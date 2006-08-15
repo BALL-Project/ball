@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.43 2006/01/26 21:33:35 oliver Exp $
+// $Id: BALL.sip,v 1.44 2006/08/15 19:00:22 oliver Exp $
+//
+// Author:
+//   Oliver Kohlbacher
 //
 
 /////////////////////////
@@ -229,6 +232,8 @@
 
 // PYTHON
 %Include extractors.sip
+%Include atomList.sip
+%Include PDBAtomList.sip
 %Include pyIndexList.sip // a list of numbers (indices etc.)
 %Include pyAtomDict.sip // a dictionary mapping to atoms
 %Include pyAtomList.sip // a list of atom (pointers)

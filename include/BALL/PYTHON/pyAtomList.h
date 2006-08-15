@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyAtomList.h,v 1.13 2004/05/27 19:49:44 oliver Exp $
+// $Id: pyAtomList.h,v 1.14 2006/08/15 19:00:21 oliver Exp $
+//
+// Author:
+//   Oliver Kohlbacher
 //
 
 #ifndef BALL_PYTHON_PYATOMLIST_H
@@ -19,6 +22,10 @@
 #	include <BALL/DATATYPE/string.h>
 #endif
 
+#ifndef BALL_KERNEL_EXTRACTORS_H
+#	include <BALL/KERNEL/extractors.h>
+#endif
+
 namespace BALL 
 {
 	class Atom;
@@ -28,7 +35,7 @@ namespace BALL
 			\ingroup PythonExtensions		
 	*/
 	class PyAtomList
-		:	public List<Atom*>
+		:	public AtomList
 	{
 		public:
 
@@ -71,13 +78,18 @@ namespace BALL
 		*/
 		PyAtomList(const PyAtomList& new_list);
 			
-		/**	Construct from a AtomContainer.
+		/**	Construct from an AtomList.
+		*/
+		PyAtomList(const AtomList& atom_list);
+
+		/**	Construct from an AtomContainer.
 				This constructor creates an PyAtomList object from
-				all atoms of a  \link AtomContainer AtomContainer \endlink  object.
+				all atoms of a  \link AtomContainer AtomContainer \endlink  object
+				by iterating over the object.
 		*/
 		PyAtomList(const AtomContainer& fragment);
 
-		/**	Construct from a AtomContainer with expression.
+		/**	Construct from an AtomContainer and filter with an expression.
 				This constructor creates an PyAtomList object from
 				the atoms of a  \link AtomContainer AtomContainer \endlink  object that match <tt>expression</tt>.
 		*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyAtomList.C,v 1.4 2006/01/26 07:41:03 oliver Exp $
+// $Id: pyAtomList.C,v 1.5 2006/08/15 19:00:24 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -16,12 +16,17 @@ namespace BALL
 {
 
 	PyAtomList::PyAtomList()
-		: List<Atom*>()
+		: AtomList()
 	{
 	}
 
-	PyAtomList::PyAtomList(const PyAtomList& new_list)
-		: List<Atom*>(new_list)
+	PyAtomList::PyAtomList(const PyAtomList& atom_list)
+		: AtomList(atom_list)
+  {
+	}
+
+	PyAtomList::PyAtomList(const AtomList& atom_list)
+		: AtomList(atom_list)
   {
 	}
 

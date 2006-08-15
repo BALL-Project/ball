@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.C,v 1.32 2006/08/15 10:40:41 oliver Exp $
+// $Id: structureMapper.C,v 1.33 2006/08/15 19:00:24 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -119,7 +119,7 @@ namespace BALL
 	   AtomContainer objects onto the second */
 	bool StructureMapper::calculateTransformation()
 	{
-		// check whether both acs are defined
+		// check whether both atom containers are defined
 		if ((A_ == 0) ||(B_ == 0))
 		{
 			return false;

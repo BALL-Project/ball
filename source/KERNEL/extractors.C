@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.C,v 1.1 2006/01/26 07:41:03 oliver Exp $
+// $Id: extractors.C,v 1.2 2006/08/15 19:00:22 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -43,6 +43,25 @@ namespace BALL
           // store the atom pointer in the list
           result.push_back(const_cast<Atom*>(&*it));
 				}
+			}
+		}
+		return result;
+	}
+
+	AtomList atoms(const AtomList& atom_list, const String& expression)
+	{
+		AtomList result;
+
+    // iterate over all atoms
+		AtomList::const_iterator it = atom_list.begin();
+
+    Expression match(expression);
+    for (; it != atom_list.end(); ++it)
+    {
+      if (match(**it))
+      {
+        // store the atom pointer in the list
+        result.push_back(const_cast<Atom*>(*it));
 			}
 		}
 		return result;

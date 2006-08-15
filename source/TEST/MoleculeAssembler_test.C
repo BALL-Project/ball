@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MoleculeAssembler_test.C,v 1.2 2006/06/08 07:30:27 oliver Exp $
+// $Id: MoleculeAssembler_test.C,v 1.3 2006/08/15 19:00:24 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -13,13 +13,11 @@
 
 #include <BALL/STRUCTURE/moleculeAssembler.h>
 #include <BALL/KERNEL/selector.h>
-
-//#include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/MOLFile.h>
 
 ///////////////////////////
 
-START_TEST(MoleculeAssembler, "$Id: MoleculeAssembler_test.C,v 1.2 2006/06/08 07:30:27 oliver Exp $")
+START_TEST(MoleculeAssembler, "$Id: MoleculeAssembler_test.C,v 1.3 2006/08/15 19:00:24 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -46,7 +44,7 @@ molecule_sys.removeSelected();
 
 Size i = 0;
 
-for(AtomIterator atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.endAtom(); atom_it++)
+for (AtomIterator atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.endAtom(); atom_it++)
 {	
 	switch (i)
 	{
@@ -147,7 +145,7 @@ vector<vector<vector<Atom*> > > ringsystems = riclu.clusterRings(seq_rings);
 //	analyse the way the rings are connected and construct each ringsystem in the suitable way
 vector<RingAnalyser::RingInfo> analysed_rings;
 
-for(vector<vector<vector<Atom*> > >::size_type i = 0; i != ringsystems.size(); i++)
+for (Size i = 0; i != ringsystems.size(); i++)
 {	
 		//	analyse the way the rings are connected
 	RingAnalyser ra;
@@ -157,9 +155,9 @@ for(vector<vector<vector<Atom*> > >::size_type i = 0; i != ringsystems.size(); i
 	RSConstructor rsc;
 	rsc.constructRS(analysed_rings, i);
 	
-	for(vector<vector<Atom*> >::size_type j = 0; j != ringsystems[i].size(); j++)
+	for (vector<vector<Atom*> >::size_type j = 0; j != ringsystems[i].size(); j++)
 	{
-		for(vector<Atom*>::size_type k = 0; k != ringsystems[i][j].size(); k++)
+		for (vector<Atom*>::size_type k = 0; k != ringsystems[i][j].size(); k++)
 		{
 			ringsystems[i][j][k] -> setProperty(SDGenerator::deposited);
 			ringsystems[i][j][k] -> setProperty(SDGenerator::pre_assembled);		
@@ -186,19 +184,19 @@ CHECK((void assembleMolecule(System& molecule_sys, vector<vector<vector<Atom*> >
 	AtomIterator atom_it_1;
 	AtomIterator atom_it_2;
 
-	for(atom_it_1 = molecule_sys.beginAtom(); atom_it_1 != molecule_sys.endAtom(); atom_it_1++)
+	for (atom_it_1 = molecule_sys.beginAtom(); atom_it_1 != molecule_sys.endAtom(); atom_it_1++)
 	{
 		mol_1.push_back(&*atom_it_1);
 	}
 
-	for(atom_it_2 = molecule_sys_2.beginAtom(); atom_it_2 != molecule_sys_2.endAtom(); atom_it_2++)
+	for (atom_it_2 = molecule_sys_2.beginAtom(); atom_it_2 != molecule_sys_2.endAtom(); atom_it_2++)
 	{
 		mol_2.push_back(&*atom_it_2);
 	}
 	
 	TEST_EQUAL(mol_1.size(), mol_2.size());
 
-	for(Size i = 0; i != mol_1.size(); i++)
+	for (Size i = 0; i != mol_1.size(); i++)
 	{
 		TEST_EQUAL(mol_1[i] -> getName(), mol_2[i] -> getName());
 		TEST_REAL_EQUAL(mol_1[i] -> getPosition()[0], mol_2[i] -> getPosition()[0]);

@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.24 2006/01/26 18:24:59 oliver Exp $
+# $Id: Makefile,v 1.25 2006/08/15 19:00:21 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -62,8 +62,8 @@ depend: $(PARSER_SOURCES)
 default_clean:	clean_flex_bison
 
 clean_flex_bison:
-	@-$(RM) GAMESSDatParserParser.C GAMESSDatParserLexer.C GAMESSDatParserParser.h
-	@-$(RM) GAMESSLogParserParser.C GAMESSLogParserLexer.C GAMESSLogParserParser.h
+	@-$(RM) GAMESSDatParserParser.C GAMESSDatParserLexer.C GAMESSDatParserParser.h 2>/dev/null
+	@-$(RM) GAMESSLogParserParser.C GAMESSLogParserLexer.C GAMESSLogParserParser.h 2>/dev/null
 
 
 GAMESSDatParserParser.C: GAMESSDatParserParser.y

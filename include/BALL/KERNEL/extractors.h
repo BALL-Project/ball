@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.h,v 1.1 2006/01/26 11:58:54 oliver Exp $
+// $Id: extractors.h,v 1.2 2006/08/15 19:00:21 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -12,6 +12,10 @@
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
+#endif
+
+#ifndef BALL_DATATYPE_STRING_H
+#	include <BALL/DATATYPE/string.h>
 #endif
 
 namespace BALL 
@@ -83,17 +87,12 @@ namespace BALL
 	/**	Extract atoms matching an expression.
 			This method extracts all atoms of a kernel data structure into
 			a list that match the  \link Expression Expression \endlink  <tt>expression</tt>.
-			@param fragment the AtomContainer containing the atoms
-			@param expression the expression that selects the atoms
+			If no expression is given, all atoms will be extracted.
+			@param fragment the AtomContainer containing the atoms.
+			@param expression the expression that selects the atoms (default: no expression)
 	*/
-	AtomList atoms(const AtomContainer& fragment, const String& expression);
+	AtomList atoms(const AtomContainer& fragment, const String& expression = String());
 			
-	/**	Extract all atoms.
-			This method extracts all atoms of a kernel data structure into a list. 
-			@param fragment the AtomContainer containing the atoms
-	*/
-	AtomList atoms(const AtomContainer& fragment);
-
 	/**	Extract atoms matching an expression.
 			This method extracts all atoms from an atom list  
       that match the \link Expression Expression \endlink  <tt>expression</tt>.
@@ -105,10 +104,11 @@ namespace BALL
 	/**	Extract PDB atoms matching an expression.
 			This method extracts all PDB atoms of a kernel data structure into
 			a list that match the  \link Expression Expression \endlink  <tt>expression</tt>.
+			If no expression is given, all PDB atoms will be returned.
 			@param fragment the AtomContainer containing the atoms
-			@param expression the expression that selects the atoms
+			@param expression the expression that selects the atoms (default: no expression)
 	*/
-	PDBAtomList PDBAtoms(const AtomContainer& fragment, const String& expression);
+	PDBAtomList PDBAtoms(const AtomContainer& fragment, const String& expression = String());
 			
 	/**	Extract all PDB atoms.
 			This method extracts all PDB atoms of a kernel data structure into

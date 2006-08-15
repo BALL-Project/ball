@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sdGenerator.C,v 1.3 2006/06/29 20:45:32 bertsch Exp $
+// $Id: sdGenerator.C,v 1.4 2006/08/15 19:00:24 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -52,7 +52,7 @@ namespace BALL
 
 
                 //      distinguish between ring-atoms and core-chain-atoms
-                for(atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.endAtom(); ++atom_it)
+                for (atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.endAtom(); ++atom_it)
                 {
                         //      finding the ring-atoms
 
@@ -113,7 +113,7 @@ namespace BALL
 
 
                 // - core-chain-atoms must have at least one neighbour, that is a core-chain-atom, too
-                for(atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.endAtom(); ++atom_it)
+                for (atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.endAtom(); ++atom_it)
                 {
                         for (Atom::BondIterator bond_it = atom_it -> beginBond(); bond_it != atom_it -> endBond(); ++bond_it)
                         {
@@ -153,7 +153,7 @@ namespace BALL
                 }
 
                 //      clear Properties, that have possibly been set in a previuos call
-                for(vector<Atom*>::size_type i = 0; i != ring.size(); i++)
+                for (vector<Atom*>::size_type i = 0; i != ring.size(); i++)
                 {
                         ring[i] -> clearProperty(firstneighbour);
                 }
@@ -162,7 +162,7 @@ namespace BALL
                 pair<Atom*, Atom*> neighbours;
 
                 bool find_second = false;       //      has the first neighbour been found yet?
-                for(Atom::BondIterator bond_it = atom -> beginBond(); bond_it != atom -> endBond(); bond_it++)
+                for (Atom::BondIterator bond_it = atom -> beginBond(); bond_it != atom -> endBond(); bond_it++)
                 {
                         RingAnalyser ra;
                         if(find_second == false)        //      if the first neighbour has not been found, yet
@@ -213,7 +213,7 @@ namespace BALL
                 //      sequencing the rings in the sssr to prepare them for anaylis and construction
                 vector<vector<Atom*> >  sequenced_rings;
 
-                for(vector<vector<Atom*> >::size_type j = 0; j != ringsystem.size(); j++)
+                for (vector<vector<Atom*> >::size_type j = 0; j != ringsystem.size(); j++)
                 {
                         //      create a new vector for each ring to hold the sequenced atoms
                         vector<Atom*> seq_ring;
@@ -222,7 +222,7 @@ namespace BALL
                         Atom* a1;
 
                         //      clear Properties, that have possibly been set in a previuos call
-                        for(vector<Atom*>::size_type k = 0; k != ringsystem[j].size(); k++)
+                        for (vector<Atom*>::size_type k = 0; k != ringsystem[j].size(); k++)
                         {
                                 ringsystem[j][k] ->  clearProperty(sequenced);
                         }
@@ -327,7 +327,7 @@ namespace BALL
                 //      analyse the way the rings are connected and construct each ringsystem in the suitable way
                 vector<RingAnalyser::RingInfo> analysed_rings;
 
-                for(vector<vector<vector<Atom*> > >::size_type i = 0; i != ringsystems.size(); i++)
+                for (Size i = 0; i != ringsystems.size(); i++)
                 {
                         cerr << endl << "\tRingsystem No.: " << i+1 << endl << endl;
 
@@ -339,9 +339,9 @@ namespace BALL
                         RSConstructor rsc;
                         rsc.constructRS(analysed_rings, i);
 
-                        for(vector<vector<Atom*> >::size_type j = 0; j != ringsystems[i].size(); j++)
+                        for (vector<vector<Atom*> >::size_type j = 0; j != ringsystems[i].size(); j++)
                         {
-                                for(vector<Atom*>::size_type k = 0; k != ringsystems[i][j].size(); k++)
+                                for (vector<Atom*>::size_type k = 0; k != ringsystems[i][j].size(); k++)
                                 {
                                         ringsystems[i][j][k] -> setProperty(deposited);
                                         ringsystems[i][j][k] -> setProperty(pre_assembled);
