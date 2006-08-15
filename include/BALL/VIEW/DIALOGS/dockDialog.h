@@ -330,9 +330,9 @@ namespace BALL
 				HashMap<int, QDialog*> scoring_dialogs_;
 	
 				/** key: DockingController::Algorithm
-				 *  value: vector of scoring functions which can be used with this algorithm
+				 *  value: vector of scoring functions name which can be used with this algorithm
 				 */
-				HashMap<int, vector<int> > allowed_sf_;
+				HashMap<int, QStringList > allowed_sf_;
 				
 			  /** vector contains pointers to all systems that are loaded into BALLView
 			   */
