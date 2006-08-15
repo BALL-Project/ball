@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.14 2006/08/03 13:14:13 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.15 2006/08/15 09:54:55 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -54,8 +54,7 @@ namespace BALL
 				ModularWidget(name),
 				dock_dialog_(this),
 				dock_alg_(0),
-				progress_dialog_(0),
-				was_called_(false)
+				progress_dialog_(0)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "New DockingController " << this << std::endl;
@@ -76,8 +75,7 @@ namespace BALL
 				ModularWidget(dock_controller),
 				dock_dialog_(),
 				dock_alg_(dock_controller.dock_alg_),
-				progress_dialog_(dock_controller.progress_dialog_),
-				was_called_(false)
+				progress_dialog_(dock_controller.progress_dialog_)
 		{}
 		
 		// Destructor
@@ -111,8 +109,6 @@ namespace BALL
 					delete progress_dialog_;
 				}
 				progress_dialog_ = dock_controller.progress_dialog_;
-				/////////////////////////////////
-				was_called_ = dock_controller.was_called_;
 			}
 			return *this;
 		}
@@ -319,6 +315,10 @@ namespace BALL
 				}
 			}
 
+			// set pointer to docked_system_ to NULL
+			// this 'reset' is needed to check later if there was an intermediate result
+			docked_system_ = NULL;
+
 			// ============================= WITH MULTITHREADING ====================================
 			#ifdef BALL_QT_HAS_THREADS
 				if (!(getMainControl()->lockCompositesFor(this))) return;
@@ -341,7 +341,7 @@ namespace BALL
 				// start thread
 				// function calls DockingThread::run()
 				thread->start();
-				progress_dialog_->show();
+			//	progress_dialog_->show();
 
 				/*switch(index)
 				{
@@ -448,21 +448,20 @@ namespace BALL
 			dock_res->addScoring(ascii(dock_dialog_.scoring_functions->currentText()), dock_dialog_.getScoringOptions(), ranked_conformations);
 
 			// add docked system to BALLView structures if no intermediate result was shown during docking run
-		  //CompositeManager& composite_manager = getMainControl()->getCompositeManager();
-			//if(!composite_manager.has(&(conformation_set->getSystem())))
-			//{
+			if(!docked_system_)
+			{
 				docked_system_ = new System(conformation_set->getSystem());
 				// remark: system is deleted by main control
 				const SnapShot& best_result = (*conformation_set)[0];
 				best_result.applySnapShot(*docked_system_);
 				//getMainControl()->deselectCompositeRecursive(docked_system_, true);
 				getMainControl()->insert(*docked_system_);
-			/*}
+			}
 			else
 			{
 				Log.error() << "in else" << std::endl;
 				getMainControl()->update(*docked_system_,true);
-			}*/
+			}
 
 			// send a DockResultMessage
 			NewDockResultMessage* dock_res_m = new NewDockResultMessage();
@@ -486,7 +485,7 @@ namespace BALL
 			//if(dock_alg_->systemChanged())
 			//{
 				// if function is called for the first time
-				if(!was_called_)
+				if(!docked_system_)
 				{
 					//Log.error() << "was_called_ true" << std::endl;
 					// system is deleted by main control, when it is removed from BallView
@@ -494,8 +493,6 @@ namespace BALL
 					//getMainControl()->deselectCompositeRecursive(docked_system, true);
 					getMainControl()->insert(*docked_system_);
 				 //notify_(new CompositeMessage(*docked_system_, CompositeMessage::CENTER_CAMERA));
-
-					was_called_ = true;
 				}
 				else
 				{
