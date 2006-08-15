@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1.2.4.2.3 2006/08/15 09:57:22 leonhardt Exp $
+// $Id: dockingController.h,v 1.1.2.4.2.4 2006/08/15 14:13:51 leonhardt Exp $
 //
 
 #ifndef BALL_WIDGETS_DOCKINGCONTROLLER_H
@@ -178,6 +178,12 @@ namespace BALL
 
 			protected:
 			
+				/**
+				 */
+				void runDocking_()
+					throw();
+
+
 				/** Applies scoring function which user has chosen.
 				 *  Then, creates new DockResult and adds new scoring to it.
 				 *  At the end, adds the docked system to BALLView structures
