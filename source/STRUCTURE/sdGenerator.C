@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sdGenerator.C,v 1.5 2006/08/15 20:36:59 oliver Exp $
+// $Id: sdGenerator.C,v 1.6 2006/08/15 20:55:13 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -327,10 +327,8 @@ namespace BALL
 		//      analyse the way the rings are connected and construct each ringsystem in the suitable way
 		vector<RingAnalyser::RingInfo> analysed_rings;
 
-		for (vector<vector<vector<Atom*> > >::size_type i = 0; i != ringsystems.size(); i++)
+		for (Size i = 0; i != ringsystems.size(); i++)
 		{
-			cerr << endl << "\tRingsystem No.: " << i+1 << endl << endl;
-
 			//      analyse the way the rings are connected
 			RingAnalyser ra;
 			analysed_rings = ra.analyseRings(ringsystems[i]);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MoleculeAssembler_test.C,v 1.4 2006/08/15 20:37:02 oliver Exp $
+// $Id: MoleculeAssembler_test.C,v 1.5 2006/08/15 20:55:13 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(MoleculeAssembler, "$Id: MoleculeAssembler_test.C,v 1.4 2006/08/15 20:37:02 oliver Exp $")
+START_TEST(MoleculeAssembler, "$Id: MoleculeAssembler_test.C,v 1.5 2006/08/15 20:55:13 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -141,7 +141,7 @@ for(AtomIterator atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.end
 		//      analyse the way the rings are connected and construct each ringsystem in the suitable way
 		vector<RingAnalyser::RingInfo> analysed_rings;
 
-		for (vector<vector<vector<Atom*> > >::size_type i = 0; i != ringsystems.size(); i++)
+		for (Size i = 0; i != ringsystems.size(); i++)
 		{
 
 			//      analyse the way the rings are connected
