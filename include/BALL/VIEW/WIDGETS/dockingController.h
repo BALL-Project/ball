@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1.2.4.2.2 2006/06/01 12:06:43 leonhardt Exp $
+// $Id: dockingController.h,v 1.1.2.4.2.3 2006/08/15 09:57:22 leonhardt Exp $
 //
 
 #ifndef BALL_WIDGETS_DOCKINGCONTROLLER_H
@@ -176,8 +176,6 @@ namespace BALL
 					*/
 				void updateSystem_();
 
-
-
 			protected:
 			
 				/** Applies scoring function which user has chosen.
@@ -221,10 +219,8 @@ namespace BALL
 					*/
 				QTimer timer_;
 
-				/** Flag for \link DockingController::updateSystem_ updateSystem_ \endlink. 
-					*/
-				bool was_called_;
-
+				/** pointer to intermediate docking result
+				 */
 				System* docked_system_;
 
 		};
