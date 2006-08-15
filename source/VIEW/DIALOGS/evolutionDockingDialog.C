@@ -112,7 +112,15 @@ namespace BALL
 		{
 		  try
 			{
-				options[EvolutionaryDocking::Option::GRID_FILE] = String(ascii(grid_filename->text()));
+				if(new_grid_radio_button->isChecked())
+				{
+					options[EvolutionaryDocking::Option::GRID_FILE] = "";
+				}
+				else
+				{
+					options[EvolutionaryDocking::Option::GRID_FILE] = String(ascii(grid_filename->text()));
+				}
+
 				options[EvolutionaryDocking::Option::MAX_ITERATIONS] = ascii(max_iterations->text()).toInt();
 				options[EvolutionaryDocking::Option::INITIAL_POPULATION] = ascii(init_population->text()).toInt();
 				options[EvolutionaryDocking::Option::POPULATION] = ascii(population->text()).toInt();
