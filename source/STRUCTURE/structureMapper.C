@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.C,v 1.31 2006/08/15 10:08:51 oliver Exp $
+// $Id: structureMapper.C,v 1.32 2006/08/15 10:40:41 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -50,6 +50,25 @@ namespace BALL
 		A_ = &A;
 		B_ = &B;
 	}
+
+
+	Size StructureMapper::countFragments_(const AtomContainer & ac) const
+	{
+		Size number_of_mol_fragments = 0;
+
+		AtomContainerConstIterator it;
+
+		for (it = ac.beginAtomContainer(); +it; ++it)
+		{
+			if (RTTI::isKindOf<Fragment>(*it))
+			{
+				number_of_mol_fragments++;
+			}
+		}
+
+		return number_of_mol_fragments;
+	}
+
 
 	/* Calculate the root mean squared deviation */
 	double StructureMapper::calculateRMSD()
