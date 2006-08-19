@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.C,v 1.19 2006/08/19 13:35:22 oliver Exp $
+// $Id: lineSearch.C,v 1.20 2006/08/19 13:54:37 oliver Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
@@ -17,19 +17,13 @@
 #define LINESEARCH__DEFAULT_BETA  0.9
 
 // maximum number of interpolation steps for a line search
-#define LINESEARCH__DEFAULT_MAX_STEPS			3
+#define LINESEARCH__DEFAULT_MAX_STEPS			2
 
-#define BALL_DEBUG
-//#undef BALL_DEBUG
+//#define BALL_DEBUG
+#undef BALL_DEBUG
 
 namespace BALL 
 {
-
-	double interpolateQuadratic
-		(double lambda_0, double lambda_1, 
-		 double energy_0, double energy_1, 
-		 double grad_0);
-
 	// default constructor
 	LineSearch::LineSearch()
 		:	alpha_(LINESEARCH__DEFAULT_ALPHA),
@@ -122,7 +116,7 @@ namespace BALL
 	bool LineSearch::minimize(double& lambda, double step, bool keep_gradient)
 	{
 		#ifdef BALL_DEBUG
-			Log.info() << "  LS:minimize(" << lambda << ", " << step << ")" << std::endl;
+			Log.info() << "LS:minimize(" << lambda << ", " << step << ")" << std::endl;
 		#endif
 
 		// Check whether a valid minimizer and a valid force field exist.
@@ -192,22 +186,10 @@ namespace BALL
 			double last_lambda = lambda;
 
 			// interpolate
-		/*
 			lambda = interpolate
 										(0.0, lambda, 
 										 initial_energy_, current_energy,	
 										 initial_dir_grad_, current_dir_grad);
-			*/
-			lambda = interpolateQuadratic
-										(0.0, lambda, 
-										 initial_energy_, current_energy,	
-										 initial_dir_grad_);
-
-			// Determine gradient numerically.
-			atoms.moveTo(direction, 1e-2 * step_);
-			double deltaE = minimizer.updateEnergy() - current_energy;	
-			Log.info() << "  LineSearch: grad(num) = " << deltaE / (1e-2 * step_);
-			
 
 			// Move the atoms to the new position.
 			atoms.moveTo(direction, lambda * step_);
@@ -237,11 +219,11 @@ namespace BALL
 				break;
 			}
 
-			// If lambda is changing too slowly, we've got a problem.
+			// If lambda is changing to slowly, there's some problem.
 			if ((lambda == 0.0) || fabs((last_lambda - lambda) / lambda) < 1e-3)
 			{
 				#ifdef BALL_DEBUG
-					Log.info() << "  LineSearch: === ABORT ===";
+					Log.info() << " === ABORT ===";
 				#endif
 				result = isSufficient(lambda, current_energy, current_dir_grad);
 				break;
@@ -251,18 +233,17 @@ namespace BALL
 			result = isSufficient(lambda, current_energy, current_dir_grad);
 		}		
 
-		// If the line search failed, reset the atom positions and return the
-		// best lambda we have to offer.
+		// if the line search failed, reset the atom positions and return the
+		// best lambda we have to offer
 		if (!result)
 		{
 			lambda = best_lambda;
 
-			// In this case, we also want to move the atoms to the position of the
+			// in this case, we also want to move the atoms to the position of the
 			// best lambda, if the energy at that point has improved.
 			if (best_energy < initial_energy_)
 			{
-				atoms.moveTo(direction, lambda * step_);
-				result = true;
+				atoms.moveTo(direction, lambda*step_);
 			}
 			else
 			{
@@ -270,9 +251,6 @@ namespace BALL
 			}
 			
 			gradient.invalidate();	
-			#ifdef BALL_DEBUG
-				Log.info() << "  LineSearch: No suitable lambda found, but accepted step to minimal energy lambda!" << endl;
-			#endif
 		}
 
 		return result;
@@ -284,7 +262,7 @@ namespace BALL
 		 double grad_0, double grad_1) const
 	{
 		#ifdef BALL_DEBUG
-			Log.info() << "  LineSearch:interpolate(" 
+			Log.info() << "LS:interpolate(" 
 									<< lambda_0 << ", " << lambda_1 << ", "
 									<< energy_0 << ", " << energy_1 << ", "
 									<< grad_0 << ", " << grad_1 << ")";
@@ -303,7 +281,7 @@ namespace BALL
     if (lambda_diff == 0)
     {
 			#ifdef BALL_DEBUG
-				Log.info() << "  LineSearch: lambda_0 == lambda_1 = " << lambda_0 << " !" << std::endl;
+				Log.info() << "LS: lambda_0 == lambda_1 = " << lambda_0 << " !" << std::endl;
 			#endif
 
       return lambda_0;
@@ -351,56 +329,6 @@ namespace BALL
     return result;
 	}
 	
-	double interpolateQuadratic
-		(double lambda_0, double lambda_1, 
-		 double energy_0, double energy_1, 
-		 double grad_0) 
-	{
-		#ifdef BALL_DEBUG
-			Log.info() << "  LineSearch:interpolateQuadratic(" 
-									<< lambda_0 << ", " << lambda_1 << ", "
-									<< energy_0 << ", " << energy_1 << ", "
-									<< grad_0 << ")";
-		#endif
-
-    // Do a quadratic interpolation based on (0, energy_0), (1, energy__1), (0, grad_0)
-    // y = a x^2 + b x + c
-    // energy_0 : energy at x_0
-    // energy_1 : energy at x_1
-    // grad_0 : direction gradient at x_0
-    double lambda_diff = lambda_1 - lambda_0;
-    double delta_energy = energy_1 - energy_0;
-
-		// If the lambdas are identical, there's nothing to be done.
-    if (lambda_diff == 0)
-    {
-			#ifdef BALL_DEBUG
-				Log.info() << "  LineSearch: lambda_0 == lambda_1 = " << lambda_0 << " !" << std::endl;
-			#endif
-
-      return lambda_0;
-		}
-
-		// Determine coefficients of the polynomial.
-    double a = (-delta_energy + lambda_diff * grad_0) / (lambda_0 * lambda_0 - lambda_1 * lambda_1 + 2.0 * lambda_0 * lambda_diff);
-    double b = grad_0 - 2.0 * lambda_0 * a;
-		double c = energy_1 - lambda_1 * lambda_1 * a - lambda_1 * b;
-
-		#ifdef BALL_DEBUG
-		  Log.info() << "  LineSearch: a = " << a << " b = " << b << " c = " << c << endl;
-		#endif
-
-		// Determine minimum of the polynomial.
-		double lambda_min = - grad_0 / (2.0 * a) + lambda_0;
-		double lambda_min2 = -grad_0 * (lambda_0 * lambda_0 - lambda_1 * lambda_1 + 2.0 * lambda_0 * lambda_diff) 
-												 / (2.0 * -delta_energy + 2.0 * lambda_diff * grad_0) + lambda_0;
-		#ifdef BALL_DEBUG
-			Log.info() << "  LineSearch: l_min (kurz) = " << lambda_min << " l_min (laaaang) = " << lambda_min2 << endl;
-		#endif
-
-    return lambda_min;
-	}
-	
 	bool LineSearch::isSufficient(double lambda, double current_energy, double current_dir_grad) const
 	{	
 		// Armijo & Goldstein criterion:
@@ -410,19 +338,18 @@ namespace BALL
 		//    E(i+1) <= E(i) + alpha * lambda * step * <g(i), dir> 
 		//
 		// - sufficient gradient reduction
-		//    |<g(i+1), dir>| <= beta |<g(i), dir>|
+		//    |<g(i+1), dir>| <= beta <g(i), dir>
 		//
 		// where g(i) and g(i+1) are the initial and the current gradient
 		// dir is the search direction
 		// E(i+1) is the current and E(i) the initial energy (lambda = 0)
-		// alpha and beta are two parameters (default: 1e-4 and 0.9).
+		// alpha and beta are two parameters (usually 0.9 and 1e-4)
 		// 
 		#ifdef BALL_DEBUG
-			Log.info() << "   Crit 1: " << current_energy - initial_energy_ << "/" << alpha_ * lambda * step_ * initial_dir_grad_
-								 << "    Crit 2: " << fabs(current_dir_grad) << "/" << beta_ * fabs(initial_dir_grad_)
-			           << "   (" << ((current_energy <= (initial_energy_ + alpha_ * lambda * step_ * initial_dir_grad_)) ? "+" :"-") << " / "
-				         << (fabs(current_dir_grad) <= beta_ * fabs(initial_dir_grad_) ? "+" : "-") << ")" << endl;
+			Log.info() << " C1: " << current_energy - initial_energy_ << "/" << alpha_ * lambda * step_ * current_dir_grad
+								<< "  C2: " << fabs(current_dir_grad) << "/" << beta_ * fabs(initial_dir_grad_) << " --- ";
 		#endif
+		//return ((current_energy <= (initial_energy_ + alpha_ * lambda * step_ * current_dir_grad))
 		return ((current_energy <= (initial_energy_ + alpha_ * lambda * step_ * initial_dir_grad_))
 						&& (fabs(current_dir_grad) <= beta_ * fabs(initial_dir_grad_)));
 	}
