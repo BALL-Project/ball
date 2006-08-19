@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.22 2004/05/27 19:50:00 oliver Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.23 2006/08/19 13:35:22 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.22 2004/05/27 19:50:00 oliver Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.23 2006/08/19 13:35:22 oliver Exp $")
 
 using namespace BALL;
 
@@ -238,9 +238,9 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES) AlaAla)
 
 	ConjugateGradientMinimizer cgm(FF);
 
-	cgm.setEnergyOutputFrequency(5);
-	cgm.setMaxGradient(0.01);
-	cgm.setEnergyDifferenceBound(0.0001);
+	cgm.setEnergyOutputFrequency(1);
+	cgm.setMaxGradient(0.0001);
+	cgm.setEnergyDifferenceBound(0.000001);
 	cgm.setMaximumDisplacement(20.0);
 	cgm.setUpdateMethod(ConjugateGradientMinimizer::FLETCHER_REEVES);
 	ConjugateGradientMinimizer::UpdateMethod um;

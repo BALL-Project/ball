@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDGenerator_test.C,v 1.5 2006/08/15 20:37:03 oliver Exp $
+// $Id: SDGenerator_test.C,v 1.6 2006/08/19 13:35:23 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -17,7 +17,7 @@
 
 ///////////////////////////
 
-START_TEST(SDGenerator, "$Id: SDGenerator_test.C,v 1.5 2006/08/15 20:37:03 oliver Exp $")
+START_TEST(SDGenerator, "$Id: SDGenerator_test.C,v 1.6 2006/08/19 13:35:23 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -47,7 +47,7 @@ infile.close();
 CHECK((pair<Atom*, Atom*> getNeighbours(vector<Atom*>& ring, Atom*& atom)))
 	
 	vector<Atom*> ring;
-	for(AtomIterator atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.endAtom(); atom_it++)
+	for (AtomIterator atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.endAtom(); atom_it++)
 	{
 		ring.push_back(&*atom_it);
 	}
@@ -59,7 +59,7 @@ CHECK((pair<Atom*, Atom*> getNeighbours(vector<Atom*>& ring, Atom*& atom)))
 	
 RESULT
 
-for(AtomIterator atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.endAtom(); atom_it++)
+for (AtomIterator atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.endAtom(); atom_it++)
 {	
 	atom_it -> setProperty(SDGenerator::IN_RING);
 }
@@ -76,7 +76,7 @@ CHECK(vector<vector<Atom*> sequenceRings(vector<vector<Atom*> >& ringsystem))
 
 	vector<vector<Atom*> > seq_ringsys = sdg_2.sequenceRings(sssr);
 
-	for(Size i = 0; i != seq_ringsys[0].size(); i++)
+	for (Size i = 0; i != seq_ringsys[0].size(); i++)
 	{
 		if(i > 0 && i < seq_ringsys[0].size())
 		{
@@ -119,9 +119,9 @@ CHECK(void generateSD(System& molecule_sys))
 	AtomIterator atom_it_1;
 	AtomIterator atom_it_2;
 
-	for(atom_it_1 = molecule_sys_3.beginAtom(); atom_it_1 != molecule_sys_3.endAtom(); atom_it_1++)
+	for (atom_it_1 = molecule_sys_3.beginAtom(); atom_it_1 != molecule_sys_3.endAtom(); atom_it_1++)
 	{
-		for(atom_it_2 = molecule_sys_2.beginAtom(); atom_it_2 != molecule_sys_2.endAtom(); atom_it_2++)
+		for (atom_it_2 = molecule_sys_2.beginAtom(); atom_it_2 != molecule_sys_2.endAtom(); atom_it_2++)
 		{
 			if(atom_it_1 -> getName() == atom_it_2 -> getName())
 			{

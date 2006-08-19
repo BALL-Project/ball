@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: files.C,v 1.12 2005/12/23 17:02:27 amoll Exp $
+// $Id: files.C,v 1.13 2006/08/19 13:35:21 oliver Exp $
 //
 
 #include <BALL/FORMAT/PDBFile.h>
@@ -215,12 +215,17 @@ void readOptionFile(const String& filename)
 void singlePoint()
 {
 	double energy = amber.updateEnergy();
+	amber.updateForces();
+	Gradient grad;
+	grad.set(amber.getAtoms());
+	grad.normalize();
 	Log.info() << "single point energy: " << energy << " kJ/mol" << endl;
 	Log.info() << "  - stretch      :" << amber.getStretchEnergy() << " kJ/mol" << endl;
 	Log.info() << "  - bend         :" << amber.getBendEnergy() << " kJ/mol" << endl;
 	Log.info() << "  - torsion      :" << amber.getTorsionEnergy() << " kJ/mol" << endl;
 	Log.info() << "  - VdW          :" << amber.getVdWEnergy() << " kJ/mol" << endl;
 	Log.info() << "  - electrostatic:" << amber.getESEnergy() << " kJ/mol" << endl;
+	Log.info() << "grad: " << grad.rms << endl;
 }
 
 void optimize()

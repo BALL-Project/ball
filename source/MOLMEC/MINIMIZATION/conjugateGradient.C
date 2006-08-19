@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.36 2005/01/25 01:05:10 amoll Exp $
+// $Id: conjugateGradient.C,v 1.37 2006/08/19 13:35:22 oliver Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -11,8 +11,8 @@
 #include <BALL/COMMON/limits.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
-//#define BALL_DEBUG
-#undef BALL_DEBUG
+#define BALL_DEBUG
+//#undef BALL_DEBUG
 
 // The default method to use for the CG direction update
 // (FLETCHER_REEVES | POLAK_RIBIERE | SHANNO)
@@ -652,7 +652,7 @@ namespace BALL
 			// Try to take a new step along the direction
 			double lambda = findStep();
 			
-			// We were successul, if we found a lambda > 0.
+			// We were successful, if we found a lambda > 0.
 			bool result = (lambda > 0.0);
 
 			// use this step as new reference step if findStep was successful
