@@ -1,6 +1,10 @@
 #ifndef BALL_NMR_EMPIRICALHSSHIFTPROCESSOR_H
 #define BALL_NMR_EMPIRICALHSSHIFTPROCESSOR_H
 
+#ifndef BALL_FORMAT_GENERICMOLFILE_H
+# include <BALL/FORMAT/genericMolFile.h>
+#endif
+
 #ifndef BALL_NMR_SHIFT_MODULE_H
 #	include<BALL/NMR/shiftModule.h>
 #endif
@@ -235,6 +239,7 @@ namespace BALL
 		class ShiftHyperSurface_
 		{
 			public:
+				typedef std::map<String, std::map<String, float> > tabletype;
 				
 				/**	@name Enums and Constants
 				*/
@@ -242,17 +247,17 @@ namespace BALL
 				
 				enum HYPERSURFACE__TYPE{
 				REAL__REAL,
-				REAL__DISCRETE,
-				DISCRETE__REAL,
+				REAL__DISCRETE, 	  
+				DISCRETE__REAL,		  // not used	
 				DISCRETE__DISCRETE,
-				CHI__REAL,
+				CHI__REAL,          // not used
 				REAL__CHI,
-				CHI__DISCRETE,
-				DISCRETE__CHI,
-				CHI__CHI, 
-				SINGLE__REAL,
+				CHI__DISCRETE,      
+				DISCRETE__CHI,      
+				CHI__CHI,           // not used
+				SINGLE__REAL,  
 				SINGLE__DISCRETE, 
-				SINGLE__CHI
+				SINGLE__CHI					// not used
 				};
 
 				/*_  Constructor
@@ -282,8 +287,18 @@ namespace BALL
 				void setType_(String firstproperty, String secondproperty)
 					throw();
 
+				void readSingleReal_(BALL::File& file, String filename) throw();	
+				void readSingleDiscrete_(BALL::File& file, String filename) throw();
+				
+				bool isvalid() throw(){return !invalid_;}
 						
 			private:
+				float getTableAverage_() throw();
+				float getTableRowAverage_(const std::map<String, float>& row) throw();
+				float getTableColumnAverage_(const String& name) throw();
+
+				bool tableHasColumn_(const String& name) throw();
+
 				int type_; // Can be REAL__REAL... 
 			 	String  first_property_;
 				String  second_property_;
@@ -292,6 +307,7 @@ namespace BALL
 				std::map <String, CubicSpline1D_ > 					s1d_;
 				// access to the table first key x, second key y: 
 				std::map <String, std::map<String, float> > table_;
+				bool invalid_;
 					
 		};
 
