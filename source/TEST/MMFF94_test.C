@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.14 2006/08/21 12:46:16 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.15 2006/08/22 13:15:44 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -40,7 +40,7 @@ const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 // CHARMM forces to BALL forces
 const double CHARMM_FORCES_FACTOR = Constants::JOULE_PER_CAL * FORCES_FACTOR;
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.14 2006/08/21 12:46:16 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.15 2006/08/22 13:15:44 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -341,6 +341,46 @@ CHECK(force test 3.2: Bends)
 	}	
 RESULT
 */
+
+CHECK(force test 3.3: linear Bends)
+	HINFile f("data/MMFF94-bend-lin.hin");
+	System s;
+	f >> s;
+	f.close();
+	TEST_EQUAL(s.countAtoms(), 3)
+	
+	// create references to the atoms
+	AtomIterator it = s.beginAtom();
+	Atom& a1 = *it++;
+	Atom& a2 = *it++;
+	Atom& a3 = *it++;
+
+	mmff.options[MMFF94_STRETCHES_ENABLED] = "false";
+	mmff.options[MMFF94_BENDS_ENABLED] = "true";
+	mmff.options[MMFF94_STRETCHBENDS_ENABLED] = "false";
+	mmff.setup(s);
+	enableOneComponent("MMFF94 StretchBend", mmff);
+	mmff.updateEnergy();
+	mmff.updateForces();
+
+	PRECISION(2e-11)
+
+	// gradient value in CHARMM (kcal /mol A) !:
+	// LBEND  1  0.  85.0400921  0.
+ 	// LBEND  2  85.0400921 -85.0400921  0.
+  // LBEND  3 -85.0400921  0.  0.
+	float charmm = -85.0400921 * CHARMM_FORCES_FACTOR;
+	Vector3 v1(0, charmm, 0);
+	Vector3 v2(charmm, -charmm, 0);
+	Vector3 v3(-charmm, 0, 0);
+
+	PRECISION(2e-10)
+	TEST_REAL_EQUAL(a1.getForce().getDistance(v1), 0)
+	TEST_REAL_EQUAL(a2.getForce().getDistance(v2), 0)
+	TEST_REAL_EQUAL(a3.getForce().getDistance(v3), 0)
+
+	TEST_REAL_EQUAL(mmff.getEnergy(), 100.00715 * JOULE_PER_CAL)
+RESULT
 
 
 CHECK(force test 6: VDW)
