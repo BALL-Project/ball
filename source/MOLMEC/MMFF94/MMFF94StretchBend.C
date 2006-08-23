@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.16 2006/07/21 11:54:33 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.17 2006/08/23 15:46:42 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -559,7 +559,7 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 				continue;
 			}
 
-			// Calculate the vector between atom3 and atom2,
+			// Calculate the normalized bond vectors
 			double inverse_length_v1 = 1.0 / length1;
 			double inverse_length_v2 = 1.0 / length2;
 			v1 *= inverse_length_v1 ;
@@ -598,10 +598,8 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 
 			if (bend.is_linear)
 			{
-				bend.n1 = -(-v2  - v1 * costheta);
-				bend.n2 = -(-v1  - v2 * costheta);
-				bend.n1 *= inverse_length_v1;
-				bend.n2 *= inverse_length_v2;
+				bend.n1 = (v2 - (v1 * costheta)) * inverse_length_v1;
+				bend.n2 = (v1 + (v2 * costheta)) * inverse_length_v2;
 			}
 
 			// radian to degree
@@ -669,37 +667,59 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 				continue;
 			}
 
+			/*
 			double bend_factor = (double)STRETCH_BEND_K0 * 
 														(sb.kba_ijk * stretches_[sb.stretch_i_j].delta_r +
 														 sb.kba_kji * stretches_[sb.stretch_j_k].delta_r);
 
 			double stretch_factor1 = STRETCH_BEND_K0 * sb.kba_ijk;
 			double stretch_factor2 = STRETCH_BEND_K0 * sb.kba_kji;
+			*/
 			
-			const Vector3 b1 = bend.n1 * bend_factor * FORCES_FACTOR;
-			const Vector3 b2 = bend.n2 * bend_factor * FORCES_FACTOR;
+			const Vector3 b1 = bend.n1;
+			const Vector3 b2 = (-bend.n1 - bend.n2);
+			const Vector3 b3 = bend.n2;
 
+			/*
 			const Vector3 s1 = stretch1.n * stretch_factor1 * FORCES_FACTOR;
 			const Vector3 s2 = stretch2.n * stretch_factor2 * FORCES_FACTOR;
+			*/
+
+			double ijk = sb.kba_ijk * STRETCH_BEND_K0;
+			double kji = sb.kba_kji * STRETCH_BEND_K0;
+			double d_ij = stretches_[sb.stretch_i_j].delta_r;
+ 			double d_jk = stretches_[sb.stretch_j_k].delta_r;
+
+			const double db = bend.delta_theta;
+
+			Vector3 c1 = bend.atom1->getPosition() - bend.atom2->getPosition();
+			float l = c1.getSquareLength();
+			if (!Maths::isZero(l)) c1 /= sqrt(l);
+
+			Vector3 c2 = bend.atom3->getPosition() - bend.atom2->getPosition();
+			l = c2.getSquareLength();
+			if (!Maths::isZero(l)) c2 /= sqrt(l);
+
+			Vector3 r1 = c1 * db;
+			r1 *= ijk * FORCES_FACTOR;
+
+			Vector3 r3 = c2 * db;
+			r3 *= kji * FORCES_FACTOR;
 
 			if (!us || bend.atom1->isSelected()) 
 			{
-				bend.atom1->getForce() += b1;
-				bend.atom1->getForce() += s1;
+				bend.atom1->getForce() += r1;
 			}
 
 			if (!us || bend.atom2->isSelected())
 			{
-				bend.atom2->getForce() -= b1;
-				bend.atom2->getForce() -= s1;
-				bend.atom2->getForce() -= b2;
-				bend.atom2->getForce() -= s2;
+				bend.atom2->getForce() -= r1;
+				bend.atom2->getForce() -= r3;
 			}
 
 			if (!us || bend.atom3->isSelected())
 			{
-				bend.atom3->getForce() += b2;
-				bend.atom3->getForce() += s2;
+				bend.atom3->getForce() += r3;
 			}
 		}
 	}
@@ -982,15 +1002,11 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 
 	void MMFF94StretchBend::updateStretchForces()
 	{
-		float epsilon =	0.000000001;
-
 		// iterate over all bonds, update the forces
 		for (Size i = 0 ; i < stretches_.size(); i++)
 		{
 			Stretch& stretch = stretches_[i];
 			double& delta = stretch.delta_r;
-
-			if (fabs(delta) < epsilon) delta = 0.;
 
 			const double a = STRETCH_K0 * stretch.kb * delta;
 
