@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyGrid.C,v 1.1.2.4 2006/08/15 14:11:45 leonhardt Exp $
+// $Id: energyGrid.C,v 1.1.2.5 2006/08/24 16:42:37 leonhardt Exp $
 
 
 #include <BALL/KERNEL/system.h>
@@ -96,7 +96,7 @@ namespace BALL
 			}
 		else
 			{
-				Log.error() << "can't load grid file" << __FILE__ << " " << __LINE__<< std::endl;
+				Log.error() << "can't load grid file " << __FILE__ << " " << __LINE__<< std::endl;
 				exit(1);
 			}
 		
@@ -109,7 +109,7 @@ namespace BALL
 				
 				if (it == elements_.end())
 					{
-						Log.error() << "grid file doesen't contain type " << gridType(*ai) << __FILE__ << " " << __LINE__<< std::endl;
+						Log.error() << "grid file doesen't contain type " << gridType(*ai) << " " << __FILE__ << " " << __LINE__<< std::endl;
 						exit(1);
 					}
 			}
