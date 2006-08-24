@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.3.2.10 2006/05/15 23:18:51 amoll Exp $
+// $Id: dockResultDialog.C,v 1.3.2.10.2.1 2006/08/24 16:41:41 leonhardt Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockResultDialog.h>
@@ -49,7 +49,7 @@ namespace BALL
 			//make sure the order of added scoring functions is consistent to the enum order
 			//because the scoring function with enum value i should be at position i in the Combobox
 			//otherwise you get the wrong option dialog for a scoring function
-			addScoringFunction("Default", DockingController::DEFAULT);
+			addScoringFunction("Default");
 			MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
 			if (!mol_struct)
 		  {
@@ -57,8 +57,8 @@ namespace BALL
 										<< __FILE__ << " " << __LINE__ << std::endl;
 		    return;
 		  }
-			addScoringFunction("Amber Force Field", DockingController::AMBER_FF, &(mol_struct->getAmberConfigurationDialog()));
-			addScoringFunction("Random", DockingController::RANDOM);
+			addScoringFunction("Amber Force Field", &(mol_struct->getAmberConfigurationDialog()));
+			addScoringFunction("Random");
 		
 			result_table->setSortingEnabled(false);
 			result_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -140,17 +140,16 @@ namespace BALL
 		}
 		
 		// Adds scoring function to Combobox and its advanced option dialogs to HashMap, if it has such an dialog.
-		void DockResultDialog::addScoringFunction(const QString& name, DockingController::ScoringFunction score_func, 
-																							QDialog* dialog)
+		void DockResultDialog::addScoringFunction(const QString& name, QDialog* dialog)
 			throw()
 		{
 			if (dialog)
 			{
 				// add dialog to HashMap
-				scoring_dialogs_[score_func] = dialog;
+				scoring_dialogs_[name] = dialog;
 			}
 			// add to ComboBox
-			scoring_functions->addItem(name, score_func);
+			scoring_functions->addItem(name);
 		}
 		
 		// --------------------------------- SLOTS ------------------------------------------------
@@ -210,6 +209,7 @@ namespace BALL
 		{
 			// get index of current row
 			Index selected_row = result_table->currentRow();
+
 			if (selected_row == -1) return;
 
 			// get snapshot number of this row
@@ -230,7 +230,7 @@ namespace BALL
 			Index selected_row = result_table->currentRow();
 			if (selected_row > 0)
 			{
-				result_table->selectRow(selected_row-1);
+				result_table->setCurrentCell(selected_row - 1, result_table->currentColumn());
 				showSnapshot();
 			}
 		}
@@ -241,7 +241,7 @@ namespace BALL
 			Index selected_row = result_table->currentRow();
 			if (selected_row < result_table->rowCount() - 1)
 			{
-				result_table->selectRow(selected_row + 1);
+				result_table->setCurrentCell(selected_row + 1, result_table->currentColumn());
 				showSnapshot();
 			}
 		}
@@ -250,8 +250,8 @@ namespace BALL
 		// otherwise the button is disabled 
 		void DockResultDialog::scoringFuncChosen()
 		{
-			Index index = scoring_functions->currentIndex();
-			if (scoring_dialogs_.has(index))
+			QString text = scoring_functions->currentText();
+			if (scoring_dialogs_.find(text) != scoring_dialogs_.end())
 			{
 				advanced_button->setEnabled(true);
 			}
@@ -264,10 +264,10 @@ namespace BALL
 		// show options dialog of selected scoring function
 		void DockResultDialog::advancedClicked()
 		{
-			Index index = scoring_functions->currentIndex();
-			if (index)
+			QString text = scoring_functions->currentText();
+			if (text != "<select>")
 			{
-				scoring_dialogs_[index]->exec();
+				scoring_dialogs_[text]->exec();
 			}
 		}
 		
@@ -280,32 +280,30 @@ namespace BALL
 			Options scoring_options;
 			
 			// check which scoring function is chosen
-			Index index = scoring_functions->currentIndex();
-			switch(index)
+			QString text = scoring_functions->currentText();
+			if (text == "Default")
 			{
-			  case DockingController::DEFAULT:
-			    scoring = new EnergeticEvaluation();
-			    break;
-			  case DockingController::RANDOM:
-			    scoring = new RandomEvaluation();
-			    break;
-			  case DockingController::AMBER_FF:
+			   scoring = new EnergeticEvaluation();
+			}
+			else if (text == "Random")
+			{
+			   scoring = new RandomEvaluation();
+			}
+			else if (text == "Amber Force Field")
+			{
+				MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
+				if (!mol_struct)
 				{
-					MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
-					if (!mol_struct)
-					{
-						Log.error() << "Error while rescoring with AMBER_FF! " << __FILE__ << " " << __LINE__ << std::endl;
-						return;
-					}
-					AmberFF& ff = mol_struct->getAmberFF();
-					AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[index]));
-					// now the Amber force field gets its options
-					dialog->applyTo(ff);
-					scoring_options = ff.options;
-					// the force field is given to the AmberEvaluation (scoring function) object
-					scoring = new AmberEvaluation(ff);
-					break;
+					Log.error() << "Error while rescoring with AMBER_FF! " << __FILE__ << " " << __LINE__ << std::endl;
+					return;
 				}
+				AmberFF& ff = mol_struct->getAmberFF();
+				AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[text]));
+				// now the Amber force field gets its options
+				dialog->applyTo(ff);
+				scoring_options = ff.options;
+				// the force field is given to the AmberEvaluation (scoring function) object
+				scoring = new AmberEvaluation(ff);
 			}
 			
 			if (!scoring) return;
@@ -458,6 +456,39 @@ namespace BALL
 										QMessageBox::NoButton);
 			mb.exec();
 		}
+
+		void DockResultDialog::selectionChanged_()
+		{
+			scoring_opt->setEnabled(true);
+			delete_score->setEnabled(true);
+			redock->setEnabled(true);
+			show_button->setEnabled(true);
+
+			QTableWidgetItem* item = result_table->selectedItems().takeFirst();
+			if (!item)
+			{
+				scoring_opt->setEnabled(false);
+				delete_score->setEnabled(false);
+				redock->setEnabled(false);
+				show_button->setEnabled(false);
+				return;
+			}
+
+			Index col = result_table->column(item);
+			if (col = 0)
+			{
+				scoring_opt->setEnabled(false);
+				delete_score->setEnabled(false);
+			}
+
+			Index row = result_table->row(item);
+			if (row < 0)
+			{
+				redock->setEnabled(false);
+				show_button->setEnabled(false);
+			}
+		}
+
 		 
 		// 
 		void DockResultDialog::redock_()
@@ -534,38 +565,5 @@ namespace BALL
 			throw()
 		{ return a[index_] < b[index_]; }
 	
-
-		void DockResultDialog::selectionChanged_()
-		{
-			scoring_opt->setEnabled(true);
-			delete_score->setEnabled(true);
-			redock->setEnabled(true);
-			show_button->setEnabled(true);
-
-			QTableWidgetItem* item = result_table->currentItem();
-			if (!item)
-			{
-				scoring_opt->setEnabled(false);
-				delete_score->setEnabled(false);
-				redock->setEnabled(false);
-				show_button->setEnabled(false);
-				return;
-			}
-
-			Index col = result_table->column(item);
-			if (col <= 0)
-			{
-				scoring_opt->setEnabled(false);
-				delete_score->setEnabled(false);
-			}
-
-			Index row = result_table->row(item);
-			if (row < 0)
-			{
-				redock->setEnabled(false);
-				show_button->setEnabled(false);
-			}
-		}
-
 	} // end of namespace VIEW
 } // end of namespace BALL
