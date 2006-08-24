@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.40.2.2 2006/08/03 11:54:00 leonhardt Exp $
+// $Id: datasetControl.C,v 1.46.2.40.2.3 2006/08/24 16:42:14 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -312,8 +312,6 @@ namespace BALL
 			}
 			else if (item_to_dock_result_.has(&item))
 			{
-				Log.error() << "dock result item" << std::endl;
-
 				DockResult* dock_res = item_to_dock_result_[&item];
 				item_to_dock_result_.erase(&item);
 				delete dock_res;

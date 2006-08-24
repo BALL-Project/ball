@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.41.2.3.2.2 2006/08/03 11:53:03 leonhardt Exp $
+// $Id: threads.C,v 1.41.2.3.2.3 2006/08/24 16:42:04 leonhardt Exp $
 //
 
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -19,6 +19,7 @@
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 
 #include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
+#include "../../STRUCTURE/DOCKING/evolutionaryDocking.h"
 
 #include <BALL/SYSTEM/directory.h>
 
@@ -424,7 +425,37 @@ namespace BALL
 		{
 			dock_alg_ = dock_alg;
 		}
-		
+	
+		///
+		void DockingThread::setDockingPartner1(System* s)
+			 throw()
+		{
+			docking_partner1_ = s;
+		}
+
+		///
+		void DockingThread::setDockingPartner2(System* s)
+		 	 throw()
+		{
+			docking_partner2_ = s;
+		}
+
+		///
+		void DockingThread::setDockingOptions(Options& opt)
+  		 throw()
+		{
+			algorithm_opt_ = opt;
+		}
+
+		///
+		void DockingThread::setForceField(ForceField* ff)
+				throw()
+		{
+			ff_ = ff;
+		}
+
+
+
 		/// 
 		void DockingThread::run()
 			throw(Exception::NullPointer)
@@ -435,7 +466,30 @@ namespace BALL
 					throw Exception::NullPointer(__FILE__, __LINE__);
 				}
 				
+				output_("Setting up docking algorithm...", true);
+				if (RTTI::isKindOf<EvolutionaryDocking>(*dock_alg_))
+				{
+					EvolutionaryDocking* ed = RTTI::castTo<EvolutionaryDocking>(*dock_alg_);
+					ed->setup(*(docking_partner1_), *(docking_partner2_), algorithm_opt_, ff_);
+				}
+				else
+				{
+					// keep the larger protein in System A and the smaller one in System B
+					// and setup the algorithm
+					if (docking_partner1_->countAtoms() < docking_partner2_->countAtoms())
+					{
+						dock_alg_->setup(*(docking_partner2_), *(docking_partner1_), algorithm_opt_);
+					}
+					else
+					{
+						dock_alg_->setup(*(docking_partner1_), *(docking_partner2_), algorithm_opt_);
+					}
+				}
+				output_("Setting up docking algorithm finished", true);
+
+				output_("Starting docking...", true);
 				dock_alg_->start();
+				output_("Docking finished.", true);
 				
 		 		DockingFinishedEvent* finished = new DockingFinishedEvent(dock_alg_->wasAborted());
 				// Qt will delete event when done

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.16 2006/08/15 14:13:00 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.17 2006/08/24 16:42:14 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -228,7 +228,7 @@ namespace BALL
 		}
 		
 		// Show docking dialog, check which algorithm is chosen and create new DockingAlgorithm object.
-		// Start thread for creating energy grid, if evolutionary docking is chosen.
+		// Start new thread and fill/show ProgressDialog.
 		void DockingController::runDocking(bool is_redock)
 			throw()
 		{
@@ -249,7 +249,7 @@ namespace BALL
 			}
 
 			// check which algorithm is chosen and create a DockingAlgorithm object
-			Index index = dock_dialog_.algorithms_item_to_enum[dock_dialog_.algorithms->currentText()];
+			Index index = dock_dialog_.getAlgorithmEnumMap()[dock_dialog_.algorithms->currentText()];
 			switch(index)
 			{
 				case GEOMETRIC_FIT:
@@ -280,75 +280,6 @@ namespace BALL
 			 	return;
 			}
 
-			if (index == EVOLUTION_DOCKING)
-			{
-					// ============================= WITH MULTITHREADING ====================================
-			/*	#ifdef BALL_QT_HAS_THREADS
-					if (!(getMainControl()->lockCompositesFor(this))) return;
-					
-					Options dock_opt = dock_dialog_.getAlgorithmOptions();
-					EnergyGridThread* thread = new EnergyGridThread;
-					thread->setFileName(dock_opt[EvolutionaryDocking::Option::GRID_FILE]);
-					thread->setMainControl(getMainControl());
-								
-					setStatusbarText("Creating/Loading energy grid...", true);
-					// start thread
-					// function calls DockingThread::run()
-					thread->start();
-				
-					// ============================= WITHOUT MULTITHREADING =================================
-				#else
-					// create or load energy grid
-					setStatusbarText("Creating/Loading energy grid...", true);
-					EnergyGrid* grid;
-					Options dock_opt = dock_dialog_.getAlgorithmOptions();
-					if(dock_opt[EvolutionaryDocking::Option::GRID_FILE] == "")
-					{
-						grid = new EnergyGrid(dock_dialog_.getSystem2());
-					}
-					else
-					{
-						grid = new EnergyGrid(dock_opt[EvolutionaryDocking::Option::GRID_FILE],,dock_dialog_.getSystem2());
-					}
-					// remark: who deletes the energy grid ???
-					setStatusbarText("Creating/Loading energy grid finished.", true);
-					setStatusbarText("Setting up docking algorithm...", true);
-					EvolutionaryDocking* ed = RTTI::castTo<EvolutionaryDocking>(*dock_alg_);
-					ed->setup(*(dock_dialog_.getSystem1()), 
-										*(dock_dialog_.getSystem2()), 
-										dock_dialog_.getAlgorithmOptions(),
-										dock_dialog_.getForceField(),
-										grid);*/
-
-					EvolutionaryDocking* ed = RTTI::castTo<EvolutionaryDocking>(*dock_alg_);
-					ed->setup(*(dock_dialog_.getSystem1()), *(dock_dialog_.getSystem2()), dock_dialog_.getAlgorithmOptions(),dock_dialog_.getForceField());
-					
-					runDocking_();
-			//	#endif
-			}
-			else
-			{
-				// Set up the docking algorithm
-				setStatusbarText("Setting up docking algorithm...", true);
-
-				// keep the larger protein in System A and the smaller one in System B
-				// and setup the algorithm
-				if (dock_dialog_.getSystem1()->countAtoms() < dock_dialog_.getSystem2()->countAtoms())
-				{
-					dock_alg_->setup(*(dock_dialog_.getSystem2()), *(dock_dialog_.getSystem1()), dock_dialog_.getAlgorithmOptions());
-				}
-				else
-				{
-					dock_alg_->setup(*(dock_dialog_.getSystem1()), *(dock_dialog_.getSystem2()), dock_dialog_.getAlgorithmOptions());
-				}
-				runDocking_();
-			}
-		}
-
-		// Start new thread and fill/show ProgressDialog.
-		void DockingController::runDocking_()
-			throw()
-		{
 			// set pointer to docked_system_ to NULL
 			// this 'reset' is needed to check later if there was an intermediate result
 			docked_system_ = NULL;
@@ -359,6 +290,10 @@ namespace BALL
 				DockingThread* thread = new DockingThread;
 				/// ??????? where is thread deleted?
 				thread->setDockingAlgorithm(dock_alg_);
+				thread->setDockingPartner1(dock_dialog_.getSystem1());
+				thread->setDockingPartner2(dock_dialog_.getSystem2());
+				thread->setDockingOptions(dock_dialog_.getAlgorithmOptions());
+				thread->setForceField(dock_dialog_.getForceField());
 				thread->setMainControl(getMainControl());
 				
 				progress_dialog_ = new DockProgressDialog(this);
@@ -371,11 +306,10 @@ namespace BALL
 																		dock_dialog_.getScoringOptions());
 				progress_dialog_->setDockingAlgorithm(dock_alg_);
 				
-				setStatusbarText("Starting docking...", true);
 				// start thread
 				// function calls DockingThread::run()
 				thread->start();
-			//	progress_dialog_->show();
+				//progress_dialog_->show();
 
 				/*switch(index)
 				{
@@ -387,22 +321,50 @@ namespace BALL
 				
 			// ============================= WITHOUT MULTITHREADING =================================
 			#else
-				// start docking
-				setStatusbarText("Starting docking...", true);
-				dock_alg_->start();
-				setStatusbarText("Docking finished.", true);
-				ConformationSet* cs = new ConformationSet(dock_alg_->getConformationSet());
-				if(!runScoring_(cs))
+				// Set up the docking algorithm
+				setStatusbarText("Setting up docking algorithm...", true);
+
+				if (index == EVOLUTION_DOCKING)
 				{
-				 delete cs;
-				 cs = NULL;
+					EvolutionaryDocking* ed = RTTI::castTo<EvolutionaryDocking>(*dock_alg_);
+					ed->setup(*(dock_dialog_.getSystem1()), *(dock_dialog_.getSystem2()), dock_dialog_.getAlgorithmOptions(),dock_dialog_.getForceField());
+					
 				}
-				// delete instance 
-				// conformationSet is deleted by dockResult
-				if (dock_alg_ != NULL)
+				else
 				{
-					delete dock_alg_;
-					dock_alg_ = NULL;
+					// keep the larger protein in System A and the smaller one in System B
+					// and setup the algorithm
+					if (dock_dialog_.getSystem1()->countAtoms() < dock_dialog_.getSystem2()->countAtoms())
+					{
+						dock_alg_->setup(*(dock_dialog_.getSystem2()), 
+														 *(dock_dialog_.getSystem1()), 
+														 dock_dialog_.getAlgorithmOptions());
+					}
+					else
+					{
+						dock_alg_->setup(*(dock_dialog_.getSystem1()), 
+														 *(dock_dialog_.getSystem2()), 
+														 dock_dialog_.getAlgorithmOptions());
+					}
+					setStatusbarText("Setting up docking algorithm finished", true);
+
+					// start docking
+					setStatusbarText("Starting docking...", true);
+					dock_alg_->start();
+					setStatusbarText("Docking finished.", true);
+					ConformationSet* cs = new ConformationSet(dock_alg_->getConformationSet());
+					if(!runScoring_(cs))
+					{
+				 		delete cs;
+				 		cs = NULL;
+					}
+					// delete instance 
+					// conformationSet is deleted by dockResult
+					if (dock_alg_ != NULL)
+					{
+						delete dock_alg_;
+						dock_alg_ = NULL;
+					}
 				}
 			#endif
 		}
@@ -424,7 +386,7 @@ namespace BALL
 		 	// create scoring function object
 			EnergeticEvaluation* scoring = 0;
 			//check which scoring function is chosen
-			Index index = dock_dialog_.scoring_functions_item_to_enum[dock_dialog_.scoring_functions->currentText()];
+			Index index = dock_dialog_.getScoringEnumMap()[dock_dialog_.scoring_functions->currentText()];
 			switch(index)
 			{
 				case DEFAULT:
@@ -493,7 +455,6 @@ namespace BALL
 			}
 			else
 			{
-				Log.error() << "in else" << std::endl;
 				getMainControl()->update(*docked_system_,true);
 			}
 
