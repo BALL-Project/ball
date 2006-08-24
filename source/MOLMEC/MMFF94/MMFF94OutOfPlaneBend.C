@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.5 2006/08/24 14:50:57 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.6 2006/08/24 15:43:22 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -298,6 +298,7 @@ namespace BALL
 						factor *= -1;
 					}
 
+Log.error() << "#~~#   2 " << factor            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 					factor *= FORCES_FACTOR;
 
 					const Vector3 ca = a3.getPosition() - a1.getPosition();
