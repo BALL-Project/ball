@@ -75,10 +75,9 @@ namespace BALL
 
 				/** Adds scoring function to combobox and its advanced option dialog to hashmap, if it has such a dialog.
 					* @param			name the name of the scoring function
-					* @param			score_func the value of enum DockingController::ScoringFunction
 					* @param			dialog advanced option dialog
 					*/
-				void addScoringFunction(const QString& name, DockingController::ScoringFunction score_func, QDialog* dialog=0)
+				void addScoringFunction(const QString& name, QDialog* dialog=0)
 					throw();
 				//@}
 					
@@ -217,7 +216,7 @@ namespace BALL
 
 				/** key: DockingController::ScoringFunction, value: advanced options dialog
 					*/
-				HashMap<int, QDialog*> scoring_dialogs_;
+				std::map<QString, QDialog*> scoring_dialogs_;
 		};
 		
 } } // Namespaces

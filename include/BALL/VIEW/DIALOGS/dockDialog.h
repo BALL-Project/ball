@@ -127,7 +127,7 @@ namespace BALL
 				Options& getAlgorithmOptions()
 					throw();
 
-				/** Get the force field options for certain algorithms. 
+				/** Get force field for certain algorithms. 
 				 */
 				ForceField* getForceField()
 					throw();
@@ -136,7 +136,17 @@ namespace BALL
 				 */
 				Options& getScoringOptions()
 					throw();
-				
+
+				/** 
+				 */
+				std::map<QString,int>& getAlgorithmEnumMap()
+					throw();
+
+				/** 
+				 */
+				std::map<QString,int>& getScoringEnumMap()
+					throw();
+
 				/** Sets the flags \link DockDialog::is_redock_ is_redock_ \endlink and \link DockDialog::has_changed_ has_changed_ \endlink.
 				 */
 				void isRedock(bool is_redock)
@@ -192,14 +202,7 @@ namespace BALL
 				void reset()
 					throw();
 				//@}
-				
 					
-				/**
-				 */
-				std::map<QString,int> algorithms_item_to_enum;
-				std::map<QString,int> scoring_functions_item_to_enum;
-
-
 			public slots:
 	
 				/** Shows and raises the dialog.
@@ -319,6 +322,11 @@ namespace BALL
 					*/
 				bool has_changed_;
 			
+				/**
+				 */
+				std::map<QString,int> algorithms_item_to_enum_;
+				std::map<QString,int> sf_item_to_enum_;
+
 				/** key: DockingController::Algorithm
 				 *  value: advanced options dialog
 				 */
