@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.17 2006/08/23 20:00:27 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.18 2006/08/24 14:18:23 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -40,7 +40,7 @@ const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 // CHARMM forces to BALL forces
 const double CHARMM_FORCES_FACTOR = Constants::JOULE_PER_CAL * FORCES_FACTOR;
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.17 2006/08/23 20:00:27 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.18 2006/08/24 14:18:23 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -382,7 +382,7 @@ CHECK(force test 3.3: linear Bends)
 	TEST_REAL_EQUAL(mmff.getEnergy(), 100.00715 * JOULE_PER_CAL)
 RESULT
 
-CHECK(force test 4: StretchBends)
+CHECK(force test 4.1: StretchBends)
 	HINFile f("data/MMFF94-bend.hin");
 	System s;
 	f >> s;
@@ -419,8 +419,6 @@ CHECK(force test 4: StretchBends)
 	TEST_REAL_EQUAL(a1.getForce().getDistance(v1), 0)
 	TEST_REAL_EQUAL(a2.getForce().getDistance(v2), 0)
 	TEST_REAL_EQUAL(a3.getForce().getDistance(v3), 0)
-
-	TEST_REAL_EQUAL(mmff.getEnergy(), 16.32974 * JOULE_PER_CAL)
 RESULT
 
 
@@ -460,16 +458,11 @@ CHECK(force test 4.2: StretchBends)
 	v3 *= CHARMM_FORCES_FACTOR;
 
 	PRECISION(2e-10)
-Log.error() << std::endl << a1.getForce()             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << v1             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << std::endl << a2.getForce()             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << v2             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << std::endl << a3.getForce()             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << v3             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	TEST_REAL_EQUAL(a1.getForce().getDistance(v1), 0)
 	TEST_REAL_EQUAL(a2.getForce().getDistance(v2), 0)
 	TEST_REAL_EQUAL(a3.getForce().getDistance(v3), 0)
 
+	// value from CHARMM:
 	TEST_REAL_EQUAL(mmff.getEnergy(), -25.34351 * JOULE_PER_CAL)
 RESULT
 

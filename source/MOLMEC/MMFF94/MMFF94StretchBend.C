@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.18 2006/08/24 09:52:15 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.19 2006/08/24 14:15:06 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -653,12 +653,13 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 	void MMFF94StretchBend::updateStretchBendForces()
 	{
 		bool us = mmff94_->getUseSelection();
+
+		const double SB_CONSTANT = STRETCH_BEND_K0 / DEGREE_TO_RADIAN * FORCES_FACTOR;
+
 		for (Size i = 0; i < stretch_bends_.size(); i++)
 		{
 			const StretchBend& sb = stretch_bends_[i];
 			const Bend& bend = bends_[sb.bend_index];
-			const Stretch& stretch1 = stretches_[sb.stretch_i_j];
-			const Stretch& stretch2 = stretches_[sb.stretch_j_k];
 
 			if (us && !bend.atom1->isSelected() &&
 								!bend.atom2->isSelected() &&
@@ -667,68 +668,37 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 				continue;
 			}
 
-			/*
-			double bend_factor = (double)STRETCH_BEND_K0 * 
-														(sb.kba_ijk * stretches_[sb.stretch_i_j].delta_r +
-														 sb.kba_kji * stretches_[sb.stretch_j_k].delta_r);
-
-			double stretch_factor1 = STRETCH_BEND_K0 * sb.kba_ijk;
-			double stretch_factor2 = STRETCH_BEND_K0 * sb.kba_kji;
-			*/
-			
-			const Vector3 b1 = bend.n1;
-			const Vector3 b2 = (-bend.n1 - bend.n2);
-			const Vector3 b3 = bend.n2;
-
-			/*
-			const Vector3 s1 = stretch1.n * stretch_factor1 * FORCES_FACTOR;
-			const Vector3 s2 = stretch2.n * stretch_factor2 * FORCES_FACTOR;
-			*/
-
-			double ijk = sb.kba_ijk * STRETCH_BEND_K0;
-			double kji = sb.kba_kji * STRETCH_BEND_K0;
-			double d_ij = stretches_[sb.stretch_i_j].delta_r;
- 			double d_jk = stretches_[sb.stretch_j_k].delta_r;
-
-			const double db = bend.delta_theta;
-
+			// normalized vectors from center atom to outer atoms
 			Vector3 c1 = bend.atom1->getPosition() - bend.atom2->getPosition();
-			float l = c1.getSquareLength();
+			double l = c1.getSquareLength();
 			if (!Maths::isZero(l)) c1 /= sqrt(l);
 
 			Vector3 c2 = bend.atom3->getPosition() - bend.atom2->getPosition();
 			l = c2.getSquareLength();
 			if (!Maths::isZero(l)) c2 /= sqrt(l);
+			
+			// force equation:
+			// outer atoms i + k:
+			// c * sb_constant * K0 * delta_theta * FORCES_FACTOR +
+			// (constant_ijk * delta_bond_length1 + constant_kji * delta_bond_length2) * K0 * FORCES_FACTOR / DEGREE_TO_RADIAN
+			//
+			// inner atom:
+			// minus sum of the forces on the outer atoms
 
-			Vector3 r1 = c1 * db;
-			r1 *= ijk * FORCES_FACTOR;
+			const double temp = bend.delta_theta * FORCES_FACTOR * STRETCH_BEND_K0;
+			Vector3 r1 = c1 * sb.kba_ijk * temp;
+			Vector3 r3 = c2 * sb.kba_kji * temp;
 
-Log.error() << "#~~#   5 "  << bend.n1 << " " << bend.n2           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   2 "  << d_ij  << d_jk       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   4 "  << ijk << " " << kji           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+			const double d_ij = stretches_[sb.stretch_i_j].delta_r;
+ 			const double d_jk = stretches_[sb.stretch_j_k].delta_r;
 
-			Vector3 x1 = bend.n1 * (d_ij * ijk + d_jk * kji) * db * FORCES_FACTOR;
+			const double sb_scale = -(sb.kba_ijk * d_ij + sb.kba_kji * d_jk) * SB_CONSTANT;
+			r1 += bend.n1 * sb_scale;
+			r3 += bend.n2 * sb_scale;
 				
-Log.error() << "#~~#   1 "  << x1           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-			Vector3 r3 = c2 * db;
-			r3 *= kji * FORCES_FACTOR;
-
-			if (!us || bend.atom1->isSelected()) 
-			{
-				bend.atom1->getForce() += r1;
-				bend.atom1->getForce() += x1;
-			}
-
-			if (!us || bend.atom2->isSelected())
-			{
-				bend.atom2->getForce() -= r1;
-				bend.atom2->getForce() -= r3;
-			}
-
-			if (!us || bend.atom3->isSelected())
-			{
-				bend.atom3->getForce() += r3;
-			}
+			if (!us || bend.atom1->isSelected()) bend.atom1->getForce() += r1;
+			if (!us || bend.atom2->isSelected()) bend.atom2->getForce() -= r1 + r3;
+			if (!us || bend.atom3->isSelected()) bend.atom3->getForce() += r3;
 		}
 	}
 
