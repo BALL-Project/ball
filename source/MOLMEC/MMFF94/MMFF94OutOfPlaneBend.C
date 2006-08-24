@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.4 2006/06/27 18:26:18 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.5 2006/08/24 14:50:57 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -127,30 +127,27 @@ namespace BALL
 
 				if (bond.getType() == Bond::TYPE__HYDROGEN) continue; // Skip H-Bonds;
 
-				Atom* partner = bond.getPartner(central_atom);
-
-				partners.push_back(partner);
+				partners.push_back(bond.getPartner(central_atom));
 			}
 
 			if (use_selection && (!central_atom.isSelected() ||
+														!partners[0]->isSelected() ||
 														!partners[1]->isSelected() ||
-														!partners[2]->isSelected() ||
-														!partners[3]->isSelected()))
+														!partners[2]->isSelected()))
 			{
 				continue;
 			}
 
 
-			this_bend.i= &Atom::getAttributes()[partners[0]->getIndex()];
-			this_bend.j= &Atom::getAttributes()[central_atom.getIndex()];
-			this_bend.k= &Atom::getAttributes()[partners[1]->getIndex()];
-			this_bend.l= &Atom::getAttributes()[partners[2]->getIndex()];
+			this_bend.i = &Atom::getAttributes()[partners[0]->getIndex()];
+			this_bend.j = &Atom::getAttributes()[central_atom.getIndex()];
+			this_bend.k = &Atom::getAttributes()[partners[1]->getIndex()];
+			this_bend.l = &Atom::getAttributes()[partners[2]->getIndex()];
 
 			const Position type_j = central_atom.getType();
-
-			Index tp0 = partners[0]->getType();
-			Index tp1 = partners[1]->getType();
-			Index tp2 = partners[2]->getType();
+			const Index tp0 = partners[0]->getType();
+			const Index tp1 = partners[1]->getType();
+			const Index tp2 = partners[2]->getType();
 
 			// check for parameters in a step down procedure
 			bool found = parameters_.getParameters(tp0, type_j, tp1, tp2, this_bend.k_oop);
@@ -185,11 +182,12 @@ namespace BALL
 		
 		vector<OutOfPlaneBend>::iterator bend_it = bends_.begin();
 
-		double radian_to_degree = 180.0 / Constants::PI;
+		const double radian_to_degree = 180.0 / Constants::PI;
 
 		// the three vectors from the three partners to the center atom
 		TVector3<double> vs[3];
-		// the normals of the 3 plane 
+
+		// the normals of the 3 planes
 		TVector3<double> ns[3];
 
 		for (; bend_it != bends_.end(); ++bend_it) 
