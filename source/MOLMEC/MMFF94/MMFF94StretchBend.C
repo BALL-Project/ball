@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.17 2006/08/23 15:46:42 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.18 2006/08/24 09:52:15 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -63,7 +63,7 @@ namespace BALL
 	// Conversion from kJ / (mol A) into Newton
 	const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 
-	#define DEGREE_TO_RADIAN  (Constants::PI / (double)180.0)
+	const double DEGREE_TO_RADIAN = (Constants::PI / (double)180.0);
 
 	// default constructor
 	MMFF94StretchBend::MMFF94StretchBend()
@@ -703,12 +703,20 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			Vector3 r1 = c1 * db;
 			r1 *= ijk * FORCES_FACTOR;
 
+Log.error() << "#~~#   5 "  << bend.n1 << " " << bend.n2           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+Log.error() << "#~~#   2 "  << d_ij  << d_jk       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+Log.error() << "#~~#   4 "  << ijk << " " << kji           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+
+			Vector3 x1 = bend.n1 * (d_ij * ijk + d_jk * kji) * db * FORCES_FACTOR;
+				
+Log.error() << "#~~#   1 "  << x1           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			Vector3 r3 = c2 * db;
 			r3 *= kji * FORCES_FACTOR;
 
 			if (!us || bend.atom1->isSelected()) 
 			{
 				bend.atom1->getForce() += r1;
+				bend.atom1->getForce() += x1;
 			}
 
 			if (!us || bend.atom2->isSelected())
