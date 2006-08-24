@@ -17,6 +17,10 @@
 # include <BALL/SYSTEM/TCPTransfer.h>
 #endif
 
+#ifndef BALL_DATATYPE_OPTIONS_H
+# include <BALL/DATATYPE/options.h>
+#endif
+
 #include <QtCore/qthread.h>
 #include <QtGui/qevent.h>
 #include <QtCore/QCustomEvent>
@@ -27,6 +31,7 @@ namespace BALL
 	class MolecularDynamics;
 	class Composite;
 	class DockingAlgorithm;
+	class ForceField;
 	class ConformationSet;
 
 namespace VIEW
@@ -355,13 +360,35 @@ namespace VIEW
 				///
 				void setDockingAlgorithm(DockingAlgorithm* dock_alg)
 					throw();
+
+				///
+				void setDockingPartner1(System* s)
+					throw();
+
+				///
+				void setDockingPartner2(System* s)
+					throw();
+
+				///
+				void setDockingOptions(Options& opt)
+					throw();
+
+				///
+				void setForceField(ForceField* ff)
+					throw();
 					
 				///
 				virtual void run()
 					throw(Exception::NullPointer);
 					
 			protected:
+
 				DockingAlgorithm* dock_alg_;
+				System* docking_partner1_;
+				System* docking_partner2_;	
+				Options algorithm_opt_;
+				ForceField* ff_;
+
 		};
 
 
