@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.6 2006/08/24 15:43:22 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.7 2006/08/25 16:34:22 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -25,6 +25,8 @@ namespace BALL
 
 	/// 0.043844 / 2
 	#define K0 0.021922
+
+	const double RADIAN_TO_DEGREE = 180.0 / Constants::PI;
 
 	// default constructor
 	MMFF94OutOfPlaneBend::MMFF94OutOfPlaneBend()
@@ -182,8 +184,6 @@ namespace BALL
 		
 		vector<OutOfPlaneBend>::iterator bend_it = bends_.begin();
 
-		const double radian_to_degree = 180.0 / Constants::PI;
-
 		// the three vectors from the three partners to the center atom
 		TVector3<double> vs[3];
 
@@ -216,7 +216,7 @@ namespace BALL
 				if (Maths::isZero(length_product)) continue;
 				double intersection_angle = asin(Maths::abs(ns[p] * vs[p]) / sqrt(length_product));
 				// we need the angle in degrees!
-				intersection_angle *= radian_to_degree;
+				intersection_angle *= RADIAN_TO_DEGREE;
 				e += k * intersection_angle * intersection_angle;
 			}
 
@@ -235,82 +235,143 @@ namespace BALL
 	// calculates and adds its forces to the current forces of the force field
 	void MMFF94OutOfPlaneBend::updateForces()
 	{
-		double cosphi;
-
-		Vector3	ab;	// vector from atom2 to atom1
-		Vector3 cb;	// vector from atom2 to atom3
-		Vector3 dc;	// vector from atom3 to atom4
-
 		bool us = getForceField()->getUseSelection();
+
+		//////////////////////////////////////////////////////////////////
+		// ids of the non-central atoms for the three runs per out of plane bend:
+		vector<vector<Position> > atom_ids;
+		// Atom i:
+		vector<Position> temp;
+		temp.push_back(0);
+		temp.push_back(0);
+		temp.push_back(1);
+		atom_ids.push_back(temp);
+
+		// Atom k:
+		temp.clear();
+		temp.push_back(1);
+		temp.push_back(2);
+		temp.push_back(2);
+		atom_ids.push_back(temp);
+
+		// Atom l:
+		temp.clear();
+		temp.push_back(2);
+		temp.push_back(1);
+		temp.push_back(0);
+		atom_ids.push_back(temp);
+
+		// temp variables:
+		double length;
+		Vector3 delta;
+
+		vector<Atom*> partners(3);
+		// normalized vectors from central atom to outer atoms:
+		vector<Vector3> nbv(3);
+		// lenght of the vectors from central atom to outer atoms:
+		vector<double> lengths(3);
+		
+		// positions of individual atoms in partners and nbv:
+		Position pi, pk, pl;
+
+		// normal vectors of the three planes:
+		Vector3 an, bn, cn;
 
 		for (Position t = 0; t < bends_.size(); t++)
 		{
 			const OutOfPlaneBend& bend = bends_[t];
-			Atom& a1 = *bend.i->ptr;
-			Atom& a2 = *bend.j->ptr;
-			Atom& a3 = *bend.k->ptr;
-			Atom& a4 = *bend.l->ptr;
+			Atom& ta1 = *bend.i->ptr;
+			Atom& ta2 = *bend.j->ptr;
+			Atom& ta3 = *bend.k->ptr;
+			Atom& ta4 = *bend.l->ptr;
 
-			if (us && !a1.isSelected() &&
-								!a2.isSelected() &&
-								!a3.isSelected() &&
-								!a4.isSelected())
+			if (us && !ta1.isSelected() &&
+								!ta2.isSelected() &&
+								!ta3.isSelected() &&
+								!ta4.isSelected())
 			{
 				continue;
 			}
 
-			ab = a1.getPosition() - a2.getPosition();
-			const double length_ab = ab.getLength();
-			Vector3 ba = a2.getPosition() - a1.getPosition();
-			cb = a3.getPosition() - a2.getPosition();
-			const double length_cb = cb.getLength();
-			dc = a4.getPosition() - a3.getPosition();
-			const double length_dc = dc.getLength();
+			partners[0] = &ta1;
+			partners[1] = &ta3;
+			partners[2] = &ta4;
+			Atom& center_atom = ta2;
 
-			if (length_ab != 0 && length_cb != 0 && length_dc != 0) 
+			// abort for this bend if two atoms have the same position:
+			bool error = false;
+
+			// calculate normalized vectors from central atom to outer atoms:
+			for (Position p = 0; p < 3; p++)
 			{
-				const Vector3  t = ba % cb;   // cross product of cb and ba
-				const Vector3  u = cb % dc;   // cross product of cb and dc
-
-				const double length_t2 = t.getSquareLength();
-				const double length_u2 = u.getSquareLength();
-
-				const double length_t = sqrt(length_t2);
-				const double length_u = sqrt(length_u2);
-
-				if (length_t != 0 && length_u != 0) 
+				delta = partners[0]->getPosition() - center_atom.getPosition();
+				length = delta.getLength();
+				if (Maths::isZero(length))
 				{
-					cosphi = (t * u) / (length_t * length_u);
-
-					if (cosphi > 1.0)
-					{
-						cosphi = 1.0;
-					}
-					if (cosphi < -1.0)
-					{
-						cosphi = -1.0;
-					}
-
-					double direction = (t % u) * cb;
-					float factor = K0 * bend.k_oop * acos(cosphi); 
-					if (direction > 0.0)
-					{
-						factor *= -1;
-					}
-
-Log.error() << "#~~#   2 " << factor            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-					factor *= FORCES_FACTOR;
-
-					const Vector3 ca = a3.getPosition() - a1.getPosition();
-					const Vector3 db = a4.getPosition() - a2.getPosition();
-					const Vector3 dt =   (float)(factor / (length_t2 * cb.getLength())) * (t % cb);
-					const Vector3 du = - (float)(factor / (length_u2 * cb.getLength())) * (u % cb);
-
-					if (!us || a1.isSelected()) a1.getForce() += dt % cb;
-					if (!us || a2.isSelected()) a2.getForce() += ca % dt + du % dc;
-					if (!us || a3.isSelected()) a3.getForce() += dt % ba + db % du;
-					if (!us || a4.isSelected()) a4.getForce() += du % cb; 
+					error = true;
+					break;
 				}
+
+				delta /= length;
+				nbv[p] = delta;
+				lengths[p] = length;
+			}
+
+			if (error) continue;
+
+			// three runs per OOP:
+			for (Position run = 0; run < 3; run++)
+			{
+				// position of the individual atoms in partners[] and nbv[]
+				pi = atom_ids[run][0];
+				pk = atom_ids[run][1];
+				pl = atom_ids[run][2];
+
+				Atom& i = *partners[pi];
+				Atom& k = *partners[pk];
+				Atom& l = *partners[pl];
+
+				// normalized vectors from central atom to outer atoms:
+				const Vector3& ji = nbv[pi];
+				const Vector3& jk = nbv[pk];
+				const Vector3& jl = nbv[pl];
+
+				const double& length_ji = lengths[pi];
+				const double& length_jk = lengths[pk];
+				const double& length_jl = lengths[pl];
+
+				// the three normal vectors of the planes:
+				an = ji % jk;
+				bn = jk % jl;
+				cn = jl % ji;
+
+				// Angle ji to jk
+				const double theta = ji.getAngle(jk);
+				const double sin_theta = sin(theta);
+				const double cos_theta = cos(theta);
+				
+				const double sin_dl = an * jl / sin_theta;
+
+				const double dl = asin(sin_dl);
+				const double cos_dl = cos(dl);
+				const double tan_dl = sin_dl / cos_dl;
+
+				const double cdst = 1. / cos_dl * sin_theta;
+
+				const double tdst = tan_dl / (sin_theta * sin_theta);
+
+				double c1 = theta * RADIAN_TO_DEGREE * K0 * bend.k_oop;
+
+				const Vector3 d_l = (an * cdst - jl * tan_dl) / length_jl * c1;
+				const Vector3 d_i = (bn * cdst + (-ji + jk * cos_theta) * tdst) / length_ji * c1;
+				const Vector3 d_k = (cn * cdst + (-jk + ji * cos_theta) * tdst) / length_jk * c1;
+
+Log.error() << "#~~#   3 "<< c1 << " "  << d_i << " " << d_k << " " << d_l            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+
+				if (!us || i.isSelected()) i.getForce() += d_i;
+				if (!us || k.isSelected()) k.getForce() += d_k;
+				if (!us || l.isSelected()) l.getForce() += d_l;
+				if (!us || center_atom.isSelected()) center_atom.getForce() -= d_i + d_k + d_l;
 			}
 		}
 	}
