@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.7 2006/08/25 16:34:22 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.8 2006/08/26 21:57:00 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -235,6 +235,7 @@ namespace BALL
 	// calculates and adds its forces to the current forces of the force field
 	void MMFF94OutOfPlaneBend::updateForces()
 	{
+		const double FC = K0 * 2. * RADIAN_TO_DEGREE * RADIAN_TO_DEGREE;
 		bool us = getForceField()->getUseSelection();
 
 		//////////////////////////////////////////////////////////////////
@@ -304,7 +305,7 @@ namespace BALL
 			// calculate normalized vectors from central atom to outer atoms:
 			for (Position p = 0; p < 3; p++)
 			{
-				delta = partners[0]->getPosition() - center_atom.getPosition();
+				delta = partners[p]->getPosition() - center_atom.getPosition();
 				length = delta.getLength();
 				if (Maths::isZero(length))
 				{
@@ -323,9 +324,9 @@ namespace BALL
 			for (Position run = 0; run < 3; run++)
 			{
 				// position of the individual atoms in partners[] and nbv[]
-				pi = atom_ids[run][0];
-				pk = atom_ids[run][1];
-				pl = atom_ids[run][2];
+				pi = atom_ids[0][run];
+				pk = atom_ids[1][run];
+				pl = atom_ids[2][run];
 
 				Atom& i = *partners[pi];
 				Atom& k = *partners[pk];
@@ -356,17 +357,16 @@ namespace BALL
 				const double cos_dl = cos(dl);
 				const double tan_dl = sin_dl / cos_dl;
 
-				const double cdst = 1. / cos_dl * sin_theta;
+				const double cdst = 1. / (cos_dl * sin_theta);
 
 				const double tdst = tan_dl / (sin_theta * sin_theta);
 
-				double c1 = theta * RADIAN_TO_DEGREE * K0 * bend.k_oop;
+				double c1 = dl * FC * bend.k_oop;
+c1 *= FORCES_FACTOR;
 
 				const Vector3 d_l = (an * cdst - jl * tan_dl) / length_jl * c1;
 				const Vector3 d_i = (bn * cdst + (-ji + jk * cos_theta) * tdst) / length_ji * c1;
 				const Vector3 d_k = (cn * cdst + (-jk + ji * cos_theta) * tdst) / length_jk * c1;
-
-Log.error() << "#~~#   3 "<< c1 << " "  << d_i << " " << d_k << " " << d_l            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 				if (!us || i.isSelected()) i.getForce() += d_i;
 				if (!us || k.isSelected()) k.getForce() += d_k;
