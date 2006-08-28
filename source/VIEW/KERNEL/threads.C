@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.41.2.3.2.3 2006/08/24 16:42:04 leonhardt Exp $
+// $Id: threads.C,v 1.41.2.3.2.4 2006/08/28 11:47:47 leonhardt Exp $
 //
 
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -485,7 +485,7 @@ namespace BALL
 						dock_alg_->setup(*(docking_partner1_), *(docking_partner2_), algorithm_opt_);
 					}
 				}
-				output_("Setting up docking algorithm finished", true);
+				output_("Setting up docking algorithm finished.", true);
 
 				output_("Starting docking...", true);
 				dock_alg_->start();

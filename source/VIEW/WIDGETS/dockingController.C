@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.17 2006/08/24 16:42:14 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.18 2006/08/28 11:47:52 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -41,7 +41,6 @@
 #include <QtGui/qcombobox.h>
 //#define BALL_VIEW_DEBUG
 //#undef BALL_QT_HAS_THREADS
-using namespace std;
 
 namespace BALL
 {
@@ -249,27 +248,26 @@ namespace BALL
 			}
 
 			// check which algorithm is chosen and create a DockingAlgorithm object
-			Index index = dock_dialog_.getAlgorithmEnumMap()[dock_dialog_.algorithms->currentText()];
-			switch(index)
+			QString text = dock_dialog_.algorithms->currentText();
+			if (text == "Geometric Fit")
 			{
-				case GEOMETRIC_FIT:
-					if(!dock_alg_)
-					{
-						delete dock_alg_;
-						dock_alg_ = NULL;
-					}
+				if(!dock_alg_)
+				{
+					delete dock_alg_;
+					dock_alg_ = NULL;
+				}
 #ifdef BALL_HAS_FFTW
-					dock_alg_ =  new GeometricFit();
+				dock_alg_ =  new GeometricFit();
 #endif
-					break;
-				case EVOLUTION_DOCKING:
-					if(!dock_alg_)
-					{
-						delete dock_alg_;
-						dock_alg_ = NULL;
-					}
-					dock_alg_ =  new EvolutionaryDocking();
-					break;
+			}
+			else if (text == "Evolutionary Docking")
+			{
+				if(!dock_alg_)
+				{
+					delete dock_alg_;
+					dock_alg_ = NULL;
+				}
+				dock_alg_ =  new EvolutionaryDocking();
 			}
 
 			if (!dock_alg_
@@ -309,7 +307,7 @@ namespace BALL
 				// start thread
 				// function calls DockingThread::run()
 				thread->start();
-				//progress_dialog_->show();
+				progress_dialog_->show();
 
 				/*switch(index)
 				{
@@ -324,10 +322,13 @@ namespace BALL
 				// Set up the docking algorithm
 				setStatusbarText("Setting up docking algorithm...", true);
 
-				if (index == EVOLUTION_DOCKING)
+				if (text == "Evolutionary Docking")
 				{
 					EvolutionaryDocking* ed = RTTI::castTo<EvolutionaryDocking>(*dock_alg_);
-					ed->setup(*(dock_dialog_.getSystem1()), *(dock_dialog_.getSystem2()), dock_dialog_.getAlgorithmOptions(),dock_dialog_.getForceField());
+					ed->setup(*(dock_dialog_.getSystem1()), 
+										*(dock_dialog_.getSystem2()), 
+										dock_dialog_.getAlgorithmOptions(),
+										dock_dialog_.getForceField());
 					
 				}
 				else
@@ -386,28 +387,22 @@ namespace BALL
 		 	// create scoring function object
 			EnergeticEvaluation* scoring = 0;
 			//check which scoring function is chosen
-			Index index = dock_dialog_.getScoringEnumMap()[dock_dialog_.scoring_functions->currentText()];
-			switch(index)
+			QString text = dock_dialog_.scoring_functions->currentText();
+			if (text == "Default")
 			{
-				case DEFAULT:
-					scoring = new EnergeticEvaluation();
-					break;
-				case AMBER_FF:
+				scoring = new EnergeticEvaluation();
+			}
+			else if (text == "AMBER Force Field")
+			{
+				MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
+				if (!mol_struct)
 				{
-					MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
-					if (!mol_struct)
-					{
-						Log.error() << "Error while scoring with AMBER_FF! " << __FILE__ << " " << __LINE__ << std::endl;
-						return false;
-					}
-					AmberFF& ff = mol_struct->getAmberFF();
-					//the force field is given to the AmberEvaluation (scoring function) object
-					scoring = new AmberEvaluation(ff);
-					break;
+					Log.error() << "Error while scoring with AMBER_FF! " << __FILE__ << " " << __LINE__ << std::endl;
+					return false;
 				}
-				case RANDOM:
-					scoring = new RandomEvaluation;
-					break;
+				AmberFF& ff = mol_struct->getAmberFF();
+				//the force field is given to the AmberEvaluation (scoring function) object
+				scoring = new AmberEvaluation(ff);
 			}
 
 			if (!scoring) return false;
