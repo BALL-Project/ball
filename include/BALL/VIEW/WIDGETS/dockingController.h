@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1.2.4.2.5 2006/08/24 16:45:11 leonhardt Exp $
+// $Id: dockingController.h,v 1.1.2.4.2.6 2006/08/28 11:50:26 leonhardt Exp $
 //
 
 #ifndef BALL_WIDGETS_DOCKINGCONTROLLER_H
@@ -51,26 +51,6 @@ namespace BALL
 			
 			BALL_EMBEDDABLE(DockingController, ModularWidget)
 			
-				////// TODO: enum Algorithm und ScoringFunction in DockingAlgorithm bzw. EnergeticEvaluation ///////
-				
-				/**	@name	Enumerations
-				 */
-				//@{
-				
-				/** Enumeration which contains the docking algorithms.
-					* The numbering corresponds to the order in the combobox of \link DockingController::dock_dialog_ dock_dialog_ \endlink.
-				 *  If you want to add a new docking algorithm extend enumeration 
-				 *	(0 corresponds to <select> item in ComboBox)
-				 */
-				enum Algorithm {GEOMETRIC_FIT = 1, EVOLUTION_DOCKING = 2};
-				
-				/** Enumeration which contains the scoring functions.
-					* The numbering corresponds to the order in the combobox of \link DockingController::dock_dialog_ dock_dialog_ \endlink. 
-					* If you want to add a new scoring function extend enumeration 
-				 */
-				enum ScoringFunction {DEFAULT = 0, AMBER_FF = 1, RANDOM = 2};
-			  //@}
-				
 				/**	@name	Constructors and Destructors
 				 */
 				//@{
