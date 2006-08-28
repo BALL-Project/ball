@@ -153,7 +153,6 @@ namespace BALL
   void EvolutionaryDocking::start()
     throw()
   {
-    
     DockingAlgorithm::start();
     
     if (dm_ == 0)
@@ -180,7 +179,7 @@ namespace BALL
   }
 
       
-  float EvolutionaryDocking::getProgress() const
+  float EvolutionaryDocking::getDockingProgress() const
     throw()
   {
     if (ga_->iteration_ == 0) 

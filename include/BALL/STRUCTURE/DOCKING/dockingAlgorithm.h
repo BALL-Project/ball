@@ -39,7 +39,7 @@ namespace BALL
 			*/
 
 			/** Full setup.
-			 *  Assigns systems 1 and two and the options for this DockingAlgorithm.
+			 *  Assigns systems 1 and 2 and the options for this DockingAlgorithm.
 			 */
 			virtual void setup(System& system1, System& system2, Options& new_options)
 				throw();
@@ -89,9 +89,25 @@ namespace BALL
 				throw() { return system_changed_;}
 
 			/**
+			 */
+			virtual bool isSetup() const
+				throw() { return is_setup_;}
+
+			/**
 			*/
-			virtual float getProgress() const
+			//virtual float getProgress() const
+				//throw();
+
+			/**
+			 */
+			virtual float getSetupProgress() const
 				throw();
+
+			/**
+			 */
+			virtual float getDockingProgress() const
+				throw();
+
 
 			/**
 				*/
@@ -116,6 +132,7 @@ namespace BALL
 			bool	pause_;
 			bool  abort_;
 			bool 	system_changed_;
+			bool	is_setup_;
 	};
 
 } // namespace BALL

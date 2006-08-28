@@ -301,7 +301,7 @@ namespace BALL
 				throw();
 
       // return the overall docking progress as a percentage
-      float getProgress() const
+      float getDockingProgress() const
 				throw();
       
       // 

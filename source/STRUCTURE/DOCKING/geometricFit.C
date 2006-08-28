@@ -174,24 +174,21 @@ namespace BALL
 	void GeometricFit::setup(System& system1, System& system2, Options& new_options)
 		throw()
 	{
+		DockingAlgorithm::setup(system1,system2,new_options);
 		radius_a_ = 0.0;
     radius_b_ = 0.0;
     current_round_ = 0;
     total_round_   = 0;
-		system1_ = system1;
-		system2_ = system2;
-		options  = new_options;
 	}
 
 	void GeometricFit::setup(System& system1, System& system2)
 		throw()
 	{
+		DockingAlgorithm::setup(system1,system2);
 		radius_a_ = 0.0;
     radius_b_ = 0.0;
     current_round_ = 0;
     total_round_   = 0;
-		system1_ = system1;
-		system2_ = system2;
 	}
 	
 	/** Compute the center of mass of system
@@ -1354,7 +1351,7 @@ namespace BALL
 
   /** Return the overall docking progress as a percentage
 	 */
-  float GeometricFit::getProgress() const
+  float GeometricFit::getDockingProgress() const
     throw()
   {
 		if (total_round_ == 0) return 0.0;

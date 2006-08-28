@@ -14,11 +14,13 @@ namespace BALL
 		throw()
 	{
 		system_changed_ = false;
+		is_setup_ = false;
 	}
 
 	void DockingAlgorithm::setup(System& system1, System& system2, Options& new_options)
 		throw()
 	{
+		is_setup_ = true;
 		system1_ = system1;
 		system2_ = system2;
 		options  = new_options;
@@ -27,6 +29,7 @@ namespace BALL
 	void DockingAlgorithm::setup(System& system1, System& system2)
 		throw()
 	{
+		is_setup_ = true;
 		system1_ = system1;
 		system2_ = system2;
 	}
@@ -36,6 +39,7 @@ namespace BALL
 	{
 		pause_ = false;
 		abort_ = false;
+		is_setup_ = false;
 	}
 
 	void DockingAlgorithm::pause()
@@ -64,12 +68,20 @@ namespace BALL
 		return true;
 	}
 
-	float DockingAlgorithm::getProgress() const
+	float DockingAlgorithm::getSetupProgress() const
+		throw()
+	{
+		//Log.error() << "This is just an interface definition. Check your dynamic binding" << std::endl;
+		return 1;
+	}
+
+	float DockingAlgorithm::getDockingProgress() const
 		throw()
 	{
 		Log.error() << "This is just an interface definition. Check your dynamic binding" << std::endl;
 		return 0;
 	}
+
 
 	const System& DockingAlgorithm::getIntermediateResult()
 		throw()
