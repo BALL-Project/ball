@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>563</width>
+    <width>623</width>
     <height>435</height>
    </rect>
   </property>
@@ -20,7 +20,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>560</width>
+     <width>611</width>
      <height>440</height>
     </rect>
    </property>
@@ -102,12 +102,12 @@
     </widget>
    </widget>
    <widget class="QWidget" name="Hotkeys" >
-    <widget class="QWidget" name="" >
+    <widget class="QWidget" name="widget" >
      <property name="geometry" >
       <rect>
        <x>0</x>
        <y>350</y>
-       <width>511</width>
+       <width>611</width>
        <height>78</height>
       </rect>
      </property>

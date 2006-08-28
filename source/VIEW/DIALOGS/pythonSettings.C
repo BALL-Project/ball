@@ -103,10 +103,10 @@ HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
   setRowCount(0);
 	setShowGrid(true);
 	
-	setColumnWidth(0, 70);
+	setColumnWidth(0, 90);
 	setColumnWidth(1, 60);
-	setColumnWidth(2, 350);
-	setGeometry(2,2, 530, 342);
+	setColumnWidth(2, 410);
+	setGeometry(2,2, 610, 342);
 
 	setSelectionBehavior(QAbstractItemView::SelectRows);
 	setSelectionMode(QAbstractItemView::SingleSelection);
