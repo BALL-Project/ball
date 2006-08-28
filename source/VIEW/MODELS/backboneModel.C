@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.25.2.13 2006/07/28 12:40:41 amoll Exp $
+// $Id: backboneModel.C,v 1.25.2.14 2006/08/28 21:46:10 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -171,6 +171,9 @@ bool AddBackboneModel::collectPositions(vector<Residue*> residues)
 	else // proteins
 	{
 		SecondaryStructure* ss;
+		// collect the types for all residues
+		// than collect all CA atoms, except if we are in CARTOON mode,
+		// than collect the C atoms for the STRAND sections
 		for (Position r = 0; r < residues.size(); r++)
 		{
 			String batom = "CA";
@@ -187,6 +190,7 @@ bool AddBackboneModel::collectPositions(vector<Residue*> residues)
 			}
 
 			/*
+			// dont know if this is still needed Andreas Moll 19.08.06
 			String full_name = residue.getFullName();
 
 			// collect CA-Atoms and CH3 atoms in ACE(-N) and NME(-C)
@@ -215,6 +219,7 @@ bool AddBackboneModel::collectPositions(vector<Residue*> residues)
 			// collect CA-Atoms and Os
 			BALL_FOREACH_ATOM(residue, it)
 			{
+				// search for CA or C Atom
 				if (it->getName() == batom)
 				{
 					backbones.push_back(it->getPosition());
@@ -235,7 +240,7 @@ bool AddBackboneModel::collectPositions(vector<Residue*> residues)
 			{
 				logString(String("Warning: not all atoms found for protein backbone/cartoon model!"));
 				String rname = residue.getFullName() + String(" ") + String(residue.getID());
-				if (!ca_found) logString(String("Could not found CA for ") + rname);
+				if (!ca_found) logString(String("Could not found ") + batom + " for " + rname);
 				if (!o_found)  logString(String("Could not found O for ") + rname);
 				return false;
 			}
