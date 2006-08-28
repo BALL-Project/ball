@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.6.2.15 2006/08/24 16:41:41 leonhardt Exp $
+// $Id: dockDialog.C,v 1.5.2.6.2.16 2006/08/28 11:47:33 leonhardt Exp $
 //
 
 #include <QtGui/qpushbutton.h>
@@ -113,8 +113,6 @@ namespace BALL
 				PreferencesEntry(dock_dialog),
 				is_redock_(dock_dialog.is_redock_),
 				has_changed_(dock_dialog.has_changed_),
-				algorithms_item_to_enum_(dock_dialog.algorithms_item_to_enum_),
-				sf_item_to_enum_(dock_dialog.sf_item_to_enum_),
 				algorithm_dialogs_(dock_dialog.algorithm_dialogs_),
 				scoring_dialogs_(dock_dialog.scoring_dialogs_),
 				allowed_sf_(dock_dialog.allowed_sf_),
@@ -141,7 +139,7 @@ namespace BALL
 				Log.info() << "Destructing object " << this << " of class DockDialog" << std::endl;
 			#endif 
 			
-			// remark: QDialogs in HashMaps are deleted automatically because their parent is DockDialog
+			// remark: QDialogs in maps are deleted automatically because their parent is DockDialog
 			// remark: Systems are deleted by Maincontrol
 		}
 		
@@ -153,16 +151,14 @@ namespace BALL
 			{
 				is_redock_ = dock_dialog.is_redock_;
 				has_changed_ = dock_dialog.has_changed_;
-				algorithms_item_to_enum_ = dock_dialog.algorithms_item_to_enum_;
-				sf_item_to_enum_ = dock_dialog.sf_item_to_enum_;
-				// dialogs in hashmaps are dynamically allocated in method initializeWidget()
-				for (HashMap<int, DockingAlgorithmDialog*>::Iterator it = algorithm_dialogs_.begin(); +it; ++it)
+				// dialogs in maps are dynamically allocated in method initializeWidget()
+				for (std::map<QString, DockingAlgorithmDialog*>::iterator it = algorithm_dialogs_.begin(); it != algorithm_dialogs_.end(); ++it)
 				{
 					delete it->second;
 					algorithm_dialogs_.erase(it);
 				}
 				algorithm_dialogs_ = dock_dialog.algorithm_dialogs_;
-				for (HashMap<int, QDialog*>::Iterator it = scoring_dialogs_.begin(); +it; ++it)
+				for (std::map<QString, QDialog*>::iterator it = scoring_dialogs_.begin(); it != scoring_dialogs_.end(); ++it)
 				{
 					delete it->second;
 					scoring_dialogs_.erase(it);
@@ -222,20 +218,6 @@ namespace BALL
 			return scoring_opt_;
 		}
 
-		std::map<QString,int>& DockDialog::getAlgorithmEnumMap()
-				throw()
-		{
-			return algorithms_item_to_enum_;
-		}
-
-
-		std::map<QString,int>& DockDialog::getScoringEnumMap()
-				throw()
-		{
-			return sf_item_to_enum_;
-		}
-
-		
 		// Sets the flags 'is_redock_' and 'has_changed_'
 		void DockDialog::isRedock(bool is_redock)
 			throw()
@@ -252,33 +234,29 @@ namespace BALL
 		}
 		
 		// Adds docking algorithm to Combobox and its advanced option dialogs to HashMap.
-		void DockDialog::addAlgorithm(const QString& name, const int algorithm, DockingAlgorithmDialog* dialog)
+		void DockDialog::addAlgorithm(const QString& name, DockingAlgorithmDialog* dialog)
 			throw()
 		{
 			if (dialog)
 			{
 				// add dialog to HashMap
-				algorithm_dialogs_[algorithm] = dialog;
+				algorithm_dialogs_[name] = dialog;
 			}
 			// add to ComboBox
 			algorithms->addItem(name);
-			// add to enum_map
-			algorithms_item_to_enum_[name] = algorithm;
 		}
 		
 		// Adds scoring function to Combobox and its advanced option dialogs to HashMap, if it has such an dialog.
-		void DockDialog::addScoringFunction(const QString& name, const int score_func, QDialog* dialog)
+		void DockDialog::addScoringFunction(const QString& name, QDialog* dialog)
 			throw()
 		{
 			if (dialog)
 			{
 				// add scoring function to HashMap for scoring option dialogs
-				scoring_dialogs_[score_func] = dialog;
+				scoring_dialogs_[name] = dialog;
 			}
 			// add to ComboBox
 			scoring_functions->addItem(name);
-			// add to enum_map
-			sf_item_to_enum_[name] = score_func;
 		}
 		
 		// is called by DockingController::initializeWidget()
@@ -290,14 +268,14 @@ namespace BALL
 			//build HashMap for algorithm advanced option dialogs
 #ifdef BALL_HAS_FFTW
 			GeometricFitDialog* geo_fit = new GeometricFitDialog(this);
-			addAlgorithm("Geometric Fit", DockingController::GEOMETRIC_FIT, geo_fit);
+			addAlgorithm("Geometric Fit", geo_fit);
 #endif
 			EvolutionDockingDialog* ev_dock = new EvolutionDockingDialog(this);
-			addAlgorithm("Evolutionary Docking", DockingController::EVOLUTION_DOCKING, ev_dock);
+			addAlgorithm("Evolutionary Docking", ev_dock);
 
 			
 			//build HashMap for scoring function advanced option dialogs
-			addScoringFunction("Default", DockingController::DEFAULT);
+			addScoringFunction("Default");
 			MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
 			if (!mol_struct)
 			{
@@ -305,14 +283,14 @@ namespace BALL
 										<< __FILE__ << " " << __LINE__ << std::endl;
 				return;
 			}
-			addScoringFunction("AMBER Force Field", DockingController::AMBER_FF, &(mol_struct->getAmberConfigurationDialog()));
+			addScoringFunction("AMBER Force Field", &(mol_struct->getAmberConfigurationDialog()));
 		
 			// build HashMap with allowed scoring functions for each algorithm
 			QStringList sf;
 			sf.append("Default");
 			sf.append("AMBER Force Field");
-			allowed_sf_[DockingController::GEOMETRIC_FIT] = sf;
-			allowed_sf_[DockingController::EVOLUTION_DOCKING] = sf;
+			allowed_sf_["Geometric Fit"] = sf;
+			allowed_sf_["Evolutionary Docking"] = sf;
 		}
 		  
 		// Read the preferences from the INIFile.
@@ -348,65 +326,65 @@ namespace BALL
 			// and set advanced button enabled if necessary
 			algorithmChosen();
 			scoringFuncChosen();
-			HashMap<int, DockingAlgorithmDialog*>::Iterator it = algorithm_dialogs_.begin();
-			for (; +it; ++it)
+			std::map<QString, DockingAlgorithmDialog*>::iterator it = algorithm_dialogs_.begin();
+			for (; it != algorithm_dialogs_.end(); ++it)
 			{
-					DockingAlgorithmDialog d(*(it->second));
-					d.fetchPreferences(file);
-					it->second->fetchPreferences(file);
-				}
+				DockingAlgorithmDialog d(*(it->second));
+				d.fetchPreferences(file);
+				it->second->fetchPreferences(file);
 			}
+		}
 							
-			// Write the preferences to the INIFile.
-			void DockDialog::writePreferences(INIFile& file)
-				throw()
-			{
-				// first write the options that are currently in the dialog
-				PreferencesEntry::writePreferenceEntries(file);
-				// now write the options that are in backup_
-				swapValues_();
-				PreferencesEntry::writePreferenceEntries(file);
-				swapValues_();
+		// Write the preferences to the INIFile.
+		void DockDialog::writePreferences(INIFile& file)
+			throw()
+		{
+			// first write the options that are currently in the dialog
+			PreferencesEntry::writePreferenceEntries(file);
+			// now write the options that are in backup_
+			swapValues_();
+			PreferencesEntry::writePreferenceEntries(file);
+			swapValues_();
 
-				HashMap<int, DockingAlgorithmDialog*>::Iterator it = algorithm_dialogs_.begin();
-				for (; +it; ++it)
-				{
-					it->second->writePreferences(file);
-				}
-			}
-			
-			/// Reset the dialog to the standard values
-			void DockDialog::reset()
-				throw()
+			std::map<QString, DockingAlgorithmDialog*>::iterator it = algorithm_dialogs_.begin();
+			for (; it != algorithm_dialogs_.end(); ++it)
 			{
-				if (tab_pages->currentIndex() == 0)
+				it->second->writePreferences(file);
+			}
+		}
+			
+		/// Reset the dialog to the standard values
+		void DockDialog::reset()
+			throw()
+		{
+			if (tab_pages->currentIndex() == 0)
+			{
+				// comboboxes
+				algorithms->setCurrentIndex(0);
+				scoring_functions->setCurrentIndex(0);
+				
+				// buttons
+				alg_advanced_button->setEnabled(false);
+				scoring_advanced_button->setEnabled(false);
+				
+				// options
+				best_num->setText("100");
+				verbosity->setText("1");
+				
+				if(is_redock_)
 				{
-					// comboboxes
-					algorithms->setCurrentIndex(0);
-					scoring_functions->setCurrentIndex(0);
-					
-					// buttons
-					alg_advanced_button->setEnabled(false);
-					scoring_advanced_button->setEnabled(false);
-					
-					// options
-					best_num->setText("100");
-					verbosity->setText("1");
-					
-					if(is_redock_)
-					{
-						// euler angles
-						phi_min->setText("-15");
-						phi_max->setText("15");
-						delta_phi->setText("3");
-					
-						psi_min->setText("-15");
-						psi_max->setText("15");
-						delta_psi->setText("3");
-					
-						theta_min->setText("-15");
-						theta_max->setText("15");
-						delta_theta->setText("3");
+					// euler angles
+					phi_min->setText("-15");
+					phi_max->setText("15");
+					delta_phi->setText("3");
+				
+					psi_min->setText("-15");
+					psi_max->setText("15");
+					delta_psi->setText("3");
+				
+					theta_min->setText("-15");
+					theta_max->setText("15");
+					delta_theta->setText("3");
 				}
 				else
 				{
@@ -455,12 +433,10 @@ namespace BALL
 				return;
 			}
 			// options for chosen algorithm; options are filled by the corresponding dialog
-			Index index = algorithms_item_to_enum_[algorithms->currentText()];
-      algorithm_dialogs_[index]->getOptions(algorithm_opt_);
-			switch(index)
+			QString text = algorithms->currentText();
+      algorithm_dialogs_[text]->getOptions(algorithm_opt_);
+			if (text == "Geometric Fit")
 			{
-				case DockingController::GEOMETRIC_FIT:
-
 #ifdef BALL_HAS_FFTW
 					// options for redocking (euler angles)
 					if(is_redock_)
@@ -496,32 +472,29 @@ namespace BALL
 						algorithm_opt_[GeometricFit::Option::DEG_THETA] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
 					}
 #endif
-					break;
-				case DockingController::EVOLUTION_DOCKING:
-					EvolutionDockingDialog* edd = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[index]));
+			}
+			else if (text == "Evolutionary Docking")
+			{
+					EvolutionDockingDialog* edd = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[text]));
 					ff_ = edd->getForceField();
-					break;
 			}
 			
 			// options for chosen scoring function
-			index = sf_item_to_enum_[scoring_functions->currentText()];
-			switch(index)
+			text = scoring_functions->currentText();
+			if (text == "Amber Force Field")
 			{
-				case DockingController::AMBER_FF:
+				MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
+				if (!mol_struct)
 				{
-					MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
-					if (!mol_struct)
-						{
-							Log.error() << "Error while applying options of AMBER_FF scoring function! " << __FILE__ << " " << __LINE__<< std::endl;
-							return;
-						}
-					AmberFF& ff = mol_struct->getAmberFF();
-					AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[index]));
-					
-					// now the Amber force field gets its options
-					dialog->applyTo(ff);
-					scoring_opt_ = ff.options;
+					Log.error() << "Error while applying options of AMBER_FF scoring function! " << __FILE__ << " " << __LINE__<< std::endl;
+					return;
 				}
+				AmberFF& ff = mol_struct->getAmberFF();
+				AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[text]));
+					
+				// now the Amber force field gets its options
+				dialog->applyTo(ff);
+				scoring_opt_ = ff.options;
 			}
 		}
 
@@ -835,11 +808,11 @@ namespace BALL
 		void DockDialog::algAdvancedPressed()
 		{
 			// show corresponding options dialog
-			Index index = algorithms_item_to_enum_[algorithms->currentText()];
-			if (algorithm_dialogs_.has(index))
+			QString text = algorithms->currentText();
+			if (algorithm_dialogs_.find(text) != algorithm_dialogs_.end())
 			{
-				algorithm_dialogs_[index]->isRedock(is_redock_);
-				if (index == DockingController::EVOLUTION_DOCKING)
+				algorithm_dialogs_[text]->isRedock(is_redock_);
+				if (text == "Evolutionary Docking")
 				{
 					if ((systems1->currentText() == "<select>") || 
 							(systems2->currentText() == "<select>") || 
@@ -853,10 +826,10 @@ namespace BALL
 					  error_message.exec();
 					  return;
 					}
-					EvolutionDockingDialog* edd = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[index]));
+					EvolutionDockingDialog* edd = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[text]));
 					edd->setSystem(docking_partner2_);
 				}
-				algorithm_dialogs_[index]->exec();
+				algorithm_dialogs_[text]->exec();
 			}
 		}
 			
@@ -864,10 +837,10 @@ namespace BALL
 		void DockDialog::scoringAdvancedPressed()
 		{
 			// show corresponding options dialog
-			Index index = sf_item_to_enum_[scoring_functions->currentText()];
-			if (scoring_dialogs_.has(index))
+			QString text = scoring_functions->currentText();
+			if (scoring_dialogs_.find(text) != scoring_dialogs_.end())
 			{
-				scoring_dialogs_[index]->exec();
+				scoring_dialogs_[text]->exec();
 			}
 		}
 		
@@ -897,8 +870,8 @@ namespace BALL
 		void DockDialog::scoringFuncChosen()
 		{
 			// if chosen scoring function has advanced options, enable advanced_button
-			Index index = sf_item_to_enum_[scoring_functions->currentText()];
-			if (scoring_dialogs_.has(index))
+			QString text = scoring_functions->currentText();
+			if (scoring_dialogs_.find(text) != scoring_dialogs_.end())
 			{
 				scoring_advanced_button->setEnabled(true);
 			}
@@ -912,14 +885,14 @@ namespace BALL
 		void DockDialog::algorithmChosen()
 		{
 			// if chosen algorithm has advanced options
-			Index index = algorithms_item_to_enum_[algorithms->currentText()];
-			if (algorithm_dialogs_.has(index))
+			QString text = algorithms->currentText();
+			if (algorithm_dialogs_.find(text) != algorithm_dialogs_.end())
 			{
 				alg_advanced_button->setEnabled(true);
 				// update scoring function combobox
 				// only show scoring functions which are allowed for chosen algorithm
 				scoring_functions->clear();
-				scoring_functions->addItems(allowed_sf_[index]);
+				scoring_functions->addItems(allowed_sf_[text]);
 			}
 			else
 			{

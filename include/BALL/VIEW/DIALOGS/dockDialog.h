@@ -137,16 +137,6 @@ namespace BALL
 				Options& getScoringOptions()
 					throw();
 
-				/** 
-				 */
-				std::map<QString,int>& getAlgorithmEnumMap()
-					throw();
-
-				/** 
-				 */
-				std::map<QString,int>& getScoringEnumMap()
-					throw();
-
 				/** Sets the flags \link DockDialog::is_redock_ is_redock_ \endlink and \link DockDialog::has_changed_ has_changed_ \endlink.
 				 */
 				void isRedock(bool is_redock)
@@ -154,20 +144,16 @@ namespace BALL
 					
 				/** Adds docking algorithm to combobox and its advanced option dialog to hashmap.
 				 *	@param      name the name of the algorithm
-				 *	@param      algorithm the value of enum DockingController::Algorithm
 				 *	@param      dialog pointer to an advanced option dialog
 				 */
-				// remark: algorithm isn't enum type because we then have cyclic includes of DockDialog and DockingController
-				void addAlgorithm(const QString& name, const int algorithm, DockingAlgorithmDialog* dialog)
+				void addAlgorithm(const QString& name, DockingAlgorithmDialog* dialog)
 					throw();
 					
 				/** Adds scoring function to combobox and its advanced option dialog to hashmap, if it has such a dialog.
 				 *	@param      name the name of the scoring function
-				 *	@param      score_func the value of enum DockingController::ScoringFunction
 				 *	@param      dialog pointer to an advanced option dialog
 				 */
-				// remark: score_func isn't enum type because we then have cyclic includes of DockDialog and DockingController
-				void addScoringFunction(const QString& name, const int score_func, QDialog* dialog=0)
+				void addScoringFunction(const QString& name, QDialog* dialog=0)
 					throw();
 				
 				/**	Builds hashmaps for algorithm advanced option dialogs and for scoring function advanced option dialogs.
@@ -322,25 +308,20 @@ namespace BALL
 					*/
 				bool has_changed_;
 			
-				/**
-				 */
-				std::map<QString,int> algorithms_item_to_enum_;
-				std::map<QString,int> sf_item_to_enum_;
-
-				/** key: DockingController::Algorithm
+				/** key: name of algorithm
 				 *  value: advanced options dialog
 				 */
-				HashMap<int, DockingAlgorithmDialog*> algorithm_dialogs_;
+				std::map<QString, DockingAlgorithmDialog*> algorithm_dialogs_;
 				
-				/** key: DockingController::ScoringFunction
+				/** key: name of scoring function
 				 *  value: advanced options dialog
 				 */
-				HashMap<int, QDialog*> scoring_dialogs_;
+				std::map<QString, QDialog*> scoring_dialogs_;
 	
-				/** key: DockingController::Algorithm
+				/** key: name of algorithm
 				 *  value: vector of scoring functions name which can be used with this algorithm
 				 */
-				HashMap<int, QStringList > allowed_sf_;
+				std::map<QString, QStringList> allowed_sf_;
 				
 			  /** vector contains pointers to all systems that are loaded into BALLView
 			   */

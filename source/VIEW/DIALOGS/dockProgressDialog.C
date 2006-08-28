@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.4.2.2.2.2 2006/08/03 14:38:03 leonhardt Exp $
+// $Id: dockProgressDialog.C,v 1.4.2.2.2.3 2006/08/28 11:47:34 leonhardt Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockProgressDialog.h>
@@ -33,7 +33,10 @@ namespace BALL
 			timer_.setSingleShot(true);
 			progress_bar->setMaximum(100);
       
+			connect(pause_button, SIGNAL(clicked()), this, SLOT(pauseClicked()));
+			connect(abort_button, SIGNAL(clicked()), this, SLOT(abortClicked()));
       connect(&timer_, SIGNAL(timeout()), SLOT(updateProgress_()));
+
     }
     
     // Copy constructor.
@@ -141,7 +144,7 @@ namespace BALL
     // TODO: pause algorithm!!!
     void DockProgressDialog::pauseClicked()
     {
-      if(pause_button->text() == "Pause")
+      if (pause_button->text() == "Pause")
 			{
 				pause_button->setText("Continue");
 				alg_->pause();
@@ -163,8 +166,17 @@ namespace BALL
 		void DockProgressDialog::updateProgress_()
 		{
 			if (alg_->wasAborted()) return;
+
+			float progress;
+			/*if (alg_->isSetup())
+			{
+				progress = alg_->getSetupProgress();
+			}
+			else
+			{*/
+				progress = alg_->getDockingProgress();
+			//}
 			
-			float progress = alg_->getProgress();
 			// set progress
 			progress_bar->setValue((int)(progress * 100.0));
 			// calculate remaining time
@@ -211,13 +223,21 @@ namespace BALL
 				remaining_time->setText("--:--:--");
 			}
 						
-			// if docking has not finished restart timer
+			// if setup / docking has not finished restart timer
 			// remark: dialog is closed by the docking controller since otherwise the time between 
 			// closing the dialog and showing the DockResult in the dataset widget would be too long 
+			if (alg_->isSetup())
+			{
+				// reset progress bar
+				progress_bar->reset();
+				progress_label->setText("Run docking...");
+			}
+			
 			if (!alg_->hasFinished())
 			{
-			 	timer_.start(1000);
+				timer_.start(1000);
 			}
+
 		}
 		
 	} // end of namespace View
