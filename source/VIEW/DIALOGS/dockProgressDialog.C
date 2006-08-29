@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.4.2.2.2.3 2006/08/28 11:47:34 leonhardt Exp $
+// $Id: dockProgressDialog.C,v 1.4.2.2.2.4 2006/08/29 12:40:24 leonhardt Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockProgressDialog.h>
@@ -22,7 +22,8 @@ namespace BALL
 				Ui_DockProgressDialogData(),
 				alg_(0),
 				remain_time_(0),
-				time_step_(1)
+				time_step_(1),
+				was_called_(false)
     {
 #ifdef BALL_VIEW_DEBUG
       Log.info() << "new DockProgressDialog " << this << std::endl;
@@ -48,7 +49,8 @@ namespace BALL
 				//timer_(dock_prog_dialog.timer_),
 				start_time_(dock_prog_dialog.start_time_),
 				remain_time_(dock_prog_dialog.remain_time_),
-				time_step_(dock_prog_dialog.time_step_)
+				time_step_(dock_prog_dialog.time_step_),
+				was_called_(dock_prog_dialog.was_called_)
     {}
     
     // Destructor	
@@ -71,6 +73,7 @@ namespace BALL
 	  start_time_ = dock_prog_dialog.start_time_;
 		remain_time_ = dock_prog_dialog.remain_time_,
 		time_step_ = dock_prog_dialog.time_step_;
+		was_called_ = dock_prog_dialog.was_called_;
 	}
       return *this;
     }
@@ -168,14 +171,14 @@ namespace BALL
 			if (alg_->wasAborted()) return;
 
 			float progress;
-			/*if (alg_->isSetup())
+			if (alg_->isSetup())
 			{
 				progress = alg_->getSetupProgress();
 			}
 			else
-			{*/
+			{
 				progress = alg_->getDockingProgress();
-			//}
+			}
 			
 			// set progress
 			progress_bar->setValue((int)(progress * 100.0));
@@ -226,8 +229,9 @@ namespace BALL
 			// if setup / docking has not finished restart timer
 			// remark: dialog is closed by the docking controller since otherwise the time between 
 			// closing the dialog and showing the DockResult in the dataset widget would be too long 
-			if (alg_->isSetup())
+			if (!alg_->isSetup() && !was_called_)
 			{
+				was_called_ = true;
 				// reset progress bar
 				progress_bar->reset();
 				progress_label->setText("Run docking...");
