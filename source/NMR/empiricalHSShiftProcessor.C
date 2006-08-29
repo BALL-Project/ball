@@ -1068,18 +1068,19 @@ namespace BALL
 			{
 				if ((*it) == 	"FR_P" )
 				{	
-					// TODO: maybe is N-terminal?
 					properties_string_[(*it)]= (prev_residue->isNTerminal() ? "Y": "N");
 				}
 				else if ((*it) == 	"AA_P" )
 				{
 					properties_string_[(*it)]= getAminoAcid_(prev_residue);
 
-				}else if ((*it) == 	"SS_P" )
+				}
+				else if ((*it) == 	"SS_P" )
 				{
 					properties_string_[(*it)]= getSecondaryStructure_(prev_residue);
 
-				}else if ((*it) == 	"PSI_P")
+				}
+				else if ((*it) == 	"PSI_P")
 				{
 					if (prev_residue->hasTorsionPsi())
 					{	
@@ -1092,7 +1093,8 @@ namespace BALL
 					{	
 						properties_real_[(*it)] = FLOAT_VALUE_NA;
 					}
-				}else if ((*it) == 	"PHI_P")
+				}
+				else if ((*it) == 	"PHI_P")
 				{	
 					if (prev_residue->hasTorsionPhi())
 					{		
@@ -1105,7 +1107,8 @@ namespace BALL
 					{
 						properties_real_[(*it)] = FLOAT_VALUE_NA;
 					}
-				}else if ((*it) == 	"CHI_P")
+				}
+				else if ((*it) == 	"CHI_P")
 				{
 					properties_real_[(*it)] = getChiAngle_(prev_residue);	
 					if (properties_real_[(*it)] == FLOAT_VALUE_NA)
@@ -1120,34 +1123,44 @@ namespace BALL
 							properties_string_[(*it)] = "Unknown"; 
 						}
 					}						
-				}else if ((*it) == 	"CHI2_P")
+				}
+				else if ((*it) == 	"CHI2_P")
 				{
 					properties_real_[(*it)]=getChi2Angle_(prev_residue);	
-				}else if ((*it) == 	"HA1L_P" )
+				}
+				else if ((*it) == 	"HA1L_P" )
 				{
 					properties_real_[(*it)]= getHA_HBondLen_(prev_residue);	
-				}else if ((*it) == 	"HA1_P" )
+				}
+				else if ((*it) == 	"HA1_P" )
 				{
 					properties_string_[(*it)]= (hasHA_HBond_(prev_residue)? "Y": "N");	
-				}else if ((*it) == 	"HA2L_P" )
+				}
+				else if ((*it) == 	"HA2L_P" )
 				{
 					properties_real_[(*it)]= getHA2_HBondLen_(prev_residue);	
-				}else if ((*it) == 	"HA2_P" )
+				}
+				else if ((*it) == 	"HA2_P" )
 				{
 					properties_string_[(*it)]= (hasHA2_HBond_(prev_residue) ? "Y": "N");	
-				}else if ((*it) == 	"HNL_P" )
+				}
+				else if ((*it) == 	"HNL_P" )
 				{
 					properties_real_[(*it)]= getHN_HBondLen_(prev_residue);	
-				}else if ((*it) == "HN_P" )
+				}
+				else if ((*it) == "HN_P" )
 				{
 					properties_string_[(*it)]  = (hasHN_HBond_(prev_residue)? "Y": "N");
-				}else if ((*it) == 	"OHL_P" )
+				}
+				else if ((*it) == 	"OHL_P" )
 				{
 					properties_real_[(*it)] = getO_HBondLen_(prev_residue);	
-				}else if ((*it) == 	"OH_P" )
+				}
+				else if ((*it) == 	"OH_P" )
 				{
 					properties_string_[(*it)] = (hasO_HBond_(prev_residue) ? "Y": "N");	
-				}else if ((*it) == 	"DISULFIDE_P" )
+				}
+				else if ((*it) == 	"DISULFIDE_P" )
 				{
 					properties_string_[(*it)]= (hasDisulfidBond_(prev_residue)  ? "Y": "N");	
 				}
@@ -1181,7 +1194,6 @@ namespace BALL
 			{
 				if ((*it) == 	"FR_N" )
 				{	
-					// TODO: maybe is N-terminal?
 					properties_string_[(*it)]=  (next_residue->isNTerminal()? "Y": "N");	
 				}
 				else if ((*it) == 	"AA_N" )
@@ -1191,7 +1203,8 @@ namespace BALL
 				{
 					properties_string_[(*it)]= getSecondaryStructure_(next_residue);
 
-				}else if ((*it) == 	"PSI_N")
+				}
+				else if ((*it) == 	"PSI_N")
 				{
 					if (next_residue->hasTorsionPsi())
 					{	
@@ -1204,7 +1217,8 @@ namespace BALL
 					{	
 						properties_real_[("PSI_N")]  = FLOAT_VALUE_NA;
 					}
-				}else if ((*it) == 	"PHI_N")
+				}
+				else if ((*it) == 	"PHI_N")
 				{	
 					if (next_residue->hasTorsionPhi())
 					{	
@@ -1217,7 +1231,8 @@ namespace BALL
 					{
 						properties_real_[("PHI_N")]  = FLOAT_VALUE_NA;
 					}
-				}else if ((*it) == 	"CHI_N")
+				}
+				else if ((*it) == 	"CHI_N")
 				{
 					properties_real_[(*it)]=  getChiAngle_(next_residue);
 					if (properties_real_[(*it)] == FLOAT_VALUE_NA) 
@@ -1233,35 +1248,45 @@ namespace BALL
 						}
 					}				
 					properties_real_[(*it)]=  getChiAngle_(next_residue);
-				}else if ((*it) == 	"CHI2_N")
+				}
+				else if ((*it) == 	"CHI2_N")
 				{
 					properties_real_[(*it)]=  getChi2Angle_(next_residue);	
-				}else if ((*it) == 	"HA1L_N" )
+				}
+				else if ((*it) == 	"HA1L_N" )
 				{
 					properties_real_[(*it)]= getHA_HBondLen_(next_residue) ;		
-				}else if((*it) == 	"HA1_N")
+				}
+				else if((*it) == 	"HA1_N")
 				{
 					properties_string_[(*it)]= (hasHA_HBond_(next_residue)? "Y": "N");	
-				}else if ((*it) == 	"HA2L_N" )
+				}
+				else if ((*it) == 	"HA2L_N" )
 				{
 					properties_real_[(*it)]= getHA2_HBondLen_(next_residue);	
-				}else if ((*it) == 	"HA2_N" )
+				}
+				else if ((*it) == 	"HA2_N" )
 				{
 					properties_string_[(*it)]= (hasHA2_HBond_(next_residue)? "Y": "N");	
-				}else if ((*it) == 	"HNL_N" )
+				}
+				else if ((*it) == 	"HNL_N" )
 				{
 					properties_real_[(*it)]= getHN_HBondLen_(next_residue);
-				}else if ((*it) == 	"HN_N" )
+				}
+				else if ((*it) == 	"HN_N" )
 				{
 					properties_string_[(*it)]= (hasHN_HBond_(next_residue)? "Y": "N");	
-				}else if ((*it) == 	"OHL_N" )
+				}
+				else if ((*it) == 	"OHL_N" )
 				{
 					properties_real_[(*it)]= getO_HBondLen_(next_residue);	
-				}else if ((*it) == 	"OH_N" )
+				}
+				else if ((*it) == 	"OH_N" )
 				{
 					properties_string_[(*it)]= (hasO_HBond_(next_residue)? "Y": "N");	
 
-				}else if ((*it) == 	"DISULFIDE_N" )
+				}
+				else if ((*it) == 	"DISULFIDE_N" )
 				{
 					properties_string_[(*it)]= 	(hasDisulfidBond_(next_residue)? "Y": "N");		
 				}
@@ -1272,13 +1297,16 @@ namespace BALL
 			{
 					// TODO: maybe is N-terminal?
 				properties_string_[(*it)]=  (residue->isNTerminal() ? "Y": "N");			
-			}else if ((*it) == 	"AA" )
+			}
+			else if ((*it) == 	"AA" )
 			{	
 				properties_string_[(*it)]=  getAminoAcid_(residue);
-			}else if ((*it) == 	"SS" )
+			}
+			else if ((*it) == 	"SS" )
 			{
 				properties_string_[(*it)]=  getSecondaryStructure_(residue);
-			}else if ((*it) == 	"PSI")
+			}
+			else if ((*it) == 	"PSI")
 			{
 				if (residue->hasTorsionPsi())
 				{	
@@ -1287,11 +1315,13 @@ namespace BALL
 						properties_real_[(*it)] -= 360;
 					else if (properties_real_[(*it)] < -180)
 						properties_real_[(*it)] += 360;
-				}else
+				}
+				else
 				{	
 					properties_real_[(*it)] = FLOAT_VALUE_NA;
 				}
-			}else if ((*it) == 		"PHI")
+			}
+			else if ((*it) == 		"PHI")
 			{		
 				if (residue->hasTorsionPhi())
 				{	
@@ -1300,7 +1330,8 @@ namespace BALL
 						properties_real_[(*it)] -= 360;
 					else if (properties_real_[(*it)] < -180)
 						properties_real_[(*it)] += 360;	
-				}else
+				}
+				else
 				{
 					properties_real_[(*it)] = FLOAT_VALUE_NA;
 				}
@@ -1328,28 +1359,36 @@ namespace BALL
 			else if ((*it) == 	"HA1L" )
 			{
 				properties_real_[(*it)]= getHA_HBondLen_(residue); 	
-			}else if ((*it) == 	"HA1" )
+			}
+			else if ((*it) == 	"HA1" )
 			{ 	
 				properties_string_[(*it)]=( hasHA_HBond_(residue)? "Y": "N");
-			}else if ((*it) == 	"HA2L" )
+			}
+			else if ((*it) == 	"HA2L" )
 			{
 				properties_real_[(*it)]= getHA2_HBondLen_(residue) ;	
-			}else if ((*it) == 	"HA2" )
+			}
+			else if ((*it) == 	"HA2" )
 			{ 	
 				properties_string_[(*it)]= (hasHA2_HBond_(residue)? "Y": "N");		
-			}else if ((*it) == 	"HNL" )
+			}
+			else if ((*it) == 	"HNL" )
 			{
 				properties_real_[(*it)]= getHN_HBondLen_(residue) ;	
-			}else if ((*it) == 	"HN" )
+			}
+			else if ((*it) == 	"HN" )
 			{
 				properties_string_[(*it)]=  (hasHN_HBond_(residue)? "Y": "N");		
-			}else if ((*it) == 	"OHL" )
+			}
+			else if ((*it) == 	"OHL" )
 			{
 				properties_real_[(*it)]= getO_HBondLen_(residue);	
-			}else if ((*it) == 	"OH" )
+			}
+			else if ((*it) == 	"OH" )
 			{
 				properties_string_[(*it)]= (hasO_HBond_(residue)? "Y": "N");		
-			}else if ((*it) == 	"DISULFIDE" )
+			}
+			else if ((*it) == 	"DISULFIDE" )
 			{
 				properties_string_[(*it)]= (hasDisulfidBond_(residue)? "Y": "N");			
 			}						
@@ -1433,7 +1472,7 @@ namespace BALL
 			s1d_(),
 			table_()
 	{			
-std::cout << filename <<  std::endl;
+//std::cout << filename <<  std::endl;
 		// find the data file
 		BALL::Path p;
 		String file_name = p.find("NMR/"+filename) ;// "NMR/splinedata/hat_PSI_DISULFIDE-1.dat");
@@ -1459,7 +1498,6 @@ std::cout << filename <<  std::endl;
 		//
 
 		BALL::File file(file_name, std::ios::in);
-		std::cout << "Anne: " << file.good() <<  file_name  << std::endl;
 		String line;
 		String line2;
 		std::vector<BALL::String> fields;
@@ -1505,7 +1543,7 @@ std::cout << filename <<  std::endl;
 			if (PropertiesForShift_::isDiscrete(secondproperty) 
 					|| (PropertiesForShift_::isMixed(secondproperty)))
 			{
-std::cout << "discrete or chi second property" << std::endl;
+//std::cout << "discrete or chi second property" << std::endl;
 				for (Position i = 0; i < fields.size(); i++)
 				{
 					string_sample_positions_y.push_back(fields[i]);
@@ -1513,7 +1551,7 @@ std::cout << "discrete or chi second property" << std::endl;
 			}
 			else
 			{
-std::cout << "real second property" << std::endl;
+//std::cout << "real second property" << std::endl;
 				for (Position i = 0; i < fields.size(); i++)
 				{	
 					float_sample_positions_y.push_back(fields[i].toFloat());
@@ -1545,6 +1583,9 @@ std::cout << "real second property" << std::endl;
 				if (fields.size() != fields2.size())
 				{
 					std::cerr << "number of points is unequal to number of values in file "<< filename << std::endl;
+					invalid_ = true;
+					// we assume the file is corrupt, we skip this file
+					return;
 				}
 				else
 				{	
@@ -1554,7 +1595,7 @@ std::cout << "real second property" << std::endl;
 					
 					if (PropertiesForShift_::isDiscrete(firstproperty) || PropertiesForShift_::isMixed(firstproperty))
 					{
-		std::cout << "discrete  first property" << std::endl;
+//		std::cout << "discrete  first property" << std::endl;
 						for (Position i = 0; i < fields.size(); i++)
 						{
 							string_sample_positions_x_1d.push_back(fields[i]);
@@ -1562,7 +1603,7 @@ std::cout << "real second property" << std::endl;
 					}
 					else
 					{
-		std::cout << "real first property" << std::endl;
+//		std::cout << "real first property" << std::endl;
 						for (Position i = 0; i < fields.size(); i++)
 						{	
 							float_sample_positions_x_1d.push_back(fields[i].toFloat());
@@ -1584,12 +1625,15 @@ std::cout << "real second property" << std::endl;
 					sample_values_2d.push_back(line_values2);
 				}
 
-				// read the next pair of lines
-				line.getline(file);
-				if (file.good())
-					line2.getline(file);
-				else
-					continue;
+				if (!invalid_)
+				{
+					// read the next pair of lines
+					line.getline(file);
+					if (file.good())
+						line2.getline(file);
+					else
+						continue;
+				}
 			}
 
 			// we have read the file now
@@ -1597,11 +1641,11 @@ std::cout << "real second property" << std::endl;
 			// 	  			a map of 1D bicubic splines or 
 			//	  			a lookUpTable (map of map)  
  
-std::cout << "create HS" << std::endl;
+//std::cout << "create HS" << std::endl;
 			
 			if (type_ == REAL__REAL)
 			{
-std::cout << "REAL__REAL" << std::endl;
+//std::cout << "REAL__REAL" << std::endl;
 				// a bicubic spline is stored
 				s2d_.createBiCubicSpline(float_sample_positions_x, float_sample_positions_y, sample_values_2d);
 				//	std::cout << "value at (-170, -160) :" <<  s2d_(float(-170.),float(-160.)) << std::endl;
@@ -1612,7 +1656,7 @@ std::cout << "REAL__REAL" << std::endl;
 				// When accessing the data, one has to switch X and Y, 
 				// since for each discrete value a 1D bicubic spline is stored
 
-std::cout << "REAL__DISCRETE" << std::endl;
+//std::cout << "REAL__DISCRETE" << std::endl;
 				for (Position i = 0; i < string_sample_positions_y.size(); i ++)
 				{
 					// create a 1D bicubic spline
@@ -1630,7 +1674,7 @@ std::cout << "DISCRETE__REAL not implemented" << std::endl;
 			}
 			else if ( (type_ == DISCRETE__DISCRETE) || (type_ == CHI__DISCRETE)|| (type_ == DISCRETE__CHI) )
 			{
-std::cout << "DISCRETE__DISCRETE" << std::endl;
+//std::cout << "DISCRETE__DISCRETE" << std::endl;
 				for (Position i = 0; i < string_sample_positions_y.size(); i++)  // y
 				{
 					 for (Position j = 0; j < string_sample_positions_x[i].size(); j++) // x
@@ -1689,8 +1733,7 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			else if (PropertiesForShift_::isDiscrete(secondproperty))
 			{
 				type_ = CHI__DISCRETE;
-
-				std::cout << "first pro: " << firstproperty << " :second pro" << secondproperty << std::endl;
+//std::cout << "first pro: " << firstproperty << " :second pro" << secondproperty << std::endl;
 			}
 			else  // second is real
 			{	
@@ -1742,9 +1785,9 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		
 		// we have a single spline 
 		// read the points
-	std::cout << "anne: " << file.good() << std::endl;
+//	std::cout << "anne: " << file.good() << std::endl;
 		line.getline(file);
-	std::cout << line << std::endl;
+//	std::cout << line << std::endl;
 		line.split(fields, ";");
 
 		for (Position i = 0; i < fields.size(); i++)
@@ -1844,7 +1887,7 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		else if (type_ == SINGLE__DISCRETE)
 		{	
 				// we have a single table line
-std::cout <<" single - DISCRETE ; " << first_property_ << "  " << second_property_ << std::endl;
+//std::cout <<" single - DISCRETE ; " << first_property_ << "  " << second_property_ << std::endl;
 				shift = table_[first_property_][properties[second_property_].second];		
 		}
 		else if (type_ == SINGLE__CHI)
@@ -1861,7 +1904,7 @@ std::cout <<" single - DISCRETE ; " << first_property_ << "  " << second_propert
 			else 
 				shift = s2d_(properties[first_property_].first, properties[second_property_].first);
 			
-std::cout << properties.atom->getName() << "  " << first_property_ << ":" << second_property_<< " -- " << properties[first_property_].first<< "::" << properties[second_property_].first << " -- " << shift << std::endl;
+//std::cout << properties.atom->getName() << "  " << first_property_ << ":" << second_property_<< " -- " << properties[first_property_].first<< "::" << properties[second_property_].first << " -- " << shift << std::endl;
 		
 		}
 		else if (type_ == REAL__DISCRETE)
@@ -1883,7 +1926,7 @@ std::cout << properties.atom->getName() << "  " << first_property_ << ":" << sec
 		}
 		else if (type_ == DISCRETE__REAL)
 		{
-std::cerr<< "Discrete Real should NEVER be called!! "<< std::endl;
+//std::cerr<< "Discrete Real should NEVER be called!! "<< std::endl;
 
 			// This simulates SHIFTX behaviour: if only one factor is out of bounds, we return the all-values average
 			if (   (properties[second_property_].first == FLOAT_VALUE_NA)
@@ -1926,7 +1969,7 @@ std::cerr<< "Discrete Real should NEVER be called!! "<< std::endl;
 					shift = getTableAverage_();
 			}
 		
-			std::cout << "shift: " << shift<< std::endl;
+		//	std::cout << "shift: " << shift<< std::endl;
 		}
 		else if (type_ == CHI__REAL)
 		{	
@@ -1956,7 +1999,7 @@ std::cerr<< "Discrete Real should NEVER be called!! "<< std::endl;
 			}
 			else 
 			{
-std::cout << "first: "<< (properties[first_property_].first) << " -- second: (" << properties[second_property_].first << "  " <<properties[second_property_].second << ")" << std::endl;
+//std::cout << "first: "<< (properties[first_property_].first) << " -- second: (" << properties[second_property_].first << "  " <<properties[second_property_].second << ")" << std::endl;
 				
 				std::cerr << second_property_ << " not set!"  << std::endl;
 			}
@@ -1967,7 +2010,7 @@ std::cout << "first: "<< (properties[first_property_].first) << " -- second: (" 
 			// a table can be accessed like this :
 			//  					table_[y][x]
 			// here the x/first property is chi  
-std::cout << "first pro: (" << properties[first_property_].first << " " << properties[first_property_].second <<  ") : second pro (" << properties[second_property_].first << " "  << properties[second_property_].second << ")" << std::endl;
+//std::cout << "first pro: (" << properties[first_property_].first << " " << properties[first_property_].second <<  ") : second pro (" << properties[second_property_].first << " "  << properties[second_property_].second << ")" << std::endl;
 	
 			if (properties[first_property_].first == FLOAT_VALUE_NA)
 			{
@@ -2040,8 +2083,8 @@ std::cout << "first pro: (" << properties[first_property_].first << " " << prope
 			std::cerr << "Unknown type of properties! " << std::endl;
 		}
 
-		std::cout << "_operator (): ";
-		std::cout <<properties.atom->getName() << "  " << first_property_ << ":" << second_property_<< " -- " << properties[first_property_].first<< ":" << properties[second_property_].second << " -- " << shift << std::endl;
+		//std::cout << "_operator (): ";
+		//std::cout <<properties.atom->getName() << "  " << first_property_ << ":" << second_property_<< " -- " << properties[first_property_].first<< ":" << properties[second_property_].second << " -- " << shift << std::endl;
 		
 		return shift;
 	} 
