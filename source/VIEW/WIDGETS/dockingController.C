@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.18 2006/08/28 11:47:52 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.19 2006/08/29 14:46:49 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -309,13 +309,11 @@ namespace BALL
 				thread->start();
 				progress_dialog_->show();
 
-				/*switch(index)
+				if (text == "Evolutionary Docking")
 				{
-					case EVOLUTION_DOCKING:
-						// start timer, true -> it is a single shot
-      			timer_.start(1000);
-						break;
-				}*/
+					// start timer, true -> it is a single shot
+      		timer_.start(1000);
+				}
 				
 			// ============================= WITHOUT MULTITHREADING =================================
 			#else
@@ -472,27 +470,23 @@ namespace BALL
 		void DockingController::updateSystem_()
 		{
 			//Log.error() << "in DockingController::updateSystem_()" << std::endl;
-			//if(dock_alg_->systemChanged())
-			//{
-				// if function is called for the first time
+			if(dock_alg_->systemChanged())
+			{
 				if(!docked_system_)
 				{
-					//Log.error() << "was_called_ true" << std::endl;
 					// system is deleted by main control, when it is removed from BallView
 					docked_system_ = new System(dock_alg_->getIntermediateResult());
 					//getMainControl()->deselectCompositeRecursive(docked_system, true);
 					getMainControl()->insert(*docked_system_);
-				 //notify_(new CompositeMessage(*docked_system_, CompositeMessage::CENTER_CAMERA));
 				}
 				else
 				{
-					//Log.error() << "was_called_ false" << std::endl;
 					SnapShot sn;
 					sn.takeSnapShot(dock_alg_->getIntermediateResult());
 					sn.applySnapShot(*docked_system_);
 					getMainControl()->update(*docked_system_, true);
 				}
-			//}
+			}
 			
 			// if docking has not finished restart timer
 			if (!dock_alg_->hasFinished())
