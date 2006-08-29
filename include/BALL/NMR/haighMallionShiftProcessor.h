@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.h,v 1.16.10.3 2006/07/18 18:42:44 anne Exp $
+// $Id: haighMallionShiftProcessor.h,v 1.16.10.4 2006/08/29 09:11:51 anne Exp $
 //
 
 #ifndef BALL_COMMON_H
@@ -176,6 +176,10 @@ namespace BALL
 		 */
 		float										default_hydrogen_target_nucleus_factor_;
 
+		/*_ The default factor of negative ring current factors
+		 */
+		float 									negative_ringcurrent_factor_ ;
+		
 		/*_	The effector residues stored as a vector of atoms the collected by {\tt operator ()}.
 		*/	
 		std::vector< std::vector<Atom*> >			effectors_;

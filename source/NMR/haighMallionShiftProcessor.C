@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.C,v 1.17.18.3 2006/07/18 18:42:46 anne Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.17.18.4 2006/08/29 09:11:52 anne Exp $
 //
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
@@ -30,7 +30,8 @@ namespace BALL
 			all_hydrogen_are_targets_(processor.all_hydrogen_are_targets_),
 			project_target_to_ring_plane_(processor.project_target_to_ring_plane_),
 			target_nucleus_factors_(processor.target_nucleus_factors_),
-			default_hydrogen_target_nucleus_factor_(processor.default_hydrogen_target_nucleus_factor_),
+			default_hydrogen_target_nucleus_factor_(processor.default_hydrogen_target_nucleus_factor_),	
+			negative_ringcurrent_factor_(processor.negative_ringcurrent_factor_),
 			effectors_(processor.effectors_),
 			effector_types_(processor.effector_types_),
 			effector_names_(processor.effector_names_),
@@ -152,7 +153,13 @@ std::cout << " ******************* HM-Shift *******************" << std::endl;
 			default_hydrogen_target_nucleus_factor_ = parameter_section.options.getReal("default_hydrogen_target_nucleus_factor");
 		}
 
-		
+		// read the negative_ringcurrent_factor
+		negative_ringcurrent_factor_ = 1.1;
+		if (parameter_section.options.has("negative_ringcurrent_factor"))
+		{
+			negative_ringcurrent_factor_ = parameter_section.options.getReal("negative_ringcurrent_factor");
+		}
+	
 		// extract the column indices
 		Position target_names_column = parameter_section.getColumnIndex("name");
 		Position target_nucleus_factor_column = parameter_section.getColumnIndex("target_nucleus_factor");
@@ -256,7 +263,7 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 			return true;
 		}
 
-		// over all effectors
+		// over all effectors (rings)
 		for (Position e = 0; e < effectors_.size(); e++ )
 		{
 			// computation of the ring normal
@@ -280,7 +287,11 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 				if (current_normal.getSquareLength() != 0)
 				{
 					current_normal.normalize();
-					ring_normal += current_normal;
+					// do they point into the same direction? 
+					if((ring_normal.getLength() == 0. )|| (current_normal*ring_normal > 0))
+						ring_normal += current_normal;
+					else
+						std::cerr << "ring normals point into different directions" << std::endl;
 				}
 			}
 
@@ -291,12 +302,12 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 			// normalize the normal vector to unit length
 			ring_normal.normalize(); 
 
-			// and print it
-			std::cout << ring_normal << std::endl;
-
 			// over all targets
 			for (Position t = 0; t < targets_.size(); t++ )
 			{
+//if (targets_[t]->getName() == "CA")
+//	std::cout << "ring normal" << ring_normal << ", target" << targets_[t]->getPosition(); 
+				
 				// can H and HA influenced by all effectors or just by effectors of the same residue? 
 				if (    (targets_[t]->getName() == "H") 
 						&& (!H_influenced_by_all_effectors_)
@@ -312,12 +323,16 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 					continue;
 				}
 
+				if (targets_[t]->getName() == "H")
+					std::cout << "HM: " << targets_[t]->getFullName() << " " << effectors_[e][0]->getResidue()->getID() << std::endl;
+
 				// project the target atom position onto the ring plane
 				Vector3 atom_projection = 
 						(project_target_to_ring_plane_) ? 	 targets_[t]->getPosition() 
-																							- (targets_[t]->getPosition()*ring_normal)*ring_normal
+																							+ ((targets_[t]->getPosition()-effectors_[e][0]->getPosition())*ring_normal)*ring_normal
 																						:    targets_[t]->getPosition();
-
+//std::cout << ", projection" << atom_projection << std::endl;
+				
 				if (use_cut_off_)
 				{
 					// compute the ring center for the cut_off computation
@@ -352,31 +367,55 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 					float area=0.;
 					if (project_target_to_ring_plane_)
 					{
-						area = (r_i % r_j).getLength() / 2.;
+				//		area = (r_i % r_j).getLength() / 2.;
+						Vector3 u = r_j - r_i;
+						float b = u.getLength();
+						Vector3 v = r_i*(-1.);
+						Vector3 w = (u*ring_normal)*ring_normal - u%ring_normal;
+						w.normalize();
+						area = fabs(b * (v*w) / 2.);
 					}
 					else
 					{
 						area = r_i * (r_j % ring_normal) / 2.;
 					}
-					
-					area *= 1.0 / (r_i.getSquareLength() * r_i.getLength()) +  1.0 / (r_j.getSquareLength() * r_j.getLength());
-								
+
+//std::cout << "r_i: " << effectors_[e][(pos ) % (ring_size)]->getName()  << " " << effectors_[e][(pos ) % (ring_size)]->getPosition() << "--rj: "<< effectors_[e][(pos + 1) % (ring_size)]->getName() <<" "<< effectors_[e][(pos + 1) % (ring_size)]->getPosition()  << " area :"  << area << " , dist:" << pow((r_i + atom_projection - targets_[t]->getPosition()).getLength(),-3) 
+//						   +  pow((r_j + atom_projection - targets_[t]->getPosition()).getLength(), -3) << std::endl;
+
+					//area *= 1.0 / (r_i.getSquareLength() * r_i.getLength()) +  1.0 / (r_j.getSquareLength() * r_j.getLength());
+					area *= pow((r_i + atom_projection - targets_[t]->getPosition()).getLength(),-3) 
+						   +  pow((r_j + atom_projection - targets_[t]->getPosition()).getLength(), -3);
+							
 					geometrical_factor += area * orientation;	
 				}
+				
 
 				// add up the contributions of all rings
 
-				float target_nucleus_factor=0.;
+				float target_nucleus_factor = 0.;
 
+//std::cout << "ElementSymbol: " <<  targets_[t]->getElement().getSymbol() << " Group: " << targets_[t]->getElement().getGroup()  << " Name: " << targets_[t]->getName();
+				
 				if (target_nucleus_factors_.has(targets_[t]->getName()))
 						target_nucleus_factor = target_nucleus_factors_[targets_[t]->getName()];
-				else if (targets_[t]->getElement() == PTE[Element::H])
+			/*	else if (targets_[t]->getElement().getSymbol() == PTE[Element::H].getSymbol())
+				{
 						target_nucleus_factor = default_hydrogen_target_nucleus_factor_;
+						std::cout << __FILE__ << "hier" << __LINE__ << "" << std::endl;
+				}*/
+//std::cout <<  " Factor: " << target_nucleus_factor  <<  std::endl;
 
 				float new_rc_shift  = intensity_factors_[effector_types_[e]] * target_nucleus_factor * geometrical_factor;
+				
+				// negative ring current correction a la ShitX
+				if (new_rc_shift < 0.)
+					new_rc_shift *= negative_ringcurrent_factor_;
+					
 				float old_rc_shift = targets_[t]->getProperty(PROPERTY__RING_CURRENT_SHIFT).getFloat();
 				float shift = targets_[t]->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
-
+//if (targets_[t]->getName() == "CA")
+//	std::cout << "shift: " << new_rc_shift << " ,NukleusFactor: " << target_nucleus_factor << " ,IntensityFactor: " << intensity_factors_[effector_types_[e]]  << std::endl;
 				targets_[t]->setProperty(ShiftModule::PROPERTY__SHIFT, shift+new_rc_shift);
 			  targets_[t]->setProperty(PROPERTY__RING_CURRENT_SHIFT, old_rc_shift+new_rc_shift);			
 			}
@@ -402,10 +441,14 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 			//To Think: perhaps it makes sense to use a string hash map for fast lookup 
 			for (Position i = 0; i < effector_names_.size(); i++)
 			{
+//std::cout << "Effektortype " << residue->getName()<< " " << effector_names_[i] << std::endl;
 				// Important Note! We want to allow names like TRP1 and TRP2 to denote the 2 rings
 				// of tryptophane, so we can't test for equality of the name of the effector and the residue!
-				if (effector_names_[i].hasSuffix(residue->getName()))
+				if (effector_names_[i].hasPrefix(residue->getName()))
 				{
+
+//std::cout << "Effektortype " << residue->getName()<< " " << effector_names_[i] << std::endl;
+				
 					effector_types_.push_back(effector_names_[i]);
 
 					vector <BALL::Atom*> atoms;
@@ -437,7 +480,7 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 		{
 			if (all_hydrogen_are_targets_  && (atom->getName() == "H"))
 			{
-					targets_.push_back(atom);
+			//		targets_.push_back(atom);
 			}	
 			
 			for (Position i = 0; i < target_names_.size(); i++)

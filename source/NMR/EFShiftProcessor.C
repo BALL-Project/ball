@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EFShiftProcessor.C,v 1.14.20.2 2006/07/18 18:42:45 anne Exp $
+// $Id: EFShiftProcessor.C,v 1.14.20.3 2006/08/29 09:11:52 anne Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
 #include <BALL/COMMON/limits.h>
@@ -78,7 +78,7 @@ std::cout << "******************* EF-Shift ******************* " << std::endl;
 		
 		// check for the option "exclude_adjacent_field"
 		exclude_adjacent_residue_field_ = false;
-		if (parameter_section.options.has("exclude_adjacent_field"))
+		if (parameter_section.options.has("exclude_adjacent_residue_field"))
 		{
 			exclude_adjacent_residue_field_ = parameter_section.options.getBool("exclude_adjacent_residue_field");
 		}
@@ -216,154 +216,101 @@ std::cout << "******************* EF-Shift ******************* " << std::endl;
 		}
 
 		printEffectors_();	
-//Ausgabe der Effektoren
-//std::cout << "********* \n Liste der Effektoren" << std::endl;
-//list<Atom*>::const_iterator effector_it = effector_list_.begin();
-//for (; effector_it != effector_list_.end(); ++effector_it)
-//{			
-//	std::cout << (*effector_it)->getFullName() <<"  " << (*effector_it)->getName()  << "  " << (*effector_it)->getType() << "  " << (*effector_it)->getTypeName()<< std::endl; 
-//}
-//std::cout << "  " << effector_list_.size() << "\n-------------\n";
-
 		printTargets_();
-//Ausgabe der Targets
-//std::cout << "********* \n Liste der Targets" << std::endl;
-//list<Bond*>::iterator tbond_it = bond_list_.begin();
-//for (; tbond_it != bond_list_.end(); ++tbond_it)
-//{			
-//	std::cout << (*tbond_it)->getFirstAtom()->getFullName() << "  " << (*tbond_it)->getSecondAtom()->getFullName() << std::endl; 
-//}
-//std::cout << "  " << bond_list_.size() << "\n-------------\n";
-
 
 		// iterate over all bonds
-		list<Bond*>::iterator bond_it = bond_list_.begin();
+		std::vector<std::pair<Atom*, Atom*> >::iterator bond_it = bond_list_.begin();
+		Index current_bond=0;
 		for (; bond_it != bond_list_.end(); ++bond_it)
 		{
-			Position bond_type = INVALID_POSITION;
-			Atom*	first_atom = 0;
-			Atom* second_atom = 0;
+			Atom* first_atom = bond_it->first;
+			Atom* second_atom = bond_it->second;
+			//std::cout <<  first_atom->getFullName() << "  " << second_atom->getFullName()<< std::endl;
 
-			// Iterate over all expressions and try to match them
-			// with the bond's atoms.
-			for (Position i = 0; i < first_atom_expressions_.size(); ++i)
+			// We found parameters for a bond -- 
+			// calculate the electric field and the induced secondary shift.
+
+			Vector3 first_atom_pos = first_atom->getPosition();
+			Vector3 second_atom_pos = second_atom->getPosition();
+			Vector3 bond_vector(first_atom_pos - second_atom_pos);
+
+			// the electric field 
+			Vector3 E(0.0);
+
+			bool same_residue;
+			bool adjacent_residues;
+
+			list<Atom*>::const_iterator effector_it = effector_list_.begin();
+			list<Atom*>::const_iterator next_effector, last_effector;
+			for (; effector_it != effector_list_.end(); ++effector_it)
 			{
-				// First, try to match first/fist and second/second.
-				if (first_atom_expressions_[i](*(*bond_it)->getFirstAtom())
-						&& second_atom_expressions_[i](*(*bond_it)->getSecondAtom()))
+
+				// Exclude this effector--target combination from consideration if
+				// effector is a cabonyl oxygen (O) and the target is a amid hydrogen (HN)
+				// and carbonyl_influences_amide_field is set (read from options in init()).
+				if (	 !carbonyl_influences_amide_field_ && ((*effector_it)->getName() == "O") 
+						&& ( (first_atom->getName() == "H") || second_atom->getName() == "H" ) 
+					 )
 				{
-					// remember the atoms and the bond type (for the parameters)
-					first_atom = const_cast<Atom*>((*bond_it)->getFirstAtom());
-					second_atom = const_cast<Atom*>((*bond_it)->getSecondAtom());
-					bond_type = i;
-					break;
+					//std::cout << first_atom->getName()<< "-->" << second_atom->getName() << "by" << (*effector_it)->getName() << std::endl; 
+					continue;
 				}
-				// Otherwise: try first/second and second/first
-				else if (first_atom_expressions_[i](*(*bond_it)->getSecondAtom())
-								 && second_atom_expressions_[i](*(*bond_it)->getFirstAtom()))
+
+
+				//  Exclude effectors from adjacent residue (fragment) if 
+				//  exclude_adjacent_residue_field is set (read from options in init()). 
+				//  and 
+				// 	Exclude effectors from the same residue (fragment) if 
+				//  exclude_residue_field is set (read from options in init()).
+
+				//  first test whether we have atoms from same residue 
+				same_residue = ((*effector_it)->getFragment() == first_atom->getFragment());
+
+				//  then test whether we have atoms in adjacent residues 
+				adjacent_residues = false;
+
+
+				adjacent_residues = (   (*effector_it)->getFragment()->isNextSiblingOf(*(first_atom->getFragment()))
+															||(*effector_it)->getFragment()->isPreviousSiblingOf(*(first_atom->getFragment()))
+															||(abs((*effector_it)->getResidue()->getID().toInt() - first_atom->getResidue()->getID().toInt()) <= 1));
+				// Exclude effectors if flags are set exclude criterion holds   
+				if (    (!exclude_residue_field_					 ||  !same_residue) 
+						&& (!exclude_adjacent_residue_field_  ||  !adjacent_residues) )
 				{
-					// remember the atoms and the bond type (for the parameters)
-					first_atom  = const_cast<Atom*>((*bond_it)->getSecondAtom());
-					second_atom = const_cast<Atom*>((*bond_it)->getFirstAtom());
-					bond_type = i;
-					break;
-				}
-			}
-			
-			if (bond_type != INVALID_POSITION)
-			{
-//std::cout <<  first_atom->getFullName() << "  " << second_atom->getFullName()<< std::endl;
+					//std::cout << (*effector_it)->getName()<< "***>" <<first_atom->getName()<< std::endl;
 
-				// We found parameters for a bond -- 
-				// calculate the electric field and the induced secondary shift.
-				
-				Vector3 first_atom_pos = first_atom->getPosition();
-				Vector3 second_atom_pos = second_atom->getPosition();
-				Vector3 bond_vector(first_atom_pos - second_atom_pos);
-				
-				// the electric field 
-				Vector3 E(0.0);
-				
-				bool same_residue;
-				bool adjacent_residues;
-				
-				list<Atom*>::const_iterator effector_it = effector_list_.begin();
-				list<Atom*>::const_iterator next_effector, last_effector;
-				for (; effector_it != effector_list_.end(); ++effector_it)
-				{
-
-					// Exclude this effector--target combination from consideration if
-					// effector is a cabonyl oxygen (O) and the target is a amid hydrogen (HN)
-					// and carbonyl_influences_amide_field is set (read from options in init()).
-					if (	 carbonyl_influences_amide_field_ && ((*effector_it)->getName() == "O") 
-							&& ( (first_atom->getName() == "HN") || second_atom->getName() == "HN" ) 
-						  )
+					Vector3 distance(first_atom_pos - (*effector_it)->getPosition());
+					float square_distance = distance.getSquareLength();
+					if (square_distance <= cut_off2_)
 					{
-//std::cout << first_atom->getName()<< "-->" << second_atom->getName() << "by" << (*effector_it)->getName() << std::endl; 
-						break;
-					}
-					
-					
-					//  Exclude effectors from adjacent residue (fragment) if 
-					//  exclude_adjacent_residue_field is set (read from options in init()). 
-					//  and 
-					// 	Exclude effectors from the same residue (fragment) if 
-					//  exclude_residue_field is set (read from options in init()).
-					
-					//  first test, wheather we have atoms from same residue 
-					same_residue = ((*effector_it)->getFragment() == first_atom->getFragment());
-					
-					//  then test, wheather we have atoms in adjacent residues 
-					adjacent_residues = false;
+//std::cout << first_atom->getFullName() << " " << second_atom->getFullName() << " " << (*effector_it)->getFullName() << " ";
+//std::cout << square_distance << std::endl;
+						// translate the charge to ESU (from elementary charges)
+						float charge = (*effector_it)->getCharge() * 1./charge_factor_; // 4.8;
 
-					next_effector = effector_it;
-					next_effector++;
-
-					last_effector = effector_it;
-					if (effector_it != effector_list_.begin()) 
-						last_effector--;
-					else
-						// we use effector_list_.end() here to simplify 
-						// the case determination in the next line
-						last_effector = effector_list_.end();
-
-					adjacent_residues = (  (    (next_effector != effector_list_.end()) 
-																	 && ((*next_effector)->getFragment() == first_atom->getFragment()))
-															 ||(    (last_effector != effector_list_.end())
-																   && ((*last_effector)->getFragment() == first_atom->getFragment())));
-				
-					// Exclude effectors if flags are set exclude criterion holds   
-					if (    (!exclude_residue_field_					 ||  !same_residue) 
-							 && (!exclude_adjacent_residue_field_  ||  !adjacent_residues) )
-					{
-//std::cout << (*effector_it)->getName()<< "***>" <<first_atom->getName()<< std::endl;
+						// add to the field
+						E += distance * charge / (square_distance * distance.getLength());
+std::cout << first_atom->getResidue()->getID().toInt() - 4 << " " <<first_atom->getName() << " " << second_atom->getName() << "  " << (*effector_it)->getResidue()->getID().toInt() - 4 << "  " << (*effector_it)->getName() << "  " << charge<< std::endl;
+std::cout << first_atom->getPosition()<< " " << second_atom->getPosition() << " " << (*effector_it)->getPosition()  << std::endl;
 						
-						Vector3 distance(first_atom_pos - (*effector_it)->getPosition());
-						float square_distance = distance.getSquareLength();
-						if (square_distance <= cut_off2_)
-						{
-							// translate the charge to ESU (from elementary charges)
-							float charge = (*effector_it)->getCharge() * 1./charge_factor_; // 4.8;
-							
-							// add to the field
-							E += distance * charge / (distance.getSquareLength() * distance.getLength());
-						}
 					}
 				}
-					
-				// Calculate the field component E_z along the bond axis
-				float Ez = (bond_vector * E) / bond_vector.getLength();
-				
-				// calculate the secondary shift induced by this field
-				float delta_EF = epsilon1_[bond_type] * Ez + epsilon2_[bond_type] * E.getSquareLength();
-
-				// store the shift in the corresponding properties
-				float shift = first_atom->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
-				shift += delta_EF;
-				first_atom->setProperty(ShiftModule::PROPERTY__SHIFT, shift);
-
-				first_atom->setProperty(PROPERTY__EF_SHIFT, delta_EF);
 			}
+
+			// Calculate the field component E_z along the bond axis
+			float Ez = (bond_vector * E) / bond_vector.getLength();
+
+			// calculate the secondary shift induced by this field
+			float delta_EF = 		epsilon1_[expression_number_[current_bond]] * Ez 
+												+ epsilon2_[expression_number_[current_bond]] * E.getSquareLength();
+
+			// store the shift in the corresponding properties
+			float shift = first_atom->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
+			shift += delta_EF;
+			first_atom->setProperty(ShiftModule::PROPERTY__SHIFT, shift);
+
+			first_atom->setProperty(PROPERTY__EF_SHIFT, delta_EF);
+			current_bond++;
 		}
 
 		return true;
@@ -378,19 +325,7 @@ std::cout << "******************* EF-Shift ******************* " << std::endl;
 		{
 			Atom* atom_ptr = RTTI::castTo<Atom>(object);
 			
-			// iterate over all bonds of the atom and collect these bonds in 
-			// the bond_list_
-			Atom::BondIterator bond_it = atom_ptr->beginBond();
-			for (; +bond_it; ++bond_it)
-			{
-				if ((bond_it->getFirstAtom() == atom_ptr) && (bond_it->getSecondAtom() != 0))
-				{	
-					// store each bond once (isFirstAtom) and take care that
-					// it is valid (i.e. it has a second atom defined as well)
-					bond_list_.push_back(&*bond_it);
-				}
-			}
-		
+	
 			// Assign the charge (if it is defined for this atom).
 			String full_name = atom_ptr->getFullName();
 			full_name.substitute(":", " ");
@@ -416,6 +351,58 @@ std::cout << "******************* EF-Shift ******************* " << std::endl;
 				effector_list_.push_back(atom_ptr);
 			}
 
+
+			std::cout << "Hallo ich bins..." << std::endl;
+			Atom::BondIterator bond_it = atom_ptr->beginBond();
+
+			for (; +bond_it; ++bond_it)
+			{
+				Atom*	first_atom = 0;
+				Atom* second_atom = 0;
+
+				bool match_found = false;
+				Index j = -1;
+
+				// Iterate over all expressions and try to match them
+				// with the bond's atoms.
+				for (Position i = 0; i < first_atom_expressions_.size(); ++i)
+				{
+					// First, try to match first/fist and second/second.
+					if (  (first_atom_expressions_[i](*(bond_it->getFirstAtom())))
+							&&(second_atom_expressions_[i](*(bond_it->getSecondAtom())))
+						 )
+
+					{
+						// remember the atoms and the bond type (for the parameters)
+						first_atom = const_cast<Atom*>(bond_it->getFirstAtom());
+						second_atom = const_cast<Atom*>(bond_it->getSecondAtom());
+						match_found=true;
+						j = i;
+						break;
+					}
+					// Otherwise: try first/second and second/first
+					else if (first_atom_expressions_[i](*(bond_it->getSecondAtom()))
+							&& second_atom_expressions_[i](*(bond_it->getFirstAtom())))
+					{
+						// remember the atoms and the bond type (for the parameters)
+						first_atom  = const_cast<Atom*>(bond_it->getSecondAtom());
+						second_atom = const_cast<Atom*>(bond_it->getFirstAtom());
+						match_found=true;
+						j = i;
+						break;
+					}
+				}
+
+				if (match_found)
+				{
+					// only include each bond once
+					if (find(bond_list_.begin(), bond_list_.end(), pair<Atom*, Atom*>(first_atom, second_atom))==bond_list_.end())
+					{
+						bond_list_.push_back(std::pair<Atom*, Atom*>(first_atom, second_atom));
+						expression_number_.push_back(j);
+					}
+				}
+			}	
 		}
 		
 		return Processor::CONTINUE;
@@ -427,10 +414,10 @@ std::cout << "******************* EF-Shift ******************* " << std::endl;
 		throw()
 	{
 		std::cout << "********* \n EF:Liste der Target Bonds" << std::endl;
-		list<Bond*>::iterator tbond_it = bond_list_.begin();
+		std::vector<std::pair<Atom*, Atom*> >::iterator tbond_it = bond_list_.begin();
 		for (; tbond_it != bond_list_.end(); ++tbond_it)
 		{			
-			std::cout << (*tbond_it)->getFirstAtom()->getFullName() << "  " << (*tbond_it)->getSecondAtom()->getFullName() << std::endl; 
+			std::cout << tbond_it->first->getFullName() << "  " << tbond_it->second->getFullName() << std::endl; 
 		}
 		std::cout << "  " << bond_list_.size() << "\n-------------\n";
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EFShiftProcessor.h,v 1.23.10.2 2006/07/18 18:42:43 anne Exp $
+// $Id: EFShiftProcessor.h,v 1.23.10.3 2006/08/29 09:11:51 anne Exp $
 //
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
@@ -131,8 +131,14 @@ namespace BALL
 		protected:
 	
 		/*_	The list of bonds collected by {\tt operator ()}.
+		* 	The first element of the pair is the origin of the bond, the second the destination.
+		* 	The shift _always_ applies to the first element of the pair.
 		*/
-		std::list<Bond*>				bond_list_;
+		std::vector<std::pair<Atom*, Atom*> >				bond_list_;
+
+		/*  The index of the expression that matched to result in the corresponding element in bond_list_
+		 */
+		std::vector<Index> expression_number_;
 
 		/*_	The list of charged atoms (effectors).
 		*/
