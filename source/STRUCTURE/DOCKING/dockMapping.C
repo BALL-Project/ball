@@ -111,10 +111,15 @@ namespace BALL
     
     system_backup_b_ = sys_lig;
     
+    //<<<<<<< dockMapping.C
+    //Log.error() << "before create energy grid" << std::endl;
+        
+    //=======
     /** create energy grid 
      */
 
     
+    //>>>>>>> 1.1.2.8
     /** create rotable bonds class with ligand
      */
     rb_ = new RotateBonds(*ligand_);
@@ -131,7 +136,12 @@ namespace BALL
     ligand_->select();
 
     eg_ = new EnergyGrid(file,system_backup_a_, *ligand_);    	
+    //<<<<<<< dockMapping.C
+    //Log.error() << "after create energy grid" << std::endl;
     
+    //=======
+    
+    //>>>>>>> 1.1.2.8
     draw_system_ = system_backup_a_;
     
     draw_system_.insert(*draw_ligand_);
@@ -176,10 +186,14 @@ namespace BALL
 	t_extension_ += higher;
       }
 
+    //<<<<<<< dockMapping.C
+   
+    //=======
     /** create rotable bonds class with ligand
      */
 //    rb_ = new RotateBonds(*ligand_);
     
+//>>>>>>> 1.1.2.8
 //     /** insert ligand to calculate conformation energy
 //      */
 //     sys_.insert(*ligand_);
@@ -195,6 +209,13 @@ namespace BALL
      */
     for (uint pos = 0; pos < ligand_->countAtoms(); pos++)
       ligand_positions_.push_back( (ligand_->getAtom(pos))->getPosition() );
+
+
+    sys_.select();
+    ff_->setup(sys_);
+    sys_.deselect();
+    ligand_->select();
+
   }
   
   
@@ -210,11 +231,10 @@ namespace BALL
     
     /** get conformation energy
      */
-    
+
     ff_->updateEnergy();
         
     double energy = ff_->getEnergy()+ eg_->getEnergy(ligand_);
-
 
     //cout << energy << endl;
   
