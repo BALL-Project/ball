@@ -71,8 +71,7 @@ namespace BALL
 	float DockingAlgorithm::getSetupProgress() const
 		throw()
 	{
-		//Log.error() << "This is just an interface definition. Check your dynamic binding" << std::endl;
-		return 1;
+		return 0;
 	}
 
 	float DockingAlgorithm::getDockingProgress() const

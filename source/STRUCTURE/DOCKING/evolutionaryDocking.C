@@ -48,7 +48,8 @@ namespace BALL
 
   EvolutionaryDocking::EvolutionaryDocking()
     throw()
-    :ga_(0),
+    :DockingAlgorithm(),
+		 ga_(0),
      dm_(0)
   {
     options.setDefault(Option::GRID_FILE,Default::GRID_FILE);  
@@ -73,8 +74,9 @@ namespace BALL
   
   EvolutionaryDocking::EvolutionaryDocking(System &system1, System &system2)
     throw()
-    :ga_(0),
-    dm_(0)
+    :DockingAlgorithm(),
+		 ga_(0),
+     dm_(0)
   {
     options.setDefault(Option::GRID_FILE,Default::GRID_FILE);  
     options.setDefaultReal(Option::TRANSLATION_BOX_BOTTOM_X,Default::TRANSLATION_BOX_BOTTOM_X);  
@@ -100,7 +102,8 @@ namespace BALL
 
   EvolutionaryDocking::EvolutionaryDocking(Options& new_options)
     throw()
-    :ga_(0),
+    :DockingAlgorithm(),
+		 ga_(0),
      dm_(0)
   {
     options=new_options;
@@ -108,7 +111,8 @@ namespace BALL
 
   EvolutionaryDocking::EvolutionaryDocking(System &system1,System &system2 ,Options& new_options, ForceField* ff)
     throw()
-    :ga_(0),
+    :DockingAlgorithm(),
+		 ga_(0),
      dm_(0)
   {
     setup(system1, system2, new_options, ff);
@@ -131,8 +135,7 @@ namespace BALL
   void EvolutionaryDocking::setup(System& system1, System& system2)
     throw()
   {
-    system1_ = system1;
-    system2_ = system2;
+		DockingAlgorithm::setup(system1,system2);
     
     delete dm_;
     
@@ -192,6 +195,7 @@ namespace BALL
   bool EvolutionaryDocking::hasFinished() const 
     throw()
   {
+		if (!ga_) return false;
     return (ga_->finished_);
   }
 
