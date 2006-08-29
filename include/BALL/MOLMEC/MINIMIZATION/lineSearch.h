@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.h,v 1.20 2005/12/23 17:01:53 amoll Exp $
+// $Id: lineSearch.h,v 1.20.12.1 2006/08/29 11:59:25 aleru Exp $
 //
 
 // Line Search Minimizer: A special class for the line search minimization algorithm
@@ -18,9 +18,10 @@ namespace BALL
 	class EnergyMinimizer;
 
 	/**	Basic line search class.
-			Without being a true energy minimizer, this method minimizes
-			the energy of a system along a given direction using	
-			cubic interpolation.  \par
+			This method minimizes the energy of a system along a given 
+			direction using a two stage algorithm. It is based on
+			an cubic or quadratic interpolation method of Jorge J. More 
+			and David J. Thuente. \par
     	\ingroup  MolmecEnergyMinimizer
 	*/
 	class BALL_EXPORT LineSearch
@@ -64,62 +65,74 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Set the parameter alpha
+		/**	Set the parameter alpha.
 		*/
 		void setAlpha(double alpha);
 
-		/**	Set the parameter beta
+		/**	Set the parameter beta.
 		*/
 		void setBeta(double beta);
 
-		/**	Get the parameter alpha
+		/**	Get the parameter alpha.
 		*/
 		double getAlpha() const;
 
-		/**	Get the parameter beta
+		/**	Get the parameter beta.
 		*/
 		double getBeta() const;
 
-		/**	Get the parameter max_steps
+		/**	Get the parameter max_steps.
 		*/
 		Size getMaxSteps() const;
 
-		/**	Set the parameter max_steps
+		/**	Set the parameter max_steps.
 		*/
 		void setMaxSteps(Size steps);
+		
+		/** Set the lower bound on energy values. An estimation for the maximum 
+				step length is computed during the algorithm based on this value.
+		*/
+		void setLowerBound(double lbound);
+		
+		/** Get the lower bound on energy values.
+		*/
+		double getLowerBound() const;
+		
+		/** Set the nonnegative relative tolerance for an acceptable step length.
+		*/
+		void setXTol(double xtol);
+		
+		/** Get the nonnegative relative tolerance for an acceptable step length.
+		 */
+		double getXTol() const;
 
-		/** Set the minimizer
+		/** Set the minimizer class which provides the search direction and
+				the force field among other things.
 		*/
 		void setMinimizer(const EnergyMinimizer& minimizer);
-
-		/**	Line search criterion.
-				This predicate implements the Armijo-Goldstein criterion:
-				
-					- sufficient decrease of energy:
-							$E(i+1) \leq E(i) + \alpha \lambda <g(i), dir>$
-					- sufficient gradient reduction: $|<g(i+1), dir>| \leq \beta <g(i), dir>$
-				
-				
-				where $g(i)$ and $g(i+1)$ are the initial and the current gradient
-				$dir$ is the (normalized) search direction
-				$E(i+1)$ is the current and $E(i)$ the initial energy ($\lambda = 0$)
-				$\alpha$ and $\beta$ are two parameters (usually 0.9 and 0.0001).
-				The line search was successful, if it could determine a value for $\lambda$
-				fulfilling this criterion. The function is used in the  \link minimize minimize \endlink  method.
+		
+		/** Computes a safeguarded step for a search procedure by case differentiation 
+				dependend on whether a minimum could already be bracketed or not. All
+				computations are done by safeguarded quadratic and cubic interpolation.
+				The interval that contains a step that satisfies a sufficient decrease and
+				the curvature condition is updated. This function is based on the proposed step 
+				computation of Jorge J. More and David J. Thuente.
+		
+				@param st_left Best step obtained so far and an endpoint of the interval that contains the minimizer.
+				@param f_left Energy value at <tt>st_left</tt>.
+				@param g_left Directional derivative at <tt>st_left</tt>.
+				@param st_right Second endpoint of the interval that contains the minimizer.
+				@param f_right Energy value at <tt>st_right</tt>.
+				@param g_right Directional derivative at <tt>st_right</tt>.
+				@param stp Current step. If <tt>is_bracketed_</tt> is set to <tt>true</tt> then <tt>stp</tt>
+					must be between <tt>st_left</tt> and <tt>st_right</tt>.
+				@param f Energy value at <tt>stp</tt>.
+				@param g Directional derivative at <tt>stp</tt>.
+				@param minstp Lower bound for the step.
+				@param maxstp Upper bound for the step.
 		*/
-		virtual bool isSufficient(double lambda, double current_energy, double current_dir_grad) 
-			const;
-
-		/**	Cubic interpolation routine.
-				Use a cubic interpolation to estimate the minimum of the function.
-				if the function is linear, either <b>lambda_0</b> or <b>lambda_1</b> is returned
-				(the one with the lower energy associated).
-				The value returned may otherwise lie outside of the interval defined by <b>lambda_0</b> and <b>lambda_1</b>.
-		*/
-		virtual double interpolate	
-			(double lambda_0, double lambda_1, 
-			 double energy_,  double energy_1, 
-			 double grad_0,   double grad_1) const;		
+		void lsStep_(double &st_left, double &f_left, double &g_left, double &st_right, double &f_right, 
+								 double &g_right, double &stp, double f, double g, double minstp, double maxstp);
 
 		//@}
 		/**	@name	Minimization
@@ -127,11 +140,37 @@ namespace BALL
 		//@{
 
 	  /** Perform a line search.
-		    Find the minimum position for all atoms along direction.
-				If keep_gradient == true, we will not calculate the gradient for lambda=1 but
-				assume that this has already been performed instead.
+				Find the minimum position for all atoms along direction. 
+				A two stage algorithm is used proposed by Jorge J. More and David J. Thuente.
+				If necessary (the convergence criterion is not fulfilled) a minimizer along 
+				the given direction is bracketed in the first stage. In the second stage this
+				function looks for a minimizer whithin the bracketed interval.
+				The routine exits 
+		
+				(1) if the weak Wolfe conditions are satisfied (convergence criterion for the line search), 
+						that are
+							$E_{k+1} \leq E_k + \alpha$ <tt>stp</tt> $<g_k, d_k>$ 
+						and 
+							$<g_{k+1}, d_k> \geq \beta <g_k, d_k>$
+						where $g_k$ and $g_{k+1}$ are the initial and the current gradient and $d_k$ is the 
+						search direction, $E_{k+1}$ is the current and $E_k$ the initial energy (stp = 0),
+						$\alpha$ and $\beta$ are two parameters (usually 0.9 and 0.0001).
+		
+				(2) if the relative tolerance for an acceptable step is reached 
+						(length of the bracketing interval).
+		
+				(3) if there were some numerical problems. In this case the best step length which could 
+						be found is returned.
+		
+				@param stp Unused on entry since the line search always starts with stp = 1.0. On exit
+					the step length corresponding to a successful step or just the best this function was
+					able to find.
+				@param scale A scaling parameter for the search direction. Internally <tt>scale</tt> $d_k$
+					is used instead of $d_k$.
+				@param keep_gradient If <tt>true</tt>, we will not calculate the gradient for stp = 1 but
+					assume that this has already been performed instead.
 		*/
-		virtual bool minimize(double& lambda, double step = 1.0, bool keep_gradient = false);
+		virtual bool minimize(double& stp, double scale = 1.0, bool keep_gradient = false);
 		//@}
 
 		protected:
@@ -147,14 +186,23 @@ namespace BALL
 		/*_	Parameter for the number of interpolation steps
 		*/
 		Size max_steps_;
-
-		/*_	Search direction.
+		
+		/*_	Lower bound for energy values.
+		*/
+		double lower_energy_bound_;
+		
+		/*_	Nonnegative relative tolerance for an acceptable step.
+		*/
+		double stptol_;
+		
+		/*_	Specifies whether a minimizer has already been bracketed or not.
+		*/
+		bool is_bracketed_;
+		
+		/*_	Calling minimizer class which provides the search direction among other things.
 		*/
 		EnergyMinimizer* minimizer_;
-
-		double initial_dir_grad_;
-		double initial_energy_;
-		double step_;
+		
 	};
 
 } // namespace BALL

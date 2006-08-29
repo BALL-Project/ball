@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.C,v 1.20 2006/08/19 13:54:37 oliver Exp $
+// $Id: lineSearch.C,v 1.20.2.1 2006/08/29 11:59:25 aleru Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
@@ -10,113 +10,156 @@
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/COMMON/limits.h>
 
-// parameter alpha for 'sufficient energy decrease'
-#define LINESEARCH__DEFAULT_ALPHA 0.0001
+// Parameter alpha for 'sufficient energy decrease'.
+#define LINESEARCH__DEFAULT_ALPHA 1.e-3
 
-// parameter beta for 'sufficient gradient reduction'
-#define LINESEARCH__DEFAULT_BETA  0.9
+// Parameter beta for 'sufficient gradient reduction'.
+#define LINESEARCH__DEFAULT_BETA 0.9
 
-// maximum number of interpolation steps for a line search
-#define LINESEARCH__DEFAULT_MAX_STEPS			2
+// Maximum number of interpolation steps for a line search.
+#define LINESEARCH__DEFAULT_MAX_STEPS 50
+
+// Lower bound for energy values.
+#define LINESEARCH__DEFAULT_MIN_ENERGY -1.e+30
+
+// Nonnegative relative tolerance for an acceptable step.
+#define LINESEARCH__DEFAULT_XTOL 0.1
 
 //#define BALL_DEBUG
 #undef BALL_DEBUG
 
 namespace BALL 
 {
-	// default constructor
+	// Default constructor
 	LineSearch::LineSearch()
 		:	alpha_(LINESEARCH__DEFAULT_ALPHA),
 			beta_(LINESEARCH__DEFAULT_BETA),
 			max_steps_(LINESEARCH__DEFAULT_MAX_STEPS),
+			lower_energy_bound_(LINESEARCH__DEFAULT_MIN_ENERGY),
+			stptol_(LINESEARCH__DEFAULT_XTOL),
+			is_bracketed_(false),
 			minimizer_(0)
 	{
 	}
 
 
-	// copy constructor 
+	// Copy constructor 
 	LineSearch::LineSearch(const LineSearch& line_search)
 		:	alpha_(line_search.alpha_),
 			beta_(line_search.beta_),
 			max_steps_(line_search.max_steps_),
+			lower_energy_bound_(line_search.lower_energy_bound_),
+			stptol_(line_search.stptol_),
+			is_bracketed_(line_search.is_bracketed_),
 			minimizer_(line_search.minimizer_)
 	{
 	}
 
-	// assignment operator
+	// Assignment operator
 	const LineSearch& LineSearch::operator = (const LineSearch& line_search)
 	{
 		alpha_ = line_search.alpha_;
 		beta_ = line_search.beta_;
 		max_steps_ = line_search.max_steps_;
+		lower_energy_bound_ = line_search.lower_energy_bound_;
+		stptol_ = line_search.stptol_;
+		is_bracketed_ = line_search.is_bracketed_;
 		minimizer_ = line_search.minimizer_;
 
 		return *this;
 	}
 
-	// detailed constructor
+	// Detailed constructor
 	LineSearch::LineSearch(const EnergyMinimizer& minimizer)
 		:	alpha_(LINESEARCH__DEFAULT_ALPHA),
 			beta_(LINESEARCH__DEFAULT_BETA),
 			max_steps_(LINESEARCH__DEFAULT_MAX_STEPS),
+			lower_energy_bound_(LINESEARCH__DEFAULT_MIN_ENERGY),
+			stptol_(LINESEARCH__DEFAULT_XTOL),
+			is_bracketed_(false),
 			minimizer_(const_cast<EnergyMinimizer*>(&minimizer))
 	{
 	}
 
-	// destructor
+	// Destructor
 	LineSearch::~LineSearch()
 		throw()
 	{
 	}
 		
-	// Set the parameter alpha_
+	// Set the parameter alpha_.
 	void LineSearch::setAlpha(double alpha)
 	{
 		alpha_ = alpha;
 	}
 
-	// Get the parameter alpha_
+	// Get the parameter alpha_.
 	double LineSearch::getAlpha() const
 	{
 		return alpha_;
 	}
 
-	// Set the parameter beta_
+	// Set the parameter beta_.
 	void LineSearch::setBeta(double beta)
 	{
 		beta_ = beta;
 	}
 
-	// Get the parameter beta_
+	// Get the parameter beta_.
 	double LineSearch::getBeta() const
 	{
 		return beta_;
 	}
 
-	// Set the parameter max_steps_
+	// Set the parameter max_steps_.
 	void LineSearch::setMaxSteps(Size max_steps)
 	{
 		max_steps_	= max_steps;
 	}
 
-	//	Get the parameter max_steps_
+	// Get the parameter max_steps_.
 	Size LineSearch::getMaxSteps() const
 	{
 		return max_steps_;
 	}
+	
+	// Set the lower bound on energy values.
+	void LineSearch::setLowerBound(double lbound)
+	{
+		lower_energy_bound_ = lbound;
+	}
+	
+	// Get the lower bound on energy values.
+	double LineSearch::getLowerBound() const
+	{
+		return lower_energy_bound_;
+	}
+	
+	// Set the nonnegative relative tolerance for an acceptable step.
+	void LineSearch::setXTol(double xtol)
+	{
+		stptol_ = xtol;
+	}
 
+	// Get the nonnegative relative tolerance for an acceptable step.
+	double LineSearch::getXTol() const
+	{
+		return stptol_;
+	}
+
+	// Set the calling minimizer class.
 	void LineSearch::setMinimizer(const EnergyMinimizer& minimizer)
 	{
 		minimizer_ = const_cast<EnergyMinimizer*>(&minimizer);
 	}
 
-	/*	The minimizer optimizes the energy of the system 
-			using a modified line search algorithm.
+	/*	The minimizer optimizes the energy of the system using a two stage line 
+			search algorithm based on a method of More and Thuente.
 	*/
-	bool LineSearch::minimize(double& lambda, double step, bool keep_gradient)
+	bool LineSearch::minimize(double& stp, double scale, bool keep_gradient)
 	{
 		#ifdef BALL_DEBUG
-			Log.info() << "LS:minimize(" << lambda << ", " << step << ")" << std::endl;
+			Log.info() << "LS:minimize(" << stp << ")" << std::endl;
 		#endif
 
 		// Check whether a valid minimizer and a valid force field exist.
@@ -125,233 +168,439 @@ namespace BALL
 			return false;
 		}
 
-		// Define some aliases for convenience
+		// Define some aliases for convenience.
 		AtomVector&				atoms(const_cast<AtomVector&>(minimizer_->getForceField()->getAtoms()));
 		const Gradient&		direction(minimizer_->getDirection());
 		EnergyMinimizer&	minimizer(*minimizer_);
 		Gradient&					gradient(minimizer.getGradient());
 		Gradient&					initial_gradient(minimizer.getInitialGradient());
 
-		// this is required for isSufficient()
-		step_ = step; 
-
 		// If we do not have a valid gradient for the first step,
-		// calculate it
+		// calculate it.
 		if (!initial_gradient.isValid())
 		{
-			// reset the atoms to the start position (lambda = 0)
+			// Reset the atoms to the start position (lambda = 0)
 			atoms.resetPositions();
 
-			// calculate the initial energy and forces
+			// Calculate the initial energy and forces
 			minimizer_->updateForces();
 			minimizer_->updateEnergy();
 			initial_gradient = gradient;
 			
-			// force a recalculation of the current gradient
+			// Force a recalculation of the current gradient
 			// as well since updateForces overwrote everything!
 			gradient.invalidate();
 		}
-		initial_energy_ = minimizer_->getInitialEnergy();
-		initial_dir_grad_ = (initial_gradient * direction) * step_;
+		
+		// Initial energy value.
+		double f_init = minimizer_->getInitialEnergy();
+		
+		// Initial (scaled) directional derivative.
+		double g_init = (initial_gradient * direction) * scale;
+		
+		// Minimum and maximum stepsizes.
+		double minstp = 0.;
+		double maxstp = (lower_energy_bound_-f_init)/(beta_*g_init);
+		
+		// A minimum has not been bracketed so far.
+		is_bracketed_ = false;
+		
+		// Set initial step size to 1 (with safeguard)
+		stp = (1. < maxstp) ? 1. : maxstp;
+		
+		// Used for directional derivative stopping criterion
+		double g_test = alpha_*g_init;
+		
+		// Used for computations of the interval width 
+		// (interval which brackets the minimizer).
+		double int_width = maxstp - minstp;
+		double bisec_int_width = int_width / 0.5;
+		
+		// st_left and st_right will bracket the minimizer
+		double st_left = 0.;
+		double st_right = 0.;
+		
+		// f_left and f_right will contain the energy values at st_left and st_right.
+		double f_left = f_init;
+		double f_right = f_init;
+		
+		// g_left and g_right will contain the directional derivatives at st_left and st_right.
+		double g_left = g_init;
+		double g_right = g_init;
+		
+		// Used for internal bracketing
+		double stmin = 0.;
+		double stmax = stp + stp*4.;
 
-		// remember the best lambda and the best energy
-		double best_lambda = 0.0;
-		double best_energy = initial_energy_;
+		// Remember the best step and the best energy
+		double best_stp = 0.0;
+		double best_f = f_init;
 
-		// if we do not have a valid current gradient for the first step, or if we are
-		// told to force an update (i.e. keep_gradient == false), calculate it
-		if (!keep_gradient || !gradient.isValid())
+		// If we do not have a valid current gradient for the first step, or if we are
+		// told to force an update (i.e. keep_gradient == false), or if 
+		// our internal safeguards force stp not to equal 1, calculate it
+		if (!keep_gradient || !gradient.isValid() || stp != 1.)
 		{
 			gradient.invalidate();
 
 			#ifdef BALL_DEBUG
-				Log << "  LineSearch: recalculate Energy/grad @ l = 1.0" << std::endl;
+				Log << "  LineSearch: recalculate Energy/grad @ l = " << stp << " " << std::endl;
 			#endif
-			// recalculate the gradient and energy for lambda = 1.0
-			atoms.moveTo(direction, step);
+			// Recalculate the gradient and energy
+			atoms.moveTo(direction, stp*scale);
 			minimizer_->updateEnergy();
 			minimizer_->updateForces();
 		}
-		double current_energy = minimizer_->getEnergy();
-		double current_dir_grad = (gradient * direction) * step_;
+		
+		// Energy value at stp.
+		double f = minimizer_->getEnergy();
+		
+		// Directional derivative at stp.
+		double g = (gradient * direction)*scale;
 
-		// Start with lambda = 1.0
 		Size iteration = 0;
 		bool result = false;
-		lambda = 1.0;
-
+		
+		// We start with the first stage
+		bool first_stage = true;
+		
+		// Used for energy decrease criterion
+		double f_test = f_init + stp*g_test;
 		while (!result && iteration < max_steps_)
 		{
-			// remember the current lambda
-			double last_lambda = lambda;
+			// First check a few numerical things
+			if (((stp < stmin) || (stp > stmax)))
+			{
+				// Rounding errors prevent progress
+				result = false;
+				break;
+			}
+			if (is_bracketed_ && stmax - stmin <= stptol_*stmax)
+			{
+				// Xtol condition satisfied
+				result = true;
+				break;
+			}
+			
+			// Test for convergence.
+			if ((f <= f_test) && (fabs(g) <= beta_*(-g_init)))
+			{
+				result = true;
+				break;
+			}
+			
+			if ((stp == maxstp) && (f <= f_test) && (g <= g_test))
+			{
+				// Maximum stepsize achieved. This doesn't have to be a problem.
+				// We return a 'false' and let the calling algorithm decide
+				// what to do. A 'false' means that neither the convergence 
+				// conditions hold (weak Wolfe conditions) nor the condition 
+				// on the step tolerance is satisfied.
+				result = false;
+				break;
+			}
+			if ((stp == minstp) && ((f > f_test) || (g >= g_test)))
+			{
+				// Minimum stepsize achieved. This doesn't have to be a problem.
+				// We return a 'false' and let the calling algorithm decide
+				// what to do. A 'false' means that neither the convergence 
+				// conditions hold (weak Wolfe conditions) nor the condition 
+				// on the step tolerance is satisfied.
+				result = false;
+				break;
+			}
+			
+			
+			// In first stage we use a modified function, proposed by More and Thuente,
+			// in case of a lower function value but the decrease is not sufficient.
+			if (first_stage && (f <= f_left) && (f > f_test))
+			{
+				// We have to compute the modified energy... 
+				double f_mod = f - stp*g_test;
+				double f_left_mod = f_left - st_left*g_test;
+				double f_right_mod = f_right - st_right*g_test;
+				
+				// ... and derivative values.
+				double g_mod = g - g_test;
+				double g_left_mod = g_left - g_test;
+				double g_right_mod = g_right - g_test;
 
-			// interpolate
-			lambda = interpolate
-										(0.0, lambda, 
-										 initial_energy_, current_energy,	
-										 initial_dir_grad_, current_dir_grad);
+				// Compute a safeguarded, interpolating step and use the modified function.
+				lsStep_(st_left, f_left_mod, g_left_mod, st_right, f_right_mod, g_right_mod, stp, f_mod, g_mod, stmin, stmax);
 
+				// Compute back all values for the original energy function.
+				f_left = f_left_mod + st_left * g_test;
+				f_right = f_right_mod + st_right * g_test;
+				g_left = g_left_mod + g_test;
+				g_right = g_right_mod + g_test;
+			}
+			else
+			{
+				// Compute a safeguarded, interpolating step.
+				lsStep_(st_left, f_left, g_left, st_right, f_right, g_right, stp, f, g, stmin, stmax);
+			}
+
+			if (is_bracketed_)
+			{
+				// The minimizer has already been bracketed.
+				if (fabs(st_right - st_left) >= bisec_int_width*0.66)
+				{
+					// We make a bisection step.
+					stp = st_left + (st_right - st_left)/2.;
+				}
+				bisec_int_width = int_width;
+				int_width = fabs(st_right - st_left);
+				
+				// Set the minimum and maximum steps allowed for stp.
+				stmin = std::min(st_left, st_right);
+				stmax = std::max(st_left, st_right);
+			}
+			else
+			{
+				// The minimizer couldn't be bracketed so far, thus we make an extrapolation step.
+				// Set the minimum and maximum steps allowed for stp.
+				stmin = stp + (stp - st_left) * 1.1;
+				stmax = stp + (stp - st_left) * 4.;
+			}
+
+			// Use the safeguards...
+			stp = (stp < minstp) ? minstp : stp;
+			stp = (stp < maxstp) ? stp : maxstp;
+
+			if ((is_bracketed_) && ((stp <= stmin) || (stp >= stmax)) || (is_bracketed_) && (stmax - stmin <= stptol_ * stmax))
+			{
+				// If we are not able to make further progress, let stp be the best point we could find.
+				stp = st_left;
+			}
+
+			// Obtain new energy and derivative.
+			
 			// Move the atoms to the new position.
-			atoms.moveTo(direction, lambda * step_);
+			atoms.moveTo(direction, stp*scale);
 
 			// Update energy and gradient
-			current_energy = minimizer.updateEnergy();
+			f = minimizer.updateEnergy();
 			minimizer.updateForces();
-			current_dir_grad = (gradient * direction) * step_;
-
-			// remember the best lambda found
-			// (just in case)
-			if (current_energy < best_energy)
+			g = (gradient * direction)*scale;
+			
+			// Check whether we can enter the second stage.
+			f_test = f_init + stp*g_test;
+			if ((f <= f_test) && (g >= 0.))
 			{
-				best_lambda = lambda;
-				best_energy = current_energy;
+				first_stage = false;
+			}
+
+			// Remember the best stepsize found
+			// (just in case)
+			if (f < best_f)
+			{
+				best_stp = stp;
+				best_f = f;
 			}
 			
 			// Increment the number of iterations.
 			iteration++;
+		}
 
-			// Make sure we don't run into numerical inaccuracies due to 
-			// *too* small a lambda.
-			if (lambda < 1e-5)
-			{
-				lambda = 0.0;
-				result = false;
-				break;
-			}
-
-			// If lambda is changing to slowly, there's some problem.
-			if ((lambda == 0.0) || fabs((last_lambda - lambda) / lambda) < 1e-3)
-			{
-				#ifdef BALL_DEBUG
-					Log.info() << " === ABORT ===";
-				#endif
-				result = isSufficient(lambda, current_energy, current_dir_grad);
-				break;
-			}
-
-			// check for convergence
-			result = isSufficient(lambda, current_energy, current_dir_grad);
-		}		
-
-		// if the line search failed, reset the atom positions and return the
-		// best lambda we have to offer
+		// If the line search failed, reset the atom positions and return the
+		// best stepsize we have to offer
 		if (!result)
 		{
-			lambda = best_lambda;
+			stp = best_stp;
 
-			// in this case, we also want to move the atoms to the position of the
-			// best lambda, if the energy at that point has improved.
-			if (best_energy < initial_energy_)
+			// In this case, we also want to move the atoms to the position of the
+			// best step, if the energy at that point has improved.
+			if (best_f < f_init)
 			{
-				atoms.moveTo(direction, lambda*step_);
+				atoms.moveTo(direction, stp*scale);
 			}
 			else
 			{
 				atoms.resetPositions();
 			}
-			
 			gradient.invalidate();	
 		}
 
 		return result;
 	}
 
-	double LineSearch::interpolate
-		(double lambda_0, double lambda_1, 
-		 double energy_0, double energy_1, 
-		 double grad_0, double grad_1) const
+	// Computes a safeguarded step for a search procedure by case differentiation 
+	// dependend on whether a minimum could already be bracketed or not.
+	// This function is based on the proposed step computation of Jorge J. More and David J. Thuente.
+	// A Fortran implementation can be found in MINPACK and MINPACK-2.
+	void LineSearch::lsStep_(double &st_left, double &f_left, double &g_left, double &st_right, 
+					double &f_right, double &g_right, double &stp, double f, double g, double minstp, double maxstp)
 	{
-		#ifdef BALL_DEBUG
-			Log.info() << "LS:interpolate(" 
-									<< lambda_0 << ", " << lambda_1 << ", "
-									<< energy_0 << ", " << energy_1 << ", "
-									<< grad_0 << ", " << grad_1 << ")";
-		#endif
-
-    // Do a cubic interpolation based on (0, energy_0), (1, energy__1), (0, grad_0), (1, grad_1)
-    // energy_0 : energy at left point
-    // energy_1 : energy at right point
-    // grad_0 : direction gradient at left point
-    // grad_1 : direction gradient at right point
-    double lambda_diff = lambda_1 - lambda_0;
-    double delta_energy = energy_1 - energy_0;
-
-
-		// If the lambdas are identical, there's nothing to be done.
-    if (lambda_diff == 0)
-    {
-			#ifdef BALL_DEBUG
-				Log.info() << "LS: lambda_0 == lambda_1 = " << lambda_0 << " !" << std::endl;
-			#endif
-
-      return lambda_0;
+		// The new step, which will be returned by stp on exit.
+		double new_stp;
+		
+		// Compute whether we have directional derivatives of opposite sign.
+		bool opp_sign =  (g*(g_left/fabs(g_left)) < 0.) ? true : false;
+		
+		// Check the four possible cases.
+		if (f > f_left)
+		{
+			// First case: We have a higher function value, so the minimum is bracketed.
+		
+			double theta = (f_left - f)*3./(stp - st_left) + g_left + g;
+			double s = std::max(fabs(theta), fabs(g_left));
+			s = (stp < st_left) ? -std::max(s, fabs(g)) : std::max(s, fabs(g));
+			double gamma = s*sqrt((theta/s)*(theta/s)-(g_left/s)*(g/s));
+			
+			// We check both, the quadratic and the cubic step.
+			// Compute the cubic step.
+			double cub_stp = st_left + (((gamma - g_left) + theta)/(((gamma - g_left) + gamma) + g))*(stp - st_left);
+			
+			// Compute the quadratic step.
+			double quad_stp = st_left + ((g_left /((f_left - f)/(stp - st_left) + g_left))/2.)*(stp - st_left);
+			
+			// We prefer the cubic step if it is closer to st_left than the quadratic step, 
+			// otherwise we use the average of the quadratic and the cubic one.
+			new_stp = (fabs(cub_stp - st_left) < fabs(quad_stp - st_left)) ? cub_stp : cub_stp + (quad_stp - cub_stp)/2.;
+			
+			// Minimum has been bracketed.
+			is_bracketed_ = true;
 		}
-
-		// compute the lambda squared/cubed
-    double lambda_diff_2 = lambda_diff * lambda_diff;
-    double lambda_diff_3 = lambda_diff_2 * lambda_diff;
-
-
-    double a = 3.0 * (-2.0 * delta_energy + (grad_0 + grad_1) * lambda_diff) / lambda_diff_3;
-    double b = (3.0 * delta_energy - (2.0 * grad_0 + grad_1) * lambda_diff) / lambda_diff_2;
-
-    double tmp2 = b * b - a * grad_0;
-
-		double result = 0.0;
-    if ((a != 0.0) && (tmp2 > 0.0))
-    {
-      result = lambda_0 + (-b + sqrt(tmp2)) / a;
+		else if (opp_sign)
+		{
+			// Second case: We have a lower function value but directional derivatives
+			// of opposite sign, so the minimum is bracketed.
+			
+			double theta = (f_left - f)*3./(stp - st_left) + g_left + g;
+			double s = std::max(fabs(theta), fabs(g_left));
+			s = (stp > st_left) ? -std::max(s, fabs(g)) : std::max(s, fabs(g));
+			double gamma = s*sqrt((theta/s)*(theta/s) - (g_left/s)*(g/s));
+			
+			// We check both, the quadratic and the cubic step.
+			// Compute the cubic step.
+			double cub_stp = stp + (((gamma - g) + theta)/(((gamma - g) + gamma) + g_left))*(st_left - stp);
+			
+			// Compute the quadratic step.
+			double quad_stp = stp + (g/(g - g_left))*(st_left - stp);
+			
+			// We prefer the cubic step if it is farther from stp than the quadratic one, 
+			// otherwise the quadratic step is used.
+			new_stp = (fabs(cub_stp - stp) > fabs(quad_stp - stp)) ? cub_stp : quad_stp;
+			
+			// Minimum has been bracketed
+			is_bracketed_ = true;
 		}
-    else if (b != 0.0)
-    {
-      // just a quadratic interpolation
-      // Note: b = 0 is then not possible by construction as this would be a linear
-      // interpolation
-      result = lambda_0 - grad_0 / (2 * b);
-			#ifdef BALL_DEBUG
-				Log.info() << "[quadr.] ";
-			#endif
+		else if (fabs(g) < fabs(g_left))
+		{
+			// Third case: We have a lower function value and derivatives of the same sign
+			// but the magnitude of the derivative decreases. There are three subcases:
+			
+			// (1) The cubic tends to infinity
+			// (2) The cubic tends to -infinity but its minimum is beyond stp
+			// (3) The cubic tends to -infinity and its minimum is on this side of stp
+		
+			double theta = (f_left - f)*3./(stp - st_left) + g_left + g;
+			double s = std::max(fabs(theta), fabs(g_left));
+			s = (stp > st_left) ? -std::max(s, fabs(g)) : std::max(s, fabs(g));
+			
+			// We can have gamma = 0 only if the cubic doesn't tend to infinity.
+			double gamma = s*sqrt(std::max(0., (theta/s)*(theta/s) - (g_left/s)*(g/s)));
+			double r = ((gamma - g) + theta)/((gamma + (g_left - g)) + gamma);
+			
+			// We compute the cubic step only in case (1) and (2) (only these cases make sense).
+			double cub_stp;
+			if ((r < 0.) && (gamma != 0.))
+			{
+				cub_stp = stp + r*(st_left - stp);
+			}
+			else
+			{
+				// Use the safeguards...
+				cub_stp = (stp > st_left) ? maxstp : minstp;
+			}
+			
+			// Compute the quadratic step.
+			double quad_stp = stp + (g/(g - g_left))*(st_left - stp);
+			
+			if (is_bracketed_)
+			{
+				// A minimizer has been bracketed. We prefer the cubic step if it
+				// is closer to stp than the quadratic step. Otherwise we use the 
+				// quadratic one.
+				new_stp = (fabs(cub_stp - stp) < fabs(quad_stp - stp)) ? cub_stp : quad_stp;
+				
+				// Use the safeguards (remember: it is assumed in the bracketed case, that
+				// stp must lie in the interval between st_left and st_right).
+				if (stp > st_left)
+				{
+					new_stp = std::min(new_stp, stp + (st_right - stp)*0.66);
+				}
+				else
+				{
+					new_stp = std::max(new_stp, stp + (st_right - stp)*0.66);
+				}
+			}
+			else
+			{
+				// If a minimizer has not been bracketed, we prefer the cubic step 
+				// if it is farther from stp than the quadratic step.
+				// Otherwise we use the quadratic step.
+				new_stp = (fabs(cub_stp - stp) > fabs(quad_stp - stp)) ? cub_stp : quad_stp;
+				
+				// Use the safeguards...
+				if (maxstp < new_stp)
+				{
+					new_stp = maxstp;
+				}
+				if (minstp > new_stp)
+				{
+					new_stp = minstp;
+				}
+			}
 		}
 		else
 		{
-			#ifdef BALL_DEBUG
-				Log.info() << "[linear.] ";
-			#endif			
-
-      // This bloody thing is linear!
-      result = ((energy_0 < energy_1) ? lambda_0 : lambda_1);
+			// Fourth case: We have a lower function value and derivatives of 
+			// the same sign, but the magnitude of the derivative doesn't 
+			// decrease.
+		
+			if (is_bracketed_)
+			{
+				// If a minimum has already been bracketed, we use the cubic step
+				double theta = (f - f_right)*3./(st_right - stp) + g_right + g;
+				double s = std::max(fabs(theta), fabs(g_right));
+				s = (stp > st_right) ? -std::max(s, fabs(g)) : std::max(s, fabs(g));
+				double gamma = s*sqrt((theta/s)*(theta/s) - (g_right/s)*(g/s));
+				
+				// Compute the cubic step.
+				new_stp = stp + (((gamma - g) + theta)/(((gamma - g) + gamma) + g_right))*(st_right - stp);
+			}
+			else 
+			{
+				// If we couldn't bracket the minimum so far, the 
+				// step must be either minstp or maxstp.
+				new_stp = (stp > st_left) ? maxstp : minstp;
+			}
 		}
 
-		#ifdef BALL_DEBUG
-			Log.info() << " = " << result << std::endl;
-		#endif
-
-    return result;
+		// Do all updates for the interval that contains a minimizer.	
+		if (f > f_left)
+		{
+			st_right = stp;
+			f_right = f;
+			g_right = g;
+		}
+		else
+		{
+			if (opp_sign)
+			{
+				st_right = st_left;
+				f_right = f_left;
+				g_right = g_left;
+			}
+			st_left = stp;
+			f_left = f;
+			g_left = g;
+		}
+	
+		// Set the new step.
+		stp = new_stp;
 	}
 	
-	bool LineSearch::isSufficient(double lambda, double current_energy, double current_dir_grad) const
-	{	
-		// Armijo & Goldstein criterion:
-		//   
-		// twofold criterion:
-		// - sufficient decrease of energy
-		//    E(i+1) <= E(i) + alpha * lambda * step * <g(i), dir> 
-		//
-		// - sufficient gradient reduction
-		//    |<g(i+1), dir>| <= beta <g(i), dir>
-		//
-		// where g(i) and g(i+1) are the initial and the current gradient
-		// dir is the search direction
-		// E(i+1) is the current and E(i) the initial energy (lambda = 0)
-		// alpha and beta are two parameters (usually 0.9 and 1e-4)
-		// 
-		#ifdef BALL_DEBUG
-			Log.info() << " C1: " << current_energy - initial_energy_ << "/" << alpha_ * lambda * step_ * current_dir_grad
-								<< "  C2: " << fabs(current_dir_grad) << "/" << beta_ * fabs(initial_dir_grad_) << " --- ";
-		#endif
-		//return ((current_energy <= (initial_energy_ + alpha_ * lambda * step_ * current_dir_grad))
-		return ((current_energy <= (initial_energy_ + alpha_ * lambda * step_ * initial_dir_grad_))
-						&& (fabs(current_dir_grad) <= beta_ * fabs(initial_dir_grad_)));
-	}
 
 } // namespace BALL
