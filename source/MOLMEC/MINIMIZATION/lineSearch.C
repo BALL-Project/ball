@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.C,v 1.20.2.1 2006/08/29 11:59:25 aleru Exp $
+// $Id: lineSearch.C,v 1.20.2.2 2006/08/29 12:50:36 aleru Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
@@ -326,7 +326,7 @@ namespace BALL
 				double g_right_mod = g_right - g_test;
 
 				// Compute a safeguarded, interpolating step and use the modified function.
-				lsStep_(st_left, f_left_mod, g_left_mod, st_right, f_right_mod, g_right_mod, stp, f_mod, g_mod, stmin, stmax);
+				lsStep(st_left, f_left_mod, g_left_mod, st_right, f_right_mod, g_right_mod, stp, f_mod, g_mod, stmin, stmax);
 
 				// Compute back all values for the original energy function.
 				f_left = f_left_mod + st_left * g_test;
@@ -337,7 +337,7 @@ namespace BALL
 			else
 			{
 				// Compute a safeguarded, interpolating step.
-				lsStep_(st_left, f_left, g_left, st_right, f_right, g_right, stp, f, g, stmin, stmax);
+				lsStep(st_left, f_left, g_left, st_right, f_right, g_right, stp, f, g, stmin, stmax);
 			}
 
 			if (is_bracketed_)
@@ -428,7 +428,7 @@ namespace BALL
 	// dependend on whether a minimum could already be bracketed or not.
 	// This function is based on the proposed step computation of Jorge J. More and David J. Thuente.
 	// A Fortran implementation can be found in MINPACK and MINPACK-2.
-	void LineSearch::lsStep_(double &st_left, double &f_left, double &g_left, double &st_right, 
+	void LineSearch::lsStep(double &st_left, double &f_left, double &g_left, double &st_right, 
 					double &f_right, double &g_right, double &stp, double f, double g, double minstp, double maxstp)
 	{
 		// The new step, which will be returned by stp on exit.

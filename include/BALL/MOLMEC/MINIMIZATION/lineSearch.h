@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.h,v 1.20.12.1 2006/08/29 11:59:25 aleru Exp $
+// $Id: lineSearch.h,v 1.20.12.2 2006/08/29 12:50:35 aleru Exp $
 //
 
 // Line Search Minimizer: A special class for the line search minimization algorithm
@@ -131,7 +131,7 @@ namespace BALL
 				@param minstp Lower bound for the step.
 				@param maxstp Upper bound for the step.
 		*/
-		void lsStep_(double &st_left, double &f_left, double &g_left, double &st_right, double &f_right, 
+		void lsStep(double &st_left, double &f_left, double &g_left, double &st_right, double &f_right, 
 								 double &g_right, double &stp, double f, double g, double minstp, double maxstp);
 
 		//@}
