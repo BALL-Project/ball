@@ -101,26 +101,24 @@ namespace BALL
 	throw();
       
       virtual void setup(System& system1, System& system2)
-	throw();	
+				throw();	
      
-		/*	void setForceField(ForceField* ff)
-				throw();*/
-
       /** Start the main loop of the algorithm.
        */
       void start()
-	throw();
+				throw();
       
       // return the overall docking progress as a percentage
       float getDockingProgress() const
-	throw();
+				throw();
       
       // 
       bool hasFinished() const
-	throw();
+				throw();
 
-      bool redraw();
-      
+			bool systemChanged() const
+				throw(); 
+
       /** Return the translation corresponding to conformation con_num.
        */
 /*       Vector3 getTranslation(Index con_num) const */
@@ -134,7 +132,7 @@ namespace BALL
       /** Return the ranked conformations.
        */
       ConformationSet getConformationSet(Index total_number = 0)
-	throw();
+				throw();
       
       //////////////////////////////////////////
       // the member variables

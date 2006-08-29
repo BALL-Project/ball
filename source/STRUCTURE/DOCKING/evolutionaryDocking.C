@@ -185,8 +185,7 @@ namespace BALL
   float EvolutionaryDocking::getDockingProgress() const
     throw()
   {
-    if (ga_->iteration_ == 0) 
-      return 0.0;
+		if (!ga_ || !ga_->iteration_) return 0.0;
     
     return float(ga_->iteration_/ga_->max_iterations_);
   }
@@ -196,12 +195,16 @@ namespace BALL
     throw()
   {
 		if (!ga_) return false;
+
     return (ga_->finished_);
   }
 
 
-  bool EvolutionaryDocking::redraw()
+  bool EvolutionaryDocking::systemChanged() const
+		throw()
   {
+		if (!dm_) return false;
+
     return (dm_->redraw());
   }
 
@@ -227,13 +230,7 @@ namespace BALL
   const System& EvolutionaryDocking::getIntermediateResult_()
     throw()
   {
-    return dm_->getIntermediateResult(system_changed_);
+    return dm_->getIntermediateResult();
   }
     
-
-/*  void EvolutionaryDocking::setForceField(ForceField* ff)
-    throw()
-  {
-    ff_ = ff;
-  }*/
 }

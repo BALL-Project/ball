@@ -84,7 +84,7 @@ namespace BALL
 
       bool redraw(); 
 
-      const System& getIntermediateResult(bool&);
+      const System& getIntermediateResult();
       
     protected:
  

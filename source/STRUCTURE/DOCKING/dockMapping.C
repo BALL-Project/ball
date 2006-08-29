@@ -359,13 +359,7 @@ namespace BALL
 
   bool DockMapping::redraw()
   {
-    if (redraw_)
-      {
-	redraw_ = false;
-	return true;
-      }
-    
-    return false;
+		return redraw_;
   }
   
 
@@ -449,11 +443,9 @@ namespace BALL
     return rc;
   }
 
-  const System& DockMapping::getIntermediateResult(bool& b)
+  const System& DockMapping::getIntermediateResult()
   {
-    //b = redraw_;
-
-    if (redraw_) redraw_ = false;
+    redraw_ = false;
 
     return draw_system_; 
   }
