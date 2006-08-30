@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.19 2006/08/29 14:46:49 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.20 2006/08/30 15:04:08 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -469,7 +469,6 @@ namespace BALL
 	
 		void DockingController::updateSystem_()
 		{
-			//Log.error() << "in DockingController::updateSystem_()" << std::endl;
 			if(dock_alg_->systemChanged())
 			{
 				if(!docked_system_)
