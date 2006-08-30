@@ -146,6 +146,8 @@ namespace BALL
 				  */
 				int remain_time_;
 				int time_step_;
+
+				bool was_called_;
 		};
 		
 } } // Namespaces
