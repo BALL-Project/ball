@@ -3,7 +3,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeAssembler.h,v 1.3 2006/08/15 20:36:55 oliver Exp $
+// $Id: moleculeAssembler.h,v 1.3.2.1 2006/08/30 20:15:20 oliver Exp $
 //
 // Author:
 //   Holger Franken
