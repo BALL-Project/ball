@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.19 2006/08/24 15:32:53 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.20 2006/08/30 11:34:21 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -40,7 +40,7 @@ const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 // CHARMM forces to BALL forces
 const double CHARMM_FORCES_FACTOR = Constants::JOULE_PER_CAL * FORCES_FACTOR;
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.19 2006/08/24 15:32:53 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.20 2006/08/30 11:34:21 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -468,7 +468,7 @@ CHECK(force test 4.2: StretchBends)
 	TEST_REAL_EQUAL(mmff.getEnergy(), -25.34351 * JOULE_PER_CAL)
 RESULT
 
-CHECK(force test 5: Planes)
+CHECK(force test 5.1: Planes)
 	HINFile f("data/MMFF94-plane.hin");
 	System s;
 	f >> s;
@@ -507,7 +507,64 @@ CHECK(force test 5: Planes)
 	PRECISION(2e-10)
 Log.error() << std::endl << "#~~#   1 "   << a1.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 Log.error() << "#~~#   2 " <<    v1       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-	TEST_REAL_EQUAL(a1.getForce().getDistance(v1), 0)
+Log.error() << std::endl << "#~~#   1 "   << a1.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+Log.error() << "#~~#   2 " <<    v2       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+Log.error() << std::endl << "#~~#   1 "   << a2.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+Log.error() << "#~~#   2 " <<    v3       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+	TEST_REAL_EQUAL(a1.getForce().getDistance(v3), 0)
+	TEST_REAL_EQUAL(a2.getForce().getDistance(v2), 0)
+	TEST_REAL_EQUAL(a3.getForce().getDistance(v3), 0)
+	TEST_REAL_EQUAL(a4.getForce().getDistance(v4), 0)
+
+	// value from CHARMM:
+	PRECISION(1)
+	TEST_REAL_EQUAL(mmff.getEnergy(), 7.46466 * JOULE_PER_CAL)
+RESULT
+
+CHECK(force test 5.2: Planes)
+	HINFile f("data/MMFF94-plane2.hin");
+	System s;
+	f >> s;
+	f.close();
+	TEST_EQUAL(s.countAtoms(), 4)
+	
+	// create references to the atoms
+	AtomIterator it = s.beginAtom();
+	Atom& a1 = *it++;
+	Atom& a2 = *it++;
+	Atom& a3 = *it++;
+	Atom& a4 = *it++;
+
+	mmff.setup(s);
+	enableOneComponent("MMFF94 OutOfPlaneBend", mmff);
+	mmff.updateEnergy();
+	mmff.updateForces();
+
+	PRECISION(2e-11)
+
+	// force value in CHARMM (kcal /mol A) !:
+	// -2.22167  10.47312   0.00000 
+	// -5.49903  -4.27990  -4.65629 
+  //  7.72070  -6.19322   0.00000 
+	//  0.00000   0.00000   4.65629
+	Vector3 v1(-2.22167, 10.47312, 0.00000);
+ 	Vector3 v2(-5.49903, -4.27990, -4.65629);
+	Vector3 v3(7.72070, -6.19322,  0.00000);
+	Vector3 v4(0.00000,  0.00000,  4.65629);
+
+	v1 *= CHARMM_FORCES_FACTOR;
+	v2 *= CHARMM_FORCES_FACTOR;
+	v3 *= CHARMM_FORCES_FACTOR;
+	v4 *= CHARMM_FORCES_FACTOR;
+
+	PRECISION(2e-10)
+Log.error() << std::endl << "#~~#   1 "   << a1.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+Log.error() << "#~~#   2 " <<    v1       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+Log.error() << std::endl << "#~~#   1 "   << a1.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+Log.error() << "#~~#   2 " <<    v2       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+Log.error() << std::endl << "#~~#   1 "   << a2.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+Log.error() << "#~~#   2 " <<    v3       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+	TEST_REAL_EQUAL(a1.getForce().getDistance(v3), 0)
 	TEST_REAL_EQUAL(a2.getForce().getDistance(v2), 0)
 	TEST_REAL_EQUAL(a3.getForce().getDistance(v3), 0)
 	TEST_REAL_EQUAL(a4.getForce().getDistance(v4), 0)
