@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondShiftProcessor.C,v 1.6 2003/08/26 09:18:09 oliver Exp $
+// $Id: HBondShiftProcessor.C,v 1.6.18.1 2006/08/31 17:56:30 anne Exp $
 //
 
 #include <BALL/NMR/HBondShiftProcessor.h>
@@ -15,17 +15,20 @@ namespace BALL
 
   HBondShiftProcessor::HBondShiftProcessor()
     : ShiftModule()
-  {
+	{
   }
 
   HBondShiftProcessor::HBondShiftProcessor(const HBondShiftProcessor& processor)
     : ShiftModule(processor),
-      donor_list_(processor.donor_list_),
-      acceptor_list_(processor.acceptor_list_),
-      a_(processor.a_),
-      b_(processor.b_),
-      minimum_bond_length_(processor.minimum_bond_length_),
-      maximum_bond_length_(processor.maximum_bond_length_)
+			acceptor_types_(processor.acceptor_types_),
+			donors_(processor.donors_),
+			acceptors_(processor.acceptors_),
+			amide_protons_are_targets_(processor.amide_protons_are_targets_),
+			amide_proton_factor_(processor.amide_proton_factor_), 
+			amide_proton_subtrahend_(processor.amide_proton_subtrahend_),
+			amide_proton_oxygen_hydrogen_separation_distance_(processor.amide_proton_oxygen_hydrogen_separation_distance_),
+			alpha_proton_oxygen_hydrogen_separation_distance_(processor.alpha_proton_oxygen_hydrogen_separation_distance_),
+			exclude_selfinteraction_(processor.exclude_selfinteraction_)
   {
   }
 
@@ -35,6 +38,8 @@ namespace BALL
 
   void HBondShiftProcessor::init()
   {
+
+		std::cout << __FILE__ << "hier im HbondProcessor" << __LINE__ << "" << std::endl;
 	// by default, we assume the worst...
     valid_ = false;
 
@@ -47,25 +52,65 @@ namespace BALL
     // check that the parameter file contains the correct section...
     ParameterSection parameter_section;
     parameter_section.extractSection(*parameters_, "HBondEffect");
+	
+		// ..and that this section contains the correct column names
+		if ( 		 !parameter_section.hasVariable("name")) 
+		{
+			return;
+		}
 
-    // ...and that this section contains the correct parameters, and if so, assign them to variables
-    if (!parameter_section.hasVariable("a") || !parameter_section.hasVariable("b")
-	|| !parameter_section.hasVariable("minimum_bond_length") || !parameter_section.hasVariable("maximum_bond_length"))
-    {
-      return;
-    }
+		// check for the options
+		amide_protons_are_targets_ = false;
+		if (parameter_section.options.has("amide_protons_are_targets"))
+		{
+			amide_protons_are_targets_ = parameter_section.options.getBool("amide_protons_are_targets");
+		}
 
-    String numdum;
-    numdum = parameter_section.getValue("a", "value");
-    a_ = numdum.toFloat();
-    numdum = parameter_section.getValue("b", "value");
-    b_ = numdum.toFloat();
-    numdum = parameter_section.getValue("minimum_bond_length", "value");
-    minimum_bond_length_ = numdum.toFloat();
-    numdum = parameter_section.getValue("maximum_bond_length", "value");
-    maximum_bond_length_ = numdum.toFloat();
- 
-    // mark the module as initialized
+		amide_proton_factor_ = 0.;
+		if (parameter_section.options.has("amide_proton_factor"))
+		{
+			amide_proton_factor_ = parameter_section.options.getReal("amide_proton_factor");
+		}
+    
+		amide_proton_subtrahend_ = 0.;
+		if (parameter_section.options.has("amide_proton_subtrahend"))
+		{
+			amide_proton_subtrahend_ = parameter_section.options.getReal("amide_proton_subtrahend");
+		}
+		
+		amide_proton_oxygen_hydrogen_separation_distance_ = 0.;
+		if (parameter_section.options.has("amide_proton_oxygen_hydrogen_separation_distance"))
+		{
+			amide_proton_oxygen_hydrogen_separation_distance_ = parameter_section.options.getReal(
+																													"amide_proton_oxygen_hydrogen_separation_distance");
+		}
+
+		alpha_proton_oxygen_hydrogen_separation_distance_ = 0.;
+		if (parameter_section.options.has("alpha_proton_oxygen_hydrogen_separation_distance"))
+		{
+			alpha_proton_oxygen_hydrogen_separation_distance_ = parameter_section.options.getReal(
+																													"alpha_proton_oxygen_hydrogen_separation_distance");
+		}
+	
+		exclude_selfinteraction_ = false;
+		if (parameter_section.options.has("exclude_selfinteraction"))
+		{
+			exclude_selfinteraction_ = parameter_section.options.getBool("exclude_selfinteraction");
+		}
+
+   
+		// read the acceptor types
+		acceptor_types_.clear();
+		
+		// extract the column indices
+		Position acceptor_type_column = parameter_section.getColumnIndex("name");
+		for (Position counter = 0; counter < parameter_section.getNumberOfKeys(); counter++)
+		{
+			String acceptor_type = parameter_section.getValue(counter, acceptor_type_column);
+			acceptor_types_.push_back(acceptor_type);
+		}
+    
+		// mark the module as initialized
     valid_ = true;
   }
 
@@ -78,14 +123,18 @@ namespace BALL
     }
 
     // clear the donor list and the acceptor list
-    donor_list_.clear();
-    acceptor_list_.clear();
+    donors_.clear();
+    acceptors_.clear();
 
     return true;
   }
 
   bool HBondShiftProcessor::finish()
   {
+		printParameters_(); 
+  	printEffectors_();
+  	printTargets_();
+		
     // if the module is invalid, abort
     if (!isValid())
     {
@@ -93,201 +142,208 @@ namespace BALL
     }
 
     // if there were no donors or acceptors, return immediately
-    if ((donor_list_.size() == 0) || acceptor_list_.size() == 0)
+    if ((donors_.size() == 0) || acceptors_.size() == 0)
     {
       return true;
     }
 
-    // iterate over all donors
-    list<Atom*>::iterator donor_it = donor_list_.begin();
-    for (; donor_it != donor_list_.end(); ++donor_it)
-    {
-      Vector3 donor_pos = (*donor_it)->getPosition();
-      float delta_HBOND = 0.0;
-      Size hbond_number = 0;
-      float nearest_acc = 0.0;
-		 
-      // iterate over all acceptors
-      list<Atom*>::iterator acceptor_it = acceptor_list_.begin();
-      for (; acceptor_it != acceptor_list_.end(); ++acceptor_it)
-      { 
+		// find all hydrogen bonds which include all donor -- acceptor pairs
+		// and store them in 
 
-	// Test: use the distances of the hydrogens instead of the ones of the residues.
-	BALL::Atom::BondConstIterator bi = (*donor_it)->beginBond();
-	
-	for (; +bi; ++bi)
-	{
-	  Atom* at = (*bi).getPartner(**donor_it);
-	  if (at->getElement() == PTE[Element::H])
-	    {
-	      // print the partners of the assumed hydrogen bond
-	      // compute the euclidian distance between acceptor and donor
-	      Vector3 acceptor_pos = (*acceptor_it)->getPosition();
-	      Vector3 donor_h_pos = (at)->getPosition();
-	      Vector3 don_h = donor_pos - donor_h_pos;
-	      Vector3 don_h_acc = acceptor_pos - donor_h_pos;
-	      Angle psi = don_h.getAngle(don_h_acc); 
-	      BALL::Atom::BondConstIterator accit = (*acceptor_it)->beginBond();
-	      Atom* c;
-	      Vector3 acceptor_plane;
-	      Angle theta;
-	      Angle phi;
-	      while (+accit) 
-	      {
-		c = (*accit).getPartner(**acceptor_it);
-		if (c->getElement() == PTE[Element::C])
+		vector< std::pair< Atom*, Atom*> > bonds;
+		
+		for(Position d = 0; d < donors_.size(); ++d)
 		{
-		  Vector3 c_pos = c->getPosition();
-		  BALL::Atom::BondConstIterator c_partner_it = c->beginBond();
-		  while (+c_partner_it)
-		    {
-		      Atom* c_partner = (*c_partner_it).getPartner(*c);
-		      if (c_partner->getElement() != PTE[Element::H])
+			for(Position a = 0; a < acceptors_.size(); ++a)
 			{
-			  Vector3 c_partner_pos = c_partner->getPosition();
-			  if ((c_partner_pos != c_pos) && (donor_h_pos != acceptor_pos))
-			    {
-			      acceptor_plane = (acceptor_pos - c_pos) % (c_partner_pos - c_pos);
-			      Vector3 hbond = (donor_h_pos - acceptor_pos);
-			      if ((acceptor_plane != Vector3(0, 0, 0)) && (((c_pos - acceptor_pos) % acceptor_plane) != Vector3(0, 0, 0)))
+	//			if (donors_[d]->getResidue()->getName() == "ASN"  )
+//std::cout << "N "<< donors_[d]->getResidue()->getID() << " -- "<< acceptors_[a]->getResidue()->getID()<< ": " << (donors_[d]->getPosition() - acceptors_[a]->getPosition()).getLength() << std::endl;
+
+				Atom* donor = getDonor_(donors_[d]);
+				if (donor == NULL)
+					continue;
+				
+				BALL::Atom::BondIterator bi = donor->beginBond();
+				for (; +bi; ++bi)
 				{
-				  theta = acceptor_plane.getAngle(hbond);
-				  Vector3 xaxis = (c_pos - acceptor_pos) % acceptor_plane;
-				  phi = xaxis.getAngle(hbond);
-				  break;
+					if (    (bi->getType() == Bond::TYPE__HYDROGEN) 
+							 && (   ( (bi->getFirstAtom() == donor) && (bi->getSecondAtom() == acceptors_[a]) )
+						       || ( (bi->getSecondAtom() == donor) && (bi->getFirstAtom() == acceptors_[a])  ) )) 
+					{
+
+std::cout << " passiert das überhaupt irgendwann?" << __LINE__ << "" << std::endl;
+						// do we have to exclude self interactions?
+						if (   exclude_selfinteraction_ 
+								&& (donor->getResidue() == acceptors_[a]->getResidue()))
+						{
+							continue;	
+						}
+if (donors_[d]->getResidue()->getName() == "ASN" )
+std::cout << "N -- "<< acceptors_[a]->getResidue()->getID()<< ": " << (donors_[d]->getPosition() - acceptors_[a]->getPosition()).getLength() << std::endl;
+						// TO THINK: How to make sure that we got no bifurcated hydrogen bonds?
+						pair <Atom*, Atom*> tuple(donors_[d],acceptors_[a]); 
+						bonds.push_back(tuple);
+					}
 				}
-			    }
 			}
-		      ++c_partner_it;
-		    }
-		  break;
-		}
-		++accit;
-	      }
-	      // this is used to compute the shift	
-	      float b_length = donor_h_pos.getDistance(acceptor_pos);
-	      // this is used to decide whether there is an hbond or not
-	      float distance = donor_pos.getDistance(acceptor_pos);
-	      // this is a test! empirical guess
-	      // float b_length = (2. / 3) * distance;
-	      // do they form a bond?
-	      // like in the paper by wuethrich, no bonds are accepted: - outside a certain range
-	      //							  - on the same residue
-	      //							  - on neighbouring residues in the chain
-	      if ((minimum_bond_length_ <= distance) && (maximum_bond_length_ >= distance) 
-		  && (*acceptor_it)->getResidue() != (*donor_it)->getResidue()
-		  && (abs((*acceptor_it)->getResidue()->getID().toInt() - (*donor_it)->getResidue()->getID().toInt()) > 1))
-		{
-		  // increase the number of found HBonds for this donor
-		  cout << (*donor_it)->getResidue()->getFullName() << ":" << (*donor_it)->getResidue()->getID() << " -> ";
-		  cout << (*acceptor_it)->getResidue()->getFullName() << ":" << (*acceptor_it)->getResidue()->getID() << " " << endl;
-		  hbond_number++;
-		  if (hbond_number > 1)
-		    {
-		      // only accept the nearest partner
-		      if (b_length <= nearest_acc)
-			{
-			  // compute their contribution to the chemical shift
-			  delta_HBOND = a_ * 1./pow(b_length, 3) + b_;
-			  cout << "#: " << hbond_number << " length: " << b_length << " " << distance << " " << delta_HBOND << endl;
-			  nearest_acc = b_length;
-			  hbond_number = 1;
-			  cerr << (*donor_it)->getResidue()->getFullName() << (*donor_it)->getResidue()->getID() << " " << (*donor_it)->getName() << " -> ";
-			  cerr << (*acceptor_it)->getResidue()->getFullName() << (*acceptor_it)->getResidue()->getID() << " " << (*acceptor_it)->getName() << " " << b_length << " " << distance << " phi, theta, psi: " << phi << " " << theta << " " << psi << endl;
-			}
-		    }
-		  else
-		    {
-		      cerr << (*donor_it)->getResidue()->getFullName() << (*donor_it)->getResidue()->getID() << " " << (*donor_it)->getName() << " -> ";
-		      cerr << (*acceptor_it)->getResidue()->getFullName() << (*acceptor_it)->getResidue()->getID() << " " << (*acceptor_it)->getName() << " " << b_length << " " << distance << " phi, theta, psi: " << phi << " " << theta << " " << psi << endl;
-		      delta_HBOND = a_ * 1./pow(b_length, 3) + b_;
-		      cout << "#: " << hbond_number << " length: " << b_length << " " << distance << " " << delta_HBOND << endl;
-		      nearest_acc = b_length;
-		    }
-		}
-	    }
-	}
-	bi = (*donor_it)->beginBond();
+		}	// end of for loop
+
+
+		std::cout << " anzahl HBONds " << bonds.size() << "" << std::endl;
 	
-      }
-      BALL::Atom::BondConstIterator bi = (*donor_it)->beginBond();
-      if (hbond_number != 0)
-	{ 
-	  delta_HBOND /= (float) hbond_number; 
-	  for (; +bi; ++bi)
-	    {
-	      Atom* at = (*bi).getPartner(**donor_it);
-	      if (at->getElement() == PTE[Element::H])
+		// compute all hydrogen bond effect shifts 
+		// by construction is the first atom in pairs the donor, the second the acceptor! 
+		for (Position b = 0; b < bonds.size(); ++b)
 		{
-		  float shift = (at)->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
-		  shift += delta_HBOND;	
-		  (at)->setProperty(ShiftModule::PROPERTY__SHIFT, shift);
-		  (at)->setProperty(PROPERTY__HBOND_SHIFT, delta_HBOND);
+			float new_hb_shift = 0.;
+			double distance = ((bonds[b].first->getPosition() - bonds[b].second->getPosition()).getLength());
+			
+			// when donor is amide proton, 
+			// we compute the shift as done in ShiftX
+			// NOTE: the variables' values differ from the values given in the ShiftX paper!
+			//
+			//					  amide_proton_factor_
+			//  shift =  ----------------------  - amide_proton_subtrahend_
+			// 								r^3
+			// 
+			// where r denotes the distance between donor and acceptor of the 
+			// hydrogen bond under consideration
+			//
+		
+			if (   amide_protons_are_targets_ && (bonds[b].first->getName() == "H") 
+					&& (distance < amide_proton_oxygen_hydrogen_separation_distance_) ) 
+			{
+				new_hb_shift = (amide_proton_factor_ /(pow(distance, 3.)) ) - amide_proton_subtrahend_ ;
+			}
+			// when the donor is an alpha proton
+			// we compute the shift as done in the ShiftX
+			// NOTE: the formular differs from the formular given in the ShfitX paper!
+			//
+			//
+			//  				0.147521    (1.65458E-05)		 0.000134668				0.0598561			 15.6855
+			//	shift = -------  - -------------  - -------------   +  -----------  + --------  - 0.673905
+			// 				   	r							r^1.5					  r*r								r^2.5					r^3
+			// 				   	
+			// 	where r denotes the distance between donor and acceptor of the 
+			// hydrogen bond under consideration
+			// 
+			// 
+			else if ((bonds[b].first->getName().hasSubstring("HA")) && (distance < alpha_proton_oxygen_hydrogen_separation_distance_ ))
+			{
+				// according to shiftX one has to correct the distance
+				if (distance >  2.60756 ) distance = 2.60756;
+				if (distance <  2.26808 ) distance = 2.26808;
+				
+ 				new_hb_shift = 0.147521/distance - (1.65458E-05)/pow(distance, 1.5) - 0.000134668/(distance*distance) + 
+			  0.0598561/pow(distance, 2.5) + 15.6855/(distance*distance*distance) - 0.673905;
+			}
+
+			// store the shift in the hydrogen if necessary
+			if (new_hb_shift !=0)
+			{
+				std::cout << " hatte doch noch einen Wert " <<  bonds[b].first->getName() << " : " << new_hb_shift <<  std::endl;
+				float old_shift = bonds[b].first->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat(); 
+				float old_hb_shift = bonds[b].first->getProperty(HBondShiftProcessor::PROPERTY__HBOND_SHIFT).getFloat(); 
+				
+				bonds[b].first->setProperty(ShiftModule::PROPERTY__SHIFT, (old_shift + new_hb_shift));
+				bonds[b].first->setProperty(HBondShiftProcessor::PROPERTY__HBOND_SHIFT, (old_hb_shift + new_hb_shift));
+			}
 		}
-	    }
-	}
-    } 
+		
     return true;
   }
+  
   Processor::Result HBondShiftProcessor::operator () (Composite& object)
-  {
-    // here, we collect all possible acceptors and donors
-    if (RTTI::isKindOf<Atom>(object))
-      {
-	Atom* atom_ptr = RTTI::castTo<Atom>(object);
+	{
+		// here, we collect all possible acceptors and donors
+		if (RTTI::isKindOf<Atom>(object))
+		{
+			Atom* atom = RTTI::castTo<Atom>(object);
 
-	// ??? Do I have to use the fragment or the residue of the atom???
-	const String& residue_name = atom_ptr->getFragment()->getName();
-	const String& atom_name = atom_ptr->getName();
+			// we store the hydrogen bond acceptors
+			for (Position i = 0; i < 	acceptor_types_.size(); i++)
+			{
+				if (acceptor_types_[i] == atom->getName())
+				{
+						acceptors_.push_back(atom);
+				}
+			}
+			
+			// and the hydrogen bond donors
+			if (    (atom->getName().hasSubstring( "HA")) 
+					 || (amide_protons_are_targets_ && (atom->getName() == "H") ) 
+				 ) 
+			{
+				donors_.push_back(atom);
+			}
+		}
 
-	if (   ((residue_name == "ALA") && (atom_name == "N"))
-	       || ((residue_name == "ARG") && ((atom_name == "N") || (atom_name == "NH1") || (atom_name == "NH2")))
-	       || ((residue_name == "ASN") && ((atom_name == "N") || (atom_name == "ND2")))
-	       || ((residue_name == "ASP") && (atom_name == "N"))
-	       || ((residue_name == "CYS") && (atom_name == "N"))
-	       || ((residue_name == "GLN") && ((atom_name == "N") || (atom_name == "NE2")))
-	       || ((residue_name == "GLU") && (atom_name == "N"))
-	       || ((residue_name == "GLY") && (atom_name == "N"))
-	       || ((residue_name == "HIS") && ((atom_name == "N") || (atom_name == "NE2")))
-	       || ((residue_name == "ILE") && (atom_name == "N"))
-	       || ((residue_name == "LEU") && (atom_name == "N"))
-	       || ((residue_name == "LYS") && ((atom_name == "N") || (atom_name == "NZ")))
-	       || ((residue_name == "MET") && (atom_name == "N"))
-	       || ((residue_name == "PHE") && (atom_name == "N"))
-	       || ((residue_name == "PRO") && (atom_name == "N"))
-	       || ((residue_name == "SER") && ((atom_name == "N") || (atom_name == "OG")))
-	       || ((residue_name == "THR") && ((atom_name == "N") || (atom_name == "OG1")))
-	       || ((residue_name == "TRP") && (atom_name == "N"))
-	       || ((residue_name == "TYR") && ((atom_name == "N") || (atom_name == "OH")))
-	       || ((residue_name == "VAL") && (atom_name == "N")))
-	  {
-	    donor_list_.push_back(atom_ptr);
-	  }
-	if (   ((residue_name == "ALA") && (atom_name == "O"))
-	       || ((residue_name == "ARG") && (atom_name == "O"))
-	       || ((residue_name == "ASN") && (atom_name == "O"))
-	       || ((residue_name == "ASP") && ((atom_name == "O") || (atom_name == "OD1") || (atom_name == "OD2")))
-	       || ((residue_name == "CYS") && ((atom_name == "O") || (atom_name == "SG")))
-	       || ((residue_name == "GLN") && (atom_name == "O"))
-	       || ((residue_name == "GLU") && ((atom_name == "O") || (atom_name == "OE1") || (atom_name == "OE2")))
-	       || ((residue_name == "GLY") && (atom_name == "O"))
-	       || ((residue_name == "HIS") && ((atom_name == "O") || (atom_name == "ND1") || (atom_name == "NE2")))
-	       || ((residue_name == "ILE") && (atom_name == "O"))
-	       || ((residue_name == "LEU") && (atom_name == "O"))
-	       || ((residue_name == "LYS") && (atom_name == "O"))
-	       || ((residue_name == "MET") && ((atom_name == "O") || (atom_name == "SD")))
-	       || ((residue_name == "PHE") && (atom_name == "O"))
-	       || ((residue_name == "PRO") && (atom_name == "O"))
-	       || ((residue_name == "SER") && ((atom_name == "O") || (atom_name == "OG")))
-	       || ((residue_name == "THR") && ((atom_name == "O") || (atom_name == "OG1")))
-	       || ((residue_name == "TRP") && (atom_name == "O"))
-	       || ((residue_name == "TYR") && (atom_name == "OH"))
-	       || ((residue_name == "VAL") && (atom_name == "O")))
-	  { 
-	    acceptor_list_.push_back(atom_ptr);
-	  }
-      }
+		return Processor::CONTINUE;
+	}
 
-    return Processor::CONTINUE;
-  }
+	Atom* 		HBondShiftProcessor::getDonor_(Atom* a) 
+	{
+		Atom * partner = NULL;
+		
+		BALL::Atom::BondIterator bi = a->beginBond();
+		for (; +bi; ++bi)
+		{
+			Atom* b =  bi->getPartner(*a);
+			if (  	(a->getName().hasSubstring("HA") &&  b->getName()=="CA")
+			    || (a->getName()=="H" &&  b->getName()=="N"))
+
+			{
+				partner = b;
+			}
+		}
+		
+		return partner; 
+	}
+
+
+	void 		HBondShiftProcessor::printParameters_() 
+	{
+		std::cout << "********* \n HB:Liste der Parameter " << std::endl;
+		std::cout << "\tacceptor_types" << std::endl;
+
+		vector< BALL::String >::const_iterator a_it = acceptor_types_.begin();
+		for(;a_it != acceptor_types_.end(); ++a_it)
+		{
+			std::cout <<(*a_it) << "  " << std::endl;
+		}
+		std::cout << "\n\tamide_protons_are_targets_: "<< amide_protons_are_targets_<< " " 
+							<< "\n\tamide_proton_factor_: "<< amide_proton_factor_ << " " 
+							<< "\n\tamide_proton_subtrahend_: "<< amide_proton_subtrahend_<< " " 
+							<< "\n\tHN_oxygen_hydrogen_distance_: "<< amide_proton_oxygen_hydrogen_separation_distance_ << " " 
+							<< "\n\tHA_oxygen_hydrogen_distance_: "<< alpha_proton_oxygen_hydrogen_separation_distance_ << " " 
+							<< "\n\texclude_selfinteraction_: "<<exclude_selfinteraction_ << " "
+//	<< "\n\t: "<< << " "
+							<< std::endl;
+	}
+	
+	void  	HBondShiftProcessor::printEffectors_() 
+	{
+		std::cout << "********* \n HB:Liste der Donoren " << std::endl;
+		vector< BALL::Atom*>::const_iterator a_it = donors_.begin();
+		for(;a_it != donors_.end(); ++a_it)
+		{
+			std::cout << (*a_it)->getResidue()->getID() << "  " << (*a_it)->getFullName() << "  " << std::endl;
+		}
+		std::cout	<< std::endl;
+	}
+	
+	void 		HBondShiftProcessor::printTargets_() 
+	{
+		std::cout << "********* \n HB:Liste der Akzeptoren " << std::endl;
+		
+		vector< BALL::Atom*>::const_iterator a_it = 	acceptors_.begin();
+		for(;a_it != 	acceptors_.end(); ++a_it)
+		{
+			std::cout<< (*a_it)->getResidue()->getID() << "  "  << (*a_it)->getFullName() << "  " << std::endl;
+		}
+		std::cout	<< std::endl;
+
+	}
+
+	
 } // namespace BALL

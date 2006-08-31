@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondShiftProcessor.h,v 1.14 2005/12/23 17:01:55 amoll Exp $
+// $Id: HBondShiftProcessor.h,v 1.14.10.1 2006/08/31 17:56:29 anne Exp $
 //
 
 #ifndef BALL_NMR_HBONDSHIFTPROCESSOR_H
@@ -72,10 +72,9 @@ namespace BALL
     /** Initialization method.
 	      This method reads the parameter section "HBondEffect" and parses its contents.
 		    This section contains the parameters used to calculate the contribution of a hydrogen bond
-		    to the chemical shift. Right now, it is assumed that the effect is linear in the bond length
-		    and the slope <tt>a</tt> and the shift <tt>b</tt> are universal, that is the same for all 
-				kinds of hydrogen bonds.
-    */
+		    to the chemical shift of alpha protons and amide protons. 
+				Right now, it is assumed that the hydrogen bonds were already set via for example the <tt>HBondProcessor</tt>.
+		*/
     virtual void init();
 
     //@}
@@ -88,8 +87,8 @@ namespace BALL
     virtual bool start();
 
     /** operator ().
-	      This method adds all acceptors to the <tt>acceptor_list_</tt> and all donors to the
-		    <tt>donor_list_</tt>.
+	      This method adds all acceptors () specified in the vector <tt>acceptor_types_</tt> 
+				to  <tt>acceptors_</tt> and all donors to <tt>donors_</tt>.
     */
     virtual Processor::Result operator () (Composite& composite);
 
@@ -111,30 +110,48 @@ namespace BALL
     //@}
 
     protected:
-
-    /** list of HBond donors collected by <tt>operator ()</tt>
+		
+		/*_ vector of HBond acceptor types collected from the <tt>ShiftX.ini-file</tt> by <tt>init ()</tt>.
      */
-    std::list<Atom*> donor_list_;
-
-    /** list of HBond acceptors collected by <tt>operator ()</tt>
+		std::vector<String> 				acceptor_types_;
+		
+    /*_ list of HBond donors collected by <tt>operator ()</tt>
      */
-    std::list<Atom*> acceptor_list_;
+    std::vector<Atom*> 						donors_;
 
-    /** slope of the linear relation for the chemical shift.
+    /*_ list of HBond acceptors collected by <tt>operator ()</tt>
      */
-    float a_;
+    std::vector<Atom*> 						acceptors_;
 
-    /** zero value of the linear relation for the chemical shift.
+		/*_  A flag indicating whether the HBond effect affects amide protons too.
      */
-    float b_;
+		bool 												amide_protons_are_targets_;
+		
+		/*_  The default factor for computing the amide protons shift.
+     */
+		float												amide_proton_factor_ ; 
+		
+		/*_  The default subtrahend for computing the amide protons shift.
+     */
+		float 											amide_proton_subtrahend_;
 
-    /** minimum distance for an HBond.
+		/*_  The default distance between oxygen and hydrogen for amide hydrogens.
      */
-    float minimum_bond_length_;
+		float 											amide_proton_oxygen_hydrogen_separation_distance_;
+		
+		/*_  The default distance between oxygen and hydrogen for alpha hydrogens.
+     */
+		float 											alpha_proton_oxygen_hydrogen_separation_distance_;
+		
+		/*_  A flag indicating whether the HBond-donar and acceptor must be on different residues.
+     */
+		bool 												exclude_selfinteraction_;
 
-    /** maximum distance for an HBond.
-     */
-    float maximum_bond_length_;
+		private:
+		void 			printParameters_();
+		void  		printEffectors_();
+		void 			printTargets_();
+		Atom* 		getDonor_(Atom* a);
 };
 } // namespace BALL
 

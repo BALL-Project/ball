@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.C,v 1.17.18.5 2006/08/31 09:38:02 anne Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.17.18.6 2006/08/31 17:56:30 anne Exp $
 //
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
@@ -331,8 +331,8 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 																						:    targets_[t]->getPosition();
 //std::cout << ", projection" << atom_projection << std::endl;
 				
-if (targets_[t]->getResidue()->getName() == "HIS" && targets_[t]->getName() == "HA")
-	std::cout << targets_[t]->getResidue()->getID() << " " << ring_normal << " " << targets_[t]->getPosition() << std::endl;
+//if (targets_[t]->getResidue()->getName() == "HIS" && targets_[t]->getName() == "HA")
+//	std::cout << targets_[t]->getResidue()->getID() << " " << ring_normal << " " << targets_[t]->getPosition() << std::endl;
 
 				if (use_cut_off_)
 				{
@@ -412,8 +412,8 @@ if (targets_[t]->getResidue()->getName() == "HIS" && targets_[t]->getName() == "
 				// negative ring current correction a la ShitX
 				if (new_rc_shift < 0.)
 					new_rc_shift *= negative_ringcurrent_factor_;
-	if (targets_[t]->getResidue()->getName() == "HIS" && targets_[t]->getName() == "HA")
-		std::cout << targets_[t]->getResidue()->getID() << " " << ring_normal << " " << targets_[t]->getPosition() << " " << new_rc_shift<< std::endl;
+//	if (targets_[t]->getResidue()->getName() == "HIS" && targets_[t]->getName() == "HA")
+//		std::cout << targets_[t]->getResidue()->getID() << " " << ring_normal << " " << targets_[t]->getPosition() << " " << new_rc_shift<< std::endl;
 
 	
 				float old_rc_shift = targets_[t]->getProperty(PROPERTY__RING_CURRENT_SHIFT).getFloat();
