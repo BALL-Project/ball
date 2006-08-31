@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.6.2.17 2006/08/31 14:06:30 leonhardt Exp $
+// $Id: dockDialog.C,v 1.5.2.6.2.18 2006/08/31 16:05:17 leonhardt Exp $
 //
 
 #include <QtGui/qpushbutton.h>
@@ -417,10 +417,9 @@ namespace BALL
 		{
 			algorithm_opt_.clear();
 			scoring_opt_.clear();
-			// options for all docking algorithms
-			///////////////// TODO common options should be in class DockingAlgorithm ////////////////////////////////////////////
-			//algorithm_opt_[DockingAlgorithm::Option::BEST_NUM] = ascii(best_num->text()).toInt();
-			//algorithm_opt_[DockingAlgorithm::Option::VERBOSITY] = ascii(verbosity->text()).toInt();
+			// options common for all docking algorithms
+			algorithm_opt_[DockingAlgorithm::Option::BEST_NUM] = ascii(best_num->text()).toInt();
+			algorithm_opt_[DockingAlgorithm::Option::VERBOSITY] = ascii(verbosity->text()).toInt();
 			
 			QString text = algorithms->currentText();
       algorithm_dialogs_[text]->getOptions(algorithm_opt_);
@@ -429,9 +428,6 @@ namespace BALL
 #ifdef BALL_HAS_FFTW
 				try
 				{
-					algorithm_opt_[GeometricFit::Option::BEST_NUM] = ascii(best_num->text()).toInt();
-					algorithm_opt_[GeometricFit::Option::VERBOSITY] = ascii(verbosity->text()).toInt();
-
 					// options for redocking (euler angles)
 					if(is_redock_)
 					{
@@ -467,17 +463,6 @@ namespace BALL
 			}
 			else if (text == "Evolutionary Docking")
 			{
-				try
-				{
-					algorithm_opt_[EvolutionaryDocking::Option::BEST_NUM] = ascii(best_num->text()).toInt();
-					algorithm_opt_[EvolutionaryDocking::Option::VERBOSITY] = ascii(verbosity->text()).toInt();
-				}
-				catch (Exception::InvalidFormat)
-				{
-					Log.error() << "Conversion from String to int failed: invalid format! " << __FILE__ << " " << __LINE__<< std::endl;
-					return;
-				}
-				
 				EvolutionDockingDialog* edd = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[text]));
 				ff_ = edd->getForceField();
 			}
