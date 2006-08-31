@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.13 2005/12/23 17:03:35 amoll Exp $
+// $Id: surfaceModel.C,v 1.13.6.1 2006/08/31 14:06:36 leonhardt Exp $
 //
 
 #include <BALL/VIEW/MODELS/surfaceModel.h>
@@ -148,10 +148,19 @@ namespace BALL
 			// Compute the surface
 			sp.finish();
 			*static_cast<Surface*>(mesh) = sp.getSurface();
+
+			// normalize normal length:
+			vector<Vector3>& normals = mesh->normal;
+			for (Position p = 0; p < normals.size(); p++)
+			{
+				float square_length = normals[p].getSquareLength();
+				if (square_length == 0) continue;
+				normals[p] /= sqrt(square_length);
+			}
+
 			geometric_objects_.push_back(mesh);
 			return true;
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL

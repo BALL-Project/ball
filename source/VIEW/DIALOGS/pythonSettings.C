@@ -103,10 +103,10 @@ HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
   setRowCount(0);
 	setShowGrid(true);
 	
-	setColumnWidth(0, 70);
+	setColumnWidth(0, 90);
 	setColumnWidth(1, 60);
-	setColumnWidth(2, 350);
-	setGeometry(2,2, 530, 342);
+	setColumnWidth(2, 410);
+	setGeometry(2,2, 610, 342);
 
 	setSelectionBehavior(QAbstractItemView::SelectRows);
 	setSelectionMode(QAbstractItemView::SingleSelection);
@@ -120,8 +120,8 @@ HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
 		keys_ << (String("F") + String(p)).c_str();
 	}
 	
-	// F2 -> runScriptAgain()
-	appendHotkey("None", "F2", "runScriptAgain()");
+	// F2 -> runCurrentScript()
+	appendHotkey("None", "F2", "runCurrentScript()");
 
 	// F3 -> hideAllRepresentations()
 	appendHotkey("None", "F3", "hideAllRepresentations()");
@@ -183,20 +183,16 @@ List<Hotkey> HotkeyTable::getContent() const
 			continue;
 		}
 
-		Hotkey hotkey;
-
-		String s = ascii(item(pos, 0)->text());
-		if      (s == "None")  hotkey.button_state = Qt::NoModifier;
-		else if (s == "Shift") hotkey.button_state = Qt::ShiftModifier;
-		else if (s == "Ctrl")  hotkey.button_state = Qt::ControlModifier;
-		else Log.error() << "Problem reading content of PythonHotkeys" << std::endl;
-
-		s = ascii(item(pos, 1)->text());
-		Index p = s[1] - 49;
-
-    hotkey.key = (Qt::Key) (Qt::Key_F1 + p);
-
-    hotkey.action = ascii(item(pos, 2)->text());
+		bool ok;
+		Hotkey hotkey = Hotkey::createHotkey(ascii(item(pos, 0)->text()),
+																				 ascii(item(pos, 1)->text()),
+																				 ascii(item(pos, 2)->text()),
+																				 ok);
+		if (!ok) 
+		{
+			Log.error() << "Problem reading content of PythonHotkeys" << std::endl;
+			return result;
+		}
 
     result.push_back(hotkey);
   }
@@ -227,15 +223,12 @@ void HotkeyTable::setContent(const List<Hotkey>& hotkeys)
 				return;
 		}
 
-		insertRow(p);
+		setItem(p, 0, new QTableWidgetItem(s.c_str()));
 
-		itemAt(p, 0)->setText(s.c_str());
-
-		Position p = (*it).key - Qt::Key_F1 + 1;
-		s = String(p);
-		itemAt(p, 1)->setText(s.c_str());
-
-		itemAt(p, 2)->setText((*it).action.c_str());
+		Position k = (*it).key - Qt::Key_F1 + 1;
+		s = String("F") + String(k);
+		setItem(p,1, new QTableWidgetItem(s.c_str()));
+		setItem(p,2, new QTableWidgetItem((*it).action.c_str()));
 
 		p++;
 	}
@@ -348,7 +341,7 @@ PythonSettings::PythonSettings(QWidget* parent, const char* name)
 
 void PythonSettings::fileSelected()
 {
-	QString s = QFileDialog::getSaveFileName(
+	QString s = QFileDialog::getOpenFileName(
 								0,
 								"Choose a Startup Python Script",
 								getMainControl()->getWorkingDir().c_str(),

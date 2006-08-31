@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.21 2006/05/08 21:55:40 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.21.2.1 2006/08/31 14:06:37 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -557,7 +557,6 @@ namespace BALL
 					const Representation* rep = item_to_representation_[*it];
 					if (rep->getModelType() != MODEL_GRID_SLICE) continue;
 					slice = (GridVisualisation*) *rep->getGeometricObjects().begin();
-					if (slice->slices > 1) continue;
 				}
 
 				if (plane != 0) n = plane->getNormal();

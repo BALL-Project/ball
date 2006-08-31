@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.C,v 1.40.12.1 2006/06/09 14:04:14 leonhardt Exp $
+// $Id: forceField.C,v 1.40.12.2 2006/08/31 14:05:43 leonhardt Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -574,6 +574,7 @@ namespace BALL
 		vector<ForceFieldComponent*>::iterator it;
 		for (it = components_.begin(); it != components_.end(); ++it)
 		{
+			if (!(**it).isEnabled()) continue;
 			(*it)->update();
 		}
 

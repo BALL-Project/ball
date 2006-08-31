@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.32 2005/12/23 17:02:17 amoll Exp $
+// $Id: cartoonModel.h,v 1.32.6.1 2006/08/31 14:04:50 leonhardt Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -13,14 +13,9 @@
 
 namespace BALL
 {
-	class SecondaryStructure;
-	class AtomContainer;
-	class Residue;
-	class Chain;
-
 	namespace VIEW
 	{
-		class Mesh;
+ 		class Mesh;
 
 		/** AddCartoonModel class.
 				The class AddCartoonModel is a model processor that creates a Cartoon model
@@ -29,50 +24,31 @@ namespace BALL
 				documentation.
 				\ingroup  ViewModels
 		*/
+
 		class BALL_VIEW_EXPORT AddCartoonModel
 			: public AddBackboneModel
 		{
 			public:
 
+			enum Types
+			{
+				STRAND = NUCLEIC_ACID + 1,
+				HELIX
+			};
+
 			BALL_CREATE(AddCartoonModel)
 
-			/**	@name	Constructors and Destructors
-			*/	
-			//@{
-
-			/** Default Constructor.
-			*/
+			/// Default Constructor.
 			AddCartoonModel()
 				throw();
 
-			/** Copy constructor.
-			*/
+			/// Copy constructor.
 			AddCartoonModel(const AddCartoonModel& cartoon_model)
 				throw();
 
-			/** Destructor.
-			*/
+			/// Destructor.
 			virtual ~AddCartoonModel()
 				throw();
-
-			//@} 
-			/**	@name Processor specific methods 
-			*/ 
-			//@{
-		
-			/**	Operator method.
-					This method iterates over each Composite object reachable in the 
-					Composite tree. If a Composite is of kind Atom and has the
-					substring <b>CA</b> in its name (this method collects only <b>CA</b>-atoms) than
-					that atom	is stored for later processing in the finish method.
-					\param  composite the Composite object that will be processed
-			*/
-			virtual Processor::Result operator() (Composite& composite);
-
-			//@} 
-			/**	@name	debuggers and diagnostics 
-			*/ 
-			//@{
 
 			///
 			void setHelixRadius(float radius)
@@ -146,69 +122,41 @@ namespace BALL
 			bool ribbonsEnabled() const
 				throw() {return draw_ribbon_;}
 			
-			///
-			void enableTwoColors(bool state)
-				throw() { use_two_colors_ = state;}
-
-			///
-			bool twoColorsEnabled() const
-				throw() {return use_two_colors_;}
-
-			///
-			virtual bool createGeometricObjects()
-				throw();
-
-			//@}
-
 			protected:
 
-			//_
-			virtual void clear_()
-				throw();
-
-			//_ collect the atoms, for which the spline points will be calculated
-			virtual void collectAtoms_(SecondaryStructure& ss);
-
-			void buildGraphicalRepresentation_(Position start, Position end, Position type);
-
-			void buildHelix_(Position start, Position end);
-
-			void buildStrand_(Position start, Position end);
-
-			void buildDNA_(Position start, Position end);
-
-			void buildWatsonCrickModel_(Position start, Position end);
-
-			void buildRibbon_(Position start, Position end);
-
 			void insertTriangle_(Position v1, Position v2, Position v3, Mesh& mesh);
-			void drawStrand_(const Vector3& start,
-											 Vector3& normal,
-											 Vector3& right,
-											 float arrow_width,
-											 Position& last_vertices,
-											 Mesh& mesh);
+			inline void drawStrand_(const Vector3& start,
+															 Vector3& right,
+															 Vector3& hn,
+															 float arrow_width,
+															 Position& last_vertices,
+															 Mesh& mesh);
 
 			void calculateComplementaryBases_(const Composite& composite) throw();
-
-			void createTriangle_(Mesh& mesh, const Atom& a1, const Atom& a2, const Atom& a3,
-																			 const Atom* sa1, const Atom* sa2, const Atom* sa3)
- 				throw();
 
 			bool assignNucleotideAtoms_(Residue& r, Size nr_atoms, String atom_names[10], Atom* atoms[10])
 				throw();
 
 			void drawRiboseAtoms_(const Atom* atom1, const Atom* atom2, const Vector3& v1, const Vector3& v2);
 
-			virtual void drawPart_(Position pos);
-			Position getType_(const Residue& residue);
+			void calculateModelParts(Protein& protein);
+			void assignModelType(ModelPart& part);
+			void createModel_(Position set_pos, Position part_pos);
 
-			Composite* last_chain_;
-			SecondaryStructure* current_ss_;
-			bool 			 have_single_residues_;
-			AddBackboneModel backbone_model_;
+			void createStrand_(Position set_pos, Position part_pos);
+			void createHelix_(Position set_first, Position part_pos);
+			void createTubeHelix_(Position set_first, Position part_pos);
+			void createWatsonCrickModel_(Position set_pos, Position part_pos);
+			void createSimpleNucleicAcid_(Position set_pos, Position part_pos);
+
+			void renderNucleotideOutline_(const vector<Vector3>& positions, Vector3 uv, Mesh& mesh);
+			Mesh* createDoubleRing_(const vector<Vector3>& positions);
+			Mesh* create6Ring_(vector<Vector3> positions);
+			virtual void refineGuidePoints_();
 
 			float helix_radius_;
+			float helix_height_;
+			float helix_width_;
 			float arrow_width_;
 			float strand_width_;
 			float strand_height_;
@@ -220,14 +168,10 @@ namespace BALL
 
 			bool  draw_DNA_as_ladder_;
 			bool  draw_ribbon_;
-			bool  use_two_colors_;
 
 			HashMap<const Residue*, const Residue*> complementary_bases_;
-			HashMap<const SecondaryStructure*, Position> ss_to_spline_start_;
-			HashMap<const SecondaryStructure*, Position> ss_nr_splines_;
-
-			bool no_ss_;
 	};
+
 
 	} // namespace VIEW
 } // namespace BALL

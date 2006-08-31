@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.53.2.11.2.4 2006/06/30 11:23:03 leonhardt Exp $
+# $Id: Makefile,v 1.53.2.11.2.5 2006/08/31 14:06:29 leonhardt Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -38,6 +38,7 @@ CPP_SOURCES=\
 	evolutionDockingDialog.C\
 	fieldLinesDialog.C\
 	FDPBDialog.C\
+	gridVisualizationDialog.C\
 	labelDialog.C\
 	lightSettings.C\
 	mainControlPreferences.C\
@@ -47,6 +48,7 @@ CPP_SOURCES=\
 	modifyRepresentationDialog.C\
 	molecularDynamicsDialog.C\
 	molecularFileDialog.C\
+	MMFF94ConfigurationDialog.C\
 	networkPreferences.C\
 	parsedFunctionDialog.C\
 	peptideDialog.C\
@@ -78,6 +80,7 @@ MOC_SOURCES=\
 	displayProperties_moc.C\
 	evolutionDockingDialog_moc.C\
 	FDPBDialog_moc.C\
+	gridVisualizationDialog_moc.C\
 	fieldLinesDialog_moc.C\
 	labelDialog_moc.C\
 	lightSettings_moc.C\
@@ -87,6 +90,7 @@ MOC_SOURCES=\
 	modifyRepresentationDialog_moc.C\
 	molecularFileDialog_moc.C\
 	molecularDynamicsDialog_moc.C\
+	MMFF94ConfigurationDialog_moc.C\
 	networkPreferences_moc.C\
 	parsedFunctionDialog_moc.C\
 	peptideDialog_moc.C\
@@ -115,6 +119,7 @@ UIC_SOURCES=\
 	editSettingsData.C\
 	FDPBDialogData.C\
 	fieldLinesDialogData.C\
+	gridVisualizationDialogData.C\
 	labelDialogData.C\
 	lightSettingsData.C\
 	mainControlPreferencesData.C\
@@ -123,6 +128,7 @@ UIC_SOURCES=\
 	modelSettingsDialogData.C\
 	modifyRepresentationDialogData.C\
 	molecularDynamicsDialogData.C\
+	MMFF94ConfigurationDialogData.C\
 	networkPreferencesData.C\
 	parsedFunctionDialogData.C\
 	peptideDialogData.C\

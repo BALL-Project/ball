@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.28.2.2.2.1 2006/06/09 15:00:13 leonhardt Exp $
+// $Id: molecularStructure.h,v 1.28.2.2.2.2 2006/08/31 14:04:58 leonhardt Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -29,6 +29,10 @@
 
 #ifndef BALL_VIEW_DIALOGS_CHARMMCONFIGURATIONDIALOG_H
 # include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
+#endif
+
+#ifndef BALL_VIEW_DIALOGS_MMFF94CONFIGURATIONDIALOG_H
+# include <BALL/VIEW/DIALOGS/MMFF94ConfigurationDialog.h>
 #endif
 
 #ifndef BALL_MOLMEC_AMBER_AMBER_H
@@ -170,11 +174,17 @@ namespace BALL
 			*/
 			CharmmFF& getCharmmFF() throw();
 
+			///
+			MMFF94& getMMFF94() throw();
+
 			/// Get an instance of an dialog to setup the AMBER forcefield
 			AmberConfigurationDialog& getAmberConfigurationDialog()	throw();
 			
 			/// Get an instance of an dialog to setup the CHARMM forcefield
 			CharmmConfigurationDialog& getCharmmConfigurationDialog()	throw();
+
+			///
+			MMFF94ConfigurationDialog& getMMFF94ConfigurationDialog() throw();
 
 			/** Fetch the widgets preferences from the INIfile.
 					\param  inifile the INIFile that contains the required values
@@ -256,7 +266,7 @@ namespace BALL
 			void calculateForceFieldEnergy();
 
 			/// Run a energy minization with the currently selected force field
-			void runMinimization();
+			void runMinimization(bool show_dialog_ = true);
 
 			/// Perfomr a molecular dynamics simulation with the currently selected force field
 			void MDSimulation(bool show_dialog_ = true);
@@ -266,6 +276,9 @@ namespace BALL
 			
 			/// Show the dialog to setup the CHARMM force field
 			void showCharmmForceFieldOptions();
+
+			///
+			void showMMFF94ForceFieldOptions();
 			
 			/// Slot for a menu entry to select the AMBER force field
 			void chooseAmberFF();
@@ -291,6 +304,8 @@ namespace BALL
 
 			virtual void addComposite_(Composite& composite, const String& name)
 				throw();
+
+			void applyForceFieldSettings_();
 
 			void selectUnassignedForceFieldAtoms_();
 
@@ -320,6 +335,7 @@ namespace BALL
 			MMFF94 											mmff_;
 			AmberConfigurationDialog    amber_dialog_;
 			CharmmConfigurationDialog 	charmm_dialog_;
+			MMFF94ConfigurationDialog 	mmff94_dialog_;
 			MinimizationDialog 					minimization_dialog_;
 			MolecularDynamicsDialog 		md_dialog_;
 			FDPBDialog* 								fdpb_dialog_;

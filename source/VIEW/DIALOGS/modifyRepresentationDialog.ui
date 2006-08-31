@@ -9,13 +9,13 @@
     <x>0</x>
     <y>0</y>
     <width>540</width>
-    <height>340</height>
+    <height>370</height>
    </rect>
   </property>
   <property name="minimumSize" >
    <size>
     <width>540</width>
-    <height>340</height>
+    <height>370</height>
    </size>
   </property>
   <property name="maximumSize" >
@@ -33,8 +33,8 @@
    </property>
    <property name="geometry" >
     <rect>
-     <x>87</x>
-     <y>308</y>
+     <x>90</x>
+     <y>330</y>
      <width>130</width>
      <height>30</height>
     </rect>
@@ -75,8 +75,8 @@
   <widget class="QPushButton" name="cancel_button" >
    <property name="geometry" >
     <rect>
-     <x>317</x>
-     <y>308</y>
+     <x>320</x>
+     <y>330</y>
      <width>130</width>
      <height>30</height>
     </rect>
@@ -117,7 +117,7 @@
      <x>0</x>
      <y>0</y>
      <width>537</width>
-     <height>303</height>
+     <height>321</height>
     </rect>
    </property>
    <property name="sizePolicy" >
@@ -132,34 +132,6 @@
     <attribute name="title" >
      <string>Color By Grid</string>
     </attribute>
-    <widget class="QSpinBox" name="levels_box" >
-     <property name="geometry" >
-      <rect>
-       <x>184</x>
-       <y>235</y>
-       <width>50</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="minimumSize" >
-      <size>
-       <width>30</width>
-       <height>24</height>
-      </size>
-     </property>
-     <property name="maximumSize" >
-      <size>
-       <width>50</width>
-       <height>24</height>
-      </size>
-     </property>
-     <property name="toolTip" >
-      <string>Number of interpolated colors</string>
-     </property>
-     <property name="value" >
-      <number>10</number>
-     </property>
-    </widget>
     <widget class="QWidget" name="layout106" >
      <property name="geometry" >
       <rect>
@@ -204,70 +176,6 @@
        <widget class="QComboBox" name="grids" />
       </item>
      </layout>
-    </widget>
-    <widget class="QGroupBox" name="transparency_group_grid" >
-     <property name="geometry" >
-      <rect>
-       <x>260</x>
-       <y>221</y>
-       <width>267</width>
-       <height>45</height>
-      </rect>
-     </property>
-     <property name="toolTip" >
-      <string/>
-     </property>
-     <property name="title" >
-      <string>Transparency</string>
-     </property>
-     <widget class="QRadioButton" name="none_button_grid" >
-      <property name="geometry" >
-       <rect>
-        <x>10</x>
-        <y>20</y>
-        <width>62</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>0</hsizetype>
-        <vsizetype>0</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text" >
-       <string>none</string>
-      </property>
-      <property name="checked" >
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QRadioButton" name="alpha_button_grid" >
-      <property name="geometry" >
-       <rect>
-        <x>102</x>
-        <y>19</y>
-        <width>151</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>0</hsizetype>
-        <vsizetype>0</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="toolTip" >
-       <string>If you use alpha-blending, dont forget to reduce the alpha channel</string>
-      </property>
-      <property name="text" >
-       <string>alpha blending</string>
-      </property>
-     </widget>
     </widget>
     <widget class="QWidget" name="layout109" >
      <property name="geometry" >
@@ -2192,32 +2100,92 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
-    <widget class="QLabel" name="TextLabel7" >
+    <widget class="QWidget" name="" >
      <property name="geometry" >
       <rect>
-       <x>25</x>
-       <y>236</y>
-       <width>150</width>
-       <height>22</height>
+       <x>10</x>
+       <y>240</y>
+       <width>221</width>
+       <height>31</height>
       </rect>
      </property>
-     <property name="minimumSize" >
-      <size>
-       <width>0</width>
-       <height>22</height>
-      </size>
-     </property>
-     <property name="maximumSize" >
-      <size>
-       <width>32767</width>
-       <height>22</height>
-      </size>
+     <layout class="QHBoxLayout" >
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="TextLabel7" >
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>32767</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Number of levels</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="levels_box" >
+        <property name="minimumSize" >
+         <size>
+          <width>30</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>50</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="toolTip" >
+         <string>Number of interpolated colors</string>
+        </property>
+        <property name="value" >
+         <number>10</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QCheckBox" name="normalization" >
+     <property name="geometry" >
+      <rect>
+       <x>260</x>
+       <y>230</y>
+       <width>261</width>
+       <height>24</height>
+      </rect>
      </property>
      <property name="text" >
-      <string>Number of levels</string>
+      <string>perform histogram equalization</string>
      </property>
-     <property name="alignment" >
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </widget>
+    <widget class="QCheckBox" name="grid_transparency" >
+     <property name="geometry" >
+      <rect>
+       <x>260</x>
+       <y>260</y>
+       <width>261</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>enable transparency</string>
      </property>
     </widget>
    </widget>
@@ -2881,7 +2849,6 @@
   <tabstop>max_box</tabstop>
   <tabstop>autoscale</tabstop>
   <tabstop>levels_box</tabstop>
-  <tabstop>none_button_grid</tabstop>
   <tabstop>apply_button</tabstop>
   <tabstop>cancel_button</tabstop>
  </tabstops>

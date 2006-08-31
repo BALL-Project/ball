@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ExpressionParser_test.C,v 1.11 2004/05/27 19:50:00 oliver Exp $
+// $Id: ExpressionParser_test.C,v 1.11.12.1 2006/08/31 14:06:19 leonhardt Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -23,7 +23,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(ExpressionParser, "$Id: ExpressionParser_test.C,v 1.11 2004/05/27 19:50:00 oliver Exp $")
+START_TEST(ExpressionParser, "$Id: ExpressionParser_test.C,v 1.11.12.1 2006/08/31 14:06:19 leonhardt Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -61,12 +61,13 @@ CHECK(Iterator begin() throw())
 	children.push_back(child3);
 
 	SyntaxTree st;
+	st.children = children;
 	SyntaxTree::Iterator test_it = st.begin();
 	SyntaxTree::Iterator test_it2 = st.children.begin();
 	bool test = (&*test_it == &*test_it2);
 	TEST_EQUAL(test, true)
 
-	st.children = children;
+
 	test_it = st.begin();
 	test = (*test_it == child1);
 	TEST_EQUAL(test, true)

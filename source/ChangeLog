@@ -6,8 +6,10 @@ Added:
 - Support for field lines, vector grids and normalized grids
 - Volume Rendering and colored planes e.g. for electrostatics
 - Support for DSN6 electron densitiy files
+- Abilitiy to create screenshots larger than the screen size
 - Widget for overview of atom values (e.g. atom type, charge)
 - Added BALL documentation widget in BALLView
+- Python widget now has its own script editor
 - Python widget supports completion
 - Python widget supports Syntax Highlighting
 - Python widget support for context sensitive help for BALL Python commands
@@ -16,6 +18,7 @@ Added:
 - Improved rendering of transparent surfaces
 - SMARTS support
 - Toon Drawing Mode for OpenGL 
+- Ribbon model
 - Capping planes
 - Improved feedback for users: e.g. Busy mouse cursor and statusbar entries
 - Added improved coordinate system
@@ -33,6 +36,7 @@ Added:
 - An interface to GAMESS (to allow quantum mechanics calculations from BALL)
 - BALLView has menu entries for user defined Python Hotkeys
 - Further Python example scripts
+- Eased installation process under Microsoft Windows
 
 Changed:
 - Build process now requires GNU make for conditional compiling
@@ -41,6 +45,10 @@ Changed:
 
 Fixed:
 - Major code overhaul of the whole VIEW framework
+- Crash when applying invalid boolean expressions in BALLView
+- Several crashes under Windows, e.g in LogStream, DisplayProperties, TCPTransfer,...
+- Improved cartoon model
+- Accelerated mesh coloring for several ColorProcessors
 - Proper error messages in Python interpreter
 - Ability to open molecular files without proper extensions in BALLView
 - Improved Python Bindings
@@ -62,7 +70,6 @@ Known problems:
 - Molecular Control Selection: Child->Parent doesnt always gets selected
 - RegularData widgets currently dont work (QT 4.1 does not yet have CanvasWidgets)
 - HelpViewer has problems with HTML layout (QT problem)
-- Stereo Viewing doesnt work because of QT stupidity
 
 1.1.1:
 

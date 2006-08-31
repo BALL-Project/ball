@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.2.11 2006/05/10 14:30:37 amoll Exp $
+// $Id: displayProperties.C,v 1.101.2.11.2.1 2006/08/31 14:06:30 leonhardt Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -500,6 +500,12 @@ void DisplayProperties::applyColoringSettings_(Representation& rep)
 
 Representation* DisplayProperties::createRepresentation(const List<Composite*>& composites, bool hidden)
 {
+	if (composites.size() == 0) return 0;
+
+	// workaround for MSVC: crashed otherwise
+	Composite* first_composite = *composites.begin();
+	if (first_composite == 0) return 0 ;
+
 	// create a new Representation
 	rep_ = new Representation();
 	applyColoringSettings_(*rep_);
@@ -527,10 +533,7 @@ Representation* DisplayProperties::createRepresentation(const List<Composite*>& 
 	// no refocus, if a this is not the only Representation
 	if ((getMainControl()->getRepresentationManager().getRepresentations().size() < 2))
 	{
-		CompositeMessage* ccmessage = new CompositeMessage;
-		ccmessage->setComposite(**composites.begin());
-		ccmessage->setType(CompositeMessage::CENTER_CAMERA);
-		notify_(ccmessage);
+		notify_(new CompositeMessage(*first_composite, CompositeMessage::CENTER_CAMERA));
 	}
 
 	if (hidden) return rep_;
@@ -544,27 +547,23 @@ Representation* DisplayProperties::createRepresentation(const List<Composite*>& 
 void DisplayProperties::applyTo_(Representation* rep)
 {
 	rep_ = rep;
-
 	ModelType mt = (ModelType) model_type_combobox->currentIndex();
-	DrawingPrecision dp = (DrawingPrecision)precision_combobox->currentIndex();
 
-	bool 	rebuild_representation = rep_->getModelType() != mt  | 
-																 advanced_options_modified_  |
+	bool 	rebuild_representation = rep_->getModelType() != mt  ||
+																 advanced_options_modified_  ||
 																 changed_selection_color_;
 
-	if (custom_precision_button->isChecked())
+	if (isSurfaceModel(mt))
 	{
 		// workaround, didnt work right otherwise: (just let it this way)
 		rebuild_representation |= 
-			(String(rep_->getSurfaceDrawingPrecision()) != 
-			 String(((float)precision_slider->value() / 10.0)));
+			(float)rep_->getSurfaceDrawingPrecision() != (float)precision_slider->value() / 10.0;
 	}
 	else
 	{
+		DrawingPrecision dp = (DrawingPrecision)precision_combobox->currentIndex();
 		rebuild_representation |= (rep_->getDrawingPrecision() != dp);
 	}
-
-	Size transparency = (Size)(transparency_slider->value() * 2.55);
 
 	if (coloring_updates_enabled->isChecked())
 	{
@@ -578,16 +577,17 @@ void DisplayProperties::applyTo_(Representation* rep)
 	}
 	else
 	{
+		Size transparency = (Size)(transparency_slider->value() * 2.55);
+
 		if (!coloring_updates_enabled->isChecked() &&
 		    rep_->getTransparency() != transparency)
 		{
 			Representation::GeometricObjectList::iterator it = rep_->getGeometricObjects().begin();
 			for (; it != rep_->getGeometricObjects().end(); it++)
 			{
-				if (RTTI::isKindOf<Mesh> (**it))
+				Mesh* mesh = dynamic_cast<Mesh*> (*it);
+				if (mesh != 0)
 				{
-					Mesh* mesh = dynamic_cast<Mesh*> (*it);
-
 					for (Position p = 0; p < mesh->colors.size(); p++)
 					{
 						mesh->colors[p].setAlpha(255 - transparency);
@@ -605,7 +605,6 @@ void DisplayProperties::applyTo_(Representation* rep)
 	rep_->enableColoringUpdate(coloring_updates_enabled->isChecked());
 	applyColoringSettings_(*rep_);
 	applyModelSettings_(*rep_);
-
 	rep_->update(rebuild_representation);
 
 	changed_selection_color_ = false;

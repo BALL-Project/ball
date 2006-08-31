@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.24.2.3 2006/02/01 13:23:39 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.24.2.3.2.1 2006/08/31 14:04:44 leonhardt Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -126,7 +126,15 @@ namespace BALL
 
 			///
 			float getForceScaling() const
-				throw() {return getFloatValue_(force_scaling_slider);}
+				throw() { return getFloatValue_(force_scaling_slider);}
+
+			///
+			float getForceBase() const
+				throw() {return getFloatValue_(force_base_slider);}
+
+			///
+			float getForceOffset() const
+				throw() {return getFloatValue_(force_offset_slider);}
 
 			///
 			float getDNALadderRadius() const
@@ -197,7 +205,15 @@ namespace BALL
 
 			///
 			void setForceScaling(float value) 
-				throw() { setValue_(force_scaling_slider,value / 10.0);}
+				throw() { setValue_(force_scaling_slider,value);}
+
+			///
+			void setForceOffset(float value) 
+				throw() { setValue_(force_offset_slider ,value);}
+
+			///
+			void setForceBase(float value)
+				throw() { setValue_(force_base_slider, value);}
 
 			///
 			void setCartoonDNALadderRadius(float value)
@@ -235,6 +251,8 @@ namespace BALL
 			void hbondsRadiusChanged(){setLabelText_(hbonds_radius_label, hbonds_radius_slider);}
 			void forceScalingChanged(){setLabelText_(force_scaling_label, force_scaling_slider);}
 			void forceMaxLengthChanged(){setLabelText_(force_max_length_label, force_max_length_slider);}
+			void forceBaseChanged(){setLabelText_(force_base_label, force_base_slider);}
+			void forceOffsetChanged(){setLabelText_(force_offset_label, force_offset_slider);}
 
 			protected:
 

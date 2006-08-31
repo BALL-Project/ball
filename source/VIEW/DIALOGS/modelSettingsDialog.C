@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.37.2.3 2006/02/01 13:23:47 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.37.2.3.2.1 2006/08/31 14:06:32 leonhardt Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -48,6 +48,8 @@ namespace BALL
 			connect( cartoon_tube_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonTubeRadiusChanged() ) );
 			connect( force_max_length_slider, SIGNAL( valueChanged(int) ), this, SLOT( forceMaxLengthChanged() ) );
 			connect( force_scaling_slider, SIGNAL( valueChanged(int) ), this, SLOT( forceScalingChanged() ) );
+			connect( force_offset_slider, SIGNAL( valueChanged(int) ), this, SLOT( forceOffsetChanged() ) );
+			connect( force_base_slider, SIGNAL( valueChanged(int) ), this, SLOT( forceBaseChanged() ) );
 			connect( hbonds_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( hbondsRadiusChanged() ) );
 			connect( stick_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( stickRadiusChanged() ) );
 			connect( strand_arrow_width_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonStrandArrowWidthChanged() ) );
@@ -82,10 +84,11 @@ namespace BALL
 			registerObject_(cartoon_dna_wac);
 			registerObject_(cartoon_dna_ladder);
 			registerObject_(ribbons_enabled);
-			registerObject_(two_colored_ribbons);
 			
 			registerObject_(force_scaling_slider);
 			registerObject_(force_max_length_slider);
+			registerObject_(force_base_slider);
+			registerObject_(force_offset_slider);
 
 			registerObject_(hbonds_radius_slider);
 
@@ -191,7 +194,6 @@ namespace BALL
 				cm.setDNABaseRadius(getDNABaseRadius());
 				cm.setDNAHelixRadius(getDNAHelixRadius());
 				cm.enableRibbons(ribbons_enabled->isChecked());
-				cm.enableTwoColors(two_colored_ribbons->isChecked());
 				return;
 			}
 
@@ -210,8 +212,10 @@ namespace BALL
 					
 			if (RTTI::isKindOf<ForceModel>(mp))
 			{
-				((ForceModel*) &mp)->setMaxLength((float)(getForceMaxLength()) / 10.0);
-				((ForceModel*) &mp)->setScaling((float)(getForceScaling()) / 10.0);
+				((ForceModel*) &mp)->setMaxLength(getForceMaxLength());
+				((ForceModel*) &mp)->setScaling(getForceScaling());
+				((ForceModel*) &mp)->setOffset(getForceOffset());
+				((ForceModel*) &mp)->setBaseSize(getForceBase());
 				return;
 			}
 		}
@@ -256,6 +260,11 @@ namespace BALL
 				case MODEL_BACKBONE:
 					model_processor = new AddBackboneModel;
 					((AddBackboneModel*) model_processor)->setTubeRadius(getTubeRadius());
+					break;
+
+				case MODEL_RIBBON:
+					model_processor = new AddBackboneModel;
+					((AddBackboneModel*) model_processor)->setRibbonMode(true);
 					break;
 
 				case MODEL_CARTOON:
@@ -322,7 +331,6 @@ namespace BALL
 				setCartoonDNABaseRadius(cm.getDNABaseRadius());
 				cartoon_dna_ladder->setChecked(cm.drawDNAAsLadderModel());
 				cartoon_dna_wac->setChecked(!cm.drawDNAAsLadderModel());
-				two_colored_ribbons->setChecked(cm.twoColorsEnabled());
 				ribbons_enabled->setChecked(cm.ribbonsEnabled());
 				return;
 			}
@@ -344,6 +352,8 @@ namespace BALL
 			{
 				setForceScaling(((ForceModel*) &mp)->getScaling());
 				setForceMaxLenght(((ForceModel*) &mp)->getMaxLength());
+				setForceOffset(((ForceModel*) &mp)->getOffset());
+				setForceBase(((ForceModel*) &mp)->getBaseSize());
 				return;
 			}
 		}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.C,v 1.27.6.1 2006/06/09 15:00:17 leonhardt Exp $
+// $Id: MOL2File.C,v 1.27.6.2 2006/08/31 14:05:22 leonhardt Exp $
 //
 
 #include <BALL/FORMAT/MOL2File.h>
@@ -268,6 +268,9 @@ namespace BALL
     while (readLine())
     {
 			getLine().toUpper();
+
+			getLine().trim();
+			if (getLine().hasPrefix("#")) continue;
 			
 			while (startsWith(TRIPOS))
 			{
@@ -334,6 +337,8 @@ namespace BALL
 		Size number_of_fields = 1;
 		while (readLine() && (number_of_fields > 0) && !getLine().hasPrefix(TRIPOS))
 		{
+			getLine().trim();
+			if (getLine().hasPrefix("#")) continue;
 			Size number_of_fields = getLine().countFields();
 			if (number_of_fields > 0)
 			{
@@ -371,6 +376,7 @@ namespace BALL
 		while (readLine() && (number_of_fields > 0) && !getLine().hasPrefix(TRIPOS))
 		{
 			getLine().trim();
+			if (getLine().hasPrefix("#")) continue;
 			Size number_of_fields = getLine().countFields();
 			if (number_of_fields > 0)
 			{
@@ -403,6 +409,7 @@ namespace BALL
 		Size number_of_fields = 1;
 		while (readLine() && (number_of_fields > 0) && !getLine().hasPrefix(TRIPOS))
 		{
+			if (getLine().hasPrefix("#")) continue;
 			getLine().trim();
 			Size number_of_fields = getLine().countFields();
 			if (number_of_fields > 0)
@@ -456,6 +463,8 @@ namespace BALL
 		Size line_number = 0;
 		while (readLine() && (number_of_fields > 0) && !getLine().hasPrefix(TRIPOS) && (line_number <= 5))
 		{
+			getLine().trim();
+			if (getLine().hasPrefix("#")) continue;
 			// read four lines
 			line_number++;
 			number_of_fields = getLine().countFields();
@@ -505,6 +514,8 @@ namespace BALL
 	{
 		while (readLine() && (getLine().countFields() > 0) && !getLine().hasPrefix(TRIPOS))
 		{
+			getLine().trim();
+			if (getLine().hasPrefix("#")) continue;
 			SubstructureStruct sub;
 
 			Size number_of_fields = getLine().countFields();

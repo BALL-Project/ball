@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualisation.h,v 1.1.2.4 2006/05/05 14:35:59 amoll Exp $
+// $Id: gridVisualisation.h,v 1.1.2.4.2.1 2006/08/31 14:04:53 leonhardt Exp $
 //
 
 #ifndef  BALL_VIEW_PRIMITIV_GRIDSLICE_H
@@ -26,6 +26,18 @@ namespace BALL
 			: public GeometricObject
 		{
 			public:
+
+			enum Type
+			{
+				///
+				PLANE,
+
+				///
+				SLICES,
+
+				///
+				DOTS
+			};
 
 			BALL_CREATE(GridVisualisation)
 
@@ -70,9 +82,18 @@ namespace BALL
 			///
 			void setTexture(Position texture) { texture_ = texture;}
 
+			///
+			void setDotSize(Size dot_size) { dot_size_ = dot_size;}
+
+			///
+			Size getDotSize() const { return dot_size_;}
+
 			Vector3 origin, x,y,z;
 			float max_dim;
 			Size slices;
+			vector<Vector3> points;
+			Type type;
+			bool draw_box;
 
 			protected:
 
@@ -80,6 +101,7 @@ namespace BALL
 			Vector3 point_;
 			Position texture_;
 			const RegularData3D* grid_;
+			Size dot_size_;
 		};
 
 	} // namespace VIEW

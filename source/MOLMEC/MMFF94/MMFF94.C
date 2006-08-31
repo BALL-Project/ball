@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.6.1 2006/06/09 14:04:15 leonhardt Exp $
+// $Id: MMFF94.C,v 1.1.6.2 2006/08/31 14:05:50 leonhardt Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -299,6 +299,22 @@ namespace BALL
 		return 0;
 	}
 
+	double MMFF94::getPlaneEnergy() const
+	{
+		const ForceFieldComponent* component = getComponent("MMFF94 OutOfPlaneBend");
+		if (component != 0)
+		{
+			const MMFF94OutOfPlaneBend* ocomponent = dynamic_cast<const MMFF94OutOfPlaneBend*>(component);
+			if (ocomponent!= 0)
+			{
+				return ocomponent->getEnergy();
+			}
+		}
+
+		return 0;
+	}
+
+
 	double MMFF94::getESEnergy() const
 	{
 		const ForceFieldComponent* component = getComponent("MMFF94 NonBonded");
@@ -331,15 +347,17 @@ namespace BALL
 		throw()
 	{
 		String result = String("\n")
-		+ "MMFF94 Energy:\n"
-		+ " - electrostatic     : " +String(getESEnergy())+  " kJ/mol\n" 
-		+ " - van der Waals     : " +String(getVdWEnergy())+  " kJ/mol\n"
-		+ " - bond stretch      : " +String(getStretchEnergy())+  " kJ/mol\n"
-		+ " - angle bend        : " +String(getBendEnergy())+  " kJ/mol\n" 
-		+ " - strech bend       : " +String(getStretchBendEnergy())+  " kJ/mol\n" 
-		+ " - torsion           : " +String(getTorsionEnergy())+  " kJ/mol\n" 
-		+ "---------------------------------------\n" 
-		+ "  total energy       : " +String(getEnergy()) + " kJ/mol\n";
+		+ "MMFF94 Energy:\n";
+
+		result += String(" - bends             : ") +String(getBendEnergy())+  " kJ/mol\n" ;
+		result += String(" - stretches         : ") +String(getStretchEnergy())+  " kJ/mol\n";
+		result += String(" - stretchbends      : ") +String(getStretchBendEnergy())+  " kJ/mol\n";
+		result += String(" - out of plane      : ") +String(getPlaneEnergy())+  " kJ/mol\n";
+		result += String(" - torsions          : ") +String(getTorsionEnergy())+  " kJ/mol\n";
+		result += String(" - van der Waals     : ") +String(getVdWEnergy())+  " kJ/mol\n";
+		result += String(" - electrostatics    : ") +String(getESEnergy())+  " kJ/mol\n";
+		result = result + "---------------------------------------\n" 
+										+ "  total energy       : " +String(getEnergy()) + " kJ/mol\n";
 		return result;
 	}
 	

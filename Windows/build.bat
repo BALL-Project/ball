@@ -27,8 +27,6 @@ if "%2" == "tutorial" goto TUTORIAL
 if "%2" == "all" goto ALL
 
 if "%QTDIR%"=="" goto Usage2
-if "%QTVERSION%"=="" goto Usage22
-if "%PYTHONDIR%"=="" goto Usage3
 
 if not exist "%PYTHONDIR%\Lib\site-packages\sip.pyd" goto Create_SIP
 
@@ -132,14 +130,6 @@ goto Usage
 
 :Usage2
 echo QTDIR variable is not set. 
-goto Usage
-
-:Usage22
-echo QTVERSION variable is not set. 
-goto Usage
-
-:Usage3
-echo PYTHONDIR variable is not set. 
 goto Usage
 
 :Usage4

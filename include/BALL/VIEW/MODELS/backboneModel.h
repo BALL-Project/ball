@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.20 2005/12/23 17:02:17 amoll Exp $
+// $Id: backboneModel.h,v 1.20.6.1 2006/08/31 14:04:49 leonhardt Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -15,12 +15,20 @@
 # include <BALL/MATHS/vector3.h>
 #endif 
 
+#ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
+ #include <BALL/KERNEL/secondaryStructure.h>
+#endif
+
+#ifndef BALL_KERNEL_PROTEIN_H
+ #include <BALL/KERNEL/protein.h>
+#endif
+
+#ifndef BALL_MATHS_MATRIX44_H
+ #include <BALL/MATHS/matrix44.h>
+#endif
+
 namespace BALL
 {
-	class Atom;
-	class Composite;
-	class Residue;
-
 	namespace VIEW
 	{
 		/** AddBackboneModel class.
@@ -35,38 +43,44 @@ namespace BALL
 			//_
 			protected:
 
-			struct SplinePoint
+			struct ModelPart
 			{
-			  public:
+				ModelPart();
+				ModelPart(const ModelPart& m);
+				const ModelPart& operator = (const ModelPart& p) throw();
 
-				SplinePoint();
-				SplinePoint(const Vector3& new_point, const Atom* new_atom);
-
-				Vector3 point;
-				Vector3 tangent;
-				const Atom* atom;
+				// residues for this ModelPart
+				vector<Residue*> residues;
+				// Model Type, e.g. Strand, Helix, Ribbon
+				Index type;
+				// start and end index in guide_points_
+				Position first_guide_point;
+				Position last_guide_point;
+				// start and end index in interpolated_points_
+				Position first_point;
+				Position last_point;
+			};
+				
+			enum ModelTypes
+			{
+				TUBE,
+				RIBBON,
+				NUCLEIC_ACID
 			};
 
 			public:
 
 			BALL_CREATE(AddBackboneModel)
 
-			/**	@name	Constructors and Destructors
-			*/	
-			//@{
-
-			/** Default Constructor.
-			*/
+			/// Default Constructor.
 			AddBackboneModel()
 				throw();
 
-			/** Copy constructor.
-			*/
+			/// Copy constructor.
 			AddBackboneModel(const AddBackboneModel& add_Backbone_model)
 				throw();
 
-			/** Destructor.
-			*/
+			/// Destructor.
 			virtual ~AddBackboneModel()
 				throw();
 
@@ -76,11 +90,10 @@ namespace BALL
 			virtual void clear()
 				throw();
 
-			//@} 
-			/**	@name Processor specific methods 
-			*/ 
-			//@{
-		
+			///
+			virtual bool start()
+				throw();
+
 			/**	Operator method.
 					This method iterates over each Composite object reachable in the 
 					Composite tree. If a Composite is of kind Atom and has the
@@ -89,11 +102,6 @@ namespace BALL
 					\param  composite the Composite object that will be processed
 			*/
 			virtual Processor::Result operator() (Composite& composite);
-
-			//@} 
-			/**	@name	debuggers and diagnostics 
-			*/ 
-			//@{
 
 			/** Internal value dump.
 					Dump the current state to the output ostream <tt>s</tt> with 
@@ -117,49 +125,75 @@ namespace BALL
 			virtual bool createGeometricObjects()
 				throw();
 
-			//@}
+			///
+			void setRibbonMode(bool state)
+				throw() {ribbon_mode_ = state;}
+
+			///
+			bool ribbonModeEnabled() const
+				throw() {return ribbon_mode_;}
 
 			protected:
 
-			//_ computes the actual spline path through the given support points
-			//_ in the splinepoint array
-			void createSplinePath_(Position to_stop);
-			
-			// calculate the interpolated points up to spline point pos
-			virtual void createPart_(Position pos);
-			virtual void drawPart_(Position pos);
+			virtual void calculateModelParts(Protein& protein);
+			virtual bool collectPositions(vector<Residue*> residues);
+			virtual void calculateGuidePoints_();
 
-			// build the graphical representaion between the given spline points
-			virtual void buildGraphicalRepresentation_(Position start, Position end, Position type);
+			virtual void assignModelType(ModelPart& part);
 
-			//_ collect the atoms, for which the spline points will be calculated
-			virtual void collectAtoms_(const Residue& residue);
+			virtual void createModel_(Position set_pos, Position model_pos);
+			// build a tube model
+			virtual void createTube_(Position set_pos, Position model_pos);
+			// build a ribbon / helix
+			virtual void createRibbon_(Position set_pos, Position model_pos);
 
-			virtual Position getType_(const Residue& residue);
+
+			virtual void refineGuidePoints_() {};
+			virtual void interpolate_();
+			virtual void refineModelParts_();
 
 			virtual void clear_();
-
-			// test if we have dont have a connection to last drawn residue
-			bool checkBuildNow_(const Residue& residue);
-
-			// build a tube model
-			void buildTube_(Position start, Position end);
-
-			vector<SplinePoint>  splines_;
-			vector<Vector3>  		 points_;
-			vector<const Atom*>  atoms_of_points_;
-
-			//_ 
-			const Residue* last_residue_;
-
-			//_
-			Position last_build_;
 			
+			inline void evaluateBSpline(const Vector3& v1, const Vector3& v2, 
+																  const Vector3& v3, float x, Vector3& result);
+
+			inline bool residuesAreConnected_(Residue& residue1, Residue& residue2);
+
+			inline void calculateTubePoints_(Vector3 right, Vector3 dir, vector<Vector3>& points);
+			inline void calculateRibbonPoints_(Vector3 xn, Vector3 dir, vector<Vector3>& points);
+			inline void calculateRibbonEllipse_(float ribbon_width, float ribbon_height);
+
 			//_
 			float tube_radius_;
 
 			//_
 			Size 	interpolation_steps_;
+			// must be alwas uneven:
+			Size number_of_ribbons_;
+			float ribbon_width_;
+			float ribbon_height_;
+			bool care_for_SS_;
+			bool ribbon_mode_;
+
+			vector<vector<vector<Vector3> > > guide_points_;
+			vector<vector<vector<Vector3> > > interpolated_points_;
+			vector<vector<Vector3> > backbone_;
+			vector<vector<Vector3> > offsets_;
+			vector<vector<ModelPart> > model_parts_;
+
+			Protein dummy_protein_;
+			Chain dummy_chain_;
+			SecondaryStructure dummy_ss_;
+			HashSet<Residue*> residues_to_be_rendered_;
+			Protein* last_protein_;
+			vector<vector<Index> > ss_;
+			// temp variables for speedup:
+			Size 				slides_;
+			Position 		middle_slide_;
+			Position 		middle_ribbon_;
+			Angle 			slides_angle_;
+			Matrix4x4 	temp_matrix_;
+			vector<float> xs_, ys_;
 		};
 
 	} // namespace VIEW

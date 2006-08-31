@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.12.2.1 2006/06/09 15:00:34 leonhardt Exp $
+// $Id: molecularStructure.C,v 1.89.2.12.2.2 2006/08/31 14:06:38 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -126,13 +126,13 @@ namespace BALL
 
 			calculate_RMSD_id_ = insertMenuEntry(MainControl::TOOLS, "&Calculate RMSD", this, 
 													 SLOT(calculateRMSD()));
-			setMenuHint("Highlight two (partial) structures to calculate their RMSD value.");
+			setMenuHint("Highlight two (partial) structures to calculate their RMSD value");
 			
 			getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 
 			calculate_ss_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate sec&ondary structure", this,
 																				 SLOT(calculateSecondaryStructure()), Qt::ALT+Qt::Key_O);
-			setMenuHint("Recalculate the secondary structure for a structure.");
+			setMenuHint("Recalculate the secondary structure for a structure");
 
 //   			calculate_ramachandran_ = insertMenuEntry(MainControl::TOOLS, "Ramachandran Plot", this,
 //   																				 SLOT(calculateRamachandranPlot()));
@@ -144,26 +144,27 @@ namespace BALL
 
 			menu_FPDB_ = insertMenuEntry(MainControl::TOOLS , "FDPB Electrostatics", this, 
 																		SLOT(calculateFDPB()));
-			setMenuHint("Calculate the Electrostatics with FDPB, if one System selected.");
+			setMenuHint("Calculate the Electrostatics with FDPB (for one highlighedt System)");
 				
 			create_distance_grid_id_ = insertMenuEntry(MainControl::TOOLS_GRID, 
 																					"&Distance Grid", this, SLOT(createGridFromDistance()));
-			setMenuHint("Create a grid with the distance to the geometric center of a structure.");
+			setMenuHint("Create a grid with the distance to the geometric center of a structure");
 			setMenuHelp("tips.html#distance_grids");
 
 			minimization_dialog_.setAmberDialog(&amber_dialog_);
 			minimization_dialog_.setCharmmDialog(&charmm_dialog_);
+			minimization_dialog_.setMMFF94Dialog(&mmff94_dialog_);
 			md_dialog_.setAmberDialog(&amber_dialog_);
 			md_dialog_.setCharmmDialog(&charmm_dialog_);
+			md_dialog_.setMMFF94Dialog(&mmff94_dialog_);
 
 			// Assign the settings of the configuration dialogs to the 
 			// force fields.
 			amber_dialog_.setAmberFF(amber_);
-			amber_dialog_.accept();
-
 			charmm_dialog_.setCharmmFF(charmm_);
-			charmm_dialog_.accept();
+			mmff94_dialog_.setMMFF94(mmff_);
 
+			applyForceFieldSettings_();
 			// use amber force field by default
 			chooseAmberFF();
 		}
@@ -796,10 +797,23 @@ namespace BALL
 			return charmm_dialog_;
 		}
 
+		MMFF94ConfigurationDialog& MolecularStructure::getMMFF94ConfigurationDialog()
+			throw()
+		{
+			return mmff94_dialog_;
+		}
+
+
 		CharmmFF& MolecularStructure::getCharmmFF()
 			throw()
 		{
 			return charmm_;
+		}
+	
+		MMFF94& MolecularStructure::getMMFF94() 
+			throw()
+		{
+			return mmff_;
 		}
 
 		ForceField& MolecularStructure::getForceField() throw()
@@ -818,6 +832,7 @@ namespace BALL
 			md_dialog_.readPreferenceEntries(inifile);
 			amber_dialog_.readPreferenceEntries(inifile);
 			charmm_dialog_.readPreferenceEntries(inifile);
+			mmff94_dialog_.readPreferenceEntries(inifile);
 			chooseForceField(AMBER_FF);
 			if (inifile.hasEntry("FORCEFIELD", "selected"))
 			{
@@ -840,6 +855,7 @@ namespace BALL
 			md_dialog_.writePreferenceEntries(inifile);
 			amber_dialog_.writePreferenceEntries(inifile);
 			charmm_dialog_.writePreferenceEntries(inifile);
+			mmff94_dialog_.writePreferenceEntries(inifile);
 			inifile.appendSection("FORCEFIELD");
 			inifile.insertValue("FORCEFIELD", "selected", force_field_id_);
 		}
@@ -879,6 +895,13 @@ namespace BALL
 			setStatusbarText(String("Calculated ") + String(hbonds) + " H-bonds", true);
 		}
 
+		void MolecularStructure::applyForceFieldSettings_()
+		{
+			charmm_dialog_.accept();
+			amber_dialog_.accept();
+			mmff94_dialog_.accept();
+		}
+
 		void MolecularStructure::calculateForceFieldEnergy()
 		{
 			System* system = getMainControl()->getSelectedSystem();
@@ -891,6 +914,8 @@ namespace BALL
 			// set up the force field
 			setStatusbarText("Setting up force field...", true);
 			ForceField& ff = getForceField();
+
+			applyForceFieldSettings_();
 
 			bool ok = false;
 			try
@@ -924,11 +949,15 @@ namespace BALL
 
 			// Compute the single point energy and print the result to Log and the status bar.
 			ff.updateEnergy();
-			Log.info() << ff.getResults() << std::endl;
+			ff.updateForces();
+			// workaround for MSVC: need to create an string, than log it!
+			String results = ff.getResults();
+			Log.info() << results << std::endl;
 			setStatusbarText("Total energy: " + String(ff.getEnergy()) + " kJ/mol.", true);
+			getMainControl()->update(*system);
 		}
 
-		void MolecularStructure::runMinimization()
+		void MolecularStructure::runMinimization(bool show_dialog)
 		{
 			// Make sure we run one instance of a simulation at a time only.
 			if (getMainControl()->isBusy())
@@ -944,19 +973,21 @@ namespace BALL
 				return;
 			}
 
-			// Execute the minimization dialog
-			// and abort if cancel is clicked or nonsense arguments are given
-			if (!minimization_dialog_.exec() ||
-					(minimization_dialog_.getMaxGradient() == 0.0) ||
-					(minimization_dialog_.getEnergyDifference() == 0.0))
+			if (show_dialog)
 			{
-				return;
+				// Execute the minimization dialog
+				// and abort if cancel is clicked or nonsense arguments are given
+				if (!minimization_dialog_.exec() ||
+						(minimization_dialog_.getMaxGradient() == 0.0) ||
+						(minimization_dialog_.getEnergyDifference() == 0.0))
+				{
+					return;
+				}
 			}
 			// Remember which force field was selected and update the force field's 
 			// settings from the appropriate dialog.
 			chooseForceField(minimization_dialog_.selectedForceField());
-			charmm_dialog_.accept();
-			amber_dialog_.accept();
+			applyForceFieldSettings_();
 
 			// Set up the force field.
 			setStatusbarText("setting up force field...", false);
@@ -1117,6 +1148,7 @@ namespace BALL
 
 			// Get the force field.
 			chooseForceField(md_dialog_.selectedForceField());
+			applyForceFieldSettings_();
 
 			// set up the force field
 			setStatusbarText("setting up force field...", false);
@@ -1317,6 +1349,15 @@ namespace BALL
 			}
 		}
 
+		void MolecularStructure::showMMFF94ForceFieldOptions()
+		{
+			mmff94_dialog_.raise();
+			if (mmff94_dialog_.exec() == QDialog::Accepted)
+			{
+				chooseMMFF94();
+			}
+		}
+
 		void MolecularStructure::chooseAmberFF()
 		{
 			chooseForceField(AMBER_FF);
@@ -1358,6 +1399,7 @@ namespace BALL
 		{
 			if (force_field_id_ == AMBER_FF) showAmberForceFieldOptions();
 			else if (force_field_id_ == CHARMM_FF) showCharmmForceFieldOptions();
+			else if (force_field_id_ == MMFF94_FF) showMMFF94ForceFieldOptions();
 		}
 
 

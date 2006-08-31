@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.49.2.1 2006/06/09 15:00:34 leonhardt Exp $
+// $Id: scene.C,v 1.174.2.49.2.2 2006/08/31 14:06:38 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -39,10 +39,10 @@
 #include <QtGui/qapplication.h>
 #include <QtGui/QDesktopWidget>
 #include <QtGui/QFileDialog>
+#include <QtOpenGL/QGLPixelBuffer>
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
-#include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
 
 //         #define BALL_BENCHMARKING
 
@@ -56,6 +56,8 @@ namespace BALL
 
 		Position Scene::screenshot_nr_ = 100000;
 		Position Scene::pov_nr_ = 100000;
+		bool Scene::offscreen_rendering_ = true;
+		QSize Scene::PNG_size_ = QSize(1500,1000);
 
 		// ###############CONSTRUCTORS,DESTRUCTORS,CLEAR###################
 
@@ -271,77 +273,11 @@ namespace BALL
 			if (RTTI::isKindOf<RegularData3DMessage>(*message))
 			{
 				RegularData3DMessage* rm = RTTI::castTo<RegularData3DMessage>(*message);
-				const RegularData3D& grid = *rm->getData();
 				switch (rm->getType())
 				{
-					case RegularData3DMessage::VISUALISE_SLICE:
-					case RegularData3DMessage::VISUALISE_VOLUME:
-					{
-						Position texname = 0;
-
-						if (!gl_renderer_.grid_to_texture_.has(&grid))
-						{
-							// to be moved somewhere else:
-							ColorMap map;
-							ColorRGBA colors[3];
-							colors[0] = ColorRGBA(1.0, 0.0, 0.0, 0.05);
-							colors[1] = ColorRGBA(1.0, 1.0, 0.0, 0.001);
-							colors[2] = ColorRGBA(0.0, 0.0, 1.0, 0.05);
-							if (rm->getType() == (Size) RegularData3DMessage::VISUALISE_SLICE)
-							{
-								colors[0].setAlpha(0.8);
-								colors[1].setAlpha(0.5);
-								colors[2].setAlpha(0.8);
-							}
-							map.setBaseColors(colors, 3);
-							map.setNumberOfColors(512);
-							map.setAlphaBlending(true);
-							const vector<float>& values = grid.getData();
-							float min = values[0];
-							float max = values[0];
-							for (Position p = 1; p < values.size(); p++)
-							{
-								if (values[p] < min) min = values[p];
-								if (values[p] > max) max = values[p];
-							}
-							map.setRange(min, max);
-							map.createMap();
-							Log.info() << "Creating coloring for grid, min value = " << min 
-												 << " max = " << max << std::endl;
-
-							texname = gl_renderer_.createTextureFromGrid(grid, map);
-						}
-						else
-						{
-							texname = gl_renderer_.grid_to_texture_[&grid];
-						}
-
-						Representation* rep = new Representation();
-
-						if (rm->getType() == (Size) RegularData3DMessage::VISUALISE_SLICE)
-						{
-							GridVisualisation * slice = gl_renderer_.createTexturedGridPlane(grid, texname);
-							rep->insert(*slice);
-							rep->setModelType(MODEL_GRID_SLICE);
-						}
-						else
-						{
-							GridVisualisation * vol = gl_renderer_.createVolume(grid, texname);
-							rep->insert(*vol);
-							rep->setTransparency(64);
-							rep->setProperty("DONT_CLIP");
-							rep->setModelType(MODEL_GRID_VOLUME);
-						}
-
-						rep->setProperty("RENDER_DIRECT");
-						getMainControl()->insert(*rep);
-						getMainControl()->update(*rep);
-						return;
-					}
-
 					case RegularData3DMessage::UPDATE:
 					case RegularData3DMessage::REMOVE:
-						gl_renderer_.removeTextureFor_(grid);
+						gl_renderer_.removeTextureFor_(*rm->getData());
 						break;
 
 					default:
@@ -1577,9 +1513,9 @@ namespace BALL
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
 			no_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()));
+			no_stereo_action_->setCheckable(true);
 			no_stereo_action_->setChecked(true);
 			setMenuHelp("tips.html#3D");
-			no_stereo_action_->setCheckable(true);
 
 			active_stereo_action_ = insertMenuEntry (
  					MainControl::DISPLAY_STEREO, "Shuttter Glasses", this, SLOT(enterActiveStereo()));
@@ -2253,38 +2189,56 @@ namespace BALL
 
 		void Scene::showExportPNGDialog()
 		{
-			// first create the image, otherwise we get the dialog into the image!!!
-			QImage image = grabFrameBuffer();
-
 			String start = String(screenshot_nr_) + ".png";
 			screenshot_nr_ ++;
-			QFileDialog fd(0, "Export a screenshot to a PNG file", getMainControl()->getWorkingDir().c_str(),
-										 "*.png");
-			fd.setAcceptMode(QFileDialog::AcceptSave);
-			fd.selectFile(start.c_str());
-			fd.setFileMode(QFileDialog::AnyFile);
-			if (fd.exec() != QDialog::Accepted ||
-					fd.selectedFiles().size() == 0)
-			{
-				return;
-			}
+			QString qresult = QFileDialog::getSaveFileName(
+												0,
+												"Export POVRay File",
+												(getWorkingDir() + String(FileSystem::PATH_SEPARATOR) + start).c_str(),
+												"*.png");
 
-			String file_name = ascii(*fd.selectedFiles().begin());
-			if (!file_name.has('.')) file_name += ".png";
+			if (qresult == QString::null) return;
 
-			bool ok = image.save(file_name.c_str(), "PNG");
-
-			setWorkingDirFromFilename_(file_name);
-
-			if (ok) setStatusbarText("Saved PNG to " + file_name);
-			else 		setStatusbarText("Could not save PNG", true);
+			String result = ascii(qresult);
+			exportPNG(result);
 		}
 
 		bool Scene::exportPNG(const String& filename)
 		{
 			makeCurrent();
+			QImage image;
 
-			QImage image = grabFrameBuffer();
+			if (offscreen_rendering_)
+			{
+				glFlush();
+				QGLFormat f = format();
+				f.setSampleBuffers(true);
+				QGLPixelBuffer pbuffer(PNG_size_, f,this );
+				if (!pbuffer.makeCurrent())
+				{
+					setStatusbarText("PBuffer not supported, please use conventional screenshots (see Preferences)", true);
+					return false;
+				}
+
+				gl_renderer_.init(*this);
+				gl_renderer_.initSolid();
+				gl_renderer_.setSize(PNG_size_.width(), PNG_size_.height());
+				gl_renderer_.updateCamera();
+				gl_renderer_.setLights(true);
+				gl_renderer_.enableVertexBuffers(want_to_use_vertex_buffer_);
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+				renderRepresentations_(DIRECT_RENDERING);
+				glFlush();
+				image = pbuffer.toImage();
+				makeCurrent();
+				gl_renderer_.setSize(width(), height());
+				gl_renderer_.updateCamera();
+				gl_renderer_.setLights(true);
+			}
+			else
+			{
+				image = grabFrameBuffer();
+			}
 			bool ok = image.save(filename.c_str(), "PNG");
 
 			setWorkingDirFromFilename_(filename);
@@ -2346,6 +2300,12 @@ namespace BALL
 		void Scene::exitStereo()
 			throw()
 		{
+			no_stereo_action_->setChecked(true);
+			active_stereo_action_->setChecked(false);
+			dual_stereo_action_->setChecked(false);
+
+			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO) return;
+
 			gl_renderer_.setStereoMode(GLRenderer::NO_STEREO);
 			gl_renderer_.setSize(width(), height());
 
@@ -2355,10 +2315,6 @@ namespace BALL
 			glMatrixMode(GL_MODELVIEW);
 
 			setFullScreen(false);
-
-			no_stereo_action_->setChecked(true);
-			active_stereo_action_->setChecked(false);
-			dual_stereo_action_->setChecked(false);
 		}
 
 		void Scene::setFullScreen(bool state)
@@ -2580,6 +2536,15 @@ namespace BALL
 		{
  			QGLWidget::updateGL();
 
+		}
+
+		void Scene::setOffScreenRendering(bool enabled, QSize size)
+		{
+			offscreen_rendering_ = enabled;
+			if (enabled) 
+			{
+				PNG_size_ = size;
+			}
 		}
 
 	} // namespace VIEW

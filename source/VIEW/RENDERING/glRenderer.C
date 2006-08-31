@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.48.2.1 2006/06/09 15:00:32 leonhardt Exp $
+// $Id: glRenderer.C,v 1.71.2.48.2.2 2006/08/31 14:06:36 leonhardt Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -237,7 +237,8 @@ namespace BALL
 
 			//////////////////////////////////////////////////////
 			// toon shader:
-			float shader[32] = { 0.1, 0.2, 0.2, 0.2, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.2, 1.5, 1.7, 1.9 };
+			// first entries: greatest angle between normal and light vector
+			float shader[32] = { 0.2, 0.21, 0.23, 0.25, 0.27, 0.29, 0.31, 0.33, 0.36, 0.39, 0.41, 0.4, 0.44, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
 
 			float cel_shader_data[32][3];
 
@@ -251,8 +252,6 @@ namespace BALL
 			glEnable(GL_TEXTURE_1D);
 			glGenTextures(1, &cel_texture_);		
 			glBindTexture(GL_TEXTURE_1D, cel_texture_);	
-			glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);	
-			glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB, 32, 0, GL_RGB , GL_FLOAT, cel_shader_data);
 			glBindTexture(GL_TEXTURE_1D, 0);	
 
@@ -556,6 +555,7 @@ namespace BALL
 
 			// accelerate things a little by calling getGeometricObjects() only once
 			const List<GeometricObject*>& geometric_objects = representation.getGeometricObjects();
+			if (geometric_objects.size() == 0) return;
 			List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
 			if (for_display_list)
 			{
@@ -735,7 +735,7 @@ namespace BALL
 			*/
 
 			const std::vector<Vector3>& vertices = line.vertices;
-			const std::vector<Vector3>& tangents = line.tangents;
+//   			const std::vector<Vector3>& tangents = line.tangents;
 			const std::vector<ColorRGBA>& colors = line.colors;
 
 			glBegin(GL_LINE_STRIP);
@@ -1136,24 +1136,31 @@ namespace BALL
  				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
  				glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
 
+				// some artefacts when using GL_LINEAR:
+//   				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	
+//   				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+ 				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);	
+ 				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
 				vector<float> tex_values;
 				tex_values.reserve(mesh.normal.size());
  				Vector3 vv = -scene_->getStage()->getCamera().getViewVector() ;
 				vv.normalize();
-				vv += scene_->getStage()->getCamera().getLookUpVector() / 3.0;
-				vv += scene_->getStage()->getCamera().getRightVector() / 3.0;
-				vv.normalize();
+				// other light positions possible:
+//    				vv += scene_->getStage()->getCamera().getLookUpVector() / 2.0;
+//    				vv += scene_->getStage()->getCamera().getRightVector() / 2.0;
+//    				vv.normalize();
 
-				Vector3 v;
-				float value;
+				float v;
 				for (Position p = 0; p < mesh.normal.size(); p++)
 				{
- 					v = mesh.normal[p];
-					if (!Maths::isZero(v.getSquareLength())) v.normalize();
-					value = v * vv;
-  				if (value < 0.) value = 0.;
-					tex_values.push_back(value);
+					v = mesh.normal[p] * vv;
+					if (v < 0.) v = 0.;
+					tex_values.push_back(BALL_MIN(1., v));
 				}
+
+				// prevent problems with single colored meshes:
+				if (mesh.colors.size() > 0) setColorRGBA_(mesh.colors[0]);
 
 				glBegin(GL_TRIANGLES);
 				for (Size index = 0; index < nr_triangles; ++index)
@@ -1832,14 +1839,12 @@ namespace BALL
 
 	Position GLRenderer::createTextureFromGrid(const RegularData3D& grid, const ColorMap& map)
 	{
+		if (!isExtensionSupported("GL_EXT_texture3D")) return 0;
+
+		// prevent warning and error if not using GLEW:
 		Position texname = 0;
-
-		if (!isExtensionSupported("GL_EXT_texture3D"))
-		{
-			return texname;
-		}
-
 #ifdef BALL_USE_GLEW
+		removeTextureFor_(grid);
 		RegularData3D::IndexType tex_size = grid.getSize();
 
 		// Generate The Texture
@@ -1870,17 +1875,6 @@ namespace BALL
 		return texname;
 	}
 
-	Vector3 GLRenderer::getGridIndex_(const RegularData3D& grid, const Vector3& point)
-	{
-		RegularData3D::IndexType i = grid.getClosestIndex(point);
-		RegularData3D::IndexType s = grid.getSize();
-		Vector3 v(i.x, i.y, i.z);
-		v.x /= (float) s.x;
-		v.y /= (float) s.y;
-		v.z /= (float) s.z;
-		return v;
-	}
-
 	void GLRenderer::removeTextureFor_(const RegularData3D& grid)
 	{
 		if (!grid_to_texture_.has(&grid)) return;
@@ -1890,7 +1884,6 @@ namespace BALL
 
 	void GLRenderer::setupGridClipPlanes_(const GridVisualisation& slice)
 	{
-		Vector3 origin = slice.origin;
 		double planes[6][4];
 
 		Vector3 x,y,z;
@@ -1902,6 +1895,12 @@ namespace BALL
 		z.normalize();
 
 
+		Vector3 origin = slice.origin;
+		Vector3 dv = slice.x + slice.y + slice.z;
+		dv *= 0.001;
+		Vector3 e = origin + slice.x + slice.y + slice.z + dv ;
+		origin -= dv;
+
 		float d = x * (-origin);
 		planes[0][0] = x.x; planes[0][1] = x.y; planes[0][2] = x.z; planes[0][3] = d;
 		d = y * (-origin);
@@ -1909,7 +1908,6 @@ namespace BALL
 		d = z * (-origin);
 		planes[2][0] = z.x; planes[2][1] = z.y; planes[2][2] = z.z; planes[2][3] = d;
 
-		Vector3 e = origin + slice.x + slice.y + slice.z;
 		d = -x * (-e);
 		planes[3][0] = -x.x; planes[3][1] = -x.y; planes[3][2] = -x.z; planes[3][3] = d;
 		d = -y * (-e);
@@ -1925,49 +1923,6 @@ namespace BALL
 	}
 
 
-	void GLRenderer::initGridObject_(GridVisualisation& slice, const RegularData3D& grid)
-	{
-		slice.setGrid(&grid);
-		Vector3 origin = grid.getOrigin();
-		RegularData3D::IndexType s = grid.getSize();
-		slice.x = grid.getCoordinates(RegularData3D::IndexType(s.x-1,0,0)) - origin;
-		slice.y = grid.getCoordinates(RegularData3D::IndexType(0,s.y-1,0)) - origin;
-		slice.z = grid.getCoordinates(RegularData3D::IndexType(0,0,s.z-1)) - origin;
-		slice.origin = origin;
-	
-		slice.max_dim = slice.x.getLength();
-		slice.max_dim = BALL_MAX(slice.max_dim, slice.y.getLength());
-		slice.max_dim = BALL_MAX(slice.max_dim, slice.z.getLength());
-	}
-
-
-	GridVisualisation* GLRenderer::createTexturedGridPlane(const RegularData3D& grid, Position texname)
-	{
-		Vector3 normal = scene_->getStage()->getCamera().getViewVector();
-		normal.normalize();
-
-		GridVisualisation* slice = new GridVisualisation;
-		slice->setTexture(texname);
-		slice->setNormal(normal);
-		initGridObject_(*slice, grid);
-
-		Vector3 point = slice->origin + (slice->x + slice->y + slice->z) / 2.0;
-		slice->setPoint(point);
-		slice->slices = 1;
-		return slice;
-	}
-
-	GridVisualisation* GLRenderer::createVolume(const RegularData3D& grid, Position texname)
-	{
-		GridVisualisation* vol = new GridVisualisation;
-		vol->setGrid(&grid);
-		vol->setTexture(texname);
-		vol->slices = 64;
-		initGridObject_(*vol, grid);
-		return vol;
-	}
-
-
 	void GLRenderer::renderGridVisualisation_(const GridVisualisation& vol)
 		throw()
 	{
@@ -1978,6 +1933,23 @@ namespace BALL
 			return;
 		}
 
+		const Vector3 origin = vol.origin;
+		
+		if (vol.draw_box)
+		{
+			Box box(origin, vol.x, vol.y, vol.z.getLength());
+			box.setColor(stage_->getBackgroundColor().getInverseColor());
+			Position dli = display_lists_index_;
+			display_lists_index_ = DRAWING_MODE_WIREFRAME * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + drawing_precision_;
+			renderBox_(box);
+			display_lists_index_ = dli;
+		}
+			
+		initDrawingOthers_();
+		glDisable(GL_LIGHTING);
+ 		glDisable(GL_CULL_FACE);
+
+		////////////////////////////////////////////////////////////////////////////////
 		glBindTexture(GL_TEXTURE_3D, texname);	
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -1985,10 +1957,7 @@ namespace BALL
    	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
    	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-		initDrawingOthers_();
- 		setupGridClipPlanes_(vol);
-
+		
 		///// init the texture: automated texture coordinate generation
 		// normalized vectors in grids directions:
 		Vector3 xd = vol.x;
@@ -1997,7 +1966,6 @@ namespace BALL
 		yd.normalize();
 		Vector3 zd = vol.z;
 		zd.normalize();
-		const Vector3 origin = vol.origin;
 
 		// plane vectors and distance for texture coordinates:
 		float xp[4], yp[4], zp[4], d;
@@ -2019,27 +1987,26 @@ namespace BALL
 		glTexGenf(GL_S,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
 		glTexGenf(GL_T,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
 		glTexGenf(GL_R,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
-		glTexGenfv(GL_S,GL_OBJECT_PLANE, xp);
+		glTexGenfv(GL_S,GL_OBJECT_PLANE, zp);
 		glTexGenfv(GL_T,GL_OBJECT_PLANE, yp);
-		glTexGenfv(GL_R,GL_OBJECT_PLANE, zp);
-		glEnable(GL_TEXTURE_GEN_S);
-		glEnable(GL_TEXTURE_GEN_T);
-		glEnable(GL_TEXTURE_GEN_R);
+		glTexGenfv(GL_R,GL_OBJECT_PLANE, xp);
+ 		glEnable(GL_TEXTURE_GEN_S);
+ 		glEnable(GL_TEXTURE_GEN_T);
+ 		glEnable(GL_TEXTURE_GEN_R);
 
 		// stretch the texture accordingly
 		glMatrixMode(GL_TEXTURE);
 		glLoadIdentity();
 		const Vector3 dim = vol.x + vol.y + vol.z;
-		glScaled((double)1.0 / (double) dim.x, 
-						 (double)1.0 / (double) dim.y,
+		glScaled((double)1.0 / (double) dim.y, 
+						 (double)1.0 / (double) dim.x,
 						 (double)1.0 / (double) dim.z);
 		glMatrixMode(GL_MODELVIEW);
 
-		glBegin(GL_QUADS);
-
 		// render this as one slice
-		if (vol.slices == 1)
+		if (vol.type == GridVisualisation::PLANE)
 		{
+		  setupGridClipPlanes_(vol);
 			Vector3 n = vol.getNormal();
 			Vector3 v1 = getNormal(n);
 			Vector3 v2 = v1 % n;
@@ -2054,24 +2021,23 @@ namespace BALL
 			v1 *= 2.0;
 			v2 *= 2.0;
 		
-			// render one side
+			glBegin(GL_QUADS);
 			normalVector3_(-vol.getNormal());
 			vertexVector3_(o);
 			vertexVector3_(o + v1);
 			vertexVector3_(o + v1 + v2);
 			vertexVector3_(o + v2);
-			
-			// render other side
-			normalVector3_(vol.getNormal());
-			vertexVector3_(o + v2);
-			vertexVector3_(o + v1 + v2);
-			vertexVector3_(o + v1);
-			vertexVector3_(o);
+			glEnd();
+
+			for (Position plane = GL_CLIP_PLANE0; plane < GL_CLIP_PLANE0 + 6; plane++)
+			{
+				glDisable(plane);
+			}
 		}
-		else
+		else if (vol.type == GridVisualisation::SLICES)
 		{
 			// volume rendering
-			const Vector3 vv = scene_->getStage()->getCamera().getViewVector();
+			const Vector3& vv = scene_->getStage()->getCamera().getViewVector();
 
 			Vector3 normals[3];
 			normals[0] = vol.x;
@@ -2089,77 +2055,86 @@ namespace BALL
 
 			Angle min_angle(angles[0]);
 			Position min = 0;
+			bool anti = false;
 			for (Position i = 0; i < 3; i++) 
 			{
-				if (angles[i] < min_angle ||
-						aangles[i] < min_angle)
+				if (angles[i] < min_angle)
 				{
 					min = i;
-					if (aangles[i] < angles[i]) min_angle = aangles[i];
-					else                        min_angle = angles[i];
+					anti = false;
+					min_angle = angles[i];
+				}
+
+				if (aangles[i] < min_angle)
+				{
+					min = i;
+					anti = true;
+					min_angle = aangles[i];
 				}
 			}
 
 			// order the axes: 3. vector is the axis nearest to view vector direction
-			Vector3 vectors[3];
+			Vector3 vectors[2];
 			Position v = 0;
+			Vector3 normal;
 			for (Position i = 0; i < 3; i++)
 			{
-				if (i != min)
+				if (i == min)
 				{
-					vectors[v] = normals[i];
-					v++;
+					normal = normals[i];
+					continue;
 				}
-				else
-				{
-					vectors[2] = normals[i];
-				}
+				
+				vectors[v] = normals[i];
+				v++;
 			}
 
 			// order of layers: depends on direction of normal to view vector direction
-			Vector3 diff;
-			if (aangles[min] > angles[min])
+			Vector3 offset;
+			Vector3 diff = normal;
+			if (!anti)
 			{
-				vectors[2] *= -1;
-				diff = -vectors[2];
+				offset = normal;
+				diff *= -1;
 			}
-			
+
 			// normal and start points
-			vectors[2] /= (float)vol.slices;
-			Vector3 o  = origin + diff;
+			diff /= ((float)vol.slices - 1.);
+			Vector3 o  = origin + offset;
 			Vector3 x  = o + vectors[0];
 			Vector3 xy = x + vectors[1];
 			Vector3 y  = o + vectors[1];
 
-			for (Position i = 0; i <= vol.slices; ++i) 
+			glBegin(GL_QUADS);
+			for (Position i = 0; i < vol.slices; ++i) 
 			{
-				// always render two sides:
-				normalVector3_(vectors[2]);
 				vertexVector3_(y);
 				vertexVector3_(xy);
 				vertexVector3_(x);
 				vertexVector3_(o);
 
-				normalVector3_(-vectors[2]);
-				vertexVector3_(o);
-				vertexVector3_(x);
-				vertexVector3_(xy);
-				vertexVector3_(y);
-
-				o  += vectors[2];
-				x  += vectors[2];
-				xy += vectors[2];
-				y  += vectors[2];
+				o  += diff;
+				x  += diff;
+				xy += diff;
+				y  += diff;
 			}
+			glEnd();
 		}
-
-		// cleanup:
-		glEnd();	
-
-		for (Position plane = GL_CLIP_PLANE0; plane < GL_CLIP_PLANE0 + 6; plane++)
+		else
 		{
-			glDisable(plane);
+			glPointSize(vol.getDotSize());
+			glBegin(GL_POINTS);
+			for (Position p = 0; p < vol.points.size(); p++)
+			{
+				vertexVector3_(vol.points[p]);
+			}
+			glEnd();
+			glEnable(GL_LIGHTING);
+			glPointSize(1);
 		}
+
+		glEnable(GL_LIGHTING);
+ 		glEnable(GL_CULL_FACE);
 
 		glDisable(GL_TEXTURE_GEN_S);
 		glDisable(GL_TEXTURE_GEN_T);

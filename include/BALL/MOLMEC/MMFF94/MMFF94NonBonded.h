@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.h,v 1.1.6.1 2006/06/09 14:04:03 leonhardt Exp $
+// $Id: MMFF94NonBonded.h,v 1.1.6.2 2006/08/31 14:04:35 leonhardt Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_NONBONDED_H
@@ -48,6 +48,11 @@ namespace BALL
 			double es_energy;  // for debugging
 		};
 
+		/// flag to enable ES
+		#define MMFF94_ES_ENABLED "enable ES"
+		
+		/// flag to enable VDW
+		#define MMFF94_VDW_ENABLED "enable VDW"
 
 		BALL_CREATE(MMFF94NonBonded)
 
@@ -111,10 +116,10 @@ namespace BALL
 		const vector<NonBondedPairData>& getNonBondedData() const { return non_bonded_data_;}
 
 		///
-		double getVDWEnergy() const { return vdw_energy_;}
+		double getVDWEnergy() const;
 
 		///
-		double getESEnergy() const { return es_energy_;}
+		double getESEnergy() const;
 
 		protected:
 
@@ -139,6 +144,8 @@ namespace BALL
 		double 																dc_; 
 		// dielectric model exponent
 		double 																n_;
+		bool 																	es_enabled_;
+		bool 																	vdw_enabled_;
 	};
 } // namespace BALL
 

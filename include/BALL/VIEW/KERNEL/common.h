@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.40.2.12 2006/05/15 15:13:57 amoll Exp $
+// $Id: common.h,v 1.40.2.12.2.1 2006/08/31 14:04:46 leonhardt Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -23,6 +23,9 @@
  #include <BALL/DATATYPE/list.h>
 #endif
 
+#ifndef BALL_DATATYPE_REGULARDATA3D_H
+ #include <BALL/DATATYPE/regularData3D.h>
+#endif
 
 #include <QtGui/qcolordialog.h>
 #include <QtGui/QLabel>
@@ -198,6 +201,9 @@ namespace BALL
 
 			/// defines the property for the model: Cartoon
 			MODEL_CARTOON,
+
+			/// defines the property for the model: Ribbon
+			MODEL_RIBBON,
 
 			/// defines the property for the model: H-Bonds
 			MODEL_HBONDS,
@@ -449,6 +455,9 @@ namespace BALL
 		///
 		BALL_VIEW_EXPORT QColor chooseColor(QLabel* label);
 
+		///
+		BALL_VIEW_EXPORT void setTextColor(QLabel* label, const ColorRGBA& color);
+
 		/** Uses the de-Casteljou algorithm to evalute a cubic Hermite interpolation
 		 *  polynomial at interpolated_values.size() equidistant values.
 		 */
@@ -467,6 +476,9 @@ namespace BALL
 		BALL_VIEW_EXPORT vector<Vector3> createSphere(Size precision);
 
 		BALL_VIEW_EXPORT void calculateHistogramEqualization(const vector<float>& values, vector<float>& normalized_values, bool use_absolute_values = false);
+
+		/// calcualte a random set of points, dependening of the field strength of a grid
+		BALL_VIEW_EXPORT void calculateRandomPoints(const RegularData3D& grid, Size nr_points, vector<Vector3>& resulting_points);
 
 		BALL_VIEW_EXPORT void getColors(const GeometricObject& object, HashSet<String>& colors);
 		

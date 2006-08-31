@@ -39,7 +39,7 @@ namespace BALL
 			
 			/**	Symbolic names for option keys.
 				This struct contains a symbolic name
-				for each recognized key in FDPB::options. \par
+				for each recognized key in GeomtetricFit::options. \par
 				For each symbol the required type is given under parameters.
 			*/
 			struct BALL_EXPORT Option 
@@ -77,10 +77,10 @@ namespace BALL
 				 */
 				static const String SURFACE_TYPE;	
 
-				// How many results should be kept in total (also in DockingAlgorithms)
+				// How many results should be kept in total
 				static const String BEST_NUM;
 
-				// Verbosity of the Algorithm (also in DockingAlgorithm)
+				// Verbosity of the Algorithm
 				static const String VERBOSITY;
 				
 				// Euler angels for redocking
@@ -323,13 +323,6 @@ namespace BALL
 			ConformationSet getConformationSet(Index total_number = 0)
 				throw();
 			
-      //////////////////////////////////////////
-      // the member variables
-
-			/**	The options for the algorithm.
-			*/
-			Options	options;
-      
 		protected:
 
       // Free all allocated memory and destroys the options and results

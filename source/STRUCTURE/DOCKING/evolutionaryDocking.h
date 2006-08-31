@@ -37,48 +37,60 @@ namespace BALL
       BALL_CREATE(EvolutionaryDocking)
 
       typedef struct Option
-      {
-	static const String GRID_FILE;
-	static const String TRANSLATION_BOX_BOTTOM_X;
-	static const String TRANSLATION_BOX_BOTTOM_Y;
-	static const String TRANSLATION_BOX_BOTTOM_Z;
-	static const String TRANSLATION_BOX_TOP_X;
-	static const String TRANSLATION_BOX_TOP_Y;
-	static const String TRANSLATION_BOX_TOP_Z;
-	static const String MAX_ITERATIONS;
-	static const String POPULATION_NUMBER;
-	static const String INITIAL_POPULATION;
-	static const String POPULATION;
-	static const String SURVIVORS;
-	static const String MUTATION_RATE;
-	static const String MUTATION_SAVE;
-	static const String CONV_ITERATIONS;
-	static const String CONV_VALUE;
-	static const String CONV_START;
-	static const String BEST_NUM;
-      };
+			{
+				static const String GRID_FILE;
+				static const String TRANSLATION_BOX_BOTTOM_X;
+				static const String TRANSLATION_BOX_BOTTOM_Y;
+				static const String TRANSLATION_BOX_BOTTOM_Z;
+				static const String TRANSLATION_BOX_TOP_X;
+				static const String TRANSLATION_BOX_TOP_Y;
+				static const String TRANSLATION_BOX_TOP_Z;
+				static const String MAX_ITERATIONS;
+				static const String POPULATION_NUMBER;
+				static const String INITIAL_POPULATION;
+				static const String POPULATION;
+				static const String SURVIVORS;
+				static const String MUTATION_RATE;
+				static const String MUTATION_SAVE;
+				static const String CONV_ITERATIONS;
+				static const String CONV_VALUE;
+				static const String CONV_START;
+
+				// How many results should be kept in total
+				static const String BEST_NUM;
+				
+				// Verbosity of the Algorithm
+				static const String VERBOSITY;
+			};
 
       typedef struct Default
-      {
-	static const String GRID_FILE;
-	static const double TRANSLATION_BOX_BOTTOM_X;
-	static const double TRANSLATION_BOX_BOTTOM_Y;
-	static const double TRANSLATION_BOX_BOTTOM_Z;
-	static const double TRANSLATION_BOX_TOP_X;
-	static const double TRANSLATION_BOX_TOP_Y;
-	static const double TRANSLATION_BOX_TOP_Z;
-	static const int MAX_ITERATIONS;
-	static const int POPULATION_NUMBER;
-	static const int INITIAL_POPULATION;
-	static const int POPULATION;
-	static const int SURVIVORS;
-	static const double MUTATION_RATE;
-	static const int MUTATION_SAVE;
-	static const int CONV_ITERATIONS;
-	static const double CONV_VALUE;
-	static const int CONV_START;
-	static const int BEST_NUM;
-      };
+			{
+				static const String GRID_FILE;
+				static const double TRANSLATION_BOX_BOTTOM_X;
+				static const double TRANSLATION_BOX_BOTTOM_Y;
+				static const double TRANSLATION_BOX_BOTTOM_Z;
+				static const double TRANSLATION_BOX_TOP_X;
+				static const double TRANSLATION_BOX_TOP_Y;
+				static const double TRANSLATION_BOX_TOP_Z;
+				static const int MAX_ITERATIONS;
+				static const int POPULATION_NUMBER;
+				static const int INITIAL_POPULATION;
+				static const int POPULATION;
+				static const int SURVIVORS;
+				static const double MUTATION_RATE;
+				static const int MUTATION_SAVE;
+				static const int CONV_ITERATIONS;
+				static const double CONV_VALUE;
+				static const int CONV_START;
+				static const int BEST_NUM;
+
+				// Verbosity of the algorithm
+				// Default value is 0
+				// For values > 1, some information is printed on Log
+				// For values > 5, timing information is included
+				static const int VERBOSITY;
+
+			};
 
       EvolutionaryDocking()
 	throw();

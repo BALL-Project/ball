@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.h,v 1.1.6.1 2006/06/09 14:04:03 leonhardt Exp $ 
+// $Id: MMFF94.h,v 1.1.6.2 2006/08/31 14:04:34 leonhardt Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -194,6 +194,9 @@ namespace BALL
 		/**	Return the Van der Waals and hydrogen bond contribution to the total energy.
 		*/
 		double getVdWEnergy() const;
+
+		///
+		double getPlaneEnergy() const;
 
 		/**	Return true, if the parameters have already been initialized
 		*/

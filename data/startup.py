@@ -49,6 +49,12 @@ def setSceneSize(width, height):
 	getScene().update(false)
 
 ###################### SHORTCUTS: #######################
+
+# map a key to a python command:
+# modifier can be "" or None, Shift, Ctrl
+def map(modifier, key, command):
+	getPyWidget().map(modifier, key, command)
+
 def log(to_log):
 	getMainControl().setStatusbarText(to_log, 1)
 	print to_log
@@ -123,8 +129,8 @@ def setMultithreading(mode):
 def runScript(filename):
 	getPyWidget().runFile(filename)
 
-def runScriptAgain():
-	getPyWidget().runAgain()
+def runCurrentScript():
+	getPyWidget().runCurrentScript()
 
 def quickSave():
 	getMainControl().quickSave()

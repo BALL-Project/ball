@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>780</width>
+    <width>865</width>
     <height>470</height>
    </rect>
   </property>
@@ -22,7 +22,7 @@
   </property>
   <property name="minimumSize" >
    <size>
-    <width>780</width>
+    <width>820</width>
     <height>470</height>
    </size>
   </property>
@@ -38,12 +38,129 @@
   <property name="sizeGripEnabled" >
    <bool>false</bool>
   </property>
+  <widget class="QTreeWidget" name="entries_listview" >
+   <property name="geometry" >
+    <rect>
+     <x>9</x>
+     <y>9</y>
+     <width>221</width>
+     <height>452</height>
+    </rect>
+   </property>
+   <column>
+    <property name="text" >
+     <string>Entries</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QPushButton" name="help_button" >
+   <property name="geometry" >
+    <rect>
+     <x>706</x>
+     <y>431</y>
+     <width>150</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="minimumSize" >
+    <size>
+     <width>100</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="maximumSize" >
+    <size>
+     <width>32767</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="toolTip" >
+    <string>Set settings to default values</string>
+   </property>
+   <property name="text" >
+    <string>&amp;Help</string>
+   </property>
+   <property name="shortcut" >
+    <string>Alt+H</string>
+   </property>
+   <property name="autoDefault" >
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="defaults_button" >
+   <property name="geometry" >
+    <rect>
+     <x>549</x>
+     <y>431</y>
+     <width>151</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="minimumSize" >
+    <size>
+     <width>100</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="maximumSize" >
+    <size>
+     <width>32767</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="toolTip" >
+    <string>Set settings to default values</string>
+   </property>
+   <property name="text" >
+    <string>&amp;Defaults</string>
+   </property>
+   <property name="shortcut" >
+    <string>Alt+D</string>
+   </property>
+   <property name="autoDefault" >
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="cancel_button" >
+   <property name="geometry" >
+    <rect>
+     <x>393</x>
+     <y>431</y>
+     <width>150</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="minimumSize" >
+    <size>
+     <width>100</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="maximumSize" >
+    <size>
+     <width>32767</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="toolTip" >
+    <string>Discard changes</string>
+   </property>
+   <property name="text" >
+    <string>&amp;Cancel</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+   <property name="autoDefault" >
+    <bool>true</bool>
+   </property>
+  </widget>
   <widget class="QPushButton" name="ok_button" >
    <property name="geometry" >
     <rect>
-     <x>241</x>
+     <x>236</x>
      <y>431</y>
-     <width>130</width>
+     <width>151</width>
      <height>30</height>
     </rect>
    </property>
@@ -75,131 +192,26 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="cancel_button" >
-   <property name="geometry" >
-    <rect>
-     <x>377</x>
-     <y>431</y>
-     <width>130</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="minimumSize" >
-    <size>
-     <width>100</width>
-     <height>30</height>
-    </size>
-   </property>
-   <property name="maximumSize" >
-    <size>
-     <width>32767</width>
-     <height>30</height>
-    </size>
-   </property>
-   <property name="toolTip" >
-    <string>Discard changes</string>
-   </property>
-   <property name="text" >
-    <string>&amp;Cancel</string>
-   </property>
-   <property name="shortcut" >
-    <string/>
-   </property>
-   <property name="autoDefault" >
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="defaults_button" >
-   <property name="geometry" >
-    <rect>
-     <x>513</x>
-     <y>431</y>
-     <width>130</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="minimumSize" >
-    <size>
-     <width>100</width>
-     <height>30</height>
-    </size>
-   </property>
-   <property name="maximumSize" >
-    <size>
-     <width>32767</width>
-     <height>30</height>
-    </size>
-   </property>
-   <property name="toolTip" >
-    <string>Set settings to default values</string>
-   </property>
-   <property name="text" >
-    <string>&amp;Defaults</string>
-   </property>
-   <property name="shortcut" >
-    <string>Alt+D</string>
-   </property>
-   <property name="autoDefault" >
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="help_button" >
-   <property name="geometry" >
-    <rect>
-     <x>649</x>
-     <y>431</y>
-     <width>130</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="minimumSize" >
-    <size>
-     <width>100</width>
-     <height>30</height>
-    </size>
-   </property>
-   <property name="maximumSize" >
-    <size>
-     <width>32767</width>
-     <height>30</height>
-    </size>
-   </property>
-   <property name="toolTip" >
-    <string>Set settings to default values</string>
-   </property>
-   <property name="text" >
-    <string>&amp;Help</string>
-   </property>
-   <property name="shortcut" >
-    <string>Alt+H</string>
-   </property>
-   <property name="autoDefault" >
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QTreeWidget" name="entries_listview" >
-   <property name="geometry" >
-    <rect>
-     <x>0</x>
-     <y>2</y>
-     <width>231</width>
-     <height>460</height>
-    </rect>
-   </property>
-   <column>
-    <property name="text" >
-     <string>Entries</string>
-    </property>
-   </column>
-  </widget>
   <widget class="QStackedWidget" name="widget_stack" >
    <property name="geometry" >
     <rect>
-     <x>244</x>
-     <y>6</y>
-     <width>531</width>
-     <height>420</height>
+     <x>236</x>
+     <y>9</y>
+     <width>620</width>
+     <height>416</height>
     </rect>
+   </property>
+   <property name="minimumSize" >
+    <size>
+     <width>620</width>
+     <height>16</height>
+    </size>
+   </property>
+   <property name="maximumSize" >
+    <size>
+     <width>620</width>
+     <height>16777215</height>
+    </size>
    </property>
    <property name="frameShape" >
     <enum>QFrame::NoFrame</enum>

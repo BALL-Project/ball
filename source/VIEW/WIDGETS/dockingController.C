@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.20 2006/08/30 15:04:08 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.21 2006/08/31 14:06:37 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -303,7 +303,6 @@ namespace BALL
 																		dock_dialog_.getAlgorithmOptions(),
 																		dock_dialog_.getScoringOptions());
 				progress_dialog_->setDockingAlgorithm(dock_alg_);
-				
 				// start thread
 				// function calls DockingThread::run()
 				thread->start();

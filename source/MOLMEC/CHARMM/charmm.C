@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmm.C,v 1.25 2005/01/18 21:46:50 amoll Exp $
+// $Id: charmm.C,v 1.25.12.1 2006/08/31 14:05:41 leonhardt Exp $
 //
 
 // Molecular Mechanics: Charmm force field class
@@ -456,15 +456,15 @@ namespace BALL
 	{
 		String result = String("\n") 
 		+ "CHARMM Energy:\n"
-		+ " - electrostatic	: " + String(getESEnergy())+  " kJ/mol\n" 
-		+ " - van der Waals	: " + String(getVdWEnergy()) + " kJ/mol\n"
-		+ " - solvation	: " + String(getSolvationEnergy())+  "kJ/mol\n" 
-		+ " - nonbonded		: " + String(getNonbondedEnergy())+  "kJ/mol\n"
-		+ " - bond stretch      : " + String(getStretchEnergy())+  " kJ/mol\n"
-		+ " - angle bend		: " + String(getBendEnergy())+  " kJ/mol\n"
-		+ " - torsion	: " + String(getTorsionEnergy())+  " kJ/mol\n"
+		+ " - electrostatic: " + String(getESEnergy())+  " kJ/mol\n" 
+		+ " - van der Waals: " + String(getVdWEnergy()) + " kJ/mol\n"
+		+ " - solvation:     " + String(getSolvationEnergy())+  "kJ/mol\n" 
+		+ " - nonbonded:     " + String(getNonbondedEnergy())+  "kJ/mol\n"
+		+ " - bond stretch:  " + String(getStretchEnergy())+  " kJ/mol\n"
+		+ " - angle bend:    " + String(getBendEnergy())+  " kJ/mol\n"
+		+ " - torsion:       " + String(getTorsionEnergy())+  " kJ/mol\n"
 		+ "---------------------------------------\n"
-		+ "  total energy		: " +String(getEnergy())+  " kJ/mol\n";
+		+ "  total energy:   " +String(getEnergy())+  " kJ/mol\n";
 		return result;
 	}
 

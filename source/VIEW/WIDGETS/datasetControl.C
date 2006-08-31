@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.40.2.3 2006/08/24 16:42:14 leonhardt Exp $
+// $Id: datasetControl.C,v 1.46.2.40.2.4 2006/08/31 14:06:37 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -16,6 +16,7 @@
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
 #include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
 #include <BALL/VIEW/DIALOGS/fieldLinesDialog.h>
+#include <BALL/VIEW/DIALOGS/gridVisualizationDialog.h>
 
 //   #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
 //   #include <BALL/VIEW/WIDGETS/regularData2DWidget.h>
@@ -40,7 +41,8 @@ namespace BALL
 			throw()
 			:	GenericControl(parent, name),
 				dialog_(0),
-				surface_dialog_(0)
+				surface_dialog_(0),
+				grid_dialog_(0)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new DatasetControl " << this << std::endl;
@@ -107,11 +109,9 @@ namespace BALL
 			main_control.insertPopupMenuSeparator(MainControl::TOOLS_GRID);
 
 			// visualisations:
-			grid_slice_ = insertMenuEntry(MainControl::TOOLS_GRID, "Render Slice", this, SLOT(createGridSlice()));
-			setMenuHint("Visualise a moveable plane in the grid");
+			vis_grid_ = insertMenuEntry(MainControl::TOOLS_GRID, "Visualize", this, SLOT(visualizeGrid()));
+			setMenuHint("Visualise a grid");
 
-			grid_volume_ = insertMenuEntry(MainControl::TOOLS_GRID, "Render Volume", this, SLOT(createGridVolume()));
-			setMenuHint("Visualise a grid per volume rendering");
 			GenericControl::initializeWidget(main_control);
 
 			menu_cs_ = insertMenuEntry(MainControl::TOOLS_GRID, "Render Contour S&urface", this,  
@@ -147,10 +147,7 @@ namespace BALL
 			grid_resize_->setEnabled(grid_selected);
 			grid_histogram_->setEnabled(grid_selected);
 
-			bool power_2_grid = grid_selected && 
-													isGridPowerOfTwo_(*item_to_grid3_[context_item_]);
-			grid_slice_->setEnabled(power_2_grid);
-			grid_volume_->setEnabled(power_2_grid);
+			vis_grid_->setEnabled(grid_selected);
 
 			bool vector_grid_selected = selected && 
 													 item_to_gradients_.has(context_item_) && 
@@ -433,9 +430,7 @@ namespace BALL
 				}
 				else
 				{
-					bool power_2_grid = isGridPowerOfTwo_(*item_to_grid3_[context_item_]);
-					insertContextMenuEntry_("Render Slice", SLOT(createGridSlice()), power_2_grid);
-					insertContextMenuEntry_("Render Volume", SLOT(createGridVolume()), power_2_grid);
+					insertContextMenuEntry_("Render Grid", SLOT(visualizeGrid()));
 					insertContextMenuEntry_("Render Contour Surface", SLOT(computeIsoContourSurface()));
 					insertContextMenuEntry_("Resize for Rendering", SLOT(resizeGrid()));
 					context_menu_.addSeparator();
@@ -1043,7 +1038,8 @@ namespace BALL
 		Size monte_carlo_nr_lines = dialog.getMonteCarloNumberLines();
 
 		vector_grid_ = item_to_gradients_[context_item_];
-		RegularData3D* potential_grid = (*get3DGrids().begin()).first;
+		RegularData3D* potential_grid = 0;
+		if (get3DGrids().size()) potential_grid = (*get3DGrids().begin()).first;
 		
 		AtomContainer* ac = (AtomContainer*) item_to_composite_[context_item_];
 		if (ac == 0)
@@ -1081,6 +1077,15 @@ namespace BALL
 			// method from "Fast Display of Illuminated Field Lines"
 			// from Stalling, Zaeckler, Hege; 1997
 			// Monte Carlo Approach in relation to potential strenght at the individual points
+
+			if (potential_grid == 0) 
+			{
+				setStatusbarText("No potential grid loaded, aborting...", true);
+				return;
+			}
+
+			setStatusbarText("Using first 3D grid for density calculation", true);
+
 			Vector3 origin = vector_grid_->getOrigin();
 			Vector3 dimension = vector_grid_->getDimension();
 			VectorGrid::IndexType size = vector_grid_->getSize();
@@ -1090,8 +1095,15 @@ namespace BALL
 			Size sz = (Size)(size.z / 2.0 + 1);
 			RegularData3D::IndexType st(sx, sy, sz);
 
-			Vector3 diff = Vector3(0.000001);
-			RegularData3D new_grid(st, origin - diff, vector_grid_->getDimension() + diff * 2);
+			if (potential_grid->getOrigin() != vector_grid_->getOrigin() ||
+					potential_grid->getDimension() != vector_grid_->getDimension())
+			{
+				setStatusbarText("Potential and vector grid have different sizes, aborting...", true);
+				return;
+			}
+
+			Vector3 diff = Vector3(0.001);
+			RegularData3D new_grid(st, origin - diff, vector_grid_->getDimension() + diff * 2.);
 			const Size new_grid_size = sx * sy * sz;
 			for (Position p = 0; p < new_grid_size; p++)
 			{
@@ -1101,60 +1113,23 @@ namespace BALL
 			const vector<float>& values =  potential_grid->getData();
 			for (Position p = 0; p < values.size(); p++)
 			{
-				new_grid.getClosestValue((vector_grid_->getCoordinates(p))) += BALL_ABS(values[p]);
+				new_grid.getClosestValue((potential_grid->getCoordinates(p))) += BALL_ABS(values[p]);
 			}
 
-			const vector<float>& values2 =  new_grid.getData();
-			vector<float> normalized_values;
+			vector<Vector3> result_points;
+			calculateRandomPoints(new_grid, monte_carlo_nr_lines, result_points);
 
-			calculateHistogramEqualization(values2, normalized_values);
-
-			float current = 0;
-			for (Position p = 0; p < normalized_values.size(); p++)
-			{
-				current += normalized_values[p];
-				normalized_values[p] = current;
-			}
-
-			const Vector3 spacing = new_grid.getSpacing();
-			RandomNumberGenerator ran_gen;
-			ran_gen.setup();
-			
-			Size errors = 0;
 			for (Position p = 0; p < monte_carlo_nr_lines; p++)
 			{
-				float x = ran_gen.randomDouble(0, current);
-				for (Position i = 0; i < normalized_values.size(); i++)
-				{
-					if (normalized_values[i] > x)
-					{
-						Vector3 point = new_grid.getCoordinates(i);
-						point += Vector3(ran_gen.randomDouble(-0.5, 0.5) * spacing.x,
-														 ran_gen.randomDouble(-0.5, 0.5) * spacing.y,
-														 ran_gen.randomDouble(-0.5, 0.5) * spacing.z);
-						try
-						{
-							vector_grid_->getClosestValue(point);
-							createFieldLine_(point, *rep);
+				createFieldLine_(result_points[p], *rep);
 							
-							/*
-							Sphere* p = new Sphere();
-							p->setPosition(point);
-							p->setRadius(0.05);
-							p->setColor(ColorRGBA(0.,0.1,0));
-							rep->insert(*p);
-							*/
-							
-							break;
-						}
-						catch(...)
-						{
-							errors ++;
-							p--;
-							break;
-						}
-					}
-				} // search point
+				/*
+				Sphere* s = new Sphere();
+				s->setPosition(point);
+				s->setRadius(0.05);
+				s->setColor(ColorRGBA(0.,0.1,0));
+				rep->insert(*s);
+				*/
 			} // all lines
 		}
 
@@ -1171,12 +1146,27 @@ namespace BALL
 
 			calculateLinePoints_(point, points, (backwards == 0) ? 1. : -1.);
 
-			const Size nrp = points.size();
-			if (points.size() < 2)
+			Index p = 0;
+			try
+			{
+				for (; p < (Index)points.size(); p++)
+				{
+					vector_grid_->getClosestIndex(points[p]);
+				}
+			}
+			catch(...)
+			{
+				p--;
+			}
+
+			if (p < 2)
 			{
 				delete line;
 				return;
 			}
+
+			points.resize(p);
+			const Size nrp = points.size();
 
 			line->tangents.resize(nrp);
 
@@ -1436,43 +1426,17 @@ namespace BALL
 		return grids;
 	}
 
-	void DatasetControl::createGridVolume()
+	void DatasetControl::visualizeGrid()
 		throw()
 	{
 		getSelectedItems();
 		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
 
 		RegularData3D* ssm = item_to_grid3_[context_item_];
-
-		RegularData3D::IndexType size = ssm->getSize();
-		RegularData3D::IndexType new_size;
-		new_size.x = getNextPowerOfTwo_(size.x);
-		new_size.y = getNextPowerOfTwo_(size.y);
-		new_size.z = getNextPowerOfTwo_(size.z);
-		if (new_size.x != size.x ||
-				new_size.y != size.y ||
-				new_size.z != size.z)
-		{
-			setStatusbarText("Grid sizes are not potentials of 2! Please resize the grid.", true);
-			return;
-		}
-
-		RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::VISUALISE_VOLUME);
-		msg->setData(*ssm);
-		notify_(msg);
-
-	}
-
-	void DatasetControl::createGridSlice()
-		throw()
-	{
-		getSelectedItems();
-		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
-
-		RegularData3D* ssm = item_to_grid3_[context_item_];
-		RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::VISUALISE_SLICE);
-		msg->setData(*ssm);
-		notify_(msg);
+		if (grid_dialog_ == 0) grid_dialog_ = new GridVisualizationDialog(this);
+		grid_dialog_->setGrids(get3DGrids());
+		grid_dialog_->setGrid(ssm);
+		grid_dialog_->exec();
 	}
 
 	Size DatasetControl::getNextPowerOfTwo_(Size in) const
@@ -1486,7 +1450,7 @@ namespace BALL
 		return test;
 	}
 
-	bool DatasetControl::isGridPowerOfTwo_(const RegularData3D& grid) const
+	bool DatasetControl::isGridSizePowerOfTwo(const RegularData3D& grid) const
 	{
 		RegularData3D::IndexType size = grid.getSize();
 		RegularData3D::IndexType new_size;
@@ -1498,11 +1462,10 @@ namespace BALL
 						new_size.z == size.z);
 	}
 
-	void DatasetControl::resizeGrid()
+	RegularData3D* DatasetControl::resizeGrid()
 		throw()
 	{
-		getSelectedItems();
-		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
+		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return 0;
 
 		RegularData3D& grid = *item_to_grid3_[context_item_];
 		RegularData3D::IndexType size = grid.getSize();
@@ -1515,7 +1478,7 @@ namespace BALL
 				new_size.z == size.z)
 		{
 			setStatusbarText("Grid does not need to be resized!", true);
-			return;
+			return 0;
 		}
 
 		// make sure new grid is a tiny little bit smaller to prevent problems
@@ -1540,7 +1503,7 @@ namespace BALL
 		if (grid_ptr == 0)
 		{
 			setStatusbarText("Not enough memory to resize grid!", true);
-			return;
+			return 0;
 		}
 
 		RegularData3D& new_grid = *grid_ptr;
@@ -1568,13 +1531,15 @@ namespace BALL
 		{
 			setStatusbarText("Grid may be inaccurate!", true);
 		}
+
+		return grid_ptr;
 	}
 
-	void DatasetControl::createHistogramGrid()
+	RegularData3D* DatasetControl::createHistogramGrid()
 		throw()
 	{
 		getSelectedItems();
-		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return;
+		if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return 0;
 
 		RegularData3D& grid = *item_to_grid3_[context_item_];
 
@@ -1582,11 +1547,45 @@ namespace BALL
 
 		vector<float>& normalized =  *(vector<float>*)&new_grid->getData();
 
-		calculateHistogramEqualization(grid.getData(), normalized);
+		calculateHistogramEqualization(grid.getData(), normalized, false);
 
 		String text = String("normalized ") + ascii(context_item_->text(0));;
 		insertGrid_(new_grid, (System*)item_to_composite_[context_item_], text);
+		return new_grid;
 	}
 
+
+	RegularData3D* DatasetControl::createHistogramGrid(RegularData3D& grid) throw()
+	{
+		HashMap<QTreeWidgetItem*, RegularData3D*>::Iterator it = item_to_grid3_.begin();
+		for (; +it; ++it)
+		{
+			if (it->second == &grid)
+			{
+				context_item_ = it->first;
+				return createHistogramGrid();
+			}
+		}
+
+		return 0;
+	}
+
+	RegularData3D* DatasetControl::resizeGrid(RegularData3D& grid) throw()
+	{
+		HashMap<QTreeWidgetItem*, RegularData3D*>::Iterator it = item_to_grid3_.begin();
+		for (; +it; ++it)
+		{
+			if (it->second == &grid)
+			{
+				context_item_ = it->first;
+				return resizeGrid();
+			}
+		}
+
+		return 0;
+	}
+
+
+	
 	} // namespace VIEW
 } // namespace BALL

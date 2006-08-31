@@ -155,7 +155,7 @@ namespace BALL
 	}
 			
 	/** Constructor.
-			Creates an instance of FDPB and calls
+			Creates an instance of GeometricFit and calls
 			setup(system1, system2, options)
 	*/
 	GeometricFit::GeometricFit(System &system1, System &system2, Options& new_options)
@@ -175,6 +175,7 @@ namespace BALL
 		throw()
 	{
 		DockingAlgorithm::setup(system1,system2,new_options);
+
 		radius_a_ = 0.0;
     radius_b_ = 0.0;
     current_round_ = 0;

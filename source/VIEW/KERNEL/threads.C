@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.41.2.3.2.4 2006/08/28 11:47:47 leonhardt Exp $
+// $Id: threads.C,v 1.41.2.3.2.5 2006/08/31 14:06:35 leonhardt Exp $
 //
 
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -228,6 +228,11 @@ namespace BALL
 				output_("final RMS gradient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
 								+ String(minimizer_->getNumberOfIterations()) + " iterations\n",
 								true);
+
+				if (converged) output_("converged!");
+				if (!ok) output_("aborted!");
+				if (minimizer_->getNumberOfIterations() == minimizer_->getMaxNumberOfIterations()) output_("max number of iterations reached!");
+
 				finish_();
 
 				if (!ok)

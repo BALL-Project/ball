@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19.2.14 2006/05/03 22:07:48 amoll Exp $
+// $Id: datasetControl.h,v 1.19.2.14.2.1 2006/08/31 14:04:58 leonhardt Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -41,6 +41,7 @@ namespace BALL
 		class SnapshotVisualisationDialog;
 		class ContourSurfaceDialog;
 		class Representation;
+		class GridVisualizationDialog;
 		class ColorRGBA;
 
 		/**	DatasetControl is a widget to manipulate Trajectories and RegularData instances.
@@ -100,6 +101,14 @@ namespace BALL
 
 			RegularData3D* addDSN6Grid(const String& filename);
 
+			///
+			RegularData3D* createHistogramGrid(RegularData3D& grid) throw();
+
+			///
+			RegularData3D* resizeGrid(RegularData3D& grid) throw();
+
+			bool isGridSizePowerOfTwo(const RegularData3D& grid) const;
+
 			public slots:
 				
 			///
@@ -136,16 +145,13 @@ namespace BALL
 			void updateSelection() throw();
 
 			///
-			void createGridSlice() throw();
+			void visualizeGrid() throw();
 
 			///
-			void createGridVolume() throw();
+			RegularData3D* resizeGrid() throw();
 
 			///
-			void resizeGrid() throw();
-
-			///
-			void createHistogramGrid() throw();
+			RegularData3D* createHistogramGrid() throw();
 
 			/// Overloaded from GenericControl, calls cut
 			virtual void deleteCurrentItems() throw() {deleteItems_();}
@@ -212,12 +218,11 @@ namespace BALL
 
 			Size getNextPowerOfTwo_(Size in) const;
 
-			bool isGridPowerOfTwo_(const RegularData3D& grid) const;
-
 			QMenu 									 			context_menu_;
 
 			SnapshotVisualisationDialog* 	dialog_;
 			ContourSurfaceDialog* 				surface_dialog_;
+			GridVisualizationDialog* 			grid_dialog_;
 
 			HashMap<QTreeWidgetItem*	, SnapShotManager*> 					item_to_trajectory_;
 			HashMap<QTreeWidgetItem*	, RegularData1D*>   					item_to_grid1_;
@@ -231,7 +236,7 @@ namespace BALL
 			HashMap<QTreeWidgetItem*  , Composite*>  								item_to_composite_;
 
 			QAction* menu_cs_, *open_trajectory_id_, *open_gradient_id_;
-			QAction* grid_slice_, * grid_volume_, * grid_resize_, *grid_histogram_, *grid_field_lines_;
+			QAction* vis_grid_, *grid_resize_, *grid_histogram_, *grid_field_lines_;
 
 			// Variables to calculate Vector Grids
 			VectorGrid*  vector_grid_;

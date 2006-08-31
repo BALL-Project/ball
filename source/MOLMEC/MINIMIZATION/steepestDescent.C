@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.C,v 1.27 2005/01/25 01:05:10 amoll Exp $
+// $Id: steepestDescent.C,v 1.27.12.1 2006/08/31 14:05:46 leonhardt Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
@@ -179,6 +179,7 @@ namespace BALL
 				// Didn't help, we abort the minimization.
 				if (lambda < 0)
 				{
+					aborted_ = true;
 					break;
 				}
 			}

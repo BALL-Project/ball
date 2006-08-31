@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.C,v 1.38 2005/12/23 17:02:39 amoll Exp $
+// $Id: INIFile.C,v 1.38.6.1 2006/08/31 14:05:21 leonhardt Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -99,7 +99,6 @@ namespace BALL
 		}
 
 		List<Section>::Iterator	section_it(sections_.begin());
-		List<String >::Iterator	   line_it(section_it->lines_.begin());
 
 		// read all lines from the file
 		char buffer[MAX_LINE_LENGTH];
@@ -114,7 +113,6 @@ namespace BALL
 					(line[0] == ';')   || (line[0] == '#'))
 			{
 				section_it->lines_.push_back(buffer);
-				line_it++;
 				continue;
 			}
 
@@ -127,7 +125,6 @@ namespace BALL
 				}
 
 				section_it++;
-				line_it = section_it->lines_.begin();
 				
 				continue;
 			}
@@ -138,9 +135,6 @@ namespace BALL
 			{
 				return false;
 			}
-
-			line_it++;
-
 		}
 		
 		// close the file
@@ -421,8 +415,9 @@ namespace BALL
 			return LineIterator();
 		}
 
-		List<String >::Iterator	line_it(getSection(section_name)->lines_.end());
-		line_it--;
+		SectionIterator sit = getSection(section_name);
+		List<String >::Iterator	line_it(sit->lines_.end());
+		if (sit->lines_.size() > 0) line_it--;
 		return LineIterator(sections_, getSection(section_name), line_it);
 	}
 

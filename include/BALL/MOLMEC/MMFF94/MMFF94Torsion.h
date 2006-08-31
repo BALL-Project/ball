@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.h,v 1.1.6.1 2006/06/09 14:04:04 leonhardt Exp $
+// $Id: MMFF94Torsion.h,v 1.1.6.2 2006/08/31 14:04:35 leonhardt Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94TORSION_H
@@ -50,6 +50,8 @@ namespace BALL
 		*/
 		//@{
 
+		/// flag to enable Torsions
+		#define MMFF94_TORSIONS_ENABLED "enable Torsions"
 		//@}	
 
 		/**	@name	Constructors and Destructors	
@@ -113,7 +115,6 @@ namespace BALL
 
 		vector<Torsion> torsions_;
 		MMFF94TorsionParameters parameters_;
-	 
 	};
 } // namespace BALL 
 

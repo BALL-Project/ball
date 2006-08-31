@@ -1,0 +1,10 @@
+; HyperChem file created by BALL
+;
+forcefield AMBER
+sys 0
+mol 1 "Protein"
+atom 1 C1 S S - -0.33 0 0 0 1 2 s 
+vel 1 0 0 0
+atom 2 C2 Si SI - 0.33 2.146 0 0 1 1 s 
+vel 2 0 0 0
+endmol 1

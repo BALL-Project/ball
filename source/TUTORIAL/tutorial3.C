@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tutorial3.C,v 1.6 2004/05/27 19:50:01 oliver Exp $
+// $Id: tutorial3.C,v 1.6.12.1 2006/08/31 14:06:27 leonhardt Exp $
 //
 
 #include <BALL/KERNEL/system.h>
@@ -29,6 +29,7 @@ int main()
 	S.apply(db.build_bonds);
 
 	ResidueChecker rc(db);
+	rc.disableSelection();
 	S.apply(rc);
 
 	AmberFF amber(S);

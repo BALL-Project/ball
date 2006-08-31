@@ -191,11 +191,19 @@ namespace BALL
 				dialog.applyTo(ff);
 				return &ff;
 			}
-			else
+			else if (charmm_radio_button->isChecked())
 			{
 				CharmmConfigurationDialog& dialog = mol_struct->getCharmmConfigurationDialog();
 				CharmmFF& ff = mol_struct->getCharmmFF();
 				// now the Charmm force field gets its options
+				dialog.applyTo(ff);
+				return &ff;
+			}
+			else
+			{
+				MMFF94ConfigurationDialog& dialog = mol_struct->getMMFF94ConfigurationDialog();
+				MMFF94& ff = mol_struct->getMMFF94();
+				// now the MMFF94 gets its options
 				dialog.applyTo(ff);
 				return &ff;
 			}
@@ -272,9 +280,13 @@ namespace BALL
 			{
 				mol_struct->getAmberConfigurationDialog().exec();
 			}
-			else
+			else if (charmm_radio_button->isChecked())
 			{
 				mol_struct->getCharmmConfigurationDialog().exec();
+			}
+			else
+			{
+				mol_struct->getMMFF94ConfigurationDialog().exec();
 			}
 		}
 

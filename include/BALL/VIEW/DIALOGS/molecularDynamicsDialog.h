@@ -17,6 +17,7 @@ namespace BALL
 	{
 		class AmberConfigurationDialog;
 		class CharmmConfigurationDialog;
+		class MMFF94ConfigurationDialog;
 
 /** Dialog for performing MD simulations
 		\ingroup ViewDialogs
@@ -75,6 +76,8 @@ class BALL_VIEW_EXPORT MolecularDynamicsDialog
 		///
 		void setCharmmDialog(CharmmConfigurationDialog* charmm_dialog);
 	 	
+		///
+		void setMMFF94Dialog(MMFF94ConfigurationDialog* dialog);
 		
 		/// Select the forcefield, nr are the enum values in MolecularStructure
 		void selectForceField(Position nr);
@@ -97,6 +100,7 @@ class BALL_VIEW_EXPORT MolecularDynamicsDialog
 		private:
 		AmberConfigurationDialog* amber_dialog_;
 		CharmmConfigurationDialog* charmm_dialog_;
+		MMFF94ConfigurationDialog* mmff_dialog_;
 };
 
 } } // namespaces

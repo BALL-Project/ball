@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.6.1 2006/06/09 14:04:16 leonhardt Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.6.2 2006/08/31 14:05:50 leonhardt Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -16,6 +16,14 @@ using namespace std;
 
 namespace BALL 
 {
+
+	// Conversion from kJ / (mol A) into Newton
+	double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
+
+
+	// ES_CONSTANT
+	double ES_CONSTANT = 332.0716 * Constants::JOULE_PER_CAL;
+
 
 	MMFF94NonBonded::NonBondedPairData::NonBondedPairData()
 		: eij(0),
@@ -35,7 +43,9 @@ namespace BALL
 			algorithm_type_(MolmecSupport::BRUTE_FORCE),
 			cut_off_(20),
 			dc_(1),
-			n_(1)
+			n_(1),
+			es_enabled_(true),
+			vdw_enabled_(true)
 	{	
 		setName("MMFF94 NonBonded");
 	}
@@ -46,7 +56,9 @@ namespace BALL
 			algorithm_type_(MolmecSupport::BRUTE_FORCE),
 			cut_off_(20),
 			dc_(1),
-			n_(1)
+			n_(1),
+			es_enabled_(true),
+			vdw_enabled_(true)
 	{
 		setName("MMFF94 NonBonded");
 	}
@@ -56,7 +68,9 @@ namespace BALL
 		:	ForceFieldComponent(component),
 			algorithm_type_(component.algorithm_type_),
 			dc_(component.dc_),
-			n_(component.n_)
+			n_(component.n_),
+			es_enabled_(component.es_enabled_),
+			vdw_enabled_(component.vdw_enabled_)
 	{
 	}
 
@@ -169,7 +183,23 @@ namespace BALL
 
 		// clear vector of non-bonded atom pairs
 		clear();
- 
+
+		es_energy_ = 0;
+		vdw_energy_ = 0;
+
+ 		Options& options = getForceField()->options;
+		vdw_enabled_ = !options.has(MMFF94_VDW_ENABLED) || options.getBool(MMFF94_VDW_ENABLED);
+		es_enabled_  = !options.has(MMFF94_ES_ENABLED)  || options.getBool(MMFF94_ES_ENABLED);
+		bool disabled = !vdw_enabled_ && !es_enabled_;
+
+		if (disabled)
+		{
+			setEnabled(false);
+			return true;
+		}
+
+		setEnabled(true);
+
 		// when using periodic boundary conditions, all
 		// cutoffs must be smaller than the smallest linear extension of
 		// the box - we use the minimum image convention!
@@ -231,10 +261,10 @@ namespace BALL
 
 			const double sec = ((1.12 * data.rij_7) / (pow(d, 7) + 0.12 * data.rij_7))  - 2;
 
-			const double e = first * sec;
+			const double e = first * sec * Constants::JOULE_PER_CAL;
 			vdw_energy_ += e;
 
-			double es = 332.0716 * data.qi * data.qj / (dc_ * pow(d + 0.05, n_));
+			double es = ES_CONSTANT * data.qi * data.qj / (dc_ * pow(d + 0.05, n_));
 
 			if (data.is_1_4) 
 			{
@@ -260,7 +290,8 @@ namespace BALL
 #endif
 		}
 
-		energy_ += vdw_energy_ + es_energy_;
+		if (vdw_enabled_) energy_ += vdw_energy_;
+		if (es_enabled_)  energy_ += es_energy_;
 
 		return energy_; 
   } 
@@ -269,20 +300,95 @@ namespace BALL
 	void MMFF94NonBonded::updateForces()
 		throw()
 	{
-		for (Size i = 0 ; i < non_bonded_data_.size(); i++)
+		// constants for VDW forces formular:
+		double a7 = pow(1.07,7.0);
+		double b = 0.07;
+		double c = 1.12;
+		double c2 = c * 2.;
+		double d = 0.12;
+		double d_2_2 = d * d * 2.;
+		double k_vdw = -7.0 * a7;
+		double cb = c * b;
+
+		for (Position p = 0; p < atom_pair_vector_.size(); p++)
 		{
-			Atom& a1 = *atom_pair_vector_[i].first;
-			Atom& a2 = *atom_pair_vector_[i].second;
-			const NonBondedPairData& nbd = non_bonded_data_[i];
+			Atom& a1 = *atom_pair_vector_[p].first;
+			Atom& a2 = *atom_pair_vector_[p].second;
 			Vector3 direction(a1.getPosition() - a2.getPosition());
-			direction.normalize();
+			double r = direction.getSquareLength();
+			if (Maths::isZero(r)) 
+			{
+				getForceField()->error() << "Error: Two atoms at exactly the same position! " 
+																 << a1.getFullName() << " " << a2.getFullName() << std::endl;
+				continue;
+			}
 
-			float factor = 0;
-			Vector3 force = direction * factor;
+			r = sqrt(r);
 
-			a1.getForce() -= force;
-			a2.getForce() += force;
-		}                                                                                                          
+			const NonBondedPairData& nbd = non_bonded_data_[p];
+			direction /= r;
+			Vector3 force;
+
+			if (vdw_enabled_)
+			{
+				// VDW: e * -7 * a^7 * R^7 * (2 * c * R^7 * r^7 +
+				//                            c * R^14 * d - 
+				//                            2 * r^14 - 
+				//                            4 * r^7 * d * R^7 - 
+				//                            2 * d^2 * R^14 +
+				//                            R^8 * c * r^6 * b)
+				//                    /
+				//                       ((r + b * R)^8 * (r^7 + d * R^7)^2)
+				//
+				//    -7 * a^7 = k_vdw
+				
+				const double R_7 = pow(nbd.rij, 7.);
+				const double R_8 = R_7 * nbd.rij;
+				const double R_14 = R_7 * R_7;
+
+				const double r_6 = pow(r, 6.);
+				const double r_7 = r_6 * r;
+				const double r_14 = r_7 * r_7;
+
+				double vdw_factor = nbd.eij * k_vdw * R_7 * (c2 * R_7 * r_7 +
+																										 c * R_14 * d -
+																										 2. * r_14 -
+																										 4. * r_7 * d * R_7 -
+																										 d_2_2 * R_14 +
+																										 R_8 * r_6 * cb)
+																					/
+																							(pow(r + b * nbd.rij, 8.) * pow(r_7 + d * R_7, 2.)); 
+																							
+				force = direction * vdw_factor * FORCES_FACTOR * Constants::JOULE_PER_CAL;
+
+				a1.getForce() += force;
+				a2.getForce() -= force;
+			}
+
+			if (es_enabled_)
+			{
+				// ES: -  332.0716 * qi *qj * n / (D * (R + delta )^n *(R + delta))
+				double es_factor = FORCES_FACTOR * (ES_CONSTANT * nbd.qi * nbd.qj * n_ / (dc_ * pow(r + 0.05, n_ + 1)));
+				force = direction * es_factor;
+				// scale 1-4 interactions:
+				if (nbd.is_1_4) force *= 0.75;
+				a1.getForce() += force;
+				a2.getForce() -= force;
+			}
+		}   
 	} 
+
+	double MMFF94NonBonded::getVDWEnergy() const 
+	{ 
+		if (!vdw_enabled_) return 0;
+		return vdw_energy_;
+	}
+
+	double MMFF94NonBonded::getESEnergy() const 
+	{ 
+		if (!es_enabled_) return 0;
+		return es_energy_;
+	}
+
 	
 } // namespace BALL

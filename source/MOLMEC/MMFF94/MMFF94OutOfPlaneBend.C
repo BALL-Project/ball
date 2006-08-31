@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.6.1 2006/06/09 14:04:16 leonhardt Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.6.2 2006/08/31 14:05:50 leonhardt Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -20,9 +20,20 @@ using namespace std;
 
 namespace BALL 
 {
+	// Conversion from kJ / (mol A) into Newton
+	const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 
 	/// 0.043844 / 2
 	#define K0 0.021922
+
+	const double RADIAN_TO_DEGREE = 180.0 / Constants::PI;
+
+	void MMFF94OutOfPlaneBend::AddDV3_(Vector3& f3, const TVector3<double> d3)
+	{
+		f3.x += d3.x;
+		f3.y += d3.y;
+		f3.z += d3.z;
+	}
 
 	// default constructor
 	MMFF94OutOfPlaneBend::MMFF94OutOfPlaneBend()
@@ -66,6 +77,16 @@ namespace BALL
 		}
 
 		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
+
+ 		Options& options = getForceField()->options;
+		if (options.has(MMFF94_OUTOFPLANE_ENABLED) && !options.getBool(MMFF94_OUTOFPLANE_ENABLED))
+		{
+			setEnabled(false);
+			return true;
+		}
+
+		setEnabled(true);
+
 
 		if (!parameters_.isInitialized())
 		{
@@ -115,30 +136,27 @@ namespace BALL
 
 				if (bond.getType() == Bond::TYPE__HYDROGEN) continue; // Skip H-Bonds;
 
-				Atom* partner = bond.getPartner(central_atom);
-
-				partners.push_back(partner);
+				partners.push_back(bond.getPartner(central_atom));
 			}
 
 			if (use_selection && (!central_atom.isSelected() ||
+														!partners[0]->isSelected() ||
 														!partners[1]->isSelected() ||
-														!partners[2]->isSelected() ||
-														!partners[3]->isSelected()))
+														!partners[2]->isSelected()))
 			{
 				continue;
 			}
 
 
-			this_bend.i= &Atom::getAttributes()[partners[0]->getIndex()];
-			this_bend.j= &Atom::getAttributes()[central_atom.getIndex()];
-			this_bend.k= &Atom::getAttributes()[partners[1]->getIndex()];
-			this_bend.l= &Atom::getAttributes()[partners[2]->getIndex()];
+			this_bend.i = &Atom::getAttributes()[partners[0]->getIndex()];
+			this_bend.j = &Atom::getAttributes()[central_atom.getIndex()];
+			this_bend.k = &Atom::getAttributes()[partners[1]->getIndex()];
+			this_bend.l = &Atom::getAttributes()[partners[2]->getIndex()];
 
 			const Position type_j = central_atom.getType();
-
-			Index tp0 = partners[0]->getType();
-			Index tp1 = partners[1]->getType();
-			Index tp2 = partners[2]->getType();
+			const Index tp0 = partners[0]->getType();
+			const Index tp1 = partners[1]->getType();
+			const Index tp2 = partners[2]->getType();
 
 			// check for parameters in a step down procedure
 			bool found = parameters_.getParameters(tp0, type_j, tp1, tp2, this_bend.k_oop);
@@ -173,11 +191,10 @@ namespace BALL
 		
 		vector<OutOfPlaneBend>::iterator bend_it = bends_.begin();
 
-		double radian_to_degree = 180.0 / Constants::PI;
-
 		// the three vectors from the three partners to the center atom
 		TVector3<double> vs[3];
-		// the normals of the 3 plane 
+
+		// the normals of the 3 planes
 		TVector3<double> ns[3];
 
 		for (; bend_it != bends_.end(); ++bend_it) 
@@ -206,9 +223,11 @@ namespace BALL
 				if (Maths::isZero(length_product)) continue;
 				double intersection_angle = asin(Maths::abs(ns[p] * vs[p]) / sqrt(length_product));
 				// we need the angle in degrees!
-				intersection_angle *= radian_to_degree;
+				intersection_angle *= RADIAN_TO_DEGREE;
 				e += k * intersection_angle * intersection_angle;
 			}
+
+			e *= Constants::JOULE_PER_CAL;
 
 			energy_ += e;
 #ifdef BALL_MMFF94_TEST
@@ -223,90 +242,172 @@ namespace BALL
 	// calculates and adds its forces to the current forces of the force field
 	void MMFF94OutOfPlaneBend::updateForces()
 	{
-		double cosphi;
+		const double FC = K0 * 2. * RADIAN_TO_DEGREE * RADIAN_TO_DEGREE;
+		bool us = getForceField()->getUseSelection();
 
-		Vector3	ab;	// vector from atom2 to atom1
-		Vector3 cb;	// vector from atom2 to atom3
-		Vector3 dc;	// vector from atom3 to atom4
+		//////////////////////////////////////////////////////////////////
+		// ids of the non-central atoms for the three runs per out of plane bend:
+		vector<vector<Position> > atom_ids;
+		// Atom i:
+		vector<Position> temp;
+		temp.push_back(0);
+		temp.push_back(0);
+		temp.push_back(1);
+		atom_ids.push_back(temp);
 
-		bool use_selection = getForceField()->getUseSelection();
+		// Atom k:
+		temp.clear();
+		temp.push_back(1);
+		temp.push_back(2);
+		temp.push_back(2);
+		atom_ids.push_back(temp);
+
+		// Atom l:
+		temp.clear();
+		temp.push_back(2);
+		temp.push_back(1);
+		temp.push_back(0);
+		atom_ids.push_back(temp);
+
+		////////////////////////////////////////////////////////////////////////
+		// all calculations below have to be performed at double precision
+		// otherwise the results are far off, especially for small wilson angles
+		//
+		// temp variables:
+		double length;
+		TVector3<double> delta;
+
+		// the three atoms bound to the central atom (for the actual plane bend)
+		vector<Atom*> partners(3);
+		// lenght of the vectors from the central atom to outer atoms:
+		vector<double> lengths(3);
+		// normalized bond vectors from central atom to outer atoms:
+		vector<TVector3<double> > nbv(3);
+		
+		// index of the individual atoms in partners and nbv:
+		Position pi, pk, pl;
+
+		// normal vectors of the three planes:
+		TVector3<double> an, bn, cn;
 
 		for (Position t = 0; t < bends_.size(); t++)
 		{
+			// the current bend
 			const OutOfPlaneBend& bend = bends_[t];
-			Atom& a1 = *bend.i->ptr;
-			Atom& a2 = *bend.j->ptr;
-			Atom& a3 = *bend.k->ptr;
-			Atom& a4 = *bend.l->ptr;
+			Atom& ta1 = *bend.i->ptr;
+			Atom& ta2 = *bend.j->ptr;
+			Atom& ta3 = *bend.k->ptr;
+			Atom& ta4 = *bend.l->ptr;
 
-			if (use_selection &&
-					!a1.isSelected() &&
-					!a2.isSelected() &&
-					!a3.isSelected() &&
-					!a4.isSelected())
+			// if using selection and no atom is selected: ignore this bend:
+			if (us && !ta1.isSelected() &&
+								!ta2.isSelected() &&
+								!ta3.isSelected() &&
+								!ta4.isSelected())
 			{
 				continue;
 			}
 
-			ab = a1.getPosition() - a2.getPosition();
-			const double length_ab = ab.getLength();
-			Vector3 ba = a2.getPosition() - a1.getPosition();
-			cb = a3.getPosition() - a2.getPosition();
-			const double length_cb = cb.getLength();
-			dc = a4.getPosition() - a3.getPosition();
-			const double length_dc = dc.getLength();
+			// non central atoms for this bend:
+			partners[0] = &ta1;
+			partners[1] = &ta3;
+			partners[2] = &ta4;
+			Atom& center_atom = ta2;
 
-			if (length_ab != 0 && length_cb != 0 && length_dc != 0) 
+			// abort for this bend if two atoms have the same position:
+			bool error = false;
+
+			// calculate normalized bond vectors from central atom to outer atoms:
+			for (Position p = 0; p < 3; p++)
 			{
-				const Vector3  t = ba % cb;   // cross product of cb and ba
-				const Vector3  u = cb % dc;   // cross product of cb and dc
-
-				const double length_t2 = t.getSquareLength();
-				const double length_u2 = u.getSquareLength();
-
-				const double length_t = sqrt(length_t2);
-				const double length_u = sqrt(length_u2);
-
-				if (length_t != 0 && length_u != 0) 
+				// transformation from single to double precision:
+				delta.x = partners[p]->getPosition().x - center_atom.getPosition().x;
+				delta.y = partners[p]->getPosition().y - center_atom.getPosition().y;
+				delta.z = partners[p]->getPosition().z - center_atom.getPosition().z;
+				length = delta.getLength();
+				if (Maths::isZero(length))
 				{
-					cosphi = (t * u) / (length_t * length_u);
-
-					if (cosphi > 1.0)
-					{
-						cosphi = 1.0;
-					}
-					if (cosphi < -1.0)
-					{
-						cosphi = -1.0;
-					}
-
-					double direction = (t % u) * cb;
-					float factor = K0 * bend.k_oop * acos(cosphi); 
-					if (direction > 0.0)
-					{
-						factor *= -1;
-					}
-
-					const Vector3 ca = a3.getPosition() - a1.getPosition();
-					const Vector3 db = a4.getPosition() - a2.getPosition();
-					const Vector3 dt =   (float)(factor / (length_t2 * cb.getLength())) * (t % cb);
-					const Vector3 du = - (float)(factor / (length_u2 * cb.getLength())) * (u % cb);
-
-					if (!use_selection)
-					{
-						a1.getForce() += dt % cb;
-						a2.getForce() += ca % dt + du % dc;
-						a3.getForce() += dt % ba + db % du;
-						a4.getForce() += du % cb; 
-					} 
-					else 
-					{
-						if (a1.isSelected()) a1.getForce() += dt % cb;
-						if (a2.isSelected()) a2.getForce() += ca % dt + du % dc;
-						if (a3.isSelected()) a3.getForce() += dt % ba + db % du;
-						if (a4.isSelected()) a4.getForce() += du % cb; 
-					}
+					error = true;
+					break;
 				}
+
+				// normalize the bond vector:
+				delta /= length;
+				// store the normalized bond vector:
+				nbv[p] = delta;
+				// store length of this bond:
+				lengths[p] = length;
+			}
+
+			// abort if any bond lenght equals zero
+			if (error) continue;
+
+			// three runs per OOP:
+			for (Position run = 0; run < 3; run++)
+			{
+				// position of the individual atoms in partners[] and nbv[]
+				pi = atom_ids[0][run];
+				pk = atom_ids[1][run];
+				pl = atom_ids[2][run];
+
+				Atom& i = *partners[pi];
+				Atom& k = *partners[pk];
+				Atom& l = *partners[pl];
+
+				// normalized vectors from central atom to outer atoms:
+				const TVector3<double>& ji = nbv[pi];
+				const TVector3<double>& jk = nbv[pk];
+				const TVector3<double>& jl = nbv[pl];
+
+				const double& length_ji = lengths[pi];
+				const double& length_jk = lengths[pk];
+				const double& length_jl = lengths[pl];
+
+				// the normal vectors of the three planes:
+				an = ji % jk;
+				bn = jk % jl;
+				cn = jl % ji;
+
+//   Log.precision(29);
+				// Bond angle ji to jk
+				const double theta = acos(ji * jk);
+//   Log.error() << "#~~#   1 " << theta            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+				const double sin_theta = sin(theta);
+
+				const double sin_dl = an * jl / sin_theta;
+				// the wilson angle:
+				const double dl = asin(sin_dl);
+//   Log.error() << "#~~#   2 wilson " << dl            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+
+				// values that will be feed into the final calculation:
+				const double cos_theta = cos(theta);
+
+				const double cos_dl = cos(dl);
+				const double tan_dl = sin_dl / cos_dl;
+
+				const double cdst = 1. / (cos_dl * sin_theta);
+//   Log.error() << "#~~#   3 " << cdst            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+				const double tdst = tan_dl / (sin_theta * sin_theta);
+//   Log.error() << "#~~#   4 "  << tdst           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+
+				// scaling factor for all forces:
+				// wilson K0 * this_bend_constant * wilson_angle * DEGREE_TO_RADIAN * DEGREE_TO_RADIAN
+				double c1 = dl * FC * bend.k_oop * FORCES_FACTOR;
+//   Log.error() << "#~~#   10 " << c1            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+//   Log.error() << "#~~#   1 l  "  << length_jl           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+//   Log.error() << "#~~#   2 "   << an << " " << jl          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+
+				// resulting force vectors on atoms i, k and l:
+				const TVector3<double> d_l = (an * cdst - jl * tan_dl) *c1 / length_jl * c1;
+				const TVector3<double> d_i = (bn * cdst + (-ji + jk * cos_theta) * tdst) *c1 / length_ji;
+				const TVector3<double> d_k = (cn * cdst + (-jk + ji * cos_theta) * tdst) *c1 / length_jk;
+
+//   Log.error() << "#~~#   3 "  << d_l.z           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+//   Log.error() << "#~~#   5 " << d_l << " " << d_i << " " << d_k            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+ 				if (!us || i.isSelected()) AddDV3_(i.getForce(), d_i);
+ 				if (!us || k.isSelected()) AddDV3_(k.getForce(), d_k);
+ 				if (!us || l.isSelected()) AddDV3_(l.getForce(), d_l);
+ 				if (!us || center_atom.isSelected()) AddDV3_(center_atom.getForce(), d_i + d_k + d_l);
 			}
 		}
 	}

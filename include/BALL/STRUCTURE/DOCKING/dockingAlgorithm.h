@@ -24,7 +24,34 @@ namespace BALL
 	class BALL_EXPORT DockingAlgorithm
 	{
 		public:
+			BALL_CREATE(DockingAlgorithm)
 
+			/**	Symbolic names for option keys.
+				This struct contains a symbolic name
+				for each recognized key in DockingAlgorithm::options. \par
+				For each symbol the required type is given under parameters.
+			*/
+			/*struct BALL_EXPORT Option 
+			{
+				// How many results should be kept in total
+				static const String BEST_NUM;
+
+				// Verbosity of the Algorithm
+				static const String VERBOSITY;
+			};
+
+			 struct BALL_EXPORT Default
+			{
+				// How many results should be kept in total
+				static const int BEST_NUM;
+
+				// Verbosity of the algorithm
+				// Default value is 0
+				// For values > 1, some information is printed on Log
+				// For values > 5, timing information is included
+				static const int VERBOSITY;
+			};*/
+			 
 			DockingAlgorithm()
 				throw();
 			

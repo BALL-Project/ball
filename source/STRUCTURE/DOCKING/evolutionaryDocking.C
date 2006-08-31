@@ -23,11 +23,10 @@ namespace BALL
   const String EvolutionaryDocking::Option::CONV_VALUE = "conv_value";
   const String EvolutionaryDocking::Option::CONV_START = "conv_start";
   const String EvolutionaryDocking::Option::BEST_NUM = "best_num";
-
-
+	const String EvolutionaryDocking::Option::VERBOSITY = "verbosity";
 
   const String EvolutionaryDocking::Default::GRID_FILE = "###DEFAULT###";
-    const double EvolutionaryDocking::Default::TRANSLATION_BOX_BOTTOM_X = 0.0;
+  const double EvolutionaryDocking::Default::TRANSLATION_BOX_BOTTOM_X = 0.0;
   const double EvolutionaryDocking::Default::TRANSLATION_BOX_BOTTOM_Y = 0.0;
   const double EvolutionaryDocking::Default::TRANSLATION_BOX_BOTTOM_Z = 0.0;
   const double EvolutionaryDocking::Default::TRANSLATION_BOX_TOP_X = 0.0;
@@ -44,7 +43,8 @@ namespace BALL
   const double EvolutionaryDocking::Default::CONV_VALUE = 0.1;
   const int EvolutionaryDocking::Default::CONV_START = 20;
   const int EvolutionaryDocking::Default::BEST_NUM  = 10;
-  
+  const int EvolutionaryDocking::Default::VERBOSITY = 0;
+
 
   EvolutionaryDocking::EvolutionaryDocking()
     throw()
@@ -69,7 +69,8 @@ namespace BALL
     options.setDefaultInteger(Option::CONV_ITERATIONS,Default::CONV_ITERATIONS);  
     options.setDefaultReal(Option::CONV_VALUE,Default::CONV_VALUE);  
     options.setDefaultInteger(Option::CONV_START,Default::CONV_START);  
-    options.setDefaultInteger(Option::BEST_NUM,Default::BEST_NUM);  
+    options.setDefaultInteger(Option::BEST_NUM,Default::BEST_NUM);
+		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
 }
   
   EvolutionaryDocking::EvolutionaryDocking(System &system1, System &system2)
@@ -95,7 +96,8 @@ namespace BALL
     options.setDefaultInteger(Option::CONV_ITERATIONS,Default::CONV_ITERATIONS);  
     options.setDefaultReal(Option::CONV_VALUE,Default::CONV_VALUE);  
     options.setDefaultInteger(Option::CONV_START,Default::CONV_START);  
-    options.setDefaultInteger(Option::BEST_NUM,Default::BEST_NUM);  
+    options.setDefaultInteger(Option::BEST_NUM,Default::BEST_NUM);
+		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
   
     setup(system1, system2);
   }

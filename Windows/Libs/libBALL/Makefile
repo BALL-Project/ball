@@ -47,6 +47,9 @@ libBALL.dll:   $(NO_OPTIMIZATION_OBJS)  $(OBJS) $(OBJS2)
 flex_bison: 
 	echo ------------------------
 	echo running flex and bison
+	set BISON_PKGDATADIR=$(BINPATH)
+	set PATH=%PATH%;$(BINPATH)
+	set M4=$(BINPATH)\M4.exe
 	$(FLEX) -PExpressionParser -o"$(SDIR)\KERNEL\expressionParserLexer.C" $(SDIR)\KERNEL\expressionParserLexer.l
 	$(FLEX) -PSmilesParser -o"$(SDIR)\STRUCTURE\smilesParserLexer.C" $(SDIR)\STRUCTURE\smilesParserLexer.l
 	$(FLEX) -PSmartsParser -o"$(SDIR)\STRUCTURE\smartsParserLexer.C" $(SDIR)\STRUCTURE\smartsParserLexer.l

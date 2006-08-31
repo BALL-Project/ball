@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.38 2005/12/23 17:03:34 amoll Exp $
+// $Id: colorProcessor.C,v 1.38.6.1 2006/08/31 14:06:36 leonhardt Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -116,6 +116,19 @@ namespace BALL
 						composites_ == 0)
 				{
 					mesh->colors.push_back(default_color_);
+					return Processor::CONTINUE;
+				}
+
+				// some ColorProcessors (e.g. ResidueNameColorProcessor) dont need the grid if:
+				// one Composite for GeometricObject,
+				// no selection in the Composite and
+				// the Composite is of the class needed by the Processor, e.g. a Residue
+				if (composite != 0 &&
+						!composite->containsSelection() &&
+						canUseMeshShortcut_(*composite))
+				{
+					mesh->colors.resize(1);
+					getColor(*composite, mesh->colors[0]);
 					return Processor::CONTINUE;
 				}
 

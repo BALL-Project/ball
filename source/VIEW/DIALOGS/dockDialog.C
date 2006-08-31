@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.6.2.16 2006/08/28 11:47:33 leonhardt Exp $
+// $Id: dockDialog.C,v 1.5.2.6.2.17 2006/08/31 14:06:30 leonhardt Exp $
 //
 
 #include <QtGui/qpushbutton.h>
@@ -419,45 +419,31 @@ namespace BALL
 			scoring_opt_.clear();
 			// options for all docking algorithms
 			///////////////// TODO common options should be in class DockingAlgorithm ////////////////////////////////////////////
-			//options_[DockingAlgorithm::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
-			try
-			{
-#ifdef BALL_HAS_FFTW
-				algorithm_opt_[GeometricFit::Option::BEST_NUM] = ascii(best_num->text()).toInt();
-				algorithm_opt_[GeometricFit::Option::VERBOSITY] = ascii(verbosity->text()).toInt();
-#endif
-			}
-			catch (Exception::InvalidFormat)
-			{
-				Log.error() << "Conversion from String to int failed: invalid format! " << __FILE__ << " " << __LINE__<< std::endl;
-				return;
-			}
-			// options for chosen algorithm; options are filled by the corresponding dialog
+			//algorithm_opt_[DockingAlgorithm::Option::BEST_NUM] = ascii(best_num->text()).toInt();
+			//algorithm_opt_[DockingAlgorithm::Option::VERBOSITY] = ascii(verbosity->text()).toInt();
+			
 			QString text = algorithms->currentText();
       algorithm_dialogs_[text]->getOptions(algorithm_opt_);
 			if (text == "Geometric Fit")
 			{
 #ifdef BALL_HAS_FFTW
+				try
+				{
+					algorithm_opt_[GeometricFit::Option::BEST_NUM] = ascii(best_num->text()).toInt();
+					algorithm_opt_[GeometricFit::Option::VERBOSITY] = ascii(verbosity->text()).toInt();
+
 					// options for redocking (euler angles)
 					if(is_redock_)
 					{
-						try
-						{	
-							algorithm_opt_[GeometricFit::Option::PHI_MIN] = ascii(phi_min->text()).toFloat();
-							algorithm_opt_[GeometricFit::Option::PHI_MAX] = ascii(phi_max->text()).toFloat();
-							algorithm_opt_[GeometricFit::Option::DEG_PHI] = ascii(delta_phi->text()).toFloat();
-							algorithm_opt_[GeometricFit::Option::PSI_MIN] = ascii(psi_min->text()).toFloat();
-							algorithm_opt_[GeometricFit::Option::PSI_MAX] = ascii(psi_max->text()).toFloat();
-							algorithm_opt_[GeometricFit::Option::DEG_PSI] = ascii(delta_psi->text()).toFloat();
-							algorithm_opt_[GeometricFit::Option::THETA_MIN] = ascii(theta_min->text()).toFloat();
-							algorithm_opt_[GeometricFit::Option::THETA_MAX] = ascii(theta_max->text()).toFloat();
-							algorithm_opt_[GeometricFit::Option::DEG_THETA] = ascii(delta_theta->text()).toFloat();
-						}
-						catch(Exception::InvalidFormat)
-						{
-							Log.error() << "Conversion from String to float failed: invalid format! " << __FILE__ << " " << __LINE__<< std::endl;
-							return;
-						}
+						algorithm_opt_[GeometricFit::Option::PHI_MIN] = ascii(phi_min->text()).toFloat();
+						algorithm_opt_[GeometricFit::Option::PHI_MAX] = ascii(phi_max->text()).toFloat();
+						algorithm_opt_[GeometricFit::Option::DEG_PHI] = ascii(delta_phi->text()).toFloat();
+						algorithm_opt_[GeometricFit::Option::PSI_MIN] = ascii(psi_min->text()).toFloat();
+						algorithm_opt_[GeometricFit::Option::PSI_MAX] = ascii(psi_max->text()).toFloat();
+						algorithm_opt_[GeometricFit::Option::DEG_PSI] = ascii(delta_psi->text()).toFloat();
+						algorithm_opt_[GeometricFit::Option::THETA_MIN] = ascii(theta_min->text()).toFloat();
+						algorithm_opt_[GeometricFit::Option::THETA_MAX] = ascii(theta_max->text()).toFloat();
+						algorithm_opt_[GeometricFit::Option::DEG_THETA] = ascii(delta_theta->text()).toFloat();
 					}
 					else
 					{
@@ -471,12 +457,29 @@ namespace BALL
 						algorithm_opt_[GeometricFit::Option::THETA_MAX] = GeometricFit::Default::THETA_MAX;
 						algorithm_opt_[GeometricFit::Option::DEG_THETA] = (float) algorithm_opt_.getReal(GeometricFit::Option::DEGREE_INTERVAL);
 					}
+				}
+				catch (Exception::InvalidFormat)
+				{
+					Log.error() << "Conversion from String to int failed: invalid format! " << __FILE__ << " " << __LINE__<< std::endl;
+					return;
+				}
 #endif
 			}
 			else if (text == "Evolutionary Docking")
 			{
-					EvolutionDockingDialog* edd = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[text]));
-					ff_ = edd->getForceField();
+				try
+				{
+					algorithm_opt_[EvolutionaryDocking::Option::BEST_NUM] = ascii(best_num->text()).toInt();
+					algorithm_opt_[EvolutionaryDocking::Option::VERBOSITY] = ascii(verbosity->text()).toInt();
+				}
+				catch (Exception::InvalidFormat)
+				{
+					Log.error() << "Conversion from String to int failed: invalid format! " << __FILE__ << " " << __LINE__<< std::endl;
+					return;
+				}
+				
+				EvolutionDockingDialog* edd = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[text]));
+				ff_ = edd->getForceField();
 			}
 			
 			// options for chosen scoring function

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.C,v 1.30.2.7 2006/05/03 22:07:37 amoll Exp $
+// $Id: stageSettings.C,v 1.30.2.7.2.1 2006/08/31 14:06:34 leonhardt Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
@@ -62,6 +62,10 @@ namespace BALL
 			registerObject_(eye_distance_slider);
 			registerObject_(focal_distance_slider);
 			registerObject_(swap_sss_button);
+
+			registerObject_(offscreen_group);
+			registerObject_(PNG_width_box);
+			registerObject_(PNG_height_box);
 
 			setWidgetStackName("Display");
 			setWidgetStack(widget_stack);
@@ -133,6 +137,7 @@ namespace BALL
 
 			Scene::setShowLightSources(show_lights_->isChecked());
 			Scene::setAnimationSmoothness(((float)animation_smoothness->value()) / 10.0);
+			Scene::setOffScreenRendering(offscreen_group->isChecked(), QSize(PNG_width_box->value(), PNG_height_box->value()));
 
 			ColorRGBA color;
 			color = getColor(capping_color);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.58.8.3 2006/05/15 12:24:35 amoll Exp $
+// $Id: standardPredicates.C,v 1.58.8.3.2.1 2006/08/31 14:05:35 leonhardt Exp $
 //
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -97,10 +97,19 @@ namespace BALL
 			}
 			else	
 			{
-				Size first = argument_.before("-").toString().toUnsignedInt();
-				Size last = argument_.after("-").toString().toUnsignedInt();
-				Size idx = res->getID().toUnsignedInt();
-				return (idx >= first && idx <= last);
+				try
+				{
+					Size first = argument_.before("-").toString().toUnsignedInt();
+					Size last = argument_.after("-").toString().toUnsignedInt();
+					Size idx = res->getID().toUnsignedInt();
+					return (idx >= first && idx <= last);
+				}
+				catch(...)
+				{
+					Log.error() << "ResidueIDPredicate::operator () (): "
+						<< "argument could not be parsed: " << argument_ << std::endl;
+					return(false);
+				}
 			}
 		}
 		

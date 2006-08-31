@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.14.2.2 2006/02/01 13:23:42 amoll Exp $
+// $Id: logView.h,v 1.14.2.2.2.1 2006/08/31 14:04:58 leonhardt Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -109,6 +109,10 @@ namespace BALL
 			virtual void finalizeWidget(MainControl& main_control)
 				throw();
 
+			public slots:
+
+			virtual void showGuestContextMenu(const QPoint&);
+
 			protected:
 
 			/** Overridden notify call.
@@ -120,7 +124,6 @@ namespace BALL
 			void logNotify();
 
 			private:
-
 
 			QTextEdit* text_edit_;
 

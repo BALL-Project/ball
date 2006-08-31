@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.h,v 1.1.6.1 2006/06/09 14:04:03 leonhardt Exp $
+// $Id: MMFF94OutOfPlaneBend.h,v 1.1.6.2 2006/08/31 14:04:35 leonhardt Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94OUTOFPLANEBEND_H
@@ -37,6 +37,9 @@ namespace BALL
 			double energy;  
 		};
 
+		/// flag to enable OutOfPlane
+		#define MMFF94_OUTOFPLANE_ENABLED "enable OutOfPlane"
+
 		BALL_CREATE(MMFF94OutOfPlaneBend)
 
 		///	Default constructor.
@@ -63,6 +66,9 @@ namespace BALL
 
 		///
 		const vector<OutOfPlaneBend>& getOutOfPlaneBends() const { return bends_;}
+		
+		// Add a double precision TVector3 to a single precision Vector3
+		inline void AddDV3_(Vector3& f3, const TVector3<double> d3);
 
 		private:
 		vector<OutOfPlaneBend> bends_;

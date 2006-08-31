@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.C,v 1.42 2005/12/23 17:02:32 amoll Exp $
+// $Id: logStream.C,v 1.42.6.1 2006/08/31 14:05:13 leonhardt Exp $
 //
 
 #include <limits>
@@ -119,7 +119,7 @@ namespace BALL
 					line_start = ++line_end;
 					
 					// remove cr/lf from the end of the line				
-					while (outstring[outstring.size() - 1] == 10 || outstring[outstring.size() - 1] == 13)
+					while (outstring.size() && (outstring[outstring.size() - 1] == 10 || outstring[outstring.size() - 1] == 13))
 					{
 						std::string::iterator p = outstring.end();
 						p--;

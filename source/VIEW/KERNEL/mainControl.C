@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.19.2.1 2006/06/09 15:00:31 leonhardt Exp $
+// $Id: mainControl.C,v 1.174.2.19.2.2 2006/08/31 14:06:34 leonhardt Exp $
 //
 // Author:
 //   Heiko Klein
@@ -221,9 +221,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
 			connect(menuBar(), SIGNAL(hovered(QAction*)), this, SLOT(menuItemHighlighted(QAction*)));
 
-//   			QToolTip::setWakeUpDelay(500);
-//   			QToolTip::setGloballyEnabled(true);
-
 			font.setPointSize(14);
 			rep_label_ = new QLabel(statusBar());
 			rep_label_->setFrameShape(QLabel::NoFrame);
@@ -233,16 +230,20 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			rep_label_->setMinimumSize(20,20);
 			rep_label_->setAlignment(Qt::AlignCenter);
 			rep_label_->hide();
+			rep_label_->setToolTip("update of model running");
+			rep_label_->setText("M");
 			statusBar()->addPermanentWidget(rep_label_, false );
 			rep_label_nr_ = 0;
+			rep_label_delta_ = 32;
+			was_not_busy_ = false;
 
-			render_timer_.start(100);
+			render_timer_.start(300);
 
 			simulation_icon_ = new QLabel(statusBar());
 			simulation_icon_->setMaximumSize(14,20);
 			simulation_icon_->setMinimumSize(14,20);
+			simulation_icon_->setToolTip("simulation running");
 			statusBar()->addPermanentWidget(simulation_icon_, false );
-//   			QToolTip::add(simulation_icon_, "simulation status");
 			QPixmap icon(simulation_running_xpm_);
 
 			simulation_icon_->setPixmap(icon);
@@ -1176,19 +1177,16 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			important_text_in_statusbar_ = important;
 
-			QPalette pal(message_label_->palette());
-
 			if (important)
 			{
-				pal.setColor(message_label_->foregroundRole(), QColor(255,0,0));
+				setTextColor(message_label_, ColorRGBA(255,0,0));
 				Log.info() << text << std::endl;
 			}
 			else
 			{
-				pal.setColor(message_label_->foregroundRole(), QColor(0,0,0));
+				setTextColor(message_label_, ColorRGBA(0,0,0));
 			}
 
-			message_label_->setPalette(pal);
 			message_label_->setText(text.c_str());
 			timer_.start(6000);
 		}
@@ -1412,12 +1410,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			if (state)
 			{
-				QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
 				simulation_icon_->show();
 			}
 			else
 			{
-				QApplication::restoreOverrideCursor();
 				simulation_icon_->hide();
 			}
 		}
@@ -1488,8 +1484,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				LogEvent* so = dynamic_cast<LogEvent*>(e);
 				if (so->showOnlyInLogView())
 				{
-					Log.info() << so->getMessage() << std::endl;
+					Log.error() << so->getMessage() << std::endl;
 					return true;
+				}
+				if (!so->isImportant())
+				{
+					Log.error() << so->getMessage() << std::endl;
 				}
  				setStatusbarText(so->getMessage(), so->isImportant());
 				return true;
@@ -1888,38 +1888,38 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 	void MainControl::updateRepLabel_()
 	{
-		setPreferencesEnabled_(!isBusy());
+		bool busy = isBusy();
+		if (was_not_busy_ && !busy) return;
+		setPreferencesEnabled_(!busy);
 
-		if (!primitive_manager_.updateRunning()) 
+		if (!busy)
 		{
-			if (!composites_locked_)
+			QCursor* cursor = QApplication::overrideCursor();
+			if (cursor != 0 &&
+					cursor->shape() == Qt::BusyCursor)
 			{
-				QCursor* cursor = QApplication::overrideCursor();
-				if (cursor != 0 &&
-						cursor->shape() == Qt::BusyCursor)
-				{
-					QApplication::restoreOverrideCursor();
-				}
+				QApplication::restoreOverrideCursor();
 			}
-			rep_label_->setText("");
+			setTextColor(rep_label_, getColor(rep_label_));
+			was_not_busy_ = true;
 			return;
 		}
 
-		rep_label_nr_ ++;
 		rep_label_->show();
-		char c = '-';
-		if 		   (rep_label_nr_ == 2) c = '\\';
-		else  if (rep_label_nr_ == 3) c = '|';
-		else  if (rep_label_nr_ == 4) c = '/';
-		else  if (rep_label_nr_ == 5) 
+		if (rep_label_nr_ + rep_label_delta_ > 255 || (Index)rep_label_nr_ + rep_label_delta_ < 0) 
 		{
-			c = '-';
-			rep_label_nr_ = 1;
+			rep_label_delta_ *= -1;
 		}
 
-		QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
+		rep_label_nr_ += rep_label_delta_;
 
-		rep_label_->setText(QString(c));
+		setTextColor(rep_label_, ColorRGBA(Size(rep_label_nr_ / 3) ,rep_label_nr_ / 3,(Size)rep_label_nr_));
+
+		QCursor* cursor = QApplication::overrideCursor();
+		{
+			if (cursor == 0) QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
+		}
+		was_not_busy_ = false;
 	}
 
 	bool MainControl::isBusy() const
