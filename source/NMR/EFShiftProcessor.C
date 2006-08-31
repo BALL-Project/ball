@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EFShiftProcessor.C,v 1.14.20.3 2006/08/29 09:11:52 anne Exp $
+// $Id: EFShiftProcessor.C,v 1.14.20.4 2006/08/31 09:38:02 anne Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
 #include <BALL/COMMON/limits.h>
@@ -290,8 +290,8 @@ std::cout << "******************* EF-Shift ******************* " << std::endl;
 
 						// add to the field
 						E += distance * charge / (square_distance * distance.getLength());
-std::cout << first_atom->getResidue()->getID().toInt() - 4 << " " <<first_atom->getName() << " " << second_atom->getName() << "  " << (*effector_it)->getResidue()->getID().toInt() - 4 << "  " << (*effector_it)->getName() << "  " << charge<< std::endl;
-std::cout << first_atom->getPosition()<< " " << second_atom->getPosition() << " " << (*effector_it)->getPosition()  << std::endl;
+//std::cout << first_atom->getResidue()->getID().toInt() - 4 << " " <<first_atom->getName() << " " << second_atom->getName() << "  " << (*effector_it)->getResidue()->getID().toInt() - 4 << "  " << (*effector_it)->getName() << "  " << charge<< std::endl;
+//std::cout << first_atom->getPosition()<< " " << second_atom->getPosition() << " " << (*effector_it)->getPosition()  << std::endl;
 						
 					}
 				}
@@ -352,7 +352,6 @@ std::cout << first_atom->getPosition()<< " " << second_atom->getPosition() << " 
 			}
 
 
-			std::cout << "Hallo ich bins..." << std::endl;
 			Atom::BondIterator bond_it = atom_ptr->beginBond();
 
 			for (; +bond_it; ++bond_it)

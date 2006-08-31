@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.C,v 1.17.18.4 2006/08/29 09:11:52 anne Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.17.18.5 2006/08/31 09:38:02 anne Exp $
 //
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
@@ -320,11 +320,9 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 						&& (!HA_influenced_by_all_effectors_)
 						&& (targets_[t]->getResidue() == effectors_[e][0]->getResidue()))
 				{
+		std::cout << "Mist! " << std::endl;
 					continue;
 				}
-
-				if (targets_[t]->getName() == "H")
-					std::cout << "HM: " << targets_[t]->getFullName() << " " << effectors_[e][0]->getResidue()->getID() << std::endl;
 
 				// project the target atom position onto the ring plane
 				Vector3 atom_projection = 
@@ -333,6 +331,9 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 																						:    targets_[t]->getPosition();
 //std::cout << ", projection" << atom_projection << std::endl;
 				
+if (targets_[t]->getResidue()->getName() == "HIS" && targets_[t]->getName() == "HA")
+	std::cout << targets_[t]->getResidue()->getID() << " " << ring_normal << " " << targets_[t]->getPosition() << std::endl;
+
 				if (use_cut_off_)
 				{
 					// compute the ring center for the cut_off computation
@@ -411,13 +412,36 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 				// negative ring current correction a la ShitX
 				if (new_rc_shift < 0.)
 					new_rc_shift *= negative_ringcurrent_factor_;
-					
+	if (targets_[t]->getResidue()->getName() == "HIS" && targets_[t]->getName() == "HA")
+		std::cout << targets_[t]->getResidue()->getID() << " " << ring_normal << " " << targets_[t]->getPosition() << " " << new_rc_shift<< std::endl;
+
+	
 				float old_rc_shift = targets_[t]->getProperty(PROPERTY__RING_CURRENT_SHIFT).getFloat();
+
+				/** TODO: average not over all rings but only over the 1HA 2HA of GLY!
+				// take the average of all contributions to HA
+				if ( targets_[t]->getName().hasSubstring( "HA") )
+				{	
+					if (new_rc_shift == 0.)
+					{
+						new_rc_shift = old_rc_shift; 	
+					}
+					else
+					{
+						if (old_rc_shift != 0.)
+						{
+							new_rc_shift = (old_rc_shift + new_rc_shift)/2.;
+						}
+					}
+				}
+				*/
+				new_rc_shift += old_rc_shift;
+				
 				float shift = targets_[t]->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
 //if (targets_[t]->getName() == "CA")
 //	std::cout << "shift: " << new_rc_shift << " ,NukleusFactor: " << target_nucleus_factor << " ,IntensityFactor: " << intensity_factors_[effector_types_[e]]  << std::endl;
-				targets_[t]->setProperty(ShiftModule::PROPERTY__SHIFT, shift+new_rc_shift);
-			  targets_[t]->setProperty(PROPERTY__RING_CURRENT_SHIFT, old_rc_shift+new_rc_shift);			
+				targets_[t]->setProperty(ShiftModule::PROPERTY__SHIFT, shift + new_rc_shift);
+			  targets_[t]->setProperty(PROPERTY__RING_CURRENT_SHIFT, new_rc_shift);			
 			}
 		}
 
@@ -478,16 +502,17 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 		Atom* atom = dynamic_cast<Atom*>(&composite);
 		if (atom != 0)
 		{
-			if (all_hydrogen_are_targets_  && (atom->getName() == "H"))
+			// TO DO: Logik ueberdenken! 
+			if (all_hydrogen_are_targets_  && atom->getName().hasSubstring("H"))
 			{
-			//		targets_.push_back(atom);
-			}	
+				//	targets_.push_back(atom);
+			}	//else
 			
 			for (Position i = 0; i < target_names_.size(); i++)
 			{
 				if (target_names_[i] == atom->getName())
 				{
-							targets_.push_back(atom);
+						targets_.push_back(atom);
 				}
 			}
 		}
