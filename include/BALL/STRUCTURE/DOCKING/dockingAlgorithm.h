@@ -31,7 +31,7 @@ namespace BALL
 				for each recognized key in DockingAlgorithm::options. \par
 				For each symbol the required type is given under parameters.
 			*/
-			/*struct BALL_EXPORT Option 
+			struct BALL_EXPORT Option 
 			{
 				// How many results should be kept in total
 				static const String BEST_NUM;
@@ -50,7 +50,7 @@ namespace BALL
 				// For values > 1, some information is printed on Log
 				// For values > 5, timing information is included
 				static const int VERBOSITY;
-			};*/
+			};
 			 
 			DockingAlgorithm()
 				throw();

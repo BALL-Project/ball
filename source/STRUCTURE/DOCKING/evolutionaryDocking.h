@@ -55,12 +55,6 @@ namespace BALL
 				static const String CONV_ITERATIONS;
 				static const String CONV_VALUE;
 				static const String CONV_START;
-
-				// How many results should be kept in total
-				static const String BEST_NUM;
-				
-				// Verbosity of the Algorithm
-				static const String VERBOSITY;
 			};
 
       typedef struct Default
@@ -82,14 +76,6 @@ namespace BALL
 				static const int CONV_ITERATIONS;
 				static const double CONV_VALUE;
 				static const int CONV_START;
-				static const int BEST_NUM;
-
-				// Verbosity of the algorithm
-				// Default value is 0
-				// For values > 1, some information is printed on Log
-				// For values > 5, timing information is included
-				static const int VERBOSITY;
-
 			};
 
       EvolutionaryDocking()

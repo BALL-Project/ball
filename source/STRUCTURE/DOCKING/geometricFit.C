@@ -37,8 +37,6 @@ namespace BALL
   const String GeometricFit::Option::SURFACE_TYPE = "surface_type";
 	const String GeometricFit::Option::DEGREE_INTERVAL = "degree_interval";
 	const String GeometricFit::Option::TOP_N = "top_n";
-	const String GeometricFit::Option::BEST_NUM = "best_num";
-	const String GeometricFit::Option::VERBOSITY = "verbosity";
 	const String GeometricFit::Option::PHI_MIN = "phi_min";
 	const String GeometricFit::Option::PHI_MAX = "phi_max";
 	const String GeometricFit::Option::DEG_PHI = "deg_phi";
@@ -58,8 +56,6 @@ namespace BALL
 	const int		  GeometricFit::Default::SURFACE_TYPE  = GeometricFit::CONNOLLY;
 	const double	GeometricFit::Default::DEGREE_INTERVAL  = 20.0;
 	const int 		GeometricFit::Default::TOP_N  = 3;
-	const int 		GeometricFit::Default::BEST_NUM  = 2000;
-	const int     GeometricFit::Default::VERBOSITY = 0;
 	const float 	GeometricFit::Default::PHI_MIN = 0.0;
 	const float 	GeometricFit::Default::PHI_MAX = 360.0;
 	const float 	GeometricFit::Default::DEG_PHI = 20.0;
@@ -86,8 +82,6 @@ namespace BALL
 		options.setDefaultInteger(Option::SURFACE_TYPE, Default::SURFACE_TYPE);
 		options.setDefaultReal(Option::DEGREE_INTERVAL, Default::DEGREE_INTERVAL);
 		options.setDefaultInteger(Option::TOP_N, Default::TOP_N);
-		options.setDefaultInteger(Option::BEST_NUM, Default::BEST_NUM);
-		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
 		options.setDefaultReal(Option::PHI_MIN, Default::PHI_MIN);
 		options.setDefaultReal(Option::PHI_MAX, Default::PHI_MAX);
 		options.setDefaultReal(Option::DEG_PHI, Default::DEG_PHI);
@@ -124,8 +118,6 @@ namespace BALL
 		options.setDefaultInteger(Option::SURFACE_TYPE, Default::SURFACE_TYPE);
 		options.setDefaultReal(Option::DEGREE_INTERVAL, Default::DEGREE_INTERVAL);
 		options.setDefaultInteger(Option::TOP_N, Default::TOP_N);
-		options.setDefaultInteger(Option::BEST_NUM, Default::BEST_NUM);
-		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
     options.setDefaultReal(Option::PHI_MIN, Default::PHI_MIN);
 		options.setDefaultReal(Option::PHI_MAX, Default::PHI_MAX);
 		options.setDefaultReal(Option::DEG_PHI, Default::DEG_PHI);
@@ -355,7 +347,7 @@ namespace BALL
 
 		// TODO: configurable verbosity
 		
-		if (options.getInteger(Option::VERBOSITY) > 1)
+		if (options.getInteger(DockingAlgorithm::Option::VERBOSITY) > 1)
 			Log << "GRID_SIZE = " << options.getInteger(Option::GRID_SIZE) << endl;
 
     return;
@@ -422,7 +414,7 @@ namespace BALL
     throw()
   {
 		int number_of_points = 0;  
-		int verbosity = options.getInteger(Option::VERBOSITY);
+		int verbosity = options.getInteger(DockingAlgorithm::Option::VERBOSITY);
 	
 		if (verbosity > 15)
 			Log << "looking for inside points now ..." << endl;
@@ -507,7 +499,7 @@ namespace BALL
   void GeometricFit::findConnollySurfacePoints_( System& system, ProteinIndex pro_idx )
     throw()
   {
-		int verbosity = options.getInteger(Option::VERBOSITY);
+		int verbosity = options.getInteger(DockingAlgorithm::Option::VERBOSITY);
 
 		int number_of_points = 0;
     FFT3D* FFT_grid = NULL;
@@ -669,7 +661,7 @@ namespace BALL
 
 		}   // for( atom_it = ...
 
-		if (options.getInteger(Option::VERBOSITY) > 1)
+		if (options.getInteger(DockingAlgorithm::Option::VERBOSITY) > 1)
 			Log.info() << "findVanDerWaalSurfacePoints_ : " << number_of_points << std::endl;
 
     return;
@@ -680,7 +672,7 @@ namespace BALL
 		throw()
 	{
 		int number_of_points = 0;
-		int verbosity = options.getInteger(Option::VERBOSITY);
+		int verbosity = options.getInteger(DockingAlgorithm::Option::VERBOSITY);
 
 		if (verbosity > 15)
 			Log << "looking for inside points now (FTDock-algorithm)..." << endl;
@@ -758,7 +750,7 @@ namespace BALL
 	void GeometricFit::findFTDockSurfacePoints_(System& /*system*/, ProteinIndex pro_idx)
 		throw()
 	{
-		int verbosity = options.getInteger(Option::VERBOSITY);
+		int verbosity = options.getInteger(DockingAlgorithm::Option::VERBOSITY);
 
 		int number_of_points = 0;
     FFT3D* FFT_grid = NULL;
@@ -1128,7 +1120,7 @@ namespace BALL
   {
 		DockingAlgorithm::start();
 	
-		int verbosity = options.getInteger(Option::VERBOSITY);
+		int verbosity = options.getInteger(DockingAlgorithm::Option::VERBOSITY);
 
   	Timer overall_timer;
 		Timer detailed_timer;
@@ -1393,8 +1385,8 @@ namespace BALL
 		throw()
 	{
 		// first see how many conformations we should generate
-		if ( (total_number == 0) || (total_number > options.getInteger(Option::BEST_NUM)) )
-			total_number = options.getInteger(Option::BEST_NUM);
+		if ( (total_number == 0) || (total_number > options.getInteger(DockingAlgorithm::Option::BEST_NUM)) )
+			total_number = options.getInteger(DockingAlgorithm::Option::BEST_NUM);
 
 		// clear the translation and orientation vector
 		translations_.clear();
@@ -1416,7 +1408,7 @@ namespace BALL
 		int count = 0;
 		multiset<class Peak_>::iterator it = peak_set_.begin();
 		
-		int verbosity = options.getInteger(Option::VERBOSITY);
+		int verbosity = options.getInteger(DockingAlgorithm::Option::VERBOSITY);
 		for (; (it != peak_set_.end()) && (count < total_number); it++)
 		{
 			Peak_ p = *it;

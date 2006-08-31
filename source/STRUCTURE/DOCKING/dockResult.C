@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.2.2.2 2006/05/15 23:18:45 amoll Exp $
+// $Id: dockResult.C,v 1.2.2.2.2.1 2006/08/31 16:06:06 leonhardt Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -277,13 +277,31 @@ namespace BALL
 					INI_out.insertValue(section, String(j), String(scorings_[i].snapshot_order_[j]));
 				}
 			}
-			// second: store docked system in a temporary PDBFile
+		/*	// second: store system property (important for redocking)
+			INI_out.appendSection("ATOM_CONTAINER_PROPERTY");
+			AtomContainerIterator ait = conformation_set_->getSystem().beginAtomContainer();
+			Position i = 0;
+			for (;+ait;++ait)
+			{
+				Log.error() << ait->getName() << std::endl;
+				if (ait->hasProperty("DOCKING_PARTNER_1"))
+				{
+					INI_out.insertValue("ATOM_CONTAINER_PROPERTY", String(i), "DOCKING_PARTNER_1");
+				}
+				else if (ait->hasProperty("DOCKING_PARTNER_2"))
+				{
+					INI_out.insertValue("ATOM_CONTAINER_PROPERTY", String(i), "DOCKING_PARTNER_2");
+				}
+				i++;
+			}*/
+
+			// third: store docked system in a temporary PDBFile
 			String PDB_temp;
 			File::createTemporaryFilename(PDB_temp);
 			PDBFile PDB_out(PDB_temp, std::ios::out);
 			PDB_out << conformation_set_->getSystem();
 			
-			// third: store trajectories in a temporary DCDFile
+			// fourth: store trajectories in a temporary DCDFile
 			String DCD_temp;
 			File::createTemporaryFilename(DCD_temp);
 			conformation_set_->writeDCDFile(DCD_temp);
@@ -432,6 +450,16 @@ namespace BALL
 				// add new Scoring_ to vector scorings_
 				scorings_.push_back(Scoring_(name, options, scores, snapshot_order));
 			}
+			/*// read system property in temporary vector
+			vector<String> sys_prop;
+			if (!INI_in.hasSection("ATOM_CONTAINER_PROPERTY")) return false;
+			it = INI_in.getSectionFirstLine("ATOM_CONTAINER_PROPERTY"); 
+			it.getSectionNextLine();
+			for (; +it; it.getSectionNextLine())
+			{
+				String line(*it);
+				sys_prop.push_back(line.after("="));
+			}*/
 			
 			// second: read PDB part from result file in a temporary PDBFile
 			String PDB_temp;
@@ -451,6 +479,15 @@ namespace BALL
 			PDB_in.reopen(std::ios::in);
 			System s;
 			PDB_in >> s;
+			// set property of the system
+		/*	AtomContainerIterator ait = s.beginAtomContainer();
+			Position i = 0;
+			for ( ; +ait; ++ait)
+			{
+				Log.error() << ait->getName() << std::endl;
+				ait->setProperty(sys_prop[i]);
+				i++;
+			}*/
 			// create new ConformationSet and set the docked system
 			if (conformation_set_)
 			{

@@ -22,8 +22,6 @@ namespace BALL
   const String EvolutionaryDocking::Option::CONV_ITERATIONS = "conv_iterations";
   const String EvolutionaryDocking::Option::CONV_VALUE = "conv_value";
   const String EvolutionaryDocking::Option::CONV_START = "conv_start";
-  const String EvolutionaryDocking::Option::BEST_NUM = "best_num";
-	const String EvolutionaryDocking::Option::VERBOSITY = "verbosity";
 
   const String EvolutionaryDocking::Default::GRID_FILE = "###DEFAULT###";
   const double EvolutionaryDocking::Default::TRANSLATION_BOX_BOTTOM_X = 0.0;
@@ -42,8 +40,6 @@ namespace BALL
   const int EvolutionaryDocking::Default::CONV_ITERATIONS = 5;
   const double EvolutionaryDocking::Default::CONV_VALUE = 0.1;
   const int EvolutionaryDocking::Default::CONV_START = 20;
-  const int EvolutionaryDocking::Default::BEST_NUM  = 10;
-  const int EvolutionaryDocking::Default::VERBOSITY = 0;
 
 
   EvolutionaryDocking::EvolutionaryDocking()
@@ -69,8 +65,6 @@ namespace BALL
     options.setDefaultInteger(Option::CONV_ITERATIONS,Default::CONV_ITERATIONS);  
     options.setDefaultReal(Option::CONV_VALUE,Default::CONV_VALUE);  
     options.setDefaultInteger(Option::CONV_START,Default::CONV_START);  
-    options.setDefaultInteger(Option::BEST_NUM,Default::BEST_NUM);
-		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
 }
   
   EvolutionaryDocking::EvolutionaryDocking(System &system1, System &system2)
@@ -96,8 +90,6 @@ namespace BALL
     options.setDefaultInteger(Option::CONV_ITERATIONS,Default::CONV_ITERATIONS);  
     options.setDefaultReal(Option::CONV_VALUE,Default::CONV_VALUE);  
     options.setDefaultInteger(Option::CONV_START,Default::CONV_START);  
-    options.setDefaultInteger(Option::BEST_NUM,Default::BEST_NUM);
-		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
   
     setup(system1, system2);
   }
@@ -215,8 +207,8 @@ namespace BALL
   {
 
     // first see how many conformations we should generate
-    if ( (total_number == 0) || (total_number > options.getInteger(Option::BEST_NUM)) )
-      total_number = options.getInteger(Option::BEST_NUM);
+    if ( (total_number == 0) || (total_number > options.getInteger(DockingAlgorithm::Option::BEST_NUM)) )
+      total_number = options.getInteger(DockingAlgorithm::Option::BEST_NUM);
     
     return dm_->getConformationSet(total_number);
   }

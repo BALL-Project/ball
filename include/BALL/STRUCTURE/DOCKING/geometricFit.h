@@ -77,12 +77,6 @@ namespace BALL
 				 */
 				static const String SURFACE_TYPE;	
 
-				// How many results should be kept in total
-				static const String BEST_NUM;
-
-				// Verbosity of the Algorithm
-				static const String VERBOSITY;
-				
 				// Euler angels for redocking
 				static const String PHI_MIN;
 				static const String PHI_MAX;
@@ -133,16 +127,6 @@ namespace BALL
 				// How many peaks should the program keep for each rotation
 				static const int TOP_N;
 
-				// How many overall top best peaks should the program keep 
-				// after doing all rotations.
-				static const int BEST_NUM;
-
-				// Verbosity of the algorithm
-				// Default value is 0
-				// For values > 1, some information is printed on Log
-				// For values > 5, timing information is included
-				static const int VERBOSITY;
-				
 				// Euler angels for redocking
 				static const float PHI_MIN;
 				static const float PHI_MAX;

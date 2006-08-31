@@ -11,11 +11,11 @@ using namespace std;
 namespace BALL
 {
 	// options common for all docking algorithms
-	/*const String DockingAlgorithm::Option::BEST_NUM = "best_num";
+	const String DockingAlgorithm::Option::BEST_NUM = "best_num";
 	const String DockingAlgorithm::Option::VERBOSITY = "verbosity";
 
 	const int DockingAlgorithm::Default::BEST_NUM  = 100;
-	const int DockingAlgorithm::Default::VERBOSITY = 0;*/
+	const int DockingAlgorithm::Default::VERBOSITY = 0;
 
 
 	DockingAlgorithm::DockingAlgorithm()
@@ -24,8 +24,8 @@ namespace BALL
 		system_changed_ = false;
 		is_setup_ = false;
 
-		//options.setDefaultInteger(Option::BEST_NUM, Default::BEST_NUM);
-		//options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
+		options.setDefaultInteger(Option::BEST_NUM, Default::BEST_NUM);
+		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
 	}
 
 	void DockingAlgorithm::setup(System& system1, System& system2, Options& new_options)
