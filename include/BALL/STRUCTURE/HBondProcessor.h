@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondProcessor.h,v 1.7 2005/12/23 17:02:01 amoll Exp $
+// $Id: HBondProcessor.h,v 1.7.10.1 2006/09/01 17:19:35 anne Exp $
 //
 
 #ifndef BALL_STRUCTURE_HBONDPROCESSOR_H
@@ -24,7 +24,7 @@
 namespace BALL
 {
 
-  /** This processor computes all hydrogen bonds occuring between amino acids in
+  /** This processor computes all  __backbone__ hydrogen bonds occuring between amino acids in
 	 *  the composite it is applied to. The computation of the bonds follows the
 	 *  criterion given in "Kabsch W & Sander C (1983). Dictionary of protein secondary 
 	 *  structure: pattern recognition of hydrogen-bonded and geometrical features. 
