@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondShiftProcessor.h,v 1.14.10.1 2006/08/31 17:56:29 anne Exp $
+// $Id: HBondShiftProcessor.h,v 1.14.10.2 2006/09/01 17:19:34 anne Exp $
 //
 
 #ifndef BALL_NMR_HBONDSHIFTPROCESSOR_H
@@ -26,6 +26,8 @@
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
 # include <BALL/FORMAT/parameterSection.h>
 #endif
+
+#include <map>
 
 namespace BALL
 {
@@ -144,14 +146,30 @@ namespace BALL
 		float 											alpha_proton_oxygen_hydrogen_separation_distance_;
 		
 		/*_  A flag indicating whether the HBond-donar and acceptor must be on different residues.
+		 *   The default value is true. 
      */
 		bool 												exclude_selfinteraction_;
+
+		/*_  A flag indicating whether the HBonds should be computed ShiftX-wise. 
+		 * 	 NOTE: This will just compute __temporarily__  hydrogen bonds 
+		 * 	 				found with the ShiftX - algorithm, whose definition of a 
+		 * 	 				hydrogen bond differ substantially from a BALL definition.
+		 * 	 			 The ShiftX definition of hydrogen bonds is: 
+		 * 	 				Donors are: H and HA
+		 * 	 				Acceptors are: O, OD_n, OE_n, OG_n, OH_n or water in the solvent! ...
+		 * 	 
+		 * 	 The default value is false! 
+     */
+		bool 												ShiftXwise_hydrogen_bonds_computation_;
 
 		private:
 		void 			printParameters_();
 		void  		printEffectors_();
 		void 			printTargets_();
 		Atom* 		getDonor_(Atom* a);
+
+		/*_ to store the ShiftX computed hydrogen bond distances */
+		std::map<Atom* , std::map <float, Atom*> > 						distances_;
 };
 } // namespace BALL
 

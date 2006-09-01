@@ -22,12 +22,11 @@
 namespace BALL
 {
 
-  /** This processor computes all hydrogen bonds occuring between amino acids in
-	    the composite it is applied to. The computation of the bonds follows the
-	    criterion given in "Kabsch W & Sander C (1983). Dictionary of protein secondary 
-	    structure: pattern recognition of hydrogen-bonded and geometrical features. 
-	    Biopolymers, 22, 2577-2637".
-			\ingroup StructureMiscellaneous
+  /** This processor computes all  __backbone__ hydrogen bonds occuring between amino acids in
+	 *  the composite it is applied to. The computation of the bonds follows the
+	 *  criterion given in "Kabsch W & Sander C (1983). Dictionary of protein secondary 
+	 *  structure: pattern recognition of hydrogen-bonded and geometrical features. 
+	 *  Biopolymers, 22, 2577-2637".
    */
   class BALL_EXPORT HBondProcessor 
 		:	public UnaryProcessor<Composite>

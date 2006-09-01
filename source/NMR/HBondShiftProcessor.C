@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondShiftProcessor.C,v 1.6.18.1 2006/08/31 17:56:30 anne Exp $
+// $Id: HBondShiftProcessor.C,v 1.6.18.2 2006/09/01 17:19:36 anne Exp $
 //
 
 #include <BALL/NMR/HBondShiftProcessor.h>
 #include <stdio.h>
+#include <math.h>
 
 using namespace std;
 
@@ -28,7 +29,8 @@ namespace BALL
 			amide_proton_subtrahend_(processor.amide_proton_subtrahend_),
 			amide_proton_oxygen_hydrogen_separation_distance_(processor.amide_proton_oxygen_hydrogen_separation_distance_),
 			alpha_proton_oxygen_hydrogen_separation_distance_(processor.alpha_proton_oxygen_hydrogen_separation_distance_),
-			exclude_selfinteraction_(processor.exclude_selfinteraction_)
+			exclude_selfinteraction_(processor.exclude_selfinteraction_),
+			ShiftXwise_hydrogen_bonds_computation_(processor.ShiftXwise_hydrogen_bonds_computation_)
   {
   }
 
@@ -92,13 +94,19 @@ namespace BALL
 																													"alpha_proton_oxygen_hydrogen_separation_distance");
 		}
 	
-		exclude_selfinteraction_ = false;
+		exclude_selfinteraction_ = true;
 		if (parameter_section.options.has("exclude_selfinteraction"))
 		{
 			exclude_selfinteraction_ = parameter_section.options.getBool("exclude_selfinteraction");
 		}
 
-   
+   	ShiftXwise_hydrogen_bonds_computation_ = false;
+		if (parameter_section.options.has("ShiftXwise_hydrogen_bonds_computation"))
+		{
+			ShiftXwise_hydrogen_bonds_computation_ = parameter_section.options.getBool("ShiftXwise_hydrogen_bonds_computation");
+		}
+
+
 		// read the acceptor types
 		acceptor_types_.clear();
 		
@@ -147,58 +155,172 @@ namespace BALL
       return true;
     }
 
-		// find all hydrogen bonds which include all donor -- acceptor pairs
-		// and store them in 
-
-		vector< std::pair< Atom*, Atom*> > bonds;
+		// should we use  hydrogen bonds computed la ShiftX?
+		// elsewise we assume the the hydrogen bonds have been already set 
 		
-		for(Position d = 0; d < donors_.size(); ++d)
+		/* NOTE: This will just compute __temporarily__  hydrogen bonds 
+		 * 	 				found with the ShiftX - algorithm, whose definition of a 
+		 * 	 				hydrogen bond differ substantially from a BALL definition.
+		 * 	 		The ShiftX definition of hydrogen bonds is: 
+		 * 	 				Donors are: H and HA
+		 * 	 				Acceptors are: O, OD_n, OE_n, OG_n, OH_n or water in the solvent!
+		 * 	 				Donors and Acceptors have to be on different residues
+		 * 	 				If the acceptor is a solvent oxygen, the donor must not be a HA
+		 * 	 				The oxygen--hydrogen separation must be less than 3.5 A for H(N) 
+		 * 	 					and 2.77 A for HA.
+		 * 	 				the angel between N_H bond vector and the C=O bond vector must be 
+		 * 	 					90 degrees or more.
+		 * 			Having applied these rules to each donor--acceptor pair, ShiftX then 
+		 * 			sorts the list of possible bonds by the O_H separation distance, shortest to 
+		 * 			longest. The list is the processed so that only the single strongest hydrogen 
+		 * 			bond is identified for each donor--acceptor pair. Up to that point
+		 * 			any bond involving the same donor or acceptor is preculded! 
+		 */
+		if (ShiftXwise_hydrogen_bonds_computation_)
 		{
-			for(Position a = 0; a < acceptors_.size(); ++a)
+			// the potential donors and acceptors are already stored 
+			// in donors_ and acceptors_
+			
+			// we need a datastructure to collect the hydrogen bonds
+			
+			for(Position d = 0; d < donors_.size(); ++d)
 			{
-	//			if (donors_[d]->getResidue()->getName() == "ASN"  )
-//std::cout << "N "<< donors_[d]->getResidue()->getID() << " -- "<< acceptors_[a]->getResidue()->getID()<< ": " << (donors_[d]->getPosition() - acceptors_[a]->getPosition()).getLength() << std::endl;
+				for(Position a = 0; a < acceptors_.size(); ++a)
+				{	
+					// does the bond fullfill all SHiftX criteria?
 
-				Atom* donor = getDonor_(donors_[d]);
-				if (donor == NULL)
-					continue;
-				
-				BALL::Atom::BondIterator bi = donor->beginBond();
-				for (; +bi; ++bi)
-				{
-					if (    (bi->getType() == Bond::TYPE__HYDROGEN) 
-							 && (   ( (bi->getFirstAtom() == donor) && (bi->getSecondAtom() == acceptors_[a]) )
-						       || ( (bi->getSecondAtom() == donor) && (bi->getFirstAtom() == acceptors_[a])  ) )) 
+					// nearest neighbour effect
+					if (   exclude_selfinteraction_ 
+								&& (donors_[d]->getResidue() == acceptors_[a]->getResidue()))
 					{
-
-std::cout << " passiert das überhaupt irgendwann?" << __LINE__ << "" << std::endl;
-						// do we have to exclude self interactions?
-						if (   exclude_selfinteraction_ 
-								&& (donor->getResidue() == acceptors_[a]->getResidue()))
-						{
-							continue;	
-						}
-if (donors_[d]->getResidue()->getName() == "ASN" )
-std::cout << "N -- "<< acceptors_[a]->getResidue()->getID()<< ": " << (donors_[d]->getPosition() - acceptors_[a]->getPosition()).getLength() << std::endl;
-						// TO THINK: How to make sure that we got no bifurcated hydrogen bonds?
-						pair <Atom*, Atom*> tuple(donors_[d],acceptors_[a]); 
-						bonds.push_back(tuple);
+						continue;	
 					}
+				
+					//  oxygen--hydrogen separation
+					float distance =  (donors_[d]->getPosition() - acceptors_[a]->getPosition()).getLength();
+					if (   (donors_[d]->getName().hasSubstring("HA") && (distance > alpha_proton_oxygen_hydrogen_separation_distance_ ))
+							|| (donors_[d]->getName().hasSubstring("H")  && (distance > amide_proton_oxygen_hydrogen_separation_distance_ )))
+						continue;
+					
+					// TODO: acceptor is a solvent oxygen, the donor must not be a HA
+					
+					// the angle criterion
+					// find the backbone C, O, N, H
+					Atom* C = NULL;
+					Atom* O = NULL;
+					Atom* N = NULL;
+					Atom* H = NULL;
+					
+					for (AtomIterator ai = acceptors_[a]->getResidue()->beginAtom(); +ai; ++ai)
+					{
+						if (ai->getName() == "C") 
+						{
+							C = &(*ai);
+						}
+						else if (ai->getName() == "O") 
+						{
+							O = &(*ai);
+						}
+						else if (ai->getName() == "N") 
+						{
+							N = &(*ai);
+						}
+						else if (ai->getName() == "H") 
+						{
+							H = &(*ai);
+						}
+					}	
+				
+					if (!C || !O || !N || !H) continue;
+					
+					// compute the vectors CO and NH
+					BALL::Vector3 CO = O->getPosition() - C->getPosition();
+					BALL::Vector3 NH = H->getPosition() - H->getPosition();
+					
+					if (acos((CO*NH)/(CO.getLength() * NH.getLength())) < (Constants::PI/2.) )
+						continue;
+					
+					// put the HBond into the hydrogen bond distance list
+					distances_[donors_[d]][distance]= acceptors_[a];  
 				}
 			}
-		}	// end of for loop
-
-
-		std::cout << " anzahl HBONds " << bonds.size() << "" << std::endl;
-	
-		// compute all hydrogen bond effect shifts 
-		// by construction is the first atom in pairs the donor, the second the acceptor! 
-		for (Position b = 0; b < bonds.size(); ++b)
-		{
-			float new_hb_shift = 0.;
-			double distance = ((bonds[b].first->getPosition() - bonds[b].second->getPosition()).getLength());
 			
-			// when donor is amide proton, 
+		}
+		else  // we assume that the molecule has already got hydrogen bonds 
+		{
+			// find all hydrogen bonds which include all 
+			// donor -- acceptor pairs and store them in distances_
+
+			for(Position d = 0; d < donors_.size(); ++d)
+			{
+				for(Position a = 0; a < acceptors_.size(); ++a)
+				{
+//if (donors_[d]->getName().hasSubstring("HA")  && (donors_[d]->getPosition() - acceptors_[a]->getPosition()).getLength() < 10 )
+	//std::cout << donors_[d]->getResidue()->getID() << donors_[d]->getFullName() << " -- "<< acceptors_[a]->getResidue()->getID()<< acceptors_[a]->getName()<< " : " << (donors_[d]->getPosition() - acceptors_[a]->getPosition()).getLength() << std::endl;
+					
+					// NOTE: BALL defines hydrogen bonds in a different way as ShiftX does
+					// e.g. in BALL  N is the donor and O the acceptor
+					// whereas in ShiftX the H is the donor, O is the acceptor
+					Atom* donor = getDonor_(donors_[d]);
+					if (donor == NULL)
+						continue;
+
+					// do we have to exclude self interactions?
+					if (   exclude_selfinteraction_ 
+							&& (donor->getResidue() == acceptors_[a]->getResidue()))
+					{
+						continue;	
+					}
+
+					BALL::Atom::BondIterator bi = donor->beginBond();
+					for (; +bi; ++bi)
+					{
+
+//if (donors_[d]->getName().hasSubstring("HA") )
+	//std::cout << donors_[d]->getResidue()->getID() << donors_[d]->getFullName() << " -- "<< acceptors_[a]->getResidue()->getID()<< acceptors_[a]->getName()<< " : " <<  Bond::TYPE__HYDROGEN << "/" << (bi->getType()) << " " << (bi->getFirstAtom() == donor)  << " - " << (bi->getSecondAtom() == acceptors_[a]) << std::endl;
+
+						// compute the distance	
+						float distance =  (donors_[d]->getPosition() - acceptors_[a]->getPosition()).getLength();
+
+						if (    (bi->getType() == Bond::TYPE__HYDROGEN) 
+								&& (   ( (bi->getFirstAtom() == donor) && (bi->getSecondAtom() == acceptors_[a]) )
+									|| ( (bi->getSecondAtom() == donor) && (bi->getFirstAtom() == acceptors_[a])  ) )) 
+						{
+
+std::cout 		<< "(" << acceptors_[a]->getResidue()->getID() 	<< " " << acceptors_[a]-> getFullName() 
+						<< ") - (" << donor->getResidue()->getID()					<< " " << donors_[d]->getFullName()<< ")"
+						<< " : " << (donors_[d]->getPosition() - acceptors_[a]->getPosition()).getLength() << std::endl;
+							
+							// put the HBond into the hydrogen bond distance list
+							distances_[donors_[d]][distance]= acceptors_[a];
+						}
+					}// end of for all bonds
+				}
+			}// end of for loop
+		}	// end of else (already set hydrogen bonds)
+
+
+		// now  compute all hydrogen bond effect shifts 
+		// by chosing the data structure map <Atom *, map <Atom*, float> >
+		// we ensure automatically that 
+		// 		each donor/acceptor is just considered once and
+		// 		by accessing the map by distances_[i].begin->first / (--(distances_[i].end()))->first 
+		// 		we get the shortest/longest hydrogen bond distance for the donor i;
+		// 		As an application of the perfect matching problem, 
+		// 		this approach is optimal, since it is optimal for the perfect matching problem
+		// 		TO THINK: but is it the solution ShiftX got?? 
+		std::map<Atom* , std::map <float, Atom*> >::iterator it_d = distances_.begin();
+		for (; it_d != distances_.end(); it_d++)
+		{
+			Atom* donor    = it_d->first;
+		 	Atom* acceptor = distances_[donor].begin()->second;
+//	Atom* acceptor2 = (--(distances_[donor].end()))->second;
+			double distance = distances_[donor].begin()->first;
+//float acceptor2 = (--(distances_[donor].end()))->first;
+//std::cout << "first: "<< acceptor1 << "   last: " <<acceptor2  << std::endl;			
+			double new_hb_shift = 0.;
+				
+ 			// when donor is amide proton, 
 			// we compute the shift as done in ShiftX
 			// NOTE: the variables' values differ from the values given in the ShiftX paper!
 			//
@@ -209,8 +331,8 @@ std::cout << "N -- "<< acceptors_[a]->getResidue()->getID()<< ": " << (donors_[d
 			// where r denotes the distance between donor and acceptor of the 
 			// hydrogen bond under consideration
 			//
-		
-			if (   amide_protons_are_targets_ && (bonds[b].first->getName() == "H") 
+	
+			if (   amide_protons_are_targets_ && (donor->getName() == "H") 
 					&& (distance < amide_proton_oxygen_hydrogen_separation_distance_) ) 
 			{
 				new_hb_shift = (amide_proton_factor_ /(pow(distance, 3.)) ) - amide_proton_subtrahend_ ;
@@ -228,28 +350,27 @@ std::cout << "N -- "<< acceptors_[a]->getResidue()->getID()<< ": " << (donors_[d
 			// hydrogen bond under consideration
 			// 
 			// 
-			else if ((bonds[b].first->getName().hasSubstring("HA")) && (distance < alpha_proton_oxygen_hydrogen_separation_distance_ ))
+			else if ((donor->getName().hasSubstring("HA")) && (distance < alpha_proton_oxygen_hydrogen_separation_distance_ ))
 			{
 				// according to shiftX one has to correct the distance
 				if (distance >  2.60756 ) distance = 2.60756;
 				if (distance <  2.26808 ) distance = 2.26808;
-				
+			
  				new_hb_shift = 0.147521/distance - (1.65458E-05)/pow(distance, 1.5) - 0.000134668/(distance*distance) + 
-			  0.0598561/pow(distance, 2.5) + 15.6855/(distance*distance*distance) - 0.673905;
+		 	 0.0598561/pow(distance, 2.5) + 15.6855/(distance*distance*distance) - 0.673905;
 			}
-
+		
 			// store the shift in the hydrogen if necessary
 			if (new_hb_shift !=0)
 			{
-				std::cout << " hatte doch noch einen Wert " <<  bonds[b].first->getName() << " : " << new_hb_shift <<  std::endl;
-				float old_shift = bonds[b].first->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat(); 
-				float old_hb_shift = bonds[b].first->getProperty(HBondShiftProcessor::PROPERTY__HBOND_SHIFT).getFloat(); 
+//std::cout << " hatte doch noch einen Wert " <<  bonds[b].first->getName() << " : " << new_hb_shift <<  std::endl;
+				float old_shift = donor->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat(); 
+				float old_hb_shift = donor->getProperty(HBondShiftProcessor::PROPERTY__HBOND_SHIFT).getFloat(); 
 				
-				bonds[b].first->setProperty(ShiftModule::PROPERTY__SHIFT, (old_shift + new_hb_shift));
-				bonds[b].first->setProperty(HBondShiftProcessor::PROPERTY__HBOND_SHIFT, (old_hb_shift + new_hb_shift));
-			}
+				donor->setProperty(ShiftModule::PROPERTY__SHIFT, (old_shift + new_hb_shift));
+				donor->setProperty(HBondShiftProcessor::PROPERTY__HBOND_SHIFT, (old_hb_shift + new_hb_shift));
+			}	
 		}
-		
     return true;
   }
   
