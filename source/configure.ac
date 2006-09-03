@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.36 2006/04/29 08:08:17 oliver Exp $
+dnl $Id: configure.ac,v 1.37 2006/09/03 09:04:00 oliver Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -548,9 +548,9 @@ BALL_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
 
 LIBS="${LIBS} ${FFTW_LIBS} ${GSL_LIBS} -lm"
 VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
-BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -rpath${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
+BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
 if test "${USE_VIEW}" = true ; then
-	BALL_LIBS="-L${BALL_PATH}/lib/${BINFMT} -rpath${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
+	BALL_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
 fi
 
 LDFLAGS="$LDFLAGS"
