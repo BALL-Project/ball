@@ -307,8 +307,20 @@ namespace BALL
 				std::map <String, CubicSpline1D_ > 					s1d_;
 				// access to the table first key x, second key y: 
 				std::map <String, std::map<String, float> > table_;
+				// this flag stores whether the spline we created is valid
 				bool invalid_;
-					
+
+				/* These vectors store information about how often a certain key/value pair occurred during sampling.
+				 * The values are relevant for the averaging process.
+				 */
+				vector<vector<int> >                        tcount_values_2d_;
+				vector<int>                                 tcount_values_1d_;
+
+				/// the average over the complete hypersurface; tcount-corrected
+				float average_;
+
+				vector<float> row_averages_;
+				vector<float> col_averages_;
 		};
 
 
@@ -355,8 +367,7 @@ namespace BALL
 			private:
 					void 			printParameters_() throw();
 					void 			printTargets_() throw();
-				
-
+					void			postprocessing_() throw();
 
 	};//End of class
 } // end of namespace

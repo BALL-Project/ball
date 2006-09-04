@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.C,v 1.17.18.6 2006/08/31 17:56:30 anne Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.17.18.7 2006/09/06 12:23:23 anne Exp $
 //
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
@@ -176,8 +176,9 @@ std::cout << " ******************* HM-Shift *******************" << std::endl;
 		valid_ = true;
 		
 // print the parameter set
-		printParameters_();
-/*std::cout << "\teffector_names" << std::endl;
+//		printParameters_();
+
+		/*std::cout << "\teffector_names" << std::endl;
 vector< BALL::String >::const_iterator effector_names_it = effector_names_.begin();
 for(;effector_names_it != effector_names_.end(); ++effector_names_it)
 {
@@ -249,8 +250,8 @@ std::cout << "-------------- HM-start() --------------- "<< std::endl;
 		
 	{
 std::cout << "-------------- HM-finish() --------------- "<< std::endl;
-		printEffectors_();
-		printTargets_();
+		//printEffectors_();
+		//printTargets_();
 
 		if (!isValid())
 		{
@@ -444,7 +445,9 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 			  targets_[t]->setProperty(PROPERTY__RING_CURRENT_SHIFT, new_rc_shift);			
 			}
 		}
-
+	
+		// we have to perform some postcorrection to be conform with ShiftX
+		postprocessing_();
 		return true;
 	}
 		
@@ -598,5 +601,50 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 		}
 	}
 
+	void  HaighMallionShiftProcessor::postprocessing_()
+	{
+		// get the System
+		System* system = NULL;
+		
+		for (Position i = 0; !system && i<targets_.size(); i++)
+		{
+			if  (RTTI::isKindOf<System>(	targets_[i]->getRoot()))
+			{	
+				std::cout << " das war also tatsaechlich ein system!!!!!" << std::endl;
+				system = dynamic_cast<System*>(&(targets_[i]->getRoot()));
+			}
+		}
 
+		if (system) 
+		{
+			// add for all CA 0.2 times the values of HA
+			for (BALL::ResidueIterator r_it = system->beginResidue(); r_it != system->endResidue(); ++r_it)
+			{
+				Atom* CA = 0;
+				Atom* HA = 0;
+
+				for (BALL::AtomIterator at_it = r_it->beginAtom(); +at_it; ++at_it)
+				{
+					if (at_it->getName() == "CA")
+						CA = &(*at_it);
+					if (at_it->getName() == "HA")
+						HA = &(*at_it);
+				}
+
+				if (CA && HA)
+				{	
+					float total = CA->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
+					float ca_shift = CA->getProperty(BALL::HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat();
+					float ha_shift	 = HA->getProperty(BALL::HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat();
+
+					CA->setProperty(BALL::HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT, ca_shift + 0.2*ha_shift);
+					CA->setProperty(ShiftModule::PROPERTY__SHIFT, total+ 0.2*ha_shift );
+				}
+			}
+		}
+		else
+		{
+			std::cerr << "found no system -> could not perform a postprocessing for HaighMallionShiftProcessor" << std::endl;
+		}
+	}
 } // namespace BALL

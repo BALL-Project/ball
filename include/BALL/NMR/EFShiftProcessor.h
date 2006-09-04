@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EFShiftProcessor.h,v 1.23.10.3 2006/08/29 09:11:51 anne Exp $
+// $Id: EFShiftProcessor.h,v 1.23.10.4 2006/09/06 12:23:19 anne Exp $
 //
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
@@ -220,6 +220,8 @@ namespace BALL
 		void 			printParameters_() throw();
 		void  		printEffectors_() throw();
 		void 			printTargets_() throw();
+		void 			postprocessing_() throw();
+
  	};
   
 } // namespace BALL

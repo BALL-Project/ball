@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondShiftProcessor.h,v 1.14.10.2 2006/09/01 17:19:34 anne Exp $
+// $Id: HBondShiftProcessor.h,v 1.14.10.3 2006/09/04 12:21:21 anne Exp $
 //
 
 #ifndef BALL_NMR_HBONDSHIFTPROCESSOR_H
@@ -157,7 +157,7 @@ namespace BALL
 		 * 	 			 The ShiftX definition of hydrogen bonds is: 
 		 * 	 				Donors are: H and HA
 		 * 	 				Acceptors are: O, OD_n, OE_n, OG_n, OH_n or water in the solvent! ...
-		 * 	 
+		 * 					By now, we do not consider water!  
 		 * 	 The default value is false! 
      */
 		bool 												ShiftXwise_hydrogen_bonds_computation_;
@@ -168,8 +168,10 @@ namespace BALL
 		void 			printTargets_();
 		Atom* 		getDonor_(Atom* a);
 
-		/*_ to store the ShiftX computed hydrogen bond distances */
-		std::map<Atom* , std::map <float, Atom*> > 						distances_;
+		/* distance, donor, acceptor for the ShiftXwise hydrogenbond determination*/
+		std::multimap<float, std::pair<Atom*, Atom*> >  hbonds_;
+		std::map<Atom*, bool> donor_occupied_;
+		std::map<Atom*, bool> acceptor_occupied_;
 };
 } // namespace BALL
 

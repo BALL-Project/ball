@@ -47,7 +47,7 @@ namespace BALL
 		// if no parameters are assigned, abort immediately
 		if (parameters_ == 0)
 		{
-		std::cout << "return" << std::endl;
+			std::cout << "return" << std::endl;
 			return;
 		}
 
@@ -220,6 +220,11 @@ namespace BALL
 			// for all property pairs of the targets atom type
 			for (Position j = 0; j < property_pairs_[atom_type].size(); j++) 
 			{
+				if (atom_type == "CA")
+				{
+					std::cout << "hs: " << property_pairs_[atom_type][j].first << " " << property_pairs_[atom_type][j].second << " " 
+						        << hypersurfaces_[atom_type][property_pairs_[atom_type][j]](target) << std::endl;
+				}		
 				if (hypersurfaces_[atom_type][property_pairs_[atom_type][j]].isvalid())
 				EHS_shift += hypersurfaces_[atom_type][property_pairs_[atom_type][j]](target);
 			}
@@ -232,8 +237,11 @@ namespace BALL
 // std::cout << "EHS SHIft: "<< EHS_shift << std::endl;
 		}
 
-		printTargets_();
-		printParameters_();
+		//printTargets_();
+		//printParameters_();
+		
+		// do the ShiftX correction
+		postprocessing_();
 		return true;
 	}
 	
@@ -1587,43 +1595,53 @@ namespace BALL
 					// we assume the file is corrupt, we skip this file
 					return;
 				}
-				else
-				{	
-					//
-					// handle the x positions : can be chi, real or string
-					//
+				//
+				// handle the x positions : can be chi, real or string
+				//
 					
-					if (PropertiesForShift_::isDiscrete(firstproperty) || PropertiesForShift_::isMixed(firstproperty))
-					{
+				if (PropertiesForShift_::isDiscrete(firstproperty) || PropertiesForShift_::isMixed(firstproperty))
+				{
 //		std::cout << "discrete  first property" << std::endl;
-						for (Position i = 0; i < fields.size(); i++)
-						{
-							string_sample_positions_x_1d.push_back(fields[i]);
-						}
+					for (Position i = 0; i < fields.size(); i++)
+					{
+						string_sample_positions_x_1d.push_back(fields[i]);
+					}
+				}
+				else
+				{
+//		std::cout << "real first property" << std::endl;
+					for (Position i = 0; i < fields.size(); i++)
+					{	
+						float_sample_positions_x_1d.push_back(fields[i].toFloat());
+					}
+				}
+
+				// store the new line
+				float_sample_positions_x.push_back(float_sample_positions_x_1d);
+				string_sample_positions_x.push_back(string_sample_positions_x_1d);
+					
+				//
+				// handle the x values
+				// 
+		
+				vector<String> tcountsplit;
+				vector<int>    tcount_values;
+				for (Position i = 0; i < fields.size(); i++)
+				{
+					fields2[i].split(tcountsplit, ",");
+					if (tcountsplit.size() == 1)
+					{
+						line_values2.push_back(fields2[i].toFloat());
+						tcount_values.push_back(10);
 					}
 					else
 					{
-//		std::cout << "real first property" << std::endl;
-						for (Position i = 0; i < fields.size(); i++)
-						{	
-							float_sample_positions_x_1d.push_back(fields[i].toFloat());
-						}
+						line_values2.push_back(tcountsplit[0].toFloat());
+						tcount_values.push_back(tcountsplit[1].toInt());
 					}
-
-					// store the new line
-					float_sample_positions_x.push_back(float_sample_positions_x_1d);
-					string_sample_positions_x.push_back(string_sample_positions_x_1d);
-					
-					//
-					// handle the x values
-					// 
-		
-					for (Position i = 0; i < fields.size(); i++)
-					{
-						line_values2.push_back(fields2[i].toFloat());
-					}
-					sample_values_2d.push_back(line_values2);
 				}
+				sample_values_2d.push_back(line_values2);
+				tcount_values_2d_.push_back(tcount_values);
 
 				if (!invalid_)
 				{
@@ -1636,6 +1654,10 @@ namespace BALL
 				}
 			}
 
+// test the tcounts
+for (int i=0; i<tcount_values_2d_.size(); i++)
+	for (int j=0; j<tcount_values_2d_[i].size(); j++)
+		std::cout << sample_values_2d[i][j] << " " << tcount_values_2d_[i][j] << std::endl;
 			// we have read the file now
 			// create 	a 2D bicubic spline, 
 			// 	  			a map of 1D bicubic splines or 
@@ -1648,7 +1670,30 @@ namespace BALL
 //std::cout << "REAL__REAL" << std::endl;
 				// a bicubic spline is stored
 				s2d_.createBiCubicSpline(float_sample_positions_x, float_sample_positions_y, sample_values_2d);
-				//	std::cout << "value at (-170, -160) :" <<  s2d_(float(-170.),float(-160.)) << std::endl;
+
+				// create the correct average values for the whole array, each row and each column
+				int count_complete=0;
+				row_averages_.resize(sample_values_2d.size(), 0.);
+
+				for (int i=0; i<sample_values_2d.size(); i++)
+				{
+					int count_row=0;
+					for (int j=0; j<sample_values_2d[i].size(); j++)
+					{
+						if (tcount_values_2d_[i][j] > 1)
+						{
+							average_ += sample_values_2d[i][j];
+							row_averages_[i] += sample_values_2d[i][j];
+							count_row++;
+							count_complete++;
+						}
+						row_averages_[i] /= (count_row > 0) ? count_row : 1;
+					}
+				}
+				average_ /= (count_complete > 0) ? count_complete : 1;
+				std::cout << "Average: " << average_ << std::endl;
+
+				// TODO: how can we do the column averages if there are values missing...???
 			}
 			else if ((type_ == REAL__DISCRETE) || (type_ == REAL__CHI))
 			{
@@ -1801,9 +1846,20 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			line.getline(file);
 			line.split(fields, ";");
 
+			vector<String> tcountsplit;
 			for (Position j = 0; j < fields.size(); j++)
 			{	
-				values.push_back(fields[j].toFloat()); 
+				fields[j].split(tcountsplit, ",");
+				if (tcountsplit.size() == 1)
+				{
+					values.push_back(fields[j].toFloat()); 
+					tcount_values_1d_.push_back(10);
+				}
+				else
+				{
+					values.push_back(tcountsplit[0].toFloat());
+					tcount_values_1d_.push_back(tcountsplit[1].toInt());
+				}
 			}	
 
 			// create a spline	
@@ -1845,11 +1901,22 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			line.getline(file);
 			line.split(fields, ";");
 
+			vector<String> tcountsplit;
 			if( fields.size()== string_sample_positions_x_1d.size())
 			{	
 				for (Position i = 0; i < fields.size(); i++)
 				{	
-					values.push_back(fields[i].toFloat());
+					fields[i].split(tcountsplit, ",");
+					if (tcountsplit.size() == 1)
+					{
+						values.push_back(fields[i].toFloat());
+						tcount_values_1d_.push_back(10);
+					}	
+					else
+					{
+						values.push_back(tcountsplit[0].toFloat());
+						tcount_values_1d_.push_back(tcountsplit[1].toInt());
+					}
 				}	
 				// store
 				for (Position i = 0; i < string_sample_positions_x_1d.size(); i++)  
@@ -2164,5 +2231,56 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 
 		return false;
 	}
+	
+	void  EmpiricalHSShiftProcessor::postprocessing_()
+		throw()
+	{
+		// get the System
+		System* system = NULL;
+		
+		for (Position i = 0; i < targets_.size(); i++)
+		{
+			if  (RTTI::isKindOf<System>(targets_[i].atom->getRoot()))
+			{	
+				std::cout << " das war also tatsaechlich ein system!!!!!" << std::endl;
+				system = dynamic_cast<System*>(&(targets_[i].atom->getRoot()));
+			}
+		}
+
+		if (system) 
+		{
+			// add for all CA 0.2 times the values of HA
+			for (BALL::ResidueIterator r_it = system->beginResidue(); r_it != system->endResidue(); ++r_it)
+			{
+				Atom* CA = 0;
+				Atom* HA = 0;
+
+				for (BALL::AtomIterator at_it = r_it->beginAtom(); +at_it; ++at_it)
+				{
+					if (at_it->getName() == "CA")
+						CA = &(*at_it);
+					if (at_it->getName() == "HA")
+						HA = &(*at_it);
+				}
+
+				if (CA && HA)
+				{	
+					float total = CA->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
+					float ca_shift = CA->getProperty(BALL::EmpiricalHSShiftProcessor::PROPERTY__EHS_SHIFT).getFloat();
+					float ha_shift = HA->getProperty(BALL::EmpiricalHSShiftProcessor::PROPERTY__EHS_SHIFT).getFloat();
+					
+					CA->setProperty(BALL::EmpiricalHSShiftProcessor::PROPERTY__EHS_SHIFT, ca_shift + 0.2*ha_shift);
+					CA->setProperty(ShiftModule::PROPERTY__SHIFT, total+ 0.2*ha_shift );
+				}
+			}
+		}
+		else
+		{
+			std::cerr << "found no system -> could not perform a postprocessing for EFShiftProcessor" << std::endl;
+		}
+	}
+
+
+
 	
 } // namespace BALL

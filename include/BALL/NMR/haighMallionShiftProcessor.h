@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.h,v 1.16.10.4 2006/08/29 09:11:51 anne Exp $
+// $Id: haighMallionShiftProcessor.h,v 1.16.10.5 2006/09/06 12:23:20 anne Exp $
 //
 
 #ifndef BALL_COMMON_H
@@ -210,10 +210,12 @@ namespace BALL
 		std::vector<Atom* >										targets_;
 	
 		private:
+
 		void 			printParameters_();
 		void  		printEffectors_();
 		void 			printTargets_();
-
+		void 			postprocessing_();
+		
 	};
   
 } // namespace BALL

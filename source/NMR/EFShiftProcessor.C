@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EFShiftProcessor.C,v 1.14.20.4 2006/08/31 09:38:02 anne Exp $
+// $Id: EFShiftProcessor.C,v 1.14.20.5 2006/09/06 12:23:23 anne Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
 #include <BALL/COMMON/limits.h>
@@ -313,6 +313,7 @@ std::cout << "******************* EF-Shift ******************* " << std::endl;
 			current_bond++;
 		}
 
+		postprocessing_();
 		return true;
 	}
 		
@@ -403,7 +404,7 @@ std::cout << "******************* EF-Shift ******************* " << std::endl;
 				}
 			}	
 		}
-		
+
 		return Processor::CONTINUE;
 	}
 
@@ -448,5 +449,54 @@ std::cout << "******************* EF-Shift ******************* " << std::endl;
 		std::cout << 	"unit" << (charge_factor_ > 0.9 ? "e0" :"ESU")<< std::endl;
 	}
 
+
+	void  EFShiftProcessor::postprocessing_()
+		throw()
+	{
+		// get the System
+		System* system = NULL;
+		
+		std::vector<std::pair<Atom*, Atom*> >::iterator tbond_it = bond_list_.begin();
+		for (; tbond_it != bond_list_.end(); ++tbond_it)
+		{
+			if  (RTTI::isKindOf<System>(tbond_it->first->getRoot()))
+			{	
+				std::cout << " das war also tatsaechlich ein system!!!!!" << std::endl;
+				system = dynamic_cast<System*>(&(tbond_it->first->getRoot()));
+			}
+		}
+
+		if (system) 
+		{
+			// add for all CA 0.2 times the values of HA
+			for (BALL::ResidueIterator r_it = system->beginResidue(); r_it != system->endResidue(); ++r_it)
+			{
+				Atom* CA = 0;
+				Atom* HA = 0;
+
+				for (BALL::AtomIterator at_it = r_it->beginAtom(); +at_it; ++at_it)
+				{
+					if (at_it->getName() == "CA")
+						CA = &(*at_it);
+					if (at_it->getName() == "HA")
+						HA = &(*at_it);
+				}
+
+				if (CA && HA)
+				{	
+					float total = CA->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
+					float ca_shift = CA->getProperty(BALL::EFShiftProcessor::PROPERTY__EF_SHIFT).getFloat();
+					float ha_shift = HA->getProperty(BALL::EFShiftProcessor::PROPERTY__EF_SHIFT).getFloat();
+					
+					CA->setProperty(BALL::EFShiftProcessor::PROPERTY__EF_SHIFT, ca_shift + 0.2*ha_shift);
+					CA->setProperty(ShiftModule::PROPERTY__SHIFT, total+ 0.2*ha_shift );
+				}
+			}
+		}
+		else
+		{
+			std::cerr << "found no system -> could not perform a postprocessing for EFShiftProcessor" << std::endl;
+		}
+	}
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: spectrum.h,v 1.14 2003/08/26 08:04:45 oliver Exp $
+// $Id: spectrum.h,v 1.14.18.1 2006/09/06 12:23:21 anne Exp $
 //
 
 #ifndef BALL_NMR_SPECTRUM_H
@@ -57,6 +57,14 @@ namespace BALL
 		//@{
 			// ?????
 		Spectrum() {}
+
+		Spectrum(const DataType& data)
+			: data_(data)
+		{}
+
+		Spectrum(const std::vector<PeakType>& peaks, const PositionType& origin, const PositionType& dimension, const PositionType& spacing)
+		{}
+
 			// ?????
 		virtual ~Spectrum() {}
 		//@}
@@ -78,9 +86,10 @@ namespace BALL
 		
 		protected:
 		DataType	data_;
-		PositionType	spacing_;
-		PositionType	min_;
-		PositionType	max_;
+		std::vector<PeakType> sticks_;
+		PositionType					spacing_;
+		PositionType					min_;
+		PositionType					max_;
 	};
 
 	/**	Clear the spectrum.
@@ -89,7 +98,8 @@ namespace BALL
 	template <typename DataT, typename PeakT, typename PositionT>
 	void Spectrum<DataT, PeakT, PositionT>::clear()
 	{
-		// ?????
+		data_.clear();
+		sticks_.clear();
 	}
 
 	/**	Calculate the difference between two spectra.
@@ -126,6 +136,20 @@ namespace BALL
 		return s1.difference(s2);
 	}
 
+	template <typename DataT, typename PeakT, typename PositionT>
+	const DataT& Spectrum<DataT, PeakT, PositionT>::getData() const
+	throw()
+	{
+		return data_;
+	}
+	
+	template <typename DataT, typename PeakT, typename PositionT>
+	DataT& Spectrum<DataT, PeakT, PositionT>::getData()
+	throw()
+	{
+		return data_;
+	}
+	
 	/**	Convenience typedefs
 	\ingroup Spectra
 	*/
@@ -134,12 +158,19 @@ namespace BALL
 	typedef Spectrum<RegularData1D, Peak1D> Spectrum1D;
 
 	/// Two-dimensional spectrum
-	typedef Spectrum<RegularData1D, Peak2D> Spectrum2D;
+	typedef Spectrum<RegularData2D, Peak2D> Spectrum2D;
 
 	/// Three-dimensional spectrum
-	typedef Spectrum<RegularData1D, Peak3D> Spectrum3D;
+	typedef Spectrum<RegularData3D, Peak3D> Spectrum3D;
 	//@}
   
+	template <typename DataT, typename PeakT, typename PositionT>
+	std::ostream& operator << (std::ostream& os, const Spectrum<DataT, PeakT, PositionT>& spectrum);
+
+# ifndef BALL_NO_INLINE_FUNCTIONS
+#   include <BALL/NMR/spectrum.iC>
+# endif
 } // namespace BALL
+
 
 #endif // BALL_NMR_SPECTRUM_H
