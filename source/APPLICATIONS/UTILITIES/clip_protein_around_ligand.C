@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clip_protein_around_ligand.C,v 1.9.2.1 2006/05/15 23:18:37 amoll Exp $
+// $Id: clip_protein_around_ligand.C,v 1.9.2.2 2006/09/04 14:47:28 amoll Exp $
 //
 // A program for extracting a parts of a protein around a ligand.
 // The output are XYZFiles because we use this program for creating AMSOL
@@ -668,7 +668,7 @@ int main(int argc, char** argv)
 	intermediate << system;
 	intermediate.close();
 
-	File dumpfile("intermediate.dump", File::OUT);
+	File dumpfile("intermediate.dump", std::ios::out);
 	system.dump(dumpfile);
 	dumpfile.close();
 
@@ -710,7 +710,7 @@ int main(int argc, char** argv)
 		(*list_it)->select();
 	}
 
-	dumpfile.open("before_minimization.dump", File::OUT);
+	dumpfile.open("before_minimization.dump", std::ios::out);
 	system.dump(dumpfile);
 	dumpfile.close();
 
@@ -726,7 +726,7 @@ int main(int argc, char** argv)
 	PDBFile cut_protein_file("cut_protein_file.pdb", std::ios::out);
 	cut_protein_file << system;
 
-	dumpfile.open("after_minimization.dump", File::OUT);
+	dumpfile.open("after_minimization.dump", std::ios::out);
 	system.dump(dumpfile);
 	dumpfile.close();
 
