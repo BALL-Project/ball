@@ -247,8 +247,8 @@ usage: docking -a <PDB File name for protein A>\n\
 	geo_fit.options[GeometricFit::Option::THETA_MAX] = GeometricFit::Default::THETA_MAX;
 	geo_fit.options[GeometricFit::Option::DEG_THETA] = DEGREE_INTERVAL;
 	geo_fit.options[GeometricFit::Option::TOP_N] = TOP_N;
-	geo_fit.options[GeometricFit::Option::BEST_NUM] = BEST_NUM;
-	geo_fit.options[GeometricFit::Option::VERBOSITY] = VERBOSITY;
+	geo_fit.options[DockingAlgorithm::Option::BEST_NUM] = BEST_NUM;
+	geo_fit.options[DockingAlgorithm::Option::VERBOSITY] = VERBOSITY;
 
   // keep the larger protein in System A and the smaller one in System B
   if ( pro_sys_a.countAtoms() < pro_sys_b.countAtoms() )
@@ -296,7 +296,7 @@ usage: docking -a <PDB File name for protein A>\n\
    cout << "TOP_N             = " << TOP_N             
 		 		<< "|||" << geo_opt[GeometricFit::Option::TOP_N] << endl;
    cout << "BEST_NUM          = " << BEST_NUM          
-		 		<< "|||" << geo_opt[GeometricFit::Option::BEST_NUM] << endl;
+		 		<< "|||" << geo_opt[DockingAlgorithm::Option::BEST_NUM] << endl;
    cout << endl;
    cout << "------System A------" << endl;
    cout << "PDB File name a   = " << PDB_file_name_a   << endl;
