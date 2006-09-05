@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: connolly.C,v 1.12 2002/12/16 09:08:28 oliver Exp $
+// $Id: connolly.C,v 1.12.14.1 2006/09/05 11:43:30 anhi Exp $
 
 #ifdef _WIN32
 #	define _USE_MATH_DEFINES
@@ -2963,8 +2963,8 @@ namespace	BALL
 			totvs += vols;
 			totasp += areasp;
 			totvsp += volsp;
-			atom_areas[a1 - 1] += (areas + areasp) / 2.0;
-			atom_areas[a2 - 1] += (areas + areasp) / 2.0;
+			atom_areas[a1 - 1] += (areas - areasp) / 2.0;
+			atom_areas[a2 - 1] += (areas - areasp) / 2.0;
 			if (areas - areasp < 0.0)
 			{
 				cerr << "Negative Area for Saddle Face" << endl;

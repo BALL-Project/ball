@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.C,v 1.11 2003/09/07 17:24:00 oliver Exp $
+// $Id: surfaceProcessor.C,v 1.11.12.1 2006/09/05 11:43:31 anhi Exp $
 //
 
 #include <BALL/STRUCTURE/surfaceProcessor.h>
@@ -58,7 +58,7 @@ namespace BALL
 	
 		ReducedSurface* reduced_surface = new ReducedSurface(spheres_, probe_radius_);
 		reduced_surface->compute();
-
+Log.error() << "Reduced Surface done..." << std::endl;
 		if (surface_type_ == SurfaceProcessor::SOLVENT_EXCLUDED_SURFACE)
 		{
 			SolventExcludedSurface* ses = new SolventExcludedSurface(reduced_surface);
