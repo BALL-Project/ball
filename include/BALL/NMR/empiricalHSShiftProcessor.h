@@ -367,8 +367,7 @@ namespace BALL
 			private:
 					void 			printParameters_() throw();
 					void 			printTargets_() throw();
-				
-
+					void			postprocessing_() throw();
 
 	};//End of class
 } // end of namespace

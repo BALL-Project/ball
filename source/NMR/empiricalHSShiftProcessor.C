@@ -238,7 +238,10 @@ namespace BALL
 		}
 
 		//printTargets_();
-		printParameters_();
+		//printParameters_();
+		
+		// do the ShiftX correction
+		postprocessing_();
 		return true;
 	}
 	
@@ -2228,5 +2231,56 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 
 		return false;
 	}
+	
+	void  EmpiricalHSShiftProcessor::postprocessing_()
+		throw()
+	{
+		// get the System
+		System* system = NULL;
+		
+		for (Position i = 0; i < targets_.size(); i++)
+		{
+			if  (RTTI::isKindOf<System>(targets_[i].atom->getRoot()))
+			{	
+				std::cout << " das war also tatsaechlich ein system!!!!!" << std::endl;
+				system = dynamic_cast<System*>(&(targets_[i].atom->getRoot()));
+			}
+		}
+
+		if (system) 
+		{
+			// add for all CA 0.2 times the values of HA
+			for (BALL::ResidueIterator r_it = system->beginResidue(); r_it != system->endResidue(); ++r_it)
+			{
+				Atom* CA = 0;
+				Atom* HA = 0;
+
+				for (BALL::AtomIterator at_it = r_it->beginAtom(); +at_it; ++at_it)
+				{
+					if (at_it->getName() == "CA")
+						CA = &(*at_it);
+					if (at_it->getName() == "HA")
+						HA = &(*at_it);
+				}
+
+				if (CA && HA)
+				{	
+					float total = CA->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
+					float ca_shift = CA->getProperty(BALL::EmpiricalHSShiftProcessor::PROPERTY__EHS_SHIFT).getFloat();
+					float ha_shift = HA->getProperty(BALL::EmpiricalHSShiftProcessor::PROPERTY__EHS_SHIFT).getFloat();
+					
+					CA->setProperty(BALL::EmpiricalHSShiftProcessor::PROPERTY__EHS_SHIFT, ca_shift + 0.2*ha_shift);
+					CA->setProperty(ShiftModule::PROPERTY__SHIFT, total+ 0.2*ha_shift );
+				}
+			}
+		}
+		else
+		{
+			std::cerr << "found no system -> could not perform a postprocessing for EFShiftProcessor" << std::endl;
+		}
+	}
+
+
+
 	
 } // namespace BALL

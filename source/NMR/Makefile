@@ -15,6 +15,7 @@ CPP_SOURCES=\
 	peak.C\
 	peakList.C\
 	shiftModel.C\
+	shiftModel2D.C\
 	shiftModule.C\
 	spectrum.C\
 	johnsonBoveyShiftProcessor.C\
