@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.C,v 1.20.2.2 2006/08/29 12:50:36 aleru Exp $
+// $Id: lineSearch.C,v 1.20.2.3 2006/09/06 14:07:00 aleru Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
@@ -146,6 +146,19 @@ namespace BALL
 	{
 		return stptol_;
 	}
+	
+	// Set the flag is_bracketed_.
+	void LineSearch::setBracketedFlag(bool bracktd)
+	{
+		is_bracketed_ = bracktd;
+	}
+		
+	
+	// Return whether a minimizer has already been bracketed.
+	bool LineSearch::isBracketed() const
+	{
+		return is_bracketed_;
+	}
 
 	// Set the calling minimizer class.
 	void LineSearch::setMinimizer(const EnergyMinimizer& minimizer)
@@ -216,17 +229,17 @@ namespace BALL
 		double int_width = maxstp - minstp;
 		double bisec_int_width = int_width / 0.5;
 		
-		// st_left and st_right will bracket the minimizer
-		double st_left = 0.;
-		double st_right = 0.;
+		// st_a and st_b will bracket the minimizer
+		double st_a = 0.;
+		double st_b = 0.;
 		
-		// f_left and f_right will contain the energy values at st_left and st_right.
-		double f_left = f_init;
-		double f_right = f_init;
+		// f_a and f_b will contain the energy values at st_a and st_b.
+		double f_a = f_init;
+		double f_b = f_init;
 		
-		// g_left and g_right will contain the directional derivatives at st_left and st_right.
-		double g_left = g_init;
-		double g_right = g_init;
+		// g_a and g_b will contain the directional derivatives at st_a and st_b.
+		double g_a = g_init;
+		double g_b = g_init;
 		
 		// Used for internal bracketing
 		double stmin = 0.;
@@ -313,54 +326,54 @@ namespace BALL
 			
 			// In first stage we use a modified function, proposed by More and Thuente,
 			// in case of a lower function value but the decrease is not sufficient.
-			if (first_stage && (f <= f_left) && (f > f_test))
+			if (first_stage && (f <= f_a) && (f > f_test))
 			{
 				// We have to compute the modified energy... 
 				double f_mod = f - stp*g_test;
-				double f_left_mod = f_left - st_left*g_test;
-				double f_right_mod = f_right - st_right*g_test;
+				double f_a_mod = f_a - st_a*g_test;
+				double f_b_mod = f_b - st_b*g_test;
 				
 				// ... and derivative values.
 				double g_mod = g - g_test;
-				double g_left_mod = g_left - g_test;
-				double g_right_mod = g_right - g_test;
+				double g_a_mod = g_a - g_test;
+				double g_b_mod = g_b - g_test;
 
 				// Compute a safeguarded, interpolating step and use the modified function.
-				lsStep(st_left, f_left_mod, g_left_mod, st_right, f_right_mod, g_right_mod, stp, f_mod, g_mod, stmin, stmax);
+				takeStep(st_a, f_a_mod, g_a_mod, st_b, f_b_mod, g_b_mod, stp, f_mod, g_mod, stmin, stmax);
 
 				// Compute back all values for the original energy function.
-				f_left = f_left_mod + st_left * g_test;
-				f_right = f_right_mod + st_right * g_test;
-				g_left = g_left_mod + g_test;
-				g_right = g_right_mod + g_test;
+				f_a = f_a_mod + st_a * g_test;
+				f_b = f_b_mod + st_b * g_test;
+				g_a = g_a_mod + g_test;
+				g_b = g_b_mod + g_test;
 			}
 			else
 			{
 				// Compute a safeguarded, interpolating step.
-				lsStep(st_left, f_left, g_left, st_right, f_right, g_right, stp, f, g, stmin, stmax);
+				takeStep(st_a, f_a, g_a, st_b, f_b, g_b, stp, f, g, stmin, stmax);
 			}
 
 			if (is_bracketed_)
 			{
 				// The minimizer has already been bracketed.
-				if (fabs(st_right - st_left) >= bisec_int_width*0.66)
+				if (fabs(st_b - st_a) >= bisec_int_width*0.66)
 				{
 					// We make a bisection step.
-					stp = st_left + (st_right - st_left)/2.;
+					stp = st_a + (st_b - st_a)/2.;
 				}
 				bisec_int_width = int_width;
-				int_width = fabs(st_right - st_left);
+				int_width = fabs(st_b - st_a);
 				
 				// Set the minimum and maximum steps allowed for stp.
-				stmin = std::min(st_left, st_right);
-				stmax = std::max(st_left, st_right);
+				stmin = std::min(st_a, st_b);
+				stmax = std::max(st_a, st_b);
 			}
 			else
 			{
 				// The minimizer couldn't be bracketed so far, thus we make an extrapolation step.
 				// Set the minimum and maximum steps allowed for stp.
-				stmin = stp + (stp - st_left) * 1.1;
-				stmax = stp + (stp - st_left) * 4.;
+				stmin = stp + (stp - st_a) * 1.1;
+				stmax = stp + (stp - st_a) * 4.;
 			}
 
 			// Use the safeguards...
@@ -370,7 +383,7 @@ namespace BALL
 			if ((is_bracketed_) && ((stp <= stmin) || (stp >= stmax)) || (is_bracketed_) && (stmax - stmin <= stptol_ * stmax))
 			{
 				// If we are not able to make further progress, let stp be the best point we could find.
-				stp = st_left;
+				stp = st_a;
 			}
 
 			// Obtain new energy and derivative.
@@ -428,35 +441,35 @@ namespace BALL
 	// dependend on whether a minimum could already be bracketed or not.
 	// This function is based on the proposed step computation of Jorge J. More and David J. Thuente.
 	// A Fortran implementation can be found in MINPACK and MINPACK-2.
-	void LineSearch::lsStep(double &st_left, double &f_left, double &g_left, double &st_right, 
-					double &f_right, double &g_right, double &stp, double f, double g, double minstp, double maxstp)
+	void LineSearch::takeStep(double &st_a, double &f_a, double &g_a, double &st_b, 
+					double &f_b, double &g_b, double &stp, double f, double g, double minstp, double maxstp)
 	{
 		// The new step, which will be returned by stp on exit.
 		double new_stp;
 		
 		// Compute whether we have directional derivatives of opposite sign.
-		bool opp_sign =  (g*(g_left/fabs(g_left)) < 0.) ? true : false;
+		bool opp_sign =  (g*(g_a/fabs(g_a)) < 0.) ? true : false;
 		
 		// Check the four possible cases.
-		if (f > f_left)
+		if (f > f_a)
 		{
 			// First case: We have a higher function value, so the minimum is bracketed.
 		
-			double theta = (f_left - f)*3./(stp - st_left) + g_left + g;
-			double s = std::max(fabs(theta), fabs(g_left));
-			s = (stp < st_left) ? -std::max(s, fabs(g)) : std::max(s, fabs(g));
-			double gamma = s*sqrt((theta/s)*(theta/s)-(g_left/s)*(g/s));
+			double theta = (f_a - f)*3./(stp - st_a) + g_a + g;
+			double s = std::max(fabs(theta), fabs(g_a));
+			s = (stp < st_a) ? -std::max(s, fabs(g)) : std::max(s, fabs(g));
+			double gamma = s*sqrt((theta/s)*(theta/s)-(g_a/s)*(g/s));
 			
 			// We check both, the quadratic and the cubic step.
 			// Compute the cubic step.
-			double cub_stp = st_left + (((gamma - g_left) + theta)/(((gamma - g_left) + gamma) + g))*(stp - st_left);
+			double cub_stp = st_a + (((gamma - g_a) + theta)/(((gamma - g_a) + gamma) + g))*(stp - st_a);
 			
 			// Compute the quadratic step.
-			double quad_stp = st_left + ((g_left /((f_left - f)/(stp - st_left) + g_left))/2.)*(stp - st_left);
+			double quad_stp = st_a + ((g_a /((f_a - f)/(stp - st_a) + g_a))/2.)*(stp - st_a);
 			
-			// We prefer the cubic step if it is closer to st_left than the quadratic step, 
+			// We prefer the cubic step if it is closer to st_a than the quadratic step, 
 			// otherwise we use the average of the quadratic and the cubic one.
-			new_stp = (fabs(cub_stp - st_left) < fabs(quad_stp - st_left)) ? cub_stp : cub_stp + (quad_stp - cub_stp)/2.;
+			new_stp = (fabs(cub_stp - st_a) < fabs(quad_stp - st_a)) ? cub_stp : cub_stp + (quad_stp - cub_stp)/2.;
 			
 			// Minimum has been bracketed.
 			is_bracketed_ = true;
@@ -466,17 +479,17 @@ namespace BALL
 			// Second case: We have a lower function value but directional derivatives
 			// of opposite sign, so the minimum is bracketed.
 			
-			double theta = (f_left - f)*3./(stp - st_left) + g_left + g;
-			double s = std::max(fabs(theta), fabs(g_left));
-			s = (stp > st_left) ? -std::max(s, fabs(g)) : std::max(s, fabs(g));
-			double gamma = s*sqrt((theta/s)*(theta/s) - (g_left/s)*(g/s));
+			double theta = (f_a - f)*3./(stp - st_a) + g_a + g;
+			double s = std::max(fabs(theta), fabs(g_a));
+			s = (stp > st_a) ? -std::max(s, fabs(g)) : std::max(s, fabs(g));
+			double gamma = s*sqrt((theta/s)*(theta/s) - (g_a/s)*(g/s));
 			
 			// We check both, the quadratic and the cubic step.
 			// Compute the cubic step.
-			double cub_stp = stp + (((gamma - g) + theta)/(((gamma - g) + gamma) + g_left))*(st_left - stp);
+			double cub_stp = stp + (((gamma - g) + theta)/(((gamma - g) + gamma) + g_a))*(st_a - stp);
 			
 			// Compute the quadratic step.
-			double quad_stp = stp + (g/(g - g_left))*(st_left - stp);
+			double quad_stp = stp + (g/(g - g_a))*(st_a - stp);
 			
 			// We prefer the cubic step if it is farther from stp than the quadratic one, 
 			// otherwise the quadratic step is used.
@@ -485,7 +498,7 @@ namespace BALL
 			// Minimum has been bracketed
 			is_bracketed_ = true;
 		}
-		else if (fabs(g) < fabs(g_left))
+		else if (fabs(g) < fabs(g_a))
 		{
 			// Third case: We have a lower function value and derivatives of the same sign
 			// but the magnitude of the derivative decreases. There are three subcases:
@@ -494,28 +507,28 @@ namespace BALL
 			// (2) The cubic tends to -infinity but its minimum is beyond stp
 			// (3) The cubic tends to -infinity and its minimum is on this side of stp
 		
-			double theta = (f_left - f)*3./(stp - st_left) + g_left + g;
-			double s = std::max(fabs(theta), fabs(g_left));
-			s = (stp > st_left) ? -std::max(s, fabs(g)) : std::max(s, fabs(g));
+			double theta = (f_a - f)*3./(stp - st_a) + g_a + g;
+			double s = std::max(fabs(theta), fabs(g_a));
+			s = (stp > st_a) ? -std::max(s, fabs(g)) : std::max(s, fabs(g));
 			
 			// We can have gamma = 0 only if the cubic doesn't tend to infinity.
-			double gamma = s*sqrt(std::max(0., (theta/s)*(theta/s) - (g_left/s)*(g/s)));
-			double r = ((gamma - g) + theta)/((gamma + (g_left - g)) + gamma);
+			double gamma = s*sqrt(std::max(0., (theta/s)*(theta/s) - (g_a/s)*(g/s)));
+			double r = ((gamma - g) + theta)/((gamma + (g_a - g)) + gamma);
 			
 			// We compute the cubic step only in case (1) and (2) (only these cases make sense).
 			double cub_stp;
 			if ((r < 0.) && (gamma != 0.))
 			{
-				cub_stp = stp + r*(st_left - stp);
+				cub_stp = stp + r*(st_a - stp);
 			}
 			else
 			{
 				// Use the safeguards...
-				cub_stp = (stp > st_left) ? maxstp : minstp;
+				cub_stp = (stp > st_a) ? maxstp : minstp;
 			}
 			
 			// Compute the quadratic step.
-			double quad_stp = stp + (g/(g - g_left))*(st_left - stp);
+			double quad_stp = stp + (g/(g - g_a))*(st_a - stp);
 			
 			if (is_bracketed_)
 			{
@@ -525,14 +538,14 @@ namespace BALL
 				new_stp = (fabs(cub_stp - stp) < fabs(quad_stp - stp)) ? cub_stp : quad_stp;
 				
 				// Use the safeguards (remember: it is assumed in the bracketed case, that
-				// stp must lie in the interval between st_left and st_right).
-				if (stp > st_left)
+				// stp must lie in the interval between st_a and st_b).
+				if (stp > st_a)
 				{
-					new_stp = std::min(new_stp, stp + (st_right - stp)*0.66);
+					new_stp = std::min(new_stp, stp + (st_b - stp)*0.66);
 				}
 				else
 				{
-					new_stp = std::max(new_stp, stp + (st_right - stp)*0.66);
+					new_stp = std::max(new_stp, stp + (st_b - stp)*0.66);
 				}
 			}
 			else
@@ -562,40 +575,40 @@ namespace BALL
 			if (is_bracketed_)
 			{
 				// If a minimum has already been bracketed, we use the cubic step
-				double theta = (f - f_right)*3./(st_right - stp) + g_right + g;
-				double s = std::max(fabs(theta), fabs(g_right));
-				s = (stp > st_right) ? -std::max(s, fabs(g)) : std::max(s, fabs(g));
-				double gamma = s*sqrt((theta/s)*(theta/s) - (g_right/s)*(g/s));
+				double theta = (f - f_b)*3./(st_b - stp) + g_b + g;
+				double s = std::max(fabs(theta), fabs(g_b));
+				s = (stp > st_b) ? -std::max(s, fabs(g)) : std::max(s, fabs(g));
+				double gamma = s*sqrt((theta/s)*(theta/s) - (g_b/s)*(g/s));
 				
 				// Compute the cubic step.
-				new_stp = stp + (((gamma - g) + theta)/(((gamma - g) + gamma) + g_right))*(st_right - stp);
+				new_stp = stp + (((gamma - g) + theta)/(((gamma - g) + gamma) + g_b))*(st_b - stp);
 			}
 			else 
 			{
 				// If we couldn't bracket the minimum so far, the 
 				// step must be either minstp or maxstp.
-				new_stp = (stp > st_left) ? maxstp : minstp;
+				new_stp = (stp > st_a) ? maxstp : minstp;
 			}
 		}
 
 		// Do all updates for the interval that contains a minimizer.	
-		if (f > f_left)
+		if (f > f_a)
 		{
-			st_right = stp;
-			f_right = f;
-			g_right = g;
+			st_b = stp;
+			f_b = f;
+			g_b = g;
 		}
 		else
 		{
 			if (opp_sign)
 			{
-				st_right = st_left;
-				f_right = f_left;
-				g_right = g_left;
+				st_b = st_a;
+				f_b = f_a;
+				g_b = g_a;
 			}
-			st_left = stp;
-			f_left = f;
-			g_left = g;
+			st_a = stp;
+			f_a = f;
+			g_a = g;
 		}
 	
 		// Set the new step.
