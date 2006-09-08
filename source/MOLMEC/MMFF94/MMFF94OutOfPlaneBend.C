@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.9 2006/09/08 13:47:05 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.10 2006/09/08 16:03:03 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -14,7 +14,7 @@
 #include <math.h>
 
 //     #define BALL_DEBUG_MMFF
-#define BALL_MMFF94_TEST
+//   #define BALL_MMFF94_TEST
 
 using namespace std;
 
@@ -368,35 +368,37 @@ namespace BALL
 				bn = jk % jl;
 				cn = jl % ji;
 
-   Log.precision(30);
 				// Bond angle ji to jk
 				const double theta = acos(ji * jk);
-//      Log.error() << "#~~#   1 " << theta            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				const double sin_theta = sin(theta);
 
 				const double sin_dl = an * jl / sin_theta;
 				// the wilson angle:
 				const double dl = asin(sin_dl);
-//      Log.error() << "#~~#   2 wilson " << dl            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 				// values that will be feed into the final calculation:
 				const double cos_theta = cos(theta);
 
 				const double cos_dl = cos(dl);
 				const double tan_dl = sin_dl / cos_dl;
-//   Log.error() << "#~~#   tan_dl " << tan_dl            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 				const double cdst = 1. / (cos_dl * sin_theta);
-//      Log.error() << "#~~#   cdst " << cdst            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				const double tdst = tan_dl / (sin_theta * sin_theta);
-//      Log.error() << "#~~#   tdst "  << tdst           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 				// scaling factor for all forces:
 				// wilson K0 * this_bend_constant * wilson_angle * DEGREE_TO_RADIAN * DEGREE_TO_RADIAN
 				double c1 = dl * FC * bend.k_oop * FORCES_FACTOR * Constants::JOULE_PER_CAL;
-//      Log.error() << "#~~#   c1 " << c1            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-//      Log.error() << "#~~#   ljl  "  << length_jl           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-//      Log.error() << "#~~#   an "   << an << " jl " << jl          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+
+				
+			Log.precision(30);
+      Log.error() << "bond   " << theta            << std::endl;
+      Log.error() << "wilson " << dl            << std::endl;
+			Log.error() << "tan_dl " << tan_dl            << std::endl;
+      Log.error() << "cdst   " << cdst            << std::endl;
+      Log.error() << "tdst   "  << tdst           << std::endl;
+      Log.error() << "c1     " << c1            << std::endl;
+      Log.error() << "abc "   << an << bn << cn << std::endl << std::endl << std::endl << std::endl;
+			
 
 				// resulting force vectors on atoms i, k and l:
 				const TVector3<double> d_l = (an * cdst - jl * tan_dl) *c1 / length_jl;
@@ -408,13 +410,13 @@ namespace BALL
  				if (!us || l.isSelected()) AddDV3_(l.getForce(), d_l);
  				if (!us || center_atom.isSelected()) AddDV3_(center_atom.getForce(), -(d_i + d_k + d_l));
 
-#ifdef BALL_MMFF94_TEST
+  #ifdef BALL_MMFF94_TEST
 			 getForceField()->error() << std::endl
 																<< i.getName() << " " << d_i << std::endl
 																<< center_atom.getName() << " " << -(d_i  +d_k + d_l) << std::endl
 																<< k.getName() << " " << d_k << std::endl
 																<< l.getName() << " " << d_l << std::endl;
-#endif
+   #endif
 			}
 		}
 	}

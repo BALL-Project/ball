@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.h,v 1.1.4.2 2006/06/23 01:35:19 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.h,v 1.1.4.3 2006/09/08 16:03:20 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94OUTOFPLANEBEND_H
@@ -66,6 +66,9 @@ namespace BALL
 
 		///
 		const vector<OutOfPlaneBend>& getOutOfPlaneBends() const { return bends_;}
+		
+		// Add a double precision TVector3 to a single precision Vector3
+		inline void AddDV3_(Vector3& f3, const TVector3<double> d3);
 
 		private:
 		vector<OutOfPlaneBend> bends_;
