@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.31 2006/07/24 07:25:26 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.32 2006/09/08 15:35:42 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -20,6 +20,7 @@
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 
 #include <BALL/KERNEL/system.h>
@@ -1180,7 +1181,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			if (important)
 			{
 				setTextColor(message_label_, ColorRGBA(255,0,0));
-				Log.info() << text << std::endl;
+ 				Log.info() << text << std::endl;
 			}
 			else
 			{
@@ -1476,22 +1477,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			if (e->type() == (QEvent::Type)SIMULATION_THREAD_FINISHED_EVENT)
 			{
 				stopedSimulation_();
-				return true;
-			}
-			
-			if (e->type() == (QEvent::Type)LOG_EVENT)
-			{
-				LogEvent* so = dynamic_cast<LogEvent*>(e);
-				if (so->showOnlyInLogView())
-				{
-					Log.error() << so->getMessage() << std::endl;
-					return true;
-				}
-				if (!so->isImportant())
-				{
-					Log.error() << so->getMessage() << std::endl;
-				}
- 				setStatusbarText(so->getMessage(), so->isImportant());
 				return true;
 			}
 			

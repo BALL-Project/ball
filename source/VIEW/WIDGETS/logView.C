@@ -6,7 +6,6 @@
 
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/VIEW/KERNEL/common.h>
 
 #include <QtGui/QTextCursor>
 
@@ -159,6 +158,5 @@ namespace BALL
 			return false;
 		}
 			
-
 	} // VIEW
 } // namespace BALL
