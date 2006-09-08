@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.70 2006/07/19 12:34:55 amoll Exp $
+// $Id: scene.C,v 1.174.2.71 2006/09/08 14:49:48 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -777,7 +777,8 @@ namespace BALL
 			const Camera& camera = stage_->getCamera();
 
 			Vector3 vv = camera.getViewVector();
-			vv.normalize(); 
+			float length = vv.getLength();
+			if (!Maths::isZero(length)) vv /= length;
 
 			return v.x * camera.getRightVector() +
 						 v.y * camera.getLookUpVector() -
