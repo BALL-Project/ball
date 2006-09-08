@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.21 2006/08/30 19:42:31 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.22 2006/09/08 13:46:47 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -40,7 +40,7 @@ const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 // CHARMM forces to BALL forces
 const double CHARMM_FORCES_FACTOR = Constants::JOULE_PER_CAL * FORCES_FACTOR;
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.21 2006/08/30 19:42:31 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.22 2006/09/08 13:46:47 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -490,29 +490,25 @@ CHECK(force test 5.1: Planes)
 	PRECISION(2e-11)
 
 	// force value in CHARMM (kcal /mol A) !:
-  //  2.67132  -2.17390  -2.20162
-  //  0.38675   5.31311  -0.47133
-  // -1.96700   2.01325   3.40230
-  // -1.09107  -5.15246  -0.72935 
-	Vector3 v1(2.67132, -2.17390, -2.20162);
- 	Vector3 v2(0.38675,  5.31311, -0.47133);
-	Vector3 v3(-1.96700,  2.01325,  3.40230);
-	Vector3 v4(-1.09107, -5.15246, -0.72935);
+  Vector3 v1(13.75731,-11.19557,-11.33832);
+	Vector3 v2(1.99175, 27.36249, -2.42734);
+	Vector3 v3(-10.13007, 10.36824, 17.52184);
+	Vector3 v4(-5.61899,-26.53516, -3.75618);
 
 	v1 *= CHARMM_FORCES_FACTOR;
 	v2 *= CHARMM_FORCES_FACTOR;
 	v3 *= CHARMM_FORCES_FACTOR;
 	v4 *= CHARMM_FORCES_FACTOR;
 
-	PRECISION(2e-10)
+	PRECISION(2e-14)
+/*
 Log.error() << std::endl << "#~~#   1 "   << a1.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 Log.error() << "#~~#   1 " <<    v1       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-
 Log.error() << std::endl << "#~~#   2 "   << a2.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 Log.error() << "#~~#   2 " <<    v2       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-
 Log.error() << std::endl << "#~~#   3 "   << a3.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 Log.error() << "#~~#   3 " <<    v3       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+*/
 	TEST_REAL_EQUAL(a1.getForce().getDistance(v1), 0)
 	TEST_REAL_EQUAL(a2.getForce().getDistance(v2), 0)
 	TEST_REAL_EQUAL(a3.getForce().getDistance(v3), 0)
@@ -520,7 +516,7 @@ Log.error() << "#~~#   3 " <<    v3       << " "  << __FILE__ << "  " << __LINE_
 
 	// value from CHARMM:
 	PRECISION(1)
-	TEST_REAL_EQUAL(mmff.getEnergy(), 7.46466 * JOULE_PER_CAL)
+	TEST_REAL_EQUAL(mmff.getEnergy(), 38.44301 * JOULE_PER_CAL)
 RESULT
 
 CHECK(force test 5.2: Planes)
@@ -545,10 +541,6 @@ CHECK(force test 5.2: Planes)
 	PRECISION(2e-11)
 
 	// force value in CHARMM (kcal /mol A) !:
-	// -2.22167  10.47312   0.00000 
-	// -5.49903  -4.27990  -4.65629 
-  //  7.72070  -6.19322   0.00000 
-	//  0.00000   0.00000   4.65629
 	Vector3 v1(-2.22167, 10.47312, 0.00000);
  	Vector3 v2(-5.49903, -4.27990, -4.65629);
 	Vector3 v3(7.72070, -6.19322,  0.00000);
@@ -578,7 +570,7 @@ Log.error() << "#~~#   4 " <<    v4       << " "  << __FILE__ << "  " << __LINE_
 
 	// value from CHARMM:
 	PRECISION(1)
-	TEST_REAL_EQUAL(mmff.getEnergy(), 7.46466 * JOULE_PER_CAL)
+	TEST_REAL_EQUAL(mmff.getEnergy(), 36.46189 * JOULE_PER_CAL)
 RESULT
 
 
