@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.14.2.3 2006/06/13 15:18:51 amoll Exp $
+// $Id: logView.h,v 1.14.2.4 2006/09/08 15:33:33 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -66,10 +66,6 @@ namespace BALL
 
 			BALL_EMBEDDABLE(LogView,DockWidget)
 		
-			/**	@name	Constructors
-			*/	
-			//@{
-
 			/** Default Constructor.
 					The contructor connects the own
 					<b> stringstream</b> with the  \link BALL::LogStream Log \endlink  object. If a string is written into
@@ -87,17 +83,11 @@ namespace BALL
 			LogView(const LogView& view)
 				throw();
 
-			//@}
-			/** @name Destructors */
-			//@{
-
 			/** Destructor.
 					Calls  clear.
 			*/
 			virtual ~LogView()
 				throw();
-
-			//@}
 
 			/**	Setup the menu entry in "Edit->Clear Logs".
 			*/
@@ -109,9 +99,15 @@ namespace BALL
 			virtual void finalizeWidget(MainControl& main_control)
 				throw();
 
+			// output a string
+			void logString(const String& text);
+
 			public slots:
 
 			virtual void showGuestContextMenu(const QPoint&);
+			
+			/// Event filter logstream
+			bool eventFilter(QObject*, QEvent*);
 
 			protected:
 
@@ -126,8 +122,6 @@ namespace BALL
 			private:
 
 			QTextEdit* text_edit_;
-
-			bool output_running_;
 		};
   	
 } } // namespaces
