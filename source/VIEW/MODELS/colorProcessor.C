@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.38.2.1 2006/07/17 23:13:28 amoll Exp $
+// $Id: colorProcessor.C,v 1.38.2.2 2006/09/09 14:17:20 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -393,6 +393,8 @@ namespace BALL
 			Position x, y, z;
 			atom_grid_.getIndices(*box, x, y, z);
 
+			float radius, new_dist;
+
 			const Atom* const* item = 0;
 			float distance = Limits<float>::max();
 			List<HashGridBox3<const Atom*>* > box_list;
@@ -411,15 +413,10 @@ namespace BALL
 							HashGridBox3<const Atom*>::ConstDataIterator hit = box_ptr->beginData();
 							for (;hit != box_ptr->endData(); hit++)
 							{
-								// this is not 
-								float radius = (*hit)->getElement().getVanDerWaalsRadius();
-								if (model_type_ == MODEL_SA_SURFACE)
-								{
-									radius += 2;
-								}
+								radius = (*hit)->getElement().getVanDerWaalsRadius();
 								if (radius <= 0.0) radius = 1;
 								// avoid calculation of the square roots
-								float new_dist = ((*hit)->getPosition() - point).getSquareLength() - radius * radius;
+								new_dist = ((*hit)->getPosition() - point).getSquareLength() - radius * radius;
 								if (new_dist < distance)
 								{
 									item = &*hit;
