@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.22 2006/09/08 13:46:47 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.24 2006/09/11 15:37:18 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -40,7 +40,7 @@ const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 // CHARMM forces to BALL forces
 const double CHARMM_FORCES_FACTOR = Constants::JOULE_PER_CAL * FORCES_FACTOR;
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.22 2006/09/08 13:46:47 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.24 2006/09/11 15:37:18 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -573,9 +573,64 @@ Log.error() << "#~~#   4 " <<    v4       << " "  << __FILE__ << "  " << __LINE_
 	TEST_REAL_EQUAL(mmff.getEnergy(), 36.46189 * JOULE_PER_CAL)
 RESULT
 
+CHECK(force test 6: Torsions)
+	HINFile f("data/MMFF94-torsion.hin");
+	System s;
+	f >> s;
+	f.close();
+	TEST_EQUAL(s.countAtoms(), 4)
+	
+	// create references to the atoms
+	AtomIterator it = s.beginAtom();
+	Atom& a1 = *it++;
+	Atom& a2 = *it++;
+	Atom& a3 = *it++;
+	Atom& a4 = *it++;
+
+	mmff.setup(s);
+	enableOneComponent("MMFF94 Torsion", mmff);
+	mmff.updateEnergy();
+	mmff.updateForces();
+
+	PRECISION(2e-11)
+
+	// gradient value in CHARMM (kcal /mol A) !:
+	Vector3 v1(0.,  0.,  12.);
+	Vector3 v2(-5.19556474E-16, 0.,-12.);
+	Vector3 v3(-6., 0.,-6.);
+	Vector3 v4(6., 0., 6.);
+
+	v1 *= -CHARMM_FORCES_FACTOR;
+	v2 *= -CHARMM_FORCES_FACTOR;
+	v3 *= -CHARMM_FORCES_FACTOR;
+	v4 *= -CHARMM_FORCES_FACTOR;
+
+	PRECISION(2e-10)
+Log.error() << std::endl << "#~~#   1 "   << a1.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+Log.error() << "#~~#   1 " <<    v1       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+
+Log.error() << std::endl << "#~~#   2 "   << a2.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+Log.error() << "#~~#   2 " <<    v2       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+
+Log.error() << std::endl << "#~~#   3 "   << a3.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+Log.error() << "#~~#   3 " <<    v3       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+
+Log.error() << std::endl << "#~~#   4 "   << a4.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+Log.error() << "#~~#   4 " <<    v4       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+	TEST_REAL_EQUAL(a1.getForce().getDistance(v1), 0)
+	TEST_REAL_EQUAL(a2.getForce().getDistance(v2), 0)
+	TEST_REAL_EQUAL(a3.getForce().getDistance(v3), 0)
+	TEST_REAL_EQUAL(a4.getForce().getDistance(v4), 0)
+
+	// value from CHARMM:
+	PRECISION(0.01)
+	TEST_REAL_EQUAL(mmff.getEnergy(), 6.00000 * JOULE_PER_CAL)
+RESULT
 
 
-CHECK(force test 6: VDW)
+
+
+CHECK(force test 7: VDW)
 	HINFile f("data/MMFF94-vdw.hin");	
 	System s;
 	f >> s;
@@ -666,7 +721,7 @@ CHECK(force test 6: VDW)
 	}
 RESULT
 
-CHECK(force test 7: ES)
+CHECK(force test 8: ES)
 	MMFF94NonBonded& nb = *(MMFF94NonBonded*)enableOneComponent("MMFF94 NonBonded", mmff);
 	HINFile f("data/MMFF94-vdw.hin");	
 	System s;
