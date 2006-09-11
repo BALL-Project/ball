@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.25 2006/09/11 21:27:32 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.26 2006/09/11 23:42:27 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -40,7 +40,7 @@ const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 // CHARMM forces to BALL forces
 const double CHARMM_FORCES_FACTOR = Constants::JOULE_PER_CAL * FORCES_FACTOR;
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.25 2006/09/11 21:27:32 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.26 2006/09/11 23:42:27 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -638,8 +638,12 @@ CHECK(force test 7: VDW)
 	mmff.updateEnergy();
 	mmff.updateForces();
 
-	PRECISION(2e-12)
+	PRECISION(1)
+	
+	float vdw_charmm = 100.36634 * Constants::JOULE_PER_CAL;
+	TEST_REAL_EQUAL(mmff.getEnergy(), vdw_charmm)
 
+	PRECISION(2e-12)
 	/*
 	TEST_REAL_EQUAL(a1.getForce().getLength(), 3.7209408887406425E-09)
 	TEST_REAL_EQUAL(a2.getForce().getLength(), 3.7209408887406425E-09)
@@ -734,7 +738,7 @@ CHECK(force test 8: ES)
 	mmff.updateForces();
 	mmff.updateEnergy();
 
-	PRECISION(2e-12)
+	PRECISION(2e-22)
 
 	TEST_REAL_EQUAL(mmff.getEnergy(), 0)
 	TEST_REAL_EQUAL(a1.getForce().getLength(), 0)
@@ -748,15 +752,19 @@ CHECK(force test 8: ES)
 	TEST_REAL_EQUAL(a1.getCharge(), -1)
 	TEST_REAL_EQUAL(a2.getCharge(), 2)
 
-	PRECISION(2e-4)
-	TEST_REAL_EQUAL(nb.getESEnergy(), -1355.5)
-	PRECISION(2e-10)
+	PRECISION(1)
+	double es_charmm = -323.97229 * Constants::JOULE_PER_CAL;
+	TEST_REAL_EQUAL(nb.getESEnergy(), es_charmm)
+	PRECISION(2e-20)
 
-	TEST_REAL_EQUAL(a1.getForce().getLength(), 1.09798e-08)
-	TEST_REAL_EQUAL(a2.getForce().getLength(), 1.09798e-08)
+	float charmm_force = -158.03526 * CHARMM_FORCES_FACTOR;
 
-//   	TEST_REAL_EQUAL(a1.getForce().getLength() * CHARMM_FORCES_FACTOR, 162.57780)
-//   	TEST_REAL_EQUAL(a2.getForce().getLength() * CHARMM_FORCES_FACTOR, 162.57780)
+	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
+	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
+	TEST_REAL_EQUAL(a1.getForce().y, 0)
+	TEST_REAL_EQUAL(a2.getForce().y, 0)
+	TEST_REAL_EQUAL(a1.getForce().z, 0)
+	TEST_REAL_EQUAL(a2.getForce().z, 0)
 
 	// calculate the differential quotient of
 	// the energy and compare it to the force
