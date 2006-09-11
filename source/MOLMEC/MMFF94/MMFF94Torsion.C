@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.4.5 2006/06/27 18:26:18 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.4.6 2006/09/11 13:30:42 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -317,6 +317,7 @@ namespace BALL
 																				it->v2 * (1.0 - cos(phi * 2.0)) +
 																				it->v3 * (1.0 + cos(phi * 3.0)));
 
+Log.error() << "#~~#   1 " << it->v1 << " " << it->v2 << " " << it->v3            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 					energy_ += e;
 
 #ifdef BALL_DEBUG_TEST
