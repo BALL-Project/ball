@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.4.7 2006/09/11 15:51:01 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.4.8 2006/09/11 21:24:45 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -412,6 +412,9 @@ namespace BALL
 			double rrcj = rrj * cos(angle_ijk);
 			double rrck = rrk * cos(angle_jkl);
 
+			Log.precision(30);
+			
+
 			DVector3 a = ij % jk;
 			DVector3 b = jk % kl;
 			DVector3 c = a % b;
@@ -428,7 +431,7 @@ namespace BALL
 				          2. * torsion.v2 * sin(angle * 2.) +
 									3. * torsion.v3 * sin(angle * 3.);
 
-			c1 *= -FORCES_FACTOR * 2.;
+			c1 *= -0.5 * FORCES_FACTOR * Constants::JOULE_PER_CAL;
 
 			if (!us || a1.isSelected()) AddDV3_(a1.getForce(), di * c1);
 			if (!us || a2.isSelected()) AddDV3_(a2.getForce(), dj * c1);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.24 2006/09/11 15:37:18 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.25 2006/09/11 21:27:32 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -40,7 +40,7 @@ const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 // CHARMM forces to BALL forces
 const double CHARMM_FORCES_FACTOR = Constants::JOULE_PER_CAL * FORCES_FACTOR;
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.24 2006/09/11 15:37:18 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.25 2006/09/11 21:27:32 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -605,18 +605,7 @@ CHECK(force test 6: Torsions)
 	v3 *= -CHARMM_FORCES_FACTOR;
 	v4 *= -CHARMM_FORCES_FACTOR;
 
-	PRECISION(2e-10)
-Log.error() << std::endl << "#~~#   1 "   << a1.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   1 " <<    v1       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-
-Log.error() << std::endl << "#~~#   2 "   << a2.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   2 " <<    v2       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-
-Log.error() << std::endl << "#~~#   3 "   << a3.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   3 " <<    v3       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-
-Log.error() << std::endl << "#~~#   4 "   << a4.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   4 " <<    v4       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+	PRECISION(1e-16)
 	TEST_REAL_EQUAL(a1.getForce().getDistance(v1), 0)
 	TEST_REAL_EQUAL(a2.getForce().getDistance(v2), 0)
 	TEST_REAL_EQUAL(a3.getForce().getDistance(v3), 0)
