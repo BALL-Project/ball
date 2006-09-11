@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.4.6 2006/09/11 13:30:42 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.4.7 2006/09/11 15:51:01 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -25,8 +25,16 @@ namespace BALL
 	// Conversion from kJ / (mol A) into Newton
 	const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 
+	typedef TVector3<double> DVector3;
 
 	#define K_TORSION 0.5 * Constants::JOULE_PER_CAL
+
+	void MMFF94Torsion::AddDV3_(Vector3& f3, const TVector3<double> d3)
+	{
+		f3.x += d3.x;
+		f3.y += d3.y;
+		f3.z += d3.z;
+	}
 
 	MMFF94Torsion::Torsion::Torsion()
 		: type(-1),
@@ -317,7 +325,6 @@ namespace BALL
 																				it->v2 * (1.0 - cos(phi * 2.0)) +
 																				it->v3 * (1.0 + cos(phi * 3.0)));
 
-Log.error() << "#~~#   1 " << it->v1 << " " << it->v2 << " " << it->v3            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 					energy_ += e;
 
 #ifdef BALL_DEBUG_TEST
@@ -334,11 +341,14 @@ Log.error() << "#~~#   1 " << it->v1 << " " << it->v2 << " " << it->v3          
 	// calculates and adds its forces to the current forces of the force field
 	void MMFF94Torsion::updateForces()
 	{
-		double cosphi;
+		// Bond vectors of the three atoms
+		DVector3 ij, jk, kl;
 
-		Vector3	ab;	// vector from atom2 to atom1
-		Vector3 cb;	// vector from atom2 to atom3
-		Vector3 dc;	// vector from atom3 to atom4
+		// length of the three bonds
+		double l_ij, l_jk, l_kl;
+
+		// angle between ijk and jkl:
+		double angle_ijk, angle_jkl;
 
 		bool us = getForceField()->getUseSelection();
 
@@ -358,70 +368,72 @@ Log.error() << "#~~#   1 " << it->v1 << " " << it->v2 << " " << it->v3          
 				continue;
 			}
 
-			ab = a1.getPosition() - a2.getPosition();
-			const double length_ab = ab.getLength();
-			Vector3 ba = a2.getPosition() - a1.getPosition();
-			cb = a3.getPosition() - a2.getPosition();
-			const double length_cb = cb.getLength();
-			dc = a4.getPosition() - a3.getPosition();
-			const double length_dc = dc.getLength();
+			ij.set(a2.getPosition().x - a1.getPosition().x,
+						 a2.getPosition().y - a1.getPosition().y,
+						 a2.getPosition().z - a1.getPosition().z);
+			jk.set(a3.getPosition().x - a2.getPosition().x,
+						 a3.getPosition().y - a2.getPosition().y,
+						 a3.getPosition().z - a2.getPosition().z);
+			kl.set(a4.getPosition().x - a3.getPosition().x,
+						 a4.getPosition().y - a3.getPosition().y,
+						 a4.getPosition().z - a3.getPosition().z);
 
-			if (length_ab != 0 && length_cb != 0 && length_dc != 0) 
+			l_ij = ij.getLength();
+			l_jk = jk.getLength();
+			l_kl = kl.getLength();
+
+			if (Maths::isZero(l_ij) || 
+					Maths::isZero(l_jk) || 
+					Maths::isZero(l_kl) )
 			{
-				const Vector3  t = ba % cb;   // cross product of cb and ba
-				const Vector3  u = cb % dc;   // cross product of cb and dc
-
-				const double length_t2 = t.getSquareLength();
-				const double length_u2 = u.getSquareLength();
-
-				const double length_t = sqrt(length_t2);
-				const double length_u = sqrt(length_u2);
-
-				if (length_t != 0 && length_u != 0) 
-				{
-					cosphi = (t * u) / (length_t * length_u);
-
-					if (cosphi > 1.0)
-					{
-						cosphi = 1.0;
-					}
-					if (cosphi < -1.0)
-					{
-						cosphi = -1.0;
-					}
-
-					float phi = acos(cosphi);
-
-					double direction = (t % u) * cb;
-					/*
-					float factor = 0.5 * (- torsion.v1 * sin(phi) + 
-																2 * torsion.v2 * sin(2 * phi) +
-																3 * torsion.v3 * sin(3 * phi));
--.5*(D(a))(1+cos(f))*sin(f)+1.0*(D(b))(1-cos(2*f))*sin(2*f)-1.5*(D(c))(1+cos(3*f))*sin(3*f)
-					*/
-
-					double factor = -.5 * torsion.v1 * (1 + cos(phi)) * sin(phi) + 
-						              torsion.v2 * (1. -cos(2. * phi)) * sin(2. * phi)-
-													torsion.v3 * 1.5 * (1. + cos(3. * phi)) * sin(3. * phi);
-
-					if (direction > 0.0)
-					{
-						factor *= -1;
-					}
-
-					factor *= FORCES_FACTOR;
-
-					const Vector3 ca = a3.getPosition() - a1.getPosition();
-					const Vector3 db = a4.getPosition() - a2.getPosition();
-					const Vector3 dt =   (float)(factor / (length_t2 * cb.getLength())) * (t % cb);
-					const Vector3 du = - (float)(factor / (length_u2 * cb.getLength())) * (u % cb);
-
-					if (!us || a1.isSelected()) a1.getForce() += dt % cb;
-					if (!us || a2.isSelected()) a2.getForce() += ca % dt + du % dc;
-					if (!us || a3.isSelected()) a3.getForce() += dt % ba + db % du;
-					if (!us || a4.isSelected()) a4.getForce() += du % cb; 
-				}
+				continue;
 			}
+
+			angle_ijk = ij.getAngle(jk);
+			angle_jkl = jk.getAngle(kl);
+
+			// normalize the bond vectors:
+			ij /= l_ij;
+			jk /= l_jk;
+			kl /= l_kl;
+
+			double sin_j = sin(angle_ijk);
+			double sin_k = sin(angle_jkl);
+
+			double rsj = l_ij * sin_j;
+			double rsk = l_kl * sin_k;
+
+			double rs2j = 1. / (rsj * sin_j);
+			double rs2k = 1. / (rsk * sin_k);
+
+			double rrj = l_ij / l_jk;
+			double rrk = l_kl / l_jk;
+
+			double rrcj = rrj * cos(angle_ijk);
+			double rrck = rrk * cos(angle_jkl);
+
+			DVector3 a = ij % jk;
+			DVector3 b = jk % kl;
+			DVector3 c = a % b;
+			double d1 = c * jk;
+			double d2 = a * b;
+			double angle = atan2(d1, d2);
+
+			DVector3 di = -a * rs2j;
+			DVector3 dl = b * rs2k;
+			DVector3 dj = di * (rrcj - 1.) - dl * rrck;
+			DVector3 dk = -(di + dj + dl);
+
+			double c1 =     torsion.v1 * sin(angle) +
+				          2. * torsion.v2 * sin(angle * 2.) +
+									3. * torsion.v3 * sin(angle * 3.);
+
+			c1 *= -FORCES_FACTOR * 2.;
+
+			if (!us || a1.isSelected()) AddDV3_(a1.getForce(), di * c1);
+			if (!us || a2.isSelected()) AddDV3_(a2.getForce(), dj * c1);
+			if (!us || a3.isSelected()) AddDV3_(a3.getForce(), dk * c1);
+			if (!us || a4.isSelected()) AddDV3_(a4.getForce(), dl * c1);
 		}
 	}
 

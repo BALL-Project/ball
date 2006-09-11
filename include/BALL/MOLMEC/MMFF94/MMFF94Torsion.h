@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.h,v 1.1.4.2 2006/06/23 01:35:20 amoll Exp $
+// $Id: MMFF94Torsion.h,v 1.1.4.3 2006/09/11 15:51:03 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94TORSION_H
@@ -108,6 +108,9 @@ namespace BALL
 		//@}
 
 		protected:
+
+		// Add a double precision TVector3 to a single precision Vector3
+		inline void AddDV3_(Vector3& f3, const TVector3<double> d3);
 
 		double getU_(Position e);
 		double getV_(Position e);
