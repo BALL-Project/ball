@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.4.11 2006/09/12 16:15:46 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.4.12 2006/09/12 22:01:44 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -343,8 +343,8 @@ namespace BALL
 																							
 				force = direction * vdw_factor * FORCES_FACTOR * Constants::JOULE_PER_CAL;
 
-				a1.getForce() += force;
-				a2.getForce() -= force;
+				a1.getForce() -= force;
+				a2.getForce() += force;
 			}
 
 			if (es_enabled_)

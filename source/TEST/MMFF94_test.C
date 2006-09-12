@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.28 2006/09/12 21:45:41 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.29 2006/09/12 22:01:28 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -47,7 +47,7 @@ float diff(double original, double our)
 	return x / fabs(original);
 }
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.28 2006/09/12 21:45:41 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.29 2006/09/12 22:01:28 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -323,6 +323,8 @@ CHECK(test 3.1: linear Bends)
 	Vector3 v2(charmm, -charmm, 0);
 	Vector3 v3(-charmm, 0, 0);
 
+Log.error() << "#~~#   4 "  << v1           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+Log.error() << "#~~#   5 "  << a1.getForce()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	PRECISION(2e-10)
 	TEST_REAL_EQUAL(a1.getForce().getDistance(v1), 0)
 	TEST_REAL_EQUAL(a2.getForce().getDistance(v2), 0)

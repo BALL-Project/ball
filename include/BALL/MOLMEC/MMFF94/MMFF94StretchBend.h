@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.h,v 1.1.4.4 2006/06/23 01:35:20 amoll Exp $
+// $Id: MMFF94StretchBend.h,v 1.1.4.5 2006/09/12 22:01:03 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94STRETCHBEND_H
@@ -53,7 +53,7 @@ namespace BALL
 			Position ATIJK;
 			double energy;  // debug
 			bool emperical; // debug
-			Vector3 n1, n2;
+			TVector3<double> n1, n2;
 		};
 		
 		///
@@ -166,6 +166,7 @@ namespace BALL
 
 		private:
 
+		inline void AddDV3_(Vector3& f3, const TVector3<double> d3);
 		void calculateDeltas_();
 		bool setupBends_();
 		bool setupStretches_();
