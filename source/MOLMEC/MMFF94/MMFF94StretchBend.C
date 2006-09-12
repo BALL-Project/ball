@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.19 2006/08/24 14:15:06 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.20 2006/09/12 21:45:44 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -20,6 +20,18 @@ using namespace std;
 
 namespace BALL 
 {
+
+	void MMFF94StretchBend::AddDV3_(Vector3& f3, const TVector3<double> d3)
+	{
+		f3.x += d3.x;
+		f3.y += d3.y;
+		f3.z += d3.z;
+	}
+
+	inline TVector3<double> diffV3(const Vector3& a, const Vector3& b)
+	{
+		return TVector3<double>(a.x - b.x, a.y - b.y, a.z - b.z);
+	}
 
 	MMFF94StretchBend::Bend::Bend()
 		: theta0(0),
@@ -58,7 +70,7 @@ namespace BALL
 
 	// mdyne * A -> kJ / mol
 	// Constant * 4.1868 * 143.9325 / 2 
-	#define STRETCH_K0 301.3082955
+	const double STRETCH_K0 = Constants::JOULE_PER_CAL * 143.9325 / 2.0; 
 
 	// Conversion from kJ / (mol A) into Newton
 	const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
@@ -531,6 +543,8 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 	{
 		bool use_selection = mmff94_->getUseSelection();
 
+		TVector3<double> v1, v2;
+
 		for (Size i = 0; i < bends_.size(); i++) 
 		{
 			Bend& bend = bends_[i];
@@ -546,16 +560,17 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			// Calculate the vector between atom1 and atom2,
 			// test if the vector has length larger than 0 and normalize it
 
-			Vector3 v1 = bend.atom1->getPosition() - bend.atom2->getPosition();
-			Vector3 v2 = bend.atom3->getPosition() - bend.atom2->getPosition();
+			v1 = diffV3(bend.atom1->getPosition(), bend.atom2->getPosition());
+			v2 = diffV3(bend.atom3->getPosition(), bend.atom2->getPosition());
+
 			double length1 = v1.getLength();
 			double length2 = v2.getLength();
 
 			// test if the vector has length larger than 0 and normalize it
-			if (length1 == 0. || length2 == 0.) 
+			if (Maths::isZero(length1) || Maths::isZero(length2))
 			{
-				bend.n1 = Vector3(0.);
-				bend.n2 = Vector3(0.);
+				bend.n1.set(0.);
+				bend.n2.set(0.);
 				continue;
 			}
 
@@ -567,12 +582,12 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 
 			// Calculate the cross product of v1 and v2, test if it has length unequal 0,
 			// and normalize it.
-			Vector3 cross = v1 % v2;
+			TVector3<double> cross = v1 % v2;
 			double length = cross.getLength();
-			if (length == 0.) 
+			if (Maths::isZero(length))
 			{
-				bend.n1 = Vector3(0.);
-				bend.n2 = Vector3(0.);
+				bend.n1.set(0.);
+				bend.n2.set(0.);
 				continue;
 			}
 
@@ -611,9 +626,9 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 
 			if (!bend.is_linear)
 			{
-				Vector3 t1 = v1 % cross;
+				TVector3<double> t1 = v1 % cross;
 				t1.normalize();
-				Vector3 t2 = v2 % cross;
+				TVector3<double> t2 = v2 % cross;
 				t2.normalize();
 
 				bend.n1 = -t1 * inverse_length_v1;
@@ -625,7 +640,10 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		for (Size i = 0 ; i < stretches_.size(); i++)
 		{
 			Vector3 direction(stretches_[i].atom1->getPosition() - stretches_[i].atom2->getPosition());
-			const double distance = direction.getLength(); 
+			double distance = direction.x * direction.x +
+												direction.y * direction.y +
+												direction.z * direction.z;
+			distance = sqrt(distance);
 			stretches_[i].delta_r = distance - (double) stretches_[i].r0;
 			direction /= distance;
 			stretches_[i].n = direction;
@@ -656,6 +674,8 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 
 		const double SB_CONSTANT = STRETCH_BEND_K0 / DEGREE_TO_RADIAN * FORCES_FACTOR;
 
+		TVector3<double> c1, c2, r1, r3;
+
 		for (Size i = 0; i < stretch_bends_.size(); i++)
 		{
 			const StretchBend& sb = stretch_bends_[i];
@@ -669,13 +689,13 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			}
 
 			// normalized vectors from center atom to outer atoms
-			Vector3 c1 = bend.atom1->getPosition() - bend.atom2->getPosition();
-			double l = c1.getSquareLength();
-			if (!Maths::isZero(l)) c1 /= sqrt(l);
+			c1 = diffV3(bend.atom1->getPosition(), bend.atom2->getPosition());
+			double l = c1.getLength();
+			if (!Maths::isZero(l)) c1 /= l;
 
-			Vector3 c2 = bend.atom3->getPosition() - bend.atom2->getPosition();
-			l = c2.getSquareLength();
-			if (!Maths::isZero(l)) c2 /= sqrt(l);
+			c2 = diffV3(bend.atom3->getPosition(), bend.atom2->getPosition());
+			l = c2.getLength();
+			if (!Maths::isZero(l)) c2 /= l;
 			
 			// force equation:
 			// outer atoms i + k:
@@ -686,8 +706,8 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			// minus sum of the forces on the outer atoms
 
 			const double temp = bend.delta_theta * FORCES_FACTOR * STRETCH_BEND_K0;
-			Vector3 r1 = c1 * sb.kba_ijk * temp;
-			Vector3 r3 = c2 * sb.kba_kji * temp;
+			r1 = c1 * sb.kba_ijk * temp;
+			r3 = c2 * sb.kba_kji * temp;
 
 			const double d_ij = stretches_[sb.stretch_i_j].delta_r;
  			const double d_jk = stretches_[sb.stretch_j_k].delta_r;
@@ -696,9 +716,9 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			r1 += bend.n1 * sb_scale;
 			r3 += bend.n2 * sb_scale;
 				
-			if (!us || bend.atom1->isSelected()) bend.atom1->getForce() += r1;
-			if (!us || bend.atom2->isSelected()) bend.atom2->getForce() -= r1 + r3;
-			if (!us || bend.atom3->isSelected()) bend.atom3->getForce() += r3;
+			if (!us || bend.atom1->isSelected()) AddDV3_(bend.atom1->getForce(), r1);
+			if (!us || bend.atom2->isSelected()) AddDV3_(bend.atom2->getForce(), -(r1 + r3));
+			if (!us || bend.atom3->isSelected()) AddDV3_(bend.atom3->getForce(), r3);
 		}
 	}
 
@@ -760,6 +780,9 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 	void MMFF94StretchBend::updateBendForces()
 	{
 		bool us = mmff94_->getUseSelection();
+
+		TVector3<double> n1, n2;
+
 		for (Size i = 0; i < bends_.size(); i++) 
 		{
 			Bend& bend = bends_[i];
@@ -773,21 +796,19 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			}
 			else
 			{
-//   				factor = -BEND_KX * bend.ka * sin(bends_[i].theta0 * DEGREE_TO_RADIAN);
-//   				factor = -BEND_KX * bend.ka * (1 - cos(bends_[i].theta0 * DEGREE_TO_RADIAN));
 				factor = -BEND_KX * bend.ka;
 			}
 			
-			const Vector3 n1 = bend.n1 * factor * FORCES_FACTOR;
-			Vector3 n2 = bend.n2 * factor * FORCES_FACTOR;
+			n1 = bend.n1 * factor * FORCES_FACTOR;
+			n2 = bend.n2 * factor * FORCES_FACTOR;
 
-			if (!us || bend.atom1->isSelected()) bend.atom1->getForce() += n1;
-			if (!us || bend.atom3->isSelected()) bend.atom3->getForce() += n2;
+			if (!us || bend.atom1->isSelected()) AddDV3_(bend.atom1->getForce(), n1);
+			if (!us || bend.atom3->isSelected()) AddDV3_(bend.atom3->getForce(), n2);
 
 			if (!us || bend.atom2->isSelected())
 			{
-				bend.atom2->getForce() -= n1;
-				bend.atom2->getForce() -= n2;
+				AddDV3_(bend.atom2->getForce(), -n1);
+				AddDV3_(bend.atom2->getForce(), -n2);
 			}
 		}
 	}

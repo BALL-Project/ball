@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.27 2006/09/12 00:06:19 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.28 2006/09/12 21:45:41 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -40,7 +40,14 @@ const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 // CHARMM forces to BALL forces
 const double CHARMM_FORCES_FACTOR = Constants::JOULE_PER_CAL * FORCES_FACTOR;
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.27 2006/09/12 00:06:19 amoll Exp $")
+float diff(double original, double our)
+{
+	double x = original - our;
+	x = fabs(x);
+	return x / fabs(original);
+}
+
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.28 2006/09/12 21:45:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -99,7 +106,7 @@ ForceFieldComponent* ffc = enableOneComponent("MMFF94 StretchBend", mmff);
 MMFF94StretchBend& sb = *((MMFF94StretchBend*) ffc);
 
 // optimal values and old values comared:
-CHECK(force test 0: Stretches)
+CHECK(test 1.1: Stretches)
 	HINFile f("data/MMFF94_test1.hin");	
 	System s;
 	f >> s;
@@ -131,7 +138,7 @@ CHECK(force test 0: Stretches)
 RESULT
 
 // compare values to CHARMM:
-CHECK(force test 1: Stretches)
+CHECK(test 1.2: Stretches compared to CHARMM implementation)
 	HINFile f("data/MMFF94-stretch.hin");
 	System s;
 	f >> s;
@@ -140,19 +147,25 @@ CHECK(force test 1: Stretches)
 
 	mmff.setup(s);
 	mmff.updateEnergy();
-	sb.updateStretchForces();
-
+	mmff.updateForces();
 	AtomIterator it = s.beginAtom();
+
+	float charmm_energy = 147.96645 * Constants::JOULE_PER_CAL;
+	TEST_EQUAL(diff(charmm_energy, sb.getStretchEnergy()) < 0.00001, true)
+
 	// value from CHARMM:
-	Vector3 charmm(0, 0, -40.2555071);
+	Vector3 charmm(-879.369641, 0, 0);
 	charmm *= CHARMM_FORCES_FACTOR;
-	TEST_REAL_EQUAL(it->getForce().getDistance(-charmm), 0)
-	it++;
+
 	TEST_REAL_EQUAL(it->getForce().getDistance(charmm), 0)
+	TEST_EQUAL(diff(charmm.x, it->getForce().x) < 0.00001, true)
+	it++;
+	TEST_REAL_EQUAL(it->getForce().getDistance(-charmm), 0)
+	TEST_EQUAL(diff(-charmm.x, it->getForce().x) < 0.00001, true)
 RESULT
 
 
-CHECK(force test 2: Stretches)
+CHECK(test 1.3: Stretches with finite difference)
 	HINFile f("data/MMFF94_test1.hin");	
 	System s;
 	f >> s;
@@ -166,16 +179,14 @@ CHECK(force test 2: Stretches)
 	Atom& a2 = *it;
 
 	mmff.setup(s);
-
-	sb.updateEnergy();
+	mmff.updateEnergy();
+	mmff.updateForces();
+	PRECISION(1e-11)
 	TEST_REAL_EQUAL(sb.getStretchEnergy(), 0)
-	sb.updateStretchForces();
-	sb.updateStretchEnergy();
 
 	// low precision here:
-	PRECISION(1e-11)
+	PRECISION(1e-13)
 
-	TEST_REAL_EQUAL(sb.getStretchEnergy(), 0)
 	TEST_REAL_EQUAL(a1.getForce().getLength(), 0)
 	TEST_REAL_EQUAL(a2.getForce().getLength(), 0)
 
@@ -204,7 +215,7 @@ CHECK(force test 2: Stretches)
 	}	
 RESULT
 
-CHECK(force test 3.1: Bends)
+CHECK(test 2.1: Bends)
 	HINFile f("data/MMFF94-bend.hin");
 	System s;
 	f >> s;
@@ -226,123 +237,61 @@ CHECK(force test 3.1: Bends)
 	mmff.updateEnergy();
 	mmff.updateForces();
 
-	PRECISION(2e-11)
+	PRECISION(0.5)
 
-	// value in CHARMM (kcal /mol A) !:
-	// 0.  -27.3344889  0.
-	// -27.3344889 27.3344889  0.
-	// 27.3344889  0.  0.
-	TEST_REAL_EQUAL(a1.getForce().x, 0)
-	TEST_REAL_EQUAL(a1.getForce().y, -1.89975213338e-09)
-	TEST_REAL_EQUAL(a1.getForce().z, 0)
+	float charmm_energy = 3.09341 * Constants::JOULE_PER_CAL;
+	TEST_REAL_EQUAL(mmff.getEnergy(), charmm_energy)
+	TEST_EQUAL(diff(charmm_energy, mmff.getEnergy() < 0.0001), true)
 
-	TEST_REAL_EQUAL(a2.getForce().x, -1.89975213338e-09)
-	TEST_REAL_EQUAL(a2.getForce().y, 1.89975213338e-09)
-	TEST_REAL_EQUAL(a2.getForce().z, 0)
-
-	TEST_REAL_EQUAL(a3.getForce().x, 1.89975213338e-09)
-	TEST_REAL_EQUAL(a3.getForce().y, 0)
-	TEST_REAL_EQUAL(a3.getForce().z, 0)
-
-	a3.setPosition(Vector3(0, 2.96900, 0));
-	mmff.updateForces();
-
-	TEST_REAL_EQUAL(a1.getForce().x, 0)
-	TEST_REAL_EQUAL(a1.getForce().y, -1.89975213338e-09)
-	TEST_REAL_EQUAL(a1.getForce().z, 0)
-
-	TEST_REAL_EQUAL(a2.getForce().x, -6.20026863185e-10)
-	TEST_REAL_EQUAL(a2.getForce().y, 1.89975213338e-09)
-	TEST_REAL_EQUAL(a2.getForce().z, 0)
-
-	TEST_REAL_EQUAL(a3.getForce().x, 6.20026863185e-10)
-	TEST_REAL_EQUAL(a3.getForce().y, 0)
-	TEST_REAL_EQUAL(a3.getForce().z, 0)
-RESULT
-
-// finite differences dont work for the bends:
-/*
-CHECK(force test 3.2: Bends)
-	HINFile f("data/MMFF94_test3.hin");	
-	System s;
-	f >> s;
-	f.close();
-	TEST_EQUAL(s.countAtoms(), 3)
-	
-	// Atoms are at (0,0,0), (0,-1,0), (1, 0, 0)
-
-	// create references to the two atoms
-	AtomIterator it = s.beginAtom();
-	Atom& a1 = *it++;
-	Atom& a2 = *it++;
-	Atom& a3 = *it++;
-
-	Vector3 v1 = a1.getPosition() - a2.getPosition();
-	Vector3 v2 = a3.getPosition() - a2.getPosition();
-	Vector3 axis = v1 % v2;
-
-	Matrix4x4 m;
-	Angle angle_0(104.893, false);
-	// k = 1.413
-	m.setRotation(angle_0, axis);
-
-	Vector3 v3 = m * v1;
-	v3 += a2.getPosition();
-	a3.setPosition(v3);
-
-	mmff.setup(s);
-
-	sb.updateForces();
-	a1.setForce(Vector3());
-	a2.setForce(Vector3());
-	a3.setForce(Vector3());
-
-	sb.updateBendForces();
-	sb.updateBendEnergy();
+	// gradient value in CHARMM (kcal /mol A) !:
+	Vector3 v1(0., 27.3344889, 0.);
+	Vector3 v2(27.3344889,-27.3344889, 0.);
+	Vector3 v3(-27.3344889, 0., 0.);
+	v1 *= -CHARMM_FORCES_FACTOR;
+	v2 *= -CHARMM_FORCES_FACTOR;
+	v3 *= -CHARMM_FORCES_FACTOR;
 
 	PRECISION(2e-12)
+	TEST_REAL_EQUAL(a1.getForce().x, v1.x)
+	TEST_REAL_EQUAL(a1.getForce().y, v1.y)
+	TEST_REAL_EQUAL(a1.getForce().z, v1.z)
 
-	TEST_REAL_EQUAL(sb.getBendEnergy(), 0)
-	TEST_REAL_EQUAL(a1.getForce().getLength(), 0)
-	TEST_REAL_EQUAL(a2.getForce().getLength(), 0)
-	TEST_REAL_EQUAL(a3.getForce().getLength(), 0)
+	TEST_REAL_EQUAL(a2.getForce().x, v2.x)
+	TEST_REAL_EQUAL(a2.getForce().y, v2.y)
+	TEST_REAL_EQUAL(a2.getForce().z, v2.z)
 
-	// calculate the differential quotient of
-	// the energy and compare it to the force
-	Vector3 pos = a3.getPosition();
+	TEST_REAL_EQUAL(a3.getForce().x, v3.x)
+	TEST_REAL_EQUAL(a3.getForce().y, v3.y)
+	TEST_REAL_EQUAL(a3.getForce().z, v3.z)
 
-	for (double d = .0; d <= 0.1; d += 0.01)
-	{
-		// move the atom to the new position
-		a3.getPosition() = pos + Vector3(0., -d, 0.0);
-		Angle angle = v1.getAngle(a3.getPosition() - a2.getPosition());
+	TEST_EQUAL(diff(v2.y, a2.getForce().y) < 0.001, true)
 
-		// calculate the force
-		sb.updateForces();
-		a1.setForce(Vector3(0.));
-		a2.setForce(Vector3(0.));
-		a3.setForce(Vector3(0.));
-		sb.updateBendForces();
-		double force = a1.getForce().x;
-		Vector3 fv = a1.getForce();
-		TEST_REAL_EQUAL(fv.y, 0.)
-		TEST_REAL_EQUAL(fv.z, 0.)
-		TEST_REAL_EQUAL(a1.getForce().getSquareLength(), a3.getForce().getSquareLength())
-		sb.updateEnergy();
-		double dE = sb.getBendEnergy();
 
-		// translate atom 3 by delta Angstrom in y-axis direction
-		// to determine the differential quotient
-		a3.getPosition() += Vector3(0.0, delta, 0.0);
-		double angle2 = Angle(v1.getAngle(a3.getPosition() - a2.getPosition()) - angle).toDegree();
-		mmff.updateEnergy();
-		dE = (sb.getBendEnergy() - dE) / angle2;
-//    		TEST_REAL_EQUAL(force, dE * FORCES_FACTOR)
-	}	
+	a3.setPosition(Vector3(0, 2.96900, 0));
+
+	v1.set(0., 27.3344889, 0.);
+	v2.set(8.92122591,-27.3344889, 0.);
+	v3.set(-8.92122591, 0., 0.);
+	v1 *= -CHARMM_FORCES_FACTOR;
+	v2 *= -CHARMM_FORCES_FACTOR;
+	v3 *= -CHARMM_FORCES_FACTOR;
+
+	mmff.updateForces();
+
+	TEST_REAL_EQUAL(a1.getForce().x, v1.x)
+	TEST_REAL_EQUAL(a1.getForce().y, v1.y)
+	TEST_REAL_EQUAL(a1.getForce().z, v1.z)
+
+	TEST_REAL_EQUAL(a2.getForce().x, v2.x)
+	TEST_REAL_EQUAL(a2.getForce().y, v2.y)
+	TEST_REAL_EQUAL(a2.getForce().z, v2.z)
+
+	TEST_REAL_EQUAL(a3.getForce().x, v3.x)
+	TEST_REAL_EQUAL(a3.getForce().y, v3.y)
+	TEST_REAL_EQUAL(a3.getForce().z, v3.z)
 RESULT
-*/
 
-CHECK(force test 3.3: linear Bends)
+CHECK(test 3.1: linear Bends)
 	HINFile f("data/MMFF94-bend-lin.hin");
 	System s;
 	f >> s;
@@ -379,7 +328,9 @@ CHECK(force test 3.3: linear Bends)
 	TEST_REAL_EQUAL(a2.getForce().getDistance(v2), 0)
 	TEST_REAL_EQUAL(a3.getForce().getDistance(v3), 0)
 
-	PRECISION(10)
+	TEST_EQUAL(diff(v2.y, a2.getForce().y) < 0.001, true)
+
+	PRECISION(1)
 	TEST_REAL_EQUAL(mmff.getEnergy(), 100.00715 * JOULE_PER_CAL)
 RESULT
 
@@ -502,12 +453,6 @@ CHECK(force test 5.1: Planes)
 
 	PRECISION(2e-14)
 /*
-Log.error() << std::endl << "#~~#   1 "   << a1.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   1 " <<    v1       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << std::endl << "#~~#   2 "   << a2.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   2 " <<    v2       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << std::endl << "#~~#   3 "   << a3.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   3 " <<    v3       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 */
 	TEST_REAL_EQUAL(a1.getForce().getDistance(v1), 0)
 	TEST_REAL_EQUAL(a2.getForce().getDistance(v2), 0)
@@ -552,17 +497,9 @@ CHECK(force test 5.2: Planes)
 	v4 *= CHARMM_FORCES_FACTOR;
 
 	PRECISION(2e-10)
-Log.error() << std::endl << "#~~#   1 "   << a1.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   1 " <<    v1       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
-Log.error() << std::endl << "#~~#   2 "   << a2.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   2 " <<    v2       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
-Log.error() << std::endl << "#~~#   3 "   << a3.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   3 " <<    v3       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
-Log.error() << std::endl << "#~~#   4 "   << a4.getForce()        << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   4 " <<    v4       << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	TEST_REAL_EQUAL(a1.getForce().getDistance(v1), 0)
 	TEST_REAL_EQUAL(a2.getForce().getDistance(v2), 0)
 	TEST_REAL_EQUAL(a3.getForce().getDistance(v3), 0)
@@ -646,7 +583,6 @@ CHECK(force test 7: VDW)
 	PRECISION(2e-22)
 
 	float charmm_force = -158.03526 * CHARMM_FORCES_FACTOR;
-Log.error() << "#~~#   2 "   << a1.getForce().x << " " << charmm_force          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	
 	TEST_REAL_EQUAL(a1.getForce().x,  charmm_force);
 	TEST_REAL_EQUAL(a2.getForce().x, -charmm_force);
