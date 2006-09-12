@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.2.2.2.2.1 2006/08/31 16:06:06 leonhardt Exp $
+// $Id: dockResult.C,v 1.2.2.2.2.2 2006/09/12 14:27:18 leonhardt Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -277,46 +277,67 @@ namespace BALL
 					INI_out.insertValue(section, String(j), String(scorings_[i].snapshot_order_[j]));
 				}
 			}
-		/*	// second: store system property (important for redocking)
-			INI_out.appendSection("ATOM_CONTAINER_PROPERTY");
-			AtomContainerIterator ait = conformation_set_->getSystem().beginAtomContainer();
-			Position i = 0;
+
+			// second: store partner 1 of the docked system in a temporary PDBFile
+			System sys(conformation_set_->getSystem());
+			AtomContainerIterator ait = sys.beginAtomContainer();
+			// skip system-level
+			++ait;
 			for (;+ait;++ait)
 			{
-				Log.error() << ait->getName() << std::endl;
-				if (ait->hasProperty("DOCKING_PARTNER_1"))
+				if (!ait->hasProperty("DOCKING_PARTNER_1"))
 				{
-					INI_out.insertValue("ATOM_CONTAINER_PROPERTY", String(i), "DOCKING_PARTNER_1");
+					ait->getParent()->removeChild(*ait);
+					delete &*ait;
 				}
-				else if (ait->hasProperty("DOCKING_PARTNER_2"))
-				{
-					INI_out.insertValue("ATOM_CONTAINER_PROPERTY", String(i), "DOCKING_PARTNER_2");
-				}
-				i++;
-			}*/
+			}
+			String PDB_temp_1;
+			File::createTemporaryFilename(PDB_temp_1);
+			PDBFile PDB_out_1(PDB_temp_1, std::ios::out);
+			PDB_out_1 << sys;
 
-			// third: store docked system in a temporary PDBFile
-			String PDB_temp;
-			File::createTemporaryFilename(PDB_temp);
-			PDBFile PDB_out(PDB_temp, std::ios::out);
-			PDB_out << conformation_set_->getSystem();
-			
+      // third: store partner 2 of the docked system in a temporary PDBFile
+			sys = conformation_set_->getSystem();
+			ait = sys.beginAtomContainer();
+			// skip system-level
+			++ait;
+			for (;+ait;++ait)
+			{
+				if (!ait->hasProperty("DOCKING_PARTNER_2"))
+				{
+					ait->getParent()->removeChild(*ait);
+					delete &*ait;
+				}
+			}
+			String PDB_temp_2;
+			File::createTemporaryFilename(PDB_temp_2);
+			PDBFile PDB_out_2(PDB_temp_2, std::ios::out);
+			PDB_out_2 << sys;
+
 			// fourth: store trajectories in a temporary DCDFile
 			String DCD_temp;
 			File::createTemporaryFilename(DCD_temp);
 			conformation_set_->writeDCDFile(DCD_temp);
 			
-			// before putting these 3 files into one, we need to know
-			// how many lines the INIFile and PDBFile have
-			PDB_out.reopen(std::ios::in);
-			Size line_nr_PDB = 0;
-			while(PDB_out.LineBasedFile::readLine())
+			// before putting these 4 files into one, we need to know
+			// how many lines the INIFile and PDBFiles have
+			PDB_out_1.reopen(std::ios::in);
+			Size line_nr_PDB_1 = 0;
+			while(PDB_out_1.LineBasedFile::readLine())
 			{
-			 	line_nr_PDB++;
+			 	line_nr_PDB_1++;
 			}
-			// write the number of lines in the first 2 lines of the result file
+			PDB_out_2.reopen(std::ios::in);
+			Size line_nr_PDB_2 = 0;
+			while(PDB_out_2.LineBasedFile::readLine())
+			{
+			 	line_nr_PDB_2++;
+			}
+
+			// write the number of lines in the first 3 lines of the result file
 			result << INI_out.getNumberOfLines() << std::endl;
-			result << line_nr_PDB << std::endl;
+			result << line_nr_PDB_1 << std::endl;
+			result << line_nr_PDB_2 << std::endl;
 			
 			/// write INIFile in File result
 			INIFile::LineIterator lit = INI_out.getLine(0);
@@ -324,11 +345,17 @@ namespace BALL
 			{
 				result << *lit << std::endl;
 			}
-			/// write PDBFile in File result
-			PDB_out.reopen(std::ios::in);
-			while(PDB_out.LineBasedFile::readLine())
+			/// write PDBFile 1 in File result
+			PDB_out_1.reopen(std::ios::in);
+			while(PDB_out_1.LineBasedFile::readLine())
 			{
-			 	result << PDB_out.getLine() << std::endl;
+			 	result << PDB_out_1.getLine() << std::endl;
+			}
+			/// write PDBFile 2 in File result
+			PDB_out_2.reopen(std::ios::in);
+			while(PDB_out_2.LineBasedFile::readLine())
+			{
+			 	result << PDB_out_2.getLine() << std::endl;
 			}
 			/// write DCDFile in File result
 			std::ifstream DCD_file(DCD_temp.c_str(), std::ios::in | std::ios::binary);
@@ -340,9 +367,10 @@ namespace BALL
 			}
 			DCD_file.close();
 			
-			// remove the 3 temporary files
+			// remove the 4 temporary files
 			File::remove(INI_temp);
-			File::remove(PDB_temp);
+			File::remove(PDB_temp_1);
+			File::remove(PDB_temp_2);
 			File::remove(DCD_temp);
 			
 			return true;
@@ -363,9 +391,10 @@ namespace BALL
 			throw()
 		{
 			// read first two lines with line numbers of INIFile and PDBFile
-			Size INI_lines, PDB_lines;
+			Size INI_lines, PDB_lines_1, PDB_lines_2;
 			file >> INI_lines;
-			file >> PDB_lines;
+			file >> PDB_lines_1;
+			file >> PDB_lines_2;
 			// first: read INI part from result file in INIFile
 			INIFile INI_in;
 			char buffer[2000];
@@ -450,44 +479,58 @@ namespace BALL
 				// add new Scoring_ to vector scorings_
 				scorings_.push_back(Scoring_(name, options, scores, snapshot_order));
 			}
-			/*// read system property in temporary vector
-			vector<String> sys_prop;
-			if (!INI_in.hasSection("ATOM_CONTAINER_PROPERTY")) return false;
-			it = INI_in.getSectionFirstLine("ATOM_CONTAINER_PROPERTY"); 
-			it.getSectionNextLine();
-			for (; +it; it.getSectionNextLine())
-			{
-				String line(*it);
-				sys_prop.push_back(line.after("="));
-			}*/
-			
-			// second: read PDB part from result file in a temporary PDBFile
-			String PDB_temp;
-			File::createTemporaryFilename(PDB_temp);
-			PDBFile PDB_in(PDB_temp, std::ios::out);
-			for (Position p = 0; p < PDB_lines; p++)
+						
+			// second: read PDB parts from result file in a temporary PDBFile
+			// docking partner 1
+			String PDB_temp_1;
+			File::createTemporaryFilename(PDB_temp_1);
+			PDBFile PDB_in_1(PDB_temp_1, std::ios::out);
+			for (Position p = 0; p < PDB_lines_1; p++)
 			{
 				if (!file.getline(&(buffer[0]), 2000))
 				{
 					Log.error() << "Error while reading Dock Result file, could not read PDB part! " << __FILE__ << " " << __LINE__ << std::endl;
 					return false;
 				}
-				PDB_in << buffer << std::endl;
+				PDB_in_1 << buffer << std::endl;
 			}
-			
-			// read PDBFile, fill system
-			PDB_in.reopen(std::ios::in);
+			// read PDBFile, fill system with docking partner 1
+			PDB_in_1.reopen(std::ios::in);
 			System s;
-			PDB_in >> s;
+			PDB_in_1 >> s;
 			// set property of the system
-		/*	AtomContainerIterator ait = s.beginAtomContainer();
-			Position i = 0;
+			AtomContainerIterator ait = s.beginAtomContainer();
 			for ( ; +ait; ++ait)
 			{
-				Log.error() << ait->getName() << std::endl;
-				ait->setProperty(sys_prop[i]);
-				i++;
-			}*/
+				ait->setProperty("DOCKING_PARTNER_1");
+			}
+
+			// docking partner 2
+			String PDB_temp_2;
+			File::createTemporaryFilename(PDB_temp_2);
+			PDBFile PDB_in_2(PDB_temp_2, std::ios::out);
+			for (Position p = 0; p < PDB_lines_2; p++)
+			{
+				if (!file.getline(&(buffer[0]), 2000))
+				{
+					Log.error() << "Error while reading Dock Result file, could not read PDB part! " << __FILE__ << " " << __LINE__ << std::endl;
+					return false;
+				}
+				PDB_in_2 << buffer << std::endl;
+			}
+			// read PDBFile, fill system with docking partner 2
+			PDB_in_2.reopen(std::ios::in);
+			PDB_in_2 >> s;
+			// set property for docking partner 2
+			ait = s.beginAtomContainer();
+			for ( ; +ait; ++ait)
+			{
+				if (!ait->hasProperty("DOCKING_PARTNER_1"))
+				{
+					ait->setProperty("DOCKING_PARTNER_2");
+				}
+			}
+
 			// create new ConformationSet and set the docked system
 			if (conformation_set_)
 			{
@@ -525,7 +568,8 @@ namespace BALL
 			};
 			
 			// remove temporary files
-			File::remove(PDB_temp);
+			File::remove(PDB_temp_1);
+			File::remove(PDB_temp_2);
 			File::remove(DCD_temp);
 			
 			return true;
