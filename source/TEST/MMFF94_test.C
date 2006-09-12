@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.26 2006/09/11 23:42:27 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.27 2006/09/12 00:06:19 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -40,7 +40,7 @@ const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 // CHARMM forces to BALL forces
 const double CHARMM_FORCES_FACTOR = Constants::JOULE_PER_CAL * FORCES_FACTOR;
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.26 2006/09/11 23:42:27 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.27 2006/09/12 00:06:19 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -643,15 +643,21 @@ CHECK(force test 7: VDW)
 	float vdw_charmm = 100.36634 * Constants::JOULE_PER_CAL;
 	TEST_REAL_EQUAL(mmff.getEnergy(), vdw_charmm)
 
-	PRECISION(2e-12)
-	/*
-	TEST_REAL_EQUAL(a1.getForce().getLength(), 3.7209408887406425E-09)
-	TEST_REAL_EQUAL(a2.getForce().getLength(), 3.7209408887406425E-09)
+	PRECISION(2e-22)
+
+	float charmm_force = -158.03526 * CHARMM_FORCES_FACTOR;
+Log.error() << "#~~#   2 "   << a1.getForce().x << " " << charmm_force          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+	
+	TEST_REAL_EQUAL(a1.getForce().x,  charmm_force);
+	TEST_REAL_EQUAL(a2.getForce().x, -charmm_force);
+	TEST_REAL_EQUAL(a1.getForce().y, 0)
 	TEST_REAL_EQUAL(a2.getForce().y, 0)
+	TEST_REAL_EQUAL(a1.getForce().z, 0)
 	TEST_REAL_EQUAL(a2.getForce().z, 0)
 
 	TEST_EQUAL(a1.getForce(), -a2.getForce())
 
+	/*
 	// calculate the differential quotient of
 	// the energy and compare it to the force
 	PRECISION(2e-12)
@@ -694,7 +700,6 @@ CHECK(force test 7: VDW)
    4    0.00383389638   0.00304170822  -0.0145154378
 	 5   -0.00262223589   0.00805800434  -0.0127604689
    5   -0.003    0.008   -0.013
-	*/
 
 	// values obtained in BALLView:
 	Vector3 vs[5];
@@ -712,6 +717,7 @@ CHECK(force test 7: VDW)
 		TEST_REAL_EQUAL(ait->getForce().z , vs[0].z)
 		ait++;
 	}
+	*/
 RESULT
 
 CHECK(force test 8: ES)

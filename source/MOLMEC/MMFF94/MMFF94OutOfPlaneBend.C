@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.10 2006/09/08 16:03:03 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.11 2006/09/12 00:06:47 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -389,7 +389,7 @@ namespace BALL
 				// wilson K0 * this_bend_constant * wilson_angle * DEGREE_TO_RADIAN * DEGREE_TO_RADIAN
 				double c1 = dl * FC * bend.k_oop * FORCES_FACTOR * Constants::JOULE_PER_CAL;
 
-				
+			/*	
 			Log.precision(30);
       Log.error() << "bond   " << theta            << std::endl;
       Log.error() << "wilson " << dl            << std::endl;
@@ -398,7 +398,7 @@ namespace BALL
       Log.error() << "tdst   "  << tdst           << std::endl;
       Log.error() << "c1     " << c1            << std::endl;
       Log.error() << "abc "   << an << bn << cn << std::endl << std::endl << std::endl << std::endl;
-			
+			*/
 
 				// resulting force vectors on atoms i, k and l:
 				const TVector3<double> d_l = (an * cdst - jl * tan_dl) *c1 / length_jl;
