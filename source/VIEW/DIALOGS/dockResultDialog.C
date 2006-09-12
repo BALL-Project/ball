@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.3.2.10.2.2 2006/09/12 14:24:45 leonhardt Exp $
+// $Id: dockResultDialog.C,v 1.3.2.10.2.3 2006/09/12 14:37:57 leonhardt Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockResultDialog.h>
@@ -10,7 +10,6 @@
 
 #include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
-#include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/dockResult.h>
 
 #include <QtGui/QTableWidget>
@@ -58,7 +57,6 @@ namespace BALL
 		    return;
 		  }
 			addScoringFunction("Amber Force Field", &(mol_struct->getAmberConfigurationDialog()));
-			addScoringFunction("Random");
 		
 			result_table->setSortingEnabled(false);
 			result_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -284,10 +282,6 @@ namespace BALL
 			if (text == "Default")
 			{
 			   scoring = new EnergeticEvaluation();
-			}
-			else if (text == "Random")
-			{
-			   scoring = new RandomEvaluation();
 			}
 			else if (text == "Amber Force Field")
 			{
