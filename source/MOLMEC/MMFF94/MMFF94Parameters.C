@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.4.3 2006/09/12 13:43:42 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.4.4 2006/09/12 14:30:03 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -1104,7 +1104,7 @@ bool MMFF94VDWParameters::getParameters(Position at1, Position at2, double& rij,
 	}
 
 	rij_[index] = rij;
-	rij_7_[index] = pow(rij, 7);
+	rij_7_[index] = rij_7 = pow(rij, 7.);
 	eij_[index] = eij;
 	calculated_[index] = true;
 
