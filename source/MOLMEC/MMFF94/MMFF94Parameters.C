@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.4.2 2006/06/12 22:43:22 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.4.3 2006/09/12 13:43:42 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -1079,7 +1079,7 @@ bool MMFF94VDWParameters::getParameters(Position at1, Position at2, double& rij,
 		}
 		else
 		{
-			rij = 0.5 * (ri + rj) * (1 + 0.2 * (1 - exp(-12 * l * l)));
+			rij = 0.5 * (ri + rj) * (1. + 0.2 * (1. - exp(-12. * l * l)));
 		}
 	}
 	else
@@ -1094,7 +1094,7 @@ bool MMFF94VDWParameters::getParameters(Position at1, Position at2, double& rij,
 	const double lo = sqrt(e1.alpha_i / e1.ni) + sqrt(e2.alpha_i / e2.ni);
 
 	// equation 5
-	eij = (up / lo) / pow(rij, 6);
+	eij = (up / lo) / pow(rij, 6.);
 
 	if (at1 != at2 &&
 			e1.donor_acceptor * e2.donor_acceptor == 2)
