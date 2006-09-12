@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.1.2.4.2.6 2006/08/28 11:50:26 leonhardt Exp $
+// $Id: dockingController.h,v 1.1.2.4.2.7 2006/09/12 14:28:51 leonhardt Exp $
 //
 
 #ifndef BALL_WIDGETS_DOCKINGCONTROLLER_H
@@ -95,7 +95,7 @@ namespace BALL
 				/**	Initializes the popup menu <b>  Molecular Mechanics </b> with its checkable submenu <b>  Docking </b>.
 				*		Calls \link DockDialog::initializeWidget DockDialog::initializeWidget \endlink.
 				*	 	It is called automatically	immediately before the main application is started.
-				*	@param main_control the  MainControl object to be initialized
+				*	@param main_control the MainControl object to be initialized
 				* @see   openDialog
 				*	@see   finalizeWidget
 				*	@see   insertMenuEntry
@@ -104,16 +104,16 @@ namespace BALL
 					throw();
 				
 				/** Fetches the preferences from the INIFile.
-				* 	Calls \link DockDialog::fetchPreferences DockDialog::fetchPreferences \endlink.
-				*  This method will be called inside the method \link MainControl::show MainControl::show \endlink. 
-				*	@see    writePreferences
-				*/
+				 * 	Calls \link DockDialog::fetchPreferences DockDialog::fetchPreferences \endlink.
+				 *  This method will be called inside the method \link MainControl::show MainControl::show \endlink. 
+				 * @see    writePreferences
+				 */
 				void fetchPreferences(INIFile& file)
 					throw();
 
 				/** Writes the preferences to the INIFile.
 				* 	Calls \link DockDialog::writePreferences DockDialog::writePreferences \endlink.
-				*  This method will be called inside the method \link MainControl::aboutToExit MainControl::aboutToExit \endlink. 
+				*  This method will be called inside the method \link MainControl::aboutToExit MainControl::aboutToExit \endlink.
 				*  @see    fetchPreferences
 				*/
 				void writePreferences(INIFile& file)
@@ -137,7 +137,7 @@ namespace BALL
 			
 				/** Shows docking dialog, checks which algorithm is chosen and creates new DockingAlgorithm object.
 				 *  Starts new Thread and fills/shows \link DockingController::progress_dialog_ progress_dialog_ \endlink.
-				 *  @param			is_redock flag that indicates if a docking or redocking should be run
+				 *  @param	is_redock flag that indicates if a docking or redocking should be run
 				 */
 				void runDocking(bool is_redock)
 					throw();
@@ -152,21 +152,21 @@ namespace BALL
 			protected slots:
 
 				/** Is called when timer elapses.
-					* Updates the position of the mobile system2. 
+					* Updates the position of the mobile docking partner. 
 					*/
 				void updateSystem_();
 
 			protected:
 			
-			 /** Applies scoring function which user has chosen.
+			 /**  Applies scoring function which user has chosen.
 				 *  Then, creates new DockResult and adds new scoring to it.
 				 *  At the end, adds the docked system to BALLView structures
 				 *  and sends a <b> NewDockResultMessage </b> to insert the DockResult in DatasetControl.
 				 *  Is called in \link DockingController::onNotify onNotify \endlink.
-				 * @param			conformation_set conformation set that contains the result of the docking algorithm
-				 * @return		true if scoring function was succesfully applied
-				 * @return		false if scoring function was not succesfully applied
-			 */
+				 *  @param		conformation_set conformation set that contains the result of the docking algorithm
+				 *  @return		true if scoring function was succesfully applied
+				 *  @return		false if scoring function was not succesfully applied
+			   */
 			 bool runScoring_(ConformationSet* conformation_set)
 					throw();
 							
