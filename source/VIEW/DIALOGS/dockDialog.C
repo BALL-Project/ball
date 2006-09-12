@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.2.6.2.18 2006/08/31 16:05:17 leonhardt Exp $
+// $Id: dockDialog.C,v 1.5.2.6.2.19 2006/09/12 14:24:44 leonhardt Exp $
 //
 
 #include <QtGui/qpushbutton.h>
@@ -326,6 +326,7 @@ namespace BALL
 			// and set advanced button enabled if necessary
 			algorithmChosen();
 			scoringFuncChosen();
+			// fetch preferences of option dialogs
 			std::map<QString, DockingAlgorithmDialog*>::iterator it = algorithm_dialogs_.begin();
 			for (; it != algorithm_dialogs_.end(); ++it)
 			{
@@ -345,7 +346,7 @@ namespace BALL
 			swapValues_();
 			PreferencesEntry::writePreferenceEntries(file);
 			swapValues_();
-
+			// write preferences of option dialogs
 			std::map<QString, DockingAlgorithmDialog*>::iterator it = algorithm_dialogs_.begin();
 			for (; it != algorithm_dialogs_.end(); ++it)
 			{
@@ -814,8 +815,6 @@ namespace BALL
 					  error_message.exec();
 					  return;
 					}
-					EvolutionDockingDialog* edd = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_[text]));
-					edd->setSystem(docking_partner2_);
 				}
 				algorithm_dialogs_[text]->exec();
 			}
@@ -851,6 +850,8 @@ namespace BALL
 			if (chosen_system)
 			{
 				docking_partner2_ = loaded_systems_[chosen_system - 1];
+				EvolutionDockingDialog* edd = RTTI::castTo<EvolutionDockingDialog>(*(algorithm_dialogs_["Evolutionary Docking"]));
+				edd->setSystem(docking_partner2_);
 		 	}
 		}
 		

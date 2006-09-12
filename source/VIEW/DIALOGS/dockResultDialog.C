@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.3.2.10.2.1 2006/08/24 16:41:41 leonhardt Exp $
+// $Id: dockResultDialog.C,v 1.3.2.10.2.2 2006/09/12 14:24:45 leonhardt Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockResultDialog.h>
@@ -475,7 +475,7 @@ namespace BALL
 			}
 
 			Index col = result_table->column(item);
-			if (col = 0)
+			if (col == 0)
 			{
 				scoring_opt->setEnabled(false);
 				delete_score->setEnabled(false);
@@ -513,6 +513,7 @@ namespace BALL
 			redock_partner2_->setName("rd");
 			
 			AtomContainerIterator it = redock_partner1_->beginAtomContainer();
+			// skip system-level
 			++it;
 			for ( ; +it; ++it)
 			{

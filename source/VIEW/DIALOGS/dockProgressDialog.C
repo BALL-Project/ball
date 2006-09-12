@@ -1,4 +1,4 @@
-// $Id: dockProgressDialog.C,v 1.4.2.2.2.4 2006/08/29 12:40:24 leonhardt Exp $
+// $Id: dockProgressDialog.C,v 1.4.2.2.2.5 2006/09/12 14:24:44 leonhardt Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockProgressDialog.h>
@@ -23,7 +23,7 @@ namespace BALL
 				alg_(0),
 				remain_time_(0),
 				time_step_(1),
-				was_called_(false)
+				is_setup_(true)
     {
 #ifdef BALL_VIEW_DEBUG
       Log.info() << "new DockProgressDialog " << this << std::endl;
@@ -50,7 +50,7 @@ namespace BALL
 				start_time_(dock_prog_dialog.start_time_),
 				remain_time_(dock_prog_dialog.remain_time_),
 				time_step_(dock_prog_dialog.time_step_),
-				was_called_(dock_prog_dialog.was_called_)
+				is_setup_(dock_prog_dialog.is_setup_)
     {}
     
     // Destructor	
@@ -73,7 +73,7 @@ namespace BALL
 	  start_time_ = dock_prog_dialog.start_time_;
 		remain_time_ = dock_prog_dialog.remain_time_,
 		time_step_ = dock_prog_dialog.time_step_;
-		was_called_ = dock_prog_dialog.was_called_;
+		is_setup_ = dock_prog_dialog.is_setup_;
 	}
       return *this;
     }
@@ -225,23 +225,22 @@ namespace BALL
 			{
 				remaining_time->setText("--:--:--");
 			}
-						
-			// if setup / docking has not finished restart timer
-			// remark: dialog is closed by the docking controller since otherwise the time between 
-			// closing the dialog and showing the DockResult in the dataset widget would be too long 
-			if (!alg_->isSetup() && !was_called_)
+			
+			// after setup reset progress bar
+			if (alg_->isSetup() != is_setup_)
 			{
-				was_called_ = true;
-				// reset progress bar
+				is_setup_ = false;
 				progress_bar->reset();
 				progress_label->setText("Run docking...");
 			}
-			
+
+			// if setup / docking has not finished restart timer
+			// remark: dialog is closed by the docking controller since otherwise the time between 
+			// closing the dialog and showing the DockResult in the dataset widget would be too long 
 			if (!alg_->hasFinished())
 			{
 				timer_.start(1000);
 			}
-
 		}
 		
 	} // end of namespace View

@@ -94,7 +94,7 @@ namespace BALL
 			return *this;
 		}
 
-		//Read the preferences from an INIFile
+		// Read the preferences from an INIFile
 		void EvolutionDockingDialog::fetchPreferences(INIFile& file)
 			throw()
 		{
@@ -168,11 +168,10 @@ namespace BALL
 			{
 				Log.error() << "Conversion from String to float, double or int failed: invalid format! " << __FILE__ << " " << __LINE__ << std::endl;
 				return;
-			}
-		  
+			}		  
 		}
 	
-		// Fill options with values of the force field dialog.
+		// Returns force field user has chosen.
 		ForceField* EvolutionDockingDialog::getForceField()
 					throw()
 		{
@@ -208,21 +207,19 @@ namespace BALL
 				return &ff;
 			}
 		}
-		  
+		
+		///
 		void EvolutionDockingDialog::setSystem(System* s)
 					throw()
 		{
 			ligand_ = s;
-		}
-				
-		
+		}	
 				
 	// --------------------------------- SLOTS ------------------------------------------------
 	// ----------------------------------------------------------------------------------------
 
-		/** Is called when radio button for using a created grid is pressed. 
-		 	* It enables the browse button and to corresponding line edit.
-		 	*/
+		// Is called when radio button for using a created grid is pressed. 
+		// It enables the browse button and to corresponding line edit.
 		void EvolutionDockingDialog::enableFileBrowsing()
 		{
 			browse_button->setEnabled(true);
@@ -230,9 +227,8 @@ namespace BALL
 			filename_label->setEnabled(true);
 		}
 
-		/** Is called when radio button for using a new grid is pressed. 
-		 	* It disables the browse button and to corresponding line edit.
-		 	*/
+		// Is called when radio button for using a new grid is pressed. 
+		// It disables the browse button and to corresponding line edit.
 		void EvolutionDockingDialog::disableFileBrowsing()
 		{
 			browse_button->setEnabled(false);
@@ -241,9 +237,8 @@ namespace BALL
 			filename_label->setEnabled(false);
 		}
 
-		/** Is called when browse button is pressed. 
-			* It shows a file dialog.
-		 	*/
+		// Is called when browse button is pressed. 
+		// It shows a file dialog.
 		void EvolutionDockingDialog::browseGridFile()
 		{
 			// look up the full path of the grid file
@@ -263,9 +258,8 @@ namespace BALL
 			}
 		}
 
-		/** Is called when force field options button is pressed. 
-			* It shows the force field option dialog.
-		 	*/
+		// Is called when force field options button is pressed. 
+		// It shows the force field option dialog.
 		void EvolutionDockingDialog::showForceFieldOptions()
 		{
 			MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
@@ -290,6 +284,8 @@ namespace BALL
 			}
 		}
 
+		// Is called when show translation box button is pressed.
+		// It shows the translation box of the ligand. 
 		void EvolutionDockingDialog::showTranslationBox()
 		{
 			if(grid_boundary_radio_button->isChecked()) return;
@@ -308,6 +304,7 @@ namespace BALL
 			height = Vector3(0, y_top-y_bottom, 0);
 			depth = Vector3(0, 0, z_top-z_bottom);
 
+			// check if user choose translation box relative to ligand or not
 			if (abs_trans_radio_button->isChecked())
 			{
 				point = Vector3(x_bottom, y_bottom, z_bottom);
@@ -332,6 +329,8 @@ namespace BALL
 
 			RepresentationManager& pm = getMainControl()->getRepresentationManager();
 
+			// check if a new translation box has to be created or
+			// if it is already in BALLView
 			if(!pm.has(*trans_box_rep_))
 			{
 				// remark: is deleted by main control
@@ -349,8 +348,11 @@ namespace BALL
 			}
 			else
 			{
-				Log.error() << "in update Box" << std::endl;
-				if (trans_box_ == NULL) Log.error() << "Box pointer NULL" << std::endl;
+				if (trans_box_ == NULL) 
+				{
+					Log.error() << "Box pointer NULL" << std::endl;
+				}
+				
 				trans_box_->setPoint(point);
 				trans_box_->setRightVector(right);
 				trans_box_->setHeightVector(height);
