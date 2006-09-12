@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.4.2.7.2.21 2006/08/31 14:06:37 leonhardt Exp $
+// $Id: dockingController.C,v 1.4.2.7.2.22 2006/09/12 14:25:40 leonhardt Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -442,7 +442,7 @@ namespace BALL
 				// remark: system is deleted by main control
 				const SnapShot& best_result = (*conformation_set)[0];
 				best_result.applySnapShot(*docked_system_);
-				//getMainControl()->deselectCompositeRecursive(docked_system_, true);
+				getMainControl()->deselectCompositeRecursive(docked_system_, true);
 				getMainControl()->insert(*docked_system_);
 			}
 			else
@@ -466,6 +466,8 @@ namespace BALL
 			return true;
 		}
 	
+		// if the docking algorithm returns intermediate results during the calculation
+		// these conformations are shown in BALLView
 		void DockingController::updateSystem_()
 		{
 			if(dock_alg_->systemChanged())
@@ -474,7 +476,7 @@ namespace BALL
 				{
 					// system is deleted by main control, when it is removed from BallView
 					docked_system_ = new System(dock_alg_->getIntermediateResult());
-					//getMainControl()->deselectCompositeRecursive(docked_system, true);
+					getMainControl()->deselectCompositeRecursive(docked_system_, true);
 					getMainControl()->insert(*docked_system_);
 				}
 				else

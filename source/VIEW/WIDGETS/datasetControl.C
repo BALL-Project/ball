@@ -1,9 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.40.2.4 2006/08/31 14:06:37 leonhardt Exp $
+// $Id: datasetControl.C,v 1.46.2.40.2.5 2006/09/12 14:25:40 leonhardt Exp $
 //
-
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
