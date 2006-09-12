@@ -137,7 +137,7 @@ namespace BALL
 				void closeClicked();
 				
 				
-				protected slots:
+			protected slots:
 
 				void selectionChanged_();
 			

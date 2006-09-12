@@ -167,7 +167,7 @@ namespace BALL
 
 				/** Fetchs the preferences from the INIFile.
 					* Calls \link PreferencesEntry::readPreferenceEntries PreferencesEntry::readPreferenceEntries \endlink.
-					* Calls \link DockDialog::fetchPreferences_ fetchPreferences_ \endlink to read the redocking options.
+					* Calls \link DockingAlgorithmDialog::fetchPreferences fetchPreferences \endlink to read preferences of option dialogs.
 					* This method is called in \link DockingController::fetchPreferences DockingController::fetchPreferences \endlink.
 				 	*	@see    writePreferences
 				 	*/
@@ -176,13 +176,13 @@ namespace BALL
 				
 				/** Writes the preferences to the INIFile.
 					* Calls \link PreferencesEntry::writePreferenceEntries PreferencesEntry::writePreferenceEntries \endlink.
+					* Calls \link DockingAlgorithmDialog::writePreferences writePreferences \endlink to write preferences of option dialogs.
 				  * This method is called in \link DockingController::writePreferences DockingController::writePreferences \endlink.
 				  * @see    fetchPreferences
 				  */
 				void writePreferences(INIFile& file)
 					throw();
 				
-					
 				/** Resets the dialog to the standard values.
 				 */
 				void reset()
@@ -339,6 +339,8 @@ namespace BALL
 				 */
 				Options algorithm_opt_, scoring_opt_;
 
+				/** Pointer to a force field that might be used by a docking algorithm
+				 */
 				ForceField* ff_;
 
 				/** Needed to guarantee that both, docking and redocking preferences can be written to INIFile
@@ -347,6 +349,9 @@ namespace BALL
 					* and in \link DockDialog::writePreferences writePreferences \endlink, we write the redocking values in INIFile from this map
 					*/
 				ValueMap backup_;
+
+				/** name of the INI file section of redocking options
+				 */
 				String inifile_section_name_backup_;
 				
 				/** Processors

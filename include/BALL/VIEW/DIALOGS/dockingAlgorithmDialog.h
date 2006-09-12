@@ -61,17 +61,26 @@ namespace BALL
 				virtual void getOptions(Options& options)
 					throw();
 
-
 	      /** Sets the flags \link DockingAlgorithmDialog::is_redock_ is_redock_ \endlink and 
 				  * \link DockingAlgorithmDialog::has_changed_ has_changed_ \endlink.
 					*/
-				void isRedock(bool is_redock)
+				virtual void isRedock(bool is_redock)
 					throw();
 
+				/** Fetchs the preferences from the INIFile.
+					* Calls \link PreferencesEntry::readPreferenceEntries PreferencesEntry::readPreferenceEntries \endlink.
+					* This method is called in \link DockDialog::fetchPreferences DockDialog::fetchPreferences \endlink.
+				 	*	@see    writePreferences
+				 	*/
 				virtual void fetchPreferences(INIFile& file)
 					throw();
 
-				void writePreferences(INIFile& file)
+				/** Writes the preferences to the INIFile.
+					* Calls \link PreferencesEntry::writePreferenceEntries PreferencesEntry::writePreferenceEntries \endlink.
+				  * This method is called in \link DockDialog::writePreferences DockDialog::writePreferences \endlink.
+				  * @see    fetchPreferences
+				  */
+				virtual void writePreferences(INIFile& file)
 					throw();
 
 			public slots:

@@ -85,25 +85,31 @@ namespace BALL
 				/**	@name	Accessors: inspectors and mutators
 				 */
 				//@{
-				 
+				
+				/** Fetchs the preferences from the INIFile.
+					* Calls \link DockingAlgorithmDialog::fetchPreferences DockingAlgorithmDialog::fetchPreferences \endlink.
+				 	*	@see    writePreferences
+				 	*/
+				void fetchPreferences(INIFile& file)
+					throw();
+
 				/** Fills options with values of the dialog.
 					*	@param      options the options that are filled
 					*/
 				void getOptions(Options& options)
 					throw();
 
-				/** Fills options with values of the force field dialog.
-					*	@param      options the options that are filled
+				/** Returns force field user has chosen.
 					*/
 				ForceField* getForceField()
 					throw();
 
+				/** Set ligand. 
+				  */
 				void setSystem(System* s)
 					throw();
 
-				void fetchPreferences(INIFile& file)
-					throw();
-			  //@}
+			//@}
 					
 			public slots:
 
@@ -128,12 +134,24 @@ namespace BALL
 					*/
 		   void showForceFieldOptions();
 
+			  /** Is called when show translation box button is pressed.
+				 *  It shows the translation box of the ligand. 
+				 */
 			 void showTranslationBox();
 		
 			private:
 			
+			 /** Pointer to the representation that contains the translation box.
+				*/
 			 Representation* trans_box_rep_;
+
+			 /** Pointer to a box that represents the translation box of the ligand.
+				*/
 			 Box* trans_box_;
+			 
+			 /** Pointer to ligand user has chosen in <b> DockDialog <\b>.
+				*  Needed to calculate the center of the translation box.
+				*/
 			 System* ligand_;
 		};
 		

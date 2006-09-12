@@ -107,8 +107,8 @@ namespace BALL
 					* Closes and deletes the dialog when calculations have finished.
 					*/
 				void updateProgress_();
-			
-			
+		
+
 			private:
 			
 				/** Copy constructor
@@ -142,12 +142,14 @@ namespace BALL
 					*/
 				QDateTime start_time_;
 
-				/**  To get a better remaining time estimation average time over five steps
+				/**  Variables for averaging time to get a better remaining time estimation.
 				  */
 				int remain_time_;
 				int time_step_;
 
-				bool was_called_;
+				/**  Flag that indicates if docking algorithm is in setup.
+				 	*/
+				bool is_setup_;
 		};
 		
 } } // Namespaces
