@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.21 2006/09/15 10:56:29 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.22 2006/09/15 14:51:24 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -47,8 +47,11 @@ namespace BALL
 	{
 	}
 
-	// Constant 
-	const double STRETCH_BEND_K0 = 2.51210 * Constants::JOULE_PER_CAL;
+	const double DEGREE_TO_RADIAN = (Constants::PI / (double)180.0);
+
+	// Constant MDyne * A -> kJ / mol | Conversion DEGREE to radian:
+	// =~ 2.51210 * Constants::JOULE_PER_CAL;
+ 	const double STRETCH_BEND_K0 = Constants::JOULE_PER_CAL * (double)143.9325 * DEGREE_TO_RADIAN;
 
 	/// 0.043844 / 2
 	const double BEND_K0 = 0.021922 * Constants::JOULE_PER_CAL;
@@ -75,7 +78,6 @@ namespace BALL
 	// Conversion from kJ / (mol A) into Newton
 	const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 
-	const double DEGREE_TO_RADIAN = (Constants::PI / (double)180.0);
 
 	// default constructor
 	MMFF94StretchBend::MMFF94StretchBend()
@@ -501,9 +503,11 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		{
 			StretchBend& sb = stretch_bends_[i];
 			const Bend& bend = bends_[sb.bend_index];
-			sb.energy = (double)STRETCH_BEND_K0 * (sb.kba_ijk * stretches_[sb.stretch_i_j].delta_r +
-													  				sb.kba_kji * stretches_[sb.stretch_j_k].delta_r) *
-										 	   					  bend.delta_theta;
+
+			double sb1 = STRETCH_BEND_K0 * (sb.kba_ijk * stretches_[sb.stretch_i_j].delta_r) * bend.delta_theta;
+			double sb2 = STRETCH_BEND_K0 * (sb.kba_kji * stretches_[sb.stretch_j_k].delta_r) * bend.delta_theta;
+
+			sb.energy = sb1 + sb2;
 
       #ifdef BALL_DEBUG_MMFF
 			Log.info() << "MMFF94 SB "  
