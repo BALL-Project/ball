@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.20 2006/09/12 21:45:44 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.21 2006/09/15 10:56:29 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -954,16 +954,21 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		atoms.push_back(&atom3);
 
 		double beta = 1.75;
-		
+	Log.precision(39);	
 		if 			(mmff94_->areInOneRing(atoms, 3))  beta *= 0.05;
 		else if (mmff94_->areInOneRing(atoms, 4))  beta *= 0.85;
 
 		double r01 = atom1.getBond(atom2)->getProperty("MMFF94RBL").getDouble();
 		double r02 = atom2.getBond(atom3)->getProperty("MMFF94RBL").getDouble();
 
-		double D = pow(r01 - r02, 2) / pow (r01 + r02, 2);
+		double rr = r01 + r02;
 
-		double k = beta * zcz * pow(angle_0, -2) * exp(-2 * D) / (r01 + r02);
+		double D = pow(r01 - r02, (double)2.) / pow (rr, (double)2.);
+
+		double ex = exp(-2 * D);
+
+		double asq = pow (angle_0, (double)-2.);
+		double k = beta * zcz * asq * ex / (rr);
 
 		return k;
 	}
@@ -1136,8 +1141,10 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		// for atoms > neon no shrinking , found in CHARMM, not in original paper?
 //   		if (e1 > 10 || e2 > 10) d = 0.0;
 
+    //  c and n are constants defined in R.Blom and A. Haaland,
+    //  J. Molec. Struc, 1985, 128, 21-27.
 		// calculate proportionality constant c
-		double c = 0.085;
+		double c = 0.08;
 
 		// for hyrogen atoms
 		if (e1 == 1 || e2 == 1) c = 0.05;
