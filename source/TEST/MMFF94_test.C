@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.2.31 2006/09/15 14:36:18 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.2.32 2006/09/15 14:45:21 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -47,7 +47,7 @@ float diff(double original, double our)
 	return x / fabs(original);
 }
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.31 2006/09/15 14:36:18 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.2.32 2006/09/15 14:45:21 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -556,12 +556,15 @@ CHECK(force test 6: Torsions)
 	PRECISION(1e-16)
 	TEST_REAL_EQUAL(a1.getForce().getDistance(v1), 0)
 	TEST_REAL_EQUAL(a2.getForce().getDistance(v2), 0)
+	TEST_EQUAL(diff(v2.z, a2.getForce().z) < 0.00001, true)
 	TEST_REAL_EQUAL(a3.getForce().getDistance(v3), 0)
 	TEST_REAL_EQUAL(a4.getForce().getDistance(v4), 0)
 
 	// value from CHARMM:
 	PRECISION(0.01)
-	TEST_REAL_EQUAL(mmff.getEnergy(), 6.00000 * JOULE_PER_CAL)
+	float charmm_energy = 6.0 * JOULE_PER_CAL;
+	TEST_REAL_EQUAL(mmff.getEnergy(), charmm_energy)
+	TEST_EQUAL(diff(charmm_energy, mmff.getEnergy()) < 0.00001, true)
 RESULT
 
 
@@ -593,13 +596,13 @@ CHECK(force test 7: VDW)
 	TEST_REAL_EQUAL(mmff.getEnergy(), vdw_charmm)
 	TEST_EQUAL(diff(vdw_charmm, mmff.getEnergy()) < 0.00001, true)
 
-	PRECISION(2e-22)
+	PRECISION(1e-12)
 
 	float charmm_force = 208.73727 * CHARMM_FORCES_FACTOR;
 	
-	TEST_REAL_EQUAL(a1.getForce().x,  charmm_force);
-	TEST_REAL_EQUAL(a2.getForce().x, -charmm_force);
-	TEST_EQUAL(diff(-charmm_force, a1.getForce().x) < 0.001, true)
+	TEST_REAL_EQUAL(a1.getForce().x, -charmm_force);
+	TEST_REAL_EQUAL(a2.getForce().x,  charmm_force);
+	TEST_EQUAL(diff(-charmm_force, a1.getForce().x) < 0.000001, true)
 	TEST_REAL_EQUAL(a1.getForce().y, 0)
 	TEST_REAL_EQUAL(a2.getForce().y, 0)
 	TEST_REAL_EQUAL(a1.getForce().z, 0)
@@ -630,42 +633,6 @@ CHECK(force test 7: VDW)
 		double dE = -(e2 - e1) / delta;
 		TEST_REAL_EQUAL(force, dE * FORCES_FACTOR)
 	}	
-
-	MOL2File mol("data/MMFF94-vdw2.mol2");
-	mol >> s;
-	mol.close();
-	mmff.setup(s);
-	enableOneComponent("MMFF94 NonBonded", mmff);
-	mmff.updateForces();
-	PRECISION(2e-12)
-
-	/** original values in CHARMM implmentation (kJ / mol A):
-	    I   DX      DY        DZ
---------------------------------------------------------------------------------
-   1    0.000    0.000    0.000
-   2   -0.001   -0.011    0.027
-   3    0.000    0.000    0.000
-   4    0.00383389638   0.00304170822  -0.0145154378
-	 5   -0.00262223589   0.00805800434  -0.0127604689
-   5   -0.003    0.008   -0.013
-
-	// values obtained in BALLView:
-	Vector3 vs[5];
-	vs[0] = Vector3(0.);
-	vs[1] = Vector3(8.41826337371e-14,-7.71175224373e-13,1.89504878803e-12);
-	vs[2] = Vector3(0.);
-	vs[3] = Vector3(2.66367629993e-13,2.11328784333e-13,-1.00848908217e-12);
-	vs[4] = Vector3(-1.82184996256e-13,5.5984644004e-13,-8.86559760067e-13);
-
-	AtomIterator ait = s.beginAtom();
-	for (Position p = 0; p < 5; p ++)
-	{
-		TEST_REAL_EQUAL(ait->getForce().x , vs[0].x)
-		TEST_REAL_EQUAL(ait->getForce().y , vs[0].y)
-		TEST_REAL_EQUAL(ait->getForce().z , vs[0].z)
-		ait++;
-	}
-	*/
 RESULT
 
 CHECK(force test 8: ES)
@@ -716,7 +683,7 @@ CHECK(force test 8: ES)
 
 	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
 	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
-	TEST_EQUAL(diff(a1.getForce().x, -charmm_force) < 0.001, true)
+	TEST_EQUAL(diff(a1.getForce().x, -charmm_force) < 0.00001, true)
 	TEST_REAL_EQUAL(a1.getForce().y, 0)
 	TEST_REAL_EQUAL(a2.getForce().y, 0)
 	TEST_REAL_EQUAL(a1.getForce().z, 0)
