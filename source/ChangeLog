@@ -16,11 +16,11 @@ Added:
 - BALLView has menu entries for user defined Python script hotkeys
 - Further Python example scripts
 - Improved rendering of transparent surfaces
-- SMARTS support
 - Toon Drawing Mode for OpenGL 
 - Ribbon model
 - Capping planes
 - Improved feedback for users: e.g. Busy mouse cursor and statusbar entries
+- Popup infos for e.g. atoms under the mouse cursor
 - Added improved coordinate system
 - Protein-protein docking code based on Fourier correlation (requires FFTW library)
 - Protein-ligand docking code based on a genetic algorithm (similar to AutoDock)
@@ -34,8 +34,6 @@ Added:
 - A major rewrite of the code for molecule superposition
 - A SMARTS matcher
 - An interface to GAMESS (to allow quantum mechanics calculations from BALL)
-- BALLView has menu entries for user defined Python Hotkeys
-- Further Python example scripts
 - Eased installation process under Microsoft Windows
 
 Changed:
@@ -69,7 +67,6 @@ Fixed:
 Known problems:
 - Molecular Control Selection: Child->Parent doesnt always gets selected
 - RegularData widgets currently dont work (QT 4.1 does not yet have CanvasWidgets)
-- HelpViewer has problems with HTML layout (QT problem)
 
 1.1.1:
 
