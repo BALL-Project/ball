@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.22 2006/09/15 14:51:24 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.23 2006/09/19 11:12:53 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -1061,94 +1061,98 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			return -1;
 		}
 
-		Position bo = bond.getOrder();
-		if (bo == Bond::ORDER__UNKNOWN || 
-				bo == Bond::ORDER__QUADRUPLE ||
-				bo == Bond::ORDER__ANY)
+		// dont correct radii if one atom is a hydrogen!
+		if (e1 != 1 && e2 != 1)
 		{
-			return -1;
-		}
-
-		const vector<MMFF94AtomType>& atom_types = mmff94_->getAtomTypes();
-
-		Position b1 = atom_types[t1].mltb;
-		Position b2 = atom_types[t2].mltb;
-
-		if (b1 == 1 && b2 == 1) bo = 4;
-		else if (b1 + b2 == 3)  bo = 5;
-		else
-		{
-			// if aromatisch and same ring:
-			vector <Atom*> atoms;
-			atoms.push_back((Atom*)&atom1);
-			atoms.push_back((Atom*)&atom2);
-			if (mmff94_->areInOneAromaticRing(atoms, 0))
+			Position bo = bond.getOrder();
+			if (bo == Bond::ORDER__UNKNOWN || 
+					bo == Bond::ORDER__QUADRUPLE ||
+					bo == Bond::ORDER__ANY)
 			{
-				if (!atom_types[t1].pilp && !atom_types[t2].pilp)
+				return -1;
+			}
+
+			const vector<MMFF94AtomType>& atom_types = mmff94_->getAtomTypes();
+
+			Position b1 = atom_types[t1].mltb;
+			Position b2 = atom_types[t2].mltb;
+
+			if (b1 == 1 && b2 == 1) bo = 4;
+			else if (b1 + b2 == 3)  bo = 5;
+			else
+			{
+				// if aromatisch and same ring:
+				vector <Atom*> atoms;
+				atoms.push_back((Atom*)&atom1);
+				atoms.push_back((Atom*)&atom2);
+				if (mmff94_->areInOneAromaticRing(atoms, 0))
 				{
-					bo = 4;
-				}
-				else 
-				{
-					bo = 5;
+					if (!atom_types[t1].pilp && !atom_types[t2].pilp)
+					{
+						bo = 4;
+					}
+					else 
+					{
+						bo = 5;
+					}
 				}
 			}
-		}
 
-		// calculate corrected radii
-		
-		if (bo == 5)
-		{
-			r1 -= 0.04;
-			r2 -= 0.04;
-		}
-		else if (bo == 4)
-		{
-			r1 -= 0.075;
-			r2 -= 0.075;
-		}
-		else if (bo == 3)
-		{
-			r1 -= 0.17;
-			r2 -= 0.17;
-		}
-		else if (bo == 2)
-		{
-			r1 -= 0.1;
-			r2 -= 0.1;
-		}
-		else  // bo == 1
-		{
-			// calculate hybridization index
-			Position h1 = 3;
-			Position h2 = 3;
+			// calculate corrected radii
+			
+			if (bo == 5)
+			{
+				r1 -= 0.04;
+				r2 -= 0.04;
+			}
+			else if (bo == 4)
+			{
+				r1 -= 0.075;
+				r2 -= 0.075;
+			}
+			else if (bo == 3)
+			{
+				r1 -= 0.17;
+				r2 -= 0.17;
+			}
+			else if (bo == 2)
+			{
+				r1 -= 0.1;
+				r2 -= 0.1;
+			}
+			else  // bo == 1
+			{
+				// calculate hybridization index
+				Position h1 = 3;
+				Position h2 = 3;
 
-			if (b1 == 1 || b1 == 2) h1 = 2;
-			else if (b1 == 3) 			h1 = 1;
+				if (b1 == 1 || b1 == 2) h1 = 2;
+				else if (b1 == 3) 			h1 = 1;
 
-			if (b2 == 1 || b2 == 2) h2 = 2;
-			else if (b2 == 3) 			h2 = 1;
+				if (b2 == 1 || b2 == 2) h2 = 2;
+				else if (b2 == 3) 			h2 = 1;
 
-			if 			(h1 == 1) r1 -= 0.08;
-			else if (h1 == 2) r1 -= 0.03;
+				if 			(h1 == 1) r1 -= 0.08;
+				else if (h1 == 2) r1 -= 0.03;
 
-			if 			(h2 == 1) r2 -= 0.08;
-			else if (h2 == 2) r2 -= 0.03;
+				if 			(h2 == 1) r2 -= 0.08;
+				else if (h2 == 2) r2 -= 0.03;
+			}
 		}
 
 		// calculate shrink factor
 		double d = 0.008; 
 
 		// for hyrogen atoms no shrinking , found in CHARMM, not in original paper?
-//   		if (e1 == 1 || e2 == 1) d = 0.0;
+ 		if (e1 == 1 || e2 == 1) d = 0.0;
 
 		// for atoms > neon no shrinking , found in CHARMM, not in original paper?
-//   		if (e1 > 10 || e2 > 10) d = 0.0;
+ 		if (e1 > 10 || e2 > 10) d = 0.0;
 
     //  c and n are constants defined in R.Blom and A. Haaland,
     //  J. Molec. Struc, 1985, 128, 21-27.
 		// calculate proportionality constant c
-		double c = 0.08;
+		double c = 0.08; // value from CHARMM implementation!, original value in paper: 0.085
 
 		// for hyrogen atoms
 		if (e1 == 1 || e2 == 1) c = 0.05;
