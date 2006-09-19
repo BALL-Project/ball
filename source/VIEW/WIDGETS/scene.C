@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.72 2006/09/19 12:47:14 amoll Exp $
+// $Id: scene.C,v 1.174.2.73 2006/09/19 13:27:32 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1951,7 +1951,7 @@ namespace BALL
 					this_string = info.getName() + " : " + this_string;
 				}
 
- 				if (this_string == "UNKNOWN") continue;;
+ 				if (this_string == "UNKNOWN") continue;
 
 				if (RTTI::isKindOf<Atom>(*composite))
 				{

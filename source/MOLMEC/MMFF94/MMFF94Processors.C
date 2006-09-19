@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.4.6 2006/05/25 20:57:18 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.4.7 2006/09/19 13:28:45 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -543,6 +543,19 @@ void MMFF94AtomTyper::assignTo(System& s)
 				{
 					atom.setTypeName("CB");
 					atom.setType(37);
+
+					// prevent NCN+ assignment for nitrogens connected to pyrimidin like ring structures!
+					// reset the type of the atom to NC=N
+					AtomBondIterator abit = atom.beginBond();
+					for (;+abit;++abit)
+					{
+						Atom* partner = (*abit).getPartner(atom);
+						if (partner->getType() == 55)
+						{
+							partner->setType(40);
+							partner->setTypeName("NC=N");
+						}
+					}
 				}
 			}
 		}
