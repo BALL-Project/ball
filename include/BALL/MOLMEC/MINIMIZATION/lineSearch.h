@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.h,v 1.20.12.2 2006/08/29 12:50:35 aleru Exp $
+// $Id: lineSearch.h,v 1.20.12.3 2006/09/20 12:49:23 aleru Exp $
 //
 
 // Line Search Minimizer: A special class for the line search minimization algorithm
@@ -20,7 +20,7 @@ namespace BALL
 	/**	Basic line search class.
 			This method minimizes the energy of a system along a given 
 			direction using a two stage algorithm. It is based on
-			an cubic or quadratic interpolation method of Jorge J. More 
+			a cubic or quadratic interpolation method of Jorge J. More 
 			and David J. Thuente. \par
     	\ingroup  MolmecEnergyMinimizer
 	*/
@@ -105,6 +105,20 @@ namespace BALL
 		/** Get the nonnegative relative tolerance for an acceptable step length.
 		 */
 		double getXTol() const;
+		
+		/** Set the flag <tt>is_bracketed_</tt>, i.e. the algorithm will act as if a 
+				minimizer has already been bracketed (true) or not (false). Warning: 
+				this can be useful if a user exactly knows what he is doing. Usually, 
+				this flag should not be touched! The algorithm sets this flag automatically
+				if a minimizer could be bracketed.
+		*/
+		void setBracketedFlag(bool bracktd);
+		
+		/** Return whether a minimizer has already been bracketed. Warning: this returns 
+				only the flag <tt>is_bracketed_</tt>. If this flag was not set by the algorithm
+				but changed by <tt>setBracketedFlag</tt> this might not be trustworthy!
+		*/
+		bool isBracketed() const;
 
 		/** Set the minimizer class which provides the search direction and
 				the force field among other things.
@@ -116,23 +130,24 @@ namespace BALL
 				computations are done by safeguarded quadratic and cubic interpolation.
 				The interval that contains a step that satisfies a sufficient decrease and
 				the curvature condition is updated. This function is based on the proposed step 
-				computation of Jorge J. More and David J. Thuente.
+				computation of Jorge J. More and David J. Thuente. Dont't worry if interval bounds
+				are changed after this routine exits.
 		
-				@param st_left Best step obtained so far and an endpoint of the interval that contains the minimizer.
-				@param f_left Energy value at <tt>st_left</tt>.
-				@param g_left Directional derivative at <tt>st_left</tt>.
-				@param st_right Second endpoint of the interval that contains the minimizer.
-				@param f_right Energy value at <tt>st_right</tt>.
-				@param g_right Directional derivative at <tt>st_right</tt>.
+				@param st_a Best step obtained so far and an endpoint of the interval that contains the minimizer.
+				@param f_a Energy value at <tt>st_a</tt>.
+				@param g_a Directional derivative at <tt>st_a</tt>.
+				@param st_b Second endpoint of the interval that contains the minimizer.
+				@param f_b Energy value at <tt>st_b</tt>.
+				@param g_b Directional derivative at <tt>st_b</tt>.
 				@param stp Current step. If <tt>is_bracketed_</tt> is set to <tt>true</tt> then <tt>stp</tt>
-					must be between <tt>st_left</tt> and <tt>st_right</tt>.
+					must be between <tt>st_a</tt> and <tt>st_b</tt>.
 				@param f Energy value at <tt>stp</tt>.
 				@param g Directional derivative at <tt>stp</tt>.
 				@param minstp Lower bound for the step.
 				@param maxstp Upper bound for the step.
 		*/
-		void lsStep(double &st_left, double &f_left, double &g_left, double &st_right, double &f_right, 
-								 double &g_right, double &stp, double f, double g, double minstp, double maxstp);
+		virtual void takeStep(double &st_a, double &f_a, double &g_a, double &st_b, double &f_b, 
+								 double &g_b, double &stp, double f, double g, double minstp, double maxstp);
 
 		//@}
 		/**	@name	Minimization
@@ -150,7 +165,7 @@ namespace BALL
 				(1) if the weak Wolfe conditions are satisfied (convergence criterion for the line search), 
 						that are
 							$E_{k+1} \leq E_k + \alpha$ <tt>stp</tt> $<g_k, d_k>$ 
-						and 
+						and
 							$<g_{k+1}, d_k> \geq \beta <g_k, d_k>$
 						where $g_k$ and $g_{k+1}$ are the initial and the current gradient and $d_k$ is the 
 						search direction, $E_{k+1}$ is the current and $E_k$ the initial energy (stp = 0),
