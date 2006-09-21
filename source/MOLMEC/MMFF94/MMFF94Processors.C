@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.4.7 2006/09/19 13:28:45 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.4.8 2006/09/21 08:26:38 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -16,6 +16,7 @@
 #include <BALL/QSAR/aromaticityProcessor.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 
+#include <BALL/SYSTEM/timer.h>
 //    #define BALL_DEBUG_MMFF
 #define BALL_DEBUG_TEST
 
@@ -23,6 +24,9 @@ using namespace std;
 
 namespace BALL 
 {
+
+
+StringHashMap<float> AtomTyper::rule_times = StringHashMap<float>();
 
 AtomTyper::AtomTyper()
 	: number_expected_fields_(4)
@@ -188,6 +192,11 @@ void AtomTyper::assignTo(Molecule& mol)
 			try
 			{
 				vector<HashSet<const Atom*> > result;
+//   #ifdef BALL_MMFF94_TEST
+				if (!rule_times.has(names_[rule])) rule_times[names_[rule]] = 0;
+//   #endif
+				Timer t;
+				t.start();
 				sm.match(result, mol, rules_[rule], to_match);
 				if (result.size() == 0) continue;
 
@@ -209,6 +218,10 @@ void AtomTyper::assignTo(Molecule& mol)
 					to_match.erase(&atom);
 					atoms_.erase(&atom);
 				}
+//   #ifdef BALL_MMFF94_TEST
+				t.stop();
+				rule_times[names_[rule]] += t.getClockTime();
+//   #endif
 			}
 			catch(Exception::ParseError e)
 			{

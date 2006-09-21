@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.4.3 2006/05/25 20:57:34 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.4.4 2006/09/21 08:26:29 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -56,6 +56,9 @@ namespace BALL
 
 		///
 		void setRings(const vector<HashSet<Atom*> >& rings) { rings_ = rings;}
+
+		// just for debugging: computational times for the individual SMARTS expressions
+		static StringHashMap<float> rule_times;
 
 		protected:
 		

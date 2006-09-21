@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.4.3 2006/06/20 15:39:45 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.4.4 2006/09/21 08:27:05 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -124,7 +124,7 @@ System* readTestFile(String filename)
 		}
 
 		Position pos = name_to_pos[ait->getName()];
-ait->setType(types[pos]); // <---------------------------------
+//   ait->setType(types[pos]); // <---------------------------------
 		ait->setProperty("Type", types[pos]);
 		ait->setProperty("TypeName", symbols[pos]);
 		ait->setProperty("OriginalInitialCharge", fcharges[pos]);
@@ -1036,13 +1036,18 @@ int runtests(const vector<String>& filenames)
 		}
 */
     		testType(*system, filenames[pos], typer);
+
+				/*
      		result &= testStretch(mmff, filenames[pos], true);
         result &= testBend(mmff, filenames[pos], true);
      		result &= testStretchBend(mmff, filenames[pos], true);
     		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
     		result &= testPlanes(mmff, filenames[pos], true);
     		result &= testNonBonded(mmff, filenames[pos], true);
-//        		result &= testCharge(*system, filenames[pos]);
+     		result &= testCharge(*system, filenames[pos]);
+				*/
+
+	
 
  		if (result) ok++;
 //    		else if (!wrong_rings) not_ok.push_back(filenames[pos]);
@@ -1320,5 +1325,12 @@ Log.error() << "#~~#   2 "  << aromatic_rings_.size() << std::endl;
 		return expressionTest(files, expr, type.toInt(), type_name);
 	}
 
-	return runtests(files);
+	int result = runtests(files);
+	StringHashMap<float>::Iterator hit = AtomTyper::rule_times.begin();
+	for (; +hit; ++hit)
+	{
+		Log.error() << hit->first << " " << hit->second << std::endl;
+	}
+
+	return result;
 }
