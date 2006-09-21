@@ -196,7 +196,8 @@ namespace BALL
 				 */
 				Atom*				atom;
 
-				/**	 compute for the given atom all properites specified in the property set
+				/**	 compute for the given atom all properites specified in the property set properties
+				 * 	and store them in the properties_real_ map respective the properties_string_ map  
 				 **/
 				bool computeProperties_(Atom* atom, std::set<String> properties) 	throw();  
 
@@ -254,10 +255,10 @@ namespace BALL
 				REAL__CHI,
 				CHI__DISCRETE,      
 				DISCRETE__CHI,      
-				CHI__CHI,           // not used
+				CHI__CHI,           
 				SINGLE__REAL,  
 				SINGLE__DISCRETE, 
-				SINGLE__CHI					// not used
+				SINGLE__CHI					
 				};
 
 				/*_  Constructor
@@ -280,47 +281,64 @@ namespace BALL
 				*/
 				virtual ~ShiftHyperSurface_() throw();
 
-				/** computes the shift of an atom.  
+				/** computes the shift of an atom given the atoms properties  
 				 */
 				float operator () (PropertiesForShift_& properties) throw();	
 				
+				/** set the type of the hypersurface according to the types of the two input properties 
+				 * (see {\tt HYPERSURFACE__TYPE()} )
+				 */
 				void setType_(String firstproperty, String secondproperty)
 					throw();
 
-				void readSingleReal_(BALL::File& file, String filename) throw();	
-				void readSingleDiscrete_(BALL::File& file, String filename) throw();
+				//void parseDataFile_(BALL::File& file, String filename) throw();	
+				//void convertToReal_(const vector<String>& input, vector<float>& output) throw();
 				
 				bool isvalid() throw(){return !invalid_;}
-						
+			
+				// returns the total average given in the input file
+				float getTotalAverage() throw() {return average_;}
+				float getTableXAverage(const String& name) throw();
+				float getTableYAverage(const String& name) throw();
+
+				
 			private:
+				// computes the average of the table values
 				float getTableAverage_() throw();
+				//computes the row average of the table given a row name 
 				float getTableRowAverage_(const std::map<String, float>& row) throw();
+				// computes the column average of the table given a column name
 				float getTableColumnAverage_(const String& name) throw();
 
 				bool tableHasColumn_(const String& name) throw();
+				
+				void parseDataFile_(BALL::File& file, String filename) throw();	
+				void convertToReal_(const vector<String>& input, vector<float>& output) throw();
 
 				int type_; // Can be REAL__REAL... 
-			 	String  first_property_;
+			 	String  first_property_; // name of the first property
 				String  second_property_;
 
 				CubicSpline2D_ 															s2d_;
 				std::map <String, CubicSpline1D_ > 					s1d_;
 				// access to the table first key x, second key y: 
 				std::map <String, std::map<String, float> > table_;
+
+				std::map <String, float> 										row_averages_;
+				std::map <String, float>										col_averages_;
+				
 				// this flag stores whether the spline we created is valid
 				bool invalid_;
 
-				/* These vectors store information about how often a certain key/value pair occurred during sampling.
-				 * The values are relevant for the averaging process.
-				 */
-				vector<vector<int> >                        tcount_values_2d_;
-				vector<int>                                 tcount_values_1d_;
-
-				/// the average over the complete hypersurface; tcount-corrected
+				/// the average over the complete hypersurface; this average maybe weighted in non-obvious ways
 				float average_;
 
-				vector<float> row_averages_;
-				vector<float> col_averages_;
+				vector<float> row_averages_values_;
+				vector<float> col_averages_values_;;
+
+				vector<String> 					 y_axis_values_;
+				vector<vector<String> >  x_axis_values_;
+				vector<vector<float> >   sample_values_;
 		};
 
 

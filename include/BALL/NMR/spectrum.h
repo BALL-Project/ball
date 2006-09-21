@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: spectrum.h,v 1.14.18.1 2006/09/06 12:23:21 anne Exp $
+// $Id: spectrum.h,v 1.14.18.2 2006/09/21 13:41:13 anne Exp $
 //
 
 #ifndef BALL_NMR_SPECTRUM_H
@@ -65,7 +65,8 @@ namespace BALL
 		Spectrum(const std::vector<PeakType>& peaks, const PositionType& origin, const PositionType& dimension, const PositionType& spacing)
 		{}
 
-			// ?????
+		/** Destructor
+		*/
 		virtual ~Spectrum() {}
 		//@}
 
@@ -80,7 +81,10 @@ namespace BALL
 
 		virtual void clear();
 		virtual double difference(const Spectrum<DataT, PeakT, PositionT>& spectrum) const;
-
+		virtual double earthMoversDistance(const Spectrum<DataT,PeakT, PositionT>& spectrum) const; 
+		
+		virtual void convertToGaussian(); 
+		
 		virtual void setSpacing(const PositionType& spacing);
 		virtual PositionType getSpacing() const;
 		

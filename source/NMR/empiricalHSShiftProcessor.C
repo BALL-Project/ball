@@ -10,7 +10,8 @@
 #include <BALL/SYSTEM/path.h>
 
 #define FLOAT_VALUE_NA 3600.
-#define STRING_VALUE_NA '?'
+#define STRING_VALUE_NA "BADVAL"
+#define CHAR_VALUE_NA  '?'
 
 using namespace std;
 
@@ -175,7 +176,7 @@ namespace BALL
 
 		// clear the target list
 		targets_.clear();
-
+std::cout << "******************* EHS-Shift start-end" << std::endl; 
 		return true;
 	}
 
@@ -501,7 +502,6 @@ namespace BALL
 		int m = sample_positions_x_.size();
 
 		CubicSpline1D_ cs; 
-		
 		average_ = 0.;
 		for (int j = 0; j < m; j++)
 		{
@@ -516,7 +516,6 @@ namespace BALL
 
 	float EmpiricalHSShiftProcessor::CubicSpline2D_::operator () (float x, float y)
 	{
-
 		CubicSpline1D_ cs;
 
 		std::vector<float> positions;
@@ -582,11 +581,13 @@ namespace BALL
 			{
 				N = &(*r_it);
 				num_of_atoms += 1;
-			}else if (name == "CA")
+			}
+			else if (name == "CA")
 			{
 				CA = &(*r_it);
 				num_of_atoms += 1;
-			}else if (name == "CB")
+			}
+			else if (name == "CB")
 			{ 
 				CB = &(*r_it);
 				num_of_atoms += 1;
@@ -638,7 +639,8 @@ namespace BALL
 					break;
 				}
 			}
-		}else if (residue_name == "CYS")
+		}
+		else if (residue_name == "CYS")
 		{
 			r_it = residue->beginAtom();
 			for (;r_it != residue->endAtom(); ++r_it)
@@ -650,7 +652,8 @@ namespace BALL
 					break;
 				}
 			}
-		}else if (residue_name == "ASP" || residue_name ==  "GLU" || 
+		}
+		else if (residue_name == "ASP" || residue_name ==  "GLU" || 
 							residue_name == "PHE" || residue_name ==  "HIS" || 
 							residue_name == "LYS" || residue_name ==  "LEU" ||
 							residue_name == "MET" || residue_name ==  "ASN" ||
@@ -667,7 +670,8 @@ namespace BALL
 					break;
 				}
 			}
-		}else if (residue_name == "VAL" || residue_name ==  "ILE")
+		}
+		else if (residue_name == "VAL" || residue_name ==  "ILE")
 		{									
 			r_it = residue->beginAtom();
 			for (;r_it != residue->endAtom(); ++r_it)
@@ -679,7 +683,8 @@ namespace BALL
 					break;
 				}
 			}
-		}else if (residue_name == "SER") 
+		}
+		else if (residue_name == "SER") 
 		{									
 			r_it = residue->beginAtom();
 			for (;r_it != residue->endAtom(); ++r_it)
@@ -691,7 +696,8 @@ namespace BALL
 					break;
 				}
 			}
-		}else if (residue_name == "THR") 
+		}
+		else if (residue_name == "THR") 
 		{									
 			r_it = residue->beginAtom();
 			for (;r_it != residue->endAtom(); ++r_it)
@@ -707,7 +713,7 @@ namespace BALL
 
 		if (num_of_atoms != 4)
 		{
-			Log.info() << "Torsion angle of " << residue->getName() << " could not be computed!" << std::endl;
+			Log.info() << "Chi torsion angle of " << residue->getID() << "-"<<  residue->getName() << " could not be computed!" << std::endl;
 			return FLOAT_VALUE_NA;
 
 		}
@@ -728,16 +734,220 @@ namespace BALL
 	
 	float EmpiricalHSShiftProcessor::PropertiesForShift_::getChi2Angle_(Residue* residue) 
 		throw()
-	{	
-		Log.info() << "Chi2-angle-computation is not yet implemented!" << std::endl;
-		return FLOAT_VALUE_NA;
+	{
+		// NOTE: for compatibility with ShiftX, 
+		// in case of C, S, G and A we have to take the fourth column of the input table, which is symbolized by ALA
+
+		float angle =  FLOAT_VALUE_NA;
+		int num_of_atoms = 0;
+		Atom* CA = 0;
+		Atom* CB = 0;
+		Atom* CG = 0;
+		Atom* XG = 0;
+		
+		String residue_name = residue->getName();
+		
+		// GLY, ALA, SER and CYS have no typical CHI2 - angle
+		if ( 		(residue->getName() == "ALA") 
+				 || (residue->getName() == "GLY") 
+				 || (residue->getName() == "SER") 
+				 || (residue->getName() == "CYS"))
+			return angle;
+
+		//  Sidechain dihedral angle chi2 is defined as follows:
+		//  
+		// 	Chi2:	CA(i)-CB(i)-CG(i)-XG(i)
+		//  where XG is the following atom for the following
+		//	residue types:
+		//
+		//	CG     XG     residue 
+		//	-------------------------------------
+		// 	CG     CD     PRO, GLN,  GLU, LYS, ARG
+		// 		     CD1    LEU,TRP,PHE,TYR, 
+	  //  		   OD1    ASN, ASP
+		//  		   ND1		HIS	 
+		//         SD     MET 
+		//  CG1    CD1    ILE
+		//         1HG1   VAL
+		//	CG2	   (1HG2   VAL)
+		//				 1HG2		THR
+		//	
+		//  TO DO: (is that true? implement : ok :-))  
+		//  Note: in some amino acids the atom names can be switched, i.e.
+    // 				for chi2 in amino acids PHE:  CD1 <-> CD2
+    //          				              TYR:  CD1 <-> CD2
+    //        	        			 	      ASP:  OD1 <-> OD2
+				
+		
+		AtomIterator r_it = residue->beginAtom();
+		for (; r_it != residue->endAtom(); ++r_it)
+		{	
+			String name = r_it->getName();
+			if (name == "CA")
+			{
+				CA = &(*r_it);
+				num_of_atoms += 1;
+			}
+			else if (name == "CB")
+			{ 
+				CB = &(*r_it);
+				num_of_atoms += 1;	
+			}
+			if (name == "CG")
+			{
+				CG = &(*r_it);
+				num_of_atoms += 1;
+			}
+		}
+		
+		//look for XG
+		if (   (residue_name == "ARG") || (residue_name == "GLN") 
+				|| (residue_name == "GLU") || (residue_name == "LYS") 
+				|| (residue_name == "PRO"))
+		{
+			r_it = residue->beginAtom();
+			for (;r_it != residue->endAtom(); ++r_it)
+			{	
+				if (r_it->getName() == "CD")
+				{
+					XG = &(*r_it);
+					num_of_atoms += 1;
+					break;
+				}
+			}
+		}
+		else if ( (residue_name == "ASN") || (residue_name == "ASP") )
+		{
+			r_it = residue->beginAtom();
+			for (;r_it != residue->endAtom(); ++r_it)
+			{	
+				if (r_it->getName() == "OD1")
+				{
+					XG = &(*r_it);
+					num_of_atoms += 1;
+					break;
+				}
+			}
+		}
+		else if ( (residue_name == "LEU") || (residue_name == "TRP") 
+				    ||(residue_name == "PHE") || (residue_name == "TYR") )
+		{
+			r_it = residue->beginAtom();
+			for (;r_it != residue->endAtom(); ++r_it)
+			{	
+				if (r_it->getName() == "CD1")
+				{
+					XG = &(*r_it);
+					num_of_atoms += 1;
+					break;
+				}
+			}
+		}	
+		else if (residue_name == "HIS") 
+		{
+			r_it = residue->beginAtom();
+			for (;r_it != residue->endAtom(); ++r_it)
+			{	
+				if (r_it->getName() == "ND1")
+				{
+					XG = &(*r_it);
+					num_of_atoms += 1;
+					break;
+				}
+			}
+		}
+		else if(residue_name == "MET") 	
+		{
+			r_it = residue->beginAtom();
+			for (;r_it != residue->endAtom(); ++r_it)
+			{	
+				if (r_it->getName() == "SD")
+				{
+					XG = &(*r_it);
+					num_of_atoms += 1;
+					break;
+				}
+			}
+		}
+		// we have to take special care about ILE, VAL and THR
+		else if(residue_name == "ILE") 	
+		{
+			r_it = residue->beginAtom();
+			for (;r_it != residue->endAtom(); ++r_it)
+			{	
+				if (r_it->getName() == "CG1")
+				{
+					CG = &(*r_it);
+					num_of_atoms += 1;
+				}
+				else if (r_it->getName() == "CD1")
+				{
+					XG = &(*r_it);
+					num_of_atoms += 1;
+				}
+			}
+		}
+		else if(residue_name == "VAL") 	
+		{
+			r_it = residue->beginAtom();
+			for (;r_it != residue->endAtom(); ++r_it)
+			{	
+				if (r_it->getName() == "1HG1")
+				{
+					XG = &(*r_it);
+					num_of_atoms += 1;
+				}
+				else if (r_it->getName() == "CG1")
+				{
+					CG = &(*r_it);
+					num_of_atoms += 1;
+				}
+			}
+		}
+		else if(residue_name == "THR") 	
+		{
+			r_it = residue->beginAtom();
+			for (;r_it != residue->endAtom(); ++r_it)
+			{	
+				if (r_it->getName() == "1HG2")
+				{
+					XG = &(*r_it);
+					num_of_atoms += 1;
+				}
+				else if (r_it->getName() == "CG2")
+				{
+					CG = &(*r_it);
+					num_of_atoms += 1;
+				}
+			}
+		} 
+
+		if (num_of_atoms != 4)
+		{
+			Log.info() << "Chi2 torsion angle of " << residue->getID() << "-"  << residue->getName() << " could not be computed!" << std::endl;
+			return FLOAT_VALUE_NA;
+		}
+			
+		Vector3 a = CA->getPosition();
+		Vector3 b = CB->getPosition();
+		Vector3 c = CG->getPosition();
+		Vector3 d = XG->getPosition();
+		
+		angle = getTorsionAngle(a.x, a.y, a.z, b.x, b.y, b.z, 
+													 c.x, c.y, c.z, d.x, d.y, d.z)*180./M_PI;
+		while (angle < 0.)
+		{
+			angle = angle + 360.;
+		}
+
+		return angle;
 	}
 
 	
 	char EmpiricalHSShiftProcessor::PropertiesForShift_::getSecondaryStructure_(Residue* residue) 
 		throw()
 	{
-		char ret = STRING_VALUE_NA;
+		char ret = CHAR_VALUE_NA;
 		if (residue->getSecondaryStructure() == 0)
 		{
 			Log.info() << "No secondary structure available. Consider precomputing!" << std::endl;
@@ -758,7 +968,7 @@ namespace BALL
 	char EmpiricalHSShiftProcessor::PropertiesForShift_::getAminoAcid_(Residue* residue)
 		throw()
 	{	
-		char ret = STRING_VALUE_NA;
+		char ret = CHAR_VALUE_NA;
 		if (residue->isAminoAcid())
 		{
 			ret = Peptides::OneLetterCode(residue->getName()); 
@@ -1053,7 +1263,7 @@ namespace BALL
 					properties_real_[("PSI_P")]  = FLOAT_VALUE_NA;
 					properties_real_[("PHI_P")]  = FLOAT_VALUE_NA;
 					properties_real_[("CHI_P")]  = FLOAT_VALUE_NA;
-					properties_real_[("CHI2_P")] = FLOAT_VALUE_NA;	
+					properties_real_[("CHI2_P")] = FLOAT_VALUE_NA;
 					properties_real_[("HA1L_P")] = FLOAT_VALUE_NA;
 					properties_real_[("HA2L_P")] = FLOAT_VALUE_NA;
 					properties_real_[("HNL_P")] = FLOAT_VALUE_NA;	
@@ -1066,7 +1276,8 @@ namespace BALL
 					properties_string_[("HN_P")] = STRING_VALUE_NA;	
 					properties_string_[("OH_P")] = STRING_VALUE_NA;	
 					properties_string_[("DISULFIDE_P")] = STRING_VALUE_NA;	
-					properties_string_[("CHI_P")] = STRING_VALUE_NA;
+					properties_string_[("CHI_P")] = "Unknown"; 
+					properties_string_[("CHI2_P")] = "Unknown";
 
 					properties_string_[("FR")] = 'Y';
 					properties_string_[("FR_P")] = 'N';
@@ -1134,7 +1345,21 @@ namespace BALL
 				}
 				else if ((*it) == 	"CHI2_P")
 				{
-					properties_real_[(*it)]=getChi2Angle_(prev_residue);	
+					properties_real_[(*it)] = getChi2Angle_(prev_residue);	
+					if (properties_real_[(*it)] == FLOAT_VALUE_NA)
+					{
+						if (   (prev_residue->getName() == "ALA") 
+								|| (prev_residue->getName() == "GLY")	
+								|| (prev_residue->getName() == "SER") 	
+								|| (prev_residue->getName() == "CYS")  )
+						{
+							properties_string_[(*it)] = "ALA";
+						}
+						else
+						{
+							properties_string_[(*it)] = "Unknown"; 
+						}
+					}
 				}
 				else if ((*it) == 	"HA1L_P" )
 				{
@@ -1192,7 +1417,8 @@ namespace BALL
 					properties_string_[("HN_N")] = STRING_VALUE_NA;	
 					properties_string_[("OH_N")] = STRING_VALUE_NA;	
 					properties_string_[("DISULFIDE_N")] = STRING_VALUE_NA;
-					properties_string_[("CHI_N")] = STRING_VALUE_NA;	
+					properties_string_[("CHI_N")] = "Unknown";// STRING_VALUE_NA;	
+					properties_string_[("CHI2_N")] = "Unknown";//STRING_VALUE_NA;	
 
 					properties_string_[("FR_P")] = STRING_VALUE_NA;
 					properties_string_[("FR")]   = STRING_VALUE_NA;
@@ -1255,11 +1481,24 @@ namespace BALL
 							properties_string_[(*it)] = "Unknown"; 
 						}
 					}				
-					properties_real_[(*it)]=  getChiAngle_(next_residue);
 				}
 				else if ((*it) == 	"CHI2_N")
 				{
-					properties_real_[(*it)]=  getChi2Angle_(next_residue);	
+					properties_real_[(*it)]=  getChi2Angle_(next_residue);
+					if (properties_real_[(*it)] == FLOAT_VALUE_NA)
+					{
+						if (   (prev_residue->getName() == "ALA") 
+							|| (prev_residue->getName() == "GLY")	
+							|| (prev_residue->getName() == "SER") 	
+							|| (prev_residue->getName() == "CYS")  )
+						{
+							properties_string_[(*it)] = ("ALA");
+						}
+						else
+						{
+							properties_string_[(*it)] = "Unknown"; 
+						}
+					}
 				}
 				else if ((*it) == 	"HA1L_N" )
 				{
@@ -1363,6 +1602,20 @@ namespace BALL
 			else if ((*it) == 	"CHI2")
 			{
 				properties_real_[(*it)]= getChi2Angle_(residue);	
+				if (properties_real_[(*it)] == FLOAT_VALUE_NA)
+				{
+					if (   (prev_residue->getName() == "ALA") 
+							|| (prev_residue->getName() == "GLY")	
+							|| (prev_residue->getName() == "SER") 	
+							|| (prev_residue->getName() == "CYS")  )
+					{	
+						properties_string_[(*it)] = ("ALA");
+					}
+					else
+					{
+						properties_string_[(*it)] = "Unknown"; 
+					}
+				}
 			}
 			else if ((*it) == 	"HA1L" )
 			{
@@ -1506,250 +1759,118 @@ namespace BALL
 		//
 
 		BALL::File file(file_name, std::ios::in);
-		String line;
-		String line2;
-		std::vector<BALL::String> fields;
-		std::vector<BALL::String> fields2;
 
-		// store the x sample positions
-		vector<vector<float> > float_sample_positions_x;
-		vector<vector<String> > string_sample_positions_x;
-		vector<float>  float_sample_positions_x_1d;
-		vector<String>  string_sample_positions_x_1d;
+		// parse the data file
+		parseDataFile_(file, filename);
 
-		// store the float y samples positions  
-		vector<float>  float_sample_positions_y;
-		vector<String> string_sample_positions_y;
-	
-		// stores the sample values
-		vector<std::vector<float> > sample_values_2d;
-
-		
-		// we have 8 different types of data, 
-		// so we have to offer different read-in procedures
-		//
-
-		// if we have no real table 
-		if(type_ == SINGLE__REAL)
+		if (type_ == SINGLE__REAL) // we have a single spline
 		{  
-			readSingleReal_(file, filename);
+			// create a spline	
+			CubicSpline1D_ s;
+			vector<float> x_axis;
+			convertToReal_(x_axis_values_[0], x_axis);
+			s.createSpline(x_axis, sample_values_[0], true);
+			
+			// store him in the map
+			s1d_[first_property_] = s;
 		}
-		else if (type_ == SINGLE__DISCRETE)
-		{  // we have a single table line
-			readSingleDiscrete_(file, filename);
-		}
-		else if (type_ == SINGLE__CHI)
-		{
-			std::cerr<< "Single CHI not implemented"<< std::endl;
+		else if (type_ == SINGLE__CHI || type_ == SINGLE__DISCRETE)  // we have a single table line
+		{ 
+			// NOTE: in the datafile the values are stored diagonally! 
+			for (Position i = 0; i < x_axis_values_[0].size(); i++)  
+			{
+				// in order to save storage, the data is compressed into a single line
+				table_[first_property_][x_axis_values_[0][i]] = sample_values_[i][i];
+			}
+			//std::cout << String(atoi("60.000000"))<< "single CHI: bei 60 " << table_[first_property_]["60.000000"]<< "soll:" << sample_values_[0][0] <<  std::endl;
+
 		}
 		else   // if we have a normal "table", 
 		{
-			// first we read the y sample positions
-			line.getline(file);
-			line.split(fields, ";");
-			
-			if (PropertiesForShift_::isDiscrete(secondproperty) 
-					|| (PropertiesForShift_::isMixed(secondproperty)))
-			{
-//std::cout << "discrete or chi second property" << std::endl;
-				for (Position i = 0; i < fields.size(); i++)
-				{
-					string_sample_positions_y.push_back(fields[i]);
-				}
-			}
-			else
-			{
-//std::cout << "real second property" << std::endl;
-				for (Position i = 0; i < fields.size(); i++)
-				{	
-					float_sample_positions_y.push_back(fields[i].toFloat());
-				}
-			}
-
-			//  we read the sample values in line pairs 
-			// 		of the  x positions and 
-			// 		the corresponding x values
-			line.getline(file); 
-			if (file.good())
-				line2.getline(file);
-			else
-				return;	
-
-			while (file.good())
-			{
-//std::cout << line << std::endl;std::cout << line2 << std::endl;
-				line.split(fields, ";"); 		// the x points
-				line2.split(fields2, ";"); 	// the x values
-
-				std::vector<float> line_values;	
-				std::vector<float> line_values2;	
-
-				// clear the variables
-				float_sample_positions_x_1d.clear();
-				string_sample_positions_x_1d.clear();
-
-				if (fields.size() != fields2.size())
-				{
-					std::cerr << "number of points is unequal to number of values in file "<< filename << std::endl;
-					invalid_ = true;
-					// we assume the file is corrupt, we skip this file
-					return;
-				}
-				//
-				// handle the x positions : can be chi, real or string
-				//
-					
-				if (PropertiesForShift_::isDiscrete(firstproperty) || PropertiesForShift_::isMixed(firstproperty))
-				{
-//		std::cout << "discrete  first property" << std::endl;
-					for (Position i = 0; i < fields.size(); i++)
-					{
-						string_sample_positions_x_1d.push_back(fields[i]);
-					}
-				}
-				else
-				{
-//		std::cout << "real first property" << std::endl;
-					for (Position i = 0; i < fields.size(); i++)
-					{	
-						float_sample_positions_x_1d.push_back(fields[i].toFloat());
-					}
-				}
-
-				// store the new line
-				float_sample_positions_x.push_back(float_sample_positions_x_1d);
-				string_sample_positions_x.push_back(string_sample_positions_x_1d);
-					
-				//
-				// handle the x values
-				// 
-		
-				vector<String> tcountsplit;
-				vector<int>    tcount_values;
-				for (Position i = 0; i < fields.size(); i++)
-				{
-					fields2[i].split(tcountsplit, ",");
-					if (tcountsplit.size() == 1)
-					{
-						line_values2.push_back(fields2[i].toFloat());
-						tcount_values.push_back(10);
-					}
-					else
-					{
-						line_values2.push_back(tcountsplit[0].toFloat());
-						tcount_values.push_back(tcountsplit[1].toInt());
-					}
-				}
-				sample_values_2d.push_back(line_values2);
-				tcount_values_2d_.push_back(tcount_values);
-
-				if (!invalid_)
-				{
-					// read the next pair of lines
-					line.getline(file);
-					if (file.good())
-						line2.getline(file);
-					else
-						continue;
-				}
-			}
-
-// test the tcounts
-for (int i=0; i<tcount_values_2d_.size(); i++)
-	for (int j=0; j<tcount_values_2d_[i].size(); j++)
-		std::cout << sample_values_2d[i][j] << " " << tcount_values_2d_[i][j] << std::endl;
-			// we have read the file now
-			// create 	a 2D bicubic spline, 
+			// depending on the types, create 	
+			// 					a 2D bicubic spline, 
 			// 	  			a map of 1D bicubic splines or 
 			//	  			a lookUpTable (map of map)  
- 
-//std::cout << "create HS" << std::endl;
-			
 			if (type_ == REAL__REAL)
 			{
-//std::cout << "REAL__REAL" << std::endl;
-				// a bicubic spline is stored
-				s2d_.createBiCubicSpline(float_sample_positions_x, float_sample_positions_y, sample_values_2d);
+				vector<float> y_axis;
+				convertToReal_(y_axis_values_, y_axis);
 
-				// create the correct average values for the whole array, each row and each column
-				int count_complete=0;
-				row_averages_.resize(sample_values_2d.size(), 0.);
-
-				for (int i=0; i<sample_values_2d.size(); i++)
+				vector<vector<float> > x_axis;
+				for (Position i=0; i<y_axis.size(); i++)
 				{
-					int count_row=0;
-					for (int j=0; j<sample_values_2d[i].size(); j++)
-					{
-						if (tcount_values_2d_[i][j] > 1)
-						{
-							average_ += sample_values_2d[i][j];
-							row_averages_[i] += sample_values_2d[i][j];
-							count_row++;
-							count_complete++;
-						}
-						row_averages_[i] /= (count_row > 0) ? count_row : 1;
-					}
+					vector<float> v;
+					convertToReal_(x_axis_values_[i], v);
+					x_axis.push_back(v);
 				}
-				average_ /= (count_complete > 0) ? count_complete : 1;
-				std::cout << "Average: " << average_ << std::endl;
 
-				// TODO: how can we do the column averages if there are values missing...???
+				// a bicubic spline is stored
+				s2d_.createBiCubicSpline(x_axis, y_axis, sample_values_);
 			}
-			else if ((type_ == REAL__DISCRETE) || (type_ == REAL__CHI))
+			else if (type_ == REAL__DISCRETE) 
 			{
 				// 		!!!!  C A U T I O N !!!! 
 				// When accessing the data, one has to switch X and Y, 
 				// since for each discrete value a 1D bicubic spline is stored
-
-//std::cout << "REAL__DISCRETE" << std::endl;
-				for (Position i = 0; i < string_sample_positions_y.size(); i ++)
+				for (Position i = 0; i < y_axis_values_.size(); i++)
 				{
 					// create a 1D bicubic spline
 					CubicSpline1D_ s;
-					s.createSpline(float_sample_positions_x[i], sample_values_2d[i], true);
+					vector<float> x_axis;
+					convertToReal_(x_axis_values_[i], x_axis);
+
+					s.createSpline(x_axis, sample_values_[i], true);
 
 					// store him in the map
-					s1d_[string_sample_positions_y[i]] = s;
+					s1d_[y_axis_values_[i]] = s;
 				}
-				//	std::cout << "value at (-100., H) :" <<  s1d_['H'](float(-100.)) << std::endl;
+			}
+			else if (type_ == REAL__CHI)
+			{
+				// 		!!!!  C A U T I O N !!!! 
+				// When accessing the data, one has to switch X and Y, 
+				// since for each discrete value a 1D bicubic spline is stored
+				for (Position i = 0; i < y_axis_values_.size(); i++)
+				{
+					// create a 1D bicubic spline
+					CubicSpline1D_ s;
+					vector<float> x_axis;
+					convertToReal_(x_axis_values_[i], x_axis);
+
+					s.createSpline(x_axis, sample_values_[i], true);
+
+					// store him in the map
+					s1d_[y_axis_values_[i]] = s;
+				}
 			}
 			else if (type_ == DISCRETE__REAL)
 			{ 
 std::cout << "DISCRETE__REAL not implemented" << std::endl;
 			}
-			else if ( (type_ == DISCRETE__DISCRETE) || (type_ == CHI__DISCRETE)|| (type_ == DISCRETE__CHI) )
+			else if ( (type_ == DISCRETE__DISCRETE) || (type_ == CHI__DISCRETE)|| (type_ == DISCRETE__CHI) || (type_ == CHI__CHI) )
 			{
-//std::cout << "DISCRETE__DISCRETE" << std::endl;
-				for (Position i = 0; i < string_sample_positions_y.size(); i++)  // y
+				if (x_axis_values_.size() != y_axis_values_.size())
 				{
-					 for (Position j = 0; j < string_sample_positions_x[i].size(); j++) // x
-					 { 	
-						 table_[string_sample_positions_y[i]][string_sample_positions_x[i][j]]= sample_values_2d[i][j];
-					 }
+					std::cerr << "Tried to read an invalid table in file"<< filename <<  std::endl;
 				}
-			//	std::cout << "value at (A, ALA) :" <<  table_["ALA"]['A'] << std::endl;
-	//std::cout << "value at (C, 240) :" <<  table_["240."]["C"] << std::endl;
-	
+				else
+				{
+					for (Position i = 0; i < y_axis_values_.size(); i++)  // y
+					{
+						 for (Position j = 0; j < x_axis_values_[i].size(); j++) // x
+					 	{ 	
+							 table_[x_axis_values_[i][j]][y_axis_values_[i]] = sample_values_[i][j];
+					 	}
+					}
+				}
 			}	
 			else if (type_ == CHI__REAL)
 			{
-				// we are given a table like this
-				//
-				//        60  180  300  |  Unknown ALA GLY
-				// - 180								|
-				//  .										|
-				//  0										|
-				//  .										|
-				//  180									|
-				// so again we split into two subtables
-				//    - case REAL__REAL
-				//    - and case DISCRETE__REAL 
-
 std::cout << "CHI__REAL not implemented" << std::endl;
 			}		
 			else if (type_ == CHI__CHI)
 			{
-				// Fortunately this case does not occure
+				// Fortunately this case does not occur
 				std::cerr << "The case CHI__CHI is not implemented" <<std::endl; 
 			}
 		}
@@ -1820,153 +1941,242 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		return;
 	}
 
-	void EmpiricalHSShiftProcessor::ShiftHyperSurface_::readSingleReal_(BALL::File& file, String filename) 
+	void EmpiricalHSShiftProcessor::ShiftHyperSurface_::convertToReal_(const vector<String>& input, vector<float>& output)
+		throw()
+	{
+		output.clear();
+		for (Position i=0; i<input.size(); i++)
+			output.push_back(input[i].toFloat());
+	}
+	
+	// Structure of all input files:
+	//
+	// atomtype factorx factory
+	// total_average
+	// (row_average_1;row_average_2;...;row_average_n|N/A)
+	// (col_averages_1;col_averages_2;...;col_averages_n|N/A)
+	// (y_axis_1;...;y_axis_n|N/A)
+	// x_axis_11;...;x_axis_1m
+	// value_11;...;value_1m
+	// ...
+	// x_axis_n1;...;x_axis_nm
+	// value_n1;...;value_nm
+	void EmpiricalHSShiftProcessor::ShiftHyperSurface_::parseDataFile_(BALL::File& file, String filename) 
 		throw()
 	{
 		String line;
 		std::vector<BALL::String> fields;
-		vector<float>  float_sample_positions_x_1d;
-		vector<float>  values; 
 		
-		// we have a single spline 
-		// read the points
-//	std::cout << "anne: " << file.good() << std::endl;
-		line.getline(file);
-//	std::cout << line << std::endl;
-		line.split(fields, ";");
+		row_averages_.clear();
+		col_averages_.clear();
 
-		for (Position i = 0; i < fields.size(); i++)
-		{	
-			float_sample_positions_x_1d.push_back(fields[i].toFloat());
-		}	
-
-		// read the values
-		if (file.good())
-		{
+		try {
+			// read over the first line. we don't need the information currently
 			line.getline(file);
-			line.split(fields, ";");
 
-			vector<String> tcountsplit;
-			for (Position j = 0; j < fields.size(); j++)
-			{	
-				fields[j].split(tcountsplit, ",");
-				if (tcountsplit.size() == 1)
-				{
-					values.push_back(fields[j].toFloat()); 
-					tcount_values_1d_.push_back(10);
-				}
-				else
-				{
-					values.push_back(tcountsplit[0].toFloat());
-					tcount_values_1d_.push_back(tcountsplit[1].toInt());
-				}
-			}	
-
-			// create a spline	
-			CubicSpline1D_ s;
-			s.createSpline(float_sample_positions_x_1d, values, true);
+			// now read the total average. this is contained in _all_ datafiles, so we can depend on it being there
+			line.getline(file);
+			average_ = line.toFloat();
 			
-			// store him in the map
-			s1d_[first_property_] = s;
-		}
-		else
-		{
-			std::cerr<< "formaterror in " <<  filename << std::endl;
-		}
-
-		return;
-	}
-
-
-	void EmpiricalHSShiftProcessor::ShiftHyperSurface_::readSingleDiscrete_(BALL::File& file, String filename) 
-		throw()
-	{
-		String line;
-		std::vector<BALL::String> fields;
-		vector<String>  string_sample_positions_x_1d;
-		vector<float>  values; //float_sample_positions_y;
-		
-		// read the points
-		line.getline(file);
-		line.split(fields, ";");
-
-		for (Position i = 0; i < fields.size(); i++)
-		{	
-			string_sample_positions_x_1d.push_back(fields[i]);
-		}	
-
-		// read the values
-		if (file.good())
-		{
+			// test for row averages
 			line.getline(file);
-			line.split(fields, ";");
+			String testline = line;
+			testline.toUpper();
+			
+			if (!testline.hasSubstring("N/A"))
+			{
+				// parse the row averages
+				line.split(fields, ";");
+				for (Position i=0; i<fields.size(); i++)
+					row_averages_values_.push_back(fields[i].toFloat());
+			}
 
-			vector<String> tcountsplit;
-			if( fields.size()== string_sample_positions_x_1d.size())
-			{	
-				for (Position i = 0; i < fields.size(); i++)
-				{	
-					fields[i].split(tcountsplit, ",");
-					if (tcountsplit.size() == 1)
-					{
-						values.push_back(fields[i].toFloat());
-						tcount_values_1d_.push_back(10);
-					}	
-					else
-					{
-						values.push_back(tcountsplit[0].toFloat());
-						tcount_values_1d_.push_back(tcountsplit[1].toInt());
-					}
-				}	
-				// store
-				for (Position i = 0; i < string_sample_positions_x_1d.size(); i++)  
-				{
-					table_[first_property_][string_sample_positions_x_1d[i]]= values[i];
-				}
+			// test for col averages
+			line.getline(file);
+			testline = line;
+			testline.toUpper();
+
+			if (!testline.hasSubstring("N/A"))
+			{
+				// parse the row averages
+				line.split(fields, ";");
+				for (Position i=0; i<fields.size(); i++)
+					col_averages_values_.push_back(fields[i].toFloat());
 			}
-			else
-			{	
-				std::cerr<< "formaterror in " <<  filename << std::endl;
+
+			// test for y_axis
+			line.getline(file);
+			testline = line;
+			testline.toUpper();
+
+			if (!testline.hasSubstring("N/A"))
+			{
+				// parse the row averages
+				line.split(fields, ";");
+				for (Position i=0; i<fields.size(); i++)
+					y_axis_values_.push_back(fields[i]);
+			}	
+			
+			// finally, read the consecutive x_axis / value lines
+			Size number_of_lines = std::max((size_t)1, y_axis_values_.size());
+			x_axis_values_.clear();
+			x_axis_values_.resize(number_of_lines);
+			sample_values_.clear();
+			sample_values_.resize(number_of_lines);
+
+			// read the values
+			for (Position i=0; i<number_of_lines; i++)
+			{
+				line.getline(file);
+				line.split(fields, ";"); 
+
+				for (Position j = 0; j < fields.size(); j++)
+					x_axis_values_[i].push_back(fields[j]);
+
+				line.getline(file);
+				line.split(fields, ";"); 	
+
+				for (Position j = 0; j < fields.size(); j++)
+					sample_values_[i].push_back(fields[j].toFloat());
 			}
-		}
-		else
+		} catch (...)
 		{
 			std::cerr<< "formaterror in " <<  filename << std::endl;
 		}
-
-		return;
 	}
-	
-	
+
+
 	
 	float EmpiricalHSShiftProcessor::ShiftHyperSurface_::operator() (EmpiricalHSShiftProcessor::PropertiesForShift_& properties)
 		throw()
 	{
 		float shift = 0.;
+		// for the cases DISCRETE__DISCRETE
+		// 							 CHI__DISCRETE
+		// 							 DISCRETE__CHI
+		// 							 SINGLE__DISCRETE
+		// 							 SINGLE__CHI
+		// we precompute the access string
+		// 
+		// NOTE: chi properties have a "mixed" nature 
+		// the property can have a numeric or alphanumeric value
+		// since the alphanumeric values are treated as 
+		// a bin we convert the alphanumeric value into string 
+		// representing the bin :-) 
+		// NOTE: for the singles we take the property itself as first access string
 		
-		if (type_ == SINGLE__REAL)
-		{ // we have a single spline 
-			if (s1d_.find(first_property_) != s1d_.end())
-					shift = s1d_[first_property_](properties[first_property_].first);
-			else
-				shift = 0.;
-		}
-		else if (type_ == SINGLE__DISCRETE)
+		String string1 = properties[first_property_].second;
+		String string2 = properties[second_property_].second;
+		
+		// special case1 : CHI
+		if (PropertiesForShift_::isMixed(first_property_))
 		{	
-				// we have a single table line
-//std::cout <<" single - DISCRETE ; " << first_property_ << "  " << second_property_ << std::endl;
-				shift = table_[first_property_][properties[second_property_].second];		
+std::cout << "chi1: " << properties[first_property_].first << "|" << properties[first_property_].second<< std::endl;
+			
+			string1 = properties[first_property_].second;
+			
+			// is the property numeric or alphanumeric? 
+			if (properties[first_property_].first != FLOAT_VALUE_NA)
+			{
+				float chi_value = properties[first_property_].first; 
+				if (chi_value < 120.)	
+					string1 = "60.000000";
+				else if (chi_value < 240.) 
+					string1 = "180.000000";
+				else if (chi_value < 360.)
+					string1 = "300.000000";
+				else 
+					std::cerr<< "There is a problem for atom " << properties.atom->getName() << ": " 
+						<< second_property_ << "-value is not valid!" << std::endl;
+			}
 		}
-		else if (type_ == SINGLE__CHI)
+		
+		if (PropertiesForShift_::isMixed(second_property_))
 		{
-				std::cerr<< "Single Chi not implemented"<< std::endl;
+std::cout << "chi2: " << properties[first_property_].first << "|" << properties[first_property_].second<< std::endl;
+
+			string2 = properties[second_property_].second; 
+			// is the property numeric or alphanumeric? 
+			if (properties[second_property_].first != FLOAT_VALUE_NA)
+			{
+				float chi_value = properties[second_property_].first; 
+				if (chi_value < 120.)	
+					string2 = "60.000000";
+				else if (chi_value < 240.) 
+					string2 = "180.000000";
+				else if (chi_value < 360.)
+					string2 = "300.000000";
+				else 
+					std::cerr<< "There is a problem for atom " << properties.atom->getName() << ": " 
+						<< second_property_ << "-value is not valid!" << std::endl;
+			}
+		}
+		// now we can assume that for chi the correct alphanumeric string is set! 
+		
+		// Special case 2: SINGLE__??
+		if (type_ == SINGLE__DISCRETE || type_ == SINGLE__CHI)
+		{ 
+			//Remember: we did this to save space
+			string1 = first_property_;
+		}
+		
+		//
+		// now access the hypersurface according to its type
+		// 
+		if (   type_ == SINGLE__DISCRETE || type_ == SINGLE__CHI    || type_ == CHI__CHI 
+				|| type_ == CHI__DISCRETE    || type_ == DISCRETE__CHI  || type_ == DISCRETE__DISCRETE)
+		{
+			// find out if the first property is contained in the tabel
+			tabletype::iterator first_it = table_.find(string1);
+			if (first_it != table_.end())
+			{  
+				// yes it is :-)
+				// check if the second property is contained in the table
+				std::map<String, float>::iterator second_it = first_it->second.find(string2);
+				if (second_it != first_it->second.end())
+					// so both accessors are valid: we can just return the value
+					shift = second_it->second; //  table_[string1][string2];	
+				else
+					;
+					// average over the row we already found
+					//shift = getTableXAverage(properties[first_property_].second);// getTableRowAverage_(first_it->second);
+			}
+			else // the first accessor is not valid! 
+			{	
+				// does the second property occur at all?
+				if (tableHasColumn_(string2))
+					// return the column average
+					shift = getTableYAverage(properties[second_property_].second);//getTableColumnAverage_(string2);
+				else
+				{
+					// we don't have the value at all... average over the whole table
+					shift = getTotalAverage(); //getTableAverage_(); 
+					Log.info() << "Took the average because of invalid properties of atom " << properties.atom->getResidue()->getID() 
+					<< properties.atom->getResidue()->getName()
+					<< "-" << properties.atom->getName() << "   : " << first_property_ <<"/" << second_property_ 
+					<< " =  " << string1 << "/"  << string2 << std::endl;
+				}
+			}
+		}
+		else if (type_ == SINGLE__REAL)
+		{ 
+			// was the property set?
+			if (s1d_.find(first_property_) != s1d_.end())
+			{
+				if (properties[first_property_].first == FLOAT_VALUE_NA)
+					return average_;
+				else 
+					shift = s1d_[first_property_](properties[first_property_].first);
+			}
+			else 
+				shift = 0.;
 		}
 		else if (type_ == REAL__REAL)
 		{		
 			// This simulates SHIFTX behaviour: if only one factor is out of bounds, we return the all-values average
 			if ((properties[first_property_].first == FLOAT_VALUE_NA) || (properties[second_property_].first == FLOAT_VALUE_NA))
 			{
-				shift = s2d_.getAverage();
+				shift = average_;
 			}
 			else 
 				shift = s2d_(properties[first_property_].first, properties[second_property_].first);
@@ -2008,7 +2218,7 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			else
 				shift = s1d_[properties[first_property_].second](properties[second_property_].first);
 		}
-		else if (type_ == DISCRETE__DISCRETE) 
+	/*	else if (type_ == DISCRETE__DISCRETE) 
 		{
 			// find out if the second property is contained in the table
 			tabletype::iterator second_it = table_.find(properties[second_property_].second);
@@ -2037,113 +2247,20 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			}
 		
 		//	std::cout << "shift: " << shift<< std::endl;
-		}
+		}*/
 		else if (type_ == CHI__REAL)
 		{	
 			std::cout << "CHI REAL should NEVER be called " << std::endl;
 		}
 		else if (type_ == REAL__CHI)
-		{				
-			// we have to decide in which chi--case we are :
-			// 			REAL or DISCRETE ? 
-			
-			if (properties[second_property_].first == FLOAT_VALUE_NA) 
-			{  //  case DISCRETE --> REAL__DISCRETE 
-				 //  ALA, GLY or Unknown
-				shift = s1d_[properties[second_property_].second](properties[first_property_].first);
-			}
-			else if (properties[second_property_].second == STRING_VALUE_NA)
-			{  // case REAL --> REAL__REAL
-				float chi_value = properties[second_property_].first; 
-				if (chi_value < 120.)
-					shift = s1d_["120."](properties[first_property_].first);
-				else if (chi_value < 240.)
-					shift = s1d_["240."](properties[first_property_].first);
-				else if (chi_value < 360.)
-					shift = s1d_["360."](properties[first_property_].first);
-				else if (chi_value == FLOAT_VALUE_NA)
-					std::cerr<< "something bad happend in PropertiesForShift::operator()" << std::endl;
-			}
-			else 
-			{
-//std::cout << "first: "<< (properties[first_property_].first) << " -- second: (" << properties[second_property_].first << "  " <<properties[second_property_].second << ")" << std::endl;
-				
-				std::cerr << second_property_ << " not set!"  << std::endl;
-			}
-		}
-		else if (type_ == CHI__DISCRETE)
 		{	
-			// REMEMBER !!
-			// a table can be accessed like this :
-			//  					table_[y][x]
-			// here the x/first property is chi  
-//std::cout << "first pro: (" << properties[first_property_].first << " " << properties[first_property_].second <<  ") : second pro (" << properties[second_property_].first << " "  << properties[second_property_].second << ")" << std::endl;
-	
-			if (properties[first_property_].first == FLOAT_VALUE_NA)
-			{
-				// ALA, GLY or Unknown 
-				if (   (table_.find(properties[second_property_].second) != table_.end()) 
-						&& (	 table_[properties[second_property_].second].find(properties[first_property_].second) 
-								!= table_[properties[second_property_].second].end() ))
-				{
-					shift = table_[properties[second_property_].second][properties[first_property_].second];
-				}
-				else
-				{
-					std::cerr << "in case CHI__DISCRETE tried to access the table with unknown values" << std::endl;
-				}
-			}
+			if (s1d_.find(string2) != s1d_.end())
+				shift = s1d_[string2](properties[first_property_].first);	
 			else
-			{
-				float chi_value = properties[first_property_].first; 
-				if (chi_value < 120.)
-					shift = table_[properties[second_property_].second]["120."];
-				else if (chi_value < 240.)
-					shift = table_[properties[second_property_].second]["240."];
-				else if (chi_value < 360.)
-					shift = table_[properties[second_property_].second]["360."];
-				else if (chi_value == FLOAT_VALUE_NA)
-					std::cerr<< "something bad happend in PropertiesForShift::operator()" << std::endl;
-			}
-		}
-		else if (type_ == DISCRETE__CHI)
-		{
-			// !! REMEMBER !!
-			// a table can be accessed like this:
-			// 					table_[y][x]
-			
-			//here the second property is chi, so we have to treat y in a special way
-			
-			if (properties[second_property_].first == FLOAT_VALUE_NA)
-			{
-				// ALA, GLY or Unknown
-				if (   (table_.find(properties[second_property_].second) != table_.end()) 
-						&& (	 table_[properties[second_property_].second].find(properties[first_property_].second) 
-								!= table_[properties[second_property_].second].end() ))
-				{
-					shift = table_[properties[second_property_].second][properties[first_property_].second];
-				}	
-				else
-				{
-					std::cerr << "in case DISCRETE__CHI tried to access the table with unknown values" << std::endl;
-				}
-			}
-			else  
-			{
-				float chi_value = properties[second_property_].first; 
-				if (chi_value < 120.)
-					shift = table_["120."][properties[second_property_].second];
-				else if (chi_value < 240.)
-					shift = table_["240."][properties[second_property_].second];
-				else if (chi_value < 360.)
-					shift = table_["360."][properties[second_property_].second];
-				else if (chi_value == FLOAT_VALUE_NA)
-					std::cerr<< "something bad happend in PropertiesForShift::operator()" << std::endl;
-			}
-		}
-		else if (type_ == CHI__CHI)
-		{ 
-			std::cerr <<  "CHI CHI not set!"  << std::endl;
+				std::cerr << "Tried to access the hypersurface for atom " << properties.atom->getResidue()->getID() 	
+					<< properties.atom->getResidue()->getName()
+					<< "-" << properties.atom->getName() << "'s properties " << first_property_ <<"/" << second_property_ 
+					<< " with " << properties[first_property_].first << "/"  << string2<< std::endl;
 		}
 		else
 		{	
@@ -2232,6 +2349,34 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		return false;
 	}
 	
+	
+	float EmpiricalHSShiftProcessor::ShiftHyperSurface_::getTableXAverage(const String& name) 
+		throw()
+	{
+		Position pos = NULL;
+		
+		tabletype::iterator it = table_.find(name);
+		if (it != table_.end())
+		{
+			Log.info() << "Not yet implemented!" << std::endl;
+		}
+		else
+		{
+			Log.info() << "Invalid value for X average determination" << std::endl;
+			return 0.0;
+		}
+	}
+	
+	float EmpiricalHSShiftProcessor::ShiftHyperSurface_::getTableYAverage(const String& name) 
+		throw()
+	{
+		Log.info() << "Not yet implemented!" << std::endl;
+	}
+
+
+				
+				
+				
 	void  EmpiricalHSShiftProcessor::postprocessing_()
 		throw()
 	{
@@ -2242,7 +2387,6 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		{
 			if  (RTTI::isKindOf<System>(targets_[i].atom->getRoot()))
 			{	
-				std::cout << " das war also tatsaechlich ein system!!!!!" << std::endl;
 				system = dynamic_cast<System*>(&(targets_[i].atom->getRoot()));
 			}
 		}
