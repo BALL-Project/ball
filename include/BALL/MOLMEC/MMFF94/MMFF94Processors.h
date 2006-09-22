@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.4.4 2006/09/21 08:26:29 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.4.5 2006/09/22 23:00:31 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -17,6 +17,10 @@
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 # include <BALL/DATATYPE/stringHashMap.h>
+#endif
+
+#ifndef BALL_KERNEL_BOND_H
+# include <BALL/KERNEL/bond.h>
 #endif
 
 #include <vector>
@@ -203,6 +207,46 @@ namespace BALL
 		HashSet<String> 						rule_types_;
 		vector<HashSet<Atom*> > 		aromatic_rings_;
 	};
+	
+
+	///
+	class BALL_EXPORT Kekuliser
+	{
+		public:
+
+		BALL_CREATE(Kekuliser)
+
+		///
+		Kekuliser();
+
+		///
+		virtual ~Kekuliser() {}
+
+		///
+		bool setup(Molecule& mol);
+
+		///
+		void setAromaticRings(const vector<HashSet<Atom*> >& rings) { aromatic_rings_ = rings;}
+		
+		///
+		void setRings(const vector<HashSet<Atom*> >& rings) { rings_ = rings;}
+
+		///
+		const vector<Bond*>& getUnassignedBonds() const { return unassigned_bonds_; }
+
+		protected:
+
+		bool fixAromaticRings_(Molecule& mol);
+
+		vector<HashSet<Atom*> > aromatic_rings_;
+		vector<HashSet<Atom*> > rings_;
+		vector<Bond*> 					unassigned_bonds_;
+
+		// temporary collection of all aromatic bonds for internal usage:
+		HashSet<Bond*> 					aromatic_bonds_;
+	};
+
+
 
 } // namespace BALL
 

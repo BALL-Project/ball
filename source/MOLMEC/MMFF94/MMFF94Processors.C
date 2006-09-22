@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.4.9 2006/09/22 07:23:43 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.4.10 2006/09/22 22:58:36 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -15,6 +15,7 @@
 #include <BALL/STRUCTURE/smartsMatcher.h>
 #include <BALL/QSAR/aromaticityProcessor.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
+#include <BALL/KERNEL/forEach.h>
 
 #include <BALL/SYSTEM/timer.h>
 //    #define BALL_MMFF94_TEST
@@ -1005,6 +1006,177 @@ bool MMFF94ChargeProcessor::start()
 	atoms_.clear();
 	unassigned_atoms_.clear();
 	return es_parameters_ != 0;
+}
+
+//////////////////////////////////////////////////////////////////////
+Kekuliser::Kekuliser()
+{
+}
+
+bool Kekuliser::setup(Molecule& mol)
+{
+	// atoms that take part in an aromatic bond:
+	HashSet<const Atom*> to_match;
+
+	// collect aromatic bonds and atoms to speed up SMARTS matching:
+	AtomIterator ait;
+	AtomBondIterator bit;
+	BALL_FOREACH_BOND(mol, ait, bit)
+	{
+		if (bit->getOrder() == Bond::ORDER__AROMATIC)
+		{
+			aromatic_bonds_.insert(&(*bit));
+		}
+
+		to_match.insert(bit->getFirstAtom());
+		to_match.insert(bit->getSecondAtom());
+	}
+
+
+	// have to transform the rings into a vector of vector of atoms for the SmartsMatcher:
+	vector<vector<Atom*> > rings_vector;
+	for (Position p = 0; p < rings_.size(); p++)
+	{
+		rings_vector.push_back(vector<Atom*>());
+		HashSet<Atom*>::Iterator it = rings_[p].begin();
+		for (; +it; ++it)
+		{
+			rings_vector[p].push_back(*it);
+		}
+	}
+
+	SmartsMatcher sm;
+	// dont recalculate the smallest set of smallest rings:
+ 	sm.setSSSR(rings_vector);
+
+	vector<HashSet<const Atom*> > result;
+	HashSet<const Atom*>::Iterator sit;
+
+	//////////////////////////////////////////////////////////////
+	// fix carboxlic acid:
+	sm.match(result, mol, "[#8;D1]#6[#8;D1]", to_match);
+
+	for (Position pos = 0; pos < result.size(); pos++)
+	{
+		HashSet<const Atom*>& set = result[pos];
+		vector<Atom*> oxygen;
+		Atom* carbon = 0;
+
+		for (sit = set.begin(); +sit; ++sit)
+		{
+			if ((*sit)->getElement().getSymbol() == "C")
+			{
+				carbon = (Atom*)*sit;
+			}
+			else
+			{
+				oxygen.push_back((Atom*)*sit);
+			}
+		}
+
+		oxygen[0]->getBond(*carbon)->setOrder(Bond::ORDER__SINGLE);
+		oxygen[1]->getBond(*carbon)->setOrder(Bond::ORDER__DOUBLE);
+		to_match.erase(oxygen[0]);
+		to_match.erase(oxygen[1]);
+		to_match.erase(carbon);
+	}
+	
+	//////////////////////////////////////////////////////////////
+	// fix amidene and guanidine
+	// sm.match(result, mol, "[#7;D1]#6([#7;D1])*");
+	result.clear();
+	sm.match(result, mol, "[#7;D1]#6([#7;D1])", to_match);
+	if (result.size() != 0)
+	{
+		for (Position pos = 0; pos < result.size(); pos++)
+		{
+			HashSet<const Atom*>& set = result[pos];
+			vector<Atom*> nitrogen;
+			Atom* carbon = 0;
+
+			for (sit = set.begin(); +sit; ++sit)
+			{
+				if ((*sit)->getElement().getSymbol() == "C")
+				{
+					carbon = (Atom*)*sit;
+				}
+				else
+				{
+					nitrogen.push_back((Atom*)*sit);
+				}
+			}
+
+			nitrogen[0]->getBond(*carbon)->setOrder(Bond::ORDER__SINGLE);
+			nitrogen[1]->getBond(*carbon)->setOrder(Bond::ORDER__DOUBLE);
+			to_match.erase(carbon);
+			to_match.erase(nitrogen[0]);
+			to_match.erase(nitrogen[1]);
+		}
+	}
+	
+	//////////////////////////////////////////////////////////////
+	// fix phosphonic acid
+	result.clear();
+//   	sm.match(result, mol, "[p]([oD1])([oD1])([oD1])[#6,#8]");
+	sm.match(result, mol, "[P]([#8;D1])([#8;D1])([#8;D1])", to_match);
+
+	for (Position pos = 0; pos < result.size(); pos++)
+	{
+		HashSet<const Atom*>& set = result[pos];
+		vector<Atom*> oxygen;
+		Atom* phosphor = 0;
+
+		for (sit = set.begin(); +sit; ++sit)
+		{
+			if ((*sit)->getElement().getSymbol() == "P")
+			{
+				phosphor = (Atom*)*sit;
+			}
+			else
+			{
+				oxygen.push_back((Atom*)*sit);
+			}
+		}
+		
+		oxygen[0]->getBond(*phosphor)->setOrder(Bond::ORDER__DOUBLE);
+		oxygen[1]->getBond(*phosphor)->setOrder(Bond::ORDER__SINGLE);
+		oxygen[2]->getBond(*phosphor)->setOrder(Bond::ORDER__SINGLE);
+
+		to_match.erase(phosphor);
+		to_match.erase(oxygen[0]);
+		to_match.erase(oxygen[1]);
+		to_match.erase(oxygen[2]);
+	}
+	
+	//////////////////////////////////////////////////////////////
+	// fix aromatic rings
+
+	// recollect the remaining aromatic bonds:	
+	aromatic_bonds_.clear();
+	BALL_FOREACH_BOND(mol, ait, bit)
+	{
+		if (bit->getOrder() == Bond::ORDER__AROMATIC)
+		{
+			aromatic_bonds_.insert(&(*bit));
+		}
+	}
+
+	bool ok = fixAromaticRings_(mol);
+
+	unassigned_bonds_.clear();
+	HashSet<Bond*>::Iterator hbit = aromatic_bonds_.begin();
+	for (; +hbit; ++hbit)
+	{
+		unassigned_bonds_.push_back(*hbit);
+	}
+
+	return ok;
+}
+
+
+bool Kekuliser::fixAromaticRings_(Molecule& mol)
+{
+	return true;
 }
 
 } // namespace BALL

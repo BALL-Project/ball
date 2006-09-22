@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.4.8 2006/06/23 01:35:53 amoll Exp $
+// $Id: MMFF94.C,v 1.1.4.9 2006/09/22 22:58:55 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -163,8 +163,31 @@ namespace BALL
 
 		collectBonds_();
 		collectRings_();
-		transformAromaticBonds_();
 
+		/////////////////////////////////////////////
+		// kekulise all aromatic bonds:
+//   		transformAromaticBonds_();
+		kekuliser_.setAromaticRings(aromatic_rings_);
+		kekuliser_.setRings(rings_);
+		MoleculeIterator mit = system_->beginMolecule();
+		bool kekule_error = false;
+		for (; +mit; ++mit)
+		{
+			kekule_error &= kekuliser_.setup(*mit);
+		}
+
+		const vector<Bond*>& ubonds = kekuliser_.getUnassignedBonds();
+		for (Position p = 0; p < ubonds.size(); p++)
+		{
+			Atom* a1 = (Atom*)ubonds[p]->getFirstAtom();
+			Atom* a2 = (Atom*)ubonds[p]->getSecondAtom();
+			unassigned_atoms_.insert(a1);
+			unassigned_atoms_.insert(a2);
+			error() << "Cannot kekulise bond " << a1->getFullName() << " -> " << a2->getFullName() << std::endl;
+		}
+
+		/////////////////////////////////////////////
+		// initialise all parameter sets from the corresponding files:
 		if (!parameters_initialized_)
 		{
 			String prefix = folder + FileSystem::PATH_SEPARATOR;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.h,v 1.1.4.6 2006/06/23 01:35:19 amoll Exp $ 
+// $Id: MMFF94.h,v 1.1.4.7 2006/09/22 22:59:16 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -268,6 +268,7 @@ namespace BALL
 		vector<Bond*> 							bonds_;
 		MMFF94AtomTyper 						atom_typer_;
 		MMFF94ChargeProcessor 			charge_processor_;
+		Kekuliser 									kekuliser_;
 		HashSet<Bond*> 							aromatic_bonds_;
 	};
 
