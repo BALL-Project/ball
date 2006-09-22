@@ -1652,7 +1652,22 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 			else if ((*it) == 	"DISULFIDE" )
 			{
 				properties_string_[(*it)]= (hasDisulfidBond_(residue)? "Y": "N");			
-			}						
+			}
+			// the following both cases are due to SHIFTX
+			else if ((*it) == "ROW")
+			{
+				properties_string_[(*it)] = "N";	
+			}
+			else if ((*it) == "HBONDSTAT")
+			{
+				// TODO: first position reflects existence of HA1 HBond (Length > 0.)
+				// 			 second position reflects existence of HA2 HBond     "
+				// 			 third position reflects HN HBond Length             "
+				// 			 fourth position reflects ?? HBond length
+				//
+				// 			 0.0 ? 'N' : 'Y';
+				properties_string_[(*it)] = "YYYY";	
+			}
 		} 
 		return true;
 	}
@@ -1686,7 +1701,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 	{
 		// initialize the return value 
 		std::pair<float, String> p(FLOAT_VALUE_NA , STRING_VALUE_NA);
-		
+	
 		// special case chi: 
 		// 		can be a string (ALA, GLY) or have an angle (float)
 		if (property_name.hasSubstring("CHI"))
@@ -1749,7 +1764,9 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 		//set the x property and the y property
 		first_property_  = firstproperty;
 		second_property_ = secondproperty;
-	
+
+		
+		
 		// set the Hypersurface type
 		setType_(firstproperty, secondproperty);
 		
@@ -2067,11 +2084,11 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		
 		String string1 = properties[first_property_].second;
 		String string2 = properties[second_property_].second;
-		
+
 		// special case1 : CHI
 		if (PropertiesForShift_::isMixed(first_property_))
 		{	
-std::cout << "chi1: " << properties[first_property_].first << "|" << properties[first_property_].second<< std::endl;
+//std::cout << "chi1: " << properties[first_property_].first << "|" << properties[first_property_].second<< std::endl;
 			
 			string1 = properties[first_property_].second;
 			
@@ -2093,7 +2110,7 @@ std::cout << "chi1: " << properties[first_property_].first << "|" << properties[
 		
 		if (PropertiesForShift_::isMixed(second_property_))
 		{
-std::cout << "chi2: " << properties[first_property_].first << "|" << properties[first_property_].second<< std::endl;
+//std::cout << "chi2: " << properties[first_property_].first << "|" << properties[first_property_].second<< std::endl;
 
 			string2 = properties[second_property_].second; 
 			// is the property numeric or alphanumeric? 
@@ -2126,6 +2143,10 @@ std::cout << "chi2: " << properties[first_property_].first << "|" << properties[
 		if (   type_ == SINGLE__DISCRETE || type_ == SINGLE__CHI    || type_ == CHI__CHI 
 				|| type_ == CHI__DISCRETE    || type_ == DISCRETE__CHI  || type_ == DISCRETE__DISCRETE)
 		{
+
+			
+
+			
 			// find out if the first property is contained in the tabel
 			tabletype::iterator first_it = table_.find(string1);
 			if (first_it != table_.end())
@@ -2145,8 +2166,9 @@ std::cout << "chi2: " << properties[first_property_].first << "|" << properties[
 			{	
 				// does the second property occur at all?
 				if (tableHasColumn_(string2))
-					// return the column average
+				{	// return the column average
 					shift = getTableYAverage(properties[second_property_].second);//getTableColumnAverage_(string2);
+				}
 				else
 				{
 					// we don't have the value at all... average over the whole table

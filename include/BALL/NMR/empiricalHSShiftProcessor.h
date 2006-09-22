@@ -204,6 +204,9 @@ namespace BALL
 				/** obtain a property. we return a std::pair<float, String> with the property that:
 				 *    the first element is std::numeric_limits<float>::min() if it is a discrete property
 				 *    the second element is the string "invalid" if it is a continuous property
+				 *    NOTE: make sure, that all properties (except from CHI)  are stored either 
+				 *     	in properties_real_ or in properties_string_ 
+				 *     	otherwise the operator is not able to return the correct value!
 				 */
 				std::pair<float, String> operator [] (const String& property_name) throw();
 
