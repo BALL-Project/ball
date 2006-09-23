@@ -1,8 +1,40 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.sip,v 1.10.2.1 2006/05/30 16:03:47 amoll Exp $
+// $Id: atom.sip,v 1.10.2.2 2006/09/23 17:48:30 amoll Exp $
 //
+
+class AtomType
+{
+%TypeHeaderCode
+	#include <BALL/KERNEL/atom.h>
+	using namespace BALL;
+	typedef Atom::Type AtomType;
+%End
+	public:
+%ConvertToTypeCode
+	if (PyInt_Check(sipPy))
+	{
+		*sipCppPtr = new AtomType(PyInt_AS_LONG(sipPy));
+	
+		return 1;
+	}
+	
+	*sipCppPtr = (AtomType*)sipConvertToCpp(sipPy, sipClass_AtomType, sipIsErr);
+
+	return 0;
+%End
+
+	SIP_PYOBJECT __str__();
+%MethodCode
+	sipRes = PyString_FromString(String(*sipCpp).c_str());
+%End
+
+	SIP_PYOBJECT __repr__();
+%MethodCode
+	sipRes = PyString_FromString(String(*sipCpp).c_str());
+%End
+};
 
 class Atom
   : Composite,
@@ -155,35 +187,4 @@ class Atom
 
 };
  
-class AtomType
-{
-%TypeHeaderCode
-	#include <BALL/KERNEL/atom.h>
-	using namespace BALL;
-	typedef Atom::Type AtomType;
-%End
-	public:
-%ConvertToTypeCode
-	if (PyInt_Check(sipPy))
-	{
-		*sipCppPtr = new AtomType(PyInt_AS_LONG(sipPy));
-	
-		return 1;
-	}
-	
-	*sipCppPtr = (AtomType*)sipConvertToCpp(sipPy, sipClass_AtomType, sipIsErr);
-
-	return 0;
-%End
-
-	SIP_PYOBJECT __str__();
-%MethodCode
-	sipRes = PyString_FromString(String(*sipCpp).c_str());
-%End
-
-	SIP_PYOBJECT __repr__();
-%MethodCode
-	sipRes = PyString_FromString(String(*sipCpp).c_str());
-%End
-};
 

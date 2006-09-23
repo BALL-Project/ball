@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom.sip,v 1.7 2003/11/01 09:27:36 oliver Exp $
+// $Id: PDBAtom.sip,v 1.7.10.1 2006/09/23 17:48:30 amoll Exp $
 //
 
 class PDBAtom
@@ -10,6 +10,7 @@ class PDBAtom
 %TypeHeaderCode
 	#include <BALL/KERNEL/PDBAtom.h>
 	using namespace BALL;
+  typedef Atom::Type AtomType;
 %End
   public:
   PDBAtom();
