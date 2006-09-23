@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.sip,v 1.7.10.1 2006/09/23 17:45:30 amoll Exp $
+// $Id: trajectoryFile.sip,v 1.7.10.2 2006/09/23 19:45:10 amoll Exp $
 //
 
 class TrajectoryFile
@@ -10,6 +10,7 @@ class TrajectoryFile
 %TypeHeaderCode
 	#include <BALL/FORMAT/trajectoryFile.h>
 	using namespace BALL;
+	using namespace BALL::Exception;
 %End
 				public:
 				TrajectoryFile()
