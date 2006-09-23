@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.sip,v 1.11 2005/12/23 17:02:51 amoll Exp $
+// $Id: genericMolFile.sip,v 1.11.2.1 2006/09/23 17:45:30 amoll Exp $
 //
 
 	class GenericMolFile
@@ -10,6 +10,7 @@
 %TypeHeaderCode
 	#include <BALL/FORMAT/genericMolFile.h>
 	using namespace BALL;
+	using namespace BALL::Exception;
 %End
 		public:
 		GenericMolFile() throw();

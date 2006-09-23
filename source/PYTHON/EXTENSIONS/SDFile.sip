@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.sip,v 1.10 2005/12/23 17:02:47 amoll Exp $
+// $Id: SDFile.sip,v 1.10.2.1 2006/09/23 17:45:29 amoll Exp $
 //
 
 class SDFile
@@ -9,7 +9,9 @@ class SDFile
 {
 %TypeHeaderCode
 	#include <BALL/FORMAT/SDFile.h>
+  #include <BALL/COMMON/exception.h>
 	using namespace BALL;
+	using namespace BALL::Exception;
 %End
   public:
   SDFile();

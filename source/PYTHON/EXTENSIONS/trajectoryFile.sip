@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.sip,v 1.7 2003/11/12 18:20:29 oliver Exp $
+// $Id: trajectoryFile.sip,v 1.7.10.1 2006/09/23 17:45:30 amoll Exp $
 //
 
 class TrajectoryFile
@@ -18,7 +18,7 @@ class TrajectoryFile
 								throw();
 				TrajectoryFile(const String& /filename/,
 											 OpenMode /open_mode/ = std::ios::in)
-								throw();
+								throw(FileNotFound);
 				~TrajectoryFile()
 								throw();
 				//const TrajectoryFile& operator = (const TrajectoryFile& /file/)
