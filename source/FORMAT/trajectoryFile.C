@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.C,v 1.13 2005/12/23 17:02:40 amoll Exp $
+// $Id: trajectoryFile.C,v 1.13.2.1 2006/09/23 17:39:21 amoll Exp $
 //
 
 #include <BALL/FORMAT/trajectoryFile.h>
@@ -29,9 +29,8 @@ namespace BALL
 	}
 
 
-	TrajectoryFile::TrajectoryFile(const String& filename,
-			File::OpenMode open_mode)
-		throw()
+	TrajectoryFile::TrajectoryFile(const String& filename, File::OpenMode open_mode)
+		throw(Exception::FileNotFound)
 		: File(filename, open_mode),
 			number_of_snapshots_(0),
 			number_of_atoms_(0)

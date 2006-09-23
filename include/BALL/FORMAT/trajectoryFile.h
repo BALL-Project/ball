@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.h,v 1.21 2005/12/23 17:01:46 amoll Exp $
+// $Id: trajectoryFile.h,v 1.21.2.1 2006/09/23 17:39:08 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_TRAJECTORYFILE_H
@@ -52,7 +52,7 @@ namespace BALL
 		*/
 		TrajectoryFile(const String& filename,
 			File::OpenMode open_mode = std::ios::in)
-			throw();
+			throw(Exception::FileNotFound);
 
 		/// Destructor
 		virtual ~TrajectoryFile()
