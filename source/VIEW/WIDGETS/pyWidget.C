@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.53 2006/06/21 23:54:48 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.54 2006/09/23 21:04:16 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -342,7 +342,7 @@ PyWidget::PyWidget(QWidget *parent, const char *name)
 	script_edit_->setContextMenuPolicy(Qt::CustomContextMenu);
 	script_edit_->setTabStopWidth((Position)(script_edit_->tabStopWidth() / 3.0));
 	script_edit_->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
-	script_edit_->setToolTip("Editor for Python scripts, for blue printed capital words, a BALL documentation entry is available. Press right mouse button for a context menu.");
+//   	script_edit_->setToolTip("Editor for Python scripts, for blue printed capital words, a BALL documentation entry is available. Press right mouse button for a context menu.");
 	splitter->addWidget(script_edit_);
 
 	widget = new QWidget(this);
