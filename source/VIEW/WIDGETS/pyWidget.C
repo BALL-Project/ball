@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.54 2006/09/23 21:04:16 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.55 2006/09/23 22:02:23 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -758,7 +758,7 @@ void PyWidget::saveScript()
 {
 	QString s = QFileDialog::getSaveFileName(
 								0, "Save script",
-								getWorkingDir().c_str(), "");
+								getWorkingDir().c_str(), "*.py");
 
 	if (s == QString::null) return;
 	String filename(ascii(s));
