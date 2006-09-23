@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleicAcid.sip,v 1.3 2003/10/29 22:54:42 oliver Exp $
+// $Id: nucleicAcid.sip,v 1.3.10.1 2006/09/23 17:46:08 amoll Exp $
 //
 
 class NucleicAcid
  : Molecule
 {
 %TypeHeaderCode
-#include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/nucleicAcid.h>
 using namespace BALL;
 %End
   public:

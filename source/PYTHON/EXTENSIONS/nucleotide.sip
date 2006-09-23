@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.sip,v 1.3.10.1 2006/05/30 16:03:49 amoll Exp $
+// $Id: nucleotide.sip,v 1.3.10.2 2006/09/23 17:46:07 amoll Exp $
 //
 
 class Nucleotide
   : Fragment
 {
 %TypeHeaderCode
-#include <BALL/KERNEL/fragment.h>
+#include <BALL/KERNEL/nucleotide.h>
 using namespace BALL;
 %End
   public:
