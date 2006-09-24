@@ -17,6 +17,7 @@
 #include <QtGui/QTableWidget>
 #include <QtGui/QWidget>
 #include <QtGui/QItemDelegate>
+#include <QtGui/QFont>
 
 namespace BALL
 {
@@ -120,6 +121,9 @@ namespace BALL
 			/// Destructor
 			~PythonSettings() {}
 
+			///
+			QFont getEditorFont() const { return font_;}
+
 			/// Set the filename of the startup script
 			void setFilename(const String& filename)
 				throw();
@@ -135,6 +139,12 @@ namespace BALL
 			///
 			void setContent(const List<Hotkey>& hotkeys);
 
+			///
+			void writePreferenceEntries(INIFile& inifile);
+
+			///
+			void readPreferenceEntries(const INIFile& inifile);
+
 			public slots:
 
 			/// Open a filedialog to select the startup script
@@ -146,9 +156,13 @@ namespace BALL
 			///
 			virtual void rowSelected();
 
+			///
+			void selectFont();
+
 			protected:
 
 			HotkeyTable*  table;
+			QFont 				font_;
 		};
 } }
 

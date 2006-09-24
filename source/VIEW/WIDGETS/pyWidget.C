@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.55 2006/09/23 22:02:23 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.56 2006/09/24 09:42:04 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -517,6 +517,13 @@ void PyWidget::applyPreferences()
 
 	if (python_settings_ == 0) return;	
 
+	////////////////////////////////////////////////
+	QFont font = python_settings_->getEditorFont();
+	text_edit_->document()->setDefaultFont(font);
+	script_edit_->document()->setDefaultFont(font);
+	script_output_->document()->setDefaultFont(font);
+
+	////////////////////////////////////////////////
 	hotkeys_ = (python_settings_->getContent());
 
 	QMenu* menu = getMainControl()->initPopupMenu(MainControl::USER);

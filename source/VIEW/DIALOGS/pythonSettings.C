@@ -11,6 +11,7 @@
 #include <QtGui/QTableWidgetItem>
 #include <QtGui/QHeaderView>
 #include <QtGui/QComboBox>
+#include <QtGui/QFontDialog>
 
 namespace BALL
 {
@@ -323,6 +324,7 @@ PythonSettings::PythonSettings(QWidget* parent, const char* name)
 	// signals and slots connections
 	connect( choose_button, SIGNAL( clicked() ), this, SLOT( fileSelected() ) );
 	connect( clear_button, SIGNAL( clicked() ), this, SLOT( clearStartupScript() ) );
+	connect( font_button, SIGNAL( clicked() ), this, SLOT( selectFont() ) );
 
 	table = new HotkeyTable(widget_stack->widget(1));
 	connect(new_button, SIGNAL(pressed()), table, SLOT(addEmptyRow()));
@@ -370,6 +372,40 @@ String PythonSettings::getFilename() const
 	return ascii(script_edit->text());
 }
 
+void PythonSettings::selectFont()
+{
+	bool ok = true;
+	QFont font = QFontDialog::getFont(&ok, font_, 0);
+
+	if (!ok) return;
+
+	font_label->setFont(font);
+	font_ = font;
+}
+
+void PythonSettings::writePreferenceEntries(INIFile& inifile)
+{
+	PreferencesEntry::writePreferenceEntries(inifile);
+	
+	// the font size
+	inifile.insertValue("PYTHON", "font", ascii(font_.toString()));
+}
+
+void PythonSettings::readPreferenceEntries(const INIFile& inifile)
+{
+	PreferencesEntry::readPreferenceEntries(inifile);
+
+	if (inifile.hasEntry("PYTHON", "font"))
+	{
+		font_.fromString(inifile.getValue("PYTHON", "font").c_str());
+	}
+	else
+	{
+		font_ = QFont("Helvetica", 12);
+	}
+
+	font_label->setFont(font_);
+}
 
 // NAMESPACE
 } }
