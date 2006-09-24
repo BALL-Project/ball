@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.34.2.1 2006/02/01 14:14:50 amoll Exp $
+// $Id: representation.h,v 1.34.2.2 2006/09/24 10:47:59 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -171,6 +171,10 @@ namespace BALL
 			///
 			GeometricObjectList& getGeometricObjects()
 				throw();
+
+			///
+			void setGeometricObjects(GeometricObjectList& gol) 
+				throw() { geometric_objects_ = gol;}
 
 			///
 			void insert(GeometricObject& object) 
