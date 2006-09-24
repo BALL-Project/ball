@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.sip,v 1.4 2005/12/23 17:02:49 amoll Exp $
+// $Id: colorRGBA.sip,v 1.4.2.1 2006/09/24 10:41:35 amoll Exp $
 //
 
 class ColorRGBA
@@ -64,4 +64,20 @@ class ColorRGBA
   // void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
 	// std::istream& operator >> (std::istream& s, ColorRGBA& color);
   //  std::ostream& operator << (std::ostream& s, const ColorRGBA& /color/);
+	SIP_PYOBJECT __str__();
+%MethodCode
+	String s("ColorRGBA {");
+	s += (String) *sipCpp;
+	s += " }";
+	sipRes = PyString_FromString(s.c_str());
+%End
+
+	SIP_PYOBJECT __repr__();
+%MethodCode
+	String s("ColorRGBA {");
+	s += (String) *sipCpp;
+	s += " }";
+	sipRes = PyString_FromString(s.c_str());
+%End
+
 };
