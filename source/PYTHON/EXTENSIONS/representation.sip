@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.14 2005/12/26 03:26:09 amoll Exp $
+// $Id: representation.sip,v 1.14.2.1 2006/09/24 11:27:37 amoll Exp $
 //
 
 class Representation
@@ -43,6 +43,7 @@ class Representation
 	void setTransparency(Size /value/) throw();
 
 	GeometricObjectList& getGeometricObjects() throw();
+	void setGeometricObjects(GeometricObjectList&) throw();
 	const GeometricObjectList& getGeometricObjects() const throw();
 	void insert(GeometricObject& /Transfer/) throw();
 
