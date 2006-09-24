@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.sip,v 1.6 2003/12/18 19:03:19 oliver Exp $
+// $Id: extractors.sip,v 1.6.10.1 2006/09/24 12:36:02 amoll Exp $
 //
 
 %ModuleHeaderCode
@@ -11,6 +11,7 @@
 PyAtomList* 								atoms(const AtomContainer& /fragment/, const String& /expression/);
 PyAtomList*									atoms(const AtomContainer& /fragment/);
 PyAtomList* 								atoms(const PyAtomList& /atoms/, const String& /expression/);
+PyAtomList*									all_atoms(const Composite& /fragment/);
 PyPDBAtomList* 							PDBAtoms(const AtomContainer& /fragment/, const String& /expression/);
 PyPDBAtomList* 							PDBAtoms(const AtomContainer& /fragment/);
 PyBondList* 								bonds(const AtomContainer& /fragment/, bool /selected_only/ = false);
