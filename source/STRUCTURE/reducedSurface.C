@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.C,v 1.9.10.2 2006/07/22 09:56:17 amoll Exp $
+// $Id: reducedSurface.C,v 1.9.10.3 2006/09/25 16:10:24 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/reducedSurface.h>
@@ -1075,7 +1075,8 @@ namespace BALL
   		Index atom1(vertex1->atom_);
 			std::list<Index>::const_iterator i;
 			i = neighbours_[atom1].begin();
-			while (i != neighbours_[atom1].end())
+			bool stop = false;
+			while (!stop && i != neighbours_[atom1].end())
 			{
 				if (atom_status_[*i] == STATUS_UNKNOWN)
 				{
@@ -1093,7 +1094,8 @@ namespace BALL
 							insert(edge);
 							insert(vertex2);
 							new_vertices_.insert(vertex1);
-							i = neighbours_[atom1].end()--;
+							// i = neighbours_[atom1].end()--; ???
+							break;
 						}
 						else
 						{
@@ -1124,8 +1126,11 @@ namespace BALL
 									insert(vertex2);
 									insert(vertex3);
 									new_vertices_.insert(vertex1);
-									i = neighbours_[atom1].end()--;
-									j = candidates.end()--;
+									// i = neighbours_[atom1].end()--;
+									// j = candidates.end()--;
+									// ????
+									stop = true;
+									break;
 								}
 							}
 							j++;
