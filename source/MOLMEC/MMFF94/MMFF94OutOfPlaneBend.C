@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.11 2006/09/12 00:06:47 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.12 2006/09/25 14:52:04 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -376,6 +376,11 @@ namespace BALL
 				// the wilson angle:
 				const double dl = asin(sin_dl);
 
+				if (fabs(fabs(dl) - Constants::PI / 2.) < 0.01) 
+				{
+					continue;
+				}
+
 				// values that will be feed into the final calculation:
 				const double cos_theta = cos(theta);
 
@@ -387,7 +392,7 @@ namespace BALL
 
 				// scaling factor for all forces:
 				// wilson K0 * this_bend_constant * wilson_angle * DEGREE_TO_RADIAN * DEGREE_TO_RADIAN
-				double c1 = dl * FC * bend.k_oop * FORCES_FACTOR * Constants::JOULE_PER_CAL;
+				double c1 = -dl * FC * bend.k_oop * FORCES_FACTOR * Constants::JOULE_PER_CAL;
 
 			/*	
 			Log.precision(30);
