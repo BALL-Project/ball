@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalSAS.sip,v 1.7 2003/10/29 22:54:42 oliver Exp $
+// $Id: numericalSAS.sip,v 1.7.10.1 2006/09/25 11:37:37 amoll Exp $
 //
 
 %ModuleHeaderCode
@@ -26,7 +26,7 @@ PyAtomDict& calculateSASAtomAreas
  
 		res = new PyAtomDict;
 		calculateSASAtomAreas(*a0, *res, a1, a2);
-		PyObject *resobj = sipConvertFrom_PyAtomDict(res);
+		PyObject *resobj = sipConvertFromMappedType(res,sipMappedType_PyAtomDict,NULL);
 
 		delete res;
 
@@ -46,6 +46,6 @@ Surface& calculateSASPoints
 		Surface* res = new Surface;
 		calculateSASPoints(*a0, *res, a1, a2);
 
-		return sipMapCppToSelf(res,sipClass_Surface);
+		return sipConvertFromInstance(res,sipClass_Surface, 0);
 	}
 %End

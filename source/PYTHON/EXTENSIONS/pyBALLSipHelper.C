@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyBALLSipHelper.C,v 1.4 2003/11/01 09:27:38 oliver Exp $
+// $Id: pyBALLSipHelper.C,v 1.4.10.1 2006/09/25 11:37:37 amoll Exp $
 
 #include <typeinfo>
 #include "sipAPIBALL.h"
@@ -27,15 +27,16 @@ namespace BALL
 #define BALL_TO_SIP_MAP(type)\
 	if (typeid(object) == typeid(RTTI::getDefault<type>()))\
 	{\
-		return sipMapCppToSelf(&object, sipClass_##type);\
+		return sipConvertFromInstance(&object, sipClass_##type, 0);\
 	}\
 
 #define BALL_TO_SIP_MAP_BASECLASS(type)\
 	if (dynamic_cast<const type*>(&object) != NULL)\
-		return sipMapCppToSelf(&object, sipClass_##type);
+		return sipConvertFromInstance(&object, sipClass_##type, 0);
 
 	PyObject* pyMapBALLObjectToSip(Composite& object)
 	{
+		/*
 		BALL_TO_SIP_MAP(Chain)
 		BALL_TO_SIP_MAP(Atom)
 		BALL_TO_SIP_MAP(PDBAtom)
@@ -49,22 +50,23 @@ namespace BALL
 		BALL_TO_SIP_MAP(Nucleotide)
 		BALL_TO_SIP_MAP(System)
 		BALL_TO_SIP_MAP(Bond)
-
-		BALL_TO_SIP_MAP_BASECLASS(Atom)
+*/
 		BALL_TO_SIP_MAP_BASECLASS(PDBAtom)
-		BALL_TO_SIP_MAP_BASECLASS(Fragment)
+		BALL_TO_SIP_MAP_BASECLASS(Atom)
+		BALL_TO_SIP_MAP_BASECLASS(Bond)
 		BALL_TO_SIP_MAP_BASECLASS(Residue)
-		BALL_TO_SIP_MAP_BASECLASS(Molecule)
-		BALL_TO_SIP_MAP_BASECLASS(Chain)
-		BALL_TO_SIP_MAP_BASECLASS(Protein)
 		BALL_TO_SIP_MAP_BASECLASS(SecondaryStructure)
-		BALL_TO_SIP_MAP_BASECLASS(AtomContainer)
+		BALL_TO_SIP_MAP_BASECLASS(Chain)
+		BALL_TO_SIP_MAP_BASECLASS(System)
+		BALL_TO_SIP_MAP_BASECLASS(Protein)
 		BALL_TO_SIP_MAP_BASECLASS(NucleicAcid)
 		BALL_TO_SIP_MAP_BASECLASS(Nucleotide)
-		BALL_TO_SIP_MAP_BASECLASS(System)
-		BALL_TO_SIP_MAP_BASECLASS(Bond)
+		BALL_TO_SIP_MAP_BASECLASS(Molecule)
+		BALL_TO_SIP_MAP_BASECLASS(Fragment)
+		BALL_TO_SIP_MAP_BASECLASS(AtomContainer)
 
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		// last resort - this *should* work!
-		return sipMapCppToSelf(&object, sipClass_Composite);
+		return sipConvertFromInstance(&object, sipClass_Composite, 0);
 	}
 }

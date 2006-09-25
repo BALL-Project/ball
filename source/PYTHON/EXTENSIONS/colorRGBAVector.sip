@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBAVector.sip,v 1.2 2005/12/23 17:02:50 amoll Exp $
+// $Id: colorRGBAVector.sip,v 1.2.2.1 2006/09/25 11:37:36 amoll Exp $
 //
 
 %MappedType PyColorRGBAVector
@@ -26,7 +26,7 @@
 	{
 		ColorRGBA* obj = (ColorRGBA*)&*it;
 
-		if (PyList_Append(pl, sipMapCppToSelf(obj, sipClass_ColorRGBA)) < 0)
+		if (PyList_Append(pl, sipConvertFromInstance(obj, sipClass_ColorRGBA), 0) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;

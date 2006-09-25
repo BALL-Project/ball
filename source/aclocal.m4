@@ -1,7 +1,7 @@
 /dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.83.2.7 2006/05/15 23:18:35 amoll Exp $
+dnl		$Id: aclocal.m4,v 1.83.2.8 2006/09/25 11:42:29 amoll Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -3671,10 +3671,10 @@ AC_DEFUN(CF_PYTHON, [
 			SIP_VERS_MINOR_MINOR="0"
 		fi
 		if test "${SIP_VERS_MAJOR}" -lt 4 \
-				-o "${SIP_VERS_MAJOR}" = 4 -a "${SIP_VERS_MINOR}" -lt 3 \
-				-o "${SIP_VERS_MAJOR}" = 4 -a "${SIP_VERS_MINOR}" = 3 -a "${SIP_VERS_MINOR_MINOR}" -lt 1; then
+				-o "${SIP_VERS_MAJOR}" = 4 -a "${SIP_VERS_MINOR}" -lt 4 \
+				-o "${SIP_VERS_MAJOR}" = 4 -a "${SIP_VERS_MINOR}" = 4 -a "${SIP_VERS_MINOR_MINOR}" -lt 1; then
 			AC_MSG_RESULT()
-			AC_MSG_RESULT(SIP release 4.3.1 or above required.)
+			AC_MSG_RESULT(SIP release 4.4.5 or above required.)
 			AC_MSG_RESULT(Your version: ${SIP_VERSION}")
 			AC_MSG_RESULT(Please upgrade or specify the location of the correct SIP using the)
 			AC_MSG_RESULT( --with-sip=PATH)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationList.sip,v 1.2.2.1 2006/02/01 14:47:08 amoll Exp $
+// $Id: representationList.sip,v 1.2.2.2 2006/09/25 11:37:37 amoll Exp $
 //
 
 %MappedType RepresentationList
@@ -30,7 +30,7 @@
 	{
 		Representation* obj = *it;
 
-		if (PyList_Append(pl, sipMapCppToSelf(obj, sipClass_Representation)) < 0)
+		if (PyList_Append(pl, sipConvertFromInstance(obj, sipClass_Representation, 0)) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;
