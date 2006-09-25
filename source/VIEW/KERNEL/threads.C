@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.41.2.6 2006/06/14 15:26:47 amoll Exp $
+// $Id: threads.C,v 1.41.2.7 2006/09/25 21:38:25 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -39,7 +39,7 @@ namespace BALL
 		void BALLThread::output_(const String& string, bool important)
 		{
 			LogEvent* su = new LogEvent;
-			su->setMessage(string);
+			su->setMessage(string + String("\n"));
 			su->setImportant(important);
 			qApp->postEvent(main_control_, su);  // Qt will delete it when done
 		}
