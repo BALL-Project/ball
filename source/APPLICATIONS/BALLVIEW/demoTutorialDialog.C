@@ -213,7 +213,8 @@ void DemoTutorialDialog::onNotifyDemo_(Message *message)
 	{
 		RegularData3DMessage* msg = RTTI::castTo<RegularData3DMessage>(*message);
 		if (msg == 0 ||
-			  ((RegularData3DMessage::RegularDataMessageType)msg->getType()) != RegularDataMessage::NEW)
+			  ((RegularData3DMessage::RegularDataMessageType)msg->getType()) != RegularDataMessage::NEW ||
+				grid_ == 0)
 		{
 			return;
 		}
@@ -390,6 +391,8 @@ void DemoTutorialDialog::nextStepDemo_()
 	}
 	else if (current_step_ == 17)
 	{
+		if (grid_ == 0) return;
+
 		ContourSurface cs(*grid_, 0.01);
 		Mesh* mesh = new Mesh;
 		mesh->Surface::operator = (static_cast<Surface&>(cs));
