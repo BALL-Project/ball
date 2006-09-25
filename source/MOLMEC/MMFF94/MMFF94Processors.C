@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.4.10 2006/09/22 22:58:36 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.4.11 2006/09/25 15:35:13 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -1049,6 +1049,8 @@ bool Kekuliser::setup(Molecule& mol)
 	// dont recalculate the smallest set of smallest rings:
  	sm.setSSSR(rings_vector);
 
+	Position nr_ca = 0;
+
 	vector<HashSet<const Atom*> > result;
 	HashSet<const Atom*>::Iterator sit;
 
@@ -1079,11 +1081,13 @@ bool Kekuliser::setup(Molecule& mol)
 		to_match.erase(oxygen[0]);
 		to_match.erase(oxygen[1]);
 		to_match.erase(carbon);
+		nr_ca++;
 	}
 	
 	//////////////////////////////////////////////////////////////
 	// fix amidene and guanidine
 	// sm.match(result, mol, "[#7;D1]#6([#7;D1])*");
+	Size nr_am_gu = 0;
 	result.clear();
 	sm.match(result, mol, "[#7;D1]#6([#7;D1])", to_match);
 	if (result.size() != 0)
@@ -1111,12 +1115,14 @@ bool Kekuliser::setup(Molecule& mol)
 			to_match.erase(carbon);
 			to_match.erase(nitrogen[0]);
 			to_match.erase(nitrogen[1]);
+			nr_am_gu++;
 		}
 	}
 	
 	//////////////////////////////////////////////////////////////
 	// fix phosphonic acid
 	result.clear();
+	Size nr_phos = 0;
 //   	sm.match(result, mol, "[p]([oD1])([oD1])([oD1])[#6,#8]");
 	sm.match(result, mol, "[P]([#8;D1])([#8;D1])([#8;D1])", to_match);
 
@@ -1146,6 +1152,7 @@ bool Kekuliser::setup(Molecule& mol)
 		to_match.erase(oxygen[0]);
 		to_match.erase(oxygen[1]);
 		to_match.erase(oxygen[2]);
+		nr_phos++;
 	}
 	
 	//////////////////////////////////////////////////////////////
@@ -1170,12 +1177,79 @@ bool Kekuliser::setup(Molecule& mol)
 		unassigned_bonds_.push_back(*hbit);
 	}
 
+Log.error() << "#~~#   1 "  << nr_ca << " " << nr_am_gu << " " << nr_phos           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	return ok;
 }
 
 
 bool Kekuliser::fixAromaticRings_(Molecule& mol)
 {
+	return true;
+}
+
+void Kekuliser::getMaximumValence_(Molecule& mol)
+{
+	AtomIterator ait = mol.beginAtom();
+	max_valence_.clear();
+
+	for (;+ait; ++ait)
+	{
+		Atom& atom = *ait;
+		if (!aromatic_atoms_.has(&atom)) continue;
+
+		float formal_charge = atom.getFormalCharge();
+
+		Position atomic_number = atom.getElement().getAtomicNumber();
+
+    switch (atomic_number)
+    {
+      case 6:
+				max_valence_[&atom] = 4 - fabs(formal_charge);
+        break;
+
+      case 8:
+      case 16:
+      case 34:
+      case 52:
+				max_valence_[&atom] = 2 + formal_charge;
+        break;
+
+       case 7:
+       case 15:
+       case 33:
+         max_valence_[&atom] = 3 + formal_charge;
+         break;
+		}
+
+		// Nitrogen and sulfur:
+		if (atomic_number == 7 || 
+				atomic_number == 16)
+		{
+			AtomBondIterator abit = atom.beginBond();
+			for (; +abit; ++abit)
+			{
+				if (abit->getOrder() != Bond::ORDER__DOUBLE) continue;
+
+				if (abit->getPartner(atom)->getElement().getAtomicNumber() == 8)
+				{
+					max_valence_[&atom] += 2;
+				}
+			}
+		}
+	}
+}
+
+bool Kekuliser::idealValenceAchieved_(vector<Atom*>& aromatic_system)
+{
+	for (Position p = 0; p < aromatic_system.size(); p++)
+	{
+		Atom& atom = *aromatic_system[p];
+		if (max_valence_[&atom] < 21)
+		{
+			return false;
+		}
+	}
+
 	return true;
 }
 

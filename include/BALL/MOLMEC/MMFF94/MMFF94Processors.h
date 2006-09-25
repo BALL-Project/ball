@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.4.5 2006/09/22 23:00:31 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.4.6 2006/09/25 15:34:50 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -237,6 +237,8 @@ namespace BALL
 		protected:
 
 		bool fixAromaticRings_(Molecule& mol);
+		void getMaximumValence_(Molecule& mol);
+		bool idealValenceAchieved_(vector<Atom*>& aromatic_system);
 
 		vector<HashSet<Atom*> > aromatic_rings_;
 		vector<HashSet<Atom*> > rings_;
@@ -244,6 +246,8 @@ namespace BALL
 
 		// temporary collection of all aromatic bonds for internal usage:
 		HashSet<Bond*> 					aromatic_bonds_;
+		HashSet<Atom*> 					aromatic_atoms_;
+		HashMap<Atom*, float> 	max_valence_;
 	};
 
 
