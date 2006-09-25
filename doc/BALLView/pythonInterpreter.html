@@ -7,7 +7,7 @@
 </head>
 <body>
 <div align=center>
-<table width="700" border="0" cellpadding="0">
+<table width="700" cellpadding="0" border=0>
   <tr>
     <td align="center">
 
@@ -43,18 +43,25 @@
 <h2 align=center>Completion and context sensitive help</h2>
 <div align=justify>
 <a name="completion"></a>
-To ease and accelerate the development with Python we implemented Command completion:
+To ease and accelerate the development with Python we implemented Command completion
+for the "Instant mode":
 When the right cursor key is pressed at the end of the edit line, a combobox pops up with all
 possible completions. This can e.g. be used to show all members of a BALL class
-and works e.g. for the example:
+and works e.g. for the following example:
+</div>
+<table border=0>
+<tr><td align=left>
 <pre>
 a = Atom()
 a.getElem[Key right]
 </pre>
-
+</td></tr></table>
+<div align="justify">
 <br><br>
-To get context sensitive help for the current line, write your line of code and press "Enter" (from the numlock block) or
-"Shift-F1" after the name of the method (like above). This pops up a window with the BALL documentation for the class and member. 
+To get context sensitive help for the current line, write your line of code and 
+press "Enter" (from the numlock block) or
+"Shift-F1" after the name of the method (like above). 
+This pops up a window with the BALL documentation for the class and member. 
 </div>
 
 <a name="startup_script"></a>
@@ -66,10 +73,18 @@ Furthermore a user can load an additional Python script at startup.
 In this script the user can define variables and methods to further simplify usage of the Python interface. 
 The location of the additional startup script is set in the Preferences:
 </div>
-<p><img src="images/startup_script1.png"> </p>
+<div align="center">
+<br>
+<img src="images/startup_script1.png">
+<br>
+</div>
 <div align = left>
+<br>
 An example for a startup script:<br>
-<table>
+<br>
+</div>
+<div align="center">
+<table border=0>
 <tr><td align=left>
 <pre align=left>
 def createStickModel():
@@ -166,7 +181,7 @@ def removeWater():
     <td>Remove all loaded systems and all representations. Remark: The datasets are not removed</td>
   </tr>
 </table>
-
+-->
 <hr width=700>
 <h2 align="center">
 <a href="datasetControl.html"><img src="images/left.png" width="58" height="28" align="Middle"></a>
