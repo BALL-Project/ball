@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.43 2006/07/17 20:26:29 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.44 2006/09/25 15:18:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -63,9 +63,11 @@ namespace BALL
 
 			listview->setObjectName("MolecularControlList");
 			listview->headerItem()->setText(0, "Name [highlight]");
-			listview->headerItem()->setText(1, "[selected] Type");
-			listview->headerItem()->setSizeHint(0, QSize(20, 120));
-			listview->headerItem()->setSizeHint(1, QSize(20, 60));
+			listview->headerItem()->setText(1, "Type");
+			listview->headerItem()->setText(2, "[checked]");
+			listview->headerItem()->setSizeHint(0, QSize(150, 200));
+			listview->headerItem()->setSizeHint(1, QSize(90, 160));
+			listview->headerItem()->setSizeHint(2, QSize(20, 20));
  			lay->addWidget(listview,0, 0, 1, -1);
 
 			selector_edit_ = new QComboBox(this);
@@ -732,7 +734,7 @@ namespace BALL
 			for (; cit != composite_to_item_.end(); ++cit)
 			{
 				QTreeWidgetItem* const item = (*cit).second;
- 				item->setCheckState(1, Qt::Unchecked);
+ 				item->setCheckState(2, Qt::Unchecked);
 			}
 
 			const HashSet<Composite*>& selection = getMainControl()->getSelection();
@@ -742,7 +744,7 @@ namespace BALL
 			{
 				to_find = composite_to_item_.find(*sit);
 				if (to_find == composite_to_item_.end()) continue;
-				to_find->second->setCheckState(1, Qt::Checked);
+				to_find->second->setCheckState(2, Qt::Checked);
 				Composite::ChildCompositeIterator cit = (**sit).beginChildComposite();
 				std::map<Composite*, QTreeWidgetItem*>::iterator fit;
 				for (; +cit; ++cit)
@@ -750,7 +752,7 @@ namespace BALL
 					fit = composite_to_item_.find(&*cit);
 					if (fit == composite_to_item_.end()) continue;
 					
-					fit->second->setCheckState(1, Qt::Checked);
+					fit->second->setCheckState(2, Qt::Checked);
 				}
 			}
 
@@ -960,8 +962,8 @@ namespace BALL
 			new_item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 			
 			// force QT to show checkboxes!
-			new_item->setCheckState(1, Qt::Checked);
-			if (!composite.isSelected()) new_item->setCheckState(1, Qt::Unchecked);
+			new_item->setCheckState(2, Qt::Checked);
+			if (!composite.isSelected()) new_item->setCheckState(2, Qt::Unchecked);
 
 			composite_to_item_[&composite] = new_item;
 			item_to_composite_[new_item] = &composite;
@@ -1346,13 +1348,13 @@ namespace BALL
 		void MolecularControl::onItemClicked(QTreeWidgetItem* item, int)
 		{
 			if (ignore_checked_changes_) return;
-			bool checked = (item->checkState(1) == Qt::Checked);
+			bool checked = (item->checkState(2) == Qt::Checked);
 
 			if (getMainControl()->isBusy())
 			{
 				ignore_checked_changes_ = true;
-				if (checked) item->setCheckState(1, Qt::Unchecked);
-				else 				 item->setCheckState(1, Qt::Checked);
+				if (checked) item->setCheckState(2, Qt::Unchecked);
+				else 				 item->setCheckState(2, Qt::Checked);
 
 				VIEW::getMainControl()->setStatusbarText("Cannot select items now!", true);
 				ignore_checked_changes_ = false;
