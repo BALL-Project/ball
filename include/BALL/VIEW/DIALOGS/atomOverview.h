@@ -18,6 +18,8 @@ namespace BALL
 
 	namespace VIEW
 	{
+		class MainControl;
+
 		/**	Dialog for creating labels for a selection of molecular objects.
 				The class  MolecularControl is responsible for creating such a selection.
  				The text, color and font of the labels can be changed.
@@ -94,6 +96,9 @@ namespace BALL
 					void setTable(QTableWidget* widget) { table_ = widget; row_ = 0;}
 
 					///
+					void setMainControl(MainControl* main_control) {main_control_ = main_control;}
+
+					///
 					void showOnlySelection(bool state) {only_selection_ = state;}
 
 				protected:
@@ -101,6 +106,7 @@ namespace BALL
 					QTableWidget* table_;
 					Position row_;
 					bool 					only_selection_;
+					MainControl*  main_control_;
 			};
 			
 		

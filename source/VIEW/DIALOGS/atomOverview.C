@@ -6,6 +6,7 @@
 #include <BALL/VIEW/DIALOGS/atomOverview.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/KERNEL/PTE.h>
 
 namespace BALL
@@ -30,6 +31,7 @@ AtomOverview::AtomOverview(QWidget* parent, const char* name)
 	setSizeGripEnabled(true);
 	processor_.setTable(table);
 	apply_processor_.setTable(table);
+	apply_processor_.setMainControl(VIEW::getMainControl());
 
 	connect(table, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(itemChanged(QTableWidgetItem*)));
 	connect(table, SIGNAL(itemClicked(QTableWidgetItem*)), this, SLOT(itemActivated(QTableWidgetItem*)));
@@ -77,6 +79,7 @@ void AtomOverview::accept()
 	apply_processor_.showOnlySelection(only_selection_);
 	parent_->apply(apply_processor_);
 	VIEW::getMainControl()->update(*parent_);
+	VIEW::getMainControl()->sendMessage(*new NewSelectionMessage());
 	VIEW::getMainControl()->setStatusbarText("Applied values", true);
 }
 
@@ -252,7 +255,12 @@ Processor::Result AtomOverview::ApplyProcessor::operator() (Composite& composite
 
 		String s;
 
-		atom->setSelected(table_->item(row_, 0)->checkState() == Qt::Checked);
+		bool selected = (table_->item(row_, 0)->checkState() == Qt::Checked);
+		if (selected != atom->isSelected())
+		{
+			if (selected) main_control_->selectCompositeRecursive(atom, true);
+			else 					main_control_->deselectCompositeRecursive(atom, true);
+		}
 
 		s = ascii(table_->item(row_, 1)->text());
 		atom->setElement(PTE.getElement(s));
