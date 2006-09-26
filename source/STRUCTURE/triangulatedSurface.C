@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSurface.C,v 1.5 2003/11/04 20:05:40 strobel Exp $
+// $Id: triangulatedSurface.C,v 1.5.10.1 2006/09/26 22:10:28 amoll Exp $
 
 #include <BALL/STRUCTURE/triangulatedSurface.h>
 
@@ -233,22 +233,23 @@ namespace BALL
 	void TriangulatedSurface::remove(EdgeIterator e, bool deep)
 		throw()
 	{
+		TriangleEdge& edge = **e;
 		if (deep)
 		{
-			if ((*e)->face_[0] != NULL)
+			if (edge.face_[0] != NULL)
 			{
-				remove((*e)->face_[0],true);
+				remove(edge.face_[0],true);
 			}
-			if ((*e)->face_[0] != NULL)
+			if (edge.face_[0] != NULL)
 			{
-				remove((*e)->face_[0],true);
+				remove(edge.face_[0],true);
 			}
-			(*e)->vertex_[0]->edges_.erase(*e);
-			(*e)->vertex_[1]->edges_.erase(*e);
+			edge.vertex_[0]->edges_.erase(*e);
+			edge.vertex_[1]->edges_.erase(*e);
 		}
 		edges_.erase(e);
 		number_of_edges_--;
-		delete *e;
+		delete &edge;
 	}
 
 
@@ -273,18 +274,19 @@ namespace BALL
 	void TriangulatedSurface::remove(TriangleIterator t, bool deep)
 		throw()
 	{
+		Triangle& tri = **t;
 		if (deep)
 		{
-			(*t)->vertex_[0]->faces_.erase(*t);
-			(*t)->vertex_[1]->faces_.erase(*t);
-			(*t)->vertex_[2]->faces_.erase(*t);
-			(*t)->edge_[0]->remove(*t);
-			(*t)->edge_[1]->remove(*t);
-			(*t)->edge_[2]->remove(*t);
+			tri.vertex_[0]->faces_.erase(*t);
+			tri.vertex_[1]->faces_.erase(*t);
+			tri.vertex_[2]->faces_.erase(*t);
+			tri.edge_[0]->remove(*t);
+			tri.edge_[1]->remove(*t);
+			tri.edge_[2]->remove(*t);
 		}
 		triangles_.erase(t);
 		number_of_triangles_--;
-		delete *t;
+		delete &tri;
 	}
 
 
@@ -297,15 +299,16 @@ namespace BALL
 		Vector3 normal;
 		for (p = points_.begin(); p != points_.end(); p++)
 		{
-			point.set((float)(*p)->point_.x,
-										 (float)(*p)->point_.y,
-										 (float)(*p)->point_.z);
-			normal.set((float)(*p)->normal_.x,
-										 (float)(*p)->normal_.y,
-										 (float)(*p)->normal_.z);
+			TrianglePoint& point = **p;
+			point.set((float)point.point_.x,
+								(float)point.point_.y,
+								(float)point.point_.z);
+			normal.set((float)point.normal_.x,
+								 (float)point.normal_.y,
+								 (float)point.normal_.z);
 			surface.vertex.push_back(point);
 			surface.normal.push_back(normal);
-			(*p)->index_ = i;
+			point.index_ = i;
 			i++;
 		}
 		std::list<Triangle*>::iterator t;
