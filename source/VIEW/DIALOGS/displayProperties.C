@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.2.13 2006/07/23 23:18:57 amoll Exp $
+// $Id: displayProperties.C,v 1.101.2.14 2006/09/26 20:21:24 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -494,6 +494,16 @@ void DisplayProperties::applyColoringSettings_(Representation& rep)
 
 	ColorProcessor* cp = rep.getColorProcessor();
 	coloring_settings_->applySettingsTo(*cp);
+	float min_spacing = 2.;
+	if (rep.getModelType() == MODEL_SE_SURFACE)
+	{
+		min_spacing = 2.62;
+	}
+	else if (rep.getModelType() == MODEL_SA_SURFACE)
+	{
+		min_spacing = 2.62 + ((AddSurfaceModel*)rep.getModelProcessor())->getProbeRadius();
+	}
+	cp->setMinGridSpacing(min_spacing);
 	cp->setDefaultColor(custom_color_);
 }
 

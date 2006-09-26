@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.38.2.2 2006/09/09 14:17:20 amoll Exp $
+// $Id: colorProcessor.C,v 1.38.2.3 2006/09/26 20:21:24 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -42,7 +42,8 @@ namespace BALL
 				atom_grid_(cp.atom_grid_),
 				model_type_(cp.model_type_),
 				last_composite_of_grid_(cp.last_composite_of_grid_),
-				additional_grid_distance_(cp.additional_grid_distance_)
+				additional_grid_distance_(cp.additional_grid_distance_),
+				min_spacing_(cp.min_spacing_)
 		{
 		}
 
@@ -64,6 +65,7 @@ namespace BALL
 			selection_color_ = BALL_SELECTED_COLOR;
 			last_composite_of_grid_ = 0;
 			additional_grid_distance_ = 5.0;
+			min_spacing_ = 3.5;
 		}
 
 		void ColorProcessor::set(const ColorProcessor& cp)
@@ -276,31 +278,27 @@ namespace BALL
 			}
 			boxp.finish();
 
-			const Vector3 diagonal = boxp.getUpper() - boxp.getLower();
+			Vector3 diagonal = boxp.getUpper() - boxp.getLower();
 			
 			// abort for strange molecules with huge dimension
 			if (diagonal.getSquareLength() > 10000000.0) return;
 
+			Vector3 grid_spacer((float)(additional_grid_distance_ + 15.));
+			diagonal += grid_spacer * 2.;
+
 			// grid spacing, tradeoff between speed and memory consumption
-			float grid_spacing = 4.0;
-			if (diagonal.getSquareLength() < 5000)
-			{
-				grid_spacing = 3.5;
-			} 
-			else 
+			float grid_spacing = min_spacing_;
+			if (diagonal.getSquareLength() > 5000)
 			{
 				float memory = SysInfo::getAvailableMemory();
 				// if we can not calculate available memory, use around 60 MB for the grid
 				if (memory == -1) memory = 10000000;
 				memory *= 0.6;
-				float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing((LongIndex)memory, diagonal + 
-																																						Vector3(2 * (additional_grid_distance_ + 15.0)));
+				float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing((LongIndex)memory, diagonal);
 				if (min_spacing > grid_spacing) grid_spacing = min_spacing;
 			}
 			
-			atom_grid_ = AtomGrid(boxp.getLower() - Vector3(additional_grid_distance_ + 15.0),
-														diagonal + Vector3(2 * additional_grid_distance_ + 15.0),
-														grid_spacing); 
+			atom_grid_ = AtomGrid(boxp.getLower() - Vector3(additional_grid_distance_ + 15.0), diagonal, grid_spacing); 
 		 
 			for (lit = atoms.begin(); lit != atoms.end(); lit++)
 			{
