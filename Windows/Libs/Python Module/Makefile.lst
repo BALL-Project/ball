@@ -31,6 +31,7 @@ sipBALLAmberFF.obj \
 sipBALLAmberNonBonded.obj \
 sipBALLAmberStretch.obj \
 sipBALLAmberTorsion.obj \
+sipBALLAminoAcidDescriptor.obj \
 sipBALLAngle.obj \
 sipBALLAssignChargeProcessor.obj \
 sipBALLAssignRadiusProcessor.obj \
@@ -189,6 +190,7 @@ sipBALLPDBAtom.obj \
 sipBALLPDBFile.obj \
 sipBALLPDBInfo.obj \
 sipBALLPDBRecords.obj \
+sipBALLPeptideBuilder.obj \
 sipBALLPeriodicBoundary.obj \
 sipBALLPersistentObject.obj \
 sipBALLPlane3.obj \
