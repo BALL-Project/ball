@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.32.2.1 2006/07/17 23:13:17 amoll Exp $
+// $Id: colorProcessor.h,v 1.32.2.2 2006/09/26 20:21:43 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -165,6 +165,9 @@ class BALL_VIEW_EXPORT ColorProcessor
 		throw() { return additional_grid_distance_;}
 
 	///
+	void setMinGridSpacing(float spacing) {min_spacing_ = spacing;}
+
+	///
 	AtomGrid& getAtomGrid() 
 		throw() { return atom_grid_;}
 
@@ -210,6 +213,7 @@ class BALL_VIEW_EXPORT ColorProcessor
 	ModelType   model_type_;
 	const Composite*  last_composite_of_grid_;
 	float 			additional_grid_distance_;
+	float 			min_spacing_;
 	//@}
 };
 
