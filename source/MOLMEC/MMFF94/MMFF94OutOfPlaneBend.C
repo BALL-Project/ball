@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.12 2006/09/25 14:52:04 amoll Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.4.13 2006/09/26 15:01:10 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -369,30 +369,42 @@ namespace BALL
 				cn = jl % ji;
 
 				// Bond angle ji to jk
-				const double theta = acos(ji * jk);
+				const double cos_theta = ji * jk;
+				const double theta = acos(cos_theta);
+				// If theta equals 180 degree or 0 degree
+				if (Maths::isZero(theta) ||
+						Maths::isZero(fabs(theta - Constants::PI)))
+				{
+					continue;
+				}
+				
 				const double sin_theta = sin(theta);
-
 				const double sin_dl = an * jl / sin_theta;
+
 				// the wilson angle:
 				const double dl = asin(sin_dl);
 
-				if (fabs(fabs(dl) - Constants::PI / 2.) < 0.01) 
+				// In case: wilson angle equals 0 or 180 degree: do nothing
+				if (Maths::isZero(dl) ||
+						Maths::isZero(fabs(dl - Constants::PI)))
+				{
+					continue;
+				}
+				
+
+				const double cos_dl = cos(dl);
+
+				// if wilson angle equal 90 degree: abort
+				if (cos_dl < 0.0001)
 				{
 					continue;
 				}
 
-				// values that will be feed into the final calculation:
-				const double cos_theta = cos(theta);
-
-				const double cos_dl = cos(dl);
-				const double tan_dl = sin_dl / cos_dl;
-
-				const double cdst = 1. / (cos_dl * sin_theta);
-				const double tdst = tan_dl / (sin_theta * sin_theta);
-
 				// scaling factor for all forces:
 				// wilson K0 * this_bend_constant * wilson_angle * DEGREE_TO_RADIAN * DEGREE_TO_RADIAN
 				double c1 = -dl * FC * bend.k_oop * FORCES_FACTOR * Constants::JOULE_PER_CAL;
+
+				double tmp = cos_dl / c1;
 
 			/*	
 			Log.precision(30);
@@ -405,10 +417,9 @@ namespace BALL
       Log.error() << "abc "   << an << bn << cn << std::endl << std::endl << std::endl << std::endl;
 			*/
 
-				// resulting force vectors on atoms i, k and l:
-				const TVector3<double> d_l = (an * cdst - jl * tan_dl) *c1 / length_jl;
-				const TVector3<double> d_i = (bn * cdst + (-ji + jk * cos_theta) * tdst) *c1 / length_ji;
-				const TVector3<double> d_k = (cn * cdst + (-jk + ji * cos_theta) * tdst) *c1 / length_jk;
+				const TVector3<double> d_l = ((an / sin_theta - jl * sin_dl) / length_jl) / tmp;
+				const TVector3<double> d_i = (((bn + (((-ji + jk * cos_theta) * sin_dl) / sin_theta)) / length_ji) / tmp) / sin_theta;
+				const TVector3<double> d_k = (((cn + (((-jk + ji * cos_theta) * sin_dl) / sin_theta)) / length_jk) / tmp) / sin_theta;
 
  				if (!us || i.isSelected()) AddDV3_(i.getForce(), d_i);
  				if (!us || k.isSelected()) AddDV3_(k.getForce(), d_k);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.C,v 1.27.8.2 2006/09/26 15:03:47 amoll Exp $
+// $Id: steepestDescent.C,v 1.27.8.3 2006/09/26 15:05:15 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
@@ -134,6 +134,9 @@ namespace BALL
 			return true;
 		}
 
+		// Initial step size:
+		double initial_step = 1.0;
+
 		// If the run is to be continued, don't reset the iteration counter.
 		if (!resume)
 		{
@@ -141,8 +144,6 @@ namespace BALL
 			setNumberOfIterations(0);
 			same_energy_counter_ = 0;
 			
-			// Initial step size:
-			double initial_step = 1.0;
 			step_ = initial_step;
 		}
 		Size max_iterations = std::min(getNumberOfIterations() + iterations, getMaxNumberOfIterations());
