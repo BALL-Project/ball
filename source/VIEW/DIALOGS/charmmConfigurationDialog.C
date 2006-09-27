@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.C,v 1.10.2.2 2006/02/01 13:23:45 amoll Exp $
+// $Id: charmmConfigurationDialog.C,v 1.10.2.3 2006/09/27 12:30:58 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
@@ -224,8 +224,8 @@ namespace BALL
 	
 		String CharmmConfigurationDialog::getValue_(const QCheckBox* box) const
 		{
-			if (box->isChecked()) return true;
-			else 									return false;
+			if (box->isChecked()) return "true";
+			else 									return "false";
 		}
 
 		float CharmmConfigurationDialog::getValue_(const QLineEdit* edit) const

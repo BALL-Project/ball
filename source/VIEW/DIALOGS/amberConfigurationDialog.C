@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.C,v 1.16.2.2 2006/02/01 13:23:44 amoll Exp $
+// $Id: amberConfigurationDialog.C,v 1.16.2.3 2006/09/27 12:30:57 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
@@ -95,8 +95,8 @@ namespace BALL
 
 		String AmberConfigurationDialog::getValue_(const QCheckBox* box) const
 		{
-			if (box->isChecked()) return true;
-			else 									return false;
+			if (box->isChecked()) return "true";
+			else 									return "false";
 		}
 
 		float AmberConfigurationDialog::getValue_(const QLineEdit* edit) const
@@ -112,7 +112,7 @@ namespace BALL
 			{
 				amber.options[AmberFF::Option::ASSIGN_TYPES] = getValue_(assign_types_checkBox);
 				amber.options[AmberFF::Option::ASSIGN_CHARGES] = getValue_(assign_charges_checkBox);
-				amber.options[AmberFF::Option::ASSIGN_TYPENAMES] = getValue_(assign_types_checkBox);
+				amber.options[AmberFF::Option::ASSIGN_TYPENAMES] = getValue_(assign_typenames_checkBox);
 				amber.options[AmberFF::Option::OVERWRITE_CHARGES] = getValue_(overwrite_charges_checkBox);
 				amber.options[AmberFF::Option::OVERWRITE_TYPENAMES] = getValue_(overwrite_typenames_checkBox);
 
