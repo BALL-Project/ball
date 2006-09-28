@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EFShiftProcessor.C,v 1.14.20.5 2006/09/06 12:23:23 anne Exp $
+// $Id: EFShiftProcessor.C,v 1.14.20.6 2006/09/28 09:30:29 anne Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
 #include <BALL/COMMON/limits.h>
@@ -215,8 +215,8 @@ std::cout << "******************* EF-Shift ******************* " << std::endl;
 			effector_list_  = 	tmp_effector_list;
 		}
 
-		printEffectors_();	
-		printTargets_();
+		//printEffectors_();	
+		//printTargets_();
 
 		// iterate over all bonds
 		std::vector<std::pair<Atom*, Atom*> >::iterator bond_it = bond_list_.begin();
@@ -463,6 +463,7 @@ std::cout << "******************* EF-Shift ******************* " << std::endl;
 			{	
 				std::cout << " das war also tatsaechlich ein system!!!!!" << std::endl;
 				system = dynamic_cast<System*>(&(tbond_it->first->getRoot()));
+				break;
 			}
 		}
 

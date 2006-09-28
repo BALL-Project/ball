@@ -223,8 +223,8 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 			{
 				if (atom_type == "CA")
 				{
-					std::cout << "hs: " << property_pairs_[atom_type][j].first << " " << property_pairs_[atom_type][j].second << " " 
-						        << hypersurfaces_[atom_type][property_pairs_[atom_type][j]](target) << std::endl;
+				//	std::cout << "hs: " << property_pairs_[atom_type][j].first << " " << property_pairs_[atom_type][j].second << " " 
+					//	        << hypersurfaces_[atom_type][property_pairs_[atom_type][j]](target) << std::endl;
 				}		
 				if (hypersurfaces_[atom_type][property_pairs_[atom_type][j]].isvalid())
 				EHS_shift += hypersurfaces_[atom_type][property_pairs_[atom_type][j]](target);
@@ -980,7 +980,9 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 	float EmpiricalHSShiftProcessor::PropertiesForShift_::getHA_HBondLen_(Residue* residue)
 		throw()
 	{
-		float len = FLOAT_VALUE_NA;
+		//float len = FLOAT_VALUE_NA;	
+		float len = 0.;
+
 		Atom* HA = 0;
 		
 		AtomIterator r_it = residue->beginAtom();
@@ -1011,7 +1013,9 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 	float EmpiricalHSShiftProcessor::PropertiesForShift_::getHA2_HBondLen_(Residue* residue)
 		throw()
 	{
-		float len = FLOAT_VALUE_NA ;
+		//float len = FLOAT_VALUE_NA ;
+		float len = 0.;
+
 		Atom* HA2 = 0;
 		
 		AtomIterator r_it = residue->beginAtom();
@@ -1041,7 +1045,9 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 	float EmpiricalHSShiftProcessor::PropertiesForShift_::getHN_HBondLen_(Residue* residue)
 		throw()
 	{
-		float len = FLOAT_VALUE_NA;
+		//float len = FLOAT_VALUE_NA;	
+		float len = 0.;
+
 		Atom* HN = 0;
 		
 		AtomIterator r_it = residue->beginAtom();
@@ -1072,7 +1078,8 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 	float 	EmpiricalHSShiftProcessor::PropertiesForShift_::getO_HBondLen_(Residue* residue) 
 		throw()
 	{
-		float len = FLOAT_VALUE_NA;
+//		float len = FLOAT_VALUE_NA;
+		float len = 0.;
 		
 		Atom* O = 0;
 		
@@ -1266,8 +1273,8 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 					properties_real_[("CHI2_P")] = FLOAT_VALUE_NA;
 					properties_real_[("HA1L_P")] = FLOAT_VALUE_NA;
 					properties_real_[("HA2L_P")] = FLOAT_VALUE_NA;
-					properties_real_[("HNL_P")] = FLOAT_VALUE_NA;	
-					properties_real_[("OHL_P")] = FLOAT_VALUE_NA;
+					properties_real_[("HNL_P")]  = FLOAT_VALUE_NA;	
+					properties_real_[("OHL_P")]  = FLOAT_VALUE_NA;
 				
 					properties_string_[("AA_P")] = STRING_VALUE_NA;
 					properties_string_[("SS_P")] = STRING_VALUE_NA; 
@@ -1279,9 +1286,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 					properties_string_[("CHI_P")] = "Unknown"; 
 					properties_string_[("CHI2_P")] = "Unknown";
 
-					properties_string_[("FR")] = 'Y';
 					properties_string_[("FR_P")] = 'N';
-					properties_string_[("FR_N")] = 'N';
 			}
 			else
 			{
@@ -1328,7 +1333,8 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 					}
 				}
 				else if ((*it) == 	"CHI_P")
-				{
+				{	
+					properties_string_[(*it)] =  STRING_VALUE_NA;
 					properties_real_[(*it)] = getChiAngle_(prev_residue);	
 					if (properties_real_[(*it)] == FLOAT_VALUE_NA)
 					{
@@ -1345,6 +1351,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 				}
 				else if ((*it) == 	"CHI2_P")
 				{
+					properties_string_[(*it)] =  STRING_VALUE_NA;
 					properties_real_[(*it)] = getChi2Angle_(prev_residue);	
 					if (properties_real_[(*it)] == FLOAT_VALUE_NA)
 					{
@@ -1420,9 +1427,9 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 					properties_string_[("CHI_N")] = "Unknown";// STRING_VALUE_NA;	
 					properties_string_[("CHI2_N")] = "Unknown";//STRING_VALUE_NA;	
 
-					properties_string_[("FR_P")] = STRING_VALUE_NA;
-					properties_string_[("FR")]   = STRING_VALUE_NA;
-					properties_string_[("FR_N")] = STRING_VALUE_NA;
+					//properties_string_[("FR_N")] = STRING_VALUE_NA;'N';
+					properties_string_[("FR_N")] = 'N';
+
 			}
 			else
 			{
@@ -1468,7 +1475,8 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 				}
 				else if ((*it) == 	"CHI_N")
 				{
-					properties_real_[(*it)]=  getChiAngle_(next_residue);
+					properties_string_[(*it)] = STRING_VALUE_NA;	
+					properties_real_[(*it)]   =  getChiAngle_(next_residue);
 					if (properties_real_[(*it)] == FLOAT_VALUE_NA) 
 					{
 						if (   (next_residue->getName() == "ALA") 
@@ -1483,8 +1491,9 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 					}				
 				}
 				else if ((*it) == 	"CHI2_N")
-				{
-					properties_real_[(*it)]=  getChi2Angle_(next_residue);
+				{	
+					properties_string_[(*it)] = STRING_VALUE_NA;	
+					properties_real_[(*it)]   = getChi2Angle_(next_residue);
 					if (properties_real_[(*it)] == FLOAT_VALUE_NA)
 					{
 						if (   (prev_residue->getName() == "ALA") 
@@ -1542,7 +1551,6 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 
 			if ((*it) == "FR" )
 			{
-					// TODO: maybe is N-terminal?
 				properties_string_[(*it)]=  (residue->isNTerminal() ? "Y": "N");			
 			}
 			else if ((*it) == 	"AA" )
@@ -1584,8 +1592,9 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 				}
 			}
 			else if ((*it) == 	"CHI")
-			{
-				properties_real_[(*it)]= 	getChiAngle_(residue);	
+			{	
+				properties_string_[(*it)] = STRING_VALUE_NA;	
+				properties_real_[(*it)]   = getChiAngle_(residue);	
 				if (properties_real_[(*it)] ==  FLOAT_VALUE_NA)
 				{
 					if (   (residue->getName() == "ALA") 
@@ -1600,8 +1609,9 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 				}				
 			}
 			else if ((*it) == 	"CHI2")
-			{
-				properties_real_[(*it)]= getChi2Angle_(residue);	
+			{	
+				properties_string_[(*it)] = STRING_VALUE_NA;	
+				properties_real_[(*it)]   = getChi2Angle_(residue);	
 				if (properties_real_[(*it)] == FLOAT_VALUE_NA)
 				{
 					if (   (prev_residue->getName() == "ALA") 
@@ -1787,6 +1797,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 			vector<float> x_axis;
 			convertToReal_(x_axis_values_[0], x_axis);
 			s.createSpline(x_axis, sample_values_[0], true);
+			s.setAverage(average_);
 			
 			// store him in the map
 			s1d_[first_property_] = s;
@@ -1837,7 +1848,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 					convertToReal_(x_axis_values_[i], x_axis);
 
 					s.createSpline(x_axis, sample_values_[i], true);
-
+					s.setAverage(row_averages_[i]);
 					// store him in the map
 					s1d_[y_axis_values_[i]] = s;
 				}
@@ -2000,12 +2011,13 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			String testline = line;
 			testline.toUpper();
 			
+			std::vector<float> row_average_values;
 			if (!testline.hasSubstring("N/A"))
 			{
 				// parse the row averages
 				line.split(fields, ";");
 				for (Position i=0; i<fields.size(); i++)
-					row_averages_values_.push_back(fields[i].toFloat());
+					row_average_values.push_back(fields[i].toFloat());
 			}
 
 			// test for col averages
@@ -2013,12 +2025,13 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			testline = line;
 			testline.toUpper();
 
+			std::vector<float> col_average_values;
 			if (!testline.hasSubstring("N/A"))
 			{
 				// parse the row averages
 				line.split(fields, ";");
 				for (Position i=0; i<fields.size(); i++)
-					col_averages_values_.push_back(fields[i].toFloat());
+					col_average_values.push_back(fields[i].toFloat());
 			}
 
 			// test for y_axis
@@ -2056,9 +2069,17 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 				for (Position j = 0; j < fields.size(); j++)
 					sample_values_[i].push_back(fields[j].toFloat());
 			}
+
+			// and build the row_ and col_averages if applicable
+			for (Position i=0; i<row_average_values.size(); i++)
+					row_averages_[y_axis_values_[i]] = row_average_values[i];
+
+			for (Position i=0; i<col_average_values.size(); i++)
+				col_averages_[x_axis_values_[0][i]] = col_average_values[i];
+
 		} catch (...)
 		{
-			std::cerr<< "formaterror in " <<  filename << std::endl;
+			std::cerr<< "format error in " <<  filename << std::endl;
 		}
 	}
 
@@ -2143,11 +2164,7 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		if (   type_ == SINGLE__DISCRETE || type_ == SINGLE__CHI    || type_ == CHI__CHI 
 				|| type_ == CHI__DISCRETE    || type_ == DISCRETE__CHI  || type_ == DISCRETE__DISCRETE)
 		{
-
-			
-
-			
-			// find out if the first property is contained in the tabel
+			// find out if the first property is contained in the table
 			tabletype::iterator first_it = table_.find(string1);
 			if (first_it != table_.end())
 			{  
@@ -2158,7 +2175,8 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 					// so both accessors are valid: we can just return the value
 					shift = second_it->second; //  table_[string1][string2];	
 				else
-					;
+//					shift = row_averages_[string1];
+						shift = average_;
 					// average over the row we already found
 					//shift = getTableXAverage(properties[first_property_].second);// getTableRowAverage_(first_it->second);
 			}
@@ -2167,12 +2185,14 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 				// does the second property occur at all?
 				if (tableHasColumn_(string2))
 				{	// return the column average
-					shift = getTableYAverage(properties[second_property_].second);//getTableColumnAverage_(string2);
+//					shift = getTableYAverage(properties[second_property_].second);//getTableColumnAverage_(string2);
+						shift = average_;
+						//shift = col_averages_[string2];
 				}
 				else
 				{
 					// we don't have the value at all... average over the whole table
-					shift = getTotalAverage(); //getTableAverage_(); 
+					shift = average_; //getTableAverage_(); 
 					Log.info() << "Took the average because of invalid properties of atom " << properties.atom->getResidue()->getID() 
 					<< properties.atom->getResidue()->getName()
 					<< "-" << properties.atom->getName() << "   : " << first_property_ <<"/" << second_property_ 
@@ -2186,12 +2206,13 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			if (s1d_.find(first_property_) != s1d_.end())
 			{
 				if (properties[first_property_].first == FLOAT_VALUE_NA)
-					return average_;
+					shift = average_;
 				else 
 					shift = s1d_[first_property_](properties[first_property_].first);
 			}
 			else 
 				shift = 0.;
+			//std::cout << "single spline for " << first_property_ << " " << shift << " " << properties.atom->getFullName() << std::endl;
 		}
 		else if (type_ == REAL__REAL)
 		{		
@@ -2209,19 +2230,15 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		else if (type_ == REAL__DISCRETE)
 		{
 			// This simulates SHIFTX behaviour: if only one factor is out of bounds, we return the all-values average
+			// TODO: For some reason, SHIFTX does not seem to use the row_averages here! Find out why!!!
 			if (   (properties[first_property_].first == FLOAT_VALUE_NA)
 					 ||(properties[second_property_].second == STRING_VALUE_NA) )
 			{
-				shift = 0;
-				std::map<String, CubicSpline1D_>::iterator ci;
-				for (ci=s1d_.begin(); ci!=s1d_.end(); ci++)
-					shift += ci->second.getAverage();
-				shift /= s1d_.size();
+				// return the total average over the whole map
+				shift = average_;
 			}
 			else
 				shift = s1d_[properties[second_property_].second](properties[first_property_].first);
-			
-		
 		}
 		else if (type_ == DISCRETE__REAL)
 		{
@@ -2279,10 +2296,13 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			if (s1d_.find(string2) != s1d_.end())
 				shift = s1d_[string2](properties[first_property_].first);	
 			else
+			{
 				std::cerr << "Tried to access the hypersurface for atom " << properties.atom->getResidue()->getID() 	
 					<< properties.atom->getResidue()->getName()
 					<< "-" << properties.atom->getName() << "'s properties " << first_property_ <<"/" << second_property_ 
 					<< " with " << properties[first_property_].first << "/"  << string2<< std::endl;
+				shift = average_; // is this the correct thing to do?
+			}
 		}
 		else
 		{	
@@ -2290,7 +2310,7 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		}
 
 		//std::cout << "_operator (): ";
-		//std::cout <<properties.atom->getName() << "  " << first_property_ << ":" << second_property_<< " -- " << properties[first_property_].first<< ":" << properties[second_property_].second << " -- " << shift << std::endl;
+		//std::cout <<properties.atom->getName() << "  " << first_property_ << ":" << second_property_<< " -- " << properties[first_property_].first << "/" << properties[first_property_].second<< ":" << properties[second_property_].first << "/" << properties[second_property_].second <<  " -- " << shift << std::endl;
 		
 		return shift;
 	} 
@@ -2371,12 +2391,10 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		return false;
 	}
 	
-	
+/*	
 	float EmpiricalHSShiftProcessor::ShiftHyperSurface_::getTableXAverage(const String& name) 
 		throw()
 	{
-		Position pos = NULL;
-		
 		tabletype::iterator it = table_.find(name);
 		if (it != table_.end())
 		{
@@ -2394,7 +2412,7 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 	{
 		Log.info() << "Not yet implemented!" << std::endl;
 	}
-
+*/
 
 				
 				

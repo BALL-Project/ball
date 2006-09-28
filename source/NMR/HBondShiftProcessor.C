@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondShiftProcessor.C,v 1.6.18.3 2006/09/04 12:21:23 anne Exp $
+// $Id: HBondShiftProcessor.C,v 1.6.18.4 2006/09/28 09:30:29 anne Exp $
 //
 
 #include <BALL/NMR/HBondShiftProcessor.h>
@@ -145,9 +145,9 @@ namespace BALL
   bool HBondShiftProcessor::finish()
     throw()
   {
-		printParameters_(); 
-  	printEffectors_();
-  	printTargets_();
+		//printParameters_(); 
+  	//printEffectors_();
+  	//printTargets_();
 		
     // if the module is invalid, abort
     if (!isValid())
