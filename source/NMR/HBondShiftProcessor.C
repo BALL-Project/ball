@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondShiftProcessor.C,v 1.6.18.3 2006/09/04 12:21:23 anne Exp $
+// $Id: HBondShiftProcessor.C,v 1.6.18.5 2006/10/04 13:49:43 anne Exp $
 //
 
 #include <BALL/NMR/HBondShiftProcessor.h>
@@ -139,9 +139,9 @@ namespace BALL
 
   bool HBondShiftProcessor::finish()
   {
-		printParameters_(); 
-  	printEffectors_();
-  	printTargets_();
+		//printParameters_(); 
+  	//printEffectors_();
+  	//printTargets_();
 		
     // if the module is invalid, abort
     if (!isValid())
@@ -408,6 +408,9 @@ namespace BALL
 				donor->setProperty(HBondShiftProcessor::PROPERTY__HBOND_SHIFT, (old_hb_shift + new_hb_shift));
 			}	
 		}
+		// we have to perform some postcorrection to be conform with ShiftX
+		postprocessing_();
+
     return true;
   }
   
@@ -503,5 +506,53 @@ namespace BALL
 
 	}
 
+
+	void  	HBondShiftProcessor::postprocessing_()
+	{
+		// get the System
+		System* system = NULL;
+		
+		for (Position i = 0; !system && i<acceptors_.size(); i++)
+		{
+			if  (RTTI::isKindOf<System>(acceptors_[i]->getRoot()))
+			{	
+				system = dynamic_cast<System*>(&(acceptors_[i]->getRoot()));
+			}
+		}
+
+		if (system) 
+		{
+			// add for all CA 0.2 times the values of HA
+			for (BALL::ResidueIterator r_it = system->beginResidue(); r_it != system->endResidue(); ++r_it)
+			{
+				Atom* CA = 0;
+				Atom* HA = 0;
+
+				for (BALL::AtomIterator at_it = r_it->beginAtom(); +at_it; ++at_it)
+				{
+					if (at_it->getName() == "CA")
+						CA = &(*at_it);
+					if (at_it->getName() == "HA")
+						HA = &(*at_it);
+				}
+
+				if (CA && HA)
+				{	
+					float total = CA->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
+					float ca_shift = CA->getProperty(BALL::HBondShiftProcessor::PROPERTY__HBOND_SHIFT).getFloat();
+					float ha_shift	 = HA->getProperty(BALL::HBondShiftProcessor::PROPERTY__HBOND_SHIFT).getFloat();
+
+					CA->setProperty(BALL::HBondShiftProcessor::PROPERTY__HBOND_SHIFT, ca_shift + 0.2*ha_shift);
+					CA->setProperty(ShiftModule::PROPERTY__SHIFT, total+ 0.2*ha_shift );
+				}
+			}
+		}
+		else
+		{
+			std::cerr << "found no system -> could not perform a postprocessing for HaighMallionShiftProcessor" << std::endl;
+		}
+	}
+
+	
 	
 } // namespace BALL

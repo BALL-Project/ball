@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondShiftProcessor.h,v 1.14.10.3 2006/09/04 12:21:21 anne Exp $
+// $Id: HBondShiftProcessor.h,v 1.14.10.4 2006/10/04 13:49:41 anne Exp $
 //
 
 #ifndef BALL_NMR_HBONDSHIFTPROCESSOR_H
@@ -167,6 +167,8 @@ namespace BALL
 		void  		printEffectors_();
 		void 			printTargets_();
 		Atom* 		getDonor_(Atom* a);
+		void			postprocessing_();
+
 
 		/* distance, donor, acceptor for the ShiftXwise hydrogenbond determination*/
 		std::multimap<float, std::pair<Atom*, Atom*> >  hbonds_;

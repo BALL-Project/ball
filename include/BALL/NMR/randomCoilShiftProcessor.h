@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: randomCoilShiftProcessor.h,v 1.16 2005/12/23 17:01:56 amoll Exp $
+// $Id: randomCoilShiftProcessor.h,v 1.16.10.1 2006/10/04 13:49:41 anne Exp $
 //
 
 #ifndef BALL_NMR_SHIFTMODULE_H
@@ -86,6 +86,10 @@ namespace BALL
 		/*_	The hash map containing the atom names and the random coil shifts.
 		*/
 		StringHashMap<float>	shift_map_;
+		private:
+		void			postprocessing_() throw();
+		System* system_;
+
 	};
   
 } // namespace BALL

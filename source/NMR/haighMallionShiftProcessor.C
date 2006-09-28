@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.C,v 1.17.18.7 2006/09/06 12:23:23 anne Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.17.18.8 2006/10/04 13:49:43 anne Exp $
 //
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
@@ -417,7 +417,9 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 //		std::cout << targets_[t]->getResidue()->getID() << " " << ring_normal << " " << targets_[t]->getPosition() << " " << new_rc_shift<< std::endl;
 
 	
-				float old_rc_shift = targets_[t]->getProperty(PROPERTY__RING_CURRENT_SHIFT).getFloat();
+				float old_rc_shift = 0.;
+				if (targets_[t]->hasProperty(PROPERTY__RING_CURRENT_SHIFT))
+					old_rc_shift = targets_[t]->getProperty(PROPERTY__RING_CURRENT_SHIFT).getFloat();
 
 				/** TODO: average not over all rings but only over the 1HA 2HA of GLY!
 				// take the average of all contributions to HA
@@ -436,13 +438,13 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 					}
 				}
 				*/
-				new_rc_shift += old_rc_shift;
+				//new_rc_shift += old_rc_shift;
 				
 				float shift = targets_[t]->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
 //if (targets_[t]->getName() == "CA")
 //	std::cout << "shift: " << new_rc_shift << " ,NukleusFactor: " << target_nucleus_factor << " ,IntensityFactor: " << intensity_factors_[effector_types_[e]]  << std::endl;
 				targets_[t]->setProperty(ShiftModule::PROPERTY__SHIFT, shift + new_rc_shift);
-			  targets_[t]->setProperty(PROPERTY__RING_CURRENT_SHIFT, new_rc_shift);			
+			  targets_[t]->setProperty(PROPERTY__RING_CURRENT_SHIFT, new_rc_shift + old_rc_shift );			
 			}
 		}
 	

@@ -147,6 +147,8 @@ namespace BALL
 				void setCurvature(std::vector<float> curvature);
 				void setValues(std::vector<float> values);
 				void setPositions(std::vector<float> positions);
+				// this is necessary to allow for "corrected" averages as in the case of ShiftX NMR-prediction
+				void setAverage(float average) {average_ = average;}
 				float getAverage() {return average_;}
 			private :
 				std::vector<float> sample_positions_;
@@ -301,8 +303,8 @@ namespace BALL
 			
 				// returns the total average given in the input file
 				float getTotalAverage() throw() {return average_;}
-				float getTableXAverage(const String& name) throw();
-				float getTableYAverage(const String& name) throw();
+				//float getTableXAverage(const String& name) throw();
+				//float getTableYAverage(const String& name) throw();
 
 				
 			private:
@@ -335,9 +337,6 @@ namespace BALL
 
 				/// the average over the complete hypersurface; this average maybe weighted in non-obvious ways
 				float average_;
-
-				vector<float> row_averages_values_;
-				vector<float> col_averages_values_;;
 
 				vector<String> 					 y_axis_values_;
 				vector<vector<String> >  x_axis_values_;

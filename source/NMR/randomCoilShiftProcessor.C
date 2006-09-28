@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: randomCoilShiftProcessor.C,v 1.6 2002/02/27 12:23:55 sturm Exp $
+// $Id: randomCoilShiftProcessor.C,v 1.6.20.1 2006/10/04 13:49:43 anne Exp $
 
 #include<BALL/NMR/randomCoilShiftProcessor.h>
 #include<BALL/FORMAT/parameterSection.h>
@@ -13,12 +13,14 @@ namespace BALL
 
 	RandomCoilShiftProcessor::RandomCoilShiftProcessor()
 	{
+		system_ = NULL; 
 	}
 
 	RandomCoilShiftProcessor::RandomCoilShiftProcessor(const RandomCoilShiftProcessor& processor)
 		:	ShiftModule(processor),
 			shift_map_(processor.shift_map_)
-	{
+	{	
+		system_ = NULL;
 	}
 
 	RandomCoilShiftProcessor::~RandomCoilShiftProcessor()
@@ -30,7 +32,8 @@ namespace BALL
 	{
 		// we assume the worst case: init fails -> valid_ = false
 		valid_ = false;
-
+		system_ = NULL;
+		
 		// make sure we have correct parameters
 		if (parameters_ == 0)
 		{
@@ -69,6 +72,12 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
+		// get the System
+		if (!system_   && (RTTI::isKindOf<System>(atom_ptr->getRoot())))
+		{	
+			system_ = dynamic_cast<System*>(&(atom_ptr->getRoot()));
+		}
+
 		String full_name = atom_ptr->getFullName();
 		full_name.substitute(":", " ");
 		if (!shift_map_.has(full_name))
@@ -101,5 +110,40 @@ namespace BALL
 		
 		return Processor::CONTINUE;
 	}
+	
+	void   RandomCoilShiftProcessor::postprocessing_()
+		throw()
+	{
+		if (system_) 
+		{
+			// add for all CA 0.2 times the values of HA
+			for (BALL::ResidueIterator r_it = system_->beginResidue(); r_it != system_->endResidue(); ++r_it)
+			{
+				Atom* CA = 0;
+				Atom* HA = 0;
 
+				for (BALL::AtomIterator at_it = r_it->beginAtom(); +at_it; ++at_it)
+				{
+					if (at_it->getName() == "CA")
+						CA = &(*at_it);
+					if (at_it->getName() == "HA")
+						HA = &(*at_it);
+				}
+
+				if (CA && HA)
+				{	
+					float total = CA->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
+					float ca_shift = CA->getProperty(BALL::RandomCoilShiftProcessor::PROPERTY__RANDOM_COIL_SHIFT).getFloat();
+					float ha_shift = HA->getProperty(BALL::RandomCoilShiftProcessor::PROPERTY__RANDOM_COIL_SHIFT).getFloat();
+					
+					CA->setProperty(BALL::RandomCoilShiftProcessor::PROPERTY__RANDOM_COIL_SHIFT, ca_shift + 0.2*ha_shift);
+					CA->setProperty(ShiftModule::PROPERTY__SHIFT, total+ 0.2*ha_shift );
+				}
+			}
+		}
+		else
+		{
+			std::cerr << "found no system -> could not perform a postprocessing for EFShiftProcessor" << std::endl;
+		}
+	}
 }//namespace BALL

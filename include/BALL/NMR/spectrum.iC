@@ -1,0 +1,464 @@
+#include <math.h> 
+
+template <>
+BALL_INLINE
+Spectrum<RegularData1D, Peak1D>::Spectrum(const std::vector<Peak1D>& peaks, const Peak1D::Position& origin,
+		                                      const Peak1D::Position& dimension, const PositionType& spacing)
+	: data_(origin, dimension, spacing),
+		sticks_(peaks)
+{	
+	// insert the peaks as single points into the RegularData
+	for (BALL::Position i = 0; i < sticks_.size(); i++)
+	{
+		try 
+		{
+			data_.getClosestValue(sticks_[i].getPosition()) = sticks_[i].getIntensity();
+		} 
+		catch (Exception::OutOfGrid e)
+		{
+			Log.error() << "Error in Spectrum(): point " << sticks_[i].getPosition() 
+								  << " outside the grid. Consider decreasing origin / increasing dimension!" << std::endl;
+			continue;
+		}
+	}
+}
+
+template <>
+BALL_INLINE
+Spectrum<RegularData2D, Peak2D>::Spectrum(const std::vector<Peak2D>& peaks, const Peak2D::Position& origin,
+		                                      const Peak2D::Position& dimension, const PositionType& spacing)
+	: data_(origin, dimension, spacing),
+		sticks_(peaks)
+{
+	// insert the peaks as single points into the RegularData
+	for (BALL::Position i=0; i<sticks_.size(); i++)
+	{
+		try 
+		{
+			data_.getClosestValue(sticks_[i].getPosition()) = sticks_[i].getIntensity();
+		} 
+		catch (Exception::OutOfGrid e)
+		{
+			Log.error() << "Error in Spectrum(): point " << sticks_[i].getPosition() 
+								  << " outside the grid. Consider decreasing origin / increasing dimension!" << std::endl;
+		}
+	}
+}
+
+
+template <>
+BALL_INLINE
+double Spectrum<RegularData1D, Peak1D>::earthMoversDistance(const Spectrum<RegularData1D, Peak1D>& spectrum) const
+{
+	return 0.0; 
+}
+
+template <>
+BALL_INLINE
+double Spectrum<RegularData2D, Peak2D>::earthMoversDistance(const Spectrum<RegularData2D, Peak2D>& spectrum) const
+{
+	return 0.0; 
+}
+
+template <>
+BALL_INLINE
+double Spectrum<RegularData1D, Peak1D>::difference(const Spectrum<RegularData1D, Peak1D>& spectrum) const
+{
+	// this is the most simple way to compare the spectra, even if they have different dimensions
+	// points not contained in one of the spectra are ignored...
+	RegularData1D::IndexType index;
+	RegularData1D::IndexType size = data_.getSize();
+	
+	float spacing = data_.getSpacing();
+	
+	const RegularData1D& their_data = spectrum.getData();
+
+	double total_difference=0.;
+	for (index = 0; index < size; index++)
+	{
+			RegularData1D::CoordinateType pos = data_.getCoordinates(index);
+
+			float our_value = data_(pos);
+			float their_value;
+			try {
+				their_value = their_data(pos);
+			} 
+			catch (Exception::OutOfGrid e)
+			{
+				continue;
+			}
+			total_difference += fabs(our_value-their_value)*spacing;
+	}
+	
+	return total_difference;
+}
+
+template <>
+BALL_INLINE
+double Spectrum<RegularData2D, Peak2D>::difference(const Spectrum<RegularData2D, Peak2D>& spectrum) const
+{
+	// this is the most simple way to compare the spectra, even if they have different dimensions
+	// points not contained in one of the spectra are ignored...
+	RegularData2D::IndexType index;
+	RegularData2D::IndexType size = data_.getSize();
+	
+	const RegularData2D& their_data = spectrum.getData();
+	
+	Vector2<float> spacing = data_.getSpacing();
+
+	double total_difference=0.;
+	for (index.x = 0; index.x < size.x; index.x++)
+	{
+		for (index.y = 0; index.y < size.y; index.y++)
+		{
+			RegularData2D::CoordinateType pos = data_.getCoordinates(index);
+
+			float our_value = data_(pos);
+			float their_value;
+			try {
+				their_value = their_data(pos);
+			} 
+			catch (Exception::OutOfGrid e)
+			{
+				continue;
+			}
+			total_difference += fabs(our_value-their_value) * spacing.x * spacing.y;
+		}
+	}
+	
+	return total_difference;
+}
+
+template <>
+BALL_INLINE
+std::ostream& operator << (std::ostream& os, const Spectrum<RegularData1D, Peak1D>& spectrum)
+{
+	// output the data in gnuplottable format :-)
+	// e.g. Spectrum2D spec; ...; File f("plot.dat", std::ios::out); f << spec;
+	// gnuplot -persist plot.dat
+	const RegularData1D& data = spectrum.getData();
+
+//	os << "set xrange [" << data.getOrigin().x << ":" << data.getOrigin().x+data.getDimension().x << "]" << std::endl;
+//	os << "set yrange [" << data.getOrigin().y << ":" << data.getOrigin().y+data.getDimension().y << "]" << std::endl;
+
+	RegularData1D::IndexType index;
+	RegularData1D::IndexType size = data.getSize();
+	
+	for (index= 0; index < size; index++)
+	{
+			RegularData1D::CoordinateType pos = data.getCoordinates(index);
+			os << pos << " "  << data(pos) << std::endl;
+	}
+
+	return os;
+}
+
+
+template <>
+BALL_INLINE
+std::ostream& operator << (std::ostream& os, const Spectrum<RegularData2D, Peak2D>& spectrum)
+{
+	// output the data in gnuplottable format :-)
+	// e.g. Spectrum2D spec; ...; File f("plot.dat", std::ios::out); f << spec;
+	// gnuplot -persist plot.dat
+	const RegularData2D& data = spectrum.getData();
+
+//	os << "set xrange [" << data.getOrigin().x << ":" << data.getOrigin().x+data.getDimension().x << "]" << std::endl;
+//	os << "set yrange [" << data.getOrigin().y << ":" << data.getOrigin().y+data.getDimension().y << "]" << std::endl;
+
+	RegularData2D::IndexType index;
+	RegularData2D::IndexType size = data.getSize();
+	
+	for (index.x = 0; index.x < size.x; index.x++)
+	{
+		for (index.y = 0; index.y < size.y; index.y++)
+		{
+			RegularData2D::CoordinateType pos = data.getCoordinates(index);
+
+			os << pos.x << " " << pos.y << " " << data(pos) << std::endl;
+		}
+		os << std::endl;
+	}
+
+	return os;
+}
+
+template <>
+BALL_INLINE
+void Spectrum<RegularData1D, Peak1D>::convertToLorentzian() 
+{
+	// for all points
+	RegularData1D::IndexType index;
+	RegularData1D::IndexType size = data_.getSize();
+	for (index = 0; index < size; index++)
+	{
+			// now compute for all peaks its contribution to this point
+			double intensity = 0.0;
+			
+			RegularData1D::CoordinateType pos = data_.getCoordinates(index);
+
+			double separation, width;
+			for (BALL::Position i = 0; i < sticks_.size(); i++)
+			{	
+				separation = pos - sticks_[i].getPosition();
+				width      = sticks_[i].getWidth();
+				float l    = pow(separation, 2) / sticks_[i].getWidth();
+				intensity += 1./( 1. + l );
+			}
+			//set the value
+			data_[index] = intensity;	
+	}
+}
+
+template <>
+BALL_INLINE
+void Spectrum<RegularData2D, Peak2D>::convertToLorentzian() 
+{
+	// for all points
+	RegularData2D::IndexType index;
+	RegularData2D::IndexType size = data_.getSize();
+	for (index.x = 0; index.x < size.x; index.x++)
+	{
+		for (index.y = 0; index.y < size.y; index.y++)
+		{
+			// now compute for all peaks its contribution to this point
+			double intensity = 0.0;
+			
+			RegularData2D::CoordinateType pos = data_.getCoordinates(index);
+
+			Vector2 separation, width;
+			for (BALL::Position i = 0; i < sticks_.size(); i++)
+			{	
+				separation = pos - sticks_[i].getPosition();
+				width      = sticks_[i].getWidth();
+				float lx    = pow(separation.x, 2) / width.x; 
+				float ly    = pow(separation.y, 2) / width.y; 
+				intensity += 1./(( 1. + lx) *(1. + ly));
+			}
+			//set the value
+			data_[index] = intensity;	
+		}
+		
+	}
+}
+
+
+template <>
+BALL_INLINE
+void Spectrum<RegularData1D, Peak1D>::convertToGaussian() 
+{
+	// for all points
+	RegularData1D::IndexType index;
+	RegularData1D::IndexType size = data_.getSize();
+	for (index = 0; index < size; index++)
+	{
+			// now compute for all peaks its contribution to this point
+			double intensity = 0.0;
+			
+			RegularData1D::CoordinateType pos = data_.getCoordinates(index);
+			
+			double separation, width;
+			for (BALL::Position i = 0; i < sticks_.size(); i++)
+			{	
+				separation = pos - sticks_[i].getPosition();
+				width      = sticks_[i].getWidth();
+				float exponent     = pow(separation / width, 2);
+				intensity += sticks_[i].getIntensity()*exp(-exponent); 
+			}
+			//set the value
+			data_[index] = intensity;	
+	}
+}
+
+
+template <>
+BALL_INLINE
+void Spectrum<RegularData2D, Peak2D>::convertToGaussian() 
+{
+	// for all points
+	RegularData2D::IndexType index;
+	RegularData2D::IndexType size = data_.getSize();
+	for (index.x = 0; index.x < size.x; index.x++)
+	{
+		for (index.y = 0; index.y < size.y; index.y++)
+		{
+			// now compute for all peaks its contribution to this point
+			double intensity = 0.0;
+			
+			RegularData2D::CoordinateType pos = data_.getCoordinates(index);
+
+			Vector2 separation, width;
+			for (BALL::Position i = 0; i < sticks_.size(); i++)
+			{	
+				separation = pos - sticks_[i].getPosition();
+				width      = sticks_[i].getWidth();
+				float exponent     = pow(separation.x / width.x, 2) + pow(separation.y / width.y, 2);
+				intensity += sticks_[i].getIntensity()*exp(-exponent);	
+			}
+			
+			//set the value
+			data_[index] = intensity;
+		}
+	}
+}
+
+
+template <>
+BALL_INLINE
+double Spectrum<RegularData1D, Peak1D>::computeMoment(int moment_number) 
+{
+	// for a negative or equal zero moment we return 0.
+	if (moment_number < 0)
+		Log.info() << "Tried to compute a negative moment!" << std::endl;	
+	if (moment_number < 1)
+		return 0.;
+		
+	// compute the average
+	double average = 0.;
+	int count = 0;
+	const RegularData1D& data = getData();
+	float spacing = data_.getSpacing();
+
+	RegularData1D::IndexType index;
+	RegularData1D::IndexType size = data_.getSize();
+	for (index = 0; index < size; index++)
+	{
+		RegularData1D::CoordinateType pos = data_.getCoordinates(index);
+		average += data(pos);
+		count += 1;
+	}
+	average = average / count;
+
+	if (moment_number == 1)
+		return average;
+	
+	double moment = 0.; 
+	// compute the moment
+	for (index = 0; index < size; index++)
+	{
+		RegularData1D::CoordinateType pos = data_.getCoordinates(index);
+		moment += pow( (data(pos) - average), moment_number)* spacing;
+	}
+	return double(moment/count);
+}
+
+
+template <>
+BALL_INLINE
+double Spectrum<RegularData2D, Peak2D>::computeMoment(int  moment_number) 
+{	
+	// for a negative or equal zero moment we return 0.
+	if (moment_number < 0)
+		Log.info() << "Tried to compute a negative moment!" << std::endl;	
+	if (moment_number < 1)
+		return 0.;
+		
+	// compute the average
+	double average = 0.;
+	int count = 0;
+	const RegularData2D& data = getData();
+	Vector2<float> spacing = data_.getSpacing();
+
+	// for all points
+	RegularData2D::IndexType index;
+	RegularData2D::IndexType size = data_.getSize();
+	for (index.x = 0; index.x < size.x; index.x++)
+	{
+		for (index.y = 0; index.y < size.y; index.y++)
+		{
+			RegularData2D::CoordinateType pos = data_.getCoordinates(index);
+			average += data(pos) ;
+			count += 1;
+ 		}	
+	}
+	average = average / count;
+	
+	if (moment_number == 1)
+		return average;
+	
+	double moment = 0.;
+	// compute the moment
+	for (index.x = 0; index.x < size.x; index.x++)
+	{
+		for (index.y = 0; index.y < size.y; index.y++)
+		{
+			RegularData2D::CoordinateType pos = data_.getCoordinates(index);
+			moment += pow( (data(pos) - average), moment_number) * spacing.x * spacing.y;
+		}
+	}
+	
+	return double(moment/count);
+}
+
+
+template <>
+BALL_INLINE
+Spectrum<RegularData1D, Peak1D> Spectrum<RegularData1D, Peak1D>::differenceSpectrum(const Spectrum<RegularData1D, Peak1D>& spectrum) 
+{
+	// we subtract from this spectrum
+	RegularData1D::IndexType index;
+	RegularData1D::IndexType size = data_.getSize();
+	
+	// we return a new spectrum
+	Spectrum1D new_spectrum = Spectrum1D(data_);
+
+	// we operate on the data
+	const RegularData1D& their_data = spectrum.getData();
+	RegularData1D& new_data = new_spectrum.getData();
+	const RegularData1D& data = getData();
+
+
+	// we have to take care for the peaks_
+	// TODO: shouldn't we "subtract" the peaks too? 
+	new_spectrum.clearSticks();
+	
+	// we have to create the difference data
+	for (index = 0; index < size; index++)
+	{
+		RegularData1D::CoordinateType pos = data_.getCoordinates(index);
+		RegularData1D::CoordinateType their_pos = their_data.getCoordinates(index);
+
+		new_data[index]	= data(pos) - their_data(their_pos);
+	}
+	
+	return new_spectrum;
+}
+
+
+template <>
+BALL_INLINE
+Spectrum<RegularData2D, Peak2D> Spectrum<RegularData2D, Peak2D>::differenceSpectrum(const Spectrum<RegularData2D, Peak2D>& spectrum) 
+{
+	// we subtract from this spectrum
+	RegularData2D::IndexType index;
+	RegularData2D::IndexType size = data_.getSize();
+	
+	// we return a new spectrum
+	Spectrum2D new_spectrum = Spectrum2D(data_);
+
+	// we operate on the data
+	const RegularData2D& their_data = spectrum.getData();
+	RegularData2D& new_data = new_spectrum.getData();
+	const RegularData2D& data = getData();
+
+
+	// we have to take care for the peaks_
+	// TODO: shouldn't we "subtract" the peaks too? 
+	new_spectrum.clearSticks();
+	
+	// we have to create the difference data
+	for (index.x = 0; index.x < size.x; index.x++)
+	{
+		for (index.y = 0; index.y < size.y; index.y++)
+		{
+			RegularData2D::CoordinateType pos = data_.getCoordinates(index);
+			RegularData2D::CoordinateType their_pos = their_data.getCoordinates(index);
+	
+			new_data[index]	= data(pos) - their_data(their_pos);
+		}
+	}
+	
+	return new_spectrum;
+
+}
+

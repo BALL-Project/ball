@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: spectrum.h,v 1.14.18.2 2006/09/21 13:41:13 anne Exp $
+// $Id: spectrum.h,v 1.14.18.4 2006/10/04 13:49:41 anne Exp $
 //
 
 #ifndef BALL_NMR_SPECTRUM_H
@@ -56,10 +56,20 @@ namespace BALL
 		*/	
 		//@{
 			// ?????
-		Spectrum() {}
+		Spectrum()
+			: data_(),
+				sticks_(),
+				spacing_(),
+				min_(),
+				max_()
+		{}
 
 		Spectrum(const DataType& data)
-			: data_(data)
+			: data_(data),
+				sticks_(),
+				spacing_(),
+				min_(),
+				max_()
 		{}
 
 		Spectrum(const std::vector<PeakType>& peaks, const PositionType& origin, const PositionType& dimension, const PositionType& spacing)
@@ -80,14 +90,20 @@ namespace BALL
 		//@}
 
 		virtual void clear();
+		virtual void clearSticks();
 		virtual double difference(const Spectrum<DataT, PeakT, PositionT>& spectrum) const;
+		virtual  Spectrum<DataT, PeakT, PositionT> differenceSpectrum(const Spectrum<DataT, PeakT, PositionT>& spectrum);
 		virtual double earthMoversDistance(const Spectrum<DataT,PeakT, PositionT>& spectrum) const; 
 		
 		virtual void convertToGaussian(); 
-		
+		virtual void convertToLorentzian(); 
+		virtual double computeMoment(int  moment_number);
+
 		virtual void setSpacing(const PositionType& spacing);
 		virtual PositionType getSpacing() const;
+		virtual void setSticks(std::vector<PeakType> sticks) {sticks_ = sticks;};
 		
+
 		protected:
 		DataType	data_;
 		std::vector<PeakType> sticks_;
@@ -97,7 +113,7 @@ namespace BALL
 	};
 
 	/**	Clear the spectrum.
-			Sets all data to zero.
+			Sets all data to zero.  // TODO: what about the  spacing?
 	*/
 	template <typename DataT, typename PeakT, typename PositionT>
 	void Spectrum<DataT, PeakT, PositionT>::clear()
@@ -105,7 +121,15 @@ namespace BALL
 		data_.clear();
 		sticks_.clear();
 	}
+	
+	template <typename DataT, typename PeakT, typename PositionT>
+	void Spectrum<DataT, PeakT, PositionT>::clearSticks()
+	{
+		sticks_.clear();
+	}
 
+
+	// TODO: muss die hier stehen??? 
 	/**	Calculate the difference between two spectra.
 	*/
 	template <typename DataT, typename PeakT, typename PositionT>
