@@ -53,6 +53,7 @@ CompositeProperties::CompositeProperties(Composite* composite, QWidget* parent,
 	type_edit->setText(String(atom->getType()).c_str());
 	type_name_edit->setText(atom->getTypeName().c_str());
 	charge_edit->setText(String(atom->getCharge()).c_str());
+	formal_charge_edit->setText(String(atom->getFormalCharge()).c_str());
 	radius_edit->setText(String(atom->getRadius()).c_str());
 	position_edit->setText((String("(") + 
 													getString_(atom->getPosition().x) + String("|") +
@@ -116,8 +117,45 @@ void CompositeProperties::accept()
 			atom->setType(ascii(type_edit->text()).toShort());
 			atom->setTypeName(ascii(type_name_edit->text()));
 			atom->setCharge(ascii(charge_edit->text()).toFloat());
+			atom->setFormalCharge(ascii(formal_charge_edit->text()).toInt());
 			atom->setRadius(ascii(radius_edit->text()).toFloat());
 			atom->setElement(PTE[(ascii(element_box->currentText()))]);
+			String text = ascii(position_edit->text());
+			vector<String> fields;
+			text.split(fields, "()|, ");
+			if (fields.size() != 3)
+			{
+				Log.error() << "Invalid values for position!" << std::endl;
+				return;
+			}
+
+			atom->setPosition(Vector3(fields[0].toFloat(),
+																fields[1].toFloat(),
+																fields[2].toFloat()));
+
+			text = ascii(velocity_edit->text());
+			text.split(fields, "(),| ");
+			if (fields.size() != 3)
+			{
+				Log.error() << "Invalid values for velocity!" << std::endl;
+				return;
+			}
+
+			atom->setVelocity(Vector3(fields[0].toFloat(),
+																fields[1].toFloat(),
+																fields[2].toFloat()));
+
+			text = ascii(force_edit->text());
+			text.split(fields, "(),| ");
+			if (fields.size() != 3)
+			{
+				Log.error() << "Invalid values for force!" << std::endl;
+				return;
+			}
+
+			atom->setForce(Vector3(fields[0].toFloat(),
+														 fields[1].toFloat(),
+														 fields[2].toFloat()));
 		}
 	}
 	catch(Exception::InvalidFormat)
