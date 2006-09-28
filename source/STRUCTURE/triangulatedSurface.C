@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSurface.C,v 1.5.10.1 2006/09/26 22:10:28 amoll Exp $
+// $Id: triangulatedSurface.C,v 1.5.10.2 2006/09/28 13:44:36 amoll Exp $
 
 #include <BALL/STRUCTURE/triangulatedSurface.h>
 
@@ -299,16 +299,16 @@ namespace BALL
 		Vector3 normal;
 		for (p = points_.begin(); p != points_.end(); p++)
 		{
-			TrianglePoint& point = **p;
-			point.set((float)point.point_.x,
-								(float)point.point_.y,
-								(float)point.point_.z);
-			normal.set((float)point.normal_.x,
-								 (float)point.normal_.y,
-								 (float)point.normal_.z);
+			TrianglePoint& tri_point = **p;
+			point.set((float)tri_point.point_.x,
+								(float)tri_point.point_.y,
+								(float)tri_point.point_.z);
+			normal.set((float)tri_point.normal_.x,
+								 (float)tri_point.normal_.y,
+								 (float)tri_point.normal_.z);
 			surface.vertex.push_back(point);
 			surface.normal.push_back(normal);
-			point.index_ = i;
+			tri_point.index_ = i;
 			i++;
 		}
 		std::list<Triangle*>::iterator t;
