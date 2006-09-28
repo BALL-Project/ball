@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.76.2.13 2006/07/23 11:14:33 amoll Exp $
+// $Id: mainControl.h,v 1.76.2.14 2006/09/28 23:34:34 amoll Exp $
 //
 // Author:
 //   Andreas Moll
@@ -785,12 +785,6 @@ namespace BALL
 			*/
 			bool remove_(Composite& composite, bool update_representations_of_parent = true, 
 																				 bool to_delete = true)
-				throw();
-
-			void selectRecursive_(Composite* composite)
-				throw();
-
-			void deselectRecursive_(Composite* composite)
 				throw();
 
 			/*_ Select the composite parents of the geometric objects.
