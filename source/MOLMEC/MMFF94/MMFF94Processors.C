@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.4.11 2006/09/25 15:35:13 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.4.12 2006/09/28 14:56:08 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -1177,7 +1177,12 @@ bool Kekuliser::setup(Molecule& mol)
 		unassigned_bonds_.push_back(*hbit);
 	}
 
-Log.error() << "#~~#   1 "  << nr_ca << " " << nr_am_gu << " " << nr_phos           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+#ifdef BALL_MMFF94_TEST
+	Log.error() << "Kekulized bounds: " <<
+	            << "CA   "  << nr_ca << " " 
+							<< "NH2  "  << nr_am_gu << " " 
+							<< "PHOS "  << nr_phos  << std::endl;
+#endif
 	return ok;
 }
 
