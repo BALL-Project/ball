@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.50.2.18 2006/09/29 09:10:24 amoll Exp $
+// $Id: molecularControl.h,v 1.50.2.19 2006/09/29 10:18:02 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -429,7 +429,6 @@ class BALL_VIEW_EXPORT MolecularControl
 	List<QTreeWidgetItem*> getAllItems_();
 
 	void enableUpdates_(bool state);
-	void ignoreCheckChanges_(bool state);
 	void newSelection_(List<Composite*>& sel, bool selected);
 	
 	//@} 
@@ -474,7 +473,6 @@ class BALL_VIEW_EXPORT MolecularControl
 	QAction* center_camera_action_, *composite_properties_action_, *bond_propertes_action_, 
 					 *select_action_, *deselect_action_, *count_items_action_, *atom_overview_, *atom_overview_selection_;
 
-	bool ignore_checked_changes_;
 	bool ignore_messages_;
 };
 	

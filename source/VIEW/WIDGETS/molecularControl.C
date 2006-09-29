@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.46 2006/09/29 09:10:31 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.47 2006/09/29 10:17:55 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -79,7 +79,6 @@ namespace BALL
 					was_delete_(false),
 					nr_items_removed_(0),
 					show_ss_(false),
-					ignore_checked_changes_(false),
 					ignore_messages_(false)
 		{
 		#ifdef BALL_VIEW_DEBUG
@@ -255,6 +254,8 @@ namespace BALL
 
 					case CompositeMessage::CHANGED_COMPOSITE_HIERARCHY:
 					{
+						bool was_enabled = !ignore_messages_;
+						enableUpdates_(false);
 						HashSet<Composite*> open_items;
 						HashSet<Composite*> highlighted;
 						QTreeWidgetItemIterator qit(listview);
@@ -273,8 +274,9 @@ namespace BALL
 							qit++;
 						}
 
-						removeComposite(composite_message->getComposite()->getRoot());
-						addComposite(composite_message->getComposite()->getRoot());
+						Composite& root = composite_message->getComposite()->getRoot();
+ 						removeComposite(root);
+						addComposite(root);
 
 						list<QTreeWidgetItem*> item_list;
 						qit = QTreeWidgetItemIterator(listview);
@@ -296,6 +298,7 @@ namespace BALL
 
 						listview->selectItems(item_list);
 
+						if (was_enabled) enableUpdates_(true);
 						return true;
 					}
 					case CompositeMessage::SELECTED_COMPOSITE:
@@ -644,9 +647,7 @@ namespace BALL
 			QString name = given_name.c_str();
 
 			// generate ListViewItem and insert it into the ListView
-			ignoreCheckChanges_(true);
 			generateListViewItem_(0, composite, &name);
-			ignoreCheckChanges_(false);
 
 			// update the view
 			updateSelection();
@@ -661,8 +662,8 @@ namespace BALL
 
 			if (to_find == composite_to_item_.end())
 			{
-				setStatusbarText(String("Tried to remove an invalid Composite in ") 
-																 + String(__FILE__) + " " + String(__LINE__), true);
+//   				setStatusbarText(String("Tried to remove an invalid Composite in ") 
+//   																 + String(__FILE__) + " " + String(__LINE__), true);
 				return 0;
 			}
 
@@ -756,7 +757,6 @@ namespace BALL
 			}
 
 			setStatusbarText(String(getMainControl()->getSelection().size()) + " objects selected.");
-			ignoreCheckChanges_(false);
 		}
 
 
@@ -767,15 +767,17 @@ namespace BALL
 			// delete old composites in copy list
 			if (!was_delete_) clearClipboard();
 
-			enableUpdates_(false);
+ 			enableUpdates_(false);
 
 			// remove the selected composites from the tree and from the scene
 			// if !was_delete_, copy them into the copy_list_
 			// for all roots of removed items the representations are rebuild
 			HashSet<Composite*> roots;
 
-			List<Composite*>::Iterator it = selected_.begin();	
-			for (; it != selected_.end(); it++)
+			List<Composite*> sel = selected_;
+			selected_.clear();
+			List<Composite*>::Iterator it = sel.begin();	
+			for (; it != sel.end(); it++)
 			{
 				Composite& c = **it;
 				if (!c.isRoot()) 
@@ -784,7 +786,7 @@ namespace BALL
 				}
 				else
 				{
-					removeComposite(c);
+ 					removeComposite(c);
 				}
 
 				getMainControl()->remove(c, was_delete_, false);
@@ -792,17 +794,16 @@ namespace BALL
 				if (!was_delete_) copy_list_.push_back(*it);
 			}
 
-			selected_.clear();
 
+ 			enableUpdates_(true);
 			HashSet<Composite*>::Iterator roots_it = roots.begin();
 			for (; +roots_it; roots_it++)
 			{
 				getMainControl()->update(**roots_it, true);
-				removeComposite(**roots_it);
-				addComposite(**roots_it);
+//    				removeComposite(**roots_it);
+//    				addComposite(**roots_it);
 			}
 
-			enableUpdates_(true);
 		}
 
 
@@ -1231,34 +1232,28 @@ namespace BALL
 			collapseAll();
 			listview->clearSelection();
 
-			HashSet<Composite*> selection = getMainControl()->getSelection();
-			HashSet<Composite*>::Iterator sit = selection.begin();
-			std::map<Composite*, MyTreeWidgetItem*>::iterator fit;
-			list<QTreeWidgetItem*> items;
-			for (; +sit; ++sit)
+			list<QTreeWidgetItem *> items;
+			QTreeWidgetItemIterator qit(listview);
+			while(*qit != 0)
 			{
-				fit = composite_to_item_.find(*sit);
-				if (fit == composite_to_item_.end()) continue;
-				items.push_back(fit->second);
+				QTreeWidgetItem* item = *qit;
+				if (item->checkState(2) == Qt::Checked)
+				{
+					items.push_back(item);
+					QTreeWidgetItem* parent = item->parent();
+					while (parent != 0 && !listview->isItemExpanded(parent))
+					{
+						listview->expandItem(parent);
+						parent = parent->parent();
+					}
+				}
+				qit++;
 			}
+			
 			listview->selectItems(items);
 
-			list<QTreeWidgetItem*>::const_iterator lit = items.begin();
-			QTreeWidgetItem* item = 0;
-			for (; lit != items.end(); ++lit)
-			{
-				QTreeWidgetItem* parent = (*lit)->parent();
-				while (parent != 0 && !listview->isItemExpanded(parent))
-				{
-					listview->expandItem(parent);
-					parent = parent->parent();
-				}
-			}
-
-			if (items.size()) item = *items.begin();
-
 			enableUpdates_(true);
-			if (item != 0) listview->scrollToItem(item);
+			if (items.size()) listview->scrollToItem(*items.begin());
 		}
 
 		void MolecularControl::enableUpdates_(bool state)
@@ -1271,17 +1266,6 @@ namespace BALL
 			connect(listview, SIGNAL(itemSelectionChanged()), this, SLOT(updateSelection()));
 			listview->update();
 			updateSelection();
-		}
-
-		void MolecularControl::ignoreCheckChanges_(bool state)
-		{
-			ignore_checked_changes_ = state;
-			disconnect(listview, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(onItemClicked(QTreeWidgetItem*, int)));
-			enableUpdates_(!state);
-
-			if (state) return;
-
-			connect(listview, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(onItemClicked(QTreeWidgetItem*, int)));
 		}
 
 		void MolecularControl::switchShowSecondaryStructure()
@@ -1359,17 +1343,15 @@ namespace BALL
 
 		void MolecularControl::onItemClicked(QTreeWidgetItem* item, int col)
 		{
-			if (ignore_checked_changes_ || col != 2) return;
+			if (col != 2) return;
 			bool checked = (item->checkState(2) == Qt::Checked);
 
 			if (getMainControl()->isBusy())
 			{
-				ignore_checked_changes_ = true;
 				if (checked) item->setCheckState(2, Qt::Unchecked);
 				else 				 item->setCheckState(2, Qt::Checked);
 
 				VIEW::getMainControl()->setStatusbarText("Cannot select items now!", true);
-				ignore_checked_changes_ = false;
 				return;
 			}
 
