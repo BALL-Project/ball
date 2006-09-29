@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FDPBDialog.C,v 1.20.2.3 2006/02/01 14:15:03 amoll Exp $
+// $Id: FDPBDialog.C,v 1.20.2.4 2006/09/29 15:35:06 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
@@ -155,15 +155,21 @@ namespace BALL
 			}
 
 			if (!lockComposites()) return false;
+
+			bool use_mt = false;
 			// currently doesnt work:
-			#ifdef BALL_QT_HAS_THREADS_
+			#ifdef BALL_QT_HAS_THREADS
+			if (getMainControl()->useMultithreading())
+			{
+				use_mt = true;
+
 				if (thread_ == 0)
 				{
 					thread_ = new CalculateFDPBThread();
 				}
 				else
 				{
-					if (thread_->running())
+					if (thread_->isRunning())
 					{
 						Log.error() << "Thread already running in"  << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 						return false;
@@ -175,10 +181,9 @@ namespace BALL
 
 				Position pos = 3;
 				String dots;
-				while (thread_->running())
+				while (thread_->isRunning())
 				{
 					setStatusbarText("Calculating FDPB grid " + dots, false);
-					qApp->wakeUpGuiThread();
 					qApp->processEvents();
 					if (pos < 40) 
 					{
@@ -194,8 +199,10 @@ namespace BALL
 				}
 					
 				setStatusbarText("Finished FDPB grid", true);
+			}
+
 			#else
-				calculate_();
+			if (!use_mt) calculate_();
 			#endif
 			
 			RegularData3DMessage* message = new RegularData3DMessage(RegularData3DMessage::NEW); 
@@ -343,10 +350,9 @@ namespace BALL
 				return false;
 			}
 
-			CompositeMessage* message = new CompositeMessage;
-			message->setComposite(*system_);
-			message->setType(CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
-			notify_(message);
+			UpdateCompositeEvent* se = new UpdateCompositeEvent;
+			se->setComposite(system_);
+			qApp->postEvent(getMainControl(), se);
 
 			return true;
 		}
