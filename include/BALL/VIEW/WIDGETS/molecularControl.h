@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.50.2.16 2006/06/05 18:18:50 amoll Exp $
+// $Id: molecularControl.h,v 1.50.2.17 2006/09/29 00:59:35 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -419,6 +419,7 @@ class BALL_VIEW_EXPORT MolecularControl
 
 	void enableUpdates_(bool state);
 	void ignoreCheckChanges_(bool state);
+	void newSelection_(List<Composite*>& sel, bool selected);
 	
 	//@} 
 	/** @name Menu entries ids

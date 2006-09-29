@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.17.2.7 2006/06/06 21:01:30 amoll Exp $
+// $Id: genericControl.C,v 1.17.2.8 2006/09/29 00:59:30 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
@@ -41,7 +41,7 @@ namespace BALL
  			setGuest(*listview);	
 			listview->setSelectionMode(QAbstractItemView::ExtendedSelection);
 			connect(listview, SIGNAL(itemSelectionChanged()), this, SLOT(updateSelection()));
-			connect(listview, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(onItemClicked(QTreeWidgetItem*, int)));
+			connect(listview, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(onItemClicked(QTreeWidgetItem*, int)));
 		}
 
 
