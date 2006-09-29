@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.50.2.19 2006/09/29 10:18:02 amoll Exp $
+// $Id: molecularControl.h,v 1.50.2.20 2006/09/29 11:01:06 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -418,7 +418,7 @@ class BALL_VIEW_EXPORT MolecularControl
 		throw();
 
 	//
- 	void removeRecursive_(QTreeWidgetItem* item)
+ 	inline void removeRecursive_(QTreeWidgetItem* item)
  		throw();
 
 	// only for Python Interface

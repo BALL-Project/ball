@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.47 2006/09/29 10:17:55 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.48 2006/09/29 11:00:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -667,10 +667,25 @@ namespace BALL
 				return 0;
 			}
 
-			nr_items_removed_ = 1;
-			removeRecursive_(to_find->second);
 			context_composite_ = 0;
 			context_item_ = 0;
+			nr_items_removed_ = 1;
+
+			bool enabled = !ignore_messages_;
+			enableUpdates_(false);
+
+			if (composite.isRoot() && listview->topLevelItemCount() <= 1)
+			{
+				composite_to_item_.clear();
+				QTreeWidgetItem* item = to_find->second;	
+				listview->takeTopLevelItem(0);
+				delete item;
+				enableUpdates_(enabled);
+				return 1;
+			}
+
+			removeRecursive_(to_find->second);
+			enableUpdates_(enabled);
 			return nr_items_removed_;
 		}
 
@@ -800,8 +815,6 @@ namespace BALL
 			for (; +roots_it; roots_it++)
 			{
 				getMainControl()->update(**roots_it, true);
-//    				removeComposite(**roots_it);
-//    				addComposite(**roots_it);
 			}
 
 		}
