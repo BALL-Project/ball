@@ -5,6 +5,7 @@
 
 #include <BALL/VIEW/DIALOGS/fieldLinesDialog.h>
 #include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 
 #include <QtGui/qlabel.h>
 
@@ -73,8 +74,17 @@ void FieldLinesDialog::accept()
 	}
 	catch(...)
 	{
+		getMainControl()->setStatusbarText("No valid floating point numbers", true);
 		return;
 	}
+
+	if (Maths::isZero(getTolerance()))
+	{
+		getMainControl()->setStatusbarText("Tolerance too low!", true);
+		Log.error() << String("Tolerance: ") + String(getTolerance()) + " !" << std::endl;
+		return;
+	}
+
 
 	QDialog::accept();
 }

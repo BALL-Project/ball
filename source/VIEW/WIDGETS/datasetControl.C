@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.50 2006/09/29 15:51:18 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.51 2006/09/29 17:12:18 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -1029,6 +1029,7 @@ namespace BALL
 		FieldLinesDialog dialog;
 		if (!dialog.exec()) return;
 
+		field_line_errors_ = 0;
 		tolerance_ = dialog.getTolerance();
 		atom_distance_ = dialog.getAtomsDistance();
 		icosaeder_steps_ = dialog.getIcosaederInterplationSteps();
@@ -1042,6 +1043,25 @@ namespace BALL
 		RegularData3D* potential_grid = 0;
 		if (get3DGrids().size()) potential_grid = (*get3DGrids().begin()).first;
 		
+		TRegularData3D<Vector3>::CoordinateType spacing = vector_grid_->getSpacing();
+		TRegularData3D<Vector3>::IndexType         size = vector_grid_->getSize();
+		if (Maths::isZero(spacing.x) ||
+				Maths::isZero(spacing.y) ||
+				Maths::isZero(spacing.z))
+		{
+			setStatusbarText("Aborting, since vector grid has a spacing of 0!", true);
+			return;
+		}
+
+		if (size.x == 0 ||
+				size.y == 0 ||
+				size.z == 0)
+		{
+			setStatusbarText("Aborting, since vector grid has a size of 0!", true);
+			return;
+		}
+
+
 		AtomContainer* ac = (AtomContainer*) item_to_composite_[context_item_];
 		if (ac == 0)
 		{
@@ -1082,6 +1102,24 @@ namespace BALL
 			if (potential_grid == 0) 
 			{
 				setStatusbarText("No potential grid loaded, aborting...", true);
+				return;
+			}
+
+			TRegularData3D<Vector3>::CoordinateType pspacing = potential_grid->getSpacing();
+			TRegularData3D<float>::IndexType        psize = potential_grid->getSize();
+			if (Maths::isZero(pspacing.x) ||
+					Maths::isZero(pspacing.y) ||
+					Maths::isZero(pspacing.z))
+			{
+				setStatusbarText("Aborting, since grid has a spacing of 0!", true);
+				return;
+			}
+
+			if (psize.x == 0 ||
+					psize.y == 0 ||
+					psize.z == 0)
+			{
+				setStatusbarText("Aborting, since grid has a size of 0!", true);
 				return;
 			}
 
@@ -1136,6 +1174,7 @@ namespace BALL
 
 		getMainControl()->insert(*rep);
 		getMainControl()->update(*rep);
+		setStatusbarText(String("Finished field line calculations. ") + String(field_line_errors_) + " errorous positions tried.", true);
 	}
 
 	void DatasetControl::createFieldLine_(const Vector3& point, Representation& rep)
@@ -1160,8 +1199,9 @@ namespace BALL
 				p--;
 			}
 
-			if (p < 2)
+			if (p < 3)
 			{
+				field_line_errors_ ++;
 				delete line;
 				return;
 			}
@@ -1312,7 +1352,7 @@ namespace BALL
 
 		float min_spacing = std::min(std::min(spacing.x, spacing.y), spacing.z);
 		float rho = 0.9; // chose sensible values
-		float lower_limit = min_spacing * 0.0001;
+		float lower_limit = min_spacing * 0.00001;
 		float h = min_spacing;// * 0.1;
 
 		// use interpolation_steps interpolation points
@@ -1333,12 +1373,23 @@ namespace BALL
 			scaling.y = fabs(point.y) + fabs(grad_current.y*h) + 1e-30;
 			scaling.z = fabs(point.z) + fabs(grad_current.z*h) + 1e-30;
 
+			if (Maths::isZero(tolerance_))
+			{
+				logString("Value 0 for tolerance of field line! Aborting...\n");
+				return;
+			}
+
+			if (Maths::isZero(h))
+			{
+				logString("Value 0 for h of field line! Aborting...\n");
+				return;
+			}
+
+
 			if (Maths::isZero(scaling.x) ||
 					Maths::isZero(scaling.y) ||
-					Maths::isZero(scaling.z) ||
-					Maths::isZero(tolerance_))
+					Maths::isZero(scaling.z))
 			{
-				BALLVIEW_DEBUG;
 				return;
 			}
 
@@ -1396,7 +1447,7 @@ namespace BALL
 				{
 					h /= 2.;
 					// horrible heuristic... :-)
-					if (fabs(h) < 1e-10)
+					if (fabs(h) < 1e-7)
 					{
 						return;
 					}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19.2.17 2006/06/29 12:11:47 amoll Exp $
+// $Id: datasetControl.h,v 1.19.2.18 2006/09/29 17:12:45 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -245,6 +245,7 @@ namespace BALL
 			Size interpolation_steps_;
 			Size icosaeder_steps_;
 			float atom_distance_;
+			Size field_line_errors_;
 		};
 		
 } } // namespaces
