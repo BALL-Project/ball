@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.45 2006/09/29 00:49:19 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.46 2006/09/29 09:10:31 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -30,13 +30,41 @@ namespace BALL
 	namespace VIEW
 	{
 
+		MolecularControl::MyTreeWidgetItem::MyTreeWidgetItem(QTreeWidget* parent,
+																												 QStringList& sl, 
+																												 Composite* c)
+
+			: QTreeWidgetItem(parent, sl),
+				composite(c)
+		{
+			init_();
+		}
+
+		MolecularControl::MyTreeWidgetItem::MyTreeWidgetItem(QTreeWidgetItem* parent, 
+																												 QStringList& sl, 
+																												 Composite* c)
+			: QTreeWidgetItem(parent, sl),
+				composite(c)
+		{
+			init_();
+		}
+
+		void MolecularControl::MyTreeWidgetItem::init_()
+		{
+			setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+			
+			// force QT to show checkboxes!
+			setCheckState(2, Qt::Checked);
+			if (!composite->isSelected()) setCheckState(2, Qt::Unchecked);
+		}
+					
+
+
 		MolecularControl::MolecularControl(const MolecularControl& mc)
 			throw()
 			: GenericControl(mc)
 		{
 		}
-
-					
 
 		MolecularControl::MolecularControl(QWidget* parent, const char* name)
 			throw()
@@ -227,47 +255,43 @@ namespace BALL
 
 					case CompositeMessage::CHANGED_COMPOSITE_HIERARCHY:
 					{
-						List<Composite*> open_items;
-						std::map<QTreeWidgetItem*, Composite*>::iterator it = item_to_composite_.begin();
-						for (; it != item_to_composite_.end(); ++it)
+						HashSet<Composite*> open_items;
+						HashSet<Composite*> highlighted;
+						QTreeWidgetItemIterator qit(listview);
+						while (*qit != 0)
 						{
-							if (listview->isItemExpanded((*it).first))
+							if (listview->isItemExpanded(*qit))
 							{
-								open_items.push_back((*it).second);
+								open_items.insert((*(MyTreeWidgetItem*)*qit).composite);
 							}
-						}
 
-						List<Composite*> highlighted;
-						it = item_to_composite_.begin();
-						for (; it != item_to_composite_.end(); ++it)
-						{
-							if (listview->isItemSelected((*it).first))
+							if (listview->isItemSelected(*qit))
 							{
-								highlighted.push_back((*it).second);
+								highlighted.insert((*(MyTreeWidgetItem*)*qit).composite);
 							}
+
+							qit++;
 						}
 
 						removeComposite(composite_message->getComposite()->getRoot());
 						addComposite(composite_message->getComposite()->getRoot());
 
-						List<Composite*>::Iterator lit = open_items.begin();
-						std::map<Composite*, QTreeWidgetItem*>::iterator to_find;
-						for (; lit != open_items.end(); lit++)
-						{
-							to_find = composite_to_item_.find(*lit);
-							if (to_find == composite_to_item_.end()) continue;
-
-							listview->expandItem(to_find->second);
-						}
-
 						list<QTreeWidgetItem*> item_list;
-						lit = highlighted.begin();
-						for (; lit != highlighted.end(); lit++)
+						qit = QTreeWidgetItemIterator(listview);
+						while (*qit != 0)
 						{
-							to_find = composite_to_item_.find(*lit);
-							if (to_find == composite_to_item_.end()) continue;
+							Composite* com = ((MyTreeWidgetItem*) *qit)->composite;
+							if (open_items.has(com))
+							{
+								listview->expandItem(*qit);
+							}
 
-							item_list.push_back(to_find->second);
+							if (highlighted.has(com))
+							{
+								item_list.push_back(*qit);
+							}
+
+							qit++;
 						}
 
 						listview->selectItems(item_list);
@@ -511,7 +535,7 @@ namespace BALL
 					continue;
 				}
 
-				selected_.push_back(item_to_composite_[item]);
+				selected_.push_back(((MyTreeWidgetItem*) item)->composite);
 			}
 
 			if (selected_.size() > 0) context_composite_ = *selected_.begin();
@@ -542,8 +566,8 @@ namespace BALL
 			QList<QTreeWidgetItem *> items = listview->selectedItems();
 			if (items.size() == 0) return;
 
-			QTreeWidgetItem* item = *items.begin();
-			Composite* composite = item_to_composite_[item];
+			MyTreeWidgetItem* item = (MyTreeWidgetItem*)*items.begin();
+			Composite* composite = item->composite;
 
 			// create the context menu
 			if (composite != 0)
@@ -555,28 +579,6 @@ namespace BALL
 
 			// show the context menu if it is not empty
 			context_menu_.popup(mapToGlobal(pos));
-		}
-
-
-		void MolecularControl::selectedComposite_(Composite* composite, bool state)
-		{
-			if (composite->isSelected() == state) return;
-
-			Qt::CheckState cstate = Qt::Unchecked;
-			if (state) cstate = Qt::Checked;
-			QTreeWidgetItemIterator qit(composite_to_item_[composite]);
-			while (*qit)
-			{
-				(*qit)->setCheckState(2, cstate);
-				qit++;
-			}
-
-			
-			CompositeMessage::CompositeMessageType id = CompositeMessage::DESELECTED_COMPOSITE;
-
-			if (state) id = CompositeMessage::SELECTED_COMPOSITE;
-
-			notify_(new CompositeMessage(*composite, id));
 		}
 
 
@@ -654,7 +656,7 @@ namespace BALL
 		Size MolecularControl::removeComposite(Composite& composite)
 			throw()
 		{
-			std::map<Composite*, QTreeWidgetItem*>::iterator to_find = 
+			std::map<Composite*, MyTreeWidgetItem*>::iterator to_find = 
 				composite_to_item_.find(&composite);
 
 			if (to_find == composite_to_item_.end())
@@ -674,8 +676,7 @@ namespace BALL
 		void MolecularControl::removeRecursive_(QTreeWidgetItem* item)
 			throw()
 		{
-			composite_to_item_.erase(item_to_composite_[item]);
-			item_to_composite_.erase(item);
+			composite_to_item_.erase(((MyTreeWidgetItem*)item)->composite);
 
 			QTreeWidgetItem* child = item->child(0);
 			while (child != 0)
@@ -721,7 +722,7 @@ namespace BALL
 
 			list<QTreeWidgetItem*> items;
 			List<Composite*>::ConstIterator sit = selection.begin();
-			std::map<Composite*, QTreeWidgetItem*>::iterator fit;
+			std::map<Composite*, MyTreeWidgetItem*>::iterator fit;
 			for (; sit != selection.end(); ++sit)
 			{
 				fit = composite_to_item_.find(*sit);
@@ -742,7 +743,7 @@ namespace BALL
 			QTreeWidgetItemIterator qit(listview);
 			while (*qit != 0)
 			{
-				Composite* c = item_to_composite_[*qit];
+				Composite* c = ((MyTreeWidgetItem*)*qit)->composite;
 				if (c->isSelected())
 				{
 					(*qit)->setCheckState(2, Qt::Checked);
@@ -754,34 +755,6 @@ namespace BALL
 				qit++;
 			}
 
-			/*
-			ignoreCheckChanges_(true);
-			std::map<Composite*, QTreeWidgetItem*>::iterator cit = composite_to_item_.begin();
-			for (; cit != composite_to_item_.end(); ++cit)
-			{
-				QTreeWidgetItem* const item = (*cit).second;
- 				item->setCheckState(2, Qt::Unchecked);
-			}
-
-			const HashSet<Composite*>& selection = getMainControl()->getSelection();
-			HashSet<Composite*>::ConstIterator sit = selection.begin();
-			std::map<Composite*, QTreeWidgetItem*>::iterator to_find;
-			for (; +sit; ++sit)
-			{
-				to_find = composite_to_item_.find(*sit);
-				if (to_find == composite_to_item_.end()) continue;
-				to_find->second->setCheckState(2, Qt::Checked);
-				Composite::ChildCompositeIterator cit = (**sit).beginChildComposite();
-				std::map<Composite*, QTreeWidgetItem*>::iterator fit;
-				for (; +cit; ++cit)
-				{
-					fit = composite_to_item_.find(&*cit);
-					if (fit == composite_to_item_.end()) continue;
-					
-					fit->second->setCheckState(2, Qt::Checked);
-				}
-			}
-*/
 			setStatusbarText(String(getMainControl()->getSelection().size()) + " objects selected.");
 			ignoreCheckChanges_(false);
 		}
@@ -972,27 +945,20 @@ namespace BALL
 			sl << name << type;
 
 			// create a new list item
-			QTreeWidgetItem* new_item = 0;
+			MyTreeWidgetItem* new_item = 0;
 
 			// is this a root item?
 			if (parent == 0)
 			{
-				new_item = new QTreeWidgetItem(listview, sl);
+				new_item = new MyTreeWidgetItem(listview, sl, &composite);
 			} 
 			else 
 			{
 				// no, insert into the current item
-				new_item = new QTreeWidgetItem(parent, sl);
+				new_item = new MyTreeWidgetItem(parent, sl, &composite);
 			}
 
-			new_item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-			
-			// force QT to show checkboxes!
-			new_item->setCheckState(2, Qt::Checked);
-			if (!composite.isSelected()) new_item->setCheckState(2, Qt::Unchecked);
-
 			composite_to_item_[&composite] = new_item;
-			item_to_composite_[new_item] = &composite;
 			recurseGeneration_(new_item, composite);
 
 			return new_item;
@@ -1023,19 +989,21 @@ namespace BALL
 
 		void MolecularControl::collapseAll()
 		{
-			std::map<QTreeWidgetItem*, Composite*>::iterator it = item_to_composite_.begin();
-			for (; it != item_to_composite_.end(); ++it)
+			QTreeWidgetItemIterator qit(listview);
+			while(*qit != 0)
 			{
-				listview->collapseItem((*it).first);
+				listview->collapseItem(*qit);
+				qit++;
 			}
 		}
 
 		void MolecularControl::expandAll()
 		{
-			std::map<QTreeWidgetItem*, Composite*>::iterator it = item_to_composite_.begin();
-			for (; it != item_to_composite_.end(); ++it)
+			QTreeWidgetItemIterator qit(listview);
+			while(*qit != 0)
 			{
-				listview->expandItem((*it).first);
+				listview->expandItem(*qit);
+				qit++;
 			}
 		}
 
@@ -1265,7 +1233,7 @@ namespace BALL
 
 			HashSet<Composite*> selection = getMainControl()->getSelection();
 			HashSet<Composite*>::Iterator sit = selection.begin();
-			std::map<Composite*, QTreeWidgetItem*>::iterator fit;
+			std::map<Composite*, MyTreeWidgetItem*>::iterator fit;
 			list<QTreeWidgetItem*> items;
 			for (; +sit; ++sit)
 			{
@@ -1406,14 +1374,14 @@ namespace BALL
 			}
 
 			List<Composite*> l;
-			l.push_back(item_to_composite_[item]);
+			l.push_back(((MyTreeWidgetItem*)item)->composite);
 			newSelection_(l, checked);
 		}
 
 		void MolecularControl::showAtomOverview()
 		{
 			AtomOverview ao;
-			ao.setParent(dynamic_cast<AtomContainer*>(item_to_composite_[context_item_]));
+			ao.setParent(dynamic_cast<AtomContainer*>(((MyTreeWidgetItem*)context_item_)->composite));
 			ao.exec();
 		}
 
@@ -1421,7 +1389,7 @@ namespace BALL
 		{
 			AtomOverview ao;
 			ao.showOnlySelection(true);
-			ao.setParent(dynamic_cast<AtomContainer*>(item_to_composite_[context_item_]));
+			ao.setParent(dynamic_cast<AtomContainer*>(((MyTreeWidgetItem*)context_item_)->composite));
 			ao.exec();
 		}
 

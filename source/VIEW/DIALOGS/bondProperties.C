@@ -141,9 +141,14 @@ void BondProperties::focusAtom()
 	{
 		return;
 	}
+
 	MolecularControl& mc = *(MolecularControl*) parent_;
+	List<Composite*> list;
+	list.push_back(atom_);
+	mc.highlight(list);
+	if (atom_->isSelected()) mc.deselect();
+	else 									   mc.select();
 	mc.context_composite_ = atom_;
-	mc.selectedComposite_(atom_, !atom_->isSelected());
 	mc.centerCamera();
 }
 
@@ -154,10 +159,15 @@ void BondProperties::focusPartner()
 	{
 		return;
 	}
-	MolecularControl& mc = *(MolecularControl*) parent_;
+
 	Atom* partner = atom_->getBond(bond_box->currentIndex())->getPartner(*atom_);
+	MolecularControl& mc = *(MolecularControl*) parent_;
+	List<Composite*> list;
+	list.push_back(partner);
+	mc.highlight(list);
+	if (partner->isSelected()) mc.deselect();
+	else 									     mc.select();
 	mc.context_composite_ = partner;
-	mc.selectedComposite_(partner, !partner->isSelected());
 	mc.centerCamera();
 }
 

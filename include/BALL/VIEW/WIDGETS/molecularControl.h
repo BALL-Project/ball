@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.50.2.17 2006/09/29 00:59:35 amoll Exp $
+// $Id: molecularControl.h,v 1.50.2.18 2006/09/29 09:10:24 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -46,6 +46,21 @@ class BondProperties;
 class BALL_VIEW_EXPORT MolecularControl
 	: public GenericControl
 {			
+	// for internal usage only:
+	class MyTreeWidgetItem
+		: public QTreeWidgetItem
+	{
+		public:
+
+			MyTreeWidgetItem(QTreeWidget* parent, QStringList& sl, Composite* composite);
+
+			MyTreeWidgetItem(QTreeWidgetItem* parent, QStringList& sl, Composite* composite);
+
+			void init_();
+
+			Composite* composite;
+	};
+
 	///
 	enum MolecularMenuEntries
 	{
@@ -336,10 +351,6 @@ class BALL_VIEW_EXPORT MolecularControl
 	///
 	void buildContextMenu_();
 
-	/*_ Method is called if checkbox of an item is clicked.\par
-	*/
-	void selectedComposite_(Composite* composite, bool state);
-
 	/** Set the selection of the checkboxes and the opening of the tree 
 			according to the selection in the MainControl.
 			\param open true means, that the item tree is opend and closed according to the changes
@@ -452,8 +463,7 @@ class BALL_VIEW_EXPORT MolecularControl
 
 	ModelType 			selected_model_;
 	ColoringMethod  selected_coloring_method_;
-	std::map<QTreeWidgetItem*, Composite*> item_to_composite_;
-	std::map<Composite*, QTreeWidgetItem*> composite_to_item_;
+	std::map<Composite*, MyTreeWidgetItem*> composite_to_item_;
 
 	// let cut know to delete the entries, set by deleteCurrentItems()
 	bool 						was_delete_;
