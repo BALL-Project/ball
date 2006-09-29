@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.40.2.15 2006/07/23 09:03:49 amoll Exp $
+// $Id: common.h,v 1.40.2.16 2006/09/29 15:55:03 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -428,7 +428,7 @@ namespace BALL
 
 		/// BALLView Debug macro
 		#define BALLVIEW_DEBUG logString(String("A problem occured in ") + __FILE__ + " " + \
-													 String(__LINE__) + ".  Please notify us per mail: ball@bioinf.uni-sb.de");
+													 String(__LINE__) + ".  Please notify us per mail: ball@bioinf.uni-sb.de\n");
 
 	
 		BALL_VIEW_EXPORT void processDropEvent(QDropEvent* e);

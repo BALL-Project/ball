@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.49 2006/09/29 15:24:26 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.50 2006/09/29 15:51:18 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -1332,6 +1332,15 @@ namespace BALL
 			scaling.x = fabs(point.x) + fabs(grad_current.x*h) + 1e-30;
 			scaling.y = fabs(point.y) + fabs(grad_current.y*h) + 1e-30;
 			scaling.z = fabs(point.z) + fabs(grad_current.z*h) + 1e-30;
+
+			if (Maths::isZero(scaling.x) ||
+					Maths::isZero(scaling.y) ||
+					Maths::isZero(scaling.z) ||
+					Maths::isZero(tolerance_))
+			{
+				BALLVIEW_DEBUG;
+				return;
+			}
 
 			// repeat the Runge-Kutta until the step size is either accepted or completely rejected
 			bool accepted = false;
