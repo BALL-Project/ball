@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.32 2006/09/08 15:35:42 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.33 2006/09/29 12:11:53 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -527,20 +527,23 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			getSelection().erase(&composite);
 			
 			// remove childs of composite from selection 
-			List<Composite*> to_remove;
-			HashSet<Composite*>::Iterator cit = getSelection().begin();
-			for (; +cit; ++cit)
+			if (composite.countChildren() > 0)
 			{
-				if ((**cit).isDescendantOf(composite))
+				List<Composite*> to_remove;
+				HashSet<Composite*>::Iterator cit = getSelection().begin();
+				for (; +cit; ++cit)
 				{
-					to_remove.push_back(*cit);
+					if ((**cit).isDescendantOf(composite))
+					{
+						to_remove.push_back(*cit);
+					}
 				}
-			}
 
-			List<Composite*>::iterator lit = to_remove.begin();
-			for (; lit != to_remove.end(); ++lit)
-			{
-				getSelection().erase(*lit);
+				List<Composite*>::iterator lit = to_remove.begin();
+				for (; lit != to_remove.end(); ++lit)
+				{
+					getSelection().erase(*lit);
+				}
 			}
 
 			// delete the Composite
@@ -1305,7 +1308,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			control_selection_.clear();
 
-			notify_(new CompositeMessage(composite, CompositeMessage::REMOVED_COMPOSITE));
+			if (update) notify_(new CompositeMessage(composite, CompositeMessage::REMOVED_COMPOSITE));
 			remove_(composite, update, to_delete);
 
 			return true;
