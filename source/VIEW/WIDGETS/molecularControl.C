@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.48 2006/09/29 11:00:52 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.49 2006/09/29 12:44:36 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -255,6 +255,7 @@ namespace BALL
 					case CompositeMessage::CHANGED_COMPOSITE_HIERARCHY:
 					{
 						bool was_enabled = !ignore_messages_;
+						selected_.clear();
 						enableUpdates_(false);
 						HashSet<Composite*> open_items;
 						HashSet<Composite*> highlighted;
@@ -810,6 +811,7 @@ namespace BALL
 			}
 
 
+			listview->clearSelection();
  			enableUpdates_(true);
 			HashSet<Composite*>::Iterator roots_it = roots.begin();
 			for (; +roots_it; roots_it++)
@@ -1271,14 +1273,16 @@ namespace BALL
 
 		void MolecularControl::enableUpdates_(bool state)
 		{
+			if (ignore_messages_ = !state) return;
+
 			ignore_messages_ = !state;
 			listview->setUpdatesEnabled(state);
 			disconnect(listview, SIGNAL(itemSelectionChanged()), this, SLOT(updateSelection()));
 			if (!state) return;
 
-			connect(listview, SIGNAL(itemSelectionChanged()), this, SLOT(updateSelection()));
 			listview->update();
 			updateSelection();
+			connect(listview, SIGNAL(itemSelectionChanged()), this, SLOT(updateSelection()));
 		}
 
 		void MolecularControl::switchShowSecondaryStructure()
