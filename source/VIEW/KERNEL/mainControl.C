@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.33 2006/09/29 12:11:53 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.34 2006/09/29 13:04:01 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -527,7 +527,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			getSelection().erase(&composite);
 			
 			// remove childs of composite from selection 
-			if (composite.countChildren() > 0)
+			if (composite.hasChild())
 			{
 				List<Composite*> to_remove;
 				HashSet<Composite*>::Iterator cit = getSelection().begin();
