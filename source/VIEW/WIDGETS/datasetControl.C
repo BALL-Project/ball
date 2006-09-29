@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.48 2006/07/06 00:21:44 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.49 2006/09/29 15:24:26 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -120,7 +120,7 @@ namespace BALL
 			setMenuHelp("datasetControl.html#isocontour_surfaces");
 
 			grid_field_lines_ = insertMenuEntry(MainControl::TOOLS_GRID, "Render Field Lines", this,  SLOT(visualiseFieldLines_()));
-			setMenuHint("Visualise a grid per field lines");
+			setMenuHint("Visualise a gradient grid per field lines");
 
 			main_control.insertPopupMenuSeparator(MainControl::TOOLS_GRID);
 
