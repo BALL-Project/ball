@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.44 2006/09/25 15:18:52 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.45 2006/09/29 00:49:19 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -561,6 +561,16 @@ namespace BALL
 		void MolecularControl::selectedComposite_(Composite* composite, bool state)
 		{
 			if (composite->isSelected() == state) return;
+
+			Qt::CheckState cstate = Qt::Unchecked;
+			if (state) cstate = Qt::Checked;
+			QTreeWidgetItemIterator qit(composite_to_item_[composite]);
+			while (*qit)
+			{
+				(*qit)->setCheckState(2, cstate);
+				qit++;
+			}
+
 			
 			CompositeMessage::CompositeMessageType id = CompositeMessage::DESELECTED_COMPOSITE;
 
@@ -729,6 +739,22 @@ namespace BALL
 		{	
 			if (!force) open = false; // ????????
 
+			QTreeWidgetItemIterator qit(listview);
+			while (*qit != 0)
+			{
+				Composite* c = item_to_composite_[*qit];
+				if (c->isSelected())
+				{
+					(*qit)->setCheckState(2, Qt::Checked);
+				}
+				else
+				{
+					(*qit)->setCheckState(2, Qt::Unchecked);
+				}
+				qit++;
+			}
+
+			/*
 			ignoreCheckChanges_(true);
 			std::map<Composite*, QTreeWidgetItem*>::iterator cit = composite_to_item_.begin();
 			for (; cit != composite_to_item_.end(); ++cit)
@@ -755,7 +781,7 @@ namespace BALL
 					fit->second->setCheckState(2, Qt::Checked);
 				}
 			}
-
+*/
 			setStatusbarText(String(getMainControl()->getSelection().size()) + " objects selected.");
 			ignoreCheckChanges_(false);
 		}
@@ -1182,12 +1208,7 @@ namespace BALL
 		{
 			// copy list, because selection could change
 			List<Composite*> selection = selected_;
-
-			List<Composite*>::Iterator it = selection.begin();
-			for(; it != selection.end(); it++)
-			{
-				selectedComposite_(*it, true);
-			}
+			newSelection_(selection, true);
 		}
 
 
@@ -1195,12 +1216,35 @@ namespace BALL
 		{
 			// copy list, because selection could change
 			List<Composite*> selection = selected_;
+			newSelection_(selection, false);
+		}
 
-			List<Composite*>::Iterator it = selection.begin();
-			for(; it != selection.end(); it++)
+		void MolecularControl::newSelection_(List<Composite*>& sel, bool selected)
+		{
+			HashSet<Composite*> roots;
+			MainControl* mc = getMainControl();
+			
+			List<Composite*>::Iterator it = sel.begin();
+			for(; it != sel.end(); it++)
 			{
-				selectedComposite_(*it, false);
-			}	
+				roots.insert(&(*it)->getRoot());
+				if (selected)
+				{
+					mc->selectCompositeRecursive(*it, true);
+				}
+				else
+				{
+					mc->deselectCompositeRecursive(*it, true);
+				}
+			}
+			
+			setSelection_(false);
+
+			HashSet<Composite*>::Iterator rit = roots.begin();
+			for (; +rit; ++rit)
+			{
+				getMainControl()->update((**rit), false);
+			}
 		}
 
 		Size MolecularControl::applySelector(const String& expression)
@@ -1264,12 +1308,12 @@ namespace BALL
 		void MolecularControl::ignoreCheckChanges_(bool state)
 		{
 			ignore_checked_changes_ = state;
-			disconnect(listview, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(onItemClicked(QTreeWidgetItem*, int)));
+			disconnect(listview, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(onItemClicked(QTreeWidgetItem*, int)));
 			enableUpdates_(!state);
 
 			if (state) return;
 
-			connect(listview, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(onItemClicked(QTreeWidgetItem*, int)));
+			connect(listview, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(onItemClicked(QTreeWidgetItem*, int)));
 		}
 
 		void MolecularControl::switchShowSecondaryStructure()
@@ -1345,9 +1389,9 @@ namespace BALL
 			DockWidget::writePreferences(inifile);
 		}
 
-		void MolecularControl::onItemClicked(QTreeWidgetItem* item, int)
+		void MolecularControl::onItemClicked(QTreeWidgetItem* item, int col)
 		{
-			if (ignore_checked_changes_) return;
+			if (ignore_checked_changes_ || col != 2) return;
 			bool checked = (item->checkState(2) == Qt::Checked);
 
 			if (getMainControl()->isBusy())
@@ -1361,10 +1405,9 @@ namespace BALL
 				return;
 			}
 
-			Composite* c = item_to_composite_[item];
-			if (checked == c->isSelected()) return;
-
- 			selectedComposite_(c, checked);
+			List<Composite*> l;
+			l.push_back(item_to_composite_[item]);
+			newSelection_(l, checked);
 		}
 
 		void MolecularControl::showAtomOverview()
