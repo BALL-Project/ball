@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.25 2006/06/08 23:37:09 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.26 2006/09/30 00:21:39 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -252,29 +252,38 @@ namespace BALL
 
 		if (file == "") return;
 
-		setStatusbarText(String("Opening file ") + file + "...");
-
-		if (file.hasSuffix(".bvp"))
+		// workaround for drag and drop under windows: damn QT sometimes adds slashes!
+		String filename(file);
+#ifdef BALL_PLATFORM_WINDOWS
+		if (filename[0] == '/') 
 		{
-			MainControl::loadBALLViewProjectFile(file);
+			filename.trimLeft("/");
+		}
+#endif
+
+		setStatusbarText(String("Opening file ") + filename + "...");
+
+		if (filename.hasSuffix(".bvp"))
+		{
+			MainControl::loadBALLViewProjectFile(filename);
 			return;
 		}
 
 #ifdef BALL_PYTHON_SUPPORT
-		if (file.hasSuffix(".py"))
+		if (filename.hasSuffix(".py"))
 		{
- 			PyWidget::getInstance(0)->openFile(file, true);
+ 			PyWidget::getInstance(0)->openFile(filename, true);
 			return;
 		}
 #endif
 
-		if (file.hasSuffix(".dcd"))
+		if (filename.hasSuffix(".dcd"))
 		{
- 			DatasetControl::getInstance(0)->addTrajectory(file);
+ 			DatasetControl::getInstance(0)->addTrajectory(filename);
 			return;
 		}
 
-		MolecularFileDialog::getInstance(0)->openFile(file);
+		MolecularFileDialog::getInstance(0)->openFile(filename);
 	}
 
 
