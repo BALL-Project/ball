@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.2.14 2006/09/26 20:21:24 amoll Exp $
+// $Id: displayProperties.C,v 1.101.2.15 2006/09/30 00:45:39 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -731,12 +731,12 @@ void DisplayProperties::getAdvancedModelOptions_()
 void DisplayProperties::applyPreferences()
 	throw()
 {
-	advanced_options_modified_ = true;
-
 	if (rep_ == 0) 
 	{
 		return;
 	}
+
+	advanced_options_modified_ = true;
 
 	const QWidget* current_page = getMainControl()->getPreferences()->currentEntry();
 
