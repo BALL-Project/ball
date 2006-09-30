@@ -208,7 +208,7 @@
       <string>Select your own resolution level</string>
      </property>
      <property name="minimum" >
-      <number>1</number>
+      <number>5</number>
      </property>
      <property name="maximum" >
       <number>900</number>
