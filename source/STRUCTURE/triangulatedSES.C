@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSES.C,v 1.9.10.1 2006/07/22 08:36:17 amoll Exp $
+// $Id: triangulatedSES.C,v 1.9.10.2 2006/09/30 01:12:18 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
@@ -952,19 +952,28 @@ namespace BALL
 				edge->vertex_[0] = edge->vertex_[1];
 				edge->vertex_[1] = tmp;
 			}
+
 			HashSet<TrianglePoint*>::Iterator next = points.begin();
-			while ((*next == edge->vertex_[0]) || (*next == edge->vertex_[1]) ||
-						 (*next == third_point))
+			for (; +next; ++next)
 			{
-				next++;
+				TrianglePoint* tpoint = *next;
+				if (tpoint != edge->vertex_[0] && 
+						tpoint != edge->vertex_[1] &&
+						tpoint != third_point)
+				{
+					break;
+				}
 			}
+
+			if (!+next) continue;
+
 			std::list<TrianglePoint*> third;
 			third.push_back(*next);
 			normal.set(((*next)->point_-edge->vertex_[1]->point_) %
 								 ((*next)->point_-edge->vertex_[0]->point_)	);
 			test_value = normal*edge->vertex_[0]->point_;
 			next++;
-			while (next != points.end())
+			while (+next)
 			{
 				if ((*next != edge->vertex_[0]) && (*next != edge->vertex_[1]) &&
 						(*next != third_point))
