@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.4.7 2006/10/02 15:47:50 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.4.8 2006/10/02 17:01:40 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -250,9 +250,6 @@ namespace BALL
 		void setAromaticRings(const vector<HashSet<Atom*> >& rings) { aromatic_rings_ = rings;}
 		
 		///
-		void setRings(const vector<HashSet<Atom*> >& rings) { rings_ = rings;}
-
-		///
 		const vector<Bond*>& getUnassignedBonds() const { return unassigned_bonds_; }
 
 		protected:
@@ -270,25 +267,18 @@ namespace BALL
 
 		vector<HashSet<Atom*> > aromatic_systems_;
 		vector<HashSet<Atom*> > aromatic_rings_;
-		vector<HashSet<Atom*> > rings_;
 		vector<Bond*> 					unassigned_bonds_;
 
-		// temporary collection of all aromatic bonds for internal usage:
-		HashSet<Bond*> 					aromatic_bonds_;
-		HashSet<Atom*> 					aromatic_atoms_;
+		// atoms that take part in an aromatic bond:
+		HashSet<const Atom*> 		aromatic_atoms_;
 		HashMap<Atom*, Index> 	max_valence_;
 
-		// current aromatic system:
-		vector<AtomInfo> 				current_asystem_;
-
-		HashSet<Atom*> 					temp_aromatic_atoms_;
 		HashSet<Atom*> 					current_aromatic_system_;
 
+		// current aromatic system:
 		vector<AtomInfo> 				atom_infos_;
 		bool 										try_charge_;
 	};
-
-
 
 } // namespace BALL
 
