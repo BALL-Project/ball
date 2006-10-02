@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.4.14 2006/10/02 17:49:31 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.4.15 2006/10/02 18:03:24 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -1319,6 +1319,11 @@ bool Kekuliser::fixAromaticRings_()
 			if (!fixAromaticSystem_(0))
 			{
 				ok = false;
+				// we were not successfull, so reset the bonds to aromatic:
+				for (Position b = 0; b < atom_infos_.size(); p++)
+				{
+					atom_infos_[b].setOrder(Bond::ORDER__AROMATIC);
+				}
 			}
 		}
 	} // all aromatic systems
