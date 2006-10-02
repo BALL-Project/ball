@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.4.9 2006/09/22 22:58:55 amoll Exp $
+// $Id: MMFF94.C,v 1.1.4.10 2006/10/02 17:49:43 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -168,7 +168,6 @@ namespace BALL
 		// kekulise all aromatic bonds:
 //   		transformAromaticBonds_();
 		kekuliser_.setAromaticRings(aromatic_rings_);
-		kekuliser_.setRings(rings_);
 		MoleculeIterator mit = system_->beginMolecule();
 		bool kekule_error = false;
 		for (; +mit; ++mit)

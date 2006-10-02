@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.4.13 2006/10/02 15:47:57 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.4.14 2006/10/02 17:49:31 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -145,7 +145,7 @@ void AtomTyper::assignTo(Molecule& mol)
 
 	/////////////////////////////////////////////////////////////
 	// Next we iterate over all rule sets:
-	HashSet<const Atom*> to_match;
+	HashSet<const Atom*> aromatic_atoms_;
 	HashSet<Atom*>::Iterator atoms_it;
 	HashMap<String, vector<Position> >::Iterator eit = element_to_rules_.begin();
 	for (; +eit; ++eit)
@@ -158,7 +158,7 @@ void AtomTyper::assignTo(Molecule& mol)
 		bool any_atom = element == "X";
 		
 		// collect all atoms, which have the same element, as the current rule set:
-		to_match.clear();
+		aromatic_atoms_.clear();
 		atoms_it = atoms_.begin();
 		for (; +atoms_it; ++atoms_it)
 		{
@@ -168,7 +168,7 @@ void AtomTyper::assignTo(Molecule& mol)
 				// match only the atoms with the correct element for this rule
 				if (this_element == element)
 				{
-					to_match.insert(*atoms_it);
+					aromatic_atoms_.insert(*atoms_it);
 				}
 			}
 			else
@@ -176,13 +176,13 @@ void AtomTyper::assignTo(Molecule& mol)
 				// match all atoms with elements, which share a rule set with other elements
 				if (!element_to_rules_.has(this_element))
 				{
-					to_match.insert(*atoms_it);
+					aromatic_atoms_.insert(*atoms_it);
 				}
 			}
 		}
 
 		// if no atoms to be matched: continue to next rule set
-		if (to_match.size() == 0) continue;
+		if (aromatic_atoms_.size() == 0) continue;
 
 		const vector<Position>& rule_numbers = eit->second;
 		for (Index nr = (Index)rule_numbers.size() - 1; nr >= 0; nr--)
@@ -199,7 +199,7 @@ void AtomTyper::assignTo(Molecule& mol)
    #endif
 				Timer t;
 				t.start();
-				sm.match(result, mol, rules_[rule], to_match);
+				sm.match(result, mol, rules_[rule], aromatic_atoms_);
 				if (result.size() == 0) continue;
 
 				// iterate over all matched atoms, and set values accordingly:
@@ -217,7 +217,7 @@ void AtomTyper::assignTo(Molecule& mol)
 					atom.setTypeName(names_[rule]);
 					assignSpecificValues_(atom);
 					// erase the atom from the sets of atoms, that are still to be matched
-					to_match.erase(&atom);
+					aromatic_atoms_.erase(&atom);
 					atoms_.erase(&atom);
 				}
    #ifdef BALL_MMFF94_TEST
@@ -1023,38 +1023,18 @@ Kekuliser::Kekuliser()
 
 bool Kekuliser::setup(Molecule& mol)
 {
-	// atoms that take part in an aromatic bond:
-	HashSet<const Atom*> to_match;
-
 	// collect aromatic bonds and atoms to speed up SMARTS matching:
-	AtomIterator ait;
-	AtomBondIterator bit;
-	BALL_FOREACH_BOND(mol, ait, bit)
+	AtomIterator ait = mol.beginAtom();
+	for (; +ait; ++ait)
 	{
-		if (bit->getOrder() == Bond::ORDER__AROMATIC)
-		{
-			aromatic_bonds_.insert(&(*bit));
-		}
-
-		to_match.insert(bit->getFirstAtom());
-		to_match.insert(bit->getSecondAtom());
+		aromatic_atoms_.insert(&*ait);
 	}
 
-
-	// have to transform the rings into a vector of vector of atoms for the SmartsMatcher:
-	vector<vector<Atom*> > rings_vector;
-	for (Position p = 0; p < rings_.size(); p++)
-	{
-		rings_vector.push_back(vector<Atom*>());
-		HashSet<Atom*>::Iterator it = rings_[p].begin();
-		for (; +it; ++it)
-		{
-			rings_vector[p].push_back(*it);
-		}
-	}
 
 	SmartsMatcher sm;
 	// dont recalculate the smallest set of smallest rings:
+	// no ring information needed for smarts matcher:
+	vector<vector<Atom*> > rings_vector;
  	sm.setSSSR(rings_vector);
 
 	Position nr_ca = 0;
@@ -1064,7 +1044,7 @@ bool Kekuliser::setup(Molecule& mol)
 
 	//////////////////////////////////////////////////////////////
 	// fix carboxlic acid:
-	sm.match(result, mol, "[#8;D1]#6[#8;D1]", to_match);
+	sm.match(result, mol, "[#8;D1]#6[#8;D1]", aromatic_atoms_);
 
 	for (Position pos = 0; pos < result.size(); pos++)
 	{
@@ -1086,9 +1066,9 @@ bool Kekuliser::setup(Molecule& mol)
 
 		oxygen[0]->getBond(*carbon)->setOrder(Bond::ORDER__SINGLE);
 		oxygen[1]->getBond(*carbon)->setOrder(Bond::ORDER__DOUBLE);
-		to_match.erase(oxygen[0]);
-		to_match.erase(oxygen[1]);
-		to_match.erase(carbon);
+		aromatic_atoms_.erase(oxygen[0]);
+		aromatic_atoms_.erase(oxygen[1]);
+		aromatic_atoms_.erase(carbon);
 		nr_ca++;
 	}
 	
@@ -1097,7 +1077,7 @@ bool Kekuliser::setup(Molecule& mol)
 	// sm.match(result, mol, "[#7;D1]#6([#7;D1])*");
 	Size nr_am_gu = 0;
 	result.clear();
-	sm.match(result, mol, "[#7;D1]#6([#7;D1])", to_match);
+	sm.match(result, mol, "[#7;D1]#6([#7;D1])", aromatic_atoms_);
 	if (result.size() != 0)
 	{
 		for (Position pos = 0; pos < result.size(); pos++)
@@ -1120,9 +1100,9 @@ bool Kekuliser::setup(Molecule& mol)
 
 			nitrogen[0]->getBond(*carbon)->setOrder(Bond::ORDER__SINGLE);
 			nitrogen[1]->getBond(*carbon)->setOrder(Bond::ORDER__DOUBLE);
-			to_match.erase(carbon);
-			to_match.erase(nitrogen[0]);
-			to_match.erase(nitrogen[1]);
+			aromatic_atoms_.erase(carbon);
+			aromatic_atoms_.erase(nitrogen[0]);
+			aromatic_atoms_.erase(nitrogen[1]);
 			nr_am_gu++;
 		}
 	}
@@ -1132,7 +1112,7 @@ bool Kekuliser::setup(Molecule& mol)
 	result.clear();
 	Size nr_phos = 0;
 //   	sm.match(result, mol, "[p]([oD1])([oD1])([oD1])[#6,#8]");
-	sm.match(result, mol, "[P]([#8;D1])([#8;D1])([#8;D1])", to_match);
+	sm.match(result, mol, "[P]([#8;D1])([#8;D1])([#8;D1])", aromatic_atoms_);
 
 	for (Position pos = 0; pos < result.size(); pos++)
 	{
@@ -1156,33 +1136,26 @@ bool Kekuliser::setup(Molecule& mol)
 		oxygen[1]->getBond(*phosphor)->setOrder(Bond::ORDER__SINGLE);
 		oxygen[2]->getBond(*phosphor)->setOrder(Bond::ORDER__SINGLE);
 
-		to_match.erase(phosphor);
-		to_match.erase(oxygen[0]);
-		to_match.erase(oxygen[1]);
-		to_match.erase(oxygen[2]);
+		aromatic_atoms_.erase(phosphor);
+		aromatic_atoms_.erase(oxygen[0]);
+		aromatic_atoms_.erase(oxygen[1]);
+		aromatic_atoms_.erase(oxygen[2]);
 		nr_phos++;
 	}
 	
 	//////////////////////////////////////////////////////////////
 	// fix aromatic rings
+	bool ok = fixAromaticRings_();
 
 	// recollect the remaining aromatic bonds:	
-	aromatic_bonds_.clear();
+	unassigned_bonds_.clear();
+	AtomBondIterator bit;
 	BALL_FOREACH_BOND(mol, ait, bit)
 	{
 		if (bit->getOrder() == Bond::ORDER__AROMATIC)
 		{
-			aromatic_bonds_.insert(&(*bit));
+			unassigned_bonds_.push_back(&*bit);
 		}
-	}
-
-	bool ok = fixAromaticRings_();
-
-	unassigned_bonds_.clear();
-	HashSet<Bond*>::Iterator hbit = aromatic_bonds_.begin();
-	for (; +hbit; ++hbit)
-	{
-		unassigned_bonds_.push_back(*hbit);
 	}
 
 #ifdef BALL_MMFF94_TEST
@@ -1199,6 +1172,8 @@ bool Kekuliser::fixAromaticRings_()
 {
 	if (aromatic_rings_.size() == 0) return true;
 
+	bool ok = true;
+
 	getMaximumValence_();
 	calculateAromaticSystems_();
 
@@ -1210,7 +1185,22 @@ bool Kekuliser::fixAromaticRings_()
 	vector<HashSet<Atom*> >::iterator rit = aromatic_systems_.begin();
 	for (; rit != aromatic_systems_.end(); rit++)
 	{
+		// abort for strange rings:
+		if ((*rit).size() < 3)
+		{
+			Log.error() << "Kekulizer: Could not assign ring with " << (*rit).size()<< " atoms. " << std::endl;
+
+			if ((*rit).size())
+			{
+				Log.error() << (**(*rit).begin()).getFullName() << std::endl;
+			}
+			ok = false;
+			continue;
+		}
+
 		atom_infos_.clear();
+
+		bool abort_this_ring = false;
 
 		// for one aromatic system: collect all needed informations for the individual atoms:
 		HashSet<Atom*>::Iterator hit = (*rit).begin();
@@ -1218,12 +1208,13 @@ bool Kekuliser::fixAromaticRings_()
 		{
 			Atom& atom = *(Atom*)*hit;
 
+			// calculate the current valence:
 			Index curr_valence = 0;
 			AtomBondIterator bit = atom.beginBond();
 			for (; +bit; ++bit)
 			{
 				if (bit->getOrder() < 2 ||
-						bit->getOrder() > 5)
+						bit->getOrder() > 4)
 				{
 					curr_valence++;
 				}
@@ -1233,11 +1224,15 @@ bool Kekuliser::fixAromaticRings_()
 				}
 			}
 
+			// calculate the number of bonds that need order of two:
 			Index max_double = max_valence_[&atom] - curr_valence;
 			if (max_double < 0)
 			{
-				Log.error() << "Could not calculate max number of double bonds for " << atom.getFullName() << std::endl;
-				return false;
+				Log.error() << "Kekulizer: Could not calculate max number of double bonds for " << atom.getFullName() << std::endl;
+				Log.error() << "Max: "  << max_valence_[&atom] << "  Curr:  " << curr_valence << std::endl;
+				abort_this_ring = true;
+				ok = false;
+				break;
 			}
 
 			// calculate the maximum number of double bonds if atom is to be charged:
@@ -1285,29 +1280,32 @@ bool Kekuliser::fixAromaticRings_()
 			bit = atom.beginBond();
 			for (; +bit; ++bit)
 			{
-				// add all aromatic bonds only once:
+				// add aromatic bonds only once:
 				if (bit->getOrder() == Bond::ORDER__AROMATIC &&
 						*bit->getPartner(atom) > atom) 
 				{
+					// set bond order initialy to single
 					bit->setOrder(Bond::ORDER__SINGLE);
 					info.abonds.push_back(&*bit);
 				}
 			}
 
-		} // all aromatic atoms
+		} // all aromatic atoms of this ring
 
-		std::sort(current_asystem_.begin(), current_asystem_.end());
+		if (abort_this_ring) continue;
+
+		std::sort(atom_infos_.begin(), atom_infos_.end());
 
 		// put the ids of the atoms partner into a vector per AtomInfo
 		HashMap<Atom*, Position> atom_to_id;
-		for (Position p = 0; p < current_asystem_.size(); p++)
+		for (Position p = 0; p < atom_infos_.size(); p++)
 		{
-			atom_to_id[current_asystem_[p].atom] = p;
+			atom_to_id[atom_infos_[p].atom] = p;
 		}
 
-		for (Position p = 0; p < current_asystem_.size(); p++)
+		for (Position p = 0; p < atom_infos_.size(); p++)
 		{
-			AtomInfo& ai = current_asystem_[p];
+			AtomInfo& ai = atom_infos_[p];
 			for (Position b = 0; b < ai.abonds.size(); b++)
 			{
 				ai.partner_id.push_back(atom_to_id[ai.abonds[b]->getPartner(*ai.atom)]);
@@ -1318,23 +1316,26 @@ bool Kekuliser::fixAromaticRings_()
 		if (!fixAromaticSystem_(0)) 
 		{
 			try_charge_ = true;
-			if (!fixAromaticSystem_(0)) return false;
+			if (!fixAromaticSystem_(0))
+			{
+				ok = false;
+			}
 		}
 	} // all aromatic systems
 
 
-	return true;
+	return ok;
 }
 
 bool Kekuliser::fixAromaticSystem_(Position it)
 {
 	// no more bonds and no more atoms?
-	if (it == current_asystem_.size() - 1)
+	if (it >= atom_infos_.size() - 1)
 	{
 		return idealValenceAchieved_();
 	}
 
-	AtomInfo& ai = current_asystem_[it];
+	AtomInfo& ai = atom_infos_[it];
 	
 	// no aromatic bonds left?
 	if (ai.abonds.size() == 0)
@@ -1370,14 +1371,14 @@ bool Kekuliser::fixAromaticSystem_(Position it)
 
 bool Kekuliser::buildConjugatedSystem_(Position it)
 {
-	AtomInfo& ai = current_asystem_[it];
+	AtomInfo& ai = atom_infos_[it];
 
 	for (Position b = 0; b < ai.abonds.size(); b++)
 	{
 		// get the bond and partner atom:
 		Bond* bond = ai.abonds[b];
 		Position p = ai.partner_id[b];
-		AtomInfo& pi = current_asystem_[p];
+		AtomInfo& pi = atom_infos_[p];
 
 		if (pi.curr_double >= pi.max_double)
 		{
@@ -1401,10 +1402,34 @@ bool Kekuliser::buildConjugatedSystem_(Position it)
 
 void Kekuliser::calculateAromaticSystems_()
 {
-	temp_aromatic_atoms_ = aromatic_atoms_;
-	while (temp_aromatic_atoms_.size() > 0)
+	aromatic_systems_.clear();
+	aromatic_atoms_.clear();
+	// collect all aromatic ring atoms:
+	vector<HashSet<Atom*> >::iterator rit = aromatic_rings_.begin();
+	for (; rit != aromatic_rings_.end(); ++rit)
 	{
-		Atom* atom = *temp_aromatic_atoms_.begin();
+		// all atoms in current ring:
+		HashSet<Atom*>::Iterator hit = (*rit).begin();
+		for (; +hit; ++hit)
+		{
+			// all bonds of this atom:
+			AtomBondIterator bit = (**hit).beginBond();
+			for (; +bit; ++bit)
+			{
+				if (bit->getOrder() == Bond::ORDER__AROMATIC)
+				{
+					aromatic_atoms_.insert(*hit);
+					break;
+				}
+			}
+		}
+	}
+
+	// iterate over all aromatic ring atoms:
+	while (aromatic_atoms_.size() > 0)
+	{
+		// first ring aromatic atom that is still left:
+		Atom* atom = (Atom*)*aromatic_atoms_.begin();
 
 		current_aromatic_system_.clear();
 
@@ -1417,16 +1442,19 @@ void Kekuliser::calculateAromaticSystems_()
 void Kekuliser::collectSystems_(Atom& atom)
 {
 	current_aromatic_system_.insert(&atom);
-	temp_aromatic_atoms_.erase(&atom);
+	aromatic_atoms_.erase(&atom);
 
+	// all bonds of this atom:
 	AtomBondIterator abit = atom.beginBond();
 	for (; +abit; ++abit)
 	{
+		// if aromatic bond:
 		if (abit->getOrder() != Bond::ORDER__AROMATIC) continue;
 
 		Atom* partner = abit->getPartner(atom);
 		
-		if (!temp_aromatic_atoms_.has(partner)) continue;
+		// if not seen partner before:
+		if (!aromatic_atoms_.has(partner)) continue;
 
 		collectSystems_(*partner);
 	}
@@ -1436,7 +1464,7 @@ void Kekuliser::getMaximumValence_()
 {
 	max_valence_.clear();
 
-	vector<HashSet<Atom*> >::iterator rit;
+	vector<HashSet<Atom*> >::iterator rit = aromatic_rings_.begin();
 	for (; rit != aromatic_rings_.end(); rit++)
 	{
 		HashSet<Atom*>::Iterator hit = (*rit).begin();
@@ -1444,7 +1472,7 @@ void Kekuliser::getMaximumValence_()
 		{
 			Atom& atom = **hit;
 			Index max_valence = 0;
-			if (!max_valence_.has(&atom)) continue;
+			if (max_valence_.has(&atom)) continue;
 
 			Index formal_charge = (Index)atom.getFormalCharge();
 
@@ -1453,20 +1481,20 @@ void Kekuliser::getMaximumValence_()
 			switch (atomic_number)
 			{
 				case 6:
-					max_valence = 4 - (int) fabs(formal_charge);
+					max_valence = 4;// - (int) fabs(formal_charge);
 					break;
 
 				case 8:
 				case 16:
 				case 34:
 				case 52:
-					max_valence = 2 + formal_charge;
+					max_valence = 2;// + formal_charge;
 					break;
 
 				 case 7:
 				 case 15:
 				 case 33:
-					 max_valence = 3 + formal_charge;
+					 max_valence = 3;// + formal_charge;
 					 break;
 			}
 
@@ -1494,9 +1522,9 @@ void Kekuliser::getMaximumValence_()
 
 bool Kekuliser::idealValenceAchieved_()
 {
-	for (Position p = 0; p < current_asystem_.size(); p++)
+	for (Position p = 0; p < atom_infos_.size(); p++)
 	{
-		AtomInfo& ai = current_asystem_[p];
+		AtomInfo& ai = atom_infos_[p];
 		if (!try_charge_)
 		{
 			if (ai.curr_double < ai.min_double &&
