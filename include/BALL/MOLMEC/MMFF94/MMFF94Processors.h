@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.4.6 2006/09/25 15:34:50 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.4.7 2006/10/02 15:47:50 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -212,6 +212,27 @@ namespace BALL
 	///
 	class BALL_EXPORT Kekuliser
 	{
+		struct AtomInfo
+		{
+			Atom* atom;
+
+			// needed for sorting:
+			bool operator < (const AtomInfo& info) const;
+
+			vector<Bond*> abonds;
+			vector<Position> partner_id;
+
+		 	Index current_charge;
+
+			Index curr_double;
+
+			Index min_double;
+			Index max_double;
+
+			Index min_double_charged;
+			Index max_double_charged;
+		};
+
 		public:
 
 		BALL_CREATE(Kekuliser)
@@ -236,10 +257,18 @@ namespace BALL
 
 		protected:
 
-		bool fixAromaticRings_(Molecule& mol);
-		void getMaximumValence_(Molecule& mol);
-		bool idealValenceAchieved_(vector<Atom*>& aromatic_system);
+		bool fixAromaticRings_();
+		bool fixAromaticSystem_(Position it);
+		bool buildConjugatedSystem_(Position it);
+ 		bool idealValenceAchieved_();
 
+		void getMaximumValence_();
+
+		// merge aromatic rings:
+		void calculateAromaticSystems_();
+		void collectSystems_(Atom& atom);
+
+		vector<HashSet<Atom*> > aromatic_systems_;
 		vector<HashSet<Atom*> > aromatic_rings_;
 		vector<HashSet<Atom*> > rings_;
 		vector<Bond*> 					unassigned_bonds_;
@@ -247,7 +276,16 @@ namespace BALL
 		// temporary collection of all aromatic bonds for internal usage:
 		HashSet<Bond*> 					aromatic_bonds_;
 		HashSet<Atom*> 					aromatic_atoms_;
-		HashMap<Atom*, float> 	max_valence_;
+		HashMap<Atom*, Index> 	max_valence_;
+
+		// current aromatic system:
+		vector<AtomInfo> 				current_asystem_;
+
+		HashSet<Atom*> 					temp_aromatic_atoms_;
+		HashSet<Atom*> 					current_aromatic_system_;
+
+		vector<AtomInfo> 				atom_infos_;
+		bool 										try_charge_;
 	};
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.4.12 2006/09/28 14:56:08 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.4.13 2006/10/02 15:47:57 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -1009,6 +1009,14 @@ bool MMFF94ChargeProcessor::start()
 }
 
 //////////////////////////////////////////////////////////////////////
+// Kekuliser
+//////////////////////////////////////////////////////////////////////
+
+bool Kekuliser::AtomInfo::operator < (const Kekuliser::AtomInfo& info) const
+{
+	return (*atom) < *info.atom;
+}
+
 Kekuliser::Kekuliser()
 {
 }
@@ -1168,7 +1176,7 @@ bool Kekuliser::setup(Molecule& mol)
 		}
 	}
 
-	bool ok = fixAromaticRings_(mol);
+	bool ok = fixAromaticRings_();
 
 	unassigned_bonds_.clear();
 	HashSet<Bond*>::Iterator hbit = aromatic_bonds_.begin();
@@ -1187,69 +1195,319 @@ bool Kekuliser::setup(Molecule& mol)
 }
 
 
-bool Kekuliser::fixAromaticRings_(Molecule& mol)
+bool Kekuliser::fixAromaticRings_()
 {
+	if (aromatic_rings_.size() == 0) return true;
+
+	getMaximumValence_();
+	calculateAromaticSystems_();
+
+	AtomInfo temp_ai;
+	temp_ai.current_charge = 0;
+	temp_ai.curr_double = 0;
+
+	// iterate over all aromatic systems:
+	vector<HashSet<Atom*> >::iterator rit = aromatic_systems_.begin();
+	for (; rit != aromatic_systems_.end(); rit++)
+	{
+		atom_infos_.clear();
+
+		// for one aromatic system: collect all needed informations for the individual atoms:
+		HashSet<Atom*>::Iterator hit = (*rit).begin();
+		for (; +hit; ++hit)
+		{
+			Atom& atom = *(Atom*)*hit;
+
+			Index curr_valence = 0;
+			AtomBondIterator bit = atom.beginBond();
+			for (; +bit; ++bit)
+			{
+				if (bit->getOrder() < 2 ||
+						bit->getOrder() > 5)
+				{
+					curr_valence++;
+				}
+				else
+				{
+					curr_valence += (Index) bit->getOrder();
+				}
+			}
+
+			Index max_double = max_valence_[&atom] - curr_valence;
+			if (max_double < 0)
+			{
+				Log.error() << "Could not calculate max number of double bonds for " << atom.getFullName() << std::endl;
+				return false;
+			}
+
+			// calculate the maximum number of double bonds if atom is to be charged:
+			Index max_double_charged = max_double;
+			String esym = atom.getElement().getSymbol();
+			if (esym == "N" ||
+					esym == "S" ||
+					esym == "O")
+			{
+				bool hydrogen_bound = false;
+				AtomBondIterator abit = atom.beginBond();
+				for (; +abit; ++abit)
+				{
+					if (abit->getPartner(atom)->getElement().getAtomicNumber() == 1)
+					{
+						hydrogen_bound = true;
+						break;
+					}
+				}
+
+				if (!hydrogen_bound)
+				{
+					if (esym == "N" && curr_valence == 3 ||
+							esym == "S" && curr_valence == 2 ||
+							esym == "O" && curr_valence == 2)
+					{
+						max_double_charged ++;
+					}
+				}
+			}
+
+			Index min_double_charged = max_double;
+
+			if (esym == "N") min_double_charged = curr_valence;
+
+			atom_infos_.push_back(temp_ai);
+			AtomInfo& info = atom_infos_[atom_infos_.size() - 1];
+			info.atom = &atom;
+			info.max_double_charged = max_double_charged;
+			info.min_double_charged = min_double_charged;
+			info.min_double 				= max_double;
+			info.max_double 				= max_double;
+
+			// collect aromatic bonds for this atom:
+			bit = atom.beginBond();
+			for (; +bit; ++bit)
+			{
+				// add all aromatic bonds only once:
+				if (bit->getOrder() == Bond::ORDER__AROMATIC &&
+						*bit->getPartner(atom) > atom) 
+				{
+					bit->setOrder(Bond::ORDER__SINGLE);
+					info.abonds.push_back(&*bit);
+				}
+			}
+
+		} // all aromatic atoms
+
+		std::sort(current_asystem_.begin(), current_asystem_.end());
+
+		// put the ids of the atoms partner into a vector per AtomInfo
+		HashMap<Atom*, Position> atom_to_id;
+		for (Position p = 0; p < current_asystem_.size(); p++)
+		{
+			atom_to_id[current_asystem_[p].atom] = p;
+		}
+
+		for (Position p = 0; p < current_asystem_.size(); p++)
+		{
+			AtomInfo& ai = current_asystem_[p];
+			for (Position b = 0; b < ai.abonds.size(); b++)
+			{
+				ai.partner_id.push_back(atom_to_id[ai.abonds[b]->getPartner(*ai.atom)]);
+			}
+		}
+
+		try_charge_ = false;
+		if (!fixAromaticSystem_(0)) 
+		{
+			try_charge_ = true;
+			if (!fixAromaticSystem_(0)) return false;
+		}
+	} // all aromatic systems
+
+
 	return true;
 }
 
-void Kekuliser::getMaximumValence_(Molecule& mol)
+bool Kekuliser::fixAromaticSystem_(Position it)
 {
-	AtomIterator ait = mol.beginAtom();
-	max_valence_.clear();
-
-	for (;+ait; ++ait)
+	// no more bonds and no more atoms?
+	if (it == current_asystem_.size() - 1)
 	{
-		Atom& atom = *ait;
-		if (!aromatic_atoms_.has(&atom)) continue;
+		return idealValenceAchieved_();
+	}
 
-		float formal_charge = atom.getFormalCharge();
+	AtomInfo& ai = current_asystem_[it];
+	
+	// no aromatic bonds left?
+	if (ai.abonds.size() == 0)
+	{
+		return fixAromaticSystem_(it + 1);
+	}
 
-		Position atomic_number = atom.getElement().getAtomicNumber();
+	Index max_double = ai.max_double;
+	if (try_charge_) max_double = ai.max_double_charged;
 
-    switch (atomic_number)
-    {
-      case 6:
-				max_valence_[&atom] = 4 - fabs(formal_charge);
-        break;
+	// at full valence?
+	if (ai.curr_double == max_double)
+	{
+		if (fixAromaticSystem_(it + 1))
+		{
+			return true;
+		}
+	}
+	else // not at full valence!
+	{
+		// protonierung?
+		if (buildConjugatedSystem_(it)) return true;
+	}
 
-      case 8:
-      case 16:
-      case 34:
-      case 52:
-				max_valence_[&atom] = 2 + formal_charge;
-        break;
+	for (Position b = 0; b < ai.abonds.size(); b++)
+	{
+		ai.abonds[b]->setOrder(Bond::ORDER__SINGLE);
+	}
 
-       case 7:
-       case 15:
-       case 33:
-         max_valence_[&atom] = 3 + formal_charge;
-         break;
+	return false;
+}
+
+
+bool Kekuliser::buildConjugatedSystem_(Position it)
+{
+	AtomInfo& ai = current_asystem_[it];
+
+	for (Position b = 0; b < ai.abonds.size(); b++)
+	{
+		// get the bond and partner atom:
+		Bond* bond = ai.abonds[b];
+		Position p = ai.partner_id[b];
+		AtomInfo& pi = current_asystem_[p];
+
+		if (pi.curr_double >= pi.max_double)
+		{
+			continue;
 		}
 
-		// Nitrogen and sulfur:
-		if (atomic_number == 7 || 
-				atomic_number == 16)
-		{
-			AtomBondIterator abit = atom.beginBond();
-			for (; +abit; ++abit)
-			{
-				if (abit->getOrder() != Bond::ORDER__DOUBLE) continue;
+		bond->setOrder(Bond::ORDER__DOUBLE);
+		ai.curr_double++;
+		pi.curr_double++;
 
-				if (abit->getPartner(atom)->getElement().getAtomicNumber() == 8)
+		if (fixAromaticSystem_(it + 1)) return true;
+
+		bond->setOrder(Bond::ORDER__SINGLE);
+		ai.curr_double--;
+		pi.curr_double--;
+	}
+
+	return false;
+}
+
+
+void Kekuliser::calculateAromaticSystems_()
+{
+	temp_aromatic_atoms_ = aromatic_atoms_;
+	while (temp_aromatic_atoms_.size() > 0)
+	{
+		Atom* atom = *temp_aromatic_atoms_.begin();
+
+		current_aromatic_system_.clear();
+
+		collectSystems_(*atom);
+
+		aromatic_systems_.push_back(current_aromatic_system_);
+	}
+}
+
+void Kekuliser::collectSystems_(Atom& atom)
+{
+	current_aromatic_system_.insert(&atom);
+	temp_aromatic_atoms_.erase(&atom);
+
+	AtomBondIterator abit = atom.beginBond();
+	for (; +abit; ++abit)
+	{
+		if (abit->getOrder() != Bond::ORDER__AROMATIC) continue;
+
+		Atom* partner = abit->getPartner(atom);
+		
+		if (!temp_aromatic_atoms_.has(partner)) continue;
+
+		collectSystems_(*partner);
+	}
+}
+
+void Kekuliser::getMaximumValence_()
+{
+	max_valence_.clear();
+
+	vector<HashSet<Atom*> >::iterator rit;
+	for (; rit != aromatic_rings_.end(); rit++)
+	{
+		HashSet<Atom*>::Iterator hit = (*rit).begin();
+		for (; +hit; ++hit)
+		{
+			Atom& atom = **hit;
+			Index max_valence = 0;
+			if (!max_valence_.has(&atom)) continue;
+
+			Index formal_charge = (Index)atom.getFormalCharge();
+
+			Position atomic_number = atom.getElement().getAtomicNumber();
+
+			switch (atomic_number)
+			{
+				case 6:
+					max_valence = 4 - (int) fabs(formal_charge);
+					break;
+
+				case 8:
+				case 16:
+				case 34:
+				case 52:
+					max_valence = 2 + formal_charge;
+					break;
+
+				 case 7:
+				 case 15:
+				 case 33:
+					 max_valence = 3 + formal_charge;
+					 break;
+			}
+
+			// Nitrogen and sulfur:
+			if (atomic_number == 7 || 
+					atomic_number == 16)
+			{
+				AtomBondIterator abit = atom.beginBond();
+				for (; +abit; ++abit)
 				{
-					max_valence_[&atom] += 2;
+					if (abit->getOrder() != Bond::ORDER__DOUBLE) continue;
+
+					if (abit->getPartner(atom)->getElement().getAtomicNumber() == 8)
+					{
+						max_valence += 2;
+					}
 				}
 			}
+
+			max_valence_[&atom] = max_valence;
 		}
 	}
 }
 
-bool Kekuliser::idealValenceAchieved_(vector<Atom*>& aromatic_system)
+
+bool Kekuliser::idealValenceAchieved_()
 {
-	for (Position p = 0; p < aromatic_system.size(); p++)
+	for (Position p = 0; p < current_asystem_.size(); p++)
 	{
-		Atom& atom = *aromatic_system[p];
-		if (max_valence_[&atom] < 21)
+		AtomInfo& ai = current_asystem_[p];
+		if (!try_charge_)
+		{
+			if (ai.curr_double < ai.min_double &&
+					ai.curr_double > ai.max_double)
+			{
+				return false;
+			}
+		}
+
+		if (ai.curr_double < ai.min_double_charged &&
+				ai.curr_double > ai.max_double_charged)
 		{
 			return false;
 		}
@@ -1257,5 +1515,6 @@ bool Kekuliser::idealValenceAchieved_(vector<Atom*>& aromatic_system)
 
 	return true;
 }
+
 
 } // namespace BALL
