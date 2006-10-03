@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.4.15 2006/10/02 18:03:24 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.4.16 2006/10/03 18:38:26 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -1320,9 +1320,13 @@ bool Kekuliser::fixAromaticRings_()
 			{
 				ok = false;
 				// we were not successfull, so reset the bonds to aromatic:
-				for (Position b = 0; b < atom_infos_.size(); p++)
+				for (Position i = 0; i < atom_infos_.size(); i++)
 				{
-					atom_infos_[b].setOrder(Bond::ORDER__AROMATIC);
+					AtomInfo& ai = atom_infos_[i];
+					for (Position b = 0; b < ai.abonds.size(); b++)
+					{
+						ai.abonds[b]->setOrder(Bond::ORDER__AROMATIC);
+					}
 				}
 			}
 		}
@@ -1479,7 +1483,7 @@ void Kekuliser::getMaximumValence_()
 			Index max_valence = 0;
 			if (max_valence_.has(&atom)) continue;
 
-			Index formal_charge = (Index)atom.getFormalCharge();
+//   			Index formal_charge = (Index)atom.getFormalCharge();
 
 			Position atomic_number = atom.getElement().getAtomicNumber();
 
