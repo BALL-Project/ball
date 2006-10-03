@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.4.8 2006/10/02 17:01:40 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.4.9 2006/10/03 19:42:39 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -244,13 +244,16 @@ namespace BALL
 		virtual ~Kekuliser() {}
 
 		///
-		bool setup(Molecule& mol);
+		bool setup(Molecule& ac);
 
 		///
 		void setAromaticRings(const vector<HashSet<Atom*> >& rings) { aromatic_rings_ = rings;}
 		
 		///
 		const vector<Bond*>& getUnassignedBonds() const { return unassigned_bonds_; }
+
+		///
+		void clear();
 
 		protected:
 

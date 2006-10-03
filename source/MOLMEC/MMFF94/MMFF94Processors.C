@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.4.16 2006/10/03 18:38:26 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.4.17 2006/10/03 19:44:34 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -1553,5 +1553,17 @@ bool Kekuliser::idealValenceAchieved_()
 	return true;
 }
 
+
+void Kekuliser::clear()
+{
+	aromatic_systems_.clear();
+	aromatic_rings_.clear();
+	unassigned_bonds_.clear();
+	aromatic_atoms_.clear();
+	max_valence_.clear();
+	current_aromatic_system_.clear();
+	atom_infos_.clear();
+	try_charge_ = false;
+}
 
 } // namespace BALL
