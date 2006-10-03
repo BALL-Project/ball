@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.74 2006/09/26 20:21:25 amoll Exp $
+// $Id: scene.C,v 1.174.2.75 2006/10/03 17:17:44 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2226,26 +2226,29 @@ namespace BALL
 				QGLFormat f = format();
 				f.setSampleBuffers(true);
 				QGLPixelBuffer pbuffer(PNG_size_, f,this );
-				if (!pbuffer.makeCurrent())
+				bool pb = pbuffer.makeCurrent();
+				if (!pb)
 				{
-					setStatusbarText("PBuffer not supported, please use conventional screenshots (see Preferences)", true);
-					return false;
+					setStatusbarText("Offscreen rendering not supported, using normal screenshots", true);
+					image = grabFrameBuffer();
 				}
-
-				gl_renderer_.init(*this);
-				gl_renderer_.initSolid();
-				gl_renderer_.setSize(PNG_size_.width(), PNG_size_.height());
-				gl_renderer_.updateCamera();
-				gl_renderer_.setLights(true);
-				gl_renderer_.enableVertexBuffers(want_to_use_vertex_buffer_);
-				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-				renderRepresentations_(DIRECT_RENDERING);
-				glFlush();
-				image = pbuffer.toImage();
-				makeCurrent();
-				gl_renderer_.setSize(width(), height());
-				gl_renderer_.updateCamera();
-				gl_renderer_.setLights(true);
+				else
+				{
+					gl_renderer_.init(*this);
+					gl_renderer_.initSolid();
+					gl_renderer_.setSize(PNG_size_.width(), PNG_size_.height());
+					gl_renderer_.updateCamera();
+					gl_renderer_.setLights(true);
+					gl_renderer_.enableVertexBuffers(want_to_use_vertex_buffer_);
+					glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+					renderRepresentations_(DIRECT_RENDERING);
+					glFlush();
+					image = pbuffer.toImage();
+					makeCurrent();
+					gl_renderer_.setSize(width(), height());
+					gl_renderer_.updateCamera();
+					gl_renderer_.setLights(true);
+				}
 			}
 			else
 			{
@@ -2550,12 +2553,22 @@ namespace BALL
 
 		}
 
-		void Scene::setOffScreenRendering(bool enabled, QSize size)
+		void Scene::setOffScreenRendering(bool enabled, Size factor)
 		{
 			offscreen_rendering_ = enabled;
 			if (enabled) 
 			{
-				PNG_size_ = size;
+				Size w = width() * factor;
+				Size h = height() * factor;
+				Size max = BALL_MAX(w, h);
+				if (max <= 4096)
+				{
+					PNG_size_ = QSize(w, h);
+				}
+				else
+				{
+					PNG_size_ = QSize(4096, 4096);
+				}
 			}
 		}
 

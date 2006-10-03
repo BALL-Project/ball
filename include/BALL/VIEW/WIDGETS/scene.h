@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.15 2006/07/03 12:10:28 amoll Exp $
+// $Id: scene.h,v 1.66.2.16 2006/10/03 17:17:37 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -431,7 +431,7 @@ namespace BALL
 			virtual void setVisible(bool state);
 
 			///
-			static void setOffScreenRendering(bool enabled, QSize size = QSize());
+			void setOffScreenRendering(bool enabled, Size factor);
 
 			protected:
 
