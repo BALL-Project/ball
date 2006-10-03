@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.4.17 2006/10/03 19:44:34 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.4.18 2006/10/03 21:27:01 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -1168,19 +1168,38 @@ bool Kekuliser::setup(Molecule& mol)
 }
 
 
+void Kekuliser::dump()
+{
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+	for (Position p = 0; p < atom_infos_.size(); p++)
+	{
+		AtomInfo& ai = atom_infos_[p];
+		Log.error() << ai.atom->getFullName() << " a. Bonds: " << ai.abonds.size()
+			 << "Cur d. " << ai.curr_double 
+			 << "min d. " << ai.min_double
+			 << "max d. " << ai.max_double
+			 << "mincd. " << ai.min_double_charged 
+			 << "maxcd. " << ai.max_double_charged << std::endl;
+	}
+	Log.error() << std::endl;
+}
+
 bool Kekuliser::fixAromaticRings_()
 {
-	if (aromatic_rings_.size() == 0) return true;
+Log.error() << "#~~#   6 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 	bool ok = true;
 
-	getMaximumValence_();
 	calculateAromaticSystems_();
+	getMaximumValence_();
+
+	if (aromatic_systems_.size() == 0) return true;
 
 	AtomInfo temp_ai;
 	temp_ai.current_charge = 0;
 	temp_ai.curr_double = 0;
 
+Log.error() << "#~~#   5 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	// iterate over all aromatic systems:
 	vector<HashSet<Atom*> >::iterator rit = aromatic_systems_.begin();
 	for (; rit != aromatic_systems_.end(); rit++)
@@ -1202,6 +1221,7 @@ bool Kekuliser::fixAromaticRings_()
 
 		bool abort_this_ring = false;
 
+Log.error() << "#~~#   4 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		// for one aromatic system: collect all needed informations for the individual atoms:
 		HashSet<Atom*>::Iterator hit = (*rit).begin();
 		for (; +hit; ++hit)
@@ -1224,6 +1244,7 @@ bool Kekuliser::fixAromaticRings_()
 				}
 			}
 
+Log.error() << "#~~#   3 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			// calculate the number of bonds that need order of two:
 			Index max_double = max_valence_[&atom] - curr_valence;
 			if (max_double < 0)
@@ -1266,7 +1287,12 @@ bool Kekuliser::fixAromaticRings_()
 
 			Index min_double_charged = max_double;
 
-			if (esym == "N") min_double_charged = curr_valence;
+			if (esym == "N") 
+			{
+				if (curr_valence == 2) min_double_charged = 0;
+//   				min_double_charged = curr_valence;
+//   Log.error() << "#~~#   11 "   << curr_valence          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+			}
 
 			atom_infos_.push_back(temp_ai);
 			AtomInfo& info = atom_infos_[atom_infos_.size() - 1];
@@ -1292,7 +1318,11 @@ bool Kekuliser::fixAromaticRings_()
 
 		} // all aromatic atoms of this ring
 
-		if (abort_this_ring) continue;
+		if (abort_this_ring) 
+		{
+Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+			continue;
+		}
 
 		std::sort(atom_infos_.begin(), atom_infos_.end());
 
@@ -1312,6 +1342,7 @@ bool Kekuliser::fixAromaticRings_()
 			}
 		}
 
+		dump();
 		try_charge_ = false;
 		if (!fixAromaticSystem_(0)) 
 		{
@@ -1433,6 +1464,31 @@ void Kekuliser::calculateAromaticSystems_()
 			}
 		}
 	}
+	
+	// sometimes aromatic rings are not correctly recognized:
+	rit = rings_.begin();
+	for (; rit != rings_.end(); ++rit)
+	{
+Log.error() << "#~~#   7 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+		if (rit->getSize() > 6) continue;
+
+		// all atoms in current ring:
+		HashSet<Atom*>::Iterator hit = (*rit).begin();
+		for (; +hit; ++hit)
+		{
+			// all bonds of this atom:
+			AtomBondIterator bit = (**hit).beginBond();
+			for (; +bit; ++bit)
+			{
+				if (bit->getOrder() == Bond::ORDER__AROMATIC)
+				{
+Log.error() << "#~~#   9 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+					aromatic_atoms_.insert(*hit);
+					break;
+				}
+			}
+		}
+	}
 
 	// iterate over all aromatic ring atoms:
 	while (aromatic_atoms_.size() > 0)
@@ -1445,6 +1501,7 @@ void Kekuliser::calculateAromaticSystems_()
 		collectSystems_(*atom);
 
 		aromatic_systems_.push_back(current_aromatic_system_);
+Log.error() << "#~~#   8 "   << current_aromatic_system_.size()          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 	}
 }
 
@@ -1473,8 +1530,8 @@ void Kekuliser::getMaximumValence_()
 {
 	max_valence_.clear();
 
-	vector<HashSet<Atom*> >::iterator rit = aromatic_rings_.begin();
-	for (; rit != aromatic_rings_.end(); rit++)
+	vector<HashSet<Atom*> >::iterator rit = aromatic_systems_.begin();
+	for (; rit != aromatic_systems_.end(); rit++)
 	{
 		HashSet<Atom*>::Iterator hit = (*rit).begin();
 		for (; +hit; ++hit)

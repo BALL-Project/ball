@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.4.9 2006/10/03 19:42:39 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.4.10 2006/10/03 21:26:53 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -250,10 +250,16 @@ namespace BALL
 		void setAromaticRings(const vector<HashSet<Atom*> >& rings) { aromatic_rings_ = rings;}
 		
 		///
+		void setRings(const vector<HashSet<Atom*> >& rings) { rings_ = rings;}
+		
+		///
 		const vector<Bond*>& getUnassignedBonds() const { return unassigned_bonds_; }
 
 		///
 		void clear();
+
+		///
+		void dump();
 
 		protected:
 
@@ -270,6 +276,7 @@ namespace BALL
 
 		vector<HashSet<Atom*> > aromatic_systems_;
 		vector<HashSet<Atom*> > aromatic_rings_;
+		vector<HashSet<Atom*> > rings_;
 		vector<Bond*> 					unassigned_bonds_;
 
 		// atoms that take part in an aromatic bond:
