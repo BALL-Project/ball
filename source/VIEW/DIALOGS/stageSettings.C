@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.C,v 1.30.2.10 2006/10/03 17:17:52 amoll Exp $
+// $Id: stageSettings.C,v 1.30.2.11 2006/10/03 17:26:26 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
@@ -136,7 +136,7 @@ namespace BALL
 
 			Scene::setShowLightSources(show_lights_->isChecked());
 			Scene::setAnimationSmoothness(((float)animation_smoothness->value()) / 10.0);
-			Scene::setOffScreenRendering(offscreen_group->isChecked(), resolution_factor->value());
+			Scene::getInstance(0)->setOffScreenRendering(offscreen_group->isChecked(), resolution_factor->value());
 
 			ColorRGBA color;
 			color = getColor(capping_color);
