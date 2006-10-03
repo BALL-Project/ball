@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.23 2005/12/23 17:03:33 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.23.2.1 2006/10/03 16:15:05 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
@@ -164,6 +164,60 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
+		void AddBallAndStickModel::renderStandardBond_(const Bond& bond)
+			throw()
+		{
+			// generate two colored tube
+			TwoColoredTube *tube = new TwoColoredTube;
+			tube->setRadius(stick_radius_);
+			tube->setVertex1Address(bond.getFirstAtom()->getPosition());
+			tube->setVertex2Address(bond.getSecondAtom()->getPosition());
+			tube->setComposite(&bond);
+			geometric_objects_.push_back(tube);
+		}
+
+		void AddBallAndStickModel::renderMultipleBond_(const Bond& bond, Vector3 normal, Vector3 dir)
+		{
+			normal *= stick_radius_ / (float) 1.5;
+			float radius = stick_radius_ / (float) 2.4;
+
+			TwoColoredTube* tube = new TwoColoredTube;
+			tube->setRadius(radius);
+			tube->setComposite(&bond);
+			geometric_objects_.push_back(tube);
+				
+			TwoColoredTube* tube2 = new TwoColoredTube(*tube);
+			geometric_objects_.push_back(tube2);
+
+			if (bond.getOrder() == Bond::ORDER__DOUBLE)
+			{
+				tube->setVertex1(bond.getFirstAtom()->getPosition() - normal);
+				tube->setVertex2(bond.getSecondAtom()->getPosition() - normal);
+
+				tube2->setVertex1(bond.getFirstAtom()->getPosition() + normal);
+				tube2->setVertex2(bond.getSecondAtom()->getPosition() + normal);
+			}
+			else
+			{
+				normal *= radius;
+
+				Vector3 normal2 = dir % normal;
+				normal2.normalize();
+				normal2 *= radius;
+				
+				tube->setVertex1(bond.getFirstAtom()->getPosition() - normal - normal2);
+				tube->setVertex2(bond.getSecondAtom()->getPosition() - normal - normal2);
+				
+				tube2->setVertex1(bond.getFirstAtom()->getPosition() + normal - normal2);
+				tube2->setVertex2(bond.getSecondAtom()->getPosition() + normal - normal2);
+
+				TwoColoredTube* tube3 = new TwoColoredTube(*tube);
+				tube3->setVertex1(bond.getFirstAtom()->getPosition() + normal2);
+				tube3->setVertex2(bond.getSecondAtom()->getPosition() + normal2);
+				geometric_objects_.push_back(tube3);
+			}
+		}
+
 		void AddBallAndStickModel::visualiseBond_(const Bond& bond)
 			throw()
 		{
@@ -174,88 +228,36 @@ namespace BALL
 					bond.getOrder() < Bond::ORDER__DOUBLE 	||
 					bond.getOrder() > Bond::ORDER__AROMATIC )
 			{
-				// generate two colored tube
-				TwoColoredTube *tube = new TwoColoredTube;
-				tube->setRadius(stick_radius_);
-				tube->setVertex1Address(bond.getFirstAtom()->getPosition());
-				tube->setVertex2Address(bond.getSecondAtom()->getPosition());
-				tube->setComposite(&bond);
-				geometric_objects_.push_back(tube);
+				renderStandardBond_(bond);
 				return;
 			}
 
 			try
 			{
 				Vector3 dir = bond.getSecondAtom()->getPosition() - bond.getFirstAtom()->getPosition();
+				dir.normalize();
 				Vector3 normal = VIEW::getNormal(dir);
 
 				if (bond.getOrder() == Bond::ORDER__AROMATIC)
 				{
-					// Bonds in aromatic rings will be drawn later
-					if (ring_atoms_.has(bond.getFirstAtom()) &&
-							ring_atoms_.has(bond.getSecondAtom()))
-					{
-						return;
-					}
-
-					renderDashedBond_(*bond.getFirstAtom(), *bond.getSecondAtom(), normal, normal);
-					return;
-				}
-	
-				normal *= stick_radius_ / (float) 1.5;
-				float radius = stick_radius_ / (float) 2.4;
-
-				TwoColoredTube* tube = new TwoColoredTube;
-				tube->setRadius(radius);
-				tube->setComposite(&bond);
-				geometric_objects_.push_back(tube);
-					
-				TwoColoredTube* tube2 = new TwoColoredTube(*tube);
-				geometric_objects_.push_back(tube2);
-
-				if (bond.getOrder() == Bond::ORDER__DOUBLE)
-				{
-					tube->setVertex1(bond.getFirstAtom()->getPosition() - normal);
-					tube->setVertex2(bond.getSecondAtom()->getPosition() - normal);
-
-					tube2->setVertex1(bond.getFirstAtom()->getPosition() + normal);
-					tube2->setVertex2(bond.getSecondAtom()->getPosition() + normal);
+					renderDashedBond_(bond, normal);
 				}
 				else
 				{
-					normal *= radius;
-
-					Vector3 normal2 = dir % normal;
-					normal2.normalize();
-					normal2 *= radius;
-					
-					tube->setVertex1(bond.getFirstAtom()->getPosition() - normal - normal2);
-					tube->setVertex2(bond.getSecondAtom()->getPosition() - normal - normal2);
-					
-					tube2->setVertex1(bond.getFirstAtom()->getPosition() + normal - normal2);
-					tube2->setVertex2(bond.getSecondAtom()->getPosition() + normal - normal2);
-
-					TwoColoredTube* tube3 = new TwoColoredTube(*tube);
-					tube3->setVertex1(bond.getFirstAtom()->getPosition() + normal2);
-					tube3->setVertex2(bond.getSecondAtom()->getPosition() + normal2);
-					geometric_objects_.push_back(tube3);
+					renderMultipleBond_(bond, normal, dir);
 				}
 			}
 			catch(...)
 			{
-				Log.error() << "We have a bond with a length of 0. Can't draw this!" << std::endl;
 			}
 		}
 
 		void AddBallAndStickModel::visualiseRings_()
 			throw()
 		{
-			if (!dashed_bonds_) return;
-
-			vector<vector<Atom*> >::iterator it = rings_.begin();
-			for(; it != rings_.end(); it++)
+			for (Position r = 0; r < rings_.size(); r++)
 			{
-				vector<Atom*>& ring = *it;
+				vector<Atom*>& ring = rings_[r];
 				if (ring.size() != 5 && ring.size() != 6) continue;
 
 				vector<Atom*>::iterator ait = ring.begin();
@@ -267,46 +269,69 @@ namespace BALL
 				}
 				center /= ring.size();
 
-				for (ait = ring.begin(); ait != ring.end(); ait++)
-				{
-					AtomBondIterator bi;
-					BALL_FOREACH_ATOM_BOND(**ait, bi)
-					{
-						Atom* partner = bi->getPartner(**ait);
-						if (partner < *ait) continue;
-						
-						Vector3 n1(center - (**ait).getPosition());
-						Vector3 n2(center - partner->getPosition());
+				vector<Bond*>& bonds = ring_bonds_[r];
 
-						renderDashedBond_(**ait, *partner, n1, n2);
+				if (bonds.size() == 0) continue;
+
+				Vector3 v1 = bonds[0]->getFirstAtom()->getPosition() - 
+										 bonds[0]->getSecondAtom()->getPosition();
+					
+			
+				Vector3 normal;
+				if (bonds.size() == 1)
+				{
+					normal = VIEW::getNormal(v1);
+				}
+				else
+				{
+					Vector3 v2 = bonds[1]->getFirstAtom()->getPosition() - 
+											 bonds[1]->getSecondAtom()->getPosition();
+					normal = v1 % v2;
+				}
+
+				
+				for (Position b = 0; b < bonds.size(); b++)
+				{
+					if (bonds[b]->getOrder() == Bond::ORDER__AROMATIC)
+					{
+						renderDashedBond_(*bonds[b], normal);
+					}
+					else
+					{
+						Vector3 dir = bonds[b]->getFirstAtom()->getPosition() -
+								          bonds[b]->getSecondAtom()->getPosition();
+						try
+						{
+							dir.normalize();
+							renderMultipleBond_(*bonds[b], normal, dir);
+						}
+						catch(...)
+						{
+						}
 					}
 				}
 			}
 		}
 
-		void AddBallAndStickModel::renderDashedBond_(const Atom& a1, const Atom& a2, Vector3 n1, Vector3 n2)
+		void AddBallAndStickModel::renderDashedBond_(const Bond& bond, Vector3 n)
 			throw(Exception::DivisionByZero)
 		{
-			const Bond& bond = *a1.getBond(a2);
+			const Atom& a1 = *bond.getFirstAtom();
+			const Atom& a2 = *bond.getSecondAtom();
 
-			if (bond.getOrder() != Bond::ORDER__AROMATIC) return;
-
-			n1.normalize();
-			n2.normalize();
-			n1 *= stick_radius_ / (float) 1.5;
-			n2 *= stick_radius_ / (float) 1.5;
+ 			n *= stick_radius_ / (float) 1.5;
 
 			// render one tube with full length			
 			TwoColoredTube *tube = new TwoColoredTube;
 			tube->setRadius(stick_radius_ / (float) 2.4);
-			tube->setVertex1(a1.getPosition() - n1);
-			tube->setVertex2(a2.getPosition() - n2);
+			tube->setVertex1(a1.getPosition() - n);
+			tube->setVertex2(a2.getPosition() - n);
 			tube->setComposite(&bond);
 			geometric_objects_.push_back(tube);
 
 			// render dashed tubes
-			Vector3 v = a2.getPosition() + n2 - (a1.getPosition() + n1);
-			Vector3 last = a1.getPosition() + n1 + v / (float) 4.5;
+ 			Vector3 v = a2.getPosition() + n - (a1.getPosition() + n);
+			Vector3 last = a1.getPosition() + n + v / (float) 4.5;
 			for (Position p = 0; p < 3; p++)
 			{
 				if (p == 1)
@@ -315,15 +340,15 @@ namespace BALL
 					TwoColoredTube *tube = new TwoColoredTube;
 					tube->setRadius(stick_radius_ / (float) 2.4);
 					tube->setComposite(&bond);
-					tube->setVertex1(middle - (v / 8) + n1);
-					tube->setVertex2(middle + (v / 8) + n2);
+					tube->setVertex1(middle - (v / 8) + n);
+					tube->setVertex2(middle + (v / 8) + n);
 					geometric_objects_.push_back(tube);
 
-					Disc* disc = new Disc(Circle3(middle - (v / 8) + n1, -v, stick_radius_ / (float) 2.4));
+					Disc* disc = new Disc(Circle3(middle - (v / 8) + n, -v, stick_radius_ / (float) 2.4));
 					disc->setComposite(&a1);
 					geometric_objects_.push_back(disc);
 
-					disc = new Disc(Circle3(middle + (v / 8) + n2, v, stick_radius_ / (float) 2.4));
+					disc = new Disc(Circle3(middle + (v / 8) + n, v, stick_radius_ / (float) 2.4));
 					disc->setComposite(&a2);
 					geometric_objects_.push_back(disc);
 
@@ -334,6 +359,83 @@ namespace BALL
 
 				last += (v /4);
 			}
+		}
+
+		void AddBallAndStickModel::collectRingBonds_()
+		{
+			vector<HashSet<Atom*> > ring_atom_set;
+			for (Position i = 0; i < rings_.size(); i++)
+			{
+				ring_atom_set.push_back(HashSet<Atom*>());
+				for (Position j = 0; j < rings_[i].size(); j++)
+				{
+					ring_atom_set[i].insert(rings_[i][j]);
+				}
+			}
+
+			ring_bonds_.clear();
+			ring_bonds_.resize(rings_.size());
+
+			const Atom* second_atom_ptr = 0;
+			AtomBondConstIterator bond_it;
+
+			// for all used atoms
+			List<const Atom*>::ConstIterator atom_it;
+			for (atom_it  = getAtomList_().begin();
+					 atom_it != getAtomList_().end(); ++atom_it)
+			{
+				// for all bonds connected from first- to second atom
+				BALL_FOREACH_ATOM_BOND(**atom_it, bond_it)
+				{
+					second_atom_ptr = bond_it->getPartner(**atom_it);
+					
+					// no visualisation for hydrogen bonds
+					if (bond_it->getType() == Bond::TYPE__HYDROGEN) continue;
+
+					// use only atoms with greater handles than first atom
+					if (**atom_it > *second_atom_ptr || !getAtomSet_().has(second_atom_ptr))
+					{
+						continue;
+					}
+
+					bool special_ring = false;
+
+					if (bond_it->getOrder() > Bond::ORDER__SINGLE &&
+							(bond_it->getOrder() != Bond::ORDER__AROMATIC || dashed_bonds_))
+					{
+						for (Position p = 0; p < ring_atom_set.size(); p++)
+						{
+							if (ring_atom_set[p].has((Atom*)*atom_it) &&
+									ring_atom_set[p].has((Atom*)second_atom_ptr))
+							{
+								special_ring = true;
+								ring_bonds_[p].push_back((Bond*)&*bond_it);
+								break;
+							}
+						}
+					}
+
+					if (!special_ring)
+					{
+ 						visualiseBond_(*bond_it);
+					}
+				}
+			}
+		}
+
+
+		bool AddBallAndStickModel::createGeometricObjects()
+			throw()
+		{
+			if (!dashed_bonds_) 
+			{
+				buildBondModels_();
+				return true;
+			}
+
+			collectRingBonds_();
+			visualiseRings_();
+			return true;
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
