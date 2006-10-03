@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.23.2.1 2006/10/03 16:15:05 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.23.2.2 2006/10/03 19:07:31 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
@@ -289,6 +289,9 @@ namespace BALL
 					normal = v1 % v2;
 				}
 
+				// try to flip all normals in the same direction
+				float x1 = normal.x + normal.y + normal.z;
+				if (x1 > -x1) normal *= -1;
 				
 				for (Position b = 0; b < bonds.size(); b++)
 				{
