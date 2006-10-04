@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.42.2.4 2006/06/07 12:35:25 amoll Exp $
+// $Id: BALL.sip,v 1.42.2.5 2006/10/04 11:48:02 amoll Exp $
 //
 
 /////////////////////////
@@ -249,6 +249,7 @@
 %Include pyFragmentProcessor.sip
 %Include pyResidueProcessor.sip
 %Include pyCompositeProcessor.sip
+%Include pyRegularData3DList.sip
 
 // QSAR
 //%Include descriptor.sip

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.sip,v 1.3.2.2 2006/04/07 12:20:20 amoll Exp $
+// $Id: datasetControl.sip,v 1.3.2.3 2006/10/04 11:48:02 amoll Exp $
 //
 
 class DatasetControl
@@ -33,6 +33,7 @@ class DatasetControl
 	void updateSelection() throw();
 
 //		List<std::pair<RegularData3D*, String> > get3DGrids() throw();
+	PyRegularData3DList get3DGrids() throw();
 
 	virtual void deleteCurrentItems() throw();
 

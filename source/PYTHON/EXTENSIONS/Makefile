@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.35.2.2 2006/05/15 23:18:40 amoll Exp $
+# $Id: Makefile,v 1.35.2.3 2006/10/04 11:48:02 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -43,6 +43,7 @@ PYBALL_SOURCES = \
 	pyBALLSipHelper.C\
 	pyCompositeList.C\
 	pyRepresentationList.C\
+	pyRegularData3DList.C\
 	pyIndexList.C\
 	pyAtomList.C \
 	pyBondList.C \

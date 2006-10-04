@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyRegularData3DList.sip,v 1.1.2.1 2006/10/04 11:33:08 amoll Exp $
+// $Id: pyRegularData3DList.sip,v 1.1.2.2 2006/10/04 11:48:03 amoll Exp $
 //
 
 %MappedType PyRegularData3DList
@@ -25,9 +25,8 @@
 	for (PyRegularData3DList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
 		RegularData3D& obj = **it;
-		PyObject *inst;
-
-		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
+		PyObject *inst = (PyObject*)sipConvertFromInstance(&obj, sipClass_RegularData3D, 0);
+		if (inst == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;
