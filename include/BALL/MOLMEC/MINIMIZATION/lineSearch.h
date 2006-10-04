@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.h,v 1.20.12.3 2006/09/20 12:49:23 aleru Exp $
+// $Id: lineSearch.h,v 1.20.12.4 2006/10/04 16:13:14 aleru Exp $
 //
 
 // Line Search Minimizer: A special class for the line search minimization algorithm
@@ -21,7 +21,13 @@ namespace BALL
 			This method minimizes the energy of a system along a given 
 			direction using a two stage algorithm. It is based on
 			a cubic or quadratic interpolation method of Jorge J. More 
-			and David J. Thuente. \par
+			and David J. Thuente. See 
+	
+			J. More and D. Thuente, "Line search algorithms with guaranteed
+			sufficient decrease," ACM Transactions on Mathematical Software 20 
+			(1994), no. 3, pp. 286-307.
+	
+	
     	\ingroup  MolmecEnergyMinimizer
 	*/
 	class BALL_EXPORT LineSearch
