@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.65 2006/07/28 14:29:34 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.66 2006/10/04 19:08:57 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1848,19 +1848,21 @@ namespace BALL
 		RegularData3D::IndexType tex_size = grid.getSize();
 
 		// Generate The Texture
+		Position i = 0;
 		GLubyte* texels = new GLubyte[tex_size.x * tex_size.y * tex_size.z * BYTES_PER_TEXEL];
 		for (Position x = 0; x < tex_size.x; x++)
 		{
-			for (Position y = 0; y < tex_size.y; y++)
-			{
 				for (Position z = 0; z < tex_size.z; z++)
 				{
+			for (Position y = 0; y < tex_size.y; y++)
+			{
 					const ColorRGBA& c = map.map(grid.getData(RegularData3D::IndexType(x,y,z)));
-					const Position i = getTextureIndex_(x,y,z, tex_size.x, tex_size.y);
+//   					const Position i = getTextureIndex_(x,y,z, tex_size.x, tex_size.y);
 					texels[i + 0] = (unsigned char)c.getRed();
 					texels[i + 1] = (unsigned char)c.getGreen();
 					texels[i + 2] = (unsigned char)c.getBlue();
 					texels[i + 3] = (unsigned char)c.getAlpha();
+					i += 4;
 				}
 			}
 		}
@@ -1987,9 +1989,12 @@ namespace BALL
 		glTexGenf(GL_S,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
 		glTexGenf(GL_T,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
 		glTexGenf(GL_R,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
+//   		glTexGenfv(GL_S,GL_OBJECT_PLANE, zp);
+//   		glTexGenfv(GL_T,GL_OBJECT_PLANE, yp);
+//   		glTexGenfv(GL_R,GL_OBJECT_PLANE, xp);
 		glTexGenfv(GL_S,GL_OBJECT_PLANE, zp);
-		glTexGenfv(GL_T,GL_OBJECT_PLANE, yp);
-		glTexGenfv(GL_R,GL_OBJECT_PLANE, xp);
+		glTexGenfv(GL_T,GL_OBJECT_PLANE, xp);
+		glTexGenfv(GL_R,GL_OBJECT_PLANE, yp);
  		glEnable(GL_TEXTURE_GEN_S);
  		glEnable(GL_TEXTURE_GEN_T);
  		glEnable(GL_TEXTURE_GEN_R);
@@ -1999,8 +2004,8 @@ namespace BALL
 		glLoadIdentity();
 		const Vector3 dim = vol.x + vol.y + vol.z;
 		glScaled((double)1.0 / (double) dim.y, 
-						 (double)1.0 / (double) dim.x,
-						 (double)1.0 / (double) dim.z);
+						 (double)1.0 / (double) dim.z,
+						 (double)1.0 / (double) dim.x);
 		glMatrixMode(GL_MODELVIEW);
 
 		// render this as one slice
