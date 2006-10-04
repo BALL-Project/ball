@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.38 2006/08/19 13:54:36 oliver Exp $
+// $Id: conjugateGradient.C,v 1.38.2.1 2006/10/04 16:11:39 aleru Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -230,7 +230,8 @@ namespace BALL
 			(Option::STEP_LENGTH, Default::STEP_LENGTH); 
 
     // determine the number of atoms
-    number_of_atoms_ = (Size)force_field_->getAtoms().size(); 
+    //number_of_atoms_ = (Size)force_field_->getAtoms().size(); 
+		number_of_atoms_ = (Size)force_field_->getNumberOfMovableAtoms(); 
 
     return true;
 	}

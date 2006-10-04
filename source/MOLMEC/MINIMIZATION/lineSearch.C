@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.C,v 1.20.2.3 2006/09/06 14:07:00 aleru Exp $
+// $Id: lineSearch.C,v 1.20.2.4 2006/10/04 16:11:39 aleru Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
@@ -11,7 +11,7 @@
 #include <BALL/COMMON/limits.h>
 
 // Parameter alpha for 'sufficient energy decrease'.
-#define LINESEARCH__DEFAULT_ALPHA 1.e-3
+#define LINESEARCH__DEFAULT_ALPHA 1.e-4
 
 // Parameter beta for 'sufficient gradient reduction'.
 #define LINESEARCH__DEFAULT_BETA 0.9
@@ -192,7 +192,7 @@ namespace BALL
 		// calculate it.
 		if (!initial_gradient.isValid())
 		{
-			// Reset the atoms to the start position (lambda = 0)
+			// Reset the atoms to the start position (stp = 0)
 			atoms.resetPositions();
 
 			// Calculate the initial energy and forces
@@ -259,6 +259,7 @@ namespace BALL
 			#ifdef BALL_DEBUG
 				Log << "  LineSearch: recalculate Energy/grad @ l = " << stp << " " << std::endl;
 			#endif
+			
 			// Recalculate the gradient and energy
 			atoms.moveTo(direction, stp*scale);
 			minimizer_->updateEnergy();
@@ -440,6 +441,8 @@ namespace BALL
 	// Computes a safeguarded step for a search procedure by case differentiation 
 	// dependend on whether a minimum could already be bracketed or not.
 	// This function is based on the proposed step computation of Jorge J. More and David J. Thuente.
+	// See: J. More and D. Thuente, "Line search algorithms with guaranteed	sufficient decrease," 
+	// ACM Transactions on Mathematical Software 20 (1994), no. 3, pp. 286-307.
 	// A Fortran implementation can be found in MINPACK and MINPACK-2.
 	void LineSearch::takeStep(double &st_a, double &f_a, double &g_a, double &st_b, 
 					double &f_b, double &g_b, double &stp, double f, double g, double minstp, double maxstp)
@@ -538,7 +541,7 @@ namespace BALL
 				new_stp = (fabs(cub_stp - stp) < fabs(quad_stp - stp)) ? cub_stp : quad_stp;
 				
 				// Use the safeguards (remember: it is assumed in the bracketed case, that
-				// stp must lie in the interval between st_a and st_b).
+				// stp lies in the interval between st_a and st_b).
 				if (stp > st_a)
 				{
 					new_stp = std::min(new_stp, stp + (st_b - stp)*0.66);
@@ -614,6 +617,5 @@ namespace BALL
 		// Set the new step.
 		stp = new_stp;
 	}
-	
 
 } // namespace BALL
