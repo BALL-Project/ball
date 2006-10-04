@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: spectrum.h,v 1.14.18.3 2006/09/28 09:30:28 anne Exp $
+// $Id: spectrum.h,v 1.14.18.4 2006/10/04 13:49:41 anne Exp $
 //
 
 #ifndef BALL_NMR_SPECTRUM_H
@@ -98,6 +98,7 @@ namespace BALL
 		virtual double earthMoversDistance(const Spectrum<DataT,PeakT, PositionT>& spectrum) const; 
 		
 		virtual void convertToGaussian(); 
+		virtual void convertToLorentzian(); 
 		virtual double computeMoment(int  moment_number);
 
 		virtual void setSpacing(const PositionType& spacing);

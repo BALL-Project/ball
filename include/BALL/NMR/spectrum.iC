@@ -183,10 +183,9 @@ std::ostream& operator << (std::ostream& os, const Spectrum<RegularData2D, Peak2
 	return os;
 }
 
-
 template <>
 BALL_INLINE
-void Spectrum<RegularData1D, Peak1D>::convertToGaussian() 
+void Spectrum<RegularData1D, Peak1D>::convertToLorentzian() 
 {
 	// for all points
 	RegularData1D::IndexType index;
@@ -203,8 +202,68 @@ void Spectrum<RegularData1D, Peak1D>::convertToGaussian()
 			{	
 				separation = pos - sticks_[i].getPosition();
 				width      = sticks_[i].getWidth();
+				float l    = pow(separation, 2) / sticks_[i].getWidth();
+				intensity += 1./( 1. + l );
+			}
+			//set the value
+			data_[index] = intensity;	
+	}
+}
+
+template <>
+BALL_INLINE
+void Spectrum<RegularData2D, Peak2D>::convertToLorentzian() 
+{
+	// for all points
+	RegularData2D::IndexType index;
+	RegularData2D::IndexType size = data_.getSize();
+	for (index.x = 0; index.x < size.x; index.x++)
+	{
+		for (index.y = 0; index.y < size.y; index.y++)
+		{
+			// now compute for all peaks its contribution to this point
+			double intensity = 0.0;
+			
+			RegularData2D::CoordinateType pos = data_.getCoordinates(index);
+
+			Vector2 separation, width;
+			for (BALL::Position i = 0; i < sticks_.size(); i++)
+			{	
+				separation = pos - sticks_[i].getPosition();
+				width      = sticks_[i].getWidth();
+				float lx    = pow(separation.x, 2) / width.x; 
+				float ly    = pow(separation.y, 2) / width.y; 
+				intensity += 1./(( 1. + lx) *(1. + ly));
+			}
+			//set the value
+			data_[index] = intensity;	
+		}
+		
+	}
+}
+
+
+template <>
+BALL_INLINE
+void Spectrum<RegularData1D, Peak1D>::convertToGaussian() 
+{
+	// for all points
+	RegularData1D::IndexType index;
+	RegularData1D::IndexType size = data_.getSize();
+	for (index = 0; index < size; index++)
+	{
+			// now compute for all peaks its contribution to this point
+			double intensity = 0.0;
+			
+			RegularData1D::CoordinateType pos = data_.getCoordinates(index);
+			
+			double separation, width;
+			for (BALL::Position i = 0; i < sticks_.size(); i++)
+			{	
+				separation = pos - sticks_[i].getPosition();
+				width      = sticks_[i].getWidth();
 				float exponent     = pow(separation / width, 2);
-				intensity += sticks_[i].getIntensity()*exp(-exponent);
+				intensity += sticks_[i].getIntensity()*exp(-exponent); 
 			}
 			//set the value
 			data_[index] = intensity;	
@@ -359,9 +418,7 @@ Spectrum<RegularData1D, Peak1D> Spectrum<RegularData1D, Peak1D>::differenceSpect
 		RegularData1D::CoordinateType pos = data_.getCoordinates(index);
 		RegularData1D::CoordinateType their_pos = their_data.getCoordinates(index);
 
-		std::cout << "NR1 " << data(pos) << "  " << their_data(their_pos)<< " "  << std::endl;
 		new_data[index]	= data(pos) - their_data(their_pos);
-		std::cout << "NR2 " << data(pos) << "  " << their_data(their_pos)<< " " << 	new_data(new_data.getCoordinates(index)) << std::endl;
 	}
 	
 	return new_spectrum;

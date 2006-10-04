@@ -163,7 +163,8 @@ namespace BALL
 		{
 			case H: 
 				atomname = "H";
-				peakwidth = 0.02142;
+				//peakwidth = 0.02142; // Peter Bayers estimation
+				peakwidth = 0.0032; // this is the former BALL estimation
 				break;
 			
 			case N:
@@ -199,11 +200,9 @@ namespace BALL
 					peak.setIntensity(peak.getIntensity()+1);
 					//setAtom();
 					peaks_.push_back(peak);
-					std::cout << at_it->getName() << " " << pos << "  " << peakwidth << " " << peak.getIntensity()<< std::endl;
 				}
 			}
 		}
-		std::cout << "number of peaks: " << peaks_.size()<< std::endl;
 		return true;
 	}
 
@@ -228,10 +227,8 @@ namespace BALL
 	void ShiftModel1D::operator >> (Spectrum1D& spectrum)
 		throw()
   {
-		std::cout << "hallo" << std::endl;
      // this overwrites the parameter
   	spectrum = Spectrum1D(peaks_, origin_, dimension_, spacing_);
-		std::cout << "hallo3" << std::endl;
 
   }
 
