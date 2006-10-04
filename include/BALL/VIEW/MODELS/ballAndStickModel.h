@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.17.2.1 2006/10/03 16:14:58 amoll Exp $
+// $Id: ballAndStickModel.h,v 1.17.2.2 2006/10/04 10:04:46 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
@@ -208,12 +208,12 @@ namespace BALL
 			virtual void visualiseRings_()
 				throw();
 
-			void renderStandardBond_(const Bond& bond)
+			inline void renderStandardBond_(const Bond& bond)
 				throw();
 
-			void renderMultipleBond_(const Bond& bond, Vector3 normal, Vector3 dir);
+			inline void renderMultipleBond_(const Bond& bond, Vector3 normal, Vector3 dir);
 
-			void renderDashedBond_(const Bond& bond, Vector3 n)
+			inline void renderDashedBond_(const Bond& bond, Vector3 n)
 				throw(Exception::DivisionByZero);
 
 			void collectRingBonds_();
@@ -222,12 +222,12 @@ namespace BALL
 
 			float ball_radius_;
 			float stick_radius_;
+			float special_radius_;
 		
 			bool ball_and_stick_;
 			bool dashed_bonds_;
 
 			vector<vector<Bond*> > ring_bonds_;
-			vector<Vector3> ring_normals_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

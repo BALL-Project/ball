@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.23.2.2 2006/10/03 19:07:31 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.23.2.3 2006/10/04 10:04:42 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
@@ -100,6 +100,7 @@ namespace BALL
 			}
 
 			stick_radius_ = radius;
+			special_radius_ = radius / 2.4;
 		}
 
 		Processor::Result AddBallAndStickModel::operator() (Composite& composite)
@@ -179,10 +180,9 @@ namespace BALL
 		void AddBallAndStickModel::renderMultipleBond_(const Bond& bond, Vector3 normal, Vector3 dir)
 		{
 			normal *= stick_radius_ / (float) 1.5;
-			float radius = stick_radius_ / (float) 2.4;
 
 			TwoColoredTube* tube = new TwoColoredTube;
-			tube->setRadius(radius);
+			tube->setRadius(special_radius_);
 			tube->setComposite(&bond);
 			geometric_objects_.push_back(tube);
 				
@@ -199,11 +199,11 @@ namespace BALL
 			}
 			else
 			{
-				normal *= radius;
+				normal *= special_radius_;
 
 				Vector3 normal2 = dir % normal;
 				normal2.normalize();
-				normal2 *= radius;
+				normal2 *= special_radius_;
 				
 				tube->setVertex1(bond.getFirstAtom()->getPosition() - normal - normal2);
 				tube->setVertex2(bond.getSecondAtom()->getPosition() - normal - normal2);
@@ -324,9 +324,10 @@ namespace BALL
 
  			n *= stick_radius_ / (float) 1.5;
 
+
 			// render one tube with full length			
 			TwoColoredTube *tube = new TwoColoredTube;
-			tube->setRadius(stick_radius_ / (float) 2.4);
+			tube->setRadius(special_radius_);
 			tube->setVertex1(a1.getPosition() - n);
 			tube->setVertex2(a2.getPosition() - n);
 			tube->setComposite(&bond);
@@ -334,6 +335,7 @@ namespace BALL
 
 			// render dashed tubes
  			Vector3 v = a2.getPosition() + n - (a1.getPosition() + n);
+			Vector3 v8 = v / 8.;
 			Vector3 last = a1.getPosition() + n + v / (float) 4.5;
 			for (Position p = 0; p < 3; p++)
 			{
@@ -341,17 +343,17 @@ namespace BALL
 				{
 					Vector3 middle((a1.getPosition() - a2.getPosition()) / 2 + a2.getPosition());
 					TwoColoredTube *tube = new TwoColoredTube;
-					tube->setRadius(stick_radius_ / (float) 2.4);
+					tube->setRadius(special_radius_);
 					tube->setComposite(&bond);
-					tube->setVertex1(middle - (v / 8) + n);
-					tube->setVertex2(middle + (v / 8) + n);
+					tube->setVertex1(middle - (v8) + n);
+					tube->setVertex2(middle + (v8) + n);
 					geometric_objects_.push_back(tube);
 
-					Disc* disc = new Disc(Circle3(middle - (v / 8) + n, -v, stick_radius_ / (float) 2.4));
+					Disc* disc = new Disc(Circle3(middle - (v8) + n, -v, stick_radius_ / (float) 2.4));
 					disc->setComposite(&a1);
 					geometric_objects_.push_back(disc);
 
-					disc = new Disc(Circle3(middle + (v / 8) + n, v, stick_radius_ / (float) 2.4));
+					disc = new Disc(Circle3(middle + (v8) + n, v, stick_radius_ / (float) 2.4));
 					disc->setComposite(&a2);
 					geometric_objects_.push_back(disc);
 
