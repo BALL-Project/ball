@@ -1,14 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: strangLBFGS.C,v 1.1.2.1 2006/10/04 16:11:39 aleru Exp $
+// $Id: strangLBFGS.C,v 1.1.2.2 2006/10/05 10:01:21 aleru Exp $
 //
-// Minimize the potential energy of a system using a nonlinear conjugate 
-// gradient method with  line search
+// Minimize the potential energy of a system using an improved version
+// of the limited memory BFGS with Strang recurrences.
 
-//#include <BALL/MOLMEC/MINIMIZATION/strangLBFGS.h>
-
-#include "strangLBFGS.h"
+#include <BALL/MOLMEC/MINIMIZATION/strangLBFGS.h>
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #include <BALL/COMMON/limits.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
