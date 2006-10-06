@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.43.2.5 2006/05/15 23:18:44 amoll Exp $
+# $Id: Makefile,v 1.43.2.6 2006/10/06 14:01:22 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -37,6 +37,7 @@ CPP_SOURCES=\
 	graphFace.C\
 	graphVertex.C\
 	HBondProcessor.C\
+	kekulizer.C\
 	molecularGraph.C\
 	numericalSAS.C\
 	peptides.C\
