@@ -28,8 +28,11 @@ namespace BALL
 		//@{
 
 		enum SPECTRUM_TYPE{
-			NH = 1, 
-			CH // fachbegriff dafuer von peter erfragen
+			HSQC_NH = 1, 
+			HSQC_CH, 
+			COSY_HH, // ist noch nicht implementiert!!! muesste ueber 2 Bindungslaengen spin = 1/2 pruefen.... 
+			COSY_CH  //= HSQC_NH
+
 		};
 		
 		//@}
@@ -177,7 +180,8 @@ namespace BALL
 		*/
 		bool init_()
 			throw(Exception::FileNotFound);
-
+		
+		void createPeak_(Atom* proton, Atom* atom, float peakwidth_proton, float peakwidth_atom);
 		/*_ The spectrum peaks
 		 * */
 		std::vector<Peak2D> peaks_;	

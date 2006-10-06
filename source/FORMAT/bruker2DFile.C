@@ -74,10 +74,7 @@ namespace BALL
 	  int SIF2_   = (int) parsf2_.getIntValue( "SI"   ); // X - spacing
 	  int XDIMF1_ = (int) parsf1_.getIntValue( "XDIM" );
 	  int XDIMF2_ = (int) parsf2_.getIntValue( "XDIM" );
-std::cout << "SIF1: " << SIF1_ << "--" << parsf1_.getIntValue("SI") << parsf1_.getDoubleValue("SI") 
-					<< " SIF2: " << SIF2_ << "--" << parsf2_.getIntValue( "SI") << parsf2_.getDoubleValue( "SI")
-					<< " XDIMF1: " <<  XDIMF1_<<"--"<< parsf1_.getIntValue( "XDIM" )  << parsf1_.getDoubleValue( "XDIM" )
-					<< " XDIMF2: " << XDIMF2_<<"--"<< parsf2_.getIntValue( "XDIM" ) <<  parsf2_.getDoubleValue( "XDIM" )  << std::endl;
+
 	  // prepare the regularData
 	  //spectrum_.setXSize(SIF2_);
 	  //spectrum_.setYSize(SIF1_);
@@ -85,14 +82,12 @@ std::cout << "SIF1: " << SIF1_ << "--" << parsf1_.getIntValue("SI") << parsf1_.g
 
 	  double a = parsf2_.getDoubleValue( "OFFSET" );
 	  double b = parsf2_.getDoubleValue( "OFFSET" ) - (parsf2_.getDoubleValue( "SW_p" ) / parsf2_.getDoubleValue( "SF" ));
-std::cout << "parsf2: Offset: " << a << " b: " << b << " SW_P: " <<parsf2_.getDoubleValue( "SW_p" ) << " SF: " <<  parsf2_.getDoubleValue( "SF" ) << std::endl;
 
 		double lower_x = (a<b) ? a : b;
 		double upper_x = (a>b) ? a : b;
 		
 	  a = parsf1_.getDoubleValue( "OFFSET" );
 	  b = parsf1_.getDoubleValue( "OFFSET" ) - (parsf1_.getDoubleValue( "SW_p" ) / parsf1_.getDoubleValue( "SF" ));
-std::cout <<"parsf1: Offset: " << a << " SW_P: " << parsf1_.getDoubleValue( "SW_p" ) << " SF: " <<  parsf1_.getDoubleValue("SF") << std::endl;
 
 		double lower_y = (a<b) ? a : b;
 		double upper_y = (a>b) ? a : b;
@@ -100,9 +95,8 @@ std::cout <<"parsf1: Offset: " << a << " SW_P: " << parsf1_.getDoubleValue( "SW_
 	  //spectrum_.setLowerBound(parsf1_.getIntValue( "YMIN_p" ));
 	  //spectrum_.setUpperBound(parsf1_.getIntValue( "YMAX_p" ));
 
-		spectrum_ = RegularData2D(RegularData2D::IndexType(SIF2_, SIF1_),
-															Vector2(lower_x, lower_y), 
-															Vector2(upper_x, upper_y) - Vector2(lower_x, lower_y)); 
+		spectrum_ = RegularData2D(Vector2(lower_x, lower_y), Vector2(upper_x, upper_y), 
+															Vector2(SIF2_, SIF1_));
 
 	  // Back to the beginning of the file.
 	  f.reopen( );
@@ -122,10 +116,8 @@ std::cout <<"parsf1: Offset: " << a << " SW_P: " << parsf1_.getDoubleValue( "SW_
 					{
 						break;
 					}
-					//std::cout << "actMat:" <<  actMat << " f1:" << f1 << " f2:" << f2 << "  " <<
-					//						 "XDIM1: " << XDIMF1_ << " XDIM2: " << XDIMF2_ <<
-					//						 " numMats " << matNumF2*matNumF1 << std::endl;
-					
+
+
 read_counter += 4;
 //std::cout << read_counter << std::endl;
 					f.read(c, 4);
@@ -161,7 +153,6 @@ read_counter += 4;
 				}
 			}
 		}
-		std::cout << "end of read" << std::endl;
 	}
 
   /** Returns the shift corresponding to a position in the bitmap.

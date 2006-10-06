@@ -1,6 +1,7 @@
 #include <BALL/NMR/shiftModel2D.h>
 #include <BALL/NMR/shiftModel.h>
-
+#include <BALL/KERNEL/PTE.h>
+#include <BALL/KERNEL/bond.h>
 
 using namespace std;
 
@@ -142,91 +143,186 @@ namespace BALL
 		// compute the shift model
 		BALL::ShiftModel sm(parameters_.getFilename());
 		system_->apply(sm);
-
-		String atomname1 = "";
-		String atomname2 = "";
 		
-		// Peter Bayer proposed as peak width  
-		// for N--H 10hz/15Hz and
-		// for C--H  5Hz/15Hz
-
-		// peakwidth is meassured in ppm, since
-		// experiments were done in Hz, we convert the values 
-		// according to the formular
-		// 
-		// 		offset [Hz] = offset[ppm] * basic frequency
-		//
-		// for our prediction we assume a basic frequency of 700 MHz
-		float peakwidth1 = 0.0;
-		float	peakwidth2 = 0.0;
-		
-		if (type_ == NH)
+		if (type_== HSQC_NH  ||  type_ ==  HSQC_CH)
 		{
-			atomname1 = "H";
-			peakwidth1 = 0.02142;
-			atomname2 = "N";
-			peakwidth2 = 0.01428;
-		}
-		else if (type_ == CH)
-		{
-			atomname1 = "HA";
-			peakwidth1 = 0.02142;
-			atomname2 = "C";
-			peakwidth2 = 0.00714;
-		}
-		
-		if (atomname1== ""  || atomname2== "")
-			return true;
-		
-		for (BALL::ResidueIterator r_it = system_->beginResidue(); +r_it; ++r_it)
-		{	
-			Atom* atom1 = NULL;
-			Atom* atom2 = NULL;
-
-			// do we have atom1 and atom2 in this residue? 
-			for (BALL::AtomIterator at_it = r_it->beginAtom(); +at_it; ++at_it)
-			{
-				if (at_it->getName() == atomname1)
-				{
-					atom1 = &(*at_it);
-				}
-			
-				if (at_it->getName() == atomname2)
-				{
-					atom2 = &(*at_it);
-				}
-			}
-			
-			if (!atom1 || !atom2)
-				continue;
-
-			// we have, get the shift
-			float shift1 = atom1->getProperty(BALL::ShiftModule::PROPERTY__SHIFT).getFloat();
-			float shift2 = atom2->getProperty(BALL::ShiftModule::PROPERTY__SHIFT).getFloat();
-			
-			//store the shift in the peak list
-			Peak2D<Vector2> peak;
-			Vector2<float> pos(shift1, shift2); 
-			peak.setPosition(pos);
+			Element element_type1 = Element::UNKNOWN;
+			Element element_type2 = Element::UNKNOWN;
 
 			// Peter Bayer proposed as peak width  
 			// for N--H 10hz/15Hz and
 			// for C--H  5Hz/15Hz
-			// NOTE: peakwidth is meassured in ppm, since
+
+			// peakwidth is meassured in ppm, since
 			// experiments were done in Hz, we convert the values 
 			// according to the formular
 			// 
 			// 		offset [Hz] = offset[ppm] * basic frequency
 			//
 			// for our prediction we assume a basic frequency of 700 MHz
-			peak.setWidth(Vector2(peakwidth1,peakwidth2));
-			peak.setIntensity(peak.getIntensity()+1);
-			//setAtom();
-			peaks_.push_back(peak);
+			float peakwidth_proton = 0.0;
+			float	peakwidth_atom = 0.0;
+
+			if (type_ == HSQC_NH)
+			{
+				element_type1 = PTE[Element::H];
+				peakwidth_proton = 0.02142;
+				element_type2 = PTE[Element::N];
+				peakwidth_atom = 0.01428;
+			}
+			else if (type_ == HSQC_CH)
+			{
+				element_type1 = PTE[Element::H];
+				peakwidth_proton = 0.02142;
+				element_type2 = PTE[Element::C];
+				peakwidth_atom = 0.00714;
+			}
+
+			if (element_type1 == Element::UNKNOWN  || element_type2 == Element::UNKNOWN)
+				return true;
+
+			//look for valid atom pairs
+			for (BALL::ResidueIterator r_it = system_->beginResidue(); +r_it; ++r_it)
+			{	
+				Atom* proton = NULL;
+				Atom* atom = NULL;
+
+				// do we have atom in this residue? 
+				for (BALL::AtomIterator at_it = r_it->beginAtom(); +at_it; ++at_it)
+				{
+					
+					if (at_it->getElement() == element_type2)
+					{
+						atom = &(*at_it);
+						
+						// is it bound to a proton? 
+						Atom::BondIterator b_it = atom->beginBond();
+						for (; +b_it; ++b_it)
+						{
+							if ( b_it->getPartner(*atom)->getElement() == element_type1)
+							{
+								proton = b_it->getPartner(*atom);
+								createPeak_(proton, atom, peakwidth_proton, peakwidth_atom);
+							}
+						}
+					}
+				}
+
+			/*	if (!atom || !proton)
+					continue;
+
+				// we have, get the shift
+				float shift1 = proton->getProperty(BALL::ShiftModule::PROPERTY__SHIFT).getFloat();
+				float shift2 = atom->getProperty(BALL::ShiftModule::PROPERTY__SHIFT).getFloat();
+
+				//store the shift in the peak list
+				Peak2D<Vector2> peak;
+				Vector2<float> pos(shift1, shift2); 
+				peak.setPosition(pos);
+
+				// Peter Bayer proposed as peak width  
+				// for N--H 10hz/15Hz and
+				// for C--H  5Hz/15Hz
+				// NOTE: peakwidth is meassured in ppm, since
+				// experiments were done in Hz, we convert the values 
+				// according to the formular
+				// 
+				// 		offset [Hz] = offset[ppm] * basic frequency
+				//
+				// for our prediction we assume a basic frequency of 700 MHz
+				peak.setWidth(Vector2(peakwidth_proton,peakwidth_atom));
+				//TODO: macht das Sinn, wenn er gerade neu erzeugt wurde?? 
+				peak.setIntensity(peak.getIntensity()+1);
+				//setAtom();
+				peaks_.push_back(peak); */
+			}
+		}
+		else 
+		{
+			Element element_type1 = Element::UNKNOWN;
+			Element element_type2 = Element::UNKNOWN;
+
+			// Peter Bayer proposed as peak width  
+			// for N--H 10hz/15Hz and
+			// for C--H  5Hz/15Hz
+
+			// peakwidth is meassured in ppm, since
+			// experiments were done in Hz, we convert the values 
+			// according to the formular
+			// 
+			// 		offset [Hz] = offset[ppm] * basic frequency
+			//
+			// for our prediction we assume a basic frequency of 700 MHz
+			float peakwidth_atom1 = 0.0;
+			float	peakwidth_atom2 = 0.0;
 			
+			if (type_ == HSQC_NH)
+			{
+				element_type1 = PTE[Element::H];
+				peakwidth_atom1 = 0.02142;
+				element_type2 = PTE[Element::N];
+				peakwidth_atom2 = 0.01428;
+			}
+			else if (type_ == HSQC_CH)
+			{
+				element_type1 = PTE[Element::H];
+				peakwidth_atom1 = 0.02142;
+				element_type2 = PTE[Element::C];
+				peakwidth_atom2 = 0.00714;
+			}
+		
+			if (element_type1 == Element::UNKNOWN  || element_type2 == Element::UNKNOWN)
+				return true;
+
+	
+			//look for valid atom pairs
+			for (BALL::ResidueIterator r_it = system_->beginResidue(); +r_it; ++r_it)
+			{	
+				Atom* atom1 = NULL;
+				Atom* atom2 = NULL;
+
+				// do we have atom1 and atom2 in this residue? 
+				for (BALL::AtomIterator at_it = r_it->beginAtom(); +at_it; ++at_it)
+				{
+					if (at_it->getElement() == element_type1)
+					{
+						atom1 = &(*at_it);
+					}
+
+					if (at_it->getElement() == element_type2)
+					{
+						atom2 = &(*at_it);
+					}
+
+					if (atom1 && atom2)  
+					{
+						createPeak_(atom1, atom2,	peakwidth_atom1, 	peakwidth_atom2 );
+					}
+				}
+			}
 		}
 		return true;
 	}
+
+	void ShiftModel2D::createPeak_(Atom* atom1, Atom* atom2, float peakwidth_atom1, float peakwidth_atom2)
+	{
+//std::cout << "Atoms: atom1:" << atom1->getFullName()<< " -- atom2: " << atom2->getFullName() << std::endl; 
+		// we have, get the shift
+		float shift1 = atom1->getProperty(BALL::ShiftModule::PROPERTY__SHIFT).getFloat();
+		float shift2 = atom2->getProperty(BALL::ShiftModule::PROPERTY__SHIFT).getFloat();
+
+		//store the shift in the peak list
+		Peak2D<Vector2> peak;
+		Vector2<float> pos(shift1, shift2); 
+		peak.setPosition(pos);
+
+		peak.setWidth(Vector2(peakwidth_atom1,peakwidth_atom2));
+		//TODO: macht das Sinn, wenn er gerade neu erzeugt wurde?? 
+		peak.setIntensity(peak.getIntensity()+1);
+		//setAtom();
+		peaks_.push_back(peak);
+	}
+
 	
 	Processor::Result ShiftModel2D::operator () (Composite& composite)
 			throw()
