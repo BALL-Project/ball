@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kekulizer.C,v 1.1.2.1 2006/10/06 14:01:05 amoll Exp $
+// $Id: kekulizer.C,v 1.1.2.2 2006/10/06 19:06:25 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/kekulizer.h>
@@ -31,12 +31,7 @@ Kekuliser::Kekuliser()
 bool Kekuliser::setup(Molecule& mol)
 {
 	// collect aromatic bonds and atoms to speed up SMARTS matching:
-	AtomIterator ait = mol.beginAtom();
-	for (; +ait; ++ait)
-	{
-		aromatic_atoms_.insert(&*ait);
-	}
-
+	collectAromaticAtoms_();
 
 	SmartsMatcher sm;
 	// dont recalculate the smallest set of smallest rings:
@@ -157,6 +152,7 @@ bool Kekuliser::setup(Molecule& mol)
 	// recollect the remaining aromatic bonds:	
 	unassigned_bonds_.clear();
 	AtomBondIterator bit;
+	AtomIterator ait;
 	BALL_FOREACH_BOND(mol, ait, bit)
 	{
 		if (bit->getOrder() == Bond::ORDER__AROMATIC)
@@ -346,7 +342,7 @@ bool Kekuliser::fixAromaticRings_()
 			}
 		}
 
-		dump();
+//   		dump();
 		try_charge_ = false;
 		if (!fixAromaticSystem_(0)) 
 		{
@@ -457,7 +453,7 @@ bool Kekuliser::buildConjugatedSystem_(Position it)
 }
 
 
-void Kekuliser::calculateAromaticSystems_()
+void Kekuliser::collectAromaticAtoms_()
 {
 	aromatic_systems_.clear();
 	aromatic_atoms_.clear();
@@ -504,6 +500,11 @@ void Kekuliser::calculateAromaticSystems_()
 			}
 		}
 	}
+}
+
+void Kekuliser::calculateAromaticSystems_()
+{
+	collectAromaticAtoms_();
 
 	// iterate over all aromatic ring atoms:
 	while (aromatic_atoms_.size() > 0)
@@ -602,8 +603,7 @@ void Kekuliser::getMaximumValence_()
 
 bool Kekuliser::idealValenceAchieved_()
 {
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-dump();
+//   dump();
 	for (Position p = 0; p < atom_infos_.size(); p++)
 	{
 		AtomInfo& ai = atom_infos_[p];
