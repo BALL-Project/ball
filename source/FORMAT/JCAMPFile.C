@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.C,v 1.19 2005/12/23 17:02:39 amoll Exp $
+// $Id: JCAMPFile.C,v 1.19.10.1 2006/10/06 15:48:10 anne Exp $
 //
 
 
@@ -46,6 +46,7 @@ namespace BALL
 	void JCAMPFile::read()
 		throw(Exception::ParseError)
 	{
+std::cout <<"+++++++++"<<__FILE__ << "  " << getName() <<  "+++++++++++" << std::endl;
 		// Clear the old contents of the header/entry maps.
 		header_.clear();
 		entries_.clear();
@@ -62,11 +63,17 @@ namespace BALL
 
 		while (readLine())
 		{
+	std::cout << "NON file" << getLine()<< std::endl; 
 			JCAMPValue value;
 		
 			try
 			{
-				if (getLine().hasPrefix("##$"))
+				//overread a comment 
+				if (getLine().hasPrefix("$$"))
+				{
+					continue;
+				}
+				else if (getLine().hasPrefix("##$"))
 				{
 
 					// Check whether the definition is an array.
@@ -118,6 +125,10 @@ namespace BALL
 					// =================== read non-array entry ===============================
 					else if (regular.find(getLine(), groups))
 					{
+	std::cout << "NON Array: " << getLine() << "  0:" << groups[0] <<" 1:" << groups[1] << " 2:" << groups[2]<< 
+		" isfloat:" << groups[2].toString().isFloat() 
+//		<< " value:" << groups[2].toString().toFloat()  
+		<< std::endl; 
 						// =================== read numeric entry ===============================
 						if (groups[2].toString().isFloat())
 						{
@@ -163,6 +174,7 @@ namespace BALL
 			}
 
 			// We could not parse this line -- abort.
+			std::cout << "NON error in line"<< getLine() << std::endl;	
 			throw Exception::ParseError(__FILE__, __LINE__, getName(), getLine());
 		};
 	}
@@ -251,7 +263,12 @@ namespace BALL
 		if (!entries_.has(name)) return 0;
 
 		const JCAMPValue& val(entries_[name]);
-		if ((val.type == NUMERIC) || (val.type == STRING))
+		if (val.type == NUMERIC) 
+		{
+			int i = round(val.numeric_value[0]);
+			return i; //round(val.numeric_value[0]).toInt();
+		}
+		else if(val.type == STRING)
 		{
 			return (Index)val.string_value.trim().toInt();
 		}

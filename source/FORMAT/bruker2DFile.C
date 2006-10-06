@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker2DFile.C,v 1.25 2005/12/23 17:02:40 amoll Exp $
+// $Id: bruker2DFile.C,v 1.25.10.1 2006/10/06 15:48:10 anne Exp $
 //
 
 #include <BALL/FORMAT/bruker2DFile.h>
@@ -18,10 +18,10 @@ namespace BALL
 
 	Bruker2DFile::Bruker2DFile(const String& name, OpenMode open_mode) 
 		throw(Exception::FileNotFound)
-		: File(name + FileSystem::PATH_SEPARATOR + "2rr", open_mode)
+		: File(name + FileSystem::PATH_SEPARATOR + "2rr", open_mode),
+			parsf1_(name + FileSystem::PATH_SEPARATOR + "proc2s"),
+			parsf2_(name + FileSystem::PATH_SEPARATOR + "procs")
 	{
-		JCAMPFile parsf1_(name + FileSystem::PATH_SEPARATOR + "proc2s");
-		JCAMPFile parsf2_(name + FileSystem::PATH_SEPARATOR + "procs");
 		parsf1_.read();
 		parsf2_.read();
 		miny_ = (int)parsf1_.getIntValue("YMIN_p");
@@ -45,8 +45,8 @@ namespace BALL
 
 	void Bruker2DFile::read(const String& name)
 	{
-		JCAMPFile parsf1(name + FileSystem::PATH_SEPARATOR + "proc2s");
-		JCAMPFile parsf2_(name + FileSystem::PATH_SEPARATOR + "procs");
+		parsf1_.open(name + FileSystem::PATH_SEPARATOR + "proc2s");
+		parsf2_.open(name + FileSystem::PATH_SEPARATOR + "procs");
 		parsf1_.read();
 		parsf2_.read();
 		parsf1_.close();
@@ -84,20 +84,25 @@ namespace BALL
 	  int SIF2_   = (int) parsf2_.getIntValue( "SI"   ); // X - spacing
 	  int XDIMF1_ = (int) parsf1_.getIntValue( "XDIM" );
 	  int XDIMF2_ = (int) parsf2_.getIntValue( "XDIM" );
-
+std::cout << "SIF1: " << SIF1_ << "--" << parsf1_.getIntValue("SI") << parsf1_.getDoubleValue("SI") 
+					<< " SIF2: " << SIF2_ << "--" << parsf2_.getIntValue( "SI") << parsf2_.getDoubleValue( "SI")
+					<< " XDIMF1: " <<  XDIMF1_<<"--"<< parsf1_.getIntValue( "XDIM" )  << parsf1_.getDoubleValue( "XDIM" )
+					<< " XDIMF2: " << XDIMF2_<<"--"<< parsf2_.getIntValue( "XDIM" ) <<  parsf2_.getDoubleValue( "XDIM" )  << std::endl;
 	  // prepare the regularData
 	  //spectrum_.setXSize(SIF2_);
 	  //spectrum_.setYSize(SIF1_);
 	  //spectrum_.resize(SIF2_, SIF1_);
 
-	  double a = parsf2_.getIntValue( "OFFSET" );
-	  double b = parsf2_.getIntValue( "OFFSET" ) - (parsf2_.getIntValue( "SW_p" ) / parsf2_.getIntValue( "SF" ));
-	  
+	  double a = parsf2_.getDoubleValue( "OFFSET" );
+	  double b = parsf2_.getDoubleValue( "OFFSET" ) - (parsf2_.getDoubleValue( "SW_p" ) / parsf2_.getDoubleValue( "SF" ));
+std::cout << "parsf2: Offset: " << a << " b: " << b << " SW_P: " <<parsf2_.getDoubleValue( "SW_p" ) << " SF: " <<  parsf2_.getDoubleValue( "SF" ) << std::endl;
+
 		double lower_x = (a<b) ? a : b;
 		double upper_x = (a>b) ? a : b;
 		
-	  a = parsf1_.getIntValue( "OFFSET" );
-	  b = parsf1_.getIntValue( "OFFSET" ) - (parsf1_.getIntValue( "SW_p" ) / parsf1_.getIntValue( "SF" ));
+	  a = parsf1_.getDoubleValue( "OFFSET" );
+	  b = parsf1_.getDoubleValue( "OFFSET" ) - (parsf1_.getDoubleValue( "SW_p" ) / parsf1_.getDoubleValue( "SF" ));
+std::cout <<"parsf1: Offset: " << a << " SW_P: " << parsf1_.getDoubleValue( "SW_p" ) << " SF: " <<  parsf1_.getDoubleValue("SF") << std::endl;
 
 		double lower_y = (a<b) ? a : b;
 		double upper_y = (a>b) ? a : b;
@@ -113,7 +118,7 @@ namespace BALL
 	  
 	  int matNumF2 = (int) (SIF2_ / XDIMF2_); // Number of matrices in x - direction
 	  int matNumF1 = (int) (SIF1_ / XDIMF1_); // Number of matrices in y - direction
-	  
+std::cout << "hallo" <<std::endl;	  
 		for (int actMat=0; actMat < matNumF2 * matNumF1; actMat++ ) 
 		{ // Walk through all submatrices
 			for (int f1 = 0; f1 < XDIMF1_; f1++ ) 
@@ -124,7 +129,8 @@ namespace BALL
 					{
 						break;
 					}
-
+					std::cout << "actMat:" <<  actMat << " f1:" << f1 << " f2:" << f2 << std::endl;
+					
 					f.read(c, 4);
 					if (parsf1_.getIntValue( "BYTORDP" ) == 1) 
 					{
@@ -158,6 +164,7 @@ namespace BALL
 				}
 			}
 		}
+		std::cout << "end of read" << std::endl;
 	}
 
   /** Returns the shift corresponding to a position in the bitmap.
