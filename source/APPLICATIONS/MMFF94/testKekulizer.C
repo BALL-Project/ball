@@ -1,0 +1,300 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: testKekulizer.C,v 1.1.2.1 2006/10/06 15:26:01 amoll Exp $
+//
+// test program for the MMFF94 implementation
+
+#include <BALL/common.h>
+
+#include <BALL/KERNEL/system.h>
+#include <BALL/DATATYPE/string.h>
+#include <BALL/SYSTEM/path.h>
+#include <BALL/SYSTEM/fileSystem.h>
+#include <BALL/FORMAT/lineBasedFile.h>
+#include <BALL/FORMAT/MOL2File.h>
+#include <BALL/FORMAT/PDBFile.h>
+#include <BALL/FORMAT/HINFile.h>
+#include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/PTE.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
+#include <BALL/STRUCTURE/smartsMatcher.h>
+#include <BALL/QSAR/aromaticityProcessor.h>
+#include <BALL/QSAR/ringPerceptionProcessor.h>
+
+#include <math.h>
+
+using namespace std;
+using namespace BALL;
+
+String dir;
+
+Size wrong_types = 0;
+
+System* readTestFile(String filename)
+{
+	MOL2File mol2_file(filename);
+	System* system = new System;
+	mol2_file >> *system;
+
+	filename = filename.getSubstring(0, filename.size() - 4);
+	filename += "atoms";
+
+	vector<String> atoms, names, symbols, fields;
+	vector<double> charges, fcharges;
+	vector<short> types;
+
+	HashMap<String, Position> name_to_pos;
+	Position pos = 0;
+	
+	LineBasedFile infile(filename);
+	while (infile.readLine())
+	{
+		if (infile.getLine().split(fields) != 6)
+		{
+			Log.error() << "Error in " << filename << " Not 6 fields in one line " << infile.getLine() << std::endl;
+			return 0;
+		}
+
+		atoms.push_back(fields[0]);
+		types.push_back(fields[2].toUnsignedShort());
+		symbols.push_back(fields[3]);
+		charges.push_back(fields[4].toFloat());
+		fcharges.push_back(fields[5].toFloat());
+
+		name_to_pos[fields[0]] = pos;
+		pos ++;
+	}
+
+	infile.close();
+
+	AtomIterator ait;
+	BALL_FOREACH_ATOM(*system, ait)
+	{
+		if (!name_to_pos.has(ait->getName()))
+		{
+			Log.error() << "We have no data for the atom " << ait->getName() << " in file " << filename << std::endl;
+			continue;
+		}
+
+		Position pos = name_to_pos[ait->getName()];
+//   ait->setType(types[pos]); // <---------------------------------
+		ait->setProperty("Type", types[pos]);
+		ait->setProperty("TypeName", symbols[pos]);
+		ait->setProperty("OriginalInitialCharge", fcharges[pos]);
+ 		ait->setFormalCharge((Index)fcharges[pos]);
+		ait->setRadius(charges[pos]);
+	}
+
+	return system;
+}
+
+
+vector<double> getResults(String filename)
+{
+	filename += ".results";
+
+	vector<double> results;
+	LineBasedFile infile(filename);
+	while (infile.readLine())
+	{
+		vector<String> fields;
+		infile.getLine().split(fields);
+		results.push_back(fields[0].toFloat() * Constants::JOULE_PER_CAL);
+	}
+
+	return results;
+}
+
+
+bool testType(System& system, String filename, AtomTyper& typer)
+{
+	bool ok = true;
+	AtomIterator ait = system.beginAtom();
+	for (; +ait; ++ait)
+	{
+		Atom& a = *ait;
+		String org_symbol = a.getProperty("TypeName").getString();
+		String our_symbol = a.getTypeName();
+
+		Index org_type = a.getProperty("Type").getInt();
+ 		if (org_type == a.getType()) continue;
+//   		if (org_symbol == our_symbol) continue;
+
+		if (a.getElement().getSymbol() == "H")
+		{
+			Bond& bond = *a.getBond(0);
+			Atom& a2 = *bond.getPartner(a);
+			if (a2.getType() != a2.getProperty("Type").getInt()) continue;
+		}
+
+		String out(org_symbol + " <-> " + our_symbol);
+
+		wrong_types++;
+
+		ok = false;
+		Log.error() << "Type! " << filename << " " << a.getName() << "  was " << String(a.getProperty("Type").getInt()) 
+								<< " " << out << " " << String(a.getType()) << " "  << std::endl;
+	}
+
+	return ok;
+}
+
+
+
+int runtests(const vector<String>& filenames)
+{
+	MMFF94AtomTyper typer;
+	typer.setup(Path().find("MMFF94/TYPES.PAR"));
+	typer.setupHydrogenTypes(Path().find("MMFF94/MMFFHDEF.PAR"));
+	typer.setupSymbolsToTypes(Path().find("MMFF94/MFFSYMB.PAR"));
+	typer.setupAromaticTypes(Path().find("MMFF94/MMFFAROM.PAR"));
+	MMFF94AtomTypes types;
+	types.readParameters(Path().find("MMFF94/MMFFPROP.PAR"));
+	typer.collectHeteroAtomTypes(types);
+
+	MMFF94 mmff;
+
+	vector<String> not_ok;
+	Size ok = 0;
+	for (Position pos = 0; pos < filenames.size(); pos++)
+	{
+//      		Log.info() << "> " << filenames[pos] << std::endl;
+		bool result = true;
+		String full_file_name(dir +FileSystem::PATH_SEPARATOR + filenames[pos] + ".mol2");
+		System* system = readTestFile(full_file_name);
+		if (system == 0)
+		{
+			Log.error() << "Could not read mol2 file " << full_file_name << std::endl;
+			return -1;
+		}
+
+		Size db = 0;
+		AtomBondIterator abit;
+		AtomIterator ai;
+		BALL_FOREACH_BOND(*system, ai, abit)
+		{
+			if (abit->getOrder() == Bond::ORDER__DOUBLE)
+			{
+				db ++;
+			}
+		}
+
+		if (!mmff.setup(*system))
+		{
+			Log.error() << "Setup failed for " << full_file_name << std::endl;
+			return -1;
+		}
+
+		vector<HashSet<Atom*> > arings = mmff.getAromaticRings();
+		for (Position p = 0; p < arings.size(); p++)
+		{
+			HashSet<Atom*>::Iterator hit = arings[p].begin();
+			for (; +hit; ++hit)
+			{
+				abit = (**hit).beginBond();
+				for (; +abit; ++abit)
+				{
+					if (arings[p].has(abit->getPartner(**hit)))
+					{
+						abit->setOrder(Bond::ORDER__AROMATIC);
+					}
+				}
+			}
+		}
+
+		double dbn = 0;
+		BALL_FOREACH_BOND(*system, ai, abit)
+		{
+			if (abit->getOrder() == Bond::ORDER__DOUBLE)
+			{
+				dbn ++;
+			}
+		}
+
+
+ 		testType(*system, filenames[pos], typer);
+
+ 		if (result) ok++;
+		delete system;
+	}
+
+	Log.info() << "Tested " << filenames.size() << " files, " << ok << " files ok" << std::endl;
+
+	return 0;
+}
+
+vector<String> getTestFiles()
+{
+	vector<String> results;
+	LineBasedFile infile(dir + FileSystem::PATH_SEPARATOR + "filenames.txt");
+	while (infile.readLine())
+	{
+		results.push_back(infile.getLine());
+	}
+
+	results.pop_back();
+
+	return results;
+}
+
+int main(int argc, char** argv)
+{
+	if (argc < 3)
+	{
+		Log.error() << "Usage: readMMFF94TestFile <dir with extracted test files> <all|system name>" << std::endl;
+		return 1;
+	}
+
+	dir = argv[1];
+
+	vector<String> files;
+	if (String(argv[2]) == "all")
+	{
+   files = getTestFiles();
+	}
+	else
+	{
+   files.push_back(argv[2]);
+	}
+
+	if (argc == 4)
+	{
+		LineBasedFile lf(Path().find("MMFF94/TYPES.PAR"));
+		String type_name(argv[3]);
+		String expr;
+		String type;
+		while(lf.readLine())
+		{
+			String line = lf.getLine();
+			if (line.hasPrefix("*")) continue;
+
+			vector<String> fields;
+			line.split(fields, "|");
+			fields[1].trim();
+			if (fields[1] == type_name)
+			{
+				fields[2].trim();
+				type = fields[2];
+				expr = fields[3];
+				expr.trim();
+				break;
+			}
+		}
+
+	}
+
+	int result = runtests(files);
+	StringHashMap<float>::Iterator hit = AtomTyper::rule_times.begin();
+	for (; +hit; ++hit)
+	{
+		Log.error() << hit->first << " " << hit->second << std::endl;
+	}
+
+	return result;
+}

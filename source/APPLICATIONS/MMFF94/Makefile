@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.1.4.2 2006/05/21 22:46:36 amoll Exp $
+# $Id: Makefile,v 1.1.4.3 2006/10/06 15:26:06 amoll Exp $
 # Makefile for BALL utilities
 #
 
@@ -8,7 +8,8 @@ DIRECTORY=APPLICATIONS/MMFF94
 EXECUTABLES = \
 	splitMMFFTestSuiteMolFiles\
 	splitMMFFTestSuiteOptiFiles\
-	readMMFF94TestFile
+	readMMFF94TestFile\
+	testKekulizer
 
 # default target
 all:	$(EXECUTABLES)
