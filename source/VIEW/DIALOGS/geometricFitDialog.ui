@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>GeometricFitDialogData</class>
  <widget class="QDialog" name="GeometricFitDialogData" >
   <property name="geometry" >
@@ -445,7 +442,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <tabstops>
   <tabstop>surface_thickness</tabstop>
   <tabstop>grid_spacing</tabstop>
@@ -458,6 +454,7 @@
   <tabstop>cancel_button</tabstop>
   <tabstop>reset_button</tabstop>
  </tabstops>
+ <includes/>
  <resources/>
  <connections>
   <connection>

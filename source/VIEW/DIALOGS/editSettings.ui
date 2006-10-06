@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>EditSettingsData</class>
  <widget class="QWidget" name="EditSettingsData" >
   <property name="geometry" >
@@ -15,7 +12,7 @@
   <property name="windowTitle" >
    <string>Editing</string>
   </property>
-  <widget class="QWidget" name="" >
+  <widget class="QWidget" name="layoutWidget" >
    <property name="geometry" >
     <rect>
      <x>10</x>
@@ -137,7 +134,6 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <includes>
   <include location="global" >BALL/COMMON/global.h</include>
  </includes>

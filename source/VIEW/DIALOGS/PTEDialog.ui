@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>PTEDialogData</class>
  <widget class="QWidget" name="PTEDialogData" >
   <property name="geometry" >
@@ -45,9 +42,6 @@
    </property>
    <property name="title" >
     <string>Main elements</string>
-   </property>
-   <property name="orientation" >
-    <enum>Qt::Vertical</enum>
    </property>
    <widget class="QPushButton" name="pushButtonS" >
     <property name="geometry" >
@@ -393,16 +387,7 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
-  <customwidget>
-   <class>QGroupBox</class>
-   <extends></extends>
-   <header>Qt3Support/QGroupBox</header>
-   <container>1</container>
-   <pixmap></pixmap>
-  </customwidget>
- </customwidgets>
+ <includes/>
  <resources/>
  <connections/>
 </ui>

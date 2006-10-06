@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>LabelDialogData</class>
  <widget class="QDialog" name="LabelDialogData" >
   <property name="geometry" >
@@ -391,7 +388,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="7" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <tabstops>
   <tabstop>edit_button</tabstop>
   <tabstop>apply_button_</tabstop>

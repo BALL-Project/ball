@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>FDPBDialogData</class>
  <widget class="QDialog" name="FDPBDialogData" >
   <property name="geometry" >
@@ -9,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>772</width>
-    <height>602</height>
+    <height>601</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -950,7 +947,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <tabstops>
   <tabstop>dc_solvent</tabstop>
   <tabstop>dc_interior</tabstop>

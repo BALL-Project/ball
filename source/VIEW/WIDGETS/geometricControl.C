@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.22 2006/07/06 12:46:41 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.23 2006/10/06 14:47:19 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -48,9 +48,6 @@ namespace BALL
 			listview->headerItem()->setText(0, "[visible] Model");
 			listview->headerItem()->setText(1, "Color");
 			listview->headerItem()->setText(2, "Properties");
-			listview->headerItem()->setSizeHint(0, QSize(20, 220));
-			listview->headerItem()->setSizeHint(1, QSize(20, 60));
-			listview->headerItem()->setSizeHint(2, QSize(20, 60));
 			
 			String txt = String("List of the representations: \n") +
 									"1.column: model type and name of the molecular entity, the model was created from\n" +

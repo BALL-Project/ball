@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>CharmmConfigurationDialogData</class>
  <widget class="QDialog" name="CharmmConfigurationDialogData" >
   <property name="geometry" >
@@ -1574,7 +1571,6 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <tabstops>
   <tabstop>parameter_file_edit</tabstop>
   <tabstop>browse_button</tabstop>

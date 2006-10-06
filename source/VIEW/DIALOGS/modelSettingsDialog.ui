@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>ModelSettingsDialogData</class>
  <widget class="QWidget" name="ModelSettingsDialogData" >
   <property name="geometry" >
@@ -139,7 +136,7 @@
        <rect>
         <x>314</x>
         <y>10</y>
-        <width>50</width>
+        <width>35</width>
         <height>25</height>
        </rect>
       </property>
@@ -193,7 +190,7 @@
        <rect>
         <x>314</x>
         <y>10</y>
-        <width>50</width>
+        <width>35</width>
         <height>25</height>
        </rect>
       </property>
@@ -312,7 +309,7 @@
        <rect>
         <x>314</x>
         <y>10</y>
-        <width>50</width>
+        <width>35</width>
         <height>25</height>
        </rect>
       </property>
@@ -482,7 +479,7 @@
        <rect>
         <x>314</x>
         <y>10</y>
-        <width>50</width>
+        <width>35</width>
         <height>25</height>
        </rect>
       </property>
@@ -634,7 +631,7 @@
        <rect>
         <x>308</x>
         <y>10</y>
-        <width>50</width>
+        <width>35</width>
         <height>25</height>
        </rect>
       </property>
@@ -755,7 +752,7 @@
        <rect>
         <x>308</x>
         <y>10</y>
-        <width>50</width>
+        <width>35</width>
         <height>25</height>
        </rect>
       </property>
@@ -1131,215 +1128,213 @@
          </widget>
         </item>
         <item row="0" column="0" >
-         <widget class="QWidget" name="layoutWidget" >
-          <layout class="QVBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
-           <property name="spacing" >
-            <number>6</number>
-           </property>
-           <item>
-            <layout class="QHBoxLayout" >
-             <property name="margin" >
-              <number>0</number>
-             </property>
-             <property name="spacing" >
-              <number>6</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_4" >
-               <property name="sizePolicy" >
-                <sizepolicy>
-                 <hsizetype>0</hsizetype>
-                 <vsizetype>0</vsizetype>
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize" >
-                <size>
-                 <width>90</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize" >
-                <size>
-                 <width>120</width>
-                 <height>32767</height>
-                </size>
-               </property>
-               <property name="text" >
-                <string>Tube radius</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSlider" name="cartoon_tube_radius_slider" >
-               <property name="minimumSize" >
-                <size>
-                 <width>80</width>
-                 <height>21</height>
-                </size>
-               </property>
-               <property name="maximumSize" >
-                <size>
-                 <width>80</width>
-                 <height>21</height>
-                </size>
-               </property>
-               <property name="toolTip" >
-                <string>Edit the tube radius</string>
-               </property>
-               <property name="minimum" >
-                <number>1</number>
-               </property>
-               <property name="maximum" >
-                <number>25</number>
-               </property>
-               <property name="value" >
-                <number>25</number>
-               </property>
-               <property name="orientation" >
-                <enum>Qt::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="cartoon_tube_radius_label" >
-               <property name="sizePolicy" >
-                <sizepolicy>
-                 <hsizetype>0</hsizetype>
-                 <vsizetype>0</vsizetype>
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize" >
-                <size>
-                 <width>50</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize" >
-                <size>
-                 <width>35</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text" >
-                <string>99.9</string>
-               </property>
-               <property name="alignment" >
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" >
-             <property name="margin" >
-              <number>0</number>
-             </property>
-             <property name="spacing" >
-              <number>6</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_2_3" >
-               <property name="sizePolicy" >
-                <sizepolicy>
-                 <hsizetype>0</hsizetype>
-                 <vsizetype>0</vsizetype>
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize" >
-                <size>
-                 <width>90</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize" >
-                <size>
-                 <width>120</width>
-                 <height>32767</height>
-                </size>
-               </property>
-               <property name="text" >
-                <string>Helix radius</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSlider" name="cartoon_helix_radius_slider" >
-               <property name="minimumSize" >
-                <size>
-                 <width>80</width>
-                 <height>21</height>
-                </size>
-               </property>
-               <property name="maximumSize" >
-                <size>
-                 <width>80</width>
-                 <height>21</height>
-                </size>
-               </property>
-               <property name="toolTip" >
-                <string>Edit the helix radius</string>
-               </property>
-               <property name="minimum" >
-                <number>1</number>
-               </property>
-               <property name="maximum" >
-                <number>50</number>
-               </property>
-               <property name="value" >
-                <number>50</number>
-               </property>
-               <property name="orientation" >
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="tickInterval" >
-                <number>25</number>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="cartoon_helix_radius_label" >
-               <property name="sizePolicy" >
-                <sizepolicy>
-                 <hsizetype>0</hsizetype>
-                 <vsizetype>0</vsizetype>
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize" >
-                <size>
-                 <width>50</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize" >
-                <size>
-                 <width>35</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="text" >
-                <string>99.9</string>
-               </property>
-               <property name="alignment" >
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_4" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize" >
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize" >
+               <size>
+                <width>120</width>
+                <height>32767</height>
+               </size>
+              </property>
+              <property name="text" >
+               <string>Tube radius</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="cartoon_tube_radius_slider" >
+              <property name="minimumSize" >
+               <size>
+                <width>80</width>
+                <height>21</height>
+               </size>
+              </property>
+              <property name="maximumSize" >
+               <size>
+                <width>80</width>
+                <height>21</height>
+               </size>
+              </property>
+              <property name="toolTip" >
+               <string>Edit the tube radius</string>
+              </property>
+              <property name="minimum" >
+               <number>1</number>
+              </property>
+              <property name="maximum" >
+               <number>25</number>
+              </property>
+              <property name="value" >
+               <number>25</number>
+              </property>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="cartoon_tube_radius_label" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize" >
+               <size>
+                <width>50</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize" >
+               <size>
+                <width>35</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text" >
+               <string>99.9</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="textLabel1_2_2_2_2_3_2_2_2_2_3" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize" >
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize" >
+               <size>
+                <width>120</width>
+                <height>32767</height>
+               </size>
+              </property>
+              <property name="text" >
+               <string>Helix radius</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="cartoon_helix_radius_slider" >
+              <property name="minimumSize" >
+               <size>
+                <width>80</width>
+                <height>21</height>
+               </size>
+              </property>
+              <property name="maximumSize" >
+               <size>
+                <width>80</width>
+                <height>21</height>
+               </size>
+              </property>
+              <property name="toolTip" >
+               <string>Edit the helix radius</string>
+              </property>
+              <property name="minimum" >
+               <number>1</number>
+              </property>
+              <property name="maximum" >
+               <number>50</number>
+              </property>
+              <property name="value" >
+               <number>50</number>
+              </property>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="tickInterval" >
+               <number>25</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="cartoon_helix_radius_label" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize" >
+               <size>
+                <width>50</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize" >
+               <size>
+                <width>35</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text" >
+               <string>99.9</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
@@ -1719,7 +1714,7 @@
          <rect>
           <x>298</x>
           <y>10</y>
-          <width>50</width>
+          <width>35</width>
           <height>25</height>
          </rect>
         </property>
@@ -2211,7 +2206,6 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <includes>
   <include location="global" >BALL/COMMON/global.h</include>
  </includes>

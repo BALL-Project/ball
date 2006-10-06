@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>MolecularDynamicsDialogData</class>
  <widget class="QDialog" name="MolecularDynamicsDialogData" >
   <property name="geometry" >
@@ -771,7 +768,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <tabstops>
   <tabstop>steps_lineedit</tabstop>
   <tabstop>timestep_linedit</tabstop>

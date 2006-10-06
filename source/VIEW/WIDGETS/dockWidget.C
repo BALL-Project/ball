@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.28.2.3 2006/02/01 13:23:50 amoll Exp $
+// $Id: dockWidget.C,v 1.28.2.4 2006/10/06 14:47:18 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -35,7 +35,9 @@ namespace BALL
 		DockWidget::DockWidget(QWidget* parent, const char* name)
 			: QDockWidget(name, parent),
 				ModularWidget(name),
-				guest_(0)
+				container_(0),
+				guest_(0),
+				layout_(0)
 		{
 			if (name != 0) 
 			{ 
@@ -49,6 +51,12 @@ namespace BALL
 			setAcceptDrops(true);
 			setFloating(false);
 			resize(100, 100);
+			container_ = new QWidget(this);
+			setWidget(container_);
+
+			layout_ = new QGridLayout();
+			layout_->setMargin(0);
+			container_->setLayout(layout_);
 		}
 
 		void DockWidget::setGuest(QWidget& guest)
@@ -58,7 +66,8 @@ namespace BALL
 			guest.resize(120,100);
 			guest_ = &guest;
 			setMinimumSize(20, 20);
-			setWidget(&guest);
+			guest.setParent(container_);
+			layout_->addWidget(&guest);
 
 			guest.setContextMenuPolicy(Qt::CustomContextMenu);
 			connect(&guest, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showGuestContextMenu(const QPoint&)));

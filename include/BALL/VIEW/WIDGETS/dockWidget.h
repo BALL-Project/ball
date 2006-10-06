@@ -9,6 +9,7 @@
 #include <QtGui/QDropEvent>
 #include <QtGui/QDockWidget>
 #include <QtGui/QMouseEvent>
+#include <QtGui/QGridLayout>
 
 namespace BALL
 {
@@ -70,6 +71,9 @@ namespace BALL
 			///
 			virtual void registerForHelpSystem(const QObject* widget, const String& url);
 
+			///
+			QGridLayout* getGuestLayout() { return layout_;}
+
 			//@}
 			/** @name Public slots 
 			*/ 
@@ -89,7 +93,9 @@ namespace BALL
 
 			protected:
 
+			QWidget* 			container_;
 			QWidget* 			guest_;
+			QGridLayout*  layout_;
 		};
 
   }  // namespace VIEW

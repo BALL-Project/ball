@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.49 2006/09/29 12:44:36 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.50 2006/10/06 14:47:19 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -85,16 +85,16 @@ namespace BALL
 			Log.error() << "new MolecularControl " << this << std::endl;
 		#endif
 
+ 			QGridLayout* glay = getGuestLayout();
  			QGridLayout* lay = new QGridLayout();
-			((QGridLayout*)layout())->addLayout(lay, 2, 0);
+ 			glay->addLayout(lay, 2, 0);
 
 			listview->setObjectName("MolecularControlList");
-			listview->headerItem()->setText(0, "Name [highlight]");
+			listview->headerItem()->setText(0, "Name [highlight]                ");
 			listview->headerItem()->setText(1, "Type");
-			listview->headerItem()->setText(2, "[checked]");
-			listview->headerItem()->setSizeHint(0, QSize(150, 200));
-			listview->headerItem()->setSizeHint(1, QSize(90, 160));
-			listview->headerItem()->setSizeHint(2, QSize(20, 20));
+			listview->headerItem()->setText(2, "checked");
+			listview->resizeColumnToContents(2);
+			listview->resizeColumnToContents(0);
  			lay->addWidget(listview,0, 0, 1, -1);
 
 			selector_edit_ = new QComboBox(this);

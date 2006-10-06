@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>ClippingDialogData</class>
  <widget class="QDialog" name="ClippingDialogData" >
   <property name="geometry" >
@@ -84,7 +81,7 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <includes/>
  <resources/>
  <connections/>
 </ui>

@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>LightSettingsData</class>
  <widget class="QWidget" name="LightSettingsData" >
   <property name="geometry" >
@@ -43,7 +40,7 @@
     <rect>
      <x>3</x>
      <y>281</y>
-     <width>130</width>
+     <width>110</width>
      <height>30</height>
     </rect>
    </property>
@@ -101,7 +98,7 @@
     <rect>
      <x>3</x>
      <y>317</y>
-     <width>130</width>
+     <width>110</width>
      <height>30</height>
     </rect>
    </property>
@@ -587,7 +584,7 @@
       <x>90</x>
       <y>210</y>
       <width>84</width>
-      <height>25</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="sizePolicy" >
@@ -787,7 +784,6 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <tabstops>
   <tabstop>lights_list</tabstop>
   <tabstop>position_x</tabstop>

@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>SetCameraData</class>
  <widget class="QDialog" name="SetCameraData" >
   <property name="geometry" >
@@ -196,7 +193,6 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <tabstops>
   <tabstop>view_x</tabstop>
   <tabstop>view_y</tabstop>

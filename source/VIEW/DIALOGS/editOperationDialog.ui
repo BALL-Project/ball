@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>EditOperationDialogData</class>
  <widget class="QDialog" name="EditOperationDialogData" >
   <property name="geometry" >
@@ -28,7 +25,7 @@
     <string>undo</string>
    </property>
   </widget>
-  <widget class="Q3ListBox" name="undo_operation_list" >
+  <widget class="Q3ListBox" native="1" name="undo_operation_list" >
    <property name="geometry" >
     <rect>
      <x>10</x>
@@ -43,16 +40,14 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
    <class>Q3ListBox</class>
-   <extends></extends>
+   <extends>QWidget</extends>
    <header>q3listbox.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
  </customwidgets>
+ <includes/>
  <resources/>
  <connections/>
 </ui>

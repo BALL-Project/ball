@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>PreferencesData</class>
  <widget class="QDialog" name="PreferencesData" >
   <property name="geometry" >
@@ -251,7 +248,6 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <includes>
   <include location="global" >BALL/COMMON/global.h</include>
  </includes>

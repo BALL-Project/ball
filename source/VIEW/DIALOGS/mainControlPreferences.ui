@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>MainControlPreferencesData</class>
  <widget class="QWidget" name="MainControlPreferencesData" >
   <property name="geometry" >
@@ -142,7 +139,6 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <includes>
   <include location="global" >BALL/COMMON/global.h</include>
  </includes>

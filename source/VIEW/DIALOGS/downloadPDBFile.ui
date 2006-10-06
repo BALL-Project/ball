@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>DownloadPDBFileData</class>
  <widget class="QDialog" name="DownloadPDBFileData" >
   <property name="geometry" >
@@ -160,7 +157,6 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <tabstops>
   <tabstop>pdbId</tabstop>
   <tabstop>download</tabstop>
