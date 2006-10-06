@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: testKekulizer.C,v 1.1.2.1 2006/10/06 15:26:01 amoll Exp $
+// $Id: testKekulizer.C,v 1.1.2.2 2006/10/06 18:47:03 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -112,7 +112,7 @@ vector<double> getResults(String filename)
 }
 
 
-bool testType(System& system, String filename, AtomTyper& typer)
+bool testType(System& system, String filename)
 {
 	bool ok = true;
 	AtomIterator ait = system.beginAtom();
@@ -124,14 +124,6 @@ bool testType(System& system, String filename, AtomTyper& typer)
 
 		Index org_type = a.getProperty("Type").getInt();
  		if (org_type == a.getType()) continue;
-//   		if (org_symbol == our_symbol) continue;
-
-		if (a.getElement().getSymbol() == "H")
-		{
-			Bond& bond = *a.getBond(0);
-			Atom& a2 = *bond.getPartner(a);
-			if (a2.getType() != a2.getProperty("Type").getInt()) continue;
-		}
 
 		String out(org_symbol + " <-> " + our_symbol);
 
@@ -149,16 +141,7 @@ bool testType(System& system, String filename, AtomTyper& typer)
 
 int runtests(const vector<String>& filenames)
 {
-	MMFF94AtomTyper typer;
-	typer.setup(Path().find("MMFF94/TYPES.PAR"));
-	typer.setupHydrogenTypes(Path().find("MMFF94/MMFFHDEF.PAR"));
-	typer.setupSymbolsToTypes(Path().find("MMFF94/MFFSYMB.PAR"));
-	typer.setupAromaticTypes(Path().find("MMFF94/MMFFAROM.PAR"));
-	MMFF94AtomTypes types;
-	types.readParameters(Path().find("MMFF94/MMFFPROP.PAR"));
-	typer.collectHeteroAtomTypes(types);
-
-	MMFF94 mmff;
+	MMFF94 mmff, mmff2;
 
 	vector<String> not_ok;
 	Size ok = 0;
@@ -185,13 +168,13 @@ int runtests(const vector<String>& filenames)
 			}
 		}
 
-		if (!mmff.setup(*system))
+		if (!mmff2.setup(*system))
 		{
 			Log.error() << "Setup failed for " << full_file_name << std::endl;
 			return -1;
 		}
 
-		vector<HashSet<Atom*> > arings = mmff.getAromaticRings();
+		vector<HashSet<Atom*> > arings = mmff2.getAromaticRings();
 		for (Position p = 0; p < arings.size(); p++)
 		{
 			HashSet<Atom*>::Iterator hit = arings[p].begin();
@@ -208,6 +191,8 @@ int runtests(const vector<String>& filenames)
 			}
 		}
 
+		mmff.setup(*system);
+
 		double dbn = 0;
 		BALL_FOREACH_BOND(*system, ai, abit)
 		{
@@ -217,8 +202,12 @@ int runtests(const vector<String>& filenames)
 			}
 		}
 
+		if (dbn  != db)
+		{
+			Log.error() << "Kekulizer: " << dbn << " != " << db << " double bonds!" << std::endl;
+		}
 
- 		testType(*system, filenames[pos], typer);
+ 		testType(*system, filenames[pos]);
 
  		if (result) ok++;
 		delete system;
@@ -261,32 +250,6 @@ int main(int argc, char** argv)
 	else
 	{
    files.push_back(argv[2]);
-	}
-
-	if (argc == 4)
-	{
-		LineBasedFile lf(Path().find("MMFF94/TYPES.PAR"));
-		String type_name(argv[3]);
-		String expr;
-		String type;
-		while(lf.readLine())
-		{
-			String line = lf.getLine();
-			if (line.hasPrefix("*")) continue;
-
-			vector<String> fields;
-			line.split(fields, "|");
-			fields[1].trim();
-			if (fields[1] == type_name)
-			{
-				fields[2].trim();
-				type = fields[2];
-				expr = fields[3];
-				expr.trim();
-				break;
-			}
-		}
-
 	}
 
 	int result = runtests(files);
