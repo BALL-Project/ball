@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.h,v 1.1.4.7 2006/09/22 22:59:16 amoll Exp $ 
+// $Id: MMFF94.h,v 1.1.4.8 2006/10/06 14:03:32 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -31,6 +31,10 @@
 
 #ifndef BALL_DATATYPE_HASHSET_H
 # include <BALL/DATATYPE/hashSet.h>
+#endif
+
+#ifndef BALL_STRUCTURE_KEKULIZER_H
+# include <BALL/STRUCTURE/kekulizer.h>
 #endif
 
 #include <vector>

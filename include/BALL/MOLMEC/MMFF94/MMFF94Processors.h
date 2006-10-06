@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.4.10 2006/10/03 21:26:53 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.4.11 2006/10/06 14:01:40 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -21,6 +21,10 @@
 
 #ifndef BALL_KERNEL_BOND_H
 # include <BALL/KERNEL/bond.h>
+#endif
+
+#ifndef BALL_STRUCTURE_KEKULIZER_H
+# include <BALL/STRUCTURE/kekulizer.h>
 #endif
 
 #include <vector>
@@ -208,88 +212,6 @@ namespace BALL
 		vector<HashSet<Atom*> > 		aromatic_rings_;
 	};
 	
-
-	///
-	class BALL_EXPORT Kekuliser
-	{
-		struct AtomInfo
-		{
-			Atom* atom;
-
-			// needed for sorting:
-			bool operator < (const AtomInfo& info) const;
-
-			vector<Bond*> abonds;
-			vector<Position> partner_id;
-
-		 	Index current_charge;
-
-			Index curr_double;
-
-			Index min_double;
-			Index max_double;
-
-			Index min_double_charged;
-			Index max_double_charged;
-		};
-
-		public:
-
-		BALL_CREATE(Kekuliser)
-
-		///
-		Kekuliser();
-
-		///
-		virtual ~Kekuliser() {}
-
-		///
-		bool setup(Molecule& ac);
-
-		///
-		void setAromaticRings(const vector<HashSet<Atom*> >& rings) { aromatic_rings_ = rings;}
-		
-		///
-		void setRings(const vector<HashSet<Atom*> >& rings) { rings_ = rings;}
-		
-		///
-		const vector<Bond*>& getUnassignedBonds() const { return unassigned_bonds_; }
-
-		///
-		void clear();
-
-		///
-		void dump();
-
-		protected:
-
-		bool fixAromaticRings_();
-		bool fixAromaticSystem_(Position it);
-		bool buildConjugatedSystem_(Position it);
- 		bool idealValenceAchieved_();
-
-		void getMaximumValence_();
-
-		// merge aromatic rings:
-		void calculateAromaticSystems_();
-		void collectSystems_(Atom& atom);
-
-		vector<HashSet<Atom*> > aromatic_systems_;
-		vector<HashSet<Atom*> > aromatic_rings_;
-		vector<HashSet<Atom*> > rings_;
-		vector<Bond*> 					unassigned_bonds_;
-
-		// atoms that take part in an aromatic bond:
-		HashSet<const Atom*> 		aromatic_atoms_;
-		HashMap<Atom*, Index> 	max_valence_;
-
-		HashSet<Atom*> 					current_aromatic_system_;
-
-		// current aromatic system:
-		vector<AtomInfo> 				atom_infos_;
-		bool 										try_charge_;
-	};
-
 } // namespace BALL
 
 #endif // BALL_MOLMEC_MMFF94_PROCESSORS_H
