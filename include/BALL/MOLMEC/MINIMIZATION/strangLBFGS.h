@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: strangLBFGS.h,v 1.1.2.1 2006/10/04 16:13:14 aleru Exp $ 
+// $Id: strangLBFGS.h,v 1.1.2.2 2006/10/06 11:51:56 aleru Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STRANGLBFGS_H 
@@ -154,20 +154,17 @@ namespace BALL
 		vector<float> rho_;
 		
 		// The stored former steps. We store the vectors in column order.
-		vector<TVector3<float> > stored_s_;
+		vector<Vector3> stored_s_;
 		
 		// The stored former changes in gradients.
 		// We store the vectors in column order.
-		vector<TVector3<float> > stored_y_;
+		vector<Vector3> stored_y_;
 		
-		// AR: TODO: avoid the need of 'initial_' and 'current_atoms_' by some kind of "a direct
+		// AR: TODO: avoid the need of 'initial_atoms_' by some kind of "a direct
 		// usage" of an 'AtomVector'. I need a direct access to 'saved_position_'.
 		
 		// The positions of the movable atoms when we start a step computation.
-		vector<TVector3<float> > initial_atoms_;
-		
-		// The positions of the movable atoms when we found a successful step.
-		vector<TVector3<float> > current_atoms_;
+		vector<Vector3> initial_atoms_;
 		
 		// Temporarily used memory for saving scalars associated with
 		// the stored vector pairs, small size i.e. max_num_of_vect_pairs_.

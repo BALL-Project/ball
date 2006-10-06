@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: strangLBFGS.C,v 1.1.2.2 2006/10/05 10:01:21 aleru Exp $
+// $Id: strangLBFGS.C,v 1.1.2.3 2006/10/06 11:51:56 aleru Exp $
 //
 // Minimize the potential energy of a system using an improved version
 // of the limited memory BFGS with Strang recurrences.
@@ -33,7 +33,6 @@ namespace BALL
 			stored_s_(),
 			stored_y_(),
 			initial_atoms_(),
-			current_atoms_(),
 			work_val_(),
 			index_of_free_vect_(0)
 	{
@@ -49,7 +48,6 @@ namespace BALL
 			stored_s_(),
 			stored_y_(),
 			initial_atoms_(),
-			current_atoms_(),
 			work_val_(),
 			index_of_free_vect_(0)
 	{
@@ -72,7 +70,6 @@ namespace BALL
 			stored_s_(),
 			stored_y_(),
 			initial_atoms_(),
-			current_atoms_(),
 			work_val_(),
 			index_of_free_vect_(0)
 	{
@@ -96,7 +93,6 @@ namespace BALL
 			stored_s_(),
 			stored_y_(),
 			initial_atoms_(),
-			current_atoms_(),
 			work_val_(),
 			index_of_free_vect_(0)
 	{
@@ -120,7 +116,6 @@ namespace BALL
 			stored_s_(),
 			stored_y_(),
 			initial_atoms_(),
-			current_atoms_(),
 			work_val_(),
 			index_of_free_vect_(0)
 	{
@@ -151,7 +146,6 @@ namespace BALL
 			stored_s_(rhs.stored_s_),
 			stored_y_(rhs.stored_y_),
 			initial_atoms_(rhs.initial_atoms_),
-			current_atoms_(rhs.current_atoms_),
 			work_val_(rhs.work_val_),
 			index_of_free_vect_(rhs.index_of_free_vect_)
 	{
@@ -169,7 +163,6 @@ namespace BALL
 		stored_s_ = rhs.stored_s_;
 		stored_y_ = rhs.stored_y_;
 		initial_atoms_ = rhs.initial_atoms_;
-		current_atoms_ = rhs.current_atoms_;
 		work_val_ = rhs.work_val_;
 		index_of_free_vect_ = rhs.index_of_free_vect_;
 		return *this;
@@ -241,6 +234,9 @@ namespace BALL
 			return;
 		}
 		
+		// Define an alias for the atom vector
+		AtomVector& atoms(const_cast<AtomVector&>(getForceField()->getAtoms()));
+		
 		// First we update our stored vectors, so we're going to store an additional vector
 		// if we have space left, otherwise we replace the oldest vector pair by the new pair.
 		if (curr_num_of_vect_pairs_ < max_num_of_vect_pairs_)
@@ -257,7 +253,7 @@ namespace BALL
 		for(i = 0; i < number_of_atoms_; ++i, ++k)
 		{
 			stored_y_[k] = current_grad_[i] - initial_grad_[i];
-			stored_s_[k] = current_atoms_[i] - initial_atoms_[i];
+			stored_s_[k] = atoms[i]->getPosition() - initial_atoms_[i];
 			
 			sty += stored_y_[k]*stored_s_[k];
 			yty += stored_y_[k]*stored_y_[k];
@@ -325,7 +321,7 @@ namespace BALL
 
 			for(r = 0, j = k*number_of_atoms_; r < number_of_atoms_; ++r, ++j)
 			{
-				direction_[r] -= stored_y_[j] * tmp;
+				direction_[r] = -stored_y_[j]*tmp + direction_[r];
 			}
 		}
 		
@@ -348,7 +344,7 @@ namespace BALL
 			
 			for(r = 0, j = k*number_of_atoms_; r < number_of_atoms_; ++r, ++j)
 			{
-				direction_[r] += stored_s_[j] * tmp;
+				direction_[r] = stored_s_[j]*tmp + direction_[r];
 			}
 			++k;
 			if (k == curr_num_of_vect_pairs_)
@@ -447,7 +443,6 @@ namespace BALL
 			stored_s_.resize(max_num_of_vect_pairs_*number_of_atoms_);
 			stored_y_.resize(max_num_of_vect_pairs_*number_of_atoms_);
 			work_val_.resize(max_num_of_vect_pairs_);
-			current_atoms_.resize(number_of_atoms_);
 			initial_atoms_.resize(number_of_atoms_);
 
 			// If we do not have a valid gradient, recalculate the gradient, the energy,
@@ -505,20 +500,6 @@ namespace BALL
 			// Check whether we were successful.
 			if (stp > 0.0)
 			{
-				
-				// AR: TODO: avoid this bloody necessity. ---------------------------------------------------
-				for(Size i = 0; i < number_of_atoms_; ++i)
-				{
-					current_atoms_[i].x = initial_atoms_[i].x + stp*direction_[i].x;
-					current_atoms_[i].y = initial_atoms_[i].y + stp*direction_[i].y;
-					current_atoms_[i].z = initial_atoms_[i].z + stp*direction_[i].z;
-				}
-				for(Size i = 0; i < number_of_atoms_; ++i)
-				{
-					atoms[i]->setPosition(Vector3(current_atoms_[i].x, current_atoms_[i].y, current_atoms_[i].z));
-				}
-				// ------------------------------------------------------------------------------------------
-				
 				// Use this step as new reference step if findStep was successful
 				atoms.savePositions();
 				
@@ -527,8 +508,13 @@ namespace BALL
 				// we operate on initial_grad_ and current_grad_.
 				updateDirection();
 				
-				// AR: TODO: avoid this bloody necessity.
-				initial_atoms_ = current_atoms_;
+				// AR: TODO: avoid this bloody necessity. ---------------------------------------------------
+				for(Size i = 0; i < number_of_atoms_; ++i)
+				{
+					initial_atoms_[i] = atoms[i]->getPosition();
+				}
+				// ------------------------------------------------------------------------------------------
+
 			}
 			else
 			{
@@ -613,8 +599,6 @@ namespace BALL
 		#endif
 		
 		bool success = true;
-		
-		//initial_grad_.invalidate();
 
 		// We perform a line search along direction_
 		LineSearch line_search(*this);
