@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kekulizer.C,v 1.1.2.4 2006/10/08 16:47:42 amoll Exp $
+// $Id: kekulizer.C,v 1.1.2.5 2006/10/08 19:12:12 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/kekulizer.h>
@@ -16,8 +16,8 @@
 
 using namespace std;
 
-//    #define DEBUG_KEKULIZER
-#undef DEBUG_KEKULIZER
+    #define DEBUG_KEKULIZER
+//   #undef DEBUG_KEKULIZER
 
 namespace BALL
 {
@@ -282,12 +282,12 @@ bool Kekuliser::fixAromaticRings_()
 					}
 				}
 
-				if (!hydrogen_bound)
+				if (!hydrogen_bound)          ???????????????
 					*/
 				{
 					if (esym == "N" && curr_valence == 3 ||
-							esym == "S" && curr_valence == 2 ||
-							esym == "O" && curr_valence == 2)
+							esym == "S" && curr_valence == 2)
+//   							esym == "O" && curr_valence == 2)  ????????
 					{
 						max_double_charged ++;
 					}
