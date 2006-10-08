@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.23.2.3 2006/10/04 10:04:42 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.23.2.4 2006/10/08 14:34:55 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
@@ -440,6 +440,8 @@ namespace BALL
 
 			collectRingBonds_();
 			visualiseRings_();
+			rings_.clear();
+			ring_bonds_.clear();
 			return true;
 		}
 
