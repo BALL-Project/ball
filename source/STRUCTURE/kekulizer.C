@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kekulizer.C,v 1.1.2.3 2006/10/08 15:34:21 amoll Exp $
+// $Id: kekulizer.C,v 1.1.2.4 2006/10/08 16:47:42 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/kekulizer.h>
@@ -16,8 +16,8 @@
 
 using namespace std;
 
-// #define DEBUG
-   #undef DEBUG
+//    #define DEBUG_KEKULIZER
+#undef DEBUG_KEKULIZER
 
 namespace BALL
 {
@@ -358,11 +358,21 @@ bool Kekuliser::fixAromaticRings_()
 			{
 				Size nr_bonds = ai.atom->countBonds();
 				if (nr_bonds == 2) try_protonate = true;
-				if (nr_bonds == 3) try_uncharged = false;
+				if (nr_bonds == 3) 
+				{
+					AtomBondIterator abit = ai.atom->beginBond();
+					for (; +abit; ++abit)
+					{
+						if (abit->getPartner(*ai.atom)->countBonds() == 1)
+						{
+							try_uncharged = false;
+						}
+					}
+				}
 			}
 		}
 
-#ifdef DEBUG
+#ifdef DEBUG_KEKULIZER
 		Log.error() << "State before Kekulizer:" << std::endl;
    	dump();
 #endif
@@ -397,7 +407,7 @@ bool Kekuliser::fixAromaticRings_()
 
 bool Kekuliser::fixAromaticSystem_(Position it)
 {
-#ifdef DEBUG
+#ifdef DEBUG_KEKULIZER
 	Log.error() << "fixAromaticSystem_ " << it << " " << atom_infos_[it].atom->getFullName() << std::endl;
 	dump();
 #endif
@@ -462,7 +472,7 @@ bool Kekuliser::buildConjugatedSystem_(Position it)
 {
 	AtomInfo& ai = atom_infos_[it];
 
-#ifdef DEBUG
+#ifdef DEBUG_KEKULIZER
 	Log.error() << "buildConjugatedSystem_ " << it  << " " << ai.atom->getFullName() << std::endl;
 	dump();
 #endif
@@ -474,7 +484,7 @@ bool Kekuliser::buildConjugatedSystem_(Position it)
 		Position p = ai.partner_id[b];
 		AtomInfo& pi = atom_infos_[p];
 
-		Size max = pi.max_double;
+		Index max = pi.max_double;
 		if (try_charge_) max = pi.max_double_charged;
 		if (protonate_) max = pi.min_double_charged;
 
@@ -648,7 +658,7 @@ void Kekuliser::getMaximumValence_()
 
 bool Kekuliser::idealValenceAchieved_()
 {
-#ifdef DEBUG
+#ifdef DEBUG_KEKULIZER
 	Log.error() << "Testing valences:" << std::endl;
   dump();
 #endif 
