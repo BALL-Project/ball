@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: testKekulizer.C,v 1.1.2.2 2006/10/06 18:47:03 amoll Exp $
+// $Id: testKekulizer.C,v 1.1.2.3 2006/10/08 15:35:01 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -46,7 +46,6 @@ System* readTestFile(String filename)
 	filename += "atoms";
 
 	vector<String> atoms, names, symbols, fields;
-	vector<double> charges, fcharges;
 	vector<short> types;
 
 	HashMap<String, Position> name_to_pos;
@@ -64,9 +63,6 @@ System* readTestFile(String filename)
 		atoms.push_back(fields[0]);
 		types.push_back(fields[2].toUnsignedShort());
 		symbols.push_back(fields[3]);
-		charges.push_back(fields[4].toFloat());
-		fcharges.push_back(fields[5].toFloat());
-
 		name_to_pos[fields[0]] = pos;
 		pos ++;
 	}
@@ -86,9 +82,6 @@ System* readTestFile(String filename)
 //   ait->setType(types[pos]); // <---------------------------------
 		ait->setProperty("Type", types[pos]);
 		ait->setProperty("TypeName", symbols[pos]);
-		ait->setProperty("OriginalInitialCharge", fcharges[pos]);
- 		ait->setFormalCharge((Index)fcharges[pos]);
-		ait->setRadius(charges[pos]);
 	}
 
 	return system;
@@ -174,24 +167,34 @@ int runtests(const vector<String>& filenames)
 			return -1;
 		}
 
+		Size nrab = 0;
 		vector<HashSet<Atom*> > arings = mmff2.getAromaticRings();
 		for (Position p = 0; p < arings.size(); p++)
 		{
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			HashSet<Atom*>::Iterator hit = arings[p].begin();
 			for (; +hit; ++hit)
 			{
 				abit = (**hit).beginBond();
 				for (; +abit; ++abit)
 				{
-					if (arings[p].has(abit->getPartner(**hit)))
+					Atom* a = *hit;
+					Atom* b = abit->getPartner(*a);
+					if (b < a && arings[p].has(b))
 					{
 						abit->setOrder(Bond::ORDER__AROMATIC);
+						nrab++;
 					}
 				}
 			}
 		}
 
+		Log.error() << "Abonds: " << nrab << std::endl;
 		mmff.setup(*system);
+
+//   		HINFile out("asd.hin", std::ios::out);
+//   		out << *system;
+//   		out.close();
 
 		double dbn = 0;
 		BALL_FOREACH_BOND(*system, ai, abit)

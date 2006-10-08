@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kekulizer.C,v 1.1.2.2 2006/10/06 19:06:25 amoll Exp $
+// $Id: kekulizer.C,v 1.1.2.3 2006/10/08 15:34:21 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/kekulizer.h>
@@ -16,6 +16,9 @@
 
 using namespace std;
 
+// #define DEBUG
+   #undef DEBUG
+
 namespace BALL
 {
 				
@@ -26,6 +29,7 @@ bool Kekuliser::AtomInfo::operator < (const Kekuliser::AtomInfo& info) const
 
 Kekuliser::Kekuliser()
 {
+	clear();
 }
 
 bool Kekuliser::setup(Molecule& mol)
@@ -177,13 +181,19 @@ void Kekuliser::dump()
 	{
 		AtomInfo& ai = atom_infos_[p];
 		Log.error() << ai.atom->getFullName() << " a. Bonds: " << ai.abonds.size()
-			 << "Cur d. " << ai.curr_double 
-			 << "min d. " << ai.min_double
-			 << "max d. " << ai.max_double
-			 << "mincd. " << ai.min_double_charged 
-			 << "maxcd. " << ai.max_double_charged << std::endl;
+			 << " Cur d. " << ai.curr_double 
+			 << " min d. " << ai.min_double
+			 << " max d. " << ai.max_double
+			 << " mincd. " << ai.min_double_charged 
+			 << " maxcd. " << ai.max_double_charged << " -> ";
+		for (Position b = 0; b < ai.abonds.size(); b++)
+		{
+			Atom* partner = ai.abonds[b]->getPartner(*ai.atom);
+			Log.error() << partner->getName() << " ";
+		}
+		Log.error() << std::endl;
 	}
-	Log.error() << std::endl;
+	Log.error() << "TryCharge: " << try_charge_ << "   Try protonate: " << protonate_ << std::endl;
 }
 
 bool Kekuliser::fixAromaticRings_()
@@ -333,6 +343,9 @@ bool Kekuliser::fixAromaticRings_()
 			atom_to_id[atom_infos_[p].atom] = p;
 		}
 
+		bool try_uncharged = true;
+		bool try_protonate = false;
+
 		for (Position p = 0; p < atom_infos_.size(); p++)
 		{
 			AtomInfo& ai = atom_infos_[p];
@@ -340,25 +353,41 @@ bool Kekuliser::fixAromaticRings_()
 			{
 				ai.partner_id.push_back(atom_to_id[ai.abonds[b]->getPartner(*ai.atom)]);
 			}
+
+			if (ai.atom->getElement().getAtomicNumber() == 7)
+			{
+				Size nr_bonds = ai.atom->countBonds();
+				if (nr_bonds == 2) try_protonate = true;
+				if (nr_bonds == 3) try_uncharged = false;
+			}
 		}
 
-//   		dump();
+#ifdef DEBUG
+		Log.error() << "State before Kekulizer:" << std::endl;
+   	dump();
+#endif
+
 		try_charge_ = false;
-		if (!fixAromaticSystem_(0)) 
+		protonate_  = false;
+
+		if (try_uncharged && fixAromaticSystem_(0)) continue;
+	
+		// try to assign 4 valence electrons to Nitrogens
+		try_charge_ = true;
+		if (fixAromaticSystem_(0)) continue;
+	
+		// try to assign 2 valence electrons to Nitrogens
+		protonate_ = true;
+		if (try_protonate && fixAromaticSystem_(0)) continue;
+	
+		// we were not successfull, so reset the bonds to aromatic:
+		ok = false;
+		for (Position i = 0; i < atom_infos_.size(); i++)
 		{
-			try_charge_ = true;
-			if (!fixAromaticSystem_(0))
+			AtomInfo& ai = atom_infos_[i];
+			for (Position b = 0; b < ai.abonds.size(); b++)
 			{
-				ok = false;
-				// we were not successfull, so reset the bonds to aromatic:
-				for (Position i = 0; i < atom_infos_.size(); i++)
-				{
-					AtomInfo& ai = atom_infos_[i];
-					for (Position b = 0; b < ai.abonds.size(); b++)
-					{
-						ai.abonds[b]->setOrder(Bond::ORDER__AROMATIC);
-					}
-				}
+				ai.abonds[b]->setOrder(Bond::ORDER__AROMATIC);
 			}
 		}
 	} // all aromatic systems
@@ -368,6 +397,11 @@ bool Kekuliser::fixAromaticRings_()
 
 bool Kekuliser::fixAromaticSystem_(Position it)
 {
+#ifdef DEBUG
+	Log.error() << "fixAromaticSystem_ " << it << " " << atom_infos_[it].atom->getFullName() << std::endl;
+	dump();
+#endif
+	
 	// no more bonds and no more atoms?
 	if (it >= atom_infos_.size() - 1)
 	{
@@ -386,6 +420,8 @@ bool Kekuliser::fixAromaticSystem_(Position it)
 
 	Index max_double = ai.max_double;
 	if (try_charge_) max_double = ai.max_double_charged;
+	Index min_double = ai.min_double;
+	if (protonate_) min_double = ai.min_double_charged;
 
 	// at full valence?
 	if (ai.curr_double == max_double)
@@ -397,17 +433,17 @@ bool Kekuliser::fixAromaticSystem_(Position it)
 	}
 	else // not at full valence!
 	{
-		// protonierung?
-		if (buildConjugatedSystem_(it)) return true;
-
-		/*
-		if (try_charge_ && ai.curr_double > ai.min_double_charged && ai.curr_double <= ai.max_double_charged))
+		// if we are using charges: try to without adding double bonds:
+		if (try_charge_ && ai.curr_double >= min_double && ai.curr_double <= ai.max_double_charged)
 		{
-			if fixAromaticSystem_(it + 1) return true;
+			if (fixAromaticSystem_(it + 1)) return true;
 		}
-		*/
+	
+		// add missing double bonds
+		if (buildConjugatedSystem_(it)) return true;
 	}
 
+	// no success up to now: reset bonds to single order:
 	for (Position b = 0; b < ai.abonds.size(); b++)
 	{
 		if (ai.abonds[b]->getOrder() == Bond::ORDER__DOUBLE)
@@ -426,6 +462,11 @@ bool Kekuliser::buildConjugatedSystem_(Position it)
 {
 	AtomInfo& ai = atom_infos_[it];
 
+#ifdef DEBUG
+	Log.error() << "buildConjugatedSystem_ " << it  << " " << ai.atom->getFullName() << std::endl;
+	dump();
+#endif
+
 	for (Position b = 0; b < ai.abonds.size(); b++)
 	{
 		// get the bond and partner atom:
@@ -433,7 +474,11 @@ bool Kekuliser::buildConjugatedSystem_(Position it)
 		Position p = ai.partner_id[b];
 		AtomInfo& pi = atom_infos_[p];
 
-		if (pi.curr_double >= pi.max_double)
+		Size max = pi.max_double;
+		if (try_charge_) max = pi.max_double_charged;
+		if (protonate_) max = pi.min_double_charged;
+
+		if (pi.curr_double >= max)
 		{
 			continue;
 		}
@@ -603,7 +648,11 @@ void Kekuliser::getMaximumValence_()
 
 bool Kekuliser::idealValenceAchieved_()
 {
-//   dump();
+#ifdef DEBUG
+	Log.error() << "Testing valences:" << std::endl;
+  dump();
+#endif 
+
 	for (Position p = 0; p < atom_infos_.size(); p++)
 	{
 		AtomInfo& ai = atom_infos_[p];
@@ -637,6 +686,7 @@ void Kekuliser::clear()
 	current_aromatic_system_.clear();
 	atom_infos_.clear();
 	try_charge_ = false;
+	protonate_  = false;
 }
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kekulizer.h,v 1.1.2.2 2006/10/06 18:53:50 amoll Exp $
+// $Id: kekulizer.h,v 1.1.2.3 2006/10/08 15:34:30 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_KEKULIZER_H
@@ -89,7 +89,7 @@ namespace BALL
 
 		bool fixAromaticRings_();
 		bool fixAromaticSystem_(Position it);
-		bool buildConjugatedSystem_(Position it);
+		inline bool buildConjugatedSystem_(Position it);
  		bool idealValenceAchieved_();
 
 		void getMaximumValence_();
@@ -113,6 +113,7 @@ namespace BALL
 		// current aromatic system:
 		vector<AtomInfo> 				atom_infos_;
 		bool 										try_charge_;
+		bool 										protonate_;
 	};
 
 } // namespace BALL
