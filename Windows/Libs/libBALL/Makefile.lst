@@ -218,6 +218,7 @@ libBALL.obj\
 ..\..\..\source\STRUCTURE\graphVertex.obj\
 ..\..\..\source\STRUCTURE\HBondProcessor.obj\
 ..\..\..\source\STRUCTURE\molecularGraph.obj\
+..\..\..\source\STRUCTURE\kekulizer.obj\
 ..\..\..\source\STRUCTURE\numericalSAS.obj\
 ..\..\..\source\STRUCTURE\peptideBuilder.obj\
 ..\..\..\source\STRUCTURE\peptides.obj\
