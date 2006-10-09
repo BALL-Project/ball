@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.4.12 2006/10/03 21:27:01 amoll Exp $
+// $Id: MMFF94.C,v 1.1.4.13 2006/10/09 09:24:41 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -185,6 +185,7 @@ namespace BALL
 		}
 
 		kekuliser_.clear();
+		collectRings_();
 
 		/////////////////////////////////////////////
 		// initialise all parameter sets from the corresponding files:
