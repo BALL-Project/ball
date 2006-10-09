@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.26 2006/09/30 00:21:39 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.27 2006/10/09 11:48:47 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -100,6 +100,7 @@ namespace BALL
  		addDockWidget(Qt::LeftDockWidgetArea, new MolecularControl(this, "Structures"));
 		addDockWidget(Qt::LeftDockWidgetArea, new GeometricControl(this, "Representations"));
 		addDockWidget(Qt::TopDockWidgetArea,  new DatasetControl(this, "Datasets"));
+		DatasetControl::getInstance(0)->hide();
 
 		HelpViewer* BALL_docu = new HelpViewer(this, "BALL Docu");
 		addDockWidget(Qt::AllDockWidgetAreas, BALL_docu);
