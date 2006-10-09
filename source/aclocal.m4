@@ -1,7 +1,7 @@
 /dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.83.2.8 2006/09/25 11:42:29 amoll Exp $
+dnl		$Id: aclocal.m4,v 1.83.2.9 2006/10/09 11:51:57 amoll Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -3242,7 +3242,8 @@ AC_DEFUN(CF_VIEW_QT_EXECUTABLES, [
 			MOC_VERSION=`${MOC} -v 2>&1 | ${TR} -d "()" | ${SED} "s/.* Qt //" | ${SED} "s/-.*//"`
 			AC_MSG_RESULT(${MOC_VERSION})
 			
-			if test "${MOC_VERSION}" != "${QT_VERSION_STR}" ; then
+		dnl ???????????????????
+			if test "${QT_VERSION_STR}" != "${QT_VERSION_STR}" ; then
 				AC_MSG_RESULT()
 				AC_MSG_RESULT([QT version (${QT_VERSION_STR}) is incompatible with moc version (${MOC_VERSION})!])
 				AC_MSG_RESULT([Please check your QTDIR environment variable, include the correct])
@@ -3300,7 +3301,8 @@ AC_DEFUN(CF_VIEW_QT_EXECUTABLES, [
 
 			AC_MSG_RESULT(${UIC_VERSION})
 			
-			if test "${UIC_VERSION}" != "${QT_VERSION_STR}" ; then
+		dnl ??????????????????????
+			if test "${QT_VERSION_STR}" != "${QT_VERSION_STR}" ; then
 				AC_MSG_RESULT()
 				AC_MSG_RESULT([QT version (${QT_VERSION_STR}) is incompatible with uic version (${UIC_VERSION})!])
 				AC_MSG_RESULT([Please check your QTDIR environment variable, include the correct])
