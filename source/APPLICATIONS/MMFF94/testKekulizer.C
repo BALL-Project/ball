@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: testKekulizer.C,v 1.1.2.3 2006/10/08 15:35:01 amoll Exp $
+// $Id: testKekulizer.C,v 1.1.2.4 2006/10/09 08:04:42 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -35,6 +35,7 @@ using namespace BALL;
 String dir;
 
 Size wrong_types = 0;
+File* out = 0;
 
 System* readTestFile(String filename)
 {
@@ -118,13 +119,16 @@ bool testType(System& system, String filename)
 		Index org_type = a.getProperty("Type").getInt();
  		if (org_type == a.getType()) continue;
 
-		String out(org_symbol + " <-> " + our_symbol);
+		String outs(org_symbol + " <-> " + our_symbol);
 
 		wrong_types++;
 
 		ok = false;
 		Log.error() << "Type! " << filename << " " << a.getName() << "  was " << String(a.getProperty("Type").getInt()) 
-								<< " " << out << " " << String(a.getType()) << " "  << std::endl;
+								<< " " << outs << " " << String(a.getType()) << " "  << std::endl;
+
+		(*out) << "Type! " << filename << " " << a.getName() << "  was " << String(a.getProperty("Type").getInt()) 
+								<< " " << outs << " " << String(a.getType()) << " "  << std::endl;
 	}
 
 	return ok;
@@ -171,7 +175,6 @@ int runtests(const vector<String>& filenames)
 		vector<HashSet<Atom*> > arings = mmff2.getAromaticRings();
 		for (Position p = 0; p < arings.size(); p++)
 		{
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			HashSet<Atom*>::Iterator hit = arings[p].begin();
 			for (; +hit; ++hit)
 			{
@@ -188,13 +191,13 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 				}
 			}
 		}
+   		HINFile outh("asd.hin", std::ios::out);
+   		outh << *system;
+  		outh.close();
 
-		Log.error() << "Abonds: " << nrab << std::endl;
+
+//   		Log.error() << "Abonds: " << nrab << std::endl;
 		mmff.setup(*system);
-
-//   		HINFile out("asd.hin", std::ios::out);
-//   		out << *system;
-//   		out.close();
 
 		double dbn = 0;
 		BALL_FOREACH_BOND(*system, ai, abit)
@@ -208,9 +211,10 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 		if (dbn  != db)
 		{
 			Log.error() << "Kekulizer: " << dbn << " != " << db << " double bonds!" << std::endl;
+			(*out) << "Kekulizer: " << dbn << " != " << db << " double bonds!" << std::endl;
 		}
 
- 		testType(*system, filenames[pos]);
+ 		result &= testType(*system, filenames[pos]);
 
  		if (result) ok++;
 		delete system;
@@ -243,6 +247,7 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
+	out = new File("results.txt", std::ios::out);
 	dir = argv[1];
 
 	vector<String> files;
@@ -261,6 +266,9 @@ int main(int argc, char** argv)
 	{
 		Log.error() << hit->first << " " << hit->second << std::endl;
 	}
+
+	out->close();
+	delete out;
 
 	return result;
 }
