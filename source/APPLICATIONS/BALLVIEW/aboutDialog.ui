@@ -8,25 +8,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>228</width>
-    <height>370</height>
+    <width>246</width>
+    <height>397</height>
    </rect>
   </property>
   <property name="sizePolicy" >
    <sizepolicy>
-    <hsizetype>0</hsizetype>
-    <vsizetype>0</vsizetype>
+    <hsizetype>7</hsizetype>
+    <vsizetype>7</vsizetype>
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
   <property name="minimumSize" >
-   <size>
-    <width>228</width>
-    <height>370</height>
-   </size>
-  </property>
-  <property name="maximumSize" >
    <size>
     <width>228</width>
     <height>370</height>
@@ -300,126 +294,98 @@
   <property name="windowTitle" >
    <string>About BALLView</string>
   </property>
-  <widget class="QPushButton" name="PushButton1" >
-   <property name="geometry" >
-    <rect>
-     <x>7</x>
-     <y>338</y>
-     <width>213</width>
-     <height>28</height>
-    </rect>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
    </property>
-   <property name="text" >
-    <string>O&amp;K</string>
+   <property name="spacing" >
+    <number>6</number>
    </property>
-   <property name="shortcut" >
-    <string>Alt+K</string>
-   </property>
-   <property name="default" >
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="qt_version_label" >
-   <property name="geometry" >
-    <rect>
-     <x>-2</x>
-     <y>240</y>
-     <width>232</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>QT Version</string>
-   </property>
-   <property name="textFormat" >
-    <enum>Qt::AutoText</enum>
-   </property>
-   <property name="alignment" >
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="BALL_version_label" >
-   <property name="geometry" >
-    <rect>
-     <x>-1</x>
-     <y>219</y>
-     <width>232</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>(BALL 1.0)</string>
-   </property>
-   <property name="textFormat" >
-    <enum>Qt::AutoText</enum>
-   </property>
-   <property name="alignment" >
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="BALLView_version_label" >
-   <property name="geometry" >
-    <rect>
-     <x>-2</x>
-     <y>189</y>
-     <width>232</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>&lt;h2>&lt;b>BALLView 1.0&lt;/b>&lt;/h2></string>
-   </property>
-   <property name="textFormat" >
-    <enum>Qt::AutoText</enum>
-   </property>
-   <property name="alignment" >
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="TextLabel1" >
-   <property name="geometry" >
-    <rect>
-     <x>-3</x>
-     <y>261</y>
-     <width>232</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Andreas Moll
+   <item row="4" column="0" >
+    <widget class="QLabel" name="TextLabel1" >
+     <property name="text" >
+      <string>Andreas Moll
 Andreas Hildebrandt
 Heiko Klein
 Oliver Kohlbacher</string>
-   </property>
-   <property name="textFormat" >
-    <enum>Qt::AutoText</enum>
-   </property>
-   <property name="alignment" >
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="PixmapLabel1" >
-   <property name="geometry" >
-    <rect>
-     <x>-2</x>
-     <y>-7</y>
-     <width>227</width>
-     <height>196</height>
-    </rect>
-   </property>
-   <property name="focusPolicy" >
-    <enum>Qt::StrongFocus</enum>
-   </property>
-   <property name="pixmap" >
-    <pixmap>../../config/logo.xpm</pixmap>
-   </property>
-   <property name="scaledContents" >
-    <bool>false</bool>
-   </property>
-   <property name="alignment" >
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
+     </property>
+     <property name="textFormat" >
+      <enum>Qt::AutoText</enum>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" >
+    <widget class="QPushButton" name="PushButton1" >
+     <property name="text" >
+      <string>O&amp;K</string>
+     </property>
+     <property name="shortcut" >
+      <string>Alt+K</string>
+     </property>
+     <property name="default" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" >
+    <widget class="QLabel" name="qt_version_label" >
+     <property name="text" >
+      <string>QT Version</string>
+     </property>
+     <property name="textFormat" >
+      <enum>Qt::AutoText</enum>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QLabel" name="BALL_version_label" >
+     <property name="text" >
+      <string>(BALL 1.0)</string>
+     </property>
+     <property name="textFormat" >
+      <enum>Qt::AutoText</enum>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="BALLView_version_label" >
+     <property name="text" >
+      <string>&lt;h1>&lt;b>BALLView 1.0&lt;/b>&lt;/h1></string>
+     </property>
+     <property name="textFormat" >
+      <enum>Qt::AutoText</enum>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="PixmapLabel1" >
+     <property name="focusPolicy" >
+      <enum>Qt::StrongFocus</enum>
+     </property>
+     <property name="pixmap" >
+      <pixmap>logo.png</pixmap>
+     </property>
+     <property name="scaledContents" >
+      <bool>false</bool>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <pixmapfunction></pixmapfunction>
