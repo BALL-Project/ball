@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.4.4 2006/09/21 08:27:05 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.4.5 2006/10/09 09:18:26 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -128,7 +128,7 @@ System* readTestFile(String filename)
 		ait->setProperty("Type", types[pos]);
 		ait->setProperty("TypeName", symbols[pos]);
 		ait->setProperty("OriginalInitialCharge", fcharges[pos]);
- 		ait->setFormalCharge((Index)fcharges[pos]);
+//    		ait->setFormalCharge((Index)fcharges[pos]);
 		ait->setRadius(charges[pos]);
 	}
 
@@ -1035,7 +1035,7 @@ int runtests(const vector<String>& filenames)
 			Log.info() << "We have unassigned atoms: " << mmff.getUnassignedAtoms().size() << std::endl;
 		}
 */
-    		testType(*system, filenames[pos], typer);
+    result &=testType(*system, filenames[pos], typer);
 
 				/*
      		result &= testStretch(mmff, filenames[pos], true);
