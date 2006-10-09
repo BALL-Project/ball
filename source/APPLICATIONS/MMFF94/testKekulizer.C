@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: testKekulizer.C,v 1.1.2.4 2006/10/09 08:04:42 amoll Exp $
+// $Id: testKekulizer.C,v 1.1.2.5 2006/10/09 09:08:54 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -171,6 +171,7 @@ int runtests(const vector<String>& filenames)
 			return -1;
 		}
 
+	
 		Size nrab = 0;
 		vector<HashSet<Atom*> > arings = mmff2.getAromaticRings();
 		for (Position p = 0; p < arings.size(); p++)
@@ -191,9 +192,12 @@ int runtests(const vector<String>& filenames)
 				}
 			}
 		}
+		
+		/*
    		HINFile outh("asd.hin", std::ios::out);
    		outh << *system;
   		outh.close();
+			*/
 
 
 //   		Log.error() << "Abonds: " << nrab << std::endl;
@@ -213,10 +217,18 @@ int runtests(const vector<String>& filenames)
 			Log.error() << "Kekulizer: " << dbn << " != " << db << " double bonds!" << std::endl;
 			(*out) << "Kekulizer: " << dbn << " != " << db << " double bonds!" << std::endl;
 		}
+		
+		
 
  		result &= testType(*system, filenames[pos]);
 
  		if (result) ok++;
+		else
+		{
+			HINFile hin(filenames[pos] + ".hin", std::ios::out);
+			hin << *system;
+			hin.close();
+		}
 		delete system;
 	}
 
