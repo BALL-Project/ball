@@ -17,8 +17,10 @@ pyNucleicAcidList.obj \
 pyNucleotideList.obj \
 pyPDBAtomList.obj \
 pyProteinList.obj \
+pyRegularData3DList.obj \
 pyRepresentationList.obj \
 pyResidueList.obj \
+pyRegularData3DList.obj\
 pySecondaryStructureList.obj \
 sipBALLAddBackboneModel.obj \
 sipBALLAddBallAndStickModel.obj \
@@ -216,6 +218,7 @@ sipBALLPyNucleicAcidList.obj \
 sipBALLPyNucleotideList.obj \
 sipBALLPyPDBAtomList.obj \
 sipBALLPyProteinList.obj \
+sipBALLPyRegularData3DList.obj \
 sipBALLPyResidueList.obj \
 sipBALLPySecondaryStructureList.obj \
 sipBALLPyWidget.obj \
