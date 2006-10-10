@@ -28,7 +28,7 @@ External software and libraries:
   easy to install.
 
   The compilation of the visualization component BALLVIEW also requires
-  the QT library (version 3.2.x or above) which is available from
+  the QT library (version 4.1.x or above) which is available from
 
     http://www.trolltech.com/products/qt
 
@@ -279,7 +279,7 @@ FFTW Support
 
 Python Support
   To enable the Python bindings of BALL you need QT support
-  enabled and the wrapper generator SIP (version 4.3.1), which
+  enabled and the wrapper generator SIP (version 4.4.5), which
   is available from 
      http://www.riverbankcomputing.co.uk/sip/index.php
   Make sure to have a recent Python installation (2.3.x) and
@@ -304,4 +304,4 @@ GLEW
 	the platform's standard locations.
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.18.2.1 2006/05/02 12:32:37 amoll Exp $
+document revision: $Id: INSTALLATION,v 1.18.2.2 2006/10/10 07:43:29 amoll Exp $
