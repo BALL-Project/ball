@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.75 2006/10/03 17:17:44 amoll Exp $
+// $Id: scene.C,v 1.174.2.76 2006/10/11 13:11:29 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -371,13 +371,12 @@ namespace BALL
 
 			if (info_string_ != "")
 			{
-				ColorRGBA c1 = stage_->getBackgroundColor();
-				ColorRGBA c2 = c1.getInverseColor();
+				ColorRGBA c = stage_->getBackgroundColor().getInverseColor();
 				QFont font;
 				font.setPixelSize(16);
 				font.setBold(true);
 				glDisable(GL_LIGHTING);
-				gl_renderer_.setColorRGBA_(c2);
+				gl_renderer_.setColorRGBA_(c);
 				renderText(info_point_.x(), info_point_.y(), info_string_.c_str(), font);
 				glEnable(GL_LIGHTING);
 			}
@@ -410,7 +409,10 @@ namespace BALL
 				font.setBold(true);
 				gl_renderer_.setColorRGBA_(color);
 				glDisable(GL_LIGHTING);
-				renderText(width() - 100, 20, temp.c_str(), font);
+				QFontMetrics fm(font);
+				QRect r = fm.boundingRect(temp.c_str());
+
+				renderText(width() - 20 - r.width(), 20, temp.c_str(), font);
 				glEnable(GL_LIGHTING);
 
 				time_ = PreciseTime::now();
@@ -738,6 +740,22 @@ namespace BALL
 					
 					glDisable(GL_STENCIL_TEST);
 				}
+			}
+
+			if (text_ != "")
+			{
+				ColorRGBA c = stage_->getBackgroundColor().getInverseColor();
+				QFont font;
+				font.setPixelSize(font_size_);
+				font.setBold(true);
+				glDisable(GL_LIGHTING);
+				gl_renderer_.setColorRGBA_(c);
+				QFontMetrics fm(font);
+				QRect r = fm.boundingRect(text_.c_str());
+				renderText(width() -  (20 + r.width()), 
+									 height() - (5 + r.height()), 
+									 text_.c_str(), font);
+				glEnable(GL_LIGHTING);
 			}
 		}
 
@@ -2572,5 +2590,10 @@ namespace BALL
 			}
 		}
 
+		void Scene::showText(const String& text, Size font_size) 
+		{ 
+			text_ = text; 
+			font_size_= font_size;
+		}
 	} // namespace VIEW
 } // namespace BALL
