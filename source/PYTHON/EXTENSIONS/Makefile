@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.35.2.3 2006/10/04 11:48:02 amoll Exp $
+# $Id: Makefile,v 1.35.2.4 2006/10/11 17:47:18 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -48,6 +48,7 @@ PYBALL_SOURCES = \
 	pyAtomList.C \
 	pyBondList.C \
 	pyConstant.C \
+	pyColorRGBAVector.C \
 	pyMoleculeList.C \
 	pyNucleotideList.C \
 	pyProteinList.C \
