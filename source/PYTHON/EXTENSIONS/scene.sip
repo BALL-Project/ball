@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.sip,v 1.5 2005/12/23 17:02:58 amoll Exp $
+// $Id: scene.sip,v 1.5.2.1 2006/10/11 12:44:52 amoll Exp $
 //
 
 class Scene 
@@ -63,5 +63,6 @@ static Scene* getInstance(Position /index/);
 	bool isAnimationRunning() const throw();
 	void setTurnPoint(const Vector3&);
 	const Vector3& getTurnPoint() const;
+	void showText(const String&, Size = 20);
   ~Scene() throw();
 };
