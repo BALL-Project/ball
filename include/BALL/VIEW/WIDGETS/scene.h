@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.16 2006/10/03 17:17:37 amoll Exp $
+// $Id: scene.h,v 1.66.2.17 2006/10/11 12:42:48 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -664,6 +664,11 @@ namespace BALL
 			///
 			virtual void timerSignal_();
 
+			/** Show text in the lower right corner.
+			 		To clear the text, call this method again with an empty string.
+			*/
+			void showText(const String& text, Size font_size = 20);
+
 			//@}
 
 			protected:
@@ -785,6 +790,8 @@ namespace BALL
 			bool show_fps_;
 			static bool offscreen_rendering_;
 			static QSize PNG_size_;
+			String text_;
+			Size   font_size_;
 		};
 
 
