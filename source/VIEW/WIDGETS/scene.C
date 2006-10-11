@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.77 2006/10/11 13:34:57 amoll Exp $
+// $Id: scene.C,v 1.174.2.78 2006/10/11 14:23:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2230,6 +2230,11 @@ namespace BALL
 			if (qresult == QString::null) return;
 
 			String result = ascii(qresult);
+			if (!offscreen_rendering_)
+			{
+				update(false);
+				getMainControl()->processEvents(9999);
+			}
 			exportPNG(result);
 		}
 
