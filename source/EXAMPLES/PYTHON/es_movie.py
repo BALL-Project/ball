@@ -16,6 +16,11 @@ run  = 0
 while (current < end_value):
 	color = ColorRGBA(1. - run * cd, 0, run * cd)
 	value = start_value + run * dist
+	string = String(value)
+	if (value >= 0):
+		string = String("+") + string
+	string.truncate(4)
+	getScene().showText(string)
 	log(String(value))
 	if (getDatasetControl().computeIsoContourSurface(grid, color, value) != 0):
 		getScene().exportPNG()

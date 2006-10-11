@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.76 2006/10/11 13:11:29 amoll Exp $
+// $Id: scene.C,v 1.174.2.77 2006/10/11 13:34:57 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -753,7 +753,7 @@ namespace BALL
 				QFontMetrics fm(font);
 				QRect r = fm.boundingRect(text_.c_str());
 				renderText(width() -  (20 + r.width()), 
-									 height() - (5 + r.height()), 
+									 height() - (r.height() - 5),
 									 text_.c_str(), font);
 				glEnable(GL_LIGHTING);
 			}
@@ -2594,6 +2594,7 @@ namespace BALL
 		{ 
 			text_ = text; 
 			font_size_= font_size;
+			update();
 		}
 	} // namespace VIEW
 } // namespace BALL
