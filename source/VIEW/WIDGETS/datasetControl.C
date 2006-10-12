@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.51 2006/09/29 17:12:18 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.52 2006/10/12 20:22:32 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -23,6 +23,7 @@
 
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
+#include <BALL/VIEW/PRIMITIVES/quadMesh.h>
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/FORMAT/DSN6File.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
@@ -99,6 +100,9 @@ namespace BALL
 			setMenuHint("Open a dock result file");
 
 			// calculations:
+			grid_sphere_ = insertMenuEntry(MainControl::TOOLS_GRID, "Create a sphere", this, SLOT(createSphere()));
+			setMenuHint("Create a sphere for the grid, e.g. for colorizing");
+
 
 			grid_histogram_ = insertMenuEntry(MainControl::TOOLS_GRID, "Calculate normalized Grid", this, SLOT(createHistogramGrid()));
 			setMenuHint("Create a new grid with a histogram equalization");
@@ -432,6 +436,7 @@ namespace BALL
 				else
 				{
 					insertContextMenuEntry_("Render Grid", SLOT(visualizeGrid()));
+					insertContextMenuEntry_("Create Sphere", SLOT(createSphere()));
 					insertContextMenuEntry_("Render Contour Surface", SLOT(computeIsoContourSurface()));
 					insertContextMenuEntry_("Resize for Rendering", SLOT(resizeGrid()));
 					context_menu_.addSeparator();
@@ -800,6 +805,78 @@ namespace BALL
 			return grids;
 		}
 
+
+		bool DatasetControl::computeSphere()
+			throw()
+		{
+			if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return false;
+
+			RegularData3D& grid = *item_to_grid3_[context_item_];
+			Vector3 origin = grid.getOrigin();
+			Vector3 center = origin + grid.getDimension() * 0.5;
+			RegularData3D::IndexType size = grid.getSize();
+			Vector3 x = grid.getCoordinates(RegularData3D::IndexType(size.x - 1, 0, 0)) - origin;
+			Vector3 y = grid.getCoordinates(RegularData3D::IndexType(0, size.y - 1, 0)) - origin;
+			Vector3 z = grid.getCoordinates(RegularData3D::IndexType(0, 0, size.z - 1)) - origin;
+			float min = BALL_MIN3(x.getLength(), y.getLength(), z.getLength());
+			min /= 2.;
+			min -= 0.01;
+
+			if (min < 0) return false;
+
+			const int N_phi = 15;
+			const int N_theta = 7;
+			float radius = min;
+			float delta_phi 	= 2.*M_PI/(N_phi-1);
+			float delta_theta = M_PI/(N_theta-1);
+
+			int theta_start = 3;
+			vector<vector<Vector3> > points_on_sphere(N_theta-theta_start);
+
+			for (Index k = theta_start; k < N_theta; k++)
+			{
+				for (Index i = 0; i < N_phi; i++)
+				{
+					Vector3 current_point;
+					current_point.x = center.x+radius*cos(delta_phi*i)*sin(delta_theta*k);
+					current_point.y = center.y+radius*sin(delta_phi*i)*sin(delta_theta*k);
+					current_point.z = center.z+radius*cos(delta_theta*k);
+					
+					points_on_sphere[k-theta_start].push_back(current_point);		
+				}
+			}
+
+			QuadMesh* qm = new QuadMesh();
+
+			int num_theta = points_on_sphere.size();
+			int num_phi   = points_on_sphere[0].size();
+
+			for (int current_theta = 0; current_theta < num_theta; current_theta++)
+			{
+				for (int current_phi = 0; current_phi < num_phi; current_phi++)
+				{
+					qm->vertex.push_back(points_on_sphere[current_theta][current_phi]);
+
+					if (current_theta != num_theta-1)
+					{
+						Index next_theta = current_theta+1;
+						Index next_phi = current_phi+1;
+						if (current_phi == num_phi-1) next_phi = 0;
+
+						qm->quad.push_back(QuadMesh::Quadruple(current_theta*num_phi + current_phi,
+																								current_theta*num_phi + next_phi,
+																								next_theta*num_phi    + next_phi,
+																								next_theta*num_phi    + current_phi));
+					}
+				}
+			}
+
+			Representation* rep = new Representation();
+			rep->insert(*qm);
+			getMainControl()->insert(*rep);
+			getMainControl()->update(*rep);
+			return true;
+		}
 
 		void DatasetControl::computeIsoContourSurface()
 			throw()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.36.2.19 2006/06/28 13:50:56 amoll Exp $
+// $Id: glRenderer.h,v 1.36.2.20 2006/10/12 20:22:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -290,6 +290,10 @@ namespace BALL
 
 			///
 			virtual void renderMesh_(const Mesh& /*mesh*/)
+				throw();
+
+			///
+			virtual void renderQuadMesh_(const QuadMesh& /*mesh*/)
 				throw();
 
 			///

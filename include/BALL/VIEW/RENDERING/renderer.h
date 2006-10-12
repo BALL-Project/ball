@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.h,v 1.11.2.4 2006/05/05 14:36:00 amoll Exp $
+// $Id: renderer.h,v 1.11.2.5 2006/10/12 20:22:22 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_RENDERER_H
 #define BALL_VIEW_RENDERING_RENDERER_H
@@ -33,6 +33,7 @@ namespace BALL
 		class Stage;
 		class ClippingPlane;
 		class GridVisualisation;
+		class QuadMesh;
 
 		/** Renderer is just a generic base class.
 		 		Derived classes are GLRenderer and POVRenderer.
@@ -188,7 +189,10 @@ namespace BALL
 			/// Render a grid
 			virtual void renderGridVisualisation_(const GridVisualisation&)
 				throw() {Log.error() << "renderGridVisualisation_ not implemented in derived Renderer class" << std::endl;}
-			//@}
+			/// Render a quad mesh
+			virtual void renderQuadMesh_(const QuadMesh&)
+				throw() {Log.error() << "renderQuadMesh_ not implemented in derived Renderer class" << std::endl;}
+				//@}
 			
 			//_
 			const Stage*		stage_;
