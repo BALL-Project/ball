@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: strangLBFGS.h,v 1.1.2.2 2006/10/06 11:51:56 aleru Exp $ 
+// $Id: strangLBFGS.h,v 1.1.2.3 2006/10/12 10:19:32 aleru Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STRANGLBFGS_H 
@@ -17,15 +17,15 @@ namespace BALL
 			A minimizer for geometry optimization based on the limited-memory
 			BFGS method proposed in
 
-			Nocedal J.: Updating quasi-Newton matrices with limited storage.
+			[1] Nocedal J.: Updating quasi-Newton matrices with limited storage.
 			Math. Comp. 35 (1980) 773-782.
 
-			Liu D.C., Nocedal J.: On the limited memory BFGS method for large
+			[2] Liu D.C., Nocedal J.: On the limited memory BFGS method for large
 			scale optimization. Math. Programming 45 (1989) 503-528.
 
 			This is an improved version which adopts ideas proposed in
 	
-			Mehiddin Al-Baali: Improved Hessian approximations for the limited 
+			[3] Mehiddin Al-Baali: Improved Hessian approximations for the limited 
 			memory BFGS method. Numerical Algorithms 22 (1999) 99-112.
 			
 			\ingroup  MolmecEnergyMinimizer
