@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.C,v 1.12.2.4 2006/05/05 14:35:52 amoll Exp $
+// $Id: renderer.C,v 1.12.2.5 2006/10/12 21:38:17 amoll Exp $
 
 #include <BALL/VIEW/RENDERING/renderer.h>
 #include <BALL/VIEW/KERNEL/stage.h>
@@ -19,6 +19,7 @@
 #include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/quadMesh.h>
 #include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
 
 
@@ -87,6 +88,7 @@ namespace BALL
 			else if (RTTI::isKindOf<Label>(*object))  	 			renderLabel_(*(const   				 				 Label*) object);
 			else if (RTTI::isKindOf<IlluminatedLine>(*object)) renderIlluminatedLine_(*(const IlluminatedLine*) object);
 			else if (RTTI::isKindOf<GridVisualisation>(*object)) 	renderGridVisualisation_(*(const  GridVisualisation*) object);
+			else if (RTTI::isKindOf<QuadMesh>(*object))   		 renderQuadMesh_(*(const   						QuadMesh*) object);
 			// ... add more types of GeometricObjects here
 			else
 			{

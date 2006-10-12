@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.53 2006/10/12 20:44:25 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.54 2006/10/12 21:39:00 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -824,8 +824,8 @@ namespace BALL
 
 			if (min < 0) return false;
 
-			const int N_phi = 15;
-			const int N_theta = 7;
+			const int N_phi = 90;
+			const int N_theta = 15;
 			float radius = min;
 			float delta_phi 	= 2.*M_PI/(N_phi-1);
 			float delta_theta = M_PI/(N_theta-1);
@@ -855,7 +855,11 @@ namespace BALL
 			{
 				for (int current_phi = 0; current_phi < num_phi; current_phi++)
 				{
-					qm->vertex.push_back(points_on_sphere[current_theta][current_phi]);
+					Vector3& vc = points_on_sphere[current_theta][current_phi];
+					qm->vertex.push_back(vc);
+					Vector3 vx = -(vc - center);
+					vx.normalize();
+					qm->normal.push_back(vx);
 
 					if (current_theta != num_theta-1)
 					{
@@ -870,6 +874,9 @@ namespace BALL
 					}
 				}
 			}
+
+			qm->colors.clear();
+			qm->colors.push_back(ColorRGBA(0,0,1.));
 
 			Representation* rep = new Representation();
 			rep->insert(*qm);
