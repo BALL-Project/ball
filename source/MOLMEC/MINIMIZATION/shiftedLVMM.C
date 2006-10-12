@@ -1,14 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftedLVMM.C,v 1.1.2.1 2006/10/12 10:20:14 aleru Exp $
+// $Id: shiftedLVMM.C,v 1.1.2.2 2006/10/12 10:28:52 aleru Exp $
 //
 // Minimize the potential energy of a system using a shifted 
 // limited-memory variable metric method.
 
 
-//#include <BALL/MOLMEC/MINIMIZATION/shiftedLVMM.h>
-#include "shiftedLVMM.h"
+#include <BALL/MOLMEC/MINIMIZATION/shiftedLVMM.h>
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #include <BALL/COMMON/limits.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
