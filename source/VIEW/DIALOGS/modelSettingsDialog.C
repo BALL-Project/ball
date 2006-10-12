@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.37.2.7 2006/07/19 12:45:26 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.37.2.8 2006/10/12 11:37:42 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -280,7 +280,8 @@ namespace BALL
 					break;
 					
 				default:
-					throw(Exception::InvalidOption(__FILE__, __LINE__, type));
+					BALLVIEW_DEBUG
+					Log.error() << "Type: " << type << std::endl;
 			}
 
 			applySettingsTo(*model_processor);
