@@ -1,15 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadMesh.h,v 1.1.2.1 2006/10/12 19:22:50 amoll Exp $
+// $Id: quadMesh.h,v 1.1.2.2 2006/10/12 20:00:06 amoll Exp $
 //
 
-#ifndef BALL_VIEW_PRIMITIV_MESH_H
-#define BALL_VIEW_PRIMITIV_MESH_H
-
-#ifndef BALL_MATHS_SURFACE_H
-#	include <BALL/MATHS/surface.h>
-#endif
+#ifndef BALL_VIEW_PRIMITIV_QUADMESH_H
+#define BALL_VIEW_PRIMITIV_QUADMESH_H
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 # include <BALL/VIEW/KERNEL/geometricObject.h>
@@ -34,6 +30,13 @@ namespace BALL
 			///
 			struct Quadruple
 			{
+				///
+				Quadruple(Position p1, Position p2, Position p3, Position p4) 
+				{
+					q1 = p1; q2 = p2; q3 = p3; q4 = p4;
+				}
+
+				///
 				Position q1, q2, q3, q4;
 			};
 
