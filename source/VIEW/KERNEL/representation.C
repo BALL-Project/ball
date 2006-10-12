@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.66.2.3 2006/04/07 09:26:00 amoll Exp $
+// $Id: representation.C,v 1.66.2.4 2006/10/12 21:13:51 amoll Exp $
 //
 
 
@@ -11,6 +11,8 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/quadMesh.h>
+#include <BALL/VIEW/PRIMITIVES/illuminatedLine.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
 
 #include <BALL/KERNEL/atom.h>
@@ -489,18 +491,31 @@ namespace BALL
 			{
 				Size alpha = 255 - transparency_;
 				GeometricObjectList::Iterator it = geometric_objects_.begin();
+				vector<ColorRGBA>* colors;
 				for (; it != geometric_objects_.end(); ++it)
 				{
+					colors = 0;
+
 					Mesh* mesh = dynamic_cast<Mesh*>(*it);
-					if (mesh)
+					if (mesh) colors = &mesh->colors;
+
+					QuadMesh* qmesh = dynamic_cast<QuadMesh*>(*it);
+					if (qmesh) colors = &qmesh->colors;
+
+					IlluminatedLine* line = dynamic_cast<IlluminatedLine*>(*it);
+					if (line) colors = &line->colors;
+
+					if (colors == 0)
 					{
-						for (Position p = 0; p < mesh->colors.size(); p++)
-						{
-							mesh->colors[p].setAlpha(alpha);
-						}
+						(**it).getColor().setAlpha(alpha);
+						continue;
+					}
+					
+					for (Position p = 0; p < mesh->colors.size(); p++)
+					{
+						(*colors)[p].setAlpha(alpha);
 					}
 
-					(**it).getColor().setAlpha(alpha);
 				}
 			}
 
