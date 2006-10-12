@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.C,v 1.1.2.12 2006/07/16 23:54:09 amoll Exp $
+// $Id: modifyRepresentationDialog.C,v 1.1.2.13 2006/10/12 21:05:36 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
@@ -11,6 +11,7 @@
 #include <BALL/VIEW/DATATYPE/colorMap.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/illuminatedLine.h>
+#include <BALL/VIEW/PRIMITIVES/quadMesh.h>
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/file.h>
@@ -366,6 +367,13 @@ namespace BALL
 						mesh->colors[0] = col;
 						continue;
 					}
+					QuadMesh* qmesh = dynamic_cast<QuadMesh*> (*git);
+					if (qmesh != 0)
+					{
+						qmesh->colors.resize(1);
+						qmesh->colors[0] = col;
+						continue;
+					}
 					IlluminatedLine* line = dynamic_cast<IlluminatedLine*>(*git);
 					if (line != 0)
 					{
@@ -387,31 +395,50 @@ namespace BALL
 			}
 			ColorProcessor* cp = rep_->getColorProcessor();
 
+			vector<ColorRGBA>* colors;
+			vector<Vector3>*   vertices;
 			Representation::GeometricObjectList::iterator git = rep_->getGeometricObjects().begin();
 			for (; git != rep_->getGeometricObjects().end(); ++git)
 			{
+				colors  = 0;
+				vertices = 0;
+
 				Mesh* mesh = dynamic_cast<Mesh*> (*git);
-
-				if (mesh == 0) continue;
-
-				if (mesh->colors.size() != mesh->vertex.size())
+				if (mesh != 0)
 				{
-					mesh->colors.resize(mesh->vertex.size());
+					colors = &mesh->colors;
+					vertices = &mesh->vertex;
+				}
+				else
+				{
+					QuadMesh* mesh = dynamic_cast<QuadMesh*> (*git);
+					if (mesh != 0)
+					{
+						colors = &mesh->colors;
+						vertices = &mesh->vertex;
+					}
+				}
+
+				if (colors == 0) continue;
+
+				if (colors->size() != vertices->size())
+				{
+					colors->resize(vertices->size());
 				}
 
 				// collect informations which vertices are to be colored
-				for (Position p = 0; p < mesh->vertex.size(); p++)
+				for (Position p = 0; p < vertices->size(); p++)
 				{
 					// make sure we found an atom
-					const Atom* atom = cp->getClosestItem(mesh->vertex[p]);
+					const Atom* atom = cp->getClosestItem((*vertices)[p]);
 
 					if (atom == 0 || !atom->isSelected())
 					{
-						mesh->colors[p].setAlpha(255 - rep_->getTransparency());
+						(*colors)[p].setAlpha(255 - rep_->getTransparency());
 					}
 					else
 					{
-						mesh->colors[p] = col;
+						(*colors)[p] = col;
 					}
 				}
 			}
@@ -475,31 +502,26 @@ namespace BALL
 			bool error = false;
 			try 
 			{
+				vector<Vector3>* vertices;
 				for (; git != rep_->getGeometricObjects().end(); ++git)
 				{
-					Mesh* mesh = dynamic_cast<Mesh*>(*git);
+					vertices = 0;
 
-					if (mesh != 0)
-					{
-						values.reserve(values.size() + mesh->vertex.size());
-						mesh->colors.resize(mesh->vertex.size());
-						for (Position i = 0; i < mesh->vertex.size(); i++)
-						{
-							values.push_back(grid_->getInterpolatedValue(mesh->vertex[i]));
-						}
-						continue;
-					}
+					Mesh* mesh = dynamic_cast<Mesh*>(*git);
+					if (mesh != 0) vertices = &mesh->vertex;
+
+					QuadMesh* qmesh = dynamic_cast<QuadMesh*>(*git);
+					if (qmesh != 0) vertices = &qmesh->vertex;
 
 					IlluminatedLine* line = dynamic_cast<IlluminatedLine*>(*git);
+					if (line != 0) vertices = &line->vertices;
 
-					if (line != 0)
+					if (vertices == 0) continue;
+
+					values.reserve(values.size() + vertices->size());
+					for (Position i = 0; i < vertices->size(); i++)
 					{
-						values.reserve(values.size() + line->vertices.size());
-						for (Position i = 0; i < line->vertices.size(); i++)
-						{
-							values.push_back(grid_->getInterpolatedValue(line->vertices[i]));
-							continue;
-						}
+						values.push_back(grid_->getInterpolatedValue((*vertices)[i]));
 					}
 				}	 // all geometric objects
 			}
@@ -515,34 +537,42 @@ namespace BALL
 			
 			git = rep_->getGeometricObjects().begin();
 			Position p = 0;
+			vector<ColorRGBA>* colors;
+			vector<Vector3>*   vertices;
 			for (; git != rep_->getGeometricObjects().end(); ++git)
 			{
-				Mesh* mesh = dynamic_cast<Mesh*>(*git);
+				colors = 0;
+				vertices = 0;
 
+				Mesh* mesh = dynamic_cast<Mesh*>(*git);
 				if (mesh != 0)
 				{
-					mesh->colors.resize(mesh->vertex.size());
-					for (Position i = 0; i < mesh->colors.size(); i++)
-					{
-						mesh->colors[i].set(cm.map(values[p]));
-						p++;
-						if (p == values.size()) break;
-					}
-					continue;
+					colors = &mesh->colors;
+					vertices = &mesh->vertex;
+				}
+
+				QuadMesh* qmesh = dynamic_cast<QuadMesh*>(*git);
+				if (qmesh != 0)
+				{
+					colors = &qmesh->colors;
+					vertices = &qmesh->vertex;
 				}
 
 				IlluminatedLine* line = dynamic_cast<IlluminatedLine*>(*git);
-
 				if (line != 0)
 				{
-					line->colors.resize(line->vertices.size());
-					for (Position i = 0; i < line->colors.size(); i++)
-					{
-						line->colors[i].set(cm.map(values[p]));
-						p++;
-						if (p == values.size()) break;
-					}
-					continue;
+					colors = &qmesh->colors;
+					vertices = &line->vertices;
+				}
+
+				if (colors == 0) continue;
+
+				colors->resize(vertices->size());
+				for (Position i = 0; i < colors->size(); i++)
+				{
+					(*colors)[i].set(cm.map(values[p]));
+					p++;
+					if (p == values.size()) break;
 				}
 			}	 // all geometric objects
 			
@@ -1034,6 +1064,7 @@ namespace BALL
 
 			rep_->setTransparency(transparency);
 
+			/*
 			Representation::GeometricObjectList::iterator it = rep_->getGeometricObjects().begin();
 			for (; it != rep_->getGeometricObjects().end(); it++)
 			{
@@ -1046,6 +1077,7 @@ namespace BALL
 					mesh->colors[p].setAlpha(255 - transparency);
 				}
 			}
+			*/
 		}
 
 		void ModifyRepresentationDialog::setSplitRadius(float distance)
