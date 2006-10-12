@@ -33,6 +33,7 @@ Added:
   of the paper by Coutsalies et al., J. Comput. Chem. 25(15), 189 (2004)
 - A major rewrite of the code for molecule superposition
 - A SMARTS matcher
+- Kekulizer
 - An interface to GAMESS (to allow quantum mechanics calculations from BALL)
 - Eased installation process under Microsoft Windows
 
