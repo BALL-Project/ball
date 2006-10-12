@@ -4,12 +4,10 @@ import os
 import shutil
 
 # adapt the paths below
-DIR = "/big/incoming/all-pdbs/"
+DIR = "/local/amoll/all-pdbs/"
 TEMPDIR = "/var/tmp/"
-BALLVIEW = "/usr/src/BALL/source/APPLICATIONS/BALLVIEW/BALLView"
-TESTDIR = "/big/incoming/cartoon_test_dir/"
-ZCAT = TESTDIR + "myzcat"
-print ZCAT
+BALLVIEW = "/local/amoll/BALL/source/APPLICATIONS/BALLVIEW/BALLView"
+TESTDIR = "/local/amoll/cartoon_test_dir/"
 
 result_file = file = open(TESTDIR + "results.txt", 'w')
 
