@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.52 2006/10/12 20:22:32 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.53 2006/10/12 20:44:25 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -806,7 +806,7 @@ namespace BALL
 		}
 
 
-		bool DatasetControl::computeSphere()
+		bool DatasetControl::createSphere()
 			throw()
 		{
 			if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return false;
@@ -1158,7 +1158,7 @@ namespace BALL
 		if (use_atoms)
 		{
 			// seed points from spheres around atoms:
-			vector<Vector3> start_diffs = createSphere(icosaeder_steps_ - 1);
+			vector<Vector3> start_diffs = VIEW::createSphere(icosaeder_steps_ - 1);
 			AtomIterator ait = ac->beginAtom();
 			for (; +ait; ++ait)
 			{
