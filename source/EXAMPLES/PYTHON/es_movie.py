@@ -2,6 +2,23 @@
 start_value = -0.6
 end_value   = 0.6
 dist = 0.1
+
+# colors:
+c1 = ColorRGBA(1.,0,0)
+c2 = ColorRGBA(1.,1.,1.)
+c3 = ColorRGBA(0,0,1.)
+
+# create a color map:
+cm = ColorMap()
+l = []
+l.append(c1)
+l.append(c2)
+l.append(c3)
+cm.setNumberOfColors(100)
+cm.setBaseColors(l)
+cm.setRange(start_value,end_value)
+cm.createMap()
+
 steps = (end_value - start_value) / dist
 cd = 1. / steps
 setMultithreading(false)
@@ -14,8 +31,8 @@ current = start_value
 
 run  = 0
 while (current < end_value):
-	color = ColorRGBA(1. - run * cd, 0, run * cd)
 	value = start_value + run * dist
+	color = cm.map(value)
 	string = String(value)
 	if (value >= 0):
 		string = String("+") + string

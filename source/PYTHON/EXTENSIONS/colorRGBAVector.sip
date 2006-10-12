@@ -1,31 +1,29 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBAVector.sip,v 1.2.2.2 2006/10/11 17:47:18 amoll Exp $
+// $Id: colorRGBAVector.sip,v 1.2.2.3 2006/10/12 10:21:02 amoll Exp $
 //
 
 %MappedType PyColorRGBAVector
 {
 %TypeHeaderCode
-	#include <BALL/VIEW/DATATYPE/colorRGBA.h>
 	#include <BALL/PYTHON/pyColorRGBAVector.h>
-	#include "sipBALLColorRGBA.h"
+  #include "sipBALLColorRGBA.h"
 %End
 
 %ConvertFromTypeCode
-	PyObject *pl = PyList_New(0);
+	PyObject* pl = PyList_New(0);
 
 	if (pl == NULL) return NULL;
 
-	// Convert the vector.
+	// Convert the list.
 
-	for (PyColorRGBAVector::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	PyColorRGBAVector::ConstIterator it = sipCpp->begin();
+	for (; it != sipCpp->end(); ++it)
 	{
-		ColorRGBA* obj = (ColorRGBA*)dynamic_cast<const ColorRGBA*>(&*it);
-
-		if (obj == 0) return 0;
-
-		if (PyList_Append(pl, sipConvertFromInstance(obj, sipClass_ColorRGBA, 0)) < 0)
+		ColorRGBA& obj = *(ColorRGBA*)&*it;
+		PyObject *inst = sipConvertFromInstance(&obj, sipClass_ColorRGBA, 0);
+		if (inst == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;
@@ -37,27 +35,25 @@
  
 %ConvertToTypeCode
 	// Convert a Python list of ColorRGBA instances to an ColorRGBAVector object on the heap.
+	
+	if (sipIsErr == NULL) return PyList_Check(sipPy);
  
-	PyColorRGBAVector *c_vector = new PyColorRGBAVector;
+	PyColorRGBAVector* cl = new PyColorRGBAVector;
  
-	int error = false;
-
 	for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i)
 	{
-		ColorRGBA* color = reinterpret_cast<ColorRGBA*>(sipForceConvertTo_ColorRGBA(PyList_GET_ITEM(sipPy,i), &error));
-
-		if (color == 0) return 0;
+		ColorRGBA* c = reinterpret_cast<ColorRGBA*>(sipForceConvertTo_ColorRGBA(PyList_GET_ITEM(sipPy,i),sipIsErr));
  
-		if (error)
+		if (*sipIsErr)
 		{
-			delete c_vector;
+			delete cl;
 			return 0;
 		}
  
-		c_vector->push_back(*color);
+		cl-> push_back(*c);
 	}
  
-	*sipCppPtr = c_vector;
+	*sipCppPtr = cl;
 
 	return 1;
 %End
