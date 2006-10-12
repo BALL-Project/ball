@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: strangLBFGS.C,v 1.1.2.3 2006/10/06 11:51:56 aleru Exp $
+// $Id: strangLBFGS.C,v 1.1.2.4 2006/10/12 10:20:14 aleru Exp $
 //
 // Minimize the potential energy of a system using an improved version
 // of the limited memory BFGS with Strang recurrences.
@@ -214,7 +214,7 @@ namespace BALL
 			// This mustn't happen at all. If this routine is called all data(-structures) should be fine.
 			// But we are here! Something went wrong and we don't know what. Most kindly the data is 
 			// modified by an external program/thread, so we do the best we can do: first we update the forces
-			// and set the direction to the normalized negative gradient. Additionally, we force a restart.
+			// and set the direction to the negative gradient. Additionally, we force a restart.
 			Log.error() << "dir: " << direction_.isValid() 
 									<< "  initial_grad: " << initial_grad_.isValid() 
 									<< "  current_grad: " << current_grad_.isValid() << endl;
