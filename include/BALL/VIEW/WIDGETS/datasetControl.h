@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.19.2.18 2006/09/29 17:12:45 amoll Exp $
+// $Id: datasetControl.h,v 1.19.2.19 2006/10/12 20:13:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -116,6 +116,9 @@ namespace BALL
 			
 			///
 			bool computeIsoContourSurface(const RegularData3D& grid, const ColorRGBA& color, float value) throw();
+
+			///
+			bool computeSphere() throw();
 
 			///
 			void addTrajectory() throw();
@@ -237,6 +240,7 @@ namespace BALL
 
 			QAction* menu_cs_, *open_trajectory_id_, *open_gradient_id_;
 			QAction* vis_grid_, *grid_resize_, *grid_histogram_, *grid_field_lines_;
+			QAction* grid_sphere_;
 
 			// Variables to calculate Vector Grids
 			VectorGrid*  vector_grid_;
