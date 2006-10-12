@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kekulizer.C,v 1.1.2.5 2006/10/08 19:12:12 amoll Exp $
+// $Id: kekulizer.C,v 1.1.2.6 2006/10/12 15:34:15 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/kekulizer.h>
@@ -16,8 +16,8 @@
 
 using namespace std;
 
-    #define DEBUG_KEKULIZER
-//   #undef DEBUG_KEKULIZER
+//      #define DEBUG_KEKULIZER
+   #undef DEBUG_KEKULIZER
 
 namespace BALL
 {
@@ -670,6 +670,15 @@ bool Kekuliser::idealValenceAchieved_()
 		{
 			if (ai.curr_double < ai.min_double ||
 					ai.curr_double > ai.max_double)
+			{
+				return false;
+			}
+		}
+
+		if (!protonate_)
+		{
+			if (ai.curr_double < ai.min_double 					||
+					ai.curr_double > ai.max_double_charged)
 			{
 				return false;
 			}
