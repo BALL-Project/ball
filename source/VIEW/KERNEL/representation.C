@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.66.2.4 2006/10/12 21:13:51 amoll Exp $
+// $Id: representation.C,v 1.66.2.5 2006/10/12 21:16:25 amoll Exp $
 //
 
 
@@ -511,11 +511,10 @@ namespace BALL
 						continue;
 					}
 					
-					for (Position p = 0; p < mesh->colors.size(); p++)
+					for (Position p = 0; p < colors->size(); p++)
 					{
 						(*colors)[p].setAlpha(alpha);
 					}
-
 				}
 			}
 
