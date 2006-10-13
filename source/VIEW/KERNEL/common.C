@@ -343,6 +343,7 @@ namespace BALL
 		{
 			QPalette pal(label->palette());
 			pal.setColor(label->backgroundRole(), color.getQColor());
+			pal.setColor(QPalette::Window, color.getQColor());
 			((QLabel*)label)->setAutoFillBackground(true);
 			((QLabel*)label)->setPalette(pal);
 		}
