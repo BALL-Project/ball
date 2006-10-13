@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kekulizer.h,v 1.1.2.3 2006/10/08 15:34:30 amoll Exp $
+// $Id: kekulizer.h,v 1.1.2.4 2006/10/13 16:07:53 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_KEKULIZER_H
@@ -98,6 +98,7 @@ namespace BALL
 		void calculateAromaticSystems_();
 		void collectSystems_(Atom& atom);
 		void collectAromaticAtoms_();
+		bool hasAromaticBonds_(Atom& atom);
 
 		vector<HashSet<Atom*> > aromatic_systems_;
 		vector<HashSet<Atom*> > aromatic_rings_;
@@ -114,6 +115,7 @@ namespace BALL
 		vector<AtomInfo> 				atom_infos_;
 		bool 										try_charge_;
 		bool 										protonate_;
+		Molecule*								molecule_;
 	};
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kekulizer.C,v 1.1.2.6 2006/10/12 15:34:15 amoll Exp $
+// $Id: kekulizer.C,v 1.1.2.7 2006/10/13 16:07:48 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/kekulizer.h>
@@ -18,6 +18,7 @@ using namespace std;
 
 //      #define DEBUG_KEKULIZER
    #undef DEBUG_KEKULIZER
+   #define BALL_MMFF94_TEST
 
 namespace BALL
 {
@@ -34,6 +35,8 @@ Kekuliser::Kekuliser()
 
 bool Kekuliser::setup(Molecule& mol)
 {
+	molecule_ = &mol;
+
 	// collect aromatic bonds and atoms to speed up SMARTS matching:
 	collectAromaticAtoms_();
 
@@ -50,7 +53,7 @@ bool Kekuliser::setup(Molecule& mol)
 
 	//////////////////////////////////////////////////////////////
 	// fix carboxlic acid:
-	sm.match(result, mol, "[#8;D1]#6[#8;D1]", aromatic_atoms_);
+	sm.match(result, mol, "[#8;D1]~#6~[#8;D1]", aromatic_atoms_);
 
 	for (Position pos = 0; pos < result.size(); pos++)
 	{
@@ -70,6 +73,8 @@ bool Kekuliser::setup(Molecule& mol)
 			}
 		}
 
+		if (!hasAromaticBonds_(*carbon)) continue;
+
 		oxygen[0]->getBond(*carbon)->setOrder(Bond::ORDER__SINGLE);
 		oxygen[1]->getBond(*carbon)->setOrder(Bond::ORDER__DOUBLE);
 		aromatic_atoms_.erase(oxygen[0]);
@@ -83,7 +88,7 @@ bool Kekuliser::setup(Molecule& mol)
 	// sm.match(result, mol, "[#7;D1]#6([#7;D1])*");
 	Size nr_am_gu = 0;
 	result.clear();
-	sm.match(result, mol, "[#7;D1]#6([#7;D1])", aromatic_atoms_);
+	sm.match(result, mol, "[#7;D1]~[#6R0]~[#7;D1]", aromatic_atoms_);
 	if (result.size() != 0)
 	{
 		for (Position pos = 0; pos < result.size(); pos++)
@@ -103,6 +108,8 @@ bool Kekuliser::setup(Molecule& mol)
 					nitrogen.push_back((Atom*)*sit);
 				}
 			}
+
+			if (!hasAromaticBonds_(*carbon)) continue;
 
 			nitrogen[0]->getBond(*carbon)->setOrder(Bond::ORDER__SINGLE);
 			nitrogen[1]->getBond(*carbon)->setOrder(Bond::ORDER__DOUBLE);
@@ -137,6 +144,8 @@ bool Kekuliser::setup(Molecule& mol)
 				oxygen.push_back((Atom*)*sit);
 			}
 		}
+
+		if (!hasAromaticBonds_(*phosphor)) continue;
 		
 		oxygen[0]->getBond(*phosphor)->setOrder(Bond::ORDER__DOUBLE);
 		oxygen[1]->getBond(*phosphor)->setOrder(Bond::ORDER__SINGLE);
@@ -149,6 +158,22 @@ bool Kekuliser::setup(Molecule& mol)
 		nr_phos++;
 	}
 	
+	//////////////////////////////////////////////////////////////
+	// fix O~N
+	Size on = 0;
+	sm.match(result, mol, "[#8;D1;R0;$(#8~[#6R0])]", aromatic_atoms_);
+
+	for (Position pos = 0; pos < result.size(); pos++)
+	{
+		Atom* oxygen = (Atom*)*result[pos].begin();
+
+		if (!hasAromaticBonds_(*oxygen)) continue;
+
+		oxygen->getBond(0)->setOrder(Bond::ORDER__DOUBLE);
+		on++;
+	}
+	
+
 	//////////////////////////////////////////////////////////////
 	// fix aromatic rings
 	bool ok = fixAromaticRings_();
@@ -166,12 +191,28 @@ bool Kekuliser::setup(Molecule& mol)
 	}
 
 #ifdef BALL_MMFF94_TEST
-	Log.error() << "Kekulized bounds: " <<
-	            << "CA   "  << nr_ca << " " 
+	Log.error() << "Kekulized bonds: " 
+	            << "CA   "  << nr_ca    << " " 
 							<< "NH2  "  << nr_am_gu << " " 
+							<< "ON   "  << on       << " " 
 							<< "PHOS "  << nr_phos  << std::endl;
+	Log.error() << "Not kekulized: " << unassigned_bonds_.size() << std::endl;
 #endif
 	return ok;
+}
+
+bool Kekuliser::hasAromaticBonds_(Atom& atom)
+{
+	AtomBondIterator abit = atom.beginBond();
+	for (; +abit; ++abit)
+	{
+		if (abit->getOrder() == Bond::ORDER__AROMATIC) 
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 
@@ -216,12 +257,14 @@ bool Kekuliser::fixAromaticRings_()
 		// abort for strange rings:
 		if ((*rit).size() < 3)
 		{
-			Log.error() << "Kekulizer: Could not assign ring with " << (*rit).size()<< " atoms. " << std::endl;
+#ifdef DEBUG_KEKULIZER
+ 			Log.error() << "Kekulizer: Could not assign ring with " << (*rit).size()<< " atoms. " << std::endl;
 
 			if ((*rit).size())
 			{
 				Log.error() << (**(*rit).begin()).getFullName() << std::endl;
 			}
+#endif
 			ok = false;
 			continue;
 		}
@@ -512,46 +555,18 @@ void Kekuliser::collectAromaticAtoms_()
 {
 	aromatic_systems_.clear();
 	aromatic_atoms_.clear();
-	// collect all aromatic ring atoms:
-	vector<HashSet<Atom*> >::iterator rit = aromatic_rings_.begin();
-	for (; rit != aromatic_rings_.end(); ++rit)
-	{
-		// all atoms in current ring:
-		HashSet<Atom*>::Iterator hit = (*rit).begin();
-		for (; +hit; ++hit)
-		{
-			// all bonds of this atom:
-			AtomBondIterator bit = (**hit).beginBond();
-			for (; +bit; ++bit)
-			{
-				if (bit->getOrder() == Bond::ORDER__AROMATIC)
-				{
-					aromatic_atoms_.insert(*hit);
-					break;
-				}
-			}
-		}
-	}
-	
-	// sometimes aromatic rings are not correctly recognized:
-	rit = rings_.begin();
-	for (; rit != rings_.end(); ++rit)
-	{
-		if (rit->getSize() > 6) continue;
 
-		// all atoms in current ring:
-		HashSet<Atom*>::Iterator hit = (*rit).begin();
-		for (; +hit; ++hit)
+	AtomIterator 		 ait;
+	BALL_FOREACH_ATOM(*molecule_, ait)
+	{
+		AtomBondIterator abit = ait->beginBond();
+		for (; +abit; ++abit)
 		{
-			// all bonds of this atom:
-			AtomBondIterator bit = (**hit).beginBond();
-			for (; +bit; ++bit)
+			if (abit->getOrder() == Bond::ORDER__AROMATIC)
 			{
-				if (bit->getOrder() == Bond::ORDER__AROMATIC)
-				{
-					aromatic_atoms_.insert(*hit);
-					break;
-				}
+				aromatic_atoms_.insert(abit->getFirstAtom());
+				aromatic_atoms_.insert(abit->getSecondAtom());
+				break;
 			}
 		}
 	}
