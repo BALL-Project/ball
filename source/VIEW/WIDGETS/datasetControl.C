@@ -1,17 +1,22 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.54 2006/10/12 21:39:00 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.55 2006/10/13 15:45:11 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
+
 #include <BALL/VIEW/PRIMITIVES/illuminatedLine.h>
 #include <BALL/VIEW/PRIMITIVES/point.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/line.h>
+#include <BALL/VIEW/PRIMITIVES/quadMesh.h>
 
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
 #include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
@@ -21,9 +26,6 @@
 //   #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
 //   #include <BALL/VIEW/WIDGETS/regularData2DWidget.h>
 
-#include <BALL/VIEW/PRIMITIVES/mesh.h>
-#include <BALL/VIEW/PRIMITIVES/line.h>
-#include <BALL/VIEW/PRIMITIVES/quadMesh.h>
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/FORMAT/DSN6File.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
@@ -807,12 +809,36 @@ namespace BALL
 
 
 		bool DatasetControl::createSphere()
-			throw()
+				throw()
 		{
+			int num_lines_theta = 50;
+			int num_lines_phi   = 50;
+			float theta_start   = 20./90. * M_PI;
+
 			if (context_item_ == 0 || !item_to_grid3_.has(context_item_)) return false;
 
 			RegularData3D& grid = *item_to_grid3_[context_item_];
 			Vector3 origin = grid.getOrigin();
+
+			Vector3 vw(1,0,0); 
+			Scene* scene = Scene::getInstance(0);
+			if (scene) vw = -scene->getStage()->getCamera().getViewVector();
+
+			// rotate the z-vector onto the look_at - vector
+			Matrix4x4 rotation;
+			vw.normalize();
+			
+			Vector3 axis = vw % Vector3(0.,0.,1.);
+
+			if (axis.getLength() > 1e-6)
+			{
+					rotation.setRotation(Angle(-acos(vw.z)), axis);
+			}
+			else
+			{
+					rotation.setIdentity();
+			}
+
 			Vector3 center = origin + grid.getDimension() * 0.5;
 			RegularData3D::IndexType size = grid.getSize();
 			Vector3 x = grid.getCoordinates(RegularData3D::IndexType(size.x - 1, 0, 0)) - origin;
@@ -824,25 +850,34 @@ namespace BALL
 
 			if (min < 0) return false;
 
-			const int N_phi = 90;
-			const int N_theta = 15;
 			float radius = min;
-			float delta_phi 	= 2.*M_PI/(N_phi-1);
-			float delta_theta = M_PI/(N_theta-1);
+			float delta_phi     = 2.*M_PI/(num_lines_phi-1);
+			float delta_theta = M_PI/(num_lines_theta-1);
 
-			int theta_start = 3;
-			vector<vector<Vector3> > points_on_sphere(N_theta-theta_start);
+			int theta_start_index = theta_start / M_PI * num_lines_theta;
+			vector<vector<Vector3> > points_on_sphere(num_lines_theta-theta_start_index);
 
-			for (Index k = theta_start; k < N_theta; k++)
+			for (Index k = theta_start_index; k < num_lines_theta; k++)
 			{
-				for (Index i = 0; i < N_phi; i++)
+				for (Index i = 0; i < num_lines_phi; i++)
 				{
+					float phi   = i*delta_phi;
+					float theta = k*delta_theta;
+
 					Vector3 current_point;
-					current_point.x = center.x+radius*cos(delta_phi*i)*sin(delta_theta*k);
-					current_point.y = center.y+radius*sin(delta_phi*i)*sin(delta_theta*k);
-					current_point.z = center.z+radius*cos(delta_theta*k);
+					current_point.x = radius*cos(phi)*sin(theta);
+					current_point.y = radius*sin(phi)*sin(theta);
+					current_point.z = radius*cos(theta);
 					
-					points_on_sphere[k-theta_start].push_back(current_point);		
+					Vector4 transformed_point(current_point.x, current_point.y, current_point.z, 1.);
+					transformed_point = rotation*transformed_point;
+					current_point.x = transformed_point.x;
+					current_point.y = transformed_point.y;
+					current_point.z = transformed_point.z;
+
+					current_point += center;
+
+					points_on_sphere[k-theta_start_index].push_back(current_point);        
 				}
 			}
 
@@ -868,9 +903,9 @@ namespace BALL
 						if (current_phi == num_phi-1) next_phi = 0;
 
 						qm->quad.push_back(QuadMesh::Quadruple(current_theta*num_phi + current_phi,
-																								current_theta*num_phi + next_phi,
-																								next_theta*num_phi    + next_phi,
-																								next_theta*num_phi    + current_phi));
+																										current_theta*num_phi + next_phi,
+																										next_theta*num_phi    + next_phi,
+																										next_theta*num_phi    + current_phi));
 					}
 				}
 			}
@@ -884,6 +919,7 @@ namespace BALL
 			getMainControl()->update(*rep);
 			return true;
 		}
+
 
 		void DatasetControl::computeIsoContourSurface()
 			throw()
