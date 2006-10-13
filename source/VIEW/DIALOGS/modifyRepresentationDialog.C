@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.C,v 1.1.2.13 2006/10/12 21:05:36 amoll Exp $
+// $Id: modifyRepresentationDialog.C,v 1.1.2.14 2006/10/13 11:37:20 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
@@ -561,7 +561,7 @@ namespace BALL
 				IlluminatedLine* line = dynamic_cast<IlluminatedLine*>(*git);
 				if (line != 0)
 				{
-					colors = &qmesh->colors;
+					colors = &line->colors;
 					vertices = &line->vertices;
 				}
 
