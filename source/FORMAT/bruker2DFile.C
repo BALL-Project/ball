@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker2DFile.C,v 1.25.10.1 2006/10/06 15:48:10 anne Exp $
+// $Id: bruker2DFile.C,v 1.25.10.2 2006/10/14 13:14:04 anne Exp $
 //
 
 #include <BALL/FORMAT/bruker2DFile.h>
@@ -110,15 +110,18 @@ std::cout <<"parsf1: Offset: " << a << " SW_P: " << parsf1_.getDoubleValue( "SW_
 	  //spectrum_.setLowerBound(parsf1_.getIntValue( "YMIN_p" ));
 	  //spectrum_.setUpperBound(parsf1_.getIntValue( "YMAX_p" ));
 
-		spectrum_ = RegularData2D(Vector2(lower_x, lower_y), Vector2(upper_x, upper_y), 
-															Vector2(SIF2_, SIF1_));
+		spectrum_ = RegularData2D(RegularData2D::IndexType(SIF2_, SIF1_),
+															Vector2(lower_x, lower_y), 
+															Vector2(upper_x, upper_y) - Vector2(lower_x, lower_y)); 
 
 	  // Back to the beginning of the file.
 	  f.reopen( );
 	  
 	  int matNumF2 = (int) (SIF2_ / XDIMF2_); // Number of matrices in x - direction
 	  int matNumF1 = (int) (SIF1_ / XDIMF1_); // Number of matrices in y - direction
-std::cout << "hallo" <<std::endl;	  
+		int byte_order = (int) parsf1_.getIntValue("BYTORDP");
+
+		int read_counter = 0;
 		for (int actMat=0; actMat < matNumF2 * matNumF1; actMat++ ) 
 		{ // Walk through all submatrices
 			for (int f1 = 0; f1 < XDIMF1_; f1++ ) 
@@ -129,10 +132,14 @@ std::cout << "hallo" <<std::endl;
 					{
 						break;
 					}
-					std::cout << "actMat:" <<  actMat << " f1:" << f1 << " f2:" << f2 << std::endl;
+					//std::cout << "actMat:" <<  actMat << " f1:" << f1 << " f2:" << f2 << "  " <<
+					//						 "XDIM1: " << XDIMF1_ << " XDIM2: " << XDIMF2_ <<
+					//						 " numMats " << matNumF2*matNumF1 << std::endl;
 					
+read_counter += 4;
+//std::cout << read_counter << std::endl;
 					f.read(c, 4);
-					if (parsf1_.getIntValue( "BYTORDP" ) == 1) 
+					if (byte_order == 1) 
 					{
 						if (littleEndian == false)
 						{

@@ -10,6 +10,9 @@
 #include <BALL/SYSTEM/path.h>
 
 #define FLOAT_VALUE_NA 3600.
+// This value signifies that the evaluation should return 0. This is a very ugly hack,
+// but the best way I can think of to prevent spline evaluation for non-existing h-bonds
+#define FLOAT_VALUE_IGNORE 3700.
 #define STRING_VALUE_NA "BADVAL"
 #define CHAR_VALUE_NA  '?'
 
@@ -981,7 +984,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 		throw()
 	{
 		//float len = FLOAT_VALUE_NA;	
-		float len = 0.;
+		float len = FLOAT_VALUE_IGNORE;
 
 		Atom* HA = 0;
 		
@@ -1014,7 +1017,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 		throw()
 	{
 		//float len = FLOAT_VALUE_NA ;
-		float len = 0.;
+		float len = FLOAT_VALUE_IGNORE;
 
 		Atom* HA2 = 0;
 		
@@ -1022,7 +1025,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 		for (; r_it != residue->endAtom(); ++r_it)
 		{	
 			String name = r_it->getName();
-			if (name == "HA2")
+			if (name == "HA2" || name == "2HA")
 			{
 				HA2 = &(*r_it);
 			}
@@ -1046,7 +1049,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 		throw()
 	{
 		//float len = FLOAT_VALUE_NA;	
-		float len = 0.;
+		float len = FLOAT_VALUE_IGNORE;
 
 		Atom* HN = 0;
 		
@@ -1079,7 +1082,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 		throw()
 	{
 //		float len = FLOAT_VALUE_NA;
-		float len = 0.;
+		float len = FLOAT_VALUE_IGNORE;
 		
 		Atom* O = 0;
 		
@@ -1101,8 +1104,8 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 				if(bi->getType() == Bond::TYPE__HYDROGEN)
 				{
 					len = bi->getLength();
-					// TODO: Atom * H = bi-getPartner(O);
-					// len = (O->getPosition() -H.getPosition()).getLength();
+					//Atom * H = bi-getPartner(O);
+					//len = (O->getPosition() -H.getPosition()).getLength();
 				}
 			}
 		}	
@@ -1225,7 +1228,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 			Atom::BondIterator bi = HN->beginBond();
 			for (;+bi;++bi)
 			{	
-				if(bi->getType() == Bond::TYPE__HYDROGEN)
+				if (bi->getType() == Bond::TYPE__HYDROGEN)
 				{
 					ret = true;	
 				}
@@ -1233,13 +1236,6 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 		}	
 		return ret;
 	}
-
-	bool 		EmpiricalHSShiftProcessor::PropertiesForShift_::hasO_HBond_(Residue* residue) 
-		throw()
-	{
-		return false; 
-	}
-
 
 	bool EmpiricalHSShiftProcessor::PropertiesForShift_::computeProperties_(Atom* a, std::set<String> properties) 
 		throw()
@@ -1398,7 +1394,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 				}
 				else if ((*it) == 	"OH_P" )
 				{
-					properties_string_[(*it)] = (hasO_HBond_(prev_residue) ? "Y": "N");	
+					properties_string_[(*it)] = (getO_HBondLen_(prev_residue) != FLOAT_VALUE_IGNORE) ? "Y": "N";	
 				}
 				else if ((*it) == 	"DISULFIDE_P" )
 				{
@@ -1539,8 +1535,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 				}
 				else if ((*it) == 	"OH_N" )
 				{
-					properties_string_[(*it)]= (hasO_HBond_(next_residue)? "Y": "N");	
-
+					properties_string_[(*it)] = (getO_HBondLen_(next_residue) != FLOAT_VALUE_IGNORE) ? "Y": "N";	
 				}
 				else if ((*it) == 	"DISULFIDE_N" )
 				{
@@ -1633,7 +1628,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 			}
 			else if ((*it) == 	"HA1" )
 			{ 	
-				properties_string_[(*it)]=( hasHA_HBond_(residue)? "Y": "N");
+				properties_string_[(*it)]=(hasHA_HBond_(residue)? "Y": "N");
 			}
 			else if ((*it) == 	"HA2L" )
 			{
@@ -1657,7 +1652,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 			}
 			else if ((*it) == 	"OH" )
 			{
-				properties_string_[(*it)]= (hasO_HBond_(residue)? "Y": "N");		
+				properties_string_[(*it)] = (getO_HBondLen_(residue) != FLOAT_VALUE_IGNORE) ? "Y": "N";	
 			}
 			else if ((*it) == 	"DISULFIDE" )
 			{
@@ -1670,13 +1665,17 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 			}
 			else if ((*it) == "HBONDSTAT")
 			{
-				// TODO: first position reflects existence of HA1 HBond (Length > 0.)
-				// 			 second position reflects existence of HA2 HBond     "
-				// 			 third position reflects HN HBond Length             "
-				// 			 fourth position reflects ?? HBond length
+				// 	first position reflects existence of HA1 HBond (Length > 0.)
+				// 	second position reflects existence of HA2 HBond     "
+				// 	third position reflects HN HBond Length             "
+				// 	fourth position reflects O_Bond length
 				//
-				// 			 0.0 ? 'N' : 'Y';
 				properties_string_[(*it)] = "YYYY";	
+				properties_string_[(*it)][0] = (hasHA_HBond_(residue)? 'Y': 'N');
+				properties_string_[(*it)][1] = (hasHA2_HBond_(residue)? 'Y': 'N');
+				properties_string_[(*it)][2] = (hasHN_HBond_(residue)? 'Y': 'N');
+				properties_string_[(*it)][3] = (getO_HBondLen_(residue) != FLOAT_VALUE_IGNORE) ? 'Y': 'N';
+				std::cout << "***************************" << properties_string_[(*it)]<< std::endl;
 			}
 		} 
 		return true;
@@ -1758,7 +1757,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 			s1d_(),
 			table_()
 	{			
-//std::cout << filename <<  std::endl;
+std::cout << filename <<  std::endl;
 		// find the data file
 		BALL::Path p;
 		String file_name = p.find("NMR/"+filename) ;// "NMR/splinedata/hat_PSI_DISULFIDE-1.dat");
@@ -1789,7 +1788,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 
 		// parse the data file
 		parseDataFile_(file, filename);
-
+		std::cout << type_ << std::endl;
 		if (type_ == SINGLE__REAL) // we have a single spline
 		{  
 			// create a spline	
@@ -1877,6 +1876,8 @@ std::cout << "DISCRETE__REAL not implemented" << std::endl;
 			}
 			else if ( (type_ == DISCRETE__DISCRETE) || (type_ == CHI__DISCRETE)|| (type_ == DISCRETE__CHI) || (type_ == CHI__CHI) )
 			{
+		std::cout << "DISCRETE__DISCRETE" <<  std::endl;
+
 				if (x_axis_values_.size() != y_axis_values_.size())
 				{
 					std::cerr << "Tried to read an invalid table in file"<< filename <<  std::endl;
@@ -2059,7 +2060,6 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			{
 				line.getline(file);
 				line.split(fields, ";"); 
-
 				for (Position j = 0; j < fields.size(); j++)
 					x_axis_values_[i].push_back(fields[j]);
 
@@ -2073,7 +2073,6 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			// and build the row_ and col_averages if applicable
 			for (Position i=0; i<row_average_values.size(); i++)
 					row_averages_[y_axis_values_[i]] = row_average_values[i];
-
 			for (Position i=0; i<col_average_values.size(); i++)
 				col_averages_[x_axis_values_[0][i]] = col_average_values[i];
 
@@ -2081,6 +2080,7 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		{
 			std::cerr<< "format error in " <<  filename << std::endl;
 		}
+
 	}
 
 
@@ -2106,12 +2106,16 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		String string1 = properties[first_property_].second;
 		String string2 = properties[second_property_].second;
 
+		//string1.toUpper();
+		//string2.toUpper();
+		
 		// special case1 : CHI
 		if (PropertiesForShift_::isMixed(first_property_))
 		{	
 //std::cout << "chi1: " << properties[first_property_].first << "|" << properties[first_property_].second<< std::endl;
 			
 			string1 = properties[first_property_].second;
+			string1.toUpper();
 			
 			// is the property numeric or alphanumeric? 
 			if (properties[first_property_].first != FLOAT_VALUE_NA)
@@ -2134,6 +2138,7 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 //std::cout << "chi2: " << properties[first_property_].first << "|" << properties[first_property_].second<< std::endl;
 
 			string2 = properties[second_property_].second; 
+			string2.toUpper();
 			// is the property numeric or alphanumeric? 
 			if (properties[second_property_].first != FLOAT_VALUE_NA)
 			{
@@ -2156,6 +2161,7 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		{ 
 			//Remember: we did this to save space
 			string1 = first_property_;
+			//string1.toUpper();
 		}
 		
 		//
@@ -2168,6 +2174,7 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			tabletype::iterator first_it = table_.find(string1);
 			if (first_it != table_.end())
 			{  
+			//	std::cout << "blubbi: " << string1 << " " << string2 << " " << (first_it->second.find(string2)!=first_it->second.end()) << std::endl;
 				// yes it is :-)
 				// check if the second property is contained in the table
 				std::map<String, float>::iterator second_it = first_it->second.find(string2);
@@ -2243,7 +2250,7 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		else if (type_ == DISCRETE__REAL)
 		{
 //std::cerr<< "Discrete Real should NEVER be called!! "<< std::endl;
-
+			std::cout << "Hallo hallo hallo" << std::endl;
 			// This simulates SHIFTX behaviour: if only one factor is out of bounds, we return the all-values average
 			if (   (properties[second_property_].first == FLOAT_VALUE_NA)
 					 ||(properties[first_property_].second == STRING_VALUE_NA) )
@@ -2308,10 +2315,15 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		{	
 			std::cerr << "Unknown type of properties! " << std::endl;
 		}
-
-		//std::cout << "_operator (): ";
-		//std::cout <<properties.atom->getName() << "  " << first_property_ << ":" << second_property_<< " -- " << properties[first_property_].first << "/" << properties[first_property_].second<< ":" << properties[second_property_].first << "/" << properties[second_property_].second <<  " -- " << shift << std::endl;
 		
+		// if one of the values is FLOAT_VALUE_IGNORE, we will _in all cases_ return zero
+		if ( 		 (properties[first_property_].first == FLOAT_VALUE_IGNORE) 
+					|| (properties[second_property_].first == FLOAT_VALUE_IGNORE) )
+			shift = 0.;
+
+		std::cout << "_operator (): ";
+		std::cout <<properties.atom->getName() << " " << properties.atom->getResidue()->getID()<<  "  " <<properties.atom->getResidue()->getName()<< "  " << first_property_ << ":" << second_property_<< " -- " << properties[first_property_].first << "/" << properties[first_property_].second<< ":" << properties[second_property_].first << "/" << properties[second_property_].second <<  " -- " << shift << std::endl;
+
 		return shift;
 	} 
 

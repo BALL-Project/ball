@@ -62,6 +62,45 @@ double Spectrum<RegularData2D, Peak2D>::earthMoversDistance(const Spectrum<Regul
 
 template <>
 BALL_INLINE
+double Spectrum<RegularData1D, Peak1D>::getIntegral() const
+{
+	RegularData1D::IndexType index;
+	RegularData1D::IndexType size = data_.getSize();
+	float spacing = data_.getSpacing();
+
+	double total_integral=0.;
+	for (index = 0; index < size; index++)
+	{
+			RegularData1D::CoordinateType pos = data_.getCoordinates(index);
+			total_integral += data_(pos)*spacing;
+	}
+	return total_integral;
+}
+
+
+template <>
+BALL_INLINE
+double Spectrum<RegularData2D, Peak2D>::getIntegral() const
+{
+	RegularData2D::IndexType index;
+	RegularData2D::IndexType size = data_.getSize();
+	Vector2<float> spacing = data_.getSpacing();
+
+	double total_integral=0.;
+	for (index.x = 0; index.x < size.x; index.x++)
+	{
+		for (index.y = 0; index.y < size.y; index.y++)
+		{
+			RegularData2D::CoordinateType pos = data_.getCoordinates(index);
+			total_integral += data_(pos) * spacing.x * spacing.y;
+		}
+	}
+	
+	return total_integral;
+}
+
+template <>
+BALL_INLINE
 double Spectrum<RegularData1D, Peak1D>::difference(const Spectrum<RegularData1D, Peak1D>& spectrum) const
 {
 	// this is the most simple way to compare the spectra, even if they have different dimensions
@@ -69,6 +108,10 @@ double Spectrum<RegularData1D, Peak1D>::difference(const Spectrum<RegularData1D,
 	RegularData1D::IndexType index;
 	RegularData1D::IndexType size = data_.getSize();
 	
+	// for normalization
+	double integral = getIntegral();
+	double their_integral = spectrum.getIntegral();
+
 	float spacing = data_.getSpacing();
 	
 	const RegularData1D& their_data = spectrum.getData();
@@ -78,8 +121,8 @@ double Spectrum<RegularData1D, Peak1D>::difference(const Spectrum<RegularData1D,
 	{
 			RegularData1D::CoordinateType pos = data_.getCoordinates(index);
 
-			float our_value = data_(pos);
-			float their_value;
+			double our_value = data_(pos);
+			double their_value;
 			try {
 				their_value = their_data(pos);
 			} 
@@ -87,7 +130,7 @@ double Spectrum<RegularData1D, Peak1D>::difference(const Spectrum<RegularData1D,
 			{
 				continue;
 			}
-			total_difference += fabs(our_value-their_value)*spacing;
+			total_difference += fabs(our_value/integral - their_value/their_integral)*(double)spacing;
 	}
 	
 	return total_difference;
@@ -99,6 +142,13 @@ double Spectrum<RegularData2D, Peak2D>::difference(const Spectrum<RegularData2D,
 {
 	// this is the most simple way to compare the spectra, even if they have different dimensions
 	// points not contained in one of the spectra are ignored...
+	
+	// for normalization
+	double integral = getIntegral();
+	double their_integral = spectrum.getIntegral();
+
+std::cout << "CMP myInt : " << integral << " their int: " << their_integral << std::endl;  
+
 	RegularData2D::IndexType index;
 	RegularData2D::IndexType size = data_.getSize();
 	
@@ -113,8 +163,8 @@ double Spectrum<RegularData2D, Peak2D>::difference(const Spectrum<RegularData2D,
 		{
 			RegularData2D::CoordinateType pos = data_.getCoordinates(index);
 
-			float our_value = data_(pos);
-			float their_value;
+			double our_value = data_(pos);
+			double their_value;
 			try {
 				their_value = their_data(pos);
 			} 
@@ -122,12 +172,16 @@ double Spectrum<RegularData2D, Peak2D>::difference(const Spectrum<RegularData2D,
 			{
 				continue;
 			}
-			total_difference += fabs(our_value-their_value) * spacing.x * spacing.y;
+			total_difference += fabs( (our_value/integral) - (their_value/their_integral)) * (double)spacing.x * (double)spacing.y;
+			std::cout << "   td= " << total_difference << std::endl;
 		}
 	}
 	
 	return total_difference;
 }
+
+
+
 
 template <>
 BALL_INLINE

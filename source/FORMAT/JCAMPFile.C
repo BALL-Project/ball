@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.C,v 1.19.10.1 2006/10/06 15:48:10 anne Exp $
+// $Id: JCAMPFile.C,v 1.19.10.2 2006/10/14 13:14:04 anne Exp $
 //
 
 
@@ -46,7 +46,6 @@ namespace BALL
 	void JCAMPFile::read()
 		throw(Exception::ParseError)
 	{
-std::cout <<"+++++++++"<<__FILE__ << "  " << getName() <<  "+++++++++++" << std::endl;
 		// Clear the old contents of the header/entry maps.
 		header_.clear();
 		entries_.clear();
@@ -63,7 +62,6 @@ std::cout <<"+++++++++"<<__FILE__ << "  " << getName() <<  "+++++++++++" << std:
 
 		while (readLine())
 		{
-	std::cout << "NON file" << getLine()<< std::endl; 
 			JCAMPValue value;
 		
 			try
@@ -125,10 +123,6 @@ std::cout <<"+++++++++"<<__FILE__ << "  " << getName() <<  "+++++++++++" << std:
 					// =================== read non-array entry ===============================
 					else if (regular.find(getLine(), groups))
 					{
-	std::cout << "NON Array: " << getLine() << "  0:" << groups[0] <<" 1:" << groups[1] << " 2:" << groups[2]<< 
-		" isfloat:" << groups[2].toString().isFloat() 
-//		<< " value:" << groups[2].toString().toFloat()  
-		<< std::endl; 
 						// =================== read numeric entry ===============================
 						if (groups[2].toString().isFloat())
 						{
@@ -174,7 +168,6 @@ std::cout <<"+++++++++"<<__FILE__ << "  " << getName() <<  "+++++++++++" << std:
 			}
 
 			// We could not parse this line -- abort.
-			std::cout << "NON error in line"<< getLine() << std::endl;	
 			throw Exception::ParseError(__FILE__, __LINE__, getName(), getLine());
 		};
 	}
