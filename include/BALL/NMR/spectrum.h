@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: spectrum.h,v 1.14.18.4 2006/10/04 13:49:41 anne Exp $
+// $Id: spectrum.h,v 1.14.18.5 2006/10/14 13:14:03 anne Exp $
 //
 
 #ifndef BALL_NMR_SPECTRUM_H
@@ -103,6 +103,7 @@ namespace BALL
 		virtual PositionType getSpacing() const;
 		virtual void setSticks(std::vector<PeakType> sticks) {sticks_ = sticks;};
 		
+		virtual double getIntegral() const;
 
 		protected:
 		DataType	data_;
@@ -177,7 +178,7 @@ namespace BALL
 	{
 		return data_;
 	}
-	
+
 	/**	Convenience typedefs
 	\ingroup Spectra
 	*/

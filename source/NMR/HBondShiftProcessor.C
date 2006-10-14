@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondShiftProcessor.C,v 1.6.18.5 2006/10/04 13:49:43 anne Exp $
+// $Id: HBondShiftProcessor.C,v 1.6.18.6 2006/10/14 13:14:05 anne Exp $
 //
 
 #include <BALL/NMR/HBondShiftProcessor.h>
@@ -167,7 +167,7 @@ namespace BALL
 		 * 	 				Acceptors are: O, OD_n, OE_n, OG_n, OH_n or water in the solvent!
 		 * 	 				By now we do not consider water!
 		 * 	 				Donors and Acceptors have to be on different residues.
-		 * 	 				HA even form hydrogen bonds with neighbours.
+		 * 	 				HA even does not form hydrogen bonds with neighbours.
 		 * 	 				If the acceptor is a solvent oxygen, the donor must not be a HA (not yet implemented!)
 		 * 	 				The oxygen--hydrogen separation must be less than 3.5 A for H(N) 
 		 * 	 					and 2.77 A for HA.

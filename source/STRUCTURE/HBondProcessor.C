@@ -7,22 +7,162 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/KERNEL/PTE.h>
+#include <map>
 
 namespace BALL
 {
-
+	const String HBondProcessor::Option::PREDICTION_METHOD = "prediction_method";
+	const String HBondProcessor::PredictionMethod::KABSCH_SANDER = "Kabsch_Sander";
+	const String HBondProcessor::PredictionMethod::WISHART_ET_AL = "Wishart_et_al";
+	const String HBondProcessor::Default::PREDICTION_METHOD = HBondProcessor::PredictionMethod::KABSCH_SANDER;
+	
 	HBondProcessor::HBondProcessor()
 		:	MAX_LENGTH(5.2 + 4.2),
 			BOND_LENGTH_N_H(1.020),
 			BOND_LENGTH_C_O(1.240),
-			residue_data_()
+			AMIDE_PROTON_OXYGEN_SEPARATION_DISTANCE(3.5),
+			ALPHA_PROTON_OXYGEN_SEPARATION_DISTANCE(2.77208),
+			residue_data_(),
+			h_bond_pairs_()
 	{
+		setDefaultOptions();
 	}
+
+	HBondProcessor::HBondProcessor(Options& new_options)
+		:	MAX_LENGTH(5.2 + 4.2),
+			BOND_LENGTH_N_H(1.020),
+			BOND_LENGTH_C_O(1.240),	
+			AMIDE_PROTON_OXYGEN_SEPARATION_DISTANCE(3.5),
+			ALPHA_PROTON_OXYGEN_SEPARATION_DISTANCE(2.77208),
+			options(new_options),
+			residue_data_(),
+			h_bond_pairs_()
+	{
+		// make sure to add all defaults that were missing in the options we got
+		setDefaultOptions();
+	}
+		
 
 	HBondProcessor::~HBondProcessor()
 	{
 	}
+		
+	void 	HBondProcessor::init()
+    throw()
+  {
+	}
+	
+	bool 	HBondProcessor::start()
+    throw()
+  {
+    // clear the donor list and the acceptor list
+    donors_.clear();
+    acceptors_.clear();
+		h_bond_pairs_.clear();
+    residue_data_.clear();
 
+		residue_id_to_position_.clear();
+		
+  	return true;
+	}
+	
+	
+	Processor::Result HBondProcessor::operator() (Composite &composite)
+	{
+		// create a bounding box which should include the composite
+		BoundingBoxProcessor bp;
+
+		// What happens to ligands, water ...
+		ResidueIterator ri;
+
+		// do we have a system?
+		if (RTTI::isKindOf<System>(composite))
+		{
+			System *s = RTTI::castTo<System>(composite);
+			s->apply(bp);
+      ri = s->beginResidue();
+		}
+		else if (RTTI::isKindOf<Protein>(composite))
+		{
+			Protein *s = RTTI::castTo<Protein>(composite);
+			s->apply(bp);
+      ri = s->beginResidue();
+		}
+		else if (RTTI::isKindOf<Chain>(composite))
+		{
+			Chain *s = RTTI::castTo<Chain>(composite);
+			s->apply(bp);
+			ri = s->beginResidue();
+		}
+		
+		// ri doesn't seem to exist
+		if (!(+ri)) 
+		{
+			return Processor::CONTINUE;
+		}
+
+		
+		if (options[HBondProcessor::Option::PREDICTION_METHOD] == PredictionMethod::KABSCH_SANDER)
+		{
+			
+			upper_ = bp.getUpper();
+			lower_ = bp.getLower();
+
+			// compute the H-Bonds
+			preComputeBonds_(ri);
+
+			//NOTE: This has to be a __BREAK__, since we want to allow
+			//to apply the HBondProcessor at system/protein and chain level! 
+			//Processors "selfcall" hierarchically, so in case of a system 
+			//the composite system is "subcalled" first and all residues 
+			//of the system were taken into account and than we have to break.
+			//Otherwise next selfcall would be the protein/chain...
+			return Processor::BREAK;
+
+		}
+		else if (options[HBondProcessor::Option::PREDICTION_METHOD] == PredictionMethod::WISHART_ET_AL)
+		{
+			// we collect the possible acceptors and donors
+			// Wishart et al allow hydrogen bonds between all kinds of oxigens and H/HA 
+			// restricted by certain rules
+
+			// we have to enumerate the residues new, to make sure that they get an ascending number
+			Position j = 0;  
+
+			for (; +ri ; ++ri)
+			{	
+				residue_id_to_position_[ri->getID()] = j;
+				j++;
+				for (AtomIterator ai = ri->beginAtom(); +ai; ++ai)
+				{
+					Atom* atom = RTTI::castTo<Atom>((*ai));
+
+					// we store all oxigens as hydrogen bond acceptors
+					if (atom->getElement() == PTE[Element::O])
+					{			
+						acceptors_.push_back(atom);
+					}			
+					// and the hydrogen bond donors
+					if (   (atom->getName().hasSubstring( "HA")) 
+							|| (atom->getName() == "H")  ) 
+					{
+						donors_.push_back(atom);
+					}
+				}
+			}	
+			return Processor::BREAK;
+		}
+		else
+		{
+			Log.error() << "HBondProcessor::Operator(): Unknown prediction method requested! Aborting!" << std::endl;
+			return Processor::ABORT;
+		}
+
+		return Processor::CONTINUE;
+
+	}
+	
 	/*********************************************************
   *  preComputeBonds identifies characteristic amino acid
 	*  atoms (C, N, O), and stores them in residue_data_ 
@@ -108,13 +248,33 @@ namespace BALL
 		}	
 	}
 
+ 	bool HBondProcessor::finish()
+	{
+		bool ret = false;
+		
+		if (options[HBondProcessor::Option::PREDICTION_METHOD] == PredictionMethod::KABSCH_SANDER)
+		{
+			ret = finishKabschSander_();
+		}
+		else if (options[HBondProcessor::Option::PREDICTION_METHOD] == PredictionMethod::WISHART_ET_AL)
+		{
+			ret = finishWishartEtAl_();
+		}
+		else
+		{
+			Log.error() << "HBondProcessor::finish(): Unknown prediction method requested! Aborting!" << std::endl;
+			ret = false;
+		}
+		
+		return ret;
+	}
 
-
-  /*************************************************** 
+	
+	/*************************************************** 
 	 * Finish computes all hbonds of the composite 
 	 * and stores them in h_bond_pairs_.
    ***************************************************/
-	bool HBondProcessor::finish()
+	bool HBondProcessor::finishKabschSander_()
 	{
 		if (residue_data_.size() == 0) return true;
 
@@ -234,52 +394,168 @@ namespace BALL
 		return true;
 	}
 
-	/*********************************************************
-	 *  Compute all HBonds for a given composite 
-	 *********************************************************/
-	Processor::Result HBondProcessor::operator() (Composite &composite)
-	{
-		ResidueIterator ri;
+	
+	bool HBondProcessor::finishWishartEtAl_()
+	{	
+		h_bond_pairs_.resize(residue_id_to_position_.size());
+		/* distance, donor, acceptor for the ShiftXwise hydrogenbond determination*/
+		std::multimap<float, std::pair<Atom*, Atom*> >  hbonds;
+		std::map<Atom*, bool> donor_occupied;
+		std::map<Atom*, bool> acceptor_occupied;
+
+		// if there were no donors or acceptors, return immediately
+		if ((donors_.size() == 0) || acceptors_.size() == 0)
+		{
+			return true;
+		}
+
+		/* 	 		The ShiftX definition of hydrogen bonds is: 
+		 * 	 				Donors are: H and HA
+		 * 	 				Acceptors are: O, OD_n, OE_n, OG_n, OH_n or water in the solvent!
+		 * 	 				By now we do not consider water!
+		 * 	 				Donors and Acceptors have to be on different residues.
+		 * 	 				HA even does not form hydrogen bonds with neighbours.
+		 * 	 				If the acceptor is a solvent oxygen, the donor must not be a HA (not yet implemented!)
+		 * 	 				The oxygen--hydrogen separation must be less than 3.5 A for H(--N) 
+		 * 	 					and 2.77 A for HA.
+		 * 	 				For H must hold: 
+		 * 	 				  the angle between N_H donor bond vector and the C=O acceptor bond vector must be 
+		 * 	 						90 degrees or more, and 
+		 * 	 					the distance must be less than 2.5 + cos of the angle, and 
+		 * 	 					hydrogen-oxygen distance must be less than the nitrogen - oxygen distance
+		 * 			Having applied these rules to each donor--acceptor pair, ShiftX then 
+		 * 			sorts the list of possible bonds by the O_H separation distance, shortest to 
+		 * 			longest. The list is the processed so that only the single strongest hydrogen 
+		 * 			bond is identified for each donor--acceptor pair. Up to that point
+		 * 			any bond involving the same donor or acceptor is preculded! 
+		 */
+
+		// the potential donors and acceptors are already stored 
+		// in donors_ and acceptors_
+
+		// we need a datastructure to collect the hydrogen bonds
+		for(Position d = 0; d < donors_.size(); ++d)
+		{
+			for(Position a = 0; a < acceptors_.size(); ++a)
+			{	
+				// does the bond fullfill all SHiftX criteria?
+
+				// exclude self interaction
+				if (donors_[d]->getResidue() == acceptors_[a]->getResidue())
+				{
+					continue;	
+				}
+
+				// HA does not form hydrogen bonds with its _neighbours_
+				if (donors_[d]->getName().hasSubstring("HA"))
+				{
+					bool adjacent_residues = 		 donors_[d]->getResidue()->isNextSiblingOf(*(acceptors_[a]->getResidue()))
+						|| donors_[d]->getResidue()->isPreviousSiblingOf(*(acceptors_[a]->getResidue()))
+						||(abs(  donors_[d]->getResidue()->getID().toInt() 
+									- acceptors_[a]->getResidue()->getID().toInt()) <= 1);
+
+					if (adjacent_residues)
+						continue;
+				}
+
+				//  oxygen--hydrogen separation  
+				float distance =  (donors_[d]->getPosition() - acceptors_[a]->getPosition()).getLength();
+				if (   (  donors_[d]->getName().hasSubstring("HA") && (distance > ALPHA_PROTON_OXYGEN_SEPARATION_DISTANCE ))
+						|| ( (donors_[d]->getName() == "H")            && (distance > AMIDE_PROTON_OXYGEN_SEPARATION_DISTANCE )))
+					continue;
+
+				// TODO: acceptor is a solvent oxygen, the donor must not be a HA
+
+				// the angle criterion for H
+				if (donors_[d]->getName()== "H")
+				{
+					Atom* C = NULL;
+					Atom* N = NULL;
+					// we have to find the C to which the acceptor O is bound and 
+					// 								 the N to which the _donor_ H is bound 
+
+					// we can't use countBonds here because of the hydrogen bonds which we want to ignore
+					int bond_count_acceptor = 0;
+					Atom::BondIterator bi;
+					for (bi = acceptors_[a]->beginBond(); +bi; ++bi)
+					{
+						bond_count_acceptor++;
+						if (bi->getPartner(*acceptors_[a])->getName().hasSubstring("C"))
+							C = bi->getPartner(*acceptors_[a]);
+					}
+
+					int bond_count_donor = 0;
+					for (bi = donors_[d]->beginBond(); +bi; ++bi)
+					{
+						if (bi->getType() != Bond::TYPE__HYDROGEN)
+						{
+							bond_count_donor++;
+							N = bi->getPartner(*donors_[d]);
+						}
+					}
+
+					// taken from ShitX :-)
+					if ( (bond_count_acceptor == 0) || (bond_count_donor != 1) || !C)
+					{
+						continue;
+					}
+
+					// compute the vectors CO and NH
+					BALL::Vector3 CO = acceptors_[a]->getPosition() - C->getPosition();
+					BALL::Vector3 HN = N->getPosition() - donors_[d]->getPosition();
+
+					float bond_angle = CO.getAngle(HN);
+					if ( 		(bond_angle >= (Constants::PI/2.)  // TODO: ist das nicht falsch rum!!!!!! 
+								||	(distance >= 2.5 + cos(bond_angle))))
+						continue;
+
+					//hydrogen-oxygen distance < 3.5 A and hydrogen-oxygen distance < nitrogen - oxygen distance		
+					if ((distance > 3.5) || (distance >  (N->getPosition()- acceptors_[a]->getPosition()).getLength()))
+						continue;
+				}
+				// put the HBond into the hydrogen bond distance list
+				std::pair<Atom*, Atom*> bond(donors_[d], acceptors_[a]);
+				hbonds.insert(std::pair<float, std::pair<Atom*, Atom*> >(distance, bond));
+			}
+		}
 		
-	  // create a bounding box which should include the composite
-		BoundingBoxProcessor bp;
-
-		// do we have a system?
-		if (RTTI::isKindOf<System>(composite))
-		{
-			System *s = RTTI::castTo<System>(composite);
-			s->apply(bp);
-      ri = s->beginResidue();
-		}
-		else if (RTTI::isKindOf<Protein>(composite))
-		{
-			Protein *s = RTTI::castTo<Protein>(composite);
-			s->apply(bp);
-      ri = s->beginResidue();
-		}
-		else if (RTTI::isKindOf<Chain>(composite))
-		{
-			Chain *s = RTTI::castTo<Chain>(composite);
-			s->apply(bp);
-			ri = s->beginResidue();
-		}
 		
-		// ri doesn't seem to exist
-		if (!(+ri)) 
+		// now  compute all hydrogen bond effect shifts 
+		// to ensure that we assign only one (the smalles) bond for each donor and acceptor atom,
+		// we iterate over the bonds sorted by their distance. if a bond is assigned, we mark this
+		// in the occupied data structures
+		std::multimap<float, std::pair<Atom*, Atom*> >::iterator it_b = hbonds.begin();
+	
+		for (; it_b != hbonds.end(); it_b++)
 		{
-			return Processor::CONTINUE;
+			//double distance = it_b->first;
+			Atom* donor    = it_b->second.first;
+			Atom* acceptor = it_b->second.second;
+
+			// is this bond still allowed? i.e. are acceptor and donor still unoccupied?
+			if (   (donor_occupied.find(donor) != donor_occupied.end())
+					|| (acceptor_occupied.find(acceptor) != acceptor_occupied.end()))
+				continue;
+
+			//create a hydrogen bond between acceptor:O and donor:H 
+			Bond* bond = donor->createBond(*acceptor);
+			bond->setType(Bond::TYPE__HYDROGEN);
+			bond->setOrder(1);
+			bond->setName("calculated H-Bond");
+			
+			donor->setProperty("HBOND_DONOR", *acceptor);
+
+			//store the HBond for the Secondary Structure Processor
+			h_bond_pairs_[residue_id_to_position_[acceptor->getResidue()->getID()]].push_back(residue_id_to_position_[donor->getResidue()->getID()]);
+			
+			donor_occupied[donor] = true;
+			acceptor_occupied[acceptor] = true;
 		}
-
-		upper_ = bp.getUpper();
-		lower_ = bp.getLower();
-
-		// compute the H-Bonds
-		preComputeBonds_(ri);
-	  	
-		return Processor::BREAK;
-
+		return true;
 	}
 
+	
+		
 	std::ostream& operator << (std::ostream& s, const BALL::HBondProcessor::ResidueData& p)
 	{
 		return s << p.pos_C << " " << p.pos_N << " " << p.pos_H << " " << p.pos_O << " " << p.number << std::endl;
@@ -295,6 +571,11 @@ namespace BALL
 		return residue_data_;
 	}
 
+	void HBondProcessor::setDefaultOptions()
+	{
+		options.setDefault(HBondProcessor::Option::PREDICTION_METHOD,
+											 HBondProcessor::Default::PREDICTION_METHOD);
+	}
 
 } //Namespace BALL
 

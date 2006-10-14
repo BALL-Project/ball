@@ -17,6 +17,10 @@
 #include <BALL/MATHS/vector3.h> 
 #endif
 
+#ifndef BALL_DATATYPE_OPTIONS_H
+	#include <BALL/DATATYPE/options.h>
+#endif
+
 #include <vector>
 
 namespace BALL
@@ -33,52 +37,97 @@ namespace BALL
   {
  
 		public:
+			/** @name Constant Definitions
+			*/
+			//@{
+			/// Option names
+			struct BALL_EXPORT Option
+			{
+				/** option for the predictions method for the hydrogen bonds
+				 */
+				static const String PREDICTION_METHOD;
+			};	
+			
+			/// Default values for options
+			struct BALL_EXPORT Default
+			{
+				/// default method for hydrogen bond prediction
+				static const String PREDICTION_METHOD;
+			};
+			
+			/// Default values for options
+			struct BALL_EXPORT PredictionMethod
+			{
+				static const String KABSCH_SANDER;
+				static const String WISHART_ET_AL;	
+			};
+				
+			// constants for Kabsch Sander
+			// 5.2 Angstrom is the maximum distance between N and O in a hydrogen bond.
+			// 4.2 Angstrom is an upper bound for the distance between N and O in the same
+			// residue. Therefore, if two residues are farther apart than MAX_LENGTH, N and O
+			// are farther apart than 5.2 Angstroms and there will be no hydrogen bond.
+			const float MAX_LENGTH;
+			const float BOND_LENGTH_N_H;
+			const float BOND_LENGTH_C_O;
 
-		// constants 
-		// 5.2 Angstrom is the maximum distance between N and O in a hydrogen bond.
-		// 4.2 Angstrom is an upper bound for the distance between N and O in the same
-		// residue. Therefore, if two residues are farther apart than MAX_LENGTH, N and O
-		// are farther apart than 5.2 Angstroms and there will be no hydrogen bond.
-		const float MAX_LENGTH;
-		const float BOND_LENGTH_N_H;
-		const float BOND_LENGTH_C_O;
+			// constants for Wishard et al
+			const float AMIDE_PROTON_OXYGEN_SEPARATION_DISTANCE; // = 3.5;
+			const float ALPHA_PROTON_OXYGEN_SEPARATION_DISTANCE; // = 2.77208;
 
-    ///
-		struct BALL_EXPORT ResidueData
-		{
-			Vector3 pos_C;
-			Vector3 pos_N;
-			Vector3 pos_H;
-			Vector3 pos_O;
-			Size		number;
-			Residue*	res; 
-			/// sometimes there are defect residues around...
-			bool is_complete; 
-		};
+			
+   	 	///
+			struct BALL_EXPORT ResidueData
+			{
+				Vector3 pos_C;
+				Vector3 pos_N;
+				Vector3 pos_H;
+				Vector3 pos_O;
+				Size		number;
+				Residue*	res; 
+				/// sometimes there are defect residues around...
+				bool is_complete; 
+			};
   
 		
 		/**	Constructors and Descructor */
 		//@{
 		
-    ///
+    /// Default constructor. 
     HBondProcessor();
+
+		/// Detailed constructor.
+		HBondProcessor(Options& new_options);
 		
     ///
 		virtual ~HBondProcessor();
 		
-    ///
-		HBondProcessor(const HBondProcessor& hbp);
+    /// not implemented yet
+		//HBondProcessor(const HBondProcessor& hbp);
 		
 		//@}
 		/**	Processor-related methods */
 		//@{
 		
-    /// Finish computes all hbonds of the composite.
-    virtual bool finish();
-		
-    ///
+		/** Initialization method.
+			*/
+    virtual void init() throw();
+
+    /** Processor start method.
+     */
+    virtual bool start() throw();
+
+    /// in case of Kabsch Sander: determines per residue the N, O, C , 
+		//														computes the theoretical position of H
+		//														and stores the residue information in residue_data_
+		//														
+		/// in case of Wishart et Al: collects the donors (H, HA) and acceptors all kinds of O 
     virtual Processor::Result operator() (Composite &composite);
 		
+		/// Finish computes all hbonds of the composite according 
+		// to the chosen method <tt> PredictionMethod</tt>.
+    virtual bool finish();
+
 		//@}
 
 		///
@@ -86,11 +135,26 @@ namespace BALL
 
 		/// 
     const std::vector<ResidueData>& getResidueData() const;
+		
+		/** @name Public Attributes
+		*/
+		//@{
+		/// options
+		Options options;
+
+		/** reset the options to default values
+			*/
+		void setDefaultOptions();
+		//@}
 
 		protected:  
 
     void preComputeBonds_(ResidueIterator& data);
-
+		bool finishKabschSander_();
+		bool finishWishartEtAl_();
+		
+		/// for the Kabsch Sander method: 
+		
 		//_ lower point of the grid
     Vector3 upper_;
 		//_ upper point of the grid
@@ -102,6 +166,19 @@ namespace BALL
     /// vector to store HBondpartners
     std::vector<std::vector<Position> > h_bond_pairs_;
 
+		/// for the Wishart et al method: 
+		
+    /*_ list of HBond donors collected by <tt>operator ()</tt>
+     */
+    std::vector<Atom*> 						donors_;
+
+    /*_ list of HBond acceptors collected by <tt>operator ()</tt>
+     */
+    std::vector<Atom*> 						acceptors_;
+		
+		/*_ map from residue ID to ascending numbers for the secondary structure processor
+		 */
+		StringHashMap<Position>						residue_id_to_position_;		
   }; //class HBondProcessor
 } //namesspace BALL
 

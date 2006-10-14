@@ -95,8 +95,9 @@ namespace BALL
 	  //spectrum_.setLowerBound(parsf1_.getIntValue( "YMIN_p" ));
 	  //spectrum_.setUpperBound(parsf1_.getIntValue( "YMAX_p" ));
 
-		spectrum_ = RegularData2D(Vector2(lower_x, lower_y), Vector2(upper_x, upper_y), 
-															Vector2(SIF2_, SIF1_));
+		spectrum_ = RegularData2D(RegularData2D::IndexType(SIF2_, SIF1_),
+															Vector2(lower_x, lower_y), 
+															Vector2(upper_x, upper_y) - Vector2(lower_x, lower_y)); 
 
 	  // Back to the beginning of the file.
 	  f.reopen( );
@@ -117,6 +118,8 @@ namespace BALL
 						break;
 					}
 
+					//						 "XDIM1: " << XDIMF1_ << " XDIM2: " << XDIMF2_ <<
+					//						 " numMats " << matNumF2*matNumF1 << std::endl;
 
 read_counter += 4;
 //std::cout << read_counter << std::endl;
