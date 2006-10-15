@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.25.2.3 2006/06/02 19:25:27 amoll Exp $
+# $Id: Makefile,v 1.25.2.4 2006/10/15 17:19:24 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -28,6 +28,7 @@ CPP_SOURCES=\
 	scene.C\
 	dockingController.C\
 	helpViewer.C\
+	fileObserver.C\
 	datasetControl.C
 
 #	canvasWidget.C\
@@ -49,6 +50,7 @@ MOC_SOURCES=\
 	logView_moc.C\
 	molecularControl_moc.C\
 	molecularStructure_moc.C\
+	fileObserver_moc.C\
 	scene_moc.C
 #	canvasWidget_moc.C\
 #	regularData1DWidget_moc.C\
@@ -90,6 +92,9 @@ scene_moc.C:	$(HEADER_DIR)/scene.h
 
 pyWidget_moc.C:	$(HEADER_DIR)/pyWidget.h
 	$(MOC) $(HEADER_DIR)/pyWidget.h -o $@
+
+fileObserver_moc.C:	$(HEADER_DIR)/fileObserver.h
+	$(MOC) $(HEADER_DIR)/fileObserver.h -o $@
 
 regularData1DWidget_moc.C:	$(HEADER_DIR)/regularData1DWidget.h
 	$(MOC) $(HEADER_DIR)/regularData1DWidget.h -o $@
