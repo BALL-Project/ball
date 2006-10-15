@@ -112,10 +112,12 @@ void FileObserver::initializeWidget(MainControl&)
 	throw()
 {
 	start_action_ = 
-	insertMenuEntry(MainControl::FILE_MONITOR, "Monitor Molecular File", this, SLOT(chooseFile()));
+		insertMenuEntry(MainControl::FILE_MONITOR, "Monitor Molecular File", this, SLOT(chooseFile()));
+	setMenuHint("Monitor a molecular file for changes");
 
 	stop_action_ = 
-	insertMenuEntry(MainControl::FILE_MONITOR, "Stop monitoring", this, SLOT(stop()));
+		insertMenuEntry(MainControl::FILE_MONITOR, "Stop monitoring", this, SLOT(stop()));
+	setMenuHint("Stop monitoring a molecular file");
 }
 
 void FileObserver::chooseFile()
