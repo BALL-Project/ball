@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.h,v 1.17.2.1 2006/10/15 12:36:20 amoll Exp $
+// $Id: XYZFile.h,v 1.17.2.2 2006/10/15 12:44:35 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_XYZFILE_H
@@ -17,10 +17,11 @@ namespace BALL
 
 	/**	XYZ file class.
 			This class enables BALL to read and write XMol XYZ files.
-			The XYZ format is a very simple molecular file format. It contains
+			The XYZ format is a very simple molecular file format. In general it contains
 			only the atom type (i.e., the element) and the cartesian coordinates
-			of the structure. Bonds, atom names, and structural informations are
-			not part of this file format. \par
+			of the structure. 
+			Newer versions of this file format also contain bonds (without bond order) and
+			atom names.\par
 			The first line of each XYZ file contains a single integer number: the number
 			of atoms in the file. The second line is just a comment line. When reading a 
 			XYZ file, BALL stores this comment as the name attribute of the system read.
@@ -72,7 +73,7 @@ namespace BALL
 		
 		/**	Read a system from the XYZ file
 		*/
-		virtual void read(System&	system);
+		virtual bool read(System&	system);
 
 		/**	Read a system from the XYZ file
 		*/

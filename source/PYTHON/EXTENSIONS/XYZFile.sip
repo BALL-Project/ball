@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.sip,v 1.9.2.1 2006/09/23 17:45:29 amoll Exp $
+// $Id: XYZFile.sip,v 1.9.2.2 2006/10/15 12:42:10 amoll Exp $
 //
 
 class XYZFile 
@@ -18,5 +18,5 @@ class XYZFile
   XYZFile(const String&, OpenMode /openmode/ = std::ios::in) throw(FileNotFound);
   ~XYZFile() throw();
   virtual bool write(const System&) throw(File::CannotWrite);
-  virtual void read(System&);
+  virtual bool read(System&);
 };

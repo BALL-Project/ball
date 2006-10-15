@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.C,v 1.7.10.1 2006/10/15 12:36:24 amoll Exp $
+// $Id: XYZFile.C,v 1.7.10.2 2006/10/15 12:44:26 amoll Exp $
 //
 
 #include <BALL/FORMAT/XYZFile.h>
@@ -66,7 +66,7 @@ namespace BALL
 		return true;
 	}
 
-	void XYZFile::read(System& system)
+	bool XYZFile::read(System& system)
 	{
 		// remove old rubbish from the system
 		system.destroy();
@@ -97,7 +97,7 @@ namespace BALL
 			{
 				// if the first line cannot be read correctly, abort immediately
 				Log.error() << "XYZFile::read: illegal header line in XYZ file " << getName() << endl;
-				return;
+				return false;
 			}
 		}
 		else 
@@ -105,7 +105,7 @@ namespace BALL
 			// we could not read the first line. Abort
 			// if the first line cannot be read correctly, abort immediately
 			Log.error() << "XYZFile::read: illegal header line in XYZ file " << getName() << endl;
-			return;
+			return false;
 		}
 
 		// second line: comment -> name of the system
@@ -117,69 +117,94 @@ namespace BALL
 
 		HashMap<Position, Atom*> pos_to_atom;
 
+		bool ok = true;
+
 		bool modern_type = 0;
 		// ...create a molecule to hold the atoms, and start reading...
 		Molecule* mol = new Molecule;
-    while (getline(buffer, BUF_SIZE) && (number_of_lines < (number_of_atoms + 2)))
-    {
-			// read an atom
-      number_of_lines++;
-      line.set(buffer);
 
-			vector<String> fields;
-			Size nr_fields = line.split(fields);
-			if (number_of_lines < 3)
+		try
+		{
+			while (getline(buffer, BUF_SIZE) && (number_of_lines < (number_of_atoms + 2)))
 			{
-				if (nr_fields > 4) 
+				// read an atom
+				number_of_lines++;
+				line.set(buffer);
+
+				vector<String> fields;
+				Size nr_fields = line.split(fields);
+				if (nr_fields < 4)
 				{
-					start = 1;
-					modern_type = true;
+					ok = false;
+					break;
 				}
-			}
-			
-			// create the atom, insert it into the molecule
-			Atom* atom = new Atom;
-			mol->insert(*atom);
 
-			// determine the element
-			String elementname = line.getField(start);
-			if (modern_type)
-			{
-				atom->setName(elementname);
-				elementname=elementname[0];
-			}
-
-			Element& element = PTE[elementname];
-			if (element == Element::UNKNOWN)
-			{
-				Log.error() << "XYZFile::read: unknown element " << elementname 
-										<< " in line " << number_of_lines << " of " << getName() 
-										<< endl;
-			}
-
-			// assign the element and the atom position
-			atom->setElement(element);
-			atom->setPosition(Vector3(fields[start + 1].toFloat(), 
-																fields[start + 2].toFloat(), 
-																fields[start + 3].toFloat()));
-
-			if (modern_type)
-			{
-				Position nr = fields[0].toUnsignedInt();
-				pos_to_atom[nr] = atom;
-
-				for (Position p = 5; p < nr_fields; p ++)
+				if (number_of_lines < 3)
 				{
-					Position partner = fields[p].toUnsignedInt();
-					if (partner < nr)
+					if (nr_fields > 4) 
 					{
-						atom->createBond(*pos_to_atom[partner]);
+						start = 1;
+						modern_type = true;
+					}
+				}
+				
+				// create the atom, insert it into the molecule
+				Atom* atom = new Atom;
+				mol->insert(*atom);
+
+				// determine the element
+				String elementname = line.getField(start);
+				if (modern_type)
+				{
+					atom->setName(elementname);
+					elementname=elementname[0];
+				}
+
+				Element& element = PTE[elementname];
+				if (element == Element::UNKNOWN)
+				{
+					Log.error() << "XYZFile::read: unknown element " << elementname 
+											<< " in line " << number_of_lines << " of " << getName() 
+											<< endl;
+				}
+
+				// assign the element and the atom position
+				atom->setElement(element);
+				atom->setPosition(Vector3(fields[start + 1].toFloat(), 
+																	fields[start + 2].toFloat(), 
+																	fields[start + 3].toFloat()));
+
+				if (modern_type)
+				{
+					Position nr = fields[0].toUnsignedInt();
+					pos_to_atom[nr] = atom;
+
+					for (Position p = 5; p < nr_fields; p ++)
+					{
+						Position partner = fields[p].toUnsignedInt();
+						if (partner < nr)
+						{
+							atom->createBond(*pos_to_atom[partner]);
+						}
 					}
 				}
 			}
 		}
+		catch(...)
+		{
+			ok = false;
+			return false;
+		}
+
+		if (!ok)
+		{
+			Log.error() << "Invalid XYZFile!" << std::endl;
+			delete mol;
+			return false;
+		}
 
 		system.insert(*mol);
+		return true;
 	}
 				
 } // namespace BALL
