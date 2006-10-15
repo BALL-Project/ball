@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.35 2006/10/15 14:59:28 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.36 2006/10/15 23:14:31 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -315,6 +315,9 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					break;
 				case FILE_EXPORT:
 					menu = initPopupMenu(FILE)->addMenu("&Export Image");
+					break;
+				case FILE_MONITOR:
+					menu = initPopupMenu(FILE)->addMenu("&Monitor File");
 					break;
 				case EDIT:
 					menu = menuBar()->addMenu("&Edit");

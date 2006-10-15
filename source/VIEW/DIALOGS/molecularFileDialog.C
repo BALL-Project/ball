@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.32.2.6 2006/10/15 17:08:34 amoll Exp $$
+// $Id: molecularFileDialog.C,v 1.32.2.7 2006/10/15 23:09:17 amoll Exp $$
 //
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
@@ -75,7 +75,7 @@ namespace BALL
 													0,
 													"Choose a molecular file to open",
 													getWorkingDir().c_str(),
-													"*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf");
+													getSupportedFileFormats().c_str());
 
  		  for (QStringList::Iterator it = files.begin(); it != files.end(); ++it) 
 			{
@@ -84,6 +84,11 @@ namespace BALL
 			}
 		}
 
+		String MolecularFileDialog::getSupportedFileFormats() const
+		{
+			return String("*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf *.xyz");
+
+		}
 
 		System* MolecularFileDialog::openFile(const String& file)
 			throw()

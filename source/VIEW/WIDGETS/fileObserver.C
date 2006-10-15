@@ -8,9 +8,8 @@
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/KERNEL/system.h>
-#include <BALL/FORMAT/XYZFile.h>
 
-using namespace std;
+#include <QtCore/QFSFileEngine>
 
 namespace BALL
 {
@@ -40,12 +39,9 @@ FileObserver::~FileObserver()
 void FileObserver::updateFile()
 {
 	// aquire lock on composites:
-	if (getMainControl()->isBusy() ||
-	    !lockComposites())
-	{
-		return;
-	}
+	if (file_name_ == "" || !lockComposites()) return;
 
+	// Compare time of file modification with the time of the last update
 	QDateTime l1 = QFSFileEngine(file_name_.c_str()).fileTime(QAbstractFileEngine::ModificationTime);
 	QDateTime l2 = QFSFileEngine(file_name_.c_str()).fileTime(QAbstractFileEngine::CreationTime);
 	QDateTime last_mod = BALL_MAX(l1, l2);
@@ -56,7 +52,6 @@ void FileObserver::updateFile()
 	}
 
 	MolecularFileDialog* mf = MolecularFileDialog::getInstance(0);
-
 	if (mf == 0)
 	{
 		setStatusbarText("No MolecularFileDialog available, aborting...", true);
@@ -79,14 +74,16 @@ void FileObserver::updateFile()
 	}
 
 	last_vis_time_ = last_mod;
-	QString time = QDateTime::currentDateTime().toString("hh:mm:ss");
-	setStatusbarText(String("File observer update: ") + ascii(time), true);
+	String time(ascii(last_vis_time_.toString("hh:mm:ss")));
+	setStatusbarText(String("File observer update: ") + time, true);
 
 	unlockComposites();
 }
 
 void FileObserver::start()
 {
+	if (file_name_ == "") return;
+	setStatusbarText(String("Starting observer for ") + file_name_, true);
 	timer_.start();
 }
 
@@ -108,6 +105,11 @@ String FileObserver::getFileName() const
 void FileObserver::setUpdateInterval(Size msec)
 {
 	timer_.setInterval(msec);
+}
+
+void FileObserver::initializeWidget(MainControl&)
+	throw()
+{
 }
 
 	} // VIEW

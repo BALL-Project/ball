@@ -1,29 +1,33 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileObserver.h,v 1.1.2.1 2006/10/15 17:19:30 amoll Exp $
+// $Id: fileObserver.h,v 1.1.2.2 2006/10/15 23:04:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_FILEOBSERVER_H
 #define BALL_VIEW_WIDGETS_FILEOBSERVER_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_WIDGETS_DOCKWIDGET_H
 #	include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
 
 #include <QtCore/qtimer.h>
-#include <QtCore/QFSFileEngine>
 #include <QtCore/QDateTime>
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		/** Class for observing changes in a file.
+		/** Class for observing changes in a molecular file.
+		 		When the file changes, all current Systems are deleted and
+				the new content of the observed molecular file is shown.
+		 		Supported are all files from the MolecularFileDialog.
+				A MolecularFileDialog must have been inserted into the MainControl.
+				Usage:\par
+				// in from MainControl derived class:\par
+				FileObserver* fo = new FileObserver(this, "FileObserver"); \par
+				fo->setFileName("foo.pdb");\\par
+				fo->start();\\par
 		*/
 		class BALL_VIEW_EXPORT FileObserver
 			: public DockWidget
@@ -43,6 +47,10 @@ namespace BALL
 				throw();
 
 			///
+			virtual void initializeWidget(MainControl& main_control)
+				throw();
+
+			/// Set the name of the molecular file to be observed
 			void setFileName(String filename);
 
 			///
@@ -56,10 +64,10 @@ namespace BALL
 			/// Look for updates in the file
 			void updateFile();
 
-			///
+			/// Start the observation
 			void start();
 
-			///
+			/// Stop the observation
 			void stop();
 
 			protected:
@@ -71,4 +79,4 @@ namespace BALL
   	
 } } // namespaces
 
-#endif // BALL_VIEW_WIDGETS_FAH_H
+#endif // BALL_VIEW_WIDGETS_FILEOBSERVER_H

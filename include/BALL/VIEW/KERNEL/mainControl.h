@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.76.2.14 2006/09/28 23:34:34 amoll Exp $
+// $Id: mainControl.h,v 1.76.2.15 2006/10/15 23:12:28 amoll Exp $
 //
 // Author:
 //   Andreas Moll
@@ -124,6 +124,9 @@ namespace BALL
 
 				/// File menu sub menu export
 				FILE_EXPORT,
+
+				/// 
+				FILE_MONITOR,
 
 				/// Edit menu
 				EDIT = 10100,

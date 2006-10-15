@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.21.2.5 2006/10/15 17:08:25 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.21.2.6 2006/10/15 23:09:27 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -179,6 +179,9 @@ namespace BALL
 			/// Overloaded from ModularWidget
 			virtual void checkMenuEntries()
 				throw();
+
+			///
+			String getSupportedFileFormats() const;
 				
 			protected:
 
