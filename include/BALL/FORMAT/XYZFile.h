@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.h,v 1.17 2005/12/23 17:01:45 amoll Exp $
+// $Id: XYZFile.h,v 1.17.2.1 2006/10/15 12:36:20 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_XYZFILE_H
@@ -61,7 +61,6 @@ namespace BALL
 			throw();
 		
 		//@}
-
 		/**	@name Reading and Writing of Kernel Datastructures
 		*/
 		//@{
@@ -99,6 +98,12 @@ namespace BALL
 			return *this;
 		}
 
+		///
+		const String& getComent() const { return comment_;}
+
+		private:
+
+		String comment_;
 		
 		//@}
 	};

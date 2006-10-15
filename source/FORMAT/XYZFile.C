@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.C,v 1.7 2004/02/24 13:05:47 anker Exp $
+// $Id: XYZFile.C,v 1.7.10.1 2006/10/15 12:36:24 amoll Exp $
 //
 
 #include <BALL/FORMAT/XYZFile.h>
@@ -9,6 +9,7 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/PTE.h>
 
 using namespace std;
@@ -79,12 +80,15 @@ namespace BALL
 		char buffer[BUF_SIZE];
 		Size number_of_atoms = 0;
 
+		comment_.clear();
+
 		// read the number of atoms (first line)
 		if (getline(buffer, BUF_SIZE))
 		{
 			line.set(buffer);
+			line.trim();
 			number_of_lines++;
-			if (line.countFields() == 1)
+			if (line.countFields() >= 1)
 			{
 				// retrieve the number of atoms
 				number_of_atoms = line.getField(0).toUnsignedInt();
@@ -107,7 +111,13 @@ namespace BALL
 		// second line: comment -> name of the system
 		getline(buffer, BUF_SIZE);
 		system.setName(buffer);
+		comment_ = buffer;
 
+		Position start = 0;
+
+		HashMap<Position, Atom*> pos_to_atom;
+
+		bool modern_type = 0;
 		// ...create a molecule to hold the atoms, and start reading...
 		Molecule* mol = new Molecule;
     while (getline(buffer, BUF_SIZE) && (number_of_lines < (number_of_atoms + 2)))
@@ -115,14 +125,31 @@ namespace BALL
 			// read an atom
       number_of_lines++;
       line.set(buffer);
+
+			vector<String> fields;
+			Size nr_fields = line.split(fields);
+			if (number_of_lines < 3)
+			{
+				if (nr_fields > 4) 
+				{
+					start = 1;
+					modern_type = true;
+				}
+			}
 			
 			// create the atom, insert it into the molecule
 			Atom* atom = new Atom;
 			mol->insert(*atom);
 
 			// determine the element
-			String elementname = line.getField(0);
-			Element& element = PTE[line.getField(0)];
+			String elementname = line.getField(start);
+			if (modern_type)
+			{
+				atom->setName(elementname);
+				elementname=elementname[0];
+			}
+
+			Element& element = PTE[elementname];
 			if (element == Element::UNKNOWN)
 			{
 				Log.error() << "XYZFile::read: unknown element " << elementname 
@@ -132,9 +159,24 @@ namespace BALL
 
 			// assign the element and the atom position
 			atom->setElement(element);
-			atom->setPosition(Vector3(line.getField(1).toFloat(), 
-																line.getField(2).toFloat(), 
-																line.getField(3).toFloat()));
+			atom->setPosition(Vector3(fields[start + 1].toFloat(), 
+																fields[start + 2].toFloat(), 
+																fields[start + 3].toFloat()));
+
+			if (modern_type)
+			{
+				Position nr = fields[0].toUnsignedInt();
+				pos_to_atom[nr] = atom;
+
+				for (Position p = 5; p < nr_fields; p ++)
+				{
+					Position partner = fields[p].toUnsignedInt();
+					if (partner < nr)
+					{
+						atom->createBond(*pos_to_atom[partner]);
+					}
+				}
+			}
 		}
 
 		system.insert(*mol);
