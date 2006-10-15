@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.34 2006/09/29 13:04:01 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.35 2006/10/15 14:59:28 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -447,6 +447,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 		void MainControl::checkMenus()
 		{
+			if (preferences_action_ == 0) return;
+
 			// preferences dialog not empty
 			if (preferences_dialog_ != 0 &&
 					preferences_dialog_->hasPages())
