@@ -10,6 +10,7 @@
 #include <BALL/KERNEL/system.h>
 
 #include <QtCore/QFSFileEngine>
+#include <QtGui/QFileDialog>
 
 namespace BALL
 {
@@ -110,6 +111,37 @@ void FileObserver::setUpdateInterval(Size msec)
 void FileObserver::initializeWidget(MainControl&)
 	throw()
 {
+	start_action_ = 
+	insertMenuEntry(MainControl::FILE_MONITOR, "Monitor Molecular File", this, SLOT(chooseFile()));
+
+	stop_action_ = 
+	insertMenuEntry(MainControl::FILE_MONITOR, "Stop monitoring", this, SLOT(stop()));
+}
+
+void FileObserver::chooseFile()
+{
+	stop();
+
+	MolecularFileDialog* mf = MolecularFileDialog::getInstance(0);
+	if (mf == 0) return;
+
+	QString file = QFileDialog::getOpenFileName(
+										0,
+										"Choose a molecular file to monitor for changes",
+										getWorkingDir().c_str(),
+										mf->getSupportedFileFormats().c_str());
+
+	if (ascii(file) == "") return;
+
+	file_name_ = ascii(file);
+	start();
+}
+
+void FileObserver::checkMenu(MainControl& main_control)
+	throw()
+{
+	stop_action_->setEnabled(timer_.isActive());
+	start_action_->setEnabled(!main_control.isBusy());
 }
 
 	} // VIEW

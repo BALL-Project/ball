@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileObserver.h,v 1.1.2.2 2006/10/15 23:04:12 amoll Exp $
+// $Id: fileObserver.h,v 1.1.2.3 2006/10/15 23:27:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_FILEOBSERVER_H
@@ -13,6 +13,8 @@
 
 #include <QtCore/qtimer.h>
 #include <QtCore/QDateTime>
+
+class QAction;
 
 namespace BALL
 {
@@ -46,8 +48,12 @@ namespace BALL
 			virtual ~FileObserver()
 				throw();
 
-			///
+			//
 			virtual void initializeWidget(MainControl& main_control)
+				throw();
+			
+			//
+			virtual void checkMenu(MainControl& main_control)
 				throw();
 
 			/// Set the name of the molecular file to be observed
@@ -70,7 +76,12 @@ namespace BALL
 			/// Stop the observation
 			void stop();
 
+			/// Choose a file and start the observer
+			void chooseFile();
+
 			protected:
+
+			QAction* start_action_, *stop_action_;
 
 			QTimer 			timer_;
 			String 			file_name_;
