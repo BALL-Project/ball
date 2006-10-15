@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.C,v 1.7.10.2 2006/10/15 12:44:26 amoll Exp $
+// $Id: XYZFile.C,v 1.7.10.3 2006/10/15 15:31:43 amoll Exp $
 //
 
 #include <BALL/FORMAT/XYZFile.h>
@@ -135,6 +135,7 @@ namespace BALL
 				Size nr_fields = line.split(fields);
 				if (nr_fields < 4)
 				{
+					Log.error() << "XYZFile: Not enought fields per line!" << std::endl;
 					ok = false;
 					break;
 				}
@@ -184,6 +185,12 @@ namespace BALL
 						Position partner = fields[p].toUnsignedInt();
 						if (partner < nr)
 						{
+							if (!pos_to_atom.has(partner))
+							{
+								ok = false;
+								break;
+							}
+
 							atom->createBond(*pos_to_atom[partner]);
 						}
 					}
@@ -192,13 +199,12 @@ namespace BALL
 		}
 		catch(...)
 		{
+			Log.error() << "XYZFile: Aborting, could not parse line!" << std::endl;
 			ok = false;
-			return false;
 		}
 
 		if (!ok)
 		{
-			Log.error() << "Invalid XYZFile!" << std::endl;
 			delete mol;
 			return false;
 		}
