@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.32.2.5 2006/06/24 18:18:32 amoll Exp $$
+// $Id: molecularFileDialog.C,v 1.32.2.6 2006/10/15 17:08:34 amoll Exp $$
 //
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
@@ -14,6 +14,7 @@
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/FORMAT/SDFile.h>
+#include <BALL/FORMAT/XYZFile.h>
 #include <BALL/MATHS/simpleBox3.h>
 #include <BALL/KERNEL/system.h>
 
@@ -65,6 +66,7 @@ namespace BALL
 			types_menu_->addAction("MOL", this, SLOT(openMOLFile()));
 			types_menu_->addAction("MOL2", this, SLOT(openMOL2File()));
 			types_menu_->addAction("SD", this, SLOT(openSDFile()));
+			types_menu_->addAction("XYZ", this, SLOT(openXYZFile()));
 		}
 		
 		void MolecularFileDialog::readFiles()
@@ -147,6 +149,11 @@ namespace BALL
 			{
 				return readSDFile(filename, system_name);
 			}
+			else if (filetype.hasSubstring("XYZ") ||
+							 filetype.hasSubstring("xyz"))
+			{
+				return readXYZFile(filename, system_name);
+			}
 			else
 			{
 				setStatusbarText(String("Unknown filetype: ") + filetype, true);
@@ -172,7 +179,7 @@ namespace BALL
 										0,
 										"Choose a filename to save the selected system",
 										getWorkingDir().c_str(),
-										"*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf");
+										"*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf *.xyz");
 
 		 	if (s == QString::null) return false;
 			String filename = ascii(s);
@@ -215,6 +222,10 @@ namespace BALL
 			else if (filter.hasSubstring("SDF") || filter.hasSubstring("sdf"))
 			{
 				result = writeSDFile(filename, system);
+			}
+			else if (filter.hasSubstring("XYZ") || filter.hasSubstring("xyz"))
+			{
+				result = writeXYZFile(filename, system);
 			}
 			else
 			{
@@ -331,6 +342,25 @@ namespace BALL
 			{
 				Log.error() << e << std::endl;
 				setStatusbarText("Writing of SD file failed, see logs!", true);
+				return false;
+			}
+
+			return true;		
+		}
+
+		bool MolecularFileDialog::writeXYZFile(String filename, const System& system)
+			throw()
+		{
+			try
+			{
+				XYZFile file(filename, std::ios::out);
+				file << system;
+				file.close();
+			}
+			catch(Exception::GeneralException e)
+			{
+				Log.error() << e << std::endl;
+				setStatusbarText("Writing of XYZ file failed, see logs!", true);
 				return false;
 			}
 
@@ -492,6 +522,30 @@ namespace BALL
 			return system;
 		}
 
+		System* MolecularFileDialog::readXYZFile(String filename, String system_name)
+			throw()
+		{
+			setStatusbarText("reading XYZ file...", true);
+
+			System* system = new System();
+
+			try
+			{
+				XYZFile sd_file(filename);
+				sd_file >> *system;
+				sd_file.close();
+			}
+			catch(Exception::GeneralException e)
+			{
+				setStatusbarText("Reading of XYZ file failed, see logs!", true);
+				delete system;
+				return 0;
+			}
+
+ 			if (!finish_(filename, system_name, system)) return 0;
+			return system;
+		}
+
 
 		bool MolecularFileDialog::finish_(const String& filename, const String& system_name, System* system)
 			throw()
@@ -594,5 +648,9 @@ namespace BALL
 			return openFile_("SDF");
 		}
 
+		System* MolecularFileDialog::openXYZFile()
+ 		{
+			return openFile_("XYZ");
+		}
 
 } } //namespaces

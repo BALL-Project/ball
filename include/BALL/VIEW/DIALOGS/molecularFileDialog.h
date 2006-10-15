@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.21.2.4 2006/05/15 21:10:01 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.21.2.5 2006/10/15 17:08:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -26,7 +26,8 @@ namespace BALL
 
 		/** Dialog for opening molecular data files.
 				This class is used to read or write Molecular files in one of several
-				file formats. Currently, PDB, HIN and MOL2 are supported.
+				file formats. Currently supported file formats are:\par
+				HIN, MOL, MOL2, PDB, SD, XYZ\par
 				Upon reading a file, the information will be stored in a System.
 				This class can also take a System and write it in one of the
 				supported file formats.
@@ -35,6 +36,8 @@ namespace BALL
 				@see MOLFile
 				@see MOL2File
 				@see PDBFile
+				@see SDFile
+				@see XYZFile
 				\ingroup ViewDialogs
 		 */
 		class BALL_VIEW_EXPORT MolecularFileDialog
@@ -45,31 +48,16 @@ namespace BALL
 			public:
 			BALL_EMBEDDABLE(MolecularFileDialog, ModularWidget)
 
-			/** @name Constructors
-			 */
-			//@{
-
 			/** Default Constructor.
 					Calls ModularWidget::registerWidget()
 			 */
 			MolecularFileDialog(QWidget* parent = 0, const char* name = "<MolecularFileDialog>")
 				throw();
-			//
-			//@} 
-			/** @name Destructors 
-			*/ 
-			//@{ 
 
-			/** Destructor.
-			 */
+			/// Destructor.
 			virtual ~MolecularFileDialog()
 				throw();
 
-			//@} 
-			/** @name Accessors: inspectors and mutators 
-			*/ 
-			//@{ 
-			
 			/** Initializes the menu entries in <b>File</b>.
 					This method is called automatically immediately before the main application is started.
 					This method will be called MainControl::show().
@@ -125,6 +113,9 @@ namespace BALL
 			///
 			System* openSDFile();
 
+			///
+			System* openXYZFile();
+
 			/** Read a PDB file
 			 */
 			System* readPDBFile(String filename, String system_name)
@@ -148,6 +139,11 @@ namespace BALL
 			/** Read a SD file
 			 */
 			System* readSDFile(String filename, String system_name)
+				throw();
+
+			/** Read a XYZ file
+			 */
+			System* readXYZFile(String filename, String system_name)
 				throw();
 
 			/** Write a PDB file
@@ -174,13 +170,16 @@ namespace BALL
 			 */
 			bool writeSDFile(String filename, const System& system)
 				throw();
+
+			/** Write a XYZ file
+			 */
+			bool writeXYZFile(String filename, const System& system)
+				throw();
 			
 			/// Overloaded from ModularWidget
 			virtual void checkMenuEntries()
 				throw();
 				
-			//@}
-			
 			protected:
 
 			// Only for Python interface
@@ -199,7 +198,8 @@ namespace BALL
 				HIN_FILE,
 				MOL_FILE,
 				MOL2_FILE,
-				SD_FILE
+				SD_FILE,
+				XYZ_FILE
 			};
 
 			QAction* save_id_, *open_id_;
