@@ -84,6 +84,7 @@ void FileObserver::updateFile()
 void FileObserver::start()
 {
 	if (file_name_ == "") return;
+	last_vis_time_ = QDateTime();
 	setStatusbarText(String("Starting observer for ") + file_name_, true);
 	timer_.start();
 }
