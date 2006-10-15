@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.C,v 1.7.10.3 2006/10/15 15:31:43 amoll Exp $
+// $Id: XYZFile.C,v 1.7.10.4 2006/10/15 22:36:20 amoll Exp $
 //
 
 #include <BALL/FORMAT/XYZFile.h>
@@ -11,6 +11,7 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/PTE.h>
+#include <BALL/COMMON/exception.h>
 
 using namespace std;
 
@@ -92,6 +93,10 @@ namespace BALL
 			{
 				// retrieve the number of atoms
 				number_of_atoms = line.getField(0).toUnsignedInt();
+				if (line.countFields() > 1)
+				{
+					comment_ = line.getField(1);
+				}
 			}
 			else
 			{
@@ -109,9 +114,12 @@ namespace BALL
 		}
 
 		// second line: comment -> name of the system
-		getline(buffer, BUF_SIZE);
-		system.setName(buffer);
-		comment_ = buffer;
+		if (comment_ == "")
+		{
+			getline(buffer, BUF_SIZE);
+			system.setName(buffer);
+			comment_ = buffer;
+		}
 
 		Position start = 0;
 
@@ -187,6 +195,7 @@ namespace BALL
 						{
 							if (!pos_to_atom.has(partner))
 							{
+								Log.error() << "Could not create bond!" << std::endl;
 								ok = false;
 								break;
 							}
@@ -197,14 +206,25 @@ namespace BALL
 				}
 			}
 		}
+		catch(Exception::GeneralException e)
+		{
+			ok = false;
+			Log.error() <<  e << std::endl;
+		}
 		catch(...)
 		{
-			Log.error() << "XYZFile: Aborting, could not parse line!" << std::endl;
 			ok = false;
+		}
+
+		if (number_of_lines != number_of_atoms + 1)
+		{
+			ok = false;
+			Log.error() << "Could not read all atoms" << std::endl;
 		}
 
 		if (!ok)
 		{
+			Log.error() << "XYZFile: Aborting, could not parse line!" << std::endl;
 			delete mol;
 			return false;
 		}
