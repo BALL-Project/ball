@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.36 2006/10/15 23:14:31 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.37 2006/10/16 13:38:34 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -1196,7 +1196,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				setTextColor(message_label_, ColorRGBA(0,0,0));
 			}
 
-			message_label_->setText(text.c_str());
+			String t(text);
+			if (t.size() && t[t.size() - 1] == '\n') t.truncate(t.size() - 1);
+
+			message_label_->setText(t.c_str());
 			timer_.start(6000);
 		}
 

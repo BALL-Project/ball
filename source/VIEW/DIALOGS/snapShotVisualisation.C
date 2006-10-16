@@ -220,6 +220,8 @@ void SnapshotVisualisationDialog::animateClicked()
 
 void SnapshotVisualisationDialog::backward(Size nr)
 {
+	if (main_control_->getRepresentationManager().updateRunning()) return;
+
   Index tmpnr = (currentSnapshot->text().toInt()) - (Index) nr;
 	if (tmpnr <= 0)
 	{
