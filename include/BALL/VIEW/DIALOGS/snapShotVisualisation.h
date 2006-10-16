@@ -33,8 +33,7 @@ class BALL_VIEW_EXPORT SnapshotVisualisationDialog
 	BALL_EMBEDDABLE(SnapshotVisualisationDialog, ModularWidget)
 
 	/// Constructor
-	SnapshotVisualisationDialog
-		(QWidget* parent = 0, const char* name = 0);//, bool modal = FALSE, WFlags fl = 0);
+	SnapshotVisualisationDialog(QWidget* parent = 0, const char* name = 0);
 
 	/// Destructor
 	~SnapshotVisualisationDialog() throw();
@@ -43,10 +42,12 @@ class BALL_VIEW_EXPORT SnapshotVisualisationDialog
 	void setSnapShotManager(SnapShotManager* snapshot_manager);
   
 	///This function gets the SnapShotManager
-	const SnapShotManager* getSnapShotManager() 
-		{return (snap_shot_manager_);}
+	const SnapShotManager* getSnapShotManager() {return snap_shot_manager_;}
 
 	public slots:
+
+	///
+	void show();
 
 	///
 	void close();
