@@ -138,7 +138,7 @@ namespace BALL
 				{
 					Atom* atom = RTTI::castTo<Atom>((*ai));
 
-					// we store all oxigens as hydrogen bond acceptors
+					// we store all oxygens as hydrogen bond acceptors
 					if (atom->getElement() == PTE[Element::O])
 					{			
 						acceptors_.push_back(atom);
@@ -439,7 +439,6 @@ namespace BALL
 			for(Position a = 0; a < acceptors_.size(); ++a)
 			{	
 				// does the bond fullfill all SHiftX criteria?
-
 				// exclude self interaction
 				if (donors_[d]->getResidue() == acceptors_[a]->getResidue())
 				{
@@ -505,7 +504,7 @@ namespace BALL
 					BALL::Vector3 HN = N->getPosition() - donors_[d]->getPosition();
 
 					float bond_angle = CO.getAngle(HN);
-					if ( 		(bond_angle >= (Constants::PI/2.)  // TODO: ist das nicht falsch rum!!!!!! 
+					if ( 		(bond_angle >= (Constants::PI/2.) // NOTE: this looks different from the SHIFTX paper, but is not :-) 
 								||	(distance >= 2.5 + cos(bond_angle))))
 						continue;
 
