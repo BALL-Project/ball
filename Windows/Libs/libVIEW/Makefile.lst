@@ -87,6 +87,7 @@ libVIEW.obj\
 ..\..\..\source\VIEW\PRIMITIVES\label.obj\
 ..\..\..\source\VIEW\PRIMITIVES\line.obj\
 ..\..\..\source\VIEW\PRIMITIVES\mesh.obj\
+..\..\..\source\VIEW\PRIMITIVES\quadMesh.obj\
 ..\..\..\source\VIEW\PRIMITIVES\point.obj\
 ..\..\..\source\VIEW\PRIMITIVES\simpleBox.obj\
 ..\..\..\source\VIEW\PRIMITIVES\sphere.obj\
