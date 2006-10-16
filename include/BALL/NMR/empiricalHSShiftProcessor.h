@@ -334,7 +334,7 @@ namespace BALL
 				
 				// this flag stores whether the spline we created is valid
 				bool invalid_;
-
+					
 				/// the average over the complete hypersurface; this average maybe weighted in non-obvious ways
 				float average_;
 
@@ -383,6 +383,10 @@ namespace BALL
 			
 				std::map<String, std::map <std::pair<String, String>,EmpiricalHSShiftProcessor::ShiftHyperSurface_> > hypersurfaces_;
 				
+				/// option to decide whether a empiricalHypersurface contribution for prolin should be computed 
+				/// default is false
+				bool exclude_prolins_;
+
 				
 			private:
 					void 			printParameters_() throw();

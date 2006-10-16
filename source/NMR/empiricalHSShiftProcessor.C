@@ -4,6 +4,7 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/FORMAT/parameterSection.h>
 #include <BALL/STRUCTURE/peptides.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/analyticalGeometry.h>
 #include <map>
 #include <set>
@@ -51,7 +52,6 @@ namespace BALL
 		// if no parameters are assigned, abort immediately
 		if (parameters_ == 0)
 		{
-			std::cout << "return" << std::endl;
 			return;
 		}
 
@@ -66,6 +66,13 @@ namespace BALL
 			return;
 		}
 	
+		// check for the options
+		exclude_prolins_ = false;
+		if (parameter_section.options.has("exclude_prolins"))
+		{
+			exclude_prolins_ = parameter_section.options.getBool("exclude_prolins");
+		}
+
 		// clear the arrays of the targets, the targets names and the target_properties
 		targets_.clear();
 		target_names_.clear();
@@ -220,6 +227,13 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 			
 			PropertiesForShift_  target = targets_[i];
 			String atom_type = target.atom->getName();
+		
+			// do we have to exclude prolins?
+			if (target.atom->getResidue()->getName() == "PRO" && target.atom->getName() == "N")
+			{
+				target.atom->setProperty(PROPERTY__EHS_SHIFT, EHS_shift);
+				continue;
+			}
 			
 			// for all property pairs of the targets atom type
 			for (Position j = 0; j < property_pairs_[atom_type].size(); j++) 
@@ -245,7 +259,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 		//printParameters_();
 		
 		// do the ShiftX correction
-		postprocessing_();
+		//postprocessing_();
 		return true;
 	}
 	
@@ -285,6 +299,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 			throw()
 	{
 		std::cout << "\n EHS:Liste der Parameter " << std::endl;
+		std::cout << "exclude prolins: " << exclude_prolins_ << std::endl;
 		std::cout << "\t\n EHS:targetnames \t\ttarget properties \t\t files " << std::endl;
 	
 		for (Position i = 0; i < target_names_.size(); i++)
@@ -1086,29 +1101,28 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 		
 		Atom* O = 0;
 		
+		// this works since FLOAT_VALUE_IGNORE is much larger than any possible bond length
+		// find the oxygen with smallest bond length
 		AtomIterator r_it = residue->beginAtom();
 		for (; r_it != residue->endAtom(); ++r_it)
 		{	
-			String name = r_it->getName();
-			if (name == "O")
+			if (r_it->getElement() == PTE[Element::O])
 			{
 				O = &(*r_it);
-			}
-		}
-		
-		if (O)
-		{
-			Atom::BondIterator bi = O->beginBond();
-			for (;+bi;++bi)
-			{	
-				if(bi->getType() == Bond::TYPE__HYDROGEN)
-				{
-					len = bi->getLength();
-					//Atom * H = bi-getPartner(O);
-					//len = (O->getPosition() -H.getPosition()).getLength();
+				Atom::BondIterator bi = O->beginBond();
+				for (;+bi;++bi)
+				{	
+					if(bi->getType() == Bond::TYPE__HYDROGEN)
+					{
+						// for backbone "N", shiftx ignores partners that are not backbone "O"
+						if ((bi->getPartner(*O)->getName() == "H") && (O->getName() != "O"))
+							continue;
+
+						len = std::min(len,bi->getLength());
+					}	
 				}
 			}
-		}	
+		}
 		
 		return len;
 	}
@@ -1185,7 +1199,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 		for (; r_it != residue->endAtom(); ++r_it)
 		{	
 			String name = r_it->getName();
-			if (name == "HA2")
+			if (name == "HA2" || name == "2HA")
 			{
 				HA2 = &(*r_it);
 			}
@@ -1282,7 +1296,8 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 					properties_string_[("CHI_P")] = "Unknown"; 
 					properties_string_[("CHI2_P")] = "Unknown";
 
-					properties_string_[("FR_P")] = 'N';
+					//properties_string_[("FR_P")] = 'N';
+					properties_string_[("FR_P")] = STRING_VALUE_NA;
 			}
 			else
 			{
@@ -2043,7 +2058,7 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			if (!testline.hasSubstring("N/A"))
 			{
 				// parse the row averages
-				line.split(fields, ";");
+				testline.split(fields, ";");
 				for (Position i=0; i<fields.size(); i++)
 					y_axis_values_.push_back(fields[i]);
 			}	
@@ -2059,6 +2074,7 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			for (Position i=0; i<number_of_lines; i++)
 			{
 				line.getline(file);
+				line.toUpper();
 				line.split(fields, ";"); 
 				for (Position j = 0; j < fields.size(); j++)
 					x_axis_values_[i].push_back(fields[j]);
@@ -2174,7 +2190,7 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			tabletype::iterator first_it = table_.find(string1);
 			if (first_it != table_.end())
 			{  
-			//	std::cout << "blubbi: " << string1 << " " << string2 << " " << (first_it->second.find(string2)!=first_it->second.end()) << std::endl;
+				std::cout << "blubbi: " << string1 << " " << string2 << " " << std::endl;
 				// yes it is :-)
 				// check if the second property is contained in the table
 				std::map<String, float>::iterator second_it = first_it->second.find(string2);
@@ -2250,7 +2266,6 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		else if (type_ == DISCRETE__REAL)
 		{
 //std::cerr<< "Discrete Real should NEVER be called!! "<< std::endl;
-			std::cout << "Hallo hallo hallo" << std::endl;
 			// This simulates SHIFTX behaviour: if only one factor is out of bounds, we return the all-values average
 			if (   (properties[second_property_].first == FLOAT_VALUE_NA)
 					 ||(properties[first_property_].second == STRING_VALUE_NA) )
@@ -2300,15 +2315,21 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		}
 		else if (type_ == REAL__CHI)
 		{	
-			if (s1d_.find(string2) != s1d_.end())
-				shift = s1d_[string2](properties[first_property_].first);	
+			// This simulates SHIFTX behaviour: if only one factor is out of bounds, we return the all-values average
+			if (properties[first_property_].first == FLOAT_VALUE_NA)
+				shift = average_;
 			else
 			{
-				std::cerr << "Tried to access the hypersurface for atom " << properties.atom->getResidue()->getID() 	
-					<< properties.atom->getResidue()->getName()
-					<< "-" << properties.atom->getName() << "'s properties " << first_property_ <<"/" << second_property_ 
-					<< " with " << properties[first_property_].first << "/"  << string2<< std::endl;
-				shift = average_; // is this the correct thing to do?
+				if (s1d_.find(string2) != s1d_.end())
+					shift = s1d_[string2](properties[first_property_].first);	
+				else
+				{
+					std::cerr << "Tried to access the hypersurface for atom " << properties.atom->getResidue()->getID() 	
+						<< properties.atom->getResidue()->getName()
+						<< "-" << properties.atom->getName() << "'s properties " << first_property_ <<"/" << second_property_ 
+						<< " with " << properties[first_property_].first << "/"  << string2<< std::endl;
+					shift = average_; // is this the correct thing to do?
+				}
 			}
 		}
 		else

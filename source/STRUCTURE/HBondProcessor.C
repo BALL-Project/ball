@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondProcessor.C,v 1.13.10.1 2006/10/14 13:14:06 anne Exp $
+// $Id: HBondProcessor.C,v 1.13.10.2 2006/10/16 10:40:04 anne Exp $
 //
 
 #include <BALL/STRUCTURE/HBondProcessor.h>
@@ -140,7 +140,7 @@ namespace BALL
 				{
 					Atom* atom = RTTI::castTo<Atom>((*ai));
 
-					// we store all oxigens as hydrogen bond acceptors
+					// we store all oxygens as hydrogen bond acceptors
 					if (atom->getElement() == PTE[Element::O])
 					{			
 						acceptors_.push_back(atom);
@@ -437,7 +437,6 @@ namespace BALL
 			for(Position a = 0; a < acceptors_.size(); ++a)
 			{	
 				// does the bond fullfill all SHiftX criteria?
-
 				// exclude self interaction
 				if (donors_[d]->getResidue() == acceptors_[a]->getResidue())
 				{
@@ -461,8 +460,6 @@ namespace BALL
 				if (   (  donors_[d]->getName().hasSubstring("HA") && (distance > ALPHA_PROTON_OXYGEN_SEPARATION_DISTANCE ))
 						|| ( (donors_[d]->getName() == "H")            && (distance > AMIDE_PROTON_OXYGEN_SEPARATION_DISTANCE )))
 					continue;
-
-				// TODO: acceptor is a solvent oxygen, the donor must not be a HA
 
 				// the angle criterion for H
 				if (donors_[d]->getName()== "H")
@@ -503,7 +500,7 @@ namespace BALL
 					BALL::Vector3 HN = N->getPosition() - donors_[d]->getPosition();
 
 					float bond_angle = CO.getAngle(HN);
-					if ( 		(bond_angle >= (Constants::PI/2.)  // TODO: ist das nicht falsch rum!!!!!! 
+					if ( 		(bond_angle >= (Constants::PI/2.) // NOTE: this looks different from the SHIFTX paper, but is not :-) 
 								||	(distance >= 2.5 + cos(bond_angle))))
 						continue;
 
@@ -511,7 +508,7 @@ namespace BALL
 					if ((distance > 3.5) || (distance >  (N->getPosition()- acceptors_[a]->getPosition()).getLength()))
 						continue;
 				}
-				// put the HBond into the hydrogen bond distance list
+
 				std::pair<Atom*, Atom*> bond(donors_[d], acceptors_[a]);
 				hbonds.insert(std::pair<float, std::pair<Atom*, Atom*> >(distance, bond));
 			}
@@ -529,7 +526,7 @@ namespace BALL
 			//double distance = it_b->first;
 			Atom* donor    = it_b->second.first;
 			Atom* acceptor = it_b->second.second;
-
+	std::cout << donor->getResidue()->getID() << " " << donor->getName() << " " << acceptor->getResidue()->getID() << " " << acceptor->getName() << (donor_occupied.find(donor) != donor_occupied.end()) << std::endl;
 			// is this bond still allowed? i.e. are acceptor and donor still unoccupied?
 			if (   (donor_occupied.find(donor) != donor_occupied.end())
 					|| (acceptor_occupied.find(acceptor) != acceptor_occupied.end()))
