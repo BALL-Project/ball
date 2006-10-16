@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftedLVMM.C,v 1.1.2.2 2006/10/12 10:28:52 aleru Exp $
+// $Id: shiftedLVMM.C,v 1.1.2.3 2006/10/16 15:51:24 aleru Exp $
 //
 // Minimize the potential energy of a system using a shifted 
 // limited-memory variable metric method.
@@ -750,14 +750,9 @@ namespace BALL
 
 	double ShiftedLVMMMinimizer::findStep()
 	{
-		// Define an alias for the atom vector
-		AtomVector& atoms(const_cast<AtomVector&>(getForceField()->getAtoms()));
-		
 		#ifdef BALL_DEBUG
 			Log.info() << "ShiftedLVMMMinimizer::findStep: " << initial_energy_ << " " << current_grad_.norm << " " << direction_.norm << endl;
 		#endif
-		
-		bool success = true;
 
 		// We perform a line search along direction_
 		LineSearch line_search(*this);

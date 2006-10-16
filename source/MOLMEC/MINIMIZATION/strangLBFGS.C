@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: strangLBFGS.C,v 1.1.2.4 2006/10/12 10:20:14 aleru Exp $
+// $Id: strangLBFGS.C,v 1.1.2.5 2006/10/16 15:51:24 aleru Exp $
 //
 // Minimize the potential energy of a system using an improved version
 // of the limited memory BFGS with Strang recurrences.
@@ -247,7 +247,7 @@ namespace BALL
 		double sty = 0.;
 		double yty = 0.;
 		Size i;
-		Size k = number_of_atoms_*index_of_free_vect_;
+		Index k = number_of_atoms_*index_of_free_vect_;
 		
 		// Main update loop. Do everything in one loop.
 		for(i = 0; i < number_of_atoms_; ++i, ++k)
@@ -591,14 +591,9 @@ namespace BALL
 
 	double StrangLBFGSMinimizer::findStep()
 	{
-		// Define an alias for the atom vector
-		AtomVector& atoms(const_cast<AtomVector&>(getForceField()->getAtoms()));
-		
 		#ifdef BALL_DEBUG
 			Log.info() << "StrangLBFGSMinimizer::findStep: " << initial_energy_ << " " << current_grad_.norm << " " << direction_.norm << endl;
 		#endif
-		
-		bool success = true;
 
 		// We perform a line search along direction_
 		LineSearch line_search(*this);
