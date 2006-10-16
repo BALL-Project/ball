@@ -49,9 +49,6 @@ class BALL_VIEW_EXPORT SnapshotVisualisationDialog
 	///
 	void show();
 
-	///
-	void close();
-
 	///Function to select the analogous Snapshot
 	virtual void firstSnapshotClicked();
 	
@@ -104,14 +101,18 @@ class BALL_VIEW_EXPORT SnapshotVisualisationDialog
 	virtual void checkRock();
 	
 	protected:
+	void close_();
+	virtual void closeEvent(QCloseEvent*);
 	void update_();
 	void forward(Size nr);
   void backward(Size nr);
 
+	MainControl* 			main_control_;
 	QString 					tmp_;
   SnapShotManager* 	snap_shot_manager_;
 	bool 							error_;
 	bool 							cancel_;
+	bool 							animation_running_;
 };
 
 } } // namespaces
