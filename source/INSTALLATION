@@ -242,11 +242,10 @@ MacOS X:
     (check this by calling 'g++ --version')
   - install QT 3.3.5 (only snapshots are currently available!)
     make sure it is the Mac *native* version, not the X11 one
-    (which should work as well, but is ugly an not supported!)
+    (which should work as well, but is ugly and not supported!)
   - call configure with '--with-qt-mt'
   - For Python support: make sure you have *framework installation*
-    of Python. Install SIP 4.2.0 or 4.2.1 together with the
-    patch provided from our website!
+    of Python. Install SIP.
   - To produce a MacOS-compliant BALLView application, use
     'make macos_app' in source/BALLVIEW
   - Make sure you set your DYLD_LIBRARY_PATH correctly!
@@ -304,4 +303,4 @@ GLEW
 	the platform's standard locations.
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.18.2.2 2006/10/10 07:43:29 amoll Exp $
+document revision: $Id: INSTALLATION,v 1.18.2.3 2006/10/16 14:38:41 amoll Exp $
