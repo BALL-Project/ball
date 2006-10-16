@@ -34,6 +34,7 @@ Added:
 - A major rewrite of the code for molecule superposition
 - A SMARTS matcher
 - Kekulizer
+- Monitoring of molecular files for updates (e.g. for external simulations)
 - An interface to GAMESS (to allow quantum mechanics calculations from BALL)
 - Eased installation process under Microsoft Windows
 
