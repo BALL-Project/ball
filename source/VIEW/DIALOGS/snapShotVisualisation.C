@@ -4,6 +4,7 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/FORMAT/trajectoryFile.h>
+#include <BALL/SYSTEM/systemCalls.h>
 
 #include <QtGui/qlineedit.h>
 #include <QtGui/qcheckbox.h>
@@ -59,6 +60,8 @@ SnapshotVisualisationDialog::~SnapshotVisualisationDialog() throw()
 
 void SnapshotVisualisationDialog::firstSnapshotClicked()
 {
+	if (main_control_->getRepresentationManager().updateRunning()) return;
+
   if (snap_shot_manager_->applyFirstSnapShot())
 	{
 		tmp_.setNum(1, 10);
@@ -103,6 +106,8 @@ void SnapshotVisualisationDialog::hundredBackwardClicked()
 
 void SnapshotVisualisationDialog::lastSnapshotClicked()
 {
+	if (main_control_->getRepresentationManager().updateRunning()) return;
+
 	if (snap_shot_manager_->applySnapShot(
 				snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots()))
 	{
@@ -117,13 +122,17 @@ void SnapshotVisualisationDialog::lastSnapshotClicked()
 
 void SnapshotVisualisationDialog::animateClicked()
 {
+	if (main_control_->getRepresentationManager().updateRunning()) return;
+
 	cancel_ = false;
 	error_ = false;
 	Size tempo = getEndSnapshot();
 	Size speed = animationSpeedSlider->value();
 	bool forward = true;
 	animateButton->setEnabled(false);
+	sliderBox->setEnabled(false);
 	cancelButton->setEnabled(true);
+	animation_running_ = true;
 	
 	for (Size i = getStartSnapshot(); 
 			 i < tempo && !error_ && !cancel_; )
@@ -204,22 +213,26 @@ void SnapshotVisualisationDialog::animateClicked()
 	setWindowTitle("Snapshot Visualisation");
 	animateButton->setEnabled(true);
 	cancelButton->setEnabled(false);
+	animation_running_ = false;
+	sliderBox->setEnabled(true);
 }
 
 
 void SnapshotVisualisationDialog::backward(Size nr)
 {
-	if (nr > (Size)currentSnapshot->text().toInt()) 
+  Index tmpnr = (currentSnapshot->text().toInt()) - (Index) nr;
+	if (tmpnr <= 0)
 	{
 		firstSnapshotClicked();
+		tmpnr = 0;
 	}
-
-  Position tmpnr = (currentSnapshot->text().toInt()) - nr;
- 
-  if (!snap_shot_manager_->applySnapShot(tmpnr)) 
+	else
 	{
-		Log.error() << "Could not apply  snapshot" <<std::endl;
-		error_ = true;
+		if (!snap_shot_manager_->applySnapShot(tmpnr)) 
+		{
+			Log.error() << "Could not apply  snapshot" <<std::endl;
+			error_ = true;
+		}
 	}
 
 	snapShotSlider->setValue(tmpnr);
@@ -229,16 +242,21 @@ void SnapshotVisualisationDialog::backward(Size nr)
 
 void SnapshotVisualisationDialog::forward(Size nr)
 {
+	if (main_control_->getRepresentationManager().updateRunning()) return;
+
 	Size tmpnr = (currentSnapshot->text().toInt()) + nr;
   if (tmpnr >= snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots())
   {
   	lastSnapshotClicked();
+		tmpnr = snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots();
   }
-	
-	if (!snap_shot_manager_->applySnapShot(tmpnr))
+	else
 	{
-	  Log.error() << "Could not apply  snapshot" << std::endl;
-		error_ = true;
+		if (!snap_shot_manager_->applySnapShot(tmpnr))
+		{
+			Log.error() << "Could not apply  snapshot" << std::endl;
+			error_ = true;
+		}
 	}
 
 	snapShotSlider->setValue(tmpnr);
@@ -277,6 +295,8 @@ Size SnapshotVisualisationDialog::getEndSnapshot() const
 void SnapshotVisualisationDialog::sliderMovedToPos()
 {
 	if (snap_shot_manager_ == 0) return;
+	if (main_control_->getRepresentationManager().updateRunning()) return;
+
 	currentSnapshot->setText(String(snapShotSlider->value()).c_str());
 	Position tmpnr = (currentSnapshot->text().toInt());	
 	
@@ -297,14 +317,25 @@ void SnapshotVisualisationDialog::update_()
   currentSnapshot->setText(tmp_);
 	update();
 	notify_(new CompositeMessage(*snap_shot_manager_->getSystem(), CompositeMessage::CHANGED_COMPOSITE));
-	MainControl* mc = getMainControl();
-	mc->wait();
+
+	while (main_control_->getRepresentationManager().updateRunning())
+	{
+		QApplication::processEvents();
+		sleepFor(10);
+	}
 }
 
 void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_manager)  
 {
 	snap_shot_manager_ = snapshot_manager;
 	if (snapshot_manager == 0) return;
+
+	main_control_ = getMainControl();
+	if (main_control_ == 0)
+	{
+		Log.error() << "No MainControl available for SnapshotVisualisationDialog!" << std::endl;
+		return;
+	}
 
   tmp_.setNum(snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots());
 	numberOfSnapshots->setText(tmp_);
@@ -394,10 +425,28 @@ void SnapshotVisualisationDialog::checkRock()
 	forwardLoopButton->setChecked(false);
 }
 
-void SnapshotVisualisationDialog::close()
+void SnapshotVisualisationDialog::close_()
 {
 	cancel_ = true;
-	QDialog::close();
+	unlockComposites();
+}
+
+void SnapshotVisualisationDialog::show()
+{
+	main_control_ = getMainControl();
+	if (main_control_ == 0)
+	{
+		Log.error() << "No MainControl available for SnapshotVisualisationDialog!" << std::endl;
+		return;
+	}
+
+	if (!lockComposites()) return;
+	QDialog::show();
+}
+
+void SnapshotVisualisationDialog::closeEvent(QCloseEvent*)
+{
+	close_();
 }
 
 } } // namespace
