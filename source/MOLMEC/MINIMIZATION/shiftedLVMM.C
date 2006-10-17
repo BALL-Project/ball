@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftedLVMM.C,v 1.1.2.3 2006/10/16 15:51:24 aleru Exp $
+// $Id: shiftedLVMM.C,v 1.1.2.4 2006/10/17 14:54:10 aleru Exp $
 //
 // Minimize the potential energy of a system using a shifted 
 // limited-memory variable metric method.
@@ -49,6 +49,15 @@ namespace BALL
 			initial_atoms_(),
 			step_(0.)
 	{
+		// Compute cutlo_
+		float epsilon;
+		float eps = 1.;
+		while (1. + eps > 1.)
+		{
+			epsilon = eps;
+			eps /= 2.;
+		}
+		cutlo_ = sqrt(Limits<float>::min()/epsilon);
 	}
 
 	// Constructor initialized with a force field
@@ -75,6 +84,16 @@ namespace BALL
 		{
 			Log.error() << "ShiftedLVMMMinimizer: setup failed! " << endl;
 		}
+		
+		// Compute cutlo_
+		float epsilon;
+		float eps = 1.;
+		while (1. + eps > 1.)
+		{
+			epsilon = eps;
+			eps /= 2.;
+		}
+		cutlo_ = sqrt(Limits<float>::min()/epsilon);
 	}
 
 	// Constructor initialized with a force field and a snapshot manager 
@@ -102,6 +121,16 @@ namespace BALL
 		{
 			Log.error() << "ShiftedLVMMMinimizer: setup failed! " << endl;
 		}
+		
+		// Compute cutlo_
+		float epsilon;
+		float eps = 1.;
+		while (1. + eps > 1.)
+		{
+			epsilon = eps;
+			eps /= 2.;
+		}
+		cutlo_ = sqrt(Limits<float>::min()/epsilon);
 	}
 
 	
@@ -131,6 +160,16 @@ namespace BALL
 		{
 			Log.error() << "ShiftedLVMMMinimizer: setup failed! " << endl; 
 		}
+		
+		// Compute cutlo_
+		float epsilon;
+		float eps = 1.;
+		while (1. + eps > 1.)
+		{
+			epsilon = eps;
+			eps /= 2.;
+		}
+		cutlo_ = sqrt(Limits<float>::min()/epsilon);
 	}
 
 	// Constructor initialized with a force field, a snapshot manager, and a set of options
@@ -159,6 +198,16 @@ namespace BALL
 		{
 			Log.error() << "ShiftedLVMMMinimizer: setup failed! " << endl; 
 		}
+		
+		// Compute cutlo_
+		float epsilon;
+		float eps = 1.;
+		while (1. + eps > 1.)
+		{
+			epsilon = eps;
+			eps /= 2.;
+		}
+		cutlo_ = sqrt(Limits<float>::min()/epsilon);
 	}
 
 
@@ -185,7 +234,8 @@ namespace BALL
 			shifted_direction_(rhs.shifted_direction_),
 			hess_factor_(rhs.hess_factor_),
 			initial_atoms_(rhs.initial_atoms_),
-			step_(rhs.step_)
+			step_(rhs.step_),
+			cutlo_(rhs.cutlo_)
 	{
 	}
 
@@ -208,6 +258,7 @@ namespace BALL
 		hess_factor_ = rhs.hess_factor_;
 		initial_atoms_ = rhs.initial_atoms_;
 		step_ = rhs.step_;
+		cutlo_ = rhs.cutlo_;
 		return *this;
 	}
 		
@@ -534,8 +585,7 @@ namespace BALL
 		else
 		{
 			// Don't risc a "NaN"
-			// AR TODO: implement a more accurate value by using numeric_limits.
-			if (norm >= 1.e-19)
+			if (norm >= cutlo_)
 			{
 				direction_.inv_norm = 1.0 / norm;
 			}

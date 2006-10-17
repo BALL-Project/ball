@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: strangLBFGS.C,v 1.1.2.5 2006/10/16 15:51:24 aleru Exp $
+// $Id: strangLBFGS.C,v 1.1.2.6 2006/10/17 14:54:11 aleru Exp $
 //
 // Minimize the potential energy of a system using an improved version
 // of the limited memory BFGS with Strang recurrences.
@@ -36,6 +36,15 @@ namespace BALL
 			work_val_(),
 			index_of_free_vect_(0)
 	{
+		// Compute cutlo_
+		float epsilon;
+		float eps = 1.;
+		while (1. + eps > 1.)
+		{
+			epsilon = eps;
+			eps /= 2.;
+		}
+		cutlo_ = sqrt(Limits<float>::min()/epsilon);
 	}
 
 	// Constructor initialized with a force field
@@ -57,6 +66,16 @@ namespace BALL
 		{
 			Log.error() << "StrangLBFGSMinimizer: setup failed! " << endl;
 		}
+		
+		// Compute cutlo_
+		float epsilon;
+		float eps = 1.;
+		while (1. + eps > 1.)
+		{
+			epsilon = eps;
+			eps /= 2.;
+		}
+		cutlo_ = sqrt(Limits<float>::min()/epsilon);
 	}
 
 	// Constructor initialized with a force field and a snapshot manager 
@@ -79,6 +98,16 @@ namespace BALL
 		{
 			Log.error() << "StrangLBFGSMinimizer: setup failed! " << endl;
 		}
+		
+		// Compute cutlo_
+		float epsilon;
+		float eps = 1.;
+		while (1. + eps > 1.)
+		{
+			epsilon = eps;
+			eps /= 2.;
+		}
+		cutlo_ = sqrt(Limits<float>::min()/epsilon);
 	}
 
 	
@@ -103,6 +132,16 @@ namespace BALL
 		{
 			Log.error() << "StrangLBFGSMinimizer: setup failed! " << endl; 
 		}
+		
+		// Compute cutlo_
+		float epsilon;
+		float eps = 1.;
+		while (1. + eps > 1.)
+		{
+			epsilon = eps;
+			eps /= 2.;
+		}
+		cutlo_ = sqrt(Limits<float>::min()/epsilon);
 	}
 
 	// Constructor initialized with a force field, a snapshot manager, and a set of options
@@ -126,6 +165,16 @@ namespace BALL
 		{
 			Log.error() << "StrangLBFGSMinimizer: setup failed! " << endl; 
 		}
+		
+		// Compute cutlo_
+		float epsilon;
+		float eps = 1.;
+		while (1. + eps > 1.)
+		{
+			epsilon = eps;
+			eps /= 2.;
+		}
+		cutlo_ = sqrt(Limits<float>::min()/epsilon);
 	}
 
 
@@ -147,7 +196,8 @@ namespace BALL
 			stored_y_(rhs.stored_y_),
 			initial_atoms_(rhs.initial_atoms_),
 			work_val_(rhs.work_val_),
-			index_of_free_vect_(rhs.index_of_free_vect_)
+			index_of_free_vect_(rhs.index_of_free_vect_),
+			cutlo_(rhs.cutlo_)
 	{
 	}
 
@@ -165,6 +215,7 @@ namespace BALL
 		initial_atoms_ = rhs.initial_atoms_;
 		work_val_ = rhs.work_val_;
 		index_of_free_vect_ = rhs.index_of_free_vect_;
+		cutlo_ = rhs.cutlo_;
 		return *this;
 	}
 		
@@ -373,8 +424,7 @@ namespace BALL
 		else
 		{
 			// Don't risc a "NaN"
-			// AR TODO: implement a more accurate value by using numeric_limits.
-			if (norm >= 1.e-19)
+			if (norm >= cutlo_)
 			{
 				direction_.inv_norm = 1.0 / norm;
 			}
