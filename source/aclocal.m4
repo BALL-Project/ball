@@ -1,7 +1,7 @@
 /dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.83.2.10 2006/10/17 14:01:39 amoll Exp $
+dnl		$Id: aclocal.m4,v 1.83.2.11 2006/10/17 15:50:17 amoll Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -2755,10 +2755,11 @@ dnl
 if test "${OS}" = "Darwin" ; then
 	VIEW_PLATFORM="OpenGL-Darwin"
 	OPENGL_LIBOPTS="-framework Carbon -framework OpenGL -framework AGL"
+	BALL_INCLUDES="${BALL_INCLUDES} -I/usr/X11R6/include"
 	X11_LIBPATHOPT=""
 	X11_INCPATH=""
-	OPENGL_INCPATH="-I/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers -I/System/Library/Frameworks/AGL.framework/Versions/A/Headers"
-	VIEW_INCLUDES="${VIEW_INCLUDES} ${OPENGL_INCPATH}"
+	dnl OPENGL_INCPATH="-I/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers -I/System/Library/Frameworks/AGL.framework/Versions/A/Headers"
+	dnl VIEW_INCLUDES="${VIEW_INCLUDES} ${OPENGL_INCPATH}"
 fi
 
 if test "${VIEW_PLATFORM}" = Mesa ; then
