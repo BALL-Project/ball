@@ -32,80 +32,100 @@
   <property name="windowTitle" >
    <string>MainControlPreferences</string>
   </property>
-  <widget class="QLabel" name="textLabel2" >
+  <widget class="QGroupBox" name="GroupBox1_2_2" >
    <property name="geometry" >
     <rect>
-     <x>6</x>
-     <y>11</y>
-     <width>250</width>
-     <height>17</height>
+     <x>10</x>
+     <y>70</y>
+     <width>311</width>
+     <height>61</height>
     </rect>
    </property>
-   <property name="sizePolicy" >
-    <sizepolicy>
-     <hsizetype>0</hsizetype>
-     <vsizetype>0</vsizetype>
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
+   <property name="title" >
+    <string>Font for the internal editor</string>
    </property>
-   <property name="minimumSize" >
-    <size>
-     <width>250</width>
-     <height>17</height>
-    </size>
-   </property>
-   <property name="maximumSize" >
-    <size>
-     <width>250</width>
-     <height>17</height>
-    </size>
-   </property>
-   <property name="text" >
-    <string>GUI Style</string>
-   </property>
-   <property name="alignment" >
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="style_box_" >
-   <property name="geometry" >
-    <rect>
-     <x>6</x>
-     <y>33</y>
-     <width>250</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="sizePolicy" >
-    <sizepolicy>
-     <hsizetype>0</hsizetype>
-     <vsizetype>0</vsizetype>
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="minimumSize" >
-    <size>
-     <width>250</width>
-     <height>23</height>
-    </size>
-   </property>
-   <property name="maximumSize" >
-    <size>
-     <width>250</width>
-     <height>23</height>
-    </size>
-   </property>
-   <property name="toolTip" >
-    <string>Select a GUI style to alter the appearance of BALLView</string>
-   </property>
+   <layout class="QHBoxLayout" >
+    <property name="margin" >
+     <number>5</number>
+    </property>
+    <property name="spacing" >
+     <number>6</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="font_label" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>3</hsizetype>
+        <vsizetype>3</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize" >
+       <size>
+        <width>400</width>
+        <height>190</height>
+       </size>
+      </property>
+      <property name="font" >
+       <font>
+        <family>Sans Serif</family>
+        <pointsize>9</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="toolTip" >
+       <string>Font Preview</string>
+      </property>
+      <property name="frameShape" >
+       <enum>QFrame::Panel</enum>
+      </property>
+      <property name="frameShadow" >
+       <enum>QFrame::Sunken</enum>
+      </property>
+      <property name="text" >
+       <string>Font Test label</string>
+      </property>
+      <property name="alignment" >
+       <set>Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="font_button" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>0</hsizetype>
+        <vsizetype>0</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize" >
+       <size>
+        <width>0</width>
+        <height>28</height>
+       </size>
+      </property>
+      <property name="toolTip" >
+       <string>Select the font</string>
+      </property>
+      <property name="text" >
+       <string>Select</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QCheckBox" name="logging_to_file" >
    <property name="geometry" >
     <rect>
      <x>10</x>
-     <y>90</y>
+     <y>150</y>
      <width>250</width>
      <height>23</height>
     </rect>
@@ -136,6 +156,57 @@
    <property name="text" >
     <string>enable logging to file</string>
    </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget" >
+   <property name="geometry" >
+    <rect>
+     <x>6</x>
+     <y>11</y>
+     <width>311</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" >
+    <property name="margin" >
+     <number>0</number>
+    </property>
+    <property name="spacing" >
+     <number>6</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="textLabel2" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>7</hsizetype>
+        <vsizetype>0</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text" >
+       <string>GUI Style</string>
+      </property>
+      <property name="alignment" >
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="style_box_" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>7</hsizetype>
+        <vsizetype>3</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="toolTip" >
+       <string>Select a GUI style to alter the appearance of BALLView</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />

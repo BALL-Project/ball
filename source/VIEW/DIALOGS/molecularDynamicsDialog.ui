@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>464</height>
+    <width>383</width>
+    <height>424</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -37,11 +37,304 @@
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>9</number>
+    <number>4</number>
    </property>
    <property name="spacing" >
     <number>6</number>
    </property>
+   <item row="3" column="1" >
+    <widget class="QPushButton" name="cancel_button" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize" >
+      <size>
+       <width>150</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>32767</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="focusPolicy" >
+      <enum>Qt::TabFocus</enum>
+     </property>
+     <property name="text" >
+      <string>C&amp;ancel</string>
+     </property>
+     <property name="shortcut" >
+      <string>Alt+A</string>
+     </property>
+     <property name="autoDefault" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" >
+    <widget class="QPushButton" name="start_button" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize" >
+      <size>
+       <width>150</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="focusPolicy" >
+      <enum>Qt::TabFocus</enum>
+     </property>
+     <property name="toolTip" >
+      <string>Start simulation</string>
+     </property>
+     <property name="text" >
+      <string>&amp;Simulate</string>
+     </property>
+     <property name="shortcut" >
+      <string>Alt+S</string>
+     </property>
+     <property name="autoDefault" >
+      <bool>true</bool>
+     </property>
+     <property name="default" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2" >
+    <widget class="QGroupBox" name="GroupBox2_2" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>3</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title" >
+      <string>Trajectory</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignHCenter</set>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QCheckBox" name="enable_dcd" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>1</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>Write trajectories to file in order to be able to watch snapshots</string>
+        </property>
+        <property name="text" >
+         <string>save to</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" >
+       <widget class="QPushButton" name="browse_button" >
+        <property name="text" >
+         <string>Browse</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QLineEdit" name="dcd_file_edit" >
+        <property name="enabled" >
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>150</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>200</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="focusPolicy" >
+         <enum>Qt::StrongFocus</enum>
+        </property>
+        <property name="text" >
+         <string>trajectory.dcd</string>
+        </property>
+        <property name="maxLength" >
+         <number>32767</number>
+        </property>
+        <property name="frame" >
+         <bool>true</bool>
+        </property>
+        <property name="echoMode" >
+         <enum>QLineEdit::Normal</enum>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignLeading</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QGroupBox" name="groupBox5" >
+     <property name="title" >
+      <string>Force Field</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignHCenter</set>
+     </property>
+     <layout class="QVBoxLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QRadioButton" name="useAmberRadioButton" >
+        <property name="text" >
+         <string>AMBER</string>
+        </property>
+        <property name="shortcut" >
+         <string/>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="useCharmmRadioButton" >
+        <property name="text" >
+         <string>CHARMM</string>
+        </property>
+        <property name="shortcut" >
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="useMMFF94RadioButton" >
+        <property name="text" >
+         <string>MMFF94</string>
+        </property>
+        <property name="shortcut" >
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="advanced_button" >
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="toolTip" >
+         <string>Alter force field options</string>
+        </property>
+        <property name="text" >
+         <string>&amp;ForceField Options</string>
+        </property>
+        <property name="shortcut" >
+         <string>Alt+F</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QGroupBox" name="dielectric_group_2" >
+     <property name="title" >
+      <string>Ensemble</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignHCenter</set>
+     </property>
+     <layout class="QVBoxLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QRadioButton" name="canonical_button" >
+        <property name="minimumSize" >
+         <size>
+          <width>120</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>canonical</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="microcanonical_button" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>120</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>microcanonical</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="0" column="0" colspan="2" >
     <widget class="QGroupBox" name="GroupBox_3" >
      <property name="focusPolicy" >
@@ -460,309 +753,6 @@
        </widget>
       </item>
      </layout>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="2" >
-    <widget class="QGroupBox" name="GroupBox2_2" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>3</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="title" >
-      <string>Trajectory</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignHCenter</set>
-     </property>
-     <widget class="QLineEdit" name="dcd_file_edit" >
-      <property name="enabled" >
-       <bool>false</bool>
-      </property>
-      <property name="geometry" >
-       <rect>
-        <x>90</x>
-        <y>20</y>
-        <width>192</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>7</hsizetype>
-        <vsizetype>0</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize" >
-       <size>
-        <width>150</width>
-        <height>25</height>
-       </size>
-      </property>
-      <property name="maximumSize" >
-       <size>
-        <width>200</width>
-        <height>32767</height>
-       </size>
-      </property>
-      <property name="focusPolicy" >
-       <enum>Qt::StrongFocus</enum>
-      </property>
-      <property name="text" >
-       <string>trajectory.dcd</string>
-      </property>
-      <property name="maxLength" >
-       <number>32767</number>
-      </property>
-      <property name="frame" >
-       <bool>true</bool>
-      </property>
-      <property name="echoMode" >
-       <enum>QLineEdit::Normal</enum>
-      </property>
-      <property name="alignment" >
-       <set>Qt::AlignLeading</set>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="browse_button" >
-      <property name="geometry" >
-       <rect>
-        <x>290</x>
-        <y>20</y>
-        <width>85</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text" >
-       <string>Browse</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="enable_dcd" >
-      <property name="geometry" >
-       <rect>
-        <x>18</x>
-        <y>20</y>
-        <width>71</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>0</hsizetype>
-        <vsizetype>0</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="toolTip" >
-       <string>Write trajectories to file in order to be able to watch snapshots</string>
-      </property>
-      <property name="text" >
-       <string>save to</string>
-      </property>
-     </widget>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QGroupBox" name="dielectric_group_2" >
-     <property name="title" >
-      <string>Ensemble</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignHCenter</set>
-     </property>
-     <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item>
-       <widget class="QRadioButton" name="canonical_button" >
-        <property name="minimumSize" >
-         <size>
-          <width>120</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>canonical</string>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="microcanonical_button" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>0</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize" >
-         <size>
-          <width>120</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>microcanonical</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="1" column="1" >
-    <widget class="QGroupBox" name="groupBox5" >
-     <property name="title" >
-      <string>Force Field</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignHCenter</set>
-     </property>
-     <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item>
-       <widget class="QRadioButton" name="useAmberRadioButton" >
-        <property name="text" >
-         <string>AMBER</string>
-        </property>
-        <property name="shortcut" >
-         <string/>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="useCharmmRadioButton" >
-        <property name="text" >
-         <string>CHARMM</string>
-        </property>
-        <property name="shortcut" >
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="useMMFF94RadioButton" >
-        <property name="text" >
-         <string>MMFF94</string>
-        </property>
-        <property name="shortcut" >
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="advanced_button" >
-        <property name="minimumSize" >
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="toolTip" >
-         <string>Alter force field options</string>
-        </property>
-        <property name="text" >
-         <string>&amp;ForceField Options</string>
-        </property>
-        <property name="shortcut" >
-         <string>Alt+F</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="3" column="0" >
-    <widget class="QPushButton" name="start_button" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>5</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize" >
-      <size>
-       <width>150</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="focusPolicy" >
-      <enum>Qt::TabFocus</enum>
-     </property>
-     <property name="toolTip" >
-      <string>Start simulation</string>
-     </property>
-     <property name="text" >
-      <string>&amp;Simulate</string>
-     </property>
-     <property name="shortcut" >
-      <string>Alt+S</string>
-     </property>
-     <property name="autoDefault" >
-      <bool>true</bool>
-     </property>
-     <property name="default" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1" >
-    <widget class="QPushButton" name="cancel_button" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>5</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize" >
-      <size>
-       <width>150</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="maximumSize" >
-      <size>
-       <width>32767</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="focusPolicy" >
-      <enum>Qt::TabFocus</enum>
-     </property>
-     <property name="text" >
-      <string>C&amp;ancel</string>
-     </property>
-     <property name="shortcut" >
-      <string>Alt+A</string>
-     </property>
-     <property name="autoDefault" >
-      <bool>true</bool>
-     </property>
     </widget>
    </item>
   </layout>

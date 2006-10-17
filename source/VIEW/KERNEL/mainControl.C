@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.37 2006/10/16 13:38:34 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.38 2006/10/17 11:24:22 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -785,6 +785,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			if (main_control_preferences_ != 0)
 			{
 				QApplication::setStyle(main_control_preferences_->getStyle());
+				QApplication::setFont(main_control_preferences_->getFont());
 				QWidget::update();
 
 				if (!main_control_preferences_->loggingToFileEnabled()) 
@@ -821,6 +822,16 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				setWorkingDir(inifile.getValue("WINDOWS", "File::working_dir"));
 			}
 
+			if (inifile.hasEntry("MAIN", "Font"))
+			{
+				QFont font;
+				font.fromString(inifile.getValue("MAIN", "Font").c_str());
+				if (main_control_preferences_ != 0)
+				{
+					main_control_preferences_->setFont(font);
+				}
+			}
+
 			restoreWindows(inifile);
 			
 			preferences_dialog_->fetchPreferences(inifile);
@@ -841,6 +852,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			String version_string(version.getMajorRevision());
 			version_string += "." + version.getMinorRevision();
 			inifile.insertValue("MAIN", "Version", version_string);
+			
+			// the font 
+			if (main_control_preferences_ != 0)
+			{
+				inifile.insertValue("MAIN", "Font", ascii(main_control_preferences_->getFont().toString()));
+			}
 
 			// the main window position
 			inifile.appendSection("WINDOWS");

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.C,v 1.16.2.5 2006/05/15 14:15:30 amoll Exp $
+// $Id: mainControlPreferences.C,v 1.16.2.6 2006/10/17 11:21:54 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
@@ -9,6 +9,7 @@
 
 #include <QtGui/qcheckbox.h>
 #include <QtGui/qstylefactory.h>
+#include <QtGui/qfontdialog.h>
 
 namespace BALL
 {
@@ -36,6 +37,8 @@ MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name
 	Index pos = style_box_->findText(prefered_style);
 	if (pos != -1) style_box_->setCurrentIndex(pos);
 
+	connect( font_button, SIGNAL( clicked() ), this, SLOT( selectFont() ) );
+
 	registerObject_(style_box_);
 	registerObject_(logging_to_file);
 
@@ -58,6 +61,11 @@ QStyle* MainControlPreferences::getStyle()
 	return new_style;
 }
 
+QFont MainControlPreferences::getFont()
+{
+	return font_label->font();
+}
+
 void MainControlPreferences::enableLoggingToFile(bool state)
 	throw()
 {
@@ -69,6 +77,23 @@ bool MainControlPreferences::loggingToFileEnabled() const
 	throw()
 {
 	return logging_to_file->isChecked();
+}
+
+void MainControlPreferences::selectFont()
+{
+	bool ok = true;
+	QFont font = QFontDialog::getFont(&ok, font_, 0);
+
+	if (!ok) return;
+
+	font_label->setFont(font);
+	font_ = font;
+}
+
+void MainControlPreferences::setFont(QFont font)
+{
+	font_ = font;
+	font_label->setFont(font);
 }
 
 } } // namespaces

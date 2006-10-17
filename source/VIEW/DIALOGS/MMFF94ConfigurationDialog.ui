@@ -68,17 +68,6 @@
           <height>0</height>
          </size>
         </property>
-        <property name="font" >
-         <font>
-          <family>Sans Serif</family>
-          <pointsize>9</pointsize>
-          <weight>50</weight>
-          <italic>false</italic>
-          <bold>false</bold>
-          <underline>false</underline>
-          <strikeout>false</strikeout>
-         </font>
-        </property>
         <property name="text" >
          <string>Assign charges</string>
         </property>
@@ -94,17 +83,6 @@
           <width>165</width>
           <height>0</height>
          </size>
-        </property>
-        <property name="font" >
-         <font>
-          <family>Sans Serif</family>
-          <pointsize>9</pointsize>
-          <weight>50</weight>
-          <italic>false</italic>
-          <bold>false</bold>
-          <underline>false</underline>
-          <strikeout>false</strikeout>
-         </font>
         </property>
         <property name="text" >
          <string>Assign type names</string>
@@ -122,17 +100,6 @@
           <height>0</height>
          </size>
         </property>
-        <property name="font" >
-         <font>
-          <family>Sans Serif</family>
-          <pointsize>9</pointsize>
-          <weight>50</weight>
-          <italic>false</italic>
-          <bold>false</bold>
-          <underline>false</underline>
-          <strikeout>false</strikeout>
-         </font>
-        </property>
         <property name="text" >
          <string>Assign (numeric) types</string>
         </property>
@@ -149,17 +116,6 @@
           <height>0</height>
          </size>
         </property>
-        <property name="font" >
-         <font>
-          <family>Sans Serif</family>
-          <pointsize>9</pointsize>
-          <weight>50</weight>
-          <italic>false</italic>
-          <bold>false</bold>
-          <underline>false</underline>
-          <strikeout>false</strikeout>
-         </font>
-        </property>
         <property name="text" >
          <string>Overwrite charges</string>
         </property>
@@ -175,17 +131,6 @@
           <width>155</width>
           <height>0</height>
          </size>
-        </property>
-        <property name="font" >
-         <font>
-          <family>Sans Serif</family>
-          <pointsize>9</pointsize>
-          <weight>50</weight>
-          <italic>false</italic>
-          <bold>false</bold>
-          <underline>false</underline>
-          <strikeout>false</strikeout>
-         </font>
         </property>
         <property name="text" >
          <string>Overwrite type names</string>
@@ -317,17 +262,6 @@
           <height>25</height>
          </size>
         </property>
-        <property name="font" >
-         <font>
-          <family>Sans Serif</family>
-          <pointsize>9</pointsize>
-          <weight>50</weight>
-          <italic>false</italic>
-          <bold>false</bold>
-          <underline>false</underline>
-          <strikeout>false</strikeout>
-         </font>
-        </property>
         <property name="focusPolicy" >
          <enum>Qt::NoFocus</enum>
         </property>
@@ -352,17 +286,6 @@
           <width>150</width>
           <height>25</height>
          </size>
-        </property>
-        <property name="font" >
-         <font>
-          <family>Sans Serif</family>
-          <pointsize>9</pointsize>
-          <weight>50</weight>
-          <italic>false</italic>
-          <bold>false</bold>
-          <underline>false</underline>
-          <strikeout>false</strikeout>
-         </font>
         </property>
         <property name="focusPolicy" >
          <enum>Qt::StrongFocus</enum>
@@ -391,17 +314,6 @@
           <width>50</width>
           <height>25</height>
          </size>
-        </property>
-        <property name="font" >
-         <font>
-          <family>Sans Serif</family>
-          <pointsize>9</pointsize>
-          <weight>50</weight>
-          <italic>false</italic>
-          <bold>false</bold>
-          <underline>false</underline>
-          <strikeout>false</strikeout>
-         </font>
         </property>
         <property name="focusPolicy" >
          <enum>Qt::TabFocus</enum>
@@ -629,17 +541,6 @@
           <height>32767</height>
          </size>
         </property>
-        <property name="font" >
-         <font>
-          <family>Sans Serif</family>
-          <pointsize>9</pointsize>
-          <weight>50</weight>
-          <italic>false</italic>
-          <bold>false</bold>
-          <underline>false</underline>
-          <strikeout>false</strikeout>
-         </font>
-        </property>
         <property name="text" >
          <string>constant</string>
         </property>
@@ -663,17 +564,6 @@
           <width>0</width>
           <height>0</height>
          </size>
-        </property>
-        <property name="font" >
-         <font>
-          <family>Sans Serif</family>
-          <pointsize>9</pointsize>
-          <weight>50</weight>
-          <italic>false</italic>
-          <bold>false</bold>
-          <underline>false</underline>
-          <strikeout>false</strikeout>
-         </font>
         </property>
         <property name="text" >
          <string>distance dependent</string>
