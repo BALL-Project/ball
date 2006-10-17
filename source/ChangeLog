@@ -1,6 +1,7 @@
 1.2 nonpublic:
 
 Added:
+- Font for BALLView can now be freely choosen
 - Useage of GLEW (OpenGL Extension Wrangler Library)
 - Docking interface
 - Support for field lines, vector grids and normalized grids
