@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.4.21 2006/10/17 16:39:14 amoll Exp $
+// $Id: MMFF94Processors.C,v 1.1.4.22 2006/10/17 16:39:30 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -13,8 +13,6 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/STRUCTURE/smartsMatcher.h>
-//   #include <BALL/QSAR/aromaticityProcessor.h>
-//   #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/KERNEL/forEach.h>
 
 #include <BALL/SYSTEM/timer.h>
