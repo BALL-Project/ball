@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.h,v 1.1.4.11 2006/10/06 14:01:40 amoll Exp $ 
+// $Id: MMFF94Processors.h,v 1.1.4.12 2006/10/17 16:39:06 amoll Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MMFF94_PROCESSORS_H
@@ -23,8 +23,8 @@
 # include <BALL/KERNEL/bond.h>
 #endif
 
-#ifndef BALL_STRUCTURE_KEKULIZER_H
-# include <BALL/STRUCTURE/kekulizer.h>
+#ifndef BALL_STRUCTURE_ATOMTYPER_H
+# include <BALL/STRUCTURE/atomTyper.h>
 #endif
 
 #include <vector>
@@ -37,65 +37,6 @@ namespace BALL
 	class Molecule;
 	class System;
 
-	///
-	class BALL_EXPORT AtomTyper
-	{
-		public:
-
-		BALL_CREATE(AtomTyper)
-
-		///
-		AtomTyper();
-
-		///
-		AtomTyper(const AtomTyper& t);
-
-		///
-		virtual ~AtomTyper() {};
-
-		///
-		bool setup(const String& filename);
-		
-		///
-		virtual void assignTo(System& s);
-		
-		///
-		void setAromaticRings(const vector<HashSet<Atom*> >& rings) { aromatic_rings_ = rings;}
-
-		///
-		void setRings(const vector<HashSet<Atom*> >& rings) { rings_ = rings;}
-
-		// just for debugging: computational times for the individual SMARTS expressions
-		static StringHashMap<float> rule_times;
-
-		protected:
-		
-		///
-		void assignTo(Molecule& mol);
-
-		/** To be overloaded in derived classes 
-				to add support for additional properties e.g. charges
-		*/
-		virtual void assignSpecificValues_(Atom&) {};
-
-		/** To be overloaded in derived classes 
-				to add support for additional properties e.g. charges
-		*/
-		virtual bool specificSetup_() { return true;}
-
-		vector<String> 		names_;
-		vector<String> 		rules_;
-		vector<Index> 		types_;
-		// entries in the file for specificSetup_() :
-		vector<vector<String> > fields_;
-		// number for fields per line in the config file
-		Size 							number_expected_fields_;
-		vector<HashSet<Atom*> > 		rings_;
-		vector<HashSet<Atom*> > 		aromatic_rings_;
-		HashMap<String, vector<Position> > element_to_rules_;
-		HashSet<Atom*> atoms_;
-	};
-	
 	///
 	class BALL_EXPORT MMFF94AtomTyper
 		: public AtomTyper

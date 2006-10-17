@@ -206,6 +206,7 @@ libBALL.obj\
 ..\..\..\source\SOLVATION\solventParameter.obj\
 ..\..\..\source\SOLVATION\uhligCavFreeEnergyProcessor.obj\
 ..\..\..\source\STRUCTURE\atomBijection.obj\
+..\..\..\source\STRUCTURE\atomTyper.obj\
 ..\..\..\source\STRUCTURE\analyticalSES.obj\
 ..\..\..\source\STRUCTURE\buildBondsProcessor.obj\
 ..\..\..\source\STRUCTURE\connolly.obj\
@@ -230,16 +231,8 @@ libBALL.obj\
 ..\..\..\source\STRUCTURE\reducedSurface.obj\
 ..\..\..\source\STRUCTURE\residueChecker.obj\
 ..\..\..\source\STRUCTURE\rotamerLibrary.obj\
-..\..\..\source\STRUCTURE\RSEdge.obj\
-..\..\..\source\STRUCTURE\RSFace.obj\
-..\..\..\source\STRUCTURE\RSVertex.obj\
-..\..\..\source\STRUCTURE\SASEdge.obj\
-..\..\..\source\STRUCTURE\SASFace.obj\
-..\..\..\source\STRUCTURE\SASVertex.obj\
 ..\..\..\source\STRUCTURE\secondaryStructureProcessor.obj\
-..\..\..\source\STRUCTURE\SESEdge.obj\
-..\..\..\source\STRUCTURE\SESFace.obj\
-..\..\..\source\STRUCTURE\SESVertex.obj\
+..\..\..\source\STRUCTURE\RSEdge.obj ..\..\..\source\STRUCTURE\RSFace.obj ..\..\..\source\STRUCTURE\RSVertex.obj ..\..\..\source\STRUCTURE\SASEdge.obj ..\..\..\source\STRUCTURE\SASFace.obj ..\..\..\source\STRUCTURE\SASVertex.obj ..\..\..\source\STRUCTURE\SESEdge.obj ..\..\..\source\STRUCTURE\SESFace.obj ..\..\..\source\STRUCTURE\SESVertex.obj\
 ..\..\..\source\STRUCTURE\smilesParser.obj\
 ..\..\..\source\STRUCTURE\solventAccessibleSurface.obj\
 ..\..\..\source\STRUCTURE\solventExcludedSurface.obj\
