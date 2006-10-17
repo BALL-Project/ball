@@ -1,21 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compareForces.C,v 1.1.2.1 2006/10/17 23:07:03 amoll Exp $
+// $Id: compareForces.C,v 1.1.2.2 2006/10/17 23:53:35 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
 #include <BALL/common.h>
 
-#include <BALL/KERNEL/system.h>
 #include <BALL/DATATYPE/string.h>
-#include <BALL/SYSTEM/path.h>
-#include <BALL/SYSTEM/fileSystem.h>
+#include <BALL/MATHS/vector3.h>
 #include <BALL/FORMAT/lineBasedFile.h>
-#include <BALL/FORMAT/MOL2File.h>
-#include <BALL/FORMAT/PDBFile.h>
-#include <BALL/FORMAT/HINFile.h>
-#include <BALL/KERNEL/forEach.h>
 
 #include <math.h>
 
@@ -31,6 +25,7 @@ float diff(double original, double our)
 {
 	double x = original - our;
 	x = fabs(x);
+	if (x < 0.05) return 0;
 	return x / fabs(original);
 }
 
@@ -82,14 +77,19 @@ int main(int argc, char** argv)
 		return 0;
 	}
 
+	Log.precision(3);
 	float max_diff = 0.01;
 	for (Position p = 0; p < charmm_forces.size(); p++)
 	{
-		if (diff(charmm_forces[p].x, ball_forces[p].x) > max_diff ||
-		    diff(charmm_forces[p].y, ball_forces[p].y) > max_diff ||
-		    diff(charmm_forces[p].z, ball_forces[p].z) > max_diff)
+		float d = BALL_MAX3(diff(charmm_forces[p].x, ball_forces[p].x),
+												diff(charmm_forces[p].y, ball_forces[p].y),
+												diff(charmm_forces[p].z, ball_forces[p].z));
+
+		if (d > max_diff)
 		{
-			Log.error() << names[p] << ": " << std::endl 
+			String s(d);
+			s.truncate(4);
+			Log.error() << "*** " << names[p] << ": ******** " << s << std::endl 
 				          << charmm_forces[p] << std::endl
 				          << ball_forces[p] << std::endl;
 		}
