@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftedLVMM.h,v 1.1.2.1 2006/10/12 10:19:32 aleru Exp $ 
+// $Id: shiftedLVMM.h,v 1.1.2.2 2006/10/17 14:54:57 aleru Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MINIMIZATION_SHIFTEDLVMM_H 
@@ -257,6 +257,10 @@ namespace BALL
 		// The last step size (in respect to the length of the computed direction vector),
 		// so the length of the last step was step_*||direction_||.
 		double step_;
+		
+		// Numerical lower bound: we don't want to compute the reciprocal of a number 
+		// which is lower than 'cutlo_'.
+		float cutlo_;
 		
     //@}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: strangLBFGS.h,v 1.1.2.3 2006/10/12 10:19:32 aleru Exp $ 
+// $Id: strangLBFGS.h,v 1.1.2.4 2006/10/17 14:54:57 aleru Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STRANGLBFGS_H 
@@ -173,6 +173,10 @@ namespace BALL
 		// Index of the vector pair which will be used for saving the data
 		// of the current step (usually by replacing the old data).
 		Size index_of_free_vect_;
+		
+		// Numerical lower bound: we don't want to compute the reciprocal of a number 
+		// which is lower than 'cutlo_'.
+		float cutlo_;
 		
     //@}
 
