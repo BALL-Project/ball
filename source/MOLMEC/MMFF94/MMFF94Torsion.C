@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.4.9 2006/09/24 13:46:14 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.4.10 2006/10/18 13:19:53 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -409,8 +409,8 @@ namespace BALL
 			double rrj = l_ij / l_jk;
 			double rrk = l_kl / l_jk;
 
-			double rrcj = rrj * cos(angle_ijk);
-			double rrck = rrk * cos(angle_jkl);
+			double rrcj = rrj * (-cos(angle_ijk));
+			double rrck = rrk * (-cos(angle_jkl));
 
 			DVector3 a = ij % jk;
 			DVector3 b = jk % kl;
