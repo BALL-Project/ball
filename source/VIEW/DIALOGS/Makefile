@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.53.2.14 2006/06/27 20:47:18 amoll Exp $
+# $Id: Makefile,v 1.53.2.15 2006/10/18 14:30:48 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -51,13 +51,15 @@ CPP_SOURCES=\
 	parsedFunctionDialog.C\
 	peptideDialog.C\
 	preferences.C\
-	pythonSettings.C\
 	setCamera.C\
 	serverPreferences.C\
 	snapShotVisualisation.C\
 	stageSettings.C
 #	openBruker1DFile.C\
 #	openBruker2DFile.C
+
+PYTHON_CPP_SOURCES=\
+	pythonSettings.C
 
 MOC_SOURCES=\
 	amberConfigurationDialog_moc.C\
@@ -91,13 +93,15 @@ MOC_SOURCES=\
 	parsedFunctionDialog_moc.C\
 	peptideDialog_moc.C\
 	preferences_moc.C\
-	pythonSettings_moc.C\
 	serverPreferences_moc.C\
 	setCamera_moc.C\
 	snapShotVisualisation_moc.C\
 	stageSettings_moc.C
 #	openBruker1DFile_moc.C\
 #	openBruker2DFile_moc.C\
+
+PYTHON_MOC_SOURCES=\
+	pythonSettings_moc.C
 
 UIC_SOURCES=\
 	amberConfigurationDialogData.C\
