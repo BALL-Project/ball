@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94ConfigurationDialog.C,v 1.1.2.3 2006/06/23 01:35:12 amoll Exp $
+// $Id: MMFF94ConfigurationDialog.C,v 1.1.2.4 2006/10/18 20:04:09 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/MMFF94ConfigurationDialog.h>
@@ -47,6 +47,14 @@ namespace BALL
 			registerObject_(assign_types_checkBox);
 			registerObject_(overwrite_charges_checkBox);
 			registerObject_(overwrite_typenames_checkBox);
+
+			registerObject_(stretch_box);
+			registerObject_(bends_box);
+			registerObject_(stretch_bends_box);
+			registerObject_(torsions_box);
+			registerObject_(plane_box);
+			registerObject_(vdw_box);
+			registerObject_(es_box);
 
 			registerObject_(parameter_file_edit);
 			registerObject_(max_unassigned_atoms);
