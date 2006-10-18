@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.4.23 2006/09/19 11:12:53 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.4.24 2006/10/18 21:31:34 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -720,9 +720,9 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			r1 += bend.n1 * sb_scale;
 			r3 += bend.n2 * sb_scale;
 				
-			if (!us || bend.atom1->isSelected()) AddDV3_(bend.atom1->getForce(), r1);
-			if (!us || bend.atom2->isSelected()) AddDV3_(bend.atom2->getForce(), -(r1 + r3));
-			if (!us || bend.atom3->isSelected()) AddDV3_(bend.atom3->getForce(), r3);
+			if (!us || bend.atom1->isSelected()) AddDV3_(bend.atom1->getForce(), -r1);
+			if (!us || bend.atom2->isSelected()) AddDV3_(bend.atom2->getForce(), (r1 + r3));
+			if (!us || bend.atom3->isSelected()) AddDV3_(bend.atom3->getForce(), -r3);
 		}
 	}
 
