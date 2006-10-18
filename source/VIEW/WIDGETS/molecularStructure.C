@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.22 2006/07/17 09:28:12 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.23 2006/10/18 23:11:21 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -833,7 +833,7 @@ namespace BALL
 			amber_dialog_.readPreferenceEntries(inifile);
 			charmm_dialog_.readPreferenceEntries(inifile);
 			mmff94_dialog_.readPreferenceEntries(inifile);
-			chooseForceField(AMBER_FF);
+			applyForceFieldSettings_();
 			if (inifile.hasEntry("FORCEFIELD", "selected"))
 			{
 				try
@@ -844,6 +844,10 @@ namespace BALL
 				catch(...)
 				{
 				}
+			}
+			else
+			{
+				chooseForceField(AMBER_FF);
 			}
 		}
 
