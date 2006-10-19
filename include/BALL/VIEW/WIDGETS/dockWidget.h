@@ -32,19 +32,12 @@ namespace BALL
 
 			BALL_EMBEDDABLE(DockWidget,Embeddable)
 
-			// required for Python bindings, but dont use this method
-			DockWidget();
-
-			// required for Python bindings, but dont use this method
-			DockWidget(const DockWidget&);
-
 			/// Use this constructor!
 			DockWidget(QWidget* parent, const char* title = 0);
 
 			///
 			virtual ~DockWidget() throw() {}
 			
-			//@{
 			/** Insert a widget with the content of the window.
 			 */
 			void setGuest(QWidget& guest);
@@ -74,14 +67,10 @@ namespace BALL
 			///
 			QGridLayout* getGuestLayout() { return layout_;}
 
-			//@}
-			/** @name Public slots 
-			*/ 
-			//@{
 			public slots:
 
 			///
-			virtual void dropEvent(QDropEvent* e);
+			virtual void dropEvent(QDropEvent* e);s:
 
 			///
 			virtual void dragEnterEvent(QDragEnterEvent* e);
@@ -89,10 +78,12 @@ namespace BALL
 			///
 			virtual void showGuestContextMenu(const QPoint&) {};
 
-			//@} 
-
 			protected:
-
+			
+			// required for Python bindings, but dont use this methods:
+			DockWidget(); 
+			DockWidget(const DockWidget&);
+			
 			QWidget* 			container_;
 			QWidget* 			guest_;
 			QGridLayout*  layout_;
