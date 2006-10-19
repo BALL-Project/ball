@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.28.2.4 2006/10/06 14:47:18 amoll Exp $
+// $Id: dockWidget.C,v 1.28.2.5 2006/10/19 21:44:13 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -16,13 +16,11 @@ namespace BALL
 
 		DockWidget::DockWidget()
 			:	QDockWidget(),
-				ModularWidget("unnamed DockWidget"),
+				ModularWidget(),
 				guest_(0)
 		{
-			BALLVIEW_DEBUG;
-			setAcceptDrops(true);
 		}
-			
+	
 		DockWidget::DockWidget(const DockWidget&)
 			:	QDockWidget(),
 				ModularWidget(),
@@ -49,8 +47,7 @@ namespace BALL
 			}
 
 			setAcceptDrops(true);
-			setFloating(false);
-			resize(100, 100);
+//   			setFloating(false);
 			container_ = new QWidget(this);
 			setWidget(container_);
 
@@ -61,16 +58,16 @@ namespace BALL
 
 		void DockWidget::setGuest(QWidget& guest)
 		{
-			QPoint p;
-			guest.setParent(this);
 			guest.resize(120,100);
 			guest_ = &guest;
-			setMinimumSize(20, 20);
+			setMinimumSize(0, 0);
+			setMaximumSize(15000, 15000);
 			guest.setParent(container_);
 			layout_->addWidget(&guest);
 
 			guest.setContextMenuPolicy(Qt::CustomContextMenu);
-			connect(&guest, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showGuestContextMenu(const QPoint&)));
+			connect(&guest, SIGNAL(customContextMenuRequested(const QPoint&)), 
+									this, SLOT(showGuestContextMenu(const QPoint&)));
 		}
 
 		void DockWidget::initializeWidget(MainControl&)
@@ -108,10 +105,11 @@ namespace BALL
 			if (event->mimeData()->hasUrls()) event->acceptProposedAction();
 		}
 
+		// only for Python needed
 		void DockWidget::setVisible(bool state)
 		{
 			if (window_menu_entry_ != 0) window_menu_entry_->setChecked(state);
-			// only for Python needed
+
 			QDockWidget::setVisible(state);
 		}
 

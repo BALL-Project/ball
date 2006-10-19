@@ -70,7 +70,7 @@ namespace BALL
 			public slots:
 
 			///
-			virtual void dropEvent(QDropEvent* e);s:
+			virtual void dropEvent(QDropEvent* e);
 
 			///
 			virtual void dragEnterEvent(QDragEnterEvent* e);
