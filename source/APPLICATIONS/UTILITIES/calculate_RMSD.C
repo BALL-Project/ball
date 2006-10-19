@@ -1,3 +1,4 @@
+#include <BALL/FORMAT/HINFile.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/STRUCTURE/structureMapper.h>
 
@@ -12,12 +13,12 @@ int main(int argc, char** argv)
 		return(0);
 	}
 
-	PDBFile file1(argv[1]);
+	HINFile file1(argv[1]);
 	System system1;
 	file1 >> system1;
 	file1.close();
 
-	PDBFile file2(argv[2]);
+	HINFile file2(argv[2]);
 	System system2;
 	file2 >> system2;
 	file2.close();

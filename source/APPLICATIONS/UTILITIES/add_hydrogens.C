@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: add_hydrogens.C,v 1.11 2006/08/19 13:35:21 oliver Exp $
+// $Id: add_hydrogens.C,v 1.11.2.1 2006/10/19 12:59:40 aleru Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -69,6 +69,9 @@ int main(int argc, char** argv)
 		amber_ff.options.set(AmberFF::Option::FILENAME, tmp);
 	}
 	amber_ff.setup(system);
+	
+	amber_ff.enableSelection();
+	
 	cout << "done." << endl;
 	cout << "Selecting H atoms..." << endl;
 	Selector h_select("element(H)");

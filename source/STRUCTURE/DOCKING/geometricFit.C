@@ -103,6 +103,11 @@ namespace BALL
     radius_b_ = 0.0;
     current_round_ = 0;
     total_round_   = 0;
+		id_pb_grid_computed_ = NO_PROTEIN;
+		init_angles_ = Vector3(0., 0., 0.);
+		p_min_ = 2.0;
+		sqrt_e_weight_ = sqrt(0.0015);
+		fdb_ = 0;
   }
 
 	/** Constructor.
@@ -137,6 +142,12 @@ namespace BALL
 		options.setDefaultInteger(Option::PENALTY_MOBILE, Default::PENALTY_MOBILE);
 		
 		setup(system1, system2);
+		
+		id_pb_grid_computed_ = NO_PROTEIN;
+		init_angles_ = Vector3(0., 0., 0.);
+		p_min_ = 2.0;
+		sqrt_e_weight_ = sqrt(0.0015);
+		fdb_ = 0;
 	}
 
 	/** Constructor.
@@ -149,6 +160,11 @@ namespace BALL
 		FFT_grid_b_(0)
 	{
 		options = new_options;
+		id_pb_grid_computed_ = NO_PROTEIN;
+		init_angles_ = Vector3(0., 0., 0.);
+		p_min_ = 2.0;
+		sqrt_e_weight_ = sqrt(0.0015);
+		fdb_ = 0;
 	}
 			
 	/** Constructor.
@@ -159,6 +175,11 @@ namespace BALL
 		throw()
 	{
 		setup(system1, system2, new_options);
+		id_pb_grid_computed_ = NO_PROTEIN;
+		init_angles_ = Vector3(0., 0., 0.);
+		p_min_ = 2.0;
+		sqrt_e_weight_ = sqrt(0.0015);
+		fdb_ = 0;
 	}
 			
   GeometricFit::~GeometricFit()
@@ -380,6 +401,8 @@ namespace BALL
       r     = (grid_size - 1.0) * grid_spacing / 2.0; // Angstrom
       r_idx = (grid_size - 1) / 2; // index
     }
+		
+		//Log << "r = " << r << " " << grid_size << " " << grid_spacing << " " << endl;
 
     FFT_grid_origin_ = Vector3(r, r, r); // in unit of Angstroms
     
@@ -833,15 +856,144 @@ namespace BALL
 
 		return;
  }
+ 
+	
+	void GeometricFit::setInterpolatedEStatic_(ProteinIndex pro_idx, Vector3 rot)
+		 throw()
+	{
+		System& system = ( pro_idx == PROTEIN_A ) ? system1_ : system2_;
+		
+		FFT3D* FFT_grid = NULL;
+		
+		if (pro_idx == PROTEIN_A)
+		{
+			FFT_grid = FFT_grid_a_;
+		}
+		else
+		{
+			FFT_grid = FFT_grid_b_;
+		}
+		
+		// Already grid computed?
+		if (pro_idx != id_pb_grid_computed_)
+		{
+			if (fdb_ == 0)
+			{
+				fdb_ = new FragmentDB;
+			}
+				
+			system.apply(fdb_->normalize_names);
+			system.apply(fdb_->build_bonds);
+			
+			AssignChargeProcessor charges("charges/PARSE.crg");
+			AssignRadiusProcessor radii("radii/PARSE.siz");
+			
+			system.apply(charges);
+			system.apply(radii);
+			
+			
+			// No
+			fdpb_.setup(system);   // AR: options???
+			fdpb_.solve();
+			id_pb_grid_computed_ = pro_idx;
+			init_angles_ = rot;
+		}
+		
+		double grid_spacing = options.getReal(Option::GRID_SPACING);
+		int    grid_size    = options.getInteger(Option::GRID_SIZE);
+		
+		// Save values for inverse transformation
+		// We don't need a rotation matrix since we want to transform the grid points
+		
+		// three euler angles, around axis x,y,z separately
+		double phi   = (rot.x-init_angles_.x) * Constants::PI / 180.0;
+		double theta = (rot.y-init_angles_.y) * Constants::PI / 180.0;
+		double psi   = (rot.z-init_angles_.z) * Constants::PI / 180.0; 
+		double sphi, stheta, spsi, cphi, ctheta, cpsi;
+		sphi   = sin( phi   );
+		cphi   = cos( phi   );
+		stheta = sin( theta );
+		ctheta = cos( theta );
+		spsi   = sin( psi   );
+		cpsi   = cos( psi   );
 
-  // make grid from System
-  void GeometricFit::makeFFTGrid_( ProteinIndex pro_idx )
+		double m11 =         ctheta * cpsi;
+		double m21 =  sphi * stheta * cpsi - cphi * spsi;
+		double m31 =  cphi * stheta * cpsi + sphi * spsi;
+		double m12 =         ctheta * spsi;
+		double m22 =  sphi * stheta * spsi + cphi * cpsi;
+		double m32 =  cphi * stheta * spsi - sphi * cpsi;
+		double m13 =       - stheta;
+		double m23 =  sphi * ctheta;
+		double m33 =  cphi * ctheta;
+		
+		// Values for 'out of grid' checking. We don't want to need the exception handler.
+		Vector3 lower = fdpb_.phi_grid->getOrigin();
+		Vector3 upper = lower + fdpb_.phi_grid->getDimension();
+		
+		//cout << " fppb grid: lower = " << lower << " upper = " << upper << endl;
+		
+		// Compute the values
+		int x, y, z, index;
+		
+		for (x = 0; x < grid_size; ++x)
+		{
+			for (y = 0; y < grid_size; ++y)
+			{
+				for (z = 0; z < grid_size; ++z)
+				{
+					Vector3 gp(grid_spacing*x, grid_spacing*y, grid_spacing*z);
+					gp += FFT_grid_lower_coord_;
+					
+					Vector3 rot_gp( m11*gp.x + m12*gp.y + m13*gp.z,
+													m21*gp.x + m22*gp.y + m23*gp.z,
+													m31*gp.x + m32*gp.y + m33*gp.z);
+					
+					index = z + (y + x*grid_size)*grid_size;
+					
+					// Log << " " << gp << " " << rot_gp << " " << FFT_grid_origin_ << " " << lower << " " << upper << endl;
+					
+					if ((rot_gp < lower) || (upper < rot_gp))
+					{
+						(*FFT_grid)[index].imag() = 0.;
+					}
+					else
+					{
+						// J/C
+						float pot_val = (*(fdpb_.phi_grid))(rot_gp);
+						
+						// We need kT/e
+						pot_val *= 38.92169652;
+						
+						//cout << pot_val << " ";
+						
+						if (fabs(pot_val) >= p_min_)
+						{
+							//cout << pot_val << endl;
+							(*FFT_grid)[index].imag() = sqrt_e_weight_*pot_val;
+						}
+						else
+						{
+							(*FFT_grid)[index].imag() = 0.;
+						}
+					}
+				}
+			}
+		}
+		//cout << endl;
+	}
+ 
+
+  // make of grid from System with (already) applied rotation
+  void GeometricFit::makeFFTGrid_( ProteinIndex pro_idx, Vector3 rot )
     throw()
   {
 		int surface_type = options.getInteger(Option::SURFACE_TYPE);
 		System& system = ( pro_idx == PROTEIN_A ) ? system1_ : system2_;
 
     int PENALTY;
+		
+		// Compute 'real part' of the grid and do some initializations
     
     // init grid value
     if( pro_idx == PROTEIN_A )
@@ -908,9 +1060,16 @@ namespace BALL
       else
       {}
     }
+		
+		// Compute 'imaginary part' of the grid
+		setInterpolatedEStatic_(pro_idx, rot);
 
 		return;
   }
+	
+	
+	
+	
   
   // Free all allocated memory and destroys the options and results
   void GeometricFit::destroy_()
@@ -1154,7 +1313,7 @@ namespace BALL
 		doPreTranslation_( GeometricFit::PROTEIN_A );
 
 		detailed_timer.reset();
-		makeFFTGrid_( GeometricFit::PROTEIN_A );
+		makeFFTGrid_( GeometricFit::PROTEIN_A, Vector3(0., 0., 0.) );
 		
 		if (verbosity > 5)
 		{
@@ -1277,7 +1436,7 @@ namespace BALL
 			}
      
       detailed_timer.reset();
-			makeFFTGrid_( GeometricFit::PROTEIN_B );  
+			makeFFTGrid_( GeometricFit::PROTEIN_B, Vector3( phi, theta, psi ) );
 
 			if (verbosity > 10)
 			{

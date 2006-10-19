@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: strangLBFGS.C,v 1.1.2.7 2006/10/19 11:16:23 aleru Exp $
+// $Id: strangLBFGS.C,v 1.1.2.8 2006/10/19 12:59:41 aleru Exp $
 //
 // Minimize the potential energy of a system using an improved version
 // of the limited memory BFGS with Strang recurrences.
@@ -419,10 +419,12 @@ namespace BALL
 		{
 			// If the current search direction is NOT a descent direction
 			// something went wrong. We set the search direction to the 
-			// normalized negative gradient.
+			// normalized negative gradient and force a 'restart'.
 			direction_ = current_grad_;
 			direction_.negate();
 			direction_.normalize();
+			curr_num_of_vect_pairs_ = 0;
+			index_of_free_vect_ = 0;
 		}
 		else
 		{
@@ -430,6 +432,10 @@ namespace BALL
 			if (norm >= cutlo_)
 			{
 				direction_.inv_norm = 1.0 / norm;
+			}
+			else
+			{
+				direction_.inv_norm = sqrt(Limits<float>::max());
 			}
 		
 			// Assign the norm and rms of the new direction
