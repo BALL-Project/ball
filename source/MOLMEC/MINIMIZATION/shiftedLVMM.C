@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftedLVMM.C,v 1.1.2.5 2006/10/19 11:16:23 aleru Exp $
+// $Id: shiftedLVMM.C,v 1.1.2.6 2006/10/19 12:37:36 aleru Exp $
 //
 // Minimize the potential energy of a system using a shifted 
 // limited-memory variable metric method.
@@ -257,7 +257,7 @@ namespace BALL
 	}
 		
 	// Returns the update method for the shifted inverse hessian approximation.
-	ShiftedLVMMMinimizer::UpdateMethod ShiftedLVMMMinimizer::setUpdateMethod() const
+	ShiftedLVMMMinimizer::UpdateMethod ShiftedLVMMMinimizer::getUpdateMethod() const
 	{
 		return updt_method_;
 	}

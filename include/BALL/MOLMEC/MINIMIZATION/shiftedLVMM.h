@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftedLVMM.h,v 1.1.2.2 2006/10/17 14:54:57 aleru Exp $ 
+// $Id: shiftedLVMM.h,v 1.1.2.3 2006/10/19 12:38:06 aleru Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MINIMIZATION_SHIFTEDLVMM_H 
@@ -150,7 +150,7 @@ namespace BALL
 		
 		/** Returns the update method for the shifted inverse hessian approximation.
 		*/
-		UpdateMethod setUpdateMethod() const;
+		UpdateMethod getUpdateMethod() const;
 		
 		/** Set explicitly the type of the correction parameter. 
 				Default is RATIO_OF_SHIFT_PARAMS.
