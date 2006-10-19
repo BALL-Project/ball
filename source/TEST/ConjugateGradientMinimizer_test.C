@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.23 2006/08/19 13:35:22 oliver Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.23.2.1 2006/10/19 11:54:21 aleru Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.23 2006/08/19 13:35:22 oliver Exp $")
+START_TEST(ConjugateGradientMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.23.2.1 2006/10/19 11:54:21 aleru Exp $")
 
 using namespace BALL;
 
@@ -71,11 +71,13 @@ RESULT
 
 CHECK(ConjugateGradientMinimizer::operator = (const ConjugateGradientMinimizer&))
 	ConjugateGradientMinimizer em1;
-	ConjugateGradientMinimizer em2 = em1;
+	ConjugateGradientMinimizer em2;
+	em2 = em1;
 	bool test = (em1 == em2);
 	TEST_EQUAL(test, true)
 	em1.setup(FF);
-	ConjugateGradientMinimizer em3 = em1;
+	ConjugateGradientMinimizer em3;
+	em3 = em1;
 	test = (em1 == em3);
 	TEST_EQUAL(test, true)
 RESULT
@@ -238,7 +240,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES) AlaAla)
 
 	ConjugateGradientMinimizer cgm(FF);
 
-	cgm.setEnergyOutputFrequency(1);
+	cgm.setEnergyOutputFrequency(5);
 	cgm.setMaxGradient(0.0001);
 	cgm.setEnergyDifferenceBound(0.000001);
 	cgm.setMaximumDisplacement(20.0);
