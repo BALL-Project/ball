@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.38.2.1 2006/10/04 16:11:39 aleru Exp $
+// $Id: conjugateGradient.C,v 1.38.2.2 2006/10/19 11:16:23 aleru Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -340,7 +340,7 @@ namespace BALL
 
 				// assign the norm of the new direction
 				direction_.norm = sqrt(direction_.norm);
-				direction_.rms = direction_.rms / (3.0 * (double)number_of_atoms_);
+				direction_.rms = direction_.norm / (3.0 * (double)number_of_atoms_);
 				direction_.inv_norm = 1.0 / direction_.norm;
 				break;
 			

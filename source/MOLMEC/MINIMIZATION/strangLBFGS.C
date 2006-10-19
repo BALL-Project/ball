@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: strangLBFGS.C,v 1.1.2.6 2006/10/17 14:54:11 aleru Exp $
+// $Id: strangLBFGS.C,v 1.1.2.7 2006/10/19 11:16:23 aleru Exp $
 //
 // Minimize the potential energy of a system using an improved version
 // of the limited memory BFGS with Strang recurrences.
@@ -278,6 +278,7 @@ namespace BALL
 			updateForces();
 			direction_ = current_grad_;
 			direction_.negate();
+			direction_.normalize();
 			
 			// Discard all data we have collected so far since we cannot trust in it any longer.
 			curr_num_of_vect_pairs_ = 0;
@@ -417,9 +418,11 @@ namespace BALL
 		if (dir_d > 0.)
 		{
 			// If the current search direction is NOT a descent direction
-			// something went wrong. We set the search direction to the negative gradient.
+			// something went wrong. We set the search direction to the 
+			// normalized negative gradient.
 			direction_ = current_grad_;
 			direction_.negate();
+			direction_.normalize();
 		}
 		else
 		{
@@ -517,6 +520,7 @@ namespace BALL
 				// The first search direction is the normalized negative gradient
 				direction_ = current_grad_;
 				direction_.negate();
+				direction_.normalize();
 				
 				// Copy atom positions.
 				// AR: TODO: avoid this bloody necessity
@@ -581,11 +585,12 @@ namespace BALL
 					updateEnergy();
 				}
 				
-				// Set the search direction to the negative gradient. Since we proceed
+				// Set the search direction to the normalized negative gradient. Since we proceed
 				// with a restart, we mustn't update the stored vectors by 'updateDirection' and there is
 				// no need to compute anything by 'updateDirection'.
 				direction_ = current_grad_;
 				direction_.negate();
+				direction_.normalize();
 				
 				// We cannot trust in our data any more, so we force all routines to 
 				// assume that we haven't collected any data so far.
@@ -658,9 +663,10 @@ namespace BALL
 		// If this line search fails we do an internal restart.
 		if (!result)
 		{
-			// Reset the search direction to the negative gradient
+			// Reset the search direction to the normalized negative gradient
 			direction_ = initial_grad_;
 			direction_.negate();
+			direction_.normalize();
 			
 			#ifdef BALL_DEBUG
 				Log.info() << direction_.rms << "]" << endl;

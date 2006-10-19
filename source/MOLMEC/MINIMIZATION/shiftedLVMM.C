@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftedLVMM.C,v 1.1.2.4 2006/10/17 14:54:10 aleru Exp $
+// $Id: shiftedLVMM.C,v 1.1.2.5 2006/10/19 11:16:23 aleru Exp $
 //
 // Minimize the potential energy of a system using a shifted 
 // limited-memory variable metric method.
@@ -49,15 +49,6 @@ namespace BALL
 			initial_atoms_(),
 			step_(0.)
 	{
-		// Compute cutlo_
-		float epsilon;
-		float eps = 1.;
-		while (1. + eps > 1.)
-		{
-			epsilon = eps;
-			eps /= 2.;
-		}
-		cutlo_ = sqrt(Limits<float>::min()/epsilon);
 	}
 
 	// Constructor initialized with a force field
@@ -84,16 +75,6 @@ namespace BALL
 		{
 			Log.error() << "ShiftedLVMMMinimizer: setup failed! " << endl;
 		}
-		
-		// Compute cutlo_
-		float epsilon;
-		float eps = 1.;
-		while (1. + eps > 1.)
-		{
-			epsilon = eps;
-			eps /= 2.;
-		}
-		cutlo_ = sqrt(Limits<float>::min()/epsilon);
 	}
 
 	// Constructor initialized with a force field and a snapshot manager 
@@ -121,16 +102,6 @@ namespace BALL
 		{
 			Log.error() << "ShiftedLVMMMinimizer: setup failed! " << endl;
 		}
-		
-		// Compute cutlo_
-		float epsilon;
-		float eps = 1.;
-		while (1. + eps > 1.)
-		{
-			epsilon = eps;
-			eps /= 2.;
-		}
-		cutlo_ = sqrt(Limits<float>::min()/epsilon);
 	}
 
 	
@@ -160,16 +131,6 @@ namespace BALL
 		{
 			Log.error() << "ShiftedLVMMMinimizer: setup failed! " << endl; 
 		}
-		
-		// Compute cutlo_
-		float epsilon;
-		float eps = 1.;
-		while (1. + eps > 1.)
-		{
-			epsilon = eps;
-			eps /= 2.;
-		}
-		cutlo_ = sqrt(Limits<float>::min()/epsilon);
 	}
 
 	// Constructor initialized with a force field, a snapshot manager, and a set of options
@@ -198,16 +159,6 @@ namespace BALL
 		{
 			Log.error() << "ShiftedLVMMMinimizer: setup failed! " << endl; 
 		}
-		
-		// Compute cutlo_
-		float epsilon;
-		float eps = 1.;
-		while (1. + eps > 1.)
-		{
-			epsilon = eps;
-			eps /= 2.;
-		}
-		cutlo_ = sqrt(Limits<float>::min()/epsilon);
 	}
 
 
@@ -234,8 +185,7 @@ namespace BALL
 			shifted_direction_(rhs.shifted_direction_),
 			hess_factor_(rhs.hess_factor_),
 			initial_atoms_(rhs.initial_atoms_),
-			step_(rhs.step_),
-			cutlo_(rhs.cutlo_)
+			step_(rhs.step_)
 	{
 	}
 
@@ -258,7 +208,6 @@ namespace BALL
 		hess_factor_ = rhs.hess_factor_;
 		initial_atoms_ = rhs.initial_atoms_;
 		step_ = rhs.step_;
-		cutlo_ = rhs.cutlo_;
 		return *this;
 	}
 		
@@ -348,6 +297,7 @@ namespace BALL
 			updateForces();
 			direction_ = current_grad_;
 			direction_.negate();
+			direction_.normalize();
 			
 			// Discard all data we have collected so far since we cannot trust in it any longer.
 			curr_number_of_cols_ = 0;
@@ -578,14 +528,16 @@ namespace BALL
 		if (dir_d > 0.)
 		{
 			// If the current search direction is NOT a descent direction
-			// something went wrong. We set the search direction to the negative gradient.
+			// something went wrong. We set the search direction to the negative normalized gradient.
 			direction_ = current_grad_;
 			direction_.negate();
+			direction_.normalize();
 		}
 		else
 		{
 			// Don't risc a "NaN"
-			if (norm >= cutlo_)
+			// AR TODO: implement a more accurate value by using numeric_limits.
+			if (norm >= 1.e-19)
 			{
 				direction_.inv_norm = 1.0 / norm;
 			}
@@ -677,6 +629,7 @@ namespace BALL
 				// The first search direction is the normalized negative gradient
 				direction_ = current_grad_;
 				direction_.negate();
+				direction_.normalize();
 				
 				// Copy atom positions.
 				// AR: TODO: avoid this bloody necessity
@@ -740,11 +693,12 @@ namespace BALL
 					updateEnergy();
 				}
 				
-				// Set the search direction to the negative gradient. Since we proceed
+				// Set the search direction to the normalized negative gradient. Since we proceed
 				// with a restart, we mustn't update our inverse hessian approximation by 
 				// 'updateDirection' and there is no need to compute anything by 'updateDirection'.
 				direction_ = current_grad_;
 				direction_.negate();
+				direction_.normalize();
 				
 				// We cannot trust in our data any more, so we force all routines to 
 				// assume that we haven't collected any data so far.
@@ -816,9 +770,10 @@ namespace BALL
 		// If this line search fails we do an internal restart.
 		if (!result)
 		{
-			// Reset the search direction to the negative gradient
+			// Reset the search direction to the normalized negative gradient
 			direction_ = initial_grad_;
 			direction_.negate();
+			direction_.normalize();
 			
 			#ifdef BALL_DEBUG
 				Log.info() << direction_.rms << "]" << endl;
