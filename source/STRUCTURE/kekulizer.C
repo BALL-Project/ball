@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kekulizer.C,v 1.1.2.7 2006/10/13 16:07:48 amoll Exp $
+// $Id: kekulizer.C,v 1.1.2.8 2006/10/19 13:10:35 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/kekulizer.h>
@@ -17,8 +17,7 @@
 using namespace std;
 
 //      #define DEBUG_KEKULIZER
-   #undef DEBUG_KEKULIZER
-   #define BALL_MMFF94_TEST
+//      #define BALL_MMFF94_TEST
 
 namespace BALL
 {
