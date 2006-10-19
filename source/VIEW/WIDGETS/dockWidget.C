@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.28.2.5 2006/10/19 21:44:13 amoll Exp $
+// $Id: dockWidget.C,v 1.28.2.6 2006/10/19 22:06:35 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -58,7 +58,6 @@ namespace BALL
 
 		void DockWidget::setGuest(QWidget& guest)
 		{
-			guest.resize(120,100);
 			guest_ = &guest;
 			setMinimumSize(0, 0);
 			setMaximumSize(15000, 15000);

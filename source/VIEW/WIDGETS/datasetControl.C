@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.55 2006/10/13 15:45:11 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.56 2006/10/19 22:06:35 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -55,7 +55,6 @@ namespace BALL
 			listview->headerItem()->setText(1, "from");
 			listview->headerItem()->setText(2, "Type");
 			default_visible_ = false;
-			setMinimumSize(50,50);
 			resize(50,50);
 			registerWidget(this);
 		}
@@ -854,7 +853,7 @@ namespace BALL
 			float delta_phi     = 2.*M_PI/(num_lines_phi-1);
 			float delta_theta = M_PI/(num_lines_theta-1);
 
-			int theta_start_index = theta_start / M_PI * num_lines_theta;
+			int theta_start_index = (int)(theta_start / M_PI * num_lines_theta);
 			vector<vector<Vector3> > points_on_sphere(num_lines_theta-theta_start_index);
 
 			for (Index k = theta_start_index; k < num_lines_theta; k++)

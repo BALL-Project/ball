@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.16.2.5 2006/06/05 21:19:09 amoll Exp $
+// $Id: mainframe.h,v 1.16.2.6 2006/10/19 22:08:22 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -79,6 +79,8 @@ namespace BALL
 		virtual void checkMenus();
 
 		protected:
+
+		void write();
 
 		Scene*				scene_;
 		bool 					fullscreen_;

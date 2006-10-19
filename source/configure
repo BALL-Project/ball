@@ -21379,7 +21379,7 @@ echo "${ECHO_T}disabled" >&6; }
 fi
 
 QT_MIN_VERSION=410
-QT_MAX_VERSION=419
+QT_MAX_VERSION=499
 QT_RECOMMENDED_VERSION=4.1.0
 
 if test "${USE_VIEW}" = true ; then
@@ -21663,11 +21663,10 @@ fi
 if test "${OS}" = "Darwin" ; then
 	VIEW_PLATFORM="OpenGL-Darwin"
 	OPENGL_LIBOPTS="-framework Carbon -framework OpenGL -framework AGL"
+	BALL_INCLUDES="${BALL_INCLUDES} -I/usr/X11R6/include"
 	X11_LIBPATHOPT=""
 	X11_INCPATH=""
-	OPENGL_INCPATH="-I/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers -I/System/Library/Frameworks/AGL.framework/Versions/A/Headers"
-	VIEW_INCLUDES="${VIEW_INCLUDES} ${OPENGL_INCPATH}"
-fi
+		fi
 
 if test "${VIEW_PLATFORM}" = Mesa ; then
 	{ echo "$as_me:$LINENO: checking for Mesa includes" >&5
@@ -24011,10 +24010,18 @@ echo $ECHO_N "checking linking against QT libraries... $ECHO_C" >&6; }
 		if test "${QT_LIBPATH}" != "/usr/lib" ; then
 			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore"
 			QT_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -l QtCore"
+			if test "${OS}" = "Darwin" ; then
+				QTQGL_LIBOPTS="-F${QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore"
+				QT_LIBOPTS="-F${QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore"
+			fi
 		else
 			QT_LIBPATH=""
 			QTQGL_LIBOPTS=" -lQtOpenGL -lQtGui -lQtCore"
 			QT_LIBOPTS="-lQtOpenGL -lQtGui -lQtCore"
+			if test "${OS}" = "Darwin" ; then
+				QTQGL_LIBOPTS="-framework QtOpenGL -framework QtGui -framework QtCore"
+				QT_LIBOPTS="-framework QtOpenGL -framework QtGui -framework QtCore"
+			fi
 		fi
 
 		SAVE_LIBS=${LIBS}

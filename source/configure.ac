@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.32.2.3 2006/05/15 23:18:35 amoll Exp $
+dnl $Id: configure.ac,v 1.32.2.4 2006/10/19 22:12:49 amoll Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -533,7 +533,7 @@ dnl		VIEW
 dnl
 dnl Currently, we require QT 3.3.x. QT 4.x isn't supported yet.
 QT_MIN_VERSION=410
-QT_MAX_VERSION=419
+QT_MAX_VERSION=499
 QT_RECOMMENDED_VERSION=4.1.0
 CF_VIEW
 

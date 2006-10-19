@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.38 2006/10/17 11:24:22 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.39 2006/10/19 22:07:35 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -1270,6 +1270,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				String mys(inifile.getValue("WINDOWS", "Main::dockwidgets"));
 				QByteArray s(mys.c_str());
 				s = s.fromBase64(s);
+				restoreState(s);
+				// workaround for some bug in some QT versions:
 				restoreState(s);
 			}
 			catch(...)

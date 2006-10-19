@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.28 2006/10/15 23:31:24 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.29 2006/10/19 22:08:22 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -29,6 +29,8 @@
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
 
+#include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/COMMON/version.h>
 
@@ -104,7 +106,7 @@ namespace BALL
 		DatasetControl::getInstance(0)->hide();
 
 		HelpViewer* BALL_docu = new HelpViewer(this, "BALL Docu");
-		addDockWidget(Qt::AllDockWidgetAreas, BALL_docu);
+		addDockWidget(Qt::BottomDockWidgetArea, BALL_docu);
 		String dirp = getDataPath() + ".." + FileSystem::PATH_SEPARATOR + "doc" + 
 									FileSystem::PATH_SEPARATOR + "BALL" + FileSystem::PATH_SEPARATOR;
 		BALL_docu->setBaseDirectory(dirp);
@@ -112,7 +114,7 @@ namespace BALL
 		BALL_docu->setProject("BALL");
 		BALL_docu->setDefaultPage("index.htm");
 
-		addDockWidget(Qt::AllDockWidgetAreas, new HelpViewer(this, "BALLView Docu"));
+		addDockWidget(Qt::BottomDockWidgetArea, new HelpViewer(this, "BALLView Docu"));
 
 		new DisplayProperties(	this, "DisplayProperties");
 		new LabelDialog(				this, "LabelDialog");
@@ -121,7 +123,7 @@ namespace BALL
 		new MolecularStructure(	this, "MolecularStructure");
  		addDockWidget(Qt::BottomDockWidgetArea, new LogView(this, "Logs"));
 		new DockingController(  this, "DockingController");
-		new FileObserver(  this, "FileObserver");
+		addDockWidget(Qt::BottomDockWidgetArea, new FileObserver(  this, "FileObserver"));
 
 		Scene::stereoBufferSupportTest();
 		scene_ = new EditableScene(this, "3D View");
@@ -431,8 +433,129 @@ namespace BALL
 		HelpViewer::getInstance(1)->showHelp("tips.html", "cite");
 	}
 
+
+	void enlarge(String& text, Size size)
+	{
+		if (text.size() > size)
+		{
+			text.truncate(size);
+			return;
+		}
+		while (text.size() < size) text = String(" ") + text;
+	}
+
+	void Mainframe::write()
+	{
+		File file("out.mrk", std::ios::out);
+		System& system = *(System*) *getCompositeManager().begin();
+		file << "***" << std::endl;
+		file << "***" << std::endl;
+
+		String tmp = String(system.countAtoms());
+		enlarge(tmp, 5);
+		file << tmp;
+
+		tmp = String(system.countBonds());
+		enlarge(tmp, 6);
+		file << tmp << std::endl;
+		
+		HashMap<Atom*, Position> map;
+		char buf[40];
+
+		Position at_nr = 1;
+		AtomIterator ait = system.beginAtom();
+		for(; +ait; ++ait)
+		{
+			Atom& atom = *ait;
+			sprintf(buf, "%.4f", atom.getPosition().x);
+			tmp = buf;
+			tmp.trimRight();
+			enlarge(tmp, 10);
+			file << tmp;
+
+			sprintf(buf, "%.4f", atom.getPosition().y);
+			tmp = buf;
+			enlarge(tmp, 11);
+			file << tmp;
+
+			sprintf(buf, "%.4f", atom.getPosition().z);
+			tmp = buf;
+			enlarge(tmp, 11);
+			file << tmp;
+
+			tmp = String(atom.getElement().getAtomicNumber());
+			enlarge(tmp, 6);
+			file << tmp;
+
+			tmp = String(atom.getType());
+			enlarge(tmp, 3);
+			file << tmp;
+
+			tmp = String(atom.getFormalCharge());
+			enlarge(tmp, 2);
+			file << tmp;
+
+			tmp = String(at_nr);
+			enlarge(tmp, 6);
+			file << tmp;
+
+			tmp = String(atom.getName());
+			enlarge(tmp, 2);
+			enlarge(tmp, 3);
+			file << tmp;
+
+			file << "    XXX";
+
+			sprintf(buf, "%.4f", atom.getCharge());
+			tmp = buf;
+			enlarge(tmp, 11);
+			file << tmp;
+			
+			file << "      MMFF" << std::endl;
+			
+
+			map[&atom] = at_nr;
+			at_nr++;
+		}
+
+		Size max_bond = system.countBonds();
+		Size bond_nr = 0;
+		AtomBondIterator abit;
+		BALL_FOREACH_BOND(system, ait, abit)
+		{
+			Atom* first = (Atom*)abit->getFirstAtom();
+			Atom* second = (Atom*)abit->getSecondAtom();
+			Size order = abit->getOrder();
+
+			tmp = map[first];
+			enlarge(tmp, 5);
+			file << tmp;
+
+			tmp = map[second];
+			enlarge(tmp, 6);
+			file << tmp;
+
+			tmp = String(order);
+			enlarge(tmp, 3);
+			file << tmp;
+
+			bond_nr ++;
+			if (bond_nr % 5 == 0) 
+			{
+				file << std::endl;
+			}
+			else
+			{
+				if (bond_nr < max_bond) file << "  ";
+			}
+		}
+		file.close();
+	}
+
 	void Mainframe::about()
 	{
+		write();
+		return;
 		// Display about dialog
 		QDialog w;
  		Ui_AboutDialog about;

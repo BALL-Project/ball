@@ -52,7 +52,6 @@ namespace BALL
  			text_edit_->setLineWrapMode(QTextEdit::WidgetWidth);
 			text_edit_->setAcceptRichText(false);
 			text_edit_->setReadOnly(true);
-			resize(300, 100);
 			registerWidget(this);
  			qApp->installEventFilter(this);
 		}
@@ -126,8 +125,6 @@ namespace BALL
 			insertMenuEntry(MainControl::EDIT, "Clear Logs", text_edit_, SLOT(clear()));
 
 			registerForHelpSystem(this, "logView.html");
-
-			setMinimumSize(10, 10);
 		}
 
 
