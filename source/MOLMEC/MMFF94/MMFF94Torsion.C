@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.4.10 2006/10/18 13:19:53 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.4.11 2006/10/19 00:18:55 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -692,7 +692,7 @@ Log.error() << "# " << atoms[0]->getName() << " "
 
 			if (atj.pilp && atk.mltb)
 			{
-				if (atj.mltb) 
+				if (atj.mltb == 1) 
 				{
 					l = 0.5;
 				}
@@ -707,7 +707,7 @@ Log.error() << "# " << atoms[0]->getName() << " "
 			}
 			else if (atk.pilp && atj.mltb)
 			{
-				if (atk.mltb) 
+				if (atk.mltb == 1) 
 				{
 					l = 0.5;
 				}
@@ -721,7 +721,7 @@ Log.error() << "# " << atoms[0]->getName() << " "
 				}
 			}
 			// strongly delocalized "single" bond between non-carbons:
-			else if ((atj.mltb || atk.mltb) && (ej != 6  || ek != 6))
+			else if ((atj.mltb == 1 || atk.mltb == 1) && (ej != 6  || ek != 6))
 			{
 				l = 0.4;
 			}
