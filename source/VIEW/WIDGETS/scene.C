@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.78 2006/10/11 14:23:52 amoll Exp $
+// $Id: scene.C,v 1.174.2.79 2006/10/19 14:12:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -90,7 +90,6 @@ namespace BALL
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0)
 		{
-			gl_renderer_.setSize(600, 600);
 			setAcceptDrops(true);
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (1) " << this << std::endl;
@@ -130,7 +129,6 @@ namespace BALL
 			setObjectName(name);
 			// the widget with the MainControl
 			registerWidget(this);
-			gl_renderer_.setSize(600, 600);
 			setAcceptDrops(true);
 
 			if (!QGLWidget::isValid())

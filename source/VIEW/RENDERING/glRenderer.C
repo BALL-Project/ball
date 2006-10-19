@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.68 2006/10/12 19:44:05 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.69 2006/10/19 14:12:50 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -198,6 +198,7 @@ bool GLRenderer::init(const Stage& stage, float height, float width)
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
 
 	// setup all in the stage given lightsources
+	setSize(width, height);
 	setLights();
 	glEnable(GL_LIGHTING);
 
