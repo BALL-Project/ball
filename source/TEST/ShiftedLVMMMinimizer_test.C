@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ShiftedLVMMMinimizer_test.C,v 1.1.2.1 2006/10/19 12:36:41 aleru Exp $
+// $Id: ShiftedLVMMMinimizer_test.C,v 1.1.2.2 2006/10/19 12:58:40 aleru Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(ShiftedLVMMMinimizer, "$Id: ShiftedLVMMMinimizer_test.C,v 1.1.2.1 2006/10/19 12:36:41 aleru Exp $")
+START_TEST(ShiftedLVMMMinimizer, "$Id: ShiftedLVMMMinimizer_test.C,v 1.1.2.2 2006/10/19 12:58:40 aleru Exp $")
 
 using namespace BALL;
 
@@ -298,7 +298,7 @@ CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_1 UNIT_VALUE)
 	ShiftedLVMMMinimizer slvmm(FF);
 
 	slvmm.setEnergyOutputFrequency(1);
-	slvmm.setMaxGradient(0.0001);
+	slvmm.setMaxGradient(0.04);
 	slvmm.setEnergyDifferenceBound(0.000001);
 	slvmm.setUpdateMethod(ShiftedLVMMMinimizer::RANK_1);
 	slvmm.setCorrectionParameter(ShiftedLVMMMinimizer::UNIT_VALUE);
@@ -346,7 +346,7 @@ CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_1 BALANCING_VALUE)
 	ShiftedLVMMMinimizer slvmm(FF);
 
 	slvmm.setEnergyOutputFrequency(1);
-	slvmm.setMaxGradient(0.0001);
+	slvmm.setMaxGradient(0.04);
 	slvmm.setEnergyDifferenceBound(0.000001);
 	slvmm.setUpdateMethod(ShiftedLVMMMinimizer::RANK_1);
 	slvmm.setCorrectionParameter(ShiftedLVMMMinimizer::BALANCING_VALUE);
@@ -394,7 +394,7 @@ CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_1 SQUARE_ROOT)
 	ShiftedLVMMMinimizer slvmm(FF);
 
 	slvmm.setEnergyOutputFrequency(1);
-	slvmm.setMaxGradient(0.0001);
+	slvmm.setMaxGradient(0.04);
 	slvmm.setEnergyDifferenceBound(0.000001);
 	slvmm.setUpdateMethod(ShiftedLVMMMinimizer::RANK_1);
 	slvmm.setCorrectionParameter(ShiftedLVMMMinimizer::SQUARE_ROOT);
@@ -442,7 +442,7 @@ CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_1 GEOMETRIC_MEAN)
 	ShiftedLVMMMinimizer slvmm(FF);
 
 	slvmm.setEnergyOutputFrequency(1);
-	slvmm.setMaxGradient(0.0001);
+	slvmm.setMaxGradient(0.04);
 	slvmm.setEnergyDifferenceBound(0.000001);
 	slvmm.setUpdateMethod(ShiftedLVMMMinimizer::RANK_1);
 	slvmm.setCorrectionParameter(ShiftedLVMMMinimizer::GEOMETRIC_MEAN);
@@ -490,7 +490,7 @@ CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_1 RATIO_OF_SHIFT_PA
 	ShiftedLVMMMinimizer slvmm(FF);
 
 	slvmm.setEnergyOutputFrequency(1);
-	slvmm.setMaxGradient(0.0001);
+	slvmm.setMaxGradient(0.04);
 	slvmm.setEnergyDifferenceBound(0.000001);
 	slvmm.setUpdateMethod(ShiftedLVMMMinimizer::RANK_1);
 	slvmm.setCorrectionParameter(ShiftedLVMMMinimizer::RATIO_OF_SHIFT_PARAMS);
@@ -538,7 +538,7 @@ CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_2 UNIT_VALUE)
 	ShiftedLVMMMinimizer slvmm(FF);
 
 	slvmm.setEnergyOutputFrequency(1);
-	slvmm.setMaxGradient(0.0001);
+	slvmm.setMaxGradient(0.04);
 	slvmm.setEnergyDifferenceBound(0.000001);
 	slvmm.setUpdateMethod(ShiftedLVMMMinimizer::RANK_2);
 	slvmm.setCorrectionParameter(ShiftedLVMMMinimizer::UNIT_VALUE);
@@ -586,7 +586,7 @@ CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_2 BALANCING_VALUE)
 	ShiftedLVMMMinimizer slvmm(FF);
 
 	slvmm.setEnergyOutputFrequency(1);
-	slvmm.setMaxGradient(0.0001);
+	slvmm.setMaxGradient(0.04);
 	slvmm.setEnergyDifferenceBound(0.000001);
 	slvmm.setUpdateMethod(ShiftedLVMMMinimizer::RANK_2);
 	slvmm.setCorrectionParameter(ShiftedLVMMMinimizer::BALANCING_VALUE);
@@ -634,7 +634,7 @@ CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_2 SQUARE_ROOT)
 	ShiftedLVMMMinimizer slvmm(FF);
 
 	slvmm.setEnergyOutputFrequency(1);
-	slvmm.setMaxGradient(0.0001);
+	slvmm.setMaxGradient(0.04);
 	slvmm.setEnergyDifferenceBound(0.000001);
 	slvmm.setUpdateMethod(ShiftedLVMMMinimizer::RANK_2);
 	slvmm.setCorrectionParameter(ShiftedLVMMMinimizer::SQUARE_ROOT);
@@ -682,7 +682,7 @@ CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_2 GEOMETRIC_MEAN)
 	ShiftedLVMMMinimizer slvmm(FF);
 
 	slvmm.setEnergyOutputFrequency(1);
-	slvmm.setMaxGradient(0.0001);
+	slvmm.setMaxGradient(0.04);
 	slvmm.setEnergyDifferenceBound(0.000001);
 	slvmm.setUpdateMethod(ShiftedLVMMMinimizer::RANK_2);
 	slvmm.setCorrectionParameter(ShiftedLVMMMinimizer::GEOMETRIC_MEAN);
@@ -730,7 +730,7 @@ CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_2 RATIO_OF_SHIFT_PA
 	ShiftedLVMMMinimizer slvmm(FF);
 
 	slvmm.setEnergyOutputFrequency(1);
-	slvmm.setMaxGradient(0.0001);
+	slvmm.setMaxGradient(0.04);
 	slvmm.setEnergyDifferenceBound(0.000001);
 	slvmm.setUpdateMethod(ShiftedLVMMMinimizer::RANK_2);
 	slvmm.setCorrectionParameter(ShiftedLVMMMinimizer::RATIO_OF_SHIFT_PARAMS);

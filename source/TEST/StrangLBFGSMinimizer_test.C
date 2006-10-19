@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StrangLBFGSMinimizer_test.C,v 1.1.2.1 2006/10/19 11:54:21 aleru Exp $
+// $Id: StrangLBFGSMinimizer_test.C,v 1.1.2.2 2006/10/19 12:58:41 aleru Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(StrangLBFGSMinimizer, "$Id: StrangLBFGSMinimizer_test.C,v 1.1.2.1 2006/10/19 11:54:21 aleru Exp $")
+START_TEST(StrangLBFGSMinimizer, "$Id: StrangLBFGSMinimizer_test.C,v 1.1.2.2 2006/10/19 12:58:41 aleru Exp $")
 
 using namespace BALL;
 
@@ -256,7 +256,7 @@ CHECK(StrangLBFGSMinimizer::minimize(Size, bool) AlaAla)
 	StrangLBFGSMinimizer bfgsm(FF);
 
 	bfgsm.setEnergyOutputFrequency(1);
-	bfgsm.setMaxGradient(0.0001);
+	bfgsm.setMaxGradient(0.04);
 	bfgsm.setEnergyDifferenceBound(0.000001);
 	bfgsm.setMaximumDisplacement(20.0);
 	
