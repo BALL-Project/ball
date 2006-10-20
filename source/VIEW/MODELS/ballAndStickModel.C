@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.23.2.4 2006/10/08 14:34:55 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.23.2.5 2006/10/20 20:36:55 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
@@ -81,7 +81,7 @@ namespace BALL
 		void AddBallAndStickModel::setBallRadius(const float radius)
 			throw(Exception::OutOfRange)
 		{
-			// a radius never can be lower or equal 0
+			// radius can never be lower or equal 0
 			if (radius <= (float)0)
 			{
 				throw Exception::OutOfRange(__FILE__, __LINE__);
@@ -93,7 +93,7 @@ namespace BALL
 		void AddBallAndStickModel::setStickRadius(const float radius)
 			throw(Exception::OutOfRange)
 		{
-			// a radius never can be lower or equal 0
+			// radius can never be lower or equal 0
 			if (radius <= (float)0)
 			{
 				throw Exception::OutOfRange(__FILE__, __LINE__);
@@ -179,8 +179,6 @@ namespace BALL
 
 		void AddBallAndStickModel::renderMultipleBond_(const Bond& bond, Vector3 normal, Vector3 dir)
 		{
-			normal *= stick_radius_ / (float) 1.5;
-
 			TwoColoredTube* tube = new TwoColoredTube;
 			tube->setRadius(special_radius_);
 			tube->setComposite(&bond);
@@ -191,6 +189,7 @@ namespace BALL
 
 			if (bond.getOrder() == Bond::ORDER__DOUBLE)
 			{
+				normal *= stick_radius_ / (float) 1.5;
 				tube->setVertex1(bond.getFirstAtom()->getPosition() - normal);
 				tube->setVertex2(bond.getSecondAtom()->getPosition() - normal);
 
@@ -199,11 +198,18 @@ namespace BALL
 			}
 			else
 			{
-				normal *= special_radius_;
-
 				Vector3 normal2 = dir % normal;
-				normal2.normalize();
-				normal2 *= special_radius_;
+				try
+				{
+					normal2.normalize();
+				}
+				catch(...)
+				{
+					return;
+				}
+
+				normal *= stick_radius_ / (float) 1.5;
+				normal2 *= stick_radius_ / (float) 1.5;
 				
 				tube->setVertex1(bond.getFirstAtom()->getPosition() - normal - normal2);
 				tube->setVertex2(bond.getSecondAtom()->getPosition() - normal - normal2);
@@ -258,8 +264,6 @@ namespace BALL
 			for (Position r = 0; r < rings_.size(); r++)
 			{
 				vector<Atom*>& ring = rings_[r];
-				if (ring.size() != 5 && ring.size() != 6) continue;
-
 				vector<Atom*>::iterator ait = ring.begin();
 
 				Vector3 center;
@@ -287,6 +291,14 @@ namespace BALL
 					Vector3 v2 = bonds[1]->getFirstAtom()->getPosition() - 
 											 bonds[1]->getSecondAtom()->getPosition();
 					normal = v1 % v2;
+					try
+					{
+						normal.normalize();
+					}
+					catch(...)
+					{
+						continue;
+					}
 				}
 
 				// try to flip all normals in the same direction
@@ -323,7 +335,6 @@ namespace BALL
 			const Atom& a2 = *bond.getSecondAtom();
 
  			n *= stick_radius_ / (float) 1.5;
-
 
 			// render one tube with full length			
 			TwoColoredTube *tube = new TwoColoredTube;
@@ -405,8 +416,8 @@ namespace BALL
 
 					bool special_ring = false;
 
-					if (bond_it->getOrder() > Bond::ORDER__SINGLE &&
-							(bond_it->getOrder() != Bond::ORDER__AROMATIC || dashed_bonds_))
+					if (dashed_bonds_ &&
+							bond_it->getOrder() > Bond::ORDER__SINGLE)
 					{
 						for (Position p = 0; p < ring_atom_set.size(); p++)
 						{
