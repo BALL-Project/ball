@@ -171,6 +171,9 @@ class BALL_VIEW_EXPORT EditableScene
 	////////////////////////////////////////
 	protected:
 
+	/// Catch key events
+	void keyPressEvent(QKeyEvent* e);
+
 	virtual void onNotify(Message *message)
 		throw();
 
