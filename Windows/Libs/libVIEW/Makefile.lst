@@ -44,7 +44,7 @@ libVIEW.obj\
 ..\..\..\source\VIEW\DIALOGS\parsedFunctionDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\peptideDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\preferences.obj\
-#..\..\..\source\VIEW\DIALOGS\PTEDialog.obj\
+..\..\..\source\VIEW\DIALOGS\PTEDialog.obj\
 ..\..\..\source\VIEW\DIALOGS\pythonSettings.obj\
 ..\..\..\source\VIEW\DIALOGS\serverPreferences.obj\
 ..\..\..\source\VIEW\DIALOGS\setCamera.obj\
@@ -150,7 +150,7 @@ mocfiles\networkPreferences_moc.obj\
 mocfiles\parsedFunctionDialog_moc.obj\
 mocfiles\peptideDialog_moc.obj\
 mocfiles\preferences_moc.obj\
-#mocfiles\PTEDialog_moc.obj\
+mocfiles\PTEDialog_moc.obj\
 mocfiles\pythonSettings_moc.obj\
 mocfiles\serverPreferences_moc.obj\
 mocfiles\setCamera_moc.obj\

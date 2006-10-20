@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.53.2.15 2006/10/18 14:30:48 amoll Exp $
+# $Id: Makefile,v 1.53.2.16 2006/10/20 19:23:08 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -51,6 +51,7 @@ CPP_SOURCES=\
 	parsedFunctionDialog.C\
 	peptideDialog.C\
 	preferences.C\
+	PTEDialog.C\
 	setCamera.C\
 	serverPreferences.C\
 	snapShotVisualisation.C\
@@ -93,6 +94,7 @@ MOC_SOURCES=\
 	parsedFunctionDialog_moc.C\
 	peptideDialog_moc.C\
 	preferences_moc.C\
+	PTEDialog_moc.C\
 	serverPreferences_moc.C\
 	setCamera_moc.C\
 	snapShotVisualisation_moc.C\
@@ -132,6 +134,7 @@ UIC_SOURCES=\
 	parsedFunctionDialogData.C\
 	peptideDialogData.C\
 	preferencesData.C\
+	PTEDialogData.C\
 	pythonSettingsData.C\
 	setCameraData.C\
 	snapShotVisualisationData.C\

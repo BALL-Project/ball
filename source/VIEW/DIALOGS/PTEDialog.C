@@ -1,126 +1,149 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTEDialog.C,v 1.5.2.2 2006/02/01 13:23:44 amoll Exp $
+// $Id: PTEDialog.C,v 1.5.2.3 2006/10/20 19:23:09 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/PTEDialog.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/VIEW/WIDGETS/editableScene.h>
 
 #include <QtGui/qtooltip.h>
-#include <QtGui/q3buttongroup.h>
-#include <QtGui/q3button.h>
+#include <QtGui/QPushButton>
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		PTEDialog::PTEDialog(QWidget* parent, const char* name, Qt::WFlags fl)
-			: QDialog(parent, name, fl),
-				Ui_PTEDialogData(),
-				ModularWidget(name)
-		{
-			//registerWidget(this);
-			Log.error() << "PTEDialog " << dynamic_cast<ModularWidget*>(this) << std::endl;
-			setupUi(this);
-			
-			// iterate over all buttons in the button group
-			int i=1;
-			int highest_id = Element::NUMBER_OF_ELEMENTS; // the maximal id in the button group
-			// we can't use count here, since the id's in the group are
-			// not contingent, since we use the atomic number as index
-			// and since the side groups (???) are left out
-			for (;i<=highest_id;i++)
-			{
-				if (buttonGroup1->find(i) != 0)
-				{
-					QToolTip::add((QWidget*)buttonGroup1->find(i), atomProperties_(i));
-				}
-			}
-			
-			// colour the current ElementType in PTE
-			
-			button_standard_color_ = buttonGroup1->find(1)->paletteBackgroundColor();
-			EditableScene* scene = EditableScene::getInstance(0);
 
-		  if (scene == 0)
-		  {
-			 Log.error() << "Expected an EditableScene, but found none!" << std::endl;
-		  }
-		  else
-		  {
-			 	int element_type = scene->getEditElementType();
-			 	Q3Button* button = buttonGroup1->find(element_type);
-
-			 	if (button)
-				{
-					button->setPaletteBackgroundColor(QColor("yellow"));
-				}
-		  }
-
-			
-		}
+PTEDialog::PTEDialog(QWidget* parent)
+	: QDialog(parent),
+		Ui_PTEDialogData()
+{
+	setupUi(this);
 	
-				
-		PTEDialog::~PTEDialog()
-			throw()
-		{
-		}
+	connectChilds_(this);
 
-// ------------------------- SLOTS ------------------------------------------------
-// --------------------------------------------------------------------------------
-	 void PTEDialog::newElementType(int elementNumber)
-	 {
-		 EditableScene* scene = EditableScene::getInstance(0);
+	vector<String> elements;
+	Element element;
 
-		 if (scene == 0)
-		 {
-			 Log.error() << "Expected an EditableScene, but found none!" << std::endl;
-		 }
-		 else
-		 {
-			 //recolor old ElementType
-			 Q3Button* old_button = buttonGroup1->find(scene->getEditElementType());
+	for (Position nr = 0; ; nr++) 
+	{
+		element = PTE.getElement(nr);
+		if (element == Element::UNKNOWN) break;
 
-			 if (old_button)
-				 old_button->setPaletteBackgroundColor(button_standard_color_);
-
-			 //color new ElementType
-			 buttonGroup1->find(elementNumber)->setPaletteBackgroundColor(QColor("yellow"));
-
-			 scene->setEditElementType(elementNumber);
-			 
-		 }
-	 }
-
-	 void PTEDialog::onNotify(Message *message)
-		 throw()
-	 {
-#ifdef BALL_VIEW_DEBUG
-			Log.error() << "PTEDialog " << this << " onNotify " << message << std::endl;
-#endif
-	 }
-
-	 QString PTEDialog::atomProperties_(int number)
-	 {
-		 Element e = PTE[number];
-		 QString result("Element: ");
-		 result += e.getName();
-		 result += "\nSymbol: ";
-		 result += e.getSymbol();
-		 result += "\nAtomic Weight: ";
-		 result += String(e.getAtomicWeight()).c_str();
-		 result += "\nAtomic Radius: ";
-		 result += String(e.getAtomicRadius()).c_str();
-		 result += "\nCovalent Radius: ";
-		 result += String(e.getCovalentRadius()).c_str();
-		 result += "\nVan der Waals Radius: ";
-		 result += String(e.getVanDerWaalsRadius()).c_str();
-		 result += "\nElectronegativity: ";
-		 result += String(e.getElectronegativity()).c_str();
-		 result += "\n"; 
-		 
-		 return result;
-	 }
+		elements.push_back(element.getSymbol());
 	}
+
+	sort(elements.begin(), elements.end());
+
+	for (Position nr = 0; nr < elements.size(); nr++)
+	{
+		element_box->addItem(elements[nr].c_str());
+	}
+
+	connect(element_box, SIGNAL(activated(int)), this, SLOT(elementChoosen_()));
+
+	EditableScene* scene = EditableScene::getInstance(0);
+	if (scene == 0)
+	{
+	  Log.error() << "Expected an EditableScene, but found none!" << std::endl;
+		return;
+  }	
+
+	int an = scene->getEditElementType();
+	
+	String symb = PTE[an].getSymbol();
+	element_box->setCurrentIndex(element_box->findText(symb.c_str()));
+}
+
+		
+PTEDialog::~PTEDialog()
+	throw()
+{
+}
+
+
+void PTEDialog::newElementType(int elementNumber)
+{
+ EditableScene* scene = EditableScene::getInstance(0);
+
+ if (scene == 0)
+ {
+	 Log.error() << "Expected an EditableScene, but found none!" << std::endl;
+ }
+ else
+ {
+	 scene->setEditElementType(elementNumber);
+ }
+}
+
+QString PTEDialog::atomProperties_(int number)
+{
+ Element e = PTE[number];
+ String result("Element: ");
+ result += e.getName();
+ result += "\nSymbol: ";
+ result += e.getSymbol();
+ result += "\nAtomic Weight: ";
+ result += String(e.getAtomicWeight()).c_str();
+ result += "\nAtomic Radius: ";
+ result += String(e.getAtomicRadius()).c_str();
+ result += "\nCovalent Radius: ";
+ result += String(e.getCovalentRadius()).c_str();
+ result += "\nVan der Waals Radius: ";
+ result += String(e.getVanDerWaalsRadius()).c_str();
+ result += "\nElectronegativity: ";
+ result += String(e.getElectronegativity()).c_str();
+ result += "\n"; 
+
+ QString r(result.c_str());
+ 
+ return r;
+}
+
+void PTEDialog::elementClicked_()
+{
+	QObject* w = sender();
+	if (w == 0) return;
+	QPushButton* bt = dynamic_cast<QPushButton*>(w);
+	if (bt == 0) return;
+
+	String element = ascii(bt->text());
+
+	Element e = PTE[element];
+	newElementType(e.getAtomicNumber());
+	accept();
+}
+
+void PTEDialog::elementChoosen_()
+{
+	int an = PTE[(ascii(element_box->currentText()))].getAtomicNumber();
+	newElementType(an);
+	accept();
+}
+
+
+void PTEDialog::connectChilds_(QObject* o)
+{
+	QPushButton* w = dynamic_cast<QPushButton*>(o);
+	if (w != 0) 
+	{
+		String s = ascii(w->text());
+		if (s.size() > 2) return;
+		Position an = PTE[s].getAtomicNumber();
+		w->setToolTip(atomProperties_(an));
+		connect(w, SIGNAL(released()), this, SLOT(elementClicked_()));
+		return;
+	}
+	
+	// iterate over all buttons in the button group
+	QObjectList ol = o->children();
+	QObjectList::iterator it = ol.begin();
+	for (; it != ol.end(); it++)
+	{
+		connectChilds_(*it);
+	}
+}
+
+	} // VIEW and BALL namespace:
 }
