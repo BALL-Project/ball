@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.26 2006/10/20 14:28:11 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.27 2006/10/20 19:34:41 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -17,6 +17,7 @@
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
 #include <BALL/VIEW/DIALOGS/editSettings.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
+#include <BALL/VIEW/DIALOGS/PTEDialog.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
 
@@ -77,8 +78,8 @@ EditableScene::EditOperation::~EditOperation()
 //
 //-------------------- EditableScene -----------------------
 
-float EditableScene::atom_limit_ = 1.5;
-float EditableScene::bond_limit_ = 2.0;
+float EditableScene::atom_limit_ = 1.;
+float EditableScene::bond_limit_ = 1.0;
 bool EditableScene::only_highlighted_ = true;
 
 EditableScene::EditableScene()
@@ -154,6 +155,8 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 
 	if (isAnimationRunning() || getMainControl()->isBusy()) return;
 
+	deselect_();
+
 	x_window_pos_old_ = x_window_pos_new_;
 	y_window_pos_old_ = y_window_pos_new_;
 	x_window_pos_new_ = e->x();
@@ -176,6 +179,7 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 		// insert a new atom:
 		String name = PTE[atom_type_].getSymbol();
 		name += String(atom_number_);
+		atom_number_ ++;
 		PDBAtom* a = new PDBAtom(PTE[atom_type_], name);
 		insert_(e->x(), e->y(), *a);		
 		current_atom_ = a;
@@ -454,7 +458,10 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 		}
 
 		// build a new atom...
-		PDBAtom* a = new PDBAtom(PTE[atom_type_], PTE[atom_type_].getName());
+		String name(PTE[atom_type_].getSymbol());
+		name += String(atom_number_);
+		atom_number_++;
+		PDBAtom* a = new PDBAtom(PTE[atom_type_], name);
 		a->setPosition(new_pos);
 		current_atom_->getParent()->appendChild(*a);
 		
@@ -545,6 +552,22 @@ List<AtomContainer*> EditableScene::getContainers_()
 // Find closest atom to screen position (x,y). If there is none closer than atom_limit_, return NULL
 Atom* EditableScene::getClickedAtom_(int x, int y)
 {
+	QPoint p(x,y);
+	List<GeometricObject*> objects;
+	gl_renderer_.pickObjects1((Position) p.x(), (Position) p.y(), 
+														(Position) p.x(), (Position) p.y());
+	renderView_(DIRECT_RENDERING);
+ 	gl_renderer_.pickObjects2(objects);
+
+	if (objects.size() > 0)
+	{
+		Composite* c = (Composite*)(**objects.begin()).getComposite();
+		if (c == 0) return 0;
+
+		Atom* atom = dynamic_cast<Atom*>(c);
+		return atom;
+	}
+
 	float min_dist = FLT_MAX;
 	Atom* min_atom = 0;
 	float dist;
@@ -592,6 +615,22 @@ Atom* EditableScene::getClickedAtom_(int x, int y)
 // Note: this code is very similar to getClickedAtom. Maybe those two should be united.
 Bond* EditableScene::getClickedBond_(int x, int y)
 {
+	QPoint p(x,y);
+	List<GeometricObject*> objects;
+	gl_renderer_.pickObjects1((Position) p.x(), (Position) p.y(), 
+														(Position) p.x(), (Position) p.y());
+	renderView_(DIRECT_RENDERING);
+ 	gl_renderer_.pickObjects2(objects);
+
+	if (objects.size() > 0)
+	{
+		Composite* c = (Composite*)(**objects.begin()).getComposite();
+		if (c == 0) return 0;
+
+		Bond* bond = dynamic_cast<Bond*>(c);
+		return bond;
+	}
+
 	Bond* closest = 0;
 	float min_dist = FLT_MAX;
 
@@ -896,10 +935,9 @@ void EditableScene::showContextMenu(QPoint pos)
 		properties->setEnabled(current_atom_ != 0);
 		QAction* move = menu.addAction("Move Atom", this, SLOT(moveAtom_()));
 		move->setEnabled(current_atom_ != 0);
-		QAction* change = menu.addAction("Change element", this, SLOT(changeElement_()));
-		change->setEnabled(current_atom_ != 0);
 		QAction* delete_atom = menu.addAction("Delete Atom", this, SLOT(deleteAtom_()));
 		delete_atom->setEnabled(current_atom_ != 0);
+ 		QAction* change = menu.addAction("Change element", this, SLOT(changeElement_()));
 	
 		menu.addSeparator();
 
@@ -956,6 +994,20 @@ void EditableScene::deleteAtom_()
 
 void EditableScene::changeElement_()
 {
+	if (current_atom_ != 0)
+	{
+		atom_type_ = current_atom_->getElement().getAtomicNumber();
+	}
+
+	PTEDialog pte;
+	pte.exec();
+
+	if (current_atom_ != 0)
+	{
+		current_atom_->setElement(PTE[atom_type_]);
+		deselect_();
+		getMainControl()->update(*current_atom_);
+	}
 }
 
 void EditableScene::deleteBond_()
@@ -997,6 +1049,8 @@ void EditableScene::onNotify(Message *message)
 		if (composite_message->getType() == CompositeMessage::CHANGED_COMPOSITE_HIERARCHY)
 		{
 			// TODO ????
+			current_atom_ = 0;
+			current_bond_ = 0;
 		}
 	}
 
@@ -1112,7 +1166,8 @@ bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
 		return false;
 	}
 
-	if      (key == Qt::Key_C) atom_type_ = 6;
+	if      (key == Qt::Key_H) atom_type_ = 1;
+	else if (key == Qt::Key_C) atom_type_ = 6;
 	else if (key == Qt::Key_N) atom_type_ = 7;
 	else if (key == Qt::Key_O) atom_type_ = 8;
 	else if (key == Qt::Key_P) atom_type_ = 15;
