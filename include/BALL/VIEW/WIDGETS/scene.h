@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.18 2006/10/11 12:44:09 amoll Exp $
+// $Id: scene.h,v 1.66.2.19 2006/10/20 08:31:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -428,7 +428,7 @@ namespace BALL
 			bool exportPNG(const String& filename);
 
 			///
-			virtual void setVisible(bool state);
+			virtual void setWidgetVisible(bool state);
 
 			///
 			void setOffScreenRendering(bool enabled, Size factor);

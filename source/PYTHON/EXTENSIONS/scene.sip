@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.sip,v 1.5.2.1 2006/10/11 12:44:52 amoll Exp $
+// $Id: scene.sip,v 1.5.2.2 2006/10/20 08:32:40 amoll Exp $
 //
 
 class Scene 
@@ -53,7 +53,7 @@ static Scene* getInstance(Position /index/);
 	void enterDualStereo();
 	void enterActiveStereo();
 	void exitStereo();
-	void setVisible(bool);
+	void setWidgetVisible(bool);
 	void rotate(float, float);
 	void rotateClockwise(float);
 	void move(Vector3);

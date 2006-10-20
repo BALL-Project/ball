@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.24.2.7 2006/03/19 22:16:48 amoll Exp $
+// $Id: modularWidget.C,v 1.24.2.8 2006/10/20 08:35:19 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -119,11 +119,6 @@ namespace BALL
 		{
 			QWidget* widget= dynamic_cast<QWidget*>(this);
 			if (!widget) return;
-
-			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on"))
-			{
-				widget->setVisible(inifile.getValue("WINDOWS", getIdentifier() + "::on").toBool());
-			}
 
 			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::x"))
 			{

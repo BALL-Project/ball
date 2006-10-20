@@ -58,8 +58,8 @@ namespace BALL
 			*/
 			virtual void writePreferences(INIFile& inifile) throw();
 
-			///
-			virtual void setVisible(bool state);
+			/// For usage with Python:
+			virtual void setWidgetVisible(bool state);
 			
 			///
 			virtual void registerForHelpSystem(const QObject* widget, const String& url);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.sip,v 1.2.2.1 2006/10/19 22:06:46 amoll Exp $
+// $Id: dockWidget.sip,v 1.2.2.2 2006/10/20 08:32:40 amoll Exp $
 //
 
 class DockWidget
@@ -22,5 +22,5 @@ class DockWidget
 
 	void applyPreferences() throw();				
 
-	void setVisible(bool);
+	void setWidgetVisible(bool);
 };

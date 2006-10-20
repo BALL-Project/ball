@@ -32,16 +32,16 @@ def getDatasetControl():
 	return DatasetControl.getInstance(0)
 
 def hideAllWidgets():
-	getScene().setVisible(0)
-	getGeometricControl().setVisible(0)
-	getMolecularControl().setVisible(0)
-	getLogView().setVisible(0)
-	getDatasetControl().setVisible(0)
-	getPyWidget().setVisible(0)
+	getScene().setWidgetVisible(0)
+	getGeometricControl().setWidgetVisible(0)
+	getMolecularControl().setWidgetVisible(0)
+	getLogView().setWidgetVisible(0)
+	getDatasetControl().setWidgetVisible(0)
+	getPyWidget().setWidgetVisible(0)
 
 def showOnlyScene():
 	hideAllWidgets()
-	getScene().setVisible(1)
+	getScene().setWidgetVisible(1)
 	getMainControl().processEvents(5000)
 
 def setSceneSize(width, height):

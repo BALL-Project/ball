@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.28.2.6 2006/10/19 22:06:35 amoll Exp $
+// $Id: dockWidget.C,v 1.28.2.7 2006/10/20 08:31:58 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -87,10 +87,13 @@ namespace BALL
 		{
 			// if the INIFile does not have the information to restore the state of the dockwidgets,
 			// make only the default widgets visible
-			if (!inifile.hasEntry("WINDOWS", "Main::dockwidgets") &&
-				  !default_visible_)
+			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on"))
 			{
-				setVisible(false);
+				setWidgetVisible(inifile.getValue("WINDOWS", getIdentifier() + "::on").toBool());
+			}
+			else if (!default_visible_)
+			{
+				setWidgetVisible(false);
 			}
 		}
 
@@ -105,9 +108,9 @@ namespace BALL
 		}
 
 		// only for Python needed
-		void DockWidget::setVisible(bool state)
+		void DockWidget::setWidgetVisible(bool state)
 		{
-			if (window_menu_entry_ != 0) window_menu_entry_->setChecked(state);
+ 			if (window_menu_entry_ != 0) window_menu_entry_->setChecked(state);
 
 			QDockWidget::setVisible(state);
 		}

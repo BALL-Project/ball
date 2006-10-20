@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.79 2006/10/19 14:12:59 amoll Exp $
+// $Id: scene.C,v 1.174.2.80 2006/10/20 08:31:58 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1259,6 +1259,12 @@ namespace BALL
 			throw()
 		{
 			ModularWidget::fetchPreferences(inifile);
+
+			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on"))
+			{
+				setWidgetVisible(inifile.getValue("WINDOWS", getIdentifier() + "::on").toBool());
+			}
+
 			if (inifile.hasEntry("EXPORT", "POVNR"))
 			{
 				pov_nr_ = inifile.getValue("EXPORT", "POVNR").toUnsignedInt();
@@ -2562,7 +2568,7 @@ namespace BALL
 			}
 		}
 
-		void Scene::setVisible(bool state)
+		void Scene::setWidgetVisible(bool state)
 		{
 			// only for Python needed
 			QGLWidget::setVisible(state);
