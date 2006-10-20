@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.29 2006/10/19 22:08:22 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.30 2006/10/20 14:28:19 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -78,7 +78,6 @@ namespace BALL
 		// ---------------------
 		setWindowTitle("BALLView");
 		setWindowIcon(QPixmap(bucky_64x64_xpm));
-		resize(800,600);
 		// make sure submenus are the first 
 		initPopupMenu(FILE_OPEN);
 		initPopupMenu(EDIT);
@@ -184,6 +183,7 @@ namespace BALL
 
 		complement_selection_action_ = insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, SLOT(complementSelection()));
 
+		maximize();
 		setStatusbarText("Ready.");
 	}
 
@@ -353,8 +353,15 @@ namespace BALL
 	{
 		if (e->key() == Qt::Key_Escape) 
 		{
-			Scene::getInstance(0)->switchToLastMode();
+			scene_->switchToLastMode();
 			return;
+		}
+
+		QPoint point = QCursor::pos();
+		if (qApp->widgetAt(point) == scene_ &&
+				qApp->focusWidget() != scene_)
+		{
+			scene_->keyPressEvent(e);
 		}
 
 		if (e->key() == Qt::Key_Delete)

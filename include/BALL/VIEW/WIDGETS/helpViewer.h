@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.2.2.6 2006/05/17 14:54:08 amoll Exp $
+// $Id: helpViewer.h,v 1.2.2.7 2006/10/20 14:28:02 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
@@ -140,7 +140,7 @@ namespace BALL
 			void exitWhatsThisMode();
 
 			/// Event filter for the whats this mode
-			bool eventFilter(QObject*, QEvent*);
+			bool eventFilter(QObject* obj, QEvent* e);
 		
 			protected:
 

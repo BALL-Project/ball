@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.19 2006/10/20 08:31:50 amoll Exp $
+// $Id: scene.h,v 1.66.2.20 2006/10/20 14:28:03 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -433,6 +433,9 @@ namespace BALL
 			///
 			void setOffScreenRendering(bool enabled, Size factor);
 
+			/// Catch key events
+			virtual void keyPressEvent(QKeyEvent* e);
+
 			protected:
 
 			//@}
@@ -490,9 +493,6 @@ namespace BALL
 					\param  e the QT-mouse event (See QT-library for mouse events)
 			*/
 			virtual void wheelEvent(QWheelEvent* qmouse_event);
-
-			/// Catch key events
-			void keyPressEvent(QKeyEvent* e);
 
 
 			public slots:

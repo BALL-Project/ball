@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.25 2006/06/08 21:27:07 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.26 2006/10/20 14:28:11 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -113,6 +113,7 @@ void EditableScene::init_()
 	bond_order_ = Bond::ORDER__SINGLE;
 	draw_line_ = 0;
 	draw_grid_ = 0;
+	atom_number_ = 0;
 }
 
 EditableScene::~EditableScene()
@@ -173,7 +174,9 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 	if (e->button() == Qt::LeftButton)
 	{	
 		// insert a new atom:
-		PDBAtom* a = new PDBAtom(PTE[atom_type_], PTE[atom_type_].getName());
+		String name = PTE[atom_type_].getSymbol();
+		name += String(atom_number_);
+		PDBAtom* a = new PDBAtom(PTE[atom_type_], name);
 		insert_(e->x(), e->y(), *a);		
 		current_atom_ = a;
 		
@@ -1087,6 +1090,39 @@ void EditableScene::switchShowGrid()
 {
 	draw_grid_ = !draw_grid_;
 	update();
+}
+
+void EditableScene::keyPressEvent(QKeyEvent* e)
+{
+	if (!reactToKeyEvent_(e))
+	{
+		Scene::keyPressEvent(e);
+	}
+}
+
+bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
+{
+	if (current_mode_ != (ModeType)EDIT__MODE) return false;
+
+	int key = e->key();
+
+	if (key < Qt::Key_A ||
+			key > Qt::Key_Z)
+	{
+		return false;
+	}
+
+	if      (key == Qt::Key_C) atom_type_ = 6;
+	else if (key == Qt::Key_N) atom_type_ = 7;
+	else if (key == Qt::Key_O) atom_type_ = 8;
+	else if (key == Qt::Key_P) atom_type_ = 15;
+	else if (key == Qt::Key_S) atom_type_ = 16;
+	else
+	{
+		return false;
+	}
+
+	return true;
 }
 
 	}//end of namespace 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.80 2006/10/20 08:31:58 amoll Exp $
+// $Id: scene.C,v 1.174.2.81 2006/10/20 14:28:11 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1595,6 +1595,7 @@ namespace BALL
 
 			connect(&timer_, SIGNAL(timeout()), this, SLOT(timerSignal_()) );			
 
+			setFocusPolicy(Qt::StrongFocus);
 			registerForHelpSystem(this, "scene.html");
 		}
 
@@ -2018,6 +2019,13 @@ namespace BALL
 
 		void Scene::keyPressEvent(QKeyEvent* e)
 		{
+			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO &&
+			    e->key() == Qt::Key_Escape) 
+			{
+				switchToLastMode();
+				return;
+			}
+
 			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO) return;
 
 			if ((e->key() == Qt::Key_Y && e->modifiers() == Qt::AltModifier) ||
@@ -2032,6 +2040,7 @@ namespace BALL
 					e->key() != Qt::Key_Up    &&
 					e->key() != Qt::Key_Down)
 			{
+				e->ignore();
 				return;
 			}
 
@@ -2605,5 +2614,6 @@ namespace BALL
 			font_size_= font_size;
 			update();
 		}
+
 	} // namespace VIEW
 } // namespace BALL

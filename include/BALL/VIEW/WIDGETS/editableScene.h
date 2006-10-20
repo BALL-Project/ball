@@ -172,7 +172,8 @@ class BALL_VIEW_EXPORT EditableScene
 	protected:
 
 	/// Catch key events
-	void keyPressEvent(QKeyEvent* e);
+	virtual void keyPressEvent(QKeyEvent* e);
+	virtual bool reactToKeyEvent_(QKeyEvent* e);
 
 	virtual void onNotify(Message *message)
 		throw();
@@ -256,6 +257,7 @@ class BALL_VIEW_EXPORT EditableScene
 	//undo stack
 	vector<EditOperation> undo_;
 	EditSettings* edit_settings_;
+	Position atom_number_;
 };
 
 	}//end of namespace
