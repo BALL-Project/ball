@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.32 2006/10/21 14:30:59 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.33 2006/10/21 22:46:42 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -560,8 +560,6 @@ namespace BALL
 
 	void Mainframe::about()
 	{
-		write();
-		return;
 		// Display about dialog
 		QDialog w;
  		Ui_AboutDialog about;
