@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.31 2006/10/21 13:59:17 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.32 2006/10/21 14:30:59 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -183,7 +183,6 @@ namespace BALL
 
 		complement_selection_action_ = insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, SLOT(complementSelection()));
 
-		showMaximized();
 		setStatusbarText("Ready.");
 	}
 

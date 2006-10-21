@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.19.2.4 2006/04/29 16:18:18 amoll Exp $
+// $Id: main.C,v 1.19.2.5 2006/10/21 14:30:59 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -104,6 +104,7 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 
 	// Show the main window.
 	mainframe.show();
+	mainframe.showMaximized();
 
 	// =============== parsing command line arguments ==================================
 	// If there are additional command line arguments, interpret them as files to open or logging flag.
