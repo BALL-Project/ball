@@ -297,12 +297,6 @@
       </property>
       <item>
        <widget class="QRadioButton" name="canonical_button" >
-        <property name="minimumSize" >
-         <size>
-          <width>120</width>
-          <height>0</height>
-         </size>
-        </property>
         <property name="text" >
          <string>canonical</string>
         </property>
@@ -313,14 +307,6 @@
       </item>
       <item>
        <widget class="QRadioButton" name="microcanonical_button" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>0</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="minimumSize" >
          <size>
           <width>120</width>
