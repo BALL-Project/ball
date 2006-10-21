@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileObserver.h,v 1.1.2.3 2006/10/15 23:27:47 amoll Exp $
+// $Id: fileObserver.h,v 1.1.2.4 2006/10/21 23:17:04 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_FILEOBSERVER_H
@@ -24,12 +24,11 @@ namespace BALL
 		 		When the file changes, all current Systems are deleted and
 				the new content of the observed molecular file is shown.
 		 		Supported are all files from the MolecularFileDialog.
-				A MolecularFileDialog must have been inserted into the MainControl.
-				Usage:\par
-				// in from MainControl derived class:\par
-				FileObserver* fo = new FileObserver(this, "FileObserver"); \par
-				fo->setFileName("foo.pdb");\\par
-				fo->start();\\par
+				A MolecularFileDialog must have been inserted into the MainControl.<br>
+				Usage: (in from MainControl derived class)<br>
+				FileObserver* fo = new FileObserver(this, "FileObserver"); <br>
+				fo->setFileName("foo.pdb");<br>
+				fo->start();<br>
 		*/
 		class BALL_VIEW_EXPORT FileObserver
 			: public DockWidget
