@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.23 2006/10/18 23:11:21 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.24 2006/10/21 11:29:36 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1194,11 +1194,11 @@ namespace BALL
 			MolecularDynamics* mds = 0;
 			if (md_dialog_.useMicroCanonical())
 			{
-				mds = new CanonicalMD;
+				mds = new MicroCanonicalMD;
 			}
 			else
 			{
-				mds = new MicroCanonicalMD;
+				mds = new CanonicalMD;
 			}
 			
 			// set the options for the MDS	
