@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.50 2006/10/06 14:47:19 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.51 2006/10/21 20:01:58 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -90,7 +90,7 @@ namespace BALL
  			glay->addLayout(lay, 2, 0);
 
 			listview->setObjectName("MolecularControlList");
-			listview->headerItem()->setText(0, "Name [highlight]                ");
+			listview->headerItem()->setText(0, "Name [highlight]      ");
 			listview->headerItem()->setText(1, "Type");
 			listview->headerItem()->setText(2, "checked");
 			listview->resizeColumnToContents(2);
