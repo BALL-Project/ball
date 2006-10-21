@@ -205,7 +205,7 @@ UICS = \
 ..\..\..\source\VIEW\DIALOGS\parsedFunctionDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\peptideDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\preferences.myui\
-#..\..\..\source\VIEW\DIALOGS\PTEDialog.myui\
+..\..\..\source\VIEW\DIALOGS\PTEDialog.myui\
 ..\..\..\source\VIEW\DIALOGS\pythonSettings.myui\
 ..\..\..\source\VIEW\DIALOGS\setCamera.myui\
 ..\..\..\source\VIEW\DIALOGS\snapShotVisualisation.myui\
