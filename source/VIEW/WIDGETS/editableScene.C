@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.27 2006/10/20 19:34:41 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.28 2006/10/21 13:59:04 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -931,18 +931,14 @@ void EditableScene::showContextMenu(QPoint pos)
 
 	if (current_mode_ == (Scene::ModeType) EDIT__MODE)
 	{
-		QAction* properties = menu.addAction("Atom Properties", this, SLOT(atomProperties_()));
-		properties->setEnabled(current_atom_ != 0);
-		QAction* move = menu.addAction("Move Atom", this, SLOT(moveAtom_()));
-		move->setEnabled(current_atom_ != 0);
-		QAction* delete_atom = menu.addAction("Delete Atom", this, SLOT(deleteAtom_()));
-		delete_atom->setEnabled(current_atom_ != 0);
- 		QAction* change = menu.addAction("Change element", this, SLOT(changeElement_()));
+		menu.addAction("Atom Properties", this, SLOT(atomProperties_()))->setEnabled(current_atom_ != 0);
+		menu.addAction("Move Atom", this, SLOT(moveAtom_()))->setEnabled(current_atom_ != 0);
+		menu.addAction("Delete Atom", this, SLOT(deleteAtom_()))->setEnabled(current_atom_ != 0);
+ 		menu.addAction("Change element", this, SLOT(changeElement_()));
 	
 		menu.addSeparator();
 
-		QAction* delete_bond = menu.addAction("Delete Bond", this, SLOT(deleteBond_()));
-		delete_bond->setEnabled(current_bond_ != 0);
+		menu.addAction("Delete Bond", this, SLOT(deleteBond_()))->setEnabled(current_bond_ != 0);
 
 		QMenu* order = new QMenu();
 		QAction* change_order = menu.addMenu(order);
