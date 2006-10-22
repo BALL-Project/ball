@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.30 2006/10/22 22:12:41 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.31 2006/10/22 22:19:57 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -694,6 +694,13 @@ void EditableScene::editMode_()
 	current_mode_ = (Scene::ModeType)EDIT__MODE;		
 	setCursor(QCursor(Qt::UpArrowCursor));
 	//ToDo:: Cursor should look different
+	HashSet<Composite*> selection = getMainControl()->getSelection();
+	HashSet<Composite*>::Iterator it = selection.begin();
+	for (; +it; ++it)
+	{
+		getMainControl()->deselectCompositeRecursive(*it, true);
+		getMainControl()->update(**it, false);
+	}
 }
 
 // insert an atom at screen positions (x,y) on the view plane
