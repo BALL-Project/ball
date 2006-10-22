@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.82 2006/10/22 12:26:58 amoll Exp $
+// $Id: scene.C,v 1.174.2.83 2006/10/22 12:27:45 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2037,6 +2037,7 @@ namespace BALL
 					 e->key() == Qt::Key_Escape)
 			{
 				exitStereo();
+				return;
 			}
 
 			// setting of eye and focal distance
