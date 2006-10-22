@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.14.2.5 2006/10/22 11:44:30 amoll Exp $
+// $Id: downloadPDBFile.h,v 1.14.2.6 2006/10/22 15:44:29 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
@@ -50,6 +50,24 @@ namespace BALL
 				virtual void initializeWidget(VIEW::MainControl& main_control)
 					throw();
 
+				///
+				virtual void fetchPreferences(INIFile& inifile)
+					throw();
+
+				///
+				virtual void writePreferences(INIFile& inifile)
+					throw();
+
+				/** Set the prefix for the PDB.org url<br>
+						Standard: http://www.rcsb.org/pdb/files/
+				*/
+				void setPrefix(String s) { prefix_ = s;}
+
+				/** Set the suffix for the PDB.org url<br>
+						Standard: (.pdb)
+				*/
+				void setSuffix(String s) { suffix_ = s;}
+
 			public slots:
 
 				///
@@ -60,12 +78,6 @@ namespace BALL
 
 				/// 
 				virtual void abort();
-
-				virtual void fetchPreferences(INIFile& inifile)
-					throw();
-
-				virtual void writePreferences(INIFile& inifile)
-					throw();
 
 			protected:
 
@@ -92,6 +104,7 @@ namespace BALL
 				HashSet<String> 				unsupported_images_;
 
 				QAction* menu_id_;
+				String   prefix_, suffix_;
 		};
 
 	} 
