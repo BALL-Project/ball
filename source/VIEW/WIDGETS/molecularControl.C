@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.51 2006/10/21 20:01:58 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.52 2006/10/22 22:12:42 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -736,6 +736,7 @@ namespace BALL
 		{	
 			enableUpdates_(false);
 			listview->clearSelection();
+			selected_.clear();
 
 			list<QTreeWidgetItem*> items;
 			List<Composite*>::ConstIterator sit = selection.begin();
@@ -745,8 +746,13 @@ namespace BALL
 				fit = composite_to_item_.find(*sit);
 				if (fit == composite_to_item_.end()) continue;
 				items.push_back(fit->second);
+				selected_.push_back(*sit);
 			}
 			listview->selectItems(items);
+
+			ControlSelectionMessage* message = new ControlSelectionMessage;
+			message->setSelection(selected_);
+			notify_(message);
 
 			enableUpdates_(true);
 		}

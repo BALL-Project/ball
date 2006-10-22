@@ -136,6 +136,8 @@ class BALL_VIEW_EXPORT EditableScene
 	virtual void setMode(ModeType mode)
 		throw();
 
+	void addRing(Size atoms);
+
 	////////////////////////////////////////
 	public slots:
 
@@ -161,6 +163,7 @@ class BALL_VIEW_EXPORT EditableScene
 	void moveAtom_();
 	void atomProperties_();
 	void createMolecule_();
+	void addRing_();
 
 	////////////////////////////////////////
 	signals:
@@ -258,6 +261,7 @@ class BALL_VIEW_EXPORT EditableScene
 	vector<EditOperation> undo_;
 	EditSettings* edit_settings_;
 	Position atom_number_;
+	QPoint 	 menu_point_;
 };
 
 	}//end of namespace

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.29 2006/10/22 18:37:09 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.30 2006/10/22 22:12:41 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -20,6 +20,7 @@
 #include <BALL/VIEW/DIALOGS/PTEDialog.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
+#include <BALL/STRUCTURE/geometricTransformations.h>
 
 #include <QtGui/qmenubar.h>
 #include <QtGui/qcursor.h>
@@ -904,6 +905,7 @@ int EditableScene::getEditElementType()
 
 void EditableScene::showContextMenu(QPoint pos)
 {
+	menu_point_ = pos;
 	QMenu menu;
 
 	QAction* rotate_mode = menu.addAction("Rotate Mode", this, SLOT(rotateMode_()));
@@ -950,6 +952,19 @@ void EditableScene::showContextMenu(QPoint pos)
 		order->addAction("Quadruple", this, SLOT(changeBondOrder_()));
 		order->addAction("Aromatic",  this, SLOT(changeBondOrder_()));
 		change_order->setEnabled(current_bond_ != 0);
+
+		menu.addSeparator();
+
+		QMenu* add_menu = new QMenu();
+		QAction* add_action = menu.addMenu(add_menu);
+		add_action->setText("Add");
+		if (getContainers_().size() == 0)
+		{
+			add_action->setEnabled(false);
+		}
+		add_menu->addAction("5 ring", this, SLOT(addRing_()));
+		add_menu->addAction("6 ring", this, SLOT(addRing_()));
+		add_menu->addAction("9 ring", this, SLOT(addRing_()));
 	}
 
 	menu.exec(mapToGlobal(pos));
@@ -1182,6 +1197,73 @@ bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
 	setStatusbarText(text, true);
 
 	return true;
+}
+
+void EditableScene::addRing(Size atoms)
+{
+	deselect_();
+
+	List<AtomContainer*> containers = getContainers_();
+	if (containers.size() == 0) return;
+
+	const FragmentDB& fdb = getMainControl()->getFragmentDB();
+	String n(atoms);
+	n += "Ring";
+	Residue* residue = fdb.getResidueCopy(n);
+	if (residue == 0)
+	{
+		return;
+	}
+
+	Matrix4x4 m;
+	Vector3 x = get3DPosition_(menu_point_.x(), menu_point_.y());
+	TransformationProcessor tf;
+
+	Vector3 vv = getStage()->getCamera().getViewVector();
+	vv.normalize();
+	Vector3 axis = Vector3(1,0,0) % vv;
+	Angle a = vv.getAngle(Vector3(1,0,0));
+	m.setRotation(a, axis);
+	tf.setTransformation(m);
+	residue->apply(tf);
+
+	m.setTranslation(x);
+	tf.setTransformation(m);
+	residue->apply(tf);
+
+	AtomContainer* s = *containers.begin();
+	s->insert(*residue);
+	getMainControl()->selectCompositeRecursive(residue, true);
+	getMainControl()->update(*s);
+	setMode(MOVE__MODE);
+}
+
+void EditableScene::addRing_()
+{
+	QObject* os = sender();
+	if (os == 0) return;
+	QAction* action = dynamic_cast<QAction*>(os);
+	if (action == 0) return;
+	String string = ascii(action->text());
+	vector<String> fields;
+	if (string.split(fields) < 2) return;
+	try
+	{
+		Size nr = fields[0].toUnsignedInt();
+		if (nr != 5 &&
+				nr != 6 &&
+				nr != 9)
+		{
+			BALLVIEW_DEBUG
+			return;
+		}
+
+		addRing(nr);
+	}
+	catch(...)
+	{
+		BALLVIEW_DEBUG
+	}
 }
 
 	}//end of namespace 
