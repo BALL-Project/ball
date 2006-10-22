@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.14.2.4 2006/02/01 14:19:50 amoll Exp $
+// $Id: downloadPDBFile.h,v 1.14.2.5 2006/10/22 11:44:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
@@ -56,13 +56,16 @@ namespace BALL
 				void slotDownload();
 
 				///
-				void slotNewId(const QString& new_id);
-
-				///
 				void idChanged();
 
 				/// 
 				virtual void abort();
+
+				virtual void fetchPreferences(INIFile& inifile)
+					throw();
+
+				virtual void writePreferences(INIFile& inifile)
+					throw();
 
 			protected:
 
