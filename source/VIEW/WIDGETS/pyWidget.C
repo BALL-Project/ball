@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.56 2006/09/24 09:42:04 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.57 2006/10/22 12:38:57 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -365,13 +365,14 @@ PyWidget::PyWidget(QWidget *parent, const char *name)
 	connect(clear_button, SIGNAL(clicked()), this, SLOT(clearScript()));
 
 	QHBoxLayout *hlayout = new QHBoxLayout;
-	hlayout->setMargin(2);
+	hlayout->setMargin(1);
 	hlayout->addWidget(run_button);
 	hlayout->addWidget(save_button);
 	hlayout->addWidget(load_button);
 	hlayout->addWidget(clear_button);
 	widget->setLayout(hlayout);
-	widget->setMaximumSize(QSize(22222, save_button->height() + 6)); 
+	widget->setMaximumSize(QSize(22222, save_button->height() + 2)); 
+	widget->setMinimumSize(QSize(22, save_button->height() + 2)); 
 
 	splitter->addWidget(widget);
 
