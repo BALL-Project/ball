@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.C,v 1.34.2.8 2006/10/22 11:44:22 amoll Exp $
+// $Id: downloadPDBFile.C,v 1.34.2.9 2006/10/22 14:08:47 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
@@ -39,7 +39,9 @@ DownloadPDBFile::DownloadPDBFile(QWidget* parent, const char* name, bool, Qt::WF
 		ModularWidget(name),
 		thread_(0),
 		aborted_(false),
-		error_(false)
+		error_(false),
+		prefix_("http://www.rcsb.org/pdb/files/"),
+		suffix_(".pdb")
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new DownloadPDBFile" << this << std::endl;
@@ -138,9 +140,9 @@ void DownloadPDBFile::slotDownload()
 	try
 	{
 		String id = ascii(pdbId->currentText());
-		String url = "http://www.rcsb.org/pdb/files/";
+		String url = prefix_;
 		url += id;
-		url += ".pdb";
+		url += suffix_;
 		String temp_filename = VIEW::createTemporaryFilename();
 		thread_->setFilename(temp_filename);
 		bool ok = threadedDownload_(url);

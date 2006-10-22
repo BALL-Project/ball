@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: networkPreferences.C,v 1.4.2.3 2006/02/01 13:23:47 amoll Exp $
+// $Id: networkPreferences.C,v 1.4.2.4 2006/10/22 14:08:47 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/networkPreferences.h>
+#include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
@@ -33,6 +34,8 @@ NetworkPreferences::NetworkPreferences(QWidget* parent, const char* name, Qt::WF
 	registerObject_(port_edit);
 	registerObject_(host_edit);
 	registerObject_(enable_proxy);
+	registerObject_(pdb_prefix);
+	registerObject_(pdb_suffix);
 
 	setWidgetStackName("Network");
 }
@@ -89,6 +92,12 @@ void NetworkPreferences::applySettings()
 	}
 		
 	mc->setProxy(ascii(host_edit->text()), port);
+
+	DownloadPDBFile* df = DownloadPDBFile::getInstance(0);
+	if (df == 0) return;
+
+	df->setPrefix(ascii(pdb_prefix->text()));
+	df->setSuffix(ascii(pdb_suffix->text()));
 }
 
 } } // namespaces

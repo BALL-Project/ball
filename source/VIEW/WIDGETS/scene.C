@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.83 2006/10/22 12:27:45 amoll Exp $
+// $Id: scene.C,v 1.174.2.84 2006/10/22 14:08:51 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1918,7 +1918,11 @@ namespace BALL
 			info_point_ = QCursor::pos();
 			info_point_ = mapFromGlobal(info_point_);
 
-			if (!rect().contains(info_point_)) return;
+			if (!rect().contains(info_point_) ||
+					!lockComposites()) 
+			{
+				return;
+			}
 
 			Position pos_x = info_point_.x();
 			Position pos_y = info_point_.y();
@@ -1931,10 +1935,15 @@ namespace BALL
 				last_x_pos_ = pos_x;
 				last_y_pos_ = pos_y;
 				show_info_ = true;
+				unlockComposites();
 				return;
 			}
 
-			if (!show_info_) return;
+			if (!show_info_) 
+			{
+				unlockComposites();
+				return;
+			}
 
 			// we wont show the info again until the mouse moved
 			show_info_ = false;
@@ -1952,6 +1961,7 @@ namespace BALL
 
 			if (objects.size() == 0)
 			{
+				unlockComposites();
 				return;
 			}
 
@@ -1991,21 +2001,27 @@ namespace BALL
 				string += this_string;
 			}
 
-			if (string == "") return;
+			if (string == "") 
+			{
+				unlockComposites();
+				return;
+			}
 
 			info_string_ = string;
 
 			String string2 = String("Object at cursor is ") + string;
 
-			if (getMainControl()->getStatusbarText() == string2) return;
+			if (getMainControl()->getStatusbarText() != string2) 
+			{
+				setStatusbarText(string2, false);
 
-			setStatusbarText(string2, false);
-
-			QPoint diff(20, 20);
-			if (pos_x > (Position) width() / 2) diff.setX(-20);
-			if (pos_y > (Position) height() / 2) diff.setY(-20);
-			info_point_ += diff;
-			updateGL();
+				QPoint diff(20, 20);
+				if (pos_x > (Position) width() / 2) diff.setX(-20);
+				if (pos_y > (Position) height() / 2) diff.setY(-20);
+				info_point_ += diff;
+				updateGL();
+			}
+			unlockComposites();
 		}
 
 		void Scene::wheelEvent(QWheelEvent *qmouse_event)

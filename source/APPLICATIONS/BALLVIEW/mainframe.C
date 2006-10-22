@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.33 2006/10/21 22:46:42 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.34 2006/10/22 14:08:24 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -350,17 +350,19 @@ namespace BALL
 
 	void Mainframe::keyPressEvent(QKeyEvent* e)
 	{
-		if (e->key() == Qt::Key_Escape) 
-		{
-			scene_->switchToLastMode();
-			return;
-		}
-
 		QPoint point = QCursor::pos();
-		if (qApp->widgetAt(point) == scene_ &&
+		QWidget* widget = qApp->widgetAt(point);
+		if (widget == scene_ &&
 				qApp->focusWidget() != scene_)
 		{
 			scene_->keyPressEvent(e);
+		}
+
+		if (widget != scene_ &&
+        e->key() == Qt::Key_Escape) 
+		{
+			scene_->switchToLastMode();
+			return;
 		}
 
 		if (e->key() == Qt::Key_Delete)
