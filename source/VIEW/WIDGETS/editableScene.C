@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.28 2006/10/21 13:59:04 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.29 2006/10/22 18:37:09 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -1172,6 +1172,14 @@ bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
 	{
 		return false;
 	}
+
+	QPoint point = mapFromGlobal(QCursor::pos());
+	Atom* atom = getClickedAtom_(point.x(), point.y());
+	if (atom != 0) atom->setElement(PTE[atom_type_]);
+	getMainControl()->update(*atom);
+	String text("Setting element to ");
+	text += atom->getElement().getName();
+	setStatusbarText(text, true);
 
 	return true;
 }
