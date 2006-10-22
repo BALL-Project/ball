@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.81 2006/10/20 14:28:11 amoll Exp $
+// $Id: scene.C,v 1.174.2.82 2006/10/22 12:26:58 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2023,10 +2023,15 @@ namespace BALL
 			    e->key() == Qt::Key_Escape) 
 			{
 				switchToLastMode();
+				e->ignore();
 				return;
 			}
 
-			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO) return;
+			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO) 
+			{
+				e->ignore();
+				return;
+			}
 
 			if ((e->key() == Qt::Key_Y && e->modifiers() == Qt::AltModifier) ||
 					 e->key() == Qt::Key_Escape)
