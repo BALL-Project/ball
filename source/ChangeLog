@@ -1,31 +1,32 @@
 1.2 nonpublic:
 
 Added:
-- Font for BALLView can now be freely choosen
-- Useage of GLEW (OpenGL Extension Wrangler Library)
-- Docking interface
-- Support for field lines, vector grids and normalized grids
-- Volume Rendering and colored planes e.g. for electrostatics
-- Support for DSN6 electron densitiy files
-- Abilitiy to create screenshots larger than the screen size
-- Widget for overview of atom values (e.g. atom type, charge)
-- Added BALL documentation widget in BALLView
-- Python widget now has its own script editor
-- Python widget supports completion
-- Python widget supports Syntax Highlighting
-- Python widget support for context sensitive help for BALL Python commands
-- BALLView has menu entries for user defined Python script hotkeys
-- Further Python example scripts
-- Improved rendering of transparent surfaces
-- Toon Drawing Mode for OpenGL 
-- Ribbon model
-- Capping planes
-- Improved feedback for users: e.g. Busy mouse cursor and statusbar entries
-- Popup infos for e.g. atoms under the mouse cursor
-- Added improved coordinate system
+- MMFF94 force field
 - Protein-protein docking code based on Fourier correlation (requires FFTW library)
 - Protein-ligand docking code based on a genetic algorithm (similar to AutoDock)
 - An interactive user interface for the two docking algorithms
+- Molecular Editing functionality 
+- Support for field lines, vector grids and normalized grids
+- Volume Rendering and colored planes e.g. for electrostatics
+- Projection of e.g. electrostatics on a sphere
+- Abilitiy to create screenshots larger than the screen size
+- Widget for overview of atom values (e.g. atom type, charge)
+- BALL documentation widget in BALLView
+- Python widget now has its own script editor
+- Python widget supports completion and Syntax Highlighting
+- Python widget support for context sensitive help for BALL Python commands
+- BALLView has menu entries for user defined Python script hotkeys
+- Further Python example scripts
+- Capping planes
+- Toon Drawing Mode for OpenGL 
+- Improved rendering of transparent surfaces
+- Improved Cartoon model and new Ribbon model
+- Improved coordinate system
+- Improved feedback for users: e.g. Busy mouse cursor and statusbar entries
+- Popup infos for e.g. atoms under the mouse cursor
+- Monitoring of molecular files for updates (e.g. for external simulations)
+- Font for BALLView can now be freely choosen
+- History of PDB downloads
 - Small molecule database interface (FORMAT/DBInterface) allows the 
   storage and retrieval of small molecules and their conformations in
   a relational database
@@ -35,21 +36,21 @@ Added:
 - A major rewrite of the code for molecule superposition
 - A SMARTS matcher
 - Kekulizer
-- Monitoring of molecular files for updates (e.g. for external simulations)
 - An interface to GAMESS (to allow quantum mechanics calculations from BALL)
+- Support for DSN6 electron densitiy files
 - Eased installation process under Microsoft Windows
 
 Changed:
 - Build process now requires GNU make for conditional compiling
 - common.mak has been broken down into targets.mak and rules.mak
 - configure now checks for the correct version of QT
+- OpenGL extensions are now accessed through GLEW (OpenGL Extension Wrangler Library)
+- Renamed class: PrimitiveManager -> RepresentationManager
 
 Fixed:
 - Major code overhaul of the whole VIEW framework
 - Crash when applying invalid boolean expressions in BALLView
-- Several crashes under Windows, e.g in LogStream, DisplayProperties,
-	TCPTransfer, Surfaces, ...
-- Improved cartoon model
+- Several crashes under Windows
 - Accelerated mesh coloring for several ColorProcessors
 - Proper error messages in Python interpreter
 - Ability to open molecular files without proper extensions in BALLView
@@ -60,13 +61,12 @@ Fixed:
 - Improved multithreading
 - POVRay camera settings now correspond better to OpenGL viewing volume
 - Faster picking mode
-- Polished layout for some dialogs
-- Indicator in statusbar for Server and simulations was missing
+- Polished layout for most dialogs
+- Indicator in statusbar for server and simulations was missing
 - Added spliting support for Contour Surfaces
-- Some flaws in the Cartoon Model
 - Sensible default styles on the individual platforms
-- Renamed classes: PrimitiveManager -> RepresentationManager
 - Return pressed in PeptideDialog now applies settings
+- many more bugs...
 
 Known problems:
 - RegularData widgets currently dont work (QT 4.1 does not yet have CanvasWidgets)
