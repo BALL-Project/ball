@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.21.2.6 2006/10/15 23:09:27 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.21.2.7 2006/10/22 10:38:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -182,6 +182,9 @@ namespace BALL
 
 			///
 			String getSupportedFileFormats() const;
+
+			///
+			String getSupportedFileFormatsList() const;
 				
 			protected:
 
@@ -207,7 +210,6 @@ namespace BALL
 
 			QAction* save_id_, *open_id_;
 			String file_format_;
-			QMenu* types_menu_;
 		};
 
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.32.2.7 2006/10/15 23:09:17 amoll Exp $$
+// $Id: molecularFileDialog.C,v 1.32.2.8 2006/10/22 10:38:29 amoll Exp $$
 //
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
@@ -59,14 +59,6 @@ namespace BALL
 
 			connect(main_control.initPopupMenu(MainControl::FILE), SIGNAL(aboutToShow()), 
 							this, SLOT(checkMenuEntries()));
-			types_menu_ = getMainControl()->initPopupMenu(MainControl::FILE_OPEN)
-					->addMenu("Structure...");
-			types_menu_->addAction("PDB", this, SLOT(openPDBFile()));
-			types_menu_->addAction("HIN", this, SLOT(openHINFile()));
-			types_menu_->addAction("MOL", this, SLOT(openMOLFile()));
-			types_menu_->addAction("MOL2", this, SLOT(openMOL2File()));
-			types_menu_->addAction("SD", this, SLOT(openSDFile()));
-			types_menu_->addAction("XYZ", this, SLOT(openXYZFile()));
 		}
 		
 		void MolecularFileDialog::readFiles()
@@ -75,7 +67,7 @@ namespace BALL
 													0,
 													"Choose a molecular file to open",
 													getWorkingDir().c_str(),
-													getSupportedFileFormats().c_str());
+													getSupportedFileFormatsList().c_str());
 
  		  for (QStringList::Iterator it = files.begin(); it != files.end(); ++it) 
 			{
@@ -87,7 +79,19 @@ namespace BALL
 		String MolecularFileDialog::getSupportedFileFormats() const
 		{
 			return String("*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf *.xyz");
+		}
 
+		String MolecularFileDialog::getSupportedFileFormatsList() const
+		{
+			String sl;
+			sl += "Molecular files (*.pdb *.hin *.mol *.mol2 *.sdf)\n";
+			sl += "PDB files (*.*)\n";
+			sl += "HIN files (*.*)\n";
+			sl += "MOL files (*.*)\n";
+			sl += "MOL2 files (*.*)\n";
+			sl += "SD files (*.*)\n";
+			sl += "XYZ files (*.*)";
+			return sl;
 		}
 
 		System* MolecularFileDialog::openFile(const String& file)
@@ -178,15 +182,22 @@ namespace BALL
 				return false;
 			}
 
-			setStatusbarText("writing file...");
+			const System& system = *(const System*) (*selection.begin());
+			String file_name = getWorkingDir();
+			file_name += FileSystem::PATH_SEPARATOR;
+			file_name += system.getName();
+			file_name += ".pdb";
 
 			QString s = QFileDialog::getSaveFileName(
 										0,
 										"Choose a filename to save the selected system",
-										getWorkingDir().c_str(),
-										"*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf *.xyz");
+										file_name.c_str(),
+										getSupportedFileFormats().c_str());
 
 		 	if (s == QString::null) return false;
+
+			setStatusbarText("writing file...");
+
 			String filename = ascii(s);
 			setWorkingDirFromFilename_(filename);
 
@@ -202,8 +213,6 @@ namespace BALL
 			{
 				filter = filter.after(".");
 			}
-
-			const System& system = *(const System*) (*selection.begin());
 
 			bool result = false;
 			if (filter == "PDB" || filter == "pdb" ||
@@ -588,7 +597,6 @@ namespace BALL
 		{
 			bool busy = getMainControl()->isBusy();
 			save_id_->setEnabled(getMainControl()->getSelectedSystem() && !busy);
-			types_menu_->setEnabled(!busy);
 		}
 
 
