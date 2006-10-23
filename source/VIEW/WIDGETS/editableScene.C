@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.31 2006/10/22 22:19:57 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.32 2006/10/23 11:31:33 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -701,6 +701,7 @@ void EditableScene::editMode_()
 		getMainControl()->deselectCompositeRecursive(*it, true);
 		getMainControl()->update(**it, false);
 	}
+	notify_(new NewSelectionMessage);
 }
 
 // insert an atom at screen positions (x,y) on the view plane
@@ -1242,6 +1243,7 @@ void EditableScene::addRing(Size atoms)
 	s->insert(*residue);
 	getMainControl()->selectCompositeRecursive(residue, true);
 	getMainControl()->update(*s);
+	notify_(new NewSelectionMessage);
 	setMode(MOVE__MODE);
 }
 
