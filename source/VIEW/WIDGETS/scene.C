@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.84 2006/10/22 14:08:51 amoll Exp $
+// $Id: scene.C,v 1.174.2.85 2006/10/23 12:29:58 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1505,7 +1505,7 @@ namespace BALL
 			// ======================== ANIMATION ===============================================
 			String help_url = "tips.html#animations";
 
-			record_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, 0);
+			record_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, SLOT(dummySlot()));
 			setMenuHint("Record an animation for later processing");
 			setMenuHelp(help_url);
 			record_animation_action_->setCheckable(true);
@@ -1525,15 +1525,15 @@ namespace BALL
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
 
-			animation_export_PNG_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", this, 0);
+			animation_export_PNG_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", this, SLOT(dummySlot()));
 			setMenuHelp(help_url);
 			animation_export_PNG_action_->setCheckable(true);
 
-			animation_export_POV_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", this, 0);
+			animation_export_POV_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", this, SLOT(dummySlot()));
 			setMenuHelp(help_url);
 			animation_export_POV_action_->setCheckable(true);
 
-			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 0);
+			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, SLOT(dummySlot()));
 			setMenuHelp(help_url);
 			animation_repeat_action_->setCheckable(true);
 

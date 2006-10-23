@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.20 2006/10/20 14:28:03 amoll Exp $
+// $Id: scene.h,v 1.66.2.21 2006/10/23 12:28:15 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -671,6 +671,11 @@ namespace BALL
 			virtual void timerSignal_();
 
 			//@}
+
+			protected slots:
+
+			// dummy slot for menu entries without immediate action (saves many lines code this way)
+			void dummySlot(){}
 
 			protected:
 
