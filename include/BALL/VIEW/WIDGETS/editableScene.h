@@ -29,6 +29,8 @@
 # include <BALL/MATHS/vector2.h>
 #endif
 
+#include <QtGui/qcursor.h>
+
 namespace BALL
 {
 	namespace VIEW
@@ -137,6 +139,12 @@ class BALL_VIEW_EXPORT EditableScene
 		throw();
 
 	void addRing(Size atoms);
+
+	///
+	void setCursor(String c);
+
+	///
+	void setElementCursor();
 
 	////////////////////////////////////////
 	public slots:
@@ -251,7 +259,9 @@ class BALL_VIEW_EXPORT EditableScene
 	// pick atoms/bonds only in highlighted AtomContainer?
 	static bool only_highlighted_;
 	// element for new atoms
-	int atom_type_;
+	int atomic_number_;
+	// name for newly created atoms
+	Position atom_number_;
 	// order for new bonds
 	int bond_order_;
 	Position last_y_;
@@ -260,7 +270,6 @@ class BALL_VIEW_EXPORT EditableScene
 	//undo stack
 	vector<EditOperation> undo_;
 	EditSettings* edit_settings_;
-	Position atom_number_;
 	QPoint 	 menu_point_;
 };
 

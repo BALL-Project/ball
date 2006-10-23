@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.32 2006/10/23 11:31:33 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.33 2006/10/23 16:17:48 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
 
+#include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/protein.h>
@@ -23,8 +24,8 @@
 #include <BALL/STRUCTURE/geometricTransformations.h>
 
 #include <QtGui/qmenubar.h>
-#include <QtGui/qcursor.h>
 #include <QtGui/QDesktopWidget>
+#include <QtGui/QPainter>
 
 #include <BALL/MATHS/vector3.h>
 #include <BALL/MATHS/matrix44.h>
@@ -110,12 +111,33 @@ void EditableScene::init_()
 {
 	edit_id_ = 0;
 	current_atom_ = 0;
-	atom_type_ = 6;
 	edit_settings_ = 0;
 	bond_order_ = Bond::ORDER__SINGLE;
 	draw_line_ = 0;
 	draw_grid_ = 0;
+	atomic_number_ = 6;
 	atom_number_ = 0;
+}
+
+void EditableScene::setCursor(String c)
+{
+	Path path;
+	String filename = path.find("graphics/cursor.png");
+	if (filename == "") return;
+
+	QPainter p;
+	QPixmap pm(filename.c_str());
+	p.begin(&pm);
+		QFont font;
+		font.setPixelSize(9);
+		QColor color;
+		stage_->getBackgroundColor().getInverseColor().get(color);
+   	p.setPen(color);
+  	p.drawText(12, 11, c.c_str());
+	p.end();
+
+	QCursor cursor(pm);
+	QWidget::setCursor(cursor);
 }
 
 EditableScene::~EditableScene()
@@ -178,10 +200,10 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 	if (e->button() == Qt::LeftButton)
 	{	
 		// insert a new atom:
-		String name = PTE[atom_type_].getSymbol();
+		String name = PTE[atomic_number_].getSymbol();
 		name += String(atom_number_);
 		atom_number_ ++;
-		PDBAtom* a = new PDBAtom(PTE[atom_type_], name);
+		PDBAtom* a = new PDBAtom(PTE[atomic_number_], name);
 		insert_(e->x(), e->y(), *a);		
 		current_atom_ = a;
 		
@@ -189,7 +211,7 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 		Vector3 atom_position = a->getPosition();
 		draw_line_ = false;
 		
-		EditOperation eo(a, NULL, "Added atom of type " + PTE[atom_type_].getName() + " at position (" 
+		EditOperation eo(a, NULL, "Added atom of type " + PTE[atomic_number_].getName() + " at position (" 
 										+ String(atom_position.x) + ", "
 										+ String(atom_position.y) + ", "
 										+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
@@ -459,17 +481,17 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 		}
 
 		// build a new atom...
-		String name(PTE[atom_type_].getSymbol());
+		String name(PTE[atomic_number_].getSymbol());
 		name += String(atom_number_);
 		atom_number_++;
-		PDBAtom* a = new PDBAtom(PTE[atom_type_], name);
+		PDBAtom* a = new PDBAtom(PTE[atomic_number_], name);
 		a->setPosition(new_pos);
 		current_atom_->getParent()->appendChild(*a);
 		
 		//store the Operation in undo_
 		Vector3 atom_position = a->getPosition();
 	
-		EditOperation eo(a, NULL, "Added atom of type " + PTE[atom_type_].getName() + " at position (" 
+		EditOperation eo(a, NULL, "Added atom of type " + PTE[atomic_number_].getName() + " at position (" 
 										+ String(atom_position.x) + ", "
 										+ String(atom_position.y) + ", "
 										+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
@@ -687,13 +709,20 @@ Bond* EditableScene::getClickedBond_(int x, int y)
 	return 0;
 }
 
+void EditableScene::setElementCursor()
+{
+	String s = PTE[atomic_number_].getSymbol();
+	s.truncate(1);
+ 	setCursor(s.c_str());
+}
+
 // Slot to change to EDIT__MODE
 void EditableScene::editMode_()
 {
 	last_mode_ = current_mode_;
 	current_mode_ = (Scene::ModeType)EDIT__MODE;		
-	setCursor(QCursor(Qt::UpArrowCursor));
-	//ToDo:: Cursor should look different
+	setElementCursor();
+
 	HashSet<Composite*> selection = getMainControl()->getSelection();
 	HashSet<Composite*>::Iterator it = selection.begin();
 	for (; +it; ++it)
@@ -902,13 +931,14 @@ Vector3 EditableScene::get3DPosition_(int x, int y)
 // Set the element for the next insert operations
 void EditableScene::setEditElementType(int element_number)
 {
-	atom_type_= element_number;
+	atomic_number_ = element_number;
+ 	setElementCursor();
 }
 
 // Get the element for the next insert operations
 int EditableScene::getEditElementType()
 {
-	return atom_type_;
+	return atomic_number_;
 }
 
 void EditableScene::showContextMenu(QPoint pos)
@@ -1015,7 +1045,7 @@ void EditableScene::changeElement_()
 {
 	if (current_atom_ != 0)
 	{
-		atom_type_ = current_atom_->getElement().getAtomicNumber();
+		atomic_number_ = current_atom_->getElement().getAtomicNumber();
 	}
 
 	PTEDialog pte;
@@ -1023,7 +1053,7 @@ void EditableScene::changeElement_()
 
 	if (current_atom_ != 0)
 	{
-		current_atom_->setElement(PTE[atom_type_]);
+		current_atom_->setElement(PTE[atomic_number_]);
 		deselect_();
 		getMainControl()->update(*current_atom_);
 	}
@@ -1138,6 +1168,11 @@ void EditableScene::applyPreferences()
 	bond_limit_ = edit_settings_->bond_distance->text().toFloat();
 	atom_limit_ = edit_settings_->atom_distance->text().toFloat();
 	only_highlighted_ = edit_settings_->only_highlighted->isChecked();
+
+	if ((int)current_mode_ == (int)EDIT__MODE)
+	{
+		setElementCursor();
+	}
 }
 
 void EditableScene::initializePreferencesTab(Preferences& preferences)
@@ -1185,20 +1220,24 @@ bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
 		return false;
 	}
 
-	if      (key == Qt::Key_H) atom_type_ = 1;
-	else if (key == Qt::Key_C) atom_type_ = 6;
-	else if (key == Qt::Key_N) atom_type_ = 7;
-	else if (key == Qt::Key_O) atom_type_ = 8;
-	else if (key == Qt::Key_P) atom_type_ = 15;
-	else if (key == Qt::Key_S) atom_type_ = 16;
+	if      (key == Qt::Key_H) atomic_number_ = 1;
+	else if (key == Qt::Key_C) atomic_number_ = 6;
+	else if (key == Qt::Key_N) atomic_number_ = 7;
+	else if (key == Qt::Key_O) atomic_number_ = 8;
+	else if (key == Qt::Key_P) atomic_number_ = 15;
+	else if (key == Qt::Key_S) atomic_number_ = 16;
 	else
 	{
 		return false;
 	}
 
+	setElementCursor();
+
 	QPoint point = mapFromGlobal(QCursor::pos());
 	Atom* atom = getClickedAtom_(point.x(), point.y());
-	if (atom != 0) atom->setElement(PTE[atom_type_]);
+	if (atom == 0) return true;
+	
+	atom->setElement(PTE[atomic_number_]);
 	getMainControl()->update(*atom);
 	String text("Setting element to ");
 	text += atom->getElement().getName();
