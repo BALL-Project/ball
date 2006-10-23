@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.33 2006/10/23 16:17:48 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.34 2006/10/23 17:23:39 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -269,7 +269,10 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 
 void EditableScene::wheelEvent(QWheelEvent* e)
 {
-	if (current_mode_ < (Scene::ModeType) EDIT__MODE)
+	Index delta = e->delta();
+	if (delta == 0) return;
+
+	if (current_mode_ != (Scene::ModeType) EDIT__MODE)
 	{
 		Scene::wheelEvent(e);
 		return;
@@ -279,13 +282,18 @@ void EditableScene::wheelEvent(QWheelEvent* e)
 
 	if (isAnimationRunning() || getMainControl()->isBusy()) return;
 
-	Index delta = e->delta();
-	if (delta == 0) return;
 	if (delta > 1) delta = 1;
 	if (delta < -1) delta = -1;
 
 	current_bond_ = getClickedBond_(e->x(), e->y());
-	changeBondOrder_(delta);
+	if (current_bond_ != 0)
+	{
+		changeBondOrder_(delta);
+	}
+	else
+	{
+		Scene::wheelEvent(e);
+	}
 }
 
 void EditableScene::changeBondOrder_(Index delta)

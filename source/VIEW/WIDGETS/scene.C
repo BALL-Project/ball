@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.85 2006/10/23 12:29:58 amoll Exp $
+// $Id: scene.C,v 1.174.2.86 2006/10/23 17:23:40 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1643,6 +1643,7 @@ namespace BALL
 			makeCurrent();
 
 			need_update_ = true;
+Log.error() << "#~~#   1 "  << e->modifiers()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 			x_window_pos_new_ = e->globalX();
 			y_window_pos_new_ = e->globalY();
