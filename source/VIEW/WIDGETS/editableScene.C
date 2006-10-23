@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.34 2006/10/23 17:23:39 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.35 2006/10/23 17:52:47 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -285,9 +285,9 @@ void EditableScene::wheelEvent(QWheelEvent* e)
 	if (delta > 1) delta = 1;
 	if (delta < -1) delta = -1;
 
-	current_bond_ = getClickedBond_(e->x(), e->y());
-	if (current_bond_ != 0)
+	if (e->modifiers() == Qt::ShiftModifier)
 	{
+		current_bond_ = getClickedBond_(e->x(), e->y());
 		changeBondOrder_(delta);
 	}
 	else
@@ -661,6 +661,9 @@ Bond* EditableScene::getClickedBond_(int x, int y)
 		Bond* bond = dynamic_cast<Bond*>(c);
 		return bond;
 	}
+
+	// code below does not work correctly.
+	return 0;
 
 	Bond* closest = 0;
 	float min_dist = FLT_MAX;
