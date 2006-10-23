@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.35 2006/10/23 17:52:47 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.36 2006/10/23 23:18:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -154,10 +154,15 @@ void EditableScene::initializeWidget(MainControl& main_control)
 {
 	Scene::initializeWidget(main_control);
 	String help_url("scene.html#editing");
-	edit_id_ = insertMenuEntry(MainControl::DISPLAY, "Edit Mode", this, SLOT(editMode_()), Qt::CTRL+Qt::Key_E);
+	edit_id_ = insertMenuEntry(MainControl::DISPLAY, "Edit Mode", 
+										this, SLOT(editMode_()), Qt::CTRL+Qt::Key_E);
 	edit_id_->setCheckable(true);
 	setMenuHint("Create and modify atoms and bonds");
 	setMenuHelp(help_url);
+
+	new_molecule_ = insertMenuEntry(MainControl::BUILD, "Create new molecule", 
+										this, SLOT(createNewMolecule()));
+	setMenuHint("Create a new molecule for editing");
 }
 
 
@@ -166,6 +171,8 @@ void EditableScene::checkMenu(MainControl& main_control)
 {
 	edit_id_->setChecked(current_mode_ == (Scene::ModeType)EDIT__MODE);
 	Scene::checkMenu(main_control);
+
+	new_molecule_->setEnabled(!getMainControl()->isBusy());
 }
 
 void EditableScene::mousePressEvent(QMouseEvent* e)
@@ -1323,6 +1330,21 @@ void EditableScene::addRing_()
 	{
 		BALLVIEW_DEBUG
 	}
+}
+
+void EditableScene::createNewMolecule()
+{
+	System* s = new System();
+	Molecule* m = new Molecule();
+	s->insert(*m);
+	getMainControl()->insert(*s);
+	getMainControl()->update(*s);
+	ControlSelectionMessage* msg = new ControlSelectionMessage();
+	List<Composite*> sel;
+	sel.push_back(m);
+	msg->setSelection(sel);
+	notify_(msg);
+	editMode_();
 }
 
 	}//end of namespace 
