@@ -154,6 +154,7 @@ class BALL_VIEW_EXPORT EditableScene
 	virtual void mouseReleaseEvent(QMouseEvent *e);
 	virtual void wheelEvent(QWheelEvent* qmouse_event);
 	void switchShowGrid();
+	void createNewMolecule();
 
 	// slots for communication with PTEDialog
 	void setEditElementType(int element_number);
@@ -241,7 +242,7 @@ class BALL_VIEW_EXPORT EditableScene
 	void deselect_();
 	void renderGrid_();
 
-	QAction* edit_id_;	
+	QAction* edit_id_, *new_molecule_;	
 	Atom* current_atom_;
 	Bond* current_bond_;
 
