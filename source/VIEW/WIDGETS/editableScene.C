@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.40 2006/10/24 22:37:28 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.41 2006/10/24 23:54:26 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -132,10 +132,11 @@ void EditableScene::setCursor(String c)
 	p.begin(&pm);
 		QFont font;
 		font.setPixelSize(9);
+		p.setFont(font);
 		QColor color;
 		stage_->getBackgroundColor().getInverseColor().get(color);
    	p.setPen(color);
-  	p.drawText(12, 11, c.c_str());
+  	p.drawText(13, 11, c.c_str());
 	p.end();
 
 	QCursor cursor(pm);
