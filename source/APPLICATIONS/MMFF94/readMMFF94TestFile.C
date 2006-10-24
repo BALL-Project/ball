@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.4.5 2006/10/09 09:18:26 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.4.6 2006/10/24 17:53:21 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -1036,16 +1036,15 @@ int runtests(const vector<String>& filenames)
 		}
 */
     result &=testType(*system, filenames[pos], typer);
+				
+		result &= testStretch(mmff, filenames[pos], true);
+		result &= testBend(mmff, filenames[pos], true);
+		result &= testStretchBend(mmff, filenames[pos], true);
+		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
+		result &= testPlanes(mmff, filenames[pos], true);
+		result &= testNonBonded(mmff, filenames[pos], true);
+		result &= testCharge(*system, filenames[pos]);
 
-				/*
-     		result &= testStretch(mmff, filenames[pos], true);
-        result &= testBend(mmff, filenames[pos], true);
-     		result &= testStretchBend(mmff, filenames[pos], true);
-    		result &= testTorsions(mmff, filenames[pos], true, wrong_torsion_types);
-    		result &= testPlanes(mmff, filenames[pos], true);
-    		result &= testNonBonded(mmff, filenames[pos], true);
-     		result &= testCharge(*system, filenames[pos]);
-				*/
 
 	
 

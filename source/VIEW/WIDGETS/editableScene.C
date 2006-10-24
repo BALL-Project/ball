@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.38 2006/10/24 16:12:28 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.39 2006/10/24 17:51:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -995,7 +995,19 @@ void EditableScene::showContextMenu(QPoint pos)
 		menu.addAction("Move Atom", this, SLOT(moveAtom_()))->setEnabled(current_atom_ != 0);
 		menu.addAction("Delete Atom", this, SLOT(deleteAtom_()))->setEnabled(current_atom_ != 0);
  		menu.addAction("Change element", this, SLOT(changeElement_()));
-	
+
+		QMenu* charge = new QMenu();
+		QAction* change_charge = menu.addMenu(charge);
+		change_charge->setText("Set formal charge");
+		for (Index p = +6; p > -7; p++)
+		{
+			String s(p);
+			if (p > 0) s = String("+") + s;
+
+			charge->addAction(s.c_str(), this, SLOT(setFormalCharge_()));
+		}
+		change_charge->setEnabled(current_atom_ != 0);
+
 		menu.addSeparator();
 
 		menu.addAction("Delete Bond", this, SLOT(deleteBond_()))->setEnabled(current_bond_ != 0);
@@ -1034,6 +1046,25 @@ void EditableScene::showContextMenu(QPoint pos)
 
 	// otherwise deselect all selected items
 	deselect_();
+}
+
+void EditableScene::setFormalCharge_()
+{
+	QObject* os = sender();
+	if (os == 0) return;
+	QAction* action = dynamic_cast<QAction*>(os);
+	if (action == 0) return;
+	String string = ascii(action->text());
+	try
+	{
+		Index fc = string.toInt();
+		if (current_atom_ != 0) current_atom_->setFormalCharge(fc);
+		getMainControl()->update(*current_atom_, true);
+	}
+	catch(...)
+	{
+		BALLVIEW_DEBUG;
+	}
 }
 
 void EditableScene::deselect_()

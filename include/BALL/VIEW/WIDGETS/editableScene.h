@@ -174,6 +174,7 @@ class BALL_VIEW_EXPORT EditableScene
 	void atomProperties_();
 	void createMolecule_();
 	void addRing_();
+	void setFormalCharge_();
 
 	////////////////////////////////////////
 	signals:

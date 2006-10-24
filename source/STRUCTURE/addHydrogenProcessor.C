@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: addHydrogenProcessor.C,v 1.1.2.4 2006/10/24 16:12:22 amoll Exp $
+// $Id: addHydrogenProcessor.C,v 1.1.2.5 2006/10/24 17:51:27 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
@@ -274,6 +274,7 @@ namespace BALL
 		{
 			if (h_to_add == 4)
 			{
+				// add first hydrogen randomly
 				addHydrogen_(*atom,atom_position + Vector3(bond_length, 0, 0));
 				// add 3 other bonds
 				operator() (*atom);
@@ -285,8 +286,11 @@ namespace BALL
 
 			if (h_to_add == 3)
 			{
+				Vector3 axis = getNormal_(v);
+				m.setRotation(Angle(110, false), axis);
+				v = m * v;
 				v *= bond_length;
-				addHydrogen_(*atom, atom_position - v);
+				addHydrogen_(*atom, atom_position + v);
 				// add 2 other bonds
 				operator() (*atom);
 				return Processor::CONTINUE;
@@ -298,12 +302,12 @@ namespace BALL
 			if (h_to_add == 2)
 			{
 				// normal on two first bonds:
-				Vector3 v12 = v % v2;
-				if (!normalize_(v12)) v12 = getNormal_(v);
-				Angle a12 = v.getAngle(v2);
+				Vector3 v12 = partners[1]->getPosition() - partners[0]->getPosition();
+				if (!normalize_(v12)) v12 = Vector3(0,1,0);
 
-				m.setRotation(Angle(a12 / 2.), v12);
+				m.setRotation(Angle(110, false), v12);
 				v = m * v;
+				if (!normalize_(v)) v = Vector3(0,1,0);
 				v *= bond_length;
 				addHydrogen_(*atom, atom_position + v);
 				// add 1 other bonds
