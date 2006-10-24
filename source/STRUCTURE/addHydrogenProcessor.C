@@ -1,18 +1,28 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: addHydrogenProcessor.C,v 1.1.2.5 2006/10/24 17:51:27 amoll Exp $
+// $Id: addHydrogenProcessor.C,v 1.1.2.6 2006/10/24 21:12:38 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/matrix44.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>
+
+//   #define DEBUG
+
+#ifdef DEBUG
+#define DEBUG_LINE Log.error() << "AddHydrogen: " << __LINE__ << std::endl;
+#elif
+#define DEBUG_LINE
+#endif
 
 namespace BALL
 {
 
 	AddHydrogenProcessor::AddHydrogenProcessor()
+		: last_atom_(0)
 	{
 	}
 
@@ -25,6 +35,17 @@ namespace BALL
 		Atom* atom = dynamic_cast<Atom*>(&composite);
 		if (atom == 0) return Processor::CONTINUE;
 
+		if (last_atom_ != atom)
+		{
+			atom_nr_ = 1;
+		}
+		else
+		{
+			atom_nr_ ++;
+		}
+
+		last_atom_ = atom;
+
 		// number of electrons that have to be delivered through bonds:
 		Index con = getConnectivity(*atom);
 		
@@ -33,10 +54,13 @@ namespace BALL
 		
 		//
 		Index h_to_add = con - sum_bond_orders;
+		
+#ifdef DEBUG
 		Log.error() << "AddHydrogen: "  << atom->getFullName() << " " << h_to_add << std::endl;
+#endif
 		if (h_to_add <= 0) return Processor::CONTINUE;
 
-		float bond_length = 1.2;
+		float bond_length = getBondLength_(atom->getElement().getAtomicNumber());
 		Vector3 atom_position = atom->getPosition();
 		Size nr_bonds = atom->countBonds();
 		Matrix4x4 m;
@@ -66,6 +90,7 @@ namespace BALL
 			if (!normalize_(diff)) diff = Vector3(0, 1, 0);
 			diff *= bond_length;
 			addHydrogen_(*atom, atom_position - diff);
+			DEBUG_LINE
 			return Processor::CONTINUE;
 		}
 
@@ -79,6 +104,7 @@ namespace BALL
 				addHydrogen_(*atom, p);
 				// add second bond
 				operator() (*atom);
+				DEBUG_LINE
 				return Processor::CONTINUE;
 			}
 
@@ -91,9 +117,11 @@ namespace BALL
 			if (!normalize_(bv)) bv = Vector3(0, 0, 1);
 			bv *= bond_length;
 			addHydrogen_(*atom, atom_position - bv);
+			DEBUG_LINE
 			return Processor::CONTINUE;
 		}
 
+		// Ring atoms:
 		if (isRingAtom_(*atom))
 		{
 			// e.g. Nitrogen in Ring
@@ -108,6 +136,7 @@ namespace BALL
 					if (Maths::isZero(d.getLength()))
 					{
 						addHydrogen_(*atom, atom_position - Vector3(0,1,0));
+						DEBUG_LINE
 						return Processor::CONTINUE;
 					}
 
@@ -117,6 +146,7 @@ namespace BALL
 					if (!normalize_(v)) v = Vector3(0, 0, 1);
 					v *= bond_length;
 					addHydrogen_(*atom, atom_position - v);
+					DEBUG_LINE
 					return Processor::CONTINUE;
 				}
 			}
@@ -134,6 +164,7 @@ namespace BALL
 					if (h_to_add == 2)
 					{
 						addHydrogen_(*atom, atom_position - Vector3(0,0,bond_length));
+						DEBUG_LINE
 					}
 					return Processor::CONTINUE;
 				}
@@ -151,6 +182,7 @@ namespace BALL
 					addHydrogen_(*atom, atom_position + v);
 					v = m * v;
 					addHydrogen_(*atom, atom_position + v);
+					DEBUG_LINE
 					return Processor::CONTINUE;
 				}
 
@@ -162,6 +194,7 @@ namespace BALL
 						m.setRotation(Angle(180, false), d);
 						v = m * v;
 						addHydrogen_(*atom, atom_position + v);
+						DEBUG_LINE
 						return Processor::CONTINUE;
 					}
 
@@ -172,6 +205,8 @@ namespace BALL
 					if (!normalize_(v2)) v2 = Vector3(0,0,1);
 					v2 *= bond_length;
 					addHydrogen_(*atom, atom_position + v2);
+					DEBUG_LINE
+					return Processor::CONTINUE;
 				}
 			}
 		}
@@ -180,8 +215,9 @@ namespace BALL
 		{
 			Vector3 bv = partners[0]->getPosition() - atom_position;
 
-			// e.g. (C[-H][-H]=O)
-			if (con == 4 && h_to_add == 2)
+			// e.g. (C[-H][-H]=O) or (H-N=O)
+			if ((con == 4 && h_to_add == 2) ||
+					(con == 3 && h_to_add == 1))
 			{
 				Vector3 bv = partners[0]->getPosition() - atom_position;
 				if (!normalize_(bv)) bv = Vector3(-1,0,0);
@@ -192,8 +228,9 @@ namespace BALL
 				bv *= bond_length;
 
 				addHydrogen_(*atom, atom_position + bv);
-				// add second bond
-				operator() (*atom);
+				DEBUG_LINE
+				// add second bond ?
+				if (h_to_add == 2) operator() (*atom);
 				return Processor::CONTINUE;
 			}
 			
@@ -210,6 +247,7 @@ namespace BALL
 				v *= bond_length;
 
 				addHydrogen_(*atom, atom_position - v);
+				DEBUG_LINE
 				return Processor::CONTINUE;
 			}
 		}
@@ -222,6 +260,7 @@ namespace BALL
 				// add first bond
 				Vector3 p = atom_position - Vector3(bond_length, 0, 0);
 				addHydrogen_(*atom, p);
+				DEBUG_LINE
 				// add second and third bond
 				operator() (*atom);
 				return Processor::CONTINUE;
@@ -234,6 +273,7 @@ namespace BALL
 				if (Maths::isZero(bv.getLength()))
 				{
 					addHydrogen_(*atom, atom_position - Vector3(0,0,1));
+					DEBUG_LINE
 					return Processor::CONTINUE;
 				}
 
@@ -243,39 +283,46 @@ namespace BALL
 				if (!normalize_(bv)) bv = Vector3(0, 1, 0);
 				bv *= bond_length;
 				addHydrogen_(*atom, atom_position + bv);
+				DEBUG_LINE
 				// add third bond
 				operator() (*atom);
 				return Processor::CONTINUE;
 			}
 
-			// h_to_add == 1
-			Vector3 p1 = partners[0]->getPosition();
-			Vector3 p2 = partners[1]->getPosition();
-			// connection line between the two partner atoms:
-			Vector3 d = p2 - p1;
-			if (Maths::isZero(d.getLength()))
+			if (h_to_add == 1)
 			{
-				addHydrogen_(*atom, atom_position - Vector3(0,1,0));
-				return Processor::CONTINUE;
-			}
+				Vector3 p1 = partners[0]->getPosition();
+				Vector3 p2 = partners[1]->getPosition();
+				// connection line between the two partner atoms:
+				Vector3 d = p2 - p1;
+				if (Maths::isZero(d.getLength()))
+				{
+					addHydrogen_(*atom, atom_position - Vector3(0,1,0));
+					DEBUG_LINE
+					return Processor::CONTINUE;
+				}
 
-			// Point between two partner aoms:
-			Vector3 p = p1 + d / 2.;
-			Vector3 d2 = p - atom_position;
-			m.setRotation(Angle(106, false), d);
-			Vector3 v = m * d2;
-			if (!normalize_(v)) v = Vector3(0, 0, 1);
-			v *= bond_length;
-			addHydrogen_(*atom, atom_position + v);
+				// Point between two partner aoms:
+				Vector3 p = p1 + d / 2.;
+				Vector3 d2 = p - atom_position;
+				m.setRotation(Angle(106, false), d);
+				Vector3 v = m * d2;
+				if (!normalize_(v)) v = Vector3(0, 0, 1);
+				v *= bond_length;
+				addHydrogen_(*atom, atom_position + v);
+				DEBUG_LINE
+			}
 		}
 
-		// Carbon without double bonds and not in ring:
+		// Carbon without double bonds and not in ring: 
+		// tetrahedral: e.g. CH4
 		if (con == 4)
 		{
 			if (h_to_add == 4)
 			{
 				// add first hydrogen randomly
 				addHydrogen_(*atom,atom_position + Vector3(bond_length, 0, 0));
+				DEBUG_LINE
 				// add 3 other bonds
 				operator() (*atom);
 				return Processor::CONTINUE;
@@ -291,6 +338,7 @@ namespace BALL
 				v = m * v;
 				v *= bond_length;
 				addHydrogen_(*atom, atom_position + v);
+				DEBUG_LINE
 				// add 2 other bonds
 				operator() (*atom);
 				return Processor::CONTINUE;
@@ -303,13 +351,18 @@ namespace BALL
 			{
 				// normal on two first bonds:
 				Vector3 v12 = partners[1]->getPosition() - partners[0]->getPosition();
-				if (!normalize_(v12)) v12 = Vector3(0,1,0);
+
+				v = partners[0]->getPosition() + v12 / 2.;
+				v -= atom_position;
+
+				if (!normalize_(v)) v = Vector3(0,1,0);
 
 				m.setRotation(Angle(110, false), v12);
 				v = m * v;
 				if (!normalize_(v)) v = Vector3(0,1,0);
 				v *= bond_length;
 				addHydrogen_(*atom, atom_position + v);
+				DEBUG_LINE
 				// add 1 other bonds
 				operator() (*atom);
 				return Processor::CONTINUE;
@@ -325,12 +378,14 @@ namespace BALL
 
 				v4 *= bond_length;
 				addHydrogen_(*atom, atom_position - v4);
+				DEBUG_LINE
 				return Processor::CONTINUE;
 			}
 		} // end carbon
 
 		return Processor::CONTINUE;
 	}
+
 
 	bool AddHydrogenProcessor::normalize_(Vector3& v)
 	{
@@ -360,10 +415,12 @@ namespace BALL
 		return n;
 	}
 
+
 	bool AddHydrogenProcessor::isRingAtom_(Atom& atom)
 	{
 		return (ring_atoms_.has(&atom));
 	}
+
 
 	bool AddHydrogenProcessor::hasMultipleBond_(Atom& atom)
 	{
@@ -396,12 +453,16 @@ namespace BALL
 		return partners;
 	}
 
+
 	void AddHydrogenProcessor::addHydrogen_(Atom& atom, Vector3 position)
 	{
 		Atom* hydrogen = new Atom();
 		hydrogen->setElement(PTE[1]);
 		hydrogen->setPosition(position);
-		hydrogen->setName(String("H") + atom.getName());
+		String name("H");
+		if (atom_nr_ != 1) name += String(atom_nr_);
+		name += atom.getName();
+		hydrogen->setName(name);
 		Composite* parent = atom.getParent();
 		if (parent != 0)
 		{
@@ -442,6 +503,7 @@ namespace BALL
 		return (Size) (electrons);
 	}
 
+
 	Size AddHydrogenProcessor::countBondOrders(Atom& atom)
 	{
 		float nr = 0;
@@ -464,19 +526,46 @@ namespace BALL
 		return (Size)(nr);
 	}
 
+
 	void AddHydrogenProcessor::setRings(const vector<vector<Atom*> >& rings)
 	{
 		ring_atoms_.clear();
 
 		for (Position i = 0; i < rings.size(); i++)
 		{
-			for (Position j = 0; j < rings.size(); j++)
+			for (Position j = 0; j < rings[i].size(); j++)
 			{
 				ring_atoms_.insert(rings[i][j]);
 			}
 		}
 	}
 
+	// Calculate the reference bond length value using a modified Schomaker-Stevenson rule
+	// (taken from MMFF94 force field)
+	float AddHydrogenProcessor::getBondLength_(Position element)
+	{
+		// currently only supports atoms up to Xenon
+		if (element > 53 || element == 0) return 1;
+
+		double re = MMFF94StretchParameters::radii[element - 1];
+		// if no radius available for the element:
+		if (re == 0) return 1;
+		double rh = MMFF94StretchParameters::radii[0];
+
+    //  c and n are constants defined in R.Blom and A. Haaland,
+    //  J. Molec. Struc, 1985, 128, 21-27.
+		// calculate proportionality constant c
+		double c = 0.05;
+
+		// POWER
+		const double n = 1.4;
+
+		const double diff_e = fabs((double)(MMFF94StretchParameters::electronegatives[0] - 
+																				MMFF94StretchParameters::electronegatives[element - 1]));
+
+		// FORMULA 
+		return (float)(re + rh - c * pow(diff_e, n));
+	}
 
 } //Namespace BALL
 
