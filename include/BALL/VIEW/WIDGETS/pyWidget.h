@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.2.26 2006/06/21 23:54:55 amoll Exp $
+// $Id: pyWidget.h,v 1.27.2.27 2006/10/24 22:24:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -44,6 +44,9 @@ class Preferences;
 
 class RunPythonThread;
 
+/** Class for syntax highlighting of Python code.
+		\ingroup ViewWidgets
+*/
 class BALL_VIEW_EXPORT PythonHighlighter
 	: public QSyntaxHighlighter
 {
@@ -120,6 +123,7 @@ struct BALL_VIEW_EXPORT Hotkey
 		This class is a Window for a Python interpreter interface.
 		So it is possible to access all data in the running application in realtime with the script language.
 		PyWidget also has the capablities to run a Python script from a file at startup, or on demand from the user.
+		\ingroup ViewWidgets
 */
 class BALL_VIEW_EXPORT PyWidget
 	: public DockWidget

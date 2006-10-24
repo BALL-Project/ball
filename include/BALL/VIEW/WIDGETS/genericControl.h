@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.h,v 1.14.2.6 2006/06/06 21:01:27 amoll Exp $
+// $Id: genericControl.h,v 1.14.2.7 2006/10/24 22:24:41 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
 #define BALL_VIEW_WIDGETS_GENERICCONTROL_H
@@ -19,7 +19,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		///
+		/** Base class for all control widgets.
+				\ingroup ViewWidgets
+		*/
 		class TreeWidget
 			: public QTreeWidget
 		{

@@ -38,6 +38,10 @@ namespace BALL
 
 class EditSettings;
 
+/** Extended 3D view for editing molecules.
+ 		The editing functionality is implemented as an own mode.
+		\ingroup ViewWidgets
+*/
 class BALL_VIEW_EXPORT EditableScene
 	: public Scene
 {

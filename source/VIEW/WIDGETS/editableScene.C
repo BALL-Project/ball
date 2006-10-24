@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.39 2006/10/24 17:51:28 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.40 2006/10/24 22:37:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -999,7 +999,7 @@ void EditableScene::showContextMenu(QPoint pos)
 		QMenu* charge = new QMenu();
 		QAction* change_charge = menu.addMenu(charge);
 		change_charge->setText("Set formal charge");
-		for (Index p = +6; p > -7; p++)
+		for (Index p = +6; p > -7; p--)
 		{
 			String s(p);
 			if (p > 0) s = String("+") + s;
@@ -1050,6 +1050,8 @@ void EditableScene::showContextMenu(QPoint pos)
 
 void EditableScene::setFormalCharge_()
 {
+	deselect_();
+
 	QObject* os = sender();
 	if (os == 0) return;
 	QAction* action = dynamic_cast<QAction*>(os);
@@ -1385,6 +1387,7 @@ void EditableScene::createNewMolecule()
 
 void EditableScene::addHydrogens()
 {
+	deselect_();
 	List<AtomContainer*> containers = getContainers_();
 	if (containers.size() < 1) return;
 	AtomContainer* ac = *containers.begin();

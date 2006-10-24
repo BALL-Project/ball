@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.2.2.7 2006/10/20 14:28:02 amoll Exp $
+// $Id: helpViewer.h,v 1.2.2.8 2006/10/24 22:24:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
@@ -51,6 +51,7 @@ namespace BALL
 				See registerWidgetForHelpSystem.
 				The implemention for opening the documentation per "Whats this?" menu entry and
 				the hotkey "Shift-F1" is also done here.
+				\ingroup ViewWidgets
 		*/
 		class BALL_VIEW_EXPORT HelpViewer
 			: public DockWidget

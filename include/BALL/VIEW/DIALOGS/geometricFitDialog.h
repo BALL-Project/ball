@@ -22,6 +22,7 @@ namespace BALL
 		/**	Dialog for options of the docking algorithm GeometricFit.
     		\ingroup  ViewDialogs
 				@see GeometricFit
+				\ingroup ViewDialogs
 		 */
 		class BALL_VIEW_EXPORT GeometricFitDialog : 
 			public QDialog,

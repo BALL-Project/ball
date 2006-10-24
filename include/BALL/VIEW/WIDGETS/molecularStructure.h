@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.28.2.6 2006/06/21 22:05:32 amoll Exp $
+// $Id: molecularStructure.h,v 1.28.2.7 2006/10/24 22:24:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -61,7 +61,7 @@ namespace BALL
 		/**	MolecularStructure provides means to modify molecular structures and do
 		 		several calculations. To do so, it contains the AMBER and CHARMM forcefields and
 				dialogs to do the setup.
-				The widget itself is invisible, but it has severeal menu entries, e.g.:
+				The widget itself is invisible, but it has several menu entries, e.g.:
 				- checkResidue
 				- centerCamera
 				- buildBonds

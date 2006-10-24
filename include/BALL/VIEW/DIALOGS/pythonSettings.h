@@ -45,7 +45,9 @@ namespace BALL
 				QStringList sl_modifier_;
 		};
 
-		///
+		/** Class for storing Python hotkeys in a GUI table
+				\ingroup ViewDialogs
+		*/
 		class BALL_VIEW_EXPORT HotkeyTable
 			:	public QTableWidget,
 				public PreferencesEntry::ExtendedPreferencesObject

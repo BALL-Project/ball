@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileObserver.h,v 1.1.2.4 2006/10/21 23:17:04 amoll Exp $
+// $Id: fileObserver.h,v 1.1.2.5 2006/10/24 22:24:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_FILEOBSERVER_H
@@ -26,9 +26,12 @@ namespace BALL
 		 		Supported are all files from the MolecularFileDialog.
 				A MolecularFileDialog must have been inserted into the MainControl.<br>
 				Usage: (in from MainControl derived class)<br>
-				FileObserver* fo = new FileObserver(this, "FileObserver"); <br>
-				fo->setFileName("foo.pdb");<br>
-				fo->start();<br>
+				\code
+				FileObserver* fo = new FileObserver(this, "FileObserver");
+				fo->setFileName("foo.pdb");
+				fo->start();
+				\endcode
+				\ingroup ViewWidgets
 		*/
 		class BALL_VIEW_EXPORT FileObserver
 			: public DockWidget

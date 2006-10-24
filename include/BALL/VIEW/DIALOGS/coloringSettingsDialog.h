@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.22.2.3 2006/02/01 13:23:38 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.22.2.4 2006/10/24 22:27:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -32,7 +32,9 @@ namespace BALL
 	{
 		class ColorProcessor;
 
-		///
+		/** Class for storing colors in a GUI table
+				\ingroup ViewDialogs
+		*/
 		class BALL_VIEW_EXPORT QColorTable
 			:	public QTableWidget,
 				public PreferencesEntry::ExtendedPreferencesObject

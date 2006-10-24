@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: addHydrogenProcessor.C,v 1.1.2.6 2006/10/24 21:12:38 amoll Exp $
+// $Id: addHydrogenProcessor.C,v 1.1.2.7 2006/10/24 22:30:41 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
@@ -14,7 +14,7 @@
 
 #ifdef DEBUG
 #define DEBUG_LINE Log.error() << "AddHydrogen: " << __LINE__ << std::endl;
-#elif
+#else
 #define DEBUG_LINE
 #endif
 

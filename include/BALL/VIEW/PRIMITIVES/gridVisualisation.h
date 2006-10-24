@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualisation.h,v 1.1.2.6 2006/06/29 14:34:04 amoll Exp $
+// $Id: gridVisualisation.h,v 1.1.2.7 2006/10/24 22:25:37 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_PRIMITIV_GRIDSLICE_H
@@ -20,7 +20,7 @@ namespace BALL
 	namespace VIEW
 	{
 		/** GridVisualisation 
-				\ingroup ViewKernelGeometricPrimitives
+				\ingroup ViewPrimitives
 		*/
 		class BALL_VIEW_EXPORT GridVisualisation
 			: public GeometricObject
