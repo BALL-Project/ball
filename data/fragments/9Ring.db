@@ -16,7 +16,7 @@
 	<node>Bonds
 		<node>1<value>C1 N2 s</value></node>
 		<node>2<value>N2 C3 s</value></node>
-		<node>3<value>C3 C4 s</value></node>
+		<node>3<value>C3 C4 d</value></node>
 		<node>4<value>C4 C5 s</value></node>
 		<node>5<value>C5 C1 d</value></node>
 		<node>6<value>C3 C6 s</value></node>
