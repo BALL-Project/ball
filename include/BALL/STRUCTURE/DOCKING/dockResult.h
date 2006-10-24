@@ -14,13 +14,14 @@
 
 namespace BALL
 {
-		/** This class contains the result of a (re)docking calculation: 
-		 *  the used algorithm and its options,
-		 * 	the conformation set which was produced by the algorithm
-		 *	and the scores, names and options of all scoring functions that were used for the ranking / reranking.
-		 *  On the one hand it allows to recieve the scores of a certain scoring, 
-		 *  on the other hand it can return scores sorted by another scoring. 
-		 *  This offers a simple way to compare the different scores with each other
+		/** Result of a (re)docking calculation.
+		    the used algorithm and its options,
+		   	the conformation set which was produced by the algorithm
+		  	and the scores, names and options of all scoring functions that were used for the ranking / reranking.
+		    On the one hand it allows to recieve the scores of a certain scoring, 
+		    on the other hand it can return scores sorted by another scoring. 
+		    This offers a simple way to compare the different scores with each other
+				\ingroup Docking
 		 */
 		class BALL_EXPORT DockResult
 		{

@@ -14,8 +14,9 @@
 
 namespace BALL
 {
-		/** A basis class for energetic evaluators of docking results using
-		 *  a force field as scoring function.
+		/** Base class for energetic evaluators of docking results using
+		    a force field as scoring function.
+				\ingroup Docking
 		 */
 		class BALL_EXPORT ForceFieldEvaluation : public EnergeticEvaluation
 		{

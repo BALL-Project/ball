@@ -26,11 +26,11 @@
 
 namespace BALL
 {
-  /**
-     class GeometricFit
+  /** GeometricFit
      This class is derived from class DockingAlgorithm.
      Protein docking algorithm via geometric fit invented by Katchalski-Katzir,
      et at. (1992) is implemented in this class.
+		 \ingroup Docking
   */
   class BALL_EXPORT GeometricFit : public DockingAlgorithm
   {

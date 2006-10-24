@@ -18,8 +18,8 @@
 
 namespace BALL
 {
-	/** A class defining the interface for docking algorithms.
-			This is a first iteration.
+	/** Interface class for docking algorithms.
+			\ingroup Docking
 	*/
 	class BALL_EXPORT DockingAlgorithm
 	{

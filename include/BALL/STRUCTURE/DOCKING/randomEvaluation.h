@@ -21,8 +21,9 @@
 namespace BALL
 {
 		/** A basis class for energetic evaluators of docking results.
-		 *	This trivial class will return the identity scoring, leaving
-		 *	permutation and score unchanged.
+		  	This trivial class will return the identity scoring, leaving
+		  	permutation and score unchanged.
+				\ingroup Docking
 		 */
 		class BALL_EXPORT RandomEvaluation : public EnergeticEvaluation
 		{
