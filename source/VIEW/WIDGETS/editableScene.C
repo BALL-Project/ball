@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.37 2006/10/24 01:06:29 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.38 2006/10/24 16:12:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -23,6 +23,7 @@
 #include <BALL/VIEW/PRIMITIVES/line.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
+#include <BALL/QSAR/ringPerceptionProcessor.h>
 
 #include <QtGui/qmenubar.h>
 #include <QtGui/QDesktopWidget>
@@ -1153,9 +1154,10 @@ void EditableScene::atomProperties_()
 	if (current_atom_ == 0) return;
 
 	CompositeProperties as(current_atom_, this);
-	if (!as.exec()) return;
+	bool apply = as.exec();
+	deselect_();
 
-	getMainControl()->update(*current_atom_, true);
+	if (apply) getMainControl()->update(*current_atom_, true);
 }
 
 void EditableScene::createMolecule_()
@@ -1355,7 +1357,13 @@ void EditableScene::addHydrogens()
 	List<AtomContainer*> containers = getContainers_();
 	if (containers.size() < 1) return;
 	AtomContainer* ac = *containers.begin();
+	RingPerceptionProcessor rpp;
+	vector<vector<Atom*> > rings;
+	rpp.calculateSSSR(rings, *ac);
+	rings = rpp.getAllSmallRings();
+
 	AddHydrogenProcessor ahp;
+	ahp.setRings(rings);
 	ac->apply(ahp);
 	getMainControl()->update(*ac, true);
 }
