@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: addHydrogenProcessor.C,v 1.1.2.1 2006/10/24 01:06:14 amoll Exp $
+// $Id: addHydrogenProcessor.C,v 1.1.2.2 2006/10/24 01:11:34 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
@@ -122,6 +122,8 @@ namespace BALL
 				bv.normalize();
 				bv *= bond_length;
 				addHydrogen_(*atom, atom_position + bv);
+				// add third bond
+				operator() (*atom);
 				return Processor::CONTINUE;
 			}
 
