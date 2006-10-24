@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.43.2.7 2006/10/17 16:35:58 amoll Exp $
+# $Id: Makefile,v 1.43.2.8 2006/10/24 01:06:21 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -25,6 +25,7 @@ SMARTS_SOURCES=\
 	smartsParserLexer.C
 
 CPP_SOURCES=\
+	addHydrogenProcessor.C\
 	analyticalSES.C\
 	atomBijection.C\
 	atomTyper.C\

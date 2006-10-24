@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.36 2006/10/23 23:18:20 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.37 2006/10/24 01:06:29 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -22,6 +22,7 @@
 #include <BALL/VIEW/PRIMITIVES/box.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
+#include <BALL/STRUCTURE/addHydrogenProcessor.h>
 
 #include <QtGui/qmenubar.h>
 #include <QtGui/QDesktopWidget>
@@ -1021,6 +1022,8 @@ void EditableScene::showContextMenu(QPoint pos)
 		add_menu->addAction("5 ring", this, SLOT(addRing_()));
 		add_menu->addAction("6 ring", this, SLOT(addRing_()));
 		add_menu->addAction("9 ring", this, SLOT(addRing_()));
+
+		menu.addAction("Add hydrogens", this, SLOT(addHydrogens()));
 	}
 
 	menu.exec(mapToGlobal(pos));
@@ -1345,6 +1348,16 @@ void EditableScene::createNewMolecule()
 	msg->setSelection(sel);
 	notify_(msg);
 	editMode_();
+}
+
+void EditableScene::addHydrogens()
+{
+	List<AtomContainer*> containers = getContainers_();
+	if (containers.size() < 1) return;
+	AtomContainer* ac = *containers.begin();
+	AddHydrogenProcessor ahp;
+	ac->apply(ahp);
+	getMainControl()->update(*ac, true);
 }
 
 	}//end of namespace 

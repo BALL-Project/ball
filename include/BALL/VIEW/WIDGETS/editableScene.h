@@ -155,6 +155,7 @@ class BALL_VIEW_EXPORT EditableScene
 	virtual void wheelEvent(QWheelEvent* qmouse_event);
 	void switchShowGrid();
 	void createNewMolecule();
+	void addHydrogens();
 
 	// slots for communication with PTEDialog
 	void setEditElementType(int element_number);
