@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondProcessor.h,v 1.7 2005/12/23 17:02:01 amoll Exp $
+// $Id: HBondProcessor.h,v 1.7.2.1 2006/10/24 22:33:37 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_HBONDPROCESSOR_H
@@ -25,10 +25,11 @@ namespace BALL
 {
 
   /** This processor computes all hydrogen bonds occuring between amino acids in
-	 *  the composite it is applied to. The computation of the bonds follows the
-	 *  criterion given in "Kabsch W & Sander C (1983). Dictionary of protein secondary 
-	 *  structure: pattern recognition of hydrogen-bonded and geometrical features. 
-	 *  Biopolymers, 22, 2577-2637".
+	    the composite it is applied to. The computation of the bonds follows the
+	    criterion given in "Kabsch W & Sander C (1983). Dictionary of protein secondary 
+	    structure: pattern recognition of hydrogen-bonded and geometrical features. 
+	    Biopolymers, 22, 2577-2637".
+			\ingroup StructureMiscellaneous
    */
   class BALL_EXPORT HBondProcessor 
 		:	public UnaryProcessor<Composite>

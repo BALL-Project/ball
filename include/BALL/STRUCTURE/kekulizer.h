@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kekulizer.h,v 1.1.2.4 2006/10/13 16:07:53 amoll Exp $
+// $Id: kekulizer.h,v 1.1.2.5 2006/10/24 22:33:41 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_KEKULIZER_H
@@ -27,12 +27,16 @@ namespace BALL
 
 	/** Class to transform bonds with type "aromatic" to 
 	 		conjugated single and double bonds.
-			Useage:\\
-			Kekulizer k;\\
-			k.setAromaticRings(...);\\
-			k.setRings(...);\\
+			<br>
+			Useage:<br>
+			\code
+			Kekulizer k;
+			k.setAromaticRings(...);
+			k.setRings(...);
 			k.setup(Molecule& m);
 			k.clear();
+			\endcode
+			\ingroup StructureMiscellaneous
 	*/
 	class BALL_EXPORT Kekuliser
 	{

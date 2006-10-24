@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureProcessor.h,v 1.10 2005/12/23 17:02:04 amoll Exp $
+// $Id: secondaryStructureProcessor.h,v 1.10.2.1 2006/10/24 22:33:42 amoll Exp $
 //
 
 #ifndef BALL_SECONDARY_STRUCTURE_PROCESSOR_H
@@ -29,6 +29,7 @@ namespace BALL
 			from the protein, predicts the secondary structure elements based
 			(mostly) on H-bond patterns and backbone torsions and reinserts the
 			appropriate secondary structure elements at the predicted positions.
+			\ingroup StructureMiscellaneous
    */
   class BALL_EXPORT SecondaryStructureProcessor 
 		:	public UnaryProcessor<Composite>

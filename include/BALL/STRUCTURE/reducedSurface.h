@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.h,v 1.47 2005/12/23 17:02:04 amoll Exp $
+// $Id: reducedSurface.h,v 1.47.2.1 2006/10/24 22:33:42 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -67,7 +67,7 @@ namespace BALL
 	class SESTriangulator;
 
 	/** Generic ReducedSurface Class.
-	\ingroup StructureMiscellaneous		
+	\ingroup Surface
 	*/
 	class BALL_EXPORT ReducedSurface
 	{
@@ -382,7 +382,7 @@ namespace BALL
 
 
 	/** Generic RSComputer Class.
-	\ingroup StructureMiscellaneous		
+			\ingroup Surface
 	*/
 	class BALL_EXPORT RSComputer
 	{

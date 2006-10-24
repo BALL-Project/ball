@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomTyper.h,v 1.1.2.1 2006/10/17 16:35:47 amoll Exp $ 
+// $Id: atomTyper.h,v 1.1.2.2 2006/10/24 22:33:39 amoll Exp $ 
 //
 
 #ifndef BALL_STRUCTURE_ATOMTYPER_H
@@ -28,12 +28,16 @@ namespace BALL
 	/** Base class for a programable Atom typer.
 	 		The types are assigned by using a line based file with SMARTS expressions.
 			For usage have a look at the derived class MMFF94AtomTyper.\par
-			Usage:\par
-			AtomTyper typer;\par
-			typer.setRings(...);\par
-			typer.setAromaticRings(...);\par
-			typer.setup(parameter_file_name);\par
+			<br><br>
+			Usage:<br>
+			\code
+			AtomTyper typer;
+			typer.setRings(...);
+			typer.setAromaticRings(...);
+			typer.setup(parameter_file_name);
 			typer.assignTo(system);
+			\endcode
+			\ingroup StructureMiscellaneous
 	*/
 	class BALL_EXPORT AtomTyper
 	{

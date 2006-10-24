@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trianglePoint.h,v 1.12 2005/12/23 17:02:05 amoll Exp $
+// $Id: trianglePoint.h,v 1.12.2.1 2006/10/24 22:33:44 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_TRIANGLEPOINT_H
@@ -38,10 +38,7 @@ namespace BALL
 
 
 	/** Generic TriangleEdge Class.
-			 \par
-			
-			 \par
-	\ingroup StructureMiscellaneous
+			\ingroup Surface
 	*/
 	class BALL_EXPORT TrianglePoint
 			:	public GraphVertex< TrianglePoint,TriangleEdge,Triangle >

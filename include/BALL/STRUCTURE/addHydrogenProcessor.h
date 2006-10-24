@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: addHydrogenProcessor.h,v 1.1.2.3 2006/10/24 16:12:34 amoll Exp $
+// $Id: addHydrogenProcessor.h,v 1.1.2.4 2006/10/24 22:33:38 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_ADDHYDROGENPROCESSOR_H
@@ -24,7 +24,28 @@
 namespace BALL
 {
 
-	///
+	/** Saturate atoms with hydrogen atoms.
+	 		Only works with main group elements.
+			The formal charge of the atoms are taken into account.
+			The placement of the hydrogen atoms only depends on
+			the direct neighbour atoms.
+			No additional optimization of the atom placement is done.
+			The optimal bond lengths are calculized by
+			a modified Schomaker-Stevenson rule 
+			(adapted from the MMFF94 force field).
+			<br>
+			Usage:<br>
+			\code
+			RingPerceptionProcessor rpp;
+			vector<vector<Atom*> > rings;
+			rpp.calculateSSSR(rings, system);
+			rings = rpp.getAllSmallRings();
+			AddHydrogenProcessor ap;
+			ap.setRings(rings);
+			system.apply(ap);
+			\endcode
+			\ingroup StructureMiscellaneous
+	*/
   class BALL_EXPORT AddHydrogenProcessor
 		:	public UnaryProcessor<Composite>
   {
@@ -58,9 +79,12 @@ namespace BALL
 		Vector3 getNormal_(const Vector3& v);
 		inline bool normalize_(Vector3& v);
 		bool hasMultipleBond_(Atom& atom);
+		// get the ideal bond length for the given element with hydrogen atoms
+		float getBondLength_(Position element);
 
 		HashSet<Atom*> ring_atoms_;
-
+		Position atom_nr_;
+		Atom*    last_atom_;
   }; //class AddHydrogenProcessor
 
 } //namesspace BALL

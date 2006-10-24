@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangle.h,v 1.10 2005/12/23 17:02:05 amoll Exp $
+// $Id: triangle.h,v 1.10.2.1 2006/10/24 22:33:44 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_TRIANGLE_H
@@ -34,10 +34,7 @@ namespace BALL
 
 
 	/** Generic TriangleEdge Class.
-			 \par
-			
-			 \par
-	\ingroup StructureMiscellaneous
+			\ingroup Surface
 	*/
 	class BALL_EXPORT Triangle
 			:	public GraphTriangle< TrianglePoint,TriangleEdge,Triangle >

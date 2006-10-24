@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UCK.h,v 1.4 2005/12/23 17:02:02 amoll Exp $
+// $Id: UCK.h,v 1.4.2.1 2006/10/24 22:33:38 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_UCK_H
@@ -18,6 +18,7 @@ namespace BALL
 {
 	/** Unique Chemical Key.
 			Implements the UCK algorithm for computing a unique key for a given chemical structure.
+			\ingroup StructureMiscellaneous
 	*/
 	class BALL_EXPORT UCK
 	{

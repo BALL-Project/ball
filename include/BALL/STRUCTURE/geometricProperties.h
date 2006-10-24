@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricProperties.h,v 1.25 2005/12/23 17:02:03 amoll Exp $
+// $Id: geometricProperties.h,v 1.25.2.1 2006/10/24 22:33:40 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -40,26 +40,6 @@
 namespace BALL 
 {
 
-	/**	@name	Geometric property processors.
-			The applicators, processors, and collectors described in 
-			this chapter are used to extract geometric properties out
-			of a given molecular object or to extract parts of these
-			objects according to their geometric properties. \par
-			Using the  \link BoundingBoxProcessor BoundingBoxProcessor \endlink , the bounding box 
-			of a given molecular object can be calculated. The bounding box is
-			represented by the lowest and highest coordinates occuring in the 
-			molecular object, i.e. the bounding box is the smallest rectangular
-			box (with sides parallel to the coordinate axes) that encloses all
-			atoms in the molecular object. \par
-			The  \link GeometricCenterProcessor GeometricCenterProcessor \endlink  calculates the geometric 
-			center of all atoms contained in the molecular object it is applied to. \par
-			With the aid of the  \link FragmentDistanceCollector FragmentDistanceCollector \endlink  it is possible
-			to collect all molecular fragments that are within a given distance
-			from a certain fragment. This is useful to extract the relevant molecular
-			environment (e.g. to examin a binding site). \par
-	*/
-	//@{
-
 	/**	Bounding box creating processor.
 			This class iterates over all atoms of a given molecular object and
 			determines the lowest and the highest coordinates occuring. It returns
@@ -73,7 +53,7 @@ namespace BALL
 			atoms. \par
 			
 			 \par
-	\ingroup StructureMiscellaneous
+			\ingroup StructureGeometric
 	*/
 	class BALL_EXPORT BoundingBoxProcessor
 		:	public UnaryProcessor<Atom>
@@ -141,7 +121,7 @@ namespace BALL
 				\vec{C} = \frac{1}{N} \sum_{i}{N} \vec{r_i}
 			\]
 			Where $\vec{r_i}$ represents the coordinates of the ith atom. \par
-			\ingroup StructureMiscellaneous
+			\ingroup StructureGeometric
 	*/
 	class BALL_EXPORT GeometricCenterProcessor
 		:	public UnaryProcessor<Atom> 
@@ -206,7 +186,7 @@ namespace BALL
 			The fragment array is emptied prior to each collection run. \par
 			
 			 \par
-	\ingroup StructureMiscellaneous
+	\ingroup StructureGeometric
 	*/
 	class BALL_EXPORT FragmentDistanceCollector
 		: public UnaryProcessor<Composite> 
@@ -313,7 +293,7 @@ namespace BALL
 
 	//@}
 	/**	@name	Angle Calculation
-	\ingroup StructureMiscellaneous
+	\ingroup StructureGeometric
 	*/
 	//@{
 		
