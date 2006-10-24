@@ -24,6 +24,14 @@
 #include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
 #endif
 
+#include <BALL/SOLVATION/poissonBoltzmann.h>
+#include <BALL/STRUCTURE/defaultProcessors.h>
+#include <BALL/MOLMEC/COMMON/radiusRuleProcessor.h>
+#include <BALL/MOLMEC/COMMON/chargeRuleProcessor.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
+
+#include <BALL/FORMAT/PDBFile.h>
+
 namespace BALL
 {
   /**
@@ -247,7 +255,9 @@ namespace BALL
 
       // PROTEIN_A is the static protein, i.e., the bigger one;
       // PROTEIN_B is the mobile protein, i.e., the smaller one.
-      enum ProteinIndex{  PROTEIN_A = 1, PROTEIN_B    = 2 };
+			// NO_PROTEIN means that no (electrostatic) computations have been 
+			// done so far.
+      enum ProteinIndex{  PROTEIN_A = 1, PROTEIN_B    = 2, NO_PROTEIN = 3};
 
 			// The surface type to use for construction of the grids.
       enum SurfaceType {  CONNOLLY  = 1, VAN_DER_WAALS = 2, FTDOCK = 3 };
@@ -323,6 +333,10 @@ namespace BALL
 			ConformationSet getConformationSet(Index total_number = 0)
 				throw();
 			
+			// AR: output of docking results without the need of a trajectory file
+			void writeScoreTransformationSet(String dockfile, String transfile, Index total_number)
+				throw();
+			
       //////////////////////////////////////////
       // the member variables
 
@@ -384,9 +398,13 @@ namespace BALL
 			 */
       void initFFTGrid_( ProteinIndex pro_idx )
 				throw();
+			
+			// Compute 'imaginary part' of the grid 
+			void setInterpolatedEStatic_(ProteinIndex pro_idx, Vector3 rot)
+				throw();
 
       // make grid from System
-      void makeFFTGrid_( ProteinIndex pro_idx )
+			void makeFFTGrid_( ProteinIndex pro_idx , Vector3 rot)
       	throw();
 
       // get the global peaks and put them into a list
@@ -456,6 +474,23 @@ namespace BALL
 			// Vectors to store orientation and translation of the results in the ranked conformations
 			vector<Vector3> translations_;
 			vector<Vector3> orientations_;
+			
+			// The finite difference poisson boltzmann solver
+			FDPB fdpb_;
+			
+			// The grid of protein 'pb_grid_computed_' is already computed and is ready to be interpolated.
+			ProteinIndex id_pb_grid_computed_;
+			
+			// The rotation angles when the grid was computed
+			Vector3 init_angles_;
+			
+			// Minimum electrostatic potential value
+			float p_min_;
+			
+			// Weight for the summation of electrostatic potential value
+			float sqrt_e_weight_;
+			
+			FragmentDB* fdb_;
 
     }; // class GeometricFit
 
