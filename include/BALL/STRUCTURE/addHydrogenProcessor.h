@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: addHydrogenProcessor.h,v 1.1.2.1 2006/10/24 01:05:59 amoll Exp $
+// $Id: addHydrogenProcessor.h,v 1.1.2.2 2006/10/24 12:47:34 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_ADDHYDROGENPROCESSOR_H
@@ -49,10 +49,16 @@ namespace BALL
 		void addHydrogen(Atom& atom, Vector3 position);
 		
 		protected:
+
+		bool hasMultipleBond(Atom& atom);
+		inline bool isRingAtom_(Atom& atom);
 		vector<Atom*> getPartners_(Atom& atom);
 		void addHydrogen_(Atom& atom, Vector3 position);
 		Vector3 getNormal_(const Vector3& v);
+		inline bool normalize_(Vector3& v);
+		bool hasMultipleBond_(Atom& atom);
 
+		HashSet<Atom*> ring_atoms_;
 
   }; //class AddHydrogenProcessor
 

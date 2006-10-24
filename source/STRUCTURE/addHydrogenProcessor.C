@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: addHydrogenProcessor.C,v 1.1.2.2 2006/10/24 01:11:34 amoll Exp $
+// $Id: addHydrogenProcessor.C,v 1.1.2.3 2006/10/24 12:47:25 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
@@ -61,13 +61,13 @@ namespace BALL
 				sum_bond_orders > 2)
 		{
 			Vector3 diff = partners[0]->getPosition() - atom_position;
-			diff.normalize();
+			if (!normalize_(diff)) diff = Vector3(0, 1, 0);
 			diff *= bond_length;
 			addHydrogen_(*atom, atom_position - diff);
 			return Processor::CONTINUE;
 		}
 
-		// two partner atoms and a planar 106 degree angle:
+		// two partner atoms and a planar 106 degree angle: (e.g. H-O-H)
 		if (con == 2)
 		{
 			if (h_to_add == 2)
@@ -83,16 +83,69 @@ namespace BALL
 			// h_to_add == 1
 			Vector3 bv = partners[0]->getPosition() - atom_position;
 			Vector3 axis = getNormal_(bv);
+
 			Matrix4x4 m;
 			m.setRotation(Angle(106, false), axis);
 			bv = m * bv;
-			bv.normalize();
+			if (!normalize_(bv)) bv = Vector3(0, 0, 1);
 			bv *= bond_length;
-			addHydrogen_(*atom, atom_position + bv);
+			addHydrogen_(*atom, atom_position - bv);
 			return Processor::CONTINUE;
 		}
+
+		if (isRingAtom_(*atom))
+		{
+			// Nitrogen in Ring
+			if (con == 3)
+			{
+			}
+			
+			// Carbon in Ring
+			if (con == 4)
+			{
+			}
+		}
+
+		if (hasMultipleBond_(*atom))
+		{
+			Vector3 bv = partners[0]->getPosition() - atom_position;
+			Matrix4x4 m;
+
+			// e.g. (C[-H][-H]=O)
+			if (con == 4 && h_to_add == 2)
+			{
+				Vector3 bv = partners[0]->getPosition() - atom_position;
+				if (!normalize_(bv)) bv = Vector3(-1,0,0);
+
+				Vector3 axis = getNormal_(bv);
+				m.setRotation(Angle(120, false), axis);
+				bv = m * bv;
+				bv *= bond_length;
+
+				addHydrogen_(*atom, atom_position + bv);
+				// add second bond
+				operator() (*atom);
+				return Processor::CONTINUE;
+			}
+			
+			// e.g. (C[-H][-H]=O)
+			if (con == 4 && h_to_add == 1)
+			{
+				Vector3 p1 = partners[0]->getPosition() - atom_position;
+				Vector3 p2 = partners[1]->getPosition() - atom_position;
+				if (!normalize_(p1)) p1 = Vector3(0,1,0);
+				if (!normalize_(p2)) p2 = Vector3(0,0,1);
+
+				Vector3 v = p1 + p2;
+				if (!normalize_(v)) v = Vector3(1,0,0);
+				v *= bond_length;
+
+				addHydrogen_(*atom, atom_position - v);
+				return Processor::CONTINUE;
+			}
+		}
 		
-		// three partner atoms and a 106 degree angle:
+		// three partner atoms and a 106 degree angle: (NH3)
 		if (con == 3)
 		{
 			if (h_to_add == 3)
@@ -119,7 +172,7 @@ namespace BALL
 				Matrix4x4 m;
 				m.setRotation(Angle(106, false), axis);
 				bv = m * bv;
-				bv.normalize();
+				if (!normalize_(bv)) bv = Vector3(0, 1, 0);
 				bv *= bond_length;
 				addHydrogen_(*atom, atom_position + bv);
 				// add third bond
@@ -144,7 +197,7 @@ namespace BALL
 			Matrix4x4 m;
 			m.setRotation(Angle(106, false), d);
 			Vector3 v = m * d2;
-			v.normalize();
+			if (!normalize_(v)) v = Vector3(0, 0, 1);
 			v *= bond_length;
 			addHydrogen_(*atom, atom_position + v);
 		}
@@ -153,21 +206,49 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
+	bool AddHydrogenProcessor::normalize_(Vector3& v)
+	{
+		float l = v.getLength();
+		if (Maths::isZero(l)) return false;
+		v /= l;
+		return true;
+	}
+
+
 	Vector3 AddHydrogenProcessor::getNormal_(const Vector3& v)
 	{
 		Vector3 n = v % Vector3(1,0,0);
-		if (Maths::isZero(n.getSquareLength())) 
+		if (!normalize_(n))
 		{ 
 			n = v % Vector3(0,1,0);
-			if (Maths::isZero(n.getSquareLength())) 
+			if (!normalize_(n))
 			{
 				n = v % Vector3(0,0,1);
 			}
 		}
-		n.normalize();
 
 		return n;
 	}
+
+	bool AddHydrogenProcessor::isRingAtom_(Atom& atom)
+	{
+		return (ring_atoms_.has(&atom));
+	}
+
+	bool AddHydrogenProcessor::hasMultipleBond_(Atom& atom)
+	{
+		AtomBondIterator bit = atom.beginBond();
+		for (; +bit; ++bit)
+		{
+			if (bit->getOrder() != Bond::ORDER__SINGLE)
+			{
+				return true;
+			}
+		}
+	
+		return false;
+	}
+
 
 	vector<Atom*> AddHydrogenProcessor::getPartners_(Atom& atom)
 	{
