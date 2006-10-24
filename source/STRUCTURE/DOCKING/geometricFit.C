@@ -5,7 +5,7 @@
 #include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 
 #include <cmath>
-#include <list> 
+#include <list>
 #include <set>
 
 ////////////////
@@ -50,7 +50,7 @@ namespace BALL
 	const String GeometricFit::Option::DEG_PSI = "deg_psi";
 	const String GeometricFit::Option::PENALTY_STATIC = "penalty_static";
 	const String GeometricFit::Option::PENALTY_MOBILE = "penalty_mobile";
-	
+
 	const float		GeometricFit::Default::NEAR_RADIUS  = 1.8;
 	const float		GeometricFit::Default::GRID_SPACING  = 1.0;
 	const int 		GeometricFit::Default::GRID_SIZE  = 128;
@@ -71,8 +71,8 @@ namespace BALL
 	const float 	GeometricFit::Default::DEG_PSI = 20.0;
 	const int			GeometricFit::Default::PENALTY_STATIC = -15;
 	const int			GeometricFit::Default::PENALTY_MOBILE = 1;
-	
-	
+
+
   GeometricFit::GeometricFit()
     throw()
     : FFT_grid_a_(0),
@@ -98,7 +98,7 @@ namespace BALL
 		options.setDefaultReal(Option::DEG_PSI, Default::DEG_PSI);
 		options.setDefaultInteger(Option::PENALTY_STATIC, Default::PENALTY_STATIC);
 		options.setDefaultInteger(Option::PENALTY_MOBILE, Default::PENALTY_MOBILE);
-		
+
     radius_a_ = 0.0;
     radius_b_ = 0.0;
     current_round_ = 0;
@@ -118,7 +118,7 @@ namespace BALL
 	GeometricFit::GeometricFit(System &system1,System &system2)
 		throw()
   : FFT_grid_a_(0),
-    FFT_grid_b_(0) 
+    FFT_grid_b_(0)
 	{
   	options.setDefaultReal(Option::NEAR_RADIUS, Default::NEAR_RADIUS);
 		options.setDefaultReal(Option::GRID_SPACING, Default::GRID_SPACING);
@@ -140,9 +140,9 @@ namespace BALL
 		options.setDefaultReal(Option::DEG_PSI, Default::DEG_PSI);
 		options.setDefaultInteger(Option::PENALTY_STATIC, Default::PENALTY_STATIC);
 		options.setDefaultInteger(Option::PENALTY_MOBILE, Default::PENALTY_MOBILE);
-		
+
 		setup(system1, system2);
-		
+
 		id_pb_grid_computed_ = NO_PROTEIN;
 		init_angles_ = Vector3(0., 0., 0.);
 		p_min_ = 2.0;
@@ -166,7 +166,7 @@ namespace BALL
 		sqrt_e_weight_ = sqrt(0.0015);
 		fdb_ = 0;
 	}
-			
+
 	/** Constructor.
 			Creates an instance of FDPB and calls
 			setup(system1, system2, options)
@@ -181,7 +181,7 @@ namespace BALL
 		sqrt_e_weight_ = sqrt(0.0015);
 		fdb_ = 0;
 	}
-			
+
   GeometricFit::~GeometricFit()
     throw()
   {
@@ -210,7 +210,7 @@ namespace BALL
 		system1_ = system1;
 		system2_ = system2;
 	}
-	
+
 	/** Compute the center of mass of system
 	 */
   Vector3 GeometricFit::getMassCenter_( System& system )
@@ -218,7 +218,7 @@ namespace BALL
   {
     int atom_num = 0;
     Vector3 mass_center = Vector3(0., 0., 0.);
-    
+
     for( AtomIterator atom_it = system.beginAtom(); +atom_it; ++atom_it )
     {
       atom_num ++;
@@ -226,7 +226,7 @@ namespace BALL
     }
 
     mass_center.x = (float)mass_center.x / atom_num;
-    mass_center.y = (float)mass_center.y / atom_num;    
+    mass_center.y = (float)mass_center.y / atom_num;
     mass_center.z = (float)mass_center.z / atom_num;
 
     return mass_center;
@@ -252,7 +252,7 @@ namespace BALL
       }
     }
 
-    return radius;  
+    return radius;
   }
 
   void GeometricFit::doPreTranslation_( ProteinIndex pro_idx )
@@ -281,7 +281,7 @@ namespace BALL
  	 *	 Certain combinations of certain powers are optimal for the fft algorithm, and
 	 *	 this function tries to determine the smallest optimal combination large enough
 	 *	 to accomodate the original data.
-	 */ 
+	 */
   int GeometricFit::optimizeGridSize_( int raw_size )
     throw()
   {
@@ -292,18 +292,18 @@ namespace BALL
       for(int c = 0; c < 5; c++)   // 5^4 = 625
       {
 				int tmp1 = (int)pow((float)5.0, (float)c) * (int)pow((float)7.0, (float)d);
-	
+
 				if(tmp1 > 1500)
 					continue;
-	
+
 				for(int b = 0; b < 6; b++)     // 3^6 = 729
 					for(int a = 0; a < 11; a++)  // 2^10 = 1024
 					{
 						int tmp2 = (int)pow((float)2, (float)a) * (int)pow((float)3, (float)b);
-	    
+
 						if( tmp2 > 1500 )
 							continue;
-	    
+
 						int size = tmp1 * tmp2;
 
 						if( (size >= 10) && (size <= 1500) )
@@ -314,7 +314,7 @@ namespace BALL
 			}  // for (d ...) for (c ...)
 
 		size_list.sort();
-    
+
 		int opt_size=0;
 
 		// just iterate all elements to find out optimal size
@@ -338,7 +338,7 @@ namespace BALL
 				temp_it++;
 
 				if( (raw_size <= (int)*(temp_it)) && (raw_size > (int)*(it)) )
-				{	  
+				{
 					opt_size = (int)*(temp_it);
 					break;
 				}
@@ -365,15 +365,15 @@ namespace BALL
 
     // number of grid point = number of units + 1
 		int grid_size = (int)ceil( d / grid_spacing ) + 1;
-		
-    // get the optimal number for grid size, 
+
+    // get the optimal number for grid size,
     // which can be handled by FFTW effciently
-		// TODO: this should really _not_ be an option of the class, but rather 
+		// TODO: this should really _not_ be an option of the class, but rather
 		// 			 a protected member
     options.setInteger(Option::GRID_SIZE, optimizeGridSize_( grid_size ));
 
 		// TODO: configurable verbosity
-		
+
 		if (options.getInteger(Option::VERBOSITY) > 1)
 			Log << "GRID_SIZE = " << options.getInteger(Option::GRID_SIZE) << endl;
 
@@ -401,15 +401,15 @@ namespace BALL
       r     = (grid_size - 1.0) * grid_spacing / 2.0; // Angstrom
       r_idx = (grid_size - 1) / 2; // index
     }
-		
+
 		//Log << "r = " << r << " " << grid_size << " " << grid_spacing << " " << endl;
 
     FFT_grid_origin_ = Vector3(r, r, r); // in unit of Angstroms
-    
+
     // index
     FFT_grid_lower_index_ = -r_idx;
     FFT_grid_upper_index_ = grid_size - 1 - r_idx;
-    
+
     // Angstrom
 		FFT_grid_lower_coord_ = FFT_grid_lower_index_ * grid_spacing;
     FFT_grid_upper_coord_ = FFT_grid_upper_index_ * grid_spacing;
@@ -420,14 +420,14 @@ namespace BALL
     if( pro_idx == PROTEIN_A )  // for the static protein
     {
       FFT_grid_a_ =  new FFT3D( grid_size, grid_size, grid_size,
-																grid_spacing, grid_spacing, grid_spacing, 
+																grid_spacing, grid_spacing, grid_spacing,
 																FFT_grid_origin_,          // grid origin
 																false                      // in physical space
 															);
     }
     else // ( pro_idx == PROTEIN_B )  // for the mobile protein
     {
-      FFT_grid_b_ =  new FFT3D( grid_size, grid_size, grid_size, 
+      FFT_grid_b_ =  new FFT3D( grid_size, grid_size, grid_size,
 																grid_spacing, grid_spacing, grid_spacing,
 																FFT_grid_origin_,          // grid origin
 																false                      // in physical space
@@ -436,23 +436,23 @@ namespace BALL
 
     return;
   }
-  
+
 
   // find the inside points
   void GeometricFit::findInsidePoints_( System& system, ProteinIndex pro_idx )
     throw()
   {
-		int number_of_points = 0;  
+		int number_of_points = 0;
 		int verbosity = options.getInteger(Option::VERBOSITY);
-	
+
 		if (verbosity > 15)
 			Log << "looking for inside points now ..." << endl;
 
     FFT3D*  FFT_grid = NULL;
-		
+
 		// penalty value of the inside points
-    int PENALTY;                    
-    
+    int PENALTY;
+
     if ( pro_idx == PROTEIN_A )
     {
       FFT_grid = FFT_grid_a_;
@@ -485,7 +485,7 @@ namespace BALL
       int upper_loop_bound_y = (int)floor((atom_position.y + near_radius) / grid_spacing);
       int lower_loop_bound_z = (int) ceil((atom_position.z - near_radius) / grid_spacing);
       int upper_loop_bound_z = (int)floor((atom_position.z + near_radius) / grid_spacing);
-			
+
   // check whether the loop points are out of the global grid bound
       if ( lower_loop_bound_x < FFT_grid_lower_index_.x ) { lower_loop_bound_x = (int)FFT_grid_lower_index_.x; }
       if ( upper_loop_bound_x > FFT_grid_upper_index_.x ) { upper_loop_bound_x = (int)FFT_grid_upper_index_.x; }
@@ -497,32 +497,32 @@ namespace BALL
       // iterate all the grids around the atom
       // in the units of grid points (index)
       Vector3 pos;
-			
+
       for ( i = lower_loop_bound_x; i <= upper_loop_bound_x; i++ )
 				for ( j = lower_loop_bound_y; j <= upper_loop_bound_y; j++ )
 					for ( k = lower_loop_bound_z; k <= upper_loop_bound_z; k++ )
 					{
 						// set the position we want to check, in the units of Angstrom
 						pos.set( i * grid_spacing, j * grid_spacing, k * grid_spacing );
-			
+
 						if( ( (*FFT_grid)[pos].real() == 0.) &&
 								( pos.getSquareDistance(atom_position) <= RADIUS_SQR ) )
 						{
 							FFT_grid->setData(pos, Complex(PENALTY, 0.));
-				
+
 							number_of_points++;
 						}
 					}
 
 		}   // for( atom_it = ...
-    
+
 		if (verbosity > 15)
 		{
 			Log << "Number of inside points: " << number_of_points << std::endl;
 		}
 
     return;
-  } 
+  }
 
 	// find out the surface points according to the Connolly's surface definition.
   void GeometricFit::findConnollySurfacePoints_( System& system, ProteinIndex pro_idx )
@@ -541,14 +541,14 @@ namespace BALL
     {
       FFT_grid = FFT_grid_b_;
     }
-    
+
     // find out Connolly surface
     // this will cost about 30 seconds
     SurfaceProcessor sp;
 
 		// TODO: make this configurable as an Option of the class
 		sp.setProbeRadius(1.4);
-		
+
     system.apply( sp );
     Surface surface = sp.getSurface();
 
@@ -559,7 +559,7 @@ namespace BALL
     Vector3 v;       // vertices on the found Connolly surface
 
     int vtx_num = surface.getNumberOfVertices();
-		
+
 		if (verbosity > 1)
 			Log.info() << "vtx_num = " << vtx_num << std::endl;
 
@@ -577,7 +577,7 @@ namespace BALL
       int upper_loop_bound_y = (int) ceil((v.y + half_thickness) / grid_spacing);
       int lower_loop_bound_z = (int)floor((v.z - half_thickness) / grid_spacing);
       int upper_loop_bound_z = (int) ceil((v.z + half_thickness) / grid_spacing);
-			
+
       // check whether the loop points are out of the global grid bound
       if ( lower_loop_bound_x < FFT_grid_lower_index_.x ) { lower_loop_bound_x = (int)FFT_grid_lower_index_.x; }
       if ( upper_loop_bound_x > FFT_grid_upper_index_.x ) { upper_loop_bound_x = (int)FFT_grid_upper_index_.x; }
@@ -587,7 +587,7 @@ namespace BALL
       if ( upper_loop_bound_z > FFT_grid_upper_index_.z ) { upper_loop_bound_z = (int)FFT_grid_upper_index_.z; }
 
       Vector3 pos;
-			
+
       for (int i = lower_loop_bound_x; i <= upper_loop_bound_x; i++ )
 				for (int j = lower_loop_bound_y; j <= upper_loop_bound_y; j++ )
 					for (int k = lower_loop_bound_z; k <= upper_loop_bound_z; k++ )
@@ -604,7 +604,7 @@ namespace BALL
 						}
 					}
 		} // for ( all vertices )
-    
+
 		if (verbosity > 1)
 			Log.info() << "findConnollySurfacePoints_ : " << number_of_points << std::endl;
 
@@ -627,7 +627,7 @@ namespace BALL
     {
       FFT_grid = FFT_grid_b_;
     }
-    
+
 		float grid_spacing 				 = options.getReal(Option::GRID_SPACING);
 
 		float half_thickness       = options.getReal(Option::SURFACE_THICKNESS) / 2.0;
@@ -658,7 +658,7 @@ namespace BALL
       int upper_loop_bound_y = (int)floor((atom_position.y + max_radius) / grid_spacing);
       int lower_loop_bound_z = (int) ceil((atom_position.z - max_radius) / grid_spacing);
       int upper_loop_bound_z = (int)floor((atom_position.z + max_radius) / grid_spacing);
-			
+
       // check whether the loop points are out of the global grid bound
       if ( lower_loop_bound_x < FFT_grid_lower_index_.x ) { lower_loop_bound_x = (int)FFT_grid_lower_index_.x; }
       if ( upper_loop_bound_x > FFT_grid_upper_index_.x ) { upper_loop_bound_x = (int)FFT_grid_upper_index_.x; }
@@ -670,14 +670,14 @@ namespace BALL
       // iterate all the grids around the atom
       // in the units of grid points
       Vector3 pos;
-			
+
       for ( i = lower_loop_bound_x; i <= upper_loop_bound_x; i++ )
 				for ( j = lower_loop_bound_y; j <= upper_loop_bound_y; j++ )
 					for ( k = lower_loop_bound_z; k <= upper_loop_bound_z; k++ )
 					{
 						pos.set( i * grid_spacing, j * grid_spacing, k * grid_spacing );
-		 
-				 
+
+
 						if( ( (*FFT_grid)[pos].real() == 0 ) &&          // if this grid is still outside grid
 								( pos.getSquareDistance(atom_position) <= max_radius * max_radius ) &&
 								( pos.getSquareDistance(atom_position) >= min_radius * min_radius ) )
@@ -707,7 +707,7 @@ namespace BALL
 			Log << "looking for inside points now (FTDock-algorithm)..." << endl;
 
 		FFT3D* FFT_grid = NULL;
-    
+
     if ( pro_idx == PROTEIN_A )
     {
       FFT_grid = FFT_grid_a_;
@@ -756,15 +756,15 @@ namespace BALL
 						int index = grid_index.z + (grid_index.y + grid_index.x*grid_size)*grid_size;
 //						std::cout << "Index: " << index << " ptc " << points_to_check << std::endl;
 						Complex& data = (*FFT_grid)[index];
-						if ((data.real() == 0.) && 
+						if ((data.real() == 0.) &&
 								(atom_position.getSquareDistance(FFT_grid->getGridCoordinates(index)) <= RADIUS_SQR))
 						{
 							data = penalty;
 							number_of_points++;
 						}
-					}	
-				}	
-			}	
+					}
+				}
+			}
 		}
 
 		if (verbosity > 15)
@@ -804,7 +804,7 @@ namespace BALL
 		int points_to_check = (int) ((surface_thickness/grid_spacing) + 1.5);
 
 		// iterate over the complete grid
-		int x, y, z, index; 
+		int x, y, z, index;
 		int x2, y2, z2, index2;
 		float SQR_SPACING   = grid_spacing*grid_spacing;
 		float SQR_THICKNESS = surface_thickness*surface_thickness;
@@ -856,15 +856,15 @@ namespace BALL
 
 		return;
  }
- 
-	
+
+
 	void GeometricFit::setInterpolatedEStatic_(ProteinIndex pro_idx, Vector3 rot)
 		 throw()
 	{
 		System& system = ( pro_idx == PROTEIN_A ) ? system1_ : system2_;
-		
+
 		FFT3D* FFT_grid = NULL;
-		
+
 		if (pro_idx == PROTEIN_A)
 		{
 			FFT_grid = FFT_grid_a_;
@@ -873,7 +873,7 @@ namespace BALL
 		{
 			FFT_grid = FFT_grid_b_;
 		}
-		
+
 		// Already grid computed?
 		if (pro_idx != id_pb_grid_computed_)
 		{
@@ -881,34 +881,38 @@ namespace BALL
 			{
 				fdb_ = new FragmentDB;
 			}
-				
+
 			system.apply(fdb_->normalize_names);
 			system.apply(fdb_->build_bonds);
-			
+
 			AssignChargeProcessor charges("charges/PARSE.crg");
 			AssignRadiusProcessor radii("radii/PARSE.siz");
-			
+
 			system.apply(charges);
 			system.apply(radii);
-			
-			
+
+
 			// No
+			fdpb_.destroy();
 			fdpb_.setup(system);   // AR: options???
 			fdpb_.solve();
 			id_pb_grid_computed_ = pro_idx;
 			init_angles_ = rot;
+
+			delete fdb_;
+			fdb_ = 0;
 		}
-		
+
 		double grid_spacing = options.getReal(Option::GRID_SPACING);
 		int    grid_size    = options.getInteger(Option::GRID_SIZE);
-		
+
 		// Save values for inverse transformation
 		// We don't need a rotation matrix since we want to transform the grid points
-		
+
 		// three euler angles, around axis x,y,z separately
 		double phi   = (rot.x-init_angles_.x) * Constants::PI / 180.0;
 		double theta = (rot.y-init_angles_.y) * Constants::PI / 180.0;
-		double psi   = (rot.z-init_angles_.z) * Constants::PI / 180.0; 
+		double psi   = (rot.z-init_angles_.z) * Constants::PI / 180.0;
 		double sphi, stheta, spsi, cphi, ctheta, cpsi;
 		sphi   = sin( phi   );
 		cphi   = cos( phi   );
@@ -926,16 +930,16 @@ namespace BALL
 		double m13 =       - stheta;
 		double m23 =  sphi * ctheta;
 		double m33 =  cphi * ctheta;
-		
+
 		// Values for 'out of grid' checking. We don't want to need the exception handler.
 		Vector3 lower = fdpb_.phi_grid->getOrigin();
 		Vector3 upper = lower + fdpb_.phi_grid->getDimension();
-		
+
 		//cout << " fppb grid: lower = " << lower << " upper = " << upper << endl;
-		
+
 		// Compute the values
 		int x, y, z, index;
-		
+
 		for (x = 0; x < grid_size; ++x)
 		{
 			for (y = 0; y < grid_size; ++y)
@@ -944,37 +948,38 @@ namespace BALL
 				{
 					Vector3 gp(grid_spacing*x, grid_spacing*y, grid_spacing*z);
 					gp += FFT_grid_lower_coord_;
-					
+
 					Vector3 rot_gp( m11*gp.x + m12*gp.y + m13*gp.z,
 													m21*gp.x + m22*gp.y + m23*gp.z,
 													m31*gp.x + m32*gp.y + m33*gp.z);
-					
+
 					index = z + (y + x*grid_size)*grid_size;
-					
+
 					// Log << " " << gp << " " << rot_gp << " " << FFT_grid_origin_ << " " << lower << " " << upper << endl;
-					
+
 					if ((rot_gp < lower) || (upper < rot_gp))
 					{
-						(*FFT_grid)[index].imag() = 0.;
+						// Not necessary: imaginary part is already initialized with 0
+						//(*FFT_grid)[index] = Complex((*FFT_grid)[index].real(),0.);
 					}
 					else
 					{
 						// J/C
 						float pot_val = (*(fdpb_.phi_grid))(rot_gp);
-						
+
 						// We need kT/e
 						pot_val *= 38.92169652;
-						
+
 						//cout << pot_val << " ";
-						
+
 						if (fabs(pot_val) >= p_min_)
 						{
 							//cout << pot_val << endl;
-							(*FFT_grid)[index].imag() = sqrt_e_weight_*pot_val;
+							(*FFT_grid)[index] = Complex((*FFT_grid)[index].real(),sqrt_e_weight_*pot_val);
 						}
 						else
 						{
-							(*FFT_grid)[index].imag() = 0.;
+							//(*FFT_grid)[index].imag() = 0.;
 						}
 					}
 				}
@@ -982,7 +987,7 @@ namespace BALL
 		}
 		//cout << endl;
 	}
- 
+
 
   // make of grid from System with (already) applied rotation
   void GeometricFit::makeFFTGrid_( ProteinIndex pro_idx, Vector3 rot )
@@ -992,9 +997,9 @@ namespace BALL
 		System& system = ( pro_idx == PROTEIN_A ) ? system1_ : system2_;
 
     int PENALTY;
-		
+
 		// Compute 'real part' of the grid and do some initializations
-    
+
     // init grid value
     if( pro_idx == PROTEIN_A )
     {
@@ -1018,9 +1023,9 @@ namespace BALL
       if ( FFT_grid_b_ == NULL )
       {
 				Log.error() << "FFT_grid_b_ is null !" << endl;
-      } 
+      }
 
-      // since we are re-using FFT_grid_b_, 
+      // since we are re-using FFT_grid_b_,
       // so we have to set number of FFT & iFFT transformations
       FFT_grid_b_->setNumberOfFFTTransforms(0);
       FFT_grid_b_->setNumberOfiFFTTransforms(0);
@@ -1032,7 +1037,7 @@ namespace BALL
       {
 				*grid = Complex(0.0,0.0);
       }
-      
+
       PENALTY = options.getInteger(Option::PENALTY_MOBILE);
     }
 
@@ -1046,7 +1051,7 @@ namespace BALL
     if(pro_idx == PROTEIN_A)
     {
       if( surface_type == CONNOLLY )
-      {	
+      {
 				findConnollySurfacePoints_( system, pro_idx );
       }
       else if( surface_type == VAN_DER_WAALS )
@@ -1060,17 +1065,17 @@ namespace BALL
       else
       {}
     }
-		
+
 		// Compute 'imaginary part' of the grid
 		setInterpolatedEStatic_(pro_idx, rot);
 
 		return;
   }
-	
-	
-	
-	
-  
+
+
+
+
+
   // Free all allocated memory and destroys the options and results
   void GeometricFit::destroy_()
     throw()
@@ -1099,7 +1104,7 @@ namespace BALL
     // three euler angles, around axis x,y,z separately
     double phi   = euler_ang.x * Constants::PI / 180.0;
     double theta = euler_ang.y * Constants::PI / 180.0;
-    double psi   = euler_ang.z * Constants::PI / 180.0; 
+    double psi   = euler_ang.z * Constants::PI / 180.0;
     double sphi, stheta, spsi, cphi, ctheta, cpsi;
     sphi   = sin( phi   );
     cphi   = cos( phi   );
@@ -1107,7 +1112,7 @@ namespace BALL
     ctheta = cos( theta );
     spsi   = sin( psi   );
     cpsi   = cos( psi   );
-      
+
     // in the matrix, mat = Rz * Ry * Rx
     Matrix4x4 mat;
     mat.m11 =         ctheta * cpsi;
@@ -1148,7 +1153,7 @@ namespace BALL
     {
       FFT_grid = (FFT3D*)FFT_grid_b_;
     }
-    
+
     Complex* grid = &( (*FFT_grid)[0] );
     Complex* end  = &( (*FFT_grid)[FFT_grid->size() - 1] );
     end++; // it's alread out of grid, we just use it as end-mark
@@ -1156,7 +1161,7 @@ namespace BALL
     {
       *grid = Complex((*grid).real(),(*grid).imag()*-1.);
     }
-    
+
     return;
   }
 
@@ -1177,10 +1182,10 @@ namespace BALL
 
     return;
   }
-  
+
   void GeometricFit::getGlobalPeak_(Peak_ *peak_list)
     throw()
-  {    
+  {
     if( FFT_grid_b_ == 0 )
     {
       Log.error() << "FFT_grid_b_ does not exist!" << endl;
@@ -1198,12 +1203,12 @@ namespace BALL
     end++; // it's alread out of grid, we just use it as end-mark
     int index_counter = 0;
     for(; grid != end; grid++, index_counter++)
-    {	    
+    {
       if((*grid).real() < 0.0)
 				continue;
-      
+
       re = (*grid).real();
-      
+
       if(re > peaks[0])
       {
 				int array_pos = 1;
@@ -1213,13 +1218,13 @@ namespace BALL
 					peaks[array_pos-1] = peaks[array_pos];
 					index[array_pos-1] = index[array_pos];
 				}
-	
+
 				peaks[array_pos-1] = re;
 				index[array_pos-1] = index_counter;
 			} // if new peak is larger than the smallest element in list
 
 		} // for all grid values
-    
+
 		int grid_size = options.getInteger(Option::GRID_SIZE);
 
 		for(int i = 0; i < top_n; i++)
@@ -1227,14 +1232,14 @@ namespace BALL
       peak_list[i].value = peaks[i] / (double) (grid_size*grid_size*grid_size);
 
       // get peak position from index (Angstrom)
-      peak_list[i].translation = FFT_grid_b_->getGridCoordinates( index[i] ); 
+      peak_list[i].translation = FFT_grid_b_->getGridCoordinates( index[i] );
     }
 
     return;
   }
 
-  // get the translation between the two proteins after doing 
-  // pre-translation of the two proteins.  
+  // get the translation between the two proteins after doing
+  // pre-translation of the two proteins.
   Vector3 GeometricFit::getSeparation_( const Vector3& mat_pos )
     throw()
   {
@@ -1256,7 +1261,7 @@ namespace BALL
   }
 
   // get the translaion between the two >>ORIGINAL<< proteins
-  // "original" means the "input" proteins 
+  // "original" means the "input" proteins
   Vector3 GeometricFit::getTranslation_( const Vector3& mat_pos )
     throw()
   {
@@ -1273,18 +1278,18 @@ namespace BALL
       trans.y -= FFT_grid_size;
     if(trans.z > radius_a_ + radius_b_ + grid_spacing )
       trans.z -= FFT_grid_size;
-		
+
     return -trans - ( pre_translation_a_ - pre_translation_b_ );
   }
 
-  
+
 	/** Currently the main loop of the algorithm.
 	 */
   void GeometricFit::start()
     throw()
   {
 		DockingAlgorithm::start();
-	
+
 		int verbosity = options.getInteger(Option::VERBOSITY);
 
   	Timer overall_timer;
@@ -1314,7 +1319,7 @@ namespace BALL
 
 		detailed_timer.reset();
 		makeFFTGrid_( GeometricFit::PROTEIN_A, Vector3(0., 0., 0.) );
-		
+
 		if (verbosity > 5)
 		{
     	Log << "Time used to make FFT Grid A: " << detailed_timer.getCPUTime() << endl;
@@ -1327,14 +1332,14 @@ namespace BALL
 		{
 	    Log << "Time used to do FFT on FFT Grid A: " << detailed_timer.getCPUTime() << endl;
 		}
-   
+
 		detailed_timer.reset();
 		calcConjugate_( GeometricFit::PROTEIN_A );
 
 		if (verbosity > 5)
 		{
 	    Log << "Time used to calc conjugate on FFT Grid A: " << detailed_timer.getCPUTime() << endl;
-		} 
+		}
 
     // since we put the mass center at origin
     // we can do pre-translation of b before all loops.
@@ -1354,7 +1359,7 @@ namespace BALL
 			 options.has("theta_min") && options.has("theta_max") && options.has("deg_theta") &&
 			 options.has("psi_min") && options.has("psi_max") && options.has("deg_psi") )
 		{
-			if(    rotAng.generateSomeAngles( (float)options.getReal(Option::DEG_PHI), 
+			if(    rotAng.generateSomeAngles( (float)options.getReal(Option::DEG_PHI),
 																				(float)options.getReal(Option::DEG_PSI),
 																				(float)options.getReal(Option::DEG_THETA),
 																				(float)options.getReal(Option::PHI_MIN),
@@ -1379,7 +1384,7 @@ namespace BALL
    		}
 		}	*/
 
-		if(     rotAng.generateSomeAngles( (float)options.getReal(Option::DEG_PHI), 
+		if(     rotAng.generateSomeAngles( (float)options.getReal(Option::DEG_PHI),
 																			 (float)options.getReal(Option::DEG_PSI),
 																			 (float)options.getReal(Option::DEG_THETA),
 																			 (float)options.getReal(Option::PHI_MIN),
@@ -1393,7 +1398,7 @@ namespace BALL
     	Log.error() << "Bad degree interval!" << endl;
      	exit(1);
    	}
-		
+
 		int rotation_num = rotAng.getRotationNum();
 		total_round_ = rotAng.getRotationNum();
 
@@ -1406,13 +1411,13 @@ namespace BALL
 
 		// TODO: Use a vector
 		Peak_* top_n_peaks = new Peak_[options.getInteger(Option::TOP_N)];
-		double phi, theta, psi; // phi: around x axis, 
-														// theta: around y axis, 
+		double phi, theta, psi; // phi: around x axis,
+														// theta: around y axis,
                             // psi: around z axis;
 		for (current_round_ = 0; (current_round_ < rotation_num) && !abort_; current_round_++)
 		{
 			// TODO: we should check if pause_ is true and sleep than for a given time
-  		
+
 			/**while (pause_)
 			{ pause(10); };
 			   **/
@@ -1424,9 +1429,9 @@ namespace BALL
 			{
 		  	Log << "rotation = " << phi << ";" << theta << ";" << psi << endl;
 			}
-     
+
 			system2_ = system_backup_b_;
-     
+
       detailed_timer.reset();
 			changeProteinOrientation_( system2_, Vector3( phi, theta, psi ) );
 
@@ -1434,7 +1439,7 @@ namespace BALL
 			{
       	Log << "Time used to rotate protein: " << detailed_timer.getCPUTime() << endl;
 			}
-     
+
       detailed_timer.reset();
 			makeFFTGrid_( GeometricFit::PROTEIN_B, Vector3( phi, theta, psi ) );
 
@@ -1453,14 +1458,14 @@ namespace BALL
 
       detailed_timer.reset();
 			FFTGridMulti_();
-			
+
 			if (verbosity > 10)
 			{
         Log << "Time used to multiply FFT grid A and B: " << detailed_timer.getCPUTime() << endl;
 			}
 
-      detailed_timer.reset();	
-		 
+      detailed_timer.reset();
+
 			// we have put the product of the two FFT_grid into FFT_grid_b_
 			FFT_grid_b_->doiFFT();
 
@@ -1471,14 +1476,14 @@ namespace BALL
 
 			detailed_timer.reset();
 
- 	    // find out the peak value 
+ 	    // find out the peak value
  	    getGlobalPeak_(top_n_peaks);
 
 			if (verbosity > 10)
 		 	{
      		Log << "Time used to find out peaks: " << detailed_timer.getCPUTime() << endl;
 			}
-     
+
 			detailed_timer.reset();
 
 			int top_n = options.getInteger(Option::TOP_N);
@@ -1513,10 +1518,10 @@ namespace BALL
     throw()
   {
 		if (total_round_ == 0) return 0.0;
-		
+
 		return (float)current_round_ / (float)total_round_;
   }
-  
+
 	/** Returns true if the docking is already done.
 	 */
   bool GeometricFit::hasFinished() const
@@ -1534,7 +1539,7 @@ namespace BALL
 
 		return result;
 	}
-		
+
 	/** Return the orientation corresponding to conformation con_num.
 	 */
 	Vector3 GeometricFit::getOrientation(Index con_num) const
@@ -1565,14 +1570,14 @@ namespace BALL
 
 		S.splice(S2);
 		String docking_name = S.getName() + "_" + S2.getName();
-		
+
 		S.setName(docking_name);
 		ConformationSet rc(S);
-	
+
 		// iterate over all peaks
 		int count = 0;
 		multiset<class Peak_>::iterator it = peak_set_.begin();
-		
+
 		int verbosity = options.getInteger(Option::VERBOSITY);
 		for (; (it != peak_set_.end()) && (count < total_number); it++)
 		{
@@ -1586,7 +1591,7 @@ namespace BALL
 				Log << "translation = " << p.translation << endl;
 				Log << "orientation = " << p.orientation << endl << endl;
 			}
-   
+
 			translations_[count] = p.translation;
 			orientations_[count] = p.orientation;
 			System sys_a = system_backup_a_;
@@ -1597,15 +1602,86 @@ namespace BALL
 			sys_b.apply(tp);
 
 			sys_a.splice(sys_b);
-			
+
 			rc.add((-1)*p.value, sys_a);
 
 			count++;
 		}
 
 		return rc;
-	}		
+	}
 	
+	// AR: Help function to obtain the results without the need of a trajectory.
+	/*void GeometricFit::getTransformationSet(vector<Peak_>& peaks, System& ref_sys, Index total_number)
+			throw()
+	{
+		// first see how many conformations we should generate
+		if ( (total_number == 0) || (total_number > options.getInteger(Option::BEST_NUM)) )
+					total_number = options.getInteger(Option::BEST_NUM);
+
+		// 			 this can probably be done smarter
+		ref_sys = system_backup_a_;
+		System S2 = system_backup_b_;
+
+		ref_sys.splice(S2);
+		String docking_name = S.getName() + "_" + S2.getName();
+
+		ref_sys.setName(docking_name);
+		
+		// iterate over all peaks
+		int count = 0;
+		multiset<class Peak_>::iterator it = peak_set_.begin();
+		
+		peaks.clear();
+
+		int verbosity = options.getInteger(Option::VERBOSITY);
+		for (; (it != peak_set_.end()) && (count < total_number); it++)
+		{
+			peaks.push_back(*it);
+			count++;
+		}
+}*/
+	
+	// AR: Help function to obtain the results without the need of a trajectory.
+	void GeometricFit::writeScoreTransformationSet(String dockfile, String transfile, Index total_number)
+		throw()
+	{
+		// first see how many conformations we should generate
+		if ( (total_number == 0) || (total_number > options.getInteger(Option::BEST_NUM)) )
+			total_number = options.getInteger(Option::BEST_NUM);
+
+		// 			 this can probably be done smarter
+		System S  = system_backup_a_;
+		System S2 = system_backup_b_;
+
+		S.splice(S2);
+		String docking_name = S.getName() + "_" + S2.getName();
+
+		S.setName(docking_name);
+		
+		PDBFile outfile(dockfile.c_str(), std::ios::out);
+		outfile << S;
+		outfile.close();
+		
+		ofstream outfile2(transfile.c_str());
+		
+		// iterate over all peaks
+		int count = 0;
+		multiset<class Peak_>::iterator it = peak_set_.begin();
+
+		for (; (it != peak_set_.end()) && (count < total_number); it++)
+		{
+			outfile2 << -(it->value) << " " 
+					<< it->orientation.x << " " << it->orientation.y << " " << it->orientation.z << " "
+					<< it->translation.x << " " << it->translation.y << " " << it->translation.z << endl;
+			++count;
+		}
+		outfile2.close();
+	}
+	
+	
+	
+
 	/** Implementation of the nested helper classes for GeometricFit **/
 
 	/** Peak_ class.
@@ -1620,7 +1696,7 @@ namespace BALL
 	/** Peak_ class
 	 * 	Destructor.
 	 */
-	GeometricFit::Peak_::~Peak_() 
+	GeometricFit::Peak_::~Peak_()
 		throw()
 	{
 	}
@@ -1629,7 +1705,7 @@ namespace BALL
 	 *  operator <
 	 *  Note: "<" is implemented as ">" on purpose!
 	 *  			In this way, the largest peak value is on top of the multiset used in the algorithm.
-	 */ 
+	 */
 	bool GeometricFit::Peak_::operator < (const Peak_& p) const
 		throw()
 	{
@@ -1655,7 +1731,7 @@ namespace BALL
 	/** RotationAngles_ class
 	 * 	Detailed constructor.
 	 */
-	GeometricFit::RotationAngles_::RotationAngles_( int step ) 
+	GeometricFit::RotationAngles_::RotationAngles_( int step )
 		throw()
 	: max_rotation_(50000),
 		ang_num_(0),
@@ -1677,7 +1753,7 @@ namespace BALL
 	bool GeometricFit::RotationAngles_::generateSomeAngles( const float deg_phi, const float deg_theta, const float deg_psi,
 								 																					const float phi_min, const float phi_max,
 																													const float psi_min, const float psi_max,
-																													const float theta_min, const float theta_max	) 
+																													const float theta_min, const float theta_max	)
 		throw()
 	{
 		ang_num_ = 0;
@@ -1685,13 +1761,13 @@ namespace BALL
 		int phi_num = (int) ceil((phi_max - phi_min) / deg_phi);
 		int psi_num = (int) ceil((psi_max - psi_min) / deg_psi);
 		int theta_num = (int) ceil((theta_max - theta_min) / deg_theta);
-		
+
 		for(int psipsi = 0; psipsi < psi_num; psipsi++)
 			for(int thetatheta = 0; thetatheta < theta_num; thetatheta++)
 				for(int phiphi = 0; phiphi < phi_num; phiphi++)
 				{
 
-					
+
 					double x1 = (phi_min + phiphi * deg_phi) * Constants::PI / 180.0;
 					double y1 = (theta_min + thetatheta * deg_theta) * Constants::PI / 180.0;
 					double z1 = (psi_min + psipsi * deg_psi) * Constants::PI / 180.0;
@@ -1699,7 +1775,7 @@ namespace BALL
 					double sx1 = sin(x1);
 					double sy1 = sin(y1);
 					double sz1 = sin(z1);
-					double cx1 = cos(x1);      
+					double cx1 = cos(x1);
 					double cy1 = cos(y1);
 					double cz1 = cos(z1);
 
@@ -1725,21 +1801,21 @@ namespace BALL
 
 
 								// Rz * Ry * Rx
-								double trace = 
-									( (     cy1*cz1          ) * (     cy2*cz2          ) + 
-										( sx1*sy1*cz1 - cx1*sz1) * ( sx2*sy2*cz2 - cx2*sz2) + 
+								double trace =
+									( (     cy1*cz1          ) * (     cy2*cz2          ) +
+										( sx1*sy1*cz1 - cx1*sz1) * ( sx2*sy2*cz2 - cx2*sz2) +
 										( cx1*sy1*cz1 + sx1*sz1) * ( cx2*sy2*cz2 + sx2*sz2) ) +
 									( (     cy1*sz1          ) * (     cy2*sz2          ) +
 										( sx1*sy1*sz1 + cx1*cz1) * ( sx2*sy2*sz2 + cx2*cz2) +
 										( cx1*sy1*sz1 - sx1*cz1) * ( cx2*sy2*sz2 - sx2*cz2) ) +
-									( (    -sy1              ) * (    -sy2              ) + 
+									( (    -sy1              ) * (    -sy2              ) +
 										( sx1*cy1              ) * ( sx2*cy2              ) +
 										( cx1*cy1              ) * ( cx2*cy2              ) );
 
 								double v = (trace - 1.0) / 2.0;
 
 								// v should be in the area [-1.0, 1.0]
-								// sometime because of the numerical error, 
+								// sometime because of the numerical error,
 								// v gets out of this area. so we set it like this:
 								if(v < -1.0)
 									v = -1.0;
@@ -1748,10 +1824,10 @@ namespace BALL
 
 								double alpha = acos( v );
 
-								if(alpha * 180.0 <= 1.0  * Constants::PI) 
+								if(alpha * 180.0 <= 1.0  * Constants::PI)
 								{
 									degenerate = true;
-									break; 
+									break;
 								}
 							}
 
@@ -1775,13 +1851,13 @@ namespace BALL
 		ang_num_ --;
 
 		return true;
-	}	
-	
+	}
+
 	/** RotationAngles_ class
 	 *  Generate all non-degenerate rotation angles for the given degree interval.
 	 * 	This algorithm is based on ???
 	 */
-	bool GeometricFit::RotationAngles_::generateAllAngles( const int deg ) 
+	bool GeometricFit::RotationAngles_::generateAllAngles( const int deg )
 		throw()
 	{
 		ang_num_ = 0;
@@ -1798,7 +1874,7 @@ namespace BALL
 					double sx1 = sin(x1);
 					double sy1 = sin(y1);
 					double sz1 = sin(z1);
-					double cx1 = cos(x1);      
+					double cx1 = cos(x1);
 					double cy1 = cos(y1);
 					double cz1 = cos(z1);
 
@@ -1824,21 +1900,21 @@ namespace BALL
 
 
 								// Rz * Ry * Rx
-								double trace = 
-									( (     cy1*cz1          ) * (     cy2*cz2          ) + 
-										( sx1*sy1*cz1 - cx1*sz1) * ( sx2*sy2*cz2 - cx2*sz2) + 
+								double trace =
+									( (     cy1*cz1          ) * (     cy2*cz2          ) +
+										( sx1*sy1*cz1 - cx1*sz1) * ( sx2*sy2*cz2 - cx2*sz2) +
 										( cx1*sy1*cz1 + sx1*sz1) * ( cx2*sy2*cz2 + sx2*sz2) ) +
 									( (     cy1*sz1          ) * (     cy2*sz2          ) +
 										( sx1*sy1*sz1 + cx1*cz1) * ( sx2*sy2*sz2 + cx2*cz2) +
 										( cx1*sy1*sz1 - sx1*cz1) * ( cx2*sy2*sz2 - sx2*cz2) ) +
-									( (    -sy1              ) * (    -sy2              ) + 
+									( (    -sy1              ) * (    -sy2              ) +
 										( sx1*cy1              ) * ( sx2*cy2              ) +
 										( cx1*cy1              ) * ( cx2*cy2              ) );
 
 								double v = (trace - 1.0) / 2.0;
 
 								// v should be in the area [-1.0, 1.0]
-								// sometime because of the numerical error, 
+								// sometime because of the numerical error,
 								// v gets out of this area. so we set it like this:
 								if(v < -1.0)
 									v = -1.0;
@@ -1847,10 +1923,10 @@ namespace BALL
 
 								double alpha = acos( v );
 
-								if(alpha * 180.0 <= 1.0  * Constants::PI) 
+								if(alpha * 180.0 <= 1.0  * Constants::PI)
 								{
 									degenerate = true;
-									break; 
+									break;
 								}
 							}
 

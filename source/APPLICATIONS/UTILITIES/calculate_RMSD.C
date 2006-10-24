@@ -13,12 +13,12 @@ int main(int argc, char** argv)
 		return(0);
 	}
 
-	HINFile file1(argv[1]);
+	PDBFile file1(argv[1]);
 	System system1;
 	file1 >> system1;
 	file1.close();
 
-	HINFile file2(argv[2]);
+	PDBFile file2(argv[2]);
 	System system2;
 	file2 >> system2;
 	file2.close();

@@ -309,14 +309,22 @@ usage: docking -a <PDB File name for protein A>\n\
    cout << "Chain name        = " << CHAIN_B           << endl;
    cout << "residue number    = " << pro_sys_b.countResidues() << endl;
    cout << "atom number       = " << pro_sys_b.countAtoms()    << endl;
-   cout << endl;
+		cout << endl;
    
-	 geo_fit.setup(pro_sys_a, pro_sys_b);
-	 geo_fit.start();
+		
+		geo_fit.setup(pro_sys_a, pro_sys_b);
+	 	geo_fit.start();
+	 
+		cout << "writing out " << BEST_NUM << " results... " << endl;
+		
+		String dockfile("docking.pdb");
+		String transfile("dock_results.txt");
+		
+		geo_fit.writeScoreTransformationSet(dockfile, transfile, BEST_NUM);
 
 	 // Version 1 to save the docking results
 	 
-	 cout << "writing out trajectories... " << endl;
+	 /*cout << "writing out trajectories... " << endl;
 	 ConformationSet rc = geo_fit.getConformationSet(BEST_NUM);
 	 rc.writeDCDFile("docking.dcd");
 
@@ -352,7 +360,7 @@ usage: docking -a <PDB File name for protein A>\n\
 	 dock_res.writeDockResult("dock_result.dr");
 	 
 	 // for further analysis of the docking result see
-	 // program computeDockingRMSD
+	 // program computeDockingRMSD*/
 		
 	 cout << "done." << endl;
 	 return 0;
