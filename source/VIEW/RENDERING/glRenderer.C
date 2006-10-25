@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.69 2006/10/19 14:12:50 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.70 2006/10/25 12:55:42 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -47,7 +47,6 @@
  #include <BALL/VIEW/RENDERING/vertexBuffer.h>
 #endif
 
-#include <BALL/MATHS/randomNumberGenerator.h>
 using namespace std;
 
 //   #define BALL_VIEW_DEBUG
