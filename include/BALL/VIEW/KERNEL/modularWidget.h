@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.22.2.3 2006/02/01 13:23:40 amoll Exp $
+// $Id: modularWidget.h,v 1.22.2.4 2006/10/25 14:47:24 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -134,6 +134,12 @@ namespace BALL
 					\see   initializeWidget
 			*/
 			virtual void finalizeWidget(MainControl& main_control);
+
+			/** Add the widgets icons to its toolbar.
+			 		This method is needed to enable icon sorting in derived classes.
+					It is called after initializeWidget().
+			*/
+			virtual void addIcons() {}
 			
 			/**	Menu checking method.
 					This method is called MainControl::checkMenus before a popup menu is shown.
