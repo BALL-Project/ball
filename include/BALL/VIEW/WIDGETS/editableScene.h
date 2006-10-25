@@ -29,6 +29,10 @@
 # include <BALL/MATHS/vector2.h>
 #endif
 
+#ifndef BALL_STRUCTURE_FRAGMENTDB_H
+# include <BALL/STRUCTURE/fragmentDB.h>
+#endif
+
 #include <QtGui/qcursor.h>
 
 namespace BALL
@@ -142,7 +146,7 @@ class BALL_VIEW_EXPORT EditableScene
 	virtual void setMode(ModeType mode)
 		throw();
 
-	void addRing(Size atoms);
+	void addStructure(String name);
 
 	///
 	void setCursor(String c);
@@ -160,6 +164,7 @@ class BALL_VIEW_EXPORT EditableScene
 	void switchShowGrid();
 	void createNewMolecule();
 	void addHydrogens();
+	void optimizeStructure();
 
 	// slots for communication with PTEDialog
 	void setEditElementType(int element_number);
@@ -177,7 +182,7 @@ class BALL_VIEW_EXPORT EditableScene
 	void moveAtom_();
 	void atomProperties_();
 	void createMolecule_();
-	void addRing_();
+	void addStructure_();
 	void setFormalCharge_();
 
 	////////////////////////////////////////
@@ -278,6 +283,8 @@ class BALL_VIEW_EXPORT EditableScene
 	vector<EditOperation> undo_;
 	EditSettings* edit_settings_;
 	QPoint 	 menu_point_;
+	FragmentDB fragment_db_;
+	bool fragment_db_initialized_;
 };
 
 	}//end of namespace

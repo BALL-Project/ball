@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.43 2006/10/25 12:10:22 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.44 2006/10/25 13:05:37 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -21,9 +21,11 @@
 #include <BALL/VIEW/DIALOGS/PTEDialog.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
+#include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
+#include <BALL/MATHS/randomNumberGenerator.h>
 
 #include <QtGui/qmenubar.h>
 #include <QtGui/QDesktopWidget>
@@ -141,7 +143,7 @@ void EditableScene::setCursor(String c)
   	p.drawText(13, 11, c.c_str());
 	p.end();
 
-	QCursor cursor(pm);
+	QCursor cursor(pm, 0, 0);
 	QWidget::setCursor(cursor);
 }
 
@@ -175,6 +177,7 @@ void EditableScene::checkMenu(MainControl& main_control)
 	throw()
 {
 	edit_id_->setChecked(current_mode_ == (Scene::ModeType)EDIT__MODE);
+	edit_id_->setEnabled(!main_control.isBusy());
 	Scene::checkMenu(main_control);
 
 	new_molecule_->setEnabled(!getMainControl()->isBusy());
@@ -604,10 +607,7 @@ Atom* EditableScene::getClickedAtom_(int x, int y)
 
 	if (objects.size() > 0)
 	{
-		Composite* c = (Composite*)(**objects.begin()).getComposite();
-		if (c == 0) return 0;
-
-		Atom* atom = dynamic_cast<Atom*>(c);
+		Atom* atom = dynamic_cast<Atom*>((Composite*)(**objects.begin()).getComposite());
 		return atom;
 	}
 
@@ -1044,11 +1044,14 @@ void EditableScene::showContextMenu(QPoint pos)
 		{
 			add_action->setEnabled(false);
 		}
-		add_menu->addAction("5 ring", this, SLOT(addRing_()));
-		add_menu->addAction("6 ring", this, SLOT(addRing_()));
-		add_menu->addAction("9 ring", this, SLOT(addRing_()));
+		add_menu->addAction("Pyrrole", this, SLOT(addStructure_()));
+		add_menu->addAction("Benzene", this, SLOT(addStructure_()));
+		add_menu->addAction("Indole", this, SLOT(addStructure_()));
+
+		menu.addSeparator();
 
 		menu.addAction("Add hydrogens", this, SLOT(addHydrogens()));
+		menu.addAction("Optimize Structure", this, SLOT(optimizeStructure()));
 	}
 
 	menu.exec(mapToGlobal(pos));
@@ -1314,20 +1317,25 @@ bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
 	return true;
 }
 
-void EditableScene::addRing(Size atoms)
+void EditableScene::addStructure(String name)
 {
 	deselect_();
+
+	if (!fragment_db_initialized_)
+	{
+		fragment_db_.setFilename("fragments/Editing-Fragments.db");
+		fragment_db_.init();
+		fragment_db_initialized_ = true;
+	}
 
 	List<AtomContainer*> containers = getContainers_();
 	if (containers.size() == 0) return;
 
-	const FragmentDB& fdb = getMainControl()->getFragmentDB();
-	String n(atoms);
-	n += "Ring";
-	Residue* residue = fdb.getResidueCopy(n);
+	Residue* residue = fragment_db_.getResidueCopy(name);
 	if (residue == 0)
 	{
-		return;
+		residue = fragment_db_.getResidueCopy(name + "-Skeleton");
+		if (residue == 0) return;
 	}
 
 	Matrix4x4 m;
@@ -1358,32 +1366,13 @@ void EditableScene::addRing(Size atoms)
 	setMode(MOVE__MODE);
 }
 
-void EditableScene::addRing_()
+void EditableScene::addStructure_()
 {
 	QObject* os = sender();
 	if (os == 0) return;
 	QAction* action = dynamic_cast<QAction*>(os);
 	if (action == 0) return;
-	String string = ascii(action->text());
-	vector<String> fields;
-	if (string.split(fields) < 2) return;
-	try
-	{
-		Size nr = fields[0].toUnsignedInt();
-		if (nr != 5 &&
-				nr != 6 &&
-				nr != 9)
-		{
-			BALLVIEW_DEBUG
-			return;
-		}
-
-		addRing(nr);
-	}
-	catch(...)
-	{
-		BALLVIEW_DEBUG
-	}
+	addStructure(ascii(action->text()));
 }
 
 void EditableScene::createNewMolecule()
@@ -1416,6 +1405,44 @@ void EditableScene::addHydrogens()
 	ahp.setRings(rings);
 	ac->apply(ahp);
 	getMainControl()->update(*ac, true);
+}
+
+void EditableScene::optimizeStructure()
+{
+	List<AtomContainer*> containers = getContainers_();
+	if (containers.size() < 1) return;
+
+	MolecularStructure* ms = MolecularStructure::getInstance(0);
+	if (ms == 0) return;
+	
+	AtomContainer* ac = *containers.begin();
+	System* system = (System*)&ac->getRoot();
+
+	setStatusbarText("Optimizing Structure...", true);
+
+	// highlight System for minimization
+	ControlSelectionMessage* nsm =  new ControlSelectionMessage();
+	List<Composite*> selection;
+	selection.push_back(system);
+	nsm->setSelection(selection);
+	notify_(nsm);
+
+	float range = 0.05;
+	RandomNumberGenerator rng;
+	rng.setup();
+	AtomIterator ait = ac->beginAtom();
+	for (; +ait; ++ait)
+	{
+		ait->getPosition() += Vector3(rng.randomDouble(-range, range),
+																	rng.randomDouble(-range, range),
+																	rng.randomDouble(-range, range));
+	}
+	ms->chooseMMFF94();
+	MinimizationDialog& md = ms->getMinimizationDialog();
+	md.setMaxIterations(100);
+	md.setRefresh(25);
+	md.setMaxGradient(1);
+	ms->runMinimization(false);
 }
 
 	}//end of namespace 
