@@ -31,9 +31,6 @@
 	<node>#include:G<value>fragments/G.db:/G</value></node>
 	<node>#include:T<value>fragments/T.db:/T</value></node>
 	<node>#include:U<value>fragments/U.db:/U</value></node>
-	<node>#include:6Ring<value>fragments/6Ring.db:/6Ring</value></node>
-	<node>#include:5Ring<value>fragments/5Ring.db:/5Ring</value></node>
-	<node>#include:9Ring<value>fragments/9Ring.db:/9Ring</value></node>
 </node>
 <node>Names
 	<node>#include:Discover<value>fragments/Names.Discover.db:/Discover</value></node>
