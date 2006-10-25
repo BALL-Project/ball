@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.42 2006/10/25 20:16:18 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.43 2006/10/25 23:00:16 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -427,7 +427,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			{
 				(*it)->initializeWidget(*this);
 				(*it)->initializePreferencesTab(*preferences_dialog_);
-				(*it)->addIcons();
 			}
 
 			preferences_dialog_->showEntry(main_control_preferences_);

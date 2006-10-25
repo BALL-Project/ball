@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.22.2.6 2006/10/25 22:17:52 amoll Exp $
+// $Id: modularWidget.h,v 1.22.2.7 2006/10/25 23:00:18 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -16,12 +16,12 @@
 #endif
 
 #include <QtGui/QKeySequence>
+#include <QtGui/QToolBar>
 
 class QObject;
 class QMenuBar;
 class QWidget;
 class QAction;
-class QToolBar;
 
 namespace BALL
 {
@@ -140,7 +140,7 @@ namespace BALL
 			 		This method is needed to enable ordering the entries.
 					It is called in Mainframe.
 			*/
-			virtual void addToolBarEntries(QToolBar*) {}
+			virtual void addMainToolBarEntries(QToolBar* tb);
 			
 			/**	Menu checking method.
 					This method is called MainControl::checkMenus before a popup menu is shown.
@@ -247,6 +247,11 @@ namespace BALL
 			///
 			void setMenuHelp(const String& url);
 
+			/** Set the icon for the last added QAction.
+			 		The file is searched in BALL/data/graphics.
+			*/
+			void setIcon(const String& filename, bool add_to_main_toolbar);
+
 			///
 			virtual void registerForHelpSystem(const QObject* object, const String& url);
 
@@ -284,6 +289,7 @@ namespace BALL
 			bool default_visible_;
 
 			QAction* last_action_;
+			QList<QAction*> main_toolbar_actions_;
 		}; 
   
 	} // namespace VIEW

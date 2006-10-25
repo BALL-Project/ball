@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.24.2.8 2006/10/20 08:35:19 amoll Exp $
+// $Id: modularWidget.C,v 1.24.2.9 2006/10/25 23:00:25 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -9,6 +9,7 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
+#include <BALL/SYSTEM/path.h>
 #include <QtGui/qmenubar.h>
 
 using namespace std;
@@ -282,6 +283,18 @@ namespace BALL
 			msg->setObject(object);
 			msg->setURL(url);
 			notify_(msg);
+		}
+
+		void ModularWidget::setIcon(const String& filename, bool add_to_main_toolbar)
+		{
+			Path path;
+			String file = path.find(String("graphics/") + filename);
+			last_action_->setIcon(QIcon(file.c_str()));
+		}
+
+		void ModularWidget::addMainToolBarEntries(QToolBar* tb)
+		{
+			tb->addActions(main_toolbar_actions_);
 		}
 
 	} // namespace VIEW

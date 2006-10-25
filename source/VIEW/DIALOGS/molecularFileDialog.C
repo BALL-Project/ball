@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.32.2.8 2006/10/22 10:38:29 amoll Exp $$
+// $Id: molecularFileDialog.C,v 1.32.2.9 2006/10/25 23:03:18 amoll Exp $$
 //
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
@@ -20,6 +20,7 @@
 
 #include <QtGui/qmenubar.h>
 #include <QtGui/QFileDialog>
+#include <QtGui/QToolBar>
 
 namespace BALL
 {
@@ -51,11 +52,15 @@ namespace BALL
 		void MolecularFileDialog::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			insertMenuEntry(MainControl::FILE_OPEN, "&Structure", this, SLOT(readFiles()), Qt::CTRL+Qt::Key_O);
+			insertMenuEntry(MainControl::FILE_OPEN, "&Structure", this, 
+											SLOT(readFiles()), Qt::CTRL+Qt::Key_O);
 			setMenuHint("Open a PDB, HIN, MOL or MOL2 file");
+			setIcon("open.png", true);
+
 			save_id_ = insertMenuEntry(MainControl::FILE, "&Save Structure", (QObject *)this, 
 																	 SLOT(writeFile()), Qt::CTRL+Qt::Key_S);
 			setMenuHint("Save a system as PDB, HIN, MOL or MOL2 file (1 System has to be selected)");
+			setIcon("save.png", true);
 
 			connect(main_control.initPopupMenu(MainControl::FILE), SIGNAL(aboutToShow()), 
 							this, SLOT(checkMenuEntries()));

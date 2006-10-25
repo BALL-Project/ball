@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.C,v 1.34.2.9 2006/10/22 14:08:47 amoll Exp $
+// $Id: downloadPDBFile.C,v 1.34.2.10 2006/10/25 23:03:18 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
@@ -14,6 +14,7 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 
+#include <QtGui/QToolBar>
 #include <QtGui/qlineedit.h> 
 #include <QtGui/qradiobutton.h>
 #include <QtGui/qcheckbox.h>
@@ -87,6 +88,7 @@ void DownloadPDBFile::initializeWidget(MainControl&)
 	menu_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Download PDB", this,
 															 SLOT(show()), Qt::CTRL+Qt::Key_T);
 	setMenuHint("Download a PDB file from www.rcsb.org");
+	setIcon("download.png", true);
 }
 
 bool DownloadPDBFile::threadedDownload_(const String& url)
