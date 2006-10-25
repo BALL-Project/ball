@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.76.2.15 2006/10/15 23:12:28 amoll Exp $
+// $Id: mainControl.h,v 1.76.2.16 2006/10/25 15:09:20 amoll Exp $
 //
 // Author:
 //   Andreas Moll
@@ -422,6 +422,9 @@ namespace BALL
 
 			///
 			void setContentSize(int w, int h);
+
+			///
+			void toggleFullScreen();
 
 			public:
 			
@@ -885,6 +888,10 @@ namespace BALL
 
 			QAction* last_highlighted_menu_entry_;
 			HashMap<Position, QMenu*> id_to_menu_;
+			bool 					fullscreen_;
+			QPoint 				last_point_;
+			QSize 				last_size_;
+			QByteArray 		last_state_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

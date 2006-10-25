@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.39 2006/10/19 22:07:35 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.40 2006/10/25 15:10:45 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -119,7 +119,8 @@ namespace BALL
 				open_action_(0),
 				save_project_action_(0),
 				preferences_action_(0),
-				delete_action_(0)
+				delete_action_(0),
+				fullscreen_(false)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new MainControl " << this << std::endl;
@@ -1956,6 +1957,36 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			QApplication::processEvents();
 			sleepFor(10);
 		}
+	}
+
+	void MainControl::toggleFullScreen()
+	{
+		if (!fullscreen_)
+		{
+			last_state_ = saveState();
+			// This call is needed because showFullScreen won't work
+			// correctly if the widget already considers itself to be fullscreen.
+			last_size_ = size();
+			last_point_ = pos();
+			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+			for (; it != modular_widgets_.end(); ++it)
+			{
+				DockWidget* widget = dynamic_cast<DockWidget*>(*it);
+				if (widget == 0) continue;
+				widget->hide();
+			}
+
+			showNormal();	
+			showFullScreen();
+		}
+		else
+		{
+			showNormal();
+			resize(last_size_.width(), last_size_.height());
+			move(last_point_);
+			restoreState(last_state_);
+		}
+		fullscreen_ = !fullscreen_;
 	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
