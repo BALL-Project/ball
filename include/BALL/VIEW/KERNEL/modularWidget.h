@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.22.2.8 2006/10/25 23:12:02 amoll Exp $
+// $Id: modularWidget.h,v 1.22.2.9 2006/10/25 23:37:02 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -136,11 +136,11 @@ namespace BALL
 			*/
 			virtual void finalizeWidget(MainControl& main_control);
 
-			/** Add the widgets actions to the main toolbar.
+			/** Add the widgets actions to the (main) toolbar.
 			 		This method is needed to enable ordering the entries.
 					It is called in Mainframe.
 			*/
-			virtual void addMainToolBarEntries(QToolBar* tb);
+			virtual void addToolBarEntries(QToolBar* main_tb);
 			
 			/**	Menu checking method.
 					This method is called MainControl::checkMenus before a popup menu is shown.
