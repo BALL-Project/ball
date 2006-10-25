@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.76.2.16 2006/10/25 15:09:20 amoll Exp $
+// $Id: mainControl.h,v 1.76.2.17 2006/10/25 22:17:09 amoll Exp $
 //
 // Author:
 //   Andreas Moll
@@ -642,6 +642,9 @@ namespace BALL
 			SimulationThread* getSimulationThread()
 				throw();
 
+			///
+			QToolBar* getToolBar() { return tool_bar_;}
+
 			/** Enable the delete entry for GenericControls.
 					Called by a GenericControl, if it has a selection, that can be deleted.
 			*/
@@ -892,6 +895,7 @@ namespace BALL
 			QPoint 				last_point_;
 			QSize 				last_size_;
 			QByteArray 		last_state_;
+			QToolBar*     tool_bar_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
