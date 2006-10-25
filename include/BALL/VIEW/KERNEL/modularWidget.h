@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.22.2.5 2006/10/25 22:15:58 amoll Exp $
+// $Id: modularWidget.h,v 1.22.2.6 2006/10/25 22:17:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -21,6 +21,7 @@ class QObject;
 class QMenuBar;
 class QWidget;
 class QAction;
+class QToolBar;
 
 namespace BALL
 {
@@ -139,7 +140,7 @@ namespace BALL
 			 		This method is needed to enable ordering the entries.
 					It is called in Mainframe.
 			*/
-			virtual void addToolBarEntries() {}
+			virtual void addToolBarEntries(QToolBar*) {}
 			
 			/**	Menu checking method.
 					This method is called MainControl::checkMenus before a popup menu is shown.
