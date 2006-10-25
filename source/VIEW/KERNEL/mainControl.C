@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.41 2006/10/25 15:36:20 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.42 2006/10/25 20:16:18 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -1662,6 +1662,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			locking_widget_ = widget;
 			composites_locked_ = true;
 			setBusyMode_(true);
+			checkMenus();
 			return true;
 		}
 
@@ -1673,6 +1674,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			composites_locked_wait_condition_.wakeAll();
 			composites_locked_ = false;
 			setBusyMode_(false);
+			checkMenus();
 			return true;
 		}
 
