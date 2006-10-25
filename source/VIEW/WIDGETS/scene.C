@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.88 2006/10/25 15:36:06 amoll Exp $
+// $Id: scene.C,v 1.174.2.89 2006/10/25 16:09:29 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -419,6 +419,8 @@ namespace BALL
 
 				time_ = PreciseTime::now();
 			}
+
+			renderGrid_();
 		}
 
 		void Scene::resizeGL(int width, int height)
@@ -1498,6 +1500,8 @@ namespace BALL
 		{
 			setMinimumSize(10, 10);
 
+			draw_grid_ = false;
+
 			main_control.initPopupMenu(MainControl::DISPLAY);
 			String filename;
 			Path path;
@@ -1602,11 +1606,18 @@ namespace BALL
 			toolbar_actions_.push_back(move_action_);
 
 			fullscreen_action_ = new QAction("Fullscreen", this);
-			filename = path.find("graphics/fullscreen.png");
 			connect(fullscreen_action_, SIGNAL(triggered()), getMainControl(), SLOT(toggleFullScreen()));
-
-			move_action_->setIcon(QIcon(filename.c_str()));
+			filename = path.find("graphics/fullscreen.png");
+			fullscreen_action_->setIcon(QIcon(filename.c_str()));
 			toolbar_actions_.push_back(fullscreen_action_);
+
+			switch_grid_ = new QAction("Show ruler", this);
+			connect(switch_grid_, SIGNAL(triggered()), this, SLOT(switchShowGrid()));
+			switch_grid_->setCheckable(true);
+			switch_grid_->setChecked(draw_grid_);
+			filename = path.find("graphics/ruler.png");
+			switch_grid_->setIcon(QIcon(filename.c_str()));
+			toolbar_actions_.push_back(switch_grid_);
 
 			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 			window_menu_entry_->setCheckable(true);
@@ -2665,6 +2676,147 @@ namespace BALL
 		{
 			toolbar_->addActions(toolbar_actions_);
 			toolbar_->insertSeparator(fullscreen_action_);
+		}
+
+		void Scene::switchShowGrid()
+		{
+			draw_grid_ = !draw_grid_;
+			switch_grid_->setChecked(draw_grid_);
+			update();
+		}
+
+
+		void Scene::renderGrid_()
+		{
+			if (!draw_grid_) return;
+
+			const Camera& s = getStage()->getCamera();
+			Vector3 v = s.getViewVector();
+			v.normalize();
+			const Vector3 x = s.getRightVector();
+			const Vector3 y = s.getLookUpVector();
+			float delta = 0.001;
+			float size = 50;
+
+			gl_renderer_.initTransparent();
+
+			Vector3 p = get3DPosition_((Index)(width() / 2.0), (Index)(height() / 2.0)) - x * size / 2.0 - y * size / 2.0;
+			Box xp(p, x * size, y * size, delta);
+			xp.setColor(ColorRGBA(0,255,190,90));
+			gl_renderer_.render_(&xp);
+
+			ColorRGBA color1(255,255,255,255);
+			ColorRGBA color2(0,0,0,230);
+			Line line;
+			p -= v * delta;
+
+			for (Position i = 0; i <= size; i+=1)
+			{
+				if (i % 10 == 0) line.setColor(color2);
+				else  					 line.setColor(color1);
+
+				line.setVertex1(p + x * i);
+				line.setVertex2(p + x * i + y * size);
+				gl_renderer_.render_(&line);
+
+				line.setVertex1(p + y * i);
+				line.setVertex2(p + y * i + x * size);
+				gl_renderer_.render_(&line);
+			}
+
+			gl_renderer_.initSolid();
+		}
+
+
+		// Convert 2D screen coordinate to 3D coordinate on the view plane
+		Vector3 Scene::get3DPosition_(int x, int y)
+		{
+			// 	Scale variables for Frustum
+			double xs_ = width();
+			double ys_ = height(); 
+
+			mapViewplaneToScreen_();
+
+			// vectors for arithmetics
+			// TODO: give sensible names!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			Vector3 p_(0., 0., 0.);      // vector look_at ray ----> insertion ray cutting the nearplane
+			Vector3 la_m_d_(0., 0., 0.); // look_at vector ray cutting the near plane
+			Vector3 la_m_v_(0., 0., 0.); // look_at vector ray cutting the near plane
+			Vector3 s_(0., 0., 0.);      // vector look_at_ray ----> insertion ray cutting viewing plane
+			Vector3 k_(0., 0., 0.);      // vector of insertionpoint in the viewing volume
+
+			// determine the vector/look_at ray : camera --> lookAt cuts the near plane
+			la_m_d_=Vector3(  near_left_bot_
+					+( (near_right_bot_ - near_left_bot_)*0.5 )
+					+( (near_left_top_  - near_left_bot_)*0.5 )
+					);	
+
+			// determine the vector look_at point--->insertion_ray cutting the near plane 
+			p_=Vector3((   near_left_top_  //c
+						+ ( x / (float)xs_ * (near_right_bot_ - near_left_bot_) )  //b-a
+						- ( y / (float)ys_ * (near_left_top_  - near_left_bot_) )  //c-a
+						)
+					- la_m_d_ );
+
+			// determine the vector look_at_ray ----> insertion ray cutting viewing plane
+			s_= Vector3(   ( ( getStage()->getCamera().getLookAtPosition() - getStage()->getCamera().getViewPoint() ).getLength()
+						/ (la_m_d_ -  getStage()->getCamera().getViewPoint()).getLength()) 
+					* p_ );
+
+			// vector of insertionpoint in the viewing volume
+			k_=Vector3( getStage()->getCamera().getLookAtPosition() + s_ );		
+
+			return k_;
+		}	
+
+		bool Scene::mapViewplaneToScreen_()
+		{
+			// matrix for the Projection matrix 	
+			GLdouble projection_matrix[16];
+			// matrix for the Modelview matrix
+			GLdouble modelview_matrix[16];
+
+			// variables for definition of projection matrix
+			float near_=0, left_=0, right_=0, bottom_ =0, top_=0; 
+
+			// take the Projection matrix	
+			glMatrixMode(GL_PROJECTION);
+			glGetDoublev(GL_PROJECTION_MATRIX, projection_matrix);
+			glMatrixMode(GL_MODELVIEW);
+			glGetDoublev(GL_MODELVIEW_MATRIX, modelview_matrix); 
+
+			// determine the projection variables
+			if(projection_matrix[0]==0. || projection_matrix[5]==0. || projection_matrix[10]==1.)
+			{	
+				Log.error() << "Projection variables equal zero! " << endl;
+				return false;
+			}	
+			near_   = projection_matrix[14]/(projection_matrix[10]-1);
+			left_   = projection_matrix[14]*(projection_matrix[8]-1) / (projection_matrix[0]*(projection_matrix[10]-1));
+			right_  = projection_matrix[14]*(projection_matrix[8]+1) / (projection_matrix[0]*(projection_matrix[10]-1));
+			bottom_ = projection_matrix[14]*(projection_matrix[9]-1) / (projection_matrix[5]*(projection_matrix[10]-1));
+			top_    = projection_matrix[14]*(projection_matrix[9]+1) / (projection_matrix[5]*(projection_matrix[10]-1));
+
+			// we have to move all points of the viewing volume with the inverted Modelview matrix 
+			Matrix4x4 mod_view_mat_(modelview_matrix[0], modelview_matrix[4], modelview_matrix[8], modelview_matrix[12],
+					modelview_matrix[1], modelview_matrix[5], modelview_matrix[9], modelview_matrix[13],
+					modelview_matrix[2], modelview_matrix[6], modelview_matrix[10], modelview_matrix[14],
+					modelview_matrix[3], modelview_matrix[7], modelview_matrix[11],	modelview_matrix[15]);
+
+
+			Matrix4x4 inverse_mod_view_mat_;
+			mod_view_mat_.invert(inverse_mod_view_mat_);
+
+			// determine the nearplane vectors
+			near_left_bot_ = Vector3(left_,  bottom_, near_*-1.); //a
+			near_right_bot_= Vector3(right_, bottom_, near_*-1.); //b
+			near_left_top_ = Vector3(left_,  top_,    near_*-1.); //c	
+
+			near_left_bot_  = inverse_mod_view_mat_*near_left_bot_;
+			near_right_bot_ = inverse_mod_view_mat_*near_right_bot_;
+			near_left_top_  = inverse_mod_view_mat_*near_left_top_;
+
+			return true;
 		}
 
 	} // namespace VIEW

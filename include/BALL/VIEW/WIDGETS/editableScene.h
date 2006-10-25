@@ -161,7 +161,6 @@ class BALL_VIEW_EXPORT EditableScene
 	virtual void mouseMoveEvent(QMouseEvent *e);
 	virtual void mouseReleaseEvent(QMouseEvent *e);
 	virtual void wheelEvent(QWheelEvent* qmouse_event);
-	void switchShowGrid();
 	void createNewMolecule();
 	void addHydrogens();
 	void optimizeStructure();
@@ -265,7 +264,6 @@ class BALL_VIEW_EXPORT EditableScene
 
 	Vector3 atom_pos_;
 	bool draw_line_;
-	bool draw_grid_;
 
 	// search range when looking for atoms/bonds (in angstrom)
 	static float atom_limit_;			

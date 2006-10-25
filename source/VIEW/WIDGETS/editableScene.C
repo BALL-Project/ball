@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.45 2006/10/25 15:36:06 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.46 2006/10/25 16:09:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -120,7 +120,6 @@ void EditableScene::init_()
 	edit_settings_ = 0;
 	bond_order_ = Bond::ORDER__SINGLE;
 	draw_line_ = 0;
-	draw_grid_ = 0;
 	atomic_number_ = 6;
 	atom_number_ = 0;
 }
@@ -381,8 +380,6 @@ void EditableScene::paintGL()
 		draw_line_ = false;
 	}
 
-	renderGrid_();
-
 	if (!draw_line_ || current_atom_ == 0) return;
 
 	glDisable(GL_LIGHTING);
@@ -394,47 +391,6 @@ void EditableScene::paintGL()
 	glEnd();
 
 	glEnable(GL_LIGHTING);
-}
-
-void EditableScene::renderGrid_()
-{
-	if (current_mode_ != (Scene::ModeType) EDIT__MODE || !draw_grid_) return;
-
-	const Camera& s = getStage()->getCamera();
-	Vector3 v = s.getViewVector();
-	v.normalize();
-	const Vector3 x = s.getRightVector();
-	const Vector3 y = s.getLookUpVector();
-	float delta = 0.001;
-	float size = 50;
-
-	gl_renderer_.initTransparent();
-
-	Vector3 p = get3DPosition_((Index)(width() / 2.0), (Index)(height() / 2.0)) - x * size / 2.0 - y * size / 2.0;
-	Box xp(p, x * size, y * size, delta);
-	xp.setColor(ColorRGBA(0,255,190,90));
-	gl_renderer_.render_(&xp);
-
-	ColorRGBA color1(255,255,255,255);
-	ColorRGBA color2(0,0,0,230);
-	Line line;
-	p -= v * delta;
-
-	for (Position i = 0; i <= size; i+=1)
-	{
-		if (i % 10 == 0) line.setColor(color2);
-		else  					 line.setColor(color1);
-
-		line.setVertex1(p + x * i);
-		line.setVertex2(p + x * i + y * size);
-		gl_renderer_.render_(&line);
-
-		line.setVertex1(p + y * i);
-		line.setVertex2(p + y * i + x * size);
-		gl_renderer_.render_(&line);
-	}
-
-	gl_renderer_.initSolid();
 }
 
 void EditableScene::mouseReleaseEvent(QMouseEvent* e)
@@ -617,48 +573,6 @@ Atom* EditableScene::getClickedAtom_(int x, int y)
 	}
 
 	return 0;
-
-	float min_dist = FLT_MAX;
-	Atom* min_atom = 0;
-	float dist;
-
-	List<AtomContainer*> containers = getContainers_();
-	List<AtomContainer*>::Iterator it = containers.begin();
-	for (; it != containers.end(); it++)
-	{
-		AtomContainer* s = *it;
-
-		Vector3 cam_to_atom;
-		Vector3 cam_to_clickedPoint = get3DPosition_(x, y) - getStage()->getCamera().getViewPoint();
-
-		for (AtomIterator ai = s->beginAtom(); +ai; ++ai)
-		{
-			cam_to_atom = (ai->getPosition() - getStage()->getCamera().getViewPoint());
-
-			// compute the angle between the rays Cam->Atom and Cam->clicked point
-			Angle	alpha((float)acos(  (cam_to_atom * cam_to_clickedPoint)
-						/(cam_to_atom.getLength() * cam_to_clickedPoint.getLength())
-						));
-
-			// the distance between the two rays is the sine of the angle between them times the length of Cam->Atom	
-			dist  = sin(alpha) * cam_to_atom.getLength();
-
-			// now save atom and distance
-			if (dist < min_dist)
-			{
-				min_dist = dist;
-				min_atom = &(*ai);
-			}
-		}
-	}
-
-	// is the minimal distance beyond the threshold?
-	if (min_dist < atom_limit_)
-	{
-		return min_atom;
-	}
-
-	return 0;
 }
 
 // Find closest bond to screen position (x,y). If there is none closer than bond_limit_, return NULL
@@ -682,60 +596,6 @@ Bond* EditableScene::getClickedBond_(int x, int y)
 	}
 
 	// code below does not work correctly.
-	return 0;
-
-	Bond* closest = 0;
-	float min_dist = FLT_MAX;
-
-	List<AtomContainer*> containers = getContainers_();
-	List<AtomContainer*>::Iterator it = containers.begin();
-	for (; it != containers.end(); it++)
-	{
-		AtomContainer* s = *it;
-
-		// save the atom and its distance to the click ray
-		Vector3 cam_to_bond;
-		Vector3 cam_to_clickedPoint = get3DPosition_(x, y) - getStage()->getCamera().getViewPoint();
-
-		Vector3 vp = getStage()->getCamera().getViewPoint();
-
-		// To iterate over all bonds, we have to iterate over all atoms and then over all their bonds
-		// Unfortunately, this counts each bond twice...
-		for (AtomIterator ai = s->beginAtom(); +ai; ++ai)
-		{
-			for (AtomBondIterator bi = ai->beginBond(); +bi; ++bi)
-			{
-				if (bi->getPartner(*ai) < &*ai) continue;
-
-				// first point the position vector to the first atom of the bond
-				cam_to_bond = (bi->getFirstAtom()->getPosition() - vp);
-				// then add 1/2 * the vector pointing from first to second
-				cam_to_bond += (bi->getSecondAtom()->getPosition() - bi->getFirstAtom()->getPosition()) * 0.5;
-
-				// compute the angle between the rays Cam->Bond and Cam->clicked point
-				Angle	alpha((float)acos(  (cam_to_bond * cam_to_clickedPoint)
-							/(cam_to_bond.getLength() * cam_to_clickedPoint.getLength())
-							));
-
-				// the distance between the two rays is the sine of the angle between them times the length of Cam->Bond
-				float dist = sin(alpha) * cam_to_bond.getLength();
-
-				// now save bond and distance
-				if (dist < min_dist)
-				{
-					min_dist = dist;
-					closest = &*bi;
-				}
-			}
-		}
-	}
-
-	// is the minimal distance beyond the threshold?
-	if (min_dist < bond_limit_)
-	{
-		return closest;
-	}
-
 	return 0;
 }
 
@@ -827,55 +687,7 @@ void EditableScene::insert_(int x, int y, PDBAtom &atom)
 
 
 // this code projects the 3D view plane to 2D screen coordinates
-bool EditableScene::mapViewplaneToScreen_()
-{
-	// matrix for the Projection matrix 	
-	GLdouble projection_matrix[16];
-	// matrix for the Modelview matrix
-	GLdouble modelview_matrix[16];
 
-	// variables for definition of projection matrix
-	float near_=0, left_=0, right_=0, bottom_ =0, top_=0; 
-
-	// take the Projection matrix	
-	glMatrixMode(GL_PROJECTION);
-	glGetDoublev(GL_PROJECTION_MATRIX, projection_matrix);
-	glMatrixMode(GL_MODELVIEW);
-	glGetDoublev(GL_MODELVIEW_MATRIX, modelview_matrix); 
-
-	// determine the projection variables
-	if(projection_matrix[0]==0. || projection_matrix[5]==0. || projection_matrix[10]==1.)
-	{	
-		Log.error() << "Projection variables equal zero! " << endl;
-		return false;
-	}	
-	near_   = projection_matrix[14]/(projection_matrix[10]-1);
-	left_   = projection_matrix[14]*(projection_matrix[8]-1) / (projection_matrix[0]*(projection_matrix[10]-1));
-	right_  = projection_matrix[14]*(projection_matrix[8]+1) / (projection_matrix[0]*(projection_matrix[10]-1));
-	bottom_ = projection_matrix[14]*(projection_matrix[9]-1) / (projection_matrix[5]*(projection_matrix[10]-1));
-	top_    = projection_matrix[14]*(projection_matrix[9]+1) / (projection_matrix[5]*(projection_matrix[10]-1));
-
-	// we have to move all points of the viewing volume with the inverted Modelview matrix 
-	Matrix4x4 mod_view_mat_(modelview_matrix[0], modelview_matrix[4], modelview_matrix[8], modelview_matrix[12],
-			modelview_matrix[1], modelview_matrix[5], modelview_matrix[9], modelview_matrix[13],
-			modelview_matrix[2], modelview_matrix[6], modelview_matrix[10], modelview_matrix[14],
-			modelview_matrix[3], modelview_matrix[7], modelview_matrix[11],	modelview_matrix[15]);
-
-
-	Matrix4x4 inverse_mod_view_mat_;
-	mod_view_mat_.invert(inverse_mod_view_mat_);
-
-	// determine the nearplane vectors
-	near_left_bot_ = Vector3(left_,  bottom_, near_*-1.); //a
-	near_right_bot_= Vector3(right_, bottom_, near_*-1.); //b
-	near_left_top_ = Vector3(left_,  top_,    near_*-1.); //c	
-
-	near_left_bot_  = inverse_mod_view_mat_*near_left_bot_;
-	near_right_bot_ = inverse_mod_view_mat_*near_right_bot_;
-	near_left_top_  = inverse_mod_view_mat_*near_left_top_;
-
-	return true;
-}
 
 TVector2<Position> EditableScene::getScreenPosition_(Vector3 vec)
 {
@@ -924,47 +736,6 @@ TVector2<Position> EditableScene::getScreenPosition_(Vector3 vec)
 }
 
 
-// Convert 2D screen coordinate to 3D coordinate on the view plane
-Vector3 EditableScene::get3DPosition_(int x, int y)
-{
-	// 	Scale variables for Frustum
-	double xs_ = width();
-	double ys_ = height(); 
-
-	mapViewplaneToScreen_();
-
-	// vectors for arithmetics
-	// TODO: give sensible names!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	Vector3 p_(0., 0., 0.);      // vector look_at ray ----> insertion ray cutting the nearplane
-	Vector3 la_m_d_(0., 0., 0.); // look_at vector ray cutting the near plane
-	Vector3 la_m_v_(0., 0., 0.); // look_at vector ray cutting the near plane
-	Vector3 s_(0., 0., 0.);      // vector look_at_ray ----> insertion ray cutting viewing plane
-	Vector3 k_(0., 0., 0.);      // vector of insertionpoint in the viewing volume
-
-	// determine the vector/look_at ray : camera --> lookAt cuts the near plane
-	la_m_d_=Vector3(  near_left_bot_
-			+( (near_right_bot_ - near_left_bot_)*0.5 )
-			+( (near_left_top_  - near_left_bot_)*0.5 )
-			);	
-
-	// determine the vector look_at point--->insertion_ray cutting the near plane 
-	p_=Vector3((   near_left_top_  //c
-				+ ( x / (float)xs_ * (near_right_bot_ - near_left_bot_) )  //b-a
-				- ( y / (float)ys_ * (near_left_top_  - near_left_bot_) )  //c-a
-				)
-			- la_m_d_ );
-
-	// determine the vector look_at_ray ----> insertion ray cutting viewing plane
-	s_= Vector3(   ( ( getStage()->getCamera().getLookAtPosition() - getStage()->getCamera().getViewPoint() ).getLength()
-				/ (la_m_d_ -  getStage()->getCamera().getViewPoint()).getLength()) 
-			* p_ );
-
-	// vector of insertionpoint in the viewing volume
-	k_=Vector3( getStage()->getCamera().getLookAtPosition() + s_ );		
-
-	return k_;
-}	
-
 // Set the element for the next insert operations
 void EditableScene::setEditElementType(int element_number)
 {
@@ -999,11 +770,6 @@ void EditableScene::showContextMenu(QPoint pos)
 	edit_mode->setCheckable(true);
 	edit_mode->setChecked(current_mode_ == (Scene::ModeType) EDIT__MODE);
 
-	menu.addSeparator();
-	menu.addAction("Create a new molecule", this, SLOT(createMolecule_()));
-	QAction* switch_grid = menu.addAction("Show ruler", this, SLOT(switchShowGrid()));
-	switch_grid->setCheckable(true);
-	switch_grid->setChecked(draw_grid_);
 	menu.addSeparator();
 
 	if (current_mode_ == (Scene::ModeType) EDIT__MODE)
@@ -1268,12 +1034,6 @@ void EditableScene::finalizePreferencesTab(Preferences& preferences)
 		preferences.removeEntry(edit_settings_);
 		edit_settings_ = 0;
 	}
-}
-
-void EditableScene::switchShowGrid()
-{
-	draw_grid_ = !draw_grid_;
-	update();
 }
 
 void EditableScene::keyPressEvent(QKeyEvent* e)
