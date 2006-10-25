@@ -194,6 +194,8 @@ class BALL_VIEW_EXPORT EditableScene
 	////////////////////////////////////////
 	protected:
 
+	virtual void addIcons();
+
 	/// Catch key events
 	virtual void keyPressEvent(QKeyEvent* e);
 	virtual bool reactToKeyEvent_(QKeyEvent* e);

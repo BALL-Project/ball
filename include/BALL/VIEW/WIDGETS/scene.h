@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.21 2006/10/23 12:28:15 amoll Exp $
+// $Id: scene.h,v 1.66.2.22 2006/10/25 15:36:00 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -29,6 +29,7 @@
 #include <QtGui/QWheelEvent>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QDropEvent>
+#include <QtGui/QToolBar>
 
 class QMouseEvent;
 class QRubberBand;
@@ -612,6 +613,8 @@ namespace BALL
 			*/
 			void showText(const String& text, Size font_size = 20);
 
+			virtual void addIcons();
+
 		
 			protected slots:
 
@@ -731,7 +734,7 @@ namespace BALL
 	
 			// Menu entry IDs
 			QAction *rotate_action_, *picking_action_, *move_action_;
-			QAction *no_stereo_action_, *active_stereo_action_, *dual_stereo_action_;
+			QAction *no_stereo_action_, *active_stereo_action_, *dual_stereo_action_, *fullscreen_action_;
 			QAction *record_animation_action_, *start_animation_action_, *clear_animation_action_, *cancel_animation_action_;
 			QAction *animation_export_POV_action_, *animation_export_PNG_action_, *animation_repeat_action_;
 			QMenu* create_coordinate_system_;
@@ -798,6 +801,8 @@ namespace BALL
 			static QSize PNG_size_;
 			String text_;
 			Size   font_size_;
+			QToolBar* toolbar_;
+			QList<QAction*> toolbar_actions_;
 		};
 
 

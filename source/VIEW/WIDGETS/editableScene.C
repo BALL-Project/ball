@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.44 2006/10/25 13:05:37 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.45 2006/10/25 15:36:06 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -161,10 +161,15 @@ void EditableScene::initializeWidget(MainControl& main_control)
 {
 	Scene::initializeWidget(main_control);
 	String help_url("scene.html#editing");
+	Path path;
+	String filename;
+
 	edit_id_ = insertMenuEntry(MainControl::DISPLAY, "Edit Mode", 
 										this, SLOT(editMode_()), Qt::CTRL+Qt::Key_E);
 	edit_id_->setCheckable(true);
-	setMenuHint("Create and modify atoms and bonds");
+	filename = path.find("graphics/edit.png");
+	edit_id_->setIcon(QIcon(filename.c_str()));
+	setMenuHint("Create and modify molecular structures");
 	setMenuHelp(help_url);
 
 	new_molecule_ = insertMenuEntry(MainControl::BUILD, "Create new molecule", 
@@ -407,7 +412,7 @@ void EditableScene::renderGrid_()
 
 	Vector3 p = get3DPosition_((Index)(width() / 2.0), (Index)(height() / 2.0)) - x * size / 2.0 - y * size / 2.0;
 	Box xp(p, x * size, y * size, delta);
-	xp.setColor(ColorRGBA(0,255,190,110));
+	xp.setColor(ColorRGBA(0,255,190,90));
 	gl_renderer_.render_(&xp);
 
 	ColorRGBA color1(255,255,255,255);
@@ -1443,6 +1448,12 @@ void EditableScene::optimizeStructure()
 	md.setRefresh(25);
 	md.setMaxGradient(1);
 	ms->runMinimization(false);
+}
+
+void EditableScene::addIcons()
+{
+	toolbar_actions_.insert(toolbar_actions_.lastIndexOf(move_action_) + 1, edit_id_);
+	Scene::addIcons();
 }
 
 	}//end of namespace 

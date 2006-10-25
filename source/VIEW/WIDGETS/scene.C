@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.87 2006/10/23 17:24:25 amoll Exp $
+// $Id: scene.C,v 1.174.2.88 2006/10/25 15:36:06 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -29,6 +29,7 @@
 
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/MATHS/quaternion.h>
+#include <BALL/SYSTEM/path.h>
 
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -88,7 +89,8 @@ namespace BALL
 				light_settings_(new LightSettings(this)),
 				stage_settings_(new StageSettings(this)),
 				material_settings_(new MaterialSettings(this)),
-				animation_thread_(0)
+				animation_thread_(0),
+				toolbar_(new QToolBar("3D View Controls", this))
 		{
 			setAcceptDrops(true);
 #ifdef BALL_VIEW_DEBUG
@@ -121,7 +123,8 @@ namespace BALL
 				stop_animation_(false),
 				content_changed_(true),
 				want_to_use_vertex_buffer_(false),
-				show_fps_(false)
+				show_fps_(false),
+				toolbar_(new QToolBar("3D View Controls", this))
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (2) " << this << std::endl;
@@ -148,7 +151,8 @@ namespace BALL
 				stage_settings_(new StageSettings(this)),
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
-				stop_animation_(false)
+				stop_animation_(false),
+				toolbar_(new QToolBar("3D View Controls", this))
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (3) " << this << std::endl;
@@ -1495,6 +1499,8 @@ namespace BALL
 			setMinimumSize(10, 10);
 
 			main_control.initPopupMenu(MainControl::DISPLAY);
+			String filename;
+			Path path;
 
 			create_coordinate_system_ = getMainControl()->initPopupMenu(MainControl::DISPLAY)->
 				addMenu("Show Coordinate System");
@@ -1575,17 +1581,32 @@ namespace BALL
 					MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), Qt::CTRL+Qt::Key_R);
 			setMenuHint("Switch to rotate/zoom mode");
 			rotate_action_->setCheckable(true);
+			filename = path.find("graphics/rotate.png");
+			rotate_action_->setIcon(QIcon(filename.c_str()));
+			toolbar_actions_.push_back(rotate_action_);
 
 			picking_action_ = insertMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), Qt::CTRL+Qt::Key_P);
 			setMenuHint("Switch to picking mode, e.g. to identify singe atoms or groups");
 			setMenuHelp("scene.html#identify_atoms");
 			picking_action_->setCheckable(true);
+			filename = path.find("graphics/picking.png");
+			picking_action_->setIcon(QIcon(filename.c_str()));
+			toolbar_actions_.push_back(picking_action_);
 
 			move_action_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()));
 			setMenuHint("Move selected items");
 			setMenuHelp("molecularControl.html#move_molecule");
 			move_action_->setCheckable(true);
+			filename = path.find("graphics/move.png");
+			move_action_->setIcon(QIcon(filename.c_str()));
+			toolbar_actions_.push_back(move_action_);
 
+			fullscreen_action_ = new QAction("Fullscreen", this);
+			filename = path.find("graphics/fullscreen.png");
+			connect(fullscreen_action_, SIGNAL(triggered()), getMainControl(), SLOT(toggleFullScreen()));
+
+			move_action_->setIcon(QIcon(filename.c_str()));
+			toolbar_actions_.push_back(fullscreen_action_);
 
 			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 			window_menu_entry_->setCheckable(true);
@@ -1597,6 +1618,9 @@ namespace BALL
 
 			setFocusPolicy(Qt::StrongFocus);
 			registerForHelpSystem(this, "scene.html");
+
+			toolbar_->setObjectName("3D toolbar");
+			getMainControl()->addToolBar(Qt::TopToolBarArea, toolbar_);
 		}
 
 		void Scene::checkMenu(MainControl& main_control)
@@ -2635,6 +2659,12 @@ namespace BALL
 			text_ = text; 
 			font_size_= font_size;
 			update();
+		}
+
+		void Scene::addIcons()
+		{
+			toolbar_->addActions(toolbar_actions_);
+			toolbar_->insertSeparator(fullscreen_action_);
 		}
 
 	} // namespace VIEW
