@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.41 2006/10/24 23:54:26 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.42 2006/10/25 00:17:51 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -1324,12 +1324,16 @@ void EditableScene::addRing(Size atoms)
 	TransformationProcessor tf;
 
 	Vector3 vv = getStage()->getCamera().getViewVector();
-	vv.normalize();
+	float l = vv.getLength();
+	if (!Maths::isZero(l)) vv /= l;
 	Vector3 axis = Vector3(1,0,0) % vv;
-	Angle a = vv.getAngle(Vector3(1,0,0));
-	m.setRotation(a, axis);
-	tf.setTransformation(m);
-	residue->apply(tf);
+	if (axis.getSquareLength() != 0)
+	{
+		Angle a = vv.getAngle(Vector3(1,0,0));
+		m.setRotation(a, axis);
+		tf.setTransformation(m);
+		residue->apply(tf);
+	}
 
 	m.setTranslation(x);
 	tf.setTransformation(m);
