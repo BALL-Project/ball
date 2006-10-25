@@ -215,32 +215,8 @@ class BALL_VIEW_EXPORT EditableScene
 	 */
 	TVector2<Position> getScreenPosition_(Vector3 vec);
 
-	/**
-	 * Given 2-dim Coordinates of Screen, clickedPointOnViewPlane computes the
-	 * appropriate 3-dim Position in Viewing Volume
-	 */
-	Vector3 get3DPosition_(int x, int y);
-
-	/**
-	 * Given 2-dim Coordinates of Screen, getCLickedAtom_ returns the nearest Atom 
-	 * within a special radius. If no atom is found, getClickedAtom returns NULL.
-	 */
 	Atom* getClickedAtom_(int x, int y);
-
-	/**
-	 * Given 2-dim Coordinates of Screen, getCLickedBond returns the nearest Bond
-	 * within a special radius. If no bond is found, getClickedBond returns NULL.
-	 * Note: This code is very similar to that of getClickedAtom and the two might
-	 *       be joined in the future.
-	 */
 	Bond* getClickedBond_(int x, int y);
-
-	/**
-	 * Maps the current viewplane to screen coordinates.
-	 * Returns false if the projection matrix is not correctly
-	 * initialized.
-	 */
-	bool mapViewplaneToScreen_();
 
 	virtual void paintGL();
 

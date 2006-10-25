@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.23 2006/10/25 16:09:23 amoll Exp $
+// $Id: scene.h,v 1.66.2.24 2006/10/25 17:33:27 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -731,7 +731,12 @@ namespace BALL
 	
 			void renderGrid_();
 
+			/// Given 2D screen coordinates computes the 3D Position in Viewing Volume
 			Vector3 get3DPosition_(int x, int y);
+
+			/** Maps the current viewplane to screen coordinates.
+				  Returns false if the projection matrix is not correctly initialized.
+			*/
 			bool mapViewplaneToScreen_();
 
 			//_ state of the scene: picking or rotate mode?

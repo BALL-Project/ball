@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.16.2.7 2006/10/25 15:11:05 amoll Exp $
+// $Id: mainframe.h,v 1.16.2.8 2006/10/25 17:30:10 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -52,9 +52,6 @@ namespace BALL
 		/// Catch key events
 		void keyPressEvent(QKeyEvent* e);
 			
-		///
-		void toggleFullScreen();
-
 		/// remove all loaded Molecules and Representations, reset Coloring options
 		void reset();
 
