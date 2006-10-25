@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.42 2006/10/25 00:17:51 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.43 2006/10/25 12:10:22 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -95,7 +95,9 @@ EditableScene::EditableScene()
 
 EditableScene::EditableScene(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 	throw()
-	: Scene(parent_widget, name, w_flags)
+	: Scene(parent_widget, name, w_flags),
+	  fragment_db_(),
+		fragment_db_initialized_(false)
 {	
 	registerWidget(this); 
 	init_();
@@ -609,6 +611,8 @@ Atom* EditableScene::getClickedAtom_(int x, int y)
 		return atom;
 	}
 
+	return 0;
+
 	float min_dist = FLT_MAX;
 	Atom* min_atom = 0;
 	float dist;
@@ -740,6 +744,13 @@ void EditableScene::setElementCursor()
 // Slot to change to EDIT__MODE
 void EditableScene::editMode_()
 {
+	if (!fragment_db_initialized_)
+	{
+		fragment_db_.setFilename("fragments/Editing-Fragments.db");
+		fragment_db_.init();
+		fragment_db_initialized_ = true;
+	}
+
 	last_mode_ = current_mode_;
 	current_mode_ = (Scene::ModeType)EDIT__MODE;		
 	setElementCursor();
