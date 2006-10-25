@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.23.2.5 2006/10/20 20:36:55 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.23.2.6 2006/10/25 12:26:59 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
@@ -171,10 +171,25 @@ namespace BALL
 			// generate two colored tube
 			TwoColoredTube *tube = new TwoColoredTube;
 			tube->setRadius(stick_radius_);
-			tube->setVertex1Address(bond.getFirstAtom()->getPosition());
-			tube->setVertex2Address(bond.getSecondAtom()->getPosition());
 			tube->setComposite(&bond);
 			geometric_objects_.push_back(tube);
+
+			if (!ball_and_stick_)
+			{
+				tube->setVertex1Address(bond.getFirstAtom()->getPosition());
+				tube->setVertex2Address(bond.getSecondAtom()->getPosition());
+			}
+			else
+			{
+				const Vector3& v1 = bond.getFirstAtom()->getPosition();
+				const Vector3& v2 = bond.getSecondAtom()->getPosition();
+				Vector3 dir = v2 - v1;
+				float f = dir.getLength();
+				if (!Maths::isZero(f)) dir /= f;
+ 				dir *= (ball_radius_ - 0.4 * stick_radius_);
+				tube->setVertex1(v1 + dir);
+				tube->setVertex2(v2 - dir);
+			}
 		}
 
 		void AddBallAndStickModel::renderMultipleBond_(const Bond& bond, Vector3 normal, Vector3 dir)
