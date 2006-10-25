@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.22.2.7 2006/10/25 23:00:18 amoll Exp $
+// $Id: modularWidget.h,v 1.22.2.8 2006/10/25 23:12:02 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -250,7 +250,7 @@ namespace BALL
 			/** Set the icon for the last added QAction.
 			 		The file is searched in BALL/data/graphics.
 			*/
-			void setIcon(const String& filename, bool add_to_main_toolbar);
+			void setIcon(const String& filename, bool add_to_main_toolbar = true);
 
 			///
 			virtual void registerForHelpSystem(const QObject* object, const String& url);
