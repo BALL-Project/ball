@@ -1,0 +1,23 @@
+<node>Benzene-Skeleton
+	<node>Names
+		<node>Benzene-Skeleton</node>
+	</node>
+	<node>Atoms
+		<node>C1<value>C 0.066248 -1.287634 0.144514</value></node>
+		<node>C2<value>C 0.057081 -0.613884 1.337852</value></node>
+		<node>C3<value>C 0.045766 0.796088 1.307799</value></node>
+		<node>C4<value>C 0.054862 1.462219 0.071058</value></node>
+		<node>C5<value>C 0.073086 0.728404 -1.129738</value></node>
+		<node>C6<value>C 0.091744 -0.671622 -1.107443</value></node>
+	</node>
+	<node>Bonds
+		<node>1<value>C1 C2 s</value></node>
+		<node>2<value>C2 C3 d</value></node>
+		<node>3<value>C3 C4 s</value></node>
+		<node>4<value>C4 C5 d</value></node>
+		<node>5<value>C5 C6 s</value></node>
+		<node>6<value>C6 C1 d</value></node>
+	</node>
+	<node>Properties
+	</node>
+</node>
