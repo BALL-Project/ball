@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.C,v 1.34.2.12 2006/10/26 10:00:45 amoll Exp $
+// $Id: downloadPDBFile.C,v 1.34.2.13 2006/10/26 14:20:49 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
@@ -308,7 +308,7 @@ void DownloadPDBFile::writePreferences(INIFile& inifile)
 void DownloadPDBFile::checkMenu(MainControl& mc)
 	throw()
 {
-	menu_id_->setEnabled(!mc.isBusy());
+	menu_id_->setEnabled(!mc.compositesAreLocked());
 }
 
 	} // namespace VIEW

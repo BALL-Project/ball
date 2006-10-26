@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.47 2006/10/26 13:57:45 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.48 2006/10/26 14:24:27 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -461,7 +461,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			if (preferences_dialog_ != 0 &&
 					preferences_dialog_->hasPages())
 			{
-				preferences_action_->setEnabled(!isBusy());
+				preferences_action_->setEnabled(!compositesAreLocked());
 			}
 
 			// overridden in Controls

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.93 2006/10/26 13:57:46 amoll Exp $
+// $Id: scene.C,v 1.174.2.94 2006/10/26 14:21:38 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1647,7 +1647,7 @@ namespace BALL
 		void Scene::checkMenu(MainControl& main_control)
 			throw()
 		{
-			bool busy = main_control.isBusy();
+			bool busy = main_control.compositesAreLocked();
 			rotate_action_->setChecked(current_mode_ == ROTATE__MODE);
 			picking_action_->setChecked(current_mode_ == PICKING__MODE);
 			picking_action_->setEnabled(!busy);

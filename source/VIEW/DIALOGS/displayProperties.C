@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.2.16 2006/10/26 11:51:09 amoll Exp $
+// $Id: displayProperties.C,v 1.101.2.17 2006/10/26 14:23:44 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -168,7 +168,7 @@ void DisplayProperties::checkMenu(MainControl& main_control)
 {
 	bool busy = main_control.isBusy();
 
-	id_->setEnabled(!busy);	
+	id_->setEnabled(!main_control.compositesAreLocked());	
 
 	if (busy)
 	{
