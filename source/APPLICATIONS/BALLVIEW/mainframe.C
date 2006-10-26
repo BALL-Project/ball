@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.35 2006/10/25 15:11:05 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.36 2006/10/26 01:08:31 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -408,6 +408,19 @@ namespace BALL
 	void Mainframe::howToCite()
 	{
 		HelpViewer::getInstance(1)->showHelp("tips.html", "cite");
+	}
+
+	void Mainframe::show()
+	{
+		QToolBar* tb = new QToolBar();
+		tb->setIconSize(QSize(23,23));
+		tb->layout()->setMargin(2);
+		tb->layout()->setSpacing(2);
+		addToolBar(Qt::TopToolBarArea, tb);
+		MainControl::show();
+		MolecularFileDialog::getInstance(0)->addToolBarEntries(tb);
+		DownloadPDBFile::getInstance(0)->addToolBarEntries(tb);
+		scene_->addToolBarEntries(tb);
 	}
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.90 2006/10/26 00:02:08 amoll Exp $
+// $Id: scene.C,v 1.174.2.91 2006/10/26 01:07:43 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1611,7 +1611,7 @@ namespace BALL
 			fullscreen_action_ = new QAction("Fullscreen", this);
 			connect(fullscreen_action_, SIGNAL(triggered()), getMainControl(), SLOT(toggleFullScreen()));
 			Path path;
-			String filename = path.find("graphics/fullscreen.xpm");
+			String filename = path.find("graphics/fullscreen.png");
 			fullscreen_action_->setIcon(QIcon(filename.c_str()));
 			toolbar_actions_.push_back(fullscreen_action_);
 
@@ -1635,6 +1635,9 @@ namespace BALL
 			registerForHelpSystem(this, "scene.html");
 
 			toolbar_->setObjectName("3D toolbar");
+			toolbar_->setIconSize(QSize(23,23));
+			toolbar_->layout()->setMargin(2);
+			toolbar_->layout()->setSpacing(2);
 		}
 
 		void Scene::checkMenu(MainControl& main_control)
