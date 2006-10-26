@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.49 2006/10/26 23:07:09 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.50 2006/10/26 23:30:40 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -1188,6 +1188,8 @@ void EditableScene::addHydrogens()
 	AddHydrogenProcessor ahp;
 	ahp.setRings(rings);
 	ac->apply(ahp);
+	String nr = ahp.getNumberOfAddedHydrogens();
+	setStatusbarText(String("Added ") + nr + " hydrogens.", true);
 	getMainControl()->update(*ac, true);
 }
 
