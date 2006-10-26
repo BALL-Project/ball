@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: addHydrogenProcessor.h,v 1.1.2.4 2006/10/24 22:33:38 amoll Exp $
+// $Id: addHydrogenProcessor.h,v 1.1.2.5 2006/10/26 23:24:00 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_ADDHYDROGENPROCESSOR_H
@@ -60,6 +60,8 @@ namespace BALL
 		
     ///
 		AddHydrogenProcessor(const AddHydrogenProcessor& hbp);
+
+		virtual bool start();
 		
     ///
     virtual Processor::Result operator() (Composite &composite);
@@ -69,6 +71,9 @@ namespace BALL
 
 		///
 		void setRings(const vector<vector<Atom*> >& rings);
+
+		///
+		Size getNumberOfAddedHydrogens() { return nr_hydrogens_;}
 		
 		protected:
 
@@ -85,6 +90,7 @@ namespace BALL
 		HashSet<Atom*> ring_atoms_;
 		Position atom_nr_;
 		Atom*    last_atom_;
+		Size 		 nr_hydrogens_;
   }; //class AddHydrogenProcessor
 
 } //namesspace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: addHydrogenProcessor.C,v 1.1.2.7 2006/10/24 22:30:41 amoll Exp $
+// $Id: addHydrogenProcessor.C,v 1.1.2.8 2006/10/26 23:24:11 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
@@ -45,6 +45,13 @@ namespace BALL
 		}
 
 		last_atom_ = atom;
+
+		// prevent adding Hydrogens, e.g. to aromatic Carboxy group
+		if (atom->countBonds() == 1 &&
+				atom->getBond(0)->getOrder() == Bond::ORDER__AROMATIC)
+		{
+			return Processor::CONTINUE;
+		}
 
 		// number of electrons that have to be delivered through bonds:
 		Index con = getConnectivity(*atom);
@@ -469,6 +476,7 @@ namespace BALL
 			parent->appendChild(*hydrogen);
 		}
 		atom.createBond(*hydrogen)->setOrder(Bond::ORDER__SINGLE);
+		nr_hydrogens_++;
 	}
 
 
@@ -565,6 +573,12 @@ namespace BALL
 
 		// FORMULA 
 		return (float)(re + rh - c * pow(diff_e, n));
+	}
+
+	bool AddHydrogenProcessor::start()
+	{
+		nr_hydrogens_ = 0;
+		return true;
 	}
 
 } //Namespace BALL
