@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.45 2006/10/26 10:00:45 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.46 2006/10/26 11:50:54 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -36,6 +36,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/SYSTEM/systemCalls.h>
+#include <BALL/SYSTEM/path.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 
 #include <QtGui/qstatusbar.h>  // statusbar
@@ -443,6 +444,9 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 																					"Preferences", 
 																					preferences_dialog_, 
 																					SLOT(show()), Qt::CTRL+Qt::Key_Z);
+				Path path;
+				String filename = path.find("graphics/pref.png");
+				preferences_action_->setIcon(QIcon(filename.c_str()));
 			}
 
 			fetchPreferences(preferences_file_);

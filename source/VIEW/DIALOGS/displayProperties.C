@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.2.15 2006/09/30 00:45:39 amoll Exp $
+// $Id: displayProperties.C,v 1.101.2.16 2006/10/26 11:51:09 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -31,7 +31,6 @@
 #include <QtGui/qpushbutton.h>
 #include <QtGui/qslider.h>
 #include <QtGui/qradiobutton.h>
-#include <QtCore/qtimer.h>
 
 namespace BALL
 {
@@ -47,6 +46,7 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 		model_settings_(0),
 		coloring_settings_(0),
 		preferences_(0),
+		id_(0),
 		rep_(0),
 		advanced_options_modified_(false),
 		create_representations_for_new_molecules_(true),
@@ -129,9 +129,9 @@ void DisplayProperties::initializeWidget(MainControl& main_control)
 																		 SLOT(show()), Qt::CTRL+Qt::Key_I);   
 	setMenuHint("Create a new representation or modify an existing one");
 	setMenuHelp("displayProperties.html");
+	setIcon("colorize.png", true);
 
 	registerForHelpSystem(this, "displayProperties.html");
-	connect(&timer_, SIGNAL(timeout()), this, SLOT(checkMenu_()));
 
 	selectModel(MODEL_STICK);
 }
@@ -168,12 +168,12 @@ void DisplayProperties::checkMenu(MainControl& main_control)
 {
 	bool busy = main_control.isBusy();
 
+	id_->setEnabled(!busy);	
+
 	if (busy)
 	{
 		modify_button->setEnabled(false);
 		create_button->setEnabled(false);
-		timer_.setSingleShot(true);
-		timer_.start(300);
 		return;
 	}
 
@@ -211,7 +211,7 @@ void DisplayProperties::createRepresentationMode()
 {
 	rep_ = 0;
  	setWindowTitle("create Representation");
-	checkMenu_();
+	if (id_ != 0) checkMenu(*getMainControl());
 
 	model_updates_enabled->setChecked(true);
 	coloring_updates_enabled->setChecked(true);
@@ -220,7 +220,7 @@ void DisplayProperties::createRepresentationMode()
 void DisplayProperties::modifyRepresentationMode(Representation* rep)
 {
 	rep_ = rep;
-	checkMenu(*getMainControl());
+	if (id_ != 0) checkMenu(*getMainControl());
 
 	if (rep_ == 0 || 
 			rep->getModelType() >= MODEL_LABEL ||
@@ -900,11 +900,6 @@ void DisplayProperties::modelUpdatesChanged()
 	model_type_combobox->setEnabled(enabled);
 	model_options->setEnabled(enabled);
 	resolution_group->setEnabled(enabled);
-}
-
-void DisplayProperties::checkMenu_()
-{
-	checkMenu(*getMainControl());
 }
 
 } } // namespaces

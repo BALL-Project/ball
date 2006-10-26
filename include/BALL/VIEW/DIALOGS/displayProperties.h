@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.43.2.4 2006/03/17 17:52:58 amoll Exp $
+// $Id: displayProperties.h,v 1.43.2.5 2006/10/26 11:51:02 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -20,8 +20,6 @@
 #endif
 
 #include <BALL/VIEW/UIC/displayPropertiesData.h>
-
-#include <QtCore/qtimer.h>
 
 namespace BALL
 {
@@ -269,10 +267,6 @@ namespace BALL
 			//_
 			virtual void applyColoringSettings_(Representation& rep);
 
-			protected slots:
-			//_
-			void checkMenu_();
-
 			protected:
 			
 			void applyTo_(Representation* rep);
@@ -294,7 +288,6 @@ namespace BALL
 			bool 						advanced_options_modified_;
 			bool 						create_representations_for_new_molecules_;
 			bool 						changed_selection_color_;
-			QTimer 					timer_;
 		};
 
 } } // namespaces
