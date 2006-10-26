@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.92 2006/10/26 02:17:24 amoll Exp $
+// $Id: scene.C,v 1.174.2.93 2006/10/26 13:57:46 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1631,7 +1631,7 @@ namespace BALL
 			window_menu_entry_->setCheckable(true);
 			setMenuHelp("scene.html");
 
-			setCursor(QCursor(Qt::SizeAllCursor));
+			setCursor(QCursor(Qt::ArrowCursor));
 
 			connect(&timer_, SIGNAL(timeout()), this, SLOT(timerSignal_()) );			
 
@@ -2202,7 +2202,7 @@ namespace BALL
 			gl_renderer_.exitPickingMode();
 			last_mode_ = current_mode_;
 			current_mode_ = ROTATE__MODE;		
-			setCursor(QCursor(Qt::SizeAllCursor));
+			setCursor(QCursor(Qt::ArrowCursor));
 			rotate_action_->setChecked(true);
 		}
 
@@ -2224,7 +2224,7 @@ namespace BALL
 			gl_renderer_.exitPickingMode();
 			last_mode_ = current_mode_;
 			current_mode_ = MOVE__MODE;
-			setCursor(QCursor(Qt::PointingHandCursor));
+			setCursor(QCursor(Qt::SizeAllCursor));
 			move_action_->setChecked(true);
 		}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.46 2006/10/26 11:50:54 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.47 2006/10/26 13:57:45 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -1838,6 +1838,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				}
 			}
 		}
+
+		checkMenus();
 	}
 
 	void MainControl::setPreferencesEnabled_(bool state)
