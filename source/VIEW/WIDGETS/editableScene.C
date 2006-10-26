@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.46 2006/10/25 16:09:28 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.47 2006/10/26 00:02:08 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -160,16 +160,15 @@ void EditableScene::initializeWidget(MainControl& main_control)
 {
 	Scene::initializeWidget(main_control);
 	String help_url("scene.html#editing");
-	Path path;
 	String filename;
 
 	edit_id_ = insertMenuEntry(MainControl::DISPLAY, "Edit Mode", 
 										this, SLOT(editMode_()), Qt::CTRL+Qt::Key_E);
 	edit_id_->setCheckable(true);
-	filename = path.find("graphics/edit.png");
-	edit_id_->setIcon(QIcon(filename.c_str()));
+	setIcon(String("edit.png"), false);
 	setMenuHint("Create and modify molecular structures");
 	setMenuHelp(help_url);
+	mode_group_->addAction(edit_id_);
 
 	new_molecule_ = insertMenuEntry(MainControl::BUILD, "Create new molecule", 
 										this, SLOT(createNewMolecule()));
@@ -618,6 +617,7 @@ void EditableScene::editMode_()
 
 	last_mode_ = current_mode_;
 	current_mode_ = (Scene::ModeType)EDIT__MODE;		
+	edit_id_->setChecked(true);
 	setElementCursor();
 
 	HashSet<Composite*> selection = getMainControl()->getSelection();
@@ -1210,10 +1210,10 @@ void EditableScene::optimizeStructure()
 	ms->runMinimization(false);
 }
 
-void EditableScene::addIcons()
+void EditableScene::addToolBarEntries(QToolBar* tb)
 {
 	toolbar_actions_.insert(toolbar_actions_.lastIndexOf(move_action_) + 1, edit_id_);
-	Scene::addIcons();
+	Scene::addToolBarEntries(tb);
 }
 
 	}//end of namespace 

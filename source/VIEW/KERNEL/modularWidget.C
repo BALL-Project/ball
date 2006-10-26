@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.24.2.9 2006/10/25 23:00:25 amoll Exp $
+// $Id: modularWidget.C,v 1.24.2.10 2006/10/26 00:02:08 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -290,9 +290,14 @@ namespace BALL
 			Path path;
 			String file = path.find(String("graphics/") + filename);
 			last_action_->setIcon(QIcon(file.c_str()));
+			
+			if (add_to_main_toolbar)
+			{
+				main_toolbar_actions_.push_back(last_action_);
+			}
 		}
 
-		void ModularWidget::addMainToolBarEntries(QToolBar* tb)
+		void ModularWidget::addToolBarEntries(QToolBar* tb)
 		{
 			tb->addActions(main_toolbar_actions_);
 		}

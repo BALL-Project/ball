@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.C,v 1.34.2.10 2006/10/25 23:03:18 amoll Exp $
+// $Id: downloadPDBFile.C,v 1.34.2.11 2006/10/26 00:02:07 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
@@ -14,7 +14,6 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 
-#include <QtGui/QToolBar>
 #include <QtGui/qlineedit.h> 
 #include <QtGui/qradiobutton.h>
 #include <QtGui/qcheckbox.h>

@@ -193,7 +193,7 @@ class BALL_VIEW_EXPORT EditableScene
 	////////////////////////////////////////
 	protected:
 
-	virtual void addIcons();
+	virtual void addToolBarEntries(QToolBar* tb);
 
 	/// Catch key events
 	virtual void keyPressEvent(QKeyEvent* e);

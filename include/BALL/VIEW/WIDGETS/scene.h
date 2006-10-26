@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.24 2006/10/25 17:33:27 amoll Exp $
+// $Id: scene.h,v 1.66.2.25 2006/10/26 00:01:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -30,6 +30,7 @@
 #include <QtGui/QKeyEvent>
 #include <QtGui/QDropEvent>
 #include <QtGui/QToolBar>
+#include <QtGui/QActionGroup>
 
 class QMouseEvent;
 class QRubberBand;
@@ -616,8 +617,8 @@ namespace BALL
 			*/
 			void showText(const String& text, Size font_size = 20);
 
-			virtual void addIcons();
-
+			///
+			virtual void addToolBarEntries(QToolBar* tb);
 		
 			protected slots:
 
@@ -818,6 +819,7 @@ namespace BALL
 			QToolBar* toolbar_;
 			QList<QAction*> toolbar_actions_;
 			bool draw_grid_;
+			QActionGroup* mode_group_;
 
 			Vector3 near_left_bot_, near_right_bot_, near_left_top_;
 		};
