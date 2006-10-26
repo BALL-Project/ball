@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.94 2006/10/26 14:21:38 amoll Exp $
+// $Id: scene.C,v 1.174.2.95 2006/10/26 23:39:48 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2087,6 +2087,25 @@ namespace BALL
 				e->ignore();
 				return;
 			}
+
+			if (e->key() == Qt::Key_R)
+			{
+				setMode(ROTATE__MODE);
+				return;
+			}
+
+			if (e->key() == Qt::Key_W)
+			{
+				setMode(MOVE__MODE);
+				return;
+			}
+
+			if (e->key() == Qt::Key_Q)
+			{
+				setMode(PICKING__MODE);
+				return;
+			}
+
 
 			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO) 
 			{

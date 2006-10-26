@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.50 2006/10/26 23:30:40 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.51 2006/10/26 23:41:37 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -1049,6 +1049,12 @@ bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
 {
 	int key = e->key();
 
+	if (key == Qt::Key_E)
+	{
+		setMode((ModeType)EDIT__MODE);
+		return true;
+	}
+
 	if (current_mode_ != (ModeType)EDIT__MODE) return false;
 
 	if (key == Qt::Key_D && !getMainControl()->isBusy())
@@ -1073,13 +1079,6 @@ bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
 	{
 		return false;
 	}
-
-	if (key == Qt::Key_E)
-	{
-		setMode((ModeType)EDIT__MODE);
-		return true;
-	}
-
 
 	if      (key == Qt::Key_H) atomic_number_ = 1;
 	else if (key == Qt::Key_C) atomic_number_ = 6;
