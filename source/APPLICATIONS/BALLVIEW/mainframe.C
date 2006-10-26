@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.38 2006/10/26 13:12:52 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.39 2006/10/26 18:52:39 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -418,6 +418,13 @@ namespace BALL
 
 	void Mainframe::show()
 	{
+		// prevent multiple inserting of menu entries, by calls of showFullScreen(), ...
+		if (preferences_action_ != 0) 
+		{
+			MainControl::show();
+			return;
+		}
+
 		QToolBar* tb = new QToolBar("Main Toolbar", this);
 		tb->setObjectName("Main Toolbar");
 		tb->setIconSize(QSize(23,23));
