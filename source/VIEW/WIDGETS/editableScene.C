@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.47 2006/10/26 00:02:08 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.48 2006/10/26 20:50:08 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -179,11 +179,12 @@ void EditableScene::initializeWidget(MainControl& main_control)
 void EditableScene::checkMenu(MainControl& main_control)
 	throw()
 {
+	bool busy = main_control.isBusy();
 	edit_id_->setChecked(current_mode_ == (Scene::ModeType)EDIT__MODE);
-	edit_id_->setEnabled(!main_control.isBusy());
+	edit_id_->setEnabled(!busy);
 	Scene::checkMenu(main_control);
 
-	new_molecule_->setEnabled(!getMainControl()->isBusy());
+	new_molecule_->setEnabled(!busy);
 }
 
 void EditableScene::mousePressEvent(QMouseEvent* e)
