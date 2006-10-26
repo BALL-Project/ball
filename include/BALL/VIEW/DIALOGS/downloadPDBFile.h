@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.14.2.6 2006/10/22 15:44:29 amoll Exp $
+// $Id: downloadPDBFile.h,v 1.14.2.7 2006/10/26 10:00:53 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
@@ -67,6 +67,10 @@ namespace BALL
 						Standard: (.pdb)
 				*/
 				void setSuffix(String s) { suffix_ = s;}
+
+				///
+				void checkMenu(MainControl& mc)
+					throw();
 
 			public slots:
 

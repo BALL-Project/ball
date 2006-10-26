@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.44 2006/10/26 02:17:23 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.45 2006/10/26 10:00:45 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -445,7 +445,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 																					SLOT(show()), Qt::CTRL+Qt::Key_Z);
 			}
 
-			getRepresentationManager().thread_->start();
 			fetchPreferences(preferences_file_);
 			applyPreferences();
 		}

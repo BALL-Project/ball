@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.C,v 1.34.2.11 2006/10/26 00:02:07 amoll Exp $
+// $Id: downloadPDBFile.C,v 1.34.2.12 2006/10/26 10:00:45 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
@@ -305,5 +305,11 @@ void DownloadPDBFile::writePreferences(INIFile& inifile)
 	inifile.insertValue("PDBFiles", "History", files);
 }
 
-	}
+void DownloadPDBFile::checkMenu(MainControl& mc)
+	throw()
+{
+	menu_id_->setEnabled(!mc.isBusy());
 }
+
+	} // namespace VIEW
+} // namespace BALL
