@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.32.2.12 2006/10/26 14:25:24 amoll Exp $$
+// $Id: molecularFileDialog.C,v 1.32.2.13 2006/10/26 14:26:46 amoll Exp $$
 //
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
@@ -598,9 +598,9 @@ namespace BALL
 		void MolecularFileDialog::checkMenu(MainControl& mc)
 			throw()
 		{
-			bool busy = mc.isBusy();
+			bool busy = mc.compositesAreLocked();
 			save_id_->setEnabled(!busy && mc.getSelectedSystem());
-			open_id_->setEnabled(!mc.compositesAreLocked());
+			open_id_->setEnabled(!busy);
 		}
 
 
