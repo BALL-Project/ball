@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.24 2006/10/21 11:29:36 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.25 2006/10/26 13:12:51 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -66,6 +66,7 @@ namespace BALL
 			center_camera_id_ = insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Focus Camera", this, 
 																												SLOT(centerCamera()), Qt::CTRL+Qt::Key_F);
 			setMenuHint("Focus the camera on one or multiple objects.");
+			setIcon("focus.png", true);
 
 			// Build Menu -------------------------------------------------------------------
 	// 		hint = "To assign charges, one System has to be selected.";
@@ -190,7 +191,11 @@ namespace BALL
 	#ifdef BALL_VIEW_DEBUG
 			Log.error() << "MolecularStructure " << this  << "onNotify " << message << std::endl;
 	#endif
-			if (RTTI::isKindOf<CompositeMessage>(*message))
+			if (RTTI::isKindOf<ControlSelectionMessage>(*message))
+			{
+				checkMenu(*getMainControl());
+			}
+			else if (RTTI::isKindOf<CompositeMessage>(*message))
 			{
 				CompositeMessage* cmessage = RTTI::castTo<CompositeMessage>(*message);
 				switch (cmessage->getType())
@@ -470,7 +475,7 @@ namespace BALL
 			calculate_ss_id_->setEnabled( allow);
 
 			// these menu point for single items only
-			center_camera_id_->setEnabled( one_item && composites_muteable);
+			center_camera_id_->setEnabled(selected && composites_muteable);
 			create_distance_grid_id_->setEnabled( one_item && composites_muteable);
 
 //			menuBar()->setItemEnabled( map_proteins_id_, (number_of_selected_objects == 2) && 

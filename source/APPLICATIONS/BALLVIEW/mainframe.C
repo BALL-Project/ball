@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.37 2006/10/26 02:17:27 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.38 2006/10/26 13:12:52 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -182,7 +182,9 @@ namespace BALL
 		stop_simulation_action_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, 
 										SLOT(stopSimulation()), Qt::ALT+Qt::Key_C);
 		insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
-		setMenuHint(stop_simulation_action_, "Abort a running simulation thread");
+		setMenuHint(stop_simulation_action_, "Abort a running simulation");
+		filename = path.find("graphics/stop.png");
+		stop_simulation_action_->setIcon(QIcon(filename.c_str()));
 
 		complement_selection_action_ = insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, SLOT(complementSelection()));
 
@@ -425,7 +427,12 @@ namespace BALL
 		MainControl::show();
 		MolecularFileDialog::getInstance(0)->addToolBarEntries(tb);
 		DownloadPDBFile::getInstance(0)->addToolBarEntries(tb);
+		DisplayProperties::getInstance(0)->addToolBarEntries(tb);
+		MolecularStructure::getInstance(0)->addToolBarEntries(tb);
 		scene_->addToolBarEntries(tb);
+		tb->addAction(stop_simulation_action_);
+		tb->addAction(preferences_action_);
+		HelpViewer::getInstance(1)->addToolBarEntries(tb);
 	}
 
 
