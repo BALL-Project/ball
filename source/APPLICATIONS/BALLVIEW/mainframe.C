@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.36 2006/10/26 01:08:31 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.37 2006/10/26 02:17:27 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -29,6 +29,7 @@
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
 
+#include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/FORMAT/PDBFile.h>
@@ -147,6 +148,9 @@ namespace BALL
 
 		// File Menu
 		QAction* entry = insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, SLOT(exportPOVRay()), Qt::CTRL+Qt::Key_Y);
+		Path path;
+		String filename = path.find("graphics/povray.png");
+		entry->setIcon(QIcon(filename.c_str()));
 
 		// registerMenuEntryForHelpSystem
 		RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
@@ -412,7 +416,8 @@ namespace BALL
 
 	void Mainframe::show()
 	{
-		QToolBar* tb = new QToolBar();
+		QToolBar* tb = new QToolBar("Main Toolbar", this);
+		tb->setObjectName("Main Toolbar");
 		tb->setIconSize(QSize(23,23));
 		tb->layout()->setMargin(2);
 		tb->layout()->setSpacing(2);

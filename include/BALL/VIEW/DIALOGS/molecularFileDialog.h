@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.21.2.7 2006/10/22 10:38:41 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.21.2.8 2006/10/26 02:17:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -177,7 +177,7 @@ namespace BALL
 				throw();
 			
 			/// Overloaded from ModularWidget
-			virtual void checkMenuEntries()
+			virtual void checkMenu(MainControl& main_control)
 				throw();
 
 			///
@@ -187,6 +187,9 @@ namespace BALL
 			String getSupportedFileFormatsList() const;
 				
 			protected:
+
+			virtual void onNotify(Message *message)
+				throw();
 
 			// Only for Python interface
 			MolecularFileDialog(const MolecularFileDialog& mfd)

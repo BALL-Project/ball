@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.C,v 1.1.2.10 2006/05/20 13:15:30 amoll Exp $
+// $Id: representationManager.C,v 1.1.2.11 2006/10/26 02:17:24 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representationManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -36,7 +36,6 @@ RepresentationManager::RepresentationManager(MainControl* mc)
 		main_control_(mc)
 {
 	thread_->setMainControl(mc);
-	thread_->start(QThread::LowPriority);
 }
 
 RepresentationManager::~RepresentationManager()
@@ -533,7 +532,14 @@ void RepresentationManager::finishedRendering(Representation* rep)
 
 Representation* RepresentationManager::popRepresentationToUpdate()
 {
-	if (to_update_.size() == 0) return 0;
+	if (to_update_.size() == 0) 
+	{
+		if (!main_control_->compositesAreLocked())
+		{
+			main_control_->checkMenus();
+		}
+		return 0;
+	}
 
 	if (!update_mutex_.tryLock())
 	{

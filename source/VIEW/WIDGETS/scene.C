@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.91 2006/10/26 01:07:43 amoll Exp $
+// $Id: scene.C,v 1.174.2.92 2006/10/26 02:17:24 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1576,8 +1576,10 @@ namespace BALL
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()));
 			setMenuHint("Reset the camera to the orgin (0,0,0)");
 
-			insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", this, SLOT(showExportPNGDialog()), Qt::ALT + Qt::Key_P);
+			QAction* screenshot_action = insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", 
+																	this, SLOT(showExportPNGDialog()), Qt::ALT + Qt::Key_P);
 			setMenuHint("Export a PNG image file from the Scene");
+			setIcon("screenshot.png", false);
 
 //   			insertMenuEntry(MainControl::FILE_EXPORT, "VRML...", this, SLOT(showExportVRMLDialog()));
 //   			setMenuHint("Export a VRML file from the Scene");
@@ -1622,6 +1624,8 @@ namespace BALL
 			filename = path.find("graphics/ruler.png");
 			switch_grid_->setIcon(QIcon(filename.c_str()));
 			toolbar_actions_.push_back(switch_grid_);
+
+			toolbar_actions_.push_back(screenshot_action);
 
 			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 			window_menu_entry_->setCheckable(true);

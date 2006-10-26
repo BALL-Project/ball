@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.32.2.10 2006/10/26 01:13:53 amoll Exp $$
+// $Id: molecularFileDialog.C,v 1.32.2.11 2006/10/26 02:17:23 amoll Exp $$
 //
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
@@ -29,7 +29,8 @@ namespace BALL
 		MolecularFileDialog::MolecularFileDialog(QWidget *parent, const char* name)
 			throw()
 			:	QWidget(parent),
-				ModularWidget(name)
+				ModularWidget(name),
+				save_id_(0)
 		{
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new MolecularFileDialog " << this << std::endl;
@@ -49,10 +50,10 @@ namespace BALL
 			#endif 
 		}
 
-		void MolecularFileDialog::initializeWidget(MainControl& main_control)
+		void MolecularFileDialog::initializeWidget(MainControl&)
 			throw()
 		{
-			insertMenuEntry(MainControl::FILE_OPEN, "&Structure", this, 
+			open_id_ = insertMenuEntry(MainControl::FILE_OPEN, "&Structure", this, 
 											SLOT(readFiles()), Qt::CTRL+Qt::Key_O);
 			setMenuHint("Open a molecular file (e.g. PDB,MOL2,SDF)");
 			setIcon("open.png", true);
@@ -61,9 +62,6 @@ namespace BALL
 																	 SLOT(writeFile()), Qt::CTRL+Qt::Key_S);
 			setMenuHint("Save the highlighted System (e.g. as PDB,MOL2,SDF file)");
 			setIcon("save.png", true);
-
-			connect(main_control.initPopupMenu(MainControl::FILE), SIGNAL(aboutToShow()), 
-							this, SLOT(checkMenuEntries()));
 		}
 		
 		void MolecularFileDialog::readFiles()
@@ -597,11 +595,12 @@ namespace BALL
 		}
 
 
-		void MolecularFileDialog::checkMenuEntries()
+		void MolecularFileDialog::checkMenu(MainControl& mc)
 			throw()
 		{
-			bool busy = getMainControl()->isBusy();
-			save_id_->setEnabled(getMainControl()->getSelectedSystem() && !busy);
+			bool busy = mc.isBusy();
+			save_id_->setEnabled(!busy && mc.getSelectedSystem());
+			open_id_->setEnabled(!busy);
 		}
 
 
@@ -669,6 +668,15 @@ namespace BALL
 		System* MolecularFileDialog::openXYZFile()
  		{
 			return openFile_("XYZ");
+		}
+
+		void MolecularFileDialog::onNotify(Message *message)
+			throw()
+		{
+			if (RTTI::isKindOf<ControlSelectionMessage>(*message)) 
+			{
+				checkMenu(*getMainControl());
+			}
 		}
 
 } } //namespaces
