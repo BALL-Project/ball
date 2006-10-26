@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.48 2006/10/26 20:50:08 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.49 2006/10/26 23:07:09 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -179,7 +179,7 @@ void EditableScene::initializeWidget(MainControl& main_control)
 void EditableScene::checkMenu(MainControl& main_control)
 	throw()
 {
-	bool busy = main_control.isBusy();
+	bool busy = main_control.compositesAreLocked();
 	edit_id_->setChecked(current_mode_ == (Scene::ModeType)EDIT__MODE);
 	edit_id_->setEnabled(!busy);
 	Scene::checkMenu(main_control);
@@ -1047,15 +1047,39 @@ void EditableScene::keyPressEvent(QKeyEvent* e)
 
 bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
 {
+	int key = e->key();
+
 	if (current_mode_ != (ModeType)EDIT__MODE) return false;
 
-	int key = e->key();
+	if (key == Qt::Key_D && !getMainControl()->isBusy())
+	{
+		QPoint point = mapFromGlobal(QCursor::pos());
+	  current_atom_ = getClickedAtom_(point.x(), point.y());
+		deleteAtom_();
+		return true;
+	}
+
+	if (key == Qt::Key_Backspace && !getMainControl()->isBusy())
+	{
+		QPoint point = mapFromGlobal(QCursor::pos());
+	  current_bond_ = getClickedBond_(point.x(), point.y());
+		deleteBond_();
+		return true;
+	}
+
 
 	if (key < Qt::Key_A ||
 			key > Qt::Key_Z)
 	{
 		return false;
 	}
+
+	if (key == Qt::Key_E)
+	{
+		setMode((ModeType)EDIT__MODE);
+		return true;
+	}
+
 
 	if      (key == Qt::Key_H) atomic_number_ = 1;
 	else if (key == Qt::Key_C) atomic_number_ = 6;
@@ -1070,14 +1094,8 @@ bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
 
 	setElementCursor();
 
-	QPoint point = mapFromGlobal(QCursor::pos());
-	Atom* atom = getClickedAtom_(point.x(), point.y());
-	if (atom == 0) return true;
-	
-	atom->setElement(PTE[atomic_number_]);
-	getMainControl()->update(*atom);
 	String text("Setting element to ");
-	text += atom->getElement().getName();
+	text += PTE[atomic_number_].getName();
 	setStatusbarText(text, true);
 
 	return true;

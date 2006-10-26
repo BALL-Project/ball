@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.27 2006/10/26 20:33:03 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.28 2006/10/26 23:08:30 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -475,7 +475,7 @@ namespace BALL
 			calculate_ss_id_->setEnabled( allow);
 
 			// these menu point for single items only
-			center_camera_id_->setEnabled(selected && main_control.compositesAreLocked());
+			center_camera_id_->setEnabled(selected && !main_control.compositesAreLocked());
 			create_distance_grid_id_->setEnabled( one_item && composites_muteable);
 
 //			menuBar()->setItemEnabled( map_proteins_id_, (number_of_selected_objects == 2) && 
