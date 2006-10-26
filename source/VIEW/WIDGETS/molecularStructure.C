@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.26 2006/10/26 14:22:58 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.27 2006/10/26 20:33:03 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -45,10 +45,10 @@ namespace BALL
 				ModularWidget(name),
 				amber_(),
 				charmm_(),
-				amber_dialog_(this),
-				charmm_dialog_(this),
-				minimization_dialog_(this),
-				md_dialog_(this),
+				amber_dialog_(parent),
+				charmm_dialog_(parent),
+				minimization_dialog_(parent),
+				md_dialog_(parent),
 				fdpb_dialog_(0)
 		{
 			#ifdef BALL_VIEW_DEBUG
@@ -1153,6 +1153,7 @@ namespace BALL
 				return;
 			}
 
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			if (show_dialog && !md_dialog_.exec()) return;
 
 			// Get the force field.
@@ -1460,11 +1461,11 @@ namespace BALL
 		{
 			if (fdpb_dialog_ == 0)
 			{
-				fdpb_dialog_ = new FDPBDialog(this, "FDPBDialog");
+				fdpb_dialog_ = new FDPBDialog(getMainControl(), "FDPBDialog");
 				fdpb_dialog_->fetchPreferences(getMainControl()->getINIFile());
 			}
 
-			fdpb_dialog_->show();
+			fdpb_dialog_->exec();
 		}
 
 		void MolecularStructure::selectUnassignedForceFieldAtoms_()
