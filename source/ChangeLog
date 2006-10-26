@@ -6,9 +6,11 @@ Added:
 - Protein-ligand docking code based on a genetic algorithm (similar to AutoDock)
 - An interactive user interface for the two docking algorithms
 - Molecular Editing functionality 
+- Processor for saturating atoms with Hydrogen atoms
 - Support for field lines, vector grids and normalized grids
 - Volume Rendering and colored planes e.g. for electrostatics
 - Projection of e.g. electrostatics on a sphere
+- Toolbars to BALLView
 - Abilitiy to create screenshots larger than the screen size
 - Widget for overview of atom values (e.g. atom type, charge)
 - BALL documentation widget in BALLView
