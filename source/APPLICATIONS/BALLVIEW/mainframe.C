@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.39 2006/10/26 18:52:39 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.40 2006/10/27 12:27:14 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -409,11 +409,22 @@ namespace BALL
 	{
 		MainControl::checkMenus();
 		save_project_action_->setEnabled(!composites_locked_);
+		qload_action_->setEnabled(!composites_locked_);
+		qsave_action_->setEnabled(!composites_locked_);
 	}
 
 	void Mainframe::howToCite()
 	{
 		HelpViewer::getInstance(1)->showHelp("tips.html", "cite");
+	}
+
+	void Mainframe::quickLoadConfirm()
+	{
+		if (QMessageBox::question(this, "Quickload", "Do you really want to quickload?", 
+									QMessageBox::Yes| QMessageBox::Default, QMessageBox::No|QMessageBox::Escape) == QMessageBox::Yes)
+		{
+			quickLoad();
+		}
 	}
 
 	void Mainframe::show()
@@ -434,6 +445,16 @@ namespace BALL
 		MainControl::show();
 		MolecularFileDialog::getInstance(0)->addToolBarEntries(tb);
 		DownloadPDBFile::getInstance(0)->addToolBarEntries(tb);
+		Path path;
+		QIcon load_icon(path.find("graphics/quickload.png").c_str());
+		QIcon save_icon(path.find("graphics/quicksave.png").c_str());
+		qload_action_ = new QAction(load_icon, "quickload", this);
+		connect(qload_action_, SIGNAL(triggered()), this, SLOT(quickLoadConfirm()));
+		qsave_action_ = new QAction(save_icon, "quicksave", this);
+		connect(qsave_action_, SIGNAL(triggered()), this, SLOT(quickSave()));
+		tb->addAction(qload_action_);
+		tb->addAction(qsave_action_);
+		tb->addSeparator();
 		DisplayProperties::getInstance(0)->addToolBarEntries(tb);
 		MolecularStructure::getInstance(0)->addToolBarEntries(tb);
 		scene_->addToolBarEntries(tb);
@@ -578,6 +599,7 @@ namespace BALL
 		about.BALLView_version_label->setFont(font);
 		about.BALL_version_label->setText(__DATE__);
 		w.exec(); 
+
 	}
 
 }

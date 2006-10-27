@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.16.2.9 2006/10/26 01:08:31 amoll Exp $
+// $Id: mainframe.h,v 1.16.2.10 2006/10/27 12:27:14 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -76,6 +76,9 @@ namespace BALL
 		void loadBALLViewProjectFile() throw();
 
 		///
+		void quickLoadConfirm();
+
+		///
 		virtual void checkMenus();
 
 		protected:
@@ -83,6 +86,7 @@ namespace BALL
 		void write();
 
 		Scene*				scene_;
+		QAction* qload_action_, *qsave_action_;
 	};
 
 } // namespace BALL
