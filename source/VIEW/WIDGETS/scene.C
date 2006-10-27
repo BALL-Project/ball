@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.95 2006/10/26 23:39:48 amoll Exp $
+// $Id: scene.C,v 1.174.2.96 2006/10/27 14:15:44 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -74,7 +74,9 @@ namespace BALL
     #define  ZOOM_FACTOR      7.
 
 	  QGLFormat Scene::gl_format_(QGL::DepthBuffer 		| 
+#ifndef BALL_OS_DARWIN
 																QGL::StereoBuffers 	| 
+#endif
 																QGL::DoubleBuffer 	| 
 																QGL::DirectRendering |
 																QGL::SampleBuffers  |
