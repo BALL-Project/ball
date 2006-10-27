@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.51 2006/10/26 23:41:37 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.52 2006/10/27 15:50:41 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -160,7 +160,6 @@ void EditableScene::initializeWidget(MainControl& main_control)
 {
 	Scene::initializeWidget(main_control);
 	String help_url("scene.html#editing");
-	String filename;
 
 	edit_id_ = insertMenuEntry(MainControl::DISPLAY, "Edit Mode", 
 										this, SLOT(editMode_()), Qt::CTRL+Qt::Key_E);
@@ -172,7 +171,20 @@ void EditableScene::initializeWidget(MainControl& main_control)
 
 	new_molecule_ = insertMenuEntry(MainControl::BUILD, "Create new molecule", 
 										this, SLOT(createNewMolecule()));
-	setMenuHint("Create a new molecule for editing");
+ 	setMenuHint("Create a new molecule for editing");
+
+	Path path;
+	QIcon icon(path.find("graphics/minimize.png").c_str());
+	optimize_ = new QAction(icon, "Quickly optimize structure", this);
+	connect(optimize_, SIGNAL(triggered()), this, SLOT(optimizeStructure()));
+
+	QIcon icon2(path.find("graphics/hydrogens.png").c_str());
+	add_hydrogens_ = new QAction(icon2, "Saturate with hydrogens", this);
+	connect(add_hydrogens_, SIGNAL(triggered()), this, SLOT(addHydrogens()));
+
+	QIcon icon3(path.find("graphics/element.png").c_str());
+	element_action_ = new QAction(icon3, "Set element", this);
+	connect(element_action_, SIGNAL(triggered()), this, SLOT(changeElement_()));
 }
 
 
@@ -778,7 +790,7 @@ void EditableScene::showContextMenu(QPoint pos)
 		menu.addAction("Atom Properties", this, SLOT(atomProperties_()))->setEnabled(current_atom_ != 0);
 		menu.addAction("Move Atom", this, SLOT(moveAtom_()))->setEnabled(current_atom_ != 0);
 		menu.addAction("Delete Atom", this, SLOT(deleteAtom_()))->setEnabled(current_atom_ != 0);
- 		menu.addAction("Change element", this, SLOT(changeElement_()));
+		menu.addAction(element_action_);
 
 		QMenu* charge = new QMenu();
 		QAction* change_charge = menu.addMenu(charge);
@@ -822,8 +834,8 @@ void EditableScene::showContextMenu(QPoint pos)
 
 		menu.addSeparator();
 
-		menu.addAction("Add hydrogens", this, SLOT(addHydrogens()));
-		menu.addAction("Optimize Structure", this, SLOT(optimizeStructure()));
+		menu.addAction(optimize_);
+		menu.addAction(add_hydrogens_);
 	}
 
 	menu.exec(mapToGlobal(pos));
@@ -1233,7 +1245,11 @@ void EditableScene::optimizeStructure()
 void EditableScene::addToolBarEntries(QToolBar* tb)
 {
 	toolbar_actions_.insert(toolbar_actions_.lastIndexOf(move_action_) + 1, edit_id_);
+	toolbar_actions_.push_back(element_action_);
+	toolbar_actions_.push_back(optimize_);
+	toolbar_actions_.push_back(add_hydrogens_);
 	Scene::addToolBarEntries(tb);
+	toolbar_->insertSeparator(element_action_);
 }
 
 	}//end of namespace 
