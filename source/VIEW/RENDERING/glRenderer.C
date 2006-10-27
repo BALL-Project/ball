@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.71.2.70 2006/10/25 12:55:42 amoll Exp $
+// $Id: glRenderer.C,v 1.71.2.71 2006/10/27 13:49:37 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1880,7 +1880,7 @@ Position GLRenderer::createTextureFromGrid(const RegularData3D& grid, const Colo
 void GLRenderer::removeTextureFor_(const RegularData3D& grid)
 {
 	if (!grid_to_texture_.has(&grid)) return;
-	glDeleteTextures(1, &grid_to_texture_[&grid]);
+	glDeleteTextures(1, (GLuint*)&grid_to_texture_[&grid]);
 	grid_to_texture_.erase(&grid);
 }
 
