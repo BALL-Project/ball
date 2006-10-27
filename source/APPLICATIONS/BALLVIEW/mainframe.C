@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.40 2006/10/27 12:27:14 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.41 2006/10/27 13:25:38 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -407,10 +407,12 @@ namespace BALL
 	
 	void Mainframe::checkMenus()
 	{
-		MainControl::checkMenus();
+		if (preferences_action_ == 0) return;
+
 		save_project_action_->setEnabled(!composites_locked_);
 		qload_action_->setEnabled(!composites_locked_);
 		qsave_action_->setEnabled(!composites_locked_);
+		MainControl::checkMenus();
 	}
 
 	void Mainframe::howToCite()
@@ -420,6 +422,8 @@ namespace BALL
 
 	void Mainframe::quickLoadConfirm()
 	{
+		if (isBusy()) return;
+
 		if (QMessageBox::question(this, "Quickload", "Do you really want to quickload?", 
 									QMessageBox::Yes| QMessageBox::Default, QMessageBox::No|QMessageBox::Escape) == QMessageBox::Yes)
 		{
