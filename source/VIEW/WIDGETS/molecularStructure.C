@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.28 2006/10/26 23:08:30 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.29 2006/10/27 22:17:08 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1153,7 +1153,6 @@ namespace BALL
 				return;
 			}
 
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			if (show_dialog && !md_dialog_.exec()) return;
 
 			// Get the force field.

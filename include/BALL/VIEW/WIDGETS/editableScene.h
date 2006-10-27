@@ -197,6 +197,7 @@ class BALL_VIEW_EXPORT EditableScene
 
 	/// Catch key events
 	virtual void keyPressEvent(QKeyEvent* e);
+	virtual void mouseDoubleClickEvent(QMouseEvent* e);
 	virtual bool reactToKeyEvent_(QKeyEvent* e);
 
 	virtual void onNotify(Message *message)
@@ -261,6 +262,7 @@ class BALL_VIEW_EXPORT EditableScene
 	QPoint 	 menu_point_;
 	FragmentDB fragment_db_;
 	bool fragment_db_initialized_;
+	bool temp_move_;
 };
 
 	}//end of namespace

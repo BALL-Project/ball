@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.96 2006/10/27 14:15:44 amoll Exp $
+// $Id: scene.C,v 1.174.2.97 2006/10/27 22:17:08 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -948,8 +948,6 @@ namespace BALL
 
 		void Scene::rotateSystemClockwise_()
 		{
-			if (current_mode_ != ROTATE__MODE) return;
-
 			float x = getXDiff_();
 
 			if (x == 0) return;
@@ -1745,14 +1743,14 @@ namespace BALL
 		{
 			if (e.modifiers() == Qt::NoModifier)
 			{
-				if (e.buttons() == Qt::LeftButton) 	return ROTATE_ACTION;
+				if (e.buttons() == Qt::LeftButton) 	return TRANSLATE_ACTION;
 				if (e.buttons() == Qt::MidButton) 	return ZOOM_ACTION;
-				if (e.buttons() == Qt::RightButton) return TRANSLATE_ACTION;
+				if (e.buttons() == Qt::RightButton) return ROTATE_ACTION;
 			}
 			else if (e.buttons() == Qt::LeftButton)
 			{
 				if (e.modifiers() == Qt::ShiftModifier) 											return ZOOM_ACTION;
-				if (e.modifiers() == Qt::ControlModifier) 										return TRANSLATE_ACTION;
+				if (e.modifiers() == Qt::ControlModifier) 										return ROTATE_ACTION;
 				if (e.modifiers() == Qt::ShiftModifier | Qt::ControlModifier) return ROTATE_CLOCKWISE_ACTION;
 			}
 			else if (e.buttons() == Qt::LeftButton | Qt::RightButton)
@@ -1760,7 +1758,7 @@ namespace BALL
 				return ROTATE_CLOCKWISE_ACTION;
 			}
 
-			return TRANSLATE_ACTION;
+			return ROTATE_ACTION;
 		}
 
 		void Scene::processRotateModeMouseEvents_(QMouseEvent* e)
@@ -1771,8 +1769,6 @@ namespace BALL
 				return;
 			}
 
-			if (current_mode_ != ROTATE__MODE) return;
-			
 			content_changed_ = true;
 
 			switch ((Index)(e->buttons() | e->modifiers()))
@@ -1808,8 +1804,6 @@ namespace BALL
 
 		void Scene::processMoveModeMouseEvents_(QMouseEvent* e)
 		{
-			if(current_mode_ != MOVE__MODE) return;
-
 			Camera& camera = stage_->getCamera();
 
 			// Difference between the old and new position in the window 

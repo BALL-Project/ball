@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.52 2006/10/27 15:50:41 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.53 2006/10/27 22:17:07 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -122,6 +122,7 @@ void EditableScene::init_()
 	draw_line_ = 0;
 	atomic_number_ = 6;
 	atom_number_ = 0;
+	temp_move_ = false;
 }
 
 void EditableScene::setCursor(String c)
@@ -195,6 +196,9 @@ void EditableScene::checkMenu(MainControl& main_control)
 	edit_id_->setChecked(current_mode_ == (Scene::ModeType)EDIT__MODE);
 	edit_id_->setEnabled(!busy);
 	Scene::checkMenu(main_control);
+	optimize_->setEnabled(!busy);
+	add_hydrogens_->setEnabled(!busy);
+	element_action_->setEnabled(!busy);
 
 	new_molecule_->setEnabled(!busy);
 }
@@ -230,6 +234,16 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 
 	if (e->button() == Qt::LeftButton)
 	{	
+		current_atom_ = getClickedAtom_(e->x(), e->y());
+		if (current_atom_ != 0)
+		{
+			getMainControl()->selectCompositeRecursive(current_atom_, true);
+			x_window_pos_new_ = x_window_pos_old_ = e->globalX();
+			y_window_pos_new_ = y_window_pos_old_ = e->globalY();
+			temp_move_ = true;
+			return;
+		}
+
 		// insert a new atom:
 		String name = PTE[atomic_number_].getSymbol();
 		name += String(atom_number_);
@@ -354,6 +368,18 @@ void EditableScene::mouseMoveEvent(QMouseEvent *e)
 
 	if (isAnimationRunning() || getMainControl()->isBusy()) return;
 
+	if (temp_move_)
+	{
+		x_window_pos_new_ = e->globalX();
+		y_window_pos_new_ = e->globalY();
+
+		processMoveModeMouseEvents_(e);
+
+		x_window_pos_old_ = x_window_pos_new_;
+		y_window_pos_old_ = y_window_pos_new_;
+		return;
+	}
+
 	// create a new bond
 	//
 	// is there an atom nearby the actual mouse position? 
@@ -407,6 +433,13 @@ void EditableScene::paintGL()
 
 void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 {
+	if (temp_move_)
+	{
+		deselect_();
+		temp_move_ = false;
+		return;
+	}
+
 	if ((int)current_mode_ < (int) EDIT__MODE)
 	{
 		Scene::mouseReleaseEvent(e);
@@ -1172,6 +1205,8 @@ void EditableScene::addStructure_()
 
 void EditableScene::createNewMolecule()
 {
+	if (getMainControl()->isBusy()) return;
+
 	System* s = new System();
 	Molecule* m = new Molecule();
 	s->insert(*m);
@@ -1187,6 +1222,8 @@ void EditableScene::createNewMolecule()
 
 void EditableScene::addHydrogens()
 {
+	if (getMainControl()->isBusy()) return;
+
 	deselect_();
 	List<AtomContainer*> containers = getContainers_();
 	if (containers.size() < 1) return;
@@ -1206,6 +1243,8 @@ void EditableScene::addHydrogens()
 
 void EditableScene::optimizeStructure()
 {
+	if (getMainControl()->isBusy()) return;
+
 	List<AtomContainer*> containers = getContainers_();
 	if (containers.size() < 1) return;
 
@@ -1246,10 +1285,21 @@ void EditableScene::addToolBarEntries(QToolBar* tb)
 {
 	toolbar_actions_.insert(toolbar_actions_.lastIndexOf(move_action_) + 1, edit_id_);
 	toolbar_actions_.push_back(element_action_);
-	toolbar_actions_.push_back(optimize_);
 	toolbar_actions_.push_back(add_hydrogens_);
+	toolbar_actions_.push_back(optimize_);
 	Scene::addToolBarEntries(tb);
 	toolbar_->insertSeparator(element_action_);
+}
+
+void EditableScene::mouseDoubleClickEvent(QMouseEvent* e)
+{
+	current_atom_ = getClickedAtom_(e->x(), e->y());
+	if (current_atom_ != 0)
+	{
+		current_atom_->setElement(PTE[atomic_number_]);
+		deselect_();
+		getMainControl()->update(*current_atom_);
+	}
 }
 
 	}//end of namespace 
