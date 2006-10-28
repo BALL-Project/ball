@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.53 2006/10/27 22:17:07 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.54 2006/10/28 20:06:44 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -1288,11 +1288,13 @@ void EditableScene::addToolBarEntries(QToolBar* tb)
 	toolbar_actions_.push_back(add_hydrogens_);
 	toolbar_actions_.push_back(optimize_);
 	Scene::addToolBarEntries(tb);
-	toolbar_->insertSeparator(element_action_);
+	toolbar_->insertSeparator(del_selection_);
 }
 
 void EditableScene::mouseDoubleClickEvent(QMouseEvent* e)
 {
+	if (current_mode_ != (ModeType) EDIT__MODE) return;
+
 	current_atom_ = getClickedAtom_(e->x(), e->y());
 	if (current_atom_ != 0)
 	{
