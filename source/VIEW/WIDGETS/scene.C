@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.98 2006/10/28 20:06:44 amoll Exp $
+// $Id: scene.C,v 1.174.2.99 2006/10/29 10:30:17 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1627,13 +1627,6 @@ namespace BALL
 
 			toolbar_actions_.push_back(screenshot_action);
 
-			del_selection_ = new QAction("Delete selection", this);
-			connect(del_selection_, SIGNAL(triggered()), this, SLOT(deleteSelection()));
-			filename = path.find("graphics/delete.png");
-			del_selection_->setIcon(QIcon(filename.c_str()));
-			toolbar_actions_.push_back(del_selection_);
-
-
 			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 			window_menu_entry_->setCheckable(true);
 			setMenuHelp("scene.html");
@@ -1673,8 +1666,6 @@ namespace BALL
 			clear_animation_action_->setEnabled(animation_points_.size() > 0 && !animation_running);
 
 			window_menu_entry_->setChecked(isVisible());
-
-			del_selection_->setEnabled(!busy && main_control.getSelection().size());
 		}
 
 		bool Scene::isAnimationRunning() const
@@ -2851,34 +2842,6 @@ namespace BALL
 			near_left_top_  = inverse_mod_view_mat_*near_left_top_;
 
 			return true;
-		}
-
-		void Scene::deleteSelection()
-		{
-			MainControl* mc = getMainControl();
-			if (mc->isBusy()) return;
-			HashSet<Composite*> selection = mc->getSelection();
-			if (selection.size() == 0) return;
-
-			HashSet<Composite*> roots;
-			HashSet<Composite*>::Iterator cit = selection.begin();
-			for (; +cit; ++cit)
-			{
-				if ((**cit).isRoot()) 
-				{
-					mc->remove(**cit, true, true);
-					continue;
-				}
-
-				roots.insert(&(**cit).getRoot());
-				mc->remove(**cit, false, false);
-			}
-
-			cit = roots.begin();
-			for (; +cit; ++cit)
-			{
-				mc->update(**cit, true);
-			}
 		}
 
 	} // namespace VIEW

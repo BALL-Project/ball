@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.54 2006/10/28 20:06:44 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.55 2006/10/29 10:30:16 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -1288,7 +1288,6 @@ void EditableScene::addToolBarEntries(QToolBar* tb)
 	toolbar_actions_.push_back(add_hydrogens_);
 	toolbar_actions_.push_back(optimize_);
 	Scene::addToolBarEntries(tb);
-	toolbar_->insertSeparator(del_selection_);
 }
 
 void EditableScene::mouseDoubleClickEvent(QMouseEvent* e)
@@ -1301,6 +1300,55 @@ void EditableScene::mouseDoubleClickEvent(QMouseEvent* e)
 		current_atom_->setElement(PTE[atomic_number_]);
 		deselect_();
 		getMainControl()->update(*current_atom_);
+	}
+
+	current_bond_ = getClickedBond_(e->x(), e->y());
+	if (current_bond_ != 0)
+	{
+		Atom* a1 = (Atom*)current_bond_->getFirstAtom();
+		Atom* a2 = (Atom*)current_bond_->getSecondAtom();
+		if (a1->getParent() != a2->getParent() || a1->getParent() == 0) return;
+		
+		RingPerceptionProcessor rpp;
+		vector<vector<Atom*> > rings;
+		rpp.calculateSSSR(rings, *(AtomContainer*)a1->getParent());
+		rings = rpp.getAllSmallRings();
+		vector<Position> rings_to_modify;
+		for (Position r = 0; r < rings.size(); r++)
+		{
+			for (Position a = 0; a < rings[r].size(); a++)
+			{
+				if (rings[r][a] == a1)
+				{
+					rings_to_modify.push_back(r);
+					break;
+				}
+			}
+		}
+
+		for (Position r = 0; r < rings_to_modify.size(); r++)
+		{
+			HashSet<Atom*> ratoms;
+			vector<Atom*>& ring = rings[rings_to_modify[r]];
+			for (Position a = 0; a < ring.size(); a++)
+			{
+				ratoms.insert(ring[a]);
+			}
+		
+			for (Position a = 0; a < ring.size(); a++)
+			{
+				AtomBondIterator abit = ring[a]->beginBond();
+				for (;+abit; ++abit)
+				{
+					if (ratoms.has(abit->getPartner(*ring[a])))
+					{
+						abit->setOrder(Bond::ORDER__AROMATIC);
+					}
+				}
+			}
+		}
+	
+		getMainControl()->update(*a1->getParent(), true);
 	}
 }
 
