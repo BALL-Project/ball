@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.27 2006/10/29 10:30:24 amoll Exp $
+// $Id: scene.h,v 1.66.2.28 2006/10/29 23:21:33 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -438,6 +438,9 @@ namespace BALL
 			/// Catch key events
 			virtual void keyPressEvent(QKeyEvent* e);
 
+			///
+			virtual void mouseDoubleClickEvent(QMouseEvent* e);
+
 			protected:
 
 			//@}
@@ -716,6 +719,7 @@ namespace BALL
 			void selectionPressedMoved_();
 
 			void selectObjects_();
+			void pickParent_(QPoint p);
 
 			void writeLights_(INIFile& inifile) const
 				throw();
@@ -818,7 +822,7 @@ namespace BALL
 			Size   font_size_;
 			QToolBar* toolbar_;
 			QList<QAction*> toolbar_actions_;
-			bool draw_grid_;
+			bool draw_grid_, ignore_pick_;
 			QActionGroup* mode_group_;
 
 			Vector3 near_left_bot_, near_right_bot_, near_left_top_;

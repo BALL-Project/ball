@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.99 2006/10/29 10:30:17 amoll Exp $
+// $Id: scene.C,v 1.174.2.100 2006/10/29 23:21:43 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1504,6 +1504,7 @@ namespace BALL
 			setMinimumSize(10, 10);
 
 			draw_grid_ = false;
+			ignore_pick_ = false;
 
 			main_control.initPopupMenu(MainControl::DISPLAY);
 
@@ -1722,6 +1723,7 @@ namespace BALL
 			makeCurrent();
 
 			mouse_button_is_pressed_ = true;
+			ignore_pick_ = false;
 
 			x_window_pos_old_ = e->globalX();
 			y_window_pos_old_ = e->globalY();
@@ -1730,11 +1732,17 @@ namespace BALL
 
 			if (current_mode_ == PICKING__MODE)
 			{	
-				if (e->buttons() == Qt::LeftButton ||
-						e->buttons() == Qt::RightButton)
+				if (e->modifiers() == Qt::NoModifier &&(
+						e->buttons() == Qt::LeftButton ||
+						e->buttons() == Qt::RightButton))
 				{
 					pick_select_ = (e->buttons() == Qt::LeftButton);
 					selectionPressed_();
+				}
+				else
+				{
+					QPoint p = mapFromGlobal(QCursor::pos());
+					pickParent_(p);
 				}
 			}
 		}
@@ -1919,6 +1927,12 @@ namespace BALL
 			// ============ picking mode ================
 			if (current_mode_ == PICKING__MODE)
 			{
+				if (ignore_pick_)
+				{
+					ignore_pick_ = false;
+
+					return;
+				}
 				x_window_pos_new_ = e->globalX();
 				y_window_pos_new_ = e->globalY();
 				selectObjects_();
@@ -2842,6 +2856,65 @@ namespace BALL
 			near_left_top_  = inverse_mod_view_mat_*near_left_top_;
 
 			return true;
+		}
+
+
+		void Scene::mouseDoubleClickEvent(QMouseEvent* e)
+		{
+			if (getMainControl()->isBusy()) return;
+
+			if (current_mode_ == PICKING__MODE)
+			{
+				QPoint p = mapFromGlobal(QCursor::pos());
+				pickParent_(p);
+			}
+		}
+
+		void Scene::pickParent_(QPoint p)
+		{
+			ignore_pick_ = true;
+			List<GeometricObject*> objects;
+			gl_renderer_.pickObjects1((Position) p.x(), (Position) p.y(), 
+																(Position) p.x(), (Position) p.y());
+			renderView_(DIRECT_RENDERING);
+			gl_renderer_.pickObjects2(objects);
+
+			if (objects.size() == 0) return;
+		
+			Composite* composite = 	(Composite*)(**objects.begin()).getComposite();
+			if (composite == 0) return;
+
+			Composite* to_select = 0;
+			Atom* atom = dynamic_cast<Atom*>(composite);
+			if (atom != 0)
+			{
+				to_select = atom->getParent();
+			}
+			else
+			{
+				Bond* bond = dynamic_cast<Bond*>(composite);
+				if (bond!= 0) 
+				{
+					to_select = (Composite*)bond->getFirstAtom()->getParent();
+				}
+				else
+				{
+					to_select = composite;
+				}
+			}
+
+			if (to_select != 0)
+			{
+				if (to_select->isSelected())
+				{
+					getMainControl()->deselectCompositeRecursive(to_select, true);
+				}
+				else
+				{
+					getMainControl()->selectCompositeRecursive(to_select, true);
+				}
+				getMainControl()->update(*to_select, true);
+			}
 		}
 
 	} // namespace VIEW
