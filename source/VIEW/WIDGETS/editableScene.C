@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.55 2006/10/29 10:30:16 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.56 2006/10/29 11:37:58 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -232,6 +232,9 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 		}
 	}
 
+	current_bond_ = getClickedBond_(e->x(), e->y());
+	if (current_bond_ != 0) return;
+
 	if (e->button() == Qt::LeftButton)
 	{	
 		current_atom_ = getClickedAtom_(e->x(), e->y());
@@ -348,7 +351,7 @@ void EditableScene::changeBondOrder_(Index delta)
 	Index order = current_bond_->getOrder();
 	order += delta;
 	order = BALL_MAX((Index)Bond::ORDER__SINGLE, order);
-	order = BALL_MIN((Index)Bond::ORDER__AROMATIC, order);
+	if (order > Bond::ORDER__AROMATIC) order = Bond::ORDER__SINGLE;
 	if (current_bond_->getOrder() == order) return;
 
 	current_bond_->setOrder(order);
@@ -1300,6 +1303,7 @@ void EditableScene::mouseDoubleClickEvent(QMouseEvent* e)
 		current_atom_->setElement(PTE[atomic_number_]);
 		deselect_();
 		getMainControl()->update(*current_atom_);
+		return;
 	}
 
 	current_bond_ = getClickedBond_(e->x(), e->y());
@@ -1316,14 +1320,17 @@ void EditableScene::mouseDoubleClickEvent(QMouseEvent* e)
 		vector<Position> rings_to_modify;
 		for (Position r = 0; r < rings.size(); r++)
 		{
+			Size found = 0;
 			for (Position a = 0; a < rings[r].size(); a++)
 			{
-				if (rings[r][a] == a1)
+				if (rings[r][a] == a1 ||
+				    rings[r][a] == a2)
 				{
-					rings_to_modify.push_back(r);
-					break;
+					found++;
 				}
 			}
+
+			if (found == 2) rings_to_modify.push_back(r);
 		}
 
 		for (Position r = 0; r < rings_to_modify.size(); r++)
@@ -1346,6 +1353,11 @@ void EditableScene::mouseDoubleClickEvent(QMouseEvent* e)
 					}
 				}
 			}
+		}
+
+		if (rings_to_modify.size() == 0)
+		{
+			changeBondOrder_(1);
 		}
 	
 		getMainControl()->update(*a1->getParent(), true);
