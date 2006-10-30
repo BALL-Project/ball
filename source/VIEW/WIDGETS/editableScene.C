@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.57 2006/10/29 23:21:42 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.58 2006/10/30 01:46:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -205,6 +205,8 @@ void EditableScene::checkMenu(MainControl& main_control)
 
 void EditableScene::mousePressEvent(QMouseEvent* e)
 {
+	draw_line_ = false;
+
 	if (current_mode_ < (Scene::ModeType) EDIT__MODE)
 	{
 		Scene::mousePressEvent(e);
@@ -235,7 +237,7 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 	current_bond_ = getClickedBond_(e->x(), e->y());
 	if (current_bond_ != 0) return;
 
-	if (e->button() == Qt::LeftButton)
+	if (e->button() == Qt::LeftButton && e->modifiers() != Qt::ControlModifier)
 	{	
 		current_atom_ = getClickedAtom_(e->x(), e->y());
 		if (current_atom_ != 0)
@@ -272,7 +274,8 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 
 	current_atom_ = getClickedAtom_(e->x(), e->y());
 
-	if (e->button() == Qt::MidButton)
+	if (e->button() == Qt::MidButton ||
+			(e->button() == Qt::LeftButton && e->modifiers() == Qt::ControlModifier))
 	{	
 		if (current_atom_)
 		{
@@ -363,6 +366,7 @@ void EditableScene::changeBondOrder_(Index delta)
 
 void EditableScene::mouseMoveEvent(QMouseEvent *e)
 {
+	draw_line_ = false;
 	if (current_mode_ < (Scene::ModeType) EDIT__MODE)
 	{
 		Scene::mouseMoveEvent(e);
@@ -415,8 +419,8 @@ void EditableScene::paintGL()
 {
 	Scene::paintGL();
 
-	if (current_mode_ != (Scene::ModeType) EDIT__MODE ||
-			last_buttons_ != Qt::MidButton) 
+	if (current_mode_ != (Scene::ModeType) EDIT__MODE)
+//   			last_buttons_ != Qt::MidButton) ????
 	{
 		draw_line_ = false;
 	}
@@ -449,13 +453,13 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 		return;
 	}
 
-	if (last_buttons_ == Qt::LeftButton) return;
-
 	if (last_buttons_ == Qt::RightButton) 
 	{
 		deselect_();
 		return;
 	}
+
+	if (last_buttons_ == Qt::LeftButton && !draw_line_) return;
 
 	if (isAnimationRunning() || getMainControl()->isBusy()) return;
 
