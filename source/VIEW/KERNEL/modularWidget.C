@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.24.2.10 2006/10/26 00:02:08 amoll Exp $
+// $Id: modularWidget.C,v 1.24.2.11 2006/10/30 09:29:50 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -173,11 +173,11 @@ namespace BALL
 		MainControl* ModularWidget::getMainControl() const
 			throw()
 		{ 
-			if (getParent() == 0) return 0;
+			if (getParent() == 0) return VIEW::getMainControl();
 			
 			ConnectionObject* root = (const_cast<ModularWidget*>(this))->getRoot();
 			
-			if (!RTTI::isKindOf<MainControl>(*root)) return 0;
+			if (!RTTI::isKindOf<MainControl>(*root)) return VIEW::getMainControl();
 
 			return (dynamic_cast<MainControl*>(root));
 		}
