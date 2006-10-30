@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.61 2006/10/30 23:08:42 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.62 2006/10/30 23:29:39 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -267,6 +267,8 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 	// left button -> add atom or move existing atom
 	if (e->button() == Qt::LeftButton && e->modifiers() != Qt::ControlModifier)
 	{	
+		if (current_bond_ != 0) return;
+
 		if (current_atom_ != 0)
 		{
 			getMainControl()->selectCompositeRecursive(current_atom_, true);
