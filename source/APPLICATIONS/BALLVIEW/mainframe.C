@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.43 2006/10/30 13:56:18 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.44 2006/10/30 13:56:38 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -449,7 +449,6 @@ namespace BALL
 		addToolBar(Qt::TopToolBarArea, tb);
 		
 		MainControl::show();
-//   		restoreWindows(preferences_file_);
 
 		initPopupMenu(MainControl::WINDOWS)->addSeparator();
 		initPopupMenu(MainControl::WINDOWS)->addAction(tb->toggleViewAction());
