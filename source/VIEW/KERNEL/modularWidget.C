@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.24.2.11 2006/10/30 09:29:50 amoll Exp $
+// $Id: modularWidget.C,v 1.24.2.12 2006/10/30 13:32:46 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -127,14 +127,11 @@ namespace BALL
 				Index y = inifile.getValue("WINDOWS", getIdentifier() + "::y").toInt();
 				Position w = inifile.getValue("WINDOWS", getIdentifier() + "::width").toUnsignedInt();
 				Position h = inifile.getValue("WINDOWS", getIdentifier() + "::height").toUnsignedInt();
-				if (x > 0 && y > 0) 
-				{
-					widget->setGeometry(QRect(x,y,w,h));
-				}
-				else
-				{
-					widget->move(QPoint(50,50));
-				}
+				x = BALL_MAX(x, 0);
+				y = BALL_MAX(y, 0);
+
+				widget->resize(QSize(w, h));
+				widget->move(x, y);
 			} 
 
 			PreferencesEntry* entry = dynamic_cast<PreferencesEntry*>(this);
@@ -155,8 +152,8 @@ namespace BALL
 
 			inifile.insertValue("WINDOWS", getIdentifier() + "::x", String(widget->x()));
 			inifile.insertValue("WINDOWS", getIdentifier() + "::y", String(widget->y()));
-			inifile.insertValue("WINDOWS", getIdentifier() + "::width", String(widget->width()));
-			inifile.insertValue("WINDOWS", getIdentifier() + "::height", String(widget->height()));
+			inifile.insertValue("WINDOWS", getIdentifier() + "::width", String(widget->size().width()));
+			inifile.insertValue("WINDOWS", getIdentifier() + "::height", String(widget->size().height()));
 
 			PreferencesEntry* entry = dynamic_cast<PreferencesEntry*>(this);
 			if (entry == 0) return;
