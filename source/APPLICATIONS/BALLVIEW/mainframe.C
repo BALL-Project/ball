@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.41 2006/10/27 13:25:38 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.42 2006/10/30 09:20:18 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -447,6 +447,8 @@ namespace BALL
 		tb->layout()->setSpacing(2);
 		addToolBar(Qt::TopToolBarArea, tb);
 		MainControl::show();
+		initPopupMenu(MainControl::WINDOWS)->addSeparator();
+		initPopupMenu(MainControl::WINDOWS)->addAction(tb->toggleViewAction());
 		MolecularFileDialog::getInstance(0)->addToolBarEntries(tb);
 		DownloadPDBFile::getInstance(0)->addToolBarEntries(tb);
 		Path path;
