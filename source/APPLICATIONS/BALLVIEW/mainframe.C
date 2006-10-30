@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.42 2006/10/30 09:20:18 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.43 2006/10/30 13:56:18 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -440,13 +440,17 @@ namespace BALL
 			return;
 		}
 
+
 		QToolBar* tb = new QToolBar("Main Toolbar", this);
 		tb->setObjectName("Main Toolbar");
 		tb->setIconSize(QSize(23,23));
 		tb->layout()->setMargin(2);
 		tb->layout()->setSpacing(2);
 		addToolBar(Qt::TopToolBarArea, tb);
+		
 		MainControl::show();
+//   		restoreWindows(preferences_file_);
+
 		initPopupMenu(MainControl::WINDOWS)->addSeparator();
 		initPopupMenu(MainControl::WINDOWS)->addAction(tb->toggleViewAction());
 		MolecularFileDialog::getInstance(0)->addToolBarEntries(tb);

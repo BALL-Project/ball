@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.49 2006/10/30 13:22:55 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.50 2006/10/30 13:53:34 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -866,8 +866,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			// the main window position
 			inifile.appendSection("WINDOWS");
-			inifile.insertValue("WINDOWS", "Main::x", String(x()));
-			inifile.insertValue("WINDOWS", "Main::y", String(y()));
+			inifile.insertValue("WINDOWS", "Main::x", String(pos().x()));
+			inifile.insertValue("WINDOWS", "Main::y", String(pos().y()));
 			inifile.insertValue("WINDOWS", "Main::width", String(size().width()));
 	 		inifile.insertValue("WINDOWS", "Main::height", String(size().height()));
 			inifile.insertValue("WINDOWS", "File::working_dir", working_dir_);
@@ -1245,8 +1245,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			try
 			{
 				// the geometry of the main window
-				int x_pos = x();
-				int y_pos = y();
+				int x_pos = 0;
+				int y_pos = 0;
 				int w = 1024;
 				int h = 800;
 				if (inifile.hasEntry("WINDOWS", "Main::x"))
