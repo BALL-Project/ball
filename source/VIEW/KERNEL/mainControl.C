@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.174.2.48 2006/10/26 14:24:27 amoll Exp $
+// $Id: mainControl.C,v 1.174.2.49 2006/10/30 13:22:55 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -868,8 +868,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			inifile.appendSection("WINDOWS");
 			inifile.insertValue("WINDOWS", "Main::x", String(x()));
 			inifile.insertValue("WINDOWS", "Main::y", String(y()));
-			inifile.insertValue("WINDOWS", "Main::width", String(width()));
-	 		inifile.insertValue("WINDOWS", "Main::height", String(height()));
+			inifile.insertValue("WINDOWS", "Main::width", String(size().width()));
+	 		inifile.insertValue("WINDOWS", "Main::height", String(size().height()));
 			inifile.insertValue("WINDOWS", "File::working_dir", working_dir_);
 
 			QByteArray ba = saveState();
