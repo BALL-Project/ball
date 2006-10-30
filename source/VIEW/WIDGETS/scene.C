@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.100 2006/10/29 23:21:43 amoll Exp $
+// $Id: scene.C,v 1.174.2.101 2006/10/30 14:35:10 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2237,6 +2237,7 @@ namespace BALL
 			current_mode_ = ROTATE__MODE;		
 			setCursor(QCursor(Qt::ArrowCursor));
 			rotate_action_->setChecked(true);
+			checkMenu(*getMainControl());
 		}
 
 		void Scene::pickingMode_()
@@ -2248,6 +2249,7 @@ namespace BALL
 			current_mode_ = PICKING__MODE;
 			setCursor(QCursor(Qt::CrossCursor));
 			picking_action_->setChecked(true);
+			checkMenu(*getMainControl());
 		}
 
 		void Scene::moveMode_()
@@ -2259,6 +2261,7 @@ namespace BALL
 			current_mode_ = MOVE__MODE;
 			setCursor(QCursor(Qt::SizeAllCursor));
 			move_action_->setChecked(true);
+			checkMenu(*getMainControl());
 		}
 
 		void Scene::selectionPressed_()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.59 2006/10/30 13:11:03 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.60 2006/10/30 14:35:09 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -196,9 +196,10 @@ void EditableScene::checkMenu(MainControl& main_control)
 	edit_id_->setChecked(current_mode_ == (Scene::ModeType)EDIT__MODE);
 	edit_id_->setEnabled(!busy);
 	Scene::checkMenu(main_control);
-	optimize_->setEnabled(!busy);
-	add_hydrogens_->setEnabled(!busy);
-	element_action_->setEnabled(!busy);
+	bool edit_mode = (current_mode_ == (Scene::ModeType)EDIT__MODE);
+	optimize_->setEnabled(!busy && edit_mode);
+	add_hydrogens_->setEnabled(!busy && edit_mode);
+	element_action_->setEnabled(!busy && edit_mode);
 
 	new_molecule_->setEnabled(!busy);
 }
@@ -672,6 +673,7 @@ void EditableScene::editMode_()
 	current_mode_ = (Scene::ModeType)EDIT__MODE;		
 	edit_id_->setChecked(true);
 	setElementCursor();
+	checkMenu(*getMainControl());
 
 	HashSet<Composite*> selection = getMainControl()->getSelection();
 	HashSet<Composite*>::Iterator it = selection.begin();
