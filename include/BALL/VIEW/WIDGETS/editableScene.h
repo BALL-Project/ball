@@ -216,8 +216,7 @@ class BALL_VIEW_EXPORT EditableScene
 	 */
 	TVector2<Position> getScreenPosition_(Vector3 vec);
 
-	Atom* getClickedAtom_(int x, int y);
-	Bond* getClickedBond_(int x, int y);
+	void getClickedItems_(int x, int y);
 
 	virtual void paintGL();
 

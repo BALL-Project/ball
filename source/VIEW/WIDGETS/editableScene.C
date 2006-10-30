@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.60 2006/10/30 14:35:09 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.61 2006/10/30 23:08:42 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -235,12 +235,38 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 		}
 	}
 
-	current_bond_ = getClickedBond_(e->x(), e->y());
-	if (current_bond_ != 0) return;
+	getClickedItems_(e->x(), e->y());
 
+	/////////////////////////////////////////
+	// right button -> context menu
+	if (e->button() == Qt::RightButton)
+	{
+		if (current_atom_)
+		{
+			current_atom_->select();
+			notify_(new CompositeMessage(*current_atom_, CompositeMessage::SELECTED_COMPOSITE));	
+		}
+
+		if (current_bond_)
+		{
+			current_bond_->select();
+			Atom* a1 = (Atom*)current_bond_->getFirstAtom();
+			Atom* a2 = (Atom*)current_bond_->getSecondAtom();
+			a1->select();
+			a2->select();
+			notify_(new CompositeMessage(*a1, CompositeMessage::SELECTED_COMPOSITE));	
+			notify_(new CompositeMessage(*a2, CompositeMessage::SELECTED_COMPOSITE));	
+		}
+
+		// we open a context menu at this point
+		showContextMenu(QPoint(e->x(), e->y()));
+		return;
+	}
+
+	////////////////////////////////////////////////
+	// left button -> add atom or move existing atom
 	if (e->button() == Qt::LeftButton && e->modifiers() != Qt::ControlModifier)
 	{	
-		current_atom_ = getClickedAtom_(e->x(), e->y());
 		if (current_atom_ != 0)
 		{
 			getMainControl()->selectCompositeRecursive(current_atom_, true);
@@ -250,6 +276,7 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 			return;
 		}
 
+		/////////////////////////////////////////
 		// insert a new atom:
 		String name = PTE[atomic_number_].getSymbol();
 		name += String(atom_number_);
@@ -273,8 +300,8 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 		return;
 	}
 
-	current_atom_ = getClickedAtom_(e->x(), e->y());
-
+	//////////////////////////////////////////////
+	// middle button -> add bond
 	if (e->button() == Qt::MidButton ||
 			(e->button() == Qt::LeftButton && e->modifiers() == Qt::ControlModifier))
 	{	
@@ -287,35 +314,6 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 		}
 
 		return;
-	}
-
-	// find an atom in a radius of limit_ around the current mouse position
-	if (current_atom_)
-	{
-		current_atom_->select(); 
-		notify_(new CompositeMessage(*current_atom_, CompositeMessage::SELECTED_COMPOSITE));	
-		current_bond_ = 0;
-	}
-	
-	// try to find a bond
-	Bond* bond = getClickedBond_(e->x(), e->y());
-
-	if (bond)
-	{
-		bond->select();
-		Atom* a1 = (Atom*)bond->getFirstAtom();
-		Atom* a2 = (Atom*)bond->getSecondAtom();
-		a1->select();
-		a2->select();
-		notify_(new CompositeMessage(*a1, CompositeMessage::SELECTED_COMPOSITE));	
-		notify_(new CompositeMessage(*a2, CompositeMessage::SELECTED_COMPOSITE));	
-		current_bond_ = bond;
-	}
-
-	if (e->button() == Qt::RightButton)
-	{	
-		// we open a context menu at this point
-		showContextMenu(QPoint(e->x(), e->y()));
 	}
 }
 
@@ -339,7 +337,7 @@ void EditableScene::wheelEvent(QWheelEvent* e)
 
 	if (e->modifiers() == Qt::ShiftModifier)
 	{
-		current_bond_ = getClickedBond_(e->x(), e->y());
+		getClickedItems_(e->x(), e->y());
 		changeBondOrder_(delta);
 	}
 	else
@@ -391,20 +389,25 @@ void EditableScene::mouseMoveEvent(QMouseEvent *e)
 	// create a new bond
 	//
 	// is there an atom nearby the actual mouse position? 
-	Atom* atom = getClickedAtom_(e->x(), e->y());
+	Atom* last_atom = current_atom_;
+	getClickedItems_(e->x(), e->y());
 
 	// have we found such an atom? if so, is it different from the one we started with?
 	// (self bonds make no sense)
-	if (atom && atom != current_atom_)
+	if (last_atom && 
+			current_atom_ &&
+			last_atom != current_atom_)
 	{
 		// if we are really close to an atom, the endpoints of the line we draw will be set to
 		// its center, so that the user has a drop in effect for the bonds
-		atom_pos_ = atom->getPosition();
+		atom_pos_ = current_atom_->getPosition();
 	}
 	else
 	{
 		atom_pos_ = get3DPosition_(e->x(), e->y());
 	}
+
+	current_atom_ = last_atom;
 
 	// paint the line representing the offered bond
 	draw_line_ = true;
@@ -421,9 +424,9 @@ void EditableScene::paintGL()
 	Scene::paintGL();
 
 	if (current_mode_ != (Scene::ModeType) EDIT__MODE)
-//   			last_buttons_ != Qt::MidButton) ????
 	{
 		draw_line_ = false;
+		return;
 	}
 
 	if (!draw_line_ || current_atom_ == 0) return;
@@ -460,17 +463,11 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 		return;
 	}
 
-	if (last_buttons_ == Qt::LeftButton && !draw_line_) return;
+	if (last_buttons_ == Qt::MidButton && !draw_line_) return;
 
 	if (isAnimationRunning() || getMainControl()->isBusy()) return;
 
 	mouse_button_is_pressed_ = false;
-
-	if (current_atom_)
- 	{	
-		current_atom_->deselect();
-		notify_(new CompositeMessage(*current_atom_, CompositeMessage::DESELECTED_COMPOSITE));	
-	}
 
 	// if we didnt find first atom: abort
 	if (!current_atom_) 
@@ -478,34 +475,38 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 		deselect_();
 		return;
 	}
+	
+	current_atom_->deselect();
+	notify_(new CompositeMessage(*current_atom_, CompositeMessage::DESELECTED_COMPOSITE));	
 
 	// is there an atom in radius "limit_" Angstroem?
-	Atom* atom = getClickedAtom_(e->x(), e->y());
+	Atom* atom = current_atom_;
+	getClickedItems_(e->x(), e->y());
 
 	// decide what to do... did we find an atom at all?
-	if (atom)
+	if (current_atom_)
 	{
 		// is it the atom we started with?
 		if (atom == current_atom_)
 		{
 			// in this case, we assume that the user does not want to set a bond
 			draw_line_ = false;
+			deselect_();
+			return;
 		}
-		else // we found _another_ atom
-		{
-			//set the bond
-			Bond* c = new Bond("Bond", *current_atom_, *atom, Bond::ORDER__SINGLE);		
-			
-			EditOperation eo(0, c, "Added bond of type single" , EditOperation::ADDED__BOND);
-			undo_.push_back(eo);
-		
-			// tell about the new undo operation
-			emit newEditOperation(eo);
 
-			//update representation
-			getMainControl()->update(*atom, true);
-			setStatusbarText("Added bond");
-		}	
+		// we found _another_ atom: set the bond
+		Bond* c = new Bond("Bond", *current_atom_, *atom, Bond::ORDER__SINGLE);		
+		
+		EditOperation eo(0, c, "Added bond of type single" , EditOperation::ADDED__BOND);
+		undo_.push_back(eo);
+	
+		// tell about the new undo operation
+		emit newEditOperation(eo);
+
+		//update representation
+		getMainControl()->update(*atom, true);
+		setStatusbarText("Added bond");
 	}
 	else // no atom found -> create one
 	{
@@ -609,29 +610,11 @@ List<AtomContainer*> EditableScene::getContainers_()
 	return containers;
 }
 
-// Find closest atom to screen position (x,y). If there is none closer than atom_limit_, return NULL
-Atom* EditableScene::getClickedAtom_(int x, int y)
+void EditableScene::getClickedItems_(int x, int y)
 {
-	QPoint p(x,y);
-	List<GeometricObject*> objects;
-	gl_renderer_.pickObjects1((Position) p.x(), (Position) p.y(), 
-														(Position) p.x(), (Position) p.y());
-	renderView_(DIRECT_RENDERING);
- 	gl_renderer_.pickObjects2(objects);
+	current_bond_ = 0;
+	current_atom_ = 0;
 
-	if (objects.size() > 0)
-	{
-		Atom* atom = dynamic_cast<Atom*>((Composite*)(**objects.begin()).getComposite());
-		return atom;
-	}
-
-	return 0;
-}
-
-// Find closest bond to screen position (x,y). If there is none closer than bond_limit_, return NULL
-// Note: this code is very similar to getClickedAtom. Maybe those two should be united.
-Bond* EditableScene::getClickedBond_(int x, int y)
-{
 	QPoint p(x,y);
 	List<GeometricObject*> objects;
 	gl_renderer_.pickObjects1((Position) p.x(), (Position) p.y(), 
@@ -642,14 +625,11 @@ Bond* EditableScene::getClickedBond_(int x, int y)
 	if (objects.size() > 0)
 	{
 		Composite* c = (Composite*)(**objects.begin()).getComposite();
-		if (c == 0) return 0;
+		if (c == 0) return;
 
-		Bond* bond = dynamic_cast<Bond*>(c);
-		return bond;
+		current_bond_ = dynamic_cast<Bond*>(c);
+		current_atom_ = dynamic_cast<Atom*>(c);
 	}
-
-	// code below does not work correctly.
-	return 0;
 }
 
 void EditableScene::setElementCursor()
@@ -1111,20 +1091,23 @@ bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
 
 	if (current_mode_ != (ModeType)EDIT__MODE) return false;
 
-	if (key == Qt::Key_D && !getMainControl()->isBusy())
+	if (!getMainControl()->isBusy())
 	{
 		QPoint point = mapFromGlobal(QCursor::pos());
-	  current_atom_ = getClickedAtom_(point.x(), point.y());
-		deleteAtom_();
-		return true;
-	}
 
-	if (key == Qt::Key_Backspace && !getMainControl()->isBusy())
-	{
-		QPoint point = mapFromGlobal(QCursor::pos());
-	  current_bond_ = getClickedBond_(point.x(), point.y());
-		deleteBond_();
-		return true;
+		if (key == Qt::Key_D)
+		{
+			getClickedItems_(point.x(), point.y());
+			deleteAtom_();
+			return true;
+		}
+
+		if (key == Qt::Key_Backspace)
+		{
+			getClickedItems_(point.x(), point.y());
+			deleteBond_();
+			return true;
+		}
 	}
 
 
@@ -1308,7 +1291,7 @@ void EditableScene::mouseDoubleClickEvent(QMouseEvent* e)
 		return;
 	}
 
-	current_atom_ = getClickedAtom_(e->x(), e->y());
+	getClickedItems_(e->x(), e->y());
 	if (current_atom_ != 0)
 	{
 		current_atom_->setElement(PTE[atomic_number_]);
@@ -1317,7 +1300,6 @@ void EditableScene::mouseDoubleClickEvent(QMouseEvent* e)
 		return;
 	}
 
-	current_bond_ = getClickedBond_(e->x(), e->y());
 	if (current_bond_ != 0)
 	{
 		Atom* a1 = (Atom*)current_bond_->getFirstAtom();
