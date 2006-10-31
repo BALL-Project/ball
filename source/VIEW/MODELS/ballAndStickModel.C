@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.23.2.6 2006/10/25 12:26:59 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.23.2.7 2006/10/31 14:25:27 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
@@ -279,6 +279,10 @@ namespace BALL
 			for (Position r = 0; r < rings_.size(); r++)
 			{
 				vector<Atom*>& ring = rings_[r];
+
+				vector<Bond*>& bonds = ring_bonds_[r];
+				if (bonds.size() == 0) continue;
+
 				vector<Atom*>::iterator ait = ring.begin();
 
 				Vector3 center;
@@ -288,52 +292,61 @@ namespace BALL
 				}
 				center /= ring.size();
 
-				vector<Bond*>& bonds = ring_bonds_[r];
 
-				if (bonds.size() == 0) continue;
-
-				Vector3 v1 = bonds[0]->getFirstAtom()->getPosition() - 
-										 bonds[0]->getSecondAtom()->getPosition();
-					
-			
-				Vector3 normal;
-				if (bonds.size() == 1)
+				vector<Vector3> bond_vectors;
+				for (Position p = 0; p < bonds.size(); p++)
 				{
-					normal = VIEW::getNormal(v1);
+					Vector3 v1 = bonds[p]->getFirstAtom()->getPosition() - 
+											 bonds[p]->getSecondAtom()->getPosition();
+					float f = v1.getLength();
+					if (Maths::isZero(f)) bond_vectors.push_back(Vector3(1,0,0));
+					else 									bond_vectors.push_back(v1 / f);
 				}
-				else
-				{
-					Vector3 v2 = bonds[1]->getFirstAtom()->getPosition() - 
-											 bonds[1]->getSecondAtom()->getPosition();
-					normal = v1 % v2;
-					try
-					{
-						normal.normalize();
-					}
-					catch(...)
-					{
-						continue;
-					}
-				}
-
-				// try to flip all normals in the same direction
-				float x1 = normal.x + normal.y + normal.z;
-				if (x1 > -x1) normal *= -1;
 				
+				bond_vectors.push_back(bond_vectors[0]);
+
+				Vector3 rn1 = bond_vectors[0] % bond_vectors[1];
+				float f = rn1.getLength();
+				if (Maths::isZero(f)) rn1 = Vector3(1,0,0);
+				else 								  rn1 / f;
+
+				Vector3 rn = rn1;
+
+				for (Position p = 2; p < bond_vectors.size(); p++)
+				{
+					Vector3 rnx = bond_vectors[p - 1] % bond_vectors[p];
+					float f = rnx.getLength();
+					if (Maths::isZero(f)) rnx = Vector3(1,0,0);
+					else 								  rnx / f;
+
+					if (rn1.getSquareDistance(rnx) > rn1.getSquareDistance(-rnx)) rnx *= -1;
+
+					rn += rnx;
+				}
+
+				if (!Maths::isZero(rn.getSquareLength())) rn.normalize();
+
 				for (Position b = 0; b < bonds.size(); b++)
 				{
+					Vector3 n = rn % bond_vectors[b];
+					float f = n.getLength();
+					if (Maths::isZero(f)) n = rn;
+					else 									n /= f;
+
+					Vector3 p = bonds[b]->getFirstAtom()->getPosition() + bond_vectors[b] / 2.0;
+					Vector3 pc = p - center;
+
+					if (n.getSquareDistance(pc) < n.getSquareDistance(-pc)) n *= -1;
+
 					if (bonds[b]->getOrder() == Bond::ORDER__AROMATIC)
 					{
-						renderDashedBond_(*bonds[b], normal);
+						renderDashedBond_(*bonds[b], n);
 					}
 					else
 					{
-						Vector3 dir = bonds[b]->getFirstAtom()->getPosition() -
-								          bonds[b]->getSecondAtom()->getPosition();
 						try
 						{
-							dir.normalize();
-							renderMultipleBond_(*bonds[b], normal, dir);
+							renderMultipleBond_(*bonds[b], n, bond_vectors[b]);
 						}
 						catch(...)
 						{
