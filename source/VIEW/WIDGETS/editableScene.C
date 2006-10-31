@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.64 2006/10/31 14:05:44 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.65 2006/10/31 15:11:01 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -27,6 +27,7 @@
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/MATHS/randomNumberGenerator.h>
+#include <BALL/SYSTEM/systemCalls.h>
 
 #include <QtGui/qmenubar.h>
 #include <QtGui/QDesktopWidget>
@@ -513,6 +514,8 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 	}
 	else // no atom found -> create one
 	{
+		current_atom_ = atom;
+
 		Vector3 new_pos = get3DPosition_(e->x(), e->y());
 		// test if the two atoms would have the same position
 		if (current_atom_->getPosition() == new_pos)
@@ -1330,11 +1333,38 @@ void EditableScene::optimizeStructure()
 																	rng.randomDouble(-range, range));
 	}
 	ms->chooseMMFF94();
+
 	MinimizationDialog& md = ms->getMinimizationDialog();
-	md.setMaxIterations(100);
+	md.storeValues();
+	md.setMaxIterations(30);
 	md.setRefresh(25);
+	md.setMaxGradient(5);
+	ms->runMinimization(false);
+
+	while (getMainControl()->isBusy())
+	{
+		getMainControl()->processEvents(999);
+		sleepFor(40);
+	}
+
+	MolecularDynamicsDialog& mdd = ms->getMDSimulationDialog();
+	mdd.storeValues();
+	mdd.setTemperature(500);
+	mdd.setNumberOfSteps(50);
+	ms->MDSimulation(false);
+
+	while (getMainControl()->isBusy())
+	{
+		getMainControl()->processEvents(999);
+		sleepFor(40);
+	}
+
+	md.setMaxIterations(200);
 	md.setMaxGradient(1);
 	ms->runMinimization(false);
+
+	md.restoreValues();
+	mdd.restoreValues();
 }
 
 void EditableScene::addToolBarEntries(QToolBar* tb)
