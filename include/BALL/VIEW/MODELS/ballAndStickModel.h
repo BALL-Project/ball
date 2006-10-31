@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.17.2.2 2006/10/04 10:04:46 amoll Exp $
+// $Id: ballAndStickModel.h,v 1.17.2.3 2006/10/31 14:40:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
@@ -217,6 +217,8 @@ namespace BALL
 				throw(Exception::DivisionByZero);
 
 			void collectRingBonds_();
+
+			Vector3 getSP2Plane_(Atom& atom, Bond& bond, const Vector3& dir);
 
 			private:
 
