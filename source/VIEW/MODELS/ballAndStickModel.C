@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.23.2.7 2006/10/31 14:25:27 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.23.2.8 2006/10/31 14:46:38 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
@@ -259,6 +259,15 @@ namespace BALL
 				dir.normalize();
 				Vector3 normal = VIEW::getNormal(dir);
 
+				if (bond.getFirstAtom()->countBonds() == 3)
+				{
+					normal = getSP2Plane_(*bond.getFirstAtom(), bond, dir);
+				}
+				else if(bond.getSecondAtom()->countBonds() == 3)
+				{
+					normal = getSP2Plane_(*bond.getSecondAtom(), bond, dir);
+				}
+
 				if (bond.getOrder() == Bond::ORDER__AROMATIC)
 				{
 					renderDashedBond_(bond, normal);
@@ -272,6 +281,35 @@ namespace BALL
 			{
 			}
 		}
+
+		Vector3 AddBallAndStickModel::getSP2Plane_(const Atom& atom, const Bond& bond, const Vector3& dir) const
+		{
+			vector<Vector3> vs;
+			AtomBondConstIterator bit = atom.beginBond();
+			for (; +bit; ++bit)
+			{
+				if (&*bit != &bond)
+				{
+					Vector3 x = bit->getPartner(atom)->getPosition() - atom.getPosition();
+					float xl = x.getLength();
+					if (!Maths::isZero(xl)) vs.push_back(x / xl);
+					else 									 vs.push_back(Vector3(1, 0, 0));
+				}
+			}
+
+			Vector3 n = vs[0] % vs[1];
+			float nl = n.getLength();
+			if (!Maths::isZero(nl)) n /= nl;
+			else 									  n = Vector3(1,0,0);
+
+			n = n % dir;
+			nl = n.getLength();
+			if (!Maths::isZero(nl)) n /= nl;
+			else 									  n = Vector3(1,0,0);
+
+			return n;
+		}
+
 
 		void AddBallAndStickModel::visualiseRings_()
 			throw()
