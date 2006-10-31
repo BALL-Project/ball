@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.76.2.18 2006/10/25 23:00:06 amoll Exp $
+// $Id: mainControl.h,v 1.76.2.19 2006/10/31 01:35:20 amoll Exp $
 //
 // Author:
 //   Andreas Moll
@@ -426,6 +426,12 @@ namespace BALL
 			///
 			void toggleFullScreen();
 
+			/// Create a BALLView project file with the name quick.bvp in the users home dir
+			void quickSave();
+
+			/// Quickload quick.bvp in the users home die (see above)
+			void quickLoad();
+
 			public:
 			
 			//@}
@@ -744,13 +750,7 @@ namespace BALL
 			
 			/// Load a BALLView project file
 			void loadBALLViewProjectFile(const String& filename) throw();
-
-			/// Create a BALLView project file with the name quick.bvp in the users home dir
-			void quickSave();
-
-			/// Quickload quick.bvp in the users home die (see above)
-			void quickLoad();
-
+			
 			/// Added overloaded method from QApplication for access in Python
 			void processEvents(Size ms);
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.62 2006/10/30 23:29:39 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.63 2006/10/31 01:31:29 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -19,6 +19,7 @@
 #include <BALL/VIEW/DIALOGS/editSettings.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/DIALOGS/PTEDialog.h>
+#include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -598,15 +599,15 @@ List<AtomContainer*> EditableScene::getContainers_()
 			if (ac != 0) containers.push_back(ac);
 		}
 	}
-	else
+
+	if (containers.size() > 0) return containers;
+
+	HashSet<Composite*> composites = getMainControl()->getCompositeManager().getComposites();
+	HashSet<Composite*>::Iterator sit = composites.begin();
+	for (; +sit; ++sit)
 	{
-		HashSet<Composite*> composites = getMainControl()->getCompositeManager().getComposites();
-		HashSet<Composite*>::Iterator sit = composites.begin();
-		for (; +sit; ++sit)
-		{
-			AtomContainer* ac = dynamic_cast<AtomContainer*>(*sit);
-			if (ac != 0) containers.push_back(ac);
-		}
+		AtomContainer* ac = dynamic_cast<AtomContainer*>(*sit);
+		if (ac != 0) containers.push_back(ac);
 	}
 
 	return containers;
@@ -651,6 +652,56 @@ void EditableScene::editMode_()
 		fragment_db_initialized_ = true;
 	}
 
+	List<AtomContainer*> acs = getContainers_();
+
+	MainControl* mc = getMainControl();
+	HashSet<Composite*> systems = mc->getCompositeManager().getComposites();
+
+	List<Representation*> reps = mc->getRepresentationManager().getRepresentations();
+	List<Representation*>::Iterator rit = reps.begin();
+	for (;rit != reps.end(); rit++)
+	{
+		Representation& rep = **rit;
+		if (rep.getModelType() != MODEL_BALL_AND_STICK)
+		{
+			rep.setHidden(true);
+			getMainControl()->update(rep);
+			continue;
+		}
+
+		List<const Composite*>::ConstIterator cit = rep.getComposites().begin();
+		for (;cit != rep.getComposites().end(); ++cit)
+		{
+			systems.erase((Composite*)*cit);
+		}
+	}
+
+	DisplayProperties* dp = DisplayProperties::getInstance(0);
+	if (dp != 0)
+	{
+		dp->selectModel(MODEL_BALL_AND_STICK);
+		dp->selectMode(DRAWING_MODE_SOLID);
+		dp->setTransparency(0);
+
+		HashSet<Composite*>::Iterator rit = systems.begin();
+		for (; +rit; ++rit)
+		{
+			List<Composite*> comp;
+			comp.push_back(*rit);
+			dp->createRepresentation(comp);
+		}
+	}
+
+	List<Composite*> sel;
+	List<AtomContainer*>::iterator lit = acs.begin();
+	for (; lit != acs.end(); lit++)
+	{
+		sel.push_back(*lit);
+	}
+	ControlSelectionMessage* msg = new ControlSelectionMessage();
+	msg->setSelection(sel);
+	notify_(msg);
+
 	last_mode_ = current_mode_;
 	current_mode_ = (Scene::ModeType)EDIT__MODE;		
 	edit_id_->setChecked(true);
@@ -661,6 +712,7 @@ void EditableScene::editMode_()
 	HashSet<Composite*>::Iterator it = selection.begin();
 	for (; +it; ++it)
 	{
+		if (!(**it).containsSelection()) continue;
 		getMainControl()->deselectCompositeRecursive(*it, true);
 		getMainControl()->update(**it, false);
 	}
