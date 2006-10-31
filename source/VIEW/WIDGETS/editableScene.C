@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.65 2006/10/31 15:11:01 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.66 2006/10/31 15:53:14 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -179,14 +179,17 @@ void EditableScene::initializeWidget(MainControl& main_control)
 	Path path;
 	QIcon icon(path.find("graphics/minimize.png").c_str());
 	optimize_ = new QAction(icon, "Quickly optimize structure", this);
+	optimize_->setToolTip("Edit mode: Quickly optmize the highlighted structure");
 	connect(optimize_, SIGNAL(triggered()), this, SLOT(optimizeStructure()));
 
 	QIcon icon2(path.find("graphics/hydrogens.png").c_str());
 	add_hydrogens_ = new QAction(icon2, "Saturate with hydrogens", this);
+	add_hydrogens_->setToolTip("Edit mode: Saturate the highlighted structure with hydrogens (with regards to formal charges).");
 	connect(add_hydrogens_, SIGNAL(triggered()), this, SLOT(addHydrogens()));
 
 	QIcon icon3(path.find("graphics/element.png").c_str());
 	element_action_ = new QAction(icon3, "Set element", this);
+	element_action_->setToolTip("Edit mode: Choose element for next atom, to modify atom under cursor: Double left click");
 	connect(element_action_, SIGNAL(triggered()), this, SLOT(changeElement_()));
 }
 
