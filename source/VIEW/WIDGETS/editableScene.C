@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.63 2006/10/31 01:31:29 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.64 2006/10/31 14:05:44 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -888,11 +888,21 @@ void EditableScene::showContextMenu(QPoint pos)
 		QAction* change_order = menu.addMenu(order);
 		connect(order, SIGNAL(hovered(QAction*)), this, SLOT(activatedOrderItem_(QAction*)));
 		change_order->setText("Change bond order");
-		order->addAction("Single",    this, SLOT(changeBondOrder_()));
-		order->addAction("Double",    this, SLOT(changeBondOrder_()));
-		order->addAction("Triple",    this, SLOT(changeBondOrder_()));
-		order->addAction("Quadruple", this, SLOT(changeBondOrder_()));
-		order->addAction("Aromatic",  this, SLOT(changeBondOrder_()));
+		vector<QAction*> oas;
+		oas.push_back(order->addAction("Single",    this, SLOT(changeBondOrder_())));
+		oas.push_back(order->addAction("Double",    this, SLOT(changeBondOrder_())));
+		oas.push_back(order->addAction("Triple",    this, SLOT(changeBondOrder_())));
+		oas.push_back(order->addAction("Quadruple", this, SLOT(changeBondOrder_())));
+		oas.push_back(order->addAction("Aromatic",  this, SLOT(changeBondOrder_())));
+
+		Index bo = 0;
+		if (current_bond_) bo = ((Index)current_bond_->getOrder()) - 1;
+		for (Index p = 0; p < (Index) oas.size(); p++)
+		{
+			oas[p]->setCheckable(true);
+			if (p == bo) oas[p]->setChecked(true);
+		}
+
 		change_order->setEnabled(current_bond_ != 0);
 
 		menu.addSeparator();
