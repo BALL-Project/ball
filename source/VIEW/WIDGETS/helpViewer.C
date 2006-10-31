@@ -370,7 +370,7 @@ namespace BALL
 			// exit whats this mode with right mouse click
 			/////////////////////////////////////////////
 			QMouseEvent* me = (QMouseEvent*) e;
-			if (me->button() == Qt::RightButton)
+			if (me->button() != Qt::LeftButton)
 			{
 				exitWhatsThisMode();
 				return true;
