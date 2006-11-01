@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>538</width>
-    <height>585</height>
+    <width>541</width>
+    <height>602</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -34,7 +34,7 @@
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>9</number>
+    <number>5</number>
    </property>
    <property name="spacing" >
     <number>6</number>
@@ -55,7 +55,7 @@
      </property>
      <layout class="QGridLayout" >
       <property name="margin" >
-       <number>9</number>
+       <number>5</number>
       </property>
       <property name="spacing" >
        <number>6</number>
@@ -485,7 +485,7 @@
      </property>
      <layout class="QHBoxLayout" >
       <property name="margin" >
-       <number>9</number>
+       <number>4</number>
       </property>
       <property name="spacing" >
        <number>6</number>
@@ -560,10 +560,10 @@
      </property>
      <layout class="QVBoxLayout" >
       <property name="margin" >
-       <number>9</number>
+       <number>5</number>
       </property>
       <property name="spacing" >
-       <number>6</number>
+       <number>4</number>
       </property>
       <item>
        <widget class="QCheckBox" name="assign_charges_checkBox" >
@@ -658,7 +658,7 @@
      </property>
      <layout class="QHBoxLayout" >
       <property name="margin" >
-       <number>5</number>
+       <number>4</number>
       </property>
       <property name="spacing" >
        <number>6</number>
@@ -923,7 +923,7 @@
        <number>6</number>
       </property>
       <item>
-       <widget class="QCheckBox" name="checkBox" >
+       <widget class="QCheckBox" name="stretches_box" >
         <property name="text" >
          <string>Stretches</string>
         </property>
@@ -933,7 +933,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox_2" >
+       <widget class="QCheckBox" name="bends_box" >
         <property name="text" >
          <string>Bends</string>
         </property>
@@ -943,7 +943,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox_3" >
+       <widget class="QCheckBox" name="torsions_box" >
         <property name="text" >
          <string>Torsions</string>
         </property>
@@ -953,7 +953,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox_4" >
+       <widget class="QCheckBox" name="NB_box" >
         <property name="text" >
          <string>NonBonded</string>
         </property>

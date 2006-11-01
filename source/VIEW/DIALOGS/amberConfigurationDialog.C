@@ -1,12 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.C,v 1.16.2.3 2006/09/27 12:30:57 amoll Exp $
+// $Id: amberConfigurationDialog.C,v 1.16.2.4 2006/11/01 22:34:56 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
+#include <BALL/MOLMEC/AMBER/amberBend.h>
+#include <BALL/MOLMEC/AMBER/amberStretch.h>
+#include <BALL/MOLMEC/AMBER/amberTorsion.h>
+#include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/SYSTEM/path.h>
 
 #include <QtGui/qlineedit.h>
@@ -53,6 +57,11 @@ namespace BALL
 
 			registerObject_(parameter_file_edit);
 			registerObject_(max_unassigned_atoms);
+
+			registerObject_(stretches_box);
+			registerObject_(bends_box);
+			registerObject_(torsions_box);
+			registerObject_(NB_box);
 		}
 
 		AmberConfigurationDialog::~AmberConfigurationDialog()
@@ -115,6 +124,10 @@ namespace BALL
 				amber.options[AmberFF::Option::ASSIGN_TYPENAMES] = getValue_(assign_typenames_checkBox);
 				amber.options[AmberFF::Option::OVERWRITE_CHARGES] = getValue_(overwrite_charges_checkBox);
 				amber.options[AmberFF::Option::OVERWRITE_TYPENAMES] = getValue_(overwrite_typenames_checkBox);
+				amber.options[AMBER_BEND_ENABLED] = getValue_(bends_box);
+				amber.options[AMBER_STRETCH_ENABLED] = getValue_(stretches_box);
+				amber.options[AMBER_TORSIONS_ENABLED] = getValue_(torsions_box);
+				amber.options[AMBER_NB_ENABLED] = getValue_(NB_box);
 
 				bool value = distance_button->isChecked();
 				amber.options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = value ? "true" : "false";

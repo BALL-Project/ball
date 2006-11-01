@@ -1,12 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.C,v 1.10.2.3 2006/09/27 12:30:58 amoll Exp $
+// $Id: charmmConfigurationDialog.C,v 1.10.2.4 2006/11/01 22:34:57 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
+#include <BALL/MOLMEC/CHARMM/charmmBend.h>
+#include <BALL/MOLMEC/CHARMM/charmmStretch.h>
+#include <BALL/MOLMEC/CHARMM/charmmTorsion.h>
+#include <BALL/MOLMEC/CHARMM/charmmImproperTorsion.h>
+#include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/SYSTEM/path.h>
 
 #include <QtGui/QFileDialog>
@@ -54,6 +59,12 @@ namespace BALL
 			
 			registerObject_(parameter_file_edit);
 			registerObject_(max_unassigned_atoms);
+
+			registerObject_(stretches_box);
+			registerObject_(bends_box);
+			registerObject_(torsions_box);
+			registerObject_(itorsions_box);
+			registerObject_(NB_box);
 		}
 
 		CharmmConfigurationDialog::~CharmmConfigurationDialog()
@@ -110,6 +121,12 @@ namespace BALL
 				charmm.options[CharmmFF::Option::ASSIGN_TYPENAMES] = getValue_(assign_typenames_checkBox);
 				charmm.options[CharmmFF::Option::OVERWRITE_CHARGES] = getValue_(overwrite_charges_checkBox);
 				charmm.options[CharmmFF::Option::OVERWRITE_TYPENAMES] = getValue_(overwrite_typenames_checkBox);
+
+				charmm.options[CHARMM_BENDS_ENABLED] = getValue_(bends_box);
+				charmm.options[CHARMM_STRETCHES_ENABLED] = getValue_(stretches_box);
+				charmm.options[CHARMM_TORSIONS_ENABLED] = getValue_(torsions_box);
+				charmm.options[CHARMM_IMPROPER_TORSIONS_ENABLED] = getValue_(itorsions_box);
+				charmm.options[CHARMM_NB_ENABLED] = getValue_(NB_box);
 
 				bool value = distance_button->isChecked();
 				charmm.options[CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = value ? "true" : "false";
