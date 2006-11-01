@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberTorsion.C,v 1.37 2005/12/23 17:02:43 amoll Exp $
+// $Id: amberTorsion.C,v 1.37.2.1 2006/11/01 22:35:41 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
@@ -64,6 +64,20 @@ namespace BALL
 
 		// clear torsion array
 		torsion_.clear();
+
+ 		Options& options = getForceField()->options;
+		if (options.has(AMBER_TORSIONS_ENABLED))
+		{
+			if (!options.getBool(AMBER_TORSIONS_ENABLED))
+			{
+				setEnabled(false);
+				return true;
+			}
+			else
+			{
+				setEnabled(true);
+			}
+		}
 
 		// extract the torsion parameters from the parameter file
 		bool result;

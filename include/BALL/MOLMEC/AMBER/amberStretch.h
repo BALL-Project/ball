@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberStretch.h,v 1.24 2005/12/23 17:01:49 amoll Exp $ 
+// $Id: amberStretch.h,v 1.24.2.1 2006/11/01 22:35:00 amoll Exp $ 
 //
 
 // Molecular Mechanics: Amber force field, bond stretch component
@@ -35,6 +35,9 @@ namespace BALL
 		: public ForceFieldComponent
 	{
 		public:
+
+		/// flag to enable Stretches
+		#define AMBER_STRETCH_ENABLED "enable Stretches"
 
 		/**	@name	Constructors and Destructors	
 		*/

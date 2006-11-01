@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmStretch.C,v 1.14 2005/02/08 19:41:21 oliver Exp $
+// $Id: charmmStretch.C,v 1.14.8.1 2006/11/01 22:35:42 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmStretch.h>
@@ -74,6 +74,21 @@ namespace BALL
 
 		// and memorize the number of stretches
 		number_of_stretches_ = 0;
+
+ 		Options& options = getForceField()->options;
+		if (options.has(CHARMM_STRETCHES_ENABLED))
+		{
+			if (!options.getBool(CHARMM_STRETCHES_ENABLED))
+			{
+				setEnabled(false);
+				return true;
+			}
+			else
+			{
+				setEnabled(true);
+			}
+		}
+
 		Atom::BondIterator bond_iterator;
 
 		vector<Atom*>::const_iterator atom_it = getForceField()->getAtoms().begin();

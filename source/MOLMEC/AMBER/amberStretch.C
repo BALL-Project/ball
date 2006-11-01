@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberStretch.C,v 1.26 2005/02/08 19:41:21 oliver Exp $
+// $Id: amberStretch.C,v 1.26.8.1 2006/11/01 22:35:40 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
@@ -59,6 +59,20 @@ namespace BALL
 
 		// throw away the old contents
 		stretch_.clear();
+
+ 		Options& options = getForceField()->options;
+		if (options.has(AMBER_STRETCH_ENABLED))
+		{
+			if (!options.getBool(AMBER_STRETCH_ENABLED))
+			{
+				setEnabled(false);
+				return true;
+			}
+			else
+			{
+				setEnabled(true);
+			}
+		}
 
 		AmberFF* amber_force_field = dynamic_cast<AmberFF*>(force_field_);
 		if ((amber_force_field == 0) || !amber_force_field->hasInitializedParameters())

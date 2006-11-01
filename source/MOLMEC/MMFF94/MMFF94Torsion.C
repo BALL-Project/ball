@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.4.12 2006/10/19 12:21:25 amoll Exp $
+// $Id: MMFF94Torsion.C,v 1.1.4.13 2006/11/01 22:35:43 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -95,13 +95,18 @@ namespace BALL
 		MMFF94* mmff = dynamic_cast<MMFF94*>(getForceField());
 
  		Options& options = getForceField()->options;
-		if (options.has(MMFF94_TORSIONS_ENABLED) && !options.getBool(MMFF94_TORSIONS_ENABLED))
+		if (options.has(MMFF94_TORSIONS_ENABLED))
 		{
-			setEnabled(false);
-			return true;
+			if (!options.getBool(MMFF94_TORSIONS_ENABLED))
+			{
+				setEnabled(false);
+				return true;
+			}
+			else
+			{
+				setEnabled(true);
+			}
 		}
-
-		setEnabled(true);
 
 		if (!parameters_.isInitialized())
 		{

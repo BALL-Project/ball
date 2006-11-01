@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmImproperTorsion.C,v 1.15 2005/02/08 19:41:21 oliver Exp $
+// $Id: charmmImproperTorsion.C,v 1.15.8.1 2006/11/01 22:35:41 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmImproperTorsion.h>
@@ -64,6 +64,20 @@ namespace BALL
 
 		// clear torsion array
 		impropers_.clear();
+
+ 		Options& options = getForceField()->options;
+		if (options.has(CHARMM_IMPROPER_TORSIONS_ENABLED))
+		{
+			if (!options.getBool(CHARMM_IMPROPER_TORSIONS_ENABLED))
+			{
+				setEnabled(false);
+				return true;
+			}
+			else
+			{
+				setEnabled(true);
+			}
+		}
 
 		// extract the torsion parameters from the parameter file
 		bool result;

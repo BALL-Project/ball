@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberBend.h,v 1.20 2005/12/23 17:01:49 amoll Exp $
+// $Id: amberBend.h,v 1.20.2.1 2006/11/01 22:34:59 amoll Exp $
 //
 
 // Molecular Mechanics: Amber force field, bond stretch component
@@ -37,6 +37,9 @@ namespace BALL
 		public:
 
 		BALL_CREATE(AmberBend)
+
+		/// flag to enable ES
+		#define AMBER_BEND_ENABLED "enable Bends"
 
 		/** @name	Constructors and Destructors	
 		*/

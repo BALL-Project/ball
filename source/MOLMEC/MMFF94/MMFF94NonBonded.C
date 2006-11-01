@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.4.12 2006/09/12 22:01:44 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.4.13 2006/11/01 22:35:42 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -197,7 +197,7 @@ namespace BALL
 			setEnabled(false);
 			return true;
 		}
-
+		
 		setEnabled(true);
 
 		// when using periodic boundary conditions, all

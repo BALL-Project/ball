@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.C,v 1.35.6.2 2006/07/22 09:55:39 amoll Exp $
+// $Id: amberNonBonded.C,v 1.35.6.3 2006/11/01 22:35:40 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
@@ -243,8 +243,19 @@ namespace BALL
 		// clear vector of non-bonded atom pairs
 		clear();
  
-		// Set the options for the non-bonded atom pairs
-		Options& options = getForceField()->options;
+ 		Options& options = getForceField()->options;
+		if (options.has(AMBER_NB_ENABLED))
+		{
+			if (!options.getBool(AMBER_NB_ENABLED))
+			{
+				setEnabled(false);
+				return true;
+			}
+			else
+			{
+				setEnabled(true);
+			}
+		}
 
 		// the cutoffs for the nonbonded pair list and the switching function
 		// for vdW and electrostatics

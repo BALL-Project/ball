@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmTorsion.h,v 1.20 2005/12/23 17:01:50 amoll Exp $
+// $Id: charmmTorsion.h,v 1.20.2.1 2006/11/01 22:35:01 amoll Exp $
 //
 
 // Molecular Mechanics: CHARMM force field, proper torsion component
@@ -39,6 +39,9 @@ namespace BALL
 		: public ForceFieldComponent
 	{
 		public:
+
+		/// flag to enable Torsions
+		#define CHARMM_TORSIONS_ENABLED "enable Torsions"
 
 		/**	@name	Type Definitions	
 		*/

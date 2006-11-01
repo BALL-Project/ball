@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.C,v 1.31 2005/02/14 22:29:14 amoll Exp $
+// $Id: charmmNonBonded.C,v 1.31.6.1 2006/11/01 22:35:42 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
@@ -224,6 +224,19 @@ namespace BALL
 
 		// create a shorthand for the options
 		Options& options = getForceField()->options;
+
+		if (options.has(CHARMM_NB_ENABLED))
+		{
+			if (!options.getBool(CHARMM_NB_ENABLED))
+			{
+				setEnabled(false);
+				return true;
+			}
+			else
+			{
+				setEnabled(true);
+			}
+		}
 
 		// extract the Lennard-Jones parameters
 		CharmmFF* charmm_force_field = dynamic_cast<CharmmFF*>(force_field_);
