@@ -403,7 +403,6 @@ namespace BALL
 			{
 				if (shown_docu)
 				{
-Log.error() << "#~~#   4 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 					menu->hide();
 				}
 				else

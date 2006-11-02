@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.101 2006/10/30 14:35:10 amoll Exp $
+// $Id: scene.C,v 1.174.2.102 2006/11/02 14:34:18 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1590,6 +1590,7 @@ namespace BALL
 			rotate_action_ =	insertMenuEntry(
 					MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), Qt::CTRL+Qt::Key_R);
 			setMenuHint("Switch to rotate/zoom mode");
+			setMenuHelp("scene.html#rotate_mode");
 			rotate_action_->setCheckable(true);
 			setIcon("rotate.png", false);
 			toolbar_actions_.push_back(rotate_action_);
