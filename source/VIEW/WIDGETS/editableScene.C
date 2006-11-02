@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.71 2006/11/02 16:44:02 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.72 2006/11/02 16:58:40 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -1544,7 +1544,7 @@ void EditableScene::merge_(Composite* a1, Composite* a2)
 	{
 		if (m2 == p2)
 		{
-			p2->appendChild(*a1);
+			p1->appendChild(*a2);
 		}
 	}
 }
