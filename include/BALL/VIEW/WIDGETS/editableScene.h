@@ -210,7 +210,7 @@ class BALL_VIEW_EXPORT EditableScene
 	 */
 	void insert_(int x_, int y_, PDBAtom &atom_);
 
-	void merge(Atom* a1, Atom* a2);
+	void merge_(Composite* a1, Composite* a2);
 
 	/**
 	 *  Given a 3-dim. Coordinates (in Viewing Volume) getScreenPosition
