@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.2.2.8 2006/10/24 22:24:41 amoll Exp $
+// $Id: helpViewer.h,v 1.2.2.9 2006/11/02 14:03:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
@@ -154,6 +154,7 @@ namespace BALL
 			bool 						whats_this_mode_;
 			bool 						ignore_event_;
 			bool 						whats_this_;
+			QAction* 				whats_action_;
 
 			HashMap<const QObject*, String> docu_entries_;
 			HashMap<String, String> classes_to_files_;

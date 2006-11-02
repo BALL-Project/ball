@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.C,v 1.34.2.13 2006/10/26 14:20:49 amoll Exp $
+// $Id: downloadPDBFile.C,v 1.34.2.14 2006/11/02 14:02:49 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
@@ -87,6 +87,7 @@ void DownloadPDBFile::initializeWidget(MainControl&)
 	menu_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Download PDB", this,
 															 SLOT(show()), Qt::CTRL+Qt::Key_T);
 	setMenuHint("Download a PDB file from www.rcsb.org");
+	setMenuHelp("tips.html#download_pdb");
 	setIcon("download.png", true);
 }
 
