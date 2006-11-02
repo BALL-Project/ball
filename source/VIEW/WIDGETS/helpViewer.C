@@ -72,7 +72,8 @@ namespace BALL
 				browser_( new MyTextBrowser(this)),
 				whats_this_mode_(false),
 				ignore_event_(false),
-				whats_this_(true)
+				whats_this_(true),
+				whats_action_(0)
 		{
 			String dir = getDataPath();
 			dir += 	String("..") + 
@@ -97,7 +98,6 @@ namespace BALL
 				Log.error() << "Destructing object " << this << " of class HelpViewer" << endl;
 			#endif 
 
-//   			qApp->setGlobalMouseTracking(FALSE);
 			qApp->removeEventFilter(this);
 		}
 
@@ -110,11 +110,10 @@ namespace BALL
 
 			if (whats_this_)
 			{
-				insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(enterWhatsThisMode()));	
+				whats_action_ = insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(enterWhatsThisMode()));	
 			}
 
  			qApp->installEventFilter(this);
-//   			qApp->setGlobalMouseTracking(TRUE);
 		}
 
 		void HelpViewer::showHelp()
@@ -299,13 +298,18 @@ namespace BALL
 
 					// nothing happens if we dont have a docu entry
 					QAction* id = getMainControl()->getLastHighLightedMenuEntry();
+					if (id == whats_action_)
+					{
+						exitWhatsThisMode();
+						return true;
+					}
+
 					if (docu_entries_.has(id))
 					{
 						showHelp(docu_entries_[id]);
 						exitWhatsThisMode();
+						return true;
 					}
-
-					return true;
 				}
 			}
 			catch(...)
@@ -379,7 +383,35 @@ namespace BALL
 
 			if (me->button() != Qt::LeftButton) return false;
 		
-			return showDocumentationForObject();
+			QPoint point = QCursor::pos();
+			QWidget* widget = qApp->widgetAt(point);
+			QMenu* menu = 0;
+			QMenuBar* menu_bar = 0;
+			
+			if (widget != 0) 
+			{
+				menu     = dynamic_cast<QMenu*>(widget);
+				menu_bar = dynamic_cast<QMenuBar*>(widget);
+			}
+
+			if (menu_bar != 0) return false;
+
+			bool shown_docu = showDocumentationForObject();
+
+			if (menu != 0)
+			{
+				if (shown_docu)
+				{
+Log.error() << "#~~#   4 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+					menu->hide();
+				}
+				else
+				{
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 		void HelpViewer::registerForHelpSystem(const QObject* object, const String& docu_entry)
