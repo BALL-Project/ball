@@ -210,11 +210,13 @@ class BALL_VIEW_EXPORT EditableScene
 	 */
 	void insert_(int x_, int y_, PDBAtom &atom_);
 
+	void merge(Atom* a1, Atom* a2);
+
 	/**
 	 *  Given a 3-dim. Coordinates (in Viewing Volume) getScreenPosition
 	 *  computes the 2-dim Coordinates on Screen.
 	 */
-	TVector2<Position> getScreenPosition_(Vector3 vec);
+	TVector2<float> getScreenPosition_(Vector3 vec);
 
 	void getClickedItems_(int x, int y);
 
@@ -233,10 +235,6 @@ class BALL_VIEW_EXPORT EditableScene
 	QAction* edit_id_, *new_molecule_, *optimize_, *add_hydrogens_, *element_action_;	
 	Atom* current_atom_;
 	Bond* current_bond_;
-
-	Vector3 near_left_bot_;  //TODO:: name in XYZ left_bot_mnear
-	Vector3 near_right_bot_;
-	Vector3 near_left_top_;
 
 	Vector3 atom_pos_;
 	bool draw_line_;
