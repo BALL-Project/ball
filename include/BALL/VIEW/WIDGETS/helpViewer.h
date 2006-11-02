@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.2.2.9 2006/11/02 14:03:52 amoll Exp $
+// $Id: helpViewer.h,v 1.2.2.10 2006/11/02 21:29:23 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
@@ -41,16 +41,26 @@ namespace BALL
 		};
 
 		/** DockWidget to show online help texts e.g. the BALLView documentation
-		 		To show a help page, just call ModularWidget::showHelp(String) or send
+				The documentation for BALLView was written in the HTML format, such that it either be
+				used online from the project's website or inside the program itself.
+				To obtain help for individual elements in the graphical user interface a special mode
+				was added. In the "Help" menu the entry "Whats this?" will switch into this mode and 
+				transform the mouse cursor into a question mark. While the "Whats this?" mode is
+				active a left mouse click on any widget will open the corresponding help entry in the
+				documentation. (If no help entry for that widget exists nothing will happen.)
+				To leave the "Whats this?" mode just press the right mouse button or press the "Escape" key.
+				As an alternative for this approach the "F1" key will popup the documentation for
+				the current widget under the mouse cursor.
+				<br><br>
+		 		To show a specific help page, just call ModularWidget::showHelp(String) or send
 				a ShowHelpMessage.
 				Per default the HelpViewer looks for index.html in $BALL_DATA_PATH/../doc/BALLView .
 				You can change this behavior by using setDefaultDir() and setDefaultPage().
-				Links to pages on the www wont work!
-				The HelpViewer also servers as registration server for the online documentation.
+				Links to pages on the WWW wont work!
 				QWidgets and menu entries can be registered with a link into the HTML documentation.
 				See registerWidgetForHelpSystem.
 				The implemention for opening the documentation per "Whats this?" menu entry and
-				the hotkey "Shift-F1" is also done here.
+				the hotkey "F1" is also done here.
 				\ingroup ViewWidgets
 		*/
 		class BALL_VIEW_EXPORT HelpViewer
