@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editSettings.C,v 1.1.2.2 2006/06/05 21:29:08 amoll Exp $
+// $Id: editSettings.C,v 1.1.2.3 2006/11/02 16:00:30 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/editSettings.h>
@@ -25,8 +25,6 @@ EditSettings::EditSettings(QWidget* parent, const char* name, Qt::WFlags fl)
 	setObjectName(name);
 	setINIFileSectionName("EDITING");
 
-	registerObject_(atom_distance);
-	registerObject_(bond_distance);
 	registerObject_(only_highlighted);
 
 	setWidgetStackName("Editing");

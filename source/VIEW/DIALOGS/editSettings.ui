@@ -1,4 +1,7 @@
 <ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
  <class>EditSettingsData</class>
  <widget class="QWidget" name="EditSettingsData" >
   <property name="geometry" >
@@ -12,128 +15,25 @@
   <property name="windowTitle" >
    <string>Editing</string>
   </property>
-  <widget class="QWidget" name="layoutWidget" >
+  <widget class="QCheckBox" name="only_highlighted" >
    <property name="geometry" >
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>381</width>
-     <height>111</height>
+     <width>379</width>
+     <height>24</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" >
-    <property name="margin" >
-     <number>0</number>
-    </property>
-    <property name="spacing" >
-     <number>6</number>
-    </property>
-    <item>
-     <layout class="QHBoxLayout" >
-      <property name="margin" >
-       <number>0</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item>
-       <widget class="QLabel" name="label" >
-        <property name="text" >
-         <string>maximum atom distance</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>21</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="atom_distance" >
-        <property name="maximumSize" >
-         <size>
-          <width>100</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="inputMask" >
-         <string>9.0; </string>
-        </property>
-        <property name="text" >
-         <string>1.5</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" >
-      <property name="margin" >
-       <number>0</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item>
-       <widget class="QLabel" name="label_2" >
-        <property name="text" >
-         <string>maximum bond distance</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>21</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="bond_distance" >
-        <property name="maximumSize" >
-         <size>
-          <width>100</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="inputMask" >
-         <string>9.0; </string>
-        </property>
-        <property name="text" >
-         <string>2.0</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QCheckBox" name="only_highlighted" >
-      <property name="text" >
-       <string>only select atoms in highlighted container</string>
-      </property>
-      <property name="checked" >
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="text" >
+    <string>only select atoms in highlighted container</string>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction></pixmapfunction>
  <includes>
   <include location="global" >BALL/COMMON/global.h</include>
  </includes>

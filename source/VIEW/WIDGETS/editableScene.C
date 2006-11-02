@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.68 2006/11/02 15:27:14 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.69 2006/11/02 16:00:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -519,224 +519,224 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 	else // no atom found -> create one
 	{
 		// project the new atom on the plane of the old atom
-		current_atom_ = atom;
-		Vector3 new_pos = current_atom_->getPosition();
+	current_atom_ = atom;
+	Vector3 new_pos = current_atom_->getPosition();
 
-		TVector2<float> p1 = getScreenPosition_(new_pos);
-		TVector2<float> xd = getScreenPosition_(new_pos + stage_->getCamera().getRightVector() * 5000.);
-		TVector2<float> yd = getScreenPosition_(new_pos - stage_->getCamera().getLookUpVector() * 5000.);
-		TVector2<float> dd(xd.x, yd.y);
-		dd /= 5000.;
+	TVector2<float> p1 = getScreenPosition_(new_pos);
+	TVector2<float> xd = getScreenPosition_(new_pos + stage_->getCamera().getRightVector() * 5000.);
+	TVector2<float> yd = getScreenPosition_(new_pos - stage_->getCamera().getLookUpVector() * 5000.);
+	TVector2<float> dd(xd.x, yd.y);
+	dd /= 5000.;
 
-		float dx = e->x() - p1.x;
-		float dy = e->y() - p1.y;
+	float dx = e->x() - p1.x;
+	float dy = e->y() - p1.y;
 
-		new_pos += stage_->getCamera().getRightVector() * dx / dd.x;
-		new_pos -= stage_->getCamera().getLookUpVector() * dy / dd.y;
+	new_pos += stage_->getCamera().getRightVector() * dx / dd.x;
+	new_pos -= stage_->getCamera().getLookUpVector() * dy / dd.y;
 
-		// test if the two atoms would have the same position
-		if (current_atom_->getPosition() == new_pos)
-		{
-			setStatusbarText("Aborting, since both atoms would have the same location!", true);
-			return;
-		}
-
-		// build a new atom...
-		String name(PTE[atomic_number_].getSymbol());
-		name += String(atom_number_);
-		atom_number_++;
-		PDBAtom* a = new PDBAtom(PTE[atomic_number_], name);
-		a->setPosition(new_pos);
-		current_atom_->getParent()->appendChild(*a);
-		
-		//store the Operation in undo_
-		Vector3 atom_position = a->getPosition();
-	
-		EditOperation eo(a, NULL, "Added atom of type " + PTE[atomic_number_].getName() + " at position (" 
-										+ String(atom_position.x) + ", "
-										+ String(atom_position.y) + ", "
-										+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
-		undo_.push_back(eo);
-
-		// tell about the new undo operation
-		emit newEditOperation(eo);
-
-		//set the bond
-		Bond* c = new Bond("Bond", *current_atom_, *a, bond_order_);		
-	
-		// tell about the new undo operation
-		String bond_string = getBondOrderString_(bond_order_);
-		EditOperation eo2(0, c, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
-		undo_.push_back(eo2);
-		emit newEditOperation(eo2);
-
-		getMainControl()->update(*a->getParent(), true);
-		setStatusbarText("Added bond and atom");
+	// test if the two atoms would have the same position
+	if (current_atom_->getPosition() == new_pos)
+	{
+		setStatusbarText("Aborting, since both atoms would have the same location!", true);
+		return;
 	}
 
-	deselect_();
+	// build a new atom...
+	String name(PTE[atomic_number_].getSymbol());
+	name += String(atom_number_);
+	atom_number_++;
+	PDBAtom* a = new PDBAtom(PTE[atomic_number_], name);
+	a->setPosition(new_pos);
+	current_atom_->getParent()->appendChild(*a);
+	
+	//store the Operation in undo_
+	Vector3 atom_position = a->getPosition();
+
+	EditOperation eo(a, NULL, "Added atom of type " + PTE[atomic_number_].getName() + " at position (" 
+									+ String(atom_position.x) + ", "
+									+ String(atom_position.y) + ", "
+									+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
+	undo_.push_back(eo);
+
+	// tell about the new undo operation
+	emit newEditOperation(eo);
+
+	//set the bond
+	Bond* c = new Bond("Bond", *current_atom_, *a, bond_order_);		
+
+	// tell about the new undo operation
+	String bond_string = getBondOrderString_(bond_order_);
+	EditOperation eo2(0, c, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
+	undo_.push_back(eo2);
+	emit newEditOperation(eo2);
+
+	getMainControl()->update(*a->getParent(), true);
+	setStatusbarText("Added bond and atom");
+}
+
+deselect_();
 }	
 
 String EditableScene::getBondOrderString_(Index order)
 {
-	String bond_string;
-	switch (order)
-	{
-		case Bond::ORDER__SINGLE:
-			bond_string = "single";
-			break;
-		case Bond::ORDER__DOUBLE:
-			bond_string = "double";
-			break;
-		case Bond::ORDER__TRIPLE:						
-			bond_string = "triple";	
-			break;
-		case Bond::ORDER__QUADRUPLE:
-			bond_string = "quadruple";	
-			break;
-		case Bond::ORDER__AROMATIC:
-			bond_string = "aromatic";	
-			break;
-		default:					
-			bond_string = "unknown";	
-			break;
-	}
-	
-	return bond_string;
+String bond_string;
+switch (order)
+{
+	case Bond::ORDER__SINGLE:
+		bond_string = "single";
+		break;
+	case Bond::ORDER__DOUBLE:
+		bond_string = "double";
+		break;
+	case Bond::ORDER__TRIPLE:						
+		bond_string = "triple";	
+		break;
+	case Bond::ORDER__QUADRUPLE:
+		bond_string = "quadruple";	
+		break;
+	case Bond::ORDER__AROMATIC:
+		bond_string = "aromatic";	
+		break;
+	default:					
+		bond_string = "unknown";	
+		break;
+}
+
+return bond_string;
 }
 
 /// ******************** Helper Functions *************************
 List<AtomContainer*> EditableScene::getContainers_()
 {
-	List<AtomContainer*> containers;
-	if (only_highlighted_)
+List<AtomContainer*> containers;
+if (only_highlighted_)
+{
+	List<Composite*> highl = getMainControl()->getMolecularControlSelection();
+	List<Composite*>::Iterator lit = highl.begin();
+	for (; lit != highl.end(); ++lit)
 	{
-		List<Composite*> highl = getMainControl()->getMolecularControlSelection();
-		List<Composite*>::Iterator lit = highl.begin();
-		for (; lit != highl.end(); ++lit)
-		{
-			AtomContainer* ac = dynamic_cast<AtomContainer*>(*lit);
-			if (ac != 0) containers.push_back(ac);
-		}
-	}
-
-	if (containers.size() > 0) return containers;
-
-	HashSet<Composite*> composites = getMainControl()->getCompositeManager().getComposites();
-	HashSet<Composite*>::Iterator sit = composites.begin();
-	for (; +sit; ++sit)
-	{
-		AtomContainer* ac = dynamic_cast<AtomContainer*>(*sit);
+		AtomContainer* ac = dynamic_cast<AtomContainer*>(*lit);
 		if (ac != 0) containers.push_back(ac);
 	}
+}
 
-	return containers;
+if (containers.size() > 0) return containers;
+
+HashSet<Composite*> composites = getMainControl()->getCompositeManager().getComposites();
+HashSet<Composite*>::Iterator sit = composites.begin();
+for (; +sit; ++sit)
+{
+	AtomContainer* ac = dynamic_cast<AtomContainer*>(*sit);
+	if (ac != 0) containers.push_back(ac);
+}
+
+return containers;
 }
 
 void EditableScene::getClickedItems_(int x, int y)
 {
-	current_bond_ = 0;
-	current_atom_ = 0;
+current_bond_ = 0;
+current_atom_ = 0;
 
-	QPoint p(x,y);
-	List<GeometricObject*> objects;
-	gl_renderer_.pickObjects1((Position) p.x(), (Position) p.y(), 
-														(Position) p.x(), (Position) p.y());
-	renderView_(DIRECT_RENDERING);
- 	gl_renderer_.pickObjects2(objects);
+QPoint p(x,y);
+List<GeometricObject*> objects;
+gl_renderer_.pickObjects1((Position) p.x(), (Position) p.y(), 
+													(Position) p.x(), (Position) p.y());
+renderView_(DIRECT_RENDERING);
+gl_renderer_.pickObjects2(objects);
 
-	if (objects.size() > 0)
-	{
-		Composite* c = (Composite*)(**objects.begin()).getComposite();
-		if (c == 0) return;
+if (objects.size() > 0)
+{
+	Composite* c = (Composite*)(**objects.begin()).getComposite();
+	if (c == 0) return;
 
-		current_bond_ = dynamic_cast<Bond*>(c);
-		current_atom_ = dynamic_cast<Atom*>(c);
-	}
+	current_bond_ = dynamic_cast<Bond*>(c);
+	current_atom_ = dynamic_cast<Atom*>(c);
+}
 }
 
 void EditableScene::setElementCursor()
 {
-	String s = PTE[atomic_number_].getSymbol();
-	s.truncate(1);
- 	setCursor(s.c_str());
+String s = PTE[atomic_number_].getSymbol();
+s.truncate(1);
+setCursor(s.c_str());
 }
 
 // Slot to change to EDIT__MODE
 void EditableScene::editMode_()
 {
-	if (!fragment_db_initialized_)
+if (!fragment_db_initialized_)
+{
+	fragment_db_.setFilename("fragments/Editing-Fragments.db");
+	fragment_db_.init();
+	fragment_db_initialized_ = true;
+}
+
+List<AtomContainer*> acs = getContainers_();
+
+MainControl* mc = getMainControl();
+HashSet<Composite*> systems = mc->getCompositeManager().getComposites();
+
+List<Representation*> reps = mc->getRepresentationManager().getRepresentations();
+List<Representation*>::Iterator rit = reps.begin();
+for (;rit != reps.end(); rit++)
+{
+	Representation& rep = **rit;
+	if (rep.getModelType() != MODEL_BALL_AND_STICK)
 	{
-		fragment_db_.setFilename("fragments/Editing-Fragments.db");
-		fragment_db_.init();
-		fragment_db_initialized_ = true;
+		rep.setHidden(true);
+		getMainControl()->update(rep);
+		continue;
 	}
 
-	List<AtomContainer*> acs = getContainers_();
-
-	MainControl* mc = getMainControl();
-	HashSet<Composite*> systems = mc->getCompositeManager().getComposites();
-
-	List<Representation*> reps = mc->getRepresentationManager().getRepresentations();
-	List<Representation*>::Iterator rit = reps.begin();
-	for (;rit != reps.end(); rit++)
+	List<const Composite*>::ConstIterator cit = rep.getComposites().begin();
+	for (;cit != rep.getComposites().end(); ++cit)
 	{
-		Representation& rep = **rit;
-		if (rep.getModelType() != MODEL_BALL_AND_STICK)
-		{
-			rep.setHidden(true);
-			getMainControl()->update(rep);
-			continue;
-		}
-
-		List<const Composite*>::ConstIterator cit = rep.getComposites().begin();
-		for (;cit != rep.getComposites().end(); ++cit)
-		{
-			systems.erase((Composite*)*cit);
-		}
+		systems.erase((Composite*)*cit);
 	}
+}
 
-	DisplayProperties* dp = DisplayProperties::getInstance(0);
-	if (dp != 0)
+DisplayProperties* dp = DisplayProperties::getInstance(0);
+if (dp != 0)
+{
+	dp->selectModel(MODEL_BALL_AND_STICK);
+	dp->selectMode(DRAWING_MODE_SOLID);
+	dp->setTransparency(0);
+
+	HashSet<Composite*>::Iterator rit = systems.begin();
+	for (; +rit; ++rit)
 	{
-		dp->selectModel(MODEL_BALL_AND_STICK);
-		dp->selectMode(DRAWING_MODE_SOLID);
-		dp->setTransparency(0);
-
-		HashSet<Composite*>::Iterator rit = systems.begin();
-		for (; +rit; ++rit)
-		{
-			List<Composite*> comp;
-			comp.push_back(*rit);
-			dp->createRepresentation(comp);
-		}
+		List<Composite*> comp;
+		comp.push_back(*rit);
+		dp->createRepresentation(comp);
 	}
+}
 
-	List<Composite*> sel;
-	List<AtomContainer*>::iterator lit = acs.begin();
-	for (; lit != acs.end(); lit++)
-	{
-		sel.push_back(*lit);
-	}
-	ControlSelectionMessage* msg = new ControlSelectionMessage();
-	msg->setSelection(sel);
-	notify_(msg);
+List<Composite*> sel;
+List<AtomContainer*>::iterator lit = acs.begin();
+for (; lit != acs.end(); lit++)
+{
+	sel.push_back(*lit);
+}
+ControlSelectionMessage* msg = new ControlSelectionMessage();
+msg->setSelection(sel);
+notify_(msg);
 
-	last_mode_ = current_mode_;
-	current_mode_ = (Scene::ModeType)EDIT__MODE;		
-	edit_id_->setChecked(true);
-	setElementCursor();
-	checkMenu(*getMainControl());
+last_mode_ = current_mode_;
+current_mode_ = (Scene::ModeType)EDIT__MODE;		
+edit_id_->setChecked(true);
+setElementCursor();
+checkMenu(*getMainControl());
 
-	HashSet<Composite*> selection = getMainControl()->getSelection();
-	HashSet<Composite*>::Iterator it = selection.begin();
-	for (; +it; ++it)
-	{
-		if (!(**it).containsSelection()) continue;
-		getMainControl()->deselectCompositeRecursive(*it, true);
-		getMainControl()->update(**it, false);
-	}
-	notify_(new NewSelectionMessage);
+HashSet<Composite*> selection = getMainControl()->getSelection();
+HashSet<Composite*>::Iterator it = selection.begin();
+for (; +it; ++it)
+{
+	if (!(**it).containsSelection()) continue;
+	getMainControl()->deselectCompositeRecursive(*it, true);
+	getMainControl()->update(**it, false);
+}
+notify_(new NewSelectionMessage);
 }
 
 // insert an atom at screen positions (x,y) on the view plane
@@ -750,48 +750,82 @@ void EditableScene::insert_(int x, int y, PDBAtom &atom)
 	// get all highlighted composites
 	List<Composite*> composite_list = getMainControl()->getMolecularControlSelection(); 
 	
-	if (composite_list.size() > 1 )
+	Size nr_high = composite_list.size();
+	if (nr_high > 1 || (only_highlighted_ && nr_high == 0))
 	{
 		setStatusbarText("Please highlight exactly one AtomContainer for insertion of the created atoms!", true);
 		return;
 	}
 
-	// only one highlighted composite
-	if (composite_list.size() == 1)
+	// exactly one highlighted composite
+	if (nr_high == 1)
 	{
 		// is it an AtomContainer?
 		AtomContainer* ai = dynamic_cast<AtomContainer*>(*composite_list.begin());
 		if (ai == 0)
 		{
-			setStatusbarText("Please highlight exactly one AtomContainer for insertion of the created atoms!", true);
-			return;
-		}
+			// is the parent an AtomContainer?
+			Composite* parent = (**composite_list.begin()).getParent();
+			if (parent != 0)
+			{
+				ai = dynamic_cast<AtomContainer*>(parent);
+			}
 
-		// Yes? we do not need to create our own system
-		ai->insert(atom);
-		getMainControl()->update(*ai, true);
-	}
-	else  // more or less than 1 highlighted
-	{
-		HashSet<Composite*> composites = getMainControl()->getCompositeManager().getComposites();
-		if (composites.size() != 0)
-		{
-			System* system = dynamic_cast<System*>(*composites.begin());
-			Molecule* mol = system->getMolecule(0);
-			if (mol != 0)
- 			{
-				mol->appendChild(atom);
-				getMainControl()->update(*mol, true);
+			if (ai == 0)
+			{
+				setStatusbarText("Please highlight exactly one AtomContainer for insertion of the created atoms!", true);
 				return;
 			}
 		}
-		
+
+		// prevent adding of atoms to a System: 
+		// some forcefields will go havoc otherwise
+		if (RTTI::isKindOf<System>(*ai))
+		{
+			System* system = (System*) ai;
+			Molecule* mol = system->getMolecule(0);
+			if (mol == 0)
+			{
+				mol = new Molecule();
+				system->insert(*mol);
+			}
+			ai = mol;
+		}
+
+		// we do not need to create our own system
+		ai->insert(atom);
+		getMainControl()->update(*ai, true);
+		return;
+	}
+
+	/////////////////////////////////////////////////////////
+	// no atom container highlighted:
+	
+	HashSet<Composite*> composites = getMainControl()->getCompositeManager().getComposites();
+
+	// no System exists? -> create one
+	if (composites.size() == 0)
+	{
 		System *system = new System();
 		Molecule* current_molecule = new Molecule();
 		system->insert(*current_molecule);
 		current_molecule->insert(atom);
 		getMainControl()->insert(*system);
-	}	
+		getMainControl()->update(*system);
+		return;
+	}
+	
+	// add to first Molecule in first System
+	System* system = dynamic_cast<System*>(*composites.begin());
+	Molecule* mol = system->getMolecule(0);
+	if (mol == 0)
+	{	
+		mol = new Molecule();
+		system->insert(*mol);
+	}
+
+	mol->appendChild(atom);
+	getMainControl()->update(*mol, true);
 }	
 
 
