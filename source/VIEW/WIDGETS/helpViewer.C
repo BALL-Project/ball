@@ -107,11 +107,12 @@ namespace BALL
 			DockWidget::initializeWidget(main_control);
 			insertMenuEntry(MainControl::HELP, project_ + " Documentation", this, SLOT(showHelp()));
 			setIcon("help.png", true);
-			registerForHelpSystem(last_action_, getDefaultPage());
+			registerForHelpSystem(last_action_, "tips.html#help");
 
 			if (whats_this_)
 			{
 				whats_action_ = insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(enterWhatsThisMode()));	
+				registerForHelpSystem(whats_action_, "tips.html#help");
 			}
 
  			qApp->installEventFilter(this);
@@ -299,11 +300,6 @@ namespace BALL
 
 					// nothing happens if we dont have a docu entry
 					QAction* id = getMainControl()->getLastHighLightedMenuEntry();
-					if (id == whats_action_)
-					{
-						exitWhatsThisMode();
-						return true;
-					}
 
 					if (docu_entries_.has(id))
 					{
