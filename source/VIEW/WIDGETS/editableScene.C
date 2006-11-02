@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.70 2006/11/02 16:21:21 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.71 2006/11/02 16:44:02 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -1505,8 +1505,48 @@ void EditableScene::merge_(Composite* a1, Composite* a2)
 	 	return;
 	}
 
-	if (a1->getParent() == a2->getParent()) return;
+	System* s2 = (System*)&a2->getRoot();
 
+	Composite* p1 = a1->getParent();
+	Composite* p2 = a2->getParent();
+
+	Size silb1 = p1->getDegree();
+	Size silb2 = p2->getDegree();
+
+	if (silb1 == 1)
+	{
+		p2->appendChild(*a1);
+	}
+	else if (silb2 == 1)
+	{
+		p1->appendChild(*a2);
+	}
+
+	Molecule dummy_mol;
+	Molecule* m1 = a1->getAncestor(dummy_mol);
+	Molecule* m2 = a2->getAncestor(dummy_mol);
+
+	if (m1 == 0 || m1 == 0) return;
+
+	Composite* anchestor = a1->getLowestCommonAncestor(*a2);
+	if (anchestor == 0)
+	{
+		m1->spliceBefore(*m2);
+		getMainControl()->remove(*s2);
+		return;
+	}
+
+	if (m1 == p1)
+	{
+		p2->appendChild(*a1);
+	}
+	else
+	{
+		if (m2 == p2)
+		{
+			p2->appendChild(*a1);
+		}
+	}
 }
 
 	}//end of namespace 
