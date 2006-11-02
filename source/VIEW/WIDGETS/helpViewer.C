@@ -15,6 +15,7 @@
 #include <QtGui/QKeyEvent>
 #include <QtCore/QEvent>
 #include <QtGui/QTextCursor>
+#include <QtGui/QToolBar>
 
 using namespace std;
 
@@ -393,19 +394,41 @@ namespace BALL
 
 		bool HelpViewer::showHelpFor(const QObject* object)
 		{
+			if (object == 0) return false;
+
 			HashMap<const QObject*, String>::Iterator to_find;
 
-			QObject* widget2 = (QObject*) object;
+			QObject* object2 = (QObject*) object;
 
-			while (widget2 != 0)
-			{ 
-				to_find = docu_entries_.find(widget2);
-				if (to_find != docu_entries_.end()) break;
-
-				widget2 = widget2->parent();
+			QWidget* widget = dynamic_cast<QWidget*>(object2);
+			if (widget && widget->parent() != 0)
+			{
+				QToolBar* tb = dynamic_cast<QToolBar*>(widget->parent());
+				if (tb != 0)
+				{
+					QList<QAction *> acs = widget->actions();
+					if (acs.size() == 1)
+					{
+						to_find = docu_entries_.find(*acs.begin());
+						if (to_find != docu_entries_.end())
+						{
+							showHelp((*to_find).second);
+							return true;
+						}
+					}
+				}
 			}
 
-			if (widget2 == 0) 
+			while (object2 != 0)
+			{ 
+				to_find = docu_entries_.find(object2);
+				if (to_find != docu_entries_.end()) break;
+
+
+				object2 = object2->parent();
+			}
+
+			if (object2 == 0) 
 			{
 				setStatusbarText("No documentation for this widget available!", true);
 				return false;
