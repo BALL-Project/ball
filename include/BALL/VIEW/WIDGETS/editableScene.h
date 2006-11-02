@@ -239,9 +239,6 @@ class BALL_VIEW_EXPORT EditableScene
 	Vector3 atom_pos_;
 	bool draw_line_;
 
-	// search range when looking for atoms/bonds (in angstrom)
-	static float atom_limit_;			
-	static float bond_limit_;			
 	// pick atoms/bonds only in highlighted AtomContainer?
 	static bool only_highlighted_;
 	// element for new atoms
