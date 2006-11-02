@@ -49,7 +49,7 @@ In the Rotate Mode, the user can zoom, rotate or translate the view by pressing 
 <br>
 <div align=center>
 
-<table border="1" cellpadding="5" width=500>
+<table border="1" cellpadding="5" width=600>
 	<tr>
 		<td width="50%" bgcolor="#CCCCCC">Mouse Button</td>
 		<td bgcolor="#CCCCCC">Effect</td>
@@ -59,7 +59,7 @@ In the Rotate Mode, the user can zoom, rotate or translate the view by pressing 
 		<td>Rotate left/right and up/down</td>
 	</tr>
 	<tr>
-		<td>Middle</td>
+		<td>Middle or Wheel</td>
 		<td>Zoom in and out</td>
 	</tr>
 	<tr>
@@ -67,7 +67,7 @@ In the Rotate Mode, the user can zoom, rotate or translate the view by pressing 
 		<td>Translate up/down and left/right</td>
 	</tr>	
 	<tr>
-	  <td>Left + Right (first keep pressed one button, than additionaly the other)</td>
+	  <td>Left + Right (first keep one button pressed, than additionaly the other)</td>
 	  <td>Rotate (counter) clockwise</td>
 	  </tr>
 	<tr>
@@ -85,7 +85,7 @@ with one- or two-button mice. Just hold the respective keys on the keyboard and 
 <br>
 <div align=center>
 
-<table border="1" cellpadding="5" width=500>
+<table border="1" cellpadding="5" width=600>
   <tbody>
     <tr>
       <td width="50%" bgcolor="#CCCCCC">Mouse button + key pressed</td>
@@ -126,7 +126,7 @@ The Picking mode is designed to identify parts of molecules or to select them fo
 </div>  
 <br>
  <div align=center> 
-  <table border="1" cellpadding="5" width=500>
+  <table border="1" cellpadding="5" width=600>
     <tr>
       <td width="50%" bgcolor="#CCCCCC">Mouse button + key pressed</td>
       <td bgcolor="#CCCCCC">Effect</td>
@@ -159,7 +159,7 @@ The Picking mode is designed to identify parts of molecules or to select them fo
 <p align=justify>In the Move mode, selected atoms can be moved by using the mouse. It can also be used to position Clipping Planes 
 (select Move in the context menu of the Clipping Plane in the Representations list). </p>
 
-<table border="1" cellpadding="5" width=500>
+<table border="1" cellpadding="5" width=600>
   <tr>
     <td width="50%" bgcolor="#CCCCCC">Mouse button + key pressed</td>
     <td bgcolor="#CCCCCC">Effect</td>
@@ -182,7 +182,7 @@ The Picking mode is designed to identify parts of molecules or to select them fo
 <h2 align=center>Edit Mode</h2>
 <p align="left">Since version 1.2 BALLView supports editing of molecules: The 3D view offers a special mode to 
 create and delete atoms / bonds and change bond orders: </p>
-<table border="1" cellpadding="5" width=500>
+<table border="1" cellpadding="5" width=600>
   <tr>
     <td width="50%" bgcolor="#CCCCCC">Mouse button + key pressed</td>
     <td bgcolor="#CCCCCC">Effect</td>
@@ -200,37 +200,32 @@ create and delete atoms / bonds and change bond orders: </p>
     <td>Move atom in Z direction </td>
   </tr>
   <tr>
-    <td>Left double click on atom </td>
-    <td>Set the atom's element to currently selected element. </td>
+    <td>Double click on atom </td>
+    <td>Set the atom's element</td>
   </tr>
   <tr>
-    <td>Left double click on ring bond </td>
-    <td>Make whole ring aromatic. </td>
+    <td>Double click on ring bond </td>
+    <td>Make whole ring aromatic</td>
   </tr>
   <tr>
-    <td>Left double click on bond </td>
-    <td>Cycle through bond orders. </td>
+    <td>Double click on bond </td>
+    <td>Cycle through bond orders</td>
   </tr>
   <tr>
     <td>Middle (or Left + Control)</td>
-    <td>Move objects in Z direction </td>
+    <td>Create bond</td>
   </tr>
   <tr>
     <td>Right</td>
-    <td>Context Menu </td>
+    <td>Context Menu for items under cursor</td>
   </tr>
+   <tr>
+    <td>Mouse wheel</td>
+    <td>Zoom in or out</td>
+  </tr> 
 </table>
-<p align="left">The middle click in the edit mode can either create bonds between existing atoms, or if
-the mouse button is released while not pointing at an existing atom, a new atom
-is created along with the new bond.</p>
-<p align=justify>The editing mode allows the creation of new molecules or to modify existing ones. Bonds can be created and deleted, bond orders and formal charges can be set. Furthermore it is possible to saturate molecules with hydrogen atoms and to perform a quick optimization of the currently highlighted System (using the MMFF94 force field).</p>
-<p align=justify>When a user creates a new bond or wants to move an atom, BALLView by default
-only looks for matching atoms in the currently highlighted AtomContainer (e.g. an
-highlighted Molecule or Residue).
-This enable users e.g. to create ligands in their binding pocket, while keeping
-the receptor untouched. To modify this behaviour, the Editing Setting in the 
-Preferences can be used. New atoms are always created in the highlighted AtomContainer. </p>
-<table border="1" cellpadding="5" width=500>
+<br>
+<table border="1" cellpadding="5" width=600>
   <tr>
     <td width="50%" bgcolor="#CCCCCC">Key pressed </td>
     <td bgcolor="#CCCCCC">Effect</td>
@@ -248,6 +243,18 @@ Preferences can be used. New atoms are always created in the highlighted AtomCon
     <td>Delete bond under cursor </td>
   </tr>
 </table>
+
+<p align="left">The middle click in the edit mode can either create bonds between existing atoms, or if
+the mouse button is released while not pointing at an existing atom, a new atom
+is created along with the new bond.</p>
+<p align=justify>The editing mode allows the creation of new molecules or to modify existing ones. Bonds can be created and deleted, bond orders and formal charges can be set. Furthermore it is possible to saturate molecules with hydrogen atoms and to perform a quick optimization of the currently highlighted System (using the MMFF94 force field).</p>
+<p align=justify>When a user creates a new bond or wants to move an atom, BALLView by default
+only looks for matching atoms in the currently highlighted AtomContainer (e.g. an
+highlighted Molecule or Residue).
+This enable users e.g. to create ligands in their binding pocket, while keeping
+the receptor untouched. To modify this behaviour, the Editing Setting in the 
+Preferences can be used. New atoms are always created in the highlighted AtomContainer. </p>
+
 <p align=justify>The editing functionality is optional, it is relalized in the class EditableScene. To obtain a slimer application without the editing functionality the class <em>Scene</em> can be used. </p>
 <p align=justify>&nbsp;</p>
 <H2 align=center>Selection Color</H2>
