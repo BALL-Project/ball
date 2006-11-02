@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.67 2006/11/02 14:03:20 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.68 2006/11/02 15:27:14 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -27,6 +27,7 @@
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/MATHS/randomNumberGenerator.h>
+#include <BALL/MATHS/analyticalGeometry.h>
 #include <BALL/SYSTEM/systemCalls.h>
 
 #include <QtGui/qmenubar.h>
@@ -517,9 +518,22 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 	}
 	else // no atom found -> create one
 	{
+		// project the new atom on the plane of the old atom
 		current_atom_ = atom;
+		Vector3 new_pos = current_atom_->getPosition();
 
-		Vector3 new_pos = get3DPosition_(e->x(), e->y());
+		TVector2<float> p1 = getScreenPosition_(new_pos);
+		TVector2<float> xd = getScreenPosition_(new_pos + stage_->getCamera().getRightVector() * 5000.);
+		TVector2<float> yd = getScreenPosition_(new_pos - stage_->getCamera().getLookUpVector() * 5000.);
+		TVector2<float> dd(xd.x, yd.y);
+		dd /= 5000.;
+
+		float dx = e->x() - p1.x;
+		float dy = e->y() - p1.y;
+
+		new_pos += stage_->getCamera().getRightVector() * dx / dd.x;
+		new_pos -= stage_->getCamera().getLookUpVector() * dy / dd.y;
+
 		// test if the two atoms would have the same position
 		if (current_atom_->getPosition() == new_pos)
 		{
@@ -784,12 +798,12 @@ void EditableScene::insert_(int x, int y, PDBAtom &atom)
 // this code projects the 3D view plane to 2D screen coordinates
 
 
-TVector2<Position> EditableScene::getScreenPosition_(Vector3 vec)
+TVector2<float> EditableScene::getScreenPosition_(Vector3 vec)
 {
 	// find the monitor coordinates of a given vector
-	TVector2<Position> pos ; 
-	pos.x = INT_MAX;
-	pos.y = INT_MAX;
+	TVector2<float> pos ; 
+	pos.x = FLT_MAX;
+	pos.y = FLT_MAX;
 
 	double xs_ = width();
 	double ys_ = height(); 
@@ -814,13 +828,10 @@ TVector2<Position> EditableScene::getScreenPosition_(Vector3 vec)
 
 			//now we compute the position on Screen of the projected atom
 			Vector3 screen_top_left_pos_to_proj_atom =  origin_to_atom_projection_on_viewplane  - near_left_top_ ; 
-			unsigned int x_mouse = (unsigned int)( screen_top_left_pos_to_proj_atom * ( near_right_bot_ - near_left_bot_ )
+			pos.x = (unsigned int)( screen_top_left_pos_to_proj_atom * ( near_right_bot_ - near_left_bot_ )
 					/   (( near_right_bot_ - near_left_bot_ ).getSquareLength())  * xs_);
-			unsigned int y_mouse = (unsigned int) (screen_top_left_pos_to_proj_atom * ( near_left_bot_ - near_left_top_ ) 
+			pos.y = (unsigned int) (screen_top_left_pos_to_proj_atom * ( near_left_bot_ - near_left_top_ ) 
 					/   (( near_left_bot_ - near_left_top_ ).getSquareLength() )  * ys_);
-
-			pos.x = x_mouse;
-			pos.y = y_mouse;
 		}
 	}	
 	catch (...)
