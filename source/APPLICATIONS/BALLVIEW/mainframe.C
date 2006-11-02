@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.44 2006/10/30 13:56:38 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.45 2006/11/02 14:34:16 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -181,6 +181,7 @@ namespace BALL
 
 		stop_simulation_action_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, 
 										SLOT(stopSimulation()), Qt::ALT+Qt::Key_C);
+		stop_simulation_action_->setEnabled(false);
 		insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 		setMenuHint(stop_simulation_action_, "Abort a running simulation");
 		filename = path.find("graphics/stop.png");
@@ -459,8 +460,10 @@ namespace BALL
 		QIcon save_icon(path.find("graphics/quicksave.png").c_str());
 		qload_action_ = new QAction(load_icon, "quickload", this);
 		connect(qload_action_, SIGNAL(triggered()), this, SLOT(quickLoadConfirm()));
+		HelpViewer::getInstance(1)->registerForHelpSystem(qload_action_, "tips.html#quickload");
 		qsave_action_ = new QAction(save_icon, "quicksave", this);
 		connect(qsave_action_, SIGNAL(triggered()), this, SLOT(quickSave()));
+		HelpViewer::getInstance(1)->registerForHelpSystem(qsave_action_, "tips.html#quickload");
 		tb->addAction(qload_action_);
 		tb->addAction(qsave_action_);
 		tb->addSeparator();

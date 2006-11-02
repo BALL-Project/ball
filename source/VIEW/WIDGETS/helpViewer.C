@@ -107,6 +107,7 @@ namespace BALL
 			DockWidget::initializeWidget(main_control);
 			insertMenuEntry(MainControl::HELP, project_ + " Documentation", this, SLOT(showHelp()));
 			setIcon("help.png", true);
+			registerForHelpSystem(last_action_, getDefaultPage());
 
 			if (whats_this_)
 			{
