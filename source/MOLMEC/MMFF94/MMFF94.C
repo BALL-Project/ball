@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.4.14 2006/11/03 13:08:36 amoll Exp $
+// $Id: MMFF94.C,v 1.1.4.15 2006/11/03 14:37:16 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -34,6 +34,7 @@ namespace BALL
 	const char* MMFF94::Option::VDW_CUTON = "vdw_cuton";
 	const char* MMFF94::Option::ELECTROSTATIC_CUTOFF = "electrostatic_cutoff";
 	const char* MMFF94::Option::ELECTROSTATIC_CUTON = "electrostatic_cuton";
+	const char* MMFF94::Option::DISTANCE_DEPENDENT_DIELECTRIC = "distance_dependend_dc";
 
 	const char* MMFF94::Default::FOLDER = "MMFF94";
 	const bool  MMFF94::Default::ASSIGN_CHARGES = true; 
@@ -46,6 +47,7 @@ namespace BALL
 	const float MMFF94::Default::VDW_CUTON = 13.0;
 	const float MMFF94::Default::ELECTROSTATIC_CUTOFF = 15.0;
 	const float MMFF94::Default::ELECTROSTATIC_CUTON = 13.0;
+	const bool  MMFF94::Default::DISTANCE_DEPENDENT_DIELECTRIC = false; 
 
 	// Default constructor
 	MMFF94::MMFF94() 

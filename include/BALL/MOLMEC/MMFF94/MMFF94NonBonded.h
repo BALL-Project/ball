@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.h,v 1.1.4.2 2006/06/23 01:35:19 amoll Exp $
+// $Id: MMFF94NonBonded.h,v 1.1.4.3 2006/11/03 14:37:12 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_NONBONDED_H
@@ -139,6 +139,8 @@ namespace BALL
 		vector<NonBondedPairData> 						non_bonded_data_;
     MolmecSupport::PairListAlgorithmType  algorithm_type_;
 		double 																cut_off_;
+		double 																vdw_cut_on_, vdw_cut_off_;
+		double 																es_cut_on_, es_cut_off_;
 		MMFF94VDWParameters 									vdw_parameters_;
 		// dielectric constant
 		double 																dc_; 

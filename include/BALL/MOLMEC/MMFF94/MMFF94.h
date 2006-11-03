@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.h,v 1.1.4.9 2006/11/03 13:07:08 amoll Exp $ 
+// $Id: MMFF94.h,v 1.1.4.10 2006/11/03 14:37:12 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -105,6 +105,8 @@ namespace BALL
 			*/
 			static const char* ELECTROSTATIC_CUTON;
 
+			///
+			static const char* DISTANCE_DEPENDENT_DIELECTRIC;
 		};
 
 		/** Default values for MMFF94 options.
@@ -155,6 +157,8 @@ namespace BALL
 			*/
 			static const float ELECTROSTATIC_CUTON;
 
+			/// Default is false
+			static const bool DISTANCE_DEPENDENT_DIELECTRIC;
 		};
 
 		//@}

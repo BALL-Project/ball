@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.4.13 2006/11/01 22:35:42 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.4.14 2006/11/03 14:37:16 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -42,6 +42,10 @@ namespace BALL
 		:	ForceFieldComponent(),
 			algorithm_type_(MolmecSupport::BRUTE_FORCE),
 			cut_off_(20),
+			vdw_cut_on_(13),
+			vdw_cut_off_(15),
+			es_cut_on_(13),
+			es_cut_off_(15),
 			dc_(1),
 			n_(1),
 			es_enabled_(true),
@@ -55,6 +59,10 @@ namespace BALL
 		:	ForceFieldComponent(force_field),
 			algorithm_type_(MolmecSupport::BRUTE_FORCE),
 			cut_off_(20),
+			vdw_cut_on_(13),
+			vdw_cut_off_(15),
+			es_cut_on_(13),
+			es_cut_off_(15),
 			dc_(1),
 			n_(1),
 			es_enabled_(true),
@@ -67,6 +75,11 @@ namespace BALL
 		throw()
 		:	ForceFieldComponent(component),
 			algorithm_type_(component.algorithm_type_),
+			cut_off_(component.cut_off_),
+			vdw_cut_on_(component.vdw_cut_on_),
+			vdw_cut_off_(component.vdw_cut_off_),
+			es_cut_on_(component.es_cut_on_),
+			es_cut_off_(component.es_cut_off_),
 			dc_(component.dc_),
 			n_(component.n_),
 			es_enabled_(component.es_enabled_),
@@ -199,6 +212,34 @@ namespace BALL
 		}
 		
 		setEnabled(true);
+
+		if (options.has(MMFF94::Option::NONBONDED_CUTOFF))
+		{
+			cut_off_ = options.getReal(MMFF94::Option::NONBONDED_CUTOFF);
+		}
+		if (options.has(MMFF94::Option::VDW_CUTOFF))
+		{
+			vdw_cut_off_ = options.getReal(MMFF94::Option::VDW_CUTOFF);
+		}
+		if (options.has(MMFF94::Option::VDW_CUTON))
+		{
+			vdw_cut_on_ = options.getReal(MMFF94::Option::VDW_CUTON);
+		}
+		if (options.has(MMFF94::Option::ELECTROSTATIC_CUTOFF))
+		{
+			es_cut_off_ = options.getReal(MMFF94::Option::ELECTROSTATIC_CUTOFF);
+		}
+		if (options.has(MMFF94::Option::ELECTROSTATIC_CUTON))
+		{
+			es_cut_on_ = options.getReal(MMFF94::Option::ELECTROSTATIC_CUTON);
+		}
+		if (options.has(MMFF94::Option::DISTANCE_DEPENDENT_DIELECTRIC))
+		{
+			bool ddd = options.getBool(MMFF94::Option::DISTANCE_DEPENDENT_DIELECTRIC);
+			if (ddd)  dc_ = 2;
+			else 			dc_ = 1;
+		}
+
 
 		// when using periodic boundary conditions, all
 		// cutoffs must be smaller than the smallest linear extension of
