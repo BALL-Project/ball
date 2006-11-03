@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.4.13 2006/10/09 09:24:41 amoll Exp $
+// $Id: MMFF94.C,v 1.1.4.14 2006/11/03 13:08:36 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -16,8 +16,8 @@
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/QSAR/aromaticityProcessor.h>
 
-//    #define BALL_DEBUG_MMFF
-#define BALL_DEBUG_TEST
+// #define BALL_DEBUG_MMFF
+// #define BALL_DEBUG_TEST
 
 using namespace std;
 
@@ -29,13 +29,23 @@ namespace BALL
 	const char* MMFF94::Option::ASSIGN_TYPES = "assign_types"; 
 	const char* MMFF94::Option::OVERWRITE_CHARGES = "overwrite_non-zero_charges"; 
 	const char* MMFF94::Option::OVERWRITE_TYPENAMES = "overwrite_non-empty_typenames"; 
+	const char* MMFF94::Option::NONBONDED_CUTOFF = "nonbonded_cutoff";
+	const char* MMFF94::Option::VDW_CUTOFF = "vdw_cutoff";
+	const char* MMFF94::Option::VDW_CUTON = "vdw_cuton";
+	const char* MMFF94::Option::ELECTROSTATIC_CUTOFF = "electrostatic_cutoff";
+	const char* MMFF94::Option::ELECTROSTATIC_CUTON = "electrostatic_cuton";
 
 	const char* MMFF94::Default::FOLDER = "MMFF94";
-	const bool MMFF94::Default::ASSIGN_CHARGES = true; 
-	const bool MMFF94::Default::ASSIGN_TYPENAMES = true; 
-	const bool MMFF94::Default::ASSIGN_TYPES = true; 
-	const bool MMFF94::Default::OVERWRITE_CHARGES = true; 
-	const bool MMFF94::Default::OVERWRITE_TYPENAMES = true; 
+	const bool  MMFF94::Default::ASSIGN_CHARGES = true; 
+	const bool  MMFF94::Default::ASSIGN_TYPENAMES = true; 
+	const bool  MMFF94::Default::ASSIGN_TYPES = true; 
+	const bool  MMFF94::Default::OVERWRITE_CHARGES = true; 
+	const bool  MMFF94::Default::OVERWRITE_TYPENAMES = true; 
+	const float MMFF94::Default::NONBONDED_CUTOFF = 16.0;
+	const float MMFF94::Default::VDW_CUTOFF = 15.0;
+	const float MMFF94::Default::VDW_CUTON = 13.0;
+	const float MMFF94::Default::ELECTROSTATIC_CUTOFF = 15.0;
+	const float MMFF94::Default::ELECTROSTATIC_CUTON = 13.0;
 
 	// Default constructor
 	MMFF94::MMFF94() 

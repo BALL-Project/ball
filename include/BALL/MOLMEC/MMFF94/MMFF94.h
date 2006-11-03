@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.h,v 1.1.4.8 2006/10/06 14:03:32 amoll Exp $ 
+// $Id: MMFF94.h,v 1.1.4.9 2006/11/03 13:07:08 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -82,6 +82,29 @@ namespace BALL
 			/**	during charge assignment, overwrite even non-empty type names
 			*/
 			static const char* OVERWRITE_TYPENAMES;
+
+			/**	Nonbonded cutoff. This value is used as cutoff radius in
+					calculations of nonbonded interactions. The unit of this option
+					is \f${\AA}\f$ (@see Default::NONBONDED_CUTOFF)
+			*/
+			static const char* NONBONDED_CUTOFF;
+
+			/**	Van der Waals cutoff
+			*/
+			static const char* VDW_CUTOFF;
+
+			/**	Van der Waals cuton
+			*/
+			static const char* VDW_CUTON;
+
+			/**	Electrostatic cutoff
+			*/
+			static const char* ELECTROSTATIC_CUTOFF;
+
+			/**	Electrostatic cuton
+			*/
+			static const char* ELECTROSTATIC_CUTON;
+
 		};
 
 		/** Default values for MMFF94 options.
@@ -111,6 +134,27 @@ namespace BALL
 			/**	during charge assignment, overwrite even non-empty type names
 			*/
 			static const bool OVERWRITE_TYPENAMES;
+
+			/**	Default non bonded cutoff of 16.0 \f${\AA}\f$.
+			*/
+			static const float NONBONDED_CUTOFF;
+
+			/**	Default van der Waals cutoff of 15.0 \f${\AA}\f$.
+			*/
+			static const float VDW_CUTOFF;
+
+			/**	Default van der Waals cuton of 13.0 \f${\AA}\f$.
+			*/
+			static const float VDW_CUTON;
+
+			/**	Default electrostatic cutoff of 15.0 \f${\AA}\f$.
+			*/
+			static const float ELECTROSTATIC_CUTOFF;
+
+			/**	Default electrostatic cuton of 13.0 \f${\AA}\f$.
+			*/
+			static const float ELECTROSTATIC_CUTON;
+
 		};
 
 		//@}
