@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.43.2.8 2006/10/24 01:06:21 amoll Exp $
+# $Id: Makefile,v 1.43.2.9 2006/11/05 17:55:40 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -118,7 +118,7 @@ subdirscollectlib:	dummy
 
 
 clean_parser:
-	@-$(RM) smilesParserParser.C smilesParserLexer.C smilesParserParser.h smartsParserParser.C smartsParserLexer.C smartsParserParser.h
+	@-$(RM) smilesParserParser.C smilesParserLexer.C smilesParserParser.h smartsParserParser.C smartsParserLexer.C smartsParserParser.h *.bak
 
 smilesParserParser.C: smilesParserParser.y
 smilesParserParser.h: smilesParserParser.y

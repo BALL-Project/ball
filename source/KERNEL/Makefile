@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.15.2.4 2006/05/17 08:15:48 amoll Exp $
+# $Id: Makefile,v 1.15.2.5 2006/11/05 17:56:52 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -57,7 +57,7 @@ depend: $(PARSER_SOURCES)
 default_clean:	clean_flex_bison
 
 clean_flex_bison:
-	@-$(RM) expressionParserParser.C expressionParserLexer.C expressionParserParser.h
+	@-$(RM) expressionParserParser.C expressionParserLexer.C expressionParserParser.h *.bak
 
 expressionParserParser.C: expressionParserParser.y
 expressionParserParser.h: expressionParserParser.y
