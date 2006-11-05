@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AtomBondIteratorTraits_test.C,v 1.3 2004/02/25 10:40:27 oliver Exp $
+// $Id: AtomBondIteratorTraits_test.C,v 1.3.10.1 2006/11/05 11:41:17 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -15,7 +15,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Atom, "$Id: AtomBondIteratorTraits_test.C,v 1.3 2004/02/25 10:40:27 oliver Exp $")
+START_TEST(Atom, "$Id: AtomBondIteratorTraits_test.C,v 1.3.10.1 2006/11/05 11:41:17 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -249,14 +249,14 @@ RESULT
 
 CHECK(Bond& getData(Index index) throw())
 	Atom::BondIteratorTraits bit(atom_a);
-	TEST_EQUAL(bit.getData(0), *bond_a_b1)
-	TEST_EQUAL(bit.getData(1), *bond_a_b2)
+	TEST_EQUAL(&bit.getData(0), bond_a_b1)
+	TEST_EQUAL(&bit.getData(1), bond_a_b2)
 RESULT
 
 CHECK(const Bond& getData(Index index) const throw())
 	Atom::BondIteratorTraits bit(atom_a);
-	TEST_EQUAL((bit.getData(0) == bond_a_b1_const_ref), true)
-	TEST_EQUAL((bit.getData(1) == bond_a_b2_const_ref), true)
+	TEST_EQUAL((&bit.getData(0) == &bond_a_b1_const_ref), true)
+	TEST_EQUAL((&bit.getData(1) == &bond_a_b2_const_ref), true)
 RESULT
 
 /////////////////////////////////////////////////////////////
