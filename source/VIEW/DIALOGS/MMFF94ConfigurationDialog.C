@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94ConfigurationDialog.C,v 1.1.2.4 2006/10/18 20:04:09 amoll Exp $
+// $Id: MMFF94ConfigurationDialog.C,v 1.1.2.5 2006/11/06 13:27:35 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/MMFF94ConfigurationDialog.h>
@@ -131,8 +131,8 @@ namespace BALL
 				mmff.options[MMFF94::Option::OVERWRITE_CHARGES] = getValue_(overwrite_charges_checkBox);
 				mmff.options[MMFF94::Option::OVERWRITE_TYPENAMES] = getValue_(overwrite_typenames_checkBox);
 
-//   				bool value = distance_button->isChecked();
-//   				MMFF94.options[MMFF94::Option::DISTANCE_DEPENDENT_DIELECTRIC] = value ? "true" : "false";
+//    				bool value = distance_button->isChecked();
+//    				MMFF94.options[MMFF94::Option::DISTANCE_DEPENDENT_DIELECTRIC] = value ? "true" : "false";
 
 				mmff.options[MMFF94::Option::FOLDER] = ascii(parameter_file_edit->text());
 				
