@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.105 2006/11/06 14:51:13 amoll Exp $
+// $Id: scene.C,v 1.174.2.106 2006/11/06 16:48:45 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1953,8 +1953,6 @@ namespace BALL
 			else if (current_mode_ == ROTATE__MODE)
 			{
 				processRotateModeMouseEvents_(e);
-				timerSignal_();
-			
  				light_settings_->updateFromStage();
 			}
 			else if (current_mode_ == MOVE__MODE)
@@ -1969,7 +1967,7 @@ namespace BALL
 			}
 		}
 
-		void Scene::timerSignal_()
+		void Scene::showInfos()
 		{
 			info_string_ = "";
 
@@ -2842,6 +2840,13 @@ namespace BALL
 			{
 				QPoint p = mapFromGlobal(QCursor::pos());
 				pickParent_(p);
+			}
+			else
+			{
+				if (current_mode_ == ROTATE__MODE)
+				{
+					showInfos();
+				}
 			}
 		}
 

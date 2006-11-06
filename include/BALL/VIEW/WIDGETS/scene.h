@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.31 2006/11/06 16:40:55 amoll Exp $
+// $Id: scene.h,v 1.66.2.32 2006/11/06 16:45:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -804,7 +804,6 @@ namespace BALL
 			float last_fps_;
 			float zoom_factor_;
 			QPoint info_point_;
-			String info_string_;
 			QByteArray last_state_;
 			bool show_fps_;
 			static bool offscreen_rendering_;
@@ -817,6 +816,7 @@ namespace BALL
 			QActionGroup* mode_group_;
 
 			Vector3 near_left_bot_, near_right_bot_, near_left_top_;
+			String info_string_;
 		};
 
 
