@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.29 2006/11/06 14:09:13 amoll Exp $
+// $Id: scene.h,v 1.66.2.30 2006/11/06 14:50:55 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -599,8 +599,6 @@ namespace BALL
 					v.z = view direction 
 			*/
 			void rotateComposites(const List<Composite*>& composites, float degree_right, float degree_up, float degree_clockwise = 0);
-
-			void initTimer();
 
 			///
 			bool isAnimationRunning() const

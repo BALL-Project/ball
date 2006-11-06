@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.104 2006/11/06 14:20:09 amoll Exp $
+// $Id: scene.C,v 1.174.2.105 2006/11/06 14:51:13 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -634,6 +634,11 @@ namespace BALL
 			{
 				if (run == 1)
 				{
+					for (Position p = 0; p < 20; p++)
+					{
+						glDisable(GL_CLIP_PLANE0 + p);
+					}
+
 					// render inactive clipping planes
 					for (plane_it = inactive_planes.begin(); plane_it != inactive_planes.end(); plane_it++)
 					{
@@ -711,6 +716,12 @@ namespace BALL
 					y = x % plane.getNormal() * 400;
  					n = plane.getNormal();
 					n.normalize();
+					
+					// disable all clipping planes
+					for (Position p = 0; p < rep_active_planes.size(); p++)
+					{
+						glDisable(rep_active_planes[p] + GL_CLIP_PLANE0);
+					}
 
 					// fill the stencil buffer
 					glEnable(cap_nr + GL_CLIP_PLANE0);
@@ -720,6 +731,13 @@ namespace BALL
 					glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 					glStencilFunc(GL_ALWAYS, 0x0, 0xff);
 					glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
+					render_(rep, mode);
+					
+					// disable all clipping planes
+					for (Position p = 0; p < rep_active_planes.size(); p++)
+					{
+						glEnable(rep_active_planes[p] + GL_CLIP_PLANE0);
+					}
 
 					// render the Representation once again, this time with colors
 					gl_renderer_.setColorRGBA_(ColorRGBA(0,1.0,0));
@@ -727,22 +745,16 @@ namespace BALL
 					glDisable(GL_STENCIL_TEST);
 					render_(rep, mode);
 
-					// disable all clipping planes
-					for (Position p = 0; p < rep_active_planes.size(); p++)
-					{
-						glDisable(rep_active_planes[p] + GL_CLIP_PLANE0);
-					}
-
 					// render the capping plane
 					glEnable(GL_STENCIL_TEST);
 					glStencilFunc(GL_NOTEQUAL, 0x0, 0xff);
-					gl_renderer_.drawing_mode_ = DRAWING_MODE_SOLID;
 
 					ColorRGBA color = ClippingPlane::getCappingColor();
 					bool transparent = (int)color.getAlpha() != 255;
 					if (transparent) gl_renderer_.initTransparent();
 					else 						 gl_renderer_.initSolid();
 
+					glDisable(cap_nr + GL_CLIP_PLANE0);
 					Disc d(Circle3(p, n, 400));
 					d.setColor(color);
 					gl_renderer_.render_(&d);
