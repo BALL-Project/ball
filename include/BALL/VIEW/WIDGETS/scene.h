@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.30 2006/11/06 14:50:55 amoll Exp $
+// $Id: scene.h,v 1.66.2.31 2006/11/06 16:40:55 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -559,6 +559,9 @@ namespace BALL
 			///
 			void switchShowGrid();
 
+			/// Popup informations for object under mouse cursor
+			void showInfos();
+
 			///
 			ModeType getMode() const
 				throw() { return current_mode_;}
@@ -674,9 +677,6 @@ namespace BALL
 
 			///
 			virtual void dragEnterEvent(QDragEnterEvent* e);
-
-			///
-			virtual void timerSignal_();
 
 			//@}
 
