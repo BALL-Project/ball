@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.24.2.12 2006/10/30 13:32:46 amoll Exp $
+// $Id: modularWidget.C,v 1.24.2.13 2006/11/06 18:04:36 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -150,8 +150,8 @@ namespace BALL
  				inifile.insertValue("WINDOWS", getIdentifier() + "::on", String(window_menu_entry_->isChecked()));
 			}
 
-			inifile.insertValue("WINDOWS", getIdentifier() + "::x", String(widget->x()));
-			inifile.insertValue("WINDOWS", getIdentifier() + "::y", String(widget->y()));
+			inifile.insertValue("WINDOWS", getIdentifier() + "::x", String(widget->pos().x()));
+			inifile.insertValue("WINDOWS", getIdentifier() + "::y", String(widget->pos().y()));
 			inifile.insertValue("WINDOWS", getIdentifier() + "::width", String(widget->size().width()));
 			inifile.insertValue("WINDOWS", getIdentifier() + "::height", String(widget->size().height()));
 
