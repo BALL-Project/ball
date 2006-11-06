@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.107 2006/11/06 17:53:53 amoll Exp $
+// $Id: scene.C,v 1.174.2.108 2006/11/06 18:53:43 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1729,6 +1729,8 @@ namespace BALL
 
 		void Scene::mousePressEvent(QMouseEvent* e)
 		{
+			info_string_ = "";
+
 			if (isAnimationRunning()) return;
 
 			makeCurrent();
