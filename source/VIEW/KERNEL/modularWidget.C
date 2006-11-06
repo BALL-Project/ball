@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.24.2.13 2006/11/06 18:04:36 amoll Exp $
+// $Id: modularWidget.C,v 1.24.2.14 2006/11/06 18:09:49 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -127,8 +127,8 @@ namespace BALL
 				Index y = inifile.getValue("WINDOWS", getIdentifier() + "::y").toInt();
 				Position w = inifile.getValue("WINDOWS", getIdentifier() + "::width").toUnsignedInt();
 				Position h = inifile.getValue("WINDOWS", getIdentifier() + "::height").toUnsignedInt();
-				x = BALL_MAX(x, 0);
-				y = BALL_MAX(y, 0);
+				x = BALL_MAX(x, 20);
+				y = BALL_MAX(y, 20);
 
 				widget->resize(QSize(w, h));
 				widget->move(x, y);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.19.2.5 2006/05/17 15:00:35 amoll Exp $
+// $Id: preferences.C,v 1.19.2.6 2006/11/06 18:13:47 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -138,6 +138,9 @@ namespace BALL
 				y_pos = inifile.getValue("WINDOWS", "Preferences::y").toInt();
 			}
 			
+			x_pos = BALL_MAX(x_pos, 0);
+			y_pos = BALL_MAX(y_pos, 0);
+
 			move(x_pos, y_pos);
 
 			HashSet<PreferencesEntry*>::Iterator it = entries_.begin();
@@ -151,8 +154,8 @@ namespace BALL
 			throw()
 		{
 			// the window position
-			inifile.insertValue("WINDOWS", "Preferences::x", String(x()));
-			inifile.insertValue("WINDOWS", "Preferences::y", String(y()));
+			inifile.insertValue("WINDOWS", "Preferences::x", String(pos().x()));
+			inifile.insertValue("WINDOWS", "Preferences::y", String(pos().y()));
 
 			HashSet<PreferencesEntry*>::Iterator it = entries_.begin();
 			for (; +it; it++)
