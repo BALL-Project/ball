@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AtomBondIteratorTraits_test.C,v 1.3 2004/02/25 10:40:27 oliver Exp $
+// $Id: AtomBondIteratorTraits_test.C,v 1.4 2006/11/06 15:33:30 bertsch Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -15,7 +15,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Atom, "$Id: AtomBondIteratorTraits_test.C,v 1.3 2004/02/25 10:40:27 oliver Exp $")
+START_TEST(Atom, "$Id: AtomBondIteratorTraits_test.C,v 1.4 2006/11/06 15:33:30 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -175,16 +175,16 @@ RESULT
 
 CHECK(Bond& getData() throw())
 	Atom::BondIteratorTraits bit(atom_a);
-	TEST_EQUAL(bit.getData(), *bond_a_b1)
+	TEST_EQUAL(&bit.getData(), bond_a_b1)
 	bit.forward();
-	TEST_EQUAL(bit.getData(), *bond_a_b2)
+	TEST_EQUAL(&bit.getData(), bond_a_b2)
 RESULT
 	
 CHECK(const Bond& getData() const throw())
 	Atom::BondIteratorTraits bit(atom_a);
 	TEST_EQUAL((bit.getData() == bond_a_b1_const_ref), true);
 	bit.forward();
-	TEST_EQUAL((bit.getData() ==bond_a_b2_const_ref), true);
+	TEST_EQUAL((bit.getData() == bond_a_b2_const_ref), true);
 RESULT
 
 CHECK(void forward() throw())
@@ -249,8 +249,8 @@ RESULT
 
 CHECK(Bond& getData(Index index) throw())
 	Atom::BondIteratorTraits bit(atom_a);
-	TEST_EQUAL(bit.getData(0), *bond_a_b1)
-	TEST_EQUAL(bit.getData(1), *bond_a_b2)
+	TEST_EQUAL(&bit.getData(0), bond_a_b1)
+	TEST_EQUAL(&bit.getData(1), bond_a_b2)
 RESULT
 
 CHECK(const Bond& getData(Index index) const throw())
