@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.106 2006/11/06 16:48:45 amoll Exp $
+// $Id: scene.C,v 1.174.2.107 2006/11/06 17:53:53 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2688,6 +2688,7 @@ namespace BALL
 			toolbar_->insertSeparator(fullscreen_action_);
 			getMainControl()->addToolBar(Qt::TopToolBarArea, toolbar_);
 			ModularWidget::addToolBarEntries(tb);
+			getMainControl()->initPopupMenu(MainControl::WINDOWS)->addAction(toolbar_->toggleViewAction());
 		}
 
 		void Scene::switchShowGrid()
