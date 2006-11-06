@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.C,v 1.1.2.12 2006/10/26 10:00:46 amoll Exp $
+// $Id: representationManager.C,v 1.1.2.13 2006/11/06 14:20:09 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representationManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -409,7 +409,10 @@ void RepresentationManager::storeRepresentations(INIFile& out)
 			data_string += " ";
 		}
 		
-		out.insertValue("BALLVIEW_PROJECT", "ClippingPlane" + String(plane_pos), data_string);
+		String pname = "ClippingPlane";
+		if (plane->cappingEnabled()) pname = "CappingPlane";
+
+		out.insertValue("BALLVIEW_PROJECT", pname + String(plane_pos), data_string);
 	}
 }
 			
@@ -444,9 +447,23 @@ void RepresentationManager::restoreRepresentations(const INIFile& in, const vect
 		// create clipping planes
 		for (Position p = 0; p < 9999999; p++)
 		{
-			if (!in.hasEntry("BALLVIEW_PROJECT", "ClippingPlane" + String(p))) break;
+			if (!in.hasEntry("BALLVIEW_PROJECT", "ClippingPlane" + String(p)) &&
+			    !in.hasEntry("BALLVIEW_PROJECT", "CappingPlane" + String(p))) 
+			{
+				break;
+			}
 
-			String data_string = in.getValue("BALLVIEW_PROJECT", "ClippingPlane" + String(p));
+			bool cap = false;
+			String data_string;
+			if (in.hasEntry("BALLVIEW_PROJECT", "ClippingPlane" + String(p)))
+			{
+				data_string = in.getValue("BALLVIEW_PROJECT", "ClippingPlane" + String(p));
+			}
+			else
+			{
+				data_string = in.getValue("BALLVIEW_PROJECT", "CappingPlane" + String(p));
+				cap = true;
+			}
 
 			vector<String> string_vector;
 			Size split_size = data_string.split(string_vector);
@@ -467,6 +484,7 @@ void RepresentationManager::restoreRepresentations(const INIFile& in, const vect
 
 			bool is_active = string_vector[2].toBool();
 			plane->setActive(is_active);
+			plane->setCappingEnabled(cap);
 
 			for (Position rep_pos = 3; rep_pos < split_size; rep_pos++)
 			{

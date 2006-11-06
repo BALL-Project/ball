@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.103 2006/11/06 14:08:56 amoll Exp $
+// $Id: scene.C,v 1.174.2.104 2006/11/06 14:20:09 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -737,7 +737,6 @@ namespace BALL
 					glEnable(GL_STENCIL_TEST);
 					glStencilFunc(GL_NOTEQUAL, 0x0, 0xff);
 					gl_renderer_.drawing_mode_ = DRAWING_MODE_SOLID;
-					gl_renderer_.render(drep, true);
 
 					ColorRGBA color = ClippingPlane::getCappingColor();
 					bool transparent = (int)color.getAlpha() != 255;
