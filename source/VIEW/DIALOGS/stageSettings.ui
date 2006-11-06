@@ -392,22 +392,6 @@
          <string>Show lightsources in Scene</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="popup_names" >
-        <property name="geometry" >
-         <rect>
-          <x>10</x>
-          <y>50</y>
-          <width>231</width>
-          <height>24</height>
-         </rect>
-        </property>
-        <property name="toolTip" >
-         <string>Print e.g. atom name if the mouse cursors stays over an atom in the 3D view of some seconds.</string>
-        </property>
-        <property name="text" >
-         <string>popup infos under mouse cursor</string>
-        </property>
-       </widget>
       </widget>
      </item>
     </layout>

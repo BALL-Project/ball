@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.2.28 2006/10/29 23:21:33 amoll Exp $
+// $Id: scene.h,v 1.66.2.29 2006/11/06 14:09:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -794,8 +794,6 @@ namespace BALL
 			// nr of last pov file export
 			static Position pov_nr_;
 
-			QPoint last_pos_;
-
 			static QGLFormat gl_format_;
 			List<Camera> animation_points_;
 			AnimationThread* animation_thread_;
@@ -803,12 +801,7 @@ namespace BALL
 			bool content_changed_;
 			bool want_to_use_vertex_buffer_;
 			bool mouse_button_is_pressed_;
-			QTimer timer_;
 
-			// Position of mouse cursor for identifying Composite
-			Position last_x_pos_, last_y_pos_;
-
-			bool show_info_;
 			PreciseTime time_;
 			float last_fps_;
 			float zoom_factor_;

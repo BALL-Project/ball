@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.102 2006/11/02 14:34:18 amoll Exp $
+// $Id: scene.C,v 1.174.2.103 2006/11/06 14:08:56 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -720,7 +720,6 @@ namespace BALL
 					glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 					glStencilFunc(GL_ALWAYS, 0x0, 0xff);
 					glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
-					render_(rep, mode);
 
 					// render the Representation once again, this time with colors
 					gl_renderer_.setColorRGBA_(ColorRGBA(0,1.0,0));
@@ -737,6 +736,8 @@ namespace BALL
 					// render the capping plane
 					glEnable(GL_STENCIL_TEST);
 					glStencilFunc(GL_NOTEQUAL, 0x0, 0xff);
+					gl_renderer_.drawing_mode_ = DRAWING_MODE_SOLID;
+					gl_renderer_.render(drep, true);
 
 					ColorRGBA color = ClippingPlane::getCappingColor();
 					bool transparent = (int)color.getAlpha() != 255;
@@ -1635,8 +1636,6 @@ namespace BALL
 
 			setCursor(QCursor(Qt::ArrowCursor));
 
-			connect(&timer_, SIGNAL(timeout()), this, SLOT(timerSignal_()) );			
-
 			setFocusPolicy(Qt::StrongFocus);
 			registerForHelpSystem(this, "scene.html");
 
@@ -1959,19 +1958,11 @@ namespace BALL
 			}
 		}
 
-		void Scene::initTimer()
-		{
- 			timer_.start(500);
-		}
-
 		void Scene::timerSignal_()
 		{
 			info_string_ = "";
 
-			if (mouse_button_is_pressed_ || getMainControl()->isBusy())
-			{
-				return;
-			}
+			if (getMainControl()->isBusy()) return;
 
 			info_point_ = QCursor::pos();
 			info_point_ = mapFromGlobal(info_point_);
@@ -1986,25 +1977,6 @@ namespace BALL
 			Position pos_y = info_point_.y();
 
 			// if the mouse was at on other position 500 ms before, store position and abort
-
-			if (pos_x != last_x_pos_ ||
-					pos_y != last_y_pos_)
-			{
-				last_x_pos_ = pos_x;
-				last_y_pos_ = pos_y;
-				show_info_ = true;
-				unlockComposites();
-				return;
-			}
-
-			if (!show_info_) 
-			{
-				unlockComposites();
-				return;
-			}
-
-			// we wont show the info again until the mouse moved
-			show_info_ = false;
 
 			List<GeometricObject*> objects;
 
@@ -2661,18 +2633,6 @@ namespace BALL
 			}
 			
 			return supports;
-		}
-
-		void Scene::setPopupInfosEnabled(bool state)
-		{
-			if (state)
-			{
-				initTimer();
-			}
-			else
-			{
-				timer_.stop();
-			}
 		}
 
 		void Scene::setWidgetVisible(bool state)
