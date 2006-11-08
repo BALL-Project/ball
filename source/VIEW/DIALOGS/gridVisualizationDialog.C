@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualizationDialog.C,v 1.1.2.11 2006/09/30 00:32:02 amoll Exp $
+// $Id: gridVisualizationDialog.C,v 1.1.2.12 2006/11/08 14:20:36 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/gridVisualizationDialog.h>
@@ -63,6 +63,12 @@ namespace BALL
 			connect( mode_tab, SIGNAL( currentChanged(int) ), this, SLOT(gridTransparencyChanged()));
 
 			setObjectName(name);
+
+			VIEW::setColor(min_min_label, ColorRGBA(255,0,0));
+			VIEW::setColor(min_label, ColorRGBA(255,0,0));
+			VIEW::setColor(mid_label, ColorRGBA(255,255,255));
+			VIEW::setColor(max_label, ColorRGBA(0,0, 255));
+			VIEW::setColor(max_max_label, ColorRGBA(0,0, 255));
 		}
 
 		void GridVisualizationDialog::normalizationChanged()
