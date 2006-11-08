@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clip_protein_around_ligand.C,v 1.9.2.2 2006/09/04 14:47:28 amoll Exp $
+// $Id: clip_protein_around_ligand.C,v 1.9.2.3 2006/11/08 14:08:25 amoll Exp $
 //
 // A program for extracting a parts of a protein around a ligand.
 // The output are XYZFiles because we use this program for creating AMSOL
@@ -434,7 +434,7 @@ int main(int argc, char** argv)
 							// DEBUG
 							//Log.info() << "res:  a: " << atoms << ", h: " << heavy_atoms 
 							//	<< " (" << res_it->getFullName() << ":"
-								<< res_it->getID() << ")" << endl;
+//   								<< res_it->getID() << ")" << endl;
 							// /DEBUG
 							if (atoms > max_atoms || heavy_atoms > max_heavy_atoms)
 							{

@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.14.2.3 2006/07/11 22:51:25 amoll Exp $
+# $Id: Makefile,v 1.14.2.4 2006/11/08 14:08:25 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -17,8 +17,6 @@ default: all
 
 EXECUTABLES = $(FFT_SOURCES)\
 	add_hydrogens\
-#assign_charges_from_rules\
-#assign_radii_from_rules\
 	assign_typenames_from_rules\
 	calculate_RMSD\
 	clip_protein_around_ligand\
@@ -29,9 +27,12 @@ EXECUTABLES = $(FFT_SOURCES)\
 	hin2mol2\
 	pdb2amber_naming\
 	pdb2dcd\
-	pdb2hin\
 	reconstruct_fragment\
 	solvent_accessibility
+
+#assign_charges_from_rules\
+#assign_radii_from_rules\
+#pdb2hin\
 
 ifeq ($(BALL_HAS_FFTW),true)
 	EXECUTABLES+=rigid_docking
