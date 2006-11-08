@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.108 2006/11/06 18:53:43 amoll Exp $
+// $Id: scene.C,v 1.174.2.109 2006/11/08 12:56:56 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2666,13 +2666,22 @@ namespace BALL
 				Size w = width() * factor;
 				Size h = height() * factor;
 				Size max = BALL_MAX(w, h);
+				Size min = BALL_MIN(w, h);
 				if (max <= 4096)
 				{
 					PNG_size_ = QSize(w, h);
 				}
 				else
 				{
-					PNG_size_ = QSize(4096, 4096);
+					Size f = (Size) (4096. * (float) min / (float) max);
+					if (w < h)
+					{
+						PNG_size_ = QSize(f, 4096);
+					}
+					else
+					{
+						PNG_size_ = QSize(4096, f);
+					}
 				}
 			}
 		}
