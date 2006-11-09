@@ -353,8 +353,8 @@ namespace BALL
   {
 		float grid_spacing = options.getReal(Option::GRID_SPACING);
 
-    float r1 = getRadius_( system1_ );
-    float r2 = getRadius_( system2_ );
+    float r1 = getRadius_(system1_);
+    float r2 = getRadius_(system2_);
 
     radius_a_ = r1;
     radius_b_ = r2;
@@ -382,7 +382,7 @@ namespace BALL
 
   /** Initialize the grid.
 	 */
-  void GeometricFit::initFFTGrid_( ProteinIndex pro_idx )
+  void GeometricFit::initFFTGrid_(ProteinIndex pro_idx)
     throw()
   {
     float r;
@@ -598,7 +598,8 @@ namespace BALL
 						if( ( (*FFT_grid)[pos].real() != 1 ) &&
 								( pos.getSquareDistance(v) <= half_thickness_sqr ) )
 						{
-							FFT_grid->setData(pos, Complex(1.0, 0.0));
+							//FFT_grid->setData(pos, Complex(1.0, 0.0));
+							FFT_grid->setData(pos, Complex(1.0, (*FFT_grid)[pos].imag()));
 
 							number_of_points++;
 						}
@@ -682,7 +683,8 @@ namespace BALL
 								( pos.getSquareDistance(atom_position) <= max_radius * max_radius ) &&
 								( pos.getSquareDistance(atom_position) >= min_radius * min_radius ) )
 						{
-							FFT_grid->setData(pos, Complex(1.0, 0.0));
+							//FFT_grid->setData(pos, Complex(1.0, 0.0));
+							FFT_grid->setData(pos, Complex(1.0, (*FFT_grid)[pos].imag()));
 
 							number_of_points++;
 						}
@@ -717,7 +719,7 @@ namespace BALL
       FFT_grid = FFT_grid_b_;
     }
 
-		Complex penalty(1., 0.);
+		//Complex penalty(1., 0.);
 
 		double near_radius  = options.getReal(Option::NEAR_RADIUS);
 		double grid_spacing = options.getReal(Option::GRID_SPACING);
@@ -759,7 +761,9 @@ namespace BALL
 						if ((data.real() == 0.) &&
 								(atom_position.getSquareDistance(FFT_grid->getGridCoordinates(index)) <= RADIUS_SQR))
 						{
-							data = penalty;
+							//data = penalty;
+							data = Complex(1.0, data.imag());
+							
 							number_of_points++;
 						}
 					}
@@ -911,15 +915,15 @@ namespace BALL
 
 		// three euler angles, around axis x,y,z separately
 		double phi   = (rot.x-init_angles_.x) * Constants::PI / 180.0;
-		double theta = (rot.y-init_angles_.y) * Constants::PI / 180.0;
+		double theta = (rot.y-init_angles_.y) * Constants::PI / 180.0 ;
 		double psi   = (rot.z-init_angles_.z) * Constants::PI / 180.0;
 		double sphi, stheta, spsi, cphi, ctheta, cpsi;
-		sphi   = sin( phi   );
-		cphi   = cos( phi   );
-		stheta = sin( theta );
-		ctheta = cos( theta );
-		spsi   = sin( psi   );
-		cpsi   = cos( psi   );
+		sphi   = sin(phi);
+		cphi   = cos(phi);
+		stheta = sin(theta);
+		ctheta = cos(theta);
+		spsi   = sin(psi);
+		cpsi   = cos(psi);
 
 		double m11 =         ctheta * cpsi;
 		double m21 =  sphi * stheta * cpsi - cphi * spsi;
@@ -935,8 +939,6 @@ namespace BALL
 		Vector3 lower = fdpb_.phi_grid->getOrigin();
 		Vector3 upper = lower + fdpb_.phi_grid->getDimension();
 
-		//cout << " fppb grid: lower = " << lower << " upper = " << upper << endl;
-
 		// Compute the values
 		int x, y, z, index;
 
@@ -949,9 +951,9 @@ namespace BALL
 					Vector3 gp(grid_spacing*x, grid_spacing*y, grid_spacing*z);
 					gp += FFT_grid_lower_coord_;
 
-					Vector3 rot_gp( m11*gp.x + m12*gp.y + m13*gp.z,
-													m21*gp.x + m22*gp.y + m23*gp.z,
-													m31*gp.x + m32*gp.y + m33*gp.z);
+					Vector3 rot_gp(m11*gp.x + m12*gp.y + m13*gp.z,
+												 m21*gp.x + m22*gp.y + m23*gp.z,
+												 m31*gp.x + m32*gp.y + m33*gp.z);
 
 					index = z + (y + x*grid_size)*grid_size;
 
@@ -969,8 +971,6 @@ namespace BALL
 
 						// We need kT/e
 						pot_val *= 38.92169652;
-
-						//cout << pot_val << " ";
 
 						if (fabs(pot_val) >= p_min_)
 						{
@@ -990,90 +990,80 @@ namespace BALL
 
 
   // make of grid from System with (already) applied rotation
-  void GeometricFit::makeFFTGrid_( ProteinIndex pro_idx, Vector3 rot )
-    throw()
-  {
+	void GeometricFit::makeFFTGrid_(ProteinIndex pro_idx, Vector3 rot)
+			throw()
+	{
 		int surface_type = options.getInteger(Option::SURFACE_TYPE);
 		System& system = ( pro_idx == PROTEIN_A ) ? system1_ : system2_;
 
-    int PENALTY;
+		// Do some initializations
 
-		// Compute 'real part' of the grid and do some initializations
-
-    // init grid value
-    if( pro_idx == PROTEIN_A )
-    {
-      if( FFT_grid_a_ == NULL )
-      {
+		// Init grid value
+		if( pro_idx == PROTEIN_A )
+		{
+			if( FFT_grid_a_ == NULL )
+			{
 				Log.error() << "FFT_grid_a_ is null !" << endl;
-      }
+			}
 
-      Complex* grid = &( (*FFT_grid_a_)[0] );
-      Complex* end  = &( (*FFT_grid_a_)[FFT_grid_a_->size() - 1] );
-      end++; // it's alread out of grid, we just use it as end-mark
-      for(; grid != end; grid++)
-      {
+			Complex* grid = &( (*FFT_grid_a_)[0] );
+			Complex* end  = &( (*FFT_grid_a_)[FFT_grid_a_->size() - 1] );
+			end++; // it's alread out of grid, we just use it as end-mark
+			for(; grid != end; grid++)
+			{
 				*grid = Complex(0.0,0.0);
-      }
-
-      PENALTY = options.getInteger(Option::PENALTY_STATIC);
-    }
-    else // if ( pro_idx == PROTEIN_B )
-    {
-      if ( FFT_grid_b_ == NULL )
-      {
+			}
+		}
+		else // if ( pro_idx == PROTEIN_B )
+		{
+			if ( FFT_grid_b_ == NULL )
+			{
 				Log.error() << "FFT_grid_b_ is null !" << endl;
-      }
-
-      // since we are re-using FFT_grid_b_,
+			}
+			// since we are re-using FFT_grid_b_,
       // so we have to set number of FFT & iFFT transformations
-      FFT_grid_b_->setNumberOfFFTTransforms(0);
-      FFT_grid_b_->setNumberOfiFFTTransforms(0);
+			FFT_grid_b_->setNumberOfFFTTransforms(0);
+			FFT_grid_b_->setNumberOfiFFTTransforms(0);
 
-      Complex* grid = &( (*FFT_grid_b_)[0] );
-      Complex* end  = &( (*FFT_grid_b_)[FFT_grid_b_->size() - 1] );
-      end++; // it's alread out of grid, we just use it as end-mark
-      for(; grid != end; grid++)
-      {
+			Complex* grid = &( (*FFT_grid_b_)[0] );
+			Complex* end  = &( (*FFT_grid_b_)[FFT_grid_b_->size() - 1] );
+			end++; // it's alread out of grid, we just use it as end-mark
+			for(; grid != end; grid++)
+			{
 				*grid = Complex(0.0,0.0);
-      }
-
-      PENALTY = options.getInteger(Option::PENALTY_MOBILE);
-    }
-
-		if (surface_type == FTDOCK)
-			findFTDockInsidePoints_( system, pro_idx );
-		else
-			findInsidePoints_( system, pro_idx );
-
-    // Since the surface points have the same value with inside points in protein b,
-    // so we only search for the surface points for protein a
-    if(pro_idx == PROTEIN_A)
-    {
-      if( surface_type == CONNOLLY )
-      {
-				findConnollySurfacePoints_( system, pro_idx );
-      }
-      else if( surface_type == VAN_DER_WAALS )
-      {
-				findVanDerWaalsSurfacePoints_( system, pro_idx );
-      }
-      else if( surface_type == FTDOCK )
-      {
-				findFTDockSurfacePoints_( system, pro_idx );
-      }
-      else
-      {}
-    }
-
+			}
+		}
+		
+		
 		// Compute 'imaginary part' of the grid
 		setInterpolatedEStatic_(pro_idx, rot);
-
+		
+		// Compute 'real part' of the grid and recorrect the 'imaginary part' in a natural way.
+		if (surface_type == FTDOCK)
+		{
+			findFTDockInsidePoints_(system, pro_idx);
+		}
+		else
+		{
+			findInsidePoints_(system, pro_idx);
+		}
+		
+    // Search for surface points
+		if (surface_type == CONNOLLY)
+		{
+			findConnollySurfacePoints_(system, pro_idx);
+		}
+		else if (surface_type == VAN_DER_WAALS)
+		{
+			findVanDerWaalsSurfacePoints_(system, pro_idx);
+		}
+		else if (surface_type == FTDOCK)
+		{
+			findFTDockSurfacePoints_(system, pro_idx);
+		}
+		
 		return;
-  }
-
-
-
+	}
 
 
   // Free all allocated memory and destroys the options and results
@@ -1098,49 +1088,49 @@ namespace BALL
   }
 
   // change the orientation of protein around its center according to euler_ang
-  void GeometricFit::changeProteinOrientation_( System& mobile_system, Vector3 euler_ang )
-    throw()
-  {
+	void GeometricFit::changeProteinOrientation_(System& mobile_system, Vector3 euler_ang)
+		throw()
+	{
     // three euler angles, around axis x,y,z separately
-    double phi   = euler_ang.x * Constants::PI / 180.0;
-    double theta = euler_ang.y * Constants::PI / 180.0;
-    double psi   = euler_ang.z * Constants::PI / 180.0;
-    double sphi, stheta, spsi, cphi, ctheta, cpsi;
-    sphi   = sin( phi   );
-    cphi   = cos( phi   );
-    stheta = sin( theta );
-    ctheta = cos( theta );
-    spsi   = sin( psi   );
-    cpsi   = cos( psi   );
+		double phi   = euler_ang.x * Constants::PI / 180.0;
+		double theta = euler_ang.y * Constants::PI / 180.0;
+		double psi   = euler_ang.z * Constants::PI / 180.0;
+		double sphi, stheta, spsi, cphi, ctheta, cpsi;
+		sphi   = sin(phi);
+		cphi   = cos(phi);
+		stheta = sin(theta);
+		ctheta = cos(theta);
+		spsi   = sin(psi);
+		cpsi   = cos(psi);
 
     // in the matrix, mat = Rz * Ry * Rx
-    Matrix4x4 mat;
-    mat.m11 =         ctheta * cpsi;
-    mat.m12 =  sphi * stheta * cpsi - cphi * spsi;
-    mat.m13 =  cphi * stheta * cpsi + sphi * spsi;
-    mat.m14 =  0.0;
-    mat.m21 =         ctheta * spsi;
-    mat.m22 =  sphi * stheta * spsi + cphi * cpsi;
-    mat.m23 =  cphi * stheta * spsi - sphi * cpsi;
-    mat.m24 =  0.0;
-    mat.m31 =       - stheta;
-    mat.m32 =  sphi * ctheta;
-    mat.m33 =  cphi * ctheta;
-    mat.m34 =  0.0;
-    mat.m41 =  0.0;
-    mat.m42 =  0.0;
-    mat.m43 =  0.0;
-    mat.m44 =  1.0;
+		Matrix4x4 mat;
+		mat.m11 =         ctheta * cpsi;
+		mat.m12 =  sphi * stheta * cpsi - cphi * spsi;
+		mat.m13 =  cphi * stheta * cpsi + sphi * spsi;
+		mat.m14 =  0.0;
+		mat.m21 =         ctheta * spsi;
+		mat.m22 =  sphi * stheta * spsi + cphi * cpsi;
+		mat.m23 =  cphi * stheta * spsi - sphi * cpsi;
+		mat.m24 =  0.0;
+		mat.m31 =       - stheta;
+		mat.m32 =  sphi * ctheta;
+		mat.m33 =  cphi * ctheta;
+		mat.m34 =  0.0;
+		mat.m41 =  0.0;
+		mat.m42 =  0.0;
+		mat.m43 =  0.0;
+		mat.m44 =  1.0;
 
-    TransformationProcessor transformation( mat );
-    mobile_system.apply( transformation );
+		TransformationProcessor transformation(mat);
+		mobile_system.apply(transformation);
 
-    return;
-  }
+		return;
+	}
 
   // calculate the conjugate of each point in FFT grid
 	// TODO: maybe a rewrite would make that readable
-  void GeometricFit::calcConjugate_( ProteinIndex pro_idx )
+  void GeometricFit::calcConjugate_(ProteinIndex pro_idx)
     throw()
   {
     FFT3D* FFT_grid = NULL;
@@ -1170,9 +1160,9 @@ namespace BALL
     throw()
   {
     // use pointers to do iterations
-    Complex* grid_a = &( (*FFT_grid_a_)[0] );
-    Complex* grid_b = &( (*FFT_grid_b_)[0] );
-    Complex* end_a  = &( (*FFT_grid_a_)[FFT_grid_a_->size() - 1] );
+    Complex* grid_a = &((*FFT_grid_a_)[0]);
+    Complex* grid_b = &((*FFT_grid_b_)[0]);
+    Complex* end_a  = &((*FFT_grid_a_)[FFT_grid_a_->size() - 1]);
     end_a++;  // it's alread out of grid, we just use it as end-mark
 
     for(; grid_a != end_a; grid_a++, grid_b++)
@@ -1306,8 +1296,8 @@ namespace BALL
 		}
 		detailed_timer.reset();
 
-		initFFTGrid_( GeometricFit::PROTEIN_A );
-		initFFTGrid_( GeometricFit::PROTEIN_B );
+		initFFTGrid_(GeometricFit::PROTEIN_A);
+		initFFTGrid_(GeometricFit::PROTEIN_B);
 
 		if (verbosity > 5)
 		{
@@ -1315,10 +1305,10 @@ namespace BALL
 		}
 		detailed_timer.reset();
 
-		doPreTranslation_( GeometricFit::PROTEIN_A );
+		doPreTranslation_(GeometricFit::PROTEIN_A);
 
 		detailed_timer.reset();
-		makeFFTGrid_( GeometricFit::PROTEIN_A, Vector3(0., 0., 0.) );
+		makeFFTGrid_(GeometricFit::PROTEIN_A, Vector3(0., 0., 0.));
 
 		if (verbosity > 5)
 		{
@@ -1334,7 +1324,7 @@ namespace BALL
 		}
 
 		detailed_timer.reset();
-		calcConjugate_( GeometricFit::PROTEIN_A );
+		calcConjugate_(GeometricFit::PROTEIN_A);
 
 		if (verbosity > 5)
 		{
@@ -1343,7 +1333,7 @@ namespace BALL
 
     // since we put the mass center at origin
     // we can do pre-translation of b before all loops.
-    doPreTranslation_( GeometricFit::PROTEIN_B );
+    doPreTranslation_(GeometricFit::PROTEIN_B);
 
 		// remove old rubbish in peak_set_
 		peak_set_.clear();
@@ -1433,7 +1423,7 @@ namespace BALL
 			system2_ = system_backup_b_;
 
       detailed_timer.reset();
-			changeProteinOrientation_( system2_, Vector3( phi, theta, psi ) );
+			changeProteinOrientation_(system2_, Vector3(phi, theta, psi));
 
 			if (verbosity > 10)
 			{
@@ -1441,7 +1431,7 @@ namespace BALL
 			}
 
       detailed_timer.reset();
-			makeFFTGrid_( GeometricFit::PROTEIN_B, Vector3( phi, theta, psi ) );
+			makeFFTGrid_(GeometricFit::PROTEIN_B, Vector3(phi, theta, psi));
 
 			if (verbosity > 10)
 			{
@@ -1853,96 +1843,95 @@ namespace BALL
 		return true;
 	}
 
+
 	/** RotationAngles_ class
 	 *  Generate all non-degenerate rotation angles for the given degree interval.
 	 * 	This algorithm is based on ???
-	 */
-	bool GeometricFit::RotationAngles_::generateAllAngles( const int deg )
-		throw()
+	*/
+	void GeometricFit::RotationAngles_::generateAllAngles( const int deg ) 
+			throw()
 	{
 		ang_num_ = 0;
 
 		for(int psipsi = 0; psipsi < 180; psipsi += deg)
 			for(int thetatheta = 0; thetatheta < 360; thetatheta += deg)
 				for(int phiphi = 0; phiphi < 360; phiphi += deg)
-				{
+		{
 
-					double x1 = phiphi     * Constants::PI / 180.0;
-					double y1 = thetatheta * Constants::PI / 180.0;
-					double z1 = psipsi     * Constants::PI / 180.0;
+			double x1 = phiphi     * Constants::PI / 180.0;
+			double y1 = thetatheta * Constants::PI / 180.0;
+			double z1 = psipsi     * Constants::PI / 180.0;
 
-					double sx1 = sin(x1);
-					double sy1 = sin(y1);
-					double sz1 = sin(z1);
-					double cx1 = cos(x1);
-					double cy1 = cos(y1);
-					double cz1 = cos(z1);
+			double sx1 = sin(x1);
+			double sy1 = sin(y1);
+			double sz1 = sin(z1);
+			double cx1 = cos(x1);      
+			double cy1 = cos(y1);
+			double cz1 = cos(z1);
 
-					bool degenerate = false;
+			bool degenerate = false;
 
-					for(int k = 0; (k <= psipsi) && (!degenerate); k += deg)
-						for(int j = 0; (j <= thetatheta) && (!degenerate); j += deg)
-							for(int i = 0; (i <= phiphi) && (!degenerate); i += deg)
-							{
-								if( (i == phiphi) && (j == thetatheta) && (k == psipsi) )
-									continue;
+			for(int k = 0; (k <= psipsi) && (!degenerate); k += deg)
+				for(int j = 0; (j <= thetatheta) && (!degenerate); j += deg)
+					for(int i = 0; (i <= phiphi) && (!degenerate); i += deg)
+			{
+				if( (i == phiphi) && (j == thetatheta) && (k == psipsi) )
+					continue;
 
-								double x2 = i * Constants::PI / 180.0;
-								double y2 = j * Constants::PI / 180.0;
-								double z2 = k * Constants::PI / 180.0;
+				double x2 = i * Constants::PI / 180.0;
+				double y2 = j * Constants::PI / 180.0;
+				double z2 = k * Constants::PI / 180.0;
 
-								double sx2 = sin(x2);
-								double sy2 = sin(y2);
-								double sz2 = sin(z2);
-								double cx2 = cos(x2);
-								double cy2 = cos(y2);
-								double cz2 = cos(z2);
+				double sx2 = sin(x2);
+				double sy2 = sin(y2);
+				double sz2 = sin(z2);
+				double cx2 = cos(x2);
+				double cy2 = cos(y2);
+				double cz2 = cos(z2);
 
 
 								// Rz * Ry * Rx
-								double trace =
-									( (     cy1*cz1          ) * (     cy2*cz2          ) +
-										( sx1*sy1*cz1 - cx1*sz1) * ( sx2*sy2*cz2 - cx2*sz2) +
-										( cx1*sy1*cz1 + sx1*sz1) * ( cx2*sy2*cz2 + sx2*sz2) ) +
-									( (     cy1*sz1          ) * (     cy2*sz2          ) +
-										( sx1*sy1*sz1 + cx1*cz1) * ( sx2*sy2*sz2 + cx2*cz2) +
-										( cx1*sy1*sz1 - sx1*cz1) * ( cx2*sy2*sz2 - sx2*cz2) ) +
-									( (    -sy1              ) * (    -sy2              ) +
-										( sx1*cy1              ) * ( sx2*cy2              ) +
-										( cx1*cy1              ) * ( cx2*cy2              ) );
+				double trace = 
+							( (     cy1*cz1          ) * (     cy2*cz2          ) + 
+							( sx1*sy1*cz1 - cx1*sz1) * ( sx2*sy2*cz2 - cx2*sz2) + 
+							( cx1*sy1*cz1 + sx1*sz1) * ( cx2*sy2*cz2 + sx2*sz2) ) +
+							( (     cy1*sz1          ) * (     cy2*sz2          ) +
+							( sx1*sy1*sz1 + cx1*cz1) * ( sx2*sy2*sz2 + cx2*cz2) +
+							( cx1*sy1*sz1 - sx1*cz1) * ( cx2*sy2*sz2 - sx2*cz2) ) +
+							( (    -sy1              ) * (    -sy2              ) + 
+							( sx1*cy1              ) * ( sx2*cy2              ) +
+							( cx1*cy1              ) * ( cx2*cy2              ) );
 
-								double v = (trace - 1.0) / 2.0;
+				double v = (trace - 1.0) / 2.0;
 
 								// v should be in the area [-1.0, 1.0]
-								// sometime because of the numerical error,
+								// sometime because of the numerical error, 
 								// v gets out of this area. so we set it like this:
-								if(v < -1.0)
-									v = -1.0;
-								else if(v > 1.0)
-									v = 1.0;
+				if(v < -1.0)
+					v = -1.0;
+				else if(v > 1.0)
+					v = 1.0;
 
-								double alpha = acos( v );
+				double alpha = acos( v );
 
-								if(alpha * 180.0 <= 1.0  * Constants::PI)
-								{
-									degenerate = true;
-									break;
-								}
-							}
-
-					if( !degenerate )
-					{
-						phi_.push_back(phiphi);
-						theta_.push_back(thetatheta);
-						psi_.push_back(psipsi);
-						ang_num_ ++;
-					}
-
+				if(alpha * 180.0 <= 1.0  * Constants::PI) 
+				{
+					degenerate = true;
+					break; 
 				}
+			}
+
+			if( !degenerate )
+			{
+				phi_.push_back(phiphi);
+				theta_.push_back(thetatheta);
+				psi_.push_back(psipsi);
+				ang_num_ ++;
+			}
+
+		}
 
 		ang_num_ --;
-
-		return true;
 	}
 
 } // namespace BALL

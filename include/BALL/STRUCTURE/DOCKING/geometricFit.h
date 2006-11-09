@@ -218,8 +218,7 @@ namespace BALL
 																	 const float theta_min, const float theta_max ) throw();
 
 					// generate all non-degenerate rotation angles.
-					// This algorithm is based on ???
-					bool generateAllAngles( const int deg ) throw();
+					void generateAllAngles( const int deg ) throw();
 
 					int getRotationNum()
 						throw()
@@ -227,19 +226,19 @@ namespace BALL
 						return ang_num_;
 					}
 
-					int getXAng( int n ) // get the euler angle rotate around x axis
+					int getXAng(int n) // get the euler angle rotate around x axis
 						throw()
 					{
 						return phi_[n];
 					}
 
-					int getYAng( int n ) // get the euler angle rotate around y axis
+					int getYAng(int n) // get the euler angle rotate around y axis
 						throw()
 					{
 						return theta_[n];
 					}
 
-					int getZAng( int n ) // get the euler angle rotate around z axis
+					int getZAng(int n) // get the euler angle rotate around z axis
 						throw()
 					{
 						return psi_[n];
@@ -247,7 +246,7 @@ namespace BALL
 
 				private:
 					int max_rotation_;
-					int  ang_num_;
+					int ang_num_;
 					vector<int> phi_;
 					vector<int> theta_;
 					vector<int> psi_;
@@ -257,7 +256,7 @@ namespace BALL
       // PROTEIN_B is the mobile protein, i.e., the smaller one.
 			// NO_PROTEIN means that no (electrostatic) computations have been 
 			// done so far.
-      enum ProteinIndex{  PROTEIN_A = 1, PROTEIN_B    = 2, NO_PROTEIN = 3};
+      enum ProteinIndex{  PROTEIN_A = 1, PROTEIN_B = 2, NO_PROTEIN = 3};
 
 			// The surface type to use for construction of the grids.
       enum SurfaceType {  CONNOLLY  = 1, VAN_DER_WAALS = 2, FTDOCK = 3 };
@@ -473,7 +472,7 @@ namespace BALL
 
 			// Vectors to store orientation and translation of the results in the ranked conformations
 			vector<Vector3> translations_;
-			vector<Vector3> orientations_;
+			vector<Vector3 > orientations_;
 			
 			// The finite difference poisson boltzmann solver
 			FDPB fdpb_;

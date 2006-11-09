@@ -38,7 +38,7 @@ int main( int argc, char **argv )
   int GRID_SIZE = 128;
   
   // SURFACE_THICKNESS stands for the thickness of the surface of the protein
-  float SURFACE_THICKNESS = 2.0;
+  float SURFACE_THICKNESS = 1.3;
   
   // delta angle between every transformation
   // it is in unit degree
@@ -229,6 +229,12 @@ usage: docking -a <PDB File name for protein A>\n\
     pro_sys_a.apply(fragment_db.add_hydrogens);
     pro_sys_b.apply(fragment_db.add_hydrogens);
   }
+	
+	cout << "Assigning radii to molecules A and B..." << endl;
+	AssignRadiusProcessor radii("radii/PARSE.siz");
+	pro_sys_a.apply(radii);
+	pro_sys_b.apply(radii);
+	cout << "Done." << endl;
    
   GeometricFit geo_fit( pro_sys_a, pro_sys_b );
    
@@ -236,6 +242,7 @@ usage: docking -a <PDB File name for protein A>\n\
 	geo_fit.options[GeometricFit::Option::GRID_SPACING] = GRID_SPACING;
 	geo_fit.options[GeometricFit::Option::GRID_SIZE] = GRID_SIZE;
 	geo_fit.options[GeometricFit::Option::SURFACE_THICKNESS] = SURFACE_THICKNESS;
+	geo_fit.options[GeometricFit::Option::SURFACE_TYPE] = SURFACE_TYPE;
 	geo_fit.options[GeometricFit::Option::DEGREE_INTERVAL] = DEGREE_INTERVAL;
 	geo_fit.options[GeometricFit::Option::PHI_MIN] = GeometricFit::Default::PHI_MIN;
 	geo_fit.options[GeometricFit::Option::PHI_MAX] = GeometricFit::Default::PHI_MAX;

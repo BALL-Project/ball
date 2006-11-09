@@ -146,6 +146,9 @@ int main(int argc, char** argv)
 		snap = (*conformation_set)[i];
 		snap.applySnapShot(docked);
 		
+		// Get rid of the old contents of static_docked
+		static_docked.clear();
+		
 		// split static chain from docked since we want to calculate the RMSD for static and mobile sperately
 		for (pi = docked.beginChain(); +pi; ++pi)
 		{
