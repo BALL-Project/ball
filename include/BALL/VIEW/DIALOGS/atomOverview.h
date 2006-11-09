@@ -115,11 +115,8 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Calls  \link ModularWidget::registerWidget registerWidget \endlink .
 					@param      parent the parent widget 
 					@param 			name
-					@see        QDialog
-					@see        ModularWidget
 			*/
 			AtomOverview(QWidget *parent = NULL, const char *name = NULL )
 				throw();

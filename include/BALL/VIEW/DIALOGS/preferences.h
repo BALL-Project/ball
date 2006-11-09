@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.h,v 1.17.2.2 2006/03/17 15:42:28 amoll Exp $
+// $Id: preferences.h,v 1.17.2.3 2006/11/09 21:04:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PREFERENCES_H
@@ -83,7 +83,7 @@ namespace BALL
 				throw();
 
 			/** Remove a previously inserted page.
-					This method can called inside ModularWidget::finalizePreferencesTab 
+					This method can be called inside ModularWidget::finalizePreferencesTab 
 					\param  child a pointer to the dialog to be removed 
 					\see    insertPage
 			*/
