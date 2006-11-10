@@ -1,7 +1,8 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.37 2006/09/03 09:04:00 oliver Exp $
+dnl $Id: configure.ac,v 1.38 2006/11/10 08:32:39 oliver Exp $
+
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -37,6 +38,15 @@ dnl retrieve the BALL version and print it to the console
 dnl for debugging purposes (people sending in config.log and the like).
 dnl
 BALL_VERSION_STRING=`grep define\ BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | cut -d\" -f2 | tr -d "a-zA-Z"`
+BALL_CURRENT_VERSION=${BALL_VERSION_STRING}
+BALL_COMPATIBILITY_VERSION=`echo ${BALL_VERSION_STRING} | cut -d. -f1-2`
+CF_VERSION_CHECK
+
+dnl
+dnl retrieve the BALL version and print it to the console
+dnl for debugging purposes (people sending in config.log and the like).
+dnl
+BALL_VERSION_STRING=`grep define\ BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | cut -d\" -f2`
 BALL_CURRENT_VERSION=${BALL_VERSION_STRING}
 BALL_COMPATIBILITY_VERSION=`echo ${BALL_VERSION_STRING} | cut -d. -f1-2`
 CF_VERSION_CHECK
@@ -657,6 +667,15 @@ if test "${AR}" = "no" ; then
 fi
 if test "${AROPTS}" = "" ; then
 	AROPTS="cru"
+fi
+
+dnl
+dnl  Some platforms (e.g. Darwin) require special flags to build
+dnl  loadable modules. If no specific flags for this were set,
+dnl  we just use the standard settings to create dynamic libraries.
+dnl
+if test "${DYNAROPTS_PYMODULE}" = "" ; then
+  DYNAROPTS_PYMODULE="${DYNAROPTS}"
 fi
 
 dnl

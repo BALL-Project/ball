@@ -1373,6 +1373,17 @@ echo "${ECHO_T}This is BALL $BALL_VERSION_STRING compiling." >&6
 echo "${ECHO_T}Host: $MACHINE" >&6
 
 
+BALL_VERSION_STRING=`grep define\ BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | cut -d\" -f2`
+BALL_CURRENT_VERSION=${BALL_VERSION_STRING}
+BALL_COMPATIBILITY_VERSION=`echo ${BALL_VERSION_STRING} | cut -d. -f1-2`
+
+	MACHINE=`uname -a`
+	echo "$as_me:$LINENO: result: This is BALL $BALL_VERSION_STRING compiling." >&5
+echo "${ECHO_T}This is BALL $BALL_VERSION_STRING compiling." >&6
+	echo "$as_me:$LINENO: result: Host: $MACHINE" >&5
+echo "${ECHO_T}Host: $MACHINE" >&6
+
+
 
 # Extract the first word of "more", so it can be a program name with args.
 set dummy more; ac_word=$2
@@ -18815,7 +18826,7 @@ echo "$as_me: error: Aborted." >&2;}
 
 				fi
 			fi
-  		GSL_LIBS="${GSL_LIBS} -L${GSL_LIBDIR} -rpath${GSL_LIBDIR} -lgsl -lgslcblas"
+  		GSL_LIBS="${GSL_LIBS} -L${GSL_LIBDIR} -lgsl -lgslcblas"
   	fi
 
 		BALL_HAS_GSL=true
@@ -19079,7 +19090,7 @@ fi
 		X11_LIBPATH=""
 		X11_LIBPATHOPT=""
 	else
-		X11_LIBPATHOPT="-L${X11_LIBPATH} -rpath${X11_LIBPATH}"
+		X11_LIBPATHOPT="-L${X11_LIBPATH}"
 	fi
 
 
@@ -20657,7 +20668,7 @@ echo "${ECHO_T}" >&6
 
 	if test "${VIEW_PLATFORM}" = OpenGL ; then
 		if test "${OPENGL_LIBPATH}" != "/usr/lib" -a "${OPENGL_LIBPATH}" != "" ; then
-			OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -rpath${OPENGL_LIBPATH} -lGLU -lGL"
+			OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -lGLU -lGL"
 		else
 			OPENGL_LIBPATH=""
 			OPENGL_LIBOPTS="-lGLU -lGL"
@@ -21019,8 +21030,8 @@ echo "${ECHO_T}yes" >&6
 echo $ECHO_N "checking linking against QT libraries... $ECHO_C" >&6
 
 		if test "${QT_LIBPATH}" != "/usr/lib" ; then
-			QTQGL_LIBOPTS="-L${QT_LIBPATH} -rpath${QT_LIBPATH} -lqgl -lqt${QT_MT_SUFFIX}"
-			QT_LIBOPTS="-L${QT_LIBPATH} -rpath${QT_LIBPATH} -lqt${QT_MT_SUFFIX}"
+			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lqgl -lqt${QT_MT_SUFFIX}"
+			QT_LIBOPTS="-L${QT_LIBPATH} -lqt${QT_MT_SUFFIX}"
 		else
 			QT_LIBPATH=""
 			QTQGL_LIBOPTS="-lqgl -lqt${QT_MT_SUFFIX}"
@@ -22886,9 +22897,9 @@ BALL_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
 
 LIBS="${LIBS} ${FFTW_LIBS} ${GSL_LIBS} -lm"
 VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
-BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -rpath${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
+BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
 if test "${USE_VIEW}" = true ; then
-	BALL_LIBS="-L${BALL_PATH}/lib/${BINFMT} -rpath${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
+	BALL_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
 fi
 
 LDFLAGS="$LDFLAGS"
@@ -22934,6 +22945,10 @@ if test "${AR}" = "no" ; then
 fi
 if test "${AROPTS}" = "" ; then
 	AROPTS="cru"
+fi
+
+if test "${DYNAROPTS_PYMODULE}" = "" ; then
+  DYNAROPTS_PYMODULE="${DYNAROPTS}"
 fi
 
 if test "${DYNAROPTS_PYMODULE}" = "" ; then
