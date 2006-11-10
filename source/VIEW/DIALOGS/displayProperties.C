@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.2.17 2006/10/26 14:23:44 amoll Exp $
+// $Id: displayProperties.C,v 1.101.2.18 2006/11/10 13:03:25 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -210,7 +210,7 @@ void DisplayProperties::show()
 void DisplayProperties::createRepresentationMode()
 {
 	rep_ = 0;
- 	setWindowTitle("create Representation");
+ 	setWindowTitle("Create a Representation");
 	if (id_ != 0) checkMenu(*getMainControl());
 
 	model_updates_enabled->setChecked(true);
@@ -220,6 +220,7 @@ void DisplayProperties::createRepresentationMode()
 void DisplayProperties::modifyRepresentationMode(Representation* rep)
 {
 	rep_ = rep;
+ 	setWindowTitle("Modify a Representation");
 	if (id_ != 0) checkMenu(*getMainControl());
 
 	if (rep_ == 0 || 
@@ -229,7 +230,6 @@ void DisplayProperties::modifyRepresentationMode(Representation* rep)
 		return;
 	}
 	
- 	setWindowTitle("modify Representation");
 	if (rep_->getColoringMethod() < COLORING_UNKNOWN)
 	{
 		coloring_method_combobox->setCurrentIndex(rep_->getColoringMethod());
