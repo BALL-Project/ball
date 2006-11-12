@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.17 2006/02/13 19:34:30 bertsch Exp $
+// $Id: ringPerceptionProcessor.C,v 1.18 2006/11/12 21:21:20 bertsch Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
@@ -85,6 +85,11 @@ namespace BALL
 
 	Size RingPerceptionProcessor::calculateSSSR(vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
 	{
+		if (ac.countAtomContainers() == 0)
+		{
+			return 0;
+		}
+
 		String algorithm_name = options.get(Option::ALGORITHM_NAME);
 		if (algorithm_name == "Balducci")
 		{
@@ -92,9 +97,24 @@ namespace BALL
 			all_small_rings_.clear();
 			
 			// build molecular graph
-			Molecule * mol = static_cast<Molecule*>(&ac);
+			Molecule* mol = static_cast<Molecule*>(&ac);
 			MolecularGraph mol_graph(*mol);
-			
+		
+			vector<Bond*> to_delete;
+      for (MolecularGraph::EdgeIterator eit = mol_graph.beginEdge(); eit != mol_graph.endEdge(); ++eit)
+      {
+        Bond::Type bond_type = eit->getBond()->getType();
+        if (bond_type == Bond::TYPE__HYDROGEN || bond_type == Bond::TYPE__DISULPHIDE_BRIDGE)
+        {
+          to_delete.push_back(eit->getBond());
+        }
+      }
+
+      for (Size i = 0; i != to_delete.size(); ++i)
+      {
+      	mol_graph.deleteEdge(*to_delete[i]);
+      }
+
 			// detect the bccs
 			vector<MolecularGraph*> bccs;
 			findAllBCC(bccs, mol_graph);
@@ -102,7 +122,7 @@ namespace BALL
 			Size num_rings(0);
 
 			// for each bcc that potentially contains rings do the Balducci/Pearlman ring perception
-			for (vector<MolecularGraph*>::iterator it=bccs.begin();it!=bccs.end();++it)
+			for (vector<MolecularGraph*>::iterator it = bccs.begin(); it != bccs.end(); ++it)
 			{
 				if ((*it)->getNumberOfNodes() > 2 && (*it)->getNumberOfEdges() > 2)
 				{
@@ -130,6 +150,8 @@ namespace BALL
 				return 0;
 			}
 		}
+
+		return 0;
 	}
 
 	const vector<vector<Atom*> >& RingPerceptionProcessor::getAllSmallRings() const
