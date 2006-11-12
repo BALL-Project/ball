@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.66.2.5 2006/10/12 21:16:25 amoll Exp $
+// $Id: representation.C,v 1.66.2.6 2006/11/12 16:03:11 amoll Exp $
 //
 
 
@@ -9,11 +9,14 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/PRIMITIVES/sphere.h>
 
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/quadMesh.h>
 #include <BALL/VIEW/PRIMITIVES/illuminatedLine.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
+#include <BALL/VIEW/DATATYPE/vertex1.h>
+#include <BALL/VIEW/DATATYPE/vertex2.h>
 
 #include <BALL/KERNEL/atom.h>
 #include <BALL/SYSTEM/timer.h>
@@ -667,6 +670,45 @@ namespace BALL
 		{
 			composites_ = composites;
 			needs_update_ = true;
+		}
+
+		void Representation::enableModelUpdate(bool state) 
+		{ 
+			model_update_enabled_ = state;
+			if (state) return;
+
+			// disable the repositioning of Vertex objects (e.g. Stick model)
+			GeometricObjectList::iterator it = getGeometricObjects().begin();
+			Vector3 v1, v2;
+			for (; it != getGeometricObjects().end(); it++)
+			{
+				if (RTTI::isKindOf<Vertex>(**it))
+				{
+					Vertex* v = dynamic_cast<Vertex*>(*it);
+					v1 = v->getVertex();
+					v->setDefaultVertexAddress();
+					v->setVertex(v1);
+				}
+
+				if (RTTI::isKindOf<Vertex2>(**it))
+				{
+					Vertex2* v = dynamic_cast<Vertex2*>(*it);
+					v1 = v->getVertex1();
+					v->setDefaultVertex1Address();
+					v->setVertex1(v1);
+					v2 = v->getVertex2();
+					v->setDefaultVertex2Address();
+					v->setVertex2(v2);
+				}
+
+				if (RTTI::isKindOf<Sphere>(**it))
+				{
+					Sphere* v = dynamic_cast<Sphere*>(*it);
+					v1 = v->getPosition();
+					v->setDefaultPositionAddress();
+					v->setPosition(v1);
+				}
+			}
 		}
 			
   #	ifdef BALL_NO_INLINE_FUNCTIONS

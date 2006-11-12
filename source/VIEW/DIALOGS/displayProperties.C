@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.2.18 2006/11/10 13:03:25 amoll Exp $
+// $Id: displayProperties.C,v 1.101.2.19 2006/11/12 16:03:11 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -613,8 +613,16 @@ void DisplayProperties::applyTo_(Representation* rep)
 
 	rep_->enableModelUpdate(model_updates_enabled->isChecked());
 	rep_->enableColoringUpdate(coloring_updates_enabled->isChecked());
-	applyColoringSettings_(*rep_);
-	applyModelSettings_(*rep_);
+	
+	if (coloring_updates_enabled->isChecked())
+	{
+		applyColoringSettings_(*rep_);
+	}
+
+	if (model_updates_enabled->isChecked())
+	{
+		applyModelSettings_(*rep_);
+	}
 	rep_->update(rebuild_representation);
 
 	changed_selection_color_ = false;
