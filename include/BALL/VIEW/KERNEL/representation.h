@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.34.2.2 2006/09/24 10:47:59 amoll Exp $
+// $Id: representation.h,v 1.34.2.3 2006/11/12 15:24:00 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -237,7 +237,7 @@ namespace BALL
 				throw();
 
 			///
-			void enableModelUpdate(bool state) { model_update_enabled_ = state;}
+			void enableModelUpdate(bool state);
 
 			///
 			void enableColoringUpdate(bool state) { coloring_update_enabled_ = state;}
