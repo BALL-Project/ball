@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularGraph.h,v 1.11.10.1 2006/10/24 22:33:41 amoll Exp $
+// $Id: molecularGraph.h,v 1.11.10.2 2006/11/12 22:12:50 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
@@ -37,7 +37,7 @@ namespace BALL
 	class TMolecularGraph;
 
 	/**	The node type in a molecular graph
-		\ingroup Surface
+		\ingroup StructureMiscellaneous
 	*/
 	template <typename Node, typename Edge>
 	class NodeItem
@@ -483,7 +483,7 @@ namespace BALL
 	Size TMolecularGraph<Node, Edge>::getNumberOfNodes() const
 		throw()
 	{
-		return atom_to_node_.size();
+		return nodes_.size();
 	}
 
 	template <typename Node, typename Edge>
@@ -491,7 +491,7 @@ namespace BALL
 	Size TMolecularGraph<Node, Edge>::getNumberOfEdges() const
 		throw()
 	{
-		return bond_to_edge_.size();
+		return edges_.size();
 	}
 
   
