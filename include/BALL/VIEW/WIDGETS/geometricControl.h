@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.27.2.10 2006/05/08 21:00:15 amoll Exp $
+// $Id: geometricControl.h,v 1.27.2.11 2006/11/12 14:56:51 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -186,6 +186,12 @@ namespace BALL
 			void duplicateRepresentation();
 
 			///
+			void saveSurface();
+
+			///
+			void loadSurface();
+
+			///
 			ModifyRepresentationDialog* getModifySurfaceDialog();
 
 		  protected slots:
@@ -246,7 +252,7 @@ namespace BALL
 			bool creating_representations_;
 			bool ignore_change_;
 
-			QAction* menu_clipping_plane_;
+			QAction* menu_clipping_plane_, *menu_load_surface_;
 			vector<QAction*> context_menu_actions_;
 		};
 		

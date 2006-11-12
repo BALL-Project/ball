@@ -21,8 +21,8 @@ FileObserver::FileObserver(QWidget *parent, const char *name)
 	throw()
 	: DockWidget(parent, name)
 {
-	hide();
-	default_visible_ = false;
+ 	hide();
+ 	default_visible_ = false;
 	registerWidget(this);
 	connect(&timer_, SIGNAL(timeout()), SLOT(updateFile()));
 	timer_.setInterval(1000);
@@ -121,6 +121,7 @@ void FileObserver::initializeWidget(MainControl&)
 	setMenuHint("Stop monitoring a molecular file");
 }
 
+// select a molecular file to monitor
 void FileObserver::chooseFile()
 {
 	stop();
@@ -128,8 +129,7 @@ void FileObserver::chooseFile()
 	MolecularFileDialog* mf = MolecularFileDialog::getInstance(0);
 	if (mf == 0) return;
 
-	QString file = QFileDialog::getOpenFileName(
-										0,
+	QString file = QFileDialog::getOpenFileName(0,
 										"Choose a molecular file to monitor for changes",
 										getWorkingDir().c_str(),
 										mf->getSupportedFileFormats().c_str());

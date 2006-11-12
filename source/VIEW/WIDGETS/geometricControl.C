@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.23 2006/10/06 14:47:19 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.24 2006/11/12 14:56:44 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -15,6 +15,7 @@
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
 #include <BALL/VIEW/DIALOGS/clippingDialog.h>
+#include <QtGui/QFileDialog>
 
 #include <QtGui/qmenubar.h>
 #include <QtGui/qtooltip.h> 
@@ -214,13 +215,15 @@ namespace BALL
 			addItem_("Delete", SLOT(deleteCurrentItems()));
 			addItem_("Focus", SLOT(focusRepresentation()));
 			addItem_("Duplicate", SLOT(duplicateRepresentation()));
+			addItem_("Save Surface", SLOT(saveSurface()));
  			addItem_("Select Atoms", SLOT(selectAtoms()));
 			addItem_("Modify Model", SLOT(modifyRepresentation_()));	
  			addItem_("Modify Representation", SLOT(show()), modify_rep_dialog_);	
 			addItem_("Move", SLOT(enterMoveMode()));
 			context_menu_.addSeparator();
 			context_menu_actions_.push_back(context_menu_.addMenu(&clipping_plane_context_menu_));
-			context_menu_actions_[7]->setText("Clipping Plane");
+			Size acs = context_menu_actions_.size() - 1;
+			context_menu_actions_[acs]->setText("Clipping Plane");
 
 			// planes ->
 			if (plane != 0)
@@ -229,14 +232,15 @@ namespace BALL
 				{
 					context_menu_actions_[p]->setEnabled(false); 
 				}
-				context_menu_actions_[6]->setEnabled(true);
-				context_menu_actions_[7]->setEnabled(true);
+				context_menu_actions_[2]->setEnabled(true);
+				context_menu_actions_[acs-1]->setEnabled(true);
+				context_menu_actions_[acs]->setEnabled(true);
 				return;
 			}
 
 			// representations ->
-			context_menu_actions_[6]->setEnabled(rep->getModelType() == MODEL_GRID_SLICE);
-			context_menu_actions_[7]->setEnabled(false);
+			context_menu_actions_[acs-1]->setEnabled(rep->getModelType() == MODEL_GRID_SLICE);
+			context_menu_actions_[acs]->setEnabled(false);
 
 			if (getSelectedItems().size() != 1)
 			{
@@ -249,7 +253,12 @@ namespace BALL
 			// not modifyable
 			if (rep->getModelType() >= MODEL_LABEL)
 			{
-				context_menu_actions_[4]->setEnabled(false);
+				context_menu_actions_[5]->setEnabled(false);
+			}
+
+			if (!isSurfaceModel(rep->getModelType()))
+			{
+				context_menu_actions_[3]->setEnabled(false);
 			}
 
 			modify_rep_dialog_->setRepresentation(rep);
@@ -456,6 +465,7 @@ namespace BALL
 			}
 
 			menu_clipping_plane_->setEnabled(!busy);
+			menu_load_surface_->setEnabled(!busy);
 		}
 
 		void GeometricControl::focusRepresentation()
@@ -475,6 +485,9 @@ namespace BALL
 																		"New Clipping Plane", this, SLOT(createNewClippingPlane()));   
 			setMenuHint("Add an OpenGL Clipping Plane to the Scene");
 			setMenuHelp("geometricControl.html#clipping_planes");
+
+			menu_load_surface_ = insertMenuEntry(MainControl::FILE_OPEN, "Surface", this,
+																						SLOT(loadSurface()));
 
 			registerForHelpSystem(this, "geometricControl.html");
 		}
@@ -788,6 +801,56 @@ namespace BALL
 		{
 			return modify_rep_dialog_;
 		}
+
+		void GeometricControl::saveSurface()
+		{
+			if (context_representation_ == 0) return;
+			if (context_representation_->getGeometricObjects().size() == 0) return;
+
+			GeometricObject& go = **context_representation_->getGeometricObjects().begin();
+			Mesh* mesh = dynamic_cast<Mesh*>(&go);
+			if (mesh == 0) return;
+
+			QString qresult = QFileDialog::getSaveFileName(
+												0,
+												"Export Surface",
+												(getWorkingDir() + String(FileSystem::PATH_SEPARATOR) + 
+												 "surface.dat").c_str(),
+												"*.*");
+
+			if (qresult == QString::null) return;
+
+			String result = ascii(qresult);
+			mesh->binaryWrite(result);
+		}
+
+		void GeometricControl::loadSurface()
+		{
+			QString qresult = QFileDialog::getOpenFileName(
+												0,
+												"Read Surface",
+												(getWorkingDir() + String(FileSystem::PATH_SEPARATOR)).c_str(),
+												"*.*");
+
+			if (qresult == QString::null) return;
+
+			String result = ascii(qresult);
+			Mesh* mesh = new Mesh();
+			Representation* rep = new Representation();
+			List<Composite*> cl = getMainControl()->getMolecularControlSelection();
+			List<const Composite*> ccl;
+			List<Composite*>::iterator cit = cl.begin();
+			for (; cit != cl.end(); cit++);
+			{
+				ccl.push_back(*cit);
+			}
+//   			rep->setComposites(ccl);
+			rep->insert(*mesh);
+			mesh->binaryRead(result);
+			getMainControl()->insert(*rep);
+			getMainControl()->update(*rep);
+		}
+
 
 	} // namespace VIEW
 } // namespace BALL

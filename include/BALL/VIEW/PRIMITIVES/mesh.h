@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.h,v 1.9.2.1 2006/03/30 14:26:57 amoll Exp $
+// $Id: mesh.h,v 1.9.2.2 2006/11/12 14:56:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
@@ -112,6 +112,12 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
 				throw();
+
+			///
+			bool binaryWrite(const String& filename);
+
+			///
+			bool binaryRead(const String& filename);
 
 			///
 			vector<ColorRGBA>& getColors() { return colors;}
