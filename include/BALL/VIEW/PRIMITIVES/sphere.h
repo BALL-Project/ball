@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.h,v 1.9.2.1 2006/03/30 14:26:58 amoll Exp $
+// $Id: sphere.h,v 1.9.2.2 2006/11/12 15:50:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
@@ -113,6 +113,10 @@ namespace BALL
 			///
 			bool isDefaultPositionAddress()
 				throw() { return point_ptr_ == &p;}
+
+			///
+			void setDefaultPositionAddress()
+				throw() { point_ptr_ = & p;}
 
 			//@}
 			/**	@name	debuggers and diagnostics
