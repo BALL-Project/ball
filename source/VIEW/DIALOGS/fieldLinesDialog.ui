@@ -156,7 +156,7 @@
              <number>3</number>
             </property>
             <property name="minimum" >
-             <number>1</number>
+             <number>0</number>
             </property>
             <property name="value" >
              <number>1</number>

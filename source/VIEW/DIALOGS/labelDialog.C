@@ -124,8 +124,6 @@ void LabelDialog::onNotify(Message *message)
 void LabelDialog::initializeWidget(MainControl& main_control)
 	throw()
 {
-	main_control.initPopupMenu(MainControl::DISPLAY);
-
 	id_ = insertMenuEntry(MainControl::DISPLAY, "Add &Label", this, SLOT(show()), Qt::CTRL+Qt::Key_L);
 	setMenuHint("Add a label for selected molecular objects");   
 }

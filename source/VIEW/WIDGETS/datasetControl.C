@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.56 2006/10/19 22:06:35 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.57 2006/11/13 18:05:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -1200,7 +1200,15 @@ namespace BALL
 		if (use_atoms)
 		{
 			// seed points from spheres around atoms:
-			vector<Vector3> start_diffs = VIEW::createSphere(icosaeder_steps_ - 1);
+			vector<Vector3> start_diffs;
+			if (icosaeder_steps_ == 0) 
+			{
+				start_diffs.push_back(Vector3(0,0,0));
+			}
+			else
+			{
+				start_diffs = VIEW::createSphere(icosaeder_steps_ - 1);
+			}
 			AtomIterator ait = ac->beginAtom();
 			for (; +ait; ++ait)
 			{
@@ -1301,7 +1309,7 @@ namespace BALL
 		for (Size backwards = 0; backwards < 2; backwards++)
 		{
 			IlluminatedLine* line = new IlluminatedLine;
-			vector<Vector3>& points = line->vertices;
+			vector<Vector3> points;
 
 			calculateLinePoints_(point, points, (backwards == 0) ? 1. : -1.);
 
@@ -1325,14 +1333,29 @@ namespace BALL
 				return;
 			}
 
-			points.resize(p);
-			const Size nrp = points.size();
+			// take only points that are at least 0.05 A apart:
+			Size nrp = points.size();
+			vector<Vector3>& points_ok = line->vertices;
+			points_ok.push_back(points[0]);
+			float min_d = 0.05 * 0.05;
+			float d = 0;
+			for (Position p = 1; p < nrp; p++)
+			{
+				d += points[p].getSquareDistance(points[p - 1]);
+				if (d > min_d)
+				{
+					points_ok.push_back(points[p]);
+					d = 0;
+				}
+			}
 
+
+			nrp = points_ok.size();
 			line->tangents.resize(nrp);
 
 			for (Position v = 0; v < nrp - 1; v++)
 			{
-				(*line).tangents[v] = points[v+1] - points[v];
+				(*line).tangents[v] = points_ok[v+1] - points_ok[v];
 			}
 			(*line).tangents[nrp -1] = (*line).tangents[nrp -2];
 

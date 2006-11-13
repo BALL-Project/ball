@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.2.24 2006/11/12 14:56:44 amoll Exp $
+// $Id: geometricControl.C,v 1.77.2.25 2006/11/13 18:05:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -846,6 +846,7 @@ namespace BALL
 			}
 //   			rep->setComposites(ccl);
 			rep->insert(*mesh);
+			rep->setModelType(MODEL_SE_SURFACE);
 			mesh->binaryRead(result);
 			getMainControl()->insert(*rep);
 			getMainControl()->update(*rep);
