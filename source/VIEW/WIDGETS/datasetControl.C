@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.2.57 2006/11/13 18:05:59 amoll Exp $
+// $Id: datasetControl.C,v 1.46.2.58 2006/11/13 19:43:47 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -1313,6 +1313,7 @@ namespace BALL
 
 			calculateLinePoints_(point, points, (backwards == 0) ? 1. : -1.);
 
+			// somethis way may run over the grid's borders:
 			Index p = 0;
 			try
 			{
@@ -1333,6 +1334,9 @@ namespace BALL
 				return;
 			}
 
+			// throw away errorous points:
+			points.resize(p);
+
 			// take only points that are at least 0.05 A apart:
 			Size nrp = points.size();
 			vector<Vector3>& points_ok = line->vertices;
@@ -1349,8 +1353,14 @@ namespace BALL
 				}
 			}
 
-
 			nrp = points_ok.size();
+			if (nrp < 3)
+			{
+				field_line_errors_ ++;
+				delete line;
+				return;
+			}
+
 			line->tangents.resize(nrp);
 
 			for (Position v = 0; v < nrp - 1; v++)

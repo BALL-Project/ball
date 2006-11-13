@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.C,v 1.1.2.14 2006/10/13 11:37:20 amoll Exp $
+// $Id: modifyRepresentationDialog.C,v 1.1.2.15 2006/11/13 19:43:47 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
@@ -478,6 +478,19 @@ namespace BALL
 			float mid_value = ascii(mid_box->text()).toFloat();
 			float max_value = ascii(max_box->text()).toFloat();
 
+			rep_->setTransparency(0);
+
+			if ((Size)min_min_color.getAlpha() 	!= 255 ||
+					(Size)min_color.getAlpha() 			!= 255 ||
+					(Size)mid_color.getAlpha() 			!= 255 ||
+					(Size)max_color.getAlpha() 			!= 255 ||
+					(Size)max_max_color.getAlpha() 	!= 255)
+			{
+					// if we use Transparency, just tell the Representation
+					rep_->setTransparency(80);
+			}
+
+
 			ColorRGBA list[3];
 			list[0] = min_color;
 			list[1] = mid_color;
@@ -572,25 +585,17 @@ namespace BALL
 				{
 					(*colors)[i].set(cm.map(values[p]));
 					p++;
-					if (p == values.size()) break;
+
+					if (p == values.size()) 
+					{
+						break;
+					}
 				}
 			}	 // all geometric objects
 			
 			if (error)
 			{
 				setStatusbarText("Error! There is a point contained in the surface that is not inside the grid!", true);
-			}
-
-			rep_->setTransparency(0);
-
-			if ((Size)min_min_color.getAlpha() 	!= 255 ||
-					(Size)min_color.getAlpha() 			!= 255 ||
-					(Size)mid_color.getAlpha() 			!= 255 ||
-					(Size)max_color.getAlpha() 			!= 255 ||
-					(Size)max_max_color.getAlpha() 	!= 255)
-			{
-					// if we use Transparency, just tell the Representation
-					rep_->setTransparency(80);
 			}
 
 			return true;
