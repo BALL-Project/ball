@@ -506,8 +506,25 @@ namespace BALL
 
 			float interval_length_2 = (b-a).getSquareLength();
 
-			bezier[1] = a + tangent_a *interval_length_2 / ((tangent_a * (b-a)) * 3.);
-			bezier[2] = b - tangent_b *interval_length_2 / ((tangent_b * (b-a)) * 3.);
+			float f = (tangent_a * (b-a)) * 3.;
+			if (!Maths::isZero(f))
+			{
+				bezier[1] = a + tangent_a *interval_length_2 / f;
+			}
+			else
+			{
+				bezier[1] = a;
+			}
+
+			f = (tangent_b * (b-a)) * 3.;
+			if (!Maths::isZero(f))
+			{
+				bezier[2] = b - tangent_b *interval_length_2 / f;
+			}
+			else
+			{
+				bezier[2] = b;
+			}
 
 			// compute the step size
 			float step_size = 1./(interpolated_values.size()+1);
