@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Expression_test.C,v 1.40 2004/11/07 14:44:15 oliver Exp $
+// $Id: Expression_test.C,v 1.40.8.1 2006/11/14 21:31:57 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -22,7 +22,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.40 2004/11/07 14:44:15 oliver Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.40.8.1 2006/11/14 21:31:57 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ Expression* e_ptr = 0;
 CHECK(Expression() throw())
 	e_ptr = new Expression;
 	TEST_NOT_EQUAL(e_ptr, 0)
-	TEST_EQUAL(e_ptr->getCreationMethods().size(), 26)
+	TEST_EQUAL(e_ptr->getCreationMethods().size(), 27)
 RESULT
 
 
@@ -76,7 +76,7 @@ RESULT
 
 CHECK(Expression(const String& expression_string) throw(Exception::ParseError))
 	Expression e("true()");
-	TEST_EQUAL(e.getCreationMethods().size(), 26)
+	TEST_EQUAL(e.getCreationMethods().size(), 27)
 	TEST_EQUAL(e(Atom()), true)
 RESULT
 
