@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualizationDialog.C,v 1.1.2.12 2006/11/08 14:20:36 amoll Exp $
+// $Id: gridVisualizationDialog.C,v 1.1.2.13 2006/11/14 16:49:19 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/gridVisualizationDialog.h>
@@ -146,8 +146,6 @@ namespace BALL
 		void GridVisualizationDialog::setGrid(RegularData3D* grid)
 			throw()
 		{
-			bool scale = true;
-			if (grid == grid_) scale = false;
 			if (grid_ == 0) return;
 			grid_ = grid;
 			resize_needed->setChecked(!DatasetControl::getInstance(0)->isGridSizePowerOfTwo(*grid_));
@@ -162,7 +160,6 @@ namespace BALL
 
 			grids->setCurrentIndex(p);
 			gridSelected();
-			if (scale) autoScale();
 		}
 
 		void GridVisualizationDialog::autoScale()

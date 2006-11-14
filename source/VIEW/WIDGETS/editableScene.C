@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.72 2006/11/02 16:58:40 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.73 2006/11/14 16:49:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -1289,6 +1289,18 @@ void EditableScene::addStructure(String name)
 	residue->apply(tf);
 
 	AtomContainer* s = *containers.begin();
+	if (RTTI::isKindOf<System>(*s))
+	{
+		System* system = (System*) s;
+		Molecule* mol = system->getMolecule(0);
+		if (mol == 0)
+		{
+			mol = new Molecule();
+			system->insert(*mol);
+		}
+		s = mol;
+	}
+
 	s->insert(*residue);
 	getMainControl()->selectCompositeRecursive(residue, true);
 	getMainControl()->update(*s);
