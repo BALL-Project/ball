@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.99.2.53 2006/10/25 20:24:13 amoll Exp $
+// $Id: molecularControl.C,v 1.99.2.54 2006/11/14 12:49:26 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -730,7 +730,7 @@ namespace BALL
 		}
 
 
-		// set the highlighting according to the selection in the MainControl
+		// set the highlighting according to a given list
 		void MolecularControl::highlight(const List<Composite*>& selection)
 			throw()
 		{	
@@ -747,6 +747,13 @@ namespace BALL
 				if (fit == composite_to_item_.end()) continue;
 				items.push_back(fit->second);
 				selected_.push_back(*sit);
+
+				QTreeWidgetItem* parent = (*fit->second).parent();
+				while (parent != 0 && !listview->isItemExpanded(parent))
+				{
+					listview->expandItem(parent);
+					parent = parent->parent();
+				}
 			}
 			listview->selectItems(items);
 
