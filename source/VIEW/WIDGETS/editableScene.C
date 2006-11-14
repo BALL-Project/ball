@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.73 2006/11/14 16:49:20 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.74 2006/11/14 20:50:05 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -1458,7 +1458,10 @@ void EditableScene::mouseDoubleClickEvent(QMouseEvent* e)
 		
 		RingPerceptionProcessor rpp;
 		vector<vector<Atom*> > rings;
-		rpp.calculateSSSR(rings, *(AtomContainer*)a1->getParent());
+		Composite* comp = a1->getParent();
+		// workaround for problem with RingPerceptionProcessor:
+		if (comp->getParent() != 0) comp = comp->getParent();
+		rpp.calculateSSSR(rings, *(AtomContainer*)comp);
 		rings = rpp.getAllSmallRings();
 		vector<Position> rings_to_modify;
 		for (Position r = 0; r < rings.size(); r++)
