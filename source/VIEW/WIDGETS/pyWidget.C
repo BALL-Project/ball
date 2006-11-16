@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.57 2006/10/22 12:38:57 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.58 2006/11/16 16:57:47 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -291,7 +291,8 @@ PyWidget::PyWidget(QWidget *parent, const char *name)
 		thread_(0),
 		stop_script_(false),
 		running_(false),
-		silent_(false)
+		silent_(false),
+		full_silent_(false)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new PyWidget " << this << std::endl;

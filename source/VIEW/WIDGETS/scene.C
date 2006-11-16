@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.2.109 2006/11/08 12:56:56 amoll Exp $
+// $Id: scene.C,v 1.174.2.110 2006/11/16 16:57:47 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -126,6 +126,7 @@ namespace BALL
 				stop_animation_(false),
 				content_changed_(true),
 				want_to_use_vertex_buffer_(false),
+				mouse_button_is_pressed_(false),
 				show_fps_(false),
 				toolbar_(new QToolBar("3D View Controls", this)),
 				mode_group_(new QActionGroup(this))
