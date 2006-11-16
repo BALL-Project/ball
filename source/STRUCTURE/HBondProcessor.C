@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondProcessor.C,v 1.13 2005/04/14 12:40:17 anhi Exp $
+// $Id: HBondProcessor.C,v 1.13.2.1 2006/11/16 16:57:30 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/HBondProcessor.h>
@@ -43,7 +43,11 @@ namespace BALL
 		// we find the first complete residue and use it instead 
 		for (; +resit ; ++resit)
 		{	
-			if (!resit->isAminoAcid()) continue;
+// ??????????????? had to remove these lines to prevent segfaults (A.Moll)
+//   			if (!resit->isAminoAcid())
+//   			{
+//   				continue;
+//   			}
 
 			bool haveO = false;
 			bool haveN = false;
