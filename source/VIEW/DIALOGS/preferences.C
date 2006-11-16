@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.19.2.6 2006/11/06 18:13:47 amoll Exp $
+// $Id: preferences.C,v 1.19.2.7 2006/11/16 13:34:29 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -138,8 +138,8 @@ namespace BALL
 				y_pos = inifile.getValue("WINDOWS", "Preferences::y").toInt();
 			}
 			
-			x_pos = BALL_MAX(x_pos, 0);
-			y_pos = BALL_MAX(y_pos, 0);
+			x_pos = BALL_MAX(x_pos, 20);
+			y_pos = BALL_MAX(y_pos, 20);
 
 			move(x_pos, y_pos);
 
