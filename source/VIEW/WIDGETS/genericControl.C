@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.17.2.8 2006/09/29 00:59:30 amoll Exp $
+// $Id: genericControl.C,v 1.17.2.9 2006/11/16 17:05:29 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
@@ -36,7 +36,8 @@ namespace BALL
 			throw()
 				:	DockWidget(parent, name),
  					context_item_(0),
-					listview(new TreeWidget(this))
+					listview(new TreeWidget(this)),
+					checkable_(false)
 		{
  			setGuest(*listview);	
 			listview->setSelectionMode(QAbstractItemView::ExtendedSelection);
