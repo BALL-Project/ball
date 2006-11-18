@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kekulizer.h,v 1.1.2.5 2006/10/24 22:33:41 amoll Exp $
+// $Id: kekulizer.h,v 1.1.2.6 2006/11/18 15:45:14 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_KEKULIZER_H
@@ -40,25 +40,36 @@ namespace BALL
 	*/
 	class BALL_EXPORT Kekuliser
 	{
+		///
 		struct AtomInfo
 		{
-			Atom* atom;
-
 			// needed for sorting:
 			bool operator < (const AtomInfo& info) const;
+			AtomInfo& operator = (const AtomInfo& ai) throw();
 
+			// THE atom 
+			Atom* atom;
+
+			// bond to be set to a double bond
+			Bond* double_bond;
+
+			// aromatic bonds
 			vector<Bond*> abonds;
+
+			// position of the partner atoms in the vector of AtomInfos
 			vector<Position> partner_id;
 
-		 	Index current_charge;
-
+			// current number of double bonds for this atom
 			Index curr_double;
 
+			// minumum possible number of double bonds for this atom
 			Index min_double;
+			
+			// maximum possible number of double bonds for this atom
 			Index max_double;
-
-			Index min_double_charged;
-			Index max_double_charged;
+			
+			// number of double bonds for this atom to be uncharged
+			Index uncharged_double;
 		};
 
 		public:
@@ -89,12 +100,17 @@ namespace BALL
 		///
 		void dump();
 
+		///
+		void setUseFormalCharges(bool state) { use_formal_charges_ = state;}
+
+		///
+		bool useFormalCharges() const { return use_formal_charges_;}
+
 		protected:
 
 		bool fixAromaticRings_();
-		bool fixAromaticSystem_(Position it);
-		inline bool buildConjugatedSystem_(Position it);
- 		bool idealValenceAchieved_();
+		void fixAromaticSystem_(Position it);
+		inline Size getPenalty_(Atom& atom, Index charge);
 
 		void getMaximumValence_();
 
@@ -103,6 +119,10 @@ namespace BALL
 		void collectSystems_(Atom& atom);
 		void collectAromaticAtoms_();
 		bool hasAromaticBonds_(Atom& atom);
+		void applySolution_(Position pos);
+		Position calculateDistanceScores_();
+
+		bool use_formal_charges_;
 
 		vector<HashSet<Atom*> > aromatic_systems_;
 		vector<HashSet<Atom*> > aromatic_rings_;
@@ -111,15 +131,18 @@ namespace BALL
 
 		// atoms that take part in an aromatic bond:
 		HashSet<const Atom*> 		aromatic_atoms_;
+		HashSet<const Atom*> 		all_aromatic_atoms_;
 		HashMap<Atom*, Index> 	max_valence_;
 
 		HashSet<Atom*> 					current_aromatic_system_;
 
 		// current aromatic system:
 		vector<AtomInfo> 				atom_infos_;
-		bool 										try_charge_;
-		bool 										protonate_;
 		Molecule*								molecule_;
+		Size 										lowest_penalty_;
+		Size 										current_penalty_;
+
+		vector<vector<AtomInfo> > solutions_;
 	};
 
 } // namespace BALL

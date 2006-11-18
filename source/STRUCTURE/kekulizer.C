@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kekulizer.C,v 1.1.2.8 2006/10/19 13:10:35 amoll Exp $
+// $Id: kekulizer.C,v 1.1.2.9 2006/11/18 15:45:03 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/kekulizer.h>
@@ -16,8 +16,8 @@
 
 using namespace std;
 
-//      #define DEBUG_KEKULIZER
-//      #define BALL_MMFF94_TEST
+//  #define DEBUG_KEKULIZER
+//  #define BALL_MMFF94_TEST
 
 namespace BALL
 {
@@ -27,7 +27,22 @@ bool Kekuliser::AtomInfo::operator < (const Kekuliser::AtomInfo& info) const
 	return (*atom) < *info.atom;
 }
 
+Kekuliser::AtomInfo& Kekuliser::AtomInfo::operator = (const AtomInfo& ai) throw()
+{
+	atom 							= ai.atom;
+	double_bond 			= ai.double_bond;
+	abonds 						= ai.abonds;
+	partner_id 				= ai.partner_id;
+	curr_double 			= ai.curr_double;
+	min_double 				= ai.min_double;
+	max_double 				= ai.max_double;
+	uncharged_double 	= ai.uncharged_double;
+	return *this;
+}
+
+
 Kekuliser::Kekuliser()
+	: use_formal_charges_(true)
 {
 	clear();
 }
@@ -189,6 +204,27 @@ bool Kekuliser::setup(Molecule& mol)
 		}
 	}
 
+	if (ok)
+	{
+		// set formal charges
+		HashMap<Atom*,Index>::Iterator hit = max_valence_.begin();
+		for (;+hit;++hit)
+		{
+			Atom* atom = hit->first;
+			Size nr = 0;
+			AtomBondIterator bit = atom->beginBond();
+			for(;+bit;++bit)
+			{
+				if (bit->getOrder() >= 1 && bit->getOrder() <= 5)
+				{
+					nr += (Size) bit->getOrder();
+				}
+			}
+
+			atom->setFormalCharge(nr - hit->second);
+		}
+	}
+
 #ifdef BALL_MMFF94_TEST
 	Log.error() << "Kekulized bonds: " 
 	            << "CA   "  << nr_ca    << " " 
@@ -221,19 +257,20 @@ void Kekuliser::dump()
 	{
 		AtomInfo& ai = atom_infos_[p];
 		Log.error() << ai.atom->getFullName() << " a. Bonds: " << ai.abonds.size()
-			 << " Cur d. " << ai.curr_double 
-			 << " min d. " << ai.min_double
-			 << " max d. " << ai.max_double
-			 << " mincd. " << ai.min_double_charged 
-			 << " maxcd. " << ai.max_double_charged << " -> ";
+			 << " Cur " << ai.curr_double 
+			 << " min " << ai.min_double
+			 << " max " << ai.max_double
+			 << " unc " << ai.uncharged_double
+		   << " ";
 		for (Position b = 0; b < ai.abonds.size(); b++)
 		{
 			Atom* partner = ai.abonds[b]->getPartner(*ai.atom);
 			Log.error() << partner->getName() << " ";
 		}
+		Log.error() << "  " << current_penalty_;
+		if (lowest_penalty_ != INT_MAX) Log.error() << " + " << lowest_penalty_;
 		Log.error() << std::endl;
 	}
-	Log.error() << "TryCharge: " << try_charge_ << "   Try protonate: " << protonate_ << std::endl;
 }
 
 bool Kekuliser::fixAromaticRings_()
@@ -241,27 +278,31 @@ bool Kekuliser::fixAromaticRings_()
 	bool ok = true;
 
 	calculateAromaticSystems_();
-	getMaximumValence_();
-
 	if (aromatic_systems_.size() == 0) return true;
 
+	getMaximumValence_();
+
 	AtomInfo temp_ai;
-	temp_ai.current_charge = 0;
+	temp_ai.uncharged_double = 0;
 	temp_ai.curr_double = 0;
+	temp_ai.double_bond = 0;
 
 	// iterate over all aromatic systems:
 	vector<HashSet<Atom*> >::iterator rit = aromatic_systems_.begin();
 	for (; rit != aromatic_systems_.end(); rit++)
 	{
+		HashSet<Atom*>& atom_set = *rit;
+
 		// abort for strange rings:
-		if ((*rit).size() < 3)
+		if (atom_set.size() < 3)
 		{
 #ifdef DEBUG_KEKULIZER
- 			Log.error() << "Kekulizer: Could not assign ring with " << (*rit).size()<< " atoms. " << std::endl;
+ 			Log.error() << "Kekulizer: Could not assign ring with " << (*rit).size()
+									<< " atoms. " << std::endl;
 
-			if ((*rit).size())
+			if (atom_set.size())
 			{
-				Log.error() << (**(*rit).begin()).getFullName() << std::endl;
+				Log.error() << (**atom_set.begin()).getFullName() << std::endl;
 			}
 #endif
 			ok = false;
@@ -273,7 +314,7 @@ bool Kekuliser::fixAromaticRings_()
 		bool abort_this_ring = false;
 
 		// for one aromatic system: collect all needed informations for the individual atoms:
-		HashSet<Atom*>::Iterator hit = (*rit).begin();
+		HashSet<Atom*>::Iterator hit = atom_set.begin();
 		for (; +hit; ++hit)
 		{
 			Atom& atom = *(Atom*)*hit;
@@ -283,6 +324,8 @@ bool Kekuliser::fixAromaticRings_()
 			AtomBondIterator bit = atom.beginBond();
 			for (; +bit; ++bit)
 			{
+				if (bit->getType() == Bond::TYPE__HYDROGEN) continue;
+
 				if (bit->getOrder() < 2 ||
 						bit->getOrder() > 4)
 				{
@@ -294,66 +337,40 @@ bool Kekuliser::fixAromaticRings_()
 				}
 			}
 
-			// calculate the number of bonds that need order of two:
-			Index max_double = max_valence_[&atom] - curr_valence;
-			if (max_double < 0)
+			// calculate the number of needed double bonds:
+			Index uncharged_double = max_valence_[&atom] - curr_valence;
+			if (uncharged_double < 0)
 			{
-				Log.error() << "Kekulizer: Could not calculate max number of double bonds for " << atom.getFullName() << std::endl;
+				Log.error() << "Kekulizer: Could not calculate max number of needed double bonds for " 
+										<< atom.getFullName() << std::endl;
 				Log.error() << "Max: "  << max_valence_[&atom] << "  Curr:  " << curr_valence << std::endl;
 				abort_this_ring = true;
 				ok = false;
 				break;
 			}
 
-			// calculate the maximum number of double bonds if atom is to be charged:
-			Index max_double_charged = max_double;
-			String esym = atom.getElement().getSymbol();
-			if (esym == "N" ||
-					esym == "S" ||
-					esym == "O")
-			{
-				/*
-				bool hydrogen_bound = false;
-				AtomBondIterator abit = atom.beginBond();
-				for (; +abit; ++abit)
-				{
-					if (abit->getPartner(atom)->getElement().getAtomicNumber() == 1)
-					{
-						hydrogen_bound = true;
-						break;
-					}
-				}
-
-				if (!hydrogen_bound)          ???????????????
-					*/
-				{
-					if (esym == "N" && curr_valence == 3 ||
-							esym == "S" && curr_valence == 2)
-//   							esym == "O" && curr_valence == 2)  ????????
-					{
-						max_double_charged ++;
-					}
-				}
-			}
-
-			Index min_double_charged = max_double;
-
-			if (esym == "N") 
-			{
-				if (curr_valence == 2) 
-				{
-					min_double_charged = 0;
-				}
-//   				min_double_charged = curr_valence;
-			}
-
 			atom_infos_.push_back(temp_ai);
-			AtomInfo& info = atom_infos_[atom_infos_.size() - 1];
+			AtomInfo& info = *atom_infos_.rbegin();
 			info.atom = &atom;
-			info.max_double_charged = max_double_charged;
-			info.min_double_charged = min_double_charged;
-			info.min_double 				= max_double;
-			info.max_double 				= max_double;
+
+			Index max_double = uncharged_double + 1;
+			max_double = BALL_MIN(1, max_double);
+
+			Index min_double = uncharged_double - 1;
+			min_double = BALL_MAX(0, min_double);
+
+			// allow charged atoms only for selected elements
+			Position atomic_number = atom.getElement().getAtomicNumber();
+			if (atomic_number != 6 &&
+					atomic_number != 7)
+			{
+				max_double = uncharged_double;
+				min_double = uncharged_double;
+			}
+
+			info.max_double = max_double;
+			info.min_double = min_double;
+			info.uncharged_double = uncharged_double;
 
 			// collect aromatic bonds for this atom:
 			bit = atom.beginBond();
@@ -371,46 +388,26 @@ bool Kekuliser::fixAromaticRings_()
 
 		} // all aromatic atoms of this ring
 
-		if (abort_this_ring) 
-		{
-			continue;
-		}
+		if (abort_this_ring) continue;
 
 		std::sort(atom_infos_.begin(), atom_infos_.end());
 
-		// put the ids of the atoms partner into a vector per AtomInfo
+		// map the AtomInfos to the atoms
 		HashMap<Atom*, Position> atom_to_id;
 		for (Position p = 0; p < atom_infos_.size(); p++)
 		{
 			atom_to_id[atom_infos_[p].atom] = p;
 		}
 
-		bool try_uncharged = true;
-		bool try_protonate = false;
-
 		for (Position p = 0; p < atom_infos_.size(); p++)
 		{
 			AtomInfo& ai = atom_infos_[p];
+			Atom* atom = ai.atom;
 			for (Position b = 0; b < ai.abonds.size(); b++)
 			{
-				ai.partner_id.push_back(atom_to_id[ai.abonds[b]->getPartner(*ai.atom)]);
-			}
-
-			if (ai.atom->getElement().getAtomicNumber() == 7)
-			{
-				Size nr_bonds = ai.atom->countBonds();
-				if (nr_bonds == 2) try_protonate = true;
-				if (nr_bonds == 3) 
-				{
-					AtomBondIterator abit = ai.atom->beginBond();
-					for (; +abit; ++abit)
-					{
-						if (abit->getPartner(*ai.atom)->countBonds() == 1)
-						{
-							try_uncharged = false;
-						}
-					}
-				}
+				Atom* partner = ai.abonds[b]->getPartner(*atom);
+				Position partnerp = atom_to_id[partner];
+				ai.partner_id.push_back(partnerp);
 			}
 		}
 
@@ -419,45 +416,66 @@ bool Kekuliser::fixAromaticRings_()
    	dump();
 #endif
 
-		try_charge_ = false;
-		protonate_  = false;
+		solutions_.clear();
+		lowest_penalty_ = INT_MAX;
+		current_penalty_ = 0;
+		fixAromaticSystem_(0);
+		// test could be changed to achieve at most a given max value:
+		if (lowest_penalty_ < INT_MAX) 
+		{
+			if (lowest_penalty_ == 0)
+			{
+				applySolution_(0);
+			}
+			else
+			{
+				applySolution_(calculateDistanceScores_());
+			}
 
-		if (try_uncharged && fixAromaticSystem_(0)) continue;
-	
-		// try to assign 4 valence electrons to Nitrogens
-		try_charge_ = true;
-		if (fixAromaticSystem_(0)) continue;
-	
-		// try to assign 2 valence electrons to Nitrogens
-		protonate_ = true;
-		if (try_protonate && fixAromaticSystem_(0)) continue;
+			continue;
+		}
 	
 		// we were not successfull, so reset the bonds to aromatic:
 		ok = false;
-		for (Position i = 0; i < atom_infos_.size(); i++)
-		{
-			AtomInfo& ai = atom_infos_[i];
-			for (Position b = 0; b < ai.abonds.size(); b++)
-			{
-				ai.abonds[b]->setOrder(Bond::ORDER__AROMATIC);
-			}
-		}
+
 	} // all aromatic systems
 
 	return ok;
 }
 
-bool Kekuliser::fixAromaticSystem_(Position it)
+void Kekuliser::fixAromaticSystem_(Position it)
 {
 #ifdef DEBUG_KEKULIZER
-	Log.error() << "fixAromaticSystem_ " << it << " " << atom_infos_[it].atom->getFullName() << std::endl;
-	dump();
+	if (it < atom_infos_.size())
+	{
+		Log.error() << "fixAromaticSystem_ " << it << " " << atom_infos_[it].atom->getFullName() << std::endl;
+		dump();
+	}
 #endif
 	
-	// no more bonds and no more atoms?
-	if (it >= atom_infos_.size() - 1)
+	// no more atoms in this aromatic system?
+	if (it >= atom_infos_.size())
 	{
-		return idealValenceAchieved_();
+		// is this solution maybe better than any we have tested so far?
+		//
+		// if we had already a solution with a penalty of 0, it can't get any better!
+		if (lowest_penalty_ == 0) return;
+
+		if (current_penalty_ <= lowest_penalty_)
+		{
+			// better than any we have seen so far? 
+			// than throw away the old solutions!
+			if (current_penalty_ < lowest_penalty_) 
+			{
+				solutions_.clear();
+				lowest_penalty_ = current_penalty_;
+			}
+
+			// store the new solution
+			solutions_.push_back(atom_infos_);
+		}
+
+		return;
 	}
 
 	AtomInfo& ai = atom_infos_[it];
@@ -465,88 +483,101 @@ bool Kekuliser::fixAromaticSystem_(Position it)
 	// no aromatic bonds left?
 	if (ai.abonds.size() == 0)
 	{
-		return fixAromaticSystem_(it + 1);
+		// penality for this atom if we have not enough double bonds for it
+		// to become uncharged:
+		Size tap = 0;
+		if (ai.curr_double < ai.uncharged_double)
+		{
+			tap = getPenalty_(*ai.atom, -1);
+		}
+
+		current_penalty_ += tap;
+		fixAromaticSystem_(it + 1);
+		current_penalty_ -= tap;
+
+		return;
 		// no aromatic bonds left to setup, so in case of no success:
 		// no need to reset the bonds to single order
 	}
 
-	Index max_double = ai.max_double;
-	if (try_charge_) max_double = ai.max_double_charged;
-	Index min_double = ai.min_double;
-	if (protonate_) min_double = ai.min_double_charged;
-
-	// at full valence?
-	if (ai.curr_double == max_double)
+	// first try without any double bonds if this atom is than uncharged:
+	if (ai.min_double <= ai.curr_double &&
+			ai.uncharged_double == ai.curr_double)
 	{
-		if (fixAromaticSystem_(it + 1))
-		{
-			return true;
-		}
-	}
-	else // not at full valence!
-	{
-		// if we are using charges: try to without adding double bonds:
-		if (try_charge_ && ai.curr_double >= min_double && ai.curr_double <= ai.max_double_charged)
-		{
-			if (fixAromaticSystem_(it + 1)) return true;
-		}
-	
-		// add missing double bonds
-		if (buildConjugatedSystem_(it)) return true;
+		fixAromaticSystem_(it + 1);
 	}
 
-	// no success up to now: reset bonds to single order:
-	for (Position b = 0; b < ai.abonds.size(); b++)
+	// this atom penalty:
+	Size tap = 0;
+
+	// can we try to add a double bond?
+	if (ai.curr_double < ai.max_double) 
 	{
-		if (ai.abonds[b]->getOrder() == Bond::ORDER__DOUBLE)
+		if (ai.uncharged_double != 1)
 		{
-			ai.abonds[b]->setOrder(Bond::ORDER__SINGLE);
-			ai.curr_double --;
-			atom_infos_[ai.partner_id[b]].curr_double --;
+			tap = getPenalty_(*ai.atom, 1);
+		}
+
+		for (Position b = 0; b < ai.abonds.size(); b++)
+		{
+			// get the bond and partner atom:
+			Bond* bond = ai.abonds[b];
+			Position p = ai.partner_id[b];
+			AtomInfo& pi = atom_infos_[p];
+
+			// if partner cant take any more double bonds, take next bond:
+			if (pi.curr_double == pi.max_double) 
+			{
+				continue;
+			}
+
+			// partner atom penalty:
+			Size pap = 0;
+			if (pi.curr_double + 1 > pi.uncharged_double)
+			{
+				pap += getPenalty_(*pi.atom, 1);
+			}
+			pap += tap;
+
+			// try an early break
+			if (current_penalty_ + pap > lowest_penalty_) 
+			{
+				continue;
+			}
+
+			ai.curr_double++;
+			pi.curr_double++;
+			ai.double_bond = bond;
+			pi.double_bond = bond;
+			current_penalty_ += pap;
+
+			// try this solution:
+			fixAromaticSystem_(it + 1);
+
+			// remove the bond and reset all values:
+			current_penalty_ -= pap;
+			ai.double_bond = 0;
+			pi.double_bond = 0;
+			ai.curr_double--;
+			pi.curr_double--;
 		}
 	}
 
-	return false;
-}
-
-
-bool Kekuliser::buildConjugatedSystem_(Position it)
-{
-	AtomInfo& ai = atom_infos_[it];
-
-#ifdef DEBUG_KEKULIZER
-	Log.error() << "buildConjugatedSystem_ " << it  << " " << ai.atom->getFullName() << std::endl;
-	dump();
-#endif
-
-	for (Position b = 0; b < ai.abonds.size(); b++)
+	// try without any extra double bonds,
+	// if this atom will than be charged, 
+	// otherwise we have tested it above
+	if (ai.uncharged_double != ai.curr_double)
 	{
-		// get the bond and partner atom:
-		Bond* bond = ai.abonds[b];
-		Position p = ai.partner_id[b];
-		AtomInfo& pi = atom_infos_[p];
+		tap = 0;
+		if (ai.curr_double == 0) tap = getPenalty_(*ai.atom, -1);
+		
+		// try an early break
+		if (current_penalty_ + tap > lowest_penalty_) return;
 
-		Index max = pi.max_double;
-		if (try_charge_) max = pi.max_double_charged;
-		if (protonate_) max = pi.min_double_charged;
-
-		if (pi.curr_double >= max)
-		{
-			continue;
-		}
-
-		bond->setOrder(Bond::ORDER__DOUBLE);
-		ai.curr_double++;
-		pi.curr_double++;
-
-		if (fixAromaticSystem_(it + 1)) return true;
-
-		bond->setOrder(Bond::ORDER__SINGLE);
-		ai.curr_double--;
-		pi.curr_double--;
+		current_penalty_ += tap;
+		fixAromaticSystem_(it + 1);
+		current_penalty_ -= tap;
 	}
-
-	return false;
 }
 
 
@@ -569,6 +600,8 @@ void Kekuliser::collectAromaticAtoms_()
 			}
 		}
 	}
+
+	all_aromatic_atoms_ = aromatic_atoms_;
 }
 
 void Kekuliser::calculateAromaticSystems_()
@@ -624,27 +657,25 @@ void Kekuliser::getMaximumValence_()
 			Index max_valence = 0;
 			if (max_valence_.has(&atom)) continue;
 
-//   			Index formal_charge = (Index)atom.getFormalCharge();
-
 			Position atomic_number = atom.getElement().getAtomicNumber();
 
 			switch (atomic_number)
 			{
 				case 6:
-					max_valence = 4;// - (int) fabs(formal_charge);
+					max_valence = 4;
 					break;
 
 				case 8:
 				case 16:
 				case 34:
 				case 52:
-					max_valence = 2;// + formal_charge;
+					max_valence = 2;
 					break;
 
 				 case 7:
 				 case 15:
 				 case 33:
-					 max_valence = 3;// + formal_charge;
+					 max_valence = 3;
 					 break;
 			}
 
@@ -670,45 +701,6 @@ void Kekuliser::getMaximumValence_()
 }
 
 
-bool Kekuliser::idealValenceAchieved_()
-{
-#ifdef DEBUG_KEKULIZER
-	Log.error() << "Testing valences:" << std::endl;
-  dump();
-#endif 
-
-	for (Position p = 0; p < atom_infos_.size(); p++)
-	{
-		AtomInfo& ai = atom_infos_[p];
-		if (!try_charge_)
-		{
-			if (ai.curr_double < ai.min_double ||
-					ai.curr_double > ai.max_double)
-			{
-				return false;
-			}
-		}
-
-		if (!protonate_)
-		{
-			if (ai.curr_double < ai.min_double 					||
-					ai.curr_double > ai.max_double_charged)
-			{
-				return false;
-			}
-		}
-
-		if (ai.curr_double < ai.min_double_charged ||
-				ai.curr_double > ai.max_double_charged)
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-
 void Kekuliser::clear()
 {
 	aromatic_systems_.clear();
@@ -718,8 +710,148 @@ void Kekuliser::clear()
 	max_valence_.clear();
 	current_aromatic_system_.clear();
 	atom_infos_.clear();
-	try_charge_ = false;
-	protonate_  = false;
+}
+
+Size Kekuliser::getPenalty_(Atom& atom, Index charge)
+{
+#define POSITIVE_NITROGEN 1000
+#define NEGATIVE_NITROGEN 1100
+#define NEGATIVE_CARBON   1200
+#define POSITIVE_CARBON   1300
+// if formal charge information available and we get an other charge:
+#define UNEQUAL_CHARGE    10000
+
+	if (use_formal_charges_ && atom.getFormalCharge() != 0)
+	{
+		if (atom.getFormalCharge() != charge)
+		{
+			return UNEQUAL_CHARGE;
+		}
+	
+		return 0;
+	}
+
+	Position p = atom.getElement().getAtomicNumber();
+	if (p == 6)
+	{
+		if (charge == 1)
+		{
+			return POSITIVE_CARBON;
+		}
+		else if (charge == -1)
+		{
+			return NEGATIVE_CARBON;
+		}
+	}
+
+	if (p == 7)
+	{
+		if (charge == -1)
+		{
+			return NEGATIVE_NITROGEN;
+		}
+		else if (charge == 1)
+		{
+			AtomBondIterator abit = atom.beginBond();
+			for (; +abit; ++abit)
+			{
+				if (abit->getPartner(atom)->countBonds() == 1)
+				{
+					return POSITIVE_NITROGEN - 1;
+				}
+			}
+
+			return POSITIVE_NITROGEN;
+		}
+	}
+
+	return 0;
+}
+
+void Kekuliser::applySolution_(Position pos)
+{
+	vector<AtomInfo> vit = solutions_[pos];
+	for (Position i = 0; i < vit.size(); i++)
+	{
+		AtomInfo& ai = vit[i];
+		if (ai.double_bond != 0) ai.double_bond->setOrder(Bond::ORDER__DOUBLE);
+	}
+}
+
+// calculate a score for the distribution of the different 
+// charged atoms in this aromatic system:
+Position Kekuliser::calculateDistanceScores_()
+{
+	float best_score = INT_MAX;
+	Size best_solution = 0;
+
+	for (Position solp = 0; solp < solutions_.size(); solp++)
+	{
+		vector<AtomInfo> vit = solutions_[solp];
+
+		vector<Atom*> pos_atoms;
+		vector<Atom*> neg_atoms;
+
+		for (Position a = 0; a < vit.size(); a++)
+		{
+			AtomInfo& ai = vit[a];
+			if (ai.curr_double < ai.uncharged_double)
+			{
+				neg_atoms.push_back(ai.atom);
+				continue;
+			}
+
+			if (ai.curr_double > ai.uncharged_double)
+			{
+				pos_atoms.push_back(ai.atom);
+			}
+		}
+
+		float this_score = 0;
+
+		// atoms with same charge get a high penalty score if they are near each other
+		for (Position posp = 0; posp < pos_atoms.size(); posp++)
+		{
+			for (Position p = posp; p < pos_atoms.size(); p++)
+			{
+				Atom* a1 = pos_atoms[posp];
+				Atom* a2 = pos_atoms[p];
+
+				this_score += 100. / (a1->getPosition().getSquareDistance(a2->getPosition()) + 1.);
+			}
+		}
+
+		for (Position negp = 0; negp < neg_atoms.size(); negp++)
+		{
+			for (Position p = negp; p < neg_atoms.size(); p++)
+			{
+				Atom* a1 = neg_atoms[negp];
+				Atom* a2 = neg_atoms[p];
+
+				this_score += 100. / (a1->getPosition().getSquareDistance(a2->getPosition()) + 1.);
+			}
+		}
+
+		// atoms with different charge get a high penalty score if they are far away
+		for (Position p = 0; p < pos_atoms.size(); p++)
+		{
+			Atom* a1 = pos_atoms[p];
+
+			for (Position n = 0; n < neg_atoms.size(); n++)
+			{
+				Atom* a2 = neg_atoms[n];
+				this_score += (a1->getPosition().getSquareDistance(a2->getPosition())) / 100.;
+			}
+		}
+
+		if (this_score < best_score)
+		{
+			best_solution = solp;
+			best_score = this_score;
+		}
+	}
+
+	return best_solution;
 }
 
 } // namespace BALL
