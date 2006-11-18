@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.76 2006/11/18 09:37:04 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.77 2006/11/18 16:49:49 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -1325,6 +1325,15 @@ void EditableScene::addStructure_()
 void EditableScene::createNewMolecule()
 {
 	if (getMainControl()->isBusy()) return;
+
+	DisplayProperties* dp = DisplayProperties::getInstance(0);
+	if (dp != 0)
+	{
+		dp->selectModel(MODEL_BALL_AND_STICK);
+		dp->selectColoringMethod(COLORING_ELEMENT);
+		dp->selectMode(DRAWING_MODE_SOLID);
+		dp->setTransparency(0);
+	}
 
 	System* s = new System();
 	Molecule* m = new Molecule();
