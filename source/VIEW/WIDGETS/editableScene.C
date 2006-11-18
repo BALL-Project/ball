@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.75 2006/11/17 15:54:30 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.76 2006/11/18 09:37:04 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -919,12 +919,16 @@ void EditableScene::showContextMenu(QPoint pos)
 		QMenu* charge = new QMenu();
 		QAction* change_charge = menu.addMenu(charge);
 		change_charge->setText("Set formal charge");
+		Index charge_value = 0;
+		if (current_atom_ != 0) charge_value = current_atom_->getFormalCharge();
 		for (Index p = +6; p > -7; p--)
 		{
 			String s(p);
 			if (p > 0) s = String("+") + s;
 
-			charge->addAction(s.c_str(), this, SLOT(setFormalCharge_()));
+			QAction* action = charge->addAction(s.c_str(), this, SLOT(setFormalCharge_()));
+			action->setCheckable(true);
+			action->setChecked(p == charge_value);
 		}
 		change_charge->setEnabled(current_atom_ != 0);
 
