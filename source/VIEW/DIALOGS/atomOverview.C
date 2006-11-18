@@ -59,12 +59,13 @@ void AtomOverview::setParent(AtomContainer* ac)
 	}
 	
 	table->clear();
-	table->setColumnCount(5);
+	table->setColumnCount(6);
 	table->setHorizontalHeaderItem(0, new QTableWidgetItem("Atom"));
 	table->setHorizontalHeaderItem(1, new QTableWidgetItem("Element"));
 	table->setHorizontalHeaderItem(2, new QTableWidgetItem("Type"));
 	table->setHorizontalHeaderItem(3, new QTableWidgetItem("Radius"));
 	table->setHorizontalHeaderItem(4, new QTableWidgetItem("Charge"));
+	table->setHorizontalHeaderItem(5, new QTableWidgetItem("FCharge"));
 	ignore_ = true;
 	processor_.showOnlySelection(only_selection_);
 	parent_->apply(processor_);
@@ -164,6 +165,13 @@ Processor::Result AtomOverview::OverviewProcessor::operator() (Composite& compos
 		{
 			table_->item(r, c)->setBackgroundColor(Qt::red);
 		}
+		
+		// FCharge
+		f = atom->getFormalCharge();
+		s = String(f);
+		c++;
+		table_->setItem(r, c, new QTableWidgetItem(s.c_str()));
+	
 	}
 
 	return Processor::CONTINUE;
@@ -273,6 +281,10 @@ Processor::Result AtomOverview::ApplyProcessor::operator() (Composite& composite
 
 		s = ascii(table_->item(row_, 4)->text());
 		atom->setCharge(s.toFloat());
+
+		s = ascii(table_->item(row_, 5)->text());
+		atom->setFormalCharge(s.toInt());
+
 		row_ ++;
 	}
 
