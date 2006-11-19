@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: addHydrogenProcessor.C,v 1.1.2.8 2006/10/26 23:24:11 amoll Exp $
+// $Id: addHydrogenProcessor.C,v 1.1.2.9 2006/11/19 21:53:43 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
@@ -10,7 +10,7 @@
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>
 
-//   #define DEBUG
+   #define DEBUG
 
 #ifdef DEBUG
 #define DEBUG_LINE Log.error() << "AddHydrogen: " << __LINE__ << std::endl;
@@ -131,28 +131,24 @@ namespace BALL
 		// Ring atoms:
 		if (isRingAtom_(*atom))
 		{
+			Vector3 v1 = partners[0]->getPosition() - atom_position;
+			Vector3 v2 = partners[1]->getPosition() - atom_position;
+			if (Maths::isZero(v1.getLength())) v1 = Vector3(1,0,0);
+			if (Maths::isZero(v2.getLength())) v2 = Vector3(0,1,0);
+			v1.normalize();
+			v2.normalize();
+
+			Vector3 v3 = -(v1 + v2);
+			if (Maths::isZero(v3.getLength())) v3 = Vector3(0,0,1);
+			v3.normalize();
+			v3 *= bond_length;
+
 			// e.g. Nitrogen in Ring
 			if (con == 3 || (con == 4 && atom->getFormalCharge() == 1))
 			{
 				if (h_to_add == 1)
 				{
-					Vector3 p1 = partners[0]->getPosition();
-					Vector3 p2 = partners[1]->getPosition();
-					// connection line between the two partner atoms:
-					Vector3 d = p2 - p1;
-					if (Maths::isZero(d.getLength()))
-					{
-						addHydrogen_(*atom, atom_position - Vector3(0,1,0));
-						DEBUG_LINE
-						return Processor::CONTINUE;
-					}
-
-					// Point between two partner aoms:
-					Vector3 p = p1 + d / 2.;
-					Vector3 v = p - atom_position;
-					if (!normalize_(v)) v = Vector3(0, 0, 1);
-					v *= bond_length;
-					addHydrogen_(*atom, atom_position - v);
+					addHydrogen_(*atom, atom_position + v3);
 					DEBUG_LINE
 					return Processor::CONTINUE;
 				}
@@ -161,58 +157,40 @@ namespace BALL
 			// Carbon in Ring
 			if (con == 4)
 			{
-				Vector3 p1 = partners[0]->getPosition();
-				Vector3 p2 = partners[1]->getPosition();
-				// connection line between the two partner atoms:
-				Vector3 d = p2 - p1;
-				if (Maths::isZero(d.getLength()))
-				{
-					addHydrogen_(*atom, atom_position - Vector3(0,bond_length,0));
-					if (h_to_add == 2)
-					{
-						addHydrogen_(*atom, atom_position - Vector3(0,0,bond_length));
-						DEBUG_LINE
-					}
-					return Processor::CONTINUE;
-				}
-
-				// Point between two partner aoms:
-				Vector3 p = p1 + d / 2.;
-				Vector3 v = p - atom_position;
-				if (!normalize_(v)) v = Vector3(1,0,0);
-				v *= bond_length;
+				Vector3 vx = v2 - v1;
 
 				if (h_to_add == 2)
 				{
-					m.setRotation(Angle(120, false), d);
-					v = m * v;
-					addHydrogen_(*atom, atom_position + v);
-					v = m * v;
-					addHydrogen_(*atom, atom_position + v);
+					m.setRotation(Angle(60, false), vx);
+					addHydrogen_(*atom, atom_position + m * v3);
+					m.setRotation(Angle(-60, false), vx);
+					addHydrogen_(*atom, atom_position + m * v3);
 					DEBUG_LINE
 					return Processor::CONTINUE;
 				}
 
 				if (h_to_add == 1)
 				{
-					// planar?
-					if (hasMultipleBond_(*atom))
+					// maybe an other Hydrogen was already added?
+					AtomBondIterator abit = atom->beginBond();
+					for (; +abit; ++abit)
 					{
-						m.setRotation(Angle(180, false), d);
-						v = m * v;
-						addHydrogen_(*atom, atom_position + v);
+						Atom* partner = abit->getPartner(*atom);
+						if (partner->getElement().getAtomicNumber() != 1) continue;
+						m.setRotation(Angle(60, false), vx);
+						partner->setPosition(atom_position + m * v3);
+						m.setRotation(Angle(-60, false), vx);
+						addHydrogen_(*atom, atom_position + m * v3);
 						DEBUG_LINE
 						return Processor::CONTINUE;
 					}
 
-					// not planar and one hydrogen to add
-					Vector3 v2 = partners[2]->getPosition() - atom_position;
-					m.setRotation(Angle(120, false), d);
-					v2 = m * v2;
-					if (!normalize_(v2)) v2 = Vector3(0,0,1);
-					v2 *= bond_length;
-					addHydrogen_(*atom, atom_position + v2);
+					// planar and 1 atom to add:
+					addHydrogen_(*atom, atom_position + v3);
 					DEBUG_LINE
+					return Processor::CONTINUE;
+
+					// not planar and one hydrogen to add
 					return Processor::CONTINUE;
 				}
 			}
