@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.60.2.45 2006/11/02 14:34:16 amoll Exp $
+// $Id: mainframe.C,v 1.60.2.46 2006/11/19 19:09:22 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -214,8 +214,18 @@ namespace BALL
 			result += ".pov";
 		}
 
-		POVRenderer pr(result);
-		if (!scene_->exportScene(pr))
+		bool ok = false;
+
+		try
+		{
+			POVRenderer pr(result);
+			if (scene_->exportScene(pr)) ok = true;
+		}
+		catch(...)
+		{
+		}
+
+		if (!ok)
 		{
 			setStatusbarText("Could not export POV to " + result, true);
 		}
