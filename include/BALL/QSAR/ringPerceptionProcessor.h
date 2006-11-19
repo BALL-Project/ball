@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.h,v 1.10.2.1 2006/05/15 23:18:33 amoll Exp $
+// $Id: ringPerceptionProcessor.h,v 1.10.2.2 2006/11/19 21:13:15 bertsch Exp $
 //
 
 #ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
@@ -86,7 +86,7 @@ namespace BALL
 
 			/** Destructor
 			*/
-			~RingPerceptionProcessor();
+			virtual ~RingPerceptionProcessor();
 
 			//@}
 			/** @name Assignment
@@ -121,7 +121,8 @@ namespace BALL
 			//@}
 	
 			/** Method that finds all biconnected components, the algorithm is freely
-					adapted from a standard bcc algorithm. Returns the number of bccs found.
+					adapted from a standard bcc (binary connected components) algorithm. 
+					Returns the number of bccs found.
 			*/
 			Size findAllBCC(std::vector<MolecularGraph*>& bcc, MolecularGraph& graph);
 
@@ -176,11 +177,11 @@ namespace BALL
 	
 	
 			// Balducci and Pearlman algorithm
-			struct PathMessage;
+			struct PathMessage_;
 			
 			/*_ The tnode structure described in the paper
 			*/
-			struct TNode
+			struct TNode_
 			{
 				/// method to process the messages in the recieve buffer
 				void recieve();
@@ -189,17 +190,17 @@ namespace BALL
 				void send();
 	
 				/// the recieve buffer, where messages are stored in
-				std::vector<PathMessage> recieve_buffer;
+				std::vector<PathMessage_> recieve_buffer;
 	
 				/// the send buffer, where messages are stored in
-				std::vector<PathMessage> send_buffer;
+				std::vector<PathMessage_> send_buffer;
 			};
 		
 			/*_ The pathMsg structure described in the paper
 			*/
-			struct PathMessage
+			struct PathMessage_
 			{
-				void push(EdgeItem<Index, Index>* bond, TNode* node);
+				void push(EdgeItem<Index, Index>* bond, TNode_* node);
 		
 				//void merge(PathMessage);
 
@@ -209,28 +210,28 @@ namespace BALL
 				BitVector beep;
 				
 				/// pointer to the first node this message was sent from
-				TNode* nfirst;
+				TNode_* nfirst;
 			
 				// pointer to the last node of the messages' path
-				TNode* nlast;
+				TNode_* nlast;
 
 				/// pointer to the first edge of the message path
 				EdgeItem<Index, Index>* efirst;
 			};
 
 			/// mapping for internal TNode structure and the nodes of the molecular graph
-			static HashMap<TNode*, NodeItem<Index, Index>* > tnode_to_atom;
-			static HashMap<NodeItem<Index, Index>* , TNode*> atom_to_tnode;
+			static HashMap<TNode_*, NodeItem<Index, Index>* > tnode_to_atom_;
+			static HashMap<NodeItem<Index, Index>* , TNode_*> atom_to_tnode_;
 			
 			/// mapping for the path representation as bitvectors
-			static HashMap<EdgeItem<Index, Index>*, Size> bond_to_index;
-			static HashMap<Size, EdgeItem<Index, Index>*> index_to_bond;
+			static HashMap<EdgeItem<Index, Index>*, Size> bond_to_index_;
+			static HashMap<Size, EdgeItem<Index, Index>*> index_to_bond_;
 			
 			/// the SSSR detected by the algorithm
-			static std::vector<BitVector> rings;
+			static std::vector<BitVector> rings_;
 			
 			/// the matrix for the independency tests
-			static std::vector<BitVector> matrix;
+			static std::vector<BitVector> matrix_;
 			
 			/// the rings of the ith phase, which are to be forwarded to the ring selector
 			static std::vector<BitVector> forwarded_rings_;
