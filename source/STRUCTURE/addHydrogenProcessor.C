@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: addHydrogenProcessor.C,v 1.1.2.9 2006/11/19 21:53:43 amoll Exp $
+// $Id: addHydrogenProcessor.C,v 1.1.2.10 2006/11/19 22:19:29 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
@@ -171,18 +171,21 @@ namespace BALL
 
 				if (h_to_add == 1)
 				{
-					// maybe an other Hydrogen was already added?
-					AtomBondIterator abit = atom->beginBond();
-					for (; +abit; ++abit)
+					if (atom->countBonds() == 3)
 					{
-						Atom* partner = abit->getPartner(*atom);
-						if (partner->getElement().getAtomicNumber() != 1) continue;
-						m.setRotation(Angle(60, false), vx);
-						partner->setPosition(atom_position + m * v3);
-						m.setRotation(Angle(-60, false), vx);
-						addHydrogen_(*atom, atom_position + m * v3);
-						DEBUG_LINE
-						return Processor::CONTINUE;
+						// maybe an other Hydrogen was already added?
+						AtomBondIterator abit = atom->beginBond();
+						for (; +abit; ++abit)
+						{
+							Atom* partner = abit->getPartner(*atom);
+							if (partner->getElement().getAtomicNumber() != 1) continue;
+							m.setRotation(Angle(60, false), vx);
+							partner->setPosition(atom_position + m * v3);
+							m.setRotation(Angle(-60, false), vx);
+							addHydrogen_(*atom, atom_position + m * v3);
+							DEBUG_LINE
+							return Processor::CONTINUE;
+						}
 					}
 
 					// planar and 1 atom to add:
