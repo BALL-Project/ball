@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.18 2006/11/12 21:21:20 bertsch Exp $
+// $Id: ringPerceptionProcessor.C,v 1.19 2006/11/19 18:17:31 bertsch Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
@@ -85,6 +85,7 @@ namespace BALL
 
 	Size RingPerceptionProcessor::calculateSSSR(vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
 	{
+		all_small_rings_.clear();
 		if (ac.countAtomContainers() == 0)
 		{
 			return 0;
@@ -93,9 +94,6 @@ namespace BALL
 		String algorithm_name = options.get(Option::ALGORITHM_NAME);
 		if (algorithm_name == "Balducci")
 		{
-			// clear the structures
-			all_small_rings_.clear();
-			
 			// build molecular graph
 			Molecule* mol = static_cast<Molecule*>(&ac);
 			MolecularGraph mol_graph(*mol);
