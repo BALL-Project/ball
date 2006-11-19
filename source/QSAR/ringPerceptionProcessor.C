@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.19 2006/11/19 18:17:31 bertsch Exp $
+// $Id: ringPerceptionProcessor.C,v 1.20 2006/11/19 19:18:19 bertsch Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
@@ -129,7 +129,7 @@ namespace BALL
 			}
 
 			// now delete the bccs
-			for (vector<MolecularGraph*>::iterator it=bccs.begin();it!=bccs.end();++it)
+			for (vector<MolecularGraph*>::iterator it = bccs.begin(); it != bccs.end(); ++it)
 			{
 				delete *it;
 			}
@@ -163,12 +163,12 @@ namespace BALL
 		AtomContainer ac_copy(ac);
 
 		// mapping is needed because this algorithms works on a copy
-		HashMap<Atom*, Atom*> copy_to_orig;
+		HashMap<Atom*, Atom*> copy_to_orig_;
 		AtomIterator orig = ac.beginAtom();
 		AtomIterator copy = ac_copy.beginAtom();
 		for (; +orig; ++orig, ++copy)
 		{
-			copy_to_orig[&*copy] = &*orig;
+			copy_to_orig_[&*copy] = &*orig;
 		}
 		
 		// herein are all nodes (atoms)
@@ -261,13 +261,13 @@ namespace BALL
 		}
 	
 		// now put the computed rings in the referenced structure
-		for (vector<HashSet<Atom*> >::iterator i=SSSR.begin(); i != SSSR.end(); ++i)
+		for (vector<HashSet<Atom*> >::iterator i = SSSR.begin(); i != SSSR.end(); ++i)
 		{
 			vector<Atom*> ring;
-			HashSet<Atom*>::Iterator j=i->begin();
+			HashSet<Atom*>::Iterator j = i->begin();
 			for (; j != i->end(); ++j)
 			{
-				ring.push_back(copy_to_orig[*j]);
+				ring.push_back(copy_to_orig_[*j]);
 			}
 			sort(ring.begin(), ring.end());
 			sssr_orig.push_back(ring);
@@ -275,19 +275,19 @@ namespace BALL
 	
 		// erase the copies (erasing here should be faster than searching by every input)
 		sort(sssr_orig.begin(), sssr_orig.end());
-		vector<vector<Atom*> >::iterator vhs_it = unique(sssr_orig.begin(),sssr_orig.end());
+		vector<vector<Atom*> >::iterator vhs_it = unique(sssr_orig.begin(), sssr_orig.end());
 		sssr_orig.erase(vhs_it, sssr_orig.end());
 
 		// set "InRing" properties of the bond and atoms
-    for (Size i=0; i < sssr_orig.size(); ++i)
+    for (Size i = 0; i < sssr_orig.size(); ++i)
     {
 			// set "InRing" as property for all ring atoms
-			for (Size j=0; j < sssr_orig[i].size(); ++j)
+			for (Size j = 0; j < sssr_orig[i].size(); ++j)
 			{
 				sssr_orig[i][j]->setProperty("InRing", true);
 			
 				// set "InRing" as property for all ring bonds
-				for (Size k=0; k < sssr_orig[i].size(); ++k)
+				for (Size k = 0; k < sssr_orig[i].size(); ++k)
 				{
 					if (sssr_orig[i][k]->isBoundTo(*sssr_orig[i][j]))
 					{
@@ -324,7 +324,7 @@ namespace BALL
 	{
 		if (n == 0) return 0;
 		deque<std::pair<Atom*, Atom*> > the_q; // double ended queue with node and its ancestor
-		the_q.push_back(std::make_pair(n,n));
+		the_q.push_back(std::make_pair(n, n));
 		
 		HashSet<Atom*> tmp;
 		tmp.insert(n);
@@ -342,7 +342,7 @@ namespace BALL
 			Atom::BondIterator bond_it;
 			for (bond_it=atom->beginBond(); +bond_it; ++bond_it)
 			{
-				Atom* bound_atom =  bond_it->getPartner(*atom);
+				Atom* bound_atom = bond_it->getPartner(*atom);
 				if (bound_atom == 0 ||
 						bound_atom == ancestor)
 				{
@@ -396,18 +396,18 @@ namespace BALL
 		vector<Size> largest_rings;
 		vector<std::pair<Atom*, Atom*> > incident_edges;
 
-		hs_it it=ring_set.begin();
-		hs_it it2=ring_set.begin();
+		hs_it it = ring_set.begin();
+		hs_it it2 = ring_set.begin();
 		
 		for (; +it; ++it)
 		{
 			// bond to examine
 			Atom * partner = 0;
-			for (it2=ring_set.begin(); +it2; ++it2)
+			for (it2 = ring_set.begin(); +it2; ++it2)
 			{
 				if ((*it)->isBoundTo(**it2))
 				{
-					Bond * bnd = (*it)->getBond(**it2);
+					Bond* bnd = (*it)->getBond(**it2);
 					if (!visited_bonds.has(bnd))
 					{
 						visited_bonds.insert(bnd);
@@ -454,7 +454,7 @@ namespace BALL
 		vector<Size>::iterator it1=largest_rings.begin();
 		Size iter(0), smallest_ring_it(0), smallest_ring(0);
 
-		for (; it1!=largest_rings.end(); ++it1, ++iter)
+		for (; it1 != largest_rings.end(); ++it1, ++iter)
 		{
 			if (*it1 < smallest_ring)
 			{
@@ -464,7 +464,7 @@ namespace BALL
 		}
 
 		// destroy the selected bond
-		incident_edges[smallest_ring_it].first->destroyBond(* incident_edges[smallest_ring_it].second);
+		incident_edges[smallest_ring_it].first->destroyBond(*incident_edges[smallest_ring_it].second);
 		
 	}
 
@@ -483,9 +483,9 @@ namespace BALL
 		visited_bonds_.clear();
 
 		// for each node in the graph apply the recursive function
-		for (MolecularGraph::NodeIterator ait=graph.beginNode(); ait!=graph.endNode(); ++ait)
+		for (MolecularGraph::NodeIterator ait = graph.beginNode(); ait != graph.endNode(); ++ait)
 		{
-			NodeItem<Index, Index> * v = &*ait;
+			NodeItem<Index, Index>* v = &*ait;
 			if (!visited_.has(v))
 			{
 				DFSBCC_(bccs, dfbi, DFBIndex, v);
@@ -504,7 +504,7 @@ namespace BALL
 		DFBIndex[v] = dfbi;
 		P_[v] = dfbi;
 	
-		for (NodeItem<Index, Index>::Iterator bit=v->begin(); bit!=v->end(); ++bit)
+		for (NodeItem<Index, Index>::Iterator bit = v->begin(); bit != v->end(); ++bit)
 		{
 			if (!visited_bonds_.has(*bit))
 			{
@@ -515,7 +515,7 @@ namespace BALL
 				cerr << String('\t', dfbi) << "pushed: " << *bit << " (stack size: " << BCC_.size() << endl;
 				#endif
 
-				NodeItem<Index, Index> * v_prime = 0;
+				NodeItem<Index, Index>* v_prime = 0;
 				if (&(*bit)->getSource() == v)
 				{				
 					v_prime = &(*bit)->getTarget();
@@ -557,7 +557,7 @@ namespace BALL
 							BCC_.pop();
 						}
 						
-						EdgeItem<Index, Index> * bond = BCC_.top();
+						EdgeItem<Index, Index>* bond = BCC_.top();
 						ac.insert(bond->getSource().getAtom());
 						ac.insert(bond->getTarget().getAtom());
 						add_edges.insert(bond->getBond());
@@ -565,14 +565,14 @@ namespace BALL
 						
 						// now all items are collected, lets build the new graph						
 						// first adding the nodes!!!
-						MolecularGraph * new_graph = new MolecularGraph;
-						for (HashSet<Atom* >::Iterator it=ac.begin();it!=ac.end();++it)
+						MolecularGraph* new_graph = new MolecularGraph;
+						for (HashSet<Atom*>::Iterator it = ac.begin(); it != ac.end(); ++it)
 						{
 							new_graph->newNode(**it);
 						}
 
 						// second add the edges
-						for (HashSet<Bond* >::Iterator it=add_edges.begin(); +it; ++it)
+						for (HashSet<Bond*>::Iterator it = add_edges.begin(); +it; ++it)
 						{
 							new_graph->newEdge(**it);
 						}
@@ -609,22 +609,22 @@ namespace BALL
 
 
 	// Balducci, Pearlman algorithm
-	HashMap<RingPerceptionProcessor::TNode*, NodeItem<Index, Index> *> RingPerceptionProcessor::tnode_to_atom;
-	HashMap<NodeItem<Index, Index>* , RingPerceptionProcessor::TNode*> RingPerceptionProcessor::atom_to_tnode;
-	HashMap<EdgeItem<Index, Index> *, Size> RingPerceptionProcessor::bond_to_index;
-	HashMap<Size, EdgeItem<Index, Index> *> RingPerceptionProcessor::index_to_bond;
-	vector<BitVector> RingPerceptionProcessor::rings;
-	vector<BitVector> RingPerceptionProcessor::matrix;
+	HashMap<RingPerceptionProcessor::TNode_*, NodeItem<Index, Index> *> RingPerceptionProcessor::tnode_to_atom_;
+	HashMap<NodeItem<Index, Index>* , RingPerceptionProcessor::TNode_*> RingPerceptionProcessor::atom_to_tnode_;
+	HashMap<EdgeItem<Index, Index> *, Size> RingPerceptionProcessor::bond_to_index_;
+	HashMap<Size, EdgeItem<Index, Index> *> RingPerceptionProcessor::index_to_bond_;
+	vector<BitVector> RingPerceptionProcessor::rings_;
+	vector<BitVector> RingPerceptionProcessor::matrix_;
 	vector<BitVector> RingPerceptionProcessor::forwarded_rings_;
 	vector<BitVector> RingPerceptionProcessor::tested_beers_;
 	vector<vector<Atom*> > RingPerceptionProcessor::all_small_rings_;
 	vector<BitVector> RingPerceptionProcessor::all_small_beers_;
 
-	void RingPerceptionProcessor::TNode::recieve()
+	void RingPerceptionProcessor::TNode_::recieve()
 	{
 #ifdef BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
 		cerr << "size of recieve buffer is " << recieve_buffer.size() << endl;
-		for (vector<PathMessage>::iterator it1 = recieve_buffer.begin(); it1 != recieve_buffer.end(); ++it1)
+		for (vector<PathMessage_>::iterator it1 = recieve_buffer.begin(); it1 != recieve_buffer.end(); ++it1)
 		{
 			cerr << it1->beep << " (" << it1->beep.countValue(true) << ")" << endl;
 		}
@@ -633,23 +633,23 @@ namespace BALL
 		vector<BitVector> do_not_forward;
 
 		// build the A array
-		HashMap<EdgeItem<Index, Index>*, HashMap<TNode*, vector<PathMessage> > > array_A;
-		for (vector<PathMessage>::iterator it=recieve_buffer.begin(); it!=recieve_buffer.end();++it)
+		HashMap<EdgeItem<Index, Index>*, HashMap<TNode_*, vector<PathMessage_> > > array_A;
+		for (vector<PathMessage_>::iterator it = recieve_buffer.begin(); it != recieve_buffer.end(); ++it)
 		{
 			array_A[it->efirst][it->nfirst].push_back(*it);
 		}
 
 		// merge the messages
-		for (HashMap<EdgeItem<Index, Index>*, HashMap<TNode*, vector<PathMessage> > >::Iterator it1=array_A.begin(); +it1; ++it1)
+		for (HashMap<EdgeItem<Index, Index>*, HashMap<TNode_*, vector<PathMessage_> > >::Iterator it1 = array_A.begin(); +it1; ++it1)
 		{
-			for (HashMap<TNode*, vector<PathMessage> >::Iterator it2=it1->second.begin(); +it2; ++it2)
+			for (HashMap<TNode_*, vector<PathMessage_> >::Iterator it2 = it1->second.begin(); +it2; ++it2)
 			{
 				if (it2->second.size() > 1)
 				{
-					vector<PathMessage> new_message;
+					vector<PathMessage_> new_message;
 					new_message.push_back(it2->second[0]);
 					
-					for (Size i=1;i!=it2->second.size();++i)
+					for (Size i = 1; i != it2->second.size(); ++i)
 					{
 						do_not_forward.push_back(it2->second[i].beep);
 					}
@@ -658,14 +658,14 @@ namespace BALL
 			}
 		}
 
-		HashMap<TNode*, vector<PathMessage> > array_B;
+		HashMap<TNode_*, vector<PathMessage_> > array_B;
 
 		// handle inverse-edge collisions
-		for (HashMap<EdgeItem<Index, Index>*, HashMap<TNode*, vector<PathMessage> > >::Iterator it1=array_A.begin(); +it1; ++it1)
+		for (HashMap<EdgeItem<Index, Index>*, HashMap<TNode_*, vector<PathMessage_> > >::Iterator it1 = array_A.begin(); +it1; ++it1)
 		{
-			for (HashMap<TNode*, vector<PathMessage> >::Iterator it2=it1->second.begin(); +it2; ++it2)
+			for (HashMap<TNode_*, vector<PathMessage_> >::Iterator it2 = it1->second.begin(); +it2; ++it2)
 			{
-				HashMap<TNode*, vector<PathMessage> >::Iterator it3=it2;
+				HashMap<TNode_*, vector<PathMessage_> >::Iterator it3 = it2;
 				for(++it3; +it3; ++it3)
 				{
 					BitVector beer = it2->second[0].beep | it3->second[0].beep;
@@ -679,11 +679,11 @@ namespace BALL
 		}
 
 		// handle collisions
-		for (HashMap<TNode*, vector<PathMessage> >::Iterator it1=array_B.begin(); +it1; ++it1)
+		for (HashMap<TNode_*, vector<PathMessage_> >::Iterator it1 = array_B.begin(); +it1; ++it1)
 		{
-			for (vector<PathMessage>::iterator it2=it1->second.begin();it2!=it1->second.end();++it2)
+			for (vector<PathMessage_>::iterator it2 = it1->second.begin(); it2 != it1->second.end(); ++it2)
 			{
-				for (vector<PathMessage>::iterator it3=it2+1;it3!=it1->second.end();++it3)
+				for (vector<PathMessage_>::iterator it3 = it2 + 1; it3 != it1->second.end(); ++it3)
 				{
 					BitVector beer = it2->beep | it3->beep;
 					do_not_forward.push_back(it2->beep);
@@ -694,10 +694,10 @@ namespace BALL
 		}
 
 		// store all non-collided path messages in the send buffer
-		for (vector<PathMessage>::iterator it1=recieve_buffer.begin();it1!=recieve_buffer.end();++it1)
+		for (vector<PathMessage_>::iterator it1 = recieve_buffer.begin(); it1 != recieve_buffer.end(); ++it1)
 		{
 			bool has(false);
-			for (vector<BitVector>::iterator it2=do_not_forward.begin();it2!=do_not_forward.end();++it2)
+			for (vector<BitVector>::iterator it2 = do_not_forward.begin(); it2 != do_not_forward.end(); ++it2)
 			{
 				if (it1->beep == *it2)
 				{
@@ -715,31 +715,31 @@ namespace BALL
 		recieve_buffer.clear();
 	}
 
-	void RingPerceptionProcessor::TNode::send()
+	void RingPerceptionProcessor::TNode_::send()
 	{
 #ifdef BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
 		cerr << "size of send buffer is " << send_buffer.size() << endl;
 #endif
-		for (Size i=0;i!=send_buffer.size();++i)
+		for (Size i = 0; i != send_buffer.size(); ++i)
 		{
-			PathMessage pm = send_buffer[i];
-			NodeItem<Index, Index>* a = tnode_to_atom[this];
-			for (NodeItem<Index, Index>::Iterator bit=a->begin(); bit!=a->end(); ++bit)
+			PathMessage_ pm = send_buffer[i];
+			NodeItem<Index, Index>* a = tnode_to_atom_[this];
+			for (NodeItem<Index, Index>::Iterator bit = a->begin(); bit != a->end(); ++bit)
 			{
-				TNode* node = 0;
+				TNode_* node = 0;
 				// determine which node
 				if (&(*bit)->getSource() == a)
 				{
-					node = atom_to_tnode[&(*bit)->getTarget()];
+					node = atom_to_tnode_[&(*bit)->getTarget()];
 				}
 				else
 				{
-					node = atom_to_tnode[&(*bit)->getSource()];
+					node = atom_to_tnode_[&(*bit)->getSource()];
 				}
 				if (node != pm.nlast)
 				{
 					// build new message
-					PathMessage new_pm;
+					PathMessage_ new_pm;
 					new_pm.nfirst = pm.nfirst;
 					new_pm.efirst = pm.efirst;
 					new_pm.beep = pm.beep;
@@ -754,10 +754,10 @@ namespace BALL
 		send_buffer.clear();
 	}
 
-	void RingPerceptionProcessor::PathMessage::push(EdgeItem<Index, Index>* bond, TNode* node)
+	void RingPerceptionProcessor::PathMessage_::push(EdgeItem<Index, Index>* bond, TNode_* node)
 	{
 		// set the bit, and the node the message arives from
-		beep.setBit(bond_to_index[bond]);
+		beep.setBit(bond_to_index_[bond]);
 		nlast = node;
 	}
 
@@ -765,22 +765,22 @@ namespace BALL
 	{
 #ifdef BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
 		cerr << "new beer: " << beer << " (" << beer.countValue(true) << ")" << endl;
-		cerr << "matrix before: " << matrix.size() << endl;
-		for (vector<BitVector>::const_iterator it = matrix.begin(); it != matrix.end(); ++it)
+		cerr << "matrix before: " << matrix_.size() << endl;
+		for (vector<BitVector>::const_iterator it = matrix_.begin(); it != matrix_.end(); ++it)
 		{
 			cerr << *it << " (" << it->countValue(true) << ")" << endl;
 		}
 #endif
 		// linear independency tests
-		if (rings.size() ==  0)
+		if (rings_.size() == 0)
 		{
-			rings.push_back(beer);
-			matrix.push_back(beer);
+			rings_.push_back(beer);
+			matrix_.push_back(beer);
 			return;
 		}
 
 		// 1. perform gaussian elimination
-		vector<BitVector> tmp_matrix = matrix;
+		vector<BitVector> tmp_matrix = matrix_;
 		//tmp_matrix.push_back(beer);
 		BitVector new_beer = beer;
 		Size hi_bit(0);
@@ -801,7 +801,7 @@ namespace BALL
 					}
 					if (i == hi_bit)
 					{
-						r_begin = r+1;
+						r_begin = r + 1;
 						new_beer ^= tmp_matrix[r];
 						break;
 					}
@@ -816,7 +816,7 @@ namespace BALL
 		
 		// if linearly independent add to the matrix
 		// sort matrix w.r.t highest bit (= maintain echelon format)
-		tmp_matrix = matrix;
+		tmp_matrix = matrix_;
 		vector<BitVector> new_matrix;
 		vector<BitVector> processed;
 		tmp_matrix.push_back(new_beer);
@@ -841,6 +841,8 @@ namespace BALL
 #endif
 	
 /*
+ 		// this code fragment is not necessary because the gauss from is
+		// garanteed from the above elimination (if successful)
 		// 2. maintain gauss form
 		hi_bit = 0;
 		// for each column
@@ -866,8 +868,8 @@ namespace BALL
 		}
 */
 		
-		matrix = new_matrix;
-		rings.push_back(beer);
+		matrix_ = new_matrix;
+		rings_.push_back(beer);
 	}
 
 	Size RingPerceptionProcessor::BalducciPearlmanAlgorithm_(vector<vector<Atom*> >& sssr, MolecularGraph& graph)
@@ -876,12 +878,12 @@ namespace BALL
 		Size num_bonds = graph.getNumberOfEdges();
 		
 		// clear the old data from the static variables
-		bond_to_index.clear();
-		index_to_bond.clear();
-		atom_to_tnode.clear();
-		tnode_to_atom.clear();
-		rings.clear();
-		matrix.clear();
+		bond_to_index_.clear();
+		index_to_bond_.clear();
+		atom_to_tnode_.clear();
+		tnode_to_atom_.clear();
+		rings_.clear();
+		matrix_.clear();
 		forwarded_rings_.clear();
 		tested_beers_.clear();
 		all_small_beers_.clear();
@@ -889,47 +891,47 @@ namespace BALL
 		// 1. init the flow-network
 
 		// do the node to tnode mapping
-		for (MolecularGraph::NodeIterator ait=graph.beginNode(); ait!=graph.endNode(); ++ait)
+		for (MolecularGraph::NodeIterator ait = graph.beginNode(); ait != graph.endNode(); ++ait)
 		{
-			TNode * node = new TNode();
-			atom_to_tnode[&*ait] = node;
-			tnode_to_atom[node] = &*ait;
+			TNode_* node = new TNode_();
+			atom_to_tnode_[&*ait] = node;
+			tnode_to_atom_[node] = &*ait;
 		}
 
 		// do the bond to index mapping for the bitvector
 		Size bond_num(0);
-		for (MolecularGraph::EdgeIterator bit=graph.beginEdge(); bit!=graph.endEdge(); ++bit)
+		for (MolecularGraph::EdgeIterator bit = graph.beginEdge(); bit != graph.endEdge(); ++bit)
 		{
-			bond_to_index[&*bit] = bond_num;
-			index_to_bond[bond_num++] = &*bit;
+			bond_to_index_[&*bit] = bond_num;
+			index_to_bond_[bond_num++] = &*bit;
 		}
 
 		// fill in the messages
-		for (MolecularGraph::NodeIterator ait=graph.beginNode(); ait!=graph.endNode(); ++ait)
+		for (MolecularGraph::NodeIterator ait = graph.beginNode(); ait != graph.endNode(); ++ait)
 		{
-			for (NodeItem<Index, Index>::Iterator bit=ait->begin(); bit!=ait->end(); ++bit)
+			for (NodeItem<Index, Index>::Iterator bit = ait->begin(); bit != ait->end(); ++bit)
 			{
-				PathMessage pm;
+				PathMessage_ pm;
 				BitVector beep(num_bonds);
 				beep.fill(false);
 				// set the bit for the first (outgoing) edge
-				beep.toggleBit(bond_to_index[*bit]);
+				beep.toggleBit(bond_to_index_[*bit]);
 				pm.beep = beep;
-				TNode* tnode = 0;
+				TNode_* tnode = 0;
 				// determine which node to set
 				if ((*bit)->getSource() == *ait)
 				{
-					tnode = atom_to_tnode[&(*bit)->getTarget()];
+					tnode = atom_to_tnode_[&(*bit)->getTarget()];
 				}
 				else
 				{
-					tnode = atom_to_tnode[&(*bit)->getSource()];
+					tnode = atom_to_tnode_[&(*bit)->getSource()];
 				}
 				pm.nfirst = tnode;
 				pm.nlast = tnode;
 				pm.efirst = *bit;
 				// append the message to the send_buff this node
-				atom_to_tnode[&*ait]->send_buffer.push_back(pm);
+				atom_to_tnode_[&*ait]->send_buffer.push_back(pm);
 			}
 		}
 	
@@ -938,23 +940,23 @@ namespace BALL
 
 		// the nodes are forced to talk until they get enough rings
 		Size count(1);
-		while (rings.size() < num_rings)
+		while (rings_.size() < num_rings)
 		{
 			count++;
 
 #ifdef BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
-			cerr << count << ". round (" << rings.size() << " of " << num_rings << ")" << endl;
+			cerr << count << ". round (" << rings_.size() << " of " << num_rings << ")" << endl;
 #endif
 			
 			// calling all sends 
-			for (MolecularGraph::NodeIterator ait=graph.beginNode(); ait!=graph.endNode(); ++ait)
+			for (MolecularGraph::NodeIterator ait = graph.beginNode(); ait != graph.endNode(); ++ait)
 			{
-				atom_to_tnode[&*ait]->send();
+				atom_to_tnode_[&*ait]->send();
 			}
 			// calling all recieves
-			for (MolecularGraph::NodeIterator ait=graph.beginNode(); ait!=graph.endNode(); ++ait)
+			for (MolecularGraph::NodeIterator ait = graph.beginNode(); ait != graph.endNode(); ++ait)
 			{
-				atom_to_tnode[&*ait]->recieve();
+				atom_to_tnode_[&*ait]->recieve();
 			}
 
 			// now invoke the BalducciPearlmanRingSelector_ which selects the correct rings of size > 2 * count -2
@@ -996,23 +998,24 @@ namespace BALL
 			// clean up for next round
 			forwarded_rings_.clear();
 			
-			// this is just a workaround, due to deficiencies of the balducci pearlman algorithm
+			// this is just in the case there is s.th. going wrong, to avoid an endless loop 
 			if (count > BALL_QSAR_RINGPERCEPTIONPROCESSOR_MAX_RUNS)
 			{
+				Log.error() << "RingPerceptionProcessor: something went wrong or the largest ring ist greater than " << BALL_QSAR_RINGPERCEPTIONPROCESSOR_MAX_RUNS << "." << endl;
 				break;
 			}
 		}
 
 		// now set the named property InRing to true, for the ring bonds
-		for (Size i = 0; i != rings.size(); ++i)
+		for (Size i = 0; i != rings_.size(); ++i)
 		{
 			HashSet<Atom*> in_ring;
 			vector<Atom*> ring;
-			for (Size j = 0; j != rings[i].getSize(); ++j)
+			for (Size j = 0; j != rings_[i].getSize(); ++j)
 			{
-				if (rings[i][j])
+				if (rings_[i][j])
 				{
-					Bond* b = index_to_bond[j]->getBond();
+					Bond* b = index_to_bond_[j]->getBond();
 					b->setProperty("InRing", true);
 					Atom* a = b->getPartner(*b->getFirstAtom());
 					a->setProperty("InRing", true);
@@ -1042,7 +1045,7 @@ namespace BALL
 			{
 				if (all_small_beers_[i][j])
 				{
-					Bond* b = index_to_bond[j]->getBond();
+					Bond* b = index_to_bond_[j]->getBond();
 					Atom* a = b->getPartner(*b->getFirstAtom());
 					if (!in_ring.has(a))
 					{
@@ -1062,11 +1065,11 @@ namespace BALL
 		}
 		
 		// delete TNodes
-		for (HashMap<NodeItem<Index, Index>* , TNode*>::Iterator it=atom_to_tnode.begin(); +it; ++it)
+		for (HashMap<NodeItem<Index, Index>* , TNode_*>::Iterator it = atom_to_tnode_.begin(); +it; ++it)
 		{
 			delete it->second;
 		}
-		return rings.size();
+		return rings_.size();
 	}
 
 } // namespace BALL
