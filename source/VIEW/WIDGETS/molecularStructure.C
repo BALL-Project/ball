@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.30 2006/11/19 17:21:49 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.31 2006/11/19 23:09:26 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
@@ -150,6 +151,11 @@ namespace BALL
 			create_distance_grid_id_ = insertMenuEntry(MainControl::TOOLS_GRID, 
 																					"&Distance Grid", this, SLOT(createGridFromDistance()));
 			setMenuHint("Create a grid with the distance to the geometric center of a structure");
+			setMenuHelp("tips.html#distance_grids");
+
+			create_distance_grid_id2_ = insertMenuEntry(MainControl::TOOLS_GRID, 
+																					"&Distance from Camera Grid", this, SLOT(createGridFromCameraDistance()));
+			setMenuHint("Create a grid with the distance to the view point");
 			setMenuHelp("tips.html#distance_grids");
 
 			minimization_dialog_.setAmberDialog(&amber_dialog_);
@@ -592,6 +598,42 @@ namespace BALL
 
 			setStatusbarText("Calculated grid", true);
 		}
+
+		void MolecularStructure::createGridFromCameraDistance()
+		{
+			if (!getMainControl()->getSelectedSystem()) return;
+			System& S = *(System*) getMainControl()->getSelectedSystem();
+			
+			Vector3 v(0,0,0);
+			AtomIterator atit = S.beginAtom();
+
+			BoundingBoxProcessor bs;
+
+			S.apply(bs);
+
+			RegularData3D* regdat = new RegularData3D(RegularData3D::IndexType(64), 
+																								bs.getLower()-Vector3(20,20,20), 
+																								bs.getUpper()-bs.getLower()+Vector3(40,40,40));
+
+			Vector3 vp;
+			Scene* scene = Scene::getInstance(0);
+			if (scene != 0) vp = scene->getStage()->getCamera().getViewPoint();
+
+			for (Size i=0; i < regdat->size(); i++)
+			{
+				float distance = (regdat->getCoordinates(i) - vp).getLength();
+				(*regdat)[i] = distance;
+			}
+
+			RegularData3DMessage* message = new RegularData3DMessage(RegularData3DMessage::NEW);
+			message->setComposite(S);
+			message->setCompositeName(S.getName() + "_camera_distance");
+			message->setData(*regdat);
+			notify_(message);
+
+			setStatusbarText("Calculated grid", true);
+		}
+
 
 		void MolecularStructure::calculateSecondaryStructure()
 		{

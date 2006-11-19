@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.28.2.7 2006/10/24 22:24:41 amoll Exp $
+// $Id: molecularStructure.h,v 1.28.2.8 2006/11/19 23:09:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -241,6 +241,9 @@ namespace BALL
 			/// Create a RegularData3D instance with the distance from the geometric center
 			virtual void createGridFromDistance();
 
+			///
+			virtual void createGridFromCameraDistance();
+
 			/// Calculate the secondary structure for a protein
 			virtual void calculateSecondaryStructure();
 
@@ -313,7 +316,7 @@ namespace BALL
 			QAction* build_bonds_id_;
 			QAction* add_hydrogens_id_;
 			QAction* check_structure_id_;
-			QAction* create_distance_grid_id_;
+			QAction* create_distance_grid_id_, *create_distance_grid_id2_;
 			QAction* calculate_ss_id_;
 			QAction* map_proteins_id_;
 			QAction* calculate_RMSD_id_;
