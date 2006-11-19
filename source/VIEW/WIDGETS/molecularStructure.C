@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.29 2006/10/27 22:17:08 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.30 2006/11/19 17:21:49 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -597,8 +597,12 @@ namespace BALL
 		{
 			if (getMainControl()->getSelectedSystem() == 0) return;
 			System& s = *getMainControl()->getSelectedSystem();
-			SecondaryStructureProcessor ssp;
-			s.apply(ssp);
+			ChainIterator cit = s.beginChain();
+			for (; +cit; ++cit)
+			{
+				SecondaryStructureProcessor ssp;
+				cit->apply(ssp);
+			}
 
 			notify_(new CompositeMessage(s, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY));
 
