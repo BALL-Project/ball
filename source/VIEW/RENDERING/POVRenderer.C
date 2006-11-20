@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.22.2.9 2006/11/20 13:10:48 amoll Exp $
+// $Id: POVRenderer.C,v 1.22.2.10 2006/11/20 13:15:40 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -161,7 +161,7 @@ namespace BALL
 			{
 				if (output[p] == '.')
 				{
-					output = output.left(p + 3);
+					output = output.left(p + 4);
 					output.trimRight("0");
 					if (output == "-0.") output = "0.";
 					return output;
