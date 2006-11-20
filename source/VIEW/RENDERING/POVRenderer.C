@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.22.2.8 2006/04/11 15:05:07 amoll Exp $
+// $Id: POVRenderer.C,v 1.22.2.9 2006/11/20 13:10:48 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -220,8 +220,7 @@ namespace BALL
 			GLdouble projection_matrix[16];
 
 			// take the Projection matrix	
-			glMatrixMode(GL_PROJECTION);
-			glGetDoublev(GL_PROJECTION_MATRIX, projection_matrix);
+ 			glGetDoublev(GL_PROJECTION_MATRIX, projection_matrix);
 
 			// determine the projection variables
 			if(projection_matrix[0]==0. || projection_matrix[5]==0. || projection_matrix[10]==1.)
