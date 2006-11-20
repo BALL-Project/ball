@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: strangLBFGS.C,v 1.1.2.8 2006/10/19 12:59:41 aleru Exp $
+// $Id: strangLBFGS.C,v 1.1.2.9 2006/11/20 14:45:27 aleru Exp $
 //
 // Minimize the potential energy of a system using an improved version
 // of the limited memory BFGS with Strang recurrences.
@@ -37,7 +37,7 @@ namespace BALL
 			index_of_free_vect_(0)
 	{
 		// Compute cutlo_
-		float epsilon;
+		float epsilon = 1.;
 		float eps = 1.;
 		while (1. + eps > 1.)
 		{
@@ -68,7 +68,7 @@ namespace BALL
 		}
 		
 		// Compute cutlo_
-		float epsilon;
+		float epsilon = 1.;
 		float eps = 1.;
 		while (1. + eps > 1.)
 		{
@@ -100,7 +100,7 @@ namespace BALL
 		}
 		
 		// Compute cutlo_
-		float epsilon;
+		float epsilon = 1.;
 		float eps = 1.;
 		while (1. + eps > 1.)
 		{
@@ -134,7 +134,7 @@ namespace BALL
 		}
 		
 		// Compute cutlo_
-		float epsilon;
+		float epsilon = 1.;
 		float eps = 1.;
 		while (1. + eps > 1.)
 		{
@@ -167,7 +167,7 @@ namespace BALL
 		}
 		
 		// Compute cutlo_
-		float epsilon;
+		float epsilon = 1.;
 		float eps = 1.;
 		while (1. + eps > 1.)
 		{
@@ -574,12 +574,11 @@ namespace BALL
 					initial_atoms_[i] = atoms[i]->getPosition();
 				}
 				// ------------------------------------------------------------------------------------------
-
 			}
 			else
 			{
 				// No success. We proceed with a restart.
-
+				
 				// Let's see if we have to recompute the forces and the energy
 				if (!current_grad_.isValid())
 				{
@@ -587,6 +586,7 @@ namespace BALL
 						Log << "StrangLBFGSMinimizer::minimize: Computing new energy/forces!" << std::endl;
 					#endif
 					// ...calculate energy and forces for the new position
+					
 					updateForces();
 					updateEnergy();
 				}
@@ -607,13 +607,13 @@ namespace BALL
 			// Store the energy, we don't need to store the initial gradient as "old" gradient.
 			old_energy_ = initial_energy_;
 			
-			// Store the current gradient and energy
+				// Store the current gradient and energy
 			storeGradientEnergy();
-
+			
 			#ifdef BALL_DEBUG
 				Log.info() << "StrangLBFGSMinimizer::minimize: end of main: current grad RMS = " << current_grad_.rms << std::endl;
 			#endif
-
+			
 			// Check for convergence.
 			converged = isConverged();
 			
@@ -665,35 +665,6 @@ namespace BALL
 		#ifdef BALL_DEBUG
 			Log.info() << "LineSearch: step = " << step << " result = " << result << endl;
 		#endif
-
-		// If this line search fails we do an internal restart.
-		if (!result)
-		{
-			// Reset the search direction to the normalized negative gradient
-			direction_ = initial_grad_;
-			direction_.negate();
-			direction_.normalize();
-			
-			#ifdef BALL_DEBUG
-				Log.info() << direction_.rms << "]" << endl;
-			#endif
-
-			// Invalidate the current gradient (LineSearch::minimize())
-			// recalculate it for step = 1.0
-			current_grad_.invalidate();
-
-			// ...and try another line search
-			result = line_search.minimize(step);
-			
-			#ifdef BALL_DEBUG
-				Log.info() << "LineSearch: step = " << step << " result = " << result << endl;
-			#endif
-			
-			// We cannot trust in our data any more, so we force all routines to 
-			// assume that we haven't collected any data so far.
-			curr_num_of_vect_pairs_ = 0;
-			index_of_free_vect_ = 0;
-		}
 
 		if (result == true)
 		{

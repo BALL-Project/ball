@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftedLVMM.C,v 1.1.2.7 2006/10/19 12:59:41 aleru Exp $
+// $Id: shiftedLVMM.C,v 1.1.2.8 2006/11/20 14:45:27 aleru Exp $
 //
 // Minimize the potential energy of a system using a shifted 
 // limited-memory variable metric method.
@@ -50,7 +50,7 @@ namespace BALL
 			step_(0.)
 	{
 		// Compute cutlo_
-		float epsilon;
+		float epsilon = 1.;
 		float eps = 1.;
 		while (1. + eps > 1.)
 		{
@@ -85,7 +85,7 @@ namespace BALL
 			Log.error() << "ShiftedLVMMMinimizer: setup failed! " << endl;
 		}
 		// Compute cutlo_
-		float epsilon;
+		float epsilon = 1.;
 		float eps = 1.;
 		while (1. + eps > 1.)
 		{
@@ -121,7 +121,7 @@ namespace BALL
 			Log.error() << "ShiftedLVMMMinimizer: setup failed! " << endl;
 		}
 		// Compute cutlo_
-		float epsilon;
+		float epsilon = 1.;
 		float eps = 1.;
 		while (1. + eps > 1.)
 		{
@@ -159,7 +159,7 @@ namespace BALL
 			Log.error() << "ShiftedLVMMMinimizer: setup failed! " << endl; 
 		}
 		// Compute cutlo_
-		float epsilon;
+		float epsilon = 1.;
 		float eps = 1.;
 		while (1. + eps > 1.)
 		{
@@ -196,7 +196,7 @@ namespace BALL
 			Log.error() << "ShiftedLVMMMinimizer: setup failed! " << endl; 
 		}
 		// Compute cutlo_
-		float epsilon;
+		float epsilon = 1.;
 		float eps = 1.;
 		while (1. + eps > 1.)
 		{
@@ -819,35 +819,6 @@ namespace BALL
 		#ifdef BALL_DEBUG
 			Log.info() << "LineSearch: step_ = " << step_ << " result = " << result << endl;
 		#endif
-
-		// If this line search fails we do an internal restart.
-		if (!result)
-		{
-			// Reset the search direction to the normalized negative gradient
-			direction_ = initial_grad_;
-			direction_.negate();
-			direction_.normalize();
-			
-			#ifdef BALL_DEBUG
-				Log.info() << direction_.rms << "]" << endl;
-			#endif
-
-			// Invalidate the current gradient (LineSearch::minimize())
-			// recalculate it for step_ = 1.0
-			current_grad_.invalidate();
-
-			// ...and try another line search
-			result = line_search.minimize(step_);
-			
-			#ifdef BALL_DEBUG
-				Log.info() << "LineSearch: step_ = " << step_ << " result = " << result << endl;
-			#endif
-			
-			// We cannot trust in our data any more, so we force all routines to 
-			// assume that we haven't collected any data so far.
-			curr_number_of_cols_ = 0;
-			prev_shift_val_ = 1.;
-		}
 
 		if (result == true)
 		{

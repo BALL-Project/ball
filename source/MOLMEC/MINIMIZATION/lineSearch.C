@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.C,v 1.20.2.4 2006/10/04 16:11:39 aleru Exp $
+// $Id: lineSearch.C,v 1.20.2.5 2006/11/20 14:45:27 aleru Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
@@ -194,7 +194,7 @@ namespace BALL
 		{
 			// Reset the atoms to the start position (stp = 0)
 			atoms.resetPositions();
-
+			
 			// Calculate the initial energy and forces
 			minimizer_->updateForces();
 			minimizer_->updateEnergy();
@@ -245,10 +245,6 @@ namespace BALL
 		double stmin = 0.;
 		double stmax = stp + stp*4.;
 
-		// Remember the best step and the best energy
-		double best_stp = 0.0;
-		double best_f = f_init;
-
 		// If we do not have a valid current gradient for the first step, or if we are
 		// told to force an update (i.e. keep_gradient == false), or if 
 		// our internal safeguards force stp not to equal 1, calculate it
@@ -271,6 +267,16 @@ namespace BALL
 		
 		// Directional derivative at stp.
 		double g = (gradient * direction)*scale;
+		
+		// Remember the best step and the best energy
+		double best_stp = 0.0;
+		double best_f = f_init;
+		
+		if (f < f_init)
+		{
+			best_f = f;
+			best_stp = stp;
+		}
 
 		Size iteration = 0;
 		bool result = false;
@@ -415,7 +421,7 @@ namespace BALL
 			// Increment the number of iterations.
 			iteration++;
 		}
-
+		
 		// If the line search failed, reset the atom positions and return the
 		// best stepsize we have to offer
 		if (!result)
@@ -432,7 +438,7 @@ namespace BALL
 			{
 				atoms.resetPositions();
 			}
-			gradient.invalidate();	
+			//gradient.invalidate();
 		}
 
 		return result;
