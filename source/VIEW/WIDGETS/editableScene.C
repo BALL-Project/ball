@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.20.2.79 2006/11/21 10:32:30 amoll Exp $
+// $Id: editableScene.C,v 1.20.2.80 2006/11/21 13:58:54 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -966,9 +966,43 @@ void EditableScene::showContextMenu(QPoint pos)
 		{
 			add_action->setEnabled(false);
 		}
-		add_menu->addAction("Pyrrole", this, SLOT(addStructure_()));
-		add_menu->addAction("Benzene", this, SLOT(addStructure_()));
-		add_menu->addAction("Indole", this, SLOT(addStructure_()));
+
+		QMenu* rings = new QMenu();
+		QAction* ring_action = add_menu->addMenu(rings);
+		ring_action->setText("Aromatic rings");
+		rings->addAction("Pyrrole", this, SLOT(addStructure_()));
+		rings->addAction("Benzene", this, SLOT(addStructure_()));
+		rings->addAction("Indole", this, SLOT(addStructure_()));
+
+		QMenu* aas = new QMenu();
+		QAction* aas_action = add_menu->addMenu(aas);
+		aas_action->setText("Amino acids");
+
+		QMenu* nas = new QMenu();
+		QAction* nas_action = add_menu->addMenu(nas);
+		nas_action->setText("Nucleic acids");
+
+		HashSet<String> names;
+		const std::vector<Residue*>& residues = fragment_db_.getFragments();
+		vector<Residue*>::const_iterator rit = residues.begin(); 
+		vector<Residue*> nucleotides;
+		for (;rit != residues.end();++rit)
+		{
+			String name = (**rit).getName();
+			if ((**rit).isAminoAcid())
+			{
+				if (names.has(name)) continue;
+				names.insert(name);
+				aas->addAction(name.c_str(), this, SLOT(addStructure_()));
+				continue;
+			}
+		}
+		
+		nas->addAction("Alanine", this, SLOT(addStructure_()));
+		nas->addAction("Cytosine", this, SLOT(addStructure_()));
+		nas->addAction("Guanine", this, SLOT(addStructure_()));
+		nas->addAction("Thymine", this, SLOT(addStructure_()));
+		nas->addAction("Uracil", this, SLOT(addStructure_()));
 
 		menu.addSeparator();
 
@@ -1273,6 +1307,17 @@ void EditableScene::addStructure(String name)
 		if (residue == 0) return;
 	}
 
+	Vector3 p;
+	Size nr = 0;
+	AtomIterator ait = residue->beginAtom();
+	for (;+ait; ++ait)
+	{
+		p += ait->getPosition();
+		nr++;
+	}
+
+	p /= (float) nr;
+
 	Matrix4x4 m;
 	Vector3 x = get3DPosition_(menu_point_.x(), menu_point_.y());
 	TransformationProcessor tf;
@@ -1289,7 +1334,7 @@ void EditableScene::addStructure(String name)
 		residue->apply(tf);
 	}
 
-	m.setTranslation(x);
+	m.setTranslation(x + p);
 	tf.setTransformation(m);
 	residue->apply(tf);
 

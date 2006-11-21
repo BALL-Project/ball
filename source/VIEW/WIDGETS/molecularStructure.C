@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.89.2.31 2006/11/19 23:09:26 amoll Exp $
+// $Id: molecularStructure.C,v 1.89.2.32 2006/11/21 13:58:54 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -86,7 +86,7 @@ namespace BALL
 																												SLOT(addHydrogens()), Qt::CTRL+Qt::Key_H);
 			setMenuHint("Add missing atoms to a selected structure.");
 			
-			check_structure_id_ = insertMenuEntry(MainControl::BUILD, "Chec&k Structure", this, 
+			check_structure_id_ = insertMenuEntry(MainControl::BUILD, "Chec&k Structure against fragment db", this, 
 																												SLOT(checkResidue()), Qt::CTRL+Qt::Key_K);
 			setMenuHint("Check a structure against the fragment database.");
 			
@@ -640,10 +640,10 @@ namespace BALL
 			if (getMainControl()->getSelectedSystem() == 0) return;
 			System& s = *getMainControl()->getSelectedSystem();
 			ChainIterator cit = s.beginChain();
-			for (; +cit; ++cit)
+//   			for (; +cit; ++cit)
 			{
 				SecondaryStructureProcessor ssp;
-				cit->apply(ssp);
+				s.apply(ssp);
 			}
 
 			notify_(new CompositeMessage(s, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY));
