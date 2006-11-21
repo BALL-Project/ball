@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.C,v 1.29 2005/12/23 17:03:06 amoll Exp $
+// $Id: directory.C,v 1.29.2.1 2006/11/21 22:59:21 amoll Exp $
 //
 
 #include <BALL/SYSTEM/directory.h>
@@ -40,7 +40,6 @@ namespace BALL
 			if ((buffer = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	
 			{
 				directory_path_ = buffer;
-				free(buffer);
 				dir_ = CreateFile(buffer,
 													FILE_LIST_DIRECTORY,                // access (read/write) mode
 													FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  // share mode
@@ -49,6 +48,7 @@ namespace BALL
 													FILE_FLAG_BACKUP_SEMANTICS,         // file attributes
 													NULL                                // file with attributes to copy
 													);
+				free(buffer);
 			}
 			else 
 			{
