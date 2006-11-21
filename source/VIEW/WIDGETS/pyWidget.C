@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.2.58 2006/11/16 16:57:47 amoll Exp $
+// $Id: pyWidget.C,v 1.49.2.59 2006/11/21 22:38:22 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -290,6 +290,7 @@ PyWidget::PyWidget(QWidget *parent, const char *name)
 		started_startup_script_(false),
 		thread_(0),
 		stop_script_(false),
+		intend_(0),
 		running_(false),
 		silent_(false),
 		full_silent_(false)
