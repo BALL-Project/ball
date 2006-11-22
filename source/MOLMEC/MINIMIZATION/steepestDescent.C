@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.C,v 1.27.8.3 2006/09/26 15:05:15 amoll Exp $
+// $Id: steepestDescent.C,v 1.27.20.1 2006/09/06 14:07:01 aleru Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
@@ -133,17 +133,16 @@ namespace BALL
 		{
 			return true;
 		}
-
+		
 		// Initial step size:
 		double initial_step = 1.0;
 
-		// If the run is to be continued, don't reset the iteration counter.
+		// If the run is to be continued, don't reset the iteration counter and the initial step size
 		if (!resume)
 		{
 			// reset the number of iterations for a restart
 			setNumberOfIterations(0);
 			same_energy_counter_ = 0;
-			
 			step_ = initial_step;
 		}
 		Size max_iterations = std::min(getNumberOfIterations() + iterations, getMaxNumberOfIterations());
@@ -240,7 +239,7 @@ namespace BALL
 		}
 
 		double lambda = -1.0;
-		bool result = line_search_.minimize(lambda, step_ * direction_.inv_norm);
+		bool result = line_search_.minimize(lambda, step_*direction_.inv_norm);
 
 		// If the line search was not successful, return -1, else
 		// the value for the optimal lambda.
@@ -257,14 +256,17 @@ namespace BALL
 	void SteepestDescentMinimizer::updateStepSize(double lambda)
 	{
 		// Use the lambda we have found to make a better guess for the step size
-		if (lambda < 0.2) 
+		/*if (lambda < 0.2) 
 		{
-			step_ *= 0.5;
+			step_ = std::max(0.1, step_/2.);
 		} 
 		else if (lambda > 0.9) 
 		{
-			step_ *= 2.;
-		}
+			step_ = std::min(10., step_*2.);
+	}*/
+		
+		// AR: let the line search decide what step size is best
+		step_ = 1.0;
 		#ifdef BALL_DEBUG
 			Log << "SDM: new step size: " << step_ << std::endl;
 		#endif

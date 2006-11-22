@@ -6,7 +6,9 @@ CPP_SOURCES=\
 	conjugateGradient.C\
 	energyMinimizer.C\
 	lineSearch.C\
-	steepestDescent.C
+	steepestDescent.C\
+	strangLBFGS.C\
+	shiftedLVMM.C
 
 include ../../common.mak
 -include .Dependencies
