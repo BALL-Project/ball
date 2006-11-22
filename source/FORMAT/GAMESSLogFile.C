@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GAMESSLogFile.C,v 1.2 2005/10/05 10:08:20 anhi Exp $
+// $Id: GAMESSLogFile.C,v 1.2.16.1 2006/11/22 18:19:55 anhi Exp $
 //
 
 #include <BALL/FORMAT/GAMESSLogFile.h>
 #include <BALL/KERNEL/system.h>
+#include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
 
 // defined in the lexer (GAMESSLogParserLexer.l)
@@ -201,7 +202,7 @@ namespace BALL
 	void GAMESSLogFile::initializeBasisSet()
 		throw()
 	{
-		String basisfilename = "basis_";
+		String basisfilename = "QM/basisset_";
 
 		/** Construct the correct data file name from the basis set options **/
 		if (!basis_options_.has("gbasis"))
@@ -226,14 +227,18 @@ namespace BALL
 		}
 
 		Log.info() << basisfilename << std::endl;
-		qmbs_.readBasisSetData("/local/andreas/BALL_main/BALL/source/FORMAT/"+basisfilename);
+		Path path;
+		String filename = path.find(basisfilename);
+		Log.info() << filename << std::endl;
+		if (filename != "")
+			qmbs_.readBasisSetData(filename);
 	}
-	
+
 	QMBasisSet& GAMESSLogFile::getBasisSet()
 		throw()
-	{
-		return qmbs_;
-	}
+		{
+			return qmbs_;
+		}
 
 	const QMBasisSet& GAMESSLogFile::getBasisSet() const 
 		throw()
