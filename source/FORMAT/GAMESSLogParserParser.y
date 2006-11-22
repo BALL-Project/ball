@@ -1,3 +1,4 @@
+// TODO: write a complete parser, handle special cases etc... (ECP handling and so on...)
 %{
 
 #include <BALL/FORMAT/GAMESSLogFile.h>
@@ -28,11 +29,15 @@ extern void yyerror(char* s);
 %token	<text>	 TK_EIGEN_LINE
 %token	<text>	 TK_ATOM
 %token	<value>	 TK_FLOAT
+%token  <number> TK_INT
 %token	<text> 	 TK_BOND
 %token	<text> 	 TK_OTHER
 %token	<text> 	 TK_CHARGE
 %token	<text> 	 TK_POPULATION
 %token	<text> 	 TK_COEFFICIENTS
+%token	<text> 	 TK_NUM_ORBITALS
+%token  <text>	 TK_EIGENVALUES
+%token  <text>	 TK_SPINSET
 %token					 TK_TITLE
 %token					 TK_COORDS_BOHR
 %token					 TK_COORDS_ANGSTROM
@@ -45,6 +50,9 @@ extern void yyerror(char* s);
 %token					 TK_POPULATION_END
 %token					 TK_EIGEN_START
 %token					 TK_EIGEN_END
+%token					 TK_EIGENVALUES_START
+%token					 TK_EIGENVALUES_END
+%token					 TK_NEXT_EIGENBLOCK
 %token					 TK_BASIS_OPTIONS_START
 %token					 TK_BASIS_OPTIONS_END
 %token					 TK_BOND_START
@@ -61,14 +69,16 @@ gamessfile:	/* empty */
 		| gamessfile charges    	 {}
 		| gamessfile population 	 {}
 		| gamessfile eigenvectors  {}
-		| gamessfile TK_LINE			 {
+		| gamessfile num_orbitals  {}
+		| gamessfile TK_LINE			 {}
+		| gamessfile TK_SPINSET		 {
 				String s($2);
 				s.toUpper();
 				if (s.hasSubstring("ALPHA"))
 					GAMESSLogFile::state.current_parser->current_set = 1;
 				else
 					GAMESSLogFile::state.current_parser->current_set = 2;
-			}
+		}
 		;
 
 //non_blocked: 
@@ -186,23 +196,42 @@ population_data: /* empty */
 		}
 	;
 
-eigenvectors:	TK_EIGEN_START eigendata TK_EIGEN_END {};
+eigenvectors:	eigenstart eigendata TK_EIGEN_END {} //{GAMESSLogFile::state.current_parser->test();};
+
+eigenstart: TK_EIGEN_START {
+	GAMESSLogFile::state.current_parser->initEigenData();
+}
 
 eigendata: /* empty */
+  | eigendata  TK_NEXT_EIGENBLOCK {
+		GAMESSLogFile::state.current_parser->nextEigenBlock();
+	}
+	| eigendata	 eigenvalues {}
 	| eigendata  TK_LINE {}
 	| eigendata	 TK_COEFFICIENTS {
 			String s($2);
 			std::vector<String> fields;
 			s.split(fields);
 
-			GAMESSLogFile::state.current_parser->current_coefficient_line += fields.size();
-			for (Size i=0; i<fields.size(); i++)
-			{
-				GAMESSLogFile::state.current_parser->addCoefficient(fields[i].toFloat());
-			}
+			GAMESSLogFile::state.current_parser->addEigenvectors(fields);
 		}
 	;
 
+eigenvalues: TK_EIGENVALUES_START TK_EIGENVALUES TK_EIGENVALUES_END {
+		String s($2);
+		std::vector<String> fields;
+		s.split(fields);
+
+		GAMESSLogFile::state.current_parser->addEigenvalues(fields);
+	};
+
+num_orbitals: TK_NUM_ORBITALS TK_INT {
+	if (!strcmp($1,"alpha"))
+		GAMESSLogFile::state.current_parser->setNumberOfAlphaOrbitals($2);
+	else
+		GAMESSLogFile::state.current_parser->setNumberOfBetaOrbitals($2);
+	}
+	;
 
 %%
 void yyerror(char* s)

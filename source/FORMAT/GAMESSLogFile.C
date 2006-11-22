@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GAMESSLogFile.C,v 1.2.16.1 2006/11/22 18:19:55 anhi Exp $
+// $Id: GAMESSLogFile.C,v 1.2.16.2 2006/11/22 21:51:02 anhi Exp $
 //
 
 #include <BALL/FORMAT/GAMESSLogFile.h>
@@ -20,7 +20,8 @@ namespace BALL
 		throw()
 		: GenericMolFile(),
 			molecule_(0),
-			factor_(1.)
+			factor_(1.),
+			current_set(1)
 	{
 	}
 
@@ -29,7 +30,8 @@ namespace BALL
 		throw(Exception::FileNotFound)
 		:	GenericMolFile(),
 			factor_(file.factor_),
-			qmbs_(file.qmbs_)
+			qmbs_(file.qmbs_),
+			current_set(file.current_set)
 	{
 		if (file.getName() != "")
 		{
@@ -47,7 +49,8 @@ namespace BALL
 		throw(Exception::FileNotFound)
 		: GenericMolFile(),
 			molecule_(0),
-			factor_(1.)
+			factor_(1.),
+			current_set(1)
 	{
 		open(name, open_mode);
 	}
@@ -102,6 +105,7 @@ namespace BALL
 			return false;
 		}
 
+		current_eigenvector_ = 0;
 		/** Let the parser do the hard work **/
 		try {
 			state.current_parser = this;
@@ -193,10 +197,16 @@ namespace BALL
 		factor_ = factor;
 	}
 
-	void GAMESSLogFile::addCoefficient(float coefficient)
+	void GAMESSLogFile::setNumberOfAlphaOrbitals(int number)
 		throw()
 	{
-		qmbs_.addCoefficient(coefficient);
+//		qmbs_.setNumberOfAlphaOrbitals(number);
+	}
+
+	void GAMESSLogFile::setNumberOfBetaOrbitals(int number)
+		throw()
+	{
+//		qmbs_.setNumberOfBetaOrbitals(number);
 	}
 
 	void GAMESSLogFile::initializeBasisSet()
@@ -267,6 +277,95 @@ namespace BALL
 			result = basis_options_[new_key];
 
 		return result;
+	}
+
+	void GAMESSLogFile::test()
+		throw()
+	{
+		// test
+		std::cout << qmbs_.alpha_eigenvalues.size() << std::endl;
+		for (int i=0; i<qmbs_.alpha_eigenvalues.size(); i++)
+			std::cout << qmbs_.alpha_eigenvalues[i] << " ";
+
+		// print the first and the 7th eigenvector
+		std::cout << "\n\n";
+		for (int i=0; i<qmbs_.alpha_eigenvectors[0].size(); i++)
+			std::cout << qmbs_.alpha_eigenvectors[0][i] << " ";
+		std::cout << "\n\n";
+		for (int i=0; i<qmbs_.alpha_eigenvectors[6].size(); i++)
+			std::cout << qmbs_.alpha_eigenvectors[6][i] << " ";
+		std::cout << "\n";
+	}
+
+	void GAMESSLogFile::initEigenData()
+		throw()
+	{
+		// we cruelly overwrite all older data that's possibly there
+		current_eigenvector_ = 0;
+		if (current_set == 1)
+		{
+			qmbs_.alpha_eigenvalues.clear();
+			qmbs_.alpha_eigenvectors.clear();
+		}
+		else
+		{
+			qmbs_.beta_eigenvalues.clear();
+			qmbs_.beta_eigenvectors.clear();
+		}
+	}
+
+	void GAMESSLogFile::nextEigenBlock()
+		throw()
+	{
+		if (current_set == 1)
+		{
+			current_eigenvector_ = qmbs_.alpha_eigenvalues.size();
+		}
+		else
+		{
+			current_eigenvector_ = qmbs_.beta_eigenvalues.size();
+		}
+	}
+
+	void GAMESSLogFile::addEigenvectors(const std::vector<String>& vectors)
+		throw()
+	{
+		std::vector<std::vector<float> >& eigenvectors = (current_set == 1) ? qmbs_.alpha_eigenvectors
+																																				: qmbs_.beta_eigenvectors;
+		std::vector<float>& eigenvalues = (current_set == 1) ? qmbs_.alpha_eigenvalues
+																												 : qmbs_.beta_eigenvalues;
+
+		// do we need to push_back or did we already do that?
+		if (eigenvectors.size() < eigenvalues.size()) // first line of the block
+		{
+			for (Size i=4; i<vectors.size(); i++)
+			{
+				eigenvectors.push_back(std::vector<float>());
+				eigenvectors[eigenvectors.size()-1].push_back(vectors[i].toFloat());
+			}
+		}
+		else
+		{
+			for (Size i=4; i<vectors.size(); i++)
+			{
+				eigenvectors[current_eigenvector_+(i-4)].push_back(vectors[i].toFloat());
+			}
+		}
+	}
+
+	void GAMESSLogFile::addEigenvalues(const std::vector<String>& values)
+		throw()
+	{
+		if (current_set == 1)
+		{
+			for (Size i=0; i<values.size(); i++)
+				qmbs_.alpha_eigenvalues.push_back(values[i].toFloat());
+		}
+		else
+		{
+			for (Size i=0; i<values.size(); i++)
+				qmbs_.beta_eigenvalues.push_back(values[i].toFloat());
+		}
 	}
 
 	struct GAMESSLogFile::State GAMESSLogFile::state;
