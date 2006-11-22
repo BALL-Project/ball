@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.66.2.6 2006/11/12 16:03:11 amoll Exp $
+// $Id: representation.C,v 1.66.2.7 2006/11/22 14:22:12 amoll Exp $
 //
 
 
@@ -64,7 +64,7 @@ namespace BALL
 					model_processor_(0),
 					color_processor_(0),
 					composites_(rp.composites_),
-					model_build_time_(PreciseTime(99999, 9)),
+					model_build_time_(rp.model_build_time_),
 					rebuild_(rp.rebuild_),
 					changed_color_processor_(true),
 					hidden_(rp.hidden_),
