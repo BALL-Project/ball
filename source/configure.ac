@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.38 2006/11/10 08:32:39 oliver Exp $
+dnl $Id: configure.ac,v 1.39 2006/12/01 18:49:21 oliver Exp $
 
 dnl
 dnl Author:
@@ -748,7 +748,7 @@ dnl
 dnl    create files
 dnl
 
-SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SOLVATION STRUCTURE SYSTEM ${VIEW} ${PYTHON}"
+SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SCORING SOLVATION STRUCTURE SYSTEM ${VIEW} ${PYTHON}"
 AC_SUBST(SUBDIRS)
 BINFMT_PATH=""
 
