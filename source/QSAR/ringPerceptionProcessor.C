@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.20 2006/11/19 19:18:19 bertsch Exp $
+// $Id: ringPerceptionProcessor.C,v 1.21 2007/01/07 23:46:55 bertsch Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
@@ -85,12 +85,17 @@ namespace BALL
 
 	Size RingPerceptionProcessor::calculateSSSR(vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
 	{
+<<<<<<< ringPerceptionProcessor.C
 		all_small_rings_.clear();
 		if (ac.countAtomContainers() == 0)
 		{
 			return 0;
 		}
 
+=======
+		all_small_rings_.clear();
+
+>>>>>>> 1.13.2.4
 		String algorithm_name = options.get(Option::ALGORITHM_NAME);
 		if (algorithm_name == "Balducci")
 		{
@@ -791,8 +796,21 @@ namespace BALL
 			{
 				for (Size r = r_begin; r < tmp_matrix.size(); ++r)
 				{
+<<<<<<< ringPerceptionProcessor.C
+					for (Size c = 0; c != tmp_matrix[r].getSize(); ++c)
+=======
 					for (Size c = 0; c != tmp_matrix[r].getSize(); ++c)
 					{
+						if (tmp_matrix[r][c])
+						{
+							hi_bit = c;
+							break;
+						}
+					}
+					if (i == hi_bit)
+>>>>>>> 1.13.2.4
+					{
+<<<<<<< ringPerceptionProcessor.C
 						if (tmp_matrix[r][c])
 						{
 							hi_bit = c;
@@ -803,6 +821,10 @@ namespace BALL
 					{
 						r_begin = r + 1;
 						new_beer ^= tmp_matrix[r];
+=======
+						r_begin = r + 1;
+						new_beer ^= tmp_matrix[r];
+>>>>>>> 1.13.2.4
 						break;
 					}
 				}
@@ -954,10 +976,56 @@ namespace BALL
 				atom_to_tnode_[&*ait]->send();
 			}
 			// calling all recieves
+<<<<<<< ringPerceptionProcessor.C
+			for (MolecularGraph::NodeIterator ait = graph.beginNode(); ait != graph.endNode(); ++ait)
+=======
 			for (MolecularGraph::NodeIterator ait = graph.beginNode(); ait != graph.endNode(); ++ait)
 			{
 				atom_to_tnode_[&*ait]->recieve();
 			}
+
+			// now invoke the BalducciPearlmanRingSelector_ which selects the correct rings of size > 2 * count -2
+			// first process rings of size 2 * count - 1 (odd sized rings of this phase)
+			vector<BitVector> even_sized;
+			for (vector<BitVector>::iterator it = forwarded_rings_.begin(); it != forwarded_rings_.end(); ++it)
+			{
+				if (it->countValue(true) == 2 * count - 1)
+				{
+					if (find(tested_beers_.begin(), tested_beers_.end(), *it) == tested_beers_.end())
+					{
+						tested_beers_.push_back(*it);
+						BalducciPearlmanRingSelector_(*it);
+						if (it->countValue(true) == 3 || it->countValue(true) == 5)
+						{
+							all_small_beers_.push_back(*it);
+						}
+					}
+				}
+				else
+				{
+					even_sized.push_back(*it);
+				}
+			}
+
+			// now process the even-sized rings
+			for (vector<BitVector>::const_iterator it = even_sized.begin(); it != even_sized.end(); ++it)
+>>>>>>> 1.13.2.4
+			{
+<<<<<<< ringPerceptionProcessor.C
+				atom_to_tnode_[&*ait]->recieve();
+=======
+				if (find(tested_beers_.begin(), tested_beers_.end(), *it) == tested_beers_.end())
+				{
+					tested_beers_.push_back(*it);
+					BalducciPearlmanRingSelector_(*it);
+					if (it->countValue(true) == 4 || it->countValue(true) == 6)
+					{
+						all_small_beers_.push_back(*it);
+					}
+				}
+>>>>>>> 1.13.2.4
+			}
+<<<<<<< ringPerceptionProcessor.C
 
 			// now invoke the BalducciPearlmanRingSelector_ which selects the correct rings of size > 2 * count -2
 			// first process rings of size 2 * count - 1 (odd sized rings of this phase)
@@ -999,6 +1067,12 @@ namespace BALL
 			forwarded_rings_.clear();
 			
 			// this is just in the case there is s.th. going wrong, to avoid an endless loop 
+=======
+			// clean up for next round
+			forwarded_rings_.clear();
+			
+			// this is just in the case there is s.th. going wrong, to avoid an endless loop 
+>>>>>>> 1.13.2.4
 			if (count > BALL_QSAR_RINGPERCEPTIONPROCESSOR_MAX_RUNS)
 			{
 				Log.error() << "RingPerceptionProcessor: something went wrong or the largest ring ist greater than " << BALL_QSAR_RINGPERCEPTIONPROCESSOR_MAX_RUNS << "." << endl;
