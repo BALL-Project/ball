@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.h,v 1.16 2007/01/07 23:46:55 bertsch Exp $
-=======
+// $Id: ringPerceptionProcessor.h,v 1.17 2007/01/08 00:01:12 bertsch Exp $
 //
 
 #ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
