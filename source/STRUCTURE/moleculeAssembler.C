@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeAssembler.C,v 1.4 2006/08/15 20:36:58 oliver Exp $
+// $Id: moleculeAssembler.C,v 1.5 2007/01/08 13:39:33 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -14,6 +14,9 @@
 #include <BALL/STRUCTURE/moleculeAssembler.h>
 
 #include <cmath>
+#include <utility>
+
+using namespace std;
 
 #ifdef BALL_DEBUG_MOLECULEASSEMBLER
 # define DEBUG(a) Log.info() << a << std::endl;

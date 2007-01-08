@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sdGenerator.C,v 1.6 2006/08/15 20:55:13 oliver Exp $
+// $Id: sdGenerator.C,v 1.7 2007/01/08 13:39:33 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -23,6 +23,8 @@
 #else
 # define DEBUG(a) 
 #endif
+
+using namespace std;
 
 namespace BALL
 {
