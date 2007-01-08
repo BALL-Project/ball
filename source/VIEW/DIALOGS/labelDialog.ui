@@ -1,0 +1,513 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>LabelDialogData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>LabelDialogData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>277</width>
+            <height>425</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>3</hsizetype>
+            <vsizetype>3</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>0</width>
+            <height>0</height>
+        </size>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>32767</width>
+            <height>3000</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>Label selected objects</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>false</bool>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget" row="0" column="0">
+            <property name="name">
+                <cstring>layout3</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>4</number>
+                </property>
+                <widget class="QGroupBox">
+                    <property name="name">
+                        <cstring>GroupBox1</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Text</string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QPushButton" row="1" column="1">
+                            <property name="name">
+                                <cstring>add_tag_button</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="text">
+                                <string>Add</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Add the selected text tag</string>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="2" column="0" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>history_box</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>22</height>
+                                </size>
+                            </property>
+                            <property name="sizeLimit">
+                                <number>50</number>
+                            </property>
+                            <property name="autoCompletion">
+                                <bool>true</bool>
+                            </property>
+                            <property name="duplicatesEnabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>History</string>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="1" column="0">
+                            <item>
+                                <property name="text">
+                                    <string>Name</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Residue ID</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Atom Type</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Atom Type Name</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Atom Charge</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Element</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>tag_box</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>22</height>
+                                </size>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Select a special text tag to add</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="0" column="0" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>label_edit_</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>22</height>
+                                </size>
+                            </property>
+                            <property name="frameShape">
+                                <enum>LineEditPanel</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Sunken</enum>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Enter label text. You can also add special tags: &lt;br&gt;%N Name&lt;br&gt;%I Residue ID&lt;br&gt;%C charge&lt;br&gt;%T type&lt;br&gt;"One label for every item" has to be checked for this.</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QGroupBox">
+                    <property name="name">
+                        <cstring>GroupBox1_2_2</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Font</string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QPushButton" row="0" column="1">
+                            <property name="name">
+                                <cstring>font_button</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>3</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>28</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Select</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>font_label</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>3</hsizetype>
+                                    <vsizetype>3</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>150</width>
+                                    <height>30</height>
+                                </size>
+                            </property>
+                            <property name="font">
+                                <font>
+                                </font>
+                            </property>
+                            <property name="frameShape">
+                                <enum>Panel</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Sunken</enum>
+                            </property>
+                            <property name="text">
+                                <string>Font Test label</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignVCenter</set>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QGroupBox">
+                    <property name="name">
+                        <cstring>GroupBox1_2</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Color</string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QPushButton" row="0" column="1">
+                            <property name="name">
+                                <cstring>edit_button</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>28</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Edit</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Edit label color</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>color_sample_</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                            <property name="paletteBackgroundColor">
+                                <color>
+                                    <red>255</red>
+                                    <green>255</green>
+                                    <blue>0</blue>
+                                </color>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>mode_group</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Mode</string>
+                    </property>
+                    <property name="exclusive">
+                        <bool>true</bool>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>all_items</cstring>
+                            </property>
+                            <property name="text">
+                                <string>one label for all items</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                            <property name="buttonGroupId">
+                                <number>3</number>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>every_atom</cstring>
+                            </property>
+                            <property name="text">
+                                <string>one label for every atom</string>
+                            </property>
+                            <property name="buttonGroupId">
+                                <number>1</number>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>every_residue</cstring>
+                            </property>
+                            <property name="text">
+                                <string>one label for every residue</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>every_item</cstring>
+                            </property>
+                            <property name="text">
+                                <string>one label for every item</string>
+                            </property>
+                            <property name="buttonGroupId">
+                                <number>0</number>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>Layout1</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>apply_button_</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>30</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>32767</width>
+                                    <height>30</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Apply</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+A</string>
+                            </property>
+                            <property name="autoDefault">
+                                <bool>true</bool>
+                            </property>
+                            <property name="default">
+                                <bool>true</bool>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Close window and create label</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>buttonCancel</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>30</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>32767</width>
+                                    <height>30</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Close</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+C</string>
+                            </property>
+                            <property name="autoDefault">
+                                <bool>true</bool>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Close window without creating label</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </vbox>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>apply_button_</sender>
+        <signal>clicked()</signal>
+        <receiver>LabelDialogData</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>LabelDialogData</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>edit_button</sender>
+        <signal>clicked()</signal>
+        <receiver>LabelDialogData</receiver>
+        <slot>editColor()</slot>
+    </connection>
+    <connection>
+        <sender>add_tag_button</sender>
+        <signal>clicked()</signal>
+        <receiver>LabelDialogData</receiver>
+        <slot>addTag()</slot>
+    </connection>
+    <connection>
+        <sender>font_button</sender>
+        <signal>clicked()</signal>
+        <receiver>LabelDialogData</receiver>
+        <slot>fontSelected()</slot>
+    </connection>
+    <connection>
+        <sender>mode_group</sender>
+        <signal>clicked(int)</signal>
+        <receiver>LabelDialogData</receiver>
+        <slot>modeChanged()</slot>
+    </connection>
+    <connection>
+        <sender>label_edit_</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>LabelDialogData</receiver>
+        <slot>textChanged()</slot>
+    </connection>
+    <connection>
+        <sender>history_box</sender>
+        <signal>activated(int)</signal>
+        <receiver>LabelDialogData</receiver>
+        <slot>historySelected()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>label_edit_</tabstop>
+    <tabstop>edit_button</tabstop>
+    <tabstop>apply_button_</tabstop>
+    <tabstop>buttonCancel</tabstop>
+</tabstops>
+<includes>
+    <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
+</includes>
+<slots>
+    <slot>editColor()</slot>
+    <slot>fontSelected()</slot>
+    <slot>addTag()</slot>
+    <slot>modeChanged()</slot>
+    <slot>textChanged()</slot>
+    <slot>historySelected()</slot>
+</slots>
+<exportmacro>BALL_VIEW_EXPORT</exportmacro>
+<layoutdefaults spacing="6" margin="7"/>
+</UI>

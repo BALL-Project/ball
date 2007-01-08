@@ -1,0 +1,15 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: qsar.doc,v 1.4 2003/08/26 08:04:47 oliver Exp $
+//
+
+/** \defgroup QSAR QSAR -- Quantitative Structure Activity Relationship.
+		\ingroup Modeling
+		This chapter contains all relevant information on 
+		BALL classes related to QSAR methods.
+*/
+
+/**	\defgroup MolecularDescriptors Molecular Descriptors
+ *	\ingroup QSAR
+ */

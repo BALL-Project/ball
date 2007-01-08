@@ -1,0 +1,298 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>PythonSettingsData</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>PythonSettings</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>563</width>
+            <height>435</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Python</string>
+    </property>
+    <widget class="QWidgetStack">
+        <property name="name">
+            <cstring>widget_stack</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>560</width>
+                <height>440</height>
+            </rect>
+        </property>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>General</cstring>
+            </property>
+            <attribute name="id">
+                <number>0</number>
+            </attribute>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>clear_button</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>404</x>
+                        <y>66</y>
+                        <width>80</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>80</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>Clear</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>19</x>
+                        <y>14</y>
+                        <width>166</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>0</hsizetype>
+                        <vsizetype>0</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="text">
+                    <string>Startup script</string>
+                </property>
+            </widget>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>script_edit</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>16</x>
+                        <y>34</y>
+                        <width>470</width>
+                        <height>27</height>
+                    </rect>
+                </property>
+                <property name="paletteBackgroundColor">
+                    <color>
+                        <red>232</red>
+                        <green>232</green>
+                        <blue>232</blue>
+                    </color>
+                </property>
+                <property name="readOnly">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>choose_button</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>315</x>
+                        <y>66</y>
+                        <width>80</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>80</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>Browse</string>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>Hotkeys</cstring>
+            </property>
+            <attribute name="id">
+                <number>1</number>
+            </attribute>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>layout16</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>330</y>
+                        <width>530</width>
+                        <height>82</height>
+                    </rect>
+                </property>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="spacing">
+                        <number>5</number>
+                    </property>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel1_2</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>3</hsizetype>
+                                <vsizetype>5</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>0</width>
+                                <height>40</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>32767</width>
+                                <height>50</height>
+                            </size>
+                        </property>
+                        <property name="frameShape">
+                            <enum>PopupPanel</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Sunken</enum>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="text">
+                            <string>&lt;b&gt;Note:&lt;/b&gt; F1 is reserved for the internal help system!</string>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout3</cstring>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout81</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <property name="margin">
+                                        <number>0</number>
+                                    </property>
+                                    <widget class="QPushButton">
+                                        <property name="name">
+                                            <cstring>new_button</cstring>
+                                        </property>
+                                        <property name="minimumSize">
+                                            <size>
+                                                <width>150</width>
+                                                <height>30</height>
+                                            </size>
+                                        </property>
+                                        <property name="maximumSize">
+                                            <size>
+                                                <width>32767</width>
+                                                <height>30</height>
+                                            </size>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Add new</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+A</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Add a new hotkey</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QPushButton">
+                                        <property name="name">
+                                            <cstring>remove_button</cstring>
+                                        </property>
+                                        <property name="minimumSize">
+                                            <size>
+                                                <width>100</width>
+                                                <height>30</height>
+                                            </size>
+                                        </property>
+                                        <property name="maximumSize">
+                                            <size>
+                                                <width>32767</width>
+                                                <height>30</height>
+                                            </size>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Remove</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+R</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Remove a hotkey, select the row (with the field to the left)</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                        </vbox>
+                    </widget>
+                </vbox>
+            </widget>
+        </widget>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>choose_button</sender>
+        <signal>clicked()</signal>
+        <receiver>PythonSettings</receiver>
+        <slot>fileSelected()</slot>
+    </connection>
+    <connection>
+        <sender>clear_button</sender>
+        <signal>clicked()</signal>
+        <receiver>PythonSettings</receiver>
+        <slot>clearStartupScript()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
+</includes>
+<slots>
+    <slot>fileSelected()</slot>
+    <slot>clearStartupScript()</slot>
+</slots>
+<exportmacro>BALL_VIEW_EXPORT</exportmacro>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

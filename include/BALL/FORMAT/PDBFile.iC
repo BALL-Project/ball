@@ -1,0 +1,167 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: PDBFile.iC,v 1.10 2005/02/12 23:08:26 oliver Exp $
+//
+
+BALL_INLINE 
+PDBFile& PDBFile::operator >> (Protein& protein) throw(Exception::ParseError)
+{
+  read(protein);
+  
+  return *this;
+}
+
+BALL_INLINE 
+PDBFile& PDBFile::operator >> (Molecule& molecule) throw(Exception::ParseError)
+{
+  read(molecule);
+  
+  return *this;
+}
+
+BALL_INLINE 
+PDBFile& PDBFile::operator >> (System& system) throw(Exception::ParseError)
+{
+  read(system);
+  
+  return *this;
+}
+
+BALL_INLINE 
+bool PDBFile::write(const Molecule& molecule) throw(File::CannotWrite)
+{
+	if (!isOpen() || getOpenMode() != std::ios::out)
+	{
+		throw (File::CannotWrite(__FILE__, __LINE__, name_));
+	}
+  write_(molecule);
+
+	return true;
+}
+
+BALL_INLINE 
+bool PDBFile::write(const Protein& protein) throw(File::CannotWrite)
+{
+	if (!isOpen() || getOpenMode() != std::ios::out)
+	{
+		throw (File::CannotWrite(__FILE__, __LINE__, name_));
+	}
+  write_(protein);
+
+	return true;
+}
+
+BALL_INLINE 
+PDBFile& PDBFile::operator << (const Molecule& molecule) throw(File::CannotWrite)
+{
+  write(molecule);
+  
+  return *this;
+}
+
+BALL_INLINE 
+PDBFile& PDBFile::operator << (const Protein& protein) throw(File::CannotWrite)
+{
+  write(protein);
+  
+  return *this;
+}
+
+BALL_INLINE 
+PDBFile& PDBFile::operator << (const System& system) throw(File::CannotWrite)
+{
+  write(system);
+  
+  return *this;
+}
+
+BALL_INLINE 
+void PDBFile::clear(int state)
+{
+  std::fstream::clear((std::ios::iostate)state);
+}
+  
+BALL_INLINE 
+float PDBFile::getVersion() const
+{
+  return (float)2.1;
+}
+
+BALL_INLINE 
+void PDBFile::selectModel(Index index)
+{
+	options.setInteger(Option::CHOOSE_MODEL, index);
+	selected_model_ = index;
+}
+
+BALL_INLINE 
+void PDBFile::selectAllModels()
+{
+	options.setInteger(Option::CHOOSE_MODEL, 0);
+  selected_model_ = 0;
+}
+
+BALL_INLINE 
+Index PDBFile::getSelectedModel() const
+{
+  return selected_model_;
+}
+
+BALL_INLINE 
+Index PDBFile::getCurrentModel() const
+{
+  return current_model_;
+}
+
+BALL_INLINE 
+char* PDBFile::getRecordString()
+{
+  return line_buffer_;
+}
+  
+BALL_INLINE 
+const char* PDBFile::getRecordString() const
+{
+  return line_buffer_;
+}
+
+BALL_INLINE 
+Index PDBFile::getRecordNumber() const
+{
+  return current_record_;
+}
+
+BALL_INLINE 
+PDB::RecordType PDBFile::getRecordType() const
+{
+  return current_record_type_;
+}
+
+BALL_INLINE 
+const char* PDBFile::getAtomName(const PDB::Atom atom_name)
+{
+	static String s;
+	s.set(atom_name);
+	s.trim();
+
+  return s.c_str();
+}
+  
+BALL_INLINE 
+char PDBFile::getAtomRemotenessIndicator(const PDB::Atom atom_name)
+{
+  return atom_name[2];
+}
+  
+BALL_INLINE 
+short PDBFile::getAtomBranchDesignator(const PDB::Atom atom_name)
+{
+  return (short)atom_name[3];
+}
+
+BALL_INLINE 
+Size PDBFile::countRecordFields() const
+{
+  return record_fields_;
+}

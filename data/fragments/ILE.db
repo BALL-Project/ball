@@ -1,0 +1,100 @@
+<node>ILE
+	<node>Names
+		<node>Isoleucine</node>
+		<node>Isoleucin</node>
+		<node>Ile</node>
+		<node>I</node>
+	</node>
+	<node>Atoms
+		<node>N<value>N 0.1219419 1.159209 -0.1919851</value></node>
+		<node>3H<value>H 0.9740559 1.689959 -0.04711162</value></node>
+		<node>CA<value>C -0.7030041 1.935257 -1.138673</value></node>
+		<node>HA<value>H -0.2842833 1.745549 -2.127681</value></node>
+		<node>C<value>C -0.5392811 3.43721 -0.8683466</value></node>
+		<node>O<value>O 0.4636989 3.750649 -0.1867381</value></node>
+		<node>CB<value>C -2.165631 1.439687 -1.121375</value></node>
+		<node>HB<value>H -2.124804 0.349284 -1.14618</value></node>
+		<node>CG1<value>C -2.945574 1.890833 -2.370761</value></node>
+		<node>1HG1<value>H -3.189406 2.951118 -2.312008</value></node>
+		<node>2HG1<value>H -2.330654 1.72068 -3.255403</value></node>
+		<node>CG2<value>C -2.890608 1.852801 0.1693949</value></node>
+		<node>1HG2<value>H -3.851115 1.343782 0.2388784</value></node>
+		<node>2HG2<value>H -2.299751 1.573039 1.041283</value></node>
+		<node>3HG2<value>H -3.060911 2.929328 0.1868919</value></node>
+		<node>CD1<value>C -4.249351 1.108805 -2.558935</value></node>
+		<node>1HD1<value>H -4.709754 1.403511 -3.502415</value></node>
+		<node>2HD1<value>H -4.043807 0.03831363 -2.586494</value></node>
+		<node>3HD1<value>H -4.947758 1.324118 -1.751006</value></node>
+		<node>1H<value>H -0.3580201 1.071109 0.6916124</value></node>
+		<node>2H<value>H 0.3236403 0.2433889 -0.5670705</value></node>
+		<node>OXT<value>O -1.135264 4.21782 -1.641576</value></node>
+	</node>
+	<node>Bonds
+		<node>5<value>3H N s</value></node>
+		<node>6<value>CA N s</value></node>
+		<node>10<value>HA CA s</value></node>
+		<node>11<value>C CA s</value></node>
+		<node>14<value>O C d</value></node>
+		<node>15<value>CB CA s</value></node>
+		<node>19<value>HB CB s</value></node>
+		<node>20<value>CG1 CB s</value></node>
+		<node>24<value>1HG1 CG1 s</value></node>
+		<node>25<value>2HG1 CG1 s</value></node>
+		<node>26<value>CG2 CB s</value></node>
+		<node>30<value>1HG2 CG2 s</value></node>
+		<node>31<value>2HG2 CG2 s</value></node>
+		<node>32<value>3HG2 CG2 s</value></node>
+		<node>33<value>CD1 CG1 s</value></node>
+		<node>37<value>1HD1 CD1 s</value></node>
+		<node>38<value>2HD1 CD1 s</value></node>
+		<node>39<value>3HD1 CD1 s</value></node>
+		<node>40<value>1H N s</value></node>
+		<node>41<value>2H N s</value></node>
+		<node>42<value>OXT C s</value></node>
+	</node>
+	<node>Connections
+		<node>N-term<value>N C-term s 1.33 0.5</value></node>
+		<node>C-term<value>C N-term s 1.33 0.5</value></node>
+	</node>
+	<node>Properties
+		<node>AMINO_ACID</node>
+	</node>
+	<node>Variants
+		<node>Default
+			<node>Delete
+				<node>OXT</node>
+				<node>1H</node>
+				<node>2H</node>
+			</node>
+			<node>Rename
+				<node>3H<value>H</value></node>
+			</node>
+		</node>
+		<node>ILE-M
+			<node>Properties
+				<node>C_TERMINAL</node>
+				<node>N_TERMINAL</node>
+			</node>
+		</node>
+		<node>ILE-C
+			<node>Delete
+				<node>1H</node>
+				<node>2H</node>
+			</node>
+			<node>Rename
+				<node>3H<value>H</value></node>
+			</node>
+			<node>Properties
+				<node>C_TERMINAL</node>
+			</node>
+		</node>
+		<node>ILE-N
+			<node>Delete
+				<node>OXT</node>
+			</node>
+			<node>Properties
+				<node>N_TERMINAL</node>
+			</node>
+		</node>
+	</node>
+</node>

@@ -1,0 +1,22 @@
+
+OBJS = \
+..\..\..\source\Applications\BALLView\aboutDialog.obj\
+..\..\..\source\Applications\BALLView\aboutDialog_moc.obj\
+..\..\..\source\Applications\BALLView\demoTutorialDialog.obj\
+..\..\..\source\Applications\BALLView\demoTutorialDialogData.obj\
+..\..\..\source\Applications\BALLView\demoTutorialDialog_moc.obj\
+..\..\..\source\Applications\BALLView\demoTutorialDialogData_moc.obj\
+..\..\..\source\Applications\BALLView\mainframe.obj\
+..\..\..\source\Applications\BALLView\mainframe_moc.obj\
+..\..\..\source\Applications\BALLView\icons.obj\
+..\..\..\source\Applications\BALLView\main.obj
+
+UICS = \
+..\..\..\source\Applications\BALLView\demoTutorialDialog.myui\
+..\..\..\source\Applications\BALLView\aboutDialog.myui2\
+
+MOCS = \
+..\..\..\source\Applications\BALLView\aboutDialog.mymoc\
+..\..\..\source\Applications\BALLView\demoTutorialDialog.mymoc\
+..\..\..\source\Applications\BALLView\demoTutorialDialogData.mymoc\
+..\..\..\source\Applications\BALLView\mainframe.mymoc

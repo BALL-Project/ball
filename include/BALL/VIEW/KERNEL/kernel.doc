@@ -1,0 +1,59 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: kernel.doc,v 1.19 2005/12/23 17:02:14 amoll Exp $
+//
+
+/** \defgroup ViewKernel Kernel
+		\ingroup Visualisation
+		This section contains core classes that are responsible for
+		handling client requests, building a connection with message 
+		queuing between widgets and dialogs and other things.
+ */
+
+/** \defgroup ViewKernelClient Client/Server request handling
+		\ingroup ViewKernel
+		With the help of the class \link BALL::VIEW::Client Client \endlink it is possible
+		to transfer a \link BALL::Composite Composite \endlink to a <em>VIEW</em> application with
+		a \link BALL::VIEW::Server Server\endlink . The class \link BALL::VIEW::QTTimer QTTimer \endlink 
+		is a timer class that is necessary for the
+		\link BALL::VIEW::Server Server \endlink class. It queries every given interval whether new
+		data from the client is accessable and directs it to the <em>VIEW</em>
+		application.
+ */
+
+/**  \defgroup ViewKernelConnectivity Widget connectivity and message queuing
+		 \ingroup ViewKernel
+		 These classes are responsible that the ModularWidget instances
+		 can communicate with each other. 
+		 The class \link BALL::VIEW::Message Message \endlink and the various derived classes define
+		 some useful messages for special events.
+ */
+
+	/**  \defgroup ViewKernelConnectivityMessages Messages
+			 \ingroup ViewKernelConnectivity
+				Message classes will be sent through the ConnectionObject tree for
+				the purpose of communication between several ConnectionObject classes.
+	*/
+
+/**  \defgroup ViewKernelGeometricPrimitives Geometric primitives and their management
+		 \ingroup ViewKernel
+		 The class \link BALL::VIEW::GeometricObject GeometricObject \endlink is the most important base class
+		 for all primitives (\link BALL::VIEW::Sphere Sphere\endlink , \link BALL::VIEW::Tube Tube\endlink etc.). 
+		 It contains the base properties and base interface definition all primitives must have.
+		 The other classes manage the \link BALL::VIEW::GeometricObject GeometricObject \endlink 's.
+ */
+
+/** \defgroup ViewKernelStage Setup of the Stage, Camera and LightSources
+ 		\ingroup ViewKernel
+		These classes provide datastructures, which are required by the \link BALL::VIEW::Scene Scene\endlink . 
+*/
+
+/** \defgroup ViewKernelOther Other classes
+ 		\ingroup ViewKernel
+		Here we find the \link BALL::VIEW::CompositeManager CompositeManager\endlink , which handles the creation, storing and 
+		deletion of \link BALL::Composite Composite \endlink instances.
+		The class \link BALL::VIEW::MolecularInformation MolecularInformation \endlink provides means to get names for molecular objects. 
+		Also there a serveral enumerations and methods, e.g. for model types of \link BALL::VIEW::Representation Representation \endlink 's.
+*/
+

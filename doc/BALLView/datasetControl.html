@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>BALLView Documentation: DatasetControl</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body>
+<center>
+
+<table width="700" border="0" cellpadding="0">
+  <tr>
+    <td align="center">
+<h2 align="center">
+<a href="logView.html"><img src="images/left.png" width="58" height="28" align="absmiddle"></a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="index.html">Index</a> &nbsp;&nbsp;&nbsp;&nbsp;
+<a href="pythonInterpreter.html"><img src="images/right.png" width="58" height="28" align="absmiddle"></a>
+</h2>
+<hr width=700>
+
+<h2>DatasetControl</h2>
+<img src="images/datasetControl.png" width=291 height=194 border=0><br>
+<div align="justify">
+    <br>
+    The DatasetControl enables the user to manage 1D, 2D and 3D grids and also trajectories.
+  All these items can be loaded and saved as files. 
+  To save an item,  it must be highlighted and then the user can open the context menu with the right mouse button. 
+  To open a trajectory, the system to which it is bound, has to be highlighted.
+  Then the menu entry "File->Open->Trajectory" can be used. </div>
+<p></p>
+
+<a name="visualise_datasets"><H3>Visualise datasets</H3></a>
+<h3>Create isocontur surfaces<a name="isocontour_surface"></a></h3>
+<div align="justify">
+For creation of an isocontour surface, a 3D grid must be loaded into the DatasetControl.
+The dialog for creating the isocontour surface is opened by clicking on the menu entry "Tools->Contour Surface". <br>  <br>  
+	</div>
+	<center>
+	<img src="images/contour_surface_dialog.png" border=0><br>  <br>
+  
+<div align="justify">
+On the upper half, the user can select the grid. In the lower half the treshold for the isocontour surface can be set.
+The color can be freely selected by clicking on the button "Edit" and using the color selection dialog.
+A possible result can be seen below.<br>  <br>  <img src="images/contour_surface.png" width="552" height="451" border=0>
+  
+	</div>
+<p></p>
+<a name="visualise_trajectories"><H3>Visualise Trajectories</H3></a>
+<p align="justify">To visualise a trajectory, it has to be loaded into the DatasetControl. When it is highlighted, the context menu entry &quot;Visualise/Export&quot; opens the following dialog:<br>
+  <br>
+	<center>
+<img src="images/visualise_trajectories.png" border=0>
+</p>
+<p align="justify">The arrow buttons on the top are for navigation between the snapshots. The user can also drag the slider. 
+The checkboxes in the lower right corner enable the user to export images, either directly in the PNG format, 
+or write <a href="http://www.povray.org/">POV-Ray</a> files for <a href="tips.html#povray">usage with the external renderer.</a> 
+The resulting images can be used to create <a href="tips.html#movies">movies</a>. </p>
+<b>Caveat:</b> The visualisation of a trajectory, which is not loaded into memory can become quiet slow, to enhance performance it is adviseable to use the context menu entry "Load into RAM".
+
+<h2 align="center">
+<hr width=700>
+<a href="logView.html"><img src="images/left.png" width="58" height="28" align="absmiddle"></a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="index.html">Index</a> &nbsp;&nbsp;&nbsp;&nbsp;
+<a href="pythonInterpreter.html"><img src="images/right.png" width="58" height="28" align="absmiddle"></a>
+</h2>
+ </td></tr></table>
+
+</body>
+</html>
+

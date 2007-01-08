@@ -1,0 +1,49 @@
+BALL examples
+
+
+This directory contains some short examples illustarting some of BALL's
+capabilities.
+Just type "make" to build the examples. When called without arguments,
+each example prints out the required syntax. Please have a look at the
+source code od each example.
+
+ramachandran:
+=============
+ 
+  This example reads a PDB file and calculates all backbone torsion angles.
+  From the output of the program, a Ramachandran plot can be created that
+  shows the torsion angle distribution.
+
+
+MOLVIEWClient:
+==============
+
+  This example illustrates the simple visualization using the MolVIEW 
+  stand-alone viewer. It reads a PDB file and sends its contents to the
+  MolVIEW application running somewhere on the network. On this viewer,
+  the molecule is then inserted and drawn in the current representation
+  (please make sure, the VIEW server is activated - check the settings in
+  Display/Preferences/Network).
+
+
+PDB2Discover:
+=============
+
+PDBChecker:
+===========
+
+energy:
+=======
+
+addHydrogens:
+=============
+
+amberEnergy:
+============
+
+bindingEnergy:
+==============
+
+proteinMapper:
+==============
+

@@ -1,0 +1,102 @@
+<node>C
+	<node>Names
+		<node>Cytosine</node>
+		<node>Cytosin</node>
+		<node>C</node>	 
+	</node>
+	<node>Atoms
+		<node>P<value>P 15.644 29.327 35.222</value></node>
+		<node>O1P<value>O 15.393 28.440 36.382</value></node>
+		<node>O2P<value>O 14.638 30.335 34.831</value></node>
+		<node>O5*<value>O 15.947 28.383 33.968</value></node>
+		<node>C5*<value>C 16.069 28.915 32.657</value></node>
+		<node>1H5*<value>H 16.821 29.704 32.690</value></node>
+		<node>2H5*<value>H 15.119 29.333 32.322</value></node>
+		<node>C4*<value>C 16.513 27.844 31.682</value></node>
+		<node>H4*<value>H 16.609 28.228 30.666</value></node>
+		<node>O4*<value>O 17.830 27.370 32.014</value></node>
+		<node>C3*<value>C 15.542 26.637 31.746</value></node>
+		<node>H3*<value>H 14.654 26.736 32.370</value></node>
+		<node>O3*<value>O 15.186 26.233 30.429</value></node>
+		<node>C2*<value>C 16.448 25.569 32.322</value></node>
+		<node>1H2*<value>H 16.102 25.297 33.319</value></node>
+		<node>2H2*<value>H 16.428 24.689 31.678</value></node>
+		<node>C1*<value>C 17.781 25.967 31.722</value></node>
+		<node>H1*<value>H 17.935 25.853 30.649</value></node>
+		<node>N1<value>N 18.940 25.252 32.322</value></node>
+		<node>C6<value>C 18.970 24.882 33.637</value></node>
+		<node>H6<value>H 18.141 25.127 34.285</value></node>
+		<node>C5<value>C 20.022 24.211 34.147</value></node>
+		<node>H5<value>H 20.029 23.926 35.199</value></node>
+		<node>C4<value>C 21.100 23.907 33.243</value></node>
+		<node>N4<value>N 22.167 23.241 33.694</value></node>
+		<node>1H4<value>H 22.908 23.042 33.037</value></node>
+		<node>2H4<value>H 22.216 22.954 34.661</value></node>
+		<node>N3<value>N 21.059 24.280 31.953</value></node>
+		<node>C2<value>C 19.992 24.955 31.461</value></node>
+		<node>O2<value>O 19.963 25.291 30.279</value></node>
+	</node>
+	<node>Bonds
+		<node>1<value>P O1P s</value></node>
+		<node>2<value>P O2P d</value></node>
+		<node>3<value>P O5* s</value></node>		
+		<node>4<value>O5* C5* s</value></node>
+		<node>5<value>C5* C4* s</value></node>
+		<node>6<value>C4* O4* s</value></node>	
+		<node>7<value>C4* C3* s</value></node>
+		<node>8<value>C3* O3* s</value></node>
+		<node>9<value>C3* C2* s</value></node>
+		<node>10<value>C2* C1* s</value></node>
+		<node>11<value>C1* O4* s</value></node>
+		<node>12<value>C1* N1 s</value></node>
+		<node>13<value>N1 C6 s</value></node>
+		<node>14<value>C6 C5 d</value></node>
+		<node>15<value>C5 C4 s</value></node>
+		<node>16<value>C4 N4 s</value></node>
+		<node>17<value>C4 N3 d</value></node>
+		<node>18<value>N3 C2 s</value></node>
+		<node>19<value>C2 O2 d</value></node>
+		<node>20<value>C2 N1 s</value></node>
+		<node>21<value>C5* 1H5* s</value></node>
+		<node>22<value>C5* 2H5* s</value></node>
+		<node>23<value>C4* H4* s</value></node>
+		<node>24<value>C1* H1* s</value></node>
+		<node>25<value>C3* H3* s</value></node>
+		<node>26<value>C2* 1H2* s</value></node>
+    <node>27<value>C2* 2H2* s</value></node>
+		<node>28<value>C6 H6 s</value></node>
+		<node>29<value>C5 H5 s</value></node>
+		<node>30<value>N4 1H4 s</value></node>
+		<node>31<value>N4 2H4 s</value></node>
+ 	</node>
+	<node>Connections
+		<node>5-term<value>P 3-term s 1.62 0.5</value></node>
+		<node>3-term<value>O3* 5-term s 1.62 0.5</value></node>
+	</node>
+	<node>Properties
+    		<node>NUCLEOTIDE</node>
+  	</node>
+  	<node>Variants
+    		<node>C-M
+      			<node>Properties
+        			<node>5_PRIME</node>
+        			<node>3_PRIME</node>
+      			</node>
+    		</node>
+    		<node>Default
+      			<node>Properties
+      			</node>
+    		</node>
+    		<node>C-3
+      			<node>Properties
+        			<node>3_PRIME</node>
+      			</node>
+    		</node>
+    		<node>C-5
+      			<node>Properties
+        			<node>5_PRIME</node>
+      			</node>
+    		</node>
+  	</node>
+</node>
+	

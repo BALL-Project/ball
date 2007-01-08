@@ -1,0 +1,32 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: primitives.doc,v 1.4 2004/05/27 19:49:50 oliver Exp $
+//
+
+/**	\defgroup ViewPrimitives Geometric Objects
+		\ingroup Visualisation
+			The \link BALL::VIEW::Representation Representation \endlink 
+			of molecular structures consists of primitive geometric objects, e.g.:
+			- \link BALL::VIEW::Box Boxes \endlink
+			- \link BALL::VIEW::Disc Discs \endlink
+			- \link BALL::VIEW::Label Labels \endlink
+			- \link BALL::VIEW::Line Lines \endlink
+			- \link BALL::VIEW::Mesh Meshs of triangles \endlink
+			- \link BALL::VIEW::Point Points \endlink
+			- \link BALL::VIEW::SimpleBox Simple Boxes \endlink, parallel to the the coordinate axes
+			- \link BALL::VIEW::Sphere Spheres \endlink
+			- \link BALL::VIEW::Tube Tubes \endlink
+			- \link BALL::VIEW::TwoColoredLine Two colored lines\endlink
+			- \link BALL::VIEW::TwoColoredTube Two colored tubes\endlink
+			- ...
+
+			Every such object is implemented in a class derived from
+			\link BALL::VIEW::GeometricObject GeometricObject \endlink. 
+			It contains all the information for the \link BALL::VIEW::Renderer Renderer \endlink classes,
+			to show it on the screen or export it to specialised formats (e.g. POVRay).
+			<br>
+			If you want to visualise a new geometric object, create a new 
+			\link BALL::VIEW::GeometricObject GeometricObject \endlink class
+			and adapt the \link BALL::VIEW::Renderer Renderer \endlink (see documentation there).
+*/

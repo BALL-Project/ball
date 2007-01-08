@@ -1,0 +1,18 @@
+<node>ZN
+	<node>Names
+ 		<node>Zinc ion</node>
+ 		<node>Zn2+</node>
+	</node>
+	<node>Atoms
+		<node>ZN<value>Zn 0.0 0.0 0.0</value></node>
+	</node>
+	<node>Bonds
+	</node>
+	<node>Connections
+	</node>
+	<node>Properties
+	</node>
+	<node>Variants
+		<node>Default</node>
+	</node>
+</node>

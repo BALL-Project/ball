@@ -1,0 +1,36 @@
+// $Id: models.doc,v 1.4 2005/12/23 17:02:18 amoll Exp $
+
+/**	\defgroup ViewModels Model Processors
+		\ingroup Visualisation
+			<h2>Molecular Models</h2>
+			There are several model types to visualise molecular structures in VIEW: <br>
+			- \link BALL::VIEW::Line Line \endlink
+			- \link BALL::VIEW::AddBallAndStickModel Stick / BallandStick \endlink
+			- \link BALL::VIEW::AddSurfaceModel Surfaces \endlink
+			- \link BALL::VIEW::AddBackboneModel Backbone \endlink
+			- \link BALL::VIEW::AddCartoonModel Cartoon \endlink
+			- \link BALL::VIEW::AddVanDerWaalsModel VanDerWaals \endlink
+			- ...
+			<p>
+			Every model is implemeted in a class derived from ModelProcessor, which operates 
+			on Kernel objects (\link BALL::Atom Atoms \endlink, \link BALL::Bond Bonds \endlink, ...). <br>
+
+			If you want to add a new model, you have to do four things:
+			- Create a new derived \link BALL::VIEW::ModelProcessor ModelProcessor \endlink class
+			- Add a new entry in the enum VIEW::ModelType (see VIEW/KERNEL/common.h)
+			- Insert the name for the new model in getModelName() (see VIEW/KERNEL/common.h)
+			- Modify BALL::VIEW::DisplayProperties::createRepresentation_()
+			<br>
+			In general \link BALL::VIEW::ModelProcessor ModelProcessor\endlink 's are members in 
+			\link BALL::VIEW::Representation Representations \endlink.
+
+			The new model will be automaticaly added to the \link BALL::VIEW::DisplayProperties DisplayProperties \endlink dialog. 
+			<br>
+
+			<h2>Coloring Methods</h2>
+			There are also several methods to colorize the molecular models and every method
+			is implemented in a class derived from \link BALL::VIEW::ColorProcessor ColorProcessor \endlink. 
+			Every instance of \link BALL::VIEW::Representation Representation \endlink 
+			can have a pointer to an object of \link BALL::VIEW::ColorProcessor ColorProcessor \endlink , 
+			which it calls to get the color for the \link BALL::VIEW::GeometricObject GeometricObjects \endlink .
+*/

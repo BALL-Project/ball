@@ -1,0 +1,183 @@
+HEADER    OXYGEN STORAGE                          05-APR-73   1MBN      1MBNH  1
+COMPND    MYOGLOBIN  (FERRIC IRON - METMYOGLOBIN)                       1MBN   4
+SOURCE    SPERM WHALE (PHYSETER CATODON)                                1MBNM  1
+AUTHOR    H.C.WATSON,J.C.KENDREW                                        1MBNG  1
+REVDAT  20   27-OCT-83 1MBNS   1       REMARK                           1MBNS  1
+REVDAT  19   30-SEP-83 1MBNR   1       REVDAT                           1MBNR  1
+REVDAT  18   12-MAY-83 1MBNQ   3       REMARK SEQRES ATOM               1MBNR  2
+REVDAT  17   07-MAR-83 1MBNP   3       ATOM                             1MBNR  3
+REVDAT  16   15-JAN-82 1MBNO   1       REMARK                           1MBNR  4
+REVDAT  15   15-JUL-81 1MBNN   1       REMARK SITE                      1MBNR  5
+REVDAT  14   31-DEC-80 1MBNM   1       SOURCE REMARK                    1MBNR  6
+REVDAT  13   07-APR-80 1MBNL   3       ATOM                             1MBNR  7
+REVDAT  12   06-FEB-79 1MBNK   1       TURN                             1MBNR  8
+REVDAT  11   15-JAN-79 1MBNJ   3       HETATM                           1MBNR  9
+REVDAT  10   20-JUL-78 1MBNI   2       CONECT                           1MBNR 10
+REVDAT   9   24-JAN-78 1MBNH   1       HEADER                           1MBNR 11
+REVDAT   8   01-NOV-77 1MBNG   1       AUTHOR JRNL   REMARK FORMUL      1MBNR 12
+REVDAT   7   09-SEP-77 1MBNF   1       REMARK                           1MBNR 13
+REVDAT   6   23-AUG-77 1MBNE   3       HETATM CONECT                    1MBNR 14
+REVDAT   5   13-JUN-77 1MBND   1       FTNOTE HET                       1MBNR 15
+REVDAT   4   28-MAR-77 1MBNC   1       REMARK                           1MBNR 16
+REVDAT   3   20-SEP-76 1MBNB   2       CONECT                           1MBNR 17
+REVDAT   2   28-JUN-76 1MBNA   1       HEADER                           1MBNR 18
+REVDAT   1   19-MAY-76 1MBN    0                                        1MBNR 19
+JRNL        AUTH   H.C.WATSON                                           1MBNG  2
+JRNL        TITL   THE STEREOCHEMISTRY OF THE PROTEIN MYOGLOBIN         1MBNG  3
+JRNL        REF    PROG.STEREOCHEM.              V.   4   299 1969      1MBNG  4
+JRNL        REFN   ASTM PRSTAP  US ISSN 0079-6808                  419  1MBNG  5
+REMARK   1                                                              1MBNG  6
+REMARK   1 REFERENCE 1                                                  1MBNQ  1
+REMARK   1  AUTH   J.C.KENDREW                                          1MBNQ  2
+REMARK   1  TITL   MYOGLOBIN AND THE STRUCTURE OF PROTEINS (NOBEL       1MBNQ  3
+REMARK   1  TITL 2 LECTURE, DECEMBER 11, 1962)                          1MBNQ  4
+REMARK   1  REF    PRIX NOBEL                             103 1963      1MBNQ  5
+REMARK   1  REFN   ASTM PRIXAL  SW ISSN 0546-8175                  945  1MBNS  2
+REMARK   1 REFERENCE 2                                                  1MBNQ  7
+REMARK   1  EDIT   R.J.FELDMANN                                         1MBNG  8
+REMARK   1  REF    ATLAS OF MACROMOLECULAR                125 1976      1MBNG  9
+REMARK   1  REF  2 STRUCTURE ON MICROFICHE                              1MBNG 10
+REMARK   1  PUBL   TRACOR JITCO INC.,ROCKVILLE,MD.                      1MBNG 11
+REMARK   1  REFN                   ISBN 0-917934-01-6              434  1MBNG 12
+REMARK   1 REFERENCE 3                                                  1MBNQ  8
+REMARK   1  EDIT   M.O.DAYHOFF                                          1MBNG 14
+REMARK   1  REF    ATLAS OF PROTEIN SEQUENCE     V.   5    84 1972      1MBNG 15
+REMARK   1  REF  2 AND STRUCTURE (DATA SECTION)                         1MBNG 16
+REMARK   1  PUBL   NATIONAL BIOMEDICAL RESEARCH FOUNDATION,             1MBNG 17
+REMARK   1  PUBL 2 SILVER SPRING,MD.                                    1MBNG 18
+REMARK   1  REFN                   ISBN 0-912466-02-2              435  1MBNG 19
+REMARK   2                                                              1MBNF  1
+REMARK   2 RESOLUTION. 2.0 ANGSTROMS.                                   1MBNM  2
+REMARK   3                                                              1MBNF  4
+REMARK   3 REFINEMENT. COORDINATES WERE REFINED BY THE DIAMOND          1MBNM  3
+REMARK   3  REAL-SPACE REFINEMENT PROCEDURE.                            1MBNM  4
+REMARK   4                                                              1MBNF  7
+REMARK   4 A TOTAL OF 10 REVERSE TURNS (WITH A HYDROGEN BOND TO THE     1MBNF  8
+REMARK   4 CARBONYL OXYGEN OF RESIDUE I FROM THE AMINO NITROGEN ATOM    1MBNF  9
+REMARK   4 OF RESIDUE I+3) EXIST AND ARE DISTRIBUTED OVER THE SEVEN     1MBNF 10
+REMARK   4 INTER-HELICAL REGIONS. THE SEVEN TURNS LISTED BELOW EACH     1MBNF 11
+REMARK   4 INVOLVE ONE RESIDUE CONSIDERED TO BE PART OF A HELIX AND SO  1MBNF 12
+REMARK   4 DO NOT QUALIFY FOR LISTING UNDER THE TURN HEADING. THESE     1MBNF 13
+REMARK   4 TURNS ARE-                                                   1MBNF 14
+REMARK   4 LYS(16)-ALA(19) , VAL(15)-ASP(20) , LEU(40)-PHE(43)          1MBNF 15
+REMARK   4 ILE(75)-LYS(78) , LEU(76)-LYS(79) , HIS(116)-HIS(119)        1MBNF 16
+REMARK   4 LYS(147)-GLY(150).                                           1MBNF 17
+REMARK   5                                                              1MBNF 18
+REMARK   5 N, PHI AND H GIVEN FOR HELICES ARE NUMBER OF RESIDUES/TURN,  1MBNF 19
+REMARK   5 ANGULAR ROTATION/RESIDUE(RADIANS) AND TRANSLATION/RESIDUE    1MBNF 20
+REMARK   5 IN ANGSTROMS.                                                1MBNF 21
+REMARK   6                                                              1MBNF 22
+REMARK   6 SITE HMB COMPRISES THOSE RESIDUES WHICH INTERACT DIRECTLY    1MBNF 23
+REMARK   6 WITH THE HEME GROUP.                                         1MBNF 24
+REMARK   7                                                              1MBNF 25
+REMARK   7 CORRECTION. THE CONECT 1219 RECORD WAS WRONG.  THE 736       1MBNF 26
+REMARK   7  SHOULD HAVE BEEN, AND IS NOW, 740.  20-SEP-76.              1MBNO  1
+REMARK   8                                                              1MBNF 28
+REMARK   8 CORRECTION. FIX MASTER RECORD TO SHOW CORRECT NUMBER OF      1MBNF 29
+REMARK   8  FTNOTE RECORDS. 28-MAR-77.                                  1MBNF 30
+REMARK   9                                                              1MBNF 31
+REMARK   9 CORRECTION. FIX HET RECORD. MOVE FTNOTE RECORDS TO OCCUR     1MBNF 32
+REMARK   9  AFTER SEQRES RECORDS. 13-JUN-77.                            1MBNF 33
+REMARK  10                                                              1MBNF 34
+REMARK  10 CORRECTION. REORDER THE ATOMS OF THE HEME GROUP AND CHANGE   1MBNF 35
+REMARK  10  THE CONECT RECORDS CORRESPONDINGLY. 23-AUG-77.              1MBNF 36
+REMARK  11                                                              1MBNF 37
+REMARK  11 CORRECTION. RENUMBER REMARKS 1-10 AS 2-11 TO ALLOW FOR       1MBNF 38
+REMARK  11  FUTURE INSERTION OF REFERENCES AS REMARK 1. 09-SEP-77.      1MBNF 39
+REMARK  12                                                              1MBNG 20
+REMARK  12 CORRECTION. REFORMAT HEADER INFORMATION TO MEET NEW          1MBNG 21
+REMARK  12  SPECIFICATIONS.                                             1MBNG 22
+REMARK  12  ADD FORMUL RECORDS.                                         1MBNG 23
+REMARK  12  01-NOV-77.                                                  1MBNG 24
+REMARK  13                                                              1MBNH  2
+REMARK  13 CORRECTION. MOVE ENTRY NAME ON HEADER RECORD. 24-JAN-78.     1MBNH  3
+REMARK  14                                                              1MBNI  1
+REMARK  14 CORRECTION. FIX TWO CONECT RECORDS. 20-JUL-78.               1MBNI  2
+REMARK  15                                                              1MBNJ  1
+REMARK  15 CORRECTION. CORRECT ATOMIC NOMENCLATURE FOR 12 ATOMS IN      1MBNJ  2
+REMARK  15  HEME GROUP. 15-JAN-79.                                      1MBNJ  3
+REMARK  16                                                              1MBNK  1
+REMARK  16 CORRECTION. CORRECT FORMAT OF TURN RECORD.  06-FEB-79.       1MBNO  2
+REMARK  17                                                              1MBNL  1
+REMARK  17 CORRECTION. STANDARDIZE NOMENCLATURE TO FOLLOW IUPAC-IUB     1MBNL  2
+REMARK  17  RECOMMENDATIONS.  INTERCHANGE CD1 AND CD2 FOR LEUCINES      1MBNL  3
+REMARK  17  9, 11, 29, 32, 40, 49, 61, 69, 72, 76, 86, 89, 104, 115,    1MBNL  4
+REMARK  17  135, 137, 149.  INTERCHANGE CG1 AND CG2 FOR VALINES 1, 10,  1MBNL  5
+REMARK  17  13, 17, 21, 66, 68, 114.  07-APR-80.                        1MBNL  6
+REMARK  18                                                              1MBNM  5
+REMARK  18 CORRECTION. STANDARDIZE FORMAT OF SOURCE, REMARKS 2 AND 3.   1MBNM  6
+REMARK  18  31-DEC-80.                                                  1MBNM  7
+REMARK  19                                                              1MBNN  1
+REMARK  19 CORRECTION. CORRECT RESIDUE IDENTIFICATION ON SITE RECORDS.  1MBNN  2
+REMARK  19  ADD RESIDUE TO SITE RECORDS.  15-JUL-81.                    1MBNN  3
+REMARK  20                                                              1MBNO  3
+REMARK  20 CORRECTION. CORRECT DATES IN REMARKS 7 AND 16. 15-JAN-82.    1MBNO  4
+REMARK  21                                                              1MBNP  1
+REMARK  21 CORRECTION. CORRECT ATOM NAME FOR ATOM 6 FROM CG2 TO CG1.    1MBNP  2
+REMARK  21  07-MAR-83.                                                  1MBNP  3
+REMARK  22                                                              1MBNQ  9
+REMARK  22 CORRECTION. CHANGE RESIDUE 122 FROM ASN TO ASP.  ADD         1MBNQ 10
+REMARK  22  REFERENCE.  12-MAY-83.                                      1MBNQ 11
+REMARK  23                                                              1MBNR 20
+REMARK  23 CORRECTION. INSERT REVDAT RECORDS. 30-SEP-83.                1MBNR 21
+REMARK  24                                                              1MBNS  3
+REMARK  24 CORRECTION. CORRECT CODEN FOR REFERENCE 1.  27-OCT-83.       1MBNS  4
+SEQRES   1    153  VAL LEU SER GLU GLY GLU TRP GLN LEU VAL LEU HIS VAL  1MBN  39
+SEQRES   2    153  TRP ALA LYS VAL GLU ALA ASP VAL ALA GLY HIS GLY GLN  1MBN  40
+SEQRES   3    153  ASP ILE LEU ILE ARG LEU PHE LYS SER HIS PRO GLU THR  1MBN  41
+SEQRES   4    153  LEU GLU LYS PHE ASP ARG PHE LYS HIS LEU LYS THR GLU  1MBN  42
+SEQRES   5    153  ALA GLU MET LYS ALA SER GLU ASP LEU LYS LYS HIS GLY  1MBN  43
+SEQRES   6    153  VAL THR VAL LEU THR ALA LEU GLY ALA ILE LEU LYS LYS  1MBN  44
+SEQRES   7    153  LYS GLY HIS HIS GLU ALA GLU LEU LYS PRO LEU ALA GLN  1MBN  45
+SEQRES   8    153  SER HIS ALA THR LYS HIS LYS ILE PRO ILE LYS TYR LEU  1MBN  46
+SEQRES   9    153  GLU PHE ILE SER GLU ALA ILE ILE HIS VAL LEU HIS SER  1MBN  47
+SEQRES  10    153  ARG HIS PRO GLY ASP PHE GLY ALA ASP ALA GLN GLY ALA  1MBNQ 12
+SEQRES  11    153  MET ASN LYS ALA LEU GLU LEU PHE ARG LYS ASP ILE ALA  1MBN  49
+SEQRES  12    153  ALA LYS TYR LYS GLU LEU GLY TYR GLN GLY              1MBN  50
+FTNOTE   1                                                              1MBND  4
+FTNOTE   1 COORDINATES MEASURED BUT HAVE SLIGHTLY HIGHER UNCERTAINTIES  1MBND  5
+FTNOTE   1 THAN THOSE OF OTHER ATOMS.                                   1MBND  6
+FTNOTE   2                                                              1MBND  7
+FTNOTE   2 ATOMIC COORDINATES OBTAINED BY ASSUMING STANDARD RESIDUE     1MBND  8
+FTNOTE   2 CONFIGURATION.                                               1MBND  9
+HET    HEM      1      44     PROTOPORPHYRIN IX WITH FE(OH), FERRIC     1MBND 10
+FORMUL   2  HEM    C34 H32 N4 O4 FE1 +++ .                              1MBNG 25
+FORMUL   2  HEM    H1 O1                                                1MBNG 26
+HELIX    1   A SER      3  GLU     18  1 N=3.63,PHI=1.73,H=1.50         1MBN  52
+HELIX    2   B ASP     20  SER     35  1 N=3.72,PHI=1.69,H=1.47         1MBN  53
+HELIX    3   C HIS     36  LYS     42  1 SHORT IRREGULAR HELIX          1MBN  54
+HELIX    4   D THR     51  ALA     57  1 N=3.63,PHI=1.73,H=1.45         1MBN  55
+HELIX    5   E SER     58  LYS     77  1 BENT ABOUT 7 DEG. AT THR (67)  1MBN  56
+HELIX    6   F LEU     86  ALA     94  1 N=3.70,PHI=1.70,H=1.46         1MBN  57
+HELIX    7   G PRO    100  ARG    118  1 N=3.59,PHI=1.75,H=1.53         1MBN  58
+HELIX    8   H ALA    125  GLU    148  1 N=3.63,PHI=1.73,H=1.49         1MBN  59
+TURN     1 CD1 PHE    43  PHE    46     BETW C/D HELICES IMM PREC CD2   1MBN  60
+TURN     2 CD2 PHE    46  LEU    49     BETW C/D HELICES IMM FOLL CD1   1MBN  61
+TURN     3  EF LYS    78  HIS    81     BETW E/F HELICES                1MBNK  3
+SITE     1 HMB  9 PHE    43  ARG    45  HIS    64  VAL    68            1MBNN  4
+SITE     2 HMB  9 ALA    71  HIS    93  HIS    97  LEU   104            1MBNN  5
+SITE     3 HMB  9 ILE   107                                             1MBNN  6
+CRYST1   64.500   30.900   34.700  90.00 106.00  90.00 P 21          2  1MBN  65
+ORIGX1       1.00000   0.00000   0.00000        0.00000                 1MBN  66
+ORIGX2       0.00000   1.00000   0.00000        0.00000                 1MBN  67
+ORIGX3       0.00000   0.00000   1.00000        0.00000                 1MBN  68
+SCALE1        .01550   0.00000    .00445        0.00000                 1MBN  69
+SCALE2       0.00000    .03236   0.00000        0.00000                 1MBN  70
+SCALE3       0.00000   0.00000    .02998        0.00000                 1MBN  71
+ATOM      1  N   VAL     1      -2.900  17.600  15.500  1.00  0.00   2  1MBN  72
+ATOM      2  CA  VAL     1      -3.600  16.400  15.300  1.00  0.00   2  1MBN  73
+ATOM      3  C   VAL     1      -3.000  15.300  16.200  1.00  0.00   2  1MBN  74
+ATOM      4  O   VAL     1      -3.700  14.700  17.000  1.00  0.00   2  1MBN  75
+ATOM      5  CB  VAL     1      -3.500  16.000  13.800  1.00  0.00   2  1MBN  76
+ATOM      6  CG1 VAL     1      -2.100  15.700  13.300  1.00  0.00   2  1MBNP  4
+ATOM      7  CG2 VAL     1      -4.600  14.900  13.400  1.00  0.00   2  1MBNL  8
+ATOM      8  N   LEU     2      -1.700  15.100  16.000  1.00  0.00   1  1MBN  79
+ATOM      9  CA  LEU     2       -.900  14.100  16.700  1.00  0.00      1MBN  80
+ATOM     10  C   LEU     2      -1.000  13.900  18.300  1.00  0.00      1MBN  81
+ATOM     11  O   LEU     2       -.900  14.900  19.000  1.00  0.00      1MBN  82
+ATOM     12  CB  LEU     2        .600  14.200  16.500  1.00  0.00      1MBN  83
+ATOM     13  CG  LEU     2       1.100  14.300  15.100  1.00  0.00   1  1MBN  84
+ATOM     14  CD1 LEU     2        .400  15.500  14.400  1.00  0.00   1  1MBNL  9
+ATOM     15  CD2 LEU     2       2.600  14.400  15.000  1.00  0.00   1  1MBNL 10
+MASTER       96    6    1    8    0    3    3    6 1260    1   46   12  1MBNS  5
+END                                                                     1MBN1380

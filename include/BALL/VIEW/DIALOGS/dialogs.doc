@@ -1,0 +1,26 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: dialogs.doc,v 1.10 2005/12/23 17:02:10 amoll Exp $
+//
+
+
+/** \defgroup ViewDialogs QT Dialogs
+		\ingroup Visualisation
+		This section contains all dialogs, which are created with QT.
+		All dialogs should be constructed with the QT designer and the 
+		implementation has to be sourced out to a derived class.
+		(This sound worse, than it is. Just have a look at a simple dialog 
+		(e.g. \link BALL::VIEW::SetCamera SetCamera\endlink ) and you will see its not that bad.)
+		This outsourcing has two goals:
+		- Seperate the design of the dialogs from the implementation. This accelerates
+			the redesign of existing dialogs.
+		- Make the dialogs independent from a specific version of the QT libary
+			(Otherwise there are serious problems, because QT is inconsistent between
+			 different versions of the libary.)
+		<p>
+		Some dialogs are derived from \link BALL::VIEW::ModularWidget ModularWidget \endlink to participate in the sending and receiving
+		of \link BALL::VIEW::Message Message \endlink 's. The other dialogs have to be informed manualy, it something happend, that
+		they need to know, e.g. to disable certain controls.
+ */
+

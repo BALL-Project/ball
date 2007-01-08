@@ -1,0 +1,1166 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>PeptideDialogData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>PeptideBuilder</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>447</width>
+            <height>286</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>0</width>
+            <height>0</height>
+        </size>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>4000</width>
+            <height>2400</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>PeptideBuilder</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget" row="0" column="0">
+            <property name="name">
+                <cstring>layout127</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Sequence</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>sequence</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="paletteBackgroundColor">
+                        <color>
+                            <red>255</red>
+                            <green>255</green>
+                            <blue>255</blue>
+                        </color>
+                    </property>
+                    <property name="palette">
+                        <palette>
+                            <active>
+                                <color>
+                                    <red>0</red>
+                                    <green>0</green>
+                                    <blue>0</blue>
+                                </color>
+                                <color>
+                                    <red>220</red>
+                                    <green>220</green>
+                                    <blue>220</blue>
+                                </color>
+                                <color>
+                                    <red>255</red>
+                                    <green>255</green>
+                                    <blue>255</blue>
+                                </color>
+                                <color>
+                                    <red>237</red>
+                                    <green>237</green>
+                                    <blue>237</blue>
+                                </color>
+                                <color>
+                                    <red>110</red>
+                                    <green>110</green>
+                                    <blue>110</blue>
+                                </color>
+                                <color>
+                                    <red>146</red>
+                                    <green>146</green>
+                                    <blue>146</blue>
+                                </color>
+                                <color>
+                                    <red>0</red>
+                                    <green>0</green>
+                                    <blue>0</blue>
+                                </color>
+                                <color>
+                                    <red>255</red>
+                                    <green>255</green>
+                                    <blue>255</blue>
+                                </color>
+                                <color>
+                                    <red>0</red>
+                                    <green>0</green>
+                                    <blue>0</blue>
+                                </color>
+                                <color>
+                                    <red>255</red>
+                                    <green>255</green>
+                                    <blue>255</blue>
+                                </color>
+                                <color>
+                                    <red>203</red>
+                                    <green>203</green>
+                                    <blue>203</blue>
+                                </color>
+                                <color>
+                                    <red>0</red>
+                                    <green>0</green>
+                                    <blue>0</blue>
+                                </color>
+                                <color>
+                                    <red>0</red>
+                                    <green>0</green>
+                                    <blue>128</blue>
+                                </color>
+                                <color>
+                                    <red>255</red>
+                                    <green>255</green>
+                                    <blue>255</blue>
+                                </color>
+                                <color>
+                                    <red>0</red>
+                                    <green>0</green>
+                                    <blue>0</blue>
+                                </color>
+                                <color>
+                                    <red>0</red>
+                                    <green>0</green>
+                                    <blue>0</blue>
+                                </color>
+                            </active>
+                            <disabled>
+                                <color>
+                                    <red>128</red>
+                                    <green>128</green>
+                                    <blue>128</blue>
+                                </color>
+                                <color>
+                                    <red>220</red>
+                                    <green>220</green>
+                                    <blue>220</blue>
+                                </color>
+                                <color>
+                                    <red>255</red>
+                                    <green>255</green>
+                                    <blue>255</blue>
+                                </color>
+                                <color>
+                                    <red>253</red>
+                                    <green>253</green>
+                                    <blue>253</blue>
+                                </color>
+                                <color>
+                                    <red>110</red>
+                                    <green>110</green>
+                                    <blue>110</blue>
+                                </color>
+                                <color>
+                                    <red>146</red>
+                                    <green>146</green>
+                                    <blue>146</blue>
+                                </color>
+                                <color>
+                                    <red>128</red>
+                                    <green>128</green>
+                                    <blue>128</blue>
+                                </color>
+                                <color>
+                                    <red>255</red>
+                                    <green>255</green>
+                                    <blue>255</blue>
+                                </color>
+                                <color>
+                                    <red>128</red>
+                                    <green>128</green>
+                                    <blue>128</blue>
+                                </color>
+                                <color>
+                                    <red>255</red>
+                                    <green>255</green>
+                                    <blue>255</blue>
+                                </color>
+                                <color>
+                                    <red>203</red>
+                                    <green>203</green>
+                                    <blue>203</blue>
+                                </color>
+                                <color>
+                                    <red>0</red>
+                                    <green>0</green>
+                                    <blue>0</blue>
+                                </color>
+                                <color>
+                                    <red>0</red>
+                                    <green>0</green>
+                                    <blue>128</blue>
+                                </color>
+                                <color>
+                                    <red>255</red>
+                                    <green>255</green>
+                                    <blue>255</blue>
+                                </color>
+                                <color>
+                                    <red>0</red>
+                                    <green>0</green>
+                                    <blue>255</blue>
+                                </color>
+                                <color>
+                                    <red>255</red>
+                                    <green>0</green>
+                                    <blue>255</blue>
+                                </color>
+                            </disabled>
+                            <inactive>
+                                <color>
+                                    <red>0</red>
+                                    <green>0</green>
+                                    <blue>0</blue>
+                                </color>
+                                <color>
+                                    <red>220</red>
+                                    <green>220</green>
+                                    <blue>220</blue>
+                                </color>
+                                <color>
+                                    <red>255</red>
+                                    <green>255</green>
+                                    <blue>255</blue>
+                                </color>
+                                <color>
+                                    <red>253</red>
+                                    <green>253</green>
+                                    <blue>253</blue>
+                                </color>
+                                <color>
+                                    <red>110</red>
+                                    <green>110</green>
+                                    <blue>110</blue>
+                                </color>
+                                <color>
+                                    <red>146</red>
+                                    <green>146</green>
+                                    <blue>146</blue>
+                                </color>
+                                <color>
+                                    <red>0</red>
+                                    <green>0</green>
+                                    <blue>0</blue>
+                                </color>
+                                <color>
+                                    <red>255</red>
+                                    <green>255</green>
+                                    <blue>255</blue>
+                                </color>
+                                <color>
+                                    <red>0</red>
+                                    <green>0</green>
+                                    <blue>0</blue>
+                                </color>
+                                <color>
+                                    <red>255</red>
+                                    <green>255</green>
+                                    <blue>255</blue>
+                                </color>
+                                <color>
+                                    <red>203</red>
+                                    <green>203</green>
+                                    <blue>203</blue>
+                                </color>
+                                <color>
+                                    <red>0</red>
+                                    <green>0</green>
+                                    <blue>0</blue>
+                                </color>
+                                <color>
+                                    <red>0</red>
+                                    <green>0</green>
+                                    <blue>128</blue>
+                                </color>
+                                <color>
+                                    <red>255</red>
+                                    <green>255</green>
+                                    <blue>255</blue>
+                                </color>
+                                <color>
+                                    <red>0</red>
+                                    <green>0</green>
+                                    <blue>255</blue>
+                                </color>
+                                <color>
+                                    <red>255</red>
+                                    <green>0</green>
+                                    <blue>255</blue>
+                                </color>
+                            </inactive>
+                        </palette>
+                    </property>
+                    <property name="readOnly">
+                        <bool>false</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Enter amino acids</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget" row="1" column="0">
+            <property name="name">
+                <cstring>layout138</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout129</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QPushButton" row="3" column="0">
+                            <property name="name">
+                                <cstring>met</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Met</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="2" column="2">
+                            <property name="name">
+                                <cstring>leu</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Leu</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="3" column="2">
+                            <property name="name">
+                                <cstring>pro</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Pro</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="3" column="1">
+                            <property name="name">
+                                <cstring>phe</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Phe</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="2" column="1">
+                            <property name="name">
+                                <cstring>ile</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Ile</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="3" column="3">
+                            <property name="name">
+                                <cstring>ser</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Ser</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="2" column="0">
+                            <property name="name">
+                                <cstring>his</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>His</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="4" column="3">
+                            <property name="name">
+                                <cstring>val</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Val</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="0" column="2">
+                            <property name="name">
+                                <cstring>asn</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Asn</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="1" column="3">
+                            <property name="name">
+                                <cstring>gly</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Gly</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="1" column="0">
+                            <property name="name">
+                                <cstring>cys</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Cys</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="0" column="3">
+                            <property name="name">
+                                <cstring>asp</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Asp</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="0" column="1">
+                            <property name="name">
+                                <cstring>arg</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Arg</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="4" column="0">
+                            <property name="name">
+                                <cstring>thr</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Thr</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="1" column="2">
+                            <property name="name">
+                                <cstring>glu</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Glu</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="0" column="0">
+                            <property name="name">
+                                <cstring>ala</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Ala</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="4" column="1">
+                            <property name="name">
+                                <cstring>trp</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Trp</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="2" column="3">
+                            <property name="name">
+                                <cstring>lys</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Lys</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="4" column="2">
+                            <property name="name">
+                                <cstring>tyr</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Tyr</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="1" column="1">
+                            <property name="name">
+                                <cstring>gln</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>25</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Gln</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>angles_group</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Backbone</string>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>alpha</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Alpha helix</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>beta</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Beta sheet</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>other</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Other</string>
+                            </property>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout135</cstring>
+                            </property>
+                            <grid>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel" row="2" column="2">
+                                    <property name="name">
+                                        <cstring>textLabel1_4_3</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>°</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="2" column="0">
+                                    <property name="name">
+                                        <cstring>textLabel1_3</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Omega:</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLineEdit" row="2" column="1">
+                                    <property name="name">
+                                        <cstring>omega</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>5</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>50</width>
+                                            <height>32767</height>
+                                        </size>
+                                    </property>
+                                    <property name="text">
+                                        <string>180</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>AlignRight</set>
+                                    </property>
+                                </widget>
+                                <widget class="QLineEdit" row="1" column="1">
+                                    <property name="name">
+                                        <cstring>psi</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>false</bool>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>5</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>50</width>
+                                            <height>32767</height>
+                                        </size>
+                                    </property>
+                                    <property name="text">
+                                        <string>-58</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>AlignRight</set>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="1" column="2">
+                                    <property name="name">
+                                        <cstring>textLabel1_4_2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>°</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="1" column="0">
+                                    <property name="name">
+                                        <cstring>textLabel1_2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Psi:</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="0" column="0">
+                                    <property name="name">
+                                        <cstring>textLabel1</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Phi:</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="0" column="2">
+                                    <property name="name">
+                                        <cstring>textLabel1_4</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>°</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLineEdit" row="0" column="1">
+                                    <property name="name">
+                                        <cstring>phi</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>false</bool>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>5</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>50</width>
+                                            <height>32767</height>
+                                        </size>
+                                    </property>
+                                    <property name="text">
+                                        <string>-47</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>AlignRight</set>
+                                    </property>
+                                </widget>
+                            </grid>
+                        </widget>
+                    </vbox>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget" row="2" column="0">
+            <property name="name">
+                <cstring>layout137</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer28</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>10</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>close_button</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>140</width>
+                            <height>30</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>32767</width>
+                            <height>30</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Build</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+B</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Build peptide</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer29</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>10</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>cancel_button</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>140</width>
+                            <height>30</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>32767</width>
+                            <height>30</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>C&amp;ancel</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer27</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>21</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                </spacer>
+            </hbox>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>ala</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>ala_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>arg</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>arg_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>asn</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>asn_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>cys</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>cys_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>gln</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>gln_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>glu</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>glu_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>gly</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>gly_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>his</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>his_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>ile</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>ile_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>leu</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>leu_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>lys</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>lys_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>met</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>met_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>phe</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>phe_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>pro</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>pro_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>ser</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>ser_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>thr</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>thr_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>trp</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>trp_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>tyr</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>tyr_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>val</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>val_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>close_button</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>close_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>alpha</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>angle_changed()</slot>
+    </connection>
+    <connection>
+        <sender>phi</sender>
+        <signal>returnPressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>angle_changed()</slot>
+    </connection>
+    <connection>
+        <sender>psi</sender>
+        <signal>returnPressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>angle_changed()</slot>
+    </connection>
+    <connection>
+        <sender>omega</sender>
+        <signal>returnPressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>angle_changed()</slot>
+    </connection>
+    <connection>
+        <sender>asp</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>asp_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>beta</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>angle_changed()</slot>
+    </connection>
+    <connection>
+        <sender>other</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>angle_changed()</slot>
+    </connection>
+    <connection>
+        <sender>sequence</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>insert_seq()</slot>
+    </connection>
+    <connection>
+        <sender>cancel_button</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>close()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>sequence</tabstop>
+    <tabstop>close_button</tabstop>
+    <tabstop>ala</tabstop>
+    <tabstop>arg</tabstop>
+    <tabstop>asn</tabstop>
+    <tabstop>asp</tabstop>
+    <tabstop>cys</tabstop>
+    <tabstop>gln</tabstop>
+    <tabstop>glu</tabstop>
+    <tabstop>gly</tabstop>
+    <tabstop>his</tabstop>
+    <tabstop>ile</tabstop>
+    <tabstop>leu</tabstop>
+    <tabstop>lys</tabstop>
+    <tabstop>met</tabstop>
+    <tabstop>phe</tabstop>
+    <tabstop>pro</tabstop>
+    <tabstop>ser</tabstop>
+    <tabstop>thr</tabstop>
+    <tabstop>trp</tabstop>
+    <tabstop>tyr</tabstop>
+    <tabstop>val</tabstop>
+    <tabstop>alpha</tabstop>
+    <tabstop>phi</tabstop>
+    <tabstop>psi</tabstop>
+    <tabstop>omega</tabstop>
+</tabstops>
+<includes>
+    <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
+</includes>
+<slots>
+    <slot>insert_seq()</slot>
+    <slot>arg_pressed()</slot>
+    <slot>asn_pressed()</slot>
+    <slot>asp_pressed()</slot>
+    <slot>cys_pressed()</slot>
+    <slot>gln_pressed()</slot>
+    <slot>glu_pressed()</slot>
+    <slot>gly_pressed()</slot>
+    <slot>his_pressed()</slot>
+    <slot>ile_pressed()</slot>
+    <slot>leu_pressed()</slot>
+    <slot>lys_pressed()</slot>
+    <slot>met_pressed()</slot>
+    <slot>phe_pressed()</slot>
+    <slot>pro_pressed()</slot>
+    <slot>ser_pressed()</slot>
+    <slot>thr_pressed()</slot>
+    <slot>trp_pressed()</slot>
+    <slot>tyr_pressed()</slot>
+    <slot>val_pressed()</slot>
+    <slot>back_pressed()</slot>
+    <slot>close_pressed()</slot>
+    <slot>angle_changed()</slot>
+    <slot>ala_pressed()</slot>
+</slots>
+<exportmacro>BALL_VIEW_EXPORT</exportmacro>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

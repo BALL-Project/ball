@@ -1,0 +1,23 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: nmr.doc,v 1.10 2003/08/26 08:04:45 oliver Exp $
+//
+
+/** \defgroup NMR	Nuclear Magnetic Resonance Spectroscopy
+		\ingroup Modeling
+		This chapter contains all relevant information on 
+		BALL classes related to the prediction of NMR shifts.
+*/
+
+	/**	\defgroup ShiftModel	Shift model classes
+	* 	\ingroup NMR
+	*/
+
+	/**	\defgroup Spectra NMR spectra and related classes
+	* 	\ingroup NMR
+	*/
+
+	/** \defgroup ShiftModulesNMR Shift modules
+	* 	\ingroup NMR
+	*/

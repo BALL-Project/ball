@@ -1,0 +1,7 @@
+# 
+# $Id: common.mak.in,v 1.15 2006/01/23 20:45:04 oliver Exp $
+#
+
+include @BALL_PATH@/source@BINFMT_PATH@/config.mak
+include @BALL_PATH@/source@BINFMT_PATH@/rules.mak
+include @BALL_PATH@/source@BINFMT_PATH@/targets.mak

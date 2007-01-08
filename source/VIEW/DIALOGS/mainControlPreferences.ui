@@ -1,0 +1,197 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>MainControlPreferencesData</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>MainControlPreferencesData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>651</width>
+            <height>406</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>0</width>
+            <height>0</height>
+        </size>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>32000</width>
+            <height>32000</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>MainControlPreferences</string>
+    </property>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>6</x>
+                <y>11</y>
+                <width>250</width>
+                <height>17</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>250</width>
+                <height>17</height>
+            </size>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>250</width>
+                <height>17</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>GUI Style</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QComboBox">
+        <property name="name">
+            <cstring>style_box_</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>6</x>
+                <y>33</y>
+                <width>250</width>
+                <height>23</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>250</width>
+                <height>23</height>
+            </size>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>250</width>
+                <height>23</height>
+            </size>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Select a GUI style to alter the appearance of BALLView</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>logging_to_file</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>6</x>
+                <y>89</y>
+                <width>250</width>
+                <height>23</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>250</width>
+                <height>23</height>
+            </size>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>250</width>
+                <height>23</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>enable logging to file</string>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Writes the information from the Logs window into a file</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>show_labels</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>5</x>
+                <y>60</y>
+                <width>300</width>
+                <height>23</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>300</width>
+                <height>23</height>
+            </size>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>300</width>
+                <height>23</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>show labels in docked widgets</string>
+        </property>
+        <property name="checked">
+            <bool>true</bool>
+        </property>
+    </widget>
+</widget>
+<includes>
+    <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
+</includes>
+<exportmacro>BALL_VIEW_EXPORT</exportmacro>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

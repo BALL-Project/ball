@@ -1,0 +1,7 @@
+// $Id 
+
+/** \defgroup Molmec Molecular Mechanics
+		\ingroup Modeling
+		This chapter contains all relevant information on 
+		classes related to molecular mechanics.
+*/

@@ -1,0 +1,23 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: widgets.doc,v 1.5 2005/12/23 17:02:24 amoll Exp $
+//
+
+/**	\defgroup ViewWidgets Modular Widgets
+		\ingroup Visualisation
+		To provide a high grade of encapsulation of functionality we have
+		developed a design pattern of independent widgets, called \link BALL::VIEW::ModularWidget ModularWidget\endlink .
+		Some of the derived classes have to following abilities: <br>
+		- \link BALL::VIEW::Scene Rendering of visualisations \endlink
+		- \link BALL::VIEW::MolecularControl Hierarchically control of molecular structures \endlink
+		- \link BALL::VIEW::GeometricControl Control of the representations \endlink
+		- \link BALL::VIEW::DatasetControl Control of trajectories and grids\endlink
+		- \link BALL::VIEW::LogView Logviews \endlink
+		- \link BALL::VIEW::PyWidget Interface to the Python interpreter \endlink
+		- \link BALL::VIEW::RegularData1DWidget Plotting of onedimensional data \endlink
+		- \link BALL::VIEW::RegularData2DWidget Plotting of  twodimensional data \endlink
+
+		<br>
+		Other widgets are easy to implement (See documentation of \link BALL::VIEW::ModularWidget ModularWidget\endlink ).
+*/

@@ -1,0 +1,703 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>MinimizationDialogData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>MinimizationDialogData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>507</width>
+            <height>326</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>0</width>
+            <height>0</height>
+        </size>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>900</width>
+            <height>9090</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>Energy Minimization</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget" row="0" column="0">
+            <property name="name">
+                <cstring>layout83</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <widget class="QGroupBox">
+                    <property name="name">
+                        <cstring>GroupBox_3</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>435</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="backgroundMode">
+                        <enum>PaletteBackground</enum>
+                    </property>
+                    <property name="focusPolicy">
+                        <enum>NoFocus</enum>
+                    </property>
+                    <property name="frameShape">
+                        <enum>GroupBoxPanel</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="lineWidth">
+                        <number>1</number>
+                    </property>
+                    <property name="title">
+                        <string>Options</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignHCenter</set>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel" row="1" column="2">
+                            <property name="name">
+                                <cstring>Label_11</cstring>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBackground</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>NoFocus</enum>
+                            </property>
+                            <property name="lineWidth">
+                                <number>1</number>
+                            </property>
+                            <property name="text">
+                                <string>iterations</string>
+                            </property>
+                            <property name="textFormat">
+                                <enum>AutoText</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignLeft</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="3" column="2">
+                            <property name="name">
+                                <cstring>Label_13</cstring>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBackground</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>NoFocus</enum>
+                            </property>
+                            <property name="lineWidth">
+                                <number>1</number>
+                            </property>
+                            <property name="text">
+                                <string>kJ/mol</string>
+                            </property>
+                            <property name="textFormat">
+                                <enum>AutoText</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignLeft</set>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="3" column="1">
+                            <property name="name">
+                                <cstring>energy_difference_lineedit</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>130</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>130</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBase</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>StrongFocus</enum>
+                            </property>
+                            <property name="text">
+                                <string>0.0001</string>
+                            </property>
+                            <property name="maxLength">
+                                <number>32767</number>
+                            </property>
+                            <property name="frame">
+                                <bool>true</bool>
+                            </property>
+                            <property name="echoMode">
+                                <enum>Normal</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignRight</set>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="0" column="1">
+                            <property name="name">
+                                <cstring>max_iterations_lineedit</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>130</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBase</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>StrongFocus</enum>
+                            </property>
+                            <property name="text">
+                                <string>500</string>
+                            </property>
+                            <property name="maxLength">
+                                <number>7</number>
+                            </property>
+                            <property name="frame">
+                                <bool>true</bool>
+                            </property>
+                            <property name="echoMode">
+                                <enum>Normal</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignRight</set>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="2" column="1">
+                            <property name="name">
+                                <cstring>max_grad_lineedit</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>130</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>130</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBase</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>StrongFocus</enum>
+                            </property>
+                            <property name="text">
+                                <string>0.5</string>
+                            </property>
+                            <property name="maxLength">
+                                <number>12</number>
+                            </property>
+                            <property name="frame">
+                                <bool>true</bool>
+                            </property>
+                            <property name="echoMode">
+                                <enum>Normal</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignRight</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="2" column="0">
+                            <property name="name">
+                                <cstring>Label_6</cstring>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBackground</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>NoFocus</enum>
+                            </property>
+                            <property name="lineWidth">
+                                <number>1</number>
+                            </property>
+                            <property name="text">
+                                <string>Maximum gradient for convergence</string>
+                            </property>
+                            <property name="textFormat">
+                                <enum>AutoText</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignLeft</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="3" column="0">
+                            <property name="name">
+                                <cstring>Label_12</cstring>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBackground</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>NoFocus</enum>
+                            </property>
+                            <property name="lineWidth">
+                                <number>1</number>
+                            </property>
+                            <property name="text">
+                                <string>Maximum energy difference</string>
+                            </property>
+                            <property name="textFormat">
+                                <enum>AutoText</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignLeft</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="0">
+                            <property name="name">
+                                <cstring>Label_5</cstring>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBackground</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>NoFocus</enum>
+                            </property>
+                            <property name="lineWidth">
+                                <number>1</number>
+                            </property>
+                            <property name="text">
+                                <string>Redraw screen after</string>
+                            </property>
+                            <property name="textFormat">
+                                <enum>AutoText</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignLeft</set>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="1" column="1">
+                            <property name="name">
+                                <cstring>refresh_iterations_lineedit</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>130</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>130</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBase</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>StrongFocus</enum>
+                            </property>
+                            <property name="text">
+                                <string>10</string>
+                            </property>
+                            <property name="maxLength">
+                                <number>7</number>
+                            </property>
+                            <property name="frame">
+                                <bool>true</bool>
+                            </property>
+                            <property name="echoMode">
+                                <enum>Normal</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignRight</set>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Number of iterations made for energy minimization</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>Label_4</cstring>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBackground</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>NoFocus</enum>
+                            </property>
+                            <property name="lineWidth">
+                                <number>1</number>
+                            </property>
+                            <property name="text">
+                                <string>Maximum number of iterations</string>
+                            </property>
+                            <property name="textFormat">
+                                <enum>AutoText</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignLeft</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="2" column="2">
+                            <property name="name">
+                                <cstring>Label_7</cstring>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBackground</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>NoFocus</enum>
+                            </property>
+                            <property name="lineWidth">
+                                <number>1</number>
+                            </property>
+                            <property name="text">
+                                <string>kJ/(mol Å)</string>
+                            </property>
+                            <property name="textFormat">
+                                <enum>AutoText</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignLeft</set>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout81</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QButtonGroup">
+                            <property name="name">
+                                <cstring>minimization_group</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>160</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="title">
+                                <string>Algorithm</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignHCenter</set>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Select minimization algorithm</string>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>conjugate_button</cstring>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>130</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                    <property name="text">
+                                        <string>conjugate gradient</string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>steepest_button</cstring>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>130</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                    <property name="text">
+                                        <string>steepest descent</string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>false</bool>
+                                    </property>
+                                </widget>
+                            </vbox>
+                        </widget>
+                        <widget class="QGroupBox">
+                            <property name="name">
+                                <cstring>groupBox2</cstring>
+                            </property>
+                            <property name="title">
+                                <string>Force Field</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignHCenter</set>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Select kind of force field</string>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>useAmberRadioButton</cstring>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>0</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                    <property name="text">
+                                        <string>AMBER</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string></string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>useCharmmRadioButton</cstring>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>0</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                    <property name="text">
+                                        <string>CHARMM</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string></string>
+                                    </property>
+                                </widget>
+                                <widget class="QPushButton">
+                                    <property name="name">
+                                        <cstring>advanced_button</cstring>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>170</width>
+                                            <height>30</height>
+                                        </size>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Force field options</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string>Alt+F</string>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Edit force field options</string>
+                                    </property>
+                                </widget>
+                            </vbox>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout82</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>start_button</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>30</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>32767</width>
+                                    <height>30</height>
+                                </size>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteButton</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>TabFocus</enum>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Minimize</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+M</string>
+                            </property>
+                            <property name="autoDefault">
+                                <bool>true</bool>
+                            </property>
+                            <property name="default">
+                                <bool>true</bool>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Start minimization</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>cancel_button</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>30</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>32767</width>
+                                    <height>30</height>
+                                </size>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteButton</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>TabFocus</enum>
+                            </property>
+                            <property name="text">
+                                <string>Cancel</string>
+                            </property>
+                            <property name="accel">
+                                <string></string>
+                            </property>
+                            <property name="autoDefault">
+                                <bool>true</bool>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Close window without energy minimization</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </vbox>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>start_button</sender>
+        <signal>clicked()</signal>
+        <receiver>MinimizationDialogData</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>cancel_button</sender>
+        <signal>clicked()</signal>
+        <receiver>MinimizationDialogData</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>advanced_button</sender>
+        <signal>clicked()</signal>
+        <receiver>MinimizationDialogData</receiver>
+        <slot>advancedOptions()</slot>
+    </connection>
+    <connection>
+        <sender>useAmberRadioButton</sender>
+        <signal>clicked()</signal>
+        <receiver>MinimizationDialogData</receiver>
+        <slot>useAmberFF()</slot>
+    </connection>
+    <connection>
+        <sender>useCharmmRadioButton</sender>
+        <signal>clicked()</signal>
+        <receiver>MinimizationDialogData</receiver>
+        <slot>useCharmmFF()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>max_iterations_lineedit</tabstop>
+    <tabstop>refresh_iterations_lineedit</tabstop>
+    <tabstop>max_grad_lineedit</tabstop>
+    <tabstop>energy_difference_lineedit</tabstop>
+    <tabstop>steepest_button</tabstop>
+    <tabstop>start_button</tabstop>
+    <tabstop>cancel_button</tabstop>
+    <tabstop>advanced_button</tabstop>
+</tabstops>
+<includes>
+    <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
+</includes>
+<slots>
+    <slot>advancedOptions()</slot>
+    <slot>useAmberFF()</slot>
+    <slot>useCharmmFF()</slot>
+</slots>
+<exportmacro>BALL_VIEW_EXPORT</exportmacro>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

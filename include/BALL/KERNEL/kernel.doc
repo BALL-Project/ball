@@ -1,0 +1,23 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: kernel.doc,v 1.21 2003/08/26 08:04:18 oliver Exp $
+//
+
+	/** \defgroup KernelContainers Molecular Datastructures
+	 		\ingroup Kernel
+	*/
+
+	/** \defgroup KernelIterators Iterator Classes
+			\ingroup Kernel
+			Iterators for KERNEL classes
+	*/
+
+	/**	\defgroup KernelMiscellaneous Miscellaneous
+			\ingroup Kernel
+			Further classes and functions related to the kernel classes
+	*/
+
+	/** \defgroup Predicates Kernel Predicates
+	* 	\ingroup Kernel
+	*/

@@ -1,0 +1,107 @@
+<node>G
+	<node>Names
+		<node>Guanine</node>
+		<node>Guanin</node>
+		<node>G</node>	 
+	</node>
+	<node>Atoms
+		<node>P<value>P 32.612 26.662 40.051</value></node>
+		<node>O1P<value>O 33.579 26.377 41.135</value></node>
+		<node>O2P<value>O 32.257 25.612 39.055</value></node>
+		<node>O5*<value>O 31.233 27.248 40.656</value></node>
+		<node>C5*<value>C 31.159 28.416 41.468</value></node>
+		<node>1H5*<value>H 32.062 29.003 41.301</value></node>
+		<node>2H5*<value>H 31.095 28.140 42.520</value></node>
+		<node>C4*<value>C 29.940 29.254 41.095</value></node>
+		<node>H4*<value>H 29.785 30.090 41.777</value></node>
+		<node>O4*<value>O 30.102 29.870 39.801</value></node>
+		<node>C3*<value>C 28.712 28.348 41.021</value></node>
+		<node>O3*<value>O 27.645 28.918 41.772</value></node>
+		<node>H3*<value>H 28.886 27.326 41.358</value></node>
+		<node>C2*<value>C 28.364 28.341 39.559</value></node>
+		<node>1H2*<value>H 28.348 27.314 39.193</value></node>
+		<node>2H2*<value>H 27.382 28.792 39.416</value></node>
+		<node>C1*<value>C 28.928 29.637 39.018</value></node>
+		<node>H1*<value>H 28.284 30.517 39.013</value></node>
+		<node>N9<value>N 29.311 29.477 37.601</value></node>
+		<node>C8<value>C 30.238 28.616 37.067</value></node>
+		<node>H8<value>H 30.771 27.925 37.703</value></node>
+		<node>N7<value>N 30.381 28.736 35.780</value></node>
+		<node>C5<value>C 29.485 29.746 35.436</value></node>
+		<node>C6<value>C 29.204 30.305 34.166</value></node>
+		<node>O6<value>O 29.745 30.037 33.101</value></node>
+		<node>N1<value>N 28.225 31.296 34.247</value></node>
+		<node>1H<value>H 27.948 31.750 33.400</value></node>
+		<node>C2<value>C 27.605 31.699 35.418</value></node>
+		<node>N2<value>N 26.693 32.662 35.319</value></node>
+		<node>1H2<value>H 26.407 33.145 34.479</value></node>
+		<node>2H2<value>H 26.252 32.956 36.179</value></node>
+		<node>N3<value>N 27.881 31.170 36.610</value></node>
+		<node>C4<value>C 28.823 30.204 36.543</value></node>
+	</node>  
+	<node>Bonds
+		<node>1<value>P O1P s</value></node>
+		<node>2<value>P O2P d</value></node>
+		<node>3<value>P O5* s</value></node>		
+		<node>4<value>O5* C5* s</value></node>
+		<node>5<value>C5* C4* s</value></node>
+		<node>6<value>C4* O4* s</value></node>	
+		<node>7<value>C4* C3* s</value></node>
+		<node>8<value>C3* O3* s</value></node>
+		<node>9<value>C3* C2* s</value></node>
+		<node>10<value>C2* C1* s</value></node>
+		<node>11<value>C1* O4* s</value></node>
+		<node>12<value>C1* N9 s</value></node>
+		<node>13<value>N9 C8 s</value></node>
+		<node>14<value>C8 N7 d</value></node>
+		<node>15<value>N7 C5 s</value></node>
+		<node>16<value>C5 C4 d</value></node>
+		<node>17<value>C4 N9 s</value></node>
+		<node>18<value>C5 C6 s</value></node>
+		<node>19<value>C6 O6 d</value></node>
+		<node>20<value>C6 N1 s</value></node>
+		<node>21<value>N1 C2 s</value></node>
+		<node>22<value>C2 N2 s</value></node>
+		<node>23<value>C2 N3 d</value></node>
+		<node>24<value>N3 C4 s</value></node>
+		<node>25<value>C5* 1H5* s</value></node>
+		<node>26<value>C5* 2H5* s</value></node>
+		<node>27<value>C4* H4* s</value></node>
+		<node>28<value>C1* H1* s</value></node>
+		<node>29<value>C3* H3* s</value></node>
+		<node>30<value>C2* 1H2* s</value></node>
+	        <node>31<value>C2* 2H2* s</value></node>
+		<node>32<value>C8 H8 s</value></node>
+		<node>33<value>N1 1H s</value></node>
+		<node>34<value>N2 1H2 s</value></node>
+		<node>35<value>N2 2H2 s</value></node>
+ 	</node>
+	<node>Connections
+    		<node>5-term<value>P 3-term s 1.62 0.5</value></node>
+    		<node>3-term<value>O3* 5-term s 1.62 0.5</value></node>
+	</node>
+  	<node>Properties
+    		<node>NUCLEOTIDE</node>
+  		</node>
+  	<node>Variants
+    		<node>G-M
+      			<node>Properties
+        			<node>5_PRIME</node>
+        			<node>3_PRIME</node>
+      			</node>
+    		</node>
+    		<node>Default
+      			<node>Properties
+      			</node>
+    		</node>
+    		<node>G-5
+      		<node>Properties
+        		<node>5_PRIME</node>
+      		</node>
+    		<node>G-3
+      			<node>Properties
+        			<node>3_PRIME</node>
+      			</node>
+    		</node>
+  	</node>
+</node>

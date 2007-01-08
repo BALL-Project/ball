@@ -1,0 +1,37 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: format.doc,v 1.14 2005/12/23 17:01:46 amoll Exp $
+//
+
+/** \defgroup Format File Formats
+		\ingroup Modeling
+		BALL supports a number of different file formats and offers 
+		a set of classes do read and write those formats.
+		Some of these classes provide interfaces for the format
+		classes, e.g. \link BALL::GenericMolFile GenericMolFile \endlink, which implements a
+		generic interface for molecular file formats. Others
+		implement specific formats. In addition, classes like
+		\link BALL::LineBasedFile LineBasedFile \endlink provide simple interface to allow
+		the user the rapid implementation of user-defined file	
+		formats or for parsing specialized formats.
+		All file format classes are derived from \link BALL::File File \endlink
+		and provide the features implemented there, e.g.
+		on-the-fly transformation and URL retrieval.
+*/
+
+	/**	\defgroup	StructureFormats Molecular structure file formats
+			\ingroup Format
+	 */
+
+	/** \defgroup MDFormats Molecular Dynamics Trajectory File Formats
+	*   \ingroup Format
+	*/
+
+	/**	\defgroup General General Purpose File Formats
+	* 	\ingroup Format
+	*/
+
+	/**	\defgroup NMRFileFormats NMR File Formats
+	* 	\ingroup Format
+	*/

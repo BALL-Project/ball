@@ -1,0 +1,54 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: timer.iC,v 1.7 2005/12/23 17:02:07 amoll Exp $
+
+BALL_INLINE 
+bool Timer::isValid() const
+{
+  return true;
+}
+
+BALL_INLINE 
+bool Timer::isRunning() const
+{
+  return is_running_;
+}
+
+BALL_INLINE 
+double Timer::getCPUTime() const
+{ 
+  return (getUserTime() + getSystemTime());
+}
+
+BALL_INLINE 
+bool Timer::operator != (const Timer& timer) const
+{
+  return !(*this == timer);
+}
+
+BALL_INLINE 
+bool Timer::operator < (const Timer& timer) const
+{
+  return (getCPUTime() < timer.getCPUTime());
+}
+
+BALL_INLINE 
+bool Timer::operator > (const Timer& timer) const
+{
+  return (getCPUTime() > timer.getCPUTime());
+}
+
+BALL_INLINE 
+bool Timer::operator <= (const Timer& timer) const
+{
+  return (getCPUTime() <= timer.getCPUTime());
+}
+
+BALL_INLINE 
+bool Timer::operator >= (const Timer& timer) const
+{
+  return (getCPUTime() >= timer.getCPUTime());
+}
+
+

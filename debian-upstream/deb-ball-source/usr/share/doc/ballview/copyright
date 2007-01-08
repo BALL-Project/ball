@@ -1,0 +1,19 @@
+This package was debianized by Andreas Moll amoll@bioinf.uni-sb.de on 12.12.2005 16 PM
+It was downloaded from www.ballview.org
+
+Upstream Authors: Andreas Moll amoll@bioinf.uni-sb.de
+
+Copyright:
+   (C) Copyright Andreas Moll amoll@bioinf.uni-sb.de 2005
+
+   This package is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 dated June, 1991.
+
+   This package is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+On Debian systems, the complete text of the GNU General
+Public License can be found in `/usr/share/common-licenses/GPL-2'.

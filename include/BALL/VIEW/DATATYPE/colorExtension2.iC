@@ -1,0 +1,58 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: colorExtension2.iC,v 1.1 2003/08/26 12:11:01 oliver Exp $
+
+BALL_INLINE
+void ColorExtension2::setColor2(const ColorRGBA& color)
+	throw()
+{
+  color2_ = color;
+}
+
+BALL_INLINE
+void ColorExtension2::setColor2
+  (const ColorUnit& red, const ColorUnit& green,
+   const ColorUnit& blue, const ColorUnit& alpha)
+	throw()
+{
+  color2_.set(red, green, blue, alpha);
+}
+
+BALL_INLINE
+ColorRGBA& ColorExtension2::getColor2()
+	throw()
+{
+  return color2_;
+}
+
+BALL_INLINE
+const ColorRGBA& ColorExtension2::getColor2() const
+	throw()
+{
+  return color2_;
+}
+
+BALL_INLINE
+void ColorExtension2::getColor2(ColorRGBA& color) const
+	throw()
+{
+  color = color2_;
+}
+
+BALL_INLINE
+void ColorExtension2::getColor2
+  (ColorUnit& red, ColorUnit& green,
+   ColorUnit& blue, ColorUnit& alpha) const
+	throw()
+{
+  color2_.get(red, green, blue, alpha);
+}
+
+BALL_INLINE
+void ColorExtension2::getColor2
+  (ColorUnit& red, ColorUnit& green, ColorUnit& blue) const
+	throw()
+{
+  color2_.get(red, green, blue);
+}

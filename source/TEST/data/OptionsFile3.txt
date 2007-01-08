@@ -1,0 +1,12 @@
+BALL::String name_ = 7 ABCDEFG 
+BALL::Size size = 10 
+BALL::String key/value = 7 ABC DEF 
+BALL::String key/value = 10 BOOL false 
+BALL::String key/value = 11 DEF default 
+BALL::String key/value = 12 DEFBOOL true 
+BALL::String key/value = 13 DEFINT 123456 
+BALL::String key/value = 16 DEFREAL 1.234560 
+BALL::String key/value = 14 INT 1234567890 
+BALL::String key/value = 13 REAL 1.234560 
+BALL::String key/value = 22 SVECTOR (0.0 1.0 2.0)  
+BALL::String key/value = 35 VECTOR (1.000000 2.000000 3.000000) 

@@ -1,0 +1,606 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>ContourSurfaceDialogData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>ContourSurfaceDialogData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>390</width>
+            <height>157</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>ContourSurface</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>false</bool>
+    </property>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>groupBox5</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>5</x>
+                <y>53</y>
+                <width>229</width>
+                <height>54</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Color</string>
+        </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>color_label</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>9</x>
+                    <y>18</y>
+                    <width>131</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>60</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="backgroundMode">
+                <enum>PaletteBackground</enum>
+            </property>
+            <property name="paletteForegroundColor">
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="paletteBackgroundColor">
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="palette">
+                <palette>
+                    <active>
+                        <color>
+                            <red>255</red>
+                            <green>255</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>255</red>
+                            <green>255</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                    </active>
+                    <disabled>
+                        <color>
+                            <red>255</red>
+                            <green>255</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>255</red>
+                            <green>255</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                    </disabled>
+                    <inactive>
+                        <color>
+                            <red>255</red>
+                            <green>255</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>255</red>
+                            <green>255</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                    </inactive>
+                </palette>
+            </property>
+            <property name="focusPolicy">
+                <enum>NoFocus</enum>
+            </property>
+            <property name="frameShape">
+                <enum>WinPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Raised</enum>
+            </property>
+            <property name="lineWidth">
+                <number>0</number>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="midLineWidth">
+                <number>0</number>
+            </property>
+            <property name="textFormat">
+                <enum>AutoText</enum>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignLeft</set>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>color_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>150</x>
+                    <y>17</y>
+                    <width>70</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>70</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>70</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="backgroundMode">
+                <enum>PaletteButton</enum>
+            </property>
+            <property name="focusPolicy">
+                <enum>TabFocus</enum>
+            </property>
+            <property name="text">
+                <string>Edit</string>
+            </property>
+            <property name="autoDefault">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Edit mininum color value</string>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>groupBox1_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>243</x>
+                <y>54</y>
+                <width>140</width>
+                <height>52</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>GroupBoxPanel</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Sunken</enum>
+        </property>
+        <property name="title">
+            <string>Threshold</string>
+        </property>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>threshold</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>20</y>
+                    <width>120</width>
+                    <height>23</height>
+                </rect>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>groupBox1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>5</x>
+                <y>0</y>
+                <width>378</width>
+                <height>50</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>GroupBoxPanel</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Sunken</enum>
+        </property>
+        <property name="title">
+            <string>Grid Data</string>
+        </property>
+        <widget class="QComboBox">
+            <property name="name">
+                <cstring>grids</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>9</x>
+                    <y>18</y>
+                    <width>361</width>
+                    <height>24</height>
+                </rect>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>buttonCancel</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>198</x>
+                <y>117</y>
+                <width>182</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>7</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>133</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>32767</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>&amp;Cancel</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+        <property name="autoDefault">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>buttonOk</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>9</x>
+                <y>117</y>
+                <width>183</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>3</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>133</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>32767</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>&amp;OK</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+        <property name="autoDefault">
+            <bool>true</bool>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Close window and apply changes.</string>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>threshold</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>valuesChanged()</slot>
+    </connection>
+    <connection>
+        <sender>grids</sender>
+        <signal>activated(int)</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>valuesChanged()</slot>
+    </connection>
+    <connection>
+        <sender>color_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>chooseColor()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>grids</tabstop>
+    <tabstop>threshold</tabstop>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>buttonCancel</tabstop>
+</tabstops>
+<includes>
+    <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
+</includes>
+<slots>
+    <slot>valuesChanged()</slot>
+    <slot>chooseColor()</slot>
+</slots>
+<exportmacro>BALL_VIEW_EXPORT</exportmacro>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

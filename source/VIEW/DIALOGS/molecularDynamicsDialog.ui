@@ -1,0 +1,1034 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>MolecularDynamicsDialogData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>MolecularDynamicSimulation</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>400</width>
+            <height>443</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>0</width>
+            <height>0</height>
+        </size>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>9000</width>
+            <height>9000</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>MolecularDynamicsSimulation</string>
+    </property>
+    <property name="toolTip" stdset="0">
+        <string></string>
+    </property>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>layout26</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>5</x>
+                <y>2</y>
+                <width>394</width>
+                <height>436</height>
+            </rect>
+        </property>
+        <grid>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <widget class="QGroupBox" row="1" column="1">
+                <property name="name">
+                    <cstring>groupBox5</cstring>
+                </property>
+                <property name="title">
+                    <string>Force Field</string>
+                </property>
+                <property name="alignment">
+                    <set>AlignHCenter</set>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout111</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>15</x>
+                            <y>21</y>
+                            <width>160</width>
+                            <height>102</height>
+                        </rect>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>useAmberRadioButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>AMBER</string>
+                            </property>
+                            <property name="accel">
+                                <string></string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>useCharmmRadioButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>CHARMM</string>
+                            </property>
+                            <property name="accel">
+                                <string></string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>advanced_button</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>30</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>&amp;ForceField Options</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+F</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Alter force field options</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+            </widget>
+            <widget class="QLayoutWidget" row="3" column="0" rowspan="1" colspan="2">
+                <property name="name">
+                    <cstring>layout121</cstring>
+                </property>
+                <hbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer23</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>46</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QPushButton">
+                        <property name="name">
+                            <cstring>start_button</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>5</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>150</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="backgroundMode">
+                            <enum>PaletteButton</enum>
+                        </property>
+                        <property name="focusPolicy">
+                            <enum>TabFocus</enum>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Simulate</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+S</string>
+                        </property>
+                        <property name="autoDefault">
+                            <bool>true</bool>
+                        </property>
+                        <property name="default">
+                            <bool>true</bool>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Start simulation</string>
+                        </property>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer25</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>47</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QPushButton">
+                        <property name="name">
+                            <cstring>cancel_button</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>5</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>150</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>32767</width>
+                                <height>30</height>
+                            </size>
+                        </property>
+                        <property name="backgroundMode">
+                            <enum>PaletteButton</enum>
+                        </property>
+                        <property name="focusPolicy">
+                            <enum>TabFocus</enum>
+                        </property>
+                        <property name="text">
+                            <string>C&amp;ancel</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+A</string>
+                        </property>
+                        <property name="autoDefault">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer24</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>46</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </hbox>
+            </widget>
+            <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="2">
+                <property name="name">
+                    <cstring>GroupBox2_2</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>5</hsizetype>
+                        <vsizetype>3</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
+                </property>
+                <property name="title">
+                    <string>Trajectory</string>
+                </property>
+                <property name="alignment">
+                    <set>AlignHCenter</set>
+                </property>
+                <hbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>enable_dcd</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="text">
+                            <string>save to</string>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Write trajectories to file in order to be able to watch snapshots</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit">
+                        <property name="name">
+                            <cstring>dcd_file_edit</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>7</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>150</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>200</width>
+                                <height>32767</height>
+                            </size>
+                        </property>
+                        <property name="backgroundMode">
+                            <enum>PaletteBase</enum>
+                        </property>
+                        <property name="focusPolicy">
+                            <enum>StrongFocus</enum>
+                        </property>
+                        <property name="text">
+                            <string>trajectory.dcd</string>
+                        </property>
+                        <property name="maxLength">
+                            <number>32767</number>
+                        </property>
+                        <property name="frame">
+                            <bool>true</bool>
+                        </property>
+                        <property name="echoMode">
+                            <enum>Normal</enum>
+                        </property>
+                        <property name="alignment">
+                            <set>AlignLeft</set>
+                        </property>
+                    </widget>
+                    <widget class="QPushButton">
+                        <property name="name">
+                            <cstring>browse_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Browse</string>
+                        </property>
+                    </widget>
+                </hbox>
+            </widget>
+            <widget class="QGroupBox" row="0" column="0" rowspan="1" colspan="2">
+                <property name="name">
+                    <cstring>GroupBox_3</cstring>
+                </property>
+                <property name="backgroundMode">
+                    <enum>PaletteBackground</enum>
+                </property>
+                <property name="focusPolicy">
+                    <enum>NoFocus</enum>
+                </property>
+                <property name="frameShape">
+                    <enum>GroupBoxPanel</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
+                </property>
+                <property name="lineWidth">
+                    <number>1</number>
+                </property>
+                <property name="title">
+                    <string>Parameters</string>
+                </property>
+                <property name="alignment">
+                    <set>AlignHCenter</set>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout29</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>9</x>
+                            <y>17</y>
+                            <width>370</width>
+                            <height>140</height>
+                        </rect>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <widget class="QLabel" row="3" column="0">
+                            <property name="name">
+                                <cstring>temperature</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>5</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>150</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBackground</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>NoFocus</enum>
+                            </property>
+                            <property name="lineWidth">
+                                <number>1</number>
+                            </property>
+                            <property name="text">
+                                <string>temperature</string>
+                            </property>
+                            <property name="textFormat">
+                                <enum>AutoText</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignLeft</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="3" column="2">
+                            <property name="name">
+                                <cstring>Label_4_2_3</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>25</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBackground</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>NoFocus</enum>
+                            </property>
+                            <property name="lineWidth">
+                                <number>1</number>
+                            </property>
+                            <property name="text">
+                                <string>K</string>
+                            </property>
+                            <property name="textFormat">
+                                <enum>AutoText</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignLeft</set>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="3" column="1">
+                            <property name="name">
+                                <cstring>temperature_lineedit</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>110</width>
+                                    <height>24</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>110</width>
+                                    <height>24</height>
+                                </size>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBase</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>StrongFocus</enum>
+                            </property>
+                            <property name="text">
+                                <string>300</string>
+                            </property>
+                            <property name="frame">
+                                <bool>true</bool>
+                            </property>
+                            <property name="echoMode">
+                                <enum>Normal</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignRight</set>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Temperature in which the simulation runs</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="0">
+                            <property name="name">
+                                <cstring>Label_5</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>130</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBackground</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>NoFocus</enum>
+                            </property>
+                            <property name="lineWidth">
+                                <number>1</number>
+                            </property>
+                            <property name="text">
+                                <string>timestep</string>
+                            </property>
+                            <property name="textFormat">
+                                <enum>AutoText</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignLeft</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="2" column="0">
+                            <property name="name">
+                                <cstring>simulationtime_edit</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBackground</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>NoFocus</enum>
+                            </property>
+                            <property name="lineWidth">
+                                <number>1</number>
+                            </property>
+                            <property name="text">
+                                <string>(total time:</string>
+                            </property>
+                            <property name="textFormat">
+                                <enum>AutoText</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignRight</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="2" column="1">
+                            <property name="name">
+                                <cstring>time_lineedit</cstring>
+                            </property>
+                            <property name="text">
+                                <string>0.01</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignRight</set>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="4" column="1">
+                            <property name="name">
+                                <cstring>refresh_lineedit</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>110</width>
+                                    <height>24</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>110</width>
+                                    <height>24</height>
+                                </size>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBase</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>StrongFocus</enum>
+                            </property>
+                            <property name="text">
+                                <string>1</string>
+                            </property>
+                            <property name="frame">
+                                <bool>true</bool>
+                            </property>
+                            <property name="echoMode">
+                                <enum>Normal</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignRight</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="2">
+                            <property name="name">
+                                <cstring>textLabel2</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="2">
+                            <property name="name">
+                                <cstring>Label_4_2</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>25</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBackground</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>NoFocus</enum>
+                            </property>
+                            <property name="lineWidth">
+                                <number>1</number>
+                            </property>
+                            <property name="text">
+                                <string>ps</string>
+                            </property>
+                            <property name="textFormat">
+                                <enum>AutoText</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignLeft</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="4" column="0">
+                            <property name="name">
+                                <cstring>temperature_2</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>5</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>190</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>200</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBackground</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>NoFocus</enum>
+                            </property>
+                            <property name="lineWidth">
+                                <number>1</number>
+                            </property>
+                            <property name="text">
+                                <string>steps between refresh</string>
+                            </property>
+                            <property name="textFormat">
+                                <enum>AutoText</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignLeft</set>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="0" column="1">
+                            <property name="name">
+                                <cstring>steps_lineedit</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>110</width>
+                                    <height>24</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>110</width>
+                                    <height>24</height>
+                                </size>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBase</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>StrongFocus</enum>
+                            </property>
+                            <property name="text">
+                                <string>1000</string>
+                            </property>
+                            <property name="frame">
+                                <bool>true</bool>
+                            </property>
+                            <property name="echoMode">
+                                <enum>Normal</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignRight</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="4" column="2">
+                            <property name="name">
+                                <cstring>textLabel1</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="1" column="1">
+                            <property name="name">
+                                <cstring>timestep_linedit</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>110</width>
+                                    <height>24</height>
+                                </size>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBase</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>StrongFocus</enum>
+                            </property>
+                            <property name="text">
+                                <string>0.0001</string>
+                            </property>
+                            <property name="frame">
+                                <bool>true</bool>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignRight</set>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Timesteps in which snapshots are taken</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>Label_4</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>150</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBackground</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>NoFocus</enum>
+                            </property>
+                            <property name="lineWidth">
+                                <number>1</number>
+                            </property>
+                            <property name="text">
+                                <string>number of steps</string>
+                            </property>
+                            <property name="textFormat">
+                                <enum>AutoText</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignLeft</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="2" column="2">
+                            <property name="name">
+                                <cstring>Label_4_2_2</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>25</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBackground</enum>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>NoFocus</enum>
+                            </property>
+                            <property name="lineWidth">
+                                <number>1</number>
+                            </property>
+                            <property name="text">
+                                <string>ps)</string>
+                            </property>
+                            <property name="textFormat">
+                                <enum>AutoText</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignLeft</set>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </widget>
+            <widget class="QButtonGroup" row="1" column="0">
+                <property name="name">
+                    <cstring>dielectric_group_2</cstring>
+                </property>
+                <property name="title">
+                    <string>Ensemble</string>
+                </property>
+                <property name="alignment">
+                    <set>AlignHCenter</set>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>canonical_button</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>14</x>
+                            <y>29</y>
+                            <width>166</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>120</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>canonical</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>microcanonical_button</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>13</x>
+                            <y>61</y>
+                            <width>170</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>120</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>microcanonical</string>
+                    </property>
+                </widget>
+            </widget>
+        </grid>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>start_button</sender>
+        <signal>clicked()</signal>
+        <receiver>MolecularDynamicSimulation</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>cancel_button</sender>
+        <signal>clicked()</signal>
+        <receiver>MolecularDynamicSimulation</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>steps_lineedit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>MolecularDynamicSimulation</receiver>
+        <slot>timeChanged()</slot>
+    </connection>
+    <connection>
+        <sender>timestep_linedit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>MolecularDynamicSimulation</receiver>
+        <slot>timeChanged()</slot>
+    </connection>
+    <connection>
+        <sender>enable_dcd</sender>
+        <signal>clicked()</signal>
+        <receiver>MolecularDynamicSimulation</receiver>
+        <slot>enableDCDFileSelected()</slot>
+    </connection>
+    <connection>
+        <sender>advanced_button</sender>
+        <signal>clicked()</signal>
+        <receiver>MolecularDynamicSimulation</receiver>
+        <slot>advancedOptions()</slot>
+    </connection>
+    <connection>
+        <sender>useAmberRadioButton</sender>
+        <signal>clicked()</signal>
+        <receiver>MolecularDynamicSimulation</receiver>
+        <slot>useAmberFF()</slot>
+    </connection>
+    <connection>
+        <sender>useCharmmRadioButton</sender>
+        <signal>clicked()</signal>
+        <receiver>MolecularDynamicSimulation</receiver>
+        <slot>useCharmmFF()</slot>
+    </connection>
+    <connection>
+        <sender>browse_button</sender>
+        <signal>clicked()</signal>
+        <receiver>MolecularDynamicSimulation</receiver>
+        <slot>chooseDCDFile()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>steps_lineedit</tabstop>
+    <tabstop>timestep_linedit</tabstop>
+    <tabstop>temperature_lineedit</tabstop>
+    <tabstop>refresh_lineedit</tabstop>
+    <tabstop>canonical_button</tabstop>
+    <tabstop>useAmberRadioButton</tabstop>
+    <tabstop>useCharmmRadioButton</tabstop>
+    <tabstop>advanced_button</tabstop>
+    <tabstop>enable_dcd</tabstop>
+    <tabstop>dcd_file_edit</tabstop>
+    <tabstop>start_button</tabstop>
+    <tabstop>cancel_button</tabstop>
+    <tabstop>browse_button</tabstop>
+</tabstops>
+<includes>
+    <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
+</includes>
+<slots>
+    <slot>timeChanged()</slot>
+    <slot>enableDCDFileSelected()</slot>
+    <slot>advancedOptions()</slot>
+    <slot>useAmberFF()</slot>
+    <slot>useCharmmFF()</slot>
+    <slot>chooseDCDFile()</slot>
+</slots>
+<exportmacro>BALL_VIEW_EXPORT</exportmacro>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

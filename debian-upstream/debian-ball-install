@@ -1,0 +1,30 @@
+#!/bin/sh -e
+
+#apt-get install python-sip4-dev python2.3-sip4-dev sip4 python2.3 python2.3-dev python gcc-3.3 g++-3.3
+
+#adapt to your settings
+export BALL_PATH=`pwd | sed "s/debian$//g"`
+#export PLATFORM=Linux-i386-g++_3.3.5
+#export LD_LIBRARY_PATH="$BALL_PATH/lib/$PLATFORM:$LD_LIBRARY_PATH"
+
+cd $BALL_PATH/source 
+touch config.lic
+rm -f config.cache || true
+
+./configure \
+ --x-libraries=/usr/X11R6/lib\
+ --x-includes=/usr/X11R6/include\
+ --disable-debuginfo\
+ --enable-optimization\
+ --with-qt-mt\
+ --enable-python 			
+ 																			
+make depend 				
+make 							
+make install 		
+
+cd PYTHON/EXTENSIONS 
+make 				  install
+
+cd $BALL_PATH/source/APPLICATIONS/BALLVIEW 
+make  		

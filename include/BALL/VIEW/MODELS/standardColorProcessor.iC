@@ -1,0 +1,40 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: standardColorProcessor.iC,v 1.2 2005/12/23 17:02:18 amoll Exp $
+
+BALL_INLINE
+float AtomDistanceColorProcessor::getDistance() const
+  throw()
+{
+	return distance_;
+}
+
+BALL_INLINE
+void AtomDistanceColorProcessor::setNullDistanceColor(const ColorRGBA& color)
+  throw()
+{
+	null_distance_color_ = color;
+}
+
+BALL_INLINE
+const ColorRGBA& AtomDistanceColorProcessor::getNullDistanceColor() const
+  throw()
+{
+	return null_distance_color_;
+}
+
+BALL_INLINE
+void AtomDistanceColorProcessor::setMaxDistanceColor(const ColorRGBA& color)
+  throw()
+{
+	full_distance_color_ = color;
+}
+
+BALL_INLINE
+const ColorRGBA& AtomDistanceColorProcessor::getMaxDistanceColor() const
+  throw()
+{
+	return full_distance_color_;
+}
+

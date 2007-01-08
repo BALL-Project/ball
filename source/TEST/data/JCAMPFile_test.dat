@@ -1,0 +1,154 @@
+##TITLE= XMASS Parameter file
+##JCAMPDX= 5.0
+##DATATYPE= XMASS Parameter Values
+##ORIGIN= XMASS, Bruker-Daltonics and Bruker-Franzen
+##OWNER= tof
+##$ABSF1= 10 
+##$ABSF2= 0 
+##$ABSG= 5 
+##$ABSL= 3 
+##$AQOP_m= 1 
+##$ATTEN= 87 
+##$AUTOLAB= 0 
+##$AZFE= 0.1 
+##$AZFW= 0.5 
+##$AccE_is= 20 
+##$BC_mod= 0 
+##$BYTORDP= 0 
+##$CLPTS= 0 
+##$CLSTAT= 0 
+##$DATMOD= 1 
+##$DC= 1 
+##$DELAY= 33000 
+##$Dy2max= 40 
+##$FILNO= 0 
+##$FT_mod= 0 
+##$GB= 0.1 
+##$INTBC= 1 
+##$INTSCL= 1 
+##$ISEN= 128 
+##$LB= 1 
+##$LINDIS= 0 
+##$MAXI= 1.25 
+##$MAXPKS= 200 
+##$MC2= 4 
+##$MEAN= 0 
+##$MI= 0.024945045 
+##$ML3= 0.00542953585106775 
+##$MPWCH= 1000 
+##$MPWM= 1000 
+##$NC_proc= 0 
+##$NSP= 1 
+##$NTH_PF= 0 
+##$NTH_PI= 0 
+##$NZP= 0 
+##$PC= 4 
+##$PHC0= 0 
+##$PHC1= 0 
+##$PH_mod= 0 
+##$POLARI= 1 
+##$PPERC= 80 
+##$PP_meth= 2 
+##$PULSREP= 3 
+##$Parent= 2465.199 
+##$PsdHi= 1.05 
+##$PsdLo= 0.77999997 
+##$Psdc0= 0 
+##$Psdc1= 0 
+##$Psdc2= 0 
+##$REPHZ= 3 
+##$REVERSE= no 
+##$RefFull= 22.5 
+##$ReflE= 22.5 
+##$SAMPNO= 0 
+##$SCALINT= 1 
+##$SCALSPC= 1 
+##$SI= 150000 
+##$SIC_gco= 0 
+##$SIC_gct= 0 
+##$SIC_ion= 0 
+##$SIC_max= 0 
+##$SIC_min= 0 
+##$SMONUM= 0 
+##$SSB= 0 
+##$STSI= 0 
+##$STSR= 0 
+##$SYMM= 0 
+##$S_DEV= 0 
+##$Sens1= 10 
+##$Sens2= 0 
+##$Subbasl= no 
+##$Subbpar= 0.80000001 
+##$SumShot= 29 
+##$T1D= 5 
+##$TDeff= 0 
+##$TIC_gco= 0 
+##$TIC_gct= 0 
+##$TIC_hig= 0 
+##$TIC_low= 0 
+##$TIC_max= 0 
+##$TIC_min= 0 
+##$TM1= 0.1 
+##$TM2= 0.89999998 
+##$Udefl= 2 
+##$UdetL= 1.65 
+##$UdetR= 1.75 
+##$Uhimass= 10 
+##$Uis1= 20 
+##$Uis2= 16.5 
+##$Ulens= 9.6000004 
+##$Uref_is= 22.5 
+##$WDW= 1 
+##$XDIM= 150000 
+##$YMAX_p= 6842 
+##$YMIN_p= 0 
+##$AUNMP= <> 
+##$Aoffs= (0..5) 
+395 395 0 0 0 0 
+##$CALME= (0..15) 
+0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 
+##$CALMR= (0..15) 
+0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 
+##$CALNAM1= <unknown> 
+##$CALNAM2= <unkown> 
+##$CALNAM3= <unkown> 
+##$CALNAM4= <unkown> 
+##$CALNAM5= <unkown> 
+##$CALNAM6= <unkown> 
+##$CALNAM7= <unkown> 
+##$CLDATE= <unknown> 
+##$CLREFNM= <unknown> 
+##$CMT1= <Pentapeptide mix, Datenauslesen> 
+##$CMT2= <CCA> 
+##$COMFILE= <TofComment> 
+##$DFILT= <> 
+##$Doffs= (0..5) 
+127 127 0 0 0 0 
+##$II_path= <> 
+##$IR_path= <> 
+##$OpId= <tof> 
+##$PDELAY= (0..3) 
+32.875 0 10 10 
+##$PDURA= (0..3) 
+40 0 10 10 
+##$PEPURL= <> 
+##$PKFILE= <none> 
+##$PostPr= <none> 
+##$PsdList= <no> 
+##$REFLIST= <none> 
+##$SMOPTS= (0..15) 
+0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 
+##$SMPNAM= <pemtapep_28mai03> 
+##$SREGLST= <RRRRRRRRRRRRRRR> 
+##$TI= <> 
+##$WEND= (0..3) 
+30000 30000 30000 30000 
+##$WINY= (0..3) 
+3 3 3 3 
+##$WSTART= (0..3) 
+0 0 0 0 
+##END=
+

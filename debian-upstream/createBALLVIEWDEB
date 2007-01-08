@@ -1,0 +1,30 @@
+#!/bin/sh
+
+INSTALL_DIR=usr/share/BALL
+rm -rf deb-ball &&
+cp -r deb-ball-source deb-ball &&
+cp ../lib/$PLATFORM/* deb-ball/$INSTALL_DIR/lib &&
+
+cp -r ../source/APPLICATIONS/BALLVIEW/BALLView deb-ball/$INSTALL_DIR/bin/BALLView &&
+
+cp -rf ../doc/BALLView deb-ball/$INSTALL_DIR/doc &&
+
+cp -r ../data deb-ball/$INSTALL_DIR &&
+cp -r ../source/EXAMPLES/PYTHON deb-ball/$INSTALL_DIR &&
+
+for i in `find deb-ball -name "CVS"`; do rm -rf $i; done &&
+for i in `find deb-ball -name "dummy"`; do rm -rf $i; done &&
+
+chmod -R 0755 deb-ball/DEBIAN &&
+chmod -x deb-ball/$INSTALL_DIR/data/QSAR/* &&
+chmod -x deb-ball/$INSTALL_DIR/data/CHARMM/charmm* &&
+chmod +x deb-ball/usr/bin/BALLView &&
+chown -R root deb-ball/usr/share/doc/ballview &&
+chgrp -R root deb-ball/usr/share/doc/ballview &&
+strip --strip-unneeded deb-ball/$INSTALL_DIR/lib/*.so &&
+strip --strip-unneeded deb-ball/$INSTALL_DIR/bin/BALLView &&
+
+dpkg -b deb-ball BALLView.deb &&
+rm -rf deb-ball &&
+mv BALLView.deb ~
+

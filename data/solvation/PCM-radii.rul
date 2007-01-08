@@ -1,0 +1,34 @@
+; These radii are used by Tomasi et al. in their PCM UAHF model.
+
+[ChargeRules:*]
+ 0.0 = true()
+# 
+[RadiusRules:H]
+ 0.0 = connectedTo((C))
+ 1.2 = true()
+
+[RadiusRules:C]
+ 2.13 = connectedTo((-H)(-H)-(H)(-*))
+ 2.04 = connectedTo((-H)(-H)(-*)(-*))
+ 1.95 = connectedTo((-H)(-*)(-*)(-*))
+ 1.86 = connectedTo((-*)(-*)(-*)(-*))
+; default
+ 1.5  = true()
+
+[RadiusRules:N]
+; default
+ 0.0  = true()
+
+[RadiusRules:O]
+ 1.5  = true()
+
+[RadiusRules:S]
+ 0.0 = true()
+
+[RadiusRules:I]
+ 2.350 = true()
+
+[RadiusRules:Br]
+ 2.080 = true()
+
+

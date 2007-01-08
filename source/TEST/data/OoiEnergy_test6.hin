@@ -1,0 +1,20 @@
+; HyperChem file created by BALL
+;
+forcefield AMBER
+sys 0
+mol 1 
+atom 1 - C CT - -0.176176 1.36874 0.006879 0 4 2 s 5 s 6 s 7 s 
+vel 1 0 0 0
+atom 2 - C C - 0.420834 -0.174328 0.000978 0 3 1 s 3 a 4 a 
+vel 2 0 0 0
+atom 3 - O O - -0.64652 -0.772912 -1.10442 -2.5e-05 1 2 a 
+vel 3 0 0 0
+atom 4 - O OH - -0.642763 -0.78644 1.09821 2.5e-05 1 2 a 
+vel 4 0 0 0
+atom 5 - H HC - 0.0166862 1.78281 1.02243 -2.1e-05 1 1 s 
+vel 5 0 0 0
+atom 6 - H HC - 0.0139689 1.76276 -0.509925 0.883245 1 1 s 
+vel 6 0 0 0
+atom 7 - H HC - 0.0139692 1.76277 -0.509955 -0.883221 1 1 s 
+vel 7 0 0 0
+endmol 1

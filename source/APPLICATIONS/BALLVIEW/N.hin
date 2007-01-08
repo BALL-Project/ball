@@ -1,0 +1,6 @@
+forcefield amber
+sys 0
+view 40 0.17706 55 15 1 0 0 0 1 0 0 0 1 0.91739 -3.6462 -52.812
+mol 1
+atom 1 N N N3 - -0.263 0 1.335 0 0
+endmol 1

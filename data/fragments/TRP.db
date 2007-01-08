@@ -1,0 +1,112 @@
+<node>TRP
+	<node>Names
+		<node>Tryptophane</node>
+		<node>Tryptophan</node>
+		<node>Trp</node>
+		<node>W</node>
+	</node>
+	<node>Atoms
+		<node>N<value>N 0.06601259 1.26337 0.1174229</value></node>
+		<node>3H<value>H 0.6980239 1.889212 0.6011554</value></node>
+		<node>CA<value>C -0.7641827 2.069947 -0.7944807</value></node>
+		<node>HA<value>H -0.09635611 2.49911 -1.541994</value></node>
+		<node>C<value>C -1.398304 3.240995 -0.03709874</value></node>
+		<node>O<value>O -0.5874859 4.036549 0.4871631</value></node>
+		<node>CB<value>C -1.786919 1.186925 -1.524096</value></node>
+		<node>1HB<value>H -1.239827 0.4012884 -2.046958</value></node>
+		<node>2HB<value>H -2.428179 0.7027346 -0.7858279</value></node>
+		<node>CG<value>C -2.643165 1.884437 -2.539373</value></node>
+		<node>CD1<value>C -3.982776 2.050424 -2.457166</value></node>
+		<node>HD1<value>H -4.607287 1.697167 -1.648804</value></node>
+		<node>CD2<value>C -2.239992 2.518021 -3.792893</value></node>
+		<node>NE1<value>N -4.432695 2.747722 -3.558181</value></node>
+		<node>HE1<value>H -5.40488 2.982779 -3.697329</value></node>
+		<node>CE2<value>C -3.401079 3.062783 -4.417417</value></node>
+		<node>CE3<value>C -1.011219 2.68937 -4.467488</value></node>
+		<node>HE3<value>H -0.1073443 2.284464 -4.037195</value></node>
+		<node>CZ2<value>C -3.347395 3.744152 -5.642442</value></node>
+		<node>HZ2<value>H -4.246768 4.143939 -6.087246</value></node>
+		<node>CZ3<value>C -0.945238 3.371593 -5.697227</value></node>
+		<node>HZ3<value>H 0.006688994 3.489207 -6.194728</value></node>
+		<node>CH2<value>C -2.108581 3.899702 -6.284111</value></node>
+		<node>HH2<value>H -2.049103 4.422244 -7.228023</value></node>
+		<node>OXT<value>O -2.601413 3.132993 0.2872543</value></node>
+		<node>1H<value>H 0.590273 0.5789365 -0.4086703</value></node>
+		<node>2H<value>H -0.5252197 0.7968075 0.7903904</value></node>
+	</node>
+  <node>Bonds
+    <node>5<value>3H N s</value></node>
+    <node>6<value>CA N s</value></node>
+    <node>10<value>HA CA s</value></node>
+    <node>11<value>C CA s</value></node>
+    <node>14<value>O C d</value></node>
+    <node>15<value>CB CA s</value></node>
+    <node>19<value>1HB CB s</value></node>
+    <node>20<value>2HB CB s</value></node>
+    <node>21<value>CG CB s</value></node>
+    <node>24<value>CD1 CG a</value></node>
+    <node>27<value>HD1 CD1 s</value></node>
+    <node>28<value>CD2 CG a</value></node>
+    <node>31<value>NE1 CD1 a</value></node>
+    <node>34<value>HE1 NE1 s</value></node>
+    <node>35<value>CE2 CD2 a</value></node>
+    <node>36<value>CE2 NE1 a</value></node>
+    <node>39<value>CE3 CD2 a</value></node>
+    <node>41<value>HE3 CE3 s</value></node>
+    <node>42<value>CZ2 CE2 a</value></node>
+    <node>45<value>HZ2 CZ2 s</value></node>
+    <node>47<value>CZ3 CE3 a</value></node>
+    <node>49<value>HZ3 CZ3 s</value></node>
+    <node>50<value>CH2 CZ2 a</value></node>
+    <node>51<value>CH2 CZ3 a</value></node>
+    <node>53<value>HH2 CH2 s</value></node>
+    <node>54<value>OXT C s</value></node>
+    <node>55<value>1H N s</value></node>
+    <node>56<value>2H N s</value></node>
+  </node>
+	<node>Connections
+		<node>N-term<value>N C-term s 1.33 0.5</value></node>
+		<node>C-term<value>C N-term s 1.33 0.5</value></node>
+	</node>
+	<node>Properties
+		<node>AMINO_ACID</node>
+	</node>
+		<node>Variants
+			<node>Default
+				<node>Delete
+				<node>OXT</node>
+				<node>1H</node>
+				<node>2H</node>
+			</node>
+			<node>Rename
+				<node>3H<value>H</value></node>
+			</node>
+		</node>
+		<node>TRP-M
+			<node>Properties
+				<node>C_TERMINAL</node>
+				<node>N_TERMINAL</node>
+			</node>
+		</node>
+		<node>TRP-C
+			<node>Delete
+				<node>1H</node>
+				<node>2H</node>
+			</node>
+			<node>Rename
+				<node>3H<value>H</value></node>
+			</node>
+			<node>Properties
+				<node>C_TERMINAL</node>
+			</node>
+		</node>
+		<node>TRP-N
+			<node>Delete
+				<node>OXT</node>
+			</node>
+			<node>Properties
+				<node>N_TERMINAL</node>
+			</node>
+		</node>
+	</node>
+</node>

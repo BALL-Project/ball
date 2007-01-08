@@ -1,0 +1,5 @@
+forcefield amber
+sys 0 
+mol 1
+atom 1 C C CT - 0.0 0.0 0.0 0.0 0
+endmol 1

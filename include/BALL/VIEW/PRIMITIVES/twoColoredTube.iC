@@ -1,0 +1,19 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: twoColoredTube.iC,v 1.1 2003/08/26 12:11:39 oliver Exp $
+
+BALL_INLINE
+Real TwoColoredTube::getLength() const
+	throw()
+{
+  return (getVertex1() - getVertex2()).getLength();
+}
+
+BALL_INLINE
+Vector3 TwoColoredTube::getMiddleVertex() const
+	throw()
+{
+  return (getVertex1() + (getVertex2() - getVertex1()) / 2.0);
+}
+
