@@ -15,13 +15,14 @@ namespace BALL
 			type_(),
 			parameters_(),
 			system_(NULL),
-			valid_(false)		
+			valid_(false),
+			compute_shifts_(true)
 	{
 		// TODO: should we do this? 
 			//	registerStandardModules_();
 	}
 
-	ShiftModel1D::ShiftModel1D(const String& filename, SPECTRUM_TYPE st) 
+	ShiftModel1D::ShiftModel1D(const String& filename, SPECTRUM_TYPE st, bool compute_shifts) 
 		throw()
 		:	ShiftModule(),
 			peaks_(),
@@ -31,14 +32,15 @@ namespace BALL
 			type_(st),
 			parameters_(filename),
 			system_(NULL),
-			valid_(false)		
+			valid_(false),
+			compute_shifts_(compute_shifts)
 	{
 		// TODO: should we do this? 
 		//registerStandardModules_();
 		init_();
 	}
 
-	ShiftModel1D::ShiftModel1D(const String& filename,SPECTRUM_TYPE st, double origin, double dimension, double spacing) 
+	ShiftModel1D::ShiftModel1D(const String& filename,SPECTRUM_TYPE st, double origin, double dimension, double spacing, bool compute_shifts) 
 		throw()
 		:	ShiftModule(),
 			peaks_(),
@@ -48,7 +50,8 @@ namespace BALL
 			type_(st),
 			parameters_(filename),
 			system_(NULL),
-			valid_(false)		
+			valid_(false),
+			compute_shifts_(compute_shifts)
 	{
 		//?? should we do this? 
 		//registerStandardModules_();
@@ -65,7 +68,8 @@ namespace BALL
 			type_(model.type_),
 			parameters_(model.parameters_),
 			system_(NULL),
-			valid_(false)		
+			valid_(false),
+			compute_shifts_(model.compute_shifts_)
 	{
 		init_();
 	}
@@ -139,9 +143,12 @@ namespace BALL
 			return false;
 		}
 		
-		// compute the shift model
-		BALL::ShiftModel sm(parameters_.getFilename());
-		system_->apply(sm);
+		// compute the shift model if necessary
+		if (compute_shifts_)
+		{
+			BALL::ShiftModel sm(parameters_.getFilename());
+			system_->apply(sm);
+		}
 
 		String atomname = "";
 		
@@ -191,7 +198,7 @@ namespace BALL
 					atom = &(*at_it);
 					// we have, get the shift
 					float shift = atom->getProperty(BALL::ShiftModule::PROPERTY__SHIFT).getFloat();
-					Peak1D<float> peak;
+					Peak1D peak;
 					
 					float pos = shift; 
 					peak.setPosition(pos);
