@@ -17,6 +17,8 @@
 #define STRING_VALUE_NA "BADVAL"
 #define CHAR_VALUE_NA  '?'
 
+#define DEBUG 1
+
 using namespace std;
 
 namespace BALL 
@@ -2336,6 +2338,10 @@ namespace BALL
 		if ( 		 (properties[first_property_].first == FLOAT_VALUE_IGNORE) 
 					|| (properties[second_property_].first == FLOAT_VALUE_IGNORE) )
 			shift = 0.;
+#ifdef DEBUG
+		std::cout << "_operator (): ";
+		std::cout <<properties.atom->getName() << " " << properties.atom->getResidue()->getID()<<  "  " <<properties.atom->getResidue()->getName()<< "  " << first_property_ << ":" << second_property_<< " -- " << properties[first_property_].first << "/" << properties[first_property_].second<< ":" << properties[second_property_].first << "/" << properties[second_property_].second <<  " -- " << shift << std::endl;
+#endif
 
 		return shift;
 	} 
