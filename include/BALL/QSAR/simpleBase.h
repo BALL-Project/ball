@@ -6,14 +6,9 @@
 #ifndef BALL_QSAR_SIMPLEBASE_H
 #define BALL_QSAR_SIMPLEBASE_H
 
-#ifndef BALL_KERNEL_MOLECULE_H
-#include <BALL/KERNEL/molecule.h>
-#endif
-
 #ifndef BALL_QSAR_DESCRIPTOR_H
 #include <BALL/QSAR/descriptor.h>
 #endif
-#include <vector>
 
 namespace BALL
 {
@@ -69,7 +64,7 @@ namespace BALL
 				otherwise false is returned
 				@param molecule to examine
 		*/
-		bool isValid(Molecule& molecule);
+		bool isValid_(AtomContainer& ac);
 		//@}
 
 		/** @name Accessors
@@ -77,7 +72,7 @@ namespace BALL
 		//@{
 		/*_ Performs the calculation of some of the simple descriptors.
 		*/
-		void calculate(Molecule& molecule);
+		void calculate_(AtomContainer& ac);
 		//@}
 		
 		
@@ -93,14 +88,14 @@ namespace BALL
 				@param referenced double which holds the pmi z component after calculation
 				@param molecule from which the pmi is calculated
 		*/
-		double calcPrincipalMomentOfInertia_(double& pmi_x, double& pmi_y, double& pmi_z, Molecule& molecule);
+		double calcPrincipalMomentOfInertia_(double& pmi_x, double& pmi_y, double& pmi_z, AtomContainer& ac);
 		
 		/*_ Helper function that reads the atomic polarizabilities 
 				from a file from the data section of BALL. It is called from
 				getAtomicPolarizability_ and reads into a static variable, hence
 				it is read one time per instance.
 		*/
-		std::vector<float> readAtomicPolarizabilities_();
+		void readAtomicPolarizabilities_(std::vector<float>& polarizabilities);
 
 		/*_ Method which returns the atomic polarizability of the element given as parameter
 				@param the atomic number of the element

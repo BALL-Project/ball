@@ -1,11 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: partialChargeDescriptors.C,v 1.1 2004/05/11 07:28:21 oliver Exp $
+// $Id: partialChargeDescriptors.C,v 1.1.28.1 2007/03/16 00:06:47 bertsch Exp $
 // 
 
 #include <BALL/QSAR/partialChargeDescriptors.h>
-
 #include <BALL/KERNEL/fragment.h>
 
 using namespace std;

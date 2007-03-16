@@ -6,16 +6,18 @@
 #ifndef BALL_QSAR_CONNECTIVITYBASE_H
 #define BALL_QSAR_CONNECTIVITYBASE_H
 
-#ifndef BALL_CONCEPT_MOLECULE_H
-#include <BALL/KERNEL/molecule.h>
-#endif
+#ifndef BALL_COMMON_GLOBAL_H
+	#include <BALL/COMMON/global.h>
+#endif 
 
 #ifndef BALL_QSAR_DESCRIPTOR_H
-#include <BALL/QSAR/descriptor.h>
+	#include <BALL/QSAR/descriptor.h>
 #endif
 
 namespace BALL
 {
+	// forward declarations
+	template <typename Key, typename Value> class HashMap;
 
 	/** Generic QSAR molecular connectivity descriptors class
 			\\
@@ -61,13 +63,13 @@ namespace BALL
 		/** @name Predicates
 		*/
 		//@{
-		bool isValid(Molecule& molecule);
+		bool isValid_(AtomContainer& ac);
 		//@}
 		
 		/** @name Accessors
 		*/
 		//@{
-		void calculate(Molecule& molecule);
+		void calculate_(AtomContainer& ac);
 		//@}
 
 

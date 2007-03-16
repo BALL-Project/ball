@@ -38,7 +38,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~TotalPositivePartialCharge();
+		virtual ~TotalPositivePartialCharge();
 		//@}
 
 		/** @name Assignment
@@ -110,7 +110,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~RelPositivePartialCharge();
+		virtual ~RelPositivePartialCharge();
 		//@}
 
 		/** @name Assignment
@@ -147,7 +147,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~RelNegativePartialCharge();
+		virtual ~RelNegativePartialCharge();
 		//@}
 
 		/** @name Assignment

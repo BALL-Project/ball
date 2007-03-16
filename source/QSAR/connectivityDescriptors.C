@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: connectivityDescriptors.C,v 1.1 2004/05/11 07:28:20 oliver Exp $
+// $Id: connectivityDescriptors.C,v 1.1.28.1 2007/03/16 00:06:46 bertsch Exp $
 // 
 
 #include <BALL/QSAR/connectivityDescriptors.h>
@@ -39,15 +39,15 @@ namespace BALL
 		return *this;
 	}
 
-	double ZagrebIndex::compute(Molecule& molecule)
+	double ZagrebIndex::compute(AtomContainer& ac)
 	{
-		//if (!isValid(molecule))
+		//if (!isValid_(ac))
 		//{
 		// do nothing...
 		//}
 		double sum = 0;
-		AtomConstIterator atom_it = molecule.beginAtom();
-		BALL_FOREACH_ATOM (molecule, atom_it)
+		AtomConstIterator atom_it = ac.beginAtom();
+		BALL_FOREACH_ATOM (ac, atom_it)
 		{
 			if (atom_it->getElement() != PTE[Element::H])
 			{
@@ -63,7 +63,7 @@ namespace BALL
 				sum += delta*delta;
 			}
 		}
-		//molecule.setProperty("ZagrebIndex",sum);
+		//ac.setProperty("ZagrebIndex",sum);
 		return sum;
 	}
 

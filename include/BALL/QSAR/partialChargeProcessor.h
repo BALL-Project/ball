@@ -6,24 +6,22 @@
 #ifndef BALL_QSAR_PARTIALCHARGEPROCESSOR_H
 #define BALL_QSAR_PARTIALCHARGEPROCESSOR_H
 
-#ifndef BALL_KERNEL_MOLECULE_H
-#	include <BALL/KERNEL/molecule.h>
-#endif
-
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/DATATYPE/hashSet.h>
 
-#include <queue>
 #include <vector>
-#include <map>
+#include <utility>
 
 namespace BALL
 {
+	class AtomContainer;
+	class Atom;
+
 	/**	Generic .
 			\\
 	*/
 	class BALL_EXPORT PartialChargeProcessor
-    : public UnaryProcessor<Molecule>
+    : public UnaryProcessor<AtomContainer>
 	{
 		public:
 
@@ -42,7 +40,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~PartialChargeProcessor();
+		virtual ~PartialChargeProcessor();
 		//@}
 
 		/** @name Assignment
@@ -59,13 +57,13 @@ namespace BALL
 		/** Methods to calculate the PEOE charges of Gasteiger. This method
 				can be called explicitely, not as processor.
 		*/
-  	void calculatePEOE(Molecule& molecule);
+  	void calculatePEOE(AtomContainer& ac);
 		//@}
 
 		/** @name Processor-realted methods
 		*/
 		//@{		
-    virtual Processor::Result operator () (Molecule& molecule);
+    virtual Processor::Result operator () (AtomContainer& ac);
 		//@}
 
 		private:
@@ -82,7 +80,7 @@ namespace BALL
 		float getIonizationEnergy_(Element::AtomicNumber atomic_number, Size charge);
 
 
-		std::vector<float> readElectronAffinities_();
+		void readElectronAffinities_(std::vector<float>& electron_affinities);
 
 		/*_ Helper funtion to get the electron affinity of an element
 		*/

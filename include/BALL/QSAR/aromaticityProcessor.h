@@ -37,7 +37,7 @@ namespace BALL
 
 		/** Destrcutor
 		*/
-		~AromaticityProcessor();
+		virtual ~AromaticityProcessor();
 
 		//@}
 		/** @name Assignment
@@ -85,7 +85,7 @@ namespace BALL
 		/** @name Predicates
 		*/
 		//@{
-		bool isValid(const AtomContainer& ac);
+		bool isValid_(const AtomContainer& ac);
 		//@}
 
 

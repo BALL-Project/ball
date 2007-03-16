@@ -6,10 +6,6 @@
 #ifndef BALL_QSAR_PARTIALCHARGEBASE_H
 #define BALL_QSAR_PARTIALCHARGEBASE_H
 
-#ifndef BALL_KERNEL_MOLECULE_H
-#include <BALL/KERNEL/molecule.h>
-#endif
-
 #ifndef BALL_QSAR_DESCRIPTOR_H
 #include <BALL/QSAR/descriptor.h>
 #endif
@@ -62,14 +58,14 @@ namespace BALL
 		*/
 		
 		//@{
-		bool isValid(Molecule& molecule);
+		bool isValid_(AtomContainer& ac);
 		//@}
 		
 		/** @name Accessors
 		*/
 
 		//@{
-		void calculate(Molecule& molecule);
+		void calculate_(AtomContainer& ac);
 		//@}
 		
 	};

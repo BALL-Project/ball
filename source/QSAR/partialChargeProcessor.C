@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: partialChargeProcessor.C,v 1.2 2004/09/02 13:12:51 amoll Exp $
+// $Id: partialChargeProcessor.C,v 1.2.28.1 2007/03/16 00:06:47 bertsch Exp $
 //
 
 #include <BALL/QSAR/partialChargeProcessor.h>
@@ -16,7 +16,6 @@
 #include <BALL/SYSTEM/path.h>
 
 #include <utility>
-#include <iostream>
 
 using namespace std;
 
@@ -26,13 +25,13 @@ using namespace std;
 namespace BALL
 {
 	PartialChargeProcessor::PartialChargeProcessor()
-		: UnaryProcessor<Molecule>(),
+		: UnaryProcessor<AtomContainer>(),
 		warned_elements_()
 	{
 	}
 
 	PartialChargeProcessor::PartialChargeProcessor(const PartialChargeProcessor& pc)
-    : UnaryProcessor<Molecule>(pc),
+    : UnaryProcessor<AtomContainer>(pc),
 		warned_elements_()
 	{
 	}
@@ -46,14 +45,14 @@ namespace BALL
 		return *this;
 	}
 
-	Processor::Result PartialChargeProcessor::operator () (Molecule& molecule)
+	Processor::Result PartialChargeProcessor::operator () (AtomContainer& ac)
 	{
-		calculatePEOE(molecule);
+		calculatePEOE(ac);
 		return Processor::CONTINUE;
 	}
 
 
-	void PartialChargeProcessor::calculatePEOE(Molecule& molecule)
+	void PartialChargeProcessor::calculatePEOE(AtomContainer& ac)
 	{
 	
 		// the PEOE calculation does not touch and does not use
@@ -61,9 +60,9 @@ namespace BALL
 
 		HashMap<Atom*, double> charges;
 		HashMap<Atom*, double> former_charges;
-		AtomIterator atom_it = molecule.beginAtom();
+		AtomIterator atom_it = ac.beginAtom();
 		// through all atoms in the hashmaps
-		for (;atom_it!=molecule.endAtom();atom_it++)
+		for (;atom_it!=ac.endAtom();atom_it++)
 		{
 			charges.insert(std::make_pair(&(*atom_it), 0.0));
 			former_charges.insert(std::make_pair(&(*atom_it), 0.0));
@@ -77,10 +76,10 @@ namespace BALL
 		// runs below a certain threshold
 		for (int i=1;i!=7;i++)
 		{
-			atom_it = molecule.beginAtom();
+			atom_it = ac.beginAtom();
 			Atom::BondIterator bond_it = atom_it->beginBond();
 			
-			BALL_FOREACH_BOND (molecule, atom_it, bond_it)
+			BALL_FOREACH_BOND (ac, atom_it, bond_it)
 			{
 				Atom * atom1 = bond_it->getPartner(*(bond_it->getSecondAtom()));
 				Atom * atom2 = bond_it->getPartner(*(bond_it->getFirstAtom()));
@@ -145,7 +144,7 @@ namespace BALL
 				if (num_bonds == 4)	{	a =  7.98;	b =  9.18;	c =  1.88;  break; }
 				if (num_bonds == 3)	{	a =  8.79;	b =  9.32;	c =  1.51;  break; }
 				if (num_bonds == 2)	{	a = 10.39;	b =  9.45;	c =  0.73;  break; }
-				//Log.error() << "PartialCharge::calculate(): cannot determine state of element C, missing H?" << endl;
+				//Log.error() << "PartialCharge::calculate_(): cannot determine state of element C, missing H?" << endl;
 				// we must set default values here to proceed 
 				a = 7.98;
 				b = 9.18;
@@ -155,7 +154,7 @@ namespace BALL
 				if (num_bonds == 3)	{	a = 11.54;	b = 10.82;	c =  1.36;	break; }
 				if (num_bonds == 2) {	a = 12.87;	b = 11.15;	c =  0.85;	break; }
 				if (num_bonds == 1)	{	a = 15.68;	b = 11.7;		c = -0.27;	break; }
-				//Log.error() << "PartialCharge::calculate(): cannot determine state of element N (" << 
+				//Log.error() << "PartialCharge::calculate_(): cannot determine state of element N (" << 
 				//	num_bonds << "), missing H?" << endl;
 				// we must set some default values to proceed with PEOE calculation
 				a = 11.54;
@@ -165,7 +164,7 @@ namespace BALL
 			case 8: //O
 				if (num_bonds == 2)	{ a = 14.18;	b = 12.92;	c =  1.39;	break; }
 				if (num_bonds == 1)	{	a = 17.07;	b = 13.79;	c =  0.47;	break; }
-				//Log.error() << "PartialCharge::calculate(): cannot determine state of element O, missing H?" << endl;
+				//Log.error() << "PartialCharge::calculate_(): cannot determine state of element O, missing H?" << endl;
 				// we must set here some default values to proceed
 				a = 14.18;
 				b = 12.92;
@@ -250,9 +249,8 @@ namespace BALL
 	}
 
 
-	vector<float> PartialChargeProcessor::readElectronAffinities_()
+	void PartialChargeProcessor::readElectronAffinities_(vector<float>& electron_affinities)
 	{
-		vector<float> eas;
 		Path path;
 		String filename = path.find(BALL_QSAR_ATOMIC_ELECTRON_AFFINITIES_FILE);
 		// if filename is empty the file is missing
@@ -268,14 +266,17 @@ namespace BALL
 		while (ea_file.good())
 		{
 			ea_file >> ea;
-			eas.push_back(ea);
+			electron_affinities.push_back(ea);
 		}
-		return eas;
 	}
 
 	float PartialChargeProcessor::getElectronAffinity_(Element::AtomicNumber atomic_number, Size charge)
 	{
-		static const vector<float> eas = readElectronAffinities_();
+		static vector<float> eas;
+		if (eas.size() == 0)
+		{
+			readElectronAffinities_(eas);
+		}
 		if (charge == 0)
 		{
 			if (atomic_number > 0 && atomic_number < (int)eas.size())

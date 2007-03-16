@@ -2,7 +2,6 @@
 // vi: set ts=2:
 //
 //
-// not checked in
 
 #ifndef BALL_QSAR_CONNECTIVITYDESCRIPTORS_H
 #define BALL_QSAR_CONNECTIVITYDESCRIPTORS_H
@@ -52,7 +51,7 @@ namespace BALL
 		/** @name Accessors
 		*/
 		//@{
-		double compute(Molecule& molecule);
+		double compute(AtomContainer& ac);
 		//@}
 	};
 

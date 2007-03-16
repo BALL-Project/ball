@@ -1,19 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: descriptor.C,v 1.12 2005/12/23 17:03:03 amoll Exp $
+// $Id: descriptor.C,v 1.12.20.1 2007/03/16 00:06:46 bertsch Exp $
 //
 
 #include <BALL/QSAR/descriptor.h>
-#include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/bondIterator.h>
-#include <BALL/KERNEL/atomIterator.h>
-#include <BALL/KERNEL/forEach.h>
-#include <BALL/KERNEL/PTE.h>
-#include <BALL/KERNEL/expression.h>
-#include <BALL/KERNEL/fragment.h>
-#include <BALL/CONCEPT/timeStamp.h>
-#include <BALL/STRUCTURE/numericalSAS.h>
+//#include <BALL/KERNEL/bond.h>
+//#include <BALL/KERNEL/bondIterator.h>
+//#include <BALL/KERNEL/atomIterator.h>
+//#include <BALL/KERNEL/forEach.h>
+//#include <BALL/KERNEL/PTE.h>
+//#include <BALL/KERNEL/expression.h>
+//#include <BALL/KERNEL/fragment.h>
+//#include <BALL/CONCEPT/timeStamp.h>
+//#include <BALL/STRUCTURE/numericalSAS.h>
 
 using namespace std;
 
@@ -21,21 +21,21 @@ namespace BALL
 {
 
 	Descriptor::Descriptor()
-		:	UnaryProcessor<Molecule>(),
+		:	UnaryProcessor<AtomContainer>(),
 			name_("generic descriptor"),
 			unit_("")
 	{
 	}
 
 	Descriptor::Descriptor(const String& name)
-		:	UnaryProcessor<Molecule>(),
+		:	UnaryProcessor<AtomContainer>(),
 			name_(name),
 			unit_("")
 	{
 	}
 
 	Descriptor::Descriptor(const String& name, const String& unit)
-		:	UnaryProcessor<Molecule>(),
+		:	UnaryProcessor<AtomContainer>(),
 			name_(name),
 			unit_(unit)
 	{
@@ -46,7 +46,7 @@ namespace BALL
 	}
 
 	Descriptor::Descriptor(const Descriptor& descriptor)
-		:	UnaryProcessor<Molecule>(descriptor),
+		:	UnaryProcessor<AtomContainer>(descriptor),
 			name_(descriptor.name_),
 			unit_(descriptor.unit_)
 	{
@@ -69,9 +69,9 @@ namespace BALL
 		name_ = name;
 	}
 
-	Processor::Result Descriptor::operator () (Molecule& molecule)
+	Processor::Result Descriptor::operator () (AtomContainer& ac)
 	{
-		molecule.setProperty(getName(), compute(molecule));
+		ac.setProperty(getName(), compute(ac));
 		return Processor::CONTINUE;
 	}
 
@@ -85,22 +85,22 @@ namespace BALL
 		unit_ = unit;
 	}
 
-	bool Descriptor::isValid(Molecule& /* molecule */)
+	bool Descriptor::isValid_(AtomContainer& /* ac */)
 	{
 		return false;
 	}
 
-	void Descriptor::calculate(Molecule& /* molecule */)
+	void Descriptor::calculate_(AtomContainer& /* ac */)
 	{		
 	}
 
-	double Descriptor::compute(Molecule& molecule)
+	double Descriptor::compute(AtomContainer& ac)
 	{
-		if (!isValid(molecule))
+		if (!isValid_(ac))
 		{
-			calculate(molecule);
+			calculate_(ac);
 		}
-		return molecule.getProperty(this->getName()).getDouble();
+		return ac.getProperty(this->getName()).getDouble();
 	}
 
 }

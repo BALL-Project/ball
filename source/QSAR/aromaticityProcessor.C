@@ -1,25 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: aromaticityProcessor.C,v 1.13 2005/12/23 17:03:03 amoll Exp $
+// $Id: aromaticityProcessor.C,v 1.13.20.1 2007/03/16 00:06:45 bertsch Exp $
 //
 
 #include <BALL/QSAR/aromaticityProcessor.h>
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
-#include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/fragment.h>
-#include <BALL/KERNEL/bondIterator.h>
-#include <BALL/KERNEL/atomIterator.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/COMMON/limits.h>
-#include <BALL/DATATYPE/hashMap.h>
-#include <BALL/CONCEPT/timeStamp.h>
-
-#include <iostream>
-#include <vector>
-#include <utility>
 
 using namespace std;
 
@@ -44,7 +34,7 @@ namespace BALL
 		return *this;
 	}
 
-	bool AromaticityProcessor::isValid(const AtomContainer& ac)
+	bool AromaticityProcessor::isValid_(const AtomContainer& ac)
 	{
 		static HashMap<Handle, PreciseTime> mod_times;
 		PreciseTime last_mod = ac.getModificationTime();
@@ -72,7 +62,7 @@ namespace BALL
 	Processor::Result AromaticityProcessor::operator () (AtomContainer& ac)
 	{
 		// we need a ring set if this is called via the processor (or directly with '()' )!
-		if (!isValid(ac))
+		if (!isValid_(ac))
 		{
 			RingPerceptionProcessor rpp;
 			vector<vector<Atom*> > sssr;
@@ -358,7 +348,6 @@ namespace BALL
 						}
 					}
 				}
-				//cerr << "\n" << s_bonds << " " << a_bonds << " " << d_bonds << endl;
 				if ((*ait)->getElement() == PTE[Element::C])
 				{
 					if (!((d_bonds == 1 && s_bonds > 0) || a_bonds > 1))
@@ -498,7 +487,6 @@ namespace BALL
 
 	void AromaticityProcessor::aromatize(const vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
 	{
-		//cerr << "AromaticityProcessor::aromatize(vector<vector<Atom*> >& sssr_orig)";
 		vector<HashSet<Atom*> > sssr;
 		for (vector<vector<Atom*> >::const_iterator it1=sssr_orig.begin();it1!=sssr_orig.end();++it1)
 		{
@@ -684,8 +672,6 @@ namespace BALL
 
 	void AromaticityProcessor::extendAromaticSystem_(vector<HashSet<Atom*> >& sssr, HashSet<Atom*> ring)
 	{
-		//cerr << "void SimpleBase::extendAromaticSystem_(vector<vector<Atom*> >& sssr, vector<Atom*>& ring)" << endl;
-
 		// calc intersections
 		vector<unsigned int> is;
 		for (vector<HashSet<Atom*> >::iterator it=sssr.begin();it!=sssr.end();++it)
@@ -893,7 +879,6 @@ namespace BALL
 
 	bool AromaticityProcessor::hasConjugatedDoubleBonds_(HashSet<Atom*> ring_orig)
 	{
-		//cerr << "AromaticityProcessor::hasConjugatedDoubleBonds_(HashSet<Atom*> ring_orig" << endl;
 		// the ring is considered to have conj. double bonds, if 
 		// every carbon is sp2 hybridized, hetero atoms are not counted
 		// sometimes it might be the case, that a triple bond substitutes a double bond

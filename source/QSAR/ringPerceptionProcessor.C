@@ -1,25 +1,20 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.22 2007/01/08 00:01:12 bertsch Exp $
+// $Id: ringPerceptionProcessor.C,v 1.22.4.1 2007/03/16 00:06:48 bertsch Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 
-#include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
-#include <BALL/CONCEPT/composite.h>
-#include <BALL/KERNEL/fragment.h>
 #include <BALL/COMMON/limits.h>
-#include <BALL/STRUCTURE/molecularGraph.h>
-
-// needed for MSVC
-#include <BALL/KERNEL/fragment.h>
-
-#include <vector>
 
 #define BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
 #undef  BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
+
+#ifdef BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
+	#include <iostream>
+#endif
 
 #define BALL_QSAR_RINGPERCEPTIONPROCESSOR_MAX_RUNS 100
 
@@ -61,7 +56,7 @@ namespace BALL
 		// call the calculate function
 		vector<vector<Atom*> > sssr;
 		calculateSSSR(sssr, ac);
-	
+
 		// set all atom and bonds which are not in a ring (for consistence)
 		AtomIterator a_it;
 		BALL_FOREACH_ATOM(ac, a_it)
@@ -86,10 +81,6 @@ namespace BALL
 	Size RingPerceptionProcessor::calculateSSSR(vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
 	{
 		all_small_rings_.clear();
-		if (ac.countAtomContainers() == 0)
-		{
-			return 0;
-		}
 
 		String algorithm_name = options.get(Option::ALGORITHM_NAME);
 		if (algorithm_name == "Balducci")
