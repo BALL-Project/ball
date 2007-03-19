@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SimpleDescriptors_test.C,v 1.5 2004/11/04 06:24:42 oliver Exp $
+// $Id: SimpleDescriptors_test.C,v 1.5.28.1 2007/03/19 21:43:46 bertsch Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -643,7 +643,7 @@ CHECK(NumberOfHydrogenBondAcceptors)
 	NumberOfHydrogenBondAcceptors nhba;
 	S.apply(nhba);
 
-	double results[] = {0, 0, 0, 0, 5, 3, 0, 0, 0};
+	double results[] = {0, 0, 0, 0, 5, 4, 0, 0, 0};
 	for (Size i=0;i!=limit;++i)
 	{
 		molecule = S.getMolecule(i);

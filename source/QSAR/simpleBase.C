@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBase.C,v 1.2.28.1 2007/03/16 00:06:49 bertsch Exp $
+// $Id: simpleBase.C,v 1.2.28.2 2007/03/19 21:43:47 bertsch Exp $
 //
 
 #include <BALL/QSAR/simpleBase.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/PTE.h>
-#include <BALL/KERNEL/expression.h>
+#include <BALL/STRUCTURE/smartsMatcher.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/QSAR/aromaticityProcessor.h>
 #include <BALL/SYSTEM/file.h>
@@ -140,16 +140,39 @@ namespace BALL
 		}
 
 		// donors are hydrogen of amino or hydrogen of hydroxyl
-		static Expression ex_don("element(O) AND connectedTo((C)) AND connectedTo((H)) OR \
-															element(N) AND connectedTo((H))");
+		//static Expression ex_don("element(O) AND connectedTo((C)) AND connectedTo((H)) OR 
+		//													element(N) AND connectedTo((H))");
 		// acceptors are carbonyl oxygens, hydroxyl oxygen, amino nitrogen and flourine
-		static Expression ex_acc("element(O) AND doubleBonds((C)) OR\
-															element(O) AND connectedTo((C)(H)) OR\
-															element(F)");
+		//static Expression ex_acc("element(O) AND doubleBonds((C)) OR
+		//													element(O) AND connectedTo((C)(H)) OR
+		//													element(F)");
 		
-		// TODO use SMARTS for matching
-		// String smarts_h_don("[$(O(#1)C),$(N(#1))]")
-		// String smarts_h_acc("[$(O=C),$(O~[CH]),F]")
+		SmartsMatcher smarts_matcher;
+
+		String smarts_h_don("[$(O(#1)C),$(N(#1))]");
+		String smarts_h_acc("[$(O=C),$(O#1),F]");
+	
+		HashSet<const Atom*> h_bond_donors, h_bond_acceptors;
+		SmartsMatcher::Match matchings;
+		Molecule* mol = static_cast<Molecule*>(&ac);
+		smarts_matcher.match(matchings, *mol, smarts_h_don);
+		for (SmartsMatcher::Match::const_iterator it1 = matchings.begin(); it1 != matchings.end(); ++it1)
+		{
+			for (set<const Atom*>::const_iterator it2 = it1->begin(); it2 != it1->end(); ++it2)
+			{
+				h_bond_donors.insert(*it2);
+			}
+		}
+
+		matchings.clear();
+		smarts_matcher.match(matchings, *mol, smarts_h_acc);
+		for (SmartsMatcher::Match::const_iterator it1 = matchings.begin(); it1 != matchings.end(); ++it1)
+    {
+      for (set<const Atom*>::const_iterator it2 = it1->begin(); it2 != it1->end(); ++it2)
+      {
+        h_bond_acceptors.insert(*it2);
+      }
+    }
 
 
 		for (AtomConstIterator a_it = ac.beginAtom(); a_it != ac.endAtom(); a_it++)
@@ -163,11 +186,13 @@ namespace BALL
 			{ 
 				num_heavy_atoms++;	
 			}
-			if (ex_don(*a_it))	
+			
+			if (h_bond_donors.has(&*a_it))
 			{	
 				num_h_don_atoms++; 
 			}
-			if (ex_acc(*a_it)) 
+
+			if (h_bond_acceptors.has(&*a_it)) 
 			{ 
 				num_h_acc_atoms++; 
 			}
