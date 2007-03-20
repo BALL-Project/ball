@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.C,v 1.13 2006/06/08 21:36:36 bertsch Exp $
+// $Id: smartsMatcher.C,v 1.13.8.1 2007/03/20 09:03:48 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/smartsMatcher.h>
@@ -225,7 +225,7 @@ namespace BALL
 				for (vector<set<const Atom*> >::const_iterator it1 = it->second.begin(); it1 != it->second.end(); ++it1)
 				{
 					cerr << it1->size() << " ";
-					for (set<const Atom*>::const_iterator it2 = it1->begin(); it2 != it->end(); ++it2)
+					for (set<const Atom*>::const_iterator it2 = it1->begin(); it2 != it1->end(); ++it2)
 					{
 						cerr << (*it2)->getName() << " ";
 					}
@@ -480,13 +480,6 @@ namespace BALL
                   first_new_rs.visited_edges[0].insert(*eit);
 #ifdef SMARTS_MATCHER_DEBUG
 									first_new_rs.dump("A", depth_);
-									/*
-									cerr << String('\t', depth_) << "A ";
-									for (HashSet<const Atom*>::ConstIterator deb = first_new_rs.matched_atoms[0].begin(); +deb; ++deb)
-									{
-										cerr << (*deb)->getName() << " ";
-									}
-									cerr << endl;*/
 #endif
 	                if (evaluate_edge_(first_new_rs, *eit, start_atom, &*bit))
                   {
@@ -498,14 +491,7 @@ namespace BALL
                         RecStruct_ second_new_rs;
                         second_new_rs.add(first_new_rs, j);
 #ifdef SMARTS_MATCHER_DEBUG
-												//cerr << String('\t', depth_) << "B ";
 												second_new_rs.dump("B", depth_);
-												/*
-												for (HashSet<const Atom*>::ConstIterator deb = second_new_rs.matched_atoms[0].begin(); +deb; ++deb)
-												{
-													cerr << (*deb)->getName() << " ";
-												}
-												cerr << endl;*/
 #endif
                         if (evaluate_node_(second_new_rs, start_node, start_atom))
                         {
@@ -548,7 +534,6 @@ namespace BALL
 				{
 					RecStruct_ first_new_rs;
 #ifdef SMARTS_MATCHER_DEBUG
-					//cerr << String('\t', depth_) << "C " << endl;
 					first_new_rs.dump("C", depth_);
 #endif
 					if (evaluate_node_(first_new_rs, first_edge->getSecondSPNode(), start_atom))
@@ -556,17 +541,9 @@ namespace BALL
 						for (Size i = 0; i != first_new_rs.matched_atoms.size(); ++i)
 						{
 							RecStruct_ second_new_rs;
-							//cerr << String('\t', depth_) << "second edge AND: " << first_new_rs.matched_atoms[i].size() << endl;
 							second_new_rs.add(first_new_rs, i);
 #ifdef SMARTS_MATCHER_DEBUG
 							second_new_rs.dump("D", depth_);
-/*							cerr << String('\t', depth_) << "D ";
-              for (HashSet<const Atom*>::ConstIterator deb = second_new_rs.matched_atoms[0].begin(); +deb; ++deb)
-							{
-								cerr << (*deb)->getName() << " ";
-							}
-							cerr << endl;
-							*/
 #endif
 							if (evaluate_node_(second_new_rs, second_edge->getSecondSPNode(), start_atom))
 							{
@@ -590,13 +567,7 @@ namespace BALL
 						{
 #ifdef SMARTS_MATCHER_DEBUG
 							first_new_rs.dump("E", depth_);
-/*							cerr << String('\t', depth_) << "E " << first_new_rs.matched_atoms.size();
-							for (HashSet<const Atom*>::ConstIterator deb = first_new_rs.matched_atoms[0].begin(); +deb; ++deb)
-							{
-								cerr << (*deb)->getName() << " ";
-							}
-							cerr << endl;*/
- #endif
+#endif
 					
 							// can it be matched?
 							if (evaluate_edge_(first_new_rs, first_edge, start_atom, &*it1))
@@ -608,16 +579,9 @@ namespace BALL
 									second_new_rs.add(first_new_rs, j);
 									for (Atom::BondConstIterator it2=start_atom->beginBond(); it2!=start_atom->endBond(); ++it2)
 									{
-										//cerr << String('\t', depth_) << "second edge AND: " << first_new_rs.matched_atoms[i].size() << endl;
 #ifdef SMARTS_MATCHER_DEBUG
 										second_new_rs.dump("F", depth_);
-										/*
-										cerr << String('\t', depth_) << "F ";
-										for (HashSet<const Atom*>::ConstIterator deb = second_new_rs.matched_atoms[0].begin(); +deb; ++deb)
-										{
-											cerr << (*deb)->getName() << " ";
-										}*/
- #endif
+#endif
 
 										if (evaluate_edge_(second_new_rs, second_edge, start_atom, &*it2))
 										{
@@ -673,7 +637,6 @@ namespace BALL
 							{
 								result_rs.add(new_rs);
 							}
-							//cerr << String('\t', depth_) << new_rs.matched_atoms.size() << endl;
 							depth_--;
 											
 							new_rs.clear();
@@ -685,7 +648,6 @@ namespace BALL
 							{
 								result_rs.add(new_rs);
 							}
-							//cerr << String('\t', depth_) << new_rs.matched_atoms.size() << endl;
 							depth_--;
 						}
 						
@@ -710,24 +672,17 @@ namespace BALL
 				{
 					if (result_rs.matched_atoms.size() == 0)
 					{
-						//cerr << "false" << endl;
 						return false;
 					}
 
-					//cerr << "size of matched atoms: " << result_rs.matched_atoms.size() << endl;
-				
 					// prepare the matches
 					new_rs = result_rs;
 					result_rs.clear();
 				}
 
-				//cerr << "size of matched atoms: " << result_rs.matched_atoms.size() << " " << new_rs.matched_atoms.size() << " " << new_rs.first_matches.size() << endl;
-				
 				// first matched node?
 				if (new_rs.matched_atoms.size() == 0)
 				{
-					// just add the found atom and node to the structures
-					// the details are further processed by the next for loop
 					#ifdef SMARTS_MATCHER_DEBUG
 					//cerr << String('\t', depth_) << "matched_Atoms.size() == 0" << endl;
 					#endif
@@ -759,13 +714,6 @@ namespace BALL
 						result_rs.visited_atoms[result_rs.visited_atoms.size()-1].insert(start_atom);
 						result_rs.mapped_atoms[result_rs.mapped_atoms.size()-1][start_node] = start_atom;
 
-						//for (HashSet<const Atom*>::ConstIterator it = result_rs.matched_atoms[0].begin(); it != result_rs.matched_atoms[0].end(); ++it)
-						//{
-							//cerr << (*it)->getName() << " ";
-						//}
-						
-						//cerr << String('\t', depth_) << "size of new result rs: " << result_rs.matched_atoms.size() << endl;
-
 						continue;
 					}
 					
@@ -773,7 +721,6 @@ namespace BALL
 					
 					for (Atom::BondConstIterator bit = start_atom->beginBond(); bit != start_atom->endBond(); ++bit)
 					{
-						//cerr << "Bond: " << &*bit << endl;
 						if (new_rs.visited_bonds[i].find(&*bit) == new_rs.visited_bonds[i].end())
 						{
 							for (SmartsParser::SPNode::EdgeIterator eit = start_node->begin(); eit != start_node->end(); ++eit)
@@ -787,17 +734,11 @@ namespace BALL
 									first_new_rs.visited_atoms[0].insert(start_atom);
 									first_new_rs.visited_bonds[0].insert(&*bit);
 									first_new_rs.visited_edges[0].insert(*eit);
-									//if (first_new_rs.mapped_atoms[0].size() == 1)
-									//{
-									//	first_new_rs.first_matches.push_back(make_pair<const SPNode*, const Atom*>(start_node, start_atom));
-									//}
 									#ifdef SMARTS_MATCHER_DEBUG
-									//cerr << String('\t', depth_) << "calling eval edge, size of result_matched_atoms: " << result_rs.matched_atoms.size() << "(size of first matched=" << first_new_rs.first_matches.size() << endl;
 									first_new_rs.dump("K", depth_);
 									#endif
 									if (evaluate_edge_(first_new_rs, *eit, start_atom, &*bit))
 									{
-										//cerr << "yes, matched edge" << endl;
 										if (start_node->countEdges() > 1)
 										{
 											for (Size j = 0; j != first_new_rs.matched_atoms.size(); ++j)
@@ -820,14 +761,6 @@ namespace BALL
 										}
 									}
 									depth_--;
-									#ifdef SMARTS_MATCHER_DEBUG
-									//cerr << String('\t', depth_) << "size of result_matched_atoms after edge_eval call: " << result_rs.matched_atoms.size() << ", ";
-									for (Size bla = 0; bla != result_rs.matched_atoms.size(); ++bla)
-									{
-										//cerr << result_rs.matched_atoms[bla].size() << " ";
-									}
-									//cerr << endl;
-									#endif
 								}
 							}
 						}
@@ -847,15 +780,6 @@ namespace BALL
 						}
 					}
 					
-#ifdef SMARTS_MATCHER_DEBUG
-					if (consider_as_noninternal)
-					{
-						//cerr << String('\t', depth_) << "#matched_bonds=" << matched_bonds << ", #matched_edges=" << matched_edges << endl;
-					}
-#endif
-					//cerr << "#matched_bonds=" << matched_bonds << ", #matched_edges=" << matched_edges
-					//	<< ", #edges=" << start_node->countEdges() << ", #bonds=" << start_atom->countBonds() << endl;
-					
 					if (start_node->countEdges() != 0 && matched_edges != 0 && matched_edges == start_node->countEdges())
 					{
 						if (matched_bonds == matched_edges)
@@ -874,16 +798,8 @@ namespace BALL
 			}
 		}
 	
-		#ifdef SMARTS_MATCHER_DEBUG
-		if (start_node->countEdges() == 0)
-		{
-			//cerr << "#of matches = " << result_matched_atoms.size() << ", size=" << result_matched_atoms[0].size() << endl;
-		}
-		#endif
-
 		rs = result_rs;
 		
-		//cerr << String('\t', depth_) << "size of matched atoms: " << rs.matched_atoms.size() << endl;
 #ifdef SMARTS_MATCHER_DEBUG
 		cerr << String('\t', depth_) << "stats for evaluate node: " << endl;
 		rs.dump("M", depth_);
@@ -963,9 +879,6 @@ namespace BALL
 				else
 				{
 					// in this case the edges are just internal edges without any logical op, sense ????
-#ifdef SMARTS_MATCHER_DEBUG
-					//cerr << "internal edge with no op, rs size: " << rs.matched_atoms.size() << endl;
-#endif
 					for (Size i = 0; i != rs.matched_atoms.size(); ++i)
 					{
 						RecStruct_ new_rs;
@@ -986,14 +899,12 @@ namespace BALL
 			// now test if there is also a atom interconnection
 			if (start_edge->getFirstSPEdge() != 0 && start_edge->getSecondSPEdge() != 0 && result_rs.matched_atoms.size() != 0)
 			{
-				//cerr << String('\t', depth_) << "considering edge also as non internal edge (" << start_edge->getFirstSPNode() << " " <<  start_edge->getSecondSPNode() << " " << result_rs.matched_atoms.size() << ")" << endl;
 				consider_as_non_internal = true;
 				result_rs.clear();
 			}
 		}
 
 #ifdef SMARTS_MATCHER_DEBUG
-		//cerr << String('\t', depth_) << "internal edge handled: " << endl;
 		result_rs.dump("", depth_);
 #endif
 		
@@ -1002,16 +913,9 @@ namespace BALL
 			// just call the evaluate_node_ methode with next node
 			if (consider_as_non_internal || start_edge->getSPBond()->equals(start_bond))
 			{
-				//if (!consider_as_non_internal)
-				//{
-					//cerr << "bond equals = " << start_edge->getSPBond()->equals(start_bond) << endl;
-				//}
 				// TODO sense?
 				if (start_edge->getFirstSPNode() == 0 && start_edge->getSecondSPNode() == 0)
 				{
-					//#ifdef SMARTS_MATCHER_DEBUG
-					//cerr << "size of matched_atoms " << rs.matched_atoms.size() << ", " << rs.matched_atoms[0].size() << "first node and second node are null" << endl;
-					//#endif
 					return true;
 				}
 				// only non-ringclosure bonds are considered so far!
@@ -1035,9 +939,7 @@ namespace BALL
 #endif
 						if (evaluate_node_(new_rs, start_edge->getSecondSPNode(), partner))
 						{
-							//cerr << "evaluate next node " << consider_as_non_internal << endl;
 							result_rs.add(new_rs);
-							//cerr << "evaluated next node: " << result_rs.matched_atoms.size() << endl;
 						}
 						depth_--;
 					}
