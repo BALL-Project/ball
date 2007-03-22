@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sdGenerator.C,v 1.7 2007/01/08 13:39:33 bertsch Exp $
+// $Id: sdGenerator.C,v 1.7.6.1 2007/03/22 11:48:21 oliver Exp $
 //
 // Author:
 //   Holger Franken

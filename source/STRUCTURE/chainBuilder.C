@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chainBuilder.C,v 1.4 2006/08/15 20:36:58 oliver Exp $
+// $Id: chainBuilder.C,v 1.4.10.1 2007/03/22 11:48:17 oliver Exp $
 //
 // Author:
 //   Holger Franken

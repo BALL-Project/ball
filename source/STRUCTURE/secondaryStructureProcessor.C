@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureProcessor.C,v 1.14 2005/12/23 17:03:05 amoll Exp $
+// $Id: secondaryStructureProcessor.C,v 1.14.18.1 2007/03/22 11:48:22 oliver Exp $
 
 #include <BALL/STRUCTURE/secondaryStructureProcessor.h>
 #include <BALL/STRUCTURE/HBondProcessor.h>
@@ -819,7 +819,13 @@ namespace BALL
 		vector<Residue*> 						residues;
 		for (;+ri;++ri)
 		{
-		 // !!!! attention: resnum is the real "index"
+			if (resnum >= summary_.size())
+			{
+				Log.error() << "Problem occured in " << __FILE__ << " " << __LINE__ << std::endl;
+				return Processor::CONTINUE;
+			}
+
+		  // !!!! attention: resnum is the real "index"
 			if (summary_[resnum] != last_struct)
 			{
 				if (last_struct != 'L' || (summary_[resnum] != 'G' && summary_[resnum] != '-'))

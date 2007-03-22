@@ -4,22 +4,31 @@ namespace BALL
 {
 	ForceFieldEvaluation::ForceFieldEvaluation()
 		throw()
+		: EnergeticEvaluation(),
+			ff_(new ForceField()),
+			delete_force_field_(true)
 	{
-		ff_ = new ForceField;
-		delete_force_field_ = true;
+	}
+
+	ForceFieldEvaluation::ForceFieldEvaluation(ForceField& ff)
+		throw()
+		: EnergeticEvaluation(),
+			ff_(&ff),
+			delete_force_field_(false)
+	{
 	}
 
 	ForceFieldEvaluation::~ForceFieldEvaluation()
 		throw()
 	{
-		if (delete_force_field_)
-			delete ff_;
+		if (delete_force_field_) delete ff_;
 	}
 
 	void ForceFieldEvaluation::setForceField(ForceField& ff)
 		throw()
 	{
 		ff_ = &ff;
+		delete_force_field_ = false;
 	}
 
 	void ForceFieldEvaluation::setOptions(const Options& options)
@@ -56,8 +65,7 @@ namespace BALL
 		throw(Exception::TooManyErrors)
 	{
 		std::vector<ConformationSet::Conformation> result;
-		if (!ff_)
-			return result;
+		if (!ff_) return result;
 
 		System S = conformations.getSystem();
 

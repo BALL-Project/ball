@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.3 2006/02/01 13:06:18 leonhardt Exp $
+// $Id: dockResult.C,v 1.3.16.1 2007/03/22 11:48:24 oliver Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
