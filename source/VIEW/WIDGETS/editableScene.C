@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.21.14.1 2007/03/25 21:56:46 oliver Exp $
+// $Id: editableScene.C,v 1.21.14.2 2007/03/25 23:30:48 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -218,14 +218,9 @@ void EditableScene::checkMenu(MainControl& main_control)
 	new_molecule_->setEnabled(!busy);
 }
 
-<<<<<<< editableScene.C
-			edit_id_ =	main_control.insertMenuEntry(
-					MainControl::DISPLAY, "&Edit Mode", this, SLOT(editMode_()), CTRL+Key_E, -1);
-=======
 void EditableScene::mousePressEvent(QMouseEvent* e)
 {
 	draw_line_ = false;
->>>>>>> 1.20.2.93
 
 	if (current_mode_ < (Scene::ModeType) EDIT__MODE)
 	{
@@ -268,13 +263,6 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 
 		if (current_bond_)
 		{
-<<<<<<< editableScene.C
-			if (current_mode_ == (Scene::ModeType)EDIT__MODE)
-			{
-				main_control.removeMenuEntry(CTRL+Key_E, -1);
-			}
-			Scene::finalizeWidget(main_control);	
-=======
 			current_bond_->select();
 			Atom* a1 = (Atom*)current_bond_->getFirstAtom();
 			Atom* a2 = (Atom*)current_bond_->getSecondAtom();
@@ -282,7 +270,6 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 			a2->select();
 			notify_(new CompositeMessage(*a1, CompositeMessage::SELECTED_COMPOSITE));	
 			notify_(new CompositeMessage(*a2, CompositeMessage::SELECTED_COMPOSITE));	
->>>>>>> 1.20.2.93
 		}
 
 		// we open a context menu at this point

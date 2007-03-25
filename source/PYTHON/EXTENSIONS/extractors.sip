@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.sip,v 1.7.8.1 2007/03/25 21:37:08 oliver Exp $
+// $Id: extractors.sip,v 1.7.8.2 2007/03/25 23:30:42 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -11,24 +11,6 @@
 	#include <BALL/KERNEL/extractors.h>
 	using namespace BALL;
 %End
-<<<<<<< extractors.sip
-PyAtomList 								atoms(const AtomContainer& /fragment/, const String& /expression/ = String());
-PyAtomList 								atoms(const PyAtomList& /atoms/, const String& /expression/);
-//PyAtomList	 							PDBAtoms(const AtomContainer& /fragment/, const String& /expression/ = String());
-//BondList* 								bonds(const AtomContainer& /fragment/, bool /selected_only/ = false);
-//BondList* 								bonds(const Atom& /atom/);
-//AtomContainerList* 				atomContainers(const AtomContainer& /fragment/, bool /selected_only/ = false);
-//FragmentList* 						fragments(const AtomContainer& /fragment/, bool /selected_only/ = false);
-//MoleculeList* 						molecules(const AtomContainer& /fragment/, bool /selected_only/ = false);
-//ResidueList* 							residues(const AtomContainer& /fragment/, bool /selected_only/ = false);
-//SecondaryStructureList* 	secondaryStructures(const AtomContainer& /fragment/, bool /selected_only/ = false);
-//ChainList* 								chains(const AtomContainer& /fragment/, bool /selected_only/ = false);
-//ProteinList*							proteins(const AtomContainer& /fragment/, bool /selected_only/ = false);
-//NucleotideList* 					nucleotides(const AtomContainer& /fragment/, bool /selected_only/ = false);
-//NucleicAcidList* 					nucleicAcids(const AtomContainer& /fragment/, bool /selected_only/ = false);
-//
-//
-=======
 PyAtomList* 								atoms(const AtomContainer& /fragment/, const String& /expression/);
 PyAtomList*									atoms(const AtomContainer& /fragment/);
 PyAtomList* 								atoms(const PyAtomList& /atoms/, const String& /expression/);
@@ -47,4 +29,3 @@ PyProteinList*							proteins(const AtomContainer& /fragment/, bool /selected_on
 PyNucleotideList* 					nucleotides(const AtomContainer& /fragment/, bool /selected_only/ = false);
 PyNucleicAcidList* 					nucleicAcids(const AtomContainer& /fragment/, bool /selected_only/ = false);
 
->>>>>>> 1.6.10.1

@@ -1,24 +1,12 @@
-<<<<<<< Makefile
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.26.14.1 2007/03/25 21:56:43 oliver Exp $
+# $Id: Makefile,v 1.26.14.2 2007/03/25 23:30:47 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
 #
 
-=======
-# -*- Mode: C++; tab-width: 2; -*-
-# vi: set ts=2:
-#
-# $Id: Makefile,v 1.26.14.1 2007/03/25 21:56:43 oliver Exp $
-#
-# Author:
-#   Oliver Kohlbacher
-#
-
->>>>>>> 1.25.2.6
 DIRECTORY=VIEW/WIDGETS
 
 # Where the headers of the derived classes reside

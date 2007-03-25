@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.20.8.1 2007/03/25 21:32:17 oliver Exp $
+// $Id: main.C,v 1.20.8.2 2007/03/25 23:30:40 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -25,15 +25,10 @@
 
 void logMessages(QtMsgType type, const char *msg)
 {
-<<<<<<< main.C
-	switch (type) 
-	{
-=======
 	BALL::String s(msg);
 	if (s.hasPrefix("QTextBrowser")) return;
 
 	switch ( type ) {
->>>>>>> 1.19.2.9
 		case QtDebugMsg:
 				BALL::Log.info() << msg << std::endl;
 				break;
@@ -41,16 +36,11 @@ void logMessages(QtMsgType type, const char *msg)
 				BALL::Log.warn() << msg << std::endl;
 				break;
 		case QtFatalMsg:
-<<<<<<< main.C
-				BALL::Log.error() << msg << std::endl;
-				abort();                    // deliberately dump core
-=======
 				fprintf( stderr, "Fatal: %s\n", msg );
 				abort();                    // deliberately core dump
 		case QtCriticalMsg:
 				fprintf( stderr, "Critical: %s\n", msg );
 				abort();                    // deliberately core dump
->>>>>>> 1.19.2.9
 	}
 }
 

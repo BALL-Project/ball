@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.39.6.1 2007/03/25 22:00:03 oliver Exp $
+dnl $Id: configure.ac,v 1.39.6.2 2007/03/25 23:30:39 amoll Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -82,20 +82,15 @@ AC_ARG_WITH(uic,               [  --with-uic=UIC          use UIC as the absolut
 AC_ARG_WITH(opengl-incl,       [  --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL])
 AC_ARG_WITH(opengl-libs,       [  --with-opengl-libs=DIR  OpenGL/Mesa libraries are in DIR/GL])
 AC_ARG_WITH(mesa,              [  --with-mesa             use MESA instead of OpenGL])
-<<<<<<< configure.ac
 
 dnl  ** GLEW **
 AC_ARG_WITH(glew-incl,         [  --with-glew-incl=DIR    GLEW header files are in DIR])
 AC_ARG_WITH(glew-libs,         [  --with-glew-libs=DIR    GLEW libraries are in DIR])
 
-dnl ** Python support **
-=======
-dnl  ** GLEW **
 AC_ARG_WITH(glew-incl,         [  --with-glew-incl=DIR    GLEW header files are in DIR])
 AC_ARG_WITH(glew-libs,         [  --with-glew-libs=DIR    GLEW libraries are in DIR])
 
 dnl ** Python support **
->>>>>>> 1.32.2.4
 AC_ARG_ENABLE(python,          [  --enable-python         enable Python support and search for executable])
 AC_ARG_WITH(python,            [  --with-python=EXE       enable Python support and use Python executable in EXE])
 AC_ARG_WITH(python-incl,       [  --with-python-incl=DIR  Python includes (Python.h) is in DIR])
@@ -688,7 +683,6 @@ if test "${AR}" = "no" ; then
 	AR="ar"
 fi
 if test "${AROPTS}" = "" ; then
-<<<<<<< configure.ac
 	AROPTS="cru"
 fi
 
@@ -699,9 +693,6 @@ dnl  we just use the standard settings to create dynamic libraries.
 dnl
 if test "${DYNAROPTS_PYMODULE}" = "" ; then
   DYNAROPTS_PYMODULE="${DYNAROPTS}"
-=======
-	AROPTS="cru"
->>>>>>> 1.32.2.4
 fi
 
 dnl

@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.12.14.1 2007/03/25 21:56:33 oliver Exp $
+# $Id: Makefile,v 1.12.14.2 2007/03/25 23:30:43 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -32,8 +32,6 @@ MOC_SOURCES=\
 
 include ../../common.mak
 -include .Dependencies
-<<<<<<< Makefile
-=======
 
 depend: $(MOC_SOURCES)
 
@@ -43,6 +41,3 @@ dataset_moc.C:	$(HEADER_DIR)/dataset.h
 standardDatasets_moc.C:	$(HEADER_DIR)/standardDatasets.h
 	$(MOC) $(HEADER_DIR)/standardDatasets.h -o $@
 
-
-
->>>>>>> 1.11.2.5

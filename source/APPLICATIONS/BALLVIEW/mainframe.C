@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.62.8.1 2007/03/25 21:32:18 oliver Exp $
+// $Id: mainframe.C,v 1.62.8.2 2007/03/25 23:30:40 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -77,16 +77,9 @@ namespace BALL
 		// ---------------------
 		// Logstream setup -----
 		// ---------------------
-<<<<<<< mainframe.C
-		Log.remove(std::cout);
-		Log.remove(std::cerr);
-=======
 //   		Log.remove(std::cout);
 //   		Log.remove(std::cerr);
->>>>>>> 1.60.2.57
 		setLoggingFilename("BALLView.log");
-<<<<<<< mainframe.C
-=======
 		
 		// Display Menu
 		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
@@ -107,21 +100,7 @@ namespace BALL
 		dc->registerController(new DockResultController());
 		
 		DatasetControl::getInstance(0)->hide();
->>>>>>> 1.60.2.57
 
-<<<<<<< mainframe.C
-		CHECK_PTR(new MolecularControl(		this, "Structures"));
-		CHECK_PTR(new GeometricControl(		this, "Representations"));
-		CHECK_PTR(new DatasetControl(			this, "Datasets"));
-		CHECK_PTR(new DisplayProperties(	this, "DisplayProperties"));
-		CHECK_PTR(new LabelDialog(				this, "LabelDialog"));
-		CHECK_PTR(new MolecularFileDialog(this, "MolecularFileDialog"));
-		CHECK_PTR(new DownloadPDBFile(		this, "DownloadPDBFile", false));
-		CHECK_PTR(new MolecularStructure(	this, "MolecularStructure"));
-		CHECK_PTR(new HelpViewer(					this, "Documentation"));
-		CHECK_PTR(new LogView(						this, "Logs"));
-		CHECK_PTR(new DockingController(this, "DockingController"));
-=======
 		new DemoTutorialDialog(this, "BALLViewDemo");
 
 		HelpViewer* BALL_docu = new HelpViewer(this, "BALL Docu");
@@ -140,18 +119,13 @@ namespace BALL
  		addDockWidget(Qt::BottomDockWidgetArea, new LogView(this, "Logs"));
 		new DockingController(  this, "DockingController");
 		addDockWidget(Qt::BottomDockWidgetArea, new FileObserver(  this, "FileObserver"));
->>>>>>> 1.60.2.57
 
 		Scene::stereoBufferSupportTest();
 		scene_ = new EditableScene(this, "3D View");
 		setCentralWidget(scene_);
-<<<<<<< mainframe.C
-		setAcceptDrops(true);
-=======
 		setAcceptDrops(true);
 
 		new DisplayProperties(	this, "DisplayProperties");
->>>>>>> 1.60.2.57
 
 		// setup the VIEW server
 		Server* server = new Server(this);
@@ -364,16 +338,12 @@ namespace BALL
 		version += "(mt)";
 #endif
 		about.qt_version_label->setText(version);
-<<<<<<< mainframe.C
-		about.exec(); 
-=======
 		QFont font = about.BALLView_version_label->font();
 		about.BALLView_version_label->setText(QString("BALLView ") + BALL_RELEASE_STRING);
 		font.setPixelSize(18);
 		about.BALLView_version_label->setFont(font);
 		about.BALL_version_label->setText(__DATE__);
 		w.exec(); 
->>>>>>> 1.60.2.57
 	}
 
 }

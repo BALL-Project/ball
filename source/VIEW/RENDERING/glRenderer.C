@@ -1,11 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-<<<<<<< glRenderer.C
-// $Id: glRenderer.C,v 1.72.12.1 2007/03/25 21:57:02 oliver Exp $
-=======
-// $Id: glRenderer.C,v 1.72.12.1 2007/03/25 21:57:02 oliver Exp $
->>>>>>> 1.71.2.80
+// $Id: glRenderer.C,v 1.72.12.2 2007/03/25 23:30:45 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -826,9 +822,6 @@ void GLRenderer::renderLabel_(const Label& label)
 }
 
 
-<<<<<<< glRenderer.C
-			rotateVector3Angle_(rotation_axis, angle);
-=======
 void GLRenderer::renderPoint_(const Point& point)
 	throw()
 {
@@ -842,7 +835,6 @@ void GLRenderer::renderPoint_(const Point& point)
 	glEnd();
 	glEnable(GL_LIGHTING);
 }
->>>>>>> 1.71.2.80
 
 
 void GLRenderer::renderSimpleBox_(const SimpleBox& box)
@@ -858,10 +850,6 @@ void GLRenderer::renderSimpleBox_(const SimpleBox& box)
 	glPopMatrix();
 }
 
-<<<<<<< glRenderer.C
-			rotateVector3Angle_(rotation_axis, angle);
-=======
->>>>>>> 1.71.2.80
 
 void GLRenderer::renderBox_(const Box& box)
 	throw()

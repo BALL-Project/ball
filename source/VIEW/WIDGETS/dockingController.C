@@ -1,11 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-<<<<<<< dockingController.C
-// $Id: dockingController.C,v 1.6.12.1 2007/03/25 21:56:45 oliver Exp $
-=======
-// $Id: dockingController.C,v 1.6.12.1 2007/03/25 21:56:45 oliver Exp $
->>>>>>> 1.4.2.12
+// $Id: dockingController.C,v 1.6.12.2 2007/03/25 23:30:47 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
@@ -27,8 +23,8 @@
 #include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
 
 #ifdef BALL_HAS_FFTW
-#	include <BALL/VIEW/DIALOGS/geometricFitDialog.h>
-#	include <BALL/STRUCTURE/DOCKING/geometricFit.h>
+#include <BALL/VIEW/DIALOGS/geometricFitDialog.h>
+#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 #endif
 
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -36,15 +32,8 @@
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qcombobox.h>
 
-<<<<<<< dockingController.C
-#include <qmessagebox.h>
-#include <qcombobox.h>
-// #define BALL_VIEW_DEBUG
-// #undef BALL_QT_HAS_THREADS
-=======
 //#define BALL_VIEW_DEBUG
 //#undef BALL_QT_HAS_THREADS
->>>>>>> 1.4.2.12
 using namespace std;
 
 namespace BALL
@@ -54,12 +43,8 @@ namespace BALL
 
 		DockingController::DockingController(QWidget* parent, const char* name)
 			throw()
-<<<<<<< dockingController.C
-			:	GenericControl(parent, name),
-=======
 			:	QWidget(parent),
 				ModularWidget(name),
->>>>>>> 1.4.2.12
 				dock_dialog_(this),
 				dock_result_dialog_(0),
 				progress_dialog_(0),
@@ -70,18 +55,15 @@ namespace BALL
 				Log.info() << "New DockingController " << this << std::endl;
 			#endif
 			registerWidget(this);
-<<<<<<< dockingController.C
-			hide();
-=======
 			setObjectName(name);
 			hide();
->>>>>>> 1.4.2.12
 		}
 
 		// Copy constructor.
 		DockingController::DockingController(const DockingController& dock_controller)
 			throw()
-			: GenericControl(dock_controller),
+			: QWidget(),
+				ModularWidget(dock_controller),
 				dock_dialog_(),
 				dock_result_dialog_(0),
 				progress_dialog_(0),
@@ -385,7 +367,7 @@ namespace BALL
 	
 			if (!scoring) return false;
 			
-			// apply scoring function
+			// apply scoring function; set new scores in the conformation set
 			vector<ConformationSet::Conformation> ranked_conformations;
 			try
 	   	{
@@ -402,6 +384,7 @@ namespace BALL
 				}
 				return false;
 			}
+			conformation_set->setScoring(ranked_conformations);
 
 			// create new DockResult and add a new scoring to it;
 			// we need the name, options and score vector of the scoring function
@@ -410,21 +393,15 @@ namespace BALL
 																						dock_dialog_.getAlgorithmOptions()); 
 			// dock result is deleted by DatasetControl
 		
-<<<<<<< dockingController.C
-			dock_res->addScoring(String(dock_dialog_.scoring_functions->currentText().ascii()), 
-													 dock_dialog_.getScoringOptions(), ranked_conformations);
-=======
 			// sort vector ranked_conformations by snapshot numbers
 			sort(ranked_conformations.begin(), ranked_conformations.end());
 			
 			dock_res->addScoring(ascii(dock_dialog_.scoring_functions->currentText()), 
 													 dock_dialog_.getScoringOptions(), ranked_conformations);
->>>>>>> 1.4.2.12
 
 			// add docked system to BALLView structures
-			Index snapshot_index = (dock_res->getScores(0))[0].first;
-			const SnapShot& best_result = (*conformation_set)[snapshot_index];
-			
+			const SnapShot& best_result = (*conformation_set)[0];
+
 			System* docked_system = new System(conformation_set->getSystem());
 			// system is deleted by main control, when it is removed from BallView
 			best_result.applySnapShot(*docked_system);

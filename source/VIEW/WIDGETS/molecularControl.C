@@ -1,11 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-<<<<<<< molecularControl.C
-// $Id: molecularControl.C,v 1.103.8.1 2007/03/25 21:56:48 oliver Exp $
-=======
-// $Id: molecularControl.C,v 1.103.8.1 2007/03/25 21:56:48 oliver Exp $
->>>>>>> 1.99.2.65
+// $Id: molecularControl.C,v 1.103.8.2 2007/03/25 23:30:49 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -21,7 +17,6 @@
 #include <BALL/VIEW/DIALOGS/atomOverview.h>
 #include <BALL/MATHS/analyticalGeometry.h>
 #include <BALL/KERNEL/system.h>
-#include <BALL/STRUCTURE/smartsMatcher.h>
 #include <BALL/KERNEL/selector.h>
 
 #include <QtGui/qpushbutton.h> 
@@ -79,12 +74,7 @@ namespace BALL
 				:	GenericControl(parent, name),
 					selected_(),
 					information_(),
-<<<<<<< molecularControl.C
-					selector_edit_(new QComboBox(this)),
-					smarts_edit_(new QComboBox(this)),
-=======
 					selector_edit_(0),
->>>>>>> 1.99.2.65
 					context_menu_(this),
 					model_menu_(this),
 					edit_menu_(this),
@@ -115,18 +105,6 @@ namespace BALL
 			selector_edit_->setLineEdit(new QLineEdit());
 			selector_edit_->lineEdit()->setObjectName("lineedit");
 
-<<<<<<< molecularControl.C
-			smarts_edit_->resize(90, 45);
-			smarts_edit_->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, 0, 0, false));
-			smarts_edit_->setAutoCompletion(true);
-			smarts_edit_->setDuplicatesEnabled(false);
-			smarts_edit_->setEditable(true);
-			layout2->addWidget(smarts_edit_);
-
-			selector_edit_->resize(90, 45);
-			selector_edit_->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, 0, 0, false));
-=======
->>>>>>> 1.99.2.65
 			selector_edit_->setAutoCompletion(true);
 			selector_edit_->setAutoCompletionCaseSensitivity(Qt::CaseSensitive);
 			selector_edit_->setDuplicatesEnabled(false);
@@ -1404,12 +1382,6 @@ namespace BALL
 					selector_edit_->addItem(fields[p].c_str());
 				}
 			}
-<<<<<<< molecularControl.C
-
-			connect(selector_edit_->lineEdit(), SIGNAL(returnPressed()), this, SLOT(applySelector()));
-			connect(smarts_edit_->lineEdit(), SIGNAL(returnPressed()), this, SLOT(applySMARTSSelector()));
-=======
->>>>>>> 1.99.2.65
 		}
 
 		void MolecularControl::writePreferences(INIFile& inifile)
@@ -1442,68 +1414,6 @@ namespace BALL
 			DockWidget::writePreferences(inifile);
 		}
 
-<<<<<<< molecularControl.C
-		Size MolecularControl::applySMARTSSelector()
-		{
-			if (parentWidget() == 0) return 0;
-			if (smarts_edit_->currentText() == "")
-			{
-				getMainControl()->clearSelection();
-				return 0;
-			}
-
-			SmartsMatcher s;
-
-			HashSet<Composite*> roots;
-			Size nr_of_matches = 0;
-
-			try
-			{
-				CompositeManager::CompositeIterator it = getMainControl()->getCompositeManager().begin();
-				for(; it != getMainControl()->getCompositeManager().end(); it++)
-				{
-					MoleculeIterator mit = ((System*)*it)->beginMolecule();
-					for (;+mit; ++mit)
-					{
-						std::vector<std::set<const Atom*> > matches;
-						s.match(matches, *mit, smarts_edit_->currentText().ascii());
-						nr_of_matches += matches.size();
-						for (Position p = 0; p < matches.size(); p++)
-						{
-							std::set<const Atom*>& set = matches[p];
-							std::set<const Atom*>::iterator sit = set.begin();
-							for (; sit != set.end(); ++sit)
-							{
-								Atom& a = (*(Atom*)*sit);
-								a.setSelected(true);
-								roots.insert(&a.getRoot());
-							}
-						}
-					}
-				}
-			}
-			catch(...)
-			{
-				setStatusbarText("Invalid Expression!", true);
-				return 0;
-			}
-
-			HashSet<Composite*>::Iterator sit = roots.begin();
-			for (; sit != roots.end(); sit++)
-			{
-				getMainControl()->updateRepresentationsOf(**sit, true, true);
-			}
-
-			NewSelectionMessage* nm = new NewSelectionMessage;
-			nm->setOpenItems(true);
-			getMainControl()->sendMessage(*nm);
-
-			setStatusbarText(String(nr_of_matches) + "Matches");
-			listview->setFocus();
-
-			return nr_of_matches;
-		}
-=======
 		void MolecularControl::onItemClicked(QTreeWidgetItem* item, int col)
 		{
 			if (col != 2) return;
@@ -1695,7 +1605,6 @@ namespace BALL
 			getMainControl()->insert(*rep);
 			getMainControl()->update(*rep);
 		}
->>>>>>> 1.99.2.65
 
 	} // namespace VIEW
 } // namespace BALL

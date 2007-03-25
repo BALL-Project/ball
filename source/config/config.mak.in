@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# $Id: config.mak.in,v 1.40.14.1 2007/03/25 22:02:48 oliver Exp $
+# $Id: config.mak.in,v 1.40.14.2 2007/03/25 23:30:52 amoll Exp $
 #
 # Author:
 #  Oliver Kohlbacher
@@ -67,7 +67,6 @@ BALL_LIBS       = @BALL_LIBS@
 # USE_VIEW contains true if VIEW support is to be built, false otherwise
 # VIEW_PLATFORM either contains Mesa or OpenGL (so far)
 #
-<<<<<<<<<< config.mak.in
 BALL_HAS_VIEW				= @BALL_HAS_VIEW@
 VIEW_PLATFORM				= @VIEW_PLATFORM@
 
@@ -100,41 +99,6 @@ PYTHON_INCLUDES			= @PYTHON_INCLUDES@
 PYTHON_SUPPORT      = @PYTHON_SUPPORT@ 
 PYTHON_LIBS					= @PYTHON_LIBS@
 PYTHON_EXECUTABLE	  =	@PYTHON_EXECUTABLE@
-=======
-BALL_HAS_VIEW		= @BALL_HAS_VIEW@
-VIEW_PLATFORM		= @VIEW_PLATFORM@
-
-BALL_HAS_XDR		= @BALL_HAS_XDR@
-
-BALL_HAS_GSL		= @BALL_HAS_GSL@
-GSL_LIBS		= @GSL_LIBS@
-
-BALL_HAS_FFTW       	= @BALL_HAS_FFTW@
-FFTW_LIBS		= @FFTW_LIBS@
-
-BALL_HAS_FLEX_YACC  	= @BALL_HAS_FLEX_YACC@
-
-X11_LIBPATH		= @X11_LIBPATH@
-X11_LIBOPTS         	= @X11_LIBOPTS@
-X11_LIBS            	= @X11_LIBS@
-
-OPENGL_LIBPATH      	= @OPENGL_LIBPATH@
-OPENGL_LIBOPTS      	= @OPENGL_LIBOPTS@
-
-QT_LIBPATH          	= @QT_LIBPATH@
-QT_MT_SUFFIX        	= @QT_MT_SUFFIX@
-QT_LIBOPTS          	= @QT_LIBOPTS@
-MOC                 	= @MOC@
-UIC                 	= @UIC@
-
-SIP            		= @SIP@
-SIP_LIB        		= @SIP_LIB@
-SIP_INCLUDES   		= @SIP_INCLUDES@
-PYTHON_INCLUDES		= @PYTHON_INCLUDES@
-PYTHON_SUPPORT      	= @PYTHON_SUPPORT@ 
-PYTHON_LIBS		= @PYTHON_LIBS@
-PYTHON_EXECUTABLE	= @PYTHON_EXECUTABLE@
->>>>>>> 1.38.2.3
 
 #
 # Support for valgrind, a memory leak checker.
