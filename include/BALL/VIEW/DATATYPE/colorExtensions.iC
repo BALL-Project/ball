@@ -1,0 +1,56 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: colorExtensions.iC,v 1.1.4.1 2007/03/25 21:25:40 oliver Exp $
+
+BALL_INLINE
+void ColorExtension2::setColor2(const ColorRGBA& color)
+	throw()
+{
+  color2_ = color;
+}
+
+BALL_INLINE
+ColorRGBA& ColorExtension2::getColor2()
+	throw()
+{
+  return color2_;
+}
+
+BALL_INLINE
+const ColorRGBA& ColorExtension2::getColor2() const
+	throw()
+{
+  return color2_;
+}
+
+BALL_INLINE
+void ColorExtension2::getColor2(ColorRGBA& color) const
+	throw()
+{
+  color = color2_;
+}
+
+
+
+BALL_INLINE
+void MultiColorExtension::setColors(const vector<ColorRGBA>& color)
+	throw()
+{
+  colors = color;
+}
+
+BALL_INLINE
+vector<ColorRGBA>& MultiColorExtension::getColors()
+	throw()
+{
+  return colors;
+}
+
+BALL_INLINE
+const vector<ColorRGBA>& MultiColorExtension::getColors() const
+	throw()
+{
+  return colors;
+}
+

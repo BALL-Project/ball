@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.h,v 1.10 2006/06/08 21:36:36 bertsch Exp $
+// $Id: smartsParser.h,v 1.10.8.1 2007/03/25 21:25:31 oliver Exp $
 //
 
 #ifndef BALL_STRUCTURE_SMARTES_PARSER_H
@@ -36,10 +36,14 @@
 #include <map>
 #include <set>
 
+// needed for MSVC:
+#undef CW_DEFAULT
+
 namespace BALL 
 {
 
-	/** @name	\brief SMARTS Parser.
+	/** SMARTS Parser.
+			\ingroup StructureMatching
 	*/
 	class BALL_EXPORT SmartsParser
 	{
@@ -137,9 +141,7 @@ namespace BALL
 				SPBondOrder bond_order_;
 				bool not_;
 		};
-	
-		// TODO union of types used and map from name (as enum) to value of union
-	
+		
 		class BALL_EXPORT SPAtom
 	/*		:	public Atom */
 	/*		: public PropertyManager */
@@ -475,8 +477,6 @@ namespace BALL
 		
 		BALL_EXPORT static State state;
 
-		void setNextComponentNumberToSubTree(SPNode* spnode);
-
 		const std::set<SPNode*>& getNodes() const { return nodes_; }
 
 		const std::set<SPEdge*>& getEdges() const { return edges_; }
@@ -489,13 +489,15 @@ namespace BALL
 
 		void addRecursiveEdge(SPEdge* edge) { rec_edges_.insert(edge); }
 
+		void setNextComponentNumberToSubTree(SPNode* spnode);
+
 		protected:
 
-			bool needs_SSSR_;
+		bool needs_SSSR_;
 
-			bool recursive_;
+		bool recursive_;
 
-			bool component_grouping_;
+		bool component_grouping_;
 
 			static vector<std::set<const Atom*> >* sssr_;
 

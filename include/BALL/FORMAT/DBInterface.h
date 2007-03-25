@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.h,v 1.7 2006/04/29 08:08:16 oliver Exp $
+// $Id: DBInterface.h,v 1.7.10.1 2007/03/25 21:23:41 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -15,8 +15,10 @@
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/COMMON/exception.h>
 
-#include <qsqlrecord.h>
-#include <qsqldatabase.h>
+#include <QtSql/qsqlrecord.h>
+#include <QtSql/qsqldatabase.h>
+#include <QtSql/qsqlquery.h>
+#include <Qt/qvariant.h>
 
 namespace BALL
 {
@@ -229,7 +231,7 @@ namespace BALL
 		QSqlQuery& query() { return *query_; }
 
 		/// Return the (expanded) last query
-		String executedQuery() { return query_->executedQuery().ascii();}
+		String executedQuery() { return query_->executedQuery().toStdString();}
 
 		/// Skip to the first result of the last query.
 		bool first() { return query_->first(); }
@@ -246,7 +248,7 @@ namespace BALL
 		IDVector extractIDs();
 
 		/// Skip to the previous result of the last query (if it exists)
-		bool prev() { return query_->prev(); }
+		bool prev() { return query_->previous(); }
 
 		/// Return the last database ID created by an insert statement
 		ID lastInsertedID();
@@ -293,7 +295,7 @@ namespace BALL
 		// Database conection
 		ErrorCode				error_;
 		///
-		QSqlDatabase*		db_;
+		QSqlDatabase		db_;
 		///
 		QSqlQuery*			query_;
 		

@@ -22,9 +22,11 @@ namespace BALL
 		/**	Dialog for options of the docking algorithm GeometricFit.
     		\ingroup  ViewDialogs
 				@see GeometricFit
+				\ingroup ViewDialogs
 		 */
-		class BALL_EXPORT GeometricFitDialog : 
-			public GeometricFitDialogData,
+		class BALL_VIEW_EXPORT GeometricFitDialog : 
+			public QDialog,
+			public Ui_GeometricFitDialogData,
 			public PreferencesEntry
 		{ 
 			Q_OBJECT
@@ -45,7 +47,7 @@ namespace BALL
 				 *	@see        QDialog
 				 *	@see				PreferncesEntry
 				 */
-				GeometricFitDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
+				GeometricFitDialog(QWidget* parent = 0, const char* name = "GeometricFitDialog")
 					throw();
 					
 				/** Destructor.
@@ -96,10 +98,6 @@ namespace BALL
 				void writePreferences(INIFile& file)
 					throw();
 					
-				/** Resets the dialog to the standard values.
-				 */
-				void reset()
-					throw();
 				//@}
 					
 			public slots:
@@ -111,12 +109,15 @@ namespace BALL
 			 /** Is called when reset button is pressed.
 				 * Calls \link GeometricFitDialog::reset reset \endlink.
 				 */
-				void resetPressed();
+				void reset();
 				
 				/** Is called when cancel button is pressed.
 				 *	Hides dialog.
 				 */
-				void cancelPressed();
+				virtual void reject();
+
+				//
+				virtual void accept();
 				
 				
 			protected:

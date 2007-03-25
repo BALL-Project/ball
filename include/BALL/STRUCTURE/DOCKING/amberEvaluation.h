@@ -15,9 +15,10 @@
 namespace BALL
 {
 		/** A class for energetic evaluators of docking results using
-		 *  an AMBER force field as scoring function.
+		    an AMBER force field as scoring function.
+				\ingroup Docking
 		 */
-		class AmberEvaluation : public ForceFieldEvaluation
+		class BALL_EXPORT AmberEvaluation : public ForceFieldEvaluation
 		{
 			public:
 

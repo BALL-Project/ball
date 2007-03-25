@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.77 2006/02/07 12:35:25 oliver Exp $
+// $Id: mainControl.h,v 1.77.14.1 2007/03/25 21:25:59 oliver Exp $
 //
 // Author:
 //   Andreas Moll
@@ -22,8 +22,8 @@
 #	include <BALL/VIEW/KERNEL/connectionObject.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
-#	include <BALL/VIEW/KERNEL/primitiveManager.h>
+#ifndef BALL_VIEW_KERNEL_REPRESENTATIONMANAGER_H
+#	include <BALL/VIEW/KERNEL/representationManager.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
@@ -42,16 +42,18 @@
 # include <BALL/STRUCTURE/fragmentDB.h>
 #endif
 
-#include <qmainwindow.h>
-#include <qapplication.h>
-#include <qmenubar.h>    // menus
-#include <qlabel.h>			 // statusbar
-#include <qtimer.h>
+#include <QtGui/QKeySequence>
+#include <QtGui/QMainWindow>
+#include <QtGui/qapplication.h>
+#include <QtGui/qmenubar.h> 
+#include <QtGui/qlabel.h>
+#include <QtCore/qtimer.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
+		class ModelInformation;
 		class ModularWidget;
 		class Preferences;
 		class MainControlPreferences;
@@ -61,27 +63,41 @@ namespace BALL
 
 		/**	MainControl is the main administration unit for a program and must be
 				used by all	applications.
-				It is a storage facility for Composite objects, the graphical
-				Representation and the inserted ModularWidget.
-				The interface for the Composite administration is implemented in CompositeManager, and for
-				the Representation 's in PrimitiveManager.
-				\par
-				This class is also the root ConnectionObject. 
-				Therefore all messages will be handled from this class. 
-				\par
-				It is also derived from the QT::QMainWindow and therefore the main
+				MainControl is also derived from Qt::QMainWindow and therefore the main
 				widget of an application must be derived from this class. Further it has the
 				necessary interface methods to create and update the menus of the main application.
-				\par
-				It handles also the general preferences tab Preferences of the main application and notifies all
-				registered ModularWidget objects if the preferences have changed. \par
-				The preferences of the application are stored in an INIFile.
-				The default name of this file is ".BALLView".\par
-				\par
+				<br>
+				<br>
+				MainControl is also a storage facility for Composite objects, the graphical
+				Representation and the inserted ModularWidget.
+				The interface for the Composite administration is implemented in CompositeManager, and for
+				the Representation 's in RepresentationManager.
+				Specialized methods exists for the adding, updateing and removing of Composites as well
+				as Representations. (see the update, insert and remove methods)
+				<br>	
+				<br>	
+				This class is also the root ConnectionObject and thus
+				it is responsible for the handling of all messages.
+				To add ModularWidgets all that is necessary are the creation of the derived modular
+				widgets with the MainControl as their parents like e.g.<br>
+				new DisplayProperties(this, "DisplayProperties");<br>
+				For examples have a look at BALL/source/APPLICATIONS/mainframe.C
+				<br>
+				<br>
+				MainControl also handles the Preferences dialog (and it's tab entry for some general 
+				preferences) 
+				and notifies all registered ModularWidgets if the preferences have changed.
+				The content of the Preferences dialog with all setup options is stored in an INIFile.
+				The default name of this file is ".BALLView".<br>
+				@see writePreferences
+				@see fetchPreferences
+				@see saveBALLViewProjectFile
+				@see loadBALLViewProjectFile
+				<br><br>
 				<b>Caveat:</b> Due to a peculiarity of the QT Meta Object Compiler (MOC)
 				you have to specify the full namespace qualified name of this class when deriving from it. \par
-				So don't use\par 
-				<tt> class foo : public MainControl </tt>; but \par
+				So don't use<br>
+				<tt> class foo : public MainControl </tt>; but <br>
 				<tt> class foo : public BALL::VIEW::MainControl </tt> instead. 
 		\ingroup ViewKernelConnectivity
 		*/
@@ -90,7 +106,7 @@ namespace BALL
 				public ConnectionObject,
 				public Embeddable
 		{
-			friend class PrimitiveManager;
+			friend class RepresentationManager;
 			friend class SimulationThread;
 
 			Q_OBJECT
@@ -115,11 +131,17 @@ namespace BALL
 				/// File menu sub menu open
 				FILE_OPEN,
 
+				/// File menu sub menu open grid
+				FILE_OPEN_GRID,
+
 				/// File menu sub menu import [currently unused]
 				FILE_IMPORT,
 
 				/// File menu sub menu export
 				FILE_EXPORT,
+
+				/// 
+				FILE_MONITOR,
 
 				/// Edit menu
 				EDIT = 10100,
@@ -130,9 +152,12 @@ namespace BALL
 				/// Display menu 
 				DISPLAY = 10300,
 
+				/// Display Create submenu
+				DISPLAY_CREATE,
+				
 				/// Display Viewpoint submenu
 				DISPLAY_VIEWPOINT,
-				
+
 				/// Display Stereo submenu
 				DISPLAY_STEREO,
 				
@@ -148,8 +173,8 @@ namespace BALL
 				/// Tools menu
 				TOOLS = 10500,
 
-				/// Create grid submenu in Tools
-				TOOLS_CREATE_GRID,
+				/// Grid submenu in Tools
+				TOOLS_GRID,
 
 				/// Python submenu in Tools
 				TOOLS_PYTHON,
@@ -159,6 +184,9 @@ namespace BALL
 
 				/// Userdefined menus
 				USER = 10700,
+
+				/// Macros e.g. for Testing
+				MACRO = 10750,
 
 				/// Help menu
 				HELP = 10800
@@ -197,28 +225,49 @@ namespace BALL
 			MainControl(const MainControl& main_control)
 				throw();
 
-			/** Explicit default initialization.
+			/** Clear all data fast, to be called at exit only!
 			*/
 			virtual void clear()
 				throw();
 
+			/** Clear all data, can be called at any time
+			*/
+			void clearData()
+				throw();
+
 			//@}
-			/**	@name	Accessors
+			/**	@name	Methods to manage Representation(s)
 			*/
 			//@{
 
 			/** Get the primitive manager.
-					The class PrimitiveManager contains all Representation objects and GeometricObject.
+					The class RepresentationManager contains all Representation objects and GeometricObject.
 			*/
-			PrimitiveManager& getPrimitiveManager()
+			RepresentationManager& getRepresentationManager()
 				throw() { return primitive_manager_;}
 
-			/** Get the composite manager.
-					The class CompositeManager is the owner of all Composite objects.
+			/** Insert a Representation
+			 		The Representation must be created on the heap!!!
+			 		A RepresentationMessage with type NEW is send.
+					\return false if the RepresentationManager contains the Representation
 			*/
-			CompositeManager& getCompositeManager()
-				throw() { return composite_manager_;}
-			
+			bool insert(Representation& rep)
+				throw();
+
+			/** Remove a Representation
+			 		A RepresentationMessage with type REMOVE is send.
+					\return false if the RepresentationManager doesnt contain the Representation
+			*/
+			bool remove(Representation& rep)
+				throw();
+
+			/** Update a Representation
+			 		A RepresentationMessage with type UPDATE and a SceneMessage is send.
+					\return false if the RepresentationManager doesnt contain the Representation
+			*/
+			bool update(Representation& rep)
+				throw();
+
 			/** Redraws all Representation objects for a Composite.
 					If the Composite is not inserted into this MainControl <tt>false</tt> will be returned.
 					updateRepresentationsOf() is called after receiving a CompositeMessage with type CHANGED_COMPOSITE in onNotify().
@@ -244,17 +293,18 @@ namespace BALL
 			void redrawAllRepresentations(bool rebuild_display_lists = false)
 				throw();
 
-			/** Update a Composite in all ModularWidget.
-			 		This method differs wheter the composites hierarchy was changed or not.
-					The update is faster if the hierarchy is unchanged, because e.g. the
-					MolecularControl doesnt have to rebuild the ListViewItem tree.
-			 		A CompositeMessage with type CHANGED_COMPOSITE or CHANGED_COMPOSITE_HIERARCHY is send and
-					updateRepresentationsOf(composite) is called.
-					\return false if the CompositeManager doesnt contain the Composite
+					
+			//@}
+			/**	@name	Methods to manage Composite(s)
 			*/
-			void update(Composite& composite, bool changed_hierarchy = true)
-				throw();
+			//@{
 
+			/** Get the composite manager.
+					The class CompositeManager is the owner of all Composite objects.
+			*/
+			CompositeManager& getCompositeManager()
+				throw() { return composite_manager_;}
+	
 			/** Insert a Composite and notify all ModularWidget.
 			 		The Composite has to be created on the heap!!!
 			 		A CompositeMessage with type NEW_COMPOSITE is send and
@@ -272,36 +322,94 @@ namespace BALL
 			*/
 			bool remove(Composite& composite, bool to_delete = true, bool update = true)
 				throw();
-
-			/** Update a Representation
-			 		A RepresentationMessage with type UPDATE and a SceneMessage is send.
-					\return false if the PrimitiveManager doesnt contain the Representation
+	
+			/** Update a Composite in all ModularWidget.
+			 		This method differs wheter the composites hierarchy was changed or not.
+					The update is faster if the hierarchy is unchanged, because e.g. the
+					MolecularControl doesnt have to rebuild the ListViewItem tree.
+			 		A CompositeMessage with type CHANGED_COMPOSITE or CHANGED_COMPOSITE_HIERARCHY is send and
+					updateRepresentationsOf(composite) is called.
+					\return false if the CompositeManager doesnt contain the Composite
 			*/
-			bool update(Representation& rep)
+			void update(Composite& composite, bool changed_hierarchy = true)
+				throw();
+			
+			/// Get the HashSet with the selected (e.g. picked) Composite objects (const)
+			const HashSet<Composite*>& getSelection() const
 				throw();
 
-			/** Insert a Representation
-			 		The Representation must be created on the heap!!!
-			 		A RepresentationMessage with type NEW is send.
-					\return false if the PrimitiveManager contains the Representation
-			*/
-			bool insert(Representation& rep)
+			/// Get the HashSet with the selected (e.g. picked) Composite objects
+			HashSet<Composite*>& getSelection() 
 				throw();
 
-			/** Remove a Representation
-			 		A RepresentationMessage with type REMOVE is send.
-					\return false if the PrimitiveManager doesnt contain the Representation
-			*/
-			bool remove(Representation& rep)
+			/// Get the selection (highlighted items) of the MolecularControl (not the selection with checkboxes)
+			List<Composite*>& getMolecularControlSelection()
 				throw();
 
-				
-			/** Mutable inspection of the preferences dialog.
-					\return   Preferences* a pointer to the Preferences dialog, (<tt> 0</tt> if not present)
-			*/
-			Preferences* getPreferences()
+			/// If exactly one System is selected in the Control, return a pointer to this system, otherwise 0.
+			System* getSelectedSystem()
 				throw();
 
+			///	Select a Composite recursive and add all Atom and AtomContainer objects to the selection.
+			void selectCompositeRecursive(Composite* composite, bool first_call=false)
+				throw();
+
+			/// Select a Composite recursive and add all Atom and AtomContainer objects to the selection.
+			void deselectCompositeRecursive(Composite* composite, bool first_call=false)
+				throw();
+
+			/** Clear Selection
+			 		Deselect all Composites and clear the selection list in the MainControl
+			*/
+			void clearSelection()
+				throw();
+
+			/** Print some informations for the selection in the statusbar.
+					Called by selectComposites_().
+					If one Atom is selected, its position is printed.
+					If two Atom objects are selected, their distance,
+					for three Atom 's their angle and
+					for four Atom 's their torsion angle.
+					Else the number of items is printed.
+			*/
+			void printSelectionInfos()
+				throw();
+
+
+			//@}
+			/**	@name	Preferences and Configuration files
+			*/
+			//@{
+			
+			/// Save the current configuration, structures and representations to a BALLView project file (*.bvp)
+			void saveBALLViewProjectFile(const String& filename);
+			
+			/// Load a BALLView project file
+			void loadBALLViewProjectFile(const String& filename) throw();
+
+			/** Fetch the preferences from the INIfile.
+					Calls fetchPreferences() for all registered ModularWidgets.
+					<b>Note:</b>If this method is overridden, call this method at the end of the
+					overriden method to make sure that the general preferences are fetched.
+					\param  inifile the INIFile that contains the needed values
+			*/
+			virtual void fetchPreferences(INIFile &inifile)
+				throw();
+			
+			/** Writes the widgets preferences to the INIFile.
+					Calls writePreferences() for all registered ModularWidgets and
+					Preferences::savePreferences().
+					<b>Note:</b> If this method is overridden, call this method at the end of the
+					overriden method to make sure that the general preferences are written.
+					\param  inifile the INIFile that contains the needed values
+			*/
+			virtual void writePreferences(INIFile &inifile)
+				throw();
+			
+			/// Restore the positions the main window and of all DockWindow's from the INIFile
+			virtual void restoreWindows(const INIFile& inifile)
+				throw();
+	
 			/** Mutable inspection of the INIFile.
 			*/
 			INIFile& getINIFile()
@@ -310,6 +418,60 @@ namespace BALL
 			/** Non-mutable inspection of the INIFile.
 			*/
 			const INIFile& getINIFile() const
+				throw();
+			
+			/** Mutable inspection of the preferences dialog.
+					\return   Preferences* a pointer to the Preferences dialog, (<tt> 0</tt> if not present)
+			*/
+			Preferences* getPreferences()
+				throw();
+			
+			/** Apply all preferences.
+					This method is called automatically by applyPreferencesClicked() and calls
+					applyPreferences() for all registered ModularWidgets.
+					<b>Note:</b> If this method is overridden, call this method at the end of the
+					overriden method to make sure that the general preferences are applied.
+					\see    ModularWidget
+					\see    Preferences
+			*/
+			virtual void applyPreferences()
+				throw();
+			
+		
+			//@}
+			/**	@name	Management of ModularWidget(s) and Message(s)
+			*/
+			//@{
+
+			/** Return the MainControl of an QObject.
+					This method returns the MainControl that should be the root of the
+					ConnectionObject tree from a given widget or dialog QObject.
+					Because we use the qt library, every widget or dialog has 
+					QObject as a base class. MainControl is the main application and therefore
+					all widgets and dialogs are its children. We use the qt
+					QObject tree mechanism to return the MainControl for a given QObject.\par
+					<b>Note</b>: This method is used internally from the ModularWidget registration process.
+					\return   MainControl* the root of the ConnectionObject tree
+					\see      ConnectionObject
+					\see      ModularWidget
+			*/
+			static MainControl* getMainControl(const QObject* object)
+				throw();
+			
+			/** Add a new ModularWidget to this MainControl.
+					This method will be called internally by the ModularWidget registration process.
+					So, if you dont know exactly what this method does, you will not need it!
+					\param  widget the ModularWidget to be inserted into this mainControl
+			*/
+			void addModularWidget(ModularWidget* widget)
+				throw();
+
+			/** Remove a ModularWidget from the MainControl.
+					This method will be called internally by the ModularWidget registration process.
+					So, if you dont know exactly what this method does, you will not need it!
+					\param  widget the ModularWidget to be removed
+			*/
+			void removeModularWidget(ModularWidget* widget)
 				throw();
 
 			/** Message handling method.
@@ -334,15 +496,247 @@ namespace BALL
 			void sendMessage(Message& message)
 				throw();
 
-			/// Get the ID of the last highlighted menu entry (used for the HelpViewer)
-			Index getLastHighLightedMenuEntry() { return last_highlighted_menu_entry_;}
+
+			//@}
+			/**	@name	Menu entries handling
+			*/
+			//@{
+		
+			/** Insert a new menu entry into menu <b>ID</b> 
+					(creates a new menu if <b>ID</b> not existent).
+					See the documentation of the qt library for more information concerning menu creation.
+					\param ID the menu ID to which the new menu entry should be inserted
+					\param name the name of the new menu entry
+					\param receiver the object to which the menu action will be connected
+					\param slot the function that will be called by activation of the menu entry
+					\param accel the acceleration key
+					\return int the new entry_ID
+			*/
+			QAction* insertMenuEntry(Position parent_id, const String& name, const QObject* receiver = 0, 
+													 const char* slot = 0, QKeySequence accel = QKeySequence())
+				throw();
+
+			/// 
+			void removeMenuEntry (Index parent_id, QAction* action)
+				throw();
 			
-			public slots:
+			/**	Initialize a new popup menu <b> ID</b>. 
+					If the MainControl has already the popup menu <b>ID</b> that QPopupMenu is returned.
+					See the documentation of the qt library for more information concerning the class QPopupMenu.
+					\param    ID the ID of the menu entry to be created.
+					\return   QPopupMenu* a pointer to the created QPopupMenu
+					\see      PopUpID
+			*/	
+			virtual QMenu* initPopupMenu(int ID)
+				throw();
+
+			/** Insert a separator into the popup menu <b> ID</b>. 
+					If the menu <b>ID</b> is not existent, it will be created first.
+					\param ID the id of the menu to which a separator will be inserted
+					\see   PopUpID
+			*/
+			void insertPopupMenuSeparator(int ID)
+				throw();
+
+			/// Set a hint for a menu entry
+			void setMenuHint(QAction* id, const String& hint)
+				throw();
+
+			/// Get the hint for a menu entry
+			String getMenuHint(QAction* id) const
+				throw();
+
+			/** Enable the delete entry for GenericControls.
+					Called by a GenericControl, if it has a selection, that can be deleted.
+			*/
+			void setDeleteEntryEnabled(bool state)
+				throw();
+	
+			/** Insert the delete entry for GenericControls.
+					Called by all GenericControls.
+			*/
+			void insertDeleteEntry()
+				throw();
+
+			/// Get the ID of the last highlighted menu entry (used for the HelpViewer)
+			QAction* getLastHighLightedMenuEntry() { return last_highlighted_menu_entry_;}
+				
+			//@}
+			/**	@name	Methods for multithreading
+			*/
+			//@{
+
+			/** Check wheter the stored composites can be modified at the moment.
+					This method returns true e.g. while a MD simulation is running.
+			*/
+			bool compositesAreLocked() const throw();
+
+			/** Lock the Composites for a given Modular Widget.
+					This allows exclusive acces e.g. to delete or modify Composites and prevents those
+					nasty segfaults if an other thread works on the Composites.
+					@retrun true if the exclusive lock on the composites could be obtained
+			*/
+			bool lockCompositesFor(ModularWidget* widget) throw();
+
+			/// Lock the Composites for a given Modular Widget
+			bool unlockCompositesFor(ModularWidget* widget) throw();
+
+			/// Get the ModularWidget with excluse access to the Composites
+			ModularWidget* getLockingWidget() throw();
+
+			/// Return true if Representations are (re)calculated
+			bool updateOfRepresentationRunning() throw();
+					
+			/// Returns true, if the simulation was told to stop, but hasnt done this so far.
+			bool stopedSimulation() { return stop_simulation_;}
+
+			/** Set the simulation thread.
+			 		The instance of SimulationThread will be deleted after it
+					has finished. If an other simulation is still running, this
+					method returns false.
+			*/
+			bool setSimulationThread(SimulationThread* thread)
+				throw();
+
+			/** Get the currently running SimulationThread or
+			 		zero pointer if no simulation running.
+			*/
+			SimulationThread* getSimulationThread()
+				throw();
+
+			/** Method to query if multithreading is enabled.
+			 		Multithreaded code is used for serveral functions:
+			    - Update of Representations
+					- Simulations
+					- Download PDB files
+					<br><br>
+					To debug such code it is often usefull to to be able to run it in
+					a singlethreaded mode. Every piece of multithreaded code should
+					therefore call this method and decide if it should run without multiple threads.
+					Furthermore most of the time, valid benchmark results can only be achived 
+					with one single thread.
+			*/
+			bool useMultithreading()
+				throw();
+
+			/// See above
+			void setMultithreading(bool state)
+				throw() { multi_threading_mode_ = state;}
+
+			///
+			bool isBusy() const;
+
+			/// Wait until the MainControl is not busy anymore
+			void wait();
+
+			/// Added overloaded method from QApplication for access in Python
+			void processEvents(Size ms);
+
+	
+			//@}
+			/**	@name	Accessors and Settings
+			*/
+			//@{
+			
+			/** Sets the text in the statusbar.
+					The statusbar has a label, whose text is set to the given argument.
+					It is possible to notify the user with a beep sound.
+					@param important If true, the message is also logged in the LogView, marked red in the statusbar and
+								 shown there for a longer time
+					@param beep if true a beep tone is played to inform the user about a critical event
+			*/
+			void setStatusbarText(const String& text, bool important = false, bool beep = false)
+				throw();
+
+			///
+			String getStatusbarText() const
+				throw();
+	
+			/// Get a const reference for the fragment database
+			const FragmentDB& getFragmentDB() const
+				throw() { return fragment_db_;}
+
+			///
+			const ModelInformation& getModelInformation() const;
+
+			///
+			void setModelInformation(ModelInformation* mi);
+
+			/** BALLView stores the directory of the last file operation, e.g. when a PDB file is opened or saved.
+			 		This saves the user some time, since he doesnt have to change the folders in the file dialogs as often.
+					This method returns the last directory.
+			*/
+			String getWorkingDir() const
+				throw() { return working_dir_;}
+
+			/// Set the working directory for the next file dialog and file operation to the given directory.
+			void setWorkingDir(const String& dir)
+				throw();
+
+			/** This enables logging to an file for all messages send per LogStream .e.g. Log().error()
+			*/
+			void enableLoggingToFile()
+				throw();
+			
+			/** This disables logging to an file for all messages send per LogStream .e.g. Log().error()
+			*/	
+			void disableLoggingToFile()
+				throw();
+
+			/** Set the name for the logging file (see above) to the given name. 
+					This file is stored in the users home dir.
+			*/
+			void setLoggingFilename(const String& string)
+				throw();
+
+			/// See above
+			const String& getLoggingFilename() const
+				throw();
+
+			/// Set the proxy for HTTP and FTP operations
+			void setProxy(const String& host, Position port);
+
+			/// Get the hostname for the proxy
+			String getProxy() const { return proxy_;}
+
+			/// Get the port for the proxy
+			Position getProxyPort() const { return proxy_port_;}
+			
+			///
+			bool isAboutToQuit() { return about_to_quit_;}
+		
+
+			//@}
+			/**	@name	Debugging and Diagnostics
+			*/
+			//@{
+
+			/** Internal state dump.
+					Dump the current internal state of this mainControl to 
+					the output ostream <b>s</b> with dumping depth <b>depth</b>.
+					\param   s output stream where to output the internal state 
+					\param   depth the dumping depth
+			*/
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
+					
+			/** Open a file.
+			 		This method is called to parse any command line arguments.
+			 		It iterates over all ModularWidgets and calls ModularWidget::canHandle
+					with the files extension (the suffix after the dot in the filename).
+					If one ModularWidget can handle the format, ModularWidget::openFile
+					is called.
+			*/
+			virtual void openFile(const String& file) 
+				throw();
+
 
 			//@}
 			/** @name Public slots
 			*/
 			//@{
+			
+			public slots:
 
 			/**	Initialize all registered ModularWidget objects.
 					It initializes the menu structure, the preferences dialogs and connects
@@ -398,332 +792,38 @@ namespace BALL
 					@see setMenuHint
 					@see getMenuHint
 			*/
-			void menuItemHighlighted(int id)
+			void menuItemHighlighted(QAction* action)
 				throw();
 			
 			/// Interface to QT events, e.g. to communicate with other threads
-			virtual void customEvent( QCustomEvent * e );
+			virtual bool event(QEvent* e);
 
 			/// Make the program exit
-			virtual void quit();
-
-			///
-			bool isAboutToQuit() { return about_to_quit_;}
-			
+			virtual void quit(int return_value = 0);
+		
 			/// overloaded from QT for Python Interface
-			virtual void resize (int w, int h );
-
-			public:
-			
-			//@}
-			/**	@name	Automatic module registration, menu construction and preferences handling.
-			*/
-			//@{
-
-			/** Return the MainControl of an QObject.
-					This method returns the MainControl that should be the root of the
-					ConnectionObject tree from a given widget or dialog QObject.
-					Because we use the qt library, every widget or dialog has 
-					QObject as a base class. MainControl is the main application and therefore
-					all widgets and dialogs are its children. We use the qt
-					QObject tree mechanism to return the MainControl for a given QObject.\par
-					<b>Note</b>: This method is used internally from the ModularWidget registration process.
-					\return   MainControl* the root of the ConnectionObject tree
-					\see      ConnectionObject
-					\see      ModularWidget
-			*/
-			static MainControl* getMainControl(const QObject* object)
-				throw();
-			
-			/** Insert a new menu entry into menu <b>ID</b> 
-					(creates a new menu if <b>ID</b> not existent).
-					See the documentation of the qt library for more information concerning menu creation.
-					\param ID the menu ID to which the new menu entry should be inserted
-					\param name the name of the new menu entry
-					\param receiver the object to which the menu action will be connected
-					\param slot the function that will be called by activation of the menu entry
-					\param accel the acceleration key
-					\param entry_ID the id for the new menu entry (default: -1, will create a new one)
-					\param hint
-					\return int the new entry_ID
-			*/
-			Index insertMenuEntry (Index parent_id, const String& name, const QObject* receiver = 0, 
-													 const char* slot = 0, Index accel = 0, Index pos = -1)
-				throw();
-
-			/// 
-			void removeMenuEntry (Index parent_id, Index entry_ID)
-				throw();
-			
-			/**	Initialize a new popup menu <b> ID</b>. 
-					If the MainControl has already the popup menu <b>ID</b> that QPopupMenu is returned.
-					See the documentation of the qt library for more information concerning the class QPopupMenu.
-					\param    ID the ID of the menu entry to be created.
-					\return   QPopupMenu* a pointer to the created QPopupMenu
-					\see      PopUpID
-			*/	
-			virtual QPopupMenu* initPopupMenu(int ID)
-				throw();
-
-			/** Insert a separator into the popup menu <b> ID</b>. 
-					If the menu <b>ID</b> is not existent, it will be created first.
-					\param ID the id of the menu to which a separator will be inserted
-					\see   PopUpID
-			*/
-			void insertPopupMenuSeparator(int ID)
-				throw();
-			
-			/** Apply all preferences.
-					This method is called automatically by applyPreferencesClicked() and calls
-					applyPreferences() for all registered ModularWidgets.
-					<b>Note:</b> If this method is overridden, call this method at the end of the
-					overriden method to make sure that the general preferences are applied.
-					\see    ModularWidget
-					\see    Preferences
-			*/
-			virtual void applyPreferences()
-				throw();
-			
-			/** Fetch the preferences from the INIfile.
-					Calls fetchPreferences() for all registered ModularWidgets.
-					<b>Note:</b>If this method is overridden, call this method at the end of the
-					overriden method to make sure that the general preferences are fetched.
-					\param  inifile the INIFile that contains the needed values
-			*/
-			virtual void fetchPreferences(INIFile &inifile)
-				throw();
-			
-			/** Writes the widgets preferences to the INIFile.
-					Calls writePreferences() for all registered ModularWidgets and
-					Preferences::savePreferences().
-					<b>Note:</b> If this method is overridden, call this method at the end of the
-					overriden method to make sure that the general preferences are written.
-					\param  inifile the INIFile that contains the needed values
-			*/
-			virtual void writePreferences(INIFile &inifile)
-				throw();
-			
-			/// Restore the positions the main window and of all DockWindow's from the INIFile
-			virtual void restoreWindows(const INIFile& inifile)
-				throw();
-			
-			/** Add a new ModularWidget to this MainControl.
-					This method will be called internally by the ModularWidget registration process.
-					\param  widget the ModularWidget to be inserted into this mainControl
-			*/
-			void addModularWidget(ModularWidget* widget)
-				throw();
-
-			/** Remove a ModularWidget from the MainControl.
-					This method will be called internally by the ModularWidget registration process.
-					\param  widget the ModularWidget to be removed
-			*/
-			void removeModularWidget(ModularWidget* widget)
-				throw();
-
-			//@}
-			/**	@name	Accessors and Settings
-			*/
-			//@{
-			
-			/// Get the HashSet with the selected (e.g. picked) Composite objects (const)
-			const HashSet<Composite*>& getSelection() const
-				throw();
-
-			/// Get the HashSet with the selected (e.g. picked) Composite objects
-			HashSet<Composite*>& getSelection() 
-				throw();
-
-			/// Get the selection (highlighted items) of the MolecularControl (not the selection with checkboxes)
-			List<Composite*>& getMolecularControlSelection()
-				throw();
-
-			/// If exactly one System is selected in the Control, return a pointer to this system, otherwise 0.
-			System* getSelectedSystem()
-				throw();
-
-			///	Select a Composite recursive and add all Atom and AtomContainer objects to the selection.
-			void selectCompositeRecursive(Composite* composite, bool first_call=false)
-				throw();
-
-			/// Select a Composite recursive and add all Atom and AtomContainer objects to the selection.
-			void deselectCompositeRecursive(Composite* composite, bool first_call=false)
-				throw();
-
-			/** Clear Selection
-			 		Deselect all Composites and clear the selection list in the MainControl
-			*/
-			void clearSelection()
-				throw();
-
-			/** Print some informations for the selection in the statusbar.
-					Called by selectComposites_().
-					If one Atom is selected, its position is printed.
-					If two Atom objects are selected, their distance,
-					for three Atom 's their angle and
-					for four Atom 's their torsion angle.
-					Else the number of items is printed.
-			*/
-			void printSelectionInfos()
-				throw();
-
-			/** Sets the text in the statusbar.
-					The statusbar has a label, whose text is set to the given argument.
-					It is possible to notify the user with a beep sound.
-			*/
-			void setStatusbarText(const String& text, bool important = false, bool beep = false)
-				throw();
+			virtual void resize(int w, int h );
 
 			///
-			String getStatusbarText() const
-				throw();
-
-			/// Set a hint for a menu entry
-			void setMenuHint(Index id, const String& hint)
-				throw();
-
-			/// Get the hint for a menu entry
-			const String& getMenuHint(Index id) const
-				throw();
-			
-			/// Get a const reference for the fragment database
-			const FragmentDB& getFragmentDB() const
-				throw() { return fragment_db_;}
-
-			/** Check wheter the stored composites can be modified at the moment.
-					This method returns true e.g. while a MD simulation is running.
-			*/
-			bool compositesAreLocked() throw();
+			void setContentSize(int w, int h);
 
 			///
-			bool lockCompositesFor(ModularWidget* widget) throw();
+			void toggleFullScreen();
 
-			///
-			bool unlockCompositesFor(ModularWidget* widget) throw();
-
-			///
-			ModularWidget* getLockingWidget() throw();
-
-			///
-			bool updateOfRepresentationRunning() throw();
-					
-			/// Returns true, if the simulation was told to stop, but hasnt done this so far.
-			bool stopedSimulation() { return stop_simulation_;}
-
-			/** Set the simulation thread.
-			 		The instance of SimulationThread will be deleted after it
-					has finished. If an other simulation is still running, this
-					method returns false.
-			*/
-			bool setSimulationThread(SimulationThread* thread)
-				throw();
-
-			/** Get the currently running SimulationThread or
-			 		zero pointer if no simulation running.
-			*/
-			SimulationThread* getSimulationThread()
-				throw();
-
-			/** Enable the delete entry for GenericControls.
-					Called by a GenericControl, if it has a selection, that can be deleted.
-			*/
-			void setDeleteEntryEnabled(bool state)
-				throw();
-	
-			/** Insert the delete entry for GenericControls.
-					Called by all GenericControls.
-			*/
-			void insertDeleteEntry()
-				throw();
-
-			///
-			String getWorkingDir() const
-				throw() { return working_dir_;}
-
-			///
-			void setWorkingDir(const String& dir)
-				throw();
-
-			///
-			void enableLoggingToFile()
-				throw();
-			
-			///
-			void disableLoggingToFile()
-				throw();
-
-			///
-			void setLoggingFilename(const String& string)
-				throw();
-
-			///
-			const String& getLoggingFilename() const
-				throw();
-
-			///
-			void setProxy(const String& host, Position port);
-
-			///
-			String getProxy() const { return proxy_;}
-
-			///
-			Position getProxyPort() const { return proxy_port_;}
-
-			#ifdef BALL_QT_HAS_THREADS
-			/// QWaitCondition to wake up threads, after Composites are unlocked
-			QWaitCondition& getCompositesLockedWaitCondition() { return composites_locked_wait_condition_;}
-			#endif
-
-			/** Multithreaded code is used for serveral functions:
-			    - Update of Representations
-					- Simulations
-					- Download PDB files
-					To debug such code it is often usefull to to be able to run it in
-					a singlethreaded mode. Every piece of multithreaded code should
-					therefore call this method and decide if it should run without multiple threads.
-					Furthermore most of the time, valid benchmark results can only be achived 
-					with one single thread.
-			*/
-			bool useMultithreading()
-				throw();
-
-			/// See above
-			void setMultithreading(bool state)
-				throw() { multi_threading_mode_ = state;}
-
-			//@}
-			/**	@name	Debugging and Diagnostics
-			*/
-			//@{
-
-			/** Internal state dump.
-					Dump the current internal state of this mainControl to 
-					the output ostream <b>s</b> with dumping depth <b>depth</b>.
-					\param   s output stream where to output the internal state 
-					\param   depth the dumping depth
-			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
-					
-			/** Open a file.
-			 		To be derived from...
-			*/
-			virtual void openFile(const String& /*file*/) throw() {};
-
-			///
-			void saveBALLViewProjectFile(const String& filename);
-			
-			///
-			void loadBALLViewProjectFile(const String& filename) throw();
-
-			///
+			/// Create a BALLView project file with the name quick.bvp in the users home dir
 			void quickSave();
 
-			///
+			/// Quickload quick.bvp in the users home die (see above)
 			void quickLoad();
+			
+			///
+			void saveBALLViewProjectFile() throw();
 
 			///
-			void processEvents(Size ms);
+			void loadBALLViewProjectFile() throw();
+
+			///
+			void quickLoadConfirm();
 
 			//@}
 			
@@ -740,6 +840,8 @@ namespace BALL
 
 			// Connected to the delete entry
 			virtual void deleteClicked();
+
+			void updateRepLabel_();
 
 			protected:
 
@@ -760,17 +862,6 @@ namespace BALL
 			*/
 			bool remove_(Composite& composite, bool update_representations_of_parent = true, 
 																				 bool to_delete = true)
-				throw();
-
-			/*_	Create a unique item ID for a menuentry by adding 1 to current_id_
-			*/
-			int getNextID_()
-				throw();
-
-			void selectRecursive_(Composite* composite)
-				throw();
-
-			void deselectRecursive_(Composite* composite)
 				throw();
 
 			/*_ Select the composite parents of the geometric objects.
@@ -796,8 +887,12 @@ namespace BALL
 
 			void init_();
 
+			bool 								about_to_quit_;
+
 			//_
 			FragmentDB fragment_db_;
+
+			ModelInformation* 					model_information_;
 
 			/*_ List with the selected composites
 			*/
@@ -813,17 +908,14 @@ namespace BALL
 			*/
 			QLabel* 										message_label_;
 
-			PrimitiveManager 						primitive_manager_;
+			RepresentationManager 						primitive_manager_;
 			CompositeManager 						composite_manager_;
 
 			MainControlPreferences* 		main_control_preferences_;
 			NetworkPreferences* 				network_preferences_;
 			Preferences*								preferences_dialog_;
-			int 			 									preferences_id_;
-			int 			 									delete_id_;
 			INIFile		 									preferences_file_;
 			
-			static int 									current_id_;
 			bool 												composites_locked_;
 			ModularWidget*							locking_widget_;
 			bool 											  stop_simulation_;
@@ -838,11 +930,11 @@ namespace BALL
 			*/
 			List<ModularWidget*>				modular_widgets_;
 
-			HashMap<Index, String>      menu_entries_hints_;
-
 			QLabel*             simulation_icon_;
+			QLabel*             rep_label_;
 			static const char  *simulation_running_xpm_[];
 			static const char  *simulation_stoped_xpm_[];
+			Position 					  rep_label_nr_;
 
 			String 							working_dir_;
 
@@ -850,20 +942,30 @@ namespace BALL
 			bool 								logging_to_file_;
 			File 								logging_file_;
 
-			bool 								about_to_quit_;
 			bool 								important_text_in_statusbar_;
+			bool 								was_not_busy_;
+			Index 							rep_label_delta_;
 			QTimer 							timer_;
-			#ifdef 	BALL_QT_HAS_THREADS
+			QTimer 							render_timer_;
 			QMutex 							composites_locked_mutex_;
-			QWaitCondition 			composites_locked_wait_condition_;
-			#endif
 
 			String 							proxy_;
 			Position 						proxy_port_;
 
-			Index 							stop_simulation_id_, complement_selection_id_, open_id_, save_project_id_;
+			QAction* stop_simulation_action_;
+			QAction* complement_selection_action_;
+			QAction* open_action_;
+			QAction* save_project_action_;
+			QAction* preferences_action_;
+			QAction* delete_action_;
+			QAction* qload_action_, *qsave_action_;
 
-			Index last_highlighted_menu_entry_;
+			QAction* last_highlighted_menu_entry_;
+			HashMap<Position, QMenu*> id_to_menu_;
+			bool 					fullscreen_;
+			QPoint 				last_point_;
+			QSize 				last_size_;
+			QByteArray 		last_state_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

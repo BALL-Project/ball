@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.24 2005/12/23 17:02:11 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.24.16.1 2007/03/25 21:25:51 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -21,7 +21,8 @@
 
 #include <BALL/VIEW/UIC/modelSettingsDialogData.h>
 
-#include <qcheckbox.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/QLabel>
 
 class QSlider;
 class QLabel;
@@ -37,7 +38,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT ModelSettingsDialog 
-			: public ModelSettingsDialogData,
+			: public QWidget,
+				public Ui_ModelSettingsDialogData,
 				public PreferencesEntry
 		{ 
 			Q_OBJECT
@@ -45,25 +47,26 @@ namespace BALL
 			public:
 
 			/// Constructor
-			ModelSettingsDialog( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+			ModelSettingsDialog( QWidget* parent = 0, const char* name = "ModelSettingsDialog", 
+														Qt::WFlags fl = 0 );
 
 			/// Destructor
-			~ModelSettingsDialog() {}
+			virtual ~ModelSettingsDialog() {}
 
 			///
-			void applySettingsTo(ModelProcessor& cp) const
+			virtual void applySettingsTo(ModelProcessor& cp) const
 				throw();
 				
 			///
-			ModelProcessor* createModelProcessor(ModelType type) const
+			virtual ModelProcessor* createModelProcessor(ModelType type) const
 				throw(Exception::InvalidOption);
 
 			///
-			void getSettings(const ModelProcessor& mp)
+			virtual void getSettings(const ModelProcessor& mp)
 				throw();
 
 			///
-			QWidget* getEntryFor(ModelType type)
+			virtual QWidget* getEntryFor(ModelType type)
 				throw();
 
 			///
@@ -124,7 +127,15 @@ namespace BALL
 
 			///
 			float getForceScaling() const
-				throw() {return getFloatValue_(force_scaling_slider);}
+				throw() { return getFloatValue_(force_scaling_slider);}
+
+			///
+			float getForceBase() const
+				throw() {return getFloatValue_(force_base_slider);}
+
+			///
+			float getForceOffset() const
+				throw() {return getFloatValue_(force_offset_slider);}
 
 			///
 			float getDNALadderRadius() const
@@ -146,6 +157,7 @@ namespace BALL
 			void setBallAndStickStickRadius(float value) 
 				throw() { setValue_(ball_stick_cylinder_radius_slider,value);}
 
+			///
 			void setBallAndStickStickDashedBondsEnabled(bool state)
 				throw() { ball_stick_dashed_bonds->setChecked(state);}
 
@@ -195,7 +207,15 @@ namespace BALL
 
 			///
 			void setForceScaling(float value) 
-				throw() { setValue_(force_scaling_slider,value / 10.0);}
+				throw() { setValue_(force_scaling_slider,value);}
+
+			///
+			void setForceOffset(float value) 
+				throw() { setValue_(force_offset_slider ,value);}
+
+			///
+			void setForceBase(float value)
+				throw() { setValue_(force_base_slider, value);}
 
 			///
 			void setCartoonDNALadderRadius(float value)
@@ -227,12 +247,15 @@ namespace BALL
 			void cartoonStrandHeightChanged(){setLabelText_(strand_height_label, strand_height_slider);}
 			void cartoonStrandWidthChanged() {setLabelText_(strand_width_label, strand_width_slider);}
 			
-					void cartoonDNAHelixRadiusChanged(){setLabelText_(cartoon_dna_helix_radius_label, cartoon_dna_helix_radius_slider);}
+			void cartoonDNAHelixRadiusChanged(){setLabelText_(cartoon_dna_helix_radius_label, cartoon_dna_helix_radius_slider);}
 			void cartoonDNABaseRadiusChanged(){setLabelText_(cartoon_dna_base_radius_label, cartoon_dna_base_radius_slider);}
 			void cartoonDNALadderRadiusChanged(){setLabelText_(cartoon_dna_ladder_radius_label, cartoon_dna_ladder_radius_slider);}
 			void hbondsRadiusChanged(){setLabelText_(hbonds_radius_label, hbonds_radius_slider);}
 			void forceScalingChanged(){setLabelText_(force_scaling_label, force_scaling_slider);}
 			void forceMaxLengthChanged(){setLabelText_(force_max_length_label, force_max_length_slider);}
+			void forceBaseChanged(){setLabelText_(force_base_label, force_base_slider);}
+			void forceOffsetChanged(){setLabelText_(force_offset_label, force_offset_slider);}
+			void changedNAMode_(bool state);
 
 			protected:
 

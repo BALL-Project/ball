@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.h,v 1.55 2006/01/26 11:58:54 oliver Exp $
+// $Id: matrix44.h,v 1.55.14.1 2007/03/25 21:23:45 oliver Exp $
 //
 
 #ifndef BALL_MATHS_MATRIX44_H

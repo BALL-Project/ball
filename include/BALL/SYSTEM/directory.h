@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.h,v 1.29 2005/12/23 17:02:06 amoll Exp $
+// $Id: directory.h,v 1.29.16.1 2007/03/25 21:25:38 oliver Exp $
 //
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
@@ -37,6 +37,7 @@
 #endif
 #include <stdio.h>
 #ifdef BALL_COMPILER_MSVC
+#define WINDOWS_LEAN_AND_MEAN
 #include <windows.h>
 #endif
 

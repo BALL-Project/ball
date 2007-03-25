@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSES.h,v 1.19 2005/12/23 17:02:06 amoll Exp $
+// $Id: triangulatedSES.h,v 1.19.18.1 2007/03/25 21:25:34 oliver Exp $
 //
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSES_H
@@ -51,11 +51,7 @@ namespace BALL
 	class SESTriangulator;
 
 	/** Generic TriangulatedSES Class.
-			 \par
-			
-			 \par
-	
-	\ingroup Surface	
+			\ingroup Surface	
 	*/
 	class BALL_EXPORT TriangulatedSES	:	public TriangulatedSurface
 	{

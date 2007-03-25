@@ -1,9 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBijection.h,v 1.3 2006/01/26 11:58:54 oliver Exp $
+// $Id: atomBijection.h,v 1.3.18.1 2007/03/25 21:25:23 oliver Exp $
 //
-// $Id: atomBijection.h,v 1.3 2006/01/26 11:58:54 oliver Exp $
+// $Id: atomBijection.h,v 1.3.18.1 2007/03/25 21:25:23 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -47,7 +47,7 @@ namespace BALL
 			The class behaves more or less like the vector of atom pointer pairs it
 			truly is. In particular, the STL container interface has been fully 
 			implemented.
-	\ingroup StructureMiscellaneous
+	\ingroup StructureMapping
 	*/
 	class BALL_EXPORT AtomBijection
 		: public std::vector<std::pair<Atom*, Atom*> >

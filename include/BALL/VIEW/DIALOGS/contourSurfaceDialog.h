@@ -6,10 +6,6 @@
 
 #include <BALL/VIEW/UIC/contourSurfaceDialogData.h>
 
-#ifndef BALL_DATATYPE_REGULARDATA3D_H
- #include <BALL/DATATYPE/regularData3D.h>
-#endif
-
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
  #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
@@ -18,23 +14,25 @@ namespace BALL
 {
  namespace VIEW
  {
-	 class DatasetControl;
+	 class DatasetController;
+	 class Dataset;
 
 /** Dialog for creating contour surfaces from RegularData3D
     \ingroup  ViewDialogs
  */
 class BALL_VIEW_EXPORT ContourSurfaceDialog 
-	: public ContourSurfaceDialogData
+	: public QDialog,
+		public Ui_ContourSurfaceDialogData
 { 
     Q_OBJECT
 
 	public:
-    ContourSurfaceDialog( QWidget* parent = 0, const char* name = 0);
+    ContourSurfaceDialog( QWidget* parent = 0, const char* name = "ContourSurfaceDialog");
     ~ContourSurfaceDialog();
 
-    RegularData3D* getGrid();
+    Dataset* getGrid();
     double getThreshold() const;
-		void setDatasetControl(DatasetControl* control) {control_ = control;}
+		void setController(DatasetController* controller) {controller_ = controller;}
 		ColorRGBA getColor();
 
 	public slots:
@@ -45,8 +43,8 @@ class BALL_VIEW_EXPORT ContourSurfaceDialog
 		virtual void chooseColor();
 	
 	private:
-		RegularData3D* grid_;
-		DatasetControl* control_;
+		Dataset* grid_;
+		DatasetController* controller_;
 };
 
 } } // namespaces

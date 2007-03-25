@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.h,v 1.35 2005/12/23 17:02:03 amoll Exp $
+// $Id: fragmentDB.h,v 1.35.18.1 2007/03/25 21:25:25 oliver Exp $
 //
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
@@ -157,6 +157,9 @@ namespace BALL
 		*/
 		bool has(const String& fragment_name) const;
 
+		///
+		const std::vector<Residue*>&	getFragments() { return fragments_;}
+		
 		/**	Return a fragment.
 		*/
 		FragmentDB::Type getFragmentType(const String& fragment_name) const;

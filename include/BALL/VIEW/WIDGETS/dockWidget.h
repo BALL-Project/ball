@@ -5,10 +5,11 @@
 #	include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#include <qdockwindow.h>
-#include <qlayout.h>
-
-class QLabel;
+#include <QtGui/QDockWidget>
+#include <QtGui/QDropEvent>
+#include <QtGui/QDockWidget>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QGridLayout>
 
 namespace BALL
 {
@@ -22,7 +23,7 @@ namespace BALL
 				\ingroup ViewWidgets
 		*/
 		class BALL_VIEW_EXPORT DockWidget
-			: public QDockWindow,
+			: public QDockWidget,
 				public ModularWidget
 		{
 			Q_OBJECT
@@ -31,27 +32,16 @@ namespace BALL
 
 			BALL_EMBEDDABLE(DockWidget,Embeddable)
 
-			// required for Python bindings, but dont use this method
-			DockWidget();
-
-			// required for Python bindings, but dont use this method
-			DockWidget(const DockWidget&);
-
 			/// Use this constructor!
 			DockWidget(QWidget* parent, const char* title = 0);
 
 			///
 			virtual ~DockWidget() throw() {}
 			
-			//@{
 			/** Insert a widget with the content of the window.
 			 */
 			void setGuest(QWidget& guest);
 
-			///
-			QVBoxLayout* getLayout()
-				throw() {return layout_;}
-			
 			/**	Initialize the widget.
 					@see ModularWidget::initializeWidget
 			*/
@@ -68,31 +58,16 @@ namespace BALL
 			*/
 			virtual void writePreferences(INIFile& inifile) throw();
 
-			/** Apply Preferences
-					@see ModularWidget::applyPreferences
-			*/
-			virtual void applyPreferences() throw();				
-
-			///
-			virtual void setVisible(bool state);
+			/// For usage with Python:
+			virtual void setWidgetVisible(bool state);
 			
 			///
-			virtual void registerWidgetForHelpSystem(const QWidget* widget, const String& url);
+			virtual void registerForHelpSystem(const QObject* widget, const String& url);
 
-			//@}
-			/** @name Public slots 
-			*/ 
-			//@{
+			///
+			QGridLayout* getGuestLayout() { return layout_;}
+
 			public slots:
-
-			/** Show or hide widget (Called by menu entry in "WINDOWS")
-			*/
-			virtual void switchShowWidget() throw();
-				
-			/** Set the MenuEntry in "WINDOWS" after closing a DockWindow with the Close button.
-					Connected to the signal visibilityChanged().
-			*/
-			void setWindowsMenuEntry(bool state);
 
 			///
 			virtual void dropEvent(QDropEvent* e);
@@ -100,13 +75,18 @@ namespace BALL
 			///
 			virtual void dragEnterEvent(QDragEnterEvent* e);
 
-			//@} 
+			///
+			virtual void showGuestContextMenu(const QPoint&) {};
 
 			protected:
-
+			
+			// required for Python bindings, but dont use this methods:
+			DockWidget(); 
+			DockWidget(const DockWidget&);
+			
+			QWidget* 			container_;
 			QWidget* 			guest_;
-			QLabel* 			caption_label_;
-			QVBoxLayout* 	layout_;
+			QGridLayout*  layout_;
 		};
 
   }  // namespace VIEW

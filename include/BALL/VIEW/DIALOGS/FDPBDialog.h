@@ -47,7 +47,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT FDPBDialog 
-		  : public FDPBDialogData,
+		  : public QDialog,
+				public Ui_FDPBDialogData,
 		    public ModularWidget,
 				public PreferencesEntry
 		{ 
@@ -60,8 +61,8 @@ namespace BALL
 			BALL_EMBEDDABLE(FDPBDialog,ModularWidget)
 
 			/// Constructor
-			FDPBDialog(QWidget* parent = 0, const char* name = 0, 
-								 bool modal = FALSE, WFlags fl = 0);
+			FDPBDialog(QWidget* parent = 0, const char* name = "FDPBDialog",
+								 bool modal = FALSE, Qt::WFlags fl = 0);
 
 			/// Destructor
 			virtual ~FDPBDialog()

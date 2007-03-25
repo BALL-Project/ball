@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: graphVertex.h,v 1.15 2005/12/23 17:02:03 amoll Exp $
+// $Id: graphVertex.h,v 1.15.18.1 2007/03/25 21:25:27 oliver Exp $
 //
 
 #ifndef BALL_STRUCTURE_GRAPHVERTEX_H
@@ -28,7 +28,7 @@ namespace BALL
 	class GraphTriangle;
 
 	/** Generic GraphVertex Class.
-		\ingroup StructureMiscellaneous		
+		\ingroup Surface
 	*/
 	template <typename Vertex, typename Edge, typename Face>
 	class GraphVertex

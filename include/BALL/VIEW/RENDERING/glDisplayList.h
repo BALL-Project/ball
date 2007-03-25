@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glDisplayList.h,v 1.8 2005/12/23 17:02:20 amoll Exp $
+// $Id: glDisplayList.h,v 1.8.16.1 2007/03/25 21:26:14 oliver Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
 #define BALL_VIEW_RENDERING_GLDISPLAYLIST_H
@@ -10,7 +10,7 @@
 #	include <BALL/common.h>
 #endif
 
-#include <qgl.h>
+#include <QtOpenGL/qgl.h>
 
 namespace BALL
 {

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.h,v 1.18 2006/01/26 11:58:54 oliver Exp $
+// $Id: extractors.h,v 1.18.14.1 2007/03/25 21:25:19 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -12,6 +12,10 @@
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
+#endif
+
+#ifndef BALL_KERNEL_ATOM_H
+# include <BALL/KERNEL/atom.h>
 #endif
 
 namespace BALL 
@@ -77,6 +81,9 @@ namespace BALL
 			@param expression the expression that selects the atoms
 	*/
 	PyAtomList* atoms(const PyAtomList& atoms, const String& expression);
+
+	/// Collect all atom from a composite, also the atoms of a bond
+	PyAtomList* all_atoms(const Composite& composite);
 			
 	/**	Extract PDB atoms matching an expression.
 			This method extracts all PDB atoms of a kernel data structure into

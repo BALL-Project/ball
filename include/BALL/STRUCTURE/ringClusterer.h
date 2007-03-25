@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringClusterer.h,v 1.3 2006/08/15 20:36:56 oliver Exp $
+// $Id: ringClusterer.h,v 1.3.10.1 2007/03/25 21:25:29 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -10,6 +10,10 @@
 
 #ifndef BALL_STRUCTURE_RINGCLUSTERER_H
 #define BALL_STRUCTURE_RINGCLUSTERER_H
+
+#ifndef BALL_COMMON_H
+#	include <BALL/common.h>
+#endif
 
 #include <vector>
 
@@ -23,7 +27,7 @@ namespace BALL
                 * \brief class, providing a method for agglomerative clustering of single rings to ringsystems
                 *
                 */
-        class RingClusterer
+        class BALL_EXPORT RingClusterer
         {
         public:
 

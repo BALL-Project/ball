@@ -1,26 +1,17 @@
 #ifndef BALL_VIEW_KERNEL_THREADS_H
 #define BALL_VIEW_KERNEL_THREADS_H
 
-#ifndef BALL_COMMON_H
-#include <BALL/common.h>
-#endif
-
-#ifdef BALL_QT_HAS_THREADS
-
-#ifndef BALL_VIEW_KERNEL_REPRESENTATION_H
-#include <BALL/VIEW/KERNEL/representation.h>
-#endif
-
-#ifndef BALL_FORMAT_DCDFILE_H
-#include <BALL/FORMAT/DCDFile.h>
+#ifndef BALL_VIEW_KERNEL_COMMON_H_
+#include <BALL/VIEW/KERNEL/common.h>
 #endif
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 # include <BALL/SYSTEM/TCPTransfer.h>
 #endif
 
-#include <qthread.h>
-#include <qevent.h>
+#include <QtCore/qthread.h>
+#include <QtGui/qevent.h>
+#include <QtCore/QCustomEvent>
 
 namespace BALL
 {
@@ -28,28 +19,57 @@ namespace BALL
 	class MolecularDynamics;
 	class Composite;
 	class DockingAlgorithm;
-	class ConformationSet;
+	class DCDFile;
 
 namespace VIEW
 {
 	class MainControl;
 	class FDPBDialog;
+	class Message;
+	class Representation;
+
+	/** A QT Event, that can contain a VIEW message.
+	 		Use this class to post events and thus messages over thread boundaries.
+			Create the Message on the heap, it will be automatically deleted after sending!
+	*/
+	class BALL_VIEW_EXPORT MessageEvent
+		: public QEvent
+	{
+		public:
+
+		///
+		MessageEvent(Message* msg = 0)
+		: QEvent((QEvent::Type)MESSAGE_EVENT),
+			message_(msg)
+		{}
+
+		///
+		void setMessage(Message* msg) { message_ = msg; }
+
+		///
+		Message* getMessage() { return message_; }
+
+		protected:
+
+		Message* message_;
+	};
+
 
 	/** Baseclass for threads in BALL.
 			To use multithreading in BALL, there are several problems arising from
-			the fact, that QT itself is not threadsafe:
+			the fact, that Qt itself is not threadsafe:
 			1. Prevent any output to Log, stdout or sterr.
 				 If a simulation has to print some informations, use the method output_,
-				 which will send an Event to the GUI-thread to do this.
-			2. Dont call any QT-methods directly. If you need some interaction with the
-				 GUI, create a new Event-class and send this event to the MainControl.
+				 which will send an Event to the GUI-thread.
+			2. Dont call any Qt-methods directly. If you need some interaction with the
+				 GUI, send a QEvent to the MainControl.
 			3. Especially dont call the refresh methods for the Scene or 
-				 GL-methods. Use updateScene_() instead.
+				 GL-methods. Use updateStructure_() instead.
 			4. Overload the run method to insert the multithreaded code.
-			5. Before running a thread, lock the composites with ModularWidget::lockComposites().
-			6. After running a thread, unlock them with ModularWidget::unlockComposites().
-			If you dont pay attention to these rules, dont wonder if BALLView freezes
-			or crashes!
+			5. Call setMainControl() before running the thread
+			6. Before running a thread, lock the composites with ModularWidget::lockComposites().
+			7. After running a thread, unlock them with ModularWidget::unlockComposites().
+			If you dont pay attention to these rules, dont wonder if BALLView should freeze or crash!
 	*/
 	class BALL_VIEW_EXPORT BALLThread
 		: public QThread
@@ -74,19 +94,25 @@ namespace VIEW
 			
 			protected:
 
+			/** Send a VIEW Message to the main thread.
+			 		Create the message on the heap!
+			*/
+			void sendMessage_(Message* msg);
+
 			/** Provokes an update of the Representation's and the Scene 
 			 		with rebuild of the display-lists.
-					This method calls PrimitiveManager::notifyOfPendingingUpdate()
-					and sends an UpdateCompositeEvent with a pointer to the Composite.
+					This method sends a CompositeMessage with a pointer to the Composite and
+					type CHANGED_COMPOSITE.
+					As a result, the method MainControl::updateRepresentationsOf(..) will be called.
 			*/
-			void updateScene_();
+			void updateStructure_();
 
 			/// Sends the string as outout to Log.info
 			void output_(const String& string, bool important = false);
 
 			/** Wait until all Representation's are rebuild, by using
-					PrimitiveManager::updatePending() and \\
-					PrimitiveManager::getUpdateWaitCondition().wait() .
+					RepresentationManager::updatePending() and \\
+					RepresentationManager::getUpdateWaitCondition().wait() .
 			*/
 			void waitForUpdateOfRepresentations_();
 	
@@ -150,8 +176,7 @@ namespace VIEW
 			virtual void run();
 
 			///
-			void setFDPBDialog(FDPBDialog* dialog)
-				{dialog_ = dialog;}
+			void setFDPBDialog(FDPBDialog* dialog) {dialog_ = dialog;}
 
 		protected:
 			FDPBDialog* dialog_;
@@ -183,6 +208,7 @@ namespace VIEW
 
 			Representation* rep_;
 	};
+
 
 	/** Baseclass for threads, which perform a simulation.
 			At the end of the run() method, always call finish_() to notify the 
@@ -275,51 +301,8 @@ namespace VIEW
 		};
 
 
-		/** This class is only intended for usage with multithreading.
-				It notifies the MainControl, that the thread for simulations has finished and can be deleted.
-				This should only be used internaly.
-		*/
-		class BALL_VIEW_EXPORT SimulationThreadFinished
-			: public QCustomEvent
-		{
-			public:
-				SimulationThreadFinished()
-					: QCustomEvent( SIMULATION_THREAD_FINISHED_EVENT ){}
-		};
-
-		///
-		class BALL_VIEW_EXPORT UpdateCompositeEvent
-			: public QCustomEvent
-		{
-			public:
-				///
-				UpdateCompositeEvent()
-					:QCustomEvent(UPDATE_COMPOSITE_EVENT),
-					 composite_(0){}
-
-				///
-				void setComposite(const Composite* composite) { composite_ = composite;}
-				
-				///
-				const Composite* getComposite() const { return composite_;}
-
-			protected:
-				const Composite* composite_;
-		};
-		
-		///
-		class BALL_VIEW_EXPORT FinishedRepresentionUpdateEvent
-			: public QCustomEvent
-		{
-			public:
-				///
-				FinishedRepresentionUpdateEvent()
-					:QCustomEvent(FINISHED_REPRESENTATION_UPDATE_EVENT)
-				{}
-		};
-
 		/// Thread for Docking
-		class BALL_EXPORT DockingThread
+		class BALL_VIEW_EXPORT DockingThread
 			: public BALLThread
 		{
 			public:
@@ -352,54 +335,7 @@ namespace VIEW
 			protected:
 				DockingAlgorithm* dock_alg_;
 		};
-
-
-		///
-		class BALL_EXPORT DockingFinishedEvent
-			: public QCustomEvent
-		{
-			public:
-				
-				///
-				DockingFinishedEvent()
-					:QCustomEvent(DOCKING_FINISHED_EVENT),
-					 conformation_set_(0)
-				{}
-
-				///
-				DockingFinishedEvent(bool abort)
-					:QCustomEvent(DOCKING_FINISHED_EVENT),
-					 conformation_set_(0)
-				{
-				 	abort_ = abort;
-				}
-				 
-				///
-				void setConformationSet(const ConformationSet* conformation_set)
-				{
-					conformation_set_ = conformation_set;
-				}
-				
-				//
-				const ConformationSet* getConformationSet() const
-				{
-					return conformation_set_;
-				}
-				
-				///
-				bool wasAborted()
-				{
-		 			return abort_;
-				}
-				
-				protected:
-
-				/// this conformation set is deleted in DockResult
-				const ConformationSet* conformation_set_;
-				bool abort_;
-		};
-		
+	
 	}
 }
-#endif //BALL_QT_HAS_THREADS
 #endif //BALL_VIEW_KERNEL_THREADS_H

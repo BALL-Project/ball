@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: runGAMESSDialog.h,v 1.1 2005/09/02 13:36:56 anhi Exp $
+// $Id: runGAMESSDialog.h,v 1.1.18.1 2007/03/25 21:25:55 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_RUNGAMESSDIALOG_H
@@ -21,13 +21,19 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class BALL_EXPORT RunGAMESSDialog
-			: public RunGAMESSDialogData
+		/**
+			\ingroup ViewDialogs
+		*/
+		class BALL_VIEW_EXPORT RunGAMESSDialog
+			: public QDialog,
+				public Ui_RunGAMESSDialogData
 		{
 			Q_OBJECT
 
 			public:
-				RunGAMESSDialog(QWidget* parent = NULL, const char* name = NULL);
+				///
+				RunGAMESSDialog(QWidget* parent = NULL, const char* name = "RunGAMESSDialog");
+				///
 				virtual ~RunGAMESSDialog();
 
 			public slots:

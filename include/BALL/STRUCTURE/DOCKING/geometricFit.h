@@ -26,13 +26,13 @@
 
 namespace BALL
 {
-  /**
-     class GeometricFit
+  /** GeometricFit
      This class is derived from class DockingAlgorithm.
      Protein docking algorithm via geometric fit invented by Katchalski-Katzir,
      et at. (1992) is implemented in this class.
+		 \ingroup Docking
   */
-  class GeometricFit : public DockingAlgorithm
+  class BALL_EXPORT GeometricFit : public DockingAlgorithm
   {
     public:
       BALL_CREATE(GeometricFit)
@@ -42,7 +42,7 @@ namespace BALL
 				for each recognized key in FDPB::options. \par
 				For each symbol the required type is given under parameters.
 			*/
-			typedef struct Option 
+			struct BALL_EXPORT Option 
 			{
 				// the parameter r,
 				// "Any grid point is considered inside the molecule if there is at 
@@ -103,7 +103,7 @@ namespace BALL
 				
 			};
     
-      struct Default
+      struct BALL_EXPORT Default
 			{
 				// Default parameter r,
 				// Default value is 1.8 Angstrom
@@ -167,7 +167,7 @@ namespace BALL
 				This class is needed for an efficient handling of all peaks corresponding
 				to one orientation in a multiset
       */
-      class Peak_
+      class BALL_EXPORT Peak_
 			{
 				public:
 
@@ -189,7 +189,7 @@ namespace BALL
       /**
 				nested class RotationAngles_
       */
-      class RotationAngles_
+      class BALL_EXPORT RotationAngles_
 			{
 				public: 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker2DFile.h,v 1.9 2005/12/23 17:02:12 amoll Exp $
+// $Id: openBruker2DFile.h,v 1.9.16.1 2007/03/25 21:25:53 oliver Exp $
 
 #ifndef BALL_VIEW_DIALOGS_OPENBRUKER2DFILE_H
 #define BALL_VIEW_DIALOGS_OPENBRUKER2DFILE_H
@@ -18,7 +18,7 @@
 # include <BALL/FORMAT/bruker2DFile.h>
 #endif
 
-#include <qwidget.h>
+#include <QtGui/qwidget.h>
 
 namespace BALL
 {

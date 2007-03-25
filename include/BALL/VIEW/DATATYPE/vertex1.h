@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex1.h,v 1.10 2005/12/23 17:02:08 amoll Exp $
+// $Id: vertex1.h,v 1.10.20.1 2007/03/25 21:25:42 oliver Exp $
 //
 
-#ifndef BALL_VIEW_KERNEL_VERTEX1_H
-#define BALL_VIEW_KERNEL_VERTEX1_H
+#ifndef BALL_VIEW_DATATYPE_VERTEX1_H
+#define BALL_VIEW_DATATYPE_VERTEX1_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -228,4 +228,4 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_VIEW_KERNEL_VERTEX1_H
+#endif // BALL_VIEW_DATATYPE_VERTEX1_H

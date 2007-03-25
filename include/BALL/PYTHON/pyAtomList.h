@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyAtomList.h,v 1.14 2006/08/15 19:00:21 oliver Exp $
+// $Id: pyAtomList.h,v 1.14.8.1 2007/03/25 21:25:20 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -26,10 +26,12 @@
 #	include <BALL/KERNEL/extractors.h>
 #endif
 
+#ifndef BALL_KERNEL_ATOMCONTAINER_H
+#	include <BALL/KERNEL/atomContainer.h>
+#endif
+
 namespace BALL 
 {
-	class Atom;
-	class AtomContainer;
 	
 	/** Equivalent for a STL::List of Atom Pointers in Python
 			\ingroup PythonExtensions		
@@ -89,7 +91,10 @@ namespace BALL
 		*/
 		PyAtomList(const AtomContainer& fragment);
 
-		/**	Construct from an AtomContainer and filter with an expression.
+		/// Collect all atom from a composite, also the atoms of a bond
+		PyAtomList(const Composite& composite);
+
+		/**	Construct from a AtomContainer with expression.
 				This constructor creates an PyAtomList object from
 				the atoms of a  \link AtomContainer AtomContainer \endlink  object that match <tt>expression</tt>.
 		*/

@@ -1,13 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.h,v 1.17 2005/12/23 17:02:12 amoll Exp $
+// $Id: preferences.h,v 1.17.16.1 2007/03/25 21:25:54 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PREFERENCES_H
 #define BALL_VIEW_DIALOGS_PREFERENCES_H
 
-#include <qtabdialog.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/VIEW/UIC/preferencesData.h>
 
@@ -34,7 +33,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT Preferences 
-			: public PreferencesData
+			: public QDialog,
+				public Ui_PreferencesData
 		{
 			Q_OBJECT
 			
@@ -52,7 +52,7 @@ namespace BALL
 					\param       parent the parent QWidget (See QTabDialog in the QT documentation)
 					\param       name (See QDialog in the QT documentation)
 			*/
-			Preferences(QWidget *parent = NULL,	const char *name = NULL)
+			Preferences(QWidget *parent = NULL,	const char *name = "Preferences")
 				throw();
 
 			/// Copy constructur
@@ -83,7 +83,7 @@ namespace BALL
 				throw();
 
 			/** Remove a previously inserted page.
-					This method can called inside ModularWidget::finalizePreferencesTab 
+					This method can be called inside ModularWidget::finalizePreferencesTab 
 					\param  child a pointer to the dialog to be removed 
 					\see    insertPage
 			*/
@@ -129,7 +129,7 @@ namespace BALL
 			void showEntry(QWidget* page);
 						
 			///
-			void entrySelected(QListViewItem* item);
+			void entrySelected();
 
 			///
 			void setDefaultValues();
@@ -145,13 +145,13 @@ namespace BALL
 
 			protected:
 
-			void removeItem_(QListViewItem* item, bool update)
+			void removeItem_(QTreeWidgetItem* item, bool update)
 				throw();
 
 			HashSet<PreferencesEntry*> entries_;
-			HashMap<QListViewItem*, QWidget*> item_to_widget_;
-			HashMap<QListViewItem*, PreferencesEntry*> item_to_entry_;
-			HashMap<QWidget*, QListViewItem*> widget_to_item_;
+			HashMap<QTreeWidgetItem*, QWidget*> item_to_widget_;
+			HashMap<QTreeWidgetItem*, PreferencesEntry*> item_to_entry_;
+			HashMap<QWidget*, QTreeWidgetItem*> widget_to_item_;
 
 			//@}
 		};

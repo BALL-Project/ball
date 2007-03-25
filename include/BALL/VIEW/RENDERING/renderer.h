@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.h,v 1.11 2005/12/23 17:02:21 amoll Exp $
+// $Id: renderer.h,v 1.11.16.1 2007/03/25 21:26:16 oliver Exp $
 
 #ifndef BALL_VIEW_RENDERING_RENDERER_H
 #define BALL_VIEW_RENDERING_RENDERER_H
@@ -19,6 +19,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class Line;
+		class MultiLine;
 		class Tube;
 		class Mesh;
 		class Label;
@@ -31,6 +32,8 @@ namespace BALL
 		class TwoColoredTube;
 		class Stage;
 		class ClippingPlane;
+		class GridVisualisation;
+		class QuadMesh;
 
 		/** Renderer is just a generic base class.
 		 		Derived classes are GLRenderer and POVRenderer.
@@ -142,6 +145,10 @@ namespace BALL
 			/// Render a line
 			virtual void renderLine_(const Line& /*line*/)
 				throw() {Log.error() << "renderLine_ not implemented in derived Renderer class" << std::endl;}
+			
+			/// Render an illuminated line
+			virtual void renderMultiLine_(const MultiLine& /*line*/)
+				throw() {Log.error() << "renderMultiLine_ not implemented in derived Renderer class" << std::endl;}
 
 			/// Render a surface mesh
 			virtual void renderMesh_(const Mesh& /*mesh*/)
@@ -178,8 +185,14 @@ namespace BALL
 			/// Render a tube with two colors
 			virtual void renderTwoColoredTube_(const TwoColoredTube& /*two_colored_tube*/)
 				throw() {Log.error() << "renderTwoColoredTube_ not implemented in derived Renderer class" << std::endl;}
-
-			//@}
+			
+			/// Render a grid
+			virtual void renderGridVisualisation_(const GridVisualisation&)
+				throw() {Log.error() << "renderGridVisualisation_ not implemented in derived Renderer class" << std::endl;}
+			/// Render a quad mesh
+			virtual void renderQuadMesh_(const QuadMesh&)
+				throw() {Log.error() << "renderQuadMesh_ not implemented in derived Renderer class" << std::endl;}
+				//@}
 			
 			//_
 			const Stage*		stage_;

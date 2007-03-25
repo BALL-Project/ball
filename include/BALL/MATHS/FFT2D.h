@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT2D.h,v 1.16 2006/01/03 17:42:39 anhi Exp $
+// $Id: FFT2D.h,v 1.16.16.1 2007/03/25 21:23:44 oliver Exp $
 //
 
 #ifndef BALL_MATHS_TFFT2D_H
@@ -88,7 +88,7 @@ namespace BALL
 			//@{
 
 			/// Assignment operator
-			const TFFT2D& operator = (const TFFT2D& TFFT2D)
+			const TFFT2D& operator = (const TFFT2D& fft_2d)
 				throw();
 			
 			/** Clear the contents.
@@ -109,7 +109,7 @@ namespace BALL
 
 			/** Equality operator.
 			 */
-			bool operator == (const TFFT2D& TFFT2D) const
+			bool operator == (const TFFT2D& fft_2d) const
 				throw();
 			//@}
 			
@@ -404,8 +404,8 @@ namespace BALL
 	bool TFFT2D<ComplexTraits>::translate(const Vector2& trans_origin)
 		throw()
 	{
-		Position internalOriginX = (Position) rint(trans_origin.x*stepPhysX_);
-		Position internalOriginY = (Position) rint(trans_origin.y*stepPhysY_);
+		Position internalOriginX = (Position) Maths::rint(trans_origin.x*stepPhysX_);
+		Position internalOriginY = (Position) Maths::rint(trans_origin.y*stepPhysY_);
 		
 		if ((internalOriginX <= lengthX_) && (internalOriginY <= lengthY_))
 		{
@@ -711,8 +711,8 @@ namespace BALL
 		{
 			Index i, j;
 			
-			i = (Index) rint((pos.x+origin_.x)/stepPhysX_);
-			j = (Index) rint((pos.y+origin_.y)/stepPhysY_);
+			i = (Index) Maths::rint((pos.x+origin_.x)/stepPhysX_);
+			j = (Index) Maths::rint((pos.y+origin_.y)/stepPhysY_);
 
 			internalPos = j + i*lengthY_;
 		}
@@ -720,8 +720,8 @@ namespace BALL
 		{
 			Index i, j;
 
-			i = (Index) rint(pos.x/stepFourierX_);
-			j = (Index) rint(pos.y/stepFourierY_);
+			i = (Index) Maths::rint(pos.x/stepFourierX_);
+			j = (Index) Maths::rint(pos.y/stepFourierY_);
 
 			if (i<0)
 			{
@@ -754,8 +754,8 @@ namespace BALL
 		{
 			Index i, j;
 			
-			i = (Index) rint((pos.x+origin_.x)/stepPhysX_);
-			j = (Index) rint((pos.y+origin_.y)/stepPhysY_);
+			i = (Index) Maths::rint((pos.x+origin_.x)/stepPhysX_);
+			j = (Index) Maths::rint((pos.y+origin_.y)/stepPhysY_);
 
 			internalPos = j + i*lengthY_;
 		}
@@ -763,8 +763,8 @@ namespace BALL
 		{
 			Index i, j;
 
-			i = (Index) rint(pos.x/stepFourierX_);
-			j = (Index) rint(pos.y/stepFourierY_);
+			i = (Index) Maths::rint(pos.x/stepFourierX_);
+			j = (Index) Maths::rint(pos.y/stepFourierY_);
 
 			if (i<0)
 			{
@@ -791,9 +791,9 @@ namespace BALL
 	typename TFFT2D<ComplexTraits>::Complex TFFT2D<ComplexTraits>::phase(const Vector2& pos) const
 		throw()
 	{
-	  double phase = 2.*M_PI*(  rint(pos.x/stepFourierX_)*rint(origin_.x/stepPhysX_)
+	  double phase = 2.*M_PI*(  Maths::rint(pos.x/stepFourierX_)*Maths::rint(origin_.x/stepPhysX_)
 															/lengthX_
-														+ rint(pos.y/stepFourierY_)*rint(origin_.y/stepPhysY_)
+														+ Maths::rint(pos.y/stepFourierY_)*Maths::rint(origin_.y/stepPhysY_)
 															/lengthY_ );
 
 		Complex result = Complex(cos(phase), sin(phase));

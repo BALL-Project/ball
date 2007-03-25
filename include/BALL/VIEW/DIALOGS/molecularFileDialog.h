@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.21 2005/12/23 17:02:11 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.21.16.1 2007/03/25 21:25:52 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -15,7 +15,7 @@
 # include <BALL/VIEW/KERNEL/common.h>
 #endif
 
-#include <qfiledialog.h>
+class QMenu;
 
 namespace BALL
 {
@@ -26,7 +26,8 @@ namespace BALL
 
 		/** Dialog for opening molecular data files.
 				This class is used to read or write Molecular files in one of several
-				file formats. Currently, PDB, HIN and MOL2 are supported.
+				file formats. Currently supported file formats are:\par
+				HIN, MOL, MOL2, PDB, SD, XYZ\par
 				Upon reading a file, the information will be stored in a System.
 				This class can also take a System and write it in one of the
 				supported file formats.
@@ -35,6 +36,8 @@ namespace BALL
 				@see MOLFile
 				@see MOL2File
 				@see PDBFile
+				@see SDFile
+				@see XYZFile
 				\ingroup ViewDialogs
 		 */
 		class BALL_VIEW_EXPORT MolecularFileDialog
@@ -45,31 +48,16 @@ namespace BALL
 			public:
 			BALL_EMBEDDABLE(MolecularFileDialog, ModularWidget)
 
-			/** @name Constructors
-			 */
-			//@{
-
 			/** Default Constructor.
 					Calls ModularWidget::registerWidget()
 			 */
-			MolecularFileDialog(QWidget* parent = 0, const char* name = "<MolecularFileDialog>")
+			MolecularFileDialog(QWidget* parent = 0, const char* name = "MolecularFileDialog")
 				throw();
-			//
-			//@} 
-			/** @name Destructors 
-			*/ 
-			//@{ 
 
-			/** Destructor.
-			 */
+			/// Destructor.
 			virtual ~MolecularFileDialog()
 				throw();
 
-			//@} 
-			/** @name Accessors: inspectors and mutators 
-			*/ 
-			//@{ 
-			
 			/** Initializes the menu entries in <b>File</b>.
 					This method is called automatically immediately before the main application is started.
 					This method will be called MainControl::show().
@@ -79,36 +67,54 @@ namespace BALL
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
 
-		public slots:
+			/** Test if this ModularWidget can handle a given file format.
+					(Overloaded from ModularWidget)
+			 		@param fileform short string with the file extension (e.g. PDB)
+					@see openFile
+			*/
+			virtual bool canHandle(const String& fileformat) const;
 
-			/** Open a molecular file.
-					This method tries to open and read a molecular file, selected from a QFileDialog,
-					and, if susccesfull, converts is into a System. Then it sends a CompositeMessage
-					containing the System to the other ConnectionObject instances.
-					\see		CompositeMessage
-					\see		ConnectionObject
-			 */
-			virtual void readFiles();
+			/** Tell this ModularWidget to open a given file.
+					(Overloaded from ModularWidget)
+			 		@see canHandle
+			*/
+			virtual bool openFile(const String& filename);
 
 			/** Open a given molecular file.
 					The file type is identified by the filename extension.
-					This method can be used to load molecular files, which were given as command line arguments.
+					This method can be used to load molecular files, which were given as 
+					command line arguments.
 			*/
-			virtual System* openFile(const String& file)
+			virtual System* openMolecularFile(const String& file)
 				throw();
 
 			/** Wrapper for the read methods.
 					The filetype String is used to indentify the file type (HIN, PDP, MOL, MOL2).
 					It is possible to give the system a designated name, otherwise it is named by the file.
 			*/
-			virtual System* openFile(const String& filename, const String& filetype, 
-												const String& system_name)
+			virtual System* openMolecularFile(const String& filename, 
+																				const String& filetype, 
+																				const String& system_name)
 				throw();
 
-			/** Write a molecular file.
-					This method takes a System and saves it into a molecular file, selected from a QFileDialog.
-			 */
-			virtual bool writeFile();
+
+			///
+			System* openPDBFile();
+
+			///
+			System* openHINFile();
+
+			///
+			System* openMOLFile();
+
+			///
+			System* openMOL2File();
+
+			///
+			System* openSDFile();
+
+			///
+			System* openXYZFile();
 
 			/** Read a PDB file
 			 */
@@ -135,6 +141,11 @@ namespace BALL
 			System* readSDFile(String filename, String system_name)
 				throw();
 
+			/** Read a XYZ file
+			 */
+			System* readXYZFile(String filename, String system_name)
+				throw();
+
 			/** Write a PDB file
 			 */
 			bool writePDBFile(String filename, const System& system)
@@ -159,22 +170,53 @@ namespace BALL
 			 */
 			bool writeSDFile(String filename, const System& system)
 				throw();
+
+			/** Write a XYZ file
+			 */
+			bool writeXYZFile(String filename, const System& system)
+				throw();
 			
 			/// Overloaded from ModularWidget
-			virtual void checkMenuEntries()
+			virtual void checkMenu(MainControl& main_control)
 				throw();
-				
-			//@}
-			
+
+			///
+			virtual String getSupportedFileFormats() const;
+
+			///
+			virtual String getSupportedFileFormatsList() const;
+
+			public slots:
+
+			/** Open a molecular file.
+					This method tries to open and read a molecular file, selected from a QFileDialog,
+					and, if susccesfull, converts is into a System. Then it sends a CompositeMessage
+					containing the System to the other ConnectionObject instances.
+					\see		CompositeMessage
+					\see		ConnectionObject
+			 */
+			virtual void readFiles();
+
+			/** Write a molecular file.
+					This method takes a System and saves it into a molecular file, selected from a QFileDialog.
+			 */
+			virtual bool writeFile();
+
+
 			protected:
+
+			virtual void onNotify(Message *message)
+				throw();
 
 			// Only for Python interface
 			MolecularFileDialog(const MolecularFileDialog& mfd)
 				throw();
 
 
-			bool finish_(const String& filename, const String& system_name, System* system)
+			virtual bool finish_(const String& filename, const String& system_name, System* system)
 				throw();
+
+			System* openFile_(String type);
 
 			enum FileFormats
 			{
@@ -182,10 +224,12 @@ namespace BALL
 				HIN_FILE,
 				MOL_FILE,
 				MOL2_FILE,
-				SD_FILE
+				SD_FILE,
+				XYZ_FILE
 			};
 
-			Index save_id_, open_id_;
+			QAction* save_id_, *open_id_;
+			String file_format_;
 		};
 
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: options.h,v 1.26 2006/02/13 17:41:14 anhi Exp $
+// $Id: options.h,v 1.26.14.1 2007/03/25 21:23:40 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_OPTIONS_H

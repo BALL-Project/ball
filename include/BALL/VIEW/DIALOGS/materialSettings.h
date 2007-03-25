@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.h,v 1.6 2005/12/23 17:02:11 amoll Exp $
+// $Id: materialSettings.h,v 1.6.16.1 2007/03/25 21:25:51 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MATERIALSETTINGS_H
@@ -12,6 +12,9 @@
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
+
+#include <QtGui/QWidget>
+#include <QtGui/QLabel>
 
 namespace BALL
 {
@@ -25,7 +28,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT MaterialSettings 
-			: public MaterialSettingsData,
+			: public QWidget,
+				public Ui_MaterialSettingsData,
 				public PreferencesEntry
 		{ 
 			Q_OBJECT
@@ -33,7 +37,7 @@ namespace BALL
 			public:
 
 			/// Constructor
-			MaterialSettings( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+			MaterialSettings( QWidget* parent = 0, const char* name = "MaterialSettings", Qt::WFlags fl = 0 );
 
 			/// Destructor
 			~MaterialSettings() {}

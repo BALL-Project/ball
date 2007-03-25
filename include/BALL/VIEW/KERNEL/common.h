@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.40 2006/01/04 16:26:33 amoll Exp $
+// $Id: common.h,v 1.40.16.1 2007/03/25 21:25:58 oliver Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -23,10 +23,15 @@
  #include <BALL/DATATYPE/list.h>
 #endif
 
+#ifndef BALL_DATATYPE_REGULARDATA3D_H
+ #include <BALL/DATATYPE/regularData3D.h>
+#endif
 
-#include <qevent.h>
-#include <qcolordialog.h>
-#include <qlabel.h>
+#include <QtGui/qcolordialog.h>
+#include <QtGui/QLabel>
+#include <QtGui/qevent.h>
+#include <QtCore/QCustomEvent>
+#include <QtGui/QDropEvent>
 
 namespace BALL
 {
@@ -35,6 +40,7 @@ namespace BALL
 
 		class GeometricObject;
 		class MainControl;
+		class ColorRGBA;
 
 		/** @name defines
 				\ingroup ViewKernelOther
@@ -47,6 +53,11 @@ namespace BALL
 		*/
 		#define VIEW_DEFAULT_PORT 20000
 
+		/** Assign the name of a QObject to its variable name, needed e.g. for the GUI testing
+		*/
+		#define BALL_ASSIGN_NAME(OBJ)\
+			OBJ->setObjectName(#OBJ);
+	
 		//@}
 		/** @name General enumerations, methods and typedefs
 				These predefined types are used in VIEW for portability and
@@ -54,24 +65,6 @@ namespace BALL
 				 \ingroup ViewKernelOther
 		*/
 		//@{
-
-		/** Command enums for the VIEW::Server.
-				These enums specify the commands the server is able
-				to understand (at the moment).
-				\see  Server
-				\see  Client
-		*/
-		enum Command
-		{
-			/// unknown command.
-			COMMAND__UNKOWN              = 0,
-
-			/// sent command. This command will be used for indicating a new object that is about to be received
-			COMMAND__SEND_OBJECT         = 1,
-
-			/// next free command.
-			NUMBER_OF_COMMANDS
-		};	
 
 		/** Enumeration of Events
 				These events are used to communicate between different threads.
@@ -81,33 +74,12 @@ namespace BALL
 		*/
 		enum EventsIDs
 		{
-			///
-			SCENE_EXPORTPNG_EVENT = 60000,
+			/// An event with a contained VIEW message
+			MESSAGE_EVENT = 60000,
 
-			///
-			SCENE_EXPORTPOV_EVENT,
-
-			///
-			SCENE_SETCAMERA_EVENT,
-
-			/// see Mainframe::SimulationThreadFinished
-			SIMULATION_THREAD_FINISHED_EVENT,
-
-			/// see SimulationOutput
-			LOG_EVENT,
-
-			/// see UpdateCompositeEvent
-			UPDATE_COMPOSITE_EVENT,
-
-			/// see FinishedRepresentionUpdateEvent
-			FINISHED_REPRESENTATION_UPDATE_EVENT,
-			
-			/// see DockingFinishedEvent
-			DOCKING_FINISHED_EVENT
+			/// Event to print output from a Thread
+			LOG_EVENT
 		};
-
-		/// global variable, which defines, if DockWidgets are shown with a Label
-		BALL_VIEW_EXPORT extern bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS;
 
 		//@}
 		/** @name Enumerations for Representations and Renderer
@@ -126,11 +98,14 @@ namespace BALL
 			DRAWING_MODE_WIREFRAME,
 
 			///
-			DRAWING_MODE_SOLID
+			DRAWING_MODE_SOLID,
+			
+			///
+			DRAWING_MODE_TOON
 		};
 
 		/// Number of drawing modes
-		#define BALL_VIEW_MAXIMAL_DRAWING_MODE 3
+		#define BALL_VIEW_MAXIMAL_DRAWING_MODE 4
 
 		/// Enumeration for Drawing Precisions.
 		enum DrawingPrecision
@@ -196,6 +171,9 @@ namespace BALL
 			/// defines the property for the model: Cartoon
 			MODEL_CARTOON,
 
+			/// defines the property for the model: Ribbon
+			MODEL_RIBBON,
+
 			/// defines the property for the model: H-Bonds
 			MODEL_HBONDS,
 
@@ -207,13 +185,25 @@ namespace BALL
 			// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 			
 			/// defines the property for the model: Label
-			MODEL_LABEL,
+			MODEL_LABEL = 100,
 
 			/// defines the property for the model: contour surface
 			MODEL_CONTOUR_SURFACE,
 
+			///
+			MODEL_GRID_SLICE,
+
+			///
+			MODEL_GRID_VOLUME,
+
+			///
+			MODEL_FIELD_LINES,
+
+			///
+			MODEL_INFORMATIONS,
+
 			/// unkown property
-			MODEL_UNKNOWN
+			MODEL_UNKNOWN = 200
 		};
 
 
@@ -263,10 +253,10 @@ namespace BALL
 			// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 			
 			///
-			COLORING_CUSTOM,
+			COLORING_CUSTOM = 100,
 
 			///
-			COLORING_UNKNOWN
+			COLORING_UNKNOWN = 200
 		};
 
 		/** A special Composite, which is ignored by all ColoringProcessors,
@@ -275,68 +265,6 @@ namespace BALL
 		*/
 		BALL_VIEW_EXPORT extern Composite composite_to_be_ignored_for_colorprocessors_;
 
-
-		/// Enumeration of GeometricObject Types
-		enum GeometricObjectType
-		{
-			/// Unknown type 
-			TYPE__UNKNOWN              = -1,
-
-			/// Line type 
-			TYPE__LINE                 = 0,
-
-			/// Sphere type 
-			TYPE__SPHERE               = 1,
-
-			/// Tube type 
-			TYPE__TUBE                 = 2,
-
-			/// Point type
-			TYPE__POINT                = 3,
-
-			/// Mesh type
-			TYPE__MESH                 = 4,
-
-			/// Box type
-			TYPE__BOX           			 = 5
-		};
-
-		/** Get a name for a ModelType
-		*/
-		BALL_VIEW_EXPORT String getModelName(ModelType type) 
-			throw();
-
-		/** Get a name for a ColoringMethod
-		*/
-		BALL_VIEW_EXPORT String getColoringName(ColoringMethod type) 
-			throw();
-
-		/** Define, which Models are Surfaces.
-				Add new kinds of Surfaces to this function!
-		*/
-		BALL_VIEW_EXPORT bool isSurfaceModel(ModelType type)
-			throw();
-
-		/** Model can be modified with DisplayProperitesDialog
-		*/
-		BALL_VIEW_EXPORT bool modelMuteableByDisplayProperties(ModelType type)
-			throw();
-
-		/** Model must be rebuild, if Composite changes
-		 		but hierarchy is unchanged.
-		*/
-		BALL_VIEW_EXPORT bool modelMustBeRebuild(ModelType type)
-			throw();
-
-		/////////////////////////////////////////////////////////
-
-		///
-		BALL_VIEW_EXPORT String getTypeName(GeometricObjectType type);
-
-		///
-		BALL_VIEW_EXPORT GeometricObjectType getGeometricObjectType(const GeometricObject& object);
-
-		
 		/////////////////////////////////////////////////////////
 
 		///
@@ -371,7 +299,7 @@ namespace BALL
 
 		/// Event class used for thread safe output to logview
 		class BALL_VIEW_EXPORT LogEvent
-			: public QCustomEvent
+			: public QEvent
 		{
 			public:
 
@@ -407,15 +335,9 @@ namespace BALL
 
 		/// BALLView Debug macro
 		#define BALLVIEW_DEBUG logString(String("A problem occured in ") + __FILE__ + " " + \
-													 String(__LINE__) + ".  Please notify us per mail: ball@bioinf.uni-sb.de");
+													 String(__LINE__) + ".  Please notify us per mail: ball@bioinf.uni-sb.de\n");
 
 	
-		/** Choose a color.
-		 		The colordialog is initialised with the background color of the label.
-				If the colordialog returns a new color, this becomes the new backbground color of the label.
-		*/
-		BALL_VIEW_EXPORT QColor chooseColor(QLabel* label);
-
 		BALL_VIEW_EXPORT void processDropEvent(QDropEvent* e);
 
 		/** focus the camera on a list of points, e.g. atoms or geometric objects.
@@ -427,7 +349,43 @@ namespace BALL
 		 		We also sort out double slashes and make sure a slash is at the end.
 		*/
 		BALL_VIEW_EXPORT String getDataPath();
+
+		///
+		BALL_VIEW_EXPORT String ascii(const QString& str);
 		
+		///
+		BALL_VIEW_EXPORT ColorRGBA getColor(const QLabel* label);
+		
+		///
+ 		BALL_VIEW_EXPORT void setColor(const QLabel* label, const ColorRGBA& color);
+
+		///
+		BALL_VIEW_EXPORT QColor chooseColor(QLabel* label);
+
+		///
+		BALL_VIEW_EXPORT void setTextColor(QLabel* label, const ColorRGBA& color);
+
+		/** Uses the de-Casteljou algorithm to evalute a cubic Hermite interpolation
+		 *  polynomial at interpolated_values.size() equidistant values.
+		 */
+		BALL_VIEW_EXPORT void cubicInterpolation(const Vector3& a, const Vector3& b,
+																	 const Vector3& tangent_a, const Vector3& tangent_b,
+																	 std::vector<Vector3>& interpolated_values);
+
+		//////////////////////////////////////////////////////////////////////////////
+		/// Code to refine a icosaeder:
+		extern float 		icosaeder_vertices[12][3];
+		extern Position icosaeder_indices[20][3];
+
+		BALL_VIEW_EXPORT void subdivideTriangle(vector<Vector3>& results, Vector3& v1, Vector3& v2, Vector3& v3, Size precision)
+			throw();
+
+		BALL_VIEW_EXPORT vector<Vector3> createSphere(Size precision);
+
+		BALL_VIEW_EXPORT void calculateHistogramEqualization(const vector<float>& values, vector<float>& normalized_values, bool use_absolute_values = false);
+
+		/// calcualte a random set of points, dependening of the field strength of a grid
+		BALL_VIEW_EXPORT void calculateRandomPoints(const RegularData3D& grid, Size nr_points, vector<Vector3>& resulting_points);
 
 		//@}
 

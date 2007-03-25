@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.14 2005/12/23 17:02:19 amoll Exp $
+// $Id: label.h,v 1.14.16.1 2007/03/25 21:26:08 oliver Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
@@ -15,7 +15,7 @@
 #	include <BALL/VIEW/DATATYPE/vertex1.h>
 #endif
 
-#include <qfont.h>
+#include <QtGui/qfont.h>
 
 namespace BALL
 {
@@ -126,7 +126,7 @@ namespace BALL
 				throw() { return text_;}
 
 			/** Inspection of the expanded text of the label.
-			*/
+			 */
 			String getExpandedText() const
 				throw();
 
@@ -135,6 +135,9 @@ namespace BALL
 
 			///
 			void setFont(const QFont& font) { font_ = font;}
+
+			///
+			void setFontSize(Size size) { font_.setPixelSize(size);}
 
 			//@}
 			/**	@name	debuggers and diagnostics */
@@ -167,6 +170,9 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
 				throw();
+			
+			// Method to get all vertices from a geometric object
+			virtual void getVertices(vector<Vector3>& vertices) const;
 
 			protected:
 				String text_;

@@ -7,6 +7,8 @@
 
 #include <BALL/VIEW/UIC/snapShotVisualisationData.h>
 
+#include <QtGui/QDialog>
+
 namespace BALL
 {
 	class SnapShotManager;
@@ -20,7 +22,8 @@ namespace BALL
 		\ingroup ViewDialogs
 */
 class BALL_VIEW_EXPORT SnapshotVisualisationDialog 
-	: public SnapshotVisualisationDialogData, 
+	: public QDialog,
+		public Ui_SnapshotVisualisationDialogData, 
 		public ModularWidget
 {
 	Q_OBJECT
@@ -30,8 +33,7 @@ class BALL_VIEW_EXPORT SnapshotVisualisationDialog
 	BALL_EMBEDDABLE(SnapshotVisualisationDialog, ModularWidget)
 
 	/// Constructor
-	SnapshotVisualisationDialog
-		(QWidget* parent = 0, const char* name = 0);//, bool modal = FALSE, WFlags fl = 0);
+	SnapshotVisualisationDialog(QWidget* parent = 0, const char* name = "SnapshotVisualisationDialog");
 
 	/// Destructor
 	~SnapshotVisualisationDialog() throw();
@@ -40,10 +42,18 @@ class BALL_VIEW_EXPORT SnapshotVisualisationDialog
 	void setSnapShotManager(SnapShotManager* snapshot_manager);
   
 	///This function gets the SnapShotManager
-	const SnapShotManager* getSnapShotManager() 
-		{return (snap_shot_manager_);}
+	const SnapShotManager* getSnapShotManager() {return snap_shot_manager_;}
+	
+	///
+	Size getStartSnapshot() const;
 
+	///
+	Size getEndSnapshot() const;
+	
 	public slots:
+
+	///
+	void show();
 
 	///Function to select the analogous Snapshot
 	virtual void firstSnapshotClicked();
@@ -74,13 +84,7 @@ class BALL_VIEW_EXPORT SnapshotVisualisationDialog
 
 	///test wether input in line edits startSnapshot or endSnapshot are valid
 	virtual void snapShotInputTest();
-	
-	///
-	Size getStartSnapshot() const;
 
-	///
-	Size getEndSnapshot() const;
-	
 	///
 	virtual void sliderMovedToPos();
 	
@@ -95,15 +99,23 @@ class BALL_VIEW_EXPORT SnapshotVisualisationDialog
 	
 	///
 	virtual void checkRock();
+
+	///
+	void cancelPressed();
 	
 	protected:
+	void stop_();
+	virtual void closeEvent(QCloseEvent*);
 	void update_();
 	void forward(Size nr);
   void backward(Size nr);
 
+	MainControl* 			main_control_;
 	QString 					tmp_;
   SnapShotManager* 	snap_shot_manager_;
 	bool 							error_;
+	bool 							cancel_;
+	bool 							animation_running_;
 };
 
 } } // namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.22 2005/12/23 17:02:09 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.22.16.1 2007/03/25 21:25:45 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -21,7 +21,7 @@
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif 
 
-#include <qtable.h>
+#include <QtGui/QTableWidget>
 #include <vector>
 			
 namespace BALL
@@ -32,26 +32,11 @@ namespace BALL
 	{
 		class ColorProcessor;
 
-		class BALL_VIEW_EXPORT QColorTableItem 
-			: public QTableItem
-		{
-			public:
-				QColorTableItem(QTable* t, EditType et, const ColorRGBA& color);
-				
-				void paint( QPainter *p, const QColorGroup &cg, const QRect &cr, bool selected );
-				
-				void setColor(ColorRGBA color) { color_rgba_ = color;}
-				
-				const ColorRGBA& getColor() const { return color_rgba_;}
-
-			protected:
-				ColorRGBA color_rgba_;
-		};
-
-
-		///
+		/** Class for storing colors in a GUI table
+				\ingroup ViewDialogs
+		*/
 		class BALL_VIEW_EXPORT QColorTable
-			:	public QTable,
+			:	public QTableWidget,
 				public PreferencesEntry::ExtendedPreferencesObject
 		{
 				Q_OBJECT
@@ -86,7 +71,9 @@ namespace BALL
 
 			private slots:
 				
-				QWidget* beginEdit(int row, int col, bool replace);
+				void beginEdit(int row, int col);
+
+				virtual void mousePressEvent(QMouseEvent* event);
 				
 			private:
 				vector<ColorRGBA> colors_;
@@ -100,7 +87,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT ColoringSettingsDialog 
-			: public ColoringSettingsDialogData,
+			: public QWidget,
+				public Ui_ColoringSettingsDialogData,
 				public PreferencesEntry
 		{ 
 			Q_OBJECT
@@ -108,29 +96,29 @@ namespace BALL
 			public:
 
 			/// Constructor
-			ColoringSettingsDialog( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+			ColoringSettingsDialog( QWidget* parent = 0, const char* name = "ColoringSettings", Qt::WFlags fl = 0 );
 
 			/// Destructor
-			~ColoringSettingsDialog() {}
+			virtual ~ColoringSettingsDialog() {}
 
 			///
-			void applySettingsTo(ColorProcessor& cp) const
+			virtual void applySettingsTo(ColorProcessor& cp) const
 				throw();
 
 			///
-			ColorProcessor* createColorProcessor(ColoringMethod method) const
+			virtual ColorProcessor* createColorProcessor(ColoringMethod method) const
 				throw(Exception::InvalidOption);
 
 			///
-			void getSettings(const ColorProcessor& cp)
+			virtual void getSettings(const ColorProcessor& cp)
 				throw();
 
 			///
-			QWidget* getEntryFor(ColoringMethod method)
+			virtual QWidget* getEntryFor(ColoringMethod method)
 				throw();
 
 			///
-			vector<ColorRGBA> getColors(ColoringMethod method) const
+			virtual vector<ColorRGBA> getColors(ColoringMethod method) const
 				throw();
 
 			protected slots:

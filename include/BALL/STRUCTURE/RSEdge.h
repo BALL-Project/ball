@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSEdge.h,v 1.33 2005/12/23 17:02:01 amoll Exp $
+// $Id: RSEdge.h,v 1.33.18.1 2007/03/25 21:25:22 oliver Exp $
 //
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
@@ -45,7 +45,7 @@ namespace BALL
 	class SASTriangulator;
 
 	/** Generic RSEdge Class.
-  \ingroup StructureMiscellaneous    
+			\ingroup Surface
 	*/
 	class BALL_EXPORT RSEdge	:	public GraphEdge< RSVertex,RSEdge,RSFace >
 	{

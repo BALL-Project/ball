@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.h,v 1.6 2005/12/23 17:02:09 amoll Exp $
+// $Id: charmmConfigurationDialog.h,v 1.6.16.1 2007/03/25 21:25:45 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_CHARMMCONFIGURATIONDIALOG_H
@@ -25,7 +25,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT CharmmConfigurationDialog
-			: public CharmmConfigurationDialogData,
+			: public QDialog,
+				public Ui_CharmmConfigurationDialogData,
 				public PreferencesEntry
 		{
 			friend class MolecularStructure;
@@ -35,7 +36,7 @@ namespace BALL
 			public:
 
 			/// Constructor
-			CharmmConfigurationDialog(QWidget* parent = NULL, const char* name = NULL);
+			CharmmConfigurationDialog(QWidget* parent = NULL, const char* name = "CharmmConfiguration");
 
 			/// Destructor
 			virtual ~CharmmConfigurationDialog();
@@ -45,6 +46,8 @@ namespace BALL
 			
 			public slots:
 
+			virtual void resetOptions();
+			
 			///
 			void accept();
 
@@ -63,11 +66,11 @@ namespace BALL
 			void periodicBoundaryClicked()
 				throw();
 
-			protected:
+			protected slots:
 
-			virtual void resetOptions();
-			
 			virtual void browseParameterFiles();
+
+			protected:
 
 			void setCharmmFF(CharmmFF& charmm)
 				throw();

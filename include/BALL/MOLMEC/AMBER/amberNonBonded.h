@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.h,v 1.30 2005/12/23 17:01:49 amoll Exp $
+// $Id: amberNonBonded.h,v 1.30.18.1 2007/03/25 21:23:47 oliver Exp $
 //
 
 // Molecular Mechanics: Amber force field, non-bonded component
@@ -39,6 +39,9 @@ namespace BALL
 		: public ForceFieldComponent
 	{
 		public:
+
+		/// flag to enable NB
+		#define AMBER_NB_ENABLED "enable NB"
 
 		/**	@name	Constructors and Destructors	
 		*/

@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifySurfaceDialog.h,v 1.4 2005/12/23 17:02:11 amoll Exp $
+// $Id: modifyRepresentationDialog.h,v 1.1.4.1 2007/03/25 21:25:52 oliver Exp $
 //
 
-#ifndef BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
-#define BALL_VIEW_DIALOGS_modifySurfaceDIALOG_H
+#ifndef BALL_VIEW_DIALOGS_MODIFYSURFACEDIALOG_H
+#define BALL_VIEW_DIALOGS_MODIFYSURFACEDIALOG_H
 
-#include <BALL/VIEW/UIC/modifySurfaceDialogData.h>
+#include <BALL/VIEW/UIC/modifyRepresentationDialogData.h>
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
@@ -42,21 +42,23 @@ namespace BALL
 				in a RegularData3D grid. You can also set the transparency of the surface.
 				\ingroup ViewDialogs
 		*/
-		class BALL_VIEW_EXPORT ModifySurfaceDialog 
-			: public ModifySurfaceDialogData,
+		class BALL_VIEW_EXPORT ModifyRepresentationDialog 
+			: public QDialog,
+				public Ui_ModifyRepresentationDialogData,
 				public ModularWidget
 		{ 
 			Q_OBJECT
 
 			public:
 
-			BALL_EMBEDDABLE(ModifySurfaceDialog, ModularWidget)
+			BALL_EMBEDDABLE(ModifyRepresentationDialog, ModularWidget)
 
 			///
-			ModifySurfaceDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0);
+			ModifyRepresentationDialog(QWidget* parent = 0, const char* name = "ModifyRepresentationDialog", 
+																 bool modal = FALSE, Qt::WFlags fl = 0);
 
 			///
-			~ModifySurfaceDialog()
+			~ModifyRepresentationDialog()
 				throw();
 					
 			///
@@ -79,6 +81,12 @@ namespace BALL
 					
 			///
 			void setMidValue(float value);
+
+			///
+			void setSplitRadius(float distance);
+
+			///
+			void setMode(Position pos);
 				
 			public slots:
 			
@@ -90,10 +98,11 @@ namespace BALL
 			void minMinPressed();
 			void maxMaxPressed();
 			void tabChanged();		
-			void autoScalePressed();
+			void autoScale();
 			void choosePressed();
 			void gridSelected();
 			void show();
+			void applySplit();
 
 			protected slots:
 
@@ -101,8 +110,11 @@ namespace BALL
 			void customColorTransparencyChanged();
 			void changeDrawingModeTransparencyChanged();
 			void splitMethodChanged();
+			void normalizationChanged();
 
 			protected:
+
+			ModifyRepresentationDialog(const ModifyRepresentationDialog& dialog);
 
 			typedef HashGrid3<const Atom*>  AtomGrid;
 			typedef HashGridBox3<const Atom*> AtomBox;
@@ -110,13 +122,10 @@ namespace BALL
 			bool colorByGrid_();
 			bool insertGrid_(RegularData3D& grid, const String& name);
 			void removeGrid_(RegularData3D& grid);
-			void setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box, 
-										 const QRadioButton* rbutton);
+			void setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box);
 			void getColor_(const ColorRGBA& color, QLabel* label, QSpinBox* box);
 			void invalidateGrid_() throw();
 			void invalidateMesh_() throw();
-			void calculateValues_();
-			void split_();
 			void changeDrawingMode_();
 			void checkApplyButton_();
 
@@ -131,9 +140,9 @@ namespace BALL
 
 			ColorRGBA	 	selected_color, min_min_color, min_color, mid_color, max_color, max_max_color;	
 
-			Mesh* mesh_;		
 			Representation* rep_;
 			List<RegularData3D*> grid_list_;
+			vector<Vector3> vertices_;
 		};
 
 	} // namespace VIEW

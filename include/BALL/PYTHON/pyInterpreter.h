@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.h,v 1.15 2005/12/23 17:01:57 amoll Exp $ 
+// $Id: pyInterpreter.h,v 1.15.18.1 2007/03/25 21:25:21 oliver Exp $ 
 //
 
 #ifndef BALL_PYTHON_PYINTERPRETER_H
@@ -72,6 +72,9 @@ namespace BALL
 		///
 		static bool isValid() { return valid_;}
 		
+		///
+		static String getStartupLog() { return start_log_;}
+		
 		//@}
 
 
@@ -101,6 +104,7 @@ namespace BALL
 		protected:
 		static PathStrings sys_path_;
 		static bool   valid_;
+		static String start_log_;
 	};
    
 } // namespace BALL

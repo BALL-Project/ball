@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sdGenerator.h,v 1.4 2006/08/15 20:36:56 oliver Exp $
+// $Id: sdGenerator.h,v 1.4.10.1 2007/03/25 21:25:30 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -32,7 +32,7 @@ namespace BALL
                 * \brief The main class, provides methods for analysis of the input.
                 *
                 */
-        class SDGenerator
+        class BALL_EXPORT SDGenerator
         {
 
         private:

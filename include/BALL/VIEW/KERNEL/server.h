@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.12 2005/12/23 17:02:16 amoll Exp $
+// $Id: server.h,v 1.12.16.1 2007/03/25 21:26:03 oliver Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_SERVER_H
@@ -15,17 +15,16 @@
 #	include <BALL/DATATYPE/hashMap.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_QTTIMER_H
-#	include <BALL/VIEW/KERNEL/QTTimer.h>
-#endif
-
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 #	include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_OBJECTCREATOR_H
-# include <BALL/VIEW/KERNEL/objectCreator.h>
+#ifndef BALL_CONCEPT_OBJECTCREATOR_H
+# include <BALL/CONCEPT/objectCreator.h>
 #endif
+
+#include <QtCore/qtimer.h>
+#include <QtGui/QLabel>
 
 class QLabel;
 
@@ -53,7 +52,7 @@ namespace BALL
 			\ingroup ViewKernelClient
 		*/
 		class BALL_VIEW_EXPORT Server
-			: public QTTimer,
+			: public QTimer,
    			public ModularWidget
 		{
 			public:
@@ -74,6 +73,9 @@ namespace BALL
 			*/
 			Server(QWidget* parent = 0, const char* name = 0)
 				throw();
+
+			// only for Python interface
+			Server(const Server& server);
 
 			//@}
 			/** @name Destructors 

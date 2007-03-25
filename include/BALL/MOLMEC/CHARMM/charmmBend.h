@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmBend.h,v 1.17 2005/12/23 17:01:50 amoll Exp $
+// $Id: charmmBend.h,v 1.17.18.1 2007/03/25 21:23:48 oliver Exp $
 //
 
 // Molecular Mechanics: Charmm force field, bond stretch component
@@ -37,6 +37,9 @@ namespace BALL
 		public:
 
 		BALL_CREATE(CharmmBend)
+
+		/// flag to enable BENDS 
+		#define CHARMM_BENDS_ENABLED "enable Bends"
 
 		/**@name	Constructors and Destructors	
 		*/

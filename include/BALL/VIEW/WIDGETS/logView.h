@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.14 2005/12/23 17:02:23 amoll Exp $
+// $Id: logView.h,v 1.14.16.1 2007/03/25 21:26:21 oliver Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -17,21 +17,14 @@
 # include <strstream>
 #endif
 
-#ifndef QAPPLICATION_H
-#	include <qapplication.h>
-#endif
-
-#ifndef QSTRING_H
-#	include <qstring.h>
-#endif
-
-#ifndef QTEXTEDIT_H
-# include <qtextedit.h>
-#endif
-
 #ifndef BALL_VIEW_WIDGETS_DOCKWIDGET_H
 #	include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
+
+#include <QtGui/QTextEdit>
+#include <QtGui/QDragEnterEvent>
+#include <QtGui/QDragLeaveEvent>
+#include <QtGui/QDropEvent>
 
 namespace BALL
 {
@@ -73,10 +66,6 @@ namespace BALL
 
 			BALL_EMBEDDABLE(LogView,DockWidget)
 		
-			/**	@name	Constructors
-			*/	
-			//@{
-
 			/** Default Constructor.
 					The contructor connects the own
 					<b> stringstream</b> with the  \link BALL::LogStream Log \endlink  object. If a string is written into
@@ -94,17 +83,11 @@ namespace BALL
 			LogView(const LogView& view)
 				throw();
 
-			//@}
-			/** @name Destructors */
-			//@{
-
 			/** Destructor.
 					Calls  clear.
 			*/
 			virtual ~LogView()
 				throw();
-
-			//@}
 
 			/**	Setup the menu entry in "Edit->Clear Logs".
 			*/
@@ -115,6 +98,16 @@ namespace BALL
 			*/
 			virtual void finalizeWidget(MainControl& main_control)
 				throw();
+
+			// output a string
+			void logString(const String& text);
+
+			public slots:
+
+			virtual void showGuestContextMenu(const QPoint&);
+			
+			/// Event filter logstream
+			bool eventFilter(QObject*, QEvent*);
 
 			protected:
 
@@ -128,10 +121,7 @@ namespace BALL
 
 			private:
 
-
 			QTextEdit* text_edit_;
-
-			bool output_running_;
 		};
   	
 } } // namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringAnalyser.h,v 1.4 2006/08/15 20:36:55 oliver Exp $
+// $Id: ringAnalyser.h,v 1.4.10.1 2007/03/25 21:25:29 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -21,7 +21,7 @@ namespace BALL
                 * \brief class, providing methods for the analysis of the structure of ringsystems
                 *
                 */
-        class RingAnalyser
+        class BALL_EXPORT RingAnalyser
         {
                 public:
 

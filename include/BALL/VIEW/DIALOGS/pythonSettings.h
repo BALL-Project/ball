@@ -14,15 +14,42 @@
  #include <BALL/VIEW/WIDGETS/pyWidget.h>
 #endif
 
-#include <qtable.h>
+#include <QtGui/QTableWidget>
+#include <QtGui/QWidget>
+#include <QtGui/QItemDelegate>
+#include <QtGui/QFont>
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		///
+
+		class ComboBoxDelegate
+			: public QItemDelegate
+		{
+			public:
+
+				ComboBoxDelegate(QObject* parent = 0);
+
+				QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+										          const QModelIndex &index) const;
+
+				void setEditorData(QWidget *editor, const QModelIndex &index) const;
+				void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+
+				void updateEditorGeometry(QWidget *editor,
+																	const QStyleOptionViewItem &option, const QModelIndex &index) const;
+			private:
+
+				QStringList sl_keys_;
+				QStringList sl_modifier_;
+		};
+
+		/** Class for storing Python hotkeys in a GUI table
+				\ingroup ViewDialogs
+		*/
 		class BALL_VIEW_EXPORT HotkeyTable
-			:	public QTable,
+			:	public QTableWidget,
 				public PreferencesEntry::ExtendedPreferencesObject
 		{
 			Q_OBJECT
@@ -38,7 +65,7 @@ namespace BALL
 				};
 
 				///
-				HotkeyTable(QWidget* parent = 0, const char* name = 0)
+				HotkeyTable(QWidget* parent = 0, const char* name = "PythonSettings")
 					throw();
 				
 				///
@@ -66,10 +93,14 @@ namespace BALL
 				/** Append a hotkey
 						F_key: 1-12 for the 12 F-keys
 				*/
-				virtual void appendHotkey(Modifier mod, Position F_key, const String& command);
+				virtual void appendHotkey(const String& modif, const String& F_key, 
+																	const String& command, String comment = "");
 				
 			private:
+
+//   				bool edit (const QModelIndex & index, EditTrigger trigger, QEvent* event);
 				QStringList modifier_, keys_;
+				ComboBoxDelegate delegate_;
 		};
 
 
@@ -79,7 +110,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT PythonSettings 
-			: public PythonSettingsData,
+			: public QWidget,
+				public Ui_PythonSettingsData,
 				public PreferencesEntry
 		{ 
 			Q_OBJECT
@@ -87,10 +119,13 @@ namespace BALL
 			public:
 
 			/// Constructor
-			PythonSettings( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+			PythonSettings(QWidget* parent = 0, const char* name = 0);
 
 			/// Destructor
 			~PythonSettings() {}
+
+			///
+			QFont getEditorFont() const { return font_;}
 
 			/// Set the filename of the startup script
 			void setFilename(const String& filename)
@@ -107,6 +142,12 @@ namespace BALL
 			///
 			void setContent(const List<Hotkey>& hotkeys);
 
+			///
+			void writePreferenceEntries(INIFile& inifile);
+
+			///
+			void readPreferenceEntries(const INIFile& inifile);
+
 			public slots:
 
 			/// Open a filedialog to select the startup script
@@ -118,9 +159,13 @@ namespace BALL
 			///
 			virtual void rowSelected();
 
+			///
+			void selectFont();
+
 			protected:
 
 			HotkeyTable*  table;
+			QFont 				font_;
 		};
 } }
 

@@ -20,8 +20,9 @@ namespace BALL
 		/** Dialog for showing the docking results.
 			* \ingroup ViewDialogs
 			*/
-		class BALL_EXPORT DockResultDialog : 
-				public DockResultDialogData
+		class BALL_VIEW_EXPORT DockResultDialog : 
+				public QDialog,
+				public Ui_DockResultDialogData
 		{ 
 			Q_OBJECT
 
@@ -37,7 +38,7 @@ namespace BALL
 				 	*	@param			modal the modal flag
 				 	*	@param			fl the widget flags
 					*/
-				DockResultDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
+				DockResultDialog(QWidget* parent = 0, const char* name = "DockResultDialog")
 					throw();
 					
 				/** Destructor
@@ -131,39 +132,32 @@ namespace BALL
 					*/
 				void scoringClicked();
 				
-				/** Is called when the result table is right-clicked.
-					* Shows a context menu with entries <b>Delete Score Column</b>, <b>Scoring Options</b> and <b>Redock</b>
-					* @param			row number of the row which the user clicked
-					* @param			column number of the row which the user clicked
-					* @param			pos
-					*/
-				void contextMenuRequested(int row, int column, const QPoint& pos);
-
 				/** Is called when close button is pressed.
 					* Closes and deletes the dialog.
 				*/
 				void closeClicked();
 				
 				
-			protected slots:
+				protected slots:
+
+				void selectionChanged_();
 			
 				/** Is called when context menu entry <b> Delete Score Column </b> is pressed.
 					* Deletes a score column.
-					* @param			column number of the column which should be deleted
 					*/
-				void deleteColumn_(int column);
+				void deleteColumn_();
 
 				/** Is called when context menu entry <b> Scoring Options </b> is pressed.
 					* Shows options of the scoring function in a small dialog.
 					* @param			column number of the column for which the scoring function options should be shown
 					*/
-				void showScoringOptions_(int column);
+				void showScoringOptions_();
 
 				/** Is called when context menu entry <b> Redock </b> is pressed.
 					* Calls \link DockingController::runDocking DockingController::runDocking \endlink for redocking.
 					* @param			row number of the row for which redocking should be started
 					*/
-				void redock_(int row);
+				void redock_();
 
 				
 			protected:

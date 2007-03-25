@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.43 2005/12/23 17:02:10 amoll Exp $
+// $Id: displayProperties.h,v 1.43.16.1 2007/03/25 21:25:46 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -21,8 +21,6 @@
 
 #include <BALL/VIEW/UIC/displayPropertiesData.h>
 
-#include <qtimer.h>
-
 namespace BALL
 {
 	class Composite;
@@ -34,6 +32,7 @@ namespace BALL
 		class ColoringSettingsDialog;
 		class ModelSettingsDialog;
 		class Preferences;
+		class ModelInformation;
 
 		/**	Dialog for creating and changing representations for a selection of molecular objects.
 				It can create a new Representation for a selection of Composite 's from the 
@@ -49,7 +48,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT DisplayProperties 
-			: public DisplayPropertiesData,
+			: public QDialog,
+				public Ui_DisplayPropertiesData,
 				public ModularWidget,
 				public PreferencesEntry
 		{
@@ -66,7 +66,7 @@ namespace BALL
 			/** Default Constructor.
 					Calls ModularWidget::registerWidget.
 			*/
-			DisplayProperties(QWidget *parent = NULL, const char* name = NULL)
+			DisplayProperties(QWidget *parent = NULL, const char* name = "DisplayProperties")
 				throw();
 
 			/// Copy constructor just implemented for Python Interface, dont use it! 
@@ -141,6 +141,9 @@ namespace BALL
 			bool getSettingsFromString(const String& data)
 				throw();
 
+			///
+			void createRepresentation(String data_string, const vector<const Composite*>& new_systems);
+
 			/// Set if Representations are automaticaly created for new Molecules
 			void enableCreationForNewMolecules(bool state) 
 				throw() { create_representations_for_new_molecules_ = state;}
@@ -153,8 +156,16 @@ namespace BALL
 					Called by onNotify() after receiving CompositeMessage::NEW_MOLECULE and by apply().
 					To insert a new type of model, this is the only method in DisplayProperties you have to
 					change (See also VIEW/KERNEL/common.h).
+					@param hidden set to true will prevent that the representations model is created right now
 			*/
-			virtual Representation* createRepresentation(const List<Composite*>& composites);
+			virtual Representation* createRepresentation(const List<Composite*>& composites, bool hidden = false);
+
+
+			///
+			void setModelSettingsDialog(ModelSettingsDialog* dialog);
+	
+			///
+			void setColoringSettingsDialog(ColoringSettingsDialog* dialog);
 	
 			public slots:
 					
@@ -264,15 +275,10 @@ namespace BALL
 			//_
 			virtual void applyColoringSettings_(Representation& rep);
 
-			//_
-			bool isNotBusy_();
-
-			protected slots:
-			//_
-			void checkMenu_();
-
 			protected:
 			
+			void applyTo_(Representation* rep);
+
 			// --------------------------------------------------------------------------------
 			// attributs
 			// --------------------------------------------------------------------------------
@@ -281,7 +287,7 @@ namespace BALL
 			Preferences* 							preferences_;
 			
 			// the menu entry id of the dialog
-			int 						id_;
+			QAction*        id_;
 			
 			// used by GeometricControl to modify an existing representation
 			Representation* rep_;
@@ -290,7 +296,7 @@ namespace BALL
 			bool 						advanced_options_modified_;
 			bool 						create_representations_for_new_molecules_;
 			bool 						changed_selection_color_;
-			QTimer 					timer_;
+			const ModelInformation* model_information_;
 		};
 
 } } // namespaces

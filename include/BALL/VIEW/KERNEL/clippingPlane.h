@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clippingPlane.h,v 1.3 2005/12/23 17:02:13 amoll Exp $
+// $Id: clippingPlane.h,v 1.3.18.1 2007/03/25 21:25:58 oliver Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_CLIPPING_PLANE_H
@@ -19,7 +19,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		/** Representation
+		/** ClippingPlane 
 				\ingroup ViewKernelGeometricPrimitives
 		*/
 		class BALL_VIEW_EXPORT ClippingPlane
@@ -28,10 +28,6 @@ namespace BALL
 
 			BALL_CREATE(ClippingPlane)
 
-			/** @name Enums
-			 */
-			//@{
-			
 			ClippingPlane()
 				throw();
 
@@ -44,17 +40,16 @@ namespace BALL
 			virtual ~ClippingPlane()
 				throw();
 
-			//@}
-			/**	@name	Predicats and Accessors
-			*/	
-			//@{
-			
 			///
 			const ClippingPlane& operator = (const ClippingPlane& plane)
 				throw();
 			
 			///
 			void clear()
+				throw();
+
+			///
+			bool operator == (const ClippingPlane& plane) const
 				throw();
 
 			///
@@ -90,7 +85,14 @@ namespace BALL
 			///
 			void flip() { normal_ = -normal_;}
 
-			//@}
+			///
+			static ColorRGBA& getCappingColor() { return capping_color_;}
+
+			///
+			bool cappingEnabled() const { return cap_;}
+
+			///
+			void setCappingEnabled(bool state) { cap_ = state;}
 
 			protected:
 
@@ -99,6 +101,8 @@ namespace BALL
 			Vector3 point_;
 			bool active_;
 			bool hidden_;
+			bool cap_;
+			static ColorRGBA capping_color_;
 		};
 
 	} // namespace VIEW

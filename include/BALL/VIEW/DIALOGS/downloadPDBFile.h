@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.14 2005/12/23 17:02:10 amoll Exp $
+// $Id: downloadPDBFile.h,v 1.14.16.1 2007/03/25 21:25:47 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
@@ -17,9 +17,6 @@
 # include <BALL/DATATYPE/hashSet.h>
 #endif
 
-#include <qtextbrowser.h>
-#include <qimage.h>
-
 namespace BALL
 {
 	class TCPTransfer;
@@ -33,7 +30,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT DownloadPDBFile 
-			: public DownloadPDBFileData,
+			: public QDialog,
+				public Ui_DownloadPDBFileData,
 				public ModularWidget
 		{ 
 				Q_OBJECT
@@ -41,7 +39,8 @@ namespace BALL
 				BALL_EMBEDDABLE(DownloadPDBFile, ModularWidget)
 
 				///
-				DownloadPDBFile( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 )
+				DownloadPDBFile(QWidget* parent = 0, const char* name = "DownloadPDBFileDialog", 
+												bool modal = FALSE, Qt::WFlags fl = 0 )
 					throw();
 
 				///
@@ -52,22 +51,32 @@ namespace BALL
 				virtual void initializeWidget(VIEW::MainControl& main_control)
 					throw();
 
+				///
+				virtual void fetchPreferences(INIFile& inifile)
+					throw();
+
+				///
+				virtual void writePreferences(INIFile& inifile)
+					throw();
+
+				/** Set the prefix for the PDB.org url<br>
+						Standard: http://www.rcsb.org/pdb/files/
+				*/
+				void setPrefix(String s) { prefix_ = s;}
+
+				/** Set the suffix for the PDB.org url<br>
+						Standard: (.pdb)
+				*/
+				void setSuffix(String s) { suffix_ = s;}
+
+				///
+				void checkMenu(MainControl& mc)
+					throw();
+
 			public slots:
 
 				///
-				void slotSearch();
-
-				///
 				void slotDownload();
-
-				///
-				void slotShowDetail();
-
-				///
-				void slotNewId(const QString& new_id);
-
-				///
-				void displayHTML(const QString& url);
 
 				///
 				void idChanged();
@@ -90,7 +99,6 @@ namespace BALL
 
 				void setProxyAndTransfer_(TCPTransfer& tcp);
 				
-				QTextBrowser 						*qb_;
 				FetchHTMLThread 				*thread_;
 				bool 										aborted_;
 				bool 										error_;
@@ -100,7 +108,8 @@ namespace BALL
 				// e.g. gif images if not supported
 				HashSet<String> 				unsupported_images_;
 
-				Index menu_id_;
+				QAction* menu_id_;
+				String   prefix_, suffix_;
 		};
 
 	} 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.39 2005/12/23 17:02:14 amoll Exp $
+// $Id: geometricObject.h,v 1.39.16.1 2007/03/25 21:25:59 oliver Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -9,6 +9,14 @@
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 #	include <BALL/VIEW/DATATYPE/colorRGBA.h>
+#endif
+
+#ifndef BALL_MATHS_VECTOR3_H
+#	include <BALL/MATHS/vector3.h>
+#endif
+
+#ifdef BALL_DATATYPE_HASHSET_H
+#	include <BALL/DATATYPE/hashSet.h>
 #endif
 
 namespace BALL
@@ -152,6 +160,9 @@ namespace BALL
 			void getColor(ColorUnit& red,  ColorUnit& green,
 										ColorUnit& blue, ColorUnit& alpha) const
 				throw() { color_.get(red, green, blue, alpha); }
+
+			/// Insert the colors of this object into the hashset
+			void getColors(HashSet<String>& colors);
 			
 			/// Needed for MSVC
 			bool operator == (const GeometricObject& object) const
@@ -162,6 +173,8 @@ namespace BALL
 			bool operator < (const GeometricObject& object) const
 				throw() { return this < &object;}
 
+			// Method to get all vertices from a geometric object
+			virtual void getVertices(std::vector<Vector3>&) const {};
 
 			//@}
 

@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.h,v 1.11 2005/12/23 17:02:20 amoll Exp $
+// $Id: twoColoredTube.h,v 1.11.16.1 2007/03/25 21:26:12 oliver Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H
 #define BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H
 
-#ifndef BALL_VIEW_DATATYPE_COLOREXTENSION2_H
-#	include <BALL/VIEW/DATATYPE/colorExtension2.h>
+#ifndef BALL_VIEW_DATATYPE_COLOREXTENSIONS_H
+#	include <BALL/VIEW/DATATYPE/colorExtensions.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -193,6 +193,10 @@ namespace BALL
 			/// Set the radius.
 			void setRadius(float radius)
 				throw() { radius_ = radius;}
+			
+			// Method to get all vertices from a geometric object
+			virtual void getVertices(vector<Vector3>& vertices) const;
+
 
 			//@}
 			

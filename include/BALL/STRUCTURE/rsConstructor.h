@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rsConstructor.h,v 1.4 2006/08/15 20:36:56 oliver Exp $
+// $Id: rsConstructor.h,v 1.4.10.1 2007/03/25 21:25:30 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -20,7 +20,7 @@ namespace BALL
         * \brief class, performing the prefabication of ringsystems (i.e. providing them with relative 2D-coordinates)
         *
         */
-class RSConstructor
+class BALL_EXPORT RSConstructor
 {
   public:
 

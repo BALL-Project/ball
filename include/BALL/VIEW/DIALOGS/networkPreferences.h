@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: networkPreferences.h,v 1.3 2005/12/23 17:02:11 amoll Exp $
+// $Id: networkPreferences.h,v 1.3.18.1 2007/03/25 21:25:53 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_NETWORKPREFERENCES_H
@@ -13,56 +13,40 @@
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
+#include <QtGui/QWidget>
+
 namespace BALL
 {
 	namespace VIEW
 	{
 
 /** NeworkPreferences is a widget that will be inserted into the
-		tab dialog Preferences. It contains the following settings:
-		- the used QT style 
-		- if DockWidget 's contain a label with their name
-		- if logging to a file is enabled
+		tab dialog Preferences.
 		\ingroup ViewDialogs
 */
 class BALL_VIEW_EXPORT NetworkPreferences 
-	: public NetworkPreferencesData,
+	: public QWidget,
+		public Ui_NetworkPreferencesData,
 		public PreferencesEntry
 {
 	Q_OBJECT
 
 	public:
 	
-	/**	@name	Constructors
-	*/	
-	//@{
-
-	/** Default Constructor.
-	*/
-	NetworkPreferences(QWidget *parent = NULL, const char *name = NULL, WFlags fl=0)
+	/// Default Constructor.
+	NetworkPreferences(QWidget *parent = NULL, const char *name = "NetworkPreferences", 
+										 Qt::WFlags fl=0)
 		throw();
 	
-	//@}
-	/** @name Destructors 
-	*/
-	//@{
-
-	/** Destructor.
-	*/
+	/// Destructor.
 	virtual ~NetworkPreferences()
 		throw();
-
-	//@}
-	/**	@name	Accessors: inspectors and mutators 
-	*/
-	//@{
 
 	///
 	void applySettings();
 
 	///
 	void getSettings();
-	//@}
 };
   
 } } // namespace

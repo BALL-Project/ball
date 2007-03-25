@@ -97,20 +97,6 @@ void Representation::setDrawingMode(DrawingMode mode)
 }
 
 BALL_INLINE 
-String Representation::getModelName() const
-	throw()
-{
-	return VIEW::getModelName(model_type_);
-}
-
-BALL_INLINE 
-String Representation::getColoringName() const
-	throw()
-{
-	return VIEW::getColoringName(coloring_method_);
-}
-
-BALL_INLINE 
 void Representation::setDrawingPrecision(DrawingPrecision precision)
 	throw() 
 {

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmStretch.h,v 1.18 2005/12/23 17:01:50 amoll Exp $ 
+// $Id: charmmStretch.h,v 1.18.18.1 2007/03/25 21:23:49 oliver Exp $ 
 //
 
 // Molecular Mechanics: Charmm force field, bond stretch component
@@ -35,6 +35,9 @@ namespace BALL
 		: public ForceFieldComponent
 	{
 		public:
+
+		/// flag to enable Stretches
+		#define CHARMM_STRETCHES_ENABLED "enable Stretches"
 
 		/**	@name	Constructors and Destructors	
 		*/

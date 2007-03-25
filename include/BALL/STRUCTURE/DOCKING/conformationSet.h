@@ -25,10 +25,10 @@
 
 namespace BALL
 {
-		/** A class defining the interface for docking algorithms.
-				This is a first iteration.
+		/** Data structure for conformation results.
+				\ingroup Docking
 		*/
-		class ConformationSet
+		class BALL_EXPORT ConformationSet
 		{
 		  public:
 

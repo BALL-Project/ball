@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chainBuilder.h,v 1.3 2006/08/15 20:36:55 oliver Exp $
+// $Id: chainBuilder.h,v 1.3.10.1 2007/03/25 21:25:24 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -20,7 +20,7 @@ namespace BALL
                 * \brief This class provides methods for analysis of the chains in a molecule
                 *
                 */
-        class ChainBuilder
+        class BALL_EXPORT ChainBuilder
         {
         public:
 

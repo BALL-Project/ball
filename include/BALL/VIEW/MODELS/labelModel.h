@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: labelModel.h,v 1.3 2005/12/23 17:02:18 amoll Exp $
+// $Id: labelModel.h,v 1.3.18.1 2007/03/25 21:26:07 oliver Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_LABELMODEL_H
@@ -20,7 +20,7 @@
 #endif
 
 
-#include <qfont.h>
+#include <QtGui/qfont.h>
 
 namespace BALL
 {

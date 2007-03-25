@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: setCamera.h,v 1.5 2005/12/23 17:02:13 amoll Exp $
+// $Id: setCamera.h,v 1.5.16.1 2007/03/25 21:25:56 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_SETCAMERA_H
@@ -12,6 +12,7 @@
 #endif
 
 #include <BALL/VIEW/UIC/setCameraData.h>
+#include <QtGui/QDialog>
 
 namespace BALL
 {
@@ -23,12 +24,13 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT SetCamera 
-			: public SetCameraData
+			: public QDialog,
+				public Ui_SetCameraData
 		{ 
 				Q_OBJECT
 
 			public:
-				SetCamera( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+				SetCamera( QWidget* parent = 0, const char* name = "SetCamera", bool modal = FALSE, Qt::WFlags fl = 0 );
 				~SetCamera();
 
 				Camera* camera;
