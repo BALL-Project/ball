@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EnumeratorIndex_test.C,v 1.1 2003/06/16 15:40:14 anker Exp $
+// $Id: EnumeratorIndex_test.C,v 1.1.32.1 2007/03/25 21:47:04 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -17,7 +17,7 @@ void char_assign(char& c1, const char& c2)
 	c1 = c2;
 }
 
-START_TEST(Enumerator, "$Id: EnumeratorIndex_test.C,v 1.1 2003/06/16 15:40:14 anker Exp $")
+START_TEST(Enumerator, "$Id: EnumeratorIndex_test.C,v 1.1.32.1 2007/03/25 21:47:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

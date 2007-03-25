@@ -1,0 +1,79 @@
+F°gui-test/selection.bvp°
+R°60°
+I°0.107812°Mainframe|3D toolbar|&Picking Mode|°5|0|1|0|0|0|17|13|
+I°0.176284°Mainframe|3D toolbar|&Picking Mode|°2|0|1|0|1|1|17|13|
+I°0.096405°Mainframe|3D toolbar|&Picking Mode|°3|0|1|0|1|0|17|13|
+I°0.079731°Mainframe|3D toolbar|&Picking Mode|°5|0|1|0|0|0|16|13|
+I°0.007975°Mainframe|3D View|°5|0|1|0|0|0|94|119|
+I°0.007966°Mainframe|3D View|°5|0|1|0|0|0|94|120|
+I°0.096269°Mainframe|3D View|°2|0|1|0|1|1|94|120|
+I°0.340087°Mainframe|3D View|°5|0|1|0|0|1|94|121|
+I°0.023606°Mainframe|3D View|°5|0|1|0|0|1|262|332|
+I°0.170555°Mainframe|3D View|°3|0|1|0|1|0|262|332|
+I°0.038314°Mainframe|3D View|°5|1|1|0|0|0|265|285|
+T°0.1°len(getMainControl().getSelection())°1°
+I°0.084169°Mainframe|Structures|Container|clear_button|°5|0|1|0|0|0|57|4|
+I°0.181581°Mainframe|Structures|Container|clear_button|°2|0|1|0|1|1|45|10|
+I°0.060574°Mainframe|Structures|Container|clear_button|°3|0|1|0|1|0|45|10|
+T°0.1°len(getMainControl().getSelection())°0°
+I°0.010401°Mainframe|Structures|Container|°5|0|1|0|0|0|63|294|
+I°0.084169°Mainframe|Structures|Container|clear_button|°5|0|1|0|0|0|57|4|
+I°0.181581°Mainframe|Structures|Container|clear_button|°2|0|1|0|1|1|45|10|
+I°0.060574°Mainframe|Structures|Container|clear_button|°3|0|1|0|1|0|45|10|
+I°0.12862°Mainframe|Structures|Container|°5|0|1|0|0|0|53|288|
+I°0.02048°Mainframe|Structures|Container|selector_edit_|°5|0|1|0|0|0|55|25|
+I°0.01039°Mainframe|Structures|Container|selector_edit_|lineedit|°5|0|1|0|0|0|54|22|
+I°0.16381°Mainframe|Structures|Container|selector_edit_|lineedit|°2|0|1|0|1|1|59|15|
+I°0.068564°Mainframe|Structures|Container|selector_edit_|lineedit|°3|0|1|0|1|0|59|15|
+I°0.163856°Mainframe|Structures|Container|selector_edit_|°6|0|2|0|78|
+I°0.11519°Mainframe|Structures|Container|selector_edit_|°6|0|2|0|65|
+I°0.136113°Mainframe|Structures|Container|selector_edit_|°6|0|2|0|77|
+I°0.113704°Mainframe|Structures|Container|selector_edit_|°6|0|2|0|69|
+I°0.152862°Mainframe|Structures|Container|selector_edit_|°6|0|2|33554432|16777248|
+I°0.157844°Mainframe|Structures|Container|selector_edit_|°6|0|2|33554432|40|
+I°0.171183°Mainframe|Structures|Container|selector_edit_|°6|0|2|33554432|67|
+I°0.133242°Mainframe|Structures|Container|selector_edit_|°6|0|2|33554432|41|
+I°0.19013°Mainframe|Structures|Container|selector_edit_|°6|0|2|0|16777220|
+I°0.14727°Mainframe|Structures|Container|selector_edit_|°5|0|1|0|0|0|133|0|
+I°0.151129°Mainframe|Structures|Container|°5|0|1|0|0|0|146|258|
+C°test we got exactly two C atoms from the previous selection
+T°0.1°len(getMainControl().getSelection())°2°
+T°0.1°getMainControl().getSelection()[0].getName()°C°
+T°0.1°getMainControl().getSelection()[1].getName()°C°
+I°0.084169°Mainframe|Structures|Container|clear_button|°5|0|1|0|0|0|57|4|
+I°0.181581°Mainframe|Structures|Container|clear_button|°2|0|1|0|1|1|45|10|
+I°0.060574°Mainframe|Structures|Container|clear_button|°3|0|1|0|1|0|45|10|
+T°0.1°len(getMainControl().getSelection())°0°
+I°0.01031°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°5|0|1|0|0|0|179|45|
+I°0.163181°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°2|0|1|0|1|1|77|76|
+I°0.147851°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°3|0|1|0|1|0|77|76|
+I°0.12411°Mainframe|Structures|Container|MolecularControlList|°6|0|2|0|16777235|
+I°0.182012°Mainframe|Structures|Container|MolecularControlList|°6|0|2|0|16777236|
+I°0.189647°Mainframe|Structures|Container|MolecularControlList|°6|0|2|0|16777237|
+I°0.193716°Mainframe|Structures|Container|MolecularControlList|°6|0|2|0|16777236|
+I°0.127061°Mainframe|Structures|Container|MolecularControlList|°6|0|2|0|16777237|
+I°0.160063°Mainframe|Structures|Container|MolecularControlList|°6|0|2|0|16777236|
+I°0.137759°Mainframe|Structures|Container|MolecularControlList|°6|0|2|0|16777237|
+I°0.181849°Mainframe|Structures|Container|MolecularControlList|°6|0|2|0|16777236|
+I°0.126752°Mainframe|Structures|Container|MolecularControlList|°6|0|2|0|16777237|
+I°0.192344°Mainframe|Structures|Container|MolecularControlList|°6|0|2|0|16777237|
+I°0.293153°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport|°5|0|1|0|0|0|128|24|
+I°0.042782°Mainframe|Structures|°5|0|1|0|0|0|122|21|
+I°0.041095°Mainframe|Main Toolbar|°5|0|1|0|0|0|111|36|
+I°0.010332°Mainframe|MainMenuBar|°5|0|1|0|0|0|64|25|
+I°0.178482°Mainframe|MainMenuBar|°2|0|1|0|1|1|63|19|
+I°0.116764°Mainframe|MainMenuBar|°3|0|1|0|1|0|63|19|
+I°0.149352°Mainframe|MainMenuBar|&Edit|°5|0|1|0|0|0|28|1|
+I°0.154589°Mainframe|MainMenuBar|&Edit|&Select|°2|0|1|0|1|1|24|5|
+I°0.086165°Mainframe|MainMenuBar|&Edit|&Select|°3|0|1|0|1|0|24|6|
+T°0.1°len(getMainControl().getSelection())°1°
+T°0.1°getMainControl().getSelection()[0].getName()°CA°
+I°0.116976°Mainframe|Main Toolbar|°5|0|1|0|0|0|53|0|
+I°0.026723°Mainframe|MainMenuBar|°5|0|1|0|0|0|53|26|
+I°0.172776°Mainframe|MainMenuBar|°2|0|1|0|1|1|53|11|
+I°0.080434°Mainframe|MainMenuBar|°3|0|1|0|1|0|53|11|
+I°0.180693°Mainframe|MainMenuBar|&Edit|&Select|°5|0|1|0|0|0|43|14|
+I°0.16765°Mainframe|MainMenuBar|&Edit|Toggle Selection|°2|0|1|0|1|1|61|18|
+I°0.066626°Mainframe|MainMenuBar|&Edit|Toggle Selection|°3|0|1|0|1|0|61|18|
+T°0.1°len(getMainControl().getSelection())°12°
+X°

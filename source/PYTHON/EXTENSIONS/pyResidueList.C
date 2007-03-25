@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyResidueList.C,v 1.3 2006/01/26 07:41:03 oliver Exp $
+// $Id: pyResidueList.C,v 1.3.14.1 2007/03/25 21:38:49 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher

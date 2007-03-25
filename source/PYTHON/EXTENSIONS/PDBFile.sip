@@ -1,14 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.sip,v 1.12 2005/12/23 17:02:46 amoll Exp $
+// $Id: PDBFile.sip,v 1.12.18.1 2007/03/25 21:37:01 oliver Exp $
 //
 
 class PDBFile
 {
 %TypeHeaderCode
 	#include <BALL/FORMAT/PDBFile.h>
+  #include <BALL/COMMON/exception.h>
 	using namespace BALL;
+	using namespace BALL::Exception;
 %End
   public:
   PDBFile();

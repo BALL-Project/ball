@@ -25,7 +25,7 @@ BALL.dll:   $(OBJS)
 	copy $(EXTENSION_DIR)\*.sip	. > NUL
 	copy $(EXTENSION_DIR)\*.C	. > NUL
 	$(BALL_CONTRIB)\sip\sipgen\sip.exe -e -s ".C"  -c .  $(*).sip
-	$(PYTHONDIR)\python.exe collectCFiles.py > Makefile.lst
+	$(PYTHON_DIR)\python.exe collectCFiles.py > Makefile.lst
 	echo A > $@
 	
 

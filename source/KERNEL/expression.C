@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.C,v 1.47 2004/11/07 14:44:15 oliver Exp $
+// $Id: expression.C,v 1.47.24.1 2007/03/25 22:00:23 oliver Exp $
 //
 
 #include <BALL/KERNEL/expression.h>
@@ -255,6 +255,7 @@ namespace BALL
 		create_methods_.insert("charge", (PersistenceManager::CreateMethod)Factory<ChargePredicate>::createVoid);
 		create_methods_.insert("isAxial", (PersistenceManager::CreateMethod)Factory<AxialPredicate>::createVoid);
 		create_methods_.insert("is4C1", (PersistenceManager::CreateMethod)Factory<Conformation4C1Predicate>::createVoid);
+		create_methods_.insert("SMARTS", (PersistenceManager::CreateMethod)Factory<SMARTSPredicate>::createVoid);
 	}
 
 }

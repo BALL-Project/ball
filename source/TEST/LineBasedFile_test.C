@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: LineBasedFile_test.C,v 1.20 2005/12/23 17:03:09 amoll Exp $
+// $Id: LineBasedFile_test.C,v 1.20.20.1 2007/03/25 21:47:16 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -10,7 +10,7 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 ///////////////////////////
 
-START_TEST(LineBasedFile, "$Id: LineBasedFile_test.C,v 1.20 2005/12/23 17:03:09 amoll Exp $")
+START_TEST(LineBasedFile, "$Id: LineBasedFile_test.C,v 1.20.20.1 2007/03/25 21:47:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

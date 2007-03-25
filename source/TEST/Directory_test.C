@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Directory_test.C,v 1.19 2005/12/23 17:03:08 amoll Exp $
+// $Id: Directory_test.C,v 1.19.20.1 2007/03/25 21:47:02 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -76,7 +76,7 @@ bool cleanup()
 }
 
 
-START_TEST(Directory, "$Id: Directory_test.C,v 1.19 2005/12/23 17:03:08 amoll Exp $")
+START_TEST(Directory, "$Id: Directory_test.C,v 1.19.20.1 2007/03/25 21:47:02 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

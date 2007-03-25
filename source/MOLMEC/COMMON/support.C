@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.C,v 1.47 2005/02/08 19:41:21 oliver Exp $
+// $Id: support.C,v 1.47.24.1 2007/03/25 22:00:31 oliver Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/support.h>
+#include <BALL/MATHS/common.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/system.h>
@@ -25,19 +26,8 @@ using namespace std;
 
 namespace BALL 
 {
-
 	namespace MolmecSupport 
 	{
-
-#ifdef BALL_COMPILER_MSVC
-		inline double rint(double x)
-		{
-			if (x < 0.0)
-				return (double)(int)(x - 0.5);
-			else
-				return (double)(int)(x + 0.5);
-		}
-#endif
 
 		// Calculate a vector of non-bonded atom pairs whose distance is
 		// smaller than the value of the distance variable
@@ -174,9 +164,9 @@ namespace BALL
 					for (Position j = i + 1; j < atom_vector.size(); j++) 
 					{
 						difference = position_i - atom_vector[j]->getPosition();
-						difference.x = difference.x - period_x * rint(difference.x * inverse_period_x);
-						difference.y = difference.y - period_y * rint(difference.y * inverse_period_y);
-						difference.z = difference.z - period_z * rint(difference.z * inverse_period_z);
+						difference.x = difference.x - period_x * Maths::rint(difference.x * inverse_period_x);
+						difference.y = difference.y - period_y * Maths::rint(difference.y * inverse_period_y);
+						difference.z = difference.z - period_z * Maths::rint(difference.z * inverse_period_z);
 
 						// Remove 1-2 and 1-3 pairs!
 						if ((difference.getSquareLength() < squared_distance) 
@@ -234,7 +224,6 @@ namespace BALL
  					HashGrid3<Atom*> grid(lower - Vector3(0.1F), upper - lower + Vector3(0.2F), 
 																distance + 0.1F);
 
-					
 					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end(); ++atom_it) 
 					{
 						grid.insert((*atom_it)->getPosition(), *atom_it); // insert atom into grid
@@ -308,48 +297,6 @@ namespace BALL
 							} // yi
 						}  // xi
 					} // for all boxes
-
-
-// old version slower and scales worser ???? to be removed?
-/*
-					HashGrid3<Atom*> grid(lower - Vector3(0.1F), upper - lower + Vector3(0.2F), distance);
-					HashGridBox3<Atom*>* hbox;
-					HashGridBox3<Atom*>::BoxIterator box_it;
-					HashGridBox3<Atom*>::DataIterator data_it;
-
-					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end(); ++atom_it) 
-					{
-						position = (*atom_it)->getPosition();
-
-						// Search all neighbor atoms of "atom_it" that are stored in the hash grid
-
-						hbox = grid.getBox(position);
-						if (hbox != 0)
-						{
-							for (box_it = hbox->beginBox(); +box_it; ++box_it) 
-							{
-								for (data_it = (*box_it).beginData(); +data_it; ++data_it) 
-								{
-									// remove 1-2 and 1-3 pairs!
-									if (((position.getSquareDistance((*data_it)->getPosition())) < squared_distance) 
-											&& !(*data_it)->isBoundTo(**atom_it)
-											&& !(*data_it)->isGeminal(**atom_it))
-									{
-										pair_vector.push_back(pair<Atom*,Atom*>(*data_it, *atom_it));
-									}
-								}
-							}
-						} 
-						else 
-						{
-							Log.warn() << "calculateNonBondedAtomPairs: hbox = 0 for position " << position
-								<< " (grid dimensions: " << grid.getOrigin() << ")" << endl;
-						}
-						// Insert the new atom into the hash grid
-						grid.insert(position, (*atom_it));
-					}
-*/
-					
 				}
 			}
 #ifdef BALL_BENCHMARK
@@ -767,9 +714,9 @@ Log.error() << "calculateNonBondedAtomPairs time: " << String(t.getClockTime()) 
 		void calculateMinimumImage
 			(Vector3& distance,	const Vector3& period)
 		{
-			distance.x = distance.x - period.x * rint(distance.x / period.x);
-			distance.y = distance.y - period.y * rint(distance.y / period.y);
-			distance.z = distance.z - period.z * rint(distance.z / period.z);
+			distance.x = distance.x - period.x * Maths::rint(distance.x / period.x);
+			distance.y = distance.y - period.y * Maths::rint(distance.y / period.y);
+			distance.z = distance.z - period.z * Maths::rint(distance.z / period.z);
 		}
 
 	}	// namespace MolmecSupport

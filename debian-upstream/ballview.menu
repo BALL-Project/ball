@@ -1,0 +1,4 @@
+?package(ballview):needs="X11" section="Apps/Science"\
+  title="BALLView" command="/usr/bin/BALLView" icon="/usr/share/BALL/data/graphics/logo.png"\
+  longtitle="BALLView : Molecular modeling and molecular graphics tool"\
+  hint:"Molecular modeling and molecular graphics" 

@@ -1,12 +1,24 @@
+<<<<<<< Makefile
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.7 2006/01/26 16:12:55 oliver Exp $
+# $Id: Makefile,v 1.7.14.1 2007/03/25 21:57:00 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
 #
 
+=======
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: Makefile,v 1.7.14.1 2007/03/25 21:57:00 oliver Exp $
+#
+# Author:
+#   Oliver Kohlbacher
+#
+
+>>>>>>> 1.6.2.1
 DIRECTORY=VIEW/RENDERING
 
 THISLIB=$(LIBNAME)

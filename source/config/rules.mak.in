@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# $Id: rules.mak.in,v 1.1 2006/01/23 20:45:04 oliver Exp $
+# $Id: rules.mak.in,v 1.1.18.1 2007/03/25 22:02:49 oliver Exp $
 #
 # Author:
 #  Oliver Kohlbacher
@@ -37,7 +37,8 @@
 	$(UIC) -o $(UIC_DIR)/$*Data.h $< && touch $*.dh
 
 .dhData.C:
-	$(UIC) -o $@ -impl $(UIC_DIR)/$*Data.h $*.ui
+	touch $@
+#	$(UIC) -o $@ -impl $(UIC_DIR)/$*Data.h $*.ui
 
 #
 # Rule to create moc files from header files (using MOC)

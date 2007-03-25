@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MolecularGraph_test.C,v 1.3.34.1 2007/03/19 21:43:47 bertsch Exp $
+// $Id: MolecularGraph_test.C,v 1.3.34.2 2007/03/25 21:47:21 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(MolecularGraph, "$Id: MolecularGraph_test.C,v 1.3.34.1 2007/03/19 21:43:47 bertsch Exp $")
+START_TEST(MolecularGraph, "$Id: MolecularGraph_test.C,v 1.3.34.2 2007/03/25 21:47:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

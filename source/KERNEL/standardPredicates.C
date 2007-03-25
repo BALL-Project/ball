@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.58 2004/11/17 22:25:05 anker Exp $
+// $Id: standardPredicates.C,v 1.58.24.1 2007/03/25 22:00:23 oliver Exp $
 //
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -97,10 +97,19 @@ namespace BALL
 			}
 			else	
 			{
-				Size first = argument_.before("-").toString().toUnsignedInt();
-				Size last = argument_.after("-").toString().toUnsignedInt();
-				Size idx = res->getID().toUnsignedInt();
-				return (idx >= first && idx <= last);
+				try
+				{
+					Size first = argument_.before("-").toString().toUnsignedInt();
+					Size last = argument_.after("-").toString().toUnsignedInt();
+					Size idx = res->getID().toUnsignedInt();
+					return (idx >= first && idx <= last);
+				}
+				catch(...)
+				{
+					Log.error() << "ResidueIDPredicate::operator () (): "
+						<< "argument could not be parsed: " << argument_ << std::endl;
+					return(false);
+				}
 			}
 		}
 		
@@ -1805,6 +1814,75 @@ namespace BALL
 		return ring_atoms_;
 	}
 
+	/////////////////////////////////////////////////////////////////
+	
+	HashMap<Molecule*, TimeStamp> SMARTSPredicate::call_time_map_;
+	Molecule SMARTSPredicate::dummy_molecule_;
+
+	SMARTSPredicate::SMARTSPredicate()
+		throw()
+		: ExpressionPredicate(),
+			last_molecule_(0)
+	{
+	}
+
+	SMARTSPredicate::SMARTSPredicate(const SMARTSPredicate& pred)
+		throw()
+		: ExpressionPredicate(pred),
+			last_molecule_(0)
+	{
+	}
+
+	SMARTSPredicate::~SMARTSPredicate()
+		throw()
+	{
+	}
+
+	bool SMARTSPredicate::operator () (const Atom& atom) const
+		throw()
+	{
+		Molecule* mol = (Molecule*) atom.getAncestor(dummy_molecule_);
+		if (mol == 0) return false;
+		if (last_molecule_ == mol)
+ 		{
+			return matches_.has((Atom*)&atom);
+ 		}
+
+		HashMap<Molecule*, TimeStamp>::Iterator it = call_time_map_.find(mol);
+		if (!+it || it->second.isOlderThan(mol->getModificationTime()))
+		{
+			mol->apply(ring_proc_);
+			mol->apply(arom_proc_);
+			TimeStamp stamp;
+			stamp.stamp();
+			call_time_map_[mol] = stamp;
+		}
+
+		matches_.clear();
+		last_molecule_ = mol;
+		vector<std::set<const Atom*> > result;
+
+		try
+		{
+			matcher_.match(result, *mol, argument_);
+		}
+		catch(...)
+		{
+			Log.error() << "Problem in SMARTS expression: " << argument_ << std::endl;
+			return false;
+		}
+
+		for (Position p = 0; p < result.size(); p++)
+		{
+			std::set<const Atom*>::const_iterator it = result[p].begin();
+			for (; it != result[p].end(); ++it)
+			{
+				matches_.insert((Atom*)*it);
+			}
+		}
+
+		return matches_.has((Atom*)&atom);
+	}
 
 
 } // namespace BALL

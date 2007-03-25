@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ClearShiftProcessor_test.C,v 1.6 2002/02/27 12:24:27 sturm Exp $
+// $Id: ClearShiftProcessor_test.C,v 1.6.32.1 2007/03/25 21:46:55 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(ClearShiftProcessor, "$Id: ClearShiftProcessor_test.C,v 1.6 2002/02/27 12:24:27 sturm Exp $")
+START_TEST(ClearShiftProcessor, "$Id: ClearShiftProcessor_test.C,v 1.6.32.1 2007/03/25 21:46:55 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

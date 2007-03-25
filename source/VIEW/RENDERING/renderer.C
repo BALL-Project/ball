@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.C,v 1.12 2005/12/23 17:03:36 amoll Exp $
+// $Id: renderer.C,v 1.12.16.1 2007/03/25 21:57:02 oliver Exp $
 
 #include <BALL/VIEW/RENDERING/renderer.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
+#include <BALL/VIEW/PRIMITIVES/multiLine.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/point.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
@@ -18,6 +19,8 @@
 #include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/quadMesh.h>
+#include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
 
 
 namespace BALL
@@ -83,6 +86,9 @@ namespace BALL
 			else if (RTTI::isKindOf<Box>(*object))  					renderBox_(*(const   		 			 					 Box*) object);
 			else if (RTTI::isKindOf<SimpleBox>(*object))  		renderSimpleBox_(*(const   		 		 SimpleBox*) object);
 			else if (RTTI::isKindOf<Label>(*object))  	 			renderLabel_(*(const   				 				 Label*) object);
+			else if (RTTI::isKindOf<MultiLine>(*object)) renderMultiLine_(*(const MultiLine*) object);
+			else if (RTTI::isKindOf<GridVisualisation>(*object)) 	renderGridVisualisation_(*(const  GridVisualisation*) object);
+			else if (RTTI::isKindOf<QuadMesh>(*object))   		 renderQuadMesh_(*(const   						QuadMesh*) object);
 			// ... add more types of GeometricObjects here
 			else
 			{

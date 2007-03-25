@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.38 2005/12/23 17:03:34 amoll Exp $
+// $Id: colorProcessor.C,v 1.38.18.1 2007/03/25 22:02:30 oliver Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
 
 #include <BALL/COMMON/limits.h>
-#include <BALL/VIEW/DATATYPE/colorExtension2.h>
+#include <BALL/VIEW/DATATYPE/colorExtensions.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
@@ -42,7 +42,8 @@ namespace BALL
 				atom_grid_(cp.atom_grid_),
 				model_type_(cp.model_type_),
 				last_composite_of_grid_(cp.last_composite_of_grid_),
-				additional_grid_distance_(cp.additional_grid_distance_)
+				additional_grid_distance_(cp.additional_grid_distance_),
+				min_spacing_(cp.min_spacing_)
 		{
 		}
 
@@ -64,6 +65,7 @@ namespace BALL
 			selection_color_ = BALL_SELECTED_COLOR;
 			last_composite_of_grid_ = 0;
 			additional_grid_distance_ = 5.0;
+			min_spacing_ = 3.5;
 		}
 
 		void ColorProcessor::set(const ColorProcessor& cp)
@@ -116,6 +118,19 @@ namespace BALL
 						composites_ == 0)
 				{
 					mesh->colors.push_back(default_color_);
+					return Processor::CONTINUE;
+				}
+
+				// some ColorProcessors (e.g. ResidueNameColorProcessor) dont need the grid if:
+				// one Composite for GeometricObject,
+				// no selection in the Composite and
+				// the Composite is of the class needed by the Processor, e.g. a Residue
+				if (composite != 0 &&
+						!composite->containsSelection() &&
+						canUseMeshShortcut_(*composite))
+				{
+					mesh->colors.resize(1);
+					getColor(*composite, mesh->colors[0]);
 					return Processor::CONTINUE;
 				}
 
@@ -263,31 +278,27 @@ namespace BALL
 			}
 			boxp.finish();
 
-			const Vector3 diagonal = boxp.getUpper() - boxp.getLower();
+			Vector3 diagonal = boxp.getUpper() - boxp.getLower();
 			
 			// abort for strange molecules with huge dimension
 			if (diagonal.getSquareLength() > 10000000.0) return;
 
+			Vector3 grid_spacer((float)(additional_grid_distance_ + 15.));
+			diagonal += grid_spacer * 2.;
+
 			// grid spacing, tradeoff between speed and memory consumption
-			float grid_spacing = 4.0;
-			if (diagonal.getSquareLength() < 5000)
-			{
-				grid_spacing = 3.5;
-			} 
-			else 
+			float grid_spacing = min_spacing_;
+			if (diagonal.getSquareLength() > 5000)
 			{
 				float memory = SysInfo::getAvailableMemory();
 				// if we can not calculate available memory, use around 60 MB for the grid
 				if (memory == -1) memory = 10000000;
 				memory *= 0.6;
-				float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing((LongIndex)memory, diagonal + 
-																																						Vector3(2 * (additional_grid_distance_ + 15.0)));
+				float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing((LongIndex)memory, diagonal);
 				if (min_spacing > grid_spacing) grid_spacing = min_spacing;
 			}
 			
-			atom_grid_ = AtomGrid(boxp.getLower() - Vector3(additional_grid_distance_ + 15.0),
-														diagonal + Vector3(2 * additional_grid_distance_ + 15.0),
-														grid_spacing); 
+			atom_grid_ = AtomGrid(boxp.getLower() - Vector3(additional_grid_distance_ + 15.0), diagonal, grid_spacing); 
 		 
 			for (lit = atoms.begin(); lit != atoms.end(); lit++)
 			{
@@ -380,6 +391,8 @@ namespace BALL
 			Position x, y, z;
 			atom_grid_.getIndices(*box, x, y, z);
 
+			float radius, new_dist;
+
 			const Atom* const* item = 0;
 			float distance = Limits<float>::max();
 			List<HashGridBox3<const Atom*>* > box_list;
@@ -398,15 +411,10 @@ namespace BALL
 							HashGridBox3<const Atom*>::ConstDataIterator hit = box_ptr->beginData();
 							for (;hit != box_ptr->endData(); hit++)
 							{
-								// this is not 
-								float radius = (*hit)->getElement().getVanDerWaalsRadius();
-								if (model_type_ == MODEL_SA_SURFACE)
-								{
-									radius += 2;
-								}
+								radius = (*hit)->getElement().getVanDerWaalsRadius();
 								if (radius <= 0.0) radius = 1;
 								// avoid calculation of the square roots
-								float new_dist = ((*hit)->getPosition() - point).getSquareLength() - radius * radius;
+								new_dist = ((*hit)->getPosition() - point).getSquareLength() - radius * radius;
 								if (new_dist < distance)
 								{
 									item = &*hit;

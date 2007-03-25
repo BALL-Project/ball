@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PARSE_test.C,v 1.5 2004/05/06 21:39:38 oliver Exp $
+// $Id: PARSE_test.C,v 1.5.28.1 2007/03/25 21:47:25 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PARSE_test.C,v 1.5 2004/05/06 21:39:38 oliver Exp $")
+START_TEST(class_name, "$Id: PARSE_test.C,v 1.5.28.1 2007/03/25 21:47:25 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

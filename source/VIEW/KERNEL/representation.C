@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.66 2005/12/23 17:03:32 amoll Exp $
+// $Id: representation.C,v 1.66.16.1 2007/03/25 22:02:26 oliver Exp $
 //
 
 
@@ -9,9 +9,12 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/PRIMITIVES/sphere.h>
 
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
+#include <BALL/VIEW/DATATYPE/vertex1.h>
+#include <BALL/VIEW/DATATYPE/vertex2.h>
 
 #include <BALL/KERNEL/atom.h>
 #include <BALL/SYSTEM/timer.h>
@@ -23,6 +26,7 @@ namespace BALL
 	namespace VIEW
 	{
 		MolecularInformation Representation::information_ = MolecularInformation();
+		ModelInformation     Representation::model_information_ = ModelInformation();
 
 		Representation::Representation()
 			throw()
@@ -42,7 +46,8 @@ namespace BALL
 					hidden_(false),
 					geometric_objects_(),
 					model_update_enabled_(true),
-					coloring_update_enabled_(true)
+					coloring_update_enabled_(true),
+					custom_model_information_(0)
 		{
 		}
 
@@ -59,13 +64,15 @@ namespace BALL
 					model_processor_(0),
 					color_processor_(0),
 					composites_(rp.composites_),
-					model_build_time_(PreciseTime(99999, 9)),
+					model_build_time_(rp.model_build_time_),
 					rebuild_(rp.rebuild_),
 					changed_color_processor_(true),
 					hidden_(rp.hidden_),
 					geometric_objects_(),
 					model_update_enabled_(rp.model_update_enabled_),
-					coloring_update_enabled_(rp.coloring_update_enabled_)
+					coloring_update_enabled_(rp.coloring_update_enabled_),
+					name_(rp.name_),
+					custom_model_information_(rp.custom_model_information_)
 		{
 			if (rp.model_processor_ != 0)
 			{
@@ -105,10 +112,25 @@ namespace BALL
 					hidden_(false),
 					geometric_objects_(),
 					model_update_enabled_(true),
-					coloring_update_enabled_(true)
+					coloring_update_enabled_(true),
+					custom_model_information_(0)
 		{
 		}
 
+
+		bool Representation::operator == (const Representation& representation) const
+			throw()
+		{
+			return drawing_mode_== representation.drawing_mode_ &&
+							drawing_precision_== representation.drawing_precision_ &&
+							model_type_ == representation.model_type_ &&
+							coloring_method_ == representation.coloring_method_ &&
+							transparency_ == representation.transparency_ &&
+							surface_drawing_precision_ == representation.surface_drawing_precision_ &&
+							hidden_ == representation.hidden_ &&
+							name_ 	== representation.name_ &&
+							PropertyManager::operator == (representation);
+		}
 
 		const Representation& Representation::operator = (const Representation& representation)
 			throw()
@@ -248,17 +270,7 @@ namespace BALL
 		bool Representation::isValid() const
 			throw()
 		{
-			if (!isSurfaceModel(model_type_))
-			{
-				if (drawing_precision_  < 0 || drawing_precision_ > BALL_VIEW_MAXIMAL_DRAWING_PRECISION)
-				{
-					return false;
-				}
-			}
-			else
-			{
-				if (surface_drawing_precision_ < 0.1) return false;
-			}
+			if (surface_drawing_precision_ < 0.1) return false;
 				
 			if (drawing_precision_  < 0 || drawing_precision_ > BALL_VIEW_MAXIMAL_DRAWING_PRECISION ||
 					drawing_mode_ 			< 0 || drawing_mode_ > BALL_VIEW_MAXIMAL_DRAWING_MODE ||
@@ -382,14 +394,7 @@ namespace BALL
 				rebuild_ = false;
 			}
 
-#ifndef BALL_QT_HAS_THREADS
-			// if multithreaded, the PrimitiveManager will send the Update message, otherwise do it here...
-			MainControl* mc = getMainControl();
-			if (mc != 0)
-			{
-				mc->sendMessage(*new RepresentationMessage(*this, RepresentationMessage::UPDATE));
-			}
-#endif
+			// in multithreaded, the RepresentationManager will send the Update message
 		}
 		
 
@@ -397,7 +402,7 @@ namespace BALL
 			throw()
 		{
 			String prop;
-			if (VIEW::isSurfaceModel(model_type_))
+			if (getModelInformation().isSurfaceModel(model_type_))
 			{
 				GeometricObjectList::ConstIterator it = getGeometricObjects().begin();
 				Size triangles = 0;
@@ -492,6 +497,22 @@ namespace BALL
 			{
 				color_processor_->setTransparency(transparency_);
 			}
+			else
+			{
+				Size alpha = 255 - transparency_;
+				GeometricObjectList::Iterator it = geometric_objects_.begin();
+				for (; it != geometric_objects_.end(); ++it)
+				{
+					MultiColorExtension* mce = dynamic_cast<MultiColorExtension*>(*it);
+					if (mce != 0)
+					{
+						mce->setAlphas(alpha);
+						continue;
+					}
+
+					(**it).getColor().setAlpha(alpha);
+				}
+			}
 
  			changed_color_processor_ = true;
 		}
@@ -585,27 +606,33 @@ namespace BALL
 		{
 			rebuild_ |= rebuild;
 
-#ifdef BALL_QT_HAS_THREADS
 			MainControl* mc = getMainControl();
-			if (mc != 0)
+			if (mc == 0) 
 			{
-				mc->getPrimitiveManager().update_(*this);
+				update_();
 				return;
 			}
-#endif
+			
+			mc->getRepresentationManager().update_(*this);
+		}
 
-			update_();
+		void Representation::setName(const String& name)
+			throw()
+		{
+			name_ = name;
 		}
 
 		String Representation::getName() const
 			throw()
 		{
+			if (name_ != "") return name_;
+
 			if (hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
 			{
 				return "Coordinate System";
 			}
 
-			String name = getModelName().c_str();
+			String name = getModelInformation().getModelName(model_type_).c_str();
 
 			if (getComposites().size() == 0) return name;
 
@@ -644,6 +671,57 @@ namespace BALL
 		{
 			composites_ = composites;
 			needs_update_ = true;
+		}
+
+		void Representation::enableModelUpdate(bool state) 
+		{ 
+			model_update_enabled_ = state;
+			if (state) return;
+
+			// disable the repositioning of Vertex objects (e.g. Stick model)
+			GeometricObjectList::iterator it = getGeometricObjects().begin();
+			Vector3 v1, v2;
+			for (; it != getGeometricObjects().end(); it++)
+			{
+				if (RTTI::isKindOf<Vertex>(**it))
+				{
+					Vertex* v = dynamic_cast<Vertex*>(*it);
+					v1 = v->getVertex();
+					v->setDefaultVertexAddress();
+					v->setVertex(v1);
+				}
+
+				if (RTTI::isKindOf<Vertex2>(**it))
+				{
+					Vertex2* v = dynamic_cast<Vertex2*>(*it);
+					v1 = v->getVertex1();
+					v->setDefaultVertex1Address();
+					v->setVertex1(v1);
+					v2 = v->getVertex2();
+					v->setDefaultVertex2Address();
+					v->setVertex2(v2);
+				}
+
+				if (RTTI::isKindOf<Sphere>(**it))
+				{
+					Sphere* v = dynamic_cast<Sphere*>(*it);
+					v1 = v->getPosition();
+					v->setDefaultPositionAddress();
+					v->setPosition(v1);
+				}
+			}
+		}
+
+		void Representation::setModelInformation(const ModelInformation& mi)
+		{
+			custom_model_information_ = &mi;
+		}
+
+		const ModelInformation& Representation::getModelInformation() const
+		{
+			if (custom_model_information_ != 0) return *custom_model_information_;
+
+			return model_information_;
 		}
 			
   #	ifdef BALL_NO_INLINE_FUNCTIONS

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MathsCommon_test.C,v 1.8 2003/04/17 06:04:41 oliver Exp $
+// $Id: MathsCommon_test.C,v 1.8.30.1 2007/03/25 21:47:20 oliver Exp $
 
 // reordered due to trouble with Darwin (isnan header clash)
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(MathsCommon, "$Id: MathsCommon_test.C,v 1.8 2003/04/17 06:04:41 oliver Exp $")
+START_TEST(MathsCommon, "$Id: MathsCommon_test.C,v 1.8.30.1 2007/03/25 21:47:20 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

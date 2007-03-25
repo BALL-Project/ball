@@ -1,12 +1,21 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VersionInfo_test.C,v 1.4 2006/01/23 20:45:03 oliver Exp $
+<<<<<<< VersionInfo_test.C
+// $Id: VersionInfo_test.C,v 1.4.14.1 2007/03/25 21:49:11 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
 //
 
+=======
+// $Id: VersionInfo_test.C,v 1.4.14.1 2007/03/25 21:49:11 oliver Exp $
+//
+// Author:
+//   Oliver Kohlbacher
+//
+
+>>>>>>> 1.3.10.1
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -16,7 +25,11 @@
 
 ///////////////////////////
 
-START_TEST(VersionInfo, "$Id: VersionInfo_test.C,v 1.4 2006/01/23 20:45:03 oliver Exp $")
+<<<<<<< VersionInfo_test.C
+START_TEST(VersionInfo, "$Id: VersionInfo_test.C,v 1.4.14.1 2007/03/25 21:49:11 oliver Exp $")
+=======
+START_TEST(VersionInfo, "$Id: VersionInfo_test.C,v 1.4.14.1 2007/03/25 21:49:11 oliver Exp $")
+>>>>>>> 1.3.10.1
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

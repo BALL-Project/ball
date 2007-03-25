@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile_test.C,v 1.13 2004/11/07 08:25:37 oliver Exp $
+// $Id: MOLFile_test.C,v 1.13.28.1 2007/03/25 21:47:18 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(MOLFile, "$Id: MOLFile_test.C,v 1.13 2004/11/07 08:25:37 oliver Exp $")
+START_TEST(MOLFile, "$Id: MOLFile_test.C,v 1.13.28.1 2007/03/25 21:47:18 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

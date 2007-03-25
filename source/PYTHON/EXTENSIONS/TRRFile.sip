@@ -1,14 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TRRFile.sip,v 1.2 2005/12/23 17:02:47 amoll Exp $
+// $Id: TRRFile.sip,v 1.2.20.1 2007/03/25 21:37:02 oliver Exp $
 //
 	class TRRFile
 	  : TrajectoryFile
 	{
 %TypeHeaderCode
 	#include <BALL/FORMAT/TRRFile.h>
+  #include <BALL/COMMON/exception.h>
 	using namespace BALL;
+	using namespace BALL::Exception;
 %End
 		public:
 		class TRRHeader

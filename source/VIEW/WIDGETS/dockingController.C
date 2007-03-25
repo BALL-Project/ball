@@ -1,16 +1,20 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.6 2006/03/01 19:21:55 oliver Exp $
+<<<<<<< dockingController.C
+// $Id: dockingController.C,v 1.6.12.1 2007/03/25 21:56:45 oliver Exp $
+=======
+// $Id: dockingController.C,v 1.6.12.1 2007/03/25 21:56:45 oliver Exp $
+>>>>>>> 1.4.2.12
 //
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 
-#include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
-
 #include <BALL/VIEW/DIALOGS/dockResultDialog.h>
 #include <BALL/VIEW/DIALOGS/dockProgressDialog.h>
+
+#include <BALL/VIEW/DATATYPE/standardDatasets.h>
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -21,23 +25,26 @@
 #include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
-#include <BALL/KERNEL/system.h>
-#include <BALL/DATATYPE/options.h>
-#include <BALL/FORMAT/INIFile.h>
 
 #ifdef BALL_HAS_FFTW
 #	include <BALL/VIEW/DIALOGS/geometricFitDialog.h>
 #	include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 #endif
 
-#ifdef BALL_QT_HAS_THREADS
-#	include <BALL/VIEW/KERNEL/threads.h>
-#endif
+#include <BALL/VIEW/KERNEL/threads.h>
 
+#include <QtGui/qmessagebox.h>
+#include <QtGui/qcombobox.h>
+
+<<<<<<< dockingController.C
 #include <qmessagebox.h>
 #include <qcombobox.h>
 // #define BALL_VIEW_DEBUG
 // #undef BALL_QT_HAS_THREADS
+=======
+//#define BALL_VIEW_DEBUG
+//#undef BALL_QT_HAS_THREADS
+>>>>>>> 1.4.2.12
 using namespace std;
 
 namespace BALL
@@ -47,16 +54,28 @@ namespace BALL
 
 		DockingController::DockingController(QWidget* parent, const char* name)
 			throw()
+<<<<<<< dockingController.C
 			:	GenericControl(parent, name),
+=======
+			:	QWidget(parent),
+				ModularWidget(name),
+>>>>>>> 1.4.2.12
 				dock_dialog_(this),
+				dock_result_dialog_(0),
+				progress_dialog_(0),
 				dock_alg_(0),
-				progress_dialog_(0)
+				thread_(0)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "New DockingController " << this << std::endl;
 			#endif
 			registerWidget(this);
+<<<<<<< dockingController.C
 			hide();
+=======
+			setObjectName(name);
+			hide();
+>>>>>>> 1.4.2.12
 		}
 
 		// Copy constructor.
@@ -64,9 +83,10 @@ namespace BALL
 			throw()
 			: GenericControl(dock_controller),
 				dock_dialog_(),
-				dock_alg_(dock_controller.dock_alg_),
-				progress_dialog_(dock_controller.progress_dialog_),
-				id_(dock_controller.id_)
+				dock_result_dialog_(0),
+				progress_dialog_(0),
+				dock_alg_(0),
+				thread_(0)
 		{}
 		
 		// Destructor
@@ -75,33 +95,24 @@ namespace BALL
 		{
 			// remark: progress dialog is automatically deleted because its parent is the docking controller
 			
+			if (thread_ != 0)
+			{
+				thread_->terminate();
+				thread_->wait();
+				delete thread_;
+			}
+
 			if (dock_alg_ != 0)
 			{
 				delete dock_alg_;
-				dock_alg_ = NULL;
+				dock_alg_ = 0;
 			}
 		}
 		
 		// Assignment operator
-		const DockingController& DockingController::operator =(const DockingController& dock_controller)
+		const DockingController& DockingController::operator = (const DockingController&)
 			throw()
 		{
-			if (&dock_controller != this)
-			{
-				dock_dialog_ = dock_controller.dock_dialog_;
-				if(dock_alg_ != 0)
-				{
-					// remark: there might be troubles if doing an assignment when the docking thread is still running
-					delete dock_alg_;
-				}
-				dock_alg_ = dock_controller.dock_alg_;
-				if(progress_dialog_ != 0)
-				{
-					delete progress_dialog_;
-				}
-				progress_dialog_ = dock_controller.progress_dialog_;
-				id_ = dock_controller.id_;
-			}
 			return *this;
 		}
 		
@@ -119,13 +130,14 @@ namespace BALL
 				
 				progress_dialog_->close();
 				delete progress_dialog_;
-				progress_dialog_ = NULL;
+				progress_dialog_ = 0;
 				
 				if (dfm->wasAborted())
 				{
-					QMessageBox request_message(0,0);
-					if ( request_message.question(0,"Request","Do you want to see the current Result?", 
-																			 "Yes", "No", QString::null, 0, 1))
+					if (QMessageBox::question(0, "Request","Do you want to see the current Result?", 
+																		 QMessageBox::Yes,
+																		 QMessageBox::No,
+																		 QMessageBox::NoButton))
 					{
 						return;
 					}
@@ -137,20 +149,23 @@ namespace BALL
 				 delete dfm->getConformationSet();
 				}
 				setStatusbarText("Scoring finished.", true);
+				return;
 			}
+
 			// DatasetControl sends this messages, when user wants to have a look at a DockResult
-			else if (RTTI::isKindOf<ShowDockResultMessage>(*message))
+			if (RTTI::isKindOf<DatasetMessage>(*message))
 			{
-				ShowDockResultMessage* sdrm = RTTI::castTo<ShowDockResultMessage>(*message);
-				
-				DockResultDialog* result_dialog = new DockResultDialog(this);
-				// dialog deletes itself after close-button is pressed
+				DatasetMessage* sdrm = RTTI::castTo<DatasetMessage>(*message);
+				if (!sdrm->isValid()) return;
+				DockResultDataset* set = dynamic_cast<DockResultDataset*>(sdrm->getDataset());
+				if (set == 0) return;
+				if (set->getType() != DockResultController::type) return;
+
+				if (dock_result_dialog_ == 0) dock_result_dialog_ = new DockResultDialog(this);
 					
-				// setup result_dialog... 
-				result_dialog->setDockResult(sdrm->getDockResult());
-				result_dialog->setDockedSystem(sdrm->getDockedSystem());
-				//...and show it
-				result_dialog->show();
+				dock_result_dialog_->setDockResult(set->getData());
+				dock_result_dialog_->setDockedSystem(dynamic_cast<System*>(set->getComposite()));
+				dock_result_dialog_->show();
 			}
 		}
 		
@@ -158,8 +173,8 @@ namespace BALL
 		void DockingController::initializeWidget(MainControl& main_control)
 			throw()
 		{			
-			id_ = main_control.insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Docking", this,
-																				 SLOT(startDocking()), CTRL+Key_D);
+			action_ = main_control.insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Docking", this,
+																				 SLOT(startDocking()), Qt::CTRL + Qt:: Key_D);
 			setMenuHint("Dock two systems.");
 			dock_dialog_.initializeWidget();
 		}
@@ -179,13 +194,13 @@ namespace BALL
 		}
 		
 		// Updates the state of menu entry Docking in the popup menu Molecular Mechanics.
-		void DockingController::checkMenu (MainControl& main_control)
+		void DockingController::checkMenu(MainControl& main_control)
 			throw()
 		{
 			// if composites are locked disable menu entry "Docking"
-			if (main_control.compositesAreLocked())
+			if (main_control.isBusy())
 			{
-				menuBar()->setItemEnabled(id_, false);
+				action_->setEnabled(false);
 				return;
 			}
 
@@ -194,14 +209,7 @@ namespace BALL
 			Size num_systems = composite_manager.getNumberOfComposites();
 
 			// if no or only one system loaded, disable menu entry "Docking"
-			if (num_systems > 1)
-			{
-				menuBar()->setItemEnabled(id_, true);
-			}
-			else
-			{
-				menuBar()->setItemEnabled(id_, false);
-			}
+			action_->setEnabled(num_systems > 1);
 		}
 		
 		DockDialog& DockingController::getDockDialog()	
@@ -223,7 +231,7 @@ namespace BALL
 			throw()
 		{
 			// Make sure we run just one instance at a time.
-			if (getMainControl()->compositesAreLocked())
+			if (getMainControl()->isBusy())
 			{
 				Log.error() << "Docking already running! " << __FILE__ << " " << __LINE__ << std::endl;
 				return;
@@ -231,33 +239,30 @@ namespace BALL
 			
 			dock_dialog_.isRedock(is_redock);
 			
-			// QDialog::Accepted = 1; QDialog::Rejected = 0 
 			//if cancel was pressed in DockDialog, don't start docking
-			if (!dock_dialog_.exec())
+			if (!dock_dialog_.exec()) return;
+
+			if (dock_alg_ != 0)
 			{
-				return;
+				delete dock_alg_;
+				dock_alg_ = 0;
 			}
-			
+		
 			// check which algorithm is chosen and create a DockingAlgorithm object
-			Index index = dock_dialog_.algorithms->currentItem();
+			Index index = dock_dialog_.algorithms->currentIndex();
 			switch(index)
 			{
 				case GEOMETRIC_FIT:
-					if(dock_alg_ != 0)
-					{
-						delete dock_alg_;
-						dock_alg_ = NULL;
-					}
 #ifdef BALL_HAS_FFTW
 					dock_alg_ =  new GeometricFit();
 #endif
 					break;
 			}
 			
-			if (!dock_alg_
-					|| !dock_dialog_.getSystem1()
-					|| !dock_dialog_.getSystem2()
-					|| dock_dialog_.getAlgorithmOptions().isEmpty())
+			if (!dock_alg_ || 
+					!dock_dialog_.getSystem1() || 
+					!dock_dialog_.getSystem2() || 
+					dock_dialog_.getAlgorithmOptions().isEmpty())
 			{
 			 	return;
 			}
@@ -266,22 +271,31 @@ namespace BALL
 			setStatusbarText("Setting up docking algorithm...", true);
 			// keep the larger protein in System A and the smaller one in System B
 			// and setup the algorithm
-			if (dock_dialog_.getSystem1()->countAtoms() < dock_dialog_.getSystem2()->countAtoms())
+			System& s1 = *dock_dialog_.getSystem1();
+			System& s2 = *dock_dialog_.getSystem2();
+			if (s1.countAtoms() < s2.countAtoms())
 			{
-				dock_alg_->setup(*(dock_dialog_.getSystem2()), *(dock_dialog_.getSystem1()), dock_dialog_.getAlgorithmOptions());
+				dock_alg_->setup(s2, s1, dock_dialog_.getAlgorithmOptions());
 			}
 			else
 			{
-				dock_alg_->setup(*(dock_dialog_.getSystem1()), *(dock_dialog_.getSystem2()), dock_dialog_.getAlgorithmOptions());
+				dock_alg_->setup(s1, s2, dock_dialog_.getAlgorithmOptions());
 			}
 			
 			// ============================= WITH MULTITHREADING ====================================
 			#ifdef BALL_QT_HAS_THREADS
 				if (!(getMainControl()->lockCompositesFor(this))) return;
-				DockingThread* thread = new DockingThread;
-				/// ??????? where is thread deleted?
-				thread->setDockingAlgorithm(dock_alg_);
-				thread->setMainControl(getMainControl());
+
+				if (thread_ != 0)
+				{
+					thread_->terminate();
+					thread_->wait();
+					delete thread_;
+				}
+
+				thread_ = new DockingThread;
+				thread_->setDockingAlgorithm(dock_alg_);
+				thread_->setMainControl(getMainControl());
 				
 				progress_dialog_ = new DockProgressDialog(this);
 				// dialog is deleted by itself when it's closed
@@ -295,7 +309,7 @@ namespace BALL
 			
 				// start thread
 				// function calls DockingThread::run()
-				thread->start();
+				thread_->start();
 				progress_dialog_->show();
 			// ============================= WITHOUT MULTITHREADING =================================
 			#else
@@ -304,20 +318,51 @@ namespace BALL
 				dock_alg_->start();
 				setStatusbarText("Docking finished.", true);
 				ConformationSet* cs = new ConformationSet(dock_alg_->getConformationSet());
-				if(!runScoring_(cs))
+				if (!runScoring_(cs))
 				{
 				 delete cs;
-				 cs = NULL;
+				 cs = 0;
 				}
 				// delete instance 
 				// conformationSet is deleted by dockResult
-				if (dock_alg_ != NULL)
+				if (dock_alg_ != 0)
 				{
 					delete dock_alg_;
-					dock_alg_ = NULL;
+					dock_alg_ = 0;
 				}
 			#endif
 		}
+
+		EnergeticEvaluation* DockingController::createEvaluationMethod(Index method)
+		{
+			MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
+			if (!mol_struct)
+			{
+				Log.error() << "Error while scoring with AMBER_FF! " << __FILE__ << " " << __LINE__ << std::endl;
+				return 0;
+			}
+
+			switch(method)
+			{
+				case DEFAULT:
+					return new EnergeticEvaluation();
+
+				case AMBER_FF:
+					return new AmberEvaluation(mol_struct->getAmberFF());
+
+				case MMFF94_FF:
+					return new ForceFieldEvaluation(mol_struct->getMMFF94());
+
+				case SELECTED_FF:
+					return new ForceFieldEvaluation(mol_struct->getForceField());
+
+				case RANDOM:
+					return new RandomEvaluation;
+			}
+
+			return 0;
+		}
+
 		
 		// Apply scoring function which user has chosen.
 		// Then, create new DockResult and add new scoring to it.
@@ -327,40 +372,17 @@ namespace BALL
 			throw()
 		{
 			if (!conformation_set) return false;
+
 			if (!conformation_set->size())
 			{
 				Log.error() << "There are no docking results! " << __FILE__ << " " << __LINE__ << std::endl;
 				return false;
 			}
 		
-		 	// create scoring function object
-			EnergeticEvaluation* scoring = 0;
 			//check which scoring function is chosen
-			Index index = dock_dialog_.scoring_functions->currentItem();
-			
-			switch(index)
-			{
-				case DEFAULT:
-					scoring = new EnergeticEvaluation();
-					break;
-				case AMBER_FF:
-				{
-					MolecularStructure* mol_struct = MolecularStructure::getInstance(0);
-					if (!mol_struct)
-					{
-						Log.error() << "Error while scoring with AMBER_FF! " << __FILE__ << " " << __LINE__ << std::endl;
-						return false;
-					}
-					AmberFF& ff = mol_struct->getAmberFF();
-					//the force field is given to the AmberEvaluation (scoring function) object
-					scoring = new AmberEvaluation(ff);
-					break;
-				}
-				case RANDOM:
-					scoring = new RandomEvaluation;
-					break;
-			}
-		
+			Index index = dock_dialog_.scoring_functions->currentIndex();
+			EnergeticEvaluation* scoring = createEvaluationMethod(index);
+	
 			if (!scoring) return false;
 			
 			// apply scoring function
@@ -373,23 +395,31 @@ namespace BALL
 			{
 				Log.error() << "Scoring of docking results failed! " << __FILE__ << " " << __LINE__ << std::endl;
 				// delete instance 
-				if (scoring != NULL)
+				if (scoring != 0)
 				{
 					delete scoring;
-					scoring = NULL;
+					scoring = 0;
 				}
 				return false;
 			}
 
 			// create new DockResult and add a new scoring to it;
 			// we need the name, options and score vector of the scoring function
-			DockResult* dock_res = new DockResult(String(dock_dialog_.algorithms->currentText().ascii()),
+			DockResult* dock_res = new DockResult(ascii(dock_dialog_.algorithms->currentText()),
 																						conformation_set,
 																						dock_dialog_.getAlgorithmOptions()); 
 			// dock result is deleted by DatasetControl
 		
+<<<<<<< dockingController.C
 			dock_res->addScoring(String(dock_dialog_.scoring_functions->currentText().ascii()), 
 													 dock_dialog_.getScoringOptions(), ranked_conformations);
+=======
+			// sort vector ranked_conformations by snapshot numbers
+			sort(ranked_conformations.begin(), ranked_conformations.end());
+			
+			dock_res->addScoring(ascii(dock_dialog_.scoring_functions->currentText()), 
+													 dock_dialog_.getScoringOptions(), ranked_conformations);
+>>>>>>> 1.4.2.12
 
 			// add docked system to BALLView structures
 			Index snapshot_index = (dock_res->getScores(0))[0].first;
@@ -401,18 +431,19 @@ namespace BALL
 			getMainControl()->deselectCompositeRecursive(docked_system, true);
 			getMainControl()->insert(*docked_system);
 			
-			// send a DockResultMessage
-			NewDockResultMessage* dock_res_m = new NewDockResultMessage();
-			// message is deleted by ConnectionObject
-			dock_res_m->setDockResult(*dock_res);
-			dock_res_m->setComposite(*docked_system);
-			notify_(dock_res_m);
+			// send a Message
+			DockResultDataset* set = new DockResultDataset;
+			set->setData(dock_res);
+			set->setComposite(docked_system);
+			set->setType(DockResultController::type);
+			set->setName(dock_res->getDockingAlgorithm() + " result");
+			notify_(new DatasetMessage(set, DatasetMessage::ADD));
 
 			// delete instance 
-			if (scoring != NULL)
+			if (scoring != 0)
 			{
 				delete scoring;
-				scoring = NULL;
+				scoring = 0;
 			}
 			return true;
 		}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UhligCavFreeEnergyProcessor_test.C,v 1.5 2003/05/25 21:38:12 oliver Exp $
+// $Id: UhligCavFreeEnergyProcessor_test.C,v 1.5.30.1 2007/03/25 21:49:10 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(UhligCavFreeEnergyProcessor, "$Id: UhligCavFreeEnergyProcessor_test.C,v 1.5 2003/05/25 21:38:12 oliver Exp $")
+START_TEST(UhligCavFreeEnergyProcessor, "$Id: UhligCavFreeEnergyProcessor_test.C,v 1.5.30.1 2007/03/25 21:49:10 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

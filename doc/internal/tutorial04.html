@@ -7,19 +7,28 @@
 </head>
 <body>
 <center>
+<blockquote>
 
-<h3> Visualisation of trajectories </h3>
+<h3> Molecular Dynamics Simulation </h3>
 
 <blockquote>
-To visualise the resulting trajectory, we will have a look at the 
-DatasetControl. It is one of the listviews in the main window and
-has the caption "Datasets". 
-(Maybe it is hidden, if you don't find it, have a look at the menu
- entry <b>"Windows->Datasets"</b>.)<br><br>
-The DatasetControl should have an entry for the trajectory.
-To visualise it, click on the entry and open the context menu with
-the right mouse button. First choose "<b>Load into RAM</b>" and then 
-"<b>Visualise/Export</b>". In the Snapshot Visualisation dialog press "<b>Animate</b>".
+Now we will simulate the peptides natural movements 
+by performing a molecular dynamics simulation (MDS). To do so,
+open the according dialog by using the menu entry <br>
+<b>"Molecular Mechanics -> Molecular Dynamics"</b><br>
+(The menu entry is only enabled if a System is selected.)<br>
+<br>
+Now we have to perform some settings:<br>
+Set the number of iterations to 500.<br>
+To accelerate the MDS, set the timestep to 0.001. <br>
+Select the force field "<b>AMBER</b>".<br>
+<br>
+Also, we want to be able to visualise the resulting trajectories.
+To do so, click the checkbox "save to".
+Then click <b>"Simulate"</b>.
+
+The next step becomes available, when the simulation has finished
+and a trajectory file was created.
 </blockquote>
 
 </html>

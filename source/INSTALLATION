@@ -28,7 +28,7 @@ External software and libraries:
   easy to install.
 
   The compilation of the visualization component BALLVIEW also requires
-  the QT library (version 3.2.x or above) which is available from
+  the QT library (version 4.1.x or above) which is available from
 
     http://www.trolltech.com/products/qt
 
@@ -57,6 +57,9 @@ External software and libraries:
     - Python support for most BALL classes is disabled by default as it
       requires SIP, a wrapper generator.
 
+		- GLEW (OpenGL Extension Wrangler Library) enables usage of advanced
+			OpenGL features like e.g. vertex buffers.
+
   The functionality provided by these libraries is not essential for
   BALL, however if you desire one of these features, have a look at
   Section 2.7 of this document for detailed installation instructions.
@@ -65,8 +68,23 @@ External software and libraries:
 =========================
 
 Building BALL is very easy, but please read through this section carefully
-to avoid any problems.  If all requirements stated above are met, BALL is
-built by issuing the following commands in the directory BALL/source:
+to avoid any problems.  
+
+We provide two different ways to build the libraries and applications:
+
+The first one is the autobuild script in BALL/source.
+It is especially suited for unexperienced users, since it automatically 
+downloads a contrib source package from our website. It contains almost 
+all dependencies and prevents any clashes with already installed libraries,
+by compiling and installing them in a subfolder in the BALL directory.
+Afterwards, the BALL library is configured, build and linked against the
+downloaded libraries. This kind of installation will include all of BALL 
+and BALLView's features. If this is not desired or you want to configure 
+the library with different settings, please proceed like stated below:
+
+As an alternative BALL can be configured with a classical configure/make
+run. If all requirements stated in section 1 are met, BALL is built by 
+issuing the following commands in the directory BALL/source:
 
   ./configure
   make
@@ -127,7 +145,11 @@ options.  An complete list of these options can also be obtained by executing
                           If no libraries with these names are found, configure looks for
                           libGLU and libGL.
                           This switch also add X11 libraries when trying to link agains the Mesa
-                          libraries.
+													libraries.
+
+  --with-glew-incl=DIR  GLEW header files are in DIR/GL
+
+  --with-glew-libs=DIR  GLEW libraries are in DIR
 
   --without-libxnet       use libsocket/libnsl for linking rather than libxnet 
                           this option is useful if some of your libraries (e.g. X11 libs)
@@ -235,11 +257,10 @@ MacOS X:
     (check this by calling 'g++ --version')
   - install QT 3.3.5 (only snapshots are currently available!)
     make sure it is the Mac *native* version, not the X11 one
-    (which should work as well, but is ugly an not supported!)
+    (which should work as well, but is ugly and not supported!)
   - call configure with '--with-qt-mt'
   - For Python support: make sure you have *framework installation*
-    of Python. Install SIP 4.2.0 or 4.2.1 together with the
-    patch provided from our website!
+    of Python. Install SIP.
   - To produce a MacOS-compliant BALLView application, use
     'make macos_app' in source/BALLVIEW
   - Make sure you set your DYLD_LIBRARY_PATH correctly!
@@ -269,11 +290,10 @@ FFTW Support
     --with-fftw-lib=DIR     (libfftw is in DIR)
   and
     --with-fftw-incl=DIR    (fftw includes are in DIR).
-	
 
 Python Support
   To enable the Python bindings of BALL you need QT support
-  enabled and the wrapper generator SIP (version 4.3.1), which
+  enabled and the wrapper generator SIP (version 4.4.5), which
   is available from 
      http://www.riverbankcomputing.co.uk/sip/index.php
   Make sure to have a recent Python installation (2.3.x) and
@@ -288,5 +308,14 @@ Python Support
   a dynamic library, which can be installed into the library
   directory through "make install".
 
+GLEW
+  The OpenGL Extension Wrangler Library is feely available from
+  http://glew.sourceforge.net/
+	To enable the GLEW support, call configure with the options
+  --with-glew-incl=DIR  GLEW header files are in DIR/GL
+  --with-glew-libs=DIR  GLEW libraries are in DIR
+	This is only needed, if the headers and libs are not located at
+	the platform's standard locations.
+
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.18 2005/12/23 17:02:24 amoll Exp $
+document revision: $Id: INSTALLATION,v 1.18.16.1 2007/03/25 21:59:53 oliver Exp $

@@ -1,36 +1,37 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.C,v 1.11 2005/12/23 17:03:26 amoll Exp $
+// $Id: materialSettings.C,v 1.11.16.1 2007/03/25 22:02:04 oliver Exp $
 // 
 
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
-#include <qlabel.h>
-#include <qslider.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qslider.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		MaterialSettings::MaterialSettings(QWidget* parent, const char* name, WFlags fl)
-			: MaterialSettingsData( parent, name, fl ),
+		MaterialSettings::MaterialSettings(QWidget* parent, const char* name, Qt::WFlags fl)
+			: QWidget(parent, fl),
+				Ui_MaterialSettingsData(),
 				PreferencesEntry()
 		{
+			setupUi(this);
+			setObjectName(name);
 			setINIFileSectionName("MATERIAL_SETTINGS");
-
-			specular_slider->setValue((Index)(0.774 * 10.0));
-			diffuse_slider->setValue((Index)(0.4   	* 10.0));
-			ambient_slider->setValue((Index)(0.25 	* 10.0));
-			shininess_slider->setValue((Index)(76.8 * 10.0));
-
-			registerObject_(specular_slider);
-			registerObject_(diffuse_slider);
-			registerObject_(ambient_slider);
-			registerObject_(shininess_slider);
 			setWidgetStackName("Materials");
+			registerWidgets_();
+			
+			// signals and slots connections
+			connect( specular_slider, SIGNAL( valueChanged(int) ), this, SLOT( specularChanged() ) );
+			connect( diffuse_slider, SIGNAL( valueChanged(int) ), this, SLOT( diffuseChanged() ) );
+			connect( ambient_slider, SIGNAL( valueChanged(int) ), this, SLOT( ambientChanged() ) );
+			connect( diffuse_slider, SIGNAL( valueChanged(int) ), this, SLOT( diffuseChanged() ) );
+			connect( shininess_slider, SIGNAL( valueChanged(int) ), this, SLOT( shininessChanged() ) );
 		}
 
 
@@ -43,18 +44,11 @@ namespace BALL
 			stage.setAmbientIntensity(	((float)ambient_slider->value())   / 10.0);
 			stage.setShininess(					((float)shininess_slider->value()) / 10.0);
 
-			glMaterialf(GL_FRONT, GL_SHININESS, stage.getShininess());
+			glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, stage.getShininess());
 			GLfloat values[4];
-			values[3] = 1.0;
-
 			values[0] = values[1] = values[2] =  stage.getSpecularIntensity();
-			glMaterialfv(GL_FRONT, GL_SPECULAR,  values);
-			
-			values[0] = values[1] = values[2] = stage.getDiffuseIntensity();
-			glMaterialfv(GL_FRONT, GL_DIFFUSE,   values);
-			
-			values[0] = values[1] = values[2] = stage.getAmbientIntensity();
- 			glMaterialfv(GL_FRONT, GL_AMBIENT,   values);
+			values[3] = 1.0;
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  values);
 		}
 
 		void MaterialSettings::ambientChanged()

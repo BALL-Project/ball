@@ -42,4 +42,4 @@ tutorial.dvi:	*.tex tutorial.ind
 	-@touch tutorial.tex
 
 clean:
-	-@rm *.aux *.log *.bbl *.dvi *.blg *.cb *.ind *.idx *.ps *.pdf *.toc core *~ *.tmp *.ilg *.bak 2>/dev/null
+	-@rm -f *.aux *.log *.bbl *.dvi *.blg *.cb *.ind *.idx *.ps *.pdf *.toc core *~ *.tmp *.ilg *.bak 2>/dev/null

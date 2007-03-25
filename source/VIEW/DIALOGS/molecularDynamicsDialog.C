@@ -5,14 +5,17 @@
 #include <BALL/VIEW/DIALOGS/molecularDynamicsDialog.h>
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
+#include <BALL/VIEW/DIALOGS/MMFF94ConfigurationDialog.h>
+#include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <qfiledialog.h>
-#include <qlineedit.h>
-#include <qradiobutton.h>
-#include <qbuttongroup.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
+#include <QtGui/QFileDialog>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qradiobutton.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qmessagebox.h> 
 
 namespace BALL
 {
@@ -20,16 +23,27 @@ namespace BALL
 	{
 
 MolecularDynamicsDialog::MolecularDynamicsDialog(QWidget* parent, const char* name)
-	:	MolecularDynamicsDialogData( parent, name ),
+	:	QDialog(parent),
+		Ui_MolecularDynamicsDialogData(),
+		PreferencesEntry(),
 		amber_dialog_(0),
-		charmm_dialog_(0)
+		charmm_dialog_(0),
+		mmff_dialog_(0)
 {
 	setINIFileSectionName("MDSIMULATION");
 
-	registerObject_(temperature_lineedit);
-	registerObject_(timestep_linedit);
-	registerObject_(steps_lineedit);
- 	registerObject_(dielectric_group_2);
+	setupUi(this);
+	setObjectName(name);
+	registerWidgets_();
+	
+	// signals and slots connections
+	connect( start_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
+	connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
+	connect( steps_lineedit, SIGNAL( textChanged(const QString&) ), this, SLOT( timeChanged() ) );
+	connect( timestep_linedit, SIGNAL( textChanged(const QString&) ), this, SLOT( timeChanged() ) );
+	connect( enable_dcd, SIGNAL( clicked() ), this, SLOT( enableDCDFileSelected() ) );
+	connect( advanced_button, SIGNAL( clicked() ), this, SLOT( advancedOptions() ) );
+	connect( browse_button, SIGNAL( clicked() ), this, SLOT( chooseDCDFile() ) );
 }
 
 MolecularDynamicsDialog::~MolecularDynamicsDialog()
@@ -40,7 +54,7 @@ float MolecularDynamicsDialog::getSimulationTime() const
 {
 	try
 	{
-		return String(time_lineedit->text().ascii()).toFloat();
+		return ascii(time_lineedit->text()).toFloat();
 	}
 	catch(...)
 	{
@@ -57,7 +71,7 @@ float MolecularDynamicsDialog::getTimeStep() const
 {
 	try
 	{
-		return String(timestep_linedit->text().ascii()).toFloat();
+		return ascii(timestep_linedit->text()).toFloat();
 	}
 	catch(...)
 	{
@@ -69,7 +83,7 @@ Size MolecularDynamicsDialog::getNumberOfSteps() const
 {
 	try
 	{
-		return (Size)String(steps_lineedit->text().ascii()).toUnsignedInt();
+		return (Size)ascii(steps_lineedit->text()).toUnsignedInt();
 	}
 	catch(...)
 	{
@@ -108,7 +122,7 @@ float MolecularDynamicsDialog::getTemperature() const
 {
 	try
 	{
-		return (Size)String(temperature_lineedit->text().ascii()).toFloat();
+		return (Size)ascii(temperature_lineedit->text()).toFloat();
 	}
 	catch(...)
 	{
@@ -129,23 +143,27 @@ void MolecularDynamicsDialog::enableDCDFileSelected()
 String MolecularDynamicsDialog::getDCDFile() const
 {
 	if (!dcd_file_edit->isEnabled()) return "";
-	return String(dcd_file_edit->text().ascii());
+	return ascii(dcd_file_edit->text());
 }
 
 Size MolecularDynamicsDialog::getStepsBetweenRefreshs() const
 {
-	return String(refresh_lineedit->text().ascii()).toUnsignedInt();
+	return ascii(refresh_lineedit->text()).toUnsignedInt();
 }
 
 void MolecularDynamicsDialog::advancedOptions()
 {
-	if(useAmberRadioButton->isChecked())
+	if (useAmberRadioButton->isChecked())
 	{
 		if (amber_dialog_ != 0) amber_dialog_->exec();
 	}
-	else
+	else if (useCharmmRadioButton->isChecked())
 	{
 		if (charmm_dialog_ != 0) charmm_dialog_->exec();
+	}
+	else if (useMMFF94RadioButton->isChecked())
+	{
+		if (mmff_dialog_ != 0) mmff_dialog_->exec();
 	}
 }
 
@@ -159,27 +177,64 @@ void MolecularDynamicsDialog::setCharmmDialog(CharmmConfigurationDialog* dialog)
 	charmm_dialog_ = dialog;
 }
 
-void MolecularDynamicsDialog::useAmberFF()
+void MolecularDynamicsDialog::setMMFF94Dialog(MMFF94ConfigurationDialog* dialog)
 {
-	useAmberRadioButton->setChecked(true);
-	useCharmmRadioButton->setChecked(false);
-}
-
-void MolecularDynamicsDialog::useCharmmFF()
-{
-	useCharmmRadioButton->setChecked(true);
-	useAmberRadioButton->setChecked(false);
-}
-
-bool MolecularDynamicsDialog::getUseAmber()
-{
-	return useAmberRadioButton->isChecked();
+	mmff_dialog_ = dialog;
 }
 
 void MolecularDynamicsDialog::chooseDCDFile()
 {
-	QString result = QFileDialog::getSaveFileName("", "*.dcd", 0, "Choose a DCDFile");
+	QString result = QFileDialog::getSaveFileName(0, "Choose a DCDFile",
+																	getMainControl()->getWorkingDir().c_str(), "*.dcd");
 	if (result != "") dcd_file_edit->setText(result);
+}
+
+void MolecularDynamicsDialog::selectForceField(Position nr)
+{
+	if 			(nr == 0) useAmberRadioButton->setChecked(Qt::Checked);
+	else if (nr == 1) useCharmmRadioButton->setChecked(Qt::Checked);
+	else if (nr == 2) useMMFF94RadioButton->setChecked(Qt::Checked);
+	else
+	{
+		BALLVIEW_DEBUG
+	}
+}
+
+Position MolecularDynamicsDialog::selectedForceField() const
+{
+	if 			(useAmberRadioButton->isChecked())  return 0;
+	else if (useCharmmRadioButton->isChecked()) return 1;
+	else if (useMMFF94RadioButton->isChecked()) return 2;
+
+	return 0;
+}
+	
+void MolecularDynamicsDialog::accept()
+{
+	QString error;
+	if (getNumberOfSteps() == 0)
+	{
+		error = "number of steps.";
+	}
+
+	if (getTemperature() == 0)
+	{
+		error = "temperature.";
+	}
+
+	if(getTimeStep() == 0.0)
+	{
+		error = "time step.";
+	}
+
+	if (error == "")
+	{
+		QDialog::accept();
+		return;
+	}
+
+	QMessageBox::critical(this, "Invalid values", QString("Please apply correct settings (> 0) for the ") + error,
+			QMessageBox::Ok| QMessageBox::Default);
 }
 
 }} //namespaces

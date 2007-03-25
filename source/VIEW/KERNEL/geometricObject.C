@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.C,v 1.25 2005/12/23 17:03:31 amoll Exp $
+// $Id: geometricObject.C,v 1.25.16.1 2007/03/25 22:02:22 oliver Exp $
 //
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
+#include <BALL/VIEW/DATATYPE/colorExtensions.h>
 
 using std::endl;
 using std::ostream;
@@ -79,6 +80,34 @@ namespace BALL
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
-				
+
+		void GeometricObject::getColors(HashSet<String>& color_set)
+		{
+			String c;
+
+			MultiColorExtension* mce = dynamic_cast<MultiColorExtension*>(this);
+			if (mce != 0)
+			{
+				const vector<ColorRGBA>& cs = mce->getColors();
+				for (Position p = 0; p < cs.size(); p++)
+				{
+					cs[p].get(c);
+					color_set.insert(c);
+				}
+
+				return;
+			}
+
+			ColorExtension2* ce2 = dynamic_cast<ColorExtension2*>(this);
+			if (ce2 != 0)
+			{
+				ce2->getColor2().get(c);
+				color_set.insert(c);
+			}
+
+			getColor().get(c);
+			color_set.insert(c);
+		}
+			
 	} // namespace VIEW
 } // namespace BALL

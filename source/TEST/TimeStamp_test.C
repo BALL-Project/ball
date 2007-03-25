@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TimeStamp_test.C,v 1.14 2002/02/27 12:25:00 sturm Exp $
+// $Id: TimeStamp_test.C,v 1.14.32.1 2007/03/25 21:49:08 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.14 2002/02/27 12:25:00 sturm Exp $")
+START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.14.32.1 2007/03/25 21:49:08 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

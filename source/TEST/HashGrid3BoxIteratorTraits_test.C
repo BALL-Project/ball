@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashGrid3BoxIteratorTraits_test.C,v 1.1 2003/06/22 10:21:47 oliver Exp $
+// $Id: HashGrid3BoxIteratorTraits_test.C,v 1.1.32.1 2007/03/25 21:47:11 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(HashGrid3::BoxIteratorTraits, "$Id: HashGrid3BoxIteratorTraits_test.C,v 1.1 2003/06/22 10:21:47 oliver Exp $")
+START_TEST(HashGrid3::BoxIteratorTraits, "$Id: HashGrid3BoxIteratorTraits_test.C,v 1.1.32.1 2007/03/25 21:47:11 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

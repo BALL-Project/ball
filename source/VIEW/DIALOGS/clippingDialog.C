@@ -13,34 +13,22 @@ namespace BALL
 	namespace VIEW
 	{
 
-ClippingDialog::SelectableListViewItem::SelectableListViewItem(
-		QListView* parent, const QString& text,
-		Representation* representation)
-	throw()
-	: QCheckListItem(parent, text, QCheckListItem::CheckBox),
-		representation_(representation)
-{
-	setText(0, text);
-	setText(1, representation->getColoringName().c_str());
-	setText(2, representation->getProperties().c_str());
-}
-
-
 ClippingDialog::ClippingDialog(QWidget* parent, const char* name)
 	throw()
-	:	ClippingDialogData( parent, name )
+	:	QDialog(parent),
+		Ui_ClippingDialogData()
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new ClippingDialog " << this << std::endl;
 #endif
 
-	listview->removeColumn(0);
-	listview->addColumn("Model");
-	listview->addColumn("Color");
-	listview->addColumn("Properties");
-	listview->setColumnWidth(0, 60);
-	listview->setColumnWidth(1, 60);
-	listview->setColumnWidth(2, 60);
+	setupUi(this);
+	
+  // signals and slots connections
+  connect( buttonOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
+  connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
+
+	setObjectName(name);
 }
 
 ClippingDialog::~ClippingDialog()
@@ -51,24 +39,52 @@ ClippingDialog::~ClippingDialog()
 #endif
 }
 
-void ClippingDialog::show()
+void ClippingDialog::exec()
 {
 	if (clipping_plane_ == 0) return;
 
-	ClippingDialogData::show();
-	raise();
 	MainControl* mc = getMainControl();
 	if (mc == 0) return;
 
-	PrimitiveManager& pm = mc->getPrimitiveManager();
+	RepresentationManager& pm = mc->getRepresentationManager();
 
-	PrimitiveManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+ 	listview->setColumnCount(3);
+	listview->setRowCount(pm.getRepresentations().size());
+	listview->setHorizontalHeaderItem(0, new QTableWidgetItem());
+	listview->setHorizontalHeaderItem(1, new QTableWidgetItem());
+	listview->setHorizontalHeaderItem(2, new QTableWidgetItem());
+ 	listview->horizontalHeaderItem(0)->setText("Model");
+ 	listview->horizontalHeaderItem(1)->setText("Coloring");
+ 	listview->horizontalHeaderItem(2)->setText("Properties");
+	listview->setColumnWidth(0, 140);
+	listview->setColumnWidth(1, 140);
+	listview->setColumnWidth(2, 140);
+
+	const ModelInformation& mi = mc->getModelInformation();
+
+	Position row= 0;
+	RepresentationManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
 	for (; it != pm.getRepresentations().end(); it++)
 	{
-		SelectableListViewItem* item = new SelectableListViewItem(listview, (**it).getName().c_str(), *it);
+		const Representation& rep = **it;
 
-		if (clipping_plane_->getRepresentations().has(*it)) item->setOn(true);
+		QTableWidgetItem* item = new QTableWidgetItem(rep.getName().c_str());
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
+		item->setCheckState(Qt::Checked);
+
+		if (!clipping_plane_->getRepresentations().has(*it)) item->setCheckState(Qt::Unchecked);
+		listview->setItem(row, 0, item);
+
+		item = new QTableWidgetItem(mi.getColoringName(rep.getColoringMethod()).c_str());
+		listview->setItem(row, 1, item);
+
+		item = new QTableWidgetItem(rep.getProperties().c_str());
+		listview->setItem(row, 2, item);
+		row++;
 	}
+
+	raise();
+	QDialog::exec();
 }
 
 
@@ -84,12 +100,17 @@ void ClippingDialog::accept()
 
 	clipping_plane_->getRepresentations().clear();
 
-	QListViewItemIterator it(listview);
-	for (; it.current(); ++it)
+	List<Representation*> lreps = getMainControl()->getRepresentationManager().getRepresentations();
+	vector<const Representation*> reps;
+	reps.resize(lreps.size());
+	copy(lreps.begin(), lreps.end(), reps.begin());
+
+	for (Position pos = 0; pos < (Position)listview->rowCount(); pos++)
 	{
-		if (((SelectableListViewItem*)it.current())->isOn())
+		const QTableWidgetItem& item = *listview->item(pos, 0);
+		if (item.checkState() == Qt::Checked)
 		{
-			clipping_plane_->getRepresentations().insert((*(SelectableListViewItem*)*it).getRepresentation());
+			clipping_plane_->getRepresentations().insert(reps[pos]);
 		}
 	}
 

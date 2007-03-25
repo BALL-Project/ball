@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Circle3_test.C,v 1.13 2003/06/10 11:57:00 amoll Exp $
+// $Id: Circle3_test.C,v 1.13.30.1 2007/03/25 21:46:54 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(Circle3, "$Id: Circle3_test.C,v 1.13 2003/06/10 11:57:00 amoll Exp $")
+START_TEST(Circle3, "$Id: Circle3_test.C,v 1.13.30.1 2007/03/25 21:46:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

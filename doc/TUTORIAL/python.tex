@@ -14,7 +14,7 @@ this and think it is still a useful feature worth testing out, please read on,
 otherwise pretend it doesn't exist. The remainder of this section assumes that
 you are somewhat familiar with the most important language concepts of Python.
 
-BALL relies on SIP \cite{SIP} (version 4.3.1 or above) to translate its class
+BALL relies on SIP \cite{SIP} version 4.3.1 to translate its class
 headers semi-automatically into python wrapper classes. For each \CPP class
 SIP creates a subclass defining the Python interface and a Python class
 using that \CPP interface class. The Python class has the same name as the
@@ -72,11 +72,13 @@ command
 \\
 {\tt system = MainControl::getInstance(0)\\
 .getCompositeManager().getComposites()[0]}.
+\\ \\
 Since this is not very convenient, we added a Python startup script,
 that will always be run when BALLView starts up. It can be found
 under BALL/data/startup.py. By using one of the methods defined in this file,
 it is possible to obtain the first System by simply calling \\
 {\tt system = getSystem(0)}.
+\\
 This is pretty useful for extracting properties from the loaded molecules
 and other datasets you are
 currently displaying, but very deadly if you start modifying internals
@@ -93,14 +95,17 @@ counting is nearly always wrong.
 	\item As mentioned above, problems with reference counting.
 	\item Python support requires the visualization support for some rather
 				arcane internal reason we won't disclose here.
-	\item {\tt configure} does not yet identify SIP and its libraries
-				automatically
+%	\item {\tt configure} does not yet identify SIP and its libraries
+%				automatically
 \end{itemize}
 
 \section{Installation}
 
-Donwload, configure, and install a recent version (4.3.1 or above) of SIP from 
-\URL{http://www.riverbankcomputing.co.uk/sip/}. It is important to compile BALL 
+Donwload, configure, and install the SIP version 4.3.1 or later from 
+\URL{http://www.ballview.org/Downloads/Contrib/}.
+Run the configure script with the command ''python configure.py -x" to
+disable the QT support. (The version 4.3.1 still tries to compile against a QT 3 library.)
+It is important to compile BALL 
 with the same \CPP compiler you compiled SIP and QT with. You can then enable the Python support of BALL
 by specifying the option \mbox{"\option{--with-python=<path>}"}, where
 {\tt path} should point to the executable of an installed Python (version 2.3

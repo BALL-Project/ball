@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RandomAccessIterator_test.C,v 1.14 2003/06/29 12:31:18 oliver Exp $
+// $Id: RandomAccessIterator_test.C,v 1.14.30.1 2007/03/25 21:48:49 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -356,7 +356,7 @@ class VectorIteratorTraits
 typedef RandomAccessIterator<vector<float>, float, VectorIteratorPosition, VectorIteratorTraits<float> > MyIterator;
 typedef reverse_iterator<RandomAccessIterator<vector<float>, float, VectorIteratorPosition, VectorIteratorTraits<float> > > MyReverseIterator;
 
-START_TEST(RandomAccessIterator, "$Id: RandomAccessIterator_test.C,v 1.14 2003/06/29 12:31:18 oliver Exp $")
+START_TEST(RandomAccessIterator, "$Id: RandomAccessIterator_test.C,v 1.14.30.1 2007/03/25 21:48:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE_.sip,v 1.5 2003/11/01 09:27:36 oliver Exp $
+// $Id: PTE_.sip,v 1.5.30.1 2007/03/25 21:37:02 oliver Exp $
 //
 
 class Element
@@ -70,8 +70,7 @@ class PTE_
 	//   virtual ~PTE_();
 	static Element& getElement(int);
 	static Element& getElement(const String&);
-	// const Element& operator [] (const String&);
-
+	const Element& operator [] (const String&);
 	const Element& operator [] (Index /index/) const;
 %MethodCode
   sipRes = &sipCpp->operator [] (*a0);
@@ -79,3 +78,6 @@ class PTE_
 
 	// static bool apply(UnaryProcessor<Element>& applicator);
 };
+
+// THE one PTE
+PTE_ PTE;

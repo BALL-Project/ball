@@ -3,7 +3,7 @@
 #  the radius is proportional to the mobility and the color is
 #  interpolated between blue (no movement at all) and red (very mobile)
 dcd = DCDFile("test.dcd")
-system = getComposites()[0]
+system = getSystems()[0]
 number_ss = dcd.getNumberOfSnapShots()
 
 ssm = SnapShotManager(system, getMolecularStructure().getForceField(), dcd)

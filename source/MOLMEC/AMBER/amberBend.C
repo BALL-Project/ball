@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberBend.C,v 1.27 2005/02/08 19:41:20 oliver Exp $
+// $Id: amberBend.C,v 1.27.26.1 2007/03/25 22:00:25 oliver Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
@@ -55,6 +55,20 @@ namespace BALL
 		{
 			Log.error() << "AmberBend::setup: component not bound to force field" << endl;
 			return false;
+		}
+
+ 		Options& options = getForceField()->options;
+		if (options.has(AMBER_BEND_ENABLED))
+		{
+			if (!options.getBool(AMBER_BEND_ENABLED))
+			{
+				setEnabled(false);
+				return true;
+			}
+			else
+			{
+				setEnabled(true);
+			}
 		}
 
 		static QuadraticAngleBend bend_parameters;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE_test.C,v 1.13 2004/02/23 20:01:57 oliver Exp $
+// $Id: PTE_test.C,v 1.13.30.1 2007/03/25 21:47:27 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +10,7 @@
 #include "ItemCollector.h"
 ///////////////////////////
 
-START_TEST(Element, "$Id: PTE_test.C,v 1.13 2004/02/23 20:01:57 oliver Exp $")
+START_TEST(Element, "$Id: PTE_test.C,v 1.13.30.1 2007/03/25 21:47:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

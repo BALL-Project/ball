@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.sip,v 1.11 2003/11/12 18:20:28 oliver Exp $
+// $Id: lineBasedFile.sip,v 1.11.30.1 2007/03/25 21:37:10 oliver Exp $
 //
 
 class LineBasedFile
@@ -30,10 +30,10 @@ class LineBasedFile
 				//				throw();
 				Position getLineNumber()
 								const throw();
-				const String& getLine()
-								const throw();
-				String& getLine()
-								throw();
+
+				//const String& getLine() const throw();
+				String& getLine()	throw();
+
 				bool readLine()
 								throw(ParseError);
 				bool skipLines(Size /number/ = 1)

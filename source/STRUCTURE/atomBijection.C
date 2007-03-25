@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBijection.C,v 1.2.18.1 2007/03/22 11:48:17 oliver Exp $
+// $Id: atomBijection.C,v 1.2.18.2 2007/03/25 22:00:33 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -11,7 +11,7 @@
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/KERNEL/PTE.h>
-//   #include <BALL/KERNEL/extractors.h>
+#include <BALL/KERNEL/extractors.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/DATATYPE/hashGrid.h>
 
@@ -123,7 +123,6 @@ namespace BALL
 		// Delete old bijection.
 		clear();
 		
-		/*
 		// Extract all residues in A and B
 		ResidueList rla(residues(A));
 		ResidueList rlb(residues(B));
@@ -141,7 +140,6 @@ namespace BALL
 				push_back(AtomPair(caa, cab));
 			}
 		}
-		*/	
 		//
 		return size();
 	}
@@ -151,7 +149,6 @@ namespace BALL
 		// Delete old bijection.
 		clear();
 		
-		/*
 		// Extract all residues in A and B
 		ResidueList rla(residues(A));
 		ResidueList rlb(residues(B));
@@ -194,7 +191,6 @@ namespace BALL
 				push_back(AtomPair(a, b));
 			}
 		}
-		*/
 			
 		//
 		return size();

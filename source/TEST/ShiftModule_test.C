@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ShiftModule_test.C,v 1.3 2002/02/27 12:24:55 sturm Exp $
+// $Id: ShiftModule_test.C,v 1.3.32.1 2007/03/25 21:48:57 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(ShiftModule, "$Id: ShiftModule_test.C,v 1.3 2002/02/27 12:24:55 sturm Exp $")
+START_TEST(ShiftModule, "$Id: ShiftModule_test.C,v 1.3.32.1 2007/03/25 21:48:57 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

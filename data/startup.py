@@ -1,3 +1,9 @@
+from sip import *
+from random import *
+###################### defines: ############################
+true=1
+false=0
+
 ###################### MAIN WIDGETS: #######################
 def getMainControl():
 	return MainControl.getInstance(0)
@@ -14,6 +20,9 @@ def getDisplayProperties():
 def getScene():
 	return Scene.getInstance(0)
 
+def getEScene():
+	return EditableScene.getInstance(0)
+
 def getGeometricControl():
 	return GeometricControl.getInstance(0)
 
@@ -27,22 +36,45 @@ def getDatasetControl():
 	return DatasetControl.getInstance(0)
 
 def hideAllWidgets():
-	getScene().setVisible(0)
-	getGeometricControl().setVisible(0)
-	getMolecularControl().setVisible(0)
-	getLogView().setVisible(0)
-	getDatasetControl().setVisible(0)
-	getPyWidget().setVisible(0)
+	getScene().setWidgetVisible(0)
+	getGeometricControl().setWidgetVisible(0)
+	getMolecularControl().setWidgetVisible(0)
+	getLogView().setWidgetVisible(0)
+	getDatasetControl().setWidgetVisible(0)
+	getPyWidget().setWidgetVisible(0)
 
 def showOnlyScene():
 	hideAllWidgets()
-	getScene().setVisible(1)
-	getMainControl().resize(800, 654)
+	getScene().setWidgetVisible(1)
 	getMainControl().processEvents(5000)
 
+def setSceneSize(width, height):
+	getMainControl().setContentSize(width, height)
+	showOnlyScene()
+	getScene().update(false)
+
 ###################### SHORTCUTS: #######################
+
+# map a key to a python command:
+# modifier can be "" or None, Shift, Ctrl
+def map(modifier, key, command):
+	getPyWidget().map(modifier, key, command)
+
+def log(to_log):
+	getMainControl().setStatusbarText(to_log, 1)
+	print to_log
+
+def abortScript():
+	getPyWidget().abortScript()
+
+def quit():
+	getMainControl().quit()
+
+def run(file):
+	getPyWidget().runFile(file)
+
 def openFile(file):
-	return MolecularFileDialog.getInstance(0).openFile(file)
+	return getMainControl().openFile(file)
 	
 def getSystems():
 	return getMainControl().getCompositeManager().getComposites()
@@ -59,21 +91,23 @@ def getMolecularControlSelection():
 # get a list with the Highlighted System or first one
 def getOneSystem():
 	s = getMolecularControlSelection()
-	if len(s) == 0:
+	if len(s) == 0 or len(s) > 1:
+		print "Warning: One System should be highlighted!"
 		s.append(getSystem(0))
-	if len(s) != 1:
-		print "One System has to be highlighted!"
-		return
-	S = s[0] 
+	S = s[0].getRoot()
 	l = []
 	l.append(S)
+	getMolecularControl().highlight(l)
 	return l
 
 def getRepresentations():
-	return getMainControl().getPrimitiveManager().getRepresentations()
+	return getMainControl().getRepresentationManager().getRepresentations()
 
 def getForceField():
 	return getMolecularStructure().getForceField()
+
+def setCamera(camera):
+	getScene().setCamera(camera)
 
 ###################### HOTKEYS: #######################
 def hideAllRepresentations():
@@ -97,10 +131,10 @@ def setMultithreading(mode):
 	getMainControl().setMultithreading(mode)
 
 def runScript(filename):
-	getPyWidget().run(filename)
+	getPyWidget().runFile(filename)
 
-def runScriptAgain():
-	getPyWidget().runAgain()
+def runCurrentScript():
+	getPyWidget().runCurrentScript()
 
 def quickSave():
 	getMainControl().quickSave()
@@ -112,7 +146,9 @@ def removeWater():
 	getMainControl().clearSelection()
 	setMultithreading(0)
 	if getMolecularControl().applySelector("residue(HOH)") == 0:
+		setMultithreading(1)
 		return
+	getMolecularControl().highlightSelection()
 	getMolecularControl().cut()
 	for i in range(len(getSystems())):
 		getMainControl().update(getSystem(i), 1)
@@ -122,17 +158,11 @@ def addOptimizedHydrogens():
 	getOneSystem()
 	getMolecularStructure().addHydrogens()
 	getMolecularControl().applySelector("element(H)")
-	getMolecularStructure().runMinimization()
+	getMolecularStructure().runMinimization(false)
 
 def relaxStructure():	
 	s = getOneSystem()
-	addOptimizedHydrogens()
-	if getMainControl().getSelection() != []:
-		print "aborted..."
-		return
-	getMolecularControl().applySelector("")
-	getMolecularControl().highlight(s)
-	getMolecularStructure().MDSimulation(0)
+	getEScene().optimizeStructure()
 
 def highlightLigand():
 	s = getOneSystem()
@@ -172,6 +202,12 @@ def printAtomTypesForLigands():
 	highlightLigand()
 	printAtomTypesForHighlighted()
 
+def randomizeAtoms(md):
+	atoml = atoms(getOneSystem()[0])
+	for i in range(0, len(atoml)):
+		atoml[i].setPosition(atoml[i].getPosition() + Vector3(uniform(-md,md), uniform(-md,md), uniform(-md,md)))
+	getMainControl().update(getOneSystem()[0])
+
 ###################### EXAMPLES: #######################
 def createStickModel():
 	dp = getDisplayProperties()
@@ -181,5 +217,15 @@ def createStickModel():
 	dp.selectColoringMethod(COLORING_ELEMENT)
 	dp.setTransparency(0)
 	dp.apply()
+
+def createChainSurfaces():
+	clearRepresentations()
+	s = getOneSystem()[0]
+	getDisplayProperties().selectModel(MODEL_SE_SURFACE)
+	getDisplayProperties().selectColoringMethod(COLORING_CHAIN)
+	for c in chains(s):
+		l = []
+		l.append(c)
+		getDisplayProperties().createRepresentation(l)
 
 

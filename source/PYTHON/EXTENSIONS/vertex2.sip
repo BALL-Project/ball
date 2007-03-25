@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex2.sip,v 1.2 2005/12/23 17:03:00 amoll Exp $
+// $Id: vertex2.sip,v 1.2.20.1 2007/03/25 21:38:56 oliver Exp $
 //
 
 class Vertex2
@@ -21,20 +21,24 @@ class Vertex2
 	void swap(Vertex2& ) throw();
 	void setVertex1(const Vector3& ) throw();
 	void setVertex1(const float , const float , const float ) throw();
+
 	Vector3& getVertex1() throw();
-	const Vector3& getVertex1() const throw();
+	// const Vector3& getVertex1() const throw();
+
 	void getVertex1(Vector3& ) const throw();
-	void getVertex1(float& , float& , float& ) const throw();
+	// void getVertex1(float& , float& , float& ) const throw();
 	void setVertex1Address(const Vector3& ) throw();
 	void setDefaultVertex1Address() throw();
 	Vector3* getVertex1Address() const throw();
 	
 	void setVertex2(const Vector3& ) throw();
 	void setVertex2(const float , const float , const float ) throw();
+
 	Vector3& getVertex2() throw();
-	const Vector3& getVertex2() const throw();
+	// const Vector3& getVertex2() const throw();
+
 	void getVertex2(Vector3& ) const throw();
-	void getVertex2(float& , float& , float& ) const throw();
+	// void getVertex2(float& , float& , float& ) const throw();
 	void setVertex2Address(const Vector3& ) throw();
 	void setDefaultVertex2Address() throw();
 	Vector3* getVertex2Address() const throw();

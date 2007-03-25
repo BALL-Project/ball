@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AnalyticalGeometry_test.C,v 1.28 2003/04/17 06:04:41 oliver Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.28.30.1 2007/03/25 21:46:44 oliver Exp $
 
 ///////////////////////////
 
@@ -21,7 +21,7 @@
 
 ///////////////////////////
 
-START_TEST(AnalyticalGeometry, "$Id: AnalyticalGeometry_test.C,v 1.28 2003/04/17 06:04:41 oliver Exp $")
+START_TEST(AnalyticalGeometry, "$Id: AnalyticalGeometry_test.C,v 1.28.30.1 2007/03/25 21:46:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

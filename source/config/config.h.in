@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: config.h.in,v 1.50 2006/01/03 17:35:50 anhi Exp $ 
+// $Id: config.h.in,v 1.50.16.1 2007/03/25 22:02:48 oliver Exp $ 
 //
 
 #ifndef BALL_CONFIG_CONFIG_H
@@ -53,6 +53,8 @@
 #undef BALL_ARCH_I386
 #undef BALL_ARCH_ALPHA
 #undef BALL_ARCH_POWERPC
+#undef BALL_ARCH_POWERPC32
+#undef BALL_ARCH_POWERPC64
 
 // Define OS
 #undef BALL_OS_LINUX
@@ -212,6 +214,7 @@
 #undef BALL_QT_VERSION
 #undef BALL_QT_VERSION_STR
 #define QT_THREAD_SUPPORT
+#undef BALL_USE_GLEW
 
 // Define whether to use the ARM style or ANSI style access modifications
 //   ARM style:   BaseClass::foo;

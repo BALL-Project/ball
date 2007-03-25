@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RotamerLibrary_test.C,v 1.10 2005/12/23 17:03:11 amoll Exp $
+// $Id: RotamerLibrary_test.C,v 1.10.20.1 2007/03/25 21:48:54 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.10 2005/12/23 17:03:11 amoll Exp $")
+START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.10.20.1 2007/03/25 21:48:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

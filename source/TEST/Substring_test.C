@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Substring_test.C,v 1.4 2003/06/24 14:31:42 amoll Exp $
+// $Id: Substring_test.C,v 1.4.30.1 2007/03/25 21:49:05 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: Substring_test.C,v 1.4 2003/06/24 14:31:42 amoll Exp $")
+START_TEST(String,"$Id: Substring_test.C,v 1.4.30.1 2007/03/25 21:49:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

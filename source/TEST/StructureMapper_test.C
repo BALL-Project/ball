@@ -1,7 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StructureMapper_test.C,v 1.13 2006/01/26 16:12:54 oliver Exp $
+<<<<<<< StructureMapper_test.C
+// $Id: StructureMapper_test.C,v 1.13.14.1 2007/03/25 21:49:04 oliver Exp $
+=======
+// $Id: StructureMapper_test.C,v 1.13.14.1 2007/03/25 21:49:04 oliver Exp $
+>>>>>>> 1.12.8.1
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +18,11 @@
 #include <BALL/FORMAT/PDBFile.h>
 #include <vector>
 
-START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.13 2006/01/26 16:12:54 oliver Exp $")
+<<<<<<< StructureMapper_test.C
+START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.13.14.1 2007/03/25 21:49:04 oliver Exp $")
+=======
+START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.13.14.1 2007/03/25 21:49:04 oliver Exp $")
+>>>>>>> 1.12.8.1
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

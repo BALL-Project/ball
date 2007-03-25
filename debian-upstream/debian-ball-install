@@ -1,30 +1,73 @@
-#!/bin/sh -e
+#!/bin/bash 
+# script to build BALL / BALLView to create and compile a Debian/Ubuntu source package
 
-#apt-get install python-sip4-dev python2.3-sip4-dev sip4 python2.3 python2.3-dev python gcc-3.3 g++-3.3
+mymake()
+{
+	make "MAKE=make -j2"
+}
 
 #adapt to your settings
-export BALL_PATH=`pwd | sed "s/debian$//g"`
-#export PLATFORM=Linux-i386-g++_3.3.5
-#export LD_LIBRARY_PATH="$BALL_PATH/lib/$PLATFORM:$LD_LIBRARY_PATH"
+export BALL_PATH=`pwd | sed "s/debian-upstream$//g" | sed "s/debian$//g"`
+unset QTDIR
+echo $1
 
-cd $BALL_PATH/source 
-touch config.lic
-rm -f config.cache || true
-
-./configure \
- --x-libraries=/usr/X11R6/lib\
- --x-includes=/usr/X11R6/include\
- --disable-debuginfo\
- --enable-optimization\
- --with-qt-mt\
- --enable-python 			
+if [ $1 == "configure" ]
+then
+	cd $BALL_PATH/source 
+	touch config.lic
+	rm -f config.cache || true
+	autoconf &&
+	./configure \
+	 --disable-debuginfo\
+	 --enable-optimization\
+	 --enable-python\
+	 --with-qt-libs=/usr/lib\
+	 --with-moc=/usr/bin/moc-qt4\
+	 --with-uic=/usr/bin/uic-qt4
+	 exit $?
+fi
  																			
-make depend 				
-make 							
-make install 		
+if [ $1 == "build" ]
+then
+	cd $BALL_PATH/source 
+	make doc 			
+	if [ -f ~/.testBALLpackage ]
+	then
+		touch $BALL_PATH/source/APPLICATIONS/BALLVIEW/BALLView
+		mkdir $BALL_PATH/lib 						2>/dev/null
+		mkdir $BALL_PATH/lib/Linux 			2>/dev/null
+		touch $BALL_PATH/lib/Linux/foo 	2>/dev/null
+		exit 0
+	fi
+	make depend 	&&
+	mymake 				&&
+	make install 	&&	
+	cd PYTHON/EXTENSIONS &&
+	mymake &&
+	make install &&
+	cd $BALL_PATH/source/APPLICATIONS/BALLVIEW &&
+	mymake  		
+	exit $?
+fi
 
-cd PYTHON/EXTENSIONS 
-make 				  install
+if [ $1 == "install" ]
+then
+	debian-upstream/createBALLVIEWDEB source
+	exit $?
+fi
 
-cd $BALL_PATH/source/APPLICATIONS/BALLVIEW 
-make  		
+if [ $1 == "clean" ]
+then
+	cd $BALL_PATH/source 
+	if [ -f Makefile ] 
+	then 
+		make clean 
+		cd PYTHON/EXTENSIONS
+		make clean
+		rm -rf ../lib/Linux*
+		rm -rf ../doc/doxygen/latex/*
+		rm $BALL_PATH/source/config.status 2>/dev/null
+		true
+	fi
+	exit $?
+fi

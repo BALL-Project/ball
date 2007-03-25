@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line.C,v 1.4 2003/08/29 15:38:00 amoll Exp $
+// $Id: line.C,v 1.4.28.1 2007/03/25 22:02:34 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIVES/line.h>
 
@@ -82,6 +82,12 @@ namespace BALL
 			Vertex2::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
+		}
+
+		void Line::getVertices(vector<Vector3>& vertices) const
+		{
+			vertices.push_back(getVertex1());
+			vertices.push_back(getVertex2());
 		}
 
 	} // namespace VIEW

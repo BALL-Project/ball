@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Timer_test.C,v 1.23 2005/12/23 17:03:13 amoll Exp $
+// $Id: Timer_test.C,v 1.23.20.1 2007/03/25 21:49:08 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
@@ -15,7 +15,7 @@
 #endif
 ///////////////////////////
 
-START_TEST(Timer, "$Id: Timer_test.C,v 1.23 2005/12/23 17:03:13 amoll Exp $")
+START_TEST(Timer, "$Id: Timer_test.C,v 1.23.20.1 2007/03/25 21:49:08 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

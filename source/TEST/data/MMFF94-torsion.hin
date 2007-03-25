@@ -1,0 +1,14 @@
+; HyperChem file created by BALL
+;
+forcefield AMBER
+sys 0
+mol 1
+atom 1 Carbon H HN=C - 0.4 1 0 0 1 2 s 
+vel 1 0 0 0
+atom 2 Carbon N N=N - -0.4 0 0 0 2 1 s 3 d 
+vel 2 0 0 0
+atom 3 Carbon N N=N - 0.011 0 1 0 2 2 d 4 s 
+vel 3 0 0 0
+atom 4 Carbon F F - -0.011 -1 1 1 1 3 s 
+vel 4 0 0 0
+endmol 1

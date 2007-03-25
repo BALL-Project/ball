@@ -12,8 +12,10 @@
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
-#include <BALL/VIEW/DIALOGS/modifySurfaceDialog.h>
+#include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
+
+#include <BALL/VIEW/DATATYPE/standardDatasets.h>
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -27,26 +29,48 @@
 #include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <qpushbutton.h>
-#include <qmessagebox.h>
-#include <qtextbrowser.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qmessagebox.h>
+#include <QtGui/QTextBrowser>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
+enum TutorialSteps
+{
+	TUTORIAL_PEPTIDE = 1,
+	TUTORIAL_ROTATE,
+	TUTORIAL_HIERARCHY,
+	TUTORIAL_MDS,
+	TUTORIAL_TRAJECTORY,
+	TUTORIAL_ES,
+	TUTORIAL_SES,
+	TUTORIAL_SES_COLORING,
+	TUTORIAL_CS
+};
+
+
 DemoTutorialDialog::DemoTutorialDialog(QWidget* parent, const char* name)
 	throw()
-	:	DemoTutorialDialogData(parent, name),
-		ModularWidget(name)
+	:	QDialog(parent),
+		Ui_DemoTutorialDialogData(),
+		ModularWidget(name),
+		surface_(0)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new DemoTutorialDialog " << this << std::endl;
 #endif
+
+	setupUi(this);
+	setObjectName(name);
+
 	// register the widget with the MainControl
  	ModularWidget::registerWidget(this);
 	hide();
+	connect(next_button, SIGNAL(clicked()), this, SLOT(nextStepClicked()));
+	connect(cancel_button, SIGNAL(clicked()), this, SLOT(hide()));
 }
 
 DemoTutorialDialog::~DemoTutorialDialog()
@@ -55,17 +79,20 @@ DemoTutorialDialog::~DemoTutorialDialog()
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "deleting DemoTutorialDialog " << this << std::endl;
 #endif
+
+	delete surface_;
 }
 
 void DemoTutorialDialog::initDemo_()
 {
-	setCaption("BALLView Demo");
+	setWindowTitle("BALLView Demo");
 
 	prefix_ = getBaseDir_() + "demo";
 
 	next_button->setEnabled(true);
 
 	DisplayProperties* dp = DisplayProperties::getInstance(0);
+	dp->setDrawingPrecision(DRAWING_PRECISION_HIGH);
 
 	((Mainframe*)getMainControl())->reset();
 
@@ -85,7 +112,7 @@ void DemoTutorialDialog::initDemo_()
 		if (dialog == 0) return;
 
 		dp->enableCreationForNewMolecules(false);
-		system_ = dialog->openFile(file_name);
+		system_ = dialog->openMolecularFile(file_name);
 		dp->enableCreationForNewMolecules(true);
 
 		if (system_ == 0)
@@ -94,7 +121,7 @@ void DemoTutorialDialog::initDemo_()
 			msg += "It should be found in " + Path().getDataPath() + "bpti.pdb";
 
 			QMessageBox::critical(0, "Error while starting BALLView Demo", msg.c_str(),
-					QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+					QMessageBox::Ok, Qt::NoButton, Qt::NoButton);
 			return;
 		}
 		
@@ -116,9 +143,9 @@ void DemoTutorialDialog::initDemo_()
 
 	// hide some dockwidgets
 	if (LogView::getInstance(0) != 0) 			 LogView::getInstance(0)->hide();
-	if (DatasetControl::getInstance(0) != 0) DatasetControl::getInstance(0)->hide();
+ 	if (DatasetControl::getInstance(0) != 0) DatasetControl::getInstance(0)->hide();
 #ifdef BALL_PYTHON_SUPPORT
-	if (PyWidget::getInstance(0) != 0) 			 PyWidget::getInstance(0)->hide();
+ 	if (PyWidget::getInstance(0) != 0) 			 PyWidget::getInstance(0)->hide();
 #endif
 }
 
@@ -134,7 +161,7 @@ String DemoTutorialDialog::getBaseDir_()
 
 void DemoTutorialDialog::initTutorial_()
 {
-	setCaption("BALLView Tutorial");
+	setWindowTitle("BALLView Tutorial");
 	
 	prefix_ = getBaseDir_() + "tutorial";
 
@@ -142,26 +169,24 @@ void DemoTutorialDialog::initTutorial_()
 
 	((Mainframe*)getMainControl())->reset();
 
-	BALL_VIEW_DOCKWINDOWS_SHOW_LABELS = true;
-
 	Scene::getInstance(0)->show();
 	MolecularControl::getInstance(0)->show();
-	MolecularControl::getInstance(0)->dock();
+	MolecularControl::getInstance(0)->setFloating(false);
 	MolecularControl::getInstance(0)->applyPreferences();
-	DatasetControl::getInstance(0)->show();
-	DatasetControl::getInstance(0)->applyPreferences();
-	DatasetControl::getInstance(0)->dock();
+ 	DatasetControl::getInstance(0)->show();
+ 	DatasetControl::getInstance(0)->applyPreferences();
+ 	DatasetControl::getInstance(0)->setFloating(false);
 	GeometricControl::getInstance(0)->show();
 	GeometricControl::getInstance(0)->applyPreferences();
-	GeometricControl::getInstance(0)->dock();
+	GeometricControl::getInstance(0)->setFloating(false);
 
 	LogView::getInstance(0)->hide();
-
 }
 
 void DemoTutorialDialog::show()
 {
 	current_step_ = 1;
+	getMainControl()->clearData();
 
 	if (demo_mode_)
 	{
@@ -172,10 +197,11 @@ void DemoTutorialDialog::show()
 		initTutorial_();
 	}
 
-	text_browser->setSource(String(prefix_ + "01.html").c_str());
+	QUrl qurl = QUrl::fromLocalFile((prefix_ + "01.html").c_str());
+	text_browser->setSource(qurl);
 
-	resize(270, 500);
-	DemoTutorialDialogData::show();
+	QDialog::show();
+	resize(350, 650);
 	raise();
 }
 
@@ -199,20 +225,26 @@ void DemoTutorialDialog::onNotifyDemo_(Message *message)
 {
 	RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
 
-	if (current_step_ == 14)
+	if (current_step_ == 13 ||
+			current_step_ == 14)
 	{
 		if (!RTTI::isKindOf<FinishedSimulationMessage>(*message)) return;
 	}
 	else if (current_step_ == 15)
 	{
-		RegularData3DMessage* msg = RTTI::castTo<RegularData3DMessage>(*message);
-		if (msg == 0 ||
-			  ((RegularData3DMessage::RegularDataMessageType)msg->getType()) != RegularDataMessage::NEW)
+		DatasetMessage* msg = RTTI::castTo<DatasetMessage>(*message);
+		if (msg == 0) return;
+
+		if (msg->getDataset() == 0)
 		{
+			BALLVIEW_DEBUG
 			return;
 		}
 
-		grid_ = msg->getData();
+		RegularData3DDataset* set = dynamic_cast<RegularData3DDataset*>(msg->getDataset());
+		if (set->getType() != RegularData3DController::type) return;
+
+		grid_ = (RegularData3D*) set->getData();
 	}
 	else if (current_step_ == 16)
 	{
@@ -245,7 +277,8 @@ void DemoTutorialDialog::nextStepClicked()
 
 	id = prefix_ + id + ".html";
 
-	text_browser->setSource(id.c_str());
+	QUrl qurl = QUrl::fromLocalFile(id.c_str());
+	text_browser->setSource(qurl);
 	next_button->setEnabled(false);
 
 	current_step_ ++;
@@ -269,10 +302,10 @@ void DemoTutorialDialog::nextStepClicked()
 		if (current_step_ == 10)
 		{
 			hide();
-			HelpViewer* hv = HelpViewer::getInstance(0);
+			HelpViewer* hv = HelpViewer::getInstance(1);
 			if (hv == 0) return;
 			hv->showHelp();
-			hv->undock();
+			hv->setFloating(true);
 			hv->showMaximized();
 		}
 	}
@@ -288,12 +321,30 @@ void DemoTutorialDialog::nextStepDemo_()
 	}
 
 	MolecularStructure* ms = MolecularStructure::getInstance(0);
-	bool disable_button = true;
+
+	next_button->setEnabled(current_step_ >= 15);
 
 	// remove representations
-	PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+	RepresentationManager& pm = getMainControl()->getRepresentationManager();
 	Size nr = pm.getNumberOfRepresentations();
 	list<Representation*> reps = pm.getRepresentations();
+
+	if (surface_ == 0 && nr == 1 && current_step_ == 7)
+	{
+		GeometricObject* go = *(**reps.begin()).getGeometricObjects().begin();
+		Mesh* mesh = dynamic_cast<Mesh*>(go);
+		if (mesh != 0)
+		{
+			surface_ = new Mesh(*mesh);
+		}
+		else
+		{
+			// should not happen
+			BALLVIEW_DEBUG
+			surface_ = new Mesh();
+		}
+	}
+
 	for (Position p = 0; p < nr; p++)
 	{
 		getMainControl()->remove(**reps.begin());
@@ -330,11 +381,8 @@ void DemoTutorialDialog::nextStepDemo_()
 	{
 		notify_(new CreateRepresentationMessage(composites_, MODEL_CARTOON, COLORING_RESIDUE_INDEX));
 	}
-	else if (current_step_ == 13)
-	{
-		notify_(new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_RESIDUE_NAME));
-	}
-	else if (current_step_ == 14)
+	else if (current_step_ == 13 ||
+					 current_step_ == 14)
 	{
 		getMainControl()->setMultithreading(0);
 		notify_(new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT));
@@ -342,87 +390,68 @@ void DemoTutorialDialog::nextStepDemo_()
 
 		List<Composite*> composites;
 		composites.push_back(*getMainControl()->getCompositeManager().getComposites().begin());
-		MolecularControl::getInstance(0)->highlight(composites);
+ 		MolecularControl::getInstance(0)->highlight(composites);
 
-		ms->chooseAmberFF();
-		ms->getMDSimulationDialog().setTimeStep(0.001);
- 		ms->getMDSimulationDialog().setNumberOfSteps(30);
-		ms->MDSimulation(false);
+		if (current_step_ == 13)
+		{
+			ms->getAmberConfigurationDialog().resetOptions();
+			ms->chooseAmberFF();
+			ms->getMinimizationDialog().setMaxGradient(1.);
+			ms->getMinimizationDialog().setMaxIterations(20);
+			ms->getMinimizationDialog().setRefresh(5);
+			ms->runMinimization(false);
+		}
+		else
+		{
+			ms->getMDSimulationDialog().setTimeStep(0.002);
+			ms->getMDSimulationDialog().setNumberOfSteps(30);
+			ms->MDSimulation(false);
+		}
 	}
 	else if (current_step_ == 15) //FDPB
 	{
-		ms->calculateFDPB();
-		ms->getFDPBDialog()->okPressed();
-		disable_button = false;
+		getMainControl()->setMultithreading(0);
+		if (!ms->calculateFDPB(false))
+		{
+			BALLVIEW_DEBUG;
+		}
+		getMainControl()->setMultithreading(1);
 	}
 	else if (current_step_ == 16) // SES colored 
 	{
-		getMainControl()->setMultithreading(false);
-		notify_(new CreateRepresentationMessage(composites_, MODEL_SE_SURFACE, COLORING_ELEMENT));
+		// Create a new representation containing the contour surface.
+		Representation* rep = getMainControl()->getRepresentationManager().createRepresentation();
+		rep->setModelType(MODEL_SE_SURFACE); 
+		rep->insert(*new Mesh(*surface_));
+		getMainControl()->insert(*rep);
 
-		getMainControl()->setMultithreading(false);
-
-		Representation* rep = *getMainControl()->getPrimitiveManager().begin();
-
-		ModifySurfaceDialog* cdialog = ModifySurfaceDialog::getInstance(0);
+		ModifyRepresentationDialog* cdialog = ModifyRepresentationDialog::getInstance(0);
+		cdialog->setMode(0);
 		cdialog->setRepresentation(rep);
 		cdialog->setGrid(grid_);
 		cdialog->setMinValue(-0.7);
-		cdialog->setMaxValue(3.0);
+		cdialog->setMaxValue(0.7);
 		cdialog->applyPressed();
 
-		rep->setColorProcessor(0);
-
- 		getMainControl()->sendMessage(*new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS));
-
-		disable_button = false;
+		getMainControl()->update(*rep);
 	}
 	else if (current_step_ == 17)
 	{
-		ContourSurface cs(*grid_, 0.01);
-		Mesh* mesh = new Mesh;
-		mesh->Surface::operator = (static_cast<Surface&>(cs));
-
-		Vector3 center;
-		for (Position i = 0; i < mesh->vertex.size(); i++)
-		{
-			center += mesh->vertex[i];
-		}
-
-		center /= mesh->vertex.size();
-
-		Size nr_of_strange_normals = 0;
-		for (Position i = 0; i < mesh->normal.size(); i++)
-		{
-			if ((mesh->vertex[i] + mesh->normal[i]).getDistance(center) < 
-					(mesh->vertex[i] - mesh->normal[i]).getDistance(center))
-			{
-				nr_of_strange_normals ++;
-			}
-		}
-
-		if (nr_of_strange_normals < mesh->normal.size() / 2.0)
-		{
-			for (Position i = 0; i < mesh->normal.size(); i++)
-			{
-				mesh->normal[i] *= -1;
-			}
-		}
-
-		// Create a new representation containing the contour surface.
-		Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();
-		rep->insert(*mesh);
-		rep->setModelType(MODEL_CONTOUR_SURFACE); 
-
-		notify_(new RepresentationMessage(*rep, RepresentationMessage::ADD));
+		getMainControl()->setMultithreading(0);
+		notify_(new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT));
+		getMainControl()->setMultithreading(1);
 
    	notify_(new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT));
 
-		// last entry: we are done
-		disable_button = false;
-	}
+		DatasetController* dc = DatasetControl::getInstance(0)->getController(RegularData3DController::type);
+		RegularData3DController& rcon = *(RegularData3DController*) dc;
+		vector<Dataset*> grids = rcon.getDatasets();
+		if (grids.size() == 0) return;
+ 		rcon.computeIsoContourSurface(*grids[0], ColorRGBA(255,0,0), -0.1);
+ 		rcon.computeIsoContourSurface(*grids[0], ColorRGBA(0,0,255), 0.1);
 
-	next_button->setEnabled(!disable_button);
+		// last entry: we are done
+	}
 }
 
 void DemoTutorialDialog::showTutorial()
@@ -437,50 +466,52 @@ void DemoTutorialDialog::showDemo()
 	show();
 }
 
-
 void DemoTutorialDialog::onNotifyTutorial_(Message *message) throw()
 {
 	CompositeMessage* cmsg = RTTI::castTo<CompositeMessage>(*message);
 	RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
 
-	if (rmsg != 0 && rmsg->getRepresentation() == 0)
-	{
-		return;
-	}
+	if (rmsg != 0 && rmsg->getRepresentation() == 0) return;
 
 	switch (current_step_)
 	{
-		case 1: // "Building a peptide from a given sequence"
+		case TUTORIAL_PEPTIDE: // "Building a peptide from a given sequence"
 		{
-			if (cmsg == 0 || cmsg->getType() != CompositeMessage::NEW_MOLECULE)
-			{
-				return;
-			}
+			if (cmsg == 0 || cmsg->getType() != CompositeMessage::NEW_MOLECULE) return;
 			break;
 		}
 
-		case 2: // "Hierarchy of molecules"
+		case TUTORIAL_ROTATE: // "Rotating"
 		{
-			ControlSelectionMessage* msg = RTTI::castTo<ControlSelectionMessage>(*message);
-			if (msg == 0 ||
-					msg->getSelection().size() != 1 ||
-					!RTTI::isKindOf<System>(**msg->getSelection().begin()))
-			{
-				return;
-			}
+			if (!RTTI::isKindOf<SceneMessage>(*message)) return;
 			break;
 		}
 
-		case 3: // "Molecular Dynamics Simulation")
+		case TUTORIAL_HIERARCHY: // "Hierarchy of molecules"
 		{
-			if (!RTTI::isKindOf<NewTrajectoryMessage>(*message))
-			{
-				return;
-			}
 			break;
 		}
 
-		case 4: // "Visualisation of trajectories")
+		case TUTORIAL_MDS: // "Molecular Dynamics Simulation")
+		{
+			if (!RTTI::isKindOf<DatasetMessage>(*message)) return;
+			DatasetMessage* msg = dynamic_cast<DatasetMessage*>(message);
+			if (msg->getDataset() == 0)
+			{
+				BALLVIEW_DEBUG
+				return;
+			}
+
+			if (msg->getDataset()->getType() != TrajectoryController::type ||
+					msg->getType() != DatasetMessage::ADD)
+			{
+				return;
+			}
+
+			break;
+		}
+
+		case TUTORIAL_TRAJECTORY: // "Visualisation of trajectories")
 		{
 			if (cmsg != 0 && cmsg->getType() == CompositeMessage::CHANGED_COMPOSITE)
 			{
@@ -489,13 +520,26 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message) throw()
 			break;
 		}
 
-		case 5:  // "Calculation of electrostatics"
+		case TUTORIAL_ES:  // "Calculation of electrostatics"
 		{
-			if (!RTTI::isKindOf<RegularData3DMessage>(*message)) return;
+			if (!RTTI::isKindOf<DatasetMessage>(*message)) return;
+			DatasetMessage* msg = dynamic_cast<DatasetMessage*>(message);
+			if (msg->getDataset() == 0)
+			{
+				BALLVIEW_DEBUG
+				return;
+			}
+
+			if (msg->getDataset()->getType() != RegularData3DController::type ||
+					msg->getType() != DatasetMessage::ADD)
+			{
+				return;
+			}
+
 			break;
 		}
 
-		case 6: // "Creating a Solvent Excluded Surface"
+		case TUTORIAL_SES: // "Creating a Solvent Excluded Surface"
 		{
 			if (rmsg == 0 ||
 					rmsg->getType() != RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL ||
@@ -506,7 +550,7 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message) throw()
 			break;
 		}
 
-		case 7: // "Coloring a SES by electrostatics"
+		case TUTORIAL_SES_COLORING: // "Coloring a SES by electrostatics"
 		{
 			if (rmsg == 0 || 
 					rmsg->getType() != RepresentationMessage::UPDATE &&
@@ -517,7 +561,7 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message) throw()
 			break;
 		}
 
-		case 8: // "Creating a isocontour surface"
+		case TUTORIAL_CS: // "Creating a isocontour surface"
 		{
 			if (rmsg == 0 ||
 					rmsg->getRepresentation()->getModelType() != MODEL_CONTOUR_SURFACE)
@@ -536,4 +580,22 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message) throw()
 	enableNextStep_();
 }
 
+void DemoTutorialDialog::initializeWidget(MainControl&)
+{
+	getMainControl()->insertPopupMenuSeparator(MainControl::HELP);
+	demo_action_ = insertMenuEntry(MainControl::HELP, "Demo", this, SLOT(showDemo()));
+	setMenuHint("Show a demonstration of BALLView's features");
+	tutorial_action_ = insertMenuEntry(MainControl::HELP, "Tutorial", this, SLOT(showTutorial()));
+	setMenuHint("Perform a step-by-step tutorial");
+	getMainControl()->insertPopupMenuSeparator(MainControl::HELP);
+}
+
+void DemoTutorialDialog::checkMenu(MainControl& main_control)
+	throw()
+{
+	bool busy = main_control.isBusy();
+	demo_action_->setEnabled(!busy);
+	tutorial_action_->setEnabled(!busy);
+}
+						
 } } // namespaces

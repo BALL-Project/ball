@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.39 2005/12/23 17:03:06 amoll Exp $
+// $Id: TCPTransfer.C,v 1.39.16.1 2007/03/25 22:00:34 oliver Exp $
 //
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
@@ -34,7 +34,7 @@
 #ifdef BALL_USE_WINSOCK
 #	include <winsock2.h>
 #	include <io.h>
-#	define GLOBAL_CLOSE	_close
+#	define GLOBAL_CLOSE	closesocket
 #	define sleep(a) _sleep(1000 * a)
 #else
 #	define GLOBAL_CLOSE ::close
@@ -43,7 +43,9 @@
 #include <fstream>				// ostream
 #include <stdio.h>
 
-// #define DEBUG
+// DEBUG will lead to Logs, which will crash all QThreads, so only change this if you really 
+// know what you are doing:
+#undef DEBUG
 
 namespace BALL
 {
@@ -84,7 +86,7 @@ namespace BALL
 	TCPTransfer::~TCPTransfer()
 		throw()
 	{
-		if (socket_ != 0)
+		if (socket_ > 0)
 		{
 			GLOBAL_CLOSE(socket_);
 			socket_ = 0;
@@ -129,9 +131,9 @@ namespace BALL
 		status_					= OK;
 		received_bytes_ = 0;
 
-		if (socket_ != 0)
+		if (socket_ > 0)
 		{
-			close(socket_);
+			GLOBAL_CLOSE(socket_);
 			socket_ = 0;
 		}
 	}
@@ -141,30 +143,32 @@ namespace BALL
 		throw()
 	{
 		abort_ = false;
+		status_ = UNKNOWN_PROTOCOL__ERROR;
 
 		if (protocol_ == FTP_PROTOCOL)
 		{
 			status_ =  getFTP_();
-			return status_;
 		}
-		
-		if (protocol_ == HTTP_PROTOCOL)
+		else if (protocol_ == HTTP_PROTOCOL)
 		{
 			status_ = getHTTP_();
-			return status_;
 		}
 
-		close(socket_);
-		return UNKNOWN_PROTOCOL__ERROR;
+		if (socket_ > 0) 
+		{
+			GLOBAL_CLOSE(socket_);
+			socket_ = 0;
+		}
+		return status_;
 	}
 
 
 	bool TCPTransfer::set(std::ostream& file, const String& address)
 		throw()
 	{
-		if (socket_ != 0)
+		if (socket_ > 0)
 		{
-			close(socket_);
+			GLOBAL_CLOSE(socket_);
 			socket_ = 0;
 		}
 
@@ -252,9 +256,9 @@ namespace BALL
 		status_				  = UNINITIALIZED__ERROR;
 		protocol_ 			= UNKNOWN_PROTOCOL;
 		
-		if (socket_ != 0)
+		if (socket_ > 0)
 		{
-			close(socket_);
+			GLOBAL_CLOSE(socket_);
 			socket_ = 0;
 		}
 	}
@@ -445,9 +449,10 @@ namespace BALL
 			return status_;
 		}  
 
-		if (socket_ != 0)
+		if (socket_ > 0)
 		{
-			close(socket_);
+			GLOBAL_CLOSE(socket_);
+			socket_ = 0;
 		}
 		socket_ = socket(AF_INET, SOCK_STREAM, 0); 
 		if (socket_ == -1)
@@ -756,7 +761,7 @@ namespace BALL
 		// now connecting to passive ftp port
 		if(connect(socket2, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
 		{
-			close(socket2);
+			GLOBAL_CLOSE(socket2);
 			status_ = CONNECT__ERROR;
 			return status_;
 		}
@@ -777,14 +782,14 @@ namespace BALL
 
 		if (send(socket_, query.c_str(), query.size(), 0) != (int) query.size())
 		{
-			close(socket2);
+			GLOBAL_CLOSE(socket2);
 			return SEND__ERROR;
 		}
 		
 
 		if (!getFTPMessage_(150)) 
 		{
-			close(socket2);	
+			GLOBAL_CLOSE(socket2);	
 			return status_;	
 		}		
 		
@@ -820,7 +825,7 @@ namespace BALL
 		// im moment noch kein zeitabbruch	
 		
 		// we dont need the second socket anymore
-		close(socket2);
+		GLOBAL_CLOSE(socket2);
 		
 		if (bytes == 0) return OK;
 		
@@ -855,6 +860,32 @@ namespace BALL
 	bool TCPTransfer::usingProxy() const
 	{
 		return proxy_address_ != "" && proxy_port_    != 0;
+	}
+
+	String TCPTransfer::getErrorCode() const
+		throw()
+	{
+		switch(status_)
+		{
+			case OK: return "No Error";
+			case GETHOSTBYNAME__ERROR: return "HostByName Error";
+			case SOCKET__ERROR: return "Socket Error";
+			case CONNECT__ERROR: return "Connect Error";
+			case RECV__ERROR: return "Receive Error";
+			case OUTOFMEMORY__ERROR: return "OutOfMemory Error";
+			case BODY__ERROR: return "Body Error";
+			case UNKNOWN__ERROR: return "Unknown Error";
+			case ADDRESS__ERROR: return "Address Error";
+			case UNINITIALIZED__ERROR: return "Unitialized Error";
+			case TRANSFER__ERROR: return "Transfer Error";
+			case SEND__ERROR: return "Send Error";
+			case PORT__ERROR: return "Port Error";
+			case UNKNOWN_PROTOCOL__ERROR: return "UnknownProtocol Error";
+			case LOGON__ERROR: return "Logon Error";
+			case PROXY__ERROR: return "Proxy Error";
+			case FILENOTFOUND__ERROR: return "FileNotFound Error";
+		}
+		return "Unknown Error";
 	}
 
 } // namespace BALL

@@ -1,8 +1,40 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.sip,v 1.10 2005/12/23 17:02:48 amoll Exp $
+// $Id: atom.sip,v 1.10.18.1 2007/03/25 21:37:03 oliver Exp $
 //
+
+class AtomType
+{
+%TypeHeaderCode
+	#include <BALL/KERNEL/atom.h>
+	using namespace BALL;
+	typedef Atom::Type AtomType;
+%End
+	public:
+%ConvertToTypeCode
+	if (PyInt_Check(sipPy))
+	{
+		*sipCppPtr = new AtomType(PyInt_AS_LONG(sipPy));
+	
+		return 1;
+	}
+	
+	*sipCppPtr = (AtomType*)sipConvertToCpp(sipPy, sipClass_AtomType, sipIsErr);
+
+	return 0;
+%End
+
+	SIP_PYOBJECT __str__();
+%MethodCode
+	sipRes = PyString_FromString(String(*sipCpp).c_str());
+%End
+
+	SIP_PYOBJECT __repr__();
+%MethodCode
+	sipRes = PyString_FromString(String(*sipCpp).c_str());
+%End
+};
 
 class Atom
   : Composite,
@@ -70,19 +102,19 @@ class Atom
 	 void setFormalCharge(Index /formal_charge/) throw();
    Index getFormalCharge() const throw();
 
-   const Fragment* getFragment() const throw();
+   // const Fragment* getFragment() const throw();
    Fragment* getFragment() throw();
 
-	 const Residue* getResidue() const throw();
+	 // const Residue* getResidue() const throw();
 	 Residue* getResidue() throw();
 
-	 const Chain* getChain() const throw();
+	 // const Chain* getChain() const throw();
    Chain* getChain() throw();
 
-	 const SecondaryStructure* getSecondaryStructure() const throw();
+	 // const SecondaryStructure* getSecondaryStructure() const throw();
 	 SecondaryStructure* getSecondaryStructure() throw();
 
-   const Molecule* getMolecule() const throw();
+   // const Molecule* getMolecule() const throw();
    Molecule* getMolecule() throw();
 
    void setName(const String& /name/) throw();
@@ -111,10 +143,12 @@ class Atom
    // Vector3& getForce() throw();
 
    Size countBonds() const;
+
    Bond* getBond(Position /index/) throw(IndexOverflow);
-   const Bond* getBond(Position /index/) const throw(IndexOverflow);
+   //const Bond* getBond(Position /index/) const throw(IndexOverflow);
+
    Bond* getBond(const Atom& /atom/) throw();
-   const Bond *getBond(const Atom& /atom/) const throw();
+   //const Bond *getBond(const Atom& /atom/) const throw();
 
    Bond* createBond(Atom& /atom/) throw(TooManyBonds);
    Bond* createBond(Bond& /bond/, Atom& /atom/) throw(TooManyBonds);
@@ -141,7 +175,7 @@ class Atom
 	sipRes = PyString_FromString(String(String("Atom ") + sipCpp->getName() 
 						+ " { " + sipCpp->getElement().getSymbol() + " @ (" 
 						+ String(sipCpp->getPosition().x) + " " + String(sipCpp->getPosition().y) + " " 
-						+ String(sipCpp->getPosition().z) + " }").c_str());
+						+ String(sipCpp->getPosition().z) + ") }").c_str());
 %End
 
 	SIP_PYOBJECT __repr__();
@@ -155,35 +189,4 @@ class Atom
 
 };
  
-class AtomType
-{
-%TypeHeaderCode
-	#include <BALL/KERNEL/atom.h>
-	using namespace BALL;
-	typedef Atom::Type AtomType;
-%End
-	public:
-%ConvertToTypeCode
-	if (PyInt_Check(sipPy))
-	{
-		*sipCppPtr = new AtomType(PyInt_AS_LONG(sipPy));
-	
-		return 1;
-	}
-	
-	*sipCppPtr = (AtomType*)sipConvertToCpp(sipPy, sipClass_AtomType, sipIsErr);
-
-	return 0;
-%End
-
-	SIP_PYOBJECT __str__();
-%MethodCode
-	sipRes = PyString_FromString(String(*sipCpp).c_str());
-%End
-
-	SIP_PYOBJECT __repr__();
-%MethodCode
-	sipRes = PyString_FromString(String(*sipCpp).c_str());
-%End
-};
 

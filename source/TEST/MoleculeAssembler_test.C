@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MoleculeAssembler_test.C,v 1.5 2006/08/15 20:55:13 oliver Exp $
+// $Id: MoleculeAssembler_test.C,v 1.5.8.1 2007/03/25 21:47:21 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(MoleculeAssembler, "$Id: MoleculeAssembler_test.C,v 1.5 2006/08/15 20:55:13 oliver Exp $")
+START_TEST(MoleculeAssembler, "$Id: MoleculeAssembler_test.C,v 1.5.8.1 2007/03/25 21:47:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

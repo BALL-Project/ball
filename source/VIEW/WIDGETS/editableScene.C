@@ -1,12 +1,12 @@
-/*    THIS IS EXPERIMENTAL CODE  
- *
- *    WE GIVE NO WARRANTY
- *    
- *    USE AT YOUR OWN RISK!!!!!!
- */
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: editableScene.C,v 1.21.14.1 2007/03/25 21:56:46 oliver Exp $
+//
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
 
+#include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/protein.h>
@@ -15,845 +15,1636 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/compositeManager.h>
+#include <BALL/VIEW/DIALOGS/compositeProperties.h>
+#include <BALL/VIEW/DIALOGS/editSettings.h>
+#include <BALL/VIEW/DIALOGS/preferences.h>
+#include <BALL/VIEW/DIALOGS/PTEDialog.h>
+#include <BALL/VIEW/PRIMITIVES/box.h>
+#include <BALL/VIEW/PRIMITIVES/line.h>
+#include <BALL/VIEW/WIDGETS/molecularStructure.h>
+#include <BALL/STRUCTURE/geometricTransformations.h>
+#include <BALL/STRUCTURE/addHydrogenProcessor.h>
+#include <BALL/QSAR/ringPerceptionProcessor.h>
+#include <BALL/MATHS/randomNumberGenerator.h>
+#include <BALL/MATHS/analyticalGeometry.h>
+#include <BALL/SYSTEM/systemCalls.h>
 
-#include <qpainter.h>
-#include <qpopupmenu.h>
-#include <qmenubar.h>
-#include <qcursor.h>
+#include <QtGui/qmenubar.h>
+#include <QtGui/QDesktopWidget>
+#include <QtGui/QPainter>
 
 #include <BALL/MATHS/vector3.h>
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MATHS/angle.h>
 
 using std::endl;
-using std::ostream;
-using std::istream;
-
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		//
-		//-------------------- EditOperation -----------------------
-		//
+//
+//-------------------- EditOperation -----------------------
+//
 
-		EditableScene::EditOperation::EditOperation()
-			throw()
-			: operationType(),
-				atom(),
-				bond(),
-				description()
-		{ 
-		}
+EditableScene::EditOperation::EditOperation()
+	throw()
+	: operationType(),
+		atom(),
+		bond(),
+		description()
+{ 
+}
 
-		EditableScene::EditOperation::EditOperation(Atom* new_atom, Bond* new_bond, String new_description, int new_operation)
-			throw()
-			: operationType((EditableScene::EditOperation::OperationType)new_operation),
-				atom(new_atom),
-				bond(new_bond),
-				description(new_description)
-		{
-		}
+EditableScene::EditOperation::EditOperation(Atom* new_atom, Bond* new_bond, String new_description, int new_operation)
+	throw()
+	: operationType((EditableScene::EditOperation::OperationType)new_operation),
+		atom(new_atom),
+		bond(new_bond),
+		description(new_description)
+{
+}
 
-		EditableScene::EditOperation::EditOperation(const EditOperation& eOperation)
-			throw()
-			: operationType(eOperation.operationType),
-				atom(eOperation.atom),
-				bond(eOperation.bond),
-				description(eOperation.description)
-		{	
-		}
+EditableScene::EditOperation::EditOperation(const EditOperation& eOperation)
+	throw()
+	: operationType(eOperation.operationType),
+		atom(eOperation.atom),
+		bond(eOperation.bond),
+		description(eOperation.description)
+{	
+}
 
-		EditableScene::EditOperation::~EditOperation()	
-			throw()
-		{
+EditableScene::EditOperation::~EditOperation()	
+	throw()
+{
 #ifdef BALL_VIEW_DEBUG
-				Log.info() << "Destructing object EditOperation " << this << " of class EditableScene>" << std::endl;
+		Log.info() << "Destructing object EditOperation " << this << " of class EditOperation>" << std::endl;
 #endif 
-		}
+}
 
-		//
-		//-------------------- EditableScene -----------------------
-		//
-		EditableScene::EditableScene()
-			throw()
-			:	Scene(),
-				edit_id_(-1),
-				system_(),
-				first_atom_for_bond_(0),
-				atom_limit_(1.5),
-				bond_limit_(2.0),
-				editAtomType_(6),
-				undo_()
-		{
-		}
+//
+//-------------------- EditableScene -----------------------
 
-		EditableScene::EditableScene(QWidget* parent_widget, const char* name, WFlags w_flags)
-			throw()
-			: Scene(parent_widget, name, w_flags),
-				edit_id_(-1),
-				system_(), 
-				first_atom_for_bond_(0),
-				atom_limit_(1.5),
-				bond_limit_(2.0),
-				editAtomType_(6),
-				undo_()
-		{	
-			registerWidget(this); 
-			Log.error() << "EditableScene " << dynamic_cast<ModularWidget*>(this) << std::endl;
-		}
+bool EditableScene::only_highlighted_ = true;
 
-		// TODO: Was sollte ein Copyconstructor sinnvolles tun?
-		// undo_ is NOT copied, since we would run into trouble with the pointers to atoms and bonds it saves
-		EditableScene::EditableScene(const EditableScene& eScene, QWidget* parent_widget, const char* name , WFlags w_flags)
-			throw()
-			: Scene(eScene, parent_widget, name, w_flags),
-				edit_id_(-1),
-				system_(eScene.system_),
-				first_atom_for_bond_(eScene.first_atom_for_bond_),
-				atom_limit_(eScene.atom_limit_),
-				bond_limit_(eScene.bond_limit_),
-				editAtomType_(eScene.editAtomType_),
-				undo_()
-		{
-		}
+EditableScene::EditableScene()
+	throw()
+	:	Scene()
+{
+	init_();
+}
 
-		EditableScene::~EditableScene()
-			throw()
-		{
+EditableScene::EditableScene(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
+	throw()
+	: Scene(parent_widget, name, w_flags),
+	  fragment_db_(),
+		fragment_db_initialized_(false)
+{	
+	registerWidget(this); 
+	init_();
+}
+
+// undo_ is NOT copied, since we would run into trouble with the pointers to atoms and bonds it saves
+EditableScene::EditableScene(const EditableScene& eScene, QWidget* parent_widget, const char* name , Qt::WFlags w_flags)
+	throw()
+	: Scene(eScene, parent_widget, name, w_flags)
+{
+	init_();
+}
+
+void EditableScene::init_()
+{
+	edit_id_ = 0;
+	current_atom_ = 0;
+	edit_settings_ = 0;
+	bond_order_ = Bond::ORDER__SINGLE;
+	draw_line_ = 0;
+	atomic_number_ = 6;
+	atom_number_ = 0;
+	temp_move_ = false;
+}
+
+void EditableScene::setCursor(String c)
+{
+	Path path;
+	String filename = path.find("graphics/cursor.png");
+	if (filename == "") return;
+
+	QPainter p;
+	QPixmap pm(filename.c_str());
+	p.begin(&pm);
+		QFont font;
+		font.setPixelSize(9);
+		p.setFont(font);
+		QColor color;
+		stage_->getBackgroundColor().getInverseColor().get(color);
+   	p.setPen(color);
+  	p.drawText(13, 11, c.c_str());
+	p.end();
+
+	QCursor cursor(pm, 0, 0);
+	QWidget::setCursor(cursor);
+}
+
+EditableScene::~EditableScene()
+	throw()
+{
 #ifdef BALL_VIEW_DEBUG
-			Log.info() << "Destructing object EditableScene " << this << " of class EditableScene>" << std::endl;
+	Log.info() << "Destructing object EditableScene " << this << " of class EditableScene>" << std::endl;
 #endif 
-		}
+}
 
-		void EditableScene::clear()
-			throw()
-		{
-			Scene::clear();
-		}
 
-		void EditableScene::initializeWidget(MainControl& main_control)
-			throw()
-		{
-			(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
+void EditableScene::initializeWidget(MainControl& main_control)
+	throw()
+{
+	Scene::initializeWidget(main_control);
+	String help_url("scene.html#editing");
 
-			String hint;
-			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
+	edit_id_ = insertMenuEntry(MainControl::DISPLAY, "Edit Mode", 
+										this, SLOT(editMode_()), Qt::CTRL+Qt::Key_E);
+	edit_id_->setCheckable(true);
+	setIcon(String("edit.png"), false);
+	setMenuHint("Create and modify molecular structures");
+	setMenuHelp(help_url);
+	mode_group_->addAction(edit_id_);
+	main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
+	Path path;
+	QIcon icon(path.find("graphics/minimize.png").c_str());
+	optimize_ = new QAction(icon, "Quickly optimize structure", this);
+	optimize_->setObjectName(optimize_->text());
+	optimize_->setToolTip("Edit mode: Quickly optimize the highlighted structure");
+	registerForHelpSystem(optimize_, "scene.html#optimize");
+	connect(optimize_, SIGNAL(triggered()), this, SLOT(optimizeStructure()));
+
+	QIcon icon2(path.find("graphics/hydrogens.png").c_str());
+	add_hydrogens_ = new QAction(icon2, "Saturate with Hydrogens", this);
+	add_hydrogens_->setToolTip("Edit mode: Saturate the highlighted structure with hydrogens (with regards to formal charges).");
+	add_hydrogens_->setObjectName(add_hydrogens_->text());
+	registerForHelpSystem(add_hydrogens_, "scene.html#saturate");
+	connect(add_hydrogens_, SIGNAL(triggered()), this, SLOT(saturateWithHydrogens()));
+
+	QIcon icon3(path.find("graphics/element.png").c_str());
+	element_action_ = new QAction(icon3, "Set element", this);
+	element_action_->setToolTip("Edit mode: Choose element for next atom, to modify atom under cursor: Double left click");
+	element_action_->setObjectName(element_action_->text());
+	registerForHelpSystem(element_action_, "scene.html#choose_element");
+	connect(element_action_, SIGNAL(triggered()), this, SLOT(changeElement_()));
+
+	getMainControl()->initPopupMenu(MainControl::BUILD)->addAction(add_hydrogens_);
+ 	setMenuHint("Saturate a molecule with hydrogen bonds");
+
+	new_molecule_ = insertMenuEntry(MainControl::BUILD, "Create new molecule", 
+										this, SLOT(createNewMolecule()));
+ 	setMenuHint("Create a new molecule for editing");
+}
+
+
+void EditableScene::checkMenu(MainControl& main_control)
+	throw()
+{
+	bool busy = main_control.compositesAreLocked();
+	edit_id_->setChecked(current_mode_ == (Scene::ModeType)EDIT__MODE);
+	edit_id_->setEnabled(!busy);
+	Scene::checkMenu(main_control);
+	bool edit_mode = (current_mode_ == (Scene::ModeType)EDIT__MODE);
+	bool selected_system = !busy && main_control.getSelectedSystem();
+	optimize_->setEnabled(selected_system);
+	add_hydrogens_->setEnabled(selected_system);
+	element_action_->setEnabled(!busy && edit_mode);
+
+	new_molecule_->setEnabled(!busy);
+}
+
+<<<<<<< editableScene.C
 			edit_id_ =	main_control.insertMenuEntry(
 					MainControl::DISPLAY, "&Edit Mode", this, SLOT(editMode_()), CTRL+Key_E, -1);
+=======
+void EditableScene::mousePressEvent(QMouseEvent* e)
+{
+	draw_line_ = false;
+>>>>>>> 1.20.2.93
 
-			Scene::initializeWidget(main_control);
+	if (current_mode_ < (Scene::ModeType) EDIT__MODE)
+	{
+		Scene::mousePressEvent(e);
+		return;
+	}
 
+	if (isAnimationRunning() || getMainControl()->isBusy()) return;
+
+	deselect_();
+
+	x_window_pos_old_ = x_window_pos_new_;
+	y_window_pos_old_ = y_window_pos_new_;
+	x_window_pos_new_ = e->x();
+	y_window_pos_new_ = e->y();
+	mouse_button_is_pressed_ = true;
+	last_buttons_ = e->buttons();
+
+	if (e->button() != Qt::RightButton)
+	{
+		if (only_highlighted_ &&
+				getMainControl()->getMolecularControlSelection().size() == 0)
+		{
+			setStatusbarText("Warning: no AtomContainer highlighted", true);
 			return;
 		}
+	}
 
+	getClickedItems_(e->x(), e->y());
 
-		void EditableScene::finalizeWidget(MainControl& main_control)
-			throw()
+	/////////////////////////////////////////
+	// right button -> context menu
+	if (e->button() == Qt::RightButton)
+	{
+		if (current_atom_)
 		{
+			current_atom_->select();
+			notify_(new CompositeMessage(*current_atom_, CompositeMessage::SELECTED_COMPOSITE));	
+		}
+
+		if (current_bond_)
+		{
+<<<<<<< editableScene.C
 			if (current_mode_ == (Scene::ModeType)EDIT__MODE)
 			{
 				main_control.removeMenuEntry(CTRL+Key_E, -1);
 			}
 			Scene::finalizeWidget(main_control);	
+=======
+			current_bond_->select();
+			Atom* a1 = (Atom*)current_bond_->getFirstAtom();
+			Atom* a2 = (Atom*)current_bond_->getSecondAtom();
+			a1->select();
+			a2->select();
+			notify_(new CompositeMessage(*a1, CompositeMessage::SELECTED_COMPOSITE));	
+			notify_(new CompositeMessage(*a2, CompositeMessage::SELECTED_COMPOSITE));	
+>>>>>>> 1.20.2.93
 		}
 
+		// we open a context menu at this point
+		showContextMenu(QPoint(e->x(), e->y()));
+		return;
+	}
 
-		void EditableScene::checkMenu(MainControl& main_control)
-			throw()
+	////////////////////////////////////////////////
+	// left button -> add atom or move existing atom
+	if (e->button() == Qt::LeftButton && e->modifiers() != Qt::ControlModifier)
+	{	
+		if (current_bond_ != 0) return;
+
+		if (current_atom_ != 0)
 		{
-			menuBar()->setItemChecked(edit_id_,(current_mode_ == (Scene::ModeType)EDIT__MODE));
-			Scene::checkMenu(main_control);
+			getMainControl()->selectCompositeRecursive(current_atom_, true);
+			x_window_pos_new_ = x_window_pos_old_ = e->globalX();
+			y_window_pos_new_ = y_window_pos_old_ = e->globalY();
+			temp_move_ = true;
+			return;
 		}
 
-		void EditableScene::mousePressEvent(QMouseEvent* e)
-		{
-			// start a new mouse_moved cycle
-			mouse_has_moved_ = false;
-
-			//store the old positions of the press Event
-			x_ewindow_bond_pos_first_ = e->x();
-			y_ewindow_bond_pos_first_ = e->y();
-			x_ewindow_bond_pos_second_old_ = e->x();
-			y_ewindow_bond_pos_second_old_ = e->y();
-
-			// we don't have to handle the other modes here:
-			//   if we are in BOND__MODE, a mouse button is already pressed and we have to
-			//      wait for the next release event
-			//   if we are in any other mode, we let Scene take care of it
-			if (current_mode_ == (Scene::ModeType)EDIT__MODE)
-			{
-				if(e->button() == Qt::LeftButton)
-				{	
-					// ToDo: Is the representation ok? Can the user see all actual atoms?
-
-					// if no atom is selected
-					PDBAtom* a = new PDBAtom(PTE[editAtomType_], PTE[editAtomType_].getName());
-					insert_(e->x(), e->y(), *a);		
-					first_atom_for_bond_ = a;
-					current_mode_ =(Scene::ModeType)BOND__MODE;
-					
-					//store the Operation in undo_
-					Vector3 atom_position = a->getPosition();
-					
-					EditOperation eo(a, NULL, "Added atom of type " + PTE[editAtomType_].getName() + " at position (" 
-													+ String(atom_position.x) + ", "
-													+ String(atom_position.y) + ", "
-													+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
-					undo_.push_back(eo);
-
-					// tell about the new undo operation
-					emit newEditOperation(eo);
-	
-					return;
-				}
-				if(e->button() == Qt::RightButton )
-				{
-					// find an atom in a radius of limit_ around the current mouse position
-					Atom *atom = getClickedAtom_(e->x(), e->y());
-
-					if (atom)
-					{
-						atom->select(); // later we should open a context menu at this point
-						CompositeMessage *m = new CompositeMessage(*atom, CompositeMessage::SELECTED_COMPOSITE);	
-						
-						notify_(m); 
-					}
-					else
-					{
-						// try to find a bond
-						Bond *bond = getClickedBond_(e->x(), e->y());
-
-						if (bond)
-						{
-							bond->select();
-							CompositeMessage *m = new CompositeMessage(*bond, CompositeMessage::SELECTED_COMPOSITE);	
-
-							notify_(m); 
-						}
-					}
-
-					return;
-				}
-				if(e->button() == Qt::MidButton)
-				{
-					//is there an atom in radius <= limit_  Anstroem? 
-					Atom *atom = getClickedAtom_(e->x(), e->y());
-
-					// if so, start a new bond from this atom
-					if (atom)
-					{
-						first_atom_for_bond_ = atom;
-						current_mode_ =(Scene::ModeType)BOND__MODE;
-						TVector2<Position> pos =  getScreenPosition_(atom->getPosition());
-
-						// start position for the putative bond
-						x_ewindow_bond_pos_first_ = pos.x;
-						y_ewindow_bond_pos_first_ = pos.y;
-
-						// we have to initialize this here, so that the first call of MouseMoveEvent does not
-						// fail when it tries to erase the old bond
-						x_ewindow_bond_pos_second_old_ = pos.x;
-						y_ewindow_bond_pos_second_old_ = pos.y;
-					}
-
-					return;	
-				}
-			}
-
-			// nothig to do for us, let's see if Scene want's to do anything
-			Scene::mousePressEvent(e);
-		}
-
-		void EditableScene::mouseMoveEvent(QMouseEvent *e)
-		{
-			// save the current mouse position for drawing possible bonds as a line
-			// these values are used as endpoints of the line we draw if we are not
-			// currently over an atom
-			x_ewindow_bond_pos_second_new_ = e->x();
-			y_ewindow_bond_pos_second_new_ = e->y();
-
-
-			// ============ bond mode ================
-			if (current_mode_ == (Scene::ModeType)BOND__MODE)
-			{
-
-				if (e->state() == Qt::LeftButton  ||
-						e->state() == Qt::MidButton )
-				{
-					mouse_has_moved_ = true;
-
-					//is there an atom nearby the actual mouse position? 
-					Atom *atom = getClickedAtom_(e->x(), e->y());
-
-					// have we found such an atom? if so, is it different from the one we started with? (self bonds make no sense :-) )
-					if (atom && (atom != first_atom_for_bond_))
-					{
-						TVector2<Position> pos =  getScreenPosition_(atom->getPosition());
-
-						// if we are really close to an atom, the endpoints of the line we draw will be set to
-						// its center, so that the user has a drop in effect for the bonds
-						x_ewindow_bond_pos_second_new_ = pos.x; 
-						y_ewindow_bond_pos_second_new_ = pos.y;
-					}
-					
-					//paint the line representing the offered bond
-					QPainter painter(this);
-					painter.setPen(white);
-
-					// this allows to (a) draw or (b) erase, depending if a line was already drawn on 
-					// the same position
-					painter.setRasterOp(XorROP);
-
-					// this erases the old line from the last move event
-					painter.drawLine(
-							(int) (x_ewindow_bond_pos_second_old_) ,  
-							(int) (y_ewindow_bond_pos_second_old_),   
-							(int) (x_ewindow_bond_pos_first_),
-							(int) (y_ewindow_bond_pos_first_));
-
-					// this draws the new line
-					painter.drawLine(
-							(int) (x_ewindow_bond_pos_second_new_) , 
-							(int) (y_ewindow_bond_pos_second_new_), 
-							(int) (x_ewindow_bond_pos_first_),
-							(int) (y_ewindow_bond_pos_first_));
-
-					painter.end();
-				}
-			}
-
-			//tidy up
-			x_ewindow_bond_pos_second_old_ =	x_ewindow_bond_pos_second_new_ ;
-			y_ewindow_bond_pos_second_old_ =	y_ewindow_bond_pos_second_new_ ;
-
-			x_ewindow_bond_pos_second_new_ = e->x();
-			y_ewindow_bond_pos_second_new_ = e->y();
-
-			// maybe Scene wants to do anything with this event as well. and if we're not in BOND__MODE, we let it... :-)
-			if (current_mode_ != (Scene::ModeType)BOND__MODE)
-				Scene::mouseMoveEvent(e);
-		}
-
-		void EditableScene::mouseReleaseEvent(QMouseEvent *e)
-		{
-			// save the current position as the new start position
-			x_ewindow_bond_pos_second_new_ = e->x();
-			y_ewindow_bond_pos_second_new_ = e->y();
-
-			// are we in BOND__MODE? 
-			if (current_mode_ == (Scene::ModeType)BOND__MODE)
-			{
-				// delete last symbolic bond line	
-				QPainter painter(this);
-				painter.setPen(white);
-				painter.setRasterOp(XorROP);
-
-				// did we paint a line at all?
-				if (mouse_has_moved_)
-				{
-					painter.drawLine(
-							(int) (x_ewindow_bond_pos_second_old_) ,  
-							(int) (y_ewindow_bond_pos_second_old_),   
-							(int) (x_ewindow_bond_pos_first_),
-							(int) (y_ewindow_bond_pos_first_));
-				}
-
-				//is there an atom in radius "limit_" Angstroem?
-				Atom *atom = getClickedAtom_(e->x(), e->y());
-
-				// decide what to do... did we find an atom at all?
-				if (atom)
-				{
-					// is it the atom we started with?
-					if (atom == first_atom_for_bond_)
-					{
-						// in this case, we assume that the user does not want to set a bond
-						// -> do nothing
-					}
-					else // we found _another_ atom
-					{
-						//set the bond
-						// TODO: - make the bond_order variable. Even better: change order with click on the bond
-						//       - if there is already a bond, change it to a double bond
-						Bond* c = new Bond("Bond", *first_atom_for_bond_, *atom, Bond::ORDER__SINGLE);		
-						
-						EditOperation eo( NULL, c, "Added bond of type " , EditOperation::ADDED__BOND);
-						undo_.push_back(eo);
-					
-						// tell about the new undo operation
-						emit newEditOperation(eo);
-
-						//update representation
-						CompositeMessage *m = 0;
-						m = new CompositeMessage(*atom, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
-						
-						notify_(m); 
-					}	
-				}
-				else // no atom found
-				{
-					//did we find a first atom?
-					if(first_atom_for_bond_!=0)
-					{
-						// build a new atom...
-						PDBAtom* a = new PDBAtom(PTE[editAtomType_], PTE[editAtomType_].getName());
-						insert_(e->x(), e->y(), *a);
-						
-						//store the Operation in undo_
-						Vector3 atom_position = a->getPosition();
-					
-						EditOperation eo(a, NULL, "Added atom of type " + PTE[editAtomType_].getName() + " at position (" 
-														+ String(atom_position.x) + ", "
-														+ String(atom_position.y) + ", "
-														+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
-						undo_.push_back(eo);
-
-						// tell about the new undo operation
-						emit newEditOperation(eo);
-	
-						//TODO: test if they have the same position, i.e. a and first_atom_for_bond!
-						if (a->getPosition() == first_atom_for_bond_->getPosition())
-						{
-							Log.error() << "Warning: inserted two atoms at the same position!" << endl;
-						}
-	
-						//set the bond
-						//update representation
-						// TODO: bond_oder
-						CompositeMessage *m = 0;
-						Bond* c = new Bond("Bond", *first_atom_for_bond_, *a, Bond::ORDER__SINGLE);		
-						m = new CompositeMessage(*a, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
-					
-						String bond_string;
-						int bond_type = c->getOrder();
-
-						switch (bond_type)
-						{
-							case Bond::ORDER__SINGLE:
-								bond_string = "single bond";
-								break;
-							case Bond::ORDER__DOUBLE:
-								bond_string = "double bond";
-								break;
-							case Bond::ORDER__TRIPLE:						
-								bond_string = "triple bond";	
-								break;
-							case Bond::ORDER__QUADRUPLE:
-								bond_string = "quadruple bond";	
-								break;
-							case Bond::ORDER__AROMATIC:
-								bond_string = "aromatic bond";	
-								break;
-							default:					
-								bond_string = "unknown";	
-								break;
-						}
-						
-						EditOperation eo2( NULL, c, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
-						undo_.push_back(eo2);
-						
-						// tell about the new undo operation
-						emit newEditOperation(eo2);
-
-						notify_(m);
-					}
-					else // we did not find a first atom!
-					{	
-						// we do nothing 
-					}
-				}
-
-				// end the mouse_moved cycle
-				mouse_has_moved_ = false;
-				first_atom_for_bond_=0;
-
-				//return to edit mode
-				current_mode_ =(Scene::ModeType)EDIT__MODE;
-
-				return;
-			}
-
-			// in EDIT__MODE, we don't need to do anything
-			if (current_mode_ == (Scene::ModeType)EDIT__MODE)
-			{
-				return;
-			}	
-
-			Scene::mouseReleaseEvent(e);
-		}	
+		/////////////////////////////////////////
+		// insert a new atom:
+		String name = PTE[atomic_number_].getSymbol();
+		name += String(atom_number_);
+		atom_number_ ++;
+		PDBAtom* a = new PDBAtom(PTE[atomic_number_], name);
+		insert_(e->x(), e->y(), *a);		
+		current_atom_ = a;
 		
+		//store the Operation in undo_
+		Vector3 atom_position = a->getPosition();
+		draw_line_ = false;
+		
+		EditOperation eo(a, NULL, "Added atom of type " + PTE[atomic_number_].getName() + " at position (" 
+										+ String(atom_position.x) + ", "
+										+ String(atom_position.y) + ", "
+										+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
+		undo_.push_back(eo);
 
-		/** ******************** Helper Functions ************************* **/
+		// tell about the new undo operation
+		emit newEditOperation(eo);
+		return;
+	}
 
-		// Find closest atom to screen position (x,y). If there is none closer than atom_limit_, return NULL
-		Atom* EditableScene::getClickedAtom_(int x, int y)
+	//////////////////////////////////////////////
+	// middle button -> add bond
+	if (e->button() == Qt::MidButton ||
+			(e->button() == Qt::LeftButton && e->modifiers() == Qt::ControlModifier))
+	{	
+		if (current_atom_)
 		{
-			//get the AtomContainer
-			CompositeManager& cm = getMainControl()->getCompositeManager();
-			CompositeManager::iterator it = cm.begin();
-
-			float min_dist = numeric_limits<float>::max();
-			Atom* min_atom = 0;
-			float dist;
-
-			for (; it != cm.end(); it++)
-			{
-				//check if composite is a system
-				// TODO: do we have to check for Protein, Molecule, Chain, ... or is the System check already sufficient?
-				System* s = dynamic_cast<System*>(*it);
-				if (s == 0) continue;
-
-				Vector3 cam_to_atom;
-				Vector3 cam_to_clickedPoint = clickedPointOnViewPlane_(x, y) - getStage()->getCamera().getViewPoint();
-
-				AtomIterator ai;
-				for(ai=s->beginAtom();+ai;++ai)
-				{
-					cam_to_atom = (ai->getPosition() - getStage()->getCamera().getViewPoint());
-
-					// compute the angle between the rays Cam->Atom and Cam->clicked point
-					Angle	alpha((float)acos(  (cam_to_atom * cam_to_clickedPoint)
-								/(cam_to_atom.getLength() * cam_to_clickedPoint.getLength())
-								));
-
-					// the distance between the two rays is the sine of the angle between them times the length of Cam->Atom	
-					dist  = sin(alpha) * cam_to_atom.getLength();
-
-					// now save atom and distance
-					if (dist < min_dist)
-					{
-						min_dist = dist;
-						min_atom = &(*ai);
-					}
-				}
-			}
-
-			//is the minimal distance beyond the threshold?
-			if (min_dist < atom_limit_)
-			{
-				return min_atom;
-			}
-
-			return 0;
+			current_atom_->select(); 
+			notify_(new CompositeMessage(*current_atom_, CompositeMessage::SELECTED_COMPOSITE));	
+			atom_pos_ = current_atom_->getPosition();
+			draw_line_ = false;
 		}
 
-		// Find closest bond to screen position (x,y). If there is none closer than bond_limit_, return NULL
-		// Note: this code is very similar to getClickedAtom. Maybe those two should be united.
-		Bond* EditableScene::getClickedBond_(int x, int y)
-		{
-			//get the AtomContainer
-			CompositeManager& cm = getMainControl()->getCompositeManager();
-			CompositeManager::iterator it = cm.begin();
+		return;
+	}
+}
 
-			Bond* closest = 0;
-			float min_dist = FLT_MAX;
+void EditableScene::wheelEvent(QWheelEvent* e)
+{
+	Index delta = e->delta();
+	if (delta == 0) return;
 
+	if (current_mode_ != (Scene::ModeType) EDIT__MODE)
+	{
+		Scene::wheelEvent(e);
+		return;
+	}
 
-			for (; it != cm.end(); it++)
-			{
-				//check if composite is a system
-				// TODO: do we have to check for Protein, Molecule, Chain, ... or is the System check already sufficient?
-				System* s = dynamic_cast<System*>(*it);
-				if (s == 0) continue;
+	e->accept();
 
-				//The Composite is a system
-				// save the atom and its distance to the click ray
-				Vector3 cam_to_bond;
-				Vector3 cam_to_clickedPoint = clickedPointOnViewPlane_(x, y) - getStage()->getCamera().getViewPoint();
+	if (isAnimationRunning() || getMainControl()->isBusy()) return;
 
-				// To iterate over all bonds, we have to iterate over all atoms and then over all their bonds
-				// Unfortunately, this counts each bond twice...
-				for (AtomIterator ai = s->beginAtom(); +ai; ++ai)
-				{
-					AtomBondIterator bi;
-					for (bi = ai->beginBond(); +bi; ++bi)
-					{
-						if (bi->getPartner(*ai) < &*ai) continue;
+	if (delta > 1) delta = 1;
+	if (delta < -1) delta = -1;
 
-						// first point the position vector to the first atom of the bond
-						cam_to_bond = (bi->getFirstAtom()->getPosition() - getStage()->getCamera().getViewPoint());
-						// then add 1/2 * the vector pointing from first to second
-						cam_to_bond += (bi->getSecondAtom()->getPosition() - bi->getFirstAtom()->getPosition())*0.5;
+	if (e->modifiers() == Qt::ShiftModifier)
+	{
+		getClickedItems_(e->x(), e->y());
+		changeBondOrder_(delta);
+	}
+	else
+	{
+		Scene::wheelEvent(e);
+	}
+}
 
-						// compute the angle between the rays Cam->Bond and Cam->clicked point
-						Angle	alpha((float)acos(  (cam_to_bond * cam_to_clickedPoint)
-									/(cam_to_bond.getLength() * cam_to_clickedPoint.getLength())
-									));
+void EditableScene::changeBondOrder_(Index delta)
+{
+	if (current_bond_ == 0) return;
 
-						// the distance between the two rays is the sine of the angle between them times the length of Cam->Bond
-						float dist = sin(alpha) * cam_to_bond.getLength();
+	Index order = current_bond_->getOrder();
+	order += delta;
+	order = BALL_MAX((Index)Bond::ORDER__SINGLE, order);
+	if (order > Bond::ORDER__AROMATIC) order = Bond::ORDER__SINGLE;
+	if (current_bond_->getOrder() == order) return;
 
-						// now save bond and distance
-						if (dist < min_dist)
-						{
-							min_dist = dist;
-							closest = &*bi;
-						}
-					}
-				}
-			}
+	current_bond_->setOrder(order);
+	getMainControl()->update(*(Atom*)current_bond_->getFirstAtom(), true);
+	String txt = "Set bond order to ";
+	txt += getBondOrderString_(order);
+	setStatusbarText(txt);
+}
 
-			//is the minimal distance beyond the threshold?
-			if (min_dist < bond_limit_)
-			{
-				return closest;
-			}
+void EditableScene::mouseMoveEvent(QMouseEvent *e)
+{
+	draw_line_ = false;
+	if (current_mode_ < (Scene::ModeType) EDIT__MODE)
+	{
+		Scene::mouseMoveEvent(e);
+		return;
+	}
 
-			return 0;
-		}
+	if (isAnimationRunning() || getMainControl()->isBusy()) return;
 
-		// Slot to change to BOND__MODE
-		void EditableScene::bondMode_()
-		{
-			current_mode_ = (Scene::ModeType)BOND__MODE;		
-			setCursor(QCursor(Qt::SizeAllCursor));
-			//ToDo:: Cursor should look different
-		}
+	if (temp_move_)
+	{
+		x_window_pos_new_ = e->globalX();
+		y_window_pos_new_ = e->globalY();
 
+		processMoveModeMouseEvents_(e);
 
-		// Slot to change to EDIT__MODE
-		void EditableScene::editMode_()
-		{
-			current_mode_ = (Scene::ModeType)EDIT__MODE;		
-			setCursor(QCursor(Qt::SizeAllCursor));
-			//ToDo:: Cursor should look different
-		}
+		x_window_pos_old_ = x_window_pos_new_;
+		y_window_pos_old_ = y_window_pos_new_;
+		return;
+	}
 
-		// insert an atom at screen positions (x,y) on the view plane
-		void EditableScene::insert_(int x, int y, PDBAtom &atom_)
-		{
-			// find the 3D coordinates of screen position (x,y) on the view plane
-			Vector3 point = clickedPointOnViewPlane_(x,y);
-			// move the atom to that position
-			atom_.setPosition( point );
+	// create a new bond
+	//
+	// is there an atom nearby the actual mouse position? 
+	Atom* last_atom = current_atom_;
+	getClickedItems_(e->x(), e->y());
 
-			// now we need to find the AtomContainer into which we will insert the atom.
-			
-			// do we need to refocus after the update? if there was no composite at all before our
-			// insertion, we need to focus since otherwise the camera will not be initialized correctly.
-			// but we will _not_ refocus if the camera position was already valid. this would confuse
-			// the user.
-			bool refocus = (getMainControl()->getCompositeManager().getNumberOfComposites() == 0);
-			//message to update the representation
+	// have we found such an atom? if so, is it different from the one we started with?
+	// (self bonds make no sense)
+	if (last_atom && 
+			current_atom_ &&
+			last_atom != current_atom_)
+	{
+		// if we are really close to an atom, the endpoints of the line we draw will be set to
+		// its center, so that the user has a drop in effect for the bonds
+		atom_pos_ = current_atom_->getPosition();
+	}
+	else
+	{
+		atom_pos_ = get3DPosition_(e->x(), e->y());
+	}
+
+	current_atom_ = last_atom;
+
+	// paint the line representing the offered bond
+	draw_line_ = true;
+	update(false);
+
+	x_window_pos_old_ = x_window_pos_new_;
+	y_window_pos_old_ = y_window_pos_new_;
+	x_window_pos_new_ = e->x();
+	y_window_pos_new_ = e->y();
+}
+
+void EditableScene::paintGL()
+{
+	Scene::paintGL();
+
+	if (current_mode_ != (Scene::ModeType) EDIT__MODE)
+	{
+		draw_line_ = false;
+		return;
+	}
+
+	if (!draw_line_ || current_atom_ == 0) return;
+
+	glDisable(GL_LIGHTING);
+	gl_renderer_->setColorRGBA_(stage_->getBackgroundColor().getInverseColor());
+
+	glBegin(GL_LINES);
+		gl_renderer_->vertexVector3_(current_atom_->getPosition());
+		gl_renderer_->vertexVector3_(atom_pos_);
+	glEnd();
+
+	glEnable(GL_LIGHTING);
+}
+
+void EditableScene::mouseReleaseEvent(QMouseEvent* e)
+{
+	if (temp_move_)
+	{
+		deselect_();
+		temp_move_ = false;
+		return;
+	}
+
+	if ((int)current_mode_ < (int) EDIT__MODE)
+	{
+		Scene::mouseReleaseEvent(e);
+		return;
+	}
+
+	if (last_buttons_ == Qt::RightButton) 
+	{
+		deselect_();
+		return;
+	}
+
+	if (last_buttons_ == Qt::MidButton && !draw_line_) return;
+
+	if (isAnimationRunning() || getMainControl()->isBusy()) return;
+
+	mouse_button_is_pressed_ = false;
+
+	// if we didnt find first atom: abort
+	if (!current_atom_) 
+	{
+		deselect_();
+		return;
+	}
 	
-			// get all highlighted composites
-			List <Composite * > compositeList = getMainControl()->getMolecularControlSelection(); 
-			List <Composite *>::iterator it = compositeList.begin();
-			
-			if(compositeList.size() > 1 )
+	current_atom_->deselect();
+	notify_(new CompositeMessage(*current_atom_, CompositeMessage::DESELECTED_COMPOSITE));	
+
+	Atom* atom = current_atom_;
+	getClickedItems_(e->x(), e->y());
+
+	// decide what to do... did we find an atom at all?
+	if (current_atom_)
+	{
+		// is it the atom we started with?
+		if (atom == current_atom_)
+		{
+			// in this case, we assume that the user does not want to set a bond
+			draw_line_ = false;
+			deselect_();
+			return;
+		}
+
+		// we found _another_ atom: set the bond
+		Bond* c = new Bond("Bond", *current_atom_, *atom, Bond::ORDER__SINGLE);		
+		
+		EditOperation eo(0, c, "Added bond of type single" , EditOperation::ADDED__BOND);
+		undo_.push_back(eo);
+	
+		// tell about the new undo operation
+		emit newEditOperation(eo);
+
+		merge_(current_atom_, atom);
+
+		//update representation
+		getMainControl()->update(*atom, true);
+		setStatusbarText("Added bond");
+	}
+	else // no atom found -> create one
+	{
+		// project the new atom on the plane of the old atom
+		current_atom_ = atom;
+		Vector3 new_pos = current_atom_->getPosition();
+
+		TVector2<float> p1 = getScreenPosition_(new_pos);
+		TVector2<float> xd = getScreenPosition_(new_pos + stage_->getCamera().getRightVector() * 5000.);
+		TVector2<float> yd = getScreenPosition_(new_pos - stage_->getCamera().getLookUpVector() * 5000.);
+		TVector2<float> dd(xd.x, yd.y);
+		dd /= 5000.;
+
+		float dx = e->x() - p1.x;
+		float dy = e->y() - p1.y;
+
+		new_pos += stage_->getCamera().getRightVector() * dx / dd.x;
+		new_pos -= stage_->getCamera().getLookUpVector() * dy / dd.y;
+
+		// test if the two atoms would have the same position
+		if (current_atom_->getPosition() == new_pos)
+		{
+			setStatusbarText("Aborting, since both atoms would have the same location!", true);
+			return;
+		}
+
+		// build a new atom...
+		String name(PTE[atomic_number_].getSymbol());
+		name += String(atom_number_);
+		atom_number_++;
+		PDBAtom* a = new PDBAtom(PTE[atomic_number_], name);
+		a->setPosition(new_pos);
+		current_atom_->getParent()->appendChild(*a);
+		
+		//store the Operation in undo_
+		Vector3 atom_position = a->getPosition();
+
+		EditOperation eo(a, NULL, "Added atom of type " + PTE[atomic_number_].getName() + " at position (" 
+										+ String(atom_position.x) + ", "
+										+ String(atom_position.y) + ", "
+										+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
+		undo_.push_back(eo);
+
+		// tell about the new undo operation
+		emit newEditOperation(eo);
+
+		//set the bond
+		Bond* c = new Bond("Bond", *current_atom_, *a, bond_order_);		
+
+		// tell about the new undo operation
+		String bond_string = getBondOrderString_(bond_order_);
+		EditOperation eo2(0, c, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
+		undo_.push_back(eo2);
+		emit newEditOperation(eo2);
+
+		getMainControl()->update(*a->getParent(), true);
+		setStatusbarText("Added bond and atom");
+	}
+
+	deselect_();
+}	
+
+String EditableScene::getBondOrderString_(Index order)
+{
+	String bond_string;
+	switch (order)
+	{
+		case Bond::ORDER__SINGLE:
+			bond_string = "single";
+			break;
+		case Bond::ORDER__DOUBLE:
+			bond_string = "double";
+			break;
+		case Bond::ORDER__TRIPLE:						
+			bond_string = "triple";	
+			break;
+		case Bond::ORDER__QUADRUPLE:
+			bond_string = "quadruple";	
+			break;
+		case Bond::ORDER__AROMATIC:
+			bond_string = "aromatic";	
+			break;
+		default:					
+			bond_string = "unknown";	
+			break;
+	}
+
+	return bond_string;
+}
+
+/// ******************** Helper Functions *************************
+List<AtomContainer*> EditableScene::getContainers_()
+{
+	List<AtomContainer*> containers;
+	if (only_highlighted_)
+	{
+		List<Composite*> highl = getMainControl()->getMolecularControlSelection();
+		List<Composite*>::Iterator lit = highl.begin();
+		for (; lit != highl.end(); ++lit)
+		{
+			AtomContainer* ac = dynamic_cast<AtomContainer*>(*lit);
+			if (ac != 0) containers.push_back(ac);
+		}
+	}
+
+	if (containers.size() > 0) return containers;
+
+	HashSet<Composite*> composites = getMainControl()->getCompositeManager().getComposites();
+	HashSet<Composite*>::Iterator sit = composites.begin();
+	for (; +sit; ++sit)
+	{
+		AtomContainer* ac = dynamic_cast<AtomContainer*>(*sit);
+		if (ac != 0) containers.push_back(ac);
+	}
+
+	return containers;
+}
+
+void EditableScene::getClickedItems_(int x, int y)
+{
+	current_bond_ = 0;
+	current_atom_ = 0;
+
+	QPoint p(x,y);
+	List<GeometricObject*> objects;
+	gl_renderer_->pickObjects1((Position) p.x(), (Position) p.y(), 
+														(Position) p.x(), (Position) p.y());
+	renderView_(DIRECT_RENDERING);
+	gl_renderer_->pickObjects2(objects);
+
+	if (objects.size() > 0)
+	{
+		Composite* c = (Composite*)(**objects.begin()).getComposite();
+		if (c == 0) return;
+
+		current_bond_ = dynamic_cast<Bond*>(c);
+		current_atom_ = dynamic_cast<Atom*>(c);
+	}
+}
+
+void EditableScene::setElementCursor()
+{
+	String s = PTE[atomic_number_].getSymbol();
+	s.truncate(1);
+	setCursor(s.c_str());
+}
+
+// Slot to change to EDIT__MODE
+void EditableScene::editMode_()
+{
+	if (!fragment_db_initialized_)
+	{
+		fragment_db_.setFilename("fragments/Editing-Fragments.db");
+		fragment_db_.init();
+		fragment_db_initialized_ = true;
+	}
+
+	List<AtomContainer*> acs = getContainers_();
+
+	MainControl* mc = getMainControl();
+	HashSet<Composite*> systems = mc->getCompositeManager().getComposites();
+
+	List<Representation*> reps = mc->getRepresentationManager().getRepresentations();
+	List<Representation*>::Iterator rit = reps.begin();
+	for (;rit != reps.end(); rit++)
+	{
+		Representation& rep = **rit;
+		if (rep.getModelType() != MODEL_BALL_AND_STICK)
+		{
+			rep.setHidden(true);
+			getMainControl()->update(rep);
+			continue;
+		}
+
+		List<const Composite*>::ConstIterator cit = rep.getComposites().begin();
+		for (;cit != rep.getComposites().end(); ++cit)
+		{
+			systems.erase((Composite*)*cit);
+		}
+	}
+
+	HashSet<Composite*>::Iterator cit = systems.begin();
+	for (; +cit; ++cit)
+	{
+		List<Composite*> comp;
+		comp.push_back(*cit);
+		notify_(new CreateRepresentationMessage(comp, MODEL_BALL_AND_STICK, COLORING_ELEMENT));
+	}
+
+	List<Composite*> sel;
+	List<AtomContainer*>::iterator lit = acs.begin();
+	for (; lit != acs.end(); lit++)
+	{
+		sel.push_back(*lit);
+	}
+	ControlSelectionMessage* msg = new ControlSelectionMessage();
+	msg->setSelection(sel);
+	notify_(msg);
+
+	last_mode_ = current_mode_;
+	current_mode_ = (Scene::ModeType)EDIT__MODE;		
+	edit_id_->setChecked(true);
+	setElementCursor();
+	checkMenu(*getMainControl());
+
+	HashSet<Composite*> selection = getMainControl()->getSelection();
+	HashSet<Composite*>::Iterator it = selection.begin();
+	for (; +it; ++it)
+	{
+		if (!(**it).containsSelection()) continue;
+		getMainControl()->deselectCompositeRecursive(*it, true);
+		getMainControl()->update(**it, false);
+	}
+	notify_(new NewSelectionMessage);
+}
+
+// insert an atom at screen positions (x,y) on the view plane
+void EditableScene::insert_(int x, int y, PDBAtom &atom)
+{
+	// find the 3D coordinates of screen position (x,y) on the view plane
+	// move the atom to that position
+	atom.setPosition(get3DPosition_(x,y));
+
+	// now we need to find the AtomContainer into which we will insert the atom.
+	// get all highlighted composites
+	List<Composite*> composite_list = getMainControl()->getMolecularControlSelection(); 
+	
+	Size nr_high = composite_list.size();
+	if (nr_high > 1 || (only_highlighted_ && nr_high == 0))
+	{
+		setStatusbarText("Please highlight exactly one AtomContainer for insertion of the created atoms!", true);
+		return;
+	}
+
+	// exactly one highlighted composite
+	if (nr_high == 1)
+	{
+		// is it an AtomContainer?
+		AtomContainer* ai = dynamic_cast<AtomContainer*>(*composite_list.begin());
+		if (ai == 0)
+		{
+			// is the parent an AtomContainer?
+			Composite* parent = (**composite_list.begin()).getParent();
+			if (parent != 0)
 			{
-				Log.error() <<"Please highlight exactly one AtomContainer for insertion of the created atoms!" << endl;
+				ai = dynamic_cast<AtomContainer*>(parent);
+			}
+
+			if (ai == 0)
+			{
+				setStatusbarText("Please highlight exactly one AtomContainer for insertion of the created atoms!", true);
 				return;
 			}
-		
-			// only one highlighted composite
-			if(compositeList.size() == 1)
-			{
-				// is it an AtomContainer?
-				AtomContainer* ai = dynamic_cast<AtomContainer*>(*it);
-				if (ai == 0)
-				{
-					Log.error() <<"Please highlight exactly one AtomContainer for insertion of the created atoms!" << endl;
-					return;
-				}
+		}
 
-				// Yes? we do not need to create our own system
-				ai->insert(atom_);
-				getMainControl()->update(*ai, true);
-			}
-			else  // more or less than 1 highlighted
-			{
-				System *system = new System();
-				Molecule* current_molecule = new Molecule();
-				system->insert(*current_molecule);
-				current_molecule->insert(atom_);
-				getMainControl()->insert(*system);
-			}	
-
-			// do we need to refocus the camera?
-			if (refocus)
-			{
-				CompositeMessage* m = new CompositeMessage(atom_, CompositeMessage::CENTER_CAMERA);
-				notify_(m);
-				
-				//move the mouse to focused position for the draw bond code
-				x_ewindow_bond_pos_first_  = width() / 2.;
-				y_ewindow_bond_pos_first_  = height() / 2.;
-				x_ewindow_bond_pos_second_old_ = width() / 2.;
-				y_ewindow_bond_pos_second_old_ = height() / 2.;
-			}
-
-		}	
-
-
-		// this code projects the 3D view plane to 2D screen coordinates
-		bool EditableScene::mapViewplaneToScreen_()
+		// prevent adding of atoms to a System: 
+		// some forcefields will go havoc otherwise
+		if (RTTI::isKindOf<System>(*ai))
 		{
-			// matrix for the Projection matrix 	
-			GLdouble projection_matrix[16];
-			// matrix for the Modelview matrix
-			GLdouble modelview_matrix[16];
+			System* system = (System*) ai;
+			Molecule* mol = system->getMolecule(0);
+			if (mol == 0)
+			{
+				mol = new Molecule();
+				system->insert(*mol);
+			}
+			ai = mol;
+		}
 
-			// variables for definition of projection matrix
-			float near_=0, left_=0, right_=0, bottom_ =0, top_=0; 
+		// we do not need to create our own system
+		ai->insert(atom);
+		getMainControl()->update(*ai, true);
+		return;
+	}
 
-			// take the Projection matrix	
-			glMatrixMode(GL_PROJECTION);
-			glGetDoublev(GL_PROJECTION_MATRIX, projection_matrix);
-			glMatrixMode(GL_MODELVIEW);
-			glGetDoublev(GL_MODELVIEW_MATRIX, modelview_matrix); 
+	/////////////////////////////////////////////////////////
+	// no atom container highlighted:
+	
+	HashSet<Composite*> composites = getMainControl()->getCompositeManager().getComposites();
 
-			// determine the projection variables
-			if(projection_matrix[0]==0. || projection_matrix[5]==0. || projection_matrix[10]==1.)
-			{	
-				Log.error() << "Projection variables equal zero! " << endl;
-				return false;
-			}	
-			near_   = projection_matrix[14]/(projection_matrix[10]-1);
-			left_   = projection_matrix[14]*(projection_matrix[8]-1) / (projection_matrix[0]*(projection_matrix[10]-1));
-			right_  = projection_matrix[14]*(projection_matrix[8]+1) / (projection_matrix[0]*(projection_matrix[10]-1));
-			bottom_ = projection_matrix[14]*(projection_matrix[9]-1) / (projection_matrix[5]*(projection_matrix[10]-1));
-			top_    = projection_matrix[14]*(projection_matrix[9]+1) / (projection_matrix[5]*(projection_matrix[10]-1));
+	// no System exists? -> create one
+	if (composites.size() == 0)
+	{
+		System *system = new System();
+		Molecule* current_molecule = new Molecule();
+		system->insert(*current_molecule);
+		current_molecule->insert(atom);
+		getMainControl()->insert(*system);
+		getMainControl()->update(*system);
+		return;
+	}
+	
+	// add to first Molecule in first System
+	System* system = dynamic_cast<System*>(*composites.begin());
+	Molecule* mol = system->getMolecule(0);
+	if (mol == 0)
+	{	
+		mol = new Molecule();
+		system->insert(*mol);
+	}
 
-			// we have to move all points of the viewing volume with the inverted Modelview matrix 
-			Matrix4x4 mod_view_mat_(modelview_matrix[0], modelview_matrix[4], modelview_matrix[8], modelview_matrix[12],
-					modelview_matrix[1], modelview_matrix[5], modelview_matrix[9], modelview_matrix[13],
-					modelview_matrix[2], modelview_matrix[6], modelview_matrix[10], modelview_matrix[14],
-					modelview_matrix[3], modelview_matrix[7], modelview_matrix[11],	modelview_matrix[15]);
+	mol->appendChild(atom);
+	getMainControl()->update(*mol, true);
+}	
 
 
-			Matrix4x4 inverse_mod_view_mat_;
-			mod_view_mat_.invert(inverse_mod_view_mat_);
+// this code projects the 3D view plane to 2D screen coordinates
+TVector2<float> EditableScene::getScreenPosition_(Vector3 vec)
+{
+	// find the monitor coordinates of a given vector
+	TVector2<float> pos ; 
+	pos.x = FLT_MAX;
+	pos.y = FLT_MAX;
 
-			// determine the nearplane vectors
-			near_left_bot_ =Vector3(left_,  bottom_, near_*-1.); //a
-			near_right_bot_=Vector3(right_, bottom_, near_*-1.); //b
-			near_left_top_ =Vector3(left_,  top_,    near_*-1.);  //c	
+	double xs_ = width();
+	double ys_ = height(); 
 
-			near_left_bot_  = inverse_mod_view_mat_*near_left_bot_;
-			near_right_bot_ = inverse_mod_view_mat_*near_right_bot_;
-			near_left_top_  = inverse_mod_view_mat_*near_left_top_;
+	// vectors for arithmetics
+	// first we compute the projection of the given atom on the Viewplane
+	Vector3 cam = getStage()->getCamera().getViewPoint();
+	Vector3 look_at = getStage()->getCamera().getLookAtPosition() -  cam ;
+	Vector3 cam_to_atom = vec - cam;
 
-//			std::cout << "\tPROJECTION VARIABLES: " << std::endl;
-//			std::cout << "near:" << near_ << " left:" << left_ << " right:" << right_<< " top:" << top_ << " bottom:" << bottom_ << std::endl;
+	try 
+	{
+		if (mapViewplaneToScreen_())
+		{
+			Vector3 la_m_d(near_left_bot_ + (near_right_bot_ - near_left_bot_) * 0.5 
+																		+ (near_left_top_  - near_left_bot_) * 0.5 - cam);
 
+			look_at.normalize();
+
+			float parm = la_m_d.getLength() /(look_at * cam_to_atom); 
+			Vector3 origin_to_atom_projection_on_viewplane =   cam + parm * cam_to_atom;	
+
+			//now we compute the position on Screen of the projected atom
+			Vector3 screen_top_left_pos_to_proj_atom =  origin_to_atom_projection_on_viewplane  - near_left_top_ ; 
+			pos.x = (unsigned int)( screen_top_left_pos_to_proj_atom * ( near_right_bot_ - near_left_bot_ )
+					/   (( near_right_bot_ - near_left_bot_ ).getSquareLength())  * xs_);
+			pos.y = (unsigned int) (screen_top_left_pos_to_proj_atom * ( near_left_bot_ - near_left_top_ ) 
+					/   (( near_left_bot_ - near_left_top_ ).getSquareLength() )  * ys_);
+		}
+	}	
+	catch (...)
+	{
+	}
+
+	return pos;
+}
+
+
+// Set the element for the next insert operations
+void EditableScene::setEditElementType(int element_number)
+{
+	atomic_number_ = element_number;
+ 	setElementCursor();
+}
+
+// Get the element for the next insert operations
+int EditableScene::getEditElementType()
+{
+	return atomic_number_;
+}
+
+void EditableScene::showContextMenu(QPoint pos)
+{
+	menu_point_ = pos;
+	QMenu menu;
+
+	QAction* rotate_mode = menu.addAction("Rotate Mode", this, SLOT(rotateMode_()));
+	rotate_mode->setCheckable(true);
+	rotate_mode->setChecked(current_mode_ == (Scene::ModeType) MOVE__MODE);
+
+	QAction* picking_mode = menu.addAction("Picking Mode", this, SLOT(pickingMode_()));
+	picking_mode->setCheckable(true);
+	picking_mode->setChecked(current_mode_ == (Scene::ModeType) PICKING__MODE);
+	
+	QAction* move_mode = menu.addAction("Move Mode", this, SLOT(moveMode_()));
+	move_mode->setCheckable(true);
+	move_mode->setChecked(current_mode_ == (Scene::ModeType) MOVE__MODE);
+	
+	QAction* edit_mode = menu.addAction("Edit Mode", this, SLOT(editMode_()));
+	edit_mode->setCheckable(true);
+	edit_mode->setChecked(current_mode_ == (Scene::ModeType) EDIT__MODE);
+
+	menu.addSeparator();
+
+	if (current_mode_ == (Scene::ModeType) EDIT__MODE)
+	{
+		menu.addAction("Atom Properties", this, SLOT(atomProperties_()))->setEnabled(current_atom_ != 0);
+		menu.addAction("Move Atom", this, SLOT(moveAtom_()))->setEnabled(current_atom_ != 0);
+		menu.addAction("Delete Atom", this, SLOT(deleteAtom_()))->setEnabled(current_atom_ != 0);
+		menu.addAction(element_action_);
+
+		QMenu* charge = new QMenu();
+		QAction* change_charge = menu.addMenu(charge);
+		change_charge->setText("Set formal charge");
+		Index charge_value = 0;
+		if (current_atom_ != 0) charge_value = current_atom_->getFormalCharge();
+		for (Index p = +6; p > -7; p--)
+		{
+			String s(p);
+			if (p > 0) s = String("+") + s;
+
+			QAction* action = charge->addAction(s.c_str(), this, SLOT(setFormalCharge_()));
+			action->setCheckable(true);
+			action->setChecked(p == charge_value);
+		}
+		change_charge->setEnabled(current_atom_ != 0);
+
+		menu.addSeparator();
+
+		menu.addAction("Delete Bond", this, SLOT(deleteBond_()))->setEnabled(current_bond_ != 0);
+
+		QMenu* order = new QMenu();
+		QAction* change_order = menu.addMenu(order);
+		connect(order, SIGNAL(hovered(QAction*)), this, SLOT(activatedOrderItem_(QAction*)));
+		change_order->setText("Change bond order");
+		vector<QAction*> oas;
+		oas.push_back(order->addAction("Single",    this, SLOT(changeBondOrder_())));
+		oas.push_back(order->addAction("Double",    this, SLOT(changeBondOrder_())));
+		oas.push_back(order->addAction("Triple",    this, SLOT(changeBondOrder_())));
+		oas.push_back(order->addAction("Quadruple", this, SLOT(changeBondOrder_())));
+		oas.push_back(order->addAction("Aromatic",  this, SLOT(changeBondOrder_())));
+
+		Index bo = 0;
+		if (current_bond_) bo = ((Index)current_bond_->getOrder()) - 1;
+		for (Index p = 0; p < (Index) oas.size(); p++)
+		{
+			oas[p]->setCheckable(true);
+			if (p == bo) oas[p]->setChecked(true);
+		}
+
+		change_order->setEnabled(current_bond_ != 0);
+
+		menu.addSeparator();
+
+		QMenu* add_menu = new QMenu();
+		QAction* add_action = menu.addMenu(add_menu);
+		add_action->setText("Add");
+		if (getContainers_().size() == 0)
+		{
+			add_action->setEnabled(false);
+		}
+
+		QMenu* rings = new QMenu();
+		QAction* ring_action = add_menu->addMenu(rings);
+		ring_action->setText("Aromatic rings");
+		rings->addAction("Pyrrole", this, SLOT(addStructure_()));
+		rings->addAction("Benzene", this, SLOT(addStructure_()));
+		rings->addAction("Indole", this, SLOT(addStructure_()));
+
+		QMenu* aas = new QMenu();
+		QAction* aas_action = add_menu->addMenu(aas);
+		aas_action->setText("Amino acids");
+
+		QMenu* nas = new QMenu();
+		QAction* nas_action = add_menu->addMenu(nas);
+		nas_action->setText("Nucleic acids");
+
+		HashSet<String> names;
+		const std::vector<Residue*>& residues = fragment_db_.getFragments();
+		vector<Residue*>::const_iterator rit = residues.begin(); 
+		vector<Residue*> nucleotides;
+		for (;rit != residues.end();++rit)
+		{
+			String name = (**rit).getName();
+			if ((**rit).isAminoAcid())
+			{
+				if (names.has(name)) continue;
+				names.insert(name);
+				aas->addAction(name.c_str(), this, SLOT(addStructure_()));
+				continue;
+			}
+		}
+		
+		nas->addAction("Alanine", this, SLOT(addStructure_()));
+		nas->addAction("Cytosine", this, SLOT(addStructure_()));
+		nas->addAction("Guanine", this, SLOT(addStructure_()));
+		nas->addAction("Thymine", this, SLOT(addStructure_()));
+		nas->addAction("Uracil", this, SLOT(addStructure_()));
+
+		menu.addSeparator();
+
+		menu.addAction(optimize_);
+		menu.addAction(add_hydrogens_);
+	}
+
+	menu.exec(mapToGlobal(pos));
+
+	// if we switched to move mode, let the user move the atom:
+	if (current_mode_ == MOVE__MODE) return;
+
+	// otherwise deselect all selected items
+	deselect_();
+}
+
+void EditableScene::setFormalCharge_()
+{
+	deselect_();
+
+	QObject* os = sender();
+	if (os == 0) return;
+	QAction* action = dynamic_cast<QAction*>(os);
+	if (action == 0) return;
+	String string = ascii(action->text());
+	try
+	{
+		Index fc = string.toInt();
+		if (current_atom_ != 0) current_atom_->setFormalCharge(fc);
+		getMainControl()->update(*current_atom_, true);
+	}
+	catch(...)
+	{
+		BALLVIEW_DEBUG;
+	}
+}
+
+void EditableScene::deselect_()
+{
+	if (current_bond_ != 0 && 
+			(current_bond_->isSelected() ||
+			 current_bond_->getFirstAtom()->isSelected() ||
+			 current_bond_->getSecondAtom()->isSelected()))
+	{
+		current_bond_->deselect();
+		Atom* a1 = (Atom*)current_bond_->getFirstAtom();
+		Atom* a2 = (Atom*)current_bond_->getSecondAtom();
+		a1->deselect();
+		a2->deselect();
+		notify_(new CompositeMessage(*a1, CompositeMessage::DESELECTED_COMPOSITE));	
+		notify_(new CompositeMessage(*a2, CompositeMessage::DESELECTED_COMPOSITE));	
+	}
+
+	if (current_atom_!= 0 && current_atom_->isSelected())
+	{
+		current_atom_->deselect();
+		notify_(new CompositeMessage(*current_atom_, CompositeMessage::DESELECTED_COMPOSITE));	
+	}
+}
+
+void EditableScene::deleteAtom_()
+{
+	if (current_atom_ == 0) return;
+	getMainControl()->remove(*current_atom_);
+	current_atom_ = 0;
+}
+
+void EditableScene::changeElement_()
+{
+	if (current_atom_ != 0)
+	{
+		atomic_number_ = current_atom_->getElement().getAtomicNumber();
+	}
+
+	PTEDialog pte;
+	pte.exec();
+
+	if (current_atom_ != 0)
+	{
+		current_atom_->setElement(PTE[atomic_number_]);
+		deselect_();
+		getMainControl()->update(*current_atom_);
+	}
+}
+
+void EditableScene::deleteBond_()
+{
+	if (current_bond_ == 0) return;
+
+	Atom* a1 = (Atom*)current_bond_->getFirstAtom();
+	Atom* a2 = (Atom*)current_bond_->getSecondAtom();
+	a1->destroyBond(*a2);
+	a1->deselect();
+	a2->deselect();
+	notify_(new CompositeMessage(*a1, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY));	
+	notify_(new CompositeMessage(*a2, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY));	
+	notify_(new CompositeMessage(*a1, CompositeMessage::DESELECTED_COMPOSITE));	
+	notify_(new CompositeMessage(*a2, CompositeMessage::DESELECTED_COMPOSITE));	
+	current_bond_ = 0;
+}
+
+void EditableScene::changeBondOrder_()
+{
+	if (current_bond_ == 0) return;
+	deselect_();
+	if (current_bond_->getOrder() == bond_order_) return;
+
+	current_bond_->setOrder((Bond::BondOrder)bond_order_);
+	getMainControl()->update(*(Atom*)current_bond_->getFirstAtom(), true);
+}
+
+void EditableScene::onNotify(Message *message)
+	throw()
+{
+	if ((current_atom_ != 0 || current_bond_ != 0) &&
+			RTTI::isKindOf<CompositeMessage>(*message))
+	{
+		CompositeMessage* composite_message = RTTI::castTo<CompositeMessage>(*message);
+		if (composite_message->getType() == CompositeMessage::REMOVED_COMPOSITE)
+		{
+			current_atom_ = 0;
+			current_bond_ = 0;
+		}
+
+		if (composite_message->getType() == CompositeMessage::CHANGED_COMPOSITE_HIERARCHY)
+		{
+			current_atom_ = 0;
+			current_bond_ = 0;
+		}
+	}
+
+	Scene::onNotify(message);
+}
+
+void EditableScene::activatedOrderItem_(QAction* action)
+{
+	if (action == 0) return;
+	String text = ascii(action->text());
+
+	if (text == "Single") bond_order_ = Bond::ORDER__SINGLE;
+	else if (text == "Double") bond_order_ = Bond::ORDER__DOUBLE;
+	else if (text == "Triple") bond_order_ = Bond::ORDER__TRIPLE;
+	else if (text == "Quadruple") bond_order_ = Bond::ORDER__QUADRUPLE;
+	else if (text == "Aromatic") bond_order_ = Bond::ORDER__AROMATIC;
+}
+
+void EditableScene::moveAtom_()
+{
+	if (current_atom_ == 0) return;
+
+	current_atom_->setSelected(true);
+	notify_(new CompositeMessage(*current_atom_, CompositeMessage::SELECTED_COMPOSITE));	
+	setMode(MOVE__MODE);
+}
+
+void EditableScene::atomProperties_()
+{
+	if (current_atom_ == 0) return;
+
+	CompositeProperties as(current_atom_, this);
+	bool apply = as.exec();
+	deselect_();
+
+	if (apply) getMainControl()->update(*current_atom_, true);
+}
+
+void EditableScene::createMolecule_()
+{
+	System *system = new System();
+	Molecule* current_molecule = new Molecule();
+	system->insert(*current_molecule);
+	getMainControl()->insert(*system);
+
+	ControlSelectionMessage* nsm =  new ControlSelectionMessage();
+	List<Composite*> selection;
+	selection.push_back(current_molecule);
+	nsm->setSelection(selection);
+	notify_(nsm);
+}
+
+void EditableScene::setMode(ModeType mode)
+	throw()
+{
+	Scene::setMode(mode);
+
+	if (mode == (Scene::ModeType) EDIT__MODE)	editMode_();
+	update();
+}
+
+void EditableScene::applyPreferences()
+	throw()
+{
+	Scene::applyPreferences();
+	if (edit_settings_ == 0) return;
+	only_highlighted_ = edit_settings_->only_highlighted->isChecked();
+
+	if ((int)current_mode_ == (int)EDIT__MODE)
+	{
+		setElementCursor();
+	}
+}
+
+void EditableScene::initializePreferencesTab(Preferences& preferences)
+	throw()
+{
+	Scene::initializePreferencesTab(preferences);
+	edit_settings_ = new EditSettings(this);
+	preferences.insertEntry(edit_settings_);
+}
+
+void EditableScene::finalizePreferencesTab(Preferences& preferences)
+	throw()
+{
+	Scene::finalizePreferencesTab(preferences);
+	if (edit_settings_) 
+	{
+		preferences.removeEntry(edit_settings_);
+		edit_settings_ = 0;
+	}
+}
+
+void EditableScene::keyPressEvent(QKeyEvent* e)
+{
+	if (!reactToKeyEvent_(e))
+	{
+		Scene::keyPressEvent(e);
+	}
+}
+
+bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
+{
+	int key = e->key();
+
+	if (key == Qt::Key_E)
+	{
+		setMode((ModeType)EDIT__MODE);
+		return true;
+	}
+
+	if (current_mode_ != (ModeType)EDIT__MODE) return false;
+
+	if (!getMainControl()->isBusy())
+	{
+		QPoint point = mapFromGlobal(QCursor::pos());
+
+		if (key == Qt::Key_D)
+		{
+			getClickedItems_(point.x(), point.y());
+			deleteAtom_();
 			return true;
 		}
 
-		TVector2<Position> EditableScene::getScreenPosition_(Vector3 vec)
+		if (key == Qt::Key_Backspace)
 		{
-			//find the monitor coordinates of a given vector
-			TVector2<Position> pos ; 
+			getClickedItems_(point.x(), point.y());
+			deleteBond_();
+			return true;
+		}
+	}
 
-			double xs_ = width();
-			double ys_ = height(); 
 
-			// vectors for arithmetics
-			// first we compute the projection of the given atom on the Viewplane
-			Vector3 cam = getStage()->getCamera().getViewPoint();
-			Vector3 look_at = getStage()->getCamera().getLookAtPosition() -  cam ;
-			Vector3 cam_to_atom = vec - cam;
+	if (key < Qt::Key_A ||
+			key > Qt::Key_Z)
+	{
+		return false;
+	}
 
-			try {
+	if      (key == Qt::Key_H) atomic_number_ = 1;
+	else if (key == Qt::Key_C) atomic_number_ = 6;
+	else if (key == Qt::Key_N) atomic_number_ = 7;
+	else if (key == Qt::Key_O) atomic_number_ = 8;
+	else if (key == Qt::Key_P) atomic_number_ = 15;
+	else if (key == Qt::Key_S) atomic_number_ = 16;
+	else
+	{
+		return false;
+	}
 
-				if (mapViewplaneToScreen_())
-				{
-					Vector3 la_m_d(near_left_bot_
-							+( (near_right_bot_ - near_left_bot_)*0.5 )
-							+( (near_left_top_  - near_left_bot_)*0.5 ) - cam);
+	setElementCursor();
 
-					look_at.normalize();
+	String text("Setting element to ");
+	text += PTE[atomic_number_].getName();
+	setStatusbarText(text, true);
 
-					float parm = la_m_d.getLength() /(look_at * cam_to_atom); 
-					Vector3 origin_to_atom_projection_on_viewplane =   cam + parm * cam_to_atom;	
+	return true;
+}
 
-					//now we compute the position on Screen of the projected atom
-					Vector3 screen_top_left_pos_to_proj_atom =  origin_to_atom_projection_on_viewplane  - near_left_top_ ; 
-					unsigned int x_mouse = (unsigned int)( screen_top_left_pos_to_proj_atom * ( near_right_bot_ - near_left_bot_ )
-							/   (( near_right_bot_ - near_left_bot_ ).getSquareLength())  * xs_);
-					unsigned int y_mouse = (unsigned int) (screen_top_left_pos_to_proj_atom * ( near_left_bot_ - near_left_top_ ) 
-							/   (( near_left_bot_ - near_left_top_ ).getSquareLength() )  * ys_);
+void EditableScene::addStructure(String name)
+{
+	deselect_();
 
-					pos.x=x_mouse;
-					pos.y=y_mouse;
-					return pos;
-				}
-				else
-				{
-					pos.x = std::numeric_limits<unsigned int>::max();
-					pos.y = std::numeric_limits<unsigned int>::max();
+	if (!fragment_db_initialized_)
+	{
+		fragment_db_.setFilename("fragments/Editing-Fragments.db");
+		fragment_db_.init();
+		fragment_db_initialized_ = true;
+	}
 
-					return pos;
-				}
-			}	
-			catch (...)
+	List<AtomContainer*> containers = getContainers_();
+	if (containers.size() == 0) return;
+
+	Residue* residue = fragment_db_.getResidueCopy(name);
+	if (residue == 0)
+	{
+		residue = fragment_db_.getResidueCopy(name + "-Skeleton");
+		if (residue == 0) return;
+	}
+
+	Vector3 p;
+	Size nr = 0;
+	AtomIterator ait = residue->beginAtom();
+	for (;+ait; ++ait)
+	{
+		p += ait->getPosition();
+		nr++;
+	}
+
+	if (nr == 0) 
+	{
+		BALLVIEW_DEBUG
+		delete residue;
+		return;
+	}
+
+	p /= (float) nr;
+
+	Matrix4x4 m;
+	Vector3 x = get3DPosition_(menu_point_.x(), menu_point_.y());
+	TransformationProcessor tf;
+
+	Vector3 vv = getStage()->getCamera().getViewVector();
+	float l = vv.getLength();
+	if (!Maths::isZero(l)) vv /= l;
+	Vector3 axis = Vector3(1,0,0) % vv;
+	if (axis.getSquareLength() != 0)
+	{
+		Angle a = vv.getAngle(Vector3(1,0,0));
+		m.setRotation(a, axis);
+		tf.setTransformation(m);
+		residue->apply(tf);
+	}
+
+	m.setTranslation(x - p);
+	tf.setTransformation(m);
+	residue->apply(tf);
+
+	AtomContainer* s = *containers.begin();
+	if (RTTI::isKindOf<System>(*s))
+	{
+		System* system = (System*) s;
+		Molecule* mol = system->getMolecule(0);
+		if (mol == 0)
+		{
+			mol = new Molecule();
+			system->insert(*mol);
+		}
+		s = mol;
+	}
+
+	s->insert(*residue);
+	getMainControl()->deselectCompositeRecursive(s, true);
+	getMainControl()->selectCompositeRecursive(residue, true);
+	getMainControl()->update(*s);
+	notify_(new NewSelectionMessage);
+	setMode(MOVE__MODE);
+}
+
+void EditableScene::addStructure_()
+{
+	QObject* os = sender();
+	if (os == 0) return;
+	QAction* action = dynamic_cast<QAction*>(os);
+	if (action == 0) return;
+	addStructure(ascii(action->text()));
+}
+
+void EditableScene::createNewMolecule()
+{
+	if (getMainControl()->isBusy()) return;
+
+	System* s = new System();
+	Molecule* m = new Molecule();
+	s->insert(*m);
+	getMainControl()->insert(*s);
+	getMainControl()->update(*s);
+	ControlSelectionMessage* msg = new ControlSelectionMessage();
+	List<Composite*> sel;
+	sel.push_back(m);
+	msg->setSelection(sel);
+	notify_(msg);
+
+	List<Composite*> comp;
+	comp.push_back(s);
+	notify_(new CreateRepresentationMessage(comp, MODEL_BALL_AND_STICK, COLORING_ELEMENT));
+	editMode_();
+}
+
+void EditableScene::saturateWithHydrogens()
+{
+	if (getMainControl()->isBusy()) return;
+
+	deselect_();
+	List<AtomContainer*> containers = getContainers_();
+	if (containers.size() < 1) return;
+	AtomContainer* ac = *containers.begin();
+	RingPerceptionProcessor rpp;
+	vector<vector<Atom*> > rings;
+	rpp.calculateSSSR(rings, *ac);
+	rings = rpp.getAllSmallRings();
+
+	AddHydrogenProcessor ahp;
+	ahp.setRings(rings);
+	ac->apply(ahp);
+	String nr = ahp.getNumberOfAddedHydrogens();
+	setStatusbarText(String("Added ") + nr + " hydrogens.", true);
+	getMainControl()->update(*ac, true);
+}
+
+void EditableScene::optimizeStructure()
+{
+	if (getMainControl()->isBusy()) return;
+
+	deselect_();
+	List<AtomContainer*> containers = getContainers_();
+	if (containers.size() < 1) return;
+
+	MolecularStructure* ms = MolecularStructure::getInstance(0);
+	if (ms == 0) return;
+	
+	AtomContainer* ac = *containers.begin();
+	System* system = (System*)&ac->getRoot();
+
+	setStatusbarText("Optimizing Structure...", true);
+
+	// highlight System for minimization
+	ControlSelectionMessage* nsm =  new ControlSelectionMessage();
+	List<Composite*> selection;
+	selection.push_back(system);
+	nsm->setSelection(selection);
+	notify_(nsm);
+
+	float range = 0.05;
+	RandomNumberGenerator rng;
+	rng.setup();
+	AtomIterator ait = ac->beginAtom();
+	for (; +ait; ++ait)
+	{
+		ait->getPosition() += Vector3(rng.randomDouble(-range, range),
+																	rng.randomDouble(-range, range),
+																	rng.randomDouble(-range, range));
+	}
+	ms->chooseMMFF94();
+
+	MinimizationDialog& md = ms->getMinimizationDialog();
+	md.storeValues();
+	md.setMaxIterations(30);
+	md.setRefresh(25);
+	md.setMaxGradient(5);
+	ms->runMinimization(false);
+
+	while (getMainControl()->isBusy())
+	{
+		getMainControl()->processEvents(999);
+		sleepFor(40);
+	}
+
+	MolecularDynamicsDialog& mdd = ms->getMDSimulationDialog();
+	mdd.storeValues();
+	mdd.setTemperature(500);
+	mdd.setNumberOfSteps(50);
+	mdd.setMicroCanonical(false);
+	ms->MDSimulation(false);
+
+	while (getMainControl()->isBusy())
+	{
+		getMainControl()->processEvents(999);
+		sleepFor(40);
+	}
+
+	md.setMaxIterations(200);
+	md.setMaxGradient(1);
+	ms->runMinimization(false);
+
+	md.restoreValues();
+	mdd.restoreValues();
+}
+
+void EditableScene::addToolBarEntries(QToolBar* tb)
+{
+	toolbar_actions_.insert(toolbar_actions_.lastIndexOf(move_action_) + 1, edit_id_);
+	toolbar_actions_.push_back(element_action_);
+	toolbar_actions_.push_back(add_hydrogens_);
+	toolbar_actions_.push_back(optimize_);
+	Scene::addToolBarEntries(tb);
+	toolbar_->insertSeparator(element_action_);
+}
+
+void EditableScene::mouseDoubleClickEvent(QMouseEvent* e)
+{
+	if (current_mode_ != (ModeType) EDIT__MODE) 
+	{
+		Scene::mouseDoubleClickEvent(e);
+		return;
+	}
+
+	getClickedItems_(e->x(), e->y());
+	if (current_atom_ != 0)
+	{
+		current_atom_->setElement(PTE[atomic_number_]);
+		deselect_();
+		getMainControl()->update(*current_atom_);
+		return;
+	}
+
+	if (current_bond_ != 0)
+	{
+		Atom* a1 = (Atom*)current_bond_->getFirstAtom();
+		Atom* a2 = (Atom*)current_bond_->getSecondAtom();
+		if (a1->getParent() != a2->getParent() || a1->getParent() == 0) return;
+		
+		RingPerceptionProcessor rpp;
+		vector<vector<Atom*> > rings;
+		Composite* comp = a1->getParent();
+		AtomContainer* ac = static_cast<AtomContainer*>(comp);
+		if (ac == 0) return;
+		rpp.calculateSSSR(rings, *ac);
+		rings = rpp.getAllSmallRings();
+		vector<Position> rings_to_modify;
+		for (Position r = 0; r < rings.size(); r++)
+		{
+			Size found = 0;
+			for (Position a = 0; a < rings[r].size(); a++)
 			{
-				pos.x = std::numeric_limits<unsigned int>::max();
-				pos.y = std::numeric_limits<unsigned int>::max();
-
-				return pos;
+				if (rings[r][a] == a1 ||
+				    rings[r][a] == a2)
+				{
+					found++;
+				}
 			}
 
+			if (found == 2) rings_to_modify.push_back(r);
 		}
 
-
-		// Convert 2D screen coordinate to 3D coordinate on the view plane
-		Vector3 EditableScene::clickedPointOnViewPlane_(int x, int y)
+		for (Position r = 0; r < rings_to_modify.size(); r++)
 		{
-
-			// 	Scale variables for Frustum
-			double xs_ = width();
-			double ys_ = height(); 
-
-			mapViewplaneToScreen_();
-
-			// vectors for arithmetics
-			// TODO: give sensible names!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			Vector3 p_(0., 0., 0.);      // vector look_at ray ----> insertion ray cutting the nearplane
-			Vector3 la_m_d_(0., 0., 0.); // look_at vector ray cutting the near plane
-			Vector3 la_m_v_(0., 0., 0.); // look_at vector ray cutting the near plane
-			Vector3 s_(0., 0., 0.);      // vector look_at_ray ----> insertion ray cutting viewing plane
-			Vector3 k_(0., 0., 0.);      // vector of insertionpoint in the viewing volume
-
-			// determine the vector/look_at ray : camera --> lookAt cuts the near plane
-			la_m_d_=Vector3(  near_left_bot_
-					+( (near_right_bot_ - near_left_bot_)*0.5 )
-					+( (near_left_top_  - near_left_bot_)*0.5 )
-					);	
-
-			// determine the vector look_at point--->insertion_ray cutting the near plane 
-			p_=Vector3((   near_left_top_  //c
-						+ ( x / (float)xs_ * (near_right_bot_ - near_left_bot_) )  //b-a
-						- ( y / (float)ys_ * (near_left_top_  - near_left_bot_) )  //c-a
-						)
-					- la_m_d_ );
-
-			// determine the vector look_at_ray ----> insertion ray cutting viewing plane
-			s_= Vector3(   ( ( getStage()->getCamera().getLookAtPosition() - getStage()->getCamera().getViewPoint() ).getLength()
-						/ (la_m_d_ -  getStage()->getCamera().getViewPoint()).getLength()) 
-					* p_ );
-
-			// vector of insertionpoint in the viewing volume
-			k_=Vector3( getStage()->getCamera().getLookAtPosition() + s_ );		
-
-			return k_;
-		}	
-
-		// Set the element for the next insert operations
-		void EditableScene::setEditElementType(int element_number)
-		{
-			editAtomType_=element_number;
-		}
+			HashSet<Atom*> ratoms;
+			vector<Atom*>& ring = rings[rings_to_modify[r]];
+			for (Position a = 0; a < ring.size(); a++)
+			{
+				ratoms.insert(ring[a]);
+			}
 		
-	  // Get the element for the next insert operations
-		int EditableScene::getEditElementType()
-		{
-			return editAtomType_;
+			for (Position a = 0; a < ring.size(); a++)
+			{
+				AtomBondIterator abit = ring[a]->beginBond();
+				for (;+abit; ++abit)
+				{
+					if (ratoms.has(abit->getPartner(*ring[a])))
+					{
+						abit->setOrder(Bond::ORDER__AROMATIC);
+					}
+				}
+			}
 		}
+
+		if (rings_to_modify.size() == 0)
+		{
+			changeBondOrder_(1);
+		}
+	
+		getMainControl()->update(*a1->getParent(), true);
+	}
+}
+
+void EditableScene::merge_(Composite* a1, Composite* a2)
+{
+	if (a1 == 0 || 
+			a2 == 0 ||
+			a1->getParent() == 0 || 
+			a2->getParent() == 0)
+	{
+	 	return;
+	}
+
+	System* s2 = (System*)&a2->getRoot();
+
+	Composite* p1 = a1->getParent();
+	Composite* p2 = a2->getParent();
+
+	Size silb1 = p1->getDegree();
+	Size silb2 = p2->getDegree();
+
+	if (silb1 == 1)
+	{
+		p2->appendChild(*a1);
+	}
+	else if (silb2 == 1)
+	{
+		p1->appendChild(*a2);
+	}
+
+	Molecule dummy_mol;
+	Molecule* m1 = a1->getAncestor(dummy_mol);
+	Molecule* m2 = a2->getAncestor(dummy_mol);
+
+	if (m1 == 0 || m1 == 0) return;
+
+	Composite* anchestor = a1->getLowestCommonAncestor(*a2);
+	if (anchestor == 0)
+	{
+		m1->spliceBefore(*m2);
+		getMainControl()->remove(*s2);
+		return;
+	}
+
+	if (m1 == p1)
+	{
+		p2->appendChild(*a1);
+	}
+	else
+	{
+		if (m2 == p2)
+		{
+			p1->appendChild(*a2);
+		}
+	}
+}
 
 	}//end of namespace 
 } //end of namespace

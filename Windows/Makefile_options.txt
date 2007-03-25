@@ -4,6 +4,7 @@
 ########## paths ########################
 BALL_WIN_DIR	=	$(BALL_PATH)\Windows
 BALL_CONTRIB	=	$(BALL_WIN_DIR)\Contrib
+PYTHON_DIR      =	$(BALL_CONTRIB)\Python
 BINPATH		=	$(BALL_CONTRIB)\bin
 SDIR		=	$(BALL_PATH)\source
 INC_DIR		=	$(BALL_PATH)\include\
@@ -31,7 +32,7 @@ LINKDEBUG	=
 
 ######### compiler options #################
 
-INCLUDES = /I "$(BALL_WIN_DIR)\include" /I "$(INC_DIR)" /I "$(BALL_CONTRIB)\regex-0.12" /I "$(BALL_CONTRIB)\ONC_RPC" /I "$(PYTHONDIR)\include"
+INCLUDES = /I "$(BALL_WIN_DIR)\include" /I "$(INC_DIR)" /I "$(BALL_CONTRIB)\regex-0.12" /I "$(BALL_CONTRIB)\ONC_RPC" /I "$(BALL_CONTRIB)\FFTW" /I "$(PYTHON_DIR)\include"  /I "$(BALL_CONTRIB)\glew\include"
 
 DEFINES = /D WIN32 /D _WINDOWS /D _USRDLL /D YY_NEVER_INTERACTIVE /D _WINDLL /U ERROR /U IN /U OUT
 
@@ -43,7 +44,7 @@ CC		= cl $(CCOPTIONS) $(INCLUDES) $(DEFINES) $(CC_OPT) $(CC_DEBUG) /TP
 
 ########## link options #################
 
-LIBS = $(PYTHONDIR)\libs\python23.lib $(BALL_CONTRIB)\ONC_RPC\librpc\oncrpc.lib imm32.lib winmm.lib ws2_32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib 
+LIBS = $(PYTHON_DIR)\libs\python23.lib $(BALL_CONTRIB)\FFTW\libfftw3f-3.lib $(BALL_CONTRIB)\ONC_RPC\librpc\oncrpc.lib imm32.lib winmm.lib ws2_32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib 
 
 LINKOPTIONS	= -nologo $(LIBS) $(LINKDEBUG) /INCREMENTAL:NO /OPT:NOWIN98 
 
@@ -55,6 +56,6 @@ LINKDLL = $(LINK) $(LINKOPTIONS_DLL)
 BALLVIEW_LIBS = $(VIEW_LIBS) $(BALL_WIN_DIR)\Libs\libVIEW\$(TARGETDIR)\libVIEW.lib
 
 ########### VIEW ########################
-VIEW_LIBS = "WS2_32.Lib" $(QTDIR)\lib\qt-mt$(QTVERSION).lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib $(BALL_WIN_DIR)\Libs\libBALL\$(TARGETDIR)\libBALL.lib
+VIEW_LIBS = "WS2_32.Lib" $(QTDIR)\lib\QtGui4.lib $(QTDIR)\lib\QtCore4.lib $(QTDIR)\lib\QtOpenGL4.lib  $(QTDIR)\lib\QtTest4.lib  $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib $(BALL_WIN_DIR)\Libs\libBALL\$(TARGETDIR)\libBALL.lib "$(BALL_CONTRIB)\glew\lib\glew32.lib"
 
-VIEW_INCLUDES = /I "$(QTDIR)\include"
+VIEW_INCLUDES = /I "$(QTDIR)\include\Qt" /I "$(QTDIR)\include\QtGui" /I "$(QTDIR)\include\QtCore" /I "$(QTDIR)\include\QtOpenGL" /I "$(QTDIR)\include" 

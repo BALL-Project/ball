@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RingClusterer_test.C,v 1.3 2006/08/15 20:37:03 oliver Exp $
+// $Id: RingClusterer_test.C,v 1.3.8.1 2007/03/25 21:48:54 oliver Exp $
 //
 // Author:
 //  Holger Franken
@@ -17,7 +17,7 @@
 
 ///////////////////////////
 
-START_TEST(RingClusterer, "$Id: RingClusterer_test.C,v 1.3 2006/08/15 20:37:03 oliver Exp $")
+START_TEST(RingClusterer, "$Id: RingClusterer_test.C,v 1.3.8.1 2007/03/25 21:48:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,0 +1,11 @@
+
+OBJS = \
+..\..\..\source\Applications\PyBALL\mainframe.obj\
+..\..\..\source\Applications\PyBALL\mainframe_moc.obj\
+..\..\..\source\Applications\PyBALL\main.obj
+
+UICS = 
+
+MOCS = \
+	..\..\..\source\Applications\PyBALL\mainframe.mymoc
+

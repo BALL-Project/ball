@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SimpleDescriptors_test.C,v 1.5.28.1 2007/03/19 21:43:46 bertsch Exp $
+// $Id: SimpleDescriptors_test.C,v 1.5.28.2 2007/03/25 21:48:58 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////

@@ -5,7 +5,7 @@ def runTest(name, model):
 	global result
 	getDisplayProperties().selectModel(model)
 	getDisplayProperties().createRepresentation(getSystems())
-	getGeometricControl().focusRepresentation()
+	getGeometricControl().focus()
 	getScene().move(Vector3(0,0,-nr_runs))
 	timer = Timer()
 	timer.start()

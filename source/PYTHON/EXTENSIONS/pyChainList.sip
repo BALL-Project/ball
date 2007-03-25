@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyChainList.sip,v 1.6 2005/12/23 17:02:55 amoll Exp $
+// $Id: pyChainList.sip,v 1.6.20.1 2007/03/25 21:37:20 oliver Exp $
+//
 //
 
 %MappedType PyChainList

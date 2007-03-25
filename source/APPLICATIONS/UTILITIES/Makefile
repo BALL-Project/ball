@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.18 2006/08/15 19:00:21 oliver Exp $
+# $Id: Makefile,v 1.18.8.1 2007/03/25 21:32:27 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -13,10 +13,10 @@ include ../../common.mak
 
 default: all
 
-
-
-EXECUTABLES = $(FFT_SOURCES)\
+EXECUTABLES =\
 	add_hydrogens\
+	assign_charges_from_rules\
+	assign_radii_from_rules\
 	assign_typenames_from_rules\
 	calculate_RMSD\
 	clip_protein_around_ligand\

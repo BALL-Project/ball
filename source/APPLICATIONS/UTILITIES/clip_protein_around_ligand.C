@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clip_protein_around_ligand.C,v 1.12 2006/05/21 17:14:34 anker Exp $
+// $Id: clip_protein_around_ligand.C,v 1.12.10.1 2007/03/25 21:32:29 oliver Exp $
 //
 // A program for extracting a parts of a protein around a ligand.
 // The output are XYZFiles because we use this program for creating AMSOL
@@ -432,9 +432,15 @@ int main(int argc, char** argv)
 							atoms += res_it->countAtoms();
 							heavy_atoms += count_heavy_atoms(*res_it);
 							// DEBUG
+<<<<<<< clip_protein_around_ligand.C
 							//Log.info() << "res:  a: " << atoms << ", h: " << heavy_atoms 
 							//	<< " (" << res_it->getFullName() << ":"
 							//	<< res_it->getID() << ")" << endl;
+=======
+							//Log.info() << "res:  a: " << atoms << ", h: " << heavy_atoms 
+							//	<< " (" << res_it->getFullName() << ":"
+//   								<< res_it->getID() << ")" << endl;
+>>>>>>> 1.9.2.3
 							// /DEBUG
 							if (atoms > max_atoms || heavy_atoms > max_heavy_atoms)
 							{

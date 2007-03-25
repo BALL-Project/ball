@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: assign_charges_from_rules.C,v 1.1 2006/05/21 10:18:10 anker Exp $
+// $Id: assign_charges_from_rules.C,v 1.1.12.1 2007/03/25 21:32:29 oliver Exp $
 //
 
 #include <BALL/common.h>

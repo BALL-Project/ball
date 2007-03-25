@@ -5,19 +5,30 @@
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/residue.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qcombobox.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qpushbutton.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-BondProperties::BondProperties( Atom* atom, QWidget* parent,  const char* name, bool modal, WFlags fl )
-  : BondPropertiesData( parent, name, modal, fl ),
+BondProperties::BondProperties( Atom* atom, QWidget* parent,  const char* name, bool, Qt::WFlags fl )
+  : QDialog(parent, fl),
+		Ui_BondPropertiesData(),
 		atom_(atom)
 {
+	setupUi(this);
+
+	// signals and slots connections
+	connect( ok_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
+	connect( bond_box, SIGNAL( activated(int) ), this, SLOT( bondSelected() ) );
+	connect( focus_atom, SIGNAL( clicked() ), this, SLOT( focusAtom() ) );
+	connect( focus_partner, SIGNAL( clicked() ), this, SLOT( focusPartner() ) );
+	connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
+
+	setObjectName(name);
+
 	if (atom->countBonds() == 0)
 	{
 		((ModularWidget*)parent)->setStatusbarText("Atom has no bonds");
@@ -35,7 +46,7 @@ BondProperties::BondProperties( Atom* atom, QWidget* parent,  const char* name, 
 	bond_box->clear();
 	for (Position pos = 0; pos < atom_->countBonds(); pos++)
 	{
-		bond_box->insertItem((String(pos + 1) + String(" . Bond")).c_str());
+		bond_box->addItem((String(pos + 1) + String(" . Bond")).c_str());
 	}
 	bondSelected();
 }
@@ -47,7 +58,7 @@ BondProperties::~BondProperties()
 
 void BondProperties::bondSelected()
 {
-	if (bond_box->currentItem() == -1)
+	if (bond_box->currentIndex() == -1)
 	{
 		name_edit->clear();
 		partner_edit->clear();
@@ -57,7 +68,7 @@ void BondProperties::bondSelected()
 		return;
 	}
 
-	Bond* bond = atom_->getBond(bond_box->currentItem());
+	Bond* bond = atom_->getBond(bond_box->currentIndex());
 	name_edit->setText(bond->getName().c_str());
 
 	String text;
@@ -126,27 +137,37 @@ void BondProperties::bondSelected()
 void BondProperties::focusAtom()
 {
 	if (!RTTI::isKindOf<MolecularControl>(*parent_) ||
-			bond_box->currentItem() == -1) 
+			bond_box->currentIndex() == -1) 
 	{
 		return;
 	}
+
 	MolecularControl& mc = *(MolecularControl*) parent_;
+	List<Composite*> list;
+	list.push_back(atom_);
+	mc.highlight(list);
+	if (atom_->isSelected()) mc.deselect();
+	else 									   mc.select();
 	mc.context_composite_ = atom_;
-	mc.selectedComposite_(atom_, !atom_->isSelected());
 	mc.centerCamera();
 }
 
 void BondProperties::focusPartner()
 {
 	if (!RTTI::isKindOf<MolecularControl>(*parent_) ||
-			bond_box->currentItem() == -1) 
+			bond_box->currentIndex() == -1) 
 	{
 		return;
 	}
+
+	Atom* partner = atom_->getBond(bond_box->currentIndex())->getPartner(*atom_);
 	MolecularControl& mc = *(MolecularControl*) parent_;
-	Atom* partner = atom_->getBond(bond_box->currentItem())->getPartner(*atom_);
+	List<Composite*> list;
+	list.push_back(partner);
+	mc.highlight(list);
+	if (partner->isSelected()) mc.deselect();
+	else 									     mc.select();
 	mc.context_composite_ = partner;
-	mc.selectedComposite_(partner, !partner->isSelected());
 	mc.centerCamera();
 }
 

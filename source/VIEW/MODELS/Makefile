@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.9 2006/01/26 16:12:55 oliver Exp $
+# $Id: Makefile,v 1.9.14.1 2007/03/25 22:02:28 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -17,6 +17,7 @@ CPP_SOURCES=\
 	ballAndStickModel.C\
 	cartoonModel.C\
 	colorProcessor.C\
+	fieldLineCreator.C\
 	forceModel.C\
 	HBondModel.C\
 	labelModel.C\

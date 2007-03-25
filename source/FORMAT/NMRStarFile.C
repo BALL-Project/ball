@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: NMRStarFile.C,v 1.25 2003/08/26 09:17:46 oliver Exp $
+// $Id: NMRStarFile.C,v 1.25.30.1 2007/03/25 22:00:19 oliver Exp $
 //
 
 #include <BALL/FORMAT/NMRStarFile.h>

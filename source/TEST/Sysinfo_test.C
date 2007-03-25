@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Sysinfo_test.C,v 1.14 2005/12/23 17:03:12 amoll Exp $
+// $Id: Sysinfo_test.C,v 1.14.20.1 2007/03/25 21:49:06 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 #include <utility>
 ///////////////////////////
 
-START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.14 2005/12/23 17:03:12 amoll Exp $")
+START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.14.20.1 2007/03/25 21:49:06 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

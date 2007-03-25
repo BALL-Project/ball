@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.22 2006/01/23 20:45:02 oliver Exp $
+# $Id: Makefile,v 1.22.14.1 2007/03/25 22:00:04 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -26,7 +26,11 @@ CPP_SOURCES=\
 	selectable.C\
 	textPersistenceManager.C\
 	timeStamp.C\
-	visitor.C
+	visitor.C\
+	objectCreator.C\
+	moleculeObjectCreator.C\
+	molecularInformation.C\
+	client.C
 
 ifeq ($(BALL_HAS_XDR),true)
 	CPP_SOURCES += XDRPersistenceManager.C

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.C,v 1.27 2005/01/25 01:05:10 amoll Exp $
+// $Id: steepestDescent.C,v 1.27.26.1 2007/03/25 22:00:31 oliver Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
@@ -134,12 +134,17 @@ namespace BALL
 			return true;
 		}
 
+		// Initial step size:
+		double initial_step = 1.0;
+
 		// If the run is to be continued, don't reset the iteration counter.
 		if (!resume)
 		{
 			// reset the number of iterations for a restart
 			setNumberOfIterations(0);
 			same_energy_counter_ = 0;
+			
+			step_ = initial_step;
 		}
 		Size max_iterations = std::min(getNumberOfIterations() + iterations, getMaxNumberOfIterations());
 		
@@ -148,10 +153,6 @@ namespace BALL
 
 		// Some aliases
 		AtomVector& atoms(const_cast<AtomVector&>(getForceField()->getAtoms()));
-
-		// Initial step size:
-		double initial_step = 1.0;
-		step_ = initial_step;
 
 		// Compute initial energy and gradient.
 		updateEnergy();
@@ -179,6 +180,7 @@ namespace BALL
 				// Didn't help, we abort the minimization.
 				if (lambda < 0)
 				{
+					aborted_ = true;
 					break;
 				}
 			}

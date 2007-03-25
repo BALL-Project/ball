@@ -1,14 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.20 2006/08/12 14:45:59 oliver Exp $
+// $Id: main.C,v 1.20.8.1 2007/03/25 21:32:17 oliver Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
-#include <qapplication.h>
-#include <qmessagebox.h>
-#include <qsplashscreen.h>
-#include <qgl.h>
+#include <QtGui/qapplication.h>
+#include <BALL/CONFIG/config.h>
+
+#ifdef BALL_USE_GLEW
+#	include <GL/glew.h>
+#endif
+
+#include <QtGui/qmessagebox.h>
+#include <QtOpenGL/qgl.h>
 
 #include "mainframe.h"
 #include "splash.h"
@@ -20,8 +25,15 @@
 
 void logMessages(QtMsgType type, const char *msg)
 {
+<<<<<<< main.C
 	switch (type) 
 	{
+=======
+	BALL::String s(msg);
+	if (s.hasPrefix("QTextBrowser")) return;
+
+	switch ( type ) {
+>>>>>>> 1.19.2.9
 		case QtDebugMsg:
 				BALL::Log.info() << msg << std::endl;
 				break;
@@ -29,8 +41,16 @@ void logMessages(QtMsgType type, const char *msg)
 				BALL::Log.warn() << msg << std::endl;
 				break;
 		case QtFatalMsg:
+<<<<<<< main.C
 				BALL::Log.error() << msg << std::endl;
 				abort();                    // deliberately dump core
+=======
+				fprintf( stderr, "Fatal: %s\n", msg );
+				abort();                    // deliberately core dump
+		case QtCriticalMsg:
+				fprintf( stderr, "Critical: %s\n", msg );
+				abort();                    // deliberately core dump
+>>>>>>> 1.19.2.9
 	}
 }
 
@@ -50,6 +70,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 
 	qInstallMsgHandler(logMessages);
 
+	putenv("BALL_RETURN_VALUE=");
 	QApplication application(argc, argv);
 
   QPixmap splash_pm(splash_xpm);
@@ -61,7 +82,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	{
 		QMessageBox::critical(0, "Error while starting BALLView", 
 				"Your computer has no OpenGL support, please install the correct drivers. Aborting for now...",
-				QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+				QMessageBox::Ok, Qt::NoButton, Qt::NoButton);
 		return -1;
 	}
 
@@ -90,8 +111,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 
 	// =============== initialize Mainframe ============================================
 	// Create the mainframe.
-	BALL::Mainframe mainframe;
-	application.setMainWidget(&mainframe);
+	BALL::Mainframe mainframe(0, "Mainframe");
 
 	// can we use the users homedir as working dir?
 	if (home_dir != "")
@@ -132,5 +152,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	delete splash;
 
   // Hand over control to the application.
-  return application.exec();
+  int value = application.exec();
+	char*	return_value = getenv("BALL_RETURN_VALUE");
+	if (return_value != 0)
+	{
+		try
+		{
+			value = BALL::String(return_value).toInt();
+		}
+		catch(...)
+		{
+		}
+	}
+
+	return value;
 }

@@ -2,7 +2,7 @@
 // vi: set ts=2:
 //
 
-// $Id: SnapShotManager_test.C,v 1.5 2002/02/27 12:24:56 sturm Exp $
+// $Id: SnapShotManager_test.C,v 1.5.32.1 2007/03/25 21:49:00 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(SnapShotManager, "$Id: SnapShotManager_test.C,v 1.5 2002/02/27 12:24:56 sturm Exp $")
+START_TEST(SnapShotManager, "$Id: SnapShotManager_test.C,v 1.5.32.1 2007/03/25 21:49:00 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

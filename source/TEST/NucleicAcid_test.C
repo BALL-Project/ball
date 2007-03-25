@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: NucleicAcid_test.C,v 1.16 2004/11/07 08:25:37 oliver Exp $
+// $Id: NucleicAcid_test.C,v 1.16.28.1 2007/03/25 21:47:23 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.16 2004/11/07 08:25:37 oliver Exp $")
+START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.16.28.1 2007/03/25 21:47:23 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

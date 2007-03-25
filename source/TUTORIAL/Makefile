@@ -1,10 +1,17 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
 #
-# $Id: Makefile,v 1.14 2005/12/23 17:03:18 amoll Exp $
+# $Id: Makefile,v 1.14.18.1 2007/03/25 22:00:36 oliver Exp $
+#
+# Author:
+#   Oliver Kohlbacher
 #
 
-#========================
-# BALL/TUTORIAL Makefile
-#========================
+DIRECTORY=APPLICATIONS/UTILITIES
+
+include ../common.mak
+
+default: all
 
 EXECUTABLES=\
 	tutorial1\
@@ -13,31 +20,26 @@ EXECUTABLES=\
 	bounding_box\
 	string_tutorial
 
+# default target
 all:	$(EXECUTABLES)
 
-include ../common.mak
+# required for clean and depend
+CPP_SOURCES=$(EXECUTABLES:=.C)
+OBJECTS=$(EXECUTABLES:=.o)
+
+
 -include .Dependencies
 
 # remove the library specific flags
-BALL_CXXFLAGS=
+# and replace them by the application specific
+# flags
+LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)
 
-BALL_INCLUDES=$(VIEW_INCLUDES)
+.o:
+	$(CXX) $(CXXFLAGS) $*.o $(LDFLAGS) -o $@ $(LIBS)
 
-clean:	default_clean
-	@-$(RM) *.o 2>/dev/null
+%%.C:
+	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.C $(LDFLAGS) -o $@ $(LIBS)
 
-tutorial1:	tutorial1.o
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
-
-tutorial2:	tutorial2.o
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
-
-tutorial3:	tutorial3.o
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
-
-bounding_box:	bounding_box.o 
-	$(CXX)	$(LDFLAGS) -o $@ $(LIBS) $(VIEW_LIBS)
-
-string_tutorial:	string_tutorial.o 
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS) 
-
+clean:  default_clean
+	@$(RM) -rf *.o *~ *.log ii_files Templates.DB   SunWS_cache _*.TMP core a.out $(EXECUTABLES)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Atom_test.C,v 1.25 2005/02/13 22:38:49 oliver Exp $
+// $Id: Atom_test.C,v 1.25.28.1 2007/03/25 21:46:48 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -20,7 +20,7 @@
 #include "ItemCollector.h"
 ///////////////////////////
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.25 2005/02/13 22:38:49 oliver Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.25.28.1 2007/03/25 21:46:48 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,0 +1,218 @@
+#!/bin/bash -e
+
+#######################################
+#### MODIFY THESE SETTINGS, IF DESIRED:
+CDEBUG="--enable-debuginfo"
+#CDEBUG="--disable-debuginfo"
+
+COPTI="--enable-optimization"
+#COPTI="--disable-optimization"
+
+CPYTHON="--enable-python"
+#CPYTHON="--disable-python"
+
+CVIEW=""
+#CVIEW="--disable-VIEW"
+
+CGSL="--enable-gsl"
+#CGSL="--disable-gsl"
+#######################################
+
+# ignore below
+
+export BALL_PATH=`pwd | sed "s/source$//g"`
+CDIR=""
+
+export OS=`uname`
+
+download()
+{
+	if [ -f /usr/bin/curl ]
+	then 
+		/usr/bin/curl $1 -o $2
+	else
+		wget $1
+	fi
+}
+
+askContrib()
+{
+	cd $BALL_PATH
+	echo 
+	echo This installer needs the Linux/Unix/MacOS Contrib package from the 
+	echo BALL website: http://www.ballview.org/Downloads/Develop
+	echo Have you already downloaded and installed this package?
+	echo "(If a previous build of the contrib package failed, choose *No*)"
+	OPTIONS="Yes No"
+	select INST in $OPTIONS; do
+		if [ "$INST" = "Yes" ]; then
+			echo Please enter the position of the contrib directory.
+			echo "(Press Return for searching in "$BALL_PATH"/contrib)"
+			read CDIR
+			if [ "$CDIR" = "" ]; then
+				export CDIR="$BALL_PATH/contrib"
+			fi
+			if [ -d "$CDIR" ]; then
+				echo found package directory $CDIR ...
+				return 0
+			else
+				echo Could not find package directory!
+				echo Aborting...
+				exit 11
+			fi
+			else if [ "$INST" = "No" ]; then
+				export VERSION=`cat "include/BALL/BALL.doc" | grep version | sed "s/.version//" | tr -d ' ' | tr -d '\t'`
+				echo Assuming version is:$VERSION ....
+				if [ "$OS" != Darwin ]
+				then
+					PACKAGE="contrib-"$VERSION".tar.gz"
+				else
+					PACKAGE="contrib-"$VERSION"-darwin.tar.gz"
+				fi
+				echo Trying to download the current Contrib file: $PACKAGE
+				URL=http://www.ballview.org/Downloads/Contrib/$PACKAGE
+				echo from $URL ...
+				echo
+				rm -f $PACKAGE 
+				download $URL $PACKAGE
+				rm -rf contrib
+				tar xzf $PACKAGE
+				rm $PACKAGE
+				export CDIR="$BALL_PATH/contrib"
+				cd $CDIR
+				./build_contrib
+				return $?
+			fi
+		fi
+	done
+}
+
+
+automaticInstaller()
+{
+	echo 
+	echo Running configure ...
+	cd $BALL_PATH/source
+	touch config.lic
+	autoconf
+ ./configure 	$CDEBUG\
+							$COPTI\
+							$CPYTHON\
+							$CVIEW\
+							$CGSL\
+						  "--with-gsl-lib=$LIBDIR"\
+							"--with-gsl-incl=$INCDIR"\
+							"--with-sip=$BINDIR/sip"\
+							"--with-sip-incl=$INCDIR"\
+							"--with-sip-lib=$LIBDIR"\
+							"--enable-fftw"\
+							"--disable-fftw-float"\
+							"--disable-fftw-longdbl"\
+							"--enable-double-cplx"\
+							"--with-fftw-lib=$LIBDIR"\
+							"--with-fftw-incl=$INCDIR"\
+							"--with-glew-incl=$INCDIR"\
+							"--with-glew-libs=$LIBDIR"\
+							"--with-qt-incl=$INCDIR"\
+							"--with-qt-libs=$LIBDIR"\
+							"--with-moc=$BINDIR/moc"\
+							"--with-uic=$BINDIR/uic"\
+
+	make depend
+	make "MAKE=make -j2"
+	make install
+	if [ "$CVIEW" = "" ]; then
+		cd $BALL_PATH/source/APPLICATIONS/BALLVIEW
+		make
+	fi
+	if [ "$CPYTHON" = "--enable-python" ]; then
+		cd $BALL_PATH/source/PYTHON/EXTENSIONS
+		make depend
+		make "MAKE=make -j2"
+		make install
+	fi
+	cd $BALL_PATH/source
+	LLPATH=$BALL_PATH/lib/`cat config.mak | grep "BINFMT   =" | sed "s/BINFMT   =//" `
+	LPATH=$LIBDIR:$LLPATH
+	rm -f $LLPATH/sip.so
+	cp $LIBDIR/sip.so $LLPATH
+	echo "====================================================================="
+	echo 
+	LPATHN="LD_LIBRARY_PATH"
+	if [ "$OS" == Darwin ]
+	then
+		LPATHN=DYLD_LIBRARY_PATH
+	fi
+	echo Dont forget to add the following directories to your $LPATHN and PYTHONPATH:
+	echo
+	echo $LPATH
+	echo 
+	echo "(export $LPATHN = $LPATH)"
+	echo "(export PYTHONPATH = $LPATH)"
+	echo
+	echo Building documentation ...
+	echo
+	make doc &> build.log
+	echo 
+	echo Build finished successfully!
+	echo
+}
+
+customInstaller()
+{
+	echo Not yet supported...
+	echo Either use the auto installer option OR
+	echo modify the settings in the header of this file by hand.
+	exit
+}
+
+if [ $# != 0 ] 
+then
+	if [ $1 == "--help" ]
+	then
+		echo Usage: either without any arguments or with the
+		echo position of the contrib directory.
+		exit 0
+	fi
+
+	CDIR=$1
+	if [ ! -d $CDIR ]
+	then 
+		echo Could not find contrib directory $CDIR
+		echo Aborting ...
+		echo
+		exit 22
+	fi
+	automaticInstaller
+	exit $0
+else
+	echo
+	echo This is the automatic BALL installer, using this script is
+	echo only allowed if you have read and accepted the BALL licence
+	echo file under BALL/source/.licence.
+	echo 
+	echo Furthermore, make sure that you have the following packages 
+	echo installed on your machine:
+	echo bison, flex, python, python-dev, libXmu-dev, libXi-dev, 
+	echo libglu-dev, libx11-dev, autoconf, doxygen, tidy, dvipdf, latex, 
+	echo wget *or* curl
+	echo
+	echo To proceed, please answer the following questions:
+	echo "(Control-C will abort the installer.)"
+	echo
+	echo Which kind of installation do you want?
+	OPTIONS="Automatic Custom"
+	select INST in $OPTIONS; do
+		if [ "$INST" = "Automatic" ]; then
+			askContrib
+			BINDIR=$CDIR/bin
+			INCDIR=$CDIR/include
+			LIBDIR=$CDIR/lib
+			automaticInstaller
+		elif [ "$INST" = "Custom" ]; then
+			customInstaller
+		fi
+		exit
+	done
+fi
+

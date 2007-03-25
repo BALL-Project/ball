@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.16 2005/12/23 17:02:30 amoll Exp $
+// $Id: mainframe.h,v 1.16.16.1 2007/03/25 21:32:18 oliver Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -15,19 +15,7 @@
 # include <BALL/VIEW/WIDGETS/scene.h>
 #endif
 
-#ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
-# include <BALL/VIEW/DIALOGS/displayProperties.h>
-#endif
-
-#ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
-# include <BALL/VIEW/WIDGETS/datasetControl.h>
-#endif
-
-#ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
-# include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
-#endif
-
-#include <qwidget.h>
+#include <QtGui/qwidget.h>
 
 namespace BALL
 {
@@ -52,43 +40,23 @@ namespace BALL
 		public slots:
 
 		///
-		void exportPOVRay();
-
-		///
-		void printScene();
+		void show();
 
 		/// Catch key events
-		void keyPressEvent(QKeyEvent* e);
+		bool eventFilter(QObject*, QEvent* e);
 			
-		///
-		void toggleFullScreen();
-
 		/// remove all loaded Molecules and Representations, reset Coloring options
 		void reset();
 
 		// Help menu
 		void about();
 
-		/** Open a file.
-				Calls MolecularFileDialog::openFile
-		*/
-		virtual void openFile(const String& file) throw();
-
 		///
- 		void saveBALLViewProjectFile() throw();
-
-		///
-		void loadBALLViewProjectFile() throw();
-
-		///
-		virtual void checkMenus();
+		void howToCite();
 
 		protected:
 
-		Scene*										scene_;
-		DatasetControl* 					dataset_control_;
-		bool 											fullscreen_;
-		QRect 										last_size_;
+		Scene*				scene_;
 	};
 
 } // namespace BALL

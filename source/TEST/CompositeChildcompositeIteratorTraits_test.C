@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CompositeChildcompositeIteratorTraits_test.C,v 1.1 2003/06/19 10:45:51 oliver Exp $
+// $Id: CompositeChildcompositeIteratorTraits_test.C,v 1.1.32.1 2007/03/25 21:46:56 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -33,7 +33,7 @@ class MyPred
 	const Composite* composite_;
 };
 
-START_TEST(CompositeIteratorTraits, "$Id: CompositeChildcompositeIteratorTraits_test.C,v 1.1 2003/06/19 10:45:51 oliver Exp $")
+START_TEST(CompositeIteratorTraits, "$Id: CompositeChildcompositeIteratorTraits_test.C,v 1.1.32.1 2007/03/25 21:46:56 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

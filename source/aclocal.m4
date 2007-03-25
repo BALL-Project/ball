@@ -1,7 +1,7 @@
 /dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.89 2006/04/29 08:08:16 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.89.10.1 2007/03/25 21:59:54 oliver Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -378,6 +378,15 @@ if test "$OS" = Linux ; then
 		ARCHITECTURE=x86_64
 		BINFMT=Linux-x86_64
 	fi
+	if test `echo $PROCESSOR` = ppc ; then
+    ARCHITECTURE=ppc32
+    BINFMT=Linux-ppc32
+	fi
+	if test `echo $PROCESSOR` = ppc64 ; then
+    ARCHITECTURE=ppc64
+    BINFMT=Linux-ppc64
+	fi
+
 	if test "${ARCHITECTURE}" = "unknown" -a "${PROJECT[]_IGNORE_ARCH}" = ""; then
 		AC_MSG_RESULT(OS: ${OS} / hardware: ${PROCESSOR})
 		AC_MSG_RESULT(Sorry - this architecture is currently not supported...)
@@ -457,6 +466,13 @@ fi
 if test "$ARCHITECTURE" = alpha ; then
 	AC_DEFINE(PROJECT[]_ARCH_ALPHA,ALPHA)
 fi
+if test "$ARCHITECTURE" = ppc64 ; then
+	AC_DEFINE(PROJECT[]_ARCH_POWERPC64,POWERPC64)
+fi
+if test "$ARCHITECTURE" = ppc32 ; then
+	AC_DEFINE(PROJECT[]_ARCH_POWERPC32,POWERPC32)
+fi
+
 
 AC_MSG_RESULT($OS $OSREV (BINFMT=$BINFMT))
 
@@ -2755,10 +2771,11 @@ dnl
 if test "${OS}" = "Darwin" ; then
 	VIEW_PLATFORM="OpenGL-Darwin"
 	OPENGL_LIBOPTS="-framework Carbon -framework OpenGL -framework AGL"
+	BALL_INCLUDES="${BALL_INCLUDES} -I/usr/X11R6/include"
 	X11_LIBPATHOPT=""
 	X11_INCPATH=""
-	OPENGL_INCPATH="-I/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers -I/System/Library/Frameworks/AGL.framework/Versions/A/Headers"
-	VIEW_INCLUDES="${VIEW_INCLUDES} ${OPENGL_INCPATH}"
+	dnl OPENGL_INCPATH="-I/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers -I/System/Library/Frameworks/AGL.framework/Versions/A/Headers"
+	dnl VIEW_INCLUDES="${VIEW_INCLUDES} ${OPENGL_INCPATH}"
 fi
 
 if test "${VIEW_PLATFORM}" = Mesa ; then
@@ -2829,15 +2846,63 @@ if test ${VIEW_PLATFORM} = OpenGL ; then
 		VIEW_INCLUDES="${VIEW_INCLUDES} -I${OPENGL_INCPATH}"
 	fi
 fi
-])
 
+])
+dnl end of opengl tests
+
+dnl
+dnl  Test for GLEW (GL Extensions Wrangler) library used 
+dnl  to handle OpenGL extensions in a more or less portable fashion
+dnl
+AC_DEFUN(CF_VIEW_GLEW, [
+if test ${VIEW_PLATFORM} = OpenGL ; then
+	AC_MSG_CHECKING(for GLEW library)
+	CF_FIND_LIB(LIBPATH,libGLEW, ${GLEW_LIBPATH})
+	if test "${LIBPATH}" = "" ; then
+		AC_MSG_RESULT((not found!))
+	else
+		AC_MSG_RESULT((${LIBPATH}))
+	fi
+	GLEW_LIBPATH="${LIBPATH}"
+
+	if test "${GLEW_LIBPATH}" != "" ; then
+		AC_MSG_CHECKING(for GLEW headers)
+		CF_FIND_HEADER(INCPATH,GL/glew.h, ${GLEW_INCPATH})
+
+		if test "${INCPATH}" = "" ; then
+			AC_MSG_RESULT((not found!))
+			CF_ERROR(Could not find GLEW headers (GL/glew.h). Please specify their location with --with-glew-incl=DIR)
+		else
+			if test "${INCPATH}" != "" ; then
+				AC_MSG_RESULT((${INCPATH}))
+				AC_DEFINE(PROJECT[]_USE_GLEW,)
+				GLEW_INCPATH="${INCPATH}"
+	
+				dnl
+				dnl  Define a few options used later to link/inlucde GLEW stuff.
+ 				dnl
+				BALL_HAS_GLEW=true
+				GLEW_LIBOPTS="-lGLEW"
+				if test "${GLEW_LIBPATH}" != /usr/lib -a "${GLEW_LIBPATH}" != /lib -a "${GLEW_LIBPATH}" != "" ; then
+					GLEW_LIBOPTS="-L${GLEW_LIBPATH} ${GLEW_LIBOPTS}"
+				fi
+
+				if test "${GLEW_INCPATH}" != /usr/include/GL && test "${GLEW_INCPATH}" != "" ; then
+					GLEW_INCLUDES="-I${GLEW_INCPATH}"
+					PROJECT[]_INCLUDES="${PROJECT[]_INCLUDES} ${GLEW_INCLUDES}"
+				fi
+			fi
+		fi
+	fi
+fi
+])
 
 AC_DEFUN(CF_VIEW_QT_BASICS, [
 	AC_MSG_CHECKING(for QT headers)
 	if test "${QTDIR}" != "" ; then
-		CF_FIND_HEADER(QT_INCPATH,qgl.h,${QTDIR}/include ${PROJECT[]_PATH}/contrib/qt/include)
+		CF_FIND_HEADER(QT_INCPATH,Qt/qglobal.h,${QTDIR}/include ${PROJECT[]_PATH}/contrib/qt/include)
 	else
-		CF_FIND_HEADER(QT_INCPATH,qgl.h,${PROJECT[]_PATH}/contrib/qt/include)
+		CF_FIND_HEADER(QT_INCPATH,Qt/qglobal.h,${PROJECT[]_PATH}/contrib/qt/include)
 	fi
 
 	if test "${QT_INCPATH}" = "" ; then
@@ -2849,42 +2914,27 @@ AC_DEFUN(CF_VIEW_QT_BASICS, [
 		AC_MSG_RESULT(path - configure will recognize this, too.)
 		AC_MSG_RESULT(The QT package can be found under the following URL:)
 		AC_MSG_RESULT(  http://www.troll.no/qt)
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(Note: BALL requires QT 4.x! QT3 is no longer supported.)
 		CF_ERROR
 	else
 		AC_MSG_RESULT((${QT_INCPATH}))	
 	fi
 
-	AC_MSG_CHECKING(for libqt${QT_MT_SUFFIX})
+	AC_MSG_CHECKING(for libQtCore)
 	if test "${QTDIR}" != "" ; then
-		if test "${QT_MT_SUFFIX}" = "-mt" -o "${QT_MT_SUFFIX+set}" != set ; then
-			if test -a "${QTDIR}/lib/libqt-mt.so" ; then
-				QT_LIBPATH="${QTDIR}/lib"
-			elif test -a "${QTDIR}/lib/libqt.so" ; then
-				QT_LIBPATH="${QTDIR}/lib"
-				QT_MT_SUFFIX=""
-			fi
-			if test "${QT_LIBPATH}" = "" ; then
-				CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${PROJECT[]_PATH}/contrib/qt/include)
-			fi
-		else	
-			if test -a "${QTDIR}/lib/libqt.so" ; then
-				QT_LIBPATH="${QTDIR}/lib"
-			elif test -a "${QTDIR}/lib/libqt-mt.so" ; then
-				QT_LIBPATH="${QTDIR}/lib"
-				QT_MT_SUFFIX="-mt"
-			fi
-			if test "${QT_LIBPATH}" = "" ; then
-				CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${PROJECT[]_PATH}/contrib/qt/include)
-			fi
+		if test -a "${QTDIR}/lib/libQtCore.so" ; then
+			QT_LIBPATH="${QTDIR}/lib"
 		fi
-	else
-		CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${PROJECT[]_PATH}/contrib/qt/lib ${PROJECT[]_PATH}/contrib/qt/lib/${BINFMT})
+		if test "${QT_LIBPATH}" = "" ; then
+			CF_FIND_LIB(QT_LIBPATH, libQtCore, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${PROJECT[]_PATH}/contrib/lib)
+		fi
 	fi
 
 	if test "${QT_LIBPATH}" = "" ; then
 		AC_MSG_RESULT((not found!))
 		AC_MSG_RESULT()
-		AC_MSG_RESULT([The QT library could not be found. Please specify the path to libqt])
+		AC_MSG_RESULT([The QtCore library could not be found. Please specify the path to libqt])
  		AC_MSG_RESULT([by passing the option --with-qt-libs=DIR to configure.])
 		AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
 		AC_MSG_RESULT([path - configure will recognize this, too.])
@@ -2892,56 +2942,69 @@ AC_DEFUN(CF_VIEW_QT_BASICS, [
 		AC_MSG_RESULT([instead of libqt), please specify the option --with-threadsafe-qt.])
 		AC_MSG_RESULT([The QT package can be found under the following URL:])
 		AC_MSG_RESULT(  http://www.troll.no/qt)
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(Note: BALL requires QT 4.x! QT3 is no longer supported.)
 		CF_ERROR
 	else
 		AC_MSG_RESULT((${QT_LIBPATH}))	
 	fi
 
-				
-	dnl
-	dnl extract the QT version number and version number string from include/qglobal.h
-	dnl
-	QT_VERSION=`${GREP} "#define QT_VERSION[^_]" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
-	QT_VERSION_STR=`${GREP} "#define QT_VERSION_STR" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3 | ${TR} -d '\042'`
-	AC_MSG_CHECKING(for QT version number in qglobal.h)
-	if test "${QT_VERSION}" = "" ; then
-		AC_MSG_RESULT([<unknown>])
-		AC_MSG_RESULT()
-		AC_MSG_RESULT([  Could not determine version number of QT library -- please])
-		AC_MSG_RESULT([  check config.log for details.])
-		AC_MSG_RESULT([  You might have a problem with your (DY)LD_LIBRARY_PATH.])
-		AC_MSG_RESULT([  Please check the settings of QTDIR as well or specify])
-		AC_MSG_RESULT([  the path to the library/headers with])
-		AC_MSG_RESULT([    --with-qt-libs=<DIR> / --with-qt-incl=<DIR>])
-		CF_ERROR
-	else
-		AC_MSG_RESULT([${QT_VERSION} (${QT_VERSION_STR})])
-		AC_DEFINE_UNQUOTED(PROJECT[]_QT_VERSION, ${QT_VERSION})
-		AC_DEFINE_UNQUOTED(PROJECT[]_QT_VERSION_STR, ${QT_VERSION_STR})
-		if test "${QT_MT_SUFFIX}" = "-mt" ; then
-			AC_DEFINE(PROJECT[]_QT_HAS_THREADS,)
+	AC_MSG_CHECKING(for libQtGui)
+	if test "${QTDIR}" != "" ; then
+		if test -a "${QTDIR}/lib/libQtGui.so" ; then
+			QT_LIBPATH="${QTDIR}/lib"
+			AC_MSG_RESULT((${QT_LIBPATH}))	
 		fi
-	fi			
-		
-	dnl
-	dnl  Check for the right version number of QT
-	dnl
-	if test `echo ${QT_VERSION} | ${CUT} -c1-2` != "0x" ; then
-		if test "${QT_VERSION}" -lt ${QT_MIN_VERSION} -o "${QT_VERSION}" -gt ${QT_MAX_VERSION} ; then
+		if test "${QT_LIBPATH}" = "" ; then
+			CF_FIND_LIB(QT_LIBPATH, libQtGui, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${PROJECT[]_PATH}/contrib/lib)
+			AC_MSG_RESULT((${QT_LIBPATH}))	
+		fi
+		if test "${QT_LIBPATH}" = "" ; then
+			AC_MSG_RESULT((not found!))
 			AC_MSG_RESULT()
-			AC_MSG_RESULT([QT version ]${QT_RECOMMENDED_VERSION}[ is recommended for PROJECT[]. Please update])
-			AC_MSG_RESULT([to a suitable version or specify the path to a more])
-			AC_MSG_RESULT([suitable version of libqt* by passing the option --with-qt-libs=DIR])
-			AC_MSG_RESULT([to configure.])
+			AC_MSG_RESULT([The QtGui library could not be found. Please specify the path to libqt])
+			AC_MSG_RESULT([by passing the option --with-qt-libs=DIR to configure.])
 			AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
 			AC_MSG_RESULT([path - configure will recognize this, too.])
+			AC_MSG_RESULT([If the QT library was built with thread support enabled (libqt-mt])
+			AC_MSG_RESULT([instead of libqt), please specify the option --with-threadsafe-qt.])
+			AC_MSG_RESULT([The QT package can be found under the following URL:])
+			AC_MSG_RESULT(  http://www.troll.no/qt)
 			AC_MSG_RESULT()
-			AC_MSG_RESULT([The complete QT package can be found under the following URL:])
-			AC_MSG_RESULT([  http://www.troll.no/qt])
+			AC_MSG_RESULT(Note: BALL requires QT 4.x! QT3 is no longer supported.)
 			CF_ERROR
 		fi
 	fi
 
+	AC_MSG_CHECKING(for libQtOpenGL)
+	if test "${QTDIR}" != "" ; then
+		if test -a "${QTDIR}/lib/libQtOpenGL.so" ; then
+			QT_LIBPATH="${QTDIR}/lib"
+			AC_MSG_RESULT((${QT_LIBPATH}))	
+		fi
+		if test "${QT_LIBPATH}" = "" ; then
+			CF_FIND_LIB(QT_LIBPATH, libQtopenGL, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${PROJECT[]_PATH}/contrib/lib)
+			AC_MSG_RESULT((${QT_LIBPATH}))	
+		fi
+		if test "${QT_LIBPATH}" = "" ; then
+			AC_MSG_RESULT((not found!))
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([The QtOpenGL library could not be found. Please specify the path to libqt])
+			AC_MSG_RESULT([by passing the option --with-qt-libs=DIR to configure.])
+			AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
+			AC_MSG_RESULT([path - configure will recognize this, too.])
+			AC_MSG_RESULT([If the QT library was built with thread support enabled (libqt-mt])
+			AC_MSG_RESULT([instead of libqt), please specify the option --with-threadsafe-qt.])
+			AC_MSG_RESULT([The QT package can be found under the following URL:])
+			AC_MSG_RESULT(  http://www.troll.no/qt)
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Note: BALL requires QT 4.x! QT3 is no longer supported.)
+			CF_ERROR
+		fi
+	fi
+
+	AC_DEFINE(PROJECT[]_QT_HAS_THREADS,)
+		
 	dnl
 	dnl	Add the QT include path to the VIEW includes
 	dnl
@@ -2950,14 +3013,16 @@ AC_DEFUN(CF_VIEW_QT_BASICS, [
 	fi	
 ])
 
+dnl
 dnl Make sure we can link against OpenGL or Mesa
+dnl
 AC_DEFUN(CF_VIEW_OPENGL_LINK_TEST, [
 	if test "${VIEW_PLATFORM}" = OpenGL ; then
 		if test "${OPENGL_LIBPATH}" != "/usr/lib" -a "${OPENGL_LIBPATH}" != "" ; then
-			OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -lGLU -lGL"
+			OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -lGLU -lGL ${GLEW_LIBOPTS}"
 		else
 			OPENGL_LIBPATH=""
-			OPENGL_LIBOPTS="-lGLU -lGL"
+			OPENGL_LIBOPTS="-lGLU -lGL ${GLEW_LIBOPTS} ${GLEW_INCLUDES}"
 		fi
 
 		dnl make sure we have OpenGL libs and no Mesa libs!
@@ -3039,7 +3104,7 @@ AC_DEFUN(CF_VIEW_OPENGL_LINK_TEST, [
 			CF_ERROR
 		else
 			AC_MSG_RESULT(yes)
-			OPENGL_LIBOPTS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS}"
+			OPENGL_LIBOPTS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${GLEW_LIBOPTS} ${GLEW_INCLUDES}"
 		fi
 	fi
 ])
@@ -3050,41 +3115,46 @@ AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
 		AC_MSG_CHECKING(linking against QT libraries)
 
 		if test "${QT_LIBPATH}" != "/usr/lib" ; then
-			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lqgl -lqt${QT_MT_SUFFIX}"
-			QT_LIBOPTS="-L${QT_LIBPATH} -lqt${QT_MT_SUFFIX}"
+			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest"
+			QT_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest"
+			if test "${OS}" = "Darwin" ; then
+				QTQGL_LIBOPTS="-F${QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest"
+				QT_LIBOPTS="-F${QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest"
+			fi
 		else 
 			QT_LIBPATH=""
-			QTQGL_LIBOPTS="-lqgl -lqt${QT_MT_SUFFIX}"
-			QT_LIBOPTS="-lqt${QT_MT_SUFFIX}"
+			QTQGL_LIBOPTS=" -lQtOpenGL -lQtGui -lQtCore -lQtTest"
+			QT_LIBOPTS="-lQtOpenGL -lQtGui -lQtCore -lQtTest"
+			if test "${OS}" = "Darwin" ; then
+				QTQGL_LIBOPTS="-framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest"
+				QT_LIBOPTS="-framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest"
+			fi
 		fi
 
 		SAVE_LIBS=${LIBS}
 		LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
-		AC_TRY_LINK([#include <qgl.h>], [QGLWidget widget;], QT_LINKING_OK=1)
+		AC_TRY_LINK([#include <QtOpenGL/QGLWidget>], [QGLWidget wid;], QT_LINKING_OK=1)
 		LIBS=${SAVE_LIBS}
 
 		if test "${QT_LINKING_OK+set}" != set ; then
 			SAVE_LIBS=${LIBS}
 			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
-			AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
+			AC_TRY_LINK([#include <QtOpenGL/QGLWidget>], [QGLWidget wid;], QT_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
-		else
-			dnl link against qgl as well (for qt <= 2.0)
-			QT_LIBOPTS="${QTQGL_LIBOPTS}"
 		fi
 
 		if test "${QT_LINKING_OK+set}" != set ; then
 			SAVE_LIBS=${LIBS}
 			X11_LIBOPTS="-lXrender -lfreetype ${X11_LIBOPTS}"
 			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
-			AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
+			AC_TRY_LINK([#include <QtOpenGL/QGLWidget>], [QGLWidget wid;], QT_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
 		fi
 
 	if test "${QT_LINKING_OK+set}" != set ; then
 		AC_MSG_RESULT(no)
 		AC_MSG_RESULT()
-		AC_MSG_RESULT([Cannot link against libqt!])
+		AC_MSG_RESULT([Cannot link against QT libraries!])
 		AC_MSG_RESULT([If QT is installed, please specify the path to the library])
 		AC_MSG_RESULT([using the option --with-qt-libs=DIR or the environment variable QTDIR.])
 		CF_ERROR
@@ -3098,11 +3168,11 @@ AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
 		SAVE_LIBS=${LIBS}
 		LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 		if test "${OS}" = "Darwin" ; then
-			DYLD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${DYLD_LIBRARY_PATH}"
+			DYLD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${GLEW_LIBPATH}:${DYLD_LIBRARY_PATH}"
 			export DYLD_LIBRARY_PATH
 			echo "DYLD_LIBRARY_PATH = ${DYLD_LIBRARY_PATH}" 1>&5
 		else
-			LD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${LD_LIBRARY_PATH}"
+			LD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${GLEW_LIBPATH}:${LD_LIBRARY_PATH}"
 			export LD_LIBRARY_PATH
 			echo "LD_LIBRARY_PATH = ${LD_LIBRARY_PATH}" 1>&5
 		fi
@@ -3139,22 +3209,27 @@ AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
 			AC_MSG_RESULT(You might also want to check your LD_LIBRARY_PATH.)
 			CF_ERROR
 		else
-			QT_VERSION_STRING=`cat qt.version`
-			AC_MSG_RESULT(${QT_VERSION_STRING})
+			QT_VERSION_STR=`cat qt.version | ${SED} "s/-.*//"`
+			AC_MSG_RESULT(${QT_VERSION_STR})
 
 			dnl
-			dnl  test whether this version is the right one
+			dnl  Check for the right version number of QT
 			dnl
-			${RM} qt.version 2>/dev/null
-			QT_MAJOR=`echo ${QT_VERSION_STRING} | ${CUT} -d. -f1`
-			if test "${QT_MAJOR}" -lt 3 ; then
-				AC_MSG_RESULT()
-				AC_MSG_RESULT(QT version 3.x is required.)
-				AC_MSG_RESULT(Please install version QT Version 3 (at least 3.0.6))
-				AC_MSG_RESULT(which can be obtained from)
-				AC_MSG_RESULT()
-				AC_MSG_RESULT(  www.troll.no/qt)
-				CF_ERROR
+			if test `echo ${QT_VERSION_STR} | ${CUT} -c1-2 | ${SED} "s/-.*//"` != "0x" ; then
+				QT_VERSION=`echo ${QT_VERSION_STR} | ${TR} -d "." ` 
+				if test "${QT_VERSION}" -lt "${QT_MIN_VERSION}" -o "${QT_VERSION}" -gt "${QT_MAX_VERSION}" ; then
+					AC_MSG_RESULT()
+					AC_MSG_RESULT([QT version ]${QT_RECOMMENDED_VERSION}[ is recommended for PROJECT[]. Please update])
+					AC_MSG_RESULT([to a suitable version or specify the path to a more])
+					AC_MSG_RESULT([suitable version of libqt* by passing the option --with-qt-libs=DIR])
+					AC_MSG_RESULT([to configure.])
+					AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
+					AC_MSG_RESULT([path - configure will recognize this, too.])
+					AC_MSG_RESULT()
+					AC_MSG_RESULT([The complete QT package can be found under the following URL:])
+					AC_MSG_RESULT([  http://www.troll.no/qt])
+					CF_ERROR
+				fi
 			fi
 		fi
 	fi
@@ -3201,12 +3276,13 @@ AC_DEFUN(CF_VIEW_QT_EXECUTABLES, [
 		else
 			AC_MSG_RESULT(yes)
 			AC_MSG_CHECKING(moc version)
-			MOC_VERSION=`${MOC} -v 2>&1 | ${TR} -d "()" | ${SED} "s/.* Qt //"`
+			MOC_VERSION=`${MOC} -v 2>&1 | ${TR} -d "()" | ${SED} "s/.* Qt //" | ${SED} "s/-.*//"`
 			AC_MSG_RESULT(${MOC_VERSION})
 			
-			if test "${MOC_VERSION}" != "${QT_VERSION_STR}" ; then
+		dnl ???????????????????
+			if test "${QT_VERSION_STR}" != "${QT_VERSION_STR}" ; then
 				AC_MSG_RESULT()
-				AC_MSG_RESULT([QT version (${QT_VERSION_STR}) is incompatible with moc version (${MOC_VERISON})!])
+				AC_MSG_RESULT([QT version (${QT_VERSION_STR}) is incompatible with moc version (${MOC_VERSION})!])
 				AC_MSG_RESULT([Please check your QTDIR environment variable, include the correct])
 				AC_MSG_RESULT([path to moc in your PATH environment variable, or specify the correct])
 				AC_MSG_RESULT([path to moc using the option --with-moc=PATH to rerun configure.])
@@ -3256,12 +3332,16 @@ AC_DEFUN(CF_VIEW_QT_EXECUTABLES, [
 		else
 			AC_MSG_RESULT(yes)
 			AC_MSG_CHECKING(uic version)
-			UIC_VERSION=`${UIC} -version 2>&1 | ${GREP} version | ${TR} -d "()" | ${SED} "s/.*version //"`
+			changequote(<<,>>)
+			UIC_VERSION=`${UIC} -v 2>&1 | ${SED} "s/[A-Za-z ]*//g" | ${SED} "s/\.$//" | ${SED} "s/-.*//"`
+			changequote([,])
+
 			AC_MSG_RESULT(${UIC_VERSION})
 			
-			if test "${UIC_VERSION}" != "${QT_VERSION_STR}" ; then
+		dnl ??????????????????????
+			if test "${QT_VERSION_STR}" != "${QT_VERSION_STR}" ; then
 				AC_MSG_RESULT()
-				AC_MSG_RESULT([QT version (${QT_VERSION_STR}) is incompatible with uic version (${UIC_VERISON})!])
+				AC_MSG_RESULT([QT version (${QT_VERSION_STR}) is incompatible with uic version (${UIC_VERSION})!])
 				AC_MSG_RESULT([Please check your QTDIR environment variable, include the correct])
 				AC_MSG_RESULT([path to uic in your PATH environment variable, or specify the correct])
 				AC_MSG_RESULT([path to uic using the option --with-uic=PATH to rerun configure.])
@@ -3400,6 +3480,7 @@ if test "${USE_VIEW}" = true ; then
 
 	dnl Check for OpenGL/Mesa
 	CF_VIEW_OPENGL
+	CF_VIEW_GLEW
 
 	dnl Check for QT basics (version, headers, existence of library)
 	CF_VIEW_QT_BASICS
@@ -3630,10 +3711,10 @@ AC_DEFUN(CF_PYTHON, [
 			SIP_VERS_MINOR_MINOR="0"
 		fi
 		if test "${SIP_VERS_MAJOR}" -lt 4 \
-				-o "${SIP_VERS_MAJOR}" = 4 -a "${SIP_VERS_MINOR}" -lt 3 \
-				-o "${SIP_VERS_MAJOR}" = 4 -a "${SIP_VERS_MINOR}" = 3 -a "${SIP_VERS_MINOR_MINOR}" -lt 1; then
+				-o "${SIP_VERS_MAJOR}" = 4 -a "${SIP_VERS_MINOR}" -lt 4 \
+				-o "${SIP_VERS_MAJOR}" = 4 -a "${SIP_VERS_MINOR}" = 4 -a "${SIP_VERS_MINOR_MINOR}" -lt 1; then
 			AC_MSG_RESULT()
-			AC_MSG_RESULT(SIP release 4.3.1 or above required.)
+			AC_MSG_RESULT(SIP release 4.4.5 or above required.)
 			AC_MSG_RESULT(Your version: ${SIP_VERSION}")
 			AC_MSG_RESULT(Please upgrade or specify the location of the correct SIP using the)
 			AC_MSG_RESULT( --with-sip=PATH)

@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.17 2006/08/15 19:00:22 oliver Exp $
+# $Id: Makefile,v 1.17.8.1 2007/03/25 22:00:22 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -42,6 +42,7 @@ CPP_SOURCES= \
 	selector.C\
 	standardPredicates.C\
 	system.C
+#	extractors.C\
 
 
 #
@@ -57,7 +58,7 @@ depend: $(PARSER_SOURCES)
 default_clean:	clean_flex_bison
 
 clean_flex_bison:
-	@-$(RM) expressionParserParser.C expressionParserLexer.C expressionParserParser.h 2>/dev/null
+	@-$(RM) expressionParserParser.C expressionParserLexer.C expressionParserParser.h *.bak 2>/dev/null
 
 expressionParserParser.C: expressionParserParser.y
 expressionParserParser.h: expressionParserParser.y

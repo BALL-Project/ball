@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.13 2006/08/12 14:45:59 oliver Exp $
+# $Id: Makefile,v 1.13.8.1 2007/03/25 21:32:15 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -22,25 +22,19 @@ include ../../common.mak
 UIC_DIR=.
 
 CPP_SOURCES=\
-	aboutDialog.C\
 	demoTutorialDialog.C\
-	demoTutorialDialogData.C\
 	icons.C\
 	main.C\
 	mainframe.C\
 	splash.C
 
 MOC_SOURCES=\
-	aboutDialog_moc.C\
 	demoTutorialDialog_moc.C\
-	demoTutorialDialogData_moc.C\
 	mainframe_moc.C
 
 UIC_FILES=\
-	aboutDialog.C\
 	aboutDialog.h\
-	demoTutorialDialogData.h\
-	demoTutorialDialogData.C
+	demoTutorialDialogData.h
 
 BALLView:	$(OBJECTS)	$(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_LIBS) $(PYTHON_LIBS)
@@ -50,16 +44,13 @@ depend: $(UIC_FILES) $(MOC_SOURCES)
 mainframe_moc.C:	mainframe.h
 	$(MOC) mainframe.h -o $@
 
+demoTutorialDialog_moc.C:	demoTutorialDialog.h
+	$(MOC) demoTutorialDialog.h -o $@
+
+
 aboutDialog.h: aboutDialog.ui
 	$(UIC) aboutDialog.ui > aboutDialog.h
 				
-aboutDialog_moc.C: aboutDialog.h
-	$(MOC) aboutDialog.h -o $@
-
-aboutDialog.C: aboutDialog.h
-	$(UIC) -impl aboutDialog.h aboutDialog.ui > aboutDialog.C
-
-
 demoTutorialDialogData.h: demoTutorialDialog.ui
 	$(UIC) demoTutorialDialog.ui > demoTutorialDialogData.h
 				

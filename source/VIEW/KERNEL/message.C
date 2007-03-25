@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.32 2006/01/04 16:26:30 amoll Exp $
+// $Id: message.C,v 1.32.16.1 2007/03/25 22:02:24 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/DATATYPE/dataset.h>
 #include <BALL/COMMON/rtti.h>
-
 
 using namespace std;
 
@@ -34,6 +34,29 @@ Message::~Message()
 	throw()
 {
 }
+
+
+DatasetMessage::DatasetMessage(Dataset* set, DatasetMessage::Type type)
+	: Message(),
+		dataset_(set),
+		type_(type),
+		dataset_type_("")
+{
+}
+
+DatasetMessage::DatasetMessage(const DatasetMessage& msg)
+	: Message(),
+		dataset_(msg.dataset_),
+		type_(msg.type_),
+		dataset_type_(msg.dataset_type_)
+{
+}
+
+bool DatasetMessage::isValid() const
+{
+	return dataset_ != 0 && dataset_->getType() != "";
+}
+
 
 CompositeMessage::CompositeMessage()
 	throw()
@@ -241,60 +264,6 @@ void MolecularTaskMessage::setType(MolecularTaskMessageType type)
 }
 
 
-NewTrajectoryMessage::NewTrajectoryMessage()
-	throw()
-	: CompositeMessage(),
-		file_(0)
-{
-	#ifdef BALL_VIEW_DEBUG
-		Log.error() << "new NewTrajectoryMessage" << std::endl;		
-	#endif
-}
-
-// ================ Regular Data Messages ===========================
-RegularDataMessage::RegularDataMessage()
-	throw()
-	: CompositeMessage()
-{
-	setType((CompositeMessageType)UNDEFINED);
-}
-
-
-RegularData1DMessage::RegularData1DMessage(RegularDataMessageType type) 
-	throw()
-	: RegularDataMessage(),
-		data_(0)
-{
-	#ifdef BALL_VIEW_DEBUG
-		Log.error() << "new RegularData1DMessage" << std::endl;		
-	#endif
-	setType((CompositeMessageType)type);
-}
-
-RegularData2DMessage::RegularData2DMessage(RegularDataMessageType type) 
-	throw()
-	: RegularDataMessage(),
-		data_(0)
-{
-	#ifdef BALL_VIEW_DEBUG
-		Log.error() << "new RegularData2DMessage" << std::endl;		
-	#endif
-	setType((CompositeMessageType)type);
-}
-
-
-RegularData3DMessage::RegularData3DMessage(RegularDataMessageType type) 
-	throw()
-	: RegularDataMessage(),
-		data_(0)
-{
-	#ifdef BALL_VIEW_DEBUG
-		Log.error() << "new RegularData3DMessage" << std::endl;		
-	#endif
-	setType((CompositeMessageType)type);
-}
-
-
 CreateRepresentationMessage::CreateRepresentationMessage()
 	throw() 
 	: Message(), 
@@ -346,57 +315,24 @@ FinishedSimulationMessage::FinishedSimulationMessage()
 {
 }
 
-ShowHelpMessage::ShowHelpMessage(String url)
+ShowHelpMessage::ShowHelpMessage(String url, String project, String entry)
 	throw()
 	: Message(),
-		url_(url)
+		url_(url),
+		project_(project),
+		entry_(entry)
 {
 }
 
 RegisterHelpSystemMessage::RegisterHelpSystemMessage()
 	throw()
 	: Message(),
-		widget_(0),
-		menu_entry_(-1),
+		object_(0),
 		url_(""),
 		register_(true)
 {
 }
 		
-///////// docking/////////////////////////////////
-NewDockResultMessage::NewDockResultMessage()
-	throw()
-	: CompositeMessage(),
-		dock_res_(0)
-{
-	#ifdef BALL_VIEW_DEBUG
-		Log.error() << "new NewDockResultMessage" << std::endl;
-	#endif
-}
-
-ShowDockResultMessage::ShowDockResultMessage()
-	throw()
-	: Message(),
-		dock_res_(0),
-		docked_system_(0)
-{
-	#ifdef BALL_VIEW_DEBUG
-		Log.error() << "new ShowDockResultMessage" << std::endl;
-	#endif
-}
-
-ShowDockResultMessage::ShowDockResultMessage(DockResult* dock_res, System* docked_system)
-	throw()
-	: Message()
-{
-	#ifdef BALL_VIEW_DEBUG
-		Log.error() << "new ShowDockResultMessage" << std::endl;
-	#endif
-	
-	dock_res_ = dock_res;
-	docked_system_ = docked_system;
-}
-
 DockingFinishedMessage::DockingFinishedMessage()
 	throw()
 	: Message(),
@@ -425,6 +361,7 @@ DockingFinishedMessage::~DockingFinishedMessage()
 		Log.error() << "Destructing " << this << "DockingFinishedMessage" << std::endl;
 	#endif
 }
+
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/message.iC>

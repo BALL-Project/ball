@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyAtomList.C,v 1.5 2006/08/15 19:00:24 oliver Exp $
+// $Id: pyAtomList.C,v 1.5.8.1 2007/03/25 21:37:18 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -9,6 +9,7 @@
 
 #include <BALL/PYTHON/pyAtomList.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/atomContainer.h>
 
@@ -44,6 +45,26 @@ namespace BALL
 	{
 		set(fragment, "");
 	}
+
+	PyAtomList::PyAtomList(const Composite& composite)
+	{
+		clear();
+		if (RTTI::isKindOf<AtomContainer>(composite))
+		{
+			set(*(AtomContainer*)&composite);
+		}
+		else if (RTTI::isKindOf<Atom>(composite))
+		{
+			push_back((Atom*)&composite);
+		}
+		else if (RTTI::isKindOf<Bond>(composite))
+		{
+			Bond* bond = (Bond*)&composite;
+			push_back((Atom*)bond->getFirstAtom());
+			push_back((Atom*)bond->getSecondAtom());
+		}
+	}
+
 
 	void PyAtomList::set(const AtomContainer& fragment, const String& expression)
 	{

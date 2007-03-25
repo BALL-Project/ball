@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Object_test.C,v 1.13 2003/06/16 16:13:52 anker Exp $
+// $Id: Object_test.C,v 1.13.30.1 2007/03/25 21:47:24 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(Object, "$Id: Object_test.C,v 1.13 2003/06/16 16:13:52 anker Exp $")
+START_TEST(Object, "$Id: Object_test.C,v 1.13.30.1 2007/03/25 21:47:24 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

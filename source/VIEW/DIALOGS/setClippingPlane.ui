@@ -1,0 +1,218 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>SetClippingData</class>
+ <widget class="QDialog" name="SetClippingData" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>350</width>
+    <height>112</height>
+   </rect>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>350</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="maximumSize" >
+   <size>
+    <width>350</width>
+    <height>32767</height>
+   </size>
+  </property>
+  <property name="windowTitle" >
+   <string>Set clipping plane position</string>
+  </property>
+  <widget class="QLineEdit" name="look_z" >
+   <property name="geometry" >
+    <rect>
+     <x>272</x>
+     <y>36</y>
+     <width>68</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="look_y" >
+   <property name="geometry" >
+    <rect>
+     <x>193</x>
+     <y>36</y>
+     <width>68</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="cancel_button" >
+   <property name="geometry" >
+    <rect>
+     <x>180</x>
+     <y>76</y>
+     <width>161</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="sizePolicy" >
+    <sizepolicy>
+     <hsizetype>7</hsizetype>
+     <vsizetype>0</vsizetype>
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize" >
+    <size>
+     <width>0</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="maximumSize" >
+    <size>
+     <width>32767</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="toolTip" >
+    <string>Close window without reseting camera</string>
+   </property>
+   <property name="text" >
+    <string>C&amp;ancel</string>
+   </property>
+   <property name="shortcut" >
+    <string>Alt+A</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="view_x" >
+   <property name="geometry" >
+    <rect>
+     <x>113</x>
+     <y>8</y>
+     <width>68</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="view_y" >
+   <property name="geometry" >
+    <rect>
+     <x>193</x>
+     <y>7</y>
+     <width>68</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="view_z" >
+   <property name="geometry" >
+    <rect>
+     <x>272</x>
+     <y>7</y>
+     <width>68</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="look_x" >
+   <property name="geometry" >
+    <rect>
+     <x>113</x>
+     <y>37</y>
+     <width>68</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="inputMask" >
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="view_label" >
+   <property name="geometry" >
+    <rect>
+     <x>6</x>
+     <y>10</y>
+     <width>101</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Point</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="look_label" >
+   <property name="geometry" >
+    <rect>
+     <x>8</x>
+     <y>40</y>
+     <width>96</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Normal</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="ok_button" >
+   <property name="geometry" >
+    <rect>
+     <x>12</x>
+     <y>76</y>
+     <width>162</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="sizePolicy" >
+    <sizepolicy>
+     <hsizetype>7</hsizetype>
+     <vsizetype>0</vsizetype>
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize" >
+    <size>
+     <width>0</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="maximumSize" >
+    <size>
+     <width>32767</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="toolTip" >
+    <string>Set camera to new coordinates</string>
+   </property>
+   <property name="text" >
+    <string>O&amp;K</string>
+   </property>
+   <property name="shortcut" >
+    <string>Alt+K</string>
+   </property>
+   <property name="default" >
+    <bool>true</bool>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>view_x</tabstop>
+  <tabstop>view_y</tabstop>
+  <tabstop>view_z</tabstop>
+  <tabstop>look_x</tabstop>
+  <tabstop>look_y</tabstop>
+  <tabstop>look_z</tabstop>
+  <tabstop>ok_button</tabstop>
+  <tabstop>cancel_button</tabstop>
+ </tabstops>
+ <includes>
+  <include location="global" >BALL/COMMON/global.h</include>
+ </includes>
+ <resources/>
+ <connections/>
+</ui>

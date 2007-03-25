@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.sip,v 1.7 2003/11/12 18:20:29 oliver Exp $
+// $Id: trajectoryFile.sip,v 1.7.28.1 2007/03/25 21:38:55 oliver Exp $
 //
 
 class TrajectoryFile
@@ -10,6 +10,7 @@ class TrajectoryFile
 %TypeHeaderCode
 	#include <BALL/FORMAT/trajectoryFile.h>
 	using namespace BALL;
+	using namespace BALL::Exception;
 %End
 				public:
 				TrajectoryFile()
@@ -18,7 +19,7 @@ class TrajectoryFile
 								throw();
 				TrajectoryFile(const String& /filename/,
 											 OpenMode /open_mode/ = std::ios::in)
-								throw();
+								throw(FileNotFound);
 				~TrajectoryFile()
 								throw();
 				//const TrajectoryFile& operator = (const TrajectoryFile& /file/)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ResidueChecker_test.C,v 1.1 2003/04/17 14:19:53 oliver Exp $
+// $Id: ResidueChecker_test.C,v 1.1.32.1 2007/03/25 21:48:53 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(ResidueChecker, "$Id: ResidueChecker_test.C,v 1.1 2003/04/17 14:19:53 oliver Exp $")
+START_TEST(ResidueChecker, "$Id: ResidueChecker_test.C,v 1.1.32.1 2007/03/25 21:48:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

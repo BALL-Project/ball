@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData3D_test.C,v 1.18 2004/02/25 11:22:44 oliver Exp $
+// $Id: RegularData3D_test.C,v 1.18.30.1 2007/03/25 21:48:51 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.18 2004/02/25 11:22:44 oliver Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.18.30.1 2007/03/25 21:48:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

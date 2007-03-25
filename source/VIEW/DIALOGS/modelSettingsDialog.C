@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.37 2005/12/23 17:03:27 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.37.16.1 2007/03/25 22:02:06 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -20,56 +20,50 @@
 #include <BALL/DATATYPE/string.h>
 #include <BALL/FORMAT/INIFile.h>
 
-#include <qslider.h>
-#include <qlabel.h>
-#include <qwidgetstack.h>
-#include <qradiobutton.h>
-#include <qbuttongroup.h>
+#include <QtGui/qslider.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qradiobutton.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		ModelSettingsDialog::ModelSettingsDialog( QWidget* parent,  const char* name, WFlags fl )
-			: ModelSettingsDialogData( parent, name, fl ),
+		ModelSettingsDialog::ModelSettingsDialog( QWidget* parent,  const char* name, Qt::WFlags fl )
+			: QWidget(parent, fl),
+				Ui_ModelSettingsDialogData(),
 				PreferencesEntry()
 		{
+			setupUi(this);
+			setObjectName(name);
 			setINIFileSectionName("MODEL_OPTIONS");
-
 			setDefaultValues_();
-
-			registerObject_(stick_radius_slider);
-
-			registerObject_(ball_stick_cylinder_radius_slider);
-			registerObject_(ball_stick_sphere_radius_slider);
-			registerObject_(ball_stick_dashed_bonds);
-			
-			registerObject_(vdw_radius_factor_slider);
-			
-			registerObject_(surface_probe_radius_slider);
-			
-			registerObject_(tube_radius_slider);
-			
-			registerObject_(cartoon_tube_radius_slider);
-			registerObject_(cartoon_helix_radius_slider);
-			registerObject_(strand_arrow_width_slider);
-			registerObject_(strand_height_slider);
-			registerObject_(strand_width_slider);
-			registerObject_(cartoon_dna_helix_radius_slider);
-			registerObject_(cartoon_dna_ladder_radius_slider);
-			registerObject_(cartoon_dna_base_radius_slider);
-			registerObject_(dna_cartoon_model_type);
-			registerObject_(ribbons_enabled);
-			registerObject_(two_colored_ribbons);
-			
-			registerObject_(force_scaling_slider);
-			registerObject_(force_max_length_slider);
-
-			registerObject_(hbonds_radius_slider);
-
 			setWidgetStackName("Models");
 			setWidgetStack(widget_stack);
+			registerWidgets_();
+
+			// signals and slots connections
+			connect( ball_stick_cylinder_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( ballStickCylinderRadiusChanged() ) );
+			connect( ball_stick_sphere_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( ballStickSphereRadiusChanged() ) );
+			connect( cartoon_dna_base_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonDNABaseRadiusChanged() ) );
+			connect( cartoon_dna_helix_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonDNAHelixRadiusChanged() ) );
+			connect( cartoon_dna_ladder_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonDNALadderRadiusChanged() ) );
+			connect( cartoon_helix_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonHelixRadiusChanged() ) );
+			connect( cartoon_tube_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonTubeRadiusChanged() ) );
+			connect( force_max_length_slider, SIGNAL( valueChanged(int) ), this, SLOT( forceMaxLengthChanged() ) );
+			connect( force_scaling_slider, SIGNAL( valueChanged(int) ), this, SLOT( forceScalingChanged() ) );
+			connect( force_offset_slider, SIGNAL( valueChanged(int) ), this, SLOT( forceOffsetChanged() ) );
+			connect( force_base_slider, SIGNAL( valueChanged(int) ), this, SLOT( forceBaseChanged() ) );
+			connect( hbonds_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( hbondsRadiusChanged() ) );
+			connect( stick_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( stickRadiusChanged() ) );
+			connect( strand_arrow_width_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonStrandArrowWidthChanged() ) );
+			connect( strand_height_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonStrandHeightChanged() ) );
+			connect( strand_width_slider, SIGNAL( valueChanged(int) ), this, SLOT( cartoonStrandWidthChanged() ) );
+			connect( surface_probe_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( probeRadiusChanged() ) );
+			connect( tube_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( tubeRadiusChanged() ) );
+			connect( vdw_radius_factor_slider, SIGNAL( valueChanged(int) ), this, SLOT( VDWfactorChanged() ) );
+			connect(cartoon_dna_ladder, SIGNAL(toggled(bool)), this, SLOT( changedNAMode_(bool)));
+			connect(cartoon_dna_wac, SIGNAL(toggled(bool)), this, SLOT( changedNAMode_(bool)));
 		}
 
 		void ModelSettingsDialog::setDefaultValues_()
@@ -170,7 +164,6 @@ namespace BALL
 				cm.setDNABaseRadius(getDNABaseRadius());
 				cm.setDNAHelixRadius(getDNAHelixRadius());
 				cm.enableRibbons(ribbons_enabled->isChecked());
-				cm.enableTwoColors(two_colored_ribbons->isChecked());
 				return;
 			}
 
@@ -189,8 +182,10 @@ namespace BALL
 					
 			if (RTTI::isKindOf<ForceModel>(mp))
 			{
-				((ForceModel*) &mp)->setMaxLength((float)(getForceMaxLength()) / 10.0);
-				((ForceModel*) &mp)->setScaling((float)(getForceScaling()) / 10.0);
+				((ForceModel*) &mp)->setMaxLength(getForceMaxLength());
+				((ForceModel*) &mp)->setScaling(getForceScaling());
+				((ForceModel*) &mp)->setOffset(getForceOffset());
+				((ForceModel*) &mp)->setBaseSize(getForceBase());
 				return;
 			}
 		}
@@ -237,6 +232,11 @@ namespace BALL
 					((AddBackboneModel*) model_processor)->setTubeRadius(getTubeRadius());
 					break;
 
+				case MODEL_RIBBON:
+					model_processor = new AddBackboneModel;
+					((AddBackboneModel*) model_processor)->setRibbonMode(true);
+					break;
+
 				case MODEL_CARTOON:
 					model_processor = new AddCartoonModel;
 					break;
@@ -250,7 +250,8 @@ namespace BALL
 					break;
 					
 				default:
-					throw(Exception::InvalidOption(__FILE__, __LINE__, type));
+					BALLVIEW_DEBUG
+					Log.error() << "Type: " << type << std::endl;
 			}
 
 			applySettingsTo(*model_processor);
@@ -301,7 +302,6 @@ namespace BALL
 				setCartoonDNABaseRadius(cm.getDNABaseRadius());
 				cartoon_dna_ladder->setChecked(cm.drawDNAAsLadderModel());
 				cartoon_dna_wac->setChecked(!cm.drawDNAAsLadderModel());
-				two_colored_ribbons->setChecked(cm.twoColorsEnabled());
 				ribbons_enabled->setChecked(cm.ribbonsEnabled());
 				return;
 			}
@@ -323,6 +323,8 @@ namespace BALL
 			{
 				setForceScaling(((ForceModel*) &mp)->getScaling());
 				setForceMaxLenght(((ForceModel*) &mp)->getMaxLength());
+				setForceOffset(((ForceModel*) &mp)->getOffset());
+				setForceBase(((ForceModel*) &mp)->getBaseSize());
 				return;
 			}
 		}
@@ -365,6 +367,24 @@ namespace BALL
 			}
 
 			return 0;
+		}
+
+		void ModelSettingsDialog::changedNAMode_(bool state)
+		{
+			if (cartoon_dna_wac-> isChecked() !=
+					cartoon_dna_ladder->isChecked())
+			{
+				return;
+			}
+
+			if (sender() == cartoon_dna_wac)
+			{
+				cartoon_dna_ladder->setChecked(!state);
+			}
+			else
+			{
+				cartoon_dna_wac->setChecked(!state);
+			}
 		}
 
 

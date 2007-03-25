@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.sip,v 1.14 2005/12/23 17:02:45 amoll Exp $
+// $Id: HINFile.sip,v 1.14.18.1 2007/03/25 21:36:59 oliver Exp $
 //
 
 class HINFile
@@ -10,6 +10,7 @@ class HINFile
 %TypeHeaderCode
 	#include <BALL/FORMAT/HINFile.h>
 	using namespace BALL;
+	using namespace BALL::Exception;
 %End
   public:
   HINFile();

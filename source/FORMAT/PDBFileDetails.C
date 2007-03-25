@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileDetails.C,v 1.14 2006/03/14 12:14:40 amoll Exp $
+// $Id: PDBFileDetails.C,v 1.14.12.1 2007/03/25 22:00:20 oliver Exp $
+//
+// Author:
+//  Oliver Kohlbacher
 //
 
 // This file contains the more or less implementation specific portion of PDBFile.

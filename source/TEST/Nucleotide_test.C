@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Nucleotide_test.C,v 1.14 2003/07/03 13:20:04 amoll Exp $
+// $Id: Nucleotide_test.C,v 1.14.30.1 2007/03/25 21:47:23 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.14 2003/07/03 13:20:04 amoll Exp $")
+START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.14.30.1 2007/03/25 21:47:23 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

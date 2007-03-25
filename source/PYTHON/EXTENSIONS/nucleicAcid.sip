@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleicAcid.sip,v 1.3 2003/10/29 22:54:42 oliver Exp $
+// $Id: nucleicAcid.sip,v 1.3.28.1 2007/03/25 21:37:15 oliver Exp $
 //
 
 class NucleicAcid
  : Molecule
 {
 %TypeHeaderCode
-#include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/nucleicAcid.h>
 using namespace BALL;
 %End
   public:
@@ -26,12 +26,16 @@ using namespace BALL;
 	//  NucleicAcid& operator = (const NucleicAcid& nucleic_acid);
   void get(NucleicAcid& /nucleic_acid/, bool /deep/ = true) const;
   void swap(NucleicAcid& /nucleic_acid/);
+
   Nucleotide* getNucleotide(int /position/);
-  const Nucleotide* getNucleotide(int /position/) const;
+  // const Nucleotide* getNucleotide(int /position/) const;
+
   Nucleotide* get3Prime();
-  const Nucleotide* get3Prime() const;
+  // const Nucleotide* get3Prime() const;
+
   Nucleotide* get5Prime();
-  const Nucleotide* get5Prime() const;
+  // const Nucleotide* get5Prime() const;
+
   void setID(const String& /id/);
   const String& getID() const;
   int countNucleotides() const;
@@ -39,4 +43,19 @@ using namespace BALL;
   // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
   // virtual void read(std::istream& s);
   // virtual void write(std::ostream& s) const;
+	
+	SIP_PYOBJECT __str__();
+%MethodCode
+	sipRes = PyString_FromString(String(String("NucleicAcid ") + sipCpp->getName() 
+							+ " { " + String(sipCpp->countNucleotides()) + " nucleotides,  " 
+							+ String(sipCpp->countAtoms()) + " atoms }").c_str());
+%End
+	
+	SIP_PYOBJECT __repr__();
+%MethodCode
+	sipRes = PyString_FromString(String(String("NucleicAcid ") + sipCpp->getName() 
+							+ " { " + String(sipCpp->countNucleotides()) + " nucleotides,  " 
+							+ String(sipCpp->countAtoms()) + " atoms }").c_str());
+%End
+
 };

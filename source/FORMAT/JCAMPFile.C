@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.C,v 1.19 2005/12/23 17:02:39 amoll Exp $
+// $Id: JCAMPFile.C,v 1.19.20.1 2007/03/25 22:00:17 oliver Exp $
 //
 
 
 #include <BALL/FORMAT/JCAMPFile.h>
 #include <BALL/DATATYPE/regularExpression.h>
+#include <BALL/MATHS/common.h>
 
 namespace BALL
 {
@@ -66,7 +67,12 @@ namespace BALL
 		
 			try
 			{
-				if (getLine().hasPrefix("##$"))
+				//overread a comment 
+				if (getLine().hasPrefix("$$"))
+				{
+					continue;
+				}
+				else if (getLine().hasPrefix("##$"))
 				{
 
 					// Check whether the definition is an array.
@@ -251,7 +257,12 @@ namespace BALL
 		if (!entries_.has(name)) return 0;
 
 		const JCAMPValue& val(entries_[name]);
-		if ((val.type == NUMERIC) || (val.type == STRING))
+		if (val.type == NUMERIC) 
+		{
+			int i = (int)Maths::round(val.numeric_value[0]);
+			return i; //round(val.numeric_value[0]).toInt();
+		}
+		else if(val.type == STRING)
 		{
 			return (Index)val.string_value.trim().toInt();
 		}

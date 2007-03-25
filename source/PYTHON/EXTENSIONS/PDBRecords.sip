@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBRecords.sip,v 1.2 2005/12/23 17:02:46 amoll Exp $
+// $Id: PDBRecords.sip,v 1.2.22.1 2007/03/25 21:37:02 oliver Exp $
 //
 	class PDBRecords
 	{
@@ -33,9 +33,11 @@
 
 		void resize(Size /sz/, String /c/ = String());
 		String& front();
-		const String& front() const;
+		// const String& front() const;
+
 		String& back();
-		const String& back() const;
+		// const String& back() const;
+
 		void push_back(const String& /x/);
 		// void insert(Index /pos/, const String& /value/);
 		// void insert(Index /pos/, Size /n/, const String& /value/);

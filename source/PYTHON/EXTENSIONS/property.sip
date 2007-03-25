@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: property.sip,v 1.4 2003/10/29 22:54:43 oliver Exp $
+// $Id: property.sip,v 1.4.30.1 2007/03/25 21:37:17 oliver Exp $
 //
 
 class NamedProperty
@@ -63,10 +63,12 @@ class PropertyManager
   const NamedProperty& getProperty(const String&) const;
   void clearProperty(const String&);
 	Size countNamedProperties() const;
-  const NamedProperty& getNamedProperty(Position /index/) const
-     throw(IndexOverflow);
+
+  //const NamedProperty& getNamedProperty(Position /index/) const
+  //   throw(IndexOverflow);
   NamedProperty& getNamedProperty(Position /index/)
      throw(IndexOverflow);
+
   bool hasProperty(int) const;
   bool hasProperty(const String&) const;
 	// friend ostream& operator << (ostream& s, const PropertyManager&);

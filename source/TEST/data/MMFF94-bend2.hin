@@ -1,0 +1,12 @@
+; HyperChem file created by BALL
+;
+forcefield AMBER
+sys 0
+mol 1
+atom 1 A1 F HOH - 0.43 -2.907 0 0 1 2 s 
+vel 1 0 0 0
+atom 2 A2 O OH2 - -0.86 0 0 0 2 1 s 3 s 
+vel 2 0 0 0
+atom 3 A3 H HOH - 0.43 0 1.435 0 1 2 s 
+vel 3 0 0 0
+endmol 1

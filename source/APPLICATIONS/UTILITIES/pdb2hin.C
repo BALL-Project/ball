@@ -1,4 +1,4 @@
-// $Id: pdb2hin.C,v 1.1 2006/05/21 10:18:11 anker Exp $
+// $Id: pdb2hin.C,v 1.1.12.1 2007/03/25 21:32:30 oliver Exp $
 //
 // A very simple utility for converting PDB files into HyperChem files
 //

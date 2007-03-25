@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StandardPredicates_test.C,v 1.30 2003/08/25 08:10:00 oliver Exp $
+// $Id: StandardPredicates_test.C,v 1.30.30.1 2007/03/25 21:49:02 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -20,7 +20,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.30 2003/08/25 08:10:00 oliver Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.30.30.1 2007/03/25 21:49:02 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.22 2005/12/23 17:02:52 amoll Exp $
+// $Id: mainControl.sip,v 1.22.16.1 2007/03/25 21:37:11 oliver Exp $
 //
 
 class MainControl
@@ -17,6 +17,7 @@ class MainControl
 	// Q_OBJECT
 	public:
 	// typedef List<CompositeDescriptor *>::iterator DescriptorIterator;
+	/*
 	enum PopUpID
 	{
 		FILE = 10001,
@@ -38,16 +39,18 @@ class MainControl
 		USER = 10700,
 		HELP = 10800
 	};
+	*/
 	//MainControl(QWidget* parent = 0, const char* name = 0, String inifile = ".BALL.preferences") throw();
 	MainControl(const MainControl&) throw();
 	~MainControl() throw();
 	virtual void clear() throw();
+	void clearData() throw();
 
 	// methods implemented by the BALL_EMBEDDED macro
 	static Size countInstances();
 	static MainControl* getInstance(Position /index/);
 
-	PrimitiveManager& getPrimitiveManager() throw();
+	RepresentationManager& getRepresentationManager() throw();
   CompositeManager& getCompositeManager() throw();
 	bool updateRepresentationsOf(const Composite& /composite/, bool /rebuild/ = true, bool = false) throw();
 	void redrawAllRepresentations(bool /rebuild_display_lists/ = false) throw();
@@ -65,24 +68,23 @@ class MainControl
 	bool remove(Representation& /composite/) throw();
 	 	
 	Preferences* getPreferences() throw();
+
 	INIFile& getINIFile() throw();
-	const INIFile& getINIFile() const throw();
+	// const INIFile& getINIFile() const throw();
   
 	// void onNotify(Message* /message/) throw();	
 	void sendMessage(Message& /Transfer/) throw();
 
-	Index getLastHighLightedMenuEntry();
-	
 	virtual void show();
 	virtual void checkMenus();
 	void stopSimulation();
 	void complementSelection();	
 	virtual void aboutToExit();
-	void menuItemHighlighted(int /id/) throw();
 	//virtual void customEvent( QCustomEvent *);
-	virtual void quit();
+	virtual void quit(int = 0);
 	virtual bool isAboutToQuit();
 	virtual void resize(int, int);
+	void setContentSize(int, int);
 	
 	// static MainControl* getMainControl(const QObject* object) throw();
 	// int insertMenuEntry(int /ID/, const String& /name/, const QObject* /receiver/ = 0, const char* /slot/ = 0, int /accel/ = 0, int /entry_ID/ = -1, String /hint/ = "") throw();
@@ -95,8 +97,11 @@ class MainControl
 	void restoreWindows(const INIFile&) throw();
 	void addModularWidget(ModularWidget* /widget/) throw();
 	void removeModularWidget(ModularWidget* /widget/) throw();
-	const PyCompositeList getSelection() const throw();
+
+
 	PyCompositeList getSelection() throw();
+	//const PyCompositeList getSelection() const throw();
+
 	PyCompositeList getMolecularControlSelection() throw();
 	System* getSelectedSystem() throw();
 	void selectCompositeRecursive(Composite* /composite/, bool /first_call/ = false) throw();
@@ -105,16 +110,18 @@ class MainControl
 	void printSelectionInfos() throw();
 	void setStatusbarText(const String&, bool = false, bool = false);
 	String getStatusbarText() const	throw();
-	void setMenuHint(Index /id/, const String& /hint/) throw();
-	const String& getMenuHint(Index /id/) const throw();
+//	void setMenuHint(Index /id/, const String& /hint/) throw();
+//	const String& getMenuHint(Index /id/) const throw();
 	const FragmentDB& getFragmentDB() const throw();
 
-	bool compositesAreLocked() throw();
+	bool compositesAreLocked() const throw();
 	bool lockCompositesFor(ModularWidget*) throw();
 	bool unlockCompositesFor(ModularWidget*) throw();
 	ModularWidget* getLockingWidget() throw();
 	bool updateOfRepresentationRunning() throw();
 	bool stopedSimulation();
+	bool isBusy();
+	void wait();
 	//bool setSimulationThread(SimulationThread*) throw();
 	//SimulationThread* getSimulationThread() throw();
 	

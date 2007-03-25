@@ -21,8 +21,6 @@ r.setColorProcessor(ecp);
 getMainControl().insert(r);
 getMainControl().update(r);
 
-blub
-
 getDisplayProperties().selectModel(MODEL_STICK)
 getDisplayProperties().selectColoringMethod(COLORING_ELEMENT)
 getDisplayProperties().setDrawingPrecision(DRAWING_PRECISION_HIGH)

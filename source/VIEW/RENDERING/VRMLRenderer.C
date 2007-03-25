@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.C,v 1.6 2005/12/23 17:03:36 amoll Exp $
+// $Id: VRMLRenderer.C,v 1.6.20.1 2007/03/25 21:57:01 oliver Exp $
 //
 
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>

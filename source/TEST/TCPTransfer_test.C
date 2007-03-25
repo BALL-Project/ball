@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer_test.C,v 1.27 2005/12/23 17:03:12 amoll Exp $
+// $Id: TCPTransfer_test.C,v 1.27.18.1 2007/03/25 21:49:07 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -23,7 +23,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.27 2005/12/23 17:03:12 amoll Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.27.18.1 2007/03/25 21:49:07 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -83,6 +83,7 @@ CHECK(set(ofstream& file, const String& address))
 	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
 
+/*
 CHECK(http/login)
 	ABORT_IF(!NetworkTest::test("www.zbi.uni-saarland.de", NetworkTest::HTTP))
 	NEW_TMP_FILE(filename)
@@ -100,6 +101,7 @@ CHECK(http/login)
 
 	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
+*/
 
 
 CHECK(ftp)

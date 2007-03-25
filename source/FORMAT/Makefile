@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.25 2006/08/15 19:00:21 oliver Exp $
+# $Id: Makefile,v 1.25.8.1 2007/03/25 22:00:18 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -26,6 +26,7 @@ CPP_SOURCES=\
 	bruker1DFile.C\
 	bruker2DFile.C\
 	DCDFile.C\
+	DSN6File.C\
 	genericMolFile.C\
 	HINFile.C\
 	INIFile.C\
@@ -64,6 +65,8 @@ default_clean:	clean_flex_bison
 clean_flex_bison:
 	@-$(RM) GAMESSDatParserParser.C GAMESSDatParserLexer.C GAMESSDatParserParser.h 2>/dev/null
 	@-$(RM) GAMESSLogParserParser.C GAMESSLogParserLexer.C GAMESSLogParserParser.h 2>/dev/null
+
+
 
 
 GAMESSDatParserParser.C: GAMESSDatParserParser.y

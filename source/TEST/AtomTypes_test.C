@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AtomTypes_test.C,v 1.1 2003/02/22 12:32:33 anker Exp $
+// $Id: AtomTypes_test.C,v 1.1.32.1 2007/03/25 21:46:47 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AtomTypes_test.C,v 1.1 2003/02/22 12:32:33 anker Exp $")
+START_TEST(class_name, "$Id: AtomTypes_test.C,v 1.1.32.1 2007/03/25 21:46:47 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

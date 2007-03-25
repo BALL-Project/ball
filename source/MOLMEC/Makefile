@@ -1,5 +1,5 @@
 # MOLMEC/Makefile
-# $Id: Makefile,v 1.5 2000/02/10 11:55:45 oliver Exp $
+# $Id: Makefile,v 1.5.34.1 2007/03/25 22:00:25 oliver Exp $
 #
 include ../config.mak
 
@@ -13,6 +13,7 @@ DIRS=\
 	COMMON\
 	MINIMIZATION\
 	MDSIMULATION\
+	MMFF94\
 	PARAMETER
 
 default:	dirs

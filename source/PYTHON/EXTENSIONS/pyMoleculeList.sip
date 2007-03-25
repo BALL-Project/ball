@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyMoleculeList.sip,v 1.6 2005/12/23 17:02:56 amoll Exp $
+// $Id: pyMoleculeList.sip,v 1.6.20.1 2007/03/25 21:37:23 oliver Exp $
+//
 //
 
 %MappedType PyMoleculeList

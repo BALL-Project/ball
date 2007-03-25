@@ -1,12 +1,24 @@
+<<<<<<< Makefile
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.26 2006/01/26 16:12:55 oliver Exp $
+# $Id: Makefile,v 1.26.14.1 2007/03/25 21:56:43 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
 #
 
+=======
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: Makefile,v 1.26.14.1 2007/03/25 21:56:43 oliver Exp $
+#
+# Author:
+#   Oliver Kohlbacher
+#
+
+>>>>>>> 1.25.2.6
 DIRECTORY=VIEW/WIDGETS
 
 # Where the headers of the derived classes reside
@@ -19,37 +31,45 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	dockWidget.C\
-	genericControl.C\
+	editableScene.C\
 	logView.C\
+ 	genericControl.C\
 	geometricControl.C\
-	datasetControl.C\
 	molecularControl.C\
 	molecularStructure.C\
 	scene.C\
-	canvasWidget.C\
-	regularData2DWidget.C\
-	regularData1DWidget.C\
 	dockingController.C\
-	helpViewer.C
+	helpViewer.C\
+	fileObserver.C\
+	SDWidget.C\
+	testFramework.C\
+	datasetControl.C
+
+#	canvasWidget.C\
+#	regularData2DWidget.C\
+#	regularData1DWidget.C\
 
 
 PYTHON_CPP_SOURCES=\
 	pyWidget.C
 
 MOC_SOURCES=\
-	dockWidget_moc.C\
-	genericControl_moc.C\
-	logView_moc.C\
 	datasetControl_moc.C\
+	dockWidget_moc.C\
+	dockingController_moc.C\
+	editableScene_moc.C\
+	genericControl_moc.C\
 	geometricControl_moc.C\
+	helpViewer_moc.C\
+	logView_moc.C\
 	molecularControl_moc.C\
 	molecularStructure_moc.C\
-	scene_moc.C\
-	canvasWidget_moc.C\
-	regularData1DWidget_moc.C\
-	regularData2DWidget_moc.C\
-	dockingController_moc.C\
-	helpViewer_moc.C
+	fileObserver_moc.C\
+	testFramework_moc.C\
+	scene_moc.C
+#	canvasWidget_moc.C\
+#	regularData1DWidget_moc.C\
+#	regularData2DWidget_moc.C\
 
 PYTHON_MOC_SOURCES=\
 	pyWidget_moc.C
@@ -63,6 +83,9 @@ depend: $(MOC_SOURCES)
 
 dockWidget_moc.C:	$(HEADER_DIR)/dockWidget.h
 	$(MOC) $(HEADER_DIR)/dockWidget.h -o $@
+
+editableScene_moc.C:	$(HEADER_DIR)/editableScene.h
+	$(MOC) $(HEADER_DIR)/editableScene.h -o $@
 
 genericControl_moc.C:	$(HEADER_DIR)/genericControl.h
 	$(MOC) $(HEADER_DIR)/genericControl.h -o $@
@@ -85,6 +108,9 @@ scene_moc.C:	$(HEADER_DIR)/scene.h
 pyWidget_moc.C:	$(HEADER_DIR)/pyWidget.h
 	$(MOC) $(HEADER_DIR)/pyWidget.h -o $@
 
+fileObserver_moc.C:	$(HEADER_DIR)/fileObserver.h
+	$(MOC) $(HEADER_DIR)/fileObserver.h -o $@
+
 regularData1DWidget_moc.C:	$(HEADER_DIR)/regularData1DWidget.h
 	$(MOC) $(HEADER_DIR)/regularData1DWidget.h -o $@
 
@@ -102,4 +128,7 @@ helpViewer_moc.C:	$(HEADER_DIR)/helpViewer.h
 
 dockingController_moc.C:	$(HEADER_DIR)/dockingController.h
 	$(MOC) $(HEADER_DIR)/dockingController.h -o $@
+
+testFramework_moc.C:	$(HEADER_DIR)/testFramework.h
+	$(MOC) $(HEADER_DIR)/testFramework.h -o $@
 

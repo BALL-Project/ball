@@ -1,20 +1,24 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.19 2005/12/23 17:03:32 amoll Exp $
+// $Id: preferencesEntry.C,v 1.19.16.1 2007/03/25 22:02:25 oliver Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/DATATYPE/colorRGBA.h>
 
-#include <qslider.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qlineedit.h>
-#include <qbuttongroup.h>
-#include <qwidgetstack.h>
+#include <QtGui/qslider.h>
+#include <QtGui/qspinbox.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/QStackedWidget>
+#include <QtGui/QButtonGroup>
+#include <QtGui/QComboBox>
+#include <QtGui/QGroupBox>
+#include <QtGui/QRadioButton>
 
 using namespace std;
 
@@ -35,6 +39,56 @@ namespace BALL
 		{
 		}
 
+		void PreferencesEntry::registerWidgets_()
+		{
+			QObject* obj = dynamic_cast<QObject*>(this);
+			if (obj == 0)
+			{
+				BALLVIEW_DEBUG
+				return;
+			}
+
+			QList<QWidget*> widgets = obj->findChildren<QWidget *>();
+			QList<QWidget*>::iterator it = widgets.begin();
+			for (; it != widgets.end(); it++)
+			{
+				QWidget& widget = **it;
+				if (isSupported_(widget)) registerWidget_(&widget);
+			}
+		}
+
+
+		bool PreferencesEntry::isSupported_(QWidget& widget)
+		{
+			if (RTTI::isKindOf<ExtendedPreferencesObject>(widget) ||
+					RTTI::isKindOf<QSlider>(widget) 			||
+					RTTI::isKindOf<QSpinBox>(widget)			||
+					RTTI::isKindOf<QLineEdit>(widget)			||
+					RTTI::isKindOf<QCheckBox>(widget)			||
+					RTTI::isKindOf<QComboBox>(widget)			||
+					RTTI::isKindOf<QButtonGroup>(widget))
+			{
+				return true;
+			}
+
+			// color labels
+			QLabel* label = dynamic_cast<QLabel*>(&widget);
+			if (label != 0 								&& 
+					label->objectName() != "" &&
+					label->text() == "")
+			{
+				return true;
+			}
+
+			QGroupBox* box = dynamic_cast<QGroupBox*>(&widget);
+			if (box != 0 && (box->isCheckable() || box->findChildren<QRadioButton*>().size()))
+			{
+				return true;
+			}
+
+			return false;
+		}
+
 		void PreferencesEntry::writePreferenceEntries(INIFile& inifile)
 		{
 			if (registered_objects_.size() == 0) return;
@@ -48,7 +102,13 @@ namespace BALL
 
 			if (inifile_section_name_ == "") 
 			{
-				Log.error() << "INIFile section name not set in " << widget->name() << std::endl;
+				Log.error() << "INIFile section name not set in " << ascii(widget->objectName()) << std::endl;
+				StackPages::const_iterator lit = stack_pages_.begin();
+				for (;lit != stack_pages_.end(); ++lit)
+				{
+					Log.error() << (*lit).second << std::endl;
+				}
+
 				return;
 			}
 
@@ -62,7 +122,7 @@ namespace BALL
 			HashSet<QWidget*>::Iterator it = registered_objects_.begin();
 			for (; it != registered_objects_.end(); it++)
 			{
-				name = (**it).name();
+				name = ascii((**it).objectName());
 
 				if (name == "" || !getValue_(*it, value))
 				{
@@ -71,7 +131,7 @@ namespace BALL
 						Log.error() << "Unnamed Preferences object!";
 					}
 
-					Log.error() << " in PreferencesEntry: " << widget->name() << " ";
+					Log.error() << " in PreferencesEntry: " << ascii(widget->objectName()) << " ";
 				  Log.error() << __FILE__ << " " << __LINE__ << std::endl;
 
 					continue;
@@ -96,13 +156,17 @@ namespace BALL
 			{
 				value = String((dynamic_cast<const QSlider*>(widget))->value());
 			}
+			else if (RTTI::isKindOf<QSpinBox>(*widget))
+			{
+				value = String((dynamic_cast<const QSpinBox*>(widget))->value());
+			}
 			else if (RTTI::isKindOf<QLabel>(*widget))
 			{
-				value = ColorRGBA((dynamic_cast<const QLabel*>(widget))->backgroundColor());	
+				value = getColor(dynamic_cast<const QLabel*>(widget));
 			}
 			else if (RTTI::isKindOf<QLineEdit>(*widget))
 			{
-				value = (dynamic_cast<const QLineEdit*>(widget))->text().ascii();
+				value = ascii((dynamic_cast<const QLineEdit*>(widget))->text());
 			}
 			else if (RTTI::isKindOf<QCheckBox>(*widget))
 			{
@@ -110,24 +174,51 @@ namespace BALL
 			}
 			else if (RTTI::isKindOf<QComboBox>(*widget))
 			{
-				value = String((dynamic_cast<const QComboBox*>(widget))->currentItem());
+				value = String((dynamic_cast<const QComboBox*>(widget))->currentIndex());
 			}
 			else if (RTTI::isKindOf<QButtonGroup>(*widget))
 			{
 				const QButtonGroup* qbg = dynamic_cast<const QButtonGroup*>(widget);
 
 				// no button selected (should not happen) -> select first
-				if (qbg->selectedId() == -1)
+				if (qbg->checkedId() == -1)
 				{
 					value="0";
 					return true;
 				}
 
-				value = String(qbg->selectedId());
+				value = String(qbg->checkedId());
+			}
+			else if (RTTI::isKindOf<QGroupBox>(*widget))
+			{
+				value.clear();
+				// QGroupBoxes can either be checkable and/or have QRadioButtons as childs
+				const QGroupBox* gb = dynamic_cast<const QGroupBox*>(widget);
+				if (gb->isCheckable() && gb->isChecked()) 
+				{
+					value = "#";
+				}
+
+				QList<QRadioButton*> rbs = gb->findChildren<QRadioButton*>();
+				QList<QRadioButton*>::iterator it = rbs.begin();
+				for (; it != rbs.end(); it++)
+				{
+					if (((QRadioButton*) *it)->isChecked())
+					{
+						value += ascii((**it).objectName());
+						return true;
+					}
+				}
+
+				if (gb->isCheckable() || rbs.size()) return true;
+
+				Log.error() << "Warning: QGroupBox " << ascii(widget->objectName())
+										<< " in PreferencesEntry without QRadioButton" << std::endl;
+				return false;
 			}
 			else
 			{
-				Log.error() << "Unknown Preferences object " << widget->name() << std::endl;
+				Log.error() << "Unknown Preferences object " << ascii(widget->objectName()) << std::endl;
 				return false;
 			}
 
@@ -140,13 +231,13 @@ namespace BALL
 			HashSet<QWidget*>::Iterator it = registered_objects_.begin();
 			for (; it != registered_objects_.end(); it++)
 			{
-				if (!inifile.hasEntry(inifile_section_name_, (**it).name())) continue;
+				if (!inifile.hasEntry(inifile_section_name_, ascii((**it).objectName()))) continue;
 
-				String value = inifile.getValue(inifile_section_name_, (**it).name());
+				String value = inifile.getValue(inifile_section_name_, ascii((**it).objectName()));
 
 				if (!setValue_(*it, value))
 				{
-					Log.error() << "Invalid entry in INIFile: " << (**it).name() << " " << value << std::endl;
+					Log.error() << "Invalid entry in INIFile: " << ascii((**it).objectName()) << " " << value << std::endl;
 				}
 			}
 		}
@@ -168,10 +259,13 @@ namespace BALL
 				{
 					(dynamic_cast<QSlider*>(widget))->setValue(value.toInt());
 				}
+				else if (RTTI::isKindOf<QSpinBox>(*widget))
+				{
+					(dynamic_cast<QSpinBox*>(widget))->setValue(value.toInt());
+				}
 				else if (RTTI::isKindOf<QLabel>(*widget))
 				{
-					QLabel& label = *dynamic_cast<QLabel*>(widget);
-					label.setBackgroundColor(ColorRGBA(value).getQColor());
+					setColor(dynamic_cast<QLabel*>(widget), ColorRGBA(value));
 				}
 				else if (RTTI::isKindOf<QLineEdit>(*widget))
 				{
@@ -184,16 +278,46 @@ namespace BALL
 				else if (RTTI::isKindOf<QComboBox>(*widget))
 				{
 					if (value.toUnsignedInt() >= (Position)(dynamic_cast<QComboBox*>(widget))->count()) return false;
-					(dynamic_cast<QComboBox*>(widget))->setCurrentItem(value.toInt());
+					(dynamic_cast<QComboBox*>(widget))->setCurrentIndex(value.toInt());
 				}
 				else if (RTTI::isKindOf<QButtonGroup>(*widget))
 				{
-					(dynamic_cast<QButtonGroup*>(widget))->setButton(value.toInt());
+					(dynamic_cast<QButtonGroup*>(widget))->button(value.toInt())->setChecked(true);
+				}
+				else if (RTTI::isKindOf<QGroupBox>(*widget))
+				{
+					QGroupBox* gb = dynamic_cast<QGroupBox*> (widget);
+					String v = value;
+					if (gb->isCheckable())
+					{
+						gb->setChecked(v[0] == '#');
+					}
+						
+					v.trimLeft("#");
+
+					QRadioButton* button = widget->findChild<QRadioButton*>(v.c_str());
+					if (button != 0) 
+					{
+						button->setChecked(true);
+						return true;
+					}
+
+					if (!gb->isCheckable())
+					{
+						Log.error() << "Warning: Could not find QRadioButton " << value 
+												<< " in GroupBox in PreferencesEntry" << std::endl;
+						return false;
+					}
 				}
 				else 
 				{
-					Log.error() << "Unknown QWidget " << widget->name() << " in " 
-											<< __FILE__ << __LINE__ << std::endl;
+					Log.error() << "Unknown QWidget " << ascii(widget->objectName()) << " in ";
+					if (widget->parent() != 0)
+					{
+						Log.error() << ascii(widget->parent()->objectName()) << " in ";
+					}
+
+					Log.error() << __FILE__ << " " << __LINE__ << std::endl;
 					return false;
 				}
 			}
@@ -206,11 +330,11 @@ namespace BALL
 		}
 
 		
-		void PreferencesEntry::registerObject_(QWidget* widget)
+		void PreferencesEntry::registerWidget_(QWidget* widget)
 		{
 			if (widget == 0) return;
 
-			if (widget->name() == "")
+			if (ascii(widget->objectName()) == "")
 			{
 				Log.error() << "Unnamed Preferences object!" << std::endl;
 				return;
@@ -218,7 +342,7 @@ namespace BALL
 
 			if (registered_objects_.has(widget))
 			{
-				Log.error() << "Widget " << widget << " with name " << widget->name() 
+				Log.error() << "Widget " << widget << " with name " << ascii(widget->objectName()) 
 										<< " was already added!" << std::endl;
 				return;
 			}
@@ -226,13 +350,34 @@ namespace BALL
 			registered_objects_.insert(widget);
 
 			String value;
-			getValue_(widget, value);
+			if (!getValue_(widget, value))
+			{
+				BALLVIEW_DEBUG
+			}
 			
 			default_values_[widget] = value;
 			last_values_[widget] = value;
 		}
 
-		
+
+		void PreferencesEntry::unregisterWidget_(QWidget* widget)
+		{
+			if (widget == 0) return;
+
+			if (!registered_objects_.has(widget))
+			{
+				Log.error() << "Widget " << widget << " with name " << ascii(widget->objectName()) 
+										<< " was not added!" << std::endl;
+				return;
+			}
+
+			registered_objects_.erase(widget);
+
+			default_values_.erase(widget);
+			last_values_.erase(widget);
+		}
+
+	
 		void PreferencesEntry::setWidgetStackName(const String& name)
 		{
 			QWidget* widget = dynamic_cast<QWidget*>(this);
@@ -243,10 +388,10 @@ namespace BALL
 				return;
 			}
 
-			insertEntry_(widget, name);
+			insertStackEntry_(widget, name);
 		}
 			
-		void PreferencesEntry::insertEntry_(QWidget* widget, const String& name)
+		void PreferencesEntry::insertStackEntry_(QWidget* widget, const String& name)
 		{
 			stack_pages_.push_back(std::pair<QWidget*, String>(widget, name));
 		}
@@ -255,17 +400,26 @@ namespace BALL
 		void PreferencesEntry::showStackPage(Position nr) 
 		{ 
 			if (widget_stack_ == 0) return;
-			widget_stack_->raiseWidget(nr);
+			widget_stack_->setCurrentWidget(widget_stack_->widget(nr));
 		}
 
 		void PreferencesEntry::showStackPage(QWidget* widget) 
 		{ 
 			if (widget_stack_ == 0) return;
-			widget_stack_->raiseWidget(widget);
+			
+			// workaround for damn QT 4.1!
+			for (Index p = 0; p < widget_stack_->count(); p++)
+			{
+				widget_stack_->widget(p)->hide();
+			}
+
+			widget_stack_->setCurrentWidget(widget);
+			widget_stack_->show();
+			widget->show();
 		}
 
 		
-		void PreferencesEntry::setWidgetStack(QWidgetStack* stack)
+		void PreferencesEntry::setWidgetStack(QStackedWidget* stack)
 		{
 			widget_stack_ = stack;
 
@@ -275,22 +429,20 @@ namespace BALL
 			{
 				if (widget_stack_->widget(p) == 0) break;
 
-				String name = widget_stack_->widget(p)->name();
+				String name = ascii(widget_stack_->widget(p)->objectName());
 				for (Position i = 0; i < name.size(); i++)
 				{
 					if (name[i] == '_') name[i] = ' ';
 				}
-				insertEntry_(widget_stack_->widget(p), name);
+				insertStackEntry_(widget_stack_->widget(p), name);
 			}
-
-			storeStackEntries_();
 		}
 
 
 		Position PreferencesEntry::currentStackPage() const
 		{
 			if (widget_stack_ == 0) return 0;
-			return widget_stack_->id(widget_stack_->visibleWidget());
+			return widget_stack_->currentIndex();
 		}
 
 
@@ -299,7 +451,7 @@ namespace BALL
 			if (getMainControl() == 0) return;
 
 			RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
-			msg->setWidget(widget);
+			msg->setObject(widget);
 			msg->setURL(url);
 			getMainControl()->sendMessage(*msg);
 		}
@@ -319,7 +471,7 @@ namespace BALL
 
 		void PreferencesEntry::restoreValues_(bool all, const ValueMap& map)
 		{
-			// no widget stack, or (all == true) -> all items are restored
+			// if this entry does not have a widget stack, or all child entries are to be restored:
 			if (widget_stack_ == 0 || all)
 			{
 				HashSet<QWidget*>::Iterator it = registered_objects_.begin();
@@ -327,17 +479,22 @@ namespace BALL
 				{
 					setValue_(*it, map[*it]);
 				}
+
+				return;
 			}
+
 			// entries for current widget stack item
-			else if (!all)
+			Index id = currentStackPage();
+			if (id == -1) return;
+
+			QWidget* widget = widget_stack_->widget(id);
+			QList<QWidget*> widgets = widget->findChildren<QWidget *>();
+
+			QList<QWidget*>::iterator it = widgets.begin();
+			for (; it != widgets.end(); it++)
 			{
-				Index id = currentStackPage();
-				if (id == -1) return;
-				for (Position p = 0; p < stack_entries_[id].size(); p++)
-				{
-					QWidget* widget = stack_entries_[id][p];
-					setValue_(widget, map[widget]);
-				}
+				QWidget& child = **it;
+				if (registered_objects_.has(&child)) setValue_(&child, map[&child]);
 			}
 		}
 
@@ -354,51 +511,18 @@ namespace BALL
 		}
 
 		
-		void PreferencesEntry::storeStackEntries_()
+		void PreferencesEntry::dump(ostream& s, Size depth) const
+			throw()
 		{
-			if (widget_stack_ == 0) return;
-
-			stack_entries_.clear();
-			stack_entries_.resize(stack_pages_.size());
-			
-			HashSet<QWidget*>::Iterator it = registered_objects_.begin();
-			for (; it != registered_objects_.end(); it++)
+			BALL_DUMP_STREAM_PREFIX(s);
+			BALL_DUMP_DEPTH(s, depth);
+			HashSet<QWidget*>::ConstIterator it = registered_objects_.begin();
+			for (; +it; ++it)
 			{
-				QWidget* widget = *it;
-				while (widget->parent() != 0)
-				{
-					QWidget* parent = (QWidget*)widget->parent();
-
-					if (!RTTI::isKindOf<QWidgetStack>(*parent)) 
-					{
-						widget = parent;
-						continue;
-					}
-
-					Index id = widget_stack_->id(widget);
-
-					if (id == -1) continue;
-
-					stack_entries_[id].push_back(*it);
-					widget = 0;
-					break;
-				} // look for parent 
-
-				// if we dont find the parent widget stack entry, debug
-				if (widget != 0) BALLVIEW_DEBUG;
-
-			} // all objects
+				s << ascii((**it).objectName()) << std::endl;
+			}
+			BALL_DUMP_STREAM_SUFFIX(s);     
 		}
 
-		ColorRGBA PreferencesEntry::getLabelColor_(const QLabel* label) const
-		{
-			return ColorRGBA(label->backgroundColor());
-		}
-			
-		void PreferencesEntry::setLabelColor_(QLabel* label, const ColorRGBA& color)
-		{
-			label->setBackgroundColor(color.getQColor());
-		}
-			
 	} // namespace VIEW
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.sip,v 1.3 2005/12/23 17:02:59 amoll Exp $
+// $Id: stage.sip,v 1.3.20.1 2007/03/25 21:38:53 oliver Exp $
 //
 
 class LightSource
@@ -95,8 +95,10 @@ class Stage
 	virtual void addLightSource(const LightSource& ) throw();
 	virtual void removeLightSource(const LightSource& ) throw();
 	void clearLightSources() throw();
+
 	virtual Camera& getCamera() throw();
-	virtual const Camera& getCamera() const throw();
+	// virtual const Camera& getCamera() const throw();
+
 	virtual void setCamera(const Camera& ) throw();
 	virtual const ColorRGBA& getBackgroundColor() const throw();
 	virtual void setBackgroundColor(const ColorRGBA& ) throw();

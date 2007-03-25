@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#  $Id: makedistribution,v 1.8 2004/02/19 17:20:36 oliver Exp $
+#  $Id: makedistribution,v 1.8.30.1 2007/03/25 22:02:49 oliver Exp $
 #
 
 # check whether the revision number is given as the first argument
@@ -15,13 +15,18 @@ fi
 # create a dummy directory and extract the current CVS version of BALL
 echo "extracting BALL revision $1 from cvs..."
 cd /tmp
+install -d $USER
+cd $USER
 rm -fr BALL-dist 2>/dev/null
-mkdir BALL-dist
+install -d BALL-dist
 cd BALL-dist
 cvs -q co -r ${TAG} BALL 1>cvs_extract.log 2>cvs_extract_err.log || ( echo "cannot extract revision ${TAG} of BALL" >&0 && exit )
 # remove CVS information
 REMOVE=`find . -name CVS -type d`
 rm -fr ${REMOVE} 2>/dev/null
+rm -fr BALL/Windows/Libs/Python\ Module/CVS 2>/dev/null
+rm -fr BALL/Windows/Libs/Python\ Module/Debug/CVS 2>/dev/null
+rm -fr BALL/Windows/Libs/Python\ Module/Release/CVS 2>/dev/null
 cd BALL/source
 FILE="BALL-`grep BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | head -1 | awk '{print $3}'| tr -d \\"`.tar"
 mv config/Makefile.dummy .

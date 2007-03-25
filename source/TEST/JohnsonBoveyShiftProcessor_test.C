@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JohnsonBoveyShiftProcessor_test.C,v 1.13 2004/11/18 19:34:15 oliver Exp $
+// $Id: JohnsonBoveyShiftProcessor_test.C,v 1.13.28.1 2007/03/25 21:47:15 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(JohnsonBoveyShiftProcessor, "$Id: JohnsonBoveyShiftProcessor_test.C,v 1.13 2004/11/18 19:34:15 oliver Exp $")
+START_TEST(JohnsonBoveyShiftProcessor, "$Id: JohnsonBoveyShiftProcessor_test.C,v 1.13.28.1 2007/03/25 21:47:15 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

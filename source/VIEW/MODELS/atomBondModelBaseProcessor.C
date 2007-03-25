@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.C,v 1.15 2005/12/23 17:03:33 amoll Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.15.18.1 2007/03/25 22:02:28 oliver Exp $
 //
 
 #include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
@@ -156,7 +156,7 @@ namespace BALL
 
 		Processor::Result AtomBondModelBaseProcessor::operator () (Composite& composite)
 		{
-			Residue* residue = dynamic_cast<Residue*>(&composite);
+			Fragment* residue = dynamic_cast<Fragment*>(&composite);
 			if (residue == 0) return Processor::CONTINUE;
 
 			RingPerceptionProcessor rpp;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PartialChargeDescriptors_test.C,v 1.1 2004/05/11 07:28:23 oliver Exp $
+// $Id: PartialChargeDescriptors_test.C,v 1.1.28.1 2007/03/25 21:47:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////

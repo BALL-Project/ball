@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RMSDMinimizer_test.C,v 1.1 2006/01/27 20:57:47 oliver Exp $
+// $Id: RMSDMinimizer_test.C,v 1.1.18.1 2007/03/25 21:47:36 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -15,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(RMSDMinimizer, "$Id: RMSDMinimizer_test.C,v 1.1 2006/01/27 20:57:47 oliver Exp $")
+START_TEST(RMSDMinimizer, "$Id: RMSDMinimizer_test.C,v 1.1.18.1 2007/03/25 21:47:36 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.18 2005/12/23 17:02:30 amoll Exp $
+// $Id: main.C,v 1.18.16.1 2007/03/25 21:32:19 oliver Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
-#include <qapplication.h>
+#include <QtGui/qapplication.h>
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/directory.h>
@@ -69,7 +69,6 @@ int main(int argc, char **argv)
 	BALL::Directory dir;
 	QApplication application(argc, argv);
 	BALL::Mainframe* mainframe = new Mainframe();
- 	application.setMainWidget(mainframe);
 	mainframe->setIdentifier("MAIN");
 	mainframe->registerThis();
 

@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ResourceFile_test.C,v 1.18 2002/12/18 16:09:22 anker Exp $
+// $Id: ResourceFile_test.C,v 1.18.32.1 2007/03/25 21:48:53 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/resourceFile.h>
 ///////////////////////////
 
-START_TEST(ResourceFile, "$Id: ResourceFile_test.C,v 1.18 2002/12/18 16:09:22 anker Exp $")
+START_TEST(ResourceFile, "$Id: ResourceFile_test.C,v 1.18.32.1 2007/03/25 21:48:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

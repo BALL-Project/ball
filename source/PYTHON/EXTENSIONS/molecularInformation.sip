@@ -1,9 +1,8 @@
 class MolecularInformation
 {
 %TypeHeaderCode
-	#include <BALL/VIEW/KERNEL/molecularInformation.h>
+	#include <BALL/CONCEPT/molecularInformation.h>
 	using namespace BALL;
-	using namespace BALL::VIEW;
 %End
   public:
 			

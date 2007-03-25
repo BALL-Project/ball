@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.sip,v 1.7 2003/11/01 09:27:37 oliver Exp $
+// $Id: chain.sip,v 1.7.28.1 2007/03/25 21:37:04 oliver Exp $
 //
 
 class Chain
@@ -24,32 +24,39 @@ class Chain
 	//  Chain& operator = (const Chain&);
   void get(Chain&, bool = true) const;
   void swap(Chain&);
+
   Protein* getProtein();
-  const Protein* getProtein() const;
+  // const Protein* getProtein() const;
+
   SecondaryStructure* getSecondaryStructure(int);
-  const SecondaryStructure* getSecondaryStructure(int) const;
+  // const SecondaryStructure* getSecondaryStructure(int) const;
+
   Residue* getResidue(int);
-  const Residue* getResidue(int) const;
+  // const Residue* getResidue(int) const;
+
   Residue* getNTerminal();
-  const Residue* getNTerminal() const;
+  // const Residue* getNTerminal() const;
+
   Residue* getCTerminal();
-  const Residue* getCTerminal() const;
+  // const Residue* getCTerminal() const;
+
   PDBAtom* getPDBAtom(int);
-  const PDBAtom* getPDBAtom(int) const;
+  // const PDBAtom* getPDBAtom(int) const;
+
   int countSecondaryStructures() const;
   int countResidues() const;
   int countPDBAtoms() const;
-  void prepend(SecondaryStructure&);
-  void append(SecondaryStructure&);
-  void insert(SecondaryStructure&);
-  void insertBefore(SecondaryStructure&, Composite&);
-  void insertAfter(SecondaryStructure&, Composite&);
+  void prepend(SecondaryStructure& /Transfer/);
+  void append(SecondaryStructure& /Transfer/);
+  void insert(SecondaryStructure& /Transfer/);
+  void insertBefore(SecondaryStructure& /Transfer/, Composite&);
+  void insertAfter(SecondaryStructure& /Transfer/, Composite&);
   bool remove(SecondaryStructure&);
-  void prepend(Residue&);
-  void append(Residue&);
-  void insert(Residue&);
-  void insertBefore(Residue&,Composite&);
-  void insertAfter(Residue&, Composite&);
+  void prepend(Residue& /Transfer/);
+  void append(Residue& /Transfer/);
+  void insert(Residue& /Transfer/);
+  void insertBefore(Residue& /Transfer/,Composite&);
+  void insertAfter(Residue& /Transfer/, Composite&);
   bool remove(Residue&);
   void spliceBefore(Chain&);
   void spliceAfter(Chain&);

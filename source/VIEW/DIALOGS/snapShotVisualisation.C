@@ -1,15 +1,17 @@
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/FORMAT/trajectoryFile.h>
+#include <BALL/SYSTEM/systemCalls.h>
 
-#include <qlineedit.h>
-#include <qcheckbox.h>
-#include <qslider.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qprogressdialog.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qslider.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qradiobutton.h>
+#include <QtGui/QProgressDialog>
 
 namespace BALL
 {
@@ -17,13 +19,37 @@ namespace BALL
 	{
 
 SnapshotVisualisationDialog::SnapshotVisualisationDialog(QWidget* parent, const char* name)
-	: SnapshotVisualisationDialogData(parent, name),
+	: QDialog(parent),
+		Ui_SnapshotVisualisationDialogData(),
 		ModularWidget(name),
 		snap_shot_manager_(0)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new SnapshotVisualisationDialog" << this << std::endl;
 #endif
+	setupUi(this);
+
+	// signals and slots connections
+	connect( animateButton, SIGNAL( clicked() ), this, SLOT( animateClicked() ) );
+	connect( cancelButton, SIGNAL( clicked() ), this, SLOT( cancelPressed() ) );
+	connect( firstSnapshotButton, SIGNAL( clicked() ), this, SLOT( firstSnapshotClicked() ) );
+	connect( tenBackwardButton, SIGNAL( clicked() ), this, SLOT( tenBackwardClicked() ) );
+	connect( oneBackwardButton, SIGNAL( clicked() ), this, SLOT( oneBackwardClicked() ) );
+	connect( oneForwardButton, SIGNAL( clicked() ), this, SLOT( oneForwardClicked() ) );
+	connect( tenForwardButton, SIGNAL( clicked() ), this, SLOT( tenForwardClicked() ) );
+	connect( lastSnapshotButton, SIGNAL( clicked() ), this, SLOT( lastSnapshotClicked() ) );
+	connect( snapShotSlider, SIGNAL( valueChanged(int) ), this, SLOT( sliderMovedToPos() ) );
+	connect( startSnapshot, SIGNAL( textChanged(const QString&) ), this, SLOT( snapShotInputTest() ) );
+	connect( endSnapshot, SIGNAL( textChanged(const QString&) ), this, SLOT( snapShotInputTest() ) );
+	connect( animationSpeedSlider, SIGNAL( valueChanged(int) ), this, SLOT( animationSpeedChanged() ) );
+	connect( forwardLoopButton, SIGNAL( clicked() ), this, SLOT( checkLoop() ) );
+	connect( rockLoopButton, SIGNAL( clicked() ), this, SLOT( checkRock() ) );
+	connect( noLoopButton, SIGNAL( clicked() ), this, SLOT( checkNoLoop() ) );
+
+	animateButton->setEnabled(true);
+	cancelButton->setText("Close");
+
+	setObjectName(name);
 	tmp_.setNum(1);
 	ModularWidget::registerWidget(this);
 }
@@ -32,8 +58,19 @@ SnapshotVisualisationDialog::~SnapshotVisualisationDialog() throw()
 {
 }
 
+void SnapshotVisualisationDialog::cancelPressed()
+{
+	stop_();
+
+	if (animation_running_) return;
+
+	close();
+}
+
 void SnapshotVisualisationDialog::firstSnapshotClicked()
 {
+	if (main_control_->getRepresentationManager().updateRunning()) return;
+
   if (snap_shot_manager_->applyFirstSnapShot())
 	{
 		tmp_.setNum(1, 10);
@@ -78,6 +115,8 @@ void SnapshotVisualisationDialog::hundredBackwardClicked()
 
 void SnapshotVisualisationDialog::lastSnapshotClicked()
 {
+	if (main_control_->getRepresentationManager().updateRunning()) return;
+
 	if (snap_shot_manager_->applySnapShot(
 				snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots()))
 	{
@@ -92,18 +131,22 @@ void SnapshotVisualisationDialog::lastSnapshotClicked()
 
 void SnapshotVisualisationDialog::animateClicked()
 {
+	if (main_control_->getRepresentationManager().updateRunning()) return;
+
+	cancel_ = false;
 	error_ = false;
 	Size tempo = getEndSnapshot();
 	Size speed = animationSpeedSlider->value();
 	bool forward = true;
-	QProgressDialog progress("SnapShot Visualisation", "Abort Animation", tempo, 0, "progress", true);
+	animateButton->setEnabled(false);
+	sliderBox->setEnabled(false);
+	cancelButton->setText("Cancel");
+	animation_running_ = true;
 	
 	for (Size i = getStartSnapshot(); 
-			 i < tempo && !error_ && !progress.wasCancelled(); )
+			 i < tempo && !error_ && !cancel_; )
 	{
-		progress.setProgress(i);
-			
-		setCaption((String("CurrentSnapshot: ") + String(i)).c_str());
+		setWindowTitle((String("CurrentSnapshot: ") + String(i)).c_str());
 		snapShotSlider->setValue(i);
 		update_();
 
@@ -133,10 +176,10 @@ void SnapshotVisualisationDialog::animateClicked()
 			if (speed >= tempo - i)
 			{
 				i = tempo;
-				setCaption((String("CurrentSnapshot: ") + String(i)).c_str());
+				setWindowTitle((String("CurrentSnapshot: ") + String(i)).c_str());
 				snapShotSlider->setValue(i);
 				update_();
-				
+
 				if (export_PNG->isChecked())
 				{
 					notify_(new SceneMessage(SceneMessage::EXPORT_PNG));
@@ -176,23 +219,31 @@ void SnapshotVisualisationDialog::animateClicked()
 		}
 	}
 	
-	setCaption("Snapshot Visualisation");
+	setWindowTitle("Snapshot Visualisation");
+	animateButton->setEnabled(true);
+	cancelButton->setText("Close");
+	animation_running_ = false;
+	sliderBox->setEnabled(true);
 }
 
 
 void SnapshotVisualisationDialog::backward(Size nr)
 {
-	if (nr > (Size)currentSnapshot->text().toInt()) 
+	if (main_control_->getRepresentationManager().updateRunning()) return;
+
+  Index tmpnr = (currentSnapshot->text().toInt()) - (Index) nr;
+	if (tmpnr <= 0)
 	{
 		firstSnapshotClicked();
+		tmpnr = 0;
 	}
-
-  Position tmpnr = (currentSnapshot->text().toInt()) - nr;
- 
-  if (!snap_shot_manager_->applySnapShot(tmpnr)) 
+	else
 	{
-		Log.error() << "Could not apply  snapshot" <<std::endl;
-		error_ = true;
+		if (!snap_shot_manager_->applySnapShot(tmpnr)) 
+		{
+			Log.error() << "Could not apply  snapshot" <<std::endl;
+			error_ = true;
+		}
 	}
 
 	snapShotSlider->setValue(tmpnr);
@@ -202,16 +253,21 @@ void SnapshotVisualisationDialog::backward(Size nr)
 
 void SnapshotVisualisationDialog::forward(Size nr)
 {
+	if (main_control_->getRepresentationManager().updateRunning()) return;
+
 	Size tmpnr = (currentSnapshot->text().toInt()) + nr;
   if (tmpnr >= snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots())
   {
   	lastSnapshotClicked();
+		tmpnr = snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots();
   }
-	
-	if (!snap_shot_manager_->applySnapShot(tmpnr))
+	else
 	{
-	  Log.error() << "Could not apply  snapshot" << std::endl;
-		error_ = true;
+		if (!snap_shot_manager_->applySnapShot(tmpnr))
+		{
+			Log.error() << "Could not apply  snapshot" << std::endl;
+			error_ = true;
+		}
 	}
 
 	snapShotSlider->setValue(tmpnr);
@@ -224,7 +280,7 @@ Size SnapshotVisualisationDialog::getStartSnapshot() const
 {
 	try
 	{
-		return (Size)String(startSnapshot->text().ascii()).toUnsignedInt();
+		return (Size)ascii(startSnapshot->text()).toUnsignedInt();
 	}
 	catch(...)
 	{
@@ -238,7 +294,7 @@ Size SnapshotVisualisationDialog::getEndSnapshot() const
 {
 	try 
 	{
-		return (Size)String(endSnapshot->text().ascii()).toUnsignedInt();
+		return (Size)ascii(endSnapshot->text()).toUnsignedInt();
 	}
 	catch(...)
 	{
@@ -250,6 +306,8 @@ Size SnapshotVisualisationDialog::getEndSnapshot() const
 void SnapshotVisualisationDialog::sliderMovedToPos()
 {
 	if (snap_shot_manager_ == 0) return;
+	if (main_control_->getRepresentationManager().updateRunning()) return;
+
 	currentSnapshot->setText(String(snapShotSlider->value()).c_str());
 	Position tmpnr = (currentSnapshot->text().toInt());	
 	
@@ -270,12 +328,25 @@ void SnapshotVisualisationDialog::update_()
   currentSnapshot->setText(tmp_);
 	update();
 	notify_(new CompositeMessage(*snap_shot_manager_->getSystem(), CompositeMessage::CHANGED_COMPOSITE));
+
+	while (main_control_->getRepresentationManager().updateRunning())
+	{
+		QApplication::processEvents();
+		sleepFor(10);
+	}
 }
 
 void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_manager)  
 {
 	snap_shot_manager_ = snapshot_manager;
 	if (snapshot_manager == 0) return;
+
+	main_control_ = getMainControl();
+	if (main_control_ == 0)
+	{
+		Log.error() << "No MainControl available for SnapshotVisualisationDialog!" << std::endl;
+		return;
+	}
 
   tmp_.setNum(snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots());
 	numberOfSnapshots->setText(tmp_);
@@ -289,8 +360,8 @@ void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_m
 
 void SnapshotVisualisationDialog::snapShotInputTest()
 {
-	String startSnap = startSnapshot->text().ascii();
-	String endSnap = endSnapshot->text().ascii();
+	String startSnap = ascii(startSnapshot->text());
+	String endSnap = ascii(endSnapshot->text());
 	String valid_char = "0123456789";
 	//test if input is valid
 	if (startSnap.size()!=0)
@@ -321,9 +392,9 @@ void SnapshotVisualisationDialog::snapShotInputTest()
 	}
 
 	// set line edits to number of snapshots, if written number is bigger then number of snapshots
-	String num_of_shots = numberOfSnapshots->text().ascii();
-	String num_of_startsnap = startSnapshot->text().ascii();
-	String num_of_endsnap = endSnapshot->text().ascii();
+	String num_of_shots = ascii(numberOfSnapshots->text());
+	String num_of_startsnap = ascii(startSnapshot->text());
+	String num_of_endsnap = ascii(endSnapshot->text());
 	Size num_shots = num_of_shots.toInt();
 	Size num_startsnap = num_of_startsnap.toInt();
 	Size num_endsnap = num_of_endsnap.toInt();
@@ -363,6 +434,30 @@ void SnapshotVisualisationDialog::checkRock()
 	if(!rockLoopButton->isChecked()) rockLoopButton->setChecked(true);
 	noLoopButton->setChecked(false);
 	forwardLoopButton->setChecked(false);
+}
+
+void SnapshotVisualisationDialog::stop_()
+{
+	cancel_ = true;
+	unlockComposites();
+}
+
+void SnapshotVisualisationDialog::show()
+{
+	main_control_ = getMainControl();
+	if (main_control_ == 0)
+	{
+		Log.error() << "No MainControl available for SnapshotVisualisationDialog!" << std::endl;
+		return;
+	}
+
+	if (!lockComposites()) return;
+	QDialog::show();
+}
+
+void SnapshotVisualisationDialog::closeEvent(QCloseEvent*)
+{
+	stop_();
 }
 
 } } // namespace

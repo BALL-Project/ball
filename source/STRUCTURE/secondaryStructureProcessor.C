@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureProcessor.C,v 1.14.18.1 2007/03/22 11:48:22 oliver Exp $
+// $Id: secondaryStructureProcessor.C,v 1.14.18.2 2007/03/25 22:00:33 oliver Exp $
 
 #include <BALL/STRUCTURE/secondaryStructureProcessor.h>
 #include <BALL/STRUCTURE/HBondProcessor.h>
@@ -230,11 +230,11 @@ namespace BALL
 					// do we have HBP(k-2, i+2) ? => antiparallel bridge(i+1,k-1)
 					if (((partner-2)>=0) && ((current_res+2) <=size))
 					{
-						for (Size s = 0;(s < HBonds_[partner-2].size()); s++)
+						for (Size s = 0; (s < HBonds_[partner-2].size()); s++)
 						{
 
 							if ((HBonds_[partner-2][s] == (current_res + 2))
-									&& ((current_res+1) != (partner - 1)))
+									&& ((current_res + 1) != (partner - 1)))
 							{
 								//insert
 							  //NOTE: there might be  more than two bridges for this residue

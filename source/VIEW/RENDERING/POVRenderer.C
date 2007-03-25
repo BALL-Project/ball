@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.22 2005/12/23 17:03:36 amoll Exp $
+// $Id: POVRenderer.C,v 1.22.16.1 2007/03/25 21:57:01 oliver Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -23,6 +23,7 @@
 #include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/multiLine.h>
 
 
 using std::endl;
@@ -84,7 +85,6 @@ namespace BALL
 
 			representations_.clear();
 			color_map_.clear();
-			color_vector_.clear();
 		}
 
 		void POVRenderer::setFileName(const String& name)
@@ -151,7 +151,6 @@ namespace BALL
 			output += trimFloatValue_(input.y) + ", ";
 			output += trimFloatValue_(input.z);
 			output += ">";
-
 			return output;
 		}
 
@@ -162,7 +161,7 @@ namespace BALL
 			{
 				if (output[p] == '.')
 				{
-					output = output.left(p + 3);
+					output = output.left(p + 4);
 					output.trimRight("0");
 					if (output == "-0.") output = "0.";
 					return output;
@@ -184,7 +183,7 @@ namespace BALL
 			wireframes_.clear();
 			representations_.clear();
 			color_map_.clear();
-			color_vector_.clear();
+			color_strings_.clear();
 
 			std::ostream& out = *outfile_;
 
@@ -210,50 +209,42 @@ namespace BALL
 					}
 					// +QR: highest quiality
 					// +A0.3 : antialiasing
-					// -UV: due to problems with the orthogonality of the camera vectors
 					// +FN: PNG format as the default
 					// +W/+H: width and height, taken from the widget.
 					out << "// povray +I" << infilename 
 							<< " +FN +O" << outfilename << " +Q9 +W" << width_ 
-							<< " +H" << height_ << " -UV +A0.3\n//" << endl;
+							<< " +H" << height_ << " +A0.3\n//" << endl;
 				}
 			}
-			out << "camera {" << std::setprecision(12) << endl
-			    << "\tperspective" << endl
-			    << "\tdirection <0.0, 0.0, -1.0>" << endl
-			    << "\tright " << (double)width_ / (double)height_ << " * x" << endl
-			    << "\tangle 83.0" << endl
-			    << "\ttransform {" << endl
-			    << "\t\tmatrix <" << endl;
+			// matrix for the Projection matrix 	
+			GLdouble projection_matrix[16];
 
- 			GLdouble m[16];	
-			glGetDoublev(GL_MODELVIEW_MATRIX, m);
-			
-			double norm = sqrt(m[0] * m[0] + m[1] * m[1] + m[2] * m[2]);
-			out << "\t\t" << m[0] / norm << ",  " << m[1] / norm << ", " << m[2] / norm << "," << endl;
-			m_[0] = m[0] / norm;
-			m_[1] = m[1] / norm;
-			m_[2] = m[2] / norm;
-			norm = sqrt(m[4] * m[4] + m[5] * m[5] + m[6] * m[6]);
-			out << "\t\t" << m[4] / norm << ",  " << m[5] / norm << ", " << m[6] / norm << "," << endl;
+			// take the Projection matrix	
+ 			glGetDoublev(GL_PROJECTION_MATRIX, projection_matrix);
 
-			m_[3] = m[4] / norm;
-			m_[4] = m[5] / norm;
-			m_[5] = m[6] / norm;
-			norm = sqrt(m[8] * m[8] + m[9] * m[9] + m[10] * m[10]);
-			out << "\t\t" << m[8] / norm << ",  " << m[9] / norm << ", " << m[10] / norm << "," << endl;
+			// determine the projection variables
+			if(projection_matrix[0]==0. || projection_matrix[5]==0. || projection_matrix[10]==1.)
+			{	
+				Log.error() << "Projection variables equal zero! " << endl;
+				return false;
+			}	
+			float nearv   = projection_matrix[14]/(projection_matrix[10]-1);
+			float left   = projection_matrix[14]*(projection_matrix[8]-1) / (projection_matrix[0]*(projection_matrix[10]-1));
+			float bottom = projection_matrix[14]*(projection_matrix[9]-1) / (projection_matrix[5]*(projection_matrix[10]-1));
+			float top    = projection_matrix[14]*(projection_matrix[9]+1) / (projection_matrix[5]*(projection_matrix[10]-1));
 
-			m_[6] = m[8] / norm;
-			m_[7] = m[9] / norm;
-			m_[8] = m[10] / norm;
-			out << "\t\t" << m[12] << ",  " << m[13] << ", " << m[14] << endl;
-			m_[9] = m[12];
-			m_[10] = m[13];
-			m_[11] = m[14];
-		  out << "\t\t>" << endl;
-			out << "\tinverse }" << endl;
+			float ratio = left / bottom;
+			Angle fovx(2*atan(ratio*(top-bottom)/(2.*nearv)));
+
+			out << "camera {" << std::setprecision(12) << endl;
+			out << "\t location " << POVVector3(stage.getCamera().getViewPoint()) << endl;
+			out << "\t up y" << endl;
+			out << "\t right -" << ratio << "*x" << endl;
+			out << "\t angle " << fovx.toDegree() << endl;
+			out << "\t sky " << POVVector3(stage.getCamera().getLookUpVector()) << endl;
+			out << "\t look_at " << POVVector3(stage.getCamera().getLookAtPosition()) << endl;
 			out << "}" << std::setprecision(6) << endl << endl;
-				
+
 			//
 			if (human_readable_)
 			{
@@ -308,8 +299,8 @@ namespace BALL
 				}
 			}
 			
-			// Add some global blurb for radiosity support
-			out << "global_settings { radiosity { brightness 0.6 } }" << endl;
+			// Add some global blurb for radiosity support and max trace level
+			out << "global_settings { max_trace_level 99 radiosity { brightness 0.6 } }" << endl;
 
 			// Set the background color
 			out << "background { " << POVColorRGBA(stage_->getBackgroundColor()) << " }" << endl << endl;
@@ -327,10 +318,10 @@ namespace BALL
 			float r = 0.1 - ((stage.getShininess() / 128.0) * 0.09);
 			out << "roughness " << r << " ";
 			
-			out << "diffuse " 	<< stage.getDiffuseIntensity() 	/ 2.0 + 0.5 << " ";
+			out << "diffuse " 	<< stage.getDiffuseIntensity() << " ";
 
 			// povray uses an other ambient setting
-			out << "ambient 0.0 }"	 	<< endl;
+			out << "ambient "  << stage.getAmbientIntensity() << " }"	 	<< endl;
 
 			out << "#declare BALLFinishSphereSolid      = BALLFinish" << endl;
 			out << "#declare BALLFinishSphereTransp     = BALLFinish" << endl;
@@ -360,12 +351,41 @@ namespace BALL
 			out << "cylinder { Position1, Position2, Radius pigment { Color } finish { BALLFinishTubeTransp } }" << endl;
 			out << "#end" << endl << endl;
 
+			out << "// open Tube" << endl;
+			out << "#macro OT(Position1, Radius, Color)" << endl;
+			out << "cylinder { last_position, Position1, Radius open pigment { Color } finish { BALLFinishTubeSolid } }" << endl;
+			out << "#define last_position = Position1" << endl;
+			
+			out << "#end" << endl << endl;
+
+			out << "// open Tube transparent" << endl;
+			out << "#macro OTT(Position1, Position2, Radius, Color)" << endl;
+			out << "cylinder { Position1, Position2, Radius open pigment { Color } finish { BALLFinishTubeTransp } }" << endl;
+			out << "#end" << endl << endl;
+
+
 			out << "#macro Wire(Position1, Position2, Position3, Color1, Color2, Color3)" << endl;
 			out << "cylinder { Position1, Position2, BALL_WIRE_RADIUS pigment { Color1 } finish { BALLFinishWire} }" << endl;
 			out << "cylinder { Position2, Position3, BALL_WIRE_RADIUS pigment { Color2 } finish { BALLFinishWire} }" << endl;
 			out << "cylinder { Position3, Position1, BALL_WIRE_RADIUS pigment { Color3 } finish { BALLFinishWire} }" << endl;
 			out << "#end" << endl << endl;
 
+			out << "\n\
+#macro ILine(Size, Points, Colors)\n\
+  #local colors = array[Size]\n\
+  #local colors = Colors\n\
+  #local points = array[Size]\n\
+  #local points = Points\n\
+  #local Index = 1;\n\
+  #local point = points[0];\n\
+  #while(Index < Size - 1)\n\
+		cylinder { point, points[Index], BALL_LINE_RADIUS open pigment { colors[Index] } finish { BALLFinishTubeSolid } }\n\
+		#declare point = (points[Index] + points[Index+1]) / 2.0;\n\
+		cylinder { points[Index], point, BALL_LINE_RADIUS open pigment { colors[Index] } finish { BALLFinishTubeSolid } }\n\
+		#declare Index = Index + 1;\n\
+  #end\n\
+#end\n\
+		" << endl << endl;
 
 			return true;
 		}
@@ -375,19 +395,19 @@ namespace BALL
 		{
 			std::ostream& out = *outfile_;
 
-			for (Position p = 0; p < color_vector_.size(); p++)
+			// write all colors
+			ColorMap::ConstIterator cit = color_map_.begin();
+			for (; +cit; ++cit)
 			{
-				out << "#declare c" << p << " = " << POVColorRGBA(*color_vector_[p]) << ";" << endl;
+				out << "#declare c" << cit->second << " = " << POVColorRGBA(ColorRGBA(cit->first)) << ";" << endl;
 			}
 
 			out << endl;
 			
-
+			// write data for all Representations in an own union
 			vector<const Representation*>::iterator rit = representations_.begin();
-
 			for (; rit != representations_.end(); rit++)
 			{
-				
 				// now begin the CSG union containing all the geometric objects of this rep
 				out << "union {" << endl;
 
@@ -399,7 +419,7 @@ namespace BALL
 					render_(*it);
 				}
 
-				const vector<ClippingPlane*>& vc = getMainControl()->getPrimitiveManager().getClippingPlanes();
+				const vector<ClippingPlane*>& vc = getMainControl()->getRepresentationManager().getClippingPlanes();
 				vector<ClippingPlane*>::const_iterator plane_it = vc.begin();
 				for (;plane_it != vc.end(); plane_it++)
 				{
@@ -413,7 +433,6 @@ namespace BALL
 
 					if (plane.getRepresentations().has((Representation*)*rit))
 					{
-
 						out << "  clipped_by{" << endl
 										 << "   plane{< -"  // negate normal vector
 										 << plane.getNormal().x << ", -" 
@@ -688,39 +707,40 @@ namespace BALL
 			/////////////////////////////////////////////////
 			// calculate a hashset of all colors in the mesh
 			/////////////////////////////////////////////////
-			ColorMap colors;
-			vector<const ColorRGBA*> color_vector;
-			String color_string;
-			for (Position i = 0; i < mesh.colors.size(); i++)
-			{
-				mesh.colors[i].get(color_string);
-				if (!colors.has(color_string))
-				{
-					colors.insert(ColorMap::ValueType(color_string, colors.size()));
-					color_vector.push_back(&mesh.colors[i]);
-				}
-			}
+			
+      ColorMap colors;
+      vector<const ColorRGBA*> color_vector;
+      String color_string;
+      for (Position i = 0; i < mesh.colors.size(); i++)
+      {
+        mesh.colors[i].get(color_string);
+        if (!colors.has(color_string))
+        {
+          colors.insert(ColorMap::ValueType(color_string, colors.size()));
+          color_vector.push_back(&mesh.colors[i]);
+        }
+      }
 
 			// write colors of vertices ---->
 			out << "\t\ttexture_list{" << endl;
-			out << "\t\t\t" << colors.size() + 1<< ","<< endl;
+			out << "\t\t\t" << colors.size()<< ","<< endl;
 
-			ColorRGBA temp_color;
-			for (Position p = 0; p < color_vector.size(); p++)
+			for (Position p = 0; p < colors.size(); p++)
 			{
-   			temp_color.set((*color_vector[p]));
-				out << "texture { pigment { " << getColorIndex_(temp_color) << " }"
-						<< " finish { BALLFinishMesh } }," << endl;
+				out << "texture { pigment { " << getColorIndex_(*color_vector[p]) << " }"
+						<< " finish { BALLFinishMesh } }";
+
+				if (p < colors.size() - 1) out << ",";
+
+				out << endl;
 			}
 
-			out << "texture { pigment { " << getColorIndex_(temp_color) << " }"
-					<< " finish { BALLFinishMesh } }" << endl;
 			out << "\t\t}" << endl;
 			
 			// write vertex indices ---->
 			out << "\t\tface_indices {" << endl;
 			out << "\t\t\t" << mesh.triangle.size() << ","<<  endl;
-			if (colors.size() == 1)
+			if (mesh.colors.size() == 1)
 			{
 				out << "\t\t\t";
 				for (Position i = 0; i < mesh.triangle.size(); i++)
@@ -785,29 +805,20 @@ namespace BALL
 					 it != representation.getGeometricObjects().end();
 					 it++)
 			{
-				if (!RTTI::isKindOf<Mesh>(**it))
-				{
-					storeColor_(**it);
-				}
-				else
-				{
-					if (representation.getDrawingMode() == DRAWING_MODE_WIREFRAME)
-					{
-						wireframes_.insert((Mesh*) *it);
-					}
+				(**it).getColors(color_strings_);
 
-					Mesh& mesh = *dynamic_cast<Mesh*>(*it);
-					String color_string;
-					for (Position i = 0; i < mesh.colors.size(); i++)
-					{
-						mesh.colors[i].get(color_string);
-						if (!color_map_.has(color_string))
-						{
-							color_map_.insert(ColorMap::ValueType(color_string, color_map_.size()));
-							color_vector_.push_back(&mesh.colors[i]);
-						}
-					}
+				if (representation.getDrawingMode() == DRAWING_MODE_WIREFRAME)
+				{
+					wireframes_.insert((Mesh*) *it);
 				}
+			}
+
+			Position p = 0;
+			HashSet<String>::ConstIterator cit = color_strings_.begin();
+			for (; +cit; ++cit)
+			{
+				color_map_.insert(ColorMap::ValueType(*cit, p));
+				p++;
 			}
 
 			representations_.push_back(&representation);
@@ -815,28 +826,10 @@ namespace BALL
 			return true;
 		}
 
-		void POVRenderer::storeColor_(const GeometricObject& object)
-		{
-			String color_string;
-			getColor_(object).get(color_string);
-			if (!color_map_.has(color_string))
-			{
-				color_map_.insert(ColorMap::ValueType(color_string, color_map_.size()));
-				color_vector_.push_back(&getColor_(object));
-			}
-		}
-
 		String POVRenderer::getColorIndex_(const ColorRGBA& color)
 		{
 			String color_temp;
 			color.get(color_temp);
-#ifdef BALL_VIEW_DEBUG
-			if (!color_map_.has(color_temp))
-			{
-				BALLVIEW_DEBUG
-				return "";
-			}
-#endif
 
 			return String("c") + String(color_map_[color_temp]);
 		}
@@ -861,6 +854,48 @@ namespace BALL
 			out << label.getVertex().y << ", ";
 			out << label.getVertex().z << " ";
 			out << " > }" << std::endl;
+		}
+
+		void POVRenderer::renderMultiLine_(const MultiLine& line)
+			throw()
+		{
+			std::ostream& out = *outfile_;
+
+			String last;
+			HashSet<Position> used;
+			vector<String> vertices;
+			for (Position i = 0; i < line.vertices.size(); i++)
+			{
+				String now = POVVector3(line.vertices[i]);
+				if (last == now) continue;
+				last = now;
+				vertices.push_back(now);
+			}
+
+			out << "#declare vertices = array[" << String(vertices.size()) << "] { ";
+			for (Position i = 0; i < vertices.size(); i++)
+			{
+				out << vertices[i] << " ";
+				if (i != vertices.size() - 1) out << ", ";
+			}
+
+			out << " } " << endl; 
+
+			out << "#declare colors = array[" << String(vertices.size()) << "] { ";
+			bool multi_colors = true;
+			if (line.colors.size() == 1) multi_colors = false;
+			for (Position i = 0; i < vertices.size(); i++)
+			{
+				if (used.has(i)) continue;
+
+				if (multi_colors) out << getColorIndex_(line.colors[i]);
+				else              out << getColorIndex_(line.colors[0]);
+
+				if (i != vertices.size() - 1) out << ", ";
+			}
+
+			out << " } " << endl; 
+			out << "ILine(" << String(vertices.size()) << ", vertices, colors)" << endl;
 		}
 
 	} // namespaces

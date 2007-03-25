@@ -19,17 +19,18 @@ using the Visual Studio project files.
 		seem to work. See README2.txt for instructions on how to build BALL
 		per Makefiles.
 
-2.) BALL can only be installed if Python 2.3.x is installed!
-		(Currently we advise you to use the release 2.3.5.)
+2.) The BALL contrib package provides Python 2.3.5, if you want to
+		use an other version of Python, you can install it into the CONTRIB directory
+		in BALL\Windows\CONTRIB\Python. 
+		(But we suggest you stick to the version we provide in the contrib package.)
 		Python can be obtained free of charge from
 		http://www.python.org/ftp/python/2.3.5/Python-2.3.5.exe
 
-3.) To create the GUI part of BALL or Python support for BALL, you need the QT 
-		library 3.3.X. (Threads support enabled).
-		Unfortunately QT 3.3 for Windows is not available under the GPL, so 
+3.) To create the GUI part of BALL or Python support for BALL, you need the QT 4.
+		Unfortunately QT 4 for Windows Visual Studio is not available under the GPL, so 
 		you need a commercial licence if you want to compile the GUI part.
-		Future versions of BALL will be build on top of QT 4.X, which is 
-		available under the GPL for Windows.
+		The QTDIR environment variable must to be set (this is in general done 
+		by the QT installation).
 
 -----------------------------------------------------------------------------------
 ------------------------------------ INSTALLATION: --------------------------------
@@ -39,7 +40,7 @@ using the Visual Studio project files.
 
 BALL requires some standard Unix tools and libraries that are not usually found on 
 Windows systems. We provide an archive file with all needed files for this tools:
-http://www.ball-project.org/Downloads/Contrib/Contrib-1.1.1.zip
+http://www.ball-project.org/Downloads/Contrib/Contrib-1.2.zip
 The Contib folder in the archive must be copied into the BALL\Windows\ directory. 
 
 This file contains:
@@ -48,14 +49,14 @@ This file contains:
 	- regex: a regular expression library
 	- RPC: the remote procedure call library (for XDR)
 	- sip: a Python binding generator
+	- GLEW: The OpenGL Extension Wrangler Library
+	- FFTW: Fast Fourier Transform library
+	- Python 2.3.5
 
 2.) Set the following environment variables: 
 		
-	- "PYTHONDIR" to the path of your Python installation
 	- "BALL_PATH" to the BALL installation 
 	- "BALL_DATA_PATH" to the "data" subdirectory in the BALL installation  path (e.g. C:\BALL\data)
-	- "QTVERSION" to a numerical representation for your QT version e.g. 335 for version 3.3.5
-	- "QTDIR" (this is in general done automatical by the QT installation)
 
 3.) Building BALL:
 
@@ -77,7 +78,7 @@ BALL\Windows\startBALLViewDebug
 
 depending, if you created the debug or release version of BALL and BALLView.
 
-If you dont have QT 3.3.X installed, you can only build the core library BALL-lib!
+If you dont have QT installed, you can only build the core library BALL-lib!
 
 
 We have also project entries to create Tutorials, Benchmarks and Tests.

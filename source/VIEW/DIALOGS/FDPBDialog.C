@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FDPBDialog.C,v 1.20 2005/12/23 17:03:22 amoll Exp $
+// $Id: FDPBDialog.C,v 1.20.16.1 2007/03/25 22:00:37 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
@@ -10,22 +10,24 @@
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/threads.h>
+#include <BALL/VIEW/DATATYPE/standardDatasets.h>
 
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qfiledialog.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qradiobutton.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/QFileDialog>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		FDPBDialog::FDPBDialog(QWidget* parent,  const char* name, bool modal, WFlags fl)
-			: FDPBDialogData(parent, name, modal, fl),
+		FDPBDialog::FDPBDialog(QWidget* parent,  const char* name, bool modal, Qt::WFlags fl)
+			: QDialog(parent, fl),
+				Ui_FDPBDialogData(),
 				ModularWidget("FDPBDialog"),
+				PreferencesEntry(),
 				system_(0),
 				thread_(0)
 		{
@@ -36,29 +38,19 @@ namespace BALL
 
 			setINIFileSectionName("FDPB");
 
-			registerObject_(radii_data_lineedit);
-			registerObject_(radii_rules_lineedit);
-			registerObject_(charges_data_lineedit);
-			registerObject_(charges_rules_lineedit);
-			registerObject_(dc_solvent);
-			registerObject_(dc_interior);
-			registerObject_(probe_radius);
-			registerObject_(ionic_strenght);
-			registerObject_(ion_radius);
-			registerObject_(spacing);
-			registerObject_(border);
-			registerObject_(temperature);
-			registerObject_(max_iterations);
-			registerObject_(boundary_group);
-			registerObject_(smoothing_group);
-			registerObject_(charge_distribution_group);
-			registerObject_(radii_group);
-			registerObject_(charges_group);
-			registerObject_(normalize_names);
-			registerObject_(assign_charges);
-			registerObject_(assign_radii);
-			registerObject_(build_bonds);
-			registerObject_(add_hydrogens);
+			setupUi(this);
+			setObjectName(name);
+			setModal(modal);
+			
+			// signals and slots connections
+			connect( radii_data_browse, SIGNAL( clicked() ), this, SLOT( browseRadiiData() ) );
+			connect( radii_rules_browse, SIGNAL( clicked() ), this, SLOT( browseRadiiRules() ) );
+			connect( ok_button, SIGNAL( clicked() ), this, SLOT( okPressed() ) );
+			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( cancelPressed() ) );
+			connect( reset_button, SIGNAL( clicked() ), this, SLOT( resetPressed() ) );
+			connect( charges_rules_browse, SIGNAL( pressed() ), this, SLOT( browseChargesRules() ) );
+			connect( charges_data_browse, SIGNAL( clicked() ), this, SLOT( browseChargesData() ) );
+			registerWidgets_();
 		}
 
 		FDPBDialog::~FDPBDialog()
@@ -68,14 +60,12 @@ namespace BALL
 				Log.info() << "Destructing object " << this << " of class FDPBDialog" << std::endl;
 			#endif 
 
-			#ifdef BALL_QT_HAS_THREADS
 				if (thread_ != 0)
 				{
-					if (thread_->running()) thread_->terminate();
-					if (thread_->running()) thread_->wait();
+					if (thread_->isRunning()) thread_->terminate();
+					if (thread_->isRunning()) thread_->wait();
 					delete thread_;
 				}
-			#endif
 		}
 
 		// ------------------------- SLOTS ------------------------------------------------
@@ -124,11 +114,10 @@ namespace BALL
 			throw()
 		{
 			QString s = QFileDialog::getOpenFileName(
+										0,
+										"Choose a file",
 										"",
-										"",
-										getMainControl(),
-										"",
-										"Choose a file" );
+										"");
 
 			if (s == QString::null) return;
 			lineedit.setText(s);
@@ -144,15 +133,26 @@ namespace BALL
 				return false;
 			}
 
-			if (!lockComposites()) return false;
-			#ifdef BALL_QT_HAS_THREADS_
+			if (!lockComposites()) 
+			{
+				setStatusbarText("Can not calculate FDPB, since I can not lock the molecular data. Is a simulation running?", true);
+				return false;
+			}
+
+			bool use_mt = false;
+			// currently doesnt work:
+			#ifdef BALL_QT_HAS_THREADS
+			if (getMainControl()->useMultithreading())
+			{
+				use_mt = true;
+
 				if (thread_ == 0)
 				{
 					thread_ = new CalculateFDPBThread();
 				}
 				else
 				{
-					if (thread_->running())
+					if (thread_->isRunning())
 					{
 						Log.error() << "Thread already running in"  << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 						return false;
@@ -164,33 +164,41 @@ namespace BALL
 
 				Position pos = 3;
 				String dots;
-				while (thread_->running())
+				Position i = 0;
+				while (thread_->isRunning())
 				{
 					setStatusbarText("Calculating FDPB grid " + dots, false);
-					qApp->wakeUpGuiThread();
 					qApp->processEvents();
-					if (pos < 40) 
+					if (i > 10)
 					{
-						pos ++;
-						dots +="..";
+						if (pos < 40) 
+						{
+							pos ++;
+							dots +=".";
+						}
+						else 
+						{
+							pos = 3;
+							dots = "...";
+						}
+						i = 0;
 					}
-					else 
-					{
-						pos = 3;
-						dots = "...";
-					}
-					thread_->wait(500); 
+
+					i++;
+					thread_->wait(10); 
 				}
-					
-				setStatusbarText("Finished FDPB grid", true);
-			#else
-				calculate_();
+			}
+
 			#endif
+			if (!use_mt) calculate_();
 			
-			RegularData3DMessage* message = new RegularData3DMessage(RegularData3DMessage::NEW); 
-			message->setData(*fdpb_.phi_grid);
-			message->setComposite(*system_);
-			message->setCompositeName("FDPB_" + system_->getName());
+			setStatusbarText("Finished FDPB grid", true);
+			RegularData3DDataset* set = new RegularData3DDataset();
+			set->setData(fdpb_.phi_grid);
+			set->setComposite(system_);
+			set->setName("FDPB_" + system_->getName());
+			set->setType(RegularData3DController::type);
+			DatasetMessage* message = new DatasetMessage(set, DatasetMessage::ADD);
 			notify_(message);
 			fdpb_.phi_grid = 0;
 			system_ = 0;
@@ -211,15 +219,15 @@ namespace BALL
 			throw()
 		{
 			/// ------------------------------
-			options_[FDPB::Option::SOLVENT_DC] 						= String(dc_solvent->text().ascii()).toFloat();
-			options_[FDPB::Option::SOLUTE_DC] 						= String(dc_interior->text().ascii()).toFloat();
-			options_[FDPB::Option::PROBE_RADIUS] 					= String(probe_radius->text().ascii()).toFloat();
-			options_[FDPB::Option::IONIC_STRENGTH] 				= String(ionic_strenght->text().ascii()).toFloat();
-			options_[FDPB::Option::ION_RADIUS] 						= String(ion_radius->text().ascii()).toFloat();
-			options_[FDPB::Option::SPACING] 							= String(spacing->text().ascii()).toFloat();
-			options_[FDPB::Option::BORDER]								= String(border->text().ascii()).toFloat();
-			options_[FDPB::Option::TEMPERATURE]						= String(temperature->text().ascii()).toFloat();
-			options_[FDPB::Option::MAX_ITERATIONS]				= String(max_iterations->text().ascii()).toFloat();
+			options_[FDPB::Option::SOLVENT_DC] 						= ascii(dc_solvent->text()).toFloat();
+			options_[FDPB::Option::SOLUTE_DC] 						= ascii(dc_interior->text()).toFloat();
+			options_[FDPB::Option::PROBE_RADIUS] 					= ascii(probe_radius->text()).toFloat();
+			options_[FDPB::Option::IONIC_STRENGTH] 				= ascii(ionic_strenght->text()).toFloat();
+			options_[FDPB::Option::ION_RADIUS] 						= ascii(ion_radius->text()).toFloat();
+			options_[FDPB::Option::SPACING] 							= ascii(spacing->text()).toFloat();
+			options_[FDPB::Option::BORDER]								= ascii(border->text()).toFloat();
+			options_[FDPB::Option::TEMPERATURE]						= ascii(temperature->text()).toFloat();
+			options_[FDPB::Option::MAX_ITERATIONS]				= ascii(max_iterations->text()).toFloat();
 
 			/// ------------------------------
 			if (boundary_zero->isChecked())
@@ -300,12 +308,12 @@ namespace BALL
 				{
 					if (charges_data_button->isChecked())
 					{
-						charge_processor_.setFilename(charges_data_lineedit->text().ascii());
+						charge_processor_.setFilename(ascii(charges_data_lineedit->text()));
 						if (!system_->apply(charge_processor_)) return false;
 					}
 					else
 					{
-						INIFile inifile(String(charges_rules_lineedit->text().ascii()));
+						INIFile inifile(ascii(charges_rules_lineedit->text()));
 						charge_rule_processor_ = ChargeRuleProcessor(inifile);
 						if (!system_->apply(charge_rule_processor_)) return false;
 					}
@@ -315,12 +323,12 @@ namespace BALL
 				{
 					if (radii_data_button->isChecked())
 					{
-						radius_processor_.setFilename(radii_data_lineedit->text().ascii());
+						radius_processor_.setFilename(ascii(radii_data_lineedit->text()));
 						if (!system_->apply(radius_processor_)) return false;
 					}
 					else
 					{
-						INIFile inifile(String(radii_rules_lineedit->text().ascii()));
+						INIFile inifile(ascii(radii_rules_lineedit->text()));
 						radius_rule_processor_ = RadiusRuleProcessor(inifile);
 						if (!system_->apply(radius_rule_processor_)) return false;
 					}
@@ -332,10 +340,11 @@ namespace BALL
 				return false;
 			}
 
-			CompositeMessage* message = new CompositeMessage;
-			message->setComposite(*system_);
-			message->setType(CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
-			notify_(message);
+			// notify MainControl to update all Representations for the Composite
+			CompositeMessage* msg = new CompositeMessage(*system_,
+																									 CompositeMessage::CHANGED_COMPOSITE,
+																									 true);;
+			qApp->postEvent(getMainControl(), new MessageEvent(msg));
 
 			return true;
 		}

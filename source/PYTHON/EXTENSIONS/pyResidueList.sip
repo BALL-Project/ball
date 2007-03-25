@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyResidueList.sip,v 1.6 2005/12/23 17:02:57 amoll Exp $
+// $Id: pyResidueList.sip,v 1.6.20.1 2007/03/25 21:38:50 oliver Exp $
+//
 //
 
 %MappedType PyResidueList

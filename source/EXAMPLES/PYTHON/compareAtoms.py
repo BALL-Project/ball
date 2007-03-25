@@ -1,12 +1,8 @@
-# 
-
-mc = MainControl.getInstance(0)
 # example for how to create a new representation
-# we draw a line between the identical atoms of two systems
-cm = mc.getCompositeManager()
+# we draw a line between the identical named atoms of two systems
 
-system1 = cm.getComposites()[0]
-system2 = cm.getComposites()[1]
+system1 = getSystems()[0]
+system2 = getSystems()[1]
 
 rep = Representation()
 
@@ -22,8 +18,7 @@ for residue1 in residues(system1):
 						line.setColor(ColorRGBA(0,0,1.0))
 						rep.insert(line)
 						break
-				break
 
-mc.insert(rep)
-mc.update(rep)
+getMainControl().insert(rep)
+getMainControl().update(rep)
 

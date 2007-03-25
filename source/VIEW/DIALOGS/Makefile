@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.54 2006/01/26 16:12:55 oliver Exp $
+# $Id: Makefile,v 1.54.14.1 2007/03/25 22:00:39 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -20,165 +20,141 @@ UIC_DIR=$(BALL_PATH)/include/BALL/VIEW/UIC
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
+	atomOverview.C\
 	amberConfigurationDialog.C\
-	amberConfigurationDialogData.C\
-	minimizationDialog.C\
-	minimizationDialogData.C\
 	bondProperties.C\
-	bondPropertiesData.C\
 	charmmConfigurationDialog.C\
-	charmmConfigurationDialogData.C\
-	modifySurfaceDialog.C\
-	modifySurfaceDialogData.C\
-	coloringSettingsDialog.C\
-	coloringSettingsDialogData.C\
-	compositeProperties.C\
-	compositePropertiesData.C\
 	contourSurfaceDialog.C\
-	contourSurfaceDialogData.C\
+	coloringSettingsDialog.C\
+	compositeProperties.C\
 	clippingDialog.C\
-	clippingDialogData.C\
 	dockDialog.C\
-	dockDialogData.C\
 	dockProgressDialog.C\
-	dockProgressDialogData.C\
 	dockResultDialog.C\
-	dockResultDialogData.C\
 	downloadPDBFile.C\
-	downloadPDBFileData.C\
+	editSettings.C\
 	displayProperties.C\
-	displayPropertiesData.C\
+	fieldLinesDialog.C\
 	FDPBDialog.C\
-	FDPBDialogData.C\
+	gridVisualizationDialog.C\
 	labelDialog.C\
-	labelDialogData.C\
 	lightSettings.C\
-	lightSettingsData.C\
 	mainControlPreferences.C\
-	mainControlPreferencesData.C\
 	materialSettings.C\
-	materialSettingsData.C\
+	minimizationDialog.C\
 	modelSettingsDialog.C\
-	modelSettingsDialogData.C\
+	modifyRepresentationDialog.C\
 	molecularDynamicsDialog.C\
-	molecularDynamicsDialogData.C\
 	molecularFileDialog.C\
-	openBruker1DFile.C\
-	openBruker2DFile.C\
+	MMFF94ConfigurationDialog.C\
 	networkPreferences.C\
-	networkPreferencesData.C\
 	parsedFunctionDialog.C\
-	parsedFunctionDialogData.C\
 	peptideDialog.C\
-	peptideDialogData.C\
 	preferences.C\
-	preferencesData.C\
+	PTEDialog.C\
+	pubchemDialog.C\
 	setCamera.C\
-	setCameraData.C\
-	pythonSettings.C\
-	pythonSettingsData.C\
+	setClippingPlane.C\
 	serverPreferences.C\
 	snapShotVisualisation.C\
-	snapShotVisualisationData.C\
-	stageSettings.C\
-	stageSettingsData.C\
-	$(FFT_DEPENDENT_SOURCES)
+	stageSettings.C
+#	openBruker1DFile.C\
+#	openBruker2DFile.C
+
+PYTHON_CPP_SOURCES=\
+	pythonSettings.C
 
 MOC_SOURCES=\
 	amberConfigurationDialog_moc.C\
-	amberConfigurationDialogData_moc.C\
+	atomOverview_moc.C\
 	minimizationDialog_moc.C\
-	minimizationDialogData_moc.C\
 	compositeProperties_moc.C\
-	compositePropertiesData_moc.C\
 	bondProperties_moc.C\
-	bondPropertiesData_moc.C\
 	charmmConfigurationDialog_moc.C\
-	charmmConfigurationDialogData_moc.C\
 	clippingDialog_moc.C\
-	clippingDialogData_moc.C\
 	coloringSettingsDialog_moc.C\
-	coloringSettingsDialogData_moc.C\
-	modifySurfaceDialog_moc.C\
-	modifySurfaceDialogData_moc.C\
 	contourSurfaceDialog_moc.C\
-	contourSurfaceDialogData_moc.C\
 	dockDialog_moc.C\
-	dockDialogData_moc.C\
 	dockProgressDialog_moc.C\
-	dockProgressDialogData_moc.C\
 	dockResultDialog_moc.C\
-	dockResultDialogData_moc.C\
 	downloadPDBFile_moc.C\
-	downloadPDBFileData_moc.C\
+ 	editSettings_moc.C\
 	displayProperties_moc.C\
-	displayPropertiesData_moc.C\
 	FDPBDialog_moc.C\
-	FDPBDialogData_moc.C\
+	gridVisualizationDialog_moc.C\
+	fieldLinesDialog_moc.C\
 	labelDialog_moc.C\
-	labelDialogData_moc.C\
 	lightSettings_moc.C\
-	lightSettingsData_moc.C\
 	mainControlPreferences_moc.C\
-	mainControlPreferencesData_moc.C\
 	materialSettings_moc.C\
-	materialSettingsData_moc.C\
 	modelSettingsDialog_moc.C\
-	modelSettingsDialogData_moc.C\
+	modifyRepresentationDialog_moc.C\
 	molecularFileDialog_moc.C\
 	molecularDynamicsDialog_moc.C\
-	molecularDynamicsDialogData_moc.C\
+	MMFF94ConfigurationDialog_moc.C\
 	networkPreferences_moc.C\
-	networkPreferencesData_moc.C\
-	openBruker1DFile_moc.C\
-	openBruker2DFile_moc.C\
 	parsedFunctionDialog_moc.C\
-	parsedFunctionDialogData_moc.C\
 	peptideDialog_moc.C\
-	peptideDialogData_moc.C\
 	preferences_moc.C\
-	preferencesData_moc.C\
-	pythonSettings_moc.C\
-	pythonSettingsData_moc.C\
+	PTEDialog_moc.C\
+	pubchemDialog_moc.C\
 	serverPreferences_moc.C\
 	setCamera_moc.C\
-	setCameraData_moc.C\
+	setClippingPlane_moc.C\
 	snapShotVisualisation_moc.C\
-	snapShotVisualisationData_moc.C\
-	stageSettings_moc.C\
-	stageSettingsData_moc.C\
-	$(FFT_DEPENDENT_MOC_SOURCES)
+	stageSettings_moc.C
+#	openBruker1DFile_moc.C\
+#	openBruker2DFile_moc.C\
 
-UIC_SOURCES=$(FFT_DEPENDENT_UIC_SOURCES)\
+PYTHON_MOC_SOURCES=\
+	pythonSettings_moc.C
+
+UIC_SOURCES=\
 	amberConfigurationDialogData.C\
-	minimizationDialogData.C\
+	atomOverviewData.C\
 	bondPropertiesData.C\
 	charmmConfigurationDialogData.C\
 	clippingDialogData.C\
 	coloringSettingsDialogData.C\
-	modifySurfaceDialogData.C\
+	contourSurfaceDialogData.C\
 	compositePropertiesData.C\
 	contourSurfaceDialogData.C\
-	dockDialogData.C\
-	dockProgressDialogData.C\
-	dockResultDialogData.C\
 	downloadPDBFileData.C\
 	displayPropertiesData.C\
+	editSettingsData.C\
 	FDPBDialogData.C\
+	fieldLinesDialogData.C\
+	gridVisualizationDialogData.C\
 	labelDialogData.C\
 	lightSettingsData.C\
 	mainControlPreferencesData.C\
 	materialSettingsData.C\
+	minimizationDialogData.C\
 	modelSettingsDialogData.C\
+	modifyRepresentationDialogData.C\
 	molecularDynamicsDialogData.C\
+	MMFF94ConfigurationDialogData.C\
 	networkPreferencesData.C\
 	parsedFunctionDialogData.C\
 	peptideDialogData.C\
 	preferencesData.C\
+	PTEDialogData.C\
+	pubchemDialogData.C\
 	pythonSettingsData.C\
 	setCameraData.C\
+	setClippingPlaneData.C\
 	snapShotVisualisationData.C\
-	stageSettingsData.C
+	stageSettingsData.C\
+	dockDialogData.C\
+	dockProgressDialogData.C\
+	dockResultDialogData.C
+
+ifeq ($(BALL_HAS_FFTW),true)
+	CPP_SOURCES+=geometricFitDialog.C geometricFitDialogData.C
+	MOC_SOURCES+=geometricFitDialog_moc.C geometricFitDialogData_moc.C
+	UIC_SOURCES+=geometricFitDialogData.C
+endif
+
 
 ifeq ($(BALL_HAS_FFTW),true)
 	CPP_SOURCES+=geometricFitDialog.C geometricFitDialogData.C
@@ -205,10 +181,7 @@ openBruker1DFile_moc.C: $(HEADER_DIR)/openBruker1DFile.h
 openBruker2DFile_moc.C: $(HEADER_DIR)/openBruker2DFile.h
 	$(MOC) $(HEADER_DIR)/openBruker2DFile.h -o $@
 
-colorChooser_moc.C: $(HEADER_DIR)/colorChooser.h
-	$(MOC) $(HEADER_DIR)/colorChooser.h -o $@
-
-depend: $(UIC_HDR) $(UIC_SOURCES) $(MOC_SOURCES)
+depend: $(UIC_HDR) $(MOC_SOURCES)
 
 default_clean: clean_uic
 

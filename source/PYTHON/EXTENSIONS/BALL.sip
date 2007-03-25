@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.44 2006/08/15 19:00:22 oliver Exp $
+// $Id: BALL.sip,v 1.44.8.1 2007/03/25 21:36:59 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -45,6 +45,8 @@
 // forwardIterator.h // not supported
 // notification.h    // ??
 %Include object.sip 
+%Include client.sip
+%Include molecularInformation.sip
 // persitenceManager.h // ??
 %Include persistentObject.sip
 %Include predicateConcept.sip
@@ -254,6 +256,8 @@
 %Include pyFragmentProcessor.sip
 %Include pyResidueProcessor.sip
 %Include pyCompositeProcessor.sip
+%Include pyRegularData3DList.sip
+%Include pyDatasetVector.sip
 
 // QSAR
 //%Include descriptor.sip
@@ -277,6 +281,7 @@
 // %Include rules.sip
 // %Include structureMapper.sip
 //%Include smilesParser.sip
+%Include peptideBuilder.sip
 %Include secondaryStructureProcessor.sip
 %Include surfaceProcessor.sip
 
@@ -294,25 +299,25 @@
 %Include stage.sip
 %Include mainControl.sip
 %Include compositeManager.sip
-%Include primitiveManager.sip
+%Include representationManager.sip
 %Include representationList.sip
-%Include client.sip
 %Include representation.sip
 %Include geometricObject.sip
 %Include geometricObjectList.sip
 %Include view-common.sip
 %Include clippingPlane.sip
-%Include molecularInformation.sip
 %Include server.sip
 
 // VIEW/DATATYPE
 %Include colorUnit.sip
 %Include colorRGBA.sip
-//%Include colorRGBAVector.sip
+%Include colorRGBAVector.sip
 %Include vertex1.sip
 %Include vertex2.sip
-%Include colorExtension2.sip
+%Include colorExtensions.sip
 %Include colorMap.sip
+%Include dataset.sip
+%Include standardDatasets.sip
 
 // VIEW/MODELS
 %Include colorProcessor.sip
@@ -333,6 +338,7 @@
 // VIEW/PRIMITIVES
 %Include box.sip
 %Include disc.sip
+%Include gridVisualisation.sip
 %Include label.sip
 %Include line.sip
 %Include mesh.sip
@@ -347,6 +353,7 @@
 %Include preferences.sip
 %Include displayProperties.sip
 %Include molecularFileDialog.sip
+%Include modifyRepresentationDialog.sip
 
 // VIEW/RENDERER
 %Include renderer.sip
@@ -358,6 +365,7 @@
 %Include dockWidget.sip
 %Include pyWidget.sip
 %Include scene.sip
+%Include editableScene.sip
 %Include molecularStructure.sip
 %Include molecularControl.sip
 %Include geometricControl.sip

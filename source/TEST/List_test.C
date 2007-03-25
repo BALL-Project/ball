@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: List_test.C,v 1.7 2003/06/17 13:20:01 amoll Exp $
+// $Id: List_test.C,v 1.7.30.1 2007/03/25 21:47:17 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -26,7 +26,7 @@ class myVisitor
 	}
 };
 
-START_TEST(List<T>, "$Id: List_test.C,v 1.7 2003/06/17 13:20:01 amoll Exp $")
+START_TEST(List<T>, "$Id: List_test.C,v 1.7.30.1 2007/03/25 21:47:17 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
