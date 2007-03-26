@@ -1,11 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-<<<<<<< Options_test.C
-// $Id: Options_test.C,v 1.10.14.1 2007/03/25 21:47:24 oliver Exp $
-=======
-// $Id: Options_test.C,v 1.10.14.1 2007/03/25 21:47:24 oliver Exp $
->>>>>>> 1.9.10.1
+// $Id: Options_test.C,v 1.10.14.2 2007/03/26 16:34:19 bertsch Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -15,11 +11,7 @@
 #include <BALL/DATATYPE/options.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
-<<<<<<< Options_test.C
-START_TEST(Options, "$Id: Options_test.C,v 1.10.14.1 2007/03/25 21:47:24 oliver Exp $")
-=======
-START_TEST(Options, "$Id: Options_test.C,v 1.10.14.1 2007/03/25 21:47:24 oliver Exp $")
->>>>>>> 1.9.10.1
+START_TEST(Options, "$Id: Options_test.C,v 1.10.14.2 2007/03/26 16:34:19 bertsch Exp $")
 
 using BALL::Options;
 using BALL::Vector3;

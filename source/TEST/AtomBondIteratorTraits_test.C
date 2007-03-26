@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AtomBondIteratorTraits_test.C,v 1.4.6.1 2007/03/25 21:46:46 oliver Exp $
+// $Id: AtomBondIteratorTraits_test.C,v 1.4.6.2 2007/03/26 16:34:19 bertsch Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -15,11 +15,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-<<<<<<< AtomBondIteratorTraits_test.C
-START_TEST(Atom, "$Id: AtomBondIteratorTraits_test.C,v 1.4.6.1 2007/03/25 21:46:46 oliver Exp $")
-=======
-START_TEST(Atom, "$Id: AtomBondIteratorTraits_test.C,v 1.4.6.1 2007/03/25 21:46:46 oliver Exp $")
->>>>>>> 1.3.10.1
+START_TEST(Atom, "$Id: AtomBondIteratorTraits_test.C,v 1.4.6.2 2007/03/26 16:34:19 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,11 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-<<<<<<< SmartsMatcher_test.C
-// $Id: SmartsMatcher_test.C,v 1.4.8.1 2007/03/25 21:48:59 oliver Exp $
-=======
-// $Id: SmartsMatcher_test.C,v 1.4.8.1 2007/03/25 21:48:59 oliver Exp $
->>>>>>> 1.1.2.1
+// $Id: SmartsMatcher_test.C,v 1.4.8.2 2007/03/26 16:34:20 bertsch Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -24,11 +20,7 @@
 using namespace BALL;
 using namespace std;
 
-<<<<<<< SmartsMatcher_test.C
-START_TEST(SmartsMatcher, "$Id: SmartsMatcher_test.C,v 1.4.8.1 2007/03/25 21:48:59 oliver Exp $")
-=======
-START_TEST(SmartsMatcher, "$Id: SmartsMatcher_test.C,v 1.4.8.1 2007/03/25 21:48:59 oliver Exp $")
->>>>>>> 1.1.2.1
+START_TEST(SmartsMatcher, "$Id: SmartsMatcher_test.C,v 1.4.8.2 2007/03/26 16:34:20 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -61,15 +53,9 @@ CHECK(match(Molecule& mol, const String& smarts))
 		tmp.trim();
 		vector<String> split;
 		tmp.split(split, " ");
-<<<<<<< SmartsMatcher_test.C
 		
 		vector<set<const Atom*> > matchings;
 		sm->match(matchings, *s.getMolecule(0), split[2]);
-=======
-
-		vector<HashSet<const Atom*> > matchings;
-		sm->match(matchings, *s.getMolecule(0), split[2]);
->>>>>>> 1.1.2.1
 		TEST_EQUAL(matchings.size(), split[0].toUnsignedInt())
 	}
 

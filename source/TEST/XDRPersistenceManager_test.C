@@ -1,11 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-<<<<<<< XDRPersistenceManager_test.C
-// $Id: XDRPersistenceManager_test.C,v 1.21.14.1 2007/03/25 21:49:12 oliver Exp $
-=======
-// $Id: XDRPersistenceManager_test.C,v 1.21.14.1 2007/03/25 21:49:12 oliver Exp $
->>>>>>> 1.20.8.1
+// $Id: XDRPersistenceManager_test.C,v 1.21.14.2 2007/03/26 16:34:22 bertsch Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -20,11 +16,7 @@
 
 ///////////////////////////
 
-<<<<<<< XDRPersistenceManager_test.C
-START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.21.14.1 2007/03/25 21:49:12 oliver Exp $")
-=======
-START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.21.14.1 2007/03/25 21:49:12 oliver Exp $")
->>>>>>> 1.20.8.1
+START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.21.14.2 2007/03/26 16:34:22 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
