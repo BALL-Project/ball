@@ -1,7 +1,7 @@
 /dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.89.10.1 2007/03/25 21:59:54 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.89.10.2 2007/03/26 09:44:47 amoll Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -2976,6 +2976,34 @@ AC_DEFUN(CF_VIEW_QT_BASICS, [
 		fi
 	fi
 
+	AC_MSG_CHECKING(for libQtSql)
+	if test "${QTDIR}" != "" ; then
+		if test -a "${QTDIR}/lib/libQtSql.so" ; then
+			QT_LIBPATH="${QTDIR}/lib"
+			AC_MSG_RESULT((${QT_LIBPATH}))	
+		fi
+		if test "${QT_LIBPATH}" = "" ; then
+			CF_FIND_LIB(QT_LIBPATH, libQtSql, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${PROJECT[]_PATH}/contrib/lib)
+			AC_MSG_RESULT((${QT_LIBPATH}))	
+		fi
+		if test "${QT_LIBPATH}" = "" ; then
+			AC_MSG_RESULT((not found!))
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([The QtSql library could not be found. Please specify the path to libqt])
+			AC_MSG_RESULT([by passing the option --with-qt-libs=DIR to configure.])
+			AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
+			AC_MSG_RESULT([path - configure will recognize this, too.])
+			AC_MSG_RESULT([If the QT library was built with thread support enabled (libqt-mt])
+			AC_MSG_RESULT([instead of libqt), please specify the option --with-threadsafe-qt.])
+			AC_MSG_RESULT([The QT package can be found under the following URL:])
+			AC_MSG_RESULT(  http://www.troll.no/qt)
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Note: BALL requires QT 4.x! QT3 is no longer supported.)
+			CF_ERROR
+		fi
+	fi
+
+
 	AC_MSG_CHECKING(for libQtOpenGL)
 	if test "${QTDIR}" != "" ; then
 		if test -a "${QTDIR}/lib/libQtOpenGL.so" ; then
@@ -3115,19 +3143,19 @@ AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
 		AC_MSG_CHECKING(linking against QT libraries)
 
 		if test "${QT_LIBPATH}" != "/usr/lib" ; then
-			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest"
-			QT_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest"
+			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
+			QT_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
 			if test "${OS}" = "Darwin" ; then
-				QTQGL_LIBOPTS="-F${QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest"
-				QT_LIBOPTS="-F${QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest"
+				QTQGL_LIBOPTS="-F${QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
+				QT_LIBOPTS="-F${QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
 			fi
 		else 
 			QT_LIBPATH=""
-			QTQGL_LIBOPTS=" -lQtOpenGL -lQtGui -lQtCore -lQtTest"
-			QT_LIBOPTS="-lQtOpenGL -lQtGui -lQtCore -lQtTest"
+			QTQGL_LIBOPTS=" -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
+			QT_LIBOPTS="-lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
 			if test "${OS}" = "Darwin" ; then
-				QTQGL_LIBOPTS="-framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest"
-				QT_LIBOPTS="-framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest"
+				QTQGL_LIBOPTS="-framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
+				QT_LIBOPTS="-framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
 			fi
 		fi
 
