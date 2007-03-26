@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kekulizer.h,v 1.1.4.2 2007/03/25 23:30:29 amoll Exp $
+// $Id: kekulizer.h,v 1.1.4.3 2007/03/26 08:26:33 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_KEKULIZER_H
@@ -15,9 +15,7 @@
 # include <BALL/DATATYPE/hashMap.h>
 #endif 
 
-#ifndef BALL_DATATYPE_HASHSET_H
-# include <BALL/DATATYPE/hashSet.h>
-#endif
+#include <set>
 
 namespace BALL
 {
@@ -54,10 +52,10 @@ namespace BALL
 			Bond* double_bond;
 
 			// aromatic bonds
-			vector<Bond*> abonds;
+			std::vector<Bond*> abonds;
 
 			// position of the partner atoms in the vector of AtomInfos
-			vector<Position> partner_id;
+			std::vector<Position> partner_id;
 
 			// current number of double bonds for this atom
 			Index curr_double;
@@ -86,13 +84,13 @@ namespace BALL
 		bool setup(Molecule& ac);
 
 		///
-		void setAromaticRings(const vector<HashSet<Atom*> >& rings) { aromatic_rings_ = rings;}
+		void setAromaticRings(const std::vector<std::set<Atom*> >& rings) { aromatic_rings_ = rings;}
 		
 		///
-		void setRings(const vector<HashSet<Atom*> >& rings) { rings_ = rings;}
+		void setRings(const std::vector<std::set<Atom*> >& rings) { rings_ = rings;}
 		
 		///
-		const vector<Bond*>& getUnassignedBonds() const { return unassigned_bonds_; }
+		const std::vector<Bond*>& getUnassignedBonds() const { return unassigned_bonds_; }
 
 		///
 		void clear();
@@ -124,25 +122,25 @@ namespace BALL
 
 		bool use_formal_charges_;
 
-		vector<HashSet<Atom*> > aromatic_systems_;
-		vector<HashSet<Atom*> > aromatic_rings_;
-		vector<HashSet<Atom*> > rings_;
-		vector<Bond*> 					unassigned_bonds_;
+		std::vector<std::set<Atom*> > aromatic_systems_;
+		std::vector<std::set<Atom*> > aromatic_rings_;
+		std::vector<std::set<Atom*> > rings_;
+		std::vector<Bond*> 					unassigned_bonds_;
 
 		// atoms that take part in an aromatic bond:
-		HashSet<const Atom*> 		aromatic_atoms_;
-		HashSet<const Atom*> 		all_aromatic_atoms_;
+		std::set<const Atom*> 		aromatic_atoms_;
+		std::set<const Atom*> 		all_aromatic_atoms_;
 		HashMap<Atom*, Index> 	max_valence_;
 
-		HashSet<Atom*> 					current_aromatic_system_;
+		std::set<Atom*> 					current_aromatic_system_;
 
 		// current aromatic system:
-		vector<AtomInfo> 				atom_infos_;
+		std::vector<AtomInfo> 				atom_infos_;
 		Molecule*								molecule_;
 		Size 										lowest_penalty_;
 		Size 										current_penalty_;
 
-		vector<vector<AtomInfo> > solutions_;
+		std::vector<std::vector<AtomInfo> > solutions_;
 	};
 
 } // namespace BALL

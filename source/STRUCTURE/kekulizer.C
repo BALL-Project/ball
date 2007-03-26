@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kekulizer.C,v 1.1.4.2 2007/03/25 23:30:43 amoll Exp $
+// $Id: kekulizer.C,v 1.1.4.3 2007/03/26 08:26:33 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/kekulizer.h>
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/PTE.h>
-#include <BALL/DATATYPE/hashSet.h>
+//#include <BALL/DATATYPE/hashSet.h>
 #include <BALL/STRUCTURE/smartsMatcher.h>
 
 using namespace std;
@@ -62,8 +62,8 @@ bool Kekuliser::setup(Molecule& mol)
 
 	Position nr_ca = 0;
 
-	vector<HashSet<const Atom*> > result;
-	HashSet<const Atom*>::Iterator sit;
+	vector<set<const Atom*> > result;
+	set<const Atom*>::iterator sit;
 
 	//////////////////////////////////////////////////////////////
 	// fix carboxlic acid:
@@ -71,11 +71,11 @@ bool Kekuliser::setup(Molecule& mol)
 
 	for (Position pos = 0; pos < result.size(); pos++)
 	{
-		HashSet<const Atom*>& set = result[pos];
+		set<const Atom*>& set = result[pos];
 		vector<Atom*> oxygen;
 		Atom* carbon = 0;
 
-		for (sit = set.begin(); +sit; ++sit)
+		for (sit = set.begin(); sit != set.end(); ++sit)
 		{
 			if ((*sit)->getElement().getSymbol() == "C")
 			{
@@ -107,11 +107,11 @@ bool Kekuliser::setup(Molecule& mol)
 	{
 		for (Position pos = 0; pos < result.size(); pos++)
 		{
-			HashSet<const Atom*>& set = result[pos];
+			set<const Atom*>& set = result[pos];
 			vector<Atom*> nitrogen;
 			Atom* carbon = 0;
 
-			for (sit = set.begin(); +sit; ++sit)
+			for (sit = set.begin(); sit != set.end(); ++sit)
 			{
 				if ((*sit)->getElement().getSymbol() == "C")
 				{
@@ -143,11 +143,11 @@ bool Kekuliser::setup(Molecule& mol)
 
 	for (Position pos = 0; pos < result.size(); pos++)
 	{
-		HashSet<const Atom*>& set = result[pos];
+		set<const Atom*>& set = result[pos];
 		vector<Atom*> oxygen;
 		Atom* phosphor = 0;
 
-		for (sit = set.begin(); +sit; ++sit)
+		for (sit = set.begin(); sit != set.end(); ++sit)
 		{
 			if ((*sit)->getElement().getSymbol() == "P")
 			{
@@ -288,10 +288,10 @@ bool Kekuliser::fixAromaticRings_()
 	temp_ai.double_bond = 0;
 
 	// iterate over all aromatic systems:
-	vector<HashSet<Atom*> >::iterator rit = aromatic_systems_.begin();
+	vector<set<Atom*> >::iterator rit = aromatic_systems_.begin();
 	for (; rit != aromatic_systems_.end(); rit++)
 	{
-		HashSet<Atom*>& atom_set = *rit;
+		set<Atom*>& atom_set = *rit;
 
 		// abort for strange rings:
 		if (atom_set.size() < 3)
@@ -314,8 +314,8 @@ bool Kekuliser::fixAromaticRings_()
 		bool abort_this_ring = false;
 
 		// for one aromatic system: collect all needed informations for the individual atoms:
-		HashSet<Atom*>::Iterator hit = atom_set.begin();
-		for (; +hit; ++hit)
+		set<Atom*>::iterator hit = atom_set.begin();
+		for (; hit != atom_set.end(); ++hit)
 		{
 			Atom& atom = *(Atom*)*hit;
 
@@ -637,7 +637,7 @@ void Kekuliser::collectSystems_(Atom& atom)
 		Atom* partner = abit->getPartner(atom);
 		
 		// if not seen partner before:
-		if (!aromatic_atoms_.has(partner)) continue;
+		if (aromatic_atoms_.find(partner) == aromatic_atoms_.end()) continue;
 
 		collectSystems_(*partner);
 	}
@@ -647,11 +647,11 @@ void Kekuliser::getMaximumValence_()
 {
 	max_valence_.clear();
 
-	vector<HashSet<Atom*> >::iterator rit = aromatic_systems_.begin();
+	vector<set<Atom*> >::iterator rit = aromatic_systems_.begin();
 	for (; rit != aromatic_systems_.end(); rit++)
 	{
-		HashSet<Atom*>::Iterator hit = (*rit).begin();
-		for (; +hit; ++hit)
+		set<Atom*>::iterator hit = (*rit).begin();
+		for (; hit != rit->end(); ++hit)
 		{
 			Atom& atom = **hit;
 			Index max_valence = 0;
