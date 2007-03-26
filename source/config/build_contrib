@@ -47,7 +47,7 @@ echo
 echo building fftw ...
 echo
 cd fftw*
-./configure --enable-double -q --prefix=$DPATH &> ../build.log
+./configure --enable-double -q --prefix=$DPATH 2&> ../build.log
 mbuild
 cd ..
 
@@ -63,7 +63,7 @@ echo
 echo building sip ...
 echo
 cd sip*
-python configure.py -b $DPATH/bin -d $DPATH/lib -e $DPATH/include &> ../build.log
+python configure.py -b $DPATH/bin -d $DPATH/lib -e $DPATH/include 2&> ../build.log
 mbuild
 cd ..
 
@@ -71,7 +71,7 @@ echo
 echo building gsl ...
 echo
 cd gsl*
-./configure --prefix=$DPATH &> ../build.log
+./configure --prefix=$DPATH 2&> ../build.log
 mbuild
 cd ..
 
@@ -79,7 +79,7 @@ echo
 echo building Qt ...
 echo
 cd qt*
-./configure -no-qt3support -silent -no-nis -confirm-license --prefix=$DPATH &> ../build.log
+./configure -no-qt3support -silent -no-nis -confirm-license --prefix=$DPATH 2&> ../build.log
 mbuild
 cd ..
 
