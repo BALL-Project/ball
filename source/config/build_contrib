@@ -1,4 +1,4 @@
-#!/bin/bash -e 
+#!/bin/bash 
 # Contrib path
 CPATH=`echo $0 | sed "s/\/build_contrib//"`
 cd $CPATH
@@ -18,8 +18,20 @@ fi
 
 mbuild()
 {
-	make -j2 &> ../build.log 
+	make -j2 &> ../build.log  		&&
 	make install &> ../build.log
+
+	ERROR_CODE=$?
+	if [ $ERROR_CODE != 0 ]
+	then
+		echo
+		echo -------------------------------------------
+		echo Error: Could not build the contrib package!
+		echo Please have a look into $DPATH/build.log
+		echo -------------------------------------------
+		echo
+		exit $ERROR_CODE
+	fi
 }
 
 echo

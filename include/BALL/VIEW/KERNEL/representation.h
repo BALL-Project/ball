@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.34.16.1 2007/03/25 21:26:02 oliver Exp $
+// $Id: representation.h,v 1.34.16.2 2007/03/26 08:08:22 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -283,7 +283,7 @@ namespace BALL
 				throw();
 
 			///
-			void setNeedsUpdate()
+			void setNeedsUpdate(bool state=true)
 				throw();
 
 			/// Dum to ostream for debugging

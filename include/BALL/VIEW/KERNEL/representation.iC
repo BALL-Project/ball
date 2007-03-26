@@ -159,8 +159,8 @@ DrawingMode Representation::getDrawingMode() const
 }
 
 BALL_INLINE 
-void Representation::setNeedsUpdate() 
+void Representation::setNeedsUpdate(bool state) 
 	throw()
 {
-	needs_update_ = true;
+	needs_update_ = state;
 }

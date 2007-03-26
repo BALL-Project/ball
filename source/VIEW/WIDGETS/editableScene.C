@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.21.14.2 2007/03/25 23:30:48 amoll Exp $
+// $Id: editableScene.C,v 1.21.14.3 2007/03/26 08:08:17 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -117,6 +117,7 @@ void EditableScene::init_()
 {
 	edit_id_ = 0;
 	current_atom_ = 0;
+	current_bond_ = 0;
 	edit_settings_ = 0;
 	bond_order_ = Bond::ORDER__SINGLE;
 	draw_line_ = 0;
@@ -1042,8 +1043,10 @@ void EditableScene::setFormalCharge_()
 	}
 }
 
-void EditableScene::deselect_()
+void EditableScene::deselect_(bool update)
 {
+	bool was_mt = getMainControl()->useMultithreading();
+	getMainControl()->setMultithreading(false);
 	if (current_bond_ != 0 && 
 			(current_bond_->isSelected() ||
 			 current_bond_->getFirstAtom()->isSelected() ||
@@ -1054,15 +1057,22 @@ void EditableScene::deselect_()
 		Atom* a2 = (Atom*)current_bond_->getSecondAtom();
 		a1->deselect();
 		a2->deselect();
-		notify_(new CompositeMessage(*a1, CompositeMessage::DESELECTED_COMPOSITE));	
-		notify_(new CompositeMessage(*a2, CompositeMessage::DESELECTED_COMPOSITE));	
+		if (update)
+		{
+			notify_(new CompositeMessage(*a1, CompositeMessage::DESELECTED_COMPOSITE));	
+			notify_(new CompositeMessage(*a2, CompositeMessage::DESELECTED_COMPOSITE));	
+		}
 	}
 
 	if (current_atom_!= 0 && current_atom_->isSelected())
 	{
 		current_atom_->deselect();
-		notify_(new CompositeMessage(*current_atom_, CompositeMessage::DESELECTED_COMPOSITE));	
+		if (update)
+		{
+			notify_(new CompositeMessage(*current_atom_, CompositeMessage::DESELECTED_COMPOSITE));	
+		}
 	}
+	getMainControl()->setMultithreading(was_mt);
 }
 
 void EditableScene::deleteAtom_()
@@ -1406,7 +1416,7 @@ void EditableScene::saturateWithHydrogens()
 {
 	if (getMainControl()->isBusy()) return;
 
-	deselect_();
+	deselect_(false);
 	List<AtomContainer*> containers = getContainers_();
 	if (containers.size() < 1) return;
 	AtomContainer* ac = *containers.begin();
@@ -1500,6 +1510,10 @@ void EditableScene::addToolBarEntries(QToolBar* tb)
 	toolbar_actions_.push_back(optimize_);
 	Scene::addToolBarEntries(tb);
 	toolbar_->insertSeparator(element_action_);
+
+	// workaround for Qt, when it only would show the first item:
+	toolbar_->hide();
+	toolbar_->show();
 }
 
 void EditableScene::mouseDoubleClickEvent(QMouseEvent* e)

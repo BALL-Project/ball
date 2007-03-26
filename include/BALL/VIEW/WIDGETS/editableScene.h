@@ -229,7 +229,7 @@ class BALL_VIEW_EXPORT EditableScene
 	List<AtomContainer*> getContainers_();
 
 	void changeBondOrder_(Index delta);
-	void deselect_();
+	void deselect_(bool update=true);
 	void renderGrid_();
 
 	QAction* edit_id_, *new_molecule_, *optimize_, *add_hydrogens_, *element_action_;	

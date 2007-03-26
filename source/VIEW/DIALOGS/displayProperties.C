@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.16.1 2007/03/25 22:01:52 oliver Exp $
+// $Id: displayProperties.C,v 1.101.16.2 2007/03/26 08:08:15 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -84,10 +84,10 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 	setINIFileSectionName("REPRESENTATION");
 	registerWidgets_();
 
-	connect( coloring_method_combobox, SIGNAL( activated(int) ), this, SLOT( selectColoringMethod(int) ) );
+	connect( coloring_method_combobox, SIGNAL( currentIndexChanged(int) ), this, SLOT( selectColoringMethod(int) ) );
 	connect( mode_combobox, SIGNAL( activated(int) ), this, SLOT( selectMode(int) ) );
-	connect( model_type_combobox, SIGNAL( activated(int) ), this, SLOT( selectModel(int) ) );
-	connect( precision_combobox, SIGNAL( activated(int) ), this, SLOT( precisionBoxChanged(int) ) );
+	connect( model_type_combobox, SIGNAL( currentIndexChanged(int) ), this, SLOT( selectModel(int) ) );
+	connect( precision_combobox, SIGNAL( currentIndexChanged(int) ), this, SLOT( precisionBoxChanged(int) ) );
 	connect( create_button, SIGNAL( clicked() ), this, SLOT( apply() ) );
 	connect( close_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
 	connect( coloring_options, SIGNAL( clicked() ), this, SLOT( coloringOptionsPressed() ) );

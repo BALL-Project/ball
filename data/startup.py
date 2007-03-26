@@ -150,8 +150,6 @@ def removeWater():
 		return
 	getMolecularControl().highlightSelection()
 	getMolecularControl().cut()
-	for i in range(len(getSystems())):
-		getMainControl().update(getSystem(i), 1)
 	setMultithreading(1)
 
 def addOptimizedHydrogens():

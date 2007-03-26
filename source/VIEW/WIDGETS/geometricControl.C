@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.16.1 2007/03/25 21:56:47 oliver Exp $
+// $Id: geometricControl.C,v 1.77.16.2 2007/03/26 08:08:18 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -760,8 +760,10 @@ namespace BALL
 			{
 				Representation* new_rep = (Representation*) context_representation_->create();
 				if (new_rep == 0) return;
+				new_rep->setNeedsUpdate(false);
 
 				getMainControl()->insert(*new_rep);
+				notify_(new RepresentationMessage(*new_rep, RepresentationMessage::UPDATE));
 			}
 
 			if (context_plane_ != 0)
