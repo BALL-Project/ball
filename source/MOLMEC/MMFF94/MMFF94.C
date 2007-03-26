@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.8.1 2007/03/23 12:51:52 oliver Exp $
+// $Id: MMFF94.C,v 1.1.8.2 2007/03/26 13:47:50 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -178,8 +178,33 @@ namespace BALL
 
 		/////////////////////////////////////////////
 		// Kekulise all aromatic bonds:
-		kekuliser_.setAromaticRings(aromatic_rings_);
-		kekuliser_.setRings(rings_);
+
+		// workaround for differend set classes:
+		vector<set<Atom*> > arings, rings;
+		
+		HashSet<Atom*>::Iterator hit;
+
+		arings.resize(aromatic_rings_.size());
+		for (Position p = 0; p < aromatic_rings_.size(); p++)
+		{
+			for ( hit=aromatic_rings_[p].begin(); +hit;++hit)
+			{
+				arings[p].insert(*hit);
+			}
+		}
+
+		rings.resize(rings_.size());
+		for (Position p = 0; p < rings_.size(); p++)
+		{
+			for ( hit=rings_[p].begin(); +hit;++hit)
+			{
+				rings[p].insert(*hit);
+			}
+		}
+		// workaround end
+
+		kekuliser_.setAromaticRings(arings);
+		kekuliser_.setRings(rings);
 		MoleculeIterator mit = system_->beginMolecule();
 		for (; +mit; ++mit)
 		{
