@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.13.8.1 2007/03/25 21:32:15 oliver Exp $
+# $Id: Makefile,v 1.13.8.2 2007/03/26 07:11:32 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -43,10 +43,6 @@ depend: $(UIC_FILES) $(MOC_SOURCES)
 
 mainframe_moc.C:	mainframe.h
 	$(MOC) mainframe.h -o $@
-
-demoTutorialDialog_moc.C:	demoTutorialDialog.h
-	$(MOC) demoTutorialDialog.h -o $@
-
 
 aboutDialog.h: aboutDialog.ui
 	$(UIC) aboutDialog.ui > aboutDialog.h

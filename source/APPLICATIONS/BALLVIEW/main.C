@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.20.8.2 2007/03/25 23:30:40 amoll Exp $
+// $Id: main.C,v 1.20.8.3 2007/03/26 07:11:33 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -13,6 +13,7 @@
 #endif
 
 #include <QtGui/qmessagebox.h>
+#include <QtGui/QSplashScreen>
 #include <QtOpenGL/qgl.h>
 
 #include "mainframe.h"
