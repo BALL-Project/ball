@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.h,v 1.2 2006/08/15 19:00:21 oliver Exp $
+// $Id: extractors.h,v 1.2.8.1 2007/03/26 09:37:30 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -44,8 +44,6 @@ namespace BALL
 			They are just convenient tyepdefs, so they will behave exactly
 			as any STL list. In order to create these lists from 
 			kernel objects, use \link extractors extractors \endlink.
-	
-
 			\ingroup KernelMiscellaneous
 	*/
 	//@{
@@ -76,6 +74,9 @@ namespace BALL
 
 	//@}
    
+	namespace Extractors
+	{
+
 	/**	Extraction functions for external iteration.
 			The following set of functions can by used from python to
 			compile lists of objects from BALL kernel data structures.
@@ -166,6 +167,8 @@ namespace BALL
 	NucleotideList nucleotides(const AtomContainer& fragment, bool selected_only = false);
 
 	//@}
+	
+	}
    
 } // namespace BALL
 

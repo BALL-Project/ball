@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.sip,v 1.7.8.2 2007/03/25 23:30:42 amoll Exp $
+// $Id: extractors.sip,v 1.7.8.3 2007/03/26 09:38:52 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher
 //
 
 %ModuleHeaderCode
-	#include <BALL/KERNEL/extractors.h>
+	#include <BALL/PYTHON/extractors.h>
 	using namespace BALL;
 %End
 PyAtomList* 								atoms(const AtomContainer& /fragment/, const String& /expression/);
