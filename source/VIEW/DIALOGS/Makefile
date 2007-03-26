@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.54.14.1 2007/03/25 22:00:39 oliver Exp $
+# $Id: Makefile,v 1.54.14.2 2007/03/26 07:51:46 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -148,13 +148,6 @@ UIC_SOURCES=\
 	dockDialogData.C\
 	dockProgressDialogData.C\
 	dockResultDialogData.C
-
-ifeq ($(BALL_HAS_FFTW),true)
-	CPP_SOURCES+=geometricFitDialog.C geometricFitDialogData.C
-	MOC_SOURCES+=geometricFitDialog_moc.C geometricFitDialogData_moc.C
-	UIC_SOURCES+=geometricFitDialogData.C
-endif
-
 
 ifeq ($(BALL_HAS_FFTW),true)
 	CPP_SOURCES+=geometricFitDialog.C geometricFitDialogData.C
