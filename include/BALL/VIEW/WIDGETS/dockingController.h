@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.h,v 1.2.12.1 2007/03/25 21:26:18 oliver Exp $
+// $Id: dockingController.h,v 1.2.12.2 2007/03/26 07:26:29 amoll Exp $
 //
 
 #ifndef BALL_WIDGETS_DOCKINGCONTROLLER_H
@@ -9,10 +9,6 @@
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 # include <BALL/VIEW/KERNEL/modularWidget.h>
-#endif
-
-#ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
-# include <BALL/VIEW/WIDGETS/genericControl.h>
 #endif
 
 #ifndef BALL_VIEW_DIALOGS_DOCKDIALOG_H
@@ -38,8 +34,9 @@ namespace BALL
 			 Finally it shows the result dialog.
 			 \ingroup	ViewWidgets
 		 */
-		class BALL_EXPORT DockingController
-			: public GenericControl
+		class BALL_VIEW_EXPORT DockingController
+			: public QWidget, 
+				public ModularWidget
 		{
 			Q_OBJECT
 			
