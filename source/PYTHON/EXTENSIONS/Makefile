@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.38.8.1 2007/03/25 21:37:00 oliver Exp $
+# $Id: Makefile,v 1.38.8.2 2007/03/27 21:25:46 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -39,26 +39,13 @@ CXXFLAGS += $(SIPFLAGS)
 ADD_INCLUDES=$(PYTHON_INCLUDES) $(SIP_INCLUDES)
  
 PYBALL_SOURCES = \
-	extractors.C\
 	pyBALLSipHelper.C\
 	pyCompositeList.C\
 	pyRepresentationList.C\
 	pyRegularData3DList.C\
 	pyIndexList.C\
-	pyAtomList.C \
-	pyBondList.C \
 	pyConstant.C \
 	pyColorRGBAVector.C \
-	pyMoleculeList.C \
-	pyNucleotideList.C \
-	pyProteinList.C \
-	pySecondaryStructureList.C \
-	pyAtomContainerList.C \
-	pyChainList.C \
-	pyFragmentList.C \
-	pyNucleicAcidList.C \
-	pyPDBAtomList.C \
-	pyResidueList.C \
 	pyGeometricObjectList.C\
 	pyDatasetVector.C
 	

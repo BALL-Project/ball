@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.44.8.1 2007/03/25 21:36:59 oliver Exp $
+// $Id: BALL.sip,v 1.44.8.2 2007/03/27 21:25:45 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -234,23 +234,9 @@
 
 // PYTHON
 %Include extractors.sip
-%Include atomList.sip
-%Include PDBAtomList.sip
 %Include pyIndexList.sip // a list of numbers (indices etc.)
 %Include pyAtomDict.sip // a dictionary mapping to atoms
-%Include pyAtomList.sip // a list of atom (pointers)
-%Include pyBondList.sip
 %Include pyCompositeList.sip
-%Include pyAtomContainerList.sip
-%Include pyFragmentList.sip
-%Include pyMoleculeList.sip
-%Include pyPDBAtomList.sip
-%Include pyResidueList.sip
-%Include pySecondaryStructureList.sip
-%Include pyChainList.sip
-%Include pyProteinList.sip
-%Include pyNucleotideList.sip
-%Include pyNucleicAcidList.sip
 %Include pyAtomProcessor.sip 
 %Include pyBondProcessor.sip
 %Include pyFragmentProcessor.sip
@@ -258,6 +244,7 @@
 %Include pyCompositeProcessor.sip
 %Include pyRegularData3DList.sip
 %Include pyDatasetVector.sip
+%Include pyLists.sip
 
 // QSAR
 //%Include descriptor.sip
