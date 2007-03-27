@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBijection.C,v 1.2.18.3 2007/03/26 09:37:14 amoll Exp $
+// $Id: atomBijection.C,v 1.2.18.4 2007/03/27 21:16:49 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -19,7 +19,6 @@ using namespace std;
 
 namespace BALL
 {
-	using namespace BALL::Extractors;
 
 	AtomBijection::AtomBijection(AtomContainer& A, AtomContainer& B)
 		:	std::vector<std::pair<Atom*, Atom*> >()

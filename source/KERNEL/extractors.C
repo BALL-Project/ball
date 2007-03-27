@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.C,v 1.2.8.1 2007/03/26 09:37:45 amoll Exp $
+// $Id: extractors.C,v 1.2.8.2 2007/03/27 21:16:34 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -17,8 +17,6 @@
 
 namespace BALL
 {
-	namespace Extractors
-	{
 
 	AtomList atoms(const AtomContainer& fragment, const String& expression)
 	{
@@ -298,4 +296,4 @@ namespace BALL
 		return result;
 	}
 
-} }
+}

@@ -1,0 +1,55 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pyListHelper.h,v 1.1.2.1 2007/03/27 21:21:39 amoll Exp $
+//
+//
+#ifndef BALL_PYTHON_PYLIST_HELPER
+#define BALL_PYTHON_PYLIST_HELPER
+
+// Convert the list.
+#define BALL_CONVERT_FROM(TYPE)\
+	PyObject *pl;\
+	\
+	if ((pl = PyList_New(0)) == NULL) return NULL;\
+	\
+	for (TYPE##List::const_iterator it = sipCpp->begin(); it != sipCpp->end(); ++it)\
+	{\
+		PyObject *inst;\
+		TYPE& t = **it;\
+		\
+		if ((inst = pyMapBALLObjectToSip(t)) == NULL || PyList_Append(pl,inst) < 0)\
+		{\
+			Py_DECREF(pl);\
+			return NULL;\
+		}\
+	}\
+	\
+	return pl;
+ 
+
+// Convert a Python list of TYPE instances to a TYPEList object on the heap.
+#define BALL_CONVERT_TO(TYPE)\
+	if (sipIsErr == NULL) return PyList_Check(sipPy);\
+	\
+	TYPE##List* alist = new TYPE##List;\
+ 	\
+	for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i)\
+	{\
+		TYPE* a = reinterpret_cast<TYPE*>(sipForceConvertTo_##TYPE(PyList_GET_ITEM(sipPy,i),sipIsErr));\
+ 		\
+		if (*sipIsErr)\
+		{\
+			delete alist;\
+			return 0;\
+		}\
+ 		\
+		alist->push_back(a);\
+	}\
+ 	\
+	*sipCppPtr = alist;\
+	\
+	return 1;
+
+
+#endif
