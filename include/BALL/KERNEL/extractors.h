@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.h,v 1.2.8.1 2007/03/26 09:37:30 amoll Exp $
+// $Id: extractors.h,v 1.2.8.2 2007/03/27 21:16:10 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -74,9 +74,6 @@ namespace BALL
 
 	//@}
    
-	namespace Extractors
-	{
-
 	/**	Extraction functions for external iteration.
 			The following set of functions can by used from python to
 			compile lists of objects from BALL kernel data structures.
@@ -111,13 +108,6 @@ namespace BALL
 	*/
 	PDBAtomList PDBAtoms(const AtomContainer& fragment, const String& expression = String());
 			
-	/**	Extract all PDB atoms.
-			This method extracts all PDB atoms of a kernel data structure into
-			a list. 
-			@param fragment the AtomContainer containing the atoms
-	*/
-	PDBAtomList PDBAtoms(const AtomContainer& fragment);
-
 	/**	Extract all bonds from a kernel data structure.
 			This function extracts all bonds from the atoms contained in the base fragment.
 			If <tt>selected_only</tt> is set to <b>true</b>, only bonds are extracted where
@@ -168,8 +158,6 @@ namespace BALL
 
 	//@}
 	
-	}
-   
 } // namespace BALL
 
 #endif // BALL_KERNEL_EXTRACTORS_H
