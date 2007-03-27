@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.h,v 1.11.8.2 2007/03/25 21:25:31 oliver Exp $
+// $Id: smartsMatcher.h,v 1.11.8.3 2007/03/27 12:36:03 amoll Exp $
 //
 // Author:
 //   Andreas Bertsch
@@ -235,7 +235,7 @@ namespace BALL
 					Position pos_;
 			};
 
-			static BALL_EXPORT RecStructPool_* pool_;
+			static RecStructPool_* pool_;
 
 			/// method for evaluation of ring edges, after the the smarts tree is matched to molcule
 			bool evaluateRingEdges_(const std::set<const Atom*>& matching, const std::map<const SPNode*, const Atom*>& mapping, const String& smarts);

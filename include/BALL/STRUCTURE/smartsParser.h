@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.h,v 1.10.8.1 2007/03/25 21:25:31 oliver Exp $
+// $Id: smartsParser.h,v 1.10.8.2 2007/03/27 12:36:03 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_SMARTES_PARSER_H
@@ -475,7 +475,7 @@ namespace BALL
 			const char*		buffer;
 		};
 		
-		BALL_EXPORT static State state;
+		static State state;
 
 		const std::set<SPNode*>& getNodes() const { return nodes_; }
 
