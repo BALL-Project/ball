@@ -5,6 +5,7 @@ OBJS = \
 ..\..\..\source\Applications\BALLView\mainframe.obj\
 ..\..\..\source\Applications\BALLView\mainframe_moc.obj\
 ..\..\..\source\Applications\BALLView\icons.obj\
+..\..\..\source\Applications\BALLView\splash.obj\
 ..\..\..\source\Applications\BALLView\main.obj
 
 UICS = \

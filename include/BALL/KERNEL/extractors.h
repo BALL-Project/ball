@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.h,v 1.2.8.2 2007/03/27 21:16:10 amoll Exp $
+// $Id: extractors.h,v 1.2.8.3 2007/03/27 22:41:31 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -89,7 +89,7 @@ namespace BALL
 			@param fragment the AtomContainer containing the atoms.
 			@param expression the expression that selects the atoms (default: no expression)
 	*/
-	AtomList atoms(const AtomContainer& fragment, const String& expression = String());
+	BALL_EXPORT AtomList atoms(const AtomContainer& fragment, const String& expression = String());
 			
 	/**	Extract atoms matching an expression.
 			This method extracts all atoms from an atom list  
@@ -97,7 +97,7 @@ namespace BALL
 			@param atoms the AtomContainer containing the atoms
 			@param expression the expression that selects the atoms
 	*/
-	AtomList atoms(const AtomList& atoms, const String& expression);
+	BALL_EXPORT AtomList atoms(const AtomList& atoms, const String& expression);
 			
 	/**	Extract PDB atoms matching an expression.
 			This method extracts all PDB atoms of a kernel data structure into
@@ -106,55 +106,55 @@ namespace BALL
 			@param fragment the AtomContainer containing the atoms
 			@param expression the expression that selects the atoms (default: no expression)
 	*/
-	PDBAtomList PDBAtoms(const AtomContainer& fragment, const String& expression = String());
+	BALL_EXPORT PDBAtomList PDBAtoms(const AtomContainer& fragment, const String& expression = String());
 			
 	/**	Extract all bonds from a kernel data structure.
 			This function extracts all bonds from the atoms contained in the base fragment.
 			If <tt>selected_only</tt> is set to <b>true</b>, only bonds are extracted where
 			both atoms are selected.
 	*/
-	BondList bonds(const AtomContainer& fragment, bool selected_only = false);
+	BALL_EXPORT BondList bonds(const AtomContainer& fragment, bool selected_only = false);
 
 	/**	Extract all bonds from an atom.
 			This function returns all bonds of an atom.
 	*/
-	BondList bonds(const Atom& atom);
+	BALL_EXPORT BondList bonds(const Atom& atom);
 
 	/**	Extract all base fragments from a kernel data structure.
 	*/
-	AtomContainerList atomContainers(const AtomContainer& fragment, bool selected_only = false);
+	BALL_EXPORT AtomContainerList atomContainers(const AtomContainer& fragment, bool selected_only = false);
 
 	/**	Extract all residues from a kernel data structure.
 	*/
-	ResidueList residues(const AtomContainer& fragment, bool selected_only = false);
+	BALL_EXPORT ResidueList residues(const AtomContainer& fragment, bool selected_only = false);
 
 	/**	Extract all fragments from a kernel data structure.
 	*/
-	FragmentList fragments(const AtomContainer& fragment, bool selected_only = false);
+	BALL_EXPORT FragmentList fragments(const AtomContainer& fragment, bool selected_only = false);
 
 	/**	Extract all molecules from a kernel data structure.
 	*/
-	MoleculeList molecules(const AtomContainer& fragment, bool selected_only = false);
+	BALL_EXPORT MoleculeList molecules(const AtomContainer& fragment, bool selected_only = false);
 
 	/**	Extract all proteins from a kernel data structure.
 	*/
-	ProteinList proteins(const AtomContainer& fragment, bool selected_only = false);
+	BALL_EXPORT ProteinList proteins(const AtomContainer& fragment, bool selected_only = false);
 
 	/**	Extract all secondary structures from a kernel data structure.
 	*/
-	SecondaryStructureList secondaryStructures(const AtomContainer& fragment, bool selected_only = false);
+	BALL_EXPORT SecondaryStructureList secondaryStructures(const AtomContainer& fragment, bool selected_only = false);
 
 	/**	Extract all chains from a kernel data structure.
 	*/
-	ChainList chains(const AtomContainer& fragment, bool selected_only = false);
+	BALL_EXPORT ChainList chains(const AtomContainer& fragment, bool selected_only = false);
 
 	/**	Extract all nucleic acids from a kernel data structure.
 	*/
-	NucleicAcidList nucleicAcids(const AtomContainer& fragment, bool selected_only = false);
+	BALL_EXPORT NucleicAcidList nucleicAcids(const AtomContainer& fragment, bool selected_only = false);
 
 	/**	Extract all nucleotides from a kernel data structure.
 	*/
-	NucleotideList nucleotides(const AtomContainer& fragment, bool selected_only = false);
+	BALL_EXPORT NucleotideList nucleotides(const AtomContainer& fragment, bool selected_only = false);
 
 	//@}
 	
