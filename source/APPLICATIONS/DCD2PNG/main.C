@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.18.16.1 2007/03/25 21:32:19 oliver Exp $
+// $Id: main.C,v 1.18.16.2 2007/03/27 10:18:33 bertsch Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 		{
 			MolecularFileDialog* mfd = MolecularFileDialog::getInstance(0);
 			if (mfd == 0) return 0;
-			system = mfd->openFile(argument);
+			system = mfd->openMolecularFile(argument);
 			if (system == 0)
 			{
 				std::cerr << "Could not open file: " << argument << std::endl;
