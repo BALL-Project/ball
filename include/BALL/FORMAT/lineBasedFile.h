@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.h,v 1.32 2005/12/23 17:01:46 amoll Exp $
+// $Id: lineBasedFile.h,v 1.32.20.1 2007/03/28 08:23:44 bertsch Exp $
 //
 
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
@@ -184,11 +184,11 @@ namespace BALL
 		bool trimWhiteSpacesEnabled() const
 			throw();
 
+		protected:
 		//@}
 		/*	@name	Protected Attributes
 		*/
 		//_@{
-
 		/// buffer for the line in use
 		String line_;
 

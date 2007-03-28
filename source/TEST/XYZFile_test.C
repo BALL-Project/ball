@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile_test.C,v 1.7.28.1 2007/03/25 21:49:12 oliver Exp $
+// $Id: XYZFile_test.C,v 1.7.28.2 2007/03/28 08:23:45 bertsch Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(XYZFile, "$Id: XYZFile_test.C,v 1.7.28.1 2007/03/25 21:49:12 oliver Exp $")
+START_TEST(XYZFile, "$Id: XYZFile_test.C,v 1.7.28.2 2007/03/28 08:23:45 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@ START_TEST(XYZFile, "$Id: XYZFile_test.C,v 1.7.28.1 2007/03/25 21:49:12 oliver E
 using namespace BALL;
 
 
-XYZFile*	file_ptr;
+XYZFile* file_ptr = 0;
 CHECK(XYZFile::XYZFile())
 	file_ptr = new XYZFile;
 	TEST_NOT_EQUAL(file_ptr, 0)
