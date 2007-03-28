@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.sip,v 1.1.4.1 2007/03/25 21:38:52 oliver Exp $
+// $Id: representationManager.sip,v 1.1.4.2 2007/03/28 13:58:08 amoll Exp $
 //
 
 class RepresentationManager
@@ -10,7 +10,6 @@ class RepresentationManager
 	#include <BALL/VIEW/KERNEL/representationManager.h>
 	using namespace BALL;
 	using namespace VIEW;
-	typedef RepresentationManager::RepresentationList RepresentationList;
 %End
   public:
   // BALL_CREATE(RepresentationManager);

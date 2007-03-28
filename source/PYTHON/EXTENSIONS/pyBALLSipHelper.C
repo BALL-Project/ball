@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyBALLSipHelper.C,v 1.4.28.1 2007/03/25 21:37:19 oliver Exp $
+// $Id: pyBALLSipHelper.C,v 1.4.28.2 2007/03/28 13:58:08 amoll Exp $
 
 #include <typeinfo>
 #include "sipAPIBALL.h"
@@ -24,34 +24,12 @@
 namespace BALL
 {
 
-#define BALL_TO_SIP_MAP(type)\
-	if (typeid(object) == typeid(RTTI::getDefault<type>()))\
-	{\
-		return sipConvertFromInstance(&object, sipClass_##type, 0);\
-	}\
-
 #define BALL_TO_SIP_MAP_BASECLASS(type)\
 	if (dynamic_cast<const type*>(&object) != NULL)\
 		return sipConvertFromInstance(&object, sipClass_##type, 0);
 
 	PyObject* pyMapBALLObjectToSip(Composite& object)
 	{
-		/*
-		BALL_TO_SIP_MAP(PDBAtom)
-		BALL_TO_SIP_MAP(Atom)
-		BALL_TO_SIP_MAP(Bond)
-		BALL_TO_SIP_MAP(Residue)
-		BALL_TO_SIP_MAP(SecondaryStructure)
-		BALL_TO_SIP_MAP(Chain)
-		BALL_TO_SIP_MAP(Protein)
-		BALL_TO_SIP_MAP(System)
-		BALL_TO_SIP_MAP(NucleicAcid)
-		BALL_TO_SIP_MAP(Nucleotide)
-		BALL_TO_SIP_MAP(Molecule)
-		BALL_TO_SIP_MAP(Fragment)
-		BALL_TO_SIP_MAP(AtomContainer)
-		*/
-
 		BALL_TO_SIP_MAP_BASECLASS(PDBAtom)
 		BALL_TO_SIP_MAP_BASECLASS(Atom)
 		BALL_TO_SIP_MAP_BASECLASS(Bond)

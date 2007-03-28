@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.14.18.1 2007/03/25 21:38:51 oliver Exp $
+// $Id: representation.sip,v 1.14.18.2 2007/03/28 13:58:07 amoll Exp $
 //
 
 class Representation
@@ -11,7 +11,6 @@ class Representation
 	#include <BALL/VIEW/KERNEL/representation.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
-	typedef Representation::GeometricObjectList GeometricObjectList;
 %End
   public:
 	// BALL_CREATE(Representation);
