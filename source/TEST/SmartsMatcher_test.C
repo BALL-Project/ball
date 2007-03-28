@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SmartsMatcher_test.C,v 1.4.8.2 2007/03/26 16:34:20 bertsch Exp $
+// $Id: SmartsMatcher_test.C,v 1.4.8.3 2007/03/28 16:07:38 bertsch Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -10,17 +10,14 @@
 
 #include <BALL/STRUCTURE/smartsMatcher.h>
 #include <BALL/FORMAT/SDFile.h>
-
-#include <fstream>
-#include <vector>
-#include <set>
+#include <BALL/KERNEL/system.h>
 
 ///////////////////////////
 
 using namespace BALL;
 using namespace std;
 
-START_TEST(SmartsMatcher, "$Id: SmartsMatcher_test.C,v 1.4.8.2 2007/03/26 16:34:20 bertsch Exp $")
+START_TEST(SmartsMatcher, "$Id: SmartsMatcher_test.C,v 1.4.8.3 2007/03/28 16:07:38 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

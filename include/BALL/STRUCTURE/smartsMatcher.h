@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.h,v 1.11.8.4 2007/03/28 09:39:09 bertsch Exp $
+// $Id: smartsMatcher.h,v 1.11.8.5 2007/03/28 16:07:35 bertsch Exp $
 //
 // Author:
 //   Andreas Bertsch
@@ -20,6 +20,8 @@
 
 namespace BALL 
 {
+	// forward declaration
+	class Molecule;
 
 	/** @name	\brief SMARTS Matcher
 	 

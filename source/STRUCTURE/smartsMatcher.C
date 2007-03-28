@@ -1,12 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.C,v 1.13.8.1 2007/03/20 09:03:48 bertsch Exp $
+// $Id: smartsMatcher.C,v 1.13.8.2 2007/03/28 16:07:36 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/smartsMatcher.h>
-#include <BALL/STRUCTURE/smartsParser.h>
-#include <BALL/KERNEL/PTE.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 
 #include <stack>

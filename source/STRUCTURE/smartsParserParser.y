@@ -340,13 +340,13 @@ ring_bond:
 atom_node:
 		'[' node ']' connection_list
 		{
-			$2->setInBrackets();
+			//$2->setInBrackets();
 			SmartsParser::state.current_parser->addRingConnection($2, $4);
 			$$ = $2;
 		}
 	| '[' node ']'
 		{
-			$2->setInBrackets();
+			//$2->setInBrackets();
 			$$ = $2;
 		}
 	| unbraced_atom connection_list
