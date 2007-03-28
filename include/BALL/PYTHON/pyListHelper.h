@@ -1,11 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyListHelper.h,v 1.1.2.1 2007/03/27 21:21:39 amoll Exp $
+// $Id: pyListHelper.h,v 1.1.2.2 2007/03/28 15:43:38 amoll Exp $
 //
 //
 #ifndef BALL_PYTHON_PYLIST_HELPER
 #define BALL_PYTHON_PYLIST_HELPER
+
+#include <BALL/DATATYPE/regularData3D.h>
+
+namespace BALL 
+{
+
+typedef List<RegularData3D*> RegularData3DList;
 
 // Convert the list.
 #define BALL_CONVERT_FROM(TYPE)\
@@ -15,10 +22,9 @@
 	\
 	for (TYPE##List::const_iterator it = sipCpp->begin(); it != sipCpp->end(); ++it)\
 	{\
-		PyObject *inst;\
-		TYPE& t = **it;\
+		PyObject *inst = sipConvertFromInstance(*it, sipClass_##TYPE, 0);\
 		\
-		if ((inst = pyMapBALLObjectToSip(t)) == NULL || PyList_Append(pl,inst) < 0)\
+		if (inst == NULL || PyList_Append(pl,inst) < 0)\
 		{\
 			Py_DECREF(pl);\
 			return NULL;\
@@ -51,5 +57,6 @@
 	\
 	return 1;
 
+}
 
 #endif

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.62.8.2 2007/03/25 23:30:40 amoll Exp $
+// $Id: mainframe.C,v 1.62.8.3 2007/03/28 15:42:42 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -263,8 +263,8 @@ namespace BALL
 		}
 
 		// remove all Representations
-		RepresentationManager::RepresentationList reps = getRepresentationManager().getRepresentations();
-		RepresentationManager::RepresentationList::Iterator rit = reps.begin();
+		RepresentationList reps = getRepresentationManager().getRepresentations();
+		RepresentationList::Iterator rit = reps.begin();
 
 		for (; rit != reps.end(); ++rit)
 		{
