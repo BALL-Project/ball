@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.sip,v 1.3.20.1 2007/03/25 21:37:12 oliver Exp $
+// $Id: modelProcessor.sip,v 1.3.20.2 2007/03/28 13:58:55 amoll Exp $
 //
 
 class ModelProcessor
@@ -11,7 +11,6 @@ class ModelProcessor
 	#include "sipBALLComposite.h"
 	using namespace BALL;
 	using namespace BALL::VIEW;
-	typedef ModelProcessor::GeometricObjectList GeometricObjectList;
 %End
   public:
 
