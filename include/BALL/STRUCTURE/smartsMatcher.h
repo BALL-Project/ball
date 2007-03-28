@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.h,v 1.11.8.3 2007/03/27 12:36:03 amoll Exp $
+// $Id: smartsMatcher.h,v 1.11.8.4 2007/03/28 09:39:09 bertsch Exp $
 //
 // Author:
 //   Andreas Bertsch
@@ -22,6 +22,24 @@ namespace BALL
 {
 
 	/** @name	\brief SMARTS Matcher
+	 
+			This class implements a SMARTS matcher. Given a molecule and
+			a SMARTS-string the matcher matches the string to the molecule
+			and reports a vector of atom sets as a result. 
+
+			To speedup the matching some other modes are possible. The search 
+			of the matching procedure can be reduced to a set of start atoms, 
+			which are used to start the matchings.
+
+			Also if available and if needed by the SMARTS pattern, the SSSR
+			can be set. The SSSR is the smallest set of smallest rings and
+			are needed if the SMARTS pattern contains rings specific parts.
+			The calculation of the SSSR is time-consuming and would be done 
+			automatically by the smarts matcher. However, if the SSSR of the 
+			molecule is already available, it can be set using the SSSR method.
+			Warning, the SSSR should always be up-to-date, i.e. the SSSR of the 
+			current molecule, otherwise the matcher might report wrong results.
+
 			\ingroup StructureMatching
 	*/
 	class BALL_EXPORT SmartsMatcher
@@ -109,7 +127,7 @@ namespace BALL
 					RecStructCore_(const RecStructCore_&);
 
 					/// destructor
-					~RecStructCore_();
+					virtual ~RecStructCore_();
 
 					/// assignment operator 
 					RecStructCore_& operator = (const RecStructCore_&);
@@ -145,7 +163,7 @@ namespace BALL
 					RecStructPool_();
 
 					/// destructor
-					~RecStructPool_();
+					virtual ~RecStructPool_();
 
 					/// returns the a free RecStructCore_ of the pool (creates new ones if needed)
 					RecStructCore_* getNextFree();
@@ -194,7 +212,7 @@ namespace BALL
 					RecStruct_(const RecStruct_& rec_struct);
 
 					/// destructor
-					~RecStruct_();
+					virtual ~RecStruct_();
 
 					/// assignment operator 
 					RecStruct_& operator = (const RecStruct_&); 
@@ -235,6 +253,7 @@ namespace BALL
 					Position pos_;
 			};
 
+			/// the pool of rec struct objects
 			static RecStructPool_* pool_;
 
 			/// method for evaluation of ring edges, after the the smarts tree is matched to molcule
