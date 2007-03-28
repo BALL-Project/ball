@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.16.1 2007/03/25 21:56:51 oliver Exp $
+// $Id: scene.C,v 1.174.16.2 2007/03/28 13:51:55 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -740,7 +740,7 @@ namespace BALL
 					}
 				}
 
-				RepresentationManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+				RepresentationList::ConstIterator it = pm.getRepresentations().begin();
 				for(; it != pm.getRepresentations().end(); it++)
 				{
 					Representation& rep = **it;
@@ -1360,7 +1360,7 @@ namespace BALL
 		{
 			if (er.init(*stage_, (float) width(), (float) height()))
 			{
-				RepresentationManager::RepresentationList::ConstIterator it;
+				RepresentationList::ConstIterator it;
 				MainControl *main_control = MainControl::getMainControl(this);
 
 				it = main_control->getRepresentationManager().getRepresentations().begin();

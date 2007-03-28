@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.16.2 2007/03/26 08:08:15 amoll Exp $
+// $Id: displayProperties.C,v 1.101.16.3 2007/03/28 13:51:51 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -610,7 +610,7 @@ void DisplayProperties::applyTo_(Representation* rep)
 		if (!coloring_updates_enabled->isChecked() &&
 		    rep_->getTransparency() != transparency)
 		{
-			Representation::GeometricObjectList::iterator it = rep_->getGeometricObjects().begin();
+			GeometricObjectList::iterator it = rep_->getGeometricObjects().begin();
 			for (; it != rep_->getGeometricObjects().end(); it++)
 			{
 				Mesh* mesh = dynamic_cast<Mesh*> (*it);

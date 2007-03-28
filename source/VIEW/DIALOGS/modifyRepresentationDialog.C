@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.C,v 1.1.4.1 2007/03/25 22:02:07 oliver Exp $
+// $Id: modifyRepresentationDialog.C,v 1.1.4.2 2007/03/28 13:51:52 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
@@ -255,9 +255,9 @@ namespace BALL
 
 			if (vertices_.size() == 0)
 			{
-				const Representation::GeometricObjectList& ls = rep_->getGeometricObjects();
+				const GeometricObjectList& ls = rep_->getGeometricObjects();
 
-				Representation::GeometricObjectList::ConstIterator it = ls.begin();
+				GeometricObjectList::ConstIterator it = ls.begin();
 				for (; it != ls.end(); it++)
 				{
 					(**it).getVertices(vertices_);
@@ -359,7 +359,7 @@ namespace BALL
 			// if not color only selected composites
 			if (!color_only_selection->isChecked())
 			{
-				Representation::GeometricObjectList::iterator git = rep_->getGeometricObjects().begin();
+				GeometricObjectList::iterator git = rep_->getGeometricObjects().begin();
 				for (; git != rep_->getGeometricObjects().end(); ++git)
 				{
 					Mesh* mesh = dynamic_cast<Mesh*> (*git);
@@ -399,7 +399,7 @@ namespace BALL
 
 			vector<ColorRGBA>* colors;
 			vector<Vector3>*   vertices;
-			Representation::GeometricObjectList::iterator git = rep_->getGeometricObjects().begin();
+			GeometricObjectList::iterator git = rep_->getGeometricObjects().begin();
 			for (; git != rep_->getGeometricObjects().end(); ++git)
 			{
 				colors  = 0;
@@ -513,7 +513,7 @@ namespace BALL
 			cm.createMap();
 
 			vector<float> values;
-			Representation::GeometricObjectList::iterator git = rep_->getGeometricObjects().begin();
+			GeometricObjectList::iterator git = rep_->getGeometricObjects().begin();
 			bool error = false;
 			try 
 			{
@@ -815,7 +815,7 @@ namespace BALL
 				cp.createAtomGrid();
 			}
 
-			Representation::GeometricObjectList::iterator git = rep_->getGeometricObjects().begin();
+			GeometricObjectList::iterator git = rep_->getGeometricObjects().begin();
 			for (; git != rep_->getGeometricObjects().end(); ++git)
 			{
 				// get the original mesh
@@ -1090,7 +1090,7 @@ namespace BALL
 			rep_->setTransparency(transparency);
 
 			/*
-			Representation::GeometricObjectList::iterator it = rep_->getGeometricObjects().begin();
+			GeometricObjectList::iterator it = rep_->getGeometricObjects().begin();
 			for (; it != rep_->getGeometricObjects().end(); it++)
 			{
 				if (!RTTI::isKindOf<Mesh> (**it)) continue;

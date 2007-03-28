@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.C,v 1.1.4.1 2007/03/25 22:02:26 oliver Exp $
+// $Id: representationManager.C,v 1.1.4.2 2007/03/28 13:51:53 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representationManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -182,7 +182,7 @@ bool RepresentationManager::operator == (const RepresentationManager& pm) const
 }
 
 
-RepresentationManager::RepresentationList RepresentationManager::removedComposite(const Composite& composite, bool update)
+RepresentationList RepresentationManager::removedComposite(const Composite& composite, bool update)
 	throw()
 {
 	// Representations either to be updated or deleted
@@ -386,7 +386,7 @@ void RepresentationManager::storeRepresentations(INIFile& out)
 	// create a numerical id for every representation
 	HashMap<const Representation*, Position> rep_to_pos_map;
 	
-	RepresentationManager::RepresentationList::const_iterator rep_it = reps.begin();
+	RepresentationList::const_iterator rep_it = reps.begin();
 	for (Position i = 0; rep_it != reps.end(); rep_it++)
 	{
 		rep_to_pos_map[*rep_it] = i;
@@ -447,8 +447,7 @@ void RepresentationManager::restoreRepresentations(const INIFile& in, const vect
 		// create a vector with all Representations to access per numeric id
 		vector<const Representation*> representations;
 
-		RepresentationManager::RepresentationList::const_iterator rit = 
-					getRepresentations().begin();
+		RepresentationList::const_iterator rit = getRepresentations().begin();
 
 		for (; rit != getRepresentations().end(); rit++)
 		{

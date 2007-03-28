@@ -63,7 +63,7 @@ void ClippingDialog::exec()
 	const ModelInformation& mi = mc->getModelInformation();
 
 	Position row= 0;
-	RepresentationManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+	RepresentationList::ConstIterator it = pm.getRepresentations().begin();
 	for (; it != pm.getRepresentations().end(); it++)
 	{
 		const Representation& rep = **it;

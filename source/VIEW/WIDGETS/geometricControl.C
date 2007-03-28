@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.16.2 2007/03/26 08:08:18 amoll Exp $
+// $Id: geometricControl.C,v 1.77.16.3 2007/03/28 13:51:54 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -677,7 +677,7 @@ namespace BALL
 			plane->setPoint(camera.getLookAtPosition() + vv * 10);
 
 			RepresentationManager& pm = mc->getRepresentationManager();
-			RepresentationManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+			RepresentationList::ConstIterator it = pm.getRepresentations().begin();
 			for (; it != pm.getRepresentations().end(); it++)
 			{
 				plane->getRepresentations().insert(*it);

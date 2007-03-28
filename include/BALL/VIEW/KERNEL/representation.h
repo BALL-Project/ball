@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.34.16.3 2007/03/28 13:11:42 amoll Exp $
+// $Id: representation.h,v 1.34.16.4 2007/03/28 13:51:46 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -83,12 +83,6 @@ namespace BALL
 				PROPERTY__IS_COORDINATE_SYSTEM
 			};
 				
-			/** @name Type definitions
-			 */
-			//@{
-			/// 
-			typedef List<GeometricObject*> 		 GeometricObjectList;
-
 			//@}
 			/**	@name	Constructors and Destuctor
 			*/	

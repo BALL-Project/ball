@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.h,v 1.19 2005/12/23 17:02:18 amoll Exp $
+// $Id: modelProcessor.h,v 1.19.20.1 2007/03/28 13:51:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
@@ -19,12 +19,14 @@
 # include <BALL/CONCEPT/property.h>
 #endif
 
+#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
+# include <BALL/VIEW/KERNEL/geometricObject.h>
+#endif
+
 namespace BALL
 {
 	namespace VIEW
 	{
-		class GeometricObject;
-		
 		/** Base class for all model processors.
 		 		Every model processor has a list with all GeometricObject 's it has
 				created. It also stores the drawing precision, it will use for creating new models.
@@ -44,9 +46,6 @@ namespace BALL
 
 				BALL_CREATE(ModelProcessor)
 				
-				///
-				typedef List<GeometricObject*> GeometricObjectList;
-
 				///
 				ModelProcessor()
 					throw();

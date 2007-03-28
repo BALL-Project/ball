@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.32.18.1 2007/03/25 21:26:07 oliver Exp $
+// $Id: standardColorProcessor.h,v 1.32.18.2 2007/03/28 13:51:48 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -36,8 +36,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
-		typedef List<GeometricObject*> GeometricObjectList;
 
 		/** ElementColorProcessor class.
 				The class ElementColorProcessor is derived from the class ColorProcessor.

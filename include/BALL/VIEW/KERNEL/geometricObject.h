@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.39.16.1 2007/03/25 21:25:59 oliver Exp $
+// $Id: geometricObject.h,v 1.39.16.2 2007/03/28 13:51:45 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -17,6 +17,10 @@
 
 #ifdef BALL_DATATYPE_HASHSET_H
 #	include <BALL/DATATYPE/hashSet.h>
+#endif
+
+#ifndef BALL_DATATYPE_LIST_H
+# include <BALL/DATATYPE/list.h>
 #endif
 
 namespace BALL
@@ -188,6 +192,9 @@ namespace BALL
 			// the composite, which is represented by this geometric object
 			const Composite* composite_;
 		};
+
+		///
+		typedef List<GeometricObject*> GeometricObjectList;
 
 } } // namespaces
 #endif // BALL_VIEW_KERNEL_GEOMETIRCOBJECT_H
