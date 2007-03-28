@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.38.8.2 2007/03/27 21:25:46 amoll Exp $
+# $Id: Makefile,v 1.38.8.3 2007/03/28 15:41:18 amoll Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -41,12 +41,10 @@ ADD_INCLUDES=$(PYTHON_INCLUDES) $(SIP_INCLUDES)
 PYBALL_SOURCES = \
 	pyBALLSipHelper.C\
 	pyCompositeList.C\
-	pyRepresentationList.C\
 	pyRegularData3DList.C\
 	pyIndexList.C\
 	pyConstant.C \
 	pyColorRGBAVector.C \
-	pyGeometricObjectList.C\
 	pyDatasetVector.C
 	
 PYBALL_OBJECTS  = $(PYBALL_SOURCES:.C=.o)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.44.8.2 2007/03/27 21:25:45 amoll Exp $
+// $Id: BALL.sip,v 1.44.8.3 2007/03/28 15:41:17 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -242,7 +242,6 @@
 %Include pyFragmentProcessor.sip
 %Include pyResidueProcessor.sip
 %Include pyCompositeProcessor.sip
-%Include pyRegularData3DList.sip
 %Include pyDatasetVector.sip
 %Include pyLists.sip
 
@@ -287,10 +286,8 @@
 %Include mainControl.sip
 %Include compositeManager.sip
 %Include representationManager.sip
-%Include representationList.sip
 %Include representation.sip
 %Include geometricObject.sip
-%Include geometricObjectList.sip
 %Include view-common.sip
 %Include clippingPlane.sip
 %Include server.sip

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyLists.sip,v 1.1.2.1 2007/03/27 21:30:42 amoll Exp $
+// $Id: pyLists.sip,v 1.1.2.2 2007/03/28 15:41:19 amoll Exp $
 //
 
 // The following lines define the SIP interface for all derived Composite lists
@@ -244,6 +244,62 @@
 %ConvertToTypeCode
   if (sipCppPtr == 0) return 0;
 	BALL_CONVERT_TO(NucleicAcid)
+%End
+};
+
+
+%MappedType GeometricObjectList
+{
+%TypeHeaderCode
+	#include "sipBALLGeometricObject.h"
+	#include <BALL/VIEW/KERNEL/representation.h>
+	#include <BALL/PYTHON/pyListHelper.h>
+%End
+
+%ConvertFromTypeCode
+	BALL_CONVERT_FROM(GeometricObject)
+%End
+
+%ConvertToTypeCode
+	if (sipCppPtr == 0) return 0;
+	BALL_CONVERT_TO(GeometricObject)
+%End
+};
+
+
+%MappedType RepresentationList
+{
+%TypeHeaderCode
+	#include "sipBALLRepresentation.h"
+	#include <BALL/VIEW/KERNEL/representation.h>
+	#include <BALL/PYTHON/pyListHelper.h>
+%End
+
+%ConvertFromTypeCode
+	BALL_CONVERT_FROM(Representation)
+%End
+
+%ConvertToTypeCode
+	if (sipCppPtr == 0) return 0;
+	BALL_CONVERT_TO(Representation)
+%End
+};
+
+
+%MappedType RegularData3DList
+{
+%TypeHeaderCode
+	#include "sipBALLRegularData3D.h"
+	#include <BALL/PYTHON/pyListHelper.h>
+%End
+
+%ConvertFromTypeCode
+	BALL_CONVERT_FROM(RegularData3D)
+%End
+
+%ConvertToTypeCode
+	if (sipCppPtr == 0) return 0;
+	BALL_CONVERT_TO(RegularData3D)
 %End
 };
 
