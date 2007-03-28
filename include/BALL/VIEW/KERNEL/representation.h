@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.34.16.2 2007/03/26 08:08:22 amoll Exp $
+// $Id: representation.h,v 1.34.16.3 2007/03/28 13:11:42 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -386,6 +386,9 @@ namespace BALL
 
 			const ModelInformation* custom_model_information_;
 		};
+
+		///
+		typedef List<Representation*> RepresentationList;
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/representation.iC>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.h,v 1.1.4.1 2007/03/25 21:26:03 oliver Exp $
+// $Id: representationManager.h,v 1.1.4.2 2007/03/28 13:11:43 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATIONMANAGER_H
 #define  BALL_VIEW_KERNEL_REPRESENTATIONMANAGER_H
@@ -54,8 +54,6 @@ namespace BALL
 			*/
 			//@{
 			///
-			typedef List<Representation*> RepresentationList;
-
 			///
 			typedef HashSet<Representation*> RepresentationSet;
 
