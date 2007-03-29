@@ -2,11 +2,11 @@
 // vi: set ts=2:
 //
 #include <BALL/FORMAT/PDBFile.h>
-#include <BALL/VIEW/KERNEL/client.h>
+#include <BALL/CONCEPT/client.h>
+#include <BALL/VIEW/KERNEL/common.h>
 
 using namespace std;
 using namespace BALL;
-using namespace BALL::VIEW;
 
 int main(int argc, char** argv)
 {

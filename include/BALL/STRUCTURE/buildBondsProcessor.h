@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.h,v 1.10.18.1 2007/03/25 21:25:24 oliver Exp $
+// $Id: buildBondsProcessor.h,v 1.10.18.2 2007/03/29 10:34:58 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_BUILDBONDSPROCESSOR_H
@@ -15,10 +15,6 @@
 	#include <BALL/KERNEL/atomContainer.h>
 #endif
 
-#ifndef BALL_KERNEL_PTE_H
-	#include <BALL/KERNEL/PTE.h>
-#endif
-
 #ifndef BALL_DATATYPE_HASHMAP_H
 	#include <BALL/DATATYPE/hashMap.h>
 #endif
@@ -30,9 +26,6 @@
 #ifndef BALL_DATATYPE_OPTIONS_H
 	#include <BALL/DATATYPE/options.h>
 #endif
-
-#include <vector>
-#include <utility>
 
 namespace BALL 
 {

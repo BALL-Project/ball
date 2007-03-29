@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.52.16.1 2007/03/25 21:23:43 oliver Exp $
+// $Id: standardPredicates.h,v 1.52.16.2 2007/03/29 10:34:59 bertsch Exp $
 //
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
@@ -913,7 +913,7 @@ namespace BALL
 				throw();
 
 			/// Destructor
-			~RingFinder()
+			virtual ~RingFinder()
 				throw();
 
 			/** Return true, if atom is in a ring.
@@ -983,7 +983,7 @@ namespace BALL
 			throw();
 
 		///
-		~SMARTSPredicate()
+		virtual ~SMARTSPredicate()
 			throw();
 	
 		BALL_CREATE(SMARTSPredicate)

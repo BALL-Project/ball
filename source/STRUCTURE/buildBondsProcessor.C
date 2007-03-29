@@ -1,14 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.C,v 1.12 2005/12/23 17:03:04 amoll Exp $
+// $Id: buildBondsProcessor.C,v 1.12.20.1 2007/03/29 10:34:56 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/forEach.h>
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/bond.h>
 #include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/COMMON/limits.h>
 #include <BALL/SYSTEM/path.h>
