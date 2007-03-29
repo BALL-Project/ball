@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.62.8.3 2007/03/28 15:42:42 amoll Exp $
+// $Id: mainframe.C,v 1.62.8.4 2007/03/29 13:55:36 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -38,6 +38,7 @@
 #include <BALL/COMMON/version.h>
 
 #include <QtGui/QKeyEvent>
+#include <QtGui/QTreeWidget>
 
 
 using namespace std;
@@ -178,7 +179,7 @@ namespace BALL
 	}
 
 
-	bool Mainframe::eventFilter(QObject*, QEvent* event) 
+	bool Mainframe::eventFilter(QObject* sender, QEvent* event) 
 	{
 		if (event->type() != QEvent::KeyPress) return false;
 
@@ -206,10 +207,12 @@ namespace BALL
 			return true;
 		}
 
-		if (e->key() == Qt::Key_Delete)
-		{
-			deleteClicked();
-		}
+ 		if (e->key() == Qt::Key_Delete &&
+				RTTI::isKindOf<QTreeWidget>(*sender))
+ 		{
+ 			deleteClicked();
+			return true;
+ 		}
 
 		if (e->key() == Qt::Key_Enter) 
 		{
