@@ -165,6 +165,8 @@ automaticInstaller()
 	echo "export PYTHONPATH" >> $SFILE
 	echo "$LPATHN=$LPATH" >> $SFILE
 	echo "export $LPATHN" >> $SFILE
+	echo "__GL_FSAA_MODE=6" >> $SFILE
+	echo "export __GL_FSAA_MODE=6" >> $SFILE
 	echo "$BALL_PATH/source/APPLICATIONS/BALLVIEW/BALLView" >> $SFILE
 	chmod +x $SFILE
 
