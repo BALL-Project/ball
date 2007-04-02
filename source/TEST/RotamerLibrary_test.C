@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RotamerLibrary_test.C,v 1.10.20.2 2007/04/02 20:54:53 bertsch Exp $
+// $Id: RotamerLibrary_test.C,v 1.10.20.3 2007/04/02 22:06:13 bertsch Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 
 ///////////////////////////
 
-START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.10.20.2 2007/04/02 20:54:53 bertsch Exp $")
+START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.10.20.3 2007/04/02 22:06:13 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -107,8 +107,8 @@ CHECK(Side chain positions for Ser)
 
 	Rotamer r = rrs_ser.getRotamer(ser);
 	TEST_EQUAL(r.P, 1.0)
-	PRECISION(1E-3)
-	TEST_REAL_EQUAL(r.chi1, 179.944)
+	PRECISION(1E-2)
+	TEST_REAL_EQUAL(r.chi1, 179.941)
 	TEST_REAL_EQUAL(r.chi2, 0.0)
 	TEST_REAL_EQUAL(r.chi3, 0.0)
 	TEST_REAL_EQUAL(r.chi4, 0.0)
