@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.25.8.1 2007/03/25 22:00:18 oliver Exp $
+# $Id: Makefile,v 1.25.8.2 2007/04/02 20:54:50 bertsch Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -47,7 +47,8 @@ CPP_SOURCES=\
 	resourceFile.C\
 	trajectoryFile.C\
 	TRRFile.C\
-	XYZFile.C
+	XYZFile.C\
+	SCWRLRotamerFile.C
 
 ifeq ($(BALL_HAS_VIEW),true)
 	CPP_SOURCES+=DBInterface.C

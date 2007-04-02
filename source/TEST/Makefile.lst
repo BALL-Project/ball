@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.35.4.2 2007/03/26 14:22:41 amoll Exp $
+# $Id: Makefile.lst,v 1.35.4.3 2007/04/02 20:54:53 bertsch Exp $
 #
 # Author:
 #  Oliver Kohlbacher
@@ -192,7 +192,8 @@ $(PREFIX)PDBRecords_test$(EXEEXT)\
 $(PREFIX)PDBInfo_test$(EXEEXT)\
 $(PREFIX)PDBFile_test$(EXEEXT)\
 $(PREFIX)TrajectoryFile_test$(EXEEXT)\
-$(PREFIX)XYZFile_test$(EXEEXT)
+$(PREFIX)XYZFile_test$(EXEEXT)\
+$(PREFIX)SCWRLRotamerFile_test$(EXEEXT)
 
 EXECUTABLES_ENERGY = \
 $(PREFIX)AtomicContactEnergy_test$(EXEEXT)\
@@ -232,6 +233,8 @@ $(PREFIX)ChainBuilder_test$(EXEEXT)\
 $(PREFIX)RSConstructor_test$(EXEEXT)\
 $(PREFIX)RingAnalyser_test$(EXEEXT)\
 $(PREFIX)RingClusterer_test$(EXEEXT)\
+$(PREFIX)ResidueRotamerSet_test$(EXEEXT)\
+$(PREFIX)RotamerLibrary_test$(EXEEXT)
 
 EXECUTABLES_SOLVATION = \
 $(PREFIX)PoissonBoltzmann_test$(EXEEXT)\

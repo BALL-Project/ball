@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.51.6.1 2007/03/22 11:48:15 oliver Exp $
+# $Id: Makefile,v 1.51.6.2 2007/04/02 20:54:51 bertsch Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -56,7 +56,6 @@ CPP_SOURCES=\
 	residueChecker.C\
 	ringAnalyser.C\
 	ringClusterer.C\
-	rotamerLibrary.C\
 	rsConstructor.C\
 	RSEdge.C\
 	RSFace.C\
@@ -86,7 +85,9 @@ CPP_SOURCES=\
 	triangulatedSAS.C\
 	triangulatedSES.C\
 	triangulatedSurface.C\
-	UCK.C
+	UCK.C\
+	residueRotamerSet.C\
+	rotamerLibrary.C
 
 SMILES_PARSER_PREFIX=SmilesParser
 SMARTS_PARSER_PREFIX=SmartsParser
