@@ -1,0 +1,57 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: SCWRLRotamerFile_test.C,v 1.1.2.1 2007/04/02 21:02:07 bertsch Exp $
+//
+
+#include <BALL/CONCEPT/classTest.h>
+
+///////////////////////////
+
+#include <BALL/FORMAT/SCWRLRotamerFile.h>
+#include <BALL/STRUCTURE/rotamerLibrary.h>
+
+///////////////////////////
+
+START_TEST(SCWRLRotamerFile, "$Id: SCWRLRotamerFile_test.C,v 1.1.2.1 2007/04/02 21:02:07 bertsch Exp $")
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
+using namespace BALL;
+using namespace std;
+
+SCWRLRotamerFile*	file_ptr = 0;
+CHECK(SCWRLRotamerFile::SCWRLRotamerFile())
+	file_ptr = new SCWRLRotamerFile;
+	TEST_NOT_EQUAL(file_ptr, 0)
+RESULT
+
+
+CHECK(SCWRLRotamerFile::~SCWRLRotamerFile())
+	delete file_ptr;
+RESULT
+
+
+CHECK(SCWRLRotamerFile::SCWRLRotamerFile(const String& filename, File::OpenMode open_mode))
+	SCWRLRotamerFile f("data/SCWRLRotamerFile_test1.lib"); // bb dep file
+RESULT
+
+
+CHECK(void SCWRLRotamerFile::operator >> (RotamerLibrary& library) throw())
+  SCWRLRotamerFile f("data/SCWRLRotamerFile_test1.lib");
+	RotamerLibrary lib;
+	f >> lib;
+	TEST_EQUAL(lib.getNumberOfRotamers(), 4107);
+RESULT
+
+CHECK(void SCWRLRotamerFile::operator >> (RotamerLibrary& library) throw())
+  SCWRLRotamerFile f("data/SCWRLRotamerFile_test2.lib"); // bb indep file
+  RotamerLibrary lib;
+  f >> lib;
+  TEST_EQUAL(lib.getNumberOfRotamers(), 110);
+RESULT
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+END_TEST
