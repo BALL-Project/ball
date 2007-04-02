@@ -138,6 +138,8 @@ automaticInstaller()
 	cp $LIBDIR/sip.so $LLPATH
 	echo "====================================================================="
 	echo 
+	echo
+	echo
 	LPATHN="LD_LIBRARY_PATH"
 	if [ "$OS" == Darwin ]
 	then
@@ -151,15 +153,6 @@ automaticInstaller()
 	echo On most platforms, this can be done by the following lines:
 	echo "export $LPATHN=$LPATH"
 	echo "export PYTHONPATH=$LPATH"
-	echo
-	echo "====================================================================="
-	echo Building documentation ...
-	echo
-	make doc &> build.log
-	echo 
-	echo
-	echo Build finished successfully!
-
 	SFILE="$BALL_PATH/source/startBALLView"
 	echo "PYTHONPATH=$LPATH" > $SFILE
 	echo "export PYTHONPATH" >> $SFILE
@@ -170,7 +163,13 @@ automaticInstaller()
 	echo "$BALL_PATH/source/APPLICATIONS/BALLVIEW/BALLView" >> $SFILE
 	chmod +x $SFILE
 
+	echo
 	echo To start BALLView, just run $SFILE
+	echo
+	echo "====================================================================="
+	echo Building documentation ...
+	make doc &> build.log
+	echo Build finished successfully!
 }
 
 customInstaller()
