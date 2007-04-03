@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.22.4.1 2007/03/16 00:06:48 bertsch Exp $
+// $Id: ringPerceptionProcessor.C,v 1.22.4.2 2007/04/03 13:29:39 bertsch Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
-
 #include <BALL/KERNEL/forEach.h>
+
 #include <BALL/COMMON/limits.h>
 
 #define BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
@@ -868,7 +868,7 @@ namespace BALL
 		Size num_atoms = graph.getNumberOfNodes();
 		Size num_bonds = graph.getNumberOfEdges();
 		
-		// clear the old data from the static variables
+		// clear old data from the static variables
 		bond_to_index_.clear();
 		index_to_bond_.clear();
 		atom_to_tnode_.clear();

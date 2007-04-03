@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chainBuilder.h,v 1.3.10.1 2007/03/25 21:25:24 oliver Exp $
+// $Id: chainBuilder.h,v 1.3.10.2 2007/04/03 13:29:43 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -11,10 +11,14 @@
 #ifndef BALL_STRUCTURE_CHAINBUILDER_H
 #define BALL_STRUCTURE_CHAINBUILDER_H
 
+#include <BALL/common.h>
 
+#include <vector>
 
 namespace BALL
 {
+	class Atom;
+	class System;
 
         /**
                 * \brief This class provides methods for analysis of the chains in a molecule

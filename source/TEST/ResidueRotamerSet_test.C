@@ -1,26 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ResidueRotamerSet_test.C,v 1.1.2.1 2007/04/02 21:02:08 bertsch Exp $
+// $Id: ResidueRotamerSet_test.C,v 1.1.2.2 2007/04/03 13:29:29 bertsch Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
-//#include <BALL/STRUCTURE/rotamerLibrary.h>
 #include <BALL/STRUCTURE/residueRotamerSet.h>
-//#include <BALL/FORMAT/HINFile.h>
-//#include <BALL/SYSTEM/file.h>
-//#include <BALL/STRUCTURE/fragmentDB.h>
-//#include <BALL/STRUCTURE/residueChecker.h>
-//#include <BALL/STRUCTURE/geometricProperties.h>
-//#include <BALL/STRUCTURE/defaultProcessors.h>
-//#include <BALL/KERNEL/system.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
 
 ///////////////////////////
 
-START_TEST(RotamerLibrary, "$Id: ResidueRotamerSet_test.C,v 1.1.2.1 2007/04/02 21:02:08 bertsch Exp $")
+START_TEST(RotamerLibrary, "$Id: ResidueRotamerSet_test.C,v 1.1.2.2 2007/04/03 13:29:29 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

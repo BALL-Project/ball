@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueRotamerSet.C,v 1.1.2.1 2007/04/02 20:57:45 bertsch Exp $
+// $Id: residueRotamerSet.C,v 1.1.2.2 2007/04/03 13:29:34 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/residueRotamerSet.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/KERNEL/bond.h>
 
 using namespace std;
 
@@ -111,7 +112,10 @@ namespace BALL
 		HashSet<String> assigned_atoms;
 
 		// identify anchor_atoms: those are the atoms used to "anchor" the first torsion to.
-		if (residue.getAtom("CA") != 0 && residue.getAtom("C") != 0 && residue.getAtom("N") != 0) 
+		const Atom* atom_ca = residue.getAtom("CA");
+		const Atom* atom_c = residue.getAtom("C");
+		const Atom* atom_n = residue.getAtom("N");
+		if (atom_ca != 0 && atom_c != 0 && atom_n != 0) 
 		{
 			assigned_atoms.insert("CA");
 			assigned_atoms.insert("C");
@@ -127,9 +131,9 @@ namespace BALL
 		// Identify atoms involved in the torsion for chi1 - chi4.
 		// and store them in movable_atoms_chi1-4 (first four entries each).
 
+		const Atom* atom_cb = residue.getAtom("CB"); 
 		// Determine the atoms for chi1 and the set of movable atoms
-		if (residue.getAtom("N") != 0 && residue.getAtom("CA") != 0 && residue.getAtom("CB") != 0
-				&& (number_of_torsions_ > 0))
+		if (atom_cb != 0 && (number_of_torsions_ > 0)) // CA and N already tested above
 		{
 			movable_atoms_chi1_.push_back("N");
 			movable_atoms_chi1_.push_back("CA");
@@ -556,14 +560,10 @@ namespace BALL
 		}
 
 		// Check if the residue template side_chain_ contains the 3 backbone atoms for the matching
-		if (/*atom_name_map_.has("CB") && atom_name_map_.has("CA") && atom_name_map_.has("N")*/
-				residue.getAtom("CB") != 0 && residue.getAtom("CA") != 0 && residue.getAtom("N") != 0)
+		if (residue.getAtom("CB") != 0 && residue.getAtom("CA") != 0 && residue.getAtom("N") != 0)
 		{
-			//a1 = atom_name_map_["CB"]->getPosition();
 			a1 = residue.getAtom("CB")->getPosition();
-			//a2 = atom_name_map_["CA"]->getPosition();
 			a2 = residue.getAtom("CA")->getPosition();
-			//a3 = atom_name_map_["N"]->getPosition();
 			a3 = residue.getAtom("N")->getPosition();
 		}
 		else 
@@ -620,29 +620,29 @@ namespace BALL
 		const Atom* a4 = 0;
 
 		AtomConstIterator atom_it;
-		Size count;
 
 		if (number_of_torsions_ > 0)
 		{
-			count = 0;
+			Size count(0);
 			for (atom_it = residue.beginAtom(); +atom_it; ++atom_it)
 			{
-				if (atom_it->getName() == movable_atoms_chi1_[0])
+				String name(atom_it->getName());
+				if (name == movable_atoms_chi1_[0])
 				{
 					a1 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == movable_atoms_chi1_[1])
+				if (name == movable_atoms_chi1_[1])
 				{
 					a2 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == movable_atoms_chi1_[2])
+				if (name == movable_atoms_chi1_[2])
 				{
 					a3 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == movable_atoms_chi1_[3])
+				if (name == movable_atoms_chi1_[3])
 				{
 					a4 = &*atom_it;
 					count++;
@@ -658,25 +658,26 @@ namespace BALL
 	
 		if (number_of_torsions_ > 1)
 		{
-			count = 0;
+			Size count(0);
 			for (atom_it = residue.beginAtom(); +atom_it; ++atom_it)
 			{
-				if (atom_it->getName() == movable_atoms_chi2_[0])
+				String name(atom_it->getName());
+				if (name == movable_atoms_chi2_[0])
 				{
 					a1 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == movable_atoms_chi2_[1])
+				if (name == movable_atoms_chi2_[1])
 				{
 					a2 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == movable_atoms_chi2_[2])
+				if (name == movable_atoms_chi2_[2])
 				{
 					a3 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == movable_atoms_chi2_[3])
+				if (name == movable_atoms_chi2_[3])
 				{
 					a4 = &*atom_it;
 					count++;
@@ -692,25 +693,26 @@ namespace BALL
 	
 		if (number_of_torsions_ > 2)
 		{
-			count = 0;
+			Size count(0);
 			for (atom_it = residue.beginAtom(); +atom_it; ++atom_it)
 			{
-				if (atom_it->getName() == movable_atoms_chi3_[0])
+				String name(atom_it->getName());
+				if (name == movable_atoms_chi3_[0])
 				{
 					a1 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == movable_atoms_chi3_[1])
+				if (name == movable_atoms_chi3_[1])
 				{
 					a2 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == movable_atoms_chi3_[2])
+				if (name == movable_atoms_chi3_[2])
 				{
 					a3 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == movable_atoms_chi3_[3])
+				if (name == movable_atoms_chi3_[3])
 				{
 					a4 = &*atom_it;
 					count++;
@@ -726,25 +728,26 @@ namespace BALL
 	
 		if (number_of_torsions_ > 3)
 		{
-			count = 0;
+			Size count(0);
 			for (atom_it = residue.beginAtom(); +atom_it; ++atom_it)
 			{
-				if (atom_it->getName() == movable_atoms_chi4_[0])
+				String name(atom_it->getName());
+				if (name == movable_atoms_chi4_[0])
 				{
 					a1 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == movable_atoms_chi4_[1])
+				if (name == movable_atoms_chi4_[1])
 				{
 					a2 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == movable_atoms_chi4_[2])
+				if (name == movable_atoms_chi4_[2])
 				{
 					a3 = &*atom_it;
 					count++;
 				}
-				if (atom_it->getName() == movable_atoms_chi4_[3])
+				if (name == movable_atoms_chi4_[3])
 				{
 					a4 = &*atom_it;
 					count++;

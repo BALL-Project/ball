@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sdGenerator.h,v 1.4.10.1 2007/03/25 21:25:30 oliver Exp $
+// $Id: sdGenerator.h,v 1.4.10.2 2007/04/03 13:29:41 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -11,27 +11,28 @@
 #ifndef BALL_STRUCTURE_SDGENERATOR_H
 #define BALL_STRUCTURE_SDGENERATOR_H
 
-#include <BALL/KERNEL/system.h>
-#include <BALL/KERNEL/atom.h>
-#include <BALL/CONCEPT/property.h>
-#include <BALL/QSAR/ringPerceptionProcessor.h>
+//#include <BALL/KERNEL/system.h>
+//#include <BALL/KERNEL/atom.h>
+//#include <BALL/CONCEPT/property.h>
+//#include <BALL/QSAR/ringPerceptionProcessor.h>
 
-#include <BALL/STRUCTURE/ringClusterer.h>
-#include <BALL/STRUCTURE/ringAnalyser.h>
-#include <BALL/STRUCTURE/rsConstructor.h>
-#include <BALL/STRUCTURE/chainBuilder.h>
-#include <BALL/STRUCTURE/moleculeAssembler.h>
+//#include <BALL/STRUCTURE/ringClusterer.h>
+//#include <BALL/STRUCTURE/ringAnalyser.h>
+//#include <BALL/STRUCTURE/rsConstructor.h>
+//#include <BALL/STRUCTURE/chainBuilder.h>
+//#include <BALL/STRUCTURE/moleculeAssembler.h>
+#include <BALL/common.h>
 
 #include <vector>
 
 namespace BALL
 {
+	class System;
+	class Atom;
 
-
-        /**
-                * \brief The main class, provides methods for analysis of the input.
-                *
-                */
+	/**
+		\brief The main class, provides methods for analysis of the input.
+	*/
         class BALL_EXPORT SDGenerator
         {
 
@@ -63,7 +64,7 @@ namespace BALL
                  *
                  * \brief Destructor
                  */
-                ~SDGenerator();
+                virtual ~SDGenerator();
 
                 /**
                 * \brief Generates a structure Diagram from the input System
@@ -111,7 +112,7 @@ namespace BALL
 						STRAIGHT
 		};
 
-        };
+	};
 
 } // namepspace BALL
 

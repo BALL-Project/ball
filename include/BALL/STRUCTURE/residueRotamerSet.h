@@ -1,30 +1,36 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueRotamerSet.h,v 1.1.2.1 2007/04/02 21:02:10 bertsch Exp $
+// $Id: residueRotamerSet.h,v 1.1.2.2 2007/04/03 13:29:43 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_RESIDUEROTAMERSET_H
 #define BALL_STRUCTURE_RESIDUEROTAMERSET_H
 
 #ifndef BALL_COMMON_H
-#	include <BALL/common.h>
+	#include <BALL/common.h>
 #endif
 
 #ifndef BALL_MATHS_ANGLE_H
-#	include <BALL/MATHS/angle.h>
+	#include <BALL/MATHS/angle.h>
 #endif
 
-#ifndef BALL_KERNEL_RESIDUE_H
-#	include <BALL/KERNEL/residue.h>
+#ifndef BALL_DATATYPE_STRING_H
+	#include <BALL/DATATYPE/string.h>
 #endif
 
-#ifndef BALL_STRUCTURE_FRAGMENT_DB_H
-#	include <BALL/STRUCTURE/fragmentDB.h>
+#ifndef BALL_MATHS_VECTOR3_H
+	#include <BALL/MATHS/vector3.h>
 #endif
 
 namespace BALL
 {
+	/// forward declarations
+	class Residue;
+	template <typename Key> class HashSet;
+	template <typename Key> class StringHashMap;
+	class Atom;
+
 	/** Rotamer class.
 		\ingroup StructureRotamers
 
@@ -92,11 +98,11 @@ namespace BALL
 		*/
 		//@{
 		///
-		typedef vector<Rotamer>::const_iterator	ConstIterator;
-		typedef vector<Rotamer>::const_iterator	const_iterator;
+		typedef std::vector<Rotamer>::const_iterator	ConstIterator;
+		typedef std::vector<Rotamer>::const_iterator	const_iterator;
 		///
-		typedef vector<Rotamer>::iterator				Iterator;
-		typedef vector<Rotamer>::iterator				iterator;
+		typedef std::vector<Rotamer>::iterator				Iterator;
+		typedef std::vector<Rotamer>::iterator				iterator;
 		//@}
 
 
@@ -246,10 +252,10 @@ namespace BALL
 				to the <tt>movable</tt> vector. Atoms whose names are contained in <tt>assigned_atoms</tt>
 				are ignored.
 		*/
-		void addMovable_(vector<String>& movable, const Atom& a, const HashSet<String>& assigned_atoms); 
+		void addMovable_(std::vector<String>& movable, const Atom& a, const HashSet<String>& assigned_atoms); 
 
 		/// Set the torsion angles
-		void setTorsionAngle_(Residue& residue, const vector<String>& movable, float torsion); 
+		void setTorsionAngle_(Residue& residue, const std::vector<String>& movable, float torsion); 
 
 		/// Indicates whether the instance is valid  
 		bool valid_; 
@@ -258,13 +264,13 @@ namespace BALL
 		String name_;
 		
 		/// Array containing all rotamers
-		vector<Rotamer> rotamers_;
+		std::vector<Rotamer> rotamers_;
 
 		/// Names of the movable atoms (names) for each of the torsions
-		vector<String> movable_atoms_chi1_;
-		vector<String> movable_atoms_chi2_;
-		vector<String> movable_atoms_chi3_;
-		vector<String> movable_atoms_chi4_;
+		std::vector<String> movable_atoms_chi1_;
+		std::vector<String> movable_atoms_chi2_;
+		std::vector<String> movable_atoms_chi3_;
+		std::vector<String> movable_atoms_chi4_;
 
 		///	Number of valid torsions of the side chain
 		Size number_of_torsions_;

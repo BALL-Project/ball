@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDGenerator_test.C,v 1.7.4.1 2007/03/25 21:48:55 oliver Exp $
+// $Id: SDGenerator_test.C,v 1.7.4.2 2007/04/03 13:29:27 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -12,12 +12,13 @@
 ///////////////////////////
 
 #include <BALL/STRUCTURE/sdGenerator.h>
+#include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/FORMAT/PDBFile.h>
 
 ///////////////////////////
 
-START_TEST(SDGenerator, "$Id: SDGenerator_test.C,v 1.7.4.1 2007/03/25 21:48:55 oliver Exp $")
+START_TEST(SDGenerator, "$Id: SDGenerator_test.C,v 1.7.4.2 2007/04/03 13:29:27 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

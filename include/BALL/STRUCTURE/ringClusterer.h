@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringClusterer.h,v 1.3.10.1 2007/03/25 21:25:29 oliver Exp $
+// $Id: ringClusterer.h,v 1.3.10.2 2007/04/03 13:29:42 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -39,7 +39,7 @@ namespace BALL
                 /**
                 * \brief Destructor
                 */
-                ~RingClusterer();
+                virtual ~RingClusterer();
 
                 /**
                 * \brief performs an agglomerative clustering of single rings to ringsystems

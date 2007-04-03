@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeAssembler.C,v 1.5.6.1 2007/03/22 11:48:18 oliver Exp $
+// $Id: moleculeAssembler.C,v 1.5.6.2 2007/04/03 13:29:35 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -12,6 +12,7 @@
 
 #include <BALL/STRUCTURE/sdGenerator.h>
 #include <BALL/STRUCTURE/moleculeAssembler.h>
+#include <BALL/KERNEL/system.h>
 
 #include <cmath>
 #include <utility>

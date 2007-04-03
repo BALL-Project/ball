@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ChainBuilder_test.C,v 1.3.8.1 2007/03/25 21:46:53 oliver Exp $
+// $Id: ChainBuilder_test.C,v 1.3.8.2 2007/04/03 13:29:31 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -11,12 +11,15 @@
 
 ///////////////////////////
 
+#include <BALL/STRUCTURE/chainBuilder.h>
 #include <BALL/STRUCTURE/sdGenerator.h>
 #include <BALL/FORMAT/MOLFile.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/system.h>
 
 ///////////////////////////
 
-START_TEST(ChainBuilder, "$Id: ChainBuilder_test.C,v 1.3.8.1 2007/03/25 21:46:53 oliver Exp $")
+START_TEST(ChainBuilder, "$Id: ChainBuilder_test.C,v 1.3.8.2 2007/04/03 13:29:31 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

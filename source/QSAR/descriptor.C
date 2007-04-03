@@ -1,19 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: descriptor.C,v 1.12.20.1 2007/03/16 00:06:46 bertsch Exp $
+// $Id: descriptor.C,v 1.12.20.2 2007/04/03 13:29:40 bertsch Exp $
 //
 
 #include <BALL/QSAR/descriptor.h>
-//#include <BALL/KERNEL/bond.h>
-//#include <BALL/KERNEL/bondIterator.h>
-//#include <BALL/KERNEL/atomIterator.h>
-//#include <BALL/KERNEL/forEach.h>
-//#include <BALL/KERNEL/PTE.h>
-//#include <BALL/KERNEL/expression.h>
-//#include <BALL/KERNEL/fragment.h>
-//#include <BALL/CONCEPT/timeStamp.h>
-//#include <BALL/STRUCTURE/numericalSAS.h>
 
 using namespace std;
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.h,v 1.17.4.1 2007/03/16 00:06:43 bertsch Exp $
+// $Id: ringPerceptionProcessor.h,v 1.17.4.2 2007/04/03 13:29:45 bertsch Exp $
 //
 
 #ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
@@ -163,7 +163,7 @@ namespace BALL
 			void DFSBCC_( std::vector<MolecularGraph*>& bccs, Size dfbi, 
 										HashMap<NodeItem<Index, Index>*, Size> DFBIndex, 
 										NodeItem<Index, Index>* v);
-																						
+																		
 			HashSet<NodeItem<Index, Index>* > visited_;
 			HashSet<EdgeItem<Index, Index>* > visited_bonds_;
 			HashMap<NodeItem<Index, Index>* , Size> P_;
@@ -197,10 +197,6 @@ namespace BALL
 			{
 				void push(EdgeItem<Index, Index>* bond, TNode_* node);
 		
-				//void merge(PathMessage);
-
-				//void join(PathMessage);
-				
 				// path of the message
 				BitVector beep;
 				

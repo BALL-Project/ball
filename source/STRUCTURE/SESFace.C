@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESFace.C,v 1.4 2002/12/17 14:13:20 anker Exp $
+// $Id: SESFace.C,v 1.4.32.1 2007/04/03 13:29:39 bertsch Exp $
 
 #include <BALL/STRUCTURE/SESEdge.h>
 #include <BALL/STRUCTURE/SESFace.h>
@@ -182,14 +182,14 @@ namespace BALL
 		{
 			points.insert(*v);
 		}
-		SESEdge* edge0;
-		SESEdge* edge1;
-		SESEdge* edge2;
-		SESEdge* edge3;
-		SESVertex* p0;
-		SESVertex* p1;
-		SESVertex* p2;
-		SESVertex* p3;
+		SESEdge* edge0(0);
+		SESEdge* edge1(0);
+		SESEdge* edge2(0);
+		SESEdge* edge3(0);
+		SESVertex* p0(0);
+		SESVertex* p1(0);
+		SESVertex* p2(0);
+		SESVertex* p3(0);
 		std::list<SESEdge*>::iterator e = edge_.begin();
 		while ((*e)->type_ != SESEdge::TYPE_CONCAVE)
 		{
@@ -251,18 +251,18 @@ namespace BALL
 	void SESFace::normalizeSingularToricFace_()
 		throw()
 	{
-		SESEdge* edge0;
-		SESEdge* edge1;
-		SESEdge* edge2;
-		SESEdge* edge3;
-		SESEdge* edge4;
-		SESEdge* edge5;
-		SESVertex* p0;
-		SESVertex* p1;
-		SESVertex* p2;
-		SESVertex* p3;
-		SESVertex* p4;
-		SESVertex* p5;
+		SESEdge* edge0(0);
+		SESEdge* edge1(0);
+		SESEdge* edge2(0);
+		SESEdge* edge3(0);
+		SESEdge* edge4(0);
+		SESEdge* edge5(0);
+		SESVertex* p0(0);
+		SESVertex* p1(0);
+		SESVertex* p2(0);
+		SESVertex* p3(0);
+		SESVertex* p4(0);
+		SESVertex* p5(0);
 		findTriangle_(true,edge0,edge1,edge2,p0,p1,p2);
 		findTriangle_(false,edge3,edge4,edge5,p3,p4,p5);
 		if (edge1->circle_ != edge4->circle_)

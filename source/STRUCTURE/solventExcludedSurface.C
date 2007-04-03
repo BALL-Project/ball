@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventExcludedSurface.C,v 1.3 2002/12/17 14:13:21 anker Exp $
+// $Id: solventExcludedSurface.C,v 1.3.32.1 2007/04/03 13:29:31 bertsch Exp $
 
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
 #include <BALL/STRUCTURE/SESEdge.h>
@@ -156,7 +156,7 @@ namespace BALL
 
 	void SolventExcludedSurface::clean(const double& density)
 	{
-		SESFace* face;
+		SESFace* face(0);
 		bool done = false;
 		double sqrt_density = sqrt(density);
 		while (!done)
@@ -1177,8 +1177,8 @@ namespace BALL
 		face->vertex_.push_back(vertex);
 		vertex->faces_.insert(face);
 		// Get the RSEdges of the corresponding RSVertex ...
-		RSEdge* tf1;
-		RSEdge* tf2;
+		RSEdge* tf1(0);
+		RSEdge* tf2(0);
 		face->rsface_->getEdges(rsvertex,tf1,tf2);
 		// ... and push the vertex to these toric faces.
 		ses_->toric_faces_[tf1->index_]->vertex_.push_back(vertex);
@@ -1206,7 +1206,7 @@ namespace BALL
 		throw()
 	{
 		RSFace* rsface = face->rsface_;
-		RSEdge* rsedge;
+		RSEdge* rsedge(0);
 		// get the corresponding RSEdge
 		rsface->getEdge(rsface->getVertex(p1),rsface->getVertex(p2),rsedge);
 		Index index = rsedge->index_;
@@ -1488,7 +1488,7 @@ namespace BALL
 			 SESEdge* edge2)
 		throw()
 	{
-		SESVertex* vertex;
+		SESVertex* vertex(0);
 		TVector3<double> intersection_point(face0->rsedge_->getIntersectionPoint(ip));
 		Index test = vertexExists(intersection_point);
 		if (test == -1)
@@ -1694,8 +1694,8 @@ namespace BALL
 	{
 		std::list<SESFace*> first_category_faces;
 		getFirstCategoryFaces(first_category_faces);
-		SESFace* face1;
-		SESFace* face2;
+		SESFace* face1(0);
+		SESFace* face2(0);
 		bool modified = false;
 		std::list<SESFace*>::iterator f
 				= first_category_faces.begin();
@@ -1938,7 +1938,7 @@ namespace BALL
 			}
 		}
 		// find remaining edges and vertices
-		SESEdge* sesedge;
+		SESEdge* sesedge(0);
 		sesvertex1[1] = sesedge1[0]->other(sesvertex1[0]);
 		sesvertex2[1] = sesedge2[0]->other(sesvertex2[0]);
 		for (Position i = 1; i < 6; i++)
@@ -1959,7 +1959,7 @@ namespace BALL
 		face1->getEdge(sesvertex1[0],sesvertex1[6],sesedge1[6]);
 		face2->getEdge(sesvertex2[0],sesvertex2[6],sesedge2[6]);
 		//
-		SESVertex* sesvertex;
+		SESVertex* sesvertex(0);
 		if (sesvertex1[2] != sesvertex2[2])
 		{
 			for (Position i = 0; i < 3; i++)
@@ -2080,10 +2080,10 @@ namespace BALL
 			Index face2 = edge->face_[1]->index_;
 			indices.insert(face1);
 			indices.insert(face2);
-			SESVertex* end_vertex1;
-			SESVertex* end_vertex2;
-			Index actual_min;
-			Index actual_max;
+			SESVertex* end_vertex1(0);
+			SESVertex* end_vertex2(0);
+			Index actual_min(0);
+			Index actual_max(0);
 			buildEndEdges(edge,min,max,end_vertex1,end_vertex2,
 										actual_min,actual_max);
 			Index next_face = actual_min;
@@ -2186,7 +2186,7 @@ namespace BALL
 		TSphere3<double> probe;
 		probe.radius = ses_->reduced_surface_->probe_radius_;
 		Intersection intersection;
-		HashGridBox3<Position>* box;
+		HashGridBox3<Position>* box(0);
 		HashGridBox3<Position>::ConstBoxIterator b;
 		HashGridBox3<Position>::ConstDataIterator d;
 		Vector3 pos(edge->circle_.p.x,
@@ -2388,7 +2388,7 @@ namespace BALL
 		Position v = (min ? 0 : 1);
 		if (vertex != edge->vertex_[v])
 		{
-			SESEdge* new_edge;
+			SESEdge* new_edge(0);
 			new_edge = new SESEdge(*edge,true);
 			new_edge->vertex_[1-v] = vertex;
 			new_edge->rsedge_ = NULL;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chainBuilder.C,v 1.4.10.1 2007/03/22 11:48:17 oliver Exp $
+// $Id: chainBuilder.C,v 1.4.10.2 2007/04/03 13:29:37 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -9,6 +9,7 @@
 
 
 #include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/system.h>
 
 #include <BALL/STRUCTURE/sdGenerator.h>
 #include <BALL/STRUCTURE/chainBuilder.h>
@@ -46,8 +47,8 @@ namespace BALL
 
 		DEBUG("nodes = " << nodes)
 
-		int x;
-		int y;
+		int x(0);
+		int y(0);
 
 		for (x = 0; x <= nodes; x++)
 		{
@@ -87,7 +88,7 @@ namespace BALL
 	void ChainBuilder::visit_c_areas(Size& k, vector<vector<Size> >& adj_matrix, vector<int>& val, Size& nodes, Size& id, vector<Atom*>& core_chain_atoms, vector<Atom*>& chain_area)
 	{
 		//      recursive visit-procedure used in the depth-first-search for chain-areas
-		Size t;
+		Size t(0);
 		val[k] = ++id;
 
 		for (t = 0; t <= nodes; t++)
@@ -109,8 +110,8 @@ namespace BALL
 		//      depth-first-search for the chain-areas
 
 		vector<int> val;        //      vector to hold the order, in which the atoms were visited
-		Size id = 0;
-		Size k;
+		Size id(0);
+		Size k(0);
 
 		for (Size i = 0; i <= nodes; i++)
 		{
@@ -219,7 +220,7 @@ namespace BALL
 		vector<Atom*> prev_nodes;                       //      vector to hold the previously visited atom for each atom
 		Size id = 0;
 
-		Size t; //      starting position for the traceback after the end atom has been found
+		Size t(0); //      starting position for the traceback after the end atom has been found
 
 		//      get the indices of the two edges between which the path shall be found
 		Size start = getIndex(first_edge, chain_area);
