@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueRotamerSet.C,v 1.1.2.2 2007/04/03 13:29:34 bertsch Exp $
+// $Id: residueRotamerSet.C,v 1.1.2.3 2007/04/04 08:42:13 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/residueRotamerSet.h>
@@ -9,6 +9,8 @@
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/KERNEL/bond.h>
+
+#include <algorithm>
 
 using namespace std;
 
@@ -799,6 +801,11 @@ namespace BALL
 	{
 		psi_ = angle;
 		has_torsion_psi_ = true;
+	}
+
+	void ResidueRotamerSet::sort()
+	{
+		std::sort(rotamers_.begin(), rotamers_.end(), RotamerProbabilityGreaterThan_());
 	}
  
 } // namespace BALL

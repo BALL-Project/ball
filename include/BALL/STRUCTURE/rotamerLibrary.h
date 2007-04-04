@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.h,v 1.31.20.1 2007/04/02 20:54:50 bertsch Exp $
+// $Id: rotamerLibrary.h,v 1.31.20.2 2007/04/04 08:42:16 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -107,6 +107,9 @@ namespace BALL
 
 		/// method to test the validation of this library, typically called after the building (see SCWLLibraryFile)
 		bool validate();
+
+		/// method to sort the Rotamers of each ResidueRotamerSet descending to the probability
+		void sort();
 		//@}
 
 		protected:

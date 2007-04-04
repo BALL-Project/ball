@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.18.16.2 2007/03/27 10:18:33 bertsch Exp $
+// $Id: main.C,v 1.18.16.3 2007/04/04 08:42:15 bertsch Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -337,7 +337,7 @@ int main(int argc, char **argv)
 			}
 
 			std::cerr << "Calling " << povray_exec << " " << pov_arg << std::endl;
- 	   	int result = execl (povray_exec.c_str(), pov_exec2.c_str(), pov_arg.c_str(), 0);
+ 	   	int result = execl (povray_exec.c_str(), pov_exec2.c_str(), pov_arg.c_str(), NULL);
 			if (result == -1)
 			{
 				std::cout << "Could not exec POVRay! " << std::endl;

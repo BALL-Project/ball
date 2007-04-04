@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueRotamerSet.h,v 1.1.2.2 2007/04/03 13:29:43 bertsch Exp $
+// $Id: residueRotamerSet.h,v 1.1.2.3 2007/04/04 08:42:17 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_RESIDUEROTAMERSET_H
@@ -241,11 +241,24 @@ namespace BALL
 
 		///	Add a rotamer to the current set.
 		void addRotamer(const Rotamer& rotamer);
+
+		/// sort the rotamers descending to their probability
+		void sort();
 		//@}
 	
 		
 
 		protected:
+
+		
+		struct RotamerProbabilityGreaterThan_
+			: std::binary_function<Rotamer, Rotamer, bool>
+		{
+			bool operator () (const Rotamer& r1, const Rotamer& r2)
+			{
+				return r1.P > r2.P;
+			}
+		};
 
 		/** Determines all movable atoms.
 				This method walks along the bonds starting at <tt>a</tt> and adds them

@@ -1,13 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.C,v 1.30.20.1 2007/04/02 20:54:52 bertsch Exp $
+// $Id: rotamerLibrary.C,v 1.30.20.2 2007/04/04 08:42:13 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 #include <BALL/FORMAT/SCWRLRotamerFile.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/MATHS/common.h>
+
+#include <algorithm>
 
 using namespace std;
 
@@ -285,7 +287,7 @@ namespace BALL
 		Size diff = 0;
 		if (torsions.size() >= 2)
 		{
-			sort(torsions.begin(), torsions.end());
+			std::sort(torsions.begin(), torsions.end());
 			diff = Maths::abs(torsions[0] - torsions[1]);
 			for (Size i = 2; i < torsions.size(); ++i)
 			{
@@ -302,7 +304,31 @@ namespace BALL
 		return true;
 	}
 
-	
+	void RotamerLibrary::sort()
+	{
+		if (backbone_dependent_)
+		{
+			for (HashMap<Index, HashMap<Index, HashMap<String, ResidueRotamerSet> > >::Iterator it1 = bb_dep_sets_.begin(); it1 != bb_dep_sets_.end(); ++it1)
+			{
+				for (HashMap<Index, HashMap<String, ResidueRotamerSet> >::Iterator it2 = it1->second.begin(); it2 != it1->second.end(); ++it2)
+				{
+					for (HashMap<String, ResidueRotamerSet>::Iterator it3 = it2->second.begin(); it3 != it2->second.end(); ++it3)
+					{
+						it3->second.sort();
+					}
+				}
+			}
+		}
+		else
+		{
+			for (HashMap<String, ResidueRotamerSet>::Iterator it = bb_indep_sets_.begin(); it != bb_indep_sets_.end(); ++it)
+			{
+				it->second.sort();
+			}
+		}
+		return;
+	}
+
 
 	bool RotamerLibrary::hasRotamers(const String& name) const
 	{
