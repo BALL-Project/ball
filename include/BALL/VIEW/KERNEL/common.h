@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.40.16.1 2007/03/25 21:25:58 oliver Exp $
+// $Id: common.h,v 1.40.16.2 2007/04/04 15:02:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -253,7 +253,7 @@ namespace BALL
 			// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 			
 			///
-			COLORING_CUSTOM = 100,
+			COLORING_CUSTOM,
 
 			///
 			COLORING_UNKNOWN = 200

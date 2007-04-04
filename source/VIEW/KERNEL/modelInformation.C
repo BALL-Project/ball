@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelInformation.C,v 1.1.4.1 2007/03/25 22:02:24 oliver Exp $
+// $Id: modelInformation.C,v 1.1.4.2 2007/04/04 15:02:48 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modelInformation.h>
@@ -148,7 +148,7 @@ namespace BALL
 		bool ModelInformation::coloringMuteableByDisplayProperties(ColoringMethod type) const
 			throw()
 		{ 
-			return type <= COLORING_MOLECULE;
+			return type <= COLORING_CUSTOM;
 		}
 
 	} // namespace VIEW
