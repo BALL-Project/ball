@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.C,v 1.38.16.1 2007/03/25 22:00:45 oliver Exp $
+// $Id: coloringSettingsDialog.C,v 1.38.16.2 2007/04/04 15:21:49 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
@@ -649,6 +649,7 @@ namespace BALL
 				case COLORING_FORCES: 							return widget_stack->widget(8);
 				case COLORING_RESIDUE_TYPE: 				return widget_stack->widget(9);
 				case COLORING_CHAIN: 								return widget_stack->widget(10);
+				case COLORING_MOLECULE: 						return widget_stack->widget(11);
 				default: break;
 			}
 
