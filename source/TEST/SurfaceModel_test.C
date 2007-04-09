@@ -1,0 +1,83 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: SurfaceModel_test.C,v 1.1.2.1 2007/04/09 19:33:13 amoll Exp $
+//
+// Author:
+//   Andreas Moll
+//
+
+#include <BALL/CONCEPT/classTest.h>
+#include <BALL/FORMAT/PDBFile.h>
+#include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/bond.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
+
+///////////////////////////
+#include <BALL/VIEW/MODELS/surfaceModel.h>
+///////////////////////////
+
+using namespace BALL;
+using namespace BALL::VIEW;
+
+START_TEST(AddSurfaceModel, "$Id: SurfaceModel_test.C,v 1.1.2.1 2007/04/09 19:33:13 amoll Exp $")
+
+CHECK(CSTR)
+	AddSurfaceModel();
+RESULT
+
+CHECK(AddSurfaceModel::BALL_CREATE(AddSurfaceModel))
+  //BAUSTELLE
+RESULT
+
+
+CHECK(AddSurfaceModel::setProbeRadius(float radius))
+	AddSurfaceModel bs;
+	bs.setProbeRadius(0.12);
+RESULT
+
+
+CHECK(AddSurfaceModel::getStickRadius() const  throw())
+	AddSurfaceModel bs;
+	bs.setProbeRadius(0.12);
+	TEST_REAL_EQUAL(bs.getProbeRadius(), 0.12)
+RESULT
+
+
+PDBFile pdb("data/1BNA.pdb");
+System system;
+pdb >> system;
+
+CHECK(AddSurfaceModel::Processor::Result operator() (Composite& composite))
+	AddSurfaceModel bs;
+	bool result = bs.operator() (system);
+	TEST_EQUAL(result, true)
+RESULT
+
+CHECK(AddSurfaceModel::createGeometricObjects() throw())
+	AddSurfaceModel bs;
+	bs.setProbeRadius(1);
+	system.apply(bs);
+	bs.createGeometricObjects();
+	TEST_EQUAL(bs.getGeometricObjects().size(), 1)
+	Mesh* m = dynamic_cast<Mesh*>(*bs.getGeometricObjects().begin());
+	TEST_NOT_EQUAL(m, 0)
+	PRECISION(0.0001)
+	TEST_EQUAL(m->vertex.size(), 33733)
+	TEST_EQUAL(m->triangle.size(), 67534)
+	TEST_EQUAL(m->normal.size(), 33733)
+	TEST_REAL_EQUAL(m->vertex[0].x, 3.95813)
+	TEST_REAL_EQUAL(m->vertex[0].y, 23.1891)
+	TEST_REAL_EQUAL(m->vertex[0].z, 10.7186)
+	TEST_REAL_EQUAL(m->normal[0].x, 0.954376)
+	TEST_REAL_EQUAL(m->normal[0].y, 0.113664)
+	TEST_REAL_EQUAL(m->normal[0].z, 0.276127)
+	TEST_EQUAL(m->triangle[0].v1, 1)
+	TEST_EQUAL(m->triangle[0].v2, 3247)
+	TEST_EQUAL(m->triangle[0].v3, 3250)
+RESULT
+
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+END_TEST
