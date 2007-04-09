@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.35.4.4 2007/04/09 19:34:35 amoll Exp $
+# $Id: Makefile.lst,v 1.35.4.5 2007/04/09 20:17:49 amoll Exp $
 #
 # Author:
 #  Oliver Kohlbacher
@@ -270,6 +270,7 @@ $(PREFIX)XDRPersistenceManager_test$(EXEEXT)
 
 VIEW_DEPENDENT_EXECUTABLES= \
 $(PREFIX)BallAndStickModel_test$(EXEEXT)\
+$(PREFIX)LineModel_test$(EXEEXT)\
 $(PREFIX)SurfaceModel_test$(EXEEXT)\
 $(PREFIX)ColorRGBA_test$(EXEEXT)\
 $(PREFIX)RepresentationManager_test$(EXEEXT)
