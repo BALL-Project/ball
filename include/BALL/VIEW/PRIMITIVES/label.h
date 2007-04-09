@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.14.16.1 2007/03/25 21:26:08 oliver Exp $
+// $Id: label.h,v 1.14.16.2 2007/04/09 20:44:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
@@ -32,9 +32,16 @@ namespace BALL
 					- text   - the text of the label
 					- vertex - the position of the label			
 				\par
-				The class Label is derived from the classes GeometricObject, ColorExtension
-				and Vertex. See these classes for further information concerning
-				interface and additional methods. \par
+				Labels support special text tags, that allows for automaticaly
+				created text:
+				<ul>
+				<li>%N Name
+				<li>%I Residue Id
+				<li>%T Atom type
+				<li>%C Atom charge
+				<li>%E Atom element
+				<li>%Y Atom type name
+				</ul>
 				\ingroup ViewPrimitives
 		*/
 		class BALL_VIEW_EXPORT Label
