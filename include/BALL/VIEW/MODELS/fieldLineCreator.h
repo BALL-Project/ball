@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fieldLineCreator.h,v 1.1.4.1 2007/03/25 21:26:06 oliver Exp $
+// $Id: fieldLineCreator.h,v 1.1.4.2 2007/04/11 11:55:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_FIELDLINE_CREATOR_H
@@ -54,6 +54,10 @@ namespace BALL
 
 			inline void calculateLinePoints_(Vector3 point, vector<Vector3>& points, float factor = 1.);
 
+			/** For the Stalling approach: use the potential or the vector field as basis for the placement
+			*/
+			void setUsePotentialGrid(bool state) { use_potential_grid_ = state;}
+
 			float tolerance_;
 			Size max_steps_;
 			Size interpolation_steps_;
@@ -65,6 +69,7 @@ namespace BALL
 			RegularData3D* potential_grid_;
 			VectorGrid*    vector_grid_;
 			AtomContainer* 	ac_;
+			bool 						use_potential_grid_;
 		};
 
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fieldLineCreator.C,v 1.1.4.1 2007/03/25 22:02:31 oliver Exp $
+// $Id: fieldLineCreator.C,v 1.1.4.2 2007/04/11 11:55:53 amoll Exp $
 
 #include <BALL/VIEW/MODELS/fieldLineCreator.h>
 #include <BALL/KERNEL/atomContainer.h>
@@ -31,7 +31,8 @@ namespace BALL
 				monte_carlo_nr_lines_(500),
 				potential_grid_(0),
 				vector_grid_(0),
-				ac_(0)
+				ac_(0),
+				use_potential_grid_(false)
 		{
 		}
 
@@ -116,31 +117,34 @@ namespace BALL
 				// from Stalling, Zaeckler, Hege; 1997
 				// Monte Carlo Approach in relation to potential strenght at the individual points
 
-				if (potential_grid_ == 0) 
+				if (use_potential_grid_)
 				{
-					delete rep;
-					Log.error() << "No potential grid loaded, aborting..." << std::endl;
-					return 0;
-				}
+					if (potential_grid_ == 0) 
+					{
+						delete rep;
+						Log.error() << "No potential grid loaded, aborting..." << std::endl;
+						return 0;
+					}
 
-				TRegularData3D<Vector3>::CoordinateType pspacing = potential_grid_->getSpacing();
-				TRegularData3D<float>::IndexType        psize = potential_grid_->getSize();
-				if (Maths::isZero(pspacing.x) ||
-						Maths::isZero(pspacing.y) ||
-						Maths::isZero(pspacing.z))
-				{
-					delete rep;
-					Log.error() << "Aborting, since grid has a spacing of 0!" << std::endl;
-					return 0;
-				}
+					TRegularData3D<Vector3>::CoordinateType pspacing = potential_grid_->getSpacing();
+					TRegularData3D<float>::IndexType        psize = potential_grid_->getSize();
+					if (Maths::isZero(pspacing.x) ||
+							Maths::isZero(pspacing.y) ||
+							Maths::isZero(pspacing.z))
+					{
+						delete rep;
+						Log.error() << "Aborting, since grid has a spacing of 0!" << std::endl;
+						return 0;
+					}
 
-				if (psize.x == 0 ||
-						psize.y == 0 ||
-						psize.z == 0)
-				{
-					delete rep;
-					Log.error() << "Aborting, since grid has a size of 0!" << std::endl;
-					return 0;
+					if (psize.x == 0 ||
+							psize.y == 0 ||
+							psize.z == 0)
+					{
+						delete rep;
+						Log.error() << "Aborting, since grid has a size of 0!" << std::endl;
+						return 0;
+					}
 				}
 
 				Vector3 origin = vector_grid_->getOrigin();
@@ -151,27 +155,42 @@ namespace BALL
 				Size sy = (Size)(size.y / 2.0 + 1);
 				Size sz = (Size)(size.z / 2.0 + 1);
 				RegularData3D::IndexType st(sx, sy, sz);
-
-				if (potential_grid_->getOrigin() != vector_grid_->getOrigin() ||
-						potential_grid_->getDimension() != vector_grid_->getDimension())
-				{
-					delete rep;
-					Log.error() << "Potential and vector grid have different sizes, aborting..." << std::endl;
-					return 0;
-				}
-
 				Vector3 diff = Vector3(0.001);
+
 				RegularData3D new_grid(st, origin - diff, vector_grid_->getDimension() + diff * 2.);
 				const Size new_grid_size = sx * sy * sz;
 				for (Position p = 0; p < new_grid_size; p++)
 				{
 					new_grid[p] = 0;
 				}
-				
-				const vector<float>& values =  potential_grid_->getData();
-				for (Position p = 0; p < values.size(); p++)
+
+				// use strength of potential grid?
+				if (use_potential_grid_)
 				{
-					new_grid.getClosestValue((potential_grid_->getCoordinates(p))) += BALL_ABS(values[p]);
+					if (potential_grid_->getOrigin() != vector_grid_->getOrigin() ||
+							potential_grid_->getDimension() != vector_grid_->getDimension())
+					{
+						delete rep;
+						Log.error() << "Potential and vector grid have different sizes, aborting..." << std::endl;
+						return 0;
+					}
+
+				
+					const vector<float>& values =  potential_grid_->getData();
+					for (Position p = 0; p < values.size(); p++)
+					{
+						new_grid.getClosestValue((potential_grid_->getCoordinates(p))) += BALL_ABS(values[p]);
+					}
+				}
+				else
+				{
+					const vector<Vector3>& values =  vector_grid_->getData();
+					for (Position p = 0; p < values.size(); p++)
+					{
+						new_grid.getClosestValue((vector_grid_->getCoordinates(p))) += values[p].getLength();
+					}
+
+					// use strength of vector field
 				}
 
 				vector<Vector3> result_points;
