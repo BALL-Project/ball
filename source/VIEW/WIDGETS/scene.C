@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.16.2 2007/03/28 13:51:55 amoll Exp $
+// $Id: scene.C,v 1.174.16.3 2007/04/11 12:06:25 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -32,6 +32,7 @@
 
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/SYSTEM/path.h>
+#include <BALL/SYSTEM/directory.h>
 #include <BALL/MATHS/quaternion.h>
 
 #include <BALL/STRUCTURE/geometricTransformations.h>
@@ -2489,6 +2490,9 @@ namespace BALL
 			screenshot_nr_ ++;
 
 			exportPNG(filename);
+			Log.info() << "Exporting PNG to " 
+								 << Directory().getPath() << FileSystem::PATH_SEPARATOR
+								 << filename << std::endl;
 
 			return filename;
 		}
