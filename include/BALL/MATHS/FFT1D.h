@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT1D.h,v 1.19 2006/01/03 17:42:39 anhi Exp $
+// $Id: FFT1D.h,v 1.19.10.1 2007/04/12 13:54:29 anne Exp $
 //
 
 #ifndef BALL_MATHS_TFFT1D_H
@@ -586,7 +586,7 @@ namespace BALL
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
 		
-		return operator [] (internalPos);
+		return operator [] ((Position)internalPos);
 	}
 
 	template <typename ComplexTraits>
