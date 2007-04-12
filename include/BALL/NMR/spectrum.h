@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: spectrum.h,v 1.14.18.5 2006/10/14 13:14:03 anne Exp $
+// $Id: spectrum.h,v 1.14.18.6 2007/04/12 13:53:57 anne Exp $
 //
 
 #ifndef BALL_NMR_SPECTRUM_H
@@ -23,6 +23,18 @@
 #	include<BALL/DATATYPE/regularData3D.h>
 #endif
 
+#ifdef BALL_HAS_FFTW
+# include <BALL/MATHS/complex.h>
+#ifndef BALL_MATHS_FFT1D_H
+# include <BALL/MATHS/FFT1D.h>
+#endif
+#ifndef BALL_MATHS_FFT2D_H
+# include <BALL/MATHS/FFT2D.h>
+#endif
+#endif
+
+
+using namespace std;
 
 namespace BALL 
 {
@@ -87,6 +99,13 @@ namespace BALL
 		const DataType& getData() const;
 		///
 		DataType& getData();
+		
+		const vector<float>& getHuInvariants() const
+			throw();
+		
+		vector<float>& getHuInvariants()
+			throw();
+
 		//@}
 
 		virtual void clear();
@@ -97,20 +116,46 @@ namespace BALL
 		
 		virtual void convertToGaussian(); 
 		virtual void convertToLorentzian(); 
-		virtual double computeMoment(int  moment_number);
+		virtual void computeAllMoments(int  moment_number);
 
 		virtual void setSpacing(const PositionType& spacing);
 		virtual PositionType getSpacing() const;
 		virtual void setSticks(std::vector<PeakType> sticks) {sticks_ = sticks;};
 		
-		virtual double getIntegral() const;
+		// computes the integral over the fabs() of the spectrum
+		virtual double getAbsIntegral() const;
+		virtual void computeHuInvariants() throw();
+		virtual vector<float> computeHuInvariantsDifferences(vector<Spectrum<DataT, PeakT, PositionT> >& spectra);
 
+		/** Computes the difference between the spectra in Fourier space. max_freq and min_freq can be used to
+		 *  include only a certain range into the comparison. In this case, we only use the positive frequencies (the
+		 *  negative ones are redundant anyhow) and assume that 0<=min_freq<max_freq<=1, where min_freq and max_freq
+		 *  are interpreted as percentages, e.g. calling this function with min_freq=0 and max_freq=0.5 would include
+		 *  the lower half of the positive frequencies.
+		 */
+		virtual double getFourierDifference(const Spectrum<DataT,PeakT, PositionT>& spectrum, float min_freq = 1e6, float max_freq = -1e6);
+
+		/** Computes the difference according to the precomputed normal moments up to moment_number. If the values have
+		 *  not been precomputed so far, we regenerate them.
+		 */
+		virtual double getNormalMomentsDifference(Spectrum<DataT,PeakT, PositionT>& spectrum, int moment_number);
+		virtual double getCentralMomentsDifference(Spectrum<DataT,PeakT, PositionT>& spectrum, int moment_number);
+		virtual double getStandardizedMomentsDifference(Spectrum<DataT,PeakT, PositionT>& spectrum, int moment_number);
+		
+		/// precomputed normal moments
+		std::vector<float> normal_moments;
+		/// precomputed central moments
+		std::vector<float> central_moments;
+		/// precomputed standardized moments
+		std::vector<float> standardized_moments;
+	
 		protected:
-		DataType	data_;
-		std::vector<PeakType> sticks_;
-		PositionType					spacing_;
-		PositionType					min_;
-		PositionType					max_;
+			DataType							data_;
+			std::vector<PeakType> sticks_;
+			PositionType					spacing_;
+			PositionType					min_;
+			PositionType					max_;
+			std::vector<float>	 	Hu_invariants_;
 	};
 
 	/**	Clear the spectrum.
@@ -164,7 +209,52 @@ namespace BALL
 	{
 		return s1.difference(s2);
 	}
+	
+	template <typename DataT, typename PeakT, typename PositionT>
+	double Spectrum<DataT, PeakT, PositionT>::getNormalMomentsDifference(Spectrum<DataT, PeakT, PositionT>& spectrum, int moment_number)
+	{
+		if (normal_moments.size() != (Size)moment_number)
+			computeAllMoments(moment_number);
+		if (spectrum.normal_moments.size() != (Size)moment_number)
+			spectrum.computeAllMoments(moment_number);
 
+		double diff = 0.;
+		for (int current_moment=0; current_moment<moment_number; current_moment++)
+			diff += fabs(normal_moments[current_moment] - spectrum.normal_moments[current_moment]);
+
+		return diff;
+	}
+
+	template <typename DataT, typename PeakT, typename PositionT>
+	double Spectrum<DataT, PeakT, PositionT>::getCentralMomentsDifference(Spectrum<DataT, PeakT, PositionT>& spectrum, int moment_number)
+	{
+		if (central_moments.size() != (Size)moment_number)
+			computeAllMoments(moment_number);
+		if (spectrum.central_moments.size() != (Size)moment_number)
+			spectrum.computeAllMoments(moment_number);
+
+		double diff = 0.;
+		for (int current_moment=0; current_moment<moment_number; current_moment++)
+			diff += fabs(central_moments[current_moment] - spectrum.central_moments[current_moment]);
+
+		return diff;
+	}
+
+	template <typename DataT, typename PeakT, typename PositionT>
+	double Spectrum<DataT, PeakT, PositionT>::getStandardizedMomentsDifference(Spectrum<DataT, PeakT, PositionT>& spectrum, int moment_number)
+	{
+		if (standardized_moments.size() != (Size)moment_number)
+			computeAllMoments(moment_number);
+		if (spectrum.standardized_moments.size() != (Size)moment_number)
+			spectrum.computeAllMoments(moment_number);
+
+		double diff = 0.;
+		for (int current_moment=0; current_moment<moment_number; current_moment++)
+			diff += fabs(standardized_moments[current_moment] - spectrum.standardized_moments[current_moment]);
+
+		return diff;
+	}	
+	
 	template <typename DataT, typename PeakT, typename PositionT>
 	const DataT& Spectrum<DataT, PeakT, PositionT>::getData() const
 	throw()
@@ -177,6 +267,49 @@ namespace BALL
 	throw()
 	{
 		return data_;
+	}
+/*	
+	const vector<float>& getHuInvariants()
+			throw();
+*/
+
+	template <typename DataT, typename PeakT, typename PositionT>
+	const vector<float>& Spectrum<DataT, PeakT, PositionT>::getHuInvariants() const
+	throw()
+	{
+		return Hu_invariants_;
+	}
+
+	template <typename DataT, typename PeakT, typename PositionT>
+	vector<float>& Spectrum<DataT, PeakT, PositionT>::getHuInvariants() 
+	throw()
+	{
+		return Hu_invariants_;
+	}
+
+
+	
+	template <typename DataT, typename PeakT, typename PositionT>
+	void Spectrum<DataT, PeakT, PositionT>::computeHuInvariants()
+	throw()
+	{
+		Log.error()<< "computeHuInvariants() only implemented in 2D" << std::endl;
+		return;
+	}
+
+	template <typename DataT, typename PeakT, typename PositionT>
+	vector<float> Spectrum<DataT, PeakT, PositionT>::computeHuInvariantsDifferences(vector<Spectrum<DataT, PeakT, PositionT> >& /*spectra*/)
+	{
+		Log.error()<< "computeHuInvariantsDifferences() only implemented in 2D" << std::endl;
+		std::vector<float> result;
+		return result;
+	}
+
+	template <typename DataT, typename PeakT, typename PositionT>
+	double Spectrum<DataT, PeakT, PositionT>::getFourierDifference(const Spectrum<DataT, PeakT, PositionT>& spectrum, float min_freq, float max_freq)
+	{
+		Log.error() << "getFourierDifference only implemented in 1D and 2D" << std::endl;
+		return 0.;
 	}
 
 	/**	Convenience typedefs

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EFShiftProcessor.h,v 1.23.10.4 2006/09/06 12:23:19 anne Exp $
+// $Id: EFShiftProcessor.h,v 1.23.10.5 2007/04/12 13:53:52 anne Exp $
 //
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
@@ -66,6 +66,15 @@ namespace BALL
 		/**	Initialization method.
 				This method reads the parameter section <b>ElectricFieldEffect</b> and
 				parses its contents.
+				This section contains four flags: 
+				- $\var exclude_residue_field$ / $varexclude_adjacent_residue_field$ denotes, whether 
+				effector atoms of the electric 
+				field effect will be excluded, if the target bond is in the same residue, an adjacent 
+				residue respectively. The defaults are false.
+				- $var carbonyl_influences_amide_field$ denotes, whether a carbonyl is regarded to 
+					effect the shift of an amid hydrogen. The default is false.
+				- $var exclude_solvent_field$ denotes, whether water molecules are excluded to be
+					effectors. The default is false.
 				This section contains the definition of two expressions that define
 				a bond (the first expression matches the atom whose shift is to be
 				calculated, the second describes its bond partner).
@@ -73,8 +82,8 @@ namespace BALL
 				$\varepsilon_1$ and	$\varepsilon_2$.  \par
 				Then, this method extracts the contents of the <b>Charges</b>
 				section and thus constructs a hash map containing residue and atom names 
-				the corresponding charges.
-				This processor is applied to all atoms in  \link operator () operator () \endlink , 
+				and the corresponding charges.
+				The \link operator () operator () \endlink is applied to all atoms,   
 				so expect the atom charges to change!
 				@see operator ()
 		*/
@@ -95,22 +104,23 @@ namespace BALL
 			;
 
 
-		/**	operator ().
-				This method sets the charge for all atoms it encounters
-				(using  \link assign_charge_processor_ assign_charge_processor_ \endlink ). 
+		/**	Processor operator ().
+				This method sets the charges for all atoms it encounters.
+				The charges are given are given in parameter file (section <b>Charges</b>).
 				Charged atoms	are stored in the atom list  \link effector_list_ effector_list_ \endlink .
-				All bonds are stored in  \link bond_list_ bond_list_ \endlink .
+				All tentative target bonds, specified in the parameter file (section <b>ElectricFieldEffect</b>), 
+				are stored in  \link bond_list_ bond_list_ \endlink .
 				@return Processor::CONTINUE
-				@param composite an arbitrary composite. All non-atom objects are ignored.
 		*/
 		virtual Processor::Result operator () (Composite& composite)
 			;
 
-		/**	Finish method.
+		/**	Processor finish method.
 				This method performs the chemical shift calculation.
 				It iterates over all bonds stored in  \link bond_list_ bond_list_ \endlink .
 				If the two bond atoms match a pair of expressions from
-				 \link first_atom_expressions_ first_atom_expressions_ \endlink  and  \link second_atom_expressions_ second_atom_expressions_ \endlink ,
+				 \link first_atom_expressions_ first_atom_expressions_ \endlink  and  
+				 \link second_atom_expressions_ second_atom_expressions_ \endlink ,
 				the electric field vector is calculated at the bond position using
 				Coulomb's law and the charges and positions of the atoms in the 
 				 \link effector_list_ effector_list_ \endlink .
@@ -130,15 +140,15 @@ namespace BALL
 
 		protected:
 	
-		/*_	The list of bonds collected by {\tt operator ()}.
+		/*_	The list of all target bonds collected by {\tt operator ()}.
 		* 	The first element of the pair is the origin of the bond, the second the destination.
 		* 	The shift _always_ applies to the first element of the pair.
 		*/
 		std::vector<std::pair<Atom*, Atom*> >				bond_list_;
 
-		/*  The index of the expression that matched to result in the corresponding element in bond_list_
+		/*_  The index of the expression that matched to result in the corresponding element in bond_list_
 		 */
-		std::vector<Index> expression_number_;
+		std::vector<Index> 			expression_number_;
 
 		/*_	The list of charged atoms (effectors).
 		*/
@@ -207,7 +217,7 @@ namespace BALL
 		/*_	A factor for switching the charge unit between esu and elementary charges. 
 		 		The unit is read from the option {\tt unit} of the section 
 				<TT>  Charges </TT> from the parameter file.
-				For numeric aspects, in the init() part the esu unit is divided by 
+				For numeric aspects, in the init() function the esu unit is divided by 
 				the charge_factor_, such that the molecules charges (which are given 
 				by PDB.org in elementary units) can easily be multiplied with. 
 				When computing the shift, the charge_factor is again multiplied with.  
@@ -217,9 +227,17 @@ namespace BALL
 		float  									charge_factor_;
 		
 		private:
+	
+		/*_ Some debugging functions printing parameter/effector/target information
+		 *  to the Log-stream.
+		 */
 		void 			printParameters_() throw();
 		void  		printEffectors_() throw();
 		void 			printTargets_() throw();
+		
+		/*_ A function to perform some ShiftX-y postprocessing: 
+		    add for all CA-atoms 0.2 times the EF-shift-value of the bound HA-atoms 
+	  */
 		void 			postprocessing_() throw();
 
  	};

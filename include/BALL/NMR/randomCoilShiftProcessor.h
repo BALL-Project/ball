@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: randomCoilShiftProcessor.h,v 1.16.10.1 2006/10/04 13:49:41 anne Exp $
+// $Id: randomCoilShiftProcessor.h,v 1.16.10.2 2007/04/12 13:53:55 anne Exp $
 //
 
 #ifndef BALL_NMR_SHIFTMODULE_H
@@ -58,7 +58,8 @@ namespace BALL
 		/**	Initialize the module.
 				This method fails if no  \link Parameters Parameters \endlink  object was assigned
 				or the parameter file does not contain the proper section (<tt>RandomCoilShifts</tt>).
-				If it terminates correctly, the module is valid.
+				The random coil shift as read from the parameter file are stored in {\tt shift_map_}.
+				If the method terminates correctly, the module is valid.
 				@see isValid
 		*/
 		virtual void init();
@@ -69,13 +70,11 @@ namespace BALL
 		//@{
 		
 		/**	Application method.
-				If current object is a Atom of kind Hydrogen its random coil shift has to be looked up
-				in <tt>rc_table</tt>.
-				Get Hydrogens residue name append ":" and its name, the lookup entry is reconstruced.
-				If this entry is found within the table the randomcoil shift is added to the Hydrogens
-				chemical shift.
-				If this entry is not found the random coil shift is set to 1000 and added as well to the
-				Hydrogens chemical shift, to mark that Hydrogen not to have a random coil shift table entry.
+		 		For all atom objects, the random coil shift contribution as read from the parameter files
+				is determined, stored in the named property \link RandomCoilShiftProcessor::PROPERTY__RANDOM_COIL_SHIFT 
+				RandomCoilShiftProcessor::PROPERTY__RANDOM_COIL_SHIFT\endlink,
+				and added to the total chemical shift contribution, stored in the named property 
+				\link ShiftModule::PROPERTY__SHIFT ShiftModule::PROPERTY__SHIFT \endlink.
 		*/
 		virtual Processor::Result operator () (Composite& composite);
 

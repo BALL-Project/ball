@@ -39,8 +39,10 @@ Spectrum<RegularData2D, Peak2D>::Spectrum(const std::vector<Peak2D>& peaks, cons
 		} 
 		catch (Exception::OutOfGrid e)
 		{
+#ifdef DEBUG
 			Log.error() << "Error in Spectrum(): point " << sticks_[i].getPosition() 
 								  << " outside the grid. Consider decreasing origin / increasing dimension!" << std::endl;
+#endif
 		}
 	}
 }
@@ -48,21 +50,21 @@ Spectrum<RegularData2D, Peak2D>::Spectrum(const std::vector<Peak2D>& peaks, cons
 
 template <>
 BALL_INLINE
-double Spectrum<RegularData1D, Peak1D>::earthMoversDistance(const Spectrum<RegularData1D, Peak1D>& spectrum) const
+double Spectrum<RegularData1D, Peak1D>::earthMoversDistance(const Spectrum<RegularData1D, Peak1D>& /*spectrum*/) const
 {
 	return 0.0; 
 }
 
 template <>
 BALL_INLINE
-double Spectrum<RegularData2D, Peak2D>::earthMoversDistance(const Spectrum<RegularData2D, Peak2D>& spectrum) const
+double Spectrum<RegularData2D, Peak2D>::earthMoversDistance(const Spectrum<RegularData2D, Peak2D>& /*spectrum*/) const
 {
 	return 0.0; 
 }
 
 template <>
 BALL_INLINE
-double Spectrum<RegularData1D, Peak1D>::getIntegral() const
+double Spectrum<RegularData1D, Peak1D>::getAbsIntegral() const
 {
 	RegularData1D::IndexType index;
 	RegularData1D::IndexType size = data_.getSize();
@@ -71,8 +73,7 @@ double Spectrum<RegularData1D, Peak1D>::getIntegral() const
 	double total_integral=0.;
 	for (index = 0; index < size; index++)
 	{
-			RegularData1D::CoordinateType pos = data_.getCoordinates(index);
-			total_integral += data_(pos)*spacing;
+			total_integral += fabs(data_[index])*spacing;
 	}
 	return total_integral;
 }
@@ -80,19 +81,18 @@ double Spectrum<RegularData1D, Peak1D>::getIntegral() const
 
 template <>
 BALL_INLINE
-double Spectrum<RegularData2D, Peak2D>::getIntegral() const
+double Spectrum<RegularData2D, Peak2D>::getAbsIntegral() const
 {
 	RegularData2D::IndexType index;
 	RegularData2D::IndexType size = data_.getSize();
-	Vector2<float> spacing = data_.getSpacing();
+	Vector2 spacing = data_.getSpacing();
 
 	double total_integral=0.;
 	for (index.x = 0; index.x < size.x; index.x++)
 	{
 		for (index.y = 0; index.y < size.y; index.y++)
 		{
-			RegularData2D::CoordinateType pos = data_.getCoordinates(index);
-			total_integral += data_(pos) * spacing.x * spacing.y;
+			total_integral += fabs(data_[index]) * spacing.x * spacing.y;
 		}
 	}
 	
@@ -109,8 +109,8 @@ double Spectrum<RegularData1D, Peak1D>::difference(const Spectrum<RegularData1D,
 	RegularData1D::IndexType size = data_.getSize();
 	
 	// for normalization
-	double integral = getIntegral();
-	double their_integral = spectrum.getIntegral();
+	double integral = getAbsIntegral();
+	double their_integral = spectrum.getAbsIntegral();
 
 	float spacing = data_.getSpacing();
 	
@@ -144,8 +144,8 @@ double Spectrum<RegularData2D, Peak2D>::difference(const Spectrum<RegularData2D,
 	// points not contained in one of the spectra are ignored...
 	
 	// for normalization
-	double integral = getIntegral();
-	double their_integral = spectrum.getIntegral();
+	double integral = getAbsIntegral();
+	double their_integral = spectrum.getAbsIntegral();
 
 std::cout << "CMP myInt : " << integral << " their int: " << their_integral << std::endl;  
 
@@ -154,7 +154,7 @@ std::cout << "CMP myInt : " << integral << " their int: " << their_integral << s
 	
 	const RegularData2D& their_data = spectrum.getData();
 	
-	Vector2<float> spacing = data_.getSpacing();
+	Vector2 spacing = data_.getSpacing();
 
 	double total_difference=0.;
 	for (index.x = 0; index.x < size.x; index.x++)
@@ -173,7 +173,7 @@ std::cout << "CMP myInt : " << integral << " their int: " << their_integral << s
 				continue;
 			}
 			total_difference += fabs( (our_value/integral) - (their_value/their_integral)) * (double)spacing.x * (double)spacing.y;
-			std::cout << "   td= " << total_difference << std::endl;
+			//std::cout << "   td= " << total_difference << std::endl;
 		}
 	}
 	
@@ -359,15 +359,25 @@ void Spectrum<RegularData2D, Peak2D>::convertToGaussian()
 
 template <>
 BALL_INLINE
-double Spectrum<RegularData1D, Peak1D>::computeMoment(int moment_number) 
+void Spectrum<RegularData1D, Peak1D>::computeAllMoments(int moment_number) 
 {
 	// for a negative or equal zero moment we return 0.
 	if (moment_number < 0)
 		Log.info() << "Tried to compute a negative moment!" << std::endl;	
 	if (moment_number < 1)
-		return 0.;
+		return;
 		
-	// compute the average
+	// clear the old moment vectors
+	normal_moments.clear();
+	normal_moments.resize(moment_number);
+	central_moments.clear();
+	central_moments.resize(moment_number);
+	standardized_moments.clear();
+	standardized_moments.resize(moment_number);
+
+	// first, compute the normal moments up to degree moment_number
+
+	// compute the average => m0
 	double average = 0.;
 	int count = 0;
 	const RegularData1D& data = getData();
@@ -377,31 +387,56 @@ double Spectrum<RegularData1D, Peak1D>::computeMoment(int moment_number)
 	RegularData1D::IndexType size = data_.getSize();
 	for (index = 0; index < size; index++)
 	{
-		RegularData1D::CoordinateType pos = data_.getCoordinates(index);
-		average += data(pos);
+		average += data[index];
 		count += 1;
 	}
-	average = average / count;
+//	average = average / count;
+	normal_moments[0] = average * spacing;
 
-	if (moment_number == 1)
-		return average;
-	
-	double moment = 0.; 
-	// compute the moment
-	for (index = 0; index < size; index++)
+	// now, compute the normal moments of interest
+	for (index=0; index<size; index++)
 	{
-		RegularData1D::CoordinateType pos = data_.getCoordinates(index);
-		moment += pow( (data(pos) - average), moment_number)* spacing;
+		for (int current_moment=1; current_moment < moment_number; current_moment++)
+		{
+			normal_moments[current_moment] += pow((float)index, current_moment) * data[index] / average;
+		}
 	}
-	return double(moment/count);
+
+	// now we can build the central moments
+	central_moments[0] = average * spacing;
+	for (index=0; index<size; index++)
+	{
+		for (int current_moment=1; current_moment < moment_number; current_moment++)
+		{
+			central_moments[current_moment] += pow(index - normal_moments[1], current_moment) * data[index] / average;
+		}
+	}
+	
+	// and finally, the standardized moments
+	float standard_deviation=0;
+	if (moment_number == 1) // we have to compute the standard deviation
+	{
+		for (index=0; index<size; index++)
+		{
+			standard_deviation += pow(index - normal_moments[1], 2) * data[index] / average;
+		}
+		standard_deviation = sqrt(standard_deviation);
+	}
+	else
+		standard_deviation = sqrt(central_moments[2]);
+	
+	for (int current_moment=0; current_moment<moment_number; current_moment++)
+	{
+		standardized_moments[current_moment] = central_moments[current_moment] / pow((float)standard_deviation, current_moment);
+	}
 }
 
 
 template <>
 BALL_INLINE
-double Spectrum<RegularData2D, Peak2D>::computeMoment(int  moment_number) 
+void Spectrum<RegularData2D, Peak2D>::computeAllMoments(int  moment_number) 
 {	
-	// for a negative or equal zero moment we return 0.
+/*	// for a negative or equal zero moment we return 0.
 	if (moment_number < 0)
 		Log.info() << "Tried to compute a negative moment!" << std::endl;	
 	if (moment_number < 1)
@@ -411,7 +446,7 @@ double Spectrum<RegularData2D, Peak2D>::computeMoment(int  moment_number)
 	double average = 0.;
 	int count = 0;
 	const RegularData2D& data = getData();
-	Vector2<float> spacing = data_.getSpacing();
+	Vector2 spacing = data_.getSpacing();
 
 	// for all points
 	RegularData2D::IndexType index;
@@ -442,8 +477,8 @@ double Spectrum<RegularData2D, Peak2D>::computeMoment(int  moment_number)
 	}
 	
 	return double(moment/count);
+	*/
 }
-
 
 template <>
 BALL_INLINE
@@ -497,7 +532,6 @@ Spectrum<RegularData2D, Peak2D> Spectrum<RegularData2D, Peak2D>::differenceSpect
 
 
 	// we have to take care for the peaks_
-	// TODO: shouldn't we "subtract" the peaks too? 
 	new_spectrum.clearSticks();
 	
 	// we have to create the difference data
@@ -514,5 +548,326 @@ Spectrum<RegularData2D, Peak2D> Spectrum<RegularData2D, Peak2D>::differenceSpect
 	
 	return new_spectrum;
 
+}
+
+template <>
+BALL_INLINE
+void Spectrum<RegularData2D, Peak2D>::computeHuInvariants()
+	throw()
+{
+	// compute the geometric moments
+	float m_0_0 = 0.;
+	float m_1_0 = 0.;
+	float m_0_1 = 0.;
+	float m_1_1 = 0.;
+	float m_2_0 = 0.;
+	float m_2_1 = 0.;
+	float m_2_2 = 0.;
+	float m_1_2 = 0.;
+	float m_0_2 = 0.;
+	float m_3_0 = 0.;
+	float m_0_3 = 0.;
+	
+	RegularData2D::IndexType index;
+	RegularData2D::IndexType size = data_.getSize();
+	const RegularData2D& data = getData();
+
+	for (index.x = 0; index.x < size.x; index.x++)
+	{
+		for (index.y = 0; index.y < size.y; index.y++)
+		{
+			RegularData2D::CoordinateType pos = data_.getCoordinates(index);
+			
+			float x = pos.x;
+			float y = pos.y; 
+			float f = data[index];
+			m_0_0 += f;
+			m_1_0 += x * f;
+			m_0_1 += y * f;
+			m_1_1 += x * y * f;
+			m_2_0 += x * x * f;
+			m_2_1 += x * x * y * f;
+			m_2_2 += x * x * y * y * f;
+			m_1_2 += x * y * y * f;
+			m_0_2 += y * y * f;
+			m_3_0 += x * x * x * f;
+			m_0_3 += y * y * y * f;
+		}
+	}
+
+	// compute the central moments
+	float x1_normalized = m_1_0 / m_0_0;
+	float x2_normalized = m_0_1 / m_0_0;
+	
+	// these are not really needed. I just added them here for completeness
+	/*float mu_0_0 = m_0_0;
+	float mu_1_0 = 0.;
+	float mu_0_1 = 0.; */
+	float mu_1_1 = m_1_1 - (x2_normalized * m_1_0);
+	float mu_2_0 = m_2_0 - (x1_normalized * m_1_0);
+	float mu_2_1 = m_2_1 - (2 * x1_normalized * m_1_1) - (x2_normalized * m_2_0) + (2 * x1_normalized * x1_normalized * m_0_1);
+	float mu_1_2 = m_1_2 - (2 * x2_normalized * m_1_1) - (x1_normalized * m_0_2) + (2 * x2_normalized * x2_normalized * m_1_0);
+	float mu_0_2 = m_0_2 - (x2_normalized * m_0_1);
+	float mu_3_0 = m_3_0 - (3 * x1_normalized * m_2_0) + (2 * x1_normalized * x1_normalized * m_1_0);
+	float mu_0_3 = m_0_3 - (3 * x2_normalized * m_0_2) + (2 * x2_normalized * x2_normalized * m_0_1);
+	
+	// compute the Hu moments
+	Hu_invariants_.resize(8);
+
+	Hu_invariants_[1] =  mu_2_0 + mu_0_2;
+	Hu_invariants_[2] =  pow((mu_2_0 - mu_0_2),2) + (4.*pow(mu_1_1 ,2)); 
+	Hu_invariants_[3] =  pow((mu_3_0 - 3.*mu_1_2),2) + pow((3.*mu_2_1 + mu_0_3),2);
+	Hu_invariants_[4] =  pow((mu_3_0 + mu_1_2),2) + pow((mu_2_1 + mu_0_3),2);
+	
+	Hu_invariants_[5] =      (mu_3_0 - 3.*mu_1_2) 
+											  * (mu_3_0 - mu_1_2) 
+											  * (pow((mu_3_0 + mu_1_2),2) - 3.*pow((mu_2_1 + mu_0_3),2) )
+										 +(   (3.*mu_2_1 - mu_0_3) 
+										    * (mu_2_1 + mu_0_3) 
+											  * (3.*pow((mu_3_0 + mu_1_2),2) - pow((mu_2_1 + mu_0_3),2) )
+											);
+	
+	Hu_invariants_[6] =  (mu_2_0 - mu_0_2) * ( pow((mu_3_0 + mu_1_2),2) - pow((mu_2_1 + mu_0_3),2) )
+										+ (4.* mu_1_1 * (mu_3_0 + mu_1_2) * (mu_2_1 + mu_0_3)) ; 
+	
+	Hu_invariants_[7] =  		(3.*mu_1_2 - mu_3_0)    *  (mu_3_0 + mu_1_2) 
+												* (pow((mu_3_0 + mu_1_2),2) - (3.*pow((mu_2_1 + mu_0_3),2))) 
+										- (   (mu_3_0 - (3.*mu_1_2))  *  (mu_2_1 + mu_0_3) 
+										    * (3.*pow((mu_3_0 + mu_1_2),2) - pow((mu_2_1 + mu_0_3),2))
+											);
+	return;
+}
+
+template <>
+BALL_INLINE	
+vector<float> Spectrum<RegularData2D, Peak2D>::computeHuInvariantsDifferences(vector<Spectrum<RegularData2D, Peak2D> >& spectra)
+{
+	// compute the Invariants
+	computeHuInvariants();
+	vector<float> hu = getHuInvariants();
+	vector< vector<float> > hu_invariants(spectra.size());  
+	
+	for (Position s = 0; s < spectra.size(); s++)
+	{	
+		spectra[s].computeHuInvariants();
+		hu_invariants[s] = spectra[s].getHuInvariants();
+	}
+	
+	// compute weighting factors
+	vector<float> factors(hu.size());
+	vector<float> averages(hu.size());
+
+	if (spectra.size() > 1)
+	{
+		// compute the averages
+		for (Position i = 1; i < factors.size(); i++)
+		{
+			averages[i] = 0.;  
+			for (Position s = 0; s < spectra.size(); s++)
+			{
+				averages[i] += hu_invariants[s][i];
+			}
+			averages[i] = averages[i] / spectra.size();	
+		}
+		//compute the weighting factors
+		for (Position i = 1; i < factors.size(); i++)
+		{
+			factors[i] = 0.;
+			for (Position s = 0; s < spectra.size(); s++)
+			{
+				factors[i] +=  pow( (hu_invariants[s][i] - averages[i]), 2);
+			}
+			factors[i] = (float(spectra.size()))/factors[i] ;  
+		}
+	}
+	else  // since we are given just a single spectra, we take the 
+				// query invariants and the given invariants into accout 
+	{
+		// compute the averages
+		for (Position i = 1; i < factors.size(); i++)
+		{
+			averages[i] = (hu_invariants[0][i] + hu[i])/ 2.;
+		}
+		// compute the factors
+		for (Position i = 1; i < factors.size(); i++)
+		{
+			factors[i] = 2./(pow((hu_invariants[0][i] - averages[i]), 2) +  pow((hu[i] - averages[i]),2)) ;
+		}
+	}
+	
+	vector<float> distance(spectra.size()); 
+	
+	// compute the distance using the weighted euclidean distance meassure
+	for (Position s=0; s < spectra.size(); s++)
+	{
+		for (Position i=1; i < factors.size(); i++)
+		{	
+			distance[s] += factors[i]*pow((hu[i] - hu_invariants[s][i]),2);
+		}
+		distance[s] = sqrt(distance[s]);
+	}
+	
+	return distance;
+}
+
+template <>
+BALL_INLINE
+double Spectrum<RegularData1D, Peak1D>::getFourierDifference(const Spectrum<RegularData1D, Peak1D>& other_spectrum, float min_freq, float max_freq)
+{
+// only compile this if BALL has FFTW support
+#ifdef BALL_HAS_FFTW
+	
+	// compute the step widths
+	const int number_of_points = 128;
+
+	// we use the same origin and step width for both spectra!!!
+	float origin = data_.getOrigin();
+	float stepwidth = data_.getDimension()/(number_of_points-2); // the -2 is there to have some room for inaccuracies	
+	
+	FFT1D our_fft_spectrum(number_of_points, number_of_points, stepwidth, origin);
+	FFT1D other_fft_spectrum(number_of_points, number_of_points, stepwidth, origin);
+
+	FFT1D::IndexType index;
+	FFT1D::IndexType size = our_fft_spectrum.getSize();
+
+	for (index = 0; index < size; index++)
+	{
+		float current_point = our_fft_spectrum.getCoordinates(index);
+		try {
+			our_fft_spectrum.setData(current_point, Complex(data_.getInterpolatedValue(current_point), 0));
+		} catch (...) {our_fft_spectrum[(Position)index]=Complex(0,0);}
+		try {
+			other_fft_spectrum.setData(current_point, Complex(other_spectrum.getData().getInterpolatedValue(current_point), 0));
+		} catch (...) {other_fft_spectrum[(Position)index]=Complex(0,0);}
+	}
+
+	// now the spectra should contain the same data, just interpolated. Let's FT them
+	our_fft_spectrum.doFFT();
+	other_fft_spectrum.doFFT();
+	
+	Complex difference;
+
+	float minimal_mode, maximal_mode;
+	if (	 (min_freq > max_freq) 
+			|| (min_freq < 0)
+			|| (max_freq > 1) )
+	{
+		minimal_mode = our_fft_spectrum.getFourierSpaceMin();
+		maximal_mode = our_fft_spectrum.getFourierSpaceMax();
+	}
+	else
+	{
+		// compute the modes from the percentages we have been given
+		minimal_mode = min_freq*our_fft_spectrum.getFourierSpaceMin();
+		maximal_mode = max_freq*our_fft_spectrum.getFourierSpaceMax();
+	}
+
+	// FFT1D currently has no convenient index access to the data in Fourier space, so we build our own
+	for (Position i=0; i<(Position)number_of_points; i++)
+	{
+		float x = (i<number_of_points/2.) ? i : i - number_of_points;
+
+		x*=our_fft_spectrum.getFourierStepWidth();
+
+		// here we can filter the modes we want to use...
+		if (  (x >= minimal_mode) && (x <= maximal_mode) )
+		{
+				Position fft_pos = i;
+				difference += our_fft_spectrum[fft_pos] - other_fft_spectrum[fft_pos];
+		}
+	}
+
+	return difference.real() * difference.real() - difference.imag() * difference.imag();
+	
+#else
+	Log.error() << "BALL was compiled without FFTW support! Returning 0" << std::endl;
+	return 0;
+#endif
+}
+
+template <>
+BALL_INLINE
+double Spectrum<RegularData2D, Peak2D>::getFourierDifference(const Spectrum<RegularData2D, Peak2D>& other_spectrum, float min_freq, float max_freq)
+{
+// only compile this if BALL has FFTW support
+#ifdef BALL_HAS_FFTW
+	
+	// compute the step widths
+	const int number_of_points = 128;
+
+	// we use the same origin and step width for both spectra!!!
+	Vector2 origin = data_.getOrigin();
+	Vector2 stepwidth = data_.getSpacing();	
+	
+	FFT2D our_fft_spectrum(number_of_points, number_of_points, stepwidth.x, stepwidth.y, origin);
+	FFT2D other_fft_spectrum(number_of_points, number_of_points, stepwidth.x, stepwidth.y, origin);
+
+	FFT2D::IndexType index;
+	FFT2D::IndexType size = our_fft_spectrum.getSize();
+
+	for (index.x = 0; index.x < size.x; index.x++)
+	{
+		for (index.y = 0; index.y < size.y; index.y++)
+		{
+			Vector2 current_point = our_fft_spectrum.getCoordinates(index);
+			try {
+				our_fft_spectrum.setData(current_point, Complex(data_.getInterpolatedValue(current_point), 0));
+			} catch (...) {our_fft_spectrum.setData(current_point, Complex(0,0));}
+			try {
+				other_fft_spectrum.setData(current_point, Complex(other_spectrum.getData().getInterpolatedValue(current_point), 0));
+			} catch (...) {other_fft_spectrum.setData(current_point, Complex(0,0));}
+		}
+	}
+
+	// now the spectra should contain the same data, just interpolated. Let's FT them
+	our_fft_spectrum.doFFT();
+	other_fft_spectrum.doFFT();
+	
+	Complex difference;
+	Vector2 current_pos;
+
+	float minimal_mode, maximal_mode;
+
+	if (	 (min_freq > max_freq) 
+			|| (min_freq < 0)
+			|| (max_freq > 1) )
+	{
+		minimal_mode = std::min(our_fft_spectrum.getFourierSpaceMinX(), our_fft_spectrum.getFourierSpaceMinY());
+		maximal_mode = std::max(our_fft_spectrum.getFourierSpaceMaxX(), our_fft_spectrum.getFourierSpaceMaxY());
+	}
+	else
+	{
+		// compute the modes from the percentages we have been given
+		minimal_mode = min_freq*std::min(our_fft_spectrum.getFourierSpaceMinX(), our_fft_spectrum.getFourierSpaceMinY());
+		maximal_mode = max_freq*std::max(our_fft_spectrum.getFourierSpaceMaxX(), our_fft_spectrum.getFourierSpaceMaxY());
+	}
+
+	// FFT2D currently has no convenient 2D - index access to the data in Fourier space, so we build or own
+	for (Position i=0; i<(Position)number_of_points; i++)
+	{
+		for (Position j=0; j<(Position)number_of_points; j++)
+		{
+			float x = (i<number_of_points/2.) ? i : i - number_of_points;
+			float y = (j<number_of_points/2.) ? j : j - number_of_points;
+
+			x*=our_fft_spectrum.getFourierStepWidthX();
+			y*=our_fft_spectrum.getFourierStepWidthY();
+
+			// here we can filter the modes we want to use...
+			if (  (x >= minimal_mode) && (x <= maximal_mode)
+				  &&(y >= minimal_mode) && (y <= maximal_mode) )
+			{
+				Position fft_pos = j + i*number_of_points;
+				difference += our_fft_spectrum[fft_pos] - other_fft_spectrum[fft_pos];
+			}
+		}
+	}
+
+	return difference.real() * difference.real() - difference.imag() * difference.imag();
+	
+#else
+	Log.error() << "BALL was compiled without FFTW support! Returning 0" << std::endl;
+	return 0;
+#endif
 }
 

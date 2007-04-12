@@ -42,12 +42,18 @@ namespace BALL
 		ShiftModel1D() 
 			throw() ;
 
-		/** Detailed Constructor
+		/** Detailed Constructor.
+		 *  If compute_shifts is set to false, we assume that the shifts have been previously assigned, and will use the
+		 *  properties as we find them in the system.
 		*/
-		ShiftModel1D(const String& filename,SPECTRUM_TYPE st) 
+		ShiftModel1D(const String& filename,SPECTRUM_TYPE st, bool compute_shifts=true) 
 			throw();
 				
-		ShiftModel1D(const String& filename,SPECTRUM_TYPE st, double origin, double dimension, double spacing) 
+		/** Detailed Constructor.
+		 *  If compute_shifts is set to false, we assume that the shifts have been previously assigned, and will use the
+		 *  properties as we find them in the system.
+		*/
+		ShiftModel1D(const String& filename,SPECTRUM_TYPE st, double origin, double dimension, double spacing, bool compute_shifts=true) 
 			throw();
 	
 		/**	Copy constructor
@@ -210,6 +216,9 @@ namespace BALL
 				Set to <b>  true </b> if the object was initialized correctly.
 		*/
 		bool valid_;
+
+		/// Flag for shift computation
+		bool compute_shifts_;
 
 		bool hasType_(Atom* a, SPECTRUM_TYPE type) throw();
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.h,v 1.16.10.5 2006/09/06 12:23:20 anne Exp $
+// $Id: haighMallionShiftProcessor.h,v 1.16.10.6 2007/04/12 13:53:54 anne Exp $
 //
 
 #ifndef BALL_COMMON_H
@@ -67,6 +67,20 @@ namespace BALL
 		//@{
 
 		/**	Initialization method.
+		 *  This method reads the parameter section "HaighMallionRingCurrent" 
+		 *  and "RingCurrentTargets" and parses its content. The effector residue names are stored in 
+		 *  effector_names_, the corresponding intensity factors are stored in intensity_factors_, and 
+		 *  the effectors ring atoms are stored in ring_atoms_. 
+		 *  The ring current target atom names and factors are stored in target_names_ and  
+		 *  target_nucleus_factors_.
+		 *  Furthermore the flags H_influenced_by_all_effectors_ (default false)
+		 *    										HA_influenced_by_all_effectors_ (default false)
+		 *    										use_cut_off_ (default false)
+		 *    										cut_off_ (default 0.)
+		 *    										project_target_to_ring_plane_  (default false) 
+		 *    										all_hydrogens_are_targets_ (default  false)
+		 *    										default_hydrogen_target_nucleus_factor_  (default 5.13)
+		 *    										negative_ringcurrent_factor_  (default 1.1) are read. 
 		*/
 		virtual void init();
 
@@ -86,32 +100,25 @@ namespace BALL
 		virtual bool start();
 		
 		
-		/**	Application method
+		/**	Application method.
 				Works as a collector:	It stores the systems aromatic rings in 
 				a vector of vectors effectors_ and each target (H, N or C) in 
-				a vector called targets_
+				a vector called targets_.
 		*/
 		virtual Processor::Result operator () (Composite& atom);
 		
 			
 		/**	Finish method.
-				Here the work is done:
-				The funcion iterates over all systems's protons by iterating through proton_list_.
-				Then for each proton every ring in aromat_list_ is accessed.
-				The actual ring's ringplane and it's area is calculated. 
-				Iterating over every bond of the aromatic ring, the triangle areas are calculated with:
-				The bond's two atoms and the actual proton's projection onto the ringplane.
-				It is important to state that these areas are signed areas, depending on wether there is 
-				a right handed system between the plane's normal vector and the difference vectors 
-				from the projection	to the two bond's atoms.
-				Next the protons distances to the actual two bond's atoms are calculated and stored 
-				in a_first and a_second.
-				Then ts is calculated : $ ts = f * (1/a_{first}^3 + 1/a_{second}) $ with f as the actual tringle area.
-				For every bond of the ring this partial sum is calculated , added and stored in gs.
-				Just some constant factor B and the chemical shift using Haigh Mallions Model is done.
-				Important note:
-				Distances are expressed in terms of the actual ring's diameter.
-				Triangle areas are expressed in terms of the actual ring's area.
+				If no targets or effectors of the ring current effect were found during the
+				application of the {\tt operator()}, no ring current shift effects are computed.
+				Otherwise for all target effector pairs (e t) the current ring shift contribution is
+				computed as 
+				
+				 shift = intensity_factors_[effector_types_[e]] * target_nucleus_factor[t] * geometrical_factor;
+
+				and added to the current shift of the target atom t stored in the named property
+				\link PROPERTY__RING_CURRENT_SHIFT PROPERTY__RING_CURRENT_SHIFT \endlink and
+				the named property  \link ShiftModule::PROPERTY__SHIFT ShiftModule::PROPERTY__SHIFT \endlink. 
 		*/
 		virtual bool finish();
 
