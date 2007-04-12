@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: randomCoilShiftProcessor.C,v 1.6.20.1 2006/10/04 13:49:43 anne Exp $
+// $Id: randomCoilShiftProcessor.C,v 1.6.20.2 2007/04/12 13:53:22 anne Exp $
 
 #include<BALL/NMR/randomCoilShiftProcessor.h>
 #include<BALL/FORMAT/parameterSection.h>
@@ -30,27 +30,27 @@ namespace BALL
 
 	void RandomCoilShiftProcessor::init()
 	{
-		// we assume the worst case: init fails -> valid_ = false
+		// We assume the worst case.
 		valid_ = false;
 		system_ = NULL;
 		
-		// make sure we have correct parameters
+		// Make sure we have correct parameters.
 		if (parameters_ == 0)
 		{
 			return;
 		}
 
-		// extract the data from the correct section
+		// Extract the data from the correct section.
 		ParameterSection parameter_section;
 		parameter_section.extractSection(*parameters_, "RandomCoilShifts");
 
-		// make sure the section contains the required columns
+		// Make sure the section contains the required columns.
 		if (!parameter_section.hasVariable("shift"))
 		{
 			return;
 		}
 
-		// extract the random coil shifts from the parameter section
+		// Extract the random coil shifts from the parameter section.
 		Position shift_column = parameter_section.getColumnIndex("shift");
 		for (Position i = 0; i < parameter_section.getNumberOfKeys(); i++)
 		{
@@ -58,7 +58,7 @@ namespace BALL
 												parameter_section.getValue(i, shift_column).toFloat());
 		}
 				
-		// initialization complete - mark the module as valid
+		// Initialization complete - mark the module as valid.
 		valid_ = true;
 
 		return;
@@ -66,18 +66,20 @@ namespace BALL
 
 	Processor::Result RandomCoilShiftProcessor::operator () (Composite& composite)	
 	{
+		// We are just interested in atoms.
 		Atom* atom_ptr = dynamic_cast<Atom*>(&composite);
 		if (atom_ptr == 0)
 		{
 			return Processor::CONTINUE;
 		}
 
-		// get the System
+		// Try to get the system.
 		if (!system_   && (RTTI::isKindOf<System>(atom_ptr->getRoot())))
 		{	
 			system_ = dynamic_cast<System*>(&(atom_ptr->getRoot()));
 		}
 
+		// Get the atoms full name. 
 		String full_name = atom_ptr->getFullName();
 		full_name.substitute(":", " ");
 		if (!shift_map_.has(full_name))
@@ -96,15 +98,15 @@ namespace BALL
 
 		if (full_name != "")
 		{
-			// retrieve the random coil shift from the hash map
+			// Retrieve the random coil shift from the hash map.
 			const float& delta_RC = shift_map_[full_name];
 
-			// add the random coil shift to the total shift value
+			// Add the random coil shift to the total shift value.
 			float delta = atom_ptr->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
 			delta += delta_RC;
 			atom_ptr->setProperty(ShiftModule::PROPERTY__SHIFT, delta);
 			
-			// store the random coil shift in the random coil shift property
+			// Store the random coil shift as the random coil shift property.
 			atom_ptr->setProperty(RandomCoilShiftProcessor::PROPERTY__RANDOM_COIL_SHIFT, delta_RC);
 		}
 		
@@ -116,7 +118,7 @@ namespace BALL
 	{
 		if (system_) 
 		{
-			// add for all CA 0.2 times the values of HA
+			// Add for all CA 0.2 times the values of HA ramdon coil shift contribution.
 			for (BALL::ResidueIterator r_it = system_->beginResidue(); r_it != system_->endResidue(); ++r_it)
 			{
 				Atom* CA = 0;
@@ -143,7 +145,8 @@ namespace BALL
 		}
 		else
 		{
-			std::cerr << "found no system -> could not perform a postprocessing for EFShiftProcessor" << std::endl;
+				Log.error() << "RandomCoilShiftProcessor: could not perform a postprocessing. (" 
+				 					<< __FILE__ << " " << __LINE__ << ")" <<  std::endl;
 		}
 	}
 }//namespace BALL
