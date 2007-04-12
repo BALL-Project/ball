@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.13.18.1 2007/03/25 22:02:32 oliver Exp $
+// $Id: surfaceModel.C,v 1.13.18.2 2007/04/12 12:04:06 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/surfaceModel.h>
@@ -99,6 +99,7 @@ namespace BALL
 			SurfaceProcessor sp;
 			sp.setType(getType());
 			sp.setProbeRadius(probe_radius_);
+			sp.start();
 
 			if (getSurfaceDrawingPrecision() != -1)
 			{
@@ -119,6 +120,8 @@ namespace BALL
 				}
 			}
 
+			bool ok = true;
+
 			try 
 			{
 				// Since we have container of *pointers* only, we have to 
@@ -128,6 +131,7 @@ namespace BALL
 				{
 					if (sp.operator () (**it) != Processor::CONTINUE)
 					{
+						ok = false;
 						break;
 					}
 				}
@@ -146,7 +150,12 @@ namespace BALL
 			}
 			
 			// Compute the surface
-			sp.finish();
+			ok &= sp.finish();
+			if (!ok)
+			{
+				Log.error() << "Unknown error occured while calculating molecular surface" << std::endl;
+			}
+
 			*static_cast<Surface*>(mesh) = sp.getSurface();
 
 			// normalize normal length:
