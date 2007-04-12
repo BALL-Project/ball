@@ -31,8 +31,10 @@ namespace BALL
 			HSQC_NH = 1, 
 			HSQC_CH, 
 			COSY_HH, // ist noch nicht implementiert!!! muesste ueber 2 Bindungslaengen spin = 1/2 pruefen.... 
-			COSY_CH  //= HSQC_NH
-
+			COSY_CH,  //
+			TOCSY_HH, 
+			TOCSY_CH, 
+			TOCSY_NH
 		};
 		
 		//@}
@@ -45,12 +47,18 @@ namespace BALL
 		ShiftModel2D() 
 			throw() ;
 
-		/** Detailed Constructor
-		*/
-		ShiftModel2D(const String& filename,SPECTRUM_TYPE st) 
+		/** Detailed Constructor.
+		 *  If compute_shifts is set to false, we assume that the shifts have been previously assigned, and will use the
+		 *  properties as we find them in the system.
+		 */
+		ShiftModel2D(const String& filename,SPECTRUM_TYPE st, bool compute_shifts=true) 
 			throw();
 		
-		ShiftModel2D(const String& filename,SPECTRUM_TYPE st, Vector2 origin, Vector2 dimension, Vector2 spacing) 
+		/** Detailed Constructor.
+		 *  If compute_shifts is set to false, we assume that the shifts have been previously assigned, and will use the
+		 *  properties as we find them in the system.
+		 */
+		ShiftModel2D(const String& filename,SPECTRUM_TYPE st, Vector2 origin, Vector2 dimension, Vector2 spacing, bool compute_shifts=true) 
 			throw();
 		
 		/**	Copy constructor
@@ -214,6 +222,9 @@ namespace BALL
 				Set to <b>  true </b> if the object was initialized correctly.
 		*/
 		bool valid_;
+
+		/// Flag for shift computation
+		bool compute_shifts_;
 
 	};
 
