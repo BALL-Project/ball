@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kekulizer.C,v 1.1.4.3 2007/03/26 08:26:33 bertsch Exp $
+// $Id: kekulizer.C,v 1.1.4.4 2007/04/13 14:15:14 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/kekulizer.h>
@@ -780,6 +780,7 @@ void Kekuliser::applySolution_(Position pos)
 
 // calculate a score for the distribution of the different 
 // charged atoms in this aromatic system:
+// return the best solution
 Position Kekuliser::calculateDistanceScores_()
 {
 	float best_score = INT_MAX;
