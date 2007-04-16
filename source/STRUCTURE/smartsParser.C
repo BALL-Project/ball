@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.C,v 1.13.8.1 2007/03/28 16:07:37 bertsch Exp $
+// $Id: smartsParser.C,v 1.13.8.2 2007/04/16 17:32:53 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/smartsParser.h>
@@ -321,7 +321,7 @@ namespace BALL
 					break;
 					
 				case AROMATIC:
-					if (atom->getProperty("IsAtomatic").getBool())
+					if (atom->getProperty("IsAromatic").getBool())
 					{
 						if (not_properties_.find(AROMATIC) != not_properties_.end())
 						{
@@ -338,7 +338,7 @@ namespace BALL
 					break;
 					
 				case ALIPHATIC:
-					if (atom->getProperty("IsAtomatic").getBool())
+					if (atom->getProperty("IsAromatic").getBool())
 					{
 						if (not_properties_.find(ALIPHATIC) == not_properties_.end())
 						{
@@ -397,14 +397,14 @@ namespace BALL
 					}
 					if (find(ring_sizes.begin(), ring_sizes.end(), it->second.int_value) != ring_sizes.end())
 					{
-						if (not_properties_.find(IN_RING_SIZE) == not_properties_.end())
+						if (not_properties_.find(IN_RING_SIZE) != not_properties_.end())
 						{
 							return false;
 						}
 					}
 					else
 					{
-						if (not_properties_.find(IN_RING_SIZE) != not_properties_.end())
+						if (not_properties_.find(IN_RING_SIZE) == not_properties_.end())
 						{
 							return false;
 						}
