@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.8.1 2007/03/25 21:32:22 oliver Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.8.2 2007/04/17 12:40:00 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -128,7 +128,7 @@ System* readTestFile(String filename)
 		ait->setProperty("Type", types[pos]);
 		ait->setProperty("TypeName", symbols[pos]);
 		ait->setProperty("OriginalInitialCharge", fcharges[pos]);
-//    		ait->setFormalCharge((Index)fcharges[pos]);
+ 		ait->setFormalCharge((Index)fcharges[pos]);
 		ait->setRadius(charges[pos]);
 	}
 
@@ -170,7 +170,7 @@ bool isOk(double value, double reference, double max_difference = 100)// max 1 p
 	
 	if (max_difference == 10) return diff < diff_max || diff < 0.005;
 
-	return diff < diff_max || diff < 0.001;
+	return diff < diff_max || diff < 0.01;
 }
 	
 
@@ -1144,12 +1144,12 @@ int expressionTest(vector<String>& filenames, String expr, Index type, String ty
 			}
 		}
 
-		vector<HashSet<const Atom*> > result;
+		vector<set<const Atom*> > result;
 		sm.match(result, *system->getMolecule(0), expr);
 
 		for (Position pos = 0; pos < result.size(); pos++)
 		{
-			HashSet<const Atom*>& set = result[pos];
+			set<const Atom*>& set = result[pos];
 			if (set.size() != 1) 
 			{
 				Log.error() << "Problem with smarts expr " << expr  << " in " << __FILE__ << " " << __LINE__ << std::endl;
@@ -1214,6 +1214,11 @@ int main(int argc, char** argv)
 	else if (String(argv[2]) == "bpti")
 	{
 		MMFF94 mmff;
+		mmff.options[MMFF94::Option::NONBONDED_CUTOFF] = 1000;
+		mmff.options[MMFF94::Option::VDW_CUTON] = 1000;
+		mmff.options[MMFF94::Option::VDW_CUTOFF] = 1000;
+		mmff.options[MMFF94::Option::ELECTROSTATIC_CUTOFF] = 1000;
+		mmff.options[MMFF94::Option::ELECTROSTATIC_CUTON] = 1000;
 
 		HINFile pdb("../BALLVIEW/bpti.hin");
 		System system;
@@ -1221,7 +1226,7 @@ int main(int argc, char** argv)
  		mmff.setup(system);
 
 	SmartsMatcher sm;
-	vector<HashSet<const Atom*> > result;
+	vector<set<const Atom*> > result;
 	sm.match(result, *system.getMolecule(0), "[O;$(O=#6)]");
 Log.error() << "#~~#   4 " << result.size()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		/*
