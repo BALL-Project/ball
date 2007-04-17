@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kekulizer.C,v 1.1.4.4 2007/04/13 14:15:14 amoll Exp $
+// $Id: kekulizer.C,v 1.1.4.5 2007/04/17 12:45:58 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/kekulizer.h>
@@ -453,6 +453,8 @@ void Kekuliser::fixAromaticSystem_(Position it)
 	}
 #endif
 	
+	if (current_penalty_ > lowest_penalty_) return;
+
 	// no more atoms in this aromatic system?
 	if (it >= atom_infos_.size())
 	{
@@ -571,9 +573,6 @@ void Kekuliser::fixAromaticSystem_(Position it)
 		tap = 0;
 		if (ai.curr_double == 0) tap = getPenalty_(*ai.atom, -1);
 		
-		// try an early break
-		if (current_penalty_ + tap > lowest_penalty_) return;
-
 		current_penalty_ += tap;
 		fixAromaticSystem_(it + 1);
 		current_penalty_ -= tap;
@@ -714,12 +713,12 @@ void Kekuliser::clear()
 
 Size Kekuliser::getPenalty_(Atom& atom, Index charge)
 {
-#define POSITIVE_NITROGEN 1000
-#define NEGATIVE_NITROGEN 1100
-#define NEGATIVE_CARBON   1200
-#define POSITIVE_CARBON   1300
+#define POSITIVE_NITROGEN 100
+#define NEGATIVE_NITROGEN 110
+#define NEGATIVE_CARBON   120
+#define POSITIVE_CARBON   130
 // if formal charge information available and we get an other charge:
-#define UNEQUAL_CHARGE    10000
+#define UNEQUAL_CHARGE    1000
 
 	if (use_formal_charges_ && atom.getFormalCharge() != 0)
 	{
