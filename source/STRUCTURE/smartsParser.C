@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsParser.C,v 1.13.8.2 2007/04/16 17:32:53 bertsch Exp $
+// $Id: smartsParser.C,v 1.13.8.3 2007/04/17 16:13:32 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/smartsParser.h>
@@ -116,28 +116,28 @@ namespace BALL
 				if (bond->getOrder() == Bond::ORDER__SINGLE)
 				{
 					matches = true;
-					Log.error() << "chiral bond definitions are not implemented yet" << endl;
+					Log.error() << "SmartsParser: chiral bond definitions are not implemented yet" << endl;
 				}
 				break;
 			case SINGLE_UP_OR_ANY:
 				if (bond->getOrder() == Bond::ORDER__SINGLE)
 				{
 					matches = true;
-					Log.error() << "chiral bond definitions are not implemented yet" << endl;
+				 	Log.error() << "SmartsParser: chiral bond definitions are not implemented yet" << endl;
 				}
 				break;
 			case SINGLE_DOWN:
 				if (bond->getOrder() == Bond::ORDER__SINGLE)
 				{
 					matches = true;
-					Log.error() << "chiral bond definitions are not implemented yet" << endl;
+					Log.error() << "SmartsParser: chiral bond definitions are not implemented yet" << endl;
 				}
 				break;
 			case SINGLE_DOWN_OR_ANY:
 				if (bond->getOrder() == Bond::ORDER__SINGLE)
 				{
 					matches = true;
-					Log.error() << "chiral bond definitions are not implemented yet" << endl;
+					Log.error() << "SmartsParser: chiral bond definitions are not implemented yet" << endl;
 				}
 				break;
 			case SINGLE_OR_AROMATIC:
@@ -177,7 +177,7 @@ namespace BALL
 				}
 				break;
 			default:
-				Log.error() << "unknown or not implemented bond order: " << bond_order_ << endl;
+				Log.error() << "SmartsParser: unknown or not implemented bond order: " << bond_order_ << endl;
 		}
 		
 		return not_ ? !matches : matches;
@@ -227,6 +227,7 @@ namespace BALL
 			case  6: return 4; // carbon
 			case  7: return 3; // nitrogen
 			case  8: return 2; // oxygen
+			case 14: return 4; // silicon
 			case 15: return 3; // phosphorus
 			case 16: return 2; // sulfur
 			case  9:
@@ -234,7 +235,7 @@ namespace BALL
 			case 35:
 			case 53: return 1; // halogens
 			default:
-				Log.error() << "SP: default valence not defined of " << an << endl;
+				Log.error() << "SmartsParmer: default valence not defined of element with atomic number" << an << endl;
 				break;
 		};
 		return 0;
@@ -260,7 +261,7 @@ namespace BALL
 					count += 3;
 					break;
 				default:
-					Log.error() << "error: bond order (" << bit->getOrder() << ")" << endl;
+					Log.error() << "SmartsParser: errorneous bond order (" << bit->getOrder() << ")" << endl;
 			}
 		}
 		return Size(count);
@@ -300,7 +301,7 @@ namespace BALL
 					break;
 
 				case ISOTOPE:
-					Log.error() << "SP: isotope not implemented, ignoring" << endl;
+					Log.error() << "SmartsParser: isotope not implemented, ignoring" << endl;
 					break;
 					
 				case CHARGE:
@@ -540,12 +541,12 @@ namespace BALL
 					break;
 					
 				case CHIRALITY:
-					Log.error() << "SP: chirality option not implemented yet" << endl;
+					Log.error() << "SmartsParser: chirality option not implemented yet" << endl;
 					return false;
 					break;
 					
 				default:
-					Log.error() << "not nothing about '" << it->first << "'" << endl;
+					Log.error() << "SmartsParser: know nothing about '" << it->first << "'" << endl;
 					break;
 			}
 
