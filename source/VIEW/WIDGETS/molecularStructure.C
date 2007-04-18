@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.91.14.2 2007/03/25 23:30:50 amoll Exp $
+// $Id: molecularStructure.C,v 1.91.14.3 2007/04/18 19:02:12 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -415,37 +415,7 @@ namespace BALL
 
 		void MolecularStructure::centerCamera(Composite* composite)
 		{
-			Composite* to_center_on = composite;
-			
-			if (to_center_on == 0)
-			{
-				if (getMainControl()->getMolecularControlSelection().size() == 0)
-				{
-					return;
-				}
-
-				to_center_on = *getMainControl()->getMolecularControlSelection().begin();
-			}
-
-			List<Vector3> positions;
-
-			AtomContainer* ai = dynamic_cast<AtomContainer*>(to_center_on);
-			if (ai != 0)
-			{
-				AtomIterator ait = ai->beginAtom();
-				for (; ait != ai->endAtom(); ait++)
-				{
-					positions.push_back((*ait).getPosition());
-				}
-			}
-			else
-			{
-				const Atom* atom = dynamic_cast<const Atom*>(to_center_on);
-				if (atom == 0) return;
-				positions.push_back(atom->getPosition());
-			}
-
-			VIEW::focusCamera(positions);
+			VIEW::focusCamera(composite);
 		}
 
 
