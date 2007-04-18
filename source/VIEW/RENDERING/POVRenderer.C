@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.22.16.1 2007/03/25 21:57:01 oliver Exp $
+// $Id: POVRenderer.C,v 1.22.16.2 2007/04/18 19:26:17 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -403,6 +403,10 @@ namespace BALL
 			}
 
 			out << endl;
+
+			MainControl* mc = getMainControl();
+			vector<ClippingPlane*> vc;
+			if (mc) vc = mc->getRepresentationManager().getClippingPlanes();
 			
 			// write data for all Representations in an own union
 			vector<const Representation*>::iterator rit = representations_.begin();
@@ -419,7 +423,6 @@ namespace BALL
 					render_(*it);
 				}
 
-				const vector<ClippingPlane*>& vc = getMainControl()->getRepresentationManager().getClippingPlanes();
 				vector<ClippingPlane*>::const_iterator plane_it = vc.begin();
 				for (;plane_it != vc.end(); plane_it++)
 				{
