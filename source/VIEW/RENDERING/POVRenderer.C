@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.22.16.2 2007/04/18 19:26:17 amoll Exp $
+// $Id: POVRenderer.C,v 1.22.16.3 2007/04/18 21:06:17 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -216,28 +216,37 @@ namespace BALL
 							<< " +H" << height_ << " +A0.3\n//" << endl;
 				}
 			}
-			// matrix for the Projection matrix 	
-			GLdouble projection_matrix[16];
 
-			// take the Projection matrix	
- 			glGetDoublev(GL_PROJECTION_MATRIX, projection_matrix);
-
-			// determine the projection variables
-			if(projection_matrix[0]==0. || projection_matrix[5]==0. || projection_matrix[10]==1.)
-			{	
-				Log.error() << "Projection variables equal zero! " << endl;
-				return false;
-			}	
-			float nearv   = projection_matrix[14]/(projection_matrix[10]-1);
-			float left   = projection_matrix[14]*(projection_matrix[8]-1) / (projection_matrix[0]*(projection_matrix[10]-1));
-			float bottom = projection_matrix[14]*(projection_matrix[9]-1) / (projection_matrix[5]*(projection_matrix[10]-1));
-			float top    = projection_matrix[14]*(projection_matrix[9]+1) / (projection_matrix[5]*(projection_matrix[10]-1));
-
-			float ratio = left / bottom;
-			Angle fovx(2*atan(ratio*(top-bottom)/(2.*nearv)));
-
+		
 			out << "camera {" << std::setprecision(12) << endl;
 			out << "\t location " << POVVector3(stage.getCamera().getViewPoint()) << endl;
+
+			Angle fovx(105, false);
+			float ratio = 1;
+
+			if (Scene::getInstance(0) != 0)
+			{
+				// matrix for the Projection matrix 	
+				GLdouble projection_matrix[16];
+
+				// take the Projection matrix	
+				glGetDoublev(GL_PROJECTION_MATRIX, projection_matrix);
+
+				// determine the projection variables
+				if(projection_matrix[0]==0. || projection_matrix[5]==0. || projection_matrix[10]==1.)
+				{	
+					Log.error() << "Projection variables equal zero! " << endl;
+					return false;
+				}	
+				float nearv   = projection_matrix[14]/(projection_matrix[10]-1);
+				float left   = projection_matrix[14]*(projection_matrix[8]-1) / (projection_matrix[0]*(projection_matrix[10]-1));
+				float bottom = projection_matrix[14]*(projection_matrix[9]-1) / (projection_matrix[5]*(projection_matrix[10]-1));
+				float top    = projection_matrix[14]*(projection_matrix[9]+1) / (projection_matrix[5]*(projection_matrix[10]-1));
+
+				ratio = left / bottom;
+				fovx.set(2*atan(ratio*(top-bottom)/(2.*nearv)));
+			}
+			
 			out << "\t up y" << endl;
 			out << "\t right -" << ratio << "*x" << endl;
 			out << "\t angle " << fovx.toDegree() << endl;

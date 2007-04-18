@@ -16,7 +16,7 @@ namespace BALL
 				angle_(10),
 				intensity_(0.8),
 				color_(255, 255, 255, 255),
-				type_(0),
+				type_(1),
 				relative_(true)	
 		{
 		}
@@ -237,7 +237,7 @@ namespace BALL
 
 		Stage::Stage()
 			throw()
-			: background_color_(),
+			: background_color_(ColorRGBA(1.,1.,1.,1.)),
 				info_color_(0, 0, 255, 255),
 				light_sources_(),
 				camera_(),
@@ -247,7 +247,7 @@ namespace BALL
 				focal_distance_(40),
 				swap_side_by_side_stereo_(false),
 				specular_(0.4),
-				diffuse_(0.2),
+				diffuse_(0.7),
 				ambient_(0.0),
 				shininess_(128.0)
 		{}
