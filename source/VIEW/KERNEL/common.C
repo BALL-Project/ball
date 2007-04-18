@@ -203,7 +203,7 @@ namespace BALL
 			}
 		}
 
-		void focusCamera(const List<Vector3>& points)
+		SceneMessage* focusCamera(const List<Vector3>& points)
 		{
 			// use processor for calculating the center
 			GeometricCenterProcessor center;
@@ -267,7 +267,46 @@ namespace BALL
 			scene_message->getStage().getCamera().setLookAtPosition(look_at_point);
 			scene_message->getStage().getCamera().setViewPoint(look_at_point- view_vector);
 			scene_message->getStage().getCamera().setLookUpVector(up_vector);
-			getMainControl()->sendMessage(*scene_message);
+			MainControl* mc = getMainControl();
+			if (mc) mc->sendMessage(*scene_message);
+			return scene_message;
+		}
+
+		SceneMessage* focusCamera(Composite* composite)
+		{
+			Composite* to_center_on = composite;
+			
+			if (to_center_on == 0)
+			{
+				MainControl* mc = getMainControl();
+
+				if (mc == 0 || mc->getMolecularControlSelection().size() == 0)
+				{
+					return 0;
+				}
+
+				to_center_on = *mc->getMolecularControlSelection().begin();
+			}
+
+			List<Vector3> positions;
+
+			AtomContainer* ai = dynamic_cast<AtomContainer*>(to_center_on);
+			if (ai != 0)
+			{
+				AtomIterator ait = ai->beginAtom();
+				for (; ait != ai->endAtom(); ait++)
+				{
+					positions.push_back((*ait).getPosition());
+				}
+			}
+			else
+			{
+				const Atom* atom = dynamic_cast<const Atom*>(to_center_on);
+				if (atom == 0) return 0;
+				positions.push_back(atom->getPosition());
+			}
+
+			return focusCamera(positions);
 		}
 
 		String getDataPath()

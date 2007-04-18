@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.40.16.2 2007/04/04 15:02:40 amoll Exp $
+// $Id: common.h,v 1.40.16.3 2007/04/18 18:34:23 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -41,6 +41,7 @@ namespace BALL
 		class GeometricObject;
 		class MainControl;
 		class ColorRGBA;
+		class SceneMessage;
 
 		/** @name defines
 				\ingroup ViewKernelOther
@@ -340,10 +341,15 @@ namespace BALL
 	
 		BALL_VIEW_EXPORT void processDropEvent(QDropEvent* e);
 
-		/** focus the camera on a list of points, e.g. atoms or geometric objects.
+		/** Focus the camera on a Composite
 				Sends a SceneMessage.
 		*/
-		BALL_VIEW_EXPORT void focusCamera(const List<Vector3>& points);
+		BALL_VIEW_EXPORT SceneMessage* focusCamera(Composite* composite);
+
+		/** Focus the camera on a list of points, e.g. atoms or geometric objects.
+				Sends a SceneMessage.
+		*/
+		BALL_VIEW_EXPORT SceneMessage* focusCamera(const List<Vector3>& points);
 
 		/** Get the first defined data path, this should be the content of the environment variable BALLVIEW_DATA_PATH.
 		 		We also sort out double slashes and make sure a slash is at the end.
