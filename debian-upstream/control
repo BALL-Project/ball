@@ -1,6 +1,6 @@
 Source: ballview
 Section: science
-Priority: extra
+Priority: optional
 Maintainer: Andreas Moll <kerosin@gmx.de>
 Build-Depends: debhelper (>= 4), libqt4-dev, libqt4-gui, sip4, python-sip4-dev, flex, bison, autoconf, libglew-dev, python-dev, doxygen, tidy, tetex-base, tetex-bin, tetex-extra, gs-common
 Standards-Version: 3.7.2
