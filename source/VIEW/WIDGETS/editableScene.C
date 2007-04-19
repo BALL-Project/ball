@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.21.14.3 2007/03/26 08:08:17 amoll Exp $
+// $Id: editableScene.C,v 1.21.14.4 2007/04/19 09:41:02 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -413,7 +413,9 @@ void EditableScene::mouseMoveEvent(QMouseEvent *e)
 	// (self bonds make no sense)
 	if (last_atom && 
 			current_atom_ &&
-			last_atom != current_atom_)
+			last_atom != current_atom_ &&
+			// workaround against crashes:
+			&last_atom->getRoot() == &current_atom_->getRoot())
 	{
 		// if we are really close to an atom, the endpoints of the line we draw will be set to
 		// its center, so that the user has a drop in effect for the bonds
@@ -503,7 +505,9 @@ void EditableScene::mouseReleaseEvent(QMouseEvent* e)
 	if (current_atom_)
 	{
 		// is it the atom we started with?
-		if (atom == current_atom_)
+		if (atom == current_atom_ ||
+				// workaround against crashes:
+				&atom->getRoot() != &current_atom_->getRoot())
 		{
 			// in this case, we assume that the user does not want to set a bond
 			draw_line_ = false;
