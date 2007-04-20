@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.14.18.2 2007/03/28 13:58:07 amoll Exp $
+// $Id: representation.sip,v 1.14.18.3 2007/04/20 14:27:45 amoll Exp $
 //
 
 class Representation
@@ -69,6 +69,7 @@ class Representation
 	}
 	sipCpp->setComposites(my_list);
 %End
+	void setComposite(const Composite*) throw();
 
 	ModelProcessor* getModelProcessor() throw();
 	// const ModelProcessor* getModelProcessor() const throw();
