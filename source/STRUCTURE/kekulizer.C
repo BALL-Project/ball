@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kekulizer.C,v 1.1.4.5 2007/04/17 12:45:58 amoll Exp $
+// $Id: kekulizer.C,v 1.1.4.6 2007/04/20 14:09:15 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/kekulizer.h>
@@ -713,19 +713,16 @@ void Kekuliser::clear()
 
 Size Kekuliser::getPenalty_(Atom& atom, Index charge)
 {
-#define POSITIVE_NITROGEN 100
-#define NEGATIVE_NITROGEN 110
-#define NEGATIVE_CARBON   120
-#define POSITIVE_CARBON   130
+#define POSITIVE_NITROGEN 10
+#define NEGATIVE_NITROGEN 11
+#define NEGATIVE_CARBON   25
+#define POSITIVE_CARBON   26
 // if formal charge information available and we get an other charge:
-#define UNEQUAL_CHARGE    1000
+#define UNEQUAL_CHARGE    100
 
 	if (use_formal_charges_ && atom.getFormalCharge() != 0)
 	{
-		if (atom.getFormalCharge() != charge)
-		{
-			return UNEQUAL_CHARGE;
-		}
+		if (atom.getFormalCharge() != charge) return UNEQUAL_CHARGE;
 	
 		return 0;
 	}
@@ -733,31 +730,19 @@ Size Kekuliser::getPenalty_(Atom& atom, Index charge)
 	Position p = atom.getElement().getAtomicNumber();
 	if (p == 6)
 	{
-		if (charge == 1)
-		{
-			return POSITIVE_CARBON;
-		}
-		else if (charge == -1)
-		{
-			return NEGATIVE_CARBON;
-		}
+		if 			(charge == 1)  return POSITIVE_CARBON;
+		else if (charge == -1) return NEGATIVE_CARBON;
 	}
 
 	if (p == 7)
 	{
-		if (charge == -1)
-		{
-			return NEGATIVE_NITROGEN;
-		}
+		if (charge == -1) return NEGATIVE_NITROGEN;
 		else if (charge == 1)
 		{
 			AtomBondIterator abit = atom.beginBond();
 			for (; +abit; ++abit)
 			{
-				if (abit->getPartner(atom)->countBonds() == 1)
-				{
-					return POSITIVE_NITROGEN - 1;
-				}
+				if (abit->getPartner(atom)->countBonds() == 1) return POSITIVE_NITROGEN - 1;
 			}
 
 			return POSITIVE_NITROGEN;
