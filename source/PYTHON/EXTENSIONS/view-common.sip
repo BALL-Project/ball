@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: view-common.sip,v 1.6.16.2 2007/04/18 19:28:19 amoll Exp $
+// $Id: view-common.sip,v 1.6.16.3 2007/04/20 14:16:44 amoll Exp $
 //
 
 %ModuleHeaderCode 
@@ -81,8 +81,8 @@ Vector3 getNormal(const Vector3&)	throw();
 void logString(const String&);
 //QColor chooseColor(QLabel* label);
 //void processDropEvent(QDropEvent* e);
-//SceneMessage* focusCamera(const Vector3List)
-SceneMessage* focusCamera(Composite*);
+//Camera focusCamera(const Vector3List)
+Camera focusCamera(Composite*);
 String getDataPath();
 
 

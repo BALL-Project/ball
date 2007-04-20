@@ -203,7 +203,7 @@ namespace BALL
 			}
 		}
 
-		SceneMessage* focusCamera(const List<Vector3>& points)
+		Camera focusCamera(const List<Vector3>& points)
 		{
 			// use processor for calculating the center
 			GeometricCenterProcessor center;
@@ -263,16 +263,22 @@ namespace BALL
 			view_vector *= distance;
 
 			// update scene
-			SceneMessage *scene_message = new SceneMessage(SceneMessage::UPDATE_CAMERA);
-			scene_message->getStage().getCamera().setLookAtPosition(look_at_point);
-			scene_message->getStage().getCamera().setViewPoint(look_at_point- view_vector);
-			scene_message->getStage().getCamera().setLookUpVector(up_vector);
+			Camera camera;
+			camera.setLookAtPosition(look_at_point);
+			camera.setViewPoint(look_at_point- view_vector);
+			camera.setLookUpVector(up_vector);
+
 			MainControl* mc = getMainControl();
-			if (mc) mc->sendMessage(*scene_message);
-			return scene_message;
+			if (mc)
+			{
+				SceneMessage *scene_message = new SceneMessage(SceneMessage::UPDATE_CAMERA);
+				scene_message->getStage().setCamera(camera);
+				mc->sendMessage(*scene_message);
+			}
+			return camera;
 		}
 
-		SceneMessage* focusCamera(Composite* composite)
+		Camera focusCamera(Composite* composite)
 		{
 			Composite* to_center_on = composite;
 			
@@ -282,7 +288,7 @@ namespace BALL
 
 				if (mc == 0 || mc->getMolecularControlSelection().size() == 0)
 				{
-					return 0;
+					return Camera();
 				}
 
 				to_center_on = *mc->getMolecularControlSelection().begin();
@@ -302,7 +308,7 @@ namespace BALL
 			else
 			{
 				const Atom* atom = dynamic_cast<const Atom*>(to_center_on);
-				if (atom == 0) return 0;
+				if (atom == 0) return Camera();
 				positions.push_back(atom->getPosition());
 			}
 

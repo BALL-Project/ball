@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.34.16.4 2007/03/28 13:51:46 amoll Exp $
+// $Id: representation.h,v 1.34.16.5 2007/04/20 14:19:50 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -184,6 +184,10 @@ namespace BALL
 
 			///
 			void setComposites(const List<const Composite*>& composites)
+				throw();
+
+			///
+			void setComposite(const Composite* composite)
 				throw();
 
 			///

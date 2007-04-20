@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.66.16.2 2007/03/26 08:08:16 amoll Exp $
+// $Id: representation.C,v 1.66.16.3 2007/04/20 14:19:52 amoll Exp $
 //
 
 
@@ -672,6 +672,14 @@ namespace BALL
 			throw()
 		{
 			composites_ = composites;
+			needs_update_ = true;
+		}
+
+		void Representation::setComposite(const Composite* composite)
+			throw()
+		{
+			composites_.clear();
+			composites_.push_back(composite);
 			needs_update_ = true;
 		}
 
