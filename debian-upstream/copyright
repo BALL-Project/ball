@@ -2,6 +2,8 @@ This package was debianized by Andreas Moll <kerosin@gmx.de> on
 Sat, 20 Jan 2007 13:34:29 +0100.
 
 It was downloaded from <www.ballview.org>
+The installation files for Windows and MacOS were removed to 
+ensure smaller source package sizes.
 
 Upstream Author: Andreas Moll <kerosin@gmx.de>
 
