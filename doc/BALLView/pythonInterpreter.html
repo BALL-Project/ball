@@ -26,14 +26,14 @@
 </div>
 <pre>MainControl.getInstance(0)</pre>
 <div align="justify">The MainControl manages almost all loaded objects, like Molecules or Representations. 
-  The documentation of the BALL library gives detailled information on the syntax of this class.
+  The documentation of the BALL library gives detailed information on the syntax of this class.
   Examples for Python script for usage with BALLView can be found in the folder BALL/source/EXAMPLES/PYTHON.
   See also below for an other code example.<br>
 	<br>
-	Users can start scripts, which are stored as extern files, either by calling 'runScript("filename")'in the Python widget or by
+	Users can start scripts, which are stored as external files, either by calling 'runScript("filename")'in the Python widget or by
 	using the menu entry.
   <p>
-  <b>Caveat:</b> Not all methods, which are defined in the C++ library are also exportet to the Python interface.
+  <b>Caveat:</b> Not all methods, which are defined in the C++ library are also exported to the Python interface.
   If a method, which you want to use does not seem to work, have a  look at the *.sip files in
   BALL/source/PYTHON/EXTENSIONS to make sure, this method is exported.<br>
 </div>
@@ -67,7 +67,7 @@ This pops up a window with the BALL documentation for the class and member.
 <h2>Setup a Python startup script</h2>
 <div align="justify">BALLView loads a standard Python script, every time it is started. 
 This script is located in BALL/data/startup.py and defines some shortcuts for obtaining
-objectes and widgets at runtime.
+objects and widgets at runtime.
 Furthermore a user can load an additional Python script at startup. 
 In this script the user can define variables and methods to further simplify usage of the Python interface. 
 The location of the additional startup script is set in the Preferences:
@@ -112,8 +112,8 @@ def removeWater():
   accelerate repetitive tasks dramatically.
 	Furthermore all Python Hotkeys are show as entries in the "User" menu.
 	The standard startup Python Scripts defines many different shortcuts, which can be mapped to any F-key.
-  Thereby a user can e.g. remove all water molecules in the loaded Systems with one keypress. 
-	Of course, it is also possible to start methods defined in the user startup script or extern Python scripts with a hotkey:
+  Thereby a user can e.g. remove all water molecules in the loaded Systems with one key press. 
+	Of course, it is also possible to start methods defined in the user startup script or external Python scripts with a hotkey:
 	Just add an hotkey entry with <i>runScript("filename")</i>.
 	</p>
 <p><img src="images/hotkeys.png"></p>
@@ -160,7 +160,7 @@ def removeWater():
   </tr>
   <tr>
     <td>relaxStructure()</td>
-    <td>Add optimized hydrogens to one loaded system and perform a MD simulation for this system. Remark: Settings for MDS and mimization are
+    <td>Add optimized hydrogens to one loaded system and perform a MD simulation for this system. Remark: Settings for MDS and minimization are
 		take from the corresponding dialog.</td>
   </tr>
   <tr>
@@ -173,7 +173,7 @@ def removeWater():
   </tr>
   <tr>
     <td>clearRepresentations()</td>
-    <td>Remove all represenations in the representations view.</td>
+    <td>Remove all representations in the representations view.</td>
   </tr> 
 	<tr>
     <td>clearAll()</td>
