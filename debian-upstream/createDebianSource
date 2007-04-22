@@ -31,7 +31,7 @@ cp $HOME/$BFILE $FILE2
 # extract content of tgz to new folder
 echo "Extracting tgz..."
 tar xzf $FILE2
-BDIR=`find . -maxdepth 1 -type d | grep BALL`
+BDIR=`find . -maxdepth 1 -type d | grep BALL | grep -v dist`
 echo $BDIR
 rm -rf "ballview-"$2 		2>/dev/null
 mv $BDIR "ballview-"$2
