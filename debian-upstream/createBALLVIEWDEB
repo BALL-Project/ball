@@ -51,6 +51,7 @@ chmod ugo-x $PNAMEC/usr/share/BALL/data/CHARMM/charmm* 	&&
 chmod ugo-x $PNAMEC/usr/share/BALL/data/graphics/* 			&&
 chmod ugo-x $PNAMEC/usr/share/BALL/PYTHON/*.py 					&&
 chmod ugo-x $PNAMEC/usr/share/BALL/data/structures/* 		&&
+chmod 755   $PNAMEC/usr/share/BALL/data/structures/DB/ 	&&
 chmod ugo+x $PNAME/usr/bin/BALLView 										&&
 
 if [ $# == 1 ] && [ $1 == "source" ]
