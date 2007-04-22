@@ -2,7 +2,7 @@ Source: ballview
 Section: science
 Priority: optional
 Maintainer: Andreas Moll <kerosin@gmx.de>
-Build-Depends: debhelper (>= 4), libqt4-dev, libqt4-gui, sip4, python-sip4-dev, flex, bison, autoconf, libglew-dev, python-dev, doxygen, tidy, tetex-base, tetex-bin, tetex-extra, gs-common
+Build-Depends: debhelper (>= 4), libqt4-dev, libqt4-gui, sip4, python-sip4-dev, flex, bison, autoconf, libglew-dev, python-dev, doxygen, tidy, texlive-base, texlive-latex-recommended, gs-common
 Standards-Version: 3.7.2
 
 Package: ballview
