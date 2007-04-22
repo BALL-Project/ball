@@ -1,7 +1,7 @@
 /dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.89.10.2 2007/03/26 09:44:47 amoll Exp $
+dnl		$Id: aclocal.m4,v 1.89.10.3 2007/04/22 18:34:49 amoll Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -28,24 +28,12 @@ dnl		accepted and do not show the license the second time
 dnl
 
 AC_DEFUN(CF_CHECK_LICENSE,[
-AC_PATH_PROG(PAGER, more, no)
-if test "${PAGER}" = "no" ; then
-	PAGER=cat
-fi
-if test ! -f config.lic ; then
-	${PAGER} COPYRIGHT
-	echo " "
-	echo "Do you accept these terms (y/n)?"
-	answer=""
-	while test "$answer" != "y" -a "$answer" != "n" ; do
-		read answer 
-	done
-	if test "$answer" = "n" ; then	
-		exit
-	else
-		echo "accepted" > config.lic
-	fi
-fi
+dnl AC_PATH_PROG(PAGER, more, no)
+dnl if test "${PAGER}" = "no" ; then
+dnl 	PAGER=cat
+dnl fi
+dnl ${PAGER} COPYRIGHT
+dnl echo " "
 ])
 
 dnl		define a macro to remove the directory name
