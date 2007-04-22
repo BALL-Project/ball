@@ -107,8 +107,9 @@ To use antialiasing in POV-Ray, the flag "+A0.3" can be added.
 
 <h2 align = center>Create animations<a name="animations"></a></h2>
 <div align="justify">
-BALLView can create fly by animations from the Scene, either for creating on screen presentations of for exporting images, for creation of movies (see below).
-  All functionality for this feature is called in the menu entry "Display->Animations":<br>
+BALLView can create fly by animations from the Scene, either for creating on screen presentations or 
+for exporting images to create movies (see below).
+  This functionality is available through the menu entry "Display->Animations":<br>
   <br>
 </div>
 
@@ -117,45 +118,55 @@ BALLView can create fly by animations from the Scene, either for creating on scr
     <td><img src="images/animation_menu.png" width="117" height="176"></td>
     <td>
 <div align="justify">
-With the entry "Record" BALLView stores the subsequent sequence of  viewpoints in the Scene. This means, if a user moves the mouse, so that the viewpoint 
-changes, this is recorded and can be reproduced. This is done by calling the menu entry "Start". The animation can be stoped any time, by clicking "Stop".
-"Clear" means, that the recorded sequence is deleted and a new one can be recorded. Click again on "Record" to switch recording off.<br>
-The last three entries can be switched on and off to repeat the animation or export images either directly in the PNG format or throught the POV-Ray renderer.
+When a user presses the "Record", BALLView stores the subsequent sequence of viewpoints in the Scene,
+i.e. if a user moves the mouse, such that the viewpoint changes, this is recorded and can be 
+reproduced. 
+To start a recorded animation, use the "Start" entry.
+The animation can be stoped any time, by clicking "Stop".
+The "Clear" entry allows for deleting the recorded sequence such that a new one can be recorded. 
+Please remember that you have to click again on "Record" to switch off the recording.<br>
+The last three entries allow to repeat the animation or export images either directly in the PNG format or throught the POV-Ray renderer.
 <br>
-Furthermore animations can be created with Python scripts. The examples folder contains some scripts which show this can be done.
+As an alternative, animations can also be created with Python scripts. 
+The examples folder contains some scripts which illustrate how this can be done.
 </td></tr></table>
 
 <h2 align = center>Create movies from pictures<a name="movies"></a></h2>
 <div align="justify">
-To create movies from a set of images on Linux we suggest useage of the GNU program 
-<a href="http://www.mplayerhq.hu/h">mencoder</a>, 
-  which is freely available for Linux, MacOS and Windows.
-  To create an AVI video with 25 frames per second from all PNG images in the current directory with the codec 
-<a href="http://www.xvid.org/">XviD</a> and a bitrate of 1600 kbit/s invoke<p>
+To combine a set of images to a movie on Linux or MacOS, we suggest the program 
+<a href="http://www.mplayerhq.hu/h">mencoder</a>.
+  To create an AVI video with 25 frames per second from all PNG images in the current directory 
+	with the 
+<a href="http://www.xvid.org/">XviD codec</a> and a bitrate of 1600 kbit/s invoke<p>
 <i>mencoder "mf://*.png" -mf fps=25 -o out.avi -ovc xvid -xvidencopts pass=1:bitrate=1600</i>
 <p>
-For Windows users we recommend the free software <a href="http://www.virtualdub.org/">VirtualDub</a>.
+For Windows users, we recommend <a href="http://www.virtualdub.org/">VirtualDub</a>.
 </div>
 
 <h2 align = center>Usage of distance grids<a name="distance_grids"></a></h2>
 <div align="justify">
-You might wonder what a distance grid should be good for (see Menu entry "Tools->Distance Grid").
-This creates a grid with the distance of every point in the grid to the center of the molecule.
-This grid can be used to color surfaces according to the distance of every triangle to the center of the molecule,
-which can create quite nice coloring effects. (see also <a href="geometricControl.html#color_surfaces">here</a>)
+You might wonder what a distance grid is good for (see menu entry "Tools->Distance Grid").
+This entry creates a grid with the distance between every point in the grid to the center of 
+the molecule.
+This grid can be used to color surfaces according to the distance of every triangle to the 
+center of the molecule, which can create nice coloring effects 
+(see also <a href="geometricControl.html#color_surfaces">here</a>).
 </div>
 
 <h2 align = center>Quick save and quick load<a name="quick_load"></a></h2>
 <div align="justify">
-BALLView offers quicksave and quickload functionality through entries in the main toolbar. The state of the application and all loaded
+BALLView offers quicksave and quickload functionality through entries in the main toolbar. 
+The state of the application and all loaded
 molecular data and standard representations are stored in the project file ''quick.bvp'' in the users home directory. This can e.g. be used
 for an undo operation.
 </div>
 
 <h2 align = center>Download PDB files<a name="download_pdb"></a></h2>
 <div align="justify">
-PDB files can be downloaded from the www.pdb.org servers using their PDB identifiers. On some machines it might be necessary to enter the
-data for the proxy configuration (see Preferences below). It is also possible to use mirror sites.
+PDB files can be downloaded from the www.pdb.org servers using their PDB identifiers. 
+On some machines it might be necessary to enter the
+data for the proxy configuration (see Preferences below). 
+It is also possible to use mirror sites.
 <br><br>
 <img src="images/network.png"><br><br>
 </div>
