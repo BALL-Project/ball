@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomTyper.C,v 1.1.4.1 2007/03/22 11:48:17 oliver Exp $
+// $Id: atomTyper.C,v 1.1.4.2 2007/04/24 23:19:08 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/atomTyper.h>
@@ -143,7 +143,7 @@ void AtomTyper::assignTo(Molecule& mol)
 
 	/////////////////////////////////////////////////////////////
 	// Next we iterate over all rule sets:
-	std::set<const Atom*> aromatic_atoms_;
+	std::set<const Atom*> atoms_to_match;
 	HashSet<Atom*>::Iterator atoms_it;
 	HashMap<String, vector<Position> >::Iterator eit = element_to_rules_.begin();
 	for (; +eit; ++eit)
@@ -156,7 +156,7 @@ void AtomTyper::assignTo(Molecule& mol)
 		bool any_atom = element == "X";
 		
 		// collect all atoms, which have the same element, as the current rule set:
-		aromatic_atoms_.clear();
+		atoms_to_match.clear();
 		atoms_it = atoms_.begin();
 		for (; +atoms_it; ++atoms_it)
 		{
@@ -166,7 +166,7 @@ void AtomTyper::assignTo(Molecule& mol)
 				// match only the atoms with the correct element for this rule
 				if (this_element == element)
 				{
-					aromatic_atoms_.insert(*atoms_it);
+					atoms_to_match.insert(*atoms_it);
 				}
 			}
 			else
@@ -174,13 +174,13 @@ void AtomTyper::assignTo(Molecule& mol)
 				// match all atoms with elements, which share a rule set with other elements
 				if (!element_to_rules_.has(this_element))
 				{
-					aromatic_atoms_.insert(*atoms_it);
+					atoms_to_match.insert(*atoms_it);
 				}
 			}
 		}
 
 		// if no atoms to be matched: continue to next rule set
-		if (aromatic_atoms_.size() == 0) continue;
+		if (atoms_to_match.size() == 0) continue;
 
 		const vector<Position>& rule_numbers = eit->second;
 		for (Index nr = (Index)rule_numbers.size() - 1; nr >= 0; nr--)
@@ -194,10 +194,10 @@ void AtomTyper::assignTo(Molecule& mol)
 //      Log.error() << names_[rule]         << " "  << __FILE__ << "  " << __LINE__<< std::endl;
    #ifdef BALL_MMFF94_TEST
 				if (!rule_times.has(names_[rule])) rule_times[names_[rule]] = 0;
-   #endif
 				Timer t;
 				t.start();
-				sm.match(result, mol, rules_[rule], aromatic_atoms_);
+   #endif
+				sm.match(result, mol, rules_[rule], atoms_to_match);
 				if (result.size() == 0) continue;
 
 				// iterate over all matched atoms, and set values accordingly:
@@ -206,7 +206,9 @@ void AtomTyper::assignTo(Molecule& mol)
 					std::set<const Atom*>& set = result[pos];
 					if (set.size() != 1) 
 					{
-						Log.error() << "Problem with smarts expr " << rules_[rule]  << " in " << __FILE__ << " " << __LINE__ << std::endl;
+						Log.error() << "Problem with smarts expr " << rules_[rule]
+												<< " : More than one atom in group matched"
+												<< " in " << __FILE__ << " " << __LINE__ << std::endl;
 						continue;
 					}
 
@@ -215,7 +217,7 @@ void AtomTyper::assignTo(Molecule& mol)
 					atom.setTypeName(names_[rule]);
 					assignSpecificValues_(atom);
 					// erase the atom from the sets of atoms, that are still to be matched
-					aromatic_atoms_.erase(&atom);
+					atoms_to_match.erase(&atom);
 					atoms_.erase(&atom);
 				}
    #ifdef BALL_MMFF94_TEST
