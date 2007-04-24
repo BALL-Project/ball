@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RepresentationManager_test.C,v 1.1.4.1 2007/03/25 21:48:52 oliver Exp $
+// $Id: RepresentationManager_test.C,v 1.1.4.2 2007/04/24 22:56:31 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -29,6 +29,7 @@ QApplication app(args, &argv);
 MainControl mc;
 DisplayProperties* dp = new DisplayProperties(&mc);
 dp->initializeWidget(mc);
+dp->initializePreferencesTab(*mc.getPreferences());
 
 CHECK(CSTR)
 	RepresentationManager rm;
@@ -226,13 +227,17 @@ CHECK(restoreRepresentations(const INIFile& in, const vector<const Composite*>& 
 	vector<const Composite*> new_systems;
 	new_systems.push_back(system);
 	mrm.clear();
+	TEST_EQUAL(mrm.getNumberOfRepresentations(), 0);
 	mrm.restoreRepresentations(infile, new_systems);
 	TEST_EQUAL(mrm.getNumberOfRepresentations(), 1);
 	if (mrm.getNumberOfRepresentations() == 1)
 	{
-		TEST_EQUAL(**mrm.begin() == rrep, true)
-		(**mrm.begin()).dump();
-		(rrep).dump();
+		Representation& rep = **mrm.begin();
+		TEST_EQUAL(rep.getModelType(), rrep.getModelType())
+		TEST_EQUAL(rep.getColoringMethod(), rrep.getColoringMethod())
+		TEST_EQUAL(rep.getTransparency(), rrep.getTransparency())
+		TEST_EQUAL(rep.getDrawingMode(), rrep.getDrawingMode())
+		TEST_EQUAL(rep.isHidden(), rrep.isHidden())
 	}
 
 	TEST_EQUAL(mrm.getClippingPlanes().size(), 1)

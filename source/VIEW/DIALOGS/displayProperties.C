@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.16.3 2007/03/28 13:51:51 amoll Exp $
+// $Id: displayProperties.C,v 1.101.16.4 2007/04/24 22:56:56 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -255,7 +255,7 @@ void DisplayProperties::modifyRepresentationMode(Representation* rep)
 		setColor(custom_color_label, custom_color_);
 	}
 
-	transparency_slider->setValue((Size)(rep_->getTransparency() / 2.55));
+	transparency_slider->setValue(rep_->getTransparency());
 
 	coloring_updates_enabled->setChecked(rep_->coloringUpdateEnabled());
 	model_updates_enabled->setChecked(rep_->modelUpdateEnabled());
@@ -505,7 +505,7 @@ void DisplayProperties::applyColoringSettings_(Representation& rep)
 		rep.setColoringMethod(current_coloring);
 	}
 
-	Size transparency = (Size)((float)transparency_slider->value() * 2.55);
+	Size transparency = transparency_slider->value();
 	custom_color_ = getColor(custom_color_label);
 	custom_color_.setAlpha(255 - transparency);
 	rep.setTransparency(transparency);
@@ -547,6 +547,7 @@ Representation* DisplayProperties::createRepresentation(const List<Composite*>& 
 		temp_composites.push_back(*it);
 	}
 	rep_->setComposites(temp_composites);
+	if (hidden) rep_->setHidden(true);
 
 	// this is not straight forward, but we have to prevent a second rendering run in the Scene...
 	// the insertion into the RepresentationManager is needed to allow the Representation::update
@@ -605,7 +606,7 @@ void DisplayProperties::applyTo_(Representation* rep)
 	}
 	else
 	{
-		Size transparency = (Size)(transparency_slider->value() * 2.55);
+		Size transparency = transparency_slider->value();
 
 		if (!coloring_updates_enabled->isChecked() &&
 		    rep_->getTransparency() != transparency)
@@ -646,7 +647,7 @@ void DisplayProperties::applyTo_(Representation* rep)
 
 void DisplayProperties::transparencySliderChanged()
 {
-	String text = String(transparency_slider->value());
+	String text = String((int)((float)transparency_slider->value()/2.55));
 	text += String("%");
 	transparency_label->setText(text.c_str());
 }
@@ -788,7 +789,7 @@ bool DisplayProperties::getSettingsFromString(const String& data)
 		setDrawingPrecision(fields[2].toUnsignedInt());
 		setSurfaceDrawingPrecision(fields[3].toFloat());
 		selectColoringMethod(fields[4].toUnsignedInt());
-		setTransparency((Position)(fields[5].toFloat() / 2.55));
+		setTransparency(fields[5].toInt());
 		return true;
 	}
 	catch(...)
@@ -813,12 +814,26 @@ void DisplayProperties::createRepresentation(String data_string, const vector<co
 
 		// split off information of system number
 		data_string.split(string_vector, ";");
+		if (string_vector.size() < 2)
+		{
+			BALLVIEW_DEBUG
+			return;
+		}
+
 		Position system_pos = string_vector[0].toUnsignedInt();
 
 		// split off between representation settings and composite numbers
 		data_string = string_vector[1];
 		vector<String> string_vector2;
 		data_string.split(string_vector2, "[]");
+		if (string_vector2.size() < 3) 
+		{
+			BALLVIEW_DEBUG
+			return;
+		}
+
+		bool hidden = (string_vector2.size() >= 3 && string_vector2[2].has('H'));
+
 		data_string = string_vector2[0];
 
 		// Composites id's per number
@@ -870,7 +885,6 @@ void DisplayProperties::createRepresentation(String data_string, const vector<co
 			return;
 		}
 
-		bool hidden = (string_vector2.size() == 3 && string_vector2[2].has('H'));
 		createRepresentation(c_list, hidden);
 	}
 	catch(...)
