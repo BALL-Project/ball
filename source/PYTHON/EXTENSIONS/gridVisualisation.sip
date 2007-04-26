@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualisation.sip,v 1.1.4.1 2007/03/25 21:37:09 oliver Exp $
+// $Id: gridVisualisation.sip,v 1.1.4.2 2007/04/26 11:11:07 amoll Exp $
 //
 
 class GridVisualisation 
@@ -52,7 +52,7 @@ class GridVisualisation
 %MethodCode
 	sipRes = PyString_FromString(String(String("GridVisualisation ") 
 						+ " { "
-						+ "   Grid: " + String((int)sipCpp->getGrid())
+						+ "   Grid: " + String((long int)sipCpp->getGrid())
 						+ "   Texture: " + String(sipCpp->getTexture())
 						+ " }").c_str());
 %End
@@ -61,7 +61,7 @@ class GridVisualisation
 %MethodCode
 	sipRes = PyString_FromString(String(String("GridVisualisation ") 
 						+ " { "
-						+ "   Grid: " + String((int)sipCpp->getGrid())
+						+ "   Grid: " + String((long int)sipCpp->getGrid())
 						+ "   Texture: " + String(sipCpp->getTexture())
 						+ " }").c_str());
 %End

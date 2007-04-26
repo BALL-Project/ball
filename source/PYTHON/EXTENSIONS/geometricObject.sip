@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.sip,v 1.5.20.1 2007/03/25 21:37:09 oliver Exp $
+// $Id: geometricObject.sip,v 1.5.20.2 2007/04/26 11:11:06 amoll Exp $
 //
 
 class GeometricObject
@@ -84,7 +84,7 @@ class GeometricObject
 %MethodCode
 	sipRes = PyString_FromString(String(String("GeometricObject") 
 						+ " { "
-						+ " Composite: " + String((int)sipCpp->getComposite())
+						+ " Composite: " + String((long int)sipCpp->getComposite())
 						+ " }").c_str());
 %End
 
@@ -92,7 +92,7 @@ class GeometricObject
 %MethodCode
 	sipRes = PyString_FromString(String(String("GeometricObject") 
 						+ " { "
-						+ " Composite: " + String((int)sipCpp->getComposite())
+						+ " Composite: " + String((long int)sipCpp->getComposite())
 						+ " }").c_str());
 %End
 
