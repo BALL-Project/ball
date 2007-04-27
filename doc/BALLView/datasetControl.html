@@ -22,18 +22,47 @@
 <img src="images/datasetControl.png" width=291 height=194 border=0><br>
 <div align="justify">
     <br>
-    The DatasetControl enables the user to manage 1D, 2D and 3D grids and also trajectories.
+    The DatasetControl enables the user to manage scalar and vector grids (e.g. for potential fields),
+		docking results, and trajectories.
   All these items can be loaded and saved as files. 
-  To save an item,  it must be highlighted and then the user can open the context menu with the right mouse button. 
-  To open a trajectory, the system to which it is bound, has to be highlighted.
+	To switch the visibility of the DatasetControl, the menu entry Windows-DatasetControl can be used.
+  To operate on one of its items,  the item must be highlighted. 
+	Then a context menu can be opened with the right mouse button. 
+	<br>
+	The functionality to open the above data types are available through the menu entry File-Open.
+  To read a trajectory, the system to which it is bound, has to be highlighted.
   Then the menu entry "File-Open-Trajectory" can be used. </div>
 <p></p>
 
+<a name="calculate_potential_fields"></a><H3>Calculate a potential field</H3>
+<div align="justify">
+BALLView supports the calculation of molecular potential fields through its integrated
+Finite Difference Boisson Bolzmann Solver (FDPB).
+Before a structure is ready for this feature, any missing (hydrogen) atoms must be added and
+the molecule's charges must be assigned. The later can be done through a single point 
+energy calculation (Molecular Mechanics-Single Point Energy). 	
+Then highlight the System in the MolecularControl and open the FDPB dialog with the menu 
+entry <b>"Tools->FDPB Electrostatics"</b>. The resulting dialog allow all kind of settings.
+Maybe the most important is the "spacing", since it determines the resolution of the resulting
+grid. Be careful about to small values, since your computer may then run out of memory.
+When a user starts the calculation with the "OK" button, the 
+potenial field is stored as a threedimenisonal grid  in the DatasetControl.
+</div>
+
 <a name="visualise_datasets"></a><H3>Visualize datasets</H3>
+<div align="justify">
+BALLView offers a variety of different methods to visualize three-dimensional data grids, e.g.
+from potential fields. 
+To visualize a 3D grid, it must be loaded into the DatasetControl and the corresponding entry
+must be highlighted. 
+Then a context menu can be opened with the right mouse button. 
+<br>
+	</div>
+<div align=center> <img src="images/dsc_menu.png" border=0></div>
+
 <h3>Create isocontour surfaces<a name="isocontour_surface"></a></h3>
 <div align="justify">
-For creation of an isocontour surface, a 3D grid must be loaded into the DatasetControl.
-The dialog for creating the isocontour surface is opened by clicking on the menu entry "Tools-Contour Surface". </div>
+The dialog for creating the isocontour surface is opened by clicking on the menu entry "Tools-Contour Surface" or through the corresponding context menu entry. </div>
  <br>  <br>  
 	<br>
 	<center>
