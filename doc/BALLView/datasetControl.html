@@ -18,7 +18,7 @@
 </h2>
 <hr width=700>
 
-<h2>DatasetControl</h2><br>
+<h2>DatasetControl</h2>
 <img src="images/datasetControl.png" width=291 height=194 border=0><br>
 <div align="justify">
     <br>
@@ -56,14 +56,22 @@ from potential fields.
 To visualize a 3D grid, it must be loaded into the DatasetControl and the corresponding entry
 must be highlighted. 
 Then a context menu can be opened with the right mouse button. 
-<br>
-	</div>
+<br><br>
 <div align=center> <img src="images/dsc_menu.png" border=0></div>
-
+<br><br>
+Currently, we support the following visualization methods for scalar data grids:
+<ol>
+<li><a href=geometricControl.html#color_surfaces>Coloring of surfaces</a>
+<li><a href=#isocontour_surface>Contour surfaces</a>
+<li><a href=#volume>Volume Rendering</a>
+<li><a href=#volume>Coloring of user-defined planes</a>
+<li><a href=#fieldlines>Visualization of field lines</a> (after creating a vector field)
+<li>Coloring of spheres
+</ol>
+	</div>
 <h3>Create isocontour surfaces<a name="isocontour_surface"></a></h3>
 <div align="justify">
 The dialog for creating the isocontour surface is opened by clicking on the menu entry "Tools-Contour Surface" or through the corresponding context menu entry. </div>
- <br>  <br>  
 	<br>
 	<center>
 	<img src="images/contour_surface_dialog.png" border=0><br>  <br>
@@ -71,10 +79,76 @@ The dialog for creating the isocontour surface is opened by clicking on the menu
 <div align="justify">
 On the upper half, the user can select the grid. In the lower half the threshold for the isocontour surface can be set.
 The color can be freely selected by clicking on the button "Edit" and using the color selection dialog.
-A possible result can be seen below.<br>  <br>  <img src="images/contour_surface.png" width="552" height="451" border=0>
-  
+A possible result can be seen below.
+<br><br>
+	<center>
+<img src="images/contour_surface.png" width="552" height="451" border=0>
 	</div>
 <p></p>
+<div align="justify">
+Remember that you can also create multiple isosurfaces with differing values and colors and slice
+them open with a clipping plane. <br><br>
+	</div>
+	<img src="images/cs.png" border=0><br>  <br>
+ <br>  
+<h3>Volume rendering and coloring of user-defined planes<a name="volume"></a></h3>
+<div align="justify">
+The dialog for this functionality is opened by using the context-menu of the DatasetControl 
+(see above).  <br>  <br>  
+	<center>
+	<img src="images/volume-dialog.png" border=0><br>  <br>
+<div align="justify">
+Due to some OpenGL internals, the used data grids must have size of 2^X for all
+three dimensions. If a grid does not fullfil this constraint, it is automatically resized to
+the next fitting size. An other constraint of the current implementation is that for
+every grid only one OpenGL texture can be created. Please keep this in mind when you create
+multiple volume visualizations for one grid. The following two images show an example for
+the volume and plane visualizations. Remember that the planes can be freely replace by
+using the move mode. To do so, the plane's representation must be highlighted in the GeomtricControl.
+<br><br>
+	</div>
+ 
+	<center>
+	<img src="images/volume.png" border=0><br>  <br>
+	<img src="images/plane.png" border=0><br>  <br>
+<br>
+
+<a name="fieldlines"></a><H3>Visualize field lines</H3>
+<div align="justify">
+BALLView sipports the rendering of field lines for vector grids. To create a vector grid
+from a scalar grid, use the context menu of the DatasetControl.
+Then, highlight the entry for new vector grid. Now the context menu provides an entry
+"Visualize VectorGrid". This opens the following dialog:<br><br>
+	<div align=center> <img src="images/fl-dialog.png" border=0></div>
+	<br>
+While the path of a field line is determined by the vector field, there are many different ways 
+for controlling the distribution of field lines in 
+three-dimensional space.
+Therefore, we implemented two distinct ways for calculating the starting positions of the individual
+field lines.
+The first approach generates a number of equidistant points for every individual atom. 
+Each point becomes the start position for one field line.<br>
+Next, we implemented an approach that was described by 
+Stalling et al.,
+in which the line placement is based on the electrostatic field strength.
+The data grid is divided into equally sized cubes and the probability for one field line
+to start in any given cube is proportional to the strength of the field in that cube.
+The exact three-dimensional position in the cube is then randomly chosen.
+This approach provides a good overview of a field's strength, since it directly corresponds to the spatial field
+line density.
+</div>
+<br>
+	<div align=center> <img src="images/fl.jpg" border=0></div>
+<div align="justify">
+<br>
+To obtain further informations on the potential field's characteristics, BALLView supports 
+the coloring of individual field lines with respect to the electrostatic potential.
+To achieve best results, users can freely choose the colors and interpolation values or 
+use transparency.
+	<br>
+</div>
+
+<br>
 <a name="visualise_trajectories"></a><H3>Visualize Trajectories</H3>
 <p align="justify">To visualize a trajectory, it has to be loaded into the DatasetControl. When it is highlighted, the context menu entry &quot;Visualize/Export&quot; opens the following dialog:<br>
   <br>
