@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardDatasets.C,v 1.1.4.1 2007/03/25 21:56:36 oliver Exp $
+// $Id: standardDatasets.C,v 1.1.4.2 2007/04/29 20:02:28 amoll Exp $
 //
 
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
@@ -314,12 +314,14 @@ namespace BALL
 
 			insertMenuEntry_(MainControl::TOOLS_GRID, "Resize for Rendering", SLOT(resizeGrid()));
 			getDatasetControl()->setMenuHint("Resize a grid for rendering");
+			getDatasetControl()->setMenuHelp("datasetControl.html#volume");
 
 			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID);
 
 			// visualizations:
 			insertMenuEntry_(MainControl::TOOLS_GRID, "Visualize 3D Grid", SLOT(visualizeGrid()));
 			getDatasetControl()->setMenuHint("Visualise a grid");
+			getDatasetControl()->setMenuHelp("datasetControl.html#volume");
 
 			insertMenuEntry_(MainControl::TOOLS_GRID, "Render Contour S&urface", 
 																							SLOT(computeIsoContourSurface()), Qt::CTRL+Qt::Key_U);

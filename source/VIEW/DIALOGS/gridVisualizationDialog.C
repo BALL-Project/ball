@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualizationDialog.C,v 1.1.6.1 2007/03/25 22:02:00 oliver Exp $
+// $Id: gridVisualizationDialog.C,v 1.1.6.2 2007/04/29 20:02:29 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/gridVisualizationDialog.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -62,6 +63,11 @@ namespace BALL
 			connect( mode_tab, SIGNAL( currentChanged(int) ), this, SLOT(gridTransparencyChanged()));
 
 			setObjectName(name);
+
+			RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
+			msg->setObject(this);
+			msg->setURL("datasetControl.html#volume");
+			getMainControl()->sendMessage(*msg);
 
 			VIEW::setColor(min_min_label, ColorRGBA(255,0,0));
 			VIEW::setColor(min_label, ColorRGBA(255,0,0));
