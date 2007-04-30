@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardDatasets.C,v 1.1.4.2 2007/04/29 20:02:28 amoll Exp $
+// $Id: standardDatasets.C,v 1.1.4.3 2007/04/30 19:25:27 anhi Exp $
 //
 
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
@@ -667,6 +667,8 @@ namespace BALL
 			set->setData(manager);
 			set->setName(name);
 			set->setType(type_);
+			set->setComposite(system);
+
 			return set;
 		}
 
