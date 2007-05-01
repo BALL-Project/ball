@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardDatasets.C,v 1.1.4.3 2007/04/30 19:25:27 anhi Exp $
+// $Id: standardDatasets.C,v 1.1.4.4 2007/05/01 21:59:49 amoll Exp $
 //
 
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
@@ -708,7 +708,11 @@ namespace BALL
 			}
 
 			SnapShotManager* ssm = getData(getSelectedDataset());
-			if (ssm == 0) return false;
+			if (ssm == 0) 
+			{
+				BALLVIEW_DEBUG
+				return false;
+			}
 
 			dialog_ = new SnapshotVisualisationDialog(getDatasetControl());
 			dialog_->setSnapShotManager(ssm);
