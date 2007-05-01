@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.175.14.1 2007/03/25 22:02:23 oliver Exp $
+// $Id: mainControl.C,v 1.175.14.2 2007/05/01 21:37:04 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -1735,6 +1735,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		bool MainControl::unlockCompositesFor(ModularWidget* widget)
 			throw()
 		{
+			if (!composites_locked_) return true;
+
 			if (locking_widget_ != widget) return false;
 			composites_locked_mutex_.unlock();
 			composites_locked_ = false;

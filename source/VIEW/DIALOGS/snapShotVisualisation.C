@@ -348,6 +348,7 @@ void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_m
 		return;
 	}
 
+	snap_shot_manager_->clearBuffer();
   tmp_.setNum(snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots());
 	numberOfSnapshots->setText(tmp_);
 	endSnapshot->setText(tmp_);
@@ -439,7 +440,10 @@ void SnapshotVisualisationDialog::checkRock()
 void SnapshotVisualisationDialog::stop_()
 {
 	cancel_ = true;
-	unlockComposites();
+	if (!unlockComposites())
+	{
+		BALLVIEW_DEBUG
+	}
 }
 
 void SnapshotVisualisationDialog::show()
@@ -451,8 +455,13 @@ void SnapshotVisualisationDialog::show()
 		return;
 	}
 
-	if (!lockComposites()) return;
+	if (!lockComposites()) 
+	{
+		BALLVIEW_DEBUG
+		return;
+	}
 	QDialog::show();
+	snap_shot_manager_->applyFirstSnapShot();
 }
 
 void SnapshotVisualisationDialog::closeEvent(QCloseEvent*)
