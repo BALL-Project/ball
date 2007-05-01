@@ -41,7 +41,7 @@ MolecularDynamicsDialog::MolecularDynamicsDialog(QWidget* parent, const char* na
 	connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
 	connect( steps_lineedit, SIGNAL( textChanged(const QString&) ), this, SLOT( timeChanged() ) );
 	connect( timestep_linedit, SIGNAL( textChanged(const QString&) ), this, SLOT( timeChanged() ) );
-	connect( enable_dcd, SIGNAL( clicked() ), this, SLOT( enableDCDFileSelected() ) );
+	connect( enable_dcd, SIGNAL( stateChanged(int) ), this, SLOT( enableDCDFileSelected() ) );
 	connect( advanced_button, SIGNAL( clicked() ), this, SLOT( advancedOptions() ) );
 	connect( browse_button, SIGNAL( clicked() ), this, SLOT( chooseDCDFile() ) );
 }
