@@ -78,9 +78,12 @@ downloads a contrib source package from our website. It contains almost
 all dependencies and prevents any clashes with already installed libraries,
 by compiling and installing them in a subfolder in the BALL directory.
 Afterwards, the BALL library is configured, build and linked against the
-downloaded libraries. This kind of installation will include all of BALL 
-and BALLView's features. If this is not desired or you want to configure 
-the library with different settings, please proceed like stated below:
+downloaded libraries. 
+To run BALLView, all that is then needed is start the BALL/source/startBALLView
+script.
+This above installation method will include all of BALL and BALLView's 
+features. If this is not desired or you want to configure the library with
+different settings, please proceed like stated below:
 
 As an alternative BALL can be configured with a classical configure/make
 run. If all requirements stated in section 1 are met, BALL is built by 
@@ -318,4 +321,4 @@ GLEW
 	the platform's standard locations.
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.18.16.1 2007/03/25 21:59:53 oliver Exp $
+document revision: $Id: INSTALLATION,v 1.18.16.2 2007/05/03 15:10:50 amoll Exp $
