@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.35.4.6 2007/04/09 21:29:42 amoll Exp $
+# $Id: Makefile.lst,v 1.35.4.7 2007/05/07 11:52:38 aleru Exp $
 #
 # Author:
 #  Oliver Kohlbacher
@@ -153,6 +153,8 @@ $(PREFIX)EnergyMinimizer_test$(EXEEXT)\
 $(PREFIX)LineSearch_test$(EXEEXT)\
 $(PREFIX)SteepestDescentMinimizer_test$(EXEEXT)\
 $(PREFIX)ConjugateGradientMinimizer_test$(EXEEXT)\
+$(PREFIX)StrangLBFGSMinimizer_test$(EXEEXT)\
+$(PREFIX)ShiftedLVMMMinimizer_test$(EXEEXT)\
 $(PREFIX)AtomTypes_test$(EXEEXT)
 
 EXECUTABLES_NMR = \
