@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.44.8.3 2007/03/28 15:41:17 amoll Exp $
+// $Id: BALL.sip,v 1.44.8.4 2007/05/07 11:46:42 aleru Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -209,8 +209,10 @@
 // MOLMEC/MINIMIZATION
 %Include conjugateGradient.sip
 %Include energyMinimizer.sip
-// %Include lineSearch.sip
+%Include lineSearch.sip
 %Include steepestDescent.sip
+%Include strangLBFGS.sip
+%Include shiftedLVMM.sip
 
 // MOLMEC/PARAMETER
 // %Include atomTypes.sip
