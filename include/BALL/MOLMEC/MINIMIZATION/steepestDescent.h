@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.h,v 1.24 2005/12/23 17:01:53 amoll Exp $
+// $Id: steepestDescent.h,v 1.24.20.1 2007/05/07 11:48:10 aleru Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
@@ -17,99 +17,100 @@
 
 namespace BALL 
 {
-	/** SteepestDescentMinimizer
-      \ingroup  MolmecEnergyMinimizer
+	/** A minimizer for geometry optimization based on steepest descent steps.
+	 *  \ingroup  MolmecEnergyMinimizer
 	 */
 	class BALL_EXPORT SteepestDescentMinimizer 
-		:	public EnergyMinimizer	
+		: public EnergyMinimizer
 	{
-
+		
 		public:
-
-		/**	@name	Constructors and Destructors	
-		*/
-		//@{
-		
-		BALL_CREATE(SteepestDescentMinimizer)
-
-		/**	Default constructor.
-		*/
-		SteepestDescentMinimizer();
-
-		/**	Constructor.
-		*/
-		SteepestDescentMinimizer(ForceField& force_field);
-
-		/**	Constructor.
-		*/
-		SteepestDescentMinimizer(ForceField& force_field,SnapShotManager *ssm);
-
-		/**	Constructor.
-		*/
-		SteepestDescentMinimizer(ForceField& force_field, const Options& options);
-
-		/**	Constructor.
-		*/
-		SteepestDescentMinimizer(ForceField& force_field, SnapShotManager* ssm, const Options& options);
-
-		/**	Copy constructor
-		*/
-		SteepestDescentMinimizer(const SteepestDescentMinimizer& minimizer);
-
-		/**	Destructor.
-		*/
-		virtual ~SteepestDescentMinimizer();
-
-		//@}
-		/**	@name	Assignments 
-		*/
-		//@{
-
-		/**	Assignment operator
-		*/
-		const SteepestDescentMinimizer&	operator = (const SteepestDescentMinimizer& minimizer);
-		//@}
-
-		/**	@name	Setup methods 
-		*/
-		//@{
-
-		/**	Specific setup
-		*/
-		virtual bool specificSetup();
-		//@}
-
-		/**	Minimize the energy of the system using a greedy steepest descent.
-		*/
-		virtual bool minimize(Size steps = 0, bool resume = false);
-
-		/** Find the next step using a line search.
-		*/
-		virtual double findStep();
-
-		/**	Update the search direction.
-				Steepest descent searches along the current gradient only.
-				Therefore, updateDirection only assigns direction to the last gradient
-				computed (current_gradient_).
-		*/
-		virtual void updateDirection();
-
-		/** Update the step size.
-		 */
-		virtual void updateStepSize(double lambda);
-		
+			
+			/** @name Constructors and Destructors
+			*/
+			//@{
+			
+			BALL_CREATE(SteepestDescentMinimizer)
+			
+			/** Default constructor.
+			*/
+			SteepestDescentMinimizer();
+			
+			/** Constructor.
+			*/
+			SteepestDescentMinimizer(ForceField& force_field);
+			
+			/** Constructor.
+			*/
+			SteepestDescentMinimizer(ForceField& force_field,SnapShotManager *ssm);
+			
+			/** Constructor.
+			*/
+			SteepestDescentMinimizer(ForceField& force_field, const Options& options);
+			
+			/** Constructor.
+			*/
+			SteepestDescentMinimizer(ForceField& force_field, SnapShotManager* ssm, const Options& options);
+			
+			/** Copy constructor
+			*/
+			SteepestDescentMinimizer(const SteepestDescentMinimizer& minimizer);
+			
+			/** Destructor.
+			*/
+			virtual ~SteepestDescentMinimizer();
+			
+			//@}
+			/** @name Assignments
+			*/
+			//@{
+			
+			/** Assignment operator
+			*/
+			const SteepestDescentMinimizer&	operator = (const SteepestDescentMinimizer& minimizer);
+			
+			//@}
+			/** @name Setup methods
+			*/
+			//@{
+			
+			/** Specific setup
+			*/
+			virtual bool specificSetup();
+			
+			//@}
+			/** @name Accessors
+			 */
+			//@{
+			
+			/** Minimize the energy of the system using scaled steepest descent steps.
+			*/
+			virtual bool minimize(Size steps = 0, bool resume = false);
+			
+			/** Find the next step using a line search.
+			*/
+			virtual double findStep();
+			
+			/** Update the search direction.
+			 *  (Scaled) steepest descent searches along the current gradient only.
+			 *  Therefore, updateDirection only assigns direction to the (scaled) last gradient
+			 *  computed (current_gradient_).
+			 */
+			virtual void updateDirection();
+			
 		protected:
-
-		/**	The line search minimizer.
-				This member is used to perform the line search in findStep
-		*/
-		LineSearch line_search_;
-
-		/**	The current step size.
-				This is used in findStep as an argument to the line search.
-				The step size is chosen and adjusted in the  \link minimize minimize \endlink .
-		*/
-		double step_;
+			
+			//@}
+			/** @name Protected Attributes
+			 */
+			//@{
+			
+			/*_ The line search minimizer.
+					This member is used to perform the line search in findStep
+			*/
+			LineSearch line_search_;
+			//@}
+			
 	};
 } // namespace BALL
 
