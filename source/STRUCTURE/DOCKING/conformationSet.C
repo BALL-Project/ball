@@ -98,7 +98,7 @@ namespace BALL
 				structures_[snapshot_order_[i].first].applySnapShot(system_);
 				ssm.takeSnapShot();
 			}
-		
+			ssm.flushToDisk();	
 			dcd.close();
 		}
 		catch(...)
