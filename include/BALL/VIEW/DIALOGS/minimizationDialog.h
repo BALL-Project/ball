@@ -62,6 +62,18 @@ namespace BALL
 				void setEnergyDifference(double energy_difference);
 				
 				///
+				bool getUseStrangLBFGS() const;
+
+				///
+				void setUseStrangLBFGS(bool use_LBFGS);
+
+				///
+				bool getUseShiftedLVMM() const;
+
+				///
+				void setUseShiftedLVMM(bool use_shifted);
+
+				///
 				bool getUseConjugateGradient() const;
 				
 				///

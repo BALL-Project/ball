@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>MinimizationDialogData</class>
  <widget class="QDialog" name="MinimizationDialogData" >
   <property name="geometry" >
@@ -42,6 +39,202 @@
    <property name="spacing" >
     <number>6</number>
    </property>
+   <item row="1" column="0" >
+    <widget class="QGroupBox" name="minimization_group" >
+     <property name="title" >
+      <string>Algorithm</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="3" column="0" >
+       <widget class="QRadioButton" name="steepest_button" >
+        <property name="text" >
+         <string>Steepest Descent</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QRadioButton" name="conjugate_button" >
+        <property name="text" >
+         <string>Conjugate Gradient</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QRadioButton" name="SLBFGS_button" >
+        <property name="text" >
+         <string>L-BFGS</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QRadioButton" name="SLVMM_button" >
+        <property name="text" >
+         <string>Shifted LVMM</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="1" >
+    <widget class="QPushButton" name="cancel_button" >
+     <property name="minimumSize" >
+      <size>
+       <width>0</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>32767</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="focusPolicy" >
+      <enum>Qt::TabFocus</enum>
+     </property>
+     <property name="toolTip" >
+      <string>Close window without energy minimization</string>
+     </property>
+     <property name="text" >
+      <string>Cancel</string>
+     </property>
+     <property name="shortcut" >
+      <string/>
+     </property>
+     <property name="autoDefault" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QPushButton" name="start_button" >
+     <property name="minimumSize" >
+      <size>
+       <width>0</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>32767</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="focusPolicy" >
+      <enum>Qt::TabFocus</enum>
+     </property>
+     <property name="toolTip" >
+      <string>Start minimization</string>
+     </property>
+     <property name="text" >
+      <string>&amp;Minimize</string>
+     </property>
+     <property name="shortcut" >
+      <string>Alt+M</string>
+     </property>
+     <property name="autoDefault" >
+      <bool>true</bool>
+     </property>
+     <property name="default" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QGroupBox" name="groupBox_2" >
+     <property name="title" >
+      <string>Force Field</string>
+     </property>
+     <layout class="QVBoxLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QRadioButton" name="useAmberRadioButton" >
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>AMBER</string>
+        </property>
+        <property name="shortcut" >
+         <string/>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="useCharmmRadioButton" >
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>CHARMM</string>
+        </property>
+        <property name="shortcut" >
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="useMMFF94RadioButton" >
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>MMFF94</string>
+        </property>
+        <property name="shortcut" >
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="advanced_button" >
+        <property name="minimumSize" >
+         <size>
+          <width>170</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="toolTip" >
+         <string>Edit force field options</string>
+        </property>
+        <property name="text" >
+         <string>&amp;Force field options</string>
+        </property>
+        <property name="shortcut" >
+         <string>Alt+F</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="0" column="0" colspan="2" >
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
@@ -355,218 +548,14 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="QGroupBox" name="groupBox_2" >
-     <property name="title" >
-      <string>Force Field</string>
-     </property>
-     <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item>
-       <widget class="QRadioButton" name="useAmberRadioButton" >
-        <property name="minimumSize" >
-         <size>
-          <width>0</width>
-          <height>20</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>AMBER</string>
-        </property>
-        <property name="shortcut" >
-         <string/>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="useCharmmRadioButton" >
-        <property name="minimumSize" >
-         <size>
-          <width>0</width>
-          <height>20</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>CHARMM</string>
-        </property>
-        <property name="shortcut" >
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="useMMFF94RadioButton" >
-        <property name="minimumSize" >
-         <size>
-          <width>0</width>
-          <height>20</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>MMFF94</string>
-        </property>
-        <property name="shortcut" >
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="advanced_button" >
-        <property name="minimumSize" >
-         <size>
-          <width>170</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="toolTip" >
-         <string>Edit force field options</string>
-        </property>
-        <property name="text" >
-         <string>&amp;Force field options</string>
-        </property>
-        <property name="shortcut" >
-         <string>Alt+F</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QGroupBox" name="minimization_group" >
-     <property name="title" >
-      <string>Algorithm</string>
-     </property>
-     <widget class="QRadioButton" name="conjugate_button" >
-      <property name="geometry" >
-       <rect>
-        <x>11</x>
-        <y>52</y>
-        <width>220</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="minimumSize" >
-       <size>
-        <width>130</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="text" >
-       <string>conjugate gradient</string>
-      </property>
-      <property name="checked" >
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QRadioButton" name="steepest_button" >
-      <property name="geometry" >
-       <rect>
-        <x>11</x>
-        <y>105</y>
-        <width>220</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="minimumSize" >
-       <size>
-        <width>130</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="text" >
-       <string>steepest descent</string>
-      </property>
-      <property name="checked" >
-       <bool>false</bool>
-      </property>
-     </widget>
-    </widget>
-   </item>
-   <item row="2" column="0" >
-    <widget class="QPushButton" name="start_button" >
-     <property name="minimumSize" >
-      <size>
-       <width>0</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="maximumSize" >
-      <size>
-       <width>32767</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="focusPolicy" >
-      <enum>Qt::TabFocus</enum>
-     </property>
-     <property name="toolTip" >
-      <string>Start minimization</string>
-     </property>
-     <property name="text" >
-      <string>&amp;Minimize</string>
-     </property>
-     <property name="shortcut" >
-      <string>Alt+M</string>
-     </property>
-     <property name="autoDefault" >
-      <bool>true</bool>
-     </property>
-     <property name="default" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1" >
-    <widget class="QPushButton" name="cancel_button" >
-     <property name="minimumSize" >
-      <size>
-       <width>0</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="maximumSize" >
-      <size>
-       <width>32767</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="focusPolicy" >
-      <enum>Qt::TabFocus</enum>
-     </property>
-     <property name="toolTip" >
-      <string>Close window without energy minimization</string>
-     </property>
-     <property name="text" >
-      <string>Cancel</string>
-     </property>
-     <property name="shortcut" >
-      <string/>
-     </property>
-     <property name="autoDefault" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
  <tabstops>
   <tabstop>max_iterations_lineedit</tabstop>
   <tabstop>refresh_iterations_lineedit</tabstop>
   <tabstop>max_grad_lineedit</tabstop>
   <tabstop>energy_difference_lineedit</tabstop>
-  <tabstop>conjugate_button</tabstop>
-  <tabstop>steepest_button</tabstop>
   <tabstop>useAmberRadioButton</tabstop>
   <tabstop>useCharmmRadioButton</tabstop>
   <tabstop>advanced_button</tabstop>

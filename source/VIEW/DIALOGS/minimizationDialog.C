@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: minimizationDialog.C,v 1.4.16.1 2007/03/25 22:02:05 oliver Exp $
+// $Id: minimizationDialog.C,v 1.4.16.2 2007/05/08 14:35:28 anhi Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/minimizationDialog.h>
@@ -113,6 +113,26 @@ namespace BALL
 		void MinimizationDialog::setEnergyDifference(double energy_difference)
 		{
 			energy_difference_lineedit->setText(QString(String(energy_difference).c_str()));
+		}
+
+		bool MinimizationDialog::getUseStrangLBFGS() const
+		{
+			return SLBFGS_button->isChecked();
+		}
+
+		void MinimizationDialog::setUseStrangLBFGS(bool use_LBFGS)
+		{
+			SLBFGS_button->setChecked(use_LBFGS);
+		}
+
+		bool MinimizationDialog::getUseShiftedLVMM() const
+		{
+			return SLVMM_button->isChecked();
+		}
+
+		void MinimizationDialog::setUseShiftedLVMM(bool use_shifted)
+		{
+			SLVMM_button->setChecked(use_shifted);
 		}
 
 		bool MinimizationDialog::getUseConjugateGradient() const

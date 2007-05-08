@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.91.14.3 2007/04/18 19:02:12 amoll Exp $
+// $Id: molecularStructure.C,v 1.91.14.4 2007/05/08 14:35:31 anhi Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -26,7 +26,8 @@
 
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
-
+#include <BALL/MOLMEC/MINIMIZATION/strangLBFGS.h>
+#include <BALL/MOLMEC/MINIMIZATION/shiftedLVMM.h>
 #include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
@@ -1061,6 +1062,14 @@ namespace BALL
 			if (minimization_dialog_.getUseConjugateGradient())
 			{
 				minimizer = new ConjugateGradientMinimizer;
+			}
+			else if (minimization_dialog_.getUseStrangLBFGS())
+			{
+				minimizer = new StrangLBFGSMinimizer;
+			}
+			else if (minimization_dialog_.getUseShiftedLVMM())
+			{
+				minimizer = new ShiftedLVMMMinimizer;
 			}
 			else
 			{
