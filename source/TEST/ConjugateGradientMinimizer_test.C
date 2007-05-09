@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.23.8.2 2007/05/07 11:50:31 aleru Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.23.8.3 2007/05/09 13:34:28 aleru Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradientMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.23.8.2 2007/05/07 11:50:31 aleru Exp $")
+START_TEST(ConjugateGradientMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.23.8.3 2007/05/09 13:34:28 aleru Exp $")
 
 using namespace BALL;
 
@@ -383,8 +383,8 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES))
 
 	ConjugateGradientMinimizer cgm(FF);
 
-	cgm.setEnergyOutputFrequency(5);
-	cgm.setMaxGradient(0.418);
+	cgm.setEnergyOutputFrequency(1);
+	cgm.setMaxGradient(0.1);
 	cgm.setEnergyDifferenceBound(0.00000001);
 	cgm.setUpdateMethod(ConjugateGradientMinimizer::FLETCHER_REEVES);
 	ConjugateGradientMinimizer::UpdateMethod um;
@@ -404,7 +404,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES))
 	float energy = FF.updateEnergy();
 	FF.updateForces();
 	
-	PRECISION(3E-2)
+	PRECISION(3E-1)
 	TEST_REAL_EQUAL(energy, 5.906)
 
 	AtomIterator atit;
@@ -458,8 +458,8 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE))
 
 	ConjugateGradientMinimizer cgm(FF);
 
-	cgm.setEnergyOutputFrequency(5);
-	cgm.setMaxGradient(0.418);
+	cgm.setEnergyOutputFrequency(1);
+	cgm.setMaxGradient(0.1);
 	cgm.setEnergyDifferenceBound(0.00000001);
 	cgm.setUpdateMethod(ConjugateGradientMinimizer::POLAK_RIBIERE);
 	ConjugateGradientMinimizer::UpdateMethod um;
@@ -532,8 +532,8 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) ethan)
 
 	ConjugateGradientMinimizer cgm(FF);
 
-	cgm.setEnergyOutputFrequency(5);
-	cgm.setMaxGradient(0.418);
+	cgm.setEnergyOutputFrequency(1);
+	cgm.setMaxGradient(0.1);
 	cgm.setEnergyDifferenceBound(0.00000001);
 	cgm.setUpdateMethod(ConjugateGradientMinimizer::SHANNO);
 	ConjugateGradientMinimizer::UpdateMethod um;

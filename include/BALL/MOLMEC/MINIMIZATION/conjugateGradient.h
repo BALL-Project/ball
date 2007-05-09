@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.h,v 1.29.20.1 2007/05/07 11:48:07 aleru Exp $ 
+// $Id: conjugateGradient.h,v 1.29.20.2 2007/05/09 13:34:18 aleru Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -225,6 +225,13 @@ namespace BALL
 			/*_ Frequency for restarts.
 			*/
 			Size restart_frequency_;
+			
+			/*_ We count the iterations since the last restart.
+				  There are other possibilities for a restart so the
+				  iteration counter may not coincide (by modulo) with the
+				  restart frequency.
+			*/
+			Size last_restart_iter_;
 			
 			//@}
 		

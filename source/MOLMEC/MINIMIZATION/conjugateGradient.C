@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.38.8.1 2007/05/07 11:47:46 aleru Exp $
+// $Id: conjugateGradient.C,v 1.38.8.2 2007/05/09 13:34:26 aleru Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -46,7 +46,8 @@ namespace BALL
 			y_i_(),
 			D_1_(0.),
 			D_4_(0.),
-			restart_frequency_(1)
+			restart_frequency_(1),
+			last_restart_iter_(0)
 	{
 		options.setDefaultInteger(Option::UPDATE_METHOD, Default::UPDATE_METHOD);
 	}
@@ -69,7 +70,8 @@ namespace BALL
 			y_i_(),
 			D_1_(0.),
 			D_4_(0.),
-			restart_frequency_(1)
+			restart_frequency_(1),
+			last_restart_iter_(0)
 	{
 		options.setDefaultInteger(Option::UPDATE_METHOD, Default::UPDATE_METHOD);
 		valid_ = setup(force_field);
@@ -99,7 +101,8 @@ namespace BALL
 			y_i_(),
 			D_1_(0.),
 			D_4_(0.),
-			restart_frequency_(1)
+			restart_frequency_(1),
+			last_restart_iter_(0)
 	{
 		options.setDefaultInteger(Option::UPDATE_METHOD, Default::UPDATE_METHOD);
 		valid_ = setup(force_field, ssm);
@@ -130,7 +133,8 @@ namespace BALL
 			y_i_(),
 			D_1_(0.),
 			D_4_(0.),
-			restart_frequency_(1)
+			restart_frequency_(1),
+			last_restart_iter_(0)
 	{
 		options.setDefaultInteger(Option::UPDATE_METHOD, Default::UPDATE_METHOD);
 		
@@ -162,7 +166,8 @@ namespace BALL
 			y_i_(),
 			D_1_(0.),
 			D_4_(0.),
-			restart_frequency_(1)
+			restart_frequency_(1),
+			last_restart_iter_(0)
 	{
 		options.setDefaultInteger(Option::UPDATE_METHOD, Default::UPDATE_METHOD);
 		
@@ -199,7 +204,8 @@ namespace BALL
 			y_i_(rhs.y_i_),
 			D_1_(rhs.D_1_),
 			D_4_(rhs.D_4_),
-			restart_frequency_(rhs.restart_frequency_)
+			restart_frequency_(rhs.restart_frequency_),
+			last_restart_iter_(rhs.last_restart_iter_)
 	{
 		line_search_.setMinimizer(*this);
 	}
@@ -225,7 +231,7 @@ namespace BALL
 		D_1_                = rhs.D_1_;
 		D_4_                = rhs.D_4_;
 		restart_frequency_  = rhs.restart_frequency_;
-	 
+		last_restart_iter_  = rhs.last_restart_iter_;
 		line_search_.setMinimizer(*this);
 		return *this;
 	}
@@ -248,7 +254,10 @@ namespace BALL
 		updt_method_ = (Size) options.getInteger(Option::UPDATE_METHOD);
 		
 		// determine the number of atoms
-		number_of_atoms_ = (Size)force_field_->getNumberOfMovableAtoms(); 
+		number_of_atoms_ = (Size)force_field_->getNumberOfMovableAtoms();
+		
+		// Reset the restart counter
+		last_restart_iter_ = 0;
 		
 		return true;
 	}
@@ -299,7 +308,8 @@ namespace BALL
 				unscaled_direction_ = direction_;
 			}
 			direction_.normalize();
-			first_iter_ = false;
+			first_iter_        = false;
+			last_restart_iter_ = 0;
 			return;
 		}
 		
@@ -324,6 +334,7 @@ namespace BALL
 			direction_.negate();
 			unscaled_direction_ = direction_;
 			direction_.normalize();
+			last_restart_iter_ = 0;
 			return;
 		}
 		
@@ -361,13 +372,14 @@ namespace BALL
 				}
 				
 				// Check whether we should proceed by a restart
-				if (number_of_iterations_ % restart_frequency_ == 0)
+				if ((last_restart_iter_ == restart_frequency_) || (same_energy_counter_ > 0))
 				{
 					direction_ = initial_grad_;
 					direction_.negate();
 					unscaled_direction_ = direction_;
 					direction_.normalize();
 					old_gtg_ = gtg;
+					last_restart_iter_ = 0;
 					return;
 				}
 				
@@ -387,6 +399,7 @@ namespace BALL
 					unscaled_direction_ = direction_;
 					direction_.normalize();
 					old_gtg_ = gtg;
+					last_restart_iter_ = 0;
 					return;
 				}
 				
@@ -414,6 +427,7 @@ namespace BALL
 					direction_.negate();
 					unscaled_direction_ = direction_;
 					direction_.normalize();
+					last_restart_iter_ = 0;
 					return;
 				}
 				else
@@ -452,14 +466,16 @@ namespace BALL
 					gg  += (double)initial_grad_[i].z*(double)old_grad_[i].z;
 				}
 				
-				// Check whether we should proceed by a restart
-				if (number_of_iterations_ % restart_frequency_ == 0)
+				// Check whether we should proceed by a restart.
+				// We also force a restart if the energy difference is too small
+				if ((last_restart_iter_ == restart_frequency_) || (same_energy_counter_ > 0))
 				{
 					direction_ = initial_grad_;
 					direction_.negate();
 					unscaled_direction_ = direction_;
 					direction_.normalize();
 					old_gtg_ = gtg;
+					last_restart_iter_ = 0;
 					return;
 				}
 				
@@ -479,6 +495,7 @@ namespace BALL
 					unscaled_direction_ = direction_;
 					direction_.normalize();
 					old_gtg_ = gtg;
+					last_restart_iter_ = 0;
 					return;
 				}
 				
@@ -490,6 +507,7 @@ namespace BALL
 					direction_.negate();
 					unscaled_direction_ = direction_;
 					direction_.normalize();
+					last_restart_iter_ = 0;
 				}
 				else
 				{
@@ -518,6 +536,7 @@ namespace BALL
 						direction_.negate();
 						unscaled_direction_ = direction_;
 						direction_.normalize();
+						last_restart_iter_ = 0;
 					}
 					else
 					{
@@ -574,12 +593,14 @@ namespace BALL
 					// Take the current gradient as the new search direction
 					direction_ = initial_grad_;
 					direction_.negate();
+					// Not necessary in Shanno case
 					//unscaled_direction_ = direction_;
 					direction_.normalize();
+					last_restart_iter_ = 0;
 					return;
 				}
 				
-				if ((number_of_iterations_ % restart_frequency_ == 0) || (number_of_iterations_ == 1))
+				if ((last_restart_iter_ == restart_frequency_) || (number_of_iterations_ == 1))
 				{
 					double condition = 0;
 					for (Size i = 0; i < number_of_atoms_; i++)
@@ -607,6 +628,7 @@ namespace BALL
 							throw Exception::DivisionByZero(__FILE__, __LINE__);
 						}
 					}
+					last_restart_iter_ = 0;
 				}
 				
 				// Calculate all the auxiliary values
@@ -657,8 +679,10 @@ namespace BALL
 					// Take the current gradient as the new search direction
 					direction_ = initial_grad_;
 					direction_.negate();
+					// Not necessary in Shanno case
 					//unscaled_direction_ = direction_;
 					direction_.normalize();
+					last_restart_iter_ = 0;
 					return;
 				}
 				
@@ -687,6 +711,7 @@ namespace BALL
 				{
 					direction_.inv_norm = sqrt(Limits<float>::max());
 				}
+				// No necessary in Shanno case
 				//unscaled_direction_ = direction_;
 			}
 		}
@@ -740,6 +765,7 @@ namespace BALL
 			initial_grad_.invalidate();
 			current_grad_.invalidate();
 			first_iter_ = true;
+			last_restart_iter_ = 0;
 			
 			restart_frequency_ = 3 * number_of_atoms_;
 			if (updt_method_ == SHANNO)
@@ -796,6 +822,7 @@ namespace BALL
 			// Increment iteration counter, take snapshots, print energy,
 			// update pair lists, and check the same-energy counter
 			finishIteration();
+			++last_restart_iter_;
 			
 			if ((!converged) && (stp < 0.))
 			{
@@ -859,6 +886,7 @@ namespace BALL
 				unscaled_direction_ = direction_;
 			}
 			direction_.normalize();
+			last_restart_iter_ = 0;
 			
 			Size iter            = 0;
 			while ((!result) && (iter < 10))
