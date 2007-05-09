@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.C,v 1.27.26.2 2007/05/07 11:47:49 aleru Exp $
+// $Id: steepestDescent.C,v 1.27.26.3 2007/05/09 16:43:30 aleru Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
@@ -237,12 +237,10 @@ namespace BALL
 		Size iter = 0;
 		while ((!result) && (iter < 10))
 		{
-			double step;
-			
 			// No need to assure the maximum displacement here since our
 			// line search pays attention to this constraint.
 			
-			result = line_search_.minimize(step);
+			result = line_search_.minimize(step_);
 			
 			if (!result)
 			{
@@ -260,12 +258,13 @@ namespace BALL
 			}
 			else
 			{
-				return step;
+				return step_;
 			}
 			++iter;
 		}
 		
 		// If we are here something went wrong
+		step_ = 0.;
 		return -1.0;
 	}
 	

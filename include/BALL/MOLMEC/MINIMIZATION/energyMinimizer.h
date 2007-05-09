@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.44.20.1 2007/05/07 11:48:08 aleru Exp $
+// $Id: energyMinimizer.h,v 1.44.20.2 2007/05/09 16:43:25 aleru Exp $
 //
 
 // Energy Minimizer: A class for minimizing the energy of molecular systems
@@ -535,6 +535,11 @@ namespace BALL
 			 *  of a number which is lower than 'cutlo_'.
 			 */
 			float cutlo_;
+			
+			/** The last step size (in respect to the length of the computed direction vector),
+			 *  so the length of the last step was step_*||direction_||.
+			 */
+			double step_;
 			
 			//_ 
 			bool abort_by_energy_enabled_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.C,v 1.20.8.1 2007/05/07 11:47:48 aleru Exp $
+// $Id: lineSearch.C,v 1.20.8.2 2007/05/09 16:43:29 aleru Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
@@ -20,7 +20,7 @@
 #define LINESEARCH__DEFAULT_MAX_STEPS 50
 
 // Lower bound for energy values.
-#define LINESEARCH__DEFAULT_MIN_ENERGY -1.e+30
+#define LINESEARCH__DEFAULT_MIN_ENERGY -1.e+10
 
 // Nonnegative relative tolerance for an acceptable step.
 #define LINESEARCH__DEFAULT_XTOL 0.1

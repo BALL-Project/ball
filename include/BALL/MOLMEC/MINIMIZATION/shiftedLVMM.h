@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftedLVMM.h,v 1.1.4.2 2007/05/07 11:48:09 aleru Exp $ 
+// $Id: shiftedLVMM.h,v 1.1.4.3 2007/05/09 16:43:26 aleru Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MINIMIZATION_SHIFTEDLVMM_H 
@@ -295,11 +295,6 @@ namespace BALL
 					in column order, U_k in [3].
 			*/
 			vector<Vector3> hess_factor_;
-			
-			/*_ The last step size (in respect to the length of the computed direction vector),
-					so the length of the last step was step_*||direction_||.
-			*/
-			double step_;
 			
 			/*_ The positions of the movable atoms when we start an iteration.
 					This is used to reduce slightly rounding errors

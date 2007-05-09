@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: strangLBFGS.C,v 1.1.4.2 2007/05/07 11:47:51 aleru Exp $
+// $Id: strangLBFGS.C,v 1.1.4.3 2007/05/09 16:43:31 aleru Exp $
 //
 // Minimize the potential energy of a system using an improved version
 // of the limited memory BFGS with Strang recurrences.
@@ -17,7 +17,7 @@
 #define DEFAULT_NUMBER_OF_VECTOR_PAIRS 5
 
 // The default "improved" flag
-#define DEFAULT_IMPROVED true
+#define DEFAULT_IMPROVED false
 
 namespace BALL 
 {
@@ -44,7 +44,6 @@ namespace BALL
 			stored_y_(),
 			work_val_(),
 			index_of_free_vect_(0),
-			step_(0.),
 			initial_atoms_()
 	{
 		options.setDefaultBool(Option::IMPROVED, Default::IMPROVED);
@@ -65,7 +64,6 @@ namespace BALL
 			stored_y_(),
 			work_val_(),
 			index_of_free_vect_(0),
-			step_(0.),
 			initial_atoms_()
 	{
 		options.setDefaultBool(Option::IMPROVED, Default::IMPROVED);
@@ -94,7 +92,6 @@ namespace BALL
 			stored_y_(),
 			work_val_(),
 			index_of_free_vect_(0),
-			step_(0.),
 			initial_atoms_()
 	{
 		options.setDefaultBool(Option::IMPROVED, Default::IMPROVED);
@@ -124,7 +121,6 @@ namespace BALL
 			stored_y_(),
 			work_val_(),
 			index_of_free_vect_(0),
-			step_(0.),
 			initial_atoms_()
 	{
 		options = new_options;
@@ -153,7 +149,6 @@ namespace BALL
 			stored_y_(),
 			work_val_(),
 			index_of_free_vect_(0),
-			step_(0.),
 			initial_atoms_()
 	{
 		options = new_options;
@@ -189,7 +184,6 @@ namespace BALL
 			stored_y_(rhs.stored_y_),
 			work_val_(rhs.work_val_),
 			index_of_free_vect_(rhs.index_of_free_vect_),
-			step_(rhs.step_),
 			initial_atoms_(rhs.initial_atoms_)
 	{
 		line_search_.setMinimizer(*this);
@@ -211,7 +205,6 @@ namespace BALL
 		stored_y_               = rhs.stored_y_;
 		work_val_               = rhs.work_val_;
 		index_of_free_vect_     = rhs.index_of_free_vect_;
-		step_                   = rhs.step_;
 		initial_atoms_          = rhs.initial_atoms_;
 		line_search_.setMinimizer(*this);
 		return *this;

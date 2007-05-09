@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.C,v 1.29.28.1 2007/05/07 11:47:47 aleru Exp $
+// $Id: energyMinimizer.C,v 1.29.28.2 2007/05/09 16:43:28 aleru Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
@@ -65,6 +65,7 @@ namespace BALL
 			force_update_counter_(0),
 			energy_update_counter_(0),
 			cutlo_(0.),
+			step_(0.),
 			abort_by_energy_enabled_(true),
 			abort_energy_(1000000000.0),
 			aborted_(false)
@@ -96,6 +97,7 @@ namespace BALL
 			force_update_counter_(energy_minimizer.force_update_counter_),
 			energy_update_counter_(energy_minimizer.energy_update_counter_),
 			cutlo_(energy_minimizer.cutlo_),
+			step_(energy_minimizer.step_),
 			abort_by_energy_enabled_(energy_minimizer.abort_by_energy_enabled_),
 			abort_energy_(energy_minimizer.abort_energy_),
 			aborted_(false)
@@ -125,6 +127,7 @@ namespace BALL
 			force_update_counter_         = energy_minimizer.force_update_counter_;
 			energy_update_counter_        = energy_minimizer.energy_update_counter_;
 			cutlo_                        = energy_minimizer.cutlo_;
+			step_                         = energy_minimizer.step_;
 			abort_by_energy_enabled_      = energy_minimizer.abort_by_energy_enabled_;
 			abort_energy_                 = energy_minimizer.abort_energy_;
 		}
@@ -527,10 +530,21 @@ namespace BALL
 	void EnergyMinimizer::finishIteration()
 	{
 		// Perform a force field update in regular intervals
-		// (to update the pair list)
+		// or if the movement of some atoms during the last step
+		// has been too large (to update the pair list)
+		float max = 0.f;
+		for(Size i = 0; i < direction_.size(); ++i)
+		{
+			float tmp = direction_[i].getSquareLength();
+			if (tmp > max)
+			{
+				max = tmp;
+			}
+		}
+		max = step_*sqrt(max);
 		if (((force_field_->getUpdateFrequency() != 0)
 				&& (number_of_iterations_ % force_field_->getUpdateFrequency() == 0))
-						|| (fabs(initial_energy_ - old_energy_) > 100.))
+						|| (max > 8.))
 		{
 			force_field_->update();
 			initial_grad_.invalidate();
