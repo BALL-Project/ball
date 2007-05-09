@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.38.8.2 2007/05/09 13:34:26 aleru Exp $
+// $Id: conjugateGradient.C,v 1.38.8.3 2007/05/09 13:44:43 aleru Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -372,7 +372,7 @@ namespace BALL
 				}
 				
 				// Check whether we should proceed by a restart
-				if ((last_restart_iter_ == restart_frequency_) || (same_energy_counter_ > 0))
+				if ((last_restart_iter_ == restart_frequency_) || (same_energy_counter_ > max_same_energy_/2))
 				{
 					direction_ = initial_grad_;
 					direction_.negate();
@@ -468,7 +468,8 @@ namespace BALL
 				
 				// Check whether we should proceed by a restart.
 				// We also force a restart if the energy difference is too small
-				if ((last_restart_iter_ == restart_frequency_) || (same_energy_counter_ > 0))
+				if ((last_restart_iter_ == restart_frequency_) 
+							|| (same_energy_counter_ > max_same_energy_/2))
 				{
 					direction_ = initial_grad_;
 					direction_.negate();
