@@ -154,8 +154,10 @@ def removeWater():
 
 def addOptimizedHydrogens():
 	getOneSystem()
+	setMultithreading(0)
 	getMolecularStructure().addHydrogens()
 	getMolecularControl().applySelector("element(H)")
+	setMultithreading(1)
 	getMolecularStructure().runMinimization(false)
 
 def relaxStructure():	
