@@ -164,15 +164,21 @@ void SnapshotVisualisationDialog::animateClicked()
 		}
 
 		tmp_.setNum(i, 10);
-		// speed things up after first snapshot is read
-		if (i == getStartSnapshot())
+		bool ok = true;
+
+		if (i <= 1) 
 		{
-			if (!snap_shot_manager_->applySnapShot(i)) break;
+			ok = snap_shot_manager_->applyFirstSnapShot();
 		}
-		else
+		else if (snap_shot_manager_->getCurrentSnapshotNumber() + 1 == i)
 		{
-			if (!snap_shot_manager_->applyNextSnapShot()) break;
+			ok = snap_shot_manager_->applyNextSnapShot();
 		}
+		else 
+		{
+			ok = snap_shot_manager_->applySnapShot(i);
+		}
+		if (!ok) break;
 
 		if (forward)
 		{
@@ -266,7 +272,17 @@ void SnapshotVisualisationDialog::forward(Size nr)
   }
 	else
 	{
-		if (!snap_shot_manager_->applySnapShot(tmpnr))
+		bool ok = true;
+		if (tmpnr == snap_shot_manager_->getCurrentSnapshotNumber() + 1)
+		{
+			ok = snap_shot_manager_->applyNextSnapShot();
+		}
+		else
+		{
+			ok = snap_shot_manager_->applySnapShot(tmpnr);
+		}
+
+		if (!ok)
 		{
 			Log.error() << "Could not apply  snapshot" << std::endl;
 			error_ = true;
@@ -283,7 +299,9 @@ Size SnapshotVisualisationDialog::getStartSnapshot() const
 {
 	try
 	{
-		return (Size)ascii(startSnapshot->text()).toUnsignedInt();
+		Size s = (Size)ascii(startSnapshot->text()).toUnsignedInt();
+		s = BALL_MAX(s, 1);
+		return s;
 	}
 	catch(...)
 	{
@@ -317,7 +335,17 @@ void SnapshotVisualisationDialog::sliderMovedToPos()
 	bool ok = true;
 
 	if (tmpnr == 1) ok = snap_shot_manager_->applyFirstSnapShot();
-	else 						ok = snap_shot_manager_->applySnapShot(tmpnr);
+	else 						
+	{
+		if (tmpnr == snap_shot_manager_->getCurrentSnapshotNumber() + 1)
+		{
+			ok = snap_shot_manager_->applyNextSnapShot();
+		}
+		else
+		{
+			ok = snap_shot_manager_->applySnapShot(tmpnr);
+		}
+	}
 
 	if (ok)
 	{
