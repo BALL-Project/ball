@@ -68,6 +68,9 @@ class BALL_VIEW_EXPORT MolecularDynamicsDialog
 		String getDCDFile() const;
 
 		///
+		void setDCDFile(const String& name);
+
+		///
 		Size getStepsBetweenRefreshs() const;
 		
 		///

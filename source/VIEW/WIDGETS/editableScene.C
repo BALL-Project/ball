@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.21.14.4 2007/04/19 09:41:02 amoll Exp $
+// $Id: editableScene.C,v 1.21.14.5 2007/05/10 21:59:53 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -1490,6 +1490,7 @@ void EditableScene::optimizeStructure()
 	mdd.setTemperature(500);
 	mdd.setNumberOfSteps(50);
 	mdd.setMicroCanonical(false);
+	mdd.setDCDFile("");
 	ms->MDSimulation(false);
 
 	while (getMainControl()->isBusy())

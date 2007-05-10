@@ -237,4 +237,19 @@ void MolecularDynamicsDialog::accept()
 			QMessageBox::Ok| QMessageBox::Default);
 }
 
+void MolecularDynamicsDialog::setDCDFile(const String& name)
+{
+	if (name == "")
+	{
+		dcd_file_edit->setText("");
+		enable_dcd->setEnabled(false);
+	}
+	else
+	{
+		dcd_file_edit->setText(name.c_str());
+		enable_dcd->setEnabled(true);
+	}
+}
+
+
 }} //namespaces
