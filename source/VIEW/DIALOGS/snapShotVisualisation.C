@@ -22,7 +22,8 @@ SnapshotVisualisationDialog::SnapshotVisualisationDialog(QWidget* parent, const 
 	: QDialog(parent),
 		Ui_SnapshotVisualisationDialogData(),
 		ModularWidget(name),
-		snap_shot_manager_(0)
+		snap_shot_manager_(0),
+		drag_(false)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new SnapshotVisualisationDialog" << this << std::endl;
@@ -39,6 +40,8 @@ SnapshotVisualisationDialog::SnapshotVisualisationDialog(QWidget* parent, const 
 	connect( tenForwardButton, SIGNAL( clicked() ), this, SLOT( tenForwardClicked() ) );
 	connect( lastSnapshotButton, SIGNAL( clicked() ), this, SLOT( lastSnapshotClicked() ) );
 	connect( snapShotSlider, SIGNAL( valueChanged(int) ), this, SLOT( sliderMovedToPos() ) );
+	connect( snapShotSlider, SIGNAL( sliderPressed() ), this, SLOT( sliderDragStarted_() ) );
+	connect( snapShotSlider, SIGNAL( sliderReleased() ), this, SLOT( sliderDragEnded_() ) );
 	connect( startSnapshot, SIGNAL( textChanged(const QString&) ), this, SLOT( snapShotInputTest() ) );
 	connect( endSnapshot, SIGNAL( textChanged(const QString&) ), this, SLOT( snapShotInputTest() ) );
 	connect( animationSpeedSlider, SIGNAL( valueChanged(int) ), this, SLOT( animationSpeedChanged() ) );
@@ -235,7 +238,7 @@ void SnapshotVisualisationDialog::backward(Size nr)
 	if (tmpnr <= 0)
 	{
 		firstSnapshotClicked();
-		tmpnr = 0;
+		tmpnr = 1;
 	}
 	else
 	{
@@ -305,13 +308,18 @@ Size SnapshotVisualisationDialog::getEndSnapshot() const
 
 void SnapshotVisualisationDialog::sliderMovedToPos()
 {
-	if (snap_shot_manager_ == 0) return;
+	if (snap_shot_manager_ == 0 || !drag_) return;
 	if (main_control_->getRepresentationManager().updateRunning()) return;
 
 	currentSnapshot->setText(String(snapShotSlider->value()).c_str());
 	Position tmpnr = (currentSnapshot->text().toInt());	
 	
-	if (snap_shot_manager_->applySnapShot(tmpnr))
+	bool ok = true;
+
+	if (tmpnr == 1) ok = snap_shot_manager_->applyFirstSnapShot();
+	else 						ok = snap_shot_manager_->applySnapShot(tmpnr);
+
+	if (ok)
 	{
 		tmp_.setNum(tmpnr);
 		update_();
@@ -467,6 +475,16 @@ void SnapshotVisualisationDialog::show()
 void SnapshotVisualisationDialog::closeEvent(QCloseEvent*)
 {
 	stop_();
+}
+
+void SnapshotVisualisationDialog::sliderDragStarted_()
+{
+	drag_ = true;
+}
+
+void SnapshotVisualisationDialog::sliderDragEnded_()
+{
+	drag_ = false;
 }
 
 } } // namespace

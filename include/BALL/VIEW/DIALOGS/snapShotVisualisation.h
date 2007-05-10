@@ -103,7 +103,13 @@ class BALL_VIEW_EXPORT SnapshotVisualisationDialog
 	///
 	void cancelPressed();
 	
+	protected slots:
+
+	void sliderDragStarted_();
+	void sliderDragEnded_();
+
 	protected:
+
 	void stop_();
 	virtual void closeEvent(QCloseEvent*);
 	void update_();
@@ -116,6 +122,7 @@ class BALL_VIEW_EXPORT SnapshotVisualisationDialog
 	bool 							error_;
 	bool 							cancel_;
 	bool 							animation_running_;
+	bool 							drag_;
 };
 
 } } // namespaces
