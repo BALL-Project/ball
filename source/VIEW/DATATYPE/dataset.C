@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dataset.C,v 1.1.4.1 2007/03/25 21:56:35 oliver Exp $
+// $Id: dataset.C,v 1.1.4.2 2007/05/10 21:40:37 amoll Exp $
 //
 
 #include <BALL/VIEW/DATATYPE/dataset.h>
@@ -230,10 +230,17 @@ namespace BALL
 
 		bool DatasetController::deleteDataset()
 		{
-			Dataset* data = getSelectedDataset();
-			if (data == 0) return false;
+			bool ok = true;
+			vector<Dataset*> v =  getSelectedDatasets();
+			for (Position p = 0; p < v.size(); p++)
+			{
+				Dataset* set = v[p];
+				if (set == 0) return false;
 
-			return deleteDataset(data);
+				ok &= deleteDataset(set);
+			}
+
+			return ok;
 		}
 
 		bool DatasetController::deleteDataset(Dataset* set)
