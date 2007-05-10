@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94ConfigurationDialog.C,v 1.1.6.2 2007/05/10 00:05:18 amoll Exp $
+// $Id: MMFF94ConfigurationDialog.C,v 1.1.6.3 2007/05/10 09:05:11 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/MMFF94ConfigurationDialog.h>
@@ -120,7 +120,13 @@ namespace BALL
 
 				mmff.options[MMFF94::Option::FOLDER] = ascii(parameter_file_edit->text());
 
-				mmff.options[MMFF94::Option::NONBONDED_CUTOFF] = getValue_(nonbonded_cutoff);
+				// cut offs and cut ons...
+				mmff.options[MMFF94::Option::VDW_CUTOFF] = getValue_(vdw_cutoff);
+				mmff.options[MMFF94::Option::VDW_CUTON] = getValue_(vdw_cuton);
+				mmff.options[MMFF94::Option::ELECTROSTATIC_CUTOFF] = 
+					getValue_(electrostatic_cutoff);
+				mmff.options[MMFF94::Option::ELECTROSTATIC_CUTON] = 
+					getValue_(electrostatic_cuton);
 				
 				bool error = false;
 				if (ascii(max_unassigned_atoms->text()).toUnsignedInt() == 0) 
