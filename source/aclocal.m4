@@ -1,7 +1,7 @@
-/dnl -*- Mode: C++; tab-width: 1; -*-
+dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.89.10.3 2007/04/22 18:34:49 amoll Exp $
+dnl		$Id: aclocal.m4,v 1.89.10.4 2007/05/10 20:04:52 oliver Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -748,7 +748,7 @@ AC_MSG_RESULT(yes)
 CXX_NAME="KAI"
 CXX_IDENTIFIED=true
 
-dnl 
+Dnl 
 dnl 	Define a symbol for KAI C++.
 dnl
 AC_DEFINE(PROJECT[]_COMPILER_KAI, )
@@ -764,69 +764,69 @@ dnl
 dnl		KAI-C++-specific options
 dnl
 AC_DEFUN(CF_KAI_OPTIONS, [
-AC_MSG_CHECKING(compiler version)
-echo "int main(){}" > conftest.C
-CXX_VERSION=`${CXX} -v --version conftest.C 2>&1| ${GREP} "KAI C++ " | ${CUT} -d" " -f3`
-CXX_NAME="KCC"
-VERSION_OUTPUT="KAI C++ ${CXX_VERSION}"
-CXX_COMPILER_NAME="KCC"
+	AC_MSG_CHECKING(compiler version)
+	echo "int main(){}" > conftest.C
+	CXX_VERSION=`${CXX} -v --version conftest.C 2>&1| ${GREP} "KAI C++ " | ${CUT} -d" " -f3`
+	CXX_NAME="KCC"
+	VERSION_OUTPUT="KAI C++ ${CXX_VERSION}"
+	CXX_COMPILER_NAME="KCC"
+		
+	AC_MSG_RESULT(${VERSION_OUTPUT})
+	CF_DIGEST_CXX_VERSION
 
-AC_MSG_RESULT(${VERSION_OUTPUT})
-CF_DIGEST_CXX_VERSION
+	dnl   KAI C++ stores a list of instantiated templates
+	dnl   in directories called ti_files
+	dnl   make clean should remove these
+	TEMPLATE_DIR="ti_files"
+	AR="${CXX}"
+	DYNAR="${CXX}"
+	AROPTS="${AROPTS} -o"
+	DYNAROPTS="${DYNAROPTS} -o"
+	CXX_MAKEDEPEND="${CXX}"
+	MAKEDEP_CXX_OPTS="-M"
+	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-dnl   KAI C++ stores a list of instantiated templates
-dnl   in directories called ti_files
-dnl   make clean should remove these
-TEMPLATE_DIR="ti_files"
-AR="${CXX}"
-DYNAR="${CXX}"
-AROPTS="${AROPTS} -o"
-DYNAROPTS="${DYNAROPTS} -o"
-CXX_MAKEDEPEND="${CXX}"
-MAKEDEP_CXX_OPTS="-M"
-MAKEDEP_CXX_SUFFIX=" >.Dependencies"
+	dnl
+	dnl   Someone at KAI seems to have the need
+	dnl   to torture developers by introducing
+	dnl   a new flag for position independent code
+	dnl   on EVERY platform...
+	dnl
+	CXXFLAGS="${CXXFLAGS} --one_per"
+	if test "${OS}" = Linux ; then
+		CXXFLAGS="${CXXFLAGS} -fPIC"
+	fi
+	if test "${OS}" = Solaris ; then
+		CXXFLAGS="${CXXFLAGS} -KPIC"
+	fi
+	if test "${OS}" = IRIX ; then
+		CXXFLAGS="${CXXFLAGS} -KPIC"
+	fi
 
-dnl
-dnl   Someone at KAI seems to have the need
-dnl   to torture developers by introducing
-dnl   a new flag for position independent code
-dnl   on EVERY platform...
-dnl
-CXXFLAGS="${CXXFLAGS} --one_per"
-if test "${OS}" = Linux ; then
-CXXFLAGS="${CXXFLAGS} -fPIC"
-fi
-if test "${OS}" = Solaris ; then
-CXXFLAGS="${CXXFLAGS} -KPIC"
-fi
-if test "${OS}" = IRIX ; then
-CXXFLAGS="${CXXFLAGS} -KPIC"
-fi
+	dnl   optimze as on highest level: this compiler
+	dnl   does a good job optimizing!
+	CXXFLAGS_O="${CXXFLAGS_O} +K3"
 
-dnl   optimze as on highest level: this compiler
-dnl   does a good job optimizing!
-CXXFLAGS_O="${CXXFLAGS_O} +K3"
+	dnl   avoid high level optimization to
+	dnl   get debuggable code...
+	CXXFLAGS_D="${CXXFLAGS_D} +K0"
+	CXXFLAGS_DI="${CXXFLAGS_DI}"
 
-dnl   avoid high level optimization to
-dnl   get debuggable code...
-CXXFLAGS_D="${CXXFLAGS_D} +K0"
-CXXFLAGS_DI="${CXXFLAGS_DI}"
-
-dnl
-dnl if we are running under Solaris/SPARC,
-dnl KAI can produce 32 or 64 bit code
-dnl
-if test "${OS}" = "Solaris" -a "${ARCHITECTURE}" = sparc ; then
-if test "${BINFMT_64_BIT}" = true ; then
-CXX_NAME="${CXX_NAME}_V9"
-LDFLAGS="${LDFLAGS} -xarch=v9"
-CXXFLAGS="${CXXFLAGS} -xarch=v9"
-AROPTS="${AROPTS} -xarch=v9"
-DYNAROPTS="-xarch=v9 ${DYNAROPTS}"
-else
-CXX_NAME="${CXX_NAME}_V8"
-fi
-fi
+	dnl
+	dnl if we are running under Solaris/SPARC,
+	dnl KAI can produce 32 or 64 bit code
+	dnl
+	if test "${OS}" = "Solaris" -a "${ARCHITECTURE}" = sparc ; then
+		if test "${BINFMT_64_BIT}" = true ; then
+			CXX_NAME="${CXX_NAME}_V9"
+			LDFLAGS="${LDFLAGS} -xarch=v9"
+			CXXFLAGS="${CXXFLAGS} -xarch=v9"
+			AROPTS="${AROPTS} -xarch=v9"
+			DYNAROPTS="-xarch=v9 ${DYNAROPTS}"
+		else
+			CXX_NAME="${CXX_NAME}_V8"
+		fi
+	fi
 ])
 
 dnl

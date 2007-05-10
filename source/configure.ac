@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.39.6.2 2007/03/25 23:30:39 amoll Exp $
+dnl $Id: configure.ac,v 1.39.6.3 2007/05/10 20:05:02 oliver Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -38,18 +38,9 @@ dnl
 dnl retrieve the BALL version and print it to the console
 dnl for debugging purposes (people sending in config.log and the like).
 dnl
-BALL_VERSION_STRING=`grep define\ BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | cut -d\" -f2 | tr -d "a-zA-Z"`
-BALL_CURRENT_VERSION=${BALL_VERSION_STRING}
-BALL_COMPATIBILITY_VERSION=`echo ${BALL_VERSION_STRING} | cut -d. -f1-2`
-CF_VERSION_CHECK
-
-dnl
-dnl retrieve the BALL version and print it to the console
-dnl for debugging purposes (people sending in config.log and the like).
-dnl
-BALL_VERSION_STRING=`grep define\ BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | cut -d\" -f2`
-BALL_CURRENT_VERSION=${BALL_VERSION_STRING}
-BALL_COMPATIBILITY_VERSION=`echo ${BALL_VERSION_STRING} | cut -d. -f1-2`
+BALL_VERSION_STRING=`grep define\ BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | cut -d\" -f2 `
+BALL_CURRENT_VERSION=`echo ${BALL_VERSION_STRING}| tr -d "a-zA-Z"`
+BALL_COMPATIBILITY_VERSION=`echo ${BALL_CURRENT_VERSION} | cut -d. -f1-2`
 CF_VERSION_CHECK
 
 dnl   Require the user to accept the license (once)

@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# $Id: config.mak.in,v 1.40.14.2 2007/03/25 23:30:52 amoll Exp $
+# $Id: config.mak.in,v 1.40.14.3 2007/05/10 20:05:03 oliver Exp $
 #
 # Author:
 #  Oliver Kohlbacher
@@ -73,6 +73,7 @@ VIEW_PLATFORM				= @VIEW_PLATFORM@
 BALL_HAS_XDR				= @BALL_HAS_XDR@
 
 BALL_HAS_GSL				= @BALL_HAS_GSL@
+GSL_LIBS				= @GSL_LIBS@
 
 BALL_HAS_FFTW       = @BALL_HAS_FFTW@
 FFTW_LIBS						= @FFTW_LIBS@
