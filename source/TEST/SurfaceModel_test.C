@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SurfaceModel_test.C,v 1.1.2.2 2007/04/21 09:01:27 amoll Exp $
+// $Id: SurfaceModel_test.C,v 1.1.2.3 2007/05/10 20:16:16 amoll Exp $
 //
 // Author:
 //   Andreas Moll
@@ -20,7 +20,7 @@
 using namespace BALL;
 using namespace BALL::VIEW;
 
-START_TEST(AddSurfaceModel, "$Id: SurfaceModel_test.C,v 1.1.2.2 2007/04/21 09:01:27 amoll Exp $")
+START_TEST(AddSurfaceModel, "$Id: SurfaceModel_test.C,v 1.1.2.3 2007/05/10 20:16:16 amoll Exp $")
 
 CHECK(CSTR)
 	AddSurfaceModel();
@@ -37,7 +37,7 @@ CHECK(AddSurfaceModel::setProbeRadius(float radius))
 RESULT
 
 
-CHECK(AddSurfaceModel::getStickRadius() const  throw())
+CHECK(AddSurfaceModel::getProbeRadius() const  throw())
 	AddSurfaceModel bs;
 	bs.setProbeRadius(0.12);
 	TEST_REAL_EQUAL(bs.getProbeRadius(), 0.12)

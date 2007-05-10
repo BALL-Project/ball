@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.41.16.1 2007/03/25 22:02:27 oliver Exp $
+// $Id: threads.C,v 1.41.16.2 2007/05/10 20:15:09 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -85,6 +85,8 @@ namespace BALL
 
 		void FetchHTMLThread::run()
 		{
+			if (main_control_ == 0) return;
+
 			if (url_ == "")
 			{
 				output_("Invalid Address " + url_ + " in " + String(__FILE__) + ":" + String(__LINE__), true);
@@ -145,6 +147,8 @@ namespace BALL
 
 		void UpdateRepresentationThread::run()
 		{
+			if (main_control_ == 0) return;
+
 			RepresentationManager& pm = main_control_->getRepresentationManager();
 			Representation* rep = 0;
 			while (!main_control_->isAboutToQuit())
@@ -209,6 +213,8 @@ namespace BALL
 		// =====================================================================
 		void EnergyMinimizerThread::run()
 		{
+			if (main_control_ == 0) return;
+
 			try
 			{
 				if (minimizer_ == 0 															||
@@ -299,6 +305,8 @@ namespace BALL
 		void MDSimulationThread::run()
 			throw(Exception::NullPointer)
 		{
+			if (main_control_ == 0) return;
+
 			try
 			{
 				if (md_ == 0 ||
