@@ -2,17 +2,19 @@
 // vi: set ts=2:
 //
 
-// $Id: SnapShotManager_test.C,v 1.5.32.1 2007/03/25 21:49:00 oliver Exp $
+// $Id: SnapShotManager_test.C,v 1.5.32.2 2007/05/10 10:04:02 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
-// insert includes here
 #include <BALL/MOLMEC/COMMON/snapShot.h>
+#include <BALL/MOLMEC/COMMON/snapShotManager.h>
+#include <BALL/FORMAT/DCDFile.h>
+#include <BALL/FORMAT/PDBFile.h>
 
 ///////////////////////////
 
-START_TEST(SnapShotManager, "$Id: SnapShotManager_test.C,v 1.5.32.1 2007/03/25 21:49:00 oliver Exp $")
+START_TEST(SnapShotManager, "$Id: SnapShotManager_test.C,v 1.5.32.2 2007/05/10 10:04:02 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -73,6 +75,23 @@ RESULT
 
 CHECK(SnapShotManager::getNumberOfSnapShots())
 	// ?????
+RESULT
+
+CHECK(full_test)
+	System system;
+	PDBFile pfile("data/DCDFile_test.pdb");
+	Size nr_of_atoms = system.countAtoms();
+	pfile.read(system);
+	system.getAtom(0)->setPosition(Vector3(1,2,1111));
+	DCDFile dcd("data/DCD_test2.dcd", std::ios::in);
+	SnapShotManager sm(&system, 0, &dcd);
+	sm.applyFirstSnapShot();
+	TEST_EQUAL(system.getAtom(0)->getPosition(), Vector3(11.936, 104.294, 10.149))
+	sm.applySnapShot(2);
+	sm.applyFirstSnapShot();
+	sm.applySnapShot(1);
+	sm.applyFirstSnapShot();
+	sm.applySnapShot(0);
 RESULT
 
 /////////////////////////////////////////////////////////////
