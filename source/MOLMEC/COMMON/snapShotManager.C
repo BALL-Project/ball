@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.C,v 1.15 2005/12/23 17:02:43 amoll Exp $
+// $Id: snapShotManager.C,v 1.15.20.1 2007/05/10 11:12:41 amoll Exp $
 //
 
 #include <BALL/KERNEL/PTE.h>
@@ -479,6 +479,7 @@ namespace BALL
 		}
 		// now apply the last snapshot we read
 		buffer.applySnapShot(*system_ptr_);
+		current_snapshot_ = number;
 		return true;
 	}
 
@@ -502,6 +503,7 @@ namespace BALL
 
 		trajectory_file_ptr_->reopen();
 		trajectory_file_ptr_->readHeader();
+		current_snapshot_ = 0;
 		
 		if (trajectory_file_ptr_->getNumberOfSnapShots() == 0) return false;
 		
@@ -519,7 +521,7 @@ namespace BALL
 		if (snapshot_buffer_.size() != 0)
 		{
 			current_snapshot_++;
-			if (current_snapshot_ > snapshot_buffer_.size()) return false;
+			if (current_snapshot_ >= snapshot_buffer_.size()) return false;
 
 			snapshot_buffer_[current_snapshot_].applySnapShot(*system_ptr_);
 			return true;
@@ -533,6 +535,7 @@ namespace BALL
 		if (trajectory_file_ptr_->read(buffer))
 		{
 			buffer.applySnapShot(*system_ptr_);
+			current_snapshot_++;
 			return true;
 		}
 		else
@@ -572,6 +575,7 @@ namespace BALL
 		if (count == trajectory_file_ptr_->getNumberOfSnapShots())
 		{
 			buffer.applySnapShot(*system_ptr_);
+			current_snapshot_ = count - 1;
 			return true;
 		}
 
