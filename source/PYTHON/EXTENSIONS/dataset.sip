@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dataset.sip,v 1.1.4.1 2007/03/25 21:37:06 oliver Exp $
+// $Id: dataset.sip,v 1.1.4.2 2007/05/10 22:18:43 amoll Exp $
 //
 
 class Dataset
@@ -47,7 +47,7 @@ class DatasetController
 	void setDatasetControl(DatasetControl* );
 	DatasetControl* getDatasetControl();
 	//virtual bool handle(DatasetMessage* );
-	virtual bool insertDataset(Dataset* );
+	virtual bool insertDataset(Dataset* /Transfer/);
 	virtual bool deleteDataset(Dataset* );
 	virtual bool createMenuEntries();
 	//virtual QMenu* buildContextMenu(QTreeWidgetItem* );

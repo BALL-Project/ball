@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.sip,v 1.3.18.2 2007/05/10 22:10:46 amoll Exp $
+// $Id: datasetControl.sip,v 1.3.18.3 2007/05/10 22:18:44 amoll Exp $
 //
 
 class DatasetControl
@@ -27,4 +27,5 @@ class DatasetControl
 //	virtual void deleteCurrentItems() throw();
 	Size getSelectionSize();
 	PyDatasetVector getDatasets(const String& type);
+	DatasetController* getController(const String& /type/);
 };
