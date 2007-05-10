@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.sip,v 1.7.16.1 2007/03/25 21:37:13 oliver Exp $
+// $Id: modularWidget.sip,v 1.7.16.2 2007/05/10 22:10:46 amoll Exp $
 //
 
 class ModularWidget
@@ -52,4 +52,6 @@ class ModularWidget
 //	virtual void dump(std::ostream& = std::cout, Size = 0) const throw();
 	void setWorkingDirFromFilename_(String) throw();
 	virtual void showHelp(const String&);
+	virtual bool canHandle(const String& /fileformat/) const;
+	virtual bool openFile(const String& /filename/);
 }; 
