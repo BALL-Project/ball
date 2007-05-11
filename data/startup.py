@@ -92,7 +92,7 @@ def getMolecularControlSelection():
 def getOneSystem():
 	s = getMolecularControlSelection()
 	if len(s) == 0 or len(s) > 1:
-		print "Warning: One System should be highlighted!"
+		log("Warning: One System should be highlighted!")
 		s.append(getSystem(0))
 	S = s[0].getRoot()
 	l = []
@@ -193,10 +193,13 @@ def showCartoonAndLigand():
 
 def printAtomTypesForHighlighted():
 	s = getMolecularControlSelection()
-	print "Atom types for highlighted Items:"
+	log("Atom types for highlighted Items:")
 	for r in s:
-		for a in atoms(r):
-			print "Residue "+str(a.getParent().getID())+" "+str(a.getFullName())+" : "+str(a.getType())
+		if r.__class__ == BALL.Atom:
+			log(str(r.getFullName(Atom.ADD_RESIDUE_ID))+" : "+str(r.getType()))
+		else:
+			for a in atoms(r):
+				log(a.getFullName(Atom.ADD_RESIDUE_ID) +" : "+str(a.getType()))
 
 def printAtomTypesForLigands():
 	highlightLigand()
