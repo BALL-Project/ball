@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.8.1 2007/03/23 12:53:27 oliver Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.8.2 2007/05/11 17:16:26 anhi Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -288,12 +288,18 @@ namespace BALL
 		MMFF94StretchParameters::StretchMap::ConstIterator stretch_it;
 
 		const vector<Bond*>& bonds = mmff94_->getBonds();
+		bool use_selection = getForceField()->getUseSelection();
 		
 		vector<Bond*>::const_iterator bond_it = bonds.begin();
 		for (; bond_it != bonds.end(); bond_it++)
 		{
 			Atom& atom1 = *(Atom*)(*bond_it)->getFirstAtom();
 			Atom& atom2 = *(Atom*)(*bond_it)->getSecondAtom();
+
+			if (use_selection && (!atom1.isSelected() || !atom2.isSelected()))
+			{
+				continue;
+			}
 
 			stretch_it = stretch_parameters_->getParameters(atom1.getType(), atom2.getType());
 			
@@ -643,6 +649,12 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		// stretches:
 		for (Size i = 0 ; i < stretches_.size(); i++)
 		{
+			if (use_selection && !stretches_[i].atom1->isSelected()
+								 			  && !stretches_[i].atom2->isSelected())
+			{
+				continue;
+			}
+
 			Vector3 direction(stretches_[i].atom1->getPosition() - stretches_[i].atom2->getPosition());
 			double distance = direction.x * direction.x +
 												direction.y * direction.y +

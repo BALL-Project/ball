@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.8.1 2007/03/23 12:51:53 oliver Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.8.2 2007/05/11 17:16:26 anhi Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -194,6 +194,7 @@ namespace BALL
 	{
 		energy_ = 0;
 		
+		bool use_selection = getForceField()->getUseSelection();
 		vector<OutOfPlaneBend>::iterator bend_it = bends_.begin();
 
 		// the three vectors from the three partners to the center atom
@@ -205,6 +206,14 @@ namespace BALL
 		for (; bend_it != bends_.end(); ++bend_it) 
 		{
 			OutOfPlaneBend& b = *bend_it;
+			if (use_selection && (!b.i->ptr->isSelected() ||
+														!b.j->ptr->isSelected() ||
+														!b.k->ptr->isSelected() ||
+														!b.l->ptr->isSelected()))
+			{
+				continue;
+			}
+
 			const Vector3& vi = b.i->position;
 			const Vector3& vj = b.j->position;
 			const Vector3& vk = b.k->position;
