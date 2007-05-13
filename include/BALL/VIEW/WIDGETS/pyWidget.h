@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.16.1 2007/03/25 21:26:23 oliver Exp $
+// $Id: pyWidget.h,v 1.27.16.2 2007/05/13 15:35:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -258,8 +258,10 @@ class BALL_VIEW_EXPORT PyWidget
 	*/
 	virtual bool openFile(const String& filename);
 
-	/// run a Python script from a given file
-	bool openFile(const String& filename, bool run) throw();
+	/** Run a Python script from a given file
+	 		@param is_current states wheter this file is currently loaded in the editor
+	*/
+	bool openFile(const String& filename, bool run, bool is_current = false) throw();
 
 	//
 	bool runString(String command);

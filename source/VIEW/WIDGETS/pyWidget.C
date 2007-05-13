@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.16.1 2007/03/25 21:56:50 oliver Exp $
+// $Id: pyWidget.C,v 1.49.16.2 2007/05/13 15:35:28 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -726,7 +726,7 @@ bool PyWidget::runCurrentScript()
 {
 	tab_widget_->setCurrentIndex(1);
 	script_output_->clear();
-	bool state = storeScript_() && openFile(current_script_, true);
+	bool state = storeScript_() && openFile(current_script_, true, true);
 	String result;
 	if (state) result = "Finished script sucessfully";
 	else 			 result = "Error occured in Script";
@@ -901,7 +901,7 @@ String PyWidget::getCurrentLine() const
 	return "";
 }
 
-bool PyWidget::openFile(const String& filename, bool run)
+bool PyWidget::openFile(const String& filename, bool run, bool is_current)
 	throw()
 {
 	bool dummy;
@@ -913,7 +913,7 @@ bool PyWidget::openFile(const String& filename, bool run)
 	multi_line_text_ = "";
 
 	script_output_->clear();
-	script_edit_->clear();
+	if (!is_current) script_edit_->clear();
 	script_mode_ = true;
 	stop_script_ = false;
 	full_silent_ = filename.hasSuffix("startup.py");
@@ -942,12 +942,15 @@ bool PyWidget::openFile(const String& filename, bool run)
 		lines.push_back(file.getLine());
 	}
 
-	for (Position i = 0; i < lines.size(); i++)
+	if (!is_current)
 	{
-		appendText_(script_edit_, lines[i] + "\n");
-	}
+		for (Position i = 0; i < lines.size(); i++)
+		{
+			appendText_(script_edit_, lines[i] + "\n");
+		}
 
-	script_edit_->setUndoRedoEnabled(false);
+		script_edit_->setUndoRedoEnabled(false);
+	}
 
 	if (!run) 
 	{
