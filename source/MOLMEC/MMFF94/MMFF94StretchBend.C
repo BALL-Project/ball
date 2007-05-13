@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.8.3 2007/05/13 00:06:09 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.8.4 2007/05/13 09:38:22 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -132,7 +132,8 @@ namespace BALL
 		mmff94_ = (MMFF94*)getForceField();
 
  		Options& options = getForceField()->options;
-		bend_enabled_ = !options.has(MMFF94_BENDS_ENABLED) || options.getBool(MMFF94_BENDS_ENABLED);
+		bend_enabled_ = !options.has(MMFF94_BENDS_ENABLED) || 
+										 options.getBool(MMFF94_BENDS_ENABLED);
 		stretch_enabled_ = !options.has(MMFF94_STRETCHES_ENABLED) || 
 											 options.getBool(MMFF94_STRETCHES_ENABLED);
 		stretchbend_enabled_ = !options.has(MMFF94_STRETCHBENDS_ENABLED) || 
@@ -1065,11 +1066,11 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			// unit conversion: kJ/(mol A) -> N: FORCES_FACTOR
 			const Vector3 direction = stretch.n * force * FORCES_FACTOR;
 
-			if (use_selection || stretch.atom1->isSelected()) 
+			if (!use_selection || stretch.atom1->isSelected()) 
 				stretch.atom1->getForce()-= direction;
-			if (use_selection || stretch.atom2->isSelected()) 
+			if (!use_selection || stretch.atom2->isSelected()) 
 				stretch.atom2->getForce()+= direction;
-		}                                                                                                          
+		}      
 	}
 
 	// Calculate the reference bond length value using a modified Schomaker-Stevenson rule
