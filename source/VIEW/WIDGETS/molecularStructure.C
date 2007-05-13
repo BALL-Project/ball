@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.91.14.4 2007/05/08 14:35:31 anhi Exp $
+// $Id: molecularStructure.C,v 1.91.14.5 2007/05/13 19:11:02 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -98,32 +98,39 @@ namespace BALL
 			energy_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Single Point Calculation", this, 
 								SLOT(calculateForceFieldEnergy()), Qt::CTRL+Qt::Key_A);
 			setMenuHint("Calculate the energy of a System with the AMBER/CHARMM force field.");
+			setMenuHelp("mm.html#single_point");
 				
 			minimization_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Energy Minimization", 
 							this, SLOT(runMinimization()));
 			setMenuHint("To perform an Energy Minimization, first select the molecular structures.");
+			setMenuHelp("mm.html#mini");
 
 			mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Molecular &Dynamics", 
 								this, SLOT(MDSimulation()), Qt::CTRL+Qt::Key_M);
 			setMenuHint("To perform a MD simulation , first select the molecular structures.");
+			setMenuHelp("mm.html#md");
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 
 			amber_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Amber", this, SLOT(chooseAmberFF()));
 			amber_ff_id_->setCheckable(true);
 			setMenuHint("Use Amber Force Field");
+			setMenuHelp("mm.html");
 			
 			charmm_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Charmm", this, SLOT(chooseCharmmFF()));
 			charmm_ff_id_->setCheckable(true);
 			setMenuHint("Use Charmm Force Field");
+			setMenuHelp("mm.html");
 
 			mmff94_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "MMFF94", this, SLOT(chooseMMFF94()));
 			mmff94_id_->setCheckable(true);
 			setMenuHint("Use MMFF94 Force Field");
+			setMenuHelp("mm.html");
 
 			setup_ff_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Options", this, 
 												SLOT(setupForceField()));
 			setMenuHint("Configure the force field");
+			setMenuHelp("mm.html");
 
 			// Tools Menu -------------------------------------------------------------------
 			getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
