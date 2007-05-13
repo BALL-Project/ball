@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94OutOfPlaneBend.C,v 1.1.8.2 2007/05/11 17:16:26 anhi Exp $
+// $Id: MMFF94OutOfPlaneBend.C,v 1.1.8.3 2007/05/13 00:06:08 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94OutOfPlaneBend.h>
@@ -206,9 +206,9 @@ namespace BALL
 		for (; bend_it != bends_.end(); ++bend_it) 
 		{
 			OutOfPlaneBend& b = *bend_it;
-			if (use_selection && (!b.i->ptr->isSelected() ||
-														!b.j->ptr->isSelected() ||
-														!b.k->ptr->isSelected() ||
+			if (use_selection && (!b.i->ptr->isSelected() &&
+														!b.j->ptr->isSelected() &&
+														!b.k->ptr->isSelected() &&
 														!b.l->ptr->isSelected()))
 			{
 				continue;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.8.1 2007/03/23 12:51:52 oliver Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.8.2 2007/05/13 00:06:07 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -283,6 +283,8 @@ namespace BALL
 		vdw_energy_ = 0;
 		es_energy_  = 0;
 
+		bool use_selection = getForceField()->getUseSelection();
+
 		for (Position p = 0; p < atom_pair_vector_.size(); p++)
 		{
 			double d = (atom_pair_vector_[p].first->getPosition() - 
@@ -297,6 +299,12 @@ namespace BALL
 			d = sqrt(d);
 
 			NonBondedPairData& data = non_bonded_data_[p];
+			if (use_selection && 
+					!atom_pair_vector_[p].first->isSelected() &&
+					!atom_pair_vector_[p].second->isSelected())
+			{
+				continue;
+			}
 
 			const double first = data.eij * pow( 1.07 * data.rij / (d + 0.07 * data.rij), 7);
 
@@ -344,6 +352,8 @@ namespace BALL
 		double dbuf = 0.07;
 		double gbuf = 0.12;
 
+		bool use_selection = getForceField()->getUseSelection();
+
 		for (Position p = 0; p < atom_pair_vector_.size(); p++)
 		{
 			Atom& a1 = *atom_pair_vector_[p].first;
@@ -384,8 +394,8 @@ namespace BALL
 																							
 				force = direction * vdw_factor * FORCES_FACTOR * Constants::JOULE_PER_CAL;
 
-				a1.getForce() -= force;
-				a2.getForce() += force;
+				if (!use_selection || a1.isSelected()) a1.getForce() -= force;
+				if (!use_selection || a2.isSelected()) a2.getForce() += force;
 			}
 
 			if (es_enabled_)
@@ -395,8 +405,8 @@ namespace BALL
 				force = direction * es_factor;
 				// scale 1-4 interactions:
 				if (nbd.is_1_4) force *= 0.75;
-				a1.getForce() += force;
-				a2.getForce() -= force;
+				if (!use_selection || a1.isSelected()) a1.getForce() += force;
+				if (!use_selection || a2.isSelected()) a2.getForce() -= force;
 			}
 		}   
 	} 

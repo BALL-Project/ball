@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Torsion.C,v 1.1.8.1 2007/03/23 12:53:28 oliver Exp $
+// $Id: MMFF94Torsion.C,v 1.1.8.2 2007/05/13 00:06:10 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
@@ -432,31 +432,6 @@ namespace BALL
 			double c1 =     torsion.v1 * sin(angle) -
 				          2. * torsion.v2 * sin(angle * 2.) +
 									3. * torsion.v3 * sin(angle * 3.);
-/*
-Log.error() << "angle_ijk " <<  angle_ijk           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "angle_jkl " <<  angle_jkl           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "sin_j " << sin_j            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "sin_k " << sin_k            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "rs2j " <<  rs2j           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "rs2k " << rs2k            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "rrj " <<  rrj           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "rrk " <<  rrk           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "rrcj " << rrcj            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "rrck " << rrck            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   25 " << a1.getType()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   25 " << a2.getType()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   25 " << a3.getType()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "#~~#   25 " << a4.getType()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "v1   "  << torsion.v1           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "v2   "  << torsion.v2           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "v3   "  << torsion.v3           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "di "  << di           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "dl "  << dl          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "dj "  << dj           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "dk "  << dk           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "c1 " << c1            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-Log.error() << "angle " << angle            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-*/
 			c1 *= 0.5 * FORCES_FACTOR * Constants::JOULE_PER_CAL;
 
 			if (!us || a1.isSelected()) AddDV3_(a1.getForce(), di * c1);

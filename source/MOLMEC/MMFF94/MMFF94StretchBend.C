@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.8.2 2007/05/11 17:16:26 anhi Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.8.3 2007/05/13 00:06:09 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -455,12 +455,20 @@ namespace BALL
 		TVector3<double> v1, v2;
 		vector<Bend>::iterator bend_it = bends_.begin();
 
-		const double degree_to_radian= Constants::PI / (double)180.0;
+		const double degree_to_radian = Constants::PI / (double)180.0;
+		bool use_selection = mmff94_->getUseSelection();
 
 		for (; bend_it != bends_.end(); ++bend_it) 
 		{
 			Bend& bend = *bend_it;
-			
+			if (use_selection &&
+					!bend.atom1->isSelected() &&
+					!bend.atom2->isSelected() &&
+					!bend.atom3->isSelected())
+			{
+				continue;
+			}
+
 			const double& ka = bend_it->ka;
 			const double& theta = bend_it->theta;
 			const double& delta_theta = bend_it->delta_theta;
@@ -504,11 +512,19 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 	{
 		// initial energy is zero
 		stretch_bend_energy_ = 0;
+		bool use_selection = mmff94_->getUseSelection();
 
 		for (Size i = 0; i < stretch_bends_.size(); i++)
 		{
 			StretchBend& sb = stretch_bends_[i];
 			const Bend& bend = bends_[sb.bend_index];
+			if (use_selection &&
+					!bend.atom1->isSelected() &&
+					!bend.atom2->isSelected() &&
+					!bend.atom3->isSelected())
+			{
+				continue;
+			}
 
 			double sb1 = STRETCH_BEND_K0 * (sb.kba_ijk * stretches_[sb.stretch_i_j].delta_r) * bend.delta_theta;
 			double sb2 = STRETCH_BEND_K0 * (sb.kba_kji * stretches_[sb.stretch_j_k].delta_r) * bend.delta_theta;
@@ -997,9 +1013,17 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 	double MMFF94StretchBend::updateStretchEnergy()
 	{
 		stretch_energy_ = 0;
+		bool use_selection = mmff94_->getUseSelection();
 
 		for (Size i = 0 ; i < stretches_.size(); i++)
 		{
+			if (use_selection &&
+					!stretches_[i].atom1->isSelected() &&
+					!stretches_[i].atom2->isSelected())
+			{
+				continue;
+			}
+
 			const Vector3 direction(stretches_[i].atom1->getPosition() - stretches_[i].atom2->getPosition());
 			const double delta(stretches_[i].delta_r);
 			const double delta_2(delta * delta);
@@ -1022,6 +1046,8 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 
 	void MMFF94StretchBend::updateStretchForces()
 	{
+		bool use_selection = getForceField()->getUseSelection();
+
 		// iterate over all bonds, update the forces
 		for (Size i = 0 ; i < stretches_.size(); i++)
 		{
@@ -1039,8 +1065,10 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 			// unit conversion: kJ/(mol A) -> N: FORCES_FACTOR
 			const Vector3 direction = stretch.n * force * FORCES_FACTOR;
 
-			stretch.atom1->getForce()-= direction;
-			stretch.atom2->getForce()+= direction;
+			if (use_selection || stretch.atom1->isSelected()) 
+				stretch.atom1->getForce()-= direction;
+			if (use_selection || stretch.atom2->isSelected()) 
+				stretch.atom2->getForce()+= direction;
 		}                                                                                                          
 	}
 
