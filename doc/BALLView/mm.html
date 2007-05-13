@@ -39,6 +39,7 @@ In most of the times in suffices to highlight the molecular system
 the corresponding entry in the "Molecular Mechanics" menu.
 
 <H2 align=center>Problems with force fields</H2>
+<a name="ff_problems"></a>
 When using the Molecular Mechanics features, users often experience
 problems with the the force field parametrization:
 If the atom typing process fails for some atoms or if no parameters can be
@@ -51,6 +52,16 @@ The most common causes for unassigned atoms are:
 <li>Missing atoms, e.g. hydrogens
 <li>Invalid bonds, e.g. covalent bonds instead of ion bonds
 <li>Force field is not suited for target molecule (MMFF94 can e.g. not handle nucleic acids)
+</ul>
+
+Possible solutions:
+<ul>
+<li>Adding missing atoms (see "Build" menu)
+<li>Deleting unsupported compounds/ligands through the 
+<a href="molecularControl.html">MolecularControl</a>
+<li>Manually fixing errors through the 
+<a href="scene.html#editing">editing mode</a>
+<li>Choosing an other force field
 </ul>
 
 <a name="single_point"></a>
