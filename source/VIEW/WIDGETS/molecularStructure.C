@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.91.14.5 2007/05/13 19:11:02 amoll Exp $
+// $Id: molecularStructure.C,v 1.91.14.6 2007/05/13 21:19:08 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -942,44 +942,10 @@ namespace BALL
 				return;
 			}
 
-			// set up the force field
-			setStatusbarText("Setting up force field...", true);
-			ForceField& ff = getForceField();
-
-			applyForceFieldSettings_();
-
-			bool ok = false;
-			try
-			{
-				if (ff.setup(*system))
-				{
-					ok = true;
-				}
-			}
-			catch(...)
-			{
-				setStatusbarText("Force field setup failed.", true);
-				selectUnassignedForceFieldAtoms_();
-				return;
-			}
-
-			// CHARMM setup may delete atoms (converted to united atoms!),
-			// so we have to make sure the rest of the world realizes something might have changed.
-			if (force_field_id_ == CHARMM_FF)
-			{
-				getMainControl()->update(*system, true);
-			}
-
-			if (!ok)
-			{
-				setStatusbarText("Force field setup failed.", true);
-				selectUnassignedForceFieldAtoms_();
-				return;
-			}
-
+			if (!setupForceField_(system)) return;
 
 			// Compute the single point energy and print the result to Log and the status bar.
-			ff.updateEnergy();
+			ForceField& ff = getForceField();
 			ff.updateForces();
 			// workaround for MSVC: need to create an string, than log it!
 			String results = ff.getResults();
@@ -999,10 +965,7 @@ namespace BALL
 
 			// Retrieve the system from the selection and abort if nothing is selected.
 			System* system = getMainControl()->getSelectedSystem();
-			if (system == 0) 
-			{
-				return;
-			}
+			if (system == 0) return;
 
 			if (show_dialog)
 			{
@@ -1015,48 +978,14 @@ namespace BALL
 					return;
 				}
 			}
-			// Remember which force field was selected and update the force field's 
-			// settings from the appropriate dialog.
-			chooseForceField(minimization_dialog_.selectedForceField());
-			applyForceFieldSettings_();
 
-			// Set up the force field.
-			setStatusbarText("setting up force field...", false);
+			chooseForceField(minimization_dialog_.selectedForceField());
+			if (setupForceField_(system, true)) return;
 			
 			ForceField& ff = getForceField();
-			ff.disableSelection();
-
-			bool ok = false;
-			try
-			{
-				if (ff.setup(*system))
-				{
-					ok = true;
-				}
-			}
-			catch(...)
-			{
-				setStatusbarText("Force field setup failed.", true);
-				selectUnassignedForceFieldAtoms_();
-				return;
-			}
-			
-			// CHARMM setup may delete atoms (converted to united atoms!),
-			// so we have to make sure the rest of the world realizes something might have changed.
-			if (force_field_id_ == CHARMM_FF)
-			{
-				getMainControl()->update(*system, true);
-			}
-
-			if (!ok)
-			{
-				setStatusbarText("Force field setup failed.", true);
-				selectUnassignedForceFieldAtoms_();
-				return;
-			}
-			
 			// Print some stats on the force field
-			Log.info() << "Set up the force field for " << ff.getAtoms().size() << " atoms with parameters from " 
+			Log.info() << "Set up the force field for " 
+								 << ff.getAtoms().size() << " atoms with parameters from " 
 								 << ff.getParameters().getFilename() << "." << std::endl;
 
 			// Start the simulation. Make sure that potential selections
@@ -1084,9 +1013,12 @@ namespace BALL
 			}
 
 			// set the minimizer options
-			minimizer->options[EnergyMinimizer::Option::MAXIMAL_NUMBER_OF_ITERATIONS] = minimization_dialog_.getMaxIterations();
-			minimizer->options[EnergyMinimizer::Option::MAX_GRADIENT] = minimization_dialog_.getMaxGradient();
-			minimizer->options[EnergyMinimizer::Option::ENERGY_DIFFERENCE_BOUND] = minimization_dialog_.getEnergyDifference();
+			minimizer->options[EnergyMinimizer::Option::MAXIMAL_NUMBER_OF_ITERATIONS] = 
+					minimization_dialog_.getMaxIterations();
+			minimizer->options[EnergyMinimizer::Option::MAX_GRADIENT] = 
+					minimization_dialog_.getMaxGradient();
+			minimizer->options[EnergyMinimizer::Option::ENERGY_DIFFERENCE_BOUND] = 
+					minimization_dialog_.getEnergyDifference();
 			minimizer->options[EnergyMinimizer::Option::ENERGY_OUTPUT_FREQUENCY] = 0;
 			minimizer->setMaxNumberOfIterations(minimization_dialog_.getMaxIterations());
 
@@ -1107,7 +1039,7 @@ namespace BALL
 				// perform an initial step (no restart step)
 				minimizer->minimize(1, false);
 
-				// ============================= WITH MULTITHREADING ====================================
+				// ============================= WITH MULTITHREADING ==================
 		#ifdef BALL_QT_HAS_THREADS
 				EnergyMinimizerThread* thread = new EnergyMinimizerThread;
 				getMainControl()->setSimulationThread(thread);
@@ -1120,7 +1052,7 @@ namespace BALL
 				return;
 				
    		#else
-				// ============================= WITHOUT MULTITHREADING =================================
+				// ============================= WITHOUT MULTITHREADING ===============
 				// iterate until done and refresh the screen every "steps" iterations
 				bool ok = true;
 				bool converged = false;
@@ -1185,45 +1117,10 @@ namespace BALL
 
 			if (show_dialog && !md_dialog_.exec()) return;
 
-			// Get the force field.
 			chooseForceField(md_dialog_.selectedForceField());
-			applyForceFieldSettings_();
-
-			// set up the force field
-			setStatusbarText("setting up force field...", false);
-		
-			// Setup the force field.
 			ForceField& ff = getForceField();
-			ff.disableSelection();
-			bool ok = false;
-			try
-			{
-				if (ff.setup(*system))
-				{
-					ok = true;
-				}
-			}
-			catch(...)
-			{
-			}
-			
-			ff.updateEnergy();
 
-			// CHARMM setup may delete atoms (converted to united atoms!),
-			// so we have to make sure the rest of the world realizes something might have changed.
-			if (force_field_id_ == CHARMM_FF)
-			{
-				getMainControl()->update(*system, true);
-			}
-
-			if (!ok)
-			{
-				setStatusbarText("Force field setup failed.", true);
-				selectUnassignedForceFieldAtoms_();
-				return;
-			}
-			
-			ff.updateEnergy();
+			if (!setupForceField_(system, true)) return;
 
 			// Create an instance of the molecular dynamics simulation.
 			MolecularDynamics* mds = 0;
@@ -1268,14 +1165,15 @@ namespace BALL
 
 					if (!md_dialog_.getDCDFile().has(FileSystem::PATH_SEPARATOR))
 					{
-						name = d.getPath() + FileSystem::PATH_SEPARATOR + md_dialog_.getDCDFile();
+						name = d.getPath() + FileSystem::PATH_SEPARATOR + 
+									 md_dialog_.getDCDFile();
 					}
 
 					dcd = new DCDFile;
 					dcd->open(name, std::ios::out);
 					dcd->enableVelocityStorage();
 				}
-				// ============================= WITH MULTITHREADING ===================================
+				// ============================= WITH MULTITHREADING ===================
 			#ifdef BALL_QT_HAS_THREADS
 				MDSimulationThread* thread = new MDSimulationThread;
 				if (!getMainControl()->setSimulationThread(thread))
@@ -1295,7 +1193,7 @@ namespace BALL
 				thread->start(QThread::LowPriority);
 
 			#else
-				// ============================= WITHOUT MULTITHREADING ==============================
+				// ============================= WITHOUT MULTITHREADING =================
 				// iterate until done and refresh the screen every "steps" iterations
 				SnapShotManager manager(system, &getForceField(), dcd);
 				manager.setFlushToDiskFrequency(10);
@@ -1530,6 +1428,61 @@ namespace BALL
 			getMainControl()->update(*getForceField().getSystem(), true);
 
 			setStatusbarText("Setup of the force field failed for selected atoms.", true);
+		}
+
+		bool MolecularStructure::setupForceField_(System* system,
+																							bool disable_selection)
+		{
+			// Get the force field.
+			applyForceFieldSettings_();
+
+			// set up the force field
+			setStatusbarText("setting up force field...", false);
+		
+			// Setup the force field.
+			ForceField& ff = getForceField();
+			if (disable_selection) ff.disableSelection();
+			else 									 ff.enableSelection();
+
+			bool ok = false;
+			try
+			{
+				if (ff.setup(*system))
+				{
+					ok = true;
+				}
+
+				if (ff.getUnassignedAtoms().size() > 0)
+				{
+					Log.error() << "Warning: some atoms could not be assigned/initialized!"
+											<< std::endl
+											<< "<a href=mm.html#ff_problems>For more informations, click Here.</a>" << std::endl;
+				}
+			}
+			catch(...)
+			{
+			}
+			
+			ff.updateEnergy();
+
+			// CHARMM setup may delete atoms (converted to united atoms!),
+			// so we have to make sure the rest of the world realizes something might have changed.
+			if (force_field_id_ == CHARMM_FF)
+			{
+				getMainControl()->update(*system, true);
+			}
+
+			if (!ok)
+			{
+				setStatusbarText("Force field setup failed.", true);
+				selectUnassignedForceFieldAtoms_();
+			}
+			else
+			{
+				ff.updateEnergy();
+			}
+
+			return ok;
 		}
 
 	} // namespace VIEW

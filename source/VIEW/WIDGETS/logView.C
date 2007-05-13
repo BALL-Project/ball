@@ -6,6 +6,7 @@
 
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/message.h>
 
 #include <QtGui/QTextCursor>
 
@@ -17,7 +18,7 @@ namespace BALL
 	{
 
 		DragLogView::DragLogView(QWidget* parent)
-			: QTextEdit(parent)
+			: QTextBrowser(parent)
 		{
 		}
 
@@ -38,6 +39,14 @@ namespace BALL
 		{
 			VIEW::processDropEvent(e);
 			setReadOnly(true);
+		}
+
+
+		void DragLogView::setSource(const QUrl& name)
+		{
+			MainControl* mc = getMainControl();
+			ShowHelpMessage* msg = new ShowHelpMessage(ascii(name.toString()));
+			if (mc) mc->sendMessage(*msg);
 		}
 
 
@@ -108,7 +117,16 @@ namespace BALL
 				text_edit_->setTextCursor(ct);
  			}
 					
- 			text_edit_->insertPlainText(text.c_str());
+			if (!text.hasSubstring("href"))
+			{
+				text_edit_->insertPlainText(text.c_str());
+			}
+			else
+			{
+				text_edit_->insertHtml(text.c_str());
+				text_edit_->insertHtml("<br>");
+			}
+
  			ct.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
  			text_edit_->setTextCursor(ct);
  			text_edit_->ensureCursorVisible();

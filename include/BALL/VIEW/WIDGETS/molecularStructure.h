@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.28.16.1 2007/03/25 21:26:22 oliver Exp $
+// $Id: molecularStructure.h,v 1.28.16.2 2007/05/13 21:18:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -311,6 +311,8 @@ namespace BALL
 			void applyForceFieldSettings_();
 
 			void selectUnassignedForceFieldAtoms_();
+
+			bool setupForceField_(System* system, bool disable_selection = false);
 
 			QAction* center_camera_id_;
 			QAction* build_bonds_id_;
