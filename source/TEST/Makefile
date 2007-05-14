@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.221.14.2 2007/03/26 14:22:40 amoll Exp $
+# $Id: Makefile,v 1.221.14.3 2007/05/14 18:32:37 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -10,6 +10,7 @@
 include ../config.mak
 
 DIRECTORY=TEST
+DISPLAY=
 
 # Include the list of test programs.
 # This file is also included by the corresponding
