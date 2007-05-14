@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.C,v 1.27.18.1 2007/03/25 22:00:18 oliver Exp $
+// $Id: MOL2File.C,v 1.27.18.2 2007/05/14 19:51:08 anhi Exp $
 //
 
 #include <BALL/FORMAT/MOL2File.h>
@@ -763,6 +763,21 @@ namespace BALL
 		else
 		{	
 			// Otherwise, insert all atoms into their proper substructures.
+			
+			// make sure that no substructures with id 0 occur. these would lead to a memory leak later, since we
+			// rely on MOL2 starting with substructure id 1 (see bug #48)
+			// we need an extra loop that cannot be merged with the following one, since all ids must be adapted
+			// if we find a single zero
+			bool fix_ids = false;
+			for (i = 0; i < atoms_.size(); i++)
+			{
+				if (atoms_[i].substructure == 0)
+				{
+					fix_ids = true;
+					break;
+				}
+			}
+
 			for (i = 0; i < atoms_.size(); i++)
 			{	
 				// MOL2 starts counting at 1, we start at zero, ergo: > instead of >=.
@@ -772,7 +787,10 @@ namespace BALL
 				}
 				else
 				{
-					sub_ptr[atoms_[i].substructure - 1]->insert(*atom_ptr[i]);
+					if (!fix_ids)
+						sub_ptr[atoms_[i].substructure - 1]->insert(*atom_ptr[i]);
+					else
+						sub_ptr[atoms_[i].substructure]->insert(*atom_ptr[i]);
 				}
 			}
 
