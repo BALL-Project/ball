@@ -1,13 +1,13 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.14.18.1 2007/03/25 22:00:36 oliver Exp $
+# $Id: Makefile,v 1.14.18.2 2007/05/14 18:19:52 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
 #
 
-DIRECTORY=APPLICATIONS/UTILITIES
+DIRECTORY=TUTORIAL
 
 include ../common.mak
 
