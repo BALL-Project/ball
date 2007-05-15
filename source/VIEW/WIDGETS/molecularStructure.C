@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.91.14.6 2007/05/13 21:19:08 amoll Exp $
+// $Id: molecularStructure.C,v 1.91.14.7 2007/05/15 22:46:39 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -980,7 +980,7 @@ namespace BALL
 			}
 
 			chooseForceField(minimization_dialog_.selectedForceField());
-			if (setupForceField_(system, true)) return;
+			if (!setupForceField_(system, true)) return;
 			
 			ForceField& ff = getForceField();
 			// Print some stats on the force field
