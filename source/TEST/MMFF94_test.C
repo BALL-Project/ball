@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.6.3 2007/05/16 13:53:06 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.6.4 2007/05/16 20:45:32 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -47,7 +47,7 @@ float diff(double original, double our)
 	return x / fabs(original);
 }
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.6.3 2007/05/16 13:53:06 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.6.4 2007/05/16 20:45:32 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -839,6 +839,96 @@ CHECK(force test 9: ES SWITCH)
 	mmff.updateEnergy();
 	charmm_force = -18.14475 * CHARMM_FORCES_FACTOR;
 	es_charmm = -44.21526 * Constants::JOULE_PER_CAL;
+	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
+	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
+	PRECISION(0.0001)
+	TEST_REAL_EQUAL(nb.getESEnergy(), es_charmm)
+RESULT
+
+CHECK(force test 10: ES SWITCH RDIE)
+	mmff.options[MMFF94::Option::ELECTROSTATIC_CUTOFF] = 12;
+	mmff.options[MMFF94::Option::ELECTROSTATIC_CUTON] = 8;
+	mmff.options[MMFF94::Option::DISTANCE_DEPENDENT_DIELECTRIC] = true;
+
+	MMFF94NonBonded& nb = *(MMFF94NonBonded*)enableOneComponent("MMFF94 NonBonded", mmff);
+	HINFile f("data/MMFF94-vdw.hin");	
+	System s;
+	f >> s;
+	f.close();
+	s.deselect();
+	TEST_EQUAL(s.countAtoms(), 2)
+
+	// create references to the two atoms
+	AtomIterator it = s.beginAtom();
+	Atom& a1 = *it++;
+	Atom& a2 = *it;
+
+	a2.setPosition(Vector3(10,0,0));
+
+	mmff.options[MMFF94_VDW_ENABLED] = "false";
+	mmff.options[MMFF94_ES_ENABLED] = "true";
+
+	mmff.setup(s);
+	mmff.updateForces();
+	mmff.updateEnergy();
+
+	PRECISION(0.0001)
+	double es_charmm = -0.51364 * Constants::JOULE_PER_CAL;
+	TEST_REAL_EQUAL(nb.getESEnergy(), es_charmm)
+	TEST_EQUAL(diff(es_charmm, nb.getESEnergy()) < 0.00001, true)
+	PRECISION(2e-14)
+
+	float charmm_force = -0.75161 * CHARMM_FORCES_FACTOR;
+
+	PRECISION(2e-15)
+	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
+	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
+	TEST_EQUAL(diff(a1.getForce().x, -charmm_force) < 0.00001, true)
+	TEST_REAL_EQUAL(a1.getForce().y, 0)
+	TEST_REAL_EQUAL(a2.getForce().y, 0)
+	TEST_REAL_EQUAL(a1.getForce().z, 0)
+	TEST_REAL_EQUAL(a2.getForce().z, 0)
+
+	// cutoff distance reached
+	a2.setPosition(Vector3(12,0,0));
+	mmff.setup(s);
+	mmff.updateForces();
+	mmff.updateEnergy();
+	TEST_REAL_EQUAL(nb.getESEnergy(), 0)
+	TEST_REAL_EQUAL(a1.getForce().getLength(), 0)
+	TEST_REAL_EQUAL(a2.getForce().getLength(), 0)
+
+	PRECISION(2e-16)
+	a2.setPosition(Vector3(9,0,0));
+	mmff.setup(s);
+	mmff.updateForces();
+	mmff.updateEnergy();
+	charmm_force = -1.58332 * CHARMM_FORCES_FACTOR;
+	es_charmm = -1.66266 * Constants::JOULE_PER_CAL;
+	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
+	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
+	PRECISION(0.0001)
+	TEST_REAL_EQUAL(nb.getESEnergy(), es_charmm)
+
+	PRECISION(2e-16)
+	a2.setPosition(Vector3(8,0,0));
+	mmff.setup(s);
+	mmff.updateForces();
+	mmff.updateEnergy();
+	charmm_force = -2.54627 * CHARMM_FORCES_FACTOR;
+	es_charmm = -3.72560 * Constants::JOULE_PER_CAL;
+	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
+	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
+	PRECISION(0.0001)
+	TEST_REAL_EQUAL(nb.getESEnergy(), es_charmm)
+
+	PRECISION(2e-16)
+	a2.setPosition(Vector3(6,0,0));
+	mmff.setup(s);
+	mmff.updateForces();
+	mmff.updateEnergy();
+	charmm_force = -5.99826 * CHARMM_FORCES_FACTOR;
+	es_charmm = -11.62162 * Constants::JOULE_PER_CAL;
 	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
 	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
 	PRECISION(0.0001)
