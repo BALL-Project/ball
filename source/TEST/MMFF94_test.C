@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.6.1 2007/03/25 21:47:18 oliver Exp $
+// $Id: MMFF94_test.C,v 1.1.6.2 2007/05/16 12:27:37 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -47,7 +47,7 @@ float diff(double original, double our)
 	return x / fabs(original);
 }
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.6.1 2007/03/25 21:47:18 oliver Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.6.2 2007/05/16 12:27:37 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -75,6 +75,12 @@ RESULT
 
 MMFF94 mmff;
 const float delta = 0.00001;
+
+mmff.options[MMFF94::Option::VDW_CUTOFF] = 99;
+mmff.options[MMFF94::Option::VDW_CUTON] = 98;
+mmff.options[MMFF94::Option::ELECTROSTATIC_CUTOFF] = 99;
+mmff.options[MMFF94::Option::ELECTROSTATIC_CUTON] = 98;
+mmff.options[MMFF94::Option::NONBONDED_CUTOFF] = 199;
 
 CHECK(forces and energies equal in two consecutive runs)
 	MOL2File f("data/MMFF94_test2.mol2");
@@ -712,13 +718,14 @@ CHECK(force test 8: ES)
 	double es_charmm = -323.97229 * Constants::JOULE_PER_CAL;
 	TEST_REAL_EQUAL(nb.getESEnergy(), es_charmm)
 	TEST_EQUAL(diff(es_charmm, nb.getESEnergy()) < 0.00001, true)
-	PRECISION(2e-20)
+	PRECISION(2e-14)
 
 	float charmm_force = -158.03526 * CHARMM_FORCES_FACTOR;
 
 	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
 	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
 	TEST_EQUAL(diff(a1.getForce().x, -charmm_force) < 0.00001, true)
+	PRECISION(2e-20)
 	TEST_REAL_EQUAL(a1.getForce().y, 0)
 	TEST_REAL_EQUAL(a2.getForce().y, 0)
 	TEST_REAL_EQUAL(a1.getForce().z, 0)
