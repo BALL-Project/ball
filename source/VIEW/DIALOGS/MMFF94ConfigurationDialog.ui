@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>MMFF94ConfigurationDialogData</class>
  <widget class="QDialog" name="MMFF94ConfigurationDialogData" >
   <property name="geometry" >
@@ -193,7 +190,7 @@
       <item row="1" column="1" >
        <widget class="QLineEdit" name="vdw_cutoff" >
         <property name="enabled" >
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="sizePolicy" >
          <sizepolicy>
@@ -226,7 +223,7 @@
       <item row="2" column="1" >
        <widget class="QLineEdit" name="electrostatic_cutoff" >
         <property name="enabled" >
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="minimumSize" >
          <size>
@@ -335,7 +332,7 @@
       <item row="1" column="3" >
        <widget class="QLineEdit" name="vdw_cuton" >
         <property name="enabled" >
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="text" >
          <string>13.0</string>
@@ -348,7 +345,7 @@
       <item row="2" column="3" >
        <widget class="QLineEdit" name="electrostatic_cuton" >
         <property name="enabled" >
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="text" >
          <string>13.0</string>
@@ -933,7 +930,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
  <tabstops>
   <tabstop>parameter_file_edit</tabstop>
   <tabstop>browse_button</tabstop>
