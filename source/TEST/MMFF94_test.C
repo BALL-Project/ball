@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.6.5 2007/05/16 21:24:40 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.6.6 2007/05/16 23:04:43 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -47,7 +47,7 @@ float diff(double original, double our)
 	return x / fabs(original);
 }
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.6.5 2007/05/16 21:24:40 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.6.6 2007/05/16 23:04:43 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -692,7 +692,7 @@ CHECK(force test 7: VDW)
 	}	
 RESULT
 
-CHECK(force test 8: ES)
+CHECK(force test 8: ES CDIE)
 	MMFF94NonBonded& nb = *(MMFF94NonBonded*)enableOneComponent("MMFF94 NonBonded", mmff);
 	HINFile f("data/MMFF94-vdw.hin");	
 	System s;
@@ -708,6 +708,7 @@ CHECK(force test 8: ES)
 
 	mmff.options[MMFF94_VDW_ENABLED] = "false";
 	mmff.options[MMFF94_ES_ENABLED] = "true";
+	mmff.options[MMFF94::Option::DISTANCE_DEPENDENT_DIELECTRIC] = false;
 
 	mmff.setup(s);
 	mmff.updateForces();
@@ -757,9 +758,65 @@ CHECK(force test 8: ES)
 	}	
 RESULT
 
+CHECK(force test 8.2: ES RDIE)
+	mmff.options[MMFF94_VDW_ENABLED] = "false";
+	mmff.options[MMFF94_ES_ENABLED] = "true";
+	mmff.options[MMFF94::Option::DISTANCE_DEPENDENT_DIELECTRIC] = true;
+
+	MMFF94NonBonded& nb = *(MMFF94NonBonded*)enableOneComponent("MMFF94 NonBonded", mmff);
+	HINFile f("data/MMFF94-vdw.hin");	
+	System s;
+	f >> s;
+	f.close();
+
+	// create references to the two atoms
+	AtomIterator it = s.beginAtom();
+	Atom& a1 = *it++;
+	Atom& a2 = *it;
+
+	a2.setPosition(Vector3(10,0,0));
+
+	mmff.setup(s);
+	mmff.updateForces();
+	mmff.updateEnergy();
+
+	// reduced precision: needed to interpolate values from CHARMM,
+	// since SWITCHING could not be disabled
+	PRECISION(0.1)
+	double es_charmm =  -6.56550 * Constants::JOULE_PER_CAL;
+	TEST_REAL_EQUAL(nb.getESEnergy(), es_charmm)
+	PRECISION(2e-14)
+
+	float charmm_force = -1.30756 * CHARMM_FORCES_FACTOR;
+
+	PRECISION(2e-13)
+	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
+	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
+	TEST_REAL_EQUAL(a1.getForce().y, 0)
+	TEST_REAL_EQUAL(a2.getForce().y, 0)
+	TEST_REAL_EQUAL(a1.getForce().z, 0)
+	TEST_REAL_EQUAL(a2.getForce().z, 0)
+
+	PRECISION(2e-12)
+	a2.setPosition(Vector3(6,0,0));
+	mmff.setup(s);
+	mmff.updateForces();
+	mmff.updateEnergy();
+	charmm_force = -5.99552 * CHARMM_FORCES_FACTOR;
+	es_charmm = -18.12812 * Constants::JOULE_PER_CAL;
+	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
+	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
+	PRECISION(0.1)
+	TEST_REAL_EQUAL(nb.getESEnergy(), es_charmm)
+RESULT
+
+
 CHECK(force test 9: ES SWITCH)
 	mmff.options[MMFF94::Option::ELECTROSTATIC_CUTOFF] = 12;
 	mmff.options[MMFF94::Option::ELECTROSTATIC_CUTON] = 8;
+	mmff.options[MMFF94::Option::DISTANCE_DEPENDENT_DIELECTRIC] = false;
+	mmff.options[MMFF94_VDW_ENABLED] = "false";
+	mmff.options[MMFF94_ES_ENABLED] = "true";
 
 	MMFF94NonBonded& nb = *(MMFF94NonBonded*)enableOneComponent("MMFF94 NonBonded", mmff);
 	HINFile f("data/MMFF94-vdw.hin");	
@@ -776,9 +833,6 @@ CHECK(force test 9: ES SWITCH)
 
 	a2.setPosition(Vector3(10,0,0));
 
-	mmff.options[MMFF94_VDW_ENABLED] = "false";
-	mmff.options[MMFF94_ES_ENABLED] = "true";
-
 	mmff.setup(s);
 	mmff.updateForces();
 	mmff.updateEnergy();
@@ -786,7 +840,6 @@ CHECK(force test 9: ES SWITCH)
 	PRECISION(0.0001)
 	double es_charmm = -2.71125 * Constants::JOULE_PER_CAL;
 	TEST_REAL_EQUAL(nb.getESEnergy(), es_charmm)
-	TEST_EQUAL(diff(es_charmm, nb.getESEnergy()) < 0.00001, true)
 	PRECISION(2e-14)
 
 	float charmm_force = -3.77685 * CHARMM_FORCES_FACTOR;
@@ -849,7 +902,7 @@ RESULT
 CHECK(force test 10: ES SWITCH RDIE)
 	mmff.options[MMFF94::Option::ELECTROSTATIC_CUTOFF] = 12;
 	mmff.options[MMFF94::Option::ELECTROSTATIC_CUTON] = 8;
-	mmff.options[MMFF94::Option::DISTANCE_DEPENDENT_DIELECTRIC] = true;
+	mmff.options[MMFF94::Option::DISTANCE_DEPENDENT_DIELECTRIC] = "true";
 
 	MMFF94NonBonded& nb = *(MMFF94NonBonded*)enableOneComponent("MMFF94 NonBonded", mmff);
 	HINFile f("data/MMFF94-vdw.hin");	
@@ -884,7 +937,6 @@ CHECK(force test 10: ES SWITCH RDIE)
 	PRECISION(2e-15)
 	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
 	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
-	TEST_EQUAL(diff(a1.getForce().x, -charmm_force) < 0.00001, true)
 	TEST_REAL_EQUAL(a1.getForce().y, 0)
 	TEST_REAL_EQUAL(a2.getForce().y, 0)
 	TEST_REAL_EQUAL(a1.getForce().z, 0)

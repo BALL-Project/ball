@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.8.3 2007/05/16 13:53:15 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.8.4 2007/05/16 23:04:31 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -237,8 +237,8 @@ namespace BALL
 		if (options.has(MMFF94::Option::DISTANCE_DEPENDENT_DIELECTRIC))
 		{
 			bool ddd = options.getBool(MMFF94::Option::DISTANCE_DEPENDENT_DIELECTRIC);
-			if (ddd)  dc_ = 2;
-			else 			dc_ = 1;
+			if (ddd)  n_ = 2;
+			else 			n_ = 1;
 		}
 
 
@@ -271,10 +271,10 @@ namespace BALL
 		// Determine the most efficient way to calculate all non bonded atom pairs
 		algorithm_type_ = determineMethodOfAtomPairGeneration();
 
-		if (es_enabled_ && es_cut_on_ > 0)
+		if (es_enabled_ && es_cut_off_ > 0)
 		{
 			bool ok = es_cut_off_ > es_cut_on_ &&
-								cut_off_ > es_cut_off_;
+								cut_off_ >= es_cut_off_;
 			if (!ok ) 
 			{
 				Log.error() << "Invalid ES cuton/cutoff values!" << std::endl;
@@ -299,6 +299,12 @@ namespace BALL
 										es_ac_ / es_d_off_ +
 										es_cover3_ * pow(es_d_off_, 3.) +
 										es_dover5_ * pow(es_d_off_, 5.);
+				// CONSTR=TWOB*LOG(CTOFM)-ACOEF/C2OFM+CCOEF*C2OFM+OFF4M*DENOM
+				es_constr_ = 2. * es_bc_ * log(es_d_off_) - es_ac_ / es_d_off2_ +
+					           es_cc_ * es_d_off2_ + pow(es_d_off2_, 2.) / es_denom_;
+				// EADDR  = (TWELVE*ONOFF2M*LOG(CTOFM/CTONM) - THREE*(OFF4M-C2ONM*C2ONM))*DENOM
+				es_eaddr_ = (12. * es_d_on2_ * es_d_off2_ * log(es_d_off_ / es_d_on_) -
+						         3. * (pow(es_d_off2_, 2.) - pow(es_d_on2_, 2.))) / es_denom_;
 			}
 
 			enable_es_switch_ = ok;
@@ -308,10 +314,10 @@ namespace BALL
 			enable_es_switch_ = false;
 		}
 
-		if (vdw_enabled_ && vdw_cut_on_ > 0)
+		if (vdw_enabled_ && vdw_cut_off_ > 0)
 		{
 			bool ok = vdw_cut_off_ > vdw_cut_on_ &&
-								cut_off_ > vdw_cut_off_;
+								cut_off_ >= vdw_cut_off_;
 			if (!ok ) 
 			{
 				Log.error() << "Invalid vdw cuton/cutoff values!" << std::endl;
@@ -336,6 +342,9 @@ namespace BALL
 		energy_ 		= 0;
 		vdw_energy_ = 0;
 		es_energy_  = 0;
+
+ 		Options& options = getForceField()->options;
+		bool ddd = options.getBool(MMFF94::Option::DISTANCE_DEPENDENT_DIELECTRIC);
 
 		bool use_selection = getForceField()->getUseSelection();
 
@@ -375,25 +384,49 @@ namespace BALL
 				{
 					if (d >= es_cut_off_) continue;
 
-					if (d > es_cut_on_)
+					const double s2d = pow(d + 0.05, 2.);
+
+					if (!ddd)
 					{
-						// G1*(R1D*(ACOEF-S2D*(BCOEF+S2D*(COVER3+DOVER5*S2D))) + CONST)
-						const double s2d = pow(d + 0.05, 2.);
-						es =	es_ac_ - s2d * (es_bc_ + s2d *
-												(es_cover3_ + es_dover5_ * s2d));
-						es /= (d + 0.05);
-						es +=	es_const_;
-						es *= ES_CONSTANT * data.qi * data.qj;
+						// constant dielectric constant
+						if (d > es_cut_on_)
+						{
+							// G1*(R1D*(ACOEF-S2D*(BCOEF+S2D*(COVER3+DOVER5*S2D))) + CONST)
+							es =	es_ac_ - s2d * (es_bc_ + s2d *
+													(es_cover3_ + es_dover5_ * s2d));
+							es /= (d + 0.05);
+							es +=	es_const_;
+						}
+						else
+						{
+							//EELPR = G1*(R1D+EADD)
+							es =  (1. / (d + 0.05)) + es_eadd_;
+						}
 					}
 					else
 					{
-            //EELPR = G1*(R1D+EADD)
-						es =  (1. / (d + 0.05)) + es_eadd_;
-						es *= ES_CONSTANT * data.qi * data.qj;
+						// distance dependend dielectric constant
+						double r2d = pow(1. / (d + 0.05), 2.);
+						// distance dependent dielectric constant
+						if (d > es_cut_on_)
+						{
+              // EELPR = G2*(ACOEF*R2D + TWOB*LOG(R1D) - S2D*(CCOEF + S2D*DENOM) + CONSTR)
+							es = es_ac_ * r2d +
+								   2. * es_bc_ * log(1. / (d + 0.05)) - 
+									 s2d * (es_cc_ + s2d / es_denom_) + es_constr_;
+						}
+						else
+						{
+							// EELPR = G2*(R2D + EADDR)
+							es = r2d + es_eaddr_;
+						}
 					}
+
+					es *= ES_CONSTANT * data.qi * data.qj;
 				}
 				else
 				{
+					// no switching
 					es = ES_CONSTANT * data.qi * data.qj / (dc_ * pow(d + 0.05, n_));
 				}
 
@@ -482,31 +515,63 @@ namespace BALL
 			{
 				double es_factor;
 
-				if (enable_es_switch_ && r >= es_cut_off_) continue;
-
-				if (enable_es_switch_ && r > es_cut_on_)
+				if (enable_es_switch_)
 				{
-					const double s2d = pow(r + 0.05, 2.);
+					if (r >= es_cut_off_) continue;
 
-          // DF-G1*R1*(ACOEF*R2D+BCOEF+S2D*(CCOEF+DCOEF*S2D))
-					es_factor = es_ac_ * pow(1./(r + 0.05), 2.) + 
-											es_bc_ +  
-											s2d * (es_cc_ + es_dc_ * s2d);
-//   					es_factor /= r;
-					es_factor *= ES_CONSTANT * nbd.qi * nbd.qj;
- 				}
- 				else
- 				{
+					Options& options = getForceField()->options;
+					bool ddd = options.getBool(MMFF94::Option::DISTANCE_DEPENDENT_DIELECTRIC);
+
+					if (!ddd)
+					{
+						if (r > es_cut_on_)
+						{
+							const double s2d = pow(r + 0.05, 2.);
+
+							// DF-G1*R1*(ACOEF*R2D+BCOEF+S2D*(CCOEF+DCOEF*S2D))
+							es_factor = es_ac_ * pow(1./(r + 0.05), 2.) + 
+													es_bc_ +  
+													s2d * (es_cc_ + es_dc_ * s2d);
+							es_factor *= ES_CONSTANT * nbd.qi * nbd.qj;
+						}
+						else
+						{
+							// ES: -  332.0716 * qi *qj * n / (D * (R + delta )^n *(R + delta))
+							es_factor = ES_CONSTANT * nbd.qi * nbd.qj * n_ / (dc_ * pow(r + 0.05, n_ + 1));
+						}
+					}
+					else
+					{
+						double r3d = pow(1. / (r + 0.05), 3.);
+						// distance dependent dielectric constant
+						if (r > es_cut_on_)
+						{
+							//DF = DF-G2*R1*(TWOA*R3D+TWOB*R1D+TWOC*S1D+TWOD*S3D)
+							es_factor = 2. * es_ac_ * r3d + 2. * es_bc_ * (1. / (r + 0.05)) +
+													2. * es_cc_ * (r + 0.05) + 2. * es_dc_ * pow(1. / (r + 0.05), 3.);
+							es_factor *= ES_CONSTANT * nbd.qi * nbd.qj;
+						}
+						else
+						{
+							//DF = DF - TWO*G2*R1*R3D
+							es_factor = 2. * r3d / r;
+							es_factor *= ES_CONSTANT * nbd.qi * nbd.qj;
+						}
+					}
+		
+				} // switching end
+				else
+				{
 					// ES: -  332.0716 * qi *qj * n / (D * (R + delta )^n *(R + delta))
- 					es_factor = ES_CONSTANT * nbd.qi * nbd.qj * n_ / (dc_ * pow(r + 0.05, n_ + 1));
+					es_factor = ES_CONSTANT * nbd.qi * nbd.qj * n_ / (dc_ * pow(r + 0.05, n_ + 1));
 				}
-
+					
 				if (nbd.is_1_4) es_factor *= 0.75;
 				force = direction * es_factor * FORCES_FACTOR;
 				// scale 1-4 interactions:
 				if (!use_selection || a1.isSelected()) a1.getForce() += force;
 				if (!use_selection || a2.isSelected()) a2.getForce() -= force;
-			}
+			} // ES end
 		}   
 	} 
 
