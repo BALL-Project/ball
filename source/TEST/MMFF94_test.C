@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.6.4 2007/05/16 20:45:32 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.6.5 2007/05/16 21:24:40 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -47,7 +47,7 @@ float diff(double original, double our)
 	return x / fabs(original);
 }
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.6.4 2007/05/16 20:45:32 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.6.5 2007/05/16 21:24:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -81,6 +81,7 @@ mmff.options[MMFF94::Option::VDW_CUTON] = 98;
 mmff.options[MMFF94::Option::ELECTROSTATIC_CUTOFF] = 99;
 mmff.options[MMFF94::Option::ELECTROSTATIC_CUTON] = 99;
 mmff.options[MMFF94::Option::NONBONDED_CUTOFF] = 199;
+mmff.options[MMFF94::Option::DISTANCE_DEPENDENT_DIELECTRIC] = false;
 
 CHECK(forces and energies equal in two consecutive runs)
 	MOL2File f("data/MMFF94_test2.mol2");
