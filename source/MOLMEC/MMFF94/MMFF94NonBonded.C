@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.8.2 2007/05/13 00:06:07 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.8.3 2007/05/16 13:53:15 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -181,6 +181,7 @@ namespace BALL
 			Log.info() << "NB pair " << atom1->getName() << " " << atom2->getName() << std::endl;
 #endif
 		}
+
 	}
 
 	// setup the internal datastructures for the component
@@ -270,6 +271,59 @@ namespace BALL
 		// Determine the most efficient way to calculate all non bonded atom pairs
 		algorithm_type_ = determineMethodOfAtomPairGeneration();
 
+		if (es_enabled_ && es_cut_on_ > 0)
+		{
+			bool ok = es_cut_off_ > es_cut_on_ &&
+								cut_off_ > es_cut_off_;
+			if (!ok ) 
+			{
+				Log.error() << "Invalid ES cuton/cutoff values!" << std::endl;
+			}
+			else
+			{
+				es_d_on_ = es_cut_on_ + 0.05;
+				es_d_on2_ = es_d_on_ * es_d_on_;
+				es_d_off_ = es_cut_off_ + 0.05;
+				es_d_off2_ = es_d_off_ * es_d_off_;
+				es_denom_ = pow((es_d_off2_ - es_d_on2_), 3);
+				es_cover3_ = -(es_d_on2_ + es_d_off2_) / es_denom_;
+				es_ac_ = es_d_off2_ *es_d_off2_ * (es_d_off2_ - 3. * es_d_on2_ ) 
+					       / es_denom_;
+				es_bc_ = 6. * es_d_on2_ * es_d_off2_ / es_denom_;
+				es_cc_ = 3. * es_cover3_;
+				es_dc_ = 2. / es_denom_;
+				es_dover5_ = es_dc_ / 5.;
+				es_eadd_ = (es_d_off2_ * es_d_on2_ * (es_d_off_ - es_d_on_) -
+									 (pow(es_d_off_, 5.) - pow(es_d_on_, 5.)) / 5.) * 8. / es_denom_;
+				es_const_ = es_bc_ * es_d_off_ - 
+										es_ac_ / es_d_off_ +
+										es_cover3_ * pow(es_d_off_, 3.) +
+										es_dover5_ * pow(es_d_off_, 5.);
+			}
+
+			enable_es_switch_ = ok;
+		}
+		else
+		{
+			enable_es_switch_ = false;
+		}
+
+		if (vdw_enabled_ && vdw_cut_on_ > 0)
+		{
+			bool ok = vdw_cut_off_ > vdw_cut_on_ &&
+								cut_off_ > vdw_cut_off_;
+			if (!ok ) 
+			{
+				Log.error() << "Invalid vdw cuton/cutoff values!" << std::endl;
+			}
+
+			enable_vdw_switch_ = ok;
+		}
+		else
+		{
+			enable_vdw_switch_ = false;
+		}
+
 		update();
 
 		return true;
@@ -313,14 +367,40 @@ namespace BALL
 			const double e = first * sec * Constants::JOULE_PER_CAL;
 			vdw_energy_ += e;
 
-			double es = ES_CONSTANT * data.qi * data.qj / (dc_ * pow(d + 0.05, n_));
+			double es = 0.;
 
-			if (data.is_1_4) 
+			if (es_enabled_)
 			{
-				es *= 0.75;
-			}
+				if (enable_es_switch_)
+				{
+					if (d >= es_cut_off_) continue;
 
-			es_energy_ += es;
+					if (d > es_cut_on_)
+					{
+						// G1*(R1D*(ACOEF-S2D*(BCOEF+S2D*(COVER3+DOVER5*S2D))) + CONST)
+						const double s2d = pow(d + 0.05, 2.);
+						es =	es_ac_ - s2d * (es_bc_ + s2d *
+												(es_cover3_ + es_dover5_ * s2d));
+						es /= (d + 0.05);
+						es +=	es_const_;
+						es *= ES_CONSTANT * data.qi * data.qj;
+					}
+					else
+					{
+            //EELPR = G1*(R1D+EADD)
+						es =  (1. / (d + 0.05)) + es_eadd_;
+						es *= ES_CONSTANT * data.qi * data.qj;
+					}
+				}
+				else
+				{
+					es = ES_CONSTANT * data.qi * data.qj / (dc_ * pow(d + 0.05, n_));
+				}
+
+				if (data.is_1_4) es *= 0.75;
+
+				es_energy_ += es;
+			}
 
 
 #ifdef BALL_MMFF94_TEST
@@ -400,11 +480,30 @@ namespace BALL
 
 			if (es_enabled_)
 			{
-				// ES: -  332.0716 * qi *qj * n / (D * (R + delta )^n *(R + delta))
-				double es_factor = FORCES_FACTOR * (ES_CONSTANT * nbd.qi * nbd.qj * n_ / (dc_ * pow(r + 0.05, n_ + 1)));
-				force = direction * es_factor;
+				double es_factor;
+
+				if (enable_es_switch_ && r >= es_cut_off_) continue;
+
+				if (enable_es_switch_ && r > es_cut_on_)
+				{
+					const double s2d = pow(r + 0.05, 2.);
+
+          // DF-G1*R1*(ACOEF*R2D+BCOEF+S2D*(CCOEF+DCOEF*S2D))
+					es_factor = es_ac_ * pow(1./(r + 0.05), 2.) + 
+											es_bc_ +  
+											s2d * (es_cc_ + es_dc_ * s2d);
+//   					es_factor /= r;
+					es_factor *= ES_CONSTANT * nbd.qi * nbd.qj;
+ 				}
+ 				else
+ 				{
+					// ES: -  332.0716 * qi *qj * n / (D * (R + delta )^n *(R + delta))
+ 					es_factor = ES_CONSTANT * nbd.qi * nbd.qj * n_ / (dc_ * pow(r + 0.05, n_ + 1));
+				}
+
+				if (nbd.is_1_4) es_factor *= 0.75;
+				force = direction * es_factor * FORCES_FACTOR;
 				// scale 1-4 interactions:
-				if (nbd.is_1_4) force *= 0.75;
 				if (!use_selection || a1.isSelected()) a1.getForce() += force;
 				if (!use_selection || a2.isSelected()) a2.getForce() -= force;
 			}

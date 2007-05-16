@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.h,v 1.1.8.1 2007/03/25 21:25:16 oliver Exp $
+// $Id: MMFF94NonBonded.h,v 1.1.8.2 2007/05/16 13:53:19 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MMFF94_NONBONDED_H
@@ -148,6 +148,13 @@ namespace BALL
 		double 																n_;
 		bool 																	es_enabled_;
 		bool 																	vdw_enabled_;
+		bool 																	enable_es_switch_;
+		bool 																	enable_vdw_switch_;
+		double 	es_d_on2_, es_d_off2_, 
+						es_d_on_, es_d_off_,
+						es_ac_, es_bc_, 
+						es_cc_, es_dc_, es_denom_, es_con_, es_cover3_, es_dover5_,
+						es_eadd_, es_const_;
 	};
 } // namespace BALL
 
