@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.C,v 1.40.26.1 2007/03/25 22:00:30 oliver Exp $
+// $Id: forceField.C,v 1.40.26.2 2007/05/16 15:56:23 aleru Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -346,7 +346,7 @@ namespace BALL
 				{
 					last--;
 				}
-				if ((last > 0) && (first < atoms_.size()))
+				if ((last > 0) && (first < atoms_.size()) && (first < last))
 				{
 					Atom* tmp = atoms_[first];
 					atoms_[first] = atoms_[last];

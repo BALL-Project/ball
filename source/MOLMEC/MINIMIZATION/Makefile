@@ -5,6 +5,7 @@ THISLIB=$(LIBNAME)
 CPP_SOURCES=\
 	energyMinimizer.C\
 	lineSearch.C\
+	conicLineSearch.C\
 	steepestDescent.C\
 	strangLBFGS.C\
 	shiftedLVMM.C\

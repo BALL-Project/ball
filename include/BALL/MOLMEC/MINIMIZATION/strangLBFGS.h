@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: strangLBFGS.h,v 1.1.4.3 2007/05/09 16:43:27 aleru Exp $ 
+// $Id: strangLBFGS.h,v 1.1.4.4 2007/05/16 15:56:13 aleru Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STRANGLBFGS_H 
@@ -11,9 +11,13 @@
 #	include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #endif
 
-#ifndef BALL_MOLMEC_MINIMIZATION_LINESEARCH_H
-# include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
+#ifndef BALL_MOLMEC_MINIMIZATION_CONICLINESEARCH_H
+# include <BALL/MOLMEC/MINIMIZATION/conicLineSearch.h>
 #endif
+
+//#ifndef BALL_MOLMEC_MINIMIZATION_LINESEARCH_H
+//# include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
+//#endif
 
 namespace BALL 
 {
@@ -181,7 +185,8 @@ namespace BALL
 			
 			/*_ The line search
 			*/
-			LineSearch line_search_;
+			ConicLineSearch line_search_;
+			//LineSearch line_search_;
 			
 			/*_ Is this an initial first iteration?
 			*/
@@ -225,6 +230,11 @@ namespace BALL
 					of the current step (usually by replacing the old data).
 			*/
 			Size index_of_free_vect_;
+			
+			/*_ The last step size (in respect to the length of the computed direction vector),
+					so the length of the last step was step_*||direction_||.
+			*/
+			double step_;
 			
 			/*_ The positions of the movable atoms when we start an iteration.
 					This is used to reduce slightly rounding errors

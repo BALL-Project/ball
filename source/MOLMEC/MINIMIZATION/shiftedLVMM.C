@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftedLVMM.C,v 1.1.4.3 2007/05/09 16:43:29 aleru Exp $
+// $Id: shiftedLVMM.C,v 1.1.4.4 2007/05/16 15:56:26 aleru Exp $
 //
 // Minimize the potential energy of a system using a shifted 
 // limited-memory variable metric method.
@@ -54,6 +54,7 @@ namespace BALL
 			updt_v_(),
 			shifted_direction_(),
 			hess_factor_(),
+			step_(0.),
 			initial_atoms_()
 	{
 		options.setDefaultInteger(Option::UPDATE_METHOD, Default::UPDATE_METHOD);
@@ -78,6 +79,7 @@ namespace BALL
 			updt_v_(),
 			shifted_direction_(),
 			hess_factor_(),
+			step_(0.),
 			initial_atoms_()
 	{
 		options.setDefaultInteger(Option::UPDATE_METHOD, Default::UPDATE_METHOD);
@@ -110,6 +112,7 @@ namespace BALL
 			updt_v_(),
 			shifted_direction_(),
 			hess_factor_(),
+			step_(0.),
 			initial_atoms_()
 	{
 		options.setDefaultInteger(Option::UPDATE_METHOD, Default::UPDATE_METHOD);
@@ -143,6 +146,7 @@ namespace BALL
 			updt_v_(),
 			shifted_direction_(),
 			hess_factor_(),
+			step_(0.),
 			initial_atoms_()
 	{
 		options = new_options;
@@ -174,6 +178,7 @@ namespace BALL
 			updt_v_(),
 			shifted_direction_(),
 			hess_factor_(),
+			step_(0.),
 			initial_atoms_()
 	{
 		options = new_options;
@@ -212,6 +217,7 @@ namespace BALL
 			updt_v_(rhs.updt_v_),
 			shifted_direction_(rhs.shifted_direction_),
 			hess_factor_(rhs.hess_factor_),
+			step_(rhs.step_),
 			initial_atoms_(rhs.initial_atoms_)
 	{
 		line_search_.setMinimizer(*this);
@@ -236,6 +242,7 @@ namespace BALL
 		updt_v_              = rhs.updt_v_;
 		shifted_direction_   = rhs.shifted_direction_;
 		hess_factor_         = rhs.hess_factor_;
+		step_                = rhs.step_;
 		initial_atoms_       = rhs.initial_atoms_;
 		
 		line_search_.setMinimizer(*this);

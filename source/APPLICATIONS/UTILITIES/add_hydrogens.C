@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: add_hydrogens.C,v 1.11.8.2 2007/03/25 23:30:41 amoll Exp $
+// $Id: add_hydrogens.C,v 1.11.8.3 2007/05/16 15:56:22 aleru Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -16,6 +16,8 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
+#include <BALL/MOLMEC/MINIMIZATION/strangLBFGS.h>
+#include <BALL/MOLMEC/MINIMIZATION/shiftedLVMM.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/DATATYPE/string.h>
@@ -75,12 +77,31 @@ int main(int argc, char** argv)
 	system.apply(h_select);
 	cout << "done." << endl;
 	cout << "Starting minimizer: " << endl << endl;
-//   	SteepestDescentMinimizer sdm(amber_ff);
-//   	sdm.minimize(1000);
+	
+	// We choose the L-BFGS minimizer
+	
+	/*
+	SteepestDescentMinimizer sdm(amber_ff);
+	sdm.setEnergyOutputFrequency(1);
+	sdm.minimize(1000);
+	*/
+	
+	/*
 	ConjugateGradientMinimizer cgm(amber_ff);
 	cgm.setEnergyOutputFrequency(1);
 	cgm.minimize(1000);
-
+	*/
+	
+	/*
+	ShiftedLVMMMinimizer sm(amber_ff);
+	sm.setEnergyOutputFrequency(1);
+	sm.minimize(1000);
+	*/
+	
+	StrangLBFGSMinimizer bfgsm(amber_ff);
+	bfgsm.setEnergyOutputFrequency(1);
+	bfgsm.minimize(1000);
+	
 	cout << "Writing " << argv[2] << "..." << endl;
 	PDBFile outfile(argv[2], std::ios::out);
 	outfile << system;

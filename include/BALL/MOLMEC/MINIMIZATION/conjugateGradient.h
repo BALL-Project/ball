@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.h,v 1.29.20.3 2007/05/09 16:43:25 aleru Exp $ 
+// $Id: conjugateGradient.h,v 1.29.20.4 2007/05/16 15:56:11 aleru Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -11,9 +11,13 @@
 #	include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #endif
 
-#ifndef BALL_MOLMEC_MINIMIZATION_LINESEARCH_H
-# include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
+#ifndef BALL_MOLMEC_MINIMIZATION_CONICLINESEARCH_H
+# include <BALL/MOLMEC/MINIMIZATION/conicLineSearch.h>
 #endif
+
+//#ifndef BALL_MOLMEC_MINIMIZATION_LINESEARCH_H
+//# include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
+//#endif
 
 namespace BALL
 {
@@ -190,7 +194,13 @@ namespace BALL
 			
 			/*_ The line search
 			*/
-			LineSearch line_search_;
+			ConicLineSearch line_search_;
+			//LineSearch line_search_;
+			
+			/*_ The last step size (in respect to the length of the computed direction vector),
+				  so the length of the last step was step_*||direction_||.
+			*/
+			double step_;
 			
 			/*_ The unscaled last search direction
 			*/

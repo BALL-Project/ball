@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: strangLBFGS.C,v 1.1.4.3 2007/05/09 16:43:31 aleru Exp $
+// $Id: strangLBFGS.C,v 1.1.4.4 2007/05/16 15:56:27 aleru Exp $
 //
 // Minimize the potential energy of a system using an improved version
 // of the limited memory BFGS with Strang recurrences.
@@ -17,7 +17,7 @@
 #define DEFAULT_NUMBER_OF_VECTOR_PAIRS 5
 
 // The default "improved" flag
-#define DEFAULT_IMPROVED false
+#define DEFAULT_IMPROVED true
 
 namespace BALL 
 {
@@ -44,6 +44,7 @@ namespace BALL
 			stored_y_(),
 			work_val_(),
 			index_of_free_vect_(0),
+			step_(0.),
 			initial_atoms_()
 	{
 		options.setDefaultBool(Option::IMPROVED, Default::IMPROVED);
@@ -64,6 +65,7 @@ namespace BALL
 			stored_y_(),
 			work_val_(),
 			index_of_free_vect_(0),
+			step_(0.),
 			initial_atoms_()
 	{
 		options.setDefaultBool(Option::IMPROVED, Default::IMPROVED);
@@ -92,6 +94,7 @@ namespace BALL
 			stored_y_(),
 			work_val_(),
 			index_of_free_vect_(0),
+			step_(0.),
 			initial_atoms_()
 	{
 		options.setDefaultBool(Option::IMPROVED, Default::IMPROVED);
@@ -121,6 +124,7 @@ namespace BALL
 			stored_y_(),
 			work_val_(),
 			index_of_free_vect_(0),
+			step_(0.),
 			initial_atoms_()
 	{
 		options = new_options;
@@ -149,6 +153,7 @@ namespace BALL
 			stored_y_(),
 			work_val_(),
 			index_of_free_vect_(0),
+			step_(0.),
 			initial_atoms_()
 	{
 		options = new_options;
@@ -184,6 +189,7 @@ namespace BALL
 			stored_y_(rhs.stored_y_),
 			work_val_(rhs.work_val_),
 			index_of_free_vect_(rhs.index_of_free_vect_),
+			step_(rhs.step_),
 			initial_atoms_(rhs.initial_atoms_)
 	{
 		line_search_.setMinimizer(*this);
@@ -205,6 +211,7 @@ namespace BALL
 		stored_y_               = rhs.stored_y_;
 		work_val_               = rhs.work_val_;
 		index_of_free_vect_     = rhs.index_of_free_vect_;
+		step_                   = rhs.step_;
 		initial_atoms_          = rhs.initial_atoms_;
 		line_search_.setMinimizer(*this);
 		return *this;
@@ -531,10 +538,10 @@ namespace BALL
 			// Assign the norm and rms of the new direction
 			direction_.norm = norm;
 			direction_.rms = norm / (3.0 * (double)number_of_atoms_);
+			
+			// Set the index for the next update
+			index_of_free_vect_ = (index_of_free_vect_+1) % max_num_of_vect_pairs_;
 		}
-		
-		// Set the index for the next update
-		index_of_free_vect_ = (index_of_free_vect_+1) % max_num_of_vect_pairs_;
 		
 		// Save old positions
 		for(Size i = 0; i < number_of_atoms_; ++i)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.23.8.3 2007/05/09 13:34:28 aleru Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.23.8.4 2007/05/16 15:56:33 aleru Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradientMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.23.8.3 2007/05/09 13:34:28 aleru Exp $")
+START_TEST(ConjugateGradientMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.23.8.4 2007/05/16 15:56:33 aleru Exp $")
 
 using namespace BALL;
 
@@ -243,7 +243,6 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES) AlaAla)
 	cgm.setEnergyOutputFrequency(5);
 	cgm.setMaxGradient(0.0001);
 	cgm.setEnergyDifferenceBound(0.000001);
-	cgm.setMaximumDisplacement(20.0);
 	cgm.setUpdateMethod(ConjugateGradientMinimizer::FLETCHER_REEVES);
 	ConjugateGradientMinimizer::UpdateMethod um;
 	um = cgm.getUpdateMethod();
@@ -295,7 +294,6 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE) AlaAla)
 	cgm.setMaxGradient(0.1);
 	cgm.setEnergyDifferenceBound(0.00000001);
 	cgm.setUpdateMethod(ConjugateGradientMinimizer::POLAK_RIBIERE);
-	cgm.setMaximumDisplacement(20.0);
 	ConjugateGradientMinimizer::UpdateMethod um;
 	um = cgm.getUpdateMethod();
 	TEST_EQUAL(um, ConjugateGradientMinimizer::POLAK_RIBIERE);
@@ -346,7 +344,6 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) AlaAla)
 	cgm.setMaxGradient(0.01);
 	cgm.setEnergyDifferenceBound(0.00000001);
 	cgm.setUpdateMethod(ConjugateGradientMinimizer::SHANNO);
-	cgm.setMaximumDisplacement(20.0);
 	ConjugateGradientMinimizer::UpdateMethod um;
 	um = cgm.getUpdateMethod();
 	TEST_EQUAL(um, ConjugateGradientMinimizer::SHANNO);
