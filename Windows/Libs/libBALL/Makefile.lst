@@ -72,6 +72,7 @@ libBALL.obj\
 ..\..\..\source\FORMAT\DSN6File.obj\
 #..\..\..\source\FORMAT\GAMESSLogFile.obj ..\..\..\source\FORMAT\GAMESSDatFile.obj\
 ..\..\..\source\FORMAT\resourceFile.obj\
+..\..\..\source\FORMAT\SCWRLRotamerFile.obj\
 ..\..\..\source\FORMAT\SDFile.obj\
 ..\..\..\source\FORMAT\trajectoryFile.obj\
 ..\..\..\source\FORMAT\TRRFile.obj\
@@ -155,6 +156,9 @@ libBALL.obj\
 ..\..\..\source\MOLMEC\MINIMIZATION\energyMinimizer.obj\
 ..\..\..\source\MOLMEC\MINIMIZATION\lineSearch.obj\
 ..\..\..\source\MOLMEC\MINIMIZATION\steepestDescent.obj\
+..\..\..\source\MOLMEC\MINIMIZATION\shiftedLVMM.obj\
+..\..\..\source\MOLMEC\MINIMIZATION\strangLBFGS.obj\
+..\..\..\source\MOLMEC\MINIMIZATION\conicLineSearch.obj\
 ..\..\..\source\MOLMEC\MMFF94\MMFF94.obj ..\..\..\source\MOLMEC\MMFF94\MMFF94NonBonded.obj ..\..\..\source\MOLMEC\MMFF94\MMFF94OutOfPlaneBend.obj ..\..\..\source\MOLMEC\MMFF94\MMFF94Parameters.obj ..\..\..\source\MOLMEC\MMFF94\MMFF94Processors.obj ..\..\..\source\MOLMEC\MMFF94\MMFF94StretchBend.obj ..\..\..\source\MOLMEC\MMFF94\MMFF94Torsion.obj\
 ..\..\..\source\MOLMEC\PARAMETER\atomTypes.obj\
 ..\..\..\source\MOLMEC\PARAMETER\charmmEEF1.obj\
@@ -235,6 +239,7 @@ libBALL.obj\
 ..\..\..\source\STRUCTURE\reconstructFragmentProcessor.obj\
 ..\..\..\source\STRUCTURE\reducedSurface.obj\
 ..\..\..\source\STRUCTURE\residueChecker.obj\
+..\..\..\source\STRUCTURE\residueRotamerSet.obj\
 ..\..\..\source\STRUCTURE\rotamerLibrary.obj\
 ..\..\..\source\STRUCTURE\secondaryStructureProcessor.obj\
 ..\..\..\source\STRUCTURE\RSEdge.obj ..\..\..\source\STRUCTURE\RSFace.obj ..\..\..\source\STRUCTURE\RSVertex.obj ..\..\..\source\STRUCTURE\SASEdge.obj ..\..\..\source\STRUCTURE\SASFace.obj ..\..\..\source\STRUCTURE\SASVertex.obj ..\..\..\source\STRUCTURE\SESEdge.obj ..\..\..\source\STRUCTURE\SESFace.obj ..\..\..\source\STRUCTURE\SESVertex.obj\
