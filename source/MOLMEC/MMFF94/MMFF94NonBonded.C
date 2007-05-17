@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.8.4 2007/05/16 23:04:31 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.8.5 2007/05/17 00:01:50 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -546,15 +546,16 @@ namespace BALL
 						// distance dependent dielectric constant
 						if (r > es_cut_on_)
 						{
-							//DF = DF-G2*R1*(TWOA*R3D+TWOB*R1D+TWOC*S1D+TWOD*S3D)
+							//DF = DF-G2*R1*(TWOA*R3D+TWOB*R1D+
+							//				       TWOC*S1D+TWOD*S3D)
 							es_factor = 2. * es_ac_ * r3d + 2. * es_bc_ * (1. / (r + 0.05)) +
-													2. * es_cc_ * (r + 0.05) + 2. * es_dc_ * pow(1. / (r + 0.05), 3.);
+													2. * es_cc_ * (r + 0.05) + 2. * es_dc_ * pow(r + 0.05, 3.);
 							es_factor *= ES_CONSTANT * nbd.qi * nbd.qj;
 						}
 						else
 						{
 							//DF = DF - TWO*G2*R1*R3D
-							es_factor = 2. * r3d / r;
+							es_factor = 2. * r3d;
 							es_factor *= ES_CONSTANT * nbd.qi * nbd.qj;
 						}
 					}
