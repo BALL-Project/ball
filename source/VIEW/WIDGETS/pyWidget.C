@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.16.2 2007/05/13 15:35:28 amoll Exp $
+// $Id: pyWidget.C,v 1.49.16.3 2007/05/17 20:47:17 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -604,7 +604,7 @@ void PyWidget::applyPreferences()
 		}
 		else
 		{
-			setMenuHint("Perform a user defined action per Python interface");
+			setMenuHint("Run a Python script");
 		}
 		setMenuHelp("pythonInterpreter.html#create_hotkeys");
 	}
