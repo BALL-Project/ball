@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.21.14.5 2007/05/10 21:59:53 amoll Exp $
+// $Id: editableScene.C,v 1.21.14.6 2007/05/17 21:22:54 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -1148,6 +1148,12 @@ void EditableScene::onNotify(Message *message)
 			current_atom_ = 0;
 			current_bond_ = 0;
 		}
+	}
+
+	if (RTTI::isKindOf<ControlSelectionMessage>(*message))
+	{
+		checkMenu(*getMainControl());
+		return;
 	}
 
 	Scene::onNotify(message);
