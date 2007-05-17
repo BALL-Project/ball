@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.16.1 2007/03/25 21:56:44 oliver Exp $
+// $Id: datasetControl.C,v 1.46.16.2 2007/05/17 21:10:06 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -91,7 +91,7 @@ void DatasetControl::onNotify(Message *message)
 	{
 		if (controllers_[p]->getType() == type)
 		{
-			if (!controllers_[p]->handle(msg)) BALLVIEW_DEBUG;
+			controllers_[p]->handle(msg);
 
 			return;
 		}
