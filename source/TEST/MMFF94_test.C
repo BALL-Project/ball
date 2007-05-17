@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.6.6 2007/05/16 23:04:43 amoll Exp $
+// $Id: MMFF94_test.C,v 1.1.6.7 2007/05/17 00:35:20 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -47,7 +47,7 @@ float diff(double original, double our)
 	return x / fabs(original);
 }
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.6.6 2007/05/16 23:04:43 amoll Exp $")
+START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.6.7 2007/05/17 00:35:20 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -951,7 +951,7 @@ CHECK(force test 10: ES SWITCH RDIE)
 	TEST_REAL_EQUAL(a1.getForce().getLength(), 0)
 	TEST_REAL_EQUAL(a2.getForce().getLength(), 0)
 
-	PRECISION(2e-16)
+	PRECISION(2e-15)
 	a2.setPosition(Vector3(9,0,0));
 	mmff.setup(s);
 	mmff.updateForces();
@@ -975,7 +975,7 @@ CHECK(force test 10: ES SWITCH RDIE)
 	PRECISION(0.0001)
 	TEST_REAL_EQUAL(nb.getESEnergy(), es_charmm)
 
-	PRECISION(2e-16)
+	PRECISION(2e-15)
 	a2.setPosition(Vector3(6,0,0));
 	mmff.setup(s);
 	mmff.updateForces();
