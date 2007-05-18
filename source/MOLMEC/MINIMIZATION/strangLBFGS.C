@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: strangLBFGS.C,v 1.1.4.4 2007/05/16 15:56:27 aleru Exp $
+// $Id: strangLBFGS.C,v 1.1.4.5 2007/05/18 10:58:39 aleru Exp $
 //
 // Minimize the potential energy of a system using an improved version
 // of the limited memory BFGS with Strang recurrences.
@@ -656,7 +656,7 @@ namespace BALL
 			#endif
 			
 			// Check for convergence.
-			converged = isConverged();
+			converged = isConverged() || (stp == 0.);
 			
 			// Increment iteration counter, take snapshots, print energy,
 			// update pair lists, and check the same-energy counter
@@ -723,17 +723,26 @@ namespace BALL
 			// Set the search direction to the normalized negative gradient. Since we proceed
 			// with a restart, we mustn't update the stored vectors by 'updateDirection' and there is
 			// no need to compute anything by 'updateDirection'.
+			
+			// Just in case: force field update (to update the pair list)
+			atoms.resetPositions();
+			force_field_->update();
+			
+			// Compute the initial energy and the initial forces
+			initial_energy_ = force_field_->updateEnergy();
+			force_field_->updateForces();
+			initial_grad_.set(force_field_->getAtoms());
+			
 			direction_ = initial_grad_;
 			direction_.negate();
 			direction_.normalize();
-			atoms.resetPositions();
 			
 			// We cannot trust in our data any more, so we force all routines to 
 			// assume that we haven't collected any data so far.
 			curr_num_of_vect_pairs_ = 0;
 			index_of_free_vect_     = 0;
 			Size iter               = 0;
-			while ((!result) && (iter < 10))
+			while ((!result) && (iter < 12))
 			{
 				result = line_search_.minimize(step_);
 				if (result == false)
@@ -753,9 +762,11 @@ namespace BALL
 				}
 				++iter;
 			}
-			// If we are here something went wrong
+			// If we are here something went wrong.
+			// Not even such scaled steepest descent steps can manage
+			// the line search to exit successfully?
+			// We must be at a local minimizer...
 			step_ = 0.;
-			return -1.0;
 		}
 			
 		#ifdef BALL_DEBUG

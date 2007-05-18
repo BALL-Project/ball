@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conicLineSearch.C,v 1.1.4.2 2007/05/16 15:56:25 aleru Exp $
+// $Id: conicLineSearch.C,v 1.1.4.3 2007/05/18 10:58:36 aleru Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/conicLineSearch.h>
@@ -518,7 +518,7 @@ namespace BALL
 			
 			//We try a quadratic step with two directional derivatives
 			double tmp = 1. - p;
-			if (!compAndSafeguardStep_(stp_lo, stp_up, tmp, stp))
+			if (compAndSafeguardStep_(stp_lo, stp_up, tmp, stp))
 			{
 				return stp;
 			}

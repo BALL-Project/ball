@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.C,v 1.27.26.4 2007/05/16 15:56:27 aleru Exp $
+// $Id: steepestDescent.C,v 1.27.26.5 2007/05/18 10:58:39 aleru Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
@@ -188,7 +188,7 @@ namespace BALL
 			#endif
 			
 			// Check for convergence.
-			converged = isConverged();
+			converged = isConverged() || (stp == 0.);
 			
 			// Increment iteration counter, take snapshots, print energy,
 			// update pair lists, and check the same-energy counter
@@ -233,40 +233,62 @@ namespace BALL
 		// Compute the new direction
 		updateDirection();
 		
-		bool result = false;
-		Size iter = 0;
-		while ((!result) && (iter < 10))
-		{
-			double step;
-			
-			// No need to assure the maximum displacement here since our
-			// line search pays attention to this constraint.
-			
-			result = line_search_.minimize(step);
-			
-			if (!result)
-			{
-				// Some aliases
-				AtomVector& atoms(const_cast<AtomVector&>(getForceField()->getAtoms()));
-				Size n = getForceField()->getNumberOfMovableAtoms();
-				for(Size i = 0; i < n; ++i)
-				{
-					direction_[i] *= 0.5;
-				}
-				direction_.norm     *= 0.5;
-				direction_.rms      *= 0.5;
-				direction_.inv_norm *= 2.;
-				atoms.resetPositions();
-			}
-			else
-			{
-				return step;
-			}
-			++iter;
-		}
+		double step;
+		bool result = line_search_.minimize(step);
 		
-		// If we are here something went wrong
-		return -1.0;
+		if (!result)
+		{
+			// Something went wrong.
+			
+			// Some aliases
+			AtomVector& atoms(const_cast<AtomVector&>(getForceField()->getAtoms()));
+			
+			// Just in case: force field update (to update the pair list)
+			atoms.resetPositions();
+			force_field_->update();
+			
+			// Compute the initial energy and the initial forces
+			initial_energy_ = force_field_->updateEnergy();
+			force_field_->updateForces();
+			initial_grad_.set(force_field_->getAtoms());
+			
+			direction_ = initial_grad_;
+			direction_.negate();
+			direction_.normalize();
+			
+			Size iter = 0;
+			while ((!result) && (iter < 12))
+			{
+				// No need to assure the maximum displacement here since our
+				// line search pays attention to this constraint.
+				
+				result = line_search_.minimize(step);
+			
+				if (!result)
+				{
+					Size n = getForceField()->getNumberOfMovableAtoms();
+					for(Size i = 0; i < n; ++i)
+					{
+						direction_[i] *= 0.5;
+					}
+					direction_.norm     *= 0.5;
+					direction_.rms      *= 0.5;
+					direction_.inv_norm *= 2.;
+					atoms.resetPositions();
+				}
+				else
+				{
+					return step;
+				}
+				++iter;
+			}
+			// If we are here something went wrong
+			// Not even such scaled steepest descent steps can manage
+			// the line search to exit successfully?
+			// We must be at a local minimizer...
+			step_ = 0.;
+		}
+		return step;
 	}
 	
 	void SteepestDescentMinimizer::updateDirection()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.C,v 1.29.28.2 2007/05/09 16:43:28 aleru Exp $
+// $Id: energyMinimizer.C,v 1.29.28.3 2007/05/18 10:58:37 aleru Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
@@ -547,7 +547,7 @@ namespace BALL
 						|| (max > 8.))
 		{
 			force_field_->update();
-			initial_grad_.invalidate();
+			//initial_grad_.invalidate();
 		}
 		
 		// Take a snapshot of the system every snapshot_frequency_ iterations.
