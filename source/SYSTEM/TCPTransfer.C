@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.39.16.1 2007/03/25 22:00:34 oliver Exp $
+// $Id: TCPTransfer.C,v 1.39.16.2 2007/05/18 20:42:22 anhi Exp $
 //
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
@@ -311,10 +311,10 @@ namespace BALL
 		query += file_address_ + " HTTP/1.0\n";
 		query += "Accept: */*\n";
 		query += "User-Agent: Mozilla/4.76\n";
+		query += "Host: " + host_address_ + "\r\n";
 		
 		if (usingProxy()) 
 		{
-			query += "Host: " + host_address_ + "\r\n";
 			query += "Proxy-Connection: close\r\n";
 		}
 
@@ -757,7 +757,7 @@ namespace BALL
 		host.sin_family = AF_INET;
 		host.sin_port	  = htons(passv_port);
 		host.sin_addr 	= *(struct in_addr*)ht->h_addr;  
-		
+
 		// now connecting to passive ftp port
 		if(connect(socket2, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
 		{
@@ -799,6 +799,8 @@ namespace BALL
 		setBlock_(socket_, false);
 
 		int bytes = -1;
+		String control;
+
 		while (!abort_ && control_bytes < 1 && bytes != 0)
 		{			
 			bytes = getReceivedBytes_(socket2);
@@ -813,23 +815,47 @@ namespace BALL
 			}
 
 			control_bytes = getReceivedBytes_(socket_);
+			if (control_bytes > 0)
+			{	
+				buffer_[control_bytes] = '\0';
+				control = buffer_;
 			#ifdef DEBUG
-				if (control_bytes > 0)
-				{	
 					Log.info() << "\n<<\n";			
 					for (Position i = 0; i < (Position)control_bytes; i++) { Log.info() <<  buffer_[i]; }
-					Log.info() << "\n";			
-				}
+					Log.info() << "\n";	Log.info() << std::endl;
 			#endif
+			}
 		}
 		// im moment noch kein zeitabbruch	
 		
+		if (control.hasPrefix("226") || control.hasPrefix("250")) 
+		{
+			// due to a race condition between the control socket and the data socket, we might have
+			// missed some data so far
+			bytes = getReceivedBytes_(socket2);
+
+			while (bytes > 0)
+			{
+				for (Position i = 0; i < (Position)bytes; i++)
+				{
+					(*fstream_) << buffer_[i];
+				}
+				received_bytes_ += bytes;
+
+				bytes = getReceivedBytes_(socket2);
+			}
+
+			GLOBAL_CLOSE(socket2);
+				
+			return OK;
+		}
+
 		// we dont need the second socket anymore
 		GLOBAL_CLOSE(socket2);
-		
+
 		if (bytes == 0) return OK;
-		
-		if (control_bytes < 1)
+
+			if (control_bytes < 1)
 		{
 			status_ = RECV__ERROR;
 			return status_;
