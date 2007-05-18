@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gradient.h,v 1.20 2005/12/23 17:01:51 amoll Exp $ 
+// $Id: gradient.h,v 1.20.20.1 2007/05/18 12:02:44 oliver Exp $ 
+//
+// Author:
+//   Oliver Kohlbacher
 //
 
 // A conjugate gradient minimizer for geometry optimisation
@@ -85,8 +88,8 @@ namespace BALL
     /**	Destructor.
     */
     virtual ~Gradient();
-
     //@}
+
     /**	@name	Assignments 
     */
     //@{
@@ -122,7 +125,6 @@ namespace BALL
 				@exception InvalidRange if the two gradients have different sizes
 		*/
 		double operator * (const Gradient& gradient) const;
-
     //@}
 
     /**	@name	Accessors 
@@ -176,8 +178,6 @@ namespace BALL
 		//?????: GCC3 using std::vector<Vector3>::end;
 		ReverseIterator rend() { return vector<Vector3>::rend(); }
 		ConstReverseIterator rend() const { return vector<Vector3>::rend(); }
-
-
 		//@}
 
     /**	@name	Public Attributes

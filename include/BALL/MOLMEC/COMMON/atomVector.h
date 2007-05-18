@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomVector.h,v 1.24 2005/12/23 17:01:51 amoll Exp $
+// $Id: atomVector.h,v 1.24.20.1 2007/05/18 12:02:43 oliver Exp $
 //
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -112,7 +112,6 @@ namespace BALL
 		using std::vector<Atom*>::size;
 
 		/// Random access operator
-		// ?????: problem with GCC3 using std::vector<Atom*>::operator [];
 		Atom*       & operator [] (int i)       { return std::vector<Atom*>::operator [] (i); }
 		Atom* const & operator [] (int i) const { return std::vector<Atom*>::operator [] (i); }
 		
@@ -137,7 +136,17 @@ namespace BALL
 				Otherwise, the current atom positions are used.
 				If the gradient's size differs from the number of atoms, nothing is done.
 		*/
-		void moveTo(const Gradient& direction, float step = 1.0);
+		void moveTo(const Gradient& direction, double step = 1.0);
+
+		/**	Move the first k atoms along a direction vector.
+				The method translates all atoms a long a given direction.
+				The direction vector is multiplied with a step length <tt>step</tt>.
+				If a saved position exists ( savePositions() ), it is used as a start
+				position (i.e. the final positions are $\vec{\mathrm{start}} + \mathrm{step} \vec{\mathrm{direction}}$).
+				Otherwise, the current atom positions are used.
+				If the gradient's size differs from the number of atoms, nothing is done.
+		*/
+		void moveTo(const Gradient& direction, double step, Size k);
 
 		/**	Insert an atom pointer.
 		*/
