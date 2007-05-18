@@ -90,53 +90,6 @@ void DemoTutorialDialog::initDemo_()
 	prefix_ = getBaseDir_() + "demo";
 
 	next_button->setEnabled(true);
-
-	DisplayProperties* dp = DisplayProperties::getInstance(0);
-	dp->setDrawingPrecision(DRAWING_PRECISION_HIGH);
-
-	((Mainframe*)getMainControl())->reset();
-
-	// open bpti 
-	try
-	{
-		Path path;
-		String file_name(path.getDataPath());
-		file_name = file_name.before("data");
-		file_name += "data";
-		file_name += FileSystem::PATH_SEPARATOR;
-		file_name += String("structures");
-		file_name += FileSystem::PATH_SEPARATOR;
-		file_name += "bpti.pdb";
-
-		MolecularFileDialog* dialog = MolecularFileDialog::getInstance(0);
-		if (dialog == 0) return;
-
-		dp->enableCreationForNewMolecules(false);
-		system_ = dialog->openMolecularFile(file_name);
-		dp->enableCreationForNewMolecules(true);
-
-		if (system_ == 0)
-		{
-			String msg("Could not open bpti.pdb. Maybe the file was deleted?\n");
-			msg += "It should be found in " + Path().getDataPath() + "bpti.pdb";
-
-			QMessageBox::critical(0, "Error while starting BALLView Demo", msg.c_str(),
-					QMessageBox::Ok, Qt::NoButton, Qt::NoButton);
-			return;
-		}
-		
-		system_->apply(getFragmentDB().add_hydrogens);
-		system_->apply(getFragmentDB().build_bonds);
-		getMainControl()->update(*system_, true);
-	}
-	catch(Exception::FileNotFound e)
-	{
-		Log.error() << "Could not open " << e.getFilename() << std::endl;
-		return;
-	}
-
-	composites_.clear();
-	composites_.push_back(system_);
 	QDialog::show();
 	raise();
 	move(20,20);
@@ -186,7 +139,6 @@ void DemoTutorialDialog::initTutorial_()
 void DemoTutorialDialog::show()
 {
 	current_step_ = 1;
-	getMainControl()->clearData();
 
 	if (demo_mode_)
 	{
@@ -194,6 +146,11 @@ void DemoTutorialDialog::show()
 	}
 	else
 	{
+		int result = QMessageBox::question(this, "Warning",
+				"To start the tutorial, all loaded structures and molecules must be deleted. Is this ok?",
+				QMessageBox::Ok| QMessageBox::Cancel, QMessageBox::Ok);
+		if (result != QMessageBox::Ok) return;
+
 		initTutorial_();
 	}
 
@@ -314,6 +271,57 @@ void DemoTutorialDialog::nextStepClicked()
 
 void DemoTutorialDialog::nextStepDemo_()
 {
+	// initialisation for first real step
+	if (current_step_ == 2)
+	{
+		DisplayProperties* dp = DisplayProperties::getInstance(0);
+		dp->setDrawingPrecision(DRAWING_PRECISION_HIGH);
+
+		((Mainframe*)getMainControl())->reset();
+
+		// open bpti 
+		try
+		{
+			Path path;
+			String file_name(path.getDataPath());
+			file_name = file_name.before("data");
+			file_name += "data";
+			file_name += FileSystem::PATH_SEPARATOR;
+			file_name += String("structures");
+			file_name += FileSystem::PATH_SEPARATOR;
+			file_name += "bpti.pdb";
+
+			MolecularFileDialog* dialog = MolecularFileDialog::getInstance(0);
+			if (dialog == 0) return;
+
+			dp->enableCreationForNewMolecules(false);
+			system_ = dialog->openMolecularFile(file_name);
+			dp->enableCreationForNewMolecules(true);
+
+			if (system_ == 0)
+			{
+				String msg("Could not open bpti.pdb. Maybe the file was deleted?\n");
+				msg += "It should be found in " + Path().getDataPath() + "bpti.pdb";
+
+				QMessageBox::critical(0, "Error while starting BALLView Demo", msg.c_str(),
+						QMessageBox::Ok, Qt::NoButton, Qt::NoButton);
+				return;
+			}
+			
+			system_->apply(getFragmentDB().add_hydrogens);
+			system_->apply(getFragmentDB().build_bonds);
+			getMainControl()->update(*system_, true);
+		}
+		catch(Exception::FileNotFound e)
+		{
+			Log.error() << "Could not open " << e.getFilename() << std::endl;
+			return;
+		}
+
+		composites_.clear();
+		composites_.push_back(system_);
+	}
+
 	if (current_step_ == 18) // last page
 	{
 		hide();

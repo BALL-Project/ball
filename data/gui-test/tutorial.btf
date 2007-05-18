@@ -6,6 +6,10 @@ I°0.071784°Mainframe|MainMenuBar|°3|0|1|0|1|0|644|21|
 I°0.213944°Mainframe|MainMenuBar|&Help|°5|0|1|0|0|0|34|0|
 I°0.230004°Mainframe|MainMenuBar|&Help|Tutorial|°2|0|1|0|1|1|37|17|
 I°0.208865°Mainframe|MainMenuBar|&Help|Tutorial|°3|0|1|0|1|0|37|17|
+I°0.031826°Mainframe|BALLViewDemo|qt_msgbox_label|°5|0|1|0|0|0|173|24|
+I°0.024592°Mainframe|BALLViewDemo|qt_msgbox_label|°2|0|1|0|1|1|173|24|
+I°0.1111°Mainframe|BALLViewDemo|qt_msgbox_label|°3|0|1|0|1|0|173|24|
+I°0.121515°Mainframe|BALLViewDemo|qt_msgbox_label|°6|0|2|0|16777220|
 I°0.020576°Mainframe|Structures|Container|select_button|°5|0|1|0|0|0|41|8|
 I°0.010165°Mainframe|Structures|Container|selector_edit_|lineedit|°5|0|1|0|0|0|163|21|
 I°0.030769°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°5|0|1|0|0|0|135|91|
