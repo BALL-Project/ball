@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.C,v 1.40.26.2 2007/05/16 15:56:23 aleru Exp $
+// $Id: forceField.C,v 1.40.26.3 2007/05/18 11:08:28 anhi Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -431,6 +431,11 @@ namespace BALL
 			// it still is *kind of* const :-)
 			const_cast<ForceField*>(this)->sortSelectedAtomVector_();
 			const_cast<ForceField*>(this)->update();
+
+			// Update the use_selection_ flag.
+			// this const_cast is _bad_
+			bool* use_ptr = const_cast<bool*>(&use_selection_);
+			*use_ptr = (selection_enabled_ && system_->containsSelection());
 		}
 		
 		return number_of_movable_atoms_;
