@@ -1,8 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomVector.C,v 1.13 2003/08/26 09:17:52 oliver Exp $
+// $Id: atomVector.C,v 1.13.30.1 2007/05/18 12:05:59 oliver Exp $
 //
+// Author:
+//   Oliver Kohlbacher
 
 #include <BALL/MOLMEC/COMMON/atomVector.h>
 #include <BALL/MOLMEC/COMMON/gradient.h>
@@ -109,7 +111,7 @@ namespace BALL
 		}
 	}
 
-	void AtomVector::moveTo(const Gradient& gradient, float step)
+	void AtomVector::moveTo(const Gradient& gradient, double step)
 	{
 		// move only if a saved position exists for every atom
 		if (gradient.size() == size())
@@ -134,6 +136,43 @@ namespace BALL
 				Iterator it(begin());
 				Gradient::ConstIterator grad_it(gradient.begin());
 				for (; it != end(); ++it, ++grad_it)
+				{
+					(*it)->getPosition() += *grad_it * step;
+					#ifdef BALL_DEBUG
+						Log << "   - atom " << (*it)->getFullName() << " @ " << (*it)->getPosition() << std::endl;
+					#endif
+				}				
+			}
+		}
+	}
+
+	void AtomVector::moveTo(const Gradient& gradient, double step, Size number)
+	{
+		// move only if a saved position exists for every atom
+		if (gradient.size() == size())
+		{
+			// use the saves positions
+			if (saved_position_.size() == size())
+			{
+				Iterator it(begin());
+				vector<Vector3>::const_iterator pos_it(saved_position_.begin());
+				vector<Vector3>::const_iterator end(saved_position_.begin() + number);
+				Gradient::ConstIterator grad_it(gradient.begin());
+				for (; pos_it != end; ++it, ++pos_it, ++grad_it)
+				{
+					(*it)->setPosition(*pos_it + *grad_it * step);
+					#ifdef BALL_DEBUG
+						Log << "   - atom " << (*it)->getFullName() << " @ " << (*it)->getPosition() << std::endl;
+					#endif
+				}
+			}
+			// we don't have saved positions, use the current atom positions
+			else 
+			{
+				Iterator it(begin());
+				Gradient::ConstIterator grad_it(gradient.begin());
+				Gradient::ConstIterator end(gradient.begin() + number);
+				for (; grad_it != end; ++it, ++grad_it)
 				{
 					(*it)->getPosition() += *grad_it * step;
 					#ifdef BALL_DEBUG

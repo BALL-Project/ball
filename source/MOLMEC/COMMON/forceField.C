@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.C,v 1.40.26.3 2007/05/18 11:08:28 anhi Exp $
+// $Id: forceField.C,v 1.40.26.4 2007/05/18 12:06:00 oliver Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -215,7 +215,7 @@ namespace BALL
 		system_ = &system;
 
 		// Setup periodic boundary
-		if(!periodic_boundary.setup()) 
+		if (!periodic_boundary.setup()) 
 		{
 			Log.error() << "setup of periodic boundary failed" << endl;
 			return false;
@@ -253,7 +253,7 @@ namespace BALL
 
 		// If specificSetup cleared this array, it wants to tell us 
 		// that it had to change the system a bit (e.g. CHARMM replacing
-	  // hydrogens by united atoms). So, we have to recalculated the vector.
+		// hydrogens by united atoms). So, we have to recalculated the vector.
 		if (atoms_.size() != old_size)
 		{
 			collectAtoms_(system);
@@ -277,6 +277,9 @@ namespace BALL
 				Log.error() << "Force Field Component setup of " << (*it)->name_ <<  " failed!" << endl;
 			}
 		}
+
+		// ?????
+		update();
 
 		// Remember the setup time
 		setup_time_stamp_.stamp();
@@ -484,9 +487,10 @@ namespace BALL
 		vector<ForceFieldComponent*>::iterator		component_it = components_.begin();
 		for (; component_it != components_.end(); ++component_it)
 		{
-			if (!(**component_it).isEnabled()) continue;
-
-			(*component_it)->updateForces();
+			if ((**component_it).isEnabled())
+			{
+				(*component_it)->updateForces();
+			}
 		}
 	}
 
@@ -577,8 +581,10 @@ namespace BALL
 		vector<ForceFieldComponent*>::iterator it;
 		for (it = components_.begin(); it != components_.end(); ++it)
 		{
-			if (!(**it).isEnabled()) continue;
-			(*it)->update();
+			if ((**it).isEnabled())
+			{
+				(*it)->update();
+			}
 		}
 
 		// remember the time of the last update

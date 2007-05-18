@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.14.18.2 2007/05/14 18:19:52 oliver Exp $
+# $Id: Makefile,v 1.14.18.3 2007/05/18 12:06:01 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -17,6 +17,7 @@ EXECUTABLES=\
 	tutorial1\
 	tutorial2\
 	tutorial3\
+	tutorial4\
 	bounding_box\
 	string_tutorial
 
