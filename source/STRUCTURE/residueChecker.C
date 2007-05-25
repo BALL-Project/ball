@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.C,v 1.27 2004/04/01 13:21:21 amoll Exp $
+// $Id: residueChecker.C,v 1.27.30.1 2007/05/25 09:36:28 oliver Exp $
+//
+// Author:
+//   Oliver Kohlbacher
 //
 
 #include <BALL/STRUCTURE/residueChecker.h>
@@ -23,8 +26,9 @@ namespace BALL
 			tests_(ResidueChecker::NUMBER_OF_TESTS),
 			selection_(false)
 	{
-		// Enable all tests by default.
+		// Enable all tests by default except for overlapping atoms.
 		tests_.fill();
+		disable(OVERLAPPING_ATOMS);
 	}
 	
 	ResidueChecker::ResidueChecker(FragmentDB& fragment_db)
@@ -34,8 +38,9 @@ namespace BALL
 			tests_(ResidueChecker::NUMBER_OF_TESTS),
 			selection_(false)
 	{
-		// Enable all tests by default.
-		tests_.fill();		
+		// Enable all tests by default except for overlapping atoms.
+		tests_.fill();
+		disable(OVERLAPPING_ATOMS);
 	}
 
 	
@@ -333,7 +338,7 @@ namespace BALL
 						radius2 = atom_it2->getElement().getAtomicRadius();
 					}
 
-					// Computte the square of the sum of the vdw radii minus 0.6 Angstrom
+					// Compute the square of the sum of the vdw radii minus 0.6 Angstrom
 					// overlap.
 					double min_dist = std::max(radius1 + radius2 - 0.6, 0.0);
 					if (atom_it->isGeminal(*atom_it2))

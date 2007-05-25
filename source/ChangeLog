@@ -1,3 +1,13 @@
+1.2 beta:
+
+Changed:
+ - Default behavior of ResidueChecker has changed: overlap test for atoms
+   is disabled by default, as it was too sensitive. Test for *strongly* overlapping
+   atoms is usually sufficient and is still enabled by default.
+
+Fixed:
+ - Tutorial3 has new comments and more reasonable paramters for optimization and MDS
+
 1.2 alpha (21.03.2007):
 
 Added:
