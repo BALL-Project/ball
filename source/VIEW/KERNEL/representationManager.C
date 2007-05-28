@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.C,v 1.1.4.2 2007/03/28 13:51:53 amoll Exp $
+// $Id: representationManager.C,v 1.1.4.3 2007/05/28 13:41:59 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representationManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -52,7 +52,7 @@ void RepresentationManager::clear()
 {
 	to_update_.clear();
 
-	if (thread_->isRunning())
+	if (thread_ && thread_->isRunning())
 	{
 		thread_->terminate();
 		thread_->wait();
@@ -78,7 +78,10 @@ bool RepresentationManager::insert(Representation& representation, bool send_mes
 
 	if (!send_message) return true;
 
-	main_control_->notify_(new RepresentationMessage(representation, RepresentationMessage::ADD));
+	if (main_control_)
+	{
+		main_control_->notify_(new RepresentationMessage(representation, RepresentationMessage::ADD));
+	}
 
 	return true;
 }
@@ -107,7 +110,7 @@ bool RepresentationManager::remove(Representation& representation, bool send_mes
 		// found it!
 		representations_.erase(it);
 
-		if (send_message)
+		if (main_control_ && send_message)
 		{
 			main_control_->notify_(new RepresentationMessage(representation, RepresentationMessage::REMOVE));
 		}
@@ -146,7 +149,10 @@ Representation* RepresentationManager::createRepresentation()
 	throw()
 {
 	Representation* rp = new Representation;
-	rp->setModelInformation(main_control_->getModelInformation());
+	if (main_control_)
+	{
+		rp->setModelInformation(main_control_->getModelInformation());
+	}
 	insert(*rp, false);
 	return rp;
 }
@@ -288,8 +294,11 @@ bool RepresentationManager::removeClippingPlane(ClippingPlane* plane)
 		if (*it == plane)
 		{
 			clipping_planes_.erase(it);
-			main_control_->sendMessage(*new SyncClippingPlanesMessage());
-			main_control_->sendMessage(*new SceneMessage(SceneMessage::REDRAW));
+			if (main_control_)
+			{
+				main_control_->sendMessage(*new SyncClippingPlanesMessage());
+				main_control_->sendMessage(*new SceneMessage(SceneMessage::REDRAW));
+			}
 			delete plane;
 
 			return true;
@@ -303,8 +312,11 @@ void RepresentationManager::insertClippingPlane(ClippingPlane* plane)
 {
 	clipping_planes_.push_back(plane);
 
-	main_control_->sendMessage(*new SyncClippingPlanesMessage());
-	main_control_->sendMessage(*new SceneMessage(SceneMessage::REDRAW));
+	if (main_control_)
+	{
+		main_control_->sendMessage(*new SyncClippingPlanesMessage());
+		main_control_->sendMessage(*new SceneMessage(SceneMessage::REDRAW));
+	}
 }
 
 void RepresentationManager::rebuildAllRepresentations()
