@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.41.16.2 2007/05/10 20:15:09 amoll Exp $
+// $Id: threads.C,v 1.41.16.3 2007/05/28 13:35:28 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -64,6 +64,7 @@ namespace BALL
 
 		void BALLThread::sendMessage_(Message* msg)
 		{
+			if (main_control_ == 0) return;
 			// Qt will delete the MessageEvent when done
 			qApp->postEvent(main_control_, new MessageEvent(msg));
 		}
