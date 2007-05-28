@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.62.8.4 2007/03/29 13:55:36 amoll Exp $
+// $Id: mainframe.C,v 1.62.8.5 2007/05/28 13:29:16 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -248,6 +248,8 @@ namespace BALL
 	{
 		if (composites_locked_ || getRepresentationManager().updateRunning()) return;
 
+		clearData();
+
 		DisplayProperties* dp = DisplayProperties::getInstance(0);
 		dp->setDrawingPrecision(DRAWING_PRECISION_HIGH);
 		dp->selectModel(MODEL_STICK);
@@ -255,24 +257,6 @@ namespace BALL
 		dp->selectMode(DRAWING_MODE_SOLID);
 		dp->setTransparency(0);
 		dp->setSurfaceDrawingPrecision(6.5);
-
-		// remove all loaded Composites
-		HashSet<Composite*> composites = getCompositeManager().getComposites();
-		HashSet<Composite*>::Iterator it = composites.begin();
-		
-		for (; +it; ++it)
-		{
-			remove(**it, true, false);
-		}
-
-		// remove all Representations
-		RepresentationList reps = getRepresentationManager().getRepresentations();
-		RepresentationList::Iterator rit = reps.begin();
-
-		for (; rit != reps.end(); ++rit)
-		{
-			remove(**rit);
-		}
 	}
 
 	

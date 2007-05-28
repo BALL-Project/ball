@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: addHydrogenProcessor.C,v 1.1.4.1 2007/03/22 11:48:16 oliver Exp $
+// $Id: addHydrogenProcessor.C,v 1.1.4.2 2007/05/28 13:25:15 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
@@ -10,7 +10,7 @@
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>
 
-// #define DEBUG
+//    #define DEBUG
 
 #ifdef DEBUG
 #define DEBUG_LINE Log.error() << "AddHydrogen: " << __LINE__ << std::endl;
@@ -192,8 +192,22 @@ namespace BALL
 					}
 
 					// planar and 1 atom to add:
-					addHydrogen_(*atom, atom_position + v3);
-					DEBUG_LINE
+					if (atom->countBonds() == 2)
+					{
+						addHydrogen_(*atom, atom_position + v3);
+						DEBUG_LINE
+					}
+					else
+					{
+						v3 = -(v1 % v2);
+						if (Maths::isZero(v3.getLength())) v3 = Vector3(0,0,1);
+						v3.normalize();
+						v3 *= bond_length;
+
+						addHydrogen_(*atom, atom_position + v3);
+						DEBUG_LINE
+					}
+
 					return Processor::CONTINUE;
 
 					// not planar and one hydrogen to add
@@ -364,12 +378,28 @@ namespace BALL
 				Vector3 v3 = partners[2]->getPosition() - atom_position;
 				if (!normalize_(v3)) v3 = Vector3(1,0,0);
 
-				Vector3 v4 = v + v2 + v3;
+				Vector3 v4;
+
+				Size nr_h = 0;
+				nr_h += (partners[0]->getElement().getSymbol() == "H");
+				nr_h += (partners[1]->getElement().getSymbol() == "H");
+				nr_h += (partners[2]->getElement().getSymbol() == "H");
+
+				if (nr_h > 1)
+				{
+					v4 = v + v2 + v3;
+					DEBUG_LINE
+				}
+				else
+				{
+					v4 = -(v2 % v3);
+					DEBUG_LINE
+				}
+
 				if (!normalize_(v4)) v4 = Vector3(1,0,0);
 
 				v4 *= bond_length;
 				addHydrogen_(*atom, atom_position - v4);
-				DEBUG_LINE
 				return Processor::CONTINUE;
 			}
 		} // end carbon
