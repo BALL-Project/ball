@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.C,v 1.27.18.2 2007/05/14 19:51:08 anhi Exp $
+// $Id: MOL2File.C,v 1.27.18.3 2007/05/29 09:58:24 anhi Exp $
 //
 
 #include <BALL/FORMAT/MOL2File.h>
@@ -491,6 +491,10 @@ namespace BALL
 					{
 						molecule_.number_of_substructures = getLine().getField(2).toUnsignedInt();
 					}
+					else // we always need at least one substructure
+					{
+						molecule_.number_of_substructures = 1;
+					}
 					if (number_of_fields > 3)
 					{
 						molecule_.number_of_features = getLine().getField(3).toUnsignedInt();
@@ -584,7 +588,7 @@ namespace BALL
 		molecule_.name = "";
 		molecule_.number_of_atoms = 0;
 		molecule_.number_of_bonds = 0;
-		molecule_.number_of_substructures = 0;
+		molecule_.number_of_substructures = 1;
 		molecule_.number_of_features = 0;
 		molecule_.number_of_sets = 0;
 

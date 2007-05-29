@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.C,v 1.12 2005/12/23 17:02:40 amoll Exp $
+// $Id: SDFile.C,v 1.12.20.1 2007/05/29 09:58:25 anhi Exp $
 //
 
 #include <BALL/FORMAT/SDFile.h>
@@ -150,6 +150,22 @@ namespace BALL
 			// read the next line
 			readLine();
 		}
+
+		// Happily munch empty lines after the properties block. This is required because
+		// otherwise, an empty line on the end of a file will lead our parser to try and
+		// read another MOLFile, which won't succeed.
+		if (good())
+		{
+			readLine();
+			while(good() && (getLine().trim() == ""))
+			{
+				readLine();
+			}
+		}
+
+		// if the file is still good, we read a bit too far.
+		if (good())
+			gotoLine(getLineNumber()-1);
 	}
 
 	void SDFile::writePropertyBlock_(const Molecule& molecule)
