@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.37.16.1 2007/03/25 22:02:06 oliver Exp $
+// $Id: modelSettingsDialog.C,v 1.37.16.2 2007/05/30 21:06:34 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -40,7 +40,6 @@ namespace BALL
 			setDefaultValues_();
 			setWidgetStackName("Models");
 			setWidgetStack(widget_stack);
-			registerWidgets_();
 
 			// signals and slots connections
 			connect( ball_stick_cylinder_radius_slider, SIGNAL( valueChanged(int) ), this, SLOT( ballStickCylinderRadiusChanged() ) );
@@ -64,6 +63,8 @@ namespace BALL
 			connect( vdw_radius_factor_slider, SIGNAL( valueChanged(int) ), this, SLOT( VDWfactorChanged() ) );
 			connect(cartoon_dna_ladder, SIGNAL(toggled(bool)), this, SLOT( changedNAMode_(bool)));
 			connect(cartoon_dna_wac, SIGNAL(toggled(bool)), this, SLOT( changedNAMode_(bool)));
+
+			registerWidgets_();
 		}
 
 		void ModelSettingsDialog::setDefaultValues_()
