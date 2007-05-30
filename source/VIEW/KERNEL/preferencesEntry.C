@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.19.16.1 2007/03/25 22:02:25 oliver Exp $
+// $Id: preferencesEntry.C,v 1.19.16.2 2007/05/30 20:14:15 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -14,6 +14,7 @@
 #include <QtGui/qlabel.h>
 #include <QtGui/qcheckbox.h>
 #include <QtGui/qlineedit.h>
+#include <QtGui/qslider.h>
 #include <QtGui/QStackedWidget>
 #include <QtGui/QButtonGroup>
 #include <QtGui/QComboBox>
@@ -49,11 +50,31 @@ namespace BALL
 			}
 
 			QList<QWidget*> widgets = obj->findChildren<QWidget *>();
-			QList<QWidget*>::iterator it = widgets.begin();
-			for (; it != widgets.end(); it++)
+			QList<QWidget*>::iterator it2 = widgets.begin();
+			for (; it2 != widgets.end(); it2++)
 			{
-				QWidget& widget = **it;
+				QWidget& widget = **it2;
 				if (isSupported_(widget)) registerWidget_(&widget);
+			}
+			
+			//////////////////////////////////////////////////////
+			// prevent problems with inconsistant sliders/labels combinations:
+			QList<QSlider*> sliders = obj->findChildren<QSlider*>();
+			QList<QSlider*>::iterator it = sliders.begin();
+			for (; it != sliders.end(); it++)
+			{
+				QSlider& slider = **it;
+				Index value = slider.value();
+				if (value > slider.minimum())
+				{
+					slider.setValue(value - 1);
+				}
+				else
+				{
+					slider.setValue(value + 1);
+				}
+
+ 				slider.setValue(value);
 			}
 		}
 
