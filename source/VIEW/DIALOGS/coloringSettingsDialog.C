@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.C,v 1.38.16.2 2007/04/04 15:21:49 amoll Exp $
+// $Id: coloringSettingsDialog.C,v 1.38.16.3 2007/05/30 21:23:14 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
@@ -168,7 +168,6 @@ namespace BALL
 			setDefaultValues_();
 			setWidgetStackName("Model Colors");
 			setWidgetStack(widget_stack);
-			registerWidgets_();
 
 			// signals and slots connections
 			connect( coil_color_button, SIGNAL( clicked() ), this, SLOT( coilColorPressed() ) );
@@ -201,6 +200,8 @@ namespace BALL
 			connect( hydrophobic_color_button, SIGNAL( clicked() ), this, SLOT( hydrophobicColorPressed() ) );
 			connect( aromatic_color_button, SIGNAL( clicked() ), this, SLOT( aromaticColorPressed() ) );
 			connect( other_color_button, SIGNAL( clicked() ), this, SLOT( otherColorPressed() ) );
+
+			registerWidgets_();
 		}
 
 		void ColoringSettingsDialog::setDefaultValues_()

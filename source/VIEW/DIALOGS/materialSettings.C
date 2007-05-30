@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.C,v 1.11.16.1 2007/03/25 22:02:04 oliver Exp $
+// $Id: materialSettings.C,v 1.11.16.2 2007/05/30 21:23:14 amoll Exp $
 // 
 
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
@@ -24,7 +24,6 @@ namespace BALL
 			setObjectName(name);
 			setINIFileSectionName("MATERIAL_SETTINGS");
 			setWidgetStackName("Materials");
-			registerWidgets_();
 			
 			// signals and slots connections
 			connect( specular_slider, SIGNAL( valueChanged(int) ), this, SLOT( specularChanged() ) );
@@ -32,6 +31,8 @@ namespace BALL
 			connect( ambient_slider, SIGNAL( valueChanged(int) ), this, SLOT( ambientChanged() ) );
 			connect( diffuse_slider, SIGNAL( valueChanged(int) ), this, SLOT( diffuseChanged() ) );
 			connect( shininess_slider, SIGNAL( valueChanged(int) ), this, SLOT( shininessChanged() ) );
+
+			registerWidgets_();
 		}
 
 
