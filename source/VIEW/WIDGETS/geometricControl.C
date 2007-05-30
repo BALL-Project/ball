@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.77.16.3 2007/03/28 13:51:54 amoll Exp $
+// $Id: geometricControl.C,v 1.77.16.4 2007/05/30 18:56:27 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -239,6 +239,8 @@ namespace BALL
 			// planes ->
 			if (plane != 0)
 			{
+				context_menu_actions_[acs + 1]->setEnabled(true);
+
 				for (Position p = all_pos + 1; p <= acs; p++)
 				{
 					context_menu_actions_[p]->setEnabled(false); 
