@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueRotamerSet.h,v 1.1.2.3 2007/04/04 08:42:17 bertsch Exp $
+// $Id: residueRotamerSet.h,v 1.1.2.4 2007/06/01 12:41:36 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_RESIDUEROTAMERSET_H
@@ -241,6 +241,12 @@ namespace BALL
 
 		///	Add a rotamer to the current set.
 		void addRotamer(const Rotamer& rotamer);
+
+    /// delete the Rotamer at the given iterator location
+		void deleteRotamer(Iterator loc);
+		
+		/// delete the range of rotamers
+		void deleteRotamers(Iterator begin, Iterator end);
 
 		/// sort the rotamers descending to their probability
 		void sort();

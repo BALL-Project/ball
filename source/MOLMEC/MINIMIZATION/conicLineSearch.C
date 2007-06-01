@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conicLineSearch.C,v 1.1.4.3 2007/05/18 10:58:36 aleru Exp $
+// $Id: conicLineSearch.C,v 1.1.4.4 2007/06/01 12:41:37 bertsch Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/conicLineSearch.h>
@@ -25,6 +25,8 @@
 
 //#define BALL_DEBUG
 #undef BALL_DEBUG
+
+using namespace std;
 
 namespace BALL 
 {

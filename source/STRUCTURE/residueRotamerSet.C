@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueRotamerSet.C,v 1.1.2.3 2007/04/04 08:42:13 bertsch Exp $
+// $Id: residueRotamerSet.C,v 1.1.2.4 2007/06/01 12:41:36 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/residueRotamerSet.h>
@@ -330,6 +330,16 @@ namespace BALL
 	void ResidueRotamerSet::addRotamer(const Rotamer& rotamer)
   {
 		rotamers_.push_back(rotamer);
+	}
+
+	void ResidueRotamerSet::deleteRotamer(Iterator loc)
+	{
+		rotamers_.erase(loc);
+	}
+
+	void ResidueRotamerSet::deleteRotamers(Iterator begin, Iterator end)
+	{
+		rotamers_.erase(begin, end);
 	}
 
 	/** This method modifies the atom position of the template side chain
