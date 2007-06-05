@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.26.20.1 2007/05/25 10:07:55 oliver Exp $
+# $Id: Makefile,v 1.26.20.2 2007/06/05 08:11:26 oliver Exp $
 #
 
 DIRECTORY=PYTHON
@@ -8,8 +8,6 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	pyInterpreter.C
-
-default: ext
 
 ext:
 	@cd EXTENSIONS ;  $(MAKE) 
