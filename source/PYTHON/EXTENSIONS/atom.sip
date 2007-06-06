@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.sip,v 1.10.18.1 2007/03/25 21:37:03 oliver Exp $
+// $Id: atom.sip,v 1.10.18.2 2007/06/06 12:33:32 anhi Exp $
 //
 
 class AtomType
@@ -131,7 +131,7 @@ class Atom
    void setType(AtomType /atom_type/);
    AtomType getType() const;
 
-   const String& getTypeName() const throw();
+   String getTypeName() const throw();
    void setTypeName(const String& /name/) throw();
 
    void setVelocity(const Vector3& /velocity/) throw();
