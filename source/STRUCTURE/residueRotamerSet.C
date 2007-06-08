@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueRotamerSet.C,v 1.1.2.5 2007/06/08 09:17:40 bertsch Exp $
+// $Id: residueRotamerSet.C,v 1.1.2.6 2007/06/08 15:54:39 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/residueRotamerSet.h>
@@ -404,7 +404,7 @@ namespace BALL
 		
 		for (; bond_it != a.endBond(); ++bond_it)
 		{
-			Atom* b = (*bond_it).getPartner(a);
+			Atom* b = bond_it->getPartner(a);
 			String pattern = b->getName();
 
 			if (find(movable.begin(), movable.end(), pattern) == movable.end()
@@ -492,21 +492,14 @@ namespace BALL
 	// Transform the side chain such that the torsion angles are identical to the angles of the rotamer
 	bool ResidueRotamerSet::setRotamer(Residue& residue, const Rotamer& rotamer) 
 	{
-		// TODO check whether this residue contains all needed atoms!
-
 		// restore the original side chain atom coordinates (necessary to reproduce rotamers
 		// with the desired precision).
 		// The application of many successive transformations on the same residue
 		// is possible, but leads to slightly different coordinates for
 		// the same rotamer at different times.
 		
-		/*AtomIterator atom_it = residue.beginAtom();
-		for (Size index = 0; +atom_it && (index < original_coordinates_.size()); ++atom_it, ++index)
-		{
-			atom_it->setPosition(original_coordinates_[index]);	
-		}*/
-
-		for (AtomIterator atom_it = residue.beginAtom(); +atom_it; ++atom_it)
+		Residue side_chain(residue);
+		for (AtomIterator atom_it = side_chain.beginAtom(); +atom_it; ++atom_it)
 		{
 			if (original_coordinates_.has(atom_it->getName()))
 			{
@@ -518,24 +511,24 @@ namespace BALL
 				return false;
 			}
 		}
-		
-		// Transform the residue template side_chain_ such that the torsion angles of the template
+
+		// Transform the residue template side_chain such that the torsion angles of the template
 		// are set to the values stored in rotamer
 		if (number_of_torsions_ > 0)
 		{
-			setTorsionAngle_(residue, movable_atoms_chi1_, rotamer.chi1);
+			setTorsionAngle_(side_chain, movable_atoms_chi1_, rotamer.chi1);
 		}
 		if (number_of_torsions_ > 1)
 		{
-			setTorsionAngle_(residue, movable_atoms_chi2_, rotamer.chi2);
+			setTorsionAngle_(side_chain, movable_atoms_chi2_, rotamer.chi2);
 		}
 		if (number_of_torsions_ > 2)
 		{
-			setTorsionAngle_(residue, movable_atoms_chi3_, rotamer.chi3);
+			setTorsionAngle_(side_chain, movable_atoms_chi3_, rotamer.chi3);
 		}
 		if (number_of_torsions_ > 3)
 		{
-			setTorsionAngle_(residue, movable_atoms_chi4_, rotamer.chi4);
+			setTorsionAngle_(side_chain, movable_atoms_chi4_, rotamer.chi4);
 		}
 
 		// Initiate vectors
@@ -569,12 +562,13 @@ namespace BALL
 			return false;
 		}
 
+		
 		// Check if the residue template side_chain_ contains the 3 backbone atoms for the matching
-		if (residue.getAtom("CB") != 0 && residue.getAtom("CA") != 0 && residue.getAtom("N") != 0)
+		if (side_chain.getAtom("CB") != 0 && side_chain.getAtom("CA") != 0 && side_chain.getAtom("N") != 0)
 		{
-			a1 = residue.getAtom("CB")->getPosition();
-			a2 = residue.getAtom("CA")->getPosition();
-			a3 = residue.getAtom("N")->getPosition();
+			a1 = side_chain.getAtom("CB")->getPosition();
+			a2 = side_chain.getAtom("CA")->getPosition();
+			a3 = side_chain.getAtom("N")->getPosition();
 		}
 		else 
 		{
@@ -588,18 +582,15 @@ namespace BALL
 
 		// Calculate the transformation
 		Matrix4x4 M = StructureMapper::matchPoints(a1, a2, a3, z1, z2, z3);
-	
+
 		// Apply the transformation to side_chain
 		proc.setTransformation(M);
-
-		// create tmp side_chain
-		Residue side_chain(residue);
 		side_chain.apply(proc);
 
 		// Change the coordinates of residue
 		for (AtomIterator atom_it = residue.beginAtom(); +atom_it; ++atom_it)
 		{
-			if (residue.getAtom(atom_it->getName()) != 0)
+			if (side_chain.getAtom(atom_it->getName()) != 0)
 			{
 				for (Size i = 3; i < movable_atoms_chi1_.size(); ++i)
 				{
