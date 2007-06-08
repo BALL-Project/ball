@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueRotamerSet.C,v 1.1.2.4 2007/06/01 12:41:36 bertsch Exp $
+// $Id: residueRotamerSet.C,v 1.1.2.5 2007/06/08 09:17:40 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/residueRotamerSet.h>
@@ -431,7 +431,6 @@ namespace BALL
 		TransformationProcessor proc;
 
 		// Compute transformation that moves the torsion atoms into normal position
-		// TODO what to do if the atoms does not exist? check before?
 		Vector3 a1(residue.getAtom(movable[0])->getPosition());
 		Vector3 a2(residue.getAtom(movable[1])->getPosition());
 		Vector3 a3(residue.getAtom(movable[2])->getPosition());
@@ -488,7 +487,6 @@ namespace BALL
 				residue.getAtom(movable[i])->setPosition(R * residue.getAtom(movable[i])->getPosition());
 			}
 		}
-							
 	}
 
 	// Transform the side chain such that the torsion angles are identical to the angles of the rotamer
@@ -589,12 +587,14 @@ namespace BALL
 		TransformationProcessor proc;
 
 		// Calculate the transformation
-		Matrix4x4 M = StructureMapper::matchPoints(a1,a2,a3,z1,z2,z3);
+		Matrix4x4 M = StructureMapper::matchPoints(a1, a2, a3, z1, z2, z3);
 	
 		// Apply the transformation to side_chain
 		proc.setTransformation(M);
-		//side_chain_.apply(proc);
-		residue.apply(proc);
+
+		// create tmp side_chain
+		Residue side_chain(residue);
+		side_chain.apply(proc);
 
 		// Change the coordinates of residue
 		for (AtomIterator atom_it = residue.beginAtom(); +atom_it; ++atom_it)
@@ -605,7 +605,7 @@ namespace BALL
 				{
 					if (movable_atoms_chi1_[i] == atom_it->getName())
 					{
-						atom_it->setPosition(residue.getAtom(atom_it->getName())->getPosition());
+						atom_it->setPosition(side_chain.getAtom(atom_it->getName())->getPosition());
 						break;
 					}
 				}
