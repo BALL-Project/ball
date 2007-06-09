@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.C,v 1.15.20.1 2007/05/10 11:12:41 amoll Exp $
+// $Id: snapShotManager.C,v 1.15.20.2 2007/06/09 16:08:08 anhi Exp $
 //
 
 #include <BALL/KERNEL/PTE.h>
@@ -442,7 +442,7 @@ namespace BALL
 		// use these, otherwise "seek" to the correct file position
 		if (snapshot_buffer_.size() != 0)
 		{
-			if (snapshot_buffer_.size() < number) return false;
+			if (snapshot_buffer_.size() <= number) return false;
 
 			snapshot_buffer_[number].applySnapShot(*system_ptr_);
 			current_snapshot_ = number;
@@ -454,7 +454,7 @@ namespace BALL
 
 		SnapShot buffer;
 
-		if (number > trajectory_file_ptr_->getNumberOfSnapShots())
+		if (number >= trajectory_file_ptr_->getNumberOfSnapShots())
 		{
 			Log.error() << "SnapShotManager::applySnapShot(): "
 									<< "requested SnapShot number " << number 
@@ -468,7 +468,7 @@ namespace BALL
 		// beginning
 		trajectory_file_ptr_->reopen();
 		trajectory_file_ptr_->readHeader();
-		for (Size count = 0; count < number; ++count)
+		for (Size count = 0; count <= number; ++count)
 		{
 			if (!trajectory_file_ptr_->read(buffer))
 			{
