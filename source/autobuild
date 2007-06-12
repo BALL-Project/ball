@@ -166,9 +166,6 @@ automaticInstaller()
 	echo
 	echo To start BALLView, just run $SFILE
 	echo
-	echo "====================================================================="
-	echo Building documentation ...
-	make doc &> build.log
 	echo Build finished successfully!
 }
 

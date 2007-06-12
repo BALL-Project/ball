@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.62.8.5 2007/05/28 13:29:16 amoll Exp $
+// $Id: mainframe.C,v 1.62.8.6 2007/06/12 05:42:24 oliver Exp $
 //
 
 #include "mainframe.h"
@@ -22,7 +22,6 @@
 #include <BALL/VIEW/WIDGETS/editableScene.h>
 #include <BALL/VIEW/WIDGETS/fileObserver.h>
 #include <BALL/VIEW/WIDGETS/testFramework.h>
-#include <BALL/VIEW/WIDGETS/dockingController.h>
 #include <BALL/VIEW/DIALOGS/pubchemDialog.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
@@ -118,7 +117,6 @@ namespace BALL
 		new LabelDialog(				this, "LabelDialog");
 		new MolecularStructure(	this, "MolecularStructure");
  		addDockWidget(Qt::BottomDockWidgetArea, new LogView(this, "Logs"));
-		new DockingController(  this, "DockingController");
 		addDockWidget(Qt::BottomDockWidgetArea, new FileObserver(  this, "FileObserver"));
 
 		Scene::stereoBufferSupportTest();
