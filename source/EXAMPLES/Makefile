@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.23.16.1 2007/03/25 22:00:07 oliver Exp $
+# $Id: Makefile,v 1.23.16.2 2007/06/12 19:41:02 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -16,17 +16,16 @@ include ../config.mak
 
 DIRECTORY=EXAMPLES
 
-CPP_SOURCES=\
-	proteinMapper.C\
-	PDB2discover.C\
-	amberEnergy.C\
-	bindingEnergy.C\
-	ramachandran.C\
-	PDBChecker.C\
-	addHydrogens.C\
-	SASAreas.C\
-	energy.C
-
+EXECUTABLES=\
+	proteinMapper\
+	PDB2discover\
+	amberEnergy\
+	bindingEnergy\
+	ramachandran\
+	PDBChecker\
+	addHydrogens\
+	SASAreas\
+	energy
 
 ifeq ($(BALL_HAS_VIEW),true)
 	EXECUTABLES += BALLVIEWClient
