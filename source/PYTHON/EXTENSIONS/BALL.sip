@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.44.8.4 2007/05/07 11:46:42 aleru Exp $
+// $Id: BALL.sip,v 1.44.8.5 2007/06/15 09:40:51 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -168,6 +168,9 @@
 %Include vector2.sip
 %Include vector3.sip
 %Include vector4.sip
+
+// MOLMEC/MMFF94
+%Include MMFF94.sip
 
 // MOLMEC/AMBER
 %Include amber.sip
