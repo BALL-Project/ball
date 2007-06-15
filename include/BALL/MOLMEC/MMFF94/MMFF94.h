@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.h,v 1.1.8.2 2007/05/10 09:06:20 amoll Exp $ 
+// $Id: MMFF94.h,v 1.1.8.3 2007/06/15 09:24:20 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -100,12 +100,10 @@ namespace BALL
 			static const char* VDW_CUTON;
 
 			/**	Electrostatic cutoff
-			 		NOT YET IMPLEMENTED!
 			*/
 			static const char* ELECTROSTATIC_CUTOFF;
 
 			/**	Electrostatic cuton
-			 		NOT YET IMPLEMENTED!
 			*/
 			static const char* ELECTROSTATIC_CUTON;
 
