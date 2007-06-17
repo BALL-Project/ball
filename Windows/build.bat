@@ -128,7 +128,7 @@ call build.bat %1 tutorial
 
 goto end
 
-rem ---------------------------------------------- Useage hints -----------------------------------------
+rem ---------------------------------------------- Usage hints -----------------------------------------
 :Usage1
 echo BALL_PATH variable is not set. 
 goto Usage
@@ -146,12 +146,12 @@ echo You didnt download the Contrib file and extracted it correctly to this dire
 goto Usage
 
 :Usage6
-echo Please specifiy if you want to create a debugging or release version!
+echo Please specify if you want to create a debugging or release version!
 goto Usage
 
 :Usage
 echo.
-echo Useage: build debug^|release [BALL^|tests^|clean^|benchmarks^|tutorial^|all]
+echo Usage: build debug^|release [BALL^|tests^|clean^|benchmarks^|tutorial^|all]
 echo.
 echo You can also have a look at in BALL\Windows\Readme.txt
 goto end
