@@ -1,5 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
+//
+// $Id: geometricFit.h,v 1.4.18.2 2007/06/17 07:02:22 oliver Exp $
+// Author:
+//
+//
 
 #ifndef BALL_STRUCTURE_DOCKING_GEOMETRICFIT_H
 #define BALL_STRUCTURE_DOCKING_GEOMETRICFIT_H
