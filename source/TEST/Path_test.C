@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Path_test.C,v 1.12.30.2 2007/06/21 19:38:12 oliver Exp $
+// $Id: Path_test.C,v 1.12.30.3 2007/06/21 19:44:53 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(Path, "$Id: Path_test.C,v 1.12.30.2 2007/06/21 19:38:12 oliver Exp $")
+START_TEST(Path, "$Id: Path_test.C,v 1.12.30.3 2007/06/21 19:44:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -78,6 +78,18 @@ CHECK(string findStrict(const string& name))
 	TEST_EQUAL(p1.findStrict("Path_test.C"), "Path_test.C")
 	TEST_EQUAL(p1.findStrict("/TEST/Path_test.C"), "");
 	TEST_EQUAL(p1.findStrict("/xxx/Path_test.C"), "");
+RESULT
+
+CHECK([extra]Singleton)
+	Path p1;
+	Path p2;
+	p1.reset();
+	STATUS(p1.getDataPath())
+	TEST_EQUAL(String(p1.getDataPath()).hasSuffix(data_suffix1)
+	 		|| String(p1.getDataPath()).hasSuffix(data_suffix2), true)
+	p1.setDataPath("XXXXX/XXXXX");
+	TEST_EQUAL(p1.getDataPath(), "XXXXX/XXXXX")
+	TEST_EQUAL(p2.getDataPath(), "XXXXX/XXXXX")
 RESULT
 
 /////////////////////////////////////////////////////////////
