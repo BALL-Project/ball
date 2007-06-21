@@ -1,3 +1,7 @@
+1.2 RC 1
+ - Autobuild script now supports building without VIEW
+ - Path is now a singleton
+
 1.2 beta:
 
 Changed:

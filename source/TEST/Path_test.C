@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Path_test.C,v 1.12.30.1 2007/03/25 21:47:30 oliver Exp $
+// $Id: Path_test.C,v 1.12.30.2 2007/06/21 19:38:12 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(Path, "$Id: Path_test.C,v 1.12.30.1 2007/03/25 21:47:30 oliver Exp $")
+START_TEST(Path, "$Id: Path_test.C,v 1.12.30.2 2007/06/21 19:38:12 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -24,7 +24,7 @@ CHECK(Path())
 	delete p;
 RESULT
 
-Path p = Path();
+Path p;
 string data_suffix1("/data/");
 string data_suffix2("/data/");
 data_suffix2[0] = FileSystem::PATH_SEPARATOR;
@@ -55,6 +55,7 @@ RESULT
 
 CHECK(string find(const string& name))
 	Path p1;
+	p1.reset();
 	String file = String("fragments") + FileSystem::PATH_SEPARATOR + "Fragments.db";
 	TEST_NOT_EQUAL(p1.find(file), "")
 	file = "Fragments.db";
