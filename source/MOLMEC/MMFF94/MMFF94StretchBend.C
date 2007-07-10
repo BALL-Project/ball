@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.8.4 2007/05/13 09:38:22 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.8.5 2007/07/10 10:54:14 anhi Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -216,7 +216,7 @@ namespace BALL
 					Atom& atom2 = *this_bend.atom2;
 					Atom& atom3 = *this_bend.atom3;
 
-					if (use_selection && (!atom1.isSelected() || !atom2.isSelected() || !atom3.isSelected()))
+					if (use_selection && (!atom1.isSelected() && !atom2.isSelected() && !atom3.isSelected()))
 					{
 						continue;
 					}
@@ -297,10 +297,14 @@ namespace BALL
 			Atom& atom1 = *(Atom*)(*bond_it)->getFirstAtom();
 			Atom& atom2 = *(Atom*)(*bond_it)->getSecondAtom();
 
-			if (use_selection && (!atom1.isSelected() || !atom2.isSelected()))
+		// WARNING: since we do not yet know whether the stretch will be needed for
+		// 				  an enabled StretchBend, we cannot skip the setup for non-selected
+		// 					stretches here!
+		/*	if (use_selection && (!atom1.isSelected() && !atom2.isSelected()))
 			{
 				continue;
 			}
+			*/
 
 			stretch_it = stretch_parameters_->getParameters(atom1.getType(), atom2.getType());
 			
@@ -532,7 +536,7 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 
 			sb.energy = sb1 + sb2;
 
-      #ifdef BALL_DEBUG_MMFF
+      //#ifdef BALL_DEBUG_MMFF
 			Log.info() << "MMFF94 SB "  
 				<< bend.atom1->getName() << " "
 				<< bend.atom2->getName() << " "
@@ -546,7 +550,7 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 				<< stretches_[sb.stretch_j_k].delta_r << " d: " 
 				<< bends_[sb.bend_index].delta_theta  << "      " 
 				<< sb.energy << std::endl;
-      #endif
+      //#endif
 
 			stretch_bend_energy_ += sb.energy;
 		}
@@ -666,16 +670,21 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		// stretches:
 		for (Size i = 0 ; i < stretches_.size(); i++)
 		{
-			if (use_selection && !stretches_[i].atom1->isSelected()
+			// WARNING: since we do not yet know whether the stretch will be needed for
+			// 				  an enabled StretchBend, we cannot skip the setup for non-selected
+			// 					stretches here!
+			/*if (use_selection && !stretches_[i].atom1->isSelected()
 								 			  && !stretches_[i].atom2->isSelected())
 			{
 				continue;
 			}
+			*/
 
 			Vector3 direction(stretches_[i].atom1->getPosition() - stretches_[i].atom2->getPosition());
 			double distance = direction.x * direction.x +
 												direction.y * direction.y +
 												direction.z * direction.z;
+	
 			distance = sqrt(distance);
 			stretches_[i].delta_r = distance - (double) stretches_[i].r0;
 			direction /= distance;
