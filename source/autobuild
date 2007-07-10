@@ -1,10 +1,7 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
 #######################################
 #### MODIFY THESE SETTINGS, IF DESIRED:
-BUILD_VIEW=true
-BUILD_PYTHON=true
-
 CDEBUG="--enable-debuginfo"
 #CDEBUG="--disable-debuginfo"
 
@@ -42,14 +39,7 @@ askContrib()
 {
 	cd $BALL_PATH
 	echo 
-	if [ "${BUILD_VIEW}" = "false" ]; then
-		CONTRIB_PACKAGE="Contrib-noView"
-		PREFIX="contrib-noview"
-	else
-		CONTRIB_PACKAGE="Contrib"
-		PREFIX="contrib"
-	fi
-	echo This installer needs the Linux/Unix/MacOS $CONTRIB_PACKAGE package from the 
+	echo This installer needs the Linux/Unix/MacOS Contrib package from the 
 	echo BALL website: http://www.ballview.org/Downloads/Develop
 	echo Have you already downloaded and installed this package?
 	echo "(If a previous build of the contrib package failed, choose *No*)"
@@ -75,9 +65,9 @@ askContrib()
 				echo Assuming version is:$VERSION ....
 				if [ "$OS" != Darwin ]
 				then
-					PACKAGE=${PREFIX}"-"${VERSION}".tar.gz"
+					PACKAGE="contrib-"$VERSION".tar.gz"
 				else
-					PACKAGE=${PREFIX}"-"${VERSION}"-darwin.tar.gz"
+					PACKAGE="contrib-"$VERSION"-darwin.tar.gz"
 				fi
 				echo Trying to download the current Contrib file: $PACKAGE
 				URL=http://www.ballview.org/Downloads/Contrib/$PACKAGE
@@ -87,7 +77,7 @@ askContrib()
 				download $URL $PACKAGE
 				rm -rf contrib
 				tar xzf $PACKAGE
-				# rm $PACKAGE
+				rm $PACKAGE
 				export CDIR="$BALL_PATH/contrib"
 				cd $CDIR
 				./build_contrib
@@ -104,119 +94,90 @@ automaticInstaller()
 	echo Running configure ...
 	cd $BALL_PATH/source
 	touch config.lic
-	autoconf || true
-	if [ "${BUILD_VIEW}" = "true" ]; then
-		VIEW_STRING=" --with-qt-incl=$INCDIR"\
-" --with-qt-libs=$LIBDIR"\
-" --with-glew-incl=$INCDIR"\
-" --with-glew-libs=$LIBDIR"\
-" --with-moc=$BINDIR/moc"\
-" --with-uic=$BINDIR/uic"
-		if [ "${BUILD_PYTHON}" = "true" ]; then
-			PYTHON_STRING=" --with-sip=$BINDIR/sip"\
-" --with-sip-incl=$INCDIR"\
-" --with-sip-lib=$LIBDIR"\
-" --enable-python"
-		else
-			PYTHON_STRING=" --disable-python"
-		fi
-
-	else
-		VIEW_STRING=" --disable-VIEW"
-		PYTHON_STRING=" --disable-python"
-	fi
-
+	autoconf
  ./configure 	$CDEBUG\
 							$COPTI\
+							$CPYTHON\
+							$CVIEW\
 							$CGSL\
-"--with-gsl-lib=$LIBDIR"\
-"--with-gsl-incl=$INCDIR"\
-"--enable-fftw"\
-"--disable-fftw-float"\
-"--disable-fftw-longdbl"\
-"--enable-double-cplx"\
-"--with-fftw-lib=$LIBDIR"\
-"--with-fftw-incl=$INCDIR"\
-							${VIEW_STRING}\
-							${PYTHON_STRING}
+						  "--with-gsl-lib=$LIBDIR"\
+							"--with-gsl-incl=$INCDIR"\
+							"--with-sip=$BINDIR/sip"\
+							"--with-sip-incl=$INCDIR"\
+							"--with-sip-lib=$LIBDIR"\
+							"--enable-fftw"\
+							"--disable-fftw-float"\
+							"--disable-fftw-longdbl"\
+							"--enable-double-cplx"\
+							"--with-fftw-lib=$LIBDIR"\
+							"--with-fftw-incl=$INCDIR"\
+							"--with-glew-incl=$INCDIR"\
+							"--with-glew-libs=$LIBDIR"\
+							"--with-qt-incl=$INCDIR"\
+							"--with-qt-libs=$LIBDIR"\
+							"--with-moc=$BINDIR/moc"\
+							"--with-uic=$BINDIR/uic"\
 
 	make depend
-	make 
+	make "MAKE=make -j2"
 	make install
-	if [ "${BUILD_VIEW}" = "true" ]; then
+	if [ "$CVIEW" = "" ]; then
 		cd $BALL_PATH/source/APPLICATIONS/BALLVIEW
 		make
 	fi
-	if [ "${BUILD_PYTHON}" = "true" -a  "${BUILD_VIEW}" = "true" ]; then
+	if [ "$CPYTHON" = "--enable-python" ]; then
 		cd $BALL_PATH/source/PYTHON/EXTENSIONS
 		make depend
-		make 
+		make "MAKE=make -j2"
 		make install
 	fi
 	cd $BALL_PATH/source
 	LLPATH=$BALL_PATH/lib/`cat config.mak | grep "BINFMT   =" | sed "s/BINFMT   =//" `
 	LPATH=$LIBDIR:$LLPATH
-	if test ${BUILD_VIEW} = true ; then
-		rm -f $LLPATH/sip.so
-		cp $LIBDIR/sip.so $LLPATH
-	fi
+	rm -f $LLPATH/sip.so
+	cp $LIBDIR/sip.so $LLPATH
 	echo "====================================================================="
 	echo 
 	echo
 	echo
 	LPATHN="LD_LIBRARY_PATH"
-	if [ "$OS" == Darwin ] ; then
+	if [ "$OS" == Darwin ]
+	then
 		LPATHN=DYLD_LIBRARY_PATH
 	fi
 
-	echo Dont forget to add the following directories to your $LPATHN:
+	echo Dont forget to add the following directories to your $LPATHN and PYTHONPATH:
 	echo
 	echo $LPATH
 	echo 
 	echo On most platforms, this can be done by the following lines:
 	echo "export $LPATHN=$LPATH"
 	echo "export PYTHONPATH=$LPATH"
-	if test ${BUILD_VIEW} = true ; then
-	    SFILE="$BALL_PATH/source/startBALLView"
-	    echo "PYTHONPATH=$LPATH" > $SFILE
-	    echo "export PYTHONPATH" >> $SFILE
-	    echo "$LPATHN=$LPATH" >> $SFILE
-	    echo "export $LPATHN" >> $SFILE
-	    echo "__GL_FSAA_MODE=6" >> $SFILE
-	    echo "export __GL_FSAA_MODE=6" >> $SFILE
-	    echo "$BALL_PATH/source/APPLICATIONS/BALLVIEW/BALLView" >> $SFILE
-	    chmod +x $SFILE
+	SFILE="$BALL_PATH/source/startBALLView"
+	echo "PYTHONPATH=$LPATH" > $SFILE
+	echo "export PYTHONPATH" >> $SFILE
+	echo "$LPATHN=$LPATH" >> $SFILE
+	echo "export $LPATHN" >> $SFILE
+	echo "__GL_FSAA_MODE=6" >> $SFILE
+	echo "export __GL_FSAA_MODE=6" >> $SFILE
+	echo "$BALL_PATH/source/APPLICATIONS/BALLVIEW/BALLView" >> $SFILE
+	chmod +x $SFILE
 
-	    echo
-	    echo To start BALLView, just run $SFILE
-	    echo
-	fi
+	echo
+	echo To start BALLView, just run $SFILE
+	echo
+	echo "====================================================================="
+	echo Building documentation ...
+	make doc &> build.log
 	echo Build finished successfully!
 }
 
 customInstaller()
 {
-	cd $BALL_PATH
-	echo
-	echo Do you want to include visualization support in the library? This
-	echo requires a functional OpenGL installation and will allow to build
-	echo BALLView.
-	echo
-	OPTIONS="Yes No"
-	select WITH_VIEW in $OPTIONS; do
-		if [ "${WITH_VIEW}" = "Yes" ]; then
-			export BUILD_VIEW=true
-		elif [ "${WITH_VIEW}" = "No" ]; then
-			export BUILD_VIEW=false
-		fi
-		break
-	done
-	echo ${BUILD_VIEW}
-	askContrib
-	BINDIR=$CDIR/bin
-	INCDIR=$CDIR/include
-	LIBDIR=$CDIR/lib
-	automaticInstaller
+	echo Not yet supported...
+	echo Either use the auto installer option OR
+	echo modify the settings in the header of this file by hand.
+	exit
 }
 
 if [ $# != 0 ] 
@@ -244,13 +205,6 @@ else
 	echo only allowed if you have read and accepted the BALL licence
 	echo file under BALL/source/.licence.
 	echo 
-	echo Please note that the build process of the contrib packages
-	echo requires about 2Gb of disk space and can take several hours,
-	echo depending on your machine. This is mostly due to compiling
-	echo Qt. After compiling the contrib packages, you will be offered
-	echo to clean object files and source directories, which will reduce
-	echo the required disk space to ~250Mb.
-	echo
 	echo Furthermore, make sure that you have the following packages 
 	echo installed on your machine:
 	echo bison, flex, python, python-dev, libXmu-dev, libXi-dev, 
@@ -275,5 +229,4 @@ else
 		exit
 	done
 fi
-
 
