@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SCWRLRotamerFile.C,v 1.1.2.2 2007/04/04 08:42:14 bertsch Exp $
+// $Id: SCWRLRotamerFile.C,v 1.1.2.3 2007/07/12 14:18:32 bertsch Exp $
 //
 
 #include <BALL/FORMAT/SCWRLRotamerFile.h>
@@ -88,7 +88,7 @@ namespace BALL
 				Size number_of_torsions(0);
 				for (Size i = 4; i != 8; ++i)
 				{
-					if (line_.getField(4).toInt() != 0)
+					if (line_.getField(i).toInt() != 0)
 					{
 						number_of_torsions++;
 					}
