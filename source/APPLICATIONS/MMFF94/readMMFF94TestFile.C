@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.8.2 2007/04/17 12:40:00 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.8.3 2007/07/13 22:39:38 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -967,6 +967,13 @@ int runtests(const vector<String>& filenames)
 	typer.collectHeteroAtomTypes(types);
 
 	MMFF94 mmff;
+	mmff.options[MMFF94::Option::VDW_CUTOFF] = 0;
+	mmff.options[MMFF94::Option::VDW_CUTON] = 0;
+	mmff.options[MMFF94::Option::ELECTROSTATIC_CUTOFF] = 0;
+	mmff.options[MMFF94::Option::ELECTROSTATIC_CUTON] = 0;
+	mmff.options[MMFF94::Option::NONBONDED_CUTOFF] = 99999;
+	mmff.options[MMFF94::Option::DISTANCE_DEPENDENT_DIELECTRIC] = false;
+
 
 	vector<String> not_ok;
 	vector<String> rings_wrong;
@@ -1214,11 +1221,6 @@ int main(int argc, char** argv)
 	else if (String(argv[2]) == "bpti")
 	{
 		MMFF94 mmff;
-		mmff.options[MMFF94::Option::NONBONDED_CUTOFF] = 1000;
-		mmff.options[MMFF94::Option::VDW_CUTON] = 1000;
-		mmff.options[MMFF94::Option::VDW_CUTOFF] = 1000;
-		mmff.options[MMFF94::Option::ELECTROSTATIC_CUTOFF] = 1000;
-		mmff.options[MMFF94::Option::ELECTROSTATIC_CUTON] = 1000;
 
 		HINFile pdb("../BALLVIEW/bpti.hin");
 		System system;
