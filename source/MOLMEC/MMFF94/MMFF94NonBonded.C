@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94NonBonded.C,v 1.1.8.5 2007/05/17 00:01:50 amoll Exp $
+// $Id: MMFF94NonBonded.C,v 1.1.8.6 2007/07/13 22:12:25 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
@@ -278,6 +278,8 @@ namespace BALL
 			if (!ok ) 
 			{
 				Log.error() << "Invalid ES cuton/cutoff values!" << std::endl;
+				Log.error() << "ES cuton: "<< es_cut_on_ << " off: " << es_cut_off_ 
+					          << " NB cut " << cut_off_ << std::endl;
 			}
 			else
 			{
