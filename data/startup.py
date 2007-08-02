@@ -71,7 +71,7 @@ def quit():
 	getMainControl().quit()
 
 def run(file):
-	getPyWidget().runFile(file)
+	getPyWidget().openFile(file, true)
 
 def openFile(file):
 	return getMainControl().openFile(file)
