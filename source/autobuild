@@ -106,17 +106,9 @@ automaticInstaller()
 	touch config.lic
 	autoconf || true
 	if [ "${BUILD_VIEW}" = "true" ]; then
-		VIEW_STRING="--with-qt-incl=$INCDIR"\
-								"--with-qt-libs=$LIBDIR"\
-								"--with-glew-incl=$INCDIR"\
-								"--with-glew-libs=$LIBDIR"\
-								"--with-moc=$BINDIR/moc"\
-								"--with-uic=$BINDIR/uic"
+		VIEW_STRING="--with-qt-incl=$INCDIR --with-qt-libs=$LIBDIR --with-glew-incl=$INCDIR --with-glew-libs=$LIBDIR --with-moc=$BINDIR/moc --with-uic=$BINDIR/uic"
 		if [ "${BUILD_PYTHON}" = "true" ]; then
-			PYTHON_STRING="--with-sip=$BINDIR/sip"\
-										"--with-sip-incl=$INCDIR"\
-										"--with-sip-lib=$LIBDIR"\
-										"--enable-python"
+			PYTHON_STRING="--with-sip=$BINDIR/sip --with-sip-incl=$INCDIR --with-sip-lib=$LIBDIR --enable-python"
 		else
 			PYTHON_STRING="--disable-python"
 		fi
