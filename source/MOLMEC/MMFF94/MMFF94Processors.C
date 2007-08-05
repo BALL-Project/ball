@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Processors.C,v 1.1.8.1 2007/03/23 12:51:55 oliver Exp $
+// $Id: MMFF94Processors.C,v 1.1.8.2 2007/08/05 18:53:02 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Processors.h>
@@ -591,7 +591,29 @@ void MMFF94ChargeProcessor::assignPartialCharges_()
 
 		if (type == "O2S")
 		{
-			/// ????
+			AtomBondIterator bit = atom.beginBond();
+
+			for (; +bit; ++bit)
+			{
+				Atom* partner = bit->getPartner(atom);
+				if (partner->getElement().getSymbol() == "S" &&
+						partner->countBonds() == 3)
+				{
+					Size nr = 0;
+					AtomBondIterator b = partner->beginBond();
+
+					for (; +b; ++b)
+					{
+						nr += (*b).getOrder();
+					}
+
+
+					if (nr == 3) atom.setCharge(-0.5);
+
+					break;
+				}
+			}
+
 			continue;
 		}
 
