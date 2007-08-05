@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.8.5 2007/07/10 10:54:14 anhi Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.8.6 2007/08/05 18:52:46 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -13,8 +13,8 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/COMMON/macros.h>
 
-//      #define BALL_DEBUG_MMFF
-#define BALL_MMFF_TEST
+// #define BALL_DEBUG_MMFF
+// #define BALL_MMFF_TEST
 
 using namespace std;
 
@@ -536,7 +536,7 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 
 			sb.energy = sb1 + sb2;
 
-      //#ifdef BALL_DEBUG_MMFF
+      #ifdef BALL_DEBUG_MMFF
 			Log.info() << "MMFF94 SB "  
 				<< bend.atom1->getName() << " "
 				<< bend.atom2->getName() << " "
@@ -550,7 +550,7 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 				<< stretches_[sb.stretch_j_k].delta_r << " d: " 
 				<< bends_[sb.bend_index].delta_theta  << "      " 
 				<< sb.energy << std::endl;
-      //#endif
+      #endif
 
 			stretch_bend_energy_ += sb.energy;
 		}
