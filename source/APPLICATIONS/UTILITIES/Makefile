@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.18.8.1 2007/03/25 21:32:27 oliver Exp $
+# $Id: Makefile,v 1.18.8.2 2007/08/06 16:13:26 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -27,6 +27,7 @@ EXECUTABLES =\
 	hin2mol2\
 	pdb2amber_naming\
 	pdb2dcd\
+	pdb2hin\
 	reconstruct_fragment\
 	solvent_accessibility
 

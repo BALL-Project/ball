@@ -1,10 +1,10 @@
-// $Id: pdb2hin.C,v 1.1.12.1 2007/03/25 21:32:30 oliver Exp $
+// $Id: pdb2hin.C,v 1.1.12.2 2007/08/06 16:13:27 oliver Exp $
 //
 // A very simple utility for converting PDB files into HyperChem files
 //
 // Still missing: A flag for choosing an additional step checking the
 // molecule. At the moment the molecule will treated with normalize_names
-// and build_bonfs which is only applicable to molecules that are present
+// and build_bonds which is only applicable to molecules that are present
 // in the FragmentDB, i. e. currently only proteins and DNA. This might
 // confuse users.
 
