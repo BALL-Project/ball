@@ -208,7 +208,7 @@ customInstaller()
 		break
 	done
 	echo ${BUILD_VIEW}
-	askContrib
+	askContrib || exit
 	BINDIR=$CDIR/bin
 	INCDIR=$CDIR/include
 	LIBDIR=$CDIR/lib
