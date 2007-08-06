@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.14.18.4 2007/06/09 13:59:27 oliver Exp $
+# $Id: Makefile,v 1.14.18.5 2007/08/06 09:46:50 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -17,9 +17,15 @@ EXECUTABLES=\
 	tutorial1\
 	tutorial2\
 	tutorial3\
-	bounding_box\
 	string_tutorial
 
+VIEW_DEPENDENT_EXECUTABLES=\
+	bouding_box
+
+ifeq ($(BALL_HAS_VIEW),true)
+  EXECUTABLES_OTHERS += $(VIEW_DEPENDENT_EXECUTABLES)
+endif
+		
 # default target
 all:	$(EXECUTABLES)
 
