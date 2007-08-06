@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.h,v 1.31.20.2 2007/04/04 08:42:16 bertsch Exp $
+// $Id: rotamerLibrary.h,v 1.31.20.3 2007/08/06 18:16:42 toussaint Exp $
 //
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -39,10 +39,24 @@ namespace BALL
 
 		BALL_CREATE(RotamerLibrary)
 
+    /** @name String constants
+     */
+    //@{
+
+    /// Rotamer library used when calling the default constructor
+    static const String DEFAULT_LIBRARY;
+
+    /// Fragment DB used when calling the default constructor
+    static const String DEFAULT_FRAGMENT_DB;
+    //@}
+
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
-		///	Default constructor
+		/**	Default constructor.
+        Uses rotamer library <tt>RotamerLibrary::DEFAULT_LIBRARY</tt> and 
+        fragment db <tt>RotamerLibrary::DEFAULT_FRAGMENT_DB</tt>.
+		*/
 		RotamerLibrary() throw();
 
 		///	Detailed constructor, provided for convenience
@@ -69,19 +83,19 @@ namespace BALL
 		/**	@name Accessors
 		*/
 		//@{
-		/// returns the residue set of the residue name
+		/// Return the residue set of the residue name.
 		ResidueRotamerSet* getRotamerSet(const String& name);
 
-		/// returns the residue set of the given name and torsions
+		/// Return the residue set of the given name and torsions.
 		ResidueRotamerSet* getRotamerSet(const String& name, float phi, float psi);
 
-		/// returns the residue set of the given residue
+		/// Return the residue set of the given residue.
 		ResidueRotamerSet* getRotamerSet(const Residue& residue);
 
-		/// return total number of rotamers
+		/// Return total number of rotamers.
 		Size getNumberOfRotamers() const;
 
-		/// returns the number of rotamers of the residue with the name
+		/// Return the number of rotamers of the residue with the name.
 		Size getNumberOfRotamers(const String& name) const;
 
 		/// returns the number of rotamer sets
@@ -105,10 +119,10 @@ namespace BALL
 		/// returns true if the library contains rotamers with this name
 		bool hasRotamers(const String& name) const;
 
-		/// method to test the validation of this library, typically called after the building (see SCWLLibraryFile)
+		/// method to test the validity of this library, typically called after the building (see SCWRLLibraryFile)
 		bool validate();
 
-		/// method to sort the Rotamers of each ResidueRotamerSet descending to the probability
+		/// method to sort the Rotamers of each ResidueRotamerSet descendingly according to the probability
 		void sort();
 		//@}
 

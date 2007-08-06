@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.C,v 1.30.20.2 2007/04/04 08:42:13 bertsch Exp $
+// $Id: rotamerLibrary.C,v 1.30.20.3 2007/08/06 18:16:41 toussaint Exp $
 //
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
@@ -15,11 +15,18 @@ using namespace std;
 
 namespace BALL
 {
+  const String RotamerLibrary::DEFAULT_LIBRARY = "rotamers/bbdep02.May.sortlib";
+  const String RotamerLibrary::DEFAULT_FRAGMENT_DB = "fragments/Fragments.db";
+
 	RotamerLibrary::RotamerLibrary() throw()
 		: step_width_(0),
-			fragment_db_(""),
+			fragment_db_(DEFAULT_FRAGMENT_DB),
 			backbone_dependent_(false)
 	{
+		Path path;
+		String absolute_filename = path.find(DEFAULT_LIBRARY);
+		SCWRLRotamerFile file(absolute_filename);
+		file >> *this;
 	}
 
 	RotamerLibrary::RotamerLibrary(const RotamerLibrary& library) throw()

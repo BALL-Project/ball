@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RotamerLibrary_test.C,v 1.10.20.3 2007/04/02 22:06:13 bertsch Exp $
+// $Id: RotamerLibrary_test.C,v 1.10.20.4 2007/08/06 18:16:41 toussaint Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 
 ///////////////////////////
 
-START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.10.20.3 2007/04/02 22:06:13 bertsch Exp $")
+START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.10.20.4 2007/08/06 18:16:41 toussaint Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -30,6 +30,8 @@ RotamerLibrary* rl_ptr = 0;
 CHECK(RotamerLibrary::RotamerLibrary())	
 	rl_ptr = new RotamerLibrary;
 	TEST_NOT_EQUAL(rl_ptr, 0)
+  ABORT_IF(rl_ptr == 0)
+	TEST_EQUAL(rl_ptr->getNumberOfRotamers(), 466829)
 RESULT
 
 CHECK(RotamerLibrary::~RotamerLibrary())
@@ -59,15 +61,7 @@ CHECK(RotamerLibrary& RotamerLibrary::operator = (const RotamerLibrary& rotamer_
 	TEST_EQUAL(rl.getNumberOfRotamers(), 320)
 RESULT
 
-CHECK(bool RotamerLibrary::readSQWRLLibraryFile(const String& filename, const FragmentDB& fragment_db))
-	// ???
-RESULT
-
 CHECK(ResidueRotamerSet* getRotamerSet(const String& name))
-	// ???
-RESULT
-
-CHECK(Size RotamerLibrary::getNumberOfRotamers() const)
 	// ???
 RESULT
 
