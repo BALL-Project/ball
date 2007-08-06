@@ -10,7 +10,7 @@ Changed:
    atoms is usually sufficient and is still enabled by default.
 
 Fixed:
- - Tutorial3 has new comments and more reasonable paramters for optimization and MDS
+ - Tutorial3 has new comments and more reasonable parameters for optimization and MDS
 
 1.2 alpha (21.03.2007):
 
@@ -66,9 +66,6 @@ Changed:
  - Build process now requires GNU make for conditional compiling
  - common.mak has been broken down into targets.mak and rules.mak
  - configure now checks for the correct version of QT
- - Build process now requires GNU make for conditional compiling
- - common.mak has been broken down into targets.mak and rules.mak
- - configure now checks for the correct version of QT
  - OpenGL extensions are now accessed through GLEW (OpenGL Extension Wrangler Library)
  - DatasetControl now supports generic data types
  - Persistence classes in VIEW/KERNEL were moved to CONCEPT
@@ -87,7 +84,7 @@ Known problems:
 1.1.1:
 
 The version 1.1.1 finally brings full Python, DLL and nmake Makefile support under Windows.
-Furthermore there is a large number of prominent fixes (especialy for g++ 4.x) 
+Furthermore there is a large number of prominent fixes (especially for g++ 4.x) 
 and some new functionality for BALLView.
 
 Added:
