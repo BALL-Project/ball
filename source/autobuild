@@ -172,12 +172,14 @@ automaticInstaller()
 	echo "export PYTHONPATH=$LPATH"
 	if test ${BUILD_VIEW} = true ; then
 	    SFILE="$BALL_PATH/source/startBALLView"
+			echo "#!/bin/bash"
 	    echo "PYTHONPATH=$LPATH" > $SFILE
 	    echo "export PYTHONPATH" >> $SFILE
 	    echo "$LPATHN=$LPATH" >> $SFILE
 	    echo "export $LPATHN" >> $SFILE
 	    echo "__GL_FSAA_MODE=6" >> $SFILE
 	    echo "export __GL_FSAA_MODE=6" >> $SFILE
+			echo "export LANG=C"
 	    echo "$BALL_PATH/source/APPLICATIONS/BALLVIEW/BALLView" >> $SFILE
 	    chmod +x $SFILE
 
