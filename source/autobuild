@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash
 
 #######################################
 #### MODIFY THESE SETTINGS, IF DESIRED:
@@ -54,7 +54,8 @@ askContrib()
 	echo Have you already downloaded and installed this package?
 	echo "(If a previous build of the contrib package failed, choose *No*)"
 	OPTIONS="Yes No"
-	select INST in $OPTIONS; do
+	select INST in $OPTIONS
+	do
 		if [ "$INST" = "Yes" ]; then
 			echo Please enter the position of the contrib directory.
 			echo "(Press Return for searching in "$BALL_PATH"/contrib)"
@@ -86,7 +87,8 @@ askContrib()
 				rm -f $PACKAGE 
 				download $URL $PACKAGE
 				rm -rf contrib
-				tar xzf $PACKAGE
+				gunzip $PACKAGE 
+				tar xf `basename $PACKAGE .gz`
 				# rm $PACKAGE
 				export CDIR="$BALL_PATH/contrib"
 				cd $CDIR
