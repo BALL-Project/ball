@@ -208,7 +208,11 @@ customInstaller()
 		break
 	done
 	echo ${BUILD_VIEW}
-	askContrib || exit
+	askContrib 
+	if test $? != 0; then
+		echo "Autobuild aborted."
+		exit
+	fi
 	BINDIR=$CDIR/bin
 	INCDIR=$CDIR/include
 	LIBDIR=$CDIR/lib
@@ -261,6 +265,10 @@ else
 	select INST in $OPTIONS; do
 		if [ "$INST" = "Automatic" ]; then
 			askContrib
+			if test $? != 0; then
+				echo "Autobuild aborted."
+				exit
+			fi
 			BINDIR=$CDIR/bin
 			INCDIR=$CDIR/include
 			LIBDIR=$CDIR/lib

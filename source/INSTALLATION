@@ -57,8 +57,8 @@ External software and libraries:
     - Python support for most BALL classes is disabled by default as it
       requires SIP, a wrapper generator.
 
-		- GLEW (OpenGL Extension Wrangler Library) enables usage of advanced
-			OpenGL features like e.g. vertex buffers.
+    - GLEW (OpenGL Extension Wrangler Library) enables usage of advanced
+      OpenGL features like e.g. vertex buffers.
 
   The functionality provided by these libraries is not essential for
   BALL, however if you desire one of these features, have a look at
@@ -136,7 +136,7 @@ options.  An complete list of these options can also be obtained by executing
 
   --with-qt-libs=DIR      QT libraries are in DIR
 
-  --with-qt-mt  	  Use the threaded version of QT. If configure fails to link against
+  --with-qt-mt      Use the threaded version of QT. If configure fails to link against
                           your QT libraries, try to rerun configure with this option. 
 
   --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL
@@ -148,7 +148,7 @@ options.  An complete list of these options can also be obtained by executing
                           If no libraries with these names are found, configure looks for
                           libGLU and libGL.
                           This switch also add X11 libraries when trying to link agains the Mesa
-													libraries.
+                          libraries.
 
   --with-glew-incl=DIR  GLEW header files are in DIR/GL
 
@@ -288,8 +288,8 @@ FFTW Support
 
   FFTW version 3.0.1 is required. It is available from 
   www.fftw.org for download.
-	After installation, point configure to the library with the
-	options 
+  After installation, point configure to the library with the
+  options 
     --with-fftw-lib=DIR     (libfftw is in DIR)
   and
     --with-fftw-incl=DIR    (fftw includes are in DIR).
@@ -314,11 +314,11 @@ Python Support
 GLEW
   The OpenGL Extension Wrangler Library is feely available from
   http://glew.sourceforge.net/
-	To enable the GLEW support, call configure with the options
+  To enable the GLEW support, call configure with the options
   --with-glew-incl=DIR  GLEW header files are in DIR/GL
   --with-glew-libs=DIR  GLEW libraries are in DIR
-	This is only needed, if the headers and libs are not located at
-	the platform's standard locations.
+  This is only needed, if the headers and libs are not located at
+  the platform's standard locations.
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.18.16.2 2007/05/03 15:10:50 amoll Exp $
+document revision: $Id: INSTALLATION,v 1.18.16.3 2007/08/06 17:18:21 oliver Exp $
