@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: strangLBFGS.h,v 1.1.4.4 2007/05/16 15:56:13 aleru Exp $ 
+// $Id: strangLBFGS.h,v 1.1.4.5 2007/08/06 09:13:47 aleru Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STRANGLBFGS_H 
@@ -11,13 +11,9 @@
 #	include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #endif
 
-#ifndef BALL_MOLMEC_MINIMIZATION_CONICLINESEARCH_H
-# include <BALL/MOLMEC/MINIMIZATION/conicLineSearch.h>
+#ifndef BALL_MOLMEC_MINIMIZATION_LINESEARCH_H
+# include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #endif
-
-//#ifndef BALL_MOLMEC_MINIMIZATION_LINESEARCH_H
-//# include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
-//#endif
 
 namespace BALL 
 {
@@ -185,8 +181,7 @@ namespace BALL
 			
 			/*_ The line search
 			*/
-			ConicLineSearch line_search_;
-			//LineSearch line_search_;
+			LineSearch line_search_;
 			
 			/*_ Is this an initial first iteration?
 			*/
