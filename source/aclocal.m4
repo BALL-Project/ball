@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.89.10.4 2007/05/10 20:04:52 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.89.10.5 2007/08/06 17:50:32 bertsch Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -3604,7 +3604,7 @@ AC_DEFUN(CF_PYTHON, [
 		dnl
 		if test "${PYTHON_VERSION_NUMBER_1}" -le 1 -o "${PYTHON_VERSION_NUMBER_2}" -lt 2 ; then
 			AC_MSG_RESULT()
-			AC_MSG_RESULT([Python verison 2.3 or above required!])
+			AC_MSG_RESULT([Python version 2.3 or above required!])
 			AC_MSG_RESULT([Please donwload and install Python from])
 			AC_MSG_RESULT([  http://www.python.org])
 			CF_ERROR
@@ -3649,12 +3649,18 @@ AC_DEFUN(CF_PYTHON, [
 			fi
 			PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`
 			if test "${PYTHON_LIBS}" = "" ; then
-				AC_MSG_RESULT()
-				AC_MSG_RESULT(No libpython*a found in ${PYTHON_LIBPATH}. Please specify)
-				AC_MSG_RESULT(the path where your Python library resides using --with-python-libs=DIR)
-				AC_MSG_RESULT(or ensure that libpython is installed in the correct directory)
-				AC_MSG_RESULT([(sys.prefix is ]${PYTHON_PREFIX}[)])
-				CF_ERROR
+				dnl test if 64 path is used
+				PYTHON_LIBPATH="${PYTHON_PREFIX}/lib64/python${PYTHON_VERSION}/config/"
+				PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`	
+
+				if test "${PYTHON_LIBS}" = "" ; then
+					AC_MSG_RESULT()
+					AC_MSG_RESULT(No libpython*a found in ${PYTHON_LIBPATH}. Please specify)
+					AC_MSG_RESULT(the path where your Python library resides using --with-python-libs=DIR)
+					AC_MSG_RESULT(or ensure that libpython is installed in the correct directory)
+					AC_MSG_RESULT([(sys.prefix is ]${PYTHON_PREFIX}[)])
+					CF_ERROR
+				fi
 			fi
 			AC_MSG_RESULT(${PYTHON_LIBS})
 
