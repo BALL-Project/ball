@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.23.16.2 2007/06/12 19:41:02 oliver Exp $
+# $Id: Makefile,v 1.23.16.3 2007/08/06 16:56:02 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -41,7 +41,7 @@ include ../common.mak
 LIB_CXXFLAGS = $(NONLIB_CXXFLAGS)
 
 clean:	default_clean
-	@-$(RM) $(EXECUTABLES) *.o 2>/dev/null
+	@-$(RM) -f $(EXECUTABLES) *.o 2>/dev/null
 
 proteinMapper:	proteinMapper.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
