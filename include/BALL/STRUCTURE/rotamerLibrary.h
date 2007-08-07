@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.h,v 1.31.20.6 2007/08/07 09:25:51 toussaint Exp $
+// $Id: rotamerLibrary.h,v 1.31.20.7 2007/08/07 13:02:41 toussaint Exp $
 //
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -29,9 +29,8 @@ namespace BALL
 	/** @brief Rotamer Library Class.
 		
 		\ingroup StructureRotamers
-		A rotamer library contains a list of all possible torsion angle combinations
-		observed for each of the 19 amino acid side chains (GLY does not have any
-		useful rotamers). 
+		A rotamer library contains a list of possible rotamers
+		for each of the 18 amino acid side chains (GLY and ALA do not have rotamers). 
 	*/
 	class BALL_EXPORT RotamerLibrary
 	{
