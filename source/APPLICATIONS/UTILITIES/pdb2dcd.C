@@ -1,4 +1,4 @@
-// $Id: pdb2dcd.C,v 1.2 2003/11/11 09:15:09 anker Exp $
+// $Id: pdb2dcd.C,v 1.2.30.1 2007/08/07 18:26:19 oliver Exp $
 //
 // A very simple utility for combining several pdb snapshots of a system
 // into one dcd file
@@ -15,6 +15,13 @@ using namespace std;
 int main(int argc, char** argv)
 {
 
+	if (argc == 1) 
+	{	
+		Log.info() << "Usage:" << argv[0] << " <PDB infile>* " << endl;	
+		Log.info() << "Converts all given PDBFiles into snapshots of a DCDFile." << endl;
+		return 1;
+	}
+
 	String filename;
 	SnapShot snapshot;
 	DCDFile dcd_file("out.dcd", ios::out | ios::binary);
@@ -24,6 +31,12 @@ int main(int argc, char** argv)
 		filename = argv[i];
 		Log.info() << "Reading file " << filename;
 		PDBFile file(filename);
+		if (file.bad())
+		{
+			Log.error() << "cannot read PDB file " << argv[i] << endl;
+			return 2;
+		}
+
 		System system;
 		file >> system;
 		file.close();
@@ -36,4 +49,5 @@ int main(int argc, char** argv)
 
 	// dcd_file.flushToDisk();
 	dcd_file.close();
+	Log.info() << "Wrote all snapshots into out.dcd." << endl;
 }

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pdb2amber_naming.C,v 1.4 2004/05/27 18:13:08 oliver Exp $
+// $Id: pdb2amber_naming.C,v 1.4.28.1 2007/08/07 18:26:19 oliver Exp $
 //
 // A little helper program that takes standard PDB files and converts them
 // to PDB files which use the AMBER naming scheme.
@@ -18,15 +18,21 @@ int main(int argc, char** argv)
 {
 
 	if (argc != 3) 
-	{
-		Log.error() << "Need two arguments: PDB -> PDB" << endl;
-		exit(1);
+	{	
+		Log << "Usage:" << argv[0] << " <PDB infile> <PDB outfile> [<amber parameter file>]" << endl;	
+
+		return 1;
 	}
 
 	System system;
 
 	PDBFile f;
-	f.open(argv[1]);
+	f.open(argv[1]);	
+	if (f.bad())
+	{
+		Log.error() << "cannot read PDB file " << argv[1] << endl;
+		return 2;
+	}
 	f >> system;
 	f.close();
 
@@ -35,12 +41,13 @@ int main(int argc, char** argv)
 	// ResidueChecker check(db);
 	// system.apply(check);
 
-	system.apply(db.build_bonds);
 
 	db.normalize_names.setNamingStandard("Amber");
 	system.apply(db.normalize_names);
 
-	Size cyx_couter = 0;
+	system.apply(db.build_bonds);
+
+	Size cyx_counter = 0;
 	Size hip_counter = 0;
 
 	ResidueIterator it = system.beginResidue();
@@ -49,7 +56,7 @@ int main(int argc, char** argv)
 		if (it->getFullName() == "CYS-S")
 		{
 			it->setName("CYX");
-			cyx_couter++;
+			cyx_counter++;
 		}
 		if (it->getFullName() == "HIS")
 		{
@@ -58,9 +65,9 @@ int main(int argc, char** argv)
 		}
 	}
 
-	if (cyx_couter > 0)
+	if (cyx_counter > 0)
 	{
-		Log.info() << "Renamed " << cyx_couter << " residues from CYS-S to CYX"
+		Log.info() << "Renamed " << cyx_counter << " residues from CYS-S to CYX"
 			<< endl;
 	}
 
@@ -72,6 +79,13 @@ int main(int argc, char** argv)
 
 	PDBFile g;
 	g.open(argv[2], ios::out);
+	if (g.bad())
+	{
+		Log.error() << "cannot write PDB file " << argv[2] << endl;
+		return 2;
+	}
+
+
 	g << system;
 	g.close();
 

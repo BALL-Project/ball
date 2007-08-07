@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: assign_radii_from_rules.C,v 1.1.12.1 2007/03/25 21:32:29 oliver Exp $
+// $Id: assign_radii_from_rules.C,v 1.1.12.2 2007/08/07 18:26:16 oliver Exp $
 //
 
 #include <BALL/common.h>
@@ -19,8 +19,9 @@ using namespace std;
 int main(int argc, char** argv)
 {
 	if (argc != 4)
-	{
-		cout << "Need 3 arguments: INIFile input.pdb output.hin" << endl;
+	{	
+		Log.info() << "Need 3 arguments: <INIFile> <input.pdb> <output.hin>" << endl;
+		Log.info() << "Note: exemplary rules can be found in BALL/data/solvation/PARSE.rul." << endl;
 		return(1);
 	}
 
@@ -37,16 +38,34 @@ int main(int argc, char** argv)
 	RadiusRuleProcessor proc(charge_rules, "RadiusRules");
 
 	PDBFile infile(argv[2]);
+	if (!infile)
+	{
+		// if file does not exist: complain and abort
+		Log.error() << "error opening " << argv[2] << " for input." << endl;
+		return 2;
+	}
+
 	System system;
 	infile >> system;
 	infile.close();
 
+	Log << "Initializing FragmentDB..." << endl;
 	FragmentDB db("");
-	system.apply(db.build_bonds);
+	Log << "  done." << endl;
+	
+	Log << "Normalizing names..." << endl;
 	system.apply(db.normalize_names);
+	Log << "  done." << endl;
+	
+	Log << "Building Bonds..." << endl;
+	system.apply(db.build_bonds);
+	Log << "  done." << endl;
 
+	Log << "Applying RadiusRuleProcessor..." << endl;
 	system.apply(proc);
+	Log << "  done." << endl;
 
+	Log << "Checking results..." << endl;
 	// PARANOIA
 	ResidueConstIterator res_it = system.beginResidue();
 
@@ -63,9 +82,12 @@ int main(int argc, char** argv)
 			}
 		}
 	}
+	Log << "  done." << endl;
 
 	HINFile outfile(argv[3], std::ios::out);
 	outfile << system;
-	outfile.close();
+	outfile.close();	
+	Log << "Outputfile " << argv[3] << " written." << endl;
+
 }
 

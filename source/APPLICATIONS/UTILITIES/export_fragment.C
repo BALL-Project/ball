@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: export_fragment.C,v 1.4 2005/12/23 17:02:31 amoll Exp $
+// $Id: export_fragment.C,v 1.4.20.1 2007/08/07 18:26:18 oliver Exp $
 //
 
 #include <fstream>
@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 {
 	if (argc != 3)
 	{
-		Log.error() << "I need two filenames: HIN/PDB input, FragmentDB output." 
+		Log.info() << "Usage :" << argv[0] << "<HIN/PDB input>  <FragmentDB output>." 
 			<< std::endl;
 		return(1);
 	}
@@ -35,7 +35,13 @@ int main(int argc, char** argv)
 	if ((substrings[substrings.size()-1] == "pdb")
 		|| (substrings[substrings.size()-1] == "PDB"))
 	{
-		PDBFile infile(infilename);
+		PDBFile infile(infilename);	
+		if (!infile)
+		{
+			Log.error() << "error opening " << argv[1] << " for input." << endl;
+			return 2;
+		}
+
 		infile >> system;
 		infile.close();
 	}
@@ -44,7 +50,13 @@ int main(int argc, char** argv)
 		if ((substrings[substrings.size()-1] == "hin")
 				|| (substrings[substrings.size()-1] == "HIN"))
 		{
-			HINFile infile(infilename);
+			HINFile infile(infilename);	
+			if (!infile)
+			{
+				Log.error() << "error opening " << argv[1] << " for input." << endl;
+				return 2;
+			}
+
 			infile >> system;
 			infile.close();
 		}
@@ -58,7 +70,6 @@ int main(int argc, char** argv)
 	String outfilename(argv[2]);
 
 	std::ofstream outfile(outfilename.c_str(), std::ios::out);
-
 	outfile << "<node>Unknown Compound" << std::endl;
 	outfile << "\t<node>Names" << std::endl;
 	outfile << "\t\t<node>Unknown Name</node>" << std::endl;

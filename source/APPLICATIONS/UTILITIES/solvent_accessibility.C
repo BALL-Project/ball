@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solvent_accessibility.C,v 1.3 2004/05/27 18:13:08 oliver Exp $
+// $Id: solvent_accessibility.C,v 1.3.28.1 2007/08/07 18:26:20 oliver Exp $
 //
 // This utility reads a PDB structure, removes water from it and
 // computes which residues are solvent exposed by summing up
@@ -16,6 +16,7 @@
 #include <BALL/KERNEL/selector.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
+#include <BALL/STRUCTURE/defaultProcessors.h>
 
 using namespace std;
 using namespace BALL;
@@ -37,34 +38,44 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	cout << "Loading " << argv[1] << "..." << endl;
+	Log.info() << "Loading " << argv[1] << "..." << endl;
 	PDBFile infile(argv[1]);
+	if (!infile)
+	{
+		// if the file could not be opened, print error message and exit
+		Log.error() << "cannot open PBD file " << argv[1] << endl;
+		return 2;
+	}
 	System S;
 	infile >> S;
 	infile.close();
-	cout << "  done." << endl;
+	Log.info() << "  done." << endl;
 
-	cout << "Removing water molecules..." << endl;
+	Log.info() << "Removing water molecules..." << endl;
 	Size atoms = S.countAtoms();
 	Selector wat("residue(HOH) OR residue(WAT)");
 	S.apply(wat);
 	S.removeSelected();
-	cout << "  removed " << atoms - S.countAtoms() << " atoms." << endl;
+	Log.info() << "  removed " << atoms - S.countAtoms() << " atoms." << endl;
 
+	Log.info() << "Apply the AssignRadiusProcessor..." << endl;
+	// assign the radii defining the solvent accessible surface
+	AssignRadiusProcessor rp("radii/PARSE.siz");
+	S.apply(rp);
+	Log.info() << "  done." << endl;
 
 	float min_area = 10.0;
 	if (argc == 3)
 	{
 		min_area = String(argv[2]).toFloat();
 	}
-	cout << "Residues will be marked as 'buried' if their accessible area is below " 
+	Log.info() << "Residues will be marked as 'buried' if their accessible area is below " 
        << min_area << " A^2" << endl;
 
 	HashMap<const Atom*, float> atom_areas;
 	calculateSASAtomAreas(S, atom_areas);
 
-	cout << "Residue solvent-accessible areas [A^2]:" << endl;
-	HashMap<Residue*, float> residue_areas;
+	Log.info() << "Residue solvent-accessible areas [A^2]:" << endl;
 	for (ResidueIterator ri = S.beginResidue(); +ri; ++ri)
 	{
 		float area = 0.0;
@@ -75,7 +86,7 @@ int main(int argc, char** argv)
 				area += atom_areas[&*ai];
 			}
 		}
-		cout << "  " << ri->getName() << ri->getID() << "\t" << area << ((area < min_area) ? "\t (buried)" : "") << endl;
+		Log.info() << "  " << ri->getName() << ri->getID() << "\t" << area << ((area < min_area) ? "\t (buried)" : "") << endl;
 	}
 
 	return 0;

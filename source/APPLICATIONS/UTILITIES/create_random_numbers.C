@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: create_random_numbers.C,v 1.1 2005/11/27 23:13:47 anker Exp $
+// $Id: create_random_numbers.C,v 1.1.22.1 2007/08/07 18:26:18 oliver Exp $
 //
 // A small example application for creating random numbers.
 
@@ -25,6 +25,9 @@ int main(int argc, char** argv)
 		String argument(argv[1]);
 		numbers = argument.toInt();
 	}
+	
+	std::cout << "******************************" << std::endl;
+
 	double r, rmin=1e32, rmax=-1e32;
 
 	RandomNumberGenerator rng;
@@ -37,5 +40,7 @@ int main(int argc, char** argv)
 		if (r > rmax) rmax = r;
 		std::cout << r << std::endl;
 	}
+	std::cout << "******************************" << std::endl;
+	std::cout << "min: " << rmin << "  max: " << rmax << std::endl; 
 
 }
