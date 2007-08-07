@@ -373,6 +373,7 @@ SESFace classBALL_1_1SESFace-members.htm
 SESSingularityCleaner classBALL_1_1SESSingularityCleaner-members.htm
 SESTriangulator classBALL_1_1SESTriangulator-members.htm
 SESVertex classBALL_1_1SESVertex-members.htm
+ShiftedLVMMMinimizer classBALL_1_1ShiftedLVMMMinimizer-members.htm
 ShiftModel classBALL_1_1ShiftModel-members.htm
 ShiftModule classBALL_1_1ShiftModule-members.htm
 SimpleBase classBALL_1_1SimpleBase-members.htm
@@ -397,6 +398,7 @@ Spectrum classBALL_1_1Spectrum-members.htm
 SpHybridizedPredicate classBALL_1_1SpHybridizedPredicate-members.htm
 SquareFunction classBALL_1_1SquareFunction-members.htm
 SteepestDescentMinimizer classBALL_1_1SteepestDescentMinimizer-members.htm
+StrangLBFGSMinimizer classBALL_1_1StrangLBFGSMinimizer-members.htm
 StringHashMap classBALL_1_1StringHashMap-members.htm
 String classBALL_1_1String-members.htm
 StructureMapper classBALL_1_1StructureMapper-members.htm
