@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SCWRLRotamerFile.C,v 1.1.2.3 2007/07/12 14:18:32 bertsch Exp $
+// $Id: SCWRLRotamerFile.C,v 1.1.2.4 2007/08/07 09:27:20 toussaint Exp $
 //
 
 #include <BALL/FORMAT/SCWRLRotamerFile.h>
@@ -52,7 +52,6 @@ namespace BALL
 					{
 						throw(Exception::ParseError(__FILE__, __LINE__, "The discretization of the backbone torsions are not correct!", ""));
 					}
-					rotamer_library.sort();
 					clear();
 					return;
 				}
@@ -65,7 +64,6 @@ namespace BALL
 			{
 				throw(Exception::ParseError(__FILE__, __LINE__, "The discretization of the backbone torsions are not correct!", ""));
 			}
-			rotamer_library.sort();
 			clear();
 			return;
 		}
