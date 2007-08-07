@@ -20,4 +20,4 @@ CPP_SOURCES=\
 #	@$(RM) -f *.o *moc*
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies

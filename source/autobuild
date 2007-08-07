@@ -40,7 +40,7 @@ download()
 
 askContrib()
 {
-	cd $BALL_PATH
+	cd $BALL@3@3@3_PATH
 	echo 
 	if [ "${BUILD_VIEW}" = "false" ]; then
 		CONTRIB_PACKAGE="Contrib-noView"
@@ -65,6 +65,7 @@ askContrib()
 			fi
 			if [ -d "$CDIR" ]; then
 				echo found package directory $CDIR ...
+				export CDIR
 				return 0
 			else
 				echo Could not find package directory!
