@@ -40,7 +40,7 @@ download()
 
 askContrib()
 {
-	cd $BALL@3@3@3_PATH
+	cd $BALL_PATH
 	echo 
 	if [ "${BUILD_VIEW}" = "false" ]; then
 		CONTRIB_PACKAGE="Contrib-noView"
