@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueRotamerSet.h,v 1.1.2.4 2007/06/01 12:41:36 bertsch Exp $
+// $Id: residueRotamerSet.h,v 1.1.2.5 2007/08/07 07:27:37 toussaint Exp $
 //
 
 #ifndef BALL_STRUCTURE_RESIDUEROTAMERSET_H
@@ -37,8 +37,8 @@ namespace BALL
 		This class is used to describe <em>rotamers</em>, i.e. rotational conformers,
 		of amino acid side chains. These rotamers correspond to different low-energy conformations.
 		Rotamers can also be used to store and retrieve specific conformations of a side chain.
-		In principle, a rotamer is just a list containing the side chain torsion angles (up to four)
-		and the probability for that angle (useful only in the context of rotamer libraries).
+		In principle, a rotamer object is just a list containing the side chain torsion angles (up to four)
+		and the probability of that rotamer (useful only in the context of rotamer libraries).
 	*/
 	class BALL_EXPORT Rotamer
 	{
@@ -82,13 +82,13 @@ namespace BALL
 
 	/** Residue Rotamer Set.
 		\ingroup StructureRotamers		
-		This class stores all potential rotamers for a given side-chain type.
+		This class stores all potential rotamers for a given side chain type.
 		By linking a residue rotamer set to a specific side chain, one can iteratively
-		try all possible rotamers for this side chain. These rotamers for a side chain	
+		try all contained rotamers for this side chain. The rotamers for a side chain	
 		are typically stored in a \link RotamerLibrary rotamer library \endlink.
 
 		The basic functionality is to store the rotamers and to modify residues 
-		with this rotamers.
+		according to this rotamers.
 	*/
 	class BALL_EXPORT ResidueRotamerSet
 	{
@@ -172,13 +172,13 @@ namespace BALL
 		/** @name Accessors
 		*/
 		//@{
-		/// Get the name of the ResidueRotamerSet 
+		/// Get the name of the ResidueRotamerSet.
 		const String& getName() const; 
 
-		/// Find out if the class instance is valid
+		/// Find out if the class instance is valid.
 		bool isValid() const; 
 
-		/// returns the number of rotamers from this residue rotamer set
+		/// Return the number of rotamers from this residue rotamer set.
 		Size getNumberOfRotamers() const;
 
 		/**	Return the number of valid torsions in the side chain.
@@ -216,11 +216,11 @@ namespace BALL
 		/**	@name	Rotamer Assignment
 		*/
 		//@{
-		/// sets the template residue, name, base coordinates ...
+		/// Set the template residue, name, base coordinates ...
 		bool setTemplateResidue(const Residue& residue, Size number_of_torsions);
 
 		/**	Assign a specific rotamer.
-				Sets the side-chain torsions of <tt>residue</tt> to the values specified by <tt>rotamer</tt>.
+				Set the side-chain torsions of <tt>residue</tt> to the values specified by <tt>rotamer</tt>.
 		*/
 		bool setRotamer(Residue& residue, const Rotamer& rotamer);
 
@@ -236,19 +236,19 @@ namespace BALL
 		*/
 		const Rotamer& getRotamer(Position index) const;
 
-		/// Assign a new name
+		/// Assign a new name.
 		void setName(const String& name); 
 
 		///	Add a rotamer to the current set.
 		void addRotamer(const Rotamer& rotamer);
 
-    /// delete the Rotamer at the given iterator location
+    /// Delete the Rotamer at the given iterator location.
 		void deleteRotamer(Iterator loc);
 		
-		/// delete the range of rotamers
+		/// Delete the range of rotamers.
 		void deleteRotamers(Iterator begin, Iterator end);
 
-		/// sort the rotamers descending to their probability
+		/// Sort the rotamers descendingly according to their probability.
 		void sort();
 		//@}
 	
@@ -266,7 +266,7 @@ namespace BALL
 			}
 		};
 
-		/** Determines all movable atoms.
+		/** Determine all movable atoms.
 				This method walks along the bonds starting at <tt>a</tt> and adds them
 				to the <tt>movable</tt> vector. Atoms whose names are contained in <tt>assigned_atoms</tt>
 				are ignored.
@@ -291,22 +291,22 @@ namespace BALL
 		std::vector<String> movable_atoms_chi3_;
 		std::vector<String> movable_atoms_chi4_;
 
-		///	Number of valid torsions of the side chain
+		///	Number of valid torsions in the side chain
 		Size number_of_torsions_;
 
-		/// original coordinates of the template residue
+		/// Original coordinates of the template residue
 		StringHashMap<Vector3> original_coordinates_;
 
-		/// true if this residue rotamer set is backbone dependend
+		/// true if this residue rotamer set is backbone dependent
 		bool has_torsion_phi_;
 
-		/// true if this residue rotamer set is backbone dependend
+		/// true if this residue rotamer set is backbone dependent
 		bool has_torsion_psi_;
 
-		/// the torsion phi
+		/// The torsion phi
 		Angle phi_;
 
-		/// the torsion psi
+		/// The torsion psi
 		Angle psi_;
 	};
 

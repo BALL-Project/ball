@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SCWRLRotamerFile.h,v 1.1.2.1 2007/04/02 21:02:11 bertsch Exp $
+// $Id: SCWRLRotamerFile.h,v 1.1.2.2 2007/08/07 07:28:37 toussaint Exp $
 //
 
 #ifndef BALL_FORMAT_SCWRLROTAMERFILE_H
@@ -13,13 +13,13 @@ namespace BALL
 {
 	/// forward declaration
 	class RotamerLibrary;
-	/** @brief Reads SCWRL rotamer library files
+	/** @brief Reads Dunbrack/SCWRL rotamer library files 
 	 
-			This class is able to read the Dunbrack rotamer library files
-			of SCWRL. It decides if the file contains  backbone dependent or 
-			a backbone independent rotamers. Currently are only the files of 
-			type <b>bbdep02.May.lib</b> and <b>bbind02.May.lib</b> supported. 
-			The filenames contain the type and the date of creation. 
+			This class is able to read the rotamer library files from Dunbrack including
+      the one used in SCWRL3.0 .
+      It decides if the file contains backbone dependent or 
+			backbone independent rotamers. Currently only files with the same format
+			as <b>bbdep02.May.lib</b> or <b>bbind02.May.lib</b> are supported. 
 	*/
 	class BALL_EXPORT SCWRLRotamerFile : public LineBasedFile
 	{
