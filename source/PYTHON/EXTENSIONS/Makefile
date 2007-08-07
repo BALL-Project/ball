@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.38.8.5 2007/06/12 20:17:53 oliver Exp $
+# $Id: Makefile,v 1.38.8.6 2007/08/07 17:11:18 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -33,10 +33,10 @@ SIP_HEADER_FILES =\
 	
 SIP_DIR=sip_files
 SIP_OPTS=-c $(SIP_DIR) -e -s ".C" -b BALL.sbf
-SIPFLAGS += $(PYTHON_INCLUDES) $(SIP_INCLUDES)
+SIPFLAGS += $(SIP_INCLUDES) $(PYTHON_INCLUDES) 
 CXXFLAGS += $(SIPFLAGS)
 
-ADD_INCLUDES=$(PYTHON_INCLUDES) $(SIP_INCLUDES)
+ADD_INCLUDES=$(SIP_INCLUDES) $(PYTHON_INCLUDES) 
  
 PYBALL_SOURCES = \
 	pyBALLSipHelper.C\
