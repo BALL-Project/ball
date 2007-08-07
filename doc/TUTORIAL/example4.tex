@@ -25,13 +25,13 @@ meaningful is performed by the classes \class{TransformationManager} and
 all matching rules from a predefined rule set to that file name. The resulting
 expanded file names are then checked for special prefixes by \class{File}:
 \begin{itemize}
-	\item a file name starting with {\tt exec:} will execute the command after the
-					colon, redirect the output of the command to a temporary file, which 	
-					is then opened and returned,
+  \item a file name starting with {\tt exec:} will execute the command after the
+        colon, redirect the output of the command to a temporary file, which 	
+        is then opened and returned,
 
-	\item a file name starting with {\tt http:} or {\tt ftp:} will initiate
-					an HTTP or FTP tranfer from the given URL to a temporary file, which
-					is opened and returned.
+  \item a file name starting with {\tt http:} or {\tt ftp:} will initiate
+        an HTTP or FTP tranfer from the given URL to a temporary file, which
+        is opened and returned.
 \end{itemize}
 
 \noindent 

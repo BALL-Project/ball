@@ -1,3 +1,4 @@
+\noindent
 BALL (Biochemical Algorithms Library) is an application framework for rapid
 software prototyping in the field of Molecular Modeling.  This tutorial shall
 help new users to make their first steps with BALL. It is {\em not} a full
@@ -5,17 +6,19 @@ documentation. For a full documentation, please refer to the \newterm{Reference
 Manual}~\cite{BALL-RM} which can be obtained in HTML, PDF, or postscript format.
 
 There are also several papers and technical reports published on
-BALL~\cite{BKL2000,BKL99a,BKL99b,KL99,Koh2001} that give a cursory overview 
-of its design principles and illustrate its use in Rapid Software Prototyping. If you
-publish results that were obtained using BALL, please cite it as follows:
+BALL~\cite{BKL99a,BKL99b,KL99,Koh2001,KL2000,MHLK05,MHLK06}
+that give a cursory overview of its design principles and illustrate its use in
+Rapid Software Prototyping. If you publish results that were obtained using 
+BALL, please cite it as follows:
 \begin{enumerate}
-	\item[] O. Kohlbacher, H.-P. Lenhof: BALL -- Rapid Software Prototyping
-  in Computational Molecular Biology, {\em Bioinformatics} 2000,
-	16(9):815--824
+  \item[] O. Kohlbacher, H.-P. Lenhof: BALL -- Rapid Software Prototyping
+          in Computational Molecular Biology, {\em Bioinformatics} 2000,
+          16(9):815--824
 \end{enumerate}
 
 \noindent
-The latest version of BALL, bug fixes, and updates are available from our website
+The latest version of BALL, bug fixes, and updates are available from our 
+website
 
 \begin{enumerate}
   \item[] \URL{http://www.ball-project.org}
@@ -38,13 +41,13 @@ the mechanisms and the usage of BALL's Python bindings.  Finally, Chapter
 \section{Overview}
 \index{BALL!overview}
 
-
 The basis of all BALL classes is an extensive set of \newterm{foundation
 classes}.  They provide generic implementations of advanced data structures
 (\eg, trees, hash associative containers, hash grids, \etc), mathematical
 objects (\eg, matrices, vectors, geometric objects), implementations of
 \Index{design patterns}, object \Index{persistence}, and access to the
-operating system (\eg, networking support, file handling).
+operating system (\eg, networking support, file handling). An overview of the
+overall structure of BALL is given in Fig. \ref{fig:BALL_structure}.
 
 The BALL \newterm{kernel} contains the molecular data structures for the
 representation of atoms, bonds, molecules, proteins, \etc  The kernel classes

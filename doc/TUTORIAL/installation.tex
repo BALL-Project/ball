@@ -19,11 +19,13 @@
  	\end{itemize}
 
 \subsection{BALL on the Windows platform}
+
 For instructions on how to install BALL on the Windows platform, please
 have a look at BALL/Windows/README.txt . The sections below will describe
 how to build BALL on Unix, Linux and MacOS...
 
 \subsection{External software and libraries}
+
 BALL needs {\tt flex} and {\tt bison} for automatically generating parsers
 for various purposes. These utilities are standard software and should be
 installed on every contemporary UN*X machine. The newest versions are
@@ -33,48 +35,45 @@ The usage of GNU {\tt make} is recommended, although BALL will also build with
 other versions of {\tt make}. It is available from \URL{ftp://ftp.gnu.org/gnu/}
 and easy to install.
 
-The compilation of the visualization component VIEW also requires
-the QT library (at least version 4.1), which is available from
-\URL{www.trolltech.com/products/qt}/.
+The compilation of the visualization component VIEW also requires the Qt 
+library (at least version 4.2), which is available from
+\URL{http://trolltech.com/products/qt}/.
 
-If QT was not installed in one of the standard library paths or the
-QT header files were not installed in one of the compiler's default
+If Qt was not installed in one of the standard library paths or the
+Qt header files were not installed in one of the compiler's default
 include directories, use \mbox{"\option{--with-qt-libs}{\tt{}=DIR}"} and
 \mbox{"\option{--with-qt-incl}{\tt{}=DIR}"} as options to configure (see
-Section \ref{section:building-ball}) to specify the paths QT was installed
-to.\index{QT} {\tt configure} will also honor the {\tt QTDIR} environment variable.
+Section \ref{section:building-ball}) to specify the paths Qt was installed
+to.\index{Qt} {\tt configure} will also honor the {\tt QTDIR} environment variable.
 
-QT also requires OpenGL. On platforms that do not provide OpenGL, Mesa can
+Qt also requires OpenGL. On platforms that do not provide OpenGL, Mesa can
 be used. Mesa is a 3-D graphics library with an API which is 
 very similar to that of OpenGL. It can be obtained from 
 \URL{http://www.mesa3d.org}.
 \index{MESA}
 
-BALL uses GLEW, the OpenGL Extension Wrangler Library for access to the OpenGL extensions.
-If the GLEW library is not installed, BALLView will still work, but the advanced OpenGL features
-like volume rendering, vertex buffers and so on will not work. GLEW is freely available from
-\URL{http://glew.sourceforge.net}.
+BALL uses GLEW, the OpenGL Extension Wrangler Library for access to the OpenGL
+extensions. If the GLEW library is not installed, BALLView will still work, but
+the advanced OpenGL features like volume rendering, vertex buffers and so on
+will not work. GLEW is freely available from \URL{http://glew.sourceforge.net}.
 \index{GLEW}
 
-If your machine has a graphics accelerator from ATI oder NVidia, 
-you can use the vendor-provided OpenGL drivers (\URL{http://www.ati.com/support/driver.html}
-and \URL{http://www.nvidia.com/object/linux.html}).
-But be warned, we experienced serious trouble with both of the drivers. They
-still seem to be unstable up to now (February 2004). If you have freezes in
-BALLView or display problems in the 3D view, please have a look at our FAQ
-which addresses some of the issues
-(\URL{http://www.ball-project.org/Support/FAQ}).
+If your machine has a graphics accelerator from Intel, ATI-AMD or NVidia, you
+can use the vendor-provided OpenGL drivers
+(\URL{http://www.intel.com/support/graphics},
+\URL{http://ati.amd.com/support/driver.html} and
+\URL{http://www.nvidia.com/content/drivers}).
 
-To use the Python extensions of BALL (Python is an object oriented
-scripting language), you will also need Python (version 2.2 or above) installed
-(\URL{http://www.python.org}) and a recent version of SIP (version 4.4.5 or
-above, available at \URL{http://www.riverbankcomputing.co.uk/sip/}). SIP is a tool
-for generating Python bindings for C++ class libraries.
+To use the Python extensions of BALL (Python is an object oriented scripting
+language), you will also need Python (version 2.3 or above) installed
+(\URL{http://www.python.org}) and a recent version of SIP (version 4.5.2 or
+above, available at \URL{http://www.riverbankcomputing.co.uk/sip/}). SIP is a
+tool for generating Python bindings for C++ class libraries.
 
-Additionally you might need the FFTW package for fast Fourier
-transformations (Verson 2.1.3), available from \URL{http://www.fftw.org/}.
+Additionally you might need the FFTW package for fast Fourier transformations
+(version 3.1.2), available from \URL{http://www.fftw.org/}.
 
-Please make sure that the required external \CPP libraries (i.e. QT and SIP)
+Please make sure that the required external \CPP libraries (i.e. Qt and SIP)
 have been compiled with the same compiler (and compiler version!) as the BALL
 libraries. Otherwise you will most likely see a plethora of strange error
 messages, either while linking applications or at runtime.
@@ -84,14 +83,15 @@ messages, either while linking applications or at runtime.
 
 We provide two different ways to build the libraries and applications:
 
-The first one is the {\tt autobuild} script in {\tt BALL/source}.
-It is especially suited for unexperienced users, since it automatically 
-downloads a contrib source package from our website. It contains almost 
-all dependencies and prevents any clashes with already installed libraries,
-by compiling and installing them in a subfolder in the BALL directory.
-Afterwards, the BALL library is configured, build and linked against the
-downloaded libraries. This kind of installation will include all of BALL 
-and BALLView's features. If this is not desired or you want to configure 
+The first one is the {\tt autobuild} script in {\tt BALL/source}. It is
+especially suited for unexperienced users, since it automatically downloads a
+contrib source package from our website. It contains almost all dependencies
+and prevents any clashes with already installed libraries, by compiling and
+installing them in a subfolder in the BALL directory. Afterwards, the BALL
+library is configured, build and linked against the downloaded libraries. We
+recommend to use the {\\tt autobuild} script for installations which should run
+out of the box on most platforms. This kind of installation will include all of
+BALL and BALLView's features. If this is not desired or you want to configure
 the library with different settings, please proceed like stated below:
 
 As an alternative BALL can be configured with a classical configure/make
@@ -125,17 +125,23 @@ An overview of these options can also be obtained by executing "{\tt configure
 
   \option{--x-libraries}{\tt{}=DIR}&       X library files are in DIR\\\vspace{3mm}
 
-  \option{--enable-optimization}&          optimize the library for speed, remove debug info\\\vspace{3mm}
+  \option{--disable-optimization}&         do not optimize the library for
+                                           speed\\\vspace{3mm}
 
-  \option{--enable-debuginfo}&             create debug information\\\vspace{3mm}
+  \option{--enable-debuginfo}&             create debug
+                                           information\\\vspace{3mm}
 
-  \option{--disable-VIEW}&                 disable the compilation of the visualization
-                                           classes\\\vspace{3mm}
+  \option{--enable-gsl}&                   enable the build of BALL with
+                                           support for GSL (GNU Scientific
+                                           Library)\\\vspace{3mm}
+
+  \option{--disable-VIEW}&                 disable the compilation of the
+                                           visualization classes\\\vspace{3mm}
 
   \option{--enable-64}&                    build 64 bit objects (if allowed
                                            by the compiler)\\\vspace{3mm}
 
-  \option{--with-compiler}{\tt{}=CXX}& use CXX to compile BALL\\\vspace{3mm}
+  \option{--with-compiler}{\tt{}=CXX}&     use CXX to compile BALL\\\vspace{3mm}
 
   \option{--with-cxxflags}{\tt{}=FLAGS}&   add FLAGS to the \CPP compiler flags
                                            (commas are converted to blanks)
@@ -153,37 +159,43 @@ An overview of these options can also be obtained by executing "{\tt configure
                                            creation of the shared libraries
                                            \\\vspace{3mm}
 
-	\option{--with-qt}{\tt{}=QTDIR}& QT installation is in QTDIR. This option 
-																						is equivalent to setting the {\tt
-																						QTDIR} environment variable.
-																						Using this option should be
-																						preferred over the next two
-																						options, which are only necessary
-																						if the QT installation has non-standard paths for libraries and headers.\\
-																					\vspace{3mm}
-  \option{--with-qt-incl}{\tt{}=DIR}&      QT header files are in DIR\\
+  \option{--with-qt}{\tt{}=QTDIR}&         Qt installation is in QTDIR. This
+                                           option is equivalent to setting the
+                                           {\tt QTDIR} environment variable.
+                                           Using this option should be
+                                           preferred over the next two options,
+                                           which are only necessary if the Qt
+                                           installation has non-standard paths
+                                           for libraries and headers.\\
                                            \vspace{3mm}
 
-  \option{--with-qt-libs}{\tt{}=DIR}&      QT libraries are in DIR\\\vspace{3mm}
-																						\\\vspace{3mm}
-	\option{--with-moc}{\tt{}=MOC}& 					The absolute path to the QT meta object
-																						compiler (moc, typically found in
-																						{\tt\$QTDIR/bin/moc})\\\vspace{3mm}
+  \option{--with-qt-incl}{\tt{}=DIR}&      Qt header files are in DIR\\
+                                           \vspace{3mm}
 
-	\option{--with-uic}{\tt{}=UIC}& 					The absolute path to the QT user interface
-																						compiler (uic, typically found in
-																						{\tt\$QTDIR/bin/uic})\\\vspace{3mm}
+  \option{--with-qt-libs}{\tt{}=DIR}&      Qt libraries are in DIR\\\vspace{3mm}
 
-  \option{--with-opengl-incl}{\tt{}=DIR}&  OpenGL/Mesa header files are in DIR/GL\\\vspace{3mm}
+  \option{--with-moc}{\tt{}=MOC}&          The absolute path to the Qt meta
+                                           object compiler (moc, typically
+                                           found in {\tt\$QTDIR/bin/moc})
+                                           \\\vspace{3mm}
 
-  \option{--with-opengl-libs}{\tt{}=DIR}&  OpenGL/Mesa libraries are in DIR/GL\\\vspace{3mm}
+  \option{--with-uic}{\tt{}=UIC}&          The absolute path to the Qt user
+                                           interface compiler (uic, typically
+                                           found in {\tt\$QTDIR/bin/uic})\\
+                                           \vspace{3mm}
+
+  \option{--with-opengl-incl}{\tt{}=DIR}&  OpenGL/Mesa header files are in
+                                           DIR/GL\\\vspace{3mm}
+
+  \option{--with-opengl-libs}{\tt{}=DIR}&  OpenGL/Mesa libraries are in
+                                           DIR/GL\\\vspace{3mm}
 
   \option{--with-mesa}&                    use MESA instead of OpenGL\\
 
-  \option{--with-glew-incl}{\tt{}=DIR}&  GLEW header files are in DIR/GL\\\vspace{3mm}
+  \option{--with-glew-incl}{\tt{}=DIR}&    GLEW header files are in DIR/GL\\
+                                           \vspace{3mm}
 
-  \option{--with-glew-libs}{\tt{}=DIR}&  GLEW libraries are in DIR\\\vspace{3mm}
-
+  \option{--with-glew-libs}{\tt{}=DIR}&    GLEW libraries are in DIR\\
                                            \vspace{3mm}
 
   \option{--without-libxnet}&              use \Index{libsocket}/\Index{libnsl}
@@ -191,13 +203,18 @@ An overview of these options can also be obtained by executing "{\tt configure
                                            \Index{libxnet} (under Solaris)
                                            \\\vspace{3mm}
 
-  \option{--with-python=EXE}& 							Enable Python support using the
-																						Python executable in EXE. If no
-executable is specified ({\tt --with-python} only), {\tt configure} looks for
-an installed python in the current PATH.
-																						Typically, from the executable {\tt configure} can figure out where the
-																						headers and the library are hidden, so that the following two options are
-																						usually not required.\\\vspace{3mm}
+  \option{--with-python=EXE}&              Enable Python support using the
+                                           Python executable in EXE. If no
+                                           executable is specified
+                                           ({\tt --with-python} only),
+                                           {\tt configure} looks for an
+                                           installed python in the current
+                                           PATH. Typically, from the executable
+                                           {\tt configure} can figure out where
+                                           the headers and the library are
+                                           hidden, so that the following two
+                                           options are usually not required.\\
+                                           \vspace{3mm}
   
   \option{--with-python-incl=DIR}&         Python includes (Python.h) is in
                                            DIR\\\vspace{3mm}
@@ -209,28 +226,29 @@ an installed python in the current PATH.
                                            linking with the Python library
                                            \\\vspace{3mm}
 
-  \option{--with-sip-lib}{\tt{}=DIR}&             the SIP library resides in DIR
+  \option{--with-sip-lib}{\tt{}=DIR}&      the SIP library resides in DIR
                                            \\\vspace{3mm}
 
-  \option{--with-sip-incl}{\tt{}=DIR}&            the SIP header file resides in DIR
+  \option{--with-sip-incl}{\tt{}=DIR}&     the SIP header file resides in DIR
                                            \\\vspace{3mm}
 
-  \option{--with-sip}{\tt{}=DIR}&                 the SIP executable resides in DIR
+  \option{--with-sip}{\tt{}=DIR}&          the SIP executable resides in DIR
                                            \\\vspace{3mm}
 
   \option{--without-xdr}&                  no RPC/XDR headers available - do
                                            not build portable binary
-                                           persistence support
-                                           \\\vspace{3mm}
-	\option{--with-fftw-lib}{\tt{}=DIR}& Enable support for the FFTW library and
-																				search for the library in {\tt DIR}.
-																					\\\vspace{3mm}
-	\option{--with-fftw-incl}{\tt{}=DIR}& 	Header files for FFTW are in {\tt DIR}.
-																					Required for non-standard include
-																					paths only.
-																					\\\vspace{3mm}
+                                           persistence support\\\vspace{3mm}
 
-  \option{--help}&                         display help information\\\hline
+  \option{--with-fftw-lib}{\tt{}=DIR}&     Enable support for the FFTW library
+                                           and search for the library in
+                                           {\tt DIR}.\\\vspace{3mm}
+
+  \option{--with-fftw-incl}{\tt{}=DIR}&    Header files for FFTW are in
+                                           {\tt DIR}. Required for non-standard
+                                           include paths only.\\\vspace{3mm}
+
+  \option{--help}&                         display help information\\
+\hline
 \caption{options for {\tt configure}}
 \label{table:options}
 \end{longtable}
@@ -238,19 +256,17 @@ an installed python in the current PATH.
 %\caption{options for {\tt configure}}
 %\label{table:options}
 
-For example, to compile BALL without the visualization component,
-specify 
+For example, to compile BALL without the visualization component, specify 
 \begin{lstlisting}{}
   configure --disable-VIEW
 \end{lstlisting}
 
-To compile the visualization classes using the QT installation in
-/opt/misc/qt, specify the path to the QT directory as follows:
+To compile the visualization classes using the Qt installation in
+/opt/misc/qt, specify the path to the Qt directory as follows:
 
 \begin{lstlisting}{}
   configure --with-qt=/opt/misc/qt
 \end{lstlisting}
-
 
 If the headers or libraries are installed in non-standard directories, you can
 also specify them separately:
@@ -260,8 +276,8 @@ also specify them separately:
 		--with-qt-incl=/opt/qt/include
 \end{lstlisting}
 
-If Mesa should be used (when compiling under Linux), the correct options might look
-like this:
+If Mesa should be used (when compiling under Linux), the correct options might
+look like this:
 
 \begin{lstlisting}{}	
   configure --with-qt-libs=/opt/qt/lib 
@@ -283,7 +299,7 @@ shared libraries. Two different libraries will be built:
 \end{center}
 
 The latter library is not built if "\option{--disable-VIEW}" is specified or configure
-cannot find X libraries, OpenGL libraries, or QT libraries (and the respective headers).
+cannot find X libraries, OpenGL libraries, or Qt libraries (and the respective headers).
 
 It is also possible (although not recommended) to build the corresponding static libraries
 \file{libBALL.a} and \file{libVIEW.a} using "{\tt make

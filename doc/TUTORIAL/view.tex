@@ -1,46 +1,48 @@
+\noindent
 Visualization not only covers the graphical representation of things (\eg
 molecules, measurement data, \dots) but also the graphical user interface
 (GUI). Both jobs can be done using \class{VIEW} functionality. Both areas are
 discussed in the next few sections.
 
 \section{Modularity}
-In general most of the time in GUI programming
-is spent on implementing the interactions of the individual elements of the user interface
-with each other (e.g.\ defining menu entries, button actions, etc.). 
-In order to reduce these efforts, the functionality in the VIEW library has been bundled 
-into different modules (e.g.\ OpenGL rendering, force field 
-methods, the scripting language interface, etc.), which can be freely combined to 
-an application. These modules automatically connect to each other and thus allow the user
-to add further functionality with as little as a single line of code.
-To this end, we have designed a set of  base classes describing the interactions of the 
-interface elements. The two most important components in this 
-design are \class{MainControl}, the application's main window, and 
+In general most of the time in GUI programming is spent on implementing the 
+interactions of the individual elements of the user interface with each other 
+(\eg defining menu entries, button actions, etc.). In order to reduce these 
+efforts, the functionality in the VIEW library has been bundled into different
+modules (\eg OpenGL rendering, force field methods, the scripting language 
+interface, etc.), which can be freely combined to an application. These modules
+automatically connect to each other and thus allow the user to add further 
+functionality with as little as a single line of code. To this end, we have 
+designed a set of  base classes describing the interactions of the interface 
+elements. The two most important components in this design are 
+\class{MainControl}, the application's main window, and 
 \class{ModularWidget}, the base class for all modules.
 The next pages will describe the modeling and implementation of this approach.
 \label{modularity}
 
 \paragraph{MainControl} 
 \hspace*{\fill}\\
-The class \class{MainControl} is derived from Qt's \class{QMainWindow} and thus realizes an 
-application's main window. It contains only the most essential data structures:
-The \class{CompositeManager} stores all molecular entities (\class{Composite} objects) and
-the \class{PrimitiveManager} is responsible for the representations 
-(i.e.\ geometric models) and the thread for their (re)calculation. 
-All additional functionality (e.g.\ reading and writing of structures, OpenGL visualization,
-etc.) are added to the main window by instantiating one of the classes derived from 
-\class{ModularWidget}. 
+The class \class{MainControl} is derived from Qt's \class{QMainWindow} and thus
+realizes an application's main window. It contains only the most essential data
+structures: The \class{CompositeManager} stores all molecular entities
+(\class{Composite} objects) and the \class{PrimitiveManager} is responsible for
+the representations (\ie geometric models) and the thread for their
+(re)calculation. All additional functionality (\eg reading and writing of 
+structures, OpenGL visualization, etc.) are added to the main window by 
+instantiating one of the classes derived from \class{ModularWidget}. 
 
 \paragraph{Modular Widgets}
 \hspace*{\fill}\\
-\class{ModularWidget} is a common base class for all the modules, that can be combined to
-form an entire application.
-While the modular widgets are widely independent, they can still notify each other about 
-the current work flow. 
-This is achieved by a messaging system, that allows a \class{ModularWidget} to send a 
-message which is then received by all other modular widgets (see Section~\ref{message}).
+\class{ModularWidget} is a common base class for all the modules, that can be
+combined to form an entire application. While the modular widgets are widely 
+independent, they can still notify each other about the current work flow. 
+This is achieved by a messaging system, that allows a \class{ModularWidget}
+to send a message which is then received by all other modular widgets (see 
+Section~\ref{message}).
 \\
-In addition to the messaging system, the \class{ModularWidget} class provides many other 
-commonly needed features to ease and accelerate the development of new modules:
+In addition to the messaging system, the \class{ModularWidget} class provides 
+many other commonly needed features to ease and accelerate the development of
+new modules:
 \begin{itemize}
 %\item Sending and receiving of messages
 \item Showing status and error messages
@@ -585,13 +587,14 @@ section below.
 \centering
 \includegraphics[width=1.\textwidth]{representation.eps}
 \caption[UML diagram for the \class{Representation} class]
-{Each visualized object corresponds to an instance of the class \class{Representation}.
-The \class{ModelProcessor} creates \class{GeometricObjects}, e.g.\ tubes or meshes for all atoms stored in the \class{AtomContainers}.
-Next, the \class{ColorProcessor} colorizes the \class{GeometricObjects}, e.g.\ by element, 
-charge or temperature factor.
-The individual model types and coloring methods are realized by derived classes.
-This approach simplifies the creation of new models and coloring methods and allows their 
-free combination.}
+{Each visualized object corresponds to an instance of the class 
+\class{Representation}. The \class{ModelProcessor} creates 
+\class{GeometricObjects}, \eg tubes or meshes for all atoms stored in the
+\class{AtomContainers}. Next, the \class{ColorProcessor} colorizes the 
+\class{GeometricObjects}, e.g.\ by element, charge or temperature factor. The
+individual model types and coloring methods are realized by derived classes.
+This approach simplifies the creation of new models and coloring methods and 
+allows their free combination.}
 \label{fig:representation}
 \end{figure*}
 
@@ -635,13 +638,13 @@ The actual rendering of a \class{Representation} is done in the method
 It iterates over all geometric objects in the \class{Representation} and,
 by using runtime type identification, finds the corresponding rendering method:
 \begin{lstlisting}{}
-	if      (RTTI::isKindOf<Point>(*go)) renderPoint_(*(const Point*) go);
-	else if (RTTI::isKindOf<Disc>(*go))  renderDisc_( *(const Disc*)  go);
-	else if (RTTI::isKindOf<Line>(*go))  renderLine_( *(const Line*)  go);
+  if      (RTTI::isKindOf<Point>(*go)) renderPoint_(*(const Point*) go);
+  else if (RTTI::isKindOf<Disc>(*go))  renderDisc_( *(const Disc*)  go);
+  else if (RTTI::isKindOf<Line>(*go))  renderLine_( *(const Line*)  go);
 \end{lstlisting}
-}
-These methods are overridden in the derived classes with the real rendering code, e.g.\ 
-OpenGL calls in the \class{GLRenderer}. 
+ 
+These methods are overridden in the derived classes with the real rendering
+code, \eg OpenGL calls in the \class{GLRenderer}. 
 This approach ensures that the different renderer can easily be extended with support for 
 new kinds of geometric objects, simply by adding a new rendering method and an appropriate 
 runtime check.
@@ -852,31 +855,31 @@ is \class{QCustomEvent}, we derived the class \class{MessageEvent} from it, whic
 As an example the thread that (re)calculates the model and coloring of a \class{Representation} notifies the main thread
 that it has finished with the following code:
 \begin{lstlisting}{}
-	sendMessage_(new RepresentationMessage(*rep, RepresentationMessage::FINISHED_UPDATE));
+  sendMessage_(new RepresentationMessage(*rep, RepresentationMessage::FINISHED_UPDATE));
 \end{lstlisting}
 sendMessage\_ looks like the following:
 \begin{lstlisting}{}
-		void BALLThread::sendMessage_(Message* msg)
-		{
-			if (main_control_ == 0) return;
-			// Qt will delete the MessageEvent when done
-			qApp->postEvent(main_control_, new MessageEvent(msg));
-		}
+    void BALLThread::sendMessage_(Message* msg)
+    {
+      if (main_control_ == 0) return;
+      // Qt will delete the MessageEvent when done
+      qApp->postEvent(main_control_, new MessageEvent(msg));
+    }
 \end{lstlisting}
 
 In the main thread, the \class{MainControl} then receives this event and acts accordingly:
 \begin{lstlisting}{}
-		bool MainControl::event(QEvent* e)
-		{
-			if (e->type() == (QEvent::Type) MESSAGE_EVENT)
-			{
-				Message* msg = dynamic_cast<MessageEvent*>(e)->getMessage();
-				sendMessage(*msg);
-				return true;
-			}
+    bool MainControl::event(QEvent* e)
+    {
+      if (e->type() == (QEvent::Type) MESSAGE_EVENT)
+      {
+        Message* msg = dynamic_cast<MessageEvent*>(e)->getMessage();
+        sendMessage(*msg);
+        return true;
+      }
 
-			return QMainWindow::event(e);
-		}
+      return QMainWindow::event(e);
+    }
 \end{lstlisting}
 
 As a result, all modular widgets will receive the VIEW message from the other thread.
@@ -904,22 +907,22 @@ implements the interface each geometric shape must have.
 The definition of \class{Cross} looks as follows:
 \begin{lstlisting}{}
 class Cross: 
-	public Vertex,
-	public GeometricObject
+  public Vertex,
+  public GeometricObject
 {
-	public:
+  public:
 
-		Cross() throw();
+    Cross() throw();
 
-		virtual ~Cross() throw();
+    virtual ~Cross() throw();
 		
-		float getRadius() const throw();
+    float getRadius() const throw();
 
-		void setRadius(float new_radius) throw();
+    void setRadius(float new_radius) throw();
 
-	protected:
+  protected:
 					
-		float radius_;
+    float radius_;
 };
 \end{lstlisting}
 
@@ -944,16 +947,16 @@ void Renderer::render_(const GeometricObject* object)
 {
   if      (RTTI::isKindOf<Sphere>(*object))         
   { 
-		renderSphere_(*(const Sphere*) object);
-	}
+    renderSphere_(*(const Sphere*) object);
+  }
   else if (RTTI::isKindOf<TwoColoredLine>(*object)) 
-	{ 
-		renderTwoColoredLine_(*(const TwoColoredLine*) object);
-	}
+  { 
+    renderTwoColoredLine_(*(const TwoColoredLine*) object);
+  }
   else if (RTTI::isKindOf<Cross>(*object))          
-	{ 
-		renderCross_(*(const Cross*) object);
-	}
+  { 
+    renderCross_(*(const Cross*) object);
+  }
   ...
 \end{lstlisting}
 
@@ -964,9 +967,9 @@ implement it in a derived Renderer:
 
 \begin{lstlisting}{}
 virtual void renderCross_(const Cross& /* cross */)
-	throw() 
+  throw() 
 {
-	Log.error() << "renderCross_ not implemented in derived Renderer class" << std::endl;
+  Log.error() << "renderCross_ not implemented in derived Renderer class" << std::endl;
 }
 \end{lstlisting}
 
@@ -976,44 +979,42 @@ does the actual rendering, so we use OpenGL code here:
 
 \begin{lstlisting}{}
 void GLRenderer::renderCross_(const Cross& cross)
-	throw() 
+  throw() 
 {
-	glPushMatrix();
+  glPushMatrix();
 	
-	// if cross is selected, use the selection color,
-	// otherwise use its own color. (method from GLRenderer)
-	setColor4ub_(cross);  
+  // if cross is selected, use the selection color,
+  // otherwise use its own color. (method from GLRenderer)
+  setColor4ub_(cross);  
 	
-	// move to the position of the cross (method from GLRenderer)
-	translateVector3_(sphere.getVertex());
+  // move to the position of the cross (method from GLRenderer)
+  translateVector3_(sphere.getVertex());
 	
-	// OpenGL code for rendering the cross.
-	glBegin(GL_LINES);
-	glVertex3f((GLfloat)(getVertex().x - cross.getRadius()),
-						 (GLfloat)(getVertex().y),
-						 (GLfloat)(getVertex().z));
-	glVertex3f((GLfloat)(getVertex().x + cross.getRadius()),
-						 (GLfloat)(getVertex().y),
-						 (GLfloat)(getVertex().z));
+  // OpenGL code for rendering the cross.
+  glBegin(GL_LINES);
+  glVertex3f((GLfloat)(getVertex().x - cross.getRadius()),
+             (GLfloat)(getVertex().y),
+             (GLfloat)(getVertex().z));
+  glVertex3f((GLfloat)(getVertex().x + cross.getRadius()),
+             (GLfloat)(getVertex().y),
+             (GLfloat)(getVertex().z));
 
-	glVertex3f((GLfloat)(getVertex().x),
-						 (GLfloat)(getVertex().y - cross.getRadius()),
-						 (GLfloat)(getVertex().z));
-	glVertex3f((GLfloat)(getVertex().x),
-						 (GLfloat)(getVertex().y + cross.getRadius()),
-						 (GLfloat)(getVertex().z));
+  glVertex3f((GLfloat)(getVertex().x),
+             (GLfloat)(getVertex().y - cross.getRadius()),
+             (GLfloat)(getVertex().z));
+  glVertex3f((GLfloat)(getVertex().x),
+             (GLfloat)(getVertex().y + cross.getRadius()),
+             (GLfloat)(getVertex().z));
 
-	glVertex3f((GLfloat)(getVertex().x),
-						 (GLfloat)(getVertex().y),
-						 (GLfloat)(getVertex().z - cross.getRadius()));
-	glVertex3f((GLfloat)(getVertex().x),
-						 (GLfloat)(getVertex().y),
-						 (GLfloat)(getVertex().z + cross.getRadius()));
-	glEnd();
+  glVertex3f((GLfloat)(getVertex().x),
+             (GLfloat)(getVertex().y),
+             (GLfloat)(getVertex().z - cross.getRadius()));
+  glVertex3f((GLfloat)(getVertex().x),
+             (GLfloat)(getVertex().y),
+             (GLfloat)(getVertex().z + cross.getRadius()));
+  glEnd();
 
-	glPopMatrix();
+  glPopMatrix();
 }
 \end{lstlisting}
-
-
 

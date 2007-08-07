@@ -5,13 +5,14 @@ Although some of the terms in biochemistry are rather fuzzy, there is a clear
 hierarchical relationship (Fig.~\ref{figure:problem-domain}).
 BALL tries to model this hierarchical relationship as a tree structure.
 The design pattern used to implement this tree is the {\em composite
-pattern}\cite{DesignPatterns}, which is implemented in the \class{Composite} class.
-Derived from Composite are \class{AtomContainer}, the base class of all
-classes handling atoms and \class{Atom}. As a typical user, you will probably
-have to use only derived classes of \class{AtomContainer}, atoms, and bonds.
-The kernel classes decompose into three frameworks: the general molecular
-framework, the protein framework, and the nucleic acid framework
-(Fig.~\ref{figure:kernel-frameworks})
+pattern}\cite{DesignPatterns}, which is implemented in the \class{Composite}
+class. Derived from \class{Composite} is the \class{AtomContainer} class, the
+base class of all classes handling atoms. Also the \class{Atom} class is 
+derived from \class{Composite}. As a typical user, you will probably have to 
+use only derived classes of \class{AtomContainer}, atoms, and bonds. The kernel
+classes decompose into three frameworks: the general molecular framework, the 
+protein framework, and the nucleic acid framework 
+(Fig.~\ref{figure:kernel-frameworks}).
 Each of these frameworks contains a few classes which try to model the
 respective problem domain as closely as possible. We will briefly discuss the
 roles of each of these classes before describing some of the general features
@@ -20,18 +21,19 @@ of the kernel classes.
 \begin{figure}[tb]
   \centering\includegraphics[width=\textwidth]{problem-domain.eps}
   \caption{A model of the biochemical problem domain. BALL tries to model
-					these entities as closely as possible with its kernel classes.}
+           these entities as closely as possible with its kernel classes.}
   \label{figure:problem-domain}
 \end{figure}
 
 \begin{figure}[tb]
   \centering\includegraphics[width=\textwidth]{kernel-data-structures.eps}
   \caption{The BALL kernel classes consist of three main frameworks: the
-molecular framework, the protein framework, and the nucleic acid framework.}
+           molecular framework, the protein framework, and the nucleic acid
+           framework.}
   \label{figure:kernel-frameworks}
 \end{figure}
 
-\paragraph{The molecular framework} contains the classes \class{System},
+\paragraph{The molecular framework}contains the classes \class{System},
 \class{Molecule}, \class{Fragment}, \class{Bond}, and \class{Atom}. 
 Molecules can contain an arbitrary number of atoms or fragments. A fragment
 can be used to define distinct groups in a molecule, \eg functional groups or
@@ -42,7 +44,7 @@ molecule are not necessarily connected to each other (or in graph-theoretical
 terms: they do not have to represent a connected component of the graph
 formed by atoms and bonds). Systems are nothing but collections of molecules.
 
-\paragraph{The protein framework} is a specialization of the general molecular
+\paragraph{The protein framework}is a specialization of the general molecular
 framework and describes the structures encountered in proteins. Proteins are
 (more or less) molecules, so \class{Protein} is a subclass of \class{Molecule}
 and proteins can be handled like molecules and stored along with them in
@@ -60,9 +62,9 @@ should always contain at least one chain. Secondary structure elements,
 defined by \class{SecondaryStructure} are optional. Wherever this information
 is known (\eg when read from PDB files), instances of
 \class{SecondaryStructure} are created to store it. Each secondary structure
-element contains has a property ({\eg helix, $\beta$-sheet) describing its type.
+element contains has a property (\eg helix, $\beta$-sheet) describing its type.
 
-\paragraph{The nucleic acid framework} contains the classes \class{NucleicAcid}
+\paragraph{The nucleic acid framework}contains the classes \class{NucleicAcid}
 and \class{Nucleotide} and is used to represent structures of nucleic acids.
 
 By deriving all kernel classes from the common base class \class{Composite},
@@ -82,15 +84,17 @@ kernel classes. Similarly, the iterators are not typedefed within the class,
 but are independent classes, because an \class{AtomIterator} could be defined
 for any kernel class containing atoms. The only exception from that rule
 is \class{Atom::BondIterator}, since an atom is the only container having
-bonds. We can use those iterators in an STL-like fashion
+bonds.
+
+We can use those iterators in an STL-like fashion
 \\
 \begin{lstlisting}{}
-	Molecule m = ...;
-	AtomIterator ai;
-	for (ai = m.beginAtom(); ai != m.endAtom(); ++ai)
-	{
-		...
-	}
+  Molecule m = ...;
+  AtomIterator ai;
+  for (ai = m.beginAtom(); ai != m.endAtom(); ++ai)
+  {
+    ...
+  }
 \end{lstlisting}
 \noindent but there is also a convenient shorthand, the \method{operator +}
 for all iterators. In contrast to STL iterators, BALL iterators are tightly 
@@ -100,12 +104,12 @@ operator. It will return {\bf false} as soon as the iterator reaches the
 end of the container. So we can rewrite the above code as:
 \\
 \begin{lstlisting}{}
-	Molecule m = ...;
-	AtomIterator ai(m.beginAtom());
-	for (; +ai; ++ai)
-	{
-		...
-	}
+  Molecule m = ...;
+  AtomIterator ai(m.beginAtom());
+  for (; +ai; ++ai)
+  {
+    ...
+  }
 \end{lstlisting}
 
 \noindent 
@@ -123,9 +127,9 @@ methods.
 A with the STL, iterators may be dereferenced using both the star operator, and
 the arrow operator:\\
 \begin{lstlisting}{}
-	AtomIterator ai = molecule.beginAtom();
-	cout << "first atom: " << (*ai).getName() 
-			 << " @ " << ai->getPosition() << std::endl;
+  AtomIterator ai = molecule.beginAtom();
+  cout << "first atom: " << (*ai).getName() 
+       << " @ " << ai->getPosition() << std::endl;
 \end{lstlisting}
 
 %\section{Selection}???
