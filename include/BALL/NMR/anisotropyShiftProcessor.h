@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: anisotropyShiftProcessor.h,v 1.20 2005/12/23 17:01:55 amoll Exp $
+// $Id: anisotropyShiftProcessor.h,v 1.20.20.1 2007/08/07 17:22:59 aleru Exp $
 //
 
 #ifndef BALL_NMR_ANISOTROPYSHIFTPROCESSOR_H
@@ -101,7 +101,7 @@ namespace BALL
 				<tt>ts</tt> is added to <tt>gs</tt>.  \par
   \par
 				<tt>dX1</tt> and <tt>dX2</tt> are some constant floats. 
-				If the actual Hydrogen´s name is "H" the constant floats <tt>dXN1</tt> and <tt>dXN2</tt> are used instead.  \par
+				If the actual Hydrogens name is "H" the constant floats <tt>dXN1</tt> and <tt>dXN2</tt> are used instead.  \par
 				If <tt>eff_list_</tt> has finished C=O anisotropy for actual Hydrogen is done and 
 				iteration	over all C=N anisotropy effector bounds of <tt>eff_list_2_</tt> is started.  \par
 				This calculation is very similar with just some differences :
@@ -119,7 +119,7 @@ namespace BALL
 				The final calculation is just the same as above, except the use of different constants.
 				Use <tt>ndX1</tt> and <tt>ndX2</tt> instead of <tt>dX1</tt> and <tt> dX2</tt>
 				and <tt>ndXN1</tt> and <tt>ndXN2</tt> intead of <tt>dXN1</tt> and <tt> dXN2</tt>.
-				Finally C=N anisotropy has finished and <tt>gs</tt> is added to the actual hydrogen´s shift.
+				Finally C=N anisotropy has finished and <tt>gs</tt> is added to the actual hydrogens shift.
 				Then iteration goes on with the next hydrogen.
 		*/
 		virtual bool finish() throw();
