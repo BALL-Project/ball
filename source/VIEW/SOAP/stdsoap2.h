@@ -49,6 +49,13 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
 --------------------------------------------------------------------------------
 */
 
+#include "../../config.h"
+
+#ifdef BALL_HAS_FLOAT_H
+	#include <float.h>
+#endif
+
+
 #ifdef WITH_SOAPDEFS_H
 # include "soapdefs.h"		/* include user-defined stuff */
 #endif
