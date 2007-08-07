@@ -13,7 +13,7 @@ remainder of this section assumes that you are somewhat familiar with the most
 important language concepts of Python.
 
 BALL relies on SIP \cite{SIP} version 4.5.2 to translate its class
-headers semi-automatically into python wrapper classes. For each \CPP class
+headers semi-automatically into Python wrapper classes. For each \CPP class
 SIP creates a subclass defining the Python interface and a Python class
 using that \CPP interface class. The Python class has the same name as the
 \CPP class, so porting code from \CPP to Python (and vice versa) gets trivial.
@@ -77,10 +77,10 @@ command
 Since this is not very convenient, we added a Python startup script,
 that will always be run when BALLView starts up. It can be found
 under BALL/data/startup.py. By using one of the methods defined in this file,
-it is possible to obtain the first System by simply calling \\
+it is possible to obtain the first System by simply calling
 
 \begin{lstlisting}{}
-  system = getSystem(0)}.
+  system = getSystem(0).
 \end{lstlisting}
 
 This is pretty useful for extracting properties from the loaded molecules
@@ -124,11 +124,10 @@ BALL/source/PYTHON/EXTENSIONS}. Here, you will have to run
 \end{lstlisting}
 
 \noindent
-in order to build the Python bindings, which are then installed to {\tt
-BALL/lib/<platform>}. 
-You can then execute the {\tt pyball} script in {\tt
-BALL/source/PYTHON/EXTENSIONS} to get an interactive Python shell with the
-BALL bindings or just start the Python interpreter and import the BALL
+in order to build the Python bindings, which are then installed to
+{\tt BALL/lib/<platform>}. You can then execute the {\tt pyball} script in 
+{\tt BALL/source/PYTHON/EXTENSIONS} to get an interactive Python shell with
+the BALL bindings or just start the Python interpreter and import the BALL
 bindings through
 
 \begin{lstlisting}{}

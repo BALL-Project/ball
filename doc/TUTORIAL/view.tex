@@ -45,16 +45,17 @@ many other commonly needed features to ease and accelerate the development of
 new modules:
 \begin{itemize}
 %\item Sending and receiving of messages
-\item Showing status and error messages
-\item Management of menu and toolbar entries 
-\item Registering widgets and menu entries for the help system
-\item Management of preferences dialogs
-\item Reading/writing of settings from/to a configuration file
-\item Registering of supported file formats e.g.\ for parsing command line arguments
-or drag-and-drop support
-\item Access to individual instances with the method \class{getInstance()}
-\item Access to the \class{MainControl} and thus to the loaded molecules and representations
-\item Locking of molecular entities while multithreaded code is running
+  \item Showing status and error messages
+  \item Management of menu and toolbar entries 
+  \item Registering widgets and menu entries for the help system
+  \item Management of preferences dialogs
+  \item Reading/writing of settings from/to a configuration file
+  \item Registering of supported file formats \eg for parsing command line
+        arguments or drag-and-drop support
+  \item Access to individual instances with the method \class{getInstance()}
+  \item Access to the \class{MainControl} and thus to the loaded molecules and
+        representations
+  \item Locking of molecular entities while multithreaded code is running
 \end{itemize}
 
 For many different tasks (see Table \ref{table:tmw}),
@@ -64,16 +65,16 @@ be combined to an application. All that is needed, is the instantiating
 of modular widgets with the \class{MainControl} as their parent, as can be seen in
 the following code snippet:
 \begin{lstlisting}{}
-  Mainframe::Mainframe(...)
-   : MainControl(...)
-  {
-    new LogView(this);          // widget (1)
-    new DatasetControl(this);   // widget (2)
-    new PyWidget(this);         // widget (3)
-    new MolecularControl(this); // widget (4)
-    new GeometricControl(this); // widget (5)
-    new Scene(this);            // widget (6)
-  }
+Mainframe::Mainframe(...)
+  : MainControl(...)
+{
+  new LogView(this);          // widget (1)
+  new DatasetControl(this);   // widget (2)
+  new PyWidget(this);         // widget (3)
+  new MolecularControl(this); // widget (4)
+  new GeometricControl(this); // widget (5)
+  new Scene(this);            // widget (6)
+}
 \end{lstlisting}
 
 These few lines of code (header includes were omitted for brevity) create a fully-fledged 
@@ -88,26 +89,28 @@ applications.
 \centering
 \begin{tabular} {|l|l|}
 \hline
-\bf Name& \bf Functionality\\
+\bf Name                            & \bf Functionality\\
 \hline
-\class{DatasetControl}& Management of data sets\\
-\class{DisplayProperties}& Creation and modification of models\\
-\class{DockingController}& Molecular docking\\
-\class{DownloadPDBDialog}& Downloads from the protein database\\
-\class{EditableScene}& Molecular editing\\
-\class{FDPBDialog}& Calculation of electrostatic potentials\\
-\class{FileObserver}& Observing changes in a molecular file\\
-\class{GeometricControl}& Management of graphical representations\\
-\class{LabelDialog}& Creation of labels in the 3D view\\
-\class{LogView}& Logging window\\
-\class{ModifyRepresentationDialog}& Custom colorings for models\\
-\class{MolecularControl}& Hierarchical overview of loaded molecules\\
-\class{MolecularFileDialog}& Reading and writing of molecular files\\
-\class{MolecularStructure}& Force field and molecular mechanics features\\
-\class{PyWidget}& Python scripting\\
-\class{Scene}& three-dimensional graphics\\
-\class{SnapshotVisualisationDialog}& Visualization of trajectories\\
-\class{TestFramework}& Recording and playback of user input\\
+\class{DatasetControl}              & Management of data sets\\
+\class{DisplayProperties}           & Creation and modification of models\\
+\class{DockingController}           & Molecular docking\\
+\class{DownloadPDBDialog}           & Downloads from the protein database\\
+\class{EditableScene}               & Molecular editing\\
+\class{FDPBDialog}                  & Calculation of electrostatic potentials\\
+\class{FileObserver}                & Observing changes in a molecular file\\
+\class{GeometricControl}            & Management of graphical representations\\
+\class{LabelDialog}                 & Creation of labels in the 3D view\\
+\class{LogView}                     & Logging window\\
+\class{ModifyRepresentationDialog}  & Custom colorings for models\\
+\class{MolecularControl}            & Hierarchical overview of loaded
+                                      molecules\\
+\class{MolecularFileDialog}         & Reading and writing of molecular files\\
+\class{MolecularStructure}          & Force field and molecular mechanics
+                                      features\\
+\class{PyWidget}                    & Python scripting\\
+\class{Scene}                       & three-dimensional graphics\\
+\class{SnapshotVisualisationDialog} & Visualization of trajectories\\
+\class{TestFramework}               & Recording and playback of user input\\
 \hline
 \end{tabular}
 \caption[Overview on the derived modular widgets]
@@ -259,7 +262,7 @@ arrives for the widget. In the \class{LabelDialog} class, it does the following:
 If no molecular entities are highlighted in the \class{MolecularControl}, the dialog's 
 "Apply" button is disabled and the menu entries are checked if they have to be 
 enabled/disabled. 
-This is done to ensure, that the dialog can not be used while e.g.\ a simulation is 
+This is done to ensure, that the dialog can not be used while \eg a simulation is 
 running, since the molecular entities could changed at any time. 
 This is checked in the \class{checkMenu} method with a call to \class{MainControl::isBusy()}, 
 which returns true if a modular widget locked the molecular entities because they could 
@@ -479,7 +482,7 @@ In this method the modular widget has to decide if it needs to react to the mess
 This is in general done by using runtime type identification. 
 In addition, many different messages also provide enumeration values for defining further
 specialized message subtypes. 
-A \class{CompositeMessage} can e.g.\ cope with the events of an added or deleted 
+A \class{CompositeMessage} can \eg cope with the events of an added or deleted 
 \class{Composite} by using the types \class{CompositeMessage::NEW\_COMPOSITE} or 
 \class{CompositeMessage::REMOVED\_COMPOSITE}.
 The usage of these enumeration subtypes has the advantage, that much less subclasses
@@ -515,14 +518,14 @@ type to differ between subtypes of messages.}
 \paragraph{Geometric objects}
 \hspace*{\fill}\\
 \label{geometric_objects}
-We created a base class \class{GeometricObject} to provide a general interface for geometric 
-shapes, that can be calculated and rendered in the VIEW framework. 
-From this base class, we then derived the classes for the individual tangible geometric 
-objects (see Table~\ref{tab:go}).
-The instances of these derived classes are created by the different model processors and 
-later get colored by the color processors, and stored in a \class{Representation}. 
-The renderer classes can then translate their informations such that they can e.g.\ be 
-drawn on the screen or processed by an external program.
+We created a base class \class{GeometricObject} to provide a general interface
+for geometric shapes, that can be calculated and rendered in the VIEW
+framework. From this base class, we then derived the classes for the individual
+tangible geometric objects (see Table~\ref{tab:go}). The instances of these 
+derived classes are created by the different model processors and later get 
+colored by the color processors, and stored in a \class{Representation}. The 
+renderer classes can then translate their informations such that they can \eg
+be drawn on the screen or processed by an external program.
 \begin{table} [ht] %[htbp]
 \centering
 \begin{tabular} {|l|l|}
@@ -560,21 +563,18 @@ model and coloring method, the drawing style, and the geometric objects represen
 model (see Fig.~\ref{fig:representation}).
 This approach has many advantages:
 \begin{itemize}
-\item 
-The different models and coloring methods can be freely combined.
-\item
-Users can can create customized representations e.g. by using the Python scripting interface.
-\item
-Users can combine as many different representations as they like to compose complex molecular visualizations.
-\item
-Individual representations can be enable/disable any time.
-\item
-It is possible to write project files, which store all representations for later usage.
-\item
-A \class{Representation} can easily be redrawn, when the corresponding atoms have changed.
-\item
-A user can disable all updates to a representation
-e.g.\ to visualize the differences between two steps in a trajectory.
+  \item The different models and coloring methods can be freely combined.
+  \item Users can can create customized representations \eg by using the Python
+        scripting interface.
+  \item Users can combine as many different representations as they like to
+        compose complex molecular visualizations.
+  \item Individual representations can be enable/disable any time.
+  \item It is possible to write project files, which store all representations
+        for later usage.
+  \item A \class{Representation} can easily be redrawn, when the corresponding
+        atoms have changed.
+  \item A user can disable all updates to a representation \eg to visualize the
+        differences between two steps in a trajectory.
 \end{itemize}
 
 We wanted to make the creation and modification of representations as easily as possible.
@@ -591,7 +591,7 @@ section below.
 \class{Representation}. The \class{ModelProcessor} creates 
 \class{GeometricObjects}, \eg tubes or meshes for all atoms stored in the
 \class{AtomContainers}. Next, the \class{ColorProcessor} colorizes the 
-\class{GeometricObjects}, e.g.\ by element, charge or temperature factor. The
+\class{GeometricObjects}, \eg by element, charge or temperature factor. The
 individual model types and coloring methods are realized by derived classes.
 This approach simplifies the creation of new models and coloring methods and 
 allows their free combination.}
@@ -638,9 +638,12 @@ The actual rendering of a \class{Representation} is done in the method
 It iterates over all geometric objects in the \class{Representation} and,
 by using runtime type identification, finds the corresponding rendering method:
 \begin{lstlisting}{}
-  if      (RTTI::isKindOf<Point>(*go)) renderPoint_(*(const Point*) go);
-  else if (RTTI::isKindOf<Disc>(*go))  renderDisc_( *(const Disc*)  go);
-  else if (RTTI::isKindOf<Line>(*go))  renderLine_( *(const Line*)  go);
+  if      (RTTI::isKindOf<Point>(*go))
+            renderPoint_(*(const Point*) go);
+  else if (RTTI::isKindOf<Disc>(*go))
+            renderDisc_( *(const Disc*)  go);
+  else if (RTTI::isKindOf<Line>(*go))
+            renderLine_( *(const Line*)  go);
 \end{lstlisting}
  
 These methods are overridden in the derived classes with the real rendering
@@ -648,8 +651,7 @@ code, \eg OpenGL calls in the \class{GLRenderer}.
 This approach ensures that the different renderer can easily be extended with support for 
 new kinds of geometric objects, simply by adding a new rendering method and an appropriate 
 runtime check.
-\\
-\\
+
 Unlike the OpenGL renderer, the \class{POVRenderer} does not provide real time graphics,
 but an interface to the external POVRay renderer.
 To do so, it translates the data in the geometric objects to a form that can be 
@@ -667,7 +669,7 @@ into a set of C++ source files by the Qt program "uic".
 These source files contain a base class, which defines the dialog's layout . 
 The actual dialog class will be derived from the layout class and contains the dialog's
 actual functionality.
-\\
+
 While this procedure may seem a bit complicated, it is actually straightforward and 
 very useful:
 Not only does the "Qt Designer" WYSIWYG interface accelerates the development process, 
@@ -767,7 +769,7 @@ button is pressed.\\
 \\
 An other extension was made to support more sophisticated
 GUI elements: We created a base class \class{ExtendedPreferencesObject}, that defines an 
-interface for (re)storing the content of composite widgets, like e.g. the tables for the 
+interface for (re)storing the content of composite widgets, like \eg the tables for the 
 setup of the different coloring methods. This approach further improves the 
 extensibility, since new, derived \class{ExtendedPreferencesObject} classes can be designed
 and added.
@@ -800,11 +802,16 @@ Now all long running calculations like MD simulations and energy minimizations a
 started in their own thread.
 This has several advantages:
 \begin{itemize}
-\item The user interface stays responsive at any time and may thus e.g.\ print estimated run times.
-\item Multithreaded calculations can be stopped with the ease of one mouse click.
-\item The 3D graphics widget can be used to show intermediate results e.g.\ while a minimization is running.
-\item Users can reposition the viewpoint e.g.\ to focus on one functional group while a MD simulation is running.
-\item Multiple threads can make efficient use of multi-processor or multi-core computers.
+  \item The user interface stays responsive at any time and may thus \eg print
+        estimated run times.
+  \item Multithreaded calculations can be stopped with the ease of one mouse
+        click.
+  \item The 3D graphics widget can be used to show intermediate results \eg 
+        while a minimization is running.
+  \item Users can reposition the viewpoint \eg to focus on one functional group
+        while a MD simulation is running.
+  \item Multiple threads can make efficient use of multi-processor or multi-core
+        computers.
 \end{itemize}
 Since multithreading has so many advantages, we also used it for further purposes:
 The (re)calculation of models and colorings are now also started in separagraphte threads.
@@ -816,7 +823,7 @@ Here it allows to monitor the progress of the download and to abort it at any ti
 \hspace*{\fill}\\
 Unfortunately multithreading is one of the most complex fields in programing since the different 
 threads have to be synchronized.
-The early multithreaded versions of our software had serious stability issues: It could e.g.\ happen
+The early multithreaded versions of our software had serious stability issues: It could \eg happen
 that users modified or deleted molecular structures, which were used in multithreaded calculations 
 like a MD simulation. This then resulted in immediate crashes. Other frequent problems were deadlocks,
 when two threads competed for access on the same data and race conditions, when two threads depended on each other.\\
@@ -867,7 +874,8 @@ sendMessage\_ looks like the following:
     }
 \end{lstlisting}
 
-In the main thread, the \class{MainControl} then receives this event and acts accordingly:
+In the main thread, the \class{MainControl} then receives this event and acts
+accordingly:
 \begin{lstlisting}{}
     bool MainControl::event(QEvent* e)
     {
@@ -882,7 +890,8 @@ In the main thread, the \class{MainControl} then receives this event and acts ac
     }
 \end{lstlisting}
 
-As a result, all modular widgets will receive the VIEW message from the other thread.
+As a result, all modular widgets will receive the VIEW message from the other
+thread.
 
 \section{How to create a geometric primitive}
 \label{section:view_create_a_geometric_primitive}
@@ -928,8 +937,7 @@ class Cross:
 
 As this object is derived from all the base classes, we only need to implement
 a standard constructor, the destructor and the get- and set- methods for 
-the radius.
-\footnote{The copy constructor and the copy assignment methods
+the radius.\footnote{The copy constructor and the copy assignment methods
 have been omitted because they are not crucial to the implementation of a
 primitive.} All additional functionality is provided by inheritance.
 
