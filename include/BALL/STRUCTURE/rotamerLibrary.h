@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.h,v 1.31.20.5 2007/08/07 08:00:47 toussaint Exp $
+// $Id: rotamerLibrary.h,v 1.31.20.6 2007/08/07 09:25:51 toussaint Exp $
 //
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -102,13 +102,10 @@ namespace BALL
 		Size getNumberOfRotamerSets() const;
 
 		/// adds rotamer with specific phi/psi backbone torsion
-		void addRotamer(const String& name, const Rotamer& rotamer, Size number_of_rotamers, Index phi, Index psi);
+		void addRotamer(const String& name, const Rotamer& rotamer, Size number_of_torsions, Index phi, Index psi);
 
 		/// adds a rotamer with name
-		void addRotamer(const String& name, const Rotamer& rotamer, Size number_of_rotamers);
-
-		/// adds a new rotamer set
-		void addRotamerSet(const ResidueRotamerSet& rotamerset);
+		void addRotamer(const String& name, const Rotamer& rotamer, Size number_of_torsions);
 
 		/// returns true if the rotamers are backbone dependent
 		bool isBackboneDependent() const;
