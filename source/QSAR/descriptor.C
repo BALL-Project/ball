@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: descriptor.C,v 1.12.20.2 2007/04/03 13:29:40 bertsch Exp $
+// $Id: descriptor.C,v 1.12.20.3 2007/08/07 16:16:16 bertsch Exp $
 //
 
 #include <BALL/QSAR/descriptor.h>
@@ -95,3 +95,4 @@ namespace BALL
 	}
 
 }
+

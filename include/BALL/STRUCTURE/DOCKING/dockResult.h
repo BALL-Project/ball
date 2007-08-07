@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.h,v 1.2.16.1 2007/03/25 21:25:35 oliver Exp $
+// $Id: dockResult.h,v 1.2.16.2 2007/08/07 16:16:15 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_DOCKING_DOCKRESULT_H
@@ -105,7 +105,7 @@ namespace BALL
 					
 				/*  Get the number of the scoring by which all scores are sorted displayed
 				 */
-				const Index isSortedBy() const
+				Index isSortedBy() const
 					throw();
 				
 				/** Returns score i of the scoring j in respect of the current sorting 

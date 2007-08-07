@@ -1,4 +1,4 @@
-// $Id: CHPI.h,v 1.2 2006/05/21 17:15:51 anker Exp $ 
+// $Id: CHPI.h,v 1.2.10.1 2007/08/07 16:16:15 bertsch Exp $ 
 // Molecular Mechanics: SLICK force field, CH---pi interaction
 
 #ifndef BALL_SCORING_COMPONENTS_CHPI_H
@@ -128,7 +128,7 @@ namespace BALL
 						return(C_atom_);
 					} 
 
-					void dump(std::ostream s = std::cout) const
+					void dump(std::ostream& s = std::cout) const
 						throw();
 
 				private :

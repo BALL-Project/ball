@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CHPI.C,v 1.2 2006/05/21 17:17:27 anker Exp $
+// $Id: CHPI.C,v 1.2.10.1 2007/08/07 16:16:16 bertsch Exp $
 
 // CH---pi interaction for the SLICK energy function
 
@@ -145,7 +145,7 @@ namespace BALL
 	}
 
 
-	void CHPI::CHGroup::dump(std::ostream s) const
+	void CHPI::CHGroup::dump(std::ostream& s) const
 		throw()
 	{
 		s << "C: " << C_atom_ << endl;
