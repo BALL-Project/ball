@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.h,v 1.31.20.4 2007/08/07 07:22:23 toussaint Exp $
+// $Id: rotamerLibrary.h,v 1.31.20.5 2007/08/07 08:00:47 toussaint Exp $
 //
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -125,7 +125,7 @@ namespace BALL
 		/// method to sort the Rotamers of each ResidueRotamerSet descendingly according to the probability
 		void sort();
 
-    /** clear rotamer library
+    /** Clear rotamer library.
         Removes all rotamers and sets library to backbone independent.
      */
     void clear();
