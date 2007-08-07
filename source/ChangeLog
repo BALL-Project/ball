@@ -4,10 +4,14 @@
 
 1.2 beta:
 
+Added:
+ - Rotamer library can be cleared now
+
 Changed:
  - Default behavior of ResidueChecker has changed: overlap test for atoms
    is disabled by default, as it was too sensitive. Test for *strongly* overlapping
    atoms is usually sufficient and is still enabled by default.
+ - Default constructor of RotamerLibrary reads default rotamer library (bbdep02.May.sortlib) now
 
 Fixed:
  - Tutorial3 has new comments and more reasonable parameters for optimization and MDS
@@ -61,7 +65,7 @@ Added:
  - Support for the PowerPC architecture
  - Ability to create Debian source packages
  - Autobuild script
-
+ 
 Changed:
  - Build process now requires GNU make for conditional compiling
  - common.mak has been broken down into targets.mak and rules.mak
