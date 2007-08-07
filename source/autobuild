@@ -132,20 +132,19 @@ automaticInstaller()
 							"--with-fftw-lib=$LIBDIR"\
 							"--with-fftw-incl=$INCDIR"\
 							${VIEW_STRING}\
-							${PYTHON_STRING}
-
-	make depend
-	make 
-	make install
+							${PYTHON_STRING} || exit
+	make depend || exit
+	make || exit
+	make install || exit
 	if [ "${BUILD_VIEW}" = "true" ]; then
 		cd $BALL_PATH/source/APPLICATIONS/BALLVIEW
-		make
+		make || exit
 	fi
 	if [ "${BUILD_PYTHON}" = "true" -a  "${BUILD_VIEW}" = "true" ]; then
 		cd $BALL_PATH/source/PYTHON/EXTENSIONS
-		make depend
-		make 
-		make install
+		make depend || exit
+		make || exit
+		make install || exit
 	fi
 	cd $BALL_PATH/source
 	LLPATH=$BALL_PATH/lib/`cat config.mak | grep "BINFMT   =" | sed "s/BINFMT   =//" `
@@ -163,7 +162,7 @@ automaticInstaller()
 		LPATHN=DYLD_LIBRARY_PATH
 	fi
 
-	echo Dont forget to add the following directories to your $LPATHN:
+	echo Don\'t forget to add the following directories to your $LPATHN:
 	echo
 	echo $LPATH
 	echo 
