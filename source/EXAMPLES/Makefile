@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.23.16.3 2007/08/06 16:56:02 oliver Exp $
+# $Id: Makefile,v 1.23.16.4 2007/08/07 19:57:47 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -33,6 +33,10 @@ ifeq ($(BALL_HAS_VIEW),true)
 endif
 
 default:	$(EXECUTABLES)
+
+# required for clean and depend
+CPP_SOURCES=$(EXECUTABLES:=.C)
+OBJECTS=$(EXECUTABLES:=.o)
 
 include ../common.mak
 -include .Dependencies
