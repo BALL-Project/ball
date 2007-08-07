@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.89.10.5 2007/08/06 17:50:32 bertsch Exp $
+dnl		$Id: aclocal.m4,v 1.89.10.6 2007/08/07 17:48:28 oliver Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
@@ -248,7 +248,7 @@ AC_DEFUN(CF_FIND_LIB,[
 					_TMP=`${FIND} $i -name "$2.*" -print 2>/dev/null`
 					for j in ${_TMP} ; do
 						if test "${_LIBS}" = "" ; then
-							_LIBS=`echo $j|${SED} "s/\/$2\\.*/\//"`
+							_LIBS=`echo $j|${SED} "s/\/$2\\..*/\//"`
 						fi
 					done
 				fi
@@ -259,7 +259,7 @@ AC_DEFUN(CF_FIND_LIB,[
 			_TMP=`${FIND} /opt -name "$2.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/$2\\.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/$2\\..*/\//"`
 				fi
 			done
 		fi
@@ -268,7 +268,7 @@ AC_DEFUN(CF_FIND_LIB,[
 			_TMP=`${FIND} /usr -name "$2.*" -print 2>/dev/null`
 			for j in ${_TMP} ; do
 				if test "${_LIBS}" = "" ; then
-					_LIBS=`echo $j|${SED} "s/\/$2\\.*/\//"`
+					_LIBS=`echo $j|${SED} "s/\/$2\\..*/\//"`
 				fi
 			done
 		fi
