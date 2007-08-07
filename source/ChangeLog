@@ -3,7 +3,8 @@
 Added:
  - Rotamer library can be cleared now
  - Autobuild script now supports building without VIEW
- - Added support and data files for Dunbrack's backbone-independent rotamer libraries
+ - Added support for Dunbrack's backbone-dependent rotamer libraries
+ - Added data files for Dunbrack's backbone-independent and backbone-dependent rotamer libraries
 
 Changed:
  - Default behavior of ResidueChecker has changed: overlap test for atoms
@@ -11,6 +12,7 @@ Changed:
    atoms is usually sufficient and is still enabled by default.
  - Default constructor of RotamerLibrary reads default rotamer library (bbdep02.May.sortlib) now
  - Path is now a singleton
+ - Rotamer library is not sorted implicitly anymore when read in from SCWRLRotamerFile object
 
 Fixed:
  - Major overhaul of the tutorial and the examples
