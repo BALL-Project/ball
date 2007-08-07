@@ -848,31 +848,38 @@ is qualified to modify GUI elements. Therefore we had to find a proper mean to t
 threads and the main thread, which is a prerequisite for many basic tasks like showing status messages.
 To this end we decided to use the \class{QEvent} messaging system. It allows one thread to send an event that will
 then be received in the main thread. Since the adequate class for passing user defined data
-is \class{QCustomEvent}, we derived several classes from it, which can contain arbitrary data.
+is \class{QCustomEvent}, we derived the class \class{MessageEvent} from it, which can contain any arbitrary VIEW message.
 As an example the thread that (re)calculates the model and coloring of a \class{Representation} notifies the main thread
 that it has finished with the following code:
 \begin{lstlisting}{}
-FinishedRepresentionUpdateEvent* se 
-       = new FinishedRepresentionUpdateEvent;
-se->setRepresentation(rep);
-qApp->postEvent(getMainControl(), se);
+	sendMessage_(new RepresentationMessage(*rep, RepresentationMessage::FINISHED_UPDATE));
 \end{lstlisting}
-In the main thread, the \class{MainControl} then receives this event and acts accordingly, e.g.\ by
+sendMessage\_ looks like the following:
 \begin{lstlisting}{}
-bool MainControl::event(QEvent* e)
-{
-  if (e->type() < QEvent::User) return QMainWindow::event(e);
-
-  if (e->type() == (QEvent::Type)FINISHED_REPRESENTATION_UPDATE_EVENT)
-  {
-    FinishedRepresentionUpdateEvent* fe = 
-        dynamic_cast<FinishedRepresentionUpdateEvent*> (e);
-    primitive_manager_.finishedUpdate_(fe->getRepresentation());
-    return true;
-  }
-  ...
-}
+		void BALLThread::sendMessage_(Message* msg)
+		{
+			if (main_control_ == 0) return;
+			// Qt will delete the MessageEvent when done
+			qApp->postEvent(main_control_, new MessageEvent(msg));
+		}
 \end{lstlisting}
+
+In the main thread, the \class{MainControl} then receives this event and acts accordingly:
+\begin{lstlisting}{}
+		bool MainControl::event(QEvent* e)
+		{
+			if (e->type() == (QEvent::Type) MESSAGE_EVENT)
+			{
+				Message* msg = dynamic_cast<MessageEvent*>(e)->getMessage();
+				sendMessage(*msg);
+				return true;
+			}
+
+			return QMainWindow::event(e);
+		}
+\end{lstlisting}
+
+As a result, all modular widgets will receive the VIEW message from the other thread.
 
 \section{How to create a geometric primitive}
 \label{section:view_create_a_geometric_primitive}
@@ -897,7 +904,6 @@ implements the interface each geometric shape must have.
 The definition of \class{Cross} looks as follows:
 \begin{lstlisting}{}
 class Cross: 
-	public ColorExtension,
 	public Vertex,
 	public GeometricObject
 {
