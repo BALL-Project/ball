@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.16.3 2007/05/17 20:47:17 amoll Exp $
+// $Id: pyWidget.C,v 1.49.16.4 2007/08/07 12:54:24 bertsch Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -1243,7 +1243,7 @@ bool PyWidget::runString(String command)
 	if (running_) return false;
 
 	running_ = true;
-	bool result;
+	bool result(false);
 
 	if (!command.has('\n'))
 	{
