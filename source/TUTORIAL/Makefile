@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.14.18.5 2007/08/06 09:46:50 oliver Exp $
+# $Id: Makefile,v 1.14.18.6 2007/08/07 19:59:23 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -20,7 +20,7 @@ EXECUTABLES=\
 	string_tutorial
 
 VIEW_DEPENDENT_EXECUTABLES=\
-	bouding_box
+	bounding_box
 
 ifeq ($(BALL_HAS_VIEW),true)
   EXECUTABLES_OTHERS += $(VIEW_DEPENDENT_EXECUTABLES)
