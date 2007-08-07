@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SCWRLRotamerFile_test.C,v 1.1.2.1 2007/04/02 21:02:07 bertsch Exp $
+// $Id: SCWRLRotamerFile_test.C,v 1.1.2.2 2007/08/07 07:22:24 toussaint Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(SCWRLRotamerFile, "$Id: SCWRLRotamerFile_test.C,v 1.1.2.1 2007/04/02 21:02:07 bertsch Exp $")
+START_TEST(SCWRLRotamerFile, "$Id: SCWRLRotamerFile_test.C,v 1.1.2.2 2007/08/07 07:22:24 toussaint Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -41,6 +41,7 @@ RESULT
 CHECK(void SCWRLRotamerFile::operator >> (RotamerLibrary& library) throw())
   SCWRLRotamerFile f("data/SCWRLRotamerFile_test1.lib");
 	RotamerLibrary lib;
+  lib.clear();
 	f >> lib;
 	TEST_EQUAL(lib.getNumberOfRotamers(), 4107);
 RESULT

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.C,v 1.30.20.3 2007/08/06 18:16:41 toussaint Exp $
+// $Id: rotamerLibrary.C,v 1.30.20.4 2007/08/07 07:22:22 toussaint Exp $
 //
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
@@ -336,6 +336,12 @@ namespace BALL
 		return;
 	}
 
+  void RotamerLibrary::clear()
+  {
+    backbone_dependent_ = false;
+    HashMap<Index, HashMap<Index, HashMap<String, ResidueRotamerSet> > >().swap(bb_dep_sets_);
+    HashMap<String, ResidueRotamerSet>().swap(bb_indep_sets_);
+  }
 
 	bool RotamerLibrary::hasRotamers(const String& name) const
 	{
