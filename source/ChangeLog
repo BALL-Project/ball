@@ -1,20 +1,19 @@
-1.2 RC 1
- - Autobuild script now supports building without VIEW
- - Path is now a singleton
-
-1.2 beta:
-
+1.2 (08/07/2006)
+----------------
 Added:
  - Rotamer library can be cleared now
+ - Autobuild script now supports building without VIEW
+ - Added support and data files for Dunbrack's backbone-independent rotamer libraries
 
 Changed:
  - Default behavior of ResidueChecker has changed: overlap test for atoms
    is disabled by default, as it was too sensitive. Test for *strongly* overlapping
    atoms is usually sufficient and is still enabled by default.
  - Default constructor of RotamerLibrary reads default rotamer library (bbdep02.May.sortlib) now
+ - Path is now a singleton
 
 Fixed:
- - Tutorial3 has new comments and more reasonable parameters for optimization and MDS
+ - Major overhaul of the tutorial and the examples
 
 1.2 alpha (21.03.2007):
 

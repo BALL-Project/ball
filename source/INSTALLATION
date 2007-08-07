@@ -3,12 +3,11 @@
 Compiler:
   BALL requires a more or less ANSI compliant C++ compiler.
   It has been successfully built and tested on the following platforms:
-
-    - Linux/x86 2.x using g++ 3.2.x/3.3.x/3.4.x/4.0.x
-    - Solaris/SPARC 8 using g++ 3.2.1
-    - MacOS X 10.4 (Tiger) using g++ 4.0.1
-    - Microsoft Windows XP using Microsoft Visual Studio .NET 2003
-    - Microsoft Windows XP using Microsoft Visual Studio Express (free!)
+    - Linux/x86 2.x using g++ 4.x
+    - Linux/x86_64 using g++ 4.x
+    - MacOS X 10.4.10/PPC using g++ 4.0.1
+    - MacOS X 10.4.10/Intel using g++ 4.0.1
+    - Microsoft Windows XP using Microsoft Visual Studio Express 2005
 
   We have also successful reports (although with slight problems) for:
     - Microsoft Windows/cygwin
@@ -28,7 +27,7 @@ External software and libraries:
   easy to install.
 
   The compilation of the visualization component BALLVIEW also requires
-  the QT library (version 4.1.x or above) which is available from
+  the QT library (version 4.2.x or above) which is available from
 
     http://www.trolltech.com/products/qt
 
@@ -39,7 +38,8 @@ External software and libraries:
   QT was installed to.
 
   QT also requires OpenGL. On platforms that do not provide OpenGL, MESA can
-  be used (e.g. Linux). Mesa is a 3-D graphics library with an API which is 
+  be used, although its use is not recommendend.
+  Mesa is a 3-D graphics library with an API which is 
   very similar to that of OpenGL. It can be obtained from
 
     http://www.mesa3d.org 
@@ -258,7 +258,7 @@ the qt libraries (libqt.so, libqgl.so), and the OpenGL/Mesa libraries
 MacOS X: 
   - Make sure you run MacOS X Tiger and have g++ 4.0 installed
     (check this by calling 'g++ --version')
-  - install QT 3.3.5 (only snapshots are currently available!)
+  - install QT 4.2.2
     make sure it is the Mac *native* version, not the X11 one
     (which should work as well, but is ugly and not supported!)
   - call configure with '--with-qt-mt'
@@ -321,4 +321,4 @@ GLEW
   the platform's standard locations.
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.18.16.3 2007/08/06 17:18:21 oliver Exp $
+document revision: $Id: INSTALLATION,v 1.18.16.4 2007/08/07 09:23:06 oliver Exp $
