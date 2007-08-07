@@ -73,7 +73,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~TotalNegativePartialCharge();
+		virtual ~TotalNegativePartialCharge();
 		//@}
 		
 		/** @name Assignment
