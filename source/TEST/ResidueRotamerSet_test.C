@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ResidueRotamerSet_test.C,v 1.1.2.2 2007/04/03 13:29:29 bertsch Exp $
+// $Id: ResidueRotamerSet_test.C,v 1.1.2.3 2007/08/07 12:32:18 toussaint Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -10,10 +10,12 @@
 
 #include <BALL/STRUCTURE/residueRotamerSet.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
+#include <BALL/FORMAT/HINFile.h>
+#include <BALL/KERNEL/system.h>
 
 ///////////////////////////
 
-START_TEST(RotamerLibrary, "$Id: ResidueRotamerSet_test.C,v 1.1.2.2 2007/04/03 13:29:29 bertsch Exp $")
+START_TEST(RotamerLibrary, "$Id: ResidueRotamerSet_test.C,v 1.1.2.3 2007/08/07 12:32:18 toussaint Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -74,9 +76,14 @@ CHECK(ResidueRotamerSet::~ResidueRotamerSet())
 	delete rrs_ptr;
 RESULT
 
-CHECK(ResidueRotamerSet::ResidueRotamerSet(const Residue& residue, Size number_of_torsions))
+CHECK(ResidueRotamerSet::ResidueRotamerSet(const ResidueRotamerSet& rotamer_set))
 	ResidueRotamerSet r;
 	ResidueRotamerSet r2(r);
+RESULT
+
+CHECK(ResidueRotamerSet::ResidueRotamerSet(const Residue& residue, Size number_of_torsions))
+  Residue ser(*frag_db.getResidue("SER"));
+  ResidueRotamerSet r(ser, 1);
 RESULT
 
 CHECK(bool ResidueRotamerSet::isValid())
@@ -125,73 +132,145 @@ CHECK(void ResidueRotamerSet::setNumberOfTorsions(Size number_of_torsions) throw
 	TEST_EXCEPTION(Exception::IndexOverflow, r.setNumberOfTorsions(6))
 RESULT
 
-/*
-CHECK(const Residue& ResidueRotamerSet::getResidue() const)
-	ResidueRotamerSet r;
-	const ResidueRotamerSet& c_r(r);
-	TEST_NOT_EQUAL(&(c_r.getResidue()), 0)
-	TEST_EQUAL(c_r.getResidue().countAtoms(), 0)
-RESULT
+Residue ser(*frag_db.getResidue("SER"));
+ResidueRotamerSet rrs(ser, 1);
 
-CHECK(Residue& ResidueRotamerSet::getResidue())
-	ResidueRotamerSet r;
-	TEST_EQUAL(r.getResidue().countAtoms(), 0)
-	r.getResidue().insert(*new PDBAtom);
-	TEST_EQUAL(r.getResidue().countAtoms(), 1)
+CHECK(void ResidueRotamerSet::addRotamer(const Rotamer& rotamer))	
+  TEST_EQUAL(rrs.getNumberOfRotamers(), 0)
+  Rotamer rotamer(0.2, -80, 0, 0, 0);
+  rrs.addRotamer(rotamer);
+  Rotamer rotamer2(0.4, 50.2, 0, 0, 0);
+  rrs.addRotamer(rotamer2);
+  TEST_EQUAL(rrs.getNumberOfRotamers(), 2)
 RESULT
-*/
 
 CHECK(const ResidueRotamerSet::operator = (const ResidueRotamerSet& rhs))
-	// ????
+  ResidueRotamerSet copy_of_rrs;
+  TEST_EQUAL(copy_of_rrs.getNumberOfRotamers(), 0)
+  copy_of_rrs = rrs;
+  TEST_EQUAL(copy_of_rrs.getNumberOfRotamers(), 2)
 RESULT
+
 
 CHECK(Rotamer& ResidueRotamerSet::operator [] (Position index) throw(Exception::IndexOverflow))
-	// ????
+  TEST_REAL_EQUAL(rrs[0].chi1, -80)
+	TEST_REAL_EQUAL(rrs[1].P, 0.4)
 RESULT
 
-CHECK(bool setRotamer(Residue& residue, const Rotamer& rotamer))	
-	// ????
+CHECK(const Rotamer& ResidueRotamerSet::getRotamer(Position index))	
+  TEST_REAL_EQUAL(rrs.getRotamer(0).chi1, -80)
+	TEST_REAL_EQUAL(rrs.getRotamer(1).P, 0.4)
 RESULT
 
-CHECK(Rotamer getRotamer(const Residue& residue))	
-	// ????
+CHECK(Rotamer ResidueRotamerSet::getRotamer(const Residue& residue))	
+  System S;
+  HINFile ags_file("data/AlaGlySer.hin");
+	ags_file >> S;
+	ABORT_IF(S.countResidues() != 3)
+
+	Residue& serine(*++(++S.beginResidue()));
+  Rotamer rotamer = rrs.getRotamer(serine);
+  TEST_NOT_EQUAL(rotamer.chi1, 0)
 RESULT
 
-CHECK(const Rotamer& getRotamer(Position index))	
-	// ????
+CHECK(bool ResidueRotamerSet::setRotamer(Residue& residue, const Rotamer& rotamer))	
+  Rotamer original(1.0, 75.0, -40.0, 0, 0);
+  rrs.setRotamer(ser, original);
+  Rotamer set_rotamer = rrs.getRotamer(ser);
+  PRECISION(0.001)
+  TEST_REAL_EQUAL(set_rotamer.chi1, original.chi1)
+  // Serine only has chi1
+  TEST_EQUAL(set_rotamer.chi2, 0)
 RESULT
 
-CHECK(void addRotamer(const Rotamer& rotamer))	
-	// ????
+CHECK(bool ResidueRotamerSet::hasTorsionPhi())
+  TEST_EQUAL(rrs.hasTorsionPhi(), false);
+RESULT
+
+CHECK(Angle ResidueRotamerSet::getTorsionPhi() const)
+  TEST_EQUAL(rrs.getTorsionPhi().toDegree(), 0)
+RESULT
+
+CHECK(void ResidueRotamerSet::setTorsionPhi(const Angle& phi))
+  rrs.setTorsionPhi(Angle(60, false));
+  TEST_EQUAL(rrs.getTorsionPhi().toDegree(), 60)
+RESULT
+
+CHECK(bool ResidueRotamerSet::hasTorsionPsi())
+  TEST_EQUAL(rrs.hasTorsionPsi(), false);
+RESULT
+
+CHECK(Angle ResidueRotamerSet::getTorsionPsi() const)
+  TEST_EQUAL(rrs.getTorsionPsi().toDegree(), 0)
+RESULT
+
+CHECK(void ResidueRotamerSet::setTorsionPsi(const Angle& psi))
+  rrs.setTorsionPsi(Angle(-60, false));
+  TEST_EQUAL(rrs.getTorsionPsi().toDegree(), -60)
+RESULT
+
+CHECK(bool ResidueRotamerSet::setTemplateResidue(const Residue& residue, Size number_of_torsions))
+  System S;
+  HINFile ags_file("data/AlaGlySer.hin");
+	ags_file >> S;
+	ABORT_IF(S.countResidues() != 3)
+
+	Residue& gly(*++S.beginResidue());
+  
+  ResidueRotamerSet copy_of_rrs(rrs);
+  TEST_EQUAL(copy_of_rrs.getName(), "SER")
+  copy_of_rrs.setTemplateResidue(gly, 0);
+  TEST_EQUAL(copy_of_rrs.getName(), "GLY")
+RESULT
+
+CHECK(void ResidueRotamerSet::deleteRotamer(Iterator loc))
+  ResidueRotamerSet copy_of_rrs(rrs);
+  TEST_EQUAL(copy_of_rrs.getNumberOfRotamers(), 2)
+  copy_of_rrs.deleteRotamer(copy_of_rrs.begin());
+  TEST_EQUAL(copy_of_rrs.getNumberOfRotamers(), 1)
+RESULT
+		
+CHECK(void ResidueRotamerSet::deleteRotamers(Iterator begin, Iterator end))
+  ResidueRotamerSet copy_of_rrs(rrs);
+  TEST_EQUAL(copy_of_rrs.getNumberOfRotamers(), 2)
+  copy_of_rrs.deleteRotamers(copy_of_rrs.begin(), copy_of_rrs.end());
+  TEST_EQUAL(copy_of_rrs.getNumberOfRotamers(), 0)
+RESULT
+
+CHECK(void ResidueRotamerSet::sort())
+  ResidueRotamerSet copy_of_rrs(rrs);
+  TEST_REAL_EQUAL(copy_of_rrs[0].P, 0.2)
+  copy_of_rrs.sort();
+  TEST_REAL_EQUAL(copy_of_rrs[0].P, 0.4)
 RESULT
 
 CHECK(ResidueRotamerSet::begin())
-	// ???
+  Rotamer rotamer = rrs[0];
+  ResidueRotamerSet::Iterator iter = rrs.begin();
+  TEST_REAL_EQUAL((*iter).P, rotamer.P)
 RESULT
 
 CHECK(ResidueRotamerSet::end())
-	// ???
+  ResidueRotamerSet::Iterator begin = rrs.begin();
+  ResidueRotamerSet::Iterator end = rrs.end();
+  TEST_EQUAL(end-begin, 2)
 RESULT
 
 CHECK(ResidueRotamerSet::begin() const)
-	// ???
+  Rotamer rotamer = rrs[0];
+  ResidueRotamerSet::Iterator iter = rrs.begin();
+  TEST_REAL_EQUAL((*iter).P, rotamer.P)
 RESULT
 
 CHECK(ResidueRotamerSet::end() const)
-	// ???
+  ResidueRotamerSet::ConstIterator begin = rrs.begin();
+  ResidueRotamerSet::ConstIterator end = rrs.end();
+  TEST_EQUAL(end-begin, 2)
 RESULT
 
 CHECK(ResidueRotamerSet::ResidueRotamerSet(const ResidueRotamerSet& rotamer_set))
 	ResidueRotamerSet r;
 	ResidueRotamerSet r2(r);
-RESULT
-
-CHECK(Residue* ResidueRotamerSet::buildRotamer(const Rotamer& rotamer))
-	// ???
-RESULT
-
-CHECK(void ResidueRotamerSet::resetResidue())
-	// ????
 RESULT
 
 /////////////////////////////////////////////////////////////
