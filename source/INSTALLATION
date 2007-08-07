@@ -9,11 +9,8 @@ Compiler:
     - MacOS X 10.4.10/Intel using g++ 4.0.1
     - Microsoft Windows XP using Microsoft Visual Studio Express 2005
 
-  We have also successful reports (although with slight problems) for:
-    - Microsoft Windows/cygwin
-    
   (Please refer to Section 2.6 at the bottom of this file for specific hints
-  for these platforms)
+  related to individual platforms)
    
 
 External software and libraries:
@@ -321,4 +318,4 @@ GLEW
   the platform's standard locations.
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.18.16.4 2007/08/07 09:23:06 oliver Exp $
+document revision: $Id: INSTALLATION,v 1.18.16.5 2007/08/07 12:31:13 oliver Exp $

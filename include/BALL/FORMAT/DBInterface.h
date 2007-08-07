@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.h,v 1.7.10.1 2007/03/25 21:23:41 oliver Exp $
+// $Id: DBInterface.h,v 1.7.10.2 2007/08/07 12:31:11 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -81,7 +81,7 @@ namespace BALL
 		//@{
 			
 		/// A database ID
-		typedef LongSize ID;
+		typedef qlonglong ID;
 
 		/// A vector of database IDs
 		typedef std::vector<ID> IDVector;
