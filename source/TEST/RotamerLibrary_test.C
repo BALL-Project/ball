@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RotamerLibrary_test.C,v 1.10.20.4 2007/08/06 18:16:41 toussaint Exp $
+// $Id: RotamerLibrary_test.C,v 1.10.20.5 2007/08/07 09:28:31 toussaint Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 
 ///////////////////////////
 
-START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.10.20.4 2007/08/06 18:16:41 toussaint Exp $")
+START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.10.20.5 2007/08/07 09:28:31 toussaint Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -34,15 +34,19 @@ CHECK(RotamerLibrary::RotamerLibrary())
 	TEST_EQUAL(rl_ptr->getNumberOfRotamers(), 466829)
 RESULT
 
-CHECK(RotamerLibrary::~RotamerLibrary())
-	delete rl_ptr;
-RESULT
 
 CHECK(RotamerLibrary::RotamerLibrary(const String& filename, const FragmentDB& fragment_db))
 	RotamerLibrary rl("rotamers/bbind99.Aug.lib", frag_db);
 
 	TEST_EQUAL(rl.getNumberOfRotamers(), 320)
 RESULT
+
+CHECK(RotamerLibrary::RotamerLibrary(const FragmentDB& fragment_db))
+	RotamerLibrary rl(frag_db);
+	TEST_EQUAL(rl.getNumberOfRotamers(), 0)
+RESULT
+
+
 
 CHECK(RotamerLibrary::RotamerLibrary(const RotamerLibrary& rotamer_library))	
 	RotamerLibrary rl("rotamers/bbind99.Aug.lib", frag_db);
@@ -61,14 +65,109 @@ CHECK(RotamerLibrary& RotamerLibrary::operator = (const RotamerLibrary& rotamer_
 	TEST_EQUAL(rl.getNumberOfRotamers(), 320)
 RESULT
 
+RotamerLibrary rl_ind("rotamers/bbind99.Aug.lib", frag_db);
 CHECK(ResidueRotamerSet* getRotamerSet(const String& name))
-	// ???
+  ResidueRotamerSet* rrs = rl_ind.getRotamerSet("LYS");
+  TEST_NOT_EQUAL(rrs, 0)
+  ABORT_IF(rrs == 0)
+  TEST_EQUAL(rrs->getNumberOfRotamers(), 81)
 RESULT
+
+CHECK(ResidueRotamerSet* getRotamerSet(const String& name, float phi, float psi))
+  ResidueRotamerSet* rrs = rl_ptr->getRotamerSet("LYS", 180, 60);
+  TEST_NOT_EQUAL(rrs, 0)
+  ABORT_IF(rrs == 0)
+  TEST_EQUAL(rrs->getNumberOfRotamers(), 81)
+RESULT
+
+CHECK(ResidueRotamerSet* getRotamerSet(const Residue& residue))
+  System S;
+	HINFile ags_file("data/AlaGlySer.hin");
+	ags_file >> S;
+	ABORT_IF(S.countResidues() != 3)
+
+	Residue& ser(*++(++S.beginResidue()));
+  ResidueRotamerSet* rrs = rl_ptr->getRotamerSet(ser);
+  TEST_NOT_EQUAL(rrs, 0)
+  ABORT_IF(rrs == 0)
+  TEST_EQUAL(rrs->getNumberOfRotamers(), 3)
+RESULT
+
 
 CHECK(Size RotamerLibrary::getNumberOfRotamers() const)
-	// ???
+	TEST_EQUAL(rl_ind.getNumberOfRotamers(), 320)
 RESULT
 
+CHECK(Size RotamerLibrary::getNumberOfRotamers(const String& name) const)
+	TEST_EQUAL(rl_ind.getNumberOfRotamers("LYS"), 81)
+RESULT
+
+CHECK(Size RotamerLibrary::getNumberOfRotamerSets() const)
+	TEST_EQUAL(rl_ind.getNumberOfRotamerSets(), 18)
+RESULT
+
+CHECK(void RotameLibrary::addRotamer(const String& name, const Rotamer& rotamer, Size number_of_torsions, Index phi, Index psi))
+	TEST_EQUAL(rl_ptr->getNumberOfRotamers(), 466829)
+  Rotamer rotamer;
+  rl_ptr->addRotamer("SER", rotamer, 1, -60, 80);
+	TEST_EQUAL(rl_ptr->getNumberOfRotamers(), 466830)
+RESULT
+
+CHECK(void RotamerLibrary::addRotamer(const String& name, const Rotamer& rotamer, Size number_of_torsions))
+	TEST_EQUAL(rl_ind.getNumberOfRotamers(), 320)
+  Rotamer rot;
+  rl_ind.addRotamer("LYS", rot, 4);
+	TEST_EQUAL(rl_ind.getNumberOfRotamers(), 321)
+RESULT
+
+CHECK(bool RotamerLibrary::isBackboneDependent() const)
+  TEST_EQUAL(rl_ind.isBackboneDependent(), false)
+  TEST_EQUAL(rl_ptr->isBackboneDependent(), true)
+RESULT
+
+CHECK(void RotamerLibrary::setBackboneDependent(bool dependent))
+  TEST_EQUAL(rl_ind.isBackboneDependent(), false)
+  rl_ind.setBackboneDependent(true);
+  TEST_EQUAL(rl_ind.isBackboneDependent(), true)
+  rl_ind.setBackboneDependent(false);
+  TEST_EQUAL(rl_ind.isBackboneDependent(), false)
+RESULT
+
+CHECK(bool RotamerLibrary::hasRotamers(const String& name) const)
+  TEST_EQUAL(rl_ind.hasRotamers("GLY"), false)
+  TEST_EQUAL(rl_ind.hasRotamers("TRP"), true)
+RESULT
+
+CHECK(bool RotamerLibrary::validate())
+  TEST_EQUAL(rl_ind.validate(), true)
+  TEST_EQUAL(rl_ptr->validate(), true)
+RESULT
+
+CHECK(void RotamerLibrary::sort())
+	RotamerLibrary rl("rotamers/bbdep02.May.lib", frag_db);
+  ResidueRotamerSet* rrs = rl.getRotamerSet("SER", -180, -140);
+  TEST_NOT_EQUAL(rrs, 0)
+  ABORT_IF(rrs == 0)
+  Rotamer rotamer = rrs->getRotamer(0);
+  TEST_REAL_EQUAL(rotamer.P, 0.292117)
+  rl.sort();
+  rrs = rl.getRotamerSet("SER", -180, -140);
+  TEST_NOT_EQUAL(rrs, 0)
+  ABORT_IF(rrs == 0)
+  rotamer = rrs->getRotamer(0);
+  TEST_REAL_EQUAL(rotamer.P, 0.700818)
+RESULT
+
+CHECK(void RotamerLibrary::clear())
+	RotamerLibrary rl("rotamers/bbind99.Aug.lib", frag_db);
+	TEST_EQUAL(rl.getNumberOfRotamers(), 320)
+  rl.clear();
+	TEST_EQUAL(rl.getNumberOfRotamers(), 0)
+RESULT
+
+CHECK(RotamerLibrary::~RotamerLibrary())
+	delete rl_ptr;
+RESULT
 
 ResidueChecker rc(frag_db);
 rc.disable(ResidueChecker::OVERLAPPING_ATOMS);
@@ -202,7 +301,7 @@ CHECK(Side chain positions for Pro)
 
 RESULT
 
-CHECK(side-chain conformations for Dunbrack library)
+CHECK(Side chain conformations for Dunbrack library)
 	System S;
 	HINFile infile("data/all_amino.hin");
 	infile >> S;
