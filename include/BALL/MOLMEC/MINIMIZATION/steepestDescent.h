@@ -1,8 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.h,v 1.24.20.3 2007/08/06 09:13:47 aleru Exp $
-// Line Search Minimizer: A special class for the line search minimization algorithm
+// $Id: steepestDescent.h,v 1.24.20.4 2007/08/07 09:12:35 aleru Exp $
+//
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
 #define BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
@@ -83,18 +83,28 @@ namespace BALL
 			 */
 			//@{
 			
-			/** Minimize the energy of the system using scaled steepest descent steps.
-			*/
+			/** Minimize the energy of the system using steepest descent steps.
+			 *  This method executes at most <tt>iterations</tt> minimization steps.
+			 *  If the number of iterations is not given, the number specified in the
+			 *  options is taken.
+			 *  @param iterations the maximum number of iterations
+			 *  @param resume <b>true</b> to resume a previous run
+			 *  @see EnergyMinimizer::minimize
+			 */
 			virtual bool minimize(Size steps = 0, bool resume = false);
 			
-			/** Find the next step using a line search.
-			*/
+			/** Find the next step.
+			 *  First, this method calls updateDirection. Second, it performs a line search
+			 *  along the calculated direction afterwards.
+			 *  @return double  \f$\geq 0\f$ if the line search found an acceptable solution, otherwise -1.
+			 *  @see EnergyMinimizer::findStep
+			 */
 			virtual double findStep();
 			
 			/** Update the search direction.
-			 *  (Scaled) steepest descent searches along the current gradient only.
-			 *  Therefore, updateDirection only assigns direction to the (scaled) last gradient
-			 *  computed (current_gradient_).
+			 *  This algorithm uses only steepest descent searches.
+			 *  Therefore, updateDirection only assigns direction to the last gradient
+			 *  computed.
 			 */
 			virtual void updateDirection();
 			
@@ -105,9 +115,9 @@ namespace BALL
 			 */
 			//@{
 			
-			/*_ The line search minimizer.
-					This member is used to perform the line search in findStep
-			*/
+			/** The line search minimizer.
+			 *  This member is used to perform the line search in findStep
+			 */
 			LineSearch line_search_;
 			//@}
 			

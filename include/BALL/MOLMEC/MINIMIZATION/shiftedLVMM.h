@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftedLVMM.h,v 1.1.4.5 2007/08/06 09:13:46 aleru Exp $ 
+// $Id: shiftedLVMM.h,v 1.1.4.6 2007/08/07 09:12:35 aleru Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MINIMIZATION_SHIFTEDLVMM_H 
@@ -209,17 +209,15 @@ namespace BALL
 			Size getMaxNumOfColumns() const;
 			
 			/** Calculate the next step.
-			 *  First this method updates the model and performs a line search
-			 *  into the calculated direction afterwards.
-			 *  @return double <b>\geq 0.0</b> if the line search found an acceptable solution, otherwise -1.0.
+			 *  First, this method updates the model. Second, it performs a line search
+			 *  along the calculated direction afterwards.
+			 *  @return double  \f$\geq 0\f$ if the line search found an acceptable solution, otherwise -1.
 			 *  @see EnergyMinimizer::findStep
 			 */
 			virtual double findStep();
 			
-			/** Update the stored vector pairs, either by adding a new pair or if there
-			 *  is no space left by replacing the oldest pair.
-			 *  Compute the search direction afterwards by using the Strang recurrence formula
-			 *  with an improvement idea of Al-Baali.
+			/** Update the shifted inverse hessian approximation.
+			 *  Afterwards, compute the search direction.
 			 */
 			virtual void updateDirection();
 			
@@ -240,70 +238,68 @@ namespace BALL
 			*/
 			//@{
 			
-			/*_ The line search
+			/** The line search
 			*/
 			LineSearch line_search_;
 			
-			/*_ Is this an initial first iteration?
+			/** Is this an initial first iteration?
 			*/
 			bool first_iter_;
 		
-			/*_ The number of movable atoms.
+			/** Number of movable atoms.
 			*/
 			Size number_of_atoms_;
 			
-			/*_ The maximum number of columns of the 
-					factor of the shifted inverse hessian approximation.
-			*/
+			/** Maximum number of columns of the 
+			 *  factor of the shifted inverse hessian approximation.
+			 */
 			Size max_number_of_cols_;
 			
-			/*_ The current number of columns of the 
-					factor of the shifted inverse hessian approximation.
-			*/
+			/** Current number of columns of the
+			 *  factor of the shifted inverse hessian approximation.
+			 */
 			Size curr_number_of_cols_;
 			
-			/*_ The update method
+			/** Update method
 			*/
 			Size updt_method_;
 			
-			/*_ The correction parameter
+			/** Correction parameter
 			*/
 			Size corr_par_;
 			
-			/*_ The shift value of the previous iteration.
+			/** Shift value of the previous iteration.
 			*/
 			double prev_shift_val_;
 			
-			/*_ The shifted previous step.
+			/** Shifted previous step.
 			*/
 			vector<Vector3> shift_s_;
 			
-			/*_ The current gradient difference.
+			/** Current gradient difference.
 			*/
 			vector<Vector3> grad_diff_;
 			
-			/*_ The needed vectors for the update.
+			/** Needed vector for the update.
 			*/
 			vector<float> updt_u_;
+			
+			/** Needed vector for the update.
+			 */
 			vector<float> updt_v_;
 			
-			/*_ The direction of the shifted step, i.e. -U_k*U_k^t*gk.
+			/** Direction of the shifted step, i.\ e.\ \f$-U_k \cdot U_k^T \cdot g_k\f$.
 			*/
 			vector<Vector3> shifted_direction_;
 			
-			/*_ The factor of the shifted inverse hessian approximation
-					in column order, U_k in [3].
-			*/
+			/** Factor of the shifted inverse hessian approximation
+			 *  in column order, \f$U_k\f$ in [3].
+			 */
 			vector<Vector3> hess_factor_;
 			
-			/*_ The last step size (in respect to the length of the computed direction vector),
-					so the length of the last step was step_*||direction_||.
-			*/
-			double step_;
-			
-			/*_ The positions of the movable atoms when we start an iteration.
-					This is used to reduce slightly rounding errors
-			*/
+			/** Positions of the movable atoms when we start an iteration.
+			 *  This is used to reduce slightly rounding errors
+			 */
 			vector<Vector3> initial_atoms_;
 			
 			//@}

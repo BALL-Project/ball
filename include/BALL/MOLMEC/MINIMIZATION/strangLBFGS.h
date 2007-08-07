@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: strangLBFGS.h,v 1.1.4.5 2007/08/06 09:13:47 aleru Exp $ 
+// $Id: strangLBFGS.h,v 1.1.4.6 2007/08/07 09:12:36 aleru Exp $ 
 //
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STRANGLBFGS_H 
@@ -27,7 +27,7 @@ namespace BALL
 	 *  [2] Liu D.C., Nocedal J.: On the limited memory BFGS method for large
 	 *  scale optimization. Math. Programming 45 (1989) 503-528.
 	 *
-	 *  If the 'improved' option is set ideas proposed in
+	 *  If the 'improved' option is set, ideas proposed in
 	 *
 	 *  [3] Mehiddin Al-Baali: Improved Hessian approximations for the limited 
 	 *  memory BFGS method. Numerical Algorithms 22 (1999) 99-112
@@ -148,9 +148,9 @@ namespace BALL
 			bool getImprovedFlag() const;
 			
 			/** Calculate the next step.
-			 *  First this method updates the model and performs a line search
-			 *  into the calculated direction afterwards.
-			 *  @return double <b>\geq 0.0</b> if the line search found an acceptable solution, otherwise -1.0.
+			 *  First, this method updates the model. Second, it performs a line search
+			 *  along the calculated direction afterwards.
+			 *  @return double \f$\geq 0\f$ if the line search found an acceptable solution, otherwise -1.
 			 *  @see EnergyMinimizer::findStep
 			 */
 			virtual double findStep();
@@ -179,61 +179,56 @@ namespace BALL
 			*/
 			//@{
 			
-			/*_ The line search
+			/** The line search
 			*/
 			LineSearch line_search_;
 			
-			/*_ Is this an initial first iteration?
+			/** Is this an initial first iteration?
 			*/
 			bool first_iter_;
 			
-			/*_ The number of movable atoms.
+			/** Number of movable atoms.
 			*/
 			Size number_of_atoms_;
 			
-			/*_ Maximum number of stored vector pairs.
+			/** Maximum number of stored vector pairs.
 			*/
 			Size max_num_of_vect_pairs_;
 			
-			/*_ Current number of stored vector pairs.
+			/** Current number of stored vector pairs.
 			*/
 			Size curr_num_of_vect_pairs_;
 			
-			/*_ Should the improved version be used?
+			/** Should the improved version be used?
 			*/
 			bool improved_;
 			
-			/*_ Old and new scaling values. Also used in the Strang recurrence formula.
+			/** Old and new scaling values. Also used in the Strang recurrence formula.
 			*/
 			vector<float> rho_;
 			
-			/*_ The stored former steps. We store the vectors in column order.
+			/** Stored former steps. Vectors stored in column order.
 			*/
 			vector<Vector3> stored_s_;
 			
-			/*_ The stored former changes in gradients.
-					We store the vectors in column order.
-			*/
+			/** Stored former changes in gradients.
+			 *  Vectors stored in column order.
+			 */
 			vector<Vector3> stored_y_;
 			
-			/*_ Temporarily used memory for saving scalars associated with
-					the stored vector pairs, small size i.e. max_num_of_vect_pairs_.
-			*/
+			/** Temporarily used memory for saving scalars associated with
+			 *  the stored vector pairs.
+			 */
 			vector<float> work_val_;
 			
-			/*_ Index of the vector pair which will be used for saving the data
-					of the current step (usually by replacing the old data).
-			*/
+			/** Index of the vector pair which will be used for saving the data
+			 *  of the current step (usually by replacing old data).
+			 */
 			Size index_of_free_vect_;
 			
-			/*_ The last step size (in respect to the length of the computed direction vector),
-					so the length of the last step was step_*||direction_||.
-			*/
-			double step_;
-			
-			/*_ The positions of the movable atoms when we start an iteration.
-					This is used to reduce slightly rounding errors
-			*/
+			/** Positions of movable atoms when starting an iteration.
+			 *  This is used to reduce slightly rounding errors
+			 */
 			std::vector<Vector3> initial_atoms_;
 			
 			//@}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.38.8.6 2007/05/18 10:58:36 aleru Exp $
+// $Id: conjugateGradient.C,v 1.38.8.7 2007/08/07 09:13:05 aleru Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -32,7 +32,6 @@ namespace BALL
   ConjugateGradientMinimizer::ConjugateGradientMinimizer()
 		: EnergyMinimizer(),
 			line_search_(*this),
-			step_(1.0),
 			unscaled_direction_(),
 			number_of_atoms_(0),
 			updt_method_(DEFAULT_METHOD),
@@ -56,7 +55,6 @@ namespace BALL
 	ConjugateGradientMinimizer::ConjugateGradientMinimizer(ForceField& force_field)
 		: EnergyMinimizer(),
 			line_search_(*this),
-			step_(1.0),
 			unscaled_direction_(),
 			number_of_atoms_(0),
 			updt_method_(DEFAULT_METHOD),
@@ -87,7 +85,6 @@ namespace BALL
 		(ForceField& force_field, SnapShotManager* ssm)
 		: EnergyMinimizer(),
 			line_search_(*this),
-			step_(1.0),
 			unscaled_direction_(),
 			number_of_atoms_(0),
 			updt_method_(DEFAULT_METHOD),
@@ -119,7 +116,6 @@ namespace BALL
 		(ForceField& force_field, const Options& new_options) 
 		: EnergyMinimizer(),
 			line_search_(*this),
-			step_(1.0),
 			unscaled_direction_(),
 			number_of_atoms_(0),
 			updt_method_(DEFAULT_METHOD),
@@ -152,7 +148,6 @@ namespace BALL
 		(ForceField& force_field, SnapShotManager* ssm, const Options& new_options)
 		: EnergyMinimizer(),
 			line_search_(*this),
-			step_(1.0),
 			unscaled_direction_(),
 			number_of_atoms_(0),
 			updt_method_(DEFAULT_METHOD),
@@ -190,7 +185,6 @@ namespace BALL
 		(const ConjugateGradientMinimizer& rhs)
 		: EnergyMinimizer(rhs),
 			line_search_(rhs.line_search_),
-			step_(rhs.step_),
 			unscaled_direction_(rhs.unscaled_direction_),
 			number_of_atoms_(rhs.number_of_atoms_),
 			updt_method_(rhs.updt_method_),
@@ -217,7 +211,6 @@ namespace BALL
 		EnergyMinimizer::operator = (rhs);
 		line_search_        = rhs.line_search_;
 		updt_method_        = rhs.updt_method_;
-		step_               = rhs.step_;
 		unscaled_direction_ = rhs.unscaled_direction_;
 		number_of_atoms_    = rhs.number_of_atoms_;
 		first_iter_         = rhs.first_iter_;
