@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.10.14.2 2007/08/08 08:28:01 bertsch Exp $
+# $Id: Makefile,v 1.10.14.3 2007/08/08 09:38:45 bertsch Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -17,7 +17,8 @@ OPTIONAL_DIRS=\
 	BALLVIEW\
 	DCD2PNG\
 	DB\
-	MMFF94
+	MMFF94\
+	PyBALL
 #	NMRVIEW\
 
 VIEW_DIRS=$(BALL_HAS_VIEW:true=$(OPTIONAL_DIRS))

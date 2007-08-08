@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nmrview.C,v 1.10 2005/12/23 17:02:31 amoll Exp $
+// $Id: nmrview.C,v 1.10.20.1 2007/08/08 09:38:45 bertsch Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -16,7 +16,6 @@ int main(int argc, char **argv)
   QApplication application(argc, argv);
 
   MainControl mainframe;
-  application.setMainWidget(&mainframe);
 
 	// create widgets
 	mainframe.setCentralWidget(new RegularData2DWidget(0, &mainframe));
