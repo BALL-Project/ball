@@ -1,12 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: systemCalls.C,v 1.1.6.1 2007/03/25 22:00:35 oliver Exp $
+// $Id: systemCalls.C,v 1.1.6.2 2007/08/08 09:21:34 oliver Exp $
+//
 
 #include <BALL/SYSTEM/systemCalls.h>
 
 #ifdef BALL_PLATFORM_WINDOWS
- #include <windows.h>
+#include <windows.h>
+#else
+#ifdef BALL_HAS_UNISTD_H
+#include <unistd.h>
+#endif
 #endif
 
 namespace BALL
