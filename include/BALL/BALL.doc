@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.doc,v 1.32.16.1 2007/03/25 21:23:36 oliver Exp $
+// $Id: BALL.doc,v 1.32.16.2 2007/08/08 10:27:20 oliver Exp $
 //
 
 
@@ -33,15 +33,22 @@
 		 		- Andreas Burchardt
 				- Andreas Crauser
 				- Anne Dehof
+				- Holger Franken
+				- Carla Haid
 				- Andreas Hildebrandt
+				- Jan Fuhrmann
 				- Heiko Klein
 				- Andreas Kerzmann
 				- Oliver Kohlbacher
 				- Hans-Peter Lenhof
+				- Bettina Leonhardt
 				- Andreas Moll
 				- Peter M&uuml;ller
+				- Alexander Rurainski
 				- Stefan Strobel
 				- Marc Sturm
+				- Nora Toussaint
+				- Hongbo Zhu
 */
 
 
