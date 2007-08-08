@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.10.14.1 2007/03/25 21:32:14 oliver Exp $
+# $Id: Makefile,v 1.10.14.2 2007/08/08 08:28:01 bertsch Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -15,7 +15,9 @@ THISLIB=$(LIBNAME)
 
 OPTIONAL_DIRS=\
 	BALLVIEW\
-	DCD2PNG
+	DCD2PNG\
+	DB\
+	MMFF94
 #	NMRVIEW\
 
 VIEW_DIRS=$(BALL_HAS_VIEW:true=$(OPTIONAL_DIRS))

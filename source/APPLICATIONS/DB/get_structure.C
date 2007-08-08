@@ -1,6 +1,6 @@
 
 #include <BALL/FORMAT/DBInterface.h>
-#include <qapp.h>
+#include <QtGui/QApplication>
 
 using namespace BALL;
 
