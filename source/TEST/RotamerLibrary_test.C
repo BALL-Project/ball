@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RotamerLibrary_test.C,v 1.10.20.6 2007/08/07 16:42:45 bertsch Exp $
+// $Id: RotamerLibrary_test.C,v 1.10.20.7 2007/08/08 09:27:00 toussaint Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 
 ///////////////////////////
 
-START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.10.20.6 2007/08/07 16:42:45 bertsch Exp $")
+START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.10.20.7 2007/08/08 09:27:00 toussaint Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -48,24 +48,22 @@ RESULT
 
 
 
+RotamerLibrary rl_ind("rotamers/bbind99.Aug.lib", frag_db);
 CHECK(RotamerLibrary::RotamerLibrary(const RotamerLibrary& rotamer_library))	
-	RotamerLibrary rl("rotamers/bbind99.Aug.lib", frag_db);
-	RotamerLibrary rl2(rl);
+	RotamerLibrary rl2(rl_ind);
 	TEST_EQUAL(rl2.getNumberOfRotamers(), 320)
 	// Make sure the old stuff hasn't changed
-	TEST_EQUAL(rl.getNumberOfRotamers(), 320)
+	TEST_EQUAL(rl_ind.getNumberOfRotamers(), 320)
 RESULT
 
 CHECK(RotamerLibrary& RotamerLibrary::operator = (const RotamerLibrary& rotamer_library))
-	RotamerLibrary rl("rotamers/bbind99.Aug.lib", frag_db);
 	RotamerLibrary rl2;
-	rl2 = rl;
+	rl2 = rl_ind;
 	TEST_EQUAL(rl2.getNumberOfRotamers(), 320)
 	// Make sure the old stuff hasn't changed
-	TEST_EQUAL(rl.getNumberOfRotamers(), 320)
+	TEST_EQUAL(rl_ind.getNumberOfRotamers(), 320)
 RESULT
 
-RotamerLibrary rl_ind("rotamers/bbind99.Aug.lib", frag_db);
 CHECK(ResidueRotamerSet* getRotamerSet(const String& name))
   ResidueRotamerSet* rrs = rl_ind.getRotamerSet("LYS");
   TEST_NOT_EQUAL(rrs, 0)
@@ -106,7 +104,7 @@ CHECK(Size RotamerLibrary::getNumberOfRotamerSets() const)
 	TEST_EQUAL(rl_ind.getNumberOfRotamerSets(), 18)
 RESULT
 
-CHECK(void RotameLibrary::addRotamer(const String& name, const Rotamer& rotamer, Size number_of_torsions, Index phi, Index psi))
+CHECK(void RotamerLibrary::addRotamer(const String& name, const Rotamer& rotamer, Size number_of_torsions, Index phi, Index psi))
 	TEST_EQUAL(rl_ptr->getNumberOfRotamers(), 466829)
   Rotamer rotamer;
   rl_ptr->addRotamer("SER", rotamer, 1, -60, 80);
@@ -159,8 +157,8 @@ CHECK(void RotamerLibrary::sort())
 RESULT
 
 CHECK(void RotamerLibrary::clear())
-	RotamerLibrary rl("rotamers/bbind99.Aug.lib", frag_db);
-	TEST_EQUAL(rl.getNumberOfRotamers(), 320)
+	RotamerLibrary rl(rl_ind);
+	TEST_EQUAL(rl.getNumberOfRotamers(), 321)
   rl.clear();
 	TEST_EQUAL(rl.getNumberOfRotamers(), 0)
 RESULT
@@ -199,8 +197,8 @@ CHECK(Side chain positions for Ser)
 	TEST_EQUAL(rrs_ser.getNumberOfRotamers(), 0)
 
 	Rotamer r = rrs_ser.getRotamer(ser);
-	TEST_EQUAL(r.P, 1.0)
 	PRECISION(1E-1)
+	TEST_REAL_EQUAL(r.P, 1.0)
 	TEST_REAL_EQUAL(r.chi1, 179.941)
 	TEST_REAL_EQUAL(r.chi2, 0.0)
 	TEST_REAL_EQUAL(r.chi3, 0.0)
@@ -247,8 +245,8 @@ CHECK(Side chain positions for Pro)
 	TEST_EQUAL(rrs_pro.getNumberOfRotamers(), 0)
 
 	Rotamer r = rrs_pro.getRotamer(pro);
-	TEST_EQUAL(r.P, 1.0)
 	PRECISION(1E-3)
+	TEST_REAL_EQUAL(r.P, 1.0)
 	TEST_REAL_EQUAL(r.chi1,  Angle(0.557364).toDegree())
 	TEST_REAL_EQUAL(r.chi2, Angle(-0.637879).toDegree())
 	TEST_REAL_EQUAL(r.chi3,  0.0)

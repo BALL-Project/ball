@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ResidueRotamerSet_test.C,v 1.1.2.3 2007/08/07 12:32:18 toussaint Exp $
+// $Id: ResidueRotamerSet_test.C,v 1.1.2.4 2007/08/08 09:27:00 toussaint Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -15,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(RotamerLibrary, "$Id: ResidueRotamerSet_test.C,v 1.1.2.3 2007/08/07 12:32:18 toussaint Exp $")
+START_TEST(RotamerLibrary, "$Id: ResidueRotamerSet_test.C,v 1.1.2.4 2007/08/08 09:27:00 toussaint Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -29,11 +29,11 @@ CHECK(Rotamer::Rotamer())
 	rot_ptr = new Rotamer;
 	TEST_NOT_EQUAL(rot_ptr, 0)
 	ABORT_IF(rot_ptr == 0)
-	TEST_EQUAL(rot_ptr->P, 0.0)
-	TEST_EQUAL(rot_ptr->chi1, 0.0)
-	TEST_EQUAL(rot_ptr->chi2, 0.0)
-	TEST_EQUAL(rot_ptr->chi3, 0.0)
-	TEST_EQUAL(rot_ptr->chi4, 0.0)
+	TEST_REAL_EQUAL(rot_ptr->P, 0.0)
+	TEST_REAL_EQUAL(rot_ptr->chi1, 0.0)
+	TEST_REAL_EQUAL(rot_ptr->chi2, 0.0)
+	TEST_REAL_EQUAL(rot_ptr->chi3, 0.0)
+	TEST_REAL_EQUAL(rot_ptr->chi4, 0.0)
 RESULT
 
 CHECK(Rotamer::~Rotamer())
@@ -49,11 +49,11 @@ CHECK(Rotamer::Rotamer(const Rotamer& rotamer))
 	r.chi4 = Angle(5.4).toDegree();
 
 	Rotamer r2(r);
-	TEST_EQUAL(r2.chi1, r.chi1)
-	TEST_EQUAL(r2.chi2, r.chi2)
-	TEST_EQUAL(r2.chi3, r.chi3)
-	TEST_EQUAL(r2.chi4, r.chi4)
-	TEST_EQUAL(r2.P, r.P)
+	TEST_REAL_EQUAL(r2.chi1, r.chi1)
+	TEST_REAL_EQUAL(r2.chi2, r.chi2)
+	TEST_REAL_EQUAL(r2.chi3, r.chi3)
+	TEST_REAL_EQUAL(r2.chi4, r.chi4)
+	TEST_REAL_EQUAL(r2.P, r.P)
 RESULT
 
 
@@ -137,7 +137,7 @@ ResidueRotamerSet rrs(ser, 1);
 
 CHECK(void ResidueRotamerSet::addRotamer(const Rotamer& rotamer))	
   TEST_EQUAL(rrs.getNumberOfRotamers(), 0)
-  Rotamer rotamer(0.2, -80, 0, 0, 0);
+  Rotamer rotamer(0.2, -80., 0, 0, 0);
   rrs.addRotamer(rotamer);
   Rotamer rotamer2(0.4, 50.2, 0, 0, 0);
   rrs.addRotamer(rotamer2);
@@ -153,7 +153,7 @@ RESULT
 
 
 CHECK(Rotamer& ResidueRotamerSet::operator [] (Position index) throw(Exception::IndexOverflow))
-  TEST_REAL_EQUAL(rrs[0].chi1, -80)
+  TEST_REAL_EQUAL(rrs[0].chi1, -80.)
 	TEST_REAL_EQUAL(rrs[1].P, 0.4)
 RESULT
 
@@ -180,7 +180,7 @@ CHECK(bool ResidueRotamerSet::setRotamer(Residue& residue, const Rotamer& rotame
   PRECISION(0.001)
   TEST_REAL_EQUAL(set_rotamer.chi1, original.chi1)
   // Serine only has chi1
-  TEST_EQUAL(set_rotamer.chi2, 0)
+  TEST_REAL_EQUAL(set_rotamer.chi2, 0.)
 RESULT
 
 CHECK(bool ResidueRotamerSet::hasTorsionPhi())
@@ -188,12 +188,12 @@ CHECK(bool ResidueRotamerSet::hasTorsionPhi())
 RESULT
 
 CHECK(Angle ResidueRotamerSet::getTorsionPhi() const)
-  TEST_EQUAL(rrs.getTorsionPhi().toDegree(), 0)
+  TEST_REAL_EQUAL(rrs.getTorsionPhi().toDegree(), 0.)
 RESULT
 
 CHECK(void ResidueRotamerSet::setTorsionPhi(const Angle& phi))
   rrs.setTorsionPhi(Angle(60, false));
-  TEST_EQUAL(rrs.getTorsionPhi().toDegree(), 60)
+  TEST_REAL_EQUAL(rrs.getTorsionPhi().toDegree(), 60.)
 RESULT
 
 CHECK(bool ResidueRotamerSet::hasTorsionPsi())
@@ -201,12 +201,12 @@ CHECK(bool ResidueRotamerSet::hasTorsionPsi())
 RESULT
 
 CHECK(Angle ResidueRotamerSet::getTorsionPsi() const)
-  TEST_EQUAL(rrs.getTorsionPsi().toDegree(), 0)
+  TEST_REAL_EQUAL(rrs.getTorsionPsi().toDegree(), 0.)
 RESULT
 
 CHECK(void ResidueRotamerSet::setTorsionPsi(const Angle& psi))
   rrs.setTorsionPsi(Angle(-60, false));
-  TEST_EQUAL(rrs.getTorsionPsi().toDegree(), -60)
+  TEST_REAL_EQUAL(rrs.getTorsionPsi().toDegree(), -60.)
 RESULT
 
 CHECK(bool ResidueRotamerSet::setTemplateResidue(const Residue& residue, Size number_of_torsions))
