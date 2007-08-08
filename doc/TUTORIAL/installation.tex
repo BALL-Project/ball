@@ -1,4 +1,5 @@
 \section{System Requirements}
+\label{requirements}
 
 \subsection{Compiler}
 \index{compiler}
@@ -18,13 +19,13 @@
 		\item Microsoft Windows XP using Microsoft Visual Studio .NET (MSVC 7.0) and Visual Studio Express 2005
  	\end{itemize}
 
-\subsection{BALL on the Windows platform}
+\subsection{BALL on the Windows Platform}
 
 For instructions on how to install BALL on the Windows platform, please
 have a look at BALL/Windows/README.txt . The sections below will describe
 how to build BALL on Unix, Linux and MacOS...
 
-\subsection{External software and libraries}
+\subsection{External Software and Libraries}
 
 BALL needs {\tt flex} and {\tt bison} for automatically generating parsers
 for various purposes. These utilities are standard software and should be
@@ -37,7 +38,7 @@ and easy to install.
 
 The compilation of the visualization component VIEW also requires the Qt 
 library (at least version 4.2), which is available from
-\URL{http://trolltech.com/products/qt}/.
+\URL{http://trolltech.com/products/qt}.
 
 If Qt was not installed in one of the standard library paths or the
 Qt header files were not installed in one of the compiler's default
@@ -89,18 +90,19 @@ contrib source package from our website. It contains almost all dependencies
 and prevents any clashes with already installed libraries, by compiling and
 installing them in a subfolder in the BALL directory. Afterwards, the BALL
 library is configured, build and linked against the downloaded libraries. We
-recommend to use the {\\tt autobuild} script for installations which should run
+recommend to use the {\tt autobuild} script for installations which should run
 out of the box on most platforms. This kind of installation will include all of
 BALL and BALLView's features. If this is not desired or you want to configure
 the library with different settings, please proceed like stated below:
 
 As an alternative BALL can be configured with a classical configure/make
-run. If all requirements stated in section 1 are met, BALL is built by 
-issuing the following commands in the directory {\tt BALL/source}:
+run. If all requirements stated in Section \ref{requirements} are met, BALL is
+built by issuing the following commands in the directory {\tt BALL/source}:
 
 \begin{lstlisting}{}
   ./configure
   make
+  make install
 \end{lstlisting}
 
 The following sections give further details on the configuration of the library,
@@ -312,7 +314,7 @@ when calling "{\tt make install}" where {\tt \${BINFMT}} is the binary format
 as determined by {\tt configure}.  Currently, the only way to install the
 libraries somewhere else is by moving them by hand to the desired destination.
 Wherever you install the shared libraries, please make sure to include their
-location in the \Index{{\tt LD\_LIBRARY\_PATH}} environment variable.
+location in the \ttindex{LD\_LIBRARY\_PATH} environment variable.
 
 If you are using \Index{csh}, \Index{tcsh}, or similar shells, use the command
 \begin{lstlisting}{}
@@ -328,5 +330,5 @@ or related shells, try
 \end{lstlisting}
 
 If you installed the shared libraries in a directory that the dynamic linker
-\Index{ld} searches by default, it is not necessary to set {\tt
+\ttindex{ld} searches by default, it is not necessary to set {\tt
 LD\_LIBRARY\_PATH}.

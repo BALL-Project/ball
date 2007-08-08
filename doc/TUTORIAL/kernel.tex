@@ -1,4 +1,4 @@
-\section{Kernel classes}
+\section{Kernel Classes}
 The BALL kernel data structures have been designed to model the problem 
 domain (\ie well-known biochemical entities) as closely as possible.
 Although some of the terms in biochemistry are rather fuzzy, there is a clear
@@ -71,7 +71,7 @@ By deriving all kernel classes from the common base class \class{Composite},
 they share all the features implemented there. The following section will
 briefly discuss some of these features.
 
-\section{Kernel iterators}
+\section{Kernel Iterators}
 Iteration over kernel data structures is a key concept in BALL.
 The BALL kernel iterators are STL-like iterators. Since most BALL kernel
 classes are so-called {\em multi-containers}, \ie they can contain different
@@ -117,7 +117,7 @@ There exist several variants of the kernel iterators: the standard
 forward iterators (\eg \class{AtomIterator}) and reverse iterators
 (\class{AtomReverseIterator}). For both, there are also const versions of
 these iterators, which are required when iterating over const instances of
-kernel classes (\class{AtomConstIterator}, \class{AtomConstReversIterator}).
+kernel classes (\class{AtomConstIterator}, \class{AtomConstReverse\-Iterator}).
 Iteration is possible for all kernel classes, if they can contain the
 respective instances. So it is possible to iterate over all atoms in a
 molecule, but it is not possible to iterate over all chains of a residue,

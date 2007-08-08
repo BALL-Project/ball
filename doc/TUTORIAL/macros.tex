@@ -196,6 +196,11 @@
 \newcommand{\Index}[1]{#1\index{#1}}
 % prints the term and creates an index entry
 
+\newcommand{\ttindex}[1]{{\ttfamily{#1}}\index{#1@{\ttfamily{#1}}}}
+% prints the term in ttfont and creates an index entry. Use for 
+% LD_LIBRARY_PATH to avoid it ending up under Symbols in the Index
+% > \newcommand new for V1.2 (AK)
+
 \newcommand{\class}[1]{{\ttfamily{#1}}\index{#1@{\ttfamily{#1}}
 (BALL~class)}\index{BALL!classes!#1@{\ttfamily{#1}}}}
 % BALL class names are typeset in typewriter bold and indexed automatically:
@@ -221,13 +226,14 @@
 %  - then under BALL!methods!<function name>
 
 \newcommand{\member}[2]{%
-	{\ttfamily{#2}}%
-	\index{#1@{\ttfamily{#2}}(member of \ttfamily{#1})}%
-	\index{BALL!#1!#2@{\ttfamily{#1}}}%
+  {\ttfamily{#2}}%
+  \index{#1@{\ttfamily{#2}} (member of {\ttfamily{#1}})}%
+  \index{BALL!#1!#2@{\ttfamily{#2}}}%
 }%
 % method names are typeset in typewriter bold and indexed automatically:
 %  - first with their name
 %  - then under BALL!members!<function name>
+% > fixed for V1.2 (AK)
 
 \newcommand{\attribute}[2]{{\ttfamily{#2}}\index{#2@{\ttfamily{#2}}
 ({\ttfamily #1} attribute)}\index{BALL!!#1!#2@{\ttfamily{#2}}}}

@@ -4,7 +4,9 @@ molecules, measurement data, \dots) but also the graphical user interface
 (GUI). Both jobs can be done using \class{VIEW} functionality. Both areas are
 discussed in the next few sections.
 
+
 \section{Modularity}
+
 In general most of the time in GUI programming is spent on implementing the 
 interactions of the individual elements of the user interface with each other 
 (\eg defining menu entries, button actions, etc.). In order to reduce these 
@@ -91,26 +93,29 @@ applications.
 \hline
 \bf Name                            & \bf Functionality\\
 \hline
-\class{DatasetControl}              & Management of data sets\\
-\class{DisplayProperties}           & Creation and modification of models\\
-\class{DockingController}           & Molecular docking\\
-\class{DownloadPDBDialog}           & Downloads from the protein database\\
-\class{EditableScene}               & Molecular editing\\
-\class{FDPBDialog}                  & Calculation of electrostatic potentials\\
-\class{FileObserver}                & Observing changes in a molecular file\\
-\class{GeometricControl}            & Management of graphical representations\\
-\class{LabelDialog}                 & Creation of labels in the 3D view\\
-\class{LogView}                     & Logging window\\
-\class{ModifyRepresentationDialog}  & Custom colorings for models\\
-\class{MolecularControl}            & Hierarchical overview of loaded
-                                      molecules\\
-\class{MolecularFileDialog}         & Reading and writing of molecular files\\
-\class{MolecularStructure}          & Force field and molecular mechanics
-                                      features\\
-\class{PyWidget}                    & Python scripting\\
-\class{Scene}                       & three-dimensional graphics\\
-\class{SnapshotVisualisationDialog} & Visualization of trajectories\\
-\class{TestFramework}               & Recording and playback of user input\\
+\class{DatasetControl}                & Management of data sets\\
+\class{DisplayProperties}             & Creation and modification of models\\
+\class{DockingController}             & Molecular docking\\
+\class{DownloadPDBDialog}             & Downloads from the protein database\\
+\class{EditableScene}                 & Molecular editing\\
+\class{FDPBDialog}                    & Calculation of electrostatic
+                                        potentials\\
+\class{FileObserver}                  & Observing changes in a molecular file\\
+\class{GeometricControl}              & Management of graphical
+                                        representations\\
+\class{LabelDialog}                   & Creation of labels in the 3D view\\
+\class{LogView}                       & Logging window\\
+\class{ModifyRepresentation\-Dialog}  & Custom colorings for models\\
+\class{MolecularControl}              & Hierarchical overview of loaded
+                                        molecules\\
+\class{MolecularFileDialog}           & Reading and writing of molecular
+                                        files\\
+\class{MolecularStructure}            & Force field and molecular mechanics
+                                        features\\
+\class{PyWidget}                      & Python scripting\\
+\class{Scene}                         & three-dimensional graphics\\
+\class{SnapshotVisualisation\-Dialog} & Visualization of trajectories\\
+\class{TestFramework}                 & Recording and playback of user input\\
 \hline
 \end{tabular}
 \caption[Overview on the derived modular widgets]
@@ -345,11 +350,11 @@ This approach may seem a bit complex but it has a distinct advantage: The positi
 of the label will be automatically updated if the 3D positions of the molecular entities 
 should change. 
 Finally the \class{Representation} is stored in the \class{MainControl} and it is rendered
-in the 3D view with a call of \class{MainControl::update(Representation\&)}.
+in the 3D view with a call of \class{MainControl::\-update(Representation\&)}.
 The methods in the \class{MainControl} for inserting and updating representations were 
 added just for convenience reasons and contain only the code for sending the corresponding 
 messages. 
-As an example, \class{MainControl::insert(Representation\&)} only consists of the 
+As an example, \class{MainControl::\-insert(Representation\&)} only consists of the 
 following code:
 \begin{lstlisting}{}
   notify_(new RepresentationMessage(representation, 
@@ -426,7 +431,7 @@ void LabelDialog::fetchPreferences(INIFile& inifile)
 
 \vspace{0.3cm}
 To write all user defined options in a configuration file, the method
-\class{ModularWidget::writePreferences} was overridden:
+\class{ModularWidget::\-writePreferences} was overridden:
 \begin{lstlisting}{}
 void LabelDialog::writePreferences(INIFile& inifile)
 {
@@ -453,19 +458,22 @@ modules works: Since the modules are mostly independent from each other and the 
 base classes take care of all basic functions, it is very easy to extend the application
 with new features.
 
-\section{Messaging system} \label{message}
-A special mechanism was needed for allowing the individual modular widgets to be mostly 
-independent from each other but still be able work together i.e.\ by notifying each other 
-about the current work flow. 
-This was achieved by a messaging system, that allows a \class{ModularWidget} to send a 
-message which is then received by all other modular widgets.
+
+\section{Messaging System}
+\label{message}
+
+A special mechanism was needed for allowing the individual modular widgets to
+be mostly independent from each other but still be able work together \ie by
+notifying each other about the current work flow. This was achieved by a 
+messaging system, that allows a \class{ModularWidget} to send a message which
+is then received by all other modular widgets.
 As an example: 
 The \class{MolecularControl} provides a hierarchical overview of the loaded molecules
 and notifies the other widgets when a user highlights some of its entries. 
 This is needed, since other modular widgets offer tool bar entries for features (like 
 saving molecules) that operate on the currently highlighted objects. 
 These entries get disabled if no molecular item is highlighted.
-To notify the other widgets, the \class{MolecularControl} sends a \class{ControlSelectionMessage}
+To notify the other widgets, the \class{MolecularControl} sends a \class{ControlSelection\-Message}
 which is then received by the \class{MolecularFileDialog}.
 This class provides the functionality for loading and writing molecular files and will 
 then disable the corresponding menu and toolbar entries.\\
@@ -476,15 +484,15 @@ If a new event is introduced, it can easily be added by creating an other \class
 subclass.
 \\
 The actual sending of messages is done in the method \class{ModularWidget::notify\_}, while 
-the message is received by \class{ModularWidget::onNotify()} (for an example of a concrete
+the message is received by \class{ModularWidget::\-onNotify()} (for an example of a concrete
 implementation see page~\pageref{onNotify}).
 In this method the modular widget has to decide if it needs to react to the message. 
 This is in general done by using runtime type identification. 
 In addition, many different messages also provide enumeration values for defining further
 specialized message subtypes. 
 A \class{CompositeMessage} can \eg cope with the events of an added or deleted 
-\class{Composite} by using the types \class{CompositeMessage::NEW\_COMPOSITE} or 
-\class{CompositeMessage::REMOVED\_COMPOSITE}.
+\class{Composite} by using the types \class{CompositeMessage::\-NEW\_COMPOSITE} or 
+\class{CompositeMessage::\-REMOVED\_COMPOSITE}.
 The usage of these enumeration subtypes has the advantage, that much less subclasses
 are needed to distinguish different classes of events, resulting in a slimmer implementation.
 Thus we only added new \class{Message} subclasses, when a message had to transmit a new kind 
@@ -496,16 +504,16 @@ of data, or if no appropriate class yet existed.
 \centering
 \begin{tabular} {|l|l|}
 \hline
-CompositeMessage & SceneMessage\\
-GenericSelectionMessage & ControlSelectionMessage\\
-NewSelectionMessage & GeometricObjectSelectionMessage\\
-RepresentationMessage & MolecularTaskMessage\\
+CompositeMessage             & SceneMessage\\
+GenericSelectionMessage      & ControlSelectionMessage\\
+NewSelectionMessage          & GeometricObjectSelectionMessage\\
+RepresentationMessage        & MolecularTaskMessage\\
 ShowDisplayPropertiesMessage & CreateRepresentationMessage\\
-RegularDataMessage & RegularData1DMessage \\
-RegularData2DMessage & RegularData3DMessage\\
-NewDockResultMessage & NewTrajectoryMessage\\
-ShowDockResultMessage & DockingFinishedMessage\\
-DeselectControlsMessage & \\
+RegularDataMessage           & RegularData1DMessage \\
+RegularData2DMessage         & RegularData3DMessage\\
+NewDockResultMessage         & NewTrajectoryMessage\\
+ShowDockResultMessage        & DockingFinishedMessage\\
+DeselectControlsMessage      & \\
 \hline
 \end{tabular}
 \caption{Derived message classes. 
@@ -513,8 +521,9 @@ All the individual classes can contain specific datas and some have an addition 
 type to differ between subtypes of messages.}
 \label{tab:messages}
 \end{table}
-%
-\section{Design of the visualization classes}
+
+
+\section{Design of the Visualization Classes}
 \paragraph{Geometric objects}
 \hspace*{\fill}\\
 \label{geometric_objects}
@@ -610,7 +619,7 @@ individual atoms, which makes it is easily possible to create models for user de
 subselections of molecules.
 When a model processor is applied to such a selection, it first iterates over the
 \class{Composite} tree and collects the information necessary for the model's creation.
-With this information, the method \class{createGeometricObjects()} can then create the 
+With this information, the method \class{createGeometric\-Objects()} can then create the 
 individual geometric object, which form the model. 
 The geometric objects are created on the heap and stored in a list inside the 
 \class{Representation}, which is then responsible for deleting them.
@@ -659,8 +668,9 @@ parsed by the POVRay application.
 The resulting text is then written to an output stream, which is either a
 file or the standard console output.
 
-\section{Creating dialogs}
+\section{Creating Dialogs}
 \label{designer}
+
 To layout the dialogs in the VIEW library, we used the program "Qt Designer".
 It is part of every Qt-package and provides a comfortable "What you see is what you get"
 (WYSIWYG) interface for designing widgets.
@@ -678,8 +688,9 @@ Thus a software engineer can extend the functionality without
 having to care about the dialog's layout, while a GUI designer can change the layout
 without the need to adapt the source code.
 
-\section{User defined settings}
+\section{User Defined Settings}
 \label{preferences}
+
 We wanted to give BALLView's users the opportunity to adapt it to their liking in any
 thinkable way, including the different models, coloring methods, and display options. 
 Therefore an extensible graphical user interface was needed for applying these settings. 
@@ -765,16 +776,17 @@ Now, dialogs no longer have to be child widgets in the
 In addition, the \class{PreferencesEntry} class now also supports the storing of default 
 values, that are applied when a dialog's ''Defaults'' button is pressed.
 In just the same way a dialog gets restored to its originally values, when the ''Cancel'' 
-button is pressed.\\
-\\
-An other extension was made to support more sophisticated
-GUI elements: We created a base class \class{ExtendedPreferencesObject}, that defines an 
-interface for (re)storing the content of composite widgets, like \eg the tables for the 
-setup of the different coloring methods. This approach further improves the 
-extensibility, since new, derived \class{ExtendedPreferencesObject} classes can be designed
-and added.
-What is even more important: Compared to a basic implementation, the described approach is also much less error-prone, since a developer 
-can no longer accidentally forget to add the (re)storing code for one GUI element.
+button is pressed.
+
+An other extension was made to support more sophisticated GUI elements: We
+created a base class \class{ExtendedPreferences\-Object}, that defines an 
+interface for (re)storing the content of composite widgets, like \eg the 
+tables for the setup of the different coloring methods. This approach further
+improves the extensibility, since new, derived
+\class{ExtendedPreferences\-Object} classes can be designed and added.
+What is even more important: Compared to a basic implementation, the described
+approach is also much less error-prone, since a developer can no longer
+accidentally forget to add the (re)storing code for one GUI element.
 
 \paragraph{Summary}
 \hspace*{\fill}\\
@@ -893,7 +905,8 @@ accordingly:
 As a result, all modular widgets will receive the VIEW message from the other
 thread.
 
-\section{How to create a geometric primitive}
+
+\section{How to Create a Geometric Primitive}
 \label{section:view_create_a_geometric_primitive}
 
 In VIEW there are a number of
