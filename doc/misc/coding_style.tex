@@ -1,7 +1,7 @@
 % -*- Mode: C++; tab-width: 2; -*-
 % vi: set ts=2:
 %
-% $Id: coding_style.tex,v 1.8.20.1 2007/08/08 07:14:35 toussaint Exp $
+% $Id: coding_style.tex,v 1.8.20.2 2007/08/08 07:17:22 toussaint Exp $
 %
                                                                                                                                                              
 \documentclass[a4paper,10pt]{article}
@@ -11,7 +11,7 @@
 \title{BALL coding conventions}
 \author{Oliver Kohlbacher}
 
-\date{$ $Revision: 1.8.20.1 $ $}
+\date{$ $Revision: 1.8.20.2 $ $}
 
 \newtheorem{example}{Example}
 
@@ -239,7 +239,7 @@ or source file should start with this header:
   // -*- Mode: C++; tab-width: 2; -*-
   // vi: set ts=2:
   //
-  // $Id: coding_style.tex,v 1.8.20.1 2007/08/08 07:14:35 toussaint Exp $
+  // $Id: coding_style.tex,v 1.8.20.2 2007/08/08 07:17:22 toussaint Exp $
   //                                                                                                                                                             
 \end{verbatim}
 In non-C++ files (Makefiles, TeX-Files, etc.) the C++ comments are replaced
@@ -373,7 +373,7 @@ each method of the class. The test programs reside in the directory
 {\tt BALL/source/TEST}. To create a new test program, rename a copy of the file
 {\tt Skeleton\_test.C} to the new class test name (usually {\tt
 <classname>\_test.C}). The test program has to be coded using the class test
-macros as described in the BALL online reference (see below). These macros are
+macros as described in the BALL online reference. These macros are
 defined in {\tt CONCEPT/classTest.h}. Special care should be taken
 to cover all special cases (e.g. what happens, if a method is called with
 empty strings, negative values, zero, null pointers etc.). 
