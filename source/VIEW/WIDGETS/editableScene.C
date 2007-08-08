@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.21.14.6 2007/05/17 21:22:54 amoll Exp $
+// $Id: editableScene.C,v 1.21.14.7 2007/08/08 11:12:28 anhi Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
@@ -1099,6 +1099,12 @@ void EditableScene::changeElement_()
 	if (current_atom_ != 0)
 	{
 		current_atom_->setElement(PTE[atomic_number_]);
+		String new_name = PTE[atomic_number_].getSymbol();
+		//get the old atom number
+		String old_name = current_atom_->getName();
+		old_name.toUpper();
+		new_name += old_name.trimLeft("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+		current_atom_->setName(new_name);
 		deselect_();
 		getMainControl()->update(*current_atom_);
 	}
@@ -1538,7 +1544,13 @@ void EditableScene::mouseDoubleClickEvent(QMouseEvent* e)
 	getClickedItems_(e->x(), e->y());
 	if (current_atom_ != 0)
 	{
-		current_atom_->setElement(PTE[atomic_number_]);
+		current_atom_->setElement(PTE[atomic_number_]);	
+		String new_name = PTE[atomic_number_].getSymbol();
+		//get the old atom number
+		String old_name = current_atom_->getName();
+		old_name.toUpper();
+		new_name += old_name.trimLeft("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+		current_atom_->setName(new_name);
 		deselect_();
 		getMainControl()->update(*current_atom_);
 		return;
