@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chainBuilder.C,v 1.4.10.2 2007/04/03 13:29:37 bertsch Exp $
+// $Id: chainBuilder.C,v 1.4.10.3 2007/08/08 10:25:04 oliver Exp $
 //
 // Author:
 //   Holger Franken
@@ -52,13 +52,7 @@ namespace BALL
 
 		for (x = 0; x <= nodes; x++)
 		{
-			vector<Size> row;
-
-			for (y = 0; y <= nodes; y++)
-			{
-				row.push_back(0);
-			}
-			adj_matrix.push_back(row);
+			adj_matrix.push_back(vector<Size>(nodes + 1, 0));
 		}
 
 
@@ -105,22 +99,16 @@ namespace BALL
 	}
 
 
-	void ChainBuilder::findChainAreas(Size& nodes, vector<vector<Size> >& adj_matrix, vector<Atom*>& core_chain_atoms, vector<vector<Atom*> >& chain_areas)
+	void ChainBuilder::findChainAreas(Size& nodes, vector<vector<Size> >& adj_matrix, 
+																		vector<Atom*>& core_chain_atoms, vector<vector<Atom*> >& chain_areas)
 	{
 		//      depth-first-search for the chain-areas
-
-		vector<int> val;        //      vector to hold the order, in which the atoms were visited
+		vector<int> val(nodes + 1, 0);        //      vector to hold the order, in which the atoms were visited
 		Size id(0);
 		Size k(0);
 
-		for (Size i = 0; i <= nodes; i++)
-		{
-			val.push_back(0);
-		}
-
 		for (k = 0; k <= nodes; k++)
 		{
-
 			if (val[k] == 0)
 			{
 				vector<Atom*> chain_area;
@@ -129,13 +117,12 @@ namespace BALL
 				chain_areas.push_back(chain_area);
 			}
 		}
-
 	}
 
 	void ChainBuilder::findEdges(vector<Atom*>& chain_area)
 	{
 		//      find atoms that have only one adjacent core-chain-atom and therefore must be an edge of the chain-area
-		for (vector<Atom*>::size_type i = 0; i != chain_area.size(); i++)
+		for (vector<Atom*>::size_type i = 0; i < chain_area.size(); i++)
 		{
 			Size adjacent_core_chain_atoms = 0;
 
@@ -419,7 +406,7 @@ namespace BALL
 		{
 			vector<vector<Size> > adj_matrix = calcAdjMatrix(core_chain_atoms);
 
-			static Size nodes = core_chain_atoms.size() -1;
+			Size nodes = core_chain_atoms.size() - 1;
 
 			vector<vector<Atom*> > chain_areas;
 
@@ -428,24 +415,24 @@ namespace BALL
 
 			DEBUG("\t-*-[buildChains]:\t" << chain_areas.size() << " chain areas found." << endl)
 
-			for (vector<vector<Atom*> >::size_type i = 0; i != chain_areas.size(); i++)
+			for (vector<vector<Atom*> >::size_type i = 0; i < chain_areas.size(); i++)
 			{
 				//      find all ending core chain atoms in a chain-area
 				findEdges(chain_areas[i]);
 
-				//      calculate an adjacence-matrix for the chain-area
+				//      calculate the adjacency matrix for the chain-area
 				adj_matrix = calcAdjMatrix(chain_areas[i]);
 
-				//      breadth first search for all chains in the chain-area
+				//      breadth-first search for all chains in the chain-area
 				vector<vector<Atom*> > chains = findChains(chain_areas[i], adj_matrix);
 
-				for (Size i = 0; i != chains.size(); i++)
+				for (Size i = 0; i < chains.size(); i++)
 				{
 					all_chains.push_back(chains[i]);
 				}
 
 			}
-// 			ChainBuilder cb;
+			// ChainBuilder cb;
 			sort(all_chains.begin(), all_chains.end(), ChainBuilder::compareChains);
 		}
 
