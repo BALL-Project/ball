@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.91.14.7 2007/05/15 22:46:39 amoll Exp $
+// $Id: molecularStructure.C,v 1.91.14.8 2007/08/09 17:22:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -97,7 +97,7 @@ namespace BALL
 			// MOLECULARMECHANICS Menu -------------------------------------------------------------------
 			energy_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Single Point Calculation", this, 
 								SLOT(calculateForceFieldEnergy()), Qt::CTRL+Qt::Key_A);
-			setMenuHint("Calculate the energy of a System with the AMBER/CHARMM force field.");
+			setMenuHint("Calculate the energy of a System with the selected force field.");
 			setMenuHelp("mm.html#single_point");
 				
 			minimization_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Energy Minimization", 
