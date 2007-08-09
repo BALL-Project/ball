@@ -47,9 +47,9 @@ include directories, use \mbox{"\option{--with-qt-libs}{\tt{}=DIR}"} and
 Section \ref{section:building-ball}) to specify the paths Qt was installed
 to.\index{Qt} {\tt configure} will also honor the {\tt QTDIR} environment variable.
 
-Qt also requires OpenGL. On platforms that do not provide OpenGL, Mesa can
-be used. Mesa is a 3-D graphics library with an API which is 
-very similar to that of OpenGL. It can be obtained from 
+Qt also requires OpenGL~\cite{OpenGL}. On platforms that do not provide OpenGL,
+Mesa~\cite{Mesa} can be used. Mesa is a 3-D graphics library with an API which
+is very similar to that of OpenGL. It can be obtained from 
 \URL{http://www.mesa3d.org}.
 \index{MESA}
 
@@ -60,21 +60,21 @@ will not work. GLEW is freely available from \URL{http://glew.sourceforge.net}.
 \index{GLEW}
 
 If your machine has a graphics accelerator from Intel, ATI-AMD or NVidia, you
-can use the vendor-provided OpenGL drivers
-(\URL{http://www.intel.com/support/graphics},
-\URL{http://ati.amd.com/support/driver.html} and
-\URL{http://www.nvidia.com/content/drivers}).
+can use the vendor-provided OpenGL drivers. The respective download locations
+are \URL{http://www.intel.com/support/graphics} (Intel),
+\URL{http://ati.amd.com/support/driver.html} (ATI-AMD), and
+\URL{http://www.nvidia.com/content/drivers} (NVidia).
 
 To use the Python extensions of BALL (Python is an object oriented scripting
 language), you will also need Python (version 2.3 or above) installed
 (\URL{http://www.python.org}) and a recent version of SIP (version 4.5.2 or
-above, available at \URL{http://www.riverbankcomputing.co.uk/sip/}). SIP is a
-tool for generating Python bindings for C++ class libraries.
+above, available at \URL{http://www.riverbankcomputing.co.uk/sip/}).
+SIP~\cite{SIP} is a tool for generating Python bindings for C++ class libraries.
 
 Additionally you might need the FFTW package for fast Fourier transformations
 (version 3.1.2), available from \URL{http://www.fftw.org/}.
 
-Please make sure that the required external \CPP libraries (i.e. Qt and SIP)
+Please make sure that the required external \CPP libraries (\ie Qt and SIP)
 have been compiled with the same compiler (and compiler version!) as the BALL
 libraries. Otherwise you will most likely see a plethora of strange error
 messages, either while linking applications or at runtime.
@@ -123,9 +123,12 @@ An overview of these options can also be obtained by executing "{\tt configure
 
 % \begin{center}
 \begin{longtable}{lp{7cm}}\hline
-  \option{--x-includes}{\tt{}=DIR}&        X include files are in DIR\\\vspace{3mm}
+  \\\vspace{3mm}
+  \option{--x-includes}{\tt{}=DIR}&        X include files are in DIR
+                                           \\\vspace{3mm}
 
-  \option{--x-libraries}{\tt{}=DIR}&       X library files are in DIR\\\vspace{3mm}
+  \option{--x-libraries}{\tt{}=DIR}&       X library files are in
+                                           DIR\\\vspace{3mm}
 
   \option{--disable-optimization}&         do not optimize the library for
                                            speed\\\vspace{3mm}

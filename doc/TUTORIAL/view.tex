@@ -91,31 +91,34 @@ applications.
 \centering
 \begin{tabular} {|l|l|}
 \hline
-\bf Name                            & \bf Functionality\\
+\bf Name                             & \bf Functionality\\
 \hline
-\class{DatasetControl}                & Management of data sets\\
-\class{DisplayProperties}             & Creation and modification of models\\
-\class{DockingController}             & Molecular docking\\
-\class{DownloadPDBDialog}             & Downloads from the protein database\\
-\class{EditableScene}                 & Molecular editing\\
-\class{FDPBDialog}                    & Calculation of electrostatic
-                                        potentials\\
-\class{FileObserver}                  & Observing changes in a molecular file\\
-\class{GeometricControl}              & Management of graphical
-                                        representations\\
-\class{LabelDialog}                   & Creation of labels in the 3D view\\
-\class{LogView}                       & Logging window\\
-\class{ModifyRepresentation\-Dialog}  & Custom colorings for models\\
-\class{MolecularControl}              & Hierarchical overview of loaded
-                                        molecules\\
-\class{MolecularFileDialog}           & Reading and writing of molecular
-                                        files\\
-\class{MolecularStructure}            & Force field and molecular mechanics
-                                        features\\
-\class{PyWidget}                      & Python scripting\\
-\class{Scene}                         & three-dimensional graphics\\
-\class{SnapshotVisualisation\-Dialog} & Visualization of trajectories\\
-\class{TestFramework}                 & Recording and playback of user input\\
+\class{DatasetControl}               & Management of data sets\\
+\class{DisplayProperties}            & Creation and modification of models\\
+\class{DockingController}            & Molecular docking\\
+\class{DockWidget}                   & Move and dock windows within the main
+                                       window\\
+\class{DownloadPDBFile}              & Downloads from the protein database\\
+\class{EditableScene}                & Molecular editing\\
+\class{FDPBDialog}                   & Calculation of electrostatic
+                                       potentials\\
+\class{FileObserver}                 & Observing changes in a molecular file\\
+\class{GeometricControl}             & Management of graphical
+                                       representations\\
+\class{LabelDialog}                  & Creation of labels in the 3D view\\
+\class{LogView}                      & Logging window\\
+\class{ModifyRepresentation\-Dialog} & Custom colorings for models\\
+\class{MolecularControl}             & Hierarchical overview of loaded
+                                       molecules\\
+\class{MolecularFileDialog}          & Reading and writing of molecular
+                                       files\\
+\class{MolecularStructure}           & Force field and molecular mechanics
+                                       features\\
+\class{PubChemDialog}                & Download a structure from PubChem\\
+\class{PyWidget}                     & Python scripting\\
+\class{Scene}                        & three-dimensional graphics\\
+\class{SnapshotVisualisation}        & Visualization of trajectories\\
+\class{TestFramework}                & Recording and playback of user input\\
 \hline
 \end{tabular}
 \caption[Overview on the derived modular widgets]
@@ -874,7 +877,8 @@ is \class{QCustomEvent}, we derived the class \class{MessageEvent} from it, whic
 As an example the thread that (re)calculates the model and coloring of a \class{Representation} notifies the main thread
 that it has finished with the following code:
 \begin{lstlisting}{}
-  sendMessage_(new RepresentationMessage(*rep, RepresentationMessage::FINISHED_UPDATE));
+  sendMessage_(new RepresentationMessage(*rep,
+                         RepresentationMessage::FINISHED_UPDATE));
 \end{lstlisting}
 sendMessage\_ looks like the following:
 \begin{lstlisting}{}
@@ -990,7 +994,8 @@ implement it in a derived Renderer:
 virtual void renderCross_(const Cross& /* cross */)
   throw() 
 {
-  Log.error() << "renderCross_ not implemented in derived Renderer class" << std::endl;
+  Log.error() << "renderCross_ not implemented in derived Renderer class"
+              << std::endl;
 }
 \end{lstlisting}
 

@@ -38,7 +38,7 @@ can \member{Composite}{apply} it to any given kernel data structure:
 Instantiating \class{FragmentDB} usually takes a few seconds to parse the
 fragment database and the naming conversion tables stored in
 \directory{BALL/data/Fragments}. The resulting data may then be used by two
-very handy processors: add\_hydrogens and build\_bonds.
+very handy processors: \processor{add\_hydrogens} and \processor{build\_bonds}.
 As their names suggest, those processors add the missing hydrogen atoms and
 rebuild missing bonds. We will now add the missing atoms and bonds of BPTI 
 through simple application of the two processors:
@@ -81,7 +81,7 @@ atoms are only approximations of the true positions.
 positions given in the \class{FragmentDB} templates, which usually deviate
 from their optimal position in the given structure. We can relax those
 hydrogen positions using a molecular mechanics calculation.
-We will use the AMBER force field\cite{AMBER95} and optimize the hydrogen 
+We will use the AMBER force field~\cite{AMBER95} and optimize the hydrogen 
 positions while keeping the heavy atoms rigid. The AMBER force field is
 implemented in the \class{AmberFF} class. Instantiating a force field and
 setting up a calculation is very simple:\index{AMBER force field}
@@ -164,7 +164,7 @@ the whole protein. Obviously, we now have to deselect the hydrogen atoms.
 Selection is recursive, so deselecting or selecting a residue will
 select/deselect all its atoms, selecting a system will select all its
 molecules, and so on. For a more detailed description, please read Section
-\ref{section:kernel-data-structures}. The easiest way to deselect all atoms is
+\ref{section:kernelclasses}. The easiest way to deselect all atoms is
 therefore to deselect the whole system:
 
 \begin{lstlisting}{}
