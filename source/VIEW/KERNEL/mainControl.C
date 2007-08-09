@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.175.14.2 2007/05/01 21:37:04 amoll Exp $
+// $Id: mainControl.C,v 1.175.14.3 2007/08/09 17:31:22 amoll Exp $
 //
 // Author:
 //   Heiko Klein
@@ -1100,7 +1100,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			{
 				case 0:
 				{
-					setStatusbarText("0 objects selected.", true);
+					setStatusbarText("", true);
 					return;
 				}
 				case 1:
@@ -1828,10 +1828,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		file >> nr_lines;
 		file >> nr_composites;
  		INIFile in;
-		char buffer[50000];
+		char buffer[INIFile::MAX_LINE_LENGTH];
 		for (Position p = 0; p <= nr_lines; p++)
 		{
-			if (!file.getline(&(buffer[0]), 50000))
+			if (!file.getline(&(buffer[0]), INIFile::MAX_LINE_LENGTH))
 			{
 				setStatusbarText("Error while reading project file, could not read INIFile", true);
 				BALLVIEW_DEBUG
