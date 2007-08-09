@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.8.3 2007/07/13 22:39:38 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.8.4 2007/08/09 17:33:33 amoll Exp $
 //
 // test program for the MMFF94 implementation
 
@@ -1230,15 +1230,12 @@ int main(int argc, char** argv)
 	SmartsMatcher sm;
 	vector<set<const Atom*> > result;
 	sm.match(result, *system.getMolecule(0), "[O;$(O=#6)]");
-Log.error() << "#~~#   4 " << result.size()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		/*
-Log.error() << "#~~#   3 "  << system.countAtoms()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		///
 		vector<vector<Atom*> > rings;
 		RingPerceptionProcessor rpp;
 		rpp.calculateSSSR(rings, system);
 
-Log.error() << "#~~#   2 "  << rings.size()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 		vector<HashSet<Atom*> > 		rings_;
 		vector<HashSet<Atom*> > 		aromatic_rings_;
@@ -1286,8 +1283,6 @@ Log.error() << "#~~#   2 "  << rings.size()           << " "  << __FILE__ << "  
 			aromatic_rings_.push_back(set);
 		}
 
-Log.error() << "#~~#   1 "  << rings_.size() << std::endl;
-Log.error() << "#~~#   2 "  << aromatic_rings_.size() << std::endl;
 */
 		return true;
 	}
