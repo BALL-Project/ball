@@ -9,15 +9,15 @@ class) that is not stored locally on a disc, but in the internet:
 
 \begin{lstlisting}{}
   PDBFile
-  infile("ftp://ftp.mpi-sb.mpg.de/pub/outgoing/BALL/pdb4pti.ent");
+  infile("http://www.ball-project.org/Downloads/Examples/pdb4pti.ent");
   System S;
   infile >> S;
   infile.close();
 \end{lstlisting}
 
 \noindent
-This command retrieves the file {\tt pdb4pti.ent} from its location at the MPI
-site using the FTP protocol and reads the contents of that file into a
+This command retrieves the file {\tt pdb4pti.ent} from its location at the BALL
+project site using the HTTP protocol and reads the contents of that file into a
 \class{System}. The retrieval and the expansion of the URL into something
 meaningful is performed by the classes \class{TransformationManager} and
 \class{TCPTransfer}. Any filename is first handed to the static instance of
@@ -43,8 +43,8 @@ executable is in your path. You can also automate this process using the
 in {\tt .gz}, gunzip will be called automatically:
 
 \begin{lstlisting}{}
-	File::registerTransformation
-		(".*\.gz", "exec:/usr/local/bin/gunzip -c %s");
+  File::registerTransformation
+    (".*\.gz", "exec:/usr/local/bin/gunzip -c %s");
 \end{lstlisting}
 
 \noindent
@@ -53,8 +53,8 @@ want to define a short-hand for the path to the PDB through the following
 rule:
 
 \begin{lstlisting}{}
-	File::registerTransformation
-		("PDB:.*", "/local/PDB/structures/all/pdb/pdb%b.ent");
+  File::registerTransformation
+    ("PDB:.*", "/local/PDB/structures/all/pdb/pdb%b.ent");
 \end{lstlisting}
 
 \noindent

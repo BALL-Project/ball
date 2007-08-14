@@ -44,6 +44,7 @@
 % even new floats it allows the following kinds of boxes:
 % \shadowbox, \doublebox, \ovalbox, \Ovalbox
 
+% Nice captions with a blue line separating table/figure from caption
 \makeatletter
 	\renewcommand{\@makecaption}[2]{
 		\vspace{3pt}
@@ -52,6 +53,21 @@
 		\vspace{5pt}
 	}
 \makeatother
+
+% Same for longtable
+% > new for BALL release 1.2
+\makeatletter
+	\renewcommand{\LT@makecaption}[3]{%
+		\LT@mcol\LT@cols c{\hbox to\z@{\hss\parbox[t]\hsize{%
+			\vspace{3pt}
+			\noindent{\color{blue}\rule{\textwidth}{1pt}}\par%
+			\noindent{\small{\sffamily #2:}\hspace{5pt}\itshape #3\par}
+			\vspace{5pt}
+		\endgraf\vskip\baselineskip}
+		\hss} }
+	}
+\makeatother
+
 % 
 %  create a fancy float caption: 
 %    - blue rule under the float
@@ -199,7 +215,7 @@
 \newcommand{\ttindex}[1]{{\ttfamily{#1}}\index{#1@{\ttfamily{#1}}}}
 % prints the term in ttfont and creates an index entry. Use for 
 % LD_LIBRARY_PATH to avoid it ending up under Symbols in the Index
-% > \newcommand new for V1.2 (AK)
+% > \newcommand new for BALL release 1.2
 
 \newcommand{\class}[1]{{\ttfamily{#1}}\index{#1@{\ttfamily{#1}}
 (BALL~class)}\index{BALL!classes!#1@{\ttfamily{#1}}}}
@@ -231,6 +247,12 @@
 %  - first with their name
 %  - then under BALL!processors!<function name>
 
+\newcommand{\accessor}[1]{{\ttfamily{#1}}\index{#1@{\ttfamily{#1}}
+(accessor)}\index{Atom!accessors!#1@{\ttfamily{#1}}}}
+% accessor names are typeset in typewriter bold and indexed automatically:
+%  - first with their name
+%  - then under Atom!accessors!<accessor name>
+
 \newcommand{\member}[2]{%
   {\ttfamily{#2}}%
   \index{#1@{\ttfamily{#2}} (member of {\ttfamily{#1}})}%
@@ -239,7 +261,7 @@
 % method names are typeset in typewriter bold and indexed automatically:
 %  - first with their name
 %  - then under BALL!members!<function name>
-% > fixed for V1.2 (AK)
+% > fixed for Ball release  1.2
 
 \newcommand{\attribute}[2]{{\ttfamily{#2}}\index{#2@{\ttfamily{#2}}
 ({\ttfamily #1} attribute)}\index{BALL!!#1!#2@{\ttfamily{#2}}}}

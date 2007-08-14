@@ -77,7 +77,7 @@ happen.
 
 Although our protein structure is correct, the positions of the added hydrogen
 atoms are only approximations of the true positions.
-\class{AddHydrogensProcessor} tries to set the positions based on the
+\class{Add\-Hydrogens\-Processor} tries to set the positions based on the
 positions given in the \class{FragmentDB} templates, which usually deviate
 from their optimal position in the given structure. We can relax those
 hydrogen positions using a molecular mechanics calculation.
@@ -126,7 +126,7 @@ for which the expression evaluates to true. In our case, the expression
 
 \noindent
 An energy minimization of those hydrogens is done using the
-\class{ConjugateGradient\-Minimizer}. It is not hard to figure out that this
+\class{Conjugate\-Gradient\-Minimizer}. It is not hard to figure out that this
 class indeed implements a conjugate gradient energy minimization.
 In a similar fashion as the force field is bound to a system, the 
 energy minimizer instances are bound to the force field. Again, we can use a
@@ -153,8 +153,8 @@ minimizer: as soon as the RMS gradient of the system falls below 5~kJ/(mol
 are in kJ/mol, all positions and distances in {\AA} and therefore the gradient
 in kJ/(mol \AA). The current settings of the minimizer are all stored in 
 the member \member{EnergyMinimizer}{options} (a public instance of 
-\class{Options}), so the internal state of the minimizer is readily obtained by
-dumping \member{EnergyMinimizer}{options} to {\tt cout}.
+\class{Options}), so the internal state of the minimizer is readily obtained 
+by dumping \member{EnergyMinimizer}{options} to {\tt cout}.
 
 Finally, a call to \method{minimize} with argument 100 will cause the
 minimizer to run for
@@ -168,7 +168,7 @@ molecules, and so on. For a more detailed description, please read Section
 therefore to deselect the whole system:
 
 \begin{lstlisting}{}
-	S.deselect();
+  S.deselect();
 \end{lstlisting}
 
 \noindent

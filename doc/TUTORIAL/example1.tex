@@ -18,25 +18,41 @@ first create an (empty) \Index{atom}. Atoms are represented by the class
 	
 \noindent
 Atoms have a number of attributes. As we created this atom without specifying
-any of its properties, these attributes are set to their defaults. The
-following table lists the attributes of an atom along with its
+any of its properties, these attributes are set to their defaults. 
+Table \ref{table:atomattributes} lists the attributes of an atom along with its
 \newtermdef{accessors} (methods to access or modify an attribute) and default
 values.
-\begin{center}
-  \begin{tabular}{lllc}
-  attribute   &	type       & accessors               & default\\
-  \hline
-  name        & String     & setName,getName         & {\tt ""}\\
-  element     & Element    & setElement,getElement   & {\tt Element::UNKNOWN}\\
-  charge      & float      & setCharge,getCharge     & 0.0\\
-  radius      & float      & setRadius,getRadius     & 0.0\\
-  type name   & String     & setTypeName,getTypeName & {\tt ""}\\
-  type        & Atom::Type & setType,getType         & {\tt Atom::INVALID\_TYPE}\\
-  position    & Vector3    & setPosition,getPosition & (0, 0, 0)\\
-  velocity    & Vector3    & setVelocity,getVelocity & (0, 0, 0)\\
-  force       & Vector3    & setForce,getForce       & (0, 0, 0)
-  \end{tabular}
-\end{center}
+
+\begin{table} [h]
+\centering
+\begin{tabular}{|l|l|l|c|}
+\hline
+\bf Attribute &	\bf Type   & \bf Accessors          & \bf Default value\\
+\hline
+name          & String     & \accessor{setName}     & {\tt ""}\\
+              &            & \accessor{getName}     & \\
+element       & Element    & \accessor{setElement}  & {\tt Element::UNKNOWN}\\
+              &            & \accessor{getElement}  & \\
+charge        & float      & \accessor{setCharge}   & 0.0\\
+              &            & \accessor{getCharge}   & \\
+radius        & float      & \accessor{setRadius}   & 0.0\\
+              &            & \accessor{getRadius}   & \\
+type name     & String     & \accessor{setTypeName} & {\tt ""}\\
+              &            & \accessor{getTypeName} & \\
+type          & Atom::Type & \accessor{setType}     & {\tt Atom::INVALID\_TYPE}\\
+              &            & \accessor{getType}     & \\
+position      & Vector3    & \accessor{setPosition} & (0, 0, 0)\\
+              &            & \accessor{getPosition} & \\
+velocity      & Vector3    & \accessor{setVelocity} & (0, 0, 0)\\
+              &            & \accessor{getVelocity} & \\
+force         & Vector3    & \accessor{setForce}    & (0, 0, 0) \\
+              &            & \accessor{getForce}    & \\
+\hline
+\end{tabular}
+\caption[Attributes of an atom]
+{Atttributes of an atom along with its accessors and default values.}
+\label{table:atomattributes}
+\end{table}
 
 \noindent
 For example, we can assign the \Index{element} for our new atom:
@@ -72,9 +88,8 @@ coordinates. Thus, we can assign the coordinates as follows:
 \end{lstlisting}
 
 \noindent
-
-Now, our three atoms are of the right type and at the right positions. However, we
-do not yet have a molecule, so let's create one:\\
+Now, our three atoms are of the right type and at the right positions. However,
+we do not yet have a molecule, so let's create one:
 
 \begin{lstlisting}{}
   Molecule* water = new Molecule;
@@ -195,6 +210,7 @@ example, we can store our two water molecules in a system object:
            ({\tt tutorial1.C})}
   \label{fig:tut1-screenshot}
 \end{figure}
+
 \noindent
 We can now manipulate the two water molecules simultaneously. For example a
 further application of the translation processor to the system would apply
@@ -202,30 +218,21 @@ the translation to both molecules.
 But now we would like to have a look at what we built. So we might write our
 system to a file and inspect it with a molecule viewer (\eg BALLView).
 BALL supports a variety of file formats. For example we could write the system
-to a HyperChem HIN file~\cite{HyperChem}:
+to a HyperChem HIN file~\cite{HyperChem}: \label{useofstreams}
+
 \begin{lstlisting}{}
   HINFile outfile("water.hin", File::OUT);
   outfile << S;
   outfile.close();
 \end{lstlisting}
+
 \noindent
 These three lines of code create a \class{HINFile} object which is used to
 read and write HyperChem files. The first line opens a file named {\tt
 water.hin} for output ({\tt File::OUT}; if the second argument is omitted the
-file is opened for reading only).
-The second line uses the stream operator {\tt <<} to write the contents
-of system {\tt S} to this file. The file is closed in the third line.
-
-% ????? [anker]
-% The following is not true. If we use a pointer here, then it's OK, but
-% with a System it simply doesn't work. What do we want here? I'd prefer a
-% Sytsem instead of a System*.
-
-% Finally, we have to delete all the objects we created. This is very simple:
-% 
-% \begin{lstlisting}{}
-% 	delete S;
-% \end{lstlisting}
+file is opened for reading only). The second line uses the stream operator 
+{\tt <<} \index{operator {\tt <<}} to write the contents of system {\tt S} to 
+this file. The file is closed in the third line.
 
 \noindent 
 As all molecules and atoms we created are inside the system, they are deleted
@@ -248,7 +255,7 @@ in the BALLView viewer.
 
 To compile this small example, we still have to include a few header files.
 The complete file is shown in Listing~\ref{lst:tutorial1} on
-page~\pageref{lst:tutorial1} and can be found in \mbox{{\tt
+Page~\pageref{lst:tutorial1} and can be found in \mbox{{\tt
 BALL/source/TUTORIAL/tutorial1.C}}.
 
 First, we have to include \file{iostream} as we use {\tt cout} and {\tt endl}
@@ -280,9 +287,9 @@ libraries are installed.
 
 After the successful execution of the example, a file named {\tt water.hin}
 should appear in the current directory. This file contains the two water
-molecules. You might inspect it with the molecule viewer BALLView.
-Fig.~\ref{fig:tut1-screenshot} shows a screenshot of BALLView displaying the two
-water molecules.
+molecules. You might inspect it with the molecule viewer \mbox{BALLView}.
+Fig.~\ref{fig:tut1-screenshot} shows a screenshot of \mbox{BALLView} 
+displaying the two water molecules.
 
 \newpage
 \begin{lstlisting}[captionpos=t,caption={The complete source code of the first example.}\label{lst:tutorial1}]{}

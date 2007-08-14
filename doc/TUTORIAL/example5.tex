@@ -96,18 +96,26 @@ letters or is simply a floating point number. The following code snippet will
 give you some idea of the power of the predicates.
 \begin{lstlisting}{}
   String T("This STRING does not start with PREFIX");
-  cout << "String is empty? " << T.isEmpty() << endl;
-  cout << "Has prefix \"PREFIX\"? " << T.hasPrefix("PREFIX") << endl;
-  cout << "Contains \"PREFIX\"? " << T.hasSubstring("PREFIX") << endl;
-  cout << "Contains only letters? " << T.isAlpha() << endl;
+  cout << "String is empty? "       << T.isEmpty()
+       << endl;
+  cout << "Has prefix \"PREFIX\"? " << T.hasPrefix("PREFIX")
+       << endl;
+  cout << "Contains \"PREFIX\"? "   << T.hasSubstring("PREFIX")
+       << endl;
+  cout << "Contains only letters? " << T.isAlpha()
+       << endl;
 \end{lstlisting}
+
+\noindent
 We will get the following output:
+
 \begin{lstlisting}{}
   String is empty? 0
   Has prefix "PREFIX"? 0
   Contains substring "PREFIX"? 1
   Contains only letters? 1
 \end{lstlisting}
+
 
 \subsection{Comparing Strings}
 
@@ -145,29 +153,37 @@ Everyone familiar with measurement data processing encountered the problem of
 getting data fields out of lines containing several values of data. Quite
 often interpreter languages like awk or perl are used for such tasks. The
 disadvantage of using such tools obviously is that you cannot integrate such
-languages easily into a C++ program. The BALL development team was also
+languages easily into a \CPP program. The BALL development team was also
 frequently confronted with such problems. Resultingly, BALL strings provide
 methods to extract fields from strings.
+
 \begin{lstlisting}{}
   String data = "1 2 3 4.567 8 blah";
   cout << "Line contains " << data.countFields() 
-		 << " values" << endl;
+       << " values" << endl;
   cout << "The data at index 5 is " << data.getField(5) << endl;
 \end{lstlisting}
-The code above should print the number 8.
-Sometimes log files contain quoted data. You can even handle such lines by
-using the field functions for quoted entries:
+
+\noindent
+The code above should print the number 8. Sometimes log files contain quoted
+data. You can even handle such lines by using the field functions for quoted
+entries:
+
 \begin{lstlisting}{}
   String data = "1 2 3 4.567 \"8 blah\"";
   cout << "Line contains " << data.countFieldsQuoted() 
-		 << " values" << endl;
-  cout << "The data at index 5 is " << data.getFieldQuoted(5) << endl;
+       << " values" << endl;
+  cout << "The data at index 5 is " << data.getFieldQuoted(5)
+       << endl;
 \end{lstlisting}
+
+\noindent
 The code above should print the number "8 blah".
 
 Additionally BALL strings know how to get single lines from a stream. So, if
 you want to read and analyze a log file, open it, read the sinlge lines and
 get the values you want:
+
 \begin{lstlisting}{}
   istream is;
   Index index = 5;
