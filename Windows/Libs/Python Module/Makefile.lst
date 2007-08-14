@@ -5,10 +5,7 @@ pyColorRGBAVector.obj \
 pyCompositeList.obj \
 pyConstant.obj \
 pyDatasetVector.obj \
-pyGeometricObjectList.obj \
 pyIndexList.obj \
-pyRegularData3DList.obj \
-pyRepresentationList.obj \
 sipBALLAddBackboneModel.obj \
 sipBALLAddBallAndStickModel.obj \
 sipBALLAddCartoonModel.obj \
@@ -144,6 +141,7 @@ sipBALLLightSource.obj \
 sipBALLLine.obj \
 sipBALLLine3.obj \
 sipBALLLineBasedFile.obj \
+sipBALLLineSearch.obj \
 sipBALLLogView.obj \
 sipBALLLongIndex.obj \
 sipBALLMainControl.obj \
@@ -151,6 +149,7 @@ sipBALLMatrix4x4.obj \
 sipBALLMesh.obj \
 sipBALLMessage.obj \
 sipBALLMicroCanonicalMD.obj \
+sipBALLMMFF94.obj \
 sipBALLModelProcessor.obj \
 sipBALLModifyRepresentationDialog.obj \
 sipBALLModularWidget.obj \
@@ -211,7 +210,6 @@ sipBALLPyColorRGBAVector.obj \
 sipBALLPyCompositeList.obj \
 sipBALLPyDatasetVector.obj \
 sipBALLPyIndexList.obj \
-sipBALLPyRegularData3DList.obj \
 sipBALLPyWidget.obj \
 sipBALLQuaternion.obj \
 sipBALLRadiusRuleProcessor.obj \
@@ -222,6 +220,7 @@ sipBALLRegularData2DIndexType.obj \
 sipBALLRegularData3D.obj \
 sipBALLRegularData3DController.obj \
 sipBALLRegularData3DIndexType.obj \
+sipBALLRegularData3DList.obj \
 sipBALLRegularExpression.obj \
 sipBALLRenderer.obj \
 sipBALLRepresentation.obj \
@@ -250,6 +249,7 @@ sipBALLSelectable.obj \
 sipBALLSelector.obj \
 sipBALLServer.obj \
 sipBALLServerNotCompositeObject.obj \
+sipBALLShiftedLVMMMinimizer.obj \
 sipBALLShowDisplayPropertiesMessage.obj \
 sipBALLSimpleBox.obj \
 sipBALLSimpleBox3.obj \
@@ -263,6 +263,7 @@ sipBALLSphere3.obj \
 sipBALLStage.obj \
 sipBALLstd__openmode.obj \
 sipBALLSteepestDescentMinimizer.obj \
+sipBALLStrangLBFGSMinimizer.obj \
 sipBALLString.obj \
 sipBALLSubstring.obj \
 sipBALLSurface.obj \
