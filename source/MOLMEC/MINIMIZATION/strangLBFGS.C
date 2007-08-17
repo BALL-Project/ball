@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: strangLBFGS.C,v 1.1.4.6 2007/08/07 09:13:07 aleru Exp $
+// $Id: strangLBFGS.C,v 1.1.4.7 2007/08/17 09:22:32 anhi Exp $
 //
 // Minimize the potential energy of a system using an improved version
 // of the limited memory BFGS with Strang recurrences.
@@ -367,7 +367,7 @@ namespace BALL
 		{
 			rho_[index_of_free_vect_] = sty;
 			
-			if (sty > 0.)
+			if ((sty > 0.) && (yty > cutlo_))
 			{
 				scale = sty/yty;
 			}
@@ -409,6 +409,7 @@ namespace BALL
 				}
 				
 				tmp /= rho_[k];
+
 				work_val_[k] = tmp;
 				for(r = 0, j = k*number_of_atoms_; r < number_of_atoms_; ++r, ++j)
 				{
@@ -763,7 +764,7 @@ namespace BALL
 		}
 			
 		#ifdef BALL_DEBUG
-			Log.info() << "LineSearch: step = " << step << " result = " << result << endl;
+			Log.info() << "LineSearch: step = " << step_ << " result = " << result << endl;
 		#endif
 			
 		return step_;

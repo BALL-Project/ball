@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.C,v 1.20.8.2 2007/05/09 16:43:29 aleru Exp $
+// $Id: lineSearch.C,v 1.20.8.3 2007/08/17 09:22:31 anhi Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
@@ -25,8 +25,8 @@
 // Nonnegative relative tolerance for an acceptable step.
 #define LINESEARCH__DEFAULT_XTOL 0.1
 
-//#define BALL_DEBUG
-#undef BALL_DEBUG
+#define BALL_DEBUG
+//#undef BALL_DEBUG
 
 namespace BALL 
 {
@@ -210,12 +210,22 @@ namespace BALL
 		
 		// Initial directional derivative.
 		double g_init = (initial_gradient * direction);
+
+		// We have obviously found our minimum along this direction to 
+		// reasonable precision! We return false to force a restart of
+		// the minimization procedure.
+		if (fabs(g_init) < 1e-16)
+		{
+			stp = 0;
+			return false;
+		}
 		
 		// Minimum and maximum stepsizes.
 		double minstp = 0.;
 		
 		// Compute the maximum step size by the minimizers 'maximum displacement'
 		double maxstp = minimizer.getMaximumDisplacement();
+
 		if (maxstp < 0.)
 		{
 			// No maximum displacement given, estimate the maximum stepsize
