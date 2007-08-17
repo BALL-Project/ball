@@ -1,8 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StrangLBFGSMinimizer_test.C,v 1.1.4.2 2007/05/07 11:51:10 aleru Exp $
+// $Id: StrangLBFGSMinimizer_test.C,v 1.1.4.3 2007/08/17 09:22:05 anhi Exp $
 //
+
+// NOTE: we are still missing a test that triggers a restart in the minimization after
+//			 the line search fails
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -17,7 +20,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(StrangLBFGSMinimizer, "$Id: StrangLBFGSMinimizer_test.C,v 1.1.4.2 2007/05/07 11:51:10 aleru Exp $")
+START_TEST(StrangLBFGSMinimizer, "$Id: StrangLBFGSMinimizer_test.C,v 1.1.4.3 2007/08/17 09:22:05 anhi Exp $")
 
 using namespace BALL;
 
@@ -234,6 +237,8 @@ CHECK(StrangLBFGSMinimizer::minimize(Size, bool, improved))
 	FF.updateEnergy();
 	FF.updateForces();
 	
+HINFile test("schmadder.hin", std::ios::out);
+test << S;
 	TEST_REAL_EQUAL(FF.getEnergy(), -0.359813)	
 	TEST_EQUAL(FF.getRMSGradient() <= bfgsm.getMaxGradient(), true)	
 	PRECISION(5e-3)
