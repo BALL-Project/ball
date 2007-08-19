@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.25.18.1 2007/03/25 22:02:28 oliver Exp $
+// $Id: backboneModel.C,v 1.25.18.2 2007/08/19 14:23:37 anhi Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -1266,13 +1266,18 @@ void AddBackboneModel::calculateRibbonEllipse_(float ribbon_width, float ribbon_
 {
 	Position temp = 0;
 	float step = 4. / slides_;
+
+	// NOTE: this code should definitely be rewritten...
 	for (float i = -1.0; i < 1.0; i+= step)
 	{
 		xs_[temp] = i * ribbon_width;
 		ys_[temp] = sqrt((1-i*i / ribbon_width * ribbon_width) * (ribbon_height * ribbon_height));
 
-		xs_[temp + middle_slide_] = -xs_[temp];
-		ys_[temp + middle_slide_] = -ys_[temp];
+		if (temp + middle_slide_ < slides_)
+		{
+			xs_[temp + middle_slide_] = -xs_[temp];
+			ys_[temp + middle_slide_] = -ys_[temp];
+		}
 		temp++;
 	}
 }
