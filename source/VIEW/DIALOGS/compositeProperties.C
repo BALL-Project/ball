@@ -113,7 +113,24 @@ void CompositeProperties::accept()
 		if (RTTI::isKindOf<Atom>(*composite_))
 		{
 			Atom* atom = (Atom*) composite_;
-			atom->setName(ascii(name_edit->text()));
+			
+			// if the atomtype has changed, we also want the atom name to be changed
+			if (    (atom->getElement() != PTE[(ascii(element_box->currentText()))])
+					 && (atom->getName() == ascii(name_edit->text())) 
+				 )
+			{
+				String new_name = PTE[(ascii(element_box->currentText()))].getSymbol();
+				// get the old atomnumber
+				String old_name = atom->getName();
+				old_name.toUpper();
+				new_name += old_name.trimLeft("ABCDEFGHIJKLMNOPQRSTUVWXYZ ");
+				atom->setName(new_name);
+				//getMainControl()->update(*atom);
+			}
+			else
+			{
+				atom->setName(ascii(name_edit->text()));
+			}
 			atom->setType(ascii(type_edit->text()).toShort());
 			atom->setTypeName(ascii(type_name_edit->text()));
 			atom->setCharge(ascii(charge_edit->text()).toFloat());
