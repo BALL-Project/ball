@@ -662,6 +662,14 @@ namespace BALL
 			*/
 			virtual void initializeGL();
 
+#ifdef ENABLE_RAYTRACING
+			/** Initialize the raytracing renderer.
+					This method will be called automatically before any call to raytracing functions.
+					\see RaytracingRenderer::init
+			*/
+			virtual void initializeRaytracing();
+#endif
+
 			/** Render the visualization.
 					Overriden qt method for rendering the visualization of this scene.
 					This method will be called automatically every time an update is necessary.
