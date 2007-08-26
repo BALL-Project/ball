@@ -107,6 +107,9 @@ namespace BALL
 				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage()),
 				gl_renderer_(new GLRenderer()),
+#ifdef ENABLE_RAYTRACING
+				rt_renderer_(new RaytracingRenderer()),
+#endif
 				light_settings_(new LightSettings(this)),
 				stage_settings_(new StageSettings(this)),
 				material_settings_(new MaterialSettings(this)),
@@ -140,6 +143,9 @@ namespace BALL
 				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage),
 				gl_renderer_(new GLRenderer),
+#ifdef ENABLE_RAYTRACING
+				rt_renderer_(new RaytracingRenderer()),
+#endif
 				light_settings_(0),
 				stage_settings_(0),
 				animation_thread_(0),
@@ -176,6 +182,9 @@ namespace BALL
 				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage(*scene.stage_)),
 				gl_renderer_(new GLRenderer()),
+#ifdef ENABLE_RAYTRACING
+				rt_renderer_(new RaytracingRenderer()),
+#endif
 				light_settings_(new LightSettings(this)),
 				stage_settings_(new StageSettings(this)),
 				material_settings_(new MaterialSettings(this)),
@@ -207,6 +216,9 @@ namespace BALL
 
 				delete stage_;
 				delete gl_renderer_;
+#ifdef ENABLE_RAYTRACING
+				delete rt_renderer_;
+#endif
 
 				if (animation_thread_ != 0) delete animation_thread_;
 			}
@@ -405,6 +417,13 @@ namespace BALL
 			gl_renderer_->enableVertexBuffers(want_to_use_vertex_buffer_);
  			stage_settings_->getGLSettings();
 		}
+
+#ifdef ENABLE_RAYTRACING	
+		void Scene::initializeRaytracing()
+		{
+			rt_renderer_->init(*this);
+		}
+#endif
 
 		void Scene::paintGL()
 		{
