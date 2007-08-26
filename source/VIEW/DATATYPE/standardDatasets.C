@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardDatasets.C,v 1.1.4.4 2007/05/01 21:59:49 amoll Exp $
+// $Id: standardDatasets.C,v 1.1.4.4 2007-05-01 21:59:49 amoll Exp $
 //
 
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
@@ -302,6 +302,7 @@ namespace BALL
 			menu->addSeparator();
 			menu->addAction("Create normalized Grid", this, SLOT(createHistogramGrid()));
 			menu->addAction("Create Gradient Grid", this, SLOT(createVectorGrid()));
+			menu->addAction("Create raytraceable Grid", this, SLOT(createRaytraceableGrid()));
 			return menu;
 		}
 
@@ -359,6 +360,21 @@ namespace BALL
 			return true;
 		}
 
+		bool RegularData3DController::createRaytraceableGrid()
+		{
+			Dataset* old_set = getSelectedDataset();
+			RegularData3D* grid3d = getData(old_set);
+
+			RaytraceableGrid* new_grid = new RaytraceableGrid(grid3d);
+			RaytraceableGridDataset* new_set = new RaytraceableGridDataset();
+			new_set->setComposite(old_set->getComposite());
+			new_set->setType(RaytraceableGridController::type);
+			new_set->setName(old_set->getName());
+			new_set->setData(new_grid);
+			DatasetMessage* msg = new DatasetMessage(new_set, DatasetMessage::ADD);
+			getDatasetControl()->getMainControl()->sendMessage(*msg);
+			return true;
+		}
 
 		void RegularData3DController::visualizeGrid()
 		{
@@ -393,7 +409,6 @@ namespace BALL
 			getDatasetControl()->getMainControl()->insert(*rep);
 			getDatasetControl()->getMainControl()->update(*rep);
 		}
-
 
 		void RegularData3DController::computeIsoContourSurface()
 		{
@@ -717,6 +732,7 @@ namespace BALL
 			dialog_ = new SnapshotVisualisationDialog(getDatasetControl());
 			dialog_->setSnapShotManager(ssm);
 			dialog_->show();
+
 			return true;
 		}
 
@@ -996,6 +1012,61 @@ namespace BALL
 			return true;
 		}
 
+		/////////////////////////////////////////////////////////////////////
+		// RaytraceableGrid Controller:
+
+		String RaytraceableGridController::type = "Raytraceable Grid";
+
+		RaytraceableGridController::RaytraceableGridController()
+			: DatasetController()
+		{
+			type_ = type;
+			setIdentifier("RaytraceableGridController");
+			registerThis();
+		}
+
+		RaytraceableGridController::RaytraceableGridController(RaytraceableGridController& rc)
+			: DatasetController(rc)
+		{
+			setIdentifier("RaytraceableGridController");
+			registerThis();
+		}
+
+		RaytraceableGridController::~RaytraceableGridController()
+			throw()
+		{
+		}
+
+		RaytraceableGrid* RaytraceableGridController::getData(Dataset* set)
+		{
+			RaytraceableGridDataset* dset = dynamic_cast<RaytraceableGridDataset*>(set);
+			if (dset == 0) return 0;
+			return dset->getData();
+		}
+			
+		void RaytraceableGridController::deleteDataset_(Dataset* set)
+		{
+			RaytraceableGrid* data = getData(set);
+			if (data == 0) return;
+			delete data;
+		}
+
+		QMenu* RaytraceableGridController::buildContextMenu(QTreeWidgetItem* item)
+		{
+			QMenu* menu = DatasetController::buildContextMenu(item);
+			if (menu == 0) return 0;
+			menu->addSeparator();
+			return menu;
+		}
+
+		bool RaytraceableGridController::createMenuEntries()
+		{
+			if (!DatasetController::createMenuEntries()) return false;
+
+			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID);
+
+			return true;
+		}
 
 	} // namespace VIEW
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardDatasets.h,v 1.1.4.1 2007/03/25 21:25:42 oliver Exp $
+// $Id: standardDatasets.h,v 1.1.4.1 2007-03-25 21:25:42 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_STANDARDDATASETS_H
@@ -22,6 +22,10 @@
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 # include <BALL/DATATYPE/regularData3D.h>
 #endif 
+
+#ifndef BALL_VIEW_DATATYPE_RAYTRACEABLEGRID_H
+# include <BALL/VIEW/DATATYPE/raytraceableGrid.h>
+#endif
 
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
@@ -100,6 +104,9 @@ class BALL_VIEW_EXPORT RegularData3DController
 
 	///
 	bool createVectorGrid();
+
+	///
+	bool createRaytraceableGrid();
 
 	///
 	void computeIsoContourSurface();
@@ -238,7 +245,7 @@ typedef TRegularData3D<Vector3> VectorGrid;
 
 BALL_CREATE_DATASET(VectorGrid)
 
-/** Controller base class for one type of Dataset
+/** Controller class for VectorGrid
 */
 class BALL_VIEW_EXPORT VectorGridController
 	: public DatasetController
@@ -287,6 +294,47 @@ class BALL_VIEW_EXPORT VectorGridController
 	FieldLinesDialog* 	dialog_;
 };
 
+/////////////////////////////////////////////////////////////////////////////
+
+BALL_CREATE_DATASET(RaytraceableGrid)
+
+/** Controller class for RaytraceableGrid
+ */
+class BALL_VIEW_EXPORT RaytraceableGridController
+	: public DatasetController
+{
+	Q_OBJECT
+
+	public:
+
+	BALL_EMBEDDABLE(RaytraceableGridController, DatasetController)
+
+	///
+	RaytraceableGridController();
+
+	///
+	RaytraceableGridController(RaytraceableGridController& rc);
+
+	///
+	virtual ~RaytraceableGridController() throw();
+
+	///
+	virtual bool createMenuEntries();
+
+	///
+	virtual QMenu* buildContextMenu(QTreeWidgetItem* item);
+
+	///
+	RaytraceableGrid* getData(Dataset* set);
+
+	static String type;
+
+	public slots:
+
+	protected:
+
+	void deleteDataset_(Dataset* set);
+};
 
 	} // namespace VIEW
 } // namespace BALL
