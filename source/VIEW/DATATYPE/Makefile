@@ -24,6 +24,7 @@ CPP_SOURCES=\
 	vertex1.C\
 	vertex2.C\
 	dataset.C\
+	raytraceableGrid.C\
 	standardDatasets.C\
 
 MOC_SOURCES=\
