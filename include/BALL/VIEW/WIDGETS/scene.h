@@ -33,6 +33,17 @@
 #include <QtGui/QToolBar>
 #include <QtGui/QActionGroup>
 
+// This allows us to switch raytracing on and off. Later, we might add this flag
+// to config.h or remove it completely and always raytracing always.
+//#undef ENABLE_RAYTRACING
+#define ENABLE_RAYTRACING
+
+#ifdef ENABLE_RAYTRACING
+	#ifdef BALL_VIEW_RENDERING_RAYTRACINGRENDERER_H
+	# include <BALL/VIEW/RENDERING/raytracingRenderer.h>
+	#endif
+#endif 
+
 class QMouseEvent;
 class QRubberBand;
 class QMenu;
@@ -384,6 +395,12 @@ namespace BALL
 			/// 
 			GLRenderer& getGLRenderer()
 				throw() { return *gl_renderer_;}
+
+#ifdef ENABLE_RAYTRACING
+			///
+			RaytracingRenderer& getRaytracingRenderer()
+				throw() { return *rt_renderer_;}
+#endif
 
 			/** Set a new GLRenderer.
 			 		This method is intended for users, that what to
@@ -806,6 +823,10 @@ namespace BALL
 			Camera stored_camera_;
 
 			GLRenderer* gl_renderer_;
+
+#ifdef ENABLE_RAYTRACING
+			RaytracingRenderer* rt_renderer_;
+#endif
 
 			static float mouse_sensitivity_;
 			static float mouse_wheel_sensitivity_;
