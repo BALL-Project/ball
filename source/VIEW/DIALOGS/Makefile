@@ -57,6 +57,7 @@ CPP_SOURCES=\
 	exportGeometryDialog.C\
 	PTEDialog.C\
 	pubchemDialog.C\
+	raytraceableContourSurfaceDialog.C\
 	setCamera.C\
 	setClippingPlane.C\
 	serverPreferences.C\
@@ -106,6 +107,7 @@ MOC_SOURCES=\
 	exportGeometryDialog_moc.C\
 	PTEDialog_moc.C\
 	pubchemDialog_moc.C\
+	raytraceableContourSurfaceDialog_moc.C\
 	serverPreferences_moc.C\
 	setCamera_moc.C\
 	setClippingPlane_moc.C\
@@ -152,6 +154,7 @@ UIC_SOURCES=\
 	PTEDialogData.C\
 	pubchemDialogData.C\
 	pythonSettingsData.C\
+	raytraceableContourSurfaceDialogData.C\
 	setCameraData.C\
 	setClippingPlaneData.C\
 	snapShotVisualisationData.C\

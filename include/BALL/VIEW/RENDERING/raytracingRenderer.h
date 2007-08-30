@@ -27,7 +27,7 @@
 # include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
-#include <BALL/DATATYPE/raytraceableGrid.h>
+#include <BALL/VIEW/DATATYPE/raytraceableGrid.h>
 
 #ifndef APIENTRY
 #define APIENTRY
@@ -211,7 +211,8 @@ namespace BALL
 				throw();
 
 			///
-			String getRenderer();
+			String getRenderer()	
+				throw();
 
 			/*
 			///
@@ -221,7 +222,8 @@ namespace BALL
 			///
 			void initPerspective();
 
-			void raytraceRepresentation_(const Representation& representation);
+			void raytraceRepresentation_(const Representation& representation)
+				throw();
 
 			//_
 			void setColorRGBA_(const ColorRGBA& color)
@@ -250,6 +252,10 @@ namespace BALL
 
 			//_
 			float 								y_scale_;
+	
+			/* Lukas: Do we need these things? 
+			/// Typedef for OPENGL names
+			typedef unsigned int Name;
 
 			// naming of geometric objects
 			typedef HashMap<const GeometricObject*, Name> NameHashMap;
@@ -261,12 +267,13 @@ namespace BALL
 			NameHashMap							object_to_name_;
 			DisplayListHashMap 			display_lists_;
 			MeshBufferHashMap 			rep_to_buffers_;
-			Name 										all_names_;
+			Name 										all_names_; */
 			Vector3 								normal_vector_;
-
-			StereoMode 							stereo_;
+	
+		/*	StereoMode 							stereo_;  */
 			RenderMode 							render_mode_;
-
+/*
+ * Lukas: And these?
 			bool 										use_vertex_buffer_;
 			bool 										picking_mode_;
 			ModelType 							model_type_;
@@ -275,13 +282,11 @@ namespace BALL
 			bool 										drawed_other_object_;
 			bool 										drawed_mesh_;
 			HashMap<const RegularData3D*, Position> grid_to_texture_;
+			*/
 		};
 
-#	ifndef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/VIEW/RENDERING/glRenderer.iC>
-#	endif
 
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_VIEW_RENDERING_GLRENDERER_H
+#endif // BALL_VIEW_RENDERING_RAYTRACINGRENDERER_H

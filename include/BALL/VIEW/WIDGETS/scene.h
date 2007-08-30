@@ -37,9 +37,9 @@
 // to config.h or remove it completely and always raytracing always.
 //#undef ENABLE_RAYTRACING
 #define ENABLE_RAYTRACING
-
-#ifdef ENABLE_RAYTRACING
-	#ifdef BALL_VIEW_RENDERING_RAYTRACINGRENDERER_H
+			 
+#ifdef ENABLE_RAYTRACING 
+	#ifndef BALL_VIEW_RENDERING_RAYTRACINGRENDERER_H 
 	# include <BALL/VIEW/RENDERING/raytracingRenderer.h>
 	#endif
 #endif 

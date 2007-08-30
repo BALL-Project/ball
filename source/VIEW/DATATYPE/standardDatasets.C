@@ -1018,7 +1018,8 @@ namespace BALL
 		String RaytraceableGridController::type = "Raytraceable Grid";
 
 		RaytraceableGridController::RaytraceableGridController()
-			: DatasetController()
+			: DatasetController(),
+				rt_contour_surface_dialog_(0)
 		{
 			type_ = type;
 			setIdentifier("RaytraceableGridController");
@@ -1026,7 +1027,8 @@ namespace BALL
 		}
 
 		RaytraceableGridController::RaytraceableGridController(RaytraceableGridController& rc)
-			: DatasetController(rc)
+			: DatasetController(rc),
+				rt_contour_surface_dialog_(rc.rt_contour_surface_dialog_)
 		{
 			setIdentifier("RaytraceableGridController");
 			registerThis();
@@ -1035,6 +1037,8 @@ namespace BALL
 		RaytraceableGridController::~RaytraceableGridController()
 			throw()
 		{
+			if (rt_contour_surface_dialog_)
+				delete rt_contour_surface_dialog_;
 		}
 
 		RaytraceableGrid* RaytraceableGridController::getData(Dataset* set)
@@ -1056,6 +1060,8 @@ namespace BALL
 			QMenu* menu = DatasetController::buildContextMenu(item);
 			if (menu == 0) return 0;
 			menu->addSeparator();
+			menu->addAction("Create Contour Surface", this, SLOT(visualizeRaytraceableContourSurface()));
+			menu->addSeparator();
 			return menu;
 		}
 
@@ -1066,6 +1072,50 @@ namespace BALL
 			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID);
 
 			return true;
+		}
+
+		void  RaytraceableGridController::visualizeRaytraceableContourSurface()
+		{
+			Dataset* data = (Dataset*)getSelectedDataset();
+			if (getData(data) == 0)
+			{
+				BALLVIEW_DEBUG
+				return;
+			}
+
+			RaytraceableGrid* grid = getData(data);
+			RaytraceableContourSurfaceDialog rcsd(getDatasetControl());
+			rcsd.setGrid(grid);
+			rcsd.exec();
+		
+/*			if (rt_contour_surface_dialog_ == 0) 
+			{
+				rt_contour_surface_dialog_ = new RaytraceableContourSurfaceDialog(getDatasetControl());
+			}
+			*/
+			//rt_contour_surface_dialog_->setController(this);
+			//rt_contour_surface_dialog_->setGrid(getData(data));
+			//since this is no modal window no exec but:
+			/*rt_contour_surface_dialog_->show();
+			rt_contour_surface_dialog_->raise();
+			rt_contour_surface_dialog_->activateWindow();*/
+			//rt_contour_surface_dialog_->exec();
+/* 
+ * TODO: something like
+ * 	Representation* rep = new Representation();
+			rep->insert(*mesh);
+			rep->setModelType(MODEL_CONTOUR_SURFACE); 
+
+			List<const Composite*> composites;
+			if (data.getComposite() != 0) composites.push_back(data.getComposite());
+			rep->setComposites(composites);
+
+			// Make sure BALLView knows about the new representation.
+			getMainControl()->insert(*rep);
+			getMainControl()->update(*rep);
+
+ * */
+
 		}
 
 	} // namespace VIEW
