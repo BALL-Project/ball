@@ -27,6 +27,10 @@
 # include <BALL/VIEW/DATATYPE/raytraceableGrid.h>
 #endif
 
+#ifndef BALL_VIEW_DATATYPE_RAYTRACEABLECONTOURSURFACEDIALOG_H
+# include <BALL/VIEW/DIALOGS/raytraceableContourSurfaceDialog.h>
+#endif
+
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
 #endif
@@ -330,10 +334,15 @@ class BALL_VIEW_EXPORT RaytraceableGridController
 	static String type;
 
 	public slots:
+	
+	///
+	void  visualizeRaytraceableContourSurface();
+
 
 	protected:
 
 	void deleteDataset_(Dataset* set);
+	RaytraceableContourSurfaceDialog* rt_contour_surface_dialog_;
 };
 
 	} // namespace VIEW

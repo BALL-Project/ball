@@ -18,6 +18,7 @@ CPP_SOURCES=\
 	POVRenderer.C\
 	STLRenderer.C\
 	VRMLRenderer.C\
+	raytracingRenderer.C\
 	vertexBuffer.C
 
 include ../../common.mak

@@ -35,6 +35,11 @@ namespace BALL
 					throw()
 				{}
 
+				
+				float getGridMinValue() throw();
+				
+				float getGridMaxValue() throw();
+
 			protected:
 				RegularData3D* grid_;
 		};
