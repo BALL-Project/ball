@@ -40,7 +40,6 @@ namespace BALL
 	namespace VIEW
 	{
 		class Scene;
-		// TODO: do we need this?
 		class ColorMap;
 
 		/** RaytracingRenderer
@@ -53,8 +52,6 @@ namespace BALL
 			friend class Scene;
 			public:
 
-			// Lukas: can we support stereo display for raytracing as well???
-			/*
 			///
  			enum StereoMode
 			{
@@ -66,7 +63,6 @@ namespace BALL
 				/// Stereo mode for output on two projectors
 				DUAL_VIEW_STEREO
 			};
-			*/
 
 			// Lukas: which render modes can be supported by raytracing?
 			///
@@ -79,10 +75,7 @@ namespace BALL
 				RENDER_MODE_SOLID,
 
 				///
-				RENDER_MODE_TRANSPARENT,
-
-				///
-				RENDER_MODE_ALWAYS_FRONT
+				RENDER_MODE_TRANSPARENT
 			};
 
 			/// Default Constructor.
@@ -107,8 +100,6 @@ namespace BALL
 			virtual bool init(Scene& scene)
 				throw();
 
-			// Lukas: do we need this for raytracing?
-			/*
 			/// Initialise the renderer, e.g. the display lists.
 			virtual bool init(const Stage& stage, float height, float width)
 				throw();
@@ -116,7 +107,6 @@ namespace BALL
 			/// Set the light sources according to the stage
 			virtual void setLights(bool reset_all = false)
 				throw();
-			 */
 
 			// Lukas: does picking make sense for raytracing?
 			/* Pick geometric objects
@@ -163,8 +153,6 @@ namespace BALL
 			void updateBackgroundColor()
 				throw();
 
-			// Lukas: does this make sense for raytracing?
-			/*
 			// Initialise transparent rendering
 			void initTransparent() 
 				throw();
@@ -173,13 +161,8 @@ namespace BALL
 			void initSolid()
 				throw();
 			
-			// Initialise always front rendering
-			void initAlwaysFront()
-				throw();
-
 			/// Enable or disable antialiasing
 			void setAntialiasing(bool state);
-			 */
 			
 			/// Remove all references and auxilliary data for the given Representation
 			void removeRepresentation(const Representation& rep)
@@ -189,7 +172,6 @@ namespace BALL
 			void addRepresentation(const Representation& rep)
 				throw();
 		
-			/* Lukas: can we support those?
 			///
 			void setStereoMode(StereoMode state)
 				throw();
@@ -197,7 +179,6 @@ namespace BALL
 			///
 			StereoMode getStereoMode() const
 				throw();
-			*/
 
 			///
 			RenderMode getRenderMode() const
@@ -207,45 +188,35 @@ namespace BALL
 			void setRenderMode(RenderMode mode) { render_mode_ = mode;}
 			
 			///
-			virtual bool render(const Representation& representation)
+			virtual void deactivateAllRepresentations()
+				throw();
+
+			///
+			virtual bool activateRepresentation(const Representation& representation)
 				throw();
 
 			///
 			String getRenderer()	
 				throw();
 
-			/*
 			///
-			DrawingMode getDrawingMode() const;
-			*/
-
+			DrawingMode getDrawingMode() const {return drawing_mode_;};
+			
 			///
 			void initPerspective();
 
-			void raytraceRepresentation_(const Representation& representation)
+			/** The main raytracing function.
+			 *  This function is called by the scene as soon as all active
+			 *  representations have been registered using activateRepresentation()
+			 */
+			void raytraceAllRepresentations()
 				throw();
 
-			//_
-			void setColorRGBA_(const ColorRGBA& color)
-				throw();
-
-			//_
-			void generateIlluminationTexture_(float ka, float kd, float kr, float shininess);
-
-			inline Position getTextureIndex_(Position x, Position y, Position z, Size width, Size height);
-			Position createTextureFromGrid(const RegularData3D& grid, const ColorMap& map);
-			void removeTextureFor_(const RegularData3D& grid);
-			
-			/* Lukas: can we supprot clipping planes??  
 			void setupGridClipPlanes_(const GridVisualisation& slice);
-			*/
 			Scene* 								scene_;
 
 			///
 			DrawingMode 					drawing_mode_;
-
-			///
-			Index 								drawing_precision_;
 
 			//_
 			float 								x_scale_;
@@ -253,36 +224,12 @@ namespace BALL
 			//_
 			float 								y_scale_;
 	
-			/* Lukas: Do we need these things? 
-			/// Typedef for OPENGL names
-			typedef unsigned int Name;
-
-			// naming of geometric objects
-			typedef HashMap<const GeometricObject*, Name> NameHashMap;
-			typedef HashMap<Name, const GeometricObject*> GeometricObjectHashMap;
-			typedef HashMap<const Representation*, GLDisplayList*> DisplayListHashMap;
-			typedef HashMap<const Representation*, vector<MeshBuffer*> > MeshBufferHashMap;
-
-			GeometricObjectHashMap	name_to_object_;
-			NameHashMap							object_to_name_;
-			DisplayListHashMap 			display_lists_;
-			MeshBufferHashMap 			rep_to_buffers_;
-			Name 										all_names_; */
 			Vector3 								normal_vector_;
 	
-		/*	StereoMode 							stereo_;  */
+			StereoMode 							stereo_;
 			RenderMode 							render_mode_;
-/*
- * Lukas: And these?
-			bool 										use_vertex_buffer_;
+
 			bool 										picking_mode_;
-			ModelType 							model_type_;
-			Position 								display_lists_index_;
-			bool 										single_pick_;
-			bool 										drawed_other_object_;
-			bool 										drawed_mesh_;
-			HashMap<const RegularData3D*, Position> grid_to_texture_;
-			*/
 		};
 
 
