@@ -17,7 +17,7 @@ namespace BALL
 			: Renderer(),
 				scene_(0)
 		{
-
+			
 		}
 
 		RaytracingRenderer::~RaytracingRenderer()
@@ -38,9 +38,6 @@ namespace BALL
 
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "Drawing Precision: " 	<< drawing_precision_ 	<< std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
 			s << "Drawing Mode: " 		 	<< drawing_mode_  << std::endl;
@@ -82,6 +79,18 @@ namespace BALL
 			return true;
 		}
 		
+		bool RaytracingRenderer::init(const Stage& stage, float height, float width)
+			throw()
+		{
+			Renderer::init(stage, height, width);
+			
+			return true;
+		}
+		
+		void RaytracingRenderer::setLights(bool reset_all) 						throw()
+		{
+			// prepare the lights :-)
+		}
 
 		void RaytracingRenderer::setSize(float width, float height)
 			throw()
@@ -105,17 +114,17 @@ namespace BALL
 			// ?
 		}
 		
-/*		float  RaytracingRenderer::getXScale() const
+		float  RaytracingRenderer::getXScale() const
 			throw()
 		{
 			return 	x_scale_;
 		}
 
 		float  RaytracingRenderer::getYScale() const
-			throw();
+			throw()
 		{
 			return 	y_scale_;
-		} */
+		} 
 	
 		void RaytracingRenderer::updateCamera(const Camera* camera)
 			throw()
@@ -144,24 +153,56 @@ namespace BALL
 					(float) stage_->getBackgroundColor().getAlpha()); */
 		} 
 		
+		void RaytracingRenderer::initTransparent() 
+			throw()
+		{
+
+		}
+
+		void RaytracingRenderer::initSolid()
+			throw()
+		{
+
+		}
+			
+		void RaytracingRenderer::setAntialiasing(bool state)
+		{
+		}
+
 		void  RaytracingRenderer::removeRepresentation(const Representation& rep)
 			throw()
 		{
 		}
 
 		void  RaytracingRenderer::addRepresentation(const Representation& rep)
-				throw()
+			throw()
+		{
+		}
+	
+		void RaytracingRenderer::setStereoMode(StereoMode state)
+			throw()
 		{
 		}
 
-/*		RenderMode RaytracingRenderer::getRenderMode() const
-				throw()
+		///
+		RaytracingRenderer::StereoMode RaytracingRenderer::getStereoMode() const
+			throw()
+		{
+		}
+
+		RaytracingRenderer::RenderMode RaytracingRenderer::getRenderMode() const
+			throw()
 		{
 			return render_mode_;
 		}
-		*/
+	 
+		void RaytracingRenderer::deactivateAllRepresentations()
+			throw()
+		{
+		}
+
 			
-		bool RaytracingRenderer::render(const Representation& representation)
+		bool RaytracingRenderer::activateRepresentation(const Representation& representation)
 			throw()
 		{
 			if (representation.isHidden()) return true;
@@ -173,7 +214,6 @@ namespace BALL
 				return false;
 			}
 
-			drawing_precision_  = representation.getDrawingPrecision();
 			drawing_mode_ 		  = representation.getDrawingMode();
 
 			/* Lukas: perhaps we can consider different drawing modes, 
@@ -208,33 +248,15 @@ namespace BALL
 		{
 		}
 		
-		void RaytracingRenderer::raytraceRepresentation_(const Representation& representation)
+		void RaytracingRenderer::raytraceAllRepresentations()
 			throw()
 		{
 		}
 
-		void RaytracingRenderer::setColorRGBA_(const ColorRGBA& color)
+/*		void RaytracingRenderer::setColorRGBA_(const ColorRGBA& color)
 			throw()
 		{
-		}
+		}*/
 			
-		void RaytracingRenderer::generateIlluminationTexture_(float ka, float kd, float kr, float shininess)
-		{
-		}
-
-		inline Position RaytracingRenderer::getTextureIndex_(Position x, Position y, Position z, Size width, Size height)
-		{
-		}
-		
-		Position RaytracingRenderer::createTextureFromGrid(const RegularData3D& grid, const ColorMap& map)
-		{
-
-		}
-		
-		void RaytracingRenderer::removeTextureFor_(const RegularData3D& grid)
-		{
-		}
-			
-
 	}
 }
