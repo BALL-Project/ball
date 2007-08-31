@@ -1084,8 +1084,7 @@ namespace BALL
 			}
 
 			RaytraceableGrid* grid = getData(data);
-			RaytraceableContourSurfaceDialog rcsd(getDatasetControl());
-			rcsd.setGrid(grid);
+			RaytraceableContourSurfaceDialog rcsd(grid, getDatasetControl());
 			rcsd.exec();
 		
 /*			if (rt_contour_surface_dialog_ == 0) 
