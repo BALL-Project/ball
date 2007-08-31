@@ -12,7 +12,7 @@ namespace BALL
 		float RaytraceableGrid::getGridMinValue()
 			throw()
 		{
-			float current_min; 
+			float current_min = std::numeric_limits<float>::max(); 
 			if (grid_ != 0)
 			{
 				RegularData3D::Iterator rd3d_it;
@@ -31,7 +31,20 @@ namespace BALL
 		float RaytraceableGrid::getGridMaxValue()
 			throw()
 		{
-
+			float current_max = std::numeric_limits<float>::min(); 
+			if (grid_ != 0)
+			{
+				RegularData3D::Iterator rd3d_it;
+				current_max = grid_->getData(0);
+				for (rd3d_it = grid_->begin(); rd3d_it != grid_->end(); rd3d_it++)
+				{
+					if (*rd3d_it > current_max)
+					{
+						current_max = *rd3d_it;
+					}
+				}
+			}
+			return current_max;
 		}
 	}
 

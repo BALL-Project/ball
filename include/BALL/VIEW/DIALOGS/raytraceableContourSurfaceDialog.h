@@ -45,7 +45,7 @@ class BALL_VIEW_EXPORT RaytraceableContourSurfaceDialog
 	BALL_EMBEDDABLE(RaytraceableContourSurfaceDialog, ModularWidget)
 
 	///
-	RaytraceableContourSurfaceDialog(QWidget* parent = 0, const char* name = "RaytraceableContourSurfaceDialog", bool modal = FALSE, Qt::WFlags fl = 0);
+	RaytraceableContourSurfaceDialog(RaytraceableGrid* grid, QWidget* parent = 0, const char* name = "RaytraceableContourSurfaceDialog", bool modal = FALSE, Qt::WFlags fl = 0);
 
 	///
 	~RaytraceableContourSurfaceDialog()
@@ -66,13 +66,26 @@ class BALL_VIEW_EXPORT RaytraceableContourSurfaceDialog
 	void reject();
 	
 	///
-	void changedSliderThreshold();	
+	void changedSliderThreshold(int a);	
 	
 	///
 	void changedEditThreshold();
 
+	//  
+	void changedRangeMin();
+
+	//  
+	void changedRangeMax();
+	
+	//  
+	void changedRangeSteps();
+
+
+	//void setDefaultRangeValues_();
 	
 	protected slots:
+
+	void setDefaultRangeValues_();
 
 
 	protected:
@@ -86,11 +99,12 @@ class BALL_VIEW_EXPORT RaytraceableContourSurfaceDialog
 	float getValue_(const QLineEdit* edit) const
 		throw(Exception::InvalidFormat);
 	
-	// the sliders min and max
-	int min_;
-	int max_;
-	float max_as_angstroem_;
 
+	// the sliders min and max
+	float min_;
+	float max_;
+
+	int steps_;
 	float current_threshold_;
 
 	RaytraceableGrid* grid_;
