@@ -227,6 +227,9 @@ namespace BALL
 		bool compute_shifts_;
 
 	};
+	
+	std::ostream& operator << (std::ostream& os, const BALL::ShiftModel2D& shiftmodel)
+			throw();
 
 } // namespace BALL
 

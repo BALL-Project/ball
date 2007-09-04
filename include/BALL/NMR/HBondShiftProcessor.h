@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondShiftProcessor.h,v 1.14.10.5 2007/04/12 13:53:53 anne Exp $
+// $Id: HBondShiftProcessor.h,v 1.14.10.5 2007-04-12 13:53:53 anne Exp $
 //
 
 #ifndef BALL_NMR_HBONDSHIFTPROCESSOR_H

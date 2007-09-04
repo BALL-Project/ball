@@ -29,7 +29,10 @@ namespace BALL
 		enum SPECTRUM_TYPE{
 			H = 1, 
 			N,
-			C
+			C,
+			H_ON_BACKBONE,
+			N_BACKBONE,
+			C_BACKBONE
 		};
 
 		//@}

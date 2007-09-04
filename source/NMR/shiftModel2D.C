@@ -173,78 +173,115 @@ namespace BALL
 			if (type_ == HSQC_NH)
 			{
 				element_type1 = PTE[Element::H];
-				peakwidth_proton = 0.02142;
+				 peakwidth_proton = 0.02142; // AKD 11.7.07
+				//peakwidth_proton = 0.;
 				element_type2 = PTE[Element::N];
-				peakwidth_atom = 0.01428;
+				peakwidth_atom = 0.01428;  //AKD 11.07.07
+				//peakwidth_atom = 0.;
 			}
 			else if (type_ == HSQC_CH)
 			{
 				element_type1 = PTE[Element::H];
-				peakwidth_proton = 0.02142;
+				peakwidth_proton = 0.02142; //AKD 11.7.07
+				//peakwidth_proton = 0.0;
 				element_type2 = PTE[Element::C];
-				peakwidth_atom = 0.00714;
+				peakwidth_atom = 0.00714; //AKD 11.7.07
+				//peakwidth_atom = 0.0;
 			}
 
 			if (element_type1 == Element::UNKNOWN  || element_type2 == Element::UNKNOWN)
 				return true;
+
+			// for debugging
+			int counter_element1 = 0;
+			int counter_element2 = 0;
+			int counter_peaks = 0;
+
+// test ausgabe			
+std::ofstream outfile("/home/HPL/anne/DEVELOP/NMR/2DSPECTRA/1z0r/1z0r.peaks");
 
 			//look for valid atom pairs
 			for (BALL::ResidueIterator r_it = system_->beginResidue(); +r_it; ++r_it)
 			{	
 				Atom* proton = NULL;
 				Atom* atom = NULL;
-
-				// do we have atom in this residue? 
+			
+				// do we have atoms in this residue? 
 				for (BALL::AtomIterator at_it = r_it->beginAtom(); +at_it; ++at_it)
 				{
-					//we just allow backbone's
-					//if (at_it->getElement() == element_type2)
-					if (at_it->getName() == "N" || at_it->getName() == "C")
+					// for debugging
+					if (at_it->getElement() == PTE[Element::H])
 					{
+						// is it bound to a backbone C or N??
+						Atom::BondIterator b_it = at_it->beginBond();
+						for (; +b_it; ++b_it)
+						{	
+							if (    b_it->getType()!=(Bond::TYPE__HYDROGEN) 
+									&& (b_it->getPartner(*at_it)->getName()=="N" || b_it->getPartner(*at_it)->getElement() == PTE[Element::C]))
+							{
+								counter_element1++;
+								proton = &(*at_it);
+								atom = b_it->getPartner(*at_it);
+							}
+						}
+					}
+					// end debugging
+					
+					// at the moment we just allow backbone's N
+					if ( (type_ == HSQC_NH) && (at_it->getName() == "N" ))
+					{	
 						atom = &(*at_it);
-						
 						// is it bound to a proton? 
 						Atom::BondIterator b_it = atom->beginBond();
 						for (; +b_it; ++b_it)
 						{
-							if ( b_it->getPartner(*atom)->getElement() == element_type1)
+							if (  b_it->getType()!=(Bond::TYPE__HYDROGEN)  && b_it->getPartner(*atom)->getElement() == element_type1)
 							{
 								proton = b_it->getPartner(*atom);
 								createPeak_(proton, atom, peakwidth_proton, peakwidth_atom);
+			// test ausgabe
+			outfile << atom->getResidue()->getID() << " " << atom->getFullName() << " "  << atom->getTypeName() << " "
+							<< proton->getFullName() << " " <<  proton->getTypeName() << " " 
+							<< proton->getProperty(BALL::ShiftModule::PROPERTY__SHIFT).getFloat() << "  "
+							<< atom->getProperty(BALL::ShiftModule::PROPERTY__SHIFT).getFloat() << std::endl;
+
+								counter_peaks++;
 							}
 						}
+						counter_element2++;
 					}
+					else if ( (type_ == HSQC_CH) && ( at_it->getElement() == PTE[Element::C]))
+					{
+						atom = &(*at_it);
+						// is it bound to a proton? 
+						Atom::BondIterator b_it = atom->beginBond();
+						for (; +b_it; ++b_it)
+						{
+							if (  b_it->getType()!=(Bond::TYPE__HYDROGEN)  && b_it->getPartner(*atom)->getElement() == element_type1)
+							{
+								proton = b_it->getPartner(*atom);
+								createPeak_(proton, atom, peakwidth_proton, peakwidth_atom);
+	// test ausgabe
+	outfile << atom->getResidue()->getID() << " " << atom->getFullName() << " "  << atom->getTypeName() << " "
+					<< proton->getFullName() << " " <<  proton->getTypeName() << " " 
+					<< proton->getProperty(BALL::ShiftModule::PROPERTY__SHIFT).getFloat() << "  "
+					<< atom->getProperty(BALL::ShiftModule::PROPERTY__SHIFT).getFloat() << std::endl;
+
+								counter_peaks++;
+							}
+	
+							counter_element2++;
+						}
+					}										
 				}
-
-			/*	if (!atom || !proton)
-					continue;
-
-				// we have, get the shift
-				float shift1 = proton->getProperty(BALL::ShiftModule::PROPERTY__SHIFT).getFloat();
-				float shift2 = atom->getProperty(BALL::ShiftModule::PROPERTY__SHIFT).getFloat();
-
-				//store the shift in the peak list
-				Peak2D<Vector2> peak;
-				Vector2<float> pos(shift1, shift2); 
-				peak.setPosition(pos);
-
-				// Peter Bayer proposed as peak width  
-				// for N--H 10hz/15Hz and
-				// for C--H  5Hz/15Hz
-				// NOTE: peakwidth is meassured in ppm, since
-				// experiments were done in Hz, we convert the values 
-				// according to the formular
-				// 
-				// 		offset [Hz] = offset[ppm] * basic frequency
-				//
-				// for our prediction we assume a basic frequency of 700 MHz
-				peak.setWidth(Vector2(peakwidth_proton,peakwidth_atom));
-				//TODO: macht das Sinn, wenn er gerade neu erzeugt wurde?? 
-				peak.setIntensity(peak.getIntensity()+1);
-				//setAtom();
-				peaks_.push_back(peak); */
 			}
-		}
+	//testausgabe
+	outfile.close();
+			
+			//debugging
+			std::cout << "Number of peaks : " << counter_peaks << "  Number of N's: " << counter_element2 << "  Number of H's: " << counter_element1 << std::endl;
+
+		} /*
 		else 
 		{
 			Element element_type1 = Element::UNKNOWN;
@@ -308,7 +345,7 @@ namespace BALL
 					}
 				}
 			}
-		}
+		}*/
 		return true;
 	}
 
@@ -332,9 +369,7 @@ namespace BALL
 
 	//std::cout << " halo " << atom2->getName() << " " << atom2->getResidue()->getName() << ": " <<  shift2  << "     "<< atom1->getName() << " " << atom1->getResidue()->getName() << ": " <<  shift1  << std::endl;
 		peak.setWidth(Vector2(peakwidth_atom1,peakwidth_atom2));
-		//TODO: macht das Sinn, wenn er gerade neu erzeugt wurde?? 
-//		peak.setIntensity(peak.getIntensity()+1);
-		peak.setIntensity(1);
+		peak.setIntensity(1.);
 		//setAtom();
 		peaks_.push_back(peak);
 	}
@@ -362,6 +397,25 @@ namespace BALL
      // this overwrites the parameter
      spectrum = Spectrum2D(peaks_, origin_, dimension_, spacing_);
   }
-	
-		
+			
+
+	std::ostream& operator << (std::ostream& os, const BALL::ShiftModel2D& shiftmodel)
+		throw()
+	{
+		// output the data in gnuplottable format :-)
+		// e.g. ShiftModel sm; ...; File f("plot.dat", std::ios::out); f << sm;
+		// gnuplot -persist plot.dat
+		const std::vector<Peak2D>& peaks = shiftmodel.getPeaks();
+
+		Size length = peaks.size();
+		for (Size i = 0; i < length; i++)
+		{
+				RegularData2D::CoordinateType pos = peaks[i].getPosition();
+
+				os << pos.x << " " << pos.y << " " << peaks[i].getIntensity() << std::endl;	
+		}
+
+		return os;
+	}
 }
+

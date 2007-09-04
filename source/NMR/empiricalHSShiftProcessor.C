@@ -20,7 +20,8 @@
 #define STRING_VALUE_NA "BADVAL"
 #define CHAR_VALUE_NA  '?'
 
-#define DEBUG 1
+//#define DEBUG
+#undef DEBUG 
 
 using namespace std;
 

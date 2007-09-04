@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EFShiftProcessor.h,v 1.23.10.5 2007/04/12 13:53:52 anne Exp $
+// $Id: EFShiftProcessor.h,v 1.23.10.5 2007-04-12 13:53:52 anne Exp $
 //
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H

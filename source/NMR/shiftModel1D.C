@@ -1,5 +1,7 @@
 #include <BALL/NMR/shiftModel1D.h>
 #include <BALL/NMR/shiftModel.h>
+#include <BALL/KERNEL/PTE.h>
+#include <BALL/KERNEL/bond.h>
 
 using namespace std;
 
@@ -150,7 +152,7 @@ namespace BALL
 			system_->apply(sm);
 		}
 
-		String atomname = "";
+		String element = "";
 		
 		// Peter Bayer proposed as peak width  
 		// for H      15Hz
@@ -168,22 +170,26 @@ namespace BALL
 		
 		switch(type_)
 		{
-			case H: 
-				atomname = "H";
+			case H:
+			case H_ON_BACKBONE:
+				element = "H";
 				//peakwidth = 0.02142; // Peter Bayers estimation
 				peakwidth = 0.0032; // this is the former BALL estimation
 				break;
-			
 			case N:
-				atomname = "N";
+			case N_BACKBONE:
+				element = "N";
 				peakwidth = 0.01428;
 				break;
 			case C:
-				atomname = "C";
+			case C_BACKBONE:  
+				element = "C";
 				peakwidth = 0.00714;
+				break;
 		}
-		
-		if (atomname == "" )
+		int counter = 0;
+
+		if (element == "" )
 			return true;
 		
 		for (BALL::ResidueIterator r_it = system_->beginResidue(); +r_it; ++r_it)
@@ -192,9 +198,9 @@ namespace BALL
 
 			for (BALL::AtomIterator at_it = r_it->beginAtom(); +at_it; ++at_it)
 			{
-				// TO DO is that correct?
 				if (hasType_(&(*at_it), type_))
 				{
+					counter++;
 					atom = &(*at_it);
 					// we have, get the shift
 					float shift = atom->getProperty(BALL::ShiftModule::PROPERTY__SHIFT).getFloat();
@@ -210,6 +216,8 @@ namespace BALL
 				}
 			}
 		}
+
+		std::cout << "Number of considered atoms: "<< counter << std::endl;
 		return true;
 	}
 
@@ -247,26 +255,51 @@ namespace BALL
 		switch (type)
 		{
 			case H:
-				if ( (a->getName() == "H") || (a->getName() ==  "1H") || (a->getName() ==  "2H")|| ( a->getName() ==  "3H"))
+				if (a->getElement() == PTE[Element::H])
 					ret = true;
-				if (   (a->getName().hasSubstring("HG")) || (a->getName().hasSubstring("HD")) 
-						|| (a->getName().hasSubstring("HB")) || (a->getName().hasSubstring("HA"))
-						|| (a->getName().hasSubstring("HE")) || (a->getName().hasSubstring("HH")) 
-						|| (a->getName().hasSubstring("HZ")))
-					ret = true;
+				 //if (   (a->getName().hasSubstring("HG")) || (a->getName().hasSubstring("HD")) 
+					//	|| (a->getName().hasSubstring("HB")) || (a->getName().hasSubstring("HA"))
+					//	|| (a->getName().hasSubstring("HE")) || (a->getName().hasSubstring("HH")) 
+					//	|| (a->getName().hasSubstring("HZ")))
+				 //	ret = true;
 				break;
 			case C:
-				if  (a->getName() == "C")
+				if  (a->getElement() ==  PTE[Element::C])
 					ret = true;
-				if (   (a->getName().hasSubstring("CA")) || (a->getName().hasSubstring("CB")) 
-						|| (a->getName().hasSubstring("CD")) || (a->getName().hasSubstring("CE")) 
-						|| (a->getName().hasSubstring("CH")) || (a->getName().hasSubstring("CG")) || (a->getName().hasSubstring("CZ")) )
+			//	if (   (a->getName().hasSubstring("CA")) || (a->getName().hasSubstring("CB")) 
+			//			|| (a->getName().hasSubstring("CD")) || (a->getName().hasSubstring("CE")) 
+			//			|| (a->getName().hasSubstring("CH")) || (a->getName().hasSubstring("CG")) || (a->getName().hasSubstring("CZ")) )
+			////		ret = true;
+				break;
+			case N:	
+				if  (a->getElement() ==  PTE[Element::N])
+					ret = true;
+ 				//if (   (a->getName() == "N") || (a->getName().hasSubstring("ND")) || (a->getName().hasSubstring("NE")) 
+				//	 	|| (a->getName().hasSubstring("NH")) || (a->getName().hasSubstring("NZ"))  )
+				//	ret = true;
+				break;
+			case H_ON_BACKBONE: //check, whether the given atom is of type hydrogen and whether it is bound to a backbone C or N
+				if (a->getElement() == PTE[Element::H])
+				{
+					// is it bound to a backbone C or N??
+					Atom::BondIterator b_it = a->beginBond();
+					for (; !ret && +b_it; ++b_it)
+					{	
+						if (    b_it->getType()!=(Bond::TYPE__HYDROGEN) 
+								&& (b_it->getPartner(*a)->getName()=="N" || b_it->getPartner(*a)->getName()=="CA" || b_it->getPartner(*a)->getName()=="C"))
+						{
+							ret = true;
+						}
+					}
+				}
+				break;
+			case C_BACKBONE:
+				if  (a->getName() == "CA" || a->getName() == "C" )
 					ret = true;
 				break;
-			case N:
- 				if (   (a->getName() == "N") || (a->getName().hasSubstring("ND")) || (a->getName().hasSubstring("NE")) 
-					 	|| (a->getName().hasSubstring("NH")) || (a->getName().hasSubstring("NZ"))  )
-					ret = true;
+			case N_BACKBONE:
+				if (a->getName() == "N")
+						ret = true;
 				break;
 		}
 		

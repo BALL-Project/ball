@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.C,v 1.17.18.10 2007/04/12 13:53:21 anne Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.17.18.10 2007-04-12 13:53:21 anne Exp $
 //
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>

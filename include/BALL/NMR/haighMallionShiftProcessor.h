@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.h,v 1.16.10.6 2007/04/12 13:53:54 anne Exp $
+// $Id: haighMallionShiftProcessor.h,v 1.16.10.6 2007-04-12 13:53:54 anne Exp $
 //
 
 #ifndef BALL_COMMON_H

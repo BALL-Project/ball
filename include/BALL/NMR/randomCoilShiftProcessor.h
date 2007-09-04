@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: randomCoilShiftProcessor.h,v 1.16.10.2 2007/04/12 13:53:55 anne Exp $
+// $Id: randomCoilShiftProcessor.h,v 1.16.10.2 2007-04-12 13:53:55 anne Exp $
 //
 
 #ifndef BALL_NMR_SHIFTMODULE_H
