@@ -95,12 +95,6 @@ namespace BALL
 		ShiftReferenceSet				reference;
 	};
 
-	std::ostream& operator << (std::ostream& s, const NMRAtomData&						ad)	;
-	std::ostream& operator << (std::ostream& s, const SampleCondition&				sc)	;
-	std::ostream& operator << (std::ostream& s, const ShiftReferenceElement& sre) ;
-	std::ostream& operator << (std::ostream& s, const ShiftReferenceSet&			sr)	;
-	std::ostream& operator << (std::ostream& s, const NMRAtomDataSet&				 set)	;
-	
 	//@}
 
 	/** NMRStarFile.
