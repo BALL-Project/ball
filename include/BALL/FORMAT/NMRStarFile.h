@@ -2,114 +2,145 @@
 // vi: set ts=2:
 //
 
-#ifndef BALL_NMR_READ_STAR_H
-#define BALL_NMR_READ_STAR_H
+#ifndef BALL_FORMAT_NMRSTARFILE_H
+#define BALL_FORMAT_NMRSTARFILE_H
 
-#ifndef BALL_FORMAT_LineBasedFile_H
-# include<BALL/FORMAT/lineBasedFile.h>
+#ifndef BALL_FORMAT_CIFFILE_H
+# include<BALL/FORMAT/CIFFile.h>
+#endif
+
+#ifndef BALL_COMMON_LIMITS_H
+# include<BALL/COMMON/limits.h>
 #endif
 
 #include <vector>
 
 namespace BALL 
 {
-	/** name Data classes and structures.
-			These classes represent the data extracted from NMR-Star-Files.
-    	\ingroup  NMRFileFormats
-	*/
-	//@{
-
-	/**	NMRAtomData
-			This structure includes all information for one atom 
-			delivered by a NMR-Star-File.
-			All members are public for easy access.
-	*/
-	struct BALL_EXPORT NMRAtomData
-	{
-		NMRAtomData();
-
-		Position	atom_ID;
-		Position	residue_seq_code;
-		String		residue_label;
-		String		atom_name;
-		char			atom_type;
-		float			shift_value;
-		float			error_value;
-		Position	ambiguity_code;
-	};
-
-	/** SampleConditions.
-			This structure includes all information for a set of samples
-			delivered by a NMR-Star-File.
-			All members are public for easy access.
-	*/
-	struct BALL_EXPORT SampleCondition
-	{
-		SampleCondition();
-
-		String	name;
-		float		temperature;
-		float		pH;
-		float		pressure;
-	};
-
-	/** ShiftReferenceElement.
-			This structure includes all information for a shift reference element
-			for one atom type delivered by a NMR-Star-File.
-			All members are public for easy access.
-	*/
-	struct BALL_EXPORT ShiftReferenceElement
-	{
-		ShiftReferenceElement();
-
-		String		mol_common_name;
-		char			atom_type;
-		Position	isotope_number;
-		String		atom_group;
-		String		shift_units;
-		float			shift_value;
-		char			reference_method;
-		char			reference_type;
-		float			indirect_shift_ratio;
-	};
-
-	/** ShiftReferenceSet.
-			This structure includes all information for all sets of shift references
-			for several atom types delivered by a NMR-Star-File.
-			All members are public for easy access.
-	*/
-	struct BALL_EXPORT ShiftReferenceSet
-	{
-		ShiftReferenceSet();
-		String name;
-		std::vector<ShiftReferenceElement> elements;
-	};
-
-	struct BALL_EXPORT NMRAtomDataSet
-	{
-		NMRAtomDataSet();
-
-		String										name;
-		std::vector<NMRAtomData> atom_data;
-		SampleCondition					condition;
-		ShiftReferenceSet				reference;
-	};
-
-	//@}
-
-	/** NMRStarFile.
-			This class is designed to read a NMR-Star-File.
-			To read a file simpy use the NMRStarFile(char* filename)- Constructor.
-			All useful data are extracted and stored.
-			To get access to the data use getData().
-			
-	*/
-	//@{
+	
 	class BALL_EXPORT NMRStarFile
-		: public LineBasedFile
+		: public CIFFile
 	{
 		public:
+			BALL_CREATE(NMRStarFile)
 
+			static const float FLOAT_VALUE_NA;
+			static const Position POSITION_VALUE_NA;
+
+			/** name nested Data classes.
+				These classes represent the data extracted from NMR-Star-Files.
+			*/
+			//@{
+		
+			/**	NMRAtomData
+			This class includes all information for one atom 
+			delivered by a NMR-Star-File.
+			All members are public for easy access.
+			*/
+			class BALL_EXPORT NMRAtomData
+			{
+				public:
+					NMRAtomData();
+
+					Position	atom_ID;
+					Position	residue_seq_code;
+					String		residue_label;
+					String		atom_name;
+					char			atom_type;
+					float			shift_value;
+					float			error_value;
+					Position	ambiguity_code;
+
+					std::ostream& operator >> (std::ostream& s)	throw();
+			};
+
+			/** SampleConditions.
+				This class includes all information for a set of samples
+				delivered by a NMR-Star-File.
+			*/
+			class BALL_EXPORT SampleCondition
+			{
+				public:
+					SampleCondition();
+	
+					String	name;
+					float		temperature;
+					float		pH;
+					float		pressure;
+	
+					std::ostream& operator >> (std::ostream& s)	throw();
+			};
+
+			/** ShiftReferenceElement.
+				This class includes all information for a shift reference element
+				for one atom type delivered by a NMR-Star-File.
+			*/
+			class BALL_EXPORT ShiftReferenceElement
+			{
+				public:
+					ShiftReferenceElement();
+
+					String		mol_common_name;
+					char			atom_type;
+					Position	isotope_number;
+					String		atom_group;
+					String		shift_units;
+					float			shift_value;
+					char			reference_method;
+					char			reference_type;
+					float			indirect_shift_ratio;
+
+					std::ostream& operator >> (std::ostream& s) throw();
+			};
+
+			/** ShiftReferenceSet.
+				This class includes all information for all sets of shift references
+				for several atom types delivered by a NMR-Star-File.
+			*/
+			class BALL_EXPORT ShiftReferenceSet
+			{
+				public:	
+					ShiftReferenceSet();
+				
+					String name;
+					std::vector<ShiftReferenceElement> elements;
+
+					std::ostream& operator >> (std::ostream& s);
+			};
+			
+			/** NMRAtomDataSet
+				This class ... TODO!!
+			*/
+			class BALL_EXPORT NMRAtomDataSet
+			{
+				public:
+					NMRAtomDataSet();
+
+					String										name;
+					std::vector<NMRAtomData> 	atom_data;
+					SampleCondition						condition;
+					ShiftReferenceSet					reference;
+
+					std::ostream& operator >> (std::ostream& s);
+			};
+
+			/** EntryInformation
+				This class ... TODO!!
+			*/
+			class BALL_EXPORT EntryInformation
+			{
+				public:
+					EntryInformation();
+					~EntryInformation();
+					std::ostream& operator >> (std::ostream& s);
+
+					String entry_type;
+					String BMRB_accession_code;
+					String NMR_STAR_version;
+					String experimental_method;
+			};
+	
+			//@}
 			/**	@name	Constructors and Destructors
 			*/
 			//@{
@@ -117,20 +148,26 @@ namespace BALL
 			/** Standard constructor
 			*/
 			NMRStarFile();
+					Then the file of f will be openeed.
 			
 			/** Detailed constuctor.
 					Opens the given file and extracts all usefull data.
 			*/
-			NMRStarFile(const String& file_name)
-				throw(Exception::FileNotFound, Exception::ParseError);
+			NMRStarFile(const String& file_name, File::OpenMode open_mode = std::ios::in)
+				throw(Exception::FileNotFound);
+
+			~NMRStarFile();
 
 			/** Assignment operator.
 					@see NMRStarFile(const NMRStarFile& f)
 			*/
 			const NMRStarFile& operator = (const NMRStarFile& f);
+			
+			/** Read a NMRStarFile.
+			 */
+			bool read()
+				throw(Exception::ParseError);
 
-			~NMRStarFile();
-				
 			/** Clear the object.
 			*/
 			void clear();
@@ -144,30 +181,43 @@ namespace BALL
 
 			/** Get the maiximum number of atoms in all shift sets
 			*/
-			Size getNumberOfAtoms() const;
+			Size getNumberOfAtoms()  // TODO!!!  
 
 			/** Get the extracted data for the atoms.
 			*/
 			const std::vector<NMRAtomDataSet>& getData() const;
 
-			//@}
+			const EntryInformation& getEntryInformation() const {return entry_information_;};
+
+			/** Get the saveframe category within datablock. 
+			  	The datablockenumeration starts at 0!
+			 */
+		//	SaveFrame& getSaveframe(String category, Position db_pos = 0);
+		//	const SaveFrame& getSaveframe(String category, Position db_pos = 0) const;
+
+			/** Get the Item with coloumnname name within saveframe 
+			 */
+	//		const CIFFile::Item* hasColumn(const SaveFrame* sf, String name);
+	// TODO ;; bool hasColumn(const SaveFrame* sf, String name);
+
+	//@}
 			/**	@name	Equality
-			*/
+			 */
 			//@{
 
 			/** Equality operator.
-					Test if both instances point to the same file.
-			*/
+				Test if both instances point to the same file.
+			 */
 			bool operator == (const NMRStarFile& f);
 
 			/** Inequality operator
-					Test if both instances point to different files.
-			*/
+				Test if both instances point to different files.
+			 */
 			bool operator != (const NMRStarFile& f);
 
 			//@}
 			/**	@name	Enums
-			*/
+			 */
 			//@{
 
 			enum ReferenceMethod
@@ -191,12 +241,12 @@ namespace BALL
 		private:
 
 			/*_	@name	NMR-Star specific Help-Methods
-			*/
+			 */
 			//_@{
 
 			/// function to extract the data from a chemical shift line
-			NMRAtomData processShiftLine_()
-				throw(Exception::ParseError);
+			//		NMRAtomData processShiftLine_()
+			//			throw(Exception::ParseError);
 
 			/// reads the number of chemical shifts
 			void readEntryInformation_()
@@ -223,8 +273,11 @@ namespace BALL
 			*/
 			//_@{
 
-			/// the number of shift data
+			/// the number of shift data -> todo: not sure what is ment with this! 
 			Size number_of_shifts_;
+ 
+			//
+			EntryInformation entry_information_;
 
 			/// the data for the atoms is stored here
 			std::vector<NMRAtomDataSet> atom_data_sets_;
@@ -240,6 +293,9 @@ namespace BALL
 
 			/// contains Strings with the used reference options
 			static std::vector<String> reference_options_;
+	
+			// a dummy saveframe
+			SaveFrame dummy_saveframe_; // TODO : add to clear... Constructor..
 
 			/// internal enumeration used in readShiftReferences_()
 			enum ShiftReferenceTypes_
@@ -256,10 +312,9 @@ namespace BALL
 			};
 
 			//_@}
-
 	};
 
 	//@}
 } // Namespace BALL
 
-#endif // BALL_NMR_READ_STAR_H
+#endif // BALL_FORMAT_NMRSTARFILE_H

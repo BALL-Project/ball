@@ -81,7 +81,7 @@ datablock_content: data_items {/*cout << "P: content: data items "  << std::endl
 data_items: TK_TAG TK_WHITESPACE TK_VALUE {
 					/*cout << "P: data item with tag title " << $1 << " and value " << $3 << std::endl;*/ 
 							current_data_item.clear();
-							current_data_item.addPair($1, $3); }
+							current_data_item.addPair($1, $3);}
 	|   loop tag_list TK_WHITESPACE loop_body optional_whitespace TK_STOP {
 					/*cout << "P: data item tag list loop body stop: " <<  std::endl;*/
 					}
@@ -107,7 +107,7 @@ loop_body: TK_VALUE { /*cout << "P:   value " << $1 << std::endl;*/
 
 saveframe: TK_SAVE save_heading TK_WHITESPACE save_frame_content TK_WHITESPACE TK_SAVE 
 					{ /*cout << "P: finished save frame : heading" << $2 << std::endl;*/
-					current_saveframe.setCategory(current_saveframe.pair_items["_Saveframe_category"]->entry.second);
+					current_saveframe.setCategory(current_saveframe.getDataItem("_Saveframe_category").entry.second);
 					}
 	;
 

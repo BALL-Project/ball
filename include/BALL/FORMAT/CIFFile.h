@@ -19,6 +19,8 @@
 #	include <BALL/KERNEL/molecule.h>
 #endif
 
+#include <multimap.h>
+
 #define CIFPARSER_LINE_LENGTH 2550
 
 namespace BALL
@@ -40,6 +42,12 @@ namespace BALL
 			{
 				public:
 
+					Item();
+					
+					Item(const Item& item);
+
+					virtual ~Item();
+
 					/** Acessors **/
 					void clear();
 					void addPair(String key, String value);
@@ -60,7 +68,7 @@ namespace BALL
 					/** Stores the tag-value pair in key - value format **/
 					std::pair<String, String> entry;
 					
-					void operator >> (std::ostream& os) const;
+					std::ostream& operator >> (std::ostream& os) const;
 
 			};
 			
@@ -69,20 +77,31 @@ namespace BALL
 			{
 				public:
 					
+					void clear();
+					void start(String name); 
+					void addDataItem(Item item);
+					void setCategory(String cat) {category = cat;};
+					
+					std::ostream& operator >> (std::ostream& os) const;
+					/** Returns a dummy Dataitem, if no item with such name exists **/
+					const Item&  getDataItem(const String& item_name) const;
+					// we allow manipulation
+					Item&  getDataItem(const String& item_name);
+					const String& getCategory() const {return category;};
+
+					bool hasItem (const String& item_name) const;
+					String getItemValue(const String& name) const;
+
+					
 					/** The name of this saveframe **/
 					String framename;	
 					String category; // always first_item.entry.second
 
 					/** Stores all dataitems of the saveframe  **/ 
 					std::vector<Item> items; 
-					StringHashMap< Item* > pair_items;
-
-					void clear();
-					void start(String name); 
-					void addDataItem(Item item);
-					void setCategory(String cat) {category = cat;};
-
-					void operator >> (std::ostream& os) const;
+					StringHashMap<Index> pair_items;
+					
+					Item dummy_data_item_; 
 
 			};
 
@@ -105,7 +124,7 @@ namespace BALL
 					/** Stores the item **/
 					Item dataitem;
 
-					void operator >> (std::ostream& os) const;
+					std::ostream& operator >> (std::ostream& os) const;
 
 			};
 			
@@ -113,31 +132,67 @@ namespace BALL
 			class Datablock
 			{
 				public:
+					/** Clears the Datablock **/
+					void clear();
+					
+					/** Sets the name of a new Datablock **/
+					void start(String blockname);
 
+					void insertDatacontent(const Datacontent& content);
+					void insertDatacontent(const SaveFrame& new_saveframe);
+					void insertDatacontent(const Item& item);
+
+					const Item&  getDataItem(const String& item_name) const;
+					Item&  getDataItem(const String& item_name);
+					
+					/** Returns the saveframe of category name.
+					 */
+					const std::vector<Index> getSaveframeIndicesByCategory(const String& name) const;
+					std::vector<Index> getSaveframeIndicesByCategory(const String& name);
+					/* Returns copies of saveframes of category name */
+					std::vector<SaveFrame> getSaveframesByCategory(const String& name) const;
+
+					
+					/** Returns the saveframe labeled 'name'.
+					 */
+					const SaveFrame& getSaveframeByName(const String& name) const;
+					SaveFrame& getSaveframeByName(const String& name);
+			
+					const SaveFrame& getSaveframeByIndex(const Index index) const;
+					SaveFrame& getSaveframeByIndex(const Index index);
+
+
+					/**	Returns true if the datablock contains a Saveframe of category name.
+					*/
+					// 
+					bool hasSaveframeName(const String& name) const;
+					bool hasSaveframeCategory(const String& name) const;
+					bool hasItem(const String& name) const;
+
+					/** Sets the name of a Datablock **/
+					void setName(String blockname);
+
+					std::ostream& operator >> (std::ostream& os) const;
+					//////////////////////////////////////////////////
 					/** The name of this saveframe **/
 					String name;
 
 					/** Stores the datablock content **/
 					std::vector<Datacontent> data;
 					
-					/** Hashes the saveframes **/
-					StringHashMap<SaveFrame*> saveframe_names;
-					StringHashMap<std::vector<SaveFrame*> > saveframe_categories;
+					/** Hashes the saveframes - we assume, that they are unique**/
+					StringHashMap<Index> saveframe_names;
+					//StringHashMap<std::vector<Index> > saveframe_categories;
+					std::multimap<String, Index> saveframe_categories;
 
-					/** Clears the Datablock**/
-					void clear();
-					
-					/** Sets the name of a new Datablock **/
-					void start(String blockname);
+					/** Hashes the items*/
+					StringHashMap<Index> item_names; 
 
-					void insertDatacontent(Datacontent content);
-					void insertDatacontent(const SaveFrame& new_saveframe);
-					void insertDatacontent(const Item item);
-					
-					/** Sets the name of a Datablock **/
-					void setName(String blockname);
+					Item dummy_data_item_; 
+					SaveFrame dummy_saveframe_; 
+					vector<SaveFrame> dummy_saveframes_; 
+					vector<Index> dummy_indices_; 
 
-					void operator >> (std::ostream& os) const;
 			};
 
 			/** State of the parser **/
@@ -206,8 +261,14 @@ namespace BALL
 			void inDatablock(const char* name);
 
 			void insertDatablock(const Datablock& datablock);
+			
+			const Datablock& getDatablock(const String& name) const;
 
-			const Datablock* getDatablock(const String& name);
+		
+			// we allow manipulation :-)
+			Datablock& getDatablock(const String& name); 
+
+			bool hasDatablock(const String& name) const;
 
 			void setMolecule(Molecule* molecule);
 		
@@ -225,7 +286,7 @@ namespace BALL
 			String current_saveframe_;
 			String current_item_;
 			
-			StringHashMap<Datablock*> datablocks_hash_;
+			StringHashMap<Index> datablocks_hash_;
 			vector<Datablock> datablocks_;
 	};	
 }
