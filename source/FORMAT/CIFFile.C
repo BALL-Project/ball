@@ -18,6 +18,7 @@ namespace BALL
 	CIFFile::CIFFile()
 		: File(),
 			molecule_(0),
+			datablocks_hash_(),
 			datablocks_()
 	{
 	}
@@ -27,6 +28,7 @@ namespace BALL
 		:	File(),
 			molecule_(file.molecule_),
 			current_datablock_(file.current_datablock_),
+			datablocks_hash_(file.datablocks_hash_),
 			datablocks_(file.datablocks_)
 	{
 		if (file.getName() != "")
@@ -63,6 +65,7 @@ namespace BALL
 		molecule_ = rhs.molecule_;
 		current_datablock_ = rhs.current_datablock_;
 		datablocks_ = rhs.datablocks_;
+		datablocks_hash_ = rhs.datablocks_hash_;
 
 		return *this;
 	}
@@ -75,10 +78,10 @@ namespace BALL
 			throw(File::CannotWrite(__FILE__, __LINE__, name_));
 		}	
 		
-		StringHashMap<Datablock>::ConstIterator si;
+		vector<Datablock>::iterator si;
 		for (si = datablocks_.begin(); si != datablocks_.end(); si++)
 		{
-			si->second >> getFileStream();
+			*si >> getFileStream();
 		}
 
 		return true;
@@ -111,9 +114,10 @@ namespace BALL
 
 	void CIFFile::insertDatablock(const Datablock& datablock)
 	{
-		if ( !datablocks_.has(datablock.name) )
+		if ( !datablocks_hash_.has(datablock.name) )
 		{
-			datablocks_.insert(datablock.name, datablock);
+			datablocks_.push_back(datablock);
+			datablocks_hash_.insert(datablock.name, &(datablocks_[datablocks_.size()-1]));
 			current_datablock_ = datablock.name;
 		}
 		else
@@ -132,6 +136,7 @@ namespace BALL
 	void CIFFile::clearParameters()
 	{
 		datablocks_.clear();
+		datablocks_hash_.clear();
 		current_datablock_ = "";
 		current_saveframe_ = "";
 		current_item_ =  "";
@@ -182,7 +187,7 @@ namespace BALL
 		if (is_loop)
 		{
 			String tmp;
-			tmp = "\tloop_\n";
+			tmp = "\n\tloop_\n";
 			// all keys
 			std::vector<String>::const_iterator ki;
 			for (ki = keys.begin(); ki !=keys.end(); ki++)
@@ -200,14 +205,16 @@ namespace BALL
 				}
 				tmp += "\n";
 			}
-			tmp += "\tstop_\n";
+			tmp += "\n\tstop_\n\n";
 			os << tmp;
 		}
 		else
 		{
-			char line[255]; 
-			sprintf(line, " %33s \t%33s\n", entry.first.c_str(), entry.second.c_str());
-			os << line; 
+			os << "\t" << entry.first << "\t\t\t\t" ;
+			
+			if (entry.second[0]==';')
+				os << "\n" <<  entry.second << std::endl;
+			else	os << entry.second << std::endl;
 		}
 		return;
 	}
@@ -216,14 +223,14 @@ namespace BALL
 
 	void CIFFile::SaveFrame::operator >> (ostream& os) const
 	{	
-		String tmp = "save_" + framename + "\n";
+		String tmp = "\nsave_" + framename + "\n";
 		os << tmp;
 		std::vector<Item>::const_iterator ici;
 		for (ici = items.begin(); ici != items.end(); ici++)
 		{
 			*ici >> os;
 		}
-		tmp = "save_ \n";
+		tmp = "\nsave_ \n\n";
 		os << tmp;
 		return;
 	}
@@ -242,7 +249,12 @@ namespace BALL
 	
 	void CIFFile::SaveFrame::addDataItem(Item item)
 	{
-		items.push_back(item);	
+		items.push_back(item);
+		if (!item.is_loop)
+		{
+			Item* last_item = &(items[items.size()-1]);
+			pair_items.insert((last_item->entry).first, last_item);
+		}
 	}
 	
 	///////////////////////// Datacontent  ///////////////
@@ -251,7 +263,7 @@ namespace BALL
 	{	
 		if (is_saveframe)
 		{
-			sframe >> os;
+			saveframe >> os;
 		}
 		else
 		{
@@ -261,7 +273,7 @@ namespace BALL
 	
 	CIFFile::Datacontent::Datacontent()
 			: is_saveframe(),
-				sframe(),
+				saveframe(),
 				dataitem()
 	{
 	}
@@ -269,7 +281,7 @@ namespace BALL
 	CIFFile::Datacontent::Datacontent(SaveFrame new_saveframe)
 	{
 		is_saveframe = true;
-		sframe = new_saveframe;
+		saveframe = new_saveframe;
 	}
 
 	CIFFile::Datacontent::Datacontent(Item new_item)
@@ -282,9 +294,9 @@ namespace BALL
 
 		///////////////////////// Datablock  ///////////////
 	
-	const CIFFile::Datablock CIFFile::getDatablock(const String& name)
+	const CIFFile::Datablock* CIFFile::getDatablock(const String& name)
 	{
-		return datablocks_[name];
+		return datablocks_hash_[name];
 	}
 
 	void CIFFile::Datablock::operator >> (ostream& os) const
@@ -303,6 +315,8 @@ namespace BALL
 	{
 		name = "";
 		data.clear();
+		saveframe_names.clear();
+		saveframe_categories.clear();
 	}
 	
 	void CIFFile::Datablock::start(String blockname)
@@ -319,19 +333,39 @@ namespace BALL
 	void CIFFile::Datablock::insertDatacontent(Datacontent content)
 	{
 		data.push_back(content);
+		if (content.is_saveframe)
+		{
+			SaveFrame* sf = &(data[data.size()-1].saveframe);
+			saveframe_names.insert(sf->framename, sf);
+			if (saveframe_categories.has(sf->category))
+			{
+				saveframe_categories[sf->category].push_back(sf);
+			}
+			else
+			{
+				std::vector<SaveFrame*> tmp;
+				tmp.push_back(sf);
+				saveframe_categories.insert(sf->category,tmp);
+			}
+		}
+
 	}
 	
 	void CIFFile::Datablock::insertDatacontent(const SaveFrame& saveframe)
 	{
 		Datacontent dc(saveframe);
-		//(datablocks_[current_datablock_]).
+		insertDatacontent(dc);
+			/*
 		data.push_back(dc);
+		if (dc.is_saveframe)
+		{
+			saveframes.insert(dc.saveframe.framename, &(data[data.size()-1].saveframe));
+		}*/
 	}
 
 	void  CIFFile::Datablock::insertDatacontent(const Item item) 
 	{
 		Datacontent dc(item);
-		//(datablocks_[current_datablock_]).
 		data.push_back(dc);
 	}
 

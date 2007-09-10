@@ -15,7 +15,7 @@ CIFFile::Datacontent current_datacontent;
 CIFFile::Item current_data_item;
 CIFFile::SaveFrame current_saveframe;
 
-bool in_loop;
+bool first_datablock;
 
 /* There is some nasty problem with alloca under Intel/icc/Linux */
 /* so we use (inefficient) malloc instead. */
@@ -106,7 +106,8 @@ loop_body: TK_VALUE { /*cout << "P:   value " << $1 << std::endl;*/
 	;  
 
 saveframe: TK_SAVE save_heading TK_WHITESPACE save_frame_content TK_WHITESPACE TK_SAVE 
-					{ /*cout << "P: finished save frame : heading" << $2 << std::endl;*/ 	
+					{ /*cout << "P: finished save frame : heading" << $2 << std::endl;*/
+					current_saveframe.setCategory(current_saveframe.pair_items["_Saveframe_category"]->entry.second);
 					}
 	;
 

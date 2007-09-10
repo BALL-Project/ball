@@ -40,7 +40,7 @@ namespace BALL
 			{
 				public:
 
-					/** Acessors**/
+					/** Acessors **/
 					void clear();
 					void addPair(String key, String value);
 					void startLoop();
@@ -70,14 +70,17 @@ namespace BALL
 				public:
 					
 					/** The name of this saveframe **/
-					String framename;
-					
+					String framename;	
+					String category; // always first_item.entry.second
+
 					/** Stores all dataitems of the saveframe  **/ 
 					std::vector<Item> items; 
+					StringHashMap< Item* > pair_items;
 
 					void clear();
 					void start(String name); 
 					void addDataItem(Item item);
+					void setCategory(String cat) {category = cat;};
 
 					void operator >> (std::ostream& os) const;
 
@@ -97,7 +100,7 @@ namespace BALL
 					bool is_saveframe;
 		
 					/** Stores the saveframe **/
-					SaveFrame sframe;
+					SaveFrame saveframe;
 
 					/** Stores the item **/
 					Item dataitem;
@@ -116,7 +119,11 @@ namespace BALL
 
 					/** Stores the datablock content **/
 					std::vector<Datacontent> data;
-	
+					
+					/** Hashes the saveframes **/
+					StringHashMap<SaveFrame*> saveframe_names;
+					StringHashMap<std::vector<SaveFrame*> > saveframe_categories;
+
 					/** Clears the Datablock**/
 					void clear();
 					
@@ -200,7 +207,7 @@ namespace BALL
 
 			void insertDatablock(const Datablock& datablock);
 
-			const Datablock getDatablock(const String& name);
+			const Datablock* getDatablock(const String& name);
 
 			void setMolecule(Molecule* molecule);
 		
@@ -218,7 +225,8 @@ namespace BALL
 			String current_saveframe_;
 			String current_item_;
 			
-			StringHashMap<Datablock> datablocks_;
+			StringHashMap<Datablock*> datablocks_hash_;
+			vector<Datablock> datablocks_;
 	};	
 }
 #endif // BALL_FORMAT_CIFFILE_H
