@@ -55,7 +55,44 @@ namespace BALL
 					StringHashMap<float>  values;
 					StringHashMap<float>  errors;
 					StringHashMap<String> units;
-					
+				
+					//void clear(); 
+					std::ostream& operator >> (std::ostream& s);
+			};
+	
+			/** Samples.
+				This class includes all information of  a sample.
+			*/
+			class Sample
+			{
+				public:
+				
+					/** Component.
+					This class includes all information of a sample component.
+					*/
+					class Component
+					{
+						public:
+							Component();
+							void clear(); 
+							
+							String label;
+							float concentration_value;
+							String value_unit;
+							float concentration_min;
+							float concentration_max;
+							String isotopic_labeling;
+							std::ostream& operator >> (std::ostream& s);
+					};
+
+					Sample(); 
+					void clear(); 
+
+					String label;
+					String type;
+					String details;
+					vector <Component> components;
+
 					std::ostream& operator >> (std::ostream& s);
 			};
 
@@ -79,6 +116,8 @@ namespace BALL
 					float			indirect_shift_ratio;
 
 					std::ostream& operator >> (std::ostream& s);
+					//void clear(); 
+
 			};
 
 			/** ShiftReferenceSet.
@@ -96,6 +135,8 @@ namespace BALL
 					std::vector<ShiftReferenceElement> elements;
 
 					std::ostream& operator >> (std::ostream& s);
+					//void clear(); 
+
 			};
 
 			/**	NMRAtomData
@@ -118,25 +159,32 @@ namespace BALL
 					Position	ambiguity_code;
 
 					std::ostream& operator >> (std::ostream& s);
+					//void clear(); 
+
 			};
 
 						
 			/** NMRAtomDataSet
 				This class includes all NMR information concerning a 
 				dataset of atoms delivered by a NMR-Star-File.
+				The corresponding condition, reference set and samples can be look up with getSampleConditionByName(), getShiftReferenceSetByName(), getSample(samples[i])
 				All members are public for easy access.
 			*/
 			class BALL_EXPORT NMRAtomDataSet
 			{
 				public:
-					NMRAtomDataSet();
+					NMRAtomDataSet(NMRStarFile* parent);
 
 					String										name;
 					std::vector<NMRAtomData> 	atom_data;
-					SampleCondition						condition; 
-					ShiftReferenceSet					reference; 
+					String 										condition;  
+					String										reference;  
+					vector<String>						samples;   
 
 					std::ostream& operator >> (std::ostream& s);
+					//void clear();
+				protected: 
+					NMRStarFile* parent_;
 			};
 
 			/** EntryInformation
@@ -150,6 +198,7 @@ namespace BALL
 					EntryInformation();
 					~EntryInformation();
 					std::ostream& operator >> (std::ostream& s);
+					//void clear(); 
 
 					String entry_type;
 					String BMRB_accession_code;
@@ -245,13 +294,10 @@ namespace BALL
 					MolecularSystem(); 
 					~MolecularSystem(); 
 
-									/// Name of the molecular system
+					/// Name of the molecular system
 					String system_name;
 					String abbreviation_common;
-					// first: Molecular system component name, 
-					// second: label
-					//vector < std::pair<String, String> > chemical_units; // TODO!! 
-					vector<ChemicalUnit> chemical_units; // TODO!! 
+					vector<ChemicalUnit> chemical_units;  
 					String system_physical_state;
 					String system_oligomer_state;
 					String system_paramagnetic;
@@ -349,7 +395,24 @@ namespace BALL
 			std::vector<SampleCondition>& getSampleConditions() {return sample_conditions_;};
 
 			// addSampleCondition TODO!!
+		
+			/// Get the samples
+			std::vector<Sample> getSamples()  const {return samples_;};
+			//const std::vector<Sample>& getSamples() const {return samples_;};
+
+			Size getNumberOfSamples() const {return samples_.size();};
 			
+			/// Returns true if the file contains a sample named label, false otherwise
+			bool hasSample(String label) const;
+			
+			/// Get the i-th sample. 
+			/// if i is out of size a dummy sample is returned.
+			Sample getSample(Index i) const;
+			
+			/// Get the sample with name label. 
+			/// if no sample with name label exist a dummy sample is returned.
+			Sample getSample(String label) const;
+
 			/// Get the shift reference sets
 			std::vector<ShiftReferenceSet>& getShiftReferenceSets() {return shift_references_;}; 
 			const std::vector<ShiftReferenceSet>& getShiftReferenceSets() const  {return shift_references_;}; 
@@ -380,13 +443,10 @@ namespace BALL
 			// Get all Monomeric Polymers
 			vector<NMRStarFile::MonomericPolymer> getMonomericPolymers() const {return monomeric_polymers_;};
 			
-			//TODO:
 			//const vector<NMRStarFile::MonomericPolymer> & getMonomericPolymers() const {return monomeric_polymers_;};
 
 
-			//TODO: sollte wir nicht auch einen  oder gibt das Krach mit vetor und StringHashmap?	
 			//NMRStarFile::MonomericPolymer& getMonomericPolymer(String name) { return monomeric_polymers_[name];}
-
 			bool hasMonomericPolymer(String name) { return monomeric_polymer_indices_.has(name);}; 
 		
 			/// returns true if a monomer with name chemical_unit_label exists,
@@ -448,7 +508,10 @@ namespace BALL
 
 			/// reads the shift datas
 			void readShifts_();
-			
+		
+			/// read the samples
+			void readSamples_();
+
 			/// reads the NMR spectrometer data
 			void readNMRSpectrometer_();
 			
@@ -474,6 +537,9 @@ namespace BALL
 
 			/// the data for different sample sets
 			std::vector<SampleCondition> sample_conditions_;
+	
+			/// the samples
+			std::vector<Sample> samples_;
 
 			/// the data for shift references
 			std::vector<ShiftReferenceSet> shift_references_;
@@ -484,18 +550,21 @@ namespace BALL
 			/// Monomeric Polymer information 
 			// stored per label_name
 			// a MonomericPolymer can be referenced in chemical_units
-			StringHashMap< Index> monomeric_polymer_indices_; //TODO >>!
-			vector<MonomericPolymer> monomeric_polymers_; //TODO: setzen
+			StringHashMap< Index> monomeric_polymer_indices_; 
+			vector<MonomericPolymer> monomeric_polymers_; 
 			/// name of the molecular system
-		//	String system_name_;  // TODO wo kommt der her?
+		
+			//	String system_name_;  // TODO wo kommt der her?
 
 			// a dummy saveframe
 			SaveFrame dummy_saveframe_; 
 			
 			SampleCondition dummy_sample_condition_;
 			
-			ShiftReferenceSet dummy_shift_reference_set_; 
+			Sample dummy_sample_;
 
+			ShiftReferenceSet dummy_shift_reference_set_; 
+			
 			//_@}
 	};
 

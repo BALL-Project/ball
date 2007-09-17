@@ -64,6 +64,72 @@ namespace BALL
 		s << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " << endl << endl;
 		return s;
 	}
+	
+	NMRStarFile::Sample::Component::Component()
+		: label(""),
+		concentration_value(0.),
+		value_unit(""),
+		concentration_min(0.),
+		concentration_max(0.),
+		isotopic_labeling("")
+	{
+	}
+
+	void  NMRStarFile::Sample::Component::clear()
+	{
+		label = "";
+		concentration_value = 0.;
+		value_unit = "";
+		concentration_min = 0.;
+		concentration_max = 0.;
+		isotopic_labeling = "";
+	}
+
+	ostream& NMRStarFile::Sample::Component::operator >> (std::ostream& s)
+	{	
+		s << "   " << label << " :\t value: " << concentration_value 
+			<< " unit: " << value_unit 
+			<< " concentration_min: " << concentration_min
+			<< " concentration_max: " << concentration_max
+			<< " isotopic labeling: " << isotopic_labeling << std::endl;
+		return s;
+	}
+
+	NMRStarFile::Sample::Sample()
+		: label(""),
+			type(""),
+			details(""),
+			components()
+	{
+	}
+
+	void  NMRStarFile::Sample::clear()
+	{
+		label = "";
+		type = "";
+		details = "";
+		components.clear();
+	}
+
+
+	ostream& NMRStarFile::Sample::operator >> (std::ostream& s)
+	{	
+		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
+		s << "label: " << label
+			<< " type: " << type
+			<< " details : " << details << endl;
+		s	<< " components: " << endl;
+		for (Size i=0; i< components.size(); i++)
+		{
+			if (i!=0)
+				s << "------------------------------------" << endl;
+			components[i] >> std::cout;
+		}
+		s << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " << endl << endl;
+		return s;
+	}
+
+
 
 	ostream& NMRStarFile::ShiftReferenceElement::operator >> (std::ostream& s)		
 	{
@@ -93,6 +159,15 @@ namespace BALL
 		s << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " << endl << endl;
 		return s;
 	}
+	
+	NMRStarFile::NMRAtomDataSet::NMRAtomDataSet(NMRStarFile* parent)
+		: name(),
+			condition(),
+			reference(),
+			samples(),
+			parent_(parent)
+	{
+	}
 
 	ostream& NMRStarFile::NMRAtomDataSet::operator >> (std::ostream& s)		
 	{
@@ -105,9 +180,14 @@ namespace BALL
 		}
 		
 		s << endl;
-		condition >> s;
-		reference >> s;
-		s << endl;
+		if (parent_)
+		{
+			parent_->getSampleConditionByName(condition) >> s;
+			parent_->getShiftReferenceSetByName(reference) >> s;
+			for (Size i=0; i< samples.size(); i++)
+				parent_->getSample(samples[i]) >> s;
+			s << endl;
+		}
 		return s;
 	}
 
@@ -131,12 +211,6 @@ namespace BALL
 	{
 	}
 
-	NMRStarFile::NMRAtomDataSet::NMRAtomDataSet()	
-		: name(),
-			condition(),
-			reference()
-	{
-	}
 	
 	NMRStarFile::EntryInformation::EntryInformation() 
 		: entry_type(),
@@ -408,12 +482,14 @@ namespace BALL
 			molecular_system_(),
 			atom_data_sets_(),
 			sample_conditions_(),
+			samples_(),
 			shift_references_(), 
 			nmr_spectrometer_(),
 			monomeric_polymer_indices_(),
 			monomeric_polymers_(),
 			dummy_saveframe_(),
 			dummy_sample_condition_(),
+			dummy_sample_(),
 			dummy_shift_reference_set_()
 	{
 	}
@@ -422,11 +498,13 @@ namespace BALL
 			number_of_shift_sets_		(f.number_of_shift_sets_),
 			entry_information_  (f.entry_information_),	
 			molecular_system_   (f.	molecular_system_),
+			samples_						(f.samples_),
 			nmr_spectrometer_		(f.nmr_spectrometer_),
 			monomeric_polymer_indices_(f.monomeric_polymer_indices_),
 			monomeric_polymers_	(f.monomeric_polymers_),
 			dummy_saveframe_		(f.dummy_saveframe_),
 			dummy_sample_condition_(f.dummy_sample_condition_),
+			dummy_sample_				(f.dummy_sample_),
 			dummy_shift_reference_set_(f.dummy_shift_reference_set_)
 	NMRStarFile::NMRStarFile(const String& file_name, File::OpenMode open_mode)
 		throw (Exception::FileNotFound)
@@ -436,12 +514,14 @@ namespace BALL
 			molecular_system_(),
 			atom_data_sets_(),
 			sample_conditions_(),
+			samples_(),
 			shift_references_(),
 			nmr_spectrometer_(),	
 			monomeric_polymer_indices_(),
 			monomeric_polymers_(),
 			dummy_saveframe_(),
 			dummy_sample_condition_(),
+			dummy_sample_(),
 			dummy_shift_reference_set_()
 	{
 	}
@@ -459,12 +539,14 @@ namespace BALL
 		molecular_system_   = f.molecular_system_; 
 		atom_data_sets_			= f.atom_data_sets_;
 		sample_conditions_  = f.sample_conditions_ ;
+		samples_						= f.samples_;
 		shift_references_   = f.shift_references_;
 		nmr_spectrometer_		= f.nmr_spectrometer_;	
 		monomeric_polymer_indices_ 	= f.monomeric_polymer_indices_;
 		monomeric_polymers_ 				= f.monomeric_polymers_;
 		dummy_saveframe_						= f.dummy_saveframe_;
 		dummy_sample_condition_			= f.dummy_sample_condition_;
+		dummy_sample_								= f.dummy_sample_;
 		dummy_shift_reference_set_	= f.dummy_shift_reference_set_;		
 
 		return *this;
@@ -481,8 +563,9 @@ namespace BALL
 			readMonomericPolymers_();
 			readSampleConditions_();
 			readShiftReferences_();
-			readShifts_();
+			readSamples_();
 			readNMRSpectrometer_();
+			readShifts_();
 			findDependiencies_();
 		//}
 		/*catch (Exception::GeneralException e)
@@ -542,6 +625,45 @@ namespace BALL
 		return dummy_sample_condition_;
 	}
 	
+	
+	bool  NMRStarFile::hasSample(String label) const 
+	{
+		for (Size i=0; i < samples_.size(); i++)
+		{
+			if (samples_[i].label == label)
+			{
+				return true;		
+			}
+		}
+		return false;
+	}
+
+	NMRStarFile::Sample NMRStarFile::getSample(Index i) const 
+	{
+		if (i < (Index)samples_.size())
+			return samples_[i];
+		else
+		{	
+			Log.warn() << "Returned a dummy sample!" << std::endl;
+			return dummy_sample_;
+		}
+	}	
+	
+	NMRStarFile::Sample NMRStarFile::getSample(String label) const 
+	{
+		for (Size i=0; i < samples_.size(); i++)
+		{
+			if (samples_[i].label == label)
+			{
+				return samples_[i];		
+			}
+		}
+		
+		Log.warn() << "Returned a dummy sample!" << std::endl;
+		return  dummy_sample_;
+	}
+
+
 	const  NMRStarFile::ShiftReferenceSet& NMRStarFile::getShiftReferenceSetByName(String name) const 
 	{
 		for (Size i=0; i < shift_references_.size(); i++)
@@ -1016,7 +1138,7 @@ namespace BALL
 								// store the data
 								Item* current_loop = &saveframes[sf].items[loop];
 
-								NMRStarFile::NMRAtomDataSet atom_data_set;
+								NMRStarFile::NMRAtomDataSet atom_data_set(this);
 
 								for (Size line = 0; line < current_loop->values.size(); line++ )
 								{	
@@ -1048,18 +1170,39 @@ namespace BALL
 								// look for the sample conditions
 								if (saveframes[sf].hasItem("_Sample_conditions_label"))
 								{	
-									String condition = (saveframes[sf].getItemValue("_Sample_conditions_label")).trim("$");
-									atom_data_set.condition = getSampleConditionByName(condition);
+									//store the name
+									atom_data_set.condition = (saveframes[sf].getItemValue("_Sample_conditions_label")).trim("$");
+									//atom_data_set.condition = getSampleConditionByName(condition);
 		
 								}
 
 								// look for the chemical shift reference
 								if (saveframes[sf].hasItem("_Chem_shift_reference_set_label"))
-								{	
-									String reference = (saveframes[sf].getItemValue("_Chem_shift_reference_set_label")).trim("$");
-									atom_data_set.reference = getShiftReferenceSetByName(reference);
+								{		
+									//store the name
+									atom_data_set.reference = (saveframes[sf].getItemValue("_Chem_shift_reference_set_label")).trim("$");
+									
+									//atom_data_set.reference = getShiftReferenceSetByName(reference);
 								}
-								
+							
+								// look for the samples
+								for (Size loop=0; loop < saveframes[sf].items.size(); loop++)
+								{
+									if (saveframes[sf].items[loop].is_loop)
+									{	
+										Item* current_loop = &saveframes[sf].items[loop];
+
+										if (saveframes[sf].items[loop].keys[0]== "_Sample_label")
+										{
+											for (Size line = 0; line < current_loop->values.size(); line++ )
+											{	
+												//store the labels
+												atom_data_set.samples.push_back(current_loop->values[line][0]);
+											}
+										}	
+									}	
+
+								}
 								// store this set 
 								atom_data_sets_.push_back(atom_data_set);
 								
@@ -1068,6 +1211,77 @@ namespace BALL
 					
 					}// for all items
 				} // end of for all saveFrames 
+			}
+		}
+	}
+
+	void  NMRStarFile::readSamples_() 
+	{
+		// in most cases we just have one datablock ...
+		for (Size db=0; db < datablocks_.size(); db++)
+		{
+			// find the category
+			if  (datablocks_[db].hasSaveframeCategory("sample"))
+			{
+				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("sample");
+				if (saveframes.size() > 1)
+					Log.warn() << "NMRFile has more than one sample saveframe! " << std::endl; 
+
+				for (Size sf = 0; sf < saveframes.size(); sf++)
+				{
+					NMRStarFile::Sample sample;
+					sample.label = saveframes[sf].framename;
+					if (saveframes[sf].hasItem("_Sample_type"))
+						sample.type = (saveframes[sf].getDataItemValue("_Sample_type"));
+					if (saveframes[sf].hasItem("_Details"))
+						sample.details = (saveframes[sf].getDataItemValue("_Details"));
+					
+					// read the loops
+					for (Size loop=0; loop < saveframes[sf].items.size(); loop++)
+					{
+						if (saveframes[sf].items[loop].is_loop)
+						{
+							Item* current_loop = &saveframes[sf].items[loop];
+							if ( saveframes[sf].items[loop].keys[0]== "_Mol_label")
+							{
+								for (Size line = 0; line < current_loop->values.size(); line++ )
+								{
+									NMRStarFile::Sample::Component component;
+									component.label = current_loop->values[line][0];
+										
+									Index pos = current_loop->getKeyIndex("_Concentration_value");
+									if ( pos > -1) 
+									{ 
+										component.concentration_value =  ((current_loop->values[line][pos] != ".") ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+									}	
+
+									pos = current_loop->getKeyIndex("_Concentration_value_units");
+									if ( pos > -1) component.value_unit  = current_loop->values[line][pos];
+
+									pos = current_loop->getKeyIndex("_Concentration_min_value");
+									if ( pos > -1)
+									{
+										component.concentration_min =  ((current_loop->values[line][pos] != ".") ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+									}
+									
+									pos = current_loop->getKeyIndex("_Concentration_max_value");
+									if ( pos > -1) 
+									{
+										component.concentration_max  =  ((current_loop->values[line][pos] != ".") ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+									}
+
+									pos = current_loop->getKeyIndex("_Isotopic_labeling");
+									if ( pos > -1) component.isotopic_labeling  = current_loop->values[line][pos];
+
+									sample.components.push_back(component);
+								}
+							}
+						}
+					}
+
+					// store the sample
+					samples_.push_back(sample);
+				}
 			}
 		}
 	}
@@ -1099,7 +1313,6 @@ namespace BALL
 	}
 	
 
-	//TODO: stimmt das alles so????
 	void NMRStarFile::findDependiencies_() 
 	{
 		// set the MonomericPolymer
