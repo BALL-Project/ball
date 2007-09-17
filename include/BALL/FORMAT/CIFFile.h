@@ -54,6 +54,9 @@ namespace BALL
 					void startLoop();
 					void addTag(String tag);
 					void addValue(String value);
+				
+					/**  Returns the index of the Item identifier key. If there is no such key, -1 is returned. **/
+					Index getKeyIndex(String key);
 					
 					/* a data item may be a tag-value pair or a table */
 					bool is_loop;
@@ -83,11 +86,18 @@ namespace BALL
 					void setCategory(String cat) {category = cat;};
 					
 					std::ostream& operator >> (std::ostream& os) const;
+					const String& getCategory() const {return category;};
+					
 					/** Returns a dummy Dataitem, if no item with such name exists **/
 					const Item&  getDataItem(const String& item_name) const;
 					// we allow manipulation
 					Item&  getDataItem(const String& item_name);
-					const String& getCategory() const {return category;};
+
+					const String& getDataItemValue(const String& item_name) const;
+					// we allow manipulation
+					String&  getDataItemValue(const String& item_name);
+
+
 
 					bool hasItem (const String& item_name) const;
 					String getItemValue(const String& name) const;

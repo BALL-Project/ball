@@ -11,6 +11,7 @@ using namespace std;
 namespace BALL
 {
 	const float    NMRStarFile::FLOAT_VALUE_NA    = Limits<float>::max();
+	const int      NMRStarFile::INT_VALUE_NA    	= Limits<int>::max();
 	const Position NMRStarFile::POSITION_VALUE_NA = Limits<Position>::max();
 
 	NMRStarFile::NMRAtomData::NMRAtomData()
@@ -34,7 +35,8 @@ namespace BALL
 
 	ostream& NMRStarFile::NMRAtomData::operator >> (ostream &s)	
 	{
-		s << "atom_ID: "					  << atom_ID;
+		// TODO: if POSITION_VALUE_NA, FLOAT_VALUE_NA ... -> NA ausgeben
+		s << "atom_ID: "					  << atom_ID ;
 		s << " residue_seq_code: "  << residue_seq_code;
 		s << " residue_label: "		  << residue_label;
 		s << " atom_name: "					<< atom_name;
@@ -46,48 +48,42 @@ namespace BALL
 
 	ostream& NMRStarFile::SampleCondition::operator >> (std::ostream& s)		
 	{
+		// TODO: if POSITION_VALUE_NA, FLOAT_VALUE_NA ... -> NA ausgeben
+		if (values.size() != errors.size() && errors.size() != units.size())
+		{
+			Log.warn() << "Missing values in Sample Conditions." << std::endl;
+			return s;
+		}
 		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
-		s << "name "				<< name << endl;;
-		s << "temperature "	<< temperature << endl;;
-		s << "pH "					<< pH << endl;;
-		s << "pressure "		<< pressure << endl;;
+		s << "set " << name  << std::endl;
+		for (Size i=0; i < types.size(); i++)
+		{
+					s << types[i] << " = " << values[types[i]] << " " << units[types[i]] << " with error " << errors[types[i]] << std::endl;  
+		}
+
 		s << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " << endl << endl;
 		return s;
 	}
 
 	ostream& NMRStarFile::ShiftReferenceElement::operator >> (std::ostream& s)		
 	{
+		// TODO: if POSITION_VALUE_NA, FLOAT_VALUE_NA ... -> NA ausgeben
 		s << endl;
-		s << "mol_common_name "		<< mol_common_name << endl;
-		s << "atom_type "					<< atom_type << endl;
-		s << "isotope_number "		<< isotope_number << endl;
-		s << "atom_group "				<< atom_group << endl;
-		s << "shift_units "				<< shift_units << endl;
-		s << "shift_value "				<< shift_value << endl;
-		s << "reference_method ";
-		switch (reference_method)
-		{
-			case NMRStarFile::INTERNAL_REFERENCE:	cout << "internal";	break;
-			case NMRStarFile::EXTERNAL_REFERENCE:	cout << "external";	break;
-			case NMRStarFile::UNKNOWN_REFERENCE:	cout << "unknown";	break;
-			case NMRStarFile::UNSET_REFERENCE:		cout << "unset";		break;
-			default:	cout << "?";
-		}
-		s << endl << "reference_type ";
-		switch (reference_type)
-		{
-			case NMRStarFile::DIRECT_TYPE:		cout << "direct";		break;
-			case NMRStarFile::INDIRECT_TYPE:	cout << "indirect";	break;
-			case NMRStarFile::UNKNOWN_TYPE:		cout << "unknown";	break;
-			case NMRStarFile::UNSET_TYPE:			cout << "unset";		break;
-			default:	cout << "?";
-		}
-		s << endl << "indirect_shift_ratio " <<  indirect_shift_ratio << endl << endl;
+		s << "mol_common_name: "		<< mol_common_name << endl;
+		s << "atom_type: "					<< atom_type << endl;
+		s << "isotope_number: "		<< isotope_number << endl;
+		s << "atom_group: "				<< atom_group << endl;
+		s << "shift_units: "				<< shift_units << endl;
+		s << "shift_value: "				<< shift_value << endl;
+		s << "reference_method: "  << reference_method << endl;
+		s << "reference_type: " 		<< reference_type << endl;
+		s << "indirect_shift_ratio: " <<  indirect_shift_ratio << endl << endl;
 		return s;
 	}
 	
 	ostream& NMRStarFile::ShiftReferenceSet::operator >> (std::ostream& s)	
 	{
+		// TODO: if POSITION_VALUE_NA, FLOAT_VALUE_NA ... -> NA ausgeben
 		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
 		s << "name " << name << endl << endl;
 		for (Position pos = 0; pos < elements.size() ; pos++ )
@@ -100,6 +96,7 @@ namespace BALL
 
 	ostream& NMRStarFile::NMRAtomDataSet::operator >> (std::ostream& s)		
 	{
+		// TODO: if POSITION_VALUE_NA, FLOAT_VALUE_NA ... -> NA ausgeben
 		s << endl << "name " << name << endl << endl;
 
 		for (Position pos = 0; pos < atom_data.size() ; pos++)
@@ -120,17 +117,17 @@ namespace BALL
 			atom_group(),
 			shift_units(),
 			shift_value(),
-			reference_method(NMRStarFile::UNSET_REFERENCE),
-		  reference_type	(NMRStarFile::UNSET_TYPE),
+			reference_method(),
+		  reference_type	(),
 			indirect_shift_ratio()
 	{
 	}
 
 	NMRStarFile::SampleCondition::SampleCondition()	
-		: name(""),
-			temperature(0.0),
-			pH(7.0),
-			pressure(0.0)
+		: types(),
+			values(),
+			errors(),
+			units()
 	{
 	}
 
@@ -153,40 +150,299 @@ namespace BALL
 	{
 	}
 	ostream& NMRStarFile::EntryInformation::operator >> (std::ostream& s)
+	{	
+		// TODO: if POSITION_VALUE_NA, FLOAT_VALUE_NA ... -> NA ausgeben
+		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"  << endl;
+		s << "BMRB_accession_code:" << BMRB_accession_code  << endl;
+ 		s << "entry_type: "  			<< entry_type						<< endl;
+		s << "NMR_STAR_version: "	<< NMR_STAR_version			<< endl;
+		s << "experimental_method: "<< experimental_method << std::endl;
+		s << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " << endl << endl;
+		return s;
+	}
+	
+	NMRStarFile::MolecularSystem::ChemicalUnit::ChemicalUnit()
+		: component_name(),
+			label(),
+			monomeric_polymer(NULL),
+			shifts(NULL)
+	{}
+	ostream& NMRStarFile::MolecularSystem::ChemicalUnit::operator >> (std::ostream& s)
 	{
-		s << "BMRB_accession_code:" << BMRB_accession_code;
- 		s << " entry_type: "  			<< entry_type;
-		s << " NMR_STAR_version: "	<< NMR_STAR_version;
-		s << " experimental_method: "<< experimental_method;
+		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"  << endl;
+		s << "component_name:" << component_name  << endl;
+ 		s << "label: "  			<< label						<< endl;
+		if (monomeric_polymer)
+			*monomeric_polymer >> s;
+		if (shifts)
+			*(shifts) >> s ;
+		s << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " << endl << endl;
+		return s;
+	}
+	
+	void NMRStarFile::MolecularSystem::ChemicalUnit::clear()
+	{
+		component_name = ""; 
+		label = "";
+		monomeric_polymer = NULL;
+		shifts = NULL;
+	}
+
+		
+	NMRStarFile::MolecularSystem::RelatedDB::RelatedDB() 
+		: name(), 
+			accession_code(), 
+			entry_mol_name(),
+			relation_type(), 
+			details()
+	{}
+	
+	void NMRStarFile::MolecularSystem::RelatedDB::clear() 
+	{
+		name = "";
+		accession_code = "";
+    entry_mol_name = "";
+    relation_type = "";
+		details = "";
+	}
+
+	ostream& NMRStarFile::MolecularSystem::RelatedDB::operator >> (std::ostream& s)
+	{	
+		s << name << " " << accession_code << " " << entry_mol_name << " " <<  relation_type << " " <<  details << endl;
 		return s;
 	}
 
-	std::vector<String> NMRStarFile::reference_options_;
+	
+	NMRStarFile::MonomericPolymer::HomologDB::HomologDB()
+		: name(),
+      accession_code(),
+      entry_mol_name(),
+      seq_to_submitted_percentage(0.),
+      subject_length(0.),
+      seq_identity(0.),
+      seq_positive(0.),
+			homology_expectation_value(0.)
+	{}
+	
+	void NMRStarFile::MonomericPolymer::HomologDB::clear() 
+	{
+		name = "";
+    accession_code = "";
+    entry_mol_name = "";
+    seq_to_submitted_percentage = 0.;
+    subject_length = 0.;
+    seq_identity = 0.;
+    seq_positive = 0.;
+    homology_expectation_value = 0.;  
+	}
+
+	ostream& NMRStarFile::MonomericPolymer::HomologDB::operator >> (std::ostream& s)
+	{
+		s << "  " << name << " " 
+			<< accession_code << " " 
+			<< entry_mol_name << " " 
+			<< seq_to_submitted_percentage << " " 
+			<< subject_length << " " 
+			<< seq_identity << " " 
+			<< seq_positive << " " 
+			<< homology_expectation_value 
+			<< endl; 
+		return s;
+	}
+	
+	NMRStarFile::MonomericPolymer::MonomericPolymer() 
+		: label_name(),    
+			type(),          
+			polymer_class(), 
+			common_name(),   
+			name_variant(),  
+			molecular_mass(0.),
+      details(),
+			number_of_residues(0),
+			residue_sequence(),
+			residues_by_index(),
+			homolog_database_entries()
+	{}
+	
+	void NMRStarFile::MonomericPolymer::clear() 
+	{	
+		label_name = "";    
+    type = "";          
+    polymer_class = ""; 
+    common_name = "";   
+    name_variant = "";  
+    molecular_mass = 0.,
+    details = "";
+    number_of_residues = 0;
+    residue_sequence = "";
+    residues_by_index.clear();
+    homolog_database_entries.clear();
+	}
+
+
+	ostream& NMRStarFile::MonomericPolymer::operator >> (std::ostream& s)
+	{	
+		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"  << endl;
+		s << "Monomeric Polymer:" << label_name << endl;
+ 		s << "type: "  						<< type						<< endl;
+		s << "polymer_class: "		<< polymer_class			<< endl;
+		s << "common_name: " 			<< common_name << std::endl;
+		s << "name_variant: " 		<< name_variant << std::endl;
+		s << "molecular_mass: " 	<< molecular_mass << std::endl;
+		s << "details " 					<< details << std::endl;
+		s << "number_of_residues: " << number_of_residues << std::endl;
+		s << "residue_sequence " << residue_sequence << std::endl;
+		//s << "residues per index :" << endl;	
+		// TODO residue per index
+		s << "other databases with homologs :" << endl;	
+		for (Size i=0; i < homolog_database_entries.size(); i++)
+		{
+			homolog_database_entries[i] >> s;
+		}
+		s << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " << endl << endl;	
+		return s;
+	}
+
+	NMRStarFile::MolecularSystem::MolecularSystem() 
+		: system_name(),
+			abbreviation_common(),
+			chemical_units(),
+			system_physical_state(),
+      system_oligomer_state(),
+      system_paramagnetic(),
+      system_thiol_state(),
+      system_molecular_weight(),
+			related_database_entries()
+	{
+	}
+
+	NMRStarFile::MolecularSystem::~MolecularSystem() 
+	{
+	}
+
+	bool NMRStarFile::isMonomericPolymer(String chemical_unit_label) 
+	{
+		return monomeric_polymer_indices_.has(chemical_unit_label); 
+	}
+ 
+	void NMRStarFile::addMonomericPolymer(NMRStarFile::MonomericPolymer mp) 
+	{
+		if (hasMonomericPolymer(mp.label_name))
+		{
+			Log.warn() << "A Monomer with that name was overwritten!" << std::endl;  
+			// delete the old entry
+			vector<NMRStarFile::MonomericPolymer>::iterator mpi = monomeric_polymers_.begin() + monomeric_polymer_indices_[mp.label_name] ;
+			monomeric_polymers_.erase(mpi);
+			//monomeric_polymers_.erase(monomeric_polymer_indices_[mp.label_name]);
+		}	
+		monomeric_polymers_.push_back(mp);
+		monomeric_polymer_indices_[mp.label_name] = monomeric_polymers_.size()-1;
+	}
+
+	void NMRStarFile::MolecularSystem::clear()
+	{
+		system_name = "";
+		abbreviation_common = "";
+		chemical_units.clear();
+		system_physical_state = "";
+    system_oligomer_state = "";
+    system_paramagnetic = "";
+    system_thiol_state = "";
+
+		system_molecular_weight = 0;
+		related_database_entries.clear();
+	}
+	
+// TODO :	monomeric_polymers
+	ostream& NMRStarFile::MolecularSystem::operator >> (std::ostream& s)
+	{	
+		// TODO: if POSITION_VALUE_NA, FLOAT_VALUE_NA ... -> NA ausgeben
+		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
+		s << "system_name:" << system_name												<< endl;
+ 		s << "abbreviation_common: "  	<< abbreviation_common 		<< endl;
+		s << "system_physical_state: "	<< system_physical_state	<< endl;
+		s << "system_oligomer_state: "	<< system_oligomer_state	<< endl;
+		s << "system_paramagnetic: "		<< system_paramagnetic		<< endl;
+		s << "system_thiol_state: " 		<< system_thiol_state			<< endl;
+		s << "system_molecular_weight: "<< system_molecular_weight << std::endl;
+
+		s << "chemical units:" << std::endl; 
+		for (Size i=0; i < chemical_units.size(); i++)
+		{
+			s << "  " << chemical_units[i].component_name << " : " << chemical_units[i].label << std::endl;
+			*(chemical_units[i].monomeric_polymer) >> s;
+		}
+		s << "related database entries:" << std::endl;
+		for (Size i=0; i < related_database_entries.size(); i++)
+		{
+			if (i!=0)
+				s << "   -------------------------------------------" << endl;
+
+			s << "   DB name: "				<< related_database_entries[i].name 						<< endl;
+			s << "   accesion code: " 	<< related_database_entries[i].accession_code 	<< std::endl; 
+			s << "   molecule name: " 	<< related_database_entries[i].entry_mol_name 	<< std::endl; 
+			s << "   relation type: " 	<< related_database_entries[i].relation_type 	<< std::endl; 
+			s << "   details : " 			<< related_database_entries[i].details 				<< std::endl; 	
+		}
+		s << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " << endl << endl;
+		return s;
+	}
+	
+	ostream& NMRStarFile::NMRSpectrometer::operator >> (std::ostream& s)
+	{	
+		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
+		s << "manufacturer: " 	<< manufacturer 	<< endl;
+		s << "model: " 					<< model 					<< endl;
+		s << "field strength: " << field_strength << endl; 
+		s << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " << endl << endl;
+		return s;
+	}
+
 
 ////////////////////////////////////////////////////////////////
 
 	NMRStarFile::NMRStarFile()
 		:	CIFFile(),
-			number_of_shifts_(0),
+			number_of_shift_sets_(0),
 			entry_information_(),
+			molecular_system_(),
 			atom_data_sets_(),
 			sample_conditions_(),
-			shift_references_(),
-			system_name_()
+			shift_references_(), 
+			nmr_spectrometer_(),
+			monomeric_polymer_indices_(),
+			monomeric_polymers_(),
+			dummy_saveframe_(),
+			dummy_sample_condition_(),
+			dummy_shift_reference_set_()
 	{
 	}
 
 		:	CIFFile(f),
-			entry_information_  (f.entry_information_),
+			number_of_shift_sets_		(f.number_of_shift_sets_),
+			entry_information_  (f.entry_information_),	
+			molecular_system_   (f.	molecular_system_),
+			nmr_spectrometer_		(f.nmr_spectrometer_),
+			monomeric_polymer_indices_(f.monomeric_polymer_indices_),
+			monomeric_polymers_	(f.monomeric_polymers_),
+			dummy_saveframe_		(f.dummy_saveframe_),
+			dummy_sample_condition_(f.dummy_sample_condition_),
+			dummy_shift_reference_set_(f.dummy_shift_reference_set_)
 	NMRStarFile::NMRStarFile(const String& file_name, File::OpenMode open_mode)
 		throw (Exception::FileNotFound)
 		:	CIFFile(file_name, open_mode),
-			number_of_shifts_(0),
+			number_of_shift_sets_(0),
 			entry_information_(),
+			molecular_system_(),
 			atom_data_sets_(),
 			sample_conditions_(),
 			shift_references_(),
-			system_name_()
+			nmr_spectrometer_(),	
+			monomeric_polymer_indices_(),
+			monomeric_polymers_(),
+			dummy_saveframe_(),
+			dummy_sample_condition_(),
+			dummy_shift_reference_set_()
 	{
 	}
 
@@ -198,11 +454,18 @@ namespace BALL
 	{
 		CIFFile::operator = (f);
 
-		number_of_shifts_		= f.number_of_shifts_;;
+		number_of_shift_sets_		= f.number_of_shift_sets_;
+		entry_information_  = f.entry_information_;
+		molecular_system_   = f.molecular_system_; 
 		atom_data_sets_			= f.atom_data_sets_;
 		sample_conditions_  = f.sample_conditions_ ;
 		shift_references_   = f.shift_references_;
-		system_name_				= f.system_name_ ;
+		nmr_spectrometer_		= f.nmr_spectrometer_;	
+		monomeric_polymer_indices_ 	= f.monomeric_polymer_indices_;
+		monomeric_polymers_ 				= f.monomeric_polymers_;
+		dummy_saveframe_						= f.dummy_saveframe_;
+		dummy_sample_condition_			= f.dummy_sample_condition_;
+		dummy_shift_reference_set_	= f.dummy_shift_reference_set_;		
 
 		return *this;
 	}
@@ -211,28 +474,31 @@ namespace BALL
 		throw(Exception::ParseError)
 	{
 		CIFFile::read();
-		try 
-		{
+		//try 
+		//{
 			readEntryInformation_();
 			readMolSystem_();
+			readMonomericPolymers_();
 			readSampleConditions_();
 			readShiftReferences_();
 			readShifts_();
-		}
-		catch (Exception::GeneralException e)
+			readNMRSpectrometer_();
+			findDependiencies_();
+		//}
+		/*catch (Exception::GeneralException e)
 		{
 			throw Exception::ParseError(e.getFile(), e.getLine(), String("NMRStarFile: ") + e.getMessage(), "");
 		}
 		catch (...)
 		{
 			throw Exception::ParseError(__FILE__, __LINE__, "NMRStarFile: caught unexpected exception while reading file.", "");
-		}
+		}*/
 		return true;
 	}
 
 	{
 		Size max = 0;
-		/*
+		
 		for (Position pos = 0;  pos < atom_data_sets_.size(); pos++)
 		{
 			if (atom_data_sets_[pos].atom_data.size() > max)
@@ -240,59 +506,72 @@ namespace BALL
 				max = (Size)atom_data_sets_[pos].atom_data.size();
 			}
 		}
-		*/
+		
 		return max;
 	}
 
-	/*CIFFile::SaveFrame& NMRStarFile::getSaveframe(String category, Position db_pos) 
-	{
-		if (datablocks_.size() < (Size) db_pos)
-		{
-			Log.error() << "An error occured while searching a saveframe: index out of range" <<  std::endl;
-			return dummy_saveframe_;
-		}
-
-		if (datablocks_[db_pos].hasSaveframeCategory(category))
-		{
-			return datablocks_[db_pos].getSaveframeByCategory(category);
-		}
-		else
-		{
-			Log.error() << "No such saveframe category in datablock " << db_pos << std::endl;
-			return dummy_saveframe_;
-		}
-	}*/
-
-	/* const CIFFile::Item* NMRStarFile::hasColumn(const SaveFrame* sf, String name) 
-	{
-		if (!sf)
-			return 0;
 	
-		// look in all items of the current saveframe
-		for (Size i=0; i < sf->items.size(); i++)
-		{
-			if (sf->items[i].is_loop)
-			{
-				// look in all columns of the current item
-				for (Size col=0; col < sf->items[i].keys.size(); col++)
-				{
-					if ( sf->items[i].keys[col]== name)
-					{
-						return &(sf->items[i]);
-					}
-				}
-			}
-		}
-		return 0;
-	}*/
-
-	const std::vector<NMRStarFile::NMRAtomDataSet>& NMRStarFile::getData() const
+	const std::vector<NMRStarFile::NMRAtomDataSet>& NMRStarFile::getNMRData() const
 	{
 		return atom_data_sets_;
 	}
 
+	NMRStarFile::SampleCondition&	NMRStarFile::getSampleConditionByName(String condition) 
+	{
+		for (Size i=0; i < sample_conditions_.size(); i++)
+		{
+			if (sample_conditions_[i].name == condition)
+			{
+				return sample_conditions_[i]; 
+			}
+		}
+		Log.warn() << "Returned a dummy sample condition!" << std::endl;
+		return dummy_sample_condition_;
+	}
+
+	const NMRStarFile::SampleCondition&	NMRStarFile::getSampleConditionByName(String condition) const
+	{
+		for (Size i=0; i < sample_conditions_.size(); i++)
+		{
+			if (sample_conditions_[i].name == condition)
+			{
+				return sample_conditions_[i]; 
+			}
+		}
+		Log.warn() << "Returned a dummy sample condition!" << std::endl;
+		return dummy_sample_condition_;
+	}
+	
+	const  NMRStarFile::ShiftReferenceSet& NMRStarFile::getShiftReferenceSetByName(String name) const 
+	{
+		for (Size i=0; i < shift_references_.size(); i++)
+		{
+			if (shift_references_[i].name == name)
+			{
+				return shift_references_[i]; 
+			}
+		}
+		Log.warn() << "Returned a dummy shift reference set!" << std::endl;
+
+		return dummy_shift_reference_set_;
+	}
+	
+	NMRStarFile::ShiftReferenceSet&  NMRStarFile::getShiftReferenceSetByName(String name) 
+	{
+		for (Size i=0; i < shift_references_.size(); i++)
+		{
+			if (shift_references_[i].name == name)
+			{
+				return shift_references_[i]; 
+			}
+		}
+		Log.warn() << "Returned a dummy shift reference set!" << std::endl;
+
+		return dummy_shift_reference_set_;
+	}
+
+
 	void NMRStarFile::readEntryInformation_()
-		throw (Exception::ParseError, Exception::InvalidFormat) // TODO::
 	{
 		// in most cases we just have one datablock ...
 		for (Size db=0; db < datablocks_.size(); db++)
@@ -306,366 +585,411 @@ namespace BALL
 				for (Size sf = 0; sf < saveframes.size(); sf++)
 				{
 					if (saveframes[sf].hasItem("_Entry_type"))
-						entry_information_.entry_type = saveframes[sf].getItemValue("_Entry_type");	
+						entry_information_.entry_type = saveframes[sf].getItemValue("_Entry_type");
+					else  entry_information_.entry_type = "";
 					if (saveframes[sf].hasItem("_NMR_STAR_version"))
-						entry_information_.NMR_STAR_version = saveframes[sf].getItemValue("_NMR_STAR_version");	
+						entry_information_.NMR_STAR_version = saveframes[sf].getItemValue("_NMR_STAR_version");		
+					else  entry_information_.NMR_STAR_version = "";
+
 					if (saveframes[sf].hasItem("_BMRB_accession_number"))
 						entry_information_.BMRB_accession_code = saveframes[sf].getItemValue("_BMRB_accession_number");	
+					else  entry_information_.BMRB_accession_code = "";
+
 					if (saveframes[sf].hasItem("_Experimental_method"))
 						entry_information_.experimental_method = saveframes[sf].getItemValue("_Experimental_method");	
+					else  entry_information_.experimental_method = "";
 				}
 
 			}
 
 		}
-		
-		/*try
-		{
-			rewind();
-			test(__FILE__, __LINE__, 
-				search("       assigned_chemical_shifts", "#  Molecular system description  #", true),
-				"Number of assigned chemical shifts could not be found");
-
-			number_of_shifts_ = getField(1).toUnsignedInt();
-		}
-		catch (Exception::ParseError&)
-		{
-			Log.warn() << "Number of assigned chemical shifts could not be found" << endl;
-		}
-		catch (Exception::InvalidFormat& e)
-		{
-			Log.warn() << "Number of assigned chemical shifts could not be transformed into a number: " 
-								 << e.getMessage() << endl;
-		}*/
 	}
 
 	void NMRStarFile::readMolSystem_()	
 	{
-		/*try
+		// in most cases we just have one datablock ...
+		for (Size db=0; db < datablocks_.size(); db++)
 		{
-			test(__FILE__, __LINE__, 
-						search("#  Molecular system description  #", 
-									 "#  Sample contents and methodology  #", true),
-						"Molecular system description could not be found");
-
-			skipLines(2);
-
-			test(__FILE__, __LINE__,
-						search("   _Mol_system_name", "#", true),
-						"Molecular system description could not be found");
-
-			// systemname can be enclosed with '' or ""
-				system_name_ = getField(1, "'\"");
-
-			if (system_name_ == "")
+			// find the category
+			if  (datablocks_[db].hasSaveframeCategory("molecular_system"))
 			{
-				Log.warn() << "The name of the molecular system could not be read." << endl;
+				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("molecular_system");
+				if (saveframes.size() > 1)
+					Log.warn() << "NMRFile has more than one molecular system saveframe! " << std::endl; 
+				for (Size sf = 0; sf < saveframes.size(); sf++)
+				{
+					// read the paired entries
+
+					if (saveframes[sf].hasItem("_Mol_system_name"))
+						molecular_system_.system_name = saveframes[sf].getItemValue("_Mol_system_name");
+					else  molecular_system_.system_name  = "";
+					
+					if (saveframes[sf].hasItem("_Abbreviation_common"))
+						molecular_system_.abbreviation_common = saveframes[sf].getItemValue("_Abbreviation_common");
+					else  molecular_system_.abbreviation_common = "";
+									
+					if (saveframes[sf].hasItem("_System_physical_state"))
+						molecular_system_.system_physical_state = saveframes[sf].getItemValue("_System_physical_state");
+					else  molecular_system_.system_physical_state = "";
+
+					if (saveframes[sf].hasItem("_System_oligomer_state"))
+						molecular_system_.system_oligomer_state = saveframes[sf].getItemValue("_System_oligomer_state");
+					else  molecular_system_.system_oligomer_state = "";
+
+					if (saveframes[sf].hasItem("_System_paramagnetic"))
+						molecular_system_.system_paramagnetic = saveframes[sf].getItemValue("_System_paramagnetic");
+					else  molecular_system_.system_paramagnetic = "";
+
+					if (saveframes[sf].hasItem("_System_thiol_state"))
+						molecular_system_.system_thiol_state = saveframes[sf].getItemValue("_System_thiol_state");
+					else  molecular_system_.system_thiol_state = "";
+
+					// in dalton
+					if (saveframes[sf].hasItem("_System_molecular_weight"))
+						molecular_system_.system_molecular_weight = 
+							( (saveframes[sf].getItemValue("_System_molecular_weight") == ".") 
+								? FLOAT_VALUE_NA  
+								: saveframes[sf].getItemValue("_System_molecular_weight").toFloat());
+					else  molecular_system_.system_molecular_weight = FLOAT_VALUE_NA;
+
+					//
+					// read the loop entries
+					//
+					for (Size loop=0; loop < saveframes[sf].items.size(); loop++)
+					{
+						if (saveframes[sf].items[loop].is_loop)
+						{	
+							Item* current_loop = &saveframes[sf].items[loop];
+
+							// read the chemical units!
+							// first: Molecular system component name, 
+							// second: label
+
+							// we check the first key :-)
+							if (saveframes[sf].items[loop].keys[0]== "_Mol_system_component_name")
+							{
+								// we have found the component name table :-)
+								// store the data
+								MolecularSystem::ChemicalUnit cu;
+								for (Size line = 0; line < current_loop->values.size(); line++ )
+								{	
+									cu.component_name  = current_loop->values[line][0];
+									cu.label = current_loop->values[line][1];
+									molecular_system_.chemical_units.push_back(cu);
+								}
+							}
+
+							// read the related DB entries
+
+							if (saveframes[sf].items[loop].keys[0]== "_Database_name")
+							{
+								NMRStarFile::MolecularSystem::RelatedDB db;
+								for (Size line = 0; line < current_loop->values.size(); line++ )
+								{	
+									db.name = current_loop->values[line][0];
+									Index pos = current_loop->getKeyIndex("_Database_accession_code");
+									if ( pos > -1) db.accession_code = current_loop->values[line][pos];
+									
+									pos = current_loop->getKeyIndex("_Database_entry_mol_name");
+									if ( pos > -1) db.entry_mol_name = current_loop->values[line][pos];
+									
+									pos = current_loop->getKeyIndex("_Database_entry_relation_type");
+									if ( pos > -1) db.relation_type = current_loop->values[line][pos];
+
+									pos = current_loop->getKeyIndex("_Database_entry_details");
+									if ( pos > -1) db.details = current_loop->values[line][pos];
+								}
+									molecular_system_.related_database_entries.push_back(db);
+							}
+
+						} // if loop
+					} // end for all loops
+
+				} // end of for all saveframes
 			}
 		}
-		catch (Exception::ParseError& e)
-		{
-			Log.warn() << e.getMessage() << endl;
-		}*/
 	}
 
-	void NMRStarFile::readSampleConditions_()		
+	void NMRStarFile::readMonomericPolymers_()
 	{
-	/*	try
+		// in most cases we just have one datablock ...
+		for (Size db=0; db < datablocks_.size(); db++)
 		{
-			test(__FILE__, __LINE__, 
-						search("#  Sample conditions  #",
-									 "#  NMR parameters  #", true),
-						"sample conditions could not be found");
-
-			skipLines(2);
-
-			String word;
-			float value;
-
-			while (search("save_", "#", false))
+			// find the category
+			if  (datablocks_[db].hasSaveframeCategory("monomeric_polymer"))
 			{
-				if (line_ == "save_")
+				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("monomeric_polymer");
+				if (saveframes.size() > 1)
+					Log.warn() << "NMRFile has more than one monomeric polymer saveframe! " << std::endl; 
+				for (Size sf = 0; sf < saveframes.size(); sf++)
 				{
-					continue;
-				}
+					NMRStarFile::MonomericPolymer mp;
+					mp.label_name = saveframes[sf].framename;
 
-				SampleCondition condition;
-				condition.name.set(getLine(), 5);
-				if (!search("      _Variable_value_units", "#", true))
-				{
-					break;
-				}
-				skipLines(1);
+					// read the paired entries	
+				
+					if (saveframes[sf].hasItem("_Mol_type"))
+						mp.type = saveframes[sf].getItemValue("_Mol_type");
+					else   mp.type = "";
+				
+					if (saveframes[sf].hasItem("_Mol_polymer_class"))
+						mp.polymer_class = saveframes[sf].getItemValue("_Mol_polymer_class");
+					else   mp.polymer_class = "";
+				
+					if (saveframes[sf].hasItem("_Name_common"))
+						mp.common_name = saveframes[sf].getItemValue("_Name_common");
+					else   mp.common_name = "";
+					
+					if (saveframes[sf].hasItem("_Name_variant"))
+						mp.name_variant = saveframes[sf].getItemValue("_Name_variant");
+					else   mp.name_variant = "";
+					
+					if (saveframes[sf].hasItem("_Molecular_mass"))
+						mp.molecular_mass = 
+							((saveframes[sf].getItemValue("_Molecular_mass") ==".") ? FLOAT_VALUE_NA : saveframes[sf].getItemValue("_Molecular_mass").toFloat());
+					else  mp.molecular_mass = 0;
+					
+					if (saveframes[sf].hasItem("_Details"))
+						mp.details = saveframes[sf].getItemValue("_Details");
+					else   mp.details = "";
 
-				// reading samples set until empty line
-				while (line_.size() > 0)
-				{ 
-					word = getField(1);
-					try
-					{
-						value = word.toFloat();
-					}
-					catch (Exception::InvalidFormat&)
-					{
-						Log.warn() << "Sample Condition value could not be transformed to a number: " 
-											 << word << endl;
-						value = 0;
-					}
+					if (saveframes[sf].hasItem("_Residue_count"))
+						mp.number_of_residues = 
+							((saveframes[sf].getItemValue("_Residue_count") ==".") ? INT_VALUE_NA : saveframes[sf].getItemValue("_Residue_count").toInt());
+					else  mp.number_of_residues  = 0;
 
-					word = getField(0);		
-					if (word == "pH")
+					if (saveframes[sf].hasItem("_Mol_residue_sequence"))
+						mp.residue_sequence = saveframes[sf].getItemValue("_Mol_residue_sequence");
+					else  mp.residue_sequence = "";
+
+					// read the loops
+					for (Size loop=0; loop < saveframes[sf].items.size(); loop++)
 					{
-						condition.pH = value;
-					}
-					else
-					{
-						if (word == "temperature")
+						if (saveframes[sf].items[loop].is_loop)
 						{
-							condition.temperature = value;
-						}
-						else 
-						{
-							if (word == "pressure")
+							Item* current_loop = &saveframes[sf].items[loop];
+
+							// read the residues per sequence code
+							if (   (saveframes[sf].items[loop].keys[0]== "_Residue_seq_code")
+									&& (saveframes[sf].items[loop].keys[1]== "_Residue_label"))
 							{
-								condition.pressure = value;
+								for (Size line = 0; line < current_loop->values.size(); line++ )
+								{
+									String idx =  current_loop->values[line][0];
+									String res =  current_loop->values[line][1];
+									mp.residues_by_index[idx] = res;
+								}
+							}
+							
+							// read the table of databases with homologs
+							if (saveframes[sf].items[loop].keys[0]== "_Database_name")
+							{
+								for (Size line = 0; line < current_loop->values.size(); line++ )
+								{
+									NMRStarFile::MonomericPolymer::HomologDB hdb; 
+									hdb.name =  current_loop->values[line][0];
+	
+									Index pos = current_loop->getKeyIndex("_Database_accession_code");
+									if ( pos > -1) hdb.accession_code = current_loop->values[line][pos];
+									
+									pos = current_loop->getKeyIndex("_Database_entry_mol_name");
+									if ( pos > -1) hdb.entry_mol_name = current_loop->values[line][pos];
+
+									pos = current_loop->getKeyIndex("_Sequence_query_to_submitted_percentage");
+									hdb.seq_to_submitted_percentage  = (((pos>-1 ) && (current_loop->values[line][pos] != ".")) ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+
+									pos = current_loop->getKeyIndex("_Sequence_subject_length");
+									hdb.subject_length  = (((pos>-1 ) && (current_loop->values[line][pos] != ".")) ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+			
+									pos = current_loop->getKeyIndex("_Sequence_identity");
+									hdb.seq_identity  = (((pos>-1 ) && (current_loop->values[line][pos] != ".")) ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+
+									pos = current_loop->getKeyIndex("_Sequence_positive");
+									hdb.seq_positive  = (((pos>-1 ) && (current_loop->values[line][pos] != ".")) ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+
+									pos = current_loop->getKeyIndex("_Sequence_homology_eypectation_value");
+									hdb.homology_expectation_value  = (((pos>-1 ) && (current_loop->values[line][pos] != ".")) ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+									
+									mp.homolog_database_entries.push_back(hdb);
+								}
+							}
+						}
+					}// end of for all items
+					// store this Monomer
+					addMonomericPolymer(mp);
+					
+				/*	// check, to which chemical unit this monomer belongs
+					for (Size j=0; j < chemical_units.size(); j++)
+					{
+						if (chemical_units[j].label.trim("$") = mp.label_name)
+							chemical_units[j].monomeric_polymer = &(monomeric_polymer[mp.label_name]);
+					}*/
+
+				} // endo for all polymeric polymers
+			} // end of has polymeric monomer
+		}
+	}
+	
+	void NMRStarFile::readSampleConditions_()
+	{	
+		// in most cases we just have one datablock ...
+		for (Size db=0; db < datablocks_.size(); db++)
+		{
+			// find the category
+			if  (datablocks_[db].hasSaveframeCategory("sample_conditions"))
+			{
+				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("sample_conditions");
+				for (Size sf = 0; sf < saveframes.size(); sf++)
+				{
+					// look for the correct loop structure...
+					for (Size loop=0; loop < saveframes[sf].items.size(); loop++)
+					{
+						if (saveframes[sf].items[loop].is_loop)
+						{
+							// we check the first key :-)
+							if (saveframes[sf].items[loop].keys[0]== "_Variable_type")
+							{
+								SampleCondition tmp;
+								tmp.name =  saveframes[sf].framename;
+								// we have found the sample condition values :-)
+								// store the data
+								Item* current_loop = &saveframes[sf].items[loop];
+
+								for (Size line = 0; line < current_loop->values.size(); line++ )
+								{
+									// accoring to the NMRStarFile 2.1 documentation, 
+									// naming the first entry "_Variable_type" is mandatory
+									// this is why we are allowed to map per type :-)
+									tmp.types.push_back(current_loop->values[line][0]);
+									if ( current_loop->keys[1] == "_Variable_value")
+									{
+										tmp.values[current_loop->values[line][0]] = 
+											( (current_loop->values[line][1]==".")
+											 ? FLOAT_VALUE_NA : current_loop->values[line][1].toFloat());
+									}
+									if ( current_loop->keys[2] == "_Variable_value_error")
+									{
+										tmp.errors[current_loop->values[line][0]] = ( (current_loop->values[line][2]==".") 
+																																	? FLOAT_VALUE_NA  : current_loop->values[line][2].toFloat());
+									}
+									if ( current_loop->keys[3] == "_Variable_value_units")
+									{
+										tmp.units[current_loop->values[line][0]] = current_loop->values[line][3];
+									}
+								}
+								sample_conditions_.push_back(tmp);
+							}
+
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+	void NMRStarFile::readShiftReferences_()
+	{
+		// in most cases we just have one datablock ...
+		for (Size db=0; db < datablocks_.size(); db++)
+		{
+			// find the category
+			if  (datablocks_[db].hasSaveframeCategory("chemical_shift_reference"))
+			{
+				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("chemical_shift_reference");
+				if (saveframes.size() > 1)
+					Log.warn() << "NMRFile has more than one chemical_shift_reference saveframe! " << std::endl; 
+
+				for (Size sf = 0; sf < saveframes.size(); sf++)
+				{
+					// look for the correct loop structure...
+					for (Size loop=0; loop < saveframes[sf].items.size(); loop++)
+					{
+						if (saveframes[sf].items[loop].is_loop)
+						{
+							// we check the first key :-)
+							if (saveframes[sf].items[loop].keys[0]== "_Mol_common_name")
+							{
+								// we have found the shift references :-)
+								// store the data
+								Item* current_loop = &saveframes[sf].items[loop];
+
+								NMRStarFile::ShiftReferenceSet reference_set;
+								reference_set.name = saveframes[sf].framename;							
+						
+								for (Size line = 0; line < current_loop->values.size(); line++ )
+								{	
+									NMRStarFile::ShiftReferenceElement ref_element;
+									Index pos = current_loop->getKeyIndex("_Mol_common_name");
+									if ( pos > -1)
+									{
+										ref_element.mol_common_name =  current_loop->values[line][pos];
+									}
+									
+									pos = current_loop->getKeyIndex("_Atom_type");
+									if ( pos > -1)
+									{
+										ref_element.atom_type  =  current_loop->values[line][pos].toChar();
+									}
+									
+									pos = current_loop->getKeyIndex("_Atom_isotope_number");
+									if ( pos > 1)
+									{
+											ref_element.isotope_number  = (( current_loop->values[line][pos] == "." )
+													                         ? INT_VALUE_NA : (Position)current_loop->values[line][pos].toInt());
+									}
+									
+									pos = current_loop->getKeyIndex("_Atom_group");
+									if ( pos > 1)
+									{
+										ref_element.atom_group   =  current_loop->values[line][pos];
+									}
+									pos = current_loop->getKeyIndex("_Chem_shift_units");
+									if ( pos > -1)
+									{
+										ref_element.shift_units  =  current_loop->values[line][pos];
+									}
+									
+									pos = current_loop->getKeyIndex("_Chem_shift_value");
+									if ( pos > -1)
+									{
+											ref_element.shift_value  = ( (current_loop->values[line][pos] == ".") 
+												 												 ?  FLOAT_VALUE_NA : current_loop->values[line][pos].toFloat());	
+									}
+									
+									pos = current_loop->getKeyIndex("_Reference_method");
+									if ( pos > -1)
+									{
+										ref_element.reference_method  = current_loop->values[line][pos].toChar();
+									}
+
+									pos = current_loop->getKeyIndex("_Reference_type");
+									if ( pos > -1)
+									{
+										ref_element.reference_type  = current_loop->values[line][pos].toChar();
+									}
+									
+									pos = current_loop->getKeyIndex("_Indirect_shift_ratio");
+									if ( pos > -1)
+									{
+										ref_element.indirect_shift_ratio  = 
+											((current_loop->values[line][pos]==".") 
+											 ? FLOAT_VALUE_NA : current_loop->values[line][pos].toFloat()); 
+									}
+									
+									reference_set.elements.push_back(ref_element);
+								}
+								
+								shift_references_.push_back(reference_set);
 							}
 						}
 					}
-
-					readLine();
 				}
-				sample_conditions_.push_back(condition);
-				skipLines(3);  // skip save_
-
 			}
 		}
-		catch (Exception::ParseError& e)
-		{
-			Log.warn() << "Sample Conditions could not be read.\n" 
-								 << e.getMessage() << endl;
-		}*/
 	}
-
-	void NMRStarFile::initializeReferenceOptions_()		
-	{
-		/*if (reference_options_.size() > 0)
-		{
-			return;
-		}
-		reference_options_.push_back("      _Mol_common_name");
-		reference_options_.push_back("      _Atom_type");
-		reference_options_.push_back("      _Atom_isotope_number");
-		reference_options_.push_back("      _Atom_group");
-		reference_options_.push_back("      _Chem_shift_units");
-		reference_options_.push_back("      _Chem_shift_value");
-		reference_options_.push_back("      _Reference_method");
-		reference_options_.push_back("      _Reference_type");
-		reference_options_.push_back("      _Indirect_shift_ratio");
-		// .... more referenceOptions can be added here
-		*/
-	}
-
-	void NMRStarFile::readShiftReferences_()		
-	{
-		/*try
-		{
-			NMRStarFile::initializeReferenceOptions_();
-
-			test(__FILE__, __LINE__, 
-						search("	#  Chemical shift referencing  #",
-									 "	#  Assigned chemical shift lists  #", true),
-						"Chemical shift referencing could not be found.");
-
-			skipLines(2);
-
-			String word;
-			std::vector<int> reference_positions;
-
-			while (search("save_", "#", false))
-			{
-				if (line_ == "save_")
-				{
-					continue;
-				}
-
-				ShiftReferenceSet shift_reference;
-				shift_reference.name.set(getLine(), 5);
-
-				if (!search("   loop_", "#", false))
-				{
-					break;
-				}
-				readLine();
-				// read data format of the references set until empty line occurs
-				while (line_.size() > 0)
-				{ 
-					reference_positions.push_back(switchString(reference_options_));
-					readLine();
-				}
-
-				skipLines(0);
-
-				// read references set until empty line occurs
-				while (line_.size() > 0)
-				{ 
-					ShiftReferenceElement reference_element;
-					for (Position pos = 0; pos < reference_positions.size(); pos++)
-					{
-						// _Atom_group may be quoted
-						word = getField(pos, "'\"");
-						
-						if (reference_positions[pos] == -1)
-						{
-							continue;
-						}
-						switch (reference_positions[pos])
-						{
-							case MOL_COMMON_NAME:
-										reference_element.mol_common_name = word;
-										break;
-							case ATOM_TYPE:
-										reference_element.atom_type = word[0];
-										break;
-							case ISOTOPE_NUMBER:
-										try
-										{
-											reference_element.isotope_number = word.toUnsignedInt();
-										}
-										catch (Exception::InvalidFormat&)
-										{
-											reference_element.isotope_number = 0;
-											Log.warn() << "isotope number could not be transformed into a number: " 
-																 << word << endl;
-										}
-										break;
-							case ATOM_GROUP:
-										reference_element.atom_group = word;
-										break;
-							case SHIFT_UNITS:
-										reference_element.shift_units = word;
-										break;
-							case SHIFT_VALUE:
-										try
-										{
-											reference_element.shift_value = word.toFloat();
-										}
-										catch (Exception::InvalidFormat&)
-										{
-											reference_element.shift_value = 0;
-											Log.warn() << "shift value could not be transformed into a number: " 
-																 << word << endl;
-										}
-										break;
-							case REFERENCE_METHOD:
-										if (word == "internal")
-										{
-											reference_element.reference_method = INTERNAL_REFERENCE;
-										}
-										else
-										{
-											if (word == "external")
-											{
-												reference_element.reference_method = EXTERNAL_REFERENCE;
-											}
-											else
-											{
-												reference_element.reference_method = UNKNOWN_REFERENCE;
-											}
-										}
-										break;
-							case REFERENCE_TYPE:
-										if (word == "direct")
-										{
-											reference_element.reference_type = DIRECT_TYPE;
-										}
-										else
-										{
-											if (word == "indirect")
-											{
-												reference_element.reference_type = INDIRECT_TYPE;
-											}
-											else
-											{
-												reference_element.reference_type = UNKNOWN_TYPE;
-											}
-										}
-										break;
-							case INDIRECT_SHIFT_RATIO:
-										try
-										{
-											reference_element.indirect_shift_ratio = word.toFloat();
-										}
-										catch (Exception::InvalidFormat&)
-										{
-											reference_element.indirect_shift_ratio = 0;
-											Log.warn() << "shift ratio could not be transformed into a number: " 
-																 << word << endl;
-										}
-										break;
-							default:
-								throw Exception::ParseError(__FILE__,__LINE__, word, "Unknown reference option");
-						}
-					}
-					readLine();
-					shift_reference.elements.push_back(reference_element);
-				}
-
-				test(__FILE__, __LINE__, 
-							shift_reference.elements.size() > 0,
-							"no data for shift references found");
-				shift_references_.push_back(shift_reference);
-				skipLines(4); // skip save_
-			}
-		}
-		catch (Exception::GeneralException& e)
-		{
-			Log.warn() << "NMRStarFile: unable to read shift references." << e.getMessage() << endl;
-		}*/
-	}
-
-/*	NMRStarFile::NMRAtomData NMRStarFile::processShiftLine_()
-		throw (Exception::ParseError)
-	{
-		NMRAtomData ad;
-
-		try
-		{
-			ad.atom_ID = getField(0).toUnsignedInt();
-			ad.residue_seq_code = getField(1).toUnsignedInt();
-			ad.residue_label = getField(2);
-			ad.atom_name = getField(3);
-			ad.atom_type = (getField(4))[0];
-			ad.shift_value = getField(5).toFloat();
-			try
-			{
-				ad.error_value = getField(6).toFloat();			
-			}
-			catch (Exception::InvalidFormat&)
-			{
-				ad.error_value = 0;
-			}
-			try
-			{
-				ad.ambiguity_code = getField(7).toUnsignedInt();
-			}
-			catch (Exception::InvalidFormat&)
-			{
-				ad.ambiguity_code = 0;
-			}
-
-		}
-		catch (Exception::InvalidFormat& e)
-		{
-			Log.error() << "An error occured while reading shift data:" << endl;
-			throw Exception::ParseError(__FILE__, __LINE__,  String("error while reading shift data from line ") 
-																	+ String(getLineNumber()) + " from " + getName(), e.getMessage());
-		}
-		readLine();
-		return ad;
-	}*/
 
 	void NMRStarFile::readShifts_()
-		throw (Exception::ParseError) //??? wo wird die geworfen? TODO??
 	{
 		// in most cases we just have one datablock ...
 		for (Size db=0; db < datablocks_.size(); db++)
@@ -677,7 +1001,7 @@ namespace BALL
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("assigned_chemical_shifts");
 				if (saveframes.size() > 1)
 					Log.warn() << "NMRFile has more than one assigned_chemical_shifts saveframe! " << std::endl; 
-
+				number_of_shift_sets_ =  saveframes.size();
 				for (Size sf = 0; sf < saveframes.size(); sf++)
 				{
 					// look for the correct loop structure...
@@ -700,136 +1024,137 @@ namespace BALL
 
 									// empty values are denoted by '.' want shall we do?
 
-									atom_data.atom_ID = ((current_loop->values[line][0]=="." )? POSITION_VALUE_NA : current_loop->values[line][0].toUnsignedInt());
-									atom_data.residue_seq_code = ((current_loop->values[line][1]=="." )? POSITION_VALUE_NA : current_loop->values[line][1].toUnsignedInt());
+									atom_data.atom_ID = ((current_loop->values[line][0]=="." ) 
+																			? POSITION_VALUE_NA : current_loop->values[line][0].toUnsignedInt());
+									atom_data.residue_seq_code = ((current_loop->values[line][1]=="." )
+																								? POSITION_VALUE_NA : current_loop->values[line][1].toUnsignedInt());
 									// current_loop->values[line][1].toUnsignedInt();
 									atom_data.residue_label = current_loop->values[line][2];
 									atom_data.atom_name = current_loop->values[line][3];
 									atom_data.atom_type = current_loop->values[line][4].toChar();
-									atom_data.shift_value = ((current_loop->values[line][5]=="." )? POSITION_VALUE_NA : current_loop->values[line][5].toFloat());
+									atom_data.shift_value = ( (current_loop->values[line][5]=="." ) 
+										 												? FLOAT_VALUE_NA : current_loop->values[line][5].toFloat());
 									//current_loop->values[line][5].toFloat();
-									atom_data.error_value = ((current_loop->values[line][6]=="." )? POSITION_VALUE_NA : current_loop->values[line][6].toFloat());
+									atom_data.error_value = ((current_loop->values[line][6]=="." )
+																						? FLOAT_VALUE_NA : current_loop->values[line][6].toFloat());
 
 									//current_loop->values[line][6].toFloat();
-									atom_data.ambiguity_code = current_loop->values[line][7].toUnsignedInt();
+									atom_data.ambiguity_code = ( (current_loop->values[line][7]==".")
+																							? INT_VALUE_NA : current_loop->values[line][7].toUnsignedInt());
 
 									atom_data_set.atom_data.push_back(atom_data);
 								}
+
+								// look for the sample conditions
+								if (saveframes[sf].hasItem("_Sample_conditions_label"))
+								{	
+									String condition = (saveframes[sf].getItemValue("_Sample_conditions_label")).trim("$");
+									atom_data_set.condition = getSampleConditionByName(condition);
+		
+								}
+
+								// look for the chemical shift reference
+								if (saveframes[sf].hasItem("_Chem_shift_reference_set_label"))
+								{	
+									String reference = (saveframes[sf].getItemValue("_Chem_shift_reference_set_label")).trim("$");
+									atom_data_set.reference = getShiftReferenceSetByName(reference);
+								}
+								
+								// store this set 
 								atom_data_sets_.push_back(atom_data_set);
-std::cout << "added a data_set with " << atom_data_set.atom_data.size() << std::endl;
-							}
-						}
-					}
+								
+							} // end of a shift loop
+						}// end of a loop
+					
+					}// for all items
+				} // end of for all saveFrames 
+			}
+		}
+	}
+
+	void NMRStarFile::readNMRSpectrometer_()
+	{
+		// in most cases we just have one datablock ...
+		for (Size db=0; db < datablocks_.size(); db++)
+		{
+			// find the category
+			if  (datablocks_[db].hasSaveframeCategory("NMR_spectrometer"))
+			{
+				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("NMR_spectrometer");
+				if (saveframes.size() > 1)
+					Log.warn() << "NMRFile has more than one NMR spectrometer  saveframe! " << std::endl; 
+
+				for (Size sf = 0; sf < saveframes.size(); sf++)
+				{
+					if (saveframes[sf].hasItem("_Manufacturer"))
+						nmr_spectrometer_.manufacturer = (saveframes[sf].getDataItemValue("_Manufacturer"));
+					if (saveframes[sf].hasItem("_Model"))
+						nmr_spectrometer_.model = saveframes[sf].getDataItemValue("_Model");
+					if (saveframes[sf].hasItem("_Field_strength"))
+						nmr_spectrometer_.field_strength = ((saveframes[sf].getDataItemValue("_Field_strength")==".") 
+											? FLOAT_VALUE_NA : saveframes[sf].getDataItemValue("_Field_strength").toFloat());
 				}
 			}
 		}
-		/*		test(__FILE__, __LINE__, 
-					search("#    
-					This class ... TODO!!9             Ambiguous, specific ambiguity not defined    #", false),
-					"Assigned chemical shift lists could not be found");
-
-					skipLines(3);
-
-					String word;
-
-					while (search("save_", "#", false))
-					{
-					if (line_ == "save_")
-					{
-					continue;
-					}
-					NMRStarFile::NMRAtomDataSet atom_data_sets;
-					atom_data_sets.name.set(getLine(), 5);
-					try
-					{
-					test(__FILE__, __LINE__,
-					search("   _Sample_conditions_label", "#", false),
-					"chemical shift does not contain Sample_conditions_label");
-
-					word = getField(1);
-					if (word[0] == '$')
-					{
-					word.erase(0, 1);
-					}
-
-					for (Position pos = 0; pos < sample_conditions_.size(); pos++)
-					{
-					if (sample_conditions_[pos].name == word)
-					{
-					atom_data_sets.condition = sample_conditions_[pos];
-					}
-					}				
-					}
-			catch (Exception::ParseError&)
-					{
-					rewind();
-					}
-
-					try
-					{
-					test(__FILE__, __LINE__,
-					search("   _Chem_shift_reference_set_label", false),
-					"chemical shift does not contain _Chem_shift_reference_set_label");
-
-					word = getField(1);
-					if (word[0] == '$')
-					{
-					word.erase(0, 1);
-					}
-
-					for (Position pos = 0; pos < shift_references_.size() ; pos++)
-					{
-					if (shift_references_[pos].name == word)
-					{
-					atom_data_sets.reference = shift_references_[pos];
-					}
-					}			
-					}
-			catch (Exception::ParseError&)
-					{
-					rewind();
-					}
-
-					test(__FILE__, __LINE__, 
-					search("      _Chem_shift_ambiguity_code", false),
-					"chemical shift does not contain _Chem_shift_ambiguity_code");
-
-		skipLines();
-		while (line_.size() > 0)
-		{
-			atom_data_sets.atom_data.push_back(processShiftLine_());
-		}
-		atom_data_sets_.push_back(atom_data_sets);
 	}
+	
 
-	if (number_of_shifts_ > 0)
+	//TODO: stimmt das alles so????
+	void NMRStarFile::findDependiencies_() 
 	{
-		test(__FILE__, __LINE__, 
-				atom_data_sets_.size() == number_of_shifts_,
-				"wrong number of shift sets found");
-	}*/
+		// set the MonomericPolymer
+		// check all chemical units, to which monomer they belong 
+		for (Size j=0; j < molecular_system_.chemical_units.size(); j++)
+		{
+			if ( monomeric_polymer_indices_.has(molecular_system_.chemical_units[j].label.trim("$")) )
+			{
+				molecular_system_.chemical_units[j].monomeric_polymer = &(monomeric_polymers_[monomeric_polymer_indices_[molecular_system_.chemical_units[j].label.trim("$")]]);
+				std::cout << "Set a monomer" << std::endl;
+			}
+		}
+
+		// set the shifts
+		for (Size j=0; j < 	molecular_system_.chemical_units.size(); j++)
+		{
+			for (Size i=0; i < atom_data_sets_.size(); i++)
+			{
+				if (atom_data_sets_[i].name == molecular_system_.chemical_units[i].component_name)
+				{
+					molecular_system_.chemical_units[j].shifts = &atom_data_sets_[i];
+					std::cout << "Set a shift set" << std::endl;
+				}
+			}
+		}
 	}
+
+
 
 	bool NMRStarFile::operator == (const NMRStarFile& f)  
 	{
+		// TODO: reicht das??
 		return File::operator == (f);
 	}
 
 	bool NMRStarFile::operator != (const NMRStarFile& f)  
 	{
+		// TODO: reicht das??
 		return !(File::operator == (f));
 	}
 
-	void NMRStarFile::clear() 
+	void NMRStarFile::clear() // TODO
 	{
 		CIFFile::clear();
-		number_of_shifts_ = 0;
-		system_name_ = "";
-		reference_options_.clear();
-
+		number_of_shift_sets_ = 0;
+		//entry_information_.clear();
+		//molecular_system_.clear();
 		atom_data_sets_.clear();
 		sample_conditions_.clear();
 		shift_references_.clear();
+		//nmr_spectrometer_.clear();
+		monomeric_polymers_.clear();
+		dummy_saveframe_.clear();	
+		//dummy_sample_condition_.clear();
+		//dummy_shift_reference_set_.clear();
 	}
 
 } //namespace

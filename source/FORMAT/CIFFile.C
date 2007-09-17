@@ -214,6 +214,20 @@ namespace BALL
 		}
 		values[num_of_lines-1].push_back(value);
 	}
+
+	Index CIFFile::Item::getKeyIndex(String key) 
+	{
+		if (is_loop)
+		{
+			for (Position i=0; i<keys.size(); i++)
+			{
+				if (keys[i]==key)
+					return i;
+			}
+		}
+		return -1;
+	}
+
 	
 	const CIFFile::Datablock& CIFFile::getDatablock(const String& name) const
 	{
@@ -326,7 +340,31 @@ namespace BALL
 			Log.error() << "Warning non-existing DataItem requested, returning a dummy..." << std::endl;
 			return dummy_data_item_; 	
 		}
+	}	
+	
+	String&  CIFFile::SaveFrame::getDataItemValue(const String& item_name) 
+	{
+		if ( pair_items.has(item_name) )
+		{
+			if (!items[pair_items[item_name]].is_loop)
+				return items[pair_items[item_name]].entry.second;
+		}
+		Log.error() << "Warning non-existing DataItem requested, returning a empty String..." << std::endl;
+		return dummy_data_item_.entry.second; 	
 	}
+	
+	const String&  CIFFile::SaveFrame::getDataItemValue(const String& item_name) const
+	{
+		if ( pair_items.has(item_name) )
+		{
+			if (!items[pair_items[item_name]].is_loop)
+				return items[pair_items[item_name]].entry.second;
+		}
+		Log.error() << "Warning non-existing DataItem requested, returning a empty String..." << std::endl;
+		return dummy_data_item_.entry.second; 	
+	}
+
+
 	
 	bool CIFFile::SaveFrame::hasItem (const String& item_name) const 
 	{
