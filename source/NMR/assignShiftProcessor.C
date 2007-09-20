@@ -28,8 +28,8 @@ namespace BALL
 
 	AssignShiftProcessor::AssignShiftProcessor()
  	 : UnaryProcessor<Composite>(),
- 	   atom_data_(RTTI::getDefault<std::vector<NMRAtomData> >()),
-		 fragment_db_(0)
+ 	   atom_data_(RTTI::getDefault<std::vector<NMRStarFile::NMRAtomData> >()),
+		 fragment_db_("")
 	{
 	}
 
@@ -42,14 +42,14 @@ namespace BALL
 		}
 
 		// ----------transforming the names from STAR-FILE-STANDARD to PDB------
-		if (!fragment_db_->getNamingStandards().has("Star-PDB"))
+		if (!fragment_db_.getNamingStandards().has("Star-PDB"))
 		{
 			 Log.error() << "AssignShiftProcessor::start: "
 									 << "no appropriate map found for name conversion" << endl;
 			return false;
 		}
 
-		StringHashMap<String>& map = fragment_db_->getNamingStandards()["Star-PDB"];
+		StringHashMap<String>& map = fragment_db_.getNamingStandards()["Star-PDB"];
 
 		// ---------------------read translate table ------------------------
 		Path path;
@@ -74,6 +74,13 @@ namespace BALL
 
 		tableFile.close();
 
+
+		// ---------------------- get or compute a mapping -------------------
+		// TODO: this method should get or compute a bijection to manifest, which starfile-atom 
+		// is/has to be assigned to which AtomContainer-atom. 
+		// Furthermore a guideline for handling different chains should be given.
+
+
 		// ----------------------read the shiftdata ------------------------
 		for (Position atom_pos = 0; atom_pos < atom_data_.size() ; atom_pos++)
 		{
@@ -81,7 +88,8 @@ namespace BALL
 			String residue_name = atom_data_[atom_pos].residue_label;
 			String atom_name    = atom_data_[atom_pos].atom_name;
 			bool normalized = false;
-			normalized = fragment_db_->normalize_names.matchName(residue_name, atom_name, map);
+			normalized = fragment_db_.normalize_names.matchName(residue_name, atom_name, map);
+
 
 			const String entry(residue_name + ":" + atom_name);
 
@@ -99,6 +107,7 @@ namespace BALL
 				String full_name(prefix);
 				full_name += atom_name;
 				shift_table_[full_name] = atom_data_[atom_pos].shift_value;
+
 				continue;
 			}
 
@@ -119,7 +128,7 @@ namespace BALL
 				String full_name(atom_data_[atom_pos].residue_seq_code);
 				full_name += tokens[wordpos];
 				shift_table_[full_name] = atom_data_[atom_pos].shift_value;
-				//cout << full_name << " " << atom_data_[atom_pos].shift_value << endl;
+		cout << full_name << " " << atom_data_[atom_pos].shift_value << endl;
 			}
 		}
 

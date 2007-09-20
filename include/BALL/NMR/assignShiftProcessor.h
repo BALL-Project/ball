@@ -19,6 +19,10 @@
 #	include <BALL/FORMAT/NMRStarFile.h>
 #endif
 
+#ifndef BALL_STRUCTURE_FRAGMENTDB_H
+#include <BALL/STRUCTURE/fragmentDB.h>
+#endif
+
 #include <vector>
 
 namespace BALL 
@@ -46,7 +50,7 @@ namespace BALL
 
 		/**	Detailed constructor.
 		*/
-		AssignShiftProcessor(const vector<NMRAtomData>& atom_data);
+		AssignShiftProcessor(const vector<NMRStarFile::NMRAtomData>& atom_data);
 
 		/**	Copy constructor.
 		*/
@@ -66,6 +70,8 @@ namespace BALL
 		virtual bool start();
 		
 		/**	Application method
+		 *  It is assumed, that the residue sequence code of the NMRAtom-dataset
+		 *  is equal to the residue sequence code of the applied AtomContainer.
 		*/
 		virtual Processor::Result operator () (Composite& composite);
 
@@ -75,10 +81,10 @@ namespace BALL
 		//@{
 
 		/// 
-		void setFragmentDB(const FragmentDB* db);
+		void setFragmentDB(const FragmentDB& db);
 
 		///
-		const FragmentDB* getFragmentDB();
+		const FragmentDB& getFragmentDB();
 
 		/**	Return the state of the object
 		*/
@@ -89,10 +95,10 @@ namespace BALL
 		protected:
 		
 		StringHashMap<float> shift_table_;
-		const std::vector<NMRAtomData>&	atom_data_;
+		const std::vector<NMRStarFile::NMRAtomData>&		atom_data_;
 		const Molecule*	molecule_;
 		Position number_of_fragment_;
-		FragmentDB* fragment_db_;
+		FragmentDB fragment_db_;
 	};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

@@ -5,10 +5,10 @@
 //
 
 BALL_INLINE
-AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData>& atom_data)
+AssignShiftProcessor::AssignShiftProcessor(const vector<NMRStarFile::NMRAtomData>& atom_data)
 	:	atom_data_(atom_data),
 		molecule_(0),
-		fragment_db_(0)
+		fragment_db_("")
 {
 	if (atom_data.size() == 0)
 	{
@@ -23,17 +23,18 @@ AssignShiftProcessor::~AssignShiftProcessor()
 BALL_INLINE
 bool AssignShiftProcessor::isValid() const
 {
-	return ((atom_data_.size() > 0) && fragment_db_ != 0);
+	//TODO vielleicht besser fragment_db_.isValid()
+	return ((atom_data_.size() > 0) && fragment_db_.isValid());
 }
 
 BALL_INLINE
-void AssignShiftProcessor::setFragmentDB(const FragmentDB* db)
+void AssignShiftProcessor::setFragmentDB(const FragmentDB& db) 
 {
-	fragment_db_ = (FragmentDB*)db;
+	fragment_db_ = db;
 }
 
 BALL_INLINE
-const FragmentDB* AssignShiftProcessor::getFragmentDB()
+const FragmentDB& AssignShiftProcessor::getFragmentDB()
 {
 	return fragment_db_;
 }
