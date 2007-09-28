@@ -25,6 +25,8 @@ using namespace BALL;
 
 EOL									\n
 AnyPrintChar				({OrdinaryChar}|[\"\'#$_\t[:blank:];\[\]])
+AnyPrintChar1				({OrdinaryChar}|[\'#$_\t[:blank:];\[\]])
+AnyPrintChar2				({OrdinaryChar}|[\"#$_\t[:blank:];\[\]])
 /*AnyPrintChar				[^\n]*/
 
 NonSQPrintChar			[^\n']
@@ -43,8 +45,8 @@ OrdinaryChar        [0-9a-zA-Z!%&()*+,\-./:<=>?@\\^`{|}~]
 
 /* NOTE: in the formal definition, UnquotedStrings are allowed to begin with a semicolon if they are not at the beginning of a line! We do not support this case yet! */
 UnquotedString      {OrdinaryChar}{NBC}* 
-SingleQuotedString  \'{AnyPrintChar}*\'
-DoubleQuotedString 	\"{AnyPrintChar}*\"
+SingleQuotedString  \'{AnyPrintChar2}*\'
+DoubleQuotedString 	\"{AnyPrintChar1}*\"
 
 TEXTLEADCHAR        {OrdinaryChar}|\"|#|$|\'|_|[[:blank:]]|\[|\] 
 CHARSTRING				 	({UnquotedString}|{SingleQuotedString}|{DoubleQuotedString})
