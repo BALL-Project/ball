@@ -128,7 +128,7 @@ namespace BALL
 				String full_name(atom_data_[atom_pos].residue_seq_code);
 				full_name += tokens[wordpos];
 				shift_table_[full_name] = atom_data_[atom_pos].shift_value;
-		cout << full_name << " " << atom_data_[atom_pos].shift_value << endl;
+		//cout << full_name << " " << atom_data_[atom_pos].shift_value << endl;
 			}
 		}
 
@@ -184,6 +184,7 @@ namespace BALL
 		if (patom->hasProperty(ShiftModule::PROPERTY__SHIFT))
 		{
 			Log.error() << "AssignShiftProcessor: atom contains already shift data: " << full_name << endl;   
+			//patom->clearProperty(ShiftModule::PROPERTY__EXPERIMENTAL__SHIFT);
 			patom->clearProperty(ShiftModule::PROPERTY__SHIFT);
 		}
 
