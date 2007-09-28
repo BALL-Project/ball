@@ -518,6 +518,12 @@ namespace BALL
 			/// find dependencies for the ChemicalUnits
 			void findDependiencies_();
 
+			/// set the characters denoting non-available values
+			void setSpecialCharacters_(String characters);
+
+			/// check whether the given String denotes a non-available value
+			bool valueIsValid(String value);
+
 			//_@}
 			/*_	@name	NMR-Star specific attributes
 			*/
@@ -565,6 +571,8 @@ namespace BALL
 
 			ShiftReferenceSet dummy_shift_reference_set_; 
 			
+			/// characters, that denote non-available values
+			String special_characters_;
 			//_@}
 	};
 

@@ -123,7 +123,7 @@ namespace BALL
 		{
 			if (i!=0)
 				s << "------------------------------------" << endl;
-			components[i] >> std::cout;
+			components[i] >> s;
 		}
 		s << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " << endl << endl;
 		return s;
@@ -490,7 +490,8 @@ namespace BALL
 			dummy_saveframe_(),
 			dummy_sample_condition_(),
 			dummy_sample_(),
-			dummy_shift_reference_set_()
+			dummy_shift_reference_set_(),
+			special_characters_(".?@")
 	{
 	}
 
@@ -505,7 +506,8 @@ namespace BALL
 			dummy_saveframe_		(f.dummy_saveframe_),
 			dummy_sample_condition_(f.dummy_sample_condition_),
 			dummy_sample_				(f.dummy_sample_),
-			dummy_shift_reference_set_(f.dummy_shift_reference_set_)
+			dummy_shift_reference_set_(f.dummy_shift_reference_set_),
+			special_characters_	(f.special_characters_)
 	NMRStarFile::NMRStarFile(const String& file_name, File::OpenMode open_mode)
 		throw (Exception::FileNotFound)
 		:	CIFFile(file_name, open_mode),
@@ -522,7 +524,8 @@ namespace BALL
 			dummy_saveframe_(),
 			dummy_sample_condition_(),
 			dummy_sample_(),
-			dummy_shift_reference_set_()
+			dummy_shift_reference_set_(),
+			special_characters_(".?@")
 	{
 	}
 
@@ -547,8 +550,9 @@ namespace BALL
 		dummy_saveframe_						= f.dummy_saveframe_;
 		dummy_sample_condition_			= f.dummy_sample_condition_;
 		dummy_sample_								= f.dummy_sample_;
-		dummy_shift_reference_set_	= f.dummy_shift_reference_set_;		
-
+		dummy_shift_reference_set_	= f.dummy_shift_reference_set_;	
+		special_characters_	 				= f.special_characters_;
+	
 		return *this;
 	}
 
@@ -769,9 +773,9 @@ namespace BALL
 					// in dalton
 					if (saveframes[sf].hasItem("_System_molecular_weight"))
 						molecular_system_.system_molecular_weight = 
-							( (saveframes[sf].getItemValue("_System_molecular_weight") == ".") 
-								? FLOAT_VALUE_NA  
-								: saveframes[sf].getItemValue("_System_molecular_weight").toFloat());
+							( valueIsValid(saveframes[sf].getItemValue("_System_molecular_weight")) 
+								? saveframes[sf].getItemValue("_System_molecular_weight").toFloat()
+								:  FLOAT_VALUE_NA  );
 					else  molecular_system_.system_molecular_weight = FLOAT_VALUE_NA;
 
 					//
@@ -868,7 +872,8 @@ namespace BALL
 					
 					if (saveframes[sf].hasItem("_Molecular_mass"))
 						mp.molecular_mass = 
-							((saveframes[sf].getItemValue("_Molecular_mass") ==".") ? FLOAT_VALUE_NA : saveframes[sf].getItemValue("_Molecular_mass").toFloat());
+							( valueIsValid(saveframes[sf].getItemValue("_Molecular_mass")) 
+								? saveframes[sf].getItemValue("_Molecular_mass").toFloat() :  FLOAT_VALUE_NA );
 					else  mp.molecular_mass = 0;
 					
 					if (saveframes[sf].hasItem("_Details"))
@@ -877,12 +882,19 @@ namespace BALL
 
 					if (saveframes[sf].hasItem("_Residue_count"))
 						mp.number_of_residues = 
-							((saveframes[sf].getItemValue("_Residue_count") ==".") ? INT_VALUE_NA : saveframes[sf].getItemValue("_Residue_count").toInt());
+							( valueIsValid(saveframes[sf].getItemValue("_Residue_count")) 
+								? saveframes[sf].getItemValue("_Residue_count").toInt() : INT_VALUE_NA );
 					else  mp.number_of_residues  = 0;
 
 					if (saveframes[sf].hasItem("_Mol_residue_sequence"))
-						mp.residue_sequence = saveframes[sf].getItemValue("_Mol_residue_sequence");
-					else  mp.residue_sequence = "";
+					{
+						mp.residue_sequence = saveframes[sf].getItemValue("_Mol_residue_sequence").trim("; \n");
+						while ( mp.residue_sequence.hasSubstring("\n"))
+						{
+							mp.residue_sequence.substitute("\n", "");
+						}
+					}
+					else { mp.residue_sequence = "";}
 
 					// read the loops
 					for (Size loop=0; loop < saveframes[sf].items.size(); loop++)
@@ -918,19 +930,24 @@ namespace BALL
 									if ( pos > -1) hdb.entry_mol_name = current_loop->values[line][pos];
 
 									pos = current_loop->getKeyIndex("_Sequence_query_to_submitted_percentage");
-									hdb.seq_to_submitted_percentage  = (((pos>-1 ) && (current_loop->values[line][pos] != ".")) ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+									hdb.seq_to_submitted_percentage  = (((pos>-1 ) && valueIsValid(current_loop->values[line][pos])) 
+																				? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
 
 									pos = current_loop->getKeyIndex("_Sequence_subject_length");
-									hdb.subject_length  = (((pos>-1 ) && (current_loop->values[line][pos] != ".")) ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+									hdb.subject_length  = (((pos>-1 ) && valueIsValid(current_loop->values[line][pos])) 
+																				? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
 			
 									pos = current_loop->getKeyIndex("_Sequence_identity");
-									hdb.seq_identity  = (((pos>-1 ) && (current_loop->values[line][pos] != ".")) ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+									hdb.seq_identity  = (((pos>-1 ) && valueIsValid(current_loop->values[line][pos])) 
+																				? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
 
 									pos = current_loop->getKeyIndex("_Sequence_positive");
-									hdb.seq_positive  = (((pos>-1 ) && (current_loop->values[line][pos] != ".")) ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+									hdb.seq_positive  = (((pos>-1 ) && valueIsValid(current_loop->values[line][pos])) 
+																				? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
 
 									pos = current_loop->getKeyIndex("_Sequence_homology_eypectation_value");
-									hdb.homology_expectation_value  = (((pos>-1 ) && (current_loop->values[line][pos] != ".")) ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+									hdb.homology_expectation_value  = (((pos>-1 ) && valueIsValid(current_loop->values[line][pos])) 
+																				? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
 									
 									mp.homolog_database_entries.push_back(hdb);
 								}
@@ -986,13 +1003,14 @@ namespace BALL
 									if ( current_loop->keys[1] == "_Variable_value")
 									{
 										tmp.values[current_loop->values[line][0]] = 
-											( (current_loop->values[line][1]==".")
-											 ? FLOAT_VALUE_NA : current_loop->values[line][1].toFloat());
+											( valueIsValid(current_loop->values[line][1])
+											 ? current_loop->values[line][1].toFloat() : FLOAT_VALUE_NA );
 									}
 									if ( current_loop->keys[2] == "_Variable_value_error")
 									{
-										tmp.errors[current_loop->values[line][0]] = ( (current_loop->values[line][2]==".") 
-																																	? FLOAT_VALUE_NA  : current_loop->values[line][2].toFloat());
+										tmp.errors[current_loop->values[line][0]] = 
+											( valueIsValid(current_loop->values[line][2])
+												? current_loop->values[line][2].toFloat() : FLOAT_VALUE_NA );
 									}
 									if ( current_loop->keys[3] == "_Variable_value_units")
 									{
@@ -1057,8 +1075,8 @@ namespace BALL
 									pos = current_loop->getKeyIndex("_Atom_isotope_number");
 									if ( pos > 1)
 									{
-											ref_element.isotope_number  = (( current_loop->values[line][pos] == "." )
-													                         ? INT_VALUE_NA : (Position)current_loop->values[line][pos].toInt());
+											ref_element.isotope_number  = ( valueIsValid(current_loop->values[line][pos]) 
+													                         ? (Position)current_loop->values[line][pos].toInt() : INT_VALUE_NA );
 									}
 									
 									pos = current_loop->getKeyIndex("_Atom_group");
@@ -1075,8 +1093,8 @@ namespace BALL
 									pos = current_loop->getKeyIndex("_Chem_shift_value");
 									if ( pos > -1)
 									{
-											ref_element.shift_value  = ( (current_loop->values[line][pos] == ".") 
-												 												 ?  FLOAT_VALUE_NA : current_loop->values[line][pos].toFloat());	
+											ref_element.shift_value  = ( valueIsValid(current_loop->values[line][pos]) 
+												 												 ?  current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);	
 									}
 									
 									pos = current_loop->getKeyIndex("_Reference_method");
@@ -1095,8 +1113,8 @@ namespace BALL
 									if ( pos > -1)
 									{
 										ref_element.indirect_shift_ratio  = 
-											((current_loop->values[line][pos]==".") 
-											 ? FLOAT_VALUE_NA : current_loop->values[line][pos].toFloat()); 
+											(valueIsValid(current_loop->values[line][pos]) 
+											 ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA); 
 									}
 									
 									reference_set.elements.push_back(ref_element);
@@ -1146,23 +1164,23 @@ namespace BALL
 
 									// empty values are denoted by '.' want shall we do?
 
-									atom_data.atom_ID = ((current_loop->values[line][0]=="." ) 
-																			? POSITION_VALUE_NA : current_loop->values[line][0].toUnsignedInt());
-									atom_data.residue_seq_code = ((current_loop->values[line][1]=="." )
-																								? POSITION_VALUE_NA : current_loop->values[line][1].toUnsignedInt());
+									atom_data.atom_ID = (valueIsValid(current_loop->values[line][0]) 
+																			?  current_loop->values[line][0].toUnsignedInt() : POSITION_VALUE_NA);
+									atom_data.residue_seq_code = (valueIsValid(current_loop->values[line][1])
+																								? current_loop->values[line][1].toUnsignedInt() : POSITION_VALUE_NA);
 									// current_loop->values[line][1].toUnsignedInt();
 									atom_data.residue_label = current_loop->values[line][2];
 									atom_data.atom_name = current_loop->values[line][3];
 									atom_data.atom_type = current_loop->values[line][4].toChar();
-									atom_data.shift_value = ( (current_loop->values[line][5]=="." ) 
-										 												? FLOAT_VALUE_NA : current_loop->values[line][5].toFloat());
+									atom_data.shift_value = ( valueIsValid(current_loop->values[line][5]) 
+										 												? current_loop->values[line][5].toFloat() : FLOAT_VALUE_NA);
 									//current_loop->values[line][5].toFloat();
-									atom_data.error_value = ((current_loop->values[line][6]=="." )
-																						? FLOAT_VALUE_NA : current_loop->values[line][6].toFloat());
+									atom_data.error_value = (valueIsValid(current_loop->values[line][6])
+																						?  current_loop->values[line][6].toFloat() : FLOAT_VALUE_NA);
 
 									//current_loop->values[line][6].toFloat();
-									atom_data.ambiguity_code = ( (current_loop->values[line][7]==".")
-																							? INT_VALUE_NA : current_loop->values[line][7].toUnsignedInt());
+									atom_data.ambiguity_code = ( valueIsValid(current_loop->values[line][7])
+																							?  current_loop->values[line][7].toUnsignedInt() : INT_VALUE_NA);
 
 									atom_data_set.atom_data.push_back(atom_data);
 								}
@@ -1252,7 +1270,8 @@ namespace BALL
 									Index pos = current_loop->getKeyIndex("_Concentration_value");
 									if ( pos > -1) 
 									{ 
-										component.concentration_value =  ((current_loop->values[line][pos] != ".") ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+										component.concentration_value =  (valueIsValid(current_loop->values[line][pos]) 
+																										? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
 									}	
 
 									pos = current_loop->getKeyIndex("_Concentration_value_units");
@@ -1261,13 +1280,15 @@ namespace BALL
 									pos = current_loop->getKeyIndex("_Concentration_min_value");
 									if ( pos > -1)
 									{
-										component.concentration_min =  ((current_loop->values[line][pos] != ".") ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+										component.concentration_min =  (valueIsValid(current_loop->values[line][pos]) 
+																									? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
 									}
 									
 									pos = current_loop->getKeyIndex("_Concentration_max_value");
 									if ( pos > -1) 
 									{
-										component.concentration_max  =  ((current_loop->values[line][pos] != ".") ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+										component.concentration_max  =  (valueIsValid(current_loop->values[line][pos]) 
+																									? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
 									}
 
 									pos = current_loop->getKeyIndex("_Isotopic_labeling");
@@ -1305,8 +1326,8 @@ namespace BALL
 					if (saveframes[sf].hasItem("_Model"))
 						nmr_spectrometer_.model = saveframes[sf].getDataItemValue("_Model");
 					if (saveframes[sf].hasItem("_Field_strength"))
-						nmr_spectrometer_.field_strength = ((saveframes[sf].getDataItemValue("_Field_strength")==".") 
-											? FLOAT_VALUE_NA : saveframes[sf].getDataItemValue("_Field_strength").toFloat());
+						nmr_spectrometer_.field_strength = (valueIsValid(saveframes[sf].getDataItemValue("_Field_strength")) 
+											?  saveframes[sf].getDataItemValue("_Field_strength").toFloat() : FLOAT_VALUE_NA);
 				}
 			}
 		}
@@ -1322,7 +1343,6 @@ namespace BALL
 			if ( monomeric_polymer_indices_.has(molecular_system_.chemical_units[j].label.trim("$")) )
 			{
 				molecular_system_.chemical_units[j].monomeric_polymer = &(monomeric_polymers_[monomeric_polymer_indices_[molecular_system_.chemical_units[j].label.trim("$")]]);
-				std::cout << "Set a monomer" << std::endl;
 			}
 		}
 
@@ -1334,13 +1354,28 @@ namespace BALL
 				if (atom_data_sets_[i].name == molecular_system_.chemical_units[i].component_name)
 				{
 					molecular_system_.chemical_units[j].shifts = &atom_data_sets_[i];
-					std::cout << "Set a shift set" << std::endl;
 				}
 			}
 		}
 	}
 
+	void NMRStarFile::setSpecialCharacters_(String characters)
+	{
+		special_characters_ = characters;
+	}
 
+	bool NMRStarFile::valueIsValid(String value)
+	{
+		if (value.size()==1)
+		{
+			for (Size i=0; i < special_characters_.size(); i ++)
+			{
+				if (value == special_characters_[i])
+					return false;
+			}
+		}
+		return true;
+	}
 
 	bool NMRStarFile::operator == (const NMRStarFile& f)  
 	{
@@ -1369,5 +1404,6 @@ namespace BALL
 		//dummy_sample_condition_.clear();
 		//dummy_shift_reference_set_.clear();
 	}
-
+	
+	
 } //namespace
