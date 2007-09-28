@@ -6,6 +6,8 @@
 #include <iostream> 
 #include <fstream>
 
+#define debug 1
+
 using namespace std;
 
 namespace BALL
@@ -562,14 +564,41 @@ namespace BALL
 		CIFFile::read();
 		//try 
 		//{
+#ifdef debug
+	std::cout << "NMRStarFile::readEntryInformation_()" << std::endl;
+#endif
 			readEntryInformation_();
+#ifdef debug
+	std::cout << "NMRStarFile::readMolSystem_()" << std::endl;
+#endif
 			readMolSystem_();
+#ifdef debug
+	std::cout << "NMRStarFile::readMonomericPolymers_()" << std::endl;
+#endif
 			readMonomericPolymers_();
+#ifdef debug
+	std::cout << "NMRStarFile::readSampleConditions_()" << std::endl;
+#endif
 			readSampleConditions_();
+#ifdef debug
+	std::cout << "NMRStarFile::readShiftReferences_()" << std::endl;
+#endif
 			readShiftReferences_();
+#ifdef debug
+	std::cout << "NMRStarFile::readSamples_()" << std::endl;
+#endif
 			readSamples_();
+#ifdef debug
+	std::cout << "NMRStarFile::readNMRSpectrometer_()" << std::endl;
+#endif
 			readNMRSpectrometer_();
+#ifdef debug	
+	std::cout << "NMRStarFile::readShifts_()" << std::endl;
+#endif
 			readShifts_();
+#ifdef debug
+	std::cout << "NMRStarFile::findDependiencies_()" << std::endl;	
+#endif
 			findDependiencies_();
 		//}
 		/*catch (Exception::GeneralException e)
@@ -1162,25 +1191,33 @@ namespace BALL
 								{	
 									NMRAtomData atom_data;
 
-									// empty values are denoted by '.' want shall we do?
-
-									atom_data.atom_ID = (valueIsValid(current_loop->values[line][0]) 
+									// empty values are denoted by '.' what shall we do?
+									Index pos = current_loop->getKeyIndex("_Atom_shift_assign_ID");
+									atom_data.atom_ID = (((pos > -1) && valueIsValid(current_loop->values[line][0]) )
 																			?  current_loop->values[line][0].toUnsignedInt() : POSITION_VALUE_NA);
-									atom_data.residue_seq_code = (valueIsValid(current_loop->values[line][1])
+									pos = current_loop->getKeyIndex("_Residue_seq_code");
+									atom_data.residue_seq_code = (((pos > -1) && valueIsValid(current_loop->values[line][pos]))
 																								? current_loop->values[line][1].toUnsignedInt() : POSITION_VALUE_NA);
-									// current_loop->values[line][1].toUnsignedInt();
-									atom_data.residue_label = current_loop->values[line][2];
-									atom_data.atom_name = current_loop->values[line][3];
-									atom_data.atom_type = current_loop->values[line][4].toChar();
-									atom_data.shift_value = ( valueIsValid(current_loop->values[line][5]) 
-										 												? current_loop->values[line][5].toFloat() : FLOAT_VALUE_NA);
-									//current_loop->values[line][5].toFloat();
-									atom_data.error_value = (valueIsValid(current_loop->values[line][6])
-																						?  current_loop->values[line][6].toFloat() : FLOAT_VALUE_NA);
+									pos = current_loop->getKeyIndex("_Residue_label");
+									if (pos > -1) atom_data.residue_label = current_loop->values[line][pos];
 
-									//current_loop->values[line][6].toFloat();
-									atom_data.ambiguity_code = ( valueIsValid(current_loop->values[line][7])
-																							?  current_loop->values[line][7].toUnsignedInt() : INT_VALUE_NA);
+									pos = current_loop->getKeyIndex("_Atom_name");
+									if (pos > -1) atom_data.atom_name = current_loop->values[line][pos];
+
+									pos = current_loop->getKeyIndex("_Atom_type");
+									if (pos > -1) atom_data.atom_type = current_loop->values[line][pos].toChar();
+							
+									pos = current_loop->getKeyIndex("_Chem_shift_value");
+									atom_data.shift_value = ( (pos > -1) && valueIsValid(current_loop->values[line][pos]) 
+										 												? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+									
+									pos = current_loop->getKeyIndex("_Chem_shift_value_error");
+									atom_data.error_value = ( (pos > -1) && valueIsValid(current_loop->values[line][pos])
+																						?  current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+
+									pos = current_loop->getKeyIndex("_Chem_shift_ambiguity_code");
+									atom_data.ambiguity_code = ( (pos > -1) && valueIsValid(current_loop->values[line][pos])
+																							?  current_loop->values[line][pos].toUnsignedInt() : INT_VALUE_NA);
 
 									atom_data_set.atom_data.push_back(atom_data);
 								}
