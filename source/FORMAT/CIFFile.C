@@ -112,7 +112,7 @@ namespace BALL
 		}
 		catch (Exception::ParseError& e)
 		{
-			Log.error() << "Cannot read " << getName() << std::endl;
+			Log.error() << "CIFFile: Cannot read " << getName() << std::endl;
 		}
 	
 		return true;
