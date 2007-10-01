@@ -126,8 +126,8 @@ save_frame_content: data_items {
 	;
 
 
-optional_whitespace: /* empty */ { strcpy($$, ""); }
-	| TK_WHITESPACE { strcpy($$, $1); }
+optional_whitespace: /* empty */ { /*strcpy($$, "");*/ }
+	| TK_WHITESPACE { /*strcpy($$, $1); */}
 	;
 
 %%
