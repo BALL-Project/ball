@@ -135,7 +135,7 @@ optional_whitespace: /* empty */ { /*strcpy($$, "");*/ }
 
 void yyerror(char* s)
 {
-	printf("Parse Error!\n");
+	printf("CIFParserParser(): Parse Error! %s \n",s);
 }
 
 /*
