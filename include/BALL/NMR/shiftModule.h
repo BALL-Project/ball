@@ -56,7 +56,7 @@ namespace BALL
 				<tt>atom.setProperty(ShiftModule::PROPERTY__SHIFT, 0.0);</tt>
 		*/
 		static const char* PROPERTY__SHIFT;
-		static const char* PROPERTY__EXPERIMENTAL_SHIFT;
+		static const char* PROPERTY__EXPERIMENTAL__SHIFT;
 		//@}
 
 		/** @name	Constructors and Destructors

@@ -11,7 +11,7 @@ namespace BALL
 {
 
 	const char* ShiftModule::PROPERTY__SHIFT = "ChemicalShift";
-	const char* ShiftModule::PROPERTY__EXPERIMENTAL_SHIFT = "ExperimentalChemicalShift";
+	const char* ShiftModule::PROPERTY__EXPERIMENTAL__SHIFT = "ExperimentalChemicalShift";
 
 	ShiftModule::ShiftModule()
 		:	module_name_(""),

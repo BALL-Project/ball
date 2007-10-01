@@ -181,16 +181,15 @@ namespace BALL
 		full_name += ":";
 		full_name += patom->getName();
 
-		if (patom->hasProperty(ShiftModule::PROPERTY__SHIFT))
+		if (patom->hasProperty(ShiftModule::PROPERTY__EXPERIMENTAL__SHIFT))
 		{
 			Log.error() << "AssignShiftProcessor: atom contains already shift data: " << full_name << endl;   
-			//patom->clearProperty(ShiftModule::PROPERTY__EXPERIMENTAL__SHIFT);
-			patom->clearProperty(ShiftModule::PROPERTY__SHIFT);
+			patom->clearProperty(ShiftModule::PROPERTY__EXPERIMENTAL__SHIFT);
 		}
 
 		if (shift_table_.has(full_name))
 		{
-			patom->setProperty(ShiftModule::PROPERTY__SHIFT, shift_table_[full_name]);
+			patom->setProperty(ShiftModule::PROPERTY__EXPERIMENTAL__SHIFT, shift_table_[full_name]);
 		}
 
 		return Processor::CONTINUE;
