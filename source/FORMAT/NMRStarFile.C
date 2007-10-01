@@ -6,7 +6,7 @@
 #include <iostream> 
 #include <fstream>
 
-#define debug 1
+//#define debug 1
 
 using namespace std;
 
@@ -561,6 +561,10 @@ namespace BALL
 	bool NMRStarFile::read() 
 		throw(Exception::ParseError)
 	{
+
+#ifdef debug
+	std::cout << "CIFFile::read()" << std::endl;
+#endif
 		CIFFile::read();
 		//try 
 		//{
@@ -1373,6 +1377,10 @@ namespace BALL
 
 	void NMRStarFile::findDependiencies_() 
 	{
+#ifdef debug
+	std::cout << "NMRStarFile::findDependiencies_()" << std::endl;	
+#endif
+
 		// set the MonomericPolymer
 		// check all chemical units, to which monomer they belong 
 		for (Size j=0; j < molecular_system_.chemical_units.size(); j++)
@@ -1382,18 +1390,22 @@ namespace BALL
 				molecular_system_.chemical_units[j].monomeric_polymer = &(monomeric_polymers_[monomeric_polymer_indices_[molecular_system_.chemical_units[j].label.trim("$")]]);
 			}
 		}
-
 		// set the shifts
 		for (Size j=0; j < 	molecular_system_.chemical_units.size(); j++)
 		{
 			for (Size i=0; i < atom_data_sets_.size(); i++)
 			{
-				if (atom_data_sets_[i].name == molecular_system_.chemical_units[i].component_name)
+				if (atom_data_sets_[i].name == molecular_system_.chemical_units[j].component_name)
 				{
 					molecular_system_.chemical_units[j].shifts = &atom_data_sets_[i];
 				}
 			}
 		}
+
+#ifdef debug
+	std::cout << "    End of NMRStarFile::findDependiencies_()" << std::endl;	
+#endif
+
 	}
 
 	void NMRStarFile::setSpecialCharacters_(String characters)
