@@ -22,15 +22,37 @@
 #endif
 
 #include <vector>
+#include <map>
 
 namespace BALL
 {
 
-  /** This processor computes all  __backbone__ hydrogen bonds occuring between amino acids in
+  /** This processor computes hydrogen bonds, stores the backbone hydrogenbonds as artificial index pairs and
+	 *  introduces for all hydrogen bonds found a BALL::Bond of type BALL::Bond::TYPE__HYDROGEN.
+	 * 	
+	 * 	The artifical indices are created by iterating with the ResidueIterator and assigning ascending numbers starting with zero.
+	 * 	NOTE: After finishing the processor, the ResidueIterator may change the arrangement of the sequence!! 
+	 * 
+	 *  The HBondProcessor offers two prediction methods: 
+	 *  BALL::HBondProcessor::PredictionMethod::KABSCH_SANDER and
+	 *  BALL::HBondProcessor::PredictionMethod::WISHART_ET_AL
+	 *  Default prediction method is BALL::HBondProcessor::PredictionMethod::KABSCH_SANDER.
+	 *
+	 *  The BALL::HBondProcessor::PredictionMethod::KABSCH_SANDER computes all 
+	 *  __backbone__ hydrogen bonds occuring between amino acids in
 	 *  the composite it is applied to. The computation of the bonds follows the
 	 *  criterion given in "Kabsch W & Sander C (1983). Dictionary of protein secondary 
 	 *  structure: pattern recognition of hydrogen-bonded and geometrical features. 
 	 *  Biopolymers, 22, 2577-2637".
+	 *
+	 *
+	 *  The  BALL::HBondProcessor::PredictionMethod::WISHART_ET_AL computes all
+	 *  hydrogen bonds occuring between amid and alpha hydrogens (H/HA) and 
+	 *  carbonyl oxygens on the backbone (O) or sidechain oxygens (OD, OE, OG, OH)
+	 *	in the composite it is applied to. The computation of the bonds follows the
+	 *  criterion given in " Neal, S., Nip, A. M., Zhang, H., and Wishart, D. S. (2003). 
+	 *  Rapid and accurate calculation of protein 1H, 13C and 15N chemical shifts. 
+	 *  J Biomol NMR, 26(3):215-240.".
    */
   class BALL_EXPORT HBondProcessor 
 		:	public UnaryProcessor<Composite>
@@ -131,7 +153,7 @@ namespace BALL
 		//@}
 
 		///
-    const std::vector< std::vector<Position> >& getHBondPairs() const;
+    const std::vector< std::vector<Position> >& getBackboneHBondPairs() const;
 
 		/// 
     const std::vector<ResidueData>& getResidueData() const;
@@ -160,11 +182,15 @@ namespace BALL
 		//_ upper point of the grid
     Vector3 lower_;
     
-    /// the atom positions per residue 
+    /// the atom positions and an accending number per residue 
     vector<ResidueData> residue_data_;
 
-    /// vector to store HBondpartners
-    std::vector<std::vector<Position> > h_bond_pairs_;
+
+		/// for both methods:
+
+    /// vector to store backbone HBond partners
+    std::vector<std::vector<Position> > backbone_h_bond_pairs_;
+
 
 		/// for the Wishart et al method: 
 		
@@ -176,9 +202,9 @@ namespace BALL
      */
     std::vector<Atom*> 						acceptors_;
 		
-		/*_ map from residue ID to ascending numbers for the secondary structure processor
+		/*_ map from residue ptr to ascending numbers for the secondary structure processor
 		 */
-		StringHashMap<Position>						residue_id_to_position_;		
+		std::map< Residue*, Position>						residue_ptr_to_position_;		
   }; //class HBondProcessor
 } //namesspace BALL
 

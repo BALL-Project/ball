@@ -24,7 +24,7 @@ namespace BALL
 			AMIDE_PROTON_OXYGEN_SEPARATION_DISTANCE(3.5),
 			ALPHA_PROTON_OXYGEN_SEPARATION_DISTANCE(2.77208),
 			residue_data_(),
-			h_bond_pairs_()
+			backbone_h_bond_pairs_()
 	{
 		setDefaultOptions();
 	}
@@ -37,7 +37,7 @@ namespace BALL
 			ALPHA_PROTON_OXYGEN_SEPARATION_DISTANCE(2.77208),
 			options(new_options),
 			residue_data_(),
-			h_bond_pairs_()
+			backbone_h_bond_pairs_()
 	{
 		// make sure to add all defaults that were missing in the options we got
 		setDefaultOptions();
@@ -59,10 +59,10 @@ namespace BALL
     // clear the donor list and the acceptor list
     donors_.clear();
     acceptors_.clear();
-		h_bond_pairs_.clear();
+		backbone_h_bond_pairs_.clear();
     residue_data_.clear();
 
-		residue_id_to_position_.clear();
+		residue_ptr_to_position_.clear();
 		
   	return true;
 	}
@@ -132,18 +132,18 @@ namespace BALL
 
 			for (; +ri ; ++ri)
 			{	
-				residue_id_to_position_[ri->getID()] = j;
+				residue_ptr_to_position_[&*ri] = j;
 				j++;
 				for (AtomIterator ai = ri->beginAtom(); +ai; ++ai)
 				{
 					Atom* atom = RTTI::castTo<Atom>((*ai));
 
-					// we store all oxygens as hydrogen bond acceptors
+					// we store all oxygens as potential hydrogen bond acceptors
 					if (atom->getElement() == PTE[Element::O])
 					{			
 						acceptors_.push_back(atom);
 					}			
-					// and the hydrogen bond donors
+					// and the hydrogen as potential hydrogen bond donors
 					if (   (atom->getName().hasSubstring( "HA")) 
 							|| (atom->getName() == "H")  ) 
 					{
@@ -151,6 +151,7 @@ namespace BALL
 					}
 				}
 			}	
+	
 			return Processor::BREAK;
 		}
 		else
@@ -181,11 +182,7 @@ namespace BALL
 		// we find the first complete residue and use it instead 
 		for (; +resit ; ++resit)
 		{	
-// ??????????????? had to remove these lines to prevent segfaults (A.Moll)
-//   			if (!resit->isAminoAcid())
-//   			{
-//   				continue;
-//   			}
+			if (!resit->isAminoAcid()) continue;
 
 			bool haveO = false;
 			bool haveN = false;
@@ -272,14 +269,14 @@ namespace BALL
 	
 	/*************************************************** 
 	 * Finish computes all hbonds of the composite 
-	 * and stores them in h_bond_pairs_.
+	 * and stores them in backbone_h_bond_pairs_ as position pairs.
    ***************************************************/
 	bool HBondProcessor::finishKabschSander_()
 	{
 		if (residue_data_.size() == 0) return true;
 
 		// matrix to save the existence of a HBond
-		h_bond_pairs_.resize(residue_data_.size()); 
+		backbone_h_bond_pairs_.resize(residue_data_.size()); 
 
 		//create a grid inside the bounding box
 		HashGrid3<ResidueData*> atom_grid(lower_, upper_ - lower_, MAX_LENGTH);
@@ -377,7 +374,7 @@ namespace BALL
 
 							if (!donor || !acceptor) continue;
 
-							h_bond_pairs_[current_res.number].push_back(ndata.number);
+							backbone_h_bond_pairs_[current_res.number].push_back(ndata.number);
 
 							Bond* bond = donor->createBond(*acceptor);
 							bond->setType(Bond::TYPE__HYDROGEN);
@@ -397,7 +394,7 @@ namespace BALL
 	
 	bool HBondProcessor::finishWishartEtAl_()
 	{	
-		h_bond_pairs_.resize(residue_id_to_position_.size());
+		backbone_h_bond_pairs_.resize(residue_ptr_to_position_.size());
 		/* distance, donor, acceptor for the ShiftXwise hydrogenbond determination*/
 		std::multimap<float, std::pair<Atom*, Atom*> >  hbonds;
 		std::map<Atom*, bool> donor_occupied;
@@ -463,8 +460,6 @@ namespace BALL
 						|| ( (donors_[d]->getName() == "H")            && (distance > AMIDE_PROTON_OXYGEN_SEPARATION_DISTANCE )))
 					continue;
 
-				// TODO: acceptor is a solvent oxygen, the donor must not be a HA
-
 				// the angle criterion for H
 				if (donors_[d]->getName()== "H")
 				{
@@ -512,19 +507,19 @@ namespace BALL
 					if ((distance > 3.5) || (distance >  (N->getPosition()- acceptors_[a]->getPosition()).getLength()))
 						continue;
 				}
-				// put the HBond into the hydrogen bond distance list
+
 				std::pair<Atom*, Atom*> bond(donors_[d], acceptors_[a]);
 				hbonds.insert(std::pair<float, std::pair<Atom*, Atom*> >(distance, bond));
 			}
 		}
 		
 		
-		// now  compute all hydrogen bond effect shifts 
-		// to ensure that we assign only one (the smalles) bond for each donor and acceptor atom,
+		// now  compute all hydrogen bonds.  
+		// to ensure that we assign only one (the smallest) bond for each donor and acceptor atom,
 		// we iterate over the bonds sorted by their distance. if a bond is assigned, we mark this
 		// in the occupied data structures
 		std::multimap<float, std::pair<Atom*, Atom*> >::iterator it_b = hbonds.begin();
-	
+
 		for (; it_b != hbonds.end(); it_b++)
 		{
 			//double distance = it_b->first;
@@ -544,9 +539,14 @@ namespace BALL
 			
 			donor->setProperty("HBOND_DONOR", *acceptor);
 
-			//store the HBond for the Secondary Structure Processor
-			h_bond_pairs_[residue_id_to_position_[acceptor->getResidue()->getID()]].push_back(residue_id_to_position_[donor->getResidue()->getID()]);
-			
+			// store the HBond as index pair for the Secondary Structure Processor
+			// Note: the index was created by iterating with the ResidueIterator and assigning an ascending number! 
+			if (acceptor->getName()=="O" && donor->getName()=="H")
+			{	
+				backbone_h_bond_pairs_[residue_ptr_to_position_[acceptor->getResidue()]].push_back(residue_ptr_to_position_[donor->getResidue()]);
+			}
+
+			// mark the current participants as occupied
 			donor_occupied[donor] = true;
 			acceptor_occupied[acceptor] = true;
 		}
@@ -560,9 +560,9 @@ namespace BALL
 		return s << p.pos_C << " " << p.pos_N << " " << p.pos_H << " " << p.pos_O << " " << p.number << std::endl;
 	}
 
-	const std::vector< std::vector<Position> >& HBondProcessor::getHBondPairs() const
+	const std::vector< std::vector<Position> >& HBondProcessor::getBackboneHBondPairs() const
 	{
-		return h_bond_pairs_;
+		return backbone_h_bond_pairs_;
 	}
 
 	const std::vector<HBondProcessor::ResidueData>& HBondProcessor::getResidueData() const

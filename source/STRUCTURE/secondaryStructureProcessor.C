@@ -820,8 +820,11 @@ namespace BALL
 
 		Chain* p = RTTI::castTo<Chain>(composite);
 		HBondProcessor hbp;
+
+
 		p->apply(hbp);       // find all posible HBonds
-		HBonds_ = hbp.getHBondPairs();
+		
+		HBonds_ = hbp.getBackboneHBondPairs();
 		ResidueIterator ri = p->beginResidue();
 		 
 		if (!(+ri))
