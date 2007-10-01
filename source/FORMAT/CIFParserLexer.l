@@ -41,7 +41,7 @@ LOOP_								[lL][oO][oO][pP]_
 STOP_								[sS][tT][oO][pP]_
 TAG                 [[:blank:]]*_{NBC}+
 
-OrdinaryChar        [0-9a-zA-Z!%&$()*+,\-./:<=>?@\\^`{|}~]
+OrdinaryChar        [0-9a-zA-Z!%&$()*+,\-./:<=>?@\\^`{|}\[\]~]
 
 /* NOTE: in the formal definition, UnquotedStrings are allowed to begin with a semicolon if they are not at the beginning of a line! We do not support this case yet! */
 UnquotedString      {OrdinaryChar}{NBC}* 
