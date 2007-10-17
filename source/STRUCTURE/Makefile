@@ -27,6 +27,7 @@ SMARTS_SOURCES=\
 CPP_SOURCES=\
 	addHydrogenProcessor.C\
 	analyticalSES.C\
+	assignBondOrderProcessor.C\
 	atomBijection.C\
 	atomTyper.C\
 	buildBondsProcessor.C\
@@ -87,7 +88,10 @@ CPP_SOURCES=\
 	triangulatedSurface.C\
 	UCK.C\
 	residueRotamerSet.C\
-	rotamerLibrary.C
+	rotamerLibrary.C\
+	bondorderAssigner.C\
+	atomtypes.C\
+	vSgenerator.C	
 
 SMILES_PARSER_PREFIX=SmilesParser
 SMARTS_PARSER_PREFIX=SmartsParser
@@ -98,6 +102,7 @@ include ../common.mak
 ifeq ($(BALL_HAS_GSL),true)
 	CPP_SOURCES+=RMSDMinimizer.C
 endif
+
 
 depend:	$(SMILES_SOURCES)	$(SMARTS_SOURCES) subdirsdepend
 

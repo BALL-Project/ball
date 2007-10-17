@@ -37,6 +37,9 @@
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MATHS/angle.h>
 
+// Annes Test
+#include <BALL/STRUCTURE/assignBondOrderProcessor.h>
+
 using std::endl;
 
 namespace BALL
@@ -173,6 +176,16 @@ void EditableScene::initializeWidget(MainControl& main_control)
 	main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
 	Path path;
+	
+	/* Annes Test */
+	QIcon icon4(path.find("graphics/buildBonds.png").c_str());
+	bondorders_ = new QAction(icon4, "Quickly optimize bond orders", this);
+	bondorders_->setObjectName(bondorders_->text());
+	bondorders_->setToolTip("Edit mode: Quickly optimize the highlighted structures bond orders");
+	registerForHelpSystem(bondorders_, "scene.html#bondorders");
+	connect(bondorders_, SIGNAL(triggered()), this, SLOT(computeBondOrders()));
+	/* end of Annes Test */
+
 	QIcon icon(path.find("graphics/minimize.png").c_str());
 	optimize_ = new QAction(icon, "Quickly optimize structure", this);
 	optimize_->setObjectName(optimize_->text());
@@ -213,6 +226,8 @@ void EditableScene::checkMenu(MainControl& main_control)
 	bool edit_mode = (current_mode_ == (Scene::ModeType)EDIT__MODE);
 	bool selected_system = !busy && main_control.getSelectedSystem();
 	optimize_->setEnabled(selected_system);
+	// Annes Test
+	bondorders_->setEnabled(selected_system);
 	add_hydrogens_->setEnabled(selected_system);
 	element_action_->setEnabled(!busy && edit_mode);
 
@@ -1015,6 +1030,8 @@ void EditableScene::showContextMenu(QPoint pos)
 
 		menu.addAction(optimize_);
 		menu.addAction(add_hydrogens_);
+		// Annes Test
+		menu.addAction(bondorders_);
 	}
 
 	menu.exec(mapToGlobal(pos));
@@ -1449,6 +1466,34 @@ void EditableScene::saturateWithHydrogens()
 	getMainControl()->update(*ac, true);
 }
 
+/* Annes test */
+void EditableScene::computeBondOrders()
+{
+	if (getMainControl()->isBusy()) return;
+
+	deselect_(false);
+	List<AtomContainer*> containers = getContainers_();
+	std::cout << "Container Size: " << containers.size() << std::endl;
+	if (containers.size() < 1) return;
+
+	// Is this neccessary?
+	//MolecularStructure* ms = MolecularStructure::getInstance(0);
+	//if (ms == 0) return;
+
+	AtomContainer* ac = *containers.begin();
+	System* system = (System*)&ac->getRoot();
+
+	AssignBondOrderProcessor abop;
+	std::cout << "Vor abop apply " << std::endl;	
+	system->apply(abop);
+	std::cout << "Nach abop apply " << std::endl;	
+	String nr = abop.getNumberOfBondOrdersSet();
+	setStatusbarText(String("Set ") + nr + " bondorders.", true);
+	getMainControl()->update(*ac, true);
+}
+/* end of Annes Test*/
+
+
 void EditableScene::optimizeStructure()
 {
 	if (getMainControl()->isBusy()) return;
@@ -1525,6 +1570,8 @@ void EditableScene::addToolBarEntries(QToolBar* tb)
 	toolbar_actions_.push_back(element_action_);
 	toolbar_actions_.push_back(add_hydrogens_);
 	toolbar_actions_.push_back(optimize_);
+	// Annes Test
+	toolbar_actions_.push_back(bondorders_);
 	Scene::addToolBarEntries(tb);
 	toolbar_->insertSeparator(element_action_);
 
