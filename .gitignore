@@ -1,0 +1,17 @@
+contrib/*
+*.o
+*_moc.C
+*.dh
+.Dependencies
+lib/*
+source/Makefile
+source/config.lic
+source/config.log
+source/config.status
+source/common.mak
+source/config.mak
+source/targets.mak
+source/rules.mak
+source/libBALL.objects
+source/libVIEW.objects
+source/qt.version
