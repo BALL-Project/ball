@@ -6,17 +6,26 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 
-#include <qpushbutton.h>
-#include <qlineedit.h> 
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qlineedit.h> 
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-SetCamera::SetCamera( QWidget* parent,  const char* name, bool modal, WFlags fl )
-    : SetCameraData( parent, name, modal, fl )
+SetCamera::SetCamera( QWidget* parent,  const char* name, bool modal, Qt::WFlags fl )
+	: QDialog(parent, fl),
+		Ui_SetCameraData()
 {
+	setupUi(this);
+	
+  // signals and slots connections
+  connect( ok_button, SIGNAL( pressed() ), this, SLOT( okPressed() ) );
+  connect( cancel_button, SIGNAL( pressed() ), this, SLOT( close() ) );
+
+	setModal(modal);
+	setObjectName(name);
 	const Camera& camera = ((Scene*) parent)->getStage()->getCamera();
 
 	view_x->setText(String((Index)camera.getViewPoint().x).c_str());
@@ -42,12 +51,12 @@ void SetCamera::okPressed()
 
 	try
 	{
-		vx = String(view_x->text().ascii()).toFloat();
-		vy = String(view_y->text().ascii()).toFloat();
-		vz = String(view_z->text().ascii()).toFloat();
-		lx = String(look_x->text().ascii()).toFloat();
-		ly = String(look_y->text().ascii()).toFloat();
-		lz = String(look_z->text().ascii()).toFloat();
+		vx = ascii(view_x->text()).toFloat();
+		vy = ascii(view_y->text()).toFloat();
+		vz = ascii(view_z->text()).toFloat();
+		lx = ascii(look_x->text()).toFloat();
+		ly = ascii(look_y->text()).toFloat();
+		lz = ascii(look_z->text()).toFloat();
 	}
 	catch(...)
 	{

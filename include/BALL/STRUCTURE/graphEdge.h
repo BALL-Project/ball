@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: graphEdge.h,v 1.12 2004/02/23 17:26:06 anhi Exp $
+// $Id: graphEdge.h,v 1.12.26.1 2007/03/25 21:25:26 oliver Exp $
 //
 
 #ifndef BALL_STRUCTURE_GRAPHEDGE_H
@@ -26,7 +26,7 @@ namespace BALL
 	class GraphTriangle;
 
 	/** Generic GraphEdge Class.
-  	\ingroup StructureMiscellaneous    
+  	\ingroup Surface
 	*/
 	template <typename Vertex, typename Edge, typename Face>
 	class GraphEdge

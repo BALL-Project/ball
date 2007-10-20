@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeAssembler.C,v 1.5 2007/01/08 13:39:33 bertsch Exp $
+// $Id: moleculeAssembler.C,v 1.5.6.2 2007/04/03 13:29:35 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -12,6 +12,7 @@
 
 #include <BALL/STRUCTURE/sdGenerator.h>
 #include <BALL/STRUCTURE/moleculeAssembler.h>
+#include <BALL/KERNEL/system.h>
 
 #include <cmath>
 #include <utility>
@@ -1149,7 +1150,6 @@ namespace BALL
 	{
 	  DEBUG("MoleculeAssembler : assembleMolecule called.")
 
-
 		// if the molecule contains ringsystem(s) start the assembly with the largest of them
 
 		if (ringsystems.size() != 0)
@@ -1257,61 +1257,64 @@ namespace BALL
 			Vector3 pos_vec;
 			TVector4<float> bond_vec;
 
-			for (Size i = 0; i != chains[0].size(); i++)
+			// fix for cases where chains is empty, caused segfault otherwise! (Andreas Moll)
+			if (chains.size())
 			{
-				DEBUG(chains[0][i] -> getName())
-
-
-				if (i % 2 == 0)
+				for (Size i = 0; i != chains[0].size(); i++)
 				{
-					bond_vec = zig_bond;
-
-				}
-				else
-				{
-					bond_vec = zag_bond;
-
-				}
+					DEBUG(chains[0][i] -> getName())
 
 
-				if (i == 0)
-				{
-					pos_vec[0] = 0.0;
-					pos_vec[1] = 0.0;
-					pos_vec[2] = 0.0;
-				}
-				else
-				{
-					pos_vec[0] = chains[0][i-1] -> getPosition()[0] + bond_vec[0];
-					pos_vec[1] = chains[0][i-1] -> getPosition()[1] + bond_vec[1];
-					pos_vec[2] = 0.0;
-				}
-
-				chains[0][i] -> setPosition(pos_vec);
-				chains[0][i] -> setProperty(SDGenerator::DEPOSITED);
-				chains[0][i] -> setProperty(SDGenerator::PRE_ASSEMBLED);
-			}
-
-			//      check the initially assembled chain for atoms that have not yet been assembled and put them into the assmenbly queue
-
-			for (Size i = 0; i != chains[0].size(); i++)
-			{
-				updateCFS(chains[0][i]);
-
-				if (!(chains[0][i] -> hasProperty(SDGenerator::ASSEMBLED)))
-				{
-					for (Atom::BondIterator bond_it = chains[0][i] -> beginBond(); bond_it != chains[0][i] -> endBond(); bond_it++)
+					if (i % 2 == 0)
 					{
-						if ((bond_it -> getPartner(*(chains[0][i])) -> hasProperty(SDGenerator::BUILT_IN_CHAIN)) || (bond_it -> getPartner(*(chains[0][i])) -> hasProperty(SDGenerator::IN_RING)))
+						bond_vec = zig_bond;
+
+					}
+					else
+					{
+						bond_vec = zag_bond;
+
+					}
+
+
+					if (i == 0)
+					{
+						pos_vec[0] = 0.0;
+						pos_vec[1] = 0.0;
+						pos_vec[2] = 0.0;
+					}
+					else
+					{
+						pos_vec[0] = chains[0][i-1] -> getPosition()[0] + bond_vec[0];
+						pos_vec[1] = chains[0][i-1] -> getPosition()[1] + bond_vec[1];
+						pos_vec[2] = 0.0;
+					}
+
+					chains[0][i] -> setPosition(pos_vec);
+					chains[0][i] -> setProperty(SDGenerator::DEPOSITED);
+					chains[0][i] -> setProperty(SDGenerator::PRE_ASSEMBLED);
+				}
+
+				//      check the initially assembled chain for atoms that have not yet been assembled and put them into the assmenbly queue
+
+				for (Size i = 0; i != chains[0].size(); i++)
+				{
+					updateCFS(chains[0][i]);
+
+					if (!(chains[0][i] -> hasProperty(SDGenerator::ASSEMBLED)))
+					{
+						for (Atom::BondIterator bond_it = chains[0][i] -> beginBond(); bond_it != chains[0][i] -> endBond(); bond_it++)
 						{
-							aq_.push_back(chains[0][i]);
-							break;
+							if ((bond_it -> getPartner(*(chains[0][i])) -> hasProperty(SDGenerator::BUILT_IN_CHAIN)) || (bond_it -> getPartner(*(chains[0][i])) -> hasProperty(SDGenerator::IN_RING)))
+							{
+								aq_.push_back(chains[0][i]);
+								break;
+							}
 						}
 					}
+					chains[0][i] -> setProperty(SDGenerator::ASSEMBLED);
 				}
-				chains[0][i] -> setProperty(SDGenerator::ASSEMBLED);
 			}
-
 
 		}
 

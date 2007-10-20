@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBInfo.sip,v 1.2 2005/12/23 17:02:46 amoll Exp $
+// $Id: PDBInfo.sip,v 1.2.22.1 2007/03/25 21:37:01 oliver Exp $
 //
 	class PDBInfo
 	{
@@ -21,9 +21,11 @@
 		bool operator != (const PDBInfo& /rhs/) const;
 
 		PDBRecords& getSkippedRecords();
-		const PDBRecords& getSkippedRecords() const;
+		// const PDBRecords& getSkippedRecords() const;
+
 		PDBRecords& getInvalidRecords();
-		const PDBRecords& getInvalidRecords() const;
+		// const PDBRecords& getInvalidRecords() const;
+
 		const String& getFilename() const;
 		void setFilename(const String& /filename/);
 		const String& getID() const;

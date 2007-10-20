@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.sip,v 1.4 2004/05/27 19:49:59 oliver Exp $
+// $Id: label.sip,v 1.4.26.1 2007/03/25 21:37:10 oliver Exp $
 //
 
 class Label 
@@ -24,5 +24,6 @@ class Label
   void set(const Label&) throw();
   void setText(const String&) throw();
   void swap(Label&) throw();
+	void setFontSize(Size);
   ~Label() throw();
 };

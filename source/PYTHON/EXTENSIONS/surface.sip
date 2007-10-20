@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surface.sip,v 1.7 2003/10/29 22:54:47 oliver Exp $
+// $Id: surface.sip,v 1.7.30.1 2007/03/25 21:38:54 oliver Exp $
 //
 
 class Surface
@@ -38,12 +38,15 @@ class Surface
 	Size getNumberOfTriangles() const throw();
 	Size getNumberOfVertices() const throw();
 	Size getNumberOfNormals() const throw();
+
 	Triangle& getTriangle(Position /index/) throw();
-	const Triangle& getTriangle(Position /index/) const throw();
+	// const Triangle& getTriangle(Position /index/) const throw();
+
 	Vector3& getVertex(Position /index/) throw();
-	const Vector3& getVertex(Position /index/) const throw();
+	// const Vector3& getVertex(Position /index/) const throw();
+
 	Vector3& getNormal(Position /index/) throw();
-	const Vector3& getNormal(Position /index/) const throw();
+	// const Vector3& getNormal(Position /index/) const throw();
 	void clearVertices();
 	void clearTriangles();
 	void clearNormals();

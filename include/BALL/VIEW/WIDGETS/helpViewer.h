@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: helpViewer.h,v 1.2 2005/12/23 17:02:23 amoll Exp $
+// $Id: helpViewer.h,v 1.2.18.1 2007/03/25 21:26:21 oliver Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_HELPVIEWER_H
@@ -11,7 +11,7 @@
 #	include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
 
-#include <qtextbrowser.h>
+#include <QtGui/QTextBrowser>
 
 namespace BALL
 {
@@ -29,28 +29,39 @@ namespace BALL
 
 			public slots:
 
-			void setBackwardAvailable(bool b);
+//   			void setBackwardAvailable(bool b);
 
-			void setForwardAvailable(bool b);
+//   			void setForwardAvailable(bool b);
 
 			protected:
 
-			virtual QPopupMenu* createPopupMenu(const QPoint& pos);
+//   			virtual QMenu* createPopupMenu(const QPoint& pos);
 
 			bool forward_, backward_;
 		};
 
 		/** DockWidget to show online help texts e.g. the BALLView documentation
-		 		To show a help page, just call ModularWidget::showHelp(String) or send
+				The documentation for BALLView was written in the HTML format, such that it either be
+				used online from the project's website or inside the program itself.
+				To obtain help for individual elements in the graphical user interface a special mode
+				was added. In the "Help" menu the entry "Whats this?" will switch into this mode and 
+				transform the mouse cursor into a question mark. While the "Whats this?" mode is
+				active a left mouse click on any widget will open the corresponding help entry in the
+				documentation. (If no help entry for that widget exists nothing will happen.)
+				To leave the "Whats this?" mode just press the right mouse button or press the "Escape" key.
+				As an alternative for this approach the "F1" key will popup the documentation for
+				the current widget under the mouse cursor.
+				<br><br>
+		 		To show a specific help page, just call ModularWidget::showHelp(String) or send
 				a ShowHelpMessage.
 				Per default the HelpViewer looks for index.html in $BALL_DATA_PATH/../doc/BALLView .
 				You can change this behavior by using setDefaultDir() and setDefaultPage().
-				Links to pages on the www wont work!
-				The HelpViewer also servers as registration server for the online documentation.
+				Links to pages on the WWW wont work!
 				QWidgets and menu entries can be registered with a link into the HTML documentation.
 				See registerWidgetForHelpSystem.
 				The implemention for opening the documentation per "Whats this?" menu entry and
-				the hotkey "Shift-F1" is also done here.
+				the hotkey "F1" is also done here.
+				\ingroup ViewWidgets
 		*/
 		class BALL_VIEW_EXPORT HelpViewer
 			: public DockWidget
@@ -84,13 +95,19 @@ namespace BALL
 				throw();
 
 			///
-			virtual void showHelp(const String& URL);
+			virtual void showHelp(const String& URL, String entry = "");
 
 			///
 			void setDefaultPage(const String& url);
 		
 			///
 			const String& getDefaultPage() const;
+
+			///
+			void setProject(const String& project) { project_ = project;}
+
+			///
+			String getProject() const { return project_;}
 			
 			///
 			void setBaseDirectory(const String& dir);
@@ -99,34 +116,31 @@ namespace BALL
 			const String& getBaseDirectory() const;
 
 			/// Register a widget for showing its documentation
-			virtual void registerWidgetForHelpSystem(const QWidget* widget, const String& docu_entry);
+			virtual void registerForHelpSystem(const QObject* object, const String& docu_entry);
 
 			/// Unregister a widget for showing its documentation
-			void unregisterWidgetForHelpSystem(const QWidget* widget);
-
-			/// Register a menu entry for showing its documentation
-			virtual void registerMenuEntryForHelpSystem(Index entry, const String& docu_entry);
-			
-			/// Unregister a menu entry for showing its documentation
-			void unregisterMenuEntryForHelpSystem(Index id);
-			
-			/// Test if we have a documentation entry for the menu entry id
-			bool hasHelpFor(Index id) const;
+			void unregisterForHelpSystem(const QObject* object);
 
 			/// Show the documentation entry for a given widget
-			bool showHelpFor(const QWidget* widget);
+			bool showHelpFor(const QObject* object);
 
 			/// Show documentation for object under cursor
 			bool showDocumentationForObject();
 
-			/// Check wheter we have a documentation entry for a given widget
-			bool hasHelpFor(const QWidget* widget) const;
-
-			/// Get help entry for menu entry
-			String getHelpEntryFor(Index id) const;
+			/// Check wheter we have a documentation entry for a given object
+			bool hasHelpFor(const QObject* object) const;
 
 			/// Get help entry for widget
-			String getHelpEntryFor(const QWidget* widget) const;
+			String getHelpEntryFor(const QObject* object) const;
+
+			///
+			void setWhatsThisEnabled(bool state) { whats_this_ = state;}
+
+			///
+			bool isWhatsThisEnabled() const {return whats_this_;}
+
+			///
+			void showDocumentationFor(const String& classname, const String& member);
 					
 			public slots:
 
@@ -140,20 +154,23 @@ namespace BALL
 			void exitWhatsThisMode();
 
 			/// Event filter for the whats this mode
-			bool eventFilter(QObject*, QEvent*);
+			bool eventFilter(QObject* obj, QEvent* e);
 		
 			protected:
 
+			void collectClasses_();
+
+			String 					project_;
 			String 					default_page_;
 			String 					base_dir_;
 			MyTextBrowser* 	browser_;
 			bool 						whats_this_mode_;
 			bool 						ignore_event_;
+			bool 						whats_this_;
+			QAction* 				whats_action_;
 
-			HashMap<const QWidget*, String> docu_for_widget_;
-
-			HashMap<Index, String> docu_for_menu_entry_;
-
+			HashMap<const QObject*, String> docu_entries_;
+			HashMap<String, String> classes_to_files_;
 		};
   	
 } } // namespaces

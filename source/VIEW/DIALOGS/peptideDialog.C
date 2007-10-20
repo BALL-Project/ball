@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideDialog.C,v 1.11 2005/12/26 03:25:59 amoll Exp $
+// $Id: peptideDialog.C,v 1.11.16.1 2007/03/25 22:02:12 oliver Exp $
 
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
+#include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/COMMON/logStream.h>
 
-#include <qlineedit.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qradiobutton.h>
 
 namespace BALL
 {
@@ -16,12 +16,45 @@ namespace BALL
 	{
 		String PeptideDialog::all_amino_acids_ = "ACDEFGHIKLMNPQRSTVWY";
 
-		PeptideDialog::PeptideDialog( QWidget* parent, const char* name, WFlags fl )
-		 : PeptideDialogData( parent, name, fl ),
+		PeptideDialog::PeptideDialog( QWidget* parent, const char* name, Qt::WFlags fl )
+		 : QDialog(parent, fl),
+		 	 Ui_PeptideDialogData(),
 			 Peptides::PeptideBuilder(),
 			 protein_(0)
 		{
-			connect(sequence, SIGNAL(returnPressed()), this, SLOT(close_pressed()));
+			setupUi(this);
+			// signals and slots connections
+			connect( ala, SIGNAL( pressed() ), this, SLOT( ala_pressed() ) );
+			connect( arg, SIGNAL( pressed() ), this, SLOT( arg_pressed() ) );
+			connect( asn, SIGNAL( pressed() ), this, SLOT( asn_pressed() ) );
+			connect( cys, SIGNAL( pressed() ), this, SLOT( cys_pressed() ) );
+			connect( gln, SIGNAL( pressed() ), this, SLOT( gln_pressed() ) );
+			connect( glu, SIGNAL( pressed() ), this, SLOT( glu_pressed() ) );
+			connect( gly, SIGNAL( pressed() ), this, SLOT( gly_pressed() ) );
+			connect( his, SIGNAL( pressed() ), this, SLOT( his_pressed() ) );
+			connect( ile, SIGNAL( pressed() ), this, SLOT( ile_pressed() ) );
+			connect( leu, SIGNAL( pressed() ), this, SLOT( leu_pressed() ) );
+			connect( lys, SIGNAL( pressed() ), this, SLOT( lys_pressed() ) );
+			connect( met, SIGNAL( pressed() ), this, SLOT( met_pressed() ) );
+			connect( phe, SIGNAL( pressed() ), this, SLOT( phe_pressed() ) );
+			connect( pro, SIGNAL( pressed() ), this, SLOT( pro_pressed() ) );
+			connect( ser, SIGNAL( pressed() ), this, SLOT( ser_pressed() ) );
+			connect( thr, SIGNAL( pressed() ), this, SLOT( thr_pressed() ) );
+			connect( trp, SIGNAL( pressed() ), this, SLOT( trp_pressed() ) );
+			connect( tyr, SIGNAL( pressed() ), this, SLOT( tyr_pressed() ) );
+			connect( val, SIGNAL( pressed() ), this, SLOT( val_pressed() ) );
+			connect( close_button, SIGNAL( pressed() ), this, SLOT( close_pressed() ) );
+			connect( phi, SIGNAL( returnPressed() ), this, SLOT( angle_changed() ) );
+			connect( psi, SIGNAL( returnPressed() ), this, SLOT( angle_changed() ) );
+			connect( omega, SIGNAL( returnPressed() ), this, SLOT( angle_changed() ) );
+			connect( asp, SIGNAL( pressed() ), this, SLOT( asp_pressed() ) );
+			connect( alpha, SIGNAL( toggled(bool) ), this, SLOT( angle_changed() ) );
+			connect( beta, SIGNAL( toggled(bool) ), this, SLOT( angle_changed() ) );
+			connect( other, SIGNAL( toggled(bool) ), this, SLOT( angle_changed() ) );
+			connect( sequence, SIGNAL( textChanged(const QString&) ), this, SLOT( insert_seq() ) );
+			connect( cancel_button, SIGNAL( pressed() ), this, SLOT( close() ) );
+
+			setObjectName(name);
 			sequence->clear();
 			show();
 		}
@@ -35,7 +68,7 @@ namespace BALL
 				return;
 			}
 
-			String old = sequence->text().ascii();
+			String old = ascii(sequence->text());
 			old.truncate(old.size() - 1);
 			sequence->setText(old.c_str());
 		}
@@ -96,7 +129,7 @@ namespace BALL
 		{
 			/////////////////////////////////////////////
 			// first check sanity
-			String aa(sequence->text().ascii());
+			String aa(ascii(sequence->text()));
 			aa.toUpper();
 
 			String new_aa;
@@ -108,7 +141,7 @@ namespace BALL
 				}
 			}
 
-			if (new_aa != sequence->text().ascii())
+			if (new_aa != ascii(sequence->text()))
 			{
 				sequence->setText(new_aa.c_str());
 				return;
@@ -116,10 +149,10 @@ namespace BALL
 
 			/////////////////////////////////////////////
 			// no difference ?
-			if (sequence_.size() == sequence->text().length())
+			if (sequence_.size() == (Position)sequence->text().length())
 			{
 				bool equal = true;
-				String s = sequence->text().ascii();
+				String s = ascii(sequence->text());
 				for (Position p = 0; p < sequence_.size(); p++)
 				{
 					if ((sequence_[p]).getType()[0] != s[p])
@@ -150,7 +183,7 @@ namespace BALL
 			{
 				sequence_.resize(written_seq_size);
 
-				String s = sequence->text().ascii();
+				String s = ascii(sequence->text());
 				for (Position p = 0; p < sequence_.size(); p++)
 				{
 					sequence_[p].setAminoAcidType(String(s[p]));
@@ -196,10 +229,10 @@ namespace BALL
 			// if written_seq > already built sequence => add amino acid
 			if (written_seq_size > old_size)
 			{
-				Angle a_phi(String(phi->text().ascii()).toFloat(), false);
-				Angle a_psi(String(psi->text().ascii()).toFloat(), false);
-				Angle a_omega(String(omega->text().ascii()).toFloat(), false);
-				const String aa = Substring(sequence->text().ascii(), old_size, written_seq_size - old_size);
+				Angle a_phi(ascii(phi->text()).toFloat(), false);
+				Angle a_psi(ascii(psi->text()).toFloat(), false);
+				Angle a_omega(ascii(omega->text()).toFloat(), false);
+				const String aa = Substring(ascii(sequence->text()), old_size, written_seq_size - old_size);
 				for (Position p = 0; p < aa.size(); p++)
 				{
 					addAminoAcid(aa[p], a_phi, a_psi, a_omega);
@@ -211,7 +244,7 @@ namespace BALL
 			// same size, but different amino acids
 			if (written_seq_size == old_size)
 			{
-				String s = sequence->text().ascii();
+				String s = ascii(sequence->text());
 				for (Position p = 0; p < sequence_.size(); p++)
 				{
 					sequence_[p].setAminoAcidType(String(s[p]));
@@ -222,7 +255,7 @@ namespace BALL
 		String PeptideDialog::getSequence()
 			throw()
 		{
-			return sequence->text().ascii();
+			return ascii(sequence->text());
 		}
 
 	} // namespace VIEW

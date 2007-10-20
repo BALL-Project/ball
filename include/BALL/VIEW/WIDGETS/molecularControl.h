@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.51 2006/02/25 16:44:08 amoll Exp $
+// $Id: molecularControl.h,v 1.51.12.2 2007/03/26 07:51:48 amoll Exp $
+//
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -10,8 +11,8 @@
 #	include <BALL/VIEW/WIDGETS/genericControl.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
-#	include <BALL/VIEW/KERNEL/molecularInformation.h>
+#ifndef BALL_CONCEPT_MOLECULARINFORMATION_H
+#	include <BALL/CONCEPT/molecularInformation.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -22,10 +23,10 @@
  #include <BALL/MATHS/matrix44.h>
 #endif
 
-#include <qlistview.h>
-#include <qpoint.h>
-#include <qpopupmenu.h>
-#include <qcombobox.h>
+#include <QtCore/qpoint.h>
+#include <QtGui/qmenu.h>
+#include <QtGui/qtreeview.h>
+#include <QtGui/qcombobox.h>
 
 
 namespace BALL
@@ -46,6 +47,21 @@ class BondProperties;
 class BALL_VIEW_EXPORT MolecularControl
 	: public GenericControl
 {			
+	// for internal usage only:
+	class MyTreeWidgetItem
+		: public QTreeWidgetItem
+	{
+		public:
+
+			MyTreeWidgetItem(QTreeWidget* parent, QStringList& sl, Composite* composite);
+
+			MyTreeWidgetItem(QTreeWidgetItem* parent, QStringList& sl, Composite* composite);
+
+			void init_();
+
+			Composite* composite;
+	};
+
 	///
 	enum MolecularMenuEntries
 	{
@@ -79,51 +95,8 @@ class BALL_VIEW_EXPORT MolecularControl
 
 	public:
 	
-	BALL_EMBEDDABLE(MolecularControl,GenericControl)
+ 	BALL_EMBEDDABLE(MolecularControl,GenericControl)
 	
-	/// A selectable list view item with a pointer to a Composite
-	class BALL_VIEW_EXPORT SelectableListViewItem
-		: public QCheckListItem
-	{
-		public:
-
-		/// Detailed Constructor with an other SelectableListViewItem as parent
-		SelectableListViewItem(QListViewItem* parent, const QString& text, const QString& type, 
-													 Composite* composite, VIEW::MolecularControl& control)
-			throw();
-
-		/// Detailed Constructor with a list view as parent
-		SelectableListViewItem(QListView* parent, const QString& text, const QString& type, 
-													 Composite* composite, VIEW::MolecularControl& control)
-			throw();
-
-		/// Get the associated Composite pointer
-		Composite* getComposite() { return composite_;};
-
-		/** Overriden function, to deselect child items, if this item is deselected.
-				This is necessary because, when using the SHIFT-modifier in selection,
-				also the collapsed child items get selected.
-		*/
-		virtual void setSelected (bool state);
-
-		protected:
-
-		// overriden function, used to message to Control
-		virtual void stateChange(bool state)
-			throw();
-
-		Composite* 					composite_;
-		MolecularControl& 	control_reference_;
-		bool 								ignore_change_;
-
-		private: 
-		
-		// prevent use of default cstr
-		SelectableListViewItem();
-	};
-
-
-	friend class SelectableListViewItem;
 	friend class BondProperties;
 
 	/**	@name	Constructors and Destructor
@@ -161,7 +134,6 @@ class BALL_VIEW_EXPORT MolecularControl
 			a name for the Composite.\par
 			Calls generateListViewItem_() for the Composite.
 			\param   composite a pointer to the Composite to be inserted into the Control
-			\param   name for the SelectableListViewItem
 	*/
 	void addComposite(Composite& composite, String given_name = "")
 		throw();
@@ -184,7 +156,7 @@ class BALL_VIEW_EXPORT MolecularControl
 	virtual void onNotify(Message *message)
 		throw();
 
-	/** Build a context menu for a Composite and an SelectableListViewItem object.
+	/** Build a context menu for a Composite.
 			If the Composite has certain properties a context menu is created.
 			This method only creates the necessary interface for derived classes.
 			Override this method for creating other context menu entries, but call 
@@ -224,6 +196,12 @@ class BALL_VIEW_EXPORT MolecularControl
 	void fetchPreferences(INIFile& inifile)
 		throw();
 
+	///
+	void showDistance(Atom* a1, Atom* a2);
+	
+	///
+	void showAngle(Atom* a1, Atom* a2, Atom* a3, Atom* a4 = 0);
+
 	public slots:
 		
 	//@}
@@ -262,12 +240,6 @@ class BALL_VIEW_EXPORT MolecularControl
 			Calls showFilename()
 	*/
 	virtual void updateSelection();
-
-	/** Invalidate the selection.
-			All selected items in the tree will be deselected. \par
-			Calls updateSelection().
-	*/
-	void invalidateSelection();
 
 	///
 	void highlightSelection()
@@ -326,10 +298,6 @@ class BALL_VIEW_EXPORT MolecularControl
 	*/
 	Size applySelector();
 
-	///
-	Size applySMARTSSelector();
-
-
 	/// Show a help dialog for the Selector 
 	void showSelectorHelp();
 
@@ -341,6 +309,18 @@ class BALL_VIEW_EXPORT MolecularControl
 	virtual void clearSelector();
 
 	void switchShowSecondaryStructure();
+
+	///
+	void showAtomOverview();
+
+	///
+	void showAtomOverviewForSelection();
+
+	///
+	void showDistance();
+	
+	///
+	void showAngle();
 	
 	//@} 
 	/** @name Protected members 
@@ -352,28 +332,25 @@ class BALL_VIEW_EXPORT MolecularControl
 			Clear the previously created context menu.
 			Calls buildContextMenu for the Composite object belonging
 			to the <tt>item</tt> and executes the context menu if menu entries are available.
-			\param  item the SelectableListViewItem for which a context menu should be created
 			\param  point the position to which the context menu should be drawn
 			\param  column not used at the moment
 			\see    buildContextMenu
 	*/
-	void onContextMenu_(QListViewItem* item, const QPoint& point, int column);
+ 	void showGuestContextMenu(const QPoint& pos);
 	
 	//_ called when a model is selected in the context menu
-	void activatedItem_(int pos);
+	void activatedItem_(QAction* action);
 
 	//_
 	void createRepresentation_();
+
+	//
+	void onItemClicked(QTreeWidgetItem* item, int);
 
 	protected:
 
 	///
 	void buildContextMenu_();
-
-	/*_ Method is called if checkbox of an item is clicked.\par
-			Called by SelectableListViewItem::stateChange
-	*/
-	void selectedComposite_(Composite* composite, bool state);
 
 	/** Set the selection of the checkboxes and the opening of the tree 
 			according to the selection in the MainControl.
@@ -385,7 +362,7 @@ class BALL_VIEW_EXPORT MolecularControl
 		throw();
 
 	/** Access the MolecularInformation visitor.
-			With the MolecularInformation, the names and type entries for the SelectableListViewItem 
+			With the MolecularInformation, the names and type entries for the Items
 			are generated.
 			Override this method if another information visitor is needed.
 			This method is used in the method generateListViewItem_() to
@@ -396,20 +373,11 @@ class BALL_VIEW_EXPORT MolecularControl
 	
 	/** Iterate over the children of the Composite and
 			call for each the method generateListViewItem_().
-			\param   item a pointer to a SelectableListViewItem to which all children of the Composite 
+			\param   item a pointer to a QTreeWidgetItem to which all children of the Composite 
 							 will be inserted
 			\param   composite whose children will be inserted into <tt>item</tt>
 	*/
-	virtual void recurseGeneration_(SelectableListViewItem* item, Composite& composite)
-		throw();
-	
-	/** Iterate over the children of the Composite and
-			call for each the method updateListViewItem_().
-			\param   item a pointer to a SelectableListViewItem containing the subtree structure 
-			\param   composite object containing the (possibly) new substructure
-			\see     updateListViewItem_
-	*/
-	virtual void recurseUpdate_(SelectableListViewItem* item, Composite& composite)
+	virtual void recurseGeneration_(QTreeWidgetItem* item, Composite& composite)
 		throw();
 
 	/** Message handling.
@@ -429,46 +397,40 @@ class BALL_VIEW_EXPORT MolecularControl
 	virtual bool reactToMessages_(Message* message)
 		throw();
 
-	/** Generate a new SelectableListViewItem for the given Composite.
+	/** Generate a new QTreeWidgetItem for the given Composite.
 			If <tt> default_name == 0</tt> than a new name is created using the 
 			Information visitor accessed with the method getInformationVisitor_().
-			If <tt>parent == 0</tt> than the new SelectableListViewItem is a root item.
-			Otherwise a new SelectableListViewItem for is created that will
+			If <tt>parent == 0</tt> than the new QTreeWidgetItem is a root item.
+			Otherwise a new QTreeWidgetItem for is created that will
 			be inserted into given <b>parent</b>.
 			All children of <b> composite</b> will be inserted recursivly into the newly
 			created item by the method recurseGeneration_().
-			\param  parent a SelectableListViewItem into which a subtree of items will be inserted, 
+			\param  parent a QTreeWidgetItem into which a subtree of items will be inserted, 
 									 or <tt> 0</tt> if a new root item should be created
 			\param  composite the Composite object whose subtree will be inserted into <b>parent</b>
 			\param  default_name the name of the <b>item</b>
 	*/
-	SelectableListViewItem* generateListViewItem_(SelectableListViewItem* parent, 
-																								Composite& composite, QString* default_name = 0)
-		throw();
+ 	QTreeWidgetItem* generateListViewItem_(QTreeWidgetItem* parent, 
+																					Composite& composite, QString* default_name = 0)
+ 		throw();
 	
-	/** Update the item tree recursivly.
-			Check if the tree structure of <b>item</b> matches the tree structure of
-			<b>composite</b>.
-			If an item does not exist a subtree for <b>composite</b>, it will be created with the
-			method generateListViewItem_() and inserted into <b>item</b>.
-			Otherwise the method recurseUpdate_() will iterate over the childrens	of the composite.	
-			\param  item a SelectableListViewItem whose subtree of items will be checked 
-			\param  composite the Composite object whose subtree will be checked against <b>item</b>
-	*/
-	void updateListViewItem_(SelectableListViewItem* item, Composite& composite)
-		throw();
-
 	//_ Test, if its allowed to paste the copy liste into the current selected context item.
 	bool pasteAllowedFor_(Composite& composite)
 		throw();
 
 	//
-	void removeRecursive_(SelectableListViewItem* item)
-		throw();
+ 	inline void removeRecursive_(QTreeWidgetItem* item)
+ 		throw();
 
 	// only for Python Interface
 	MolecularControl(const MolecularControl& mc)
 		throw();
+
+	//
+	List<QTreeWidgetItem*> getAllItems_();
+
+	void enableUpdates_(bool state);
+	void newSelection_(List<Composite*>& sel, bool selected);
 	
 	//@} 
 	/** @name Menu entries ids
@@ -476,8 +438,8 @@ class BALL_VIEW_EXPORT MolecularControl
 	//@{
 
 	//_
-	int cut_id_, copy_id_, paste_id_, delete_id_, clipboard_id_, select_id_, deselect_id_,
-			show_ss_id_;
+	QAction* cut_id_, *copy_id_, *paste_id_, *delete_id_, *clipboard_id_, *select_id_, *deselect_id_,
+			*show_ss_id_;
 
 	//@}
 	
@@ -490,19 +452,18 @@ class BALL_VIEW_EXPORT MolecularControl
 	QComboBox* 							smarts_edit_;
 
 	// the context menus
-	QPopupMenu 							context_menu_, 
-													model_menu_, 
-													edit_menu_,
-													color_menu_[MODEL_LABEL - MODEL_LINES];
+	QMenu 							context_menu_, 
+											model_menu_, 
+											edit_menu_,
+											color_menu_[MODEL_LABEL - MODEL_LINES];
 
 	Composite* 							context_composite_;
 
-	SelectableListViewItem* context_item_;
-
-	HashMap<Composite*, SelectableListViewItem*> composite_to_item_;
+ 	QTreeWidgetItem* context_item_;
 
 	ModelType 			selected_model_;
 	ColoringMethod  selected_coloring_method_;
+	std::map<Composite*, MyTreeWidgetItem*> composite_to_item_;
 
 	// let cut know to delete the entries, set by deleteCurrentItems()
 	bool 						was_delete_;
@@ -510,6 +471,11 @@ class BALL_VIEW_EXPORT MolecularControl
 	Size 						nr_items_removed_;
 
 	bool 						show_ss_;
+	QAction* center_camera_action_, *composite_properties_action_, *bond_propertes_action_, 
+					 *select_action_, *deselect_action_, *count_items_action_, *atom_overview_, *atom_overview_selection_,
+					 *angle_action_, *distance_action_;
+
+	bool ignore_messages_;
 };
 	
 }} // namespaces

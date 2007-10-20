@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.26 2005/07/16 21:00:42 oliver Exp $
+# $Id: Makefile,v 1.26.20.2 2007/06/05 08:11:26 oliver Exp $
 #
 
 DIRECTORY=PYTHON
@@ -8,6 +8,9 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	pyInterpreter.C
+
+ext:
+	@cd EXTENSIONS ;  $(MAKE) 
 
 include ../common.mak
 -include .Dependencies

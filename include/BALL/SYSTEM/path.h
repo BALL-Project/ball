@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: path.h,v 1.13 2005/12/23 17:02:06 amoll Exp $
+// $Id: path.h,v 1.13.20.1 2007/06/21 19:38:10 oliver Exp $
+//
+// Author:
+//   Oliver Kohlbacher
 //
 
 #ifndef BALL_COMMON_PATH_H
@@ -26,6 +29,9 @@ namespace BALL
 	/**	Data path management class.
 			This class is intended to provide a unique interface to 
 			directories where the data files needed by BALL reside.	 \par
+			Path is a singleton, so there is only one unique application-wide
+			instance of and changes to this will be seen by all classes using
+			path.
 	\ingroup System		
 	*/
 	class BALL_EXPORT Path 
@@ -95,14 +101,19 @@ namespace BALL
 		*/
 		string findStrict(const string& name);
 
+		/// Reset the path variable to its default state (as it was a the start of the application).
+		void reset();
+
 		
 		protected:
 				
 		void buildPathArray_();
-		string path_;
-		bool path_array_valid_;
-		bool environment_checked_;
-		std::vector<std::string>	path_array_;
+
+		static string path_;
+		static bool path_array_valid_;
+		static bool environment_checked_;
+		static std::vector<std::string>	path_array_;
+		static bool initialized_;
 	};
   
 } // namespace BALL

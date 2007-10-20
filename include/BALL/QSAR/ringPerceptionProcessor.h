@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.h,v 1.17 2007/01/08 00:01:12 bertsch Exp $
+// $Id: ringPerceptionProcessor.h,v 1.17.4.2 2007/04/03 13:29:45 bertsch Exp $
 //
 
 #ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
@@ -9,10 +9,6 @@
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 	#include <BALL/KERNEL/atomContainer.h>
-#endif
-
-#ifndef BALL_DATATYPE_BITVECTOR_H
-	#include <BALL/DATATYPE/bitVector.h>
 #endif
 
 #ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
@@ -23,7 +19,6 @@
 	#include <BALL/DATATYPE/options.h>
 #endif
 
-#include <queue>
 #include <stack>
 #include <vector>
 
@@ -168,7 +163,7 @@ namespace BALL
 			void DFSBCC_( std::vector<MolecularGraph*>& bccs, Size dfbi, 
 										HashMap<NodeItem<Index, Index>*, Size> DFBIndex, 
 										NodeItem<Index, Index>* v);
-																						
+																		
 			HashSet<NodeItem<Index, Index>* > visited_;
 			HashSet<EdgeItem<Index, Index>* > visited_bonds_;
 			HashMap<NodeItem<Index, Index>* , Size> P_;
@@ -202,10 +197,6 @@ namespace BALL
 			{
 				void push(EdgeItem<Index, Index>* bond, TNode_* node);
 		
-				//void merge(PathMessage);
-
-				//void join(PathMessage);
-				
 				// path of the message
 				BitVector beep;
 				
@@ -248,7 +239,7 @@ namespace BALL
 			/*_ function that gets a binary edge-encoded ring as a BitVector
 					and adds it to the ringset if its linearly independend
 			*/
-			static void BalducciPearlmanRingSelector_(BitVector);
+			static void BalducciPearlmanRingSelector_(BitVector bit_vector);
 	
 			/*_ Implementation of the Balducci/Pearlman algorithm 
 			*/

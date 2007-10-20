@@ -1,12 +1,16 @@
 @echo off
 echo.
 
+set TARGETS="Libs\libBALL" "Libs\libVIEW" "Libs\Python Module" "Applications\BALLView" "Applications\PyBALL"
+
 if "%BALL_PATH%"=="" goto Usage1
 rem if "%VSINSTALLDIR%"=="" goto Usage4
 
 if not exist Contrib goto Usage5
 
 set OLDDIR=%CD%
+
+if "%PYTHONDIR%"=="" set PYTHONDIR="%BALL_PATH%"\Windows\Contrib\Python
 
 if "%1" == "debug" (
 	set NMAKE_ARG="DEBUG=true" 
@@ -25,10 +29,9 @@ if "%2" == "tests" goto TESTS
 if "%2" == "benchmarks" goto BENCHMARKS
 if "%2" == "tutorial" goto TUTORIAL
 if "%2" == "all" goto ALL
+if "%2" == "sip" goto Create_SIP
 
 if "%QTDIR%"=="" goto Usage2
-if "%QTVERSION%"=="" goto Usage22
-if "%PYTHONDIR%"=="" goto Usage3
 
 if not exist "%PYTHONDIR%\Lib\site-packages\sip.pyd" goto Create_SIP
 
@@ -52,7 +55,7 @@ echo building the libraries and BALLView ...
 
 mkdir Libs\libVIEW\mocfiles 2> NUL
 
-for %%i in ("Libs\libBALL" "Libs\libVIEW" "Libs\Python Module"  "Applications\BALLView") do (
+for %%i in (%TARGETS%) do (
 echo ----------------------------------------------------------------
 echo running make in %%i
 echo ----------------------------------------------------------------
@@ -107,7 +110,7 @@ goto end
 rem ----------------------------------------------- Make clean ---------------------------------------
 :CLEANUP
 echo Cleaning up ...
-for %%i in ("Libs\libBALL" "Libs\libVIEW" "Libs\Python Module"  "Applications\BALLView" Tests Tutorial Benchmarks) do (
+for %%i in (%TARGETS% Tests Tutorial Benchmarks) do (
 echo running make clean in %%i
 cd %%i
 nmake %NMAKE_ARG% clean /CS
@@ -125,21 +128,13 @@ call build.bat %1 tutorial
 
 goto end
 
-rem ---------------------------------------------- Useage hints -----------------------------------------
+rem ---------------------------------------------- Usage hints -----------------------------------------
 :Usage1
 echo BALL_PATH variable is not set. 
 goto Usage
 
 :Usage2
 echo QTDIR variable is not set. 
-goto Usage
-
-:Usage22
-echo QTVERSION variable is not set. 
-goto Usage
-
-:Usage3
-echo PYTHONDIR variable is not set. 
 goto Usage
 
 :Usage4
@@ -151,12 +146,12 @@ echo You didnt download the Contrib file and extracted it correctly to this dire
 goto Usage
 
 :Usage6
-echo Please specifiy if you want to create a debugging or release version!
+echo Please specify if you want to create a debugging or release version!
 goto Usage
 
 :Usage
 echo.
-echo Useage: build debug^|release [BALL^|tests^|clean^|benchmarks^|tutorial^|all]
+echo Usage: build debug^|release [BALL^|tests^|clean^|benchmarks^|tutorial^|all]
 echo.
 echo You can also have a look at in BALL\Windows\Readme.txt
 goto end

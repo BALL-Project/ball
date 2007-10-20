@@ -1,89 +1,65 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.103 2006/06/08 21:36:37 bertsch Exp $
+// $Id: molecularControl.C,v 1.103.8.2 2007/03/25 23:30:49 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/KERNEL/representation.h>
+#include <BALL/VIEW/PRIMITIVES/tube.h>
+#include <BALL/VIEW/PRIMITIVES/sphere.h>
+#include <BALL/VIEW/PRIMITIVES/label.h>
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
 #include <BALL/VIEW/DIALOGS/bondProperties.h>
+#include <BALL/VIEW/DIALOGS/atomOverview.h>
+#include <BALL/MATHS/analyticalGeometry.h>
 #include <BALL/KERNEL/system.h>
-#include <BALL/STRUCTURE/smartsMatcher.h>
 #include <BALL/KERNEL/selector.h>
-#include <qmenubar.h>
-#include <qpushbutton.h> 
-#include <qlineedit.h> 
-#include <qmessagebox.h> 
-#include <qtooltip.h> 
+
+#include <QtGui/qpushbutton.h> 
+#include <QtGui/qlineedit.h> 
+#include <QtGui/qmessagebox.h> 
+#include <QtGui/qtooltip.h> 
+#include <QtGui/QGridLayout> 
+
+#include <set>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		MolecularControl::SelectableListViewItem::SelectableListViewItem(QListViewItem* parent, const QString& text, const QString& type, Composite* composite, VIEW::MolecularControl& control)
-			throw()
-			: QCheckListItem(parent, text, QCheckListItem::CheckBox),
-				composite_(composite),
-				control_reference_(control),
-				ignore_change_(true)
+		MolecularControl::MyTreeWidgetItem::MyTreeWidgetItem(QTreeWidget* parent,
+																												 QStringList& sl, 
+																												 Composite* c)
+
+			: QTreeWidgetItem(parent, sl),
+				composite(c)
 		{
-			setText(1, type);
-			setOn(composite->isSelected());
-			ignore_change_ = false;
+			init_();
 		}
 
-
-		MolecularControl::SelectableListViewItem::SelectableListViewItem(QListView* parent, const QString& text, const QString& type, Composite* composite, VIEW::MolecularControl& control)
-			throw()
-			: QCheckListItem(parent, text, QCheckListItem::CheckBox),
-				composite_(composite),
-				control_reference_(control),
-				ignore_change_(true)
+		MolecularControl::MyTreeWidgetItem::MyTreeWidgetItem(QTreeWidgetItem* parent, 
+																												 QStringList& sl, 
+																												 Composite* c)
+			: QTreeWidgetItem(parent, sl),
+				composite(c)
 		{
-			setText(1, type);
-			setOn(composite->isSelected());
-			ignore_change_ = false;
+			init_();
 		}
 
-		void MolecularControl::SelectableListViewItem::setSelected(bool state)
+		void MolecularControl::MyTreeWidgetItem::init_()
 		{
-			QCheckListItem::setSelected(state);
+			setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 			
-			if (!state)
-			{
-				QListViewItem* child = firstChild();
-				while (child != 0)
-				{
-					child->setSelected(false);
-					child = child->nextSibling();
-				}
-			}
+			// force QT to show checkboxes!
+			setCheckState(2, Qt::Checked);
+			if (!composite->isSelected()) setCheckState(2, Qt::Unchecked);
 		}
-
-		void MolecularControl::SelectableListViewItem::stateChange(bool state)
-			throw()
-		{
-			if (ignore_change_)
-			{
-				ignore_change_ = false;
-				return;
-			}
-
-			if (control_reference_.getMainControl()->compositesAreLocked() ||
-					control_reference_.getMainControl()->updateOfRepresentationRunning())
-			{
-				if (composite_->isSelected() == state) return;
-
-				ignore_change_ = true;
-				setOn(!state);
-				return;
-			}
-			control_reference_.selectedComposite_(composite_, isOn());
-		}
+					
 
 
 		MolecularControl::MolecularControl(const MolecularControl& mc)
@@ -92,90 +68,85 @@ namespace BALL
 		{
 		}
 
-					
 
 		MolecularControl::MolecularControl(QWidget* parent, const char* name)
 			throw()
 				:	GenericControl(parent, name),
-					cut_id_(-1),
-					copy_id_(-1),
-					paste_id_(-1),
-					clipboard_id_(-1),
 					selected_(),
 					information_(),
-					selector_edit_(new QComboBox(this)),
-					smarts_edit_(new QComboBox(this)),
+					selector_edit_(0),
 					context_menu_(this),
 					model_menu_(this),
 					edit_menu_(this),
 					context_composite_(0),
 					was_delete_(false),
 					nr_items_removed_(0),
-					show_ss_(false)
+					show_ss_(false),
+					ignore_messages_(false)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new MolecularControl " << this << std::endl;
 		#endif
-			listview->addColumn("[selected] | Name  [highlighted]");
-			listview->addColumn("Type");
-			listview->setColumnWidth(0, 120);
-			listview->setColumnWidth(1, 60);
 
-			QVBoxLayout* layout2 = new QVBoxLayout();
-			getLayout()->addLayout(layout2);
+ 			QGridLayout* glay = getGuestLayout();
+ 			QGridLayout* lay = new QGridLayout();
+ 			glay->addLayout(lay, 2, 0);
 
-			smarts_edit_->resize(90, 45);
-			smarts_edit_->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, 0, 0, false));
-			smarts_edit_->setAutoCompletion(true);
-			smarts_edit_->setDuplicatesEnabled(false);
-			smarts_edit_->setEditable(true);
-			layout2->addWidget(smarts_edit_);
+			listview->setObjectName("MolecularControlList");
+			listview->headerItem()->setText(0, "Name [highlight]");
+			listview->headerItem()->setText(1, "Type");
+			listview->headerItem()->setText(2, "checked");
+			listview->resizeColumnToContents(2);
+			listview->resizeColumnToContents(0);
+ 			lay->addWidget(listview,0, 0, 1, -1);
 
-			selector_edit_->resize(90, 45);
-			selector_edit_->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, 0, 0, false));
+			selector_edit_ = new QComboBox(this);
+			BALL_ASSIGN_NAME(selector_edit_)
+			selector_edit_->setLineEdit(new QLineEdit());
+			selector_edit_->lineEdit()->setObjectName("lineedit");
+
 			selector_edit_->setAutoCompletion(true);
+			selector_edit_->setAutoCompletionCaseSensitivity(Qt::CaseSensitive);
 			selector_edit_->setDuplicatesEnabled(false);
 			selector_edit_->setEditable(true);
-			layout2->addWidget(selector_edit_);
+			selector_edit_->resize(100, 25);
+			selector_edit_->setMinimumSize(50,25);
+			lay->addWidget(selector_edit_,2, 0, 1, -1);
 
 			QPushButton* clear_button = new QPushButton(this);
+			BALL_ASSIGN_NAME(clear_button)
 			clear_button->resize(60, 25);
 			clear_button->setMinimumSize(40, 25);
 			clear_button->setText("Clear");
-			clear_button->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, false));
 			connect(clear_button, SIGNAL(clicked()), this, SLOT(clearSelector()));
-			QToolTip::add(clear_button, tr("Clear the selection."));
-			QHBoxLayout* layout3 = new QHBoxLayout;
-			layout3->addWidget(clear_button);
-			layout2->addLayout(layout3);
+ 			clear_button->setToolTip("Clear the selection.");
+			lay->addWidget(clear_button,3, 0);
 
 			QPushButton* help_button = new QPushButton(this);
+			BALL_ASSIGN_NAME(help_button)
 			help_button->resize(60, 25);
 			help_button->setMinimumSize(40, 25);
 			help_button->setText("Help");
-			help_button->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, false));
 			connect(help_button, SIGNAL(clicked()), this, SLOT(showSelectorHelp()));
-			QToolTip::add(help_button, tr("Show a help dialog."));
-			layout3->addWidget(help_button);
+			help_button->setToolTip("Show a help dialog.");
+			lay->addWidget(help_button,3, 1);
 
 			QPushButton* select_button = new QPushButton(this);
+			BALL_ASSIGN_NAME(select_button)
 			select_button->resize(60, 25);
 			select_button->setText("Select");
 			select_button->setDefault(true);
 			select_button->setMinimumSize(40, 25);
-			select_button->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, false));
 			connect(select_button, SIGNAL(clicked()), this, SLOT(applySelector()));
-			QToolTip::add(select_button, tr("Apply the current expression."));
-			layout3->addWidget(select_button);
+			connect(selector_edit_->lineEdit(), SIGNAL(returnPressed()), this, SLOT(applySelector()));
+			select_button->setToolTip("Apply the current expression.");
+			lay->addWidget(select_button,3, 2);
 
-			// if the selection of any item changed,
-			// mark the complete selection as invalid
-			// it is then re-determined by getSelection()
-			connect(listview, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
-
-			buildContextMenu_();
+			resize(200,400);
 
 			registerWidget(this);
+
+			buildContextMenu_();
 		}
 
 		MolecularControl::~MolecularControl()
@@ -192,8 +163,7 @@ namespace BALL
 			throw()
 		{
 			String hint;
-			bool busy = main_control.compositesAreLocked() ||
-									main_control.updateOfRepresentationRunning();
+			bool busy = main_control.isBusy();
 
 			// prevent changes to composites while simulations are running
 			
@@ -220,25 +190,20 @@ namespace BALL
 			}
 			else
 			{
-				if (getSelection().size() != 1)
-					hint = "One item must be selected to paste into.";
-				else if (copy_list_.size() == 0)
-					hint = "No copied/cuted object.";
-				else if (main_control.compositesAreLocked())
-					hint = "Simulation running, cant paste meanwhile";
-				else
-					hint = "Update of Representation running, cant paste meanwhile";
+				if (getSelection().size() != 1) 	hint = "One item must be selected to paste into.";
+				else if (copy_list_.size() == 0) 	hint = "No copied/cuted object.";
+				else if (main_control.isBusy()) 	hint = "Simulation running, cant paste meanwhile";
+				else 															hint = "Update of Representation running, cant paste meanwhile";
 			}
-			menuBar()->setItemEnabled(paste_id_, allow_paste);	
+			paste_id_->setEnabled(allow_paste);	
 			getMainControl()->setMenuHint(paste_id_, hint);
 
 			// ------------------------------------------------------------------
 			// clearClipboard
 			// enable only if copy_list_ not empty
 			bool copy_list_filled = (copy_list_.size() > 0);
-			menuBar()->setItemEnabled(clipboard_id_, copy_list_filled && 
-																							 !main_control.compositesAreLocked());
-			if (!menuBar()->isItemEnabled(clipboard_id_))
+			clipboard_id_->setEnabled(copy_list_filled && !main_control.isBusy());
+			if (clipboard_id_->isEnabled())
 			{
 				hint = "No item copied/cuted or simulation running";
 			} 
@@ -255,20 +220,22 @@ namespace BALL
 			if (list_filled) hint = "";
 			else hint = "No item selected or simulation running";
 			
-			menuBar()->setItemEnabled(cut_id_, list_filled);
+			cut_id_->setEnabled(list_filled);
 			getMainControl()->setMenuHint(cut_id_, hint);
-			menuBar()->setItemEnabled(copy_id_, list_filled);	
+			copy_id_->setEnabled(list_filled);	
 			getMainControl()->setMenuHint(copy_id_, hint);
 
-			menuBar()->setItemEnabled(select_id_, list_filled);
+			select_id_->setEnabled(list_filled);
 			getMainControl()->setMenuHint(select_id_, hint);
-			menuBar()->setItemEnabled(deselect_id_, list_filled);	
+			deselect_id_->setEnabled(list_filled);	
 			getMainControl()->setMenuHint(deselect_id_, hint);
 
+			angle_action_->setEnabled(list_filled && selected_.size() == 3);	
+			distance_action_->setEnabled(list_filled && selected_.size() == 2);	
 
+			// enable global delete entry for all GenericControls, if this Control has the selection
 			if (selected_.size() > 0)
 			{
-				// enable global delete entry for all GenericControls, if this Control has the selection
 				getMainControl()->setDeleteEntryEnabled(!busy);
 			}
 		}
@@ -284,49 +251,77 @@ namespace BALL
 				switch (composite_message->getType())
 				{
 					case CompositeMessage::NEW_MOLECULE:
+					{
 						addComposite(*(Composite *)composite_message->getComposite(), 
 																			 composite_message->getCompositeName());
 						return false;
+					}
 					
 					case CompositeMessage::REMOVED_COMPOSITE:
+					{
 						removeComposite(*(Composite *)composite_message->getComposite());
-						return false;
+						return true;
+					}
 					
 					case CompositeMessage::CHANGED_COMPOSITE:
 						return false;
 
 					case CompositeMessage::CHANGED_COMPOSITE_HIERARCHY:
 					{
-						List<Composite*> open_items;
-						QListViewItemIterator it(listview);
-						for (; it.current(); ++it)
+						bool was_enabled = !ignore_messages_;
+						selected_.clear();
+						enableUpdates_(false);
+						HashSet<Composite*> open_items;
+						HashSet<Composite*> highlighted;
+						QTreeWidgetItemIterator qit(listview);
+						while (*qit != 0)
 						{
-							if (it.current()->isOpen())
+							if (listview->isItemExpanded(*qit))
 							{
-								open_items.push_back(((SelectableListViewItem*)*it)->getComposite());
+								open_items.insert((*(MyTreeWidgetItem*)*qit).composite);
 							}
+
+							if (listview->isItemSelected(*qit))
+							{
+								highlighted.insert((*(MyTreeWidgetItem*)*qit).composite);
+							}
+
+							qit++;
 						}
 
-						removeComposite(composite_message->getComposite()->getRoot());
-						addComposite(composite_message->getComposite()->getRoot());
+						Composite& root = composite_message->getComposite()->getRoot();
+ 						removeComposite(root);
+						addComposite(root);
 
-						List<Composite*>::Iterator lit = open_items.begin();
-						HashMap<Composite*, SelectableListViewItem*>::Iterator to_find;
-						for (; lit != open_items.end(); lit++)
+						list<QTreeWidgetItem*> item_list;
+						qit = QTreeWidgetItemIterator(listview);
+						while (*qit != 0)
 						{
-							to_find = composite_to_item_.find(*lit);
-							if (to_find == composite_to_item_.end()) continue;
+							Composite* com = ((MyTreeWidgetItem*) *qit)->composite;
+							if (open_items.has(com))
+							{
+								listview->expandItem(*qit);
+							}
 
-							to_find->second->setOpen(true);
+							if (highlighted.has(com))
+							{
+								item_list.push_back(*qit);
+							}
+
+							qit++;
 						}
 
+						listview->selectItems(item_list);
+
+						if (was_enabled) enableUpdates_(true);
 						return true;
 					}
 					case CompositeMessage::SELECTED_COMPOSITE:
 					case CompositeMessage::DESELECTED_COMPOSITE:
-						updateListViewItem_(0, *composite_message->getComposite());
+					{
+ 						setSelection_(false);
 						return true;
-
+					}
 					default:
 						return false;
 				}
@@ -348,32 +343,46 @@ namespace BALL
 			return false;
 		}
 
-		void MolecularControl::activatedItem_(int pos)
+		void MolecularControl::activatedItem_(QAction* action)
 		{
-			if (pos >= 1000 && pos < 2000)
+			String a = ascii(action->objectName());
+			try
 			{
-				selected_model_ = (ModelType)(pos - 1000);
+				Index pos = a.toUnsignedInt();
+				if (pos < 1000)
+				{
+					selected_model_ = (ModelType)(pos);
+				}
+				else if (pos >= 1000 && pos < 1100)
+				{
+					selected_coloring_method_ = (ColoringMethod)(pos - 1000);
+				}
 			}
-			if (pos >= 2000 && pos < 3000)
+			catch(...)
 			{
-				selected_coloring_method_ = (ColoringMethod)(pos - 2000);
 			}
-
 		}
 
 		void MolecularControl::buildContextMenu_()
 		{
-
 			// ===============================================================
 			// create representation context menu:
 			// ===============================================================
+			context_menu_.setObjectName("ContextMenu");
+			model_menu_.setObjectName("ModelMenu");
 
-			model_menu_.insertItem("Custom", this, SLOT(createRepresentation())); 
+			model_menu_.addAction("Custom", this, SLOT(createRepresentation())); 
 
+			const ModelInformation& mi = getMainControl()->getModelInformation();
+			QAction* action =	0;
 			Position p = 0;
 			for (Position pos = MODEL_LINES; pos < MODEL_LABEL; pos++)
 			{
-				model_menu_.insertItem(getModelName((ModelType)pos).c_str(), &color_menu_[p], 1000+pos); 
+				if (!mi.modelMuteableByDisplayProperties((ModelType)pos)) break;
+				action = model_menu_.addMenu(&color_menu_[p]);
+				color_menu_[p].setObjectName((String("ColorMenu") + String(p)).c_str());
+				action->setText(mi.getModelName((ModelType)pos).c_str());
+				action->setObjectName(String(pos).c_str());
 				p++;
 			}
 
@@ -383,100 +392,110 @@ namespace BALL
 			{
 				for (Position pos = COLORING_ELEMENT; pos < COLORING_UNKNOWN; pos++)
 				{
-					color_menu_[i].insertItem(getColoringName((ColoringMethod)pos).c_str(), this, 
-																								 SLOT(createRepresentation_()), 0,2000 + pos);  
-					connect(&color_menu_[i], SIGNAL(highlighted(int)), this, SLOT(activatedItem_(int)));
+					if (!mi.coloringMuteableByDisplayProperties((ColoringMethod)pos)) break;
+					action = color_menu_[i].addAction(mi.getColoringName((ColoringMethod)pos).c_str(), this, 
+																								 SLOT(createRepresentation_()));
+					action->setObjectName(String(pos + 1000).c_str());
+					connect(&color_menu_[i], SIGNAL(hovered(QAction*)), this, SLOT(activatedItem_(QAction*)));
 				}
 			}
 
-			connect(&model_menu_, SIGNAL(highlighted(int)), this, SLOT(activatedItem_(int)));
+			connect(&model_menu_, SIGNAL(hovered(QAction*)), this, SLOT(activatedItem_(QAction*)));
 
 			// ===============================================================
 			// main context menu:
 			// ===============================================================
 
-			context_menu_.insertItem("Create Representation", &model_menu_, CREATE_REPRESENTATION);
-			context_menu_.insertSeparator();
-			context_menu_.insertItem("Edit", &edit_menu_, EDIT_MENU);
-			context_menu_.insertSeparator();
+			QAction* cr = context_menu_.addMenu(&model_menu_);
+			cr->setText("Create Representation");
+			context_menu_.addSeparator();
+			cr = context_menu_.addMenu(&edit_menu_);
+			cr->setText("Edit");
+			context_menu_.addSeparator();
 
-			context_menu_.insertItem("Select", this, SLOT(select()), 0, SELECT);
-			context_menu_.insertItem("Deselect", this, SLOT(deselect()), 0, DESELECT);
+			select_action_ = context_menu_.addAction("Select", this, SLOT(select()));
+			deselect_action_ = context_menu_.addAction("Deselect", this, SLOT(deselect()));
 
-			context_menu_.insertSeparator();
-			context_menu_.insertItem("Focus", this, SLOT(centerCamera()), 0, CAMERA__CENTER);
-			context_menu_.insertSeparator();
+			context_menu_.addSeparator();
+			center_camera_action_ = context_menu_.addAction("Focus", this, SLOT(centerCamera()));
+			context_menu_.addSeparator();
 
 			// -----------------------------------> AtomContainer
-			context_menu_.insertItem("Count items", this, SLOT(countItems()), 0, COUNT__ITEMS);
+			count_items_action_ = context_menu_.addAction("Count items", this, SLOT(countItems()), 0);
+			atom_overview_ = context_menu_.addAction("Atom Overview", this, SLOT(showAtomOverview()), 0);
+			atom_overview_selection_ = context_menu_.addAction("Atom Overview for Selection", this, 
+																												SLOT(showAtomOverviewForSelection()), 0);
 			// <----------------------------------- AtomContainer
 			
-			context_menu_.insertSeparator();
-			context_menu_.insertItem("Properties", this, SLOT(compositeProperties()), 0, COMPOSITE__PROPERTIES);
+			context_menu_.addSeparator();
+			composite_properties_action_ = context_menu_.addAction("Properties", this, SLOT(compositeProperties()));
 
 			// -----------------------------------> Atoms
-			context_menu_.insertItem("Show Bonds", this, SLOT(bondProperties()), 0, BOND__PROPERTIES);
+			bond_propertes_action_ = context_menu_.addAction("Show Bonds", this, SLOT(bondProperties()));
 			// <----------------------------------- Atoms
 
-			context_menu_.insertSeparator();
-			context_menu_.insertItem("Collapse all", this, SLOT(collapseAll()), 0, COLLAPSE_ALL);
-			context_menu_.insertItem("Expand all", this, SLOT(expandAll()), 0, EXPAND_ALL);
-			context_menu_.insertItem("Highlight Selection", this, SLOT(highlightSelection()));
-			context_menu_.insertSeparator();
-			show_ss_id_ = context_menu_.insertItem("Show Secondary Structures", this, 
+			context_menu_.addSeparator();
+			context_menu_.addAction("Collapse all", this, SLOT(collapseAll()));
+			context_menu_.addAction("Expand all", this, SLOT(expandAll()));
+			context_menu_.addAction("Highlight Selection", this, SLOT(highlightSelection()));
+			context_menu_.addSeparator();
+			show_ss_id_ = context_menu_.addAction("Show Secondary Structures", this, 
 																						SLOT(switchShowSecondaryStructure()));
+			show_ss_id_->setCheckable(true);
 
 			// ===============================================================
 			// edit context menu:
 			// ===============================================================
 
-			edit_menu_.insertItem("Cut", this, SLOT(cut()), 0, CUT);
-			edit_menu_.insertItem("Copy", this, SLOT(copy()), 0, COPY);
-			edit_menu_.insertItem("Paste", this, SLOT(paste()), 0, PASTE);
-			edit_menu_.insertItem("Delete", this, SLOT(deleteCurrentItems()), 0, DELETE_ENTRY);
-			edit_menu_.insertSeparator();
-			edit_menu_.insertItem("Move", this, SLOT(moveItems()), 0, OBJECT__MOVE);
+			edit_menu_.addAction("Cut", this, SLOT(cut()));
+			edit_menu_.addAction("Copy", this, SLOT(copy()));
+			edit_menu_.addAction("Paste", this, SLOT(paste()));
+			edit_menu_.addAction("Delete", this, SLOT(deleteCurrentItems()));
+			edit_menu_.addSeparator();
+			edit_menu_.addAction("Move", this, SLOT(moveItems()));
 		}
 
 		void MolecularControl::updateContextMenu(Composite& composite)
 			throw()
 		{
-			bool composites_muteable = !getMainControl()->compositesAreLocked();
+			bool composites_muteable = !getMainControl()->isBusy();
+
 			bool one_item = (getSelection().size() == 1);
 
-			context_menu_.setItemEnabled(SELECT,   !composite.isSelected() && composites_muteable);
-			context_menu_.setItemEnabled(DESELECT,  composite.isSelected() && composites_muteable);
+			select_action_->setEnabled(!composite.isSelected() && composites_muteable);
+			deselect_action_->setEnabled(composite.isSelected() && composites_muteable);
 
 			// -----------------------------------> AtomContainer
-			context_menu_.setItemEnabled(COUNT__ITEMS, RTTI::isKindOf<AtomContainer>(composite));
+			bool ac = RTTI::isKindOf<AtomContainer>(composite);
+			count_items_action_->setEnabled(ac);
+			atom_overview_->setEnabled(ac);
+			atom_overview_selection_->setEnabled(ac);
 			// <----------------------------------- AtomContainer
 			
 			// -----------------------------------> Atoms
-			context_menu_.setItemEnabled(BOND__PROPERTIES, 
-																	 RTTI::isKindOf<Atom>(composite) && one_item && composites_muteable);
+			bond_propertes_action_->setEnabled(RTTI::isKindOf<Atom>(composite) && one_item && composites_muteable);
 			// <----------------------------------- Atoms
 
-			context_menu_.setItemEnabled(CREATE_REPRESENTATION, composites_muteable);
-			context_menu_.setItemEnabled(EDIT_MENU, composites_muteable);
-			context_menu_.setItemEnabled(COMPOSITE__PROPERTIES, composites_muteable && one_item);
-			context_menu_.setItemEnabled(CAMERA__CENTER, composites_muteable);
-			context_menu_.setItemEnabled(COUNT__ITEMS, composites_muteable);
+			composite_properties_action_->setEnabled(one_item);
 		}
 
 
 		void MolecularControl::compositeProperties()
 		{
-			CompositeProperties as(context_composite_, this);
-			as.exec();
+			if (context_composite_ == 0) return;
 
-			CompositeMessage* message = new CompositeMessage(
-					*context_composite_, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
-			getMainControl()->sendMessage(*message);
+			CompositeProperties as(context_composite_, this);
+			if (!as.exec()) return;
+
+			getMainControl()->update(*context_composite_, true);
 		}
 
 		void MolecularControl::bondProperties()
 		{
+			if (context_composite_ == 0) return;
+
 			Atom* const atom = dynamic_cast<Atom*>(context_composite_);
+			if (atom == 0) return;
 			if (atom->countBonds() == 0) 
 			{
 				setStatusbarText("Atom has no bonds!");
@@ -488,11 +507,13 @@ namespace BALL
 			
 		void MolecularControl::buildBonds()
 		{
+			if (context_composite_ == 0) return;
 			notify_(new MolecularTaskMessage(MolecularTaskMessage::BUILD_BONDS));
 		}
 			
 		void MolecularControl::centerCamera()
 		{
+			if (context_composite_ == 0) return;
 			notify_(new CompositeMessage(*context_composite_, CompositeMessage::CENTER_CAMERA));
 		}
 
@@ -504,13 +525,13 @@ namespace BALL
 		void MolecularControl::showFilename()
 		{
 			if (context_composite_ == 0) return;
+			if (getMainControl()->isBusy()) return;
 
 			const AtomContainer* const ac = dynamic_cast<AtomContainer*>(&context_composite_->getRoot());
 			
 			if (ac != 0)
 			{
-				setStatusbarText("Composite is from file  " +
-													ac->getProperty("FROM_FILE").getString());
+				setStatusbarText("Composite is from file  " + ac->getProperty("FROM_FILE").getString());
 			}
 			else
 			{
@@ -521,45 +542,36 @@ namespace BALL
 
 		void MolecularControl::updateSelection()
 		{
-			GenericControl::updateSelection();
+			if (ignore_messages_) return;
+
+ 			GenericControl::updateSelection();
 
 			selected_.clear();
+			context_composite_ = 0;
 
-			// we have to prevent inserting childs of already selected parents, 
-			// otherwise we get serious trouble
-			QListViewItemIterator it(listview);
-			for (; it.current(); ++it)
+			std::set<QTreeWidgetItem*> highlighted;
+			QList<QTreeWidgetItem *> items = getSelectedItems();
+			QList<QTreeWidgetItem *>::iterator it = items.begin();
+			for (; it != items.end(); it++)
 			{
-				SelectableListViewItem* item = (SelectableListViewItem*) it.current();
-				if (item->isSelected())
+				QTreeWidgetItem* item = *it;
+				QTreeWidgetItem* parent = item->parent();
+				// we have to prevent inserting childs of already selected parents, 
+				// otherwise we get serious trouble
+				if (parent != 0 && highlighted.find(parent) != highlighted.end())
 				{
-					// always add systems
-					Composite* const composite = item->getComposite();
-					if (composite->getParent() == 0)
-					{
-						selected_.push_back(composite);
-						continue;
-					}
-
-					List<Composite*>::Iterator lit = selected_.begin();
-					for (; lit != selected_.end(); lit++)
-					{
-						if (composite->isDescendantOf(**lit)) break;
-					}
-
-					// no added parent found
-					if (lit == selected_.end())
-					{
-						selected_.push_back(composite);
-					}
+					highlighted.insert(item);
+					continue;
 				}
+
+				selected_.push_back(((MyTreeWidgetItem*) item)->composite);
+				highlighted.insert(item);
 			}
 
+			if (selected_.size() > 0) context_composite_ = *selected_.begin();
 
 			if (selected_.size() == 1 && RTTI::isKindOf<System>(**selected_.begin()))
 			{
-				context_composite_ = *selected_.begin();
-
 				bool is_in_move_mode = 
 					(Scene::getInstance(0) != 0) &&
 					(Scene::getInstance(0)->getMode() == Scene::MOVE__MODE);
@@ -573,64 +585,40 @@ namespace BALL
 			notify_(message);
 		}
 
-		void MolecularControl::onContextMenu_(QListViewItem* item,  const QPoint& point, int /* col*/)
+		void MolecularControl::showGuestContextMenu(const QPoint& pos)
 		{
-			// clear the context menu
-			SelectableListViewItem* sitem = dynamic_cast<SelectableListViewItem*>(item);
-
-			if (item == 0 || sitem == 0)
+			if (getMainControl()->isBusy())
 			{
+				setStatusbarText("No changes allowed, while simulation is running or creating new representations!", true);
 				return;
 			}
 
-			Composite* composite = sitem->getComposite();
+			QList<QTreeWidgetItem *> items = listview->selectedItems();
+			if (items.size() == 0) return;
+
+			MyTreeWidgetItem* item = (MyTreeWidgetItem*)*items.begin();
+			Composite* composite = item->composite;
 
 			// create the context menu
 			if (composite != 0)
 			{
 				context_composite_ = composite;
-				context_item_ = sitem;
+				context_item_ = item;
 				updateContextMenu(*composite);
 			}
 
 			// show the context menu if it is not empty
-			if (context_menu_.count())
-			{
-				context_menu_.popup(point);
-			}
+			context_menu_.popup(mapToGlobal(pos));
 		}
 
 
-		void MolecularControl::selectedComposite_(Composite* composite, bool state)
-		{
-			if (composite->isSelected() == state) return;
-			
-			CompositeMessage::CompositeMessageType id = CompositeMessage::DESELECTED_COMPOSITE;
-
-			if (state) id = CompositeMessage::SELECTED_COMPOSITE;
-
-			notify_(new CompositeMessage(*composite, id));
-		}
-
-
-		void MolecularControl::recurseGeneration_(SelectableListViewItem* item, Composite& composite)
+		void MolecularControl::recurseGeneration_(QTreeWidgetItem* item, Composite& composite)
 			throw()
 		{
-			Composite::ChildCompositeReverseIterator it = composite.rbeginChildComposite();
-			for (; it != composite.rendChildComposite(); ++it)
+			Composite::ChildCompositeIterator it = composite.beginChildComposite();
+			for (; it != composite.endChildComposite(); ++it)
 			{
 				generateListViewItem_(item, *it);
-			}
-		}
-
-
-		void MolecularControl::recurseUpdate_(SelectableListViewItem* item, Composite& composite)
-			throw()
-		{
-			Composite::ChildCompositeReverseIterator it = composite.rbeginChildComposite();
-			for (; it != composite.rendChildComposite(); ++it)
-			{
-				updateListViewItem_(item, *it);
 			}
 		}
 
@@ -648,9 +636,9 @@ namespace BALL
 
 			main_control.insertPopupMenuSeparator(MainControl::EDIT);
 
-			cut_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Cu&t", this, SLOT(cut()), CTRL+Key_X);
-			copy_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Copy", this, SLOT(copy()), CTRL+Key_C);
-			paste_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Paste", this, SLOT(paste()), CTRL+Key_V);
+			cut_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Cu&t", this, SLOT(cut()), Qt::CTRL+Qt::Key_X);
+			copy_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Copy", this, SLOT(copy()), Qt::CTRL+Qt::Key_C);
+			paste_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Paste", this, SLOT(paste()), Qt::CTRL+Qt::Key_V);
 
 			main_control.insertDeleteEntry();
 			main_control.insertPopupMenuSeparator(MainControl::EDIT);
@@ -661,8 +649,13 @@ namespace BALL
 
 			GenericControl::initializeWidget(main_control);
 
-			registerWidgetForHelpSystem(this, "molecularControl.html");
-			registerWidgetForHelpSystem(selector_edit_, "molecularControl.html#regular_expressions"); 
+			registerForHelpSystem(this, "molecularControl.html");
+			registerForHelpSystem(selector_edit_, "molecularControl.html#regular_expressions"); 
+
+			distance_action_ = insertMenuEntry(MainControl::DISPLAY_CREATE, "Distance Label", this, SLOT(showDistance()));
+			setMenuHint("Render a label for the distance between two highlighted atoms");
+			angle_action_ = insertMenuEntry(MainControl::DISPLAY_CREATE, "Angle Label", this, SLOT(showAngle()));
+			setMenuHint("Render a label for the angle between three highlighted atoms");
 		}
 
 
@@ -684,8 +677,6 @@ namespace BALL
 			generateListViewItem_(0, composite, &name);
 
 			// update the view
-			invalidateSelection();
-			composite_to_item_[&composite]->setSelected(true);
 			updateSelection();
 		}
 
@@ -693,31 +684,48 @@ namespace BALL
 		Size MolecularControl::removeComposite(Composite& composite)
 			throw()
 		{
-			HashMap<Composite*, SelectableListViewItem*>::Iterator to_find = 
+			std::map<Composite*, MyTreeWidgetItem*>::iterator to_find = 
 				composite_to_item_.find(&composite);
 
 			if (to_find == composite_to_item_.end())
 			{
-				setStatusbarText(String("Tried to remove an invalid Composite in ") 
-																 + String(__FILE__) + " " + String(__LINE__), true);
+//   				setStatusbarText(String("Tried to remove an invalid Composite in ") 
+//   																 + String(__FILE__) + " " + String(__LINE__), true);
 				return 0;
 			}
 
+			context_composite_ = 0;
+			context_item_ = 0;
 			nr_items_removed_ = 1;
+
+			bool enabled = !ignore_messages_;
+			enableUpdates_(false);
+
+			if (composite.isRoot() && listview->topLevelItemCount() <= 1)
+			{
+				composite_to_item_.clear();
+				QTreeWidgetItem* item = to_find->second;	
+				listview->takeTopLevelItem(0);
+				delete item;
+				enableUpdates_(enabled);
+				return 1;
+			}
+
 			removeRecursive_(to_find->second);
+			enableUpdates_(enabled);
 			return nr_items_removed_;
 		}
 
-		void MolecularControl::removeRecursive_(SelectableListViewItem* item)
+		void MolecularControl::removeRecursive_(QTreeWidgetItem* item)
 			throw()
 		{
-			composite_to_item_.erase(item->getComposite());
+			composite_to_item_.erase(((MyTreeWidgetItem*)item)->composite);
 
-			SelectableListViewItem* child = dynamic_cast<SelectableListViewItem*>(item->firstChild());
+			QTreeWidgetItem* child = item->child(0);
 			while (child != 0)
 			{
 				removeRecursive_(child);
-				child = dynamic_cast<SelectableListViewItem*>(item->firstChild());
+				child = item->child(0);
 				nr_items_removed_++;
 			}
 
@@ -732,6 +740,7 @@ namespace BALL
 			Log.error() << "MolecularControl " << this << " onNotify " << message << std::endl;
 		#endif
 
+			if (ignore_messages_) return;
 			GenericControl::onNotify(message);
 
 			listview->setUpdatesEnabled(false);
@@ -742,146 +751,124 @@ namespace BALL
 				// if message makes an update of the control necessary
 				// sends new selection through tree
 				updateSelection();
-				listview->setUpdatesEnabled(true);
-				listview->triggerUpdate();
-				return;
 			}
 			listview->setUpdatesEnabled(true);
 		}
 
 
-		void MolecularControl::invalidateSelection()
-		{
-			listview->setUpdatesEnabled(false);
-			QListViewItemIterator it(listview);
-			for (; it.current(); ++it)
-			{
-				it.current()->setSelected(false);
-			}
-
-			listview->setUpdatesEnabled(true);
-			listview->triggerUpdate();
-		}
-
-		// set the highlighting according to the selection in the MainControl
+		// set the highlighting according to a given list
 		void MolecularControl::highlight(const List<Composite*>& selection)
 			throw()
 		{	
-			listview->setUpdatesEnabled(false);
+			enableUpdates_(false);
 			listview->clearSelection();
+			selected_.clear();
 
-			List<Composite*>::ConstIterator cit = selection.begin();
-			for (; cit != selection.end(); cit++)
+			list<QTreeWidgetItem*> items;
+			List<Composite*>::ConstIterator sit = selection.begin();
+			std::map<Composite*, MyTreeWidgetItem*>::iterator fit;
+			for (; sit != selection.end(); ++sit)
 			{
-				if (*cit == 0 || 
-						!composite_to_item_.has(*cit) ||
-						composite_to_item_[*cit] == 0) 
-				{
-		#ifdef BALL_VIEW_DEBUG
-					BALLVIEW_DEBUG
-		#endif
-					continue;
-				}
-				composite_to_item_[*cit]->setSelected(true);
-			}
+				fit = composite_to_item_.find(*sit);
+				if (fit == composite_to_item_.end()) continue;
+				items.push_back(fit->second);
+				selected_.push_back(*sit);
 
-			listview->setUpdatesEnabled(true);
-			listview->triggerUpdate();
-			updateSelection();
+				QTreeWidgetItem* parent = (*fit->second).parent();
+				while (parent != 0 && !listview->isItemExpanded(parent))
+				{
+					listview->expandItem(parent);
+					parent = parent->parent();
+				}
+			}
+			listview->selectItems(items);
+
+			ControlSelectionMessage* message = new ControlSelectionMessage;
+			message->setSelection(selected_);
+			notify_(message);
+
+			enableUpdates_(true);
 		}
 
 		// set the checkboxes according to the selection in the MainControl
 		void MolecularControl::setSelection_(bool open, bool force)
 			throw()
 		{	
-			const HashSet<Composite*>& selection = getMainControl()->getSelection();
-			if (!selection.size())
-			{
-				listview->clearSelection();
-
-				QListViewItemIterator it(listview);
-				for (; it.current(); ++it)
-				{
-					SelectableListViewItem* item = dynamic_cast<SelectableListViewItem*>(it.current());
-					item->setOn(false);
-					item->setSelected(false);
-				}
-				return;
-			}
-
 			if (!force) open = false;
 
-			Size nr = 0;
-			QListViewItemIterator it(listview);
-			for (; it.current(); ++it)
+			QTreeWidgetItemIterator qit(listview);
+			while (*qit != 0)
 			{
-				SelectableListViewItem* item = dynamic_cast<SelectableListViewItem*>(it.current());
-				if (!item->getComposite()->isSelected()) 
+				Composite* c = ((MyTreeWidgetItem*)*qit)->composite;
+				if (c->isSelected())
 				{
-					item->setOn(false);
-					item->setSelected(false);
-					continue;
+					(*qit)->setCheckState(2, Qt::Checked);
 				}
-				
-				nr++;
-				item->setOn(true);
-				item->setSelected(true);
-				if (open)
+				else
 				{
-					QListViewItem* parent = item->parent();
-					while (parent != 0 && !parent->isOpen())
-					{
-						parent->setOpen(true);
-						parent = parent->parent();
-					}
+					(*qit)->setCheckState(2, Qt::Unchecked);
 				}
+				qit++;
 			}
 
-			setStatusbarText(String(nr) + " objects selected.");
+			getMainControl()->printSelectionInfos();
 		}
 
 
 		void MolecularControl::cut()
 		{
-			if (getMainControl()->compositesAreLocked()) return;
+			if (selected_.size() == 0) return;
 
 			// delete old composites in copy list
 			if (!was_delete_) clearClipboard();
 
-			listview->setUpdatesEnabled(false);
+ 			enableUpdates_(false);
 
 			// remove the selected composites from the tree and from the scene
 			// if !was_delete_, copy them into the copy_list_
 			// for all roots of removed items the representations are rebuild
-			HashSet<Composite*> roots;
+			HashSet<Composite*> roots, deleted_roots;
 
-			List<Composite*>::Iterator it = selected_.begin();	
-			for (; it != selected_.end(); it++)
+			List<Composite*> sel = selected_;
+			selected_.clear();
+			List<Composite*>::Iterator it = sel.begin();	
+			for (; it != sel.end(); it++)
 			{
-				if (!(**it).isRoot()) roots.insert(&(**it).getRoot());
+				bool update = false;
+				Composite& c = **it;
+				if (!c.isRoot()) 
+				{
+					roots.insert(&c.getRoot());
+				}
+				else
+				{
+ 					removeComposite(c);
+					update = true;
+					deleted_roots.insert(&c);
+				}
 
-				getMainControl()->remove(**it, was_delete_, false);
+				getMainControl()->remove(c, was_delete_, update);
 
 				if (!was_delete_) copy_list_.push_back(*it);
 			}
 
-			selected_.clear();
-			listview->setUpdatesEnabled(true);
-			listview->triggerUpdate();
 
-			notify_(new ControlSelectionMessage);
-
+			listview->clearSelection();
+ 			enableUpdates_(true);
 			HashSet<Composite*>::Iterator roots_it = roots.begin();
 			for (; +roots_it; roots_it++)
 			{
-				getMainControl()->update(**roots_it, true);
+				if (!deleted_roots.has(*roots_it))
+				{
+					getMainControl()->update(**roots_it, true);
+				}
 			}
 		}
 
 
 		void MolecularControl::copy()
 		{
-			if (getMainControl()->compositesAreLocked()) return;
+			if (getMainControl()->isBusy()) return;
 
 			const List<Composite*> selection = getSelection();
 			if (selection.size() == 0) return;
@@ -902,7 +889,7 @@ namespace BALL
 
 		void MolecularControl::paste()
 		{
-			if (getMainControl()->compositesAreLocked()) return;
+			if (getMainControl()->isBusy() || selected_.size() > 1) return;
 
 			if (copy_list_.size() == 0) return;
 
@@ -970,8 +957,7 @@ namespace BALL
 		}
 
 
-		MolecularControl::SelectableListViewItem* 
-			MolecularControl::generateListViewItem_(SelectableListViewItem* parent, 
+		QTreeWidgetItem* MolecularControl::generateListViewItem_(QTreeWidgetItem* parent, 
 																							Composite& composite, QString* default_name)
 			throw()
 		{
@@ -1015,41 +1001,27 @@ namespace BALL
 			// create an entry for this composite
 			QString type = getInformationVisitor_().getTypeName().c_str();
 
+			QStringList sl;
+			sl << name << type;
+
 			// create a new list item
-			SelectableListViewItem* new_item = 0;
+			MyTreeWidgetItem* new_item = 0;
 
 			// is this a root item?
 			if (parent == 0)
 			{
-				new_item = new SelectableListViewItem(listview, name, type, &composite, *this);
+				new_item = new MyTreeWidgetItem(listview, sl, &composite);
 			} 
 			else 
 			{
 				// no, insert into the current item
-				new_item = new SelectableListViewItem(parent, name, type, &composite, *this);
+				new_item = new MyTreeWidgetItem(parent, sl, &composite);
 			}
 
 			composite_to_item_[&composite] = new_item;
 			recurseGeneration_(new_item, composite);
 
 			return new_item;
-		}
-
-
-		void MolecularControl::updateListViewItem_(SelectableListViewItem* parent, Composite& composite)
-			throw()
-		{
-			HashMap<Composite*, SelectableListViewItem*>::Iterator to_find = 
-				composite_to_item_.find(&composite);
-
-			// an item does not exist => create a new SelectableListViewItem 
-			if (to_find == composite_to_item_.end())
-			{
-				generateListViewItem_(parent, composite);
-				return;
-			}
-
-			recurseUpdate_(to_find->second, composite);
 		}
 
 
@@ -1077,19 +1049,21 @@ namespace BALL
 
 		void MolecularControl::collapseAll()
 		{
-			QListViewItemIterator it(listview);
-			for (; it.current(); ++it)
+			QTreeWidgetItemIterator qit(listview);
+			while(*qit != 0)
 			{
-				(*it)->setOpen(false);
+				listview->collapseItem(*qit);
+				qit++;
 			}
 		}
 
 		void MolecularControl::expandAll()
 		{
-			QListViewItemIterator it(listview);
-			for (; it.current(); ++it)
+			QTreeWidgetItemIterator qit(listview);
+			while(*qit != 0)
 			{
-				(*it)->setOpen(true);
+				listview->expandItem(*qit);
+				qit++;
 			}
 		}
 
@@ -1100,13 +1074,13 @@ namespace BALL
 
 		void MolecularControl::countItems()
 		{
-			if (context_item_ == 0 ||
-					context_item_->getComposite() == 0 || 
-					!RTTI::isKindOf<AtomContainer>(*context_item_->getComposite()))
+			if (context_composite_ == 0 ||
+					dynamic_cast<AtomContainer*>(context_composite_) == 0) 
 			{
 				return;
 			}
-			AtomContainer& ac = *(AtomContainer*) context_item_->getComposite(); 
+
+			AtomContainer& ac = *(AtomContainer*) context_composite_;
 
 			String s;
 			if (RTTI::isKindOf<System>(ac))
@@ -1147,11 +1121,16 @@ namespace BALL
 			Selector s;
 			try
 			{
-				s.setExpression(Expression(selector_edit_->currentText().ascii()));
+				s.setExpression(Expression(ascii(selector_edit_->currentText())));
 			}
 			catch(Exception::ParseError e)
 			{
 				setStatusbarText(String("Invalid expression ") + e.getMessage(), true);
+				return 0;
+			}
+			catch(Exception::GeneralException e)
+			{
+				setStatusbarText(e.getMessage(), true);
 				return 0;
 			}
 
@@ -1159,7 +1138,7 @@ namespace BALL
 			Size nr_of_atoms = 0;
 
 			CompositeManager::CompositeIterator it = getMainControl()->getCompositeManager().begin();
-			for(; it != getMainControl()->getCompositeManager().end(); it++)
+			for(; +it; it++)
 			{
 				try
 				{
@@ -1168,6 +1147,7 @@ namespace BALL
 				catch(Exception::GeneralException e)
 				{
 					setStatusbarText(String("Invalid expression ") + e.getMessage(), true);
+					return 0;
 				}
 
 				List<Atom*>::Iterator ait = s.getSelectedAtoms().begin();
@@ -1203,7 +1183,9 @@ namespace BALL
 
 		void MolecularControl::clearSelector()
 		{
-			selector_edit_->setCurrentText("");
+			selector_edit_->addItem("");
+			Index x = selector_edit_->findText("");
+			selector_edit_->setCurrentIndex(x);
 			getMainControl()->clearSelection();
 		}
 
@@ -1254,12 +1236,7 @@ namespace BALL
 		{
 			// copy list, because selection could change
 			List<Composite*> selection = selected_;
-
-			List<Composite*>::Iterator it = selection.begin();
-			for(; it != selection.end(); it++)
-			{
-				selectedComposite_(*it, true);
-			}
+			newSelection_(selection, true);
 		}
 
 
@@ -1267,49 +1244,101 @@ namespace BALL
 		{
 			// copy list, because selection could change
 			List<Composite*> selection = selected_;
+			newSelection_(selection, false);
+		}
 
-			List<Composite*>::Iterator it = selection.begin();
-			for(; it != selection.end(); it++)
+		void MolecularControl::newSelection_(List<Composite*>& sel, bool selected)
+		{
+			HashSet<Composite*> roots;
+			MainControl* mc = getMainControl();
+			
+			List<Composite*>::Iterator it = sel.begin();
+			for(; it != sel.end(); it++)
 			{
-				selectedComposite_(*it, false);
-			}	
+				roots.insert(&(*it)->getRoot());
+				if (selected)
+				{
+					mc->selectCompositeRecursive(*it, true);
+				}
+				else
+				{
+					mc->deselectCompositeRecursive(*it, true);
+				}
+			}
+			
+			setSelection_(false);
+
+			HashSet<Composite*>::Iterator rit = roots.begin();
+			for (; +rit; ++rit)
+			{
+				getMainControl()->update((**rit), false);
+			}
 		}
 
 		Size MolecularControl::applySelector(const String& expression)
 			throw()
 		{
-			selector_edit_->setCurrentText(expression.c_str());
+			selector_edit_->addItem(expression.c_str());
+			Index x = selector_edit_->findText(expression.c_str());
+			selector_edit_->setCurrentIndex(x);
 			return applySelector();
 		}
 
 		void MolecularControl::highlightSelection()
 			throw()
 		{
-			listview->setUpdatesEnabled(false);
-			QListViewItemIterator it(listview);
-			for (; it.current(); ++it)
+			enableUpdates_(false);
+			collapseAll();
+			listview->clearSelection();
+
+			bool to_expand = getMainControl()->getSelection().size() < 50;
+			bool expand = true;
+			Size nr_expanded = 0;
+			list<QTreeWidgetItem *> items;
+			QTreeWidgetItemIterator qit(listview);
+			while (*qit != 0)
 			{
-				SelectableListViewItem* item = (SelectableListViewItem*) it.current();
-				if (item->isOn())
+				QTreeWidgetItem* item = *qit;
+				if (item->checkState(2) == Qt::Checked)
 				{
-					item->setOpen(true);
-					listview->setSelected(item, true);
-					QListViewItem* parent = item->parent();
-					while (parent != 0 && !parent->isOpen())
+					items.push_back(item);
+
+					if (expand)
 					{
-						parent->setOpen(true);
-						parent = parent->parent();
+						QTreeWidgetItem* parent = item->parent();
+						while (parent != 0 && !listview->isItemExpanded(parent))
+						{
+							listview->expandItem(parent);
+							parent = parent->parent();
+						}
+						nr_expanded++;
+						if (!to_expand && nr_expanded > 10)
+						{
+							expand = false;
+						}
 					}
 				}
-				else
-				{
-					item->setOpen(false);
-					listview->setSelected(item, false);
-				}
-					
+				qit++;
 			}
-			listview->setUpdatesEnabled(true);
-			listview->triggerUpdate();
+			
+			listview->selectItems(items);
+
+			enableUpdates_(true);
+			if (items.size()) listview->scrollToItem(*items.begin());
+		}
+
+		void MolecularControl::enableUpdates_(bool state)
+		{
+			if (ignore_messages_ = !state) return;
+
+			ignore_messages_ = !state;
+			listview->setUpdatesEnabled(state);
+			disconnect(listview, SIGNAL(itemSelectionChanged()), this, SLOT(updateSelection()));
+			if (!state) return;
+
+			listview->update();
+			updateSelection();
+			connect(listview, SIGNAL(itemSelectionChanged()), this, SLOT(updateSelection()));
 		}
 
 		void MolecularControl::switchShowSecondaryStructure()
@@ -1317,7 +1346,7 @@ namespace BALL
 			if (show_ss_) show_ss_ = false;
 			else 					show_ss_ = true;
 
-			context_menu_.setItemChecked(show_ss_id_, show_ss_);
+			show_ss_id_->setChecked(show_ss_);
 
 			CompositeManager::CompositeConstIterator cit = getMainControl()->getCompositeManager().begin();
 			for (; +cit; ++cit)
@@ -1350,12 +1379,9 @@ namespace BALL
 				Size size = inifile.getValue("MOLECULARCONTROL", "RegularExpressions").split(fields, "|");
 				for (Position p = 0; p < size; p++)
 				{
-					selector_edit_->insertItem(fields[p].c_str());
+					selector_edit_->addItem(fields[p].c_str());
 				}
 			}
-
-			connect(selector_edit_->lineEdit(), SIGNAL(returnPressed()), this, SLOT(applySelector()));
-			connect(smarts_edit_->lineEdit(), SIGNAL(returnPressed()), this, SLOT(applySMARTSSelector()));
 		}
 
 		void MolecularControl::writePreferences(INIFile& inifile)
@@ -1368,7 +1394,7 @@ namespace BALL
 
 			for (Position p = 0; p < (Position)selector_edit_->count(); p++)
 			{
-				set.insert(selector_edit_->text(p).ascii());
+				set.insert(ascii(selector_edit_->itemText(p)));
 			}
 
 			String regexps;
@@ -1388,65 +1414,196 @@ namespace BALL
 			DockWidget::writePreferences(inifile);
 		}
 
-		Size MolecularControl::applySMARTSSelector()
+		void MolecularControl::onItemClicked(QTreeWidgetItem* item, int col)
 		{
-			if (parentWidget() == 0) return 0;
-			if (smarts_edit_->currentText() == "")
+			if (col != 2) return;
+			bool checked = (item->checkState(2) == Qt::Checked);
+
+			if (getMainControl()->isBusy())
 			{
-				getMainControl()->clearSelection();
-				return 0;
+				if (checked) item->setCheckState(2, Qt::Unchecked);
+				else 				 item->setCheckState(2, Qt::Checked);
+
+				VIEW::getMainControl()->setStatusbarText("Cannot select items now!", true);
+				return;
 			}
 
-			SmartsMatcher s;
+			List<Composite*> l;
+			l.push_back(((MyTreeWidgetItem*)item)->composite);
+			newSelection_(l, checked);
+		}
 
-			HashSet<Composite*> roots;
-			Size nr_of_matches = 0;
+		void MolecularControl::showAtomOverview()
+		{
+			AtomOverview ao;
+			ao.setParent(dynamic_cast<AtomContainer*>(((MyTreeWidgetItem*)context_item_)->composite));
+			ao.exec();
+		}
 
+		void MolecularControl::showAtomOverviewForSelection()
+		{
+			AtomOverview ao;
+			ao.showOnlySelection(true);
+			ao.setParent(dynamic_cast<AtomContainer*>(((MyTreeWidgetItem*)context_item_)->composite));
+			ao.exec();
+		}
+
+		void MolecularControl::showDistance()
+		{
+			if (getSelection().size() != 2) return;
+
+			List<Composite*>::ConstIterator it = getSelection().begin();
+
+			Atom* a1 = dynamic_cast<Atom*>(*it);
+			it++;
+			Atom* a2 = dynamic_cast<Atom*>(*it);
+			showDistance(a1, a2);
+		}
+
+		void MolecularControl::showDistance(Atom* a1, Atom* a2)
+		{
+			if (!a1 || !a2 || a1 == a2) return;
+			
+			Vector3 pos1 = a1->getPosition();
+			Vector3 pos2 = a2->getPosition();
+			ColorRGBA color(0,0,1.0);
+			Scene* scene = Scene::getInstance(0);
+			ColorRGBA lcolor(1,0,1.0);
+			if (scene != 0)
+			{
+				color = scene->getStage()->getInfoColor();
+				lcolor = scene->getStage()->getBackgroundColor().getInverseColor();
+			}
+
+			Representation* rep = new Representation;
+
+			Sphere* sphere = new Sphere;
+			sphere->setPosition(pos1);
+			sphere->setRadius(0.05);
+			sphere->setColor(color);
+			rep->insert(*sphere);
+
+			sphere = new Sphere;
+			sphere->setPosition(pos2);
+			sphere->setRadius(0.05);
+			sphere->setColor(color);
+			rep->insert(*sphere);
+
+			Tube* tube = new Tube;
+			tube->setRadius(0.05);
+			tube->setVertex1(pos1);
+			tube->setVertex2(pos2);
+			tube->setColor(color);
+			rep->insert(*tube);
+
+			Label* label = new Label;
+			label->setVertex(pos1 + (pos2 - pos1) / 2.);
+			label->setText(String((pos1 - pos2).getLength()));
+			label->setColor(lcolor);
+			rep->insert(*label);
+
+			rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
+			getMainControl()->insert(*rep);
+			getMainControl()->update(*rep);
+		}
+
+		void MolecularControl::showAngle()
+		{
+			List<Composite*>::ConstIterator it = getSelection().begin();
+
+			vector<Atom*> atoms;
+
+			for (; it != getSelection().end(); it++)
+			{
+				Atom* a = dynamic_cast<Atom*>(*it);
+				if (a != 0) atoms.push_back(a);
+			}
+
+			if (atoms.size() < 3 || atoms.size() > 4) return;
+
+			if (atoms.size() == 3) atoms.push_back(0);
+
+			showAngle(atoms[0], atoms[1], atoms[2], atoms[3]);
+		}
+
+		void MolecularControl::showAngle(Atom* a1, Atom* a2, Atom* a3, Atom* a4)
+		{
+			if (!a1 || !a2 || !a3) return;
+			
+			Vector3 pos1 = a1->getPosition();
+			Vector3 pos2 = a2->getPosition();
+			Vector3 pos3 = a3->getPosition();
+
+			Vector3 v1,v2,v3;
 			try
 			{
-				CompositeManager::CompositeIterator it = getMainControl()->getCompositeManager().begin();
-				for(; it != getMainControl()->getCompositeManager().end(); it++)
-				{
-					MoleculeIterator mit = ((System*)*it)->beginMolecule();
-					for (;+mit; ++mit)
-					{
-						std::vector<std::set<const Atom*> > matches;
-						s.match(matches, *mit, smarts_edit_->currentText().ascii());
-						nr_of_matches += matches.size();
-						for (Position p = 0; p < matches.size(); p++)
-						{
-							std::set<const Atom*>& set = matches[p];
-							std::set<const Atom*>::iterator sit = set.begin();
-							for (; sit != set.end(); ++sit)
-							{
-								Atom& a = (*(Atom*)*sit);
-								a.setSelected(true);
-								roots.insert(&a.getRoot());
-							}
-						}
-					}
-				}
+				v1 = pos1 - pos2;
+				v2 = pos3 - pos2;
+				v1.normalize();
+				v2.normalize();
+				v3 = v1 + v2;
+				v3 /= 4.;
 			}
 			catch(...)
 			{
-				setStatusbarText("Invalid Expression!", true);
-				return 0;
+				return;
 			}
 
-			HashSet<Composite*>::Iterator sit = roots.begin();
-			for (; sit != roots.end(); sit++)
+			ColorRGBA color(0,0,1.0);
+			ColorRGBA lcolor(1,0,1.0);
+			Scene* scene = Scene::getInstance(0);
+			if (scene != 0)
 			{
-				getMainControl()->updateRepresentationsOf(**sit, true, true);
+				color = scene->getStage()->getInfoColor();
+				lcolor = scene->getStage()->getBackgroundColor().getInverseColor();
 			}
 
-			NewSelectionMessage* nm = new NewSelectionMessage;
-			nm->setOpenItems(true);
-			getMainControl()->sendMessage(*nm);
+			Representation* rep = new Representation;
 
-			setStatusbarText(String(nr_of_matches) + "Matches");
-			listview->setFocus();
+			Sphere* sphere = new Sphere;
+			sphere->setPosition(pos1);
+			sphere->setRadius(0.05);
+			sphere->setColor(color);
+			rep->insert(*sphere);
 
-			return nr_of_matches;
+			sphere = new Sphere;
+			sphere->setPosition(pos2);
+			sphere->setRadius(0.05);
+			sphere->setColor(color);
+			rep->insert(*sphere);
+
+			sphere = new Sphere;
+			sphere->setPosition(pos3);
+			sphere->setRadius(0.05);
+			sphere->setColor(color);
+			rep->insert(*sphere);
+
+			Tube* tube = new Tube;
+			tube->setRadius(0.05);
+			tube->setVertex1(pos1);
+			tube->setVertex2(pos2);
+			tube->setColor(color);
+			rep->insert(*tube);
+
+			tube = new Tube;
+			tube->setRadius(0.05);
+			tube->setVertex1(pos2);
+			tube->setVertex2(pos3);
+			tube->setColor(color);
+			rep->insert(*tube);
+
+			Angle angle;
+			GetAngle(v1, v2, angle);
+			Label* label = new Label;
+			Vector3 v = pos2 + v3;
+			label->setVertex(v);
+			label->setText(String(angle.toDegree()));
+			label->setColor(lcolor);
+			rep->insert(*label);
+
+			rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
+			getMainControl()->insert(*rep);
+			getMainControl()->update(*rep);
 		}
 
 	} // namespace VIEW

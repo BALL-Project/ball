@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.C,v 1.15 2005/12/23 17:02:43 amoll Exp $
+// $Id: snapShotManager.C,v 1.15.20.2 2007/06/09 16:08:08 anhi Exp $
 //
 
 #include <BALL/KERNEL/PTE.h>
@@ -442,7 +442,7 @@ namespace BALL
 		// use these, otherwise "seek" to the correct file position
 		if (snapshot_buffer_.size() != 0)
 		{
-			if (snapshot_buffer_.size() < number) return false;
+			if (snapshot_buffer_.size() <= number) return false;
 
 			snapshot_buffer_[number].applySnapShot(*system_ptr_);
 			current_snapshot_ = number;
@@ -454,7 +454,7 @@ namespace BALL
 
 		SnapShot buffer;
 
-		if (number > trajectory_file_ptr_->getNumberOfSnapShots())
+		if (number >= trajectory_file_ptr_->getNumberOfSnapShots())
 		{
 			Log.error() << "SnapShotManager::applySnapShot(): "
 									<< "requested SnapShot number " << number 
@@ -468,7 +468,7 @@ namespace BALL
 		// beginning
 		trajectory_file_ptr_->reopen();
 		trajectory_file_ptr_->readHeader();
-		for (Size count = 0; count < number; ++count)
+		for (Size count = 0; count <= number; ++count)
 		{
 			if (!trajectory_file_ptr_->read(buffer))
 			{
@@ -479,6 +479,7 @@ namespace BALL
 		}
 		// now apply the last snapshot we read
 		buffer.applySnapShot(*system_ptr_);
+		current_snapshot_ = number;
 		return true;
 	}
 
@@ -502,6 +503,7 @@ namespace BALL
 
 		trajectory_file_ptr_->reopen();
 		trajectory_file_ptr_->readHeader();
+		current_snapshot_ = 0;
 		
 		if (trajectory_file_ptr_->getNumberOfSnapShots() == 0) return false;
 		
@@ -519,7 +521,7 @@ namespace BALL
 		if (snapshot_buffer_.size() != 0)
 		{
 			current_snapshot_++;
-			if (current_snapshot_ > snapshot_buffer_.size()) return false;
+			if (current_snapshot_ >= snapshot_buffer_.size()) return false;
 
 			snapshot_buffer_[current_snapshot_].applySnapShot(*system_ptr_);
 			return true;
@@ -533,6 +535,7 @@ namespace BALL
 		if (trajectory_file_ptr_->read(buffer))
 		{
 			buffer.applySnapShot(*system_ptr_);
+			current_snapshot_++;
 			return true;
 		}
 		else
@@ -572,6 +575,7 @@ namespace BALL
 		if (count == trajectory_file_ptr_->getNumberOfSnapShots())
 		{
 			buffer.applySnapShot(*system_ptr_);
+			current_snapshot_ = count - 1;
 			return true;
 		}
 

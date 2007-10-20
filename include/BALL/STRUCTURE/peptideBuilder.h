@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideBuilder.h,v 1.7 2005/12/23 17:02:03 amoll Exp $
+// $Id: peptideBuilder.h,v 1.7.18.1 2007/03/25 21:25:28 oliver Exp $
 //
 
 #ifndef BALL_STRUCTURE_PEPTIDEBUILDER_H
@@ -18,6 +18,7 @@ namespace BALL
 	namespace Peptides
 	{
 		/** This class represents one amino acid in the sequence.
+				\ingroup StructurePeptideBuilder
 		*/
 		class BALL_EXPORT AminoAcidDescriptor
 		{
@@ -88,6 +89,7 @@ namespace BALL
        
    /** Build a Peptide from a sequence and the corresponing angles.
 			 Dont forget to call setFragmentDB() before using this class.
+			\ingroup StructurePeptideBuilder
    */
    class BALL_EXPORT PeptideBuilder
 	 {

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.14 2005/12/23 17:02:23 amoll Exp $
+// $Id: logView.h,v 1.14.16.2 2007/05/13 21:18:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -17,28 +17,21 @@
 # include <strstream>
 #endif
 
-#ifndef QAPPLICATION_H
-#	include <qapplication.h>
-#endif
-
-#ifndef QSTRING_H
-#	include <qstring.h>
-#endif
-
-#ifndef QTEXTEDIT_H
-# include <qtextedit.h>
-#endif
-
 #ifndef BALL_VIEW_WIDGETS_DOCKWIDGET_H
 #	include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
+
+#include <QtGui/QTextBrowser>
+#include <QtGui/QDragEnterEvent>
+#include <QtGui/QDragLeaveEvent>
+#include <QtGui/QDropEvent>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 		class DragLogView
-			: public QTextEdit
+			: public QTextBrowser
 		{
 			Q_OBJECT
 
@@ -50,6 +43,7 @@ namespace BALL
 			virtual void contentsDragEnterEvent(QDragEnterEvent* e);
 			virtual void contentsDragLeaveEvent(QDragLeaveEvent* e);
 			virtual void contentsDropEvent(QDropEvent* e);
+			virtual void setSource(const QUrl& name);
 		};
 
 		/** LogView class.
@@ -61,6 +55,11 @@ namespace BALL
 				Use the class LogView as a widget. There are no initializations necessary.
 				Just create this widget as a child widget of your application and it will
 				record and show all messages sent to the \link BALL::LogStream Log \endlink object.
+				The LogView supports URLs, that are included into the LogStream.
+				The links must only be one line long.
+				If such a link is clicked, it's document is shown in the HelpViewer.
+				This can be used to show the corresponding section in the BALLView
+				documentation for an occuring problem.
 				\ingroup ViewWidgets
 		*/
 		class BALL_VIEW_EXPORT LogView
@@ -73,10 +72,6 @@ namespace BALL
 
 			BALL_EMBEDDABLE(LogView,DockWidget)
 		
-			/**	@name	Constructors
-			*/	
-			//@{
-
 			/** Default Constructor.
 					The contructor connects the own
 					<b> stringstream</b> with the  \link BALL::LogStream Log \endlink  object. If a string is written into
@@ -94,17 +89,11 @@ namespace BALL
 			LogView(const LogView& view)
 				throw();
 
-			//@}
-			/** @name Destructors */
-			//@{
-
 			/** Destructor.
 					Calls  clear.
 			*/
 			virtual ~LogView()
 				throw();
-
-			//@}
 
 			/**	Setup the menu entry in "Edit->Clear Logs".
 			*/
@@ -115,6 +104,16 @@ namespace BALL
 			*/
 			virtual void finalizeWidget(MainControl& main_control)
 				throw();
+
+			// output a string
+			void logString(const String& text);
+
+			public slots:
+
+			virtual void showGuestContextMenu(const QPoint&);
+			
+			/// Event filter logstream
+			bool eventFilter(QObject*, QEvent*);
 
 			protected:
 
@@ -128,10 +127,7 @@ namespace BALL
 
 			private:
 
-
 			QTextEdit* text_edit_;
-
-			bool output_running_;
 		};
   	
 } } // namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.32 2005/12/23 17:02:18 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.32.18.2 2007/03/28 13:51:48 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -36,8 +36,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
-		typedef List<GeometricObject*> GeometricObjectList;
 
 		/** ElementColorProcessor class.
 				The class ElementColorProcessor is derived from the class ColorProcessor.
@@ -126,6 +124,8 @@ namespace BALL
 					throw();
 
 			protected:
+				bool canUseMeshShortcut_(const Composite& composite);
+
 				GeometricObjectList list_;
 				ColorRGBA first_color_, middle_color_, last_color_;
 				ColorMap table_;
@@ -187,6 +187,7 @@ namespace BALL
 				{ return composite.getAncestor(dummy_chain_);}
 
 			virtual bool isOK_(const Composite& composite) { return RTTI::isKindOf<Chain>(composite);}
+			bool canUseMeshShortcut_(const Composite& composite);
 
  			Chain 	dummy_chain_;
 		};
@@ -209,6 +210,7 @@ namespace BALL
 				{ return composite.getAncestor(dummy_molecule_);}
 
 			virtual bool isOK_(const Composite& composite) { return RTTI::isKindOf<Molecule>(composite);}
+			bool canUseMeshShortcut_(const Composite& composite);
 
  			Molecule 	dummy_molecule_;
 		};
@@ -228,10 +230,6 @@ namespace BALL
 
 			BALL_CREATE(ResidueNameColorProcessor)
 			
-			/**	@name	Constructors
-			*/
-			//@{
-
 			/** Default Constructor.
 					Initialize the internal ColorMap to contain all residue colors with 
 					residue names as names.
@@ -239,18 +237,12 @@ namespace BALL
 			ResidueNameColorProcessor()
 				throw();
 
-			//@} 
-			/**	@name	Accessors: inspectors and mutators 
-			*/ 
-			//@{
-
 			///
 			void setTransparency(Size value)
 				throw();
 
 			///
 			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
-			//@}
 			
 			///
 			StringHashMap<ColorRGBA>& getColorMap() { return color_map_;}
@@ -261,6 +253,7 @@ namespace BALL
 			protected:	
 				StringHashMap<ColorRGBA> color_map_;
 				Residue 								 dummy_residue;
+				bool canUseMeshShortcut_(const Composite& composite);
 		};
 
 			
@@ -281,10 +274,6 @@ namespace BALL
 
 			BALL_CREATE(AtomChargeColorProcessor)
 			
-			/**	@name	Constructors 
-			*/	
-			//@{
-
 			/** Default Constructor.
 					Initialize the colors to:
 					  - positive color set to blue ("0000FFFF")
@@ -294,20 +283,12 @@ namespace BALL
       AtomChargeColorProcessor()
 				throw();
 
-			/** Copy constructor.
-			*/
+			/// Copy constructor.
  			AtomChargeColorProcessor(const AtomChargeColorProcessor& color_Processor)
 				throw();
 
-			//@} 
-			/**	@name	Accessors: inspectors and mutators 
-			*/ 
-			//@{
-
 			///
 			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
-
-			//@}
 		};
 
 
@@ -328,10 +309,6 @@ namespace BALL
 
 			BALL_CREATE(AtomDistanceColorProcessor)
 			
-			/**	@name	Constructors 
-			*/	
-			//@{
-
 			/** Default Constructor.
 					Initialize to:
 					  - distance set to 10
@@ -342,16 +319,10 @@ namespace BALL
       AtomDistanceColorProcessor()
 				throw();
 
-			/** Construct with copying the colors and the distance.
-			*/
+			/// Construct with copying the colors and the distance.
  			AtomDistanceColorProcessor(const AtomDistanceColorProcessor& color_Processor)
 				throw();
 
-			//@} 
-			/**	@name	Accessors: inspectors and mutators 
-			*/ 
-			//@{
-			
 			/** Change the max distance.
 					Every new Atom object is inserted into the AtomDistanceColorProcessor
 					with this max distance. If the method calculateDistances() is called
@@ -424,10 +395,6 @@ namespace BALL
 			///
 			virtual bool finish()
 				throw();
-			//@} 
-			/**	@name Processor specific methods 
-			*/ 
-			//@{
 
 			///
 			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
@@ -442,7 +409,6 @@ namespace BALL
 			*/
 			virtual Processor::Result operator() (GeometricObject*& object)
 				throw();
-			//@}
 
 			private:
 
@@ -478,6 +444,8 @@ namespace BALL
 				CustomColorProcessor()
 					: ColorProcessor()
 				{}
+
+				bool canUseMeshShortcut_(const Composite&) { return true;}
 		};
 
 
@@ -588,6 +556,8 @@ namespace BALL
 
 			private:
 
+			bool canUseMeshShortcut_(const Composite& composite);
+
 			///
 			ColorRGBA helix_color_,
 								coil_color_,
@@ -667,6 +637,8 @@ namespace BALL
 				throw();
 
 			private:
+
+			bool canUseMeshShortcut_(const Composite& composite);
 
 			///
 			ColorRGBA basic_color_,

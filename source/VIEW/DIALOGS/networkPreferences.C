@@ -1,32 +1,37 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: networkPreferences.C,v 1.4 2005/12/23 17:03:28 amoll Exp $
+// $Id: networkPreferences.C,v 1.4.18.1 2007/03/25 22:02:10 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/networkPreferences.h>
+#include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <qcheckbox.h>
-#include <qlineedit.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qlineedit.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-NetworkPreferences::NetworkPreferences(QWidget* parent, const char* name, WFlags fl)
+NetworkPreferences::NetworkPreferences(QWidget* parent, const char* name, Qt::WFlags fl)
 	throw()
-	: NetworkPreferencesData(parent, name, fl),
+	: QWidget(parent, fl),
+		Ui_NetworkPreferencesData(),
 		PreferencesEntry()
 {
 	setINIFileSectionName("NETWORK");
-	registerObject_(port_edit);
-	registerObject_(host_edit);
-	registerObject_(enable_proxy);
-
+	setupUi(this);
+ 	setObjectName(name);
 	setWidgetStackName("Network");
+	registerWidgets_();
+	
+  // signals and slots connections
+  connect( enable_proxy, SIGNAL( toggled(bool) ), host_edit, SLOT( setEnabled(bool) ) );
+  connect( enable_proxy, SIGNAL( toggled(bool) ), port_edit, SLOT( setEnabled(bool) ) );
 }
 
 NetworkPreferences::~NetworkPreferences()
@@ -73,14 +78,20 @@ void NetworkPreferences::applySettings()
 	Position port = 0;
 	try
 	{
-		port = String(port_edit->text().ascii()).toUnsignedInt();
+		port = ascii(port_edit->text()).toUnsignedInt();
 	}
 	catch(...)
 	{
 		return;
 	}
 		
-	mc->setProxy(host_edit->text().ascii(), port);
+	mc->setProxy(ascii(host_edit->text()), port);
+
+	DownloadPDBFile* df = DownloadPDBFile::getInstance(0);
+	if (df == 0) return;
+
+	df->setPrefix(ascii(pdb_prefix->text()));
+	df->setSuffix(ascii(pdb_suffix->text()));
 }
 
 } } // namespaces

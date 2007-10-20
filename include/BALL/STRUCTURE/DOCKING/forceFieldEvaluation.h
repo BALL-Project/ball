@@ -14,17 +14,24 @@
 
 namespace BALL
 {
-		/** A basis class for energetic evaluators of docking results using
-		 *  a force field as scoring function.
+		/** Base class for energetic evaluators of docking results using
+		    a force field as scoring function.
+				\ingroup Docking
 		 */
-		class ForceFieldEvaluation : public EnergeticEvaluation
+		class BALL_EXPORT ForceFieldEvaluation 
+			: public EnergeticEvaluation
 		{
 			public:
 
-				// Default constructor.
+				/// Default constructor.
 				ForceFieldEvaluation()
 					throw();
 				
+				/// 
+				ForceFieldEvaluation(ForceField& ff)
+					throw();
+				
+				/// 
 				virtual ~ForceFieldEvaluation()
 					throw();
 				
@@ -33,21 +40,27 @@ namespace BALL
 				void setForceField(ForceField& ff)
 					throw();
 
+				/// 
 				void setOptions(const Options& options)
 					throw();
 
+				/// 
 				ForceField& getForceField()
 					throw();
 
+				/// 
 				const ForceField& getForceField() const
 					throw();
 
+				/// 
 				Options& getOptions()
 					throw();
 
+				/// 
 				const Options& getOptions() const
 					throw();
 				
+				/// 
 				virtual std::vector<ConformationSet::Conformation> operator () (ConformationSet& conformations)
 					throw(Exception::TooManyErrors);
 

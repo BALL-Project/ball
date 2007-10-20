@@ -1,11 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2 sw=2
 //
-// $Id: randomNumberGenerator.h,v 1.1 2005/11/25 14:20:54 anker Exp $
+// $Id: randomNumberGenerator.h,v 1.1.18.1 2007/03/25 21:23:46 oliver Exp $
 //
 
 #ifndef BALL_MATHS_RANDOMNUMBERGENERATOR_H
 #define BALL_MATHS_RANDOMNUMBERGENERATOR_H
+
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
 
 #include<vector>
 
@@ -56,7 +60,7 @@ namespace BALL
 
 	*/
 
-	class RandomNumberGenerator
+	class BALL_EXPORT RandomNumberGenerator
 	{
 
 		public:

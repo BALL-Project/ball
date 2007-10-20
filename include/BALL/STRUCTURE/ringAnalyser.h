@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringAnalyser.h,v 1.4 2006/08/15 20:36:55 oliver Exp $
+// $Id: ringAnalyser.h,v 1.4.10.2 2007/04/03 13:29:42 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -11,17 +11,19 @@
 #ifndef BALL_STRUCTURE_RINGANALYSER_H
 #define BALL_STRUCTURE_RINGANALYSER_H
 
+#include <BALL/common.h>
+
 #include <vector>
-#include <BALL/KERNEL/atom.h>
 
 namespace BALL
 {
+		class Atom;
 
         /**
                 * \brief class, providing methods for the analysis of the structure of ringsystems
                 *
                 */
-        class RingAnalyser
+        class BALL_EXPORT RingAnalyser
         {
                 public:
 
@@ -52,7 +54,7 @@ namespace BALL
                 /**
                 * \brief Destructor
                 */
-                ~RingAnalyser();
+                virtual ~RingAnalyser();
 
                 /**
                 * \brief performs an anylsis of the structure of a ringsystem

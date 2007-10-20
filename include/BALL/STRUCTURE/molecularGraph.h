@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularGraph.h,v 1.12 2006/11/12 21:21:20 bertsch Exp $
+// $Id: molecularGraph.h,v 1.12.6.1 2007/03/25 21:25:28 oliver Exp $
 //
 
 #ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
@@ -260,13 +260,24 @@ namespace BALL
 	bool TMolecularGraph<Node, Edge>::newEdge(const Bond& bond)
 		throw()
 	{
+		// Create convenience aliases for atoms.
 		Atom* first = const_cast<Atom*>(bond.getFirstAtom());
 		Atom* second = const_cast<Atom*>(bond.getSecondAtom());	
+
+    // Make sure we have atoms/nodes for this bond/edge.
 		if (!atom_to_node_.has(first) || !atom_to_node_.has(second))
 		{
 			return false;
 		}
 
+		// Make sure not to create the same edge twice.
+		if (bond_to_edge_.has(const_cast<Bond*>(&bond)))
+		{
+			return true;
+		}
+		
+		// Create the new edge und add it to the hash map relating
+		// the bond to the edge.
 		NodeItemType* first_item = atom_to_node_[first];
 		NodeItemType* second_item = atom_to_node_[second];
 		edges_.push_back(EdgeItemType(bond, first_item, second_item));

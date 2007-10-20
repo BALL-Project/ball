@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $$
+// $Id: forceField.iC,v 1.2.28.1 2007/05/18 12:02:44 oliver Exp $
+//
+// Author:
+//   Oliver Kohlbacher
 //
 
 BALL_INLINE

@@ -1,0 +1,12 @@
+; HyperChem file created by BALL
+;
+forcefield AMBER
+sys 0
+mol 1
+atom 1 Carbon O O=C - -0.487 -1.176 0 0 1 2 d 
+vel 1 0 0 0
+atom 2 Carbon C =C= - 0.974 0 0 0 2 1 d 3 d 
+vel 2 0 0 0
+atom 3 Carbon O O=C - -0.487 0 1.176 0 1 2 d 
+vel 3 0 0 0
+endmol 1

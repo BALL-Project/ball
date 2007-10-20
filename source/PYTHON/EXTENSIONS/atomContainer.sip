@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.sip,v 1.7 2003/11/01 09:27:36 oliver Exp $
+// $Id: atomContainer.sip,v 1.7.30.1 2007/03/25 21:37:03 oliver Exp $
 //
 
 class AtomContainer
@@ -32,14 +32,19 @@ class AtomContainer
   void swap(AtomContainer&);
   void setName(const String&);
   const String& getName() const;
+
   AtomContainer* getSuperAtomContainer();
-  const AtomContainer* getSuperAtomContainer() const;
+  // const AtomContainer* getSuperAtomContainer() const;
+
   AtomContainer* getAtomContainer(Position);
-  const AtomContainer* getAtomContainer(Position) const;
+  // const AtomContainer* getAtomContainer(Position) const;
+
   Atom* getAtom(Position);
-  const Atom* getAtom(Position) const;
+  // const Atom* getAtom(Position) const;
+
   Atom* getAtom(const String&);
-  const Atom* getAtom(const String&) const;
+  // const Atom* getAtom(const String&) const;
+
   Size countAtomContainers() const;
   Size countAtoms() const;
   Size countBonds() const;

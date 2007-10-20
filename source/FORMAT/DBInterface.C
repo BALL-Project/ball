@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.C,v 1.6 2006/02/07 12:35:25 oliver Exp $
+// $Id: DBInterface.C,v 1.6.16.1 2007/03/25 22:00:15 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -22,6 +22,7 @@
 #include <sstream>
 #include <iostream>
 
+#include <QtSql/qsqlerror.h>
 
 // #define BALL_DEBUG_DBINTERFACE 1
 
@@ -69,7 +70,7 @@ namespace BALL
 
 	DBInterface::DBInterface()
 		:	error_(DBInterface::NO_ERROR),	
-			db_(0)
+			db_()
 	{
 	}
 
@@ -97,10 +98,10 @@ namespace BALL
 			throw DBInterface::InvalidQuery(__FILE__, __LINE__, "unknown structure id " + String((long)id));
 		}
 		first();
-		text = value(0).toString();
+		text = value(0).toString().toStdString();
 
-		source_id = (value(1).isNull() ? String("") : String(value(1).toCString()));
-		name = (value(2).isNull() ? String("") : String(value(2).toCString()));
+		source_id = (value(1).isNull() ? String("") : String(value(1).toString().toStdString()));
+		name = (value(2).isNull() ? String("") : String(value(2).toString().toStdString()));
 		
 		return true;
 	}
@@ -145,7 +146,7 @@ namespace BALL
 		throw(DBInterface::InvalidQuery, DBInterface::NotConnected)
 	{
 		//check if there is a connection active
-		if (db_ == 0)
+		if (!db_.isOpen())
 		{
 			throw NotConnected(__FILE__,__LINE__);
 		}
@@ -158,7 +159,7 @@ namespace BALL
 				std::cout << "query failed: " << executedQuery() << std::endl;
 				std::cout << "  error text: " << query_->lastError().text().ascii() << std::endl;
 			#endif
-			throw InvalidQuery(__FILE__, __LINE__, String(query_->lastError().text().ascii()) + " for query " + executedQuery());
+			throw InvalidQuery(__FILE__, __LINE__, String(query_->lastError().text().toStdString()) + " for query " + executedQuery());
 		}
 		#ifdef BALL_DEBUG_DBINTERFACE
 			std::cout << "query was executed: " << executedQuery() << std::endl;
@@ -187,14 +188,14 @@ namespace BALL
 			Log.info() << "Connecting to " << db << ":" << user << "@" << host << ":" << port << " through " << driver << std::endl;
 		#endif
 
-		db_ = QSqlDatabase::addDatabase(driver);
-		db_->setHostName(host);
-		db_->setUserName(user);
-		db_->setDatabaseName(db);
-		db_->setPassword(password);
-		db_->setPort(port);
+		db_ = QSqlDatabase::addDatabase(QString(driver.c_str()));
+		db_.setHostName(host.c_str());
+		db_.setUserName(user.c_str());
+		db_.setDatabaseName(db.c_str());
+		db_.setPassword(password.c_str());
+		db_.setPort(port);
 
-		if (!db_->open())
+		if (!db_.open())
 		{
 			setError(NO_CONNECTION);
 			return false;
@@ -275,8 +276,8 @@ namespace BALL
 
 		// Otherwise, remember name and source ID of the structure.
 		first();
-		String source_id = value(1).toString().ascii();
-		String name = value(0).toString().ascii();
+		String source_id = value(1).toString().toStdString();
+		String name = value(0).toString().toStdString();
 
 		// Retrieve all atoms belonging to this structure
 		executeQuery("SELECT atom_number, element, formal_charge, name "
@@ -295,9 +296,9 @@ namespace BALL
 		while (next()) 
 		{
 			atoms[i] = new Atom;
-			atoms[i]->setElement(PTE[value(1).toString().ascii()]);
+			atoms[i]->setElement(PTE[value(1).toString().toStdString()]);
 			atoms[i]->setFormalCharge(value(2).toInt());
-			atoms[i]->setName(value(3).toString().ascii());
+			atoms[i]->setName(value(3).toString().toStdString());
 			i++;
 		}
 		
@@ -542,7 +543,7 @@ namespace BALL
 	{
 		// Create an XDR object ready to *decode* from a memory block (data).
 		XDR xdr;
-		xdrmem_create(&xdr, a.data(), a.size(), XDR_DECODE);
+		xdrmem_create(&xdr, const_cast<char*>(a.data()), a.size(), XDR_DECODE);
 
 		// Determine the number of atoms in the system and make sure the
 		// number of coordinates stored in the XDR blob is the same.
@@ -707,7 +708,7 @@ namespace BALL
 		if (size() > 0)
 		{
 			first();
-			return ConformationMethod(value(0).toString().ascii(), value(1).toString().ascii());
+			return ConformationMethod(value(0).toString().toStdString(), value(1).toString().toStdString());
 		}
 		else
 		{
@@ -722,7 +723,7 @@ namespace BALL
 		if (size() > 0)
 		{
 			first();
-			return ChargeMethod(value(0).toString().ascii(), value(1).toString().ascii());
+			return ChargeMethod(value(0).toString().toStdString(), value(1).toString().toStdString());
 		}
 		else 
 		{

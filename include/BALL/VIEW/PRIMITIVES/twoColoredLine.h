@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredLine.h,v 1.10 2005/12/23 17:02:20 amoll Exp $
+// $Id: twoColoredLine.h,v 1.10.16.1 2007/03/25 21:26:12 oliver Exp $
 //
 
 #ifndef BALL_VIEW_VIEW_PRIMITIVES_TWOCOLOREDLINE_H
 #define BALL_VIEW_VIEW_PRIMITIVES_TWOCOLOREDLINE_H
 
-#ifndef BALL_VIEW_DATATYPE_COLOREXTENSION2_H
-#	include <BALL/VIEW/DATATYPE/colorExtension2.h>
+#ifndef BALL_VIEW_DATATYPE_COLOREXTENSIONS_H
+#	include <BALL/VIEW/DATATYPE/colorExtensions.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -169,6 +169,9 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
+			
+			// Method to get all vertices from a geometric object
+			virtual void getVertices(vector<Vector3>& vertices) const;
 
 			//@}
 		};

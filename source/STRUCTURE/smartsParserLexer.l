@@ -1,10 +1,10 @@
 %{
 #include <BALL/STRUCTURE/smartsParser.h>
+#include <BALL/DATATYPE/string.h>
 
 using namespace BALL;
 
 #include "smartsParserParser.h"
-#include <string.h>
 
 %}
 

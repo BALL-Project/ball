@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorHSV.C,v 1.7 2003/08/29 15:37:03 amoll Exp $
+// $Id: colorHSV.C,v 1.7.32.1 2007/03/25 21:56:34 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>

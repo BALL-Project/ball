@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.iC,v 1.1 2003/08/26 12:11:39 oliver Exp $
+// $Id: twoColoredTube.iC,v 1.1.32.1 2007/03/25 21:26:13 oliver Exp $
 
 BALL_INLINE
-Real TwoColoredTube::getLength() const
+float TwoColoredTube::getLength() const
 	throw()
 {
   return (getVertex1() - getVertex2()).getLength();

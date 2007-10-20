@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Directory_test.C,v 1.19 2005/12/23 17:03:08 amoll Exp $
+// $Id: Directory_test.C,v 1.19.20.2 2007/08/07 17:19:32 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -76,7 +76,7 @@ bool cleanup()
 }
 
 
-START_TEST(Directory, "$Id: Directory_test.C,v 1.19 2005/12/23 17:03:08 amoll Exp $")
+START_TEST(Directory, "$Id: Directory_test.C,v 1.19.20.2 2007/08/07 17:19:32 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -371,9 +371,6 @@ CHECK(bool getFirstEntry(String& entry))
 	d0.create("test1");
 
 	TEST_EQUAL(d0.getFirstEntry(s), true)
-	TEST_EQUAL((s == ".") || (s == "..") || (s == "test1"), true)
-	TEST_EQUAL(d0.getFirstEntry(s), true)
-	TEST_EQUAL((s == ".") || (s == "..") || (s == "test1"), true)
 	d0.remove("test1");
 RESULT
 

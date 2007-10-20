@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.h,v 1.41 2005/12/23 17:01:44 amoll Exp $
+// $Id: INIFile.h,v 1.41.20.1 2007/08/09 17:11:53 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_INIFILE_H
@@ -37,9 +37,9 @@ namespace BALL
 		*/
 		enum
 		{
-			/**	Maximum line length for each entry (1024)
+			/**	Maximum line length for each entry (1048576)
 			*/
-			MAX_LINE_LENGTH = 1024
+			MAX_LINE_LENGTH = 1048576
 		};
 
 		class IteratorTraits_;

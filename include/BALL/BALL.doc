@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.doc,v 1.32 2005/12/23 17:01:38 amoll Exp $
+// $Id: BALL.doc,v 1.32.16.3 2007/08/08 15:36:19 anne Exp $
 //
 
 
@@ -24,7 +24,7 @@
 			functionality provided by BALL.
 
 		 <center><h1>Biochemical Algorithms Library</h1><p>Reference Manual</center>
-		\version 1.1.1
+		\version 1.2
 		\author 
 				- Tim Aubertin
 				- Christian Bender
@@ -33,15 +33,22 @@
 		 		- Andreas Burchardt
 				- Andreas Crauser
 				- Anna Dehof
+				- Holger Franken
+				- Carla Haid
 				- Andreas Hildebrandt
+				- Jan Fuhrmann
 				- Heiko Klein
 				- Andreas Kerzmann
 				- Oliver Kohlbacher
 				- Hans-Peter Lenhof
+				- Bettina Leonhardt
 				- Andreas Moll
 				- Peter M&uuml;ller
+				- Alexander Rurainski
 				- Stefan Strobel
 				- Marc Sturm
+				- Nora Toussaint
+				- Hongbo Zhu
 */
 
 

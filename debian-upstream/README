@@ -1,0 +1,32 @@
+This directory contains all necessary means to create
+a Debian package from a BALL CVS tree. It was created
+by Andreas Moll from the BALL project team (upstream
+author) and can be freely used by any downstream author
+to do the packaging. The directory is named
+debian-upstream to prevent any potential problems
+between up- and downstream authors.
+
+There are three different scripts in this folder:
+
+createDebianSource:
+Intended to create a Debin source package from CVS.
+It does a CVS checkout, and creates a tarball that
+is then moved to /var/tmp/$USER and extracted there.
+To prevent unnecessary overhead for other platforms,
+it also removes the Windows and MacOS folders and
+afterwards creates a new tarball.
+Finally the package building process is started and
+the following two scripts are started.
+
+debian-ball-install:
+Build script, that may be reused for other platforms.
+
+createBALLVIEWDEB:
+It copies all relevant files like binaries, 
+documentation, data files and so on into the folder
+debian/ballview for the packaging later on.
+
+If you have any questions on this approach, feel
+free to contact the authors:
+
+www.ballview.org

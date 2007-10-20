@@ -1,5 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
+//
+// $Id: dockingAlgorithm.h,v 1.3.18.2 2007/06/17 07:02:21 oliver Exp $
+//
+// Author:
+//
+//
 
 #ifndef BALL_STRUCTURE_DOCKING_DOCKINGALGORITHM_H
 #define BALL_STRUCTURE_DOCKING_DOCKINGALGORITHM_H
@@ -18,10 +24,10 @@
 
 namespace BALL
 {
-	/** A class defining the interface for docking algorithms.
-			This is a first iteration.
+	/** Interface class for docking algorithms.
+			\ingroup Docking
 	*/
-	class DockingAlgorithm
+	class BALL_EXPORT DockingAlgorithm
 	{
 		public:
 

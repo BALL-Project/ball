@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.sip,v 1.4 2005/02/26 13:22:04 oliver Exp $
+// $Id: resourceFile.sip,v 1.4.26.1 2007/03/25 21:38:52 oliver Exp $
 //
 
 class ResourceEntry
@@ -23,22 +23,29 @@ class ResourceEntry
   // ResourceEntry& operator = (const ResourceEntry& /entry/);
   void get(ResourceEntry& /entry/, bool /deep/ = true) const;
   ResourceEntry& getRoot();
-  const ResourceEntry& getRoot() const;
+  // const ResourceEntry& getRoot() const;
+
   ResourceEntry* getParent();
-  const ResourceEntry* getParent() const;
+  // const ResourceEntry* getParent() const;
+
   ResourceEntry* getChild(Position /index/);
-  const ResourceEntry* getChild(Position /index/) const;
+  //const ResourceEntry* getChild(Position /index/) const;
+
   ResourceEntry* getEntry(const String& /key_path/);
-  const ResourceEntry* getEntry(const String& /key_path/) const;
+  // const ResourceEntry* getEntry(const String& /key_path/) const;
+
   const String& getKey() const;
   void setValue(const String& /value/);
+
   String& getValue();
-  const String& getValue() const;
+  // const String& getValue() const;
+
   String getPath() const;
   Size countChildren() const;
   Size countDescendants() const;
   Size getSize() const;
   Size getDepth() const;
+
   ResourceEntry* insertChild(const String& /key/, const String& /value/, bool /replace_value/ = true);
   ResourceEntry* insertSibling(const String& /key/, const String& /value/, bool /replace_value/ = true);
   ResourceEntry* insertChild(ResourceEntry& /entry/, bool /replace_value/ = true);
@@ -47,11 +54,13 @@ class ResourceEntry
   // bool removeChild(const String& /key/, ResourceEntry** /removed/ = 0);
   bool removeKey(const String& /key_path/);
   ResourceEntry* findChild(const String& /key/);
-  const ResourceEntry* findChild(const String& /key/) const;
+  // const ResourceEntry* findChild(const String& /key/) const;
+
   ResourceEntry* findDescendant(const String& /key/);
-  const ResourceEntry* findDescendant(const String& /key/) const;
+  // const ResourceEntry* findDescendant(const String& /key/) const;
+
   ResourceEntry* findEntry(const String& /key/);
-  const ResourceEntry* findEntry(const String& /key/) const;
+  // const ResourceEntry* findEntry(const String& /key/) const;
   bool hasChild(const String& /key/) const;
   bool isEmpty() const;
   bool isParentOf(const ResourceEntry& /entry/) const;
@@ -95,10 +104,13 @@ class ResourceFile
   Size getSize() const;
   Entry& getRoot();
   // const Entry& getRoot() const;
+
   Entry* getEntry(const String& /key_path/);
-  const Entry* getEntry(const String& /key_path/) const;
+  // const Entry* getEntry(const String& /key_path/) const;
+
   String* getValue(const String& /key_path/);
-  const String* getValue(const String& /key_path/) const;
+  // const String* getValue(const String& /key_path/) const;
+
   Entry* insert(const String& /key_path/, const String& /name/);
   bool removeKey(const String& /key_path/);
   bool hasKey(const String& /key_path/) const;

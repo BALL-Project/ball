@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Plane3_test.C,v 1.16 2003/06/10 14:28:51 amoll Exp $
+// $Id: Plane3_test.C,v 1.16.30.1 2007/03/25 21:47:33 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/line3.h>
 ///////////////////////////
 
-START_TEST(Plane3, "$Id: Plane3_test.C,v 1.16 2003/06/10 14:28:51 amoll Exp $")
+START_TEST(Plane3, "$Id: Plane3_test.C,v 1.16.30.1 2007/03/25 21:47:33 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

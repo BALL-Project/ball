@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.69 2006/01/04 16:26:34 amoll Exp $
+// $Id: message.h,v 1.69.16.1 2007/03/25 21:26:00 oliver Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -15,30 +15,16 @@
 # include <BALL/VIEW/KERNEL/common.h>
 #endif
 
-#ifndef BALL_DATATYPE_REGULARDATA1D
-# include <BALL/DATATYPE/regularData1D.h>
-#endif
-
-#ifndef BALL_DATATYPE_REGULARDATA2D
-# include <BALL/DATATYPE/regularData2D.h>
-#endif
-
-#ifndef BALL_DATATYPE_REGULARDATA3D
-# include <BALL/DATATYPE/regularData3D.h>
-#endif
-
 class QWidget;
 
 namespace BALL
 {
 	class Composite;
-	class TrajectoryFile;
 	class ConformationSet;
-	class DockResult;
-	class System;
 
 	namespace VIEW
 	{
+		class Dataset;
 		class ConnectionObject;
 		class GeometricObject;
 
@@ -58,9 +44,9 @@ namespace BALL
 		it will be deleted after all ConnectionObject objects has been informed
 		of this message. Therefore a deletable message must be created with the <b> new</b>
 		command.
-		All messages should be created with the <b> new</b> command
-		for avoiding segmentation faults.
-		See ConnectionObject for further information concerning message handling
+		All messages should be created with the <b> new</b> command, since they will be
+		automatically deleted after all ConnectionObjects have been notified.
+		See ConnectionObject for further information concerning message handling.
 		and message posting. \par
 */
 class BALL_VIEW_EXPORT Message
@@ -138,10 +124,80 @@ class BALL_VIEW_EXPORT Message
 };
 
 
+/** Message to notify about changes in a Dataset.
+ 		This message can be e.g. used to notify all ModularWidget about a new 
+		DockResult, Trajectory or any other kind of dataset. The Dataset contains the
+		information on the kind of data it contains. The receiving widget thus has to
+		query the type of the message and the the type of the Dataset.
+		@see Dataset
+		@see DatasetController
+		@see DatasetControl
+*/
+class DatasetMessage
+	: public Message
+{
+	public:
+
+		/// Message type enumeration
+		enum Type
+		{
+			/// Default Value
+			UNDEFINED = -1,
+
+			/// To add 
+			ADD = 0,
+
+			/// To be removed 
+			REMOVE,
+
+			/// Update 
+			UPDATE,
+
+			/// Was selected in Control
+			SELECTED,
+
+			///
+			VISUALIZE,
+
+			/// Allow >90 different kinds of visualization
+			VISUALIZE_END = 100
+		};
+
+		///
+		DatasetMessage(Dataset* set = 0, Type type = UNDEFINED);
+
+		///
+		DatasetMessage(const DatasetMessage& msg);
+
+		///
+		Type getType() const { return type_;}
+
+		///
+		void setType(Type type) { type_ = type;}
+
+		///
+		Dataset* getDataset() const { return dataset_;}
+
+		///
+		void setDataset(Dataset* set) { dataset_ = set;}
+
+		///
+		bool isValid() const;
+
+		protected:
+
+		Dataset* dataset_;
+		Type 		 type_;
+		String 	 dataset_type_;
+};
+
+				
+
 /** CompositeMessage is the base class of all messages concerning the change of one Composite.
 		With it ConnectionObject can notify and react to Composite changes.
 */
-class BALL_VIEW_EXPORT CompositeMessage: public Message
+class BALL_VIEW_EXPORT CompositeMessage
+	: public Message
 {
 	public:
 
@@ -319,7 +375,7 @@ class BALL_VIEW_EXPORT SceneMessage: public Message
 	};
 
 	//@}
-	/**	@name	Constructors
+	/**	@name	Constructors and Destructors
 	*/	
 	//@{
 
@@ -336,11 +392,6 @@ class BALL_VIEW_EXPORT SceneMessage: public Message
 	*/
 	SceneMessage(const SceneMessage& message)
 		throw();
-
-	//@}
-	/** @name Destructors 
-	*/
-	//@{
 
 	/** Destructor.
 	*/
@@ -599,6 +650,7 @@ class BALL_VIEW_EXPORT RepresentationMessage: public Message
 	RepresentationMessageType type_;
 };
 	
+
 /** Message to perform specific tasks for molecular items.\par
 		Send by MolecularControl to MolecularProperties.
  */
@@ -688,28 +740,6 @@ class BALL_VIEW_EXPORT CreateRepresentationMessage
 };
 	
 
-/// Message to notify about a new Trajectory
-class BALL_VIEW_EXPORT NewTrajectoryMessage
-	:public CompositeMessage
-{
-	public:
-		///
-		NewTrajectoryMessage()
-			throw();
-
-		///
-		void setTrajectoryFile(TrajectoryFile& file)
-			throw() { file_ = &file;}
-
-		///
-		TrajectoryFile* getTrajectoryFile()
-			throw() { return file_;}
-
-	protected:
-		TrajectoryFile* file_;
-};
-
-
 /** Message send by one GenericControl to notify all other GenericControl instances to
  		deselect their QListView.
 */
@@ -722,100 +752,6 @@ class BALL_VIEW_EXPORT DeselectControlsMessage
 };
 
 
-/// Message concerning RegularDatas
-class BALL_VIEW_EXPORT RegularDataMessage
-	:public CompositeMessage
-{
-	public:
-
-		///
-		enum RegularDataMessageType
-		{
-			///
-			UNDEFINED = -1,
-			///
-			NEW = 100,
-			///
-			REMOVE,
-			///
-			UPDATE,
-			///
-			SELECTED
-		};
-
-		RegularDataMessage()
-			throw();
-};
-
-/// Message concerning RegularData1D
-class BALL_VIEW_EXPORT RegularData1DMessage
-	: public RegularDataMessage
-{
-	public:
-
-	///
-	RegularData1DMessage(RegularDataMessageType type = UNDEFINED)
-		throw();
-
-	///
-	void setData(RegularData1D& data)
-		throw() { data_ = &data;}
-
-	///
-	RegularData1D* getData()
-		throw() { return data_;}
-
-	protected:
-	RegularData1D* data_;
-};
-
-
-/// Message concerning RegularData2D
-class BALL_VIEW_EXPORT RegularData2DMessage
-	: public RegularDataMessage
-{
-	public:
-
-	///
-	RegularData2DMessage(RegularDataMessageType type = UNDEFINED)
-		throw();
-
-	///
-	void setData(RegularData2D& data)
-		throw() { data_ = &data;}
-
-	///
-	RegularData2D* getData()
-		throw() { return data_;}
-
-	protected:
-	RegularData2D* data_;
-};
-
-
-/// Message concerning RegularData3D
-class BALL_VIEW_EXPORT RegularData3DMessage
-	: public RegularDataMessage
-{
-	public:
-
-	///
-	RegularData3DMessage(RegularDataMessageType type = UNDEFINED)
-		throw();
-
-	///
-	void setData(RegularData3D& data)
-		throw() { data_ = &data;}
-
-	///
-	RegularData3D* getData()
-		throw() { return data_;}
-
-	protected:
-	RegularData3D* data_;
-};
-
-	
 ///
 class BALL_VIEW_EXPORT TransformationMessage
 	: public Message
@@ -843,6 +779,7 @@ class BALL_VIEW_EXPORT TransformationMessage
 	Matrix4x4 matrix_;
 };
 
+
 ///
 class BALL_VIEW_EXPORT FinishedSimulationMessage
 	: public Message
@@ -866,6 +803,7 @@ class BALL_VIEW_EXPORT SyncClippingPlanesMessage
 		throw() {};
 };
 
+
 ///
 class BALL_VIEW_EXPORT ShowHelpMessage
 	: public Message
@@ -873,17 +811,27 @@ class BALL_VIEW_EXPORT ShowHelpMessage
 	public:
 
 	///
-	ShowHelpMessage(String url = "")
+	ShowHelpMessage(String url = "", String project = "BALLView", String entry = "")
 		throw();
 
 	String getURL() const { return url_;}
 
+	String getProject() const { return project_;}
+
+	String getEntry() const { return entry_;}
+
 	protected:
 
 	String url_;
+	String project_;
+	String entry_;
 };
 
-///
+
+/** Register a QObject to a URL in the documentation
+ 		This message is send by ModularWidget::registerForHelpSystem and should
+		probably not be used otherwise.
+*/
 class BALL_VIEW_EXPORT RegisterHelpSystemMessage
 	: public Message
 {
@@ -894,10 +842,7 @@ class BALL_VIEW_EXPORT RegisterHelpSystemMessage
 		throw();
 
 	///
-	void setWidget(const QWidget* widget) { widget_ = widget;}
-
-	///
-	void setMenuEntry(Index id) { menu_entry_ = id;}
+	void setObject(const QObject* object) { object_ = object;}
 
 	///
 	void setURL(const String& url) { url_ = url;}
@@ -906,10 +851,7 @@ class BALL_VIEW_EXPORT RegisterHelpSystemMessage
 	void setRegisterMode(bool state) { register_ = state;}
 
 	///
-	const QWidget* getWidget() const { return widget_;}
-
-	///
-	Index getMenuEntry() const { return menu_entry_;}
+	const QObject* getObject() const { return object_;}
 
 	///
 	const String& getURL() const { return url_;}
@@ -919,88 +861,16 @@ class BALL_VIEW_EXPORT RegisterHelpSystemMessage
 
 	protected:
 
-	const QWidget* widget_;
+	const QObject* object_;
 	Index 	 menu_entry_;
 	String 	 url_;
 	bool  	 register_;
 };
 
 
-//////////////// DOCKING ///////////////////////
-/// Message to notify about a new DockResult
-class BALL_EXPORT NewDockResultMessage
-	:public CompositeMessage
-{
-	public:
-		///
-		NewDockResultMessage()
-			throw();
-			
-		///
-		void setDockResult(DockResult& dock_res)
-			throw()
-		{
-			dock_res_ = &dock_res;
-		}
-
-		///
-		DockResult* getDockResult()
-			throw()
-		{
-			return dock_res_;
-		}
-
-	protected:
-		DockResult* dock_res_;
-};
-
-/// Message to notify dock result should be shown
-class BALL_EXPORT ShowDockResultMessage
-	:public Message
-{
-	public:
-		///
-		ShowDockResultMessage()
-			throw();
-			
-		///
-		ShowDockResultMessage(DockResult* dock_res, System* docked_system)
-			throw();
-			
-		///
-		void setDockResult(DockResult* dock_res)
-			throw()
-		{
-			dock_res_ = dock_res;
-		}
-
-		void setDockedSystem(System* docked_system)
-			throw()
-		{
-			docked_system_ = docked_system;
-		}
-		
-		///
-		DockResult* getDockResult()
-			throw()
-		{
-			return dock_res_;
-		}
-		
-		///
-		System* getDockedSystem()
-			throw()
-		{
-			return docked_system_;
-		}
-
-	protected:
-		DockResult* dock_res_;
-		System* docked_system_;
-};
 
 /// Message to notify docking has finished
-class BALL_EXPORT DockingFinishedMessage
+class BALL_VIEW_EXPORT DockingFinishedMessage
 	:public Message
 {
 	public:
@@ -1023,16 +893,10 @@ class BALL_EXPORT DockingFinishedMessage
 		}
 		
 		//
-		const ConformationSet* getConformationSet() const
-		{
-			return conformation_set_;
-		}
+		const ConformationSet* getConformationSet() const { return conformation_set_; }
 		
 		///
-		bool wasAborted()
-		{
-		 	return abort_;
-		}
+		bool wasAborted() { return abort_; }
 
 	protected:
 
@@ -1040,7 +904,6 @@ class BALL_EXPORT DockingFinishedMessage
 		const ConformationSet* conformation_set_;
 		bool abort_;
 };
-
 
 //@}
 

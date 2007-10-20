@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile_test.C,v 1.27 2004/11/18 16:15:07 amoll Exp $
+// $Id: INIFile_test.C,v 1.27.28.2 2007/08/09 17:17:09 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -29,7 +29,7 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.27 2004/11/18 16:15:07 amoll Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.27.28.2 2007/08/09 17:17:09 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -725,6 +725,14 @@ CHECK(void toSectionLastLine())
 	TEST_EQUAL(*it, "[Section1]")
 	unbound.toSectionLastLine();
 	TEST_EQUAL(+unbound, false)
+RESULT
+
+CHECK([EXTRA] large_enry)
+	INIFile ini("data/INIFile_test3.ini");
+	ini.read();
+	TEST_EQUAL(ini.hasEntry("Section1", "PythonHotkeys"), true)
+	String res = ini.getValue("Section1", "PythonHotkeys");
+	TEST_EQUAL(res.size(), 9999)
 RESULT
 
 

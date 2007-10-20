@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker2DFile.C,v 1.6 2005/12/23 17:03:28 amoll Exp $
+// $Id: openBruker2DFile.C,v 1.6.16.1 2007/03/25 22:02:11 oliver Exp $
 
 #include <BALL/VIEW/DIALOGS/openBruker2DFile.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -9,7 +9,7 @@
 
 #include <BALL/FORMAT/bruker2DFile.h>
 
-#include <qfiledialog.h>
+#include <QtGui/q3filedialog.h>
 
 namespace BALL
 {
@@ -40,8 +40,8 @@ namespace BALL
 	  void OpenBruker2DFile::openFile()
 		  throw()
     {
-      QFileDialog* fd = new QFileDialog(this,"Import Bruker2DFile", true);
-			fd->setMode(QFileDialog::ExistingFile);
+      Q3FileDialog* fd = new Q3FileDialog(this,"Import Bruker2DFile", true);
+			fd->setMode(Q3FileDialog::ExistingFile);
       fd->setFilter("Bruker2DFile-files (*.2r)");
 			if (!fd->exec()) return;
       setStatusbarText("reading Bruker2DFile file...");

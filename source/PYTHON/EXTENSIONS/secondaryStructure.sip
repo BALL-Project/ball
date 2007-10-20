@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.sip,v 1.10 2006/06/06 11:31:39 oliver Exp $
+// $Id: secondaryStructure.sip,v 1.10.8.1 2007/03/25 21:38:53 oliver Exp $
 //
 
 class SecondaryStructure
@@ -33,27 +33,35 @@ class SecondaryStructure
 	//  SecondaryStructure &operator =(const SecondaryStructure&);
   void get(SecondaryStructure&, bool = true) const;
   void swap(SecondaryStructure&);
+
 	Type getType() const throw();
 	void setType(Type /type/) throw();
+
   Protein* getProtein();
-  const Protein* getProtein() const;
+  // const Protein* getProtein() const;
+
   Chain* getChain();
-  const Chain* getChain() const;
+  // const Chain* getChain() const;
+
   Residue* getResidue(int);
-  const Residue* getResidue(int) const;
+  // const Residue* getResidue(int) const;
+
   Residue* getNTerminal();
-  const Residue* getNTerminal() const;
+  // const Residue* getNTerminal() const;
+
   Residue* getCTerminal();
-  const Residue* getCTerminal() const;
+  // const Residue* getCTerminal() const;
+
   PDBAtom* getPDBAtom(int);
-  const PDBAtom* getPDBAtom(int) const;
+  // const PDBAtom* getPDBAtom(int) const;
+
   int countResidues() const;
   int countPDBAtoms() const;
-  void prepend(Residue&);
-  void append(Residue&);
-  void insert(Residue&);
-  void insertBefore(Residue&, Composite&);
-  void insertAfter(Residue&, Composite&);
+  void prepend(Residue& /Transfer/);
+  void append(Residue& /Transfer/);
+  void insert(Residue& /Transfer/);
+  void insertBefore(Residue& /Transfer/, Composite&);
+  void insertAfter(Residue& /Transfer/, Composite&);
   bool remove(Residue&);
   void spliceBefore(SecondaryStructure&);
   void spliceAfter(SecondaryStructure&);

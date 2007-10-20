@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RingClusterer_test.C,v 1.3 2006/08/15 20:37:03 oliver Exp $
+// $Id: RingClusterer_test.C,v 1.3.8.2 2007/04/03 13:29:28 bertsch Exp $
 //
 // Author:
 //  Holger Franken
@@ -13,11 +13,12 @@
 
 #include <BALL/STRUCTURE/ringClusterer.h>
 #include <BALL/STRUCTURE/sdGenerator.h>
+#include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/FORMAT/PDBFile.h>
 
 ///////////////////////////
 
-START_TEST(RingClusterer, "$Id: RingClusterer_test.C,v 1.3 2006/08/15 20:37:03 oliver Exp $")
+START_TEST(RingClusterer, "$Id: RingClusterer_test.C,v 1.3.8.2 2007/04/03 13:29:28 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

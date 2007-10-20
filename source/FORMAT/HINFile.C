@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.C,v 1.64 2005/02/09 13:02:41 oliver Exp $
+// $Id: HINFile.C,v 1.64.28.1 2007/08/06 15:57:39 oliver Exp $
 //
 
 #include <BALL/FORMAT/HINFile.h>
@@ -886,8 +886,26 @@ namespace BALL
 						{
 							// everything all right, create the bond
 							Bond* b = atom_vector[bond_vector[i].atom1]->createBond(*atom_vector[bond_vector[i].atom2]);
-						
 							b->setOrder(bond_vector[i].order);
+							
+							// Fix up the disulphide bridges in proteins.
+							// Make sure we have
+							//   -- a protein
+							//   -- two sulfurs
+							//   -- connecting different residues
+							//   -- these residues are not hetero residues.
+							PDBAtom* a1 = dynamic_cast<PDBAtom*>(const_cast<Atom*>(b->getFirstAtom()));
+							PDBAtom* a2 = dynamic_cast<PDBAtom*>(const_cast<Atom*>(b->getSecondAtom()));
+							if ((a1 != 0) && (a2 != 0)
+									&& (a1->getElement() == PTE[Element::S]) && (a2->getElement() == PTE[Element::S])
+									&& (a1->getResidue() != a2->getResidue())
+									&& (a1->getResidue() != 0) && (a2->getResidue() != 0)
+									&& (a1->getResidue()->hasProperty(Residue::PROPERTY__AMINO_ACID)) 
+									&& (a2->getResidue()->hasProperty(Residue::PROPERTY__AMINO_ACID)))
+							{
+								a1->getResidue()->setProperty(Residue::PROPERTY__HAS_SSBOND);
+								a2->getResidue()->setProperty(Residue::PROPERTY__HAS_SSBOND);
+							}
 						}
 					}
 

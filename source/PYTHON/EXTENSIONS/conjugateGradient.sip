@@ -1,45 +1,43 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.sip,v 1.4 2003/10/29 22:54:39 oliver Exp $
+// $Id: conjugateGradient.sip,v 1.4.30.1 2007/05/07 11:46:43 aleru Exp $
 //
 
 class ConjugateGradientMinimizer 
-  : EnergyMinimizer
+	: EnergyMinimizer
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
 	using namespace BALL;
 %End
-  public:
-  enum UpdateMethod
-  {
-   POLAK_RIBIERE,
-   FLETCHER_REEVES,
-   SHANNO
-  };
+	public:
+	enum UpdateMethod
+	{
+		POLAK_RIBIERE,
+		FLETCHER_REEVES,
+		SHANNO
+	};
 	//  struct Option
 	//  {
-	//    static const char* STEP_LENGTH; 
+	//    static const char* UPDATE_METHOD;
 	//  };
 	//  struct Default
 	//  {
-	//    static double STEP_LENGTH; 
+	//    static const Size UPDATE_METHOD;
 	//  };
 	//    BALL_CREATE(ConjugateGradientMinimizer)
-  ConjugateGradientMinimizer();
-  ConjugateGradientMinimizer(ForceField& /force_field/);
-  ConjugateGradientMinimizer(ForceField& /force_field/, SnapShotManager* /ssm/);
-  ConjugateGradientMinimizer
-   (ForceField& /force_field/, SnapShotManager* /ssm/, const Options& /options/);
-  ConjugateGradientMinimizer(ForceField& /force_field/, const Options& /options/);
-  ~ConjugateGradientMinimizer();
-  // ConjugateGradientMinimizer& operator = (const ConjugateGradientMinimizer& /rhs/);
-  virtual bool specificSetup();
-  void setStepLength(double /value/);
-  double getStepLength() const; 
-  virtual double findStep();
-  virtual void updateDirection();
-  virtual bool minimize(Size /iterations/ = 0, bool /restart/ = false); 
-  Options options;
+	ConjugateGradientMinimizer();
+	ConjugateGradientMinimizer(ForceField& /force_field/);
+	ConjugateGradientMinimizer(ForceField& /force_field/, SnapShotManager* /ssm/);
+	ConjugateGradientMinimizer(ForceField& /force_field/, SnapShotManager* /ssm/, const Options& /options/);
+	ConjugateGradientMinimizer(ForceField& /force_field/, const Options& /options/);
+	~ConjugateGradientMinimizer();
+	// ConjugateGradientMinimizer& operator = (const ConjugateGradientMinimizer& /rhs/);
+	virtual bool specificSetup();
+	void setUpdateMethod(UpdateMethod /method/);
+	UpdateMethod getUpdateMethod() const;
+	virtual double findStep();
+	virtual void updateDirection();
+	virtual bool minimize(Size /iterations/ = 0, bool /restart/ = false);
 };

@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PoissonBoltzmann_test.C,v 1.10 2004/11/07 08:25:38 oliver Exp $
+// $Id: PoissonBoltzmann_test.C,v 1.10.28.1 2007/03/25 21:47:33 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
 
-START_TEST(FDPB, "$Id: PoissonBoltzmann_test.C,v 1.10 2004/11/07 08:25:38 oliver Exp $")
+START_TEST(FDPB, "$Id: PoissonBoltzmann_test.C,v 1.10.28.1 2007/03/25 21:47:33 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

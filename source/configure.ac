@@ -1,11 +1,12 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.39 2006/12/01 18:49:21 oliver Exp $
-
+dnl $Id: configure.ac,v 1.39.6.3 2007/05/10 20:05:02 oliver Exp $
 dnl
 dnl Author:
 dnl   Oliver Kohlbacher
+dnl   Andreas Hildebrandt
+dnl   Marc Sturm
 dnl
 
 dnl
@@ -37,18 +38,9 @@ dnl
 dnl retrieve the BALL version and print it to the console
 dnl for debugging purposes (people sending in config.log and the like).
 dnl
-BALL_VERSION_STRING=`grep define\ BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | cut -d\" -f2 | tr -d "a-zA-Z"`
-BALL_CURRENT_VERSION=${BALL_VERSION_STRING}
-BALL_COMPATIBILITY_VERSION=`echo ${BALL_VERSION_STRING} | cut -d. -f1-2`
-CF_VERSION_CHECK
-
-dnl
-dnl retrieve the BALL version and print it to the console
-dnl for debugging purposes (people sending in config.log and the like).
-dnl
-BALL_VERSION_STRING=`grep define\ BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | cut -d\" -f2`
-BALL_CURRENT_VERSION=${BALL_VERSION_STRING}
-BALL_COMPATIBILITY_VERSION=`echo ${BALL_VERSION_STRING} | cut -d. -f1-2`
+BALL_VERSION_STRING=`grep define\ BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | cut -d\" -f2 `
+BALL_CURRENT_VERSION=`echo ${BALL_VERSION_STRING}| tr -d "a-zA-Z"`
+BALL_COMPATIBILITY_VERSION=`echo ${BALL_CURRENT_VERSION} | cut -d. -f1-2`
 CF_VERSION_CHECK
 
 dnl   Require the user to accept the license (once)
@@ -70,6 +62,7 @@ AC_ARG_WITH(dynarflags,        [  --with-dynarflags=FLAGS add FLAGS to the flags
 AC_ARG_WITH(libxnet,           [  --without-libxnet       use -lsocket -lnsl rather than -lxnet (under Solaris)])
 AC_ARG_WITH(xdr,               [  --without-xdr           no RPC/XDR headers available - do not build portable binary persistence support])
 
+
 dnl  ** QT/X11 **
 AC_ARG_WITH(qt,                [  --with-qt=QTDIR         QT is installed in QTDIR. Prefer this over the following options.])
 AC_ARG_WITH(qt-incl,           [  --with-qt-incl=DIR      QT header files are in DIR])
@@ -80,6 +73,13 @@ AC_ARG_WITH(uic,               [  --with-uic=UIC          use UIC as the absolut
 AC_ARG_WITH(opengl-incl,       [  --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL])
 AC_ARG_WITH(opengl-libs,       [  --with-opengl-libs=DIR  OpenGL/Mesa libraries are in DIR/GL])
 AC_ARG_WITH(mesa,              [  --with-mesa             use MESA instead of OpenGL])
+
+dnl  ** GLEW **
+AC_ARG_WITH(glew-incl,         [  --with-glew-incl=DIR    GLEW header files are in DIR])
+AC_ARG_WITH(glew-libs,         [  --with-glew-libs=DIR    GLEW libraries are in DIR])
+
+AC_ARG_WITH(glew-incl,         [  --with-glew-incl=DIR    GLEW header files are in DIR])
+AC_ARG_WITH(glew-libs,         [  --with-glew-libs=DIR    GLEW libraries are in DIR])
 
 dnl ** Python support **
 AC_ARG_ENABLE(python,          [  --enable-python         enable Python support and search for executable])
@@ -164,6 +164,14 @@ else
 	USE_THREADSAFE_QT=false
 	QT_MT_SUFFIX=""
 fi
+
+if test "$with_glew_incl" != "" ; then
+	GLEW_INCPATH=$with_glew_incl
+fi
+if test "$with_glew_libs" != "" ; then
+	GLEW_LIBPATH=$with_glew_libs
+fi
+
 if test "$with_opengl_incl" != "" ; then
 	OPENGL_INCPATH=$with_opengl_incl
 fi
@@ -528,9 +536,9 @@ dnl
 dnl		VIEW
 dnl
 dnl Currently, we require QT 3.3.x. QT 4.x isn't supported yet.
-QT_MIN_VERSION=330
-QT_MAX_VERSION=399
-QT_RECOMMENDED_VERSION=3.3.5
+QT_MIN_VERSION=410
+QT_MAX_VERSION=499
+QT_RECOMMENDED_VERSION=4.1.0
 CF_VIEW
 
 dnl

@@ -5,23 +5,15 @@
 
 #include <BALL/QSAR/connectivityBase.h>
 #include <BALL/QSAR/simpleDescriptors.h>
-#include <BALL/KERNEL/atomIterator.h>
-#include <BALL/KERNEL/bondIterator.h>
-#include <BALL/CONCEPT/timeStamp.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/fragment.h>
 #include <BALL/COMMON/limits.h>
 
-#include <vector> 
-using std::vector;
 #include <queue>
-using std::priority_queue;
 #include <numeric>
-using std::accumulate;
-#include <utility>
-using std::pair;
+
+using namespace std;
 
 #define BALL_QSAR_CONNECTIVITYBASE_DEBUG
 #undef  BALL_QSAR_CONNECTIVITYBASE_DEBUG
@@ -59,11 +51,11 @@ namespace BALL
 	{
 	}
 	
-	bool ConnectivityBase::isValid(Molecule& molecule)
+	bool ConnectivityBase::isValid_(AtomContainer& ac)
 	{
 		static HashMap<Handle, PreciseTime> mod_times;
-		PreciseTime last_mod = molecule.getModificationTime();
-		Handle mol_handle = molecule.getHandle();
+		PreciseTime last_mod = ac.getModificationTime();
+		Handle mol_handle = ac.getHandle();
 		if (mod_times.has(mol_handle))
 		{
 			if (mod_times[mol_handle] == last_mod)
@@ -77,7 +69,7 @@ namespace BALL
 			{
 				mod_times[mol_handle] = last_mod;
 				#ifdef BALL_QSAR_CONNECTIVITYBASE_DEBUG
-				cerr << ">> ConnectivityBase::isValid: molecule not valid, modified!" << endl;
+				cerr << ">> ConnectivityBase::isValid: atom container not valid, modified!" << endl;
 				#endif
 				return false;
 			}
@@ -86,20 +78,20 @@ namespace BALL
 		{
 			mod_times.insert(std::make_pair(mol_handle, last_mod));
 			#ifdef BALL_QSAR_CONNECTIVITYBASE_DEBUG
-			cerr << ">> ConnectivityBase::isValid: molecule not valid, first call!" << endl;
+			cerr << ">> ConnectivityBase::isValid: atom container not valid, first call!" << endl;
 			#endif
 			return false;
 		}
 	}
 	
 
-	void ConnectivityBase::calculate(Molecule& molecule)
+	void ConnectivityBase::calculate_(AtomContainer& ac)
 	{
 		// we need aromaitcity detected and the number of heavy bonds
 		NumberOfHeavyBonds nhb;
-		molecule.apply(nhb);
+		ac.apply(nhb);
 
-		//cerr << "ConnectivityBase::calculate(Molecule& molecule)" << endl;
+		//cerr << "ConnectivityBase::calculate_(AtomContainer& ac)" << endl;
 		// iterators needed in this function
 		AtomConstIterator atom_it;
 		Atom::BondConstIterator bond_it;
@@ -108,7 +100,7 @@ namespace BALL
 		// indices from [0-num_heavy_atoms]  are heavy atoms rest hydrogen
 		HashMap<const Atom*, Size> index_map;
 		Size num_heavy_atoms = 0;
-		for (atom_it=molecule.beginAtom();atom_it!=molecule.endAtom();++atom_it)
+		for (atom_it = ac.beginAtom(); atom_it != ac.endAtom(); ++atom_it)
 		{
 			if (atom_it->getElement() != PTE[Element::H])
 			{
@@ -120,7 +112,7 @@ namespace BALL
 		vector<double> row_sums(num_heavy_atoms, 0.0);
 		// do for every atom the min dists to all other atoms 
 		// (single source shortest path for every single atom)
-		for (atom_it=molecule.beginAtom();atom_it!=molecule.endAtom();++atom_it)
+		for (atom_it = ac.beginAtom(); atom_it != ac.endAtom();++atom_it)
 		{
 			if (atom_it->getElement() != PTE[Element::H])
 			{
@@ -134,10 +126,10 @@ namespace BALL
 		}	
 		
 		// compute Balanbans J indices
-		atom_it = molecule.beginAtom();
+		atom_it = ac.beginAtom();
 		bond_it = atom_it->beginBond();
 		double value(0);
-		BALL_FOREACH_BOND (molecule, atom_it, bond_it)
+		BALL_FOREACH_BOND (ac, atom_it, bond_it)
 		{
 			const Atom * a1 = bond_it->getFirstAtom();
 			const Atom * a2 = bond_it->getSecondAtom();
@@ -150,12 +142,12 @@ namespace BALL
 		double balaban_j_idx(0);
 
 		// here is not the NumberOfBonds descriptor used to keep this descriptor independend
-		double num_heavy_bonds = molecule.getProperty("NumberOfHeavyBonds").getDouble();
+		double num_heavy_bonds = ac.getProperty("NumberOfHeavyBonds").getDouble();
 		
 		double q = num_heavy_bonds;
 		double mu = num_heavy_bonds-num_heavy_atoms+1;
 		balaban_j_idx = q/(mu+1) * value;
-		molecule.setProperty("BalabanIndexJ", balaban_j_idx);
+		ac.setProperty("BalabanIndexJ", balaban_j_idx);
 	}
 
 

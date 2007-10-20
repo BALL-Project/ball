@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Bit_test.C,v 1.1 2003/06/12 05:56:55 oliver Exp $
+// $Id: Bit_test.C,v 1.1.32.1 2007/03/25 21:46:51 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(Bit, "$Id: Bit_test.C,v 1.1 2003/06/12 05:56:55 oliver Exp $")
+START_TEST(Bit, "$Id: Bit_test.C,v 1.1.32.1 2007/03/25 21:46:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

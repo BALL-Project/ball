@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RMSDMinimizer.h,v 1.3 2006/01/28 12:32:54 oliver Exp $
+// $Id: RMSDMinimizer.h,v 1.3.18.1 2007/03/25 21:25:22 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -29,7 +29,7 @@ namespace BALL
 			the RMSD-optimal transformation by solving an eigenvalue
 			problem.
 			 \par
-	\ingroup StructureMiscellaneous
+	\ingroup StructureMapping
 	\remarks{
 		This code requires GSL (GNU Scientific Library) support to be enabled.
 		If you cannot compile/link code using RMSDMinimizer, please rerun configure

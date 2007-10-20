@@ -1,13 +1,13 @@
-// $Id: dockProgressDialog.C,v 1.4 2006/01/06 13:10:35 leonhardt Exp $
+// $Id: dockProgressDialog.C,v 1.4.18.1 2007/03/25 22:01:54 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/dockProgressDialog.h>
 
-#include <qprogressbar.h>
-#include <qtextedit.h>
-#include <qpushbutton.h>
-#include <qmessagebox.h>
-#include <qlabel.h>
+#include <QtGui/qprogressbar.h>
+#include <QtGui/qtextedit.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qmessagebox.h>
+#include <QtGui/qlabel.h>
 
 //#define BALL_VIEW_DEBUG
 
@@ -16,14 +16,20 @@ namespace BALL
   namespace VIEW
   {
     // Constructor
-    DockProgressDialog::DockProgressDialog(QWidget* parent,  const char* name, bool modal, WFlags fl)
+    DockProgressDialog::DockProgressDialog(QWidget* parent,  const char* name)
       throw()
-      : DockProgressDialogData(parent, name, modal, fl),
-	alg_(0)
+      : QDialog(parent),
+				Ui_DockProgressDialogData(),
+				alg_(0)
     {
 #ifdef BALL_VIEW_DEBUG
       Log.info() << "new DockProgressDialog " << this << std::endl;
 #endif
+
+			setupUi(this);
+			setWindowTitle(name);
+			timer_.setSingleShot(true);
+			progress_bar->setMaximum(100);
       
       connect(&timer_, SIGNAL(timeout()), SLOT(updateProgress_()));
     }
@@ -31,10 +37,11 @@ namespace BALL
     // Copy constructor.
     DockProgressDialog::DockProgressDialog(const DockProgressDialog& dock_prog_dialog)
     throw()
-    : //DockProgressDialogData(dock_prog_dialog),
-    alg_(dock_prog_dialog.alg_),
-    //timer_(dock_prog_dialog.timer_),
-    start_time_(dock_prog_dialog.start_time_)
+			: QDialog(),
+				Ui_DockProgressDialogData(),
+				alg_(dock_prog_dialog.alg_),
+				//timer_(dock_prog_dialog.timer_),
+				start_time_(dock_prog_dialog.start_time_)
     {}
     
     // Destructor	
@@ -90,9 +97,9 @@ namespace BALL
       Options::ConstIterator it = alg_opt.begin();
       for (; +it; ++it)
 			{
-				s = it->first;
+				s = it->first.c_str();
 				s.append(" : ");
-				options->append(s.append(it->second));
+				options->append(s.append(it->second.c_str()));
 			}
       
       if (sf_opt.isEmpty())
@@ -105,9 +112,9 @@ namespace BALL
 				it = sf_opt.begin();
 				for (; +it; ++it)
 					{
-						s = it->first;
+						s = it->first.c_str();
 						s.append(" : ");
-						options->append(s.append(it->second));
+						options->append(s.append(it->second.c_str()));
 					}
 			}
     }
@@ -116,13 +123,13 @@ namespace BALL
     void DockProgressDialog::show()
     {
       // start timer, true -> it is a single shot
-      timer_.start(1000, true);
+      timer_.start(1000);
       
       // remember start time
       start_time_ = QDateTime::currentDateTime();
       
       // show dialog to user
-      DockProgressDialogData::show();
+			QDialog::show();
     }
     
     // TODO: pause algorithm!!!
@@ -153,7 +160,7 @@ namespace BALL
 			
 			float progress = alg_->getProgress();
 			// set progress
-			progress_bar->setProgress((int)(progress * 100.0), 100);
+			progress_bar->setValue((int)(progress * 100.0));
 			// calculate remaining time
 			int run_time = start_time_.secsTo(QDateTime::currentDateTime());
 			int remain_time, hours, min, sec;
@@ -190,7 +197,7 @@ namespace BALL
 			// closing the dialog and showing the DockResult in the dataset widget would be too long 
 			if (!alg_->hasFinished())
 			{
-			 	timer_.start(1000, true);
+			 	timer_.start(1000);
 			}
 		}
 		

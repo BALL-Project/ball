@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PairExpRDFIntegrator_test.C,v 1.11 2002/02/27 12:24:43 sturm Exp $
+// $Id: PairExpRDFIntegrator_test.C,v 1.11.32.1 2007/03/25 21:47:28 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(PairExpRDFIntegrator, "$Id: PairExpRDFIntegrator_test.C,v 1.11 2002/02/27 12:24:43 sturm Exp $")
+START_TEST(PairExpRDFIntegrator, "$Id: PairExpRDFIntegrator_test.C,v 1.11.32.1 2007/03/25 21:47:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

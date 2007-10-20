@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.23 2006/02/21 16:07:47 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.23.12.1 2007/03/25 22:00:32 oliver Exp $
 //
 
 #include <BALL/SYSTEM/path.h>

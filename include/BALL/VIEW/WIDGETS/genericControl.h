@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.h,v 1.14 2005/12/23 17:02:22 amoll Exp $
+// $Id: genericControl.h,v 1.14.16.1 2007/03/25 21:26:20 oliver Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
 #define BALL_VIEW_WIDGETS_GENERICCONTROL_H
@@ -10,29 +10,30 @@
 # include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
 
-#include <qlistview.h>
+#include <QtGui/QKeyEvent>
+#include <QtGui/QTreeWidget>
+#include <QtGui/QTreeWidgetItem>
+#include <QtCore/QList>
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		/** Overloaded QListView, which notifies it parent GenericControl,
-		 		that a entry has to be deleted, after "del" was pressed.
+		/** Base class for all control widgets.
+				\ingroup ViewWidgets
 		*/
-		class BALL_VIEW_EXPORT MyListView
-			: public QListView
+		class TreeWidget
+			: public QTreeWidget
 		{
 			public:
 
-				///
-				MyListView(QWidget* parent)
-					: QListView(parent) {}
+			///
+			TreeWidget(QWidget* parent = 0);
 
-				///
- 				void keyPressEvent(QKeyEvent * e);
+			///
+			void selectItems(const list<QTreeWidgetItem*>& items);
 		};
-		
-		
+
 		/**	GenericControl is a widget to display the structure of Composite objects. 
 		 		It uses the datastructure QListView from the QT-libary.
 				There are two columns. The <b>Name</b> column and the
@@ -42,7 +43,6 @@ namespace BALL
 				copy or paste objects into the GenericControl.
 				Various virtual methods can be overridden to customize the behavior of these
 				structure changing methods. 
-				The method buildContextMenu() can create a customizable context menu.
 				To use this widget in the application just create it with MainGenericControl as
 				parent.
 				\ingroup ViewWidgets
@@ -55,7 +55,7 @@ namespace BALL
 			public:
 
 			/// typedef
-			typedef List<QListViewItem*> ItemList;
+ 			typedef QList<QTreeWidgetItem*> ItemList;
 
 			/** @name Macros.
 		  */
@@ -71,8 +71,6 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					There is a connection from the signal rightButtonClicked from the
-					QT-library to the method onContextMenu(). 
 					(See documentation of QT-library for information concerning widgets and 
 					signal/slot mechanism.) \par
 					Calls registerWidget().
@@ -88,9 +86,11 @@ namespace BALL
 			virtual ~GenericControl()
 				throw();
 
+ 			ItemList getSelectedItems()
+ 				throw();
+
 			///
-			ItemList getSelectedItems()
-				throw();
+			QTreeWidgetItem* addRow(const QStringList& entries);
 
 			/** React to a DeselectControlsMessage.
 			 		If such a message is send from other GenericControls, this GenericControl 
@@ -98,8 +98,8 @@ namespace BALL
 					at any time.
 			 		Call this Method in the derived Classes in their onNotify().
 			*/
-			virtual void onNotify(Message *message)
-				throw();
+ 			virtual void onNotify(Message *message)
+ 				throw();
 
 			/**	Initialize the menu entries:
 					  - delete
@@ -108,36 +108,36 @@ namespace BALL
 					is started by MainControl::show.
 					\param main_control the MainControl object to be initialized with this ModularWidget
 			*/
-			virtual void initializeWidget(MainControl& main_control)
-				throw();
+ 			virtual void initializeWidget(MainControl& main_control)
+ 				throw();
 
 			//@}
 
 			public slots:
 			
-			/// Called by MyListView, if del is pressed
-			virtual void deleteCurrentItems()
-				throw() {};
+			/// Called by if del is pressed
+ 			virtual void deleteCurrentItems()
+ 				throw() {};
 
-			
 		  protected slots:
-			
-			virtual void onContextMenu_(QListViewItem* item, const QPoint& point, int column);
 
-			virtual void deselectOtherControls_();
+ 			virtual void deselectOtherControls_();
 
 			/*_ Call deselectOtherControls_ if a selection exists.
 			 		Call this Method in the derived Classes in their updateSelection()
 			*/
-			virtual void updateSelection();
+ 			virtual void updateSelection();
+
+			virtual void onItemClicked(QTreeWidgetItem*, int) {};
 			
 		  protected:
 
-			virtual void removeItem_(QListViewItem* item, bool update = false)
-				throw();
+ 			virtual void removeItem_(QTreeWidgetItem* item)
+ 				throw();
 
-			QListViewItem* 								context_item_;
-			MyListView* 										listview;
+ 			QTreeWidgetItem* 			context_item_;
+			TreeWidget* 					listview;
+			bool 									checkable_;
 		};
 		
 } } // namespaces

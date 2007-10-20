@@ -17,12 +17,14 @@ namespace BALL
 	{
 		class AmberConfigurationDialog;
 		class CharmmConfigurationDialog;
+		class MMFF94ConfigurationDialog;
 
 		/** Dialog for performing energy minimisations
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT MinimizationDialog 
-			: public MinimizationDialogData,
+			: public QDialog,
+				public Ui_MinimizationDialogData,
 				public PreferencesEntry
 		{
 				Q_OBJECT
@@ -30,7 +32,7 @@ namespace BALL
 				public:
 
 				/// Constructor
-				MinimizationDialog(QWidget* parent = NULL, const char* name = NULL );
+				MinimizationDialog(QWidget* parent = NULL, const char* name = "MinimizationDialog");
 
 				/// Destructor
 				virtual ~MinimizationDialog();
@@ -60,13 +62,22 @@ namespace BALL
 				void setEnergyDifference(double energy_difference);
 				
 				///
+				bool getUseStrangLBFGS() const;
+
+				///
+				void setUseStrangLBFGS(bool use_LBFGS);
+
+				///
+				bool getUseShiftedLVMM() const;
+
+				///
+				void setUseShiftedLVMM(bool use_shifted);
+
+				///
 				bool getUseConjugateGradient() const;
 				
 				///
 				void setUseConjugateGradient(bool use_CG);
-				
-				/// Show an dialog for setting the options of the currently selected force field.
-				void advancedOptions();
 				
 				/** Set the dialog for the AMBER Configuration.
 						Called by MolecularStructure.
@@ -78,18 +89,27 @@ namespace BALL
 				*/
 				void setCharmmDialog(CharmmConfigurationDialog* charmm_dialog);
 				
-				/// Use the AMBER force field
-				void useAmberFF();
+				///
+				void setMMFF94Dialog(MMFF94ConfigurationDialog* dialog);
+		
+				/// Select the forcefield, nr are the enum values in MolecularStructure
+				void selectForceField(Position nr);
 				
-				/// Use the CHARMM force field
-				void useCharmmFF();
+				/// Return the ID of the selected forcefield (see enum values in MolecularStructure)
+				Position selectedForceField() const;
 				
-				/// Are we using the AMBER force field?
-				bool getUseAmber();
+				public slots:
+
+				///
+				virtual void accept();
+
+				/// Show an dialog for setting the options of the currently selected force field.
+				void advancedOptions();
 				
 				private:
 				AmberConfigurationDialog* amber_dialog_;
 				CharmmConfigurationDialog* charmm_dialog_;
+				MMFF94ConfigurationDialog* mmff_dialog_;
 		};
 		
 	} // namespace VIEW

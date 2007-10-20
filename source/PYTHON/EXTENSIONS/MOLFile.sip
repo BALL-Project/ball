@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.sip,v 1.9 2005/12/23 17:02:46 amoll Exp $
+// $Id: MOLFile.sip,v 1.9.18.1 2007/03/25 21:37:00 oliver Exp $
 //
 
 class MOLFile
@@ -10,6 +10,7 @@ class MOLFile
 %TypeHeaderCode
 	#include <BALL/FORMAT/MOLFile.h>
 	using namespace BALL;
+	using namespace BALL::Exception;
 %End
   public:
   MOLFile();

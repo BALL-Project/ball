@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT3D.h,v 1.17 2006/01/03 19:10:41 anhi Exp $
+// $Id: FFT3D.h,v 1.17.16.1 2007/03/25 21:23:44 oliver Exp $
 //
 
 #ifndef BALL_MATHS_TFFT3D_H
@@ -89,7 +89,7 @@ namespace BALL
 			//@{
 
 			/// Assignment operator
-			const TFFT3D& operator = (const TFFT3D& TFFT3D)
+ 			const TFFT3D& operator = (const TFFT3D& fft_3d)
 				throw();
 			
 			/** Clear the contents.
@@ -110,8 +110,8 @@ namespace BALL
 
 			/** Equality operator.
 			 */
-			bool operator == (const TFFT3D& TFFT3D) const
-				throw();
+ 			bool operator == (const TFFT3D& fft3d) const
+ 				throw();
 			//@}
 			
 			// @name Accessors
@@ -460,9 +460,9 @@ namespace BALL
 	bool TFFT3D<ComplexTraits>::translate(const Vector3& trans_origin)
 		throw()
 	{
-		Position internalOriginX = (Position) rint(trans_origin.x*stepPhysX_);
-		Position internalOriginY = (Position) rint(trans_origin.y*stepPhysY_);
-		Position internalOriginZ = (Position) rint(trans_origin.z*stepPhysZ_);
+		Position internalOriginX = (Position) Maths::rint(trans_origin.x*stepPhysX_);
+		Position internalOriginY = (Position) Maths::rint(trans_origin.y*stepPhysY_);
+		Position internalOriginZ = (Position) Maths::rint(trans_origin.z*stepPhysZ_);
 		
 		if ((internalOriginX <= lengthX_) && (internalOriginY <= lengthY_) && (internalOriginZ <= lengthZ_))
 		{
@@ -840,9 +840,9 @@ namespace BALL
 		{
 			Index i, j, k;
 
-			i = (Index) rint((pos.x+origin_.x)/stepPhysX_);
-			j = (Index) rint((pos.y+origin_.y)/stepPhysY_);
-			k = (Index) rint((pos.z+origin_.z)/stepPhysZ_);
+			i = (Index) Maths::rint((pos.x+origin_.x)/stepPhysX_);
+			j = (Index) Maths::rint((pos.y+origin_.y)/stepPhysY_);
+			k = (Index) Maths::rint((pos.z+origin_.z)/stepPhysZ_);
 			
 			internalPos = (k + (j + i*lengthY_)*lengthZ_);
 			
@@ -856,9 +856,9 @@ namespace BALL
 		{
 			Index i, j, k;
 
-			i = (Index) rint(pos.x/stepFourierX_);
-			j = (Index) rint(pos.y/stepFourierY_);
-			k = (Index) rint(pos.z/stepFourierZ_);
+			i = (Index) Maths::rint(pos.x/stepFourierX_);
+			j = (Index) Maths::rint(pos.y/stepFourierY_);
+			k = (Index) Maths::rint(pos.z/stepFourierZ_);
 
 			if (i<0)
 			{
@@ -896,9 +896,9 @@ namespace BALL
 		{
 			Index i, j, k;
 
-			i = (Index) rint((pos.x+origin_.x)/stepPhysX_);
-			j = (Index) rint((pos.y+origin_.y)/stepPhysY_);
-			k = (Index) rint((pos.z+origin_.z)/stepPhysZ_);
+			i = (Index) Maths::rint((pos.x+origin_.x)/stepPhysX_);
+			j = (Index) Maths::rint((pos.y+origin_.y)/stepPhysY_);
+			k = (Index) Maths::rint((pos.z+origin_.z)/stepPhysZ_);
 			
 			internalPos = (k + (j + i*lengthY_)*lengthZ_);
 			
@@ -912,9 +912,9 @@ namespace BALL
 		{
 			Index i, j, k;
 
-			i = (Index) rint(pos.x/stepFourierX_);
-			j = (Index) rint(pos.y/stepFourierY_);
-			k = (Index) rint(pos.z/stepFourierZ_);
+			i = (Index) Maths::rint(pos.x/stepFourierX_);
+			j = (Index) Maths::rint(pos.y/stepFourierY_);
+			k = (Index) Maths::rint(pos.z/stepFourierZ_);
 
 			if (i<0)
 			{
@@ -960,11 +960,11 @@ namespace BALL
 	{
 		
 		// AR: old version: -2.*M_PI...
-	  double phase = 2.*M_PI*(  (rint(pos.x/stepFourierX_))*(rint(origin_.x/stepPhysX_))
+	  double phase = 2.*M_PI*(  (Maths::rint(pos.x/stepFourierX_))*(Maths::rint(origin_.x/stepPhysX_))
 															/lengthX_
-														+ (rint(pos.y/stepFourierY_))*(rint(origin_.y/stepPhysY_))
+														+ (Maths::rint(pos.y/stepFourierY_))*(Maths::rint(origin_.y/stepPhysY_))
 															/lengthY_
-														+ (rint(pos.z/stepFourierZ_))*(rint(origin_.z/stepPhysZ_))
+														+ (Maths::rint(pos.z/stepFourierZ_))*(Maths::rint(origin_.z/stepPhysZ_))
 															/lengthZ_ );
 	
 
@@ -974,9 +974,9 @@ namespace BALL
 		
 		/*double phase = -2.*M_PI*(  (rint(pos.x/stepFourierX_))*(rint(origin_.x/stepPhysX_))
 															/lengthX_
-														+ (rint(pos.y/stepFourierY_))*(rint(origin_.y/stepPhysY_))
+														+ (Maths::rint(pos.y/stepFourierY_))*(Maths::rint(origin_.y/stepPhysY_))
 															/lengthY_
-														+ (rint(pos.z/stepFourierZ_))*(rint(origin_.z/stepPhysZ_))
+														+ (Maths::rint(pos.z/stepFourierZ_))*(Maths::rint(origin_.z/stepPhysZ_))
 															/lengthZ_ );
 	
 

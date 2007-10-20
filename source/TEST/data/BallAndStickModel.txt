@@ -1,0 +1,7 @@
+/Object: [0-9a-zA-Fx]* is instance of class: BALL::VIEW::AddBallAndStickModel
+/    Object: [0-9a-zA-Fx]* is instance of class: BALL::VIEW::AddBallAndStickModel
+    used atoms: 0
+ball radius: 0.4
+stick radius: 0.2
+b&s model: 1
+dashed bonds: 0

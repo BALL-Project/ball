@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringAnalyser.C,v 1.4 2006/08/15 20:36:58 oliver Exp $
+// $Id: ringAnalyser.C,v 1.4.10.2 2007/04/03 13:29:33 bertsch Exp $
 //
 // Author:
 //   Holger Franken

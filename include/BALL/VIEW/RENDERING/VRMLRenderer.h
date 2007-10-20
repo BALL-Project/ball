@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.h,v 1.8 2005/12/23 17:02:20 amoll Exp $
+// $Id: VRMLRenderer.h,v 1.8.20.1 2007/03/25 21:26:14 oliver Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_VRMLRENDERER_H
@@ -33,6 +33,9 @@ namespace BALL
 		This class walks over all the geometric primitives in a Scene
 		and exports them into a data file in the VRML format, which can
 		be used to render the same scene externally.
+		<br>
+		<br>
+		This is unmaintained code!
 		\ingroup ViewRendering
 */
 class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
@@ -89,10 +92,10 @@ class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
 		throw();
 
 	//@}
-	
 	/** @name Processor specific methods
 	 */
 	//@{
+	
 	/** Start method. 
 			This method creates the file and writes the header.
 	 */
@@ -104,6 +107,8 @@ class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
 	 */
 	virtual bool finish()
 		throw();
+
+	//@}
 
 	void renderSphere_(const Sphere& sphere)
 		throw();
@@ -125,7 +130,6 @@ class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
 
 	void outfinish_(const String& data)
 		throw() {out_(data); current_intend_ -= 1;}
-	//@}
 
 	Size width, height;
 

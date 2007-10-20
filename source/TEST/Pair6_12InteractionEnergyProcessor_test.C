@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.14 2003/10/29 22:08:40 oliver Exp $
+// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.14.30.1 2007/03/25 21:47:27 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(Pair6_12InteractionEnergyProcessor, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.14 2003/10/29 22:08:40 oliver Exp $")
+START_TEST(Pair6_12InteractionEnergyProcessor, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.14.30.1 2007/03/25 21:47:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

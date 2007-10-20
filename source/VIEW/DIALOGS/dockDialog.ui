@@ -1,952 +1,868 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>DockDialogData</class>
-<widget class="QDialog">
-    <property name="name">
-        <cstring>DockDialogData</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>475</width>
-            <height>587</height>
-        </rect>
-    </property>
-    <property name="sizePolicy">
-        <sizepolicy>
-            <hsizetype>4</hsizetype>
-            <vsizetype>0</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-    </property>
-    <property name="minimumSize">
-        <size>
-            <width>0</width>
-            <height>0</height>
-        </size>
-    </property>
-    <property name="maximumSize">
-        <size>
-            <width>650</width>
-            <height>650</height>
-        </size>
-    </property>
-    <property name="caption">
-        <string>Docking Options</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QPushButton" row="1" column="2">
-            <property name="name">
-                <cstring>reset_button</cstring>
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>DockDialogData</class>
+ <widget class="QDialog" name="DockDialogData" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>552</width>
+    <height>549</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>4</hsizetype>
+    <vsizetype>0</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="maximumSize" >
+   <size>
+    <width>650</width>
+    <height>650</height>
+   </size>
+  </property>
+  <property name="windowTitle" >
+   <string>Docking Options</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <widget class="QTabWidget" name="tab_pages" >
+     <property name="currentIndex" >
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="general_page" >
+      <attribute name="title" >
+       <string>General</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="systems_group" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title" >
+          <string>Docking Partners</string>
+         </property>
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>11</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QComboBox" name="systems1" >
+            <property name="editable" >
+             <bool>false</bool>
             </property>
-            <property name="text">
-                <string>Reset</string>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="systems2" >
+            <property name="editable" >
+             <bool>false</bool>
             </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
-        <widget class="QPushButton" row="1" column="0">
-            <property name="name">
-                <cstring>ok_button</cstring>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="algorithm_group" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title" >
+          <string>Docking Algorithm</string>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>11</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="0" column="0" >
+           <widget class="QComboBox" name="algorithms" >
+            <item>
+             <property name="text" >
+              <string>&lt;select></string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QPushButton" name="alg_advanced_button" >
+            <property name="text" >
+             <string>Advanced...</string>
             </property>
-            <property name="text">
-                <string>OK</string>
-            </property>
-            <property name="default">
-                <bool>true</bool>
-            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
-        <widget class="QPushButton" row="1" column="1">
-            <property name="name">
-                <cstring>cancel_button</cstring>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="scoring_group" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title" >
+          <string>Scoring</string>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>11</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="0" column="0" >
+           <widget class="QComboBox" name="scoring_functions" />
+          </item>
+          <item row="0" column="1" >
+           <widget class="QPushButton" name="scoring_advanced_button" >
+            <property name="enabled" >
+             <bool>false</bool>
             </property>
-            <property name="text">
-                <string>Cancel</string>
+            <property name="text" >
+             <string>Advanced...</string>
             </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
-        <widget class="QTabWidget" row="0" column="0" rowspan="1" colspan="3">
-            <property name="name">
-                <cstring>tab_pages</cstring>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="options_group" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title" >
+          <string>Options</string>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>11</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="0" column="0" >
+           <widget class="QLabel" name="best_num_label" >
+            <property name="text" >
+             <string>number of best docked structures </string>
             </property>
-            <property name="margin">
-                <number>0</number>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QLineEdit" name="best_num" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>0</hsizetype>
+              <vsizetype>0</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>general_page</cstring>
-                </property>
-                <attribute name="title">
-                    <string>General</string>
-                </attribute>
-                <grid>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QButtonGroup" row="0" column="0">
-                        <property name="name">
-                            <cstring>systems_group</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="title">
-                            <string>Docking Partners</string>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QComboBox">
-                                <property name="name">
-                                    <cstring>systems1</cstring>
-                                </property>
-                                <property name="editable">
-                                    <bool>false</bool>
-                                </property>
-                            </widget>
-                            <widget class="QComboBox">
-                                <property name="name">
-                                    <cstring>systems2</cstring>
-                                </property>
-                                <property name="editable">
-                                    <bool>false</bool>
-                                </property>
-                            </widget>
-                        </hbox>
-                    </widget>
-                    <widget class="QButtonGroup" row="1" column="0">
-                        <property name="name">
-                            <cstring>algorithm_group</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="title">
-                            <string>Docking Algorithm</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QComboBox" row="0" column="0">
-                                <item>
-                                    <property name="text">
-                                        <string>&lt;select&gt;</string>
-                                    </property>
-                                </item>
-                                <property name="name">
-                                    <cstring>algorithms</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QPushButton" row="0" column="1">
-                                <property name="name">
-                                    <cstring>alg_advanced_button</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Advanced...</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                    <widget class="QButtonGroup" row="2" column="0">
-                        <property name="name">
-                            <cstring>scoring_group</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="title">
-                            <string>Scoring</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QComboBox" row="0" column="0">
-                                <property name="name">
-                                    <cstring>scoring_functions</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QPushButton" row="0" column="1">
-                                <property name="name">
-                                    <cstring>scoring_advanced_button</cstring>
-                                </property>
-                                <property name="enabled">
-                                    <bool>false</bool>
-                                </property>
-                                <property name="text">
-                                    <string>Advanced...</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                    <widget class="QButtonGroup" row="3" column="0">
-                        <property name="name">
-                            <cstring>options_group</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="title">
-                            <string>Options</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>best_num_label</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>number of best docked structures </string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="0" column="1">
-                                <property name="name">
-                                    <cstring>best_num</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>0</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>0</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>80</width>
-                                        <height>32767</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>100</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>AlignRight</set>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="1" column="0">
-                                <property name="name">
-                                    <cstring>verbosity_label</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>verbosity of algorithm</string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="1" column="1">
-                                <property name="name">
-                                    <cstring>verbosity</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>0</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>80</width>
-                                        <height>32767</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>1</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>AlignRight</set>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                    <widget class="QButtonGroup" row="4" column="0">
-                        <property name="name">
-                            <cstring>euler_group</cstring>
-                        </property>
-                        <property name="enabled">
-                            <bool>true</bool>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>7</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="title">
-                            <string>Euler angles</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLabel" row="1" column="2">
-                                <property name="name">
-                                    <cstring>psi_max_label</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>7</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="text">
-                                    <string>psi &lt;font size="-1"&gt;max&lt;/font&gt;</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="1" column="4">
-                                <property name="name">
-                                    <cstring>delta_psi_label</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>7</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="text">
-                                    <string>delta psi</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="0" column="4">
-                                <property name="name">
-                                    <cstring>delta_phi_label</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>delta phi</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>phi_min_label</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>7</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="text">
-                                    <string>phi &lt;font size="-1"&gt;min&lt;/font&gt;</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="0" column="2">
-                                <property name="name">
-                                    <cstring>phi_max_label</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>phi &lt;font size="-1"&gt;max&lt;/font&gt;</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="2" column="2">
-                                <property name="name">
-                                    <cstring>theta_max_label</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>theta &lt;font size="-1"&gt;max&lt;/font&gt;</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="1" column="0">
-                                <property name="name">
-                                    <cstring>psi_min_label</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>psi &lt;font size="-1"&gt;min&lt;/font&gt;</string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="0" column="1">
-                                <property name="name">
-                                    <cstring>phi_min</cstring>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>50</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>-15</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>AlignRight</set>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="1" column="1">
-                                <property name="name">
-                                    <cstring>psi_min</cstring>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>50</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>-15</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>AlignRight</set>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="2" column="1">
-                                <property name="name">
-                                    <cstring>theta_min</cstring>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>50</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>-15</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>AlignRight</set>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="0" column="3">
-                                <property name="name">
-                                    <cstring>phi_max</cstring>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>50</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>15</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>AlignRight</set>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="1" column="3">
-                                <property name="name">
-                                    <cstring>psi_max</cstring>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>50</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>15</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>AlignRight</set>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="2" column="3">
-                                <property name="name">
-                                    <cstring>theta_max</cstring>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>50</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>15</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>AlignRight</set>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="0" column="5">
-                                <property name="name">
-                                    <cstring>delta_phi</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>5</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>0</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>50</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>3</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>AlignRight</set>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="2" column="5">
-                                <property name="name">
-                                    <cstring>delta_theta</cstring>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>50</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>3</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>AlignRight</set>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="1" column="5">
-                                <property name="name">
-                                    <cstring>delta_psi</cstring>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>50</width>
-                                        <height>25</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>3</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>AlignRight</set>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="2" column="0">
-                                <property name="name">
-                                    <cstring>theta_min_label</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>theta &lt;font size="-1"&gt;min&lt;/font&gt;</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="2" column="4">
-                                <property name="name">
-                                    <cstring>delta_theta_label</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>delta theta</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                </grid>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>processor_page</cstring>
-                </property>
-                <attribute name="title">
-                    <string>Processors</string>
-                </attribute>
-                <grid>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QButtonGroup" row="1" column="0">
-                        <property name="name">
-                            <cstring>radii_group</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="title">
-                            <string>Radii Config File</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLineEdit" row="1" column="1">
-                                <property name="name">
-                                    <cstring>radii_rules_lineedit</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>solvation/PARSE.rul</string>
-                                </property>
-                                <property name="readOnly">
-                                    <bool>false</bool>
-                                </property>
-                            </widget>
-                            <widget class="QPushButton" row="1" column="2">
-                                <property name="name">
-                                    <cstring>radii_rules_browse</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Browse</string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="0" column="1">
-                                <property name="name">
-                                    <cstring>radii_data_lineedit</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>radii/PARSE.siz</string>
-                                </property>
-                            </widget>
-                            <widget class="QPushButton" row="0" column="2">
-                                <property name="name">
-                                    <cstring>radii_data_browse</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Browse</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="0" column="0">
-                                <property name="name">
-                                    <cstring>radii_data_button</cstring>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>110</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>110</width>
-                                        <height>32767</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>from table</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="1" column="0">
-                                <property name="name">
-                                    <cstring>radii_rules_button</cstring>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>110</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>by rules</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                    <widget class="QButtonGroup" row="2" column="0">
-                        <property name="name">
-                            <cstring>processors_group</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="title">
-                            <string>Processors</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QCheckBox" row="0" column="1">
-                                <property name="name">
-                                    <cstring>build_bonds</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>build Bonds</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="0" column="2">
-                                <property name="name">
-                                    <cstring>add_hydrogens</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>addHydrogens</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="0" column="0">
-                                <property name="name">
-                                    <cstring>normalize_names</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>normalize names</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="1" column="0">
-                                <property name="name">
-                                    <cstring>assign_charges</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>assign charges</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="1" column="1">
-                                <property name="name">
-                                    <cstring>assign_radii</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>assign radii</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                    <widget class="QButtonGroup" row="0" column="0">
-                        <property name="name">
-                            <cstring>charges_group</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="title">
-                            <string>Charges Config File</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QRadioButton" row="1" column="0">
-                                <property name="name">
-                                    <cstring>charges_rules_button</cstring>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>110</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>by rules</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="0" column="0">
-                                <property name="name">
-                                    <cstring>charges_data_button</cstring>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>110</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>from table</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="0" column="1">
-                                <property name="name">
-                                    <cstring>charges_data_lineedit</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>charges/PARSE.crg</string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="1" column="1">
-                                <property name="name">
-                                    <cstring>charges_rules_lineedit</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>solvation/PARSE.rul</string>
-                                </property>
-                                <property name="readOnly">
-                                    <bool>false</bool>
-                                </property>
-                            </widget>
-                            <widget class="QPushButton" row="0" column="2">
-                                <property name="name">
-                                    <cstring>charges_data_browse</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Browse</string>
-                                </property>
-                            </widget>
-                            <widget class="QPushButton" row="1" column="2">
-                                <property name="name">
-                                    <cstring>charges_rules_browse</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Browse</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                </grid>
-            </widget>
+            <property name="minimumSize" >
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>80</width>
+              <height>32767</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>100</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QLabel" name="verbosity_label" >
+            <property name="text" >
+             <string>verbosity of algorithm</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" >
+           <widget class="QLineEdit" name="verbosity" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>0</hsizetype>
+              <vsizetype>0</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>80</width>
+              <height>32767</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>1</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
-    </grid>
-</widget>
-<connections>
-    <connection>
-        <sender>cancel_button</sender>
-        <signal>clicked()</signal>
-        <receiver>DockDialogData</receiver>
-        <slot>cancelPressed()</slot>
-    </connection>
-    <connection>
-        <sender>ok_button</sender>
-        <signal>clicked()</signal>
-        <receiver>DockDialogData</receiver>
-        <slot>okPressed()</slot>
-    </connection>
-    <connection>
-        <sender>reset_button</sender>
-        <signal>clicked()</signal>
-        <receiver>DockDialogData</receiver>
-        <slot>resetPressed()</slot>
-    </connection>
-    <connection>
-        <sender>alg_advanced_button</sender>
-        <signal>clicked()</signal>
-        <receiver>DockDialogData</receiver>
-        <slot>algAdvancedPressed()</slot>
-    </connection>
-    <connection>
-        <sender>scoring_advanced_button</sender>
-        <signal>clicked()</signal>
-        <receiver>DockDialogData</receiver>
-        <slot>scoringAdvancedPressed()</slot>
-    </connection>
-    <connection>
-        <sender>systems1</sender>
-        <signal>activated(const QString&amp;)</signal>
-        <receiver>DockDialogData</receiver>
-        <slot>partner1Chosen()</slot>
-    </connection>
-    <connection>
-        <sender>systems2</sender>
-        <signal>activated(const QString&amp;)</signal>
-        <receiver>DockDialogData</receiver>
-        <slot>partner2Chosen()</slot>
-    </connection>
-    <connection>
-        <sender>scoring_functions</sender>
-        <signal>activated(const QString&amp;)</signal>
-        <receiver>DockDialogData</receiver>
-        <slot>scoringFuncChosen()</slot>
-    </connection>
-    <connection>
-        <sender>charges_data_browse</sender>
-        <signal>clicked()</signal>
-        <receiver>DockDialogData</receiver>
-        <slot>browseChargesData()</slot>
-    </connection>
-    <connection>
-        <sender>charges_rules_browse</sender>
-        <signal>clicked()</signal>
-        <receiver>DockDialogData</receiver>
-        <slot>browseChargesRules()</slot>
-    </connection>
-    <connection>
-        <sender>radii_data_browse</sender>
-        <signal>clicked()</signal>
-        <receiver>DockDialogData</receiver>
-        <slot>browseRadiiData()</slot>
-    </connection>
-    <connection>
-        <sender>radii_rules_browse</sender>
-        <signal>clicked()</signal>
-        <receiver>DockDialogData</receiver>
-        <slot>browseRadiiRules()</slot>
-    </connection>
-    <connection>
-        <sender>algorithms</sender>
-        <signal>activated(const QString&amp;)</signal>
-        <receiver>DockDialogData</receiver>
-        <slot>algorithmChosen()</slot>
-    </connection>
-</connections>
-<tabstops>
-    <tabstop>systems1</tabstop>
-    <tabstop>systems2</tabstop>
-    <tabstop>algorithms</tabstop>
-    <tabstop>alg_advanced_button</tabstop>
-    <tabstop>scoring_functions</tabstop>
-    <tabstop>scoring_advanced_button</tabstop>
-    <tabstop>ok_button</tabstop>
-    <tabstop>cancel_button</tabstop>
-    <tabstop>reset_button</tabstop>
-</tabstops>
-<slots>
-    <slot>resetPressed()</slot>
-    <slot>okPressed()</slot>
-    <slot>cancelPressed()</slot>
-    <slot>algAdvancedPressed()</slot>
-    <slot>scoringAdvancedPressed()</slot>
-    <slot>partner1Chosen()</slot>
-    <slot>partner2Chosen()</slot>
-    <slot>browseRadiiData()</slot>
-    <slot>browseChargesData()</slot>
-    <slot>browseChargesRules()</slot>
-    <slot>browseRadiiRules()</slot>
-    <slot>scoringFuncChosen()</slot>
-    <slot>algorithmChosen()</slot>
-</slots>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="euler_group" >
+         <property name="enabled" >
+          <bool>true</bool>
+         </property>
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>7</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title" >
+          <string>Euler angles</string>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>11</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="1" column="2" >
+           <widget class="QLabel" name="psi_max_label" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>7</hsizetype>
+              <vsizetype>5</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text" >
+             <string>psi &lt;font size="-1">max&lt;/font></string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4" >
+           <widget class="QLabel" name="delta_psi_label" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>7</hsizetype>
+              <vsizetype>5</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text" >
+             <string>delta psi</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4" >
+           <widget class="QLabel" name="delta_phi_label" >
+            <property name="text" >
+             <string>delta phi</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" >
+           <widget class="QLabel" name="phi_min_label" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>7</hsizetype>
+              <vsizetype>5</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text" >
+             <string>phi &lt;font size="-1">min&lt;/font></string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" >
+           <widget class="QLabel" name="phi_max_label" >
+            <property name="text" >
+             <string>phi &lt;font size="-1">max&lt;/font></string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2" >
+           <widget class="QLabel" name="theta_max_label" >
+            <property name="text" >
+             <string>theta &lt;font size="-1">max&lt;/font></string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QLabel" name="psi_min_label" >
+            <property name="text" >
+             <string>psi &lt;font size="-1">min&lt;/font></string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QLineEdit" name="phi_min" >
+            <property name="maximumSize" >
+             <size>
+              <width>50</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>-15</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" >
+           <widget class="QLineEdit" name="psi_min" >
+            <property name="maximumSize" >
+             <size>
+              <width>50</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>-15</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1" >
+           <widget class="QLineEdit" name="theta_min" >
+            <property name="maximumSize" >
+             <size>
+              <width>50</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>-15</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" >
+           <widget class="QLineEdit" name="phi_max" >
+            <property name="maximumSize" >
+             <size>
+              <width>50</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>15</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3" >
+           <widget class="QLineEdit" name="psi_max" >
+            <property name="maximumSize" >
+             <size>
+              <width>50</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>15</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3" >
+           <widget class="QLineEdit" name="theta_max" >
+            <property name="maximumSize" >
+             <size>
+              <width>50</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>15</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5" >
+           <widget class="QLineEdit" name="delta_phi" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>0</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize" >
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>50</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>3</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="5" >
+           <widget class="QLineEdit" name="delta_theta" >
+            <property name="maximumSize" >
+             <size>
+              <width>50</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>3</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="5" >
+           <widget class="QLineEdit" name="delta_psi" >
+            <property name="maximumSize" >
+             <size>
+              <width>50</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>3</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" >
+           <widget class="QLabel" name="theta_min_label" >
+            <property name="text" >
+             <string>theta &lt;font size="-1">min&lt;/font></string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="4" >
+           <widget class="QLabel" name="delta_theta_label" >
+            <property name="text" >
+             <string>delta theta</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="processor_page" >
+      <attribute name="title" >
+       <string>Processors</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="charges_group" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title" >
+          <string>Charges Config File</string>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>11</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="1" column="0" >
+           <widget class="QRadioButton" name="charges_rules_button" >
+            <property name="minimumSize" >
+             <size>
+              <width>110</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>by rules</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" >
+           <widget class="QRadioButton" name="charges_data_button" >
+            <property name="minimumSize" >
+             <size>
+              <width>110</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>from table</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QLineEdit" name="charges_data_lineedit" >
+            <property name="text" >
+             <string>charges/PARSE.crg</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" >
+           <widget class="QLineEdit" name="charges_rules_lineedit" >
+            <property name="text" >
+             <string>solvation/PARSE.rul</string>
+            </property>
+            <property name="readOnly" >
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" >
+           <widget class="QPushButton" name="charges_data_browse" >
+            <property name="text" >
+             <string>Browse</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2" >
+           <widget class="QPushButton" name="charges_rules_browse" >
+            <property name="text" >
+             <string>Browse</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="radii_group" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title" >
+          <string>Radii Config File</string>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>11</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="1" column="1" >
+           <widget class="QLineEdit" name="radii_rules_lineedit" >
+            <property name="text" >
+             <string>solvation/PARSE.rul</string>
+            </property>
+            <property name="readOnly" >
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2" >
+           <widget class="QPushButton" name="radii_rules_browse" >
+            <property name="text" >
+             <string>Browse</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QLineEdit" name="radii_data_lineedit" >
+            <property name="text" >
+             <string>radii/PARSE.siz</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" >
+           <widget class="QPushButton" name="radii_data_browse" >
+            <property name="text" >
+             <string>Browse</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" >
+           <widget class="QRadioButton" name="radii_data_button" >
+            <property name="minimumSize" >
+             <size>
+              <width>110</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>110</width>
+              <height>32767</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>from table</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QRadioButton" name="radii_rules_button" >
+            <property name="minimumSize" >
+             <size>
+              <width>110</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>by rules</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="processors_group" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title" >
+          <string>Processors</string>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>11</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="0" column="1" >
+           <widget class="QCheckBox" name="build_bonds" >
+            <property name="text" >
+             <string>build Bonds</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" >
+           <widget class="QCheckBox" name="add_hydrogens" >
+            <property name="text" >
+             <string>addHydrogens</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" >
+           <widget class="QCheckBox" name="normalize_names" >
+            <property name="text" >
+             <string>normalize names</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QCheckBox" name="assign_charges" >
+            <property name="text" >
+             <string>assign charges</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" >
+           <widget class="QCheckBox" name="assign_radii" >
+            <property name="text" >
+             <string>assign radii</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="ok_button" >
+       <property name="text" >
+        <string>OK</string>
+       </property>
+       <property name="default" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancel_button" >
+       <property name="text" >
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="reset_button" >
+       <property name="text" >
+        <string>Reset</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>tab_pages</tabstop>
+  <tabstop>systems1</tabstop>
+  <tabstop>systems2</tabstop>
+  <tabstop>algorithms</tabstop>
+  <tabstop>alg_advanced_button</tabstop>
+  <tabstop>scoring_functions</tabstop>
+  <tabstop>scoring_advanced_button</tabstop>
+  <tabstop>best_num</tabstop>
+  <tabstop>verbosity</tabstop>
+  <tabstop>phi_min</tabstop>
+  <tabstop>psi_min</tabstop>
+  <tabstop>theta_min</tabstop>
+  <tabstop>delta_psi</tabstop>
+  <tabstop>phi_max</tabstop>
+  <tabstop>theta_max</tabstop>
+  <tabstop>psi_max</tabstop>
+  <tabstop>delta_phi</tabstop>
+  <tabstop>delta_theta</tabstop>
+  <tabstop>ok_button</tabstop>
+  <tabstop>cancel_button</tabstop>
+  <tabstop>reset_button</tabstop>
+  <tabstop>charges_data_button</tabstop>
+  <tabstop>charges_data_lineedit</tabstop>
+  <tabstop>charges_data_browse</tabstop>
+  <tabstop>charges_rules_button</tabstop>
+  <tabstop>charges_rules_lineedit</tabstop>
+  <tabstop>charges_rules_browse</tabstop>
+  <tabstop>radii_data_button</tabstop>
+  <tabstop>radii_data_lineedit</tabstop>
+  <tabstop>radii_data_browse</tabstop>
+  <tabstop>radii_rules_button</tabstop>
+  <tabstop>radii_rules_lineedit</tabstop>
+  <tabstop>radii_rules_browse</tabstop>
+  <tabstop>normalize_names</tabstop>
+  <tabstop>build_bonds</tabstop>
+  <tabstop>add_hydrogens</tabstop>
+  <tabstop>assign_charges</tabstop>
+  <tabstop>assign_radii</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

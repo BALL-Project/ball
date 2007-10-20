@@ -1,0 +1,109 @@
+I°0.030969°Mainframe|MainMenuBar|°5|0|1|0|0|0|0.348437|0.935484|
+I°0.373926°Mainframe|MainMenuBar|°2|0|1|0|1|1|0.315625|0.580645|
+I°0.06136°Mainframe|MainMenuBar|°3|0|1|0|1|0|0.315625|0.580645|
+I°0.10337°Mainframe|MainMenuBar|&User|runCurrentScript()|°5|0|1|0|0|0|0.112500|0.200000|
+I°0.173171°Mainframe|MainMenuBar|&User|clearAll()|°2|0|1|0|1|1|0.175000|0.160000|
+I°0.082614°Mainframe|MainMenuBar|&User|clearAll()|°3|0|1|0|1|0|0.175000|0.160000|
+I°0.097262°Mainframe|MainMenuBar|°3|0|1|0|1|0|0.082031|0.419355|
+I°0.114283°Mainframe|MainMenuBar|&Build|°5|0|1|0|0|0|0.085294|0.000000|
+I°0.158699°Mainframe|MainMenuBar|&Build|B&uild Peptide|°2|0|1|0|1|1|0.085546|0.360000|
+I°0.056009°Mainframe|MainMenuBar|&Build|B&uild Peptide|°3|0|1|0|1|0|0.085546|0.360000|
+I°0.039995°Mainframe|Main Toolbar|Download PDB|°5|0|1|0|0|0|0.818182|0.125000|
+I°0.032269°Mainframe|Main Toolbar|quickload|°5|0|1|0|0|0|0.090909|0.375000|
+I°0.031961°Mainframe|Structures|°5|0|1|0|0|0|0.430233|0.002653|
+I°0.017115°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport|°5|0|1|0|0|0|0.511765|0.000000|
+I°0.030505°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°5|0|1|0|0|0|0.641176|0.042471|
+I°0.071668°Mainframe|Structures|Container|MolecularControlList|°5|0|1|0|0|0|0.994186|0.572414|
+I°0.012059°Mainframe|3D View|°5|0|1|0|0|0|0.006452|0.324800|
+I°0.060514°Mainframe|MolecularStructure|PeptideDialog|°5|0|1|0|0|0|0.004535|0.071429|
+I°0.040159°Mainframe|MolecularStructure|PeptideDialog|ala|°5|0|1|0|0|0|0.323944|0.000000|
+I°0.304442°Mainframe|MolecularStructure|PeptideDialog|ala|°2|0|1|0|1|1|0.521127|0.193548|
+I°0.05189°Mainframe|MolecularStructure|PeptideDialog|ala|°3|0|1|0|1|0|0.521127|0.193548|
+I°0.154396°Mainframe|MolecularStructure|PeptideDialog|°5|0|1|0|0|0|0.176871|0.217532|
+I°0.009394°Mainframe|MolecularStructure|PeptideDialog|arg|°5|0|1|0|0|0|0.028169|0.741935|
+I°0.2252°Mainframe|MolecularStructure|PeptideDialog|arg|°2|0|1|0|1|1|0.267606|0.709677|
+I°0.047684°Mainframe|MolecularStructure|PeptideDialog|arg|°3|0|1|0|1|0|0.267606|0.709677|
+I°0.359016°Mainframe|MolecularStructure|PeptideDialog|°5|0|1|0|0|0|0.346939|0.211039|
+I°0.074998°Mainframe|MolecularStructure|PeptideDialog|asn|°5|0|1|0|0|0|0.000000|0.580645|
+I°0.173646°Mainframe|MolecularStructure|PeptideDialog|asn|°2|0|1|0|1|1|0.084507|0.516129|
+I°0.04706°Mainframe|MolecularStructure|PeptideDialog|asn|°3|0|1|0|1|0|0.084507|0.516129|
+I°0.106034°Mainframe|MolecularStructure|PeptideDialog|°5|0|1|0|0|0|0.369615|0.266234|
+I°0.022886°Mainframe|MolecularStructure|PeptideDialog|glu|°5|0|1|0|0|0|0.056338|0.064516|
+I°0.028583°Mainframe|MolecularStructure|PeptideDialog|°5|0|1|0|0|0|0.365079|0.412338|
+I°0.010148°Mainframe|MolecularStructure|PeptideDialog|leu|°5|0|1|0|0|0|0.028169|0.096774|
+I°0.030726°Mainframe|MolecularStructure|PeptideDialog|°5|0|1|0|0|0|0.360544|0.548701|
+I°0.020391°Mainframe|MolecularStructure|PeptideDialog|pro|°5|0|1|0|0|0|0.000000|0.193548|
+I°0.020869°Mainframe|MolecularStructure|PeptideDialog|°5|0|1|0|0|0|0.356009|0.665584|
+I°0.132858°Mainframe|MolecularStructure|PeptideDialog|trp|°5|0|1|0|0|0|0.985915|0.387097|
+I°0.137876°Mainframe|MolecularStructure|PeptideDialog|°5|0|1|0|0|0|0.337868|0.834416|
+I°0.143411°Mainframe|MolecularStructure|PeptideDialog|close_button|°5|0|1|0|0|0|0.722222|0.000000|
+I°0.222865°Mainframe|MolecularStructure|PeptideDialog|close_button|°2|0|1|0|1|1|0.717172|0.433333|
+I°0.057866°Mainframe|3D View|°3|0|1|0|1|0|0.226882|0.859200|
+I°0.040551°Mainframe|Representations|Container|MolecularControlList|qt_scrollarea_viewport|°5|0|1|0|0|0|0.923529|0.925926|
+I°0.174134°Mainframe|Representations|Container|MolecularControlList|qt_scrollarea_viewport#0|°5|0|1|0|0|0|0.697059|0.015625|
+I°0.11591°Mainframe|Representations|Container|MolecularControlList|qt_scrollarea_viewport#0|°2|0|1|0|1|1|0.179412|0.057292|
+I°0.058134°Mainframe|Representations|Container|MolecularControlList|qt_scrollarea_viewport#0|°3|0|1|0|1|0|0.179412|0.057292|
+I°0.362506°Mainframe|Representations|Container|MolecularControlList|qt_scrollarea_viewport|°5|0|1|0|0|0|0.191176|0.888889|
+I°0.042626°Mainframe|Representations|°5|0|1|0|0|0|0.235465|0.045455|
+I°0.020407°Mainframe|MainMenuBar|°5|0|1|0|0|0|0.132812|0.935484|
+I°0.241108°Mainframe|MainMenuBar|°2|0|1|0|1|1|0.127344|0.580645|
+I°0.108687°Mainframe|MainMenuBar|°3|0|1|0|1|0|0.127344|0.580645|
+I°0.223026°Mainframe|MainMenuBar|&Display|&Viewpoint|°5|0|1|0|0|0|0.162055|0.080000|
+I°0.126776°Mainframe|MainMenuBar|&Display|D&isplay Properties|°2|0|1|0|1|1|0.355731|0.518519|
+I°0.072978°Mainframe|MainMenuBar|&Display|D&isplay Properties|°3|0|1|0|1|0|0.355731|0.518519|
+I°0.040062°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°5|0|1|0|0|0|0.626471|0.196911|
+I°0.211498°Mainframe|°5|0|1|0|0|0|0.166667|0.280000|
+I°0.011558°Mainframe|3D View|°5|0|1|0|0|0|0.009677|0.292800|
+I°0.102065°Mainframe|DisplayProperties|model_group|°5|0|1|0|0|0|0.336879|0.042017|
+I°0.008781°Mainframe|DisplayProperties|model_group|textLabel1_2|°5|0|1|0|0|0|0.357692|0.312500|
+I°0.020682°Mainframe|DisplayProperties|model_group|model_type_combobox|°5|0|1|0|0|0|0.396226|0.208333|
+I°0.030635°Mainframe|DisplayProperties|model_group|°5|0|1|0|0|0|0.443262|0.243697|
+I°0.403451°Mainframe|DisplayProperties|model_group|model_type_combobox|°5|0|1|0|0|0|0.415094|0.958333|
+I°0.171285°Mainframe|DisplayProperties|model_group|model_type_combobox|°2|0|1|0|1|1|0.407547|0.791667|
+I°0.062174°Mainframe|DisplayProperties|model_group|model_type_combobox|°3|0|1|0|1|0|0.407547|0.791667|
+I°0.121583°Mainframe|DisplayProperties|model_group|model_type_combobox|qt_scrollarea_viewport|°5|0|1|0|0|0|0.387755|0.005882|
+I°0.171196°Mainframe|DisplayProperties|model_group|model_type_combobox|qt_scrollarea_viewport|°2|0|1|0|1|1|0.187755|0.376471|
+I°0.073442°Mainframe|DisplayProperties|model_group|model_type_combobox|qt_scrollarea_viewport|°3|0|1|0|1|0|0.187755|0.376471|
+I°0.003636°Mainframe|DisplayProperties|model_group|resolution_group|custom_precision_button|°5|0|1|0|0|0|0.481928|0.285714|
+I°0.084541°Mainframe|DisplayProperties|model_group|resolution_group|°5|0|1|0|0|0|0.218868|0.587500|
+I°0.040884°Mainframe|DisplayProperties|model_group|resolution_group|presets_precision_button|°5|0|1|0|0|0|0.850575|0.809524|
+I°0.020717°Mainframe|DisplayProperties|model_group|resolution_group|°5|0|1|0|0|0|0.369811|0.425000|
+I°0.010059°Mainframe|DisplayProperties|model_group|resolution_group|precision_combobox|°5|0|1|0|0|0|0.090000|0.583333|
+I°0.062341°Mainframe|DisplayProperties|model_group|resolution_group|°5|0|1|0|0|0|0.686792|0.200000|
+I°0.070776°Mainframe|DisplayProperties|model_group|°5|0|1|0|0|0|0.985816|0.289916|
+I°0.012138°Mainframe|DisplayProperties|coloring_group|°5|0|1|0|0|0|0.007067|0.289916|
+I°0.008311°Mainframe|DisplayProperties|coloring_group|selection_group|°5|0|1|0|0|0|0.022901|0.025000|
+I°0.192561°Mainframe|DisplayProperties|coloring_group|°5|0|1|0|0|0|0.187279|0.277311|
+I°0.071454°Mainframe|DisplayProperties|coloring_group|coloring_method_combobox|°5|0|1|0|0|0|0.194757|0.916667|
+I°0.245798°Mainframe|DisplayProperties|coloring_group|coloring_method_combobox|°2|0|1|0|1|1|0.209738|0.541667|
+I°0.077438°Mainframe|DisplayProperties|coloring_group|coloring_method_combobox|°3|0|1|0|1|0|0.209738|0.541667|
+I°0.282102°Mainframe|DisplayProperties|coloring_group|coloring_method_combobox|°5|0|1|0|0|0|0.187266|0.000000|
+I°0.009675°Mainframe|DisplayProperties|coloring_group|coloring_method_combobox|qt_scrollarea_viewport|°5|0|1|0|0|0|0.194332|0.000000|
+I°0.190065°Mainframe|DisplayProperties|coloring_group|coloring_method_combobox|qt_scrollarea_viewport|°2|0|1|0|1|1|0.186235|0.164706|
+I°0.171414°Mainframe|DisplayProperties|coloring_group|coloring_method_combobox|qt_scrollarea_viewport|°3|0|1|0|1|0|0.186235|0.164706|
+I°0.004396°Mainframe|DisplayProperties|coloring_group|selection_group|°5|0|1|0|0|0|0.358779|0.237500|
+I°0.109913°Mainframe|DisplayProperties|coloring_group|selection_group|selection_color_label|°5|0|1|0|0|0|0.950000|0.000000|
+I°0.112537°Mainframe|DisplayProperties|coloring_group|selection_group|°5|0|1|0|0|0|0.152672|0.925000|
+I°0.013752°Mainframe|DisplayProperties|coloring_group|°5|0|1|0|0|0|0.095406|0.626050|
+I°0.017165°Mainframe|DisplayProperties|coloring_group|textLabel1_2_2_2|°5|0|1|0|0|0|0.069231|0.375000|
+I°0.020353°Mainframe|DisplayProperties|coloring_group|°5|0|1|0|0|0|0.081272|0.731092|
+I°0.010247°Mainframe|DisplayProperties|coloring_group|transparency_slider|°5|0|1|0|0|0|0.053398|0.190476|
+I°0.030591°Mainframe|DisplayProperties|coloring_group|coloring_updates_enabled|°5|0|1|0|0|0|0.023166|0.037037|
+I°0.05114°Mainframe|DisplayProperties|coloring_group|°5|0|1|0|0|0|0.053004|0.983193|
+I°0.010334°Mainframe|DisplayProperties|coloring_options|°5|0|1|0|0|0|0.042857|0.000000|
+I°0.20596°Mainframe|DisplayProperties|°5|0|1|0|0|0|0.515789|0.874194|
+I°0.050316°Mainframe|DisplayProperties|modify_button|°5|0|1|0|0|0|0.537634|0.000000|
+I°0.152854°Mainframe|DisplayProperties|modify_button|°2|0|1|0|1|1|0.526882|0.200000|
+I°0.086773°Mainframe|DisplayProperties|modify_button|°3|0|1|0|1|0|0.526882|0.200000|
+I°0.199184°Mainframe|DisplayProperties|°5|0|1|0|0|0|0.664912|0.948387|
+I°0.019409°Mainframe|DisplayProperties|close_button|°5|0|1|0|0|0|0.005376|0.566667|
+I°0.154309°Mainframe|DisplayProperties|close_button|°2|0|1|0|1|1|0.209677|0.533333|
+I°0.117636°Mainframe|DisplayProperties|close_button|°3|0|1|0|1|0|0.209677|0.533333|
+I°0.10951°Mainframe|3D View|°5|0|1|0|0|0|0.481720|0.944000|
+T°0.1°len(getSystems())°1
+T°0.1°len(getRepresentations())°1
+P°0.1°rep = getRepresentations()[0]
+T°0.1°rep.getModelType()°3
+T°0.1°rep.getColoringMethod()°1
+T°0.1°rep.getModelName()°VDW
+T°0.1°len(rep.getGeometricObjects())°51

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer_test.C,v 1.27 2005/12/23 17:03:12 amoll Exp $
+// $Id: TCPTransfer_test.C,v 1.27.18.2 2007/05/18 20:42:35 anhi Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -23,7 +23,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.27 2005/12/23 17:03:12 amoll Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.27.18.2 2007/05/18 20:42:35 anhi Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -45,10 +45,9 @@ CHECK(http/no login)
 	ABORT_IF(!NetworkTest::test("www.ball-project.org", NetworkTest::HTTP))
 	NEW_TMP_FILE(filename)
 	std::ofstream os(filename.c_str(), std::ios::out);
-	
-	TCPTransfer tcp_t(os ,"http://www.bioinf.uni-sb.de/OK/BALL/Downloads/http_test.txt");
-	TEST_EQUAL(tcp_t.getHostAddress(), "www.bioinf.uni-sb.de")
-	TEST_EQUAL(tcp_t.getFileAddress(), "/OK/BALL/Downloads/http_test.txt")
+	TCPTransfer tcp_t(os ,"http://www.ball-project.org/Downloads/http_test.txt");
+	TEST_EQUAL(tcp_t.getHostAddress(), "www.ball-project.org")
+	TEST_EQUAL(tcp_t.getFileAddress(), "/Downloads/http_test.txt")
 	TEST_EQUAL(tcp_t.getPort(), 80)
 	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::OK)
 	TEST_EQUAL(tcp_t.getReceivedBytes(), 3048)
@@ -67,9 +66,9 @@ CHECK(set(ofstream& file, const String& address))
 	std::ofstream os(filename.c_str(), std::ios::out);
 	
 	TCPTransfer tcp_t;
-	tcp_t.set(os ,"http://www.bioinf.uni-sb.de/OK/BALL/Downloads/http_test.txt");
-	TEST_EQUAL(tcp_t.getHostAddress(), "www.bioinf.uni-sb.de")
-	TEST_EQUAL(tcp_t.getFileAddress(), "/OK/BALL/Downloads/http_test.txt")
+	tcp_t.set(os ,"http://www.ball-project.org/Downloads/http_test.txt");
+	TEST_EQUAL(tcp_t.getHostAddress(), "www.ball-project.org")
+	TEST_EQUAL(tcp_t.getFileAddress(), "/Downloads/http_test.txt")
 	TEST_EQUAL(tcp_t.getPort(), 80)
 	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::OK)
 	TEST_EQUAL(tcp_t.getReceivedBytes(), 0)
@@ -83,6 +82,7 @@ CHECK(set(ofstream& file, const String& address))
 	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
 
+/*
 CHECK(http/login)
 	ABORT_IF(!NetworkTest::test("www.zbi.uni-saarland.de", NetworkTest::HTTP))
 	NEW_TMP_FILE(filename)
@@ -100,6 +100,7 @@ CHECK(http/login)
 
 	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
+*/
 
 
 CHECK(ftp)
@@ -133,6 +134,11 @@ RESULT
 
 CHECK(PROXY)
 	ABORT_IF(!NetworkTest::test("www.zbi.uni-saarland.de", NetworkTest::HTTP))
+	char *http_proxy = getenv("http_proxy");
+	ABORT_IF(!http_proxy);
+
+	String http_proxy_string(http_proxy);
+
 	NEW_TMP_FILE(filename);
 	std::ofstream os(filename.c_str(), std::ios::out);
 	

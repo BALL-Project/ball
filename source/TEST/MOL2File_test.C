@@ -1,7 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File_test.C,v 1.12 2005/03/02 21:58:50 oliver Exp $
+// $Id: MOL2File_test.C,v 1.12.26.2 2007/05/14 19:30:14 oliver Exp $
+//
+// Author:
+//   Oliver Kohlbacher
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -18,7 +22,7 @@
 
 ///////////////////////////
 
-START_TEST(MOL2File, "$Id: MOL2File_test.C,v 1.12 2005/03/02 21:58:50 oliver Exp $")
+START_TEST(MOL2File, "$Id: MOL2File_test.C,v 1.12.26.2 2007/05/14 19:30:14 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -55,8 +59,14 @@ CHECK(MOL2File::MOL2File(const String& filename, File::OpenMode open_mode))
 	TEST_EQUAL(system.countResidues(), 3)
 	TEST_EQUAL(system.countBonds(), 29)
 
+	MOL2File f2("data/chimera-test.mol2");
+	System s2;
+	f2.read(s2);
+	TEST_EQUAL(s2.countAtoms(), 3);
+	TEST_EQUAL(s2.countBonds(), 2);
 	// writing is tested below...
 RESULT
+
 
 
 CHECK(MOL2File::write(const System& system))

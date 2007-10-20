@@ -1,20 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.18 2005/12/23 17:03:33 amoll Exp $
+// $Id: server.C,v 1.18.16.1 2007/03/25 22:02:27 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/server.h>
+#include <BALL/CONCEPT/client.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/DIALOGS/serverPreferences.h>
 #include <BALL/SYSTEM/socket.h>
 #include <BALL/FORMAT/INIFile.h>
 
-#include <qstatusbar.h>
-#include <qpixmap.h>
-#include <qtooltip.h>
-#include <qstring.h>
-#include <qlabel.h>
+#include <QtGui/qstatusbar.h>
+#include <QtGui/qpixmap.h>
+#include <QtGui/qtooltip.h>
 
 using namespace std;
 
@@ -53,7 +52,7 @@ namespace BALL
 
 		Server::Server(QWidget* parent, const char* name)
 				throw()
-			:	QTTimer(parent, name),
+			:	QTimer(parent),
 				ModularWidget(name),
 				object_creator_(0),
 				composite_hashmap_(),
@@ -73,6 +72,12 @@ namespace BALL
 			unregisterObjectCreator();
 		}
 
+		Server::Server(const Server&)
+			: QTimer(),
+				ModularWidget()
+		{
+		}
+
 		Server::~Server()
 			throw()
 		{
@@ -88,7 +93,7 @@ namespace BALL
 		void Server::clear()
 			throw()
 		{
-			QTTimer::clear();
+			QTimer::stop();
 			ConnectionObject::clear();
 		}
 
@@ -101,9 +106,9 @@ namespace BALL
 			
 			// if the timer is already running, clear it and close the
 			// socket first
-			if (isTimerEnabled())
+			if (isActive())
 			{
-				stopTimer();
+				stop();
 				sock_inet_buf.close();
 			}
 			
@@ -123,16 +128,16 @@ namespace BALL
 
 			// check once per second
 			setInterval(1000);
-			startTimer();
+			start();
 		}
 
 		void Server::deactivate()
 				throw()
 		{
-			if (isTimerEnabled())
+			if (isActive())
 			{
 				Log.info() << "VIEW::Server: stopped." << endl;
-				stopTimer();
+				QTimer::stop();
 				sock_inet_buf_->close();
 			}
 		}
@@ -153,13 +158,14 @@ namespace BALL
 			throw()
 		{
 			server_icon_ = new QLabel(main_control.statusBar());
-			main_control.statusBar()->addWidget(server_icon_, 1, TRUE );
-			QToolTip::add(server_icon_, "VIEW server status");
+			main_control.statusBar()->addPermanentWidget(server_icon_);
+//   			QToolTip::add(server_icon_, "VIEW server status");
 			QPixmap icon(mini_ray_xpm_);
 
   		server_icon_->setFrameShape(QLabel::NoFrame);
 			server_icon_->setPixmap(icon);
-			server_icon_->setMaximumSize(14,16);
+			server_icon_->setMaximumSize(14,20);
+			server_icon_->setMinimumSize(14,20);
 			server_icon_->show();
  		}
 
@@ -174,7 +180,6 @@ namespace BALL
 			throw()
 		{
 			server_preferences_ = new ServerPreferences();
-			CHECK_PTR(server_preferences_);
 
 			preferences.insertEntry(server_preferences_);
 		}
@@ -207,7 +212,7 @@ namespace BALL
 				// adjust the tool tip and update the server icon
 				QString tip;
 				tip.sprintf("VIEW Server listening on port %d", port); 
-				QToolTip::add(server_icon_, tip);
+//   				QToolTip::add(server_icon_, tip);
 				server_icon_->show();
 			}
 			else
@@ -234,7 +239,6 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 
-			QTTimer::dump(s, depth + 1);
 			ConnectionObject::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
@@ -260,7 +264,7 @@ namespace BALL
 			// process commands
 			switch (command)
 			{
-  			case COMMAND__SEND_OBJECT:
+				case Client::COMMAND__SEND_OBJECT:
 					sendObject(iostream_socket);
 				break;
 

@@ -1,14 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.C,v 1.12 2005/12/23 17:03:04 amoll Exp $
+// $Id: buildBondsProcessor.C,v 1.12.20.2 2007/04/03 13:29:37 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/forEach.h>
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/bond.h>
 #include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/COMMON/limits.h>
 #include <BALL/SYSTEM/path.h>
@@ -412,7 +410,7 @@ namespace BALL
 			}
 			else
 			{
-				// should never occur, otherwise the input paramters file is corrupted
+				// should never occur, otherwise the input parameters file is corrupted
 				Log.error() << "cannot find right bond order: " << elem1 << " " << elem2 << " " << length << endl;
 				return Bond::ORDER__UNKNOWN;
 			}
@@ -459,7 +457,7 @@ namespace BALL
 		}
 	
 		// read the resource file
-		ResourceFile * resource_db = new ResourceFile(filepath);
+		ResourceFile* resource_db = new ResourceFile(filepath);
 		if (!resource_db->isValid())
 		{
 			delete resource_db;
@@ -467,7 +465,7 @@ namespace BALL
 		}
 
 		// put content of file into ResourceEntry
-		ResourceEntry * tree = new ResourceEntry();
+		ResourceEntry* tree = new ResourceEntry();
 		tree->mergeChildrenOf(resource_db->getRoot());
 		resource_db->close();
 		delete resource_db;

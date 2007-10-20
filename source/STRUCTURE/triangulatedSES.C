@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSES.C,v 1.9 2003/08/26 09:18:28 oliver Exp $
+// $Id: triangulatedSES.C,v 1.9.28.1 2007/03/22 11:48:22 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
@@ -373,11 +373,27 @@ namespace BALL
 		centers.pop_back();
 		centers.push_back(edge2->circle_.p);
 		// save an iterator to the last triangle
+		//
+		// workaround for MSVC from Andreas Moll: 22.07.06
 		std::list<Triangle*>::iterator last_triangle = tses_->triangles_.end();
-		last_triangle--;
-		buildTriangles(edge0,edge1,edge2,edge3,centers,edge1_segments,edge3_segments,
-									 probe_radius);
-		last_triangle++;
+		bool at_start = false;
+		if (tses_->triangles_.size() == 0)
+		{
+			at_start = true;
+		}
+		else
+		{
+			last_triangle--;
+		}
+		buildTriangles(edge0,edge1,edge2,edge3,centers,edge1_segments,edge3_segments, probe_radius);
+		if (at_start) 
+		{
+			last_triangle = tses_->triangles_.begin();
+		}
+		else
+		{
+			last_triangle++;
+		}
 		Triangle* test_triangle = *last_triangle;
 		// swap the triangles if necessary
 		TVector3<double> orth( (test_triangle->vertex_[1]->point_-test_triangle->vertex_[0]->point_) %
@@ -936,19 +952,28 @@ namespace BALL
 				edge->vertex_[0] = edge->vertex_[1];
 				edge->vertex_[1] = tmp;
 			}
+
 			HashSet<TrianglePoint*>::Iterator next = points.begin();
-			while ((*next == edge->vertex_[0]) || (*next == edge->vertex_[1]) ||
-						 (*next == third_point))
+			for (; +next; ++next)
 			{
-				next++;
+				TrianglePoint* tpoint = *next;
+				if (tpoint != edge->vertex_[0] && 
+						tpoint != edge->vertex_[1] &&
+						tpoint != third_point)
+				{
+					break;
+				}
 			}
+
+			if (!+next) continue;
+
 			std::list<TrianglePoint*> third;
 			third.push_back(*next);
 			normal.set(((*next)->point_-edge->vertex_[1]->point_) %
 								 ((*next)->point_-edge->vertex_[0]->point_)	);
 			test_value = normal*edge->vertex_[0]->point_;
 			next++;
-			while (next != points.end())
+			while (+next)
 			{
 				if ((*next != edge->vertex_[0]) && (*next != edge->vertex_[1]) &&
 						(*next != third_point))

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.sip,v 1.5 2006/01/18 16:31:00 anhi Exp $
+// $Id: INIFile.sip,v 1.5.14.1 2007/03/25 21:37:00 oliver Exp $
 //
 
 

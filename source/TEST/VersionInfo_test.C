@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VersionInfo_test.C,v 1.4 2006/01/23 20:45:03 oliver Exp $
+// $Id: VersionInfo_test.C,v 1.4.14.2 2007/03/26 16:34:21 bertsch Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(VersionInfo, "$Id: VersionInfo_test.C,v 1.4 2006/01/23 20:45:03 oliver Exp $")
+START_TEST(VersionInfo, "$Id: VersionInfo_test.C,v 1.4.14.2 2007/03/26 16:34:21 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

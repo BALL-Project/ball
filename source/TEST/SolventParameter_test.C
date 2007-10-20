@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SolventParameter_test.C,v 1.15 2003/02/22 12:54:41 anker Exp $
+// $Id: SolventParameter_test.C,v 1.15.30.1 2007/03/25 21:49:01 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SOLVATION/solventParameter.h>
 ///////////////////////////
 
-START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.15 2003/02/22 12:54:41 anker Exp $")
+START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.15.30.1 2007/03/25 21:49:01 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

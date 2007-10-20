@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBInfo_test.C,v 1.4 2005/02/12 23:08:28 oliver Exp $
+// $Id: PDBInfo_test.C,v 1.4.28.1 2007/03/25 21:47:26 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBInfo, "$Id: PDBInfo_test.C,v 1.4 2005/02/12 23:08:28 oliver Exp $")
+START_TEST(PDBInfo, "$Id: PDBInfo_test.C,v 1.4.28.1 2007/03/25 21:47:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,6 +1,9 @@
-//   // -*- Mode: C++; tab-width: 2; -*-
+// -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: dockResult.h,v 1.2.16.2 2007/08/07 16:16:15 bertsch Exp $
+//
+
 #ifndef BALL_STRUCTURE_DOCKING_DOCKRESULT_H
 #define BALL_STRUCTURE_DOCKING_DOCKRESULT_H
 
@@ -14,15 +17,16 @@
 
 namespace BALL
 {
-		/** This class contains the result of a (re)docking calculation: 
-		 *  the used algorithm and its options,
-		 * 	the conformation set which was produced by the algorithm
-		 *	and the scores, names and options of all scoring functions that were used for the ranking / reranking.
-		 *  On the one hand it allows to recieve the scores of a certain scoring, 
-		 *  on the other hand it can return scores sorted by another scoring. 
-		 *  This offers a simple way to compare the different scores with each other
+		/** Result of a (re)docking calculation.
+		    the used algorithm and its options,
+		   	the conformation set which was produced by the algorithm
+		  	and the scores, names and options of all scoring functions that were used for the ranking / reranking.
+		    On the one hand it allows to recieve the scores of a certain scoring, 
+		    on the other hand it can return scores sorted by another scoring. 
+		    This offers a simple way to compare the different scores with each other
+				\ingroup Docking
 		 */
-		class DockResult
+		class BALL_EXPORT DockResult
 		{
 			public:
 					
@@ -101,7 +105,7 @@ namespace BALL
 					
 				/*  Get the number of the scoring by which all scores are sorted displayed
 				 */
-				const Index isSortedBy() const
+				Index isSortedBy() const
 					throw();
 				
 				/** Returns score i of the scoring j in respect of the current sorting 

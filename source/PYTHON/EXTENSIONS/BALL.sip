@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.44 2006/08/15 19:00:22 oliver Exp $
+// $Id: BALL.sip,v 1.44.8.5 2007/06/15 09:40:51 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -45,6 +45,8 @@
 // forwardIterator.h // not supported
 // notification.h    // ??
 %Include object.sip 
+%Include client.sip
+%Include molecularInformation.sip
 // persitenceManager.h // ??
 %Include persistentObject.sip
 %Include predicateConcept.sip
@@ -167,6 +169,9 @@
 %Include vector3.sip
 %Include vector4.sip
 
+// MOLMEC/MMFF94
+%Include MMFF94.sip
+
 // MOLMEC/AMBER
 %Include amber.sip
 %Include amberBend.sip
@@ -207,8 +212,10 @@
 // MOLMEC/MINIMIZATION
 %Include conjugateGradient.sip
 %Include energyMinimizer.sip
-// %Include lineSearch.sip
+%Include lineSearch.sip
 %Include steepestDescent.sip
+%Include strangLBFGS.sip
+%Include shiftedLVMM.sip
 
 // MOLMEC/PARAMETER
 // %Include atomTypes.sip
@@ -232,28 +239,16 @@
 
 // PYTHON
 %Include extractors.sip
-%Include atomList.sip
-%Include PDBAtomList.sip
 %Include pyIndexList.sip // a list of numbers (indices etc.)
 %Include pyAtomDict.sip // a dictionary mapping to atoms
-%Include pyAtomList.sip // a list of atom (pointers)
-%Include pyBondList.sip
 %Include pyCompositeList.sip
-%Include pyAtomContainerList.sip
-%Include pyFragmentList.sip
-%Include pyMoleculeList.sip
-%Include pyPDBAtomList.sip
-%Include pyResidueList.sip
-%Include pySecondaryStructureList.sip
-%Include pyChainList.sip
-%Include pyProteinList.sip
-%Include pyNucleotideList.sip
-%Include pyNucleicAcidList.sip
 %Include pyAtomProcessor.sip 
 %Include pyBondProcessor.sip
 %Include pyFragmentProcessor.sip
 %Include pyResidueProcessor.sip
 %Include pyCompositeProcessor.sip
+%Include pyDatasetVector.sip
+%Include pyLists.sip
 
 // QSAR
 //%Include descriptor.sip
@@ -277,6 +272,7 @@
 // %Include rules.sip
 // %Include structureMapper.sip
 //%Include smilesParser.sip
+%Include peptideBuilder.sip
 %Include secondaryStructureProcessor.sip
 %Include surfaceProcessor.sip
 
@@ -294,25 +290,23 @@
 %Include stage.sip
 %Include mainControl.sip
 %Include compositeManager.sip
-%Include primitiveManager.sip
-%Include representationList.sip
-%Include client.sip
+%Include representationManager.sip
 %Include representation.sip
 %Include geometricObject.sip
-%Include geometricObjectList.sip
 %Include view-common.sip
 %Include clippingPlane.sip
-%Include molecularInformation.sip
 %Include server.sip
 
 // VIEW/DATATYPE
 %Include colorUnit.sip
 %Include colorRGBA.sip
-//%Include colorRGBAVector.sip
+%Include colorRGBAVector.sip
 %Include vertex1.sip
 %Include vertex2.sip
-%Include colorExtension2.sip
+%Include colorExtensions.sip
 %Include colorMap.sip
+%Include dataset.sip
+%Include standardDatasets.sip
 
 // VIEW/MODELS
 %Include colorProcessor.sip
@@ -333,6 +327,7 @@
 // VIEW/PRIMITIVES
 %Include box.sip
 %Include disc.sip
+%Include gridVisualisation.sip
 %Include label.sip
 %Include line.sip
 %Include mesh.sip
@@ -347,6 +342,7 @@
 %Include preferences.sip
 %Include displayProperties.sip
 %Include molecularFileDialog.sip
+%Include modifyRepresentationDialog.sip
 
 // VIEW/RENDERER
 %Include renderer.sip
@@ -358,6 +354,7 @@
 %Include dockWidget.sip
 %Include pyWidget.sip
 %Include scene.sip
+%Include editableScene.sip
 %Include molecularStructure.sip
 %Include molecularControl.sip
 %Include geometricControl.sip

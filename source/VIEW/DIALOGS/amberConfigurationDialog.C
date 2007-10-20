@@ -1,19 +1,23 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.C,v 1.16 2005/12/23 17:03:22 amoll Exp $
+// $Id: amberConfigurationDialog.C,v 1.16.16.1 2007/03/25 22:00:40 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
+#include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
+#include <BALL/MOLMEC/AMBER/amberBend.h>
+#include <BALL/MOLMEC/AMBER/amberStretch.h>
+#include <BALL/MOLMEC/AMBER/amberTorsion.h>
+#include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <qfiledialog.h>
-#include <qlineedit.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qbuttongroup.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qradiobutton.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/QFileDialog>
 
 namespace BALL
 {
@@ -21,28 +25,22 @@ namespace BALL
 	{
 
 		AmberConfigurationDialog::AmberConfigurationDialog(QWidget* parent, const char* name)
-			:	AmberConfigurationDialogData(parent, name),
+			:	QDialog(parent),
+				Ui_AmberConfigurationDialogData(),
+				PreferencesEntry(),
 				amber_(0)
 		{
+			setupUi(this);
+
+			// signals and slots connections
+			connect( close_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
+			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
+			connect( reset_button, SIGNAL( clicked() ), this, SLOT( resetOptions() ) );
+			connect( browse_button, SIGNAL( clicked() ), this, SLOT( browseParameterFiles() ) );
+
 			setINIFileSectionName("AMBER");
-
-			registerObject_(nonbonded_cutoff_line_edit);
-			registerObject_(vdw_cutoff_line_edit);
-			registerObject_(vdw_cuton_line_edit);
-			registerObject_(electrostatic_cutoff_line_edit);
-			registerObject_(electrostatic_cuton_line_edit);
-			registerObject_(scaling_electrostatic_1_4_line_edit);
-			registerObject_(scaling_vdw_1_4_line_edit);
-
-			registerObject_(dielectric_group);
-			registerObject_(assign_charges_checkBox);
-			registerObject_(assign_typenames_checkBox);
-			registerObject_(assign_types_checkBox);
-			registerObject_(overwrite_charges_checkBox);
-			registerObject_(overwrite_typenames_checkBox);
-
-			registerObject_(parameter_file_edit);
-			registerObject_(max_unassigned_atoms);
+			setObjectName(name);
+			registerWidgets_();
 		}
 
 		AmberConfigurationDialog::~AmberConfigurationDialog()
@@ -53,14 +51,14 @@ namespace BALL
 		{
 			// look up the full path of the parameter file
 			Path p;
-			String filename = p.find(parameter_file_edit->text().ascii());
+			String filename = p.find(ascii(parameter_file_edit->text()));
 
 			if (filename == "")
 			{
-				filename = parameter_file_edit->text().ascii();
+				filename = ascii(parameter_file_edit->text());
 			}
 			QString tmp = filename.c_str();
-			QString result = QFileDialog::getOpenFileName(tmp, "*.ini", 0, "Select an AMBER parameter file");
+			QString result = QFileDialog::getOpenFileName(0, "Select an AMBER parameter file", tmp, "*.ini", 0);
 			if (!result.isEmpty())
 			{
 				// store the new filename in the lineedit field
@@ -85,14 +83,14 @@ namespace BALL
 
 		String AmberConfigurationDialog::getValue_(const QCheckBox* box) const
 		{
-			if (box->isChecked()) return true;
-			else 									return false;
+			if (box->isChecked()) return "true";
+			else 									return "false";
 		}
 
 		float AmberConfigurationDialog::getValue_(const QLineEdit* edit) const
 			throw(Exception::InvalidFormat)
 		{
-			return String(edit->text().ascii()).toFloat();
+			return ascii(edit->text()).toFloat();
 		}
 
 		void AmberConfigurationDialog::applyTo(AmberFF& amber)
@@ -102,9 +100,13 @@ namespace BALL
 			{
 				amber.options[AmberFF::Option::ASSIGN_TYPES] = getValue_(assign_types_checkBox);
 				amber.options[AmberFF::Option::ASSIGN_CHARGES] = getValue_(assign_charges_checkBox);
-				amber.options[AmberFF::Option::ASSIGN_TYPENAMES] = getValue_(assign_types_checkBox);
+				amber.options[AmberFF::Option::ASSIGN_TYPENAMES] = getValue_(assign_typenames_checkBox);
 				amber.options[AmberFF::Option::OVERWRITE_CHARGES] = getValue_(overwrite_charges_checkBox);
 				amber.options[AmberFF::Option::OVERWRITE_TYPENAMES] = getValue_(overwrite_typenames_checkBox);
+				amber.options[AMBER_BEND_ENABLED] = getValue_(bends_box);
+				amber.options[AMBER_STRETCH_ENABLED] = getValue_(stretches_box);
+				amber.options[AMBER_TORSIONS_ENABLED] = getValue_(torsions_box);
+				amber.options[AMBER_NB_ENABLED] = getValue_(NB_box);
 
 				bool value = distance_button->isChecked();
 				amber.options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = value ? "true" : "false";
@@ -117,17 +119,17 @@ namespace BALL
 				amber.options[AmberFF::Option::SCALING_ELECTROSTATIC_1_4] = getValue_(scaling_electrostatic_1_4_line_edit);
 				amber.options[AmberFF::Option::SCALING_VDW_1_4] = getValue_(scaling_vdw_1_4_line_edit);
 
-				amber.options[AmberFF::Option::FILENAME] = String(parameter_file_edit->text().ascii());
+				amber.options[AmberFF::Option::FILENAME] = ascii(parameter_file_edit->text());
 				
 				bool error = false;
-				if (String(max_unassigned_atoms->text().ascii()).toUnsignedInt() == 0) 
+				if (ascii(max_unassigned_atoms->text()).toUnsignedInt() == 0) 
 				{
 					error = true;
 				}
 
 				try
 				{
-					amber.setMaximumNumberOfErrors(String(max_unassigned_atoms->text().ascii()).toUnsignedInt());
+					amber.setMaximumNumberOfErrors(ascii(max_unassigned_atoms->text()).toUnsignedInt());
 				}
 				catch(...)
 				{

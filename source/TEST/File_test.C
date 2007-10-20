@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: File_test.C,v 1.47 2005/12/23 17:03:08 amoll Exp $
+// $Id: File_test.C,v 1.47.20.1 2007/03/25 21:47:07 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -21,7 +21,7 @@ using namespace std;
 #	define sleep(a) _sleep(1000 * a)
 #endif
 
-START_TEST(File, "$Id: File_test.C,v 1.47 2005/12/23 17:03:08 amoll Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.47.20.1 2007/03/25 21:47:07 oliver Exp $")
 
 
 /////////////////////////////////////////////////////////////

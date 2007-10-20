@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: labelModel.h,v 1.3 2005/12/23 17:02:18 amoll Exp $
+// $Id: labelModel.h,v 1.3.18.2 2007/04/09 20:44:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_LABELMODEL_H
@@ -20,7 +20,7 @@
 #endif
 
 
-#include <qfont.h>
+#include <QtGui/qfont.h>
 
 namespace BALL
 {
@@ -28,8 +28,11 @@ namespace BALL
 	{
 
 		/** LabelModel class.
-				The class LabelModel is a model processor that is responsible
+				The LabelModel is a model processor that is responsible
 				for creating and updateing Labels.
+				It supports special text tags, that allows for automaticaly
+				created labels, see the documentation for the Label class.
+				@see Label
 				\ingroup  ViewModels
 		*/
 		class BALL_VIEW_EXPORT LabelModel: public ModelProcessor

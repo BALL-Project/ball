@@ -13,8 +13,8 @@
 # include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
 #endif
 
-#include <qtimer.h>
-#include <qdatetime.h>
+#include <QtCore/qtimer.h>
+#include <QtCore/qdatetime.h>
 
 #include <BALL/VIEW/UIC/dockProgressDialogData.h>
 
@@ -25,8 +25,9 @@ namespace BALL
 		/**	Dialog for showing the progress during a docking calculation.
     		\ingroup  ViewDialogs
 		 */
-		class BALL_EXPORT DockProgressDialog : 
-			public DockProgressDialogData
+		class BALL_VIEW_EXPORT DockProgressDialog : 
+			public QDialog,
+			public Ui_DockProgressDialogData
 		{ 
 			Q_OBJECT
 				
@@ -42,7 +43,7 @@ namespace BALL
 				 	*	@param			modal the modal flag
 				 	*	@param			fl the widget flags
 					*/
-				DockProgressDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
+				DockProgressDialog(QWidget* parent = 0, const char* name = "DockProgressDialog")
 					throw();
 					
 				/** Destructor

@@ -1,9 +1,10 @@
 
 #include <BALL/VIEW/DIALOGS/geometricFitDialog.h>
 #include <BALL/STRUCTURE/DOCKING/geometricFit.h>
+#include <BALL/VIEW/KERNEL/common.h>
 
-#include <qlineedit.h>
-#include <qcombobox.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qcombobox.h>
 
 //#define BALL_VIEW_DEBUG
 
@@ -12,37 +13,33 @@ namespace BALL
 	namespace VIEW
 	{
 		// Constructor
-		GeometricFitDialog::GeometricFitDialog(QWidget* parent, const char* name, bool modal, WFlags fl)
+		GeometricFitDialog::GeometricFitDialog(QWidget* parent, const char* name)
 			throw()
-			: GeometricFitDialogData(parent, name, modal, fl),
+			: QDialog(parent),
+				Ui_GeometricFitDialogData(),
 				PreferencesEntry()
 			{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "new GeometricFitDialog " << this << std::endl;
 			#endif
-			
-				// register QWidgets of Dialog with PreferenceEntry
-				// entries of them will be generated in the INIFile
+
+				setupUi(this);
+				setObjectName(name);
 				setINIFileSectionName("GEOMETRIC_FIT_OPTIONS");
-				registerObject_(surface_thickness);
-				registerObject_(grid_spacing);
-				registerObject_(penalty_static);
-				registerObject_(penalty_mobile);
-				registerObject_(near_radius);
-				registerObject_(deg_interval);
-				registerObject_(peak_num);
-				registerObject_(surface_type);
+				registerWidgets_();
 		
 				// set flag
 				is_redock_ = false;
 				
 				hide();
+				connect(reset_button, SIGNAL(pressed()), this, SLOT(reset()));
 			}
 		
 		// Copy constructor.
 		GeometricFitDialog::GeometricFitDialog(const GeometricFitDialog& geo_fit_dialog)
 			throw()
-			: GeometricFitDialogData(),
+			: QDialog(),
+				Ui_GeometricFitDialogData(),
 				PreferencesEntry(),
 				has_changed_(geo_fit_dialog.has_changed_),
 				is_redock_(geo_fit_dialog.is_redock_),
@@ -122,22 +119,26 @@ namespace BALL
 			for (Position i = 0; i < backup_.size(); i++)
 			{
 				String entry = String("option_entry_") + String(i);
-				file.insertValue("GEOMETRIC_FIT_OPTIONS_REDOCK", entry, backup_[i].ascii());
+				file.insertValue("GEOMETRIC_FIT_OPTIONS_REDOCK", entry, ascii(backup_[i]));
 			}
 		}
 
 		// Reset the dialog to the standard values
 		void GeometricFitDialog::reset()
-			throw()
 		{
-    	surface_thickness->setText("1.0");
-    	grid_spacing->setText("1.0"); 
-    	penalty_static->setText("-15");
-    	penalty_mobile->setText("1");
-    	deg_interval->setText("20");
-    	near_radius->setText("1.8");
-    	peak_num->setText("3");
-			surface_type->setCurrentText("Connolly");
+			restoreDefaultValues();
+		}
+
+		void GeometricFitDialog::reject()
+		{
+			restoreValues();
+			QDialog::reject();
+		}
+
+		void GeometricFitDialog::accept()
+		{
+			storeValues();
+			QDialog::accept();
 		}
 		
 		// Fill options with values of the dialog.
@@ -146,13 +147,13 @@ namespace BALL
 		{
 		  try
 			{
-				options[GeometricFit::Option::NEAR_RADIUS] = String(near_radius->text().ascii()).toFloat();
-				options[GeometricFit::Option::GRID_SPACING] = String(grid_spacing->text().ascii()).toFloat();
-				options[GeometricFit::Option::SURFACE_THICKNESS] = String(surface_thickness->text().ascii()).toFloat();
-				options[GeometricFit::Option::DEGREE_INTERVAL] = String(deg_interval->text().ascii()).toDouble();
-				options[GeometricFit::Option::TOP_N] = String(peak_num->text().ascii()).toInt();
-				options[GeometricFit::Option::PENALTY_STATIC] = String(penalty_static->text().ascii()).toInt();
-				options[GeometricFit::Option::PENALTY_MOBILE] = String(penalty_mobile->text().ascii()).toInt();
+				options[GeometricFit::Option::NEAR_RADIUS] = ascii(near_radius->text()).toFloat();
+				options[GeometricFit::Option::GRID_SPACING] = ascii(grid_spacing->text()).toFloat();
+				options[GeometricFit::Option::SURFACE_THICKNESS] = ascii(surface_thickness->text()).toFloat();
+				options[GeometricFit::Option::DEGREE_INTERVAL] = ascii(deg_interval->text()).toDouble();
+				options[GeometricFit::Option::TOP_N] = ascii(peak_num->text()).toInt();
+				options[GeometricFit::Option::PENALTY_STATIC] = ascii(penalty_static->text()).toInt();
+				options[GeometricFit::Option::PENALTY_MOBILE] = ascii(penalty_mobile->text()).toInt();
 			}
 		  catch (Exception::InvalidFormat)
 			{
@@ -224,7 +225,7 @@ namespace BALL
 			backup_[6] = temp;
 
 			temp = surface_type->currentText();
-			surface_type->setCurrentText(backup_[7]);
+			surface_type->setCurrentIndex(surface_type->findText(backup_[7]));
 			backup_[7] = temp;
 		}
 		
@@ -239,20 +240,8 @@ namespace BALL
 			{
 				swapValues_();
 			}
-			GeometricFitDialogData::show();
+			QDialog::show();
 		}
 	
-		//
-		void GeometricFitDialog::resetPressed()
-		{
-			reset();
-		}
-		
-		/////// TODO: take the values which were in the fields when dialog was opened
-		void GeometricFitDialog::cancelPressed()
-		{
-			reject();
-		}
-		
 	} // namespace VIEW
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: KCFFile.sip,v 1.2 2005/12/23 17:02:46 amoll Exp $
+// $Id: KCFFile.sip,v 1.2.20.1 2007/03/25 21:37:00 oliver Exp $
 //
 
 
@@ -11,6 +11,7 @@
 %TypeHeaderCode
 	#include <BALL/FORMAT/KCFFile.h>
 	using namespace BALL;
+	using namespace BALL::Exception;
 %End
 		public:
 

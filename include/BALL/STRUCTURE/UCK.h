@@ -1,23 +1,25 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UCK.h,v 1.4 2005/12/23 17:02:02 amoll Exp $
+// $Id: UCK.h,v 1.4.18.2 2007/04/03 13:29:44 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_UCK_H
 #define BALL_STRUCTURE_UCK_H
 
-#ifndef BALL_KERNEL_MOLECULE_H
- #include <BALL/KERNEL/molecule.h>
+#ifndef BALL_DATATYPE_STRING_H
+	#include <BALL/DATATYPE/string.h>
 #endif
 
-#include <fstream>
 #include <vector>
 
 namespace BALL
 {
+	class Molecule;
+
 	/** Unique Chemical Key.
 			Implements the UCK algorithm for computing a unique key for a given chemical structure.
+			\ingroup StructureMiscellaneous
 	*/
 	class BALL_EXPORT UCK
 	{
@@ -43,7 +45,7 @@ namespace BALL
 		
 		/* destructor
 		*/
-		~UCK();
+		virtual ~UCK();
 		
 		/* print Uck to std::out
 		*/
@@ -51,11 +53,11 @@ namespace BALL
 
 		Size getDepth();
 
-		String getFormula();
+		const String& getFormula() const;
 
-		String getUCK();
+		const String& getUCK() const;
 
-		String getId();
+		const String& getId() const;
 
 		float getWeight();
 		
@@ -94,7 +96,9 @@ namespace BALL
 		void createFinalString(const std::vector<String>& pairs);
 
 		Size depth_;
-		String formula_, uck_str_, id_;
+		String formula_; 
+		String uck_str_; 
+		String id_;
 		float weight_;
 	};
 

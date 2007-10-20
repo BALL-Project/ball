@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MoleculeAssembler_test.C,v 1.5 2006/08/15 20:55:13 oliver Exp $
+// $Id: MoleculeAssembler_test.C,v 1.5.8.2 2007/04/03 13:29:30 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -13,13 +13,18 @@
 
 #include <BALL/STRUCTURE/moleculeAssembler.h>
 #include <BALL/KERNEL/selector.h>
+#include <BALL/QSAR/ringPerceptionProcessor.h>
+#include <BALL/STRUCTURE/ringClusterer.h>
+#include <BALL/STRUCTURE/ringAnalyser.h>
+#include <BALL/STRUCTURE/rsConstructor.h>
+#include <BALL/STRUCTURE/chainBuilder.h>
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/MOLFile.h>
 
 ///////////////////////////
 
-START_TEST(MoleculeAssembler, "$Id: MoleculeAssembler_test.C,v 1.5 2006/08/15 20:55:13 oliver Exp $")
+START_TEST(MoleculeAssembler, "$Id: MoleculeAssembler_test.C,v 1.5.8.2 2007/04/03 13:29:30 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.sip,v 1.5 2004/11/17 20:12:12 oliver Exp $
+// $Id: composite.sip,v 1.5.26.1 2007/03/25 21:37:06 oliver Exp $
 //
 
 class Composite
@@ -39,9 +39,9 @@ class Composite
   Size getDepth() const;
   Size getHeight() const;
   Composite& getRoot();
-  const Composite& getRoot() const;
+  // const Composite& getRoot() const;
   Composite* getLowestCommonAncestor(Composite& /composite/);
-  const Composite* getLowestCommonAncestor(const Composite& /composite/) const;
+  // const Composite* getLowestCommonAncestor(const Composite& /composite/) const;
   // template <typename T> T* getAncestor(const T&  );
   // template <class T> const T* getAncestor(const T&  ) const;
   // template <typename T> T* getPrevious(const T&  );
@@ -49,24 +49,25 @@ class Composite
   // template <typename T> T* getNext(const T&  );
   // template <class T> const T* getNext(const T& dummy) const;
   Composite* getParent();
-  const Composite* getParent() const;
+  // const Composite* getParent() const;
   Composite* getChild(Index /index/);
-  const Composite* getChild(Index /index/) const;
+  // const Composite* getChild(Index /index/) const;
   Composite* getSibling(Index /index/);
-  const Composite* getSibling(Index /index/) const;
+  // const Composite* getSibling(Index /index/) const;
   Composite* getFirstChild();
-  const Composite* getFirstChild() const;
+  // const Composite* getFirstChild() const;
   Composite* getLastChild();
-  const Composite* getLastChild() const;
+  // const Composite* getLastChild() const;
+
   const PreciseTime& getModificationTime() const throw();
   const PreciseTime& getSelectionTime() const throw();
-  void prependChild(Composite& /composite/);
-  void appendChild(Composite& /composite/);
+  void prependChild(Composite& /Transfer/);
+  void appendChild(Composite& /Transfer/);
   static bool insertParent
    (Composite& /parent/, Composite& /first/, 
     Composite& /last/, bool /destroy_parent/ = true);
-  void insertBefore(Composite& /composite/);
-  void insertAfter(Composite& /composite/);
+  void insertBefore(Composite& /Transfer/);
+  void insertAfter(Composite& /Transfer/);
   void spliceBefore(Composite& /composite/);
   void spliceAfter(Composite& /composite/);
   void splice(Composite& /composite/);

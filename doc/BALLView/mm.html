@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>BALLView Documentation: Molecular Mechanics</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body>
+<div align=center>
+
+<table width="700" border="0" cellpadding="0">
+  <tr>
+    <td align="center">
+	
+<h2 align="center">
+<a href="displayProperties.html"><img src="images/left.png" width="58" height="28" border=0 align="Middle"></a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="index.html">Index</a> &nbsp;&nbsp;&nbsp;&nbsp;
+<a href="tips.html"><img src="images/right.png" width="58" height="28" border=0 align="Middle"></a>
+</h2><hr width=700>
+		
+<H2>Molecular Mechanics</H2>
+<div align=justify>
+BALLView provides a wide variety of Molecular Mechanics features:
+<ul>
+<li><a href="#single_point">Single point energies</a>
+<li><a href="#mini">Minimizations</a>
+<li><a href="#md">Molecular dynamics simulations</a>
+</ul>
+
+<H2 align=center>Using selections</H2>
+For any of the above features, BALLView supports the application of arbitrary 
+selections that can be used to restrict these calculations to a subset of atoms.
+This enables users, e.g., to optimize only the hydrogen atoms in a molecule:
+Such selections can either be created by applying a <a href="molecularControl.html#regular_expressions">boolean expression</a> or click on the checkbox for any item in the 
+<a href="molecularControl.html">MolecularControl</a>. But remember:
+These selections are only needed for restricting the calculations!
+In most of the times in suffices to highlight the molecular system 
+(click on the name of the root item in the MolecularControl) and click on
+the corresponding entry in the "Molecular Mechanics" menu.
+
+<a name="ff_problems"></a>
+<H2 align=center>Problems with force fields</H2>
+When using the Molecular Mechanics features, users often experience
+problems with the the force field parametrization:
+If the atom typing process fails for some atoms or if no parameters can be
+found, BALLView selects these atoms for easier inspections.
+As a result, the atoms are marked in the MolecularControl and in the
+3D graphics widget. If a given numbers of unassigned atoms is succeded,
+the calculation is aborted (see configuration dialog for the force field).
+The most common causes for unassigned atoms are:
+<ul>
+<li>Missing atoms, e.g. hydrogens
+<li>Invalid bonds, e.g. covalent bonds instead of ion bonds
+<li>Force field is not suited for target molecule (MMFF94 can e.g. not handle nucleic acids)
+</ul>
+
+Possible solutions:
+<ul>
+<li>Adding missing atoms (see "Build" menu)
+<li>Deleting unsupported compounds/ligands through the 
+<a href="molecularControl.html">MolecularControl</a>
+<li>Manually fixing errors through the 
+<a href="scene.html#editing">editing mode</a>
+<li>Choosing an other force field
+</ul>
+
+<a name="single_point"></a>
+<h2 align = center>Single point energies</h2>
+BALLView support the calculation of energies with any of the integrated force fields. If a selection is applied to the molecule, the energy is only calculated for
+the selected atoms (see above). Along with the energy the forces and charges for the individual atoms are calculated.
+<p></p>
+<a name="min"></a>
+<h2 align = center>Minimizations</h2>
+Currently BALLView support four different minimizers:
+<ul>
+<li>Shifted LVMM
+<li>L-BFGS
+<li>Conjugate Gradient
+<li>Steepest Descent
+</ul>
+These minimizers can be combined with any of the integrated force fields.
+Moreover, users can freely choose the stop conditions, like the maximum number
+of iterations, energy difference or gradient.
+If any of these conditions is met, the minimization ends.
+Since the minimization is implemented with multithreading techniques users
+can freely reposition the camera and thus e.g. focus on a given functional 
+group.
+<p></p>
+<a name="md"></a>
+<h2 align = center>Molecular dynamics simulations</h2>
+BALLView supports canonical and microcanonical MD simulations with any
+of the integrated force fields. Users can freely choose the number of steps,
+temperature and timestep. Here, it is important not to choose too large timesteps,
+since the simulations will become too inacurate and produce strange results.
+As a rule of thumb, the timestep should not get larger than 0.001 ps.
+While performing a MD simualtion, the resulting conformations can be stored
+as a trajectory in DCD format. This data can then be visualized as animation.
+
+<hr width=700>
+<h2 align="center">
+<a href="displayProperties.html"><img src="images/left.png" width="58" height="28" border=0 align="Middle"></a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="index.html">Index</a> &nbsp;&nbsp;&nbsp;&nbsp;
+<a href="tips.html"><img src="images/right.png" width="58" height="28" border=0 align="Middle"></a>
+</h2>
+</td></tr></table>
+</div>
+
+</body>
+</html>

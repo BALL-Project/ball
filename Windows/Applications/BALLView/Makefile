@@ -15,13 +15,11 @@ UICDIR = $(SDIR)\Applications\BALLView
 .ui.myui:
 	echo running uic and moc for $(*B)
 	$(QTDIR)\bin\uic -o "$(*R)Data.h"  "$(*).ui"
-	$(QTDIR)\bin\uic -o "$(*R)Data.C" -impl "$(*R)Data.h" "$(*).ui"
 	echo A >  $(*).myui
 
 .ui.myui2:
 	echo running uic and moc for $(*B)
 	$(QTDIR)\bin\uic -o "$(*R).h"  "$(*).ui"
-	$(QTDIR)\bin\uic -o "$(*R).C" -impl "$(*R).h" "$(*).ui"
 	echo A >  $(*).myui2
 
 .h.mymoc:

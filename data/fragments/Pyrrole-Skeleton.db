@@ -1,0 +1,21 @@
+<node>Pyrrole-Skeleton
+	<node>Names
+		<node>Pyrrole-Skeleton</node>
+	</node>
+	<node>Atoms
+		<node>C1<value>C -0.028662 -0.037639 1.451927</value></node>
+		<node>N2<value>N -0.002221 -1.136686 0.619895</value></node>
+		<node>C3<value>C 0.0447 -0.76844 -0.708243</value></node>
+		<node>C4<value>C 0.046187 0.65781 -0.681334</value></node>
+		<node>C5<value>C -0.008647 1.094253 0.712146</value></node>
+	</node>
+	<node>Bonds
+		<node>1<value>C1 N2 s</value></node>
+		<node>2<value>N2 C3 d</value></node>
+		<node>3<value>C3 C4 s</value></node>
+		<node>4<value>C4 C5 d</value></node>
+		<node>5<value>C5 C1 s</value></node>
+	</node>
+	<node>Properties
+	</node>
+</node>

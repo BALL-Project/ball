@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.22 2005/12/23 17:02:15 amoll Exp $
+// $Id: modularWidget.h,v 1.22.16.1 2007/03/25 21:26:01 oliver Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -15,9 +15,13 @@
 # include <BALL/VIEW/KERNEL/connectionObject.h>
 #endif
 
+#include <QtGui/QKeySequence>
+#include <QtGui/QToolBar>
+
 class QObject;
 class QMenuBar;
 class QWidget;
+class QAction;
 
 namespace BALL
 {
@@ -29,27 +33,26 @@ namespace BALL
 		class Preferences;
 		class MainControl;
 
-		/**	ModularWidget is a base class.
-				BALLVIEW provides a simple mechanism for Rapid Application Prototyping based 
-				on <b>modular widgets</b>.	Using the modular widgets and the MainControl class
+		/**	ModularWidget is a base class for widely independent widget that realize one feature domain.
+				The VIEW framework provides a simple mechanism for Rapid Application Prototyping based 
+				on <b>modular widgets</b>.	Using these modular widgets and the MainControl class
 				(or more precisely, classes derived from MainControl) applications can be developed
-				in a plug&play style.	The most important parts of a visualization application are	
-				implemented as classes derived from ModularWidget.
+				in a plug&play style.	
 				Inserting an instance of one of these widgets automatically creates the required
-				menus in the menubar of the main window, sets up the required connections,
-				and registers the class instance for use from the embedded Python interpreter 
+				menus and menu entries in the menubar of the main window, sets up the required connections,
+				and registers the class instance for usage from the embedded Python interpreter 
 				(if desired).
 				<br>
-				When implementing classes derived from ModularWidget and you want to give access 
-				to the class from Python, please remember	to include the BALL_EMBEDDABLE 
+				When implementing classes derived from ModularWidget and access 
+				to the class from Python is desired, please remember to include the BALL_EMBEDDABLE 
 				macro in the public section	of your class declaration. Also make sure that the QT 
 				class you	derive from (e.g. QWidget) is the <b>first</b> base class and 
 				ModularWidget	second. 
 				<br>
+				<br>
 				<b>Remember:</b> A ModularWidget is not notified by the Messages it sends itself!
 				\see MainControl
 				\see Embeddable
-				\see PyInterpreter
 				\see PyWidget
 			\ingroup ViewKernelConnectivity
 		*/
@@ -100,7 +103,7 @@ namespace BALL
 				throw();
 
 			//@}	
-			/**	@name	Accessors: inspectors and mutators 
+			/**	@name	Registering 
 			*/
 			//@{
 			
@@ -131,7 +134,25 @@ namespace BALL
 					\see   initializeWidget
 			*/
 			virtual void finalizeWidget(MainControl& main_control);
-			
+
+			/** Test if this ModularWidget can handle a given file format
+			 		@param fileform short string with the file extension (e.g. PDB)
+					@see openFile
+					@see MainControl::openFile
+			*/
+			virtual bool canHandle(const String& /*fileformat*/) const { return false;}
+
+			/** Tell this ModularWidget to open a given file.
+			 		@see canHandle
+					@see MainControl::openFile
+			*/
+			virtual bool openFile(const String& /*filename*/) { return false;}
+
+			//@}	
+			/**	@name	Management of menu and toolbar entries
+			*/
+			//@{
+	
 			/**	Menu checking method.
 					This method is called MainControl::checkMenus before a popup menu is shown.
 					It should be used to update the state of menu entries (e.g. disable or enable entries).
@@ -139,6 +160,44 @@ namespace BALL
 			*/
 			virtual void checkMenu(MainControl& main_control)
 				throw();
+
+			///
+			QAction* insertMenuEntry (Position parent_id, const String& name, const QObject* receiver = 0, 
+													 const char* slot = 0, QKeySequence accel = QKeySequence())
+				throw();
+
+			/** Set the hint for the last added menu entry
+			 		@see insertMenuEntry
+			*/
+			void setMenuHint(const String& hint);
+
+			/** Set the help URL for the last added menu entry
+			 		@see insertMenuEntry
+					@see HelpViewer
+			*/
+			void setMenuHelp(const String& url);
+
+			/** Register an QObject for the help system.
+			 		@see HelpViewer
+			*/
+			virtual void registerForHelpSystem(const QObject* object, const String& url);
+
+			/** Add the widgets actions to the (main) toolbar.
+			 		This method is needed to enable ordering the entries.
+					It is called in Mainframe.
+			*/
+			virtual void addToolBarEntries(QToolBar* main_tb);
+
+			/** Set the icon for the last added QAction.
+			 		The file is searched in BALL/data/graphics.
+			*/
+			void setIcon(const String& filename, bool add_to_main_toolbar = true);
+
+
+			//@}	
+			/**	@name	Preferences handling
+			*/
+			//@{
 			
 			/** Initialize a preferences tab for the widget (if needed).
 					This method can be used to create preferences widgets that can be inserted
@@ -188,17 +247,37 @@ namespace BALL
 			virtual void writePreferences(INIFile& inifile)
 				throw();
 
-			/** Set the text of the statusbar of the main application.
-			 		<b>Note:</b> The ModularWidget must be registered to a MainControl.
-					Implemented for convenience.
-			 */
-			virtual void setStatusbarText(String text, bool important = false)
+			//@}	
+			/**	@name	Preferences handling
+			*/
+			//@{
+			
+			/** Try to get an exclusive lock on the Composites, so that they can not be altered by
+			 		any other ModularWidget.
+			*/
+			bool lockComposites()
 				throw();
+
+			/// Unlock the Composites.
+			bool unlockComposites()
+				throw();
+
+			//@}	
+			/**	@name	Convenience methods
+			*/
+			//@{
 
 			/** Return the MainControl of this ModularWidget
 					Implemented for convenience.
 			*/
 			MainControl* getMainControl() const
+				throw();
+
+			/** Set the text of the statusbar of the main application.
+			 		<b>Note:</b> The ModularWidget must be registered to a MainControl.
+					Implemented for convenience.
+			 */
+			virtual void setStatusbarText(String text, bool important = false)
 				throw();
 
 			///	Implemented for convenience.
@@ -215,36 +294,6 @@ namespace BALL
 			*/
 			FragmentDB& getFragmentDB() const
 				throw();
-
-			/** Try to get an exclusive lock on the Composites, so that they can not be altered by
-			 		any other ModularWidget.
-			*/
-			bool lockComposites()
-				throw();
-
-			/// Unlock the Composites.
-			bool unlockComposites()
-				throw();
-
-			/// Wrapper for MainControl::menuBar()
-			QMenuBar* menuBar() 
-				throw();
-
-			Index insertMenuEntry (Index parent_id, const String& name, const QObject* receiver = 0, 
-													 const char* slot = 0, Index accel = 0, Index pos = -1)
-				throw();
-
-			///
-			void setMenuHint(const String& hint);
-
-			///
-			void setMenuHelp(const String& url);
-
-			///
-			virtual void registerWidgetForHelpSystem(const QWidget* widget, const String& url);
-
-			///
-			virtual void registerMenuEntryForHelpSystem(Index entry, const String& docu_entry);
 
 			//@}
 			/**	@name	Debugging and Diagnostics
@@ -266,14 +315,12 @@ namespace BALL
 			void setWorkingDirFromFilename_(String filename)
 				throw();
 
-			void removeMenuEntries();
-
 			virtual void showHelp(const String& url);
 
 			protected:
 
 			//_ id in the menubar entry "WINDOWS" for every widget
-			Index window_menu_entry_id_;
+			QAction* window_menu_entry_;
 
 			//_ should there be an entry to switch the window on and off?
 			bool show_window_enty_;
@@ -281,9 +328,8 @@ namespace BALL
 			//_ should the widget be visible, if no config file entry exists?
 			bool default_visible_;
 
-			vector<std::pair<Index, Index> > menu_ids_;
-
-			Index last_parent_id_, last_id_;
+			QAction* last_action_;
+			QList<QAction*> main_toolbar_actions_;
 		}; 
   
 	} // namespace VIEW

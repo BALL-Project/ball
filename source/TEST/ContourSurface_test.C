@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ContourSurface_test.C,v 1.7 2004/02/25 12:04:44 oliver Exp $
+// $Id: ContourSurface_test.C,v 1.7.30.1 2007/03/25 21:47:00 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(ContourSurface, "$Id: ContourSurface_test.C,v 1.7 2004/02/25 12:04:44 oliver Exp $")
+START_TEST(ContourSurface, "$Id: ContourSurface_test.C,v 1.7.30.1 2007/03/25 21:47:00 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

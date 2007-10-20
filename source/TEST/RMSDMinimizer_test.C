@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RMSDMinimizer_test.C,v 1.1 2006/01/27 20:57:47 oliver Exp $
+// $Id: RMSDMinimizer_test.C,v 1.1.18.2 2007/05/18 12:06:00 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -15,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(RMSDMinimizer, "$Id: RMSDMinimizer_test.C,v 1.1 2006/01/27 20:57:47 oliver Exp $")
+START_TEST(RMSDMinimizer, "$Id: RMSDMinimizer_test.C,v 1.1.18.2 2007/05/18 12:06:00 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ CHECK(RMSDMinimizer::Reszlt RMSDMinimizer::computeTransformation
 	TEST_EXCEPTION(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::computeTransformation(A, B))
 	B.push_back(Vector3(3.0, 2.0, 1.0));
 	RMSDMinimizer::Result r = RMSDMinimizer::computeTransformation(A, B);
-	PRECISION(0.0002)
+	PRECISION(0.0003)
 	TEST_REAL_EQUAL(r.second, 0.0)
 	STATUS("RMSD: " << r.second)
 	STATUS("T:\n" << r.first)

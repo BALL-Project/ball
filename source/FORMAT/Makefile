@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.25 2006/08/15 19:00:21 oliver Exp $
+# $Id: Makefile,v 1.25.8.2 2007/04/02 20:54:50 bertsch Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -26,6 +26,7 @@ CPP_SOURCES=\
 	bruker1DFile.C\
 	bruker2DFile.C\
 	DCDFile.C\
+	DSN6File.C\
 	genericMolFile.C\
 	HINFile.C\
 	INIFile.C\
@@ -46,7 +47,8 @@ CPP_SOURCES=\
 	resourceFile.C\
 	trajectoryFile.C\
 	TRRFile.C\
-	XYZFile.C
+	XYZFile.C\
+	SCWRLRotamerFile.C
 
 ifeq ($(BALL_HAS_VIEW),true)
 	CPP_SOURCES+=DBInterface.C
@@ -64,6 +66,8 @@ default_clean:	clean_flex_bison
 clean_flex_bison:
 	@-$(RM) GAMESSDatParserParser.C GAMESSDatParserLexer.C GAMESSDatParserParser.h 2>/dev/null
 	@-$(RM) GAMESSLogParserParser.C GAMESSLogParserLexer.C GAMESSLogParserParser.h 2>/dev/null
+
+
 
 
 GAMESSDatParserParser.C: GAMESSDatParserParser.y

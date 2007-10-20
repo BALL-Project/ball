@@ -1,29 +1,35 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.C,v 1.30 2005/12/26 03:25:59 amoll Exp $
+// $Id: stageSettings.C,v 1.30.16.1 2007/03/25 22:02:19 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/clippingPlane.h>
 
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
-#include <qslider.h>
-#include <qwidgetstack.h>
-#include <qlistview.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qslider.h>
+#include <QtGui/QStackedWidget>
+#include <QtGui/QListWidget>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		StageSettings::StageSettings( QWidget* parent,  const char* name, WFlags fl )
-			: StageSettingsData(parent, name, fl)
+		StageSettings::StageSettings( QWidget* parent,  const char* name, Qt::WFlags fl )
+			: QWidget(parent, fl),
+				Ui_StageSettingsData(),
+				PreferencesEntry()
 		{
+			setupUi(this);
+			
+			setObjectName(name);
 			stage_ = ((Scene*) parent)->getStage();
 			if (stage_ == 0) return;
 			scene_ = (Scene*) parent;
@@ -33,25 +39,16 @@ namespace BALL
 
 			setDefaultValues_();
 			setINIFileSectionName("STAGE");
-
-			registerObject_(color_sample);
-			registerObject_(animation_smoothness);
-			registerObject_(coordinate_button);
-			registerObject_(show_lights_);
-			registerObject_(enable_fog);
-			registerObject_(fog_slider);
-			registerObject_(popup_names);
-			registerWidgetForHelpSystem_(popup_names, "scene.html#popup_atoms");
-
-			registerObject_(slider_);
-			registerObject_(wheel_slider_);
-
-			registerObject_(eye_distance_slider);
-			registerObject_(focal_distance_slider);
-			registerObject_(swap_sss_button);
-
 			setWidgetStackName("Display");
 			setWidgetStack(widget_stack);
+			registerWidgets_();
+			
+			// signals and slots connections
+			connect( color_button, SIGNAL( clicked() ), this, SLOT( colorPressed() ) );
+			connect( capping_color_button, SIGNAL( clicked() ), this, SLOT( cappingColorPressed() ) );
+			connect( eye_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( eyeDistanceChanged() ) );
+			connect( focal_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( focalDistanceChanged() ) );
+			connect( enable_fog, SIGNAL( stateChanged(int) ), this, SLOT( fogStateChanged() ) );
 		}
 
 
@@ -60,13 +57,16 @@ namespace BALL
 			chooseColor(color_sample);
 		}
 
+		void StageSettings::cappingColorPressed()
+		{
+			chooseColor(capping_color);
+		}
 
 		void StageSettings::updateFromStage()
 			throw()
 		{
 			if (stage_ == 0) return;
-			color_sample->setBackgroundColor(stage_->getBackgroundColor().getQColor());
-			coordinate_button->setChecked(stage_->coordinateSystemEnabled());
+			setColor(color_sample, stage_->getBackgroundColor());
 
 			slider_->setValue((int) Scene::getMouseSensitivity() - 1);
 			wheel_slider_->setValue((int) Scene::getMouseWheelSensitivity() - 1);
@@ -76,6 +76,11 @@ namespace BALL
 			fog_slider->setValue((int) (stage_->getFogIntensity()));
 			enable_fog->setChecked(stage_->getFogIntensity() > 0);
 			animation_smoothness->setValue((int) (Scene::getAnimationSmoothness() * 10.0));
+
+			ColorRGBA color = ClippingPlane::getCappingColor();
+			setColor(capping_color, color);
+			capping_transparency->setValue(255 - (int)color.getAlpha());
+
 			eyeDistanceChanged();
 			focalDistanceChanged();
 			getGLSettings();
@@ -86,16 +91,10 @@ namespace BALL
 			throw()
 		{
 			if (stage_ == 0) return;
-			stage_->setBackgroundColor(color_sample->backgroundColor());
-			stage_->showCoordinateSystem(coordinate_button->isChecked());
+			stage_->setBackgroundColor(getColor(color_sample));
 
 			Scene::setMouseSensitivity(slider_->value() + 1);
 			Scene::setMouseWheelSensitivity(wheel_slider_->value() + 1);
-
-			if (Scene::getInstance(0) != 0)
-			{
-				Scene::getInstance(0)->setPopupInfosEnabled(popup_names->isChecked());
-			}
 
 			stage_->setEyeDistance((float)(eye_distance_slider->value() / 10.0));
 			stage_->setFocalDistance((float)(eye_distance_slider->value()));
@@ -113,16 +112,29 @@ namespace BALL
 
 			Scene::setShowLightSources(show_lights_->isChecked());
 			Scene::setAnimationSmoothness(((float)animation_smoothness->value()) / 10.0);
+			Scene::getInstance(0)->setOffScreenRendering(offscreen_group->isChecked(), resolution_factor->value());
+
+			ColorRGBA color;
+			color = getColor(capping_color);
+			color.setAlpha(255 - capping_transparency->value());
+			ClippingPlane::getCappingColor() = color;
+
+			Scene* scene = ((Scene*)Scene::getInstance(0));
+			if (scene == 0) return;
+
+			scene->setFPSEnabled(show_fps->isChecked());
+			scene->setPreview(use_preview->isChecked());
 
 			// use vertex buffers ?
 			bool use_buffer = use_vertex_buffers->isChecked();
-			GLRenderer& renderer = ((Scene*)Scene::getInstance(0))->getGLRenderer();
+			GLRenderer& renderer = scene->getGLRenderer();
 
-			if (use_buffer != renderer.vertexBuffersEnabled())
+			if (use_buffer != renderer.vertexBuffersEnabled() && 
+					getMainControl()->getRepresentationManager().getNumberOfRepresentations() > 0)
 			{
 				getMainControl()->setStatusbarText("Because of change in usage of vertex buffer, all Representations have to be deleted!", true);
 				// remove representations
-				PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+				RepresentationManager& pm = getMainControl()->getRepresentationManager();
 				Size nr = pm.getNumberOfRepresentations();
 				list<Representation*> reps = pm.getRepresentations();
 				for (Position p = 0; p < nr; p++)
@@ -138,13 +150,11 @@ namespace BALL
 
 		void StageSettings::setDefaultValues_()
 		{
-			color_sample->setBackgroundColor(black);
+			setColor(color_sample, ColorRGBA(0,0,0));
 			animation_smoothness->setValue(25);
-			coordinate_button->setChecked(false);
 			show_lights_->setChecked(false);
 			enable_fog->setChecked(false);
 			fog_slider->setValue(200);
-			popup_names->setChecked(false);
 
 			slider_->setValue(5);
 			wheel_slider_->setValue(5);
@@ -153,12 +163,10 @@ namespace BALL
 			focal_distance_slider->setValue(40);
 			swap_sss_button->setChecked(false);
 
-			/**
 			if (use_vertex_buffers->isEnabled())
 			{
 				use_vertex_buffers->setChecked(true);
 			}
-			*/ // ?????
 		}
 
 		void StageSettings::eyeDistanceChanged()
@@ -211,8 +219,7 @@ namespace BALL
 			
 			for (Position p = 0; p < extensions.size(); p++)
 			{
-				QListViewItem* item = new QListViewItem(extensions_list, extensions[p].c_str());
-				extensions_list->insertItem(item);
+				new QListWidgetItem(extensions[p].c_str(), extensions_list);
 			}
 
 			if (!renderer.vertexBuffersSupported())

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: generalizedBornCase.C,v 1.3 2006/05/27 09:05:40 anker Exp $
+// $Id: generalizedBornCase.C,v 1.3.10.1 2007/03/25 22:00:32 oliver Exp $
+//
 
 #include <BALL/SOLVATION/generalizedBornCase.h>
 // #include "generalizedBornCase.h"

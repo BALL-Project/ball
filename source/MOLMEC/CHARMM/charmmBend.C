@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmBend.C,v 1.14 2005/02/08 19:41:21 oliver Exp $
+// $Id: charmmBend.C,v 1.14.26.1 2007/03/25 22:00:28 oliver Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmBend.h>
@@ -56,6 +56,20 @@ namespace BALL
 		{
 			Log.error() << "CharmmBend::setup: component not bound to force field" << endl;
 			return false;
+		}
+
+ 		Options& options = getForceField()->options;
+		if (options.has(CHARMM_BENDS_ENABLED))
+		{
+			if (!options.getBool(CHARMM_BENDS_ENABLED))
+			{
+				setEnabled(false);
+				return true;
+			}
+			else
+			{
+				setEnabled(true);
+			}
 		}
 
 		// extract parameter section (if necessary)

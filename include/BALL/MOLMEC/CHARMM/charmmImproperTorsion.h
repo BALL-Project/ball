@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmImproperTorsion.h,v 1.22 2005/12/23 17:01:50 amoll Exp $
+// $Id: charmmImproperTorsion.h,v 1.22.18.1 2007/03/25 21:23:48 oliver Exp $
 //
 
 // Molecular Mechanics: Charmm force field, bond stretch component
@@ -48,6 +48,9 @@ namespace BALL
 		: public ForceFieldComponent
 	{
 		public:
+
+		/// flag to enable improper torsions
+		#define CHARMM_IMPROPER_TORSIONS_ENABLED "enable IT"
 
 		/**	@name	Constructors and Destructors	
 		*/

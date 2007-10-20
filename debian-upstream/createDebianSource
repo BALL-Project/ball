@@ -1,0 +1,65 @@
+#!/bin/bash 
+# script to create a Debian source package from a BALL CVS tree
+# arguments: $1 == BALL CVS branch
+# arguments: $2 == BALL version number
+if test $# != 2 ; then
+	echo "createDebianSource <CVS tag> <BALL version number>"
+	exit
+fi
+
+#create tgz
+export BALL_PATH=`pwd | sed "s/debian$//g" | sed "s/debian-upstream$//g" | sed "s/source$//g"`
+cd $BALL_PATH
+echo Using BALL_PATH: $BALL_PATH
+cd source/config
+echo "Creating CVS checkout..."
+# get name of the BALL tgz
+BFILE=`./makedistribution $1 | grep "compressing archive" | sed "s/compressing archive //" | sed "s/\.\.\.//"`".gz"
+echo $BFILE
+
+# create working folder
+cd /var/tmp
+mkdir $USER 2>/dev/null
+cd $USER
+rm -rf ballview* 2>/dev/null
+
+# rename and move the tgz
+FILE2="ballview_"$2".orig.tar.gz"
+echo $FILE2
+cp $HOME/$BFILE $FILE2
+
+# extract content of tgz to new folder
+echo "Extracting tgz..."
+tar xzf $FILE2
+BDIR=`find . -maxdepth 1 -type d | grep BALL | grep -v dist`
+echo $BDIR
+rm -rf "ballview-"$2 		2>/dev/null
+mv $BDIR "ballview-"$2
+# create a new tgz without the unneeded overhead for other platforms:
+rm -rf "ballview-"$2/Windows
+rm -rf "ballview-"$2/MacOSX
+rm $FILE2
+tar czf $FILE2 "ballview-"$2
+cd "ballview-"$2
+
+# copy debian control files
+pwd
+cp -r debian-upstream debian
+rm -f debian/createDebianSource
+rm -f debian/debian-ball-install
+rm -f debian/createBALLVIEWDEB
+rm -f debian/README
+
+# build package
+echo "Compiling..."
+dpkg-buildpackage -rfakeroot &&
+lintian /var/tmp/$USER/*.deb
+cd /var/tmp/$USER/
+rm -f ballview-$2-debian-binary.tar.gz 
+tar czf ballview-$2-debian-binary.tar.gz  *.deb
+tar czf ballview-$2-debian-source.tar.gz \
+		ballview*.dsc \
+		ballview*.changes \
+		*orig.tar.gz \
+		*.diff.gz
+

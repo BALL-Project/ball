@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.C,v 1.27 2005/12/23 17:02:39 amoll Exp $
+// $Id: MOL2File.C,v 1.27.18.3 2007/05/29 09:58:24 anhi Exp $
 //
 
 #include <BALL/FORMAT/MOL2File.h>
@@ -268,6 +268,9 @@ namespace BALL
     while (readLine())
     {
 			getLine().toUpper();
+
+			getLine().trim();
+			if (getLine().hasPrefix("#")) continue;
 			
 			while (startsWith(TRIPOS))
 			{
@@ -294,7 +297,12 @@ namespace BALL
 				}	
 				else if (RTI == "SUBSTRUCTURE") 
 				{
-					 readSubstructureSection_();
+					readSubstructureSection_();
+				} 
+				else if (RTI == "COMMENT") 
+				{
+					// do nothing
+					readLine();
 				} 
 				else 
 				{	
@@ -329,6 +337,8 @@ namespace BALL
 		Size number_of_fields = 1;
 		while (readLine() && (number_of_fields > 0) && !getLine().hasPrefix(TRIPOS))
 		{
+			getLine().trim();
+			if (getLine().hasPrefix("#")) continue;
 			Size number_of_fields = getLine().countFields();
 			if (number_of_fields > 0)
 			{
@@ -366,6 +376,7 @@ namespace BALL
 		while (readLine() && (number_of_fields > 0) && !getLine().hasPrefix(TRIPOS))
 		{
 			getLine().trim();
+			if (getLine().hasPrefix("#")) continue;
 			Size number_of_fields = getLine().countFields();
 			if (number_of_fields > 0)
 			{
@@ -398,6 +409,7 @@ namespace BALL
 		Size number_of_fields = 1;
 		while (readLine() && (number_of_fields > 0) && !getLine().hasPrefix(TRIPOS))
 		{
+			if (getLine().hasPrefix("#")) continue;
 			getLine().trim();
 			Size number_of_fields = getLine().countFields();
 			if (number_of_fields > 0)
@@ -451,6 +463,8 @@ namespace BALL
 		Size line_number = 0;
 		while (readLine() && (number_of_fields > 0) && !getLine().hasPrefix(TRIPOS) && (line_number <= 5))
 		{
+			getLine().trim();
+			if (getLine().hasPrefix("#")) continue;
 			// read four lines
 			line_number++;
 			number_of_fields = getLine().countFields();
@@ -477,6 +491,10 @@ namespace BALL
 					{
 						molecule_.number_of_substructures = getLine().getField(2).toUnsignedInt();
 					}
+					else // we always need at least one substructure
+					{
+						molecule_.number_of_substructures = 1;
+					}
 					if (number_of_fields > 3)
 					{
 						molecule_.number_of_features = getLine().getField(3).toUnsignedInt();
@@ -500,6 +518,8 @@ namespace BALL
 	{
 		while (readLine() && (getLine().countFields() > 0) && !getLine().hasPrefix(TRIPOS))
 		{
+			getLine().trim();
+			if (getLine().hasPrefix("#")) continue;
 			SubstructureStruct sub;
 
 			Size number_of_fields = getLine().countFields();
@@ -568,7 +588,7 @@ namespace BALL
 		molecule_.name = "";
 		molecule_.number_of_atoms = 0;
 		molecule_.number_of_bonds = 0;
-		molecule_.number_of_substructures = 0;
+		molecule_.number_of_substructures = 1;
 		molecule_.number_of_features = 0;
 		molecule_.number_of_sets = 0;
 
@@ -747,6 +767,21 @@ namespace BALL
 		else
 		{	
 			// Otherwise, insert all atoms into their proper substructures.
+			
+			// make sure that no substructures with id 0 occur. these would lead to a memory leak later, since we
+			// rely on MOL2 starting with substructure id 1 (see bug #48)
+			// we need an extra loop that cannot be merged with the following one, since all ids must be adapted
+			// if we find a single zero
+			bool fix_ids = false;
+			for (i = 0; i < atoms_.size(); i++)
+			{
+				if (atoms_[i].substructure == 0)
+				{
+					fix_ids = true;
+					break;
+				}
+			}
+
 			for (i = 0; i < atoms_.size(); i++)
 			{	
 				// MOL2 starts counting at 1, we start at zero, ergo: > instead of >=.
@@ -756,7 +791,10 @@ namespace BALL
 				}
 				else
 				{
-					sub_ptr[atoms_[i].substructure - 1]->insert(*atom_ptr[i]);
+					if (!fix_ids)
+						sub_ptr[atoms_[i].substructure - 1]->insert(*atom_ptr[i]);
+					else
+						sub_ptr[atoms_[i].substructure]->insert(*atom_ptr[i]);
 				}
 			}
 

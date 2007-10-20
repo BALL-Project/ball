@@ -29,244 +29,235 @@
 # include <BALL/MATHS/vector2.h>
 #endif
 
-// has to come after BALL includes to prevent problems with Visual Stuio Net
-#include <qgl.h>
+#ifndef BALL_STRUCTURE_FRAGMENTDB_H
+# include <BALL/STRUCTURE/fragmentDB.h>
+#endif
 
-
+#include <QtGui/qcursor.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		class BALL_VIEW_EXPORT EditableScene
-			: public Scene
-			{
-				Q_OBJECT //macro for QT-Messages
+class EditSettings;
 
-				public:
+/** Extended 3D view for editing molecules.
+ 		The editing functionality is implemented as an own mode.
+		\ingroup ViewWidgets
+*/
+class BALL_VIEW_EXPORT EditableScene
+	: public Scene
+{
+	Q_OBJECT //macro for QT-Messages
 
-					BALL_EMBEDDABLE(EditableScene, ModularWidget)	
+	public:
 
-						// nested class
-						// This class represents a single edit operation and stores its type and
-						// parameters. This can be used to implement undo functionality.
-						class BALL_VIEW_EXPORT EditOperation
-						{
-							public:
+	BALL_EMBEDDABLE(EditableScene, ModularWidget)	
 
-								/** Constructor
-								*/
-								EditOperation()
-									throw();
+	// This class represents a single edit operation and stores its type and
+	// parameters. This can be used to implement undo functionality.
+	class BALL_VIEW_EXPORT EditOperation
+	{
+		public:
 
-								EditOperation(Atom* atom, Bond* bond, String description= "Added Object", int operation=0)
-									throw();
+		/// Constructor
+		EditOperation()
+			throw();
 
-								EditOperation(const EditOperation& eOperation)
-									throw();
+		///
+		EditOperation(Atom* atom, Bond* bond, String description= "Added Object", int operation=0)
+			throw();
 
+		///
+		EditOperation(const EditOperation& eOperation)
+			throw();
 
-								/** Destructor.
-								*/
-								virtual ~EditOperation()
-									throw();
+		/// Destructor.
+		virtual ~EditOperation()
+			throw();
 
-								enum OperationType
-								{
-									DEFAULT,
-									ADDED__ATOM,
-									ADDED__BOND,
-									CHANGED__TYPE
-										// DELETED__ATOM
-										// DELETED__BOND
-										//CHANGED__SYSTEM
-										//MOVED__ATOM
-								};
+		///
+		enum OperationType
+		{
+			DEFAULT,
+			ADDED__ATOM,
+			ADDED__BOND,
+			CHANGED__TYPE
+				// DELETED__ATOM
+				// DELETED__BOND
+				//CHANGED__SYSTEM
+				//MOVED__ATOM
+		};
 
-								int	operationType;
-								Atom* atom;
-								Bond* bond;
-								String description;
-
-						};
-
-					//@} 
-					/**	@name	Constructors 
-					*/	
-					//@{
-
-					EditableScene()
-						throw();
-
-					/** Default Constructor.
-						Initialize the width and height of this scene to <tt> 600</tt> and sets
-						the camera position to:
-						- camera position set to <tt> Vector(1,0,0)</tt>
-						- camera look at position set to <tt> Vector(0,0,0)</tt>
-						- camera look up vector to <tt> Vector(0,0,-1)</tt>
-						\par
-						Calls registerWidget.
-						\param      parent_widget the parent widget of this scene 
-						\param      name the name of this scene 
-						\param      w_flags the flags the scene widget should have 
-						(See documentation of QT-library for information concerning widget flags) 
-						*/
-					EditableScene(QWidget* parent_widget, const char* name = NULL, WFlags w_flags = 0)
-						throw();
-
-					/** Copy constructor.
-						Initialize the width, height and camera position.
-						\par					
-						Calls registerWidget.
-						\param  scene the scene to be copied
-						\param  parent_widget the parent widget of this scene 
-						\param  name the name of this scene 
-						\param  wflags the flags the scene widget should have 
-						(See documentation of QT-library for information concerning widget flags) 
-						undo_, stack for operations is NOT copied!				
-						*/
-					EditableScene (const EditableScene& eScene, QWidget* parent_widget = NULL, const char* name = NULL, WFlags wflags = 0)
-						throw();
-
-					//@} 
-					/** @name Destructors 
-					*/ 
-					//@{
-
-					/** Destructor.
-					*/
-					virtual ~EditableScene()
-						throw();
-
-					/** Explicit default initialization.
-						Reset the default values of this scene to:
-						-  width is set to <tt> 600</tt>
-						-  height is set to <tt> 600</tt>
-						- camera position set to <tt> Vector(1,0,0)</tt>
-						- camera look at position set to <tt> Vector(0,0,0)</tt>
-						\par
-						*/
-					virtual void clear()
-						throw();
-
-
-					enum EditMode
-					{
-						// inserting atoms
-						EDIT__MODE = PICKING__MODE + 1,
-						// drawing new bonds
-						BOND__MODE	
-					};
-
-
-					void initializeWidget(MainControl& main_control)
-						throw();
-
-					void finalizeWidget(MainControl& main_control)
-						throw();
-
-
-					void checkMenu(MainControl& main_control)
-						throw();
-
-
-					public slots:
-						//#############################################################
-						//								Mouse Events
-						//############################################################
-						virtual void mousePressEvent(QMouseEvent* e);
-
-
-						virtual void mouseMoveEvent(QMouseEvent *e);
-
-
-						virtual void mouseReleaseEvent(QMouseEvent *e);
-
-						// slots for communication with PTEDialog
-						void setEditElementType(int element_number);
-						int getEditElementType();
-
-											
-					protected slots:
-						virtual void editMode_();
-						virtual void bondMode_();
-
-					signals:
-						// signal for communication with EditOperationDialog
-						void newEditOperation(EditableScene::EditOperation &eo);
-
-
-		protected:
-					Index edit_id_;	
-					System system_; // Do we need them?? 
-					Molecule *current_molecule_;	//Do we need them??
-					Atom* first_atom_for_bond_;
-
-					// used for the bond insert algorithm
-					float x_ewindow_bond_pos_first_;
-					float y_ewindow_bond_pos_first_;
-					float x_ewindow_bond_pos_second_new_;
-					float y_ewindow_bond_pos_second_new_;
-					float x_ewindow_bond_pos_second_old_;
-					float y_ewindow_bond_pos_second_old_;
-
-					Vector3 near_left_bot_;  //TODO:: name in XYZ left_bot_mnear
-					Vector3 near_right_bot_;
-					Vector3 near_left_top_;
-
-					// ???
-					// search range when looking for atoms/bonds (in angstrom)
-					double atom_limit_;			
-					double bond_limit_;			
-					bool   mouse_has_moved_;
-					int editAtomType_;
-
-					//undo stack
-					//TODO   list_of_operations
-					vector< EditOperation > undo_;
-
-					/**
-					 * Insert a given Atom in the Scene. Its position is specified by the 2-dim 
-					 * Mouseclick coordinates of the Screen, which will be translated into the 
-					 * 3-dim space of Viewing Volume.
-					 */
-					void insert_(int x_, int y_, PDBAtom &atom_);
-
-					/**
-					 *  Given a 3-dim. Coordinates (in Viewing Volume) getScreenPosition
-					 *  computes the 2-dim Coordinates on Screen.
-					 */
-					TVector2<Position> getScreenPosition_(Vector3 vec);
-
-					/**
-					 * Given 2-dim Coordinates of Screen, clickedPointOnViewPlane computes the
-					 * appropriate 3-dim Position in Viewing Volume
-					 */
-					Vector3 clickedPointOnViewPlane_(int x, int y);
-
-					/**
-					 * Given 2-dim Coordinates of Screen, getCLickedAtom_ returns the nearest Atom 
-					 * within a special radius. If no atom is found, getClickedAtom returns NULL.
-					 */
-					Atom* getClickedAtom_(int x, int y);
-
-					/**
-					 * Given 2-dim Coordinates of Screen, getCLickedBond returns the nearest Bond
-					 * within a special radius. If no bond is found, getClickedBond returns NULL.
-					 * Note: This code is very similar to that of getClickedAtom and the two might
-					 *       be joined in the future.
-					 */
-					Bond* getClickedBond_(int x, int y);
-
-					/**
-					 * Maps the current viewplane to screen coordinates.
-					 * Returns false if the projection matrix is not correctly
-					 * initialized.
-					 */
-					bool mapViewplaneToScreen_();
-
+		int	operationType;
+		Atom* atom;
+		Bond* bond;
+		String description;
 	};
+
+	///
+	enum EditMode
+	{
+		// 
+		EDIT__MODE = PICKING__MODE + 1
+	};
+
+	///
+	EditableScene()
+		throw();
+
+	/// Default Constructor
+	EditableScene(QWidget* parent_widget, const char* name = NULL, Qt::WFlags w_flags = 0)
+		throw();
+
+	/// Copy constructor.
+	EditableScene (const EditableScene& eScene, QWidget* parent_widget = NULL, const char* name = NULL, Qt::WFlags wflags = 0)
+		throw();
+
+	/// Destructor.
+	virtual ~EditableScene()
+		throw();
+
+	///
+	void initializeWidget(MainControl& main_control)
+		throw();
+
+	///
+	void checkMenu(MainControl& main_control)
+		throw();
+
+	///
+	void initializePreferencesTab(Preferences &preferences)
+		throw();
+	
+	///
+	void finalizePreferencesTab(Preferences &preferences)
+		throw();
+
+	///
+	virtual void applyPreferences()
+		throw();
+	
+	///
+	void showContextMenu(QPoint pos);
+
+	///
+	virtual void setMode(ModeType mode)
+		throw();
+
+	void addStructure(String name);
+
+	///
+	void setCursor(String c);
+
+	///
+	void setElementCursor();
+
+	////////////////////////////////////////
+	public slots:
+
+	virtual void mousePressEvent(QMouseEvent* e);
+	virtual void mouseMoveEvent(QMouseEvent *e);
+	virtual void mouseReleaseEvent(QMouseEvent *e);
+	virtual void wheelEvent(QWheelEvent* qmouse_event);
+	void createNewMolecule();
+	void saturateWithHydrogens();
+	void optimizeStructure();
+
+	// slots for communication with PTEDialog
+	void setEditElementType(int element_number);
+	int getEditElementType();
+							
+	////////////////////////////////////////
+	protected slots:
+
+	virtual void editMode_();
+	void deleteAtom_();
+	void changeElement_();
+	void deleteBond_();
+	void changeBondOrder_();
+	void activatedOrderItem_(QAction* action);
+	void moveAtom_();
+	void atomProperties_();
+	void createMolecule_();
+	void addStructure_();
+	void setFormalCharge_();
+
+	////////////////////////////////////////
+	signals:
+
+	// signal for communication with EditOperationDialog
+	void newEditOperation(EditableScene::EditOperation &eo);
+
+	////////////////////////////////////////
+	protected:
+
+	virtual void addToolBarEntries(QToolBar* tb);
+
+	/// Catch key events
+	virtual void keyPressEvent(QKeyEvent* e);
+	virtual void mouseDoubleClickEvent(QMouseEvent* e);
+	virtual bool reactToKeyEvent_(QKeyEvent* e);
+
+	virtual void onNotify(Message *message)
+		throw();
+
+	/**
+	 * Insert a given Atom in the Scene. Its position is specified by the 2-dim 
+	 * Mouseclick coordinates of the Screen, which will be translated into the 
+	 * 3-dim space of Viewing Volume.
+	 */
+	void insert_(int x_, int y_, PDBAtom &atom_);
+
+	void merge_(Composite* a1, Composite* a2);
+
+	/**
+	 *  Given a 3-dim. Coordinates (in Viewing Volume) getScreenPosition
+	 *  computes the 2-dim Coordinates on Screen.
+	 */
+	TVector2<float> getScreenPosition_(Vector3 vec);
+
+	void getClickedItems_(int x, int y);
+
+	virtual void paintGL();
+
+	void init_();
+
+	String getBondOrderString_(Index order);
+
+	List<AtomContainer*> getContainers_();
+
+	void changeBondOrder_(Index delta);
+	void deselect_(bool update=true);
+	void renderGrid_();
+
+	QAction* edit_id_, *new_molecule_, *optimize_, *add_hydrogens_, *element_action_;	
+	Atom* current_atom_;
+	Bond* current_bond_;
+
+	Vector3 atom_pos_;
+	bool draw_line_;
+
+	// pick atoms/bonds only in highlighted AtomContainer?
+	static bool only_highlighted_;
+	// element for new atoms
+	int atomic_number_;
+	// name for newly created atoms
+	Position atom_number_;
+	// order for new bonds
+	int bond_order_;
+	Position last_y_;
+	Qt::MouseButtons last_buttons_;
+
+	//undo stack
+	vector<EditOperation> undo_;
+	EditSettings* edit_settings_;
+	QPoint 	 menu_point_;
+	FragmentDB fragment_db_;
+	bool fragment_db_initialized_;
+	bool temp_move_;
+};
 
 	}//end of namespace
 } // end of namespace

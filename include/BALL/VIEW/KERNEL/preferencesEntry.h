@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.h,v 1.10 2005/12/23 17:02:15 amoll Exp $
+// $Id: preferencesEntry.h,v 1.10.16.1 2007/03/25 21:26:02 oliver Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCES_ENTRY
@@ -15,13 +15,9 @@
 # include <BALL/DATATYPE/hashSet.h>
 #endif
 
-#ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
-# include <BALL/VIEW/DATATYPE/colorRGBA.h>
-#endif
 
 class QWidget;
-class QLabel;
-class QWidgetStack;
+class QStackedWidget;
 
 namespace BALL
 {
@@ -29,41 +25,43 @@ namespace BALL
 
 	namespace VIEW
 	{
-		/** Base class for a dialogs or a Preferences page.
-		 		It allows to register all individual GUI elements in a widget
-				to support reading and writing of its settings to a INIFile.
-				Also restoring of the default value and the last applied value
-				before cancel was pressed is supported.
-				Currently the following QT objects are supported:
-				- QLineEdit
-				- QLabel
-				- QSlider
-				- QCheckBox
-				- QCombobox
-				- QButtonGroup
+		/** Base class for a dialog or a Preferences page.
+		 		It allows to register child widgets to
+				support reading and writing their data into a INIFile.
+				Also restoring of a default value and the last applied value
+				is supported.
+				Currently the following Qt widgets are supported:
+				<ul>
+				<li>QLineEdit
+				<li>QSlider
+				<li>QSpinBox
+				<li>QCheckBox
+				<li>QCombobox
+				<li>QButtonGroup
+				<li>QLabels without text (for storing colors)
+				</ul>
 				To support more sophisticated items, e.g. color tables, a base class
 				is provided to derive from (see ExtendedPreferencesObject).
 				\\
-				Furthermore this class allows to use QWidgetStack items, like e.g.
-				in the Preferences, where all individual child widgets are than
-				also entries in a QListView. This is than also use to support
-				e.g. applying default values for the currently shown page in the
-				QWidgetStack.\\
+				Furthermore this class allows to use QStackedWidget items, like e.g.
+				in the Preferences, where all individual child widgets are then
+				also entries in a QListView.
 				\\
-				How to use this class:\\
-				1. Derive from it.\\
-				2. Modify the constructor of the derived class:
- 				3. Make sure that every GUI element is set to its default value.\\
-				4. Call registerObject_() for every GUI element to be restored.\\
-				5. Call setINIFileSectionName(String) for the section in the INIFile, where
-				   the settins are to be stored.
-				6. If the dialog is a page in a QWidgetStack (like in the Preferences dialog) 
-					 call insertEntry(this, "Name to appear in the listview").\\
-				7. If the dialog itself has a QWidgetStack call setWidgetStack() for it and 
-					 set the names of the QWidgetStack pages accordingly.
-					 But: setWidgetStack() has to be called after all registerObject_() calls!\\
 				\\
-				@see QModelSettings for an example
+				How to use this class:
+				<ol>
+				<li>Derive from it.
+				<li>Ensure, that all child widgets have a unique name (see QWidget::setObjectName)
+				<li>Modify the constructor of the derived class:
+ 				<li>Make sure that every GUI element is set to its default value.
+				<li>Call registerWidgets_(), which automatically registeres all supported child widgets
+				<li>Call setINIFileSectionName(String) 
+				<li>If the dialog is a page in a QStackedWidget (like in the Preferences dialog) 
+					 call insertEntry(this, "Name to appear in the listview").
+				<li>If the dialog itself has a QStackedWidget call setWidgetStack() for it and 
+					 set the names of the QStackedWidget pages accordingly.
+				</ol>
+				@see ModelSettings for an example
 		 */
 		class BALL_VIEW_EXPORT PreferencesEntry
 		{
@@ -71,10 +69,10 @@ namespace BALL
 
 			public:
 
-			/** Base class for more sophisticated GUI elements in a dialog,
-					to support e.g. reading and (re)storing of its state.
-					Make sure to name all derived objects, so that (re-)storing the
-					values from the INIFile works!
+			/** Base class for the more sophisticated GUI elements in a dialog,
+					to support reading and (re)storing their state.
+					Make sure to name all derived objects, by calling setObjectName()
+					Otherwise (re-)storing the values wont work.
 					@see QColorTable
 			*/
 			class BALL_VIEW_EXPORT ExtendedPreferencesObject
@@ -97,12 +95,6 @@ namespace BALL
 			///
 			typedef List<std::pair<QWidget*, String> > StackPages;
 			
-			/// 
-			typedef HashMap<const QWidget*, String>    ValueMap;
-			
-			/// Typedef for all QWidgets in the individual WidgetStack items
-			typedef vector<vector<QWidget*> > StackEntries;
-
 			///
 			PreferencesEntry();
 
@@ -121,59 +113,90 @@ namespace BALL
 			/// Get the name for the section in the INIFile
 			const String& getINIFileSectionName() const { return inifile_section_name_;}
 	
-			/** If the derived class is to be shown in a QWidgetStack, 
+			/** If the derived class is to be shown in a QStackedWidget, 
 			    call this method to set the name for its entry.
 			*/
 			void setWidgetStackName(const String& name);
 			
-			/// Return all pages, that are to be shown in a parent QWidgetStack.
+			/// Return all pages, that are to be shown in a parent QStackedWidget.
 			StackPages& getStackPages() { return stack_pages_;}
 	
 			/** Call this method in the constructor of the derived class
-			    has its own QWidgetStack.
+			    has its own QStackedWidget.
 			*/
-			void setWidgetStack(QWidgetStack* stack);
+			void setWidgetStack(QStackedWidget* stack);
 
-			/// Show the specified page in the QWidgetStack.
+			/// Show the specified page in the QStackedWidget.
 			virtual void showStackPage(Position nr);
 			
-			/// Show the specified page in the QWidgetStack.
+			/// Show the specified page in the QStackedWidget.
 			virtual void showStackPage(QWidget* widget);
 
-			/// Get the currently shown page in the QWidgetStack.
+			/// Get the currently shown page in the QStackedWidget.
 			virtual Position currentStackPage() const;
 
 			/// Set all registered objects to their default values.
 			virtual void restoreDefaultValues(bool all = false);
 
-			///
+			/** Store the values for later restoration by the restoreValues method.
+			 		Called e.g. by the Preferences dialog apply button.
+			*/
 			virtual void storeValues();
 
-			///
+			/** Restore the values of the child widgets. 
+			 		Called e.g. when a user presses a Cancel button.
+			*/
 			virtual void restoreValues(bool all = false);
+
+			/** Internal state dump.
+					Dump the current internal state of this mainControl to 
+					the output ostream <b>s</b> with dumping depth <b>depth</b>.
+					\param   s output stream where to output the internal state 
+					\param   depth the dumping depth
+			*/
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 
 			protected:
 
-			//_ Call this method in the constructor of the derived class for all GUI elements.
-			void registerObject_(QWidget* widget);
+			/// 
+			typedef HashMap<const QWidget*, String>    ValueMap;
 			
-			///
-			bool getValue_(const QWidget* widget, String& value);
+			/** Register all supported child widgets for the storing of their data.
+			 		Must be called at the end of the child classes constructor.
+			*/
+			void registerWidgets_();
+			
+			/*_ Registration for widgets, that are not automatically supported.
+			 		Should no be needed, but if the need should arive, call it in the constructor of the derived class.
+			*/
+			void registerWidget_(QWidget* widget);
+			
+			/*_ Unregistration for widgets, that are automatically registered.
+			 		Should no be needed, but if the need should arive, call it in the constructor of the derived class
+					after registerWidgets_()
+			*/
+			void unregisterWidget_(QWidget* widget);
 
-			///
-			bool setValue_(QWidget* widget, const String& value);
-
+			/** Register a widget for the internal help system
+			 		@see HelpViewer
+			*/
 			void registerWidgetForHelpSystem_(const QWidget* widget, const String& url);
 
-			void storeStackEntries_();
-
+			//_ Helper function to restore the values of the current stack widget or all values
 			void restoreValues_(bool all, const ValueMap& map);
 
-			void insertEntry_(QWidget*, const String& name);
+			//_ Add a stack entry
+			void insertStackEntry_(QWidget*, const String& name);
 
-			ColorRGBA getLabelColor_(const QLabel* label) const;
+			//_ Check if the widget's data can be transformed into a string
+			bool isSupported_(QWidget& widget);
+			
+			//_ Transform the widget's data into a string
+			bool getValue_(const QWidget* widget, String& value);
 
-			void setLabelColor_(QLabel* label, const ColorRGBA& color);
+			//_ Restore the widget's data from a string
+			bool setValue_(QWidget* widget, const String& value);
 
 			// name for the section in the INIFile
 			String 							inifile_section_name_;
@@ -184,13 +207,10 @@ namespace BALL
 			// stored default and last values for each registered object
 			ValueMap 						default_values_, last_values_;
 			
-			// if the derived class has its own QWidgetStack, it is stored here
-			QWidgetStack*				widget_stack_;
+			// if the derived class has its own QStackedWidget, it is stored here
+			QStackedWidget*			widget_stack_;
 
 			StackPages 					stack_pages_;
-
-			// registered objects per QWidgetStack page
-			StackEntries 				stack_entries_;
 		};
   
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.h,v 1.9 2005/12/23 17:02:19 amoll Exp $
+// $Id: mesh.h,v 1.9.16.1 2007/03/25 21:26:09 oliver Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
@@ -15,24 +15,30 @@
 # include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
+#ifndef BALL_VIEW_DATATYPE_COLOREXTENSIONS_H
+# include <BALL/VIEW/DATATYPE/colorExtensions.h>
+#endif
+
 namespace BALL
 {
 	namespace VIEW
 	{           
 		/** Mesh class.			
 				An instance of Mesh represents an instance of the geometric representation "mesh".
-				A mesh has the following properties. 
-				  - color - the color of the mesh
 				\par
 				The class Mesh is derived from the classes GeometricObject
 				and Surface. The data structures defining the mesh are implemented in
 				the class Surface. Therefore one can use this mesh in the
 				same fashion as Surface. \par
+				The colors belonging to each vertex. If this list has *less* entries than
+				there are vertices in this mesh, we take the first element to color the whole
+				mesh. If it is *empty*, we use the color white.
 				\ingroup ViewPrimitives
 		*/
 		class BALL_VIEW_EXPORT Mesh
 			: public GeometricObject,
-			  public Surface
+			  public Surface,
+				public MultiColorExtension
 		{
 			public:
 
@@ -43,8 +49,6 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					The properties of this mesh are set to:
-  				  - color - to the color black
 			*/
 			Mesh()
 				throw();
@@ -114,20 +118,15 @@ namespace BALL
 				throw();
 
 			///
-			vector<ColorRGBA>& getColors() { return colors;}
+			bool binaryWrite(const String& filename);
+
+			///
+			bool binaryRead(const String& filename);
+
+			// Method to get all vertices from a geometric object
+			virtual void getVertices(vector<Vector3>& vertices) const;
 
 			//@}
-			/** @name Attributes
-			 */
-			//@{
-			
-			/** The colors belonging to each vertex. If this list has *less* entries than
-					there are vertices in this mesh, we take the first element to color the whole
-					mesh. If it is *empty*, we use the color white.
-			 */
-			vector<ColorRGBA> colors;
-			//@}
-
 		};
   
 } } // namespaces

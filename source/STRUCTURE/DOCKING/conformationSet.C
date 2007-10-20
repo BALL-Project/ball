@@ -1,3 +1,9 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: conformationSet.C,v 1.2.22.2 2007/05/07 11:49:25 zeistacita Exp $
+//
+
 #include <BALL/STRUCTURE/DOCKING/conformationSet.h>
 
 #include <BALL/KERNEL/atomContainer.h>
@@ -98,7 +104,7 @@ namespace BALL
 				structures_[snapshot_order_[i].first].applySnapShot(system_);
 				ssm.takeSnapShot();
 			}
-		
+			ssm.flushToDisk();	
 			dcd.close();
 		}
 		catch(...)

@@ -10,21 +10,20 @@
 #	include <BALL/CONCEPT/processor.h>
 #endif
 
-#ifndef BALL_KERNEL_MOLECULE_H
-#	include <BALL/KERNEL/molecule.h>
+#ifndef BALL_KERNEL_ATOMCONTAINER_H
+	#include <BALL/KERNEL/atomContainer.h>
 #endif
-
-#include <BALL/DATATYPE/hashMap.h>
-#include <BALL/CONCEPT/timeStamp.h>
 
 namespace BALL
 {
+
+	template <typename Key, typename Value> class HashMap;
 
 	/**	Generic QSAR molecular descriptor class.
 			\\
 	*/
 	class BALL_EXPORT Descriptor
-		:	public UnaryProcessor<Molecule>
+		:	public UnaryProcessor<AtomContainer>
 	{
 		public:
 		
@@ -65,7 +64,7 @@ namespace BALL
 		/**	@name	Processor-related methods
 		*/	
 		//@{
-		Processor::Result operator () (Molecule& molecule);
+		Processor::Result operator () (AtomContainer& ac);
 		//@}
 
 		/**	@name Accessors
@@ -93,7 +92,7 @@ namespace BALL
 
 		/*_ Generic compute method
 		*/
-		virtual double compute(Molecule& molecule);
+		virtual double compute(AtomContainer& ac);
 		//@}
 		
 		
@@ -101,7 +100,7 @@ namespace BALL
 		
 		/*_ Generic calculate function
 		*/
-		virtual void calculate(Molecule& molecule);
+		virtual void calculate_(AtomContainer& ac);
 
 		/** @name Predicates
 		*/
@@ -109,7 +108,7 @@ namespace BALL
 		/*_ Predicate which returns true if the descriptor
 				data is calculated and valid.			
 		*/
-		virtual bool isValid(Molecule& molecule);
+		virtual bool isValid_(AtomContainer& ac);
 		//@}
 		
 

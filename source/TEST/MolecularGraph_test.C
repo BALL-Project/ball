@@ -1,9 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MolecularGraph_test.C,v 1.4 2007/05/01 21:16:54 oliver Exp $
-//
-
+// $Id: MolecularGraph_test.C,v 1.3.34.2 2007/03/25 21:47:21 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(MolecularGraph, "$Id: MolecularGraph_test.C,v 1.4 2007/05/01 21:16:54 oliver Exp $")
+START_TEST(MolecularGraph, "$Id: MolecularGraph_test.C,v 1.3.34.2 2007/03/25 21:47:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -23,7 +21,7 @@ using namespace BALL;
 
 MolecularGraph* ptr = 0;
 CHECK(MolecularGraph::MolecularGraph())
-	ptr = new MolecularGraph;
+	ptr = new MolecularGraph();
 	TEST_NOT_EQUAL(ptr, 0)
 RESULT											
 

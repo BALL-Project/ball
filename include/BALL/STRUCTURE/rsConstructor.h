@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rsConstructor.h,v 1.4 2006/08/15 20:36:56 oliver Exp $
+// $Id: rsConstructor.h,v 1.4.10.2 2007/04/03 13:29:41 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -11,21 +11,23 @@
 #define BALL_STRUCTURE_RSCONSTRUCTOR_H
 
 #include <vector>
-#include <BALL/KERNEL/atom.h>
 #include <BALL/STRUCTURE/ringAnalyser.h>
 
 namespace BALL
 {
+	class Atom;
+
 /**
         * \brief class, performing the prefabication of ringsystems (i.e. providing them with relative 2D-coordinates)
         *
         */
-class RSConstructor
+class BALL_EXPORT RSConstructor
 {
   public:
 
   typedef RingAnalyser::RingInfo RingInfo;
-  /**
+
+	/**
   * \brief Default-Constructor
   */
   RSConstructor();
@@ -33,7 +35,7 @@ class RSConstructor
   /**
   * \brief Destructor
   */
-  ~RSConstructor();
+  virtual ~RSConstructor();
 
   /**
   * \brief constructs a ringsystem, providing the atoms with relative 2D-coordinates, starting in the point of origin

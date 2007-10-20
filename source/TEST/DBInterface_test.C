@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface_test.C,v 1.2 2006/03/01 08:58:58 oliver Exp $
+// $Id: DBInterface_test.C,v 1.2.14.1 2007/03/25 21:47:01 oliver Exp $
 //
 // Author:
 //  Oliver Kohlbacher
@@ -28,11 +28,11 @@
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/FORMAT/INIFile.h>
 
-#include <qapp.h>
+#include <QtGui/QApplication>
 
 ///////////////////////////
 
-START_TEST(DBInterface, "$Id: DBInterface_test.C,v 1.2 2006/03/01 08:58:58 oliver Exp $")
+START_TEST(DBInterface, "$Id: DBInterface_test.C,v 1.2.14.1 2007/03/25 21:47:01 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

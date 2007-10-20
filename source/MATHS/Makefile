@@ -45,7 +45,7 @@ depend: $(PARSER_SOURCES)
 default_clean: clean_flex_bison
 
 clean_flex_bison:
-	@-$(RM) parsedFunctionParser.C parsedFunctionLexer.C parsedFunctionParser.h 2>/dev/null
+	@-$(RM) parsedFunctionParser.C parsedFunctionLexer.C parsedFunctionParser.h *.bak 2>/dev/null
 
 parsedFunctionParser.C: parsedFunctionParser.y
 parsedFunctionParser.h: parsedFunctionParser.y

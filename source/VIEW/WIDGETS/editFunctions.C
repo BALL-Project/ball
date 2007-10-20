@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editFunctions.C,v 1.5 2005/12/23 17:03:37 amoll Exp $
+// $Id: editFunctions.C,v 1.5.20.1 2007/03/25 21:56:45 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editFunctions.h>

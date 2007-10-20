@@ -1,0 +1,4395 @@
+350
+1
+[BALLVIEW_PROJECT]
+Representation0=0;1 2 3 3.500000 0 0 [0]|0000ffff|
+TurnPoint=(0.030635,1.895705,4.227518) 
+Camera=(0.030635,12.881708,-1.048566)  (0.030635,1.895705,4.227518)  (1.000000,0.000000,0.000000) 
+[MAIN]
+Version=1adding hydrogens ...
+Font=Sans Serif,11,-1,5,50,0,0,0,0,0
+[WINDOWS]
+Main::x=77
+Main::y=0
+Main::width=891
+Main::height=616
+File::working_dir=/big/incoming/1FB7
+Main::dockwidgets=AAAA/wAAAAD8AAAAAQAAAAIAAAACAAAAGABNAGEAaQBuACAAVABvAG8AbABiAGEAcgEAAAAAAAAAGwAAAZ8AAAAlAAAAAAAAAAAAAAAAAAAAAAAAABQAMwBEACAAdABvAG8AbABiAGEAcgEAAAGfAAAAGwAAAdwAAAAlAAAAAAAAAAAAAAAAAAAAAP0AAAACAAAAAAAAALwAAAIP/AIAAAAD+wAAABQAUwB0AHIAdQBjAHQAdQByAGUAcwEAAABAAAABQgAAAKQAADqY+wAAAB4AUgBlAHAAcgBlAHMAZQBuAHQAYQB0AGkAbwBuAHMBAAABiAAAAMcAAABmAAA6mPsAAAAQAEQAYQB0AGEAcwBlAHQAcwAAAAHtAAAA2wAAAGYAADqYAAAAAwAAA3v////6/AEAAAAF+wAAABIAQgBBAEwATAAgAEQAbwBjAHUAAAAAAP////8AAABTAAA6mPsAAAAaAEIAQQBMAEwAVgBpAGUAdwAgAEQAbwBjAHUAAAAAAP////8AAABTAAA6mPsAAAAYAEYAaQBsAGUATwBiAHMAZQByAHYAZQByAAAAAAD/////AAAACAD////7AAAACABMAG8AZwBzAAAAAAAAAAG+AAAAUwAAOpj7AAAAJABQAHkAdABoAG8AbgAgAEkAbgB0AGUAcgBwAHIAZQB0AGUAcgAAAAAAAAADqwAAAJ0AADqYAAACuQAAAg8AAAAEAAAABAAAAAgAAAAI
+MolecularFileDialog::x=0
+MolecularFileDialog::y=0
+MolecularFileDialog::width=100
+MolecularFileDialog::height=30
+PubChemDialog::x=227
+PubChemDialog::y=33
+PubChemDialog::width=648
+PubChemDialog::height=721
+Structures::on=1
+ModifyRepresentationDialog::x=0
+ModifyRepresentationDialog::y=0
+ModifyRepresentationDialog::width=540
+ModifyRepresentationDialog::height=370
+Representations::on=1
+Datasets::on=0
+BALL Docu::on=0
+BALLView Docu::on=0
+LabelDialog::x=320
+LabelDialog::y=307
+LabelDialog::width=277
+LabelDialog::height=433
+Label::customcolor=000000ff
+Label::font=Helvetica,12,-1,5,50,0,0,0,0,0
+Label::manylabels=1
+Logs::on=0
+3D View::on=1
+3D View::x=194
+3D View::y=64
+3D View::width=697
+3D View::height=527
+DisplayProperties::x=64
+DisplayProperties::y=187
+DisplayProperties::width=570
+DisplayProperties::height=310
+BALLViewDemo::x=320
+BALLViewDemo::y=307
+BALLViewDemo::width=311
+BALLViewDemo::height=375
+Test Framework::x=0
+Test Framework::y=0
+Test Framework::width=100
+Test Framework::height=30
+Python Interpreter::on=0
+Python Interpreter::x=0
+Python Interpreter::y=342
+Python Interpreter::width=939
+Python Interpreter::height=370
+Preferences::x=154
+Preferences::y=293
+[PDBFiles]
+History=1pma#2ptc#1glu#1bna#
+[MOLECULARCONTROL]
+ShowSS=1
+RegularExpressions=name(ZN)|residue(12)|residue(HOH)|SMARTS([$([Ov1]P([Ov1])([Ov1])])|residueID(12)|SMARTS([$([Ov1]~P([Ov1])([Ov1])([Ov1]))])|SMARTS([$([Ov1]~P([Ov1])([Ov1])[Ov1])])|SMARTS(PD4)|element(H)|SMARTS([$([Ov1]~P([Ov1])([Ov1])])|residueID(HIS)|residue(HIS)|SMARTS([$([Ov1]P([Ov1])([Ov1]))])|
+[MINIMIZATION]
+minimization_group=conjugate_button
+max_grad_lineedit=0.5
+groupBox_2=useAmberRadioButton
+refresh_iterations_lineedit=10
+energy_difference_lineedit=0.0001
+max_iterations_lineedit=500
+[MDSIMULATION]
+textLabel2=efefefff
+enable_dcd=0
+timestep_linedit=0.0001
+temperature_lineedit=300
+groupBox5=useAmberRadioButton
+textLabel1=efefefff
+dielectric_group_2=canonical_button
+dcd_file_edit=trajectory.dcd
+refresh_lineedit=1
+steps_lineedit=1000
+[AMBER]
+bends_box=1
+assign_typenames_checkBox=1
+stretches_box=1
+overwrite_charges_checkBox=1
+assign_charges_checkBox=1
+NB_box=1
+torsions_box=1
+dielectric_group=constant_button
+nonbonded_cutoff_line_edit=20.0
+max_unassigned_atoms=10
+overwrite_typenames_checkBox=1
+electrostatic_cuton_line_edit=13.0
+scaling_electrostatic_1_4_line_edit=2.0
+parameter_file_edit=Amber/amber96.ini
+scaling_vdw_1_4_line_edit=2.0
+electrostatic_cutoff_line_edit=15.0
+vdw_cutoff_line_edit=15.0
+vdw_cuton_line_edit=13.0
+assign_types_checkBox=1
+[CHARMM]
+assign_typenames_checkBox=1
+electrostatic_cutoff_line_edit=9.0
+itorsions_box=1
+nonbonded_cutoff_line_edit=20.0
+vdw_cutoff_line_edit=9.0
+solvation_cuton_line_edit=7.0
+scaling_electrostatic_1_4_line_edit=1.0
+max_unassigned_atoms=10
+solvation_cutoff_line_edit=9.0
+overwrite_charges_checkBox=1
+parameter_file_edit=CHARMM/EEF1/param19_eef1.ini
+torsions_box=1
+vdw_cuton_line_edit=7.0
+scaling_vdw_1_4_line_edit=2.0
+assign_types_checkBox=1
+assign_charges_checkBox=1
+overwrite_typenames_checkBox=1
+use_eef1_checkBox=1
+NB_box=1
+dielectric_group=distance_button
+electrostatic_cuton_line_edit=7.0
+bends_box=1
+stretches_box=1
+[MMFF94]
+parameter_file_edit=MMFF94
+vdw_cutoff=15.0
+overwrite_charges_checkBox=1
+electrostatic_cutoff=15.0
+torsions_box=1
+overwrite_typenames_checkBox=1
+assign_types_checkBox=1
+bends_box=1
+max_unassigned_atoms=10
+es_box=1
+stretch_box=1
+assign_typenames_checkBox=1
+dielectric_group=constant_button
+plane_box=1
+nonbonded_cutoff=16.0
+stretch_bends_box=1
+vdw_cuton=13.0
+assign_charges_checkBox=1
+electrostatic_cuton=13.0
+vdw_box=1
+[FORCEFIELD]
+selected=0
+[DOCKING]
+radii_rules_lineedit=solvation/PARSE.rul
+delta_phi=3
+phi_max=15
+radii_data_lineedit=radii/PARSE.siz
+phi_min=-15
+assign_charges=1
+best_num=100
+radii_group=radii_data_button
+charges_group=charges_data_button
+theta_max=15
+charges_rules_lineedit=solvation/PARSE.rul
+normalize_names=0
+theta_min=-15
+charges_data_lineedit=charges/PARSE.crg
+delta_psi=3
+verbosity=1
+algorithms=0
+scoring_functions=0
+assign_radii=1
+build_bonds=0
+psi_max=15
+delta_theta=3
+psi_min=-15
+add_hydrogens=0
+[REDOCKING]
+redock_entry_0=<select>
+redock_entry_1=Default
+redock_entry_2=100
+redock_entry_3=1
+redock_entry_4=<select>
+redock_entry_5=Default
+redock_entry_6=100
+redock_entry_7=1
+[GEOMETRIC_FIT_OPTIONS]
+near_radius=1.8
+peak_num=3
+penalty_static=-15
+surface_type=0
+surface_thickness=1.0
+deg_interval=20
+penalty_mobile=1
+grid_spacing=1.0
+[GEOMETRIC_FIT_OPTIONS_REDOCK]
+option_entry_0=1.0
+option_entry_1=1.0
+option_entry_2=-15
+option_entry_3=1
+option_entry_4=1.8
+option_entry_5=20
+option_entry_6=3
+option_entry_7=Connolly
+option_entry_8=1.0
+option_entry_9=1.0
+option_entry_10=-15
+option_entry_11=1
+option_entry_12=1.8
+option_entry_13=20
+option_entry_14=3
+option_entry_15=Connolly
+[EXPORT]
+POVNR=100000
+PNGNR=100033
+[LIGHTING]
+Light_0_Position=(0.000000,4.000000,-20.000000) 
+Light_0_Direction=(0.000000,0.000000,1.000000) 
+Light_0_Angle=10.000000
+Light_0_Intensity=0.800000
+Light_0_Color=(255,255,255,255)
+Light_0_Type=1
+Light_0_Relative=1
+type_group=point
+position_z=-20
+color_sample=ffffffff
+direction_x=0
+settings_group=relative
+position_x=0
+intensity=80
+orientation_group=relative
+direction_y=0
+position_y=4
+direction_z=1
+[REPRESENTATION]
+precision_slider=35
+resolution_group=presets_precision_button
+coloring_updates_enabled=1
+model_type_combobox=1
+coloring_method_combobox=0
+model_updates_enabled=1
+custom_color_label=0000ffff
+mode_combobox=2
+transparency_slider=0
+model_group=presets_precision_button
+precision_combobox=3
+selection_color_label=0000ffff
+[PYTHON]
+current_script=/home/kerosin/last_BALL_script.py
+script_edit=
+PythonHotkeys=None캟2컍unCurrentScript()같@None캟3컃ideAllRepresentations()같@None캟4컍emoveWater()같@None캟5컋rintAtomTypesForHighlighted()같@Shift캟5컋rintAtomTypesForLigands()같@None캟6컃ighlightLigand()같@Shift캟6컎howCartoonAndLigand()같@None캟7캻ddOptimizedHydrogens()같@Shift캟7컍elaxStructure()같@None캟8컌uickSave()같@Shift캟8컌uickLoad()같@None캟12캽learRepresentations()같@Shift캟12캽learAll()같@
+font=Helvetica,12,-1,5,50,0,0,0,0,0
+[NETWORK]
+pdb_prefix=http://www.rcsb.org/pdb/files/
+host_edit=
+pdb_suffix=.pdb
+enable_proxy=0
+port_edit=
+server_status=0
+port=20000
+[COLORING_OPTIONS]
+negative_charge_label=0000ffff
+max_tf_slider=500
+helix_color_label=0000ffff
+first_residue_label=ff0000ff
+strand_color_label=ff0000ff
+maximum_o_label=ffff00ff
+Molecules=ff0000ff;00ff00ff;0000ffff;ffff00ff;00ffffff;ff00ffff;7f7f7fff;ff7f7fff;ffffffff;7f7f00ff;ff3333ff;e519e5ff;00e500ff;e50033ff;ffff7fff;7fffffff;ff7fffff;b233b2ff;33b2b2ff;b2b233ff;
+neutral_charge_label=ffffffff
+Elements=ffffffff;d8ffffff;cd7effff;c4ff00ff;ffb6b6ff;909090ff;8e8effff;f00000ff;b3ffffff;afe2f4ff;aa5df2ff;89ff00ff;d1a5a5ff;809a9aff;ff8000ff;ffc828ff;1af01aff;80d1e4ff;8e41d3ff;3dff00ff;e6e6e4ff;bfc3c6ff;a7a5acff;8999c6ff;9c7bc6ff;807bc6ff;5d6dffff;5d7bc3ff;ff7b62ff;7c80afff;c39090ff;669090ff;bc80e2ff;ffa100ff;a52121ff;5dbad1ff;702db1ff;00ff00ff;95fdffff;95e1e1ff;74c3cbff;54b5b6ff;3b9ea8ff;238e97ff;0a7c8cff;006985ff;99c6ffff;ffd890ff;a77572ff;668080ff;9e64b5ff;d47b00ff;930093ff;429eafff;56188eff;00cb00ff;70ddffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;4dc1ffff;4da7ffff;2693d6ff;267eacff;266797ff;185487ff;185b90ff;ffd123ff;b5b5c3ff;a7544dff;505960ff;9e4fb5ff;ac5d00ff;754f44ff;428397ff;420066ff;007c00ff;70aafbff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;
+Residues=3dff00ff;cd7effff;f00000ff;89ff00ff;ffc828ff;6464ffff;8e41d3ff;b3ffffff;aa5df2ff;afe2f4ff;ffff00ff;ff8000ff;1af01aff;ff0000ff;ffb6b6ff;909090ff;80d1e4ff;809a9aff;00ff00ff;d8ffffff;c4ff00ff;d1a5a5ff;0000ffff;8e8effff;ffffffff;ffffffff;
+unassigned_o_label=ffff00ff
+force_min_value_slider=1
+basic_color_label=ffff00ff
+hydrophobic_color_label=00ff00ff
+distance_show_selected=0
+maximum_tf_label=ffff00ff
+middle_residue_label=00ff00ff
+force_min_color_label=0000ffff
+force_max_value_slider=100
+unassigned_tf_label=ffffffff
+turn_color_label=ffff00ff
+last_residue_label=0000ffff
+polar_color_label=ff00ffff
+Chains=ff0000ff;00ff00ff;0000ffff;ffff00ff;00ffffff;ff00ffff;7f7f7fff;ff7f7fff;ffffffff;7f7f00ff;ff3333ff;e519e5ff;00e500ff;e50033ff;ffff7fff;7fffffff;ff7fffff;b233b2ff;33b2b2ff;b2b233ff;
+max_distance_label=0000ffff
+minimum_o_label=0000ffff
+other_color_label=7d7d7dff
+aromatic_color_label=ff0000ff
+positive_charge_label=ff0000ff
+force_max_color_label=ff0000ff
+null_distance_label=ffff00ff
+max_distance_slider=100
+acidic_color_label=0000ffff
+coil_color_label=009b9bff
+minimum_tf_label=0000ffff
+[MATERIAL_SETTINGS]
+shininess_slider=768
+diffuse_slider=4
+ambient_slider=2
+specular_slider=7
+[EDITING]
+only_highlighted=1
+[MODEL_OPTIONS]
+stick_radius_slider=1
+cartoon_dna_base_radius_slider=1
+force_scaling_slider=11
+ribbons_enabled=1
+tube_radius_slider=4
+ball_stick_dashed_bonds=1
+cartoon_helix_radius_slider=24
+vdw_radius_factor_slider=10
+cartoon_dna_helix_radius_slider=2
+cartoon_dna_ladder_radius_slider=5
+force_base_slider=2
+strand_arrow_width_slider=12
+hbonds_radius_slider=3
+cartoon_dna_wac=#
+cartoon_tube_radius_slider=4
+ball_stick_sphere_radius_slider=4
+surface_probe_radius_slider=15
+cartoon_dna_ladder=
+ball_stick_cylinder_radius_slider=2
+force_offset_slider=2
+strand_width_slider=17
+strand_height_slider=2
+force_max_length_slider=100
+[GENERAL]
+logging_to_file=0
+style=Plastique
+[STAGE]
+capping_transparency=1
+offscreen_group=
+wheel_slider_=5
+slider_=5
+animation_smoothness=25
+fog_slider=200
+focal_distance_slider=40
+swap_sss_button=0
+qt_spinbox_lineedit=1
+capping_color=0000ffff
+resolution_factor=1
+use_vertex_buffers=0
+show_fps=0
+show_lights_=0
+eye_distance_slider=20
+use_preview=1
+color_sample=ffffffff
+enable_fog=0
+START
+OBJECT BALL::System @ 145862952 -
+  BASEOBJECT BALL::AtomContainer @ 145862952 -
+    BASEOBJECT BALL::Composite @ 145862952 -
+      STORABLE BALL::Selectable  Selectable 
+        bool selected_ = FALSE 
+      END_STORABLE
+      BALL::Size number_of_children_ = 1 
+      BALL::Composite * parent_  0 
+      BALL::Composite * previous_  0 
+      BALL::Composite * next_  0 
+      BALL::Composite * first_child_  135406936 
+      BALL::Composite * last_child_  135406936 
+      unsigned_char properties_ = 0 
+      bool contains_selection_ = FALSE 
+      BALL::Size number_of_selected_children_ = 0 
+      BALL::Size number_of_children_containing_selection_ = 0 
+      STORABLE BALL::TimeStamp  selection_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 0 
+          BALL::Size usecs_ = 0 
+        END_STORABLE
+      END_STORABLE
+      STORABLE BALL::TimeStamp  modification_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 1173129753 
+          BALL::Size usecs_ = 737624 
+        END_STORABLE
+      END_STORABLE
+    END_BASEOBJECT
+    STORABLE BALL::PropertyManager  PropertyManager 
+      STORABLE BALL::BitVector  bitvector_ 
+        BALL::Size size = 0 
+      END_STORABLE
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::String name_ = 2 AR 
+  END_BASEOBJECT
+END_OBJECT
+END
+START
+OBJECT BALL::Protein @ 135406936 -
+  BASEOBJECT BALL::Molecule @ 135406936 -
+    BASEOBJECT BALL::AtomContainer @ 135406936 -
+      BASEOBJECT BALL::Composite @ 135406936 -
+        STORABLE BALL::Selectable  Selectable 
+          bool selected_ = FALSE 
+        END_STORABLE
+        BALL::Size number_of_children_ = 1 
+        BALL::Composite * parent_  145862952 
+        BALL::Composite * previous_  0 
+        BALL::Composite * next_  0 
+        BALL::Composite * first_child_  145864224 
+        BALL::Composite * last_child_  145864224 
+        unsigned_char properties_ = 0 
+        bool contains_selection_ = FALSE 
+        BALL::Size number_of_selected_children_ = 0 
+        BALL::Size number_of_children_containing_selection_ = 0 
+        STORABLE BALL::TimeStamp  selection_stamp_ 
+          STORABLE BALL::PreciseTime  time_ 
+            BALL::Size secs_ = 0 
+            BALL::Size usecs_ = 0 
+          END_STORABLE
+        END_STORABLE
+        STORABLE BALL::TimeStamp  modification_stamp_ 
+          STORABLE BALL::PreciseTime  time_ 
+            BALL::Size secs_ = 1173129753 
+            BALL::Size usecs_ = 737623 
+          END_STORABLE
+        END_STORABLE
+      END_BASEOBJECT
+      STORABLE BALL::PropertyManager  PropertyManager 
+        STORABLE BALL::BitVector  bitvector_ 
+          BALL::Size size = 0 
+        END_STORABLE
+        BALL::Size size = 0 
+      END_STORABLE
+      BALL::String name_ = 7 Protein 
+    END_BASEOBJECT
+  END_BASEOBJECT
+  BALL::String id_ = 0  
+END_OBJECT
+END
+START
+OBJECT BALL::Chain @ 145864224 -
+  BASEOBJECT BALL::AtomContainer @ 145864224 -
+    BASEOBJECT BALL::Composite @ 145864224 -
+      STORABLE BALL::Selectable  Selectable 
+        bool selected_ = FALSE 
+      END_STORABLE
+      BALL::Size number_of_children_ = 2 
+      BALL::Composite * parent_  135406936 
+      BALL::Composite * previous_  0 
+      BALL::Composite * next_  0 
+      BALL::Composite * first_child_  145873800 
+      BALL::Composite * last_child_  145865752 
+      unsigned_char properties_ = 0 
+      bool contains_selection_ = FALSE 
+      BALL::Size number_of_selected_children_ = 0 
+      BALL::Size number_of_children_containing_selection_ = 0 
+      STORABLE BALL::TimeStamp  selection_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 0 
+          BALL::Size usecs_ = 0 
+        END_STORABLE
+      END_STORABLE
+      STORABLE BALL::TimeStamp  modification_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 1173129753 
+          BALL::Size usecs_ = 723046 
+        END_STORABLE
+      END_STORABLE
+    END_BASEOBJECT
+    STORABLE BALL::PropertyManager  PropertyManager 
+      STORABLE BALL::BitVector  bitvector_ 
+        BALL::Size size = 0 
+      END_STORABLE
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::String name_ = 5 Chain 
+  END_BASEOBJECT
+END_OBJECT
+END
+START
+OBJECT BALL::Residue @ 145865752 -
+  BASEOBJECT BALL::Fragment @ 145865752 -
+    BASEOBJECT BALL::AtomContainer @ 145865752 -
+      BASEOBJECT BALL::Composite @ 145865752 -
+        STORABLE BALL::Selectable  Selectable 
+          bool selected_ = FALSE 
+        END_STORABLE
+        BALL::Size number_of_children_ = 25 
+        BALL::Composite * parent_  145864224 
+        BALL::Composite * previous_  145873800 
+        BALL::Composite * next_  0 
+        BALL::Composite * first_child_  145749320 
+        BALL::Composite * last_child_  145949128 
+        unsigned_char properties_ = 0 
+        bool contains_selection_ = FALSE 
+        BALL::Size number_of_selected_children_ = 0 
+        BALL::Size number_of_children_containing_selection_ = 0 
+        STORABLE BALL::TimeStamp  selection_stamp_ 
+          STORABLE BALL::PreciseTime  time_ 
+            BALL::Size secs_ = 0 
+            BALL::Size usecs_ = 0 
+          END_STORABLE
+        END_STORABLE
+        STORABLE BALL::TimeStamp  modification_stamp_ 
+          STORABLE BALL::PreciseTime  time_ 
+            BALL::Size secs_ = 1173129753 
+            BALL::Size usecs_ = 723044 
+          END_STORABLE
+        END_STORABLE
+      END_BASEOBJECT
+      STORABLE BALL::PropertyManager  PropertyManager 
+        STORABLE BALL::BitVector  bitvector_ 
+          BALL::Size size = 3 
+          bool - = TRUE 
+          bool - = FALSE 
+          bool - = FALSE 
+        END_STORABLE
+        BALL::Size size = 0 
+      END_STORABLE
+      BALL::String name_ = 3 ARG 
+    END_BASEOBJECT
+  END_BASEOBJECT
+  BALL::String id_ = 1 2 
+  char insertion_code_ = 32 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 145949128 -
+  BASEOBJECT BALL::Composite @ 145949128 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  145970296 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 723043 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 O 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 3 OXT 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = -0.703178 
+    float y = -0.944445 
+    float z = 4.06397 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145878600  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145878600 -
+  BASEOBJECT BALL::Composite @ 145878600 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145875224 
+  BALL::Atom * second_  145949128 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::PDBAtom @ 145875224 -
+  BASEOBJECT BALL::Atom @ 145875224 -
+    BASEOBJECT BALL::Composite @ 145875224 -
+      STORABLE BALL::Selectable  Selectable 
+        bool selected_ = FALSE 
+      END_STORABLE
+      BALL::Size number_of_children_ = 0 
+      BALL::Composite * parent_  145865752 
+      BALL::Composite * previous_  145749616 
+      BALL::Composite * next_  145873392 
+      BALL::Composite * first_child_  0 
+      BALL::Composite * last_child_  0 
+      unsigned_char properties_ = 0 
+      bool contains_selection_ = FALSE 
+      BALL::Size number_of_selected_children_ = 0 
+      BALL::Size number_of_children_containing_selection_ = 0 
+      STORABLE BALL::TimeStamp  selection_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 0 
+          BALL::Size usecs_ = 0 
+        END_STORABLE
+      END_STORABLE
+      STORABLE BALL::TimeStamp  modification_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 1173129753 
+          BALL::Size usecs_ = 672390 
+        END_STORABLE
+      END_STORABLE
+    END_BASEOBJECT
+    STORABLE BALL::PropertyManager  PropertyManager 
+      STORABLE BALL::BitVector  bitvector_ 
+        BALL::Size size = 0 
+      END_STORABLE
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::String element_ = 1 C 
+    BALL::Index formal_charge_ = 0 
+    float charge_ = 0 
+    float radius_ = 0 
+    BALL::String name_ = 1 C 
+    BALL::String type_name_ = 1 ? 
+    BALL::Index type_ = -1 
+    STORABLE BALL::TVector3<float>  position_ 
+      float x = 0.414829 
+      float y = -0.407879 
+      float z = 4.22764 
+    END_STORABLE
+    STORABLE BALL::TVector3<float>  velocity_ 
+      float x = 0 
+      float y = 0 
+      float z = 0 
+    END_STORABLE
+    STORABLE BALL::TVector3<float>  force_ 
+      float x = 0 
+      float y = 0 
+      float z = 0 
+    END_STORABLE
+    unsigned_char number_of_bonds_ = 3 
+    BALL::Bond bond_  [ 3 ] = { 145874000  145878448  145878600  }
+  END_BASEOBJECT
+  char branch_designator_ = 32 
+  char remoteness_indicator_ = 32 
+  char alternate_location_indicator_ = 32 
+  float occupancy_ = 1 
+  float temperature_factor_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145878448 -
+  BASEOBJECT BALL::Composite @ 145878448 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145875224 
+  BALL::Atom * second_  145970296 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 2 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 145970296 -
+  BASEOBJECT BALL::Composite @ 145970296 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  145970088 
+    BALL::Composite * next_  145949128 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 723032 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 O 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 1 O 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = 1.28494 
+    float y = -0.789006 
+    float z = 5.04081 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145878448  }
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 145970088 -
+  BASEOBJECT BALL::Composite @ 145970088 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  145969880 
+    BALL::Composite * next_  145970296 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 723020 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 N 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 3 NH2 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = 0.618403 
+    float y = 4.3783 
+    float z = 10.1253 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 3 
+  BALL::Bond bond_  [ 3 ] = { 145875920  145876680  146084640  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 146084640 -
+  BASEOBJECT BALL::Composite @ 146084640 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145991192 
+  BALL::Atom * second_  145970088 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 5 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 145991192 -
+  BASEOBJECT BALL::Composite @ 145991192 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  145990984 
+    BALL::Composite * next_  145991400 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 722953 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 C 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 2 CZ 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = 0.0474079 
+    float y = 4.37007 
+    float z = 8.91528 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 3 
+  BALL::Bond bond_  [ 3 ] = { 146084336  146084488  146084640  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 146084488 -
+  BASEOBJECT BALL::Composite @ 146084488 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145991192 
+  BALL::Atom * second_  145969880 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 5 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 145969880 -
+  BASEOBJECT BALL::Composite @ 145969880 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  145969672 
+    BALL::Composite * next_  145970088 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 723009 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 N 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 3 NH1 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = -0.883159 
+    float y = 5.27934 
+    float z = 8.60463 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 3 
+  BALL::Bond bond_  [ 3 ] = { 145875768  145876528  146084488  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145876528 -
+  BASEOBJECT BALL::Composite @ 145876528 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  146011944 
+  BALL::Atom * second_  145969880 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 146011944 -
+  BASEOBJECT BALL::Composite @ 146011944 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  146011736 
+    BALL::Composite * next_  145990360 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 722875 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 4 2HH1 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = -1.17964 
+    float y = 5.98769 
+    float z = 9.25925 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145876528  }
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 145990360 -
+  BASEOBJECT BALL::Composite @ 145990360 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  146011944 
+    BALL::Composite * next_  145990568 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 722893 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 4 2HH2 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = 0.362149 
+    float y = 5.06265 
+    float z = 10.8218 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145876680  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145876680 -
+  BASEOBJECT BALL::Composite @ 145876680 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145990360 
+  BALL::Atom * second_  145970088 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 145990568 -
+  BASEOBJECT BALL::Composite @ 145990568 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  145990360 
+    BALL::Composite * next_  145990776 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 722920 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 C 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 2 CB 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = -0.0981696 
+    float y = 2.05933 
+    float z = 4.47631 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 4 
+  BALL::Bond bond_  [ 4 ] = { 145878296  145878752  145876072  145876832  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145876832 -
+  BASEOBJECT BALL::Composite @ 145876832 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145990568 
+  BALL::Atom * second_  145990984 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 145990984 -
+  BASEOBJECT BALL::Composite @ 145990984 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  145990776 
+    BALL::Composite * next_  145991192 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 722942 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 C 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 2 CG 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = 0.494873 
+    float y = 2.17559 
+    float z = 5.8872 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 4 
+  BALL::Bond bond_  [ 4 ] = { 145879056  145876376  145876832  146084032  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 146084032 -
+  BASEOBJECT BALL::Composite @ 146084032 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145990776 
+  BALL::Atom * second_  145990984 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 145990776 -
+  BASEOBJECT BALL::Composite @ 145990776 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  145990568 
+    BALL::Composite * next_  145990984 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 722931 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 C 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 2 CD 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = -0.150424 
+    float y = 3.33762 
+    float z = 6.65006 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 4 
+  BALL::Bond bond_  [ 4 ] = { 145878904  145876224  146084032  146084184  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 146084184 -
+  BASEOBJECT BALL::Composite @ 146084184 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145990776 
+  BALL::Atom * second_  145969672 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 145969672 -
+  BASEOBJECT BALL::Composite @ 145969672 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  145969464 
+    BALL::Composite * next_  145969880 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 722999 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 N 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 2 NE 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = 0.407411 
+    float y = 3.44735 
+    float z = 8.00782 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 3 
+  BALL::Bond bond_  [ 3 ] = { 146084184  146084336  146084792  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 146084792 -
+  BASEOBJECT BALL::Composite @ 146084792 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145969464 
+  BALL::Atom * second_  145969672 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 145969464 -
+  BASEOBJECT BALL::Composite @ 145969464 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  145991400 
+    BALL::Composite * next_  145969672 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 722985 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 2 HE 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = 1.11263 
+    float y = 2.76575 
+    float z = 8.25305 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 146084792  }
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 145991400 -
+  BASEOBJECT BALL::Composite @ 145991400 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  145991192 
+    BALL::Composite * next_  145969464 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 722965 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 2 HA 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = 1.67322 
+    float y = 1.2025 
+    float z = 3.62741 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145878144  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145878144 -
+  BASEOBJECT BALL::Composite @ 145878144 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145749616 
+  BALL::Atom * second_  145991400 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::PDBAtom @ 145749616 -
+  BASEOBJECT BALL::Atom @ 145749616 -
+    BASEOBJECT BALL::Composite @ 145749616 -
+      STORABLE BALL::Selectable  Selectable 
+        bool selected_ = FALSE 
+      END_STORABLE
+      BALL::Size number_of_children_ = 0 
+      BALL::Composite * parent_  145865752 
+      BALL::Composite * previous_  145749320 
+      BALL::Composite * next_  145875224 
+      BALL::Composite * first_child_  0 
+      BALL::Composite * last_child_  0 
+      unsigned_char properties_ = 0 
+      bool contains_selection_ = FALSE 
+      BALL::Size number_of_selected_children_ = 0 
+      BALL::Size number_of_children_containing_selection_ = 0 
+      STORABLE BALL::TimeStamp  selection_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 0 
+          BALL::Size usecs_ = 0 
+        END_STORABLE
+      END_STORABLE
+      STORABLE BALL::TimeStamp  modification_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 1173129753 
+          BALL::Size usecs_ = 672387 
+        END_STORABLE
+      END_STORABLE
+    END_BASEOBJECT
+    STORABLE BALL::PropertyManager  PropertyManager 
+      STORABLE BALL::BitVector  bitvector_ 
+        BALL::Size size = 0 
+      END_STORABLE
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::String element_ = 1 C 
+    BALL::Index formal_charge_ = 0 
+    float charge_ = 0 
+    float radius_ = 0 
+    BALL::String name_ = 2 CA 
+    BALL::String type_name_ = 1 ? 
+    BALL::Index type_ = -1 
+    STORABLE BALL::TVector3<float>  position_ 
+      float x = 0.60497 
+      float y = 0.980466 
+      float z = 3.63879 
+    END_STORABLE
+    STORABLE BALL::TVector3<float>  velocity_ 
+      float x = 0 
+      float y = 0 
+      float z = 0 
+    END_STORABLE
+    STORABLE BALL::TVector3<float>  force_ 
+      float x = 0 
+      float y = 0 
+      float z = 0 
+    END_STORABLE
+    unsigned_char number_of_bonds_ = 4 
+    BALL::Bond bond_  [ 4 ] = { 145875496  145874000  145878144  145878296  }
+  END_BASEOBJECT
+  char branch_designator_ = 32 
+  char remoteness_indicator_ = 32 
+  char alternate_location_indicator_ = 32 
+  float occupancy_ = 1 
+  float temperature_factor_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145878296 -
+  BASEOBJECT BALL::Composite @ 145878296 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145749616 
+  BALL::Atom * second_  145990568 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145874000 -
+  BASEOBJECT BALL::Composite @ 145874000 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145749616 
+  BALL::Atom * second_  145875224 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145875496 -
+  BASEOBJECT BALL::Composite @ 145875496 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145749320 
+  BALL::Atom * second_  145749616 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::PDBAtom @ 145749320 -
+  BASEOBJECT BALL::Atom @ 145749320 -
+    BASEOBJECT BALL::Composite @ 145749320 -
+      STORABLE BALL::Selectable  Selectable 
+        bool selected_ = FALSE 
+      END_STORABLE
+      BALL::Size number_of_children_ = 0 
+      BALL::Composite * parent_  145865752 
+      BALL::Composite * previous_  0 
+      BALL::Composite * next_  145749616 
+      BALL::Composite * first_child_  0 
+      BALL::Composite * last_child_  0 
+      unsigned_char properties_ = 0 
+      bool contains_selection_ = FALSE 
+      BALL::Size number_of_selected_children_ = 0 
+      BALL::Size number_of_children_containing_selection_ = 0 
+      STORABLE BALL::TimeStamp  selection_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 0 
+          BALL::Size usecs_ = 0 
+        END_STORABLE
+      END_STORABLE
+      STORABLE BALL::TimeStamp  modification_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 1173129753 
+          BALL::Size usecs_ = 672384 
+        END_STORABLE
+      END_STORABLE
+    END_BASEOBJECT
+    STORABLE BALL::PropertyManager  PropertyManager 
+      STORABLE BALL::BitVector  bitvector_ 
+        BALL::Size size = 0 
+      END_STORABLE
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::String element_ = 1 N 
+    BALL::Index formal_charge_ = 0 
+    float charge_ = 0 
+    float radius_ = 0 
+    BALL::String name_ = 1 N 
+    BALL::String type_name_ = 1 ? 
+    BALL::Index type_ = -1 
+    STORABLE BALL::TVector3<float>  position_ 
+      float x = 0.132896 
+      float y = 0.980466 
+      float z = 2.26779 
+    END_STORABLE
+    STORABLE BALL::TVector3<float>  velocity_ 
+      float x = 0 
+      float y = 0 
+      float z = 0 
+    END_STORABLE
+    STORABLE BALL::TVector3<float>  force_ 
+      float x = 0 
+      float y = 0 
+      float z = 0 
+    END_STORABLE
+    unsigned_char number_of_bonds_ = 3 
+    BALL::Bond bond_  [ 3 ] = { 145875496  145872816  145874280  }
+  END_BASEOBJECT
+  char branch_designator_ = 32 
+  char remoteness_indicator_ = 32 
+  char alternate_location_indicator_ = 32 
+  float occupancy_ = 1 
+  float temperature_factor_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145874280 -
+  BASEOBJECT BALL::Composite @ 145874280 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145749320 
+  BALL::Atom * second_  145873392 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::PDBAtom @ 145873392 -
+  BASEOBJECT BALL::Atom @ 145873392 -
+    BASEOBJECT BALL::Composite @ 145873392 -
+      STORABLE BALL::Selectable  Selectable 
+        bool selected_ = FALSE 
+      END_STORABLE
+      BALL::Size number_of_children_ = 0 
+      BALL::Composite * parent_  145865752 
+      BALL::Composite * previous_  145875224 
+      BALL::Composite * next_  146031648 
+      BALL::Composite * first_child_  0 
+      BALL::Composite * last_child_  0 
+      unsigned_char properties_ = 0 
+      bool contains_selection_ = FALSE 
+      BALL::Size number_of_selected_children_ = 0 
+      BALL::Size number_of_children_containing_selection_ = 0 
+      STORABLE BALL::TimeStamp  selection_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 0 
+          BALL::Size usecs_ = 0 
+        END_STORABLE
+      END_STORABLE
+      STORABLE BALL::TimeStamp  modification_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 1173129753 
+          BALL::Size usecs_ = 707443 
+        END_STORABLE
+      END_STORABLE
+    END_BASEOBJECT
+    STORABLE BALL::PropertyManager  PropertyManager 
+      STORABLE BALL::BitVector  bitvector_ 
+        BALL::Size size = 0 
+      END_STORABLE
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::String element_ = 1 H 
+    BALL::Index formal_charge_ = 0 
+    float charge_ = 0 
+    float radius_ = 0 
+    BALL::String name_ = 1 H 
+    BALL::String type_name_ = 1 ? 
+    BALL::Index type_ = -1 
+    STORABLE BALL::TVector3<float>  position_ 
+      float x = -0.475743 
+      float y = 1.72959 
+      float z = 1.93797 
+    END_STORABLE
+    STORABLE BALL::TVector3<float>  velocity_ 
+      float x = 0 
+      float y = 0 
+      float z = 0 
+    END_STORABLE
+    STORABLE BALL::TVector3<float>  force_ 
+      float x = 0 
+      float y = 0 
+      float z = 0 
+    END_STORABLE
+    unsigned_char number_of_bonds_ = 1 
+    BALL::Bond bond_  [ 1 ] = { 145874280  }
+  END_BASEOBJECT
+  char branch_designator_ = 32 
+  char remoteness_indicator_ = 32 
+  char alternate_location_indicator_ = 32 
+  float occupancy_ = 1 
+  float temperature_factor_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 146031648 -
+  BASEOBJECT BALL::Composite @ 146031648 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  145873392 
+    BALL::Composite * next_  146031856 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 714709 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 3 1HB 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = 0.0224107 
+    float y = 3.01671 
+    float z = 3.96706 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145878752  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145878752 -
+  BASEOBJECT BALL::Composite @ 145878752 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  146031648 
+  BALL::Atom * second_  145990568 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 146031856 -
+  BASEOBJECT BALL::Composite @ 146031856 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  146031648 
+    BALL::Composite * next_  146032064 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 714720 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 3 1HD 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = 0.0374776 
+    float y = 4.26115 
+    float z = 6.09748 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145878904  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145878904 -
+  BASEOBJECT BALL::Composite @ 145878904 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  146031856 
+  BALL::Atom * second_  145990776 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 146032064 -
+  BASEOBJECT BALL::Composite @ 146032064 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  146031856 
+    BALL::Composite * next_  146010904 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 714730 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 3 1HG 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = 0.322252 
+    float y = 1.2489 
+    float z = 6.43715 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145879056  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145879056 -
+  BASEOBJECT BALL::Composite @ 145879056 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  146032064 
+  BALL::Atom * second_  145990984 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 146010904 -
+  BASEOBJECT BALL::Composite @ 146010904 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  146032064 
+    BALL::Composite * next_  146011112 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 714740 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 4 1HH1 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = -1.30363 
+    float y = 5.25982 
+    float z = 7.68751 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145875768  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145875768 -
+  BASEOBJECT BALL::Composite @ 145875768 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  146010904 
+  BALL::Atom * second_  145969880 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 146011112 -
+  BASEOBJECT BALL::Composite @ 146011112 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  146010904 
+    BALL::Composite * next_  146011320 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 714750 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 4 1HH2 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = 1.32144 
+    float y = 3.69421 
+    float z = 10.3665 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145875920  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145875920 -
+  BASEOBJECT BALL::Composite @ 145875920 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  146011112 
+  BALL::Atom * second_  145970088 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 146011320 -
+  BASEOBJECT BALL::Composite @ 146011320 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  146011112 
+    BALL::Composite * next_  146011528 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 714761 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 3 2HB 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = -1.16355 
+    float y = 1.83238 
+    float z = 4.54056 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145876072  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145876072 -
+  BASEOBJECT BALL::Composite @ 145876072 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  146011320 
+  BALL::Atom * second_  145990568 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 146011528 -
+  BASEOBJECT BALL::Composite @ 146011528 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  146011320 
+    BALL::Composite * next_  146011736 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 714770 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 3 2HD 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = -1.22669 
+    float y = 3.15886 
+    float z = 6.70597 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145876224  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145876224 -
+  BASEOBJECT BALL::Composite @ 145876224 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  146011528 
+  BALL::Atom * second_  145990776 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 146011736 -
+  BASEOBJECT BALL::Composite @ 146011736 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145865752 
+    BALL::Composite * previous_  146011528 
+    BALL::Composite * next_  146011944 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 714780 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 3 2HG 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = 1.5704 
+    float y = 2.34578 
+    float z = 5.80807 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145876376  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145876376 -
+  BASEOBJECT BALL::Composite @ 145876376 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  146011736 
+  BALL::Atom * second_  145990984 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145872816 -
+  BASEOBJECT BALL::Composite @ 145872816 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145871000 
+  BALL::Atom * second_  145749320 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::PDBAtom @ 145871000 -
+  BASEOBJECT BALL::Atom @ 145871000 -
+    BASEOBJECT BALL::Composite @ 145871000 -
+      STORABLE BALL::Selectable  Selectable 
+        bool selected_ = FALSE 
+      END_STORABLE
+      BALL::Size number_of_children_ = 0 
+      BALL::Composite * parent_  145873800 
+      BALL::Composite * previous_  145867408 
+      BALL::Composite * next_  145872968 
+      BALL::Composite * first_child_  0 
+      BALL::Composite * last_child_  0 
+      unsigned_char properties_ = 0 
+      bool contains_selection_ = FALSE 
+      BALL::Size number_of_selected_children_ = 0 
+      BALL::Size number_of_children_containing_selection_ = 0 
+      STORABLE BALL::TimeStamp  selection_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 0 
+          BALL::Size usecs_ = 0 
+        END_STORABLE
+      END_STORABLE
+      STORABLE BALL::TimeStamp  modification_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 1173129753 
+          BALL::Size usecs_ = 672320 
+        END_STORABLE
+      END_STORABLE
+    END_BASEOBJECT
+    STORABLE BALL::PropertyManager  PropertyManager 
+      STORABLE BALL::BitVector  bitvector_ 
+        BALL::Size size = 0 
+      END_STORABLE
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::String element_ = 1 C 
+    BALL::Index formal_charge_ = 0 
+    float charge_ = 0 
+    float radius_ = 0 
+    BALL::String name_ = 1 C 
+    BALL::String type_name_ = 1 ? 
+    BALL::Index type_ = -1 
+    STORABLE BALL::TVector3<float>  position_ 
+      float x = 0.494864 
+      float y = 0 
+      float z = 1.43719 
+    END_STORABLE
+    STORABLE BALL::TVector3<float>  velocity_ 
+      float x = 0 
+      float y = 0 
+      float z = 0 
+    END_STORABLE
+    STORABLE BALL::TVector3<float>  force_ 
+      float x = 0 
+      float y = 0 
+      float z = 0 
+    END_STORABLE
+    unsigned_char number_of_bonds_ = 3 
+    BALL::Bond bond_  [ 3 ] = { 145871848  145872816  145873240  }
+  END_BASEOBJECT
+  char branch_designator_ = 32 
+  char remoteness_indicator_ = 32 
+  char alternate_location_indicator_ = 32 
+  float occupancy_ = 1 
+  float temperature_factor_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145873240 -
+  BASEOBJECT BALL::Composite @ 145873240 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145871000 
+  BALL::Atom * second_  145872968 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 2 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::PDBAtom @ 145872968 -
+  BASEOBJECT BALL::Atom @ 145872968 -
+    BASEOBJECT BALL::Composite @ 145872968 -
+      STORABLE BALL::Selectable  Selectable 
+        bool selected_ = FALSE 
+      END_STORABLE
+      BALL::Size number_of_children_ = 0 
+      BALL::Composite * parent_  145873800 
+      BALL::Composite * previous_  145871000 
+      BALL::Composite * next_  146114800 
+      BALL::Composite * first_child_  0 
+      BALL::Composite * last_child_  0 
+      unsigned_char properties_ = 0 
+      bool contains_selection_ = FALSE 
+      BALL::Size number_of_selected_children_ = 0 
+      BALL::Size number_of_children_containing_selection_ = 0 
+      STORABLE BALL::TimeStamp  selection_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 0 
+          BALL::Size usecs_ = 0 
+        END_STORABLE
+      END_STORABLE
+      STORABLE BALL::TimeStamp  modification_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 1173129753 
+          BALL::Size usecs_ = 707424 
+        END_STORABLE
+      END_STORABLE
+    END_BASEOBJECT
+    STORABLE BALL::PropertyManager  PropertyManager 
+      STORABLE BALL::BitVector  bitvector_ 
+        BALL::Size size = 0 
+      END_STORABLE
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::String element_ = 1 O 
+    BALL::Index formal_charge_ = 0 
+    float charge_ = 0 
+    float radius_ = 0 
+    BALL::String name_ = 1 O 
+    BALL::String type_name_ = 1 ? 
+    BALL::Index type_ = -1 
+    STORABLE BALL::TVector3<float>  position_ 
+      float x = 1.23478 
+      float y = -0.910694 
+      float z = 1.83814 
+    END_STORABLE
+    STORABLE BALL::TVector3<float>  velocity_ 
+      float x = 0 
+      float y = 0 
+      float z = 0 
+    END_STORABLE
+    STORABLE BALL::TVector3<float>  force_ 
+      float x = 0 
+      float y = 0 
+      float z = 0 
+    END_STORABLE
+    unsigned_char number_of_bonds_ = 1 
+    BALL::Bond bond_  [ 1 ] = { 145873240  }
+  END_BASEOBJECT
+  char branch_designator_ = 32 
+  char remoteness_indicator_ = 32 
+  char alternate_location_indicator_ = 32 
+  float occupancy_ = 1 
+  float temperature_factor_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 146114800 -
+  BASEOBJECT BALL::Composite @ 146114800 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145873800 
+    BALL::Composite * previous_  145872968 
+    BALL::Composite * next_  146115008 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 714302 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 2 1H 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = -1.78794 
+    float y = 0.918428 
+    float z = 0.249791 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145969312  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145969312 -
+  BASEOBJECT BALL::Composite @ 145969312 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145867752 
+  BALL::Atom * second_  146114800 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::PDBAtom @ 145867752 -
+  BASEOBJECT BALL::Atom @ 145867752 -
+    BASEOBJECT BALL::Composite @ 145867752 -
+      STORABLE BALL::Selectable  Selectable 
+        bool selected_ = FALSE 
+      END_STORABLE
+      BALL::Size number_of_children_ = 0 
+      BALL::Composite * parent_  145873800 
+      BALL::Composite * previous_  0 
+      BALL::Composite * next_  145867408 
+      BALL::Composite * first_child_  0 
+      BALL::Composite * last_child_  0 
+      unsigned_char properties_ = 0 
+      bool contains_selection_ = FALSE 
+      BALL::Size number_of_selected_children_ = 0 
+      BALL::Size number_of_children_containing_selection_ = 0 
+      STORABLE BALL::TimeStamp  selection_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 0 
+          BALL::Size usecs_ = 0 
+        END_STORABLE
+      END_STORABLE
+      STORABLE BALL::TimeStamp  modification_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 1173129753 
+          BALL::Size usecs_ = 672312 
+        END_STORABLE
+      END_STORABLE
+    END_BASEOBJECT
+    STORABLE BALL::PropertyManager  PropertyManager 
+      STORABLE BALL::BitVector  bitvector_ 
+        BALL::Size size = 0 
+      END_STORABLE
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::String element_ = 1 N 
+    BALL::Index formal_charge_ = 0 
+    float charge_ = 0 
+    float radius_ = 0 
+    BALL::String name_ = 1 N 
+    BALL::String type_name_ = 1 ? 
+    BALL::Index type_ = -1 
+    STORABLE BALL::TVector3<float>  position_ 
+      float x = -1.45 
+      float y = 0 
+      float z = 0 
+    END_STORABLE
+    STORABLE BALL::TVector3<float>  velocity_ 
+      float x = 0 
+      float y = 0 
+      float z = 0 
+    END_STORABLE
+    STORABLE BALL::TVector3<float>  force_ 
+      float x = 0 
+      float y = 0 
+      float z = 0 
+    END_STORABLE
+    unsigned_char number_of_bonds_ = 4 
+    BALL::Bond bond_  [ 4 ] = { 145871272  145969312  145949336  145949488  }
+  END_BASEOBJECT
+  char branch_designator_ = 32 
+  char remoteness_indicator_ = 32 
+  char alternate_location_indicator_ = 32 
+  float occupancy_ = 1 
+  float temperature_factor_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145949488 -
+  BASEOBJECT BALL::Composite @ 145949488 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145867752 
+  BALL::Atom * second_  146115632 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 146115632 -
+  BASEOBJECT BALL::Composite @ 146115632 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145873800 
+    BALL::Composite * previous_  146115424 
+    BALL::Composite * next_  146115840 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 714353 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 2 3H 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = -1.74918 
+    float y = -0.665137 
+    float z = 0.704076 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145949488  }
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 146115840 -
+  BASEOBJECT BALL::Composite @ 146115840 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145873800 
+    BALL::Composite * previous_  146115632 
+    BALL::Composite * next_  146031088 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 714366 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 3 3HB 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = 0.258031 
+    float y = 2.11837 
+    float z = -0.351289 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145950248  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145950248 -
+  BASEOBJECT BALL::Composite @ 145950248 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  146115840 
+  BALL::Atom * second_  146031088 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 146031088 -
+  BASEOBJECT BALL::Composite @ 146031088 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145873800 
+    BALL::Composite * previous_  146115840 
+    BALL::Composite * next_  146031296 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 714397 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 C 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 2 CB 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = 0.553667 
+    float y = 1.17545 
+    float z = -0.813004 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 4 
+  BALL::Bond bond_  [ 4 ] = { 145949792  145949944  145950096  145950248  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145950096 -
+  BASEOBJECT BALL::Composite @ 145950096 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  146115424 
+  BALL::Atom * second_  146031088 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 146115424 -
+  BASEOBJECT BALL::Composite @ 146115424 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145873800 
+    BALL::Composite * previous_  146115216 
+    BALL::Composite * next_  146115632 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 714342 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 3 2HB 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = 0.154357 
+    float y = 1.136 
+    float z = -1.8271 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145950096  }
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 146115216 -
+  BASEOBJECT BALL::Composite @ 146115216 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145873800 
+    BALL::Composite * previous_  146115008 
+    BALL::Composite * next_  146115424 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 714331 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 2 2H 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = -1.80122 
+    float y = -0.259809 
+    float z = -0.910621 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145949336  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145949336 -
+  BASEOBJECT BALL::Composite @ 145949336 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145867752 
+  BALL::Atom * second_  146115216 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 146115008 -
+  BASEOBJECT BALL::Composite @ 146115008 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145873800 
+    BALL::Composite * previous_  146114800 
+    BALL::Composite * next_  146115216 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 714318 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 3 1HB 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = 1.64175 
+    float y = 1.12351 
+    float z = -0.864007 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145949944  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145949944 -
+  BASEOBJECT BALL::Composite @ 145949944 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  146115008 
+  BALL::Atom * second_  146031088 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Residue @ 145873800 -
+  BASEOBJECT BALL::Fragment @ 145873800 -
+    BASEOBJECT BALL::AtomContainer @ 145873800 -
+      BASEOBJECT BALL::Composite @ 145873800 -
+        STORABLE BALL::Selectable  Selectable 
+          bool selected_ = FALSE 
+        END_STORABLE
+        BALL::Size number_of_children_ = 12 
+        BALL::Composite * parent_  145864224 
+        BALL::Composite * previous_  0 
+        BALL::Composite * next_  145865752 
+        BALL::Composite * first_child_  145867752 
+        BALL::Composite * last_child_  146031296 
+        unsigned_char properties_ = 0 
+        bool contains_selection_ = FALSE 
+        BALL::Size number_of_selected_children_ = 0 
+        BALL::Size number_of_children_containing_selection_ = 0 
+        STORABLE BALL::TimeStamp  selection_stamp_ 
+          STORABLE BALL::PreciseTime  time_ 
+            BALL::Size secs_ = 0 
+            BALL::Size usecs_ = 0 
+          END_STORABLE
+        END_STORABLE
+        STORABLE BALL::TimeStamp  modification_stamp_ 
+          STORABLE BALL::PreciseTime  time_ 
+            BALL::Size secs_ = 1173129753 
+            BALL::Size usecs_ = 714409 
+          END_STORABLE
+        END_STORABLE
+      END_BASEOBJECT
+      STORABLE BALL::PropertyManager  PropertyManager 
+        STORABLE BALL::BitVector  bitvector_ 
+          BALL::Size size = 3 
+          bool - = TRUE 
+          bool - = FALSE 
+          bool - = FALSE 
+        END_STORABLE
+        BALL::Size size = 0 
+      END_STORABLE
+      BALL::String name_ = 3 ALA 
+    END_BASEOBJECT
+  END_BASEOBJECT
+  BALL::String id_ = 1 1 
+  char insertion_code_ = 32 
+END_OBJECT
+END
+START
+OBJECT BALL::Atom @ 146031296 -
+  BASEOBJECT BALL::Composite @ 146031296 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  145873800 
+    BALL::Composite * previous_  146031088 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 1173129753 
+        BALL::Size usecs_ = 714407 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::String element_ = 1 H 
+  BALL::Index formal_charge_ = 0 
+  float charge_ = 0 
+  float radius_ = 0 
+  BALL::String name_ = 2 HA 
+  BALL::String type_name_ = 1 ? 
+  BALL::Index type_ = -1 
+  STORABLE BALL::TVector3<float>  position_ 
+    float x = 0.340871 
+    float y = -0.928171 
+    float z = -0.460441 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  velocity_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  STORABLE BALL::TVector3<float>  force_ 
+    float x = 0 
+    float y = 0 
+    float z = 0 
+  END_STORABLE
+  unsigned_char number_of_bonds_ = 1 
+  BALL::Bond bond_  [ 1 ] = { 145949640  }
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145949640 -
+  BASEOBJECT BALL::Composite @ 145949640 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145867408 
+  BALL::Atom * second_  146031296 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::PDBAtom @ 145867408 -
+  BASEOBJECT BALL::Atom @ 145867408 -
+    BASEOBJECT BALL::Composite @ 145867408 -
+      STORABLE BALL::Selectable  Selectable 
+        bool selected_ = FALSE 
+      END_STORABLE
+      BALL::Size number_of_children_ = 0 
+      BALL::Composite * parent_  145873800 
+      BALL::Composite * previous_  145867752 
+      BALL::Composite * next_  145871000 
+      BALL::Composite * first_child_  0 
+      BALL::Composite * last_child_  0 
+      unsigned_char properties_ = 0 
+      bool contains_selection_ = FALSE 
+      BALL::Size number_of_selected_children_ = 0 
+      BALL::Size number_of_children_containing_selection_ = 0 
+      STORABLE BALL::TimeStamp  selection_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 0 
+          BALL::Size usecs_ = 0 
+        END_STORABLE
+      END_STORABLE
+      STORABLE BALL::TimeStamp  modification_stamp_ 
+        STORABLE BALL::PreciseTime  time_ 
+          BALL::Size secs_ = 1173129753 
+          BALL::Size usecs_ = 672317 
+        END_STORABLE
+      END_STORABLE
+    END_BASEOBJECT
+    STORABLE BALL::PropertyManager  PropertyManager 
+      STORABLE BALL::BitVector  bitvector_ 
+        BALL::Size size = 0 
+      END_STORABLE
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::String element_ = 1 C 
+    BALL::Index formal_charge_ = 0 
+    float charge_ = 0 
+    float radius_ = 0 
+    BALL::String name_ = 2 CA 
+    BALL::String type_name_ = 1 ? 
+    BALL::Index type_ = -1 
+    STORABLE BALL::TVector3<float>  position_ 
+      float x = 0 
+      float y = 0 
+      float z = 0 
+    END_STORABLE
+    STORABLE BALL::TVector3<float>  velocity_ 
+      float x = 0 
+      float y = 0 
+      float z = 0 
+    END_STORABLE
+    STORABLE BALL::TVector3<float>  force_ 
+      float x = 0 
+      float y = 0 
+      float z = 0 
+    END_STORABLE
+    unsigned_char number_of_bonds_ = 4 
+    BALL::Bond bond_  [ 4 ] = { 145871272  145871848  145949640  145949792  }
+  END_BASEOBJECT
+  char branch_designator_ = 32 
+  char remoteness_indicator_ = 32 
+  char alternate_location_indicator_ = 32 
+  float occupancy_ = 1 
+  float temperature_factor_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145949792 -
+  BASEOBJECT BALL::Composite @ 145949792 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145867408 
+  BALL::Atom * second_  146031088 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145871848 -
+  BASEOBJECT BALL::Composite @ 145871848 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145867408 
+  BALL::Atom * second_  145871000 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 145871272 -
+  BASEOBJECT BALL::Composite @ 145871272 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145867752 
+  BALL::Atom * second_  145867408 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+START
+OBJECT BALL::Bond @ 146084336 -
+  BASEOBJECT BALL::Composite @ 146084336 -
+    STORABLE BALL::Selectable  Selectable 
+      bool selected_ = FALSE 
+    END_STORABLE
+    BALL::Size number_of_children_ = 0 
+    BALL::Composite * parent_  0 
+    BALL::Composite * previous_  0 
+    BALL::Composite * next_  0 
+    BALL::Composite * first_child_  0 
+    BALL::Composite * last_child_  0 
+    unsigned_char properties_ = 0 
+    bool contains_selection_ = FALSE 
+    BALL::Size number_of_selected_children_ = 0 
+    BALL::Size number_of_children_containing_selection_ = 0 
+    STORABLE BALL::TimeStamp  selection_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+    STORABLE BALL::TimeStamp  modification_stamp_ 
+      STORABLE BALL::PreciseTime  time_ 
+        BALL::Size secs_ = 0 
+        BALL::Size usecs_ = 0 
+      END_STORABLE
+    END_STORABLE
+  END_BASEOBJECT
+  STORABLE BALL::PropertyManager  PropertyManager 
+    STORABLE BALL::BitVector  bitvector_ 
+      BALL::Size size = 0 
+    END_STORABLE
+    BALL::Size size = 0 
+  END_STORABLE
+  BALL::Atom * first_  145991192 
+  BALL::Atom * second_  145969672 
+  BALL::String name_ = 0  
+  BALL::Index bond_order_ = 1 
+  BALL::Index bond_type_ = 0 
+END_OBJECT
+END
+END

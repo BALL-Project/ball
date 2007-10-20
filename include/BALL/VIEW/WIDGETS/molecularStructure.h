@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.28 2005/12/23 17:02:23 amoll Exp $
+// $Id: molecularStructure.h,v 1.28.16.2 2007/05/13 21:18:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -31,6 +31,10 @@
 # include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
 #endif
 
+#ifndef BALL_VIEW_DIALOGS_MMFF94CONFIGURATIONDIALOG_H
+# include <BALL/VIEW/DIALOGS/MMFF94ConfigurationDialog.h>
+#endif
+
 #ifndef BALL_MOLMEC_AMBER_AMBER_H
 # include <BALL/MOLMEC/AMBER/amber.h>
 #endif
@@ -39,7 +43,12 @@
 # include <BALL/MOLMEC/CHARMM/charmm.h>
 #endif
 
-#include <qwidget.h>
+#ifndef BALL_MOLMEC_MMFF94_MMFF94
+# include <BALL/MOLMEC/MMFF94/MMFF94.h>
+#endif
+
+
+#include <QtGui/qwidget.h>
 
 namespace BALL
 {
@@ -52,7 +61,7 @@ namespace BALL
 		/**	MolecularStructure provides means to modify molecular structures and do
 		 		several calculations. To do so, it contains the AMBER and CHARMM forcefields and
 				dialogs to do the setup.
-				The widget itself is invisible, but it has severeal menu entries, e.g.:
+				The widget itself is invisible, but it has several menu entries, e.g.:
 				- checkResidue
 				- centerCamera
 				- buildBonds
@@ -77,6 +86,18 @@ namespace BALL
 
 			BALL_EMBEDDABLE(MolecularStructure, ModularWidget)
 
+			///
+			enum
+			{
+				///
+				AMBER_FF = 0,
+
+				///
+				CHARMM_FF,
+
+				///
+				MMFF94_FF
+			};
 			
 			/**	@name	Constructors
 			*/	
@@ -117,7 +138,7 @@ namespace BALL
 					\see   GeometricObjectSelectionMessage
 					\see   MolecularTaskMessage
 			*/
-			void onNotify(Message *message)
+			virtual void onNotify(Message *message)
 				throw();
 
 			/**	Check the menu entries.
@@ -126,7 +147,7 @@ namespace BALL
 					The menu <b>Focus camera</b> will be enabled only if only one molecular object
 					is in the selection list.
 			*/
-			void checkMenu(MainControl& main_control)
+			virtual void checkMenu(MainControl& main_control)
 				throw();
 
 			/**	Initialize the popup menus for this Widget.
@@ -153,11 +174,17 @@ namespace BALL
 			*/
 			CharmmFF& getCharmmFF() throw();
 
+			///
+			MMFF94& getMMFF94() throw();
+
 			/// Get an instance of an dialog to setup the AMBER forcefield
 			AmberConfigurationDialog& getAmberConfigurationDialog()	throw();
 			
 			/// Get an instance of an dialog to setup the CHARMM forcefield
 			CharmmConfigurationDialog& getCharmmConfigurationDialog()	throw();
+
+			///
+			MMFF94ConfigurationDialog& getMMFF94ConfigurationDialog() throw();
 
 			/** Fetch the widgets preferences from the INIfile.
 					\param  inifile the INIFile that contains the required values
@@ -214,6 +241,9 @@ namespace BALL
 			/// Create a RegularData3D instance with the distance from the geometric center
 			virtual void createGridFromDistance();
 
+			///
+			virtual void createGridFromCameraDistance();
+
 			/// Calculate the secondary structure for a protein
 			virtual void calculateSecondaryStructure();
 
@@ -239,7 +269,7 @@ namespace BALL
 			void calculateForceFieldEnergy();
 
 			/// Run a energy minization with the currently selected force field
-			void runMinimization();
+			void runMinimization(bool show_dialog_ = true);
 
 			/// Perfomr a molecular dynamics simulation with the currently selected force field
 			void MDSimulation(bool show_dialog_ = true);
@@ -249,6 +279,9 @@ namespace BALL
 			
 			/// Show the dialog to setup the CHARMM force field
 			void showCharmmForceFieldOptions();
+
+			///
+			void showMMFF94ForceFieldOptions();
 			
 			/// Slot for a menu entry to select the AMBER force field
 			void chooseAmberFF();
@@ -256,11 +289,17 @@ namespace BALL
 			/// Slot for a menu entry to select the CHARMM force field
 			void chooseCharmmFF();
 				
+			/// Slot for a menu entry to select the MMFF94 force field
+			void chooseMMFF94();
+
+			/// 
+			void chooseForceField(Position nr);
+
 			/// Show a dialog to setup the currently selected force field
 			void setupForceField();
 
 			///
-			void calculateFDPB();
+			bool calculateFDPB(bool show = true);
 				
 			//@}
 			
@@ -269,37 +308,43 @@ namespace BALL
 			virtual void addComposite_(Composite& composite, const String& name)
 				throw();
 
+			void applyForceFieldSettings_();
+
 			void selectUnassignedForceFieldAtoms_();
 
-			Index center_camera_id_;
-			Index build_bonds_id_;
-			Index add_hydrogens_id_;
-			Index check_structure_id_;
-			Index	create_distance_grid_id_;
-			Index	calculate_ss_id_;
-			Index	map_proteins_id_;
-			Index	calculate_RMSD_id_;
-			Index	assign_charges_id_;
-			Index	energy_id_;
-			Index	minimization_id_;
-			Index	mdsimulation_id_;
-			Index	build_peptide_id_;
-			Index	calculate_hbonds_id_;
-			Index	amber_ff_id_;
-			Index	charmm_ff_id_;
-			Index setup_ff_;
-			Index calculate_ramachandran_;
-			Index menu_FPDB_;
+			bool setupForceField_(System* system, bool disable_selection = false);
 
-			bool use_amber_;
+			QAction* center_camera_id_;
+			QAction* build_bonds_id_;
+			QAction* add_hydrogens_id_;
+			QAction* check_structure_id_;
+			QAction* create_distance_grid_id_, *create_distance_grid_id2_;
+			QAction* calculate_ss_id_;
+			QAction* map_proteins_id_;
+			QAction* calculate_RMSD_id_;
+			QAction* assign_charges_id_;
+			QAction* energy_id_;
+			QAction* minimization_id_;
+			QAction* mdsimulation_id_;
+			QAction* build_peptide_id_;
+			QAction* calculate_hbonds_id_;
+			QAction* amber_ff_id_;
+			QAction* charmm_ff_id_;
+			QAction* mmff94_id_;
+			QAction* setup_ff_;
+			QAction* calculate_ramachandran_;
+			QAction* menu_FPDB_;
 
 			AmberFF 										amber_;
 			CharmmFF										charmm_;
+			MMFF94 											mmff_;
 			AmberConfigurationDialog    amber_dialog_;
 			CharmmConfigurationDialog 	charmm_dialog_;
+			MMFF94ConfigurationDialog 	mmff94_dialog_;
 			MinimizationDialog 					minimization_dialog_;
 			MolecularDynamicsDialog 		md_dialog_;
 			FDPBDialog* 								fdpb_dialog_;
+			Position 										force_field_id_;
 		};
 
 	} // namespace VIEW

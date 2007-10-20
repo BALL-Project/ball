@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SecondaryStructureProcessor_test.C,v 1.2 2004/02/23 21:29:16 oliver Exp $
+// $Id: SecondaryStructureProcessor_test.C,v 1.2.30.1 2007/03/25 21:48:56 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(SecondaryStructureProcessor, "$Id: SecondaryStructureProcessor_test.C,v 1.2 2004/02/23 21:29:16 oliver Exp $")
+START_TEST(SecondaryStructureProcessor, "$Id: SecondaryStructureProcessor_test.C,v 1.2.30.1 2007/03/25 21:48:56 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EnergyProcessor_test.C,v 1.10 2003/06/27 11:26:49 anker Exp $
+// $Id: EnergyProcessor_test.C,v 1.10.30.1 2007/03/25 21:47:04 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 #include <BALL/ENERGY/energyProcessor.h>
 ///////////////////////////
 
-START_TEST(EnergyProcessor, "$Id: EnergyProcessor_test.C,v 1.10 2003/06/27 11:26:49 anker Exp $")
+START_TEST(EnergyProcessor, "$Id: EnergyProcessor_test.C,v 1.10.30.1 2007/03/25 21:47:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

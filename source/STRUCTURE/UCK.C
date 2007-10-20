@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UCK.C,v 1.7 2005/12/23 17:03:04 amoll Exp $
+// $Id: UCK.C,v 1.7.20.1 2007/04/03 13:29:38 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/UCK.h>
@@ -10,13 +10,13 @@
 #include <BALL/COMMON/limits.h>
 
 #include <BALL/KERNEL/molecule.h>
-#include <BALL/KERNEL/fragment.h>
+//#include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/PTE.h>
 
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <map>
+//#include <iostream>
+//#include <fstream>
+//#include <vector>
+//#include <map>
 
 using namespace std;
 
@@ -29,11 +29,15 @@ namespace BALL
 
 	//default constructor
 	UCK::UCK()
+		: depth_(0),
+			weight_(0.0)
 	{
 	}
 	
 	//constructor
 	UCK::UCK(const Molecule& mol, Size d)
+		:	depth_(d),
+			weight_(0.0)
 	{
 		id_ = mol.getName();
 		id_.trim();
@@ -43,12 +47,12 @@ namespace BALL
 	
 	// copy constructor
 	UCK::UCK(UCK& uck)
+		:	depth_(uck.depth_),
+			formula_(uck.formula_),
+			uck_str_(uck.uck_str_),
+			id_(uck.id_),
+			weight_(uck.weight_)
 	{
-		depth_		= uck.getDepth();
-		formula_	= uck.getFormula();
-		uck_str_	= uck.getUCK();
-		id_				= uck.getId();
-		weight_		= uck.getWeight();
 	}
 	
 	UCK::~UCK()
@@ -155,15 +159,20 @@ namespace BALL
 			// find bonds from current atom to all other atoms and store them in e
 			for(AtomConstIterator atit2 = mol.beginAtom(); atit2 != mol.endAtom(); ++atit2)
 			{
-				if(atit1->getBond(*atit2)!=0)
+				if(atit1->getBond(*atit2) != 0)
+				{
 					e.push_back(make_pair(count, dest));
+				}
 				++dest;
 			}
 			++count;
 		}
+
 		sort(mol_name->begin(), mol_name->end());		// sort vector mol_name in order to get the lexicographically ordered
 		for(Size i = 0; i != mol_name->size(); ++i)	// chemical formula
+		{
 			formula_ += ((*mol_name)[i].first)+(String)(*mol_name)[i].second;
+		}
 			
 		delete mol_name;
 		return;
@@ -171,9 +180,13 @@ namespace BALL
 	
 	String UCK::eraseDoubleLabels(Size d, String label, String x)
 	{
-		if(d>=2)
-			if(x.find(label)!=string::npos)
+		if(d >= 2)
+		{
+			if(x.find(label) != string::npos)
+			{
 				x = x.substr(0,x.find(label)) + x.substr(x.find(label)+label.size());
+			}
+		}
 
 		return x;
 	}
@@ -189,21 +202,28 @@ namespace BALL
 			delete lam;
 			return lambda_d;
 		}
-		
 		else	// d!=0
 		{
 			// compute lambda_d-1_labels for all children
 			for(PairVector::const_iterator it = e.begin(); it != e.end(); ++it)
+			{
 				if(it->first!=i)	// if source node in e is not equal to the current position i, then skip this edge
+				{
 					continue;
+				}
 				else	// an edge to another node is found, so compute lambda_d-1 of the child and store the resulting string
 							// in vector lam
+				{
 					lam->push_back(eraseDoubleLabels(d, v[i], lambda("", e, v, it->second, d-1)));
+				}
+			}
 			sort(lam->begin(), lam->end()); // lexicographically order the lambda_d-1 -labels
 		}
 		// concatenate lambda_d-1 -labels and produce lambda_d -label
 		for(vector<String>::iterator it = lam->begin(); it != lam->end(); ++it)
+		{
 			lambda_d += *it;
+		}
 
 		delete lam;
 		return lambda_d;
@@ -212,8 +232,12 @@ namespace BALL
 	void UCK::makePairs(const vector<String>& lambda_map, vector<String>& pairs, const SizeVector& sp)
 	{
 		for(Size i = 0; i != lambda_map.size(); ++i)
+		{
 			for(Size j = 0; j != lambda_map.size(); ++j)
+			{
 				pairs.push_back(lambda_map[i] + (String)sp[i][j] + lambda_map[j]);
+			}
+		}
 
 		sort(pairs.begin(), pairs.end());
 		return;
@@ -240,17 +264,17 @@ namespace BALL
 		return depth_;
 	}
 
-	String UCK::getFormula()
+	const String& UCK::getFormula() const
 	{
 		return formula_;
 	}
 
-	String UCK::getUCK()
+	const String& UCK::getUCK() const
 	{
 		return uck_str_;
 	}
 
-	String UCK::getId()
+	const String& UCK::getId() const
 	{
 		return id_;
 	}
@@ -275,7 +299,9 @@ namespace BALL
 		getGraph(v, e, m);
 		
 		for(Size i=0; i!=v.size(); ++i)
+		{
 			lambda_map.push_back(lambda("", e, v, i, depth_));
+		}
 		
 		makePathMatrix(e, sp, v.size());
 		makePairs(lambda_map, pairs, sp);

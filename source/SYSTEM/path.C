@@ -1,7 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: path.C,v 1.6 2005/12/23 17:03:06 amoll Exp $
+// $Id: path.C,v 1.6.20.1 2007/06/21 19:38:11 oliver Exp $
+// 
+// Author:
+//   Oliver Kohlbacher
+//
 
 #include <BALL/COMMON/global.h>
 #include <BALL/SYSTEM/path.h>
@@ -13,14 +17,22 @@ using std::ifstream;
 
 namespace BALL 
 {
+	string Path::path_ = BALL_PATH;
+	bool Path::path_array_valid_ = false;
+	bool Path::environment_checked_ = false;
+	std::vector<string> Path::path_array_;
+	bool Path::initialized_ = false;
 
-	Path::Path()
-		:	path_(BALL_PATH),
-			path_array_valid_(false),
-			environment_checked_(false),
-			path_array_()
+	void Path::reset()
 	{
 		path_ = getDefaultDataPath();
+		path_array_valid_ = false;
+		environment_checked_ = false;
+	}
+
+	Path::Path()
+	{
+		if (!initialized_) reset();
 	}
 
 	string Path::getDataPath()

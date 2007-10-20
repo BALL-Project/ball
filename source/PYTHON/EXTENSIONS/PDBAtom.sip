@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom.sip,v 1.7 2003/11/01 09:27:36 oliver Exp $
+// $Id: PDBAtom.sip,v 1.7.28.1 2007/03/25 21:37:01 oliver Exp $
 //
 
 class PDBAtom
@@ -10,6 +10,7 @@ class PDBAtom
 %TypeHeaderCode
 	#include <BALL/KERNEL/PDBAtom.h>
 	using namespace BALL;
+  typedef Atom::Type AtomType;
 %End
   public:
   PDBAtom();
@@ -38,12 +39,16 @@ class PDBAtom
 	//  PDBAtom& operator = (const PDBAtom&);
   void get(PDBAtom&, bool = true) const;
   void swap(PDBAtom&);
+
   Protein* getProtein();
-  const Protein* getProtein() const;
+  // const Protein* getProtein() const;
+
   Chain* getChain();
-  const Chain* getChain() const;
+  // const Chain* getChain() const;
+
   Residue* getResidue();
-  const Residue* getResidue() const;
+  // const Residue* getResidue() const;
+
   void setBranchDesignator(char);
   char getBranchDesignator() const;
   void setRemotenessIndicator(char);

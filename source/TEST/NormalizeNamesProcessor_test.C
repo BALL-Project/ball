@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: NormalizeNamesProcessor_test.C,v 1.1 2004/06/15 06:39:07 oliver Exp $
+// $Id: NormalizeNamesProcessor_test.C,v 1.1.28.1 2007/03/25 21:47:23 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(FragmentDB::NormalizeNamesProcessor, "$Id: NormalizeNamesProcessor_test.C,v 1.1 2004/06/15 06:39:07 oliver Exp $")
+START_TEST(FragmentDB::NormalizeNamesProcessor, "$Id: NormalizeNamesProcessor_test.C,v 1.1.28.1 2007/03/25 21:47:23 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.C,v 1.34 2005/12/23 17:03:25 amoll Exp $
+// $Id: downloadPDBFile.C,v 1.34.16.1 2007/03/25 22:01:56 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
@@ -14,17 +14,12 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 
-#include <qcombobox.h> 
-#include <qlineedit.h> 
-#include <qtextedit.h> 
-#include <qfile.h>
-#include <qurl.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qimage.h>
-#include <qpushbutton.h>
-#include <qgroupbox.h>
-#include <qapplication.h>
+#include <QtGui/qlineedit.h> 
+#include <QtGui/qradiobutton.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qimage.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qapplication.h>
 
 #ifdef BALL_HAS_SSTREAM
 # include <sstream>
@@ -37,27 +32,36 @@ namespace BALL
 	namespace VIEW
 	{
 
-DownloadPDBFile::DownloadPDBFile(QWidget* parent, const char* name, bool modal, WFlags fl)
+DownloadPDBFile::DownloadPDBFile(QWidget* parent, const char* name, bool, Qt::WFlags fl)
 	throw()
-	: DownloadPDBFileData(parent, name, modal, fl),
+	: QDialog(parent, fl),
+		Ui_DownloadPDBFileData(),
 		ModularWidget(name),
-		qb_(0),
 		thread_(0),
 		aborted_(false),
-		error_(false)
+		error_(false),
+		prefix_("http://www.rcsb.org/pdb/files/"),
+		suffix_(".pdb")
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new DownloadPDBFile" << this << std::endl;
 #endif
+	setupUi(this);
+	setObjectName(name);
+	
+	// signals and slots connections
+	connect( buttonClose, SIGNAL( clicked() ), this, SLOT( close() ) );
+	connect( download, SIGNAL( clicked() ), this, SLOT( slotDownload() ) );
+	connect( button_abort, SIGNAL( clicked() ), this, SLOT( abort() ) );
+	connect( pdbId, SIGNAL( editTextChanged(const QString&) ), this, SLOT( idChanged() ) );
+
 	// register the widget with the MainControl
 	registerWidget(this);
 	hide();
-//   	connect(results, SIGNAL(activated(const QString&)), this, SLOT(slotNewId(const QString&)));
 	pdbId->setFocus();
 
-#ifdef BALL_QT_HAS_THREADS
 	thread_ = new FetchHTMLThread();
-#endif
+	thread_->setMainControl(getMainControl());
 }
 
 DownloadPDBFile::~DownloadPDBFile()
@@ -67,118 +71,35 @@ DownloadPDBFile::~DownloadPDBFile()
 	Log.info() << "Destructing object " << this << " of class DownloadPDBFile" << std::endl; 
 #endif 
 
-	if (qb_ != 0) delete qb_;
-
-#ifdef BALL_QT_HAS_THREADS
 	if (thread_ != 0) 
 	{
-		if (thread_->running())
+		if (thread_->isRunning())
 		{
 			thread_->terminate();
 			thread_->wait();
 		}
 		delete thread_;
 	}
-#endif
 }
 
 void DownloadPDBFile::initializeWidget(MainControl&)
 	throw()
 {
 	menu_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Download PDB", this,
-															 SLOT(show()), CTRL+Key_T, 1);
+															 SLOT(show()), Qt::CTRL+Qt::Key_T);
 	setMenuHint("Download a PDB file from www.rcsb.org");
-}
-
-void DownloadPDBFile::slotSearch()
-{
-	/*
-	results->clear();
-
-	QString search_contents = searchField->text();
-	QString filename;
-	filename = "http://pdbbeta.rcsb.org/pdb/navbarsearch.do?newSearch=yes&isAuthorSearch=";
-	if (authors->isChecked())
-	{
-		filename += "yes";
-	}
-	else
-	{
-		filename += "no";
-	}
-
-	filename += "&radioset=Structures&inputQuickSearch=";
-	QUrl::encode(search_contents);
-	filename += search_contents;
-	filename += "&image.x=0&image.y=0";
-	
-	try 
-	{
-#ifndef BALL_QT_HAS_THREADS
-		std::stringstream search_result;
-		TCPTransfer tcp;
-		tcp.set(search_result, filename.latin1());
-		setProxyAndTransfer_(tcp);
-
-		if (tcp.getStatusCode() != TCPTransfer::OK)
-		{
-			setStatusbarText(String("Failed to download file ") + filename.latin1() + 
-											 ". ErrorCode " + String(tcp.getStatusCode()), true);
-			return;
-		}
-#else   // =============================
-		thread_->setFilename("");
-		threadedDownload_(filename.latin1());
-		downloadEnded_();
-		if (error_) 
-		{
-			return;
-		}
-
-		std::stringstream& search_result = thread_->getStream();
-#endif
-		
-		char buffer[10000];
-		vector<String> result;
-		while (!search_result.eof())
-		{
-			search_result.getline(buffer, 10000);
-			String tmp(buffer);
-			if (!tmp.hasSubstring("qrb_structid")) continue;
-
-			Size pos = tmp.find(">");
-			if (pos != string::npos)
-			{
-				result.push_back(tmp.substr(pos + 1, 4));
-			}
-		}
-
-		for (Size i = 0; i < result.size(); i++)
-		{
-			results->insertItem(result[i].c_str());
-		}
-
-		if (result.size() != 0)
-		{
-			pdbId->setText(result[0].c_str());
-		}
-	}
-	catch (...)
-	{ 
-		setStatusbarText("Could not download search result from PDB.org", true);
-	}
-	*/
+	setMenuHelp("tips.html#download_pdb");
+	setIcon("download.png", true);
 }
 
 bool DownloadPDBFile::threadedDownload_(const String& url)
 {
 	error_ = false;
-#ifdef BALL_QT_HAS_THREADS
 	downloadStarted_();
 	thread_->setURL(url);
 	thread_->start();
 	Size last_bytes = 0;
-	while (thread_->running())
+	while (thread_->isRunning())
 	{
 		qApp->processEvents();
 		
@@ -199,20 +120,18 @@ bool DownloadPDBFile::threadedDownload_(const String& url)
 	{
 		if (thread_->getTCPTransfer().getReceivedBytes() == 0)
 		{
-			setStatusbarText("Could not download the given file. Maybe it does not exist on pdb.org?", true);
+			setStatusbarText(String("Could not download the given file. Maybe it does not exist on pdb.org? ") +
+											 thread_->getTCPTransfer().getErrorCode() + " occured.", true);
 		}
 		else
 		{
-			setStatusbarText(String("Failed to download file, ErrorCode ") + 
-											 String(thread_->getTCPTransfer().getStatusCode()), true);
+			setStatusbarText(String("Failed to download file, an ") + 
+											 thread_->getTCPTransfer().getErrorCode() + " occured. " +
+											 "Maybe you need a proxy?" , true);
 		}
 		error_ = true;
 		return false;
 	}
-#else
-	// prevent compiler warnings
-	url.isValid();
-#endif
 
 	return true;
 }
@@ -223,12 +142,10 @@ void DownloadPDBFile::slotDownload()
 
 	try
 	{
-		String id = pdbId->text().latin1();
-		String url = "http://pdbbeta.rcsb.org/pdb/displayFile.do?fileFormat=PDB&structureId=";
+		String id = ascii(pdbId->currentText());
+		String url = prefix_;
 		url += id;
-#ifndef BALL_QT_HAS_THREADS
-		PDBFile pdb_file(url);
-#else   // =============================
+		url += suffix_;
 		String temp_filename = VIEW::createTemporaryFilename();
 		thread_->setFilename(temp_filename);
 		bool ok = threadedDownload_(url);
@@ -241,14 +158,11 @@ void DownloadPDBFile::slotDownload()
 		}
 
 		PDBFile pdb_file(temp_filename);
-#endif
 
 		pdb_file >> *system;
 		pdb_file.close();
 
-#ifdef BALL_QT_HAS_THREADS
  		removeFile_(temp_filename);
-#endif
 
 		if (system->countAtoms() == 0)
 		{
@@ -264,17 +178,17 @@ void DownloadPDBFile::slotDownload()
 
 		if (system->getName() == "")
 		{
-			system->setName(pdbId->text().latin1());
+			system->setName(ascii(pdbId->currentText()));
 		}
 
 		system->setProperty("FROM_FILE", url);
 		close();
-		getMainControl()->insert(*system, pdbId->text().latin1());
+		pdbId->clearEditText();
+		getMainControl()->insert(*system, ascii(pdbId->currentText()));
 		
 		notify_(new CompositeMessage(*system, CompositeMessage::CENTER_CAMERA));
 		
 		download->setDefault(true);
-		pdbId->setText("");
 		pdbId->setFocus();
 	}
 	catch(...)
@@ -284,171 +198,20 @@ void DownloadPDBFile::slotDownload()
 	}
 }
 
-void DownloadPDBFile::slotShowDetail()
-{
-	if (pdbId->text() == "") return;
-
-	setStatusbarText("Downloading information, please wait...", true);
-	QString filename = "http://pdbbeta.rcsb.org/pdb/explore.do?structureId=";
-	filename += pdbId->text();
-
-	displayHTML(filename);
-}
-
-void DownloadPDBFile::slotNewId(const QString& new_id)
-{
-	pdbId->setText(new_id);
-}
-
-void DownloadPDBFile::displayHTML(const QString& url)
-{
-	if (url == "") return;
-
-	try
-	{
-		QString filename;
-
-		if (url.find("http://") == -1) filename = "http://www.rcsb.org/"+url;	
-		else 													 filename = url;
-
-		setStatusbarText(String("Reading ") + filename.ascii(), true);
-
-#ifndef BALL_QT_HAS_THREADS
-		std::stringstream search_result;
-		TCPTransfer tcp;
-		tcp.set(search_result, filename.latin1());
-		setProxyAndTransfer_(tcp);
-
-		if (tcp.getStatusCode() != TCPTransfer::OK)
-		{
-			setStatusbarText(String("Failed to download file ") + filename.latin1() + ". ErrorCode " + String(tcp.getStatusCode()), true);
-			return;
-		}
-		Size size = tcp.getReceivedBytes();
-#else
-		thread_->setFilename("");
-		threadedDownload_(filename.ascii());
-		if (aborted_) return;
-
-		std::stringstream& search_result = thread_->getStream();
-		Size size = thread_->getTCPTransfer().getReceivedBytes();
-#endif
-
-		if (size == 0)
-		{
-			setStatusbarText(String("URL ") + filename.ascii() + " does not exist.", true);
-			error_ = true;
-			downloadEnded_();
-			return;
-		}
-
-		setStatusbarText("Please wait, while loading images...", true);
-
-		List<String> images;
-		String result;
-		char buffer[10000];
-
-		while (!search_result.eof())
-		{
-			search_result.getline(buffer, 10000);
-			String current_line(buffer);
-			result += current_line + "\n";
-
-			// find out all the images
-			String tmp = current_line;
-			tmp.toUpper();
-			Size pos_1 = 0;
-			Size pos_2 = 0;
-
-//   			while ( (pos_1 = tmp.find("<IMG", pos_2)) != string::npos )
-			while ( false)
-			{
-				pos_1 = tmp.find("SRC=\"", pos_1);
-				pos_2 = current_line.find("\"", pos_1+9);
-
-				String img_url = current_line.substr(pos_1+5, pos_2 - (pos_1+5));
-				images.push_back(img_url);
-				if (!unsupported_images_.has(img_url) && !image_cache_.has(img_url))
-				{
-					String tmp_filename = VIEW::createTemporaryFilename();
-					File img(tmp_filename, std::ios::out);
-					TCPTransfer tcp;
-					tcp.set(img, "http://www.rcsb.org/" + img_url);
-					setProxyAndTransfer_(tcp);
-					img.close();
-
-					QImage qi;
-					qi.load(tmp_filename.c_str());
- 					removeFile_(tmp_filename);
-
-					if (qi.isNull())
-					{
-						unsupported_images_.insert(img_url);
-					}
-					else
-					{
-						image_cache_[img_url] = qi;
-					}
-				}
-			}
-		}
-
- 		if (qb_ == 0) 
-		{
-			qb_ = new QTextBrowser();
-			connect(qb_, SIGNAL(linkClicked(const QString&)), this, SLOT(displayHTML(const QString&)));
-		}
-
-		QImage empty;
-		List<String>::Iterator it = images.begin();
-		for (; it != images.end(); it++)
-		{
-			if (!unsupported_images_.has(*it))
-			{
-				qb_->mimeSourceFactory()->setImage((*it).c_str(), image_cache_[*it]);
-			}
-			else
-			{
-				qb_->mimeSourceFactory()->setImage((*it).c_str(), empty);
-			}
-		}
-
-		qb_->setText(QString(result.c_str()));
-
-		downloadEnded_();
-		setStatusbarText("Finished download of HTML page", true);
-
-		qb_->showMaximized();
-		qb_->show();
-	}
-	catch (...)
-	{ 
-		downloadEnded_();
-		setStatusbarText("Failed to download HTML page.", true);
-	}
-
-#ifdef BALL_QT_HAS_THREADS
-	removeFile_(thread_->getFilename());
-#endif
-} 
-
-
 void DownloadPDBFile::idChanged()
 {
-	download->setEnabled(pdbId->text() != "");
+	download->setEnabled(pdbId->currentText() != "");
 }
 
 void DownloadPDBFile::abort()
 {
-#ifdef BALL_QT_HAS_THREADS
-
 	if (thread_ == 0) return;
 	aborted_ = true;
 
 	thread_->abort();
 	thread_->wait(5500);
 
-	if (thread_->running())
+	if (thread_->isRunning())
 	{
 		thread_->terminate();
 		thread_->wait();
@@ -456,8 +219,6 @@ void DownloadPDBFile::abort()
 	removeFile_(thread_->getFilename());
 	
 	downloadEnded_();
-
-#endif
 }
 
 void DownloadPDBFile::downloadStarted_()
@@ -465,12 +226,10 @@ void DownloadPDBFile::downloadStarted_()
 {
 	aborted_ = false;
 	error_   = false;
-	setStatusbarText("Starting download ...", true);
+	setStatusbarText("Started download, please wait...", true);
 	button_abort->setEnabled(true);
 	download->setEnabled(false);
 	pdbId->setEnabled(false);
-//   	search_box->setEnabled(false);			
-//   	showDetails->setEnabled(false);
 	buttonClose->setEnabled(false);
 }
 
@@ -479,24 +238,20 @@ void DownloadPDBFile::downloadEnded_()
 {
 	if (!aborted_ && !error_)
 	{
-		setStatusbarText("Finished downloading, loading structure ...", true);
+		setStatusbarText("Finished downloading, please wait...", true);
 	}
 	button_abort->setEnabled(false);
 	download->setEnabled(true);
 	pdbId->setEnabled(true);
-//   	search_box->setEnabled(true);			
-//   	showDetails->setEnabled(true);
 	buttonClose->setEnabled(true);
 	idChanged();
 	qApp->processEvents();
 	pdbId->setFocus();
 
-#ifdef BALL_QT_HAS_THREADS
 	if (error_)
 	{
 		removeFile_(thread_->getFilename());
 	}
-#endif
 }
 
 void DownloadPDBFile::removeFile_(const String& filename)
@@ -515,5 +270,48 @@ void DownloadPDBFile::setProxyAndTransfer_(TCPTransfer& tcp)
 	tcp.transfer();
 }
 
+void DownloadPDBFile::fetchPreferences(INIFile& inifile)
+	throw()
+{
+	if (!inifile.hasSection("PDBFiles") ||
+			!inifile.hasEntry("PDBFiles", "History"))
+	{
+		return;
+	}
+
+	String files = inifile.getValue("PDBFiles", "History");
+	vector<String> fields;
+	files.split(fields, "# ");
+	for (Position p = 0; p < fields.size(); p++)
+	{
+		QString file(fields[p].c_str());
+		if (pdbId->findText(file) == -1)
+		{
+			pdbId->addItem(file);
+		}
 	}
 }
+
+void DownloadPDBFile::writePreferences(INIFile& inifile)
+	throw()
+{
+	String files;
+	for (Index p = 0; p < pdbId->count(); p++)
+	{
+		String s = ascii(pdbId->itemText(p));
+		if (s == "") continue;
+		files += s + "#";
+	}
+
+	inifile.appendSection("PDBFiles");
+	inifile.insertValue("PDBFiles", "History", files);
+}
+
+void DownloadPDBFile::checkMenu(MainControl& mc)
+	throw()
+{
+	menu_id_->setEnabled(!mc.compositesAreLocked());
+}
+
+	} // namespace VIEW
+} // namespace BALL

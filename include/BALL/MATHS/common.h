@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.29 2005/07/16 21:00:31 oliver Exp $
+// $Id: common.h,v 1.29.16.1 2007/03/25 21:23:45 oliver Exp $
 //
 
 #ifndef BALL_MATHS_COMMON_H
@@ -180,11 +180,7 @@ namespace BALL
 			#ifdef BALL_COMPILER_MSVC
 				return (_isnan(t) != 0);
 			#else
-			#	ifdef BALL_OS_DARWIN
-				return (__isnan(t) != 0);
-			#	else
 				return (isnan(t) != 0);
-			#	endif
 			#endif
 		}
 
@@ -353,10 +349,17 @@ namespace BALL
 			return (abs((double)a - (double)b) < abs((double)max_diff));
 		}
 
+
+		/// round to integral value in floating-point format
+		inline double rint(double x)
+		{
+			if (x < 0.0) return (double)(int)(x - 0.5);
+			else 				 return (double)(int)(x + 0.5);
+		}
+
 	//@}
 		
 	} // namespace Maths
-
 } // namespace BALL
 
 #endif // BALL_MATHS_COMMON_H

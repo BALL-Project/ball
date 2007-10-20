@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.14 2005/12/26 03:26:09 amoll Exp $
+// $Id: representation.sip,v 1.14.18.3 2007/04/20 14:27:45 amoll Exp $
 //
 
 class Representation
@@ -11,7 +11,6 @@ class Representation
 	#include <BALL/VIEW/KERNEL/representation.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
-	typedef Representation::GeometricObjectList GeometricObjectList;
 %End
   public:
 	// BALL_CREATE(Representation);
@@ -43,10 +42,23 @@ class Representation
 	void setTransparency(Size /value/) throw();
 
 	GeometricObjectList& getGeometricObjects() throw();
-	const GeometricObjectList& getGeometricObjects() const throw();
+	// const GeometricObjectList& getGeometricObjects() const throw();
+
+	void setGeometricObjects(GeometricObjectList&) throw();
 	void insert(GeometricObject& /Transfer/) throw();
 
-	//const PyCompositeList& getComposites() const throw();
+	PyCompositeList getComposites() const throw();
+%MethodCode
+	PyCompositeList& my_list = *new PyCompositeList;
+	List<const Composite*> org_list = sipCpp->getComposites();
+	List<const Composite*>::Iterator it = org_list.begin();
+	for (; it != org_list.end(); it++)
+	{
+		my_list.push_back((Composite*)*it);
+	}
+	sipRes = &my_list;
+%End
+
 	void setComposites(const PyCompositeList&) throw();
 %MethodCode
 	List<const Composite*> my_list;
@@ -57,15 +69,15 @@ class Representation
 	}
 	sipCpp->setComposites(my_list);
 %End
+	void setComposite(const Composite*) throw();
 
 	ModelProcessor* getModelProcessor() throw();
-	const ModelProcessor* getModelProcessor() const throw();
+	// const ModelProcessor* getModelProcessor() const throw();
+
 	void setModelProcessor(ModelProcessor* /Transfer/) throw();
 
 	ColorProcessor* getColorProcessor() throw();
 	void setColorProcessor(ColorProcessor* /Transfer/) throw();
-
-	String getModelName() const throw();
 
 	void setModelType(ModelType /type/) throw();
 	ModelType getModelType() const throw();

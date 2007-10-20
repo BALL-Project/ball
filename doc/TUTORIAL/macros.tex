@@ -39,11 +39,12 @@
 \usepackage{color}
 % This package allows the coloring of text (e.g. in an ipe minipage)
 
-\usepackage{float}
+%\usepackage{float}
 % the float package allows a better placement of all floats (figures,tables) or
 % even new floats it allows the following kinds of boxes:
 % \shadowbox, \doublebox, \ovalbox, \Ovalbox
 
+% Nice captions with a blue line separating table/figure from caption
 \makeatletter
 	\renewcommand{\@makecaption}[2]{
 		\vspace{3pt}
@@ -52,6 +53,21 @@
 		\vspace{5pt}
 	}
 \makeatother
+
+% Same for longtable
+% > new for BALL release 1.2
+\makeatletter
+	\renewcommand{\LT@makecaption}[3]{%
+		\LT@mcol\LT@cols c{\hbox to\z@{\hss\parbox[t]\hsize{%
+			\vspace{3pt}
+			\noindent{\color{blue}\rule{\textwidth}{1pt}}\par%
+			\noindent{\small{\sffamily #2:}\hspace{5pt}\itshape #3\par}
+			\vspace{5pt}
+		\endgraf\vskip\baselineskip}
+		\hss} }
+	}
+\makeatother
+
 % 
 %  create a fancy float caption: 
 %    - blue rule under the float
@@ -104,15 +120,15 @@
 % redefinitions of sectioning comands
 %-----------------------------------------
 
-\usepackage{fancyheadings}
+\usepackage{fancyhdr}
 % allows you an easy adaption of the headings
 
 \usepackage{fancybox}
 % you can use shaded boxes e.g. for figures it allows the following kinds of boxes:
 % \shadowbox, \doublebox, \ovalbox, \Ovalbox
 
-\addtolength{\headrulewidth}{0.2pt}
-\addtolength{\footrulewidth}{0.6pt}
+%\addtolength{\headrulewidth}{0.2pt}
+%\addtolength{\footrulewidth}{0.6pt}
 \addtolength{\headwidth}{1cm}
 \addtolength{\footskip}{10mm}
 \addtolength{\headsep}{5mm}
@@ -196,6 +212,11 @@
 \newcommand{\Index}[1]{#1\index{#1}}
 % prints the term and creates an index entry
 
+\newcommand{\ttindex}[1]{{\ttfamily{#1}}\index{#1@{\ttfamily{#1}}}}
+% prints the term in ttfont and creates an index entry. Use for 
+% LD_LIBRARY_PATH to avoid it ending up under Symbols in the Index
+% > \newcommand new for BALL release 1.2
+
 \newcommand{\class}[1]{{\ttfamily{#1}}\index{#1@{\ttfamily{#1}}
 (BALL~class)}\index{BALL!classes!#1@{\ttfamily{#1}}}}
 % BALL class names are typeset in typewriter bold and indexed automatically:
@@ -220,14 +241,27 @@
 %  - first with their name
 %  - then under BALL!methods!<function name>
 
+\newcommand{\processor}[1]{{\ttfamily{#1}}\index{#1@{\ttfamily{#1}}
+(processor)}\index{BALL!processors!#1@{\ttfamily{#1}}}}
+% processor names are typeset in typewriter bold and indexed automatically:
+%  - first with their name
+%  - then under BALL!processors!<function name>
+
+\newcommand{\accessor}[1]{{\ttfamily{#1}}\index{#1@{\ttfamily{#1}}
+(accessor)}\index{Atom!accessors!#1@{\ttfamily{#1}}}}
+% accessor names are typeset in typewriter bold and indexed automatically:
+%  - first with their name
+%  - then under Atom!accessors!<accessor name>
+
 \newcommand{\member}[2]{%
-	{\ttfamily{#2}}%
-	\index{#1@{\ttfamily{#2}}(member of \ttfamily{#1})}%
-	\index{BALL!#1!#2@{\ttfamily{#1}}}%
+  {\ttfamily{#2}}%
+  \index{#1@{\ttfamily{#2}} (member of {\ttfamily{#1}})}%
+  \index{BALL!#1!#2@{\ttfamily{#2}}}%
 }%
 % method names are typeset in typewriter bold and indexed automatically:
 %  - first with their name
 %  - then under BALL!members!<function name>
+% > fixed for Ball release  1.2
 
 \newcommand{\attribute}[2]{{\ttfamily{#2}}\index{#2@{\ttfamily{#2}}
 ({\ttfamily #1} attribute)}\index{BALL!!#1!#2@{\ttfamily{#2}}}}

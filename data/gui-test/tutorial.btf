@@ -1,0 +1,278 @@
+F°gui-test/selection.bvp°
+R°300°
+I°0.014187°Mainframe|MainMenuBar|°5|0|1|0|0|0|633|31|
+I°0.242634°Mainframe|MainMenuBar|°2|0|1|0|1|1|644|21|
+I°0.071784°Mainframe|MainMenuBar|°3|0|1|0|1|0|644|21|
+I°0.213944°Mainframe|MainMenuBar|&Help|°5|0|1|0|0|0|34|0|
+I°0.230004°Mainframe|MainMenuBar|&Help|Tutorial|°2|0|1|0|1|1|37|17|
+I°0.208865°Mainframe|MainMenuBar|&Help|Tutorial|°3|0|1|0|1|0|37|17|
+I°0.031826°Mainframe|BALLViewDemo|qt_msgbox_label|°5|0|1|0|0|0|173|24|
+I°0.024592°Mainframe|BALLViewDemo|qt_msgbox_label|°2|0|1|0|1|1|173|24|
+I°0.1111°Mainframe|BALLViewDemo|qt_msgbox_label|°3|0|1|0|1|0|173|24|
+I°0.121515°Mainframe|BALLViewDemo|qt_msgbox_label|°6|0|2|0|16777220|
+I°0.020576°Mainframe|Structures|Container|select_button|°5|0|1|0|0|0|41|8|
+I°0.010165°Mainframe|Structures|Container|selector_edit_|lineedit|°5|0|1|0|0|0|163|21|
+I°0.030769°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°5|0|1|0|0|0|135|91|
+I°0.096542°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport|°5|0|1|0|0|0|89|27|
+I°0.022814°Mainframe|MainMenuBar|°5|0|1|0|0|0|107|31|
+I°0.206193°Mainframe|MainMenuBar|°2|0|1|0|1|1|107|24|
+I°0.070162°Mainframe|MainMenuBar|°3|0|1|0|1|0|107|24|
+I°0.028653°Mainframe|MainMenuBar|&Build|Build from SMILES|°5|0|1|0|0|0|24|2|
+I°0.264279°Mainframe|MainMenuBar|&Build|B&uild Peptide|°2|0|1|0|1|1|24|6|
+I°0.262423°Mainframe|MainMenuBar|&Build|B&uild Peptide|°3|0|1|0|1|0|24|6|
+I°0.233079°Mainframe|MolecularStructure|PeptideDialog|ala|°5|0|1|0|0|0|40|20|
+I°0.279636°Mainframe|MolecularStructure|PeptideDialog|ala|°2|0|1|0|1|1|40|20|
+I°0.204298°Mainframe|MolecularStructure|PeptideDialog|ala|°3|0|1|0|1|0|40|20|
+I°0.228535°Mainframe|MolecularStructure|PeptideDialog|arg|°5|0|1|0|0|0|17|23|
+I°0.003764°Mainframe|MolecularStructure|PeptideDialog|arg|°2|0|1|0|1|1|56|19|
+I°0.004946°Mainframe|MolecularStructure|PeptideDialog|arg|°3|0|1|0|1|0|56|19|
+I°0.259402°Mainframe|MolecularStructure|PeptideDialog|°5|0|1|0|0|0|140|66|
+I°0.020733°Mainframe|MolecularStructure|PeptideDialog|asn|°5|0|1|0|0|0|0|18|
+I°0.267985°Mainframe|MolecularStructure|PeptideDialog|asn|°2|0|1|0|1|1|4|17|
+I°0.080294°Mainframe|MolecularStructure|PeptideDialog|asn|°3|0|1|0|1|0|8|16|
+I°0.071282°Mainframe|MolecularStructure|PeptideDialog|°5|0|1|0|0|0|213|70|
+I°0.010136°Mainframe|MolecularStructure|PeptideDialog|asp|°5|0|1|0|0|0|7|22|
+I°0.262305°Mainframe|MolecularStructure|PeptideDialog|asp|°2|0|1|0|1|1|48|15|
+I°0.081009°Mainframe|MolecularStructure|PeptideDialog|asp|°3|0|1|0|1|0|48|15|
+I°0.259446°Mainframe|MolecularStructure|PeptideDialog|°5|0|1|0|0|0|251|82|
+I°0.020517°Mainframe|MolecularStructure|PeptideDialog|gly|°5|0|1|0|0|0|23|8|
+I°0.02143°Mainframe|MolecularStructure|PeptideDialog|°5|0|1|0|0|0|225|124|
+I°0.029781°Mainframe|MolecularStructure|PeptideDialog|leu|°5|0|1|0|0|0|63|16|
+I°0.020234°Mainframe|MolecularStructure|PeptideDialog|°5|0|1|0|0|0|199|174|
+I°0.020526°Mainframe|MolecularStructure|PeptideDialog|pro|°5|0|1|0|0|0|43|6|
+I°0.030798°Mainframe|MolecularStructure|PeptideDialog|°5|0|1|0|0|0|167|220|
+I°0.02034°Mainframe|MolecularStructure|PeptideDialog|tyr|°5|0|1|0|0|0|11|0|
+I°0.051168°Mainframe|MolecularStructure|PeptideDialog|°5|0|1|0|0|0|142|249|
+I°0.030866°Mainframe|MolecularStructure|PeptideDialog|trp|°5|0|1|0|0|0|64|20|
+I°0.219922°Mainframe|MolecularStructure|PeptideDialog|°5|0|1|0|0|0|129|262|
+I°0.030688°Mainframe|MolecularStructure|PeptideDialog|close_button|°5|0|1|0|0|0|116|0|
+I°0.248142°Mainframe|MolecularStructure|PeptideDialog|close_button|°2|0|1|0|1|1|109|18|
+I°0.008356°Mainframe|BALLViewDemo|next_button|°5|0|1|0|0|0|67|7|
+I°0.294416°Mainframe|BALLViewDemo|next_button|°2|0|1|0|1|1|65|15|
+I°0.036753°Mainframe|BALLViewDemo|next_button|°3|0|1|0|1|0|65|15|
+I°0.069211°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°5|0|1|0|0|0|182|60|
+I°0.092236°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport|°5|0|1|0|0|0|112|27|
+I°0.071571°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°5|0|1|0|0|0|100|0|
+I°0.290007°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°2|0|1|0|1|1|47|7|
+I°0.059967°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°3|0|1|0|1|0|47|7|
+I°0.28039°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport|°5|0|1|0|0|0|60|22|
+I°0.030651°Mainframe|Main Toolbar|&Focus Camera|°5|0|1|0|0|0|10|26|
+I°0.28608°Mainframe|Main Toolbar|&Focus Camera|°2|0|1|0|1|1|20|18|
+I°0.294898°Mainframe|Main Toolbar|&Focus Camera|°3|0|1|0|1|0|20|18|
+I°0.231943°Mainframe|Main Toolbar|°5|0|1|0|0|0|269|37|
+I°0.008185°Mainframe|BALLViewDemo|next_button|°5|0|1|0|0|0|70|7|
+I°0.239605°Mainframe|BALLViewDemo|next_button|°2|0|1|0|1|1|63|23|
+I°0.023747°Mainframe|BALLViewDemo|next_button|°3|0|1|0|1|0|63|23|
+I°0.041954°Mainframe|Structures|Container|select_button|°5|0|1|0|0|0|52|7|
+I°0.007122°Mainframe|Structures|Container|°5|0|1|0|0|0|170|192|
+I°0.010707°Mainframe|Structures|Container|selector_edit_|lineedit|°5|0|1|0|0|0|162|22|
+I°0.05088°Mainframe|Structures|Container|°5|0|1|0|0|0|128|158|
+I°0.041168°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°5|0|1|0|0|0|106|104|
+I°0.289068°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°2|0|1|0|1|1|50|10|
+I°0.056838°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°3|0|1|0|1|0|50|10|
+I°0.219144°Mainframe|Structures|Container|MolecularControlList|°6|0|2|0|16777236|
+I°0.284374°Mainframe|Structures|Container|°6|0|2|0|16777236|
+I°0.205177°Mainframe|Structures|°6|0|2|0|16777236|
+I°0.292948°Mainframe|Structures|Container|MolecularControlList|°6|0|2|0|16777236|
+I°0.287464°Mainframe|Structures|Container|MolecularControlList|°6|0|2|0|16777237|
+I°0.294174°Mainframe|Structures|Container|MolecularControlList|°6|0|2|0|16777236|
+I°0.235071°Mainframe|Structures|Container|MolecularControlList|°6|0|2|0|16777235|
+I°0.293314°Mainframe|Structures|Container|MolecularControlList|°6|0|2|0|16777235|
+I°0.266878°Mainframe|Structures|Container|MolecularControlList|°6|0|2|0|16777235|
+I°0.018528°Mainframe|BALLViewDemo|next_button|°5|0|1|0|0|0|88|2|
+I°0.272599°Mainframe|BALLViewDemo|next_button|°2|0|1|0|1|1|82|9|
+I°0.05721°Mainframe|BALLViewDemo|next_button|°3|0|1|0|1|0|82|9|
+I°0.011912°Mainframe|BALLViewDemo|°5|0|1|0|0|0|0|46|
+I°0.202933°Mainframe|MainMenuBar|°5|0|1|0|0|0|267|31|
+I°0.260387°Mainframe|MainMenuBar|°2|0|1|0|1|1|269|25|
+I°0.050181°Mainframe|MainMenuBar|°3|0|1|0|1|0|269|25|
+I°0.479752°Mainframe|MainMenuBar|&Molecular Mechanics|°5|0|1|0|0|0|67|0|
+I°0.62831°Mainframe|MainMenuBar|&Molecular Mechanics|Molecular &Dynamics|°2|0|1|0|1|1|69|13|
+I°0.293735°Mainframe|MainMenuBar|&Molecular Mechanics|Molecular &Dynamics|°3|0|1|0|1|0|69|13|
+I°0.278822°Mainframe|MainMenuBar|&Molecular Mechanics|Molecular &Dynamics|°3|0|1|0|1|0|104|22|
+I°0.040974°Mainframe|MolecularDynamicsDialog|GroupBox_3|steps_lineedit|°5|0|1|0|0|0|36|23|
+I°0.222848°Mainframe|MolecularDynamicsDialog|GroupBox_3|steps_lineedit|°2|0|1|0|1|1|37|12|
+I°0.05762°Mainframe|MolecularDynamicsDialog|GroupBox_3|steps_lineedit|°3|0|1|0|1|0|37|12|
+I°0.21384°Mainframe|MolecularDynamicsDialog|GroupBox_3|steps_lineedit|°4|0|1|0|1|1|37|12|
+I°0.093465°Mainframe|MolecularDynamicsDialog|GroupBox_3|steps_lineedit|°3|0|1|0|1|0|37|12|
+I°0.24668°Mainframe|MolecularDynamicsDialog|GroupBox_3|steps_lineedit|°6|0|2|0|49|
+I°0.272025°Mainframe|MolecularDynamicsDialog|GroupBox_3|steps_lineedit|°6|0|2|0|49|
+I°0.062312°Mainframe|MolecularDynamicsDialog|GroupBox2_2|°5|0|1|0|0|0|140|0|
+I°0.084517°Mainframe|MolecularDynamicsDialog|GroupBox2_2|enable_dcd|°5|0|1|0|0|0|75|3|
+I°0.275104°Mainframe|MolecularDynamicsDialog|GroupBox2_2|enable_dcd|°2|0|1|0|1|1|53|11|
+I°0.03234°Mainframe|MolecularDynamicsDialog|GroupBox2_2|enable_dcd|°3|0|1|0|1|0|53|11|
+I°0.258137°Mainframe|MolecularDynamicsDialog|GroupBox2_2|°5|0|1|0|0|0|69|61|
+I°0.258285°Mainframe|MolecularDynamicsDialog|°5|0|1|0|0|0|72|438|
+I°0.039272°Mainframe|MolecularDynamicsDialog|start_button|°5|0|1|0|0|0|66|0|
+I°0.204694°Mainframe|MolecularDynamicsDialog|start_button|°2|0|1|0|1|1|64|10|
+I°0.057269°Mainframe|MolecularDynamicsDialog|start_button|°3|0|1|0|1|0|64|10|
+I°0.018138°Mainframe|BALLViewDemo|next_button|°5|0|1|0|0|0|73|0|
+I°0.244321°Mainframe|BALLViewDemo|next_button|°2|0|1|0|1|1|71|19|
+I°0.057413°Mainframe|BALLViewDemo|next_button|°3|0|1|0|1|0|71|19|
+I°0.131012°Mainframe|Datasets|Container|Guest|qt_scrollarea_viewport#0|°5|0|1|0|0|0|179|34|
+I°0.227029°Mainframe|Datasets|Container|Guest|qt_scrollarea_viewport#0|°2|0|1|0|1|1|61|10|
+I°0.141566°Mainframe|Datasets|Container|Guest|qt_scrollarea_viewport#0|°3|0|1|0|1|0|61|10|
+I°0.010838°Mainframe|MainMenuBar|°5|0|1|0|0|0|405|26|
+I°0.274309°Mainframe|MainMenuBar|°2|0|1|0|1|1|400|12|
+I°0.088684°Mainframe|MainMenuBar|°3|0|1|0|1|0|400|12|
+I°0.248989°Mainframe|MainMenuBar|&Tools|°5|0|1|0|0|0|38|0|
+I°0.26372°Mainframe|MainMenuBar|&Tools|Visualize Trajectory|°2|0|1|0|1|1|49|7|
+I°0.286681°Mainframe|MainMenuBar|&Tools|Visualize Trajectory|°3|0|1|0|1|0|49|7|
+I°0.063577°Mainframe|Datasets|SnapshotVisualisationDialog|animateButton|°5|1|1|0|0|0|111|0|
+I°0.209849°Mainframe|Datasets|SnapshotVisualisationDialog|animateButton|°2|1|1|0|1|1|111|12|
+I°0.067886°Mainframe|Datasets|SnapshotVisualisationDialog|animateButton|°3|1|1|0|1|0|111|12|
+I°2.530851°Mainframe|Datasets|SnapshotVisualisationDialog|cancelButton|°5|1|1|0|0|0|0|25|
+I°0.15694°Mainframe|Datasets|SnapshotVisualisationDialog|cancelButton|°2|1|1|0|1|1|49|23|
+I°0.168521°Mainframe|Datasets|SnapshotVisualisationDialog|cancelButton|°3|1|1|0|1|0|49|23|
+I°0.530851°Mainframe|Datasets|SnapshotVisualisationDialog|cancelButton|°5|1|1|0|0|0|0|25|
+I°0.15694°Mainframe|Datasets|SnapshotVisualisationDialog|cancelButton|°2|1|1|0|1|1|49|23|
+I°0.168521°Mainframe|Datasets|SnapshotVisualisationDialog|cancelButton|°3|1|1|0|1|0|49|23|
+I°0.021755°Mainframe|BALLViewDemo|next_button|°5|1|1|0|0|0|85|1|
+I°0.235564°Mainframe|BALLViewDemo|next_button|°2|1|1|0|1|1|82|8|
+I°0.254635°Mainframe|BALLViewDemo|next_button|°3|1|1|0|1|0|82|8|
+I°0.02045°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°5|0|1|0|0|0|167|93|
+I°0.240045°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°2|0|1|0|1|1|68|11|
+I°0.029618°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°3|0|1|0|1|0|68|11|
+I°0.293688°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport|°5|0|1|0|0|0|87|26|
+I°0.054621°Mainframe|MainMenuBar|°5|0|1|0|0|0|361|27|
+I°0.28572°Mainframe|MainMenuBar|°2|0|1|0|1|1|321|14|
+I°0.086451°Mainframe|MainMenuBar|°3|0|1|0|1|0|321|14|
+I°0.38578°Mainframe|MainMenuBar|&Tools|&Python|°5|0|1|0|0|0|26|3|
+I°0.29246°Mainframe|MainMenuBar|&Tools|FDPB Electrostatics|°2|0|1|0|1|1|50|3|
+I°0.155597°Mainframe|MainMenuBar|&Tools|FDPB Electrostatics|°3|0|1|0|1|0|50|3|
+I°0.069353°Mainframe|FDPBDialog|ok_button|°5|0|1|0|0|0|169|1|
+I°0.205789°Mainframe|FDPBDialog|ok_button|°2|0|1|0|1|1|169|4|
+I°0.055667°Mainframe|FDPBDialog|ok_button|°3|0|1|0|1|0|169|4|
+I°0.038266°Mainframe|BALLViewDemo|next_button|°5|0|1|0|0|0|69|0|
+I°0.25507°Mainframe|BALLViewDemo|next_button|°2|0|1|0|1|1|70|9|
+I°0.248006°Mainframe|BALLViewDemo|next_button|°3|0|1|0|1|0|70|9|
+I°0.010506°Mainframe|Representations|Container|MolecularControlList|qt_scrollarea_viewport|°5|0|1|0|0|0|181|9|
+I°0.011911°Mainframe|Representations|°5|0|1|0|0|0|177|20|
+I°0.018854°Mainframe|Structures|Container|select_button|°5|0|1|0|0|0|37|21|
+I°0.020379°Mainframe|Structures|Container|°5|0|1|0|0|0|159|192|
+I°0.011125°Mainframe|Structures|Container|selector_edit_|lineedit|°5|0|1|0|0|0|157|18|
+I°0.029678°Mainframe|Structures|Container|°5|0|1|0|0|0|155|161|
+I°0.040754°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°5|0|1|0|0|0|145|105|
+I°0.242124°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport|°5|0|1|0|0|0|116|25|
+I°0.061673°Mainframe|Main Toolbar|°5|0|1|0|0|0|180|36|
+I°0.010033°Mainframe|Main Toolbar|quicksave|°5|0|1|0|0|0|3|31|
+I°0.297487°Mainframe|Main Toolbar|°5|0|1|0|0|0|182|30|
+I°0.010206°Mainframe|Main Toolbar|quickload|°5|0|1|0|0|0|23|29|
+I°0.010191°Mainframe|Main Toolbar|°5|0|1|0|0|0|160|36|
+I°0.229904°Mainframe|Structures|Container|MolecularControlList|°5|0|1|0|0|0|60|0|
+I°0.020435°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport|°5|0|1|0|0|0|57|0|
+I°0.256576°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°5|0|1|0|0|0|38|0|
+I°0.248642°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°2|0|1|0|1|1|38|5|
+I°0.074349°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°3|0|1|0|1|0|38|5|
+I°0.259875°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport|°5|0|1|0|0|0|44|27|
+I°0.254329°Mainframe|Structures|Container|MolecularControlList|°5|0|1|0|0|0|127|0|
+I°0.244959°Mainframe|Main Toolbar|°5|0|1|0|0|0|216|20|
+I°0.043219°Mainframe|Main Toolbar|D&isplay Properties|°5|0|1|0|0|0|0|16|
+I°0.248532°Mainframe|Main Toolbar|D&isplay Properties|°2|0|1|0|1|1|9|14|
+I°0.055363°Mainframe|Main Toolbar|D&isplay Properties|°3|0|1|0|1|0|9|14|
+I°0.034512°Mainframe|DisplayProperties|model_group|model_type_combobox|°5|0|1|0|0|0|186|0|
+I°0.112453°Mainframe|DisplayProperties|model_group|model_type_combobox|°2|0|1|0|1|1|151|21|
+I°0.064217°Mainframe|DisplayProperties|model_group|model_type_combobox|°3|0|1|0|1|0|151|21|
+I°0.165781°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777235|
+I°0.213471°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777235|
+I°0.157541°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777235|
+I°0.251064°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777235|
+I°0.106622°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777235|
+I°0.24934°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777235|
+I°0.096068°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777235|
+I°0.157892°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777235|
+I°0.173709°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777235|
+I°0.166082°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777235|
+I°0.189701°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777235|
+I°0.165655°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777235|
+I°0.181952°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777235|
+I°0.205648°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777235|
+I°0.173891°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777235|
+I°0.16641°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777235|
+I°0.179959°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777237|
+I°0.23765°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777237|
+I°0.20579°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777237|
+I°0.20607°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777237|
+I°0.15492°Mainframe|DisplayProperties|model_group|model_type_combobox|°6|0|2|0|16777220|
+I°0.25194°Mainframe|DisplayProperties|model_group|°5|0|1|0|0|0|160|57|
+I°0.210698°Mainframe|DisplayProperties|create_button|°5|0|1|0|0|0|182|0|
+I°0.230287°Mainframe|DisplayProperties|create_button|°2|0|1|0|1|1|175|3|
+I°0.228046°Mainframe|DisplayProperties|create_button|°3|0|1|0|1|0|175|3|
+I°0.218155°Mainframe|DisplayProperties|close_button|°5|0|1|0|0|0|1|3|
+I°0.166274°Mainframe|DisplayProperties|close_button|°2|0|1|0|1|1|39|4|
+I°0.105678°Mainframe|DisplayProperties|close_button|°3|0|1|0|1|0|39|4|
+I°0.16399°Mainframe|BALLViewDemo|next_button|°5|0|1|0|0|0|60|0|
+I°0.142976°Mainframe|BALLViewDemo|next_button|°2|0|1|0|1|1|68|22|
+I°0.019896°Mainframe|BALLViewDemo|next_button|°3|0|1|0|1|0|68|22|
+I°0.031096°Mainframe|Representations|Container|MolecularControlList|°5|0|1|0|0|0|187|97|
+I°0.021273°Mainframe|Representations|Container|MolecularControlList|qt_scrollarea_viewport#0|°5|0|1|0|0|0|182|66|
+I°0.267214°Mainframe|Representations|Container|MolecularControlList|qt_scrollarea_viewport#0|°2|0|1|0|1|1|65|11|
+I°0.066773°Mainframe|Representations|Container|MolecularControlList|qt_scrollarea_viewport#0|°3|0|1|0|1|0|65|11|
+I°0.277865°Mainframe|Representations|Container|MolecularControlList|qt_scrollarea_viewport#0|°2|0|1|0|1|1|61|23|
+I°0.051955°Mainframe|Representations|Container|MolecularControlList|qt_scrollarea_viewport#0|°3|0|1|0|1|0|61|23|
+I°0.293789°Mainframe|Representations|Container|MolecularControlList|qt_scrollarea_viewport|°5|0|1|0|0|0|65|13|
+I°0.003367°Mainframe|Representations|°5|0|1|0|0|0|71|2|
+I°0.003916°Mainframe|Structures|Container|help_button|°5|0|1|0|0|0|7|19|
+I°0.001378°Mainframe|Structures|Container|selector_edit_|lineedit|°5|0|1|0|0|0|73|12|
+I°0.001851°Mainframe|Structures|Container|°5|0|1|0|0|0|73|162|
+I°0.001565°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°5|0|1|0|0|0|71|104|
+I°0.21251°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport|°5|0|1|0|0|0|75|27|
+I°0.065405°Mainframe|MainMenuBar|°5|0|1|0|0|0|79|31|
+I°0.274434°Mainframe|MainMenuBar|°2|0|1|0|1|1|146|15|
+I°0.216831°Mainframe|MainMenuBar|°3|0|1|0|1|0|146|15|
+I°0.245724°Mainframe|MainMenuBar|&Display|Toggle Fullscreen|°5|0|1|0|0|0|49|2|
+I°0.259006°Mainframe|MainMenuBar|&Display|Customize Representation|°2|0|1|0|1|1|104|19|
+I°0.05599°Mainframe|MainMenuBar|&Display|Customize Representation|°3|0|1|0|1|0|104|19|
+I°0.05127°Mainframe|Representations|ModifyRepresentationDialog|surface_tab|qt_tabwidget_stackedwidget|split|°5|0|1|0|0|0|313|101|
+I°0.231525°Mainframe|Representations|ModifyRepresentationDialog|surface_tab|qt_tabwidget_stackedwidget|split|split_group|°5|0|1|0|0|0|222|79|
+I°0.030609°Mainframe|Representations|ModifyRepresentationDialog|surface_tab|qt_tabwidget_stackedwidget|split|split_group|split_by_distance|°5|0|1|0|0|0|180|17|
+I°0.051327°Mainframe|Representations|ModifyRepresentationDialog|surface_tab|qt_tabwidget_stackedwidget|split|split_group|°5|0|1|0|0|0|128|47|
+I°0.010135°Mainframe|Representations|ModifyRepresentationDialog|surface_tab|qt_tabwidget_stackedwidget|split|split_group|split_by_selection|°5|0|1|0|0|0|109|20|
+I°0.04102°Mainframe|Representations|ModifyRepresentationDialog|surface_tab|qt_tabwidget_stackedwidget|split|split_group|°5|0|1|0|0|0|76|21|
+I°0.061521°Mainframe|Representations|ModifyRepresentationDialog|surface_tab|qt_tabwidget_stackedwidget|split|°5|0|1|0|0|0|52|7|
+I°0.031057°Mainframe|Representations|ModifyRepresentationDialog|surface_tab|qt_tabwidget_tabbar|°5|0|1|0|0|0|42|26|
+I°0.254055°Mainframe|Representations|ModifyRepresentationDialog|surface_tab|qt_tabwidget_tabbar|°2|0|1|0|1|1|35|19|
+I°0.052443°Mainframe|Representations|ModifyRepresentationDialog|surface_tab|qt_tabwidget_tabbar|°3|0|1|0|1|0|35|19|
+I°0.030695°Mainframe|Representations|ModifyRepresentationDialog|°5|0|1|0|0|0|131|326|
+I°0.020462°Mainframe|Representations|ModifyRepresentationDialog|apply_button|°5|0|1|0|0|0|41|1|
+I°0.235098°Mainframe|Representations|ModifyRepresentationDialog|apply_button|°2|0|1|0|1|1|41|9|
+I°0.203113°Mainframe|Representations|ModifyRepresentationDialog|apply_button|°3|0|1|0|1|0|41|9|
+I°0.201169°Mainframe|Representations|ModifyRepresentationDialog|°5|0|1|0|0|0|226|337|
+I°0.07158°Mainframe|Representations|ModifyRepresentationDialog|cancel_button|°5|0|1|0|0|0|8|11|
+I°0.276319°Mainframe|Representations|ModifyRepresentationDialog|cancel_button|°2|0|1|0|1|1|37|11|
+I°0.089617°Mainframe|Representations|ModifyRepresentationDialog|cancel_button|°3|0|1|0|1|0|37|11|
+I°0.073021°Mainframe|BALLViewDemo|next_button|°5|0|1|0|0|0|61|0|
+I°0.283801°Mainframe|BALLViewDemo|next_button|°2|0|1|0|1|1|61|2|
+I°0.226738°Mainframe|BALLViewDemo|next_button|°3|0|1|0|1|0|61|2|
+I°0.010457°Mainframe|Datasets|Container|Guest|qt_scrollarea_viewport#0|°5|0|1|0|0|0|181|17|
+I°0.250679°Mainframe|Datasets|Container|Guest|qt_scrollarea_viewport#0|°2|0|1|0|1|1|55|9|
+I°0.08288°Mainframe|Datasets|Container|Guest|qt_scrollarea_viewport#0|°3|0|1|0|1|0|55|9|
+I°0.299114°Mainframe|Datasets|Container|Guest|qt_scrollarea_viewport|°5|0|1|0|0|0|57|24|
+I°0.032642°Mainframe|Datasets|°5|0|1|0|0|0|63|19|
+I°0.008333°Mainframe|°5|0|1|0|0|0|63|470|
+I°0.010515°Mainframe|Representations|Container|MolecularControlList|qt_scrollarea_viewport#0|°5|0|1|0|0|0|63|76|
+I°0.03043°Mainframe|Representations|Container|MolecularControlList|qt_scrollarea_viewport|°5|0|1|0|0|0|61|2|
+I°0.01063°Mainframe|°5|0|1|0|0|0|61|314|
+I°0.010095°Mainframe|Structures|Container|°5|0|1|0|0|0|61|189|
+I°0.020267°Mainframe|Structures|Container|MolecularControlList|qt_scrollarea_viewport#0|°5|0|1|0|0|0|67|105|
+I°0.010216°Mainframe|MainMenuBar|°5|0|1|0|0|0|395|31|
+I°0.220781°Mainframe|MainMenuBar|°2|0|1|0|1|1|402|20|
+I°0.090375°Mainframe|MainMenuBar|°3|0|1|0|1|0|402|20|
+I°0.290887°Mainframe|MainMenuBar|&Tools|°5|0|1|0|0|0|37|0|
+I°0.20924°Mainframe|MainMenuBar|&Tools|&Grids|Calculate normalized Grid|°5|0|1|0|0|0|8|19|
+I°0.29792°Mainframe|MainMenuBar|&Tools|&Grids|°5|0|1|0|0|0|322|22|
+I°0.24661°Mainframe|MainMenuBar|&Tools|&Grids|Render Contour S&urface|°2|0|1|0|1|1|33|11|
+I°0.052507°Mainframe|MainMenuBar|&Tools|&Grids|Render Contour S&urface|°3|0|1|0|1|0|33|11|
+I°0.061466°Mainframe|Datasets|ContourSurfaceDialog|groupBox1_2|threshold|°5|0|1|0|0|0|51|4|
+I°0.203766°Mainframe|Datasets|ContourSurfaceDialog|groupBox1_2|threshold|°2|0|1|0|1|1|48|5|
+I°0.06149°Mainframe|Datasets|ContourSurfaceDialog|groupBox1_2|threshold|°3|0|1|0|1|0|48|5|
+I°0.246082°Mainframe|Datasets|ContourSurfaceDialog|groupBox1_2|threshold|°6|0|2|0|48|
+I°0.258194°Mainframe|Datasets|ContourSurfaceDialog|groupBox1_2|threshold|°6|0|2|0|46|
+I°0.220792°Mainframe|Datasets|ContourSurfaceDialog|groupBox1_2|threshold|°6|0|2|0|49|
+I°0.027276°Mainframe|Datasets|ContourSurfaceDialog|buttonOk|°5|0|1|0|0|0|74|5|
+I°0.243842°Mainframe|Datasets|ContourSurfaceDialog|buttonOk|°2|0|1|0|1|1|60|26|
+I°0.062183°Mainframe|Datasets|ContourSurfaceDialog|buttonOk|°3|0|1|0|1|0|60|26|
+I°0.039997°Mainframe|BALLViewDemo|next_button|°5|0|1|0|0|0|82|1|
+I°0.237885°Mainframe|BALLViewDemo|next_button|°2|0|1|0|1|1|78|14|
+I°0.043946°Mainframe|BALLViewDemo|next_button|°3|0|1|0|1|0|78|14|
+°X°

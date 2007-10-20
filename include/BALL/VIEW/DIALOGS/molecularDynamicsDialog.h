@@ -17,12 +17,14 @@ namespace BALL
 	{
 		class AmberConfigurationDialog;
 		class CharmmConfigurationDialog;
+		class MMFF94ConfigurationDialog;
 
 /** Dialog for performing MD simulations
 		\ingroup ViewDialogs
 */
 class BALL_VIEW_EXPORT MolecularDynamicsDialog 
-	: public MolecularDynamicsDialogData,
+	: public QDialog,
+		public Ui_MolecularDynamicsDialogData,
 		public PreferencesEntry
 {
     Q_OBJECT
@@ -30,7 +32,7 @@ class BALL_VIEW_EXPORT MolecularDynamicsDialog
 		public:
 
 		///
-    MolecularDynamicsDialog(QWidget* parent = NULL, const char* name = NULL );
+    MolecularDynamicsDialog(QWidget* parent = NULL, const char* name = "MolecularDynamicsDialog" );
 
 		///
     virtual ~MolecularDynamicsDialog();
@@ -66,38 +68,47 @@ class BALL_VIEW_EXPORT MolecularDynamicsDialog
 		String getDCDFile() const;
 
 		///
+		void setDCDFile(const String& name);
+
+		///
 		Size getStepsBetweenRefreshs() const;
 		
-		///
-		void advancedOptions();
-
 		///
 		void setAmberDialog(AmberConfigurationDialog* amber_dialog);
 		
 		///
 		void setCharmmDialog(CharmmConfigurationDialog* charmm_dialog);
-		
+	 	
 		///
-		void useAmberFF();
+		void setMMFF94Dialog(MMFF94ConfigurationDialog* dialog);
 		
-		///
-		void useCharmmFF();
+		/// Select the forcefield, nr are the enum values in MolecularStructure
+		void selectForceField(Position nr);
 		
-		///
-		bool getUseAmber();
+		/// Return the ID of the selected forcefield (see enum values in MolecularStructure)
+		Position selectedForceField() const;
 
+		public slots:
+				
 		///
-		void chooseDCDFile();
-	
+		virtual void accept();
+
 		protected slots:
 
 		virtual void enableDCDFileSelected();
-
+		
+		///
+		void advancedOptions();
+	
+		///
+		void chooseDCDFile();
+	
 		void timeChanged();
 
 		private:
 		AmberConfigurationDialog* amber_dialog_;
 		CharmmConfigurationDialog* charmm_dialog_;
+		MMFF94ConfigurationDialog* mmff_dialog_;
 };
 
 } } // namespaces

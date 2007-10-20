@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: System_test.C,v 1.15 2005/12/23 17:03:12 amoll Exp $
+// $Id: System_test.C,v 1.15.20.1 2007/03/25 21:49:07 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(System, "$Id: System_test.C,v 1.15 2005/12/23 17:03:12 amoll Exp $")
+START_TEST(System, "$Id: System_test.C,v 1.15.20.1 2007/03/25 21:49:07 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.51 2006/11/10 08:32:39 oliver Exp $
+# $Id: Makefile,v 1.51.6.2 2007/04/02 20:54:51 bertsch Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -25,8 +25,10 @@ SMARTS_SOURCES=\
 	smartsParserLexer.C
 
 CPP_SOURCES=\
+	addHydrogenProcessor.C\
 	analyticalSES.C\
 	atomBijection.C\
+	atomTyper.C\
 	buildBondsProcessor.C\
 	chainBuilder.C\
 	connolly.C\
@@ -37,6 +39,8 @@ CPP_SOURCES=\
 	graphEdge.C\
 	graphFace.C\
 	graphVertex.C\
+	kekulizer.C\
+	molecularGraph.C\
 	HBondProcessor.C\
 	moleculeAssembler.C\
 	molecularGraph.C\
@@ -52,7 +56,6 @@ CPP_SOURCES=\
 	residueChecker.C\
 	ringAnalyser.C\
 	ringClusterer.C\
-	rotamerLibrary.C\
 	rsConstructor.C\
 	RSEdge.C\
 	RSFace.C\
@@ -82,7 +85,9 @@ CPP_SOURCES=\
 	triangulatedSAS.C\
 	triangulatedSES.C\
 	triangulatedSurface.C\
-	UCK.C
+	UCK.C\
+	residueRotamerSet.C\
+	rotamerLibrary.C
 
 SMILES_PARSER_PREFIX=SmilesParser
 SMARTS_PARSER_PREFIX=SmartsParser
@@ -121,7 +126,7 @@ subdirscollectlib:	dummy
 
 
 clean_parser:
-	@-$(RM) smilesParserParser.C smilesParserLexer.C smilesParserParser.h smartsParserParser.C smartsParserLexer.C smartsParserParser.h 2>/dev/null
+	@-$(RM) smilesParserParser.C smilesParserLexer.C smilesParserParser.h smartsParserParser.C smartsParserLexer.C smartsParserParser.h *.bak 2>/dev/null
 
 smilesParserParser.C: smilesParserParser.y
 smilesParserParser.h: smilesParserParser.y
@@ -156,6 +161,9 @@ smartsParserLexer.o: smartsParserLexer.C smartsParserParser.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
 
 smartsParserParser.o: smartsParserParser.C
-	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
+	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@ || \
+	../config/fixbison smartsParserParser.C
+
+
 
 dummy:

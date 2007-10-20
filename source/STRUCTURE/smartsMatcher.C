@@ -1,12 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.C,v 1.14 2007/03/20 08:53:23 bertsch Exp $
+// $Id: smartsMatcher.C,v 1.13.8.3 2007/04/16 09:23:49 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/smartsMatcher.h>
-#include <BALL/STRUCTURE/smartsParser.h>
-#include <BALL/KERNEL/PTE.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 
 #include <stack>
@@ -30,22 +28,33 @@ namespace BALL
 		: has_user_sssr_(false),
 			depth_(0)
 	{
-		pool_ = new RecStructPool_();
+		if (pool_ == 0)
+		{
+			pool_ = new RecStructPool_();
+		}
 	}
 
 	SmartsMatcher::SmartsMatcher(const SmartsMatcher& matcher)
-		: has_user_sssr_(matcher.has_user_sssr_),
+		:	rec_matches_(matcher.rec_matches_),
+			has_user_sssr_(matcher.has_user_sssr_),
+			sssr_(matcher.sssr_),
 			depth_(matcher.depth_)
 	{
 	}
 
 	SmartsMatcher::~SmartsMatcher()
 	{
-		delete pool_;
 	}
 
-	SmartsMatcher& SmartsMatcher::operator = (const SmartsMatcher& /*matcher*/)
+	SmartsMatcher& SmartsMatcher::operator = (const SmartsMatcher& matcher)
 	{
+		if (&matcher != this)
+		{
+			rec_matches_ = matcher.rec_matches_;
+			has_user_sssr_ = matcher.has_user_sssr_;
+			sssr_ = matcher.sssr_;
+			depth_ = matcher.depth_;
+		}
 		return *this;
 	}
 

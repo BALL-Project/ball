@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174 2005/12/23 17:03:39 amoll Exp $
+// $Id: scene.C,v 1.174.16.3 2007/04/11 12:06:25 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/KERNEL/threads.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 
 #include <BALL/VIEW/DIALOGS/setCamera.h>
@@ -16,30 +17,41 @@
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
 
-#include <BALL/VIEW/PRIMITIVES/simpleBox.h>
-#include <BALL/VIEW/PRIMITIVES/label.h>
+#include <BALL/VIEW/DATATYPE/standardDatasets.h>
+
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
 
+#include <BALL/VIEW/PRIMITIVES/simpleBox.h>
+#include <BALL/VIEW/PRIMITIVES/box.h>
+#include <BALL/VIEW/PRIMITIVES/label.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/VIEW/PRIMITIVES/disc.h>
+#include <BALL/VIEW/PRIMITIVES/line.h>
 
 #include <BALL/SYSTEM/timer.h>
+#include <BALL/SYSTEM/path.h>
+#include <BALL/SYSTEM/directory.h>
 #include <BALL/MATHS/quaternion.h>
 
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 
-#include <qpainter.h>
-#include <qmenubar.h>
-#include <qimage.h>
-#include <qmenubar.h>
-#include <qcursor.h>
-#include <qapplication.h>
-#include <qdragobject.h>
-#include <qfiledialog.h>
-#include <qapplication.h>
+#include <QtGui/qmenubar.h>
+#include <QtGui/qprinter.h>
+#include <QtGui/qprintdialog.h>
+#include <QtGui/qpainter.h>
+#include <QtGui/qimage.h>
+#include <QtGui/qcursor.h>
+#include <QtGui/qapplication.h>
+#include <QtGui/QDesktopWidget>
+#include <QtGui/QFileDialog>
+#include <QtGui/QInputDialog>
+#include <QtOpenGL/QGLPixelBuffer>
+
+#include <BALL/VIEW/WIDGETS/datasetControl.h>
+#include <BALL/VIEW/DATATYPE/colorMap.h>
 
 //         #define BALL_BENCHMARKING
 
@@ -53,6 +65,8 @@ namespace BALL
 
 		Position Scene::screenshot_nr_ = 100000;
 		Position Scene::pov_nr_ = 100000;
+		bool Scene::offscreen_rendering_ = true;
+		QSize Scene::PNG_size_ = QSize(1500,1000);
 
 		// ###############CONSTRUCTORS,DESTRUCTORS,CLEAR###################
 
@@ -68,53 +82,42 @@ namespace BALL
     #define  ZOOM_FACTOR      7.
 
 	  QGLFormat Scene::gl_format_(QGL::DepthBuffer 		| 
+#ifndef BALL_OS_DARWIN
 																QGL::StereoBuffers 	| 
+#endif
 																QGL::DoubleBuffer 	| 
-																QGL::DirectRendering);
+																QGL::DirectRendering |
+																QGL::SampleBuffers  |
+																QGL::StencilBuffer);
 
 		Scene::Scene()
 			throw()
 			:	QGLWidget(gl_format_),
 				ModularWidget("<Scene>"),
-				current_mode_(ROTATE__MODE),
-				last_mode_(PICKING__MODE),
-				rotate_id_(-1),
-				picking_id_(-1),
-				system_origin_(0.0),
-				need_update_(false),
-				update_running_(false),
-				x_window_pos_old_(0),
-				y_window_pos_old_(0),
-				x_window_pos_new_(0),
-				y_window_pos_new_(0),
-				x_window_pick_pos_first_(0),
-				y_window_pick_pos_first_(0),
-				x_window_pick_pos_second_(0),
-				y_window_pick_pos_second_(0),
-				stage_(new Stage),
-				light_settings_(0),
-				stage_settings_(0),
+				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
+				stage_(new Stage()),
+				gl_renderer_(new GLRenderer()),
+				light_settings_(new LightSettings(this)),
+				stage_settings_(new StageSettings(this)),
+				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
-				stop_animation_(false),
-				content_changed_(true),
-				time_(),
-				last_fps_(0)
+				toolbar_(new QToolBar("3D View Controls", this)),
+				mode_group_(new QActionGroup(this))
 		{
-			gl_renderer_.setSize(600, 600);
 			setAcceptDrops(true);
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (1) " << this << std::endl;
 #endif
 		}
 
-		Scene::Scene(QWidget* parent_widget, const char* name, WFlags w_flags)
+		Scene::Scene(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 			throw()
-			:	QGLWidget(gl_format_, parent_widget, name, 0, w_flags),
+			:	QGLWidget(gl_format_, parent_widget, (QGLWidget*)0, w_flags),
 				ModularWidget(name),
 				current_mode_(ROTATE__MODE),
 				last_mode_(PICKING__MODE),
-				rotate_id_(-1),
-				picking_id_(-1),
+				rotate_action_(0),
+				picking_action_(0),
 				system_origin_(0.0, 0.0, 0.0),
 				need_update_(false),
 				update_running_(false),
@@ -124,22 +127,29 @@ namespace BALL
 				y_window_pos_new_(0),
 				x_window_pick_pos_first_(0),
 				y_window_pick_pos_first_(0),
-				x_window_pick_pos_second_(0),
-				y_window_pick_pos_second_(0),
+				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage),
+				gl_renderer_(new GLRenderer),
 				light_settings_(0),
 				stage_settings_(0),
 				animation_thread_(0),
 				stop_animation_(false),
 				content_changed_(true),
-				want_to_use_vertex_buffer_(false)
+				want_to_use_vertex_buffer_(false),
+				mouse_button_is_pressed_(false),
+				preview_(false),
+				use_preview_(true),
+				show_fps_(false),
+				toolbar_(new QToolBar("3D View Controls", this)),
+				mode_group_(new QActionGroup(this)),
+				volume_width_(FLT_MAX)
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (2) " << this << std::endl;
 #endif
+			setObjectName(name);
 			// the widget with the MainControl
 			registerWidget(this);
-			gl_renderer_.setSize(600, 600);
 			setAcceptDrops(true);
 
 			if (!QGLWidget::isValid())
@@ -148,32 +158,30 @@ namespace BALL
 			}
 		}
 
-		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, WFlags w_flags)
+		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 			throw()
-			:	QGLWidget(gl_format_, parent_widget, name, 0, w_flags),
+			:	QGLWidget(gl_format_, parent_widget, (QGLWidget*)0, w_flags),
 				ModularWidget(scene),
 				system_origin_(scene.system_origin_),
-				x_window_pos_old_(0),
-				y_window_pos_old_(0),
-				x_window_pos_new_(0),
-				y_window_pos_new_(0),
-				x_window_pick_pos_first_(0),
-				y_window_pick_pos_first_(0),
-				x_window_pick_pos_second_(0),
-				y_window_pick_pos_second_(0),
+				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage(*scene.stage_)),
+				gl_renderer_(new GLRenderer()),
 				light_settings_(new LightSettings(this)),
 				stage_settings_(new StageSettings(this)),
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
 				stop_animation_(false),
-				content_changed_(true)
+				toolbar_(new QToolBar("3D View Controls", this)),
+				mode_group_(new QActionGroup(this))
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (3) " << this << std::endl;
 #endif
 
-			resize((Size) scene.gl_renderer_.getWidth(), (Size) scene.gl_renderer_.getHeight());
+			setObjectName(name);
+
+			resize((Size) scene.gl_renderer_->getWidth(), 
+						 (Size) scene.gl_renderer_->getHeight());
 
 			// the widget with the MainControl
 			ModularWidget::registerWidget(this);
@@ -188,10 +196,9 @@ namespace BALL
 #endif 
 
 				delete stage_;
+				delete gl_renderer_;
 
-#ifdef BALL_QT_HAS_THREADS
 				if (animation_thread_ != 0) delete animation_thread_;
-#endif
 			}
 
 		void Scene::clear()
@@ -259,6 +266,9 @@ namespace BALL
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "Scene " << this  << "onNotify " << message << std::endl;
 #endif
+//   			qApp->processEvents(); ??????? AM
+			makeCurrent();
+
 			if (RTTI::isKindOf<RepresentationMessage>(*message)) 
 			{
 				RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
@@ -266,11 +276,18 @@ namespace BALL
 				switch (rm->getType())
 				{
 					case RepresentationMessage::UPDATE:
-						gl_renderer_.bufferRepresentation(*rep);
+					{
+						RepresentationManager& pm = getMainControl()->getRepresentationManager();
+						if (pm.startRendering(rep))
+						{
+							gl_renderer_->bufferRepresentation(*rep);
+							pm.finishedRendering(rep);
+						}
 						break;
+					}
 
 					case RepresentationMessage::REMOVE:
-						gl_renderer_.removeRepresentation(*rep);
+						gl_renderer_->removeRepresentation(*rep);
 						break;
 
 					default:
@@ -279,6 +296,29 @@ namespace BALL
 
 				content_changed_ = true;
 
+				update(false);
+				return;
+			}
+
+			if (RTTI::isKindOf<DatasetMessage>(*message))
+			{
+				DatasetMessage* rm = RTTI::castTo<DatasetMessage>(*message);
+				if (!rm->isValid()) return;
+				RegularData3DDataset* set = dynamic_cast<RegularData3DDataset*>(rm->getDataset());
+				if (set == 0) return;
+
+				switch (rm->getType())
+				{
+					case DatasetMessage::UPDATE:
+					case DatasetMessage::REMOVE:
+						gl_renderer_->removeTextureFor_(*set->getData());
+						break;
+
+					default:
+						return;
+				}
+
+				content_changed_ = true;
 				update(false);
 				return;
 			}
@@ -347,26 +387,94 @@ namespace BALL
 
 			makeCurrent();
 
-			gl_renderer_.init(*this);
-			gl_renderer_.initSolid();
+			gl_renderer_->init(*this);
+			gl_renderer_->initSolid();
 			if (stage_->getLightSources().size() == 0) setDefaultLighting(false);
-			gl_renderer_.updateCamera();
-			gl_renderer_.enableVertexBuffers(want_to_use_vertex_buffer_);
+			gl_renderer_->updateCamera();
+			gl_renderer_->enableVertexBuffers(want_to_use_vertex_buffer_);
  			stage_settings_->getGLSettings();
 		}
 
 		void Scene::paintGL()
 		{
-//    			if (!content_changed_) return;
-
+			time_ = PreciseTime::now();
 			// cannot call update here, because it calls updateGL
    		renderView_(DISPLAY_LISTS_RENDERING);
+			glFlush();
+
+			if (info_string_ != "")
+			{
+				ColorRGBA c = stage_->getBackgroundColor().getInverseColor();
+				QFont font;
+				font.setPixelSize(16);
+				font.setBold(true);
+				glDisable(GL_LIGHTING);
+				gl_renderer_->setColorRGBA_(c);
+				renderText(info_point_.x(), info_point_.y(), info_string_.c_str(), font);
+				glEnable(GL_LIGHTING);
+			}
+
+			renderGrid_();
+
+			if (show_fps_)
+			{
+				float ti = 1000000.0 / (PreciseTime::now().getMicroSeconds() - time_.getMicroSeconds());
+
+				if (ti < 0)
+				{
+					time_ = PreciseTime::now();
+					return;
+				}
+
+				if (fps_.size() > 0)
+				{
+					if (BALL_ABS(*fps_.begin() - ti) > ti / 0.5)
+					{
+						fps_.clear();
+					}
+				}
+
+				fps_.push_back(ti);
+				if (fps_.size() > 10) fps_.pop_front();
+
+				float fps = 0;
+				list<float>::iterator lit = fps_.begin();
+				for (; lit != fps_.end(); lit++)
+				{
+					fps += *lit;
+				}
+
+				fps /= fps_.size();
+
+				String temp = createFloatString(fps, 1);
+
+				if (fps < 10.0) temp = String(" ") + temp;
+				if (fps < 100.0) temp = String(" ") + temp;
+
+				if (!temp.has('.')) temp = temp + ".0";
+
+				temp = String("FPS ") + temp;
+
+				ColorRGBA color = getStage()->getBackgroundColor().getInverseColor();
+
+				QFont font;
+				font.setStyleHint(QFont::Courier, QFont::OpenGLCompatible);
+				font.setPixelSize(16);
+				font.setBold(true);
+				gl_renderer_->setColorRGBA_(color);
+				glDisable(GL_LIGHTING);
+				QFontMetrics fm(font);
+				QRect r = fm.boundingRect(temp.c_str());
+
+				renderText(width() - 20 - r.width(), 20, temp.c_str(), font);
+				glEnable(GL_LIGHTING);
+			}
 		}
 
 		void Scene::resizeGL(int width, int height)
 		{
-			gl_renderer_.setSize(width, height);
-			gl_renderer_.updateCamera();
+			gl_renderer_->setSize(width, height);
+			gl_renderer_->updateCamera();
 			content_changed_ = true;
 		}
 
@@ -376,13 +484,17 @@ namespace BALL
 		{
 			makeCurrent();
 
+			if (use_preview_ && preview_) gl_renderer_->setAntialiasing(false);
+
 			glDepthMask(GL_TRUE);
-			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO)
+			if (gl_renderer_->getStereoMode() == GLRenderer::NO_STEREO)
 			{
 				glDrawBuffer(GL_BACK);
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 				renderRepresentations_(mode);
 				content_changed_ = false;
+
+				if (use_preview_ && preview_) gl_renderer_->setAntialiasing(true);
 
 				return;
 			}
@@ -402,18 +514,18 @@ namespace BALL
 
 			float ndfl    = nearf / stage_->getFocalDistance();
 
-      float left  = -2.0 *gl_renderer_.getXScale() - 0.5 * stage_->getEyeDistance() * ndfl;
-      float right =  2.0 *gl_renderer_.getXScale() - 0.5 * stage_->getEyeDistance() * ndfl;
+      float left  = -2.0 *gl_renderer_->getXScale() - 0.5 * stage_->getEyeDistance() * ndfl;
+      float right =  2.0 *gl_renderer_->getXScale() - 0.5 * stage_->getEyeDistance() * ndfl;
 
 			//================== draw first buffer =============
 	    glMatrixMode(GL_PROJECTION);
-			if (gl_renderer_.getStereoMode() == GLRenderer::DUAL_VIEW_STEREO)
+			if (gl_renderer_->getStereoMode() == GLRenderer::DUAL_VIEW_STEREO)
 			{
-				gl_renderer_.setSize(width()/2, height());
+				gl_renderer_->setSize(width()/2, height());
 				glLoadIdentity();
 				glFrustum(left,right,
-								-2.0 * gl_renderer_.getXScale() / 2, 
-								 2.0 * gl_renderer_.getYScale(),
+								-2.0 * gl_renderer_->getXScale() / 2, 
+								 2.0 * gl_renderer_->getYScale(),
 								nearf,farf);
 				glViewport(0, 0, width() / 2, height());
 
@@ -426,14 +538,14 @@ namespace BALL
 			{
 				glLoadIdentity();
 				glFrustum(left,right,
-									-2.0 * gl_renderer_.getXScale(), 
-									 2.0 * gl_renderer_.getYScale(),
+									-2.0 * gl_renderer_->getXScale(), 
+									 2.0 * gl_renderer_->getYScale(),
 									nearf,farf);
 			}
 
 			// draw models
       glMatrixMode(GL_MODELVIEW);
-			if (gl_renderer_.getStereoMode() == GLRenderer::ACTIVE_STEREO)
+			if (gl_renderer_->getStereoMode() == GLRenderer::ACTIVE_STEREO)
 			{
 				glDrawBuffer(GL_BACK_RIGHT);
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -442,23 +554,23 @@ namespace BALL
 			glPushMatrix();
 			stereo_camera_.setViewPoint(old_view_point + diff);
 			stereo_camera_.setLookAtPosition(old_look_at + diff);
-			gl_renderer_.updateCamera(&stereo_camera_);
- 			gl_renderer_.setLights(true);
+			gl_renderer_->updateCamera(&stereo_camera_);
+ 			gl_renderer_->setLights(true);
 			renderRepresentations_(mode);
 			glPopMatrix();
 
 			//================== draw second buffer =============
 	    glMatrixMode(GL_PROJECTION);
-      left  = -2.0 *gl_renderer_.getXScale() + 0.5 * stage_->getEyeDistance() * ndfl;
-      right =  2.0 *gl_renderer_.getXScale() + 0.5 * stage_->getEyeDistance() * ndfl;
+      left  = -2.0 *gl_renderer_->getXScale() + 0.5 * stage_->getEyeDistance() * ndfl;
+      right =  2.0 *gl_renderer_->getXScale() + 0.5 * stage_->getEyeDistance() * ndfl;
 
-			if (gl_renderer_.getStereoMode() == GLRenderer::DUAL_VIEW_STEREO)
+			if (gl_renderer_->getStereoMode() == GLRenderer::DUAL_VIEW_STEREO)
 			{
-				gl_renderer_.setSize(width()/2, height());
+				gl_renderer_->setSize(width()/2, height());
 				glLoadIdentity();
 				glFrustum(left,right,
-								-2.0 * gl_renderer_.getXScale() / 2, 
-								 2.0 * gl_renderer_.getYScale(),
+								-2.0 * gl_renderer_->getXScale() / 2, 
+								 2.0 * gl_renderer_->getYScale(),
 								nearf,farf);
 				glViewport(width() / 2, 0, width() / 2, height());
 		  }
@@ -466,15 +578,15 @@ namespace BALL
 			{
 				glLoadIdentity();
 				glFrustum(left,right,
-									-2.0 * gl_renderer_.getXScale(), 
-									 2.0 * gl_renderer_.getYScale(),
+									-2.0 * gl_renderer_->getXScale(), 
+									 2.0 * gl_renderer_->getYScale(),
 									nearf,farf);
 			}
 
 
       glMatrixMode(GL_MODELVIEW);
 
-			if (gl_renderer_.getStereoMode() == GLRenderer::ACTIVE_STEREO)
+			if (gl_renderer_->getStereoMode() == GLRenderer::ACTIVE_STEREO)
 			{
 				glDrawBuffer(GL_BACK_LEFT);
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -483,18 +595,66 @@ namespace BALL
 			glPushMatrix();
 			stereo_camera_.setViewPoint(old_view_point - diff);
 			stereo_camera_.setLookAtPosition(old_look_at - diff);
-			gl_renderer_.updateCamera(&stereo_camera_);
- 			gl_renderer_.setLights(true);
+			gl_renderer_->updateCamera(&stereo_camera_);
+ 			gl_renderer_->setLights(true);
 			renderRepresentations_(DISPLAY_LISTS_RENDERING);
 			glPopMatrix();
 			content_changed_ = false;
+
+			if (use_preview_ && preview_) gl_renderer_->setAntialiasing(true);
 		}
 
 		void Scene::renderRepresentations_(RenderMode mode)
 			throw()
 		{
-			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
-			
+			RepresentationManager& pm = getMainControl()->getRepresentationManager();
+
+			if (volume_width_ != FLT_MAX)
+			{
+				const Camera& camera = stage_->getCamera();
+				Vector3 n(-camera.getViewVector());
+				n.normalize();
+				Vector3 nr(camera.getRightVector());
+				nr.normalize();
+				Vector3 nu(camera.getLookUpVector());
+				nu.normalize();
+				ClippingPlane plane;
+
+				for (Position p = 1; p < 6; p++)
+				{
+					if (p == 1)
+					{
+						plane.setPoint(camera.getLookAtPosition() - n * volume_width_);
+						plane.setNormal(n);
+					}
+					else if (p == 2)
+					{
+						plane.setPoint(camera.getLookAtPosition() - nr * volume_width_);
+						plane.setNormal(nr);
+					}
+					else if (p == 3)
+					{
+						plane.setPoint(camera.getLookAtPosition() + nr * volume_width_);
+						plane.setNormal(-nr);
+					}
+					else if (p == 4)
+					{
+						plane.setPoint(camera.getLookAtPosition() - nu * volume_width_);
+						plane.setNormal(nu);
+					}
+					else if (p == 5)
+					{
+						plane.setPoint(camera.getLookAtPosition() + nu * volume_width_);
+						plane.setNormal(-nu);
+					}
+
+					Vector3 v = plane.getNormal();
+					GLdouble planef[] ={v.x, v.y, v.z, plane.getDistance()};
+					glClipPlane(GL_CLIP_PLANE0 + p, planef);
+					glEnable(GL_CLIP_PLANE0 + p);
+				}
+			}
+		
 			// ============== enable active Clipping planes ==============================
 			GLint current_clipping_plane = GL_CLIP_PLANE0;
 
@@ -549,16 +709,17 @@ namespace BALL
 					s.setPosition(pos);
 					s.setRadius(5);
 					s.setColor(ColorRGBA(255,255,255));
-					gl_renderer_.renderSphere_(s);
+					gl_renderer_->renderSphere_(s);
 
 					Tube t;
 					t.setVertex1(pos);
 					t.setVertex2(pos + diff);
 					t.setColor(ColorRGBA(255,255,255));
-					gl_renderer_.renderTube_(t);
+					gl_renderer_->renderTube_(t);
 				}
 			}
 			// -------------------------------------------------------------------
+			
 			
 			// we draw all the representations in different runs, 
 			// 1. normal reps
@@ -568,23 +729,30 @@ namespace BALL
 			{
 				if (run == 1)
 				{
+					for (Position p = 0; p < 20; p++)
+					{
+						if (volume_width_ != FLT_MAX) glDisable(GL_CLIP_PLANE0 + p);
+					}
+
 					// render inactive clipping planes
 					for (plane_it = inactive_planes.begin(); plane_it != inactive_planes.end(); plane_it++)
 					{
-						gl_renderer_.renderClippingPlane_(**plane_it);
+						gl_renderer_->renderClippingPlane_(**plane_it);
 					}
 				}
 
-				PrimitiveManager::RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+				RepresentationList::ConstIterator it = pm.getRepresentations().begin();
 				for(; it != pm.getRepresentations().end(); it++)
 				{
 					Representation& rep = **it;
+					if (rep.isHidden()) continue;
 
 					if (run == 0)
 					{
 						// render all "normal" (non always front and non transparent models)
-						if (rep.getTransparency() != 0 ||
-								rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
+						if (!rep.hasProperty("DONT_CLIP") && (
+								rep.getTransparency() != 0 ||
+								rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT)))
 						{
 							continue;
 						}
@@ -592,7 +760,8 @@ namespace BALL
 					else if (run == 1)
 					{
 						// render all transparent models
-						if (rep.getTransparency() == 0 ||
+						if (rep.hasProperty("DONT_CLIP") ||
+								rep.getTransparency() == 0 ||
 								rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
 						{
 							continue;
@@ -606,57 +775,170 @@ namespace BALL
 					
 					vector<Position> rep_active_planes; // clipping planes
 
+					Index cap_nr = -1;
 					for (Position plane_nr = 0; plane_nr < active_planes.size(); plane_nr++)
 					{
-						if (active_planes[plane_nr]->getRepresentations().has(*it))
+						if (!active_planes[plane_nr]->getRepresentations().has(*it)) continue;
+						
+						const ClippingPlane& plane = *active_planes[plane_nr];
+						rep_active_planes.push_back(plane_nr);
+						if (!plane.cappingEnabled())
 						{
 							glEnable(plane_nr + GL_CLIP_PLANE0);
-							rep_active_planes.push_back(plane_nr);
+							continue;
 						}
+
+						cap_nr = plane_nr;
 					}
 
-					render_(rep, mode);
+					// no capping? then we are done: disable again all clipping planes
+					if (cap_nr == -1)
+					{
+						render_(rep, mode);
 
+						for (Position p = 0; p < rep_active_planes.size(); p++)
+						{
+							glDisable(rep_active_planes[p] + GL_CLIP_PLANE0);
+						}
+						continue;
+					}
+
+					// draw a capping plane
+ 					const ClippingPlane& plane = *active_planes[cap_nr];
+					Vector3 p, x, y, n;
+					p = plane.getPoint();
+					x = getNormal(plane.getNormal()) * 400;
+					y = x % plane.getNormal() * 400;
+ 					n = plane.getNormal();
+					n.normalize();
+					
+					// disable all clipping planes
 					for (Position p = 0; p < rep_active_planes.size(); p++)
 					{
 						glDisable(rep_active_planes[p] + GL_CLIP_PLANE0);
 					}
+
+					// fill the stencil buffer
+					glEnable(cap_nr + GL_CLIP_PLANE0);
+					glEnable(GL_STENCIL_TEST);
+					glClearStencil(0);
+					glClear(GL_STENCIL_BUFFER_BIT);
+					glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+					glStencilFunc(GL_ALWAYS, 0x0, 0xff);
+					glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
+					render_(rep, mode);
+					
+					// disable all clipping planes
+					for (Position p = 0; p < rep_active_planes.size(); p++)
+					{
+						glEnable(rep_active_planes[p] + GL_CLIP_PLANE0);
+					}
+
+					// render the Representation once again, this time with colors
+					gl_renderer_->setColorRGBA_(ColorRGBA(0,1.0,0));
+					glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+					glDisable(GL_STENCIL_TEST);
+					render_(rep, mode);
+
+					// render the capping plane
+					glEnable(GL_STENCIL_TEST);
+					glStencilFunc(GL_NOTEQUAL, 0x0, 0xff);
+
+					ColorRGBA color = ClippingPlane::getCappingColor();
+					bool transparent = (int)color.getAlpha() != 255;
+					if (transparent) gl_renderer_->initTransparent();
+					else 						 gl_renderer_->initSolid();
+
+					glDisable(cap_nr + GL_CLIP_PLANE0);
+					Disc d(Circle3(p, n, 400));
+					d.setColor(color);
+					gl_renderer_->render_(&d);
+					
+					glDisable(GL_STENCIL_TEST);
 				}
 			}
 
+			if (text_ != "")
+			{
+				ColorRGBA c = stage_->getBackgroundColor().getInverseColor();
+				QFont font;
+				font.setPixelSize(font_size_);
+				font.setBold(true);
+				glDisable(GL_LIGHTING);
+				gl_renderer_->setColorRGBA_(c);
+				QFontMetrics fm(font);
+				QRect r = fm.boundingRect(text_.c_str());
+				renderText(width() -  (20 + r.width()), 
+									 height() - (r.height() - 5),
+									 text_.c_str(), font);
+				glEnable(GL_LIGHTING);
+			}
 		}
 
 
 		void Scene::render_(const Representation& repr, RenderMode mode)
 			throw()
 		{
-			if (mode == DISPLAY_LISTS_RENDERING)
+			RepresentationManager& pm = getMainControl()->getRepresentationManager();
+			Representation* rep = (Representation*)& repr;
+
+			// preview mode:
+			// if we have a model with only sticks and cylinders, decrease the rendering detail
+			// and draw it directly instead of using display lists.
+			// BUT: if the representation is currently rebuild, we can only draw buffered!
+			bool used_preview = false;
+			DrawingPrecision pbak = repr.getDrawingPrecision();
+			if (use_preview_ && preview_)
 			{
-				gl_renderer_.drawBuffered(repr);
+				if (repr.getModelType() >= MODEL_STICK &&
+						repr.getModelType() <= MODEL_VDW &&
+						pm.startRendering(rep))
+				{
+					rep->setDrawingPrecision(DRAWING_PRECISION_LOW);
+					mode = DIRECT_RENDERING;
+					used_preview = true;
+				}
+			}
+
+			if (mode == DISPLAY_LISTS_RENDERING &&
+					!repr.hasProperty("RENDER_DIRECT") && 
+					repr.getDrawingMode() != DRAWING_MODE_TOON)
+			{
+				gl_renderer_->drawBuffered(repr);
 				return;
 			}
 
-#ifdef BALL_QT_HAS_THREADS
-			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
-			HashSet<Representation*>& reps_drawn = pm.getRepresentationsBeeingDrawn();
-			Representation* rep = (Representation*)& repr;
-
-			reps_drawn.insert(rep);
-#endif
+			if (!used_preview) 
+			{
+				// if we use previewing mode, the RepresentationManager was already notified above
+				if (!pm.startRendering(rep))
+				{
+					// if Representation is to be rebuilded, but it is currently recalculated,
+					// we can only draw it from the DisplayList
+					gl_renderer_->drawBuffered(repr);
+					return;
+				}
+			}
 
 			if (mode == REBUILD_DISPLAY_LISTS)
 			{
-				gl_renderer_.bufferRepresentation(repr);
+				gl_renderer_->bufferRepresentation(repr);
 			}
 			else //	DIRECT_RENDERING:
 			{
-				gl_renderer_.render(repr);
+				gl_renderer_->render(repr);
 			}
 
-#ifdef BALL_QT_HAS_THREADS
-			reps_drawn.erase(rep);
-			pm.getUpdateWaitCondition().wakeAll();
-#endif
+			if (used_preview)
+			{
+				if (repr.getDrawingPrecision() != pbak)
+				{
+					// if previewing mode was used: reset the drawing precision
+					(*(Representation*)&repr).setDrawingPrecision(pbak);
+				}
+			}
+
+			pm.finishedRendering(rep);
 		}
 
 		/////////////////////////////////////////////////////////
@@ -666,7 +948,8 @@ namespace BALL
 			const Camera& camera = stage_->getCamera();
 
 			Vector3 vv = camera.getViewVector();
-			vv.normalize(); 
+			float length = vv.getLength();
+			if (!Maths::isZero(length)) vv /= length;
 
 			return v.x * camera.getRightVector() +
 						 v.y * camera.getLookUpVector() -
@@ -745,11 +1028,11 @@ namespace BALL
 			Quaternion q2;
  			q2.set(camera.getRightVector(), Angle(degree_up, false).toRadian());
 
-			Quaternion q3;
- 			q3.set(camera.getViewVector(), Angle(degree_clockwise, false).toRadian());
+			Quaternion Q;
+ 			Q.set(camera.getViewVector(), Angle(degree_clockwise, false).toRadian());
 
  			q1 += q2;
- 			q1 += q3;
+ 			q1 += Q;
 			
 			GeometricCenterProcessor center_processor;
 			Vector3 center;
@@ -793,7 +1076,7 @@ namespace BALL
 
 		float Scene::getXDiff_()
 		{
-			float delta_x = x_window_pos_new_ - x_window_pos_old_;
+			float delta_x = (float)x_window_pos_new_ - (float)x_window_pos_old_;
 			delta_x /= qApp->desktop()->width();
 			delta_x *= mouse_sensitivity_;
 			return delta_x;
@@ -801,7 +1084,7 @@ namespace BALL
 
 		float Scene::getYDiff_()
 		{
-			float delta_y = y_window_pos_new_ - y_window_pos_old_;
+			float delta_y = (float)y_window_pos_new_ - (float)y_window_pos_old_;
 			delta_y /= qApp->desktop()->width();
 			delta_y *= mouse_sensitivity_;
 			return delta_y;
@@ -809,8 +1092,6 @@ namespace BALL
 
 		void Scene::rotateSystemClockwise_()
 		{
-			if (current_mode_ != ROTATE__MODE) return;
-
 			float x = getXDiff_();
 
 			if (x == 0) return;
@@ -848,24 +1129,28 @@ namespace BALL
 
 
 		// picking routine ------
-		void Scene::selectObjects_(bool select)
+		void Scene::selectObjects_()
 		{
+			rb_->hide();
+
+			QPoint p0 = mapFromGlobal(QPoint(x_window_pick_pos_first_, y_window_pick_pos_first_));
+			QPoint p1 = mapFromGlobal(QPoint(x_window_pos_new_, y_window_pos_new_));
+
 			List<GeometricObject*> objects;
-			gl_renderer_.pickObjects1(
-					(Position)x_window_pick_pos_first_,
-					(Position)y_window_pick_pos_first_,
-					(Position)x_window_pick_pos_second_,
-					(Position)y_window_pick_pos_second_);
+			gl_renderer_->pickObjects1((Position) p0.x(),
+																(Position) p0.y(),
+																(Position) p1.x(),
+																(Position) p1.y());
 
 			// draw the representations
 			renderView_(DIRECT_RENDERING);
 
- 			gl_renderer_.pickObjects2(objects);
+ 			gl_renderer_->pickObjects2(objects);
 
 			// sent collected objects
 			GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
 			message->setSelection(objects);
-			message->setSelected(select);
+			message->setSelected(pick_select_);
 			notify_(message);
 		}
 
@@ -875,7 +1160,7 @@ namespace BALL
 		{
 			SetCamera set_camera(this);
 			set_camera.exec();
-			gl_renderer_.updateCamera();
+			gl_renderer_->updateCamera();
 			updateGL();
 		}
 
@@ -916,10 +1201,10 @@ namespace BALL
 		void Scene::updateCamera_()
 			throw()
 		{
-			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO)
+			if (gl_renderer_->getStereoMode() == GLRenderer::NO_STEREO)
 			{
-				gl_renderer_.updateCamera();
- 				gl_renderer_.setLights();
+				gl_renderer_->updateCamera();
+ 				gl_renderer_->setLights();
 			}
 
 			updateGL();
@@ -939,71 +1224,132 @@ namespace BALL
 
 			stage_->clearLightSources();
 			stage_->addLightSource(light);
-			gl_renderer_.setLights(true);
+			gl_renderer_->setLights(true);
 			light_settings_->updateFromStage();
 
 			if (update_GL) renderView_(REBUILD_DISPLAY_LISTS);
 		}
 
-
-		void Scene::createCoordinateSystem_()
+		void Scene::createCoordinateSystem()
 			throw()
 		{
-			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+			createCoordinateSystem_(false);
+		}
+
+		void Scene::createCoordinateSystemAtOrigin()
+			throw()
+		{
+			createCoordinateSystem_(true);
+		}
+
+		void Scene::createCoordinateSystem_(bool at_origin)
+			throw()
+		{
+			RepresentationManager& pm = getMainControl()->getRepresentationManager();
 
 			Representation* rp = pm.createRepresentation();
-			ColorRGBA red(255,0,0,120);
-			ColorRGBA yellow(255,255,0,120);
-			ColorRGBA color = red;
+			rp->setTransparency(90);
 
-			for (Position p = 0; p <= 990; p+=10)
+			const Camera& s = getStage()->getCamera();
+
+			float size = 100;
+
+			Vector3 x,y,z,p;
+
+			if (at_origin)
 			{
-				if (color == red) color = yellow;
-				else 							color = red;
-
-				SimpleBox* box = new SimpleBox;
-				box->a.set(p,0,0);
-				box->b.set((p+10),2,2);
-				box->setColor(color);
-				rp->insert(*box);
-
-				box = new SimpleBox;
-				box->a.set(0,p,0);
-				box->b.set(2,p+10,2);
-				box->setColor(color);
-				rp->insert(*box);
-
-				box = new SimpleBox;
-				box->a.set(0,0,p);
-				box->b.set(2,2,p+10);
-				box->setColor(color);
-				rp->insert(*box);
+				p = Vector3(0,0,0);
+				x = Vector3(1,0,0);
+				y = Vector3(0,1,0);
+				z = Vector3(0,0,1);
 			}
+			else
+			{
+				Vector3 v = s.getViewVector();
+				v.normalize();
+				
+				p = s.getViewPoint() + (v * 25) - (s.getLookUpVector() * 5.);
 
-			Label* labelx = new Label;
-			labelx->setText("x-axis");
-			labelx->setColor(ColorRGBA(0,0,1.0,0));
-			labelx->setVertex(10,0,-2);
-			rp->insert(*labelx);
+				x = -v + s.getRightVector();
+				x.normalize();
+				y = -v - s.getRightVector();
+				y.normalize();
 
-			Label* labely = new Label;
-			labely->setText("y-axis");
-			labely->setColor(ColorRGBA(0,0,1.0,0));
-			labely->setVertex(-2,10,0);
-			rp->insert(*labely);
+				z = -(x % y);
+ 			}
 
+			float delta = 0.001;
+			Box* xp = new Box(p, x * size, z * size, delta);
+			Box* yp = new Box(p, y * size, z * size, delta);
+			Box* zp = new Box(p, x * size, y * size, delta);
 
-			Label* labelz = new Label;
-			labelz->setText("z-axis");
-			labelz->setColor(ColorRGBA(0,0,1.0,0));
-			labelz->setVertex(0,-2,10);
-			rp->insert(*labelz);
+			ColorRGBA bcolor(0,255,190,180);
+			xp->setColor(bcolor);
+			yp->setColor(bcolor);
+			zp->setColor(bcolor);
+
+			rp->insert(*xp);
+			rp->insert(*yp);
+ 			rp->insert(*zp);
+
+			ColorRGBA color;
+			ColorRGBA color1(0,255,255,160);
+			ColorRGBA color2(0,0,0,230);
+
+			Vector3 p1[3], p2[3], d[3];
+			p1[0].set(x); p2[0].set(z); d[0].set(y * delta);
+			p1[1].set(y); p2[1].set(z); d[1].set(x * delta);
+			p1[2].set(x); p2[2].set(y); d[2].set(z * delta);
+
+			Vector3 px;
+			for (Position i = 0; i <= size; i+=1)
+			{
+				if (i % 10 == 0) 
+				{
+					color = color2;
+				}
+				else
+				{
+					color = color1;
+				}
+
+				for (Position j = 0; j < 3; j++)
+				{
+					px = p + d[j];
+
+					Line* line = new Line();
+					line->setVertex1(px + p1[j] * i);
+					line->setVertex2(px + p1[j] * i + p2[j] * size);
+					line->setColor(color);
+					rp->insert(*line);
+
+					line = new Line();
+					line->setVertex1(px + p2[j] * i);
+					line->setVertex2(px + p2[j] * i + p1[j] * size);
+					line->setColor(color);
+					rp->insert(*line);
+
+					px = p - d[j];
+
+					line = new Line();
+					line->setVertex1(px + p1[j] * i);
+					line->setVertex2(px + p1[j] * i + p2[j] * size);
+					line->setColor(color);
+					rp->insert(*line);
+
+					line = new Line();
+					line->setVertex1(px + p2[j] * i);
+					line->setVertex2(px + p2[j] * i + p1[j] * size);
+					line->setColor(color);
+					rp->insert(*line);
+				}
+			}
 
 			rp->setProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM);
 
 			// we have to add the representation in the GLRenderer manualy,
 			// because the message wont arrive in Scene::onNotify
-			gl_renderer_.bufferRepresentation(*rp);
+			gl_renderer_->bufferRepresentation(*rp);
 
 			// notify GeometricControl
 			notify_(new RepresentationMessage(*rp, RepresentationMessage::ADD));
@@ -1015,11 +1361,11 @@ namespace BALL
 		{
 			if (er.init(*stage_, (float) width(), (float) height()))
 			{
-				PrimitiveManager::RepresentationList::ConstIterator it;
+				RepresentationList::ConstIterator it;
 				MainControl *main_control = MainControl::getMainControl(this);
 
-				it = main_control->getPrimitiveManager().getRepresentations().begin();
-				for (; it != main_control->getPrimitiveManager().getRepresentations().end(); it++)
+				it = main_control->getRepresentationManager().getRepresentations().begin();
+				for (; it != main_control->getRepresentationManager().getRepresentations().end(); it++)
 				{
 					if (!er.render(**it))
 					{
@@ -1045,6 +1391,9 @@ namespace BALL
 		void Scene::writePreferences(INIFile& inifile)
 			throw()
 		{
+			// workaround: otherwise the variable might not get set
+			window_menu_entry_->setChecked(!isHidden());
+
 			ModularWidget::writePreferences(inifile);
 
 			inifile.appendSection("EXPORT");
@@ -1063,6 +1412,12 @@ namespace BALL
 			throw()
 		{
 			ModularWidget::fetchPreferences(inifile);
+
+			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on"))
+			{
+				setWidgetVisible(inifile.getValue("WINDOWS", getIdentifier() + "::on").toBool());
+			}
+
 			if (inifile.hasEntry("EXPORT", "POVNR"))
 			{
 				pov_nr_ = inifile.getValue("EXPORT", "POVNR").toUnsignedInt();
@@ -1071,12 +1426,6 @@ namespace BALL
 			if (inifile.hasEntry("EXPORT", "PNGNR"))
 			{
 				screenshot_nr_ = inifile.getValue("EXPORT", "PNGNR").toUnsignedInt();
-			}
-
-			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on") &&
-					!inifile.getValue("WINDOWS", getIdentifier() + "::on").toUnsignedInt())
-			{
-				switchShowWidget();
 			}
 
 			readLights_(inifile);
@@ -1122,16 +1471,16 @@ namespace BALL
 			if (light_settings_ == 0) return;
 
 			light_settings_->apply();
-			gl_renderer_.setLights(true);
+			gl_renderer_->setLights(true);
 			updateCamera_();
 
 			bool showed_coordinate = stage_->coordinateSystemEnabled();
 			stage_settings_->apply();
-			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+			RepresentationManager& pm = getMainControl()->getRepresentationManager();
 
 			if (showed_coordinate && !stage_->coordinateSystemEnabled())
 			{
-				PrimitiveManager::RepresentationsIterator it = pm.begin();
+				RepresentationManager::RepresentationsIterator it = pm.begin();
 				Representation* coordinate_rep = 0;
 				for (; it != pm.end(); ++it)
 				{
@@ -1152,12 +1501,12 @@ namespace BALL
 			}
 			else if (!showed_coordinate && stage_->coordinateSystemEnabled()) 
 			{
-				createCoordinateSystem_();
+				createCoordinateSystem();
 			}
 
 			material_settings_->apply();
 
-			gl_renderer_.updateBackgroundColor(); 
+			gl_renderer_->updateBackgroundColor(); 
 
 			if (stage_->getFogIntensity() == 0)
 			{
@@ -1169,14 +1518,14 @@ namespace BALL
 				glEnable(GL_FOG);
 
 				ColorRGBA co = stage_->getBackgroundColor();
-				GLfloat color[4] = {(float) co.getRed(),
-														(float) co.getGreen(),
-														(float) co.getBlue(), 
-														1.0};
+				GLfloat color[4] = {(float) co.getRed(), (float) co.getGreen(), (float) co.getBlue(), 1.0};
 				glFogfv(GL_FOG_COLOR, color);
 
-				glFogf(GL_FOG_START, 2.0);
- 				glFogf(GL_FOG_END, (200 - ((float)stage_->getFogIntensity()) / 2.0) + 12);
+				glFogf(GL_FOG_START, 10.0);
+				float end = ((float) stage_->getFogIntensity());
+				end = 400 - end;
+				end += 20;
+ 				glFogf(GL_FOG_END, end);
 				glFogi(GL_FOG_MODE, GL_LINEAR);
 
 				// doesnt work as expected:
@@ -1297,136 +1646,201 @@ namespace BALL
 		{
 			setMinimumSize(10, 10);
 
-			main_control.initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
+			draw_grid_ = false;
+			ignore_pick_ = false;
 
-			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
-			rotate_id_ =	insertMenuEntry(
-					MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R);
-			setMenuHint("Switch to rotate/zoom mode");
+			Path path;
+			String filename;
 
-			picking_id_ = insertMenuEntry( MainControl::DISPLAY, "&Picking Mode", 
-													this, SLOT(pickingMode_()), CTRL+Key_P);
-			setMenuHint("Switch to picking mode, e.g. to identify singe atoms or groups");
-			setMenuHelp("scene.html#identify_atoms");
+			main_control.initPopupMenu(MainControl::DISPLAY);
 
-			move_id_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()));
-			setMenuHint("Move selected items");
-			setMenuHelp("molecularControl.html#move_molecule");
+			mode_group_->setExclusive(true);
 
-			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
-
-			no_stereo_id_ = insertMenuEntry (
- 					MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()));
- 			menuBar()->setItemChecked(no_stereo_id_, true) ;
-			setMenuHelp("tips.html#3D");
-
-			active_stereo_id_ = insertMenuEntry (
- 					MainControl::DISPLAY_STEREO, "Shuttter Glasses", this, SLOT(enterActiveStereo()));
-			setMenuHelp("tips.html#3D");
-
-			dual_stereo_id_ = insertMenuEntry (
- 					MainControl::DISPLAY_STEREO, "Side by Side", this, SLOT(enterDualStereo()));
-			setMenuHelp("tips.html#3D");
-
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, 
-											SLOT(showViewPoint_()), CTRL+Key_W);
-			setMenuHint("Print the coordinates of the current viewpoint");
-
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, 
-											SLOT(setViewPoint_()), CTRL+Key_N);
-			setMenuHint("Move the viewpoint to the given coordinates");
-
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()));
-			setMenuHint("Reset the camera to the orgin (0,0,0)");
-
-			insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", this, SLOT(showExportPNGDialog()), ALT + Key_P);
-			setMenuHint("Export a PNG image file from the Scene");
-
-//   			insertMenuEntry(MainControl::FILE_EXPORT, "VRML...", this, SLOT(showExportVRMLDialog()));
-//   			setMenuHint("Export a VRML file from the Scene");
-
-			window_menu_entry_id_ = 
-				insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
-			menuBar()->setItemChecked(window_menu_entry_id_, true);
-			setMenuHelp("scene.html");
-
+			create_coordinate_system_ = getMainControl()->initPopupMenu(MainControl::DISPLAY)->
+				addMenu("Show Coordinate System");
+			setMenuHint("Show a coordinate system");
+			create_coordinate_system_->addAction("at origin", this, SLOT(createCoordinateSystemAtOrigin()));
+			create_coordinate_system_->addAction("here", this, SLOT(createCoordinateSystem()));
+			
 			// ======================== ANIMATION ===============================================
 			String help_url = "tips.html#animations";
 
-			record_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, 
-															SLOT(recordAnimationClicked()));
+			record_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, SLOT(dummySlot()));
 			setMenuHint("Record an animation for later processing");
- 			menuBar()->setItemChecked(record_animation_id_, false) ;
 			setMenuHelp(help_url);
+			record_animation_action_->setCheckable(true);
 			
-			clear_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Clear", this, 
+			clear_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Clear", this, 
 															SLOT(clearRecordedAnimation()));
 			setMenuHelp(help_url);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
 
-			start_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, 
-															SLOT(startAnimation()));
+			start_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, SLOT(startAnimation()));
 			setMenuHelp(help_url);
 
-			cancel_animation_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, 
-															SLOT(stopAnimation()));
-			menuBar()->setItemEnabled(cancel_animation_id_, false);
+			cancel_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, SLOT(stopAnimation()));
+			cancel_animation_action_->setEnabled(false);
 			setMenuHelp(help_url);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
 
-			animation_export_PNG_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", 
-																	this, SLOT(animationExportPNGClicked()));
+			animation_export_PNG_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", this, SLOT(dummySlot()));
 			setMenuHelp(help_url);
+			animation_export_PNG_action_->setCheckable(true);
 
-			animation_export_POV_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", 
-																	this, SLOT(animationExportPOVClicked()));
+			animation_export_POV_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", this, SLOT(dummySlot()));
 			setMenuHelp(help_url);
+			animation_export_POV_action_->setCheckable(true);
 
-			animation_repeat_id_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 
-																	SLOT(animationRepeatClicked()));
+			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, SLOT(dummySlot()));
 			setMenuHelp(help_url);
+			animation_repeat_action_->setCheckable(true);
 
-			setCursor(QCursor(Qt::SizeAllCursor));
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
-			connect(&timer_, SIGNAL(timeout()), this, SLOT(timerSignal_()) );			
+			no_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()));
+			no_stereo_action_->setCheckable(true);
+			no_stereo_action_->setChecked(true);
+			setMenuHelp("tips.html#3D");
 
-			registerWidgetForHelpSystem(this, "scene.html");
+			active_stereo_action_ = insertMenuEntry (
+ 					MainControl::DISPLAY_STEREO, "Shuttter Glasses", this, SLOT(enterActiveStereo()));
+			setMenuHelp("tips.html#3D");
+			active_stereo_action_->setCheckable(true);
+
+			dual_stereo_action_ = insertMenuEntry (
+ 					MainControl::DISPLAY_STEREO, "Side by Side", this, SLOT(enterDualStereo()));
+			setMenuHelp("tips.html#3D");
+			dual_stereo_action_->setCheckable(true);
+
+			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Store Viewpoint", this, SLOT(storeViewPoint()));
+			setMenuHint("Store the current viewpoint");
+
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Restore Viewpoint", this, SLOT(restoreViewPoint()));
+			setMenuHint("Restore the viewpoint");
+
+			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
+
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()), Qt::CTRL+Qt::Key_W);
+			setMenuHint("Print the coordinates of the current viewpoint");
+
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, SLOT(setViewPoint_()), Qt::CTRL+Qt::Key_N);
+			setMenuHint("Move the viewpoint to the given coordinates");
+
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()));
+			setMenuHint("Reset the camera to the orgin (0,0,0)");
+
+			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Limit ViewVolume", this, SLOT(setupViewVolume()));
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Reset ViewVolume", this, SLOT(disableViewVolumeRestriction()));
+
+			QAction* screenshot_action = insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", 
+																	this, SLOT(showExportPNGDialog()), Qt::ALT + Qt::Key_P);
+			setMenuHint("Export a PNG image file from the Scene");
+			setIcon("screenshot.png", false);
+
+			insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, SLOT(exportPOVRay()), Qt::CTRL+Qt::Key_Y);
+			setIcon("povray.png", false);
+			setMenuHint("tips.html#povray");
+
+//   			insertMenuEntry(MainControl::FILE_EXPORT, "VRML...", this, SLOT(showExportVRMLDialog()));
+//   			setMenuHint("Export a VRML file from the Scene");
+
+			// ====================================== MODES =====================================
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
+			rotate_action_ =	insertMenuEntry(
+					MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), Qt::CTRL+Qt::Key_R);
+			setMenuHint("Switch to rotate/zoom mode");
+			setMenuHelp("scene.html#rotate_mode");
+			rotate_action_->setCheckable(true);
+			setIcon("rotate.png", false);
+			toolbar_actions_.push_back(rotate_action_);
+			mode_group_->addAction(rotate_action_);
+
+			picking_action_ = insertMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), Qt::CTRL+Qt::Key_P);
+			setMenuHint("Switch to picking mode, e.g. to identify singe atoms or groups");
+			setMenuHelp("scene.html#identify_atoms");
+			setIcon("picking.png", false);
+			picking_action_->setCheckable(true);
+			toolbar_actions_.push_back(picking_action_);
+			mode_group_->addAction(picking_action_);
+
+			move_action_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()));
+			setMenuHint("Move selected items");
+			setMenuHelp("molecularControl.html#move_molecule");
+			setIcon("move.png", false);
+			move_action_->setCheckable(true);
+			toolbar_actions_.push_back(move_action_);
+			mode_group_->addAction(move_action_);
+
+			fullscreen_action_ = new QAction("Fullscreen", this);
+			fullscreen_action_->setObjectName(fullscreen_action_->text());
+			connect(fullscreen_action_, SIGNAL(triggered()), getMainControl(), SLOT(toggleFullScreen()));
+			filename = path.find("graphics/fullscreen.png");
+			fullscreen_action_->setIcon(QIcon(filename.c_str()));
+			toolbar_actions_.push_back(fullscreen_action_);
+
+			switch_grid_ = new QAction("Show ruler", this);
+			switch_grid_->setObjectName(switch_grid_->text());
+			connect(switch_grid_, SIGNAL(triggered()), this, SLOT(switchShowGrid()));
+			switch_grid_->setCheckable(true);
+			switch_grid_->setChecked(draw_grid_);
+			filename = path.find("graphics/ruler.png");
+			switch_grid_->setIcon(QIcon(filename.c_str()));
+			toolbar_actions_.push_back(switch_grid_);
+
+			toolbar_actions_.push_back(screenshot_action);
+
+			insertMenuEntry(MainControl::FILE, "Print", this, SLOT(printScene()));
+
+			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
+			window_menu_entry_->setCheckable(true);
+			setMenuHelp("scene.html");
+
+			setCursor(QCursor(Qt::ArrowCursor));
+
+			setFocusPolicy(Qt::StrongFocus);
+			registerForHelpSystem(this, "scene.html");
+
+			toolbar_->setObjectName("3D toolbar");
+			toolbar_->setIconSize(QSize(23,23));
+			toolbar_->layout()->setMargin(2);
+			toolbar_->layout()->setSpacing(2);
 		}
 
-		void Scene::checkMenu(MainControl& /*main_control*/)
+		void Scene::checkMenu(MainControl& main_control)
 			throw()
 		{
-			menuBar()->setItemChecked(rotate_id_, 	(current_mode_ == ROTATE__MODE));
-			menuBar()->setItemChecked(picking_id_,  (current_mode_ == PICKING__MODE));		
+			bool busy = main_control.compositesAreLocked();
+			rotate_action_->setChecked(current_mode_ == ROTATE__MODE);
+			picking_action_->setChecked(current_mode_ == PICKING__MODE);
+			picking_action_->setEnabled(!busy);
+			move_action_->setChecked(current_mode_ == MOVE__MODE);
+			move_action_->setEnabled(!busy);
 
-			menuBar()->setItemEnabled(picking_id_, !getMainControl()->compositesAreLocked());
-			menuBar()->setItemEnabled(move_id_, !getMainControl()->compositesAreLocked());
+			create_coordinate_system_->setEnabled(!busy);
 
-			bool animation_running = false;
-			#ifdef BALL_QT_HAS_THREADS
-				animation_running = (animation_thread_ != 0 && animation_thread_->running());
-			#endif
+			bool animation_running = (animation_thread_ != 0 && animation_thread_->isRunning());
 			
-			menuBar()->setItemEnabled(start_animation_id_, 
+			start_animation_action_->setEnabled(
 																animation_points_.size() > 0 && 
-																!getMainControl()->compositesAreLocked() &&
+																!busy &&
 																!animation_running);
 			
-			menuBar()->setItemEnabled(clear_animation_id_, 
-					animation_points_.size() > 0 && !animation_running);
+			clear_animation_action_->setEnabled(animation_points_.size() > 0 && !animation_running);
+
+			window_menu_entry_->setChecked(isVisible());
 		}
 
 		bool Scene::isAnimationRunning() const
 			throw()
 		{
-			#ifdef BALL_QT_HAS_THREADS
-				if (animation_thread_ != 0 && animation_thread_->running())
-				{
-					return true;
-				}
-			#endif
+			if (animation_thread_ != 0 && animation_thread_->isRunning())
+			{
+				return true;
+			}
 
 			return false;
 		}
@@ -1441,15 +1855,14 @@ namespace BALL
 
 			need_update_ = true;
 
-			x_window_pos_new_ = e->x();
-			y_window_pos_new_ = e->y();
+			x_window_pos_new_ = e->globalX();
+			y_window_pos_new_ = e->globalY();
 
 			// ============ picking mode ================
 			if (current_mode_ == PICKING__MODE)
 			{
-				if (e->state() == Qt::LeftButton  ||
-						e->state() == Qt::RightButton ||
-						e->state() == (Qt::LeftButton | Qt::ShiftButton))
+				if (e->buttons() == Qt::LeftButton  ||
+						e->buttons() == Qt::RightButton)
 				{
 					selectionPressedMoved_();
 				}
@@ -1470,84 +1883,91 @@ namespace BALL
 
 		void Scene::mousePressEvent(QMouseEvent* e)
 		{
+			info_string_ = "";
+
 			if (isAnimationRunning()) return;
 
 			makeCurrent();
 
 			mouse_button_is_pressed_ = true;
+			ignore_pick_ = false;
 
-			x_window_pos_old_ = e->x();
-			y_window_pos_old_ = e->y();
+			x_window_pos_old_ = e->globalX();
+			y_window_pos_old_ = e->globalY();
 
-			if(current_mode_ == ROTATE__MODE)
+			if (current_mode_ == ROTATE__MODE) 
 			{
+				preview_ = true;
 				return;
 			}
 
-			if(current_mode_ == PICKING__MODE)
+			if (current_mode_ == PICKING__MODE)
 			{	
-				if (e->button() == Qt::LeftButton ||
-						e->button() == Qt::RightButton)
+				if (e->modifiers() == Qt::NoModifier &&(
+						e->buttons() == Qt::LeftButton ||
+						e->buttons() == Qt::RightButton))
 				{
+					pick_select_ = (e->buttons() == Qt::LeftButton);
 					selectionPressed_();
 				}
+				else
+				{
+					QPoint p = mapFromGlobal(QCursor::pos());
+					pickParent_(p);
+				}
+			}
+			else if (current_mode_ == MOVE__MODE)
+			{
+				preview_ = true;
 			}
 		}
 
 		Index Scene::getMoveModeAction_(const QMouseEvent& e)
 		{
-			switch (e.state())
+			if (e.modifiers() == Qt::NoModifier)
 			{
-				// zoom
-				case (Qt::ShiftButton | Qt::LeftButton): 
-				case  Qt::MidButton:
-					return MOVE_ZOOM;
-
-				// translate 
-				case (Qt::ControlButton | Qt::LeftButton):
-				case  Qt::RightButton:
-					return MOVE_TRANSLATE;
-
-				// rotate
-				case Qt::LeftButton:
-					return MOVE_ROTATE;
-
-				// rotate2 
-				case (Qt::LeftButton | Qt::RightButton):
-				case (Qt::LeftButton | Qt::ShiftButton | Qt::ControlButton):
-				default:
-					return MOVE_ROTATE_CLOCKWISE;
+				if (e.buttons() == Qt::LeftButton) 	return TRANSLATE_ACTION;
+				if (e.buttons() == Qt::MidButton) 	return ZOOM_ACTION;
+				if (e.buttons() == Qt::RightButton) return ROTATE_ACTION;
+			}
+			else if (e.buttons() == Qt::LeftButton)
+			{
+				if (e.modifiers() == Qt::ShiftModifier) 											return ZOOM_ACTION;
+				if (e.modifiers() == Qt::ControlModifier) 										return ROTATE_ACTION;
+				if (e.modifiers() == Qt::ShiftModifier | Qt::ControlModifier) return ROTATE_CLOCKWISE_ACTION;
+			}
+			else if (e.buttons() == Qt::LeftButton | Qt::RightButton)
+			{
+				return ROTATE_CLOCKWISE_ACTION;
 			}
 
-			return MOVE_TRANSLATE;
+			return ROTATE_ACTION;
 		}
 
 		void Scene::processRotateModeMouseEvents_(QMouseEvent* e)
 		{
-			if (x_window_pos_old_ == e->x() &&
-					y_window_pos_old_ == e->y())
+			if (x_window_pos_old_ == e->globalX() &&
+					y_window_pos_old_ == e->globalY())
 			{
 				return;
 			}
 
-			if(current_mode_ != ROTATE__MODE) return;
-			
 			content_changed_ = true;
 
-			switch (e->state())
+			switch ((Index)(e->buttons() | e->modifiers()))
 			{
-				case (Qt::ShiftButton | Qt::LeftButton): 
+				case (Qt::ShiftModifier | Qt::LeftButton): 
 				case  Qt::MidButton:
 					zoomSystem_();
 					break;
 
-				case (Qt::ControlButton | Qt::LeftButton):
+				case (Qt::ControlModifier | Qt::LeftButton):
 				case  Qt::RightButton:
 					translateSystem_();
 					break;
 
-				case (Qt::LeftButton | Qt::RightButton):
-				case (Qt::LeftButton | Qt::ShiftButton | Qt::ControlButton):
+				case (Qt::LeftButton | (Index)Qt::RightButton):
+				case (Qt::LeftButton | Qt::ShiftModifier | Qt::ControlModifier):
 					rotateSystemClockwise_();
 					break;
 
@@ -1559,7 +1979,7 @@ namespace BALL
 					break;
 			}
 
-			if (menuBar()->isItemChecked(record_animation_id_))
+			if (record_animation_action_->isChecked())
 			{
 				animation_points_.push_back(stage_->getCamera());
 			}
@@ -1567,9 +1987,10 @@ namespace BALL
 
 		void Scene::processMoveModeMouseEvents_(QMouseEvent* e)
 		{
-			if(current_mode_ != MOVE__MODE) return;
-
 			Camera& camera = stage_->getCamera();
+
+			x_window_pos_new_ = e->globalX();
+			y_window_pos_new_ = e->globalY();
 
 			// Difference between the old and new position in the window 
 			float delta_x = getXDiff_() / 4.0;
@@ -1589,25 +2010,25 @@ namespace BALL
 
 				switch (action)
 				{
-					case MOVE_ZOOM:
+					case ZOOM_ACTION:
 					{
 						moveComposites(composites, Vector3(0,0, delta_y * ZOOM_FACTOR));
 						return;
 					}
 
-					case MOVE_TRANSLATE:
+					case TRANSLATE_ACTION:
 					{
 						moveComposites(composites, Vector3(delta_x * TRANSLATE_FACTOR ,-delta_y * TRANSLATE_FACTOR, 0));
 						return;
 					}
 
-					case MOVE_ROTATE:
+					case ROTATE_ACTION:
 					{
 						rotateComposites(composites, delta_x * ROTATE_FACTOR * 4., delta_y * ROTATE_FACTOR * 4., 0);
 						return;
 					}
 
-					case MOVE_ROTATE_CLOCKWISE:
+					case ROTATE_CLOCKWISE_ACTION:
 					{
 						rotateComposites(composites, 0, 0, delta_x * ROTATE_FACTOR * 4.);
 						return;
@@ -1623,7 +2044,7 @@ namespace BALL
 
 			switch (action)
 			{
-				case MOVE_ZOOM:
+				case ZOOM_ACTION:
 				{
 					Vector3 v = -stage_->getCamera().getViewVector();
 					if (Maths::isZero(v.getSquareLength())) v = Vector3(1,0,0);
@@ -1635,7 +2056,7 @@ namespace BALL
 					break;
 				}
 
-				case MOVE_TRANSLATE:
+				case TRANSLATE_ACTION:
 				{
 					// calculate translation in x-axis direction
 					Vector3 right_translate = camera.getRightVector() * delta_x * TRANSLATE_FACTOR * 3.0;
@@ -1647,7 +2068,7 @@ namespace BALL
 					break;
 				}
 
-				case MOVE_ROTATE:
+				case ROTATE_ACTION:
 				{
 					delta_x *= ROTATE_FACTOR * 4.;
 					delta_y *= ROTATE_FACTOR * 4.;
@@ -1660,7 +2081,7 @@ namespace BALL
 					break;
 				}
 
-				case MOVE_ROTATE_CLOCKWISE:
+				case ROTATE_CLOCKWISE_ACTION:
 				default:
 					delta_x *= ROTATE_FACTOR2;
 					Vector3 rotation_axis = camera.getViewVector();
@@ -1680,24 +2101,22 @@ namespace BALL
 			makeCurrent();
 
 			mouse_button_is_pressed_ = false;
+			preview_ = false;
 
 			// ============ picking mode ================
-			if(current_mode_ == PICKING__MODE)
+			if (current_mode_ == PICKING__MODE)
 			{
-				switch (e->state())
+				if (ignore_pick_)
 				{
-					case (Qt::LeftButton | Qt::ShiftButton):
-					case Qt::RightButton:
-						deselectionReleased_();
-						break;
+					ignore_pick_ = false;
 
-					case Qt::LeftButton:
-						selectionReleased_();
-						break;
-
-					default:
-						break;
+					return;
 				}
+				x_window_pos_new_ = e->globalX();
+				y_window_pos_new_ = e->globalY();
+				selectObjects_();
+				// update will be done from MolecularControl!
+				need_update_ = false; 			
 			}
 			else if (current_mode_ == ROTATE__MODE)
 			{
@@ -1716,56 +2135,40 @@ namespace BALL
 			}
 		}
 
-		void Scene::initTimer()
+		void Scene::showInfos()
 		{
-			timer_.start(500);
-		}
+			info_string_ = "";
 
-		void Scene::timerSignal_()
-		{
-			if (mouse_button_is_pressed_ ||
-					getMainControl()->compositesAreLocked() ||
-					getMainControl()->getPrimitiveManager().updateRunning())
+			if (getMainControl()->isBusy()) return;
+
+			info_point_ = QCursor::pos();
+			info_point_ = mapFromGlobal(info_point_);
+
+			if (!rect().contains(info_point_) ||
+					!lockComposites()) 
 			{
 				return;
 			}
 
-			QPoint point = mapFromGlobal(QCursor::pos());
-
-			if (!rect().contains(point)) return;
-
-			Position pos_x = point.x();
-			Position pos_y = point.y();
+			Position pos_x = info_point_.x();
+			Position pos_y = info_point_.y();
 
 			// if the mouse was at on other position 500 ms before, store position and abort
-
-			if (pos_x != last_x_pos_ ||
-					pos_y != last_y_pos_)
-			{
-				last_x_pos_ = pos_x;
-				last_y_pos_ = pos_y;
-				show_info_ = true;
-				return;
-			}
-
-			if (!show_info_) return;
-
-			// we wont show the info again until the mouse moved
-			show_info_ = false;
 
 			List<GeometricObject*> objects;
 
 			// ok, do the picking, until we find something
 			for (Position p = 0; p < 8; p++)
 			{
-				gl_renderer_.pickObjects1(pos_x - p, pos_y - p, pos_x + p, pos_y + p);
+				gl_renderer_->pickObjects1(pos_x - p, pos_y - p, pos_x + p, pos_y + p);
 				renderView_(DIRECT_RENDERING);
-				gl_renderer_.pickObjects2(objects);
+				gl_renderer_->pickObjects2(objects);
 				if (objects.size() != 0) break;
 			}
 
 			if (objects.size() == 0)
 			{
+				unlockComposites();
 				return;
 			}
 
@@ -1773,12 +2176,15 @@ namespace BALL
 			String string;
 			MolecularInformation info;
 
+			GeometricObject* object = 0;
 			List<GeometricObject*>::Iterator git = objects.begin();
 			for (; git != objects.end(); git++)
 			{
 				// do we have a composite?
 				Composite* composite = (Composite*) (**git).getComposite();
 				if (composite == 0) continue;
+
+				object = *git;
 
 				info.visit(*composite);
 				String this_string(info.getName());
@@ -1789,149 +2195,178 @@ namespace BALL
 					this_string = info.getName() + " : " + this_string;
 				}
 
- 				if (this_string == "UNKNOWN") continue;;
+ 				if (this_string == "UNKNOWN") continue;
+
+				if (RTTI::isKindOf<Atom>(*composite))
+				{
+					this_string += "[T:";
+					this_string += ((Atom*)composite)->getTypeName();
+					this_string += ",FC:";
+					this_string += String(((Atom*)composite)->getFormalCharge());
+					this_string += "]";
+				}
 
 				if (string != "") string += ", ";
 				string += this_string;
 			}
 
-			if (string == "") return;
+			if (string == "") 
+			{
+				unlockComposites();
+				return;
+			}
+
+			info_string_ = string;
 
 			String string2 = String("Object at cursor is ") + string;
 
-			if (getMainControl()->getStatusbarText() == string2) return;
+			if (getMainControl()->getStatusbarText() != string2) 
+			{
+				setStatusbarText(string2, false);
 
-			setStatusbarText(string2, false);
-
-			QPainter painter(this);
-
-			ColorRGBA color = getStage()->getBackgroundColor();
-			color.set(255 - (Position) color.getRed(),
-								255 - (Position) color.getGreen(),
-								255 - (Position) color.getBlue());
-
-
-			painter.setBackgroundMode(Qt::OpaqueMode);
-			painter.setBackgroundColor(color.getQColor());
-			painter.setPen(getStage()->getBackgroundColor().getQColor());
-
-			QPoint diff(20, 20);
-			if (pos_x > (Position) width() / 2) diff.setX(-20);
-			if (pos_y > (Position) height() / 2) diff.setY(-20);
-
-			point += diff;
-			painter.drawText(point, string.c_str(), 0, -1);
-
-			show_info_ = false;
+				QPoint diff(20, 20);
+				if (pos_x > (Position) width() / 2) diff.setX(-20);
+				if (pos_y > (Position) height() / 2) diff.setY(-20);
+				info_point_ += diff;
+				updateGL();
+			}
+			unlockComposites();
 		}
 
-
-#ifndef QT_NO_WHEELEVENT
 		void Scene::wheelEvent(QWheelEvent *qmouse_event)
 		{
 			qmouse_event->accept();
 
-			y_window_pos_new_ = y_window_pos_old_ + (qmouse_event->delta()/120*mouse_wheel_sensitivity_);
+			y_window_pos_new_ = (Position)(y_window_pos_old_ + (qmouse_event->delta() / 120 * mouse_wheel_sensitivity_));
 			zoomSystem_();
 			y_window_pos_old_ = y_window_pos_new_;
 		}
-#endif
 
 		void Scene::keyPressEvent(QKeyEvent* e)
 		{
-			if (gl_renderer_.getStereoMode() != GLRenderer::NO_STEREO)
+			if (gl_renderer_->getStereoMode() == GLRenderer::NO_STEREO &&
+			    e->key() == Qt::Key_Escape) 
 			{
-				if ((e->key() == Key_Y && e->state() == AltButton) ||
-						 e->key() == Key_Escape)
+				switchToLastMode();
+				return;
+			}
+
+			if (e->key() == Qt::Key_R)
+			{
+				setMode(ROTATE__MODE);
+				return;
+			}
+
+			if (e->key() == Qt::Key_W)
+			{
+				setMode(MOVE__MODE);
+				return;
+			}
+
+			if (e->key() == Qt::Key_Q)
+			{
+				setMode(PICKING__MODE);
+				return;
+			}
+
+
+			if (gl_renderer_->getStereoMode() == GLRenderer::NO_STEREO) 
+			{
+				e->ignore();
+				return;
+			}
+
+			if ((e->key() == Qt::Key_Y && e->modifiers() == Qt::AltModifier) ||
+					 e->key() == Qt::Key_Escape)
+			{
+				exitStereo();
+				return;
+			}
+
+			// setting of eye and focal distance
+			if (e->key() != Qt::Key_Left  &&
+					e->key() != Qt::Key_Right &&
+					e->key() != Qt::Key_Up    &&
+					e->key() != Qt::Key_Down)
+			{
+				e->ignore();
+				return;
+			}
+
+			// setting of eye distance
+			if (e->key() == Qt::Key_Left ||
+					e->key() == Qt::Key_Right)
+			{
+				float new_distance = stage_->getEyeDistance();
+
+				float modifier;
+				if (e->key() == Qt::Key_Left)
 				{
-					exitStereo();
+					modifier = -0.1;
 				}
-
-				// setting of eye and focal distance
-				if (e->key() != Key_Left  &&
-						e->key() != Key_Right &&
-						e->key() != Key_Up    &&
-						e->key() != Key_Down)
-				{
-					return;
-				}
-
-				// setting of eye distance
-				if (e->key() == Key_Left ||
-						e->key() == Key_Right)
-				{
-					float new_distance = stage_->getEyeDistance();
-
-					float modifier;
-					if (e->key() == Key_Left)
-					{
-						modifier = -0.1;
-					}
-					else
-					{
-						modifier = +0.1;
-					}
-
-					if (e->state() == ShiftButton)
-					{
-						modifier *= 10;
-					}
-
-					new_distance += modifier;
-					
-					// prevent strange values
-					if (new_distance < 0)
-					{
-						new_distance = 0;
-					}
-
-					if (new_distance > 4)
-					{
-						new_distance = 4;
-					}
-
-					stage_->setEyeDistance(new_distance);
-				}
-				// setting of focal distance
 				else
 				{
-					float new_focal_distance = stage_->getFocalDistance();
-
-					float modifier;
-					if (e->key() == Key_Down)
-					{
-						modifier = -1;
-					}
-					else
-					{
-						modifier = +1;
-					}
-
-					if (e->state() == ShiftButton)
-					{
-						modifier *= 10;
-					}
-
-					new_focal_distance += modifier;
-	
-					// prevent strange values
-					if (new_focal_distance < 7)
-					{
-						new_focal_distance = 7;
-					}
-					
-					if (new_focal_distance > 100) 
-					{
-						new_focal_distance = 100;
-					}
-
-					stage_->setFocalDistance(new_focal_distance);
+					modifier = +0.1;
 				}
 
-				stage_settings_->updateFromStage();
+				if (e->modifiers() == Qt::ShiftModifier)
+				{
+					modifier *= 10;
+				}
 
-				updateGL();
+				new_distance += modifier;
+				
+				// prevent strange values
+				if (new_distance < 0)
+				{
+					new_distance = 0;
+				}
+
+				if (new_distance > 4)
+				{
+					new_distance = 4;
+				}
+
+				stage_->setEyeDistance(new_distance);
 			}
+			// setting of focal distance
+			else
+			{
+				float new_focal_distance = stage_->getFocalDistance();
+
+				float modifier;
+				if (e->key() == Qt::Key_Down)
+				{
+					modifier = -1;
+				}
+				else
+				{
+					modifier = +1;
+				}
+
+				if (e->modifiers() == Qt::ShiftModifier)
+				{
+					modifier *= 10;
+				}
+
+				new_focal_distance += modifier;
+
+				// prevent strange values
+				if (new_focal_distance < 7)
+				{
+					new_focal_distance = 7;
+				}
+				
+				if (new_focal_distance > 100) 
+				{
+					new_focal_distance = 100;
+				}
+
+				stage_->setFocalDistance(new_focal_distance);
+			}
+
+			stage_settings_->updateFromStage();
+			updateGL();
 		}
 
 		void Scene::setMode(ModeType mode)
@@ -1946,105 +2381,82 @@ namespace BALL
 		{
 			if (current_mode_ == ROTATE__MODE) return;
 			
-			gl_renderer_.exitPickingMode();
+			gl_renderer_->exitPickingMode();
 			last_mode_ = current_mode_;
 			current_mode_ = ROTATE__MODE;		
-			setCursor(QCursor(Qt::SizeAllCursor));
-			menuBar()->setItemChecked(rotate_id_, true);
-			menuBar()->setItemChecked(picking_id_, false);
-			menuBar()->setItemChecked(move_id_, false);
+			setCursor(QCursor(Qt::ArrowCursor));
+			rotate_action_->setChecked(true);
+			checkMenu(*getMainControl());
 		}
 
 		void Scene::pickingMode_()
 		{
 			if (current_mode_ == PICKING__MODE) return;
 			
-			gl_renderer_.enterPickingMode();
+			gl_renderer_->enterPickingMode();
 			last_mode_ = current_mode_;
 			current_mode_ = PICKING__MODE;
 			setCursor(QCursor(Qt::CrossCursor));
-			menuBar()->setItemChecked(rotate_id_, false);
-			menuBar()->setItemChecked(picking_id_, true);
-			menuBar()->setItemChecked(move_id_, false);
+			picking_action_->setChecked(true);
+			checkMenu(*getMainControl());
 		}
 
 		void Scene::moveMode_()
 		{
 			if (current_mode_ == MOVE__MODE) return;
 			
-			gl_renderer_.exitPickingMode();
+			gl_renderer_->exitPickingMode();
 			last_mode_ = current_mode_;
 			current_mode_ = MOVE__MODE;
-			setCursor(QCursor(Qt::PointingHandCursor));
-			menuBar()->setItemChecked(rotate_id_, false);
-			menuBar()->setItemChecked(picking_id_, false);
-			menuBar()->setItemChecked(move_id_, true);
+			setCursor(QCursor(Qt::SizeAllCursor));
+			move_action_->setChecked(true);
+			checkMenu(*getMainControl());
 		}
 
 		void Scene::selectionPressed_()
 		{
 			x_window_pick_pos_first_ = x_window_pos_old_;
 			y_window_pick_pos_first_ = y_window_pos_old_;
-			x_window_pick_pos_second_ = x_window_pos_old_;
-			y_window_pick_pos_second_ = y_window_pos_old_;
-		}
-
-		void Scene::selectionReleased_()
-		{
-			selectObjects_(true);
-			need_update_ = true;
-			updateGL();
-		}
-
-		void Scene::deselectionReleased_()
-		{
-			selectObjects_(false);
-			need_update_ = true;
-			updateGL();
 		}
 
 
 		void Scene::selectionPressedMoved_()
 		{
-			x_window_pick_pos_second_ = x_window_pos_new_;
-			y_window_pick_pos_second_ = y_window_pos_new_;
+			Position x0, x1, y0, y1;
 
-			QPainter painter(this);
-			painter.setPen(white);
-			painter.setRasterOp(XorROP);
+			x0 = BALL_MIN(x_window_pos_new_, x_window_pick_pos_first_);
+			x1 = BALL_MAX(x_window_pos_new_, x_window_pick_pos_first_);
+			y0 = BALL_MIN(y_window_pos_new_, y_window_pick_pos_first_);
+			y1 = BALL_MAX(y_window_pos_new_, y_window_pick_pos_first_);
 
-			painter.drawRect((int) x_window_pick_pos_first_,
-					(int) y_window_pick_pos_first_,
-					(int) (x_window_pos_old_ - x_window_pick_pos_first_),
-					(int) (y_window_pos_old_ - y_window_pick_pos_first_));
+			QPoint p0 = mapFromGlobal(QPoint(x0, y0));
+			QPoint p1 = mapFromGlobal(QPoint(x1, y1));
 
-			painter.drawRect((int) x_window_pick_pos_first_,
-					(int) y_window_pick_pos_first_,
-					(int) (x_window_pos_new_ - x_window_pick_pos_first_),
-					(int) (y_window_pos_new_ - y_window_pick_pos_first_));
-
-			painter.end();
+			rb_->setGeometry(QRect(p0, p1));
+			rb_->show();
 		}
 
 		void Scene::showExportVRMLDialog()
 		{
 			String start = String(screenshot_nr_) + ".vrml";
 			screenshot_nr_ ++;
-			QFileDialog fd("Export to a VRML file", "*.vrml", 0, "Select a VRMLfile", true);
-			fd.setSelection(start.c_str());
-			fd.setMode(QFileDialog::AnyFile);
+			QFileDialog fd(0, "Export to a VRML file", getMainControl()->getWorkingDir().c_str(), "*.vrml");
+			fd.setAcceptMode(QFileDialog::AcceptSave);
+			fd.selectFile(start.c_str());
+			fd.setFileMode(QFileDialog::AnyFile);
 			if (fd.exec() != QDialog::Accepted ||
-					fd.selectedFile() == "")
+					fd.selectedFiles().size() == 0)
 			{
 				return;
 			}
 
-			VRMLRenderer vrml(fd.selectedFile().ascii());
+			String filename = ascii(*fd.selectedFiles().begin());
+			VRMLRenderer vrml(filename);
 
 			if (exportScene(vrml))
 			{
-				setStatusbarText("Saved VRML to " + String(fd.selectedFile().ascii()));
-				setWorkingDirFromFilename_(fd.selectedFile().ascii());
+				setStatusbarText("Saved VRML to " + filename);
+				setWorkingDirFromFilename_(filename);
 				return;
 			}
 			
@@ -2053,6 +2465,24 @@ namespace BALL
 		}
 
 
+		void Scene::printScene()
+		{
+			QPrinter printer;
+			QPrintDialog dialog(&printer, this);
+			if (!dialog.exec()) return;
+			
+			setStatusbarText("printing..");
+
+			QPainter p;
+			if(!p.begin(&printer)) return; 
+
+			QImage pic = grabFrameBuffer();
+			p.drawImage(0,0, pic);	
+			p.end();
+
+			setStatusbarText("finished printing");
+		}
+
 
 		String Scene::exportPNG()
 		{
@@ -2060,42 +2490,74 @@ namespace BALL
 			screenshot_nr_ ++;
 
 			exportPNG(filename);
+			Log.info() << "Exporting PNG to " 
+								 << Directory().getPath() << FileSystem::PATH_SEPARATOR
+								 << filename << std::endl;
 
 			return filename;
 		}
 
 		void Scene::showExportPNGDialog()
 		{
-			// first create the image, otherwise we get the dialog into the image!!!
-			QImage image = grabFrameBuffer();
-
 			String start = String(screenshot_nr_) + ".png";
 			screenshot_nr_ ++;
-			QFileDialog fd("Export a screenshot to a PNG file", "*.png", 0, "Select a PNG file", true);
-			fd.setSelection(start.c_str());
-			fd.setMode(QFileDialog::AnyFile);
-			if (fd.exec() != QDialog::Accepted ||
-					fd.selectedFile() == "")
+			QString qresult = QFileDialog::getSaveFileName(
+												0,
+												"Export POVRay File",
+												(getWorkingDir() + String(FileSystem::PATH_SEPARATOR) + start).c_str(),
+												"*.png");
+
+			if (qresult == QString::null) return;
+
+			String result = ascii(qresult);
+			if (!offscreen_rendering_)
 			{
-				return;
+				update(false);
+				getMainControl()->processEvents(9999);
 			}
-
-			String file_name = fd.selectedFile().ascii();
-			if (!file_name.has('.')) file_name += ".png";
-
-			bool ok = image.save(file_name.c_str(), "PNG");
-
-			setWorkingDirFromFilename_(file_name);
-
-			if (ok) setStatusbarText("Saved PNG to " + file_name);
-			else 		setStatusbarText("Could not save PNG", true);
+			exportPNG(result);
 		}
 
 		bool Scene::exportPNG(const String& filename)
 		{
 			makeCurrent();
+			QImage image;
 
-			QImage image = grabFrameBuffer();
+			if (offscreen_rendering_)
+			{
+				glFlush();
+				QGLFormat f = format();
+				f.setSampleBuffers(true);
+				Log.info() << "Starting offscreen rendering with " << PNG_size_.width() << " * " << PNG_size_.height() << std::endl;
+				QGLPixelBuffer pbuffer(PNG_size_, f,this );
+				bool pb = pbuffer.makeCurrent();
+				if (!pb)
+				{
+					setStatusbarText("Offscreen rendering not supported, using normal screenshots", true);
+					image = grabFrameBuffer();
+				}
+				else
+				{
+					gl_renderer_->init(*this);
+					gl_renderer_->initSolid();
+					gl_renderer_->setSize(PNG_size_.width(), PNG_size_.height());
+					gl_renderer_->updateCamera();
+					gl_renderer_->setLights(true);
+					gl_renderer_->enableVertexBuffers(want_to_use_vertex_buffer_);
+					glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+					renderRepresentations_(DIRECT_RENDERING);
+					glFlush();
+					image = pbuffer.toImage();
+					makeCurrent();
+					gl_renderer_->setSize(width(), height());
+					gl_renderer_->updateCamera();
+					gl_renderer_->setLights(true);
+				}
+			}
+			else
+			{
+				image = grabFrameBuffer();
+			}
 			bool ok = image.save(filename.c_str(), "PNG");
 
 			setWorkingDirFromFilename_(filename);
@@ -2106,7 +2568,7 @@ namespace BALL
 			return ok;
 		}
 
-		void Scene::exportPOVRay()
+		void Scene::exportNextPOVRay()
 		{
 			String filename = String("BALLView_pov_" + String(pov_nr_) +".pov");
 
@@ -2118,107 +2580,117 @@ namespace BALL
 			else 				setStatusbarText("Could not save POVRay to " + filename);
 		}
 
-		void Scene::customEvent(QCustomEvent * e)
+		void Scene::exportPOVRay()
 		{
-			if (e->type() == (QEvent::Type)SCENE_EXPORTPNG_EVENT) 
-			{  
-				exportPNG();
-				return;
+			QString qresult = QFileDialog::getSaveFileName(
+												0,
+												"Export POVRay File",
+												getWorkingDir().c_str(),
+												"*.pov");
+
+			if (qresult == QString::null) return;
+
+			String result = ascii(qresult);
+
+			if (!result.hasSuffix(".pov"))
+			{
+				result += ".pov";
 			}
 
-			if (e->type() == (QEvent::Type)SCENE_EXPORTPOV_EVENT) 
-			{  
-				exportPOVRay();
-				return;
+			bool ok = false;
+
+			try
+			{
+				POVRenderer pr(result);
+				if (exportScene(pr)) ok = true;
+			}
+			catch(...)
+			{
 			}
 
-			if (e->type() == (QEvent::Type)SCENE_SETCAMERA_EVENT) 
-			{  
-				setCamera(((SceneSetCameraEvent*) e)->camera);
-				return;
+			if (!ok)
+			{
+				setStatusbarText("Could not export POV to " + result, true);
+			}
+			else
+			{
+				setStatusbarText("Exported POV to " + result);
+				setWorkingDirFromFilename_(result);
 			}
 		}
+
 
 		void Scene::switchShowWidget()
 			throw()
 		{
-			if (window_menu_entry_id_ == -1) return;
+			if (window_menu_entry_ == 0) return;
 
-			if (!getMainControl()) 
-			{
-				BALLVIEW_DEBUG
-				return;
-			}
-
-			QMenuBar* menu = getMainControl()->menuBar();
-			if (menu->isItemChecked(window_menu_entry_id_))
-			{
-				hide();
-				menu->setItemChecked(window_menu_entry_id_, false);
-			}
-			else
-			{
-				show();
-				menu->setItemChecked(window_menu_entry_id_, true);
-			}
+			bool vis = isVisible();
+			setVisible(!vis);
+			window_menu_entry_->setChecked(vis);
 		}
 
 
 		void Scene::exitStereo()
 			throw()
 		{
-			gl_renderer_.setStereoMode(GLRenderer::NO_STEREO);
-			gl_renderer_.setSize(width(), height());
+			no_stereo_action_->setChecked(true);
+			active_stereo_action_->setChecked(false);
+			dual_stereo_action_->setChecked(false);
+
+			if (gl_renderer_->getStereoMode() == GLRenderer::NO_STEREO) return;
+
+			gl_renderer_->setStereoMode(GLRenderer::NO_STEREO);
+			gl_renderer_->setSize(width(), height());
 
 			glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
-			gl_renderer_.initPerspective();
+			gl_renderer_->initPerspective();
 			glMatrixMode(GL_MODELVIEW);
 
-			hide();
-			reparent((QWidget*)getMainControl(), getWFlags() & ~WType_Mask, last_pos_, false);
-			((QMainWindow*)getMainControl())->setCentralWidget(this);
-			show();
+			setFullScreen(false);
+		}
 
-			getMainControl()->menuBar()->setItemChecked(no_stereo_id_, true);
-			getMainControl()->menuBar()->setItemChecked(active_stereo_id_, false);
-			getMainControl()->menuBar()->setItemChecked(dual_stereo_id_, false);
+		void Scene::setFullScreen(bool state)
+		{
+			if (state)
+			{
+				last_state_ = getMainControl()->saveState();
+				showNormal();  // needed on windows
+				setParent(0);
+				showFullScreen();
+				update();
+				return;
+			}
+
+			hide();
+ 			setParent((QWidget*)getMainControl());
+			show();
+			getMainControl()->setCentralWidget(this);
+			getMainControl()->restoreState(last_state_);
 			update();
 		}
 
 		void Scene::enterActiveStereo()
 			throw()
 		{
-			gl_renderer_.setStereoMode(GLRenderer::ACTIVE_STEREO);
-			last_pos_ = pos();
-			hide();
-			showNormal();  // needed on windows
-			reparent(NULL, Qt::WType_TopLevel, QPoint(0, 0));
-			showFullScreen();
-			show();
+			gl_renderer_->setStereoMode(GLRenderer::ACTIVE_STEREO);
+			setFullScreen(true);
 
-			getMainControl()->menuBar()->setItemChecked(no_stereo_id_, false);
-			getMainControl()->menuBar()->setItemChecked(active_stereo_id_, true);
-			getMainControl()->menuBar()->setItemChecked(dual_stereo_id_, false);
-			update();
+			no_stereo_action_->setChecked(false);
+			active_stereo_action_->setChecked(true);
+			dual_stereo_action_->setChecked(false);
 		}
 
 		void Scene::enterDualStereo()
 			throw()
 		{
-			gl_renderer_.setStereoMode(GLRenderer::DUAL_VIEW_STEREO);
-			last_pos_ = pos();
-			hide();
-			showNormal();  // needed on windows
-			reparent(NULL, Qt::WType_TopLevel, QPoint(0, 0));
-			showFullScreen();
-			setGeometry(qApp->desktop()->geometry());
-			show();
+			gl_renderer_->setStereoMode(GLRenderer::DUAL_VIEW_STEREO);
+			setFullScreen(true);
 
-			getMainControl()->menuBar()->setItemChecked(no_stereo_id_, false);
-			getMainControl()->menuBar()->setItemChecked(active_stereo_id_, false);
-			getMainControl()->menuBar()->setItemChecked(dual_stereo_id_, true);
-			update();
+			no_stereo_action_->setChecked(false);
+			active_stereo_action_->setChecked(false);
+			dual_stereo_action_->setChecked(true);
 		}
 
 		void Scene::setCamera(const Camera& camera)
@@ -2239,25 +2711,21 @@ namespace BALL
 			throw()
 		{
 			if (!lockComposites()) return;
-			menuBar()->setItemChecked(record_animation_id_, false);
-			menuBar()->setItemEnabled(record_animation_id_, false);
+			record_animation_action_->setChecked(false);
+			record_animation_action_->setEnabled(false);
 
-			menuBar()->setItemEnabled(start_animation_id_, false);
-			menuBar()->setItemEnabled(cancel_animation_id_, true);
+			start_animation_action_->setChecked(false);
+			cancel_animation_action_->setEnabled(true);
 
-			menuBar()->setItemEnabled(animation_repeat_id_, false);
-			menuBar()->setItemEnabled(animation_export_POV_id_, false);
-			menuBar()->setItemEnabled(animation_export_PNG_id_, false);
-			menuBar()->setItemEnabled(clear_animation_id_, false);
+			animation_repeat_action_->setEnabled(false);
+			animation_export_POV_action_->setEnabled(false);
+			animation_export_PNG_action_->setEnabled(false);
+			clear_animation_action_->setEnabled(false);
 
-			#ifdef BALL_QT_HAS_THREADS
-				if (animation_thread_ != 0) delete animation_thread_;
-				animation_thread_ = new AnimationThread();
-				animation_thread_->start();
-				return;
-			#endif
-	
-			animate_();
+			if (animation_thread_ != 0) delete animation_thread_;
+			animation_thread_ = new AnimationThread();
+			animation_thread_->setScene(this);
+			animation_thread_->start();
 		}
 
 		void Scene::stopAnimation()
@@ -2266,19 +2734,12 @@ namespace BALL
 			stop_animation_ = true;
 		}
 
-		void Scene::recordAnimationClicked()
-			throw()
-		{
-			menuBar()->setItemChecked(record_animation_id_, 
-					!menuBar()->isItemChecked(record_animation_id_));
-		}
-
 		void Scene::animate_()
 			throw()
 		{
-			bool export_PNG = menuBar()->isItemChecked(animation_export_PNG_id_);
-			bool export_POV = menuBar()->isItemChecked(animation_export_POV_id_);
-			bool repeat     = menuBar()->isItemChecked(animation_repeat_id_);
+			bool export_PNG = animation_export_PNG_action_->isChecked();
+			bool export_POV = animation_export_POV_action_->isChecked();
+			bool repeat     = animation_repeat_action_->isChecked();
 
 			do
 			{
@@ -2307,28 +2768,28 @@ namespace BALL
 
 					for (Size i = 0; i < steps && !stop_animation_; i++)
 					{
-						#ifdef BALL_QT_HAS_THREADS
-							animation_thread_->mySleep(50);
-						#endif
+						animation_thread_->mySleep(30);
 
 						camera.setViewPoint(camera.getViewPoint() - diff_viewpoint);
 						camera.setLookUpVector(camera.getLookUpVector() - diff_up);
 						camera.setLookAtPosition(camera.getLookAtPosition() - diff_look_at);
 
-						Scene::SceneSetCameraEvent* e = new Scene::SceneSetCameraEvent();
-						e->camera = camera;
-						qApp->postEvent(this, e);
+						SceneMessage* msg = new SceneMessage(SceneMessage::UPDATE_CAMERA);
+						Stage stage(*getStage());
+						stage.setCamera(camera);
+						msg->setStage(stage);
+						qApp->postEvent(getMainControl(), new MessageEvent(msg));
 
 						if (export_PNG)
 						{
-							Scene::SceneExportPNGEvent* e = new Scene::SceneExportPNGEvent();
-							qApp->postEvent(this, e);
+							SceneMessage* msg = new SceneMessage(SceneMessage::EXPORT_PNG);
+							qApp->postEvent(getMainControl(), new MessageEvent(msg));
 						}
 
 						if (export_POV)
 						{
-							Scene::SceneExportPOVEvent* e = new Scene::SceneExportPOVEvent();
-							qApp->postEvent(this, e);
+							SceneMessage* msg = new SceneMessage(SceneMessage::EXPORT_POVRAY);
+							qApp->postEvent(getMainControl(), new MessageEvent(msg));
 						}
 					}
 					
@@ -2339,53 +2800,21 @@ namespace BALL
 			while(!stop_animation_ && repeat);
 
 			stop_animation_ = false;
-			menuBar()->setItemEnabled(start_animation_id_, true);
-			menuBar()->setItemEnabled(cancel_animation_id_, false);
-			menuBar()->setItemEnabled(record_animation_id_, true);
+			start_animation_action_->setEnabled(true);
+			cancel_animation_action_->setEnabled(false);
+			record_animation_action_->setEnabled(true);
 
-			menuBar()->setItemEnabled(animation_repeat_id_, true);
-			menuBar()->setItemEnabled(animation_export_POV_id_, true);
-			menuBar()->setItemEnabled(animation_export_PNG_id_, true);
-			menuBar()->setItemEnabled(clear_animation_id_, true);
+			animation_repeat_action_->setEnabled(true);
+			animation_export_POV_action_->setEnabled(true);
+			animation_export_PNG_action_->setEnabled(true);
+			clear_animation_action_->setEnabled(true);
 			unlockComposites();
-		}
-
-		void Scene::animationRepeatClicked()
-			throw()
-		{
-			menuBar()->setItemChecked(animation_repeat_id_, 
-					!menuBar()->isItemChecked(animation_repeat_id_));
-		}
-
-		void Scene::animationExportPOVClicked()
-			throw()
-		{
-			menuBar()->setItemChecked(animation_export_POV_id_, 
-					!menuBar()->isItemChecked(animation_export_POV_id_));
-		}
-
-		void Scene::animationExportPNGClicked()
-			throw()
-		{
-			menuBar()->setItemChecked(animation_export_PNG_id_, 
-					!menuBar()->isItemChecked(animation_export_PNG_id_));
 		}
 
 		void Scene::switchToLastMode()
 			throw()
 		{
-			switch (last_mode_)
-			{
- 				case PICKING__MODE: 
-					pickingMode_();
-					break;
- 				case ROTATE__MODE: 
-					rotateMode_();
-					break;
- 				case MOVE__MODE: 
-					moveMode_();
-					break;
-			}
+			setMode(last_mode_);
 		}
 
 		void Scene::dropEvent(QDropEvent* e)
@@ -2395,7 +2824,7 @@ namespace BALL
 
 		void Scene::dragEnterEvent(QDragEnterEvent* event)
 		{
-			event->accept(QTextDrag::canDecode(event));
+			 if (event->mimeData()->hasUrls()) event->acceptProposedAction();
 		}
 
 
@@ -2415,77 +2844,317 @@ namespace BALL
 				delete gl_test;
 				if (!supports)
 				{
-					gl_format_ = (QGL::DepthBuffer);
+					gl_format_ = QGLFormat(QGL::DepthBuffer);
 				}
 			}
 			
 			return supports;
 		}
 
-		void Scene::setPopupInfosEnabled(bool state)
+		void Scene::setWidgetVisible(bool state)
 		{
-			if (state)
-			{
-				initTimer();
-			}
-			else
-			{
-				timer_.stop();
-			}
-		}
-
-		void Scene::setVisible(bool state)
-		{
-			if (state)
-			{
-				show();
-			}
-			else
-			{
-				hide();
-			}
+			// only for Python needed
+			QGLWidget::setVisible(state);
 		}
 
 		void Scene::updateGL()
 		{
  			QGLWidget::updateGL();
 
-#ifdef BALL_BENCHMARKING
+		}
 
-			float ti = 100000.0 / (PreciseTime::now().getMicroSeconds() - time_.getMicroSeconds());
-
-			if (ti < 0)
+		void Scene::setOffScreenRendering(bool enabled, Size factor)
+		{
+			offscreen_rendering_ = enabled;
+			if (enabled) 
 			{
-				time_ = PreciseTime::now();
-				return;
+				Size w = width() * factor;
+				Size h = height() * factor;
+				Size max = BALL_MAX(w, h);
+				Size min = BALL_MIN(w, h);
+				if (max < 4096)
+				{
+					PNG_size_ = QSize(w, h);
+				}
+				else
+				{
+					Size f = (Size) (4095. * (float) min / (float) max);
+					if (w < h)
+					{
+						PNG_size_ = QSize(f, 4095);
+					}
+					else
+					{
+						PNG_size_ = QSize(4095, f);
+					}
+				}
+			}
+		}
+
+		void Scene::showText(const String& text, Size font_size) 
+		{ 
+			text_ = text; 
+			font_size_= font_size;
+			update();
+		}
+
+		void Scene::addToolBarEntries(QToolBar* tb)
+		{
+			toolbar_->addActions(toolbar_actions_);
+			toolbar_->insertSeparator(fullscreen_action_);
+			getMainControl()->addToolBar(Qt::TopToolBarArea, toolbar_);
+			ModularWidget::addToolBarEntries(tb);
+			getMainControl()->initPopupMenu(MainControl::WINDOWS)->addAction(toolbar_->toggleViewAction());
+		}
+
+		void Scene::switchShowGrid()
+		{
+			draw_grid_ = !draw_grid_;
+			switch_grid_->setChecked(draw_grid_);
+			update();
+		}
+
+
+		void Scene::renderGrid_()
+		{
+			if (!draw_grid_) return;
+
+			const Camera& s = getStage()->getCamera();
+			Vector3 v = s.getViewVector();
+			v.normalize();
+			const Vector3 x = s.getRightVector();
+			const Vector3 y = s.getLookUpVector();
+			float delta = 0.001;
+			float size = 50;
+
+			gl_renderer_->initTransparent();
+
+			Vector3 p = get3DPosition_((Index)(width() / 2.0), (Index)(height() / 2.0)) - x * size / 2.0 - y * size / 2.0;
+			Box xp(p, x * size, y * size, delta);
+			xp.setColor(ColorRGBA(0,255,190,90));
+			gl_renderer_->render_(&xp);
+
+			ColorRGBA color1(255,255,255,255);
+			ColorRGBA color2(0,0,0,230);
+			Line line;
+			p -= v * delta;
+
+			for (Position i = 0; i <= size; i+=1)
+			{
+				if (i % 10 == 0) line.setColor(color2);
+				else  					 line.setColor(color1);
+
+				line.setVertex1(p + x * i);
+				line.setVertex2(p + x * i + y * size);
+				gl_renderer_->render_(&line);
+
+				line.setVertex1(p + y * i);
+				line.setVertex2(p + y * i + x * size);
+				gl_renderer_->render_(&line);
 			}
 
-			float fps = (ti + last_fps_) / 2.;
-			String temp = createFloatString(fps, 1);
-			last_fps_ = fps;
+			gl_renderer_->initSolid();
+		}
 
-			if (fps < 10.0) temp = String(" ") + temp;
 
-			if (!temp.has('.')) temp = temp + ".0";
+		// Convert 2D screen coordinate to 3D coordinate on the view plane
+		Vector3 Scene::get3DPosition_(int x, int y)
+		{
+			// 	Scale variables for Frustum
+			double xs_ = width();
+			double ys_ = height(); 
 
-			temp = String("FPS ") + temp;
+			mapViewplaneToScreen_();
 
-			QPainter painter(this);
+			// vectors for arithmetics
+			// TODO: give sensible names!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			Vector3 p_(0., 0., 0.);      // vector look_at ray ----> insertion ray cutting the nearplane
+			Vector3 la_m_d_(0., 0., 0.); // look_at vector ray cutting the near plane
+			Vector3 la_m_v_(0., 0., 0.); // look_at vector ray cutting the near plane
+			Vector3 s_(0., 0., 0.);      // vector look_at_ray ----> insertion ray cutting viewing plane
+			Vector3 k_(0., 0., 0.);      // vector of insertionpoint in the viewing volume
 
-			ColorRGBA color = getStage()->getBackgroundColor();
-			color.set(255 - (Position) color.getRed(),
-								255 - (Position) color.getGreen(),
-								255 - (Position) color.getBlue());
+			// determine the vector/look_at ray : camera --> lookAt cuts the near plane
+			la_m_d_=Vector3(  near_left_bot_
+					+( (near_right_bot_ - near_left_bot_)*0.5 )
+					+( (near_left_top_  - near_left_bot_)*0.5 )
+					);	
 
-			painter.setBackgroundMode(Qt::OpaqueMode);
-			painter.setPen(color.getQColor());
-			painter.setBackgroundColor(getStage()->getBackgroundColor().getQColor());
+			// determine the vector look_at point--->insertion_ray cutting the near plane 
+			p_=Vector3((   near_left_top_  //c
+						+ ( x / (float)xs_ * (near_right_bot_ - near_left_bot_) )  //b-a
+						- ( y / (float)ys_ * (near_left_top_  - near_left_bot_) )  //c-a
+						)
+					- la_m_d_ );
 
-			QPoint point(width() - 70, 20);
-			painter.drawText(point, temp.c_str(), 0, -1);
+			// determine the vector look_at_ray ----> insertion ray cutting viewing plane
+			s_= Vector3(   ( ( getStage()->getCamera().getLookAtPosition() - getStage()->getCamera().getViewPoint() ).getLength()
+						/ (la_m_d_ -  getStage()->getCamera().getViewPoint()).getLength()) 
+					* p_ );
 
-			time_ = PreciseTime::now();
-#endif
+			// vector of insertionpoint in the viewing volume
+			k_=Vector3( getStage()->getCamera().getLookAtPosition() + s_ );		
+
+			return k_;
+		}	
+
+		bool Scene::mapViewplaneToScreen_()
+		{
+			// matrix for the Projection matrix 	
+			GLdouble projection_matrix[16];
+			// matrix for the Modelview matrix
+			GLdouble modelview_matrix[16];
+
+			// variables for definition of projection matrix
+			float near_=0, left_=0, right_=0, bottom_ =0, top_=0; 
+
+			// take the Projection matrix	
+			glMatrixMode(GL_PROJECTION);
+			glGetDoublev(GL_PROJECTION_MATRIX, projection_matrix);
+			glMatrixMode(GL_MODELVIEW);
+			glGetDoublev(GL_MODELVIEW_MATRIX, modelview_matrix); 
+
+			// determine the projection variables
+			if(projection_matrix[0]==0. || projection_matrix[5]==0. || projection_matrix[10]==1.)
+			{	
+				Log.error() << "Projection variables equal zero! " << endl;
+				return false;
+			}	
+			near_   = projection_matrix[14]/(projection_matrix[10]-1);
+			left_   = projection_matrix[14]*(projection_matrix[8]-1) / (projection_matrix[0]*(projection_matrix[10]-1));
+			right_  = projection_matrix[14]*(projection_matrix[8]+1) / (projection_matrix[0]*(projection_matrix[10]-1));
+			bottom_ = projection_matrix[14]*(projection_matrix[9]-1) / (projection_matrix[5]*(projection_matrix[10]-1));
+			top_    = projection_matrix[14]*(projection_matrix[9]+1) / (projection_matrix[5]*(projection_matrix[10]-1));
+
+			// we have to move all points of the viewing volume with the inverted Modelview matrix 
+			Matrix4x4 mod_view_mat_(modelview_matrix[0], modelview_matrix[4], modelview_matrix[8], modelview_matrix[12],
+					modelview_matrix[1], modelview_matrix[5], modelview_matrix[9], modelview_matrix[13],
+					modelview_matrix[2], modelview_matrix[6], modelview_matrix[10], modelview_matrix[14],
+					modelview_matrix[3], modelview_matrix[7], modelview_matrix[11],	modelview_matrix[15]);
+
+
+			Matrix4x4 inverse_mod_view_mat_;
+			mod_view_mat_.invert(inverse_mod_view_mat_);
+
+			// determine the nearplane vectors
+			near_left_bot_ = Vector3(left_,  bottom_, near_*-1.); //a
+			near_right_bot_= Vector3(right_, bottom_, near_*-1.); //b
+			near_left_top_ = Vector3(left_,  top_,    near_*-1.); //c	
+
+			near_left_bot_  = inverse_mod_view_mat_*near_left_bot_;
+			near_right_bot_ = inverse_mod_view_mat_*near_right_bot_;
+			near_left_top_  = inverse_mod_view_mat_*near_left_top_;
+
+			return true;
+		}
+
+
+		void Scene::mouseDoubleClickEvent(QMouseEvent*)
+		{
+			if (getMainControl()->isBusy()) return;
+
+			if (current_mode_ == PICKING__MODE)
+			{
+				QPoint p = mapFromGlobal(QCursor::pos());
+				pickParent_(p);
+			}
+			else
+			{
+				if (current_mode_ == ROTATE__MODE)
+				{
+					showInfos();
+				}
+			}
+		}
+
+		void Scene::pickParent_(QPoint p)
+		{
+			ignore_pick_ = true;
+			List<GeometricObject*> objects;
+			gl_renderer_->pickObjects1((Position) p.x(), (Position) p.y(), 
+																(Position) p.x(), (Position) p.y());
+			renderView_(DIRECT_RENDERING);
+			gl_renderer_->pickObjects2(objects);
+
+			if (objects.size() == 0) return;
+		
+			Composite* composite = 	(Composite*)(**objects.begin()).getComposite();
+			if (composite == 0) return;
+
+			Composite* to_select = 0;
+			Atom* atom = dynamic_cast<Atom*>(composite);
+			if (atom != 0)
+			{
+				to_select = atom->getParent();
+			}
+			else
+			{
+				Bond* bond = dynamic_cast<Bond*>(composite);
+				if (bond!= 0) 
+				{
+					to_select = (Composite*)bond->getFirstAtom()->getParent();
+				}
+				else
+				{
+					to_select = composite;
+				}
+			}
+
+			if (to_select != 0)
+			{
+				if (to_select->isSelected())
+				{
+					getMainControl()->deselectCompositeRecursive(to_select, true);
+				}
+				else
+				{
+					getMainControl()->selectCompositeRecursive(to_select, true);
+				}
+				getMainControl()->update(*to_select, true);
+			}
+		}
+
+		void Scene::disableViewVolumeRestriction()
+		{
+			volume_width_ = FLT_MAX;
+		}
+
+		void Scene::setupViewVolume()
+		{
+			bool ok;
+			float value = QInputDialog::getDouble(this, "Setup view volume",
+																						"Enter volume length:", 
+																						20, 5, 200, 1, &ok);
+			if (!ok) return;
+
+			volume_width_ = value;
+			update(false);
+		}
+
+		void Scene::restoreViewPoint()
+		{
+			getStage()->setCamera(stored_camera_);
+			updateCamera_();
+		}
+
+		void Scene::storeViewPoint()
+		{
+			stored_camera_ = getStage()->getCamera();
+		}
+
+		void Scene::setGLRenderer(GLRenderer& renderer)
+		{
+			delete gl_renderer_;
+			gl_renderer_ = &renderer;
+		}
+
+		void AnimationThread::mySleep(Size msec) 
+		{
+			msleep(msec);
+			while (scene_ != 0 && scene_->isUpdateRunning())
+			{
+				msleep(10);
+			}
 		}
 
 	} // namespace VIEW

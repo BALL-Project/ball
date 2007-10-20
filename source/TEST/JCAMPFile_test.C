@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile_test.C,v 1.5 2005/12/23 17:03:09 amoll Exp $
+// $Id: JCAMPFile_test.C,v 1.5.20.1 2007/03/25 21:47:15 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: JCAMPFile_test.C,v 1.5 2005/12/23 17:03:09 amoll Exp $")
+START_TEST(class_name, "$Id: JCAMPFile_test.C,v 1.5.20.1 2007/03/25 21:47:15 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,22 +1,24 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sdGenerator.C,v 1.7 2007/01/08 13:39:33 bertsch Exp $
+// $Id: sdGenerator.C,v 1.7.6.2 2007/04/03 13:29:33 bertsch Exp $
 //
 // Author:
 //   Holger Franken
 //
 
 #include <BALL/STRUCTURE/sdGenerator.h>
+#include <BALL/STRUCTURE/ringAnalyser.h>
+#include <BALL/STRUCTURE/ringClusterer.h>
+#include <BALL/STRUCTURE/rsConstructor.h>
+#include <BALL/STRUCTURE/chainBuilder.h>
+#include <BALL/STRUCTURE/moleculeAssembler.h>
 
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/standardPredicates.h>
-#include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/selector.h>
-#include <BALL/STRUCTURE/fragmentDB.h>
-#include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/PTE.h>
+#include <BALL/QSAR/ringPerceptionProcessor.h>
 
 #ifdef BALL_DEBUG_SDGENERATOR
 # define DEBUG(a) Log.info() << a << endl;

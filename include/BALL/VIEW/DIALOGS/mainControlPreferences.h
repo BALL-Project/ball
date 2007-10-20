@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.h,v 1.14 2005/12/23 17:02:10 amoll Exp $
+// $Id: mainControlPreferences.h,v 1.14.16.1 2007/03/25 21:25:50 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MAINCONTROLPREFERENCES_H
@@ -17,6 +17,9 @@
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
+#include <QtGui/QWidget>
+#include <QtGui/QFont>
+
 namespace BALL
 {
 	namespace VIEW
@@ -30,36 +33,22 @@ namespace BALL
 		\ingroup ViewDialogs
 */
 class BALL_VIEW_EXPORT MainControlPreferences 
-	: public MainControlPreferencesData,
+	: public QWidget,
+		public Ui_MainControlPreferencesData,
 		public PreferencesEntry
 {
 	Q_OBJECT
 
 	public:
 	
-	/**	@name	Constructors
-	*/	
-	//@{
-
-	/** Default Constructor.
-	*/
-	MainControlPreferences(QWidget *parent = NULL, const char *name = NULL, WFlags fl=0)
+	/// Default Constructor.
+	MainControlPreferences(QWidget *parent = NULL, const char *name = "MainControlPreferences", 
+												 Qt::WFlags fl=0)
 		throw();
-	
-	//@}
-	/** @name Destructors 
-	*/
-	//@{
 
-	/** Destructor.
-	*/
+	////Destructor.
 	virtual ~MainControlPreferences()
 		throw();
-
-	//@}
-	/**	@name	Accessors: inspectors and mutators 
-	*/
-	//@{
 
 	/** Inspection of the selected style.
 			This method will be called from MainControl::applyPreferences().
@@ -69,11 +58,6 @@ class BALL_VIEW_EXPORT MainControlPreferences
 	QStyle* getStyle()
 		throw();
 
-	/// Inspection, wheter the name labels in the DockWidget instances should be enabled.
-	bool showLabelsEnabled() const
-		throw();
-
-
 	/// Enable logging to file
 	void enableLoggingToFile(bool state)
 		throw();
@@ -81,7 +65,27 @@ class BALL_VIEW_EXPORT MainControlPreferences
 	///
 	bool loggingToFileEnabled() const
 		throw();
-	//@}
+
+	///
+	QFont getFont();
+
+	///
+	void writePreferenceEntries(INIFile& inifile);
+
+	///
+	void readPreferenceEntries(const INIFile& inifile);
+
+	public slots:
+
+	/// Get the application's default font
+	void selectFont();
+
+	/// Set the application's default font
+	void setFont(QFont font);
+
+	protected:
+
+	QFont font_;
 };
   
 } } // namespace

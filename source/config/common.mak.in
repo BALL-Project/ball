@@ -1,5 +1,10 @@
-# 
-# $Id: common.mak.in,v 1.15 2006/01/23 20:45:04 oliver Exp $
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: common.mak.in,v 1.15.14.1 2007/03/25 22:02:48 oliver Exp $
+#
+# Author:
+#   Oliver Kohlbacher
 #
 
 include @BALL_PATH@/source@BINFMT_PATH@/config.mak

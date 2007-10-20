@@ -36,7 +36,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~MolecularWeight();
+		virtual ~MolecularWeight();
 		//@}
 
 		/** @name Assignment
@@ -71,7 +71,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfBonds();
+		virtual ~NumberOfBonds();
 		//@}
 
 		/** @name Assignment
@@ -106,7 +106,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfSingleBonds();
+		virtual ~NumberOfSingleBonds();
 
 		/** @name Assignment
 		*/
@@ -140,7 +140,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfDoubleBonds();
+		virtual ~NumberOfDoubleBonds();
 		//@}
 
 		/** @name Assigenment
@@ -175,7 +175,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfTripleBonds();
+		virtual ~NumberOfTripleBonds();
 		//@}
 
 		/** @name Assignment 
@@ -209,7 +209,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfAromaticBonds();
+		virtual ~NumberOfAromaticBonds();
 		//@}
 
 		/** @name Assigment 
@@ -243,7 +243,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfAtoms();
+		virtual ~NumberOfAtoms();
 		//@}
 
 		/** @name Assignment
@@ -277,7 +277,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfBoron();
+		virtual ~NumberOfBoron();
 		//@}
 
 		/** @name Assignment
@@ -311,7 +311,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfCarbon();
+		virtual ~NumberOfCarbon();
 		//@}
 
 		/** @name Assignment
@@ -345,7 +345,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfNitrogen();
+		virtual ~NumberOfNitrogen();
 		//@}
 
 		/** @name Assignment
@@ -379,7 +379,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfOxygen();
+		virtual ~NumberOfOxygen();
 
 		/** @name Assignment
 		*/
@@ -412,7 +412,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfFlourine();
+		virtual ~NumberOfFlourine();
 		//@}
 
 		/** @name Assignment
@@ -446,7 +446,7 @@ namespace BALL
 		
 		/** Destructor
 		*/
-		~NumberOfPhosphorus();
+		virtual ~NumberOfPhosphorus();
 		//@}
 	
 		/** @name Assignment
@@ -480,7 +480,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfSulfur();
+		virtual ~NumberOfSulfur();
 		//@}
 
 		/** @name Assignment
@@ -514,7 +514,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfChlorine();
+		virtual ~NumberOfChlorine();
 		//@}
 
 		/** @name Assignment
@@ -548,7 +548,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfBromine();
+		virtual ~NumberOfBromine();
 		//@}
 
 		/** @name Assignment
@@ -582,7 +582,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfIodine();
+		virtual ~NumberOfIodine();
 		//@}
 
 		/** @name Assigenment 
@@ -616,7 +616,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfHydrogen();
+		virtual ~NumberOfHydrogen();
 		//@}
 
 		/** @name Assignment
@@ -650,7 +650,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~FormalCharge();
+		virtual ~FormalCharge();
 		//@}
 
 		/** @name Assignment
@@ -686,7 +686,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfHeavyAtoms();
+		virtual ~NumberOfHeavyAtoms();
 		//@}
 
 		/** @name Assignment
@@ -725,7 +725,7 @@ namespace BALL
 		
 		/** Destructor
 		*/
-		~MeanAtomInformationContent();
+		virtual ~MeanAtomInformationContent();
 		//@}
 
 		/** @name Assignment
@@ -759,7 +759,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~AtomInformationContent();
+		virtual ~AtomInformationContent();
 		//@}
 
 		/** @name Assignment
@@ -773,7 +773,7 @@ namespace BALL
 		/** @name Accessors
 		*/
 		//@{
-		double compute(Molecule& molecule);
+		double compute(AtomContainer& ac);
 		//@}
 	};
 
@@ -801,7 +801,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfRotatableSingleBonds();
+		virtual ~NumberOfRotatableSingleBonds();
 		//@}
 
 		/** @name Assignment
@@ -837,7 +837,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~RelNumberOfRotatableSingleBonds();
+		virtual ~RelNumberOfRotatableSingleBonds();
 		//@}
 
 		/** @name Assignment
@@ -851,7 +851,7 @@ namespace BALL
 		/** Accessors
 		*/
 		//@{
-		double compute(Molecule& molecule);
+		double compute(AtomContainer& ac);
 		//@}
 	};
 
@@ -878,7 +878,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfAromaticAtoms();
+		virtual ~NumberOfAromaticAtoms();
 		//@}
 
 		/** @name Assignment
@@ -913,7 +913,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfHeavyBonds();
+		virtual ~NumberOfHeavyBonds();
 		//@}
 
 		/** @name Assignment
@@ -949,7 +949,7 @@ namespace BALL
 		
 		/** Destructors
 		*/
-		~NumberOfRotatableBonds();
+		virtual ~NumberOfRotatableBonds();
 
 		/** @name Assignment
 		*/
@@ -984,7 +984,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~RelNumberOfRotatableBonds();
+		virtual ~RelNumberOfRotatableBonds();
 		//@}
 
 		/** @name Assignment
@@ -998,7 +998,7 @@ namespace BALL
 		/** @name Accessors
 		*/
 		//@{
-		double compute(Molecule& molecule);
+		double compute(AtomContainer& ac);
 		//@}
 	};
 
@@ -1026,7 +1026,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~VertexAdjacency();
+		virtual ~VertexAdjacency();
 		//@}
 		
 		/** @name Assignment
@@ -1040,7 +1040,7 @@ namespace BALL
 		/** @name Accessors
 		*/
 		//@{
-		double compute(Molecule& molecule);
+		double compute(AtomContainer& ac);
 		//@}
 	};
 
@@ -1071,7 +1071,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~VertexAdjacencyEquality();
+		virtual ~VertexAdjacencyEquality();
 		//@}
 
 		/** @name Assignment
@@ -1085,7 +1085,7 @@ namespace BALL
 		/** @name Accessors
 		*/
 		//@{
-		double compute(Molecule& molecule);
+		double compute(AtomContainer& ac);
 		//@}
 	};
 
@@ -1118,7 +1118,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfHydrogenBondAcceptors();
+		virtual ~NumberOfHydrogenBondAcceptors();
 		//@}
 
 		/** Accessors
@@ -1135,7 +1135,7 @@ namespace BALL
 		/*_ This method return the number, which is calculated
 				using the Expression string.
 		*/
-		double compute(Molecule& molecule);
+		double compute(AtomContainer& ac);
 		//@}
 
 
@@ -1183,7 +1183,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfHydrogenBondDonors();
+		virtual ~NumberOfHydrogenBondDonors();
 		//@}
 
 		/** @name Accessors
@@ -1200,7 +1200,7 @@ namespace BALL
 		/*_ Methods which returns the number calcualted from 
 				the Expression string.
 		*/
-		double compute(Molecule& molecule);
+		double compute(AtomContainer& ac);
 		//@}
 
 		/** @name Assignment
@@ -1247,7 +1247,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~NumberOfHydrophobicAtoms();
+		virtual ~NumberOfHydrophobicAtoms();
 		//@}
 
 		/** @name Acessors
@@ -1264,7 +1264,7 @@ namespace BALL
 		/*_ Method which computes the number from the 
 				Expression string 
 		*/
-		double compute(Molecule& molecule);
+		double compute(AtomContainer& ac);
 		//@}
 
 		/** @name Assignment
@@ -1307,7 +1307,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~BondPolarizabilities();
+		virtual ~BondPolarizabilities();
 		//@}
 
 		/** @name Assignment
@@ -1342,7 +1342,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~AtomicPolarizabilities();
+		virtual ~AtomicPolarizabilities();
 		//@}
 
 		/** @name Assignment
@@ -1376,7 +1376,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~SizeOfSSSR();
+		virtual ~SizeOfSSSR();
 		//@}
 
 		/** @name Assignment
@@ -1411,7 +1411,7 @@ namespace BALL
 
 		/** Destrcutor
 		*/
-		~PrincipalMomentOfInertia();
+		virtual ~PrincipalMomentOfInertia();
 		//@}
 
 		/** @name Assignment
@@ -1447,7 +1447,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~PrincipalMomentOfInertiaX();
+		virtual ~PrincipalMomentOfInertiaX();
 		//@}
 
 		/** @name Assignment
@@ -1482,7 +1482,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~PrincipalMomentOfInertiaY();
+		virtual ~PrincipalMomentOfInertiaY();
 		//@}
 
 		/** @name Assignment
@@ -1518,7 +1518,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		~PrincipalMomentOfInertiaZ();
+		virtual ~PrincipalMomentOfInertiaZ();
 		//@}
 		
 		/** @name Assignment

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.sip,v 1.8 2005/02/26 13:22:04 oliver Exp $
+// $Id: residue.sip,v 1.8.24.1 2007/03/25 21:38:52 oliver Exp $
 //
 
 class Residue
@@ -46,22 +46,29 @@ class Residue
   Angle getTorsionPhi() const;
   bool hasTorsionPsi() const;
   Angle getTorsionPsi() const;  
+
   Protein* getProtein();
-  const Protein* getProtein() const;
+  // const Protein* getProtein() const;
+
   Chain* getChain();
-  const Chain* getChain() const;
+  // const Chain* getChain() const;
+
   PDBAtom* getPDBAtom(Position /position/);
-  const PDBAtom* getPDBAtom(Position /position/) const;
+  // const PDBAtom* getPDBAtom(Position /position/) const;
+
+	SecondaryStructure* getSecondaryStructure() throw();
+	//const SecondaryStructure* getSecondaryStructure() const throw();
+
   void setID(const String& /id/);
   const String& getID() const;
   void setInsertionCode(char /insertion_code/);
   char getInsertionCode() const;
   Size countPDBAtoms() const;
-  void prepend(PDBAtom& /atom/);
-  void append(PDBAtom& /atom/);
-  void insert(PDBAtom& /atom/);
-  void insertBefore(PDBAtom& /atom/, Composite& /before/);
-  void insertAfter(PDBAtom& /atom/, Composite& /after/);
+  void prepend(PDBAtom& /Transfer/);
+  void append(PDBAtom& /Transfer/);
+  void insert(PDBAtom& /Transfer/);
+  void insertBefore(PDBAtom& /Transfer/, Composite& /before/);
+  void insertAfter(PDBAtom& /Transfer/, Composite& /after/);
   bool remove(PDBAtom& /atom/);
   void spliceBefore(Residue& /residue/);
   void spliceAfter(Residue& /residue/);

@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.6 2006/01/26 16:12:55 oliver Exp $
+# $Id: Makefile,v 1.6.14.1 2007/03/25 22:02:32 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -12,12 +12,15 @@ DIRECTORY=VIEW/PRIMITIVES
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
+	box.C\
+	disc.C\
+	gridVisualisation.C\
 	label.C\
 	line.C\
 	mesh.C\
+	multiLine.C\
+	quadMesh.C\
 	point.C\
-	box.C\
-	disc.C\
 	simpleBox.C\
 	sphere.C\
 	tube.C\

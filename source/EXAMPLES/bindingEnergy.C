@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bindingEnergy.C,v 1.6 2004/05/27 19:49:57 oliver Exp $
+// $Id: bindingEnergy.C,v 1.6.28.1 2007/08/06 16:22:06 oliver Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -97,7 +97,7 @@ int main(int argc, char** argv)
        << (ACE_AB - ACE_A - ACE_B) << " kJ/mol" << endl;
 	cout << "change in electrostatic energy on binding:    " 
        << (ES_AB - ES_A - ES_B) << " kJ/mol" << endl;
-	cout << "total binding fre energy:                     "
+	cout << "total binding free energy:                     "
 			 << (ACE_AB - ACE_A - ACE_B) + (ES_AB - ES_A - ES_B) << " kJ/mol" << endl;
 
 	// done

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Sphere3_test.C,v 1.12 2003/06/09 22:40:53 oliver Exp $
+// $Id: Sphere3_test.C,v 1.12.30.1 2007/03/25 21:49:01 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -11,7 +11,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(Sphere3, "$Id: Sphere3_test.C,v 1.12 2003/06/09 22:40:53 oliver Exp $")
+START_TEST(Sphere3, "$Id: Sphere3_test.C,v 1.12.30.1 2007/03/25 21:49:01 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

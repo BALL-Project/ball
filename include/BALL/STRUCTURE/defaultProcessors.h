@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: defaultProcessors.h,v 1.17 2006/05/21 18:23:01 anker Exp $
+// $Id: defaultProcessors.h,v 1.17.10.1 2007/03/25 21:25:25 oliver Exp $
 //
 
 #ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
@@ -29,12 +29,8 @@
 
 namespace BALL 
 {
-	/** @name	Standard processors
-	\ingroup StructureMiscellaneous
-	*/
-	//@{
-
 	/**	Clears the charge on all atoms
+			\ingroup StructureMiscellaneous
 	*/
 	class BALL_EXPORT ClearChargeProcessor
 		:	public UnaryProcessor<Atom> 
@@ -47,6 +43,7 @@ namespace BALL
 
 
 	/**	Clears the radius of all atoms
+			\ingroup StructureMiscellaneous
 	*/
 	class BALL_EXPORT ClearRadiusProcessor
 		:	public UnaryProcessor<Atom>
@@ -62,6 +59,7 @@ namespace BALL
 			This processor reads a radius table from a file	and assigns each 
 			atom a radius according to its name and the name of the fragment 
 			the atom is contained	in.
+			\ingroup StructureMiscellaneous
 	*/
 	class BALL_EXPORT AssignRadiusProcessor
 		:	public UnaryProcessor<Atom> 
@@ -144,6 +142,7 @@ namespace BALL
 			This processor reads a charge table from a file	and assigns each 
 			atom a charge according to its name and the name of the fragment 
 			the atom is contained in.
+			\ingroup StructureMiscellaneous
 	*/
 	class BALL_EXPORT AssignChargeProcessor
 		: public AssignRadiusProcessor 
@@ -182,7 +181,6 @@ namespace BALL
 		float		total_charge_;
 	};
 
-	//@}
   
 } // namespace BALL
 

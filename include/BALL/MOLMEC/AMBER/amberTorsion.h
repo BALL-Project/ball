@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberTorsion.h,v 1.23 2005/12/23 17:01:49 amoll Exp $
+// $Id: amberTorsion.h,v 1.23.18.1 2007/03/25 21:23:47 oliver Exp $
 //
 
 // Molecular Mechanics: Amber force field, bond stretch component
@@ -34,6 +34,9 @@ namespace BALL
 		: public ForceFieldComponent
 	{
 		public:
+
+		/// flag to enable Torsions
+		#define AMBER_TORSIONS_ENABLED "enable Torsions"
 
 		/**	@name	Type Definitions	
 		*/

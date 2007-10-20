@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AtomStaticAtomAttributes_test.C,v 1.2 2003/06/26 12:07:35 amoll Exp $
+// $Id: AtomStaticAtomAttributes_test.C,v 1.2.32.1 2007/03/25 21:46:47 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -10,7 +10,7 @@
 #include <BALL/KERNEL/atom.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AtomStaticAtomAttributes_test.C,v 1.2 2003/06/26 12:07:35 amoll Exp $")
+START_TEST(class_name, "$Id: AtomStaticAtomAttributes_test.C,v 1.2.32.1 2007/03/25 21:46:47 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

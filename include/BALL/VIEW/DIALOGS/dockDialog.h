@@ -44,14 +44,15 @@ namespace BALL
 			* For redocking he can specify the euler angles.
     		\ingroup  ViewDialogs
 		 */
-		class BALL_EXPORT DockDialog : 
-			public DockDialogData,
+		class BALL_VIEW_EXPORT DockDialog : 
+			public QDialog,
+			public Ui_DockDialogData,
 			public PreferencesEntry
 		{ 
 			Q_OBJECT
 			
 			public:
-			
+		
 				/**	@name	Constructors and Destructors
 				 */	
 				//@{
@@ -66,7 +67,7 @@ namespace BALL
 				 *	@see        QDialog
 				 *	@see				PreferncesEntry
 				 */
-				DockDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
+				DockDialog(QWidget* parent = 0, const char* name = "DockDialog")
 					throw();
 					
 				/** Destructor.
@@ -145,7 +146,7 @@ namespace BALL
 				 *	@see				addAlgorithm
 				 *	@see				addScoringFunction
 				 */
-				void initializeWidget()
+				virtual void initializeWidget()
 					throw();
 
 				/** Fetchs the preferences from the INIFile.
@@ -154,7 +155,7 @@ namespace BALL
 					* This method is called in \link DockingController::fetchPreferences DockingController::fetchPreferences \endlink.
 				 	*	@see    writePreferences
 				 	*/
-				void fetchPreferences(INIFile& file)
+				virtual void fetchPreferences(INIFile& file)
 					throw();
 				
 				/** Writes the preferences to the INIFile.
@@ -162,7 +163,7 @@ namespace BALL
 				  * This method is called in \link DockingController::writePreferences DockingController::writePreferences \endlink.
 				  * @see    fetchPreferences
 				  */
-				void writePreferences(INIFile& file)
+				virtual void writePreferences(INIFile& file)
 					throw();
 				
 					
@@ -178,7 +179,7 @@ namespace BALL
 					* Dialog is adapted for docking / redocking.
 				 *	Calls \link fillSystemComboboxes_ fillSystemComboboxes_ \endlink in case of docking.
 				 */
-				void show();
+				bool exec();
 				
 				/** Is called when reset button is pressed.
 				 * Calls \link DockDialog::reset reset \endlink.
@@ -285,7 +286,7 @@ namespace BALL
 				
 				
 			private:
-				
+
 				/** Copy constructor.
 					* Remark: Copy contructor is private because it is not completed. 
 					* The copy constuctor of the QT widgets is private and cannot be called.  

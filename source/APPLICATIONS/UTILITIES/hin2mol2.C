@@ -1,4 +1,4 @@
-// $Id: hin2mol2.C,v 1.2 2006/05/08 07:49:58 anker Exp $
+// $Id: hin2mol2.C,v 1.2.12.1 2007/03/25 21:32:30 oliver Exp $
 //
 // A very simple utility for converting HyperChem files into MOL2 files
 

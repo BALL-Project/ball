@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberEnergy.C,v 1.9 2004/05/27 19:49:57 oliver Exp $
+// $Id: amberEnergy.C,v 1.9.28.1 2007/08/06 16:22:06 oliver Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -69,6 +69,8 @@ int main(int argc, char** argv)
 						 << "ES: " << amber.getESEnergy() << " kJ/mol   "
 						 << "vdW: " << amber.getVdWEnergy() << " kJ/mol" 
 					   << endl;
+	// alternatively
+	Log.info() << amber.getResults() << endl;
 
 	// done
 	return 0;

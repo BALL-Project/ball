@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.C,v 1.13 2005/12/23 17:02:45 amoll Exp $
+// $Id: pyInterpreter.C,v 1.13.18.1 2007/03/25 21:42:50 oliver Exp $
 //
 
 #include <Python.h>
@@ -14,6 +14,7 @@ namespace BALL
 	String error_message_;
 	PyObject* context_;
 
+	String PyInterpreter::start_log_;
 	bool PyInterpreter::valid_ = false;
 
 	PyInterpreter::PyInterpreter()
@@ -30,6 +31,7 @@ namespace BALL
 		PyObject* result = PyRun_String(const_cast<char*>(str.c_str()), mode, context_, context_);
 		if (PyErr_Occurred())
 		{
+			PyErr_Print();
 			PyObject* type;
 			PyObject* value;
 			PyObject* range;
@@ -48,7 +50,6 @@ namespace BALL
 			
 			error_message_ += "\n";
 
-			PyErr_Clear();
 			return 0;
 		}
 		
@@ -73,6 +74,7 @@ namespace BALL
 	void PyInterpreter::initialize()
 	{
 		valid_ = false;
+		start_log_.clear();
 
 		// finalize the interpreter if it is already running
 		if (Py_IsInitialized())
@@ -103,12 +105,15 @@ namespace BALL
 		// import the modules required for the output redirection
 		// and the system stuff
 		runSingleString_("import cStringIO, sys", Py_single_input);
+		start_log_ += error_message_;
 
 		// Add the BALL library path to the Python search path
 		// to make sure Python can find the BALL extensions.
 		runSingleString_("sys.path.append(\"" BALL_PATH "/lib/" BALL_BINFMT "\")", Py_single_input);
+		start_log_ += error_message_;
 #ifdef BALL_OS_DARWIN // Quick hack for Darwin BALLVIew installer // [20050624/OK]
 		runSingleString_("sys.path.append(\"/Library/BALL/Library/Python\")", Py_single_input);
+		start_log_ += error_message_;
 #endif
 
 		// Add additional paths (user-defined) to the end of the search path.
@@ -117,6 +122,7 @@ namespace BALL
 		for (; it != sys_path_.end(); ++it)
 		{
 			runSingleString_("sys.path.append(\"" + *it + "\")", Py_single_input);
+			start_log_ += error_message_;
 		}
 
 		PyObject *sip_module = PyImport_ImportModule("sip");
@@ -126,8 +132,9 @@ namespace BALL
 			return;
 		}
 	
+		valid_ = true;
 		// import the BALL module
-		valid_ = runSingleString_("from BALL import *", Py_single_input);
+		start_log_ += run("from BALL import *", valid_);
 
 		if (!valid_) 
 		{
@@ -141,27 +148,24 @@ namespace BALL
 		if (!valid_) return "";
 
 		state = false;
-		if (runSingleString_("OLDSTDOUT = sys.stdout", Py_single_input) == 0) return error_message_;
-		if (runSingleString_("CIO = cStringIO.StringIO()", Py_single_input) == 0) return error_message_;
-		if (runSingleString_("sys.stdout=CIO", Py_single_input) == 0) return error_message_;
-		if (runSingleString_("sys.stderr=CIO", Py_single_input) == 0) return error_message_;
+		if (runSingleString_("CIO = cStringIO.StringIO()", Py_single_input) == 0 ||
+		    runSingleString_("sys.stdout=CIO", Py_single_input) == 0 ||
+		    runSingleString_("sys.stderr=CIO", Py_single_input) == 0) 
+		{
+			return error_message_;
+		}
 		
-		PyErr_Clear();
-		if (runSingleString_(const_cast<char*>(s.c_str()), Py_single_input) == 0) return error_message_;
-		state = true;
+		state = (runSingleString_(s, Py_single_input) != 0);
 
 		// retrieve output
+		char* buf = 0;
 		PyObject* result = runSingleString_("str(CIO.getvalue())", Py_eval_input);
 		if (result != 0)
 		{
-			char* buf;
 			PyArg_Parse(result, "s", &buf);
-			return buf;
 		}
-		else
-		{
-			return "";
-		}
+		
+		return buf;
 	}
 
 	String PyInterpreter::runFile(const String& filename)
@@ -169,17 +173,18 @@ namespace BALL
 	{
 		if (!valid_) return "";
 
-		if (runSingleString_("OLDSTDOUT = sys.stdout", Py_single_input) == 0) return error_message_;
-		if (runSingleString_("CIO = cStringIO.StringIO()", Py_single_input) == 0) return error_message_;
-		if (runSingleString_("sys.stdout = CIO", Py_single_input) == 0) return error_message_;
-		if (runSingleString_("sys.stderr = CIO", Py_single_input) == 0) return error_message_;
-		PyErr_Clear();
+		if (runSingleString_("CIO = cStringIO.StringIO()", Py_single_input) == 0 ||
+		    runSingleString_("sys.stdout = CIO", Py_single_input) == 0 || 
+		    runSingleString_("sys.stderr = CIO", Py_single_input) == 0) 
+		{
+			return error_message_;
+		}
 		
 		String result_string;
 		LineBasedFile file(filename);
 		while (file.readLine())
 		{
-			if (runSingleString_(const_cast<char*>(file.getLine().c_str()), Py_single_input) == 0) 
+			if (runSingleString_(file.getLine(), Py_single_input) == 0) 
 			{
 				result_string += "Error in Line " + String(file.getLineNumber()) + " in file " + filename;
 				return result_string;

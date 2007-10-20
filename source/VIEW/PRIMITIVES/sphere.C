@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.C,v 1.5 2003/12/10 15:30:53 amoll Exp $
+// $Id: sphere.C,v 1.5.28.1 2007/03/25 22:02:36 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 
@@ -121,6 +121,12 @@ namespace BALL
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
+
+		void Sphere::getVertices(vector<Vector3>& vertices) const
+		{
+			vertices.push_back(*point_ptr_);
+		}
+
 
 	} // namespace VIEW
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.h,v 1.11 2005/12/23 17:02:10 amoll Exp $
+// $Id: lightSettings.h,v 1.11.16.1 2007/03/25 21:25:50 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_LIGHTSETTINGS_H
@@ -30,7 +30,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT LightSettings 
-			: public LightSettingsData,
+			: public QWidget,
+				public Ui_LightSettingsData,
 				public PreferencesEntry
 		{ 
 			Q_OBJECT
@@ -38,7 +39,8 @@ namespace BALL
 			public:
 
 			/// Constructor
-			LightSettings( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+			LightSettings( QWidget* parent = 0, const char* name = "LightSettings", 
+										Qt::WFlags fl = 0 );
 
 			/// Destructor
 			~LightSettings() {}

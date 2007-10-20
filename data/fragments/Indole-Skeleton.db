@@ -1,0 +1,30 @@
+<node>Indole-Skeleton
+	<node>Names
+		<node>Indole-Skeleton</node>
+	</node>
+	<node>Atoms
+		<node>C1<value>C 0.098272 0.968184 -2.108448</value></node>
+		<node>N2<value>N 0.106846 2.054217 -1.259124</value></node>
+		<node>C3<value>C 0.08464 1.665738 0.063892</value></node>
+		<node>C4<value>C 0.060104 0.240281 0.014949</value></node>
+		<node>C5<value>C 0.062069 -0.174574 -1.386187</value></node>
+		<node>C6<value>C 0.084854 2.377612 1.27264</value></node>
+		<node>C7<value>C 0.060305 1.667968 2.483589</value></node>
+		<node>C8<value>C 0.039354 0.262233 2.470668</value></node>
+		<node>C9<value>C 0.039595 -0.441663 1.251419</value></node>
+	</node>
+	<node>Bonds
+		<node>1<value>C1 N2 s</value></node>
+		<node>2<value>N2 C3 s</value></node>
+		<node>3<value>C3 C4 d</value></node>
+		<node>4<value>C4 C5 s</value></node>
+		<node>5<value>C5 C1 d</value></node>
+		<node>6<value>C3 C6 s</value></node>
+		<node>7<value>C6 C7 d</value></node>
+		<node>8<value>C7 C8 s</value></node>
+		<node>9<value>C8 C9 d</value></node>
+		<node>10<value>C9 C4 s</value></node>
+	</node>
+	<node>Properties
+	</node>
+</node>

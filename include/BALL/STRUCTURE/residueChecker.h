@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.h,v 1.22 2005/12/23 17:02:04 amoll Exp $
+// $Id: residueChecker.h,v 1.22.20.1 2007/05/25 09:36:27 oliver Exp $
+//
+// Author:
+//   Oliver Kohlbacher
 //
 
 #ifndef BALL_STRUCTURE_RESIDUECHECKER_H
@@ -31,7 +34,7 @@ namespace BALL
 			The individual tests can be enabled/disabled using the \link ResidueChecker::enable enable \endlink
 			and \link ResidueChecker::disable disable \endlink methods. Please use the enum
 			\link ResidueChecker::TestTypes TestTypes \endlink to refer to the appropriate tests.
-			By default all tests are enabled.
+			By default all tests are enabled except for OVERLAPPING_ATOMS.
 			
 			The following tests are currently implemented:
 			<ul>

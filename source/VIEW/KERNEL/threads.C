@@ -1,20 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.41 2006/01/04 16:40:36 amoll Exp $
+// $Id: threads.C,v 1.41.16.3 2007/05/28 13:35:28 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/threads.h>
-
-// Do nothing, if no thread support
-#ifdef BALL_QT_HAS_THREADS
-
-#include <BALL/VIEW/MODELS/modelProcessor.h>
-#include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/VIEW/KERNEL/common.h>
-#include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
+#include <BALL/VIEW/DATATYPE/standardDatasets.h>
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
@@ -22,10 +17,9 @@
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 
 #include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
+#include <BALL/FORMAT/DCDFile.h>
 
-#include <BALL/SYSTEM/directory.h>
-
-#include <qapplication.h>
+#include <QtGui/qapplication.h>
 
 namespace BALL
 {
@@ -41,44 +35,38 @@ namespace BALL
 
 		void BALLThread::output_(const String& string, bool important)
 		{
-			if (main_control_ == 0) 
-			{
-				throw Exception::NullPointer(__FILE__, __LINE__);
-			}
-
-			if (main_control_->stopedSimulation()) return;
-
 			LogEvent* su = new LogEvent;
-			su->setMessage(string);
+			su->setMessage(string + String("\n"));
 			su->setImportant(important);
 			qApp->postEvent(main_control_, su);  // Qt will delete it when done
 		}
 
 		void BALLThread::waitForUpdateOfRepresentations_()
 		{
-			if (main_control_ == 0) 
+			RepresentationManager& pm = main_control_->getRepresentationManager();
+			while (!main_control_->stopedSimulation() &&
+					   (pm.still_to_notify_ || pm.updateRunning()))
+						 
 			{
-				throw Exception::NullPointer(__FILE__, __LINE__);
-			}
-
-			while (main_control_->getPrimitiveManager().updatePending())
-			{
-				main_control_->getPrimitiveManager().getUpdateWaitCondition().wait(100);
+				msleep(10);
 			}
 		}
 
-		void BALLThread::updateScene_()
+		void BALLThread::updateStructure_()
 		{
-			if (main_control_ == 0) 
-			{
-				throw Exception::NullPointer(__FILE__, __LINE__);
-			}
-
-			main_control_->getPrimitiveManager().setUpdatePending(true);
+			RepresentationManager& pm = main_control_->getRepresentationManager();
+			pm.still_to_notify_ = true;
 			// notify MainControl to update all Representations for the Composite
-			UpdateCompositeEvent* se = new UpdateCompositeEvent;
-			se->setComposite(composite_);
-			qApp->postEvent(main_control_, se);
+			sendMessage_(new CompositeMessage(*composite_, 
+																				CompositeMessage::CHANGED_COMPOSITE,
+																				true));
+		}
+
+		void BALLThread::sendMessage_(Message* msg)
+		{
+			if (main_control_ == 0) return;
+			// Qt will delete the MessageEvent when done
+			qApp->postEvent(main_control_, new MessageEvent(msg));
 		}
 
 		// ================================== FetchHTMLThread ===============================
@@ -98,19 +86,21 @@ namespace BALL
 
 		void FetchHTMLThread::run()
 		{
+			if (main_control_ == 0) return;
+
 			if (url_ == "")
 			{
 				output_("Invalid Address " + url_ + " in " + String(__FILE__) + ":" + String(__LINE__), true);
 				return;
 			}
+
+			if (main_control_ != 0)
+			{
+				tcp_.setProxy(main_control_->getProxy(), main_control_->getProxyPort());
+			}
+
 			try
 			{
-				MainControl* mc = getMainControl();
-				if (mc != 0)
-				{
-					tcp_.setProxy(mc->getProxy(), mc->getProxyPort());
-				}
-
 				if (file_name_ != "")
 				{
 					File f(file_name_, std::ios::out);
@@ -153,26 +143,34 @@ namespace BALL
 			: BALLThread(),
 				rep_(0)
 		{
+			setTerminationEnabled(true);
 		}
 
 		void UpdateRepresentationThread::run()
 		{
-			if (rep_ == 0) return;
-			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
-			while (pm.getRepresentationsBeeingDrawn().has(rep_))
+			if (main_control_ == 0) return;
+
+			RepresentationManager& pm = main_control_->getRepresentationManager();
+			Representation* rep = 0;
+			while (!main_control_->isAboutToQuit())
 			{
-				pm.getUpdateWaitCondition().wait(100);
-			}
+				if (!main_control_->useMultithreading()) 
+				{
+					msleep(50);
+					continue;
+				}
 
-			pm.getRepresentationsBeeingUpdated().insert(rep_);
+				rep = pm.popRepresentationToUpdate();
+				if (rep == 0) 
+				{
+					msleep(10);
+					continue;
+				}
 				
- 			rep_->update_();
-			rep_ = 0;
-			pm.getRepresentationsBeeingUpdated().erase(rep_);
-			pm.getUpdateWaitCondition().wakeAll();
+				rep->update_();
 
-			FinishedRepresentionUpdateEvent* se = new FinishedRepresentionUpdateEvent;
-			qApp->postEvent(getMainControl(), se);
+				sendMessage_(new RepresentationMessage(*rep, RepresentationMessage::FINISHED_UPDATE));
+			}
 		}
 
 		// ==========================================
@@ -182,30 +180,42 @@ namespace BALL
 				steps_between_updates_(0),
 				dcd_file_(0)
 		{
+			setTerminationEnabled(true);
 		}
 		
 		void SimulationThread::exportSceneToPNG_()
 		{
 			if (main_control_->stopedSimulation()) return;
 
-			Scene* scene = Scene::getInstance(0);
-			if (scene == 0) return;
-
-			Scene::SceneExportPNGEvent* e = new Scene::SceneExportPNGEvent();
-			qApp->postEvent(scene, e);
+			sendMessage_(new SceneMessage(SceneMessage::EXPORT_PNG));
 		}
 
 		void SimulationThread::finish_()
 		{
-			SimulationThreadFinished* su = new SimulationThreadFinished;
-			qApp->postEvent(main_control_, su);  // Qt will delete it when done
-
-			main_control_->getCompositesLockedWaitCondition().wakeAll();
+			if (dcd_file_ != 0)
+			{
+				dcd_file_->close();
+				String filename = dcd_file_->getName();
+				delete dcd_file_;
+				dcd_file_ = 0;
+				// we will reopen the file to prevent problems when a user runs an other sim
+				SnapShotManagerDataset* set = new SnapShotManagerDataset;
+				set->setName(filename);
+				set->setType(TrajectoryController::type);
+				set->setComposite(getComposite());
+				SnapShotManager* manager = new SnapShotManager((System*)getComposite(), 0, 
+																					new DCDFile(filename, std::ios::in));
+				set->setData(manager);
+				sendMessage_(new DatasetMessage(set, DatasetMessage::ADD));
+			}
+			sendMessage_(new FinishedSimulationMessage);
 		}
 
 		// =====================================================================
 		void EnergyMinimizerThread::run()
 		{
+			if (main_control_ == 0) return;
+
 			try
 			{
 				if (minimizer_ == 0 															||
@@ -227,22 +237,27 @@ namespace BALL
 					converged = minimizer_->minimize(steps_between_updates_, true);
 					ok = !minimizer_->wasAborted();
 
-					updateScene_();
+					updateStructure_();
 					waitForUpdateOfRepresentations_();
 
 					QString message;
 					message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
 													minimizer_->getNumberOfIterations(), 
 													ff.getEnergy(), ff.getRMSGradient());
-					output_(message.ascii());
+					output_(ascii(message));
 				}
 
-				updateScene_();
+				updateStructure_();
 
 				output_(ff.getResults());
 				output_("final RMS gradient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
 								+ String(minimizer_->getNumberOfIterations()) + " iterations\n",
 								true);
+
+				if (converged) output_("converged!");
+				if (!ok) output_("aborted!");
+				if (minimizer_->getNumberOfIterations() == minimizer_->getMaxNumberOfIterations()) output_("max number of iterations reached!");
+
 				finish_();
 
 				if (!ok)
@@ -291,6 +306,8 @@ namespace BALL
 		void MDSimulationThread::run()
 			throw(Exception::NullPointer)
 		{
+			if (main_control_ == 0) return;
+
 			try
 			{
 				if (md_ == 0 ||
@@ -312,7 +329,7 @@ namespace BALL
 							 !main_control_->stopedSimulation())
 				{
 					ok = md_->simulateIterations(steps_between_updates_, true);
-					updateScene_();
+					updateStructure_();
 
 					waitForUpdateOfRepresentations_();
 					
@@ -320,7 +337,7 @@ namespace BALL
 					message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
 													md_->getNumberOfIterations(), ff.getEnergy(),
 													ff.getRMSGradient());
-					output_(message.ascii());
+					output_(ascii(message));
 					
 
 					if (save_images_) exportSceneToPNG_();
@@ -368,19 +385,13 @@ namespace BALL
 
 		MDSimulationThread::~MDSimulationThread()
 		{
-			if (md_ != 0)
-			{ 
-				delete md_;
-			}
+			if (md_ != 0) delete md_;
 		}
 
 
 		void MDSimulationThread::setMolecularDynamics(MolecularDynamics* md)
 		{ 
-			if (md_ != 0)
-			{
-				delete md_;
-			}
+			if (md_ != 0) delete md_;
 			
 			md_ = md;
 		}
@@ -422,11 +433,7 @@ namespace BALL
 		{
 			output_("delete thread", true);
 
-			if (dock_alg_ != 0)
-			{
-				delete dock_alg_;
-				dock_alg_ = NULL;
-			}
+			// docking algorithm is deleted in DockingController
 		}
 		
 		// Assignment operator
@@ -461,12 +468,10 @@ namespace BALL
 
 				dock_alg_->start();
 				
-		 		DockingFinishedEvent* finished = new DockingFinishedEvent(dock_alg_->wasAborted());
-				// Qt will delete event when done
-				ConformationSet* cs = new ConformationSet(dock_alg_->getConformationSet());
+				DockingFinishedMessage* msg = new DockingFinishedMessage(dock_alg_->wasAborted());
 				// conformation set is deleted in DockResult
-				finished->setConformationSet(cs);
-				qApp->postEvent(getMainControl(), finished);
+				msg->setConformationSet(new ConformationSet(dock_alg_->getConformationSet()));
+				sendMessage_(msg);
 				
 				output_("Docking finished.", true);
 		}
@@ -476,4 +481,3 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif //Thread support

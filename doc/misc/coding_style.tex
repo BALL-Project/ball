@@ -1,7 +1,7 @@
 % -*- Mode: C++; tab-width: 2; -*-
 % vi: set ts=2:
 %
-% $Id: coding_style.tex,v 1.8 2005/12/23 17:01:38 amoll Exp $
+% $Id: coding_style.tex,v 1.8.20.2 2007/08/08 07:17:22 toussaint Exp $
 %
                                                                                                                                                              
 \documentclass[a4paper,10pt]{article}
@@ -11,7 +11,7 @@
 \title{BALL coding conventions}
 \author{Oliver Kohlbacher}
 
-\date{$ $Revision: 1.8 $ $}
+\date{$ $Revision: 1.8.20.2 $ $}
 
 \newtheorem{example}{Example}
 
@@ -28,8 +28,8 @@ standard file header should automatically set these values for {\tt vi} or
 {\tt emacs} (see below).
 
 \noindent
-{\bf Matching pairs of opening and closing curly braces should be set to the same
-column.}
+Curly braces should be put on their own line. {\bf Matching pairs of opening and closing curly braces should be 
+set to the same column. }
 
 \begin{verbatim}
 while (continue == true)
@@ -47,7 +47,9 @@ while (continue == true)
   }
 }
 \end{verbatim}
-The main reason for this rule is to avoid constructions like:
+
+\noindent
+{\bf Always use braces around a block.} The main reason for this rule is to avoid constructions like:
 
 \begin{verbatim}
 if (isValid(a))
@@ -63,8 +65,9 @@ if (isValid(a))
   return 0;
 \end{verbatim}
 
+\noindent
 The resulting errors are hard to find. There are two ways to avoid these
-problems: (a) always use braces around a block (b) write everyting in a single
+problems: (a) always use braces around a block (b) write everything in a single
 line. We recommend method (a).
 However, this is mainly a question of personal style, so no explicit checking
 is performed to enforce this rule.
@@ -75,9 +78,9 @@ is performed to enforce this rule.
 
 Each BALL class has to provide the following minimal interface:
 \begin{verbatim}
-	/** Class documentation... 
-	*/
-	class Test
+  /** Class documentation... 
+  */
+  class Test
   {
     public:
 
@@ -110,7 +113,7 @@ separated using underscores ``{\tt \_}''. If parts of the name are derived
 from common acronyms (e.g. PDB) they should be in upper case.\\
 Private or protected member variables of classes are suffixed by an
 underscore.\\
-No prefixing or suffixing is allowed to identify the variable type - this
+No prefixing or suffixing is allowed to identify the variable type - it 
 leads to completely illegible documentation and overly long variable names.\\
 \begin{example}\hspace*{2mm}\\
 {\tt String PDB\_atom\_name;} (using an abbreviation)\\
@@ -123,7 +126,7 @@ leads to completely illegible documentation and overly long variable names.\\
 {\bf Class names and type names always start with a capital letter.} Different parts
 of the name are separated by capital letters at the beginning of the word. No
 underscores are allowed in type names and class names, except for the names of
-protected types and classes in classes which are suffixed by an underscore.
+protected types and nested classes which are suffixed by an underscore.
 \begin{example}\hspace*{2mm}\\
 {\tt class PDBFile}\\
 {\tt class ForwardIteratorTraits\_} (private nested class definition)\\
@@ -134,16 +137,16 @@ protected types and classes in classes which are suffixed by an underscore.
 {\bf Header and source files should be named after the class they contain.}
 Each file should contain a single class only, although exceptions are possible
 for extreme light-weight classes. The file names start with a lower-case
-letter (for historical reasons). Hence, the file containing the {\tt
-AtomContainer} class would be named {\tt atomContainer.C}.
+letter (for historical reasons). An exception to the rule are file names starting 
+with common acronyms. Hence, the file containing the {\tt AtomContainer} class 
+would be named {\tt atomContainer.C}. The file containing the {\tt PDBRecord} class
+would be named {\tt PDBRecord.C}.
 
 \subsection{Function names/method names}
 
 {\bf Function names (including class method names) always start with a lower case
-letter.} Parts of the name are separated using capital letters (as are types
-and class names). No underscores are allowed in type names and class names,
-except for the names of protected types and classes in classes which are
-suffixed by an underscore. The argument of {\tt void} functions is omitted in
+letter.} Parts of the name are separated using capital letters (as are class
+and type names). The argument of {\tt void} functions is omitted in
 the declaration and the definition. If function arguments are pointers or
 references, the pointer or reference qualifier is appended to the variable
 type (without separating blanks). It should not prefix the variable name.\\
@@ -161,37 +164,36 @@ function, they have to be commented out (to avoid compiler warnings).
 
 \subsection{Doxygen}
 {\bf Each BALL class has to be documented using Doxygen.} The documentation is
-inserted in Doxygen format in the header file where the class is defined.
+inserted in Doxygen format in the header file in which the class is defined.
 Documentation includes the description of the class, of each method, type
-declaration, enum declaration, each constant, and each member variable.
-An example for a class documentation is given below. 
+declaration, enum declaration, constant, and member variable.
 
 \subsection{Usage of groups in the documentation}
 
 In order to obtain a structured and comprehensible documentation,  methods are
-grouped by their function. Each class usually uses one or more out of the
+grouped by their function. Each class usually uses one or more of the
 following categories to group its methods:
 \begin{itemize}
 	\item {\bf Type Definitions:}\\
-		This group should contain all {\tt typedef}s (except for private or pretected
-		ones) of the class.
+		This group should contain all {\tt typedef}s of the class 
+    (except for private or protected ones).
 	\item {\bf Exceptions:}\\
 		All class specific exceptions are defined as nested classes in this group.
 	\item {\bf Enums:}\\
 		This group usually contains enums or constants defined via enums such as
 		properties.
 	\item {\bf Constructors and Destructor:}\\
-		This group includes all constructors and destructors, as well as related
+		This group includes all constructors and the destructor as well as related
 		methods such as {\tt clear} or {\tt destroy}.
 	\item {\bf Persistence:}\\
 		This group is present in each class derived from {\tt PersistentObject}
 		and always contains the two methods {\tt persistentWrite} and {\tt
 		persistentRead}.
 	\item {\bf Converters:}\\
-		If an object should be convertible to another class, an explicit
+		If an object is convertible into another class an explicit
 		converter should be defined inside this group.
 	\item {\bf Accessors:}\\
-		Accessors are all the methods that access or modify attributes of the
+		Accessors are all methods that access or modify attributes of the
 		class.
 	\item {\bf Predicates:}\\
 		Predicates are functions returning a boolean value. The names of
@@ -204,7 +206,7 @@ following categories to group its methods:
 	\item {\bf Attributes:}\\	
 		This group should contain all public class attributes. Protected and
 		private attributes should be documented in the corresponding groups
-		{\bf Private Attributes} or {\bf Protected Attributes}. However, private 
+		{\bf Protected Attributes} or {\bf Private Attributes}. However, private 
 		members do not occur in the documentation by default.
 \end{itemize}
 
@@ -218,10 +220,10 @@ order.
 The code for each .C file has to be commented. Each piece of code in BALL has
 to contain at least {\bf 5\% of comments}. The use of {\tt //} instead of C style
 comments ({\tt /* */}) is recommended to avoid problems arising from nested
-comments. Comments should be written in plain english and describe the
+comments. Comments should be written in plain English and describe the
 functionality of the next few lines.
 
-To check whether a header or source file fulfils this requirement, use the
+To check whether a header or source file fulfills this requirement, use the
 script {\tt check\_coding} in {\tt source/config}. Invoke {\tt check\_coding} with the
 filename to check (or a list of files) and it will print the percentage of
 comments (including Doxygen comments) for each file.
@@ -237,7 +239,7 @@ or source file should start with this header:
   // -*- Mode: C++; tab-width: 2; -*-
   // vi: set ts=2:
   //
-  // $Id: coding_style.tex,v 1.8 2005/12/23 17:01:38 amoll Exp $
+  // $Id: coding_style.tex,v 1.8.20.2 2007/08/08 07:17:22 toussaint Exp $
   //                                                                                                                                                             
 \end{verbatim}
 In non-C++ files (Makefiles, TeX-Files, etc.) the C++ comments are replaced
@@ -248,7 +250,7 @@ by the respective comment characters (e.g. ``\#'' for Makefiles).
 No BALL class method or function should lead to the termination of a program
 in case of a detectable error. In particular, if BALL classes are embedded 
 for scripting, robustness is an important topic. The recommended
-procedure to handle -- even fatal -- errors is to throw an exception. Uncaught
+procedure to handle even fatal errors is to throw an exception. Uncaught
 exceptions will result in a call to {\tt abort} thereby terminating the
 program while still giving the programmer a chance to handle them graciously.\\
 All exceptions used in BALL are derived from {\tt GeneralException}
@@ -274,12 +276,12 @@ exception's cause.\\
 
 Object persistence is a serious problem in C++. There are mainly three
 concepts that are responsible for the trouble:
-\begin{itemize}
-	\item multiple inheritence from a common base class, leading to virtual
+\begin{enumerate}
+	\item multiple inheritance from a common base class leading to virtual
 		inheritance
 	\item static member variables
 	\item void pointers
-\end{itemize}
+\end{enumerate}
 
 To start at the end, {\em void pointers} are very simple to handle: avoid them!
 Pointers are only valid inside a single instance of a program, they have no
@@ -294,31 +296,30 @@ implementing object persistence for the BALL kernel classes, was the internal
 counter of the class {\tt Object}. This counter is incremented by one for each
 instance of {\tt Object} created. It is used to uniquely identify objects and
 to define a linear order on these objects (this is the object's handle).
-If the state of this counter was written with each persistent object, what
-had happened? When writing for example a molecule, the static variable had
-always had the same value. Reading these objects again had set the internal
-variable of the reading instance of a program to that value. This might lead
-to object handles occuring twice. Persistent reading for objects of type {\tt Object} 
-was therefore implemented to ignore the value. This leads to a different order
-of the handles (the atoms that are read get handles according to the order in
-which they are read and created) but prevents the double occurance of the same
-handle. Whether static variables have to be read/written or not has to be
-decided  on a case-by-case basis.
+If this handle had been treated as other variables when reading/writing persistent objects,
+reading an object could have lead to object handles occuring twice. 
+Persistent reading for objects of type {\tt Object} 
+was therefore implemented to ignore the value. Objects that are read get handles according
+to the order in which they are read and created. This leads to a different order
+of the handles but prevents handles from occuring twice.
+Whether static variables have to be read/written or not has to be
+decided on a case-by-case basis.
 
 {\em Multiple inheritance} is the most serious problem. 
-All persistent object have to be derived from exactly {\em one} persistent
-object - in this case {\tt Composite}. The support classes like {\tt
+All persistent objects have to be derived from exactly {\em one} persistent
+object class - in this case {\tt Composite}. The support classes like {\tt
 PropertyManager} or {\tt Selectable} are not derived from {\tt
 PersistentObject}, but are a {\em model of storable}. 
-This requires the definition of two methods in the storable class' interface:
-{\tt read(PersistenceManager\& pm)} and {\tt write(PersistenceManager\& pm)}.
-These methods are quite alike to {\tt persistenWrite} and {\tt
-persistentRead} even in the implementation. The difference is that classes
-that are a model of storable cannot be read from a persistent stream if they
-are not part or base class of a persistent object. This is due to the fact
+A class which is a model of storable cannot be read from a persistent stream
+if it is not part or base class of a persistent object. This is due to the fact
 that the persistence manager needs a well-defined interface to handle the
-objects he stores and retrieves, and this interface is implemented in the class
+objects it stores and retrieves. This interface is implemented in the class
 {\tt PersistentObject}. 
+Thus, in order to provide for object persistence 
+the definition of two methods in the storable class' interface is required:
+{\tt read(PersistenceManager\& pm)} and {\tt write(PersistenceManager\& pm)}.
+These methods are quite similar to {\tt persistentWrite} and {\tt
+persistentRead}.
 
 \section{Testing}
 
@@ -326,12 +327,11 @@ objects he stores and retrieves, and this interface is implemented in the class
 
 Testing is crucial to verify the correctness of the library -- especially when
 using C++. But why has it to be {\em so} complicated, using all these macros
-and stuff? One of the biggest problems when building large class frameworks is
-portability. C++ compilers are strange beasts and there is not a single one
-that accepts the same code as any other compiler. Since one of the main
-concerns of BALL is portability, we have to ensure that every single line of
+and stuff? C++ compilers are strange beasts and there are no two accepting 
+the same code. Since one of the main concerns of BALL is portability, 
+we have to ensure that every single line of
 code compiles on all platforms. Due to the long compilation times and the
-(hopefully in future) large number of different platforms, tests to verify the
+(hopefully in the future) large number of different platforms, tests to verify the
 correct behaviour of all classes have to be carried out automatically. This
 implies a well defined interface for all tests, which is the reason for all
 these strange macros. This fixed format also enforces the writing of complete
@@ -341,20 +341,20 @@ introduction of the test macros, about a tenth of all functions/methods showed
 severe errors after thorough testing. Most of these errors did not occur an
 all platforms or did not show up on trivial input.
 
-Writing tests for {\em each} method of a class also ensures that each line is
+Writing tests for {\em each} method of a class also ensures that each line of code is
 compiled. When using class templates the compiler only compiles the methods
 called. Thus it is possible that a code segment contains syntactical errors
-but the compiler accepts the code happily -- he simply ignores most of the
+but the compiler accepts the code happily -- it simply ignores most of the
 code. This is quickly discovered in a complete test of all methods. The same
 is true for configuration dependend preprocessor directives that stem from
 platform dependencies. Often untested code also hides inside the {\tt const}
 version of a method, when there is a non-const method with the same name and
-arguments (for example most of the {\tt getName}) methods in BALL. In most
+arguments (for example most of the {\tt getName} methods in BALL). In most
 cases, the non-const version is preferred by the compiler and it is usually
 not clear to the user which version is taken. Again, explicit testing of each
 single method provides help for this problem.
 The ideal method to tackle the problem of untested code is the complete
-coverage analysis of a class. Unfortunately this is only supported for very
+coverage analysis of a class. Unfortunately, this is only supported for very
 few compilers, so it is not used for testing BALL.
 
 Writing the test program is a wonderful opportunity to verify and complete the
@@ -368,41 +368,41 @@ implement a test program, too!
 
 \subsection{Structure of a test program}
 
-Each BALL class has to provide its own test program. This test program has to check
+{\bf Each BALL class has to provide its own test program.} This test program has to check
 each method of the class. The test programs reside in the directory
 {\tt BALL/source/TEST}. To create a new test program, rename a copy of the file
 {\tt Skeleton\_test.C} to the new class test name (usually {\tt
 <classname>\_test.C}). The test program has to be coded using the class test
-macros as described in the BALL online reference (see below, these macros are
-defined in {\tt CONCEPT/classTest.h}). Special care should be taken
+macros as described in the BALL online reference. These macros are
+defined in {\tt CONCEPT/classTest.h}. Special care should be taken
 to cover all special cases (e.g. what happens, if a method is called with
 empty strings, negative values, zero, null pointers etc.). 
 
 \subsection{Macros to start, finish and evaluate tests}
 \begin{itemize}
 	\item {\tt START\_TEST(class\_name, version)}\\
-	\item {\tt END\_TEST}\\
-		Start the tests for class {\tt class\_name}. This should occur just
+	{\tt END\_TEST}\\
+		The {\tt START\_TEST} macro starts the tests for class {\tt class\_name}. This should occur just
 		\emph{once} in a test program, as it contains the definition of the {\tt main}
 		function. Similarly, {\tt END\_TEST} defines the terminal section of the test program.
 	
 	\item {\tt CHECK(name)}\\
-	\item {\tt RESULT}\\
+	{\tt RESULT}\\
 		The {\tt CHECK} macro starts a subtest for a specific method of the class. The full
 		signature of the class should be given as {\tt name}.
 		Variables defined after this macro are scoped and valid until the next
-		{\tt RESULT} only, which also evaluats success or failure of the test.
+		{\tt RESULT} only. This {\tt RESULT} also evaluates success or failure of the test.
 
 	\item {\tt ABORT\_IF(condition)}\\
 		This macro aborts the subtest, i.e. it jumps forward to the next {\tt
-		RESULT} macro and marks the subtest as failed. This macro usually employed
-		to prevent the execution of certain tests, if a necessary precondition was
+		RESULT} macro and marks the subtest as failed. This macro is usually employed
+		to prevent the execution of certain tests if a necessary precondition was
 		not met and the execution would hence result in a crash.
 
 	\item {\tt STATUS(...)}\\
 		This macro can be used to print the current status from within a subtest
-		and useful for debugging tests. The macro will print its argument to the
-		console, if the test is run with "-V" as an argument and stay silent
+		and is useful for debugging tests. The macro will print its argument to the
+		console if the test is run with "-V" as an argument and stay silent
 		otherwise. Example: {\tt STATUS("result: " << result)}.
 
 \end{itemize}
@@ -418,18 +418,20 @@ empty strings, negative values, zero, null pointers etc.).
 		you know what a method returns upon \emph{unsuccessful} execution, e.g.,
 		if you want to make sure it did not return a NULL pointer.
 
-	\item {\tt TEST\_REAL\_EQUAL(a, b)}
-	\item{\tt PRECISION(delta)}\\
-		Check that {\tt a} and {\tt b} are equal within a tolerance {\tt delta},
-		defined. {\tt a} and {\tt b} have to be convertible to double.
+	\item {\tt TEST\_REAL\_EQUAL(a, b)}\\
+	{\tt PRECISION(delta)}\\
+		The {\tt TEST\_REAL\_EQUAL(a, b)} macro checks if {\tt a} and {\tt b} 
+    are equal within a defined tolerance {\tt delta}. 
+    The tolerance is defined via the {\tt PRECISION} macro. 
+    {\tt a} and {\tt b} have to be convertible to double. 
 
 	\item{\tt NEW\_TMPFILE(filename)}\\
-	\item{\tt TEST\_FILE()}\\
-	\item{\tt TEST\_FILE\_REGEX()}\\
-		{\tt NEW\_TMPFILE} creates a new temporary filename, which is then assigned
+	{\tt TEST\_FILE()}\\
+	{\tt TEST\_FILE\_REGEX()}\\
+		The {\tt NEW\_TMPFILE} macro creates a new temporary filename, which is then assigned
 		to {\tt filename}. Using these temporary filenames is recommended, as they
 		are deleted after running the test (except if run in verbose mode).
-		After writing something to a file (e.g. while testing output methods), the
+		After having written something to a file (e.g. while testing output methods), the
 		contents of this file can be compared to a template file using the {\tt
 		TEST\_FILE} and {\tt TEST\_FILE\_REGEX} macros.
 

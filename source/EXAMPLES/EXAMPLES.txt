@@ -1,26 +1,28 @@
 BALL examples
 
 
-This directory contains some short examples illustarting some of BALL's
+This directory contains some short examples illustrating some of BALL's
 capabilities.
 Just type "make" to build the examples. When called without arguments,
 each example prints out the required syntax. Please have a look at the
-source code od each example.
+source code of each example.
+
+Further examples can be found in the folder "BALL/source/APPLICATIONS/UTILITIES/". 
 
 ramachandran:
 =============
  
-  This example reads a PDB file and calculates all backbone torsion angles.
+  This example reads a PDB-file and calculates all backbone torsion angles.
   From the output of the program, a Ramachandran plot can be created that
   shows the torsion angle distribution.
 
 
-MOLVIEWClient:
+BALLVIEWClient:
 ==============
 
-  This example illustrates the simple visualization using the MolVIEW 
+  This example illustrates the simple visualization using the BALLView 
   stand-alone viewer. It reads a PDB file and sends its contents to the
-  MolVIEW application running somewhere on the network. On this viewer,
+  BALLView-application running somewhere on the network. On this viewer,
   the molecule is then inserted and drawn in the current representation
   (please make sure, the VIEW server is activated - check the settings in
   Display/Preferences/Network).
@@ -28,22 +30,70 @@ MOLVIEWClient:
 
 PDB2Discover:
 =============
+	This example reads a PDB-file, adds hydrogen atoms where needed and
+	converts the atom names to the Discover naming scheme, and finally 
+	writes everything to the given outfile.
+
 
 PDBChecker:
 ===========
+	This example reads a PDB-file, converts the atom names from several naming
+	conventions to the standard PDB names, reconstructs the bonds from templates 
+	in the fragment database (since PDB files normally do not contain bond 
+	information) and checks all residues for valid bond distances, charges and 
+	missing or superfluous atoms in a residue.
+
 
 energy:
 =======
+  This example shows an examplary energy function as used in Althaus 
+  et al. "A branch and cut algorithm for the optimal solution of the 
+  side-chain placement problem", 2000.
+  
+  It reads a PDB-file and calculates "the" bonded energy using a force
+  field and "the" non-bonded energy (electrostatics only) by solving 
+	the Poisson-Boltzmann equation.
+
 
 addHydrogens:
 =============
+	This example reads a PDB-file, normalizes the atoms names, builds bonds, 
+	adds missing hydrogens and minimizes the all hydrogens employing a 
+	conjugate gradient minimizer.
 
 amberEnergy:
 ============
+	This example reads a PDB-file and optionally an AMBER-option-file, normalizes
+	the atoms names, builds bonds, computes and prints nicely all AMBER energy 
+	contributions.
+
 
 bindingEnergy:
 ==============
+	This example reads two PDB-files, normalizes the atoms names, adds missing
+	bonds, and computes the binding energy according to the following equation:
+			(ACE_AB - ACE_A - ACE_B) + (ES_AB - ES_A - ES_B)
+	where ACE denotes the _A_tom _C_ontact _E_nergy of the molecules and 
+	the complex (Zhang et al. "Determination of atomic desolvation energies from 
+	the structures of crystallized proteins". J. Mol. Biol., 267:707-726, 1997) 
+	as well as the electrostatic energy analogs.
 
 proteinMapper:
 ==============
+	This example reads two PDB-files and maps the backbone of the two proteins 
+	(Calpha atoms) onto each other. The Calpha atoms are recognized by their 
+	name (CA).
+
+	Optional parameters are:
+  	<upper> (double):
+    	 upper bound for triangle side length use by the mapper
+  	<lower> (double):
+     	lower bound for triangle side length use by the mapper
+  	<tolerance> (double):
+     	maximum distance between two (mapped) Calpha atoms in Angstrom
+
+	Defaults for the optional parameters are:
+    upper     = 8
+    lower     = 4
+    tolerance = 0.6
 

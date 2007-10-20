@@ -20,7 +20,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT PeptideDialog
-			: public PeptideDialogData,
+			: public QDialog,
+				public Ui_PeptideDialogData,
 				public Peptides::PeptideBuilder
 		{ 
 			Q_OBJECT
@@ -28,7 +29,7 @@ namespace BALL
 			public:
 
 			/// Constructor
-			PeptideDialog( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+			PeptideDialog( QWidget* parent = 0, const char* name = "PeptideDialog", Qt::WFlags fl = 0 );
 
 			/// Destructor
 			~PeptideDialog() {}

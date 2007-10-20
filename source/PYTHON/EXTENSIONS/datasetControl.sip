@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.sip,v 1.3 2005/12/23 17:02:50 amoll Exp $
+// $Id: datasetControl.sip,v 1.3.18.3 2007/05/10 22:18:44 amoll Exp $
 //
 
 class DatasetControl
@@ -9,6 +9,7 @@ class DatasetControl
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/WIDGETS/datasetControl.h>
+	#include <BALL/PYTHON/pyDatasetVector.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
 %End
@@ -20,22 +21,11 @@ class DatasetControl
 	DatasetControl() throw();
   ~DatasetControl() throw();
 
-	void addTrajectory(const String&);
-
-	void addTrajectory() throw();
-
-	void add1DGrid() throw();
-
-	void add2DGrid() throw();
-
-	void add3DGrid() throw();
-
-	void updateSelection() throw();
-
 //		List<std::pair<RegularData3D*, String> > get3DGrids() throw();
+//	PyRegularData3DList get3DGrids() throw();
 
-	virtual void deleteCurrentItems() throw();
-
-	void computeIsoContourSurface();
-
+//	virtual void deleteCurrentItems() throw();
+	Size getSelectionSize();
+	PyDatasetVector getDatasets(const String& type);
+	DatasetController* getController(const String& /type/);
 };

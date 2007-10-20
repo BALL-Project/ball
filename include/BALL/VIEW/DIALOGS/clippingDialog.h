@@ -12,7 +12,7 @@
 # include <BALL/VIEW/KERNEL/clippingPlane.h>
 #endif
 
-#include <qlistview.h>
+#include <QtGui/QDialog>
 
 namespace BALL
 {
@@ -22,31 +22,11 @@ namespace BALL
     		\ingroup  ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT ClippingDialog 
-			: public ClippingDialogData
+			: public QDialog,
+				public Ui_ClippingDialogData
 		{
 			Q_OBJECT
 				
-			class BALL_VIEW_EXPORT SelectableListViewItem
-				: public QCheckListItem
-			{
-				public:
-
-				SelectableListViewItem(QListView* parent, const QString& text, 
-															 Representation* representation)
-					throw();
-
-				Representation* getRepresentation() { return representation_;};
-
-				protected:
-
-				Representation* 	representation_;
-
-				private: 
-				
-				// prevent use of default cstr
-				SelectableListViewItem();
-			};
-
 			public:
 			
 			/**	@name	Constructors
@@ -55,7 +35,7 @@ namespace BALL
 
 			/** Default Constructor.
 			*/
-			ClippingDialog(QWidget *parent = NULL, const char *name = NULL )
+			ClippingDialog(QWidget *parent = NULL, const char *name = "ClippingDialog" )
 				throw();
 
 			//@}
@@ -71,6 +51,7 @@ namespace BALL
 			///
 			void setClippingPlane(ClippingPlane* plane) { clipping_plane_ = plane;}
 
+			///
 			const ClippingPlane* getClippingPlane() const { return clipping_plane_;}
 			
 			//@}
@@ -83,7 +64,7 @@ namespace BALL
 				
 			/** Show and raise the dialog
 			*/
-			void show();
+			void exec();
 			
 			///
 			void accept();

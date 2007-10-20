@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.h,v 1.7 2005/12/23 17:02:09 amoll Exp $
+// $Id: amberConfigurationDialog.h,v 1.7.16.1 2007/03/25 21:25:43 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_AMBERCONFIGURATIONDIALOG_H
@@ -25,7 +25,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT AmberConfigurationDialog
-			: public AmberConfigurationDialogData,
+			: public QDialog,
+				public Ui_AmberConfigurationDialogData,
 				public PreferencesEntry
 		{
 			friend class MolecularStructure;
@@ -35,7 +36,7 @@ namespace BALL
 			public:
 
 			/// Constructor
-			AmberConfigurationDialog(QWidget* parent = NULL, const char* name = NULL);
+			AmberConfigurationDialog(QWidget* parent = NULL, const char* name = "AmberConfiguration");
 
 			/// Destructor
 			virtual ~AmberConfigurationDialog();
@@ -48,6 +49,9 @@ namespace BALL
 			///
 			void reject();
 
+			///
+			virtual void resetOptions();
+			
 			/// apply the settings to a given AMBER force field
 			void applyTo(AmberFF& amber)
 				throw();
@@ -56,11 +60,11 @@ namespace BALL
 			void periodicBoundaryClicked()
 				throw();
 
-			protected:
+			protected slots:
 
-			virtual void resetOptions();
-			
 			virtual void browseParameterFiles();
+
+			protected:
 
 			void setAmberFF(AmberFF& amber)
 				throw();

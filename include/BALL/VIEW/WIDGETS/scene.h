@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66 2005/12/23 17:02:24 amoll Exp $
+// $Id: scene.h,v 1.66.16.1 2007/03/25 21:26:24 oliver Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -20,16 +20,20 @@
 #endif 
 
 // has to come after BALL includes to prevent problems with Visual Studio Net
-#include <qgl.h>
+#include <QtOpenGL/qgl.h>
 
-#ifdef BALL_QT_HAS_THREADS
- #include <qthread.h>
- #include <qevent.h>
-#endif
-
-#include <qtimer.h>
+#include <QtCore/qthread.h>
+#include <QtCore/qtimer.h>
+#include <QtGui/QDragEnterEvent>
+#include <QtGui/QWheelEvent>
+#include <QtGui/QKeyEvent>
+#include <QtGui/QDropEvent>
+#include <QtGui/QToolBar>
+#include <QtGui/QActionGroup>
 
 class QMouseEvent;
+class QRubberBand;
+class QMenu;
 
 namespace BALL
 {
@@ -79,10 +83,8 @@ namespace BALL
 				Its possible to add new modi, to do so, derive a new class from Scene and overload the mouse*Event methods.
 				<br>
 				<br>
-				It is possible to connect Scenes together with the Notification
-				mechanism of BALL. Connecting two or more Scenes together means that that
-				mouse action performed in one Scene are also transfered to all other connected
-				Scenes. These other Scenes can have different Camera angles or other properties.
+				Furthermore, users can create modified versions of the GLRenderer and pass them to
+				the Scene with the method setGLRenderer.
 				\ingroup ViewWidgets
 		*/
 		class BALL_VIEW_EXPORT Scene
@@ -96,38 +98,6 @@ namespace BALL
 		  public:
 
 			BALL_EMBEDDABLE(Scene, ModularWidget)
-
-			/** This class is only intended for usage with multithreading.
-			 		It provides a mean for other threads to make the Scene export a PNG.
-			*/
-			class BALL_VIEW_EXPORT SceneExportPNGEvent : public QCustomEvent
-			{
-				public:
-					SceneExportPNGEvent()
-						: QCustomEvent( SCENE_EXPORTPNG_EVENT){}
-			};
-
-			/** This class is only intended for usage with multithreading.
-			 		It provides a mean for other threads to make the Scene export a POVRay file.
-			*/
-			class BALL_VIEW_EXPORT SceneExportPOVEvent : public QCustomEvent
-			{
-				public:
-					SceneExportPOVEvent()
-						: QCustomEvent( SCENE_EXPORTPOV_EVENT){}
-			};
-
-			/** This class is only intended for usage with multithreading.
-			 		It provides a mean for other threads to set the camera position.
-			*/
-			class BALL_VIEW_EXPORT SceneSetCameraEvent : public QCustomEvent
-			{
-				public:
-					SceneSetCameraEvent()
-						: QCustomEvent( SCENE_SETCAMERA_EVENT){}
-
-					Camera camera;
-			};
 
 			/** @name Type definitions 
 			*/
@@ -153,20 +123,20 @@ namespace BALL
 				PICKING__MODE
 			};
 
-			/// Different Move Mode actions
-			enum MoveModeAction
+			/// Different Mouse Mode actions
+			enum ModeAction
 			{
 				///
-				MOVE_TRANSLATE,
+				TRANSLATE_ACTION,
 
 				///
-				MOVE_ZOOM,
+				ZOOM_ACTION,
 
 				///
-				MOVE_ROTATE,
+				ROTATE_ACTION,
 
 				///
-				MOVE_ROTATE_CLOCKWISE
+				ROTATE_CLOCKWISE_ACTION
 			};
 			
 			//@} 
@@ -206,7 +176,7 @@ namespace BALL
 					\param      w_flags the flags the scene widget should have 
 											(See documentation of QT-library for information concerning widget flags) 
 			*/
-			Scene(QWidget* parent_widget, const char* name = NULL, WFlags w_flags = 0)
+			Scene(QWidget* parent_widget, const char* name = NULL, Qt::WFlags w_flags = 0)
 				throw();
 
 			/** Copy constructor.
@@ -219,7 +189,7 @@ namespace BALL
 					\param  wflags the flags the scene widget should have 
 									(See documentation of QT-library for information concerning widget flags) 
 			 */
-			Scene (const Scene& scene, QWidget* parent_widget = NULL, const char* name = NULL, WFlags wflags = 0)
+			Scene (const Scene& scene, QWidget* parent_widget = NULL, const char* name = NULL, Qt::WFlags wflags = 0)
 				throw();
 
 			/** Destructor.
@@ -407,7 +377,13 @@ namespace BALL
 
 			/// 
 			GLRenderer& getGLRenderer()
-				throw() { return gl_renderer_;}
+				throw() { return *gl_renderer_;}
+
+			/** Set a new GLRenderer.
+			 		This method is intended for users, that what to
+					overload the behaviour of the GLRenderer.
+			*/
+			void setGLRenderer(GLRenderer& renderer);
 
 			///
 			static bool stereoBufferSupportTest();
@@ -419,14 +395,228 @@ namespace BALL
 			float getMousePositionY() { return y_window_pos_new_;}
 
 			///
-			void setPopupInfosEnabled(bool state);
-	
-			///
 			bool exportPNG(const String& filename);
 
 			///
-			virtual void setVisible(bool state);
+			virtual void setWidgetVisible(bool state);
 
+			///
+			void setOffScreenRendering(bool enabled, Size factor);
+
+			/// Catch key events
+			virtual void keyPressEvent(QKeyEvent* e);
+
+			///
+			virtual void mouseDoubleClickEvent(QMouseEvent* e);
+
+			///
+			ModeType getMode() const
+				throw() { return current_mode_;}
+
+			///
+			virtual void setMode(ModeType mode)
+				throw();
+
+			///
+			static void setScreenShotNumber(Position pos) { screenshot_nr_ = pos;}
+
+			///
+			static void setPOVNumber(Position pos) { pov_nr_ = pos;}
+
+			///
+			void rotate(float degree_right, float degree_up);
+
+			///
+			void rotateClockwise(float degree);
+
+			/** Move the view. \\
+			 		v.x = right  \\
+					v.y = up     \\
+					v.z = view direction 
+			*/
+			void move(Vector3 v);
+
+			/** Move some Composites. \\
+			 		v.x = right  \\
+					v.y = up     \\
+					v.z = view direction 
+			*/
+			void moveComposites(const List<Composite*>& composites, Vector3 v);
+
+			/** Rotate some Composites. \\
+			 		v.x = right  \\
+					v.y = up     \\
+					v.z = view direction 
+			*/
+			void rotateComposites(const List<Composite*>& composites, float degree_right, float degree_up, float degree_clockwise = 0);
+
+			///
+			bool isAnimationRunning() const
+				throw();
+
+			///
+			void setTurnPoint(const Vector3& v) { system_origin_ = v;}
+
+			///
+			const Vector3& getTurnPoint() const { return system_origin_;}
+
+			///
+			void setFullScreen(bool state);
+
+			///
+			void setFPSEnabled(bool state) { show_fps_ = state; }
+
+			/** Show text in the lower right corner.
+			 		To clear the text, call this method again with an empty string.
+			*/
+			void showText(const String& text, Size font_size = 20);
+
+			///
+			virtual void addToolBarEntries(QToolBar* tb);
+
+			///
+			bool isUpdateRunning() const { return update_running_;}
+
+			public slots:
+
+			/// Create an coordinate system at current position
+			void createCoordinateSystem()
+				throw();
+
+			/// Create an coordinate system at origin
+			void createCoordinateSystemAtOrigin()
+				throw();
+
+			/// Export PNG image and return the filename
+			String exportPNG();
+			
+			///
+			void exportPOVRay();
+
+			/// Export to POVRay whithout showing file dialog
+			void exportNextPOVRay();
+
+			///
+			void printScene();
+
+			/// show an dialog to save an PNG file to
+			void showExportPNGDialog();
+
+			///
+			void showExportVRMLDialog();
+
+			/// Enable or disable model previews e.g. while rotating
+			void setPreview(bool state) { use_preview_ = state; }
+			
+			/** Show or hide widget (Called by menu entry in "WINDOWS")
+					If the ModularWidget is not also a QWidget, this method does nothing
+			*/
+			virtual void switchShowWidget()
+				throw();
+
+			///
+			void exitStereo()
+				throw();
+
+			///
+			void enterActiveStereo()
+				throw();
+
+			///
+			void enterDualStereo()
+				throw();
+
+			///
+			void clearRecordedAnimation()
+				throw();
+			
+			///
+			void startAnimation()
+				throw();
+
+			///
+			void stopAnimation()
+				throw();
+
+			///
+			void switchToLastMode()
+				throw();
+
+			///
+			void switchShowGrid();
+
+			/// Popup informations for object under mouse cursor
+			void showInfos();
+
+			///
+			void setupViewVolume();
+
+			///
+			void disableViewVolumeRestriction();
+
+			///
+			void storeViewPoint();
+
+			///
+			void restoreViewPoint();
+	
+			protected slots:
+
+			//@}
+			/** @name Protected slots
+			*/
+			//@{
+
+			/** Switch to rotate mode.
+					If this method is called the mouse actions of this scene will
+					perform rotation, translation and zooming the visualization.
+					This method will be called from the corresponding menu entry.
+					\see initializeWidget
+					\see checkMenu
+			*/
+			virtual void rotateMode_();
+
+			/** Switch to picking mode.
+					If this method is called the mouse actions of this scene will
+					perform object picking.
+					This method will be called from the corresponding menu entry.
+					\see initializeWidget
+					\see checkMenu
+			*/
+			virtual void pickingMode_();
+
+			/**
+			*/
+			virtual void moveMode_();
+			
+			/// Show the viewpoint and the look at point in the statusline of the mainwidget.
+			virtual void showViewPoint_()
+				throw();
+
+			/// Set the viewpoint 
+			virtual void setViewPoint_()
+				throw();
+
+			/// Reset the camera to standard values
+			virtual void resetCamera_()
+				throw();
+
+			/// Update the GL camera and if necessary the lights
+			virtual void updateCamera_()
+				throw();
+			
+			///
+			virtual void dropEvent(QDropEvent* e);
+
+			///
+			virtual void dragEnterEvent(QDragEnterEvent* e);
+
+
+
+			// dummy slot for menu entries without immediate action (saves many lines code this way)
+			void dummySlot(){}
+
+			//@}
 			protected:
 
 			//@}
@@ -480,196 +670,14 @@ namespace BALL
 			*/
 			virtual void mouseReleaseEvent(QMouseEvent* qmouse_event);
 
-#ifndef QT_NO_WHEELEVENT
 			/** Catch mouse wheel events and zoom the scene accordingly.
 					\param  e the QT-mouse event (See QT-library for mouse events)
 			*/
 			virtual void wheelEvent(QWheelEvent* qmouse_event);
-#endif
 
-			/// Catch key events
-			void keyPressEvent(QKeyEvent* e);
 
-	
-			public slots:
 
-			/// Export PNG image and return the filename
-			String exportPNG();
-
-			/// show an dialog to save an PNG file to
-			void showExportPNGDialog();
-
-			///
-			void showExportVRMLDialog();
-			
-			///
-			void exportPOVRay();
-
-			/** Show or hide widget (Called by menu entry in "WINDOWS")
-					If the ModularWidget is not also a QWidget, this method does nothing
-			*/
-			virtual void switchShowWidget()
-				throw();
-
-			///
-			void exitStereo()
-				throw();
-
-			///
-			void enterActiveStereo()
-				throw();
-
-			///
-			void enterDualStereo()
-				throw();
-
-			///
-			void clearRecordedAnimation()
-				throw();
-			
-			///
-			void startAnimation()
-				throw();
-
-			///
-			void stopAnimation()
-				throw();
-
-			///
-			void recordAnimationClicked()
-				throw();
-
-			///
-			void animationRepeatClicked()
-				throw();
-
-			///
-			void animationExportPOVClicked()
-				throw();
-
-			///
-			void animationExportPNGClicked()
-				throw();
-
-			///
-			void switchToLastMode()
-				throw();
-
-			///
-			ModeType getMode() const
-				throw() { return current_mode_;}
-
-			///
-			virtual void setMode(ModeType mode)
-				throw();
-
-			///
-			static void setScreenShotNumber(Position pos) { screenshot_nr_ = pos;}
-
-			///
-			static void setPOVNumber(Position pos) { pov_nr_ = pos;}
-
-			///
-			void rotate(float degree_right, float degree_up);
-
-			///
-			void rotateClockwise(float degree);
-
-			/** Move the view. \\
-			 		v.x = right  \\
-					v.y = up     \\
-					v.z = view direction 
-			*/
-			void move(Vector3 v);
-
-			/** Move some Composites. \\
-			 		v.x = right  \\
-					v.y = up     \\
-					v.z = view direction 
-			*/
-			void moveComposites(const List<Composite*>& composites, Vector3 v);
-
-			/** Rotate some Composites. \\
-			 		v.x = right  \\
-					v.y = up     \\
-					v.z = view direction 
-			*/
-			void rotateComposites(const List<Composite*>& composites, float degree_right, float degree_up, float degree_clockwise = 0);
-
-			void initTimer();
-
-			///
-			bool isAnimationRunning() const
-				throw();
-
-			///
-			void setTurnPoint(const Vector3& v) { system_origin_ = v;}
-
-			///
-			const Vector3& getTurnPoint() const { return system_origin_;}
-			
-			protected slots:
-
-			//@}
-			/** @name Protected slots
-			*/
-			//@{
-
-			/** Switch to rotate mode.
-					If this method is called the mouse actions of this scene will
-					perform rotation, translation and zooming the visualization.
-					This method will be called from the corresponding menu entry.
-					\see initializeWidget
-					\see checkMenu
-			*/
-			virtual void rotateMode_();
-
-			/** Switch to picking mode.
-					If this method is called the mouse actions of this scene will
-					perform object picking.
-					This method will be called from the corresponding menu entry.
-					\see initializeWidget
-					\see checkMenu
-			*/
-			virtual void pickingMode_();
-
-			/**
-			*/
-			virtual void moveMode_();
-			
-			/// Show the viewpoint and the look at point in the statusline of the mainwidget.
-			virtual void showViewPoint_()
-				throw();
-
-			/// Set the viewpoint 
-			virtual void setViewPoint_()
-				throw();
-
-			/// Reset the camera to standard values
-			virtual void resetCamera_()
-				throw();
-
-			/// Update the GL camera and if necessary the lights
-			virtual void updateCamera_()
-				throw();
-			
-			//_
-			virtual void customEvent( QCustomEvent * e );
-
-			///
-			virtual void dropEvent(QDropEvent* e);
-
-			///
-			virtual void dragEnterEvent(QDragEnterEvent* e);
-
-			///
-			virtual void timerSignal_();
-
-			//@}
-
-			protected:
-			
-			virtual void updateGL();
+			void updateGL();
 
 			void renderView_(RenderMode mode)
 				throw();
@@ -696,11 +704,10 @@ namespace BALL
 			Index getMoveModeAction_(const QMouseEvent& e);
 
 			void selectionPressed_();
-			void selectionReleased_();
 			void selectionPressedMoved_();
-			void deselectionReleased_();
 
-			void selectObjects_(bool select = true);
+			void selectObjects_();
+			void pickParent_(QPoint p);
 
 			void writeLights_(INIFile& inifile) const
 				throw();
@@ -708,12 +715,22 @@ namespace BALL
 			void readLights_(const INIFile& inifile) 
 				throw();
 
-			void createCoordinateSystem_()
-				throw();
-
 			inline float getXDiff_();
 			inline float getYDiff_();
 			inline Vector3 getTranslationVector_(const Vector3& v);
+			
+			void createCoordinateSystem_(bool at_origin)
+				throw();
+	
+			void renderGrid_();
+
+			/// Given 2D screen coordinates computes the 3D Position in Viewing Volume
+			Vector3 get3DPosition_(int x, int y);
+
+			/** Maps the current viewplane to screen coordinates.
+				  Returns false if the projection matrix is not correctly initialized.
+			*/
+			bool mapViewplaneToScreen_();
 
 			//_ state of the scene: picking or rotate mode?
 			ModeType current_mode_;
@@ -722,31 +739,35 @@ namespace BALL
 			ModeType last_mode_;
 	
 			// Menu entry IDs
-			Index rotate_id_, picking_id_, move_id_;
-			Index no_stereo_id_, active_stereo_id_, dual_stereo_id_;
-			Index record_animation_id_, start_animation_id_, clear_animation_id_, cancel_animation_id_;
-			Index animation_export_POV_id_, animation_export_PNG_id_, animation_repeat_id_;
-			Index show_popup_infos_id_;
+			QAction *rotate_action_, *picking_action_, *move_action_;
+			QAction *no_stereo_action_, *active_stereo_action_, *dual_stereo_action_, *fullscreen_action_;
+			QAction *record_animation_action_, *start_animation_action_, *clear_animation_action_, *cancel_animation_action_;
+			QAction *animation_export_POV_action_, *animation_export_PNG_action_, *animation_repeat_action_;
+			QAction *switch_grid_;
+			QMenu* create_coordinate_system_;
 			
 			Vector3 system_origin_;
 
 			bool need_update_;
 			bool update_running_;
 
-			float x_window_pos_old_;
-			float y_window_pos_old_;
-			float x_window_pos_new_;
-			float y_window_pos_new_;
+			Index x_window_pos_old_;
+			Index y_window_pos_old_;
+			Index x_window_pos_new_;
+			Index y_window_pos_new_;
 
-			float x_window_pick_pos_first_;
-			float y_window_pick_pos_first_;
-			float x_window_pick_pos_second_;
-			float y_window_pick_pos_second_;
+			Index x_window_pick_pos_first_;
+			Index y_window_pick_pos_first_;
+			Index x_window_pick_pos_second_;
+			Index y_window_pick_pos_second_;
+			bool pick_select_;
+			QRubberBand* rb_;
 
 			Stage* stage_;
 			Camera stereo_camera_;
+			Camera stored_camera_;
 
-			GLRenderer gl_renderer_;
+			GLRenderer* gl_renderer_;
 
 			static float mouse_sensitivity_;
 			static float mouse_wheel_sensitivity_;
@@ -754,17 +775,13 @@ namespace BALL
 			static float animation_smoothness_;
 
 			LightSettings* light_settings_;
-
 			StageSettings* stage_settings_;
-
 			MaterialSettings* material_settings_;
 
 			// nr of last png file export
 			static Position screenshot_nr_;
 			// nr of last pov file export
 			static Position pov_nr_;
-
-			QPoint last_pos_;
 
 			static QGLFormat gl_format_;
 			List<Camera> animation_points_;
@@ -773,19 +790,30 @@ namespace BALL
 			bool content_changed_;
 			bool want_to_use_vertex_buffer_;
 			bool mouse_button_is_pressed_;
-			QTimer timer_;
+			bool preview_;
+			bool use_preview_;
 
-			// Position of mouse cursor for identifying Composite
-			Position last_x_pos_, last_y_pos_;
-
-			bool show_info_;
 			PreciseTime time_;
-			float last_fps_;
 			float zoom_factor_;
+			QPoint info_point_;
+			QByteArray last_state_;
+			list<float> fps_;
+			bool show_fps_;
+			static bool offscreen_rendering_;
+			static QSize PNG_size_;
+			String text_;
+			Size   font_size_;
+			QToolBar* toolbar_;
+			QList<QAction*> toolbar_actions_;
+			bool draw_grid_, ignore_pick_;
+			QActionGroup* mode_group_;
+
+			Vector3 near_left_bot_, near_right_bot_, near_left_top_;
+			String info_string_;
+			float  volume_width_;
 		};
 
 
-#ifdef BALL_QT_HAS_THREADS
 		///
 		class BALL_VIEW_EXPORT AnimationThread
 			: public QThread
@@ -797,12 +825,21 @@ namespace BALL
 					throw(){};
 
 				///
-				virtual void run() {((Scene*) Scene::getInstance(0))->animate_();}
+				virtual void run() {scene_->animate_();}
 
 				///
-				void mySleep(Size msec) {msleep(msec);}
+				void mySleep(Size msec);
+
+				///
+				void setScene(Scene* scene) { scene_ = scene;}
+
+				///
+				Scene* getScene() { return scene_;}
+
+			protected:
+
+				Scene* scene_;
 		};
-#endif
 
 
 } } // namespaces

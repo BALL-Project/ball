@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.h,v 1.10 2005/12/23 17:02:02 amoll Exp $
+// $Id: buildBondsProcessor.h,v 1.10.18.2 2007/03/29 10:34:58 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_BUILDBONDSPROCESSOR_H
@@ -13,10 +13,6 @@
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 	#include <BALL/KERNEL/atomContainer.h>
-#endif
-
-#ifndef BALL_KERNEL_PTE_H
-	#include <BALL/KERNEL/PTE.h>
 #endif
 
 #ifndef BALL_DATATYPE_HASHMAP_H
@@ -31,13 +27,11 @@
 	#include <BALL/DATATYPE/options.h>
 #endif
 
-#include <vector>
-#include <utility>
-
 namespace BALL 
 {
 
 	/**	Bond creation processor
+			\ingroup StructureMiscellaneous
 	*/
 	class BALL_EXPORT BuildBondsProcessor 
 		: public UnaryProcessor<AtomContainer> 

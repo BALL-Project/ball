@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.sip,v 1.12 2005/12/23 17:02:53 amoll Exp $
+// $Id: molecularControl.sip,v 1.12.16.1 2007/03/25 21:37:14 oliver Exp $
 //
 
 class MolecularControl
@@ -37,6 +37,7 @@ class MolecularControl
 	// void writePreferences(INIFile& inifile) throw();
 	// void fetchPreferences(INIFile& inifile) throw();
 
+	void showDistance();
   void createRepresentation();
   void compositeProperties();
   void bondProperties();
@@ -46,7 +47,6 @@ class MolecularControl
   void countItems();
   void showFilename();
   void updateSelection();
-  void invalidateSelection();
 	void highlightSelection() throw();
 	void highlight(PyCompositeList) throw();
   void cut();

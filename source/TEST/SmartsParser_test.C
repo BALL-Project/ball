@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SmartsParser_test.C,v 1.1 2005/11/17 14:36:26 bertsch Exp $
+// $Id: SmartsParser_test.C,v 1.1.22.1 2007/03/25 21:48:59 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 using namespace BALL;
 using namespace std;
 
-START_TEST(SmartsParser, "$Id: SmartsParser_test.C,v 1.1 2005/11/17 14:36:26 bertsch Exp $")
+START_TEST(SmartsParser, "$Id: SmartsParser_test.C,v 1.1.22.1 2007/03/25 21:48:59 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

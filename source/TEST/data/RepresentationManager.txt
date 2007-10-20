@@ -1,0 +1,16 @@
+/Object: [0-9a-fA-Fx]+ is instance of class: BALL::VIEW::RepresentationManager
+number of representations: 1
+/    Object: [0-9a-fA-Fx]+ is instance of class: BALL::VIEW::Representation
+    drawing mode: 2
+    drawing precision: 2
+    surface drawing precision: 3.5
+    model type : 200
+    coloring type : 200
+    number of primitives: 0
+    number of composites: 0
+    model processor: 0
+    hidden: 0
+    PropertyManager: 
+/        Object: [0-9a-fA-Fx]+ is instance of class: PropertyManager
+        0  
+

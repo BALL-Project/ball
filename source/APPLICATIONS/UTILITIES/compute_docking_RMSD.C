@@ -14,17 +14,11 @@ using namespace BALL;
 
 int main(int argc, char** argv) 
 {
-
-	// default values
-	double upper = 8.0;
-	double lower = 4.0;
-	double tolerance = 0.6;
-
 	// print usage information
 	if (argc < 5)
 	{
-		Log.error() << "Compute the RMSD values after a rigid docking run." << endl;
-		Log.error() << "Usage: " << argv[0] << " reference.pdb docked.pdb dockResult.dr static_chain_name" << endl;
+		Log.error() << "Compute the C_alpha-RMSD values after a rigid docking run." << endl;
+		Log.error() << "Usage: " << argv[0] << " reference.pdb docked.pdb dockResult.bdr static_chain_name" << endl;
 
 		return 1;
 	}
@@ -64,15 +58,15 @@ int main(int argc, char** argv)
 
 	// read the proteins
 	pdb_file.open(argv[1]);
-	cout << "Reading reference " << argv[1] << "... " << flush;
+	Log.info() << "Reading reference " << argv[1] << "... " << flush;
 	pdb_file >> reference;
-	cout << "Read " << reference.countAtoms() << " atoms." << endl;
+	Log.info() << "Read " << reference.countAtoms() << " atoms." << endl;
 	pdb_file.close();
 
 	pdb_file.open(argv[2]);
-	cout << "Reading docked " << argv[2] << "... " << flush;
+	Log.info() << "Reading docked " << argv[2] << "... " << flush;
 	pdb_file >> docked;
-	cout << "Read " << docked.countAtoms() << " atoms." << endl;
+	Log.info() << "Read " << docked.countAtoms() << " atoms." << endl;
 	pdb_file.close();
 
 	docked_backup = docked;
@@ -97,11 +91,16 @@ int main(int argc, char** argv)
 	Size						no_ca;
 	double					rmsd;
 	
-	cout << "Mapping static chain of " << argv[1] << " onto static chain of " << argv[2] << endl;
-	cout << " (this may take a while)..." << endl; 
+	Log.info() << "Mapping static chain of " << argv[1] << " onto static chain of " << argv[2] << endl;
+	Log.info() << " (this may take a while)..." << endl; 
 	
 	Timer	t;
 	t.start();
+
+	// default values
+	double upper = 8.0;
+	double lower = 4.0;
+	double tolerance = 0.6;
 
 	T = mapper.mapProteins(static_reference, static_docked, type_map, no_ca, rmsd, upper, lower, tolerance);
 
@@ -109,17 +108,17 @@ int main(int argc, char** argv)
 
 	if (no_ca < 1) 
 	{
-		cout << "Sorry - couldn't map (no CA atoms?)" << endl;
+		Log.info() << "Sorry - couldn't map (no CA atoms?)" << endl;
 		return 1;
 	}
 
-	cout << "Mapped " << no_ca << " CA atoms." << endl;
-	cout << "RMSD (CA only): " << rmsd << " A" << endl;
-	cout << endl << "Transformation: " << endl;
-	cout << T;
+	Log.info() << "Mapped " << no_ca << " CA atoms." << endl;
+	Log.info() << "RMSD (CA only): " << rmsd << " A" << endl;
+	Log.info() << endl << "Transformation: " << endl;
+	Log.info() << T;
 
-	cout << "Time to map the proteins: " << t.getClockTime() << "s" << endl;
-	cout << "Transforming " << argv[1] << endl;
+	Log.info() << "Time to map the proteins: " << t.getClockTime() << "s" << endl;
+	Log.info() << "Transforming " << argv[1] << endl;
 
 	/** The static chain is still stored in static_..., while the remainder is stored
 	 *  in docked and reference.
@@ -128,14 +127,14 @@ int main(int argc, char** argv)
 	reference.apply(mapper);
 	static_reference.apply(mapper);
 	
-	cout << "Reading the docking results..." << endl;
+	Log.info() << "Reading the docking results..." << endl;
 	DockResult dr;
 	dr.readDockResult(argv[3]);
 	const ConformationSet* conformation_set = dr.getConformationSet();
 	vector<ConformationSet::Conformation> conformations = conformation_set->getScoring();
-	cout << "Done." << endl;
+	Log.info() << "Done." << endl;
 
-	cout << "Computing RMSD values..." << endl;
+	Log.info() << "Computing RMSD values..." << endl;
 	SnapShot snap;
 	ofstream out("docking_rmsds.txt");
 	// Calculate RMSD for each snapshot
@@ -200,16 +199,16 @@ int main(int argc, char** argv)
 			}
 		}
 
-		cout << "***** Snaphot " << i << " *****" << endl;
-		cout << "RMSD is " << sqrt(rmsd / count) << " for " << count << " atoms." << endl;
-		cout << "RMSD of static protein " << sqrt(rmsd_2 / count_2) << " for " << count_2 << " atoms." << endl;
-		cout << "RMSD of mobile protein " << sqrt(rmsd_1 / count_1) << " for " << count_1 << " atoms." << endl;
-		cout << endl;
+		Log.info() << "***** Snaphot " << i << " *****" << endl;
+		Log.info() << "RMSD is " << sqrt(rmsd / count) << " for " << count << " atoms." << endl;
+		Log.info() << "RMSD of static protein " << sqrt(rmsd_2 / count_2) << " for " << count_2 << " atoms." << endl;
+		Log.info() << "RMSD of mobile protein " << sqrt(rmsd_1 / count_1) << " for " << count_1 << " atoms." << endl;
+		Log.info() << endl;
 
 		// write out score of ith snapshot and calculated RMSD
 		out << conformations[i].second << " " << sqrt(rmsd/count) << endl;
 	}
-	cout << "Done." << endl;
+	Log.info() << "Done." << endl;
 	out.close();
 	return 0;
 }

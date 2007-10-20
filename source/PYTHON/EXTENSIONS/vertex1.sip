@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex1.sip,v 1.2 2005/12/23 17:03:00 amoll Exp $
+// $Id: vertex1.sip,v 1.2.20.1 2007/03/25 21:38:55 oliver Exp $
 //
 
 class Vertex 
@@ -21,10 +21,12 @@ class Vertex
   void swap(Vertex&) throw();
   void setVertex(const Vector3&) throw();
   void setVertex(const float, const float, const float) throw();
+
   Vector3& getVertex() throw();
-  const Vector3& getVertex() const throw();
-  void getVertex(Vector3&) const throw();
-  void getVertex(float&, float&, float&) const throw();
+  // const Vector3& getVertex() const throw();
+
+  // void getVertex(Vector3&) const throw();
+  // void getVertex(float&, float&, float&) const throw();
   void setVertexAddress(const Vector3&) throw();
   void setDefaultVertexAddress() throw();
   Vector3* getVertexAddress() const throw();

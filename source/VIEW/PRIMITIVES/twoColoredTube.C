@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.C,v 1.5 2003/11/18 14:48:10 amoll Exp $
+// $Id: twoColoredTube.C,v 1.5.28.1 2007/03/25 22:02:36 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 
@@ -96,6 +96,12 @@ namespace BALL
 			s << "radius : " << radius_ << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
+		}
+
+		void TwoColoredTube::getVertices(vector<Vector3>& vertices) const
+		{
+			vertices.push_back(getVertex1());
+			vertices.push_back(getVertex2());
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

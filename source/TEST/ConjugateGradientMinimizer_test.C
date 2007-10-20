@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.23 2006/08/19 13:35:22 oliver Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.23.8.4 2007/05/16 15:56:33 aleru Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.23 2006/08/19 13:35:22 oliver Exp $")
+START_TEST(ConjugateGradientMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.23.8.4 2007/05/16 15:56:33 aleru Exp $")
 
 using namespace BALL;
 
@@ -26,7 +26,7 @@ using namespace BALL;
 
 System S;
 AmberFF FF(S);
-	
+
 ConjugateGradientMinimizer*	em;
 CHECK(ConjugateGradientMinimizer::ConjugateGradientMinimizer())
 	em = new ConjugateGradientMinimizer();
@@ -71,11 +71,13 @@ RESULT
 
 CHECK(ConjugateGradientMinimizer::operator = (const ConjugateGradientMinimizer&))
 	ConjugateGradientMinimizer em1;
-	ConjugateGradientMinimizer em2 = em1;
+	ConjugateGradientMinimizer em2;
+	em2 = em1;
 	bool test = (em1 == em2);
 	TEST_EQUAL(test, true)
 	em1.setup(FF);
-	ConjugateGradientMinimizer em3 = em1;
+	ConjugateGradientMinimizer em3;
+	em3 = em1;
 	test = (em1 == em3);
 	TEST_EQUAL(test, true)
 RESULT
@@ -238,10 +240,9 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES) AlaAla)
 
 	ConjugateGradientMinimizer cgm(FF);
 
-	cgm.setEnergyOutputFrequency(1);
+	cgm.setEnergyOutputFrequency(5);
 	cgm.setMaxGradient(0.0001);
 	cgm.setEnergyDifferenceBound(0.000001);
-	cgm.setMaximumDisplacement(20.0);
 	cgm.setUpdateMethod(ConjugateGradientMinimizer::FLETCHER_REEVES);
 	ConjugateGradientMinimizer::UpdateMethod um;
 	um = cgm.getUpdateMethod();
@@ -260,10 +261,9 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES) AlaAla)
 	float energy = FF.updateEnergy();
 	FF.updateForces();
 	
-	PRECISION(1E-1)
-	TEST_REAL_EQUAL(energy, -415.5)
+	PRECISION(1.)
+	TEST_REAL_EQUAL(energy, -415.)
 RESULT
-
 
 CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE) AlaAla)
 	System S;
@@ -294,7 +294,6 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE) AlaAla)
 	cgm.setMaxGradient(0.1);
 	cgm.setEnergyDifferenceBound(0.00000001);
 	cgm.setUpdateMethod(ConjugateGradientMinimizer::POLAK_RIBIERE);
-	cgm.setMaximumDisplacement(20.0);
 	ConjugateGradientMinimizer::UpdateMethod um;
 	um = cgm.getUpdateMethod();
 	TEST_EQUAL(um, ConjugateGradientMinimizer::POLAK_RIBIERE);
@@ -302,7 +301,8 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE) AlaAla)
 	TEST_EQUAL(cgm.isValid(), true)
 	FF.updateEnergy();
 	FF.updateForces();
-	bool result = cgm.minimize(700);
+	cgm.setMaxNumberOfIterations(10000);
+	bool result = cgm.minimize(5000);
 
 	TEST_EQUAL(result, true)
 	STATUS("PR/AlaAla -- " << (result ? "" : "not ") << "converged after " 
@@ -311,8 +311,8 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE) AlaAla)
 	float energy = FF.updateEnergy();
 	FF.updateForces();
 	
-	PRECISION(1E-1)
-	TEST_REAL_EQUAL(energy, -415.5)
+	PRECISION(1.)
+	TEST_REAL_EQUAL(energy, -415.)
 RESULT
 
 CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) AlaAla)
@@ -344,7 +344,6 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) AlaAla)
 	cgm.setMaxGradient(0.01);
 	cgm.setEnergyDifferenceBound(0.00000001);
 	cgm.setUpdateMethod(ConjugateGradientMinimizer::SHANNO);
-	cgm.setMaximumDisplacement(20.0);
 	ConjugateGradientMinimizer::UpdateMethod um;
 	um = cgm.getUpdateMethod();
 	TEST_EQUAL(um, ConjugateGradientMinimizer::SHANNO);
@@ -352,7 +351,8 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) AlaAla)
 	TEST_EQUAL(cgm.isValid(), true)
 	FF.updateEnergy();
 	FF.updateForces();
-	bool result = cgm.minimize(500);
+	cgm.setMaxNumberOfIterations(10000);
+	bool result = cgm.minimize(5000);
 
 	STATUS("SH/AlaAla -- " << (result ? "" : "not ") << "converged after " 
 				 << cgm.getNumberOfIterations() << " steps")
@@ -361,10 +361,9 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) AlaAla)
 	float energy = FF.updateEnergy();
 	FF.updateForces();
 	
-	PRECISION(1E-1)
-	TEST_REAL_EQUAL(energy, -415.5)
+	PRECISION(1.)
+	TEST_REAL_EQUAL(energy, -415.)
 RESULT
-
 
 CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES))
 	System S;
@@ -381,8 +380,8 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES))
 
 	ConjugateGradientMinimizer cgm(FF);
 
-	cgm.setEnergyOutputFrequency(5);
-	cgm.setMaxGradient(0.418);
+	cgm.setEnergyOutputFrequency(1);
+	cgm.setMaxGradient(0.1);
 	cgm.setEnergyDifferenceBound(0.00000001);
 	cgm.setUpdateMethod(ConjugateGradientMinimizer::FLETCHER_REEVES);
 	ConjugateGradientMinimizer::UpdateMethod um;
@@ -402,7 +401,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES))
 	float energy = FF.updateEnergy();
 	FF.updateForces();
 	
-	PRECISION(3E-2)
+	PRECISION(3E-1)
 	TEST_REAL_EQUAL(energy, 5.906)
 
 	AtomIterator atit;
@@ -456,8 +455,8 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE))
 
 	ConjugateGradientMinimizer cgm(FF);
 
-	cgm.setEnergyOutputFrequency(5);
-	cgm.setMaxGradient(0.418);
+	cgm.setEnergyOutputFrequency(1);
+	cgm.setMaxGradient(0.1);
 	cgm.setEnergyDifferenceBound(0.00000001);
 	cgm.setUpdateMethod(ConjugateGradientMinimizer::POLAK_RIBIERE);
 	ConjugateGradientMinimizer::UpdateMethod um;
@@ -468,7 +467,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE))
 	TEST_EQUAL(cgm.isValid(), true)
 	FF.updateEnergy();
 	FF.updateForces();
-	bool result = cgm.minimize(100);
+	bool result = cgm.minimize(500);
 
 	STATUS("PR/C2H6 -- " << (result ? "" : "not ") << "converged after " 
 				 << cgm.getNumberOfIterations() << " steps")
@@ -513,7 +512,6 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE))
 	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
 	tet = (pos[7] - pos[1]).getAngle(pos[6] - pos[1]);
 	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
-
 RESULT
 
 CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) ethan)
@@ -531,8 +529,8 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) ethan)
 
 	ConjugateGradientMinimizer cgm(FF);
 
-	cgm.setEnergyOutputFrequency(5);
-	cgm.setMaxGradient(0.418);
+	cgm.setEnergyOutputFrequency(1);
+	cgm.setMaxGradient(0.1);
 	cgm.setEnergyDifferenceBound(0.00000001);
 	cgm.setUpdateMethod(ConjugateGradientMinimizer::SHANNO);
 	ConjugateGradientMinimizer::UpdateMethod um;
@@ -542,12 +540,10 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) ethan)
 	TEST_EQUAL(cgm.isValid(), true)
 	FF.updateEnergy();
 	FF.updateForces();
-	bool result = cgm.minimize(55);
+	bool result = cgm.minimize(500);
 
 	STATUS("SH/C2H6 -- " << (result ? "" : "not ") << "converged after " 
 				 << cgm.getNumberOfIterations() << " steps")
-
-
 
 	TEST_EQUAL(result, true)
 	float energy = FF.updateEnergy();
@@ -590,6 +586,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) ethan)
 	tet = (pos[7] - pos[1]).getAngle(pos[6] - pos[1]);
 	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
 RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,25 +1,26 @@
-\section{Handling proteins}
+\section{Handling Proteins}
 
 In the second example we take a step towards real world applications. Instead
 of constructing our own molecules, we now read a protein from a \newterm{PDB
-file}. The PDB format~\cite{PDB} is a standardized file format for molecular structure
-data. In our case, we will read BPTI (bovine pancreatic trypsin inhibitor), a
-small protein:
+file}. The PDB format~\cite{PDB} is a standardized file format for molecular 
+structure data. In our case, we will read BPTI (bovine pancreatic trypsin 
+inhibitor), a small protein:
 
 \begin{lstlisting}{}
-	PDBFile infile("bpti.pdb");
-	System S;
-	infile >> S;
-	infile.close();
+  PDBFile infile("bpti.pdb");
+  System S;
+  infile >> S;
+  infile.close();
 \end{lstlisting}
 
 \noindent
 In the first line, we create a \class{PDBFile} object and assign it to a file
 named {\tt bpti.pdb}. Then we create an empty system {\tt S} and read the
 contents of the PDB file into the system using the stream operator {\tt >>}.
-This use of the stream operators is possible for all file formats in BALL (see
-also the first example). Hence, you can easily switch file formats
-by changing just the type of the {\tt infile} object (\eg replace it by
+\index{operator {\tt >>}} This use of the stream operators is possible for all
+file formats in BALL (see also the first example on 
+Page~\pageref{useofstreams}). Hence, you can easily switch file formats by 
+changing just the type of the {\tt infile} object (\eg replace it by 
 \class{HINFile} to read HyperChem files).
 
 We can now verify whether the file was correctly read. BPTI should have 454
@@ -28,9 +29,10 @@ atoms. As mentioned before, for each kernel object containing atoms
 actual number of atoms by calling \method{countAtoms}:
 
 \begin{lstlisting}{}
-	cout << "# of atoms in BPTI: " << S.countAtoms() << endl;
+  cout << "# of atoms in BPTI: " << S.countAtoms() << endl;
 \end{lstlisting}
 
+\noindent
 Now, we are interested in the sequence of BPTI. Since BPTI contains only a
 single chain, we might just traverse all residues of this chain and write
 their names to {\tt cout}. This is done by \newterm{iterators}. Iterators are
@@ -48,15 +50,15 @@ This leads to a difference in the interface. A typical {\tt for} loop using STL
 iterators to access all elements of a list looks as follows:
 
 \begin{lstlisting}{}
-	list<string> string_list = ...;
-	list<string>::iterator list_it;
+  list<string> string_list = ...;
+  list<string>::iterator list_it;
 	
-	for (list_it = string_list.begin(); 
-			 list_it != string_list.end();
-			 ++list_it)
-	{
-		cout << *list_it << endl;
-	}
+  for (list_it = string_list.begin(); 
+       list_it != string_list.end();
+       ++list_it)
+  {
+    cout << *list_it << endl;
+  }
 \end{lstlisting}
 
 \noindent
@@ -66,7 +68,7 @@ the first element of the list. In the {\tt for} loop we increment the iterator
 until it equals the iterator returned by {\tt end()}. This method returns a
 past--the--end iterator, \ie the iterator points beyond the last element of
 the container. In the body of the {\tt for} loop, we access the list element
-the iterator points to using the {\tt *} operator.
+the iterator points to using the {\tt *} operator. \index{operator {\tt *}}
 
 Traversing a BALL kernel data structure is as simple as traversing a list with
 STL. But since kernel objects may contain objects of a variety of types,
@@ -94,6 +96,6 @@ residues are traversed in the order in which they appear in the PDB file.
 Since the PDB format requires the residues to start with the N-terminus,
 the sequence is printed  in the correct order (N-terminus to C-terminus). 
 
-\noindent
-The source code for this example can be as {\tt tutorial2.C} found in
-\directory{BALL/source/TUTORIAL}.
+The source code for this example can be found as {\tt tutorial2.C} in
+\directory{BALL/source/TUTORIAL}. The PDB file {\tt pbti.pdb} can also be found
+in this directory.

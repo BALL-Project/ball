@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: protein.sip,v 1.7 2003/11/01 09:27:38 oliver Exp $
+// $Id: protein.sip,v 1.7.30.1 2007/03/25 21:37:17 oliver Exp $
 //
 
 class Protein
@@ -24,18 +24,25 @@ class Protein
 	//  Protein& operator = (const Protein& protein);
   void get(Protein&, bool = true) const;
   void swap(Protein&);
+
   Chain* getChain(int);
-  const Chain* getChain(int) const;
+  // const Chain* getChain(int) const;
+
   SecondaryStructure* getSecondaryStructure(int);
-  const SecondaryStructure* getSecondaryStructure(int) const;
+  //const SecondaryStructure* getSecondaryStructure(int) const;
+
   Residue* getResidue(int);
-  const Residue* getResidue(int) const;
+  // const Residue* getResidue(int) const;
+
   Residue* getNTerminal();
-  const Residue* getNTerminal() const;
+  // const Residue* getNTerminal() const;
+
   Residue* getCTerminal();
-  const Residue* getCTerminal() const;
+  // const Residue* getCTerminal() const;
+
   PDBAtom* getPDBAtom(int);
-  const PDBAtom* getPDBAtom(int) const;
+  // const PDBAtom* getPDBAtom(int) const;
+
   void setID(const String&);
   const String& getID() const;
   int countChains() const;

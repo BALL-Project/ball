@@ -1,12 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.8 2005/12/23 17:02:30 amoll Exp $
+// $Id: mainframe.C,v 1.8.16.1 2007/03/25 21:32:20 oliver Exp $
 //
 
 #include "mainframe.h"
-
-#include <qapplication.h>
 
 #include <BALL/VIEW/KERNEL/message.h>
 
@@ -33,24 +31,13 @@ namespace BALL
    	Log.remove(std::cerr);
 
 		control_ = new MolecularControl(this, "Structures");
-		CHECK_PTR(control_);
-
  		geometric_control_ = new GeometricControl(this, "Representations");
- 		CHECK_PTR(geometric_control_);
-
 		scene_ = new Scene(this, "3D View");
-		CHECK_PTR(scene_);
 		scene_->setMinimumSize(10, 10);
 		setCentralWidget(scene_);
-
 		display_properties_ = new DisplayProperties(this, "DisplayProperties");
-		CHECK_PTR(display_properties_);
-
 		file_dialog_ = new MolecularFileDialog(this, "MolecularFileDialog");
-		CHECK_PTR(file_dialog_);
-
  		molecular_structure_ = new MolecularStructure(this, "MolecularStructure");
- 		CHECK_PTR(molecular_structure_);
 
 		init_();
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile_test.C,v 1.7 2003/07/03 13:30:41 oliver Exp $
+// $Id: XYZFile_test.C,v 1.7.28.2 2007/03/28 08:23:45 bertsch Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(XYZFile, "$Id: XYZFile_test.C,v 1.7 2003/07/03 13:30:41 oliver Exp $")
+START_TEST(XYZFile, "$Id: XYZFile_test.C,v 1.7.28.2 2007/03/28 08:23:45 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@ START_TEST(XYZFile, "$Id: XYZFile_test.C,v 1.7 2003/07/03 13:30:41 oliver Exp $"
 using namespace BALL;
 
 
-XYZFile*	file_ptr;
+XYZFile* file_ptr = 0;
 CHECK(XYZFile::XYZFile())
 	file_ptr = new XYZFile;
 	TEST_NOT_EQUAL(file_ptr, 0)
@@ -60,6 +60,23 @@ CHECK(XYZFile::read(System& system))
 	TEST_REAL_EQUAL(it->getPosition().y, 4.0)
 	TEST_REAL_EQUAL(it->getPosition().z, 5.0)
 RESULT
+
+CHECK(XYZFile::read(System& system))
+  XYZFile f("data/current.xyz");
+	System S;
+	f.read(S);
+	f.close();
+
+	PRECISION(0.001)
+	TEST_EQUAL(S.countAtoms(), 1258)
+	AtomIterator it = S.beginAtom();
+	TEST_EQUAL(it->getElement().getSymbol(), "C")
+	TEST_REAL_EQUAL(it->getPosition().x, 306.379299)
+	it++;
+	TEST_EQUAL(it->getElement().getSymbol(), "O")
+	TEST_REAL_EQUAL(it->getPosition().z, 328.972092)
+RESULT
+
 
 String filename;
 NEW_TMP_FILE(filename)

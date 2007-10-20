@@ -3,6 +3,7 @@ class ColorMap
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/DATATYPE/colorMap.h>
+  #include <BALL/PYTHON/pyColorRGBAVector.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
 %End
@@ -16,7 +17,15 @@ class ColorMap
 		ColorMap(const ColorMap&, Index, Index, bool =false) throw();
 		ColorMap(const ColorRGBA*, Size, bool =false) throw();
 		//virtual ~ColorMap() throw();
-	  void setBaseColors(const ColorRGBA*, Size) throw();
+	  void setBaseColors(const PyColorRGBAVector&) throw();
+%MethodCode
+		sipCpp->clear();
+		for (Position p = 0; p < (*a0).size(); p++)
+		{
+			sipCpp->push_back((*a0)[p]);
+		}
+%End
+	//  void setBaseColors(const ColorRGBA*, Size) throw();
 		void setNumberOfColors(const Size) throw();
 		Size getNumberOfColors() const throw();
 		void setAlphaBlending(bool) throw();
@@ -25,6 +34,6 @@ class ColorMap
 		void setMinMaxColors(ColorRGBA, ColorRGBA) throw();
 		void setRange(float, float) throw();
 		ColorRGBA& map(float) throw();
-		const ColorRGBA& map(float) const throw();
+		// const ColorRGBA& map(float) const throw();
 		//virtual void dump(std::ostream&  = std::cout, Size = 0) const;
 };

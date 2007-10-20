@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: partialChargeBase.C,v 1.2 2004/09/02 13:12:51 amoll Exp $
+// $Id: partialChargeBase.C,v 1.2.28.1 2007/03/16 00:06:47 bertsch Exp $
 //
 
 #include <BALL/QSAR/partialChargeBase.h>
@@ -15,12 +15,8 @@
 #include <BALL/CONCEPT/timeStamp.h>
 
 #include <utility>
-#include <iostream>
 
 using namespace std;
-
-#define BALL_QSAR_PARTIALCHARGEBASE_DEBUG
-#undef  BALL_QSAR_PARTIALCHARGEBASE_DEBUG
 
 namespace BALL
 {
@@ -55,51 +51,42 @@ namespace BALL
 		return *this;
 	}
 
-  bool PartialChargeBase::isValid(Molecule& molecule)
+  bool PartialChargeBase::isValid_(AtomContainer& ac)
   {
 		static HashMap<Handle, PreciseTime> mod_times;
-		PreciseTime last_mod = molecule.getModificationTime();
-		Handle mol_handle = molecule.getHandle();
+		PreciseTime last_mod = ac.getModificationTime();
+		Handle mol_handle = ac.getHandle();
 		if (mod_times.has(mol_handle))
 		{
 			if (mod_times[mol_handle] == last_mod)
 			{
-				#ifdef BALL_QSAR_PARTIALCHARGEBASE_DEBUG
-				cerr << ">> PartialChargeBase::isValid: molcule valid!" << endl;
-				#endif
 				return true;
 			}
 			else
 			{
 				mod_times[mol_handle] = last_mod;
-				#ifdef BALL_QSAR_SIMPLEBASE_DEBUG
-				cerr << ">> PartialChargeBase::isValid: molecule not valid, modified!" << endl;
-				#endif
 				return false;
 			}
 		}
 		else
 		{
 			mod_times.insert(std::make_pair(mol_handle, last_mod));
-			#ifdef BALL_QSAR_PARTIALCHARGEBASE_DEBUG
-			cerr << ">> PartialChargeBase::isValid: molecule not valid, first call!" << endl;
-			#endif
 			return false;
 		}
 	}
 
 
-	void PartialChargeBase::calculate(Molecule& molecule)
+	void PartialChargeBase::calculate_(AtomContainer& ac)
 	{
 		// sets partial charges;
 		PartialChargeProcessor pcp;
-		molecule.apply(pcp);
+		ac.apply(pcp);
 	
 		//HashMap<Atom*, double>::Iterator it = charges.begin();	
-		AtomIterator it = molecule.beginAtom();
+		AtomIterator it = ac.beginAtom();
 		// assign the calculated values to the descriptors
 		double tot_pos(0), tot_neg(0), rel_pos(0), rel_neg(0), max_charge(0), min_charge(0);	
-		for (it=molecule.beginAtom();it!=molecule.endAtom();++it)
+		for (it=ac.beginAtom();it!=ac.endAtom();++it)
 		{
 			double charge = it->getProperty("PEOEPartialCharge").getDouble();
 			if (charge > 0)
@@ -132,10 +119,10 @@ namespace BALL
 			rel_neg = min_charge/tot_neg;
 		}
 		
-		molecule.setProperty("TotalPositivePartialCharge", tot_pos);
-		molecule.setProperty("TotalNegativePartialCharge", tot_neg);
-		molecule.setProperty("RelPositivePartialCharge", rel_pos);
-		molecule.setProperty("RelNegativePartialCharge", rel_neg);
+		ac.setProperty("TotalPositivePartialCharge", tot_pos);
+		ac.setProperty("TotalNegativePartialCharge", tot_neg);
+		ac.setProperty("RelPositivePartialCharge", rel_pos);
+		ac.setProperty("RelNegativePartialCharge", rel_neg);
 	}
 
 } // namespace BALL

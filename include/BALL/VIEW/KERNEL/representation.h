@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.34 2005/12/23 17:02:16 amoll Exp $
+// $Id: representation.h,v 1.34.16.5 2007/04/20 14:19:50 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -23,11 +23,15 @@
 # include <BALL/VIEW/KERNEL/common.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
-#	include <BALL/VIEW/KERNEL/molecularInformation.h>
+#ifndef BALL_CONCEPT_MOLECULARINFORMATION_H
+#	include <BALL/CONCEPT/molecularInformation.h>
 #endif
 
-// next two defines need to be included in header file, because if iC file
+#ifndef BALL_VIEW_KERNEL_MODELINFORMATION_H
+#	include <BALL/VIEW/KERNEL/modelInformation.h>
+#endif
+
+// next two defines need to be included in header file, because of iC file
 #ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
 # include <BALL/VIEW/MODELS/modelProcessor.h>
 #endif
@@ -45,7 +49,7 @@ namespace BALL
 		class ColorProcessor;
 		class GeometricObject;
 		class UpdateRepresentationThread;
-		class PrimitiveManager;
+		class RepresentationManager;
 
 		/** Representation
 		 		A Representation is a collection of geometric objects for a group of 
@@ -60,7 +64,7 @@ namespace BALL
 			: public PropertyManager
 		{
 			friend class UpdateRepresentationThread;
-			friend class PrimitiveManager;
+			friend class RepresentationManager;
 			public:
 
 			BALL_CREATE(Representation)
@@ -79,12 +83,6 @@ namespace BALL
 				PROPERTY__IS_COORDINATE_SYSTEM
 			};
 				
-			/** @name Type definitions
-			 */
-			//@{
-			/// 
-			typedef List<GeometricObject*> 		 GeometricObjectList;
-
 			//@}
 			/**	@name	Constructors and Destuctor
 			*/	
@@ -173,6 +171,10 @@ namespace BALL
 				throw();
 
 			///
+			void setGeometricObjects(GeometricObjectList& gol) 
+				throw() { geometric_objects_ = gol;}
+
+			///
 			void insert(GeometricObject& object) 
 				throw();
 
@@ -182,6 +184,10 @@ namespace BALL
 
 			///
 			void setComposites(const List<const Composite*>& composites)
+				throw();
+
+			///
+			void setComposite(const Composite* composite)
 				throw();
 
 			///
@@ -205,10 +211,6 @@ namespace BALL
 				throw();
 
 			///
-			String getModelName() const
-				throw();
-
-			///
 			void setModelType(ModelType type)
 				throw();
 
@@ -217,11 +219,11 @@ namespace BALL
 				throw();
 
 			///
-			String getColoringName() const
+			String getName() const
 				throw();
 
 			///
-			String getName() const
+			void setName(const String& name)
 				throw();
 
 			///
@@ -233,7 +235,7 @@ namespace BALL
 				throw();
 
 			///
-			void enableModelUpdate(bool state) { model_update_enabled_ = state;}
+			void enableModelUpdate(bool state);
 
 			///
 			void enableColoringUpdate(bool state) { coloring_update_enabled_ = state;}
@@ -279,20 +281,26 @@ namespace BALL
 				throw();
 
 			///
-			void setNeedsUpdate()
+			void setNeedsUpdate(bool state=true)
 				throw();
 
 			/// Dum to ostream for debugging
-			void dump(std::ostream& s, Size depth) const
+			void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 
 			/// Get a String containing all settings for Usage in project files.
 			String toString() const
 				throw();
 
-			/// Needed for MSVC
+			/// Set a custom ModelInformation e.g. when new models were added external of the library.
+			void setModelInformation(const ModelInformation& mi);
+
+			///
+			const ModelInformation& getModelInformation() const;
+
+			/// 
 			bool operator == (const Representation& object) const
-				throw() { return this == &object;}
+				throw();
 
 		
 			/// Needed for MSVC
@@ -304,7 +312,7 @@ namespace BALL
 			protected:
 
 			/** Wrapper method for multithreading.
-			 		Can be called by update() directly, or by the PrimitiveManager' s 
+			 		Can be called by update() directly, or by the RepresentationManager' s 
 					UpdateRepresentationThread.
 			*/
 			void update_()
@@ -366,9 +374,19 @@ namespace BALL
 			//_
 			bool 								coloring_update_enabled_;
 
+			String 							name_;
+
 			//_ 							  used for getName()
 			static 							MolecularInformation information_;
+			
+			//_ 							  used for getName()
+			static 							ModelInformation model_information_;
+
+			const ModelInformation* custom_model_information_;
 		};
+
+		///
+		typedef List<Representation*> RepresentationList;
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/representation.iC>

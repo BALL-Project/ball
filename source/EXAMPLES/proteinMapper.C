@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: proteinMapper.C,v 1.10 2006/02/07 12:35:25 oliver Exp $
+// $Id: proteinMapper.C,v 1.10.14.2 2007/08/06 16:22:07 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -40,9 +40,9 @@ int main(int argc, char** argv)
 				 << "Calpha atoms are recognized by their name (CA)." << endl << endl
 				 << "Optional parameters:" << endl
 				 << "  <upper> (double):" << endl
-				 << "     lower bound for triangle side length use by the mapper" << endl
-				 << "  <upper> (double):" << endl
 				 << "     upper bound for triangle side length use by the mapper" << endl
+				 << "  <lower> (double):" << endl
+				 << "     lower bound for triangle side length use by the mapper" << endl
 				 << "  <tolerance> (double):" << endl
 				 << "     maximum distance between two (mapped) Calpha atoms in Angstrom" << endl << endl
 				 << "Defaults for optional parameters:" << endl

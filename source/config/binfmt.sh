@@ -3,7 +3,7 @@
 ############################################################
 # OS and architecture detection script                     #
 ############################################################
-# $Id: binfmt.sh,v 1.10 2000/03/27 20:05:17 oliver Exp $    #
+# $Id: binfmt.sh,v 1.10.36.1 2007/03/25 22:02:46 oliver Exp $    #
 ############################################################
 
 UNAME=uname
@@ -45,6 +45,14 @@ if test "$OS" = Linux ; then
 	if test "${PROCESSOR}" = alpha ; then
 		ARCHITECTURE=alpha
 		BINFMT=Linux-alpha
+	fi
+	if test `echo $PROCESSOR` = ppc ; then
+    ARCHITECTURE=ppc32
+    BINFMT=Linux-ppc32
+	fi
+	if test `echo $PROCESSOR` = ppc64 ; then
+    ARCHITECTURE=ppc64
+    BINFMT=Linux-ppc64
 	fi
 
 	if test "${ARCHITECTURE}" = "unknown" ; then
@@ -101,6 +109,13 @@ fi
 if test "$ARCHITECTURE" = alpha ; then
 	ALPHA=ALPHA
 fi
+if test "$ARCHITECTURE" = ppc32 ; then
+	PPC64=PPC32
+fi
+if test "$ARCHITECTURE" = ppc64 ; then
+	PPC64=PPC64
+fi
+
 
 if test ! -f "${BINFORMAT_FILE}" ; then
 	echo "cannot open file ${BINFORMAT_FILE}" >&2	

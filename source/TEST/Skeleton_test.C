@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Skeleton_test.C,v 1.5 2006/01/26 07:41:04 oliver Exp $
+// $Id: Skeleton_test.C,v 1.5.14.2 2007/05/12 09:06:17 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -15,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Skeleton_test.C,v 1.5 2006/01/26 07:41:04 oliver Exp $")
+START_TEST(class_name, "$Id: Skeleton_test.C,v 1.5.14.2 2007/05/12 09:06:17 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

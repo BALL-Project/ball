@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.sip,v 1.10 2005/12/23 17:02:52 amoll Exp $
+// $Id: message.sip,v 1.10.20.1 2007/03/25 21:37:12 oliver Exp $
 //
 
 class Message
@@ -95,8 +95,9 @@ class SceneMessage
 	void setType(SceneMessageType) throw();
 	SceneMessageType getType() const throw();
 	void setStage(Stage) throw();
+
 	Stage& getStage() throw();
- 	const Stage& getStage() const throw();
+ 	// const Stage& getStage() const throw();
 };
 
 
@@ -263,21 +264,6 @@ class CreateRepresentationMessage
 };
 	
 
-class NewTrajectoryMessage
-	:CompositeMessage
-{
-%TypeHeaderCode
-	#include <BALL/VIEW/KERNEL/message.h>
-	using namespace BALL;
-	using namespace BALL::VIEW;
-%End
-
-	public:
-		NewTrajectoryMessage() throw();
-		void setTrajectoryFile(TrajectoryFile&) throw();
-		TrajectoryFile* getTrajectoryFile() throw();
-};
-	
 class DeselectControlsMessage
 	: Message
 {
@@ -290,78 +276,4 @@ class DeselectControlsMessage
 	public:
 		DeselectControlsMessage();
 };
-
-
-class RegularDataMessage
-	: CompositeMessage
-{
-%TypeHeaderCode
-	#include <BALL/VIEW/KERNEL/message.h>
-	using namespace BALL;
-	using namespace BALL::VIEW;
-%End
-
-	public:
-
-		enum RegularDataMessageType
-		{
-			UNDEFINED = -1,
-			NEW = 100,
-			REMOVE,
-			UPDATE,
-			SELECTED
-		};
-
-		RegularDataMessage() throw();
-};
-
-class RegularData1DMessage
-	: RegularDataMessage
-{
-%TypeHeaderCode
-	#include <BALL/VIEW/KERNEL/message.h>
-	using namespace BALL;
-	using namespace BALL::VIEW;
-%End
-
-	public:
-
-	RegularData1DMessage(RegularDataMessageType /*type = UNDEFINED*/) throw();
-	void setData(RegularData1D& /*data*/) throw();
-	RegularData1D* getData() throw();
-};
-
-class RegularData2DMessage
-	: RegularDataMessage
-{
-%TypeHeaderCode
-	#include <BALL/VIEW/KERNEL/message.h>
-	using namespace BALL;
-	using namespace BALL::VIEW;
-%End
-
-	public:
-
-	RegularData2DMessage(RegularDataMessageType /*type = UNDEFINED*/) throw();
-	void setData(RegularData2D& /*data*/) throw();
-	RegularData2D* getData() throw();
-};
-
-class RegularData3DMessage
-	: RegularDataMessage
-{
-%TypeHeaderCode
-	#include <BALL/VIEW/KERNEL/message.h>
-	using namespace BALL;
-	using namespace BALL::VIEW;
-%End
-
-	public:
-
-	RegularData3DMessage(RegularDataMessageType /*type = UNDEFINED*/) throw();
-	void setData(RegularData3D& /*data*/) throw();
-	RegularData3D* getData() throw();
-};
-
-
 

@@ -1,18 +1,22 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.C,v 1.16 2005/12/23 17:03:39 amoll Exp $
+// $Id: regularData2DWidget.C,v 1.16.16.1 2007/03/25 21:56:51 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData2DWidget.h> 
 #include <BALL/VIEW/DATATYPE/colorMap.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
-#include <qpointarray.h>
-#include <qpainter.h>
-#include <qlayout.h>
-#include <qpopupmenu.h>
-#include <qapplication.h>
+#include <QtGui/q3pointarray.h>
+#include <QtGui/qpainter.h>
+#include <QtGui/qlayout.h>
+#include <QtGui/q3popupmenu.h>
+#include <QtGui/qapplication.h>
+//Added by qt3to4:
+#include <QContextMenuEvent>
+#include <QPixmap>
+#include <QResizeEvent>
 
 namespace BALL
 {
@@ -24,9 +28,9 @@ namespace BALL
 			: CanvasWidget(parent),
 				ModularWidget("RegularData2DWidget"),
 				data_(data),
-				diagram_color_(QColor(black)),
-				background_color_(QColor(white)),
-				axis_color_(QColor(red))
+				diagram_color_(QColor(Qt::black)),
+				background_color_(QColor(Qt::white)),
+				axis_color_(QColor(Qt::red))
 		{
 			registerWidget(this);
 		}
@@ -107,7 +111,7 @@ namespace BALL
 			//put the pixmapItem into objects
 			PixmapItem* pixItem = new PixmapItem(&canvas_, pixmap);
 			pixItem->show();
-			objects_.push_back(dynamic_cast<QCanvasItem*> (pixItem)); 
+			objects_.push_back(dynamic_cast<Q3CanvasItem*> (pixItem)); 
 
 			// resize the canvas to fit the data
 			canvas_.resize(max_x, max_y);
@@ -135,8 +139,8 @@ namespace BALL
 			{
 				data_ = 0;
 
-				QCanvasItemList list = canvas()->allItems();
-				QCanvasItemList::Iterator it = list.begin();
+				Q3CanvasItemList list = canvas()->allItems();
+				Q3CanvasItemList::Iterator it = list.begin();
 				for (; it != list.end(); ++it) 
 				{
 					if ( *it ) delete *it;
@@ -175,7 +179,7 @@ namespace BALL
 
 		void DockableRegularData2DWidget::contextMenuEvent(QContextMenuEvent* e)
 		{
-			QPopupMenu context_menu;
+			Q3PopupMenu context_menu;
 			context_menu.insertItem("ZoomToFit", this, SLOT(zoomToFit()));
 			context_menu.insertItem("ZoomIn", this, SLOT(zoomIn()));
 			context_menu.insertItem("ZoomOut", this, SLOT(zoomOut()));

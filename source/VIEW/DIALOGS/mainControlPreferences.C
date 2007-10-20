@@ -1,33 +1,47 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.C,v 1.16 2005/12/23 17:03:26 amoll Exp $
+// $Id: mainControlPreferences.C,v 1.16.16.1 2007/03/25 22:02:03 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qstylefactory.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qstylefactory.h>
+#include <QtGui/qfontdialog.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name, WFlags fl)
+MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name, Qt::WFlags fl)
 	throw()
-	: MainControlPreferencesData(parent, name, fl),
+	: QWidget(parent, fl),
+		Ui_MainControlPreferencesData(),
 		PreferencesEntry()
 {
+	setupUi(this);
+	setObjectName(name);
 	setINIFileSectionName("GENERAL");
-	style_box_->insertStringList(QStyleFactory::keys());
-	registerObject_(style_box_);
-	registerObject_(show_labels);
-	registerObject_(logging_to_file);
+	style_box_->addItems(QStyleFactory::keys());
+	QString prefered_style = "Plastique";
+#ifdef BALL_PLATFORM_WINDOWS
+	prefered_style = "WindowsXP";
+#endif
+#ifdef BALL_OS_DARWIN
+	prefered_style = "Macintosh style";
+#endif
+
+	Index pos = style_box_->findText(prefered_style);
+	if (pos != -1) style_box_->setCurrentIndex(pos);
 
 	setWidgetStackName("General");
+	registerWidgets_();
+	unregisterWidget_(style_box_);
+
+	connect( font_button, SIGNAL( clicked() ), this, SLOT( selectFont() ) );
 }
 
 MainControlPreferences::~MainControlPreferences()
@@ -46,10 +60,9 @@ QStyle* MainControlPreferences::getStyle()
 	return new_style;
 }
 
-bool MainControlPreferences::showLabelsEnabled() const
-	throw()
+QFont MainControlPreferences::getFont()
 {
-	return show_labels->isChecked();
+	return font_label->font();
 }
 
 void MainControlPreferences::enableLoggingToFile(bool state)
@@ -63,6 +76,42 @@ bool MainControlPreferences::loggingToFileEnabled() const
 	throw()
 {
 	return logging_to_file->isChecked();
+}
+
+void MainControlPreferences::selectFont()
+{
+	bool ok = true;
+	QFont font = QFontDialog::getFont(&ok, font_, 0);
+
+	if (!ok) return;
+
+	font_label->setFont(font);
+	font_ = font;
+}
+
+void MainControlPreferences::setFont(QFont font)
+{
+	font_ = font;
+	font_label->setFont(font);
+}
+
+void MainControlPreferences::writePreferenceEntries(INIFile& inifile)
+{
+	PreferencesEntry::writePreferenceEntries(inifile);
+	inifile.insertValue(inifile_section_name_, "style", ascii(style_box_->currentText()));
+}
+
+void MainControlPreferences::readPreferenceEntries(const INIFile& inifile)
+{
+	PreferencesEntry::readPreferenceEntries(inifile);
+	if (inifile.hasEntry(inifile_section_name_, "style"))
+	{
+		String value = inifile.getValue(inifile_section_name_, "style");
+		int e = style_box_->findText(value.c_str());
+		if (e == -1) return;
+
+		style_box_->setCurrentIndex(e);
+	}
 }
 
 } } // namespaces

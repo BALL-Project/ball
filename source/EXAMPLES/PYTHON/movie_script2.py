@@ -59,13 +59,13 @@ for i in range(0, 390 / angle_step):
 	my_task()
 	
 # move chain C
+setMultithreading(0)
 move_step = 0.7
 for i in range(0, 45 / move_step): 
 	s.moveComposites(chain_a, Vector3(-move_step, move_step, 0))
 	my_task()
 
 #remove chain a
-setMultithreading(0)
 mc.highlight(chain_a)
 mc.cut()
 setMultithreading(1)

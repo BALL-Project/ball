@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.sip,v 1.4 2005/12/23 17:02:49 amoll Exp $
+// $Id: colorRGBA.sip,v 1.4.18.1 2007/03/25 21:37:05 oliver Exp $
 //
 
 class ColorRGBA
@@ -42,16 +42,20 @@ class ColorRGBA
   void swap(ColorRGBA& /color/) throw();
   void setRed(const ColorUnit& /red_value/) throw();
   ColorUnit& getRed() throw();
-  const ColorUnit& getRed() const throw();
+  // const ColorUnit& getRed() const throw();
+
   void setGreen(const ColorUnit& /green_value/) throw();
   ColorUnit& getGreen() throw();
-  const ColorUnit& getGreen() const throw();
+  // const ColorUnit& getGreen() const throw();
+
   void setBlue(const ColorUnit& /blue_value/) throw();
   ColorUnit& getBlue() throw();
-  const ColorUnit& getBlue() const throw();
+  // const ColorUnit& getBlue() const throw();
+
   void setAlpha(const ColorUnit& /alpha_value/) throw();
   ColorUnit& getAlpha() throw();
-  const ColorUnit& getAlpha() const throw();
+  // const ColorUnit& getAlpha() const throw();
+
   void set(const ColorUnit& /red_value/, const ColorUnit& /green_value/, const ColorUnit& /blue_value/, const ColorUnit& /alpha_value/ = 1.0) throw();
   void get(ColorUnit& /red_value/, ColorUnit& /green_value/, ColorUnit& /blue_value/, ColorUnit& /alpha_value/) const throw();
   void get(ColorUnit& /red_value/, ColorUnit& /green_value/, ColorUnit& /blue_value/) const throw();
@@ -64,4 +68,20 @@ class ColorRGBA
   // void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
 	// std::istream& operator >> (std::istream& s, ColorRGBA& color);
   //  std::ostream& operator << (std::ostream& s, const ColorRGBA& /color/);
+	SIP_PYOBJECT __str__();
+%MethodCode
+	String s("ColorRGBA {");
+	s += (String) *sipCpp;
+	s += " }";
+	sipRes = PyString_FromString(s.c_str());
+%End
+
+	SIP_PYOBJECT __repr__();
+%MethodCode
+	String s("ColorRGBA {");
+	s += (String) *sipCpp;
+	s += " }";
+	sipRes = PyString_FromString(s.c_str());
+%End
+
 };

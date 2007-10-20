@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMap.h,v 1.2 2005/12/23 17:02:07 amoll Exp $
+// $Id: colorMap.h,v 1.2.18.1 2007/03/25 21:25:40 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORMAP_H
@@ -9,6 +9,10 @@
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 #	include <BALL/VIEW/DATATYPE/colorRGBA.h>
+#endif
+
+#ifndef BALL_MATHS_VECTOR4_H
+# include <BALL/MATHS/vector4.h>
 #endif
 
 #include <vector>
@@ -80,6 +84,10 @@ namespace BALL
 			 */
 			//@{
 			
+			/// Create a colormap similar to the "jet" map of matlab
+			void createMapJet(const Size color_number)
+				throw();
+
 			/// Set the base colors for the interpolation
 			void setBaseColors(const ColorRGBA* color_array, Size array_size)
 				throw();
@@ -126,6 +134,14 @@ namespace BALL
 			const ColorRGBA& map(float value) const
 				throw();
 			
+			/** Set the interpolation boundary points. This allows different slopes in
+			 *  the interpolation of the R, G, B, and A components. The color vector must
+			 *  be initialized prior to this function. If the number of colors does not
+			 *  match the number of interpolation points we return false and do nothing.
+			 */
+			bool setInterpolationBoundaries(const vector<Vector4>& boundaries)
+				throw();
+
 			//@}
 			/**	@name	Debugging and Diagnostics
 			*/	
@@ -145,6 +161,8 @@ namespace BALL
 			bool			has_min_max_colors_;
 			float			min_;
 			float			max_;
+
+			vector<Vector4> interpolation_boundaries_; 
 		};
   
 	} // namespace VIEW

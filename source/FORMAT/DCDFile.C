@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.36 2005/12/23 17:02:38 amoll Exp $
+// $Id: DCDFile.C,v 1.36.18.1 2007/03/25 22:00:16 oliver Exp $
 //
 
 #include <BALL/FORMAT/DCDFile.h>
@@ -51,7 +51,7 @@ namespace BALL
 
 
 	DCDFile::DCDFile(const String& name, File::OpenMode open_mode)
-		throw()
+		throw(Exception::FileNotFound)
 		: TrajectoryFile(name, open_mode),
 			verbosity_(0),
 			swap_bytes_(false),

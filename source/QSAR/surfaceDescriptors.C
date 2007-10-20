@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceDescriptors.C,v 1.1 2004/05/11 07:28:22 oliver Exp $
+// $Id: surfaceDescriptors.C,v 1.1.28.1 2007/03/16 00:06:50 bertsch Exp $
 // 
 
 #include <BALL/QSAR/surfaceDescriptors.h>
@@ -178,13 +178,13 @@ namespace BALL
 		return *this;
 	}
 
-	double RelPositiveVdWSurface::compute(Molecule& molecule)
+	double RelPositiveVdWSurface::compute(AtomContainer& ac)
 	{
-		if (!isValid(molecule))
+		if (!isValid_(ac))
 		{
-			calculate(molecule);
+			calculate_(ac);
 		}
-		return molecule.getProperty("PositiveVdWSurface").getDouble()/molecule.getProperty("VdWSurface").getDouble();
+		return ac.getProperty("PositiveVdWSurface").getDouble()/ac.getProperty("VdWSurface").getDouble();
 	}
 
 
@@ -212,15 +212,15 @@ namespace BALL
 		return *this;
 	}
 
-	double RelNegativeVdWSurface::compute(Molecule& molecule)
+	double RelNegativeVdWSurface::compute(AtomContainer& ac)
 	{
-		if (!isValid(molecule))
+		if (!isValid_(ac))
 		{
-			calculate(molecule);
+			calculate_(ac);
 		}
-		if (molecule.getProperty("VdWSurface").getDouble() != 0)
+		if (ac.getProperty("VdWSurface").getDouble() != 0)
 		{
-			return molecule.getProperty("NegativeVdWSurface").getDouble()/molecule.getProperty("VdWSurface").getDouble();
+			return ac.getProperty("NegativeVdWSurface").getDouble()/ac.getProperty("VdWSurface").getDouble();
 		}
 		else
 		{
@@ -253,15 +253,15 @@ namespace BALL
 		return *this;
 	}
 	
-	double RelPositivePolarVdWSurface::compute(Molecule& molecule)
+	double RelPositivePolarVdWSurface::compute(AtomContainer& ac)
 	{
-		if (!isValid(molecule))
+		if (!isValid_(ac))
 		{
-			calculate(molecule);
+			calculate_(ac);
 		}
-		if (molecule.getProperty("VdWSurface").getDouble() != 0)
+		if (ac.getProperty("VdWSurface").getDouble() != 0)
 		{
-			return molecule.getProperty("PositivePolarVdWSurface").getDouble()/molecule.getProperty("VdWSurface").getDouble();
+			return ac.getProperty("PositivePolarVdWSurface").getDouble()/ac.getProperty("VdWSurface").getDouble();
 		}
 		else
 		{
@@ -294,15 +294,15 @@ namespace BALL
 		return *this;
 	}
 
-	double RelNegativePolarVdWSurface::compute(Molecule& molecule)
+	double RelNegativePolarVdWSurface::compute(AtomContainer& ac)
 	{
-		if (!isValid(molecule))
+		if (!isValid_(ac))
 		{
-			calculate(molecule);
+			calculate_(ac);
 		}
-		if (molecule.getProperty("VdWSurface").getDouble() != 0)
+		if (ac.getProperty("VdWSurface").getDouble() != 0)
 		{
-			return molecule.getProperty("NegativePolarVdWSurface").getDouble()/molecule.getProperty("VdWSurface").getDouble();
+			return ac.getProperty("NegativePolarVdWSurface").getDouble()/ac.getProperty("VdWSurface").getDouble();
 		}
 		else
 		{
@@ -335,15 +335,15 @@ namespace BALL
 		return *this;
 	}
 	
-	double RelHydrophobicVdWSurface::compute(Molecule& molecule)
+	double RelHydrophobicVdWSurface::compute(AtomContainer& ac)
 	{
-		if (!isValid(molecule))
+		if (!isValid_(ac))
 		{
-			calculate(molecule);
+			calculate_(ac);
 		}
-		if (molecule.getProperty("VdWSurface").getDouble() != 0)
+		if (ac.getProperty("VdWSurface").getDouble() != 0)
 		{
-			return molecule.getProperty("HydrophobicVdWSurface").getDouble()/molecule.getProperty("VdWSurface").getDouble();
+			return ac.getProperty("HydrophobicVdWSurface").getDouble()/ac.getProperty("VdWSurface").getDouble();
 		}
 		else
 		{
@@ -376,15 +376,15 @@ namespace BALL
 		return *this;
 	}
 	
-	double RelPolarVdWSurface::compute(Molecule& molecule)
+	double RelPolarVdWSurface::compute(AtomContainer& ac)
 	{
-		if (!isValid(molecule))
+		if (!isValid_(ac))
 		{
-			calculate(molecule);
+			calculate_(ac);
 		}
-		if (molecule.getProperty("VdWSurface").getDouble() != 0)
+		if (ac.getProperty("VdWSurface").getDouble() != 0)
 		{
-			return molecule.getProperty("PolarVdWSurface").getDouble()/molecule.getProperty("VdWSurface").getDouble();
+			return ac.getProperty("PolarVdWSurface").getDouble()/ac.getProperty("VdWSurface").getDouble();
 		}
 		else
 		{

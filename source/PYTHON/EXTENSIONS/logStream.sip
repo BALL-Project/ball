@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.sip,v 1.1 2006/01/26 21:33:36 oliver Exp $
+// $Id: logStream.sip,v 1.1.18.1 2007/03/25 21:37:10 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher

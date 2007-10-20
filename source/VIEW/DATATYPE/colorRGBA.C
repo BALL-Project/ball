@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.C,v 1.10 2005/12/23 17:03:21 amoll Exp $
+// $Id: colorRGBA.C,v 1.10.16.1 2007/03/25 21:56:34 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
-#include <qcolor.h>
+#include <QtGui/qcolor.h>
 
 using namespace std;
 
@@ -308,6 +308,15 @@ namespace BALL
 				
 				alpha_ = buffer;
 			}
+		}
+
+		ColorRGBA ColorRGBA::getInverseColor() const
+		{
+			ColorRGBA color;
+			color.set(255 - (Position) getRed(),
+								255 - (Position) getGreen(),
+								255 - (Position) getBlue());
+			return color;
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex2.C,v 1.7 2005/07/03 09:43:30 oliver Exp $
+// $Id: vertex2.C,v 1.7.20.1 2007/03/25 21:56:37 oliver Exp $
 //
 
 #include <BALL/VIEW/DATATYPE/vertex2.h>

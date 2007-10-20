@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureProcessor.C,v 1.14 2005/12/23 17:03:05 amoll Exp $
+// $Id: secondaryStructureProcessor.C,v 1.14.18.3 2007/03/26 10:50:44 bertsch Exp $
 
 #include <BALL/STRUCTURE/secondaryStructureProcessor.h>
 #include <BALL/STRUCTURE/HBondProcessor.h>
@@ -230,11 +230,11 @@ namespace BALL
 					// do we have HBP(k-2, i+2) ? => antiparallel bridge(i+1,k-1)
 					if (((partner-2)>=0) && ((current_res+2) <=size))
 					{
-						for (Size s = 0;(s < HBonds_[partner-2].size()); s++)
+						for (Size s = 0; (s < HBonds_[partner-2].size()); s++)
 						{
 
 							if ((HBonds_[partner-2][s] == (current_res + 2))
-									&& ((current_res+1) != (partner - 1)))
+									&& ((current_res + 1) != (Size)(partner - 1)))
 							{
 								//insert
 							  //NOTE: there might be  more than two bridges for this residue
@@ -819,7 +819,13 @@ namespace BALL
 		vector<Residue*> 						residues;
 		for (;+ri;++ri)
 		{
-		 // !!!! attention: resnum is the real "index"
+			if (resnum >= summary_.size())
+			{
+				Log.error() << "Problem occured in " << __FILE__ << " " << __LINE__ << std::endl;
+				return Processor::CONTINUE;
+			}
+
+		  // !!!! attention: resnum is the real "index"
 			if (summary_[resnum] != last_struct)
 			{
 				if (last_struct != 'L' || (summary_[resnum] != 'G' && summary_[resnum] != '-'))

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.h,v 1.10 2005/12/23 17:02:19 amoll Exp $
+// $Id: point.h,v 1.10.16.1 2007/03/25 21:26:10 oliver Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIVES_POINT_H
@@ -117,7 +117,9 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
 				throw();
-
+			
+			// Method to get all vertices from a geometric object
+			virtual void getVertices(vector<Vector3>& vertices) const; 
 			//@}
 
 		};

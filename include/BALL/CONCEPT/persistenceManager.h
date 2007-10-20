@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.h,v 1.48 2005/10/23 12:02:16 oliver Exp $
+// $Id: persistenceManager.h,v 1.48.20.1 2007/08/07 12:31:05 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
@@ -951,7 +951,7 @@ namespace BALL
 		// machine
 		object = 0;
 
-		if (ptr != 0);
+		if (ptr != 0)
 		{
 			pointer_list_.push_back(std::make_pair((void**)&object, ptr));
 		}

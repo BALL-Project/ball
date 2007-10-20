@@ -1,7 +1,7 @@
 	// -*- Mode: C++; tab-width: 2; -*-
 	// vi: set ts=2:
 	//
-	// $Id: snapShotManager.h,v 1.19 2005/12/23 17:01:52 amoll Exp $
+	// $Id: snapShotManager.h,v 1.19.20.1 2007/05/10 10:51:04 amoll Exp $
 	//
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
@@ -229,8 +229,13 @@ class BALL_EXPORT SnapShotManager
 	virtual void flushToDisk()
 		throw(File::CannotWrite);
 
+	///
 	Size getNumberOfSnapShotsInBuffer()
 		throw() { return  snapshot_buffer_.size();}
+
+	///
+	Position getCurrentSnapshotNumber() const
+		throw() { return current_snapshot_ + 1;}
 
 	/** Try to read all SnapShot 's from the TrajectoryFile into the memory.
 	*/

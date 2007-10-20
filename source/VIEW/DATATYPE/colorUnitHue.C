@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnitHue.C,v 1.13 2005/10/23 12:02:30 oliver Exp $
+// $Id: colorUnitHue.C,v 1.13.20.1 2007/03/25 21:56:35 oliver Exp $
 //
 
 #include <BALL/VIEW/DATATYPE/colorUnitHue.h>

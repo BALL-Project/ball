@@ -6,10 +6,6 @@
 #ifndef BALL_QSAR_SURFACEBASE_H
 #define BALL_QSAR_SURFACEBASE_H
 
-#ifndef BALL_CONCEPT_MOLECULE_H
-#include <BALL/KERNEL/molecule.h>
-#endif
-
 #ifndef BALL_QSAR_DESCRIPTOR_H
 #include <BALL/QSAR/descriptor.h>
 #endif
@@ -63,13 +59,13 @@ namespace BALL
 		/** @name Predicates
 		*/
 		//@{
-		bool isValid(Molecule& molecule);
+		bool isValid_(AtomContainer& ac);
 		//@}
 		
 		/** @name Accessors
 		*/
 		//@{
-		void calculate(Molecule& molecule);
+		void calculate_(AtomContainer& ac);
 		//@}
 	};
 } // namespace BALL

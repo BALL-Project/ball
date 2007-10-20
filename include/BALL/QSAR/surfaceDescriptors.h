@@ -272,7 +272,7 @@ namespace BALL
 		/** @name Accessors
 		*/
 		//@{
-		double compute(Molecule& molecule);
+		double compute(AtomContainer& ac);
 		//@}
 	};
 
@@ -316,7 +316,7 @@ namespace BALL
 		/** @name Accessors
 		*/
 		//@{
-		double compute(Molecule& molecule);
+		double compute(AtomContainer& ac);
 		//@}
 	};
 
@@ -361,7 +361,7 @@ namespace BALL
 		/** @name Accessors
 		*/
 		//@{
-		double compute(Molecule& molecule);
+		double compute(AtomContainer& ac);
 		//@}
 	};
 
@@ -406,7 +406,7 @@ namespace BALL
 		/** @name Accessors
 		*/
 		//@{
-		double compute(Molecule& molecule);
+		double compute(AtomContainer& ac);
 		//@}
 	};
 
@@ -450,7 +450,7 @@ namespace BALL
 		/** @name Accessors
 		*/
 		//@{
-		double compute(Molecule& molecule);
+		double compute(AtomContainer& ac);
 		//@}
 	};
 
@@ -494,7 +494,7 @@ namespace BALL
 		/** @name Accessors
 		*/
 		//@{
-		double compute(Molecule& molecule);
+		double compute(AtomContainer& ac);
 		//@}
 	};
 

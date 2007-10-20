@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.32 2005/12/23 17:02:17 amoll Exp $
+// $Id: colorProcessor.h,v 1.32.18.1 2007/03/25 21:26:06 oliver Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -58,10 +58,6 @@ class BALL_VIEW_EXPORT ColorProcessor
 
 	BALL_CREATE(ColorProcessor)
 	
-	/**	@name	Type definitions
-	*/
-	//@{
-		
 	/// A HashSet with the used Composites, see also Representation
 	typedef HashSet<const Composite*>  CompositeSet;
 
@@ -71,28 +67,15 @@ class BALL_VIEW_EXPORT ColorProcessor
 	/// a single box in the threedimensional grid
 	typedef HashGridBox3<const Atom*> AtomBox;
 
-	//@} 
-	/**	@name	Constructors 
-	*/	
-	//@{
-
-	/** Default Constructor.
-	*/
+	/// Default Constructor.
 	ColorProcessor()
 		throw();
 
-	/** Copy constructor.
-	*/
+	/// Copy constructor.
 	ColorProcessor(const ColorProcessor& color_calculator)
 		throw();
 
-	//@} 
-	/** @name Destructors 
-	*/ 
-	//@{
-
-	/** Destructor.
-	*/
+	/// Destructor.
 	virtual ~ColorProcessor();
 
 	/** Explicit default initialization.
@@ -103,12 +86,7 @@ class BALL_VIEW_EXPORT ColorProcessor
 	virtual void clear()
 		throw();
 
-	//@} 
-	/**	@name	Asignment */ 
-	//@{
-
-	/** Assignment
-	*/
+	/// Assignment
 	void set(const ColorProcessor& color_calculator)
 		throw();
 
@@ -121,11 +99,6 @@ class BALL_VIEW_EXPORT ColorProcessor
 	*/
 	const ColorProcessor&  operator = (const ColorProcessor& color_calculator)
 		throw();
-
-	//@} 
-
-	/**	@name	Accessors */ 
-	//@{
 
 	/** Some coloring processors need only to be applied to a Representation if the hierarchy of
 			the Representations Composite is changed, or the Composites Names or Type (like SecondaryStructure::Type)
@@ -192,13 +165,11 @@ class BALL_VIEW_EXPORT ColorProcessor
 		throw() { return additional_grid_distance_;}
 
 	///
+	void setMinGridSpacing(float spacing) {min_spacing_ = spacing;}
+
+	///
 	AtomGrid& getAtomGrid() 
 		throw() { return atom_grid_;}
-
-	//@} 
-	/**	@name	debuggers and diagnostics 
-	*/ 
-	//@{
 
 	/** Internal value dump.
 			Dump the current state of this ColorProcessor to 
@@ -220,16 +191,14 @@ class BALL_VIEW_EXPORT ColorProcessor
 	const Atom* getClosestItem(const Vector3& v) const
 		throw();
 
-	//@} 
-	/** @name Protected member variables 
-	*/ 
-	//@{
-
 	protected:
 
 	//_ Colorize the mesh with the computed grid.
 	virtual void colorMeshFromGrid_(Mesh& mesh)
 		throw();
+
+	//_
+	virtual bool canUseMeshShortcut_(const Composite&) { return false;}
 
 	bool  			update_always_needed_;
 	//_ a color that will be used if no other color can be calculated.
@@ -244,6 +213,7 @@ class BALL_VIEW_EXPORT ColorProcessor
 	ModelType   model_type_;
 	const Composite*  last_composite_of_grid_;
 	float 			additional_grid_distance_;
+	float 			min_spacing_;
 	//@}
 };
 

@@ -3,20 +3,22 @@
 //
 // $Id:
 
-#ifndef DemoTutorialDialogTUTORIAL_H
-#define DemoTutorialDialogTUTORIAL_H
+#ifndef BALL_DEMOTUTORIALDIALOG_H
+#define BALL_DEMOTUTORIALDIALOG_H
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 # include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_MESSAGE_H
-//   # include <BALL/VIEW/KERNEL/message.h>
+#ifndef BALL_VIEW_PRIMITIV_MESH_H
+# include <BALL/VIEW/PRIMITIVES/mesh.h>
 #endif
 
 #include <BALL/DATATYPE/regularData3D.h>
 
 #include "demoTutorialDialogData.h"
+
+#include <QtGui/QDialog>
 
 namespace BALL
 {
@@ -28,7 +30,8 @@ namespace BALL
 		/**	Dialog for showing a demo and tutorial.
 		*/
 		class DemoTutorialDialog : 
-			public DemoTutorialDialogData,
+			public QDialog,
+			public Ui_DemoTutorialDialogData,
  			public ModularWidget
 		{
 			Q_OBJECT
@@ -46,6 +49,8 @@ namespace BALL
 			/// Message handling method.
  			virtual void onNotify(Message *message) throw();
 
+			virtual void initializeWidget(MainControl& main_control);
+
 			///
 			void setDemoMode(bool state) { demo_mode_ = state;}
 							
@@ -62,6 +67,9 @@ namespace BALL
 
 			/// Next Step
 			void nextStepClicked();
+
+			virtual void checkMenu(MainControl& main_control)
+				throw();
 						
 			protected:
 
@@ -87,8 +95,10 @@ namespace BALL
 			String 					prefix_;
 			bool 						demo_mode_;
 			Position  			current_step_;
+			Mesh* 					surface_;
+			QAction* 				demo_action_, *tutorial_action_;
 		};
 
 } } // namespaces
 
-#endif // BALL_VIEW_DIALOGS_DemoTutorialDialog_H
+#endif // BALL_DEMOTUTORIALDIALOG_H

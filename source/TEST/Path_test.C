@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Path_test.C,v 1.12 2003/07/03 13:20:04 amoll Exp $
+// $Id: Path_test.C,v 1.12.30.3 2007/06/21 19:44:53 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(Path, "$Id: Path_test.C,v 1.12 2003/07/03 13:20:04 amoll Exp $")
+START_TEST(Path, "$Id: Path_test.C,v 1.12.30.3 2007/06/21 19:44:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -24,7 +24,7 @@ CHECK(Path())
 	delete p;
 RESULT
 
-Path p = Path();
+Path p;
 string data_suffix1("/data/");
 string data_suffix2("/data/");
 data_suffix2[0] = FileSystem::PATH_SEPARATOR;
@@ -55,6 +55,7 @@ RESULT
 
 CHECK(string find(const string& name))
 	Path p1;
+	p1.reset();
 	String file = String("fragments") + FileSystem::PATH_SEPARATOR + "Fragments.db";
 	TEST_NOT_EQUAL(p1.find(file), "")
 	file = "Fragments.db";
@@ -77,6 +78,18 @@ CHECK(string findStrict(const string& name))
 	TEST_EQUAL(p1.findStrict("Path_test.C"), "Path_test.C")
 	TEST_EQUAL(p1.findStrict("/TEST/Path_test.C"), "");
 	TEST_EQUAL(p1.findStrict("/xxx/Path_test.C"), "");
+RESULT
+
+CHECK([extra]Singleton)
+	Path p1;
+	Path p2;
+	p1.reset();
+	STATUS(p1.getDataPath())
+	TEST_EQUAL(String(p1.getDataPath()).hasSuffix(data_suffix1)
+	 		|| String(p1.getDataPath()).hasSuffix(data_suffix2), true)
+	p1.setDataPath("XXXXX/XXXXX");
+	TEST_EQUAL(p1.getDataPath(), "XXXXX/XXXXX")
+	TEST_EQUAL(p2.getDataPath(), "XXXXX/XXXXX")
 RESULT
 
 /////////////////////////////////////////////////////////////

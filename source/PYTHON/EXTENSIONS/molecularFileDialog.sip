@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.sip,v 1.3 2005/12/23 17:02:53 amoll Exp $
+// $Id: molecularFileDialog.sip,v 1.3.20.1 2007/03/25 21:37:14 oliver Exp $
 //
 
 class MolecularFileDialog
@@ -21,8 +21,8 @@ class MolecularFileDialog
   ~MolecularFileDialog() throw();
   virtual void initializeWidget(MainControl&) throw();
   virtual void readFiles();
-  virtual System* openFile(const String&) throw();
-  virtual System* openFile(const String&, const String&, const String&) throw();
+  virtual System* openMolecularFile(const String&) throw();
+  virtual System* openMolecularFile(const String&, const String&, const String&) throw();
   virtual bool writeFile();
   System* readPDBFile(String, String) throw();
   System* readHINFile(String, String) throw();

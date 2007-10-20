@@ -20,7 +20,7 @@
 
 #include <BALL/VIEW/UIC/labelDialogData.h>
 
-#include <qfont.h>
+#include <QtGui/qfont.h>
 
 namespace BALL
 {
@@ -33,7 +33,8 @@ namespace BALL
     		\ingroup  ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT LabelDialog 
-			: public LabelDialogData,
+			: public QDialog,
+				public Ui_LabelDialogData,
 				public ModularWidget
 		{
 			Q_OBJECT
@@ -52,7 +53,7 @@ namespace BALL
 					@see        QDialog
 					@see        ModularWidget
 			*/
-			LabelDialog(QWidget *parent = NULL, const char *name = NULL )
+			LabelDialog(QWidget *parent = NULL, const char *name = "LabelDialog")
 				throw();
 
 			//@}
@@ -151,8 +152,6 @@ namespace BALL
 			///
 			void textChanged();
 
-			///
-			void historySelected();
 			//@}
 			
 			/// Overloaded from ModularWidget
@@ -166,7 +165,7 @@ namespace BALL
 			Representation* createMultipleLabels_();
 
 
-			int id_;
+			QAction* 					id_;
 			
 			ColorRGBA 				custom_color_;
 			QFont 						font_;

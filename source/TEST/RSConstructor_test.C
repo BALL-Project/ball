@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSConstructor_test.C,v 1.3 2006/08/15 20:37:03 oliver Exp $
+// $Id: RSConstructor_test.C,v 1.3.8.2 2007/04/03 13:29:30 bertsch Exp $
 //
 // Author:
 //   Holger Franken
@@ -13,13 +13,15 @@
 
 #include <BALL/STRUCTURE/rsConstructor.h>
 #include <BALL/STRUCTURE/sdGenerator.h>
+#include <BALL/STRUCTURE/ringClusterer.h>
+#include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/MOLFile.h>
 
 ///////////////////////////
 
-START_TEST(RSConstructor, "$Id: RSConstructor_test.C,v 1.3 2006/08/15 20:37:03 oliver Exp $")
+START_TEST(RSConstructor, "$Id: RSConstructor_test.C,v 1.3.8.2 2007/04/03 13:29:30 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

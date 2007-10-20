@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StringHashMap_test.C,v 1.7 2003/06/28 19:18:38 oliver Exp $
+// $Id: StringHashMap_test.C,v 1.7.30.2 2007/08/09 17:17:29 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -35,7 +35,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(StringHashMap, "$Id: StringHashMap_test.C,v 1.7 2003/06/28 19:18:38 oliver Exp $")
+START_TEST(StringHashMap, "$Id: StringHashMap_test.C,v 1.7.30.2 2007/08/09 17:17:29 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -302,6 +302,24 @@ CHECK(bool remove(const String& key) throw())
 	TEST_EQUAL(hm.has("c"), true)
 	TEST_EQUAL(hm.getSize(), 2)
 RESULT
+
+CHECK([EXTRA] large_entries)
+	StringHashMap<String> shm;
+	for (Position p = 1; p < 1000; p+= 100)
+	{
+		String key(p);
+		String value;
+		for (Position i = p; i < p * 10; i++) value += "X";
+
+		shm[key] = value;
+		TEST_EQUAL(shm[key], value)
+
+		shm[value] = key;
+		TEST_EQUAL(shm[value], key)
+	}
+RESULT
+
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

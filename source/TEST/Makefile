@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.221 2006/01/27 20:57:46 oliver Exp $
+# $Id: Makefile,v 1.221.14.3 2007/05/14 18:32:37 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -10,6 +10,7 @@
 include ../config.mak
 
 DIRECTORY=TEST
+DISPLAY=
 
 # Include the list of test programs.
 # This file is also included by the corresponding
@@ -53,11 +54,17 @@ ifeq ($(BALL_HAS_GSL),true)
 endif
  
 
+ifeq ($(BALL_HAS_SQL),true)
+	EXECUTABLES_OTHERS+=$(SQL_DEPENDENT_EXECUTABLES)
+	OTHERS_TEST+=$(SQL_DEPENDENT_EXECUTABLES)
+endif
+ 
+
 all:	$(EXECUTABLES)
 
 echo:
-	@echo $(EXECUTABLES)
-	@echo $(ALL_TESTS)
+	@echo "_$(EXECUTABLES)_"
+	@echo "_$(ALL_TESTS)_"
 
 include ../rules.mak
 include ../targets.mak

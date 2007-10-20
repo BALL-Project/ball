@@ -6,10 +6,10 @@ OBJS = \
 libBALL.obj\
 ..\..\..\source\KERNEL\expressionParserLexer.obj\
 ..\..\..\source\MATHS\parsedFunctionLexer.obj\
-..\..\..\source\STRUCTURE\smilesParserLexer.obj\
+..\..\..\source\STRUCTURE\smilesParserLexer.obj ..\..\..\source\STRUCTURE\smilesParserParser.obj\
+..\..\..\source\STRUCTURE\smartsParser.obj ..\..\..\source\STRUCTURE\smartsParserLexer.obj ..\..\..\source\STRUCTURE\smartsParserParser.obj ..\..\..\source\STRUCTURE\smartsMatcher.obj\
 ..\..\..\source\KERNEL\expressionParserParser.obj\
 ..\..\..\source\MATHS\parsedFunctionParser.obj\
-..\..\..\source\STRUCTURE\smilesParserParser.obj\
 ..\..\..\source\COMMON\constants.obj\
 ..\..\..\source\COMMON\exception.obj\
 ..\..\..\source\COMMON\hash.obj\
@@ -32,6 +32,10 @@ libBALL.obj\
 ..\..\..\source\CONCEPT\timeStamp.obj\
 ..\..\..\source\CONCEPT\visitor.obj\
 ..\..\..\source\CONCEPT\XDRPersistenceManager.obj\
+..\..\..\source\CONCEPT\client.obj\
+..\..\..\source\CONCEPT\objectCreator.obj\
+..\..\..\source\CONCEPT\moleculeObjectCreator.obj\
+..\..\..\source\CONCEPT\molecularInformation.obj\
 ..\..\..\source\DATATYPE\bitVector.obj\
 ..\..\..\source\DATATYPE\contourSurface.obj\
 ..\..\..\source\DATATYPE\hashGrid.obj\
@@ -65,7 +69,10 @@ libBALL.obj\
 ..\..\..\source\FORMAT\PDBFileGeneral.obj\
 ..\..\..\source\FORMAT\PDBInfo.obj\
 ..\..\..\source\FORMAT\PDBRecords.obj\
+..\..\..\source\FORMAT\DSN6File.obj\
+#..\..\..\source\FORMAT\GAMESSLogFile.obj ..\..\..\source\FORMAT\GAMESSDatFile.obj\
 ..\..\..\source\FORMAT\resourceFile.obj\
+..\..\..\source\FORMAT\SCWRLRotamerFile.obj\
 ..\..\..\source\FORMAT\SDFile.obj\
 ..\..\..\source\FORMAT\trajectoryFile.obj\
 ..\..\..\source\FORMAT\TRRFile.obj\
@@ -74,10 +81,9 @@ libBALL.obj\
 ..\..\..\source\KERNEL\atomContainer.obj\
 ..\..\..\source\KERNEL\bond.obj\
 ..\..\..\source\KERNEL\chain.obj\
-..\..\..\source\KERNEL\expression.obj\
-..\..\..\source\KERNEL\expressionParser.obj\
-..\..\..\source\KERNEL\expressionPredicate.obj\
-..\..\..\source\KERNEL\expressionTree.obj\
+..\..\..\source\KERNEL\expression.obj ..\..\..\source\KERNEL\expressionParser.obj\
+..\..\..\source\KERNEL\expressionPredicate.obj ..\..\..\source\KERNEL\expressionTree.obj\
+..\..\..\source\KERNEL\extractors.obj\
 ..\..\..\source\KERNEL\fragment.obj\
 ..\..\..\source\KERNEL\global.obj\
 ..\..\..\source\KERNEL\molecule.obj\
@@ -109,12 +115,14 @@ libBALL.obj\
 ..\..\..\source\MATHS\piecewisePolynomial.obj\
 ..\..\..\source\MATHS\plane3.obj\
 ..\..\..\source\MATHS\quaternion.obj\
+..\..\..\source\MATHS\randomNumberGenerator.obj\
 ..\..\..\source\MATHS\simpleBox3.obj\
 ..\..\..\source\MATHS\sphere3.obj\
 ..\..\..\source\MATHS\surface.obj\
 ..\..\..\source\MATHS\vector2.obj\
 ..\..\..\source\MATHS\vector3.obj\
 ..\..\..\source\MATHS\vector4.obj\
+..\..\..\source\MATHS\FFT1D.obj ..\..\..\source\MATHS\FFT2D.obj ..\..\..\source\MATHS\FFT3D.obj\
 ..\..\..\source\MOLMEC\AMBER\amber.obj\
 ..\..\..\source\MOLMEC\AMBER\amberBend.obj\
 ..\..\..\source\MOLMEC\AMBER\amberNonBonded.obj\
@@ -148,6 +156,9 @@ libBALL.obj\
 ..\..\..\source\MOLMEC\MINIMIZATION\energyMinimizer.obj\
 ..\..\..\source\MOLMEC\MINIMIZATION\lineSearch.obj\
 ..\..\..\source\MOLMEC\MINIMIZATION\steepestDescent.obj\
+..\..\..\source\MOLMEC\MINIMIZATION\shiftedLVMM.obj\
+..\..\..\source\MOLMEC\MINIMIZATION\strangLBFGS.obj\
+..\..\..\source\MOLMEC\MMFF94\MMFF94.obj ..\..\..\source\MOLMEC\MMFF94\MMFF94NonBonded.obj ..\..\..\source\MOLMEC\MMFF94\MMFF94OutOfPlaneBend.obj ..\..\..\source\MOLMEC\MMFF94\MMFF94Parameters.obj ..\..\..\source\MOLMEC\MMFF94\MMFF94Processors.obj ..\..\..\source\MOLMEC\MMFF94\MMFF94StretchBend.obj ..\..\..\source\MOLMEC\MMFF94\MMFF94Torsion.obj\
 ..\..\..\source\MOLMEC\PARAMETER\atomTypes.obj\
 ..\..\..\source\MOLMEC\PARAMETER\charmmEEF1.obj\
 ..\..\..\source\MOLMEC\PARAMETER\cosineTorsion.obj\
@@ -201,6 +212,9 @@ libBALL.obj\
 ..\..\..\source\SOLVATION\solventDescriptor.obj\
 ..\..\..\source\SOLVATION\solventParameter.obj\
 ..\..\..\source\SOLVATION\uhligCavFreeEnergyProcessor.obj\
+..\..\..\source\STRUCTURE\addHydrogenProcessor.obj\
+..\..\..\source\STRUCTURE\atomBijection.obj\
+..\..\..\source\STRUCTURE\atomTyper.obj\
 ..\..\..\source\STRUCTURE\analyticalSES.obj\
 ..\..\..\source\STRUCTURE\buildBondsProcessor.obj\
 ..\..\..\source\STRUCTURE\connolly.obj\
@@ -213,6 +227,7 @@ libBALL.obj\
 ..\..\..\source\STRUCTURE\graphVertex.obj\
 ..\..\..\source\STRUCTURE\HBondProcessor.obj\
 ..\..\..\source\STRUCTURE\molecularGraph.obj\
+..\..\..\source\STRUCTURE\kekulizer.obj\
 ..\..\..\source\STRUCTURE\numericalSAS.obj\
 ..\..\..\source\STRUCTURE\peptideBuilder.obj\
 ..\..\..\source\STRUCTURE\peptides.obj\
@@ -223,34 +238,16 @@ libBALL.obj\
 ..\..\..\source\STRUCTURE\reconstructFragmentProcessor.obj\
 ..\..\..\source\STRUCTURE\reducedSurface.obj\
 ..\..\..\source\STRUCTURE\residueChecker.obj\
+..\..\..\source\STRUCTURE\residueRotamerSet.obj\
 ..\..\..\source\STRUCTURE\rotamerLibrary.obj\
-..\..\..\source\STRUCTURE\RSEdge.obj\
-..\..\..\source\STRUCTURE\RSFace.obj\
-..\..\..\source\STRUCTURE\RSVertex.obj\
-..\..\..\source\STRUCTURE\SASEdge.obj\
-..\..\..\source\STRUCTURE\SASFace.obj\
-..\..\..\source\STRUCTURE\SASVertex.obj\
 ..\..\..\source\STRUCTURE\secondaryStructureProcessor.obj\
-..\..\..\source\STRUCTURE\SESEdge.obj\
-..\..\..\source\STRUCTURE\SESFace.obj\
-..\..\..\source\STRUCTURE\SESVertex.obj\
+..\..\..\source\STRUCTURE\RSEdge.obj ..\..\..\source\STRUCTURE\RSFace.obj ..\..\..\source\STRUCTURE\RSVertex.obj ..\..\..\source\STRUCTURE\SASEdge.obj ..\..\..\source\STRUCTURE\SASFace.obj ..\..\..\source\STRUCTURE\SASVertex.obj ..\..\..\source\STRUCTURE\SESEdge.obj ..\..\..\source\STRUCTURE\SESFace.obj ..\..\..\source\STRUCTURE\SESVertex.obj\
 ..\..\..\source\STRUCTURE\smilesParser.obj\
 ..\..\..\source\STRUCTURE\solventAccessibleSurface.obj\
 ..\..\..\source\STRUCTURE\solventExcludedSurface.obj\
 ..\..\..\source\STRUCTURE\structureMapper.obj\
 ..\..\..\source\STRUCTURE\surfaceProcessor.obj\
-..\..\..\source\STRUCTURE\triangle.obj\
-..\..\..\source\STRUCTURE\triangleEdge.obj\
-..\..\..\source\STRUCTURE\trianglePoint.obj\
-..\..\..\source\STRUCTURE\triangulatedSAS.obj\
-..\..\..\source\STRUCTURE\triangulatedSES.obj\
-..\..\..\source\STRUCTURE\triangulatedSurface.obj\
-..\..\..\source\STRUCTURE\UCK.obj\
-..\..\..\source\SYSTEM\directory.obj\
-..\..\..\source\SYSTEM\file.obj\
-..\..\..\source\SYSTEM\fileSystem.obj\
-..\..\..\source\SYSTEM\path.obj\
-..\..\..\source\SYSTEM\socket.obj\
-..\..\..\source\SYSTEM\sysinfo.obj\
-..\..\..\source\SYSTEM\TCPTransfer.obj\
-..\..\..\source\SYSTEM\timer.obj
+..\..\..\source\STRUCTURE\chainBuilder.obj ..\..\..\source\STRUCTURE\ringAnalyser.obj ..\..\..\source\STRUCTURE\ringClusterer.obj ..\..\..\source\STRUCTURE\rsConstructor.obj ..\..\..\source\STRUCTURE\sdGenerator.obj ..\..\..\source\STRUCTURE\moleculeAssembler.obj\
+..\..\..\source\STRUCTURE\triangle.obj ..\..\..\source\STRUCTURE\triangleEdge.obj ..\..\..\source\STRUCTURE\trianglePoint.obj ..\..\..\source\STRUCTURE\triangulatedSAS.obj ..\..\..\source\STRUCTURE\triangulatedSES.obj ..\..\..\source\STRUCTURE\triangulatedSurface.obj\
+..\..\..\source\STRUCTURE\UCK.obj ..\..\..\source\STRUCTURE\DOCKING\amberEvaluation.obj ..\..\..\source\STRUCTURE\DOCKING\dockResult.obj ..\..\..\source\STRUCTURE\DOCKING\energeticEvaluation.obj ..\..\..\source\STRUCTURE\DOCKING\geometricFit.obj ..\..\..\source\STRUCTURE\DOCKING\conformationSet.obj ..\..\..\source\STRUCTURE\DOCKING\dockingAlgorithm.obj ..\..\..\source\STRUCTURE\DOCKING\forceFieldEvaluation.obj ..\..\..\source\STRUCTURE\DOCKING\randomEvaluation.obj ..\..\..\source\SYSTEM\directory.obj ..\..\..\source\SYSTEM\file.obj ..\..\..\source\SYSTEM\fileSystem.obj ..\..\..\source\SYSTEM\path.obj ..\..\..\source\SYSTEM\socket.obj ..\..\..\source\SYSTEM\sysinfo.obj ..\..\..\source\SYSTEM\TCPTransfer.obj ..\..\..\source\SYSTEM\timer.obj  ..\..\..\source\SYSTEM\systemCalls.obj
+#stupid WINDOWS: no more than 255 lines!

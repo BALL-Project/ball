@@ -1,1141 +1,1006 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>AmberConfigurationDialogData</class>
-<widget class="QDialog">
-    <property name="name">
-        <cstring>AmberConfigurationDialogData</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>597</width>
-            <height>503</height>
-        </rect>
-    </property>
-    <property name="sizePolicy">
-        <sizepolicy>
-            <hsizetype>5</hsizetype>
-            <vsizetype>5</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-    </property>
-    <property name="minimumSize">
-        <size>
-            <width>0</width>
-            <height>0</height>
-        </size>
-    </property>
-    <property name="maximumSize">
-        <size>
-            <width>6500</width>
-            <height>4900</height>
-        </size>
-    </property>
-    <property name="caption">
-        <string>AMBER Options</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>AmberConfigurationDialogData</class>
+ <widget class="QDialog" name="AmberConfigurationDialogData" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>541</width>
+    <height>602</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>5</hsizetype>
+    <vsizetype>5</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="maximumSize" >
+   <size>
+    <width>6500</width>
+    <height>4900</height>
+   </size>
+  </property>
+  <property name="windowTitle" >
+   <string>AMBER Options</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>5</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="4" column="0" colspan="2" >
+    <widget class="QGroupBox" name="AmberFF_Options" >
+     <property name="minimumSize" >
+      <size>
+       <width>520</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="title" >
+      <string>Amber Options</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignHCenter</set>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>5</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="4" column="0" >
+       <widget class="QLabel" name="scaling_vdw_1_4" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <widget class="QLayoutWidget" row="0" column="0">
-            <property name="name">
-                <cstring>layout18</cstring>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QGroupBox">
-                    <property name="name">
-                        <cstring>groupBox12</cstring>
-                    </property>
-                    <property name="title">
-                        <string>Parameter Set</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignHCenter</set>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel" row="0" column="0">
-                            <property name="name">
-                                <cstring>Label_10</cstring>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>0</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="backgroundMode">
-                                <enum>PaletteBackground</enum>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="focusPolicy">
-                                <enum>NoFocus</enum>
-                            </property>
-                            <property name="lineWidth">
-                                <number>1</number>
-                            </property>
-                            <property name="text">
-                                <string>Filename</string>
-                            </property>
-                            <property name="textFormat">
-                                <enum>AutoText</enum>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignVCenter|AlignRight</set>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton" row="0" column="2">
-                            <property name="name">
-                                <cstring>browse_button</cstring>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>50</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="backgroundMode">
-                                <enum>PaletteButton</enum>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="focusPolicy">
-                                <enum>TabFocus</enum>
-                            </property>
-                            <property name="text">
-                                <string>Browse</string>
-                            </property>
-                            <property name="autoDefault">
-                                <bool>true</bool>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Browse your computer for amber file</string>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit" row="0" column="1">
-                            <property name="name">
-                                <cstring>parameter_file_edit</cstring>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>150</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="backgroundMode">
-                                <enum>PaletteBase</enum>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="focusPolicy">
-                                <enum>StrongFocus</enum>
-                            </property>
-                            <property name="text">
-                                <string>Amber/amber96.ini</string>
-                            </property>
-                            <property name="maxLength">
-                                <number>32767</number>
-                            </property>
-                            <property name="frame">
-                                <bool>true</bool>
-                            </property>
-                            <property name="echoMode">
-                                <enum>Normal</enum>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignLeft</set>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-                <widget class="QGroupBox">
-                    <property name="name">
-                        <cstring>groupBox11</cstring>
-                    </property>
-                    <property name="title">
-                        <string>Setup Error Handling</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignHCenter</set>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLineEdit" row="0" column="1">
-                            <property name="name">
-                                <cstring>max_unassigned_atoms</cstring>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>100</width>
-                                    <height>28</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>100</width>
-                                    <height>28</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>10</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignRight</set>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="0" column="0">
-                            <property name="name">
-                                <cstring>textLabel1</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>0</width>
-                                    <height>28</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>Maximum number of unassigned atoms before aborting setup</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignVCenter|AlignLeft</set>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout15</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QButtonGroup">
-                            <property name="name">
-                                <cstring>dielectric_group</cstring>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>180</width>
-                                    <height>0</height>
-                                </size>
-                            </property>
-                            <property name="title">
-                                <string>Dielectric Constant</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignHCenter</set>
-                            </property>
-                            <grid>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QRadioButton" row="1" column="0">
-                                    <property name="name">
-                                        <cstring>distance_button</cstring>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>165</width>
-                                            <height>0</height>
-                                        </size>
-                                    </property>
-                                    <property name="font">
-                                        <font>
-                                        </font>
-                                    </property>
-                                    <property name="text">
-                                        <string>distance dependent</string>
-                                    </property>
-                                </widget>
-                                <widget class="QRadioButton" row="0" column="0">
-                                    <property name="name">
-                                        <cstring>constant_button</cstring>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>165</width>
-                                            <height>0</height>
-                                        </size>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>165</width>
-                                            <height>32767</height>
-                                        </size>
-                                    </property>
-                                    <property name="font">
-                                        <font>
-                                        </font>
-                                    </property>
-                                    <property name="text">
-                                        <string>constant</string>
-                                    </property>
-                                    <property name="checked">
-                                        <bool>true</bool>
-                                    </property>
-                                </widget>
-                            </grid>
-                        </widget>
-                        <widget class="QGroupBox">
-                            <property name="name">
-                                <cstring>check_options</cstring>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>330</width>
-                                    <height>0</height>
-                                </size>
-                            </property>
-                            <property name="title">
-                                <string>Charge and Type Assignment</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignHCenter</set>
-                            </property>
-                            <grid>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
-                                    <property name="name">
-                                        <cstring>assign_types_checkBox</cstring>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>140</width>
-                                            <height>0</height>
-                                        </size>
-                                    </property>
-                                    <property name="font">
-                                        <font>
-                                        </font>
-                                    </property>
-                                    <property name="text">
-                                        <string>Assign (numeric) types</string>
-                                    </property>
-                                    <property name="checked">
-                                        <bool>true</bool>
-                                    </property>
-                                </widget>
-                                <spacer row="2" column="2">
-                                    <property name="name">
-                                        <cstring>spacer10</cstring>
-                                    </property>
-                                    <property name="orientation">
-                                        <enum>Horizontal</enum>
-                                    </property>
-                                    <property name="sizeType">
-                                        <enum>Expanding</enum>
-                                    </property>
-                                    <property name="sizeHint">
-                                        <size>
-                                            <width>171</width>
-                                            <height>21</height>
-                                        </size>
-                                    </property>
-                                </spacer>
-                                <widget class="QCheckBox" row="0" column="0">
-                                    <property name="name">
-                                        <cstring>assign_charges_checkBox</cstring>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>140</width>
-                                            <height>0</height>
-                                        </size>
-                                    </property>
-                                    <property name="font">
-                                        <font>
-                                        </font>
-                                    </property>
-                                    <property name="text">
-                                        <string>Assign charges</string>
-                                    </property>
-                                    <property name="checked">
-                                        <bool>true</bool>
-                                    </property>
-                                </widget>
-                                <widget class="QCheckBox" row="1" column="0">
-                                    <property name="name">
-                                        <cstring>assign_typenames_checkBox</cstring>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>165</width>
-                                            <height>0</height>
-                                        </size>
-                                    </property>
-                                    <property name="font">
-                                        <font>
-                                        </font>
-                                    </property>
-                                    <property name="text">
-                                        <string>Assign type names</string>
-                                    </property>
-                                    <property name="checked">
-                                        <bool>true</bool>
-                                    </property>
-                                </widget>
-                                <widget class="QCheckBox" row="0" column="1" rowspan="1" colspan="2">
-                                    <property name="name">
-                                        <cstring>overwrite_charges_checkBox</cstring>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>155</width>
-                                            <height>0</height>
-                                        </size>
-                                    </property>
-                                    <property name="font">
-                                        <font>
-                                        </font>
-                                    </property>
-                                    <property name="text">
-                                        <string>Overwrite charges</string>
-                                    </property>
-                                    <property name="checked">
-                                        <bool>true</bool>
-                                    </property>
-                                </widget>
-                                <widget class="QCheckBox" row="1" column="1" rowspan="1" colspan="2">
-                                    <property name="name">
-                                        <cstring>overwrite_typenames_checkBox</cstring>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>155</width>
-                                            <height>0</height>
-                                        </size>
-                                    </property>
-                                    <property name="font">
-                                        <font>
-                                        </font>
-                                    </property>
-                                    <property name="text">
-                                        <string>Overwrite type names</string>
-                                    </property>
-                                    <property name="checked">
-                                        <bool>true</bool>
-                                    </property>
-                                </widget>
-                            </grid>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QGroupBox">
-                    <property name="name">
-                        <cstring>AmberFF_Options</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>520</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="title">
-                        <string>Amber Options</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignHCenter</set>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel" row="1" column="0">
-                            <property name="name">
-                                <cstring>vdw_cutoff_label</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>260</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>van der Waals cutoff/cuton distance</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>vdw_cutoff_line_edit</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="2" column="0">
-                            <property name="name">
-                                <cstring>electrostatic_cutoff_label</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>260</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>Electrostatic cutoff/cuton distance</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="3" column="0">
-                            <property name="name">
-                                <cstring>scaling_electrostatic_1_4_label</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>260</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>Electrostatic 1-4 scaling factor</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="4" column="0">
-                            <property name="name">
-                                <cstring>scaling_vdw_1_4</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>260</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>van der Waals 1-4 scaling factor</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="0" column="0">
-                            <property name="name">
-                                <cstring>nonbonded_cutoff_label</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>260</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>Nonbonded cutoff distance</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>nonbonded_cutoff_line_edit</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit" row="1" column="1">
-                            <property name="name">
-                                <cstring>vdw_cutoff_line_edit</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>0</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>150</width>
-                                    <height>32767</height>
-                                </size>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>15.0</string>
-                            </property>
-                            <property name="frame">
-                                <bool>true</bool>
-                            </property>
-                            <property name="echoMode">
-                                <enum>Normal</enum>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignRight</set>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit" row="1" column="3">
-                            <property name="name">
-                                <cstring>vdw_cuton_line_edit</cstring>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>32767</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>13.0</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignRight</set>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit" row="2" column="1">
-                            <property name="name">
-                                <cstring>electrostatic_cutoff_line_edit</cstring>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>15.0</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignRight</set>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit" row="2" column="3">
-                            <property name="name">
-                                <cstring>electrostatic_cuton_line_edit</cstring>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>32767</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>13.0</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignRight</set>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="2" column="4">
-                            <property name="name">
-                                <cstring>nonbonded_cutoff_label_2_2_2</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>15</width>
-                                    <height>0</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>30</width>
-                                    <height>32767</height>
-                                </size>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>Å</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>nonbonded_cutoff_line_edit</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit" row="3" column="1">
-                            <property name="name">
-                                <cstring>scaling_electrostatic_1_4_line_edit</cstring>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>2.0</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignRight</set>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit" row="4" column="1">
-                            <property name="name">
-                                <cstring>scaling_vdw_1_4_line_edit</cstring>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>2.0</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignRight</set>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit" row="0" column="1">
-                            <property name="name">
-                                <cstring>nonbonded_cutoff_line_edit</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>0</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>150</width>
-                                    <height>32767</height>
-                                </size>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>20.0</string>
-                            </property>
-                            <property name="maxLength">
-                                <number>32767</number>
-                            </property>
-                            <property name="frame">
-                                <bool>true</bool>
-                            </property>
-                            <property name="echoMode">
-                                <enum>Normal</enum>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignRight</set>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="0" column="2">
-                            <property name="name">
-                                <cstring>nonbonded_cutoff_label_2</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>25</width>
-                                    <height>0</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>30</width>
-                                    <height>32767</height>
-                                </size>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>Å</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>nonbonded_cutoff_line_edit</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="1" column="4">
-                            <property name="name">
-                                <cstring>nonbonded_cutoff_label_2_2</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>15</width>
-                                    <height>0</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>30</width>
-                                    <height>32767</height>
-                                </size>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>Å</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>nonbonded_cutoff_line_edit</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="1" column="2">
-                            <property name="name">
-                                <cstring>nonbonded_cutoff_label_2_2_3</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>25</width>
-                                    <height>0</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>30</width>
-                                    <height>32767</height>
-                                </size>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>Å /</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>nonbonded_cutoff_line_edit</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="2" column="2">
-                            <property name="name">
-                                <cstring>nonbonded_cutoff_label_2_2_3_2</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>25</width>
-                                    <height>0</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>30</width>
-                                    <height>32767</height>
-                                </size>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>Å /</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>nonbonded_cutoff_line_edit</cstring>
-                            </property>
-                        </widget>
-                        <spacer row="3" column="2" rowspan="1" colspan="3">
-                            <property name="name">
-                                <cstring>spacer8</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>110</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                        </spacer>
-                        <spacer row="4" column="2" rowspan="1" colspan="3">
-                            <property name="name">
-                                <cstring>spacer9</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>121</width>
-                                    <height>25</height>
-                                </size>
-                            </property>
-                        </spacer>
-                        <spacer row="0" column="3" rowspan="1" colspan="2">
-                            <property name="name">
-                                <cstring>spacer7</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>150</width>
-                                    <height>21</height>
-                                </size>
-                            </property>
-                        </spacer>
-                    </grid>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout14</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>close_button</cstring>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>0</width>
-                                    <height>30</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>O&amp;K</string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                            <property name="default">
-                                <bool>true</bool>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Close and save options</string>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>cancel_button</cstring>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>0</width>
-                                    <height>30</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>C&amp;ancel</string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Close window and discard changes</string>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>reset_button</cstring>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>0</width>
-                                    <height>30</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>Defaults</string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Reset all settings to default values</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-            </vbox>
-        </widget>
-    </grid>
-</widget>
-<connections>
-    <connection>
-        <sender>close_button</sender>
-        <signal>clicked()</signal>
-        <receiver>AmberConfigurationDialogData</receiver>
-        <slot>accept()</slot>
-    </connection>
-    <connection>
-        <sender>cancel_button</sender>
-        <signal>clicked()</signal>
-        <receiver>AmberConfigurationDialogData</receiver>
-        <slot>reject()</slot>
-    </connection>
-    <connection>
-        <sender>reset_button</sender>
-        <signal>clicked()</signal>
-        <receiver>AmberConfigurationDialogData</receiver>
-        <slot>resetOptions()</slot>
-    </connection>
-    <connection>
-        <sender>browse_button</sender>
-        <signal>clicked()</signal>
-        <receiver>AmberConfigurationDialogData</receiver>
-        <slot>browseParameterFiles()</slot>
-    </connection>
-</connections>
-<tabstops>
-    <tabstop>parameter_file_edit</tabstop>
-    <tabstop>browse_button</tabstop>
-    <tabstop>max_unassigned_atoms</tabstop>
-    <tabstop>constant_button</tabstop>
-    <tabstop>assign_charges_checkBox</tabstop>
-    <tabstop>overwrite_charges_checkBox</tabstop>
-    <tabstop>assign_typenames_checkBox</tabstop>
-    <tabstop>overwrite_typenames_checkBox</tabstop>
-    <tabstop>assign_types_checkBox</tabstop>
-    <tabstop>nonbonded_cutoff_line_edit</tabstop>
-    <tabstop>vdw_cutoff_line_edit</tabstop>
-    <tabstop>vdw_cuton_line_edit</tabstop>
-    <tabstop>electrostatic_cutoff_line_edit</tabstop>
-    <tabstop>electrostatic_cuton_line_edit</tabstop>
-    <tabstop>scaling_electrostatic_1_4_line_edit</tabstop>
-    <tabstop>scaling_vdw_1_4_line_edit</tabstop>
-    <tabstop>close_button</tabstop>
-    <tabstop>cancel_button</tabstop>
-    <tabstop>reset_button</tabstop>
-</tabstops>
-<includes>
-    <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
-</includes>
-<slots>
-    <slot>browseParameterFiles()</slot>
-    <slot>resetOptions()</slot>
-    <slot>chooseSolventFile()</slot>
-    <slot>periodicBoundaryClicked()</slot>
-</slots>
-<exportmacro>BALL_VIEW_EXPORT</exportmacro>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+        <property name="minimumSize" >
+         <size>
+          <width>260</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>van der Waals 1-4 scaling factor</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" >
+       <widget class="QLabel" name="scaling_electrostatic_1_4_label" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>260</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Electrostatic 1-4 scaling factor</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="electrostatic_cutoff_label" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>260</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Electrostatic cutoff/cuton distance</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="vdw_cutoff_label" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>260</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>van der Waals cutoff/cuton distance</string>
+        </property>
+        <property name="buddy" >
+         <cstring>vdw_cutoff_line_edit</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="nonbonded_cutoff_label" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>260</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Nonbonded cutoff distance</string>
+        </property>
+        <property name="buddy" >
+         <cstring>nonbonded_cutoff_line_edit</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="4" >
+       <widget class="QLabel" name="nonbonded_cutoff_label_2_2_2" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>5</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>15</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>30</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Å</string>
+        </property>
+        <property name="buddy" >
+         <cstring>nonbonded_cutoff_line_edit</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4" >
+       <widget class="QLabel" name="nonbonded_cutoff_label_2_2" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>5</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>15</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>30</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Å</string>
+        </property>
+        <property name="buddy" >
+         <cstring>nonbonded_cutoff_line_edit</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3" >
+       <widget class="QLineEdit" name="electrostatic_cuton_line_edit" >
+        <property name="maximumSize" >
+         <size>
+          <width>32767</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>13.0</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3" >
+       <widget class="QLineEdit" name="vdw_cuton_line_edit" >
+        <property name="maximumSize" >
+         <size>
+          <width>32767</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>13.0</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2" >
+       <widget class="QLabel" name="nonbonded_cutoff_label_2_2_3_2" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>5</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>25</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>30</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Å /</string>
+        </property>
+        <property name="buddy" >
+         <cstring>nonbonded_cutoff_line_edit</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" >
+       <widget class="QLabel" name="nonbonded_cutoff_label_2_2_3" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>5</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>25</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>30</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Å /</string>
+        </property>
+        <property name="buddy" >
+         <cstring>nonbonded_cutoff_line_edit</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" >
+       <widget class="QLabel" name="nonbonded_cutoff_label_2" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>5</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>25</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>30</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Å</string>
+        </property>
+        <property name="buddy" >
+         <cstring>nonbonded_cutoff_line_edit</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1" >
+       <widget class="QLineEdit" name="scaling_vdw_1_4_line_edit" >
+        <property name="text" >
+         <string>2.0</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1" >
+       <widget class="QLineEdit" name="scaling_electrostatic_1_4_line_edit" >
+        <property name="text" >
+         <string>2.0</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QLineEdit" name="electrostatic_cutoff_line_edit" >
+        <property name="text" >
+         <string>15.0</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QLineEdit" name="vdw_cutoff_line_edit" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>150</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>15.0</string>
+        </property>
+        <property name="frame" >
+         <bool>true</bool>
+        </property>
+        <property name="echoMode" >
+         <enum>QLineEdit::Normal</enum>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QLineEdit" name="nonbonded_cutoff_line_edit" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>150</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>20.0</string>
+        </property>
+        <property name="maxLength" >
+         <number>32767</number>
+        </property>
+        <property name="frame" >
+         <bool>true</bool>
+        </property>
+        <property name="echoMode" >
+         <enum>QLineEdit::Normal</enum>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2" >
+    <widget class="QGroupBox" name="dielectric_group" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>1</hsizetype>
+       <vsizetype>1</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize" >
+      <size>
+       <width>180</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="title" >
+      <string>Dielectric Constant</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignHCenter</set>
+     </property>
+     <layout class="QHBoxLayout" >
+      <property name="margin" >
+       <number>4</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QRadioButton" name="constant_button" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>1</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>32000</width>
+          <height>32767</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>constant</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="distance_button" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>3</hsizetype>
+          <vsizetype>1</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>distance dependent</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QGroupBox" name="check_options" >
+     <property name="minimumSize" >
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="title" >
+      <string>Charge and Type Assignment</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignHCenter</set>
+     </property>
+     <layout class="QVBoxLayout" >
+      <property name="margin" >
+       <number>5</number>
+      </property>
+      <property name="spacing" >
+       <number>4</number>
+      </property>
+      <item>
+       <widget class="QCheckBox" name="assign_charges_checkBox" >
+        <property name="minimumSize" >
+         <size>
+          <width>140</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Assign charges</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="assign_typenames_checkBox" >
+        <property name="minimumSize" >
+         <size>
+          <width>165</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Assign type names</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="assign_types_checkBox" >
+        <property name="minimumSize" >
+         <size>
+          <width>140</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Assign (numeric) types</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="overwrite_charges_checkBox" >
+        <property name="minimumSize" >
+         <size>
+          <width>155</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Overwrite charges</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="overwrite_typenames_checkBox" >
+        <property name="minimumSize" >
+         <size>
+          <width>155</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Overwrite type names</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2" >
+    <widget class="QGroupBox" name="groupBox11" >
+     <property name="title" >
+      <string>Setup Error Handling</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignHCenter</set>
+     </property>
+     <layout class="QHBoxLayout" >
+      <property name="margin" >
+       <number>4</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="textLabel1" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>1</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>28</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Maximum number of unassigned atoms before aborting setup</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="max_unassigned_atoms" >
+        <property name="minimumSize" >
+         <size>
+          <width>100</width>
+          <height>28</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>100</width>
+          <height>28</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>10</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2" >
+    <widget class="QGroupBox" name="groupBox12" >
+     <property name="title" >
+      <string>Parameter Set</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignHCenter</set>
+     </property>
+     <layout class="QHBoxLayout" >
+      <property name="margin" >
+       <number>5</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="Label_10" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>5</hsizetype>
+          <vsizetype>1</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="focusPolicy" >
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="lineWidth" >
+         <number>1</number>
+        </property>
+        <property name="text" >
+         <string>Filename</string>
+        </property>
+        <property name="textFormat" >
+         <enum>Qt::AutoText</enum>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="parameter_file_edit" >
+        <property name="minimumSize" >
+         <size>
+          <width>150</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="focusPolicy" >
+         <enum>Qt::StrongFocus</enum>
+        </property>
+        <property name="text" >
+         <string>Amber/amber96.ini</string>
+        </property>
+        <property name="maxLength" >
+         <number>32767</number>
+        </property>
+        <property name="frame" >
+         <bool>true</bool>
+        </property>
+        <property name="echoMode" >
+         <enum>QLineEdit::Normal</enum>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignLeading</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="browse_button" >
+        <property name="minimumSize" >
+         <size>
+          <width>50</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="focusPolicy" >
+         <enum>Qt::TabFocus</enum>
+        </property>
+        <property name="toolTip" >
+         <string>Browse your computer for amber file</string>
+        </property>
+        <property name="text" >
+         <string>Browse</string>
+        </property>
+        <property name="autoDefault" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="close_button" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>3</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>Close and save options</string>
+       </property>
+       <property name="text" >
+        <string>O&amp;K</string>
+       </property>
+       <property name="shortcut" >
+        <string/>
+       </property>
+       <property name="default" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancel_button" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>3</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>Close window and discard changes</string>
+       </property>
+       <property name="text" >
+        <string>C&amp;ancel</string>
+       </property>
+       <property name="shortcut" >
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="reset_button" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>3</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>Reset all settings to default values</string>
+       </property>
+       <property name="text" >
+        <string>Defaults</string>
+       </property>
+       <property name="shortcut" >
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="1" >
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Components</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignHCenter</set>
+     </property>
+     <layout class="QVBoxLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QCheckBox" name="stretches_box" >
+        <property name="text" >
+         <string>Stretches</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="bends_box" >
+        <property name="text" >
+         <string>Bends</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="torsions_box" >
+        <property name="text" >
+         <string>Torsions</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="NB_box" >
+        <property name="text" >
+         <string>NonBonded</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>parameter_file_edit</tabstop>
+  <tabstop>browse_button</tabstop>
+  <tabstop>max_unassigned_atoms</tabstop>
+  <tabstop>assign_charges_checkBox</tabstop>
+  <tabstop>assign_typenames_checkBox</tabstop>
+  <tabstop>assign_types_checkBox</tabstop>
+  <tabstop>overwrite_charges_checkBox</tabstop>
+  <tabstop>overwrite_typenames_checkBox</tabstop>
+  <tabstop>stretches_box</tabstop>
+  <tabstop>bends_box</tabstop>
+  <tabstop>torsions_box</tabstop>
+  <tabstop>NB_box</tabstop>
+  <tabstop>constant_button</tabstop>
+  <tabstop>distance_button</tabstop>
+  <tabstop>nonbonded_cutoff_line_edit</tabstop>
+  <tabstop>vdw_cutoff_line_edit</tabstop>
+  <tabstop>electrostatic_cutoff_line_edit</tabstop>
+  <tabstop>scaling_electrostatic_1_4_line_edit</tabstop>
+  <tabstop>scaling_vdw_1_4_line_edit</tabstop>
+  <tabstop>vdw_cuton_line_edit</tabstop>
+  <tabstop>electrostatic_cuton_line_edit</tabstop>
+  <tabstop>close_button</tabstop>
+  <tabstop>cancel_button</tabstop>
+  <tabstop>reset_button</tabstop>
+ </tabstops>
+ <includes>
+  <include location="global" >BALL/COMMON/global.h</include>
+ </includes>
+ <resources/>
+ <connections/>
+</ui>

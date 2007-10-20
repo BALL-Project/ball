@@ -97,20 +97,6 @@ void Representation::setDrawingMode(DrawingMode mode)
 }
 
 BALL_INLINE 
-String Representation::getModelName() const
-	throw()
-{
-	return VIEW::getModelName(model_type_);
-}
-
-BALL_INLINE 
-String Representation::getColoringName() const
-	throw()
-{
-	return VIEW::getColoringName(coloring_method_);
-}
-
-BALL_INLINE 
 void Representation::setDrawingPrecision(DrawingPrecision precision)
 	throw() 
 {
@@ -135,7 +121,7 @@ void Representation::setSurfaceDrawingPrecision(float precision)
 }
 
 BALL_INLINE 
-const Representation::GeometricObjectList& Representation::getGeometricObjects() const
+const GeometricObjectList& Representation::getGeometricObjects() const
 	throw() 
 { 
 	if (model_processor_ == 0)
@@ -147,7 +133,7 @@ const Representation::GeometricObjectList& Representation::getGeometricObjects()
 }
 
 BALL_INLINE 
-Representation::GeometricObjectList& Representation::getGeometricObjects()
+GeometricObjectList& Representation::getGeometricObjects()
 	throw() 
 { 
 	if (model_processor_ == 0)
@@ -173,8 +159,8 @@ DrawingMode Representation::getDrawingMode() const
 }
 
 BALL_INLINE 
-void Representation::setNeedsUpdate() 
+void Representation::setNeedsUpdate(bool state) 
 	throw()
 {
-	needs_update_ = true;
+	needs_update_ = state;
 }

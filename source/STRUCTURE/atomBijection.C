@@ -1,7 +1,7 @@
-// -*- Mode: C++; tab-width: 2; -*-
+//   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBijection.C,v 1.2 2006/01/26 07:41:03 oliver Exp $
+// $Id: atomBijection.C,v 1.2.18.4 2007/03/27 21:16:49 amoll Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -140,7 +140,6 @@ namespace BALL
 				push_back(AtomPair(caa, cab));
 			}
 		}
-			
 		//
 		return size();
 	}

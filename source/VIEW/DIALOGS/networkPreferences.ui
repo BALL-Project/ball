@@ -1,214 +1,230 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>NetworkPreferencesData</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>NetworkPreferencesData</cstring>
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>NetworkPreferencesData</class>
+ <widget class="QWidget" name="NetworkPreferencesData" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>651</width>
+    <height>406</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>5</hsizetype>
+    <vsizetype>5</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="maximumSize" >
+   <size>
+    <width>32000</width>
+    <height>32000</height>
+   </size>
+  </property>
+  <property name="windowTitle" >
+   <string>NetworkPreferences</string>
+  </property>
+  <widget class="QWidget" name="layoutWidget" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>11</y>
+     <width>501</width>
+     <height>240</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" >
+    <property name="margin" >
+     <number>0</number>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>651</width>
-            <height>406</height>
-        </rect>
+    <property name="spacing" >
+     <number>6</number>
     </property>
-    <property name="sizePolicy">
-        <sizepolicy>
-            <hsizetype>5</hsizetype>
-            <vsizetype>5</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-    </property>
-    <property name="minimumSize">
-        <size>
-            <width>0</width>
-            <height>0</height>
-        </size>
-    </property>
-    <property name="maximumSize">
-        <size>
-            <width>32000</width>
-            <height>32000</height>
-        </size>
-    </property>
-    <property name="caption">
-        <string>NetworkPreferences</string>
-    </property>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>groupBox31</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>11</x>
-                <y>11</y>
-                <width>521</width>
-                <height>384</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>HTTP Transfers</string>
-        </property>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>enable_proxy</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>11</x>
-                    <y>22</y>
-                    <width>250</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>250</width>
-                    <height>23</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>250</width>
-                    <height>23</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>Use proxy</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Writes the information from the Logs window into a file</string>
-            </property>
+    <item>
+     <widget class="QGroupBox" name="groupBox31" >
+      <property name="title" >
+       <string>HTTP Transfers</string>
+      </property>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item row="2" column="1" >
+        <widget class="QLineEdit" name="port_edit" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>7</hsizetype>
+           <vsizetype>1</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
         </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout77</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>16</x>
-                    <y>51</y>
-                    <width>497</width>
-                    <height>68</height>
-                </rect>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>textLabel1_2</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>50</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>50</width>
-                            <height>32767</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>host</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="0" column="1">
-                    <property name="name">
-                        <cstring>host_edit</cstring>
-                    </property>
-                    <property name="enabled">
-                        <bool>false</bool>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>25</width>
-                            <height>25</height>
-                        </size>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="1" column="1">
-                    <property name="name">
-                        <cstring>port_edit</cstring>
-                    </property>
-                    <property name="enabled">
-                        <bool>false</bool>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>0</width>
-                            <height>25</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>80</width>
-                            <height>32767</height>
-                        </size>
-                    </property>
-                    <property name="frameShape">
-                        <enum>LineEditPanel</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Sunken</enum>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>50</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>50</width>
-                            <height>32767</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>port</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignLeft</set>
-                    </property>
-                </widget>
-            </grid>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QLineEdit" name="host_edit" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>1</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize" >
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
         </widget>
-    </widget>
-</widget>
-<connections>
-    <connection>
-        <sender>enable_proxy</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>host_edit</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>enable_proxy</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>port_edit</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-</connections>
-<includes>
-    <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
-</includes>
-<exportmacro>BALL_VIEW_EXPORT</exportmacro>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="textLabel1_2" >
+         <property name="text" >
+          <string>host</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" >
+        <widget class="QLabel" name="textLabel1" >
+         <property name="minimumSize" >
+          <size>
+           <width>150</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text" >
+          <string>port</string>
+         </property>
+         <property name="alignment" >
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="2" >
+        <widget class="QCheckBox" name="enable_proxy" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>0</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip" >
+          <string>Writes the information from the Logs window into a file</string>
+         </property>
+         <property name="text" >
+          <string>Use proxy</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="groupBox31_2" >
+      <property name="title" >
+       <string>Downloads from www.PDB.org</string>
+      </property>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item row="1" column="1" >
+        <widget class="QLineEdit" name="pdb_suffix" >
+         <property name="minimumSize" >
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="text" >
+          <string>.pdb</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="textLabel1_4" >
+         <property name="minimumSize" >
+          <size>
+           <width>150</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text" >
+          <string>URL suffix</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="textLabel1_3" >
+         <property name="minimumSize" >
+          <size>
+           <width>150</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text" >
+          <string>URL prefix</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QLineEdit" name="pdb_prefix" >
+         <property name="minimumSize" >
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="text" >
+          <string>http://www.rcsb.org/pdb/files/</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>enable_proxy</tabstop>
+  <tabstop>host_edit</tabstop>
+  <tabstop>port_edit</tabstop>
+  <tabstop>pdb_prefix</tabstop>
+  <tabstop>pdb_suffix</tabstop>
+ </tabstops>
+ <includes>
+  <include location="global" >BALL/COMMON/global.h</include>
+ </includes>
+ <resources/>
+ <connections/>
+</ui>

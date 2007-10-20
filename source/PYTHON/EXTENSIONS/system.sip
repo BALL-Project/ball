@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: system.sip,v 1.9 2003/11/01 09:27:40 oliver Exp $
+// $Id: system.sip,v 1.9.28.2 2007/05/16 15:56:31 aleru Exp $
 //
 
 class System
@@ -30,11 +30,13 @@ class System
   Size countMolecules() const;
   Size countFragments() const;
   Size countAtoms() const;
-  void prepend(Molecule&);
-  void append(Molecule&);
-  void insert(Molecule&);
-  void insertBefore(Molecule&, Composite&);
-  void insertAfter(Molecule&, Composite&);
+	Size countSecondaryStructures() const;
+	Size countResidues() const;
+  void prepend(Molecule& /Transfer/);
+  void append(Molecule& /Transfer/);
+  void insert(Molecule& /Transfer/);
+  void insertBefore(Molecule& /Transfer/, Composite&);
+  void insertAfter(Molecule& /Transfer/, Composite&);
   bool remove(Molecule&);
   void spliceBefore(System&);
   void spliceAfter(System&);

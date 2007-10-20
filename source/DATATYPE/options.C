@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: options.C,v 1.27 2006/02/13 17:41:14 anhi Exp $ 
+// $Id: options.C,v 1.27.14.2 2007/05/17 00:02:42 amoll Exp $ 
 //
 
 #include <BALL/DATATYPE/options.h>
@@ -182,7 +182,7 @@ namespace BALL
 		}
 
 		ConstIterator it = find(key);
-		if ((it != end()) && (it->second == "true"))
+		if ((it != end()) && (it->second == "true" || it->second == "1"))
 		{
 			return true;
 		}

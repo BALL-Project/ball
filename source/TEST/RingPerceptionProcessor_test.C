@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RingPerceptionProcessor_test.C,v 1.2 2004/08/07 19:38:25 oliver Exp $
+// $Id: RingPerceptionProcessor_test.C,v 1.2.28.1 2007/03/25 21:48:54 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -10,6 +10,7 @@
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/FORMAT/SDFile.h>
+#include <BALL/FORMAT/PDBFile.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
@@ -17,7 +18,7 @@
 #include <BALL/KERNEL/molecule.h>
 
 ///////////////////////////
-START_TEST(RingPerceptionProcessor, "$Id: RingPerceptionProcessor_test.C,v 1.2 2004/08/07 19:38:25 oliver Exp $")
+START_TEST(RingPerceptionProcessor, "$Id: RingPerceptionProcessor_test.C,v 1.2.28.1 2007/03/25 21:48:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -70,6 +71,16 @@ CHECK(RingPerceptionProcessor)
 		TEST_EQUAL(num_ringed, results_bonds[i])
 	}
 		
+RESULT
+
+CHECK(DNA)
+	PDBFile pdb("data/1BNA.pdb");
+	System s2;
+	pdb >> s2;
+	RingPerceptionProcessor rpp;
+	vector<vector<Atom*> > rings;
+	s2.apply(rpp);
+	rpp.calculateSSSR(rings, s2);
 RESULT
 
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: view-common.sip,v 1.6 2005/12/23 17:03:00 amoll Exp $
+// $Id: view-common.sip,v 1.6.16.3 2007/04/20 14:16:44 amoll Exp $
 //
 
 %ModuleHeaderCode 
@@ -10,31 +10,19 @@
 	using namespace BALL::VIEW;
 %End
 
-//extern bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS;
-
-enum Command
-{
-	COMMAND__UNKOWN              = 0,
-	COMMAND__SEND_OBJECT         = 1,
-	NUMBER_OF_COMMANDS
-};
 
 enum EventsIDs
 {
-	SCENE_EXPORTPNG_EVENT = 60000,
-	SCENE_EXPORTPOV_EVENT,
-	SCENE_SETCAMERA_EVENT,
-	SIMULATION_THREAD_FINISHED_EVENT,
-	LOG_EVENT,
-	UPDATE_COMPOSITE_EVENT
-	FINISHED_REPRESENTATION_UPDATE_EVENT
+	MESSAGE_EVENT = 60000,
+	LOG_EVENT
 };
 
 enum DrawingMode
 {
 	DRAWING_MODE_DOTS = 0,
 	DRAWING_MODE_WIREFRAME,
-	DRAWING_MODE_SOLID
+	DRAWING_MODE_SOLID,
+	DRAWING_MODE_TOON
 };
 
 enum DrawingPrecision
@@ -59,7 +47,10 @@ enum ModelType
 	MODEL_HBONDS,
   MODEL_FORCES,
 	MODEL_LABEL,
-	MODEL_CONTOUR_SURFACE
+	MODEL_CONTOUR_SURFACE,
+	MODEL_GRID_SLICE,
+	MODEL_GRID_VOLUME,
+	MODEL_FIELD_LINES
 };
 
 enum ColoringMethod
@@ -80,24 +71,6 @@ enum ColoringMethod
 	COLORING_UNKNOWN
 };
 
-	enum GeometricObjectType
-	{
-		TYPE__UNKNOWN              = -1,
-		TYPE__LINE                 = 0,
-		TYPE__SPHERE               = 1,
-		TYPE__TUBE                 = 2,
-		TYPE__POINT                = 3,
-		TYPE__MESH                 = 4,
-		TYPE__BOX           			 = 5
-	};
-
-String getModelName(ModelType) throw();
-String getColoringName(ColoringMethod)  throw();
-bool isSurfaceModel(ModelType)	throw();
-bool modelMuteableByDisplayProperties(ModelType)	throw();
-bool modelMustBeRebuild(ModelType)	throw();
-String getTypeName(GeometricObjectType);
-GeometricObjectType getGeometricObjectType(const GeometricObject&);
 String vector3ToString(const Vector3& ) throw();
 bool stringToVector3(const String&, Vector3&) throw();
 String createFloatString(float, Size)	throw();
@@ -105,10 +78,11 @@ MainControl* getMainControl()	throw();
 String createTemporaryFilename() throw();
 Vector3 getNormal(const Vector3&)	throw();
 
-//void logString(const String& data);
+void logString(const String&);
 //QColor chooseColor(QLabel* label);
 //void processDropEvent(QDropEvent* e);
-//void focusCamera(const List<Vector3>& points);
+//Camera focusCamera(const Vector3List)
+Camera focusCamera(Composite*);
 String getDataPath();
 
 

@@ -1,24 +1,22 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: client.sip,v 1.5 2005/12/23 17:02:49 amoll Exp $
+// $Id: client.sip,v 1.5.20.1 2007/03/25 21:37:04 oliver Exp $
 //
 
 class Client
 {
 %TypeHeaderCode
-	#include <BALL/VIEW/KERNEL/client.h>
+	#include <BALL/CONCEPT/client.h>
 	using namespace BALL;
-	using namespace VIEW;
 %End
 	public:
 	class InvalidClient
 		: GeneralException
 	{
 %TypeHeaderCode
-	#include <BALL/VIEW/KERNEL/client.h>
+	#include <BALL/CONCEPT/client.h>
 	using namespace BALL;
-	using namespace VIEW;
 %End
 		public:
 		InvalidClient(const char* /file/, int /line/)
@@ -28,9 +26,8 @@ class Client
 		: GeneralException
 	{
 %TypeHeaderCode
-	#include <BALL/VIEW/KERNEL/client.h>
+	#include <BALL/CONCEPT/client.h>
 	using namespace BALL;
-	using namespace VIEW;
 %End
 		public:
 		NoPersistentObject(const char* /file/, int /line/)
@@ -38,6 +35,14 @@ class Client
 	};
 
 	public:
+
+	enum Command
+	{
+		COMMAND__UNKOWN              = 0,
+		COMMAND__SEND_OBJECT         = 1,
+		NUMBER_OF_COMMANDS
+	};
+
 	Client() throw();
 	Client(const String& /host/, int /port/ = VIEW_DEFAULT_PORT) throw();
   ~Client() throw();

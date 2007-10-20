@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.sip,v 1.15 2005/12/23 17:02:59 amoll Exp $
+// $Id: string.sip,v 1.15.20.1 2007/03/25 21:38:54 oliver Exp $
 //
 
 class Substring
@@ -36,8 +36,10 @@ class Substring
   Substring& bind(const String& /string/, int /from/ = 0, int /len/ = String::EndPos);
   Substring& bind(const Substring& /substring/, int /from/ = 0, int /len/ = String::EndPos);
   void unbind();
+
   String* getBoundString();
-  const String* getBoundString() const;
+  // const String* getBoundString() const;
+
   void set(const String& /string/);
   void set(const Substring& /s/);
   void set(const char* /char_ptr/, Size /size/ = String::EndPos);

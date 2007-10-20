@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.sip,v 1.2 2005/07/03 09:43:25 oliver Exp $
+// $Id: geometricControl.sip,v 1.2.18.1 2007/03/25 21:37:08 oliver Exp $
 //
 
 class GeometricControl
@@ -9,6 +9,7 @@ class GeometricControl
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/WIDGETS/geometricControl.h>
+	#include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
 %End
@@ -25,8 +26,8 @@ class GeometricControl
 	virtual void selectAtoms();
 //	virtual void selectedRepresentation(Representation& representation, bool state);
 	virtual void updateSelection();
-	virtual void focusRepresentation();
-	virtual void moveClippingPlane();
+	virtual void focus();
+	virtual void enterMoveMode();
 	virtual void flipClippingPlane();
 	virtual void setClippingPlaneX();
 	virtual void setClippingPlaneY();
@@ -34,5 +35,7 @@ class GeometricControl
 	void hideShowClippingPlane();
 	virtual void selectClipRepresentations();
 	void createNewClippingPlane();
-	void duplicateRepresentation();
+	void duplicate();
+	void renameRepresentation();
+	ModifyRepresentationDialog* getModifySurfaceDialog();
 };

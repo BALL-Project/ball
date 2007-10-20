@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ExpressionTree_test.C,v 1.2 2003/06/30 14:21:58 amoll Exp $
+// $Id: ExpressionTree_test.C,v 1.2.32.1 2007/03/25 21:47:05 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -15,7 +15,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: ExpressionTree_test.C,v 1.2 2003/06/30 14:21:58 amoll Exp $")
+START_TEST(Expression, "$Id: ExpressionTree_test.C,v 1.2.32.1 2007/03/25 21:47:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

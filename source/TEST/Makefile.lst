@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.35 2007/01/07 23:24:02 bertsch Exp $
+# $Id: Makefile.lst,v 1.35.4.9 2007/05/14 19:02:39 oliver Exp $
 #
 # Author:
 #  Oliver Kohlbacher
@@ -139,7 +139,6 @@ $(PREFIX)AtomIterator_test$(EXEEXT)\
 $(PREFIX)AtomBondIteratorTraits_test$(EXEEXT)\
 $(PREFIX)Extractors_test$(EXEEXT)
 
-
 EXECUTABLES_MOLMEC = \
 $(PREFIX)Gradient_test$(EXEEXT)\
 $(PREFIX)AtomVector_test$(EXEEXT)\
@@ -148,11 +147,14 @@ $(PREFIX)SnapShot_test$(EXEEXT)\
 $(PREFIX)SnapShotManager_test$(EXEEXT)\
 $(PREFIX)ForceField_test$(EXEEXT)\
 $(PREFIX)AmberFF_test$(EXEEXT)\
+$(PREFIX)MMFF94_test$(EXEEXT)\
 $(PREFIX)CharmmFF_test$(EXEEXT)\
 $(PREFIX)EnergyMinimizer_test$(EXEEXT)\
 $(PREFIX)LineSearch_test$(EXEEXT)\
 $(PREFIX)SteepestDescentMinimizer_test$(EXEEXT)\
 $(PREFIX)ConjugateGradientMinimizer_test$(EXEEXT)\
+$(PREFIX)StrangLBFGSMinimizer_test$(EXEEXT)\
+$(PREFIX)ShiftedLVMMMinimizer_test$(EXEEXT)\
 $(PREFIX)AtomTypes_test$(EXEEXT)
 
 EXECUTABLES_NMR = \
@@ -192,7 +194,8 @@ $(PREFIX)PDBRecords_test$(EXEEXT)\
 $(PREFIX)PDBInfo_test$(EXEEXT)\
 $(PREFIX)PDBFile_test$(EXEEXT)\
 $(PREFIX)TrajectoryFile_test$(EXEEXT)\
-$(PREFIX)XYZFile_test$(EXEEXT)
+$(PREFIX)XYZFile_test$(EXEEXT)\
+$(PREFIX)SCWRLRotamerFile_test$(EXEEXT)
 
 EXECUTABLES_ENERGY = \
 $(PREFIX)AtomicContactEnergy_test$(EXEEXT)\
@@ -232,6 +235,8 @@ $(PREFIX)ChainBuilder_test$(EXEEXT)\
 $(PREFIX)RSConstructor_test$(EXEEXT)\
 $(PREFIX)RingAnalyser_test$(EXEEXT)\
 $(PREFIX)RingClusterer_test$(EXEEXT)\
+$(PREFIX)ResidueRotamerSet_test$(EXEEXT)\
+$(PREFIX)RotamerLibrary_test$(EXEEXT)
 
 EXECUTABLES_SOLVATION = \
 $(PREFIX)PoissonBoltzmann_test$(EXEEXT)\
@@ -266,7 +271,16 @@ XDR_DEPENDENT_EXECUTABLES = \
 $(PREFIX)XDRPersistenceManager_test$(EXEEXT)
 
 VIEW_DEPENDENT_EXECUTABLES= \
-$(PREFIX)DBInterface_test$(EXEEXT)
+$(PREFIX)BallAndStickModel_test$(EXEEXT)\
+$(PREFIX)AddCartoonModel_test$(EXEEXT)\
+$(PREFIX)LabelModel_test$(EXEEXT)\
+$(PREFIX)LineModel_test$(EXEEXT)\
+$(PREFIX)SurfaceModel_test$(EXEEXT)\
+$(PREFIX)HBondModel_test$(EXEEXT)\
+$(PREFIX)ColorRGBA_test$(EXEEXT)
 
 GSL_DEPENDENT_EXECUTABLES= \
 $(PREFIX)RMSDMinimizer_test$(EXEEXT)
+
+SQL_DEPENDENT_EXECUTABLES= \
+$(PREFIX)DBInterface_test$(EXEEXT)

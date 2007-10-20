@@ -1,5 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
+//
+// $Id: conformationSet.h,v 1.3.18.2 2007/06/17 07:02:21 oliver Exp $
+//
+// Author:
+//
 
 #ifndef BALL_STRUCTURE_DOCKING_RANKEDCONFORMATION_H
 #define BALL_STRUCTURE_DOCKING_RANKEDCONFORMATION_H
@@ -25,10 +30,10 @@
 
 namespace BALL
 {
-		/** A class defining the interface for docking algorithms.
-				This is a first iteration.
+		/** Data structure for conformation results.
+				\ingroup Docking
 		*/
-		class ConformationSet
+		class BALL_EXPORT ConformationSet
 		{
 		  public:
 

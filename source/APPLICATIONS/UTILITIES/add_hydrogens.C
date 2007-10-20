@@ -1,21 +1,21 @@
 // -*- Mode: C++; tab-width: 2; -*-
+// -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: add_hydrogens.C,v 1.11 2006/08/19 13:35:21 oliver Exp $
+// $Id: add_hydrogens.C,v 1.11.8.4 2007/08/07 18:26:15 oliver Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
-// conjugate gradient minimizer.
-
-#include <BALL/common.h>
+// StrangLBFGS minimizer.
 
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>
 #include <BALL/FORMAT/PDBFile.h>
-#include <BALL/FORMAT/HINFile.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
+#include <BALL/MOLMEC/MINIMIZATION/strangLBFGS.h>
+#include <BALL/MOLMEC/MINIMIZATION/shiftedLVMM.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/DATATYPE/string.h>
@@ -28,38 +28,48 @@ int main(int argc, char** argv)
 {
 	if ((argc < 3) || (argc > 4))
 	{
-		cerr << "A small hydrogen adder." << endl;
-		cerr << "Need two filenames: infile.pdb outfile.pdb " << endl;
-		cerr << "A third argument can optionally define the amber parameter file"
-			<< endl;
+		Log << "Usage:" << argv[0] << " <PDB infile> <PDB outfile> [<amber parameter file>]" << endl;
 		return 1;
 	}
-
-	cout << "Loading " << argv[1] << "..." << endl;
+    
+	Log << "Loading " << argv[1] << "..." << endl;
 	PDBFile infile(argv[1]);
+	if (!infile)
+	{
+		// if file does not exist: complain and abort
+		Log.error() << "error opening " << argv[1] << " for input." << endl;
+		return 2;
+	}
+
 	System system;
 	infile >> system;
-	cout << "done." << endl;
+	Log << "done." << endl;
 
-	cout << "Initializing FragmentDB..." << endl;
+	Log << "Initializing FragmentDB..." << endl;
 	FragmentDB db("");
-	cout << "done." << endl;
-	cout << "Adding hydrogens..." << endl;
-	system.apply(db.add_hydrogens);
-	cout << "done." << endl;
-	cout << "Building Bonds..." << endl;
-	system.apply(db.build_bonds);
-	cout << "done." << endl;
-	cout << "Normalizing names..." << endl;
+	Log << "done." << endl;
+		
+	Log << "Normalizing names..." << endl;
 	system.apply(db.normalize_names);
-	cout << "done." << endl;
+	Log << "done." << endl;
+	
+	Log << "Adding hydrogens..." << endl;
+	system.apply(db.add_hydrogens);
+	Log << "  ...added " << db.add_hydrogens.getNumberOfInsertedAtoms() 
+			<< " atoms" << endl;
+	Log << "done." << endl;
 
-	cout << "Applying ResidueChecker..." << endl << endl;
+	Log << "Building Bonds..." << endl;
+	system.apply(db.build_bonds);
+	Log << "done." << endl;
+	
+
+	Log << "Applying ResidueChecker..." << endl << endl;
 	ResidueChecker check;
 	system.apply(check);
-	cout << "done." << endl;
+	Log << "done." << endl;
 
-	cout << "Initializing force field..." << endl;
+	Log << "Initializing force field..." << endl;
 	AmberFF amber_ff;
 	if (argc == 4)
 	{
@@ -69,23 +79,42 @@ int main(int argc, char** argv)
 		amber_ff.options.set(AmberFF::Option::FILENAME, tmp);
 	}
 	amber_ff.setup(system);
-	cout << "done." << endl;
-	cout << "Selecting H atoms..." << endl;
+	Log << "done." << endl;
+	Log << "Selecting H atoms..." << endl;
 	Selector h_select("element(H)");
 	system.apply(h_select);
-	cout << "done." << endl;
-	cout << "Starting minimizer: " << endl << endl;
-	//SteepestDescentMinimizer sdm(amber_ff);
-	//sdm.minimize(1000);
-
+	Log << "done." << endl;
+	Log << "Starting minimizer: " << endl << endl;
+	
+	// We choose the L-BFGS minimizer
+	
+	/*
+	SteepestDescentMinimizer sdm(amber_ff);
+	sdm.setEnergyOutputFrequency(1);
+	sdm.minimize(1000);
+	*/
+	
+	/*
 	ConjugateGradientMinimizer cgm(amber_ff);
 	cgm.setEnergyOutputFrequency(1);
 	cgm.minimize(1000);
-
-	cout << "Writing " << argv[2] << "..." << endl;
+	*/
+	
+	/*
+	ShiftedLVMMMinimizer sm(amber_ff);
+	sm.setEnergyOutputFrequency(1);
+	sm.minimize(1000);
+	*/
+	
+	StrangLBFGSMinimizer bfgsm(amber_ff);
+	bfgsm.setEnergyOutputFrequency(1);
+	bfgsm.minimize(1000);
+	
+	Log << "Writing " << argv[2] << "..." << endl;
 	PDBFile outfile(argv[2], std::ios::out);
 	outfile << system;
-	cout << "done." << endl;
+	Log << "done." << endl;
 
 	return 0;
 }
+

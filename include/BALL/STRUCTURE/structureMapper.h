@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.h,v 1.29 2006/08/15 10:40:40 oliver Exp $
+// $Id: structureMapper.h,v 1.29.8.1 2007/03/25 21:25:32 oliver Exp $
 //
 // Author:
 //   Oliver Kohlbacher
@@ -50,7 +50,7 @@ namespace BALL
 {
 
 	/**	Structure mapping class.
-	\ingroup StructureMiscellaneous
+	\ingroup StructureMapping
 	*/
 	class BALL_EXPORT StructureMapper
 		:	public TransformationProcessor
@@ -146,7 +146,6 @@ namespace BALL
 			 double							tolerance = 0.6);
 
 		protected:
-				
 		// Count the fragments in an AtomContainer -- this is not implemented
 		// in AtomContainer!
 		Size countFragments_(const AtomContainer& ac) const;

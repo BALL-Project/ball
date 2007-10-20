@@ -1,24 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleDescriptors.C,v 1.9 2005/12/23 17:03:03 amoll Exp $
+// $Id: simpleDescriptors.C,v 1.9.20.1 2007/03/16 00:06:49 bertsch Exp $
 //
 
 #include <BALL/QSAR/simpleDescriptors.h>
-
-#include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/expression.h>
-#include <BALL/STRUCTURE/numericalSAS.h>
-
-#include <BALL/KERNEL/atomIterator.h>
-#include <BALL/KERNEL/bondIterator.h>
-#include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/fragment.h>
-#include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/forEach.h>
-#include <BALL/CONCEPT/property.h>
-
-#include <iostream>
 
 using namespace std;
 
@@ -578,13 +566,13 @@ namespace BALL
 		return *this;
 	}
 
-	double VertexAdjacency::compute(Molecule& molecule)
+	double VertexAdjacency::compute(AtomContainer& ac)
 	{
-		if (!isValid(molecule))
+		if (!isValid_(ac))
 		{
-			calculate(molecule);
+			calculate_(ac);
 		}
-		double m = molecule.getProperty("NumberOfHeavyBonds").getDouble();
+		double m = ac.getProperty("NumberOfHeavyBonds").getDouble();
 		return m!=0 ? 1 + 3.3219280948873626 * log10(m) : 0.0;
 	}
 
@@ -612,14 +600,14 @@ namespace BALL
 		return *this;
 	}
 
-	double VertexAdjacencyEquality::compute(Molecule& molecule)
+	double VertexAdjacencyEquality::compute(AtomContainer& ac)
 	{
-		if (!isValid(molecule))
+		if (!isValid_(ac))
 		{
-			calculate(molecule);
+			calculate_(ac);
 		}	
-		double n = molecule.getProperty("NumberOfHeavyAtoms").getDouble();
-		double m = molecule.getProperty("NumberOfHeavyBonds").getDouble();
+		double n = ac.getProperty("NumberOfHeavyAtoms").getDouble();
+		double m = ac.getProperty("NumberOfHeavyBonds").getDouble();
 
 		if (n!=0.0 && m!=0) 
 		{
@@ -679,30 +667,30 @@ namespace BALL
 		return this->expression_;
 	}
 
-	double NumberOfHydrophobicAtoms::compute(Molecule& molecule)
+	double NumberOfHydrophobicAtoms::compute(AtomContainer& ac)
 	{
 		if (expression_ != "")
 		{
 			Size num_hyd = 0;
 			Expression ex_hyd(expression_);
-			AtomIterator a_it = molecule.beginAtom();
-			BALL_FOREACH_ATOM (molecule, a_it)
+			AtomIterator a_it = ac.beginAtom();
+			BALL_FOREACH_ATOM (ac, a_it)
 			{
 				if (ex_hyd(*a_it))
 				{
 					++num_hyd;
 				}
 			}
-			molecule.setProperty(this->getName(), (double)num_hyd);
+			ac.setProperty(this->getName(), (double)num_hyd);
 		}
 		else
 		{
-			if (!isValid(molecule))
+			if (!isValid_(ac))
 			{
-				calculate(molecule);
+				calculate_(ac);
 			}
 		}
-		return molecule.getProperty(this->getName()).getDouble();
+		return ac.getProperty(this->getName()).getDouble();
 	}
 
 	/////////////////////////////////////
@@ -748,30 +736,30 @@ namespace BALL
 		return this->expression_;
 	}
 
-	double NumberOfHydrogenBondDonors::compute(Molecule& molecule)
+	double NumberOfHydrogenBondDonors::compute(AtomContainer& ac)
 	{
 		if (expression_ != "")
 		{
 			Expression ex_don(expression_);
 			Size num_don = 0;
-			AtomIterator a_it = molecule.beginAtom();
-			BALL_FOREACH_ATOM (molecule, a_it)
+			AtomIterator a_it = ac.beginAtom();
+			BALL_FOREACH_ATOM (ac, a_it)
 			{
 				if (ex_don(*a_it))
 				{
 					++num_don;
 				}
 			}
-			molecule.setProperty(this->getName(), (double)num_don);
+			ac.setProperty(this->getName(), (double)num_don);
 		}
 		else
 		{
-			if (!isValid(molecule))
+			if (!isValid_(ac))
 			{
-				calculate(molecule);
+				calculate_(ac);
 			}
 		}
-		return molecule.getProperty(this->getName()).getDouble();
+		return ac.getProperty(this->getName()).getDouble();
 	}
 
 	////////////////////////////////////////
@@ -817,30 +805,30 @@ namespace BALL
 		return this->expression_;
 	}
 
-	double NumberOfHydrogenBondAcceptors::compute(Molecule& molecule)
+	double NumberOfHydrogenBondAcceptors::compute(AtomContainer& ac)
 	{
 		if (expression_ != "")
 		{
 			Expression ex_acc(expression_);
 			Size num_acc = 0;
-			AtomIterator a_it = molecule.beginAtom();
-			BALL_FOREACH_ATOM (molecule, a_it)
+			AtomIterator a_it = ac.beginAtom();
+			BALL_FOREACH_ATOM (ac, a_it)
 			{
 				if (ex_acc(*a_it))
 				{
 					++num_acc;
 				}
 			}
-			molecule.setProperty(this->getName(), (double)num_acc);
+			ac.setProperty(this->getName(), (double)num_acc);
 		}
 		else
 		{
-			if (!isValid(molecule))
+			if (!isValid_(ac))
 			{
-				calculate(molecule);
+				calculate_(ac);
 			}
 		}
-		return molecule.getProperty(this->getName()).getDouble();
+		return ac.getProperty(this->getName()).getDouble();
 	}
 
 	///////////////////////////
@@ -963,14 +951,14 @@ namespace BALL
 		return *this;
 	}
 
-	double RelNumberOfRotatableBonds::compute(Molecule& molecule)
+	double RelNumberOfRotatableBonds::compute(AtomContainer& ac)
 	{
-		if (!isValid(molecule))
+		if (!isValid_(ac))
 		{	
-			calculate(molecule);
+			calculate_(ac);
 		}
-		double num_bonds =  molecule.getProperty("NumberOfBonds").getDouble();
-		double num_rot = molecule.getProperty("NumberOfRotatableBonds").getDouble();
+		double num_bonds =  ac.getProperty("NumberOfBonds").getDouble();
+		double num_rot = ac.getProperty("NumberOfRotatableBonds").getDouble();
 		return num_bonds != 0 ? num_rot/num_bonds : -1.0;
 	}
 
@@ -998,14 +986,14 @@ namespace BALL
 		return *this;
 	}
 
-	double RelNumberOfRotatableSingleBonds::compute(Molecule& molecule)
+	double RelNumberOfRotatableSingleBonds::compute(AtomContainer& ac)
 	{
-		if (!isValid(molecule))
+		if (!isValid_(ac))
 		{
-			calculate(molecule);
+			calculate_(ac);
 		}
-		double num_bonds = molecule.getProperty("NumberOfBonds").getDouble();
-		double num_rot = molecule.getProperty("NumberOfRotatableSingleBonds").getDouble();
+		double num_bonds = ac.getProperty("NumberOfBonds").getDouble();
+		double num_rot = ac.getProperty("NumberOfRotatableSingleBonds").getDouble();
 		return num_bonds != 0 ? num_rot/num_bonds : -1.0;
 	}
 
@@ -1057,14 +1045,14 @@ namespace BALL
 		return *this;
 	}
 
-	double AtomInformationContent::compute(Molecule& molecule)
+	double AtomInformationContent::compute(AtomContainer& ac)
 	{
-		if (!isValid(molecule))
+		if (!isValid_(ac))
 		{
-			calculate(molecule);
+			calculate_(ac);
 		}
-		double num_atoms = molecule.getProperty("NumberOfAtoms").getDouble();
-		double info_mean = molecule.getProperty("MeanAtomInformationContent").getDouble();
+		double num_atoms = ac.getProperty("NumberOfAtoms").getDouble();
+		double info_mean = ac.getProperty("MeanAtomInformationContent").getDouble();
 		return num_atoms * info_mean;
 	}
 

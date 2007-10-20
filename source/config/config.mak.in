@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# $Id: config.mak.in,v 1.40 2006/01/26 16:12:56 oliver Exp $
+# $Id: config.mak.in,v 1.40.14.3 2007/05/10 20:05:03 oliver Exp $
 #
 # Author:
 #  Oliver Kohlbacher
@@ -60,8 +60,8 @@ BINFMT   =@BINFMT@
 # BALL_INCLUDES contains compiler flags to set the BALL include paths
 # and BALL_LIBS is set to $BALL_PATH/lib/$BINFMT
 #
-BALL_PATH		    = @BALL_PATH@
-BALL_INCLUDES		= @BALL_INCLUDES@
+BALL_PATH	= @BALL_PATH@
+BALL_INCLUDES	= @BALL_INCLUDES@
 BALL_LIBS       = @BALL_LIBS@
 
 # USE_VIEW contains true if VIEW support is to be built, false otherwise
@@ -73,6 +73,7 @@ VIEW_PLATFORM				= @VIEW_PLATFORM@
 BALL_HAS_XDR				= @BALL_HAS_XDR@
 
 BALL_HAS_GSL				= @BALL_HAS_GSL@
+GSL_LIBS				= @GSL_LIBS@
 
 BALL_HAS_FFTW       = @BALL_HAS_FFTW@
 FFTW_LIBS						= @FFTW_LIBS@

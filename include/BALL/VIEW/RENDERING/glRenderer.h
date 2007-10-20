@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.36 2005/12/23 17:02:21 amoll Exp $
+// $Id: glRenderer.h,v 1.36.16.1 2007/03/25 21:26:15 oliver Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -27,8 +27,18 @@
 # include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
+#ifdef BALL_USE_GLEW
+# include <GL/glew.h>
+#endif
+
 #ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
 # include <BALL/VIEW/RENDERING/glDisplayList.h>
+#endif
+
+#include <BALL/DATATYPE/regularData3D.h>
+
+#ifndef APIENTRY
+#define APIENTRY
 #endif
 
 class QFont;
@@ -43,6 +53,7 @@ namespace BALL
 		class GLDisplayList;
 		class Scene;
 		class MeshBuffer;
+		class ColorMap;
 
 		/** GLRenderer
 		 		Renderer which provides hardware accelerated OPENGL rendering.
@@ -95,37 +106,20 @@ namespace BALL
 					throw();
 			};
 
-			/** @name Type Definitions
-			*/
-			//@{
-			
 			/// Typedef for OPENGL names
 			typedef unsigned int Name;
 			
-			//@}
-			/**	@name	Constructors and Destructors
-			*/	
-			//@{
-
-			/** Default Constructor.
-			*/
+			/// Default Constructor.
 			GLRenderer()
 				throw();
 
-			/** Destructor
-			*/
+			/// Destructor
 			virtual ~GLRenderer()
 				throw();
 
-			/** Explicit default initialization.
-			*/
+			/// Explicit default initialization.
 			virtual void clear()
 				throw();
-
-			//@}
-			/**	@name	Accessors: inspectors and mutators 
-			*/
-			//@{		
 
 			///
 			void dump(std::ostream& s, Size depth) const
@@ -172,8 +166,7 @@ namespace BALL
 			///
 			void exitPickingMode();
 
-			/**
-			 */
+			///
 			void setSize(float width, float height)
 				throw();
 
@@ -186,8 +179,7 @@ namespace BALL
 				throw();
 
 			/** Update the camera position with gluLookAt,
-			 		either from a given Camera, or from the default
-					Stage.
+			 		either from a given Camera, or from the default Stage.
 			*/
 			void updateCamera(const Camera* camera = 0)
 				throw();
@@ -207,6 +199,9 @@ namespace BALL
 			// Initialise always front rendering
 			void initAlwaysFront()
 				throw();
+
+			/// Enable or disable antialiasing
+			void setAntialiasing(bool state);
 			
 			/// Remove all VertexBuffer and DisplayLists for the given Representation
 			void removeRepresentation(const Representation& rep)
@@ -282,8 +277,7 @@ namespace BALL
 			///
 			void initPerspective();
 
-			//@}
-			protected:
+			void renderRepresentation_(const Representation& representation, bool for_display_list);
 
 			///
 			virtual void renderLabel_(const Label& /*label*/)
@@ -293,8 +287,16 @@ namespace BALL
 			virtual void renderLine_(const Line& /*line*/)
 				throw();
 
+			/// Render an illuminated line
+			virtual void renderMultiLine_(const MultiLine& line)
+				throw();
+
 			///
 			virtual void renderMesh_(const Mesh& /*mesh*/)
+				throw();
+
+			///
+			virtual void renderQuadMesh_(const QuadMesh& /*mesh*/)
 				throw();
 
 			///
@@ -337,6 +339,10 @@ namespace BALL
 
 			///
 			virtual void renderClippingPlane_(const ClippingPlane& plane)
+				throw();
+			
+			/// Render a grid slice
+			virtual void renderGridVisualisation_(const GridVisualisation& vol)
 				throw();
 
 			//_
@@ -390,6 +396,10 @@ namespace BALL
 			//_
 			void translateVector3_(const Vector3& v)
 				throw();
+			
+			//_
+			void texCoordVector3_(const Vector3& v)
+				throw() { glTexCoord3f(v.x, v.y, v.z); }
 
 			//_
 			void scaleVector3_(const Vector3& v)
@@ -410,8 +420,12 @@ namespace BALL
 			void initGLU_(DrawingMode mode);
 
 			//_
- 			GLubyte* generateBitmapFromText_(const String& text, const QFont& font, int& width, int& height) const
-				throw();
+			void generateIlluminationTexture_(float ka, float kd, float kr, float shininess);
+
+			inline Position getTextureIndex_(Position x, Position y, Position z, Size width, Size height);
+			Position createTextureFromGrid(const RegularData3D& grid, const ColorMap& map);
+			void removeTextureFor_(const RegularData3D& grid);
+			void setupGridClipPlanes_(const GridVisualisation& slice);
 
 			Scene* 								scene_;
 
@@ -431,10 +445,9 @@ namespace BALL
 			GLDisplayList* 				GL_tubes_list_;
 			GLDisplayList* 				GL_boxes_list_;
 			GLDisplayList* 				sphere_list_;
-
-			/* static array of vertices for sphere dots */
-			static const float sphere_vertices_[12][3];
-			static const int 		sphere_indices_[20][3];
+			GLDisplayList  				line_list_;
+			GLuint 								line_texture_bind_;
+			GLubyte  							line_tex_[128][128][4];
 
 			// naming of geometric objects
 			typedef HashMap<const GeometricObject*, Name> NameHashMap;
@@ -449,8 +462,6 @@ namespace BALL
 			Name 										all_names_;
 			GLuint 									object_buffer_[BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS];
 			Vector3 								normal_vector_;
-			ColorRGBA 							dummy_color_;
-			const ColorRGBA* 				last_color_;
 
 			StereoMode 							stereo_;
 			RenderMode 							render_mode_;
@@ -463,6 +474,8 @@ namespace BALL
 			bool 										drawed_other_object_;
 			bool 										drawed_mesh_;
 			GLUquadricObj*  GLU_quadric_obj_;
+			HashMap<const RegularData3D*, Position> grid_to_texture_;
+			GLuint       						cel_texture_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

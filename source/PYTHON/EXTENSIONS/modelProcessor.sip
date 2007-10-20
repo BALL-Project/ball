@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.sip,v 1.3 2005/12/23 17:02:53 amoll Exp $
+// $Id: modelProcessor.sip,v 1.3.20.2 2007/03/28 13:58:55 amoll Exp $
 //
 
 class ModelProcessor
@@ -11,7 +11,6 @@ class ModelProcessor
 	#include "sipBALLComposite.h"
 	using namespace BALL;
 	using namespace BALL::VIEW;
-	typedef ModelProcessor::GeometricObjectList GeometricObjectList;
 %End
   public:
 
@@ -22,8 +21,10 @@ class ModelProcessor
   virtual bool isValid() const throw();
 	virtual void clearComposites() throw();
 	//virtual void dump(std::ostream& /*s = std::cout*/, Size /*depth = 0*/) const throw();
+
 	GeometricObjectList& getGeometricObjects() throw();
-	const GeometricObjectList& getGeometricObjects() const throw();
+	// const GeometricObjectList& getGeometricObjects() const throw();
+
 	void setDrawingPrecision(Index) throw();
 	Index getDrawingPrecision() const throw();
 	void setSurfaceDrawingPrecision(float) throw();
