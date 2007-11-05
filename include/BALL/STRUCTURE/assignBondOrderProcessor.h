@@ -38,23 +38,52 @@ namespace BALL
 			//@{
 			/// Option names
 			struct BALL_EXPORT Option
-			{
-								
-				/** If true, the existing bonds are deleted before 
-				 *  bonds detection begins. If the atoms are in 
-				 *  non-bond distance no bonds will be build! Note
-				 *  that the processor cannot rebuild inter-atomcontainer
-				 *  bonds, that will cause problem using it with proteins.
-				 */
-				static const char* DELETE_EXISTING_BOND_ORDERS;
+			{	
+				/**	compute bond orders for all bonds of unknown type
+				*/
+				static const char* OVERWRITE_UNKNOWN_BOND_ORDERS; 
+				
+				/**	compute bond orders for all bonds of type single bond order
+				*/
+		 		static const char* OVERWRITE_SINGLE_BOND_ORDERS;	
+
+				/**	compute bond orders for all bonds of type double bond order
+				*/
+				static const char* OVERWRITE_DOUBLE_BOND_ORDERS;	
+				
+				/**	compute bond orders for all bonds of type triple bond order
+				*/
+				static const char* OVERWRITE_TRIPLE_BOND_ORDERS;	
+				
+				/**	compute bond orders for all bonds of type quadruple bond order
+				*/
+				static const char* OVERWRITE_QUADRUPLE_BOND_ORDERS;	
+				
+				/**	compute bond orders for all bonds of type aromatic bond order
+				*/
+				static const char* OVERWRITE_AROMATIC_BOND_ORDERS; 	
+				
+				/**	overwrite all charges
+				*/
+				static const char* OVERWRITE_CHARGES;
+				
+				/**	assign all charges
+				*/
+				static const char* ASSIGN_CHARGES;
 
 			};
 
 			/// Default values for options
 			struct BALL_EXPORT Default
 			{
-				/// this option is off by default
-				static const bool DELETE_EXISTING_BOND_ORDERS;
+				static const bool OVERWRITE_UNKNOWN_BOND_ORDERS;
+				static const bool OVERWRITE_SINGLE_BOND_ORDERS;
+				static const bool OVERWRITE_DOUBLE_BOND_ORDERS;
+				static const bool OVERWRITE_TRIPLE_BOND_ORDERS;
+				static const bool OVERWRITE_QUADRUPLE_BOND_ORDERS;
+				static const bool OVERWRITE_AROMATIC_BOND_ORDERS; 
+				static const bool OVERWRITE_CHARGES;
+				static const bool ASSIGN_CHARGES;
 
 			};
 			//@}

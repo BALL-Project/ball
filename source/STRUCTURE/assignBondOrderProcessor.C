@@ -33,9 +33,31 @@
 using namespace std;
 
 namespace BALL 
-{
-	const char* AssignBondOrderProcessor::Option::DELETE_EXISTING_BOND_ORDERS = "delete_existing_bond_orders";
-	const bool  AssignBondOrderProcessor::Default::DELETE_EXISTING_BOND_ORDERS = true;
+{	
+	const char* AssignBondOrderProcessor::Option::OVERWRITE_UNKNOWN_BOND_ORDERS = "overwrite_unknown_bond_orders";
+	const bool  AssignBondOrderProcessor::Default::OVERWRITE_UNKNOWN_BOND_ORDERS = true;
+	
+	const char* AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS = "overwrite_single_bond_orders";
+	const bool  AssignBondOrderProcessor::Default::OVERWRITE_SINGLE_BOND_ORDERS = false;
+	
+	const char* AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS = "overwrite_double_bond_orders";
+	const bool  AssignBondOrderProcessor::Default::OVERWRITE_DOUBLE_BOND_ORDERS = false;
+	
+	const char* AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS = "overwrite_triple_bond_orders";
+	const bool  AssignBondOrderProcessor::Default::OVERWRITE_TRIPLE_BOND_ORDERS = false;
+
+	const char* AssignBondOrderProcessor::Option::OVERWRITE_QUADRUPLE_BOND_ORDERS = "overwrite_quadruple_bond_orders";
+	const bool  AssignBondOrderProcessor::Default::OVERWRITE_QUADRUPLE_BOND_ORDERS = false;
+
+	const char* AssignBondOrderProcessor::Option::OVERWRITE_AROMATIC_BOND_ORDERS = "overwrite_aromatic_bond_orders";
+	const bool  AssignBondOrderProcessor::Default::OVERWRITE_AROMATIC_BOND_ORDERS = false;
+
+	const char* AssignBondOrderProcessor::Option::OVERWRITE_CHARGES = "overwrite_existing_charges";
+	const bool  AssignBondOrderProcessor::Default::OVERWRITE_CHARGES = false;
+	
+	const char* AssignBondOrderProcessor::Option::ASSIGN_CHARGES = "assign_charges";
+	const bool  AssignBondOrderProcessor::Default::ASSIGN_CHARGES = false;
+
 
 	AssignBondOrderProcessor::AssignBondOrderProcessor()
 		: UnaryProcessor<AtomContainer>(),
@@ -73,18 +95,17 @@ namespace BALL
 		return num_bonds_;
 	}
 
-
 	Processor::Result AssignBondOrderProcessor::operator () (AtomContainer& ac)
 	{
+		// speed up the code by temporarily store the options locally 
+		bool oubo = options.getBool(Option::OVERWRITE_UNKNOWN_BOND_ORDERS);
+		bool osbo = options.getBool(Option::OVERWRITE_SINGLE_BOND_ORDERS);
+		bool odbo = options.getBool(Option::OVERWRITE_DOUBLE_BOND_ORDERS);
+		bool otbo = options.getBool(Option::OVERWRITE_TRIPLE_BOND_ORDERS);
+		bool oqbo = options.getBool(Option::OVERWRITE_QUADRUPLE_BOND_ORDERS);
+		bool oabo = options.getBool(Option::OVERWRITE_AROMATIC_BOND_ORDERS);
 
-		/*if (options.getBool(AssignBondOrderProcessor::Option::DELETE_EXISTING_BOND_ORDERS))
-		{
-			AtomIterator ait;
-			BALL_FOREACH_ATOM(ac, ait)
-			{
-				ait->destroyBonds();
-			}
-		}*/
+	
 		// what kind of composite do we have?
 		if (RTTI::isKindOf<Molecule>(ac))
 		{
@@ -103,7 +124,7 @@ namespace BALL
 
 			// Check number of variables with prefix 'x'
 			// and map bonds onto its variables
-			int no_x = ac.countBonds();
+			int total_no_bonds = ac.countBonds();
 
 			// Number of atoms in the system
 			int no_atoms = ac.countAtoms();
@@ -112,70 +133,129 @@ namespace BALL
 			map<Bond*, unsigned int> bond_map;
 
 			// Vector for mapping from variable indices onto bonds
-			std::vector<Bond*> ind_bond(no_x, (Bond*)0);
+			std::vector<Bond*> ind_bond(total_no_bonds, (Bond*)0);
+
+			// Vector for storing fixed valences
+			std::vector<Position> fixed_val(no_atoms, 0);
 
 			Timer timer;
 			timer.start();
 
-			int counter = 1;
+			// count the changeable bonds
+			int counter = 0;
 			for(int i = 0; i < no_atoms; ++i)
 			{
 				Atom* at1 = ac.getAtom(i);
+				Position fixed = 0;
 				for(Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
 				{
 					Bond* bnd = &(*bit);
-					pair<map<Bond*, unsigned int>::iterator, bool> p 
-						= bond_map.insert(make_pair(bnd, counter));
-					if (p.second)
+
+					// accoring to the options and the given bond order 
+					// the acutal bond is a free variable of the ILP or not
+					// YES: add a variable in the bond side constraint + ???? 
+					// NO: equality in the bond side constraint +  ?????
+					bool change = true;
+					switch (bnd->getOrder())
 					{
-						ind_bond[counter-1] = bnd;
-						++counter;
+						case Bond::ORDER__SINGLE:
+						{
+							if (!osbo)
+							{
+								fixed += 1;
+								change = false;
+							}
+							break;
+						}
+						case Bond::ORDER__DOUBLE:
+						{
+							if (!odbo)
+							{
+								fixed += 2;
+								change = false;
+							}
+							break;
+						}
+						case Bond::ORDER__TRIPLE:
+						{
+							if (!otbo)
+							{
+								fixed += 3;
+								change = false;
+							}
+							break;
+						}
+						case Bond::ORDER__QUADRUPLE:
+						{
+							if (!oqbo)
+							{
+								fixed += 4;
+								change = false;
+							}
+							break;
+						}
+						case Bond::ORDER__AROMATIC:
+						{
+							if (!osbo)
+							{
+								fixed += 1; ///????????????
+								change = false;
+							}
+							break;
+						}
+					}
+					
+					// In all other cases we should calculate the bond order
+					if (change)
+					{
+						pair<map<Bond*, unsigned int>::iterator, bool> p 
+							= bond_map.insert(make_pair(bnd, counter));
+						if (p.second)
+						{
+							ind_bond[counter] = bnd;
+							++counter;
+						}
 					}
 				}
+				fixed_val[i] = fixed;
 			}
+			
+			Position no_x = counter;
+			ind_bond.resize(no_x);
 
-			cout << "Time used to build bond map: " << timer.getCPUTime() << endl;
-
-			if (counter-1 != no_x)
-			{
-				cout << "Something went wrong! Number of counted bonds does not match the number of returned bonds" << endl;
-				exit(-2);
-			}
+			//cout << "Time used to build bond map: " << timer.getCPUTime() << endl;
 
 			timer.reset();
-	cout << "VOr Konstruktor " << ac.countBonds() << endl;
 
 			// Generate penalty values
 			VSgenerator gen;
 	
-	cout << " dazwischen" << ac.countBonds() << endl;
 
 			gen.GenerateAPS(dynamic_cast<Molecule*>(&ac));
 			vector<vector<pair<int, int> > >& av_vec(gen.atomic_penalty_scores_);
-	cout << "nach Sabine" << ac.countBonds() << endl;
 
-			cout << "Time used to build penalty vector: " << timer.getCPUTime() << endl;
+			//cout << "Time used to build penalty vector: " << timer.getCPUTime() << endl;
 
 			timer.reset();
 
 			// Count variables
 			int no_vars = no_x;
 
-			cout << "Number of bonds: " << no_x << endl;
+			//cout << "Number of bonds: " << no_x << endl;
 
 			// 'y' variables
 			for(int i = 0; i < no_atoms; ++i)
 			{
+
 				no_vars += av_vec[i].size();
 			}
 
-			cout << "Number of variables: " << no_vars << endl;
+			//cout << "Number of variables: " << no_vars << endl;
 
 			// Create a new model with 'no_vars' variables 
 			// (columns) and 0 rows
 			lprec *lp = make_lp(0,no_vars);
 
-			cout << "1 " << ac.countBonds() << endl;
 
 			if (!lp)
 			{
@@ -208,7 +288,8 @@ namespace BALL
 			{
 				colno[0] = i;
 				row[0]   = 1;
-				if (!add_constraintex(lp, 1, &row[0], &colno[0], LE, 3))
+
+				if (!add_constraintex(lp, 1, &row[0], &colno[0], LE, 4))
 				{
 					cout << "Something went wrong" << endl;
 				}
@@ -216,31 +297,19 @@ namespace BALL
 				{
 					cout << "Something went wrong" << endl;
 				}
-			}
-     
-			cout << "2 " << ac.countBonds() << endl;
+			}	
 
-			// Choice constraints
-			for(int i = 0, k = no_x + 1; i < no_atoms; ++i)
-			{
-				for(unsigned int j = 0; j < av_vec[i].size(); ++j, ++k)
-				{
-					colno[j] = k;
-					row[j]   = 1;
-				}
-				if (!add_constraintex(lp, av_vec[i].size(), &row[0], &colno[0], EQ, 1))
-				{
-					cout << "Something went wrong" << endl;
-				}
-			}
-	
-			cout << "3 " << ac.countBonds() << endl;
+			// Create space large enough for one row,
+			// use lp_solves internal types.
+			std::vector<int> obj_colno(no_vars-no_x+1);
+			std::vector<REAL> obj_row(no_vars-no_x+1);
 
 
 			// Create valence constraints
 			for(int i = 0, k = no_x + 1; i < no_atoms; ++i)
 			{
 				int r = 0;
+				int k_save = k;
 				for(unsigned int j = 0; j < av_vec[i].size(); ++j, ++k, ++r)
 				{
 					colno[r] = k;
@@ -253,23 +322,36 @@ namespace BALL
 				Size num_bonds = 0;
 				for(Atom::BondIterator bit = at1->beginBond(); +bit; ++bit, ++r)
 				{
-					num_bonds++;
 					Bond* bnd = &(*bit);
 					map<Bond*, unsigned int>::iterator it = bond_map.find(bnd);
 
-					if (it == bond_map.end())
+					if (it != bond_map.end())
 					{
-						cout << "Something went wrong. Current bond not found!" << endl;
+						++num_bonds;
+						colno[r] = it->second;
+						row[r]   = -1;
+					}
+				}
+				//cout << num_bonds << endl;
+
+				if (num_bonds)
+				{
+					if (!add_constraintex(lp, r, &row[0], &colno[0], EQ, fixed_val[i]))
+					{
+						cout << "Something went wrong" << endl;
 					}
 
-					colno[r] = it->second;
-					row[r]   = -1;
-				}
-				cout << num_bonds << endl;
-
-				if (!add_constraintex(lp, r, &row[0], &colno[0], EQ, 0))
-				{
-					cout << "Something went wrong" << endl;
+					// Choice constraints
+					for(unsigned int j = 0, t = k_save; j < av_vec[i].size(); ++j, ++t)
+					{
+						colno[j] = t;
+						row[j]   = 1;
+						obj_colno[j] = t;
+					}
+					if (!add_constraintex(lp, av_vec[i].size(), &row[0], &colno[0], EQ, 1))
+					{
+						cout << "Something went wrong" << endl;
+					}
 				}
 			}
 
@@ -298,7 +380,7 @@ namespace BALL
 			set_verbose(lp, IMPORTANT);
 
 			// Show the generated MIP
-			write_LP(lp, stdout);
+			//write_LP(lp, stdout);
 
 			cout << "Time used to create MILP: " << timer.getCPUTime() << endl;
 
@@ -366,8 +448,29 @@ namespace BALL
 */
 	void AssignBondOrderProcessor::setDefaultOptions()
 	{		
-		options.setDefaultBool(AssignBondOrderProcessor::Option::DELETE_EXISTING_BOND_ORDERS,
-													 AssignBondOrderProcessor::Default::DELETE_EXISTING_BOND_ORDERS);
+	 	options.setDefaultBool(AssignBondOrderProcessor::Option::OVERWRITE_UNKNOWN_BOND_ORDERS,
+	 												 AssignBondOrderProcessor::Default::OVERWRITE_UNKNOWN_BOND_ORDERS);
+	
+	 	options.setDefaultBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, 
+	 												 AssignBondOrderProcessor::Default::OVERWRITE_SINGLE_BOND_ORDERS); 
+	
+	 	options.setDefaultBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, 
+	 												 AssignBondOrderProcessor::Default::OVERWRITE_DOUBLE_BOND_ORDERS); 
+	
+	 	options.setDefaultBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS, 
+	 												 AssignBondOrderProcessor::Default::OVERWRITE_TRIPLE_BOND_ORDERS); 
+
+	 	options.setDefaultBool(AssignBondOrderProcessor::Option::OVERWRITE_QUADRUPLE_BOND_ORDERS, 
+	 												 AssignBondOrderProcessor::Default::OVERWRITE_QUADRUPLE_BOND_ORDERS); 
+
+	 	options.setDefaultBool(AssignBondOrderProcessor::Option::OVERWRITE_AROMATIC_BOND_ORDERS, 
+	 												 AssignBondOrderProcessor::Default::OVERWRITE_AROMATIC_BOND_ORDERS); 
+
+		options.setDefaultBool(AssignBondOrderProcessor::Option::OVERWRITE_CHARGES,
+												   AssignBondOrderProcessor::Default::OVERWRITE_CHARGES);	
+		
+		options.setDefaultBool(AssignBondOrderProcessor::Option::ASSIGN_CHARGES,
+													 AssignBondOrderProcessor::Default::ASSIGN_CHARGES);
 	}
 	
 } // namespace BALL
