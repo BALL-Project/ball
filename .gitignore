@@ -2,6 +2,7 @@ contrib/*
 *.o
 *_moc.C
 *.dh
+*.swp
 .Dependencies
 lib/*
 source/Makefile
