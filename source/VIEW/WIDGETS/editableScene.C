@@ -24,6 +24,7 @@
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
+#include <BALL/STRUCTURE/assignBondOrderProcessor.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/MATHS/randomNumberGenerator.h>
 #include <BALL/MATHS/analyticalGeometry.h>
@@ -36,9 +37,6 @@
 #include <BALL/MATHS/vector3.h>
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MATHS/angle.h>
-
-// Annes Test
-#include <BALL/STRUCTURE/assignBondOrderProcessor.h>
 
 using std::endl;
 
@@ -968,13 +966,35 @@ void EditableScene::showContextMenu(QPoint pos)
 		oas.push_back(order->addAction("Triple",    this, SLOT(changeBondOrder_())));
 		oas.push_back(order->addAction("Quadruple", this, SLOT(changeBondOrder_())));
 		oas.push_back(order->addAction("Aromatic",  this, SLOT(changeBondOrder_())));
+		oas.push_back(order->addAction("Unknown",   this, SLOT(changeBondOrder_())));
 
 		Index bo = 0;
-		if (current_bond_) bo = ((Index)current_bond_->getOrder()) - 1;
+		if (current_bond_) bo = ((Index)current_bond_->getOrder());
 		for (Index p = 0; p < (Index) oas.size(); p++)
 		{
 			oas[p]->setCheckable(true);
-			if (p == bo) oas[p]->setChecked(true);
+		}
+
+		switch (bo)
+		{
+			case Bond::ORDER__SINGLE:
+				oas[0]->setChecked(true);
+				break;
+			case Bond::ORDER__DOUBLE:
+				oas[1]->setChecked(true);
+				break;
+			case Bond::ORDER__TRIPLE:
+				oas[2]->setChecked(true);
+				break;
+			case Bond::ORDER__QUADRUPLE:
+				oas[3]->setChecked(true);
+				break;
+			case Bond::ORDER__AROMATIC:
+				oas[4]->setChecked(true);
+				break;
+			default:
+				oas[5]->setChecked(true);
+				break;
 		}
 
 		change_order->setEnabled(current_bond_ != 0);
@@ -1192,6 +1212,8 @@ void EditableScene::activatedOrderItem_(QAction* action)
 	else if (text == "Triple") bond_order_ = Bond::ORDER__TRIPLE;
 	else if (text == "Quadruple") bond_order_ = Bond::ORDER__QUADRUPLE;
 	else if (text == "Aromatic") bond_order_ = Bond::ORDER__AROMATIC;
+	else if (text == "Unknown") bond_order_ = Bond::ORDER__UNKNOWN;
+
 }
 
 void EditableScene::moveAtom_()
@@ -1473,7 +1495,6 @@ void EditableScene::computeBondOrders()
 
 	deselect_(false);
 	List<AtomContainer*> containers = getContainers_();
-	std::cout << "Container Size: " << containers.size() << std::endl;
 	if (containers.size() < 1) return;
 
 	// Is this neccessary?
@@ -1484,9 +1505,7 @@ void EditableScene::computeBondOrders()
 	System* system = (System*)&ac->getRoot();
 
 	AssignBondOrderProcessor abop;
-	std::cout << "Vor abop apply " << std::endl;	
 	system->apply(abop);
-	std::cout << "Nach abop apply " << std::endl;	
 	String nr = abop.getNumberOfBondOrdersSet();
 	setStatusbarText(String("Set ") + nr + " bondorders.", true);
 	getMainControl()->update(*ac, true);
