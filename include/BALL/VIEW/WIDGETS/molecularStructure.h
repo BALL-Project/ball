@@ -214,6 +214,9 @@ namespace BALL
 			
 			///
 			AssignBondOrderConfigurationDialog& getBondOrderDialog() { return bond_order_dialog_;}
+			
+			///
+			const AssignBondOrderConfigurationDialog& getBondOrderDialog() const { return bond_order_dialog_;}
 
 					
 			public slots:

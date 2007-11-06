@@ -69,6 +69,7 @@ namespace BALL
 		{
 			hide();
 			PreferencesEntry::storeValues();
+			QDialog::accept();
 		}
 
 

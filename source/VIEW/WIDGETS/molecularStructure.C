@@ -446,11 +446,10 @@ namespace BALL
 			System* system = getMainControl()->getSelectedSystem();
 			if (system == 0) return;
 
-			setStatusbarText("assigning bond orders ...", true);
 
 			if (show_dialog)
 			{
-				// Execute the minimization dialog
+				// Execute the assign bond order dialog
 				// and abort if cancel is clicked or nonsense arguments are given
 				if (!bond_order_dialog_.exec())
 				{
@@ -458,10 +457,11 @@ namespace BALL
 				}
 			}
 
+			setStatusbarText("Assigning Bond Orders ...", true);
+			
 			AssignBondOrderProcessor abop;
 
 			// read the options
-			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_UNKNOWN_BOND_ORDERS] 	= bond_order_dialog_.overwrite_unknownBO_box->isChecked();
 			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS] 		= bond_order_dialog_.overwrite_singleBO_box->isChecked();
 			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS] 		= bond_order_dialog_.overwrite_doubleBO_box->isChecked();
 			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS] 		= bond_order_dialog_.overwrite_tripleBO_box->isChecked();
@@ -473,7 +473,6 @@ namespace BALL
 			//abop.options[AssignBondOrderProcessor::Option::FOLDER] = ascii(bond_order_dialog_.parameter_file_edit->text());
 
 			// apply
-			
 			system->apply(abop);
 			String nr = abop.getNumberOfBondOrdersSet();
 			setStatusbarText(String("Set ") + nr + " bondorders.", true);

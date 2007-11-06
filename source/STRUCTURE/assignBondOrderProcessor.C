@@ -34,8 +34,8 @@ using namespace std;
 
 namespace BALL 
 {	
-	const char* AssignBondOrderProcessor::Option::OVERWRITE_UNKNOWN_BOND_ORDERS = "overwrite_unknown_bond_orders";
-	const bool  AssignBondOrderProcessor::Default::OVERWRITE_UNKNOWN_BOND_ORDERS = true;
+	//const char* AssignBondOrderProcessor::Option::OVERWRITE_UNKNOWN_BOND_ORDERS = "overwrite_unknown_bond_orders";
+	//const bool  AssignBondOrderProcessor::Default::OVERWRITE_UNKNOWN_BOND_ORDERS = true;
 	
 	const char* AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS = "overwrite_single_bond_orders";
 	const bool  AssignBondOrderProcessor::Default::OVERWRITE_SINGLE_BOND_ORDERS = false;
@@ -98,14 +98,13 @@ namespace BALL
 	Processor::Result AssignBondOrderProcessor::operator () (AtomContainer& ac)
 	{
 		// speed up the code by temporarily store the options locally 
-		bool oubo = options.getBool(Option::OVERWRITE_UNKNOWN_BOND_ORDERS);
 		bool osbo = options.getBool(Option::OVERWRITE_SINGLE_BOND_ORDERS);
 		bool odbo = options.getBool(Option::OVERWRITE_DOUBLE_BOND_ORDERS);
 		bool otbo = options.getBool(Option::OVERWRITE_TRIPLE_BOND_ORDERS);
 		bool oqbo = options.getBool(Option::OVERWRITE_QUADRUPLE_BOND_ORDERS);
 		bool oabo = options.getBool(Option::OVERWRITE_AROMATIC_BOND_ORDERS);
 
-	
+
 		// what kind of composite do we have?
 		if (RTTI::isKindOf<Molecule>(ac))
 		{
@@ -124,30 +123,41 @@ namespace BALL
 
 			// Check number of variables with prefix 'x'
 			// and map bonds onto its variables
-			int total_no_bonds = ac.countBonds();
+			Position total_no_bonds = ac.countBonds();
 
 			// Number of atoms in the system
-			int no_atoms = ac.countAtoms();
+			Position no_atoms = ac.countAtoms();
 
 			// Mapping from bonds onto bond variable indices
-			map<Bond*, unsigned int> bond_map;
+			map<Bond*, Position> bond_map;
 
 			// Vector for mapping from variable indices onto bonds
 			std::vector<Bond*> ind_bond(total_no_bonds, (Bond*)0);
 
-			// Vector for storing fixed valences
-			std::vector<Position> fixed_val(no_atoms, 0);
+			// Vector for storing fixed atom valences
+			std::vector<Position> fixed_val(total_no_bonds, 0);
 
-			Timer timer;
-			timer.start();
+			// Generate penalty values
+			VSgenerator gen;
+			gen.GenerateAPS(dynamic_cast<Molecule*>(&ac));
+			vector<vector<pair<int, int> > >& av_vec(gen.atomic_penalty_scores_);
 
-			// count the changeable bonds
-			int counter = 0;
-			for(int i = 0; i < no_atoms; ++i)
+			// Count the choice constraints
+			Position no_y = 0;
+
+			// Count the number of bonds whose orders should be calculated
+			Position no_x = 0;
+
+			// Maximum number of row entries (in penalty table)
+			Position max_no_ent = 0;
+
+			for (Position i = 0; i < no_atoms; ++i)
 			{
 				Atom* at1 = ac.getAtom(i);
 				Position fixed = 0;
-				for(Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
+
+				bool consider_atom = false;
+				for (Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
 				{
 					Bond* bnd = &(*bit);
 
@@ -155,222 +165,206 @@ namespace BALL
 					// the acutal bond is a free variable of the ILP or not
 					// YES: add a variable in the bond side constraint + ???? 
 					// NO: equality in the bond side constraint +  ?????
-					bool change = true;
+					bool consider_bond = true;
 					switch (bnd->getOrder())
 					{
 						case Bond::ORDER__SINGLE:
-						{
-							if (!osbo)
 							{
-								fixed += 1;
-								change = false;
+								if (!osbo)
+								{
+									fixed += 1;
+									consider_bond = false;
+								}
+								break;
 							}
-							break;
-						}
 						case Bond::ORDER__DOUBLE:
-						{
-							if (!odbo)
 							{
-								fixed += 2;
-								change = false;
+								if (!odbo)
+								{
+									fixed += 2;
+									consider_bond = false;
+								}
+								break;
 							}
-							break;
-						}
 						case Bond::ORDER__TRIPLE:
-						{
-							if (!otbo)
 							{
-								fixed += 3;
-								change = false;
+								if (!otbo)
+								{
+									fixed += 3;
+									consider_bond = false;
+								}
+								break;
 							}
-							break;
-						}
 						case Bond::ORDER__QUADRUPLE:
-						{
-							if (!oqbo)
 							{
-								fixed += 4;
-								change = false;
+								if (!oqbo)
+								{
+									fixed += 4;
+									consider_bond = false;
+								}
+								break;
 							}
-							break;
-						}
 						case Bond::ORDER__AROMATIC:
-						{
-							if (!osbo)
 							{
-								fixed += 1; ///????????????
-								change = false;
+								if (!osbo)
+								{
+									fixed += 1; ///????????????
+									consider_bond = false;
+								}
+								break;
 							}
-							break;
-						}
 					}
-					
+
 					// In all other cases we should calculate the bond order
-					if (change)
+					if (consider_bond)
 					{
+						consider_atom = true;
 						pair<map<Bond*, unsigned int>::iterator, bool> p 
-							= bond_map.insert(make_pair(bnd, counter));
+							= bond_map.insert(make_pair(bnd, no_x+1));
 						if (p.second)
 						{
-							ind_bond[counter] = bnd;
-							++counter;
+							ind_bond[no_x] = bnd;
+							++no_x;
 						}
 					}
 				}
+
+				if (consider_atom)
+				{
+					no_y += av_vec[i].size();
+					if (av_vec[i].size() > max_no_ent)
+					{
+						max_no_ent = av_vec[i].size();
+					}
+				}
+
 				fixed_val[i] = fixed;
 			}
-			
-			Position no_x = counter;
-			ind_bond.resize(no_x);
 
-			//cout << "Time used to build bond map: " << timer.getCPUTime() << endl;
+			Position no_vars = no_x + no_y;
 
-			timer.reset();
-
-			// Generate penalty values
-			VSgenerator gen;
-	
-
-			gen.GenerateAPS(dynamic_cast<Molecule*>(&ac));
-			vector<vector<pair<int, int> > >& av_vec(gen.atomic_penalty_scores_);
-
-			//cout << "Time used to build penalty vector: " << timer.getCPUTime() << endl;
-
-			timer.reset();
-
-			// Count variables
-			int no_vars = no_x;
-
-			//cout << "Number of bonds: " << no_x << endl;
-
-			// 'y' variables
-			for(int i = 0; i < no_atoms; ++i)
-			{
-
-				no_vars += av_vec[i].size();
-			}
-
-			//cout << "Number of variables: " << no_vars << endl;
+			//cout << no_vars << endl;
 
 			// Create a new model with 'no_vars' variables 
 			// (columns) and 0 rows
-			lprec *lp = make_lp(0,no_vars);
-
-
+			lprec *lp = make_lp(0, no_vars);
 			if (!lp)
 			{
-				cout << "Something went wrong" << endl;
+				Log.error() << "Creation of ILP failed" << endl;
 			}
 
 			// Set the binary and integer constraints
-			for(int i = 1; i <= no_x; ++i)
+			for(Position i = 1; i <= no_x; ++i)
 			{
 				set_int(lp, i, TRUE);
 			}
-			for(int i = no_x+1; i <= no_vars; ++i)
+			for(Position i = no_x+1; i <= no_vars; ++i)
 			{
 				set_binary(lp, i, TRUE);
 			}
 
-			// Create space large enough for one row,
+			// Create space large enough for one row and the objective function,
 			// use lp_solves internal types.
-			std::vector<int> colno(no_vars-no_x+1);
-			std::vector<REAL> row(no_vars-no_x+1);
+			std::vector<int> colno(5 + max_no_ent,0);
+			std::vector<REAL> row(5 + max_no_ent,0);
+			std::vector<int> obj_colno(no_y+1,0);
+			std::vector<REAL> obj_row(no_y+1,0);
 
-
+			// Factors for choice constraints
+			std::vector<REAL> choices(max_no_ent, 1);
 
 			// Makes building the model faster if it's done
 			// row by row
 			set_add_rowmode(lp, TRUE);
 
 			// Set the lower and upper constraints for bonds
-			for(int i = 1; i <= no_x; ++i)
+			for(Position i = 1; i <= no_x; ++i)
 			{
 				colno[0] = i;
-				row[0]   = 1;
-
-				if (!add_constraintex(lp, 1, &row[0], &colno[0], LE, 4))
+				if (!add_constraintex(lp, 1, &choices[0], &colno[0], LE, 4))
 				{
-					cout << "Something went wrong" << endl;
+					Log.error() << "Setting upper bound for bond constraint failed" << endl;
 				}
-				if (!add_constraintex(lp, 1, &row[0], &colno[0], GE, 1))
+				if (!add_constraintex(lp, 1, &choices[0], &colno[0], GE, 1))
 				{
-					cout << "Something went wrong" << endl;
+					Log.error() << "Setting lower bound for bond constraint failed" << endl;
 				}
-			}	
+			}
 
-			// Create space large enough for one row,
-			// use lp_solves internal types.
-			std::vector<int> obj_colno(no_vars-no_x+1);
-			std::vector<REAL> obj_row(no_vars-no_x+1);
+			// Create all remaining constraints and the objective function
 
+			// Atom indices
+			Position i = 0;
 
-			// Create valence constraints
-			for(int i = 0, k = no_x + 1; i < no_atoms; ++i)
+			// Indices of the choice variables (y)
+			Position ind_y = 0;
+
+			for(; i < no_atoms; ++i)
 			{
-				int r = 0;
-				int k_save = k;
-				for(unsigned int j = 0; j < av_vec[i].size(); ++j, ++k, ++r)
-				{
-					colno[r] = k;
-					row[r]   = av_vec[i][j].first;
-				}
-
 				// Find corresponding variables
 				Atom* at1 = ac.getAtom(i);
-				cout << at1->getElement() << "-------------";
-				Size num_bonds = 0;
-				for(Atom::BondIterator bit = at1->beginBond(); +bit; ++bit, ++r)
+
+				// Count the bonds of this atom whose
+				// orders should be calculated
+				Position count_b = 0;
+				for(Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
 				{
 					Bond* bnd = &(*bit);
 					map<Bond*, unsigned int>::iterator it = bond_map.find(bnd);
 
 					if (it != bond_map.end())
 					{
-						++num_bonds;
-						colno[r] = it->second;
-						row[r]   = -1;
+						colno[count_b] = it->second;
+						row[count_b]   = -1;
+						++count_b;
 					}
 				}
-				//cout << num_bonds << endl;
 
-				if (num_bonds)
+				if (count_b)
 				{
-					if (!add_constraintex(lp, r, &row[0], &colno[0], EQ, fixed_val[i]))
+					// This atom has bonds whose orders should be calculated
+
+					// Create indices for the choice variables and set
+					// the entries for the valence constraint and the 
+					// objective function
+
+					// Count the number of variables participating in the current row
+					Position count_vars = count_b;
+					for(Position j = 0; j < av_vec[i].size(); ++j, ++ind_y, ++count_vars)
 					{
-						cout << "Something went wrong" << endl;
+						// Choice variables have indices > no_x in variable vector for ILP
+						obj_colno[ind_y]   = ind_y + no_x + 1;
+						colno[count_vars] = obj_colno[ind_y];
+
+						// Set valences
+						row[count_vars]   = av_vec[i][j].first;
+
+						// Set penalties
+						obj_row[ind_y]     = av_vec[i][j].second;
+					}
+					
+					// Add valence constraint
+					if (!add_constraintex(lp, count_vars, &row[0], &colno[0], EQ, 
+								fixed_val[i]))
+					{
+						Log.error() << "Setting valence constraint for ILP failed" << endl;
 					}
 
-					// Choice constraints
-					for(unsigned int j = 0, t = k_save; j < av_vec[i].size(); ++j, ++t)
+					// Add choice constraint
+					if (!add_constraintex(lp, av_vec[i].size(), &choices[0], &colno[count_b], 
+								EQ, 1))
 					{
-						colno[j] = t;
-						row[j]   = 1;
-						obj_colno[j] = t;
-					}
-					if (!add_constraintex(lp, av_vec[i].size(), &row[0], &colno[0], EQ, 1))
-					{
-						cout << "Something went wrong" << endl;
+						Log.error() << "Setting choice constraint for ILP failed" << endl;
 					}
 				}
 			}
-
-
 			// Rowmode should be turned off again after building the model
 			set_add_rowmode(lp, FALSE);
 
 			// Set objective function
-			for(int i = 0, k = no_x + 1, r = 0; i < no_atoms; ++i)
+			if (!set_obj_fnex(lp, no_y, &obj_row[0], &obj_colno[0]))
 			{
-				for(unsigned int j = 0; j < av_vec[i].size(); ++j, ++r, ++k)
-				{
-					colno[r] = k;
-					row[r]   = av_vec[i][j].second;
-				}
-			}
-			if (!set_obj_fnex(lp, no_vars-no_x, &row[0], &colno[0]))
-			{
-				cout << "Something went wrong" << endl;
+				Log.error() << "Setting objective function for ILP failed" << endl;
 			}
 
 			// Tell lp_solve that this problem is a minimization problem
@@ -382,50 +376,51 @@ namespace BALL
 			// Show the generated MIP
 			//write_LP(lp, stdout);
 
-			cout << "Time used to create MILP: " << timer.getCPUTime() << endl;
-
-			timer.reset();
-
 			// Let lp_solve solve our problem
 			int ret = solve(lp);
 
-			cout << "Time used to solve MILP: " << timer.getCPUTime() << endl;
-
 			// Check whether lp_solve could do its job successfully
-			if (ret == OPTIMAL)
+			if (ret != OPTIMAL)
 			{
-				cout << "Hurray" << endl;
-			}
-			else
-			{
-				cout << "Bullshit" << endl;
+				Log.error() << "ILP could not be solved successfully" << endl;
 			}
 
 			// Get variables
 			REAL *vars;
 			get_ptr_variables(lp, &vars);
 
+			// count the assigned bond orders
+			num_bonds_ = 0;
 			// Do the assignment of the bond orders
-			for(int i = 0; i < no_x; ++i)
+			for(Position i = 0; i < no_x; ++i)
 			{
 				if (fabs(vars[i] - 1.) < 1.e-10)
 				{
 					ind_bond[i]->setOrder(Bond::ORDER__SINGLE);
+					num_bonds_++;
 					continue;
 				}
 				if (fabs(vars[i] - 2.) < 1.e-10)
 				{
-					ind_bond[i]->setOrder(Bond::ORDER__DOUBLE);
+					ind_bond[i]->setOrder(Bond::ORDER__DOUBLE);	
+					num_bonds_++;
 					continue;
 				}
 				if (fabs(vars[i] - 3.) < 1.e-10)
 				{
-					ind_bond[i]->setOrder(Bond::ORDER__TRIPLE);
+					ind_bond[i]->setOrder(Bond::ORDER__TRIPLE);	
+					num_bonds_++;
+					continue;
+				}
+				if (fabs(vars[i] - 4.) < 1.e-10)
+				{
+					ind_bond[i]->setOrder(Bond::ORDER__QUADRUPLE);
+					num_bonds_++;
 					continue;
 				}
 			}
 
-			delete_lp(lp);	
+			delete_lp(lp);
 
 
 		}
@@ -439,17 +434,8 @@ namespace BALL
 	}
 
 
-	/*	HashMap<String, Bond::BondOrder> name_to_order;
-		name_to_order["single"] = Bond::ORDER__SINGLE;
-		name_to_order["double"] = Bond::ORDER__DOUBLE;
-		name_to_order["triple"] = Bond::ORDER__TRIPLE;
-		name_to_order["aromatic"] = Bond::ORDER__AROMATIC;
-	Bond::BondOrder order = Bond::ORDER__UNKNOWN;
-*/
 	void AssignBondOrderProcessor::setDefaultOptions()
 	{		
-	 	options.setDefaultBool(AssignBondOrderProcessor::Option::OVERWRITE_UNKNOWN_BOND_ORDERS,
-	 												 AssignBondOrderProcessor::Default::OVERWRITE_UNKNOWN_BOND_ORDERS);
 	
 	 	options.setDefaultBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, 
 	 												 AssignBondOrderProcessor::Default::OVERWRITE_SINGLE_BOND_ORDERS); 

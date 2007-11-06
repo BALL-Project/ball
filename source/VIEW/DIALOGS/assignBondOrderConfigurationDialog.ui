@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>524</width>
-    <height>350</height>
+    <height>365</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -39,7 +39,7 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="5" column="0" colspan="2" >
+   <item row="6" column="0" colspan="2" >
     <layout class="QHBoxLayout" >
      <property name="margin" >
       <number>0</number>
@@ -171,7 +171,7 @@
          <number>1</number>
         </property>
         <property name="text" >
-         <string>Folder</string>
+         <string>Path</string>
         </property>
         <property name="textFormat" >
          <enum>Qt::AutoText</enum>
@@ -234,7 +234,7 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="1" >
+   <item row="3" column="1" >
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
       <string>Bond Order Assignment</string>
@@ -247,12 +247,9 @@
        <number>5</number>
       </property>
       <item>
-       <widget class="QCheckBox" name="overwrite_unknownBO_box" >
+       <widget class="QLabel" name="label" >
         <property name="text" >
-         <string>Overwrite Bond Order Unknown</string>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
+         <string>In Addition to Unknown Bond Orders:</string>
         </property>
        </widget>
       </item>
@@ -309,7 +306,7 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="0" >
+   <item row="3" column="0" >
     <widget class="QGroupBox" name="check_options" >
      <property name="minimumSize" >
       <size>
@@ -373,7 +370,6 @@
   <tabstop>browse_button</tabstop>
   <tabstop>assign_charges_checkBox</tabstop>
   <tabstop>overwrite_charges_checkBox</tabstop>
-  <tabstop>overwrite_unknownBO_box</tabstop>
   <tabstop>overwrite_singleBO_box</tabstop>
   <tabstop>overwrite_doubleBO_box</tabstop>
   <tabstop>overwrite_tripleBO_box</tabstop>

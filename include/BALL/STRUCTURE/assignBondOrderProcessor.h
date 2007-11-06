@@ -39,10 +39,6 @@ namespace BALL
 			/// Option names
 			struct BALL_EXPORT Option
 			{	
-				/**	compute bond orders for all bonds of unknown type
-				*/
-				static const char* OVERWRITE_UNKNOWN_BOND_ORDERS; 
-				
 				/**	compute bond orders for all bonds of type single bond order
 				*/
 		 		static const char* OVERWRITE_SINGLE_BOND_ORDERS;	
@@ -76,7 +72,6 @@ namespace BALL
 			/// Default values for options
 			struct BALL_EXPORT Default
 			{
-				static const bool OVERWRITE_UNKNOWN_BOND_ORDERS;
 				static const bool OVERWRITE_SINGLE_BOND_ORDERS;
 				static const bool OVERWRITE_DOUBLE_BOND_ORDERS;
 				static const bool OVERWRITE_TRIPLE_BOND_ORDERS;
