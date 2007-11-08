@@ -1494,24 +1494,38 @@ void EditableScene::computeBondOrders()
 {
 	if (getMainControl()->isBusy()) return;
 	
-	System* system = getMainControl()->getSelectedSystem();
-	if (system == 0) return;
+	System* system = getMainControl()->getSelectedSystem();  //???
+	if (system == 0) { return;};              //???
 
 	deselect_(false);
 	
-	//List<AtomContainer*> containers = getContainers_();
-	//if (containers.size() < 1) return;
-	//AtomContainer* ac = *containers.begin();
-	//System* system = (System*)&ac->getRoot();
+	// Do we have a Molecular Structure?
+	MolecularStructure* ms = MolecularStructure::getInstance(0);
+	if (ms == 0) return;
 
-	// Is this neccessary?
-	//MolecularStructure* ms = MolecularStructure::getInstance(0);
-	//if (ms == 0) return;
+	// get the highlighted atomcontainer
+	List<AtomContainer*> containers;
+	if (only_highlighted_)
+	{
+		List<Composite*> highl = getMainControl()->getMolecularControlSelection();
+		List<Composite*>::Iterator lit = highl.begin();
+		for (; lit != highl.end(); ++lit)
+		{
+			AtomContainer* ac = dynamic_cast<AtomContainer*>(*lit);
+			if (ac != 0) containers.push_back(ac);
+		}
+	}
+
+	if (containers.size() != 1) 
+	{
+		setStatusbarText("Please highlight exactly one AtomContainer!", true);
+		return;
+	}
+
+	AssignBondOrderConfigurationDialog& bond_order_dialog= ms->getBondOrderDialog();
 
 	AssignBondOrderProcessor abop;
-	MolecularStructure *ms = MolecularStructure::getInstance(0);
-	AssignBondOrderConfigurationDialog& bond_order_dialog= ms->getBondOrderDialog();
-	
+
 	// read the options from the dialog
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_singleBO_box->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_doubleBO_box->isChecked();
@@ -1520,12 +1534,14 @@ void EditableScene::computeBondOrders()
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_AROMATIC_BOND_ORDERS] 	= bond_order_dialog.overwrite_aromaticBO_box->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::ASSIGN_CHARGES] 									= bond_order_dialog.assign_charges_checkBox->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_CHARGES] 							= bond_order_dialog.overwrite_charges_checkBox->isChecked();
+	
 
 	// apply
-	system->apply(abop);
+	containers.front()->apply(abop);
 	String nr = abop.getNumberOfBondOrdersSet();
 	setStatusbarText(String("Set ") + nr + " bondorders.", true);
-	getMainControl()->update(*system, true);
+
+	getMainControl()->update(*containers.front(), true);
 }
 /* end of Annes Test*/
 

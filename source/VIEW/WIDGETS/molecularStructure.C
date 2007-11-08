@@ -442,10 +442,25 @@ namespace BALL
 				return;
 			}
 
-			// Retrieve the system from the selection and abort if nothing is selected.
+			/*// Retrieve the system from the selection and abort if nothing is selected.
 			System* system = getMainControl()->getSelectedSystem();
 			if (system == 0) return;
+			*/
+			// Retrieve the selected atom container and abort if nothing is selected.
+			List<AtomContainer*> containers;
+			List<Composite*> highl = getMainControl()->getMolecularControlSelection();
+			List<Composite*>::Iterator lit = highl.begin();
+			for (; lit != highl.end(); ++lit)
+			{
+				AtomContainer* ac = dynamic_cast<AtomContainer*>(*lit);
+				if (ac != 0) containers.push_back(ac);
+			}
 
+			if (containers.size() != 1) 
+			{
+				setStatusbarText("Please highlight exactly one AtomContainer!", true);
+				return;
+			}
 
 			if (show_dialog)
 			{
@@ -469,14 +484,15 @@ namespace BALL
 			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_AROMATIC_BOND_ORDERS] 	= bond_order_dialog_.overwrite_aromaticBO_box->isChecked();
 			abop.options[AssignBondOrderProcessor::Option::ASSIGN_CHARGES] 									= bond_order_dialog_.assign_charges_checkBox->isChecked();
 			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_CHARGES] 							= bond_order_dialog_.overwrite_charges_checkBox->isChecked();
+			
 			// get the parameter folder
 			//abop.options[AssignBondOrderProcessor::Option::FOLDER] = ascii(bond_order_dialog_.parameter_file_edit->text());
 
 			// apply
-			system->apply(abop);
+			containers.front()->apply(abop);
 			String nr = abop.getNumberOfBondOrdersSet();
 			setStatusbarText(String("Set ") + nr + " bondorders.", true);
-			getMainControl()->update(*system, true);
+			getMainControl()->update(*containers.front(), true);
 
 		}
 
