@@ -103,24 +103,11 @@ namespace BALL
 		bool otbo = options.getBool(Option::OVERWRITE_TRIPLE_BOND_ORDERS);
 		bool oqbo = options.getBool(Option::OVERWRITE_QUADRUPLE_BOND_ORDERS);
 		bool oabo = options.getBool(Option::OVERWRITE_AROMATIC_BOND_ORDERS);
-
+	
 
 		// what kind of composite do we have?
 		if (RTTI::isKindOf<Molecule>(ac))
-		{
-			/*	// consider  all bonds of type  TYPE__COVALENT (especially not TYPE__DISULPHIDE_BRIDGE and not TYPE__HYDROGEN)
-					AtomIterator ait;
-					Atom::BondIterator bit;
-					BALL_FOREACH_BOND(ac, ait, bit)
-					{
-					if ((bit->getType() == Bond::TYPE__COVALENT) || (bit->getType() == Bond::TYPE__UNKNOWN))
-					{
-			// add to the list 
-			//bit->getSecondAtom()
-			//bit;
-			}
-			}*/
-
+		{	
 			// Check number of variables with prefix 'x'
 			// and map bonds onto its variables
 			Position total_no_bonds = ac.countBonds();
@@ -421,8 +408,6 @@ namespace BALL
 			}
 
 			delete_lp(lp);
-
-
 		}
 
 		return Processor::CONTINUE;
