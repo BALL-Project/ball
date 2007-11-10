@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box.sip,v 1.1 2003/11/18 15:06:06 amoll Exp $
+// $Id$
 //
 
 class Box

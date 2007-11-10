@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.sip,v 1.10.18.1 2007/03/25 21:37:02 oliver Exp $
+// $Id$
 //
 
 class SDFile

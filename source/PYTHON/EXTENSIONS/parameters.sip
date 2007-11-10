@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parameters.sip,v 1.2 2005/12/23 17:02:54 amoll Exp $
+// $Id$
 // general parameter file class
 //
 	class Parameters

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmTorsion.sip,v 1.5 2004/12/27 17:24:57 amoll Exp $
+// $Id$
 //
 
 class CharmmTorsion 

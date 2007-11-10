@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tube.sip,v 1.4 2003/11/25 00:02:00 amoll Exp $
+// $Id$
 //
 
 class Tube 

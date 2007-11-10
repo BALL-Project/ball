@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector4.sip,v 1.8 2004/09/22 21:07:06 oliver Exp $
+// $Id$
 //
 
 class Vector4
 {
 %TypeHeaderCode
 	#include <BALL/MATHS/vector4.h>
-	#include "sipBALLIndex.h"
+	#include "sipAPIBALL.h"
   using namespace BALL;
   using namespace BALL::Exception;
 %End

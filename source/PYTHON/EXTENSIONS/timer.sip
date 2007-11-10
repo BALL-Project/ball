@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timer.sip,v 1.1 2004/07/10 15:15:01 amoll Exp $
+// $Id$
 //
 
 class Timer

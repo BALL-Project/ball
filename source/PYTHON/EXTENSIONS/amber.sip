@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amber.sip,v 1.4 2004/12/27 17:24:55 amoll Exp $
+// $Id$
 //
 
 class AmberFF 

@@ -1,13 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.sip,v 1.7 2003/11/01 09:27:36 oliver Exp $
+// $Id$
 //
 class Bit
 {
 %TypeHeaderCode
 	#include <BALL/DATATYPE/bitVector.h>
+	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
+	using namespace BALL::Exception;
 %End
   public:
   Bit() throw();

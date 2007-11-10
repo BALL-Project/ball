@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.sip,v 1.2.20.1 2007/03/25 21:37:07 oliver Exp $
+// $Id$
 //
 
 class DockWidget

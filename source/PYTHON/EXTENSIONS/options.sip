@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: options.sip,v 1.7 2003/11/01 09:27:38 oliver Exp $
+// $Id$
 //
 
 class IllegalKey
@@ -9,6 +9,8 @@ class IllegalKey
 {
 %TypeHeaderCode
 	#include <BALL/DATATYPE/hashMap.h>
+	#include <BALL/COMMON/exception.h>
+	using namespace BALL::Exception;
 	typedef StringHashMap<String>::IllegalKey IllegalKey;
 	using namespace BALL;
 %End

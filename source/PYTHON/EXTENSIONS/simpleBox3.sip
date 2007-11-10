@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox3.sip,v 1.1 2003/11/01 11:13:49 oliver Exp $
+// $Id$
 //
 
 class SimpleBox3

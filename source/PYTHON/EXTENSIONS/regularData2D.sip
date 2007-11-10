@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.sip,v 1.9 2004/09/22 21:07:05 oliver Exp $
+// $Id$
 //
 
 typedef float GridDataType;
@@ -9,8 +9,8 @@ class RegularData2D
 {
 %TypeHeaderCode
 	#include <BALL/DATATYPE/regularData2D.h>
-	#include "sipBALLOutOfMemory.h"
-	#include "sipBALLOutOfGrid.h"
+	#include "sipAPIBALL.h"
+	#include "sipAPIBALL.h"
 	using namespace BALL;
 	using namespace BALL::Exception;
 	// typedef TVector2<float> Vector2;
@@ -20,8 +20,8 @@ class RegularData2D
 	{
 %TypeHeaderCode
 	#include <BALL/DATATYPE/regularData2D.h>
-	#include "sipBALLOutOfMemory.h"
-	#include "sipBALLOutOfGrid.h"
+	#include "sipAPIBALL.h"
+	#include "sipAPIBALL.h"
 	using namespace BALL;
 	using namespace BALL::Exception;
 %End

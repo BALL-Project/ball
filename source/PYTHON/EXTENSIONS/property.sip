@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: property.sip,v 1.4.30.1 2007/03/25 21:37:17 oliver Exp $
+// $Id$
 //
 
 class NamedProperty
@@ -9,7 +9,9 @@ class NamedProperty
 {
 %TypeHeaderCode
 	#include <BALL/CONCEPT/property.h>
+	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
+	using namespace BALL::Exception;
 %End
   public:
   NamedProperty(String&);

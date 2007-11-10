@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: canonicalMD.sip,v 1.5 2005/01/24 16:59:22 amoll Exp $
+// $Id$
 //
 
 class CanonicalMD 

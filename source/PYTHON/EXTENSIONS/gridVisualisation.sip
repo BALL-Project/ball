@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualisation.sip,v 1.1.4.2 2007/04/26 11:11:07 amoll Exp $
+// $Id$
 //
 
 class GridVisualisation 

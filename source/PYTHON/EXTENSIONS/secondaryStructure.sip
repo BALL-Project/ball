@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.sip,v 1.10.8.1 2007/03/25 21:38:53 oliver Exp $
+// $Id$
 //
 
 class SecondaryStructure

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.sip,v 1.9 2003/11/01 09:27:36 oliver Exp $
+// $Id$
 //
 
 class Angle

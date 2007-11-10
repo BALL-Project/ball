@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: periodicBoundary.sip,v 1.4 2003/10/31 23:15:49 oliver Exp $
+// $Id$
 //
 
 class PeriodicBoundary
