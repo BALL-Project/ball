@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.sip,v 1.2.22.1 2007/05/07 11:46:47 aleru Exp $
+// $Id$
 //
 
 class SteepestDescentMinimizer 

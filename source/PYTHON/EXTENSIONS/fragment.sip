@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragment.sip,v 1.7 2003/11/01 09:27:37 oliver Exp $
+// $Id$
 //
 
 class Fragment

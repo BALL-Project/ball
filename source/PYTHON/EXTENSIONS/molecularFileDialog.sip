@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.sip,v 1.3.20.1 2007/03/25 21:37:14 oliver Exp $
+// $Id$
 //
 
 class MolecularFileDialog

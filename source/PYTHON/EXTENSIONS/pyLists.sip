@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyLists.sip,v 1.1.2.2 2007/03/28 15:41:19 amoll Exp $
+// $Id$
 //
 
 // The following lines define the SIP interface for all derived Composite lists
@@ -11,7 +11,7 @@
 %MappedType AtomList
 {
 %TypeHeaderCode
-	#include "sipBALLAtom.h"
+	#include "sipAPIBALL.h"
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
@@ -31,7 +31,7 @@
 %MappedType PDBAtomList
 {
 %TypeHeaderCode
-	#include "sipBALLPDBAtom.h"
+	#include "sipAPIBALL.h"
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
@@ -51,7 +51,7 @@
 %MappedType BondList
 {
 %TypeHeaderCode
-	#include "sipBALLBond.h"
+	#include "sipAPIBALL.h"
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
@@ -71,7 +71,7 @@
 %MappedType AtomContainerList
 {
 %TypeHeaderCode
-	#include "sipBALLAtomContainer.h"
+	#include "sipAPIBALL.h"
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
@@ -91,7 +91,7 @@
 %MappedType FragmentList
 {
 %TypeHeaderCode
-	#include "sipBALLFragment.h"
+	#include "sipAPIBALL.h"
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
@@ -111,7 +111,7 @@
 %MappedType MoleculeList
 {
 %TypeHeaderCode
-	#include "sipBALLMolecule.h"
+	#include "sipAPIBALL.h"
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
@@ -131,7 +131,7 @@
 %MappedType ResidueList
 {
 %TypeHeaderCode
-	#include "sipBALLResidue.h"
+	#include "sipAPIBALL.h"
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
@@ -151,7 +151,7 @@
 %MappedType SecondaryStructureList
 {
 %TypeHeaderCode
-	#include "sipBALLSecondaryStructure.h"
+	#include "sipAPIBALL.h"
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
@@ -171,7 +171,7 @@
 %MappedType ChainList
 {
 %TypeHeaderCode
-	#include "sipBALLChain.h"
+	#include "sipAPIBALL.h"
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
@@ -191,7 +191,7 @@
 %MappedType ProteinList
 {
 %TypeHeaderCode
-	#include "sipBALLProtein.h"
+	#include "sipAPIBALL.h"
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
@@ -211,7 +211,7 @@
 %MappedType NucleotideList
 {
 %TypeHeaderCode
-	#include "sipBALLNucleotide.h"
+	#include "sipAPIBALL.h"
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
@@ -231,7 +231,7 @@
 %MappedType NucleicAcidList
 {
 %TypeHeaderCode
-	#include "sipBALLNucleicAcid.h"
+	#include "sipAPIBALL.h"
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
@@ -251,7 +251,7 @@
 %MappedType GeometricObjectList
 {
 %TypeHeaderCode
-	#include "sipBALLGeometricObject.h"
+	#include "sipAPIBALL.h"
 	#include <BALL/VIEW/KERNEL/representation.h>
 	#include <BALL/PYTHON/pyListHelper.h>
 %End
@@ -270,7 +270,7 @@
 %MappedType RepresentationList
 {
 %TypeHeaderCode
-	#include "sipBALLRepresentation.h"
+	#include "sipAPIBALL.h"
 	#include <BALL/VIEW/KERNEL/representation.h>
 	#include <BALL/PYTHON/pyListHelper.h>
 %End
@@ -289,7 +289,7 @@
 %MappedType RegularData3DList
 {
 %TypeHeaderCode
-	#include "sipBALLRegularData3D.h"
+	#include "sipAPIBALL.h"
 	#include <BALL/PYTHON/pyListHelper.h>
 %End
 

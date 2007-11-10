@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.sip,v 1.10 2004/09/22 21:07:05 oliver Exp $
+// $Id$
 //
 
 class RegularData3D 

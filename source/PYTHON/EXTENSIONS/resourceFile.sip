@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.sip,v 1.4.26.1 2007/03/25 21:38:52 oliver Exp $
+// $Id$
 //
 
 class ResourceEntry

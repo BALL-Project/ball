@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.44.8.5 2007/06/15 09:40:51 amoll Exp $
+// $Id$
 //
 // Author:
 //   Oliver Kohlbacher

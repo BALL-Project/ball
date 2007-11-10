@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.sip,v 1.3 2005/12/23 17:03:00 amoll Exp $
+// $Id$
 //
 
 class AddVanDerWaalsModel 

@@ -1,14 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShot.sip,v 1.4 2003/10/29 22:54:47 oliver Exp $
+// $Id$
 //
 
 class SnapShot
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/COMMON/snapShot.h>
+	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
+	using namespace BALL::Exception;
 %End
  public:
  SnapShot()

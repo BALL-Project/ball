@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.14.18.3 2007/04/20 14:27:45 amoll Exp $
+// $Id$
 //
 
 class Representation

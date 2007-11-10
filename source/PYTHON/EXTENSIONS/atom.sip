@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.sip,v 1.10.18.2 2007/06/06 12:33:32 anhi Exp $
+// $Id$
 //
 
 class AtomType

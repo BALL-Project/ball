@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.sip,v 1.10.20.1 2007/03/25 21:37:12 oliver Exp $
+// $Id$
 //
 
 class Message

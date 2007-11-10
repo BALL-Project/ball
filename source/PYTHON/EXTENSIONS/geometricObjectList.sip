@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObjectList.sip,v 1.1.28.1 2007/03/25 21:37:09 oliver Exp $
+// $Id$
 //
 
 %MappedType GeometricObjectList
@@ -9,7 +9,7 @@
 %TypeHeaderCode
 	#include <BALL/VIEW/KERNEL/representation.h>
 	#include <BALL/VIEW/KERNEL/geometricObject.h>
-	#include "sipBALLGeometricObject.h"
+	#include "sipAPIBALL.h"
 	typedef Representation::GeometricObjectList GeometricObjectList;
 %End
 

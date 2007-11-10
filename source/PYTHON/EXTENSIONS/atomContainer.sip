@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.sip,v 1.7.30.1 2007/03/25 21:37:03 oliver Exp $
+// $Id$
 //
 
 class AtomContainer
@@ -10,6 +10,7 @@ class AtomContainer
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/atomContainer.h>
+	#include <BALL/KERNEL/residue.h>
 	using namespace BALL;
 %End
 

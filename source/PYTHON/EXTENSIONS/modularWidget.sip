@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.sip,v 1.7.16.2 2007/05/10 22:10:46 amoll Exp $
+// $Id$
 //
 
 class ModularWidget
@@ -10,8 +10,10 @@ class ModularWidget
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/KERNEL/modularWidget.h>
+	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
+	using namespace BALL::Exception;
 %End
 
   public:

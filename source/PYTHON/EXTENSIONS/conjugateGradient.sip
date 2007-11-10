@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.sip,v 1.4.30.1 2007/05/07 11:46:43 aleru Exp $
+// $Id$
 //
 
 class ConjugateGradientMinimizer 

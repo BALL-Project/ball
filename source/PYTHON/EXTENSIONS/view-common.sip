@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: view-common.sip,v 1.6.16.3 2007/04/20 14:16:44 amoll Exp $
+// $Id$
 //
 
 %ModuleHeaderCode 

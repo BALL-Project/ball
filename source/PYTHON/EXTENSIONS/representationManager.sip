@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.sip,v 1.1.4.2 2007/03/28 13:58:08 amoll Exp $
+// $Id$
 //
 
 class RepresentationManager

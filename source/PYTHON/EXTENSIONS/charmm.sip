@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmm.sip,v 1.4 2004/12/27 17:24:56 amoll Exp $
+// $Id$
 //
 
 class CharmmFF 

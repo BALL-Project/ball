@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.sip,v 1.16 2005/12/23 17:02:51 amoll Exp $
+// $Id$
 //
 
 class std__openmode

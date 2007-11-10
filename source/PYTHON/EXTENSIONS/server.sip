@@ -3,8 +3,10 @@ class Server
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/KERNEL/server.h>
+	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
+	using namespace BALL::Exception;
 %End
   public:
 

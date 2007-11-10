@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.sip,v 1.4.18.1 2007/03/25 21:37:05 oliver Exp $
+// $Id$
 //
 
 class ColorRGBA
@@ -9,8 +9,11 @@ class ColorRGBA
 %TypeHeaderCode
 	#include <BALL/VIEW/DATATYPE/colorRGBA.h>
 	#include <BALL/VIEW/DATATYPE/colorUnit.h>
+	#include <BALL/COMMON/exception.h>
+
 	using namespace BALL;
 	using namespace BALL::VIEW;
+	using namespace BALL::Exception;
 	typedef ColorUnit::NotInHexFormat NotInHexFormat;
 %End
   public:

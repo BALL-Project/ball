@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyDatasetVector.sip,v 1.1.4.1 2007/03/25 21:37:22 oliver Exp $
+// $Id$
 //
 
 %MappedType PyDatasetVector
 {
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyDatasetVector.h>
-	#include "sipBALLDataset.h"
+	#include "sipAPIBALL.h"
 %End
 
 %ConvertFromTypeCode

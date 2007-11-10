@@ -1,13 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.sip,v 1.4 2005/12/26 03:26:09 amoll Exp $
+// $Id$
 //
 
 class NotInHexFormat
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/DATATYPE/colorUnit.h>
+	#include <BALL/COMMON/exception.h>
+	using namespace BALL::Exception;
 	using namespace BALL;
 	using namespace BALL::VIEW;
 	typedef ColorUnit::NotInHexFormat NotInHexFormat;
@@ -20,6 +22,8 @@ class ColorUnit
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/DATATYPE/colorUnit.h>
+	#include <BALL/COMMON/exception.h>
+	using namespace BALL::Exception;
 	using namespace BALL;
 	using namespace BALL::VIEW;
 	typedef ColorUnit::NotInHexFormat NotInHexFormat;

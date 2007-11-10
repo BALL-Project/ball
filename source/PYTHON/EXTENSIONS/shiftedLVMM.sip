@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftedLVMM.sip,v 1.1.2.1 2007/05/07 11:46:46 aleru Exp $
+// $Id$
 //
 
 class ShiftedLVMMMinimizer 

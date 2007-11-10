@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.sip,v 1.5 2005/12/23 17:02:59 amoll Exp $
+// $Id$
 //
 
 class SnapShotManager

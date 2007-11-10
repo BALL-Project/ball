@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.22.16.1 2007/03/25 21:37:11 oliver Exp $
+// $Id$
 //
 
 class MainControl

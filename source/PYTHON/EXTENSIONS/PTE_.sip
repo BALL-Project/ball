@@ -1,8 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE_.sip,v 1.5.30.1 2007/03/25 21:37:02 oliver Exp $
+// $Id$
 //
+%ModuleHeaderCode
+	#include <BALL/KERNEL/PTE.h>
+	using namespace BALL;
+%End
 
 class Element
   : PropertyManager

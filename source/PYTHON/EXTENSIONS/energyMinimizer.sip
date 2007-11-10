@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.sip,v 1.4 2003/10/29 22:54:39 oliver Exp $
+// $Id$
 //
 
 class EnergyMinimizer
