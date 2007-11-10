@@ -37,7 +37,7 @@ clean:
 
 PyBALL.exe:  $(MOCS) $(OBJS) 
 #compile the resource file:
-	rc.exe /i "$(INCLUDE)"\mfc /fo"$(TARGETDIR)\PyBALL.res" PyBALL.rc 
+        rc.exe /i "$(INCLUDE)\mfc" /fo"$(TARGETDIR)\PyBALL.res" PyBALL.rc 
 	$(LINK) $(TARGETDIR)\PyBALL.res /OUT:$(TARGETDIR)\PyBALL.exe
 	echo.
 	echo finished creating PyBALL...

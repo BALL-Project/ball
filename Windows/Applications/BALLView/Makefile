@@ -5,10 +5,10 @@
 # options for Compiler
 BALLVIEW_DEFINES = /D QT_DLL /D UNICODE /D QT_THREAD_SUPPORT /D NO_DEBUG /D BALL_QT_HAS_THREADS /D BALL_PYTHON_SUPPORT
 
-CC =  $(CC) $(VIEW_INCLUDES) $(BALLVIEW_DEFINES)
+CC =  $(CC) /Zi $(VIEW_INCLUDES) $(BALLVIEW_DEFINES)
 
 # options for Linker
-LINK = $(LINK) $(BALLVIEW_LIBS) $(TARGETDIR)\*.obj
+LINK = $(LINK) /DEBUG $(BALLVIEW_LIBS) $(TARGETDIR)\*.obj
 
 UICDIR = $(SDIR)\Applications\BALLView
 
@@ -37,7 +37,7 @@ clean:
 
 BALLView.exe:  $(UICS) $(MOCS) $(OBJS) 
 #compile the resource file:
-	rc.exe /i "$(INCLUDE)"\mfc /fo"$(TARGETDIR)\BALLView.res" BALLView.rc 
+	rc.exe /i "$(INCLUDE)\mfc" /fo"$(TARGETDIR)\BALLView.res" BALLView.rc 
 	$(LINK) $(TARGETDIR)\BALLView.res /OUT:$(TARGETDIR)\BALLView.exe
 	echo.
 	echo finished creating BALLVIEW...

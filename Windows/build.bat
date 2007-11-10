@@ -17,6 +17,7 @@ if "%1" == "debug" (
 	set RESULT_DIR=Debug
 	echo OK, we are working on the debugging version
 )else if "%1" == "release" (
+	set NMAKE_ARG=""
 	set RESULT_DIR=Release
 	echo OK, we are working on the release version
 )else (
@@ -61,6 +62,7 @@ echo running make in %%i
 echo ----------------------------------------------------------------
 cd %%i
 mkdir %RESULT_DIR% > NUL 2> NUL
+echo %NMAKE_ARG%
 nmake %NMAKE_ARG% /CS
 if errorlevel 1 (
 echo Error occured while running make in %%i%, aborting...
