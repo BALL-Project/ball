@@ -89,7 +89,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt334.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libball.lib C:\Programme\Python23\libs\python23.lib"
+				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt334.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libball.lib C:\Programme\Python25\libs\python25.lib"
 				OutputFile="$(ProjectDir)..\..\..\lib\$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\..\lib\&quot;;&quot;$(QTDIR)\lib&quot;"/>
 			<Tool
@@ -204,7 +204,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(SIPDir)\libs\python23.lib imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt323.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libball.lib"
+				AdditionalDependencies="$(SIPDir)\libs\python25.lib imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt323.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libball.lib"
 				OutputFile="&quot;$(ProjectDir)\..\$(ProjectName).dll&quot;"
 				AdditionalLibraryDirectories="&quot;$(SIPDIR)\libs&quot;;&quot;$(QTDIR)\lib&quot;;&quot;$(ProjectDir)..&quot;"/>
 			<Tool
@@ -1062,19 +1062,19 @@
 						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="C:\Programme\Python23\include"/>
+							AdditionalIncludeDirectories="C:\Programme\Python25\include"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="C:\Programme\Python23\include"/>
+							AdditionalIncludeDirectories="C:\Programme\Python25\include"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="C:\Programme\Python23\include"/>
+							AdditionalIncludeDirectories="C:\Programme\Python25\include"/>
 					</FileConfiguration>
 				</File>
 				<File
