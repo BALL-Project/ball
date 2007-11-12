@@ -37,7 +37,7 @@ namespace BALL
 		char* buffer;
 
 		#ifdef BALL_PLATFORM_WINDOWS
-			if ((buffer = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	
+			if ((buffer = ::_getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	
 			{
 				directory_path_ = buffer;
 				dir_ = CreateFile(buffer,
@@ -585,7 +585,7 @@ namespace BALL
 			FileSystem::canonizePath(directory_path_);
 			return isValid();
 		}
-		if ((buffer = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)
+		if ((buffer = ::_getcwd(NULL, MAX_PATH_LENGTH)) != NULL)
 		{
 			directory_path_ = buffer;
 			free(buffer);
