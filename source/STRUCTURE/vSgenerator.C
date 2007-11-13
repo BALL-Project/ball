@@ -118,7 +118,8 @@ namespace BALL {
 	//stores for every atom its possible atomic valences 
 	//and the corresponding possible atomic penalty scores in a vector 
 	//the vector then is stored in an other vector at the atom's position in the molecule
-	void VSgenerator::GenerateAPS(Molecule* mol){
+	void VSgenerator::GenerateAPS(Molecule* mol)
+	{
 	
 		const Atom* partnerAtom;	
 		const Atom* secPartnerAtom;	
@@ -131,13 +132,8 @@ namespace BALL {
 		Atom::BondIterator bond_it;	//iterate over all bonds of one atom
 		Atom::BondIterator bond_it2;
 		RingPerceptionProcessor(ringPP);	//marks all atoms in a ring structure with property "InRing"
-		int atomic_penalty_score;
 		pair <int, int > atomicScore;	//pair of atomic valence and corresponding atomic penalty score
 		vector <pair <int, int > > aps_vector;	//vector of atomicScores
-	
-		//TODO be carefull because of init value 0!!!
-		//sum of all atom penalties
-		int total_penalty_score = 0;
 	
 		//mark all atoms in a ring structure with property "InRing"
 		mol->apply(ringPP);	
@@ -148,42 +144,52 @@ namespace BALL {
 		atomtypes.SetAtomProperties(mol);
 	
 		//if bonds exist
-		if(mol->countBonds() != 0){
+		if(mol->countBonds() != 0)
+		{
 			//assign to each atom in molecule a penalty score if necessary
-			for(;+atom_it;++atom_it){
+			for(;+atom_it;++atom_it)
+			{
 				aps_vector.clear();
 				//Oxygen
-				if (atom_it->getElement().getName()=="Oxygen"){
+				if (atom_it->getElement().getName()=="Oxygen")
+				{
 					//O(x1)
-					if (atom_it->getProperty("connectivity").getInt() == 1){
+					if (atom_it->getProperty("connectivity").getInt() == 1)
+					{
 						bond_it = atom_it->beginBond();
-						partnerAtom = bond_it->getBoundAtom(*atom_it);
-						//O(x1) in pyridine-1-oxide
-						if ((partnerAtom->getElement().getName()=="Nitrate" or partnerAtom->getElement().getName()=="Nitrogen") and partnerAtom->getProperty("InRing").getBool()){
-							atomicScore.first = 1;
-							atomicScore.second = 0;
-							aps_vector.push_back(atomicScore);
-					
-							atomicScore.first = 2;
-							atomicScore.second = 1;
-							aps_vector.push_back(atomicScore);
-						}
-						else {
-							atomicScore.first = 1;
-							atomicScore.second = 1;
-							aps_vector.push_back(atomicScore);
-					
-							atomicScore.first = 2;
-							atomicScore.second = 0;
-							aps_vector.push_back(atomicScore);
-	
-							atomicScore.first = 3;
-							atomicScore.second = 64;
-							aps_vector.push_back(atomicScore);
+						if(bond_it != atom_it->beginBond())
+						{
+							partnerAtom = bond_it->getBoundAtom(*atom_it);
+							//O(x1) in pyridine-1-oxide
+							if ((partnerAtom->getElement().getName()=="Nitrate" or partnerAtom->getElement().getName()=="Nitrogen") and partnerAtom->getProperty("InRing").getBool())
+							{
+								atomicScore.first = 1;
+								atomicScore.second = 0;
+								aps_vector.push_back(atomicScore);
+						
+								atomicScore.first = 2;
+								atomicScore.second = 1;
+								aps_vector.push_back(atomicScore);
+							}
+							else 
+							{
+								atomicScore.first = 1;
+								atomicScore.second = 1;
+								aps_vector.push_back(atomicScore);
+						
+								atomicScore.first = 2;
+								atomicScore.second = 0;
+								aps_vector.push_back(atomicScore);
+		
+								atomicScore.first = 3;
+								atomicScore.second = 64;
+								aps_vector.push_back(atomicScore);
+							}
 						}
 					}
 					//O(x2)
-					else if (atom_it->getProperty("connectivity").getInt() == 2){
+					else if (atom_it->getProperty("connectivity").getInt() == 2)
+					{
 						atomicScore.first = 1;
 						atomicScore.second = 32;
 						aps_vector.push_back(atomicScore);
@@ -199,7 +205,8 @@ namespace BALL {
 				}
 				
 				//H, F, CL, Br, I
-				if (atom_it->getElement().getName()=="Hydrogen" or atom_it->getElement().getName()=="Fluorine" or 		atom_it->getElement().getName()=="Iodine " or atom_it->getElement().getName()=="Chlorine" or 	atom_it->getElement().getName()=="Bromine" ){
+				if (atom_it->getElement().getName()=="Hydrogen" or atom_it->getElement().getName()=="Fluorine" or 		atom_it->getElement().getName()=="Iodine " or atom_it->getElement().getName()=="Chlorine" or 	atom_it->getElement().getName()=="Bromine" )
+				{
 						atomicScore.first = 1;
 						atomicScore.second = 0;
 						aps_vector.push_back(atomicScore);
@@ -215,109 +222,105 @@ namespace BALL {
 				
 					
 				//Carbon
-				if (atom_it->getElement().getName()=="Carbon"){
-					if (atom_it->getProperty("connectivity").getInt() ==1){
+				if (atom_it->getElement().getName()=="Carbon")
+				{
+					if (atom_it->getProperty("connectivity").getInt() ==1)
+					{
 						//C in CN-R
 						bond_it = atom_it->beginBond();
-						partnerAtom = bond_it->getBoundAtom(*atom_it);
-						if (partnerAtom->getElement().getName()=="Nitrate" or partnerAtom->getElement().getName()=="Nitrogen"){
-							cout << "nitrate" << endl;
-							if(partnerAtom->countBonds() == 2){
-								// TODO getOrder!!! not always possible!!!
-								if((atom_it->beginBond())->getOrder()==3){
-									if(partnerAtom->countBonds()==2){ 
-										atomicScore.first = 3;
-										atomicScore.second = 0;
-										aps_vector.push_back(atomicScore);
+						if(bond_it != atom_it->endBond())
+						{
+							partnerAtom = bond_it->getBoundAtom(*atom_it);
+							if (partnerAtom->getElement().getName()=="Nitrate" or partnerAtom->getElement().getName()=="Nitrogen")
+							{
+								if(partnerAtom->countBonds() == 2)
+								{
+									atomicScore.first = 3;
+									atomicScore.second = 0;
+									aps_vector.push_back(atomicScore);
+			
+									atomicScore.first = 4;
+									atomicScore.second = 1;
+									aps_vector.push_back(atomicScore);
 		
-										atomicScore.first = 4;
-										atomicScore.second = 1;
-										aps_vector.push_back(atomicScore);
-	
-										atomicScore.first = 5;
-										atomicScore.second = 32;
-										aps_vector.push_back(atomicScore);
-									}	
-								}				
+									atomicScore.first = 5;
+									atomicScore.second = 32;
+									aps_vector.push_back(atomicScore);				
+								}
 							}
-						}
-						//C(x1)		
-						else {
-							atomicScore.first = 3;
-							atomicScore.second = 1;
-							aps_vector.push_back(atomicScore);
-	
-							atomicScore.first = 4;
-							atomicScore.second = 0;
-							aps_vector.push_back(atomicScore);
-						
-							atomicScore.first = 5;
-							atomicScore.second = 32;
-							aps_vector.push_back(atomicScore);
+							//C(x1)		
+							else 
+							{
+								atomicScore.first = 3;
+								atomicScore.second = 1;
+								aps_vector.push_back(atomicScore);
+		
+								atomicScore.first = 4;
+								atomicScore.second = 0;
+								aps_vector.push_back(atomicScore);
+							
+								atomicScore.first = 5;
+								atomicScore.second = 32;
+								aps_vector.push_back(atomicScore);
+							}
 						}
 					}
 					//C in COO-
 					bond_it = atom_it->beginBond();
-					partnerAtom = bond_it->getBoundAtom(*atom_it);
-					if (partnerAtom->getElement().getName() =="Oxygen"){
-						secPartnerAtom = (++bond_it)->getBoundAtom(*atom_it);
-						if (secPartnerAtom->getElement().getName() =="Oxygen"){
-							//TODO getCharge!!! not always possible!!!
-							if (partnerAtom->getCharge()<0.0 and secPartnerAtom->getCharge()==0.0){
-								atomicScore.first = 5;
-								atomicScore.second = 0;
-								aps_vector.push_back(atomicScore);
-	
-								atomicScore.first = 4;
-								atomicScore.second = 32;
-								aps_vector.push_back(atomicScore);
-	
-								atomicScore.first = 6;
-								atomicScore.second = 32;
-								aps_vector.push_back(atomicScore);
-							}
-							else if (partnerAtom->getCharge()==0.0 and secPartnerAtom->getCharge()<0.0){
-								atomicScore.first = 5;
-								atomicScore.second = 0;
-								aps_vector.push_back(atomicScore);
-	
-								atomicScore.first = 4;
-								atomicScore.second = 32;
-								aps_vector.push_back(atomicScore);
-	
-								atomicScore.first = 6;
-								atomicScore.second = 32;
-								aps_vector.push_back(atomicScore);
-							}					
-						}
-					}
-					//if atom type still not found
-					if(aps_vector.empty()){
-						//C
-						atomicScore.first = 2;
-						atomicScore.second = 64;
-						aps_vector.push_back(atomicScore);
+					if(bond_it != atom_it->endBond())
+					{
+						partnerAtom = bond_it->getBoundAtom(*atom_it);
+						if (partnerAtom->getElement().getName() =="Oxygen")
+						{
+							secPartnerAtom = (++bond_it)->getBoundAtom(*atom_it);
+							if (secPartnerAtom->getElement().getName() =="Oxygen")
+							{
+								if ((partnerAtom->countBonds() == 1) || (secPartnerAtom->countBonds() ==1))
+								{
+									atomicScore.first = 5;
+									atomicScore.second = 0;
+									aps_vector.push_back(atomicScore);
 		
-						atomicScore.first = 3;
-						atomicScore.second = 32;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 4;
-						atomicScore.second = 0;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 5;
-						atomicScore.second = 32;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 6;
-						atomicScore.second = 64;
-						aps_vector.push_back(atomicScore);
-					}		
+									atomicScore.first = 4;
+									atomicScore.second = 32;
+									aps_vector.push_back(atomicScore);
+		
+									atomicScore.first = 6;
+									atomicScore.second = 32;
+									aps_vector.push_back(atomicScore);
+								}		
+							}
+						}
+						//if atom type still not found
+						if(aps_vector.empty())
+						{
+							//C
+							atomicScore.first = 2;
+							atomicScore.second = 64;
+							aps_vector.push_back(atomicScore);
+			
+							atomicScore.first = 3;
+							atomicScore.second = 32;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 4;
+							atomicScore.second = 0;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 5;
+							atomicScore.second = 32;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 6;
+							atomicScore.second = 64;
+							aps_vector.push_back(atomicScore);
+						}		
+					}
 				}
 				
 				// Si
-				if (atom_it->getElement().getName()== "Silicium"){
+				if (atom_it->getElement().getName()== "Silicium")
+				{
 					atomicScore.first = 4;
 					atomicScore.second = 0;
 					aps_vector.push_back(atomicScore);
@@ -326,163 +329,192 @@ namespace BALL {
 				
 					
 				//N(x1) in N=N=R
-				if ((atom_it->getElement().getName()=="Nitrate" or atom_it->getElement().getName()=="Nitrogen") and atom_it->getProperty("connectivity").getInt()==1){
+				if ((atom_it->getElement().getName()=="Nitrate" || atom_it->getElement().getName()=="Nitrogen") && (atom_it->countBonds() ==1))
+				{
 					bond = &(*(atom_it->beginBond()));
-					partnerAtom = bond->getBoundAtom(*atom_it);
-					if (partnerAtom->getElement().getName()=="Nitrate" or partnerAtom->getElement().getName()=="Nitrogen"){
-						//TODO getOrder!!! not always possible!!!
-						if(bond->getOrder()==2 and partnerAtom->countBonds()==2){  
-							partnerBond = const_cast <Bond*> (&(*(partnerAtom->beginBond())));
-							nextPartnerBond = const_cast <Bond*> (&(*(++(partnerAtom->beginBond()))));
-							if(partnerBond->getOrder()==2 and nextPartnerBond->getOrder()==2){
-								atomicScore.first = 2;
-								atomicScore.second = 0;
-								aps_vector.push_back(atomicScore);
-	
-								atomicScore.first = 3;
-								atomicScore.second = 0;
-								aps_vector.push_back(atomicScore);
+					if(atom_it->beginBond() != atom_it->endBond())
+					{
+						partnerAtom = bond->getBoundAtom(*atom_it);
+						if (partnerAtom->getElement().getName()=="Nitrate" or partnerAtom->getElement().getName()=="Nitrogen")
+						{
+							if(partnerAtom->countBonds()==2)
+							{  
+								partnerBond = const_cast <Bond*> (&(*(partnerAtom->beginBond())));
+								nextPartnerBond = const_cast <Bond*> (&(*(++(partnerAtom->beginBond()))));
+								const Atom* nextPartnerAtom = nextPartnerBond->getBoundAtom(*partnerAtom);
+								if(nextPartnerAtom->countBonds() == 1)
+								{
+									atomicScore.first = 2;
+									atomicScore.second = 0;
+									aps_vector.push_back(atomicScore);
+			
+									atomicScore.first = 3;
+									atomicScore.second = 0;
+									aps_vector.push_back(atomicScore);
+								}
 							}
 						}
-					}
-					//N(x1)
-					if(aps_vector.empty()){
-						atomicScore.first = 2;
-						atomicScore.second = 3;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 3;
-						atomicScore.second = 0;
-						aps_vector.push_back(atomicScore);
-			
-						atomicScore.first = 4;
-						atomicScore.second = 32;
-						aps_vector.push_back(atomicScore);
-					}			
+						//N(x1)
+						if(aps_vector.empty())
+						{
+							atomicScore.first = 2;
+							atomicScore.second = 3;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 3;
+							atomicScore.second = 0;
+							aps_vector.push_back(atomicScore);
+				
+							atomicScore.first = 4;
+							atomicScore.second = 32;
+							aps_vector.push_back(atomicScore);
+						}	
+					}		
 				}
 				//N(x2) in N=N=R
-				if ((atom_it->getElement().getName()=="Nitrate" or atom_it->getElement().getName()=="Nitrogen") and atom_it->getProperty("connectivity").getInt()==2){
+				if ((atom_it->getElement().getName()=="Nitrate" || atom_it->getElement().getName()=="Nitrogen") && (atom_it->countBonds()== 2))
+				{
 					bond = &(*(atom_it->beginBond()));
-					nextBond = const_cast<Bond*>(&(*(++(atom_it->beginBond()))));
-					partnerAtom = bond->getBoundAtom(*atom_it);
-					otherPartnerAtom = nextBond->getBoundAtom(*atom_it);
-					//if one of the neighbours is a Nitrate
-					if (partnerAtom->getElement().getName()=="Nitrate" or partnerAtom->getElement().getName()=="Nitrogen"){
-						//check bonds (x1 of N)
-						if(bond->getOrder()==2 and partnerAtom->countBonds()==1){ 
-							partnerBond = const_cast<Bond*>(&(*(partnerAtom->beginBond())));
-							nextPartnerBond = const_cast<Bond*>(&(*(++(partnerAtom->beginBond()))));
-	
-							atomicScore.first = 3;
-							atomicScore.second = 1;
-							aps_vector.push_back(atomicScore);
-	
-							atomicScore.first = 4;
-							atomicScore.second = 0;
-							aps_vector.push_back(atomicScore);							
+					if(atom_it->beginBond() != atom_it->endBond())
+					{
+						nextBond = const_cast<Bond*>(&(*(++(atom_it->beginBond()))));
+						partnerAtom = bond->getBoundAtom(*atom_it);
+						otherPartnerAtom = nextBond->getBoundAtom(*atom_it);
+						//if one of the neighbours is a Nitrate
+						if (partnerAtom->getElement().getName()=="Nitrate" || partnerAtom->getElement().getName()=="Nitrogen")
+						{
+							//check bonds (x1 of N)
+							if(partnerAtom->countBonds()==1)	
+							{ 
+								atomicScore.first = 3;
+								atomicScore.second = 1;
+								aps_vector.push_back(atomicScore);
+		
+								atomicScore.first = 4;
+								atomicScore.second = 0;
+								aps_vector.push_back(atomicScore);							
+							}
+						}
+						if(otherPartnerAtom->getElement().getName()=="Nitrate" || otherPartnerAtom->getElement().getName()=="Nitrogen")
+						{
+						//check bonds (x2 of N)
+							if(otherPartnerAtom->countBonds()==1)
+							{
+								atomicScore.first = 3;
+								atomicScore.second = 1;
+								aps_vector.push_back(atomicScore);
+		
+								atomicScore.first = 4;
+								atomicScore.second = 0;
+								aps_vector.push_back(atomicScore);
+							} 
 						}
 					}
-					else if(otherPartnerAtom->getElement().getName()=="Nitrate" or otherPartnerAtom->getElement().getName()=="Nitrogen"){
-					//check bonds (x2 of N)
-						if(nextBond->getOrder()==2 and otherPartnerAtom->countBonds()==1){
-							partnerBond = const_cast<Bond*>(&(*(otherPartnerAtom->beginBond())));
-							
-							atomicScore.first = 3;
-							atomicScore.second = 1;
-							aps_vector.push_back(atomicScore);
-	
-							atomicScore.first = 4;
-							atomicScore.second = 0;
-							aps_vector.push_back(atomicScore);
-						} 
-					}
 					//N(x2)
-					if(aps_vector.empty()){
+					if(aps_vector.empty())
+					{
 						atomicScore.first = 2;
 						atomicScore.second = 4;
 						aps_vector.push_back(atomicScore);
-	
+		
 						atomicScore.first = 3;
 						atomicScore.second = 0;
 						aps_vector.push_back(atomicScore);
-	
+		
 						atomicScore.first = 4;
 						atomicScore.second = 2;
 						aps_vector.push_back(atomicScore);
 					}
 				}
 				//N(x3) in nitro
-				if ((atom_it->getElement().getName()=="Nitrate" or atom_it->getElement().getName()=="Nitrogen") and atom_it->getProperty("connectivity").getInt()==3){
+				if ((atom_it->getElement().getName()=="Nitrate" or atom_it->getElement().getName()=="Nitrogen") and (atom_it->countBonds()==3))
+				{
 					bond_it = atom_it->beginBond();
-					int countOxy= 0;
-					for(;bond_it != atom_it->endBond();++bond_it){
-						partnerAtom = bond_it->getBoundAtom(*atom_it);
-						if(partnerAtom->getElement().getName()=="Oxygen" and partnerAtom->countBonds()==1 /*and partnerAtom->getCharge()==0*/){
-							++countOxy; 
-						}
-					}
-					if(countOxy==2){
-						atomicScore.first = 3;
-						atomicScore.second = 64;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 4;
-						atomicScore.second = 32;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 5;
-						atomicScore.second = 0;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 6;
-						atomicScore.second = 32;
-						aps_vector.push_back(atomicScore);
-					}
-					//N(x3) in pyridine-1-oxide
-					else if (atom_it->getCharge()>0){
-						bond_it2 = atom_it->beginBond();
-						int countOxy=0;
-						int countCarb=0;
-						for(;bond_it2 != atom_it->endBond();++bond_it2){
-							partnerAtom = bond_it2->getBoundAtom(*atom_it);
-							if(partnerAtom->getElement().getName()=="Carbon" and partnerAtom->getProperty("InRing").getName()=="InRing"){
-								++countCarb;
-							}
-							if(partnerAtom->getElement().getName()=="Oxygen"){
-								++countOxy;
+					if(atom_it->countBonds() > 0)
+					{
+						int countOxy= 0;
+						for(;bond_it != atom_it->endBond();++bond_it)
+						{
+							partnerAtom = bond_it->getBoundAtom(*atom_it);
+							if(partnerAtom->getElement().getName()=="Oxygen" and partnerAtom->countBonds()==1 )
+							{
+								++countOxy; 
 							}
 						}
-						if (countOxy==1 and countCarb==2){
+						if(countOxy==2)
+						{
 							atomicScore.first = 3;
-							atomicScore.second = 1;
+							atomicScore.second = 64;
 							aps_vector.push_back(atomicScore);
-	
+		
 							atomicScore.first = 4;
+							atomicScore.second = 32;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 5;
 							atomicScore.second = 0;
 							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 6;
+							atomicScore.second = 32;
+							aps_vector.push_back(atomicScore);
 						}
-					}
-					//N(x3)
-					if(aps_vector.empty()){
-						atomicScore.first = 2;
-						atomicScore.second =32;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 3;
-						atomicScore.second = 0;
-						aps_vector.push_back(atomicScore);
-				
-						atomicScore.first = 4;
-						atomicScore.second = 1;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 5;
-						atomicScore.second = 2;
-						aps_vector.push_back(atomicScore);
+						//N(x3) in pyridine-1-oxide
+						else 
+						{
+							bond_it2 = atom_it->beginBond();
+							if(atom_it->countBonds() > 0)
+							{
+								int countOxy=0;
+								int countCarb=0;
+								for(;bond_it2 != atom_it->endBond();++bond_it2)
+								{
+									partnerAtom = bond_it2->getBoundAtom(*atom_it);
+									if(partnerAtom->getElement().getName()=="Carbon" and partnerAtom->getProperty("InRing").getName()=="InRing")
+									{
+										++countCarb;
+									}
+									if(partnerAtom->getElement().getName()=="Oxygen")
+									{
+										++countOxy;
+									}
+								}
+								if (countOxy==1 and countCarb==2)	
+								{
+									atomicScore.first = 3;
+									atomicScore.second = 1;
+									aps_vector.push_back(atomicScore);
+			
+									atomicScore.first = 4;
+									atomicScore.second = 0;
+									aps_vector.push_back(atomicScore);
+								}
+							}
+						}
+						//N(x3)
+						if(aps_vector.empty())
+						{
+							atomicScore.first = 2;
+							atomicScore.second =32;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 3;
+							atomicScore.second = 0;
+							aps_vector.push_back(atomicScore);
+					
+							atomicScore.first = 4;
+							atomicScore.second = 1;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 5;
+							atomicScore.second = 2;
+							aps_vector.push_back(atomicScore);
+						}
 					}	
 				}
 				//N(x4)
-				if ((atom_it->getElement().getName()=="Nitrate" or atom_it->getElement().getName()=="Nitrogen") and atom_it->getProperty("connectivity").getInt()==4){
+				if ((atom_it->getElement().getName()=="Nitrate" or atom_it->getElement().getName()=="Nitrogen") and atom_it->getProperty("connectivity").getInt()==4)
+				{
 					atomicScore.first = 2;
 					atomicScore.second = 64;
 					aps_vector.push_back(atomicScore);		
@@ -498,7 +530,8 @@ namespace BALL {
 				
 				
 				//P(x1)
-				if (atom_it->getElement().getName()=="Phosphorus" and atom_it->getProperty("connectivity").getInt()==1){
+				if (atom_it->getElement().getName()=="Phosphorus" and atom_it->getProperty("connectivity").getInt()==1)
+				{
 					atomicScore.first = 2;
 					atomicScore.second = 2;
 					aps_vector.push_back(atomicScore);
@@ -512,7 +545,8 @@ namespace BALL {
 					aps_vector.push_back(atomicScore);
 				}
 				//P(x2)
-				if (atom_it->getElement().getName()=="Phosphorus" and atom_it->getProperty("connectivity").getInt()==2){
+				if (atom_it->getElement().getName()=="Phosphorus" and atom_it->getProperty("connectivity").getInt()==2)
+				{
 					atomicScore.first = 2;
 					atomicScore.second = 4;
 					aps_vector.push_back(atomicScore);
@@ -526,7 +560,8 @@ namespace BALL {
 					aps_vector.push_back(atomicScore);
 				}
 				//P(x3)
-				if (atom_it->getElement().getName()=="Phosphorus" and atom_it->getProperty("connectivity").getInt()==3){
+				if (atom_it->getElement().getName()=="Phosphorus" and atom_it->getProperty("connectivity").getInt()==3)
+				{
 					atomicScore.first = 2;
 					atomicScore.second = 32;
 					aps_vector.push_back(atomicScore);
@@ -544,98 +579,128 @@ namespace BALL {
 					aps_vector.push_back(atomicScore);
 				}
 				//P(x4) 
-				if (atom_it->getElement().getName()=="Phosphorus" and atom_it->getProperty("connectivity").getInt()==4){
+				if (atom_it->getElement().getName()=="Phosphorus" and atom_it->getProperty("connectivity").getInt()==4)
+				{
 					bond_it = atom_it->beginBond();
-					int countOxy = 0;
-					int countSul = 0;
-					for(;bond_it != atom_it->endBond(); ++bond_it){
-						partnerAtom = bond_it->getBoundAtom(*atom_it);
-						if (partnerAtom->getElement().getName()=="Oxygen" and partnerAtom->countBonds()== 1){
-							++countOxy;
+					if(atom_it->countBonds() > 0)
+					{
+						int countOxy = 0;
+						int countSul = 0;
+						for(;bond_it != atom_it->endBond(); ++bond_it)
+						{
+							partnerAtom = bond_it->getBoundAtom(*atom_it);
+							if (partnerAtom->getElement().getName()=="Oxygen" and partnerAtom->countBonds()== 1)
+							{
+								++countOxy;
+							}
+							else if ((partnerAtom->getElement().getName()=="Sulphur" or  partnerAtom->getElement().getName()=="Sulfur") and partnerAtom->countBonds()== 1)
+							{
+								++countSul;
+							}					
 						}
-						else if ((partnerAtom->getElement().getName()=="Sulphur" or  partnerAtom->getElement().getName()=="Sulfur") and partnerAtom->countBonds()== 1){
-							++countSul;
-						}					
-					}
-					//bonded to 2 O(x1) or 2 S(x1)
-					if (countOxy==2 or countSul==2){
-						atomicScore.first = 5;
-						atomicScore.second = 32;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 6;
-						atomicScore.second = 0;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 7;
-						atomicScore.second = 32;
-						aps_vector.push_back(atomicScore);
-					}	
-					//bonded to 3 O(x1) or 3 S(x1)
-					if(countOxy==3 or countSul==3){
-						atomicScore.first = 6;
-						atomicScore.second = 32;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 7;
-						atomicScore.second = 0;
-						aps_vector.push_back(atomicScore);
-					}
-					//P(x4)
-					if(aps_vector.empty()){
-						atomicScore.first = 3;
-						atomicScore.second = 64;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 4;
-						atomicScore.second = 1;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 5;
-						atomicScore.second = 0;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 6;
-						atomicScore.second = 32;
-						aps_vector.push_back(atomicScore);
+						//bonded to 2 O(x1) or 2 S(x1)
+						if (countOxy==2 or countSul==2)
+						{
+							atomicScore.first = 5;
+							atomicScore.second = 32;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 6;
+							atomicScore.second = 0;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 7;
+							atomicScore.second = 32;
+							aps_vector.push_back(atomicScore);
+						}	
+						//bonded to 3 O(x1) or 3 S(x1)
+						if(countOxy==3 or countSul==3)
+						{
+							atomicScore.first = 6;
+							atomicScore.second = 32;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 7;
+							atomicScore.second = 0;
+							aps_vector.push_back(atomicScore);
+						}
+						//P(x4)
+						if(aps_vector.empty())
+						{
+							atomicScore.first = 3;
+							atomicScore.second = 64;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 4;
+							atomicScore.second = 1;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 5;
+							atomicScore.second = 0;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 6;
+							atomicScore.second = 32;
+							aps_vector.push_back(atomicScore);
+						}
 					}
 				}
 						
 				
 				//S(x1)
-				if ((atom_it->getElement().getName()=="Sulphur" or  atom_it->getElement().getName()=="Sulfur") and atom_it->getProperty("connectivity").getInt()==1){
+				if ((atom_it->getElement().getName()=="Sulphur" or  atom_it->getElement().getName()=="Sulfur") and atom_it->getProperty("connectivity").getInt()==1)
+				{
 					bond_it = atom_it->beginBond();
-					partnerAtom = bond_it->getBoundAtom(*atom_it);
-					//S(x1) in pyridine-1-thiol anion
-					if ((partnerAtom->getElement().getName()=="Nitrate" or partnerAtom->getElement().getName()=="Nitrogen") and partnerAtom->getProperty("InRing").getName() =="InRing"){
-						if(partnerAtom->getCharge()>0 and atom_it->getCharge()<0){
+					if(bond_it != atom_it->endBond())
+					{
+						partnerAtom = bond_it->getBoundAtom(*atom_it);
+						//S(x1) in pyridine-1-thiol anion
+						if ((partnerAtom->getElement().getName()=="Nitrate" or partnerAtom->getElement().getName()=="Nitrogen") and partnerAtom->getProperty("InRing").getName() =="InRing")
+						{
+							//check if Nitrate is inRing of Carbons
+							const Atom* partner_of_partner_atom;
+							int count_carbon = 0;
+
+							for(;+bond_it2;++bond_it2)
+							{
+								partner_of_partner_atom = bond_it2->getBoundAtom(*partnerAtom);
+								if(partner_of_partner_atom->getElement().getName() == "Carbon")
+								{
+									++count_carbon;
+								}
+							}
+							if((partnerAtom->countBonds()== 2) && (count_carbon >= 1))
+							{
+								atomicScore.first = 1;
+								atomicScore.second = 0;
+								aps_vector.push_back(atomicScore);
+					
+								atomicScore.first = 2;
+								atomicScore.second = 1;
+								aps_vector.push_back(atomicScore);
+							}
+						}
+						//S(x1)
+						if(aps_vector.empty())
+						{
 							atomicScore.first = 1;
+							atomicScore.second = 2;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 2;
 							atomicScore.second = 0;
 							aps_vector.push_back(atomicScore);
-				
-							atomicScore.first = 2;
-							atomicScore.second = 1;
+		
+							atomicScore.first = 3;
+							atomicScore.second = 64;
 							aps_vector.push_back(atomicScore);
 						}
-					}
-					//S(x1)
-					if(aps_vector.empty()){
-						atomicScore.first = 1;
-						atomicScore.second = 2;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 2;
-						atomicScore.second = 0;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 3;
-						atomicScore.second = 64;
-						aps_vector.push_back(atomicScore);
 					}
 				}
 				
 				//S(x2)
-				if ((atom_it->getElement().getName()=="Sulphur" or  atom_it->getElement().getName()=="Sulfur") and atom_it->getProperty("connectivity").getInt()==2){
+				if ((atom_it->getElement().getName()=="Sulphur" or  atom_it->getElement().getName()=="Sulfur") and atom_it->getProperty("connectivity").getInt()==2)
+				{
 					atomicScore.first = 1;
 					atomicScore.second = 32;
 					aps_vector.push_back(atomicScore);
@@ -654,7 +719,8 @@ namespace BALL {
 				}
 				
 				//S(x3)
-				if ((atom_it->getElement().getName()=="Sulphur" or  atom_it->getElement().getName()=="Sulfur") and atom_it->getProperty("connectivity").getInt()==3){
+				if ((atom_it->getElement().getName()=="Sulphur" or  atom_it->getElement().getName()=="Sulfur") and atom_it->getProperty("connectivity").getInt()==3)
+				{
 					atomicScore.first = 3;
 					atomicScore.second = 1;
 					aps_vector.push_back(atomicScore);
@@ -675,72 +741,77 @@ namespace BALL {
 				
 				
 				//S(x4)
-				if ((atom_it->getElement().getName()=="Sulphur" or  atom_it->getElement().getName()=="Sulfur") and atom_it->getProperty("connectivity").getInt()==4){
+				if ((atom_it->getElement().getName()=="Sulphur" or  atom_it->getElement().getName()=="Sulfur") and atom_it->getProperty("connectivity").getInt()==4)
+				{
 					bond_it = atom_it->beginBond();
-					int countOxy = 0;
-					int countSul = 0;
-					for(;bond_it != atom_it->endBond(); ++bond_it){
-						partnerAtom = bond_it->getBoundAtom(*atom_it);
-						if (partnerAtom->getElement().getName()=="Oxygen" and partnerAtom->countBonds()== 1){
-							++countOxy;
+					if(atom_it->countBonds() > 0)
+					{
+						int countOxy = 0;
+						int countSul = 0;
+						for(;bond_it != atom_it->endBond(); ++bond_it){
+							partnerAtom = bond_it->getBoundAtom(*atom_it);
+							if (partnerAtom->getElement().getName()=="Oxygen" and partnerAtom->countBonds()== 1)
+							{
+								++countOxy;
+							}
+							else if ((partnerAtom->getElement().getName()=="Sulphur" or  partnerAtom->getElement().getName()=="Sulfur") and partnerAtom->countBonds()== 1)
+							{
+								++countSul;
+							}					
 						}
-						else if ((partnerAtom->getElement().getName()=="Sulphur" or  partnerAtom->getElement().getName()=="Sulfur") and partnerAtom->countBonds()== 1){
-							++countSul;
-						}					
+						//bonded to 2 O(x1) or S(x1)
+						if (countOxy ==2 or countSul==2)
+						{
+							atomicScore.first = 6;
+							atomicScore.second = 0;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 7;
+							atomicScore.second = 32;
+							aps_vector.push_back(atomicScore);
+						}	
+						//bonded to 3 O(x1) or S(x1)
+						if(countOxy== 3 or countSul==3)
+						{
+							atomicScore.first = 6;
+							atomicScore.second = 32;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 7;
+							atomicScore.second = 0;
+							aps_vector.push_back(atomicScore);
+						}
+						//bonded to 4 O(x1) or S(x1)
+						if(countOxy==4 or countSul==4)
+						{
+							atomicScore.first = 6;
+							atomicScore.second = 32;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 7;
+							atomicScore.second = 0;
+							aps_vector.push_back(atomicScore);
+						}		
+						//S(x4)
+						if(aps_vector.empty())
+						{
+							atomicScore.first = 4;
+							atomicScore.second = 4;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 5;
+							atomicScore.second = 2;
+							aps_vector.push_back(atomicScore);
+		
+							atomicScore.first = 6;
+							atomicScore.second = 0;
+							aps_vector.push_back(atomicScore);
+						}	
 					}
-					//bonded to 2 O(x1) or S(x1)
-					if (countOxy ==2 or countSul==2){
-						atomicScore.first = 6;
-						atomicScore.second = 0;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 7;
-						atomicScore.second = 32;
-						aps_vector.push_back(atomicScore);
-					}	
-					//bonded to 3 O(x1) or S(x1)
-					if(countOxy== 3 or countSul==3){
-						atomicScore.first = 6;
-						atomicScore.second = 32;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 7;
-						atomicScore.second = 0;
-						aps_vector.push_back(atomicScore);
-					}
-					//bonded to 4 O(x1) or S(x1)
-					if(countOxy==4 or countSul==4){
-						atomicScore.first = 6;
-						atomicScore.second = 32;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 7;
-						atomicScore.second = 0;
-						aps_vector.push_back(atomicScore);
-					}		
-					//S(x4)
-					if(aps_vector.empty()){
-						atomicScore.first = 4;
-						atomicScore.second = 4;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 5;
-						atomicScore.second = 2;
-						aps_vector.push_back(atomicScore);
-	
-						atomicScore.first = 6;
-						atomicScore.second = 0;
-						aps_vector.push_back(atomicScore);
-					}	
 				}
-
-				//sort aps_vector in ascending order
-				//sort(aps_vector.begin(),aps_vector.end(),PairSorted);
 				atomic_penalty_scores_.push_back(aps_vector);
 			}
-					}//TODO exception handling!
-			else cout << "Error: Molecule has no bonds!" << endl;
-
+		}
 	}
 
 
@@ -751,7 +822,6 @@ namespace BALL {
 		list<int> current_atoms = bondorderAssigner.getCurrentAtoms();
 
 		GenerateAPS(mol);
-		int index = 0;
 		//delete atom indices out of atomlist 
 		//if atomic penalty score list has only one element
 		for(vector<vector<pair<int,int> > >::iterator vec_it = atomic_penalty_scores_.begin(); vec_it != atomic_penalty_scores_.end();++vec_it){
@@ -797,5 +867,6 @@ namespace BALL {
 
 
 }
+
 
 
