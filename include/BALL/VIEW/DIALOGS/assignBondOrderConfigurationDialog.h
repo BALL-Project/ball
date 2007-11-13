@@ -24,7 +24,7 @@ namespace BALL
 	{
 		class MolecularStructure;
 
-		/** Dialog for changing the options of the MMFF94 forcefield
+		/** Dialog for changing the options of the assignBondOrderProcessro
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT AssignBondOrderConfigurationDialog
@@ -55,10 +55,6 @@ namespace BALL
 			///
 			void reject();
 
-			//void readOptions(AssignBondOrderProcessor& assign_bond_proc) throw();
-			/// apply the settings to a given MMFF94 force field
-			//void applyTo(AssignBondOrderProcessor& assign_bond_proc)
-			//	throw();
 
 			protected slots:
 
@@ -66,16 +62,10 @@ namespace BALL
 
 			protected:
 
-			//void chooseSolventFile()
-			//	throw();
-		//	void setProc(AssignBondOrderProcessor& assign_bond_proc) throw();
-
 			private:
 			String getValue_(const QCheckBox* box) const;
 			float getValue_(const QLineEdit* edit) const
 				throw(Exception::InvalidFormat);
-
-			//AssignBondOrderProcessor* assign_bond_proc_;
 		};
 	}
 }

@@ -29,6 +29,7 @@
 #include <BALL/FORMAT/resourceFile.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
+#include <BALL/QSAR/aromaticityProcessor.h>
 
 using namespace std;
 
@@ -57,6 +58,9 @@ namespace BALL
 	
 	const char* AssignBondOrderProcessor::Option::ASSIGN_CHARGES = "assign_charges";
 	const bool  AssignBondOrderProcessor::Default::ASSIGN_CHARGES = false;
+	
+	const char* AssignBondOrderProcessor::Option::KEKULIZE_RINGS = "kekulize_aromatic_rings";
+	const bool  AssignBondOrderProcessor::Default::KEKULIZE_RINGS = true;
 
 
 	AssignBondOrderProcessor::AssignBondOrderProcessor()
@@ -122,7 +126,7 @@ namespace BALL
 			std::vector<Bond*> ind_bond(total_no_bonds, (Bond*)0);
 
 			// Vector for storing fixed atom valences
-			std::vector<Position> fixed_val(total_no_bonds, 0);
+			std::vector<Position> fixed_val(no_atoms, 0);
 
 			// Generate penalty values
 			VSgenerator gen;
@@ -329,19 +333,34 @@ namespace BALL
 						// Set penalties
 						obj_row[ind_y]     = av_vec[i][j].second;
 					}
-					
-					// Add valence constraint
-					if (!add_constraintex(lp, count_vars, &row[0], &colno[0], EQ, 
-								fixed_val[i]))
-					{
-						Log.error() << "Setting valence constraint for ILP failed" << endl;
-					}
 
-					// Add choice constraint
-					if (!add_constraintex(lp, av_vec[i].size(), &choices[0], &colno[count_b], 
-								EQ, 1))
+					// in case we got an empty penalty row
+					if (av_vec[i].size() != 0)
 					{
-						Log.error() << "Setting choice constraint for ILP failed" << endl;
+						// Add valence constraint
+						if (!add_constraintex(lp, count_vars, &row[0], &colno[0], EQ, 
+								fixed_val[i]))
+						{
+							Log.error() << "Setting valence constraint for ILP failed" << endl;
+						}
+
+						// Add choice constraint
+						if (!add_constraintex(lp, av_vec[i].size(), &choices[0], &colno[count_b], 
+									EQ, 1))
+						{
+							Log.error() << "Setting choice constraint for ILP failed" << endl;
+						}
+
+						// Annes test: Oktett-Regel
+						if ((at1->getElement()!= PTE[Element::HELIUM]) && at1->getElement().getGroup() > (short)3)
+						{
+							if (!add_constraintex(lp, count_b,  &row[0], &colno[0], 
+										GE, -4))
+							{
+								Log.error() << "Setting octett constraint for ILP failed" << endl;
+							}
+
+						}
 					}
 				}
 			}
@@ -407,7 +426,22 @@ namespace BALL
 				}
 			}
 
+			
+			if (!options.getBool(Option::KEKULIZE_RINGS))
+			{
+				// find all rings
+				vector<vector<Atom*> > rings;
+				RingPerceptionProcessor rpp;
+				rpp.calculateSSSR(rings, ac);
+
+				// set the aromatic rings	
+				AromaticityProcessor ap;
+				//ap.aromatizeSimple(rings);
+				ap.aromatize(rings, ac);
+			}
+			
 			delete_lp(lp);
+
 		}
 
 		return Processor::CONTINUE;
@@ -441,7 +475,11 @@ namespace BALL
 												   AssignBondOrderProcessor::Default::OVERWRITE_CHARGES);	
 		
 		options.setDefaultBool(AssignBondOrderProcessor::Option::ASSIGN_CHARGES,
-													 AssignBondOrderProcessor::Default::ASSIGN_CHARGES);
+													 AssignBondOrderProcessor::Default::ASSIGN_CHARGES);	
+	
+		options.setDefaultBool(AssignBondOrderProcessor::Option::KEKULIZE_RINGS,
+													 AssignBondOrderProcessor::Default::KEKULIZE_RINGS);	
+
 	}
 	
 } // namespace BALL

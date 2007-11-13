@@ -85,38 +85,6 @@ namespace BALL
 			return ascii(edit->text()).toFloat();
 		}
 
-		/*
-	//	void AssignBondOrderConfigurationDialog::applyTo(AssignBondOrderProcessor& assign_bond_proc)
-		void readOptions(AssignBondOrderProcessor& assign_bond_proc)
-			throw()
-		{
-			try
-			{
-				assign_bond_proc.options[AssignBondOrderProcessor::Option::OVERWRITE_UNKNOWN_BOND_ORDERS] = getValue_(overwrite_unknownBO_box);
-				assign_bond_proc.options[AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS] = getValue_(overwrite_singleBO_box);
-				assign_bond_proc.options[AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS] = getValue_(overwrite_doubleBO_box);
-				assign_bond_proc.options[AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS] = getValue_(overwrite_tripleBO_box);
-				assign_bond_proc.options[AssignBondOrderProcessor::Option::OVERWRITE_QUADRUPLE_BOND_ORDERS] = getValue_(overwrite_quadrupleBO_box);
-				assign_bond_proc.options[AssignBondOrderProcessor::Option::OVERWRITE_AROMATIC_BOND_ORDERS] = getValue_(overwrite_aromaticBO_box);
-				assign_bond_proc.options[AssignBondOrderProcessor::Option::ASSIGN_CHARGES] = getValue_(assign_charges_checkBox);
-				assign_bond_proc.options[AssignBondOrderProcessor::Option::OVERWRITE_CHARGES] = getValue_(overwrite_charges_checkBox);
-
-				// get the parameter folder
-				assign_bond_proc.options[MMFF94::Option::FOLDER] = ascii(parameter_file_edit->text());
-
-			}
-			catch(...)
-			{
-				Log.error() << "Invalid values for ILP" << std::endl; // TODO: nameing
-			}
-		}*/
-/*
-		void AssignBondOrderConfigurationDialog::setProc(AssignBondOrderProcessor& assign_bond_proc)
-			throw()
-		{
-			//mmff_ = &mmff;
-		}*/
-
 	
 		void AssignBondOrderConfigurationDialog::resetOptions()
 		{

@@ -66,6 +66,10 @@ namespace BALL
 				/**	assign all charges
 				*/
 				static const char* ASSIGN_CHARGES;
+				
+				/**	kekulize rings
+				*/
+				static const char* KEKULIZE_RINGS;
 
 			};
 
@@ -79,7 +83,7 @@ namespace BALL
 				static const bool OVERWRITE_AROMATIC_BOND_ORDERS; 
 				static const bool OVERWRITE_CHARGES;
 				static const bool ASSIGN_CHARGES;
-
+				static const bool KEKULIZE_RINGS;
 			};
 			//@}
 		

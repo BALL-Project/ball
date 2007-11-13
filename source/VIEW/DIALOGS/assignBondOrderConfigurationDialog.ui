@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>524</width>
-    <height>365</height>
+    <width>510</width>
+    <height>299</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -34,12 +34,347 @@
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>5</number>
+    <number>9</number>
    </property>
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="6" column="0" colspan="2" >
+   <item row="1" column="1" >
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Bond Order Assignment</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignHCenter</set>
+     </property>
+     <property name="flat" >
+      <bool>false</bool>
+     </property>
+     <widget class="QCheckBox" name="overwrite_quadrupleBO_box" >
+      <property name="geometry" >
+       <rect>
+        <x>7</x>
+        <y>122</y>
+        <width>240</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Overwrite Bond Order Quadruple</string>
+      </property>
+      <property name="checked" >
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="overwrite_tripleBO_box" >
+      <property name="geometry" >
+       <rect>
+        <x>7</x>
+        <y>96</y>
+        <width>240</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Overwrite Bond Order Triple</string>
+      </property>
+      <property name="checked" >
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="overwrite_doubleBO_box" >
+      <property name="geometry" >
+       <rect>
+        <x>7</x>
+        <y>70</y>
+        <width>240</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Overwrite Bond Order Double</string>
+      </property>
+      <property name="checked" >
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label" >
+      <property name="geometry" >
+       <rect>
+        <x>7</x>
+        <y>23</y>
+        <width>240</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>In Addition to Unknown Bond Orders:</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="overwrite_aromaticBO_box" >
+      <property name="enabled" >
+       <bool>false</bool>
+      </property>
+      <property name="geometry" >
+       <rect>
+        <x>7</x>
+        <y>148</y>
+        <width>240</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Overwrite Bond Order Aromatic</string>
+      </property>
+      <property name="checkable" >
+       <bool>true</bool>
+      </property>
+      <property name="checked" >
+       <bool>true</bool>
+      </property>
+      <property name="tristate" >
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="overwrite_singleBO_box" >
+      <property name="geometry" >
+       <rect>
+        <x>7</x>
+        <y>44</y>
+        <width>240</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Overwrite Bond Order Single</string>
+      </property>
+      <property name="checked" >
+       <bool>true</bool>
+      </property>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <layout class="QVBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QGroupBox" name="groupBox_2" >
+       <property name="title" >
+        <string>Aromatic Rings</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignHCenter</set>
+       </property>
+       <property name="checked" >
+        <bool>false</bool>
+       </property>
+       <layout class="QVBoxLayout" >
+        <property name="margin" >
+         <number>9</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QRadioButton" name="kekulizeBonds_button" >
+          <property name="enabled" >
+           <bool>true</bool>
+          </property>
+          <property name="text" >
+           <string>Kekulize Bonds</string>
+          </property>
+          <property name="checked" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="assignBOAromatic_button" >
+          <property name="text" >
+           <string>Assign Bond Order Aromatic</string>
+          </property>
+          <property name="checked" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="check_options" >
+       <property name="minimumSize" >
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="title" >
+        <string>Charge Assignment</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignHCenter</set>
+       </property>
+       <layout class="QVBoxLayout" >
+        <property name="margin" >
+         <number>9</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QCheckBox" name="assign_charges_checkBox" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>140</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>Assign charges</string>
+          </property>
+          <property name="checked" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="overwrite_charges_checkBox" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>155</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>Overwrite charges</string>
+          </property>
+          <property name="checked" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0" colspan="2" >
+    <widget class="QGroupBox" name="groupBox12" >
+     <property name="title" >
+      <string>Parameter Set</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignHCenter</set>
+     </property>
+     <layout class="QHBoxLayout" >
+      <property name="margin" >
+       <number>5</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="Label_10" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>5</hsizetype>
+          <vsizetype>1</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="focusPolicy" >
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="lineWidth" >
+         <number>1</number>
+        </property>
+        <property name="text" >
+         <string>Path</string>
+        </property>
+        <property name="textFormat" >
+         <enum>Qt::AutoText</enum>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="parameter_file_edit" >
+        <property name="minimumSize" >
+         <size>
+          <width>150</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="focusPolicy" >
+         <enum>Qt::StrongFocus</enum>
+        </property>
+        <property name="text" >
+         <string>ValencePenalty</string>
+        </property>
+        <property name="maxLength" >
+         <number>32767</number>
+        </property>
+        <property name="frame" >
+         <bool>true</bool>
+        </property>
+        <property name="echoMode" >
+         <enum>QLineEdit::Normal</enum>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignLeading</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="browse_button" >
+        <property name="enabled" >
+         <bool>false</bool>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>50</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="focusPolicy" >
+         <enum>Qt::TabFocus</enum>
+        </property>
+        <property name="toolTip" >
+         <string>Browse your computer for amber file</string>
+        </property>
+        <property name="text" >
+         <string>Browse</string>
+        </property>
+        <property name="autoDefault" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2" >
     <layout class="QHBoxLayout" >
      <property name="margin" >
       <number>0</number>
@@ -133,248 +468,21 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="0" colspan="2" >
-    <widget class="QGroupBox" name="groupBox12" >
-     <property name="title" >
-      <string>Parameter Set</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignHCenter</set>
-     </property>
-     <layout class="QHBoxLayout" >
-      <property name="margin" >
-       <number>5</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item>
-       <widget class="QLabel" name="Label_10" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>5</hsizetype>
-          <vsizetype>1</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize" >
-         <size>
-          <width>0</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="focusPolicy" >
-         <enum>Qt::NoFocus</enum>
-        </property>
-        <property name="lineWidth" >
-         <number>1</number>
-        </property>
-        <property name="text" >
-         <string>Path</string>
-        </property>
-        <property name="textFormat" >
-         <enum>Qt::AutoText</enum>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="parameter_file_edit" >
-        <property name="minimumSize" >
-         <size>
-          <width>150</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="focusPolicy" >
-         <enum>Qt::StrongFocus</enum>
-        </property>
-        <property name="text" >
-         <string>ValencePenalty</string>
-        </property>
-        <property name="maxLength" >
-         <number>32767</number>
-        </property>
-        <property name="frame" >
-         <bool>true</bool>
-        </property>
-        <property name="echoMode" >
-         <enum>QLineEdit::Normal</enum>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignLeading</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="browse_button" >
-        <property name="minimumSize" >
-         <size>
-          <width>50</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="focusPolicy" >
-         <enum>Qt::TabFocus</enum>
-        </property>
-        <property name="toolTip" >
-         <string>Browse your computer for amber file</string>
-        </property>
-        <property name="text" >
-         <string>Browse</string>
-        </property>
-        <property name="autoDefault" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="3" column="1" >
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
-      <string>Bond Order Assignment</string>
-     </property>
-     <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>5</number>
-      </property>
-      <property name="spacing" >
-       <number>5</number>
-      </property>
-      <item>
-       <widget class="QLabel" name="label" >
-        <property name="text" >
-         <string>In Addition to Unknown Bond Orders:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="overwrite_singleBO_box" >
-        <property name="text" >
-         <string>Overwrite Bond Order Single</string>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="overwrite_doubleBO_box" >
-        <property name="text" >
-         <string>Overwrite Bond Order Double</string>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="overwrite_tripleBO_box" >
-        <property name="text" >
-         <string>Overwrite Bond Order Triple</string>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="overwrite_quadrupleBO_box" >
-        <property name="text" >
-         <string>Overwrite Bond Order Quadruple</string>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="overwrite_aromaticBO_box" >
-        <property name="text" >
-         <string>Overwrite Bond Order Aromatic</string>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="3" column="0" >
-    <widget class="QGroupBox" name="check_options" >
-     <property name="minimumSize" >
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="title" >
-      <string>Charge Assignment</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignHCenter</set>
-     </property>
-     <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item>
-       <widget class="QCheckBox" name="assign_charges_checkBox" >
-        <property name="minimumSize" >
-         <size>
-          <width>140</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>Assign charges</string>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="overwrite_charges_checkBox" >
-        <property name="minimumSize" >
-         <size>
-          <width>155</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>Overwrite charges</string>
-        </property>
-        <property name="checked" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <tabstops>
   <tabstop>parameter_file_edit</tabstop>
   <tabstop>browse_button</tabstop>
-  <tabstop>assign_charges_checkBox</tabstop>
-  <tabstop>overwrite_charges_checkBox</tabstop>
+  <tabstop>kekulizeBonds_button</tabstop>
+  <tabstop>assignBOAromatic_button</tabstop>
   <tabstop>overwrite_singleBO_box</tabstop>
   <tabstop>overwrite_doubleBO_box</tabstop>
   <tabstop>overwrite_tripleBO_box</tabstop>
   <tabstop>overwrite_quadrupleBO_box</tabstop>
   <tabstop>overwrite_aromaticBO_box</tabstop>
+  <tabstop>assign_charges_checkBox</tabstop>
+  <tabstop>overwrite_charges_checkBox</tabstop>
   <tabstop>close_button</tabstop>
   <tabstop>cancel_button</tabstop>
   <tabstop>reset_button</tabstop>
