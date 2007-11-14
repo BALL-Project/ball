@@ -149,10 +149,19 @@ namespace BALL
 			//@}
 			
 		protected:
+	
+			/// computes for every atom its possible atomic valences and the corresponding possible atomic penalty scores
+		  /// and stores them per \b{atom in atomic_penalty_scores_}
+			void calculateAtomPenalties_(AtomContainer& ac);
+
 			/// number of bonds, which are created during the processor call
 			Size num_bonds_;
-	
-			/// hashmap storing the considered bonds
+			
+			//TODO: change to something better than the atom index :-) 
+			/// the penalties per atom 
+			vector<vector< pair <int,int> > > atomic_penalty_scores_;
+			
+			// hashmap storing the considered bonds
 
 		};
 

@@ -88,10 +88,7 @@ CPP_SOURCES=\
 	triangulatedSurface.C\
 	UCK.C\
 	residueRotamerSet.C\
-	rotamerLibrary.C\
-	bondorderAssigner.C\
-	atomtypes.C\
-	vSgenerator.C	
+	rotamerLibrary.C
 
 SMILES_PARSER_PREFIX=SmilesParser
 SMARTS_PARSER_PREFIX=SmartsParser

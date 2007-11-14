@@ -18,7 +18,6 @@
 #include <BALL/STRUCTURE/secondaryStructureProcessor.h>
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/STRUCTURE/HBondProcessor.h>
-#include <BALL/STRUCTURE/bondorderAssigner.h>
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/KERNEL/system.h>
