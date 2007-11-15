@@ -1535,6 +1535,7 @@ void EditableScene::computeBondOrders()
 	abop.options[AssignBondOrderProcessor::Option::ASSIGN_CHARGES] 									= bond_order_dialog.assign_charges_checkBox->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_CHARGES] 							= bond_order_dialog.overwrite_charges_checkBox->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::KEKULIZE_RINGS] 									= bond_order_dialog.kekulizeBonds_button->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::ENFORCE_OCTETT_RULE] 						= bond_order_dialog.enforce_octett_rule_box->isChecked();
 
 	// apply
 	containers.front()->apply(abop);

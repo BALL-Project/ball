@@ -52,6 +52,9 @@ namespace BALL
 	const char* AssignBondOrderProcessor::Option::KEKULIZE_RINGS = "kekulize_aromatic_rings";
 	const bool  AssignBondOrderProcessor::Default::KEKULIZE_RINGS = true;
 
+	const char* AssignBondOrderProcessor::Option::ENFORCE_OCTETT_RULE = "enforce_octett_rule";
+	const bool  AssignBondOrderProcessor::Default::ENFORCE_OCTETT_RULE = true;
+
 
 	AssignBondOrderProcessor::AssignBondOrderProcessor()
 		: UnaryProcessor<AtomContainer>(),
@@ -97,7 +100,7 @@ namespace BALL
 		bool otbo = options.getBool(Option::OVERWRITE_TRIPLE_BOND_ORDERS);
 		bool oqbo = options.getBool(Option::OVERWRITE_QUADRUPLE_BOND_ORDERS);
 		bool oabo = options.getBool(Option::OVERWRITE_AROMATIC_BOND_ORDERS);
-	
+		bool enforce_octett_rule = options.getBool(Option::ENFORCE_OCTETT_RULE);
 
 		// what kind of composite do we have?
 		if (RTTI::isKindOf<Molecule>(ac))
@@ -134,21 +137,23 @@ namespace BALL
 			// Maximum number of row entries (in penalty table)
 			Position max_no_ent = 0;
 
+			// Maximum number of bonds of an atom
+			Position max_no_atom_bonds = 0;
+
 			for (Position i = 0; i < no_atoms; ++i)
 			{
 				Atom* at1 = ac.getAtom(i);
 				Position fixed = 0;
+				Position consider_bonds = 0;
 
 				bool consider_atom = false;
 				for (Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
 				{
 					Bond* bnd = &(*bit);
-
 					// accoring to the options and the given bond order 
 					// the acutal bond is a free variable of the ILP or not
 					// YES: add a variable in the bond side constraint + ???? 
 					// NO: equality in the bond side constraint +  ?????
-					bool consider_bond = true;
 					switch (bnd->getOrder())
 					{
 						case Bond::ORDER__SINGLE:
@@ -156,7 +161,10 @@ namespace BALL
 								if (!osbo)
 								{
 									fixed += 1;
-									consider_bond = false;
+								}
+								else
+								{	
+									++consider_bonds;
 								}
 								break;
 							}
@@ -165,8 +173,12 @@ namespace BALL
 								if (!odbo)
 								{
 									fixed += 2;
-									consider_bond = false;
 								}
+								else
+								{	
+									++consider_bonds;
+								}
+
 								break;
 							}
 						case Bond::ORDER__TRIPLE:
@@ -174,8 +186,12 @@ namespace BALL
 								if (!otbo)
 								{
 									fixed += 3;
-									consider_bond = false;
 								}
+								else
+								{	
+									++consider_bonds;
+								}
+
 								break;
 							}
 						case Bond::ORDER__QUADRUPLE:
@@ -183,23 +199,36 @@ namespace BALL
 								if (!oqbo)
 								{
 									fixed += 4;
-									consider_bond = false;
 								}
+								else
+								{	
+									++consider_bonds;
+								}
+
 								break;
 							}
 						case Bond::ORDER__AROMATIC:
-							{
+						{
 								if (!osbo)
 								{
 									fixed += 1; ///????????????
-									consider_bond = false;
 								}
+								else
+								{	
+									++consider_bonds;
+								}
+
 								break;
-							}
+						}	
+						default: //Bond::ORDER__UNKNOWN:
+						{
+								++consider_bonds;
+						}
 					}
 
+
 					// In all other cases we should calculate the bond order
-					if (consider_bond)
+					if (consider_bonds)
 					{
 						consider_atom = true;
 						pair<map<Bond*, unsigned int>::iterator, bool> p 
@@ -221,12 +250,17 @@ namespace BALL
 					}
 				}
 
+				if (consider_bonds > max_no_atom_bonds)
+				{
+					max_no_atom_bonds = consider_bonds;
+				}
+
 				fixed_val[i] = fixed;
 			}
 
 			Position no_vars = no_x + no_y;
 
-			//cout << no_vars << endl;
+			//cout << "no vars " << no_vars << endl;
 
 			// Create a new model with 'no_vars' variables 
 			// (columns) and 0 rows
@@ -248,8 +282,8 @@ namespace BALL
 
 			// Create space large enough for one row and the objective function,
 			// use lp_solves internal types.
-			std::vector<int> colno(5 + max_no_ent,0);
-			std::vector<REAL> row(5 + max_no_ent,0);
+			std::vector<int> colno(max_no_atom_bonds + 1 + max_no_ent,0);
+			std::vector<REAL> row(max_no_atom_bonds + 1 + max_no_ent,0);
 			std::vector<int> obj_colno(no_y+1,0);
 			std::vector<REAL> obj_row(no_y+1,0);
 
@@ -343,19 +377,22 @@ namespace BALL
 							Log.error() << "Setting choice constraint for ILP failed" << endl;
 						}
 
-						// add constraint for the octett-rule
-						if ((at1->getElement()!= PTE[Element::HELIUM]) && at1->getElement().getGroup() > (short)3)
+						if (enforce_octett_rule)
 						{
-							if (!add_constraintex(lp, count_b,  &row[0], &colno[0], 
-										GE, -4))
-							{
-								Log.error() << "Setting octett constraint for ILP failed" << endl;
-							}
-
+						 // Add constraint for the octett-rule
+						 if ((at1->getElement()!= PTE[Element::HELIUM]) && at1->getElement().getGroup() > (short)3)
+						 {
+							 if (!add_constraintex(lp, count_b,  &row[0], &colno[0], 
+										 GE, -4))
+							 {
+								 Log.error() << "Setting octett constraint for ILP failed" << endl;
+							 } 
+						 }
 						}
 					}
 				}
 			}
+
 			// Rowmode should be turned off again after building the model
 			set_add_rowmode(lp, FALSE);
 
@@ -378,64 +415,64 @@ namespace BALL
 			int ret = solve(lp);
 
 			// Check whether lp_solve could do its job successfully
-			if (ret != OPTIMAL)
+			if (ret == OPTIMAL)
+			{
+				// Get variables
+				REAL *vars;
+				get_ptr_variables(lp, &vars);
+
+				// count the assigned bond orders
+				num_bonds_ = 0;
+				// Do the assignment of the bond orders
+				for(Position i = 0; i < no_x; ++i)
+				{
+					if (fabs(vars[i] - 1.) < 1.e-10)
+					{
+						ind_bond[i]->setOrder(Bond::ORDER__SINGLE);
+						num_bonds_++;
+						continue;
+					}
+					if (fabs(vars[i] - 2.) < 1.e-10)
+					{
+						ind_bond[i]->setOrder(Bond::ORDER__DOUBLE);	
+						num_bonds_++;
+						continue;
+					}
+					if (fabs(vars[i] - 3.) < 1.e-10)
+					{
+						ind_bond[i]->setOrder(Bond::ORDER__TRIPLE);	
+						num_bonds_++;
+						continue;
+					}
+					if (fabs(vars[i] - 4.) < 1.e-10)
+					{
+						ind_bond[i]->setOrder(Bond::ORDER__QUADRUPLE);
+						num_bonds_++;
+						continue;
+					}
+				}
+
+				if (!options.getBool(Option::KEKULIZE_RINGS))
+				{
+					// find all rings
+					vector<vector<Atom*> > rings;
+					RingPerceptionProcessor rpp;
+					rpp.calculateSSSR(rings, ac);
+
+					// set the aromatic rings	
+					AromaticityProcessor ap;
+					ap.aromatize(rings, ac);
+
+				}
+			}
+			else
 			{
 				Log.error() << "ILP could not be solved successfully" << endl;
 			}
 
-			// Get variables
-			REAL *vars;
-			get_ptr_variables(lp, &vars);
-
-			// count the assigned bond orders
-			num_bonds_ = 0;
-			// Do the assignment of the bond orders
-			for(Position i = 0; i < no_x; ++i)
-			{
-				if (fabs(vars[i] - 1.) < 1.e-10)
-				{
-					ind_bond[i]->setOrder(Bond::ORDER__SINGLE);
-					num_bonds_++;
-					continue;
-				}
-				if (fabs(vars[i] - 2.) < 1.e-10)
-				{
-					ind_bond[i]->setOrder(Bond::ORDER__DOUBLE);	
-					num_bonds_++;
-					continue;
-				}
-				if (fabs(vars[i] - 3.) < 1.e-10)
-				{
-					ind_bond[i]->setOrder(Bond::ORDER__TRIPLE);	
-					num_bonds_++;
-					continue;
-				}
-				if (fabs(vars[i] - 4.) < 1.e-10)
-				{
-					ind_bond[i]->setOrder(Bond::ORDER__QUADRUPLE);
-					num_bonds_++;
-					continue;
-				}
-			}
-
-			
-			if (!options.getBool(Option::KEKULIZE_RINGS))
-			{
-				// find all rings
-				vector<vector<Atom*> > rings;
-				RingPerceptionProcessor rpp;
-				rpp.calculateSSSR(rings, ac);
-
-				// set the aromatic rings	
-				AromaticityProcessor ap;
-				//ap.aromatizeSimple(rings);
-				ap.aromatize(rings, ac);
-			}
-			
 			delete_lp(lp);
 
 		}
-
 		return Processor::CONTINUE;
 	}
 
@@ -1168,7 +1205,9 @@ namespace BALL
 	
 		options.setDefaultBool(AssignBondOrderProcessor::Option::KEKULIZE_RINGS,
 													 AssignBondOrderProcessor::Default::KEKULIZE_RINGS);	
-
+		
+		options.setDefaultBool(AssignBondOrderProcessor::Option::ENFORCE_OCTETT_RULE,
+													 AssignBondOrderProcessor::Default::ENFORCE_OCTETT_RULE);	
 	}
 	
 } // namespace BALL

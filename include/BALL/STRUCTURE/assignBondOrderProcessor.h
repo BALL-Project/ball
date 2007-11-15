@@ -71,6 +71,10 @@ namespace BALL
 				*/
 				static const char* KEKULIZE_RINGS;
 
+				/**	enforce octett rule
+				*/
+				static const char* ENFORCE_OCTETT_RULE;
+
 			};
 
 			/// Default values for options
@@ -84,6 +88,7 @@ namespace BALL
 				static const bool OVERWRITE_CHARGES;
 				static const bool ASSIGN_CHARGES;
 				static const bool KEKULIZE_RINGS;
+				static const bool ENFORCE_OCTETT_RULE;
 			};
 			//@}
 		
@@ -149,7 +154,9 @@ namespace BALL
 			//@}
 			
 		protected:
-	
+			/// solves the ILP 
+			void solveILP(); 
+
 			/// computes for every atom its possible atomic valences and the corresponding possible atomic penalty scores
 		  /// and stores them per \b{atom in atomic_penalty_scores_}
 			void calculateAtomPenalties_(AtomContainer& ac);
