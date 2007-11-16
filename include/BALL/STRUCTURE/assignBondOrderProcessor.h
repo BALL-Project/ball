@@ -30,7 +30,9 @@ namespace BALL
 	class BALL_EXPORT AssignBondOrderProcessor 
 		: public UnaryProcessor<AtomContainer> 
 	{
-
+		protected:
+			class ILPSolution_;
+			friend class ILPSolution;
 		public:
 
 			/** @name Constant Definitions
@@ -132,7 +134,14 @@ namespace BALL
 			//@{
 			/// Return the number of bonds built during the last application.
 			Size getNumberOfBondOrdersSet();
+		
+			Size getNumberOfSolutions() {return solutions_.size();};
 
+			//// Return the ILP computed Bond order solutions
+			//vector<ILPSolution_>& getSolutions() {return solutions_;};
+			//const vector<ILPSolution_>& getSolutions() const {return solutions_;};
+			
+			void apply(AtomContainer& ac, Position i);
 			//@}
 			
 			/** @name Assignment
@@ -154,22 +163,57 @@ namespace BALL
 			//@}
 			
 		protected:
-			/// solves the ILP 
-			void solveILP(); 
+			
+			/// Nested class storing the parameters of a solution to our ILP
+			class ILPSolution_
+			{	
+				friend class AssignBondOrderProcessor;
 
+				public:
+					/// Default constructor
+					ILPSolution_();
+					
+					/// Detailed constructor
+					// we assume that the AtomContainer in the constructor and the apply-method are equal
+					// otherwise we would have to solve a graph matching problem
+					// Note: The last parameter decides which order spectrum should be considered.
+					// Since the lpsolve does not offer a unequality constraint we have to split into LE and GE
+					ILPSolution_(AssignBondOrderProcessor* ap, AtomContainer& ac, Bond* bond = NULL, int order = 0, bool lessEqualConstraint = false);
+					
+					/// Destructor
+					virtual ~ILPSolution_();
+					
+					/// denotes whether the ILP could be solved or not
+					bool valid;
+					
+					/// the complete set of bond orders for _ALL_ bonds
+					HashMap<Bond*, int> bond_orders;
+
+					/// the value of the objective function
+					double penalty_sum;	
+
+					/// number of bonds, which are created during the processor call
+					Size num_bonds; // TODO: richtig verlinken im DIALOG MENUTEXT !!! // TODO: richtig verlinken im DIALOG MENUTEXT !!!  
+			};
+
+		
 			/// computes for every atom its possible atomic valences and the corresponding possible atomic penalty scores
 		  /// and stores them per \b{atom in atomic_penalty_scores_}
 			void calculateAtomPenalties_(AtomContainer& ac);
 
-			/// number of bonds, which are created during the processor call
-			Size num_bonds_;
-			
+					
 			//TODO: change to something better than the atom index :-) 
 			/// the penalties per atom 
 			vector<vector< pair <int,int> > > atomic_penalty_scores_;
-			
-			// hashmap storing the considered bonds
+		
+			// Map for storing whether a bond is free or fixed
+			map<Bond*, bool> bond_free_;
+ 			
+			/// store per atom index the atoms fixed valences 
+			std::vector<Position> fixed_val_;
 
+			// storing the solutions
+			vector<ILPSolution_> solutions_;
 		};
 
 } // namespace BALL 

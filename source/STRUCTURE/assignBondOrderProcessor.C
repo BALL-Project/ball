@@ -18,8 +18,9 @@
 #include <BALL/QSAR/aromaticityProcessor.h>
 
 // For lp_solve
-#include <lp_lib.h>
+#include <lpsolve/lp_lib.h>
 
+#define MAX__SOLUTIONS 100 // TODO: should be a option
 
 using namespace std;
 
@@ -59,15 +60,22 @@ namespace BALL
 	AssignBondOrderProcessor::AssignBondOrderProcessor()
 		: UnaryProcessor<AtomContainer>(),
 			options(),
-			num_bonds_(0)	
+			atomic_penalty_scores_(),
+			bond_free_(),
+			fixed_val_(),
+			solutions_()
 	{
 		setDefaultOptions();
 	}
 
 	AssignBondOrderProcessor::AssignBondOrderProcessor(const AssignBondOrderProcessor& abop)
 		:	UnaryProcessor<AtomContainer>(abop),
-			options(),
-			num_bonds_(0)
+			options(abop.options),
+			atomic_penalty_scores_(abop.atomic_penalty_scores_),
+			bond_free_(abop.bond_free_),
+			fixed_val_(abop.fixed_val_),
+			solutions_(abop.solutions_)
+
 	{
 	}
 
@@ -83,13 +91,14 @@ namespace BALL
 
 	bool AssignBondOrderProcessor::start()
 	{
-		num_bonds_ = 0;
 		return true;
 	}
 
 	Size AssignBondOrderProcessor::getNumberOfBondOrdersSet()
 	{
-		return num_bonds_;
+		if (solutions_.size() > 0)
+			return solutions_[0].num_bonds;
+		return 0;
 	}
 
 	Processor::Result AssignBondOrderProcessor::operator () (AtomContainer& ac)
@@ -106,372 +115,210 @@ namespace BALL
 		if (RTTI::isKindOf<Molecule>(ac))
 		{	
 			// Check number of variables with prefix 'x'
-			// and map bonds onto its variables
 			Position total_no_bonds = ac.countBonds();
+
+			// Number of fixed bonds
+			Size num_fixed_bonds = 0; 
 
 			// Number of atoms in the system
 			Position no_atoms = ac.countAtoms();
 
-			// Mapping from bonds onto bond variable indices
-			map<Bond*, Position> bond_map;
+			// Mapping from (free) bonds onto bond variable indices
+			//map<Bond*, Position> bond_map;
 
 			// Vector for mapping from variable indices onto bonds
-			std::vector<Bond*> ind_bond(total_no_bonds, (Bond*)0);
+			//std::vector<Bond*> ind_bond(total_no_bonds, (Bond*)0);
 
 			// Vector for storing fixed atom valences
-			std::vector<Position> fixed_val(no_atoms, 0);
-
-			// Generate penalty values
-			calculateAtomPenalties_(ac);
-			vector<vector<pair<int, int> > >& av_vec(atomic_penalty_scores_);
-			//VSgenerator gen;
-			//gen.GenerateAPS(dynamic_cast<Molecule*>(&ac));
-			//vector<vector<pair<int, int> > >& av_vec(gen.atomic_penalty_scores_);
-
+			fixed_val_ = std::vector<Position>(no_atoms, 0);
+			
 			// Count the choice constraints
-			Position no_y = 0;
+			//Position no_y = 0;
 
 			// Count the number of bonds whose orders should be calculated
-			Position no_x = 0;
+			//Position no_x = 0;
 
 			// Maximum number of row entries (in penalty table)
-			Position max_no_ent = 0;
+			//Position max_no_ent = 0;
 
 			// Maximum number of bonds of an atom
-			Position max_no_atom_bonds = 0;
+			//Position max_no_atom_bonds = 0;
 
+					
+			// Find out, which bonds should be considered in general
 			for (Position i = 0; i < no_atoms; ++i)
 			{
 				Atom* at1 = ac.getAtom(i);
 				Position fixed = 0;
-				Position consider_bonds = 0;
+				//Position consider_bonds = 0;
 
-				bool consider_atom = false;
 				for (Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
 				{
 					Bond* bnd = &(*bit);
-					// accoring to the options and the given bond order 
+					// according to the options and the given bond order 
 					// the acutal bond is a free variable of the ILP or not
 					// YES: add a variable in the bond side constraint + ???? 
 					// NO: equality in the bond side constraint +  ?????
 					switch (bnd->getOrder())
 					{
 						case Bond::ORDER__SINGLE:
-							{
+						{
 								if (!osbo)
 								{
 									fixed += 1;
+									bond_free_[bnd] = false;
 								}
 								else
 								{	
-									++consider_bonds;
+								//	++consider_bonds;	
+									bond_free_[bnd] = true;
 								}
 								break;
-							}
+						}
 						case Bond::ORDER__DOUBLE:
-							{
+						{
 								if (!odbo)
 								{
 									fixed += 2;
+									bond_free_[bnd] = false;
 								}
 								else
 								{	
-									++consider_bonds;
+								//	++consider_bonds;
+									bond_free_[bnd] = true;
 								}
 
 								break;
-							}
+						}
 						case Bond::ORDER__TRIPLE:
-							{
+						{
 								if (!otbo)
 								{
 									fixed += 3;
+									bond_free_[bnd] = false;
 								}
 								else
 								{	
-									++consider_bonds;
+								//	++consider_bonds;	
+									bond_free_[bnd] = true;
 								}
 
 								break;
-							}
+						}
 						case Bond::ORDER__QUADRUPLE:
-							{
+						{
 								if (!oqbo)
 								{
 									fixed += 4;
+									bond_free_[bnd] = false;
+
 								}
 								else
 								{	
-									++consider_bonds;
+								//	++consider_bonds;
+									bond_free_[bnd] = true;
 								}
 
 								break;
-							}
+						}
 						case Bond::ORDER__AROMATIC:
 						{
 								if (!osbo)
 								{
-									fixed += 1; ///????????????
+									fixed += 1; ///????????????	
+									bond_free_[bnd] = false;
 								}
 								else
 								{	
-									++consider_bonds;
+							//		++consider_bonds;
+									bond_free_[bnd] = true;
 								}
-
 								break;
 						}	
 						default: //Bond::ORDER__UNKNOWN:
 						{
-								++consider_bonds;
+						//		++consider_bonds;	
+								bond_free_[bnd] = true;
 						}
 					}
+				}
+				fixed_val_[i] = fixed;
+				num_fixed_bonds += fixed;
+			}
+		
+			// Generate penalty values for all atoms in the AtomContainer ac
+			calculateAtomPenalties_(ac);
+	
+			// get a first solution
+			solutions_.push_back(ILPSolution_(this, ac));
+		
+			if ( (solutions_.size() > 0) 
+					&&  (total_no_bonds - num_fixed_bonds < MAX__SOLUTIONS) 
+					&&  (solutions_[0].valid)
+				 )
+			{
+				// now iterate over all free bonds and inhibit the order we already found
+				map<Bond*, bool>::iterator it = bond_free_.begin();
+				for (; it!= bond_free_.end(); it++)
+				{
+					if (it->second)
+					{	
+						// We want to inhibit the current bond to have the order, we already found
+						// Since lpsolve does not offer constraints of type unequal, we have to check
+						// if there is a solution with constraint x_bond LE order-1  AND x_bond GE order+1 
+						// the type of the extra constraint is controlled by the last parameter value.
+					
+						ILPSolution_ solutionLE; 
+						ILPSolution_ solutionGE; 
 
-
-					// In all other cases we should calculate the bond order
-					if (consider_bonds)
-					{
-						consider_atom = true;
-						pair<map<Bond*, unsigned int>::iterator, bool> p 
-							= bond_map.insert(make_pair(bnd, no_x+1));
-						if (p.second)
+						// case LE order-1
+						if (solutions_[0].bond_orders[it->first]-1 > 0)
+						{	
+							solutionLE = ILPSolution_(this, ac, it->first, solutions_[0].bond_orders[it->first], true);
+													}
+						// case GE order+1
+						if (solutions_[0].bond_orders[it->first]+1 < 5)
+						{	
+							ILPSolution_ solutionGE = ILPSolution_(this, ac, it->first, solutions_[0].bond_orders[it->first], false);
+						}
+						
+						if (solutionLE.valid)
 						{
-							ind_bond[no_x] = bnd;
-							++no_x;
-						}
-					}
-				}
-
-				if (consider_atom)
-				{
-					no_y += av_vec[i].size();
-					if (av_vec[i].size() > max_no_ent)
-					{
-						max_no_ent = av_vec[i].size();
-					}
-				}
-
-				if (consider_bonds > max_no_atom_bonds)
-				{
-					max_no_atom_bonds = consider_bonds;
-				}
-
-				fixed_val[i] = fixed;
-			}
-
-			Position no_vars = no_x + no_y;
-
-			//cout << "no vars " << no_vars << endl;
-
-			// Create a new model with 'no_vars' variables 
-			// (columns) and 0 rows
-			lprec *lp = make_lp(0, no_vars);
-			if (!lp)
-			{
-				Log.error() << "Creation of ILP failed" << endl;
-			}
-
-			// Set the binary and integer constraints
-			for(Position i = 1; i <= no_x; ++i)
-			{
-				set_int(lp, i, TRUE);
-			}
-			for(Position i = no_x+1; i <= no_vars; ++i)
-			{
-				set_binary(lp, i, TRUE);
-			}
-
-			// Create space large enough for one row and the objective function,
-			// use lp_solves internal types.
-			std::vector<int> colno(max_no_atom_bonds + 1 + max_no_ent,0);
-			std::vector<REAL> row(max_no_atom_bonds + 1 + max_no_ent,0);
-			std::vector<int> obj_colno(no_y+1,0);
-			std::vector<REAL> obj_row(no_y+1,0);
-
-			// Factors for choice constraints
-			std::vector<REAL> choices(max_no_ent, 1);
-
-			// Makes building the model faster if it's done
-			// row by row
-			set_add_rowmode(lp, TRUE);
-
-			// Set the lower and upper constraints for bonds
-			for(Position i = 1; i <= no_x; ++i)
-			{
-				colno[0] = i;
-				if (!add_constraintex(lp, 1, &choices[0], &colno[0], LE, 4))
-				{
-					Log.error() << "Setting upper bound for bond constraint failed" << endl;
-				}
-				if (!add_constraintex(lp, 1, &choices[0], &colno[0], GE, 1))
-				{
-					Log.error() << "Setting lower bound for bond constraint failed" << endl;
-				}
-			}
-
-			// Create all remaining constraints and the objective function
-
-			// Atom indices
-			Position i = 0;
-
-			// Indices of the choice variables (y)
-			Position ind_y = 0;
-
-			for(; i < no_atoms; ++i)
-			{
-				// Find corresponding variables
-				Atom* at1 = ac.getAtom(i);
-
-				// Count the bonds of this atom whose
-				// orders should be calculated
-				Position count_b = 0;
-				for(Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
-				{
-					Bond* bnd = &(*bit);
-					map<Bond*, unsigned int>::iterator it = bond_map.find(bnd);
-
-					if (it != bond_map.end())
-					{
-						colno[count_b] = it->second;
-						row[count_b]   = -1;
-						++count_b;
-					}
-				}
-
-				if (count_b)
-				{
-					// This atom has bonds whose orders should be calculated
-
-					// Create indices for the choice variables and set
-					// the entries for the valence constraint and the 
-					// objective function
-
-					// Count the number of variables participating in the current row
-					Position count_vars = count_b;
-					for(Position j = 0; j < av_vec[i].size(); ++j, ++ind_y, ++count_vars)
-					{
-						// Choice variables have indices > no_x in variable vector for ILP
-						obj_colno[ind_y]   = ind_y + no_x + 1;
-						colno[count_vars] = obj_colno[ind_y];
-
-						// Set valences
-						row[count_vars]   = av_vec[i][j].first;
-
-						// Set penalties
-						obj_row[ind_y]     = av_vec[i][j].second;
-					}
-
-					// in case we got an empty penalty row
-					if (av_vec[i].size() != 0)
-					{
-						// Add valence constraint
-						if (!add_constraintex(lp, count_vars, &row[0], &colno[0], EQ, 
-								fixed_val[i]))
+							if (solutionGE.valid)
+							{
+								if (solutionLE.penalty_sum <= solutionGE.penalty_sum)
+								{
+									solutions_.push_back(solutionLE);  
+								}
+								if (solutionLE.penalty_sum >= solutionGE.penalty_sum)
+								{
+									solutions_.push_back(solutionGE);  
+								}
+							}
+							else
+							{
+								solutions_.push_back(solutionLE);  
+							}
+						} // solution_LE not valid
+						else
 						{
-							Log.error() << "Setting valence constraint for ILP failed" << endl;
-						}
-
-						// Add choice constraint
-						if (!add_constraintex(lp, av_vec[i].size(), &choices[0], &colno[count_b], 
-									EQ, 1))
-						{
-							Log.error() << "Setting choice constraint for ILP failed" << endl;
-						}
-
-						if (enforce_octett_rule)
-						{
-						 // Add constraint for the octett-rule
-						 if ((at1->getElement()!= PTE[Element::HELIUM]) && at1->getElement().getGroup() > (short)3)
-						 {
-							 if (!add_constraintex(lp, count_b,  &row[0], &colno[0], 
-										 GE, -4))
-							 {
-								 Log.error() << "Setting octett constraint for ILP failed" << endl;
-							 } 
-						 }
+							if (solutionGE.valid)
+							{			
+								solutions_.push_back(solutionGE);  
+							}
 						}
 					}
-				}
-			}
-
-			// Rowmode should be turned off again after building the model
-			set_add_rowmode(lp, FALSE);
-
-			// Set objective function
-			if (!set_obj_fnex(lp, no_y, &obj_row[0], &obj_colno[0]))
-			{
-				Log.error() << "Setting objective function for ILP failed" << endl;
-			}
-
-			// Tell lp_solve that this problem is a minimization problem
-			set_minim(lp);
-
-			// We only want to see important messages on screen while solving
-			set_verbose(lp, IMPORTANT);
-
-			// Show the generated MIP
-			//write_LP(lp, stdout);
-
-			// Let lp_solve solve our problem
-			int ret = solve(lp);
-
-			// Check whether lp_solve could do its job successfully
-			if (ret == OPTIMAL)
-			{
-				// Get variables
-				REAL *vars;
-				get_ptr_variables(lp, &vars);
-
-				// count the assigned bond orders
-				num_bonds_ = 0;
-				// Do the assignment of the bond orders
-				for(Position i = 0; i < no_x; ++i)
-				{
-					if (fabs(vars[i] - 1.) < 1.e-10)
+					else
 					{
-						ind_bond[i]->setOrder(Bond::ORDER__SINGLE);
-						num_bonds_++;
-						continue;
+						Log.error() << "There is a unknown bond" << endl;
 					}
-					if (fabs(vars[i] - 2.) < 1.e-10)
-					{
-						ind_bond[i]->setOrder(Bond::ORDER__DOUBLE);	
-						num_bonds_++;
-						continue;
-					}
-					if (fabs(vars[i] - 3.) < 1.e-10)
-					{
-						ind_bond[i]->setOrder(Bond::ORDER__TRIPLE);	
-						num_bonds_++;
-						continue;
-					}
-					if (fabs(vars[i] - 4.) < 1.e-10)
-					{
-						ind_bond[i]->setOrder(Bond::ORDER__QUADRUPLE);
-						num_bonds_++;
-						continue;
-					}
-				}
-
-				if (!options.getBool(Option::KEKULIZE_RINGS))
-				{
-					// find all rings
-					vector<vector<Atom*> > rings;
-					RingPerceptionProcessor rpp;
-					rpp.calculateSSSR(rings, ac);
-
-					// set the aromatic rings	
-					AromaticityProcessor ap;
-					ap.aromatize(rings, ac);
-
-				}
+				} // end of all bonds
 			}
 			else
-			{
-				Log.error() << "ILP could not be solved successfully" << endl;
+			{	
+				cout << "Too many bonds " << total_no_bonds - num_fixed_bonds << std::endl;
 			}
-
-			delete_lp(lp);
-
+		
 		}
 		return Processor::CONTINUE;
 	}
@@ -1209,5 +1056,373 @@ namespace BALL
 		options.setDefaultBool(AssignBondOrderProcessor::Option::ENFORCE_OCTETT_RULE,
 													 AssignBondOrderProcessor::Default::ENFORCE_OCTETT_RULE);	
 	}
+
+	void AssignBondOrderProcessor::apply(AtomContainer& ac, Position i)
+	{
+		if (i < solutions_.size())
+		{
+			// we assume, that the AtomContainer is valid and the correct one! //TODO: is the ok?
+			AtomIterator a_it = ac.beginAtom();
+			Atom::BondIterator b_it = a_it->beginBond();
+			BALL_FOREACH_BOND(ac, a_it, b_it)
+			{
+				HashMap<Bond*, int>::Iterator it = solutions_[i].bond_orders.find(&*b_it);
+				if (it != solutions_[i].bond_orders.end())
+				{
+					b_it->setOrder(it->second);
+				}
+			}
+		}
+	}
+
+	//-----------------------------------------------------------------------------------
 	
+	AssignBondOrderProcessor::ILPSolution_::ILPSolution_()
+		: valid(false),
+			bond_orders(),
+			penalty_sum(),
+			num_bonds(0)
+	{
+	}
+
+	AssignBondOrderProcessor::ILPSolution_::ILPSolution_(AssignBondOrderProcessor* ap, AtomContainer& ac, Bond* bond, int order, bool lessEqualConstraint)
+	{		
+			// Check number of variables with prefix 'x'
+		Position total_no_bonds = ac.countBonds();
+
+		// Number of atoms in the system
+		Position no_atoms = ac.countAtoms();
+
+		// Mapping from (free) bonds onto bond variable indices
+		map<Bond*, Position> bond_map;
+
+		// Vector for mapping from variable indices onto bonds
+		std::vector<Bond*> ind_bond(total_no_bonds, (Bond*)0);
+
+		// Vector for storing fixed atom valences
+		//std::vector<Position> fixed_val_(no_atoms, 0);
+
+		// Count the choice constraints
+		Position no_y = 0;
+
+		// Count the number of bonds whose orders should be calculated
+		Position no_x = 0;
+
+		// Maximum number of row entries (in penalty table)
+		Position max_no_ent = 0;
+
+		// Maximum number of bonds of an atom
+		Position max_no_atom_bonds = 0;
+	
+		// compute the maps, variables ...
+		for (Position i = 0; i < no_atoms; ++i)
+		{
+			Atom* at1 = ac.getAtom(i);
+			//Position fixed = 0;
+			Position consider_bonds = 0;
+
+			bool consider_atom = false;
+			for (Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
+			{		
+				Bond* bnd = &(*bit);
+				map<Bond*, bool>::iterator it = ap->bond_free_.find(bnd);
+				if (it != ap->bond_free_.end())
+				{
+					// If this atom has a free bond we should calculate the bond order
+					if (it->second && (bond!=bnd))
+					{
+						++consider_bonds;	
+						consider_atom = true;
+						pair<map<Bond*, unsigned int>::iterator, bool> p 
+							= bond_map.insert(make_pair(bnd, no_x+1));
+						if (p.second)
+						{
+							ind_bond[no_x] = bnd;
+							++no_x;
+						}
+					}
+				}
+			} // end of for all bonds of this atom
+
+			if (consider_atom)
+			{
+				no_y += ap->atomic_penalty_scores_[i].size();
+				if (ap->atomic_penalty_scores_[i].size() > max_no_ent)
+				{
+					max_no_ent = ap->atomic_penalty_scores_[i].size();
+				}
+			}
+
+			if (consider_bonds > max_no_atom_bonds)
+			{
+				max_no_atom_bonds = consider_bonds;
+			}
+
+		} // end of for all atoms
+
+		Position no_vars = no_x + no_y;
+		//cout << "no vars " << no_vars << endl;
+
+		// Create a new model with 'no_vars' variables 
+		// (columns) and 0 rows
+		lprec *lp = make_lp(0, no_vars);
+		if (!lp)
+		{
+			Log.error() << "Creation of ILP failed" << endl;
+		}
+
+		// Set the binary and integer constraints
+		for(Position i = 1; i <= no_x; ++i)
+		{
+			set_int(lp, i, TRUE);
+		}
+
+		for(Position i = no_x+1; i <= no_vars; ++i)
+		{
+			set_binary(lp, i, TRUE);
+		}
+
+		// Create space large enough for one row and the objective function,
+		// use lp_solves internal types.
+		std::vector<int> colno(max_no_atom_bonds + 1 + max_no_ent,0);
+		std::vector<REAL> row(max_no_atom_bonds + 1 + max_no_ent,0);
+		std::vector<int> obj_colno(no_y+1,0);
+		std::vector<REAL> obj_row(no_y+1,0);
+
+		// Factors for choice constraints
+		std::vector<REAL> choices(max_no_ent, 1);
+
+		// Makes building the model faster if it's done
+		// row by row
+		set_add_rowmode(lp, TRUE);
+
+		// Set the lower and upper constraints for bonds
+		for(Position i = 1; i <= no_x; ++i)
+		{
+			colno[0] = i;
+			if (!add_constraintex(lp, 1, &choices[0], &colno[0], LE, 4))
+			{
+				Log.error() << "Setting upper bound for bond constraint failed" << endl;
+			}
+			if (!add_constraintex(lp, 1, &choices[0], &colno[0], GE, 1))
+			{
+				Log.error() << "Setting lower bound for bond constraint failed" << endl;
+			}
+		}
+
+		// Set the extra bond constraint
+		if (bond && order-1 > -1)
+		{	
+			// get the bonds index 
+			map<Bond*, unsigned int>::iterator it = bond_map.find(bond);
+			if (it != bond_map.end())
+			{
+				Position i = it->second;
+				colno[0] = i;
+				if (lessEqualConstraint)
+				{
+					if (!add_constraintex(lp, 1, &choices[0], &colno[0], LE, order-1))
+					{
+						Log.error() << "Setting extra upper bound for bond constraint failed" << endl;
+					}
+				}
+				else
+				{
+					if (!add_constraintex(lp, 1, &choices[0], &colno[0], GE, order+1))
+					{
+						Log.error() << "Setting extra lower bound for bond constraint failed" << endl;
+					}
+				}
+			}
+	 	}
+
+		// Create all remaining constraints and the objective function
+
+		// Atom indices
+		Position i = 0;
+
+		// Indices of the choice variables (y)
+		Position ind_y = 0;
+
+		for(; i < no_atoms; ++i)
+		{
+			// Find corresponding variables
+			Atom* at1 = ac.getAtom(i);
+
+			// Count the bonds of this atom whose
+			// orders should be calculated
+			Position count_b = 0;
+			for(Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
+			{
+				Bond* bnd = &(*bit);
+				map<Bond*, unsigned int>::iterator it = bond_map.find(bnd);
+
+				if (it != bond_map.end())
+				{
+					colno[count_b] = it->second;
+					row[count_b]   = -1;
+					++count_b;
+				}
+			}
+
+			if (count_b)
+			{
+				// This atom has bonds whose orders should be calculated
+
+				// Create indices for the choice variables and set
+				// the entries for the valence constraint and the 
+				// objective function
+
+				// Count the number of variables participating in the current row
+				Position count_vars = count_b;
+				for(Position j = 0; j < ap->atomic_penalty_scores_[i].size(); ++j, ++ind_y, ++count_vars)
+				{
+					// Choice variables have indices > no_x in variable vector for ILP
+					obj_colno[ind_y]   = ind_y + no_x + 1;
+					colno[count_vars] = obj_colno[ind_y];
+
+					// Set valences
+					row[count_vars]   = ap->atomic_penalty_scores_[i][j].first;
+
+					// Set penalties
+					obj_row[ind_y]     = ap->atomic_penalty_scores_[i][j].second;
+				}
+
+				// in case we got an empty penalty row
+				if (ap->atomic_penalty_scores_[i].size() != 0)
+				{
+					// Add valence constraint
+					if (!add_constraintex(lp, count_vars, &row[0], &colno[0], EQ, 
+								ap->fixed_val_[i]))
+					{
+						Log.error() << "Setting valence constraint for ILP failed" << endl;
+					}
+
+					// Add choice constraint
+					if (!add_constraintex(lp, ap->atomic_penalty_scores_[i].size(), &choices[0], &colno[count_b], 
+								EQ, 1))
+					{
+						Log.error() << "Setting choice constraint for ILP failed" << endl;
+					}
+
+					if (ap->options.getBool(Option::ENFORCE_OCTETT_RULE))
+					{
+						// Add constraint for the octett-rule
+						if ((at1->getElement()!= PTE[Element::HELIUM]) && at1->getElement().getGroup() > (short)3)
+						{
+							if (!add_constraintex(lp, count_b,  &row[0], &colno[0], 
+										GE, -4))
+							{
+								Log.error() << "Setting octett constraint for ILP failed" << endl;
+							} 
+						}
+					}
+				}
+			}
+		}
+
+		// Rowmode should be turned off again after building the model
+		set_add_rowmode(lp, FALSE);
+
+		// Set objective function
+		if (!set_obj_fnex(lp, no_y, &obj_row[0], &obj_colno[0]))
+		{
+			Log.error() << "Setting objective function for ILP failed" << endl;
+		}
+
+		// Tell lp_solve that this problem is a minimization problem
+		set_minim(lp);
+
+		// We only want to see important messages on screen while solving
+		set_verbose(lp, IMPORTANT);
+
+		// Show the generated MIP
+		//write_LP(lp, stdout);
+
+		// Let lp_solve solve our problem
+		int ret = solve(lp);
+
+		// Check whether lp_solve could do its job successfully
+		if (ret == OPTIMAL)
+		{
+			// Get the value of the objective function
+			penalty_sum = get_objective(lp);
+
+			// Get variables
+			REAL *vars;
+			get_ptr_variables(lp, &vars);
+
+			// count the assigned bond orders
+			num_bonds = 0;
+			// Do the assignment of the bond orders
+			for(Position i = 0; i < no_x; ++i)
+			{
+				if (fabs(vars[i] - 1.) < 1.e-10)
+				{
+					// TODO: should we really set the orders here?
+					ind_bond[i]->setOrder(Bond::ORDER__SINGLE);
+					num_bonds++;
+					//orders_[ind_bond[i]] = Bond::ORDER__SINGLE;
+					continue;
+				}
+				if (fabs(vars[i] - 2.) < 1.e-10)
+				{
+					ind_bond[i]->setOrder(Bond::ORDER__DOUBLE);	
+					num_bonds++;
+					//orders_[ind_bond[i]] = Bond::ORDER__DOUBLE;
+					continue;
+				}
+				if (fabs(vars[i] - 3.) < 1.e-10)
+				{
+					ind_bond[i]->setOrder(Bond::ORDER__TRIPLE);	
+					num_bonds++;	
+					//orders_[ind_bond[i]] = Bond::ORDER__TRIPLE;
+					continue;
+				}
+				if (fabs(vars[i] - 4.) < 1.e-10)
+				{
+					ind_bond[i]->setOrder(Bond::ORDER__QUADRUPLE);
+					num_bonds++;	
+					//orders_[ind_bond[i]] = Bond::ORDER__QUADRUPLE;
+					continue;
+				}
+			}
+
+			if (!ap->options.getBool(AssignBondOrderProcessor::Option::KEKULIZE_RINGS))
+			{
+				// find all rings
+				vector<vector<Atom*> > rings;
+				RingPerceptionProcessor rpp;
+				rpp.calculateSSSR(rings, ac);
+
+				// set the aromatic rings	
+				AromaticityProcessor ap;
+				ap.aromatize(rings, ac);
+
+			}
+			// we got a valid solution
+			valid = true;
+
+			// store the bond orders of _ALL_ bonds to offer a complete solution 
+			AtomIterator a_it = ac.beginAtom();
+			Atom::BondIterator b_it = a_it->beginBond();
+			BALL_FOREACH_BOND(ac, a_it, b_it)
+			{
+				bond_orders[&(*b_it)] = (b_it->getOrder());
+			}
+		}
+		else
+		{
+			Log.error() << "ILP could not be solved successfully" << endl;
+			valid = false;
+		}
+
+		// free
+		delete_lp(lp);
+	}
+
+	AssignBondOrderProcessor::ILPSolution_::~ILPSolution_()
+	{
+	}
+
 } // namespace BALL
