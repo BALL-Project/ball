@@ -54,7 +54,7 @@ namespace BALL
 				minimization_dialog_(parent),
 				md_dialog_(parent),
 				fdpb_dialog_(0),
-				bond_order_dialog_()
+				bond_order_dialog_(parent)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "New MolecularStructure " << this << std::endl;

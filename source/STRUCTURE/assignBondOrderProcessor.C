@@ -91,6 +91,10 @@ namespace BALL
 
 	bool AssignBondOrderProcessor::start()
 	{
+		solutions_.clear();
+		fixed_val_.clear();
+		bond_free_.clear();
+		atomic_penalty_scores_.clear();
 		return true;
 	}
 
@@ -316,7 +320,8 @@ namespace BALL
 			}
 			else
 			{	
-				cout << "Too many bonds " << total_no_bonds - num_fixed_bonds << std::endl;
+				cout << "No solution compted! -solsize:" <<  solutions_.size() << " - no free bonds:" <<  total_no_bonds - num_fixed_bonds << " - valid " << (solutions_.size()>0 ? solutions_[0].valid : false) << std::endl;
+				//cout << "Too many bonds " << total_no_bonds - num_fixed_bonds << std::endl;
 			}
 		
 		}
@@ -1057,22 +1062,27 @@ namespace BALL
 													 AssignBondOrderProcessor::Default::ENFORCE_OCTETT_RULE);	
 	}
 
-	void AssignBondOrderProcessor::apply(AtomContainer& ac, Position i)
+	bool AssignBondOrderProcessor::apply(AtomContainer& ac, Position i)
 	{
 		if (i < solutions_.size())
 		{
-			// we assume, that the AtomContainer is valid and the correct one! //TODO: is the ok?
-			AtomIterator a_it = ac.beginAtom();
-			Atom::BondIterator b_it = a_it->beginBond();
-			BALL_FOREACH_BOND(ac, a_it, b_it)
+			if (solutions_[i].valid)
 			{
-				HashMap<Bond*, int>::Iterator it = solutions_[i].bond_orders.find(&*b_it);
-				if (it != solutions_[i].bond_orders.end())
+				// we assume, that the AtomContainer is valid and the correct one! //TODO: is the ok?
+				AtomIterator a_it = ac.beginAtom();
+				Atom::BondIterator b_it = a_it->beginBond();
+				BALL_FOREACH_BOND(ac, a_it, b_it)
 				{
-					b_it->setOrder(it->second);
+					HashMap<Bond*, int>::Iterator it = solutions_[i].bond_orders.find(&*b_it);
+					if (it != solutions_[i].bond_orders.end())
+					{
+						b_it->setOrder(it->second);
+					}
 				}
 			}
+			return solutions_[i].valid;
 		}
+		else return false;
 	}
 
 	//-----------------------------------------------------------------------------------
@@ -1424,5 +1434,14 @@ namespace BALL
 	AssignBondOrderProcessor::ILPSolution_::~ILPSolution_()
 	{
 	}
+	
+	void AssignBondOrderProcessor::ILPSolution_::clear()
+	{
+		valid = false;
+		bond_orders.clear();
+		penalty_sum = 0;
+		num_bonds = 0;
+	}
+
 
 } // namespace BALL

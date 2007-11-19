@@ -141,7 +141,9 @@ namespace BALL
 			//vector<ILPSolution_>& getSolutions() {return solutions_;};
 			//const vector<ILPSolution_>& getSolutions() const {return solutions_;};
 			
-			void apply(AtomContainer& ac, Position i);
+			/// set the AtomContainer ac's bond orders to the ones found in solution i
+			/// returns true if the i-th solution is valid NOTE: start counting in 0
+			bool apply(AtomContainer& ac, Position i);
 			//@}
 			
 			/** @name Assignment
@@ -183,6 +185,9 @@ namespace BALL
 					/// Destructor
 					virtual ~ILPSolution_();
 					
+					/// 
+					void clear();
+
 					/// denotes whether the ILP could be solved or not
 					bool valid;
 					
@@ -193,7 +198,7 @@ namespace BALL
 					double penalty_sum;	
 
 					/// number of bonds, which are created during the processor call
-					Size num_bonds; // TODO: richtig verlinken im DIALOG MENUTEXT !!! // TODO: richtig verlinken im DIALOG MENUTEXT !!!  
+					Size num_bonds; 
 			};
 
 		
