@@ -29,20 +29,24 @@ namespace BALL
 	//const char* AssignBondOrderProcessor::Option::OVERWRITE_UNKNOWN_BOND_ORDERS = "overwrite_unknown_bond_orders";
 	//const bool  AssignBondOrderProcessor::Default::OVERWRITE_UNKNOWN_BOND_ORDERS = true;
 	
+	const String AssignBondOrderProcessor::ComputeAllSolutions::DISABLED = "disabled";
+	const String AssignBondOrderProcessor::ComputeAllSolutions::ONE_BOND_HEURISTIC = "one_bond_heuristic";
+	const String AssignBondOrderProcessor::ComputeAllSolutions::ENUMERATION_TREE = "enumeration_tree";
+
 	const char* AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS = "overwrite_single_bond_orders";
-	const bool  AssignBondOrderProcessor::Default::OVERWRITE_SINGLE_BOND_ORDERS = false;
+	const bool  AssignBondOrderProcessor::Default::OVERWRITE_SINGLE_BOND_ORDERS = true;
 	
 	const char* AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS = "overwrite_double_bond_orders";
-	const bool  AssignBondOrderProcessor::Default::OVERWRITE_DOUBLE_BOND_ORDERS = false;
+	const bool  AssignBondOrderProcessor::Default::OVERWRITE_DOUBLE_BOND_ORDERS = true;
 	
 	const char* AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS = "overwrite_triple_bond_orders";
-	const bool  AssignBondOrderProcessor::Default::OVERWRITE_TRIPLE_BOND_ORDERS = false;
+	const bool  AssignBondOrderProcessor::Default::OVERWRITE_TRIPLE_BOND_ORDERS = true;
 
 	const char* AssignBondOrderProcessor::Option::OVERWRITE_QUADRUPLE_BOND_ORDERS = "overwrite_quadruple_bond_orders";
-	const bool  AssignBondOrderProcessor::Default::OVERWRITE_QUADRUPLE_BOND_ORDERS = false;
+	const bool  AssignBondOrderProcessor::Default::OVERWRITE_QUADRUPLE_BOND_ORDERS = true;
 
 	const char* AssignBondOrderProcessor::Option::OVERWRITE_AROMATIC_BOND_ORDERS = "overwrite_aromatic_bond_orders";
-	const bool  AssignBondOrderProcessor::Default::OVERWRITE_AROMATIC_BOND_ORDERS = false;
+	const bool  AssignBondOrderProcessor::Default::OVERWRITE_AROMATIC_BOND_ORDERS = true;
 
 	const char* AssignBondOrderProcessor::Option::OVERWRITE_CHARGES = "overwrite_existing_charges";
 	const bool  AssignBondOrderProcessor::Default::OVERWRITE_CHARGES = false;
@@ -56,7 +60,9 @@ namespace BALL
 	const char* AssignBondOrderProcessor::Option::ENFORCE_OCTETT_RULE = "enforce_octett_rule";
 	const bool  AssignBondOrderProcessor::Default::ENFORCE_OCTETT_RULE = true;
 
-
+	const char* AssignBondOrderProcessor::Option::COMPUTE_ALL_SOLUTIONS = "compute_all_solutions";
+	const String AssignBondOrderProcessor::Default::COMPUTE_ALL_SOLUTIONS = AssignBondOrderProcessor::ComputeAllSolutions::DISABLED;
+		
 	AssignBondOrderProcessor::AssignBondOrderProcessor()
 		: UnaryProcessor<AtomContainer>(),
 			options(),
@@ -100,8 +106,11 @@ namespace BALL
 
 	Size AssignBondOrderProcessor::getNumberOfBondOrdersSet()
 	{
-		if (solutions_.size() > 0)
-			return solutions_[0].num_bonds;
+		if (   (solutions_.size() >= (Size)last_applied_solution_) 
+				&&  solutions_[last_applied_solution_].valid 
+				&& (last_applied_solution_ > (Position) -1)
+			 )
+			return solutions_[last_applied_solution_].num_bonds;
 		return 0;
 	}
 
@@ -148,17 +157,25 @@ namespace BALL
 			// Maximum number of bonds of an atom
 			//Position max_no_atom_bonds = 0;
 
-					
+			Index bond_index_counter = 0;
+		
 			// Find out, which bonds should be considered in general
 			for (Position i = 0; i < no_atoms; ++i)
 			{
 				Atom* at1 = ac.getAtom(i);
 				Position fixed = 0;
 				//Position consider_bonds = 0;
-
+				
 				for (Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
 				{
 					Bond* bnd = &(*bit);
+
+					// for the recursive function
+					if (bond_to_index_.find(bnd) == bond_to_index_.end())
+					{
+						bond_to_index_[bnd] = bond_index_counter;
+						bond_index_counter++;
+					}
 					// according to the options and the given bond order 
 					// the acutal bond is a free variable of the ILP or not
 					// YES: add a variable in the bond side constraint + ???? 
@@ -249,83 +266,303 @@ namespace BALL
 				fixed_val_[i] = fixed;
 				num_fixed_bonds += fixed;
 			}
-		
+
 			// Generate penalty values for all atoms in the AtomContainer ac
 			calculateAtomPenalties_(ac);
 	
 			// get a first solution
 			solutions_.push_back(ILPSolution_(this, ac));
-		
+			if (solutions_[0].valid)
+			{
+				last_applied_solution_ = 0;
+				apply(ac, 0);	
+			}
+			else
+			{
+				last_applied_solution_=-1;
+			}
+
 			if ( (solutions_.size() > 0) 
 					&&  (total_no_bonds - num_fixed_bonds < MAX__SOLUTIONS) 
 					&&  (solutions_[0].valid)
 				 )
 			{
-				// now iterate over all free bonds and inhibit the order we already found
-				map<Bond*, bool>::iterator it = bond_free_.begin();
-				for (; it!= bond_free_.end(); it++)
+				if (options.get(Option::COMPUTE_ALL_SOLUTIONS) == ComputeAllSolutions::ONE_BOND_HEURISTIC)
 				{
-					if (it->second)
-					{	
-						// We want to inhibit the current bond to have the order, we already found
-						// Since lpsolve does not offer constraints of type unequal, we have to check
-						// if there is a solution with constraint x_bond LE order-1  AND x_bond GE order+1 
-						// the type of the extra constraint is controlled by the last parameter value.
-					
-						ILPSolution_ solutionLE; 
-						ILPSolution_ solutionGE; 
+					// now iterate over all free bonds and inhibit the order we already found
+					map<Bond*, bool>::iterator it = bond_free_.begin();
+					for (; it!= bond_free_.end(); it++)
+					{
+						if (it->second)
+						{	
+							// We want to inhibit the current bond to have the order, we already found
+							// Since lpsolve does not offer constraints of type unequal, we have to check
+							// if there is a solution with constraint x_bond LE order-1  AND x_bond GE order+1 
+							// the type of the extra constraint is controlled by the last parameter value.
 
-						// case LE order-1
-						if (solutions_[0].bond_orders[it->first]-1 > 0)
-						{	
-							solutionLE = ILPSolution_(this, ac, it->first, solutions_[0].bond_orders[it->first], true);
-													}
-						// case GE order+1
-						if (solutions_[0].bond_orders[it->first]+1 < 5)
-						{	
-							ILPSolution_ solutionGE = ILPSolution_(this, ac, it->first, solutions_[0].bond_orders[it->first], false);
-						}
-						
-						if (solutionLE.valid)
-						{
-							if (solutionGE.valid)
+							ILPSolution_ solutionLE; 
+							ILPSolution_ solutionGE; 
+
+							// case LE order-1
+							if (solutions_[0].bond_orders[it->first]-1 > 0)
+							{	
+								solutionLE = ILPSolution_(this, ac, it->first, solutions_[0].bond_orders[it->first], true);
+							}
+							// case GE order+1
+							if (solutions_[0].bond_orders[it->first]+1 < 5)
+							{	
+								solutionGE = ILPSolution_(this, ac, it->first, solutions_[0].bond_orders[it->first], false);
+							}
+
+							if (solutionLE.valid)
 							{
-								if (solutionLE.penalty_sum <= solutionGE.penalty_sum)
+								if (solutionGE.valid)
+								{
+									if (solutionLE.penalty <= solutionGE.penalty)
+									{
+										solutions_.push_back(solutionLE);  
+									}
+									if (solutionLE.penalty >= solutionGE.penalty)
+									{
+										solutions_.push_back(solutionGE);  
+									}
+								}
+								else
 								{
 									solutions_.push_back(solutionLE);  
 								}
-								if (solutionLE.penalty_sum >= solutionGE.penalty_sum)
-								{
+							} // solution_LE not valid
+							else
+							{
+								if (solutionGE.valid)
+								{			
 									solutions_.push_back(solutionGE);  
 								}
 							}
-							else
-							{
-								solutions_.push_back(solutionLE);  
-							}
-						} // solution_LE not valid
+						}
 						else
 						{
-							if (solutionGE.valid)
-							{			
-								solutions_.push_back(solutionGE);  
-							}
+							Log.error() << "There is a unknown bond" << endl;
 						}
-					}
-					else
+					} // end of all bonds
+					
+					if (options.getBool(AssignBondOrderProcessor::Option::KEKULIZE_RINGS))
 					{
-						Log.error() << "There is a unknown bond" << endl;
+					// find all rings
+					vector<vector<Atom*> > rings;
+					RingPerceptionProcessor rpp;
+					rpp.calculateSSSR(rings, ac);
+
+					// set the aromatic rings	
+					AromaticityProcessor ap;
+					ap.aromatize(rings, ac);
 					}
-				} // end of all bonds
+
+					// set the last solution // TODO: Do we want to apply the LAST solution?
+					last_applied_solution_ = solutions_.size()-1;
+					apply(ac, solutions_.size()-1);
+				}
+				else if (options.get(Option::COMPUTE_ALL_SOLUTIONS) == ComputeAllSolutions::ENUMERATION_TREE)
+				{
+/*// print the optimal sol
+HashMap<Bond*, int>::Iterator mit = solutions_[0].bond_orders.begin();
+for (; mit != solutions_[0].bond_orders.end(); ++mit)
+{
+	cout << bond_to_index_[mit->first] << "---"<< mit->second <<  " " << 
+		mit->first->getFirstAtom()->getName() << ".."<<	mit->first->getSecondAtom()->getName()   << std::endl;
+}
+cout << std::endl;*/
+					// get the current optimum
+					optimal_penalty_ = solutions_[0].penalty;
+					
+					// prepare the compare String
+					map<Bond*, bool>::iterator it = bond_free_.begin();
+					for (; it!= bond_free_.end(); it++)
+					{
+						current_orders_ +=" ";
+					}
+					it = bond_free_.begin();
+					for (; it!= bond_free_.end(); it++)
+					{
+						if (it->second && !(  (it->first->getFirstAtom()->getElement() ==PTE[Element::H])
+								 					      ||( it->first->getSecondAtom()->getElement()==PTE[Element::H]) 
+												       )
+						   )
+						{	
+							// denote the bond as fixed
+							bond_free_[it->first]= false;
+							for (int order = 1; order <= 4; order++)
+							{	
+//	//cout << "vorher: " << current_orders_ << "-----" << bond_to_index_[it->first] << std::endl;//"--" << order << "--" << char(order) << std::endl;
+								// denote the choosen bond order in the order string
+								current_orders_[bond_to_index_[it->first]] = '0'+order;
+	//	//cout << "nachher: " << current_orders_ << "-----" << bond_to_index_[it->first] << "--" << (current_orders_[bond_to_index_[it->first]]) << "--" << std::endl;
+
+								// prohibit the bonds order to get the order found on the last (optimal) solution
+								if (   (solutions_[0].bond_orders[it->first] != order)
+										&& (checked_.find(current_orders_) == checked_.end()))
+								{
+
+	//cout << "Bond " << bond_to_index_[it->first] << "--Order " << order << " situation: " << current_orders_ << std::endl;
+																	
+									// denote the choosen bond order in the atoms fixed valences
+									fixed_val_[it->first->getFirstAtom()->getIndex()] += order;
+									fixed_val_[it->first->getSecondAtom()->getIndex()] += order;
+			
+									//current_orders_.set(String(order), bond_to_index_[it->first], bond_to_index_[it->first]);
+									// try to solve this bond order
+									recursive_solve(ac, 0);
+
+									// remember, that we already tried this combination
+									checked_.insert(current_orders_);
+
+									// clean up the order string 
+									current_orders_[bond_to_index_[it->first]] = ' ';
+
+									//current_orders_.set(" ", bond_to_index_[it->first], bond_to_index_[it->first]);
+									
+									// reset the fixed valences
+									fixed_val_[it->first->getFirstAtom()->getIndex()] -= order;
+									fixed_val_[it->first->getSecondAtom()->getIndex()] -= order;
+								}
+							}
+							// reset the bond status
+							bond_free_[it->first] = true;
+						}
+					}	
+
+					// set the last solution // TODO: Do we want to apply the LAST solution?
+					last_applied_solution_ = solutions_.size()-1;
+					apply(ac, solutions_.size()-1);
+				}
 			}
 			else
 			{	
 				cout << "No solution compted! -solsize:" <<  solutions_.size() << " - no free bonds:" <<  total_no_bonds - num_fixed_bonds << " - valid " << (solutions_.size()>0 ? solutions_[0].valid : false) << std::endl;
 				//cout << "Too many bonds " << total_no_bonds - num_fixed_bonds << std::endl;
 			}
-		
-		}
+		}	
 		return Processor::CONTINUE;
+	}
+
+	void AssignBondOrderProcessor::recursive_solve(AtomContainer& ac, int depth)
+	{
+////cout << depth+1 << std::endl;
+		ILPSolution_ sol = ILPSolution_(this, ac);
+//cout << "penalty: " <<  sol.penalty << " "<< optimal_penalty_ ;//<< std::endl;
+		bool last_bond = true;
+		if (sol.valid && (sol.penalty == optimal_penalty_))
+		{
+////cout << "   has a opti sol with ";// << std::endl;
+			// store this solution
+			solutions_.push_back(sol);	
+			last_applied_solution_ = solutions_.size()-1;
+			// look for further free bonds
+			map<Bond*, bool>::iterator it = bond_free_.begin();
+			for (; it!= bond_free_.end(); it++)
+			{
+				if (it->second && !(  (it->first->getFirstAtom()->getElement() ==PTE[Element::H])
+								 					||  (it->first->getSecondAtom()->getElement()==PTE[Element::H]) 
+												  )
+				   )
+				{	
+//cout << " opti sol: bond " <<  bond_to_index_[it->first] << " order " << sol.bond_orders[it->first] << " situation " << current_orders_ <<  std::endl;
+
+					last_bond = false;
+					// test whether there exist another solution at all
+					ILPSolution_ antisol_le = ILPSolution_(this, ac, &(*it->first), sol.bond_orders[it->first], true);
+					ILPSolution_ antisol_ge = ILPSolution_(this, ac, &(*it->first), sol.bond_orders[it->first], false);
+				
+					bond_free_[it->first]= false;
+
+					if (antisol_le.valid || antisol_ge.valid)			
+					{
+					for (int order = 1; order <= 4; order++)
+					{	
+////cout << "vorher: " << current_orders_ << "-----" << bond_to_index_[it->first] << std::endl;
+
+						// denote the choosen bond order in the order string
+						//current_orders_.set(String(order), bond_to_index_[it->first], bond_to_index_[it->first]);
+						//current_orders_[bond_to_index_[it->first]] = char(order);
+						current_orders_[bond_to_index_[it->first]] = '0'+order;
+
+						// prohibit the bonds order to get the order found on the last (optimal) solution
+						if (   (sol.bond_orders[it->first]!= order)
+								&& (checked_.find(current_orders_) == checked_.end())
+								)
+						{
+////cout << "nachher: " << current_orders_ << "-----" << bond_to_index_[it->first] << std::endl;
+//cout << "Bond " << bond_to_index_[it->first] << "--Order " << order << " situation: " << current_orders_ << std::endl;
+
+							// denote the set bond order in the atoms fixed valences
+							fixed_val_[it->first->getFirstAtom()->getIndex()] += order;
+							fixed_val_[it->first->getSecondAtom()->getIndex()] += order;
+
+							// try to solve
+							recursive_solve(ac, depth + 1);
+
+							// remember, that we already tried this combination
+							checked_.insert(current_orders_);
+
+							// reset the fixed valences
+							fixed_val_[it->first->getFirstAtom()->getIndex()] -= order;
+							fixed_val_[it->first->getSecondAtom()->getIndex()] -= order;
+						}
+						// clean up the order string 
+						current_orders_[bond_to_index_[it->first]] = ' ';
+						//current_orders_.set(" ", bond_to_index_[it->first], bond_to_index_[it->first]);
+					}
+					}
+					// reset the bond status
+					bond_free_[it->first] = true;
+				}
+			}
+			// this was the last free bond and we got a optimal solution
+			if (last_bond)
+			{
+				// store :-)
+				solutions_.push_back(sol);		
+				last_applied_solution_ = solutions_.size()-1;
+			}
+		}
+		else
+		{
+//cout << " no opti sol" << endl;
+		}
+		// if no valid solution was found
+		// set all further bond combinations to checked
+		//setChecked_(current_orders_);
+	}
+
+/*
+	bool AssignBondOrderProcessor::isChecked_(String orders)
+	{
+		if (checked_.find(current_orders_) == checked_.end())
+			return true;
+		else
+		{
+			
+		}
+	}*/
+
+	void AssignBondOrderProcessor::setChecked_(String orders)
+	{
+		String tmp_orders(orders);
+		for (Size i = 0; i< current_orders_.size(); i++)
+		{
+			if (orders[i] == ' ')
+			{
+				for (int j=0; j < 5; j++)
+				{
+					tmp_orders[i] = '0'+j;
+					if (j==0)
+						tmp_orders[i] = ' ';
+					tmp_orders[i] = '0'+j;
+					checked_.insert(current_orders_);
+					setChecked_(tmp_orders);
+				}
+			}
+		}
 	}
 
 	void AssignBondOrderProcessor::calculateAtomPenalties_(AtomContainer& ac)
@@ -1079,6 +1316,19 @@ namespace BALL
 						b_it->setOrder(it->second);
 					}
 				}
+				last_applied_solution_ = i;
+
+				if (options.getBool(AssignBondOrderProcessor::Option::KEKULIZE_RINGS))
+				{
+					// find all rings
+					vector<vector<Atom*> > rings;
+					RingPerceptionProcessor rpp;
+					rpp.calculateSSSR(rings, ac);
+
+					// set the aromatic rings	
+					AromaticityProcessor ap;
+					ap.aromatize(rings, ac);
+				}
 			}
 			return solutions_[i].valid;
 		}
@@ -1090,7 +1340,7 @@ namespace BALL
 	AssignBondOrderProcessor::ILPSolution_::ILPSolution_()
 		: valid(false),
 			bond_orders(),
-			penalty_sum(),
+			penalty(0),
 			num_bonds(0)
 	{
 	}
@@ -1221,7 +1471,7 @@ namespace BALL
 		}
 
 		// Set the extra bond constraint
-		if (bond && order-1 > -1)
+		if (bond && (order-1 > -1) && (order+1 < 5))
 		{	
 			// get the bonds index 
 			map<Bond*, unsigned int>::iterator it = bond_map.find(bond);
@@ -1356,7 +1606,7 @@ namespace BALL
 		if (ret == OPTIMAL)
 		{
 			// Get the value of the objective function
-			penalty_sum = get_objective(lp);
+			penalty = (int)get_objective(lp);
 
 			// Get variables
 			REAL *vars;
@@ -1398,18 +1648,7 @@ namespace BALL
 				}
 			}
 
-			if (!ap->options.getBool(AssignBondOrderProcessor::Option::KEKULIZE_RINGS))
-			{
-				// find all rings
-				vector<vector<Atom*> > rings;
-				RingPerceptionProcessor rpp;
-				rpp.calculateSSSR(rings, ac);
-
-				// set the aromatic rings	
-				AromaticityProcessor ap;
-				ap.aromatize(rings, ac);
-
-			}
+			
 			// we got a valid solution
 			valid = true;
 
@@ -1423,7 +1662,7 @@ namespace BALL
 		}
 		else
 		{
-			Log.error() << "ILP could not be solved successfully" << endl;
+			//Log.error() << "ILP could not be solved successfully" << endl;
 			valid = false;
 		}
 
@@ -1439,7 +1678,7 @@ namespace BALL
 	{
 		valid = false;
 		bond_orders.clear();
-		penalty_sum = 0;
+		penalty = 0;
 		num_bonds = 0;
 	}
 

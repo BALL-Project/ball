@@ -13,6 +13,11 @@
 	#include <BALL/DATATYPE/hashMap.h>
 #endif
 
+#ifndef BALL_DATATYPE_HASHSET_H
+	#include <BALL/DATATYPE/hashSet.h>
+#endif
+
+
 #ifndef BALL_KERNEL_BOND_H
 	#include <BALL/KERNEL/bond.h>
 #endif
@@ -20,6 +25,7 @@
 #ifndef BALL_DATATYPE_OPTIONS_H
 	#include <BALL/DATATYPE/options.h>
 #endif
+
 
 namespace BALL 
 {
@@ -76,7 +82,10 @@ namespace BALL
 				/**	enforce octett rule
 				*/
 				static const char* ENFORCE_OCTETT_RULE;
-
+				
+				/**	technique to compute all solutions
+				*/
+				static const char* COMPUTE_ALL_SOLUTIONS;
 			};
 
 			/// Default values for options
@@ -90,7 +99,15 @@ namespace BALL
 				static const bool OVERWRITE_CHARGES;
 				static const bool ASSIGN_CHARGES;
 				static const bool KEKULIZE_RINGS;
-				static const bool ENFORCE_OCTETT_RULE;
+				static const bool ENFORCE_OCTETT_RULE;	
+				static const String COMPUTE_ALL_SOLUTIONS;
+			};
+
+			struct BALL_EXPORT ComputeAllSolutions
+			{
+				static const String DISABLED;
+				static const String ONE_BOND_HEURISTIC;
+				static const String ENUMERATION_TREE;
 			};
 			//@}
 		
@@ -187,26 +204,38 @@ namespace BALL
 					
 					/// 
 					void clear();
+				
+					/// equality operator // TODO
+					bool operator == (ILPSolution_ b);
 
 					/// denotes whether the ILP could be solved or not
 					bool valid;
 					
-					/// the complete set of bond orders for _ALL_ bonds
+					/// the result of a ILP: the complete set of bond orders for _ALL_ bonds
 					HashMap<Bond*, int> bond_orders;
 
 					/// the value of the objective function
-					double penalty_sum;	
+					int penalty;	
 
-					/// number of bonds, which are created during the processor call
+					/// number of bonds, which are created for this solution
 					Size num_bonds; 
 			};
+			
+		/*	/// Nested class storing the parameters of a solution to our ILP
+			class BondOrderNode_
+			{	
+				friend class AssignBondOrderProcessor;
 
+				public:
+					 BondOrderNode_();
+					 virtual ~BondOrderNode_();
+
+			};*/
 		
 			/// computes for every atom its possible atomic valences and the corresponding possible atomic penalty scores
 		  /// and stores them per \b{atom in atomic_penalty_scores_}
 			void calculateAtomPenalties_(AtomContainer& ac);
 
-					
 			//TODO: change to something better than the atom index :-) 
 			/// the penalties per atom 
 			vector<vector< pair <int,int> > > atomic_penalty_scores_;
@@ -214,11 +243,39 @@ namespace BALL
 			// Map for storing whether a bond is free or fixed
 			map<Bond*, bool> bond_free_;
  			
+			/// Map for storing the bonds associated index 
+			// needed for the recursive pruning dont want to check bond order combinations more than once
+			HashMap<Bond*, Index> bond_to_index_;
+
+			// not necessary because of getIndex()
+			//HashMap<Atom*, int> atom_to_index_;
+
 			/// store per atom index the atoms fixed valences 
 			std::vector<Position> fixed_val_;
 
 			// storing the solutions
 			vector<ILPSolution_> solutions_;
+			
+			/// the optimal penalty // TODO: Konsturktor, getMehtod...
+			int optimal_penalty_;
+
+			/// TODO: Konstruktor....
+			// denotes the index of the last applied solution
+			// -1 if there was no valid solution applied
+			Position last_applied_solution_;
+
+			////////// for ComputeAllSolutions::ENUMERATION_TREE ///////
+			
+			void recursive_solve(AtomContainer& ac, int depth);
+			void setChecked_(String orders);
+
+			HashSet<String> checked_;
+			String current_orders_;
+
+			//vector<short> current_bond_orders_;
+			
+			/// stack storing the nodes
+			//vector< BondOrderNode_> stack_;
 		};
 
 } // namespace BALL 
