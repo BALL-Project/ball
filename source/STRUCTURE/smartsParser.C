@@ -270,7 +270,13 @@ namespace BALL
 	Size SmartsParser::SPAtom::getNumberOfImplicitHydrogens(const Atom* atom) const
 	{
 		// TODO charges?
-		return getDefaultValence(atom) - countRealValences(atom);
+		int defaultValence = getDefaultValence(atom);
+		int countedValence = countRealValences(atom);
+
+		if (countedValence > defaultValence)
+			return 0;
+		else
+		 return defaultValence - countedValence;
 	}
 
 	bool SmartsParser::SPAtom::equals(const Atom * atom) const
@@ -491,24 +497,16 @@ namespace BALL
 					break;
 					
 				case DEGREE:
-					tmp = 0;
-					for (Atom::BondConstIterator bit = atom->beginBond(); +bit; ++bit)
+					if ((int)(atom->countBonds()) != it->second.int_value)
 					{
-						if (bit->getPartner(*atom)->getElement() != PTE[Element::H])
-						{
-							++tmp;
-						}
-					}
-					if (tmp == it->second.int_value)
-					{
-						if (not_properties_.find(DEGREE) != not_properties_.end())
+						if (not_properties_.find(DEGREE) == not_properties_.end())
 						{
 							return false;
 						}
 					}
 					else
 					{
-						if (not_properties_.find(DEGREE) == not_properties_.end())
+						if (not_properties_.find(DEGREE) != not_properties_.end())
 						{
 							return false;
 						}
