@@ -536,18 +536,9 @@ namespace BALL
 		{
 			if ((*p1)->faces_.size() == 0)
 			{
-				p2 = p1;
-				p2++;
-				if (p2 == points_.end())
-				{
-					points_.erase(p1);
-					p1 = points_.end();
-				}
-				else
-				{
-					points_.erase(p1);
-					p1 = p2;
-				}
+				delete *p1;
+				p2 = points_.erase(p1);
+				p1 = p2;
 				number_of_points_--;
 			}
 			else
