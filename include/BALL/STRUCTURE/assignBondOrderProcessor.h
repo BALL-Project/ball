@@ -26,6 +26,7 @@
 	#include <BALL/DATATYPE/options.h>
 #endif
 
+#include <queue>
 
 namespace BALL 
 {
@@ -37,8 +38,11 @@ namespace BALL
 		: public UnaryProcessor<AtomContainer> 
 	{
 		protected:
-			class ILPSolution_;
-			friend class ILPSolution;
+			class Solution_;
+			friend class Solution;
+			class PQ_Entry_;
+			friend class PQ_Entry_;
+
 		public:
 
 			/** @name Constant Definitions
@@ -86,6 +90,10 @@ namespace BALL
 				/**	technique to compute all solutions
 				*/
 				static const char* COMPUTE_ALL_SOLUTIONS;
+
+				/** the folder
+				 */
+				static const char* INIFile;
 			};
 
 			/// Default values for options
@@ -101,6 +109,7 @@ namespace BALL
 				static const bool KEKULIZE_RINGS;
 				static const bool ENFORCE_OCTETT_RULE;	
 				static const String COMPUTE_ALL_SOLUTIONS;
+				static const String INIFile;
 			};
 
 			struct BALL_EXPORT ComputeAllSolutions
@@ -108,6 +117,7 @@ namespace BALL
 				static const String DISABLED;
 				static const String ONE_BOND_HEURISTIC;
 				static const String ENUMERATION_TREE;
+				static const String A_STAR;
 			};
 			//@}
 		
@@ -155,8 +165,8 @@ namespace BALL
 			Size getNumberOfSolutions() {return solutions_.size();};
 
 			//// Return the ILP computed Bond order solutions
-			//vector<ILPSolution_>& getSolutions() {return solutions_;};
-			//const vector<ILPSolution_>& getSolutions() const {return solutions_;};
+			//vector<Solution_>& getSolutions() {return solutions_;};
+			//const vector<Solution_>& getSolutions() const {return solutions_;};
 			
 			/// set the AtomContainer ac's bond orders to the ones found in solution i
 			/// returns true if the i-th solution is valid NOTE: start counting in 0
@@ -184,57 +194,86 @@ namespace BALL
 		protected:
 			
 			/// Nested class storing the parameters of a solution to our ILP
-			class ILPSolution_
+			class Solution_
 			{	
 				friend class AssignBondOrderProcessor;
 
 				public:
 					/// Default constructor
-					ILPSolution_();
-					
-					/// Detailed constructor
+					Solution_();
+				
+					// Detailed constructor for A*-Star
+					Solution_(AssignBondOrderProcessor* ap, PQ_Entry_ entry);
+
+					/// Detailed constructor for ILP solutions
 					// we assume that the AtomContainer in the constructor and the apply-method are equal
 					// otherwise we would have to solve a graph matching problem
 					// Note: The last parameter decides which order spectrum should be considered.
 					// Since the lpsolve does not offer a unequality constraint we have to split into LE and GE
-					ILPSolution_(AssignBondOrderProcessor* ap, AtomContainer& ac, Bond* bond = NULL, int order = 0, bool lessEqualConstraint = false);
+					Solution_(AssignBondOrderProcessor* ap, AtomContainer& ac, Bond* bond = NULL, int order = 0, bool lessEqualConstraint = false);
 					
 					/// Destructor
-					virtual ~ILPSolution_();
+					virtual ~Solution_();
 					
 					/// 
 					void clear();
 				
 					/// equality operator // TODO
-					bool operator == (ILPSolution_ b);
+					bool operator == (Solution_ b);
 
-					/// denotes whether the ILP could be solved or not
+					/// denotes whether the ILP could be solved or not  
 					bool valid;
 					
-					/// the result of a ILP: the complete set of bond orders for _ALL_ bonds
+					/// the result : the complete set of bond orders for _ALL_ bonds
 					HashMap<Bond*, int> bond_orders;
 
 					/// the value of the objective function
 					int penalty;	
-
-					/// number of bonds, which are created for this solution
-					Size num_bonds; 
 			};
 			
-		/*	/// Nested class storing the parameters of a solution to our ILP
-			class BondOrderNode_
+			/// Nested class storing a priority queue entry for the A-STAR-Option
+			class PQ_Entry_
 			{	
 				friend class AssignBondOrderProcessor;
 
 				public:
-					 BondOrderNode_();
-					 virtual ~BondOrderNode_();
+				
+					/// Default constructor
+					PQ_Entry_();
+								
+					/// Copy constructor
+					PQ_Entry_(const PQ_Entry_& entry);
 
-			};*/
-		
+					/// Destructor
+					virtual ~PQ_Entry_();
+					
+					/// 
+					void clear();
+					
+					/// estimate f
+					void estimatePenalty();
+					
+					/// the less operator
+					bool operator < (const PQ_Entry_& b) const {return estimated_f < b.estimated_f;}
+					
+					/// the f (the estimated penalty)
+					int estimated_f;
+
+					/// the bond orders 
+					/// the i-th entry denotes the bondorder of the i-th bond
+					vector<int> bond_orders;
+					
+					/// the last considered bond
+					Position last_bond;
+
+				};
+
 			/// computes for every atom its possible atomic valences and the corresponding possible atomic penalty scores
 		  /// and stores them per \b{atom in atomic_penalty_scores_}
 			void calculateAtomPenalties_(AtomContainer& ac);
+
+			/// reads the Penalty file and assigns every atom possible valences and the corresponding penalties
+			bool readAtomPenalties_();
 
 			//TODO: change to something better than the atom index :-) 
 			/// the penalties per atom 
@@ -243,39 +282,83 @@ namespace BALL
 			// Map for storing whether a bond is free or fixed
 			map<Bond*, bool> bond_free_;
  			
-			/// Map for storing the bonds associated index 
-			// needed for the recursive pruning dont want to check bond order combinations more than once
+			// Map for storing the bonds fixed orders
+			// if a bond is free, the map returns 0
+			// TODO: remove bond_free_
+			map<Bond*, int> bond_fixed_;
+
+			/// Map for storing the bonds associated index (all bonds)
 			HashMap<Bond*, Index> bond_to_index_;
+			
+			// TODO: constructor... Ersetzung
+			// Vector for mapping from variable indices onto bonds (all bonds)
+			std::vector<Bond*> index_to_bond_;
+
+			//TODO
+			/// the number of bonds given (free + fixed!)
+			Position total_num_of_bonds_; 
+
+			// TODO
+			/// num of free bonds 
+			int num_of_free_bonds_;
+
+			// stores the number of bonds
+			//Position num_of_bonds_; // Position total_no_bonds = ac.countBonds();
 
 			// not necessary because of getIndex()
 			//HashMap<Atom*, int> atom_to_index_;
 
-			/// store per atom index the atoms fixed valences 
+			/// store for all atom-indices the atoms fixed valences 
 			std::vector<Position> fixed_val_;
 
 			// storing the solutions
-			vector<ILPSolution_> solutions_;
+			vector<Solution_> solutions_;
 			
-			/// the optimal penalty // TODO: Konsturktor, getMehtod...
+			/// the optimal penalty // TODO: Konsturktor, getMehtod... filled correctly in all applications?
 			int optimal_penalty_;
-
-			/// TODO: Konstruktor....
+		
+		
+			/// TODO: Konstruktor.... apply-methods
 			// denotes the index of the last applied solution
 			// -1 if there was no valid solution applied
 			Position last_applied_solution_;
+			
+			//TODO: ac-->ac_
+			/// the AtomContainer, the processor is operating on
+			AtomContainer* ac_;
 
 			////////// for ComputeAllSolutions::ENUMERATION_TREE ///////
 			
-			void recursive_solve(AtomContainer& ac, int depth);
+			void recursive_solve_(AtomContainer& ac, int depth);
 			void setChecked_(String orders);
 
-			HashSet<String> checked_;
-			String current_orders_;
+			HashSet<String> checked_; //TODO: constr ...
+			String current_orders_; // TODO: constr ...
 
-			//vector<short> current_bond_orders_;
+			////////// for ComputeAllSolutions::A_STAR ///////
 			
-			/// stack storing the nodes
-			//vector< BondOrderNode_> stack_;
+			/// the priority queue //TODO constr...
+			priority_queue<PQ_Entry_> queue_;
+			
+			/// Method to estimate the f = g* +h*
+			/// returns true, if the entry is still valid
+			bool estimatePenalty_(PQ_Entry_ entry);
+
+			// filled by readAtomPenalties_
+			// organized in imaginarey blocks of length  
+			// block_to_length_[i], starting from 
+			// block_to_start_idx_[i] associating 
+			// block_to_start_valence_[i] to the start_idx
+			vector<int> penalties_;
+			vector<Position> block_to_start_idx_;
+			vector<Size> block_to_length_;
+			vector<int> block_to_start_valence_;
+			
+			// stores which atom belongs to which block
+			vector<int> atom_to_block_;
+			
+			//vector<short> current_bond_orders_;
+		
 		};
 
 } // namespace BALL 
