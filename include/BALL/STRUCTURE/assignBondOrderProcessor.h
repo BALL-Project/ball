@@ -134,7 +134,7 @@ namespace BALL
 			/// copy construcor
 			AssignBondOrderProcessor(const AssignBondOrderProcessor& abop);
 		
-			/// constructor with parameter filename
+			/// constructor with parameter filename //TODO
 			//AssignBondOrderProcessor(const String& file_name) throw(Exception::FileNotFound);
 			
 			/// destructor
@@ -202,7 +202,7 @@ namespace BALL
 					/// Default constructor
 					Solution_();
 				
-					// Detailed constructor for A*-Star
+					// Detailed constructor for A-STAR
 					Solution_(AssignBondOrderProcessor* ap, PQ_Entry_ entry);
 
 					/// Detailed constructor for ILP solutions
@@ -272,8 +272,8 @@ namespace BALL
 		  /// and stores them per \b{atom in atomic_penalty_scores_}
 			void calculateAtomPenalties_(AtomContainer& ac);
 
-			/// reads the Penalty file and assigns every atom possible valences and the corresponding penalties
-			bool readAtomPenalties_();
+			/// reads the Penalty-INIFile, stores the penalties blockwise and assigns every atom a block of possible valences and the corresponding penalties
+			bool readAtomPenalties_()	throw(Exception::FileNotFound());
 
 			//TODO: change to something better than the atom index :-) 
 			/// the penalties per atom 
@@ -354,6 +354,10 @@ namespace BALL
 			vector<Size> block_to_length_;
 			vector<int> block_to_start_valence_;
 			
+			// TODO
+			// stores the defining element and the SMART-string of each block
+			vector<pair<String, String> > block_definition_;
+
 			// stores which atom belongs to which block
 			vector<int> atom_to_block_;
 			

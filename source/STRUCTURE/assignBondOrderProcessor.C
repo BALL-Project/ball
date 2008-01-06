@@ -29,7 +29,7 @@
 #define MAX__SOLUTIONS 100 // TODO: should be a option
 
 using namespace std;
-
+using namespace BALL::VIEW;
 namespace BALL 
 {	
 	//const char* AssignBondOrderProcessor::Option::OVERWRITE_UNKNOWN_BOND_ORDERS = "overwrite_unknown_bond_orders";
@@ -68,7 +68,7 @@ namespace BALL
 	const bool  AssignBondOrderProcessor::Default::ENFORCE_OCTETT_RULE = true;
 
 	const char* AssignBondOrderProcessor::Option::INIFile = "iniFile";
-	const String  AssignBondOrderProcessor::Default::INIFile = "BondOrder.ini";
+	const String  AssignBondOrderProcessor::Default::INIFile = "/bond_lengths/BondOrder.xml";
 
 	const char* AssignBondOrderProcessor::Option::COMPUTE_ALL_SOLUTIONS = "compute_all_solutions";
 	const String AssignBondOrderProcessor::Default::COMPUTE_ALL_SOLUTIONS = AssignBondOrderProcessor::ComputeAllSolutions::DISABLED;
@@ -180,7 +180,7 @@ namespace BALL
 					// according to the options and the given bond order 
 					// the acutal bond is a free variable of the ILP or not
 					// YES: add a variable in the bond side constraint + ???? 
-					// NO: equality in the bond side constraint +  ?????
+					// NO: equality in the bonds side constraint +  ?????
 					switch (bnd->getOrder())
 					{
 						case Bond::ORDER__SINGLE:
@@ -554,7 +554,7 @@ namespace BALL
 				}
 			}
 
-			if (solution_.size() > 0)
+			if (solutions_.size() > 0)
 			{	
 				last_applied_solution_ = 0;
 				// set the bond orders of the first solution
@@ -562,7 +562,7 @@ namespace BALL
 				Atom::BondIterator b_it = a_it->beginBond();
 				BALL_FOREACH_BOND(ac, a_it, b_it)
 				{
-					b_it->setOrder(solution_[0].bond_orders[&(*b_it)]);
+					b_it->setOrder(solutions_[0].bond_orders[&(*b_it)]);
 				}
 			}
 		}
@@ -1472,15 +1472,112 @@ namespace BALL
 		// open parameter file
 		Path    path;
 		String  inifilename(path.find(options[Option::Option::INIFile]));
-		
+cout << options[Option::Option::INIFile] << std::endl;
 		if (inifilename == "") 
 		{
 			throw Exception::FileNotFound(__FILE__, __LINE__, options[Option::Option::INIFile]);
 		}
 
-	
-		return true;
+		QString errorStr;
+		int errorLine;
+		int errorColumn;
 
+		QFile file((inifilename.c_str()));
+		if (!file.open(QFile::ReadOnly | QFile::Text)) 
+		{
+			Log.error() << "AssignBondOrderProcessor: cannot read file " << inifilename << std::endl;
+			Log.error() << "Reason was: " << ascii(file.errorString()) << std::endl;
+			return 1;
+		}
+
+		// read the document
+		QDomDocument domDocument;
+		if (!domDocument.setContent(&file, true, &errorStr, &errorLine,
+					&errorColumn)) 
+		{
+			Log.error() << "Parse error in line " << errorLine << " column " << errorColumn <<  " of file " << inifilename << endl;
+			Log.error() << "Reason was: " << ascii(errorStr) << std::endl;
+			return 1;
+		}
+
+		// get the root element...
+		QDomElement root = domDocument.documentElement();	
+		
+		// ... and get all entries
+		QDomNodeList entries = domDocument.elementsByTagName("entry");
+		for (unsigned int i= 0; i < entries.length(); i++)
+		{
+			pair<String, String> tmp;
+			int start_valence;
+			QDomNodeList penalties; 
+			Position start_idx;
+
+			// get the element type (tag elementstring) 
+			// NOTE: each entry should have just ONE element tag)
+			QDomNodeList elementstrings = entries.item(i).toElement().elementsByTagName("elementstring");
+			if (elementstrings.length() ==1)
+			{
+				// read the element type
+				QDomNode element = elementstrings.item(0);
+				tmp.first = ascii(element.firstChild().nodeValue()); 
+
+				// read the SMARTS-string
+				QDomNodeList smartstring =  entries.item(i).toElement().elementsByTagName("smartstring");
+				if (smartstring.length() == 1)
+				{
+					tmp.second = ascii(smartstring.item(0).toElement().firstChild().nodeValue());
+				} 
+				else if (smartstring.length() == 0)
+				{
+					Log.warn() << "In file " << inifilename << " : no SMARTS-string found for element " << ascii(element.firstChild().nodeValue()) << endl;
+				}  
+				else
+				{
+					Log.error() <<  "Parse error in file " << inifilename << " : more than on3 SMARTS-string for element " << ascii(element.firstChild().nodeValue()) << endl;
+					return false;
+				}
+
+				// now read the penalties
+				penalties =  entries.item(i).toElement().elementsByTagName("penalty");
+				if (penalties.length() > 0)
+				{
+					start_valence = (penalties.item(0).toElement().attribute("valence")).toInt();
+					start_idx = penalties_.size();
+					for (unsigned int k = 0; k < penalties.length(); k++)
+					{
+						// NOTE: we assume, that the valences come en block without any leftouts // TODO??
+						penalties_.push_back((penalties.item(k).toElement().firstChild().nodeValue()).toInt());
+						///////  ascii(penalties.item(k).toElement().attribute("valence")
+						//////   ascii(penalties.item(k).toElement().firstChild().nodeValue())
+					}
+				}
+				else
+				{
+					Log.error() << "In file " << inifilename << " : no penalties found for element " << ascii(element.firstChild().nodeValue()) << endl;
+					return false;
+				}
+			}
+			else
+			{
+				Log.error() << "Parse error in file " << inifilename << endl;
+				return false;
+			}
+
+			// now store the entry
+			block_definition_.push_back(tmp);
+			block_to_length_.push_back(penalties.length());
+			block_to_start_idx_.push_back(start_idx);
+			block_to_start_valence_.push_back(start_valence);
+
+		} // next block
+
+		cout << block_definition_.size() << " " << block_to_length_.size() << " " << block_to_start_idx_.size() << " " << block_to_start_valence_.size() << std::endl;
+		cout << penalties_.size()<< std::endl;
+		// now determine for each atom the corresponding valence- and penaltyblock
+
+		
+
+		return true;
 	}
 
 
@@ -1514,7 +1611,7 @@ namespace BALL
 		options.setDefaultBool(AssignBondOrderProcessor::Option::ENFORCE_OCTETT_RULE,
 													 AssignBondOrderProcessor::Default::ENFORCE_OCTETT_RULE);
 		
-		options.setDefaultString(AssignBondOrderProcessor::Option::INIFile,
+		options.setDefault(AssignBondOrderProcessor::Option::INIFile,
 													 AssignBondOrderProcessor::Default::INIFile);		
 	}
 
