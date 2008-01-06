@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<table>
+	<entry id="1">
+		<elementstring>H</elementstring>
+		<smartstring>SMARTS(HD1)</smartstring>
+		<penalty valence="0">64</penalty>
+		<penalty valence="1">0</penalty>
+		<penalty valence="2">64</penalty>
+	</entry>
+	<entry id="2">
+		<elementstring>F</elementstring>
+		<smartstring>SMARTS(F)</smartstring>
+		<penalty valence="0">64</penalty>
+		<penalty valence="1">0</penalty>
+		<penalty valence="2">64</penalty>
+	</entry>
+	<entry id="3">
+		<elementstring>Cl</elementstring>
+		<smartstring>SMARTS(Cl)</smartstring>
+		<penalty valence="0">64</penalty>
+		<penalty valence="1">0</penalty>
+		<penalty valence="2">64</penalty>
+	</entry>
+	<entry id="4">
+		<elementstring>Br</elementstring>
+		<smartstring>SMARTS(Br)</smartstring>
+		<penalty valence="0">64</penalty>
+		<penalty valence="1">0</penalty>
+		<penalty valence="2">64</penalty>
+	</entry>
+	<entry id="5">
+		<elementstring>I</elementstring>
+		<smartstring>SMARTS(I)</smartstring>
+		<penalty valence="0">64</penalty>
+		<penalty valence="1">0</penalty>
+		<penalty valence="2">64</penalty>
+	</entry>
+	<entry id="6">
+		<elementstring>C</elementstring>
+		<smartstring>SMARTS([CD1]#[ND2]) AND element(C)</smartstring>
+		<penalty valence="3">0</penalty>
+		<penalty valence="4">1</penalty>
+		<penalty valence="5">32</penalty>
+	</entry>
+	<entry id="7">
+		<elementstring>C</elementstring>
+		<smartstring>SMARTS(CD1)</smartstring>
+		<penalty valence="3">1</penalty>
+		<penalty valence="4">0</penalty>
+		<penalty valence="5">32</penalty>
+	</entry>
+	<entry id="8">
+		<elementstring>C</elementstring>
+		<smartstring>SMARTS([OD1]~[CD3]~[OD1])</smartstring>
+		<penalty valence="4">32</penalty>
+		<penalty valence="5">0</penalty>
+		<penalty valence="6">32</penalty>
+	</entry>
+	<entry id="9">
+		<elementstring>C</elementstring>
+		<smartstring>SMARTS(C)</smartstring>
+		<penalty valence="2">64</penalty>
+		<penalty valence="3">32</penalty>
+		<penalty valence="4">0</penalty>
+		<penalty valence="5">32</penalty>
+		<penalty valence="6">64</penalty>
+	</entry>
+	<entry id="10">
+		<elementstring>Si</elementstring>
+		<smartstring>SMARTS(Si)</smartstring>
+		<penalty valence="4">0</penalty>
+	</entry>
+	<entry id="11">
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([ND1]=[ND2]) AND SMARTS([ND1])</smartstring>
+		<penalty valence="2">0</penalty>
+		<penalty valence="3">0</penalty>
+	</entry>
+	<entry id="12">
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([ND1])</smartstring>
+		<penalty valence="2">3</penalty>
+		<penalty valence="3">0</penalty>
+		<penalty valence="4">32</penalty>
+	</entry>
+	<entry id="13">
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([ND1]=[ND2]) AND SMARTS([ND2])</smartstring>
+		<penalty valence="3">1</penalty>
+		<penalty valence="4">0</penalty>
+	</entry>
+	<entry id="14">
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([ND2])</smartstring>
+		<penalty valence="2">4</penalty>
+		<penalty valence="3">0</penalty>
+		<penalty valence="4">2</penalty>
+	</entry>
+	<entry id="15">
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([OD1]~[ND3]~[OD1]) AND SMARTS([N])</smartstring>
+		<penalty valence="3">64</penalty>
+		<penalty valence="4">32</penalty>
+		<penalty valence="5">0</penalty>
+		<penalty valence="6">32</penalty>
+	</entry>
+	<entry id="16">
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([$(*OD1)&amp;$(*c)&amp;n])</smartstring>
+		<penalty valence="3">1</penalty>
+		<penalty valence="4">0</penalty>
+	</entry>
+	<entry id="17">
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([ND3])</smartstring>
+		<penalty valence="2">32</penalty>
+		<penalty valence="3">0</penalty>
+		<penalty valence="4">1</penalty>
+		<penalty valence="5">2</penalty>
+	</entry>
+	<entry id="18">
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([ND4])</smartstring>
+		<penalty valence="2">64</penalty>
+		<penalty valence="3">0</penalty>
+		<penalty valence="4">64</penalty>
+	</entry>
+	<entry id="19">
+		<elementstring>O</elementstring>
+		<smartstring>SMARTS([OD1]~[n;R]) OR SMARTS([OD1]~[N;R])</smartstring>
+		<penalty valence="1">0</penalty>
+		<penalty valence="2">1</penalty>
+	</entry>
+	<entry id="20">
+		<elementstring>O</elementstring>
+		<smartstring>SMARTS(OD1)</smartstring>
+		<penalty valence="1">1</penalty>
+		<penalty valence="2">0</penalty>
+		<penalty valence="3">64</penalty>
+	</entry>
+	<entry id="21">
+		<elementstring>O</elementstring>
+		<smartstring>SMARTS(OD2)</smartstring>
+		<penalty valence="1">32</penalty>
+		<penalty valence="2">0</penalty>
+		<penalty valence="3">64</penalty>
+	</entry>
+	<entry id="22">
+		<elementstring>P</elementstring>
+		<smartstring>SMARTS(PD1)</smartstring>
+		<penalty valence="2">2</penalty>
+		<penalty valence="3">0</penalty>
+		<penalty valence="4">32</penalty>
+	</entry>
+	<entry id="23">
+		<elementstring>P</elementstring>
+		<smartstring>SMARTS(PD2)</smartstring>
+		<penalty valence="2">4</penalty>
+		<penalty valence="3">0</penalty>
+		<penalty valence="4">2</penalty>
+	</entry>
+	<entry id="24">
+		<elementstring>P</elementstring>
+		<smartstring>SMARTS(PD3)</smartstring>
+		<penalty valence="2">32</penalty>
+		<penalty valence="3">0</penalty>
+		<penalty valence="4">1</penalty>
+		<penalty valence="5">2</penalty>
+	</entry>
+	<entry id="25">
+		<elementstring>P</elementstring>
+		<smartstring>element(P) AND (SMARTS(PD4(~[O])(~[O])([!O])([!O])) OR SMARTS(PD4(~[S])(~[S])([!S])([!S])))</smartstring>
+		<penalty valence="5">32</penalty>
+		<penalty valence="6">0</penalty>
+		<penalty valence="7">32</penalty>
+	</entry>
+	<entry id="26">
+		<elementstring>P</elementstring>
+		<smartstring>element(P) AND SMARTS(PD4(~[O])(~[O])(~[O])([!O])) OR SMARTS(PD4(~[S])(~[S])(~[S])([!S]))</smartstring>
+		<penalty valence="6">32</penalty>
+		<penalty valence="7">0</penalty>
+	</entry>
+	<entry id="27">
+		<elementstring>P</elementstring>
+		<smartstring>SMARTS(PD4)</smartstring>
+		<penalty valence="3">64</penalty>
+		<penalty valence="4">1</penalty>
+		<penalty valence="5">0</penalty>
+		<penalty valence="6">32</penalty>
+	</entry>
+	<entry id="28">
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS([SD1]~[n;R]) OR SMARTS([SD1]~[N;R])</smartstring>
+		<penalty valence="1">0</penalty>
+		<penalty valence="2">1</penalty>
+	</entry>
+	<entry id="29">
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS([SD1])</smartstring>
+		<penalty valence="1">2</penalty>
+		<penalty valence="2">0</penalty>
+		<penalty valence="3">64</penalty>
+	</entry>
+	<entry id="30">
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS([SD2])</smartstring>
+		<penalty valence="1">32</penalty>
+		<penalty valence="2">0</penalty>
+		<penalty valence="3">32</penalty>
+		<penalty valence="4">1</penalty>
+	</entry>
+	<entry id="31">
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS([SD3])</smartstring>
+		<penalty valence="3">1</penalty>
+		<penalty valence="4">0</penalty>
+		<penalty valence="5">2</penalty>
+		<penalty valence="6">2</penalty>
+	</entry>
+	<entry id="32">
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS(SD4) AND (SMARTS(SD4(~OD1)(~OD1)([!OD1])([!OD1])) OR SMARTS(SD4(~SD1)(~SD1)([!SD1])([!SD1])))</smartstring>
+		<penalty valence="6">0</penalty>
+		<penalty valence="7">32</penalty>
+	</entry>
+	<entry id="33">
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS(SD4) AND (SMARTS(SD4(~OD1)(~OD1)(~OD1)([!OD1])) OR SMARTS(SD4(~SD1)(~SD1)(~SD1)([!SD1])))</smartstring>
+		<penalty valence="6">32</penalty>
+		<penalty valence="7">0</penalty>
+	</entry>
+	<entry id="34">
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS(SD4) AND (SMARTS(SD4(~OD1)(~OD1)(~OD1)(~OD1)) OR SMARTS(SD4(~SD1)(~SD1)(~SD1)(~SD1)))</smartstring>
+		<penalty valence="6">32</penalty>
+		<penalty valence="7">0</penalty>
+	</entry>
+	<entry id="35">
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS([SD4])</smartstring>
+		<penalty valence="4">4</penalty>
+		<penalty valence="5">2</penalty>
+		<penalty valence="6">0</penalty>
+	</entry>
+</table>
