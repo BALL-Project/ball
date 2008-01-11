@@ -1,0 +1,116 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+//
+
+#ifndef CLASVALIDATION
+#define CLASVALIDATION
+
+#ifndef QSARDATA
+#include <BALL/QSAR/QSARData.h>
+#endif
+
+#ifndef VALIDATION
+#include <BALL/QSAR/validation.h>
+#endif
+
+#include <gsl/gsl_randist.h>
+#include <gsl/gsl_cdf.h>
+#include <iterator>
+
+
+namespace BALL
+{	
+	namespace QSAR
+	{
+		class ClassificationModel;
+		/** class for validation of QSAR regression models */
+		class ClassificationValidation : public Validation
+		{
+			public:
+				/** @name Constructors and Destructors
+				 */
+				//@{
+				/** constructor
+				@param m pointer to the regression model, which the object of this class should test */
+				ClassificationValidation(ClassificationModel* m);
+				//@}
+				
+				
+				/** @name Accessors
+				 */
+				//@{
+				void crossValidation(int k, bool restore=1);
+				
+				double getCVRes();
+				
+				double getFitRes();
+				
+				void setCVRes(double d);
+				
+				void testInputData(bool transform=0);
+				
+				/** return pointer to the matrix containing the number of TP, FP, FN, TN in one column for each class  */
+				const Matrix* getConfusionMatrix();
+				
+				/** starts bootstrapping with k samples \n
+				@param k no of bootstrap samples */
+				void bootstrap(int k, bool restore=1);
+				
+				/** Y randomization test \n
+				Randomizes all columns of model.Y, trains the model, runs crossValidation and testInputData and saves the resulting accuracy_input_test and accuracy_cv value to a vector, where Matrix(i,0)=accuracy_input_test, Matrix(i,1)=accuracy_cv \n
+				@param runs this is repeated as often as specified by 'runs' */
+				Matrix yRandomizationTest(int runs, int k);
+				
+				/** calculate average accuracy with the current values of TP, FP, FN, TN in matrix ClassificationValidation.predictions. */
+				void calculateAccuracy();
+				
+				void calculateWeightedAccuracy();
+				
+				/** get average accuracy value as determined after cross validation */
+				double getAccuracyCV();
+				
+				/** get average accuracy value as determined after testing of input data(); */
+				double getAccuracyInputTest();
+				
+				void selectStat(int s);
+				
+				//@}
+				
+				
+			private:
+				/** @name Accessors
+				 */
+				//@{
+				/** Tests the current model with all substances in the (unchanged) test data set */
+				void testAllSubstances(bool transform);
+				//@}
+				
+				
+				/** @name Attributes
+				 */
+				//@{
+				/** matrix containing the number of TP, FP, FN, TN in one column for each class  */
+				Matrix confusion_matrix_;
+			
+				double accuracy_;
+				
+				double accuracy_input_test_;
+				
+				double accuracy_cv_;
+
+				/** pointer to the regression model, which the object of this class should test */
+				ClassificationModel* clas_model;
+				
+				void (ClassificationValidation::* qualCalculation)();
+				
+				
+				//@}
+	
+		};
+	}
+}
+
+
+
+#endif // REGVALIDATION
