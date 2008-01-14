@@ -208,6 +208,9 @@
 // The default traits for the FFTW classes
 #define BALL_FFTW_DEFAULT_TRAITS FloatTraits
 
+// Define whether BALL was built with lpsolve support
+#undef BALL_HAS_LPSOLVE
+
 // QT options
 #undef BALL_HAS_VIEW
 #undef BALL_QT_HAS_THREADS

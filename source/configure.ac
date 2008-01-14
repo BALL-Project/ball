@@ -106,6 +106,11 @@ AC_ARG_ENABLE(gsl,             [  --enable-gsl            enable the build of BA
 AC_ARG_WITH(gsl-lib,           [  --with-gsl-lib=DIR      libgsl is in DIR])
 AC_ARG_WITH(gsl-incl,          [  --with-gsl-incl=DIR     gsl includes are in DIR])
 
+dnl ** LPSOLVE **
+AC_ARG_ENABLE(lpsolve,				 [  --enable-lpsolve        enable the build of BALL with support for lpsolve55)])
+AC_ARG_WITH(lpsolve-lib,			 [  --with-lpsolve-lib=DIR  liblpsolve55 is in DIR])
+AC_ARG_WITH(lpsolve-incl,			 [  --with-lpsolve-incl=DIR lpsolve includes are in DIR])
+
 dnl
 dnl    interpret switches...
 dnl
@@ -292,6 +297,23 @@ if test "$with_gsl" != "" -a "$with_gsl" != "no" -o "$enable_gsl" = yes ; then
 	fi
 else
 	GSL_SUPPORT=
+fi
+
+# support for lpsolve 
+if test "$with_lpsolve" != "" -a "$with_lpsolve" != "no" -o "$enable_lpsolve" = yes ; then
+	LPSOLVE_SUPPORT=true
+	if test "${with_lpsolve_lib}" != "" ; then
+		LPSOLVE_LIBDIR=${with_lpsolve_lib}
+	else
+		LPSOLVE_LIBDIR=""
+	fi
+	if test "${with_lpsolve_incl}" != "" ; then
+		LPSOLVE_INCDIR=${with_lpsolve_incl}
+	else
+		LPSOLVE_INCDIR=""
+	fi
+else
+	LPSOLVE_SUPPORT=
 fi
 
 dnl
@@ -533,6 +555,13 @@ if test "${GSL_SUPPORT}" == true ; then
 fi
 
 dnl
+dnl LPSOLVE 
+dnl
+if test "${LPSOLVE_SUPPORT}" == true ; then
+	CF_LPSOLVE
+fi
+
+dnl
 dnl		VIEW
 dnl
 dnl Currently, we require QT 3.3.x. QT 4.x isn't supported yet.
@@ -564,7 +593,7 @@ BINFMT_INDEX=""
 
 BALL_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
 
-LIBS="${LIBS} ${FFTW_LIBS} ${GSL_LIBS} -lm"
+LIBS="${LIBS} ${FFTW_LIBS} ${GSL_LIBS} ${LPSOLVE_LIBS} -lm"
 VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
 if test "${USE_VIEW}" = true ; then

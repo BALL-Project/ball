@@ -703,6 +703,10 @@ GSL_SUPPORT
 GSL_INCLUDES
 GSL_LIBS
 BALL_HAS_GSL
+LPSOLVE_SUPPORT
+LPSOLVE_INCLUDES
+LPSOLVE_LIBS
+BALL_HAS_LPSOLVE
 XMKMF
 MOC
 UIC
@@ -1360,6 +1364,7 @@ Optional Features:
   --enable-double-cplx    use double precision floats for Complex type
   --enable-longdbl-cplx   use long double precision floats for Complex type
   --enable-gsl            enable the build of BALL with support for GSL (GNU Scientific Library)
+  --enable-lpsolve        enable the build of BALL with support for lpsolve55)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -1393,6 +1398,8 @@ Optional Packages:
   --with-fftw-incl=DIR    fftw includes are in DIR
   --with-gsl-lib=DIR      libgsl is in DIR
   --with-gsl-incl=DIR     gsl includes are in DIR
+  --with-lpsolve-lib=DIR  liblpsolve55 is in DIR
+  --with-lpsolve-incl=DIR lpsolve includes are in DIR
   --with-x                use the X Window System
 
 Some influential environment variables:
@@ -2121,6 +2128,24 @@ if test "${with_gsl_incl+set}" = set; then
 fi
 
 
+# Check whether --enable-lpsolve was given.
+if test "${enable_lpsolve+set}" = set; then
+  enableval=$enable_lpsolve;
+fi
+
+
+# Check whether --with-lpsolve-lib was given.
+if test "${with_lpsolve_lib+set}" = set; then
+  withval=$with_lpsolve_lib;
+fi
+
+
+# Check whether --with-lpsolve-incl was given.
+if test "${with_lpsolve_incl+set}" = set; then
+  withval=$with_lpsolve_incl;
+fi
+
+
 if test "$enable_optimization" = "no" ; then
 	DEBUG=true
 else
@@ -2304,6 +2329,23 @@ if test "$with_gsl" != "" -a "$with_gsl" != "no" -o "$enable_gsl" = yes ; then
 	fi
 else
 	GSL_SUPPORT=
+fi
+
+# support for lpsolve
+if test "$with_lpsolve" != "" -a "$with_lpsolve" != "no" -o "$enable_lpsolve" = yes ; then
+	LPSOLVE_SUPPORT=true
+	if test "${with_lpsolve_lib}" != "" ; then
+		LPSOLVE_LIBDIR=${with_lpsolve_lib}
+	else
+		LPSOLVE_LIBDIR=""
+	fi
+	if test "${with_lpsolve_incl}" != "" ; then
+		LPSOLVE_INCDIR=${with_lpsolve_incl}
+	else
+		LPSOLVE_INCDIR=""
+	fi
+else
+	LPSOLVE_SUPPORT=
 fi
 
 
@@ -18837,7 +18879,9 @@ echo "$as_me: error: Aborted." >&2;}
 						GSL_INCDIR=`echo ${GSL_INCDIR} | sed "s/gsl$//"`
   		{ echo "$as_me:$LINENO: result: (${GSL_INCDIR})" >&5
 echo "${ECHO_T}(${GSL_INCDIR})" >&6; }
-  		BALL_INCLUDES="${BALL_INCLUDES} -I${GSL_INCDIR}"
+			if test "${GSL_INCDIR}" != /usr/include ; then
+				BALL_INCLUDES="${BALL_INCLUDES} -I${GSL_INCDIR}"
+			fi
   	fi
 
 
@@ -19049,7 +19093,10 @@ echo "$as_me: error: Aborted." >&2;}
 
 				fi
 			fi
-  		GSL_LIBS="${GSL_LIBS} -L${GSL_LIBDIR} -lgsl -lgslcblas"
+												if test "${GSL_LIBDIR}" != /usr/lib; then
+				GSL_LIBS="${GSL_LIBS} -L${GSL_LIBDIR}"
+			fi
+  		GSL_LIBS="${GSL_LIBS} -lgsl -lgslcblas"
   	fi
 
 		BALL_HAS_GSL=true
@@ -19059,6 +19106,489 @@ echo "$as_me: error: Aborted." >&2;}
 		{ echo "$as_me:$LINENO: result: disabled" >&5
 echo "${ECHO_T}disabled" >&6; }
 	fi
+
+
+fi
+
+if test "${LPSOLVE_SUPPORT}" == true ; then
+
+{ echo "$as_me:$LINENO: checking Checking for lpsolve support" >&5
+echo $ECHO_N "checking Checking for lpsolve support... $ECHO_C" >&6; }
+
+
+
+
+if test "${LPSOLVE_SUPPORT}" = "true" ; then
+	{ echo "$as_me:$LINENO: result: enabled" >&5
+echo "${ECHO_T}enabled" >&6; }
+
+	cat >>confdefs.h <<\_ACEOF
+#define BALL_HAS_LPSOLVE 1
+_ACEOF
+
+
+	{ echo "$as_me:$LINENO: checking for lpsolve header files" >&5
+echo $ECHO_N "checking for lpsolve header files... $ECHO_C" >&6; }
+
+	_INCLUDES=
+
+		if test "${LPSOLVE_INCDIR}" != "" ; then
+	_INCLUDES=${LPSOLVE_INCDIR}
+	fi
+
+	if test "${_INCLUDES}" = "" ; then
+		for i in /usr/include /opt/include ${LPSOLVE_INCPATH} ; do
+			if test -f "$i/lpsolve/lp_lib.h" -a "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" ; then
+		for i in /usr/*/include /opt/*/include ; do
+			if test -f "$i/lpsolve/lp_lib.h" -a "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" ; then
+		for i in /opt/*/*/include /usr/*/*/include /usr/local/*/*/include ; do
+			if test -f "$i/lpsolve/lp_lib.h" -a "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" -a "${FIND}" != "-" ; then
+		if test "${FIND_KNOWS_PATH}" = false ; then
+			FIND_OPT="-name"
+			_TMP_FIND_NAME="lpsolve/lp_lib.h"
+			while test _`${EGREP} / $_TMP_FIND_NAME`_ != __ ; do
+				_TMP_FIND_NAME=`echo ${_TMP_FIND_NAME}|${CUT} -d/ -f2-`
+			done
+
+			FIND_ARG="\*${_TMP_FIND_NAME}\*"
+		else
+			FIND_OPT="-path"
+			FIND_ARG="\*lpsolve/lp_lib.h\*"
+		fi
+
+		_TMP=`${FIND} /usr ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+		for j in ${_TMP} ; do
+			if test "${_INCLUDES}" = "" ; then
+				_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+			fi
+		done
+
+		if test "${_INCLUDES}" = "" ; then
+			_TMP=`${FIND} /opt ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_INCLUDES}" = "" ; then
+					_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+				fi
+			done
+		fi
+
+		if test "${_INCLUDES}" = "" -a "${LPSOLVE_INCPATH}" != ""; then
+			for i in ${LPSOLVE_INCPATH} /dev/null ; do
+				_TMP=`${FIND} $i ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+				for j in ${_TMP} ; do
+					if test "${_INCLUDES}" = "" ; then
+						_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+					fi
+				done
+			done
+		fi
+	fi
+
+	LPSOLVE_INCDIR="${_INCLUDES}"
+
+	if test "${LPSOLVE_INCDIR}" = "" ; then
+		{ echo "$as_me:$LINENO: result: (not found!)" >&5
+echo "${ECHO_T}(not found!)" >&6; }
+		{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+		{ echo "$as_me:$LINENO: result: The lpsolve headers could not be found. Please specify the path to <lpsolve/lp_lib.h>" >&5
+echo "${ECHO_T}The lpsolve headers could not be found. Please specify the path to <lpsolve/lp_lib.h>" >&6; }
+		{ echo "$as_me:$LINENO: result: by passing the option --with-lpsolve-incl=DIR to configure." >&5
+echo "${ECHO_T}by passing the option --with-lpsolve-incl=DIR to configure." >&6; }
+		{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+		{ echo "$as_me:$LINENO: result: lpsolve is needed for integer linear programming." >&5
+echo "${ECHO_T}lpsolve is needed for integer linear programming." >&6; }
+		{ echo "$as_me:$LINENO: result: Please install the library on your system, or disable it with --disable-lpsolve." >&5
+echo "${ECHO_T}Please install the library on your system, or disable it with --disable-lpsolve." >&6; }
+		{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+
+	{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+	{ echo "$as_me:$LINENO: result: Configure failed. If you cannot solve your problem with the aid" >&5
+echo "${ECHO_T}Configure failed. If you cannot solve your problem with the aid" >&6; }
+	{ echo "$as_me:$LINENO: result: of the above error message, please contact the BALL mailing list" >&5
+echo "${ECHO_T}of the above error message, please contact the BALL mailing list" >&6; }
+	{ echo "$as_me:$LINENO: result: or the BALL developers. Please enclose the file 'conf.diag.tar'" >&5
+echo "${ECHO_T}or the BALL developers. Please enclose the file 'conf.diag.tar'" >&6; }
+	{ echo "$as_me:$LINENO: result: which has been created in source. It contains the relevant" >&5
+echo "${ECHO_T}which has been created in source. It contains the relevant" >&6; }
+	{ echo "$as_me:$LINENO: result: files from this configure run. In most cases, the information" >&5
+echo "${ECHO_T}files from this configure run. In most cases, the information" >&6; }
+	{ echo "$as_me:$LINENO: result: is necessary to diagnose what went wrong. This file contains" >&5
+echo "${ECHO_T}is necessary to diagnose what went wrong. This file contains" >&6; }
+	{ echo "$as_me:$LINENO: result: information about your system setup and versions of compilers" >&5
+echo "${ECHO_T}information about your system setup and versions of compilers" >&6; }
+	{ echo "$as_me:$LINENO: result: and other tools installed in your system." >&5
+echo "${ECHO_T}and other tools installed in your system." >&6; }
+	{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+
+	TARFILE=conf.diag.tar
+	if test -f $TARFILE ; then
+		${RM} $TARFILE ;
+	fi
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+	tar cf $TARFILE $FILES
+
+	{ { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
+
+	else
+				LPSOLVE_INCDIR=`echo ${LPSOLVE_INCDIR} | sed "s/lpsolve$//"`
+		{ echo "$as_me:$LINENO: result: (${LPSOLVE_INCDIR})" >&5
+echo "${ECHO_T}(${LPSOLVE_INCDIR})" >&6; }
+		if test "${LPSOLVE_INCDIR}" != /usr/include; then
+			BALL_INCLUDES="${BALL_INCLUDES} -I${LPSOLVE_INCDIR}"
+		fi
+	fi
+
+
+	{ echo "$as_me:$LINENO: checking for liblpsolve55.a" >&5
+echo $ECHO_N "checking for liblpsolve55.a... $ECHO_C" >&6; }
+	if test "${LPSOLVE_LIBDIR}" != "" ; then
+		if test -a "${LPSOLVE_LIBDIR}/liblpsolve55.a" ; then
+			LPSOLVE_LIBDIR="${LPSOLVE_LIBDIR}/"
+		fi
+	fi
+
+	_LIBS=
+
+		if test "${LPSOLVE_LIBDIR}" != "" ; then
+		_LIBS=${LPSOLVE_LIBDIR}
+	fi
+
+	if test "${LPSOLVE_LIBPATH}" = "" ; then
+		_LIBDIRS="/usr/lib /opt/lib /usr/local/lib"
+	else
+		_LIBDIRS="${LPSOLVE_LIBPATH}"
+	fi
+
+	if test "${_LIBS}" = "" ; then
+		for i in ${_LIBDIRS} ; do
+			for j in $i/liblpsolve55.* ; do
+				if test -f "$j" -a "${_LIBS}" = ""; then
+					_LIBS="$i"
+				fi
+			done
+		done
+	fi
+
+	if test "${_LIBS}" = "" ; then
+		for i in /usr/lib /opt/lib /usr/*/lib /opt/*/lib ; do
+			for j in $i/liblpsolve55.* ; do
+				if test -f "$j" -a "${_LIBS}" = ""; then
+					_LIBS="$i"
+				fi
+			done
+		done
+	fi
+
+	if test "${_LIBS}" = "" ; then
+		for i in /opt/*/*/lib /usr/*/*/lib /usr/local/*/*/lib ; do
+			for j in $i/liblpsolve55.* ; do
+				if test -f "$j" -a "${_LIBS}" = ""; then
+					_LIBS="$i"
+				fi
+			done
+		done
+	fi
+
+	if test "${_LIBS}" = "" -a "${FIND}" != "-" ; then
+		if test "${_LIBS}" = "" -a "${LPSOLVE_LIBPATH}" != ""; then
+			for i in ${LPSOLVE_LIBPATH} /dev/null; do
+				if test "${_LIBS}" = "" ; then
+					_TMP=`${FIND} $i -name "liblpsolve55.*" -print 2>/dev/null`
+					for j in ${_TMP} ; do
+						if test "${_LIBS}" = "" ; then
+							_LIBS=`echo $j|${SED} "s/\/liblpsolve55\\..*/\//"`
+						fi
+					done
+				fi
+			done
+		fi
+
+		if test "${_LIBS}" = "" ; then
+			_TMP=`${FIND} /opt -name "liblpsolve55.*" -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_LIBS}" = "" ; then
+					_LIBS=`echo $j|${SED} "s/\/liblpsolve55\\..*/\//"`
+				fi
+			done
+		fi
+
+		if test "${_LIBS}" = "" ; then
+			_TMP=`${FIND} /usr -name "liblpsolve55.*" -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_LIBS}" = "" ; then
+					_LIBS=`echo $j|${SED} "s/\/liblpsolve55\\..*/\//"`
+				fi
+			done
+		fi
+
+	fi
+
+	LPSOLVE_LIBDIR="${_LIBS}"
+
+
+	if test "${LPSOLVE_LIBDIR}" = "" ; then
+		{ echo "$as_me:$LINENO: result: (not found!)" >&5
+echo "${ECHO_T}(not found!)" >&6; }
+		{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+		{ echo "$as_me:$LINENO: result: The lpsolve library, version 5.5, could not be found. Please specify the path to liblpsolve55.a" >&5
+echo "${ECHO_T}The lpsolve library, version 5.5, could not be found. Please specify the path to liblpsolve55.a" >&6; }
+		{ echo "$as_me:$LINENO: result: by passing the option --with-lpsolve-libs=DIR to configure." >&5
+echo "${ECHO_T}by passing the option --with-lpsolve-libs=DIR to configure." >&6; }
+		{ echo "$as_me:$LINENO: result: You may also set the environment variable LPSOLVE_LIBDIR to the correct" >&5
+echo "${ECHO_T}You may also set the environment variable LPSOLVE_LIBDIR to the correct" >&6; }
+		{ echo "$as_me:$LINENO: result: path - configure will recognize this, too." >&5
+echo "${ECHO_T}path - configure will recognize this, too." >&6; }
+		{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+		{ echo "$as_me:$LINENO: result: Please install the library on your system, or disable it with --disable-lpsolve." >&5
+echo "${ECHO_T}Please install the library on your system, or disable it with --disable-lpsolve." >&6; }
+		{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+
+	{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+	{ echo "$as_me:$LINENO: result: Configure failed. If you cannot solve your problem with the aid" >&5
+echo "${ECHO_T}Configure failed. If you cannot solve your problem with the aid" >&6; }
+	{ echo "$as_me:$LINENO: result: of the above error message, please contact the BALL mailing list" >&5
+echo "${ECHO_T}of the above error message, please contact the BALL mailing list" >&6; }
+	{ echo "$as_me:$LINENO: result: or the BALL developers. Please enclose the file 'conf.diag.tar'" >&5
+echo "${ECHO_T}or the BALL developers. Please enclose the file 'conf.diag.tar'" >&6; }
+	{ echo "$as_me:$LINENO: result: which has been created in source. It contains the relevant" >&5
+echo "${ECHO_T}which has been created in source. It contains the relevant" >&6; }
+	{ echo "$as_me:$LINENO: result: files from this configure run. In most cases, the information" >&5
+echo "${ECHO_T}files from this configure run. In most cases, the information" >&6; }
+	{ echo "$as_me:$LINENO: result: is necessary to diagnose what went wrong. This file contains" >&5
+echo "${ECHO_T}is necessary to diagnose what went wrong. This file contains" >&6; }
+	{ echo "$as_me:$LINENO: result: information about your system setup and versions of compilers" >&5
+echo "${ECHO_T}information about your system setup and versions of compilers" >&6; }
+	{ echo "$as_me:$LINENO: result: and other tools installed in your system." >&5
+echo "${ECHO_T}and other tools installed in your system." >&6; }
+	{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+
+	TARFILE=conf.diag.tar
+	if test -f $TARFILE ; then
+		${RM} $TARFILE ;
+	fi
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+	tar cf $TARFILE $FILES
+
+	{ { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
+
+	else
+								if test "${LPSOLVE_LIBDIR}" != /usr/lib ; then
+			LPSOLVE_LIBS="-L${LPSOLVE_LIBDIR} -llpsolve55"
+		else
+			LPSOLVE_LIBS="-llpsolve55"
+		fi
+		{ echo "$as_me:$LINENO: checking libraries needed for liblpsolve55" >&5
+echo $ECHO_N "checking libraries needed for liblpsolve55... $ECHO_C" >&6; }
+		SAVE_LIBS=${LIBS}
+		SAVE_LDFLAGS=${LDFLAGS}
+		LIBS=${LPSOLVE_LIBS}
+		LDFLAGS="${LDFLAGS} -I${LPSOLVE_INCDIR}"
+		LPSOLVE_LINKS=0
+		cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+			#include <lpsolve/lp_lib.h>
+
+int
+main ()
+{
+
+			int major, minor, release, build;
+			lp_solve_version(&major, &minor, &release, &build);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  LPSOLVE_LINKS=1
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+		LIBS=${SAVE_LIBS}
+		LDFLAGS=${SAVE_LDFLAGS}
+		if test "${LPSOLVE_LINKS}" = 1; then
+			{ echo "$as_me:$LINENO: result: (liblpsolve55 suffices!)" >&5
+echo "${ECHO_T}(liblpsolve55 suffices!)" >&6; }
+		else
+			SAVE_LIBS=${LIBS}
+			SAVE_LDFLAGS=${LDFLAGS}
+			LPSOLVE_LIBS="${LPSOLVE_LIBS} -lm -lcolamd -ldl"
+			LIBS=${LPSOLVE_LIBS}
+			LDFLAGS="${LDFLAGS} -I${LPSOLVE_INCDIR}"
+			LPSOLVE_LINKS=0
+			cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+				#include <lpsolve/lp_lib.h>
+
+int
+main ()
+{
+
+				int major, minor, release, build;
+				lp_solve_version(&major, &minor, &release, &build);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  LPSOLVE_LINKS=1
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+			LIBS=${SAVE_LIBS}
+			LDFLAGS=${SAVE_LDFLAGS}
+			if test "${LPSOLVE_LINKS}" != 1; then
+				{ echo "$as_me:$LINENO: result: could not link against liblpsolve55!" >&5
+echo "${ECHO_T}could not link against liblpsolve55!" >&6; }
+				{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+				{ echo "$as_me:$LINENO: result: Please check your lpsolve installation or disable lpsolve support" >&5
+echo "${ECHO_T}Please check your lpsolve installation or disable lpsolve support" >&6; }
+				{ echo "$as_me:$LINENO: result: by passing --disable-lpsolve to configure!" >&5
+echo "${ECHO_T}by passing --disable-lpsolve to configure!" >&6; }
+
+	{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+	{ echo "$as_me:$LINENO: result: Configure failed. If you cannot solve your problem with the aid" >&5
+echo "${ECHO_T}Configure failed. If you cannot solve your problem with the aid" >&6; }
+	{ echo "$as_me:$LINENO: result: of the above error message, please contact the BALL mailing list" >&5
+echo "${ECHO_T}of the above error message, please contact the BALL mailing list" >&6; }
+	{ echo "$as_me:$LINENO: result: or the BALL developers. Please enclose the file 'conf.diag.tar'" >&5
+echo "${ECHO_T}or the BALL developers. Please enclose the file 'conf.diag.tar'" >&6; }
+	{ echo "$as_me:$LINENO: result: which has been created in source. It contains the relevant" >&5
+echo "${ECHO_T}which has been created in source. It contains the relevant" >&6; }
+	{ echo "$as_me:$LINENO: result: files from this configure run. In most cases, the information" >&5
+echo "${ECHO_T}files from this configure run. In most cases, the information" >&6; }
+	{ echo "$as_me:$LINENO: result: is necessary to diagnose what went wrong. This file contains" >&5
+echo "${ECHO_T}is necessary to diagnose what went wrong. This file contains" >&6; }
+	{ echo "$as_me:$LINENO: result: information about your system setup and versions of compilers" >&5
+echo "${ECHO_T}information about your system setup and versions of compilers" >&6; }
+	{ echo "$as_me:$LINENO: result: and other tools installed in your system." >&5
+echo "${ECHO_T}and other tools installed in your system." >&6; }
+	{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+
+	TARFILE=conf.diag.tar
+	if test -f $TARFILE ; then
+		${RM} $TARFILE ;
+	fi
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+	tar cf $TARFILE $FILES
+
+	{ { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
+
+			else
+				{ echo "$as_me:$LINENO: result: (${LPSOLVE_LIBS})" >&5
+echo "${ECHO_T}(${LPSOLVE_LIBS})" >&6; }
+				BALL_HAS_LPSOLVE=true
+
+			fi
+		fi
+	fi
+else
+	{ echo "$as_me:$LINENO: result: disabled" >&5
+echo "${ECHO_T}disabled" >&6; }
+fi
 
 
 fi
@@ -23540,7 +24070,7 @@ BINFMT_INDEX=""
 
 BALL_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
 
-LIBS="${LIBS} ${FFTW_LIBS} ${GSL_LIBS} -lm"
+LIBS="${LIBS} ${FFTW_LIBS} ${GSL_LIBS} ${LPSOLVE_LIBS} -lm"
 VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
 if test "${USE_VIEW}" = true ; then
@@ -24417,15 +24947,15 @@ GSL_SUPPORT!$GSL_SUPPORT$ac_delim
 GSL_INCLUDES!$GSL_INCLUDES$ac_delim
 GSL_LIBS!$GSL_LIBS$ac_delim
 BALL_HAS_GSL!$BALL_HAS_GSL$ac_delim
+LPSOLVE_SUPPORT!$LPSOLVE_SUPPORT$ac_delim
+LPSOLVE_INCLUDES!$LPSOLVE_INCLUDES$ac_delim
+LPSOLVE_LIBS!$LPSOLVE_LIBS$ac_delim
+BALL_HAS_LPSOLVE!$BALL_HAS_LPSOLVE$ac_delim
 XMKMF!$XMKMF$ac_delim
 MOC!$MOC$ac_delim
 UIC!$UIC$ac_delim
 SIP!$SIP$ac_delim
 SIP_LIB!$SIP_LIB$ac_delim
-SIP_INCLUDES!$SIP_INCLUDES$ac_delim
-PYTHON_INCLUDES!$PYTHON_INCLUDES$ac_delim
-PYTHON_SUPPORT!$PYTHON_SUPPORT$ac_delim
-PYTHON_LIBS!$PYTHON_LIBS$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -24467,6 +24997,10 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+SIP_INCLUDES!$SIP_INCLUDES$ac_delim
+PYTHON_INCLUDES!$PYTHON_INCLUDES$ac_delim
+PYTHON_SUPPORT!$PYTHON_SUPPORT$ac_delim
+PYTHON_LIBS!$PYTHON_LIBS$ac_delim
 PYTHON_EXECUTABLE!$PYTHON_EXECUTABLE$ac_delim
 VALGRIND!$VALGRIND$ac_delim
 VALGRIND_OPTS!$VALGRIND_OPTS$ac_delim
@@ -24517,7 +25051,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 48; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 52; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
