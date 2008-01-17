@@ -162,15 +162,27 @@ namespace BALL
 			/// Return the number of bonds built during the last application.
 			Size getNumberOfBondOrdersSet();
 		
-			Size getNumberOfSolutions() {return solutions_.size();};
+			/// Returns the number of already computed solutions
+			Size getNumberOfComputedSolutions() {return solutions_.size();};
 
 			//// Return the ILP computed Bond order solutions
 			//vector<Solution_>& getSolutions() {return solutions_;};
 			//const vector<Solution_>& getSolutions() const {return solutions_;};
+
+			/// Returns the total penalty of the (already computed!) i-th solution
+			int getTotalPenalty(Position i) {return solutions_[i].penalty;}
 			
-			/// set the AtomContainer ac's bond orders to the ones found in solution i
-			/// returns true if the i-th solution is valid NOTE: start counting in 0
-			bool apply(AtomContainer& ac, Position i);
+			/** Set the AtomContainer ac_'s bond orders to the ones found 
+			 * in the (already computed!) i-th solution.
+			 * Returns true if the i-th solution is valid 
+			 * NOTE: start counting in 0
+			 */
+			bool apply(Position i);
+
+			/* Computes and applies another solution
+			*  Returns false if no further solution can be found.
+			*/
+			bool computeNextSolution();
 			//@}
 			
 			/** @name Assignment
@@ -190,7 +202,10 @@ namespace BALL
 			*/
 			void setDefaultOptions();
 			//@}
-			
+		
+			// for testing
+			int evaluatePenalty(AtomContainer* ac);
+
 		protected:
 			
 			/// Nested class storing the parameters of a solution to our ILP
@@ -203,7 +218,7 @@ namespace BALL
 					Solution_();
 				
 					// Detailed constructor for A-STAR
-					Solution_(AssignBondOrderProcessor* ap, PQ_Entry_ entry);
+					Solution_(AssignBondOrderProcessor* ap, const PQ_Entry_& entry);
 
 					/// Detailed constructor for ILP solutions
 					// we assume that the AtomContainer in the constructor and the apply-method are equal
@@ -251,16 +266,18 @@ namespace BALL
 					void clear();
 					
 					/// estimate f
-					void estimatePenalty();
+					//void estimatePenalty();
 					
-					/// the less operator
-					bool operator < (const PQ_Entry_& b) const {return estimated_f < b.estimated_f;}
+					/** the less operator
+					 *  note: we want a reverse sort, hence we actually return a "greater"
+					 */
+					bool operator < (const PQ_Entry_& b) const {return estimated_f > b.estimated_f;}
 					
 					/// the f (the estimated penalty)
 					int estimated_f;
 
 					/// the bond orders 
-					/// the i-th entry denotes the bondorder of the i-th bond
+					/// the i-th entry denotes the bondorder of the i-th bond 
 					vector<int> bond_orders;
 					
 					/// the last considered bond
@@ -272,8 +289,23 @@ namespace BALL
 		  /// and stores them per \b{atom in atomic_penalty_scores_}
 			void calculateAtomPenalties_(AtomContainer& ac);
 
-			/// reads the Penalty-INIFile, stores the penalties blockwise and assigns every atom a block of possible valences and the corresponding penalties
+			/** Reads the penalty-INIFile (for example BondOrder.ini),
+			 *  and stores the penalties blockwise. 
+			 *	Returns false if the INIFile could not be read correctly.
+			 */
 			bool readAtomPenalties_()	throw(Exception::FileNotFound());
+			
+			/** Assigns to every atom of the AtomContainer to which the
+			 *  processor is applied to a block of possible valences 
+			 *  and the corresponding penalties.	
+			 *  Returns false if the AtomContainer to which the processor 
+			 *  is applied to has an atom with no matching penalty block. 
+			 */
+			bool preassignPenaltyClasses_();
+
+			
+			/// Processor is in a useable valid state. //TODO
+			bool valid_;
 
 			//TODO: change to something better than the atom index :-) 
 			/// the penalties per atom 
@@ -336,13 +368,15 @@ namespace BALL
 			String current_orders_; // TODO: constr ...
 
 			////////// for ComputeAllSolutions::A_STAR ///////
-			
+			/// 
+			bool	performAStarStep_();
+
 			/// the priority queue //TODO constr...
 			priority_queue<PQ_Entry_> queue_;
 			
 			/// Method to estimate the f = g* +h*
 			/// returns true, if the entry is still valid
-			bool estimatePenalty_(PQ_Entry_ entry);
+			bool estimatePenalty_(PQ_Entry_& entry);
 
 			// filled by readAtomPenalties_
 			// organized in imaginarey blocks of length  
