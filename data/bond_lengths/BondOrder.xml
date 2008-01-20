@@ -186,7 +186,8 @@
 	</entry>
 	<entry id="25">
 		<elementstring>P</elementstring>
-		<smartstring>SMARTS([$([#15D4]([#8D1,#16D1])([#8D1,#16D1])([!#8D1;!#16D1])([!#8D1;!#16D1]))])</smartstring>
+		<!-- Note: this is _SLOW_ --!>
+		<smartstring>SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8&amp;!#16,!D1])(~[!#8&amp;!#16,!D1])(~[#8D1,#16D1]))])</smartstring>
 		<penalty valence="5">32</penalty>
 		<penalty valence="6">0</penalty>
 		<penalty valence="7">32</penalty>
