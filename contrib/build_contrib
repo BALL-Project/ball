@@ -1,0 +1,110 @@
+#!/bin/bash 
+
+# Contrib path
+CPATH=`echo $0 | sed "s/\/build_contrib//"`
+cd $CPATH
+CPATH=`pwd`
+
+echo building contrib package from $CPATH ...
+
+# Try to use gtar, fall back to tar if it doesn't exist
+TAR=`which gtar`
+if test "$TAR" = "" ;  then
+	TAR=tar
+fi
+
+DPATH=$CPATH
+
+if [ $# == 1 ]
+then
+	DPATH=$1
+	rm -rf $DPATH/* 2>/dev/null
+	install -d $DPATH
+	cp -r * $DPATH
+	cd $DPATH
+fi
+
+mbuild()
+{
+	make 2>&1 >> ../build.log  &&		make install 2>&1 >> ../build.log
+
+	ERROR_CODE=$?
+	if [ $ERROR_CODE != 0 ]
+	then
+		echo
+		echo -------------------------------------------
+		echo Error: Could not build the contrib package!
+		echo Please have a look into $DPATH/build.log
+		echo -------------------------------------------
+		echo
+		exit $ERROR_CODE
+	fi
+}
+
+echo
+echo extracting packages to $DPATH ...
+for i in ./*.gz; do gunzip $i; $TAR xif `basename $i .gz`; done;
+
+touch build.log
+install -d include 
+install -d lib
+
+echo
+echo building lpsolve ...
+echo
+cd lp_solve_5.5
+make -f Makefile.Linux 2>&1 >> ../build.log || exit
+install -d ../include/lpsolve
+install *.h ../include/lpsolve
+install lpsolve55/liblpsolve55.a ../lib
+cd ..
+
+
+echo
+echo building fftw ...
+echo
+cd fftw*
+./configure --enable-double --with-pic -q --prefix=$DPATH 2>&1 >> ../build.log || exit
+mbuild
+cd ..
+
+echo
+echo building glew ...
+echo
+cd glew*
+export GLEW_DEST=$DPATH
+mbuild
+cd ..
+
+echo
+echo building sip ...
+echo
+cd sip*
+python configure.py -b $DPATH/bin -d $DPATH/lib -e $DPATH/include 2>&1 >> ../build.log || exit
+mbuild
+cd ..
+
+echo
+echo building gsl ...
+echo
+cd gsl*
+./configure --prefix=$DPATH &> ../build.log 2>&1 >> ../build.log || exit
+mbuild
+cd ..
+
+echo
+echo building Qt ...
+echo
+cd qt*
+./configure -no-qt3support -silent -nomake examples -no-nis -confirm-license --prefix=$DPATH 2>&1 >> ../build.log || exit
+mbuild
+cd ..
+
+echo
+echo cleanup ...
+echo
+rm -rf lp_solve_55 fftw* glew* sip* gsl* qt* mkspecs phrasebooks man plugins translations demos examples info share build.log
+
+echo
+echo Finished building contrib package
+echo
