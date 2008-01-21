@@ -123,7 +123,7 @@
 	<entry id="16">
 		<elementstring>N</elementstring>
 		<!-- <smartstring>SMARTS([$(*OD1)&amp;$(*aR)&amp;n]) OR SMARTS([$(*OD1);$(*R);N])</smartstring> -->	
-		<smartstring>SMARTS([$([#7D3](~[#8D1,#16D1])(~[!#8D1;!#16D1])(~[!#8D1;!#16D1]))])</smartstring>
+		<smartstring>SMARTS([$([#7D3](~[#8D1,#16D1])(~[!#8&amp;!#16,!D1])(~[!#8&amp;!#16,!D1]))])</smartstring>
 		<penalty valence="3">1</penalty>
 		<penalty valence="4">0</penalty>
 	</entry>
@@ -144,7 +144,7 @@
 	</entry>
 	<entry id="19">
 		<elementstring>O</elementstring>
-		<smartstring>SMARTS([#7D3](~[#8D1,#16D1])(~[!#8D1;!#16D1])(~[!#8D1;!#16D1])) AND element(O)</smartstring>
+		<smartstring>SMARTS([#7D3](~[#8D1,#16D1])(~[!#8&amp;!#16,!D1])(~[!#8&amp;!#16,!D1])) AND element(O)</smartstring>
 		<penalty valence="1">0</penalty>
 		<penalty valence="2">1</penalty>
 	</entry>
@@ -186,7 +186,7 @@
 	</entry>
 	<entry id="25">
 		<elementstring>P</elementstring>
-		<!-- Note: this is _SLOW_ --!>
+		<!-- Note: this is _SLOW_ -->
 		<smartstring>SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8&amp;!#16,!D1])(~[!#8&amp;!#16,!D1])(~[#8D1,#16D1]))])</smartstring>
 		<penalty valence="5">32</penalty>
 		<penalty valence="6">0</penalty>
