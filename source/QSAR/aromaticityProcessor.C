@@ -15,6 +15,9 @@ using namespace std;
 
 namespace BALL
 {
+	const char* AromaticityProcessor::Option::OVERWRITE_BOND_ORDERS = "overwrite_bond_orders";
+	const bool  AromaticityProcessor::Default::OVERWRITE_BOND_ORDERS = true;
+
 	AromaticityProcessor::AromaticityProcessor()
 		:	UnaryProcessor<AtomContainer>()
 	{
@@ -58,6 +61,11 @@ namespace BALL
 		}
 	}
 
+	bool AromaticityProcessor::start()
+	{
+		overwrite_bond_orders_ = options.getBool(Option::OVERWRITE_BOND_ORDERS);
+		return true;
+	}
 
 	Processor::Result AromaticityProcessor::operator () (AtomContainer& ac)
 	{
@@ -812,7 +820,14 @@ namespace BALL
 							{
 								if (ring.has(b_it->getPartner(**it)))
 								{
-									b_it->setOrder(Bond::ORDER__AROMATIC);
+									if (overwrite_bond_orders_)
+									{
+										b_it->setOrder(Bond::ORDER__AROMATIC);
+									}
+									else
+									{
+										b_it->setProperty("IsAromatic", true);
+									}
 								}
 							}
 						}
@@ -828,7 +843,14 @@ namespace BALL
 						{
 							if (ring.has(b_it->getPartner(**it)))
 							{
-								b_it->setOrder(Bond::ORDER__AROMATIC);
+								if (overwrite_bond_orders_)
+								{	
+									b_it->setOrder(Bond::ORDER__AROMATIC);
+								}
+								else
+								{
+									b_it->setProperty("IsAromatic", true);
+								}
 							}
 						}
 					}
@@ -847,7 +869,14 @@ namespace BALL
 					{
 						if (ring.has(b_it->getPartner(**it)))
 						{
-							b_it->setOrder(Bond::ORDER__AROMATIC);
+							if (overwrite_bond_orders_)
+							{
+								b_it->setOrder(Bond::ORDER__AROMATIC);
+							}
+							else
+							{
+								b_it->setProperty("IsAromatic", true);
+							}
 						}
 					}
 				}
@@ -1108,5 +1137,10 @@ namespace BALL
 		}
 	}
 	
+	void AromaticityProcessor::setDefaultOptions()
+	{		
+	 	options.setDefaultBool(AromaticityProcessor::Option::OVERWRITE_BOND_ORDERS, 
+	 												 AromaticityProcessor::Default::OVERWRITE_BOND_ORDERS); 
+	}
 } // namespace BALL
 
