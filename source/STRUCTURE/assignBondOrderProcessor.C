@@ -27,8 +27,8 @@
 // For lp_solve
 #include <lpsolve/lp_lib.h>
 
-//#define DEBUG 1
-#undef DEBUG
+#define DEBUG 1
+//#undef DEBUG
 #define DEBUG_READ 1
 //#undef DEBUG_READ
 
@@ -41,10 +41,13 @@ namespace BALL
 	//const char* AssignBondOrderProcessor::Option::OVERWRITE_UNKNOWN_BOND_ORDERS = "overwrite_unknown_bond_orders";
 	//const bool  AssignBondOrderProcessor::Default::OVERWRITE_UNKNOWN_BOND_ORDERS = true;
 	
-	const String AssignBondOrderProcessor::ComputeAllSolutions::DISABLED = "disabled";
-	const String AssignBondOrderProcessor::ComputeAllSolutions::ONE_BOND_HEURISTIC = "one_bond_heuristic";
-	const String AssignBondOrderProcessor::ComputeAllSolutions::ENUMERATION_TREE = "enumeration_tree";
-	const String AssignBondOrderProcessor::ComputeAllSolutions::A_STAR = "a_star";
+	//const String AssignBondOrderProcessor::ComputeAllSolutions::DISABLED = "disabled";
+	//const String AssignBondOrderProcessor::ComputeAllSolutions::ONE_BOND_HEURISTIC = "one_bond_heuristic";
+	//const String AssignBondOrderProcessor::ComputeAllSolutions::ENUMERATION_TREE = "enumeration_tree";
+	//const String AssignBondOrderProcessor::ComputeAllSolutions::A_STAR = "a_star";
+	
+	const String AssignBondOrderProcessor::Algorithm::A_STAR = "a_star";
+	const String AssignBondOrderProcessor::Algorithm::ILP = "ilp";
 
 	const char* AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS = "overwrite_single_bond_orders";
 	const bool  AssignBondOrderProcessor::Default::OVERWRITE_SINGLE_BOND_ORDERS = true;
@@ -76,8 +79,10 @@ namespace BALL
 	const char* AssignBondOrderProcessor::Option::INIFile = "iniFile";
 	const String  AssignBondOrderProcessor::Default::INIFile = "/bond_lengths/BondOrder.xml";
 
-	const char* AssignBondOrderProcessor::Option::COMPUTE_ALL_SOLUTIONS = "compute_all_solutions";
-	const String AssignBondOrderProcessor::Default::COMPUTE_ALL_SOLUTIONS = AssignBondOrderProcessor::ComputeAllSolutions::DISABLED;
+	const char* AssignBondOrderProcessor::Option::ALGORITHM = "algorithm";
+	//const char* AssignBondOrderProcessor::Option::COMPUTE_ALL_SOLUTIONS = "compute_all_solutions";
+	const String AssignBondOrderProcessor::Default::ALGORITHM = AssignBondOrderProcessor::Algorithm::A_STAR;
+	//const String AssignBondOrderProcessor::Default::COMPUTE_ALL_SOLUTIONS = AssignBondOrderProcessor::ComputeAllSolutions::DISABLED;
 		
 	AssignBondOrderProcessor::AssignBondOrderProcessor()
 		: UnaryProcessor<AtomContainer>(),
@@ -207,6 +212,26 @@ cout << endl;
 
 	Processor::Result AssignBondOrderProcessor::operator () (AtomContainer& ac)
 	{
+#ifdef DEBUG
+cout << "  OPTIONS:" << endl;
+cout << " \t Algorithm: " <<  options[Option::Option::ALGORITHM] << endl;
+cout << " \t Overwrite bonds (single, double, triple, quad, aroma):" 
+		 << options.getBool(Option::OVERWRITE_SINGLE_BOND_ORDERS) << " " 
+		 << options.getBool(Option::OVERWRITE_DOUBLE_BOND_ORDERS) << " " 
+		 << options.getBool(Option::OVERWRITE_TRIPLE_BOND_ORDERS) << " " 
+		 << options.getBool(Option::OVERWRITE_QUADRUPLE_BOND_ORDERS) << " " 
+		 << options.getBool(Option::OVERWRITE_AROMATIC_BOND_ORDERS) << endl;
+
+cout << " \t Oktett Regel: " <<options.getBool(Option::ENFORCE_OCTETT_RULE) << endl;
+cout << " \t Ladung überschreiben: " << options.getBool(Option::OVERWRITE_CHARGES) << endl;
+cout << " \t Ladung zuweisen: " << options.getBool(Option::ASSIGN_CHARGES) << endl;
+
+cout << " \t Kekulizer: " << options.getBool(Option::KEKULIZE_RINGS)  << endl;
+cout << " \t Penalty files " << options[Option::Option::INIFile] << endl;
+cout << " \t valid : " << valid_ << endl;
+cout << endl;
+#endif
+
 		// Is the processor in a valid state?
 		if (valid_)
 		{
@@ -361,8 +386,11 @@ cout << endl;
 				calculateAtomPenalties_(ac); // TODO: Umstellung auf readAtomPenalties!
 				if (preassignPenaltyClasses_())
 				{
-					if (options.get(Option::COMPUTE_ALL_SOLUTIONS) == ComputeAllSolutions::A_STAR)
+					//if (options.get(Option::COMPUTE_ALL_SOLUTIONS) == ComputeAllSolutions::A_STAR)
+					cout << "hier"<< endl;
+					if (options.get(Option::ALGORITHM) == Algorithm::A_STAR)
 					{
+						cout << "hier2 " << endl;
 						// Initialize a priority queue and try to find a first solution
 						// Further solutions will be computed calling the method computeNextSolution
 
@@ -434,7 +462,7 @@ cout << "\nNach initialisierung : \n" << queue_.size() << endl;
 								&&  (solutions_[0].valid)
 							 )
 						{
-							if (options.get(Option::COMPUTE_ALL_SOLUTIONS) == ComputeAllSolutions::ONE_BOND_HEURISTIC)
+							/*if (options.get(Option::COMPUTE_ALL_SOLUTIONS) == ComputeAllSolutions::ONE_BOND_HEURISTIC)
 							{
 
 								// now iterate over all free bonds and inhibit the order we already found
@@ -512,14 +540,14 @@ cout << "\nNach initialisierung : \n" << queue_.size() << endl;
 							}
 							else if (options.get(Option::COMPUTE_ALL_SOLUTIONS) == ComputeAllSolutions::ENUMERATION_TREE)
 							{
-								/*// print the optimal sol
+								/ * // print the optimal sol
 									HashMap<Bond*, int>::Iterator mit = solutions_[0].bond_orders.begin();
 									for (; mit != solutions_[0].bond_orders.end(); ++mit)
 									{
 									cout << bond_to_index_[mit->first] << "---"<< mit->second <<  " " << 
 									mit->first->getFirstAtom()->getName() << ".."<<	mit->first->getSecondAtom()->getName()   << std::endl;
 									}
-									cout << std::endl;*/
+									cout << std::endl; * /
 								// get the current optimum
 								optimal_penalty_ = solutions_[0].penalty;
 
@@ -580,7 +608,7 @@ cout << "\nNach initialisierung : \n" << queue_.size() << endl;
 									}
 								}	
 
-							}
+							}*/
 						}
 						else
 						{	
@@ -1793,6 +1821,9 @@ cout << endl;
 		
 		options.setDefault(AssignBondOrderProcessor::Option::INIFile,
 													 AssignBondOrderProcessor::Default::INIFile);		
+		
+		options.setDefault(AssignBondOrderProcessor::Option::ALGORITHM,
+													 AssignBondOrderProcessor::Default::ALGORITHM);		
 	}
 
 	Size  AssignBondOrderProcessor::getNumberOfBondOrdersSet()
@@ -1842,7 +1873,8 @@ cout << endl;
 	
 	bool AssignBondOrderProcessor::computeNextSolution()
 	{
-		if (options.get(Option::COMPUTE_ALL_SOLUTIONS) == ComputeAllSolutions::A_STAR)
+		//if (options.get(Option::COMPUTE_ALL_SOLUTIONS) == ComputeAllSolutions::A_STAR)
+		if (options.get(Option::ALGORITHM) == Algorithm::A_STAR)
 		{
 			if (performAStarStep_())
 			{

@@ -50,8 +50,9 @@ namespace BALL
 			{
 				filename = ascii(parameter_file_edit->text());
 			}
+
 			QString tmp = filename.c_str();
-			QString result = QFileDialog::getExistingDirectory(0, "Select a folder with the ILP parameter files", tmp); // TODO nameing
+			QString result = QFileDialog::getOpenFileName(0, "Select the penalty parameter file", tmp, "*.xml");
 			if (!result.isEmpty())
 			{
 				// store the new filename in the lineedit field

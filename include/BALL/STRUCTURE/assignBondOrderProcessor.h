@@ -89,9 +89,10 @@ namespace BALL
 				
 				/**	technique to compute all solutions
 				*/
-				static const char* COMPUTE_ALL_SOLUTIONS;
+				//static const char* COMPUTE_ALL_SOLUTIONS;
+				static const char* ALGORITHM; 
 
-				/** the folder
+				/** the penalty parameter file
 				 */
 				static const char* INIFile;
 			};
@@ -108,16 +109,18 @@ namespace BALL
 				static const bool ASSIGN_CHARGES;
 				static const bool KEKULIZE_RINGS;
 				static const bool ENFORCE_OCTETT_RULE;	
-				static const String COMPUTE_ALL_SOLUTIONS;
+				//static const String COMPUTE_ALL_SOLUTIONS;
+				static const String ALGORITHM;
 				static const String INIFile;
 			};
 
-			struct BALL_EXPORT ComputeAllSolutions
+			struct BALL_EXPORT Algorithm//Algorithm::ComputeAllSolutions
 			{
-				static const String DISABLED;
-				static const String ONE_BOND_HEURISTIC;
-				static const String ENUMERATION_TREE;
+				//static const String DISABLED;
+				//static const String ONE_BOND_HEURISTIC;
+				//static const String ENUMERATION_TREE;
 				static const String A_STAR;
+				static const String ILP; 
 			};
 			//@}
 		
@@ -359,7 +362,7 @@ namespace BALL
 			/// the AtomContainer, the processor is operating on
 			AtomContainer* ac_;
 
-			////////// for ComputeAllSolutions::ENUMERATION_TREE ///////
+			////////// for Algorithm::ComputeAllSolutions::ENUMERATION_TREE ///////
 			
 			void recursive_solve_(AtomContainer& ac, int depth);
 			void setChecked_(String orders);
@@ -367,7 +370,7 @@ namespace BALL
 			HashSet<String> checked_; //TODO: constr ...
 			String current_orders_; // TODO: constr ...
 
-			////////// for ComputeAllSolutions::A_STAR ///////
+			////////// for Algorithm::A_START   ComputeAllSolutions::A_STAR ///////
 			/// 
 			bool	performAStarStep_();
 
