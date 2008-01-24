@@ -21,7 +21,8 @@ namespace BALL
 {		
 
 	GAFFCESParser::APSMatcher::APSMatcher(const String& aps)
-		: aps_string(aps)
+		: aps_string(aps),
+			aps_terms(1)
 	{
 	}
 
@@ -216,16 +217,41 @@ namespace BALL
 		return false;
 	}
 
-	void GAFFCESParser::APSMatcher::addNewAND(GAFFCESParser::APSMatcher::APSType aps)
+	void GAFFCESParser::APSMatcher::addNewAND()
 	{
-		
+		aps_terms.resize(aps_terms.size()+1);	
 	}
 
 	void GAFFCESParser::APSMatcher::addNewOR(GAFFCESParser::APSMatcher::APSType aps)
 	{
-			
+		aps_terms[aps_terms.size()-1].push_back(aps);	
 	}
 
+	bool GAFFCESParser::APSMatcher::operator() (Atom& atom)
+	{
+		// all and-terms must be true
+		bool and_result = true;
+
+		// iterate over all the and-terms
+		for (Position i=0; i<and_terms.size(); i++)
+		{
+			// one of the or-terms must be true
+			bool or_result = false;
+
+			// iterate over all the or-terms
+			for (Position j=0; j<and_terms[i].size(); j++)
+			{
+				if (checkProperty(atom, or_terms[j]))
+				{
+					or_result = true;
+					break;
+				}
+			}
+			and_result &= or_result;
+		}
+
+		return and_result;
+	}
 
 	GAFFCESParser::CESPredicate::~CESPredicate()
 	{
