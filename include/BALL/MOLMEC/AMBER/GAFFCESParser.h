@@ -87,8 +87,10 @@ namespace BALL
 						APSMatcher(const String& aps);
 						~APSMatcher();
 
-						void addNewAND(APSType aps);
+						void addNewAND();
 						void addNewOR(APSType aps);
+
+						bool operator() (Atom& atom);
 
 						//store atomic property string
 						//external vector: all AND (",") types

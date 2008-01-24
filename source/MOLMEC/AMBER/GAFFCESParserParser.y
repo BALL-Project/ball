@@ -80,7 +80,7 @@ aps_and_terms: aps_or_terms TK_APS_AND_TERM aps_and_terms { }
 	| aps_or_terms { }
 	;
 
-aps_or_terms: aps_term TK_APS_OR_TERM aps_or_terms {  }
+aps_or_terms: aps_term TK_APS_OR_TERM aps_or_terms { GAFFCESParser::state.current_parser->current_predicate->addNewOr(GAFFCESParser::state->current_aps_type); }
 	| aps_term { }
 	;
 
