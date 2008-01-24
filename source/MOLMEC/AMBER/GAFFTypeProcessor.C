@@ -97,6 +97,7 @@ std::cout << "value: " << value << std::endl;
 		RingPerceptionProcessor rpp;
 		rpp.calculateSSSR(sssr_, *molecule);
 
+		//TODO: Option!
 		AromaticityProcessor arp;
 		arp.aromatize(sssr_, *molecule);
 	
@@ -212,7 +213,7 @@ std::cout << "value: " << value << std::endl;
 			for(;atom_it != ring_it->end();++atom_it)
 			{
 				// if one ring member is not sp3 carbon, the whole thing isn't	
-				if( ((*atom_it)->getElement() != PTE[Element::C]) || ((*atom_it)->countBonds() == 4))
+				if( ((*atom_it)->getElement() != PTE[Element::C]) || ((*atom_it)->countBonds() != 4))
 				{
 					purely_aliphatic = false;
 					break;
@@ -222,7 +223,7 @@ std::cout << "value: " << value << std::endl;
 			if (purely_aliphatic)
 			{
 				for(;atom_it != ring_it->end();++atom_it)
-					(*atom_it)->setProperty("IsPureAliphatic",(bool) true);
+					(*atom_it)->setProperty("IsPureAliphatic", true);
 			}
 		}
 	}
@@ -283,6 +284,7 @@ std::cout << "value: " << value << std::endl;
 			{	
 				if((*atom_it)->getProperty("CouldBePlanar").getBool())
 				{
+					// TODO: double bond should be to a non-ring atom!
 					Atom::BondConstIterator constBond_it = (*atom_it)->beginBond();
 					for(;+constBond_it;++constBond_it)
 					{
@@ -338,7 +340,7 @@ std::cout << "value: " << value << std::endl;
 						std::cout << "ChemicalEnvironmentString" << endl;
 
 						if(		(typeDefinition.chemical_environment == "*")
-								||(ces_parsers_[typeDefinition.chemical_environment]->match(atom)))
+								||(ces_parsers_[typeDefinition.atomic_property+typeDefinition.chemical_environment]->match(atom)))
 						{
 							atom.setProperty("atomtype", typeDefinition.atom_type );
 
