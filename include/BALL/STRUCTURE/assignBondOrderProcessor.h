@@ -173,7 +173,7 @@ namespace BALL
 			//const vector<Solution_>& getSolutions() const {return solutions_;};
 
 			/// Returns the total penalty of the (already computed!) i-th solution
-			int getTotalPenalty(Position i) {return solutions_[i].penalty;}
+			float getTotalPenalty(Position i) {return solutions_[i].penalty;}
 			
 			/** Set the AtomContainer ac_'s bond orders to the ones found 
 			 * in the (already computed!) i-th solution.
@@ -207,7 +207,7 @@ namespace BALL
 			//@}
 		
 			// for testing
-			int evaluatePenalty(AtomContainer* ac);
+			float evaluatePenalty(AtomContainer* ac);
 
 		protected:
 			
@@ -246,7 +246,7 @@ namespace BALL
 					HashMap<Bond*, int> bond_orders;
 
 					/// the value of the objective function
-					int penalty;	
+					float penalty;	
 			};
 			
 			/// Nested class storing a priority queue entry for the A-STAR-Option
@@ -277,7 +277,7 @@ namespace BALL
 					bool operator < (const PQ_Entry_& b) const {return estimated_f > b.estimated_f;}
 					
 					/// the f (the estimated penalty)
-					int estimated_f;
+					float estimated_f;
 
 					/// the bond orders 
 					/// the i-th entry denotes the bondorder of the i-th bond 
@@ -397,7 +397,9 @@ namespace BALL
 
 			// stores which atom belongs to which block
 			vector<int> atom_to_block_;
-			
+		
+			/// stores the bondlength 
+			HashMap<Size, HashMap<Size, HashMap<Bond::BondOrder, float> > > bond_length_;
 			//vector<short> current_bond_orders_;
 		
 		};
