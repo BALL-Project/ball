@@ -97,8 +97,8 @@ std::cout << "value: " << value << std::endl;
 		RingPerceptionProcessor rpp;
 		rpp.calculateSSSR(sssr_, *molecule);
 
-		//TODO: Option!
 		AromaticityProcessor arp;
+		arp.options.setBool(AromaticityProcessor::Option::OVERWRITE_BOND_ORDERS,false);
 		arp.aromatize(sssr_, *molecule);
 	
 		annotateRingSizes_();
@@ -284,14 +284,19 @@ std::cout << "value: " << value << std::endl;
 			{	
 				if((*atom_it)->getProperty("CouldBePlanar").getBool())
 				{
-					// TODO: double bond should be to a non-ring atom!
 					Atom::BondConstIterator constBond_it = (*atom_it)->beginBond();
 					for(;+constBond_it;++constBond_it)
 					{
 						if(   ((constBond_it->getProperty("GAFFBondType").getString())== "DB")
 								||((constBond_it->getProperty("GAFFBondType").getString())== "db")) 
 						{
-							(*atom_it)->setProperty("PlanarRing", true);
+							Atom* atom = constBond_it->getPartner(*(*atom_it));
+							//NOTE is there a way to do it better?
+							GAFFCESParser::APSMatcher aps;
+							if(aps.isNonRingAtom(*atom))
+							{
+								(*atom_it)->setProperty("PlanarRing", true);
+							}
 						}
 					}
 				}

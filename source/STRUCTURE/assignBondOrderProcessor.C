@@ -27,10 +27,10 @@
 // For lp_solve
 #include <lpsolve/lp_lib.h>
 
-#define DEBUG 1
-//#undef DEBUG
-#define DEBUG_READ 1
-//#undef DEBUG_READ
+//#define DEBUG 1
+#undef DEBUG
+//#define DEBUG_READ 1
+#undef DEBUG_READ
 
 #define MAX__SOLUTIONS 100 // TODO: should be a option
 
@@ -387,10 +387,10 @@ cout << endl;
 				if (preassignPenaltyClasses_())
 				{
 					//if (options.get(Option::COMPUTE_ALL_SOLUTIONS) == ComputeAllSolutions::A_STAR)
-					cout << "hier"<< endl;
+			
 					if (options.get(Option::ALGORITHM) == Algorithm::A_STAR)
 					{
-						cout << "hier2 " << endl;
+					
 						// Initialize a priority queue and try to find a first solution
 						// Further solutions will be computed calling the method computeNextSolution
 
@@ -626,6 +626,35 @@ cout << "\nNach initialisierung : \n" << queue_.size() << endl;
 						BALL_FOREACH_BOND(ac, a_it, b_it)
 						{
 							b_it->setOrder(solutions_[0].bond_orders[&(*b_it)]);
+
+							// NOTE;neu dazu implementiert!!!
+							//TODO wie AB aromatic bond und DL delocalized bond???
+							switch(b_it->getOrder())
+							{
+								case 1:
+									if (b_it->getProperty("IsAromatic").getBool())
+									{
+										b_it->setProperty("GAFFBondType", (String) "sb");
+									}
+									else
+									{
+										b_it->setProperty("GAFFBondType", (String) "SB");
+									}
+									break;
+								case 2:
+									if (b_it->getProperty("IsAromatic").getBool())
+									{
+										b_it->setProperty("GAFFBondType", (String) "db");
+									}
+									else
+									{
+										b_it->setProperty("GAFFBondType", (String) "DB");
+									}
+									break;
+								case 3:
+									b_it->setProperty("GAFFBondType", (String) "TB");
+									break;
+							}
 						}
 					}
 				}
