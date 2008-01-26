@@ -70,13 +70,16 @@ ces_string:	/* empty */ {
 	| aps open atomlist close {}
 	| aps {}
 	| open atomlist close {}
+  ;
 
 aps: TK_APS_START aps_and_terms TK_APS_END {
+		//why Log ERROR???
 		Log.error() << "Parsing a new aps string" << std::endl;
 	}
 	; 
 
-aps_and_terms: aps_or_terms TK_APS_AND_TERM aps_and_terms { }
+aps_and_terms: aps_or_terms TK_APS_AND_TERM aps_and_terms {
+GAFFCESParser::state.current_parser->current_predicate->addNewAND(); }
 	| aps_or_terms { }
 	;
 
@@ -86,36 +89,36 @@ aps_or_terms: aps_term TK_APS_OR_TERM aps_or_terms { GAFFCESParser::state.curren
 
 aps_term: TK_APS_DELOCALIZED connection { 
 						GAFFCESParser::state->current_aps_type = GAFFCESParser::APSMatcher::DELOCALIZED_BOND; 
-						GAFFCESParser::state->current_bond_to_parent = connection;
+						GAFFCESParser::state->current_bond_to_parent = $2;
 					}
 	|	TK_APS_ONLY_SINGLE_BOND connection {
 						GAFFCESParser::state->current_aps_type = GAFFCESParser::APSMatcher::ONLY_SINGLE_BOND;
-						GAFFCESParser::state->current_bond_to_parent = connection;
+						GAFFCESParser::state->current_bond_to_parent = $2;
 					}
 	|	TK_APS_ONLY_DOUBLE_BOND connection {
 						GAFFCESParser::state->current_aps_type = GAFFCESParser::APSMatcher::ONLY_DOUBLE_BOND;
-						GAFFCESParser::state->current_bond_to_parent = connection;
+						GAFFCESParser::state->current_bond_to_parent = $2;
 					}
 	|	TK_APS_ONLY_TRIPLE_BOND connection {
 						// NOTE: GAFF does not distinguish between different kinds of triple bonds!
 						GAFFCESParser::state->current_aps_type = GAFFCESParser::APSMatcher::TRIPLE_BOND;
-						GAFFCESParser::state->current_bond_to_parent = connection;
+						GAFFCESParser::state->current_bond_to_parent = $2;
 					}
 	|	TK_APS_AROMATIC_BOND connection {
 						GAFFCESParser::state->current_aps_type = GAFFCESParser::APSMatcher::AROMATIC_BOND;
-						GAFFCESParser::state->current_bond_to_parent = connection;
+						GAFFCESParser::state->current_bond_to_parent = $2;
 					}
 	|	TK_APS_ALL_SINGLE_BONDS connection {
 						GAFFCESParser::state->current_aps_type = GAFFCESParser::APSMatcher::SINGLE_BOND;
-						GAFFCESParser::state->current_bond_to_parent = connection;
+						GAFFCESParser::state->current_bond_to_parent = $2;
 					}
 	|	TK_APS_ALL_DOUBLE_BONDS connection {
 						GAFFCESParser::state->current_aps_type = GAFFCESParser::APSMatcher::DOUBLE_BOND;
-						GAFFCESParser::state->current_bond_to_parent = connection;
+						GAFFCESParser::state->current_bond_to_parent = $2;
 					}
 	|	TK_APS_ALL_TRIPLE_BONDS connection {
 						GAFFCESParser::state->current_aps_type = GAFFCESParser::APSMatcher::TRIPLE_BOND;
-						GAFFCESParser::state->current_bond_to_parent = connection;
+						GAFFCESParser::state->current_bond_to_parent = $2;
 					}
 	|	TK_APS_PURE_AROMATIC_RING {
 						GAFFCESParser::state->current_aps_type = GAFFCESParser::APSMatcher::IS_PURELY_AROMATIC;
@@ -180,7 +183,7 @@ atomlist:	atomsymbol optional_atomlist	{}
 optional_atomlist: /* empty */	{}
 	| open atomlist close	{};
 
-atomsymbol:	ATOMSTRING 	{
+atomsymbol:	ATOMSTRING aps	{
 		const set<String>& element_symbols = GAFFCESParser::state.current_parser->getElementSymbols();
 		if((element_symbols.find($1)) != element_symbols.end())
 		{
@@ -188,12 +191,19 @@ atomsymbol:	ATOMSTRING 	{
 		}
 		else if( ((GAFFCESParser::state.current_parser->current_predicate->getStringToWildcard()).find($1)) != ((GAFFCESParser::state.current_parser->current_predicate->getStringToWildcard()).end()) )
 		{	
-			Log.error() << "Wildcard Element read at unvalid position" << std::endl;
+			GAFFCESParser::state.current_parser->current_root_predicate->addCESwildcardsPredicate($1);
 		}
 		else
 		{
-			Log.error() << "No valid Atomsymbol found" << std::endl;
-		}
+			Atom* atom = GAFFCESParser::state.current_parser->root_predicate->atom_to_test;
+			if(GAFFCESParser::state.current_parser->root_predicate->aps_matcher()(*atom))
+			{
+			}
+			else
+			{
+				Log.error() << "No APS-Match found" << std::endl;
+			}
+		} 
 	}
 	|	ATOMSTRING  OPTIONAL_NUMBER	{
 		const set<String>& element_symbols = GAFFCESParser::state.current_parser->getElementSymbols();
@@ -209,21 +219,6 @@ atomsymbol:	ATOMSTRING 	{
 		{
 			Log.error() << "No valid Atomsymbol found" << std::endl;
 		}
-	}
-	|	ATOMSTRING aps	{
-/*		const set<String>& element_symbols = GAFFCESParser::state.current_parser->getElementSymbols();
-		if((element_symbols.find($1)) != element_symbols.end())
-		{
-			GAFFCESParser::state.current_parser->current_root_predicate->addCESelementPredicate($1);
-		}
-		else if( ((GAFFCESParser::state.current_parser->current_predicate->getStringToWildcard()).find($1)) != ((GAFFCESParser::state.current_parser->current_predicate->getStringToWildcard()).end()) )
-		{	
-			GAFFCESParser::state.current_parser->current_root_predicate->addCESwildcardsAtomicPropertyPredicate($2, $1);
-		}
-		else
-		{
-			Log.error() << "No valid Atomsymbol found" << std::endl;
-		} */
 	};
 
 %%

@@ -633,6 +633,35 @@ cout << "\nNach initialisierung : \n" << queue_.size() << endl;
 						BALL_FOREACH_BOND(ac, a_it, b_it)
 						{
 							b_it->setOrder(solutions_[0].bond_orders[&(*b_it)]);
+
+							// NOTE;neu dazu implementiert!!!
+							//TODO wie AB aromatic bond und DL delocalized bond???
+							switch(b_it->getOrder())
+							{
+								case 1:
+									if (b_it->getProperty("IsAromatic").getBool())
+									{
+										b_it->setProperty("GAFFBondType", (String) "sb");
+									}
+									else
+									{
+										b_it->setProperty("GAFFBondType", (String) "SB");
+									}
+									break;
+								case 2:
+									if (b_it->getProperty("IsAromatic").getBool())
+									{
+										b_it->setProperty("GAFFBondType", (String) "db");
+									}
+									else
+									{
+										b_it->setProperty("GAFFBondType", (String) "DB");
+									}
+									break;
+								case 3:
+									b_it->setProperty("GAFFBondType", (String) "TB");
+									break;
+							}
 						}
 					}
 				}

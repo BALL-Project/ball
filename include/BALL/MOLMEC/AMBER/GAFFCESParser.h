@@ -36,8 +36,6 @@ namespace BALL
 			class APSMatcher
 			{
 				public:
-
-						String aps_string;
 						//encode Ringatomtypes
 						enum APSType
 						{
@@ -55,7 +53,9 @@ namespace BALL
 							IS_7_RING_ATOM,
 							IS_8_RING_ATOM,
 							IS_9_RING_ATOM,
-							ONLY_SINGLE_BOND,
+// 							ONLY_SINGLE_BOND,
+// 							ONLY_SINGLE_BOND_TO_PARENT,
+// 							ONLY_SINGLE_BOND_NOT_TO_PARENT,
 							SINGLE_BOND,
 							ONLY_DOUBLE_BOND,
 							DOUBLE_BOND,
@@ -84,12 +84,10 @@ namespace BALL
 
 						bool checkProperty(Atom& atom, String property_term);
 
-						APSMatcher(const String& aps);
+						APSMatcher();
 						~APSMatcher();
 
-						void addNewAND();
-						void addNewOR(APSType aps);
-
+						// check if atom matches atomic property string
 						bool operator() (Atom& atom);
 
 						//store atomic property string
@@ -123,8 +121,8 @@ namespace BALL
 
 					//add a CESwildcardsConnectionPredicate to "predicate tree"
 					void addCESwildcardsConnectionPredicate(String wildcard, Size partners);
-					//add a CESwilddcardsAtomicPropertyPredicate to "predicate tree"
-					void addCESwildcardsAtomicPropertyPredicate(String atomic_property, String wildcard);
+					//add a CESwilddcardsPredicate to "predicate tree"
+					void addCESwildcardsPredicate(String wildcard);
 					//add an CESelementPredicate to "predicate tree"
 					void addCESelementPredicate(String name);
 					//add an CESelementConnectionPredicate to "predicate tree"
@@ -134,16 +132,20 @@ namespace BALL
 
 					//check if atom and its environment match predicates
 					virtual bool operator () (Atom& atom);
-					//check if atom matches predicates
-					virtual bool match(Atom& /*atom*/){return false;};
+					//check if atom matches "predicates in predicate-tree"
+					virtual bool match(Atom&){return false;};
 					//delete children 
 					void clear();
 
 					// check whether this atom is contained on a path to the root
 					bool alreadySeenThisAtom(Atom* atom);
-					//TODO wo setzen???
+
+					//to expand aps_term in aps_matcher object
+					void addNewAND();
+					void addNewOR(APSMatcher::APSType aps);
+
 					//store existing atomic property string
-					APSMatcher aps_matcher(const String& aps_string);	
+					APSMatcher aps_matcher;	
 				
 					//all CESPredicates for current_predicate ->children of current_predicate
 					std::vector<CESPredicate*> children;
@@ -201,28 +203,23 @@ namespace BALL
 					String elementName_;
 			};
 
-			//XA,XB,XC,XD,XX and atomic property string found
-			class CESwildcardsAtomicPropertyPredicate : public CESPredicate
+			//XA,XB,XC,XD,XX 
+			class CESwildcardsPredicate : public CESPredicate
 			{
 				public:
-					CESwildcardsAtomicPropertyPredicate(GAFFCESParser* parser)
-						: CESPredicate(parser),
-							atomic_property_("") 
+					CESwildcardsPredicate(GAFFCESParser* parser)
+						: CESPredicate(parser)
 					{};
 
-					~CESwildcardsAtomicPropertyPredicate();
+					~CESwildcardsPredicate();
 
-					void setAtomicProperty(String atomic_property);
 					void setWildcards(String new_wildcard);
-					String getAtomicProperty();
 					CESwildcards getWildcards();
 					//checks if atom matches the given wildcard-element (XA, XB, XC, XD, XX) 
 					bool matchWildcards(Atom& atom);
 					//check if atom matches predicate
 					bool match(Atom& atom);
 				protected:
-					//store atomic property string if given in CES
-					String atomic_property_;
 					CESwildcards wildcards_;
 			};
 
@@ -258,7 +255,7 @@ namespace BALL
 					{};
 					~TruePredicate() {};
 					//check if atom matches predicate (always true!)
-					bool match(Atom& /*atom*/) { return true; }
+					bool match(Atom&) { return true; }
 			};
 
 			//Parser-match-Function checking if atom's environment matches the "predicate tree"
