@@ -23,15 +23,6 @@ namespace BALL
 	{
 		public:
 
-			struct State
-			{
-				//not "thread-safe"
-				GAFFCESParser* current_parser;
-				
-				int current_aps_type;
-				int current_bond_to_parent;
-			};
-	
 			//atomic property string
 			class APSMatcher
 			{
@@ -44,7 +35,7 @@ namespace BALL
 							IS_PLANAR,
 							IS_PLANAR_WITH_DB_TO_NR,
 							IS_PURELY_AROMATIC,
-							IS_ALIPHATIC,
+							IS_PURELY_ALIPHATIC,
 							IS_OTHER_RING,
 							IS_3_RING_ATOM,
 							IS_4_RING_ATOM,
@@ -53,15 +44,27 @@ namespace BALL
 							IS_7_RING_ATOM,
 							IS_8_RING_ATOM,
 							IS_9_RING_ATOM,
-// 							ONLY_SINGLE_BOND,
-// 							ONLY_SINGLE_BOND_TO_PARENT,
-// 							ONLY_SINGLE_BOND_NOT_TO_PARENT,
+ 							PURE_SINGLE_BOND,
+ 							PURE_SINGLE_BOND_TO_PARENT,
+ 							NO_PURE_SINGLE_BOND_TO_PARENT,
 							SINGLE_BOND,
-							ONLY_DOUBLE_BOND,
+							SINGLE_BOND_TO_PARENT,
+							NO_SINGLE_BOND_TO_PARENT,
+							PURE_DOUBLE_BOND,
+							PURE_DOUBLE_BOND_TO_PARENT,
+							NO_PURE_DOUBLE_BOND_TO_PARENT,
 							DOUBLE_BOND,
+							DOUBLE_BOND_TO_PARENT,
+							NO_DOUBLE_BOND_TO_PARENT,
 							TRIPLE_BOND,
+							TRIPLE_BOND_TO_PARENT,
+							NO_TRIPLE_BOND_TO_PARENT,
 							DELOCALIZED_BOND,
-							AROMATIC_BOND
+							DELOCALIZED_BOND_TO_PARENT,
+							NO_DELOCALIZED_BOND_TO_PARENT,
+							AROMATIC_BOND,
+							AROMATIC_BOND_TO_PARENT,
+							NO_AROMATIC_BOND_TO_PARENT
 						};
 
  						//check if current atom is in a ring
@@ -71,30 +74,35 @@ namespace BALL
  						//check if the current atom is not a ringatom or
  						//in a ten-membered or larger ring
  						bool isNonRingAtom(Atom& atom);	
- 						//check if current atom is in an aromatic ringsystem
- 						bool isPureAromaticRingAtom(Atom& atom);
- 						//check if current atom is in an aliphatic ringsystem
- 						bool isPureAliphaticRingAtom(Atom& atom);
- 						//check if current atom could be in a planar ring
- 						//s.t. atom is a C(X3),N(X2),N(X3),O(X2),S(X2),P(X2),P(X3)
- 						bool CouldBePlanarRingAtom(Atom& atom);
- 						//check if current ringsystem is planar
- 						//s.t. consist of C(X3),N(X2),N(X3),O(X2),S(X2),P(X2),P(X3)
- 						bool isPlanarRingAtom(Atom& atom);
 
-						bool checkProperty(Atom& atom, String property_term);
+						bool checkGAFFProperties(Atom& atom, Atom& predecessor, APSType aps);
+
 
 						APSMatcher();
 						~APSMatcher();
 
 						// check if atom matches atomic property string
-						bool operator() (Atom& atom);
+						bool operator() (Atom& atom, Atom& predecessor);
 
 						//store atomic property string
 						//external vector: all AND (",") types
 						//internal vector: all OR (".")types
 						std::vector < std::vector< APSType> > aps_terms;
+
+					protected:
+						bool hasBond_(Atom* atom, Atom* predecessor, const String& bond_type);
 			};
+
+			struct State
+			{
+				//not "thread-safe"
+				GAFFCESParser* current_parser;
+				
+				APSMatcher::APSType current_aps_type;
+				int current_bond_to_parent;
+			};
+	
+
 
 			//chemical environment string
 			class CESPredicate
@@ -267,7 +275,6 @@ namespace BALL
 
 			GAFFCESParser();	
 			GAFFCESParser(const String& cesstring);
-			GAFFCESParser(const GAFFCESParser& parser);
 			~GAFFCESParser();
 
 			//for lexer/parser

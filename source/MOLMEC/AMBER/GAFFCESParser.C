@@ -21,6 +21,7 @@ namespace BALL
 {		
 
 	GAFFCESParser::APSMatcher::APSMatcher()
+		: aps_terms(1)
 	{
 	}
 
@@ -71,153 +72,147 @@ namespace BALL
 	//in a ten-membered or larger ring
 	bool GAFFCESParser::APSMatcher::isNonRingAtom(Atom& atom)
 	{
-		/*if(!(atom.getProperty("InRing").getBool()))
-		{
-			return true;
-		}
-		else if(atom.getProperty("RingSize").getInt() >= 10)
-		{
- 			atom.setProperty("InRing",(bool) false);	
-			return true;
-		}
-		*/
 		return !isRingAtom(atom);
 	}	
 
-	//checks if current atom is in an aromatic ringsystem
-	bool GAFFCESParser::APSMatcher::isPureAromaticRingAtom(Atom& atom)
+	// check if atom forms a bond of type bond_type with partner.
+	// if partner == NULL, check whether there is a bond of this kind at all
+	bool GAFFCESParser::APSMatcher::hasBond_(Atom* atom, Atom* partner, const String& bond_type)
 	{
-		return (atom.getProperty("IsAromatic").getBool());
-	}
-
-	//checks if current atom is in an aliphatic ringsystem,
-	// which is made of sp3 Carbon
-	bool GAFFCESParser::APSMatcher::isPureAliphaticRingAtom(Atom& atom)	
-	{
-		return atom.getProperty("IsPureAliphatic").getBool();
-	}
-
-	//check if current atom could be in a planar ring
-	//s.t. atom is a C(X3),N(X2),N(X3),O(X2),S(X2),P(X2),P(X3)
-	bool GAFFCESParser::APSMatcher::CouldBePlanarRingAtom(Atom& atom)
-	{
-		return (atom.getProperty("CouldBePlanar").getBool());
-	}
-
-	//check if current ringsystem is planar
-	//s.t. consist of C(X3),N(X2),N(X3),O(X2),S(X2),P(X2),P(X3)
-	bool GAFFCESParser::APSMatcher::isPlanarRingAtom(Atom& atom)
-	{
-		return atom.getProperty("PlanarRing").getBool();
-	}
-
-	//check various properties for atom
-	bool GAFFCESParser::APSMatcher::checkProperty(Atom& atom, String property_term)
-	{
-		if (property_term == "NR")
+		bool result = false;
+		Atom::BondConstIterator bond_it;
+		for (bond_it = atom->beginBond(); +bond_it; ++bond_it)
 		{
-			return isNonRingAtom(atom);
-		}
-		else if (isRingAtom(atom))
-		{
-			// NOTE: our definitions of AR2 and AR3 are not entirely correct (and identical)
-	
-			//Ring (from 3-membered to nine-membered)
-			if (property_term == "RG")
+			if (partner == NULL || bond_it->getBoundAtom(*atom) == partner)
 			{
-				return isRingAtom(atom);
-			}
-			//3-membered ring
-			if (property_term == "RG3")
-			{
-				return isNRingAtom(3, atom);
-			}
-			//4-membered ring
-			if (property_term == "RG4")
-			{
-				return isNRingAtom(4, atom);
-			}
-			//5-membered ring
-			if (property_term == "RG5")
-			{
-				return isNRingAtom(5, atom);
-			}
-			//6-membered ring
-			if (property_term == "RG6")
-			{
-				return isNRingAtom(6, atom);
-			}
-			//7-membered ring
-			if (property_term == "RG7")
-			{
-				return isNRingAtom(7, atom);
-			}
-			//8-membered ring
-			if (property_term == "RG8")
-			{
-				return isNRingAtom(8, atom);
-			}
-			//9-membered ring
-			if (property_term == "RG9")
-			{
-				return isNRingAtom(9, atom);
-			}
-			//pure aromatic atom (such as benzene and pyridine)
-			if (property_term == "AR1")
-			{
-				return isPureAromaticRingAtom(atom);
-			}
-			//TODO better definition
-			//atom in a planar ring
-			if (property_term == "AR2")
-			{
-				return CouldBePlanarRingAtom(atom);
-			}
-			//TODO better definition
-			//atom in a planar ring which has one or 
-			//several double bonds formed between NR and RG atoms
-			if (property_term == "AR3")
-			{
-				return CouldBePlanarRingAtom(atom);
-			}
-			//atom other than AR1, AR2, AR3, AR5
-			if (property_term == "AR4")
-			{
-				if(   isPureAromaticRingAtom(atom)
-					|| CouldBePlanarRingAtom(atom)
-					||  isPlanarRingAtom(atom) || 
-							isPureAliphaticRingAtom(atom))
-				{
-					return false;
-				}
-				else return true;
-			}
-			//pure aliphatic atom in a ring which is made of sp3 carbon
-			if (property_term == "AR5")
-			{
-				return isPureAliphaticRingAtom(atom);
+				if (bond_it->getProperty("GAFFBondType").getString() == bond_type)
+					result = true;
 			}
 		}
-		//if property_term is no ringtype
-		//it has to be of bondtype SB, DB, TB, AB, DL, sb, db, tb
-		else
-		{ 
-			Atom::BondConstIterator constBond_it = atom.beginBond();
-			for(;+constBond_it;++constBond_it)
-			{
-				String gaff_bond_type = constBond_it->getProperty("GAFFBondType").getString();
-				if(property_term == gaff_bond_type)
-				{
-					return true;
-				}
-			}
-		}
-		return false;
+
+		return result;
 	}
 
+	//check if required APSTypes are fullfild
+	bool GAFFCESParser::APSMatcher::checkGAFFProperties(Atom& atom, Atom& predecessor, APSType aps)	
+	{
+		bool result = false;
+
+		switch(aps)
+		{
+			case IS_RING_ATOM:
+				result = isRingAtom(atom);
+				break;
+			case IS_NON_RING_ATOM:
+				result = isNonRingAtom(atom);
+				break;
+			case IS_PLANAR:
+				result = atom.getProperty("IsPlanarRingAtom").getBool();
+				break;
+			case IS_PLANAR_WITH_DB_TO_NR:
+				result = atom.getProperty("IsPlanarWithDBtoNR").getBool();
+				break;
+			case IS_PURELY_AROMATIC:
+				result = atom.getProperty("IsPureAromatic").getBool();
+				break;
+			case IS_PURELY_ALIPHATIC:
+				result = atom.getProperty("IsPureAliphatic").getBool();
+				break;
+			case IS_OTHER_RING:
+				//TODO!
+				result = atom.getProperty("IsOther").getBool();
+				break;
+			case IS_3_RING_ATOM:
+				result = atom.getProperty("In3Ring").getBool();
+				break;
+			case IS_4_RING_ATOM:
+				result = atom.getProperty("In4Ring").getBool();
+				break;
+			case IS_5_RING_ATOM:
+				result = atom.getProperty("In5Ring").getBool();
+				break;
+			case IS_6_RING_ATOM:
+				result = atom.getProperty("In6Ring").getBool();
+				break;
+			case IS_7_RING_ATOM:
+				result = atom.getProperty("In7Ring").getBool();
+				break;
+			case IS_8_RING_ATOM:
+				result = atom.getProperty("In8Ring").getBool();
+				break;
+			case IS_9_RING_ATOM:
+				result = atom.getProperty("In9Ring").getBool();
+				break;
+			case PURE_SINGLE_BOND:
+				result = hasBond_(&atom, NULL, "SB");
+				break;
+			case PURE_SINGLE_BOND_TO_PARENT:
+				result = hasBond_(&atom, &predecessor, "SB");
+				break;
+			case NO_PURE_SINGLE_BOND_TO_PARENT:
+				result = !hasBond_(&atom, &predecessor, "SB");
+				break;
+			case SINGLE_BOND:
+				result = hasBond_(&atom, NULL, "sb");
+				break;
+			case SINGLE_BOND_TO_PARENT:
+				result = hasBond_(&atom, &predecessor, "sb");
+				break;
+			case NO_SINGLE_BOND_TO_PARENT:
+				result = !hasBond_(&atom, &predecessor, "sb");
+				break;
+			case PURE_DOUBLE_BOND:
+				result = hasBond_(&atom, NULL, "DB");
+				break;
+			case PURE_DOUBLE_BOND_TO_PARENT:
+				result = hasBond_(&atom, &predecessor, "DB");
+				break;
+			case NO_PURE_DOUBLE_BOND_TO_PARENT:
+				result = !hasBond_(&atom, &predecessor, "DB");
+				break;
+			case DOUBLE_BOND:
+				result = hasBond_(&atom, NULL, "db");
+				break;
+			case DOUBLE_BOND_TO_PARENT:
+				result = hasBond_(&atom, &predecessor, "db");
+				break;
+			case NO_DOUBLE_BOND_TO_PARENT:
+				result = !hasBond_(&atom, &predecessor, "db");
+				break;
+			case TRIPLE_BOND:
+				result = hasBond_(&atom, NULL, "TB");
+				break;
+			case TRIPLE_BOND_TO_PARENT:
+				result = hasBond_(&atom, &predecessor, "TB");
+				break;
+			case NO_TRIPLE_BOND_TO_PARENT:
+				result = !hasBond_(&atom, &predecessor, "TB");
+				break;
+			case DELOCALIZED_BOND:
+				result = hasBond_(&atom, NULL, "DL");
+				break;
+			case DELOCALIZED_BOND_TO_PARENT:
+				result = hasBond_(&atom, &predecessor, "DL");
+				break;
+			case NO_DELOCALIZED_BOND_TO_PARENT:
+				result = !hasBond_(&atom, &predecessor, "DL");
+				break;
+			case AROMATIC_BOND:
+				result = hasBond_(&atom, NULL, "AB");
+				break;
+			case AROMATIC_BOND_TO_PARENT:
+				result = hasBond_(&atom, &predecessor, "AB");
+				break;
+			case NO_AROMATIC_BOND_TO_PARENT:
+				result = !hasBond_(&atom, &predecessor, "AB");
+				break;
+		}
+
+		return result;
+	}
 
 	// check if atom matches atomic property string
-	bool GAFFCESParser::APSMatcher::operator() (Atom& atom)
+	bool GAFFCESParser::APSMatcher::operator() (Atom& atom, Atom& predecessor)
 	{
 		// all and-terms must be true
 		bool and_result = true;
@@ -225,17 +220,26 @@ namespace BALL
 		// iterate over all the and-terms in aps_terms
 		for (Position i=0; i<aps_terms.size(); i++)
 		{
-			// one of the or-terms must be true
+			// one of the or-terms must be true...
 			bool or_result = false;
-			std::vector<GAFFCESParser::APSMatcher::APSType > or_terms;
-			aps_terms[i] = or_terms;
-			// iterate over all the or-terms
-			for (Position j=0; j<or_terms.size(); j++)
+
+			// ...but if there is none, this is an "always match" case
+			if (aps_terms[i].size() == 0)
 			{
-				if (checkProperty(atom, (or_terms[j])))
+				or_result = true;
+			}
+			else
+			{
+				std::vector<GAFFCESParser::APSMatcher::APSType > or_terms;
+				aps_terms[i] = or_terms;
+				// iterate over all the or-terms
+				for (Position j=0; j<or_terms.size(); j++)
 				{
-					or_result = true;
-					break;
+					if (checkGAFFProperties(atom, predecessor, (or_terms[j])))
+					{
+						or_result = true;
+						break;
+					}
 				}
 			}
 			and_result &= or_result;
@@ -344,162 +348,142 @@ namespace BALL
 	
 	bool GAFFCESParser::CESPredicate::operator()(Atom& atom)	
 	{
-		std::cout << "in match "<< std::endl;
 		atom_to_test = &atom;
 
-		if (aps_matcher(atom))
+		//present predicate has child-predicates
+		if(!(children.empty()))
 		{
-			std::cout << "aps string matched" << endl;
- 
-			//present predicate has child-predicates
-			if(!(children.empty()))
+			//present predicate isn't root and matches atom
+			if((parser_->root_predicate != this) && (match(atom)))
 			{
-				//present predicate isn't root and matches atom
-				if((parser_->root_predicate != this) && (match(atom)))
-				{
-					std::cout << "matched atom and children " << std::endl;
-					//stores if a children-predicate is already matched or not
-					std::vector<bool>match_events((children.size()),false);
-		
-					Atom::BondIterator bond_it = atom.beginBond();
-					for(;+bond_it;++bond_it)
-					{
-						Atom& partnerAtom = *(bond_it->getPartner(atom));
-						std::cout << "trying " << partnerAtom.getName() << " " << atom.getName() << " " << parent->alreadySeenThisAtom(&partnerAtom) << std::endl;	
-						if (parent->alreadySeenThisAtom(&partnerAtom))
-							continue;
+				//stores if a children-predicate is already matched or not
+				std::vector<bool>match_events((children.size()),false);
 	
-						for (Size i=0; (i<children.size()); i++)
-						{
-							std::cout << "matching " << i << std::endl;
-							std::cout << "partnerAtom:" << partnerAtom.getName() <<  std::endl;
-							//if predicate was'nt matched before
-							if(!(match_events[i]))
-							{
-								//first check if aps string is given and if so, if atom matches
-								if(!(aps_matcher.aps_terms.empty()))
-								{
-									//if the predicate's atom does not match
-									if(!(aps_matcher(*atom_to_test)))
-									{
-										std::cout << "atom does not match aps string" << endl;
-										return false;
-									}
-								}
-								std::cout << "not yet matched" << std::endl;
-								//if one match of atom and predicate is found
-								if((*children[i])(partnerAtom))
-								{
-									std::cout << "gematcht" << std::endl;
-									//mark predicate as matched and start with next partnerAtom
-									match_events[i] = true;
-									break;
-								}
-							}
-						}
-					}
-					//number of partnerAtoms and number of 
-					//corresponding predicate-children
-					//can differ, but all occurring predicate-children 
-					//have to be matched by a partnerAtom
-					for(std::vector<bool>::iterator match_it = match_events.begin() ; match_it != match_events.end();++match_it)
-					{
-						//if any match_event is false, no complete match could be found
-						if(!(*(match_it)))
-						{
-							std::cout << "false" << endl;
-							return false;	
-						}
-					}			
-					return true;
-				}
-				//root_predicate cannot be matched with any atom in CES
-				//therefore: only matching of all its children
-				else if(parser_->root_predicate == this)
+				Atom::BondIterator bond_it = atom.beginBond();
+				for(;+bond_it;++bond_it)
 				{
-					std::cout << "root" << std::endl;
-					//stores if a children-predicate is already matched or not
-					std::vector<bool>match_events((children.size()),false);
-		
-					Atom::BondIterator bond_it = atom.beginBond();
-					for(;+bond_it;++bond_it)
+					Atom& partnerAtom = *(bond_it->getPartner(atom));
+					if (parent->alreadySeenThisAtom(&partnerAtom))
+						continue;
+
+					for (Size i=0; (i<children.size()); i++)
 					{
-						Atom& partnerAtom = *(bond_it->getPartner(atom));
-		
-						for (Size i=0; (i<children.size()); i++)
+						//if predicate wasn't matched before
+						if(!(match_events[i]))
 						{
-							std::cout << "matching " << i << std::endl;
-							std::cout << "partnerAtom:" << partnerAtom.getElement().getName() <<  std::endl;
-							//if predicate was'nt matched before
-							if(!(match_events[i]))
+							//first check if aps string is given and if so, if atom matches
+							if(!(aps_matcher.aps_terms.empty()))
 							{
-								//first check if aps string is given and if so, if atom matches
-								if(!(aps_matcher.aps_terms.empty()))
+								// if the predicate's atom does not match
+								// (we already know that we are not in the root predicate, hence parent != NULL)
+								if(!(aps_matcher(*atom_to_test, *parent->atom_to_test)))
 								{
-									//if the predicate's atom does not match
-									if(!(aps_matcher(*atom_to_test)))
-									{
-										std::cout << "atom does not match aps string" << endl;
-										return false;
-									}
+									return false;
 								}
-								std::cout << "not yet matched" << std::endl;
-								//if one match of atom and predicate is found
-								if((*children[i])(partnerAtom))
-								{
-									std::cout << "gematcht" << std::endl;
-									//mark predicate as matched and start with next partnerAtom
-									match_events[i] = true;
-									break;
-								}
+							}
+							//if one match of atom and predicate is found
+							if((*children[i])(partnerAtom))
+							{
+								//mark predicate as matched and start with next partnerAtom
+								match_events[i] = true;
+								break;
 							}
 						}
 					}
-					//number of partnerAtoms and number of 
-					//corresponding predicate-children
-					//can differ, but all occurring predicate-children 
-					//have to be matched by a partnerAtom
-					for(Size i=0; i<match_events.size(); i++)
-					{
-						//if any match_event is false, no complete match could be found
-						if(!match_events[i])
-						{
-							std::cout << "false" << endl;
-							return false;	
-						}
-					}			
-					return true;
 				}
+				//number of partnerAtoms and number of 
+				//corresponding predicate-children
+				//can differ, but all occurring predicate-children 
+				//have to be matched by a partnerAtom
+				for(std::vector<bool>::iterator match_it = match_events.begin() ; match_it != match_events.end();++match_it)
+				{
+					//if any match_event is false, no complete match could be found
+					if(!(*(match_it)))
+					{
+						return false;	
+					}
+				}			
+				return true;
 			}
-			else
+			//root_predicate cannot be matched with any atom in CES
+			//therefore: only matching of all its children
+			else if(parser_->root_predicate == this)
 			{
-				std::cout << "no children" << std::endl;
-				return (match(atom));
+				//stores if a children-predicate is already matched or not
+				std::vector<bool>match_events((children.size()),false);
+	
+				Atom::BondIterator bond_it = atom.beginBond();
+				for(;+bond_it;++bond_it)
+				{
+					Atom& partnerAtom = *(bond_it->getPartner(atom));
+	
+					for (Size i=0; (i<children.size()); i++)
+					{
+						//if predicate was'nt matched before
+						if(!(match_events[i]))
+						{
+							//first check if aps string is given and if so, if atom matches
+							if(!(aps_matcher.aps_terms.empty()))
+							{
+								//if the predicate's atom does not match
+								// (note: we are in the root predicate, hence, the predecessor atom
+								// does not exist. on the other hand, it will never be used. Thus,
+								// we just take the same atom again!)
+								if(!(aps_matcher(*atom_to_test, *atom_to_test)))
+								{
+									return false;
+								}
+							}
+							//if one match of atom and predicate is found
+							if((*children[i])(partnerAtom))
+							{
+								//mark predicate as matched and start with next partnerAtom
+								match_events[i] = true;
+								break;
+							}
+						}
+					}
+				}
+				//number of partnerAtoms and number of 
+				//corresponding predicate-children
+				//can differ, but all occurring predicate-children 
+				//have to be matched by a partnerAtom
+				for(Size i=0; i<match_events.size(); i++)
+				{
+					//if any match_event is false, no complete match could be found
+					if(!match_events[i])
+					{
+						return false;	
+					}
+				}			
+				return true;
 			}
-		}	
-		std::cout << "no match possible " << std::endl;
+		}
+		else
+		{
+			return (match(atom));
+		}
+
 		return false;
 	}
 		
 
 	GAFFCESParser::GAFFCESParser() 
-		: root(this),
-			root_predicate(&root),
-			current_root_predicate(root_predicate),
-			current_predicate(root_predicate)
+		: root(this)
 	{
-printf("GAFFCESParser()\n");
+		root_predicate = &root;
+		current_root_predicate = root_predicate;
+		current_predicate = root_predicate;
 		current_predicate->parent = root_predicate; 
  		initElementSymbols();
 	}	
 	
 	GAFFCESParser::GAFFCESParser(const String& cesstring) 
-		: root(this),
-			root_predicate(&root),
-			current_root_predicate(root_predicate),
-			current_predicate(root_predicate)
+		: root(this)
 	{
-printf("GAFFCESParser(String %s)\n", cesstring.c_str());
+		root_predicate = &root;
+		current_root_predicate = root_predicate;
+		current_predicate = root_predicate;
 		current_predicate->parent = root_predicate; 
  		initElementSymbols();
 		parse(cesstring); 
@@ -571,21 +555,16 @@ printf("GAFFCESParser(String %s)\n", cesstring.c_str());
 	//check if atom matches ElementConnectionPredicate
 	bool GAFFCESParser::CESelementConnectionPredicate::match(Atom& atom)
 	{
-		std::cout << "matchCESelementConnectionPredicate" << std::endl;
 		bool correct_match = false;
-		std::cout << "AtomName:" << atom.getElement().getSymbol() << "" << elementName_ << std::endl;
 		//match element-name?
 		if((atom.getElement().getSymbol()) == elementName_)
 		{
-			std::cout << "NumberOfPartners:" << atom.countBonds() << "" << numberOfPartners_ << std::endl;
 			//match number of bounded partners?
 			if(((atom.countBonds()) == numberOfPartners_) || (numberOfPartners_ == 0))
 			{
-				std::cout << "correct_match" << std::endl;
 				correct_match = true;
 			}
 		}
-		std::cout << "correct_match:" << correct_match << std::endl;
 		return correct_match;
 	}
 
@@ -609,16 +588,12 @@ printf("GAFFCESParser(String %s)\n", cesstring.c_str());
 	//check if atom matches ElementPredicate
 	bool GAFFCESParser::CESelementPredicate::match(Atom& atom)
 	{
-		std::cout << "trying to match " << atom.getName() << " against " << elementName_ << std::endl;
 		bool correct_match = false;
-		std::cout << "AtomName:" << atom.getElement().getSymbol() << "" << elementName_ << std::endl;
 		//match element-name?
 		if((atom.getElement().getSymbol())== elementName_)
 		{
-			std::cout << "correct_match" << std::endl;
 			correct_match = true;	
 		}
-		std::cout << "correct_match:" << correct_match << std::endl;
 		return correct_match;
 	}			
 	
@@ -642,7 +617,6 @@ printf("GAFFCESParser(String %s)\n", cesstring.c_str());
 	//checks if atom matches the given wildcard-element (XA, XB, XD, XC, XX) 
 	bool GAFFCESParser::CESwildcardsPredicate::matchWildcards(Atom& atom)
 	{		
-		std::cout << "matchCESwildcardsPredicate" << std::endl;
 		bool matched = false;
 		switch(wildcards_)
 			{
@@ -682,7 +656,6 @@ printf("GAFFCESParser(String %s)\n", cesstring.c_str());
 				break;
 			//XX:  Phosphorus/Phosphor, Sulfur/Sulpur, Nitrogen, Carbon, Oxygen
 			case 4:
-				std::cout << "XX" << endl;
 				if (	(atom.getElement()== PTE[Element::P]) 
 						||(atom.getElement()== PTE[Element::N]) 
 						||(atom.getElement()== PTE[Element::S]) 
@@ -701,13 +674,13 @@ printf("GAFFCESParser(String %s)\n", cesstring.c_str());
 	//check if atom matches WildcardsAtomicPropertyPredicatePredicate
 	bool GAFFCESParser::CESwildcardsPredicate::match(Atom& atom)
 	{
-		std::cout << "matchCESwildcardsPredicate" << std::endl;
-	
+std::cout << "ceswild" << std::endl;	
 		bool correct_match = false;
 		// match wildcard-element?
 		if(matchWildcards(atom))
 		{
 			std::cout << "wildcards gemachted" << endl;
+			correct_match = true;
 		}
 		return correct_match;
 	}			
@@ -780,7 +753,6 @@ printf("GAFFCESParser(String %s)\n", cesstring.c_str());
 				break;
 			//XX:  Phosphorus/Phosphor, Sulfur/Sulpur, Nitrogen, Carbon, Oxygen
 			case 4:
-				std::cout << "XX" << endl;
 				if (	(atom.getElement()== PTE[Element::P]) 
 						||(atom.getElement()== PTE[Element::N]) 
 						||(atom.getElement()== PTE[Element::S]) 
@@ -798,7 +770,6 @@ printf("GAFFCESParser(String %s)\n", cesstring.c_str());
 	//check if atom matches WildcardsConnectionPredicatePredicate
 	bool GAFFCESParser::CESwildcardsConnectionPredicate::match(Atom& atom)
 	{
-		printf("ceswildcard...\n");
 		bool correct_match = false;
 		//match wildcard-element?
 		if(matchWildcards(atom))
@@ -836,15 +807,12 @@ printf("GAFFCESParser(String %s)\n", cesstring.c_str());
 		state.current_parser = this;
 		cesstring_ = cesstring;
 		read_start_ = 0;
-		printf("cesstring %s\n", cesstring_.c_str());
-		if(		(current_root_predicate == root_predicate) 
-				&&(current_predicate == root_predicate))
-		{
-			std::cout << "settings ok" << endl;			
 
+		if(		(current_root_predicate == root_predicate) 
+				&&(current_predicate      == root_predicate))
+		{
 			if(!GAFFCESParserparse())
 			{
-				std::cout << "Parserparse succeeded" << endl;
 				current_predicate = root_predicate;
 				return true;
 			}
@@ -871,8 +839,6 @@ printf("GAFFCESParser(String %s)\n", cesstring.c_str());
 			//does atom match "predicate-tree"?
 			if ((*root_predicate)(atom))
 			{
-				std::cout << "op:" << ((*root_predicate)(atom)) << endl;
-				std::cout << "atomMatcher succeeded" << endl;
 				return true;
 			}
 		}
