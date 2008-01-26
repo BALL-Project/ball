@@ -94,7 +94,12 @@ namespace BALL
 
 				/** the penalty parameter file
 				 */
-				static const char* INIFile;
+				static const char* INIFile;	
+				
+				/** the maximal possible bond order
+				 */
+				static const char* MAX_BOND_ORDER;
+
 			};
 
 			/// Default values for options
@@ -112,6 +117,7 @@ namespace BALL
 				//static const String COMPUTE_ALL_SOLUTIONS;
 				static const String ALGORITHM;
 				static const String INIFile;
+				static const int MAX_BOND_ORDER;
 			};
 
 			struct BALL_EXPORT Algorithm//Algorithm::ComputeAllSolutions
@@ -305,7 +311,14 @@ namespace BALL
 			 *  is applied to has an atom with no matching penalty block. 
 			 */
 			bool preassignPenaltyClasses_();
-
+	
+			/** Precomputes for every bond of the AtomContainer to which the 
+			 *	processor is applied to the possible bond length penalties
+			 *	resulting from deviation of the actual bond length to 
+			 *	a standart length for bonds with same atom types and the 
+			 *	chosen bond order. bond_lengths_penalties_
+			 */
+			bool precomputeBondLengthPenalties_();
 			
 			/// Processor is in a useable valid state. //TODO
 			bool valid_;
@@ -397,12 +410,13 @@ namespace BALL
 
 			// stores which atom belongs to which block
 			vector<int> atom_to_block_;
-		
-			/// stores the bondlength 
-			HashMap<Size, HashMap<Size, HashMap<Bond::BondOrder, float> > > bond_length_;
-			//vector<short> current_bond_orders_;
-		
-		};
+					
+			///stores the possible bond lengths penalties per order // TODO: constructor etc
+			HashMap<Bond*, vector<float> > bond_lengths_penalties_;
+	
+			/// max bond order to consider
+			int max_bond_order_;
+	};
 
 } // namespace BALL 
 
