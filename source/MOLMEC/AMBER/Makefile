@@ -14,7 +14,9 @@ CPP_SOURCES=\
 	amberStretch.C\
 	amberTorsion.C\
 	GAFFTypeProcessor.C\
-	GAFFCESParser.C
+	GAFFCESParser.C\
+	GAFFCESParserParser.C\
+	GAFFCESParserLexer.C
 
 include ../../common.mak
 -include .Dependencies

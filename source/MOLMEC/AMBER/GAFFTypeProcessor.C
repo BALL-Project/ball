@@ -2,11 +2,13 @@
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/QSAR/aromaticityProcessor.h>
 #include <BALL/KERNEL/PTE.h>
+#include <BALL/SYSTEM/path.h>
 
 namespace BALL
 {
 	const String GAFFTypeProcessor::Option::ATOMTYPE_FILENAME = "atomtype_filename";
-	const String GAFFTypeProcessor::Default::ATOMTYPE_FILENAME = "Amber/GAFFTypes.dat";
+//	const String GAFFTypeProcessor::Default::ATOMTYPE_FILENAME = "Amber/GAFFTypes.dat";
+	const String GAFFTypeProcessor::Default::ATOMTYPE_FILENAME = "Amber/AMBERTypes.dat";
 
 	GAFFTypeProcessor::GAFFTypeProcessor()
 		: UnaryProcessor<Composite>()
@@ -37,7 +39,6 @@ namespace BALL
 			{
 				value = assignAtomtype_(*atom_it);
 			}	
-std::cout << "value: " << value << std::endl;
 		}
 
 		return Processor::CONTINUE;
@@ -52,7 +53,8 @@ std::cout << "value: " << value << std::endl;
 		ces_parsers_.clear();
 
 		ifstream atomfile;
-		String filename = options.get(Option::ATOMTYPE_FILENAME);
+		Path path;
+		String filename = path.find(options.get(Option::ATOMTYPE_FILENAME));
 
 		atomfile.open(filename.c_str());
 		if(!atomfile)
@@ -73,11 +75,13 @@ std::cout << "value: " << value << std::endl;
 			typeDefinition.atomic_property = table_line.getField(5);
 			typeDefinition.chemical_environment = table_line.getField(6);
 			
-			std::cout << "chem: " << typeDefinition.chemical_environment << std::endl;
-
 			// create new parser to parse the given CESstring and store it
-			ces_parsers_.insert(typeDefinition.chemical_environment, 
-													new GAFFCESParser(typeDefinition.atomic_property + typeDefinition.chemical_environment));
+			String to_parse = "";
+			if (typeDefinition.atomic_property != "*")
+				to_parse = typeDefinition.atomic_property;
+			to_parse += typeDefinition.chemical_environment;
+
+			ces_parsers_.insert(to_parse, new GAFFCESParser(to_parse));
 
 			// insert the type definition at the corresponding position
 			if (atom_types_.find(typeDefinition.atomic_number) == atom_types_.end())
@@ -98,12 +102,11 @@ std::cout << "value: " << value << std::endl;
 		rpp.calculateSSSR(sssr_, *molecule);
 
 		AromaticityProcessor arp;
-		arp.options.setBool(AromaticityProcessor::Option::OVERWRITE_BOND_ORDERS,false);
+		arp.options.setBool(AromaticityProcessor::Option::OVERWRITE_BOND_ORDERS, false);
 		arp.aromatize(sssr_, *molecule);
 	
 		annotateRingSizes_();
-		annotateAliphaticRingAtoms_();
-		annotatePossiblyPlanarRingAtoms_();
+		annotateAliphaticAndAromaticRingAtoms_();
 		annotatePlanarRingAtoms_();
 
 		AtomIterator atom_it = molecule->beginAtom();
@@ -201,13 +204,14 @@ std::cout << "value: " << value << std::endl;
 	}
 
 	// checks if current atom is in an aliphatic ringsystem,
-	// which is made of sp3 Carbon
-	void GAFFTypeProcessor::annotateAliphaticRingAtoms_()	
+	// which is made of sp3 Carbon or a purely aromatic ring
+	void GAFFTypeProcessor::annotateAliphaticAndAromaticRingAtoms_()	
 	{
 		std::vector<std::vector<Atom* > >::iterator ring_it = sssr_.begin();
 		for(;ring_it != sssr_.end();++ring_it)
 		{
 			bool purely_aliphatic = true;
+			bool purely_aromatic  = true;
 
 			vector<Atom*>::iterator atom_it = ring_it->begin();
 			for(;atom_it != ring_it->end();++atom_it)
@@ -216,7 +220,11 @@ std::cout << "value: " << value << std::endl;
 				if( ((*atom_it)->getElement() != PTE[Element::C]) || ((*atom_it)->countBonds() != 4))
 				{
 					purely_aliphatic = false;
-					break;
+				}
+
+				if ( !(*atom_it)->getProperty("IsAromatic").getBool() )
+				{
+					purely_aromatic = false;
 				}
 			}
 
@@ -225,64 +233,35 @@ std::cout << "value: " << value << std::endl;
 				for(;atom_it != ring_it->end();++atom_it)
 					(*atom_it)->setProperty("IsPureAliphatic", true);
 			}
+			if (purely_aromatic)
+			{
+				for(;atom_it != ring_it->end();++atom_it)
+					(*atom_it)->setProperty("IsPureAromatic", true);
+			}
 		}
 	}
 
-	// check if current atom could be in a planar ring
-	// s.t. atom is a C(X3),N(X2),N(X3),O(X2),S(X2),P(X2),P(X3)
-	void GAFFTypeProcessor::annotatePossiblyPlanarRingAtoms_()
-	{
-		// TODO: only for all ring atoms???
-		for (AtomIterator atom_it = current_molecule_->beginAtom(); +atom_it; ++atom_it)
-		{
-			Element element = atom_it->getElement();
-			int num_bonds = atom_it->countBonds();
-			// C(X2) or C(X3)
-			if(		 (element == PTE[Element::C]) 
-					&&((num_bonds == 2) ||(num_bonds == 3)))
-			{
-				atom_it->setProperty("CouldBePlanar",(bool) true);
-			}
-			// N(X2) or N(X3)
-			else if(	(element == PTE[Element::N]) 
-							&&((num_bonds == 2) || (num_bonds == 3)))
-			{
-				atom_it->setProperty("CouldBePlanar",(bool) true);
-			} 
-			// P(X2) or P(X3)
-			else if(	(element == PTE[Element::P])
-							&&((num_bonds == 2) || (num_bonds == 3)))
-			{
-				atom_it->setProperty("CouldBePlanar",(bool) true);
-			}
-			// O(X2)
-			else if((element == PTE[Element::O]) && (num_bonds == 2))
-			{
-				atom_it->setProperty("CouldBePlanar",(bool) true);
-			}
-			// S(X2)
-			else if((element == PTE[Element::S]) && (num_bonds == 2))
-			{
-				atom_it->setProperty("CouldBePlanar",(bool) true);
-			}
-			else 
-			{
-				atom_it->setProperty("CouldBePlanar",(bool) false);
-			}
-		}
-	}	
-
-	// check if current ringsystem is planar
-	// s.t. consist of C(X3),N(X2),N(X3),O(X2),S(X2),P(X2),P(X3)
+	// checks if current atom is in a planar ringsystem
 	void GAFFTypeProcessor::annotatePlanarRingAtoms_()
 	{
 		std::vector<std::vector<Atom* > >::iterator ring_it = sssr_.begin();
 		for(;ring_it != sssr_.end();++ring_it)
 		{
-			std::vector<Atom*>::iterator atom_it = ring_it->begin();
-			for(; atom_it != ring_it->end(); ++atom_it)
-			{	
-				if((*atom_it)->getProperty("CouldBePlanar").getBool())
+			bool is_planar = true;
+			bool has_db_to_non_ring = false;
+
+			vector<Atom*>::iterator atom_it = ring_it->begin();
+			for(;atom_it != ring_it->end();++atom_it)
+			{
+				// if one atom isn't planar, the whole ring isn't.
+				if( !planarAtom_(**atom_it) )
+				{
+					is_planar = false;
+					break;
+				}
+
+				// is there one atom with a double bond to a non-ring?
+				if (!has_db_to_non_ring) // otherwise, we don't need to look for another one!
 				{
 					Atom::BondConstIterator constBond_it = (*atom_it)->beginBond();
 					for(;+constBond_it;++constBond_it)
@@ -290,19 +269,51 @@ std::cout << "value: " << value << std::endl;
 						if(   ((constBond_it->getProperty("GAFFBondType").getString())== "DB")
 								||((constBond_it->getProperty("GAFFBondType").getString())== "db")) 
 						{
-							Atom* atom = constBond_it->getPartner(*(*atom_it));
-							//NOTE is there a way to do it better?
-							GAFFCESParser::APSMatcher aps;
-							if(aps.isNonRingAtom(*atom))
-							{
-								(*atom_it)->setProperty("PlanarRing", true);
-							}
+							const Atom* partner_atom = constBond_it->getBoundAtom(**atom_it);
+							if (!partner_atom->getProperty("InRing").getBool())
+								has_db_to_non_ring = true;
 						}
 					}
 				}
 			}
+
+			// if the ring is planar 
+			if (is_planar)
+			{
+				for(;atom_it != ring_it->end();++atom_it)
+				{
+					(*atom_it)->setProperty("IsPlanarRingAtom", true);
+					if (has_db_to_non_ring)
+						(*atom_it)->setProperty("IsPlanarWithDBtoNR", true);
+				}
+			}
 		}
 	}
+
+	// check if current atom could be in a planar ring
+	// s.t. atom is a C(X3),N(X2),N(X3),O(X2),S(X2),P(X2),P(X3)
+	bool GAFFTypeProcessor::planarAtom_(const Atom& atom)
+	{
+		Element element = atom.getElement();
+		int num_bonds   = atom.countBonds();
+		// C(X2) or C(X3)
+		if(		 (element == PTE[Element::C]) &&((num_bonds == 2) ||(num_bonds == 3)))
+			return true;
+		// N(X2) or N(X3)
+		if(	(element == PTE[Element::N]) &&((num_bonds == 2) || (num_bonds == 3)))
+			return true;
+		// P(X2) or P(X3)
+		if(	(element == PTE[Element::P]) &&((num_bonds == 2) || (num_bonds == 3)))
+			return true;
+		// O(X2)
+		if((element == PTE[Element::O]) && (num_bonds == 2))
+			return true;
+		// S(X2)
+		if((element == PTE[Element::S]) && (num_bonds == 2))
+			return true;		
+
+		return false;
+	}	
 
 	bool GAFFTypeProcessor::assignAtomtype_(Atom& atom)
 	{
@@ -319,33 +330,23 @@ std::cout << "value: " << value << std::endl;
 		for (Position i=0; i<type_defs.size(); i++)
 		{
 			TypeDefinition& typeDefinition = type_defs[i];
-
-			printf("checking atom %s against type %s\n", atom.getName().c_str(), typeDefinition.atom_type.c_str());
-		
-			std::cout << "connectivity:" <<  typeDefinition.connectivity << "" << atom.getProperty("connectivity").getInt() << endl;
-
 			//all fields with "*" are invalid and therefore considered as True
 			if(atom.getProperty("connectivity").getInt() == typeDefinition.connectivity)
 			{
-				
-				std::cout << "attached hydrogens:" <<  typeDefinition.attached_hydrogens << " " << atom.getProperty("attached hydrogens").getString() << endl;
-
 				if(		(atom.getProperty("attached hydrogens").getString() == typeDefinition.attached_hydrogens) 
 						||(typeDefinition.attached_hydrogens == "*"))
 				{
-
-					std::cout << "electron withdrawal atoms:" <<  typeDefinition.electron_withdrawal_atoms << "" << atom.getProperty("electron withdrawal atoms").getString() << endl;
-
 					if(		(atom.getProperty("electron withdrawal atoms").getString() == typeDefinition.electron_withdrawal_atoms) 
 							||(typeDefinition.electron_withdrawal_atoms == "*"))
 					{
 						String atomic_property = typeDefinition.atomic_property;
 
-						std::cout << "atomicPropertyString" << endl;
-						std::cout << "ChemicalEnvironmentString" << endl;
-
-						if(		(typeDefinition.chemical_environment == "*")
-								||(ces_parsers_[typeDefinition.atomic_property+typeDefinition.chemical_environment]->match(atom)))
+						String to_match = "";
+						if (typeDefinition.atomic_property != "*")
+							to_match = typeDefinition.atomic_property;
+						to_match += typeDefinition.chemical_environment;
+						
+						if(	(ces_parsers_[to_match]->match(atom)))
 						{
 							atom.setProperty("atomtype", typeDefinition.atom_type );
 

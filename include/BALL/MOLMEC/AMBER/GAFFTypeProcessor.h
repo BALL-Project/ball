@@ -90,9 +90,9 @@ namespace BALL
 
 			/// Helper for precomputeAtomProperties
 			void annotateRingSizes_();
-			void annotateAliphaticRingAtoms_();
-			void annotatePossiblyPlanarRingAtoms_();
+			void annotateAliphaticAndAromaticRingAtoms_();
 			void annotatePlanarRingAtoms_();
+			bool planarAtom_(const Atom& atom);
 
 			/** Check the atom against each possible atom type and try to assign one.
 			 */
