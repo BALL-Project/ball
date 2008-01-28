@@ -63,6 +63,8 @@ END_PROPERTY   "]"
 <APS>"RG"	 {return TK_APS_RING;}
 <APS>"NR"	 {return TK_APS_NON_RING;}
 
+<APS>[0-9]+ {GAFFCESParserlval.number = atoi(yytext); return TK_APS_NUMBER;}
+
 <APS>{END_PROPERTY}	 {BEGIN(INITIAL); return TK_APS_END;}
 
 "("				{return TK_OPEN;}

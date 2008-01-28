@@ -57,8 +57,10 @@ extern void yyerror(char* s);
 %token					  TK_APS_NINE_RING
 %token					  TK_APS_RING
 %token					  TK_APS_NON_RING
+%token<number>  	TK_APS_NUMBER
 
 %type	<number>				connection
+%type	<number>				optional_aps_number
 
 %%
 
@@ -156,6 +158,10 @@ aps_term: TK_APS_DELOCALIZED connection {
 	|	TK_APS_NON_RING {
 		GAFFCESParser::state.current_aps_type = GAFFCESParser::APSMatcher::IS_NON_RING_ATOM;
 	}
+	;
+
+optional_aps_number: /* empty */ { return 0; }
+	| TK_APS_NUMBER { return $1; }
 	;
 
 connection: /* empty */ { return 0; }
