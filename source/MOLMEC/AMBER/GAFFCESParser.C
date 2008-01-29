@@ -94,11 +94,11 @@ namespace BALL
 	}
 
 	//check if required APSTypes are fullfild
-	bool GAFFCESParser::APSMatcher::checkGAFFProperties(Atom& atom, Atom& predecessor, APSType aps)	
+	bool GAFFCESParser::APSMatcher::checkGAFFProperties(Atom& atom, Atom& predecessor, APSTerm aps)	
 	{
 		bool result = false;
 
-		switch(aps)
+		switch(aps.type)
 		{
 			case IS_RING_ATOM:
 				result = isRingAtom(atom);
@@ -230,7 +230,7 @@ namespace BALL
 			}
 			else
 			{
-				std::vector<GAFFCESParser::APSMatcher::APSType > or_terms;
+				std::vector<GAFFCESParser::APSMatcher::APSTerm > or_terms;
 				aps_terms[i] = or_terms;
 				// iterate over all the or-terms
 				for (Position j=0; j<or_terms.size(); j++)
@@ -282,9 +282,9 @@ namespace BALL
 	}
 
 	//to expand aps_term in aps_matcher object
-	void GAFFCESParser::CESPredicate::addNewOR(GAFFCESParser::APSMatcher::APSType aps)
+	void GAFFCESParser::CESPredicate::addNewOR(GAFFCESParser::APSMatcher::APSType aps, int feature_number)
 	{
-		aps_matcher.aps_terms[aps_matcher.aps_terms.size()-1].push_back(aps);	
+		aps_matcher.aps_terms[aps_matcher.aps_terms.size()-1].push_back(GAFFCESParser::APSMatcher::APSTerm(aps, feature_number));	
 	}
 
 
@@ -481,12 +481,15 @@ namespace BALL
 	GAFFCESParser::GAFFCESParser(const String& cesstring) 
 		: root(this)
 	{
+		printf("trying to parse %s\n", cesstring.c_str());
 		root_predicate = &root;
 		current_root_predicate = root_predicate;
 		current_predicate = root_predicate;
 		current_predicate->parent = root_predicate; 
  		initElementSymbols();
 		parse(cesstring); 
+		printf("done with %s\n", cesstring.c_str());
+		root_predicate = &root;
 	}	
 
 	GAFFCESParser::~GAFFCESParser()
