@@ -627,7 +627,7 @@ cout << "\nNach initialisierung : \n" << queue_.size() << endl;
 					if (solutions_.size() > 0)
 					{	
 						last_applied_solution_ = 0;
-						// set the bond orders of the first solution
+						// set the bond orders and bond types of the first solution
 						AtomIterator a_it = ac.beginAtom();
 						Atom::BondIterator b_it = a_it->beginBond();
 						BALL_FOREACH_BOND(ac, a_it, b_it)
@@ -635,7 +635,7 @@ cout << "\nNach initialisierung : \n" << queue_.size() << endl;
 							b_it->setOrder(solutions_[0].bond_orders[&(*b_it)]);
 
 							// NOTE;neu dazu implementiert!!!
-							//TODO wie AB aromatic bond und DL delocalized bond???
+							//TODO definition von  AB aromatic bond und DL delocalized bond???
 							switch(b_it->getOrder())
 							{
 								case 1:

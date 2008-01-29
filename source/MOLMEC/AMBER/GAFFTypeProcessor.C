@@ -174,39 +174,49 @@ namespace BALL
 		for(;ring_it != sssr_.end();++ring_it)
 		{
 			String property;
-			bool   in_ring;
+			// mark the number of occurence for the given feature
+			int   in_ring = 0;
 			
-			switch (ring_it->size())
-			{
-				case 3: property = "In3Ring";
-								in_ring  = true;
-								break;
-				case 4: property = "In4Ring";
-								in_ring  = true;
-								break;
-				case 5: property = "In5Ring";
-								in_ring  = true;
-								break;
-				case 6: property = "In6Ring";
-								in_ring  = true;
-								break;
-				case 7: property = "In7Ring";
-								in_ring  = true;
-								break;
-				case 8: property = "In8Ring";
-								in_ring  = true;
-								break;
-				case 9: property = "In9Ring";
-								in_ring  = true;
-								break;
-				default: in_ring = false;
-			}
-
+			// in default: set property to current in_ring for every atom 
 			std::vector<Atom*>::iterator atom_it = ring_it->begin();
 			for(;atom_it != ring_it->end();++atom_it)
 			{
-				if (in_ring)
-					(*atom_it)->setProperty(property, true);
+				(*atom_it)->setProperty(property, (int) in_ring);
+			}
+
+			switch (ring_it->size())
+			{
+				case 3: property = "In3Ring";
+								in_ring = 1;
+								break;
+				case 4: property = "In4Ring";
+								in_ring = 1;
+								break;
+				case 5: property = "In5Ring";
+								in_ring = 1;
+								break;
+				case 6: property = "In6Ring";
+								in_ring = 1;
+								break;
+				case 7: property = "In7Ring";
+								in_ring = 1;
+								break;
+				case 8: property = "In8Ring";
+								in_ring = 1;
+								break;
+				case 9: property = "In9Ring";
+								in_ring = 1;
+								break;
+				default: in_ring = 0;
+			}
+
+			// set property to current in ring for every atom
+			// note: we count the occurence of the property within an atom
+			atom_it = ring_it->begin();
+			for(;atom_it != ring_it->end();++atom_it)
+			{
+				in_ring = ((*atom_it)->getProperty(property).getInt()) + in_ring;
+				(*atom_it)->setProperty(property, (int) in_ring);
 			}
 		}
 	}
@@ -235,17 +245,11 @@ namespace BALL
 					purely_aromatic = false;
 				}
 			}
-
-			if (purely_aliphatic)
-			{
-				for(;atom_it != ring_it->end();++atom_it)
-					(*atom_it)->setProperty("IsPureAliphatic", true);
-			}
-			if (purely_aromatic)
-			{
-				for(;atom_it != ring_it->end();++atom_it)
-					(*atom_it)->setProperty("IsPureAromatic", true);
-			}
+			for(;atom_it != ring_it->end();++atom_it)
+					(*atom_it)->setProperty("IsPureAliphatic",(bool) purely_aliphatic);
+	
+			for(;atom_it != ring_it->end();++atom_it)
+					(*atom_it)->setProperty("IsPureAromatic",(bool) purely_aromatic);
 		}
 	}
 
@@ -293,6 +297,8 @@ namespace BALL
 					(*atom_it)->setProperty("IsPlanarRingAtom", true);
 					if (has_db_to_non_ring)
 						(*atom_it)->setProperty("IsPlanarWithDBtoNR", true);
+					else
+						(*atom_it)->setProperty("IsPlanarWithDBtoNR", false);
 				}
 			}
 		}
@@ -349,6 +355,7 @@ namespace BALL
 					{
 						String atomic_property = typeDefinition.atomic_property;
 
+						//add aps string to ces string for parsing
 						String to_match = "";
 						if (typeDefinition.atomic_property != "*")
 							to_match = typeDefinition.atomic_property;
