@@ -62,6 +62,7 @@ namespace BALL
 			};
 
 			GAFFTypeProcessor();
+			GAFFTypeProcessor(const Options& new_options);
 			virtual ~GAFFTypeProcessor();
 			virtual Processor::Result operator() (Composite &composite);
 

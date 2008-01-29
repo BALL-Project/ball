@@ -22,8 +22,9 @@ int main(int argc, char** argv){
 	AssignBondOrderProcessor abp;
 	S.apply(abp);
 
-	GAFFTypeProcessor gt;
-	gt.options[GAFFTypeProcessor::Option::ATOMTYPE_FILENAME] = "Amber/AMBERTypes.dat";
+	Options options;
+	options[GAFFTypeProcessor::Option::ATOMTYPE_FILENAME] = "Amber/GAFFTypes.dat";
+	GAFFTypeProcessor gt(options);
 	S.apply(gt);
 }
 

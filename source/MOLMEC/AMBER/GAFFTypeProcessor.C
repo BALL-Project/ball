@@ -7,11 +7,19 @@
 namespace BALL
 {
 	const String GAFFTypeProcessor::Option::ATOMTYPE_FILENAME = "atomtype_filename";
-//	const String GAFFTypeProcessor::Default::ATOMTYPE_FILENAME = "Amber/GAFFTypes.dat";
-	const String GAFFTypeProcessor::Default::ATOMTYPE_FILENAME = "Amber/AMBERTypes.dat";
+	const String GAFFTypeProcessor::Default::ATOMTYPE_FILENAME = "Amber/GAFFTypes.dat";
+//	const String GAFFTypeProcessor::Default::ATOMTYPE_FILENAME = "Amber/AMBERTypes.dat";
 
 	GAFFTypeProcessor::GAFFTypeProcessor()
 		: UnaryProcessor<Composite>()
+	{
+		options.setDefault(Option::ATOMTYPE_FILENAME, Default::ATOMTYPE_FILENAME);
+		parseAtomtypeTableFile_();
+	}
+
+	GAFFTypeProcessor::GAFFTypeProcessor(const Options& new_options)
+		: UnaryProcessor<Composite>(),
+			options(new_options)
 	{
 		options.setDefault(Option::ATOMTYPE_FILENAME, Default::ATOMTYPE_FILENAME);
 		parseAtomtypeTableFile_();

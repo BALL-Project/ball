@@ -67,6 +67,18 @@ namespace BALL
 							NO_AROMATIC_BOND_TO_PARENT
 						};
 
+						class APSTerm
+						{
+							public:
+								APSTerm(APSType new_type, int new_feature_number)
+									: type(new_type),
+										feature_number(new_feature_number)
+								{}
+
+								APSType type;
+								int feature_number;
+						};
+
  						//check if current atom is in a ring
  						bool isRingAtom(Atom& atom);
  						//check if the current atom is in a ring with size n
@@ -75,7 +87,7 @@ namespace BALL
  						//in a ten-membered or larger ring
  						bool isNonRingAtom(Atom& atom);	
 
-						bool checkGAFFProperties(Atom& atom, Atom& predecessor, APSType aps);
+						bool checkGAFFProperties(Atom& atom, Atom& predecessor, APSTerm aps);
 
 
 						APSMatcher();
@@ -87,7 +99,7 @@ namespace BALL
 						//store atomic property string
 						//external vector: all AND (",") types
 						//internal vector: all OR (".")types
-						std::vector < std::vector< APSType> > aps_terms;
+						std::vector < std::vector< APSTerm> > aps_terms;
 
 					protected:
 						bool hasBond_(Atom* atom, Atom* predecessor, const String& bond_type);
@@ -99,7 +111,7 @@ namespace BALL
 				GAFFCESParser* current_parser;
 				
 				APSMatcher::APSType current_aps_type;
-				int current_bond_to_parent;
+				int feature_number;
 			};
 	
 
@@ -150,7 +162,7 @@ namespace BALL
 
 					//to expand aps_term in aps_matcher object
 					void addNewAND();
-					void addNewOR(APSMatcher::APSType aps);
+					void addNewOR(APSMatcher::APSType aps, int feature_number);
 
 					//store existing atomic property string
 					APSMatcher aps_matcher;	
