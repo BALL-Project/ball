@@ -76,13 +76,15 @@ namespace BALL
 								{}
 
 								APSType type;
+								//contain the number of occurence of a given feature
 								int feature_number;
 						};
 
  						//check if current atom is in a ring
  						bool isRingAtom(Atom& atom);
  						//check if the current atom is in a ring with size n
- 						bool isNRingAtom(Size size, Atom& atom);
+						//and return the number of occurence
+ 						int isNRingAtom(Size size, Atom& atom);
  						//check if the current atom is not a ringatom or
  						//in a ten-membered or larger ring
  						bool isNonRingAtom(Atom& atom);	
@@ -102,7 +104,7 @@ namespace BALL
 						std::vector < std::vector< APSTerm> > aps_terms;
 
 					protected:
-						bool hasBond_(Atom* atom, Atom* predecessor, const String& bond_type);
+						int countBond_(Atom* atom, Atom* predecessor, const String& bond_type);
 			};
 
 			struct State

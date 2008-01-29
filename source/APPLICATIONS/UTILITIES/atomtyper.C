@@ -3,6 +3,7 @@
 
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/HINFile.h>
+#include <BALL/FORMAT/MOL2File.h>
 #include <BALL/MOLMEC/AMBER/GAFFTypeProcessor.h>
 #include <BALL/STRUCTURE/assignBondOrderProcessor.h>
 
@@ -30,5 +31,8 @@ int main(int argc, char** argv){
 
 	GAFFTypeProcessor gt(options);
 	S.apply(gt);
+	MOL2File m("rockaz.mol2", std::ios::out);
+	m << S;
+	m.close();
 }
 

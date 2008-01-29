@@ -30,7 +30,7 @@ namespace BALL
 	}	
 
 	//checks if the current atom is in a ring with size n
-	bool GAFFCESParser::APSMatcher::isNRingAtom(Size size, Atom& atom)
+	int GAFFCESParser::APSMatcher::isNRingAtom(Size size, Atom& atom)
 	{
 		String property = "NoSuchPropertyXXX";
 		switch (size)
@@ -51,7 +51,7 @@ namespace BALL
 							break;
 		}
 
-		return atom.getProperty(property).getBool();
+		return atom.getProperty(property).getInt();
 	}
 
 	//checks if current atom is in a ring
@@ -61,7 +61,7 @@ namespace BALL
 		// we don't merely check for "InRing" because rings need to be smaller than 10 for GAFF
 		for (Size i=3; i<10; i++)
 		{
-			if (isNRingAtom(i, atom))
+			if (isNRingAtom(i, atom) != 0)
 				return true;
 		}
 
@@ -72,21 +72,22 @@ namespace BALL
 	//in a ten-membered or larger ring
 	bool GAFFCESParser::APSMatcher::isNonRingAtom(Atom& atom)
 	{
-		return !isRingAtom(atom);
+		return (!isRingAtom(atom));
 	}	
 
 	// check if atom forms a bond of type bond_type with partner.
 	// if partner == NULL, check whether there is a bond of this kind at all
-	bool GAFFCESParser::APSMatcher::hasBond_(Atom* atom, Atom* partner, const String& bond_type)
+	int GAFFCESParser::APSMatcher::countBond_(Atom* atom, Atom* partner, const String& bond_type)
 	{
-		bool result = false;
+		// count the occurence of bond_type for an atom 
+		int result = 0;
 		Atom::BondConstIterator bond_it;
 		for (bond_it = atom->beginBond(); +bond_it; ++bond_it)
 		{
 			if (partner == NULL || bond_it->getBoundAtom(*atom) == partner)
 			{
 				if (bond_it->getProperty("GAFFBondType").getString() == bond_type)
-					result = true;
+					result++;
 			}
 		}
 
@@ -119,92 +120,192 @@ namespace BALL
 				result = atom.getProperty("IsPureAliphatic").getBool();
 				break;
 			case IS_OTHER_RING:
-				//TODO!
-				result = atom.getProperty("IsOther").getBool();
+				if(isRingAtom(atom))
+					{
+						if( (!atom.getProperty("IsPlanarRingAtom").getBool())
+								&& (!atom.getProperty("IsPlanarWithDBtoNR").getBool())
+								&& (!atom.getProperty("IsPureAromatic").getBool())
+								&& (!atom.getProperty("IsPureAliphatic").getBool()))
+							{
+								atom.setProperty("isOther", true);
+								result = true;
+							}
+					}
 				break;
 			case IS_3_RING_ATOM:
-				result = atom.getProperty("In3Ring").getBool();
+				if(	 (aps.feature_number == atom.getProperty("In3Ring").getInt())
+					 ||(aps.feature_number < 0))
+							result = true;
 				break;
 			case IS_4_RING_ATOM:
-				result = atom.getProperty("In4Ring").getBool();
+				if(	 (aps.feature_number == atom.getProperty("In4Ring").getInt())
+					 ||(aps.feature_number < 0))
+							result = true;
 				break;
 			case IS_5_RING_ATOM:
-				result = atom.getProperty("In5Ring").getBool();
+				if(	 (aps.feature_number == atom.getProperty("In5Ring").getInt())
+					 ||(aps.feature_number < 0))
+							result = true;
 				break;
 			case IS_6_RING_ATOM:
-				result = atom.getProperty("In6Ring").getBool();
+				if(	 (aps.feature_number == atom.getProperty("In6Ring").getInt())
+					 ||(aps.feature_number < 0))
+							result = true;
 				break;
 			case IS_7_RING_ATOM:
-				result = atom.getProperty("In7Ring").getBool();
+				if(	 (aps.feature_number == atom.getProperty("In7Ring").getInt())
+					 ||(aps.feature_number < 0))
+							result = true;
 				break;
 			case IS_8_RING_ATOM:
-				result = atom.getProperty("In8Ring").getBool();
+				if(	 (aps.feature_number == atom.getProperty("In8Ring").getInt())
+					 ||(aps.feature_number < 0))
+							result = true;
 				break;
 			case IS_9_RING_ATOM:
-				result = atom.getProperty("In9Ring").getBool();
+				if(	 (aps.feature_number == atom.getProperty("In9Ring").getInt())
+					 ||(aps.feature_number < 0))
+							result = true;
 				break;
 			case PURE_SINGLE_BOND:
-				result = hasBond_(&atom, NULL, "SB");
+				if(  (aps.feature_number == countBond_(&atom, NULL, "SB"))
+					 ||	(aps.feature_number < 0))
+				{
+					result = true;
+				}
 				break;
 			case PURE_SINGLE_BOND_TO_PARENT:
-				result = hasBond_(&atom, &predecessor, "SB");
+				if(  (aps.feature_number == countBond_(&atom, &predecessor, "SB"))
+					 ||	(aps.feature_number < 0))
+				{
+					result = true;
+				}
 				break;
 			case NO_PURE_SINGLE_BOND_TO_PARENT:
-				result = !hasBond_(&atom, &predecessor, "SB");
+				if(aps.feature_number != countBond_(&atom, &predecessor, "SB"))
+				{
+					result = true;
+				}
 				break;
 			case SINGLE_BOND:
-				result = hasBond_(&atom, NULL, "sb");
+				if(  (aps.feature_number == countBond_(&atom, NULL, "sb"))
+					 ||	(aps.feature_number < 0))
+				{
+					result = true;
+				}
 				break;
 			case SINGLE_BOND_TO_PARENT:
-				result = hasBond_(&atom, &predecessor, "sb");
+				if(  (aps.feature_number == countBond_(&atom, &predecessor, "sb"))
+					 ||	(aps.feature_number < 0))
+				{
+					result = true;
+				}
 				break;
 			case NO_SINGLE_BOND_TO_PARENT:
-				result = !hasBond_(&atom, &predecessor, "sb");
+				if(aps.feature_number != countBond_(&atom, &predecessor, "sb"))
+				{
+					result = true;
+				}
 				break;
 			case PURE_DOUBLE_BOND:
-				result = hasBond_(&atom, NULL, "DB");
+				if(  (aps.feature_number == countBond_(&atom, NULL, "DB"))
+					 ||	(aps.feature_number < 0))
+				{
+					result = true;
+				}
 				break;
 			case PURE_DOUBLE_BOND_TO_PARENT:
-				result = hasBond_(&atom, &predecessor, "DB");
+				if(  (aps.feature_number == countBond_(&atom, &predecessor, "DB"))
+					 ||	(aps.feature_number < 0))
+				{
+					result = true;
+				}
 				break;
 			case NO_PURE_DOUBLE_BOND_TO_PARENT:
-				result = !hasBond_(&atom, &predecessor, "DB");
+				if(aps.feature_number != countBond_(&atom, &predecessor, "DB"))
+				{
+					result = true;
+				}
 				break;
 			case DOUBLE_BOND:
-				result = hasBond_(&atom, NULL, "db");
+				if(  (aps.feature_number == countBond_(&atom, NULL, "db"))
+					 ||	(aps.feature_number < 0))
+				{
+					result = true;
+				}
 				break;
 			case DOUBLE_BOND_TO_PARENT:
-				result = hasBond_(&atom, &predecessor, "db");
+				if(  (aps.feature_number == countBond_(&atom, &predecessor, "db"))
+					 ||	(aps.feature_number < 0))
+				{
+					result = true;
+				}
 				break;
 			case NO_DOUBLE_BOND_TO_PARENT:
-				result = !hasBond_(&atom, &predecessor, "db");
+				if(aps.feature_number != countBond_(&atom, &predecessor, "db"))
+				{
+					result = true;
+				}
 				break;
 			case TRIPLE_BOND:
-				result = hasBond_(&atom, NULL, "TB");
+				if(  (aps.feature_number == countBond_(&atom, NULL, "TB"))
+					 ||	(aps.feature_number < 0))
+				{
+					result = true;
+				}
 				break;
 			case TRIPLE_BOND_TO_PARENT:
-				result = hasBond_(&atom, &predecessor, "TB");
+				if(  (aps.feature_number == countBond_(&atom, &predecessor, "TB"))
+					 ||	(aps.feature_number < 0))
+				{
+					result = true;
+				}
 				break;
 			case NO_TRIPLE_BOND_TO_PARENT:
-				result = !hasBond_(&atom, &predecessor, "TB");
+				if(aps.feature_number != countBond_(&atom, &predecessor, "TB"))
+				{
+					result = true;
+				}
 				break;
 			case DELOCALIZED_BOND:
-				result = hasBond_(&atom, NULL, "DL");
+				if(  (aps.feature_number == countBond_(&atom, NULL, "DL"))
+					 ||	(aps.feature_number < 0))
+				{
+					result = true;
+				}
 				break;
 			case DELOCALIZED_BOND_TO_PARENT:
-				result = hasBond_(&atom, &predecessor, "DL");
+				if(  (aps.feature_number == countBond_(&atom, &predecessor, "DL"))
+					 ||	(aps.feature_number < 0))
+				{
+					result = true;
+				}
 				break;
 			case NO_DELOCALIZED_BOND_TO_PARENT:
-				result = !hasBond_(&atom, &predecessor, "DL");
+				if(aps.feature_number != countBond_(&atom, &predecessor, "DL"))
+				{
+					result = true;
+				}
 				break;
 			case AROMATIC_BOND:
-				result = hasBond_(&atom, NULL, "AB");
+				if(  (aps.feature_number == countBond_(&atom, NULL, "AB"))
+					 ||	(aps.feature_number < 0))
+				{
+					result = true;
+				}
 				break;
 			case AROMATIC_BOND_TO_PARENT:
-				result = hasBond_(&atom, &predecessor, "AB");
+				if(  (aps.feature_number == countBond_(&atom, &predecessor, "AB"))
+					 ||	(aps.feature_number < 0))
+				{
+					result = true;
+				}
 				break;
 			case NO_AROMATIC_BOND_TO_PARENT:
-				result = !hasBond_(&atom, &predecessor, "AB");
+				if(aps.feature_number != countBond_(&atom, &predecessor, "AB"))
+				{
+					result = true;
+				}
 				break;
 		}
 
