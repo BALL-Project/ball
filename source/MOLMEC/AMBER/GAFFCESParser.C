@@ -230,8 +230,7 @@ namespace BALL
 			}
 			else
 			{
-				std::vector<GAFFCESParser::APSMatcher::APSTerm > or_terms;
-				aps_terms[i] = or_terms;
+				std::vector<GAFFCESParser::APSMatcher::APSTerm >& or_terms = aps_terms[i];
 				// iterate over all the or-terms
 				for (Position j=0; j<or_terms.size(); j++)
 				{
@@ -350,6 +349,19 @@ namespace BALL
 	{
 		atom_to_test = &atom;
 
+		// first, we check for the APS of this atom
+		Atom* second_atom;
+		if (parser_->root_predicate == this)
+			second_atom = atom_to_test;
+		else
+			second_atom = parent->atom_to_test;
+
+		if (!aps_matcher.aps_terms.empty())
+		{
+			if (!aps_matcher(*atom_to_test, *second_atom))
+				return false;
+		}
+
 		//present predicate has child-predicates
 		if(!(children.empty()))
 		{
@@ -371,16 +383,6 @@ namespace BALL
 						//if predicate wasn't matched before
 						if(!(match_events[i]))
 						{
-							//first check if aps string is given and if so, if atom matches
-							if(!(aps_matcher.aps_terms.empty()))
-							{
-								// if the predicate's atom does not match
-								// (we already know that we are not in the root predicate, hence parent != NULL)
-								if(!(aps_matcher(*atom_to_test, *parent->atom_to_test)))
-								{
-									return false;
-								}
-							}
 							//if one match of atom and predicate is found
 							if((*children[i])(partnerAtom))
 							{
@@ -422,18 +424,6 @@ namespace BALL
 						//if predicate was'nt matched before
 						if(!(match_events[i]))
 						{
-							//first check if aps string is given and if so, if atom matches
-							if(!(aps_matcher.aps_terms.empty()))
-							{
-								//if the predicate's atom does not match
-								// (note: we are in the root predicate, hence, the predecessor atom
-								// does not exist. on the other hand, it will never be used. Thus,
-								// we just take the same atom again!)
-								if(!(aps_matcher(*atom_to_test, *atom_to_test)))
-								{
-									return false;
-								}
-							}
 							//if one match of atom and predicate is found
 							if((*children[i])(partnerAtom))
 							{
@@ -461,7 +451,7 @@ namespace BALL
 		}
 		else
 		{
-			return (match(atom));
+			return match(atom);
 		}
 
 		return false;
@@ -481,14 +471,12 @@ namespace BALL
 	GAFFCESParser::GAFFCESParser(const String& cesstring) 
 		: root(this)
 	{
-		printf("trying to parse %s\n", cesstring.c_str());
 		root_predicate = &root;
 		current_root_predicate = root_predicate;
 		current_predicate = root_predicate;
 		current_predicate->parent = root_predicate; 
  		initElementSymbols();
 		parse(cesstring); 
-		printf("done with %s\n", cesstring.c_str());
 		root_predicate = &root;
 	}	
 
@@ -677,12 +665,10 @@ namespace BALL
 	//check if atom matches WildcardsAtomicPropertyPredicatePredicate
 	bool GAFFCESParser::CESwildcardsPredicate::match(Atom& atom)
 	{
-std::cout << "ceswild" << std::endl;	
 		bool correct_match = false;
 		// match wildcard-element?
 		if(matchWildcards(atom))
 		{
-			std::cout << "wildcards gemachted" << endl;
 			correct_match = true;
 		}
 		return correct_match;

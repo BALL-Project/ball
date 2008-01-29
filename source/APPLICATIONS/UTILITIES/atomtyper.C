@@ -14,6 +14,7 @@ int main(int argc, char** argv){
  	String fname = "benzene.hin";
  	if (argc > 1)
  		fname = argv[1];
+		
  	HINFile mol(fname, std::ios::in);
 
 	System S;
@@ -24,6 +25,9 @@ int main(int argc, char** argv){
 
 	Options options;
 	options[GAFFTypeProcessor::Option::ATOMTYPE_FILENAME] = "Amber/GAFFTypes.dat";
+	if (argc > 2)
+		options[GAFFTypeProcessor::Option::ATOMTYPE_FILENAME] = String("Amber/")+argv[2];
+
 	GAFFTypeProcessor gt(options);
 	S.apply(gt);
 }

@@ -164,7 +164,7 @@ optional_aps_number: /* empty */ { GAFFCESParser::state.feature_number = -1; }
 	;
 
 connection: /* empty */ {  $$ = 0; }
-	|	TK_APS_BOUND_TO_PARENT { printf("to parent\n"); $$ = 1; }
+	|	TK_APS_BOUND_TO_PARENT {  $$ = 1; }
 	| TK_APS_NOT_BOUND_TO_PARENT { $$ = 2; }
 	;
 
