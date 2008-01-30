@@ -160,11 +160,14 @@ namespace BALL
 				}
 			} 
 
-			attached_hydrogens.set(attached_hydrogens_int);
-			electron_withdrawal_atoms.set(electron_withdrawal_atoms_int);
+			String attached(attached_hydrogens_int);
+			String electron(electron_withdrawal_atoms_int);
 
- 			atom_it->setProperty("attached hydrogens", attached_hydrogens);
- 			atom_it->setProperty("electron withdrawal atoms", electron_withdrawal_atoms);
+			attached_hydrogens = attached;
+			electron_withdrawal_atoms = electron;
+
+ 			atom_it->setProperty("attached hydrogens", (String) attached_hydrogens);
+ 			atom_it->setProperty("electron withdrawal atoms", (String) electron_withdrawal_atoms);
 		}
 	}
 	
@@ -175,39 +178,47 @@ namespace BALL
 		{
 			String property;
 			// mark the number of occurence for the given feature
-			int   in_ring = 0;
+			int occurence = 0;
+			bool in_ring = false;
 			
-			// in default: set property to current in_ring for every atom 
+			// in default: set number of occurence of property for every atom 
 			std::vector<Atom*>::iterator atom_it = ring_it->begin();
 			for(;atom_it != ring_it->end();++atom_it)
 			{
-				(*atom_it)->setProperty(property, (int) in_ring);
+				(*atom_it)->setProperty(property, (int) occurence);
 			}
 
 			switch (ring_it->size())
 			{
 				case 3: property = "In3Ring";
-								in_ring = 1;
+								occurence = 1;
+								in_ring = true;
 								break;
 				case 4: property = "In4Ring";
-								in_ring = 1;
+								occurence = 1;
+								in_ring = true;
 								break;
 				case 5: property = "In5Ring";
-								in_ring = 1;
+								occurence = 1;
+								in_ring = true;
 								break;
 				case 6: property = "In6Ring";
-								in_ring = 1;
+								occurence = 1;
+								in_ring = true;
 								break;
 				case 7: property = "In7Ring";
-								in_ring = 1;
+								occurence = 1;
+								in_ring = true;
 								break;
 				case 8: property = "In8Ring";
-								in_ring = 1;
+								occurence = 1;
+								in_ring = true;
 								break;
 				case 9: property = "In9Ring";
-								in_ring = 1;
+								occurence = 1;
+								in_ring = true;
 								break;
-				default: in_ring = 0;
+				default: in_ring = false;
 			}
 
 			// set property to current in ring for every atom
@@ -215,8 +226,9 @@ namespace BALL
 			atom_it = ring_it->begin();
 			for(;atom_it != ring_it->end();++atom_it)
 			{
-				in_ring = ((*atom_it)->getProperty(property).getInt()) + in_ring;
-				(*atom_it)->setProperty(property, (int) in_ring);
+				 occurence = ((*atom_it)->getProperty(property).getInt()) + occurence;
+				(*atom_it)->setProperty(property, (int) occurence);
+				(*atom_it)->setProperty(property, (bool) in_ring);
 			}
 		}
 	}
@@ -350,6 +362,10 @@ namespace BALL
 				if(		(atom.getProperty("attached hydrogens").getString() == typeDefinition.attached_hydrogens) 
 						||(typeDefinition.attached_hydrogens == "*"))
 				{
+
+// 					std::cout << "eleWAtoms:"<< atom.getName() << ""<<"" << atom.getProperty("electron withdrawal atoms").getString()  << ""<< typeDefinition.electron_withdrawal_atoms << endl;
+
+
 					if(		(atom.getProperty("electron withdrawal atoms").getString() == typeDefinition.electron_withdrawal_atoms) 
 							||(typeDefinition.electron_withdrawal_atoms == "*"))
 					{
@@ -364,7 +380,6 @@ namespace BALL
 						if(	(ces_parsers_[to_match]->match(atom)))
 						{
 							atom.setProperty("atomtype", typeDefinition.atom_type );
-
 							cout << "atom name: " << atom.getName() << " atomtype:" << typeDefinition.atom_type << endl;
 
 							return true;	
