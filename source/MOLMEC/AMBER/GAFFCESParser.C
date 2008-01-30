@@ -50,7 +50,6 @@ namespace BALL
 			case 9: property = "In9Ring";
 							break;
 		}
-
 		return atom.getProperty(property).getInt();
 	}
 
@@ -77,20 +76,24 @@ namespace BALL
 
 	// check if atom forms a bond of type bond_type with partner.
 	// if partner == NULL, check whether there is a bond of this kind at all
-	int GAFFCESParser::APSMatcher::countBond_(Atom* atom, Atom* partner, const String& bond_type)
+	bool GAFFCESParser::APSMatcher::hasBond_(Atom* atom, Atom* partner, const String& bond_type)
 	{
 		// count the occurence of bond_type for an atom 
-		int result = 0;
+		int occurence = 0;
+		bool result = false;
 		Atom::BondConstIterator bond_it;
 		for (bond_it = atom->beginBond(); +bond_it; ++bond_it)
 		{
 			if (partner == NULL || bond_it->getBoundAtom(*atom) == partner)
 			{
 				if (bond_it->getProperty("GAFFBondType").getString() == bond_type)
-					result++;
+				{
+						result = true;
+						occurence++;
+				}
 			}
 		}
-
+		atom->setProperty(bond_type, (int) occurence);
 		return result;
 	}
 
@@ -133,176 +136,253 @@ namespace BALL
 					}
 				break;
 			case IS_3_RING_ATOM:
-				if(	 (aps.feature_number == atom.getProperty("In3Ring").getInt())
-					 ||(aps.feature_number < 0))
-							result = true;
+				if(atom.getProperty("In3Ring").getBool())
+				{
+						if(  (aps.feature_number == atom.getProperty("In3Ring").getInt())
+							 ||	(aps.feature_number < 0))
+							{
+									result = true;
+							}
+				}
 				break;
 			case IS_4_RING_ATOM:
-				if(	 (aps.feature_number == atom.getProperty("In4Ring").getInt())
-					 ||(aps.feature_number < 0))
-							result = true;
+				if(atom.getProperty("In4Ring").getBool())
+				{
+						if(  (aps.feature_number == atom.getProperty("In4Ring").getInt())
+							 ||	(aps.feature_number < 0))
+							{
+									result = true;
+							}
+				}
 				break;
 			case IS_5_RING_ATOM:
-				if(	 (aps.feature_number == atom.getProperty("In5Ring").getInt())
-					 ||(aps.feature_number < 0))
-							result = true;
+				if(atom.getProperty("In5Ring").getBool())
+				{
+						if(  (aps.feature_number == atom.getProperty("In5Ring").getInt())
+							 ||	(aps.feature_number < 0))
+							{
+									result = true;
+							}
+				}
 				break;
 			case IS_6_RING_ATOM:
-				if(	 (aps.feature_number == atom.getProperty("In6Ring").getInt())
-					 ||(aps.feature_number < 0))
-							result = true;
+				if(atom.getProperty("In6Ring").getBool())
+				{
+						if(  (aps.feature_number == atom.getProperty("In6Ring").getInt())
+							 ||	(aps.feature_number < 0))
+							{
+									result = true;
+							}
+				}
 				break;
 			case IS_7_RING_ATOM:
-				if(	 (aps.feature_number == atom.getProperty("In7Ring").getInt())
-					 ||(aps.feature_number < 0))
-							result = true;
+				if(atom.getProperty("In7Ring").getBool())
+				{
+						if(  (aps.feature_number == atom.getProperty("In7Ring").getInt())
+							 ||	(aps.feature_number < 0))
+							{
+									result = true;
+							}
+				}
 				break;
 			case IS_8_RING_ATOM:
-				if(	 (aps.feature_number == atom.getProperty("In8Ring").getInt())
-					 ||(aps.feature_number < 0))
-							result = true;
+			if(atom.getProperty("In8Ring").getBool())
+				{
+						if(  (aps.feature_number == atom.getProperty("In8Ring").getInt())
+							 ||	(aps.feature_number < 0))
+							{
+									result = true;
+							}
+				}
 				break;
 			case IS_9_RING_ATOM:
-				if(	 (aps.feature_number == atom.getProperty("In9Ring").getInt())
-					 ||(aps.feature_number < 0))
-							result = true;
+				if(atom.getProperty("In9Ring").getBool())
+				{
+						if(  (aps.feature_number == atom.getProperty("In9Ring").getInt())
+							 ||	(aps.feature_number < 0))
+							{
+									result = true;
+							}
+				}
 				break;
 			case PURE_SINGLE_BOND:
-				if(  (aps.feature_number == countBond_(&atom, NULL, "SB"))
-					 ||	(aps.feature_number < 0))
+				if(hasBond_(&atom, NULL, "SB"))
 				{
-					result = true;
+					if(  (aps.feature_number == atom.getProperty("SB").getInt())
+						 ||(aps.feature_number < 0))
+						{
+							result = true;
+						}
 				}
 				break;
 			case PURE_SINGLE_BOND_TO_PARENT:
-				if(  (aps.feature_number == countBond_(&atom, &predecessor, "SB"))
-					 ||	(aps.feature_number < 0))
+				if(hasBond_(&atom, &predecessor, "SB"))
 				{
-					result = true;
+					if(  (aps.feature_number == atom.getProperty("SB").getInt())
+						 ||(aps.feature_number < 0))
+						{
+							result = true;
+						}
 				}
 				break;
 			case NO_PURE_SINGLE_BOND_TO_PARENT:
-				if(aps.feature_number != countBond_(&atom, &predecessor, "SB"))
+				if(!hasBond_(&atom, &predecessor, "SB"))
 				{
 					result = true;
 				}
 				break;
 			case SINGLE_BOND:
-				if(  (aps.feature_number == countBond_(&atom, NULL, "sb"))
-					 ||	(aps.feature_number < 0))
+				if(hasBond_(&atom, NULL, "sb"))
 				{
-					result = true;
+					if(  (aps.feature_number == atom.getProperty("sb").getInt())
+						 ||(aps.feature_number < 0))
+						{
+							result = true;
+						}
 				}
 				break;
 			case SINGLE_BOND_TO_PARENT:
-				if(  (aps.feature_number == countBond_(&atom, &predecessor, "sb"))
-					 ||	(aps.feature_number < 0))
+				if(hasBond_(&atom, &predecessor, "sb"))
 				{
-					result = true;
+					if(  (aps.feature_number == atom.getProperty("sb").getInt())
+						 ||(aps.feature_number < 0))
+						{
+							result = true;
+						}
 				}
 				break;
 			case NO_SINGLE_BOND_TO_PARENT:
-				if(aps.feature_number != countBond_(&atom, &predecessor, "sb"))
+				if(!hasBond_(&atom, &predecessor, "sb"))
 				{
 					result = true;
 				}
 				break;
 			case PURE_DOUBLE_BOND:
-				if(  (aps.feature_number == countBond_(&atom, NULL, "DB"))
-					 ||	(aps.feature_number < 0))
+				if(hasBond_(&atom, NULL, "DB"))
 				{
-					result = true;
+					if(  (aps.feature_number == atom.getProperty("DB").getInt())
+						 ||(aps.feature_number < 0))
+						{
+							result = true;
+						}
 				}
 				break;
 			case PURE_DOUBLE_BOND_TO_PARENT:
-				if(  (aps.feature_number == countBond_(&atom, &predecessor, "DB"))
-					 ||	(aps.feature_number < 0))
+				if(hasBond_(&atom, &predecessor, "DB"))
 				{
-					result = true;
+					if(  (aps.feature_number == atom.getProperty("DB").getInt())
+						 ||(aps.feature_number < 0))
+						{
+							result = true;
+						}
 				}
 				break;
 			case NO_PURE_DOUBLE_BOND_TO_PARENT:
-				if(aps.feature_number != countBond_(&atom, &predecessor, "DB"))
+				if(!hasBond_(&atom, &predecessor, "DB"))
 				{
 					result = true;
 				}
 				break;
 			case DOUBLE_BOND:
-				if(  (aps.feature_number == countBond_(&atom, NULL, "db"))
-					 ||	(aps.feature_number < 0))
+				if(hasBond_(&atom, NULL, "db"))
 				{
-					result = true;
+					if(  (aps.feature_number == atom.getProperty("db").getInt())
+						 ||(aps.feature_number < 0))
+						{
+							result = true;
+						}
 				}
 				break;
 			case DOUBLE_BOND_TO_PARENT:
-				if(  (aps.feature_number == countBond_(&atom, &predecessor, "db"))
-					 ||	(aps.feature_number < 0))
+				if(hasBond_(&atom, &predecessor, "db"))
 				{
-					result = true;
+					if(  (aps.feature_number == atom.getProperty("db").getInt())
+						 ||(aps.feature_number < 0))
+						{
+							result = true;
+						}
 				}
 				break;
 			case NO_DOUBLE_BOND_TO_PARENT:
-				if(aps.feature_number != countBond_(&atom, &predecessor, "db"))
+				if(!hasBond_(&atom, &predecessor, "db"))
 				{
 					result = true;
 				}
 				break;
 			case TRIPLE_BOND:
-				if(  (aps.feature_number == countBond_(&atom, NULL, "TB"))
-					 ||	(aps.feature_number < 0))
+				if(hasBond_(&atom, NULL, "TB"))
 				{
-					result = true;
+					if(  (aps.feature_number == atom.getProperty("TB").getInt())
+						 ||(aps.feature_number < 0))
+						{
+							result = true;
+						}
 				}
 				break;
 			case TRIPLE_BOND_TO_PARENT:
-				if(  (aps.feature_number == countBond_(&atom, &predecessor, "TB"))
-					 ||	(aps.feature_number < 0))
+				if(hasBond_(&atom, &predecessor, "TB"))
 				{
-					result = true;
+					if(  (aps.feature_number == atom.getProperty("TB").getInt())
+						 ||(aps.feature_number < 0))
+						{
+							result = true;
+						}
 				}
 				break;
 			case NO_TRIPLE_BOND_TO_PARENT:
-				if(aps.feature_number != countBond_(&atom, &predecessor, "TB"))
+				if(!hasBond_(&atom, &predecessor, "TB"))
 				{
 					result = true;
 				}
 				break;
 			case DELOCALIZED_BOND:
-				if(  (aps.feature_number == countBond_(&atom, NULL, "DL"))
-					 ||	(aps.feature_number < 0))
+				if(hasBond_(&atom, NULL, "DL"))
 				{
-					result = true;
+					if(  (aps.feature_number == atom.getProperty("DL").getInt())
+						 ||(aps.feature_number < 0))
+						{
+							result = true;
+						}
 				}
 				break;
 			case DELOCALIZED_BOND_TO_PARENT:
-				if(  (aps.feature_number == countBond_(&atom, &predecessor, "DL"))
-					 ||	(aps.feature_number < 0))
+				if(hasBond_(&atom, &predecessor, "DL"))
 				{
-					result = true;
+					if(  (aps.feature_number == atom.getProperty("DL").getInt())
+						 ||(aps.feature_number < 0))
+						{
+							result = true;
+						}
 				}
 				break;
 			case NO_DELOCALIZED_BOND_TO_PARENT:
-				if(aps.feature_number != countBond_(&atom, &predecessor, "DL"))
+				if(!hasBond_(&atom, &predecessor, "DL"))
 				{
 					result = true;
 				}
 				break;
 			case AROMATIC_BOND:
-				if(  (aps.feature_number == countBond_(&atom, NULL, "AB"))
-					 ||	(aps.feature_number < 0))
+				if(hasBond_(&atom, NULL, "AB"))
 				{
-					result = true;
+					if(  (aps.feature_number == atom.getProperty("AB").getInt())
+						 ||(aps.feature_number < 0))
+						{
+							result = true;
+						}
 				}
 				break;
 			case AROMATIC_BOND_TO_PARENT:
-				if(  (aps.feature_number == countBond_(&atom, &predecessor, "AB"))
-					 ||	(aps.feature_number < 0))
+				if(hasBond_(&atom, &predecessor, "AB"))
 				{
-					result = true;
+					if(  (aps.feature_number == atom.getProperty("AB").getInt())
+						 ||(aps.feature_number < 0))
+						{
+							result = true;
+						}
 				}
 				break;
 			case NO_AROMATIC_BOND_TO_PARENT:
-				if(aps.feature_number != countBond_(&atom, &predecessor, "AB"))
+				if(!hasBond_(&atom, &predecessor, "AB"))
 				{
 					result = true;
 				}
