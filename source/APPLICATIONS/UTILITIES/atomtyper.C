@@ -2,7 +2,7 @@
 // vi: set ts=2:
 
 #include <BALL/KERNEL/system.h>
-#include <BALL/FORMAT/HINFile.h>
+// #include <BALL/FORMAT/HINFile.h>
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/MOLMEC/AMBER/GAFFTypeProcessor.h>
 #include <BALL/STRUCTURE/assignBondOrderProcessor.h>
@@ -12,11 +12,13 @@ using namespace std;
 
 int main(int argc, char** argv){
 	
- 	String fname = "benzene.hin";
+//  	String fname = "benzene.hin";
+	String fname = "benzene.mol2";
  	if (argc > 1)
  		fname = argv[1];
 		
- 	HINFile mol(fname, std::ios::in);
+//  	HINFile mol(fname, std::ios::in);
+	MOL2File mol(fname, std::ios::in);
 
 	System S;
 	mol >> S;
@@ -35,4 +37,3 @@ int main(int argc, char** argv){
 	m << S;
 	m.close();
 }
-
