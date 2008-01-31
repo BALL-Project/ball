@@ -388,6 +388,7 @@ namespace BALL
 				}	
 			}
 		}
+		std::cout << "could not assing a type for atom " << atom.getFullName() << std::endl;
 		return false;
 	}
 

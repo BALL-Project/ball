@@ -104,7 +104,7 @@ namespace BALL
 						std::vector < std::vector< APSTerm> > aps_terms;
 
 					protected:
-						bool hasBond_(Atom* atom, Atom* predecessor, const String& bond_type);
+						bool hasBond_(Atom* atom, Atom* predecessor, const String& bond_type, int feature_number);
 			};
 
 			struct State

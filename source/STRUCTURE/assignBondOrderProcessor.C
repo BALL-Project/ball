@@ -19,6 +19,7 @@
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/expression.h>
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
+#include <BALL/KERNEL/selector.h>
 
 // Qt
 #include <BALL/VIEW/KERNEL/common.h>
@@ -240,6 +241,10 @@ cout << " \t Penalty files " << options[Option::Option::INIFile] << endl;
 cout << " \t valid : " << valid_ << endl;
 cout << endl;
 #endif
+
+		// do we have bonds in the molecule at all?
+		if (ac.countBonds() == 0)
+			return Processor::CONTINUE;
 
 		// Is the processor in a valid state?
 		if (valid_)
@@ -626,41 +631,80 @@ cout << "\nNach initialisierung : \n" << queue_.size() << endl;
 
 					if (solutions_.size() > 0)
 					{	
+						// select all carboxyl anions and nitro groups for 
+						// delocalized bond types in GAFF
+						//TODO clear Selection for system!!!
+						//for carboxyl anion COO
+						Selector select("SMARTS([#6D3](~[#8D1])(~[#8D1])) OR SMARTS([#7D3](~[#8D1])(~[#8D1]))");
+						std::cout << "smart setted"<< endl;
+						ac.apply(select);
+						std::cout << "apply"<< endl;
+						//for nitro groups NOO
+						std::cout << "2"<< endl;;
+						std::cout << "3"<< endl;
+						ac.apply(select);		
+						std::cout << "4"<< endl;				
+						List<Atom*> selected_atoms = select.getSelectedAtoms();
+						List<Atom*>::iterator it = selected_atoms.begin();					
+						for(;it != selected_atoms.end(); ++it)
+						{
+							std::cout << "it"<< endl;
+							
+							Atom::BondIterator bond_it = (*it)->beginBond();
+							for(;+bond_it;++bond_it)
+							{
+								Atom* partner = bond_it->getPartner(**it);
+								if(partner->isSelected())
+								{
+std::cout <<"setting " << std::endl;
+									bond_it->setProperty("GAFFBondType", String("DL"));
+								}
+							}
+						}
+
 						last_applied_solution_ = 0;
 						// set the bond orders and bond types of the first solution
 						AtomIterator a_it = ac.beginAtom();
-						Atom::BondIterator b_it = a_it->beginBond();
-						BALL_FOREACH_BOND(ac, a_it, b_it)
+						Atom::BondIterator b_it;
+						BALL_FOREACH_BOND(ac, a_it, b_it)						
 						{
 							b_it->setOrder(solutions_[0].bond_orders[&(*b_it)]);
 
-							// NOTE;neu dazu implementiert!!!
-							//TODO definition von  AB aromatic bond und DL delocalized bond???
-							switch(b_it->getOrder())
+							//TODO definition of  AB aromatic bond???
+							if(b_it->hasProperty("GAFFBondType"))
 							{
-								case 1:
-									if (b_it->getProperty("IsAromatic").getBool())
+								std::cout << "Property found " << b_it->getProperty("GAFFBondType").getString() << endl;
+								// b_it is no delocalized bond 
+								if(b_it->getProperty("GAFFBondType").getString() != "DL")
+								{
+									std::cout << "Property already set" << endl;
+									switch(b_it->getOrder())
 									{
-										b_it->setProperty("GAFFBondType", (String) "sb");
+										case 1:
+											if (b_it->getProperty("IsAromatic").getBool())
+											{
+												b_it->setProperty("GAFFBondType", String("sb"));
+											}
+											else
+											{
+												b_it->setProperty("GAFFBondType",  String("SB"));
+											}
+											break;
+										case 2:
+											if (b_it->getProperty("IsAromatic").getBool())
+											{
+												b_it->setProperty("GAFFBondType",  String("db"));
+											}
+											else
+											{
+												b_it->setProperty("GAFFBondType",  String("DB"));
+											}
+											break;
+										case 3:
+											b_it->setProperty("GAFFBondType", String("TB"));
+											break;
 									}
-									else
-									{
-										b_it->setProperty("GAFFBondType", (String) "SB");
-									}
-									break;
-								case 2:
-									if (b_it->getProperty("IsAromatic").getBool())
-									{
-										b_it->setProperty("GAFFBondType", (String) "db");
-									}
-									else
-									{
-										b_it->setProperty("GAFFBondType", (String) "DB");
-									}
-									break;
-								case 3:
-									b_it->setProperty("GAFFBondType", (String) "TB");
-									break;
+								}
 							}
 						}
 					}
