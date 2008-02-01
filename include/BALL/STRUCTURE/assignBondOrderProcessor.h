@@ -100,6 +100,10 @@ namespace BALL
 				 */
 				static const char* MAX_BOND_ORDER;
 
+				/** the weighting of bond length penalties wrt valence penalties
+				 */
+				static const char* BOND_LENGTH_WEIGHTING;
+
 			};
 
 			/// Default values for options
@@ -118,6 +122,7 @@ namespace BALL
 				static const String ALGORITHM;
 				static const String INIFile;
 				static const int MAX_BOND_ORDER;
+				static const float BOND_LENGTH_WEIGHTING;
 			};
 
 			struct BALL_EXPORT Algorithm//Algorithm::ComputeAllSolutions
@@ -264,7 +269,7 @@ namespace BALL
 				public:
 				
 					/// Default constructor
-					PQ_Entry_();
+					PQ_Entry_(float alpha = 0.);
 								
 					/// Copy constructor
 					PQ_Entry_(const PQ_Entry_& entry);
@@ -278,11 +283,13 @@ namespace BALL
 					/** the less operator
 					 *  note: we want a reverse sort, hence we actually return a "greater"
 					 */
-					bool operator < (const PQ_Entry_& b) const {return estimated_atom_type_penalty > b.estimated_atom_type_penalty;}
+					bool operator < (const PQ_Entry_& b) const; //estimated_atom_type_penalty > b.estimated_atom_type_penalty);}
 					
+					bool coarsePenalty() const {return (1.-alpha_) * estimated_atom_type_penalty + (alpha_* estimated_bond_length_penalty);}
+					bool finePenalty() const {return estimated_bond_length_penalty;}
+
 					/// the estimated atom type penalty
-					//estimated_f
-					float estimated_atom_type_penalty;
+					float estimated_atom_type_penalty;   //estimated_f
 					/// the estimated bond length penalty
 					float estimated_bond_length_penalty;
 
@@ -293,6 +300,8 @@ namespace BALL
 					/// the last considered bond
 					Position last_bond;
 
+					protected:
+						float alpha_;
 				};
 
 			/// computes for every atom its possible atomic valences and the corresponding possible atomic penalty scores

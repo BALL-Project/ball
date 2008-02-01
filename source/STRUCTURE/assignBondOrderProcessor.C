@@ -34,7 +34,7 @@
 #undef DEBUG_READ
 
 #define MAX__SOLUTIONS 100 // TODO: should be an option
-#define alpha 0  // TODO: should be an option, denotes the fraction of the penalty due to the deviation of bondlength from average
+//#define alpha 0  // TODO: should be an option, denotes the fraction of the penalty due to the deviation of bondlength from average
 
 using namespace std;
 using namespace BALL::VIEW;
@@ -89,6 +89,9 @@ namespace BALL
 	const String AssignBondOrderProcessor::Default::ALGORITHM = AssignBondOrderProcessor::Algorithm::A_STAR;
 	//const String AssignBondOrderProcessor::Default::COMPUTE_ALL_SOLUTIONS = AssignBondOrderProcessor::ComputeAllSolutions::DISABLED;
 		
+	const char* AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING = "bond_length_weighting";
+	const float AssignBondOrderProcessor::Default::BOND_LENGTH_WEIGHTING = 0.;
+
 	AssignBondOrderProcessor::AssignBondOrderProcessor()
 		: UnaryProcessor<AtomContainer>(),
 			options(),
@@ -403,7 +406,7 @@ cout << " Option ASTAR " << endl;
 #endif
 
 						// Initialize the priority queue
-						PQ_Entry_ entry;
+						PQ_Entry_ entry(alpha_);
 						entry.bond_orders.resize(total_num_of_bonds_,0);
 						entry.last_bond = 0;
 
@@ -942,8 +945,8 @@ cout << i<< "-" << current_start_index + i - current_start_valence << "-"<< pena
 #endif
 					// Remember: the current_start_index corresponds to the current_start_valence
 					estimated_penalty_per_valence = 
-						(  (1 - alpha) * penalties_[current_start_index + i - current_start_valence]) 
-						 + (alpha * min_bond_length_penalty_per_valence);
+						(  (1 - alpha_) * penalties_[current_start_index + i - current_start_valence]) 
+						 + (alpha_ * min_bond_length_penalty_per_valence);
 
 					if (estimated_penalty_per_valence < min)//penalties_[current_start_index + i - current_start_valence] < min)
 					{
@@ -1946,6 +1949,9 @@ cout << endl;
 		
 		options.setDefault(AssignBondOrderProcessor::Option::ALGORITHM,
 													 AssignBondOrderProcessor::Default::ALGORITHM);		
+
+		options.setDefaultReal(AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING,
+													 AssignBondOrderProcessor::Default::BOND_LENGTH_WEIGHTING);		
 	}
 
 	Size  AssignBondOrderProcessor::getNumberOfBondOrdersSet()
@@ -2370,21 +2376,23 @@ cout << endl;
 	//////////////////////////// the PQ_Entry_ - class
 	
 	// Default constructor
-	AssignBondOrderProcessor::PQ_Entry_::PQ_Entry_()
+	AssignBondOrderProcessor::PQ_Entry_::PQ_Entry_(float alpha)
 		: estimated_atom_type_penalty(0.), 
 			estimated_bond_length_penalty(0.),
 			bond_orders(),
-			last_bond()
+			last_bond(),
+			alpha_(alpha)
 	{
 	}
 
 	// Copy constructor
 	AssignBondOrderProcessor::PQ_Entry_::PQ_Entry_(const AssignBondOrderProcessor::PQ_Entry_& entry)
+		: estimated_atom_type_penalty(entry.estimated_atom_type_penalty),
+			estimated_bond_length_penalty(entry.estimated_bond_length_penalty),
+			bond_orders(entry.bond_orders),
+			last_bond(entry.last_bond),
+			alpha_(entry.alpha_)
 	{	
-		estimated_atom_type_penalty = entry.estimated_atom_type_penalty;
-		estimated_bond_length_penalty = entry.estimated_bond_length_penalty;
-		bond_orders = entry.bond_orders;
-		last_bond = entry.last_bond;
 	}
 	
 	// Destructor
@@ -2401,7 +2409,24 @@ cout << endl;
 		bond_orders.clear();
 	}
 
-
+	// the less operator
+	bool AssignBondOrderProcessor::PQ_Entry_::operator < (const PQ_Entry_& b) const 
+	{
+		bool value = false;
+		if (coarsePenalty() > b.coarsePenalty())// estimated_atom_type_penalty > b.estimated_atom_type_penalty)
+		{
+			value = true;
+		}
+		else
+		{ 
+			if (coarsePenalty() == b.coarsePenalty() && finePenalty() > b.finePenalty())
+			{
+				value = true;
+			}
+		}
+		return value; 
+	}
+	
 	// For testing // TODO: should we add the bond length penalty to the evaluation?
 	float AssignBondOrderProcessor::evaluatePenalty(AtomContainer* ac)
 	{
@@ -2413,7 +2438,7 @@ cout << endl;
 			if (preassignPenaltyClasses_() && precomputeBondLengthPenalties_())
 			{
 cout << "Preassign hat geklappt" << endl;
-				PQ_Entry_ entry;
+				PQ_Entry_ entry(alpha_);
 				
 				AtomIterator a_it = ac_->beginAtom();
 				Atom::BondIterator b_it = a_it->beginBond();
