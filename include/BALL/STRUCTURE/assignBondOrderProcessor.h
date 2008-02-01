@@ -174,12 +174,8 @@ namespace BALL
 			/// Returns the number of already computed solutions
 			Size getNumberOfComputedSolutions() {return solutions_.size();};
 
-			//// Return the ILP computed Bond order solutions
-			//vector<Solution_>& getSolutions() {return solutions_;};
-			//const vector<Solution_>& getSolutions() const {return solutions_;};
-
-			/// Returns the total penalty of the (already computed!) i-th solution
-			float getTotalPenalty(Position i) {return solutions_[i].penalty;}
+			/// Returns the total penalty of the (already computed!) i-th solution //TODO atom vs bond penalty
+			float getTotalPenalty(Position i) {return solutions_[i].atom_type_penalty;}
 			
 			/** Set the AtomContainer ac_'s bond orders to the ones found 
 			 * in the (already computed!) i-th solution.
@@ -215,6 +211,9 @@ namespace BALL
 			// for testing
 			float evaluatePenalty(AtomContainer* ac);
 
+			// for testing
+			bool rankByBondLength(); 
+
 		protected:
 			
 			/// Nested class storing the parameters of a solution to our ILP
@@ -245,14 +244,16 @@ namespace BALL
 					/// equality operator // TODO
 					bool operator == (Solution_ b);
 
-					/// denotes whether the ILP could be solved or not  
+					/// denotes whether the problem could be solved or not  
 					bool valid;
 					
 					/// the result : the complete set of bond orders for _ALL_ bonds
 					HashMap<Bond*, int> bond_orders;
 
-					/// the value of the objective function
-					float penalty;	
+					/// the values of the objective function
+					//float penalty;	
+					float atom_type_penalty;
+					float bond_length_penalty;
 			};
 			
 			/// Nested class storing a priority queue entry for the A-STAR-Option
@@ -274,16 +275,16 @@ namespace BALL
 					/// 
 					void clear();
 					
-					/// estimate f
-					//void estimatePenalty();
-					
 					/** the less operator
 					 *  note: we want a reverse sort, hence we actually return a "greater"
 					 */
-					bool operator < (const PQ_Entry_& b) const {return estimated_f > b.estimated_f;}
+					bool operator < (const PQ_Entry_& b) const {return estimated_atom_type_penalty > b.estimated_atom_type_penalty;}
 					
-					/// the f (the estimated penalty)
-					float estimated_f;
+					/// the estimated atom type penalty
+					//estimated_f
+					float estimated_atom_type_penalty;
+					/// the estimated bond length penalty
+					float estimated_bond_length_penalty;
 
 					/// the bond orders 
 					/// the i-th entry denotes the bondorder of the i-th bond 
@@ -363,7 +364,7 @@ namespace BALL
 			vector<Solution_> solutions_;
 			
 			/// the optimal penalty // TODO: Konsturktor, getMehtod... filled correctly in all applications?
-			int optimal_penalty_;
+			int optimal_penalty_; // TODO atomtype vs bond length penalty
 		
 		
 			/// TODO: Konstruktor.... apply-methods
@@ -394,6 +395,10 @@ namespace BALL
 			/// returns true, if the entry is still valid
 			bool estimatePenalty_(PQ_Entry_& entry);
 
+			/// Method to combine the atom type and bond length penalty
+			/// the balance parameter is alpha_
+			float combinedAtomAndBondPenalty_(PQ_Entry_& entry);
+
 			// filled by readAtomPenalties_
 			// organized in imaginarey blocks of length  
 			// block_to_length_[i], starting from 
@@ -416,6 +421,9 @@ namespace BALL
 	
 			/// max bond order to consider
 			int max_bond_order_;
+
+			/// balance parameter between atom type and bond length penalty
+			float alpha_; //TODO aus option //TODO: makro ersetzen!
 	};
 
 } // namespace BALL 
