@@ -627,29 +627,20 @@ cout << "\nNach initialisierung : \n" << queue_.size() << endl;
 						// select all carboxyl anions and nitro groups for 
 						// delocalized bond types in GAFF
 						//TODO clear Selection for system!!!
-						//for carboxyl anion COO
+						//for carboxyl anion COO and nitro NOO
 						Selector select("SMARTS([#6D3](~[#8D1])(~[#8D1])) OR SMARTS([#7D3](~[#8D1])(~[#8D1]))");
-						std::cout << "smart setted"<< endl;
 						ac.apply(select);
-						std::cout << "apply"<< endl;
-						//for nitro groups NOO
-						std::cout << "2"<< endl;;
-						std::cout << "3"<< endl;
-						ac.apply(select);		
-						std::cout << "4"<< endl;				
+
 						List<Atom*> selected_atoms = select.getSelectedAtoms();
 						List<Atom*>::iterator it = selected_atoms.begin();					
 						for(;it != selected_atoms.end(); ++it)
 						{
-							std::cout << "it"<< endl;
-							
 							Atom::BondIterator bond_it = (*it)->beginBond();
 							for(;+bond_it;++bond_it)
 							{
 								Atom* partner = bond_it->getPartner(**it);
 								if(partner->isSelected())
 								{
-std::cout <<"setting " << std::endl;
 									bond_it->setProperty("GAFFBondType", String("DL"));
 								}
 							}
