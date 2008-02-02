@@ -624,7 +624,7 @@ cout << "\nNach initialisierung : \n" << queue_.size() << endl;
 						}
 						else
 						{	
-							cout << "No solution compted! -solsize:" <<  solutions_.size() << " - no free bonds:" <<  total_num_of_bonds_ - num_fixed_bonds << " - valid " << (solutions_.size()>0 ? solutions_[0].valid : false) << std::endl;
+							cout << "No solution computed! -solsize:" <<  solutions_.size() << " - no free bonds:" <<  total_num_of_bonds_ - num_fixed_bonds << " - valid " << (solutions_.size()>0 ? solutions_[0].valid : false) << std::endl;
 							//cout << "Too many bonds " << total_no_bonds - num_fixed_bonds << std::endl;
 						}
 					}
@@ -662,39 +662,35 @@ cout << "\nNach initialisierung : \n" << queue_.size() << endl;
 							b_it->setOrder(solutions_[0].bond_orders[&(*b_it)]);
 
 							//TODO definition of  AB aromatic bond???
-							if(b_it->hasProperty("GAFFBondType"))
+
+							// b_it is no delocalized bond 
+							if(!b_it->hasProperty("GAFFBondType") || (b_it->getProperty("GAFFBondType").getString() != "DL"))
 							{
-								std::cout << "Property found " << b_it->getProperty("GAFFBondType").getString() << endl;
-								// b_it is no delocalized bond 
-								if(b_it->getProperty("GAFFBondType").getString() != "DL")
+								switch(b_it->getOrder())
 								{
-									std::cout << "Property already set" << endl;
-									switch(b_it->getOrder())
-									{
-										case 1:
-											if (b_it->getProperty("IsAromatic").getBool())
-											{
-												b_it->setProperty("GAFFBondType", String("sb"));
-											}
-											else
-											{
-												b_it->setProperty("GAFFBondType",  String("SB"));
-											}
-											break;
-										case 2:
-											if (b_it->getProperty("IsAromatic").getBool())
-											{
-												b_it->setProperty("GAFFBondType",  String("db"));
-											}
-											else
-											{
-												b_it->setProperty("GAFFBondType",  String("DB"));
-											}
-											break;
-										case 3:
-											b_it->setProperty("GAFFBondType", String("TB"));
-											break;
-									}
+									case 1:
+										if (b_it->getProperty("IsAromatic").getBool())
+										{
+											b_it->setProperty("GAFFBondType", String("sb"));
+										}
+										else
+										{
+											b_it->setProperty("GAFFBondType",  String("SB"));
+										}
+										break;
+									case 2:
+										if (b_it->getProperty("IsAromatic").getBool())
+										{
+											b_it->setProperty("GAFFBondType",  String("db"));
+										}
+										else
+										{
+											b_it->setProperty("GAFFBondType",  String("DB"));
+										}
+										break;
+									case 3:
+										b_it->setProperty("GAFFBondType", String("TB"));
+										break;
 								}
 							}
 						}

@@ -356,7 +356,6 @@ namespace BALL
 		for (Position i=0; i<type_defs.size(); i++)
 		{
 			TypeDefinition& typeDefinition = type_defs[i];
-
 			//all fields with "*" are invalid and therefore considered as True
 			if(atom.getProperty("connectivity").getInt() == typeDefinition.connectivity)
 			{
