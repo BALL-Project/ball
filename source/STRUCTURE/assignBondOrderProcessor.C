@@ -18,10 +18,7 @@
 #include <BALL/QSAR/aromaticityProcessor.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/expression.h>
-<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
-=======
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
->>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 #include <BALL/KERNEL/selector.h>
 
 // Qt
@@ -404,16 +401,9 @@ cout << endl;
 				if (preassignPenaltyClasses_() && precomputeBondLengthPenalties_())
 				{
 					//if (options.get(Option::COMPUTE_ALL_SOLUTIONS) == ComputeAllSolutions::A_STAR)
-<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
-			
-=======
->>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
+
 					if (options.get(Option::ALGORITHM) == Algorithm::A_STAR)
 					{
-<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
-					
-=======
->>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 						// Initialize a priority queue and try to find a first solution
 						// Further solutions will be computed calling the method computeNextSolution
 
@@ -645,46 +635,18 @@ cout << "\nNach initialisierung : \n" << queue_.size() << endl;
 						// select all carboxyl anions and nitro groups for 
 						// delocalized bond types in GAFF
 						//TODO clear Selection for system!!!
-<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
-						//for carboxyl anion COO
-=======
-						//for carboxyl anion COO and nitro NOO
->>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 						Selector select("SMARTS([#6D3](~[#8D1])(~[#8D1])) OR SMARTS([#7D3](~[#8D1])(~[#8D1]))");
-<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
-						std::cout << "smart setted"<< endl;
-=======
->>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 						ac.apply(select);
-<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
-						std::cout << "apply"<< endl;
-						//for nitro groups NOO
-						std::cout << "2"<< endl;;
-						std::cout << "3"<< endl;
-						ac.apply(select);		
-						std::cout << "4"<< endl;				
-=======
-
->>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 						List<Atom*> selected_atoms = select.getSelectedAtoms();
 						List<Atom*>::iterator it = selected_atoms.begin();					
 						for(;it != selected_atoms.end(); ++it)
 						{
-<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
-							std::cout << "it"<< endl;
-							
-=======
->>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 							Atom::BondIterator bond_it = (*it)->beginBond();
 							for(;+bond_it;++bond_it)
 							{
 								Atom* partner = bond_it->getPartner(**it);
 								if(partner->isSelected())
 								{
-<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
-std::cout <<"setting " << std::endl;
-=======
->>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 									bond_it->setProperty("GAFFBondType", String("DL"));
 								}
 							}
@@ -698,52 +660,12 @@ std::cout <<"setting " << std::endl;
 						{
 							b_it->setOrder(solutions_[0].bond_orders[&(*b_it)]);
 
-							//TODO definition of  AB aromatic bond???
-<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
-							if(b_it->hasProperty("GAFFBondType"))
-=======
-
-							// b_it is no delocalized bond 
+							//TODO definition of  AB aromatic bond??
+						// b_it is no delocalized bond 
 							if(!b_it->hasProperty("GAFFBondType") || (b_it->getProperty("GAFFBondType").getString() != "DL"))
->>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 							{
-<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
-								std::cout << "Property found " << b_it->getProperty("GAFFBondType").getString() << endl;
-								// b_it is no delocalized bond 
-								if(b_it->getProperty("GAFFBondType").getString() != "DL")
-=======
 								switch(b_it->getOrder())
->>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 								{
-<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
-									std::cout << "Property already set" << endl;
-									switch(b_it->getOrder())
-									{
-										case 1:
-											if (b_it->getProperty("IsAromatic").getBool())
-											{
-												b_it->setProperty("GAFFBondType", String("sb"));
-											}
-											else
-											{
-												b_it->setProperty("GAFFBondType",  String("SB"));
-											}
-											break;
-										case 2:
-											if (b_it->getProperty("IsAromatic").getBool())
-											{
-												b_it->setProperty("GAFFBondType",  String("db"));
-											}
-											else
-											{
-												b_it->setProperty("GAFFBondType",  String("DB"));
-											}
-											break;
-										case 3:
-											b_it->setProperty("GAFFBondType", String("TB"));
-											break;
-									}
-=======
 									case 1:
 										if (b_it->getProperty("IsAromatic").getBool())
 										{
@@ -767,7 +689,6 @@ std::cout <<"setting " << std::endl;
 									case 3:
 										b_it->setProperty("GAFFBondType", String("TB"));
 										break;
->>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 								}
 							}
 						}
