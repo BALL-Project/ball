@@ -222,13 +222,16 @@ namespace BALL
 				return !hasBond_(&atom, &predecessor, "SB", aps.feature_number);
 				break;
 			case SINGLE_BOND:
-				return hasBond_(&atom, NULL, "sb", aps.feature_number);
+				return ( (hasBond_(&atom, NULL, "sb", aps.feature_number)) 
+								|| (hasBond_(&atom, NULL, "SB", aps.feature_number)));
 				break;
 			case SINGLE_BOND_TO_PARENT:
-				return hasBond_(&atom, &predecessor, "sb", aps.feature_number);
+				return ((hasBond_(&atom, &predecessor, "sb", aps.feature_number))
+								||(hasBond_(&atom, &predecessor, "SB", aps.feature_number)));
 				break;
 			case NO_SINGLE_BOND_TO_PARENT:
-				return !hasBond_(&atom, &predecessor, "sb", aps.feature_number);
+				return ((!hasBond_(&atom, &predecessor, "sb", aps.feature_number))
+ 								&& (!hasBond_(&atom, &predecessor, "SB", aps.feature_number)));
 				break;
 			case PURE_DOUBLE_BOND:
 				return hasBond_(&atom, NULL, "DB", aps.feature_number);
@@ -240,13 +243,16 @@ namespace BALL
 				return !hasBond_(&atom, &predecessor, "DB", aps.feature_number);
 				break;
 			case DOUBLE_BOND:
-				return hasBond_(&atom, NULL, "db", aps.feature_number);
+				return ( (hasBond_(&atom, NULL, "db", aps.feature_number)) 
+								|| (hasBond_(&atom, NULL, "DB", aps.feature_number)));
 				break;
 			case DOUBLE_BOND_TO_PARENT:
-				return hasBond_(&atom, &predecessor, "db", aps.feature_number);
+				return ((hasBond_(&atom, &predecessor, "db", aps.feature_number))
+								||(hasBond_(&atom, &predecessor, "DB", aps.feature_number)));
 				break;
 			case NO_DOUBLE_BOND_TO_PARENT:
-				return !hasBond_(&atom, &predecessor, "db", aps.feature_number);
+				return ((!hasBond_(&atom, &predecessor, "db", aps.feature_number))
+ 								&& (!hasBond_(&atom, &predecessor, "DB", aps.feature_number)));
 				break;
 			case TRIPLE_BOND:
 				return hasBond_(&atom, NULL, "TB", aps.feature_number);
