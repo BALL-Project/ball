@@ -18,6 +18,10 @@
 #include <BALL/QSAR/aromaticityProcessor.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/expression.h>
+<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
+=======
+#include <BALL/STRUCTURE/buildBondsProcessor.h>
+>>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 #include <BALL/KERNEL/selector.h>
 
 // Qt
@@ -33,7 +37,8 @@
 //#define DEBUG_READ 1
 #undef DEBUG_READ
 
-#define MAX__SOLUTIONS 100 // TODO: should be a option
+#define MAX__SOLUTIONS 100 // TODO: should be an option
+//#define alpha 0  // TODO: should be an option, denotes the fraction of the penalty due to the deviation of bondlength from average
 
 using namespace std;
 using namespace BALL::VIEW;
@@ -80,11 +85,17 @@ namespace BALL
 	const char* AssignBondOrderProcessor::Option::INIFile = "iniFile";
 	const String  AssignBondOrderProcessor::Default::INIFile = "/bond_lengths/BondOrder.xml";
 
+	const char* AssignBondOrderProcessor::Option::MAX_BOND_ORDER = "max_bond_order";
+	const int  AssignBondOrderProcessor::Default::MAX_BOND_ORDER = 3;
+
 	const char* AssignBondOrderProcessor::Option::ALGORITHM = "algorithm";
 	//const char* AssignBondOrderProcessor::Option::COMPUTE_ALL_SOLUTIONS = "compute_all_solutions";
 	const String AssignBondOrderProcessor::Default::ALGORITHM = AssignBondOrderProcessor::Algorithm::A_STAR;
 	//const String AssignBondOrderProcessor::Default::COMPUTE_ALL_SOLUTIONS = AssignBondOrderProcessor::ComputeAllSolutions::DISABLED;
 		
+	const char* AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING = "bond_length_weighting";
+	const float AssignBondOrderProcessor::Default::BOND_LENGTH_WEIGHTING = 0.;
+
 	AssignBondOrderProcessor::AssignBondOrderProcessor()
 		: UnaryProcessor<AtomContainer>(),
 			options(),
@@ -138,6 +149,7 @@ namespace BALL
 		atomic_penalty_scores_.clear();
 		ac_ = 0;
 		valid_ = readAtomPenalties_();
+		max_bond_order_ = options.getInteger(Option::MAX_BOND_ORDER);
 		return true;
 	}
 
@@ -155,7 +167,7 @@ cout << "queue size : " << queue_.size();
 			queue_.pop();
 
 #ifdef DEBUG
-cout << "  f: " << entry.estimated_f << " " ;
+cout << "  atom type f: " << estimated_atom_type_penalty << " " ;
 for (Size i = 0; i< entry.bond_orders.size(); i++)
 {
 	cout << " " <<   entry.bond_orders[i] ;
@@ -192,7 +204,7 @@ cout << endl;
 				else // the next bond is free
 				{
 					// try all bond orders
-					for (int i = 1; i < 5; i++)
+					for (int i = 1; i <= max_bond_order_; i++)
 					{
 						entry.bond_orders[entry.last_bond] = i;
 
@@ -389,13 +401,19 @@ cout << endl;
 				
 				// Generate penalty values for all atoms in the AtomContainer ac
 				calculateAtomPenalties_(ac); // TODO: Umstellung auf readAtomPenalties!
-				if (preassignPenaltyClasses_())
+				if (preassignPenaltyClasses_() && precomputeBondLengthPenalties_())
 				{
 					//if (options.get(Option::COMPUTE_ALL_SOLUTIONS) == ComputeAllSolutions::A_STAR)
+<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
 			
+=======
+>>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 					if (options.get(Option::ALGORITHM) == Algorithm::A_STAR)
 					{
+<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
 					
+=======
+>>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 						// Initialize a priority queue and try to find a first solution
 						// Further solutions will be computed calling the method computeNextSolution
 
@@ -404,7 +422,7 @@ cout << " Option ASTAR " << endl;
 #endif
 
 						// Initialize the priority queue
-						PQ_Entry_ entry;
+						PQ_Entry_ entry(alpha_);
 						entry.bond_orders.resize(total_num_of_bonds_,0);
 						entry.last_bond = 0;
 
@@ -422,7 +440,7 @@ cout << " Option ASTAR " << endl;
 						}
 						else // Bond is free -> try all bond orders
 						{
-							for (int i = 1; i < 5; i++)
+							for (int i = 1; i <= max_bond_order_; i++)
 							{
 								// Set the bond order
 								entry.bond_orders[0] = i;
@@ -617,7 +635,7 @@ cout << "\nNach initialisierung : \n" << queue_.size() << endl;
 						}
 						else
 						{	
-							cout << "No solution compted! -solsize:" <<  solutions_.size() << " - no free bonds:" <<  total_num_of_bonds_ - num_fixed_bonds << " - valid " << (solutions_.size()>0 ? solutions_[0].valid : false) << std::endl;
+							cout << "No solution computed! -solsize:" <<  solutions_.size() << " - no free bonds:" <<  total_num_of_bonds_ - num_fixed_bonds << " - valid " << (solutions_.size()>0 ? solutions_[0].valid : false) << std::endl;
 							//cout << "Too many bonds " << total_no_bonds - num_fixed_bonds << std::endl;
 						}
 					}
@@ -627,29 +645,46 @@ cout << "\nNach initialisierung : \n" << queue_.size() << endl;
 						// select all carboxyl anions and nitro groups for 
 						// delocalized bond types in GAFF
 						//TODO clear Selection for system!!!
+<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
 						//for carboxyl anion COO
+=======
+						//for carboxyl anion COO and nitro NOO
+>>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 						Selector select("SMARTS([#6D3](~[#8D1])(~[#8D1])) OR SMARTS([#7D3](~[#8D1])(~[#8D1]))");
+<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
 						std::cout << "smart setted"<< endl;
+=======
+>>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 						ac.apply(select);
+<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
 						std::cout << "apply"<< endl;
 						//for nitro groups NOO
 						std::cout << "2"<< endl;;
 						std::cout << "3"<< endl;
 						ac.apply(select);		
 						std::cout << "4"<< endl;				
+=======
+
+>>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 						List<Atom*> selected_atoms = select.getSelectedAtoms();
 						List<Atom*>::iterator it = selected_atoms.begin();					
 						for(;it != selected_atoms.end(); ++it)
 						{
+<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
 							std::cout << "it"<< endl;
 							
+=======
+>>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 							Atom::BondIterator bond_it = (*it)->beginBond();
 							for(;+bond_it;++bond_it)
 							{
 								Atom* partner = bond_it->getPartner(**it);
 								if(partner->isSelected())
 								{
+<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
 std::cout <<"setting " << std::endl;
+=======
+>>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 									bond_it->setProperty("GAFFBondType", String("DL"));
 								}
 							}
@@ -664,12 +699,23 @@ std::cout <<"setting " << std::endl;
 							b_it->setOrder(solutions_[0].bond_orders[&(*b_it)]);
 
 							//TODO definition of  AB aromatic bond???
+<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
 							if(b_it->hasProperty("GAFFBondType"))
+=======
+
+							// b_it is no delocalized bond 
+							if(!b_it->hasProperty("GAFFBondType") || (b_it->getProperty("GAFFBondType").getString() != "DL"))
+>>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 							{
+<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
 								std::cout << "Property found " << b_it->getProperty("GAFFBondType").getString() << endl;
 								// b_it is no delocalized bond 
 								if(b_it->getProperty("GAFFBondType").getString() != "DL")
+=======
+								switch(b_it->getOrder())
+>>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 								{
+<<<<<<< HEAD:source/STRUCTURE/assignBondOrderProcessor.C
 									std::cout << "Property already set" << endl;
 									switch(b_it->getOrder())
 									{
@@ -697,6 +743,31 @@ std::cout <<"setting " << std::endl;
 											b_it->setProperty("GAFFBondType", String("TB"));
 											break;
 									}
+=======
+									case 1:
+										if (b_it->getProperty("IsAromatic").getBool())
+										{
+											b_it->setProperty("GAFFBondType", String("sb"));
+										}
+										else
+										{
+											b_it->setProperty("GAFFBondType",  String("SB"));
+										}
+										break;
+									case 2:
+										if (b_it->getProperty("IsAromatic").getBool())
+										{
+											b_it->setProperty("GAFFBondType",  String("db"));
+										}
+										else
+										{
+											b_it->setProperty("GAFFBondType",  String("DB"));
+										}
+										break;
+									case 3:
+										b_it->setProperty("GAFFBondType", String("TB"));
+										break;
+>>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/STRUCTURE/assignBondOrderProcessor.C
 								}
 							}
 						}
@@ -717,9 +788,9 @@ std::cout <<"setting " << std::endl;
 	{
 ////cout << depth+1 << std::endl;
 		Solution_ sol = Solution_(this, ac);
-//cout << "penalty: " <<  sol.penalty << " "<< optimal_penalty_ ;//<< std::endl;
+//cout << "penalty: " <<  sol.atom_type_penalty << " "<< optimal_penalty_ ;//<< std::endl;
 		bool last_bond = true;
-		if (sol.valid && (sol.penalty == optimal_penalty_))
+		if (sol.valid && (sol.atom_type_penalty == optimal_penalty_))
 		{
 ////cout << "   has a opti sol with ";// << std::endl;
 			// store this solution
@@ -833,8 +904,11 @@ cout << " - - PE - - - - - - - - " << endl;
 		Atom::BondIterator b_it; 
 		int valence = 0; 			// the so far fixed valence of the considered atom
 		bool closed = true;  	// are all bonds of this atom fixed? 
-		int f = 0;
+		float estimated_atom_penalty = 0.;
+		float estimated_bond_penalty = 0.;
+		float current_bond_length_penalty = 0; // lenght penalty of the bonds already set
 		bool valid = true;
+		int num_free_bonds = 0;
 
 		// evaluate all atom penalties
 		for (; a_it != ac_->endAtom() && valid ; a_it++)
@@ -842,22 +916,32 @@ cout << " - - PE - - - - - - - - " << endl;
 #ifdef DEBUG
 cout << " ++A+++++++++++++++" << endl;
 #endif
-
+			vector<Bond*> free_bonds;
 			valence = 0;
+			current_bond_length_penalty = 0;
 			closed = true;
+			num_free_bonds = 0;
+
 			for (b_it = a_it->beginBond(); +b_it; b_it++) 
 			{			
 				// do we have a valid bond? 
-				if (bond_to_index_.find(&*b_it) != bond_to_index_.end())
+				if (   (bond_to_index_.find(&*b_it) != bond_to_index_.end())
+						&& (bond_lengths_penalties_.find(&*b_it)) != bond_lengths_penalties_.end())
 				{
 					// is this bond already fixed?
 					if (bond_to_index_[&*b_it] <= (Index)entry.last_bond)
 					{
+							
+						int order = entry.bond_orders[bond_to_index_[&*b_it]];
+						valence += order;
+						
+						// store the bond length penalty
+						current_bond_length_penalty += bond_lengths_penalties_[&*b_it][order]; 
 
 #ifdef DEBUG
-cout << "  * bond " << bond_to_index_[&*b_it] << "(" << b_it->getFirstAtom()->getFullName() << "-" << b_it->getSecondAtom()->getFullName() <<")" << " fixed by " << entry.bond_orders[bond_to_index_[&*b_it]] << endl;
+cout << "  * bond " << bond_to_index_[&*b_it] << "(" << b_it->getFirstAtom()->getFullName() << "-" << b_it->getSecondAtom()->getFullName() <<")" << " fixed by " << entry.bond_orders[bond_to_index_[&*b_it]]  << " bond len penalty: " << bond_lengths_penalties_[&*b_it][order] << endl;
 #endif
-						valence += entry.bond_orders[bond_to_index_[&*b_it]];
+
 					}
 					else
 					{
@@ -866,6 +950,8 @@ cout << "  * bond " << bond_to_index_[&*b_it] << "(" << b_it->getFirstAtom()->ge
 cout << "  * free bond " << endl;
 #endif
 						closed = false;
+						num_free_bonds++;
+						free_bonds.push_back(&*b_it);
 					}
 				}
 				else
@@ -907,7 +993,7 @@ cout << "  * atom " << a_it->getFullName() << " is block " << block +1 << " : "
 			int current_start_index   = block_to_start_idx_[block];
 
 			// is the valence found already greater than the largest for this atom type?
-			if (valence > current_end_valence)
+			if (valence + num_free_bonds > current_end_valence)
 			{
 
 #ifdef DEBUG
@@ -926,11 +1012,15 @@ cout << "  * atom " <<   a_it->getFullName() << " fixed with valence " << valenc
 				// is the valence large enough for this atom type?
 				if (valence >= current_start_valence)
 				{
+					//TODO: wie wollen wirs nun machen??
 					// add the actual penalty
-					f += penalties_[current_start_index + valence - current_start_valence];
+					// estimated_atom_penalty +=  ((1-alpha)*penalties_[current_start_index + valence - current_start_valence])
+					//		 +(alpha * current_bond_length_penalty);
+					estimated_atom_penalty   +=  penalties_[current_start_index + valence - current_start_valence];
+					estimated_bond_penalty   +=  current_bond_length_penalty;
 
 #ifdef DEBUG
-cout << " and penalty " << f << endl;
+cout << " and penalty " << estimated_atom_penalty << endl;
 #endif
 				}
 				else
@@ -950,35 +1040,78 @@ cout << "  * atom " <<   a_it->getFullName() << " has to be evaluted starting fr
 #endif
 
 				// we have to estimate the penalty heuristically 
-				int min = 0;
-				Position i = (valence < current_start_valence) 
+				// at which penalty position are we at the moment?
+				Position i = (valence + num_free_bonds < current_start_valence) 
 										? current_start_valence
-										: valence;
+										: valence + num_free_bonds;
 
+				// the minimal penalty of all possible valence states for this atom
+				float min = std::numeric_limits<float>::max();
+				//
+				float estimated_penalty_per_valence = 0;
+				float min_bond_length_penalty_per_valence = std::numeric_limits<float>::max();
+
+				// for every remaining valence
 				for (; i <= (Position)current_end_valence; i++)
 				{
+					// estimate the bond-length-penalty
+					min_bond_length_penalty_per_valence = 0;//std::numeric_limits<float>::max();
+					
+					// for every free bond
+					for (Size fb=0; fb < free_bonds.size(); fb++)
+					{
+						float min_bond_length_penalty_per_bond = std::numeric_limits<float>::max();
+						
+						// zuvergebende valenzen für freie bindungen = i - valence -(num_free_bonds-1)
+						for (Size j = 1; j <= i-valence-(num_free_bonds-1); j++)
+						{
+							int order = entry.bond_orders[bond_to_index_[free_bonds[fb]]];
+							float deviation = bond_lengths_penalties_[free_bonds[fb]][order]; 
+							
+							if (deviation < min_bond_length_penalty_per_bond )
+							{
+								min_bond_length_penalty_per_bond = deviation;
+							}
+						}
+
+						min_bond_length_penalty_per_valence += min_bond_length_penalty_per_bond;
+					}
 
 #ifdef DEBUG
 cout << i<< "-" << current_start_index + i - current_start_valence << "-"<< penalties_[current_start_index + i - current_start_valence] <<  " , ";
 #endif
-					if (penalties_[current_start_index + i - current_start_valence] < min)
+					// Remember: the current_start_index corresponds to the current_start_valence
+					estimated_penalty_per_valence = 
+						(  (1 - alpha_) * penalties_[current_start_index + i - current_start_valence]) 
+						 + (alpha_ * min_bond_length_penalty_per_valence);
+
+					if (estimated_penalty_per_valence < min)//penalties_[current_start_index + i - current_start_valence] < min)
 					{
-						min = penalties_[current_start_index + i - current_start_valence];
+						min = estimated_penalty_per_valence;
+						//min = penalties_[current_start_index + i - current_start_valence];	
 					}
 				}
-				f += min;
+				estimated_atom_penalty += min;
 
 #ifdef DEBUG
-cout << " )  possible min f = " << min << endl;			
+cout << " )  possible min estimated_atom_penalty = " << min << endl;			
 #endif
 
 			}
 		} // end of for all atoms
 
-		// store the computed f
-		entry.estimated_f = f;
+		// store the computed atom type penalty
+		entry.estimated_atom_type_penalty = estimated_atom_penalty;
 		
+		//store the computed bond length penalty
+		entry.estimated_bond_length_penalty = estimated_bond_penalty;
+
 		return true;
+	}
+	
+	float AssignBondOrderProcessor::combinedAtomAndBondPenalty_(PQ_Entry_& entry)
+	{
+		return  ((1-alpha_) * entry.estimated_atom_type_penalty)+ (alpha_ * entry.estimated_bond_length_penalty);
 	}
 
 	void AssignBondOrderProcessor::calculateAtomPenalties_(AtomContainer& ac)
@@ -1782,6 +1915,58 @@ cout << " )  possible min f = " << min << endl;
 
 		} // next block
 
+	
+		return true;
+	}
+	
+	bool AssignBondOrderProcessor::precomputeBondLengthPenalties_()	
+	{
+		if (!valid_)
+		{	
+			Log.error() << "AssignBondOrderProcessor: The processors state is invalid." << endl;
+			return false;
+		}
+
+		// determine for each bond its average bond lengths	 and store them in bond_lengths_penalties_
+		if (ac_)
+		{	
+			// get the averaged bond lengths
+			BuildBondsProcessor bbp; 
+			HashMap<Size, HashMap<Size, HashMap<Bond::BondOrder, float> > > bond_lengths = bbp.getBondMap();
+
+			// 
+			AtomIterator a_it = ac_->beginAtom();
+			Atom::BondIterator b_it = a_it->beginBond();
+			BALL_FOREACH_BOND(*ac_, a_it, b_it)
+			{
+				// the precomputed bond length penalties
+				vector<float> penalties(max_bond_order_ + 1,0.);
+				// the bond atoms 
+				Size atom_num1 = b_it->getFirstAtom()->getElement().getAtomicNumber();
+				Size atom_num2 = b_it->getSecondAtom()->getElement().getAtomicNumber();
+				// the averaged bond length of atom1 and atom2
+ 				HashMap<Bond::BondOrder, float> tmp_bond_lengths =  bond_lengths[atom_num1][atom_num2];
+				// the current bond length
+				float bond_length = b_it->getLength();	
+
+				// for all possible bond orders precompute the penalties
+				// here we try square deviation
+				// NOTE: we ommit the aromatic bonds!
+				for (Size i = 1; i <= (unsigned int)max_bond_order_; i++)
+				{
+					penalties[i] = pow((bond_length - tmp_bond_lengths[(Bond::BondOrder)i]),(int)2);
+				}
+
+				// store the b_it's penalties in the hashmap
+				bond_lengths_penalties_[&(*b_it)] = penalties;
+			}
+
+		}
+		else
+		{
+			valid_ = false;
+			return false;
+		}
 		return true;
 	}
 
@@ -1852,6 +2037,7 @@ cout << "Treffer : " << at->getFullName() << " " << block_definition_[j].first <
 		{
 			Log.error() << "AssignBondOrderProcessor: There was no valid AtomContainer set." << endl;
 		}
+		
 /*cout << "Penalties: " ;
 for (Size i =0; i<penalties_.size(); i++)
 {
@@ -1895,8 +2081,14 @@ cout << endl;
 		options.setDefault(AssignBondOrderProcessor::Option::INIFile,
 													 AssignBondOrderProcessor::Default::INIFile);		
 		
+		options.setDefault(AssignBondOrderProcessor::Option::MAX_BOND_ORDER,
+													 AssignBondOrderProcessor::Default::MAX_BOND_ORDER);		
+		
 		options.setDefault(AssignBondOrderProcessor::Option::ALGORITHM,
 													 AssignBondOrderProcessor::Default::ALGORITHM);		
+
+		options.setDefaultReal(AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING,
+													 AssignBondOrderProcessor::Default::BOND_LENGTH_WEIGHTING);		
 	}
 
 	Size  AssignBondOrderProcessor::getNumberOfBondOrdersSet()
@@ -1967,14 +2159,16 @@ cout << endl;
 	AssignBondOrderProcessor::Solution_::Solution_()
 		: valid(false),
 			bond_orders(),
-			penalty(0)
+			atom_type_penalty(0.),
+			bond_length_penalty(0.)
 	{
 	}
 
 	AssignBondOrderProcessor::Solution_::Solution_(AssignBondOrderProcessor* ap, const PQ_Entry_& entry)
 		: valid(true),
 			bond_orders(),
-			penalty(entry.estimated_f)
+		  atom_type_penalty(entry.estimated_atom_type_penalty),
+			bond_length_penalty(entry.estimated_bond_length_penalty)
 	{
 		if (entry.bond_orders.size() != ap->index_to_bond_.size())
 		{
@@ -2247,8 +2441,8 @@ cout << endl;
 		if (ret == OPTIMAL)
 		{
 			// Get the value of the objective function
-			penalty = (int)get_objective(lp);
-cout << " Penalty: " << penalty << endl;
+			atom_type_penalty = (int)get_objective(lp);
+//cout << " Penalty: " << estimated_atom_type_penalty << endl;
 			// Get variables
 			REAL *vars;
 			get_ptr_variables(lp, &vars);
@@ -2311,26 +2505,31 @@ cout << " Penalty: " << penalty << endl;
 	void AssignBondOrderProcessor::Solution_::clear()
 	{
 		valid = false;
-		bond_orders.clear();
-		penalty = 0;
+		bond_orders.clear();	
+		atom_type_penalty = 0.;
+		bond_length_penalty = 0.;
 	}
 	
 	//////////////////////////// the PQ_Entry_ - class
 	
 	// Default constructor
-	AssignBondOrderProcessor::PQ_Entry_::PQ_Entry_()
-		: estimated_f(0),
+	AssignBondOrderProcessor::PQ_Entry_::PQ_Entry_(float alpha)
+		: estimated_atom_type_penalty(0.), 
+			estimated_bond_length_penalty(0.),
 			bond_orders(),
-			last_bond()
+			last_bond(),
+			alpha_(alpha)
 	{
 	}
 
 	// Copy constructor
 	AssignBondOrderProcessor::PQ_Entry_::PQ_Entry_(const AssignBondOrderProcessor::PQ_Entry_& entry)
+		: estimated_atom_type_penalty(entry.estimated_atom_type_penalty),
+			estimated_bond_length_penalty(entry.estimated_bond_length_penalty),
+			bond_orders(entry.bond_orders),
+			last_bond(entry.last_bond),
+			alpha_(entry.alpha_)
 	{	
-		estimated_f = entry.estimated_f;
-		bond_orders = entry.bond_orders;
-		last_bond = entry.last_bond;
 	}
 	
 	// Destructor
@@ -2341,24 +2540,42 @@ cout << " Penalty: " << penalty << endl;
 	// clear-method
 	void AssignBondOrderProcessor::PQ_Entry_::clear()
 	{ 
-		estimated_f = 0;
+		estimated_atom_type_penalty = 0.;
+		estimated_bond_length_penalty = 0.;
 		last_bond = 0;
 		bond_orders.clear();
 	}
 
-
-	// For testing
-	int AssignBondOrderProcessor::evaluatePenalty(AtomContainer* ac)
+	// the less operator
+	bool AssignBondOrderProcessor::PQ_Entry_::operator < (const PQ_Entry_& b) const 
+	{
+		bool value = false;
+		if (coarsePenalty() > b.coarsePenalty())// estimated_atom_type_penalty > b.estimated_atom_type_penalty)
+		{
+			value = true;
+		}
+		else
+		{ 
+			if (coarsePenalty() == b.coarsePenalty() && finePenalty() > b.finePenalty())
+			{
+				value = true;
+			}
+		}
+		return value; 
+	}
+	
+	// For testing // TODO: should we add the bond length penalty to the evaluation?
+	float AssignBondOrderProcessor::evaluatePenalty(AtomContainer* ac)
 	{
 
 		if (valid_ && readAtomPenalties_())
 		{
 			// Assign penalty classes
 			ac_ = ac;
-			if (preassignPenaltyClasses_())
+			if (preassignPenaltyClasses_() && precomputeBondLengthPenalties_())
 			{
 cout << "Preassign hat geklappt" << endl;
-				PQ_Entry_ entry;
+				PQ_Entry_ entry(alpha_);
 				
 				AtomIterator a_it = ac_->beginAtom();
 				Atom::BondIterator b_it = a_it->beginBond();
@@ -2379,12 +2596,18 @@ cout << "Preassign hat geklappt" << endl;
 				}
 				entry.last_bond = ac->countBonds()-1;
 				if (estimatePenalty_(entry))
-					return entry.estimated_f;
+					return entry.estimated_atom_type_penalty;
 				else
-					return -1;
+					return -1.;
 			}
 		}
-		return -1;
+		return -1.;
+	}
+
+	// TODO
+	bool AssignBondOrderProcessor::rankByBondLength()
+	{
+		return true;
 	}
 
 } // namespace BALL

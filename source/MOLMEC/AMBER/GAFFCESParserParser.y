@@ -79,20 +79,40 @@ ces_part: open atomlist close {}
 aps: TK_APS_START aps_and_terms TK_APS_END { }
 	; 
 
+<<<<<<< HEAD:source/MOLMEC/AMBER/GAFFCESParserParser.y
 aps_and_terms: aps_or_terms TK_APS_AND_TERM aps_and_terms {
 		 GAFFCESParser::state.current_parser->current_predicate->addNewAND(); 
+=======
+aps_and_terms: aps_or_terms aps_and aps_and_terms {
+>>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/MOLMEC/AMBER/GAFFCESParserParser.y
 	}
 	| aps_or_terms { }
 	;
 
+<<<<<<< HEAD:source/MOLMEC/AMBER/GAFFCESParserParser.y
 aps_or_terms: aps_term TK_APS_OR_TERM aps_or_terms { 
 			GAFFCESParser::state.current_parser->current_predicate->addNewOR(GAFFCESParser::state.current_aps_type, GAFFCESParser::state.feature_number); 
 		}
 	| aps_term { 
 			GAFFCESParser::state.current_parser->current_predicate->addNewOR(GAFFCESParser::state.current_aps_type, GAFFCESParser::state.feature_number);
 		}
+=======
+aps_and: TK_APS_AND_TERM {
+		 GAFFCESParser::state.current_parser->current_predicate->addNewAND(); 
+	};
+
+aps_or_terms: aps_or_term TK_APS_OR_TERM aps_or_terms { }
+	| aps_or_term { }
+>>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/MOLMEC/AMBER/GAFFCESParserParser.y
 	;
 
+<<<<<<< HEAD:source/MOLMEC/AMBER/GAFFCESParserParser.y
+=======
+aps_or_term: aps_term { 
+		GAFFCESParser::state.current_parser->current_predicate->addNewOR(GAFFCESParser::state.current_aps_type, GAFFCESParser::state.feature_number); 
+	};
+
+>>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/MOLMEC/AMBER/GAFFCESParserParser.y
 aps_term: optional_aps_number TK_APS_DELOCALIZED connection { 
 		GAFFCESParser::state.current_aps_type = (GAFFCESParser::APSMatcher::APSType) (GAFFCESParser::APSMatcher::DELOCALIZED_BOND + $3);
 	}
@@ -182,10 +202,17 @@ atomlist:	atomsymbol optional_atomlist	{}
 optional_atomlist: /* empty */	{}
 	| open atomlist close	{};
 
+<<<<<<< HEAD:source/MOLMEC/AMBER/GAFFCESParserParser.y
 optional_aps: /* empty */ {}
 	| aps {};
 
 atomsymbol:	ATOMSTRING optional_aps	{
+=======
+atomsymbol: atom_definition { }
+	| atom_definition aps { };
+	
+atom_definition:	ATOMSTRING {
+>>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/MOLMEC/AMBER/GAFFCESParserParser.y
 		const set<String>& element_symbols = GAFFCESParser::state.current_parser->getElementSymbols();
 		if((element_symbols.find($1)) != element_symbols.end())
 		{
@@ -196,7 +223,11 @@ atomsymbol:	ATOMSTRING optional_aps	{
 			GAFFCESParser::state.current_parser->current_root_predicate->addCESwildcardsPredicate($1);
 		}
 	}
+<<<<<<< HEAD:source/MOLMEC/AMBER/GAFFCESParserParser.y
 	|	ATOMSTRING  OPTIONAL_NUMBER	optional_aps {
+=======
+	|	ATOMSTRING  OPTIONAL_NUMBER	{
+>>>>>>> eaecbf47afee2f8f59ff52a8e96ad186eeb51db6:source/MOLMEC/AMBER/GAFFCESParserParser.y
 		const set<String>& element_symbols = GAFFCESParser::state.current_parser->getElementSymbols();
 		if((element_symbols.find($1)) != element_symbols.end())
 		{

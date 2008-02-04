@@ -257,10 +257,11 @@ namespace BALL
 					purely_aromatic = false;
 				}
 			}
-			for(;atom_it != ring_it->end();++atom_it)
+			for(atom_it = ring_it->begin();atom_it != ring_it->end();++atom_it)
 					(*atom_it)->setProperty("IsPureAliphatic",(bool) purely_aliphatic);
 	
-			for(;atom_it != ring_it->end();++atom_it)
+
+			for(atom_it = ring_it->begin();atom_it != ring_it->end();++atom_it)
 					(*atom_it)->setProperty("IsPureAromatic",(bool) purely_aromatic);
 		}
 	}
@@ -304,7 +305,7 @@ namespace BALL
 			// if the ring is planar 
 			if (is_planar)
 			{
-				for(;atom_it != ring_it->end();++atom_it)
+				for(atom_it = ring_it->begin();atom_it != ring_it->end();++atom_it)
 				{
 					(*atom_it)->setProperty("IsPlanarRingAtom", true);
 					if (has_db_to_non_ring)
@@ -352,6 +353,7 @@ namespace BALL
 			return false;
 		}
 
+
 		std::vector<TypeDefinition>& type_defs = atom_types_[atom.getElement().getAtomicNumber()];
 		for (Position i=0; i<type_defs.size(); i++)
 		{
@@ -362,9 +364,6 @@ namespace BALL
 				if(		(atom.getProperty("attached hydrogens").getString() == typeDefinition.attached_hydrogens) 
 						||(typeDefinition.attached_hydrogens == "*"))
 				{
-
-// 					std::cout << "eleWAtoms:"<< atom.getName() << ""<<"" << atom.getProperty("electron withdrawal atoms").getString()  << ""<< typeDefinition.electron_withdrawal_atoms << endl;
-
 
 					if(		(atom.getProperty("electron withdrawal atoms").getString() == typeDefinition.electron_withdrawal_atoms) 
 							||(typeDefinition.electron_withdrawal_atoms == "*"))
