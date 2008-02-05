@@ -216,9 +216,6 @@ namespace BALL
 			// for testing
 			float evaluatePenalty(AtomContainer* ac);
 
-			// for testing
-			bool rankByBondLength(); 
-
 		protected:
 			
 			/// Nested class storing the parameters of a solution to our ILP
