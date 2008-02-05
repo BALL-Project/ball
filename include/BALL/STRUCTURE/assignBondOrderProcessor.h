@@ -283,10 +283,10 @@ namespace BALL
 					/** the less operator
 					 *  note: we want a reverse sort, hence we actually return a "greater"
 					 */
-					bool operator < (const PQ_Entry_& b) const; //estimated_atom_type_penalty > b.estimated_atom_type_penalty);}
+					bool operator < (const PQ_Entry_& b) const;  
 					
-					bool coarsePenalty() const {return (1.-alpha_) * estimated_atom_type_penalty + (alpha_* estimated_bond_length_penalty);}
-					bool finePenalty() const {return estimated_bond_length_penalty;}
+					float coarsePenalty() const {return ((1.-alpha_) * estimated_atom_type_penalty + (alpha_* estimated_bond_length_penalty));}
+					float finePenalty() const {return estimated_bond_length_penalty;}
 
 					/// the estimated atom type penalty
 					float estimated_atom_type_penalty;   //estimated_f
@@ -294,7 +294,8 @@ namespace BALL
 					float estimated_bond_length_penalty;
 
 					/// the bond orders 
-					/// the i-th entry denotes the bondorder of the i-th bond 
+					/// the i-th entry denotes the bondorder of the i-th bond
+					/// unset bonds get the order 0
 					vector<int> bond_orders;
 					
 					/// the last considered bond
@@ -432,7 +433,7 @@ namespace BALL
 			int max_bond_order_;
 
 			/// balance parameter between atom type and bond length penalty
-			float alpha_; //TODO aus option //TODO: makro ersetzen!
+			float alpha_; 
 	};
 
 } // namespace BALL 
