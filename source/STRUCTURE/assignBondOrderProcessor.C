@@ -136,6 +136,8 @@ namespace BALL
 		ac_ = 0;
 		valid_ = readAtomPenalties_();
 		max_bond_order_ = options.getInteger(Option::MAX_BOND_ORDER);
+		alpha_ = options.getReal(Option::BOND_LENGTH_WEIGHTING);
+
 		return true;
 	}
 
@@ -1791,6 +1793,9 @@ cout << " End of estimator: atom type pen: " << entry.estimated_atom_type_penalt
 	
 	bool AssignBondOrderProcessor::precomputeBondLengthPenalties_()	
 	{
+		max_bond_order_ = options.getInteger(Option::MAX_BOND_ORDER);
+		alpha_ = options.getReal(Option::BOND_LENGTH_WEIGHTING);
+
 		if (!valid_)
 		{	
 			Log.error() << "AssignBondOrderProcessor: The processors state is invalid." << endl;
@@ -1803,7 +1808,6 @@ cout << " End of estimator: atom type pen: " << entry.estimated_atom_type_penalt
 			// get the averaged bond lengths
 			BuildBondsProcessor bbp; 
 			HashMap<Size, HashMap<Size, HashMap<Bond::BondOrder, float> > > bond_lengths = bbp.getBondMap();
-
 			// 
 			AtomIterator a_it = ac_->beginAtom();
 			Atom::BondIterator b_it = a_it->beginBond();
@@ -2481,10 +2485,5 @@ cout << "AssignBondOrderProcessor::PQ_Entry_::operator <: " <<  coarsePenalty() 
 		return -1.;
 	}
 
-	// TODO
-	bool AssignBondOrderProcessor::rankByBondLength()
-	{
-		return true;
-	}
 
 } // namespace BALL
