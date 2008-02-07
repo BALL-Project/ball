@@ -3,6 +3,7 @@
 #include <BALL/QSAR/aromaticityProcessor.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/SYSTEM/path.h>
+#include <BALL/STRUCTURE/assignBondOrderProcessor.h>
 
 namespace BALL
 {
@@ -152,7 +153,8 @@ namespace BALL
 								||(partner_partner_atom.getElement()== PTE[Element::O]) 
 								||(partner_partner_atom.getElement()== PTE[Element::F]) 
 								||(partner_partner_atom.getElement()== PTE[Element::Cl]) 
-								||(partner_partner_atom.getElement()== PTE[Element::Br]))
+								||(partner_partner_atom.getElement()== PTE[Element::Br])
+								||(partner_partner_atom.getElement()== PTE[Element::S]))
 						{
 							++electron_withdrawal_atoms_int;
 						}
@@ -291,8 +293,9 @@ namespace BALL
 					Atom::BondConstIterator constBond_it = (*atom_it)->beginBond();
 					for(;+constBond_it;++constBond_it)
 					{
-						if(   ((constBond_it->getProperty("GAFFBondType").getString())== "DB")
-								||((constBond_it->getProperty("GAFFBondType").getString())== "db")) 
+						if(    (constBond_it->hasProperty("GAFFBondType")) && 
+									((constBond_it->getProperty("GAFFBondType").getInt() == AssignBondOrderProcessor::DB)
+								|| (constBond_it->getProperty("GAFFBondType").getInt() == AssignBondOrderProcessor::db)))
 						{
 							const Atom* partner_atom = constBond_it->getBoundAtom(**atom_it);
 							if (!partner_atom->getProperty("InRing").getBool())
@@ -359,7 +362,7 @@ namespace BALL
 		{
 			TypeDefinition& typeDefinition = type_defs[i];
 			//all fields with "*" are invalid and therefore considered as True
-			if(atom.getProperty("connectivity").getInt() == typeDefinition.connectivity)
+			if((typeDefinition.connectivity < 0) || (atom.getProperty("connectivity").getInt() == typeDefinition.connectivity))
 			{
 				if(		(atom.getProperty("attached hydrogens").getString() == typeDefinition.attached_hydrogens) 
 						||(typeDefinition.attached_hydrogens == "*"))

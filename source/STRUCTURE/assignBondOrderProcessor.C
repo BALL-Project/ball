@@ -78,7 +78,8 @@ namespace BALL
 	const int  AssignBondOrderProcessor::Default::MAX_BOND_ORDER = 3;
 
 	const char* AssignBondOrderProcessor::Option::ALGORITHM = "algorithm";
-	const String AssignBondOrderProcessor::Default::ALGORITHM = AssignBondOrderProcessor::Algorithm::A_STAR;
+	//const String AssignBondOrderProcessor::Default::ALGORITHM = AssignBondOrderProcessor::Algorithm::A_STAR;
+	const String AssignBondOrderProcessor::Default::ALGORITHM = AssignBondOrderProcessor::Algorithm::ILP;
 		
 	const char* AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING = "bond_length_weighting";
 	const float AssignBondOrderProcessor::Default::BOND_LENGTH_WEIGHTING = 0.;
@@ -393,7 +394,7 @@ cout << endl;
 				
 				// Generate penalty values for all atoms in the AtomContainer ac
 				calculateAtomPenalties_(ac); // TODO: Umstellung auf readAtomPenalties!
-				if (preassignPenaltyClasses_() && precomputeBondLengthPenalties_())
+//				if (preassignPenaltyClasses_() && precomputeBondLengthPenalties_())
 				{
 					if (options.get(Option::ALGORITHM) == Algorithm::A_STAR)
 					{
@@ -639,7 +640,7 @@ cout << "\nNach initialisierung : queue siue = " << queue_.size() << endl;
 								Atom* partner = bond_it->getPartner(**it);
 								if(partner->isSelected())
 								{
-									bond_it->setProperty("GAFFBondType", String("DL"));
+									bond_it->setProperty("GAFFBondType", DL);
 								}
 							}
 						}
@@ -654,32 +655,32 @@ cout << "\nNach initialisierung : queue siue = " << queue_.size() << endl;
 
 							//TODO definition of  AB aromatic bond??
 						// b_it is no delocalized bond 
-							if(!b_it->hasProperty("GAFFBondType") || (b_it->getProperty("GAFFBondType").getString() != "DL"))
+							if(!b_it->hasProperty("GAFFBondType") || (b_it->getProperty("GAFFBondType").getInt() != DL))
 							{
 								switch(b_it->getOrder())
 								{
 									case 1:
 										if (b_it->getProperty("IsAromatic").getBool())
 										{
-											b_it->setProperty("GAFFBondType", String("sb"));
+											b_it->setProperty("GAFFBondType", sb);
 										}
 										else
 										{
-											b_it->setProperty("GAFFBondType",  String("SB"));
+											b_it->setProperty("GAFFBondType",  SB);
 										}
 										break;
 									case 2:
 										if (b_it->getProperty("IsAromatic").getBool())
 										{
-											b_it->setProperty("GAFFBondType",  String("db"));
+											b_it->setProperty("GAFFBondType",  db);
 										}
 										else
 										{
-											b_it->setProperty("GAFFBondType",  String("DB"));
+											b_it->setProperty("GAFFBondType",  DB);
 										}
 										break;
 									case 3:
-										b_it->setProperty("GAFFBondType", String("TB"));
+										b_it->setProperty("GAFFBondType", TB);
 										break;
 								}
 							}

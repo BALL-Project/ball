@@ -5,8 +5,8 @@ c     6   3   *   *   [2DL]   		(XA1)
 c     6   3   *   *   [1DB,0DL]  	(XA1)	
 c     6   3   *   *   [3sb]   		(XA1)
 cz    6   3   *   *   *           (N3,N3,N3) 
-cp    6   3   *   *   [AR1,1RG6]  (XX[AR1],XX[AR1],XX[AR1]) 
-ca    6   3   *   *   [AR1]    		*
+cp    6   3   *   *   [AR1,RG6,1RG6]  (XX[AR1,RG6],XX[AR1,RG6],XX[AR1,RG6]) 
+ca    6   3   *   *   [AR1,RG6]    		*
 cc    6   3   *   *   [sb,db,AR2]       (C3(C3))	
 cc    6   3   *   *   [sb,db,AR2]       (C3(C2))	
 cc    6   3   *   *   [sb,db,AR2]       (C3(XB2))	
@@ -80,7 +80,7 @@ pc    15  2   *   *   [sb,db,AR3]       (C2[sb'])
 pc    15  2   *   *   [sb,db,AR3]       (XB2[sb'])	
 pc    15  2   *   *   [sb,db,AR3]       (XD3[sb',db])	
 pc    15  2   *   *   [sb,db,AR3]       (XD4[sb',db])	
-pb    15  2   *   *   [AR1]        *
+pb    15  2   *   *   [AR1,RG6]        *
 pe    15  2   *   *   [sb,db]          (C3[sb'])	
 pe    15  2   *   *   [sb,db]          (C2[SB'])	
 pe    15  2   *   *   [sb,db]          (XA1[SB'])	
@@ -105,13 +105,13 @@ p5    15  6   *		*		*						*
 n     7   3   *   *   *       		(C3(XA1)) 
 n4    7   4   *		*		*						*
 no    7   3   *   *   *       		(O1,O1)
-na    7   3   *   *   [AR1.AR2.AR3]    *
-nh    7   3   *   *   *       		(XX[AR1.AR2.AR3]) 
+na    7   3   *   *   [AR1,RG6.AR2.AR3]    *
+nh    7   3   *   *   *       		(XX[AR1,RG6.AR2.AR3]) 
 nh    7   3   *   *   *       		(C3[DB]) 	
 nh    7   3   *   *   *       		(N2[DB]) 
 nh    7   3   *   *   *       		(P2[DB]) 
 n3    7   3   *		*		*						*
-nb    7   2   *   *   [AR1]       *
+nb    7   2   *   *   [AR1,RG6]       *
 nc    7   2   *   *   [sb,db,AR2]       (C3(C3))	
 nc    7   2   *   *   [sb,db,AR2]       (C3(C2))	
 nc    7   2   *   *   [sb,db,AR2]       (C3(XB2))	
