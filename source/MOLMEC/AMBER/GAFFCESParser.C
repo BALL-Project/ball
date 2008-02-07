@@ -12,6 +12,8 @@
 #include <BALL/KERNEL/PTE.h>
 #endif
 
+#include <BALL/STRUCTURE/assignBondOrderProcessor.h>
+
 //defined in the lexer (GAFFCESParserLexer.l)
 extern void GAFFCESParser_initBuffer(const char* buf);
 extern void GAFFCESParser_delBuffer();
@@ -76,7 +78,7 @@ namespace BALL
 
 	// check if atom forms a bond of type bond_type with partner.
 	// if partner == NULL, check whether there is a bond of this kind at all
-	bool GAFFCESParser::APSMatcher::hasBond_(Atom* atom, Atom* partner, const String& bond_type, int feature_number)
+	bool GAFFCESParser::APSMatcher::hasBond_(Atom* atom, Atom* partner, int bond_type, int feature_number)
 	{
 		// count the occurence of bond_type for an atom 
 		int occurence = 0;
@@ -86,14 +88,14 @@ namespace BALL
 		{
 			if (partner == NULL || bond_it->getBoundAtom(*atom) == partner)
 			{
-				if (bond_it->getProperty("GAFFBondType").getString() == bond_type)
+				if (bond_it->getProperty("GAFFBondType").getInt() == bond_type)
 				{
 						result = true;
 						occurence++;
 				}
 			}
 		}
-		atom->setProperty(bond_type, (int) occurence);
+//		atom->setProperty(bond_type, (int) occurence);
 
 		// do we need to check for a certain number of bonds?
 		if (result && (feature_number > 0))
@@ -213,67 +215,73 @@ namespace BALL
 				}
 				break;
 			case PURE_SINGLE_BOND:
-				return hasBond_(&atom, NULL, "SB", aps.feature_number);
+				return hasBond_(&atom, NULL, AssignBondOrderProcessor::SB, aps.feature_number);
 				break;
 			case PURE_SINGLE_BOND_TO_PARENT:
-				return hasBond_(&atom, &predecessor, "SB", aps.feature_number);
+				return hasBond_(&atom, &predecessor, AssignBondOrderProcessor::SB, aps.feature_number);
 				break;
 			case NO_PURE_SINGLE_BOND_TO_PARENT:
-				return !hasBond_(&atom, &predecessor, "SB", aps.feature_number);
+				return !hasBond_(&atom, &predecessor, AssignBondOrderProcessor::SB, aps.feature_number);
 				break;
 			case SINGLE_BOND:
-				return hasBond_(&atom, NULL, "sb", aps.feature_number);
+				return ( (hasBond_(&atom, NULL, AssignBondOrderProcessor::sb, aps.feature_number)) 
+								|| (hasBond_(&atom, NULL, AssignBondOrderProcessor::SB, aps.feature_number)));
 				break;
 			case SINGLE_BOND_TO_PARENT:
-				return hasBond_(&atom, &predecessor, "sb", aps.feature_number);
+				return ((hasBond_(&atom, &predecessor, AssignBondOrderProcessor::sb, aps.feature_number))
+								||(hasBond_(&atom, &predecessor, AssignBondOrderProcessor::SB, aps.feature_number)));
 				break;
 			case NO_SINGLE_BOND_TO_PARENT:
-				return !hasBond_(&atom, &predecessor, "sb", aps.feature_number);
+				return ((!hasBond_(&atom, &predecessor, AssignBondOrderProcessor::sb, aps.feature_number))
+ 								&& (!hasBond_(&atom, &predecessor, AssignBondOrderProcessor::SB, aps.feature_number)));
 				break;
 			case PURE_DOUBLE_BOND:
-				return hasBond_(&atom, NULL, "DB", aps.feature_number);
+				return hasBond_(&atom, NULL, AssignBondOrderProcessor::DB, aps.feature_number);
 				break;
 			case PURE_DOUBLE_BOND_TO_PARENT:
-				return hasBond_(&atom, &predecessor, "DB", aps.feature_number);
+				return hasBond_(&atom, &predecessor, AssignBondOrderProcessor::DB, aps.feature_number);
 				break;
 			case NO_PURE_DOUBLE_BOND_TO_PARENT:
-				return !hasBond_(&atom, &predecessor, "DB", aps.feature_number);
+				return !hasBond_(&atom, &predecessor, AssignBondOrderProcessor::DB, aps.feature_number);
 				break;
 			case DOUBLE_BOND:
-				return hasBond_(&atom, NULL, "db", aps.feature_number);
+				return ( (hasBond_(&atom, NULL, AssignBondOrderProcessor::db, aps.feature_number)) 
+								|| (hasBond_(&atom, NULL, AssignBondOrderProcessor::DB, aps.feature_number)));
 				break;
 			case DOUBLE_BOND_TO_PARENT:
-				return hasBond_(&atom, &predecessor, "db", aps.feature_number);
+				return ((hasBond_(&atom, &predecessor, AssignBondOrderProcessor::db, aps.feature_number))
+								||(hasBond_(&atom, &predecessor, AssignBondOrderProcessor::DB, aps.feature_number)));
 				break;
 			case NO_DOUBLE_BOND_TO_PARENT:
-				return !hasBond_(&atom, &predecessor, "db", aps.feature_number);
+				return ((!hasBond_(&atom, &predecessor, AssignBondOrderProcessor::db, aps.feature_number))
+ 								&& (!hasBond_(&atom, &predecessor, AssignBondOrderProcessor::DB, aps.feature_number)));
 				break;
 			case TRIPLE_BOND:
-				return hasBond_(&atom, NULL, "TB", aps.feature_number);
+				return hasBond_(&atom, NULL, AssignBondOrderProcessor::TB, aps.feature_number);
 				break;
 			case TRIPLE_BOND_TO_PARENT:
-				return hasBond_(&atom, &predecessor, "TB", aps.feature_number);
+				return hasBond_(&atom, &predecessor, AssignBondOrderProcessor::TB, aps.feature_number);
 				break;
 			case NO_TRIPLE_BOND_TO_PARENT:
-				return !hasBond_(&atom, &predecessor, "TB", aps.feature_number);
+				return !hasBond_(&atom, &predecessor, AssignBondOrderProcessor::TB, aps.feature_number);
 				break;
 			case DELOCALIZED_BOND:
-				return hasBond_(&atom, NULL, "DL", aps.feature_number);
+				return hasBond_(&atom, NULL, AssignBondOrderProcessor::DL, aps.feature_number);
 				break;
 			case DELOCALIZED_BOND_TO_PARENT:
-				return hasBond_(&atom, &predecessor, "DL", aps.feature_number);
+				return hasBond_(&atom, &predecessor, AssignBondOrderProcessor::DL, aps.feature_number);
 				break;
 			case NO_DELOCALIZED_BOND_TO_PARENT:
-				return !hasBond_(&atom, &predecessor, "DL", aps.feature_number);
+				return !hasBond_(&atom, &predecessor, AssignBondOrderProcessor::DL, aps.feature_number);
 				break;
 			case AROMATIC_BOND:
-				return hasBond_(&atom, NULL, "AB", aps.feature_number);
+				return hasBond_(&atom, NULL, AssignBondOrderProcessor::AB, aps.feature_number);
 				break;
 			case AROMATIC_BOND_TO_PARENT:
-				return hasBond_(&atom, &predecessor, "AB", aps.feature_number);
+				return hasBond_(&atom, &predecessor, AssignBondOrderProcessor::AB, aps.feature_number);
 				break;
 			case NO_AROMATIC_BOND_TO_PARENT:
-				return !hasBond_(&atom, &predecessor, "AB", aps.feature_number);
+				return !hasBond_(&atom, &predecessor, AssignBondOrderProcessor::AB, aps.feature_number);
 				break;
 		}
 

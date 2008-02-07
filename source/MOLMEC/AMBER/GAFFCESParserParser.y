@@ -96,6 +96,7 @@ aps_or_term: aps_term {
 		GAFFCESParser::state.current_parser->current_predicate->addNewOR(GAFFCESParser::state.current_aps_type, GAFFCESParser::state.feature_number); 
 	};
 
+
 aps_term: optional_aps_number TK_APS_DELOCALIZED connection { 
 		GAFFCESParser::state.current_aps_type = (GAFFCESParser::APSMatcher::APSType) (GAFFCESParser::APSMatcher::DELOCALIZED_BOND + $3);
 	}

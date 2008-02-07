@@ -3,6 +3,10 @@
 #include <BALL/QSAR/aromaticityProcessor.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/SYSTEM/path.h>
+#include <BALL/STRUCTURE/assignBondOrderProcessor.h>
+
+//#define DEBUG
+#undef DEBUG
 
 namespace BALL
 {
@@ -152,7 +156,8 @@ namespace BALL
 								||(partner_partner_atom.getElement()== PTE[Element::O]) 
 								||(partner_partner_atom.getElement()== PTE[Element::F]) 
 								||(partner_partner_atom.getElement()== PTE[Element::Cl]) 
-								||(partner_partner_atom.getElement()== PTE[Element::Br]))
+								||(partner_partner_atom.getElement()== PTE[Element::Br])
+								||(partner_partner_atom.getElement()== PTE[Element::S]))
 						{
 							++electron_withdrawal_atoms_int;
 						}
@@ -234,7 +239,7 @@ namespace BALL
 	}
 
 	// checks if current atom is in an aliphatic ringsystem,
-	// which is made of sp3 Carbon or a purely aromatic ring
+	// which is made of sp3 Carbon or a purely aromatic six-membered ring
 	void GAFFTypeProcessor::annotateAliphaticAndAromaticRingAtoms_()	
 	{
 		std::vector<std::vector<Atom* > >::iterator ring_it = sssr_.begin();
@@ -252,7 +257,8 @@ namespace BALL
 					purely_aliphatic = false;
 				}
 
-				if ( !(*atom_it)->getProperty("IsAromatic").getBool() )
+				// NOTE: antechamber defines purely aromatic only for 6-membered rings!
+				if ( !(*atom_it)->getProperty("IsAromatic").getBool() || (ring_it->size() != 6))
 				{
 					purely_aromatic = false;
 				}
@@ -289,8 +295,9 @@ namespace BALL
 					Atom::BondConstIterator constBond_it = (*atom_it)->beginBond();
 					for(;+constBond_it;++constBond_it)
 					{
-						if(   ((constBond_it->getProperty("GAFFBondType").getString())== "DB")
-								||((constBond_it->getProperty("GAFFBondType").getString())== "db")) 
+						if(    (constBond_it->hasProperty("GAFFBondType")) && 
+									((constBond_it->getProperty("GAFFBondType").getInt() == AssignBondOrderProcessor::DB)
+								|| (constBond_it->getProperty("GAFFBondType").getInt() == AssignBondOrderProcessor::db)))
 						{
 							const Atom* partner_atom = constBond_it->getBoundAtom(**atom_it);
 							if (!partner_atom->getProperty("InRing").getBool())
@@ -356,12 +363,28 @@ namespace BALL
 		for (Position i=0; i<type_defs.size(); i++)
 		{
 			TypeDefinition& typeDefinition = type_defs[i];
+#ifdef DEBUG
+			Log.info() << "GAFFTypeProcessor: trying to match atom " << atom.getFullName() << " against type " << typeDefinition.atom_type << std::endl;
+			Log.info() << "GAFFTypeProcessor: connectivity is " << atom.getProperty("connectivity").getInt() << " should be " << typeDefinition.connectivity
+								 << std::endl;
+#endif
+
 			//all fields with "*" are invalid and therefore considered as True
-			if(atom.getProperty("connectivity").getInt() == typeDefinition.connectivity)
+			if((typeDefinition.connectivity < 0) || (atom.getProperty("connectivity").getInt() == typeDefinition.connectivity))
 			{
+#ifdef DEBUG
+				Log.info() << "GAFFTypeProcessor: number of attached hydrogens is " << atom.getProperty("attached hydrogens").getString() 
+									 << " should be " << typeDefinition.attached_hydrogens
+									 << std::endl;
+#endif
 				if(		(atom.getProperty("attached hydrogens").getString() == typeDefinition.attached_hydrogens) 
 						||(typeDefinition.attached_hydrogens == "*"))
 				{
+#ifdef DEBUG
+				Log.info() << "GAFFTypeProcessor: number of electron withdrawal atoms is " << atom.getProperty("electron withdrawal atoms").getString() 
+									 << " should be " << typeDefinition.electron_withdrawal_atoms
+									 << std::endl;
+#endif
 					if(		(atom.getProperty("electron withdrawal atoms").getString() == typeDefinition.electron_withdrawal_atoms) 
 							||(typeDefinition.electron_withdrawal_atoms == "*"))
 					{
@@ -372,8 +395,12 @@ namespace BALL
 						if (typeDefinition.atomic_property != "*")
 							to_match = typeDefinition.atomic_property;
 						to_match += typeDefinition.chemical_environment;
+#ifdef DEBUG
+						Log.info() << "GAFFTypeProcessor: combined APS/CES to match is " << to_match << std::endl;
+#endif
 						
-						if(	(ces_parsers_[to_match]->match(atom)))
+						if(		 (ces_parsers_.find(to_match) != ces_parsers_.end())
+								&& (ces_parsers_[to_match]->match(atom)))
 						{
 							atom.setProperty("atomtype", typeDefinition.atom_type );
 							cout << "atom name: " << atom.getName() << " atomtype:" << typeDefinition.atom_type << endl;

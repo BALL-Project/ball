@@ -495,6 +495,7 @@ namespace BALL
 
 	void AromaticityProcessor::aromatize(const vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
 	{
+		overwrite_bond_orders_ = options.getBool(Option::OVERWRITE_BOND_ORDERS);
 		vector<HashSet<Atom*> > sssr;
 		for (vector<vector<Atom*> >::const_iterator it1=sssr_orig.begin();it1!=sssr_orig.end();++it1)
 		{
