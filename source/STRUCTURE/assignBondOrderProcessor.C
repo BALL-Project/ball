@@ -78,8 +78,8 @@ namespace BALL
 	const int  AssignBondOrderProcessor::Default::MAX_BOND_ORDER = 3;
 
 	const char* AssignBondOrderProcessor::Option::ALGORITHM = "algorithm";
-	//const String AssignBondOrderProcessor::Default::ALGORITHM = AssignBondOrderProcessor::Algorithm::A_STAR;
-	const String AssignBondOrderProcessor::Default::ALGORITHM = AssignBondOrderProcessor::Algorithm::ILP;
+	const String AssignBondOrderProcessor::Default::ALGORITHM = AssignBondOrderProcessor::Algorithm::A_STAR;
+	//const String AssignBondOrderProcessor::Default::ALGORITHM = AssignBondOrderProcessor::Algorithm::ILP;
 		
 	const char* AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING = "bond_length_weighting";
 	const float AssignBondOrderProcessor::Default::BOND_LENGTH_WEIGHTING = 0.;
@@ -393,8 +393,8 @@ cout << endl;
 				num_of_free_bonds_ = total_num_of_bonds_ - num_fixed_bonds;
 				
 				// Generate penalty values for all atoms in the AtomContainer ac
-				calculateAtomPenalties_(ac); // TODO: Umstellung auf readAtomPenalties!
-//				if (preassignPenaltyClasses_() && precomputeBondLengthPenalties_())
+//				calculateAtomPenalties_(ac); // TODO: Umstellung auf readAtomPenalties!
+				if (preassignPenaltyClasses_() && precomputeBondLengthPenalties_())
 				{
 					if (options.get(Option::ALGORITHM) == Algorithm::A_STAR)
 					{

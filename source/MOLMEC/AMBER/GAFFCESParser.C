@@ -19,6 +19,9 @@ extern void GAFFCESParser_initBuffer(const char* buf);
 extern void GAFFCESParser_delBuffer();
 extern int  GAFFCESParserparse();
 
+//#define DEBUG
+#undef DEBUG
+
 namespace BALL
 {		
 
@@ -288,10 +291,43 @@ namespace BALL
 		return result;
 	}
 
+	String GAFFCESParser::APSMatcher::printAPS()
+	{
+		String result = "";
+		if ((aps_terms.size() == 1) && (aps_terms[1].size() == 0))
+			result = "[*]";
+		else
+		{
+			result = "[";
+			// this will create a string with a trailing & which we will later replace
+			for (Position i=0; i<aps_terms.size(); i++)
+			{
+				std::vector<GAFFCESParser::APSMatcher::APSTerm >& or_terms = aps_terms[i];
+				if (aps_terms[i].size() == 0)
+					result += "*";
+				else
+				{
+					for (Position j=0; j<or_terms.size(); j++)
+					{
+						result += String(or_terms[j].feature_number)+"x"+String(or_terms[j].type)+"|";
+					}
+					result.truncate(result.size()-1);
+				}
+				result += "&";
+			}
+			result.truncate(result.size()-1);
+			result += "]";
+		}
+		return result;
+	}
+
 	// check if atom matches atomic property string
 	bool GAFFCESParser::APSMatcher::operator() (Atom& atom, Atom& predecessor)
 	{
-		// all and-terms must be true
+#ifdef DEBUG
+		Log.info() << "GAFFCESParser::APSMatcher: trying to match atom " << atom.getFullName() << " against APS: " << printAPS() << " ";
+#endif
+	// all and-terms must be true
 		bool and_result = true;
 
 		// iterate over all the and-terms in aps_terms
@@ -320,7 +356,12 @@ namespace BALL
 			}
 			and_result &= or_result;
 		}
-
+#ifdef DEBUG
+		if (and_result)
+			Log.info() << "found a match!" << std::endl;
+		else
+			Log.info() << "no match!" << std::endl;
+#endif
 		return and_result;
 	}
 

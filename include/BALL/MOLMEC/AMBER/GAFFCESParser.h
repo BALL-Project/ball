@@ -95,6 +95,8 @@ namespace BALL
 						APSMatcher();
 						~APSMatcher();
 
+						String printAPS();
+
 						// check if atom matches atomic property string
 						bool operator() (Atom& atom, Atom& predecessor);
 
