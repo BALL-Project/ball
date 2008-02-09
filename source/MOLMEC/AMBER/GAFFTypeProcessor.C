@@ -264,10 +264,19 @@ namespace BALL
 				}
 			}
 			for(atom_it = ring_it->begin();atom_it != ring_it->end();++atom_it)
+			{
+				// do not overwrite the property if we have already detected a suitable ring!
+				if (  !(*atom_it)->hasProperty("IsPureAliphatic")
+            ||!(*atom_it)->getProperty("IsPureAliphatic").getBool())
 					(*atom_it)->setProperty("IsPureAliphatic",(bool) purely_aliphatic);
+			}
 	
 			for(atom_it = ring_it->begin();atom_it != ring_it->end();++atom_it)
+			{
+				if (  !(*atom_it)->hasProperty("IsPureAromatic")
+            ||!(*atom_it)->getProperty("IsPureAromatic").getBool())
 					(*atom_it)->setProperty("IsPureAromatic",(bool) purely_aromatic);
+			}
 		}
 	}
 
