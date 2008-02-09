@@ -625,26 +625,6 @@ cout << "\nNach initialisierung : queue siue = " << queue_.size() << endl;
 
 					if (solutions_.size() > 0)
 					{	
-						// select all carboxyl anions and nitro groups for 
-						// delocalized bond types in GAFF
-						//TODO clear Selection for system!!!
-						Selector select("SMARTS([#6D3](~[#8D1])(~[#8D1])) OR SMARTS([#7D3](~[#8D1])(~[#8D1]))");
-						ac.apply(select);
-						List<Atom*> selected_atoms = select.getSelectedAtoms();
-						List<Atom*>::iterator it = selected_atoms.begin();					
-						for(;it != selected_atoms.end(); ++it)
-						{
-							Atom::BondIterator bond_it = (*it)->beginBond();
-							for(;+bond_it;++bond_it)
-							{
-								Atom* partner = bond_it->getPartner(**it);
-								if(partner->isSelected())
-								{
-									bond_it->setProperty("GAFFBondType", DL);
-								}
-							}
-						}
-
 						last_applied_solution_ = 0;
 						// set the bond orders and bond types of the first solution
 						AtomIterator a_it = ac.beginAtom();
@@ -652,9 +632,37 @@ cout << "\nNach initialisierung : queue siue = " << queue_.size() << endl;
 						BALL_FOREACH_BOND(ac, a_it, b_it)						
 						{
 							b_it->setOrder(solutions_[0].bond_orders[&(*b_it)]);
+						}
 
+						// select all carboxyl anions and nitro groups for 
+						// delocalized bond types in GAFF
+						//TODO clear Selection for system!!!
+//						Selector select("SMARTS([#6D3](~[#8D1])(~[#8D1])) OR SMARTS([#7D3](~[#8D1])(~[#8D1]))");
+
+						// find conjugated atoms
+						ac.deselect();
+						Selector select("SMARTS([#16D1,#8D1]) AND (SMARTS(a) OR SMARTS(*=,#*-,=*=,#*) OR SMARTS([N,P,O,S]=,#*-[*;!H0]) OR SMARTS(*=,#*-[F,Cl,Br,I]) OR SMARTS(*=,#*-[N,P,O,S;!H0]))");
+						ac.apply(select);
+
+						// we know that the selected atoms only have one bond each. so we only need to make sure it really is a double bond
+						List<Atom*> selected_atoms = select.getSelectedAtoms();
+						List<Atom*>::iterator it = selected_atoms.begin();					
+						for(;it != selected_atoms.end(); ++it)
+						{
+							Atom::BondIterator bond_it = (*it)->beginBond();
+							for(;+bond_it;++bond_it)
+							{
+								if (bond_it->getOrder() == Bond::ORDER__DOUBLE)
+									bond_it->setProperty("GAFFBondType", DL);
+							}
+						}
+						ac.deselect();
+
+						a_it = ac.beginAtom();
+						BALL_FOREACH_BOND(ac, a_it, b_it)
+						{
 							//TODO definition of  AB aromatic bond??
-						// b_it is no delocalized bond 
+							// b_it is no delocalized bond 
 							if(!b_it->hasProperty("GAFFBondType") || (b_it->getProperty("GAFFBondType").getInt() != DL))
 							{
 								switch(b_it->getOrder())
