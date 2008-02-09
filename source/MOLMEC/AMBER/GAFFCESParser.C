@@ -728,33 +728,25 @@ namespace BALL
 	{		
 		bool matched = false;
 		switch(wildcards_)
-			{
-			//XA: Sulfur/Sulpur and Oxygen
-			case 0:
+		{
+			case XA:
+				//XA: Sulfur/Sulpur and Oxygen
 				if(		(atom.getElement()== PTE[Element::S]) 
 						||(atom.getElement()== PTE[Element::O]))
 				{
 					matched = true;
 				}
 				break;
-			//XB: Phosphorus/Phosphor and Nitrogen
-			case 1:
+			case XB:
+				//XB: Phosphorus/Phosphor and Nitrogen
 				if(		(atom.getElement()== PTE[Element::P]) 
 						||(atom.getElement()== PTE[Element::N]))
 				{
 					matched = true;
 				}
 				break;
-			//XD:  Phosphorus/Phosphor and Sulfur/Sulpur
-			case 2:
-				if (	(atom.getElement()== PTE[Element::P]) 
-						||(atom.getElement()== PTE[Element::S]))
-				{
-					matched = true;
-				}
-				break;
-			//XC:  Fluorine, Chloride, Bromide and Iodine 
-			case 3:
+			case XC:
+				//XC:  Fluorine, Chloride, Bromide and Iodine 
 				if (	(atom.getElement()== PTE[Element::F]) 
 						||(atom.getElement()== PTE[Element::Cl])
 						||(atom.getElement()== PTE[Element::Br])
@@ -763,8 +755,16 @@ namespace BALL
 					matched = true;
 				}
 				break;
-			//XX:  Phosphorus/Phosphor, Sulfur/Sulpur, Nitrogen, Carbon, Oxygen
-			case 4:
+			case XD:
+				//XD:  Phosphorus/Phosphor and Sulfur/Sulpur
+				if (	(atom.getElement()== PTE[Element::P]) 
+						||(atom.getElement()== PTE[Element::S]))
+				{
+					matched = true;
+				}
+				break;
+			case XX:
+				//XX:  Phosphorus/Phosphor, Sulfur/Sulpur, Nitrogen, Carbon, Oxygen
 				if (	(atom.getElement()== PTE[Element::P]) 
 						||(atom.getElement()== PTE[Element::N]) 
 						||(atom.getElement()== PTE[Element::S]) 
@@ -774,7 +774,7 @@ namespace BALL
 					matched = true;
 				}
 				break;
-			}
+		}
 
 		return matched;
 	}
@@ -823,33 +823,25 @@ namespace BALL
 	{
 		bool matched = false;
 		switch(wildcards_)
-			{
-			//XA: Sulfur/Sulpur and Oxygen
-			case 0:
+		{
+			case XA:
+				//XA: Sulfur/Sulpur and Oxygen
 				if(		(atom.getElement()== PTE[Element::S]) 
 						||(atom.getElement()== PTE[Element::O]))
 				{
 					matched = true;
 				}
 				break;
-			//XB: Phosphorus/Phosphor and Nitrogen
-			case 1:
+			case XB:
+				//XB: Phosphorus/Phosphor and Nitrogen
 				if(		(atom.getElement()== PTE[Element::P]) 
 						||(atom.getElement()== PTE[Element::N]))
 				{
 					matched = true;
 				}
 				break;
-			//XD:  Phosphorus/Phosphor and Sulfur/Sulpur
-			case 2:
-				if (	(atom.getElement()== PTE[Element::P]) 
-						||(atom.getElement()== PTE[Element::S]))
-				{
-					matched = true;
-				}
-				break;
-			//XC:  Fluorine, Chloride, Bromide and Iodine 
-			case 3:
+			case XC:
+				//XC:  Fluorine, Chloride, Bromide and Iodine 
 				if (	(atom.getElement()== PTE[Element::F]) 
 						||(atom.getElement()== PTE[Element::Cl])
 						||(atom.getElement()== PTE[Element::Br])
@@ -858,8 +850,16 @@ namespace BALL
 					matched = true;
 				}
 				break;
-			//XX:  Phosphorus/Phosphor, Sulfur/Sulpur, Nitrogen, Carbon, Oxygen
-			case 4:
+			case XD:
+				//XD:  Phosphorus/Phosphor and Sulfur/Sulpur
+				if (	(atom.getElement()== PTE[Element::P]) 
+						||(atom.getElement()== PTE[Element::S]))
+				{
+					matched = true;
+				}
+				break;
+			case XX:
+				//XX:  Phosphorus/Phosphor, Sulfur/Sulpur, Nitrogen, Carbon, Oxygen
 				if (	(atom.getElement()== PTE[Element::P]) 
 						||(atom.getElement()== PTE[Element::N]) 
 						||(atom.getElement()== PTE[Element::S]) 
@@ -869,7 +869,7 @@ namespace BALL
 					matched = true;
 				}
 				break;
-			}
+		}
 
 		return matched;
 	}	
@@ -877,6 +877,10 @@ namespace BALL
 	//check if atom matches WildcardsConnectionPredicatePredicate
 	bool GAFFCESParser::CESwildcardsConnectionPredicate::match(Atom& atom)
 	{
+#ifdef DEBUG
+		Log.info() << "GAFFCESParser::CESwildcardsConnectionPredicate: trying to match atom " << atom.getFullName() << " with " 
+							 << atom.countBonds() << " bonds against " << numberOfPartners_ << ":" << wildcards_;
+#endif
 		bool correct_match = false;
 		//match wildcard-element?
 		if(matchWildcards(atom))
@@ -888,6 +892,12 @@ namespace BALL
 				correct_match = true;
 			}
 		}
+#ifdef DEBUG
+		if (correct_match)
+			Log.info() << " (found a match!)" << std::endl;
+		else
+			Log.info() << " (no match!)" << std::endl;
+#endif
 		return correct_match;
 	}
 
