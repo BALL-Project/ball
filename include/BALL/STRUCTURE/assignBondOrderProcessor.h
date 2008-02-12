@@ -294,7 +294,11 @@ namespace BALL
 					 */
 					bool operator < (const PQ_Entry_& b) const;  
 					
-					float coarsePenalty() const {return ((1.-alpha_) * estimated_atom_type_penalty + (alpha_* estimated_bond_length_penalty));}
+					float coarsePenalty() const {
+					//	cout << "al:" << alpha_ << " ap:" <<  estimated_atom_type_penalty << " bp:" << estimated_bond_length_penalty << " tot:" << (1.-alpha_) * estimated_atom_type_penalty + (alpha_* estimated_bond_length_penalty) << endl;
+						
+						
+						return ((1.-alpha_) * estimated_atom_type_penalty + (alpha_* estimated_bond_length_penalty));}
 					float finePenalty() const {return estimated_bond_length_penalty;}
 
 					/// the estimated atom type penalty
@@ -337,6 +341,9 @@ namespace BALL
 			 *	resulting from deviation of the actual bond length to 
 			 *	a standart length for bonds with same atom types and the 
 			 *	chosen bond order. bond_lengths_penalties_
+			 *	If there is no information for certain atom pair, penalty 0. 
+			 *	is assumed. For incomplete information, we assign the
+			 *	the compare to the longest known bond for this atom pair. 
 			 */
 			bool precomputeBondLengthPenalties_();
 			
@@ -416,7 +423,7 @@ namespace BALL
 
 			/// Method to combine the atom type and bond length penalty
 			/// the balance parameter is alpha_
-			float combinedAtomAndBondPenalty_(PQ_Entry_& entry);
+			//float combinedAtomAndBondPenalty_(PQ_Entry_& entry);
 
 			// filled by readAtomPenalties_
 			// organized in imaginarey blocks of length  
