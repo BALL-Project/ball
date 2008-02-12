@@ -780,7 +780,7 @@ cout << " ++A+++++++++++++++" << endl;
 			num_free_bonds = 0;
 
 			for (b_it = a_it->beginBond(); +b_it; b_it++) 
-			{			
+			{				
 				// do we have a valid bond? 
 				if (   (bond_to_index_.find(&*b_it) != bond_to_index_.end())
 						&& (bond_lengths_penalties_.find(&*b_it)) != bond_lengths_penalties_.end())
@@ -914,14 +914,18 @@ cout << "  * atom " <<   a_it->getFullName() << " has to be evaluted starting fr
 				Position i = (valence + num_free_bonds < current_start_valence) 
 										? current_start_valence
 										: valence + num_free_bonds;
-
+//cout << " i: " << i << " current end valence " << current_end_valence << endl;
 				// for every remaining valence of the atom under consideration
+				// (we know there is at least one)
 				for (; i <= (Position)current_end_valence; i++)
 				{
+//cout << " valence: " << i<< endl;
 					// first estimate the bond-length-penalty for choice valence=i by
 					min_bond_length_penalty_per_valence = 0;
-					
-					// iterating over all free bonds
+
+//cout << "      free bonds: " <<  free_bonds.size() << endl;
+					// iterating over all free bonds 
+					// (we know there is at least one free bond)
 					for (Size fb=0; fb < free_bonds.size(); fb++)
 					{
 						// and computing the minimal bond length penalty for each bond
@@ -930,23 +934,30 @@ cout << "  * atom " <<   a_it->getFullName() << " has to be evaluted starting fr
 						//       orders correctly! We just find the min!
 						// the number of the remaining bond orders to be assigned 
 						// to the free bonds are : i - valence -(num_free_bonds-1)
-						for (Size j = 1; j <= i-valence-(num_free_bonds-1); j++)
+						std::vector<float>& current_bond_length_penalties = bond_lengths_penalties_[free_bonds[fb]];
+						int up_to = std::min(current_bond_length_penalties.size()-1, i-valence-(num_free_bonds-1));
+//cout << "            fb:"<< fb <<"  up_to" << up_to << endl;
+						for (Size j = 1; j <= up_to; j++)
 						{
-							float deviation = bond_lengths_penalties_[free_bonds[fb]][j]; 
-							
+							float deviation = current_bond_length_penalties[j]; 
+//cout << "               deviation:" << deviation << " current min per bond: " << min_bond_length_penalty_per_bond ;
 							if (deviation < min_bond_length_penalty_per_bond )
 							{
 								min_bond_length_penalty_per_bond = deviation;
 							}
+
+//cout <<	min_bond_length_penalty_per_bond << endl;
+
 						}
 						min_bond_length_penalty_per_valence += min_bond_length_penalty_per_bond;
 					}
-					
+//cout << "      min for given bond and valence: "	<<	min_bond_length_penalty_per_valence << " bisheriges min: " << min_bond_length_penalty;				
 					// has this choice of valence i a minimal bond length penalty?
 					if (min_bond_length_penalty_per_valence < min_bond_length_penalty)
 					{
 						min_bond_length_penalty = min_bond_length_penalty_per_valence;
 					}
+//cout << " neues min:" << min_bond_length_penalty << endl;
 
 #ifdef DEBUG
 cout << i<< "-" << current_start_index + i - current_start_valence << "-"<< penalties_[current_start_index + i - current_start_valence] <<  " , ";
@@ -959,9 +970,12 @@ cout << i<< "-" << current_start_index + i - current_start_valence << "-"<< pena
 						 min_atom_type_penalty = estimated_atom_type_penalty_per_valence;
 					}
 				}
+//cout << " min for given valence:" << min_bond_length_penalty << " + " << current_bond_length_penalty ;
 				//now add the minima to the atomcontainer's penalty sums
 				estimated_atom_penalty += min_atom_type_penalty;
-				estimated_bond_penalty += min_bond_length_penalty;	
+				estimated_bond_penalty += min_bond_length_penalty + current_bond_length_penalty;	
+
+//cout << " => " << 	estimated_bond_penalty  << endl;
 
 #ifdef DEBUG
 cout << " )  possible min estimated_atom_penalty = " << min_atom_type_penalty << endl;			
@@ -975,16 +989,24 @@ cout << " )  possible min estimated_atom_penalty = " << min_atom_type_penalty <<
 		//store the computed bond length penalty
 		entry.estimated_bond_length_penalty = estimated_bond_penalty;
 
+/*cout << " End of estimator for ";
+for (Size i=0; i < entry.bond_orders.size(); i++)
+{
+	cout << " " << entry.bond_orders[i];
+}
+	
+cout << " atom type pen: " << entry.estimated_atom_type_penalty << " bond len pen: "<< entry.estimated_bond_length_penalty << endl;
+*/
 #ifdef DEBUG		
 cout << " End of estimator: atom type pen: " << entry.estimated_atom_type_penalty << " bond len pen: "<< entry.estimated_bond_length_penalty << endl;
 #endif		
 		return true;
 	}
 	
-	float AssignBondOrderProcessor::combinedAtomAndBondPenalty_(PQ_Entry_& entry)
+/*	float AssignBondOrderProcessor::combinedAtomAndBondPenalty_(PQ_Entry_& entry)
 	{
-		return  ((1-alpha_) * entry.estimated_atom_type_penalty)+ (alpha_ * entry.estimated_bond_length_penalty);
-	}
+		return  ((1.-alpha_) * entry.estimated_atom_type_penalty)+ (alpha_ * entry.estimated_bond_length_penalty);
+	}*/
 
 	void AssignBondOrderProcessor::calculateAtomPenalties_(AtomContainer& ac)
 	{
@@ -1802,7 +1824,8 @@ cout << " End of estimator: atom type pen: " << entry.estimated_atom_type_penalt
 			return false;
 		}
 
-		// determine for each bond its average bond lengths	 and store them in bond_lengths_penalties_
+		// determine for each bond its average bond lengths	
+		// and store them in bond_lengths_penalties_
 		if (ac_)
 		{	
 			// get the averaged bond lengths
@@ -1814,24 +1837,56 @@ cout << " End of estimator: atom type pen: " << entry.estimated_atom_type_penalt
 			BALL_FOREACH_BOND(*ac_, a_it, b_it)
 			{
 				// the precomputed bond length penalties
-				vector<float> penalties(max_bond_order_ + 1,0.);
+				vector<float> penalties(max_bond_order_ + 1, 0.);
 				// the bond atoms 
 				Size atom_num1 = b_it->getFirstAtom()->getElement().getAtomicNumber();
 				Size atom_num2 = b_it->getSecondAtom()->getElement().getAtomicNumber();
-				// the averaged bond length of atom1 and atom2
- 				HashMap<Bond::BondOrder, float> tmp_bond_lengths =  bond_lengths[atom_num1][atom_num2];
-				// the current bond length
-				float bond_length = b_it->getLength();	
-
-				// for all possible bond orders precompute the penalties
-				// here we try square deviation
-				// NOTE: we ommit the aromatic bonds!
-				for (Size i = 1; i <= (unsigned int)max_bond_order_; i++)
+				
+				if (   bond_lengths.find(atom_num1) != bond_lengths.end() 
+						&& bond_lengths[atom_num1].find(atom_num2) != bond_lengths[atom_num1].end()) 
 				{
-					penalties[i] = pow((bond_length - tmp_bond_lengths[(Bond::BondOrder)i]),(int)2);
-				}
+					bool complete = true;
+					float max_bond_length = 0;
+					// the averaged bond length of atom1 and atom2
+					HashMap<Bond::BondOrder, float> tmp_bond_lengths =  bond_lengths[atom_num1][atom_num2];
+					
+					// the current bond length
+					float bond_length = b_it->getLength();	
 
-				// store the b_it's penalties in the hashmap
+					// for all possible bond orders precompute the penalties
+					// here we try square deviation
+					// NOTE: we ommit the aromatic bonds!
+					for (Size i = 1; i <= (unsigned int)max_bond_order_; i++)
+					{
+						if (tmp_bond_lengths.find((Bond::BondOrder)i) != tmp_bond_lengths.end())
+						{
+							penalties[i] = pow((bond_length - tmp_bond_lengths[(Bond::BondOrder)i]),(int)2);
+							if (max_bond_length < tmp_bond_lengths[(Bond::BondOrder)i])
+							{
+								max_bond_length = tmp_bond_lengths[(Bond::BondOrder)i];
+							}
+						}
+						else
+						{
+							complete = false;
+						}
+					}
+					
+					// in case we got no complete set
+					if (!complete)
+					{
+						for (Size i = 1; i <= (unsigned int)max_bond_order_; i++)
+						{
+							if (tmp_bond_lengths.find((Bond::BondOrder)i) == tmp_bond_lengths.end())
+							{
+								penalties[i] = pow((bond_length - max_bond_length),(int)2);
+							}
+					  }
+					}
+				}
+				//store the b_it's penalties in the hashmap
+				//else: since we have no information, we handle 
+				//every bond order the same, namely assign 0. :-)	
 				bond_lengths_penalties_[&(*b_it)] = penalties;
 			}
 
@@ -2424,7 +2479,6 @@ cout << endl;
 	// note: we want a reverse sort, hence we actually return a "greater"
 	bool AssignBondOrderProcessor::PQ_Entry_::operator < (const PQ_Entry_& b) const 
 	{
-
 		bool value = false;
 		if (coarsePenalty() > b.coarsePenalty())
 		{
