@@ -136,16 +136,16 @@ namespace BALL
 				break;
 			case IS_OTHER_RING:
 				if(isRingAtom(atom))
+				{
+					if( 	 (!atom.getProperty("IsPlanarRingAtom").getBool())
+							&& (!atom.getProperty("IsPlanarWithDBtoNR").getBool())
+							&& (!atom.getProperty("IsPureAromatic").getBool())
+							&& (!atom.getProperty("IsPureAliphatic").getBool()))
 					{
-						if( (!atom.getProperty("IsPlanarRingAtom").getBool())
-								&& (!atom.getProperty("IsPlanarWithDBtoNR").getBool())
-								&& (!atom.getProperty("IsPureAromatic").getBool())
-								&& (!atom.getProperty("IsPureAliphatic").getBool()))
-							{
-								atom.setProperty("isOther", true);
-								result = true;
-							}
+						atom.setProperty("isOther", true);
+						result = true;
 					}
+				}
 				break;
 			case IS_3_RING_ATOM:
 				if(atom.getProperty("In3Ring").getBool())

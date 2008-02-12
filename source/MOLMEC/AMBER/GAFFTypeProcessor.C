@@ -247,10 +247,14 @@ namespace BALL
 		{
 			bool purely_aliphatic = true;
 			bool purely_aromatic  = true;
+			bool has_sp3_carbon   = false;
 
 			vector<Atom*>::iterator atom_it = ring_it->begin();
 			for(;atom_it != ring_it->end();++atom_it)
 			{
+				if( ((*atom_it)->getElement() == PTE[Element::C]) && ((*atom_it)->countBonds() == 4))
+					has_sp3_carbon = true;
+
 				// if one ring member is not sp3 carbon, the whole thing isn't	
 				if( ((*atom_it)->getElement() != PTE[Element::C]) || ((*atom_it)->countBonds() != 4))
 				{
@@ -263,17 +267,14 @@ namespace BALL
 					purely_aromatic = false;
 				}
 			}
+
 			for(atom_it = ring_it->begin();atom_it != ring_it->end();++atom_it)
 			{
 				// do not overwrite the property if we have already detected a suitable ring!
 				if (  !(*atom_it)->hasProperty("IsPureAliphatic")
             ||!(*atom_it)->getProperty("IsPureAliphatic").getBool())
 					(*atom_it)->setProperty("IsPureAliphatic",(bool) purely_aliphatic);
-			}
-	
-			for(atom_it = ring_it->begin();atom_it != ring_it->end();++atom_it)
-			{
-				if (  !(*atom_it)->hasProperty("IsPureAromatic")
+				else if (  !(*atom_it)->hasProperty("IsPureAromatic")
             ||!(*atom_it)->getProperty("IsPureAromatic").getBool())
 					(*atom_it)->setProperty("IsPureAromatic",(bool) purely_aromatic);
 			}
