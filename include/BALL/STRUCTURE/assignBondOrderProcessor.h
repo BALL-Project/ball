@@ -100,6 +100,10 @@ namespace BALL
 				 */
 				static const char* MAX_BOND_ORDER;
 
+				/** the maximal number of solutions to compute
+				 */
+				static const char* MAX_NUMBER_OF_SOLUTIONS;
+
 				/** the weighting of bond length penalties wrt valence penalties
 				 */
 				static const char* BOND_LENGTH_WEIGHTING;
@@ -121,7 +125,8 @@ namespace BALL
 				//static const String COMPUTE_ALL_SOLUTIONS;
 				static const String ALGORITHM;
 				static const String INIFile;
-				static const int MAX_BOND_ORDER;
+				static const int MAX_BOND_ORDER;	
+				static const int MAX_NUMBER_OF_SOLUTIONS;
 				static const float BOND_LENGTH_WEIGHTING;
 			};
 
@@ -179,9 +184,11 @@ namespace BALL
 			/// Returns the number of already computed solutions
 			Size getNumberOfComputedSolutions() {return solutions_.size();};
 
-			/// Returns the total penalty of the (already computed!) i-th solution //TODO atom vs bond penalty
-			float getTotalPenalty(Position i) {return solutions_[i].atom_type_penalty;}
-			
+			/// Returns the total penalty of the (already computed!) i-th solution 
+			float getTotalPenalty(Position i) {
+				return (  (1.-alpha_) * (solutions_[i].atom_type_penalty/atom_type_normalization_factor_) 
+					      + (alpha_*solutions_[i].bond_length_penalty/bond_length_normalization_factor_));} 
+
 			/** Set the AtomContainer ac_'s bond orders to the ones found 
 			 * in the (already computed!) i-th solution.
 			 * Returns true if the i-th solution is valid 
@@ -266,7 +273,7 @@ namespace BALL
 				public:
 				
 					/// Default constructor
-					PQ_Entry_(float alpha = 0.);
+					PQ_Entry_(float alpha = 0., float atom_type_normalization_factor = 1., float bond_length_normalization_factor = 1.);
 								
 					/// Copy constructor
 					PQ_Entry_(const PQ_Entry_& entry);
@@ -283,10 +290,8 @@ namespace BALL
 					bool operator < (const PQ_Entry_& b) const;  
 					
 					float coarsePenalty() const {
-					//	cout << "al:" << alpha_ << " ap:" <<  estimated_atom_type_penalty << " bp:" << estimated_bond_length_penalty << " tot:" << (1.-alpha_) * estimated_atom_type_penalty + (alpha_* estimated_bond_length_penalty) << endl;
-						
-						
-						return ((1.-alpha_) * estimated_atom_type_penalty + (alpha_* estimated_bond_length_penalty));}
+						return (  (1.-alpha_) * (estimated_atom_type_penalty / atom_type_normalization_factor_)
+								    + (alpha_* estimated_bond_length_penalty / bond_length_normalization_factor_));}
 					float finePenalty() const {return estimated_bond_length_penalty;}
 
 					/// the estimated atom type penalty
@@ -304,6 +309,8 @@ namespace BALL
 
 					protected:
 						float alpha_;
+						float atom_type_normalization_factor_;
+						float bond_length_normalization_factor_;
 				};
 
 			/// computes for every atom its possible atomic valences and the corresponding possible atomic penalty scores
@@ -386,17 +393,20 @@ namespace BALL
 			// -1 if there was no valid solution applied
 			Position last_applied_solution_;
 			
-			//TODO: ac-->ac_
 			/// the AtomContainer, the processor is operating on
 			AtomContainer* ac_;
 
-			////////// for Algorithm::ComputeAllSolutions::ENUMERATION_TREE ///////
-			
-			void recursive_solve_(AtomContainer& ac, int depth);
-			void setChecked_(String orders);
+			/// max bond order to consider
+			int max_bond_order_;
 
-			HashSet<String> checked_; //TODO: constr ...
-			String current_orders_; // TODO: constr ...
+			/// balance parameter between atom type and bond length penalty
+			float alpha_; 
+
+			/// the inverse of the atom type penalty normalization factor
+			float atom_type_normalization_factor_;
+
+			/// the inverse of the bond length penalty normalization factor
+			float bond_length_normalization_factor_;
 
 			////////// for Algorithm::A_START   ComputeAllSolutions::A_STAR ///////
 			/// 
@@ -432,13 +442,7 @@ namespace BALL
 					
 			///stores the possible bond lengths penalties per order // TODO: constructor etc
 			HashMap<Bond*, vector<float> > bond_lengths_penalties_;
-	
-			/// max bond order to consider
-			int max_bond_order_;
-
-			/// balance parameter between atom type and bond length penalty
-			float alpha_; 
-	};
+		};
 
 } // namespace BALL 
 
