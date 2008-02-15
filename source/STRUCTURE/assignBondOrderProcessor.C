@@ -28,12 +28,12 @@
 // For lp_solve
 #include <lpsolve/lp_lib.h>
 
-//#define DEBUG 1
-#undef DEBUG
-//#define DEBUG_READ 1
-#undef DEBUG_READ
-//#define DEBUG_ESTIMATE
-#undef DEBUG_ESTIMATE
+#define DEBUG 1
+//#undef DEBUG
+#define DEBUG_READ 1
+//#undef DEBUG_READ
+#define DEBUG_ESTIMATE
+//#undef DEBUG_ESTIMATE
 
 
 using namespace std;
@@ -225,7 +225,7 @@ cout << ")" << endl;
 
 	Processor::Result AssignBondOrderProcessor::operator () (AtomContainer& ac)
 	{
-#ifdef DEBUG
+//#ifdef DEBUG
 cout << "  OPTIONS:" << endl;
 cout << " \t Algorithm: " <<  options[Option::Option::ALGORITHM] << endl;
 cout << " \t Overwrite bonds (single, double, triple, quad, aroma):" 
@@ -235,7 +235,7 @@ cout << " \t Overwrite bonds (single, double, triple, quad, aroma):"
 		 << options.getBool(Option::OVERWRITE_QUADRUPLE_BOND_ORDERS) << " " 
 		 << options.getBool(Option::OVERWRITE_AROMATIC_BOND_ORDERS) << endl;
 
-cout << " \t Oktett Regel: " <<options.getBool(Option::ENFORCE_OCTETT_RULE) << endl;
+//cout << " \t Oktett Regel: " <<options.getBool(Option::ENFORCE_OCTETT_RULE) << endl;
 cout << " \t Ladung überschreiben: " << options.getBool(Option::OVERWRITE_CHARGES) << endl;
 cout << " \t Ladung zuweisen: " << options.getBool(Option::ASSIGN_CHARGES) << endl;
 
@@ -243,10 +243,10 @@ cout << " \t Kekulizer: " << options.getBool(Option::KEKULIZE_RINGS)  << endl;
 cout << " \t Penalty files " << options[Option::Option::INIFile] << endl;
 cout << " \t alpha: " << options[Option::Option::BOND_LENGTH_WEIGHTING] << endl;
 cout << " \t max bond order " << options[Option::MAX_BOND_ORDER] << endl;
-cout << " \t max number of solutions " << options[Options::MAX_NUMBER_OF_SOLUTIONS] << endl;
+cout << " \t max number of solutions " << options[Option::MAX_NUMBER_OF_SOLUTIONS] << endl;
 cout << " \t valid : " << valid_ << endl;
 cout << endl;
-#endif
+//#endif
 
 		// Is the processor in a valid state?
 		if (valid_)
@@ -397,7 +397,11 @@ cout << endl;
 				}
 				
 				num_of_free_bonds_ = total_num_of_bonds_ - num_fixed_bonds;
-				
+#ifdef DEBUG
+cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomputeBondLengthPenalties_:" << precomputeBondLengthPenalties_() << endl;
+#endif
+
+
 				// Generate penalty values for all atoms in the AtomContainer ac
 				calculateAtomPenalties_(ac); // TODO: Umstellung auf readAtomPenalties!
 				if (preassignPenaltyClasses_() && precomputeBondLengthPenalties_())
@@ -741,6 +745,12 @@ cout << "  * fixed bond num " << bond_to_index_[&*b_it] << " (" << b_it->getFirs
 			// and all bond length deviation penalties are summed up in current_bond_length_penalty
 			
 			// Remember, we start counting with 0
+			if (a_it->getIndex() >= atom_to_block_.size())
+			{
+				Log.error() << "AssignBondOrderProcessor: No penalty type found for atom " << a_it->getFullName() << " with index " << a_it->getIndex() << endl;
+				return false; 
+			}
+
 			int block = atom_to_block_[a_it->getIndex()];
 			// This should not happen, but who knows ...
 			if (block == -1)
@@ -755,6 +765,7 @@ cout << "  * atom " << a_it->getFullName() << " is block " << block +1 << " : "
 		 << " " <<  block_to_start_idx_[block] << endl;
 #endif
 
+cout << "block num: " << block << "  cur_st_val:" << block_to_start_valence_[block] << endl;
 			int current_start_valence = block_to_start_valence_[block];
 			int current_block_length  = block_to_length_[block];
 			int current_end_valence   = current_start_valence + current_block_length-1;
@@ -1742,7 +1753,7 @@ cout << " atom type pen: " << entry.estimated_atom_type_penalty << " bond len pe
 	bool AssignBondOrderProcessor::precomputeBondLengthPenalties_()	
 	{
 #if defined DEBUG || defined DEBUG_ESTIMATE
-cout << "AssignBondOrderProcessor::precomputeBondLengthPenalties_:   " << endl;
+cout << " start AssignBondOrderProcessor::precomputeBondLengthPenalties_:   " << endl;
 #endif
 
 		// get the relevant options
@@ -1887,7 +1898,7 @@ cout << "AssignBondOrderProcessor::precomputeBondLengthPenalties_:   " << endl <
 
 	bool AssignBondOrderProcessor::preassignPenaltyClasses_()	
 	{
-#ifdef DEBUG_READ
+#if defined DEBUG_READ 
 cout << " - - preassign penalty classes  - - - - - - - - " << endl;
 #endif
 
@@ -1933,7 +1944,7 @@ cout << at->getFullName() << endl;
 					{
 
 #ifdef DEBUG_READ
-cout << "Treffer : " << at->getFullName() << " " << block_definition_[j].first << ": "
+cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() << " " << block_definition_[j].first << ": "
 		<<  block_definition_[j].second << " block: " << j+1 << endl;
 #endif
 						// store the blocks index

@@ -33,11 +33,19 @@ namespace BALL
 			connect( close_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
 			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
 			connect( reset_button, SIGNAL( clicked() ), this, SLOT( resetOptions() ) );
-			connect( browse_button, SIGNAL( clicked() ), this, SLOT( browseParameterFiles() ) );
+			connect( browse_button, SIGNAL( clicked() ), this, SLOT( browseParameterFiles() ) );	
+			connect( penalty_balance_slider, SIGNAL( valueChanged(int) ), this, SLOT( balanceParameterChanged() ) );
+
 		}
 
 		AssignBondOrderConfigurationDialog::~AssignBondOrderConfigurationDialog()
 		{
+		}
+
+		void AssignBondOrderConfigurationDialog::balanceParameterChanged()
+		{
+			atom_type_penalty_label->setText(String((int)(100 - penalty_balance_slider->value())).c_str());
+			bond_length_penalty_label ->setText(String(penalty_balance_slider->value()).c_str());
 		}
 
 		void AssignBondOrderConfigurationDialog::browseParameterFiles()

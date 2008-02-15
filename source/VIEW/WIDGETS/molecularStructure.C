@@ -484,17 +484,18 @@ namespace BALL
 			abop.options[AssignBondOrderProcessor::Option::ASSIGN_CHARGES] 									= bond_order_dialog_.assign_charges_checkBox->isChecked();
 			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_CHARGES] 							= bond_order_dialog_.overwrite_charges_checkBox->isChecked();
 			abop.options[AssignBondOrderProcessor::Option::KEKULIZE_RINGS] 									= bond_order_dialog_.kekulizeBonds_button->isChecked();
-			abop.options[AssignBondOrderProcessor::Option::ENFORCE_OCTETT_RULE] 						= bond_order_dialog_.enforce_octett_rule_box->isChecked();
+			abop.options[AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING]						= ( bond_order_dialog_.penalty_balance_slider->value()/100.);
 
 			// get the parameter folder
 			//abop.options[AssignBondOrderProcessor::Option::FOLDER] = ascii(bond_order_dialog_.parameter_file_edit->text());
 
+cout << " vor apply in molecularStructure" << endl;
 			// apply
 			containers.front()->apply(abop);
 			String nr = abop.getNumberOfBondOrdersSet();
 			setStatusbarText(String("Set ") + nr + " bondorders.", true);
 			getMainControl()->update(*containers.front(), true);
-
+cout << " nach apply in molecularStructure" << endl;
 		}
 
 

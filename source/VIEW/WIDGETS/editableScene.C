@@ -177,7 +177,7 @@ void EditableScene::initializeWidget(MainControl& main_control)
 	Path path;
 	
 	/* Annes Test */
-	QIcon icon4(path.find("graphics/buildBonds.png").c_str());
+	QIcon icon4(path.find("graphics/assignBondOrders.png").c_str());
 	bondorders_ = new QAction(icon4, "Quickly optimize bond orders", this);
 	bondorders_->setObjectName(bondorders_->text());
 	bondorders_->setToolTip("Edit mode: Quickly optimize the highlighted structures bond orders");
@@ -1522,7 +1522,7 @@ void EditableScene::computeBondOrders()
 		return;
 	}
 
-	AssignBondOrderConfigurationDialog& bond_order_dialog= ms->getBondOrderDialog();
+	AssignBondOrderConfigurationDialog& bond_order_dialog = ms->getBondOrderDialog();
 
 	AssignBondOrderProcessor abop;
 
@@ -1535,7 +1535,9 @@ void EditableScene::computeBondOrders()
 	abop.options[AssignBondOrderProcessor::Option::ASSIGN_CHARGES] 									= bond_order_dialog.assign_charges_checkBox->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_CHARGES] 							= bond_order_dialog.overwrite_charges_checkBox->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::KEKULIZE_RINGS] 									= bond_order_dialog.kekulizeBonds_button->isChecked();
-	abop.options[AssignBondOrderProcessor::Option::ENFORCE_OCTETT_RULE] 						= bond_order_dialog.enforce_octett_rule_box->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING]						= (bond_order_dialog.penalty_balance_slider->value()/100.);
+
+cout << " vor apply in editabelScene" << endl;
 
 	// apply
 	containers.front()->apply(abop);
@@ -1543,6 +1545,8 @@ void EditableScene::computeBondOrders()
 	setStatusbarText(String("Set ") + nr + " bondorders.", true);
 
 	getMainControl()->update(*containers.front(), true);
+	cout << " nach apply in editabelScene" << endl;
+
 }
 /* end of Annes Test*/
 

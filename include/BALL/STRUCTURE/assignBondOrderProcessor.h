@@ -121,8 +121,7 @@ namespace BALL
 				static const bool OVERWRITE_CHARGES;
 				static const bool ASSIGN_CHARGES;
 				static const bool KEKULIZE_RINGS;
-				static const bool ENFORCE_OCTETT_RULE;	
-				//static const String COMPUTE_ALL_SOLUTIONS;
+				static const bool ENFORCE_OCTETT_RULE;// TODO weg!	
 				static const String ALGORITHM;
 				static const String INIFile;
 				static const int MAX_BOND_ORDER;	
