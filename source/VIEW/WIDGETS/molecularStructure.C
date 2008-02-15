@@ -489,13 +489,11 @@ namespace BALL
 			// get the parameter folder
 			//abop.options[AssignBondOrderProcessor::Option::FOLDER] = ascii(bond_order_dialog_.parameter_file_edit->text());
 
-cout << " vor apply in molecularStructure" << endl;
 			// apply
 			containers.front()->apply(abop);
 			String nr = abop.getNumberOfBondOrdersSet();
 			setStatusbarText(String("Set ") + nr + " bondorders.", true);
 			getMainControl()->update(*containers.front(), true);
-cout << " nach apply in molecularStructure" << endl;
 		}
 
 

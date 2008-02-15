@@ -28,12 +28,12 @@
 // For lp_solve
 #include <lpsolve/lp_lib.h>
 
-#define DEBUG 1
-//#undef DEBUG
-#define DEBUG_READ 1
-//#undef DEBUG_READ
-#define DEBUG_ESTIMATE
-//#undef DEBUG_ESTIMATE
+//#define DEBUG 1
+#undef DEBUG
+//#define DEBUG_READ 1
+#undef DEBUG_READ
+//#define DEBUG_ESTIMATE
+#undef DEBUG_ESTIMATE
 
 
 using namespace std;
@@ -225,7 +225,7 @@ cout << ")" << endl;
 
 	Processor::Result AssignBondOrderProcessor::operator () (AtomContainer& ac)
 	{
-//#ifdef DEBUG
+#ifdef DEBUG
 cout << "  OPTIONS:" << endl;
 cout << " \t Algorithm: " <<  options[Option::Option::ALGORITHM] << endl;
 cout << " \t Overwrite bonds (single, double, triple, quad, aroma):" 
@@ -246,7 +246,7 @@ cout << " \t max bond order " << options[Option::MAX_BOND_ORDER] << endl;
 cout << " \t max number of solutions " << options[Option::MAX_NUMBER_OF_SOLUTIONS] << endl;
 cout << " \t valid : " << valid_ << endl;
 cout << endl;
-//#endif
+#endif
 
 		// Is the processor in a valid state?
 		if (valid_)
@@ -675,8 +675,13 @@ cout << " - - PE - - - - - - - - " << endl;
 		bool valid = true;
 		int num_free_bonds = 0;
 
+		// NOTE: this variable indexes the currently addressed atom. We cannot rely on
+		// 			 getIndex for this task since this is relative to the static atom array,
+		// 			 not to the current atom container!
+		Index current_atom_index = 0; 
+
 		// evaluate all atom type and bond length penalties
-		for (; a_it != ac_->endAtom() && valid ; a_it++)
+		for (; a_it != ac_->endAtom() && valid ; a_it++, current_atom_index++)
 		{
 #if defined DEBUG || defined DEBUG_ESTIMATE
 cout << " ++A+++++++++++++++" << endl;
@@ -745,13 +750,13 @@ cout << "  * fixed bond num " << bond_to_index_[&*b_it] << " (" << b_it->getFirs
 			// and all bond length deviation penalties are summed up in current_bond_length_penalty
 			
 			// Remember, we start counting with 0
-			if (a_it->getIndex() >= atom_to_block_.size())
+			if (current_atom_index >= atom_to_block_.size())
 			{
-				Log.error() << "AssignBondOrderProcessor: No penalty type found for atom " << a_it->getFullName() << " with index " << a_it->getIndex() << endl;
+				Log.error() << "AssignBondOrderProcessor: No penalty type found for atom " << a_it->getFullName() << " with index " << endl;
 				return false; 
 			}
 
-			int block = atom_to_block_[a_it->getIndex()];
+			int block = atom_to_block_[current_atom_index];
 			// This should not happen, but who knows ...
 			if (block == -1)
 			{
@@ -765,7 +770,6 @@ cout << "  * atom " << a_it->getFullName() << " is block " << block +1 << " : "
 		 << " " <<  block_to_start_idx_[block] << endl;
 #endif
 
-cout << "block num: " << block << "  cur_st_val:" << block_to_start_valence_[block] << endl;
 			int current_start_valence = block_to_start_valence_[block];
 			int current_block_length  = block_to_length_[block];
 			int current_end_valence   = current_start_valence + current_block_length-1;
@@ -804,7 +808,7 @@ cout << " and atom type penalty +" << penalties_[current_start_index + valence -
 				{
 
 #ifdef DEBUG
-cout << " but to less" << endl;
+cout << " but too small" << endl;
 #endif
 					return false;
 				}
@@ -1967,12 +1971,11 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 						//break; //continue; 
 					}
 				}
-//cout << "max atom pen = " << 	atom_type_normalization_factor_ << endl;
+
 				if (!found)
 				{
 					Log.error() << "AssignBondOrderProcessor: No penalty type found for atom " 
 											<< at->getFullName() << endl;
-//cout << "~" << at->getElement().getSymbol()<<	" " << block_definition_[8].first << " " << block_definition_[8].second  << endl;				
 					return false;
 				}
 			}
@@ -1982,13 +1985,6 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 			Log.error() << "AssignBondOrderProcessor: There was no valid AtomContainer set." << endl;
 		}
 		
-/*cout << "Penalties: " ;
-for (Size i =0; i<penalties_.size(); i++)
-{
-	cout << penalties_[i] << " " ; 
-}
-cout << endl;
-*/
 		return true;
 	}
 
@@ -2202,8 +2198,7 @@ cout << endl;
 		} // end of for all atoms
 
 		Position no_vars = no_x + no_y;
-		//cout << "no vars " << no_vars << endl;
-
+		
 		// Create a new model with 'no_vars' variables 
 		// (columns) and 0 rows
 		lprec *lp = make_lp(0, no_vars);
