@@ -78,6 +78,9 @@ namespace BALL
 
 	const char* AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS = "max_number_of_solutions";
 	const int  AssignBondOrderProcessor::Default::MAX_NUMBER_OF_SOLUTIONS = 10;
+	
+	const char* AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS = "compute_also_non_optimal_solutions";
+	const bool  AssignBondOrderProcessor::Default::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS = false;
 
 	const char* AssignBondOrderProcessor::Option::ALGORITHM = "algorithm";
 	const String AssignBondOrderProcessor::Default::ALGORITHM = AssignBondOrderProcessor::Algorithm::A_STAR;
@@ -102,6 +105,8 @@ namespace BALL
 			alpha_(),
 			atom_type_normalization_factor_(),
 			bond_length_normalization_factor_(),
+			max_number_of_solutions_(),
+			compute_also_non_optimal_solutions_(),
 			queue_()
 	{
 		setDefaultOptions();
@@ -123,7 +128,9 @@ namespace BALL
 			max_bond_order_(abop.max_bond_order_),
 			alpha_(abop.alpha_),
 			atom_type_normalization_factor_(abop.atom_type_normalization_factor_),
-			bond_length_normalization_factor_(abop.bond_length_normalization_factor_),
+			bond_length_normalization_factor_(abop.bond_length_normalization_factor_),	
+			max_number_of_solutions_(abop.max_number_of_solutions_),
+			compute_also_non_optimal_solutions_(abop.compute_also_non_optimal_solutions_),
 			queue_(abop.queue_)
 	{
 	}
@@ -145,9 +152,13 @@ namespace BALL
 		bond_free_.clear();
 		atomic_penalty_scores_.clear();
 		ac_ = 0;
+
 		valid_ = readAtomPenalties_();
+		
 		max_bond_order_ = options.getInteger(Option::MAX_BOND_ORDER);
 		alpha_ = options.getReal(Option::BOND_LENGTH_WEIGHTING);
+		max_number_of_solutions_ = options.getInteger(Option::MAX_NUMBER_OF_SOLUTIONS);
+		compute_also_non_optimal_solutions_ = options.getBool(Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS);
 
 		return true;
 	}
@@ -225,7 +236,7 @@ cout << ")" << endl;
 
 	Processor::Result AssignBondOrderProcessor::operator () (AtomContainer& ac)
 	{
-#ifdef DEBUG
+//#ifdef DEBUG
 cout << "  OPTIONS:" << endl;
 cout << " \t Algorithm: " <<  options[Option::Option::ALGORITHM] << endl;
 cout << " \t Overwrite bonds (single, double, triple, quad, aroma):" 
@@ -242,11 +253,12 @@ cout << " \t Ladung zuweisen: " << options.getBool(Option::ASSIGN_CHARGES) << en
 cout << " \t Kekulizer: " << options.getBool(Option::KEKULIZE_RINGS)  << endl;
 cout << " \t Penalty files " << options[Option::Option::INIFile] << endl;
 cout << " \t alpha: " << options[Option::Option::BOND_LENGTH_WEIGHTING] << endl;
-cout << " \t max bond order " << options[Option::MAX_BOND_ORDER] << endl;
+cout << " \t max bond order: " << options[Option::MAX_BOND_ORDER] << endl;
 cout << " \t max number of solutions " << options[Option::MAX_NUMBER_OF_SOLUTIONS] << endl;
+cout << " \t compute also non-optimal solutions: " << options.getBool(Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS) << endl;
 cout << " \t valid : " << valid_ << endl;
 cout << endl;
-#endif
+//#endif
 
 		// Is the processor in a valid state?
 		if (valid_)
@@ -447,7 +459,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 						}
 
 #ifdef DEBUG
-cout << "\nNach initialisierung : queue siue = " << queue_.size() << endl;
+cout << "\nNach initialisierung : queue size = " << queue_.size() << endl;
 #endif
 
 						// Try to find a first solution
@@ -463,12 +475,7 @@ cout << "\nNach initialisierung : queue siue = " << queue_.size() << endl;
 					{
 						// Get a first solution
 						solutions_.push_back(Solution_(this, ac));
-						if (solutions_[0].valid)
-						{
-							last_applied_solution_ = 0;
-							apply(0);	
-						}
-						else
+						if (!solutions_[0].valid)
 						{
 							last_applied_solution_=-1;
 						}
@@ -478,174 +485,21 @@ cout << "\nNach initialisierung : queue siue = " << queue_.size() << endl;
 								&&  (solutions_[0].valid)
 							 )
 						{
-							/*if (options.get(Option::COMPUTE_ALL_SOLUTIONS) == ComputeAllSolutions::ONE_BOND_HEURISTIC)
-							{
-
-								// now iterate over all free bonds and inhibit the order we already found
-								map<Bond*, bool>::iterator it = bond_free_.begin();
-								for (; it!= bond_free_.end(); it++)
-								{
-									if (it->second)
-									{	
-										// We want to inhibit the current bond to have the order, we already found
-										// Since lpsolve does not offer constraints of type unequal, we have to check
-										// if there is a solution with constraint x_bond LE order-1  AND x_bond GE order+1 
-										// the type of the extra constraint is controlled by the last parameter value.
-
-										Solution_ solutionLE; 
-										Solution_ solutionGE; 
-
-										// case LE order-1
-										if (solutions_[0].bond_orders[it->first]-1 > 0)
-										{	
-											solutionLE = Solution_(this, ac, it->first, solutions_[0].bond_orders[it->first], true);
-										}
-										// case GE order+1
-										if (solutions_[0].bond_orders[it->first]+1 < 5)
-										{	
-											solutionGE = Solution_(this, ac, it->first, solutions_[0].bond_orders[it->first], false);
-										}
-
-										if (solutionLE.valid)
-										{
-											if (solutionGE.valid)
-											{
-												if (solutionLE.penalty <= solutionGE.penalty)
-												{
-													solutions_.push_back(solutionLE);  
-												}
-												if (solutionLE.penalty >= solutionGE.penalty)
-												{
-													solutions_.push_back(solutionGE);  
-												}
-											}
-											else
-											{
-												solutions_.push_back(solutionLE);  
-											}
-										} // solution_LE not valid
-										else
-										{
-											if (solutionGE.valid)
-											{			
-												solutions_.push_back(solutionGE);  
-											}
-										}
-									}
-									else
-									{
-										Log.error() << "There is a unknown bond" << endl;
-									}
-								} // end of all bonds
-
-								if (!options.getBool(Option::KEKULIZE_RINGS))
-								{
-									// find all rings
-									vector<vector<Atom*> > rings;
-									RingPerceptionProcessor rpp;
-									rpp.calculateSSSR(rings, ac);
-
-									// set the aromatic rings	
-									AromaticityProcessor ap;
-									ap.aromatize(rings, ac);
-								}
-
-								// set the last solution // TODO: Do we want to apply the LAST solution?
-								last_applied_solution_ = solutions_.size()-1;
-								apply(solutions_.size()-1);
-							}
-							else if (options.get(Option::COMPUTE_ALL_SOLUTIONS) == ComputeAllSolutions::ENUMERATION_TREE)
-							{
-								/ * // print the optimal sol
-									HashMap<Bond*, int>::Iterator mit = solutions_[0].bond_orders.begin();
-									for (; mit != solutions_[0].bond_orders.end(); ++mit)
-									{
-									cout << bond_to_index_[mit->first] << "---"<< mit->second <<  " " << 
-									mit->first->getFirstAtom()->getName() << ".."<<	mit->first->getSecondAtom()->getName()   << std::endl;
-									}
-									cout << std::endl; * /
-								// get the current optimum
-								optimal_penalty_ = solutions_[0].penalty;
-
-								// prepare the compare String
-								map<Bond*, bool>::iterator it = bond_free_.begin();
-								for (; it!= bond_free_.end(); it++)
-								{
-									current_orders_ +=" ";
-								}
-								it = bond_free_.begin();
-
-								for (; it!= bond_free_.end(); it++)
-								{
-									if (it->second && !(  (it->first->getFirstAtom()->getElement() ==PTE[Element::H])
-												||( it->first->getSecondAtom()->getElement()==PTE[Element::H]) 
-												)
-										 )
-									{	
-										// denote the bond as fixed
-										bond_free_[it->first]= false;
-										for (int order = 1; order <= 4; order++)
-										{	
-											//	//cout << "vorher: " << current_orders_ << "-----" << bond_to_index_[it->first] << std::endl;//"--" << order << "--" << char(order) << std::endl;
-											// denote the choosen bond order in the order string
-											current_orders_[bond_to_index_[it->first]] = '0'+order;
-											//	//cout << "nachher: " << current_orders_ << "-----" << bond_to_index_[it->first] << "--" << (current_orders_[bond_to_index_[it->first]]) << "--" << std::endl;
-
-											// prohibit the bonds order to get the order found on the last (optimal) solution
-											if (   (solutions_[0].bond_orders[it->first] != order)
-													&& (checked_.find(current_orders_) == checked_.end()))
-											{
-
-												//cout << "Bond " << bond_to_index_[it->first] << "--Order " << order << " situation: " << current_orders_ << std::endl;
-
-												// denote the choosen bond order in the atoms fixed valences
-												fixed_val_[it->first->getFirstAtom()->getIndex()] += order;
-												fixed_val_[it->first->getSecondAtom()->getIndex()] += order;
-
-												//current_orders_.set(String(order), bond_to_index_[it->first], bond_to_index_[it->first]);
-												// try to solve this bond order
-												recursive_solve_(ac, 0);
-
-												// remember, that we already tried this combination
-												checked_.insert(current_orders_);
-
-												// clean up the order string 
-												current_orders_[bond_to_index_[it->first]] = ' ';
-
-												//current_orders_.set(" ", bond_to_index_[it->first], bond_to_index_[it->first]);
-
-												// reset the fixed valences
-												fixed_val_[it->first->getFirstAtom()->getIndex()] -= order;
-												fixed_val_[it->first->getSecondAtom()->getIndex()] -= order;
-											}
-										}
-										// reset the bond status
-										bond_free_[it->first] = true;
-									}
-								}	
-
-							}*/
+							// find some more :-)
 						}
 						else
 						{	
 							cout << "No solution compted! -solsize:" <<  solutions_.size() << " - no free bonds:" <<  total_num_of_bonds_ - num_fixed_bonds << " - valid " << (solutions_.size()>0 ? solutions_[0].valid : false) << std::endl;
 							//cout << "Too many bonds " << total_no_bonds - num_fixed_bonds << std::endl;
 						}
-					}
+					} // end of ILP
 
 					if (solutions_.size() > 0)
-					{	
-						last_applied_solution_ = 0;
-						// set the bond orders of the first solution
-						AtomIterator a_it = ac.beginAtom();
-						Atom::BondIterator b_it = a_it->beginBond();
-						BALL_FOREACH_BOND(ac, a_it, b_it)
-						{
-							b_it->setOrder(solutions_[0].bond_orders[&(*b_it)]);
-						}
+					{
+						apply(0);
 					}
-				}
-			}
+				} // end of if preassign worked out
+			} // end of if molecule
 		}
 		return Processor::CONTINUE;
 	}
@@ -2021,17 +1875,21 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 		options.setDefault(AssignBondOrderProcessor::Option::INIFile,
 													 AssignBondOrderProcessor::Default::INIFile);		
 		
-		options.setDefault(AssignBondOrderProcessor::Option::MAX_BOND_ORDER,
+		options.setDefaultInteger(AssignBondOrderProcessor::Option::MAX_BOND_ORDER,
 													 AssignBondOrderProcessor::Default::MAX_BOND_ORDER);
 
-		options.setDefault(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS,
-													 AssignBondOrderProcessor::Default::MAX_NUMBER_OF_SOLUTIONS);
+		options.setDefaultInteger(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS,
+													    AssignBondOrderProcessor::Default::MAX_NUMBER_OF_SOLUTIONS);
+
+		options.setDefault(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS,
+											 AssignBondOrderProcessor::Default::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS);
 
 		options.setDefault(AssignBondOrderProcessor::Option::ALGORITHM,
 													 AssignBondOrderProcessor::Default::ALGORITHM);		
 
 		options.setDefaultReal(AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING,
-													 AssignBondOrderProcessor::Default::BOND_LENGTH_WEIGHTING);		
+													 AssignBondOrderProcessor::Default::BOND_LENGTH_WEIGHTING);	
+
 	}
 
 	Size  AssignBondOrderProcessor::getNumberOfBondOrdersSet()
@@ -2045,6 +1903,7 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 
 	bool AssignBondOrderProcessor::apply(Position i)
 	{
+cout << "  AssignBondOrderProcessor::apply(Position i)" << endl;
 		if (i < solutions_.size())
 		{
 			if (solutions_[i].valid)
@@ -2064,6 +1923,7 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 
 				if (!options.getBool(AssignBondOrderProcessor::Option::KEKULIZE_RINGS))
 				{
+cout << " Apply: make aromatic! " << endl;
 					// find all rings
 					vector<vector<Atom*> > rings;
 					RingPerceptionProcessor rpp;

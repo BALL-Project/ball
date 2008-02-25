@@ -23,7 +23,11 @@
 #endif
 
 #ifndef BALL_DATATYPE_OPTIONS_H
-	#include <BALL/DATATYPE/options.h>
+# include <BALL/DATATYPE/options.h>
+#endif
+
+#ifndef BALL_COMMON_LIMITS_H
+#	include <BALL/COMMON/limits.h>
 #endif
 
 #include <queue>
@@ -71,6 +75,10 @@ namespace BALL
 				*/
 				static const char* OVERWRITE_AROMATIC_BOND_ORDERS; 	
 				
+				/**	compute bond orders for all bonds of type aromatic bond order
+				*/
+				static const char* OVERWRITE_SELECTED_BONDS; 	
+
 				/**	overwrite all charges
 				*/
 				static const char* OVERWRITE_CHARGES;
@@ -89,9 +97,8 @@ namespace BALL
 				
 				/**	technique to compute all solutions
 				*/
-				//static const char* COMPUTE_ALL_SOLUTIONS;
 				static const char* ALGORITHM; 
-
+				
 				/** the penalty parameter file
 				 */
 				static const char* INIFile;	
@@ -103,6 +110,10 @@ namespace BALL
 				/** the maximal number of solutions to compute
 				 */
 				static const char* MAX_NUMBER_OF_SOLUTIONS;
+			
+				/** compute also non-optimal solutions
+				 */
+				static const char* COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS;
 
 				/** the weighting of bond length penalties wrt valence penalties
 				 */
@@ -126,17 +137,16 @@ namespace BALL
 				static const String INIFile;
 				static const int MAX_BOND_ORDER;	
 				static const int MAX_NUMBER_OF_SOLUTIONS;
+				static const bool COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS;
 				static const float BOND_LENGTH_WEIGHTING;
 			};
 
-			struct BALL_EXPORT Algorithm//Algorithm::ComputeAllSolutions
+			struct BALL_EXPORT Algorithm
 			{
-				//static const String DISABLED;
-				//static const String ONE_BOND_HEURISTIC;
-				//static const String ENUMERATION_TREE;
 				static const String A_STAR;
 				static const String ILP; 
 			};
+			
 			//@}
 		
 
@@ -181,12 +191,27 @@ namespace BALL
 			Size getNumberOfBondOrdersSet();
 		
 			/// Returns the number of already computed solutions
-			Size getNumberOfComputedSolutions() {return solutions_.size();};
+			Size getNumberOfComputedSolutions() {return solutions_.size();}
 
 			/// Returns the total penalty of the (already computed!) i-th solution 
-			float getTotalPenalty(Position i) {
-				return (  (1.-alpha_) * (solutions_[i].atom_type_penalty/atom_type_normalization_factor_) 
-					      + (alpha_*solutions_[i].bond_length_penalty/bond_length_normalization_factor_));} 
+			float getTotalPenalty(Position i) 
+			{
+				if (i >= solutions_.size())
+				{
+					Log.error() << "AssignBondOrderProcessor::getTotalPenalty: no solution with index " << i << std::endl;
+					return Limits<float>::max();
+				}
+				else if (   (atom_type_normalization_factor_   < 0.00001) 
+						     || (bond_length_normalization_factor_ < 0.00001) ) 
+				{
+					Log.error() << "AssignBondOrderProcessor::getTotalPenalty: normalization factor zero " << i << std::endl;
+				}
+				else
+				{
+					return (  (1.-alpha_) * (solutions_[i].atom_type_penalty/atom_type_normalization_factor_) 
+									+ (alpha_*solutions_[i].bond_length_penalty/bond_length_normalization_factor_));
+				} 
+			}
 
 			/** Set the AtomContainer ac_'s bond orders to the ones found 
 			 * in the (already computed!) i-th solution.
@@ -407,6 +432,12 @@ namespace BALL
 			/// the inverse of the bond length penalty normalization factor
 			float bond_length_normalization_factor_;
 
+			/// the max number of solutions to compute //TODO
+			int max_number_of_solutions_;
+
+			/// flag to indicate, whether also non-optimal solutions should be computed //TODO
+			bool compute_also_non_optimal_solutions_;
+
 			////////// for Algorithm::A_START   ComputeAllSolutions::A_STAR ///////
 			/// 
 			bool	performAStarStep_();
@@ -417,10 +448,6 @@ namespace BALL
 			/// Method to estimate the f = g* +h*
 			/// returns true, if the entry is still valid
 			bool estimatePenalty_(PQ_Entry_& entry);
-
-			/// Method to combine the atom type and bond length penalty
-			/// the balance parameter is alpha_
-			//float combinedAtomAndBondPenalty_(PQ_Entry_& entry);
 
 			// filled by readAtomPenalties_
 			// organized in imaginarey blocks of length  
