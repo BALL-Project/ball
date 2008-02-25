@@ -224,10 +224,12 @@ void EditableScene::checkMenu(MainControl& main_control)
 	Scene::checkMenu(main_control);
 	bool edit_mode = (current_mode_ == (Scene::ModeType)EDIT__MODE);
 	bool selected_system = !busy && main_control.getSelectedSystem();
+	
 	optimize_->setEnabled(selected_system);
+	add_hydrogens_->setEnabled(selected_system);
 	// Annes Test
 	bondorders_->setEnabled(selected_system);
-	add_hydrogens_->setEnabled(selected_system);
+
 	element_action_->setEnabled(!busy && edit_mode);
 
 	new_molecule_->setEnabled(!busy);

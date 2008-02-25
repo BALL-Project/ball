@@ -236,7 +236,7 @@ cout << ")" << endl;
 
 	Processor::Result AssignBondOrderProcessor::operator () (AtomContainer& ac)
 	{
-//#ifdef DEBUG
+#ifdef DEBUG
 cout << "  OPTIONS:" << endl;
 cout << " \t Algorithm: " <<  options[Option::Option::ALGORITHM] << endl;
 cout << " \t Overwrite bonds (single, double, triple, quad, aroma):" 
@@ -258,7 +258,7 @@ cout << " \t max number of solutions " << options[Option::MAX_NUMBER_OF_SOLUTION
 cout << " \t compute also non-optimal solutions: " << options.getBool(Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS) << endl;
 cout << " \t valid : " << valid_ << endl;
 cout << endl;
-//#endif
+#endif
 
 		// Is the processor in a valid state?
 		if (valid_)
@@ -1903,7 +1903,6 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 
 	bool AssignBondOrderProcessor::apply(Position i)
 	{
-cout << "  AssignBondOrderProcessor::apply(Position i)" << endl;
 		if (i < solutions_.size())
 		{
 			if (solutions_[i].valid)
@@ -1923,7 +1922,6 @@ cout << "  AssignBondOrderProcessor::apply(Position i)" << endl;
 
 				if (!options.getBool(AssignBondOrderProcessor::Option::KEKULIZE_RINGS))
 				{
-cout << " Apply: make aromatic! " << endl;
 					// find all rings
 					vector<vector<Atom*> > rings;
 					RingPerceptionProcessor rpp;
