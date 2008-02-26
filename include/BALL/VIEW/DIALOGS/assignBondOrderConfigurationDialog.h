@@ -59,6 +59,7 @@ namespace BALL
 			protected slots:
 
 			virtual void browseParameterFiles();
+			virtual void balanceParameterChanged();
 
 			protected:
 

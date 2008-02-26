@@ -177,7 +177,7 @@ void EditableScene::initializeWidget(MainControl& main_control)
 	Path path;
 	
 	/* Annes Test */
-	QIcon icon4(path.find("graphics/buildBonds.png").c_str());
+	QIcon icon4(path.find("graphics/assignBondOrders.png").c_str());
 	bondorders_ = new QAction(icon4, "Quickly optimize bond orders", this);
 	bondorders_->setObjectName(bondorders_->text());
 	bondorders_->setToolTip("Edit mode: Quickly optimize the highlighted structures bond orders");
@@ -224,10 +224,12 @@ void EditableScene::checkMenu(MainControl& main_control)
 	Scene::checkMenu(main_control);
 	bool edit_mode = (current_mode_ == (Scene::ModeType)EDIT__MODE);
 	bool selected_system = !busy && main_control.getSelectedSystem();
+	
 	optimize_->setEnabled(selected_system);
+	add_hydrogens_->setEnabled(selected_system);
 	// Annes Test
 	bondorders_->setEnabled(selected_system);
-	add_hydrogens_->setEnabled(selected_system);
+
 	element_action_->setEnabled(!busy && edit_mode);
 
 	new_molecule_->setEnabled(!busy);
@@ -1493,13 +1495,13 @@ void EditableScene::saturateWithHydrogens()
 void EditableScene::computeBondOrders()
 {
 	if (getMainControl()->isBusy()) return;
-	
-	System* system = getMainControl()->getSelectedSystem();  //???
-	if (system == 0) { return;};              //???
+
+	System* system = getMainControl()->getSelectedSystem();  
+	if (system == 0) { return;};              
 
 	deselect_(false);
-	
-	// Do we have a Molecular Structure?
+
+	// do we have a Molecular Structure?
 	MolecularStructure* ms = MolecularStructure::getInstance(0);
 	if (ms == 0) return;
 
@@ -1522,7 +1524,7 @@ void EditableScene::computeBondOrders()
 		return;
 	}
 
-	AssignBondOrderConfigurationDialog& bond_order_dialog= ms->getBondOrderDialog();
+	AssignBondOrderConfigurationDialog& bond_order_dialog = ms->getBondOrderDialog();
 
 	AssignBondOrderProcessor abop;
 
@@ -1535,12 +1537,89 @@ void EditableScene::computeBondOrders()
 	abop.options[AssignBondOrderProcessor::Option::ASSIGN_CHARGES] 									= bond_order_dialog.assign_charges_checkBox->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_CHARGES] 							= bond_order_dialog.overwrite_charges_checkBox->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::KEKULIZE_RINGS] 									= bond_order_dialog.kekulizeBonds_button->isChecked();
-	abop.options[AssignBondOrderProcessor::Option::ENFORCE_OCTETT_RULE] 						= bond_order_dialog.enforce_octett_rule_box->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING]						= (bond_order_dialog.penalty_balance_slider->value()/100.);
+
+	
+	// get the limitations for number of bond order assignment
+	if (bond_order_dialog.max_n_opt_solutions->text().toInt() < 1)
+		bond_order_dialog.max_n_opt_solutions->setText(String(1).c_str());
+
+	if (bond_order_dialog.max_n_all_solutions->text().toInt() < 1)
+		bond_order_dialog.max_n_all_solutions->setText(String(1).c_str());
+
+	if (bond_order_dialog.single_solution_button->isChecked())
+	{
+		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= 1;
+		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= false;
+	}
+	else if (bond_order_dialog.all_optimal_solutions_button->isChecked())
+	{
+		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= 0;
+		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= false;
+	}
+	else if (bond_order_dialog.n_opt_solutions_button->isChecked())
+	{
+		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= bond_order_dialog.max_n_opt_solutions->text().toInt();
+		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= false;
+	}
+	else if (bond_order_dialog.n_all_solutions_button->isChecked())
+	{
+		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= bond_order_dialog.max_n_all_solutions->text().toInt();
+		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= true;
+	}
+
+	// get the parameter folder
+	abop.options[AssignBondOrderProcessor::Option::INIFile] = ascii(bond_order_dialog.parameter_file_edit->text());
 
 	// apply
 	containers.front()->apply(abop);
-	String nr = abop.getNumberOfBondOrdersSet();
-	setStatusbarText(String("Set ") + nr + " bondorders.", true);
+
+	// do we have to compute more solutions?	
+	Size max_n = abop.options.getInteger(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS);
+	bool compute_also_non_optimal_solutions = abop.options.getReal(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS);
+	
+	// did we find a solution at all?
+	if (abop.getNumberOfComputedSolutions() == 0)
+	{
+		setStatusbarText(String("Found no valid bond order assignment!", true));
+		return;
+	}
+
+	if (max_n > 1)
+	{
+		Log.info() << "Solution " << abop.getNumberOfComputedSolutions() << " has penalty "  
+								<<  abop.getTotalPenalty(abop.getNumberOfComputedSolutions()-1) << "." << endl;
+
+		bool found_another = abop.computeNextSolution();
+		bool next_solution_is_optimal = (abop.getTotalPenalty(0) == abop.getTotalPenalty(1)); 
+
+		while (    found_another 
+				&& ((abop.getNumberOfComputedSolutions() <= max_n) || (!max_n)      )
+				&& ( next_solution_is_optimal || compute_also_non_optimal_solutions )
+				)
+		{
+			Log.info() << "Solution " << abop.getNumberOfComputedSolutions() << " has penalty "  
+				<<  abop.getTotalPenalty(abop.getNumberOfComputedSolutions()-1) << "." << endl;
+
+			found_another = abop.computeNextSolution();
+			next_solution_is_optimal = (abop.getTotalPenalty(0) == abop.getTotalPenalty(abop.getNumberOfComputedSolutions()-1)); 
+		}
+	}
+
+	// apply the best solution
+	abop.apply(0);
+	
+	// give a message
+	if (abop.getNumberOfComputedSolutions() < 3)
+	{		
+		String nr = abop.getNumberOfBondOrdersSet();
+		setStatusbarText(String("Assigned orders to ") + nr + " bonds.", true);
+	}
+	else 
+	{	
+		String nr = abop.getNumberOfComputedSolutions()-1;
+		setStatusbarText(String("Found ") + nr + " bond order assignments.", true);
+	}
 
 	getMainControl()->update(*containers.front(), true);
 }
