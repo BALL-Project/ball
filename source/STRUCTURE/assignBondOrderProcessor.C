@@ -246,7 +246,6 @@ cout << " \t Overwrite bonds (single, double, triple, quad, aroma):"
 		 << options.getBool(Option::OVERWRITE_QUADRUPLE_BOND_ORDERS) << " " 
 		 << options.getBool(Option::OVERWRITE_AROMATIC_BOND_ORDERS) << endl;
 
-//cout << " \t Oktett Regel: " <<options.getBool(Option::ENFORCE_OCTETT_RULE) << endl;
 cout << " \t Ladung überschreiben: " << options.getBool(Option::OVERWRITE_CHARGES) << endl;
 cout << " \t Ladung zuweisen: " << options.getBool(Option::ASSIGN_CHARGES) << endl;
 
@@ -469,7 +468,27 @@ cout << "\nNach initialisierung : queue size = " << queue_.size() << endl;
 						if (!found_a_sol)
 						{
 							Log.info() << "AssignBondOrderProcessor: No solution found!" << endl;
-						}	
+						}
+						else
+						{	
+							// Do we have to find more solutions?
+							Size max_n = options.getInteger(Option::MAX_NUMBER_OF_SOLUTIONS);
+							bool compute_also_non_optimal_solutions = options.getReal(Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS);
+							if (max_n > 1)
+							{
+								bool found_another = computeNextSolution();
+								bool next_solution_is_optimal = (getTotalPenalty(0) == getTotalPenalty(1)); 
+
+								while (     found_another 
+											  && ((getNumberOfComputedSolutions() < max_n) || (!max_n)      )
+												&& ( next_solution_is_optimal || compute_also_non_optimal_solutions )
+										)
+								{	
+									found_another = computeNextSolution();
+									next_solution_is_optimal = (getTotalPenalty(0) == getTotalPenalty(getNumberOfComputedSolutions()-1)); 
+								}
+							}
+						}
 					}
 					else // Solve a ILP
 					{
@@ -1936,7 +1955,8 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 		}
 		else return false;
 	}
-	
+
+	// TODO: could be given a flag indicating whether the next solution should be applied or not
 	bool AssignBondOrderProcessor::computeNextSolution()
 	{
 		if (options.get(Option::ALGORITHM) == Algorithm::A_STAR)

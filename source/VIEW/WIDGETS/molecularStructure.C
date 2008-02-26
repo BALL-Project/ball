@@ -482,15 +482,18 @@ namespace BALL
 			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_CHARGES] 							= bond_order_dialog_.overwrite_charges_checkBox->isChecked();
 			abop.options[AssignBondOrderProcessor::Option::KEKULIZE_RINGS] 									= bond_order_dialog_.kekulizeBonds_button->isChecked();
 			abop.options[AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING]						= (bond_order_dialog_.penalty_balance_slider->value()/100.);
-			
-			// get the limitations for number of bond order assignments
+		
+			// get the parameter folder
+			abop.options[AssignBondOrderProcessor::Option::INIFile] = ascii(bond_order_dialog_.parameter_file_edit->text());
+
+			// check for valid input
 			if (bond_order_dialog_.max_n_opt_solutions->text().toInt() < 1)
 				bond_order_dialog_.max_n_opt_solutions->setText(String(1).c_str());
 
 			if (bond_order_dialog_.max_n_all_solutions->text().toInt() < 1)
 				bond_order_dialog_.max_n_all_solutions->setText(String(1).c_str());
 
-
+			// get the limitations for number of bond order assignments
 			if (bond_order_dialog_.single_solution_button->isChecked())
 			{
 				abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= 1;
@@ -512,56 +515,30 @@ namespace BALL
 				abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= true;
 			}
 
-			// get the parameter folder
-			abop.options[AssignBondOrderProcessor::Option::INIFile] = ascii(bond_order_dialog_.parameter_file_edit->text());
-
+		
 			// apply
 			containers.front()->apply(abop);
 			
-			Size max_n = abop.options.getInteger(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS);
-			bool compute_also_non_optimal_solutions = abop.options.getReal(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS);
-
-			// did we find a solution at all?
+			// give a message
 			if (abop.getNumberOfComputedSolutions() == 0)
 			{
-				setStatusbarText(String("Found no valid bond order assignment!", true));
-				return;
+				setStatusbarText(String("Could not find a valid bond order assignment.", true));
 			}
-
-			// do we have to compute more solutions?
-			if (max_n > 1)
-			{	
-				Log.info() << "Solution " << abop.getNumberOfComputedSolutions() << " has penalty "  
-								   <<  abop.getTotalPenalty(abop.getNumberOfComputedSolutions()-1) << "." << endl;
-
-				bool found_another = abop.computeNextSolution();
-				bool next_solution_is_optimal = (abop.getTotalPenalty(0) == abop.getTotalPenalty(1)); 
-
-				while (    found_another 
-						&& ((abop.getNumberOfComputedSolutions() <= max_n) || (!max_n)      )
-						&& ( next_solution_is_optimal || compute_also_non_optimal_solutions )
-						)
-				{
-					Log.info() << "Solution " << abop.getNumberOfComputedSolutions() << " has penalty "  
-						<<  abop.getTotalPenalty(abop.getNumberOfComputedSolutions()-1) << "." << endl;
-
-					found_another = abop.computeNextSolution();
-					next_solution_is_optimal = (abop.getTotalPenalty(0) == abop.getTotalPenalty(abop.getNumberOfComputedSolutions()-1)); 
-				}
-			}
-			
-			// apply the best solution
-			abop.apply(0);
-			
-			// give a message
-			if (abop.getNumberOfComputedSolutions() < 3)
+			else if (abop.getNumberOfComputedSolutions() < 2)
 			{		
 				String nr = abop.getNumberOfBondOrdersSet();
 				setStatusbarText(String("Assigned orders to ") + nr + " bonds.", true);
 			}
 			else 
-			{	
-				String nr = abop.getNumberOfComputedSolutions()-1;
+			{
+				for (Size i = 0; i < abop.getNumberOfComputedSolutions(); i++)
+				{
+					Log.info() << "Solution " << i+1 << " has penalty "  
+								 <<  abop.getTotalPenalty(i) << "." << endl;
+
+				}
+
+				String nr = abop.getNumberOfComputedSolutions();
 				setStatusbarText(String("Found ") + nr + " bond order assignments.", true);
 			}
 
