@@ -32,9 +32,13 @@
 
 #include <queue>
 
+#ifdef BALL_HAS_LPSOLVE
+		struct _lprec;
+		typedef struct _lprec lprec;
+#endif
+
 namespace BALL 
 {
-
 	/**	Bond creation processor
 			\ingroup StructureMiscellaneous
 	*/
@@ -273,13 +277,6 @@ namespace BALL
 					// Detailed constructor for A-STAR
 					Solution_(AssignBondOrderProcessor* ap, const PQ_Entry_& entry);
 
-					/// Detailed constructor for ILP solutions
-					// we assume that the AtomContainer in the constructor and the apply-method are equal
-					// otherwise we would have to solve a graph matching problem
-					// Note: The last parameter decides which order spectrum should be considered.
-					// Since the lpsolve does not offer a unequality constraint we have to split into LE and GE
-					Solution_(AssignBondOrderProcessor* ap, AtomContainer& ac, Bond* bond = NULL, int order = 0, bool lessEqualConstraint = false);
-					
 					/// Destructor
 					virtual ~Solution_();
 					
@@ -349,10 +346,6 @@ namespace BALL
 						float bond_length_normalization_factor_;
 				};
 
-			/// computes for every atom its possible atomic valences and the corresponding possible atomic penalty scores
-		  /// and stores them per \b{atom in atomic_penalty_scores_}
-			void calculateAtomPenalties_(AtomContainer& ac);
-
 			/** Reads the penalty-INIFile (for example BondOrder.ini),
 			 *  and stores the penalties blockwise. 
 			 *	Returns false if the INIFile could not be read correctly.
@@ -377,21 +370,22 @@ namespace BALL
 			 *	the compare to the longest known bond for this atom pair. 
 			 */
 			bool precomputeBondLengthPenalties_();
+
+#ifdef BALL_HAS_LPSOLVE
+			/** Setup an initial linear program.
+			 */
+			bool solveInitialILP_(Solution_& solution);
+#endif
 			
 			/// Processor is in a useable valid state. //TODO
 			bool valid_;
 
-			//TODO: change to something better than the atom index :-) 
-			/// the penalties per atom 
-			vector<vector< pair <int,int> > > atomic_penalty_scores_;
-		
-			// Map for storing whether a bond is free or fixed
-			map<Bond*, bool> bond_free_;
- 			
 			// Map for storing the bonds fixed orders
 			// if a bond is free, the map returns 0
-			// TODO: remove bond_free_
 			map<Bond*, int> bond_fixed_;
+
+			/// all free bonds in the atom container
+			vector<Bond*> free_bonds_;
 
 			/// Map for storing the bonds associated index (all bonds)
 			HashMap<Bond*, Index> bond_to_index_;
@@ -399,6 +393,10 @@ namespace BALL
 			// TODO: constructor... Ersetzung
 			// Vector for mapping from variable indices onto bonds (all bonds)
 			std::vector<Bond*> index_to_bond_;
+
+			// Vector for mapping from variable indices onto free bonds in the
+			// order used by the ILP
+			std::vector<Bond*> ilp_index_to_free_bond_;
 
 			//TODO
 			/// the number of bonds given (free + fixed!)
@@ -480,6 +478,10 @@ namespace BALL
 					
 			///stores the possible bond lengths penalties per order // TODO: constructor etc
 			HashMap<Bond*, vector<float> > bond_lengths_penalties_;
+
+#ifdef BALL_HAS_LPSOLVE
+			lprec* ilp_;
+#endif
 		};
 
 } // namespace BALL 

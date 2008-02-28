@@ -26,8 +26,9 @@
 #include <QtXml/QtXml>
 #include <Qt/qdom.h>
 
-// For lp_solve
-#include <lpsolve/lp_lib.h>
+#ifdef BALL_HAS_LPSOLVE
+# include <lpsolve/lp_lib.h>
+#endif
 
 //#define DEBUG 1
 #undef DEBUG
@@ -69,7 +70,7 @@ namespace BALL
 	const bool  AssignBondOrderProcessor::Default::KEKULIZE_RINGS = true;
 
 	const char* AssignBondOrderProcessor::Option::ENFORCE_OCTETT_RULE = "enforce_octett_rule";
-	const bool  AssignBondOrderProcessor::Default::ENFORCE_OCTETT_RULE = true;
+	const bool  AssignBondOrderProcessor::Default::ENFORCE_OCTETT_RULE = false;
 
 	const char* AssignBondOrderProcessor::Option::INIFile = "iniFile";
 	const String  AssignBondOrderProcessor::Default::INIFile = "/bond_lengths/BondOrder.xml";
@@ -94,8 +95,6 @@ namespace BALL
 		: UnaryProcessor<AtomContainer>(),
 			options(),
 			valid_(true),
-			atomic_penalty_scores_(),
-			bond_free_(),
 			bond_to_index_(),
 			total_num_of_bonds_(),
 			fixed_val_(),
@@ -111,6 +110,9 @@ namespace BALL
 			compute_also_non_optimal_solutions_(),
 			queue_()
 	{
+#ifdef BALL_HAS_LPSOLVE
+		ilp_ = 0;
+#endif
 		setDefaultOptions();
 	}
 
@@ -118,8 +120,6 @@ namespace BALL
 		:	UnaryProcessor<AtomContainer>(abop),
 			options(abop.options),
 			valid_(abop.valid_),
-			atomic_penalty_scores_(abop.atomic_penalty_scores_),	
-			bond_free_(abop.bond_free_),
 			bond_to_index_(abop.bond_to_index_),
 			total_num_of_bonds_(abop.total_num_of_bonds_),
 			fixed_val_(abop.fixed_val_),
@@ -135,15 +135,52 @@ namespace BALL
 			compute_also_non_optimal_solutions_(abop.compute_also_non_optimal_solutions_),
 			queue_(abop.queue_)
 	{
+#ifdef BALL_HAS_LPSOLVE
+		if (abop.ilp_)
+			ilp_ = copy_lp(abop.ilp_);
+		else
+			ilp_ = 0;
+#endif
 	}
 
 	AssignBondOrderProcessor::~AssignBondOrderProcessor()
 	{
 		setDefaultOptions();
+#ifdef BALL_HAS_LPSOLVE
+		if (ilp_)
+			delete_lp(ilp_);
+#endif
 	}
 
 	AssignBondOrderProcessor& AssignBondOrderProcessor::operator = (const AssignBondOrderProcessor& abop)
 	{
+		// prevent self assignment
+		if (&abop == this)
+			return *this;
+
+		options = abop.options;
+		valid_ = abop.valid_;
+		bond_to_index_ = abop.bond_to_index_;
+		total_num_of_bonds_ = abop.total_num_of_bonds_;
+		fixed_val_ = abop.fixed_val_;
+		solutions_ = abop.solutions_;
+		optimal_penalty_ = abop.optimal_penalty_;
+		last_applied_solution_ = abop.last_applied_solution_;
+		ac_ = abop.ac_; 
+		max_bond_order_ = abop.max_bond_order_;
+		alpha_ = abop.alpha_;
+		atom_type_normalization_factor_ = abop.atom_type_normalization_factor_;
+		bond_length_normalization_factor_ = abop.bond_length_normalization_factor_;	
+		max_number_of_solutions_ = abop.max_number_of_solutions_;
+		compute_also_non_optimal_solutions_ = abop.compute_also_non_optimal_solutions_;
+		queue_ = abop.queue_;
+#ifdef BALL_HAS_LPSOLVE
+		if (abop.ilp_)
+			ilp_ = copy_lp(abop.ilp_);
+		else
+			ilp_ = 0;
+#endif
+
 		return *this;
 	}
 
@@ -151,8 +188,6 @@ namespace BALL
 	{
 		solutions_.clear();
 		fixed_val_.clear();
-		bond_free_.clear();
-		atomic_penalty_scores_.clear();
 		ac_ = 0;
 
 		valid_ = readAtomPenalties_();
@@ -248,10 +283,9 @@ cout << " \t Overwrite bonds (single, double, triple, quad, aroma):"
 		 << options.getBool(Option::OVERWRITE_QUADRUPLE_BOND_ORDERS) << " " 
 		 << options.getBool(Option::OVERWRITE_AROMATIC_BOND_ORDERS) << endl;
 
-//cout << " \t Oktett Regel: " <<options.getBool(Option::ENFORCE_OCTETT_RULE) << endl;
-cout << " \t Ladung überschreiben: " << options.getBool(Option::OVERWRITE_CHARGES) << endl;
-cout << " \t Ladung zuweisen: " << options.getBool(Option::ASSIGN_CHARGES) << endl;
-
+//cout << " \t Octet Rule: " <<options.getBool(Option::ENFORCE_OCTETT_RULE) << endl;
+cout << " \t Overwrite charges: " << options.getBool(Option::OVERWRITE_CHARGES) << endl;
+cout << " \t Assign charges: " << options.getBool(Option::ASSIGN_CHARGES) << endl;
 cout << " \t Kekulizer: " << options.getBool(Option::KEKULIZE_RINGS)  << endl;
 cout << " \t Penalty files " << options[Option::Option::INIFile] << endl;
 cout << " \t alpha: " << options[Option::Option::BOND_LENGTH_WEIGHTING] << endl;
@@ -275,7 +309,7 @@ cout << endl;
 			bool overwrite_triple_bonds = options.getBool(Option::OVERWRITE_TRIPLE_BOND_ORDERS);
 			bool overwrite_quadruple_bonds = options.getBool(Option::OVERWRITE_QUADRUPLE_BOND_ORDERS);
 			bool overwrite_aromatic_bonds = options.getBool(Option::OVERWRITE_AROMATIC_BOND_ORDERS);
-			bool enforce_octett_rule = options.getBool(Option::ENFORCE_OCTETT_RULE);
+//			bool enforce_octett_rule = options.getBool(Option::ENFORCE_OCTETT_RULE);
 
 			// What kind of composite do we have?
 			if (RTTI::isKindOf<Molecule>(ac))
@@ -329,15 +363,11 @@ cout << endl;
 							{
 									if (overwrite_single_bonds)
 									{	
-// c	out << "overwrite single bonds" << endl;
-										bond_free_[bnd] 	= true;
-										bond_fixed_[bnd] 	= 0;	 // Remember: 0 = false, 1 = true
+										bond_fixed_[bnd] 	= 0;	 
 									}
 									else
 									{
-//		cout << "don't overwrite single bonds" << endl;
 										fixed += 1;
-										bond_free_[bnd] 	= false;
 										bond_fixed_[bnd] 	= 1;
 									}
 									break;
@@ -346,13 +376,11 @@ cout << endl;
 							{
 								if (overwrite_double_bonds)
 								{
-									bond_free_[bnd]	 = true;
 									bond_fixed_[bnd] = 0;
 								}
 								else
 								{
 									fixed += 2;
-									bond_free_[bnd] 	= false;
 									bond_fixed_[bnd] 	= 2;
 								}
 								break;
@@ -361,13 +389,11 @@ cout << endl;
 							{
 								if (overwrite_triple_bonds)
 								{
-									bond_free_[bnd] = true;
 									bond_fixed_[bnd] = 0;
 								}
 								else
 								{	
 									fixed += 3;
-									bond_free_[bnd] = false;
 									bond_fixed_[bnd] = 3;
 								}
 								break;
@@ -376,13 +402,11 @@ cout << endl;
 							{
 								if (overwrite_quadruple_bonds)
 								{
-										bond_free_[bnd] = true;
 										bond_fixed_[bnd] = 0;
 								}
 								else
 								{	
 									fixed += 4;
-									bond_free_[bnd] = false;
 									bond_fixed_[bnd] = 4;
 								}
 								break;
@@ -391,20 +415,17 @@ cout << endl;
 							{
 								if (overwrite_aromatic_bonds)
 								{
-									bond_free_[bnd] 	= true;
 									bond_fixed_[bnd] 	= 0; 
 								}
 								else
 								{	
 									fixed += 1;         /// TODO: wie soll das im ILP dargestellt werden? 1,5?	
-									bond_free_[bnd] 	= false;
 									bond_fixed_[bnd] 	= 1; 
 								}
 								break;
 							}	
 							default: //Bond::ORDER__UNKNOWN:
 							{
-									bond_free_[bnd] = true;
 									bond_fixed_[bnd] = false;  //0
 							}
 						}
@@ -419,9 +440,7 @@ cout << endl;
 cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomputeBondLengthPenalties_:" << precomputeBondLengthPenalties_() << endl;
 #endif
 
-
 				// Generate penalty values for all atoms in the AtomContainer ac
-//				calculateAtomPenalties_(ac); // TODO: Umstellung auf readAtomPenalties!
 				if (preassignPenaltyClasses_() && precomputeBondLengthPenalties_())
 				{
 					if (options.get(Option::ALGORITHM) == Algorithm::A_STAR)
@@ -480,7 +499,14 @@ cout << "\nNach initialisierung : queue size = " << queue_.size() << endl;
 					else // Solve a ILP
 					{
 						// Get a first solution
-						solutions_.push_back(Solution_(this, ac));
+						Solution_ sol;
+						bool found_a_sol = solveInitialILP_(sol);
+						// Do we have a solution? 
+						if (!found_a_sol)
+						{
+							Log.info() << "AssignBondOrderProcessor: No solution found!" << endl;
+						}	
+						solutions_.push_back(sol);
 						if (!solutions_[0].valid)
 						{
 							last_applied_solution_=-1;
@@ -510,7 +536,6 @@ cout << "\nNach initialisierung : queue size = " << queue_.size() << endl;
 						// select all carboxyl anions and nitro groups for 
 						// delocalized bond types in GAFF
 						//TODO clear Selection for system!!!
-//						Selector select("SMARTS([#6D3](~[#8D1])(~[#8D1])) OR SMARTS([#7D3](~[#8D1])(~[#8D1]))");
 
 						// find conjugated atoms
 						ac.deselect();
@@ -579,9 +604,6 @@ cout << "\nNach initialisierung : queue size = " << queue_.size() << endl;
 	{		
 		return true;
 	}
-
-
-
 
 	bool AssignBondOrderProcessor::estimatePenalty_(PQ_Entry_& entry)
 	{
@@ -675,7 +697,7 @@ cout << "  * fixed bond num " << bond_to_index_[&*b_it] << " (" << b_it->getFirs
 			// and all bond length deviation penalties are summed up in current_bond_length_penalty
 			
 			// Remember, we start counting with 0
-			if (current_atom_index >= atom_to_block_.size())
+			if (current_atom_index >= (int)atom_to_block_.size())
 			{
 				Log.error() << "AssignBondOrderProcessor: No penalty type found for atom " << a_it->getFullName() << " with index " << endl;
 				return false; 
@@ -793,7 +815,7 @@ cout << "      free bonds: " <<  free_bonds.size() << endl;
 cout << "            fb:"<< fb <<"  up_to" << up_to << endl;
 #endif
 
-						for (Size j = 1; j <= up_to; j++)
+						for (Size j = 1; j <= (Size)up_to; j++)
 						{
 							float deviation = current_bond_length_penalties[j]; 
 
@@ -872,705 +894,7 @@ cout << " atom type pen: " << entry.estimated_atom_type_penalty << " bond len pe
 
 		return true;
 	}
-	
 
-	void AssignBondOrderProcessor::calculateAtomPenalties_(AtomContainer& ac)
-	{
-		// This method computes for every atom its possible atomic valences 
-		// and the corresponding possible atomic penalty scores and stores them 
-		// per atom in the vector atomic_penalty_scores_
-		
-		const Atom* partner_atom;	
-		const Atom* sec_partner_atom;	
-		const Atom* other_partner_atom;	
-		AtomIterator atom_it;	//iterates over all atoms in the observed molecule
-		Bond* bond;	//bond of the observed atom
-		Bond* next_bond;	//another bond of the observed atom
-		Bond* partner_bond;	//bond of the partner_atom
-		Bond* next_partner_bond;	//next bond of the partner_atom	
-		Atom::BondIterator bond_it;	//iterate over all bonds of one atom
-		Atom::BondIterator bond_it2;
-		RingPerceptionProcessor(ringPP);	//marks all atoms in a ring structure with property "InRing"
-		pair <int, int > atomic_score;	//pair of atomic valence and corresponding atomic penalty score
-		vector <pair <int, int > > aps_vector;	//vector of atomic_scores
-
-		//mark all atoms in a ring structure with property "InRing"
-		ac.apply(ringPP);	
-		atom_it = ac.beginAtom();	
-
-		//if bonds exist
-		if (ac.countBonds() != 0)
-		{
-			//assign to each atom in molecule a penalty score if necessary
-			for (;+atom_it;++atom_it)
-			{
-				aps_vector.clear();
-				//Oxygen
-				if (atom_it->getElement().getName()=="Oxygen")
-				{
-					//O(x1)
-					if (atom_it->countBonds() == 1)
-					{
-						bond_it = atom_it->beginBond();
-						if (bond_it != atom_it->beginBond())
-						{
-							partner_atom = bond_it->getBoundAtom(*atom_it);
-							//O(x1) in pyridine-1-oxide
-							if (((partner_atom->getElement().getName()=="Nitrate") or (partner_atom->getElement().getName()=="Nitrogen")) and partner_atom->getProperty("InRing").getBool())
-							{
-								atomic_score.first = 1;
-								atomic_score.second = 0;
-								aps_vector.push_back(atomic_score);
-
-								atomic_score.first = 2;
-								atomic_score.second = 1;
-								aps_vector.push_back(atomic_score);
-							}
-							else 
-							{
-								atomic_score.first = 1;
-								atomic_score.second = 1;
-								aps_vector.push_back(atomic_score);
-
-								atomic_score.first = 2;
-								atomic_score.second = 0;
-								aps_vector.push_back(atomic_score);
-
-								atomic_score.first = 3;
-								atomic_score.second = 64;
-								aps_vector.push_back(atomic_score);
-							}
-						}
-					}
-					//O(x2)
-					else if (atom_it->countBonds() == 2)
-					{
-						atomic_score.first = 1;
-						atomic_score.second = 32;
-						aps_vector.push_back(atomic_score);
-
-						atomic_score.first = 2;
-						atomic_score.second = 0;
-						aps_vector.push_back(atomic_score);
-
-						atomic_score.first = 3;
-						atomic_score.second = 64;
-						aps_vector.push_back(atomic_score);
-					}
-				}
-
-				//H, F, CL, Br, I
-				if ((atom_it->getElement().getName()=="Hydrogen") or (atom_it->getElement().getName()=="Fluorine") or 		(atom_it->getElement().getName()=="Iodine ") or (atom_it->getElement().getName()=="Chlorine") or 	(atom_it->getElement().getName()=="Bromine") )
-				{
-					atomic_score.first = 1;
-					atomic_score.second = 0;
-					aps_vector.push_back(atomic_score);
-
-					atomic_score.first = 0;
-					atomic_score.second = 64;
-					aps_vector.push_back(atomic_score);
-
-					atomic_score.first = 2;
-					atomic_score.second = 64;
-					aps_vector.push_back(atomic_score);
-				}
-
-
-				//Carbon
-				if (atom_it->getElement().getName()=="Carbon")
-				{
-					if (atom_it->countBonds() ==1)
-					{
-						//C in CN-R
-						bond_it = atom_it->beginBond();
-						if (bond_it != atom_it->endBond())
-						{
-							partner_atom = bond_it->getBoundAtom(*atom_it);
-							if ((partner_atom->getElement().getName()=="Nitrate") or (partner_atom->getElement().getName()=="Nitrogen"))
-							{
-								if (partner_atom->countBonds() == 2)
-								{
-									atomic_score.first = 3;
-									atomic_score.second = 0;
-									aps_vector.push_back(atomic_score);
-
-									atomic_score.first = 4;
-									atomic_score.second = 1;
-									aps_vector.push_back(atomic_score);
-
-									atomic_score.first = 5;
-									atomic_score.second = 32;
-									aps_vector.push_back(atomic_score);				
-								}
-							}
-							//C(x1)		
-							else 
-							{
-								atomic_score.first = 3;
-								atomic_score.second = 1;
-								aps_vector.push_back(atomic_score);
-
-								atomic_score.first = 4;
-								atomic_score.second = 0;
-								aps_vector.push_back(atomic_score);
-
-								atomic_score.first = 5;
-								atomic_score.second = 32;
-								aps_vector.push_back(atomic_score);
-							}
-						}
-					}
-					//C in COO-
-					bond_it = atom_it->beginBond();
-					if (bond_it != atom_it->endBond())
-					{
-						partner_atom = bond_it->getBoundAtom(*atom_it);
-						if (partner_atom->getElement().getName() =="Oxygen")
-						{
-							sec_partner_atom = (++bond_it)->getBoundAtom(*atom_it);
-							if (sec_partner_atom->getElement().getName() =="Oxygen")
-							{
-								if ((partner_atom->countBonds() == 1) || (sec_partner_atom->countBonds() ==1))
-								{
-									atomic_score.first = 5;
-									atomic_score.second = 0;
-									aps_vector.push_back(atomic_score);
-
-									atomic_score.first = 4;
-									atomic_score.second = 32;
-									aps_vector.push_back(atomic_score);
-
-									atomic_score.first = 6;
-									atomic_score.second = 32;
-									aps_vector.push_back(atomic_score);
-								}		
-							}
-						}
-						//if atom type still not found
-						if (aps_vector.empty())
-						{
-							//C
-							atomic_score.first = 2;
-							atomic_score.second = 64;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 3;
-							atomic_score.second = 32;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 4;
-							atomic_score.second = 0;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 5;
-							atomic_score.second = 32;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 6;
-							atomic_score.second = 64;
-							aps_vector.push_back(atomic_score);
-						}		
-					}
-				}
-
-				// Si
-				if ((atom_it->getElement().getName()== "Silicium") || (atom_it->getElement().getName()== "Silicon"))
-				{
-					atomic_score.first = 4;
-					atomic_score.second = 0;
-					aps_vector.push_back(atomic_score);
-				}
-
-
-
-				//N(x1) in N=N=R
-				if (((atom_it->getElement().getName()=="Nitrate") || (atom_it->getElement().getName()=="Nitrogen")) && (atom_it->countBonds() ==1))
-				{
-					bond = &(*(atom_it->beginBond()));
-					if (atom_it->beginBond() != atom_it->endBond())
-					{
-						partner_atom = bond->getBoundAtom(*atom_it);
-						if ((partner_atom->getElement().getName()=="Nitrate") || (partner_atom->getElement().getName()=="Nitrogen"))
-						{
-							if (partner_atom->countBonds()==2)
-							{  
-								partner_bond = const_cast <Bond*> (&(*(partner_atom->beginBond())));
-								next_partner_bond = const_cast <Bond*> (&(*(++(partner_atom->beginBond()))));
-								const Atom* next_partner_atom = next_partner_bond->getBoundAtom(*partner_atom);
-								if (next_partner_atom->countBonds() == 1)
-								{
-									atomic_score.first = 2;
-									atomic_score.second = 0;
-									aps_vector.push_back(atomic_score);
-
-									atomic_score.first = 3;
-									atomic_score.second = 0;
-									aps_vector.push_back(atomic_score);
-								}
-							}
-						}
-						//N(x1)
-						if (aps_vector.empty())
-						{
-							atomic_score.first = 2;
-							atomic_score.second = 3;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 3;
-							atomic_score.second = 0;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 4;
-							atomic_score.second = 32;
-							aps_vector.push_back(atomic_score);
-						}	
-					}		
-				}
-				//N(x2) in N=N=R
-				if (((atom_it->getElement().getName()=="Nitrate") || (atom_it->getElement().getName()=="Nitrogen")) && (atom_it->countBonds()== 2))
-				{
-					bond = &(*(atom_it->beginBond()));
-					if (atom_it->beginBond() != atom_it->endBond())
-					{
-						next_bond = const_cast<Bond*>(&(*(++(atom_it->beginBond()))));
-						partner_atom = bond->getBoundAtom(*atom_it);
-						other_partner_atom = next_bond->getBoundAtom(*atom_it);
-						//if one of the neighbours is a Nitrate
-						if ((partner_atom->getElement().getName()=="Nitrate") || (partner_atom->getElement().getName()=="Nitrogen"))
-						{
-							//check bonds (x1 of N)
-							if (partner_atom->countBonds()==1)	
-							{ 
-								atomic_score.first = 3;
-								atomic_score.second = 1;
-								aps_vector.push_back(atomic_score);
-
-								atomic_score.first = 4;
-								atomic_score.second = 0;
-								aps_vector.push_back(atomic_score);							
-							}
-						}
-						if ((other_partner_atom->getElement().getName()=="Nitrate") || (other_partner_atom->getElement().getName()=="Nitrogen"))
-						{
-							//check bonds (x2 of N)
-							if (other_partner_atom->countBonds()==1)
-							{
-								atomic_score.first = 3;
-								atomic_score.second = 1;
-								aps_vector.push_back(atomic_score);
-
-								atomic_score.first = 4;
-								atomic_score.second = 0;
-								aps_vector.push_back(atomic_score);
-							} 
-						}
-					}
-					//N(x2)
-					if (aps_vector.empty())
-					{
-						atomic_score.first = 2;
-						atomic_score.second = 4;
-						aps_vector.push_back(atomic_score);
-
-						atomic_score.first = 3;
-						atomic_score.second = 0;
-						aps_vector.push_back(atomic_score);
-
-						atomic_score.first = 4;
-						atomic_score.second = 2;
-						aps_vector.push_back(atomic_score);
-					}
-				}
-				//N(x3) in nitro
-				if (((atom_it->getElement().getName()=="Nitrate") || (atom_it->getElement().getName()=="Nitrogen")) && (atom_it->countBonds()==3))
-				{
-					bond_it = atom_it->beginBond();
-					if (atom_it->countBonds() > 0)
-					{
-						int count_oxygen_atoms= 0;
-						for (;bond_it != atom_it->endBond();++bond_it)
-						{
-							partner_atom = bond_it->getBoundAtom(*atom_it);
-							if ((partner_atom->getElement().getName()=="Oxygen") && (partner_atom->countBonds()==1 ))
-							{
-								++count_oxygen_atoms; 
-							}
-						}
-						if (count_oxygen_atoms==2)
-						{
-							atomic_score.first = 3;
-							atomic_score.second = 64;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 4;
-							atomic_score.second = 32;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 5;
-							atomic_score.second = 0;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 6;
-							atomic_score.second = 32;
-							aps_vector.push_back(atomic_score);
-						}
-						//N(x3) in pyridine-1-oxide
-						else 
-						{
-							bond_it2 = atom_it->beginBond();
-							if (atom_it->countBonds() > 0)
-							{
-								Size count_oxygen_atoms=0;
-								Size countCarb=0;
-								for (;bond_it2 != atom_it->endBond();++bond_it2)
-								{
-									partner_atom = bond_it2->getBoundAtom(*atom_it);
-									if (partner_atom->getElement().getName()=="Carbon" and partner_atom->getProperty("InRing").getName()=="InRing")
-									{
-										++countCarb;
-									}
-									if (partner_atom->getElement().getName()=="Oxygen")
-									{
-										++count_oxygen_atoms;
-									}
-								}
-								if (count_oxygen_atoms==1 and countCarb==2)	
-								{
-									atomic_score.first = 3;
-									atomic_score.second = 1;
-									aps_vector.push_back(atomic_score);
-
-									atomic_score.first = 4;
-									atomic_score.second = 0;
-									aps_vector.push_back(atomic_score);
-								}
-							}
-						}
-						//N(x3)
-						if (aps_vector.empty())
-						{
-							atomic_score.first = 2;
-							atomic_score.second =32;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 3;
-							atomic_score.second = 0;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 4;
-							atomic_score.second = 1;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 5;
-							atomic_score.second = 2;
-							aps_vector.push_back(atomic_score);
-						}
-					}	
-				}
-				//N(x4)
-				if (((atom_it->getElement().getName()=="Nitrate") || (atom_it->getElement().getName()=="Nitrogen")) && (atom_it->countBonds()==4))
-				{
-					atomic_score.first = 2;
-					atomic_score.second = 64;
-					aps_vector.push_back(atomic_score);		
-
-					atomic_score.first = 3;
-					atomic_score.second = 0;
-					aps_vector.push_back(atomic_score);
-
-					atomic_score.first = 4;
-					atomic_score.second = 64;
-					aps_vector.push_back(atomic_score);
-				}
-
-
-				//P(x1)
-				if ((atom_it->getElement().getName()=="Phosphorus") && (atom_it->countBonds() ==1))
-				{
-					atomic_score.first = 2;
-					atomic_score.second = 2;
-					aps_vector.push_back(atomic_score);
-
-					atomic_score.first = 3;
-					atomic_score.second = 0;
-					aps_vector.push_back(atomic_score);
-
-					atomic_score.first = 4;
-					atomic_score.second = 32;
-					aps_vector.push_back(atomic_score);
-				}
-				//P(x2)
-				if ((atom_it->getElement().getName()=="Phosphorus") && (atom_it->countBonds()==2))
-				{
-					atomic_score.first = 2;
-					atomic_score.second = 4;
-					aps_vector.push_back(atomic_score);
-
-					atomic_score.first = 3;
-					atomic_score.second = 0;
-					aps_vector.push_back(atomic_score);
-
-					atomic_score.first = 4;
-					atomic_score.second = 2;
-					aps_vector.push_back(atomic_score);
-				}
-				//P(x3)
-				if ((atom_it->getElement().getName()=="Phosphorus") && (atom_it->countBonds()==3))
-				{
-					atomic_score.first = 2;
-					atomic_score.second = 32;
-					aps_vector.push_back(atomic_score);
-
-					atomic_score.first = 3;
-					atomic_score.second = 0;
-					aps_vector.push_back(atomic_score);
-
-					atomic_score.first = 4;
-					atomic_score.second = 1;
-					aps_vector.push_back(atomic_score);
-
-					atomic_score.first = 5;
-					atomic_score.second = 2;
-					aps_vector.push_back(atomic_score);
-				}
-				//P(x4) 
-				if ((atom_it->getElement().getName()=="Phosphorus") && (atom_it->countBonds()==4))
-				{
-					bond_it = atom_it->beginBond();
-					if (atom_it->countBonds() > 0)
-					{
-						Size count_oxygen_atoms = 0;
-						Size count_sulfur_atoms = 0;
-						for (;bond_it != atom_it->endBond(); ++bond_it)
-						{
-							partner_atom = bond_it->getBoundAtom(*atom_it);
-							if ((partner_atom->getElement().getName()=="Oxygen") && (partner_atom->countBonds()== 1))
-							{
-								++count_oxygen_atoms;
-							}
-							else if (((partner_atom->getElement().getName()=="Sulphur") ||  (partner_atom->getElement().getName()=="Sulfur")) && (partner_atom->countBonds()== 1))
-							{
-								++count_sulfur_atoms;
-							}					
-						}
-						//bonded to 2 O(x1) or 2 S(x1)
-						if (count_oxygen_atoms==2 or count_sulfur_atoms==2)
-						{
-							atomic_score.first = 5;
-							atomic_score.second = 32;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 6;
-							atomic_score.second = 0;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 7;
-							atomic_score.second = 32;
-							aps_vector.push_back(atomic_score);
-						}	
-						//bonded to 3 O(x1) or 3 S(x1)
-						if (count_oxygen_atoms==3 or count_sulfur_atoms==3)
-						{
-							atomic_score.first = 6;
-							atomic_score.second = 32;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 7;
-							atomic_score.second = 0;
-							aps_vector.push_back(atomic_score);
-						}
-						//P(x4)
-						if (aps_vector.empty())
-						{
-							atomic_score.first = 3;
-							atomic_score.second = 64;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 4;
-							atomic_score.second = 1;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 5;
-							atomic_score.second = 0;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 6;
-							atomic_score.second = 32;
-							aps_vector.push_back(atomic_score);
-						}
-					}
-				}
-
-
-				//S(x1)
-				if (((atom_it->getElement().getName()=="Sulphur") ||  (atom_it->getElement().getName()=="Sulfur")) && (atom_it->countBonds()==1))
-				{
-					bond_it = atom_it->beginBond();
-					if (bond_it != atom_it->endBond())
-					{
-						partner_atom = bond_it->getBoundAtom(*atom_it);
-						//S(x1) in pyridine-1-thiol anion
-						if (((partner_atom->getElement().getName()=="Nitrate") || (partner_atom->getElement().getName()=="Nitrogen")) && (partner_atom->getProperty("InRing").getName() =="InRing"))
-						{
-							//check if Nitrate is inRing of Carbons
-							const Atom* partner_of_partner_atom;
-							Size count_carbon_atoms = 0;
-
-							for (;+bond_it2;++bond_it2)
-							{
-								partner_of_partner_atom = bond_it2->getBoundAtom(*partner_atom);
-								if (partner_of_partner_atom->getElement().getName() == "Carbon")
-								{
-									++count_carbon_atoms;
-								}
-							}
-							if ((partner_atom->countBonds()== 2) && (count_carbon_atoms >= 1))
-							{
-								atomic_score.first = 1;
-								atomic_score.second = 0;
-								aps_vector.push_back(atomic_score);
-
-								atomic_score.first = 2;
-								atomic_score.second = 1;
-								aps_vector.push_back(atomic_score);
-							}
-						}
-						//S(x1)
-						if (aps_vector.empty())
-						{
-							atomic_score.first = 1;
-							atomic_score.second = 2;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 2;
-							atomic_score.second = 0;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 3;
-							atomic_score.second = 64;
-							aps_vector.push_back(atomic_score);
-						}
-					}
-				}
-
-				//S(x2)
-				if (((atom_it->getElement().getName()=="Sulphur") ||  (atom_it->getElement().getName()=="Sulfur")) && (atom_it->countBonds()==2))
-				{
-					atomic_score.first = 1;
-					atomic_score.second = 32;
-					aps_vector.push_back(atomic_score);
-
-					atomic_score.first = 2;
-					atomic_score.second = 0;
-					aps_vector.push_back(atomic_score);
-
-					atomic_score.first = 3;
-					atomic_score.second = 32;
-					aps_vector.push_back(atomic_score);
-
-					atomic_score.first = 4;
-					atomic_score.second = 1;
-					aps_vector.push_back(atomic_score);
-				}
-
-				//S(x3)
-				if (((atom_it->getElement().getName()=="Sulphur") ||  (atom_it->getElement().getName()=="Sulfur")) && (atom_it->countBonds()==3))
-				{
-					atomic_score.first = 3;
-					atomic_score.second = 1;
-					aps_vector.push_back(atomic_score);
-
-					atomic_score.first = 4;
-					atomic_score.second = 0;
-					aps_vector.push_back(atomic_score);
-
-					atomic_score.first = 5;
-					atomic_score.second = 2;
-					aps_vector.push_back(atomic_score);
-
-					atomic_score.first = 6;
-					atomic_score.second = 2;
-					aps_vector.push_back(atomic_score);
-				}
-
-
-
-				//S(x4)
-				if (((atom_it->getElement().getName()=="Sulphur") ||  (atom_it->getElement().getName()=="Sulfur")) && (atom_it->countBonds()==4))
-				{
-					bond_it = atom_it->beginBond();
-					if (atom_it->countBonds() > 0)
-					{
-						Size count_oxygen_atoms = 0;
-						Size count_sulfur_atoms = 0;
-						for (;bond_it != atom_it->endBond(); ++bond_it){
-							partner_atom = bond_it->getBoundAtom(*atom_it);
-							if ((partner_atom->getElement().getName()=="Oxygen") && (partner_atom->countBonds()== 1))
-							{
-								++count_oxygen_atoms;
-							}
-							else if (  (  (partner_atom->getElement().getName()=="Sulphur") 
-											    ||(partner_atom->getElement().getName()=="Sulfur") ) 
-									    && (partner_atom->countBonds()== 1))
-							{
-								++count_sulfur_atoms;
-							}					
-						}
-						//bonded to 2 O(x1) or S(x1)
-						if (count_oxygen_atoms ==2 or count_sulfur_atoms==2)
-						{
-							atomic_score.first = 6;
-							atomic_score.second = 0;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 7;
-							atomic_score.second = 32;
-							aps_vector.push_back(atomic_score);
-						}	
-						//bonded to 3 O(x1) or S(x1)
-						if (count_oxygen_atoms== 3 or count_sulfur_atoms==3)
-						{
-							atomic_score.first = 6;
-							atomic_score.second = 32;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 7;
-							atomic_score.second = 0;
-							aps_vector.push_back(atomic_score);
-						}
-						//bonded to 4 O(x1) or S(x1)
-						if (count_oxygen_atoms==4 or count_sulfur_atoms==4)
-						{
-							atomic_score.first = 6;
-							atomic_score.second = 32;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 7;
-							atomic_score.second = 0;
-							aps_vector.push_back(atomic_score);
-						}		
-						//S(x4)
-						if (aps_vector.empty())
-						{
-							atomic_score.first = 4;
-							atomic_score.second = 4;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 5;
-							atomic_score.second = 2;
-							aps_vector.push_back(atomic_score);
-
-							atomic_score.first = 6;
-							atomic_score.second = 0;
-							aps_vector.push_back(atomic_score);
-						}	
-					}
-				}
-				atomic_penalty_scores_.push_back(aps_vector);
-			}
-		}
-	}
-	
 	bool AssignBondOrderProcessor::readAtomPenalties_()	
 		throw(Exception::FileNotFound())
 	{
@@ -2025,6 +1349,285 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 		return false;
 	}
 
+#ifdef BALL_HAS_LPSOLVE
+	bool AssignBondOrderProcessor::solveInitialILP_(Solution_& solution)
+	{
+		// Check number of variables with prefix 'x'
+		Position total_no_bonds = ac_->countBonds();
+
+		// Number of atoms in the system
+		Position no_atoms = ac_->countAtoms();
+
+		// Mapping from (free) bonds onto bond variable indices
+		map<Bond*, Position> bond_map;
+
+		// Vector for mapping from variable indices onto bonds
+		ilp_index_to_free_bond_.resize(total_no_bonds, (Bond*)0);
+
+		// Count the choice constraints
+		Position no_y = 0;
+
+		// Count the number of bonds whose orders should be calculated
+		Position no_x = 0;
+
+		// Maximum number of row entries (in penalty table)
+		// NOTE: we determine this number later in the code, since we do not
+		//			 know yet which atoms have to be considered and which are fixed
+		Position max_no_ent=0;
+
+		// Maximum number of bonds of an atom
+		Position max_no_atom_bonds = 0;
+	
+		// compute the maps, variables ...
+		for (Position current_atom = 0; current_atom < no_atoms; ++current_atom)
+		{
+			Atom* at1 = ac_->getAtom(current_atom);
+			Position consider_bonds = 0;
+
+			for (Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
+			{		
+				if (!bond_fixed_[&*bit]) // this bond is free => calculate bond order
+				{
+					++consider_bonds;
+					if (bond_map.find(&*bit) == bond_map.end())
+					{ 
+						bond_map[&*bit] = no_x;
+						ilp_index_to_free_bond_[no_x] = &*bit;
+						++no_x;
+					}
+				}
+			} // end of for all bonds of this atom
+
+			if (consider_bonds)
+			{
+				Size current_length = block_to_length_[atom_to_block_[current_atom]];
+				
+				no_y += current_length;
+				max_no_ent = std::max(max_no_ent, current_length);
+			}
+
+			max_no_atom_bonds = std::max(consider_bonds, max_no_atom_bonds);
+
+		} // end of for all atoms
+
+		// Number of variables of the whole ILP
+		Position no_vars = no_x + no_y;
+		
+		// Create a new model with 'no_vars' variables 
+		// (columns) and 0 rows
+		ilp_ = make_lp(0, no_vars);
+		if (!ilp_)
+		{
+			Log.error() << "AssignBondOrderProcessor: Creation of ILP failed" << endl;
+			return false;
+		}
+
+		// Set the binary and integer constraints
+		// Variables for bond orders are integer
+		for(Position i = 1; i <= no_x; ++i)
+		{
+			set_int(ilp_, i, TRUE);
+		}
+		// Decision variables for atom valences are binary 
+		for(Position i = no_x+1; i <= no_vars; ++i)
+		{
+			set_binary(ilp_, i, TRUE);
+		}
+
+		// Create space large enough for one row and the objective function,
+		// use lp_solves internal types.
+
+		// Indices of the variables (constraints)
+		std::vector<int> cons_indices(max_no_atom_bonds + 1 + max_no_ent,0); // colno
+		// Prefactors (constraints)
+		std::vector<REAL> cons_prefactors(max_no_atom_bonds + 1 + max_no_ent,0); // row
+		// Indices of the variables (objective function)
+		std::vector<int> obj_indices(no_y+1,0); // obj_colno
+		// Prefactors (objective function)
+		std::vector<REAL> obj_prefactors(no_y+1,0); // obj_row
+
+		// Factors for choice constraints
+		std::vector<REAL> choices(max_no_ent, 1);
+
+		// Makes building the model faster if it's done
+		// row by row
+		set_add_rowmode(ilp_, TRUE);
+
+		// Set the lower and upper constraints for bonds
+		for(Position i = 1; i <= no_x; ++i)
+		{
+			cons_indices[0] = i;
+			if (!add_constraintex(ilp_, 1, &choices[0], &cons_indices[0], LE, max_bond_order_))
+			{
+				Log.error() << "AssignBondOrderProcessor: Setting upper bound for bond constraint failed" << endl;
+				return false;
+			}
+			if (!add_constraintex(ilp_, 1, &choices[0], &cons_indices[0], GE, 1))
+			{
+				Log.error() << "AssignBondOrderProcessor: Setting lower bound for bond constraint failed" << endl;
+				return false;
+			}
+		}
+
+		// Create all remaining constraints and the objective function
+		// Indices of the choice variables (y)
+		Position ind_y = 0;
+
+		for(Position i = 0; i < no_atoms; ++i)
+		{
+			// Find corresponding variables
+			Atom* at1 = ac_->getAtom(i);
+
+			// Count the bonds of this atom whose
+			// orders should be calculated
+			Position count_b = 0;
+			for(Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
+			{
+				map<Bond*, unsigned int>::iterator it = bond_map.find(&(*bit));
+				if (it != bond_map.end())
+				{
+					cons_indices[count_b] = it->second + 1;
+					cons_prefactors[count_b] = -1;
+					++count_b;
+				}
+			}
+
+			if (count_b)
+			{
+				// This atom has bonds whose orders should be calculated
+
+				// Create indices for the choice variables and set
+				// the entries for the valence constraint and the
+				// objective function
+
+				// Count the number of variables participating in the current cons_prefactors
+				Position count_vars = count_b;
+				for(Position j = 0; j < block_to_length_[atom_to_block_[i]]; ++j, ++ind_y, ++count_vars)
+				{
+					// Choice variables have indices > no_x in variable vector for ILP
+					obj_indices[ind_y]  = ind_y + no_x + 1;
+					cons_indices[count_vars] = obj_indices[ind_y];
+
+					// Set valences
+					cons_prefactors[count_vars] = block_to_start_valence_[atom_to_block_[i]] + j;
+
+					// Set penalties
+					obj_prefactors[ind_y]       = penalties_[block_to_start_idx_[atom_to_block_[i]] + j];
+				}
+
+				// in case we got an empty penalty cons_prefactors
+				if (block_to_length_[atom_to_block_[i]] != 0)
+				{
+					// Add valence constraint
+					if (!add_constraintex(ilp_, count_vars, &cons_prefactors[0], &cons_indices[0], EQ,
+								fixed_val_[i]))
+					{
+						Log.error() << "AssignBondOrderProcessor: Setting valence constraint for ILP failed" << endl;
+						return false;
+					}
+					// Add choice constraint
+					if (!add_constraintex(ilp_, block_to_length_[atom_to_block_[i]], &choices[0], &cons_indices[count_b], EQ, 1))
+					{
+						Log.error() << "AssignBondOrderProcessor: Setting choice constraint for ILP failed" << endl;
+						return false;
+					}
+
+					if (options.getBool(Option::ENFORCE_OCTETT_RULE))
+					{
+						// Add constraint for the octett-rule
+						if ((at1->getElement()!= PTE[Element::HELIUM]) && at1->getElement().getGroup() > (short)3)
+						{
+							if (!add_constraintex(ilp_, count_b,  &cons_prefactors[0], &cons_indices[0], GE, -4))
+							{
+								Log.error() << "AssignBondOrderProcessor: Setting octett constraint for ILP failed" << endl;
+								return false;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// Rowmode should be turned off again after building the model
+		set_add_rowmode(ilp_, FALSE);
+
+		// Set objective function
+		if (!set_obj_fnex(ilp_, no_y, &obj_prefactors[0], &obj_indices[0]))
+		{
+			Log.error() << "AssignBondOrderProcessor: Setting objective function for ILP failed" << endl;
+		}
+
+		// Tell lp_solve that this problem is a minimization problem
+		set_minim(ilp_);
+
+		// We only want to see important messages on screen while solving
+		set_verbose(ilp_, IMPORTANT);
+
+		// Show the generated MIP
+		//write_LP(ilp_, stdout);
+
+		// Let lp_solve solve our problem
+		int ret = solve(ilp_);
+
+		// Get the value of the objective function
+		solution.atom_type_penalty = (int)get_objective(ilp_);
+
+		// Check whether lp_solve could do its job successfully
+		if (ret == OPTIMAL)
+		{
+//cout << " Penalty: " << estimated_atom_type_penalty << endl;
+
+			// we got a valid solution
+			solution.valid = true;
+
+			// store the bond orders of _ALL_ bonds to offer a complete solution 
+			AtomIterator a_it = ac_->beginAtom();
+			Atom::BondIterator b_it = a_it->beginBond();
+			BALL_FOREACH_BOND(*ac_, a_it, b_it)
+			{
+				solution.bond_orders[&(*b_it)] = (b_it->getOrder());
+			}
+
+			// Get variables
+			REAL *vars;
+			get_ptr_variables(ilp_, &vars);
+
+			// Do the assignment of the bond orders
+			for(Position i = 0; i < no_x; ++i)
+			{
+				if (fabs(vars[i] - 1.) < 1.e-10)
+				{
+					solution.bond_orders[ilp_index_to_free_bond_[i]] = Bond::ORDER__SINGLE;
+					continue;
+				}
+				if (fabs(vars[i] - 2.) < 1.e-10)
+				{
+					solution.bond_orders[ilp_index_to_free_bond_[i]] = Bond::ORDER__DOUBLE;
+					continue;
+				}
+				if (fabs(vars[i] - 3.) < 1.e-10)
+				{
+					solution.bond_orders[ilp_index_to_free_bond_[i]] = Bond::ORDER__TRIPLE;
+					continue;
+				}
+				if (fabs(vars[i] - 4.) < 1.e-10)
+				{
+					solution.bond_orders[ilp_index_to_free_bond_[i]] = Bond::ORDER__QUADRUPLE;
+					continue;
+				}
+			}
+		}
+		else
+		{
+			Log.error() << "AssignBondOrderProcessor: ILP could not be solved successfully" << endl;
+			solution.valid = false;
+			return false;
+		}
+
+		return true;
+	}
+#endif
+
 	//-----------------------------------------------------------------------------------
 	
 	AssignBondOrderProcessor::Solution_::Solution_()
@@ -2052,320 +1655,6 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 		{	
 			bond_orders[ap->index_to_bond_[i]] =  entry.bond_orders[i];
 		} 
-	}
-
-	AssignBondOrderProcessor::Solution_::Solution_(AssignBondOrderProcessor* ap, AtomContainer& ac, Bond* bond, int order, bool lessEqualConstraint)
-	{		
-		// Check number of variables with prefix 'x'
-		Position total_no_bonds = ac.countBonds();
-
-		// Number of atoms in the system
-		Position no_atoms = ac.countAtoms();
-
-		// Mapping from (free) bonds onto bond variable indices
-		map<Bond*, Position> bond_map;
-
-		// Vector for mapping from variable indices onto bonds
-		std::vector<Bond*> ind_bond(total_no_bonds, (Bond*)0);
-
-		// Count the choice constraints
-		Position no_y = 0;
-
-		// Count the number of bonds whose orders should be calculated
-		Position no_x = 0;
-
-		// Maximum number of row entries (in penalty table)
-		Position max_no_ent = 0;
-
-		// Maximum number of bonds of an atom
-		Position max_no_atom_bonds = 0;
-	
-		// compute the maps, variables ...
-		for (Position i = 0; i < no_atoms; ++i)
-		{
-			Atom* at1 = ac.getAtom(i);
-			//Position fixed = 0;
-			Position consider_bonds = 0;
-
-			bool consider_atom = false;
-			for (Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
-			{		
-				Bond* bnd = &(*bit);
-				map<Bond*, bool>::iterator it = ap->bond_free_.find(bnd);
-				if (it != ap->bond_free_.end())
-				{
-					// If this atom has a free bond we should calculate the bond order
-					if (it->second && (bond!=bnd))
-					{
-						++consider_bonds;	
-						consider_atom = true;
-						pair<map<Bond*, unsigned int>::iterator, bool> p 
-							= bond_map.insert(make_pair(bnd, no_x+1));
-						if (p.second)
-						{
-							ind_bond[no_x] = bnd;
-							++no_x;
-						}
-					}
-				}
-			} // end of for all bonds of this atom
-
-			if (consider_atom)
-			{
-				no_y += ap->atomic_penalty_scores_[i].size();
-				if (ap->atomic_penalty_scores_[i].size() > max_no_ent)
-				{
-					max_no_ent = ap->atomic_penalty_scores_[i].size();
-				}
-			}
-
-			if (consider_bonds > max_no_atom_bonds)
-			{
-				max_no_atom_bonds = consider_bonds;
-			}
-
-		} // end of for all atoms
-
-		Position no_vars = no_x + no_y;
-		
-		// Create a new model with 'no_vars' variables 
-		// (columns) and 0 rows
-		lprec *lp = make_lp(0, no_vars);
-		if (!lp)
-		{
-			Log.error() << "Creation of ILP failed" << endl;
-		}
-
-		// Set the binary and integer constraints
-		for(Position i = 1; i <= no_x; ++i)
-		{
-			set_int(lp, i, TRUE);
-		}
-
-		for(Position i = no_x+1; i <= no_vars; ++i)
-		{
-			set_binary(lp, i, TRUE);
-		}
-
-		// Create space large enough for one row and the objective function,
-		// use lp_solves internal types.
-		std::vector<int> colno(max_no_atom_bonds + 1 + max_no_ent,0);
-		std::vector<REAL> row(max_no_atom_bonds + 1 + max_no_ent,0);
-		std::vector<int> obj_colno(no_y+1,0);
-		std::vector<REAL> obj_row(no_y+1,0);
-
-		// Factors for choice constraints
-		std::vector<REAL> choices(max_no_ent, 1);
-
-		// Makes building the model faster if it's done
-		// row by row
-		set_add_rowmode(lp, TRUE);
-
-		// Set the lower and upper constraints for bonds
-		for(Position i = 1; i <= no_x; ++i)
-		{
-			colno[0] = i;
-			if (!add_constraintex(lp, 1, &choices[0], &colno[0], LE, 4))
-			{
-				Log.error() << "Setting upper bound for bond constraint failed" << endl;
-			}
-			if (!add_constraintex(lp, 1, &choices[0], &colno[0], GE, 1))
-			{
-				Log.error() << "Setting lower bound for bond constraint failed" << endl;
-			}
-		}
-
-		// Set the extra bond constraint
-		if (bond && (order-1 > -1) && (order+1 < 5))
-		{	
-			// get the bonds index 
-			map<Bond*, unsigned int>::iterator it = bond_map.find(bond);
-			if (it != bond_map.end())
-			{
-				Position i = it->second;
-				colno[0] = i;
-				if (lessEqualConstraint)
-				{
-					if (!add_constraintex(lp, 1, &choices[0], &colno[0], LE, order-1))
-					{
-						Log.error() << "Setting extra upper bound for bond constraint failed" << endl;
-					}
-				}
-				else
-				{
-					if (!add_constraintex(lp, 1, &choices[0], &colno[0], GE, order+1))
-					{
-						Log.error() << "Setting extra lower bound for bond constraint failed" << endl;
-					}
-				}
-			}
-	 	}
-
-		// Create all remaining constraints and the objective function
-
-		// Atom indices
-		Position i = 0;
-
-		// Indices of the choice variables (y)
-		Position ind_y = 0;
-
-		for(; i < no_atoms; ++i)
-		{
-			// Find corresponding variables
-			Atom* at1 = ac.getAtom(i);
-
-			// Count the bonds of this atom whose
-			// orders should be calculated
-			Position count_b = 0;
-			for(Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
-			{
-				Bond* bnd = &(*bit);
-				map<Bond*, unsigned int>::iterator it = bond_map.find(bnd);
-
-				if (it != bond_map.end())
-				{
-					colno[count_b] = it->second;
-					row[count_b]   = -1;
-					++count_b;
-				}
-			}
-
-			if (count_b)
-			{
-				// This atom has bonds whose orders should be calculated
-
-				// Create indices for the choice variables and set
-				// the entries for the valence constraint and the 
-				// objective function
-
-				// Count the number of variables participating in the current row
-				Position count_vars = count_b;
-				for(Position j = 0; j < ap->atomic_penalty_scores_[i].size(); ++j, ++ind_y, ++count_vars)
-				{
-					// Choice variables have indices > no_x in variable vector for ILP
-					obj_colno[ind_y]   = ind_y + no_x + 1;
-					colno[count_vars] = obj_colno[ind_y];
-
-					// Set valences
-					row[count_vars]   = ap->atomic_penalty_scores_[i][j].first;
-
-					// Set penalties
-					obj_row[ind_y]     = ap->atomic_penalty_scores_[i][j].second;
-				}
-
-				// in case we got an empty penalty row
-				if (ap->atomic_penalty_scores_[i].size() != 0)
-				{
-					// Add valence constraint
-					if (!add_constraintex(lp, count_vars, &row[0], &colno[0], EQ, 
-								ap->fixed_val_[i]))
-					{
-						Log.error() << "Setting valence constraint for ILP failed" << endl;
-					}
-
-					// Add choice constraint
-					if (!add_constraintex(lp, ap->atomic_penalty_scores_[i].size(), &choices[0], &colno[count_b], 
-								EQ, 1))
-					{
-						Log.error() << "Setting choice constraint for ILP failed" << endl;
-					}
-
-					if (ap->options.getBool(Option::ENFORCE_OCTETT_RULE))
-					{
-						// Add constraint for the octett-rule
-						if ((at1->getElement()!= PTE[Element::HELIUM]) && at1->getElement().getGroup() > (short)3)
-						{
-							if (!add_constraintex(lp, count_b,  &row[0], &colno[0], 
-										GE, -4))
-							{
-								Log.error() << "Setting octett constraint for ILP failed" << endl;
-							} 
-						}
-					}
-				}
-			}
-		}
-
-		// Rowmode should be turned off again after building the model
-		set_add_rowmode(lp, FALSE);
-
-		// Set objective function
-		if (!set_obj_fnex(lp, no_y, &obj_row[0], &obj_colno[0]))
-		{
-			Log.error() << "Setting objective function for ILP failed" << endl;
-		}
-
-		// Tell lp_solve that this problem is a minimization problem
-		set_minim(lp);
-
-		// We only want to see important messages on screen while solving
-		set_verbose(lp, IMPORTANT);
-
-		// Show the generated MIP
-		//write_LP(lp, stdout);
-
-		// Let lp_solve solve our problem
-		int ret = solve(lp);
-
-		// Check whether lp_solve could do its job successfully
-		if (ret == OPTIMAL)
-		{
-			// Get the value of the objective function
-			atom_type_penalty = (int)get_objective(lp);
-//cout << " Penalty: " << estimated_atom_type_penalty << endl;
-			// Get variables
-			REAL *vars;
-			get_ptr_variables(lp, &vars);
-
-			// Do the assignment of the bond orders
-			for(Position i = 0; i < no_x; ++i)
-			{
-				if (fabs(vars[i] - 1.) < 1.e-10)
-				{
-					// TODO: should we really set the orders here? No
-					ind_bond[i]->setOrder(Bond::ORDER__SINGLE);
-					//orders_[ind_bond[i]] = Bond::ORDER__SINGLE;
-					continue;
-				}
-				if (fabs(vars[i] - 2.) < 1.e-10)
-				{
-					ind_bond[i]->setOrder(Bond::ORDER__DOUBLE);	
-					//orders_[ind_bond[i]] = Bond::ORDER__DOUBLE;
-					continue;
-				}
-				if (fabs(vars[i] - 3.) < 1.e-10)
-				{
-					ind_bond[i]->setOrder(Bond::ORDER__TRIPLE);	
-					//orders_[ind_bond[i]] = Bond::ORDER__TRIPLE;
-					continue;
-				}
-				if (fabs(vars[i] - 4.) < 1.e-10)
-				{
-					ind_bond[i]->setOrder(Bond::ORDER__QUADRUPLE);
-					//orders_[ind_bond[i]] = Bond::ORDER__QUADRUPLE;
-					continue;
-				}
-			}
-			
-			// we got a valid solution
-			valid = true;
-
-			// store the bond orders of _ALL_ bonds to offer a complete solution 
-			AtomIterator a_it = ac.beginAtom();
-			Atom::BondIterator b_it = a_it->beginBond();
-			BALL_FOREACH_BOND(ac, a_it, b_it)
-			{
-				bond_orders[&(*b_it)] = (b_it->getOrder());
-			}
-		}
-		else
-		{
-			//Log.error() << "ILP could not be solved successfully" << endl;
-			valid = false;
-		}
-
-		// free
-		delete_lp(lp);
 	}
 
 	AssignBondOrderProcessor::Solution_::~Solution_()
