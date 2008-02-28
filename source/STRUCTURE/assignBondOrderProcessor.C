@@ -200,7 +200,7 @@ namespace BALL
 		return true;
 	}
 
-	bool AssignBondOrderProcessor::performAStarStep_()
+	bool AssignBondOrderProcessor::performAStarStep_(Solution_& sol)
 	{
 		// try to find a solution
 		while(!queue_.empty())
@@ -214,7 +214,7 @@ cout << " Next ASTAR step : queue size : " << queue_.size();
 			queue_.pop();
 
 #ifdef DEBUG
-cout << "  atom type penaty: " << entry.estimated_atom_type_penalty << 
+cout << "  atom type penalty: " << entry.estimated_atom_type_penalty << 
 				"  bond length penalty: " << entry.estimated_bond_length_penalty << " ( " ;
 for (Size i = 0; i< entry.bond_orders.size(); i++)
 {
@@ -228,8 +228,22 @@ cout << ")" << endl;
 			{
 				// we found a solution
 				// store the solution :-)
-				Solution_ sol(this, entry);
-				solutions_.push_back(sol);
+				sol.valid = true;
+				sol.atom_type_penalty = entry.estimated_atom_type_penalty;
+				sol.bond_length_penalty = entry.estimated_bond_length_penalty;
+
+				if (entry.bond_orders.size() != index_to_bond_.size())
+				{
+					Log.error() << "Error in AssignBondOrderProcessor::Solution_ Constructor"  << endl;
+
+					return false;
+				}
+
+				// convert the entry's bond order vector into a HashMap
+				for (Size i=0; i<entry.bond_orders.size(); i++)
+				{	
+					sol.bond_orders[index_to_bond_[i]] =  entry.bond_orders[i];
+				} 
 
 				return true;
 			}
@@ -448,6 +462,9 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 				// Generate penalty values for all atoms in the AtomContainer ac
 				if (preassignPenaltyClasses_() && precomputeBondLengthPenalties_())
 				{
+					bool found_a_sol = false;
+					Solution_ sol;
+
 					if (options.get(Option::ALGORITHM) == Algorithm::A_STAR)
 					{
 						// Initialize a priority queue and try to find a first solution
@@ -493,65 +510,37 @@ cout << "\nNach initialisierung : queue size = " << queue_.size() << endl;
 #endif
 
 						// Try to find a first solution
-						bool found_a_sol = performAStarStep_();
-
-						// Do we have a solution? 
-						if (!found_a_sol)
-						{
-							Log.info() << "AssignBondOrderProcessor: No solution found!" << endl;
-						}
-						else
-						{	
-							// Do we have to find more solutions?
-							Size max_n = options.getInteger(Option::MAX_NUMBER_OF_SOLUTIONS);
-							bool compute_also_non_optimal_solutions = options.getReal(Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS);
-							if (max_n > 1)
-							{
-								bool found_another = computeNextSolution();
-								bool next_solution_is_optimal = (getTotalPenalty(0) == getTotalPenalty(1)); 
-
-								while (     found_another 
-											  && ((getNumberOfComputedSolutions() < max_n) || (!max_n)      )
-												&& ( next_solution_is_optimal || compute_also_non_optimal_solutions )
-										)
-								{	
-									found_another = computeNextSolution();
-									next_solution_is_optimal = (getTotalPenalty(0) == getTotalPenalty(getNumberOfComputedSolutions()-1)); 
-								}
-							}
-						}
+						found_a_sol = performAStarStep_(sol);
 					}	
 					else // Solve a ILP
 					{
 #ifdef BALL_HAS_LPSOLVE
 						// Get a first solution
-						Solution_ sol;
-						bool found_a_sol = createILP_();
+						found_a_sol = createILP_();
 						found_a_sol &= solveILP_(sol);
-						solutions_.push_back(sol);
-
-						if (!solutions_[0].valid)
-						{
-							last_applied_solution_=-1;
-						}
-
-						if ( (solutions_.size() > 0) 
-								//&&  (total_num_of_bonds_ - num_fixed_bonds < MAX__SOLUTIONS) 
-								&&  (solutions_[0].valid)
-							 )
-						{
-							// find some more :-)
-						}
-						else
-						{	
-							cout << "No solution computed! -solsize:" <<  solutions_.size() << " - no free bonds:" <<  total_num_of_bonds_ - num_fixed_bonds << " - valid " << (solutions_.size()>0 ? solutions_[0].valid : false) << std::endl;
-							//cout << "Too many bonds " << total_no_bonds - num_fixed_bonds << std::endl;
-						}
-#else
+					#else
 						Log.error() << "AssignBondOrderProcessor: BALL was configured without lpsolve support! Try A_STAR instead!" << std::endl;
 #endif
 					} // end of ILP
 
+					// Do we have a solution? 
+					if (!found_a_sol)
+					{
+						Log.info() << "AssignBondOrderProcessor: No solution found!" << endl;
+					}
+					else
+					{	
+						solutions_.push_back(sol);
+
+						// Do we have to find more solutions?
+						Size max_n = options.getInteger(Option::MAX_NUMBER_OF_SOLUTIONS);
+						bool found_another = computeNextSolution();
+
+						while (found_another && ((getNumberOfComputedSolutions() < max_n) || (!max_n)))
+						{	
+							found_another = computeNextSolution();
+						}
+					}
 					if (solutions_.size() > 0)
 					{				
 						apply(0);	
@@ -1361,17 +1350,13 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 	// TODO: could be given a flag indicating whether the next solution should be applied or not
 	bool AssignBondOrderProcessor::computeNextSolution()
 	{
+		Solution_ sol;
+		bool found_a_sol = false;
+
+
 		if (options.get(Option::ALGORITHM) == Algorithm::A_STAR)
 		{
-			if (performAStarStep_())
-			{
-				apply(solutions_.size()-1);
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			found_a_sol = performAStarStep_(sol);
 		}
 		else // ILP
 		{
@@ -1379,27 +1364,31 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 			// first find out if there is a further solution
 			int number_of_solutions = get_solutioncount(ilp_);
 
-			if (solutions_.size() >= number_of_solutions)
+			if (solutions_.size() >= (Size)number_of_solutions)
 				return false;
 
 			// set the solution number of the next solution to return
 			// NOTE: count starts at 1
 			set_solutionlimit(ilp_, solutions_.size());
-			
-			Solution_ sol;
 
-			bool found_a_sol = solveILP_(sol);
-			if (found_a_sol)
-			{
-				solutions_.push_back(sol);
-				return true;
-			}
-
+			found_a_sol = solveILP_(sol);
 #else
 			Log.error() << "AssignBondOrderProcessor: BALL was configured without lp_solve support! Try using A_STAR instead!" << std::endl;
 #endif
+		}
 
-			return false;
+		if (found_a_sol)
+		{
+			bool compute_also_non_optimal_solutions = options.getReal(Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS);
+			bool next_solution_is_optimal = (getTotalPenalty(solutions_[0]) == getTotalPenalty(sol)); 
+
+			if ( next_solution_is_optimal || compute_also_non_optimal_solutions )
+			{
+				solutions_.push_back(sol);
+				apply(solutions_.size()-1);
+				
+				return true;
+			}
 		}
 
 		return false;
@@ -1694,25 +1683,6 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 			atom_type_penalty(0.),
 			bond_length_penalty(0.)
 	{
-	}
-
-	AssignBondOrderProcessor::Solution_::Solution_(AssignBondOrderProcessor* ap, const PQ_Entry_& entry)
-		: valid(true),
-			bond_orders(),
-		  atom_type_penalty(entry.estimated_atom_type_penalty),
-			bond_length_penalty(entry.estimated_bond_length_penalty)
-	{
-		if (entry.bond_orders.size() != ap->index_to_bond_.size())
-		{
-			Log.error() << "Error in AssignBondOrderProcessor::Solution_ Constructor"  << endl;
-			return;
-		}
-
-		// convert the entry's bond order vector into a HashMap
-		for (Size i=0; i< entry.bond_orders.size(); i++)
-		{	
-			bond_orders[ap->index_to_bond_[i]] =  entry.bond_orders[i];
-		} 
 	}
 
 	AssignBondOrderProcessor::Solution_::~Solution_()

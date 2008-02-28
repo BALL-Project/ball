@@ -209,24 +209,34 @@ namespace BALL
 			/// Returns the number of already computed solutions
 			Size getNumberOfComputedSolutions() {return solutions_.size();}
 
-			/// Returns the total penalty of the (already computed!) i-th solution 
-			float getTotalPenalty(Position i) 
+			/// Returns the total penalty of solution i
+			float getTotalPenalty(Position i)
 			{
 				if (i >= solutions_.size())
 				{
-					Log.error() << "AssignBondOrderProcessor::getTotalPenalty: no solution with index " << i << std::endl;
+					Log.error() << "AssignBondOrderProcessor: No solution with index " << i << std::endl;
+
 					return Limits<float>::max();
 				}
-				else if (   (atom_type_normalization_factor_   < 0.00001) 
-						     || (bond_length_normalization_factor_ < 0.00001) ) 
+				else
+					return getTotalPenalty(solutions_[i]);
+			}
+
+			/// Returns the total penalty of a solution 
+			float getTotalPenalty(const Solution_& sol) 
+			{
+				if (   (atom_type_normalization_factor_   < 0.00001) 
+				    || (bond_length_normalization_factor_ < 0.00001) ) 
 				{
-					Log.error() << "AssignBondOrderProcessor::getTotalPenalty: normalization factor zero " << i << std::endl;
+					Log.error() << "AssignBondOrderProcessor::getTotalPenalty: normalization factor zero " << std::endl;
 				}
 				else
 				{
-					return (  (1.-alpha_) * (solutions_[i].atom_type_penalty/atom_type_normalization_factor_) 
-									+ (alpha_*solutions_[i].bond_length_penalty/bond_length_normalization_factor_));
+					return (  (1.-alpha_) * (sol.atom_type_penalty/atom_type_normalization_factor_) 
+									+ (alpha_*sol.bond_length_penalty/bond_length_normalization_factor_));
 				} 
+
+				return Limits<float>::max();
 			}
 
 			/** Set the AtomContainer ac_'s bond orders to the ones found 
@@ -274,9 +284,6 @@ namespace BALL
 					/// Default constructor
 					Solution_();
 				
-					// Detailed constructor for A-STAR
-					Solution_(AssignBondOrderProcessor* ap, const PQ_Entry_& entry);
-
 					/// Destructor
 					virtual ~Solution_();
 					
@@ -457,7 +464,7 @@ namespace BALL
 
 			////////// for Algorithm::A_START   ComputeAllSolutions::A_STAR ///////
 			/// 
-			bool	performAStarStep_();
+			bool	performAStarStep_(Solution_& sol);
 
 			/// the priority queue //TODO constr...
 			priority_queue<PQ_Entry_> queue_;
