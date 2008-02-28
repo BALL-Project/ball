@@ -369,6 +369,7 @@ cout << endl;
 									{
 										fixed += 1;
 										bond_fixed_[bnd] 	= 1;
+										num_fixed_bonds++;
 									}
 									break;
 							}
@@ -382,6 +383,7 @@ cout << endl;
 								{
 									fixed += 2;
 									bond_fixed_[bnd] 	= 2;
+									num_fixed_bonds++;
 								}
 								break;
 							}
@@ -395,6 +397,7 @@ cout << endl;
 								{	
 									fixed += 3;
 									bond_fixed_[bnd] = 3;
+									num_fixed_bonds++;
 								}
 								break;
 							}
@@ -408,6 +411,7 @@ cout << endl;
 								{	
 									fixed += 4;
 									bond_fixed_[bnd] = 4;
+									num_fixed_bonds++;
 								}
 								break;
 							}
@@ -419,23 +423,24 @@ cout << endl;
 								}
 								else
 								{	
-									fixed += 1;         /// TODO: wie soll das im ILP dargestellt werden? 1,5?	
+									fixed += 1;
 									bond_fixed_[bnd] 	= 1; 
+									num_fixed_bonds++;
 								}
 								break;
 							}	
 							default: //Bond::ORDER__UNKNOWN:
 							{
-									bond_fixed_[bnd] = false;  //0
+									bond_fixed_[bnd] = 0;
 							}
 						}
 					}
 
 					fixed_val_[i] = fixed;
-					num_fixed_bonds += fixed;
 				}
 				
-				num_of_free_bonds_ = total_num_of_bonds_ - num_fixed_bonds;
+				// NOTE: we count each bond twice (one for each atom), hence we divide num_fixed_bonds by 2
+				num_of_free_bonds_ = total_num_of_bonds_ - num_fixed_bonds/2;
 #ifdef DEBUG
 cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomputeBondLengthPenalties_:" << precomputeBondLengthPenalties_() << endl;
 #endif
