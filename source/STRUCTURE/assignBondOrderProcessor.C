@@ -503,9 +503,12 @@ cout << "\nNach initialisierung : queue size = " << queue_.size() << endl;
 					}
 					else // Solve a ILP
 					{
+#ifdef BALL_HAS_LPSOLVE
 						// Get a first solution
 						Solution_ sol;
-						bool found_a_sol = solveInitialILP_(sol);
+						bool found_a_sol = createILP_();
+						found_a_sol &= solveILP_(sol);
+
 						// Do we have a solution? 
 						if (!found_a_sol)
 						{
@@ -529,6 +532,9 @@ cout << "\nNach initialisierung : queue size = " << queue_.size() << endl;
 							cout << "No solution computed! -solsize:" <<  solutions_.size() << " - no free bonds:" <<  total_num_of_bonds_ - num_fixed_bonds << " - valid " << (solutions_.size()>0 ? solutions_[0].valid : false) << std::endl;
 							//cout << "Too many bonds " << total_no_bonds - num_fixed_bonds << std::endl;
 						}
+#else
+						Log.error() << "AssignBondOrderProcessor: BALL was configured without lpsolve support! Try A_STAR instead!" << std::endl;
+#endif
 					} // end of ILP
 
 					if (solutions_.size() > 0)
@@ -1351,11 +1357,40 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 				return false;
 			}
 		}
+		else // ILP
+		{
+#ifdef BALL_HAS_LPSOLVE
+			// first find out if there is a further solution
+			int number_of_solutions = get_solutioncount(ilp_);
+
+			if (solutions_.size() >= number_of_solutions)
+				return false;
+
+			// set the solution number of the next solution to return
+			// NOTE: count starts at 1
+			set_solutionlimit(ilp_, solutions_.size());
+			
+			Solution_ sol;
+
+			bool found_a_sol = solveILP_(sol);
+			if (found_a_sol)
+			{
+				solutions_.push_back(sol);
+				return true;
+			}
+
+#else
+			Log.error() << "AssignBondOrderProcessor: BALL was configured without lp_solve support! Try using A_STAR instead!" << std::endl;
+#endif
+
+			return false;
+		}
+
 		return false;
 	}
 
 #ifdef BALL_HAS_LPSOLVE
-	bool AssignBondOrderProcessor::solveInitialILP_(Solution_& solution)
+	bool AssignBondOrderProcessor::createILP_()
 	{
 		// Check number of variables with prefix 'x'
 		Position total_no_bonds = ac_->countBonds();
@@ -1373,7 +1408,7 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 		Position no_y = 0;
 
 		// Count the number of bonds whose orders should be calculated
-		Position no_x = 0;
+		ilp_number_of_free_bonds_ = 0;
 
 		// Maximum number of row entries (in penalty table)
 		// NOTE: we determine this number later in the code, since we do not
@@ -1396,9 +1431,9 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 					++consider_bonds;
 					if (bond_map.find(&*bit) == bond_map.end())
 					{ 
-						bond_map[&*bit] = no_x;
-						ilp_index_to_free_bond_[no_x] = &*bit;
-						++no_x;
+						bond_map[&*bit] = ilp_number_of_free_bonds_;
+						ilp_index_to_free_bond_[ilp_number_of_free_bonds_] = &*bit;
+						++ilp_number_of_free_bonds_;
 					}
 				}
 			} // end of for all bonds of this atom
@@ -1416,7 +1451,7 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 		} // end of for all atoms
 
 		// Number of variables of the whole ILP
-		Position no_vars = no_x + no_y;
+		Position no_vars = ilp_number_of_free_bonds_ + no_y;
 		
 		// Create a new model with 'no_vars' variables 
 		// (columns) and 0 rows
@@ -1429,12 +1464,12 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 
 		// Set the binary and integer constraints
 		// Variables for bond orders are integer
-		for(Position i = 1; i <= no_x; ++i)
+		for(Position i = 1; i <= ilp_number_of_free_bonds_; ++i)
 		{
 			set_int(ilp_, i, TRUE);
 		}
 		// Decision variables for atom valences are binary 
-		for(Position i = no_x+1; i <= no_vars; ++i)
+		for(Position i = ilp_number_of_free_bonds_+1; i <= no_vars; ++i)
 		{
 			set_binary(ilp_, i, TRUE);
 		}
@@ -1459,7 +1494,7 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 		set_add_rowmode(ilp_, TRUE);
 
 		// Set the lower and upper constraints for bonds
-		for(Position i = 1; i <= no_x; ++i)
+		for(Position i = 1; i <= ilp_number_of_free_bonds_; ++i)
 		{
 			cons_indices[0] = i;
 			if (!add_constraintex(ilp_, 1, &choices[0], &cons_indices[0], LE, max_bond_order_))
@@ -1509,8 +1544,8 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 				Position count_vars = count_b;
 				for(Position j = 0; j < block_to_length_[atom_to_block_[i]]; ++j, ++ind_y, ++count_vars)
 				{
-					// Choice variables have indices > no_x in variable vector for ILP
-					obj_indices[ind_y]  = ind_y + no_x + 1;
+					// Choice variables have indices > ilp_number_of_free_bonds_ in variable vector for ILP
+					obj_indices[ind_y]  = ind_y + ilp_number_of_free_bonds_ + 1;
 					cons_indices[count_vars] = obj_indices[ind_y];
 
 					// Set valences
@@ -1570,7 +1605,11 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 
 		// Show the generated MIP
 		//write_LP(ilp_, stdout);
+		return true;
+	}
 
+	bool AssignBondOrderProcessor::solveILP_(Solution_& solution)
+	{
 		// Let lp_solve solve our problem
 		int ret = solve(ilp_);
 
@@ -1580,8 +1619,6 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 		// Check whether lp_solve could do its job successfully
 		if (ret == OPTIMAL)
 		{
-//cout << " Penalty: " << estimated_atom_type_penalty << endl;
-
 			// we got a valid solution
 			solution.valid = true;
 
@@ -1598,7 +1635,7 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 			get_ptr_variables(ilp_, &vars);
 
 			// Do the assignment of the bond orders
-			for(Position i = 0; i < no_x; ++i)
+			for(Position i = 0; i < ilp_number_of_free_bonds_; ++i)
 			{
 				if (fabs(vars[i] - 1.) < 1.e-10)
 				{

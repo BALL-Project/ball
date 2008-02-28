@@ -372,9 +372,13 @@ namespace BALL
 			bool precomputeBondLengthPenalties_();
 
 #ifdef BALL_HAS_LPSOLVE
-			/** Setup an initial linear program.
+			/** Setup the integer linear program.
 			 */
-			bool solveInitialILP_(Solution_& solution);
+			bool createILP_();
+
+			/** Solve the current integer linear program and convert it into a Solution_
+			 */
+			bool solveILP_(Solution_& solution);
 #endif
 			
 			/// Processor is in a useable valid state. //TODO
@@ -397,6 +401,9 @@ namespace BALL
 			// Vector for mapping from variable indices onto free bonds in the
 			// order used by the ILP
 			std::vector<Bond*> ilp_index_to_free_bond_;
+
+			// number of bond variables in the ILP
+			Position ilp_number_of_free_bonds_;
 
 			//TODO
 			/// the number of bonds given (free + fixed!)
