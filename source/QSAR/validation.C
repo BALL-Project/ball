@@ -5,7 +5,7 @@
 #include <BALL/QSAR/validation.h>
 #include <BALL/QSAR/statistics.h>
 #include <BALL/QSAR/Model.h>
-#include <newmat/newmatio.h>
+#include <newmatio.h>
 
 using namespace BALL::QSAR;
 

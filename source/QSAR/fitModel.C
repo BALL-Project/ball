@@ -4,7 +4,7 @@
 //
 
 #include <BALL/QSAR/fitModel.h>
-#include <newmat/newmatio.h>
+#include <newmatio.h>
 using namespace BALL::QSAR;
 #include <BALL/COMMON/exception.h>
 

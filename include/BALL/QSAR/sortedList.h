@@ -10,7 +10,7 @@
 #include <iterator>
 #include <iostream>
 #include <BALL/DATATYPE/string.h>
-#include <newmat/newmat.h>
+#include <newmat.h>
 
 
 namespace BALL

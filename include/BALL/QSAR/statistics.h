@@ -9,7 +9,7 @@
 //#include <math.h>
 #include <vector>
 #include <iostream>
-#include <newmat/newmat.h>
+#include <newmat.h>
 #include <cmath>
 #include <BALL/MATHS/parsedFunction.h>
 

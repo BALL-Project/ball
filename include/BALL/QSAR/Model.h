@@ -6,7 +6,7 @@
 #define MODEL
 
 #include <vector>
-#include <newmat/newmat.h>
+#include <newmat.h>
 
 #ifndef VALIDATION
 #include <BALL/QSAR/validation.h>

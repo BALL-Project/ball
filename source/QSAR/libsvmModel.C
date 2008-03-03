@@ -5,7 +5,7 @@
 
 #include <BALL/QSAR/libsvmModel.h>
 #define Malloc(type,n) (type *)malloc((n)*sizeof(type))
-#include <newmat/newmatio.h>
+#include <newmatio.h>
 
 using namespace BALL::QSAR;
 

@@ -4,7 +4,7 @@
 //
 
 #include <BALL/QSAR/oplsModel.h>
-#include <newmat/newmatio.h>
+#include <newmatio.h>
 #include <BALL/QSAR/statistics.h>
  
 using namespace BALL::QSAR;

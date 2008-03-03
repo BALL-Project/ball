@@ -4,7 +4,7 @@
 // 
 
 #include <BALL/QSAR/kernelModel.h>
-#include <newmat/newmatio.h>
+#include <newmatio.h>
 
 using namespace BALL::QSAR; 
 

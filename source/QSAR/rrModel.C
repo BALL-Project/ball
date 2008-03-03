@@ -4,7 +4,7 @@
 // 
 
 #include <BALL/QSAR/rrModel.h>
-#include <newmat/newmatap.h>
+#include <newmatap.h>
 using namespace BALL::QSAR;
 
 

@@ -6,7 +6,7 @@
 #include <BALL/QSAR/statistics.h>
 #include <BALL/QSAR/regressionModel.h>
 #include <gsl/gsl_rng.h>
-#include <newmat/newmatio.h>
+#include <newmatio.h>
 
 
 using namespace BALL::QSAR;

@@ -11,7 +11,7 @@
 #endif
 
 #include <fstream>
-#include <libsvm/svm.h>
+#include <svm.h>
 
 
 namespace BALL

@@ -15,7 +15,7 @@
 #endif
 
 
-#include <newmat/newmatio.h>
+#include <newmatio.h>
 
 namespace BALL
 {

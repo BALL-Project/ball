@@ -18,8 +18,8 @@
 #include <BALL/QSAR/exception.h>
 #endif
 
-#include <newmat/newmatap.h>
-#include <newmat/newmatio.h>
+#include <newmatap.h>
+#include <newmatio.h>
 
 
 namespace BALL 
