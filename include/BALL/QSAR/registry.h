@@ -7,7 +7,7 @@
 
 #include <BALL/QSAR/QSARData.h>
 #include <BALL/QSAR/pcrModel.h>
-#include <BALL/QSAR/pcrModel.h>
+#include <BALL/QSAR/mlrModel.h>
 #include <BALL/QSAR/plsModel.h>
 #include <BALL/QSAR/oplsModel.h>
 #include <BALL/QSAR/libsvmModel.h>
@@ -21,6 +21,7 @@
 #include <BALL/QSAR/logitModel.h>
 #include <BALL/QSAR/libsvmModel.h>
 #include <BALL/QSAR/knnModel.h>
+#include <BALL/QSAR/rrModel.h>
 
 namespace BALL
 {
@@ -71,6 +72,9 @@ namespace BALL
 				
 				/** returns the RegistryEntry for a given model name */
 				RegistryEntry* getRegistryEntry(String model_name);
+				
+				/** return the ID of a specified model */
+				int getModelNo(String model_name);
 				
 				/** enable fast finding of a RegistryEntry for a given model name */
 				map<String,int> model_map;

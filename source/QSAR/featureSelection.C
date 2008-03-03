@@ -4,7 +4,7 @@
 // 
 
 #include <BALL/QSAR/featureSelection.h>
-using namespace BALL::QSAR; 
+using namespace BALL::QSAR;
 
 
 
@@ -84,12 +84,12 @@ void FeatureSelection::forward(bool stepwise, int k, bool optPar)
 	SortedList<unsigned int>::Iterator irr_it;
 
 	for(int d=0; d<crossValidation_lines; d++)
-	{	
+	{
 		int best_col=0; 
 		double best_q2=0;
 		des_it = model_->descriptor_IDs_.begin();
 		irr_it = irrelevantDescriptors->begin();
-		
+	
 		// find the descriptor that leads to the largest increase of Q^2
 		for(unsigned int i=0; i<columns; i++)
 		{	
@@ -109,7 +109,7 @@ void FeatureSelection::forward(bool stepwise, int k, bool optPar)
 			{
 				continue;
 			}
-			
+		
 			model_->descriptor_IDs_.insert(des_it,i);
 			
 			if(weights_!=NULL && weights_->Ncols()>0)
@@ -130,7 +130,6 @@ void FeatureSelection::forward(bool stepwise, int k, bool optPar)
 				model_->descriptor_IDs_.deleteLastInsertion();
 				continue;
 			}
-		
 			if(model_->model_val->getCVRes() > best_q2)
 			{
 				best_q2=model_->model_val->getCVRes();

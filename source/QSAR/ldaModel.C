@@ -184,7 +184,7 @@ void LDAModel::saveToFile(string filename)
 		descriptor_IDs_.front();
 		for(int i=0; i<descriptor_matrix_.Ncols();i++)
 		{
-			out<<String(descriptor_IDs_.next())<<"    "<<descriptor_names_[i]<<"\t";
+			out<<String(descriptor_IDs_.next())<<"\t"<<descriptor_names_[i]<<"\t";
 			
 			if(centered_data)
 			{

@@ -13,7 +13,7 @@ using namespace BALL::QSAR;
 OPLSModel::OPLSModel(const QSARData& q) : PLSModel(q) 
 { 
 	type_="OPLS";
-	no_ortho_components_=20;
+	no_ortho_components_=5;
 }
 
 OPLSModel::~OPLSModel()
@@ -47,7 +47,7 @@ void OPLSModel::train()
 	//w = X.t()*u / Statistics::scalarProduct(u);
 	//w = w / Statistics::euclNorm(w);	
 
-	for(int j=0; j<no_ortho_components_ && j<cols; j++)
+	for(int j=0; j<no_ortho_components_ && j<cols-1; j++)
 	{	
 		for(int i=0; ;i++)
 		{
@@ -115,7 +115,7 @@ const Matrix* OPLSModel::getWOrtho()
 }
 
 
-void OPLSModel::optimizeParameters(int k, unsigned int max)
+bool OPLSModel::optimizeParameters(int k, int no_steps)
 {
 	double best_q2=0;
 	int best_no=1;
@@ -125,29 +125,70 @@ void OPLSModel::optimizeParameters(int k, unsigned int max)
 	{
 		cols = descriptor_IDs_.size();
 	}
+	no_ortho_components_=0;
 	
-	for(unsigned int i=1; i<=max && i<=cols;i++)
+	// first find best number of components, for PLS analysis 
+	for(int i=1; i<=no_steps && i<=cols;i++)
 	{	
-		no_ortho_components_=i;
-		for(unsigned int j=1; j<=max && j<=cols;j++)
+		no_components_=i;
+			
+		validation->crossValidation(k);
+	
+		if(validation->getQ2()>best_q2)
 		{
-			no_components_=j;
-			validation->crossValidation(k);
-			if(validation->getQ2()>best_q2)
-			{
-				best_q2=validation->getQ2();
-				best_no=j;
-				best_o_no=i;
-			}
-			else if(validation->getQ2()<0.5*best_q2)
-			{
-				break;
-			}
+			best_q2=validation->getQ2();
+			best_no=i;
+		}
+		else if(validation->getQ2()<0.75*best_q2)
+		{
+			break; // for speed-up
 		}
 	}
 	no_components_=best_no;
+	best_q2=validation->getQ2();
+	
+	//then try to remove orthogonal variance by use of OPLS components
+	for(int i=0; i<=no_steps && i<=cols;i++)
+	{	
+		no_ortho_components_=i;
+			
+		validation->crossValidation(k);
+	
+		if(validation->getQ2()>best_q2)
+		{
+			best_q2=validation->getQ2();
+			best_o_no=i;
+		}
+		else if(validation->getQ2()<0.75*best_q2)
+		{
+			break; // for speed-up
+		}
+	}
 	no_ortho_components_=best_o_no;
+	best_q2=validation->getQ2();
+
+	//finally, try to reduce the number of PLS components (since orthogonal variance has been removed, less PLS components should be neccessary)
+	for(int i=no_components_; i>=1 ;i--)
+	{	
+		no_components_=i;
+			
+		validation->crossValidation(k);
+	
+		if(validation->getQ2()>best_q2)
+		{
+			best_q2=validation->getQ2();
+			best_no=i;
+		}
+		else if(validation->getQ2()<0.75*best_q2)
+		{
+			break; // for speed-up
+		}
+	}
+	no_components_=best_no;
+	
 	validation->setQ2(best_q2);
+	
+	return 1;
 }
 
 

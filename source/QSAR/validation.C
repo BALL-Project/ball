@@ -109,9 +109,8 @@ void Validation::yRand()
 	
 	for(unsigned int i=0; i<data->Y_.size(); i++)
 	{
-		gsl_rng_set(r,i);
 		for(unsigned int j=0; j<data->Y_[0].size(); j++)
-		{
+		{	
 			int pos = gsl_rng_uniform_int(r,data->Y_[0].size()-1);  // exchange elements at pos and j
 			double tmp=data->Y_[i][pos];
 			data->Y_[i][pos]=data->Y_[i][j];

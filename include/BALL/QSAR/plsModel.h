@@ -45,9 +45,7 @@ namespace BALL
 				virtual void train();
 				
 				/** Tries to find the optimal number of PLS components (latente variables) for the current data of this model */
-				void findNoComponents(int k);
-	
-				bool optimizeParameters(int k);
+				virtual bool optimizeParameters(int k, int no_steps);
 
 				/** set the number of PLS components to create */
 				void setNoComponents(int no);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: partialChargeBase.C,v 1.2.28.1 2007/03/16 00:06:47 bertsch Exp $
+// $Id: partialChargeBase.C,v 1.2.28.1 2007-03-16 00:06:47 bertsch Exp $
 //
 
 #include <BALL/QSAR/partialChargeBase.h>
@@ -75,6 +75,14 @@ namespace BALL
 		}
 	}
 
+	
+	void PartialChargeBase::computeAllDescriptors(AtomContainer& ac)
+	{	
+		if (!isValid_(ac))
+		{
+			calculate_(ac);
+		}
+	}
 
 	void PartialChargeBase::calculate_(AtomContainer& ac)
 	{

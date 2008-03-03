@@ -42,6 +42,12 @@ namespace BALL
 		*/
 		virtual ~PartialChargeBase();
 		//@}
+		
+		/** @name Accessors
+		*/
+		//@{
+		void computeAllDescriptors(AtomContainer& ac);
+		//@}
 	
 		/** @name Assignment
 		*/

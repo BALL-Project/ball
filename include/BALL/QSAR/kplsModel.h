@@ -45,9 +45,7 @@ namespace BALL
 				void train();
 				
 				/** tries to find the optimal number of latente variables (=PLS components) */
-				void findNoComponents(int k);
-				
-				bool optimizeParameters(int k);
+				bool optimizeParameters(int k, int no_steps);
 				
 				/** returns the number of latente variables (=PLS components) */
 				int getNoComponents();

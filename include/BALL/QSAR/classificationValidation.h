@@ -53,6 +53,9 @@ namespace BALL
 				/** return pointer to the matrix containing the number of TP, FP, FN, TN in one column for each class  */
 				const Matrix* getConfusionMatrix();
 				
+				/** returns a RowVector holding the one value contituting the validation result for each class if "average accuracy" or "average MCC" is chosen (see selectStat()). */
+				const RowVector* getClassResults();
+				
 				/** starts bootstrapping with k samples \n
 				@param k no of bootstrap samples */
 				void bootstrap(int k, bool restore=1);
@@ -61,11 +64,6 @@ namespace BALL
 				Randomizes all columns of model.Y, trains the model, runs crossValidation and testInputData and saves the resulting accuracy_input_test and accuracy_cv value to a vector, where Matrix(i,0)=accuracy_input_test, Matrix(i,1)=accuracy_cv \n
 				@param runs this is repeated as often as specified by 'runs' */
 				Matrix yRandomizationTest(int runs, int k);
-				
-				/** calculate average accuracy with the current values of TP, FP, FN, TN in matrix ClassificationValidation.predictions. */
-				void calculateAccuracy();
-				
-				void calculateWeightedAccuracy();
 				
 				/** get average accuracy value as determined after cross validation */
 				double getAccuracyCV();
@@ -84,6 +82,21 @@ namespace BALL
 				//@{
 				/** Tests the current model with all substances in the (unchanged) test data set */
 				void testAllSubstances(bool transform);
+				
+				/** calculate average accuracy with the current values of TP, FP, FN, TN in matrix ClassificationValidation.predictions. */
+				void calculateAverageAccuracy();
+				
+				/** calculate weighted average accuracy of all classes. Weighted by the number of training compounds within each class */
+				void calculateWeightedAccuracy();
+				
+				/** calculate accuracy for all classes at once */
+				void calculateOverallAccuracy();
+				
+				/** calculate one MCC for each class and use the average */
+				void calculateAverageMCC();
+				
+				/** calculate MCC for all classes at once */
+				void calculateOverallMCC();
 				//@}
 				
 				
@@ -92,6 +105,9 @@ namespace BALL
 				//@{
 				/** matrix containing the number of TP, FP, FN, TN in one column for each class  */
 				Matrix confusion_matrix_;
+				
+				/** RowVector holding the one value contituting the validation result for each class if "average accuracy" or "average MCC" is chosen (see selectStat()). */
+				RowVector class_results_;
 			
 				double accuracy_;
 				

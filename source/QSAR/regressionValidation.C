@@ -121,7 +121,7 @@ void RegressionValidation::testAllSubstances(bool transform)
 		//sum_of_squares(i)=Statistics::sq(test_Y_,i,mean_Y(i));
 	}
 	//ssT_ =  sum_of_squares.Sum();
-		
+	
 	for(unsigned int i=0; i<test_substances_.size();i++)
 	{       
 		RowVector rv=model_->predict(test_substances_[i],transform);
@@ -137,15 +137,15 @@ void RegressionValidation::testAllSubstances(bool transform)
 		}
 		ssE_+=error;
 		
-		if(model_->type_=="GP")
-		{
-			std_err_ += model_->calculateStdErr();
-		}
+// 		if(model_->type_=="GP")
+// 		{
+// 			std_err_ += model_->calculateStdErr();
+// 		}
 	}
-	if(model_->type_=="GP")
+/*	if(model_->type_=="GP")
 	{
 		std_err_ = std_err_/test_substances_.size();
-	}	
+	}*/	
 
 }
 
@@ -168,6 +168,18 @@ void RegressionValidation::testInputData(bool transform)
 		{
 			throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before its fit to the input data can be evaluated!");
 		}
+		int test_col = model_->descriptor_IDs_.size(); // no of columns of X^T X (linear model)
+		int kernel_test_col = model_->descriptor_matrix_.Nrows();  // no of columns of X X^T (nonlinear model)
+		if(test_col==0)
+		{
+			test_col=model_->data->getNoDescriptors();
+		}
+		
+		if(test_col!=res_rows && kernel_test_col!=res_rows)
+		{
+			throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before its fit to the input data can be evaluated!");
+		}
+				 		 		 
 // 		else if( des==0 && data_cols!=res_rows && data_cols!=desmat_cols)
 // 		{
 // 			throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained with data containing the same number of features as the test data set!");
@@ -476,7 +488,7 @@ void RegressionValidation::bootstrap(int k, vector<Matrix>* results, bool restor
 		test_line=0;
 		for(int j=0; j<N;j++)  
 		{
-			while(sample_substances[j]>0) 
+			while(sample_substances[j]>0) // insert substance as often as it occurs in the training data set 
 			{	
 				setTestLine(test_line,j);
 				test_line++;
@@ -486,7 +498,7 @@ void RegressionValidation::bootstrap(int k, vector<Matrix>* results, bool restor
 		testAllSubstances(0);
 		r2 += 1-(ssE_/(ssE_+ssR_));
 	}
-	//cout << "  sum Q2_="<<Q2_<<"  sum r2="<<r2<<endl;
+	
 	Q2_ = Q2_/k;
 	r2 = r2/k;
 	
@@ -504,13 +516,16 @@ void RegressionValidation::bootstrap(int k, vector<Matrix>* results, bool restor
 
 Matrix RegressionValidation::yRandomizationTest(int runs, int k)
 {
+	if(model_->data->descriptor_matrix_.size()==0 || model_->data->Y_.size()==0)
+	{
+		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be fetched from input-files by QSARData object before response permutation tests can be done!");
+	}	
+	
 	Matrix y_backup=model_->Y_;
 	Matrix desc_backup=model_->descriptor_matrix_;
 	Matrix res_backup=regr_model_->training_result_;
 	vector<vector<double> > dataY_backup=model_->data->Y_;
 				
-	//vector<double> c(2,-1);
-	//vector<vector<double> > results(runs,2);
 	Matrix results(runs,2);
 	results=-1;
 
@@ -520,10 +535,7 @@ Matrix RegressionValidation::yRandomizationTest(int runs, int k)
 		crossValidation(k,NULL,0);
 		model_->readTrainingData();
 		model_->train();
-		testInputData(0);
-		//results[i][0]=R2_;
-		//results[i][1]=Q2_;
-		
+		testInputData(0);	
 		results(i+1,1)=R2_;
 		results(i+1,2)=Q2_;
 	}	

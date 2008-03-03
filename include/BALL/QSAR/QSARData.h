@@ -68,6 +68,9 @@ namespace BALL
 				@param directory the directory, where the structure files and activity.txt can be found */
 				void readFiles(char* directory);
 				
+				/** reads the names of the properties from the first molecule in the given sd-file */
+				vector<String>* readPropertyNames(String sd_file);
+
 				/** Fetches input from one sd-file containing all structures and from one file containing the activities of all structures sorted in ascending order. \n 
 				The latter file is assumed to have the same name as the first one, with only the extension changed to ".txt"
 				@param file the sd-file containing the input */
@@ -146,6 +149,13 @@ namespace BALL
 				unsigned int getNoResponseVariables() const;
 				
 				const vector<string>* getSubstanceNames();
+				
+				/** checks whether the response variables contain only discrete values. This can be used to check whether the current input data set is suitable for a ClassificationModel */
+				bool checkforDiscreteY();
+				
+				
+				/** checks whether the response variables of a specified file contain only discrete values. */
+				bool checkforDiscreteY(const char* file, SortedList<int>& activity_IDs);
 				//@}
 				
 				

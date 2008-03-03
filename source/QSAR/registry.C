@@ -14,7 +14,7 @@ Registry::Registry()
 	RegistryEntry r0(0,1,"Multiple Linear Regression", "MLR", (CreateMethod) &ModelFactory<MLRModel>::create,this);
 	registered_models.push_back(r0);
 	
-	RegistryEntry r00(0,1,"Ridge Regression","RR",(CreateMethod) &ModelFactory<MLRModel>::create,this);
+	RegistryEntry r00(0,1,"Ridge Regression","RR",(CreateMethod) &ModelFactory<RRModel>::create,this);
 	r00.parameterNames.push_back("lambda");
 	r00.parameterDefaults.push_back(0.003);
 	registered_models.push_back(r00);
@@ -48,13 +48,11 @@ Registry::Registry()
 	registered_models.push_back(r3);
 	
 	RegistryEntry r31(0,1,"k Nearest Neighbor Regression","KNN",(CreateMethod) &ModelFactory<KNNModel>::create,this);
-	r31.parameterNames.push_back("kernel width");
-	r31.parameterNames.push_back("lambda");
 	r31.parameterNames.push_back("k (number of nearest neighbors)");
-	r31.parameterDefaults.push_back(4);
-	r31.parameterDefaults.push_back(0.003);
+	r31.parameterNames.push_back("lambda");
 	r31.parameterDefaults.push_back(3);
-	r31.optimizableParameters.push_back(2);
+	r31.parameterDefaults.push_back(0.003);
+	r31.optimizableParameters.push_back(0);
 	registered_models.push_back(r31);
 	
 	RegistryEntry r4(1,1,"Kernel Partial Least Squares","KPLS",(CreateKernel1) &ModelFactory<KPLSModel>::createKernel1, (CreateKernel2) &ModelFactory<KPLSModel>::createKernel2,this);
@@ -113,9 +111,24 @@ RegistryEntry* Registry::getRegistryEntry(String model_name)
 	{
 		String mess = "A model with the name \""+model_name+"\"does not exist!";
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model creation error",mess.c_str());
-		//return NULL;
 	}	
-}		
+	return NULL;
+}
+		
+int Registry::getModelNo(String model_name)
+{
+	map<String,int>::iterator it = model_map.find(model_name);
+	if(it!=model_map.end())
+	{
+		return it->second;
+	}
+	else
+	{
+		String mess = "A model with the name \""+model_name+"\"does not exist!";
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model creation error",mess.c_str());
+	}
+	return -1;	
+}
 		
 
 RegistryEntry::RegistryEntry(bool k, bool r, String n, String ab, CreateMethod c0, Registry* reg)
@@ -127,7 +140,7 @@ RegistryEntry::RegistryEntry(bool k, bool r, String n, String ab, CreateMethod c
 	create = c0;
 	createKernel1 = NULL;
 	createKernel2 = NULL;
-	reg->model_map[ab] = reg->registered_models.size()-1;
+	reg->model_map[ab] = reg->registered_models.size();
 }
 
 
@@ -140,7 +153,7 @@ RegistryEntry::RegistryEntry(bool k, bool r, String n, String ab, CreateKernel1 
 	create = NULL;
 	createKernel1 = c1;
 	createKernel2 = c2;
-	reg->model_map[ab] = reg->registered_models.size()-1;
+	reg->model_map[ab] = reg->registered_models.size();
 }
 
 RegistryEntry::~RegistryEntry()

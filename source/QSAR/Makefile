@@ -1,3 +1,5 @@
+include ../config.mak
+
 DIRECTORY=QSAR
 
 THISLIB=$(LIBNAME)
@@ -15,6 +17,51 @@ CPP_SOURCES=\
 	simpleDescriptors.C\
 	surfaceBase.C\
 	surfaceDescriptors.C
+	
+
+ifeq ($(USE_NEWMAT),true)
+	ifeq ($(BALL_HAS_GSL),true)
+		CPP_SOURCES+=\
+		classificationModel.C\
+		classificationValidation.C\
+		exception.C\
+		featureSelection.C\
+		allModel.C\
+		gpModel.C\
+		kernel.C\
+		kernelModel.C\
+		kpcrModel.C\
+		kplsModel.C\
+		ldaModel.C\
+		linearModel.C\
+		logitModel.C\
+		mlrModel.C\
+		Model.C\
+		nonlinearModel.C\
+		oplsModel.C\
+		pcrModel.C\
+		plsModel.C\
+		QSARData.C\
+		regressionModel.C\
+		regressionValidation.C\
+		sortedList.C\
+		statistics.C\
+		validation.C\
+		modelFactory.C\
+		registry.C\
+		knnModel.C\
+		rrModel.C\
+		fitModel.C
+		
+		ifeq ($(USE_LIBSVM),true)
+			CPP_SOURCES+=\
+			svmModel.C\
+			svrModel.C\
+			libsvmModel.C
+		endif			
+	endif
+endif
+
 
 include ../common.mak
 -include .Dependencies

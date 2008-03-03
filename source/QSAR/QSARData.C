@@ -152,7 +152,7 @@ void QSARData::checkActivityIDs(SortedList<int>& act, int no_properties)
 {	
 	act.front();
 	// No response variable in case of data set whose activity is to be predicted
-	if(act.size()==0 || act.front()==-1) 
+	if(act.size()==0 || (act.front()==-1&&act.size()==1)) 
 	{									
 		return;
 		//throw Exception::InvalidActivityID(__FILE__,__LINE__);
@@ -161,11 +161,31 @@ void QSARData::checkActivityIDs(SortedList<int>& act, int no_properties)
 	while(act.hasNext())
 	{
 		int a = act.next();
-		if(a<0 || a>no_properties)
+		if(a<0 || a>=no_properties)
 		{
 			throw Exception::InvalidActivityID(__FILE__,__LINE__,a,no_properties);
 		}
 	}
+}
+
+
+
+vector<BALL::String>* QSARData::readPropertyNames(String sd_file)
+{
+	SDFile input(sd_file);
+	Molecule m;
+	input >> m;
+	int no = m.countNamedProperties();
+	
+	vector<String>* names = new vector<String>;
+	names->resize(no);cout<<"size = "<<no<<endl;
+	
+	for(int i=0; i<no;i++)
+	{
+		(*names)[i] = m.getNamedProperty(i).getName();
+	}
+	input.close();
+	return names;
 }
 
 
@@ -1131,7 +1151,7 @@ void QSARData::readFromFile(string filename)
 	unsigned int no_desc = (unsigned int) line.getField(1,"\t").toInt();
 	unsigned int no_y = (unsigned int) line.getField(2,"\t").toInt();
 	bool center_data = (bool) line.getField(3,"\t").toInt();
-	bool center_y = (bool) line.getField(3,"\t").toInt();
+	bool center_y = (bool) line.getField(4,"\t").toInt();
 	column_names_.resize(no_desc);
 	substance_names_.resize(no_subst);
 	getline(in,line); // skip empty line
@@ -1214,4 +1234,46 @@ vector<double>* QSARData::getActivity(int s)
 const vector<string>* QSARData::getSubstanceNames()
 {
 	return &substance_names_;
+}
+
+
+bool QSARData::checkforDiscreteY()
+{
+	for(uint i=0; i<Y_.size();i++)
+	{
+		for(uint j=0;j<Y_[0].size();j++)
+		{
+			int label=static_cast<int>(Y_[i][j]);
+			if(label!=Y_[i][j])
+			{
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+
+
+bool QSARData::checkforDiscreteY(const char* file, SortedList<int>& activity_IDs)
+{
+	SDFile sd(file);
+	sd.disableAtoms();
+	
+	while(sd)
+	{
+		Molecule m;
+		sd >> m;
+		activity_IDs.front();
+		while(activity_IDs.hasNext())
+		{
+			double y = String(m.getNamedProperty(activity_IDs.next()).getString()).toDouble();
+		
+			if(y!=(int)y)
+			{
+				return false;
+			}
+		}
+	}
+	return true;
 }

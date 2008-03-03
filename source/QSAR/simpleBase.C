@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBase.C,v 1.2.28.2 2007/03/19 21:43:47 bertsch Exp $
+// $Id: simpleBase.C,v 1.2.28.2 2007-03-19 21:43:47 bertsch Exp $
 //
 
 #include <BALL/QSAR/simpleBase.h>
@@ -15,7 +15,7 @@
 
 using namespace std;
 
-#define BALL_QSAR_ATOMIC_POLARIZABILITIES_FILE "QSAR/atomic_polarizabilities.data"
+#define BALL_QSAR_ATOMIC_POLARIZABILITIES_FILE "data/atomic_polarizabilities.data"
 
 namespace BALL
 {
@@ -103,7 +103,14 @@ namespace BALL
 		}
 	}
 
-
+	void SimpleBase::computeAllDescriptors(AtomContainer& ac)
+	{	
+		if (!isValid_(ac))
+		{
+			calculate_(ac);
+		}
+	}
+	
 	void SimpleBase::calculate_(AtomContainer& ac)
 	{
 		// ring processing
@@ -249,7 +256,6 @@ namespace BALL
 	
 		AtomConstIterator a_it = ac.beginAtom();
 		Atom::BondConstIterator b_it = a_it->beginBond();
-
 		BALL_FOREACH_BOND (ac, a_it, b_it)
 		{
 			switch (b_it->getOrder())

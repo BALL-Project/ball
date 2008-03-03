@@ -68,7 +68,7 @@ namespace BALL
 				void bootstrap1(int k, vector<Matrix>* results, bool restore=1);
 				
 				/** Y randomization test \n
-				Randomizes all columns of model.Y, trains the model, runs crossValidation and testInputData and saves the resulting R2 and Q2 value to a vector, where vector[0]=R2, vector[1]=Q2 \n
+				Randomizes all columns of model.Y, trains the model, runs crossValidation and testInputData and saves the resulting R2 and Q2 value to a matrix with 2 columns; the R2 values makeing up the first colum, the Q2 value the second.
 				@param runs this is repeated as often as specified by 'runs' */
 				Matrix yRandomizationTest(int runs, int k);
 				

@@ -43,7 +43,7 @@ namespace BALL
 				
 				void setNoOrthoComponents(int d);
 				
-				void optimizeParameters(int k, unsigned int max=20);
+				bool optimizeParameters(int k, int no_steps);
 				//RowVector predict(const vector<double>& substance, bool transform);
 				
 				void setParameters(vector<double>& v);

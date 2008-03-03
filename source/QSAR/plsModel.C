@@ -14,7 +14,7 @@ using namespace BALL::QSAR;
 PLSModel::PLSModel(const QSARData& q) : LinearModel(q) 
 {
 	type_="PLS";
-	no_components_=1;
+	no_components_=10;
 }
 
 PLSModel::~PLSModel()
@@ -29,12 +29,6 @@ int PLSModel::getNoComponents()
 void PLSModel::setNoComponents(int no)
 {
 	no_components_=no;
-}
-
-bool PLSModel::optimizeParameters(int k)
-{
-	findNoComponents(k);
-	return 1;
 }
 	
 
@@ -121,28 +115,29 @@ void PLSModel::train()
 }
 
 
-
-void PLSModel::findNoComponents(int k)
+bool PLSModel::optimizeParameters(int k, int no_steps)
 {
 	double best_q2=0;
 	int best_no=1;
-	for(unsigned int i=1; i<=data->getNoDescriptors() && (descriptor_IDs_.empty() || i<descriptor_IDs_.size()) ;i++)
+	for(unsigned int i=1; i<=no_steps && i<=data->getNoDescriptors() && (descriptor_IDs_.empty() || i<descriptor_IDs_.size()); i++)
 	{
 		no_components_=i;
 		validation->crossValidation(k);
-
+	
 		if(validation->getQ2()>best_q2)
 		{
 			best_q2=validation->getQ2();
 			best_no=i;
 		}
-// 		else
-// 		{
-// 			break;
-// 		}
+		else if(validation->getQ2()<0.75*best_q2)
+		{
+			break; // for speed-up
+		}
 	}
 	no_components_=best_no;
 	validation->setQ2(best_q2);
+	
+	return 1;
 }
 
 

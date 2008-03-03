@@ -3,17 +3,20 @@
 
 using namespace BALL::QSAR;
 
-
-KNNModel::KNNModel(const QSARData& q, int k, double kw) : ALLModel(q,kw)
+// ALLModel::kw_ will not be used so it can be set to an arbitrary value
+KNNModel::KNNModel(const QSARData& q, int k) : ALLModel(q,1)
 {
 	type_ = "KNN";
 	k_ = k;
 }
 
 
-
 void KNNModel::calculateWeights(Matrix& dist, RowVector& w)
 {
+	// set first k entries of similarity vector w to 1
+	//   and all other entries to 0
+	//   ==> KNN instead of ALL	
+	
 	w.ReSize(dist.Ncols());
 	w=1;
 	
@@ -27,8 +30,8 @@ void KNNModel::calculateWeights(Matrix& dist, RowVector& w)
 	{
 		ranking.next();  // skip the k nearest neighbors
 	}
-	while(ranking.hasNext())
-	{
+	while(ranking.hasNext()) 
+	{			  
 		w(ranking.next().second) = 0;
 	}
 }
@@ -36,31 +39,29 @@ void KNNModel::calculateWeights(Matrix& dist, RowVector& w)
 
 void KNNModel::setParameters(vector<double>& v)
 {
-	if(v.size()!=3)
+	if(v.size()!=2)
 	{
-		String c = "Wrong number of model parameters! Needed: 3;";
+		String c = "Wrong number of model parameters! Needed: 2;";
 		c = c+" given: "+String(v.size());
 		throw Exception::ModelParameterError(__FILE__,__LINE__,c.c_str());
 	}
-	kw_ = v[0];
+	k_ = (int) v[0];
 	lambda_ = v[1];
-	k_ = (int) v[2];
 }
 
 vector<double> KNNModel::getParameters() const
 {
 	vector<double> d;
-	d.push_back(kw_);
-	d.push_back(lambda_);
 	d.push_back(k_);
+	d.push_back(lambda_);
 	return d;
 }
 
-bool KNNModel::optimizeParameters(int d)
+bool KNNModel::optimizeParameters(int d, int no_steps)
 {
 	double best_q2=0;
 	int best_no=1;
-	for(unsigned int i=1; i<=data->getNoSubstances() ;i++)
+	for(int i=1; i<=no_steps && i<=(int)data->getNoSubstances();i++)
 	{
 		k_=i;
 		validation->crossValidation(d);

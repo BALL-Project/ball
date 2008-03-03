@@ -52,6 +52,12 @@ namespace BALL
 		/** Assignment operator
 		*/
 		virtual SimpleBase& operator = (const SimpleBase& sb);
+		
+		
+		/** @name Accessors
+		*/
+		//@{
+		void computeAllDescriptors(AtomContainer& ac);
 		//@}
 
 

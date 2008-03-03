@@ -46,6 +46,17 @@ namespace BALL
 	{
 		initTable();
 	}
+	
+	template <>
+	ParsedFunction<double>::ParsedFunction(const String& expression)
+		throw()
+		: constants_(),
+			functions_(),
+			expression_(expression)
+			
+	{
+		initTable();
+	}
 
 	template <typename arg>
 	ParsedFunction<arg>::ParsedFunction(const ParsedFunction& func)
@@ -69,6 +80,12 @@ namespace BALL
 		throw()
 	{
 	}
+	template <>
+	ParsedFunction<double>::~ParsedFunction()
+		throw()
+	{
+	}
+	
 
 	template <typename arg>
 	double ParsedFunction<arg>::operator () (arg argument)
@@ -86,6 +103,20 @@ namespace BALL
 
 	template <>
 	double ParsedFunction<float>::operator () (float argument)
+		throw(Exception::ParseError)
+	{
+		double arg = argument;
+		constants_["X"] = &arg;
+		parsedFunctionConstants = &constants_;
+		parsedFunctionFunctions = &functions_;
+		parsedFunction_initBuffer(expression_.c_str());
+		parsedFunctionparse();
+		parsedFunction_delBuffer();
+		return parsedFunctionResult;
+	}
+	
+	template <>
+	double ParsedFunction<double>::operator () (double argument)
 		throw(Exception::ParseError)
 	{
 		double arg = argument;

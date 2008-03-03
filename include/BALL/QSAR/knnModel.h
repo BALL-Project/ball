@@ -22,7 +22,7 @@ namespace BALL
 				/** @name Constructors and Destructors
 				 */
 				//@{
-				KNNModel(const QSARData& q, int k=3, double kw=4);
+				KNNModel(const QSARData& q, int k=3);
 				//@}
 				
 				void calculateWeights(Matrix& dist, RowVector& w);
@@ -31,7 +31,7 @@ namespace BALL
 				
 				vector<double> getParameters() const;
 				
-				bool optimizeParameters(int k);
+				bool optimizeParameters(int k, int no_steps);
 				
 			private:
 				int k_ ;

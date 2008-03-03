@@ -8,6 +8,8 @@ CPP_SOURCES=\
 	coulomb.C\
 	distanceCoulomb.C\
 	energyProcessor.C
+# 	energyGrid.C\
+# 	energyGridBuilder.C
 
 include ../common.mak
 -include .Dependencies

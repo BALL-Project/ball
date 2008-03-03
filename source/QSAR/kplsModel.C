@@ -72,65 +72,6 @@ vector<double> KPLSModel::getParameters() const
 	return d;
 }
 
-/*
-void KPLSModel::train()
-{	
-	if(descriptor_matrix_.Ncols()==0)
-	{
-		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be read into the model before training!");
-	}
-	kernel->calculateKernelMatrix(descriptor_matrix_, K_);
-	
-	Matrix T_;
-	Matrix U_;
-	IdentityMatrix I(K_.Ncols());
-	ColumnVector t;
-	ColumnVector c;
-	ColumnVector u(K_.Nrows());
-	for (int i=1; i<=u.Nrows(); i++)
-	{
-		u(i)=Y_(i,1);	
-	}
-	ColumnVector u_old;
-	
- 	for(int j=0; j<latente_Variables; j++)
- 	{
- 		for(int i=0;i<100 ;i++)
- 		{	
- 			t = K_*u;
-			t = t / Statistics::euclNorm(t);
-			c = Y_.t()*t;
-			u_old=u;
-			u = Y_*c; 
-			u = u / Statistics::euclNorm(u);
-			
-			if (Statistics::euclDistance(u,u_old)/Statistics::euclNorm(u)>0.0000001) 
-			{ 
-				continue;
-			}
-			else  // if u has converged
-			{
-				break;
-			}
-		}
-
-		K_ = (I-t*t.t())*K_*(I-t*t.t());
-		Y_ = Y_ - t*t.t()*Y_;
-		
-		if(j==0)
-		{
-			U_ = u;
-			T_ = t;
-		}
-		else
-		{
-			T_ = T_|t;
-			U_ = U_|u;
- 		}
- 	}
-	training_result_ = U_*(T_.t()*K_*U_).i()*T_.t()*Y_;
-}*/
-
 
 void KPLSModel::train()
 {	
@@ -228,34 +169,28 @@ RowVector KPLSModel::predict(const vector<double>& substance, bool transform)
 }
 
 
-bool KPLSModel::optimizeParameters(int k)
-{
-	findNoComponents(k);
-	return 1;
-}
-
-
-void KPLSModel::findNoComponents(int k)
+bool KPLSModel::optimizeParameters(int k, int no_steps)
 {
 	double best_q2=0;
 	int best_no=1;
-	for(unsigned int i=1; i<=data->getNoDescriptors() && (descriptor_IDs_.empty() || i<descriptor_IDs_.size());i++)
+	for(unsigned int i=1; i<=no_steps && i<=data->getNoDescriptors() && (descriptor_IDs_.empty() || i<descriptor_IDs_.size());i++)
 	{	
 		no_components_=i;
 		validation->crossValidation(k);
-		//cout <<"i="<<i<<"  q2="<<validation->getQ2()<<endl;
 		if(validation->getQ2()>best_q2)
 		{
 			best_q2=validation->getQ2();
 			best_no=i;
 		}
-		else if(validation->getQ2()<0.7*best_q2)
+		else if(validation->getQ2()<0.75*best_q2)
 		{
 			break;
 		}
 	}
 	no_components_=best_no;
 	validation->setQ2(best_q2);
+	
+	return 1;
 }
 
 

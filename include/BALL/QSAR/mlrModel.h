@@ -29,7 +29,7 @@ namespace BALL
 				//@{
 				/** constructur
 				@param q QSAR-wrapper object, from which the data for this model should be taken */
-				MLRModel(const QSARData& q, double ridge_regression=0);
+				MLRModel(const QSARData& q);
 
 				~MLRModel();
 				//@}
@@ -40,19 +40,7 @@ namespace BALL
 				/** Starts multiple linear regression with the current data and saves the resulting linear combination of descriptors to training_result. \n 
 				In order for this to work, descriptor_matrix MUST have more rows than columns, so that the matrix is invertible !! \n
 				If this is not the case, start a feature selection method before running train() !  */
-				void train();
-				
-				void setParameters(vector<double>& v);
-				
-				vector<double> getParameters() const;
-				//@}
-		
-			private:
-				/** @name Attributes
-				 */
-				//@{
-				/** ridge regression value. If rr!=0, ridge regression is done */
-				double rr_;
+				virtual void train();
 				//@}
 		};
 	}

@@ -136,7 +136,7 @@ void ALLModel::calculateXY(RowVector& w, Matrix& res)
 }
 
 
-void ALLModel::findKW(int k)
+bool ALLModel::optimizeParameters(int k, int /*no_steps*/)
 {
 	double best_q2=0;
 	double best_kw=0;
@@ -157,12 +157,7 @@ void ALLModel::findKW(int k)
 		}
 	}
 	kw_=best_kw;
-}
-
-
-bool ALLModel::optimizeParameters(int k)
-{
-	findKW(k);
+	
 	return 1;
 }
 

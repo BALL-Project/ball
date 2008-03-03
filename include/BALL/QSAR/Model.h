@@ -83,13 +83,13 @@ namespace BALL
 				The number of selected features (=descriptors) is NOT changed by this method. Use class FeatureSelection in order to do this.\n
 				@return 1 if parameters were optimized using cross-validation. The best Q2 value is assumed to be saved in ModelValidation.Q2 \n
 				0 if the model has no parameters to be optimized, so that no cross-validation was done.*/
-				virtual bool optimizeParameters(int k){return 0;};
+				virtual bool optimizeParameters(int /*k*/, int /*no_steps*/=30){return 0;};
 				
 				virtual double calculateStdErr()
 				{return -1.0;};
 				
 				/** sets the model parameters according to the given values. */
-				virtual void setParameters(vector<double>& v){};
+				virtual void setParameters(vector<double>& /*v*/){};
 				
 				virtual vector<double> getParameters() const;
 

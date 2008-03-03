@@ -33,14 +33,12 @@ namespace BALL
 				void setKw(double kw);
 				
 				virtual RowVector predict(const vector<double>& substance, bool transform=1);
-			
-				/** Tries to find the optimal kernel width for the current data. Therefore some training data must have been stored in this model before running this method. */
-				void findKW(int k);
 				
 				/** automated lazy learning does not have a seperate training step */
 				void train(){};
 				
-				virtual bool optimizeParameters(int d);
+				/** Tries to find the optimal kernel width for the current data. Therefore some training data must have been read by the connected QSARData object before running this method. */
+				virtual bool optimizeParameters(int d, int no_steps);
 				
 				/** returns the current kernel width */
 				double getKw();

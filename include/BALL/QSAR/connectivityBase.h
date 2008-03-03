@@ -57,7 +57,14 @@ namespace BALL
 		/** Assignment operator
 		*/
 		virtual ConnectivityBase& operator = (const ConnectivityBase& cb);
-
+		//@}
+		
+		/** @name Accessors
+		*/
+		//@{
+		void computeAllDescriptors(AtomContainer& ac);
+		//@}
+		
 		protected:
 
 		/** @name Predicates
@@ -70,6 +77,8 @@ namespace BALL
 		*/
 		//@{
 		void calculate_(AtomContainer& ac);
+		
+		
 		//@}
 
 

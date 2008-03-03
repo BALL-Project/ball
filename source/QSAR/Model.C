@@ -188,7 +188,7 @@ void Model::readDescriptorInformation()
 	SortedList<unsigned int>::Iterator it=descriptor_IDs_.begin();
 	// copy selected descriptors, their names and the information about their transformations (mean and stddev of each descriptor)
 	for(unsigned int j=0; j<data->descriptor_matrix_.size() && (!fs || it!=descriptor_IDs_.end()); j++)
-	{	cout<<"p2"<<endl;	
+	{	
 		// set only those columns that belong to selected descriptors
 		if ( (fs && *it==j) || !fs )
 		{
@@ -417,6 +417,3 @@ void Model::addLambda(Matrix& matrix, double& lambda)
 		matrix(i,i)+=lambda;
 	}
 }	
-		
-		
-		
