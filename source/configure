@@ -894,8 +894,8 @@ Optional Packages:
   --with-gsl-lib=DIR      libgsl is in DIR
   --with-gsl-incl=DIR     gsl includes are in DIR
   --with-x                use the X Window System
-  --with-newmat-path=DIR      newmat source/header are in DIR
-  --with-libsvm-path=DIR      libsvm source/header are in DIR
+  --with-newmat=DIR      newmat source/header are in DIR
+  --with-libsvm=DIR      libsvm source/header are in DIR
 
 Some influential environment variables:
   CXX         C++ compiler command
@@ -1819,17 +1819,17 @@ else
 	GSL_SUPPORT=
 fi
 
-if test "$with_libsvm_path" != "" ; then
+if test "$with_libsvm" != "" ; then
 	USE_LIBSVM=true
-	LIBSVM_PATH=${with_libsvm_path}
+	LIBSVM_PATH=${with_libsvm}
 else
 	USE_LIBSVM=false
 	LIBSVM_PATH=""
 fi
 
-if test "$with_newmat_path" != "" ; then
+if test "$with_newmat" != "" ; then
 	USE_NEWMAT=true
-	NEWMAT_PATH=${with_newmat_path}
+	NEWMAT_PATH=${with_newmat}
 else
 	USE_NEWMAT=false
 	NEWMAT_PATH=""
