@@ -1,0 +1,47 @@
+#!/bin/bash 
+
+# Contrib path
+CPATH=`echo $0 | sed "s/\/build_contrib//"`
+cd $CPATH
+CPATH=`pwd`
+
+echo building contrib package from $CPATH ...
+
+# Try to use gtar, fall back to tar if it doesn't exist
+TAR=`which gtar`
+if test "$TAR" = "" ;  then
+	TAR=tar
+fi
+
+
+gunzip newmat.tar.gz; $TAR xif newmat.tar;
+gunzip libsvm.tar.gz; $TAR xif libsvm.tar;
+gunzip gsl-1.8.tar.gz; $TAR xif gsl-1.8.tar;
+
+echo
+echo building gsl ...
+echo
+cd gsl-1.8
+./configure --prefix=`pwd`/gsl-1.8
+make
+make install
+cd ..
+
+echo
+echo building newmat ...
+echo 
+cd newmat
+make
+cd ..
+
+echo
+echo building libsvm ...
+echo
+cd libsvm
+make
+cd ..
+
+
+echo
+echo Finished building QSAR contrib package
+echo
