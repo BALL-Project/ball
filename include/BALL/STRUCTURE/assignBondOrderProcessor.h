@@ -229,15 +229,14 @@ namespace BALL
 				if (   (atom_type_normalization_factor_   < 0.00001) 
 				    || (bond_length_normalization_factor_ < 0.00001) ) 
 				{
-					Log.error() << "AssignBondOrderProcessor::getTotalPenalty: normalization factor zero " << std::endl;
+					Log.info() << "AssignBondOrderProcessor::getTotalPenalty: normalization factor zero  - falling back to atomtype penalty" << std::endl;
+					return sol.atom_type_penalty;
 				}
 				else
 				{
 					return (  (1.-alpha_) * (sol.atom_type_penalty/atom_type_normalization_factor_) 
 									+ (alpha_*sol.bond_length_penalty/bond_length_normalization_factor_));
 				} 
-
-				return Limits<float>::max();
 			}
 
 			/** Set the AtomContainer ac_'s bond orders to the ones found 
