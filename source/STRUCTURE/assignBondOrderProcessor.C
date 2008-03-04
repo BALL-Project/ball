@@ -726,7 +726,7 @@ cout << "  * fixed bond num " << bond_to_index_[&*b_it] << " (" << b_it->getFirs
 				return false; 
 			}
 
-#if defined DEBUG 
+#if defined DEBUG || defined DEBUG_ESTIMATE
 cout << "  * atom " << a_it->getFullName() << " is block " << block +1 << " : " 
 		 <<  block_to_start_valence_[block] << " " << block_to_length_[block] 
 		 << " " <<  block_to_start_idx_[block] << endl;
@@ -1202,7 +1202,7 @@ cout << " - - preassign penalty classes  - - - - - - - - " << endl;
 cout << at->getFullName() << endl;
 #endif
 			
-				// find the first matching atom definition, whos index gives the block
+				// find the first matching atom definition, whose index gives the block
 				for (Size j = 0; !found && (j < block_definition_.size()); j++)
 				{	
 					Expression exp(block_definition_[j].second);
@@ -1232,7 +1232,6 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 						}
 						atom_type_normalization_factor_+= max_penalty;
 
-						//break; //continue; 
 					}
 				}
 
@@ -1793,11 +1792,19 @@ cout << "AssignBondOrderProcessor::PQ_Entry_::operator <: " <<  coarsePenalty() 
 				}
 				entry.last_bond = ac->countBonds()-1;
 				if (estimatePenalty_(entry))
-					return entry.coarsePenalty();//entry.estimated_atom_type_penalty;
+				{	
+					return entry.coarsePenalty();
+				}
 				else
+				{
+					Log.info() << "Error in estimatePenalty" << endl;
 					return -1.;
+				}
 			}
 		}
+
+		Log.info() << "Error in evaluatePenalty: valid: " <<  valid_ << " readAtomPenalties:" << readAtomPenalties_() << endl;
+		
 		return -1.;
 	}
 

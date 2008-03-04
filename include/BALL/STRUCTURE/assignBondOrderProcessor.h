@@ -124,6 +124,7 @@ namespace BALL
 				static const char* MAX_BOND_ORDER;
 
 				/** the maximal number of solutions to compute
+				 *  if set to zero all optimal solutions will be computed.
 				 */
 				static const char* MAX_NUMBER_OF_SOLUTIONS;
 			
