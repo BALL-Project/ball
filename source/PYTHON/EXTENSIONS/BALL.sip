@@ -19,6 +19,8 @@
 %Include versions.sip
 %Include copying.sip
 
+%Include vector.sip
+
 // COMMON
 %Include constants.sip
 // %Include create.sip
@@ -77,7 +79,7 @@
 // quadruple.h -- generic, no way...
 %Include regularExpression.sip
 %Include string.sip 
-// stringHashMap.h // -> dictionaries
+%Include stringHashMap.sip
 // stringHashSet.h // -> dictionaries
 
 
@@ -95,7 +97,6 @@
 %Include KCFFile.sip
 %Include MOL2File.sip
 %Include MOLFile.sip
-// %Include NMRStarFile.sip
 %Include PDBFile.sip
 %Include PDBInfo.sip
 %Include PDBRecords.sip
