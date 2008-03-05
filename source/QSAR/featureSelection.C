@@ -555,7 +555,7 @@ void FeatureSelection::removeEmptyDescriptors()
 void FeatureSelection::removeHighlyCorrelatedFeatures(double& cor_threshold)
 {
 	removeEmptyDescriptors(); // -> descriptor_IDs now contains the IDs of all non-empty descriptors
-	
+
 	vector<double> stddev(model_->data->getNoDescriptors(),1);
 	vector<double> mean(model_->data->getNoDescriptors(),0);
 	

@@ -86,7 +86,7 @@ double Statistics::getCovariance(const vector<double>& v1, const vector<double>&
 	if (mean1==-1) {mean1=getMean(v1);}
 	if (mean2==-1) {mean2=getMean(v2);}
 	double sum_of_squares=0;
-	for(uint i=0; i<=v1.size() && i<=v2.size(); i++)
+	for(uint i=0; i<v1.size() && i<v2.size(); i++)
 	{
 		sum_of_squares+=(v1[i]-mean1)*(v2[i]-mean2);
 	}
