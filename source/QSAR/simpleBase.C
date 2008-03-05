@@ -15,7 +15,7 @@
 
 using namespace std;
 
-#define BALL_QSAR_ATOMIC_POLARIZABILITIES_FILE "data/atomic_polarizabilities.data"
+#define BALL_QSAR_ATOMIC_POLARIZABILITIES_FILE "QSAR/atomic_polarizabilities.data"
 
 namespace BALL
 {
