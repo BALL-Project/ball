@@ -47,7 +47,18 @@ void GPModel::train()
 	}
 	kernel->calculateKernelMatrix(descriptor_matrix_, K_);
 	IdentityMatrix I(K_.Nrows());
-	L_ = (K_+I*pow(lambda_,2)).i();  // dim: nxn
+	
+	try
+	{
+		L_ = (K_+I*pow(lambda_,2)).i();  // dim: nxn
+	}
+	catch(BaseException e)
+	{
+		cout<<e.what()<<endl;
+		L_.ReSize(0,0);
+		throw Exception::SingularMatrixError(__FILE__,__LINE__,"Matrix for GP training is singular!! Check that descriptor_matrix_ does not contain empty columns and/or lambda is large enough!");
+		return;
+	}
 
 // 	double l = pow(lambda_,2);
 // 	addLambda(K_,l);

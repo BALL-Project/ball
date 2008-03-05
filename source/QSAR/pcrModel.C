@@ -72,7 +72,7 @@ void PCRModel::train()
 		c++;
  	}
 
-	MLRModel m(*data);
+	RRModel m(*data);
 	m.descriptor_matrix_=latenteVariables;
 	m.Y_=Y_;
 	m.train();

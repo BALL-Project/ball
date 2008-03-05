@@ -10,14 +10,11 @@
 #include <BALL/QSAR/linearModel.h>
 #endif
 
-#ifndef MLRMODEL
-#include <BALL/QSAR/mlrModel.h>
-#endif
-
 #ifndef QSAR_EXCEPTION
 #include <BALL/QSAR/exception.h>
 #endif
 
+#include <BALL/QSAR/rrModel.h>
 #include <newmatap.h>
 #include <newmatio.h>
 
