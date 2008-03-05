@@ -25,6 +25,7 @@ ifeq ($(USE_NEWMAT),true)
 		classificationModel.C\
 		classificationValidation.C\
 		exception.C\
+		statistics.C\
 		featureSelection.C\
 		allModel.C\
 		gpModel.C\
@@ -45,7 +46,6 @@ ifeq ($(USE_NEWMAT),true)
 		regressionModel.C\
 		regressionValidation.C\
 		sortedList.C\
-		statistics.C\
 		validation.C\
 		modelFactory.C\
 		registry.C\

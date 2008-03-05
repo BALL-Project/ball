@@ -66,7 +66,7 @@ double Statistics::getVariance(const vector<double>& v, double mean)
 {
 	if (mean==-1) {	mean=getMean(v); }
 	double sum_of_squares=0;
-	for(unsigned int i=0; i<v.size(); i++)
+	for(uint i=0; i<v.size(); i++)
 	{
 		sum_of_squares+=(v[i]-mean)*(v[i]-mean);
 	}
@@ -74,10 +74,30 @@ double Statistics::getVariance(const vector<double>& v, double mean)
 }
 
 
+double Statistics::getStddev(const vector<double>& v, double mean)
+{
+	double var = getVariance(v,mean);
+	return sqrt(var);
+}
+
+
+double Statistics::getCovariance(const vector<double>& v1, const vector<double>& v2, double mean1, double mean2)
+{
+	if (mean1==-1) {mean1=getMean(v1);}
+	if (mean2==-1) {mean2=getMean(v2);}
+	double sum_of_squares=0;
+	for(uint i=0; i<=v1.size() && i<=v2.size(); i++)
+	{
+		sum_of_squares+=(v1[i]-mean1)*(v2[i]-mean2);
+	}
+	return sum_of_squares/(v1.size()-1);
+}
+
+
 double Statistics::getMean(const vector<double>& v)
 {
 	double sum=0;
-	for(unsigned int i=0; i<v.size(); i++)
+	for(uint i=0; i<v.size(); i++)
 	{
 		sum+=v[i];
 	}

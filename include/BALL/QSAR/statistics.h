@@ -53,8 +53,14 @@ namespace BALL
 				@param std the standart deviation of v will be saved here */ 
 				static void centering(vector<double>& v, double& mean, double& std);
 				
-				/** calculate variance of given vecor */
+				/** calculate variance of a given vector */
 				static double getVariance(const std::vector<double>& v, double mean=-1);
+				
+				/** calculate standart deviation of a given vector */
+				static double getStddev(const vector<double>& v, double mean=-1);
+				
+				/** calculate covariance between two given vectors */
+				static double getCovariance(const vector<double>& v1, const vector<double>& v2, double mean1, double mean2);
 	
 				/** calculate mean of given vector */
 				static double getMean(const std::vector<double>& v);

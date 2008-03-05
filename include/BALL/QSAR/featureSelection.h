@@ -69,6 +69,11 @@ namespace BALL
 				@param act determines which coefficients are to be used, i.e. which column of LinearModel.training_result */
 				void implicitSelection(LinearModel& lm, int act=1, double d=1);
 				
+				/** reomves features that are highly correlated to another feature.
+				@param cor_threshold all feature which a correlation (to another feature) > cor_threshold or \< cor_threshold are removed */
+				void removeHighlyCorrelatedFeatures(double& cor_threshold);
+				
+				
 				/** removes descriptors whose values are 0 in all substances from the list of selected features */
 				void removeEmptyDescriptors();
 				//@}

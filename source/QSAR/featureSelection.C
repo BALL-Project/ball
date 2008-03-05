@@ -552,6 +552,48 @@ void FeatureSelection::removeEmptyDescriptors()
 
 
 
+void FeatureSelection::removeHighlyCorrelatedFeatures(double& cor_threshold)
+{
+	removeEmptyDescriptors(); // -> descriptor_IDs now contains the IDs of all non-empty descriptors
+	
+	vector<double> stddev(model_->data->getNoDescriptors(),1);
+	vector<double> mean(model_->data->getNoDescriptors(),0);
+	
+	// if data has not been centered, calculate mean and stddev of each feature
+	if(model_->data->descriptor_transformations_.size()==0)
+	{
+		for(uint i=0; i<mean.size();i++)
+		{
+			mean[i] = Statistics::getMean(model_->data->descriptor_matrix_[i]);
+		}		
+		for(uint i=0; i<stddev.size();i++)
+		{
+			stddev[i] = Statistics::getStddev(model_->data->descriptor_matrix_[i], mean[i]);
+		}
+	}
+		
+	double abs_cor_threshold = abs(cor_threshold);
+	
+	for(SortedList<uint>::iterator it1 = model_->descriptor_IDs_.begin(); it1!=model_->descriptor_IDs_.end(); it1++)
+	{	
+		for(SortedList<uint>::iterator it2 = model_->descriptor_IDs_.begin(); it2!=model_->descriptor_IDs_.end(); it2++)
+		{
+			if(*it1==*it2) continue;
+			
+			double covar = Statistics::getCovariance(model_->data->descriptor_matrix_[*it1], model_->data->descriptor_matrix_[*it2],mean[*it1],mean[*it2]);
+			
+			double abs_cor = abs(covar/(stddev[*it1]*stddev[*it2]));
+			
+			if(abs_cor>abs_cor_threshold)
+			{
+				model_->descriptor_IDs_.erase(it2); // element at this position is deleted and it2 is automagically set to next element
+			}
+		}
+	}
+}
+
+
+
 void FeatureSelection::implicitSelection(LinearModel& lm, int act, double d)
 {
 	SortedList<unsigned int> newIDs;
