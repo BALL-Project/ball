@@ -283,7 +283,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 		
 						if (input_item_at_pos)
 						{
- 							csv_item = main_window->createCSVInput(path);
+							csv_item = main_window->createCSVInput(path);
 							csv_item->setData(input_item_at_pos->data());
 							csv_item->setAppend(true);
 							addItem(csv_item);

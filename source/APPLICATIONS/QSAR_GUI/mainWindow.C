@@ -159,6 +159,43 @@ CSVInputDataItem* MainWindow::createCSVInput(QString filename)
 	return input;
 }
 
+
+///create a new CSVInputItem with the given file
+CSVInputDataItem* MainWindow::createCSVInput(QSARData* data)
+{
+	CSVInputDataItem* input = new CSVInputDataItem(data);
+	bool ok = false;
+	int exec = 0;
+	CSVInputDialog csvInputDialog(input);
+	///as long as there's no valid input
+	while (!ok)	
+	{ 
+		try
+		{
+			/// show dialog
+			exec = csvInputDialog.exec();
+
+			///if user accepts
+			if(exec==1)
+			{
+				csvInputDialog.readNumY(); 
+				ok= true;
+			}
+			else
+			{
+				throw InvalidInputDataItem(__FILE__,__LINE__);
+			}
+		}
+		catch(BALL::QSAR::Exception::InvalidActivityID e)
+		{
+			ok = false;
+			QMessageBox::about(this, tr("Error"),tr("Invalid activity ID"));
+		}
+	}
+	return input;
+}
+
+
 ///create a new ModelItem, that is connected to an InputDataItem
 ModelItem* MainWindow::createModel(ModelItem* model, InputDataItem* input)
 {

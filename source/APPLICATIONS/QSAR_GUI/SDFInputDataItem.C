@@ -28,6 +28,8 @@ SDFInputDataItem::SDFInputDataItem(QString filename,SortedList<int> act, bool cd
 	setName(list[list.size()-1]);
 
 	string st = filename.toStdString();
+	
+	data_ = new QSARData;
 
 	try
 	{
@@ -100,7 +102,6 @@ SDFInputDataItem::SDFInputDataItem(SDFInputDataItem& item):
 
 void SDFInputDataItem::readData()
 {
-	data_ = new QSARData;
 	string st = filename_.toStdString();
 
 	try

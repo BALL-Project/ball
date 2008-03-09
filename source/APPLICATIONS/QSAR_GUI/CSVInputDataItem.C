@@ -54,7 +54,6 @@ CSVInputDataItem::CSVInputDataItem(CSVInputDataItem& item):
 
 void CSVInputDataItem::readData()
 {
-	data_ = new QSARData;
 	string st = filename_.toStdString();
 
 	try
@@ -81,7 +80,7 @@ void CSVInputDataItem::appendData()
 	string st = filename_.toStdString();
 
 	try
-	{
+	{	cout<<data_->getNoSubstances()<<"  "<<data_->getNoDescriptors()<<endl;
 		data_->readCSVFile(st.c_str(), no_y_, x_labels_, y_labels_, ",", 1);
 	}
 	catch(WrongFileFormat)

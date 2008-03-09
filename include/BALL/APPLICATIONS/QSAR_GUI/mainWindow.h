@@ -59,6 +59,8 @@ namespace BALL
 				/** creation of items*/
 				SDFInputDataItem* createSDFInput(QString filename);
 				CSVInputDataItem* createCSVInput(QString filename);
+				CSVInputDataItem* createCSVInput(QSARData* data);
+				
 				ModelItem* createModel(ModelItem* model, InputDataItem* input=NULL);
 				FeatureSelectionItem* createFeatureSelection(FeatureSelectionItem* fs, ModelItem* model=0, ModelItem* in_model=0);
 				ValidationItem* createValidation(ValidationItem* val, ModelItem* model=0);
