@@ -72,7 +72,11 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 			item = (ModelItem*)main_window->dragged_item;
 			try
 			{
+				if(input_item_at_pos)
 				item = main_window->createModel(item,input_item_at_pos);
+				else if(csv_input_item_at_pos)
+				item = main_window->createModel(item,csv_input_item_at_pos);	
+					
 				item->setView(view);
 				addItem(item);
 				item->setPos(pos.x(),pos.y());

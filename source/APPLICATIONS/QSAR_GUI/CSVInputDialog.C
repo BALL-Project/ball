@@ -10,10 +10,12 @@ CSVInputDialog::CSVInputDialog(CSVInputDataItem* item):
 	input_ok_(false),
 	input_item_(item)
 {
-	QGridLayout* layout = new QGridLayout(this);
-	QString tmp;
-	tmp.setNum(0);
+	layout_ = new QGridLayout(this);
+	QString tmp; tmp.setNum(0);
 	activity_edit_ = new QLineEdit(tmp);
+	QString sep="tab";
+	seperator_edit_ = new QLineEdit(sep);
+	
 	x_labels_ = new QCheckBox("File contains descriptor names", this);
 	y_labels_ = new QCheckBox("File contains compound names", this);
 	center_descriptor_values_ = new QCheckBox("Center descriptor values", this);
@@ -22,19 +24,23 @@ CSVInputDialog::CSVInputDialog(CSVInputDataItem* item):
 	center_response_values_->setChecked(true);
 	QDialogButtonBox* inputDialogButtons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,Qt::Horizontal, this);
 
-	QString message_string = "Number of properties that are to be used as activities:<br>(activity values are assumed to be located in last columns of the table)";
-
-
-	QLabel* alabel = new QLabel(message_string,this);
-	layout->addWidget(alabel,1,1,1,2);
-	layout->addWidget(activity_edit_,2,1,1,2);
-	layout->addWidget(x_labels_,3,1,Qt::AlignLeft);
-	layout->addWidget(y_labels_,4,1,Qt::AlignLeft);
-	layout->addWidget(center_descriptor_values_,5,1,Qt::AlignLeft);
-	layout->addWidget(center_response_values_,6,1,Qt::AlignLeft);;
-	layout->addWidget(inputDialogButtons,7,1,1,2, Qt::AlignHCenter);
+	QString message_string = "Number of properties that are to be used as activities:<br>(activity values are assumed to be<br>located in last columns of the table)";
 	
-	setLayout(layout);
+	QString sep_string = "Character used as seperator<br>within the csv-file:";
+
+
+	alabel_ = new QLabel(message_string,this);
+	blabel_ = new QLabel(sep_string,this);
+	layout_->addWidget(alabel_,1,1,4,1); layout_->addWidget(blabel_,3,2,2,1);
+	layout_->addWidget(activity_edit_,5,1); 
+	layout_->addWidget(seperator_edit_,5,2);
+	layout_->addWidget(x_labels_,6,1,Qt::AlignLeft);
+	layout_->addWidget(y_labels_,7,1,Qt::AlignLeft);
+	layout_->addWidget(center_descriptor_values_,8,1,Qt::AlignLeft);
+	layout_->addWidget(center_response_values_,9,1,Qt::AlignLeft);;
+	layout_->addWidget(inputDialogButtons,10,1,1,2, Qt::AlignHCenter);
+	
+	setLayout(layout_);
 	setWindowTitle("Preferences for " + input_item_->name());
 
 
@@ -44,14 +50,21 @@ CSVInputDialog::CSVInputDialog(CSVInputDataItem* item):
 
 CSVInputDialog::~CSVInputDialog()
 {
+	delete seperator_edit_;
 	delete activity_edit_;
 	delete x_labels_;
 	delete y_labels_;
+	delete center_descriptor_values_;
+	delete center_response_values_;
+	delete layout_;
+	delete alabel_;
+	delete blabel_;
 }
 
 void CSVInputDialog::readNumY()
 {
 	QString input = activity_edit_->text().trimmed();
+	QString sep = seperator_edit_->text().trimmed();
 
 	bool ok;
 	int num = 0;
@@ -72,6 +85,7 @@ void CSVInputDialog::readNumY()
 	input_item_->setXLabelFlag(x_labels_->isChecked());
 	input_item_->setYLabelFlag(y_labels_->isChecked());
 	input_item_->setNumOfActivities(no_y_);
+	input_item_->setSeperator(sep.toStdString());
 }
 
 bool CSVInputDialog::xLabels()

@@ -52,23 +52,28 @@ CSVInputDataItem::CSVInputDataItem(CSVInputDataItem& item):
 	append_ = item.append_;
 }
 
+void CSVInputDataItem::setSeperator(string sep)
+{
+	if(sep=="tab") {sep_="	";}
+	else sep_=sep;
+}
+
 void CSVInputDataItem::readData()
 {
 	string st = filename_.toStdString();
 
 	try
 	{
-		data_->readCSVFile(st.c_str(), no_y_, x_labels_, y_labels_, ",", 0);
+		data_->readCSVFile(st.c_str(), no_y_, x_labels_, y_labels_, sep_.c_str(), 0);
 	}
 	catch(WrongFileFormat)
 	{
 		throw(InvalidInputDataItem(__FILE__,__LINE__));
 	}
-	catch(PropertyError e)
-	{
-		cout<<"CATCH PropertyError !! "<<e.getMessage()<<endl;
-		//throw(InvalidInputDataItem(__FILE__,__LINE__));
-	}
+// 	catch(PropertyError e)
+// 	{
+// 		//throw(InvalidInputDataItem(__FILE__,__LINE__));
+// 	}
 
 	if (center_data_)
 	{
@@ -83,8 +88,8 @@ void CSVInputDataItem::appendData()
 	string st = filename_.toStdString();
 
 	try
-	{	cout<<data_->getNoSubstances()<<"  "<<data_->getNoDescriptors()<<endl;
-		data_->readCSVFile(st.c_str(), no_y_, x_labels_, y_labels_, ",", 1);
+	{	cout<<"trying to append to  "<<data_->getNoSubstances()<<"  "<<data_->getNoDescriptors()<<endl;
+		data_->readCSVFile(st.c_str(), no_y_, x_labels_, y_labels_, sep_.c_str(), 1);
 	}
 	catch(WrongFileFormat)
 	{

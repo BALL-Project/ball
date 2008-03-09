@@ -271,15 +271,14 @@ InputDataItem* ModelItem::inputDataItem()
 
 void ModelItem::trainModel()
 {
+	cout<<model_->data->getNoDescriptors()<<endl<<flush;
+	cout<<model_->data->getNoResponseVariables()<<endl<<flush;
+	cout<<model_->data->getNoSubstances()<<endl<<flush;
+	
 	model_->readTrainingData();
-	try 
-	{
-		model_->train();
-	}
-	catch (SingularMatrixError)
-	{
-		throw ModelTrainingError(__FILE__,__LINE__);
-	}
+	
+	model_->train();
+
 }
 
 void  ModelItem::setSaveAttribute(bool save)

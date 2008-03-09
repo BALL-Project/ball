@@ -65,7 +65,7 @@ SDFInputDataItem::SDFInputDataItem(QString filename, QString name, DataItemView*
 	setPixmap(pm);
 	this->setName(name);
 	
-	data_ = new QSARData();
+	data_ = new QSARData;
 	data_->readFromFile(filename.toStdString());
 }
 
@@ -79,7 +79,7 @@ SDFInputDataItem::SDFInputDataItem(QString filename, DataItemView* view):
 	setName(list[list.size()-1]);
 	activity_values_.clear();
 
-	data_ = new QSARData();
+	data_ = new QSARData;
 }
 
 SDFInputDataItem::~SDFInputDataItem()

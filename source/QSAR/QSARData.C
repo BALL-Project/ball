@@ -779,6 +779,8 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 		
 	if(!appendDescriptors)
 	{
+		descriptor_matrix_.clear();
+		Y_.clear();
 		descriptor_matrix_.resize(prop-no_y-ylabels);
 		Y_.resize(no_y);
 		column_names_.clear();

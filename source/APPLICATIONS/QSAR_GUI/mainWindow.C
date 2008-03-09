@@ -758,7 +758,7 @@ void MainWindow::executePipeline()
 		value++;
 		emit sendNewValue(value);
 	}
-
+	
 	if (!sdf_input_pipeline_.empty() || csv_input_pipeline_.empty())
 	{
 		statusBar()->showMessage(tr("All input files were read"));
@@ -770,18 +770,19 @@ void MainWindow::executePipeline()
 		try
 		{
 			(*it)->model()->setDataSource((*it)->inputDataItem()->data());
+		
 			if ((*it)->optimize_model_parameters)
 			{
 				(*it)->model()->optimizeParameters((*it)->k_fold);
 			}
-			
+		
 			if ((*it)->optimize_kernel_parameters)
 			{
 				KernelModel* km = (KernelModel*)((*it)->model());
 				km->kernel->gridSearch((*it)->grid_search_stepwidth, (*it)->grid_search_steps,(*it)->grid_search_recursions,(*it)->k_fold);
 				(*it)->setModel(km);
 			}
-
+			
 			(*it)->trainModel();
 		}
 		catch (ModelTrainingError e)

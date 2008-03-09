@@ -35,6 +35,7 @@ namespace BALL
 				void setXLabelFlag(bool x);
 				void setYLabelFlag(bool y);
 				void setNumOfActivities(int num);
+				void setSeperator(string sep);
 				bool checkForDiscreteY();
 				void setAppend(bool append);
 				bool append();
@@ -46,6 +47,7 @@ namespace BALL
 				bool x_labels_;
 				bool y_labels_;
 				bool append_;
+				string sep_;
 
 			protected:
 				void mousePressEvent(QGraphicsSceneMouseEvent *event);

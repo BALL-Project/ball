@@ -46,11 +46,15 @@ namespace BALL
 		
 			/** @name Attributes
 			*/
+			QLineEdit* seperator_edit_;
 			QLineEdit* activity_edit_;
 			QCheckBox* x_labels_;
 			QCheckBox* y_labels_;
 			QCheckBox* center_descriptor_values_;
 			QCheckBox* center_response_values_;
+			QGridLayout* layout_;
+			QLabel* alabel_;
+			QLabel* blabel_;
 			int no_y_;
 			bool input_ok_;
 			CSVInputDataItem* input_item_;
