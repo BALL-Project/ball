@@ -1,0 +1,53 @@
+#ifndef PREDDIALOG_H
+#define PREDDIALOG_H
+
+#include <QtGui/QDialog>
+#include <BALL/APPLICATIONS/QSAR_GUI/predictionItem.h>
+
+namespace BALL
+{
+	namespace VIEW
+	{
+		/** @class PredictionResultDialog
+		* @brief a dialog for displaying the results of the prediction of activity values for all compounds of a dataset
+		*
+		* @todo
+		*/
+		class PredictionResultDialog : public QDialog
+		{	
+			Q_OBJECT
+
+			public:
+				/** @name Constructors and Destructors */	
+
+				/** constructor
+				* @param item the PredictionItem connected to this dialog
+				*/
+				PredictionResultDialog(PredictionItem* item);	
+			
+				/** standard constructor
+				*/
+				PredictionResultDialog();
+			
+				/** destructor
+				*/
+				~PredictionResultDialog();
+
+			protected slots:
+				void saveToFile();
+			
+			private:
+				/** @name Private Attributes */
+			
+				/** the results of the validation */
+				const QList<RowVector>* results_;
+			
+				QString file_name_;
+
+				/** the compund names*/
+				const vector<string>* compound_names_; 	
+		};			
+	}
+}
+
+#endif

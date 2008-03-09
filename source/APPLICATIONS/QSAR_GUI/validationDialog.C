@@ -1,0 +1,134 @@
+#include <BALL/APPLICATIONS/QSAR_GUI/validationDialog.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/exception.h>
+#include <BALL/QSAR/exception.h>
+#include <QtGui/QMessageBox>
+#include <QtGui/QPushButton>
+
+using namespace BALL::QSAR::Exception;
+using namespace BALL::VIEW;
+
+ValidationDialog::ValidationDialog(ValidationItem* val_item):
+	val_item_(val_item)
+{
+	QVBoxLayout* main_layout = new QVBoxLayout(this);
+	QGridLayout* layout1 = new QGridLayout();
+	QDialogButtonBox* buttons = new QDialogButtonBox(QDialogButtonBox::Cancel,Qt::Horizontal, this);
+	QPushButton* applyButton = new QPushButton("OK", this);
+	buttons->addButton(applyButton, QDialogButtonBox::ApplyRole);
+
+	if (val_item->getValidationType() == 2)
+	{
+		QLabel* klabel = new QLabel("k for k-fold cross validation");
+		k_edit_ = new QLineEdit(this);
+		layout1->addWidget(klabel,1,1);
+		layout1->addWidget(k_edit_,1,2);
+	}
+
+	else if (val_item->getValidationType() == 3)
+	{
+		QLabel* label = new QLabel("number of samples for bootstrapping");
+		n_of_samples_edit_ = new QLineEdit(this);
+		layout1->addWidget(label,1,1);
+		layout1->addWidget(n_of_samples_edit_,1,2);
+	}
+		
+	else if (val_item->getValidationType() == 4)
+	{
+		QLabel* klabel = new QLabel("k for k-fold cross validation");
+		QLabel* label = new QLabel("number of runs for response permutation test");
+		k_edit_ = new QLineEdit(this);
+		n_of_runs_edit_ = new QLineEdit(this);
+		layout1->addWidget(label,1,1);
+		layout1->addWidget(n_of_runs_edit_,1,2);
+		layout1->addWidget(klabel,2,1);
+		layout1->addWidget(k_edit_,2,2);
+	}
+
+	main_layout->addLayout(layout1);
+	main_layout->addWidget(buttons);
+
+	this->setLayout(main_layout);
+	this->setWindowTitle("Model Validation");
+
+	connect(applyButton, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(buttons, SIGNAL(rejected()), this, SLOT(reject()));
+}
+
+ValidationDialog::ValidationDialog():
+	val_item_(NULL)
+{
+}
+
+ValidationDialog::~ValidationDialog()
+{
+}	
+
+void ValidationDialog::applyInput()
+{
+	bool ok;
+	int num = 0;
+	if (ok)
+	{	
+		k_ = num;
+	}
+
+	switch(val_item_->getValidationType())
+	{
+		case 2:
+			ok = false;
+			num = k_edit_->text().toInt(&ok);
+			if (ok)
+			{	
+				k_ = num;
+				val_item_->setK(k_);
+			}
+			else
+			{
+				throw BALL::VIEW::Exception::InvalidK(__FILE__, __LINE__);
+			}
+			break;
+		case 3:	
+			ok = false;
+			num = n_of_samples_edit_->text().toInt(&ok);
+			if (ok)
+			{	
+				n_of_samples_ = num;
+				val_item_->setNumOfSamples(n_of_samples_);
+			}	
+			else
+			{
+				throw BALL::VIEW::Exception::InvalidK(__FILE__, __LINE__);
+			}
+			break;
+		case 4:	
+			ok = false;
+			num = k_edit_->text().toInt(&ok);
+			if (ok)
+			{	
+				k_ = num;
+				val_item_->setK(k_);
+			}
+			else
+			{
+				throw BALL::VIEW::Exception::InvalidK(__FILE__, __LINE__);
+			}
+			
+			ok = false;
+			num = n_of_runs_edit_ ->text().toInt(&ok);
+			if (ok)
+			{	
+				n_of_runs_ = num;
+				val_item_->setNumOfRuns(n_of_runs_);
+			}
+			else
+			{
+				throw BALL::VIEW::Exception::InvalidK(__FILE__, __LINE__);
+			}
+			break;
+	}
+}
+
+int ValidationDialog::k()
+{
+	return k_;
+}

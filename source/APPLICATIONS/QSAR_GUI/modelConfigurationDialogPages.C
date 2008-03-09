@@ -1,0 +1,471 @@
+#include <BALL/APPLICATIONS/QSAR_GUI/modelConfigurationDialogPages.h>
+#include <QtGui/QLabel>
+#include <QtGui/QGroupBox>
+#include <QtGui/QHBoxLayout>
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QLineEdit>
+#include <QtGui/QTableWidget>
+#include <QtGui/QHeaderView>
+
+using namespace BALL::VIEW;
+
+ModelParameterPage::ModelParameterPage(ModelConfigurationDialog *parent)
+{
+	///return if there's no parent
+	if (parent == NULL)
+	{
+		return;
+	}
+
+	/// group the model parameters
+	QGroupBox *configGroup = new QGroupBox(tr("Model Parameters"), this);
+	QGridLayout *layout = new QGridLayout();
+	String value;
+
+	///create labels and line edits for every model parameter and print out the parameter name and the default value (read from the registry)
+	for (uint i=0; i < parent->entry()->parameterNames.size(); i++)
+	{
+		value = (String)parent->entry()->parameterDefaults[i];
+		QLabel* label = new QLabel(QString(parent->entry()->parameterNames[i].c_str()));
+		edit_ = new QLineEdit(this);
+		edit_->setText(QString(value.c_str()));
+		edits_.push_back(edit_);
+		layout->addWidget(label, i,1);
+		layout->addWidget(edit_, i ,2);
+	}
+
+	/// mark which parameters are optimizable
+	if (parent->isOptimizable)
+	{
+		parent->entry()->optimizableParameters.front();
+		while(parent->entry()->optimizableParameters.hasNext())
+		{
+			QLabel* label = new QLabel(QString("*"), this);
+			layout->addWidget(label,parent->entry()->optimizableParameters.next(), 3);
+		}
+		QLabel* label = new QLabel("*: can be automatically optimized by cross validation", this);
+		layout->addWidget(label,parent->entry()->parameterNames.size()+1,1,1,-1);
+	}
+
+	configGroup->setLayout(layout);
+	QVBoxLayout *mainLayout = new QVBoxLayout();
+	mainLayout->addWidget(configGroup);
+	mainLayout->addStretch(1);
+	setLayout(mainLayout);	
+
+}
+
+KernelParameterPage::KernelParameterPage(ModelConfigurationDialog* parent)
+ {
+	///return if there's no parent
+	if (parent == NULL)
+	{
+		return;
+	}
+
+	///---------------------CONFIG GROUP----------------------------------
+
+	/// group the kernel parameters
+	QGroupBox *configGroup = new QGroupBox(tr("Kernel Parameters"), this);
+
+
+	///create a combo box with the different available kernel function types
+	QLabel *kernelLabel = new QLabel(tr("Kernel function:"), this);
+
+	///don't mess with the combo box, the order should kept fixed, otherwise ModelConfigurationDialog::applyKernelParameters() and isIndividualKernel(int id) will not work correctly!!!!
+	kernel_combo_ = new QComboBox(this);
+	kernel_combo_->addItem(tr("polynomial"));
+	kernel_combo_->addItem(tr("radial basis"));
+	kernel_combo_->addItem(tr("sigmoid"));
+	kernel_combo_->addItem(tr("individual"));
+
+	QHBoxLayout* kernelParamLayout = new QHBoxLayout();
+	kernelParamLayout->addWidget(kernelLabel);
+	kernelParamLayout->addWidget(kernel_combo_);
+
+	//-------------------------------------------------------
+
+	///label and line edit for kernel parameter 1
+	QLabel* kernelParamLabel1 = new QLabel(tr("Parameter 1:"), this);
+	kernel_param_edit1_ = new QLineEdit(this);
+	kernel_param_edit1_->setText(QString(((String)(parent->parent->registry()->default_kernel_par1)).c_str()));
+
+	//QLabel* param = new QLabel(QString(((String)(parent->model()->model()->getParameters()[i])).c_str()));
+
+	QHBoxLayout *param1Layout = new QHBoxLayout;
+	param1Layout->addWidget(kernelParamLabel1);
+	param1Layout->addWidget(kernel_param_edit1_);
+
+	kernelParameter1Extension_ = new QWidget;
+	kernelParameter1Extension_->setLayout(param1Layout);
+	//-------------------------------------------------------
+
+	///label and line edit for kernel parameter 2 (if available with the chosen kernel type)
+	QLabel* kernelParamLabel2 = new QLabel(tr("Parameter 2:"), this);
+	kernel_param_edit2_ = new QLineEdit(this);
+	kernel_param_edit2_->setText(QString(((String)(parent->parent->registry()->default_kernel_par2)).c_str()));
+
+	QHBoxLayout *param2Layout = new QHBoxLayout();
+	param2Layout->addWidget(kernelParamLabel2);
+	param2Layout->addWidget(kernel_param_edit2_);
+
+	kernelParameter2Extension_ = new QWidget(this);
+	kernelParameter2Extension_->setLayout(param2Layout);
+
+	//-------------------------------------------------------
+
+	///labels and line edits for individual kernel strings
+	QLabel* indKernelParamLabel1 = new QLabel(tr("String 1:"), this);
+	QLabel* indKernelParamLabel2 = new QLabel(tr("String 2:"), this);
+	kernel_string_edit1_ = new QLineEdit(this);
+	kernel_string_edit2_ = new QLineEdit(this);
+
+	//-------------------------------------------------------
+
+	QGridLayout* individualKernelLayout = new QGridLayout();
+	individualKernelLayout->addWidget(indKernelParamLabel1,1,1);
+	individualKernelLayout->addWidget(indKernelParamLabel2,2,1);
+	individualKernelLayout->addWidget(kernel_string_edit1_,1,2);
+	individualKernelLayout->addWidget(kernel_string_edit2_,2,2);
+	
+	individualKernelExtension_ = new QWidget(this);
+	individualKernelExtension_->setLayout(individualKernelLayout);
+
+	//-------------------------------------------------------
+
+	///add all of the parameter layouts to the group box for the kernel parameters
+	QVBoxLayout *configLayout = new QVBoxLayout();
+	configLayout->addLayout(kernelParamLayout);
+	configLayout->addWidget(kernelParameter1Extension_);
+	configLayout->addWidget(kernelParameter2Extension_);
+	configLayout->addWidget(individualKernelExtension_);
+	configGroup->setLayout(configLayout);
+
+	///---------------------FUNCTION GROUP----------------------------------
+	
+	QGroupBox* functionGroup = new QGroupBox(tr("Kernel Function"), this);
+	QLabel* functionLabel1 = new QLabel(tr("Kernel Function:"), this);
+	function_label_ = new QLabel();
+
+	QHBoxLayout *functionLayout = new QHBoxLayout();
+	functionLayout->addWidget(functionLabel1);
+	functionLayout->addWidget(function_label_);
+	functionGroup->setLayout(functionLayout);
+	
+	//-------------------------------------------------------
+
+	///add all group boxes to the main layout of the page
+	QVBoxLayout *mainLayout = new QVBoxLayout();
+	mainLayout->addWidget(configGroup);
+	mainLayout->addWidget(functionGroup);
+	mainLayout->addStretch(1);
+	setLayout(mainLayout);	
+
+	///set visibility modes for the different extensions
+	kernelParameter1Extension_->show();
+	kernelParameter2Extension_->hide();
+	individualKernelExtension_->hide();
+
+	///connect all needed signals with the corresponding slots
+	connect(kernel_combo_, SIGNAL(activated(int)), this, SLOT(showExtensions(int)));
+	connect(kernel_combo_, SIGNAL(activated(int)), this, SLOT(showKernelFunction(int)));
+	connect(this, SIGNAL(hasIndividualKernel(bool)), individualKernelExtension_, SLOT(setVisible(bool)));
+	connect(this, SIGNAL(hasKernelParameter1(bool)), kernelParameter1Extension_, SLOT(setVisible(bool)));
+	connect(this, SIGNAL(hasKernelParameter2(bool)), kernelParameter2Extension_, SLOT(setVisible(bool)));
+ }
+
+void KernelParameterPage::showExtensions(int id)
+{
+	if (id < 2)
+	{
+		emit hasKernelParameter1(true);
+		emit hasKernelParameter2(false);
+		emit hasIndividualKernel(false);
+	}
+	else if (id == 2)
+	{	
+		emit hasKernelParameter1(true);
+		emit hasKernelParameter2(true);
+		emit hasIndividualKernel(false);
+	}
+	else if(id == 3)
+	{
+		emit hasKernelParameter1(false);
+		emit hasKernelParameter2(false);
+		emit hasIndividualKernel(true);
+	}
+}
+
+void KernelParameterPage::showKernelFunction(int id)
+{
+	QString function_string = "";
+	switch (id) 
+	{
+		case 0: 
+			function_string = "Funktion1";
+			function_label_->setPixmap(QPixmap("./images/polynomial_kernel.png"));
+			break;
+		case 1:
+			function_string = "Funktion2";
+			function_label_->setPixmap(QPixmap("./images/radial_basis_kernel.png"));
+			break;
+		case 2: 
+			function_string = "Funktion3";
+			function_label_->setPixmap(QPixmap("./images/sigmoid_kernel.png"));
+			break;
+		case 3:
+			function_string = "Funktion4";
+			function_label_->setPixmap(QPixmap());
+			break;
+	}
+	//function_label_->setText(function_string);
+}
+
+OptimizePage::OptimizePage(ModelConfigurationDialog* parent)
+ {	
+	///return if there's no parent
+	if (parent == NULL)
+	{
+		return;
+	}
+	
+	QVBoxLayout* mainLayout = new QVBoxLayout();
+
+	if (parent->isOptimizable || parent->entryHasKernel)
+	{
+		QGroupBox *kGroup = new QGroupBox(tr("k"),this);
+		QHBoxLayout* k_layout = new QHBoxLayout();
+		QLabel* label = new QLabel("k for k-fold cross-validation",this);
+		k_edit_ = new QLineEdit(this);
+		k_layout->addWidget(label);
+		k_layout->addWidget(k_edit_);
+		kGroup->setLayout(k_layout);	
+		mainLayout->addWidget(kGroup);
+	}
+
+	if (parent->isOptimizable)
+	{
+		QGroupBox *modelConfigGroup = new QGroupBox(tr("optimized Model Parameters"),this);
+		QGridLayout* layout1 = new QGridLayout;
+	
+		parent->entry()->optimizableParameters.front();
+		int i = 0;
+
+		while(parent->entry()->optimizableParameters.hasNext())
+		{
+			QLabel* label = new QLabel(this);
+			label->setText(QString(parent->entry()->parameterNames[parent->entry()->optimizableParameters.next()].c_str()));
+			label_ = new QLabel(this);
+			labels_.push_back(label_);
+			layout1->addWidget(label, i+2,1);
+			layout1->addWidget(label_, i+2 ,2);
+			i++;
+		}		
+
+		modelConfigGroup->setLayout(layout1);
+	
+		QVBoxLayout *modelLayout = new QVBoxLayout();
+		modelLayout->addWidget(modelConfigGroup);
+		modelLayout->addStretch(1);
+		
+		mainLayout->addLayout(modelLayout);
+	}
+
+	if (parent->entryHasKernel)	
+	{
+		QGroupBox* kernelConfigGroup = new QGroupBox(tr("Optimize Kernel Parameters"),this);
+	
+		QGridLayout *layout2 = new QGridLayout();
+		QLabel* search_label1 = new QLabel(tr("number of steps for grid search:"),this);
+		QLabel* search_label2 = new QLabel(tr("width of grid search:"),this);
+		QLabel* search_label3 = new QLabel(tr("number of recursion steps:"),this);
+		QLabel* parameter1_label = new QLabel(tr("start value for parameter 1"),this);
+		QLabel* parameter2_label = new QLabel(tr("start value for parameter 2"),this);
+		search_edit1_ = new QLineEdit(this);
+		search_edit2_ = new QLineEdit(this);
+		search_edit3_ = new QLineEdit(this);
+		parameter1_edit_ = new QLineEdit(this);
+		parameter2_edit_ = new QLineEdit(this);
+		
+		layout2->addWidget(search_label1,1,1);
+		layout2->addWidget(search_label2,2,1);
+		layout2->addWidget(search_label3,3,1);
+		layout2->addWidget(search_edit1_,1,2);
+		layout2->addWidget(search_edit2_,2,2);
+		layout2->addWidget(search_edit3_,3,2);
+		layout2->addWidget(parameter1_label,5,1);
+		layout2->addWidget(parameter2_label,6,1);
+		layout2->addWidget(parameter1_edit_,5,2);
+		layout2->addWidget(parameter2_edit_,6,2);
+		
+		QVBoxLayout *kernelLayout = new QVBoxLayout();
+		kernelConfigGroup->setLayout(layout2);
+		kernelLayout->addWidget(kernelConfigGroup);
+		kernelLayout->addStretch(1);
+	
+		mainLayout->addLayout(kernelLayout);
+	}
+	setLayout(mainLayout);	
+ }
+
+
+ModelPropertiesPage::ModelPropertiesPage(ModelConfigurationDialog* parent)
+{
+	///return if there's no parent
+	if (parent == NULL)
+	{
+		return;
+	}
+	QVBoxLayout *mainLayout = new QVBoxLayout();
+
+	QGroupBox *paramGroup = new QGroupBox(tr("Model Parameters"),this);
+	QGridLayout *layout = new QGridLayout();
+
+	for (uint i=0; i < parent->entry()->parameterNames.size(); i++)
+	{
+		QLabel* label = new QLabel(QString(parent->entry()->parameterNames[i].c_str()),this);
+		layout->addWidget(label, i,1);
+		QLabel* param = new QLabel(QString(((String)(parent->modelItem()->model()->getParameters()[i])).c_str()),this);
+		layout->addWidget(param, i,2);
+	}
+	paramGroup->setLayout(layout);
+	mainLayout->addWidget(paramGroup);
+
+	if (parent->entryHasKernel)
+	{
+		QGroupBox *kernelGroup = new QGroupBox(tr("Kernel Parameters"),this);
+		QGridLayout *layout2 = new QGridLayout();
+	
+		KernelModel* kernel_model = (KernelModel*)(parent->modelItem()->model());
+		int type = kernel_model->kernel->type;
+		double param1 =  kernel_model->kernel->par1;
+		double param2 = kernel_model->kernel->par2;
+		QString type_string;
+
+		switch (type) 
+		{
+			case 1:
+				type_string = "polynomial kernel";
+				break;
+			case 2:
+				type_string = "radial basis function kernel";
+				break;
+			case 3:
+				type_string = "sigmoid kernel";
+				break;
+			case 4: 
+				type_string = "individual kernel-function";
+				break;
+			default: 
+				type_string = "";
+		}
+
+		QLabel* label = new QLabel(type_string,this);
+		QLabel* label2 = new QLabel("kernel function type: ", this);
+		QLabel* label3 = new QLabel("kernel parameter 1: ", this);
+		QLabel* label4 = new QLabel("kernel parameter 2: ", this);
+		QLabel* label5 = new QLabel(QString(((String)param1).c_str()));
+		QLabel* label6 = new QLabel(QString(((String)param2).c_str()));
+		layout2->addWidget(label2,1,1);
+		layout2->addWidget(label, 1,2);
+		layout2->addWidget(label3, 2,1);
+		layout2->addWidget(label4, 3,1);
+		layout2->addWidget(label5, 2,2);
+		layout2->addWidget(label6, 3,2);
+
+		/*
+		for (uint i=0; i < parent->entry()->parameterNames.size(); i++)
+		{
+			
+			QLabel* label = new QLabel(QString(parent->entry()->parameterNames[i].c_str()));
+			layout2->addWidget(label, i,1);
+		
+			//QLabel* param = new QLabel(QString(((String)(parent->modelItem()->model()->getParameters()[i])).c_str()));
+			//layout2->addWidget(param, i,2);
+		}
+		*/
+
+		kernelGroup->setLayout(layout2);
+		mainLayout->addWidget(kernelGroup);
+	}
+	mainLayout->addStretch(1);
+	setLayout(mainLayout);	
+}
+
+
+ConnectionsPage::ConnectionsPage(ModelConfigurationDialog* parent)
+{
+	///return if there's no parent
+	if (parent == NULL)
+	{
+		return;
+	}
+
+	connection_manager_ = new ConnectionManager(parent);
+	QVBoxLayout *mainLayout = new QVBoxLayout();
+
+	mainLayout->addWidget(connection_manager_);
+
+	mainLayout->addStretch(1);
+	setLayout(mainLayout);	
+}
+
+DataPage::DataPage(ModelConfigurationDialog* parent)
+{
+	///return if there's no parent
+	if (parent == NULL)
+	{
+		return;
+	}
+	QVBoxLayout* mainLayout = new QVBoxLayout();
+	QVBoxLayout* resultGroupLayout = new QVBoxLayout();
+
+	QGroupBox* resultGroup = new QGroupBox(tr("Descriptors"),this);
+
+	descriptor_names_ = parent->modelItem()->model()->getDescriptorNames();
+	descriptor_ids_ = parent->modelItem()->model()->getDescriptorIDs();
+
+	QStringList labels;
+	labels << "Descriptor name";
+
+	QTableWidget* table = new QTableWidget(descriptor_names_->size(), 1, this);	
+	table->verticalHeader()->hide();
+	table->setHorizontalHeaderLabels (labels);
+	table->setAlternatingRowColors(true);
+	table->setDragDropMode(QAbstractItemView::NoDragDrop);
+	table->setEditTriggers(QAbstractItemView::NoEditTriggers);	
+	table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+
+	for (unsigned int i=0; i< descriptor_names_->size(); i++)
+	{
+		QTableWidgetItem* name = new QTableWidgetItem(QString(descriptor_names_->at(i).c_str()));
+		table->setItem(i, 0, name);	
+	}
+
+	QScrollArea* scrollArea = new QScrollArea(this);
+	scrollArea->setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
+	scrollArea->setVerticalScrollBarPolicy ( Qt::ScrollBarAsNeeded );
+	scrollArea->setFrameShape(QFrame::NoFrame);
+	scrollArea->setWidget(table);
+	scrollArea->setWidgetResizable(true);
+
+	resultGroupLayout->addWidget(scrollArea);
+	resultGroup->setLayout(resultGroupLayout);
+
+	QString tmp;
+	QLabel* num_of_descriptors;
+	if (descriptor_ids_->size() == 0)
+	{
+		num_of_descriptors = new QLabel("There are " + tmp.setNum(descriptor_names_->size()) + " descriptors in this model");
+	}
+	else
+	{
+			num_of_descriptors = new QLabel("There are " + tmp.setNum(descriptor_ids_->size()) + " descriptors in this model");
+	}
+	
+	mainLayout->addWidget(num_of_descriptors);
+	mainLayout->addWidget(resultGroup);
+	mainLayout->addStretch(1);
+	setLayout(mainLayout);	
+}
+
