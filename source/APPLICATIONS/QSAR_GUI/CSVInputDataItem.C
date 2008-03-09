@@ -64,15 +64,18 @@ void CSVInputDataItem::readData()
 	{
 		throw(InvalidInputDataItem(__FILE__,__LINE__));
 	}
-	catch(PropertyError)
+	catch(PropertyError e)
 	{
-		throw(InvalidInputDataItem(__FILE__,__LINE__));
+		cout<<"CATCH PropertyError !! "<<e.getMessage()<<endl;
+		//throw(InvalidInputDataItem(__FILE__,__LINE__));
 	}
 
 	if (center_data_)
 	{
 		data_->centerData(center_y_);
 	}
+	
+	cout<<"no response var. = "<<data_->getNoResponseVariables()<<endl;
 }
 
 void CSVInputDataItem::appendData()
