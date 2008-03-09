@@ -47,6 +47,8 @@ namespace BALL
 		*/
 		//@{
 		void computeAllDescriptors(AtomContainer& ac);
+		
+		void setDataFolder(const char* folder);
 		//@}
 	
 		/** @name Assignment
@@ -73,6 +75,8 @@ namespace BALL
 		//@{
 		void calculate_(AtomContainer& ac);
 		//@}
+		
+		String data_folder_;
 		
 	};
 

@@ -15,38 +15,48 @@
 
 using namespace std;
 
-#define BALL_QSAR_ATOMIC_POLARIZABILITIES_FILE "QSAR/atomic_polarizabilities.data"
+#define BALL_QSAR_ATOMIC_POLARIZABILITIES_FILE "/atomic_polarizabilities.data"
 
 namespace BALL
 {
 	SimpleBase::SimpleBase()
 		:	Descriptor()
 	{
+		data_folder_ = "QSAR/";
 	}
 
 	SimpleBase::SimpleBase(const SimpleBase& sb)
 		:	Descriptor(sb)
 	{
+		data_folder_ = "QSAR/";
 	}
 
 	SimpleBase::SimpleBase(const String& name)
 		:	Descriptor(name)
 	{
+		data_folder_ = "QSAR/";
 	}
 
 	SimpleBase::SimpleBase(const String& name, const String& unit)
 		:	Descriptor(name, unit)
 	{
+		data_folder_ = "QSAR/";
 	}
 
 	SimpleBase::~SimpleBase()
 	{
 	}
+	
+	void SimpleBase::setDataFolder(const char* folder)
+	{
+		data_folder_ = folder;
+	}	
 
 	SimpleBase& SimpleBase::operator = (const SimpleBase& sb)
 	{
-		this->setUnit(sb.getUnit());
-		this->setName(sb.getName());
+		setUnit(sb.getUnit());
+		setName(sb.getName());
+		data_folder_ = sb.data_folder_;
 		return *this;
 	}
 
@@ -333,11 +343,11 @@ namespace BALL
 	void SimpleBase::readAtomicPolarizabilities_(vector<float>& atomic_polarizabilties)
 	{
 		Path path;
-    String filename = path.find(BALL_QSAR_ATOMIC_POLARIZABILITIES_FILE);
+    String filename = path.find(data_folder_+BALL_QSAR_ATOMIC_POLARIZABILITIES_FILE);
 		// if filename is empty the file could not be found
 		if (filename == "")
 		{
-			throw Exception::FileNotFound(__FILE__, __LINE__, BALL_QSAR_ATOMIC_POLARIZABILITIES_FILE);
+			throw Exception::FileNotFound(__FILE__, __LINE__, data_folder_+BALL_QSAR_ATOMIC_POLARIZABILITIES_FILE);
 		}
 		File pol_file(filename);
 		// skip comment line 

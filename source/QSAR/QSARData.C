@@ -7,6 +7,22 @@
 
 using namespace BALL::QSAR;
 
+QSARData::QSARData()
+{
+	data_folder_ = "QSAR/";
+}
+
+QSARData::~QSARData()
+{
+	
+}
+
+
+void QSARData::setDataFolder(const char* folder)
+{
+	data_folder_ = folder;
+}
+
 
 void QSARData::readFiles(char* directory)
 {
@@ -557,124 +573,124 @@ void QSARData::calculateBALLDescriptors(Molecule& m)
 */	
 	//simple descriptors:
 	
-	AtomicPolarizabilities simple0;
+	AtomicPolarizabilities simple0; simple0.setDataFolder(data_folder_.c_str());
  	descriptor_matrix_[0].push_back(simple0.compute(m));
 
-	AtomInformationContent simple1;
+	AtomInformationContent simple1; simple1.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[1].push_back(simple1.compute(m));
  
-	BondPolarizabilities simple2;
+	BondPolarizabilities simple2; simple2.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[2].push_back(simple2.compute(m));
 
-	FormalCharge simple3;
+	FormalCharge simple3; simple3.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[3].push_back(simple3.compute(m));
 
-	MeanAtomInformationContent simple4;
+	MeanAtomInformationContent simple4; simple4.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[4].push_back(simple4.compute(m));
 
- 	MolecularWeight simple5;
+	MolecularWeight simple5; simple5.setDataFolder(data_folder_.c_str());
  	descriptor_matrix_[5].push_back(simple5.compute(m));
 
-	NumberOfAromaticAtoms simple6;
+	NumberOfAromaticAtoms simple6; simple6.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[6].push_back(simple6.compute(m));
 	
-	NumberOfAromaticBonds simple7;
+	NumberOfAromaticBonds simple7; simple7.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[7].push_back(simple7.compute(m));
 
-	NumberOfAtoms simple8;
+	NumberOfAtoms simple8; simple8.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[8].push_back(simple8.compute(m));
 
-	NumberOfAtoms simple9;
+	NumberOfAtoms simple9; simple9.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[9].push_back(simple9.compute(m));
 
-	NumberOfAtoms simple10;
+	NumberOfAtoms simple10; simple10.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[10].push_back(simple10.compute(m));
 
-	NumberOfBonds simple11;
+	NumberOfBonds simple11; simple11.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[11].push_back(simple11.compute(m));
 	
-	NumberOfBoron simple12;
+	NumberOfBoron simple12; simple12.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[12].push_back(simple12.compute(m));
 
-	NumberOfBromine simple13;
+	NumberOfBromine simple13; simple13.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[13].push_back(simple13.compute(m));
 	
-	NumberOfCarbon simple14;
+	NumberOfCarbon simple14; simple14.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[14].push_back(simple14.compute(m));
 	
-	NumberOfChlorine simple15;
+	NumberOfChlorine simple15; simple15.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[15].push_back(simple15.compute(m));
 	
-	NumberOfDoubleBonds simple16;
+	NumberOfDoubleBonds simple16; simple16.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[16].push_back(simple16.compute(m));
 	
-	NumberOfFlourine simple17;
+	NumberOfFlourine simple17; simple17.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[17].push_back(simple17.compute(m));
 	
-	NumberOfHeavyAtoms simple18;
+	NumberOfHeavyAtoms simple18; simple18.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[18].push_back(simple18.compute(m));
 	
-	NumberOfHeavyBonds simple19;
+	NumberOfHeavyBonds simple19; simple19.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[19].push_back(simple19.compute(m));
 	
-	NumberOfHydrogen simple20;
+	NumberOfHydrogen simple20; simple20.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[20].push_back(simple20.compute(m));
 	
-	NumberOfHydrogenBondAcceptors simple21;
+	NumberOfHydrogenBondAcceptors simple21; simple21.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[21].push_back(simple21.compute(m));
 	
-	NumberOfHydrogenBondDonors simple22;
+	NumberOfHydrogenBondDonors simple22; simple22.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[22].push_back(simple22.compute(m));
 
-	NumberOfHydrophobicAtoms simple23;
+	NumberOfHydrophobicAtoms simple23; simple23.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[23].push_back(simple23.compute(m));
 	
-	NumberOfIodine simple24;
+	NumberOfIodine simple24; simple24.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[24].push_back(simple24.compute(m));
 	
-	NumberOfNitrogen simple25;
+	NumberOfNitrogen simple25; simple25.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[25].push_back(simple25.compute(m));
 
-	NumberOfOxygen simple26;
+	NumberOfOxygen simple26; simple26.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[26].push_back(simple26.compute(m));
 
-	NumberOfPhosphorus simple27;
+	NumberOfPhosphorus simple27; simple27.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[27].push_back(simple27.compute(m));
 	
-	NumberOfRotatableBonds simple28;
+	NumberOfRotatableBonds simple28; simple28.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[28].push_back(simple28.compute(m));
 	
-	NumberOfSingleBonds simple29;
+	NumberOfSingleBonds simple29; simple29.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[29].push_back(simple29.compute(m));
 	
-	NumberOfSulfur simple30;
+	NumberOfSulfur simple30; simple30.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[30].push_back(simple30.compute(m));
 		
-	NumberOfTripleBonds simple31;
+	NumberOfTripleBonds simple31; simple31.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[31].push_back(simple31.compute(m));
 	
-	PrincipalMomentOfInertiaX simple32;
+	PrincipalMomentOfInertiaX simple32; simple32.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[32].push_back(simple32.compute(m));
 	
-	PrincipalMomentOfInertiaY simple33;
+	PrincipalMomentOfInertiaY simple33; simple33.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[33].push_back(simple33.compute(m));
 	
-	PrincipalMomentOfInertiaZ simple34;
+	PrincipalMomentOfInertiaZ simple34; simple34.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[34].push_back(simple34.compute(m));
 	
-	RelNumberOfRotatableBonds simple35;
+	RelNumberOfRotatableBonds simple35; simple35.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[35].push_back(simple35.compute(m));
 
-	RelNumberOfRotatableSingleBonds simple36;
+	RelNumberOfRotatableSingleBonds simple36; simple36.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[36].push_back(simple36.compute(m));
 	
-	SizeOfSSSR simple37;
+	SizeOfSSSR simple37; simple37.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[37].push_back(simple37.compute(m));
 	
-	VertexAdjacency simple38;
+	VertexAdjacency simple38; simple38.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[38].push_back(simple38.compute(m));
-	
-	VertexAdjacencyEquality simple39;
+
+	VertexAdjacencyEquality simple39; simple39.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[39].push_back(simple39.compute(m));
 
 
@@ -689,16 +705,20 @@ void QSARData::calculateBALLDescriptors(Molecule& m)
 
 	// partial charge descriptors:
 
-	RelNegativePartialCharge partial_charge0;
+	RelNegativePartialCharge partial_charge0; 
+	partial_charge0.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[42].push_back(partial_charge0.compute(m));
 	
 	RelPositivePartialCharge partial_charge1;
+	partial_charge1.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[43].push_back(partial_charge1.compute(m));
 
 	TotalNegativePartialCharge partial_charge2;
+	partial_charge2.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[44].push_back(partial_charge2.compute(m));
 
 	TotalPositivePartialCharge partial_charge3;
+	partial_charge3.setDataFolder(data_folder_.c_str());
 	descriptor_matrix_[45].push_back(partial_charge3.compute(m));
 
 

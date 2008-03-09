@@ -58,6 +58,10 @@ namespace BALL
 		class QSARData 
 		{
 			public:
+				
+				QSARData();
+				
+				~QSARData();
 					
 				/** @name Accessors
 				 */
@@ -156,6 +160,9 @@ namespace BALL
 				
 				/** checks whether the response variables of a specified file contain only discrete values. */
 				bool checkforDiscreteY(const char* file, SortedList<int>& activity_IDs);
+				
+				/** allows to set the data-folder neccessary for computation of descriptors without using BALL_DATA_PATH enviroment variable, which is useful for standalone applications */
+				void setDataFolder(const char* folder);
 				//@}
 				
 				
@@ -211,6 +218,8 @@ namespace BALL
 				SortedList<int> invalidDescriptors_;
 				
 				SortedList<int> invalidSubstances_;
+				
+				String data_folder_;
 				//@}
 
 				
