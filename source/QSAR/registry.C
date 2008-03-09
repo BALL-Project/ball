@@ -93,6 +93,16 @@ Registry::Registry()
 	
 	RegistryEntry r8(0,0,"Logistical Regression","Logit",(CreateMethod) &ModelFactory<LogitModel>::create,this);
 	registered_models.push_back(r8);
+	
+	RegistryEntry r10(0,0,"Simple Naive Bayes","snB",(CreateMethod) &ModelFactory<SNBModel>::create,this);
+	r10.parameterNames.clear();
+	r10.parameterDefaults.clear();
+	registered_models.push_back(r10);
+	
+	RegistryEntry r11(0,0,"Naive Bayes","nB",(CreateMethod) &ModelFactory<NBModel>::create,this);
+	r11.parameterNames.clear();
+	r11.parameterDefaults.clear();
+	registered_models.push_back(r11);
 }
 
 

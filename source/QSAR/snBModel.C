@@ -3,7 +3,7 @@
 //
 //
 
-#include <BALL/QSAR/ldaModel.h>
+#include <BALL/QSAR/snBModel.h>
 #include <newmatio.h>
 
 using namespace BALL::QSAR;
@@ -11,130 +11,133 @@ using namespace BALL::QSAR;
 
 
 
-LDAModel::LDAModel(const QSARData& q) : ClassificationModel(q) 
+SNBModel::SNBModel(const QSARData& q) : ClassificationModel(q) 
 {
-	lambda_=0.0001;
-	type_="LDA";
+	type_="snB";
+	mean_.resize(0);
+	stddev_.resize(0);
 }
 
-LDAModel::~LDAModel()
+SNBModel::~SNBModel()
 {
 }
 
-void LDAModel::train()
+void SNBModel::train()
 {
 	if(descriptor_matrix_.Ncols()==0)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be read into the model before training!");
 	}
 	readLabels();
-
-	// calculate sigma_ = covariance matrix of descriptors
-	sigma_.ReSize(descriptor_matrix_.Ncols(),descriptor_matrix_.Ncols());
-	for(int i=1;i<=descriptor_matrix_.Ncols();i++)
+		
+	// map values of Y to their index
+	map<int,uint> label_to_pos; 
+	for(uint i=0;i<labels_.size();i++)
 	{
-		double mi=Statistics::getMean(descriptor_matrix_,i);
-		for(int j=1;j<=descriptor_matrix_.Ncols();j++)
-		{
-			sigma_(i,j)=Statistics::getCovariance(descriptor_matrix_,i,j,mi);
-		}
-	}
-	IdentityMatrix I(sigma_.Ncols());
-	I=I*lambda_;
-	sigma_=sigma_+I;
-	sigma_=sigma_.i();
+		label_to_pos.insert(make_pair(labels_[i],i));
+	}	
 
-	mean_vectors_.resize(Y_.Ncols());
+	
+	mean_.resize(Y_.Ncols());
+	stddev_.resize(Y_.Ncols());
 	no_substances_.clear();
 	no_substances_.resize(labels_.size(),0);
-	for(int c=0; c<Y_.Ncols();c++)
+	for(int act=0; act<Y_.Ncols();act++)
 	{
-		vector<int> no_substances_c(labels_.size(),0);  // no of substances in each class for activitiy c
-		mean_vectors_[c].ReSize(labels_.size(),descriptor_matrix_.Ncols());
-		mean_vectors_[c]=0;
-		
-		for(int i=1;i<=descriptor_matrix_.Nrows();i++) // calculate sum vector of each class
-		{
-			int yi = static_cast<int>(Y_(i,c+1)); // Y_ will contains only ints for classifications
-			int pos = yi - labels_[0]; 
-			if(labels_[pos]==yi)
-			{
-				mean_vectors_[c].Row(pos+1) += descriptor_matrix_.Row(i);
-				if(c==0) no_substances_c[pos]++;
-			}
-		}
+		// calculate mean and stddev of each feature for _each_ class
+		mean_[act].ReSize(labels_.size(),descriptor_matrix_.Ncols());
+		stddev_[act].ReSize(labels_.size(),descriptor_matrix_.Ncols());
+		mean_[act]=0; stddev_[act]=0;
 	
-		for(int i=1; i<=mean_vectors_[c].Nrows();i++) // calculate mean vector of each class
+		for(int i=1;i<=descriptor_matrix_.Ncols();i++)
 		{
-			if(no_substances_c[i-1]==0)
+			vector<double> v0(0,0);
+			v0.reserve(descriptor_matrix_.Nrows());
+			vector<vector<double> > class_values(labels_.size(),v0); 
+			
+			// sort values of current feature into the respective vector (one for each class)
+			for(int j=1; j<=descriptor_matrix_.Nrows();j++)
 			{
-				mean_vectors_[c].Row(i)=exp(100);  // set mean of classes NOT occurring for activitiy c to inf
+				uint index = label_to_pos.find(Y_(j,act+1))->second;
+				class_values[index].push_back(descriptor_matrix_(j,i));
+				if(act==0 && i==1) no_substances_[index]++;
 			}
-			mean_vectors_[c].Row(i) = mean_vectors_[c].Row(i)/no_substances_c[i-1];
-		}
-		
-		for(unsigned int i=0; i<no_substances_.size();i++) // update overall number of substances per class
-		{
-			no_substances_[i] += no_substances_c[i];
+			
+			// calculate mean and stddev for current feature for all classes
+			for(uint j=1; j<=labels_.size();j++)
+			{
+				mean_[act](j,i) = Statistics::getMean(class_values[j-1]);
+				stddev_[act](j,i)=Statistics::getStddev(class_values[j-1],mean_[act](j,i));
+			}
 		}
 	}
 }
 
 
-RowVector LDAModel::predict(const vector<double>& substance, bool transform)
+RowVector SNBModel::predict(const vector<double>& substance, bool transform)
 {
-	if(sigma_.Ncols()==0)
+	if(mean_.size()==0)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before it can predict the activitiy of substances!");
 	}
-	// search class to which the given substance has the smallest distance
-	RowVector s = getSubstanceVector(substance,transform);
-	int min_k=0;
-	double min_dist = 99999999;
-	RowVector result(mean_vectors_.size());
 	
-	for(unsigned int c=0; c<mean_vectors_.size();c++)
+	RowVector s = getSubstanceVector(substance,transform);
+	
+	uint no_activities = mean_.size();
+	uint no_classes = mean_[0].Nrows();
+	uint no_features = mean_[0].Ncols();
+	
+	RowVector result(no_activities);
+	result=0;
+	
+	for(uint act=0; act<no_activities;act++)
 	{
-		for (int k=1; k<=mean_vectors_[c].Nrows();k++)
+		vector<double> d(no_classes,0);
+		vector<vector<double> > probabilities (no_features,d);
+		vector<double> pdf_sums(no_features,0);
+		
+		// calculate probability-density-function value for each given feature value
+		for(uint i=0;i<no_features;i++)
 		{
-			RowVector diff=s-mean_vectors_[c].Row(k);
-			double dist = (diff*sigma_*diff.t()).AsScalar();
-			if(dist<min_dist)
+			double x = s(i+1);
+			for(uint j=0;j<no_classes;j++)
 			{
-				min_dist=dist;
-				min_k=k;
+				double stddev = stddev_[act](j+1,i+1);
+				if(stddev==0) stddev = 0.000001; // zero is not allowed by the below equation
+				probabilities[i][j] = (1/(stddev*sqrt(2*Constants::PI))) * exp(-pow((x-mean_[act](j+1,i+1)),2)/(2*stddev));
+				pdf_sums[i] += probabilities[i][j];
 			}
 		}
-		result(c+1)=labels_[min_k-1];
+		
+		// convert probability-density values to probabilities;
+		// then calculate probability for each class by muliplying the probabilities for each feature value;
+		// finally find most probable class
+		vector<double> substance_prob(no_classes,1); // the prob for the given subst. to be in each of the classes
+		double max=0;
+		int best_label=0;
+		for(uint i=0; i<no_features;i++)
+		{
+			for(uint j=0; j<no_classes;j++)
+			{
+				probabilities[i][j] /= pdf_sums[i];
+				substance_prob[j] *= probabilities[i][j];
+				if(i==no_features-1 && substance_prob[j]>max)
+				{
+					max = substance_prob[j];
+					best_label = labels_[j];
+				}				
+			}
+		}
+		result(act+1) = best_label;
 	}
 	
-	return result;
-	
-}
-
-void LDAModel::setParameters(vector<double>& v)
-{
-	if(v.size()!=1)
-	{
-		String c = "Wrong number of model parameters! Needed: 1;";
-		c = c+" given: "+String(v.size());
-		throw Exception::ModelParameterError(__FILE__,__LINE__,c.c_str());
-	}
-	lambda_ = v[0];
+	return result;	
 }
 
 
-vector<double> LDAModel::getParameters() const
+void SNBModel::saveToFile(string filename)
 {
-	vector<double> d;
-	d.push_back(lambda_);
-	return d;
-}
-
-
-void LDAModel::saveToFile(string filename)
-{
-	if(sigma_.Nrows()==0)
+	if(mean_.size()==0)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must have been trained before the results can be saved to a file!");
 	}
@@ -224,17 +227,22 @@ void LDAModel::saveToFile(string filename)
 	}
 	out<<endl<<endl;
 	
-	out<<sigma_<<endl;	/// write Matrix sigma_
-	
-	for(unsigned int i=0; i<mean_vectors_.size();i++)   /// write all mean-vector matrices
+	/// write mean_ matrices
+	for(uint i=0; i<mean_.size();i++)
 	{
-		out<<mean_vectors_[i]<<endl;
+		out<<mean_[i]<<endl;
+	}
+	
+	/// write stddev_ matrices
+	for(uint i=0; i<stddev_.size();i++)
+	{
+		out<<stddev_[i]<<endl;
 	}
 }
 
 
 
-void LDAModel::readFromFile(string filename)
+void SNBModel::readFromFile(string filename)
 {
 	ifstream input(filename.c_str());
 	if(!input)
@@ -259,9 +267,6 @@ void LDAModel::readFromFile(string filename)
 	int no_classes = line0.getField(5,"\t").toInt();
 	//int no_subst = line0.getField(6,"\t").toInt();
 
-	sigma_.ReSize(no_descriptors,no_descriptors);
-	Matrix means(no_classes,no_descriptors);
-	mean_vectors_.resize(no_y,means);
 	no_substances_.clear();
 	descriptor_names_.clear();
 	substance_names_.clear();
@@ -317,27 +322,35 @@ void LDAModel::readFromFile(string filename)
 	}
 	getline(input,line0);  // skip empty line 
 	
-	for(int i=1; i<=no_descriptors;i++) /// read matrix sigma_
+	Matrix m(no_classes,no_descriptors);
+	mean_.resize(no_y,m);
+	stddev_.resize(no_y,m);
+	
+	for(int act=0;act<no_y;act++) /// read all mean matrices (each containing a mean for each feature for each class)
 	{
-		String line;
-		getline(input,line);
-		for(int j=1; j<=no_descriptors;j++)
-		{
-			sigma_(i,j) = line.getField(j-1," ").toDouble();
-		}
-	}
-	getline(input,line0);  // skip empty line 
-
-	for(int c=0; c<no_y;c++) /// read all mean-vector matrices
-	{
-		for(int i=1; i<=no_classes;i++) 
+		for(int i=1; i<=no_classes;i++)
 		{
 			String line;
 			getline(input,line);
 			for(int j=1; j<=no_descriptors;j++)
 			{
-				mean_vectors_[c](i,j) = line.getField(j-1," ").toDouble();
+				mean_[act](i,j) = line.getField(j-1," ").toDouble();
 			}
 		}
+		getline(input,line0);  // skip empty line 
+	}
+	
+	for(int act=0;act<no_y;act++)   /// read all stddev matrices (each containing a stddev for each feature for each class)
+	{
+		for(int i=1; i<=no_classes;i++)
+		{
+			String line;
+			getline(input,line);
+			for(int j=1; j<=no_descriptors;j++)
+			{
+				stddev_[act](i,j) = line.getField(j-1," ").toDouble();
+			}
+		}
+		getline(input,line0);  // skip empty line 	
 	}
 }

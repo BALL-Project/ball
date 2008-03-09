@@ -7,14 +7,17 @@
 using namespace BALL::QSAR;
 
 
+
 Model::Model(const QSARData& q)
 {
 	data=&q;
 }
 
+
 Model::~Model()
 {
 }
+
 
 void Model::copyData(const Model& m)
 {
@@ -55,12 +58,14 @@ void Model::copyDescriptorIDs(const Model& m)
 {
 	descriptor_IDs_=m.descriptor_IDs_;
 }
-	    
+
+
 void Model::deleteDescriptorIDs()
 {
 	SortedList<unsigned int> s;
 	descriptor_IDs_=s;
 }
+
 
 void Model::readTrainingData()
 {
@@ -396,7 +401,7 @@ SortedList<unsigned int>* Model::getDescriptorIDs()
 
 vector<double> Model::getParameters() const
 {
-	vector<double> d;
+	vector<double> d(0);
 	return d;
 }
 

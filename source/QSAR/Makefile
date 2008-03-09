@@ -51,7 +51,9 @@ ifeq ($(USE_NEWMAT),true)
 		registry.C\
 		knnModel.C\
 		rrModel.C\
-		fitModel.C
+		fitModel.C\
+		snBModel.C\
+		nBModel.C
 		
 		ifeq ($(USE_LIBSVM),true)
 			CPP_SOURCES+=\

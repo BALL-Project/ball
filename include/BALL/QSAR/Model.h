@@ -91,7 +91,7 @@ namespace BALL
 				/** sets the model parameters according to the given values. */
 				virtual void setParameters(vector<double>& /*v*/){};
 				
-				virtual vector<double> getParameters() const;
+				virtual vector<double> getParameters() const;			
 
 				/** returns a const pointer to the descriptor IDs of this model */
 				SortedList<unsigned int>* getDescriptorIDs();

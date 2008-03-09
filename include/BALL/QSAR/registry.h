@@ -22,6 +22,8 @@
 #include <BALL/QSAR/libsvmModel.h>
 #include <BALL/QSAR/knnModel.h>
 #include <BALL/QSAR/rrModel.h>
+#include <BALL/QSAR/snBModel.h>
+#include <BALL/QSAR/nBModel.h>
 
 namespace BALL
 {
