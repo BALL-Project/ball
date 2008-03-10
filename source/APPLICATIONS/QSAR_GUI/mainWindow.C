@@ -529,6 +529,11 @@ void MainWindow::createDockWindows()
 	QDockWidget *modeldock = new QDockWidget(tr("Models"), this);
 	modeldock->setAllowedAreas(Qt::LeftDockWidgetArea);
 	modeldock->setWidget(model_list_);
+	
+	QColor c1(160,172,182);
+	QBrush b1(c1,Qt::SolidPattern);
+	model_list_->setBackgroundBrush(b1);
+	
 	addDockWidget(Qt::LeftDockWidgetArea, modeldock);
 	windowMenu_->addAction(modeldock->toggleViewAction());
 
@@ -539,12 +544,15 @@ void MainWindow::createDockWindows()
 		fs_list_scene_.addItem(item);
 		item->setPos(20,70*(i-1)+20);
 	}
-
 	QDockWidget* fsdock = new QDockWidget(tr("Feature Selection"), this);
 	fsdock->setAllowedAreas(Qt::LeftDockWidgetArea);
 	fsdock->setWidget(fs_list_);
 	addDockWidget(Qt::LeftDockWidgetArea, fsdock);
 	windowMenu_->addAction(fsdock->toggleViewAction());
+	
+	QColor c2(230,230,211);
+	QBrush b2(c2,Qt::SolidPattern);
+	fs_list_->setBackgroundBrush(b2);
 
 	///create dock widget for  model validation
 	for(uint i=1; i<5;i++)
@@ -554,12 +562,15 @@ void MainWindow::createDockWindows()
 		item->setPos(20,70*(i-1)+20);
 
 	}
-	
 	QDockWidget* validationdock = new QDockWidget(tr("Validation"), this);
     validationdock->setAllowedAreas(Qt::LeftDockWidgetArea);
 	validationdock->setWidget(val_list_);
 	addDockWidget(Qt::LeftDockWidgetArea, validationdock);
 	windowMenu_->addAction(validationdock->toggleViewAction());
+	
+	QColor c3(205,225,205);
+	QBrush b3(c3,Qt::SolidPattern);
+	val_list_->setBackgroundBrush(b3);
 
 	tabifyDockWidget(modeldock,fsdock);
 	tabifyDockWidget(fsdock, validationdock);
