@@ -580,8 +580,8 @@ void MainWindow::deleteItem()
 		QList<QGraphicsItem*>::Iterator it = items.begin();
 	
 		DataItem* item = static_cast<DataItem *>(*it);
-		delete item;
 		//deleteItem(item);
+		delete item;
 	}
 	else
 	{
@@ -913,7 +913,7 @@ void MainWindow::executePipeline()
 
 bool MainWindow::removeFromPipeline(DataItem* item)
 {
-	if(disconnected_items_.remove(item))
+/*	if(disconnected_items_.remove(item))
 	{
 		return 1;
 	}
@@ -1006,7 +1006,7 @@ bool MainWindow::removeFromPipeline(DataItem* item)
 // 			return 0;
 // 		}
 	}
-	
+	*/
 }
 
 void MainWindow::addDisconnectedItem(DataItem* item)

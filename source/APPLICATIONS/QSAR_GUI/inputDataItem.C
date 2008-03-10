@@ -26,7 +26,8 @@ InputDataItem::InputDataItem(QString filename, bool center_data, bool center_y, 
 
 InputDataItem::InputDataItem(QString filename, DataItemView* view): 
 	DataItem(view),
-	filename_(filename)
+	filename_(filename),
+	data_(NULL)
 {
 }
 
@@ -41,11 +42,6 @@ InputDataItem::InputDataItem():
 
 InputDataItem::~InputDataItem()
 {
-	if (view_->name == "view")
-	{
-		MainWindow* mw = view_->data_scene->main_window;
-		mw->removeFromPipeline(this);
-	}
 	delete data_;
 }
 

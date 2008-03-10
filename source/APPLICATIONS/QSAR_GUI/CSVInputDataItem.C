@@ -35,12 +35,7 @@ CSVInputDataItem::CSVInputDataItem(QSARData* data):
 
 CSVInputDataItem::~CSVInputDataItem()
 {
-	if (view_->name == "view")
-	{
-		MainWindow* mw = view_->data_scene->main_window;
-		mw->removeFromPipeline(this);
-	}
-	delete data_;
+	// do NOT delete data_, since this is already done by the base class InputDataItem !
 }
 
 CSVInputDataItem::CSVInputDataItem(CSVInputDataItem& item):

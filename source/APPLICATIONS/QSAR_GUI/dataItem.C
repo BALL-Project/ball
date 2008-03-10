@@ -70,19 +70,21 @@ DataItem::~DataItem()
 	// delete incoming edges
 	for(QSet<Edge*>::iterator it=in_edge_list_.begin(); it!=in_edge_list_.end(); it++)
 	{
+		(*it)->sourceNode()->out_edge_list_.remove(*it);
 		delete *it;
+		
 	}
 
 	// delete outgoing edges and everthing hanging below these egdes
 	for(QSet<Edge*>::iterator it=out_edge_list_.begin(); it!=out_edge_list_.end(); it++)
 	{
 		view_->data_scene->removeItem(*it);
-
-		DataItem* child = (*it)->destNode();		
+		DataItem* child = (*it)->destNode();
+		child->in_edge_list_.remove(*it);
 		delete *it;
 		delete child;
 	}
-	//view_->data_scene->removeItem(this);
+	view_->data_scene->removeItem(this);
 }
 
 void DataItem::addInEdge(Edge* edge)
