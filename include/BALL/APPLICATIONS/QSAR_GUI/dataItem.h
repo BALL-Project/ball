@@ -159,6 +159,7 @@ namespace BALL
 			/** has the data already been processed by this DataItem? */
 			bool done_;
 			
+			
 		private:
 		
 			/** @name Private Attributes*/

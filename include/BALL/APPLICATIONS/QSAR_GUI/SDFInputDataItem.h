@@ -22,6 +22,7 @@ namespace BALL
 			public:
 				/** @name Constructors and Destructors
 				*/
+				
 				SDFInputDataItem(QString filename,SortedList<int> act, bool cdv, bool crv, DataItemView* view);
 				SDFInputDataItem(QString filename, QString name, DataItemView* view);
 				SDFInputDataItem(QString filename, DataItemView* view);
@@ -46,8 +47,14 @@ namespace BALL
 				*/
 				SortedList<int> activity_values_;
 				
+				/** Are there additional descriptors that are to be read from a csv-file?!\n
+				If yes, do NOT center the input data but leave this to the CSVInputDataItem !! */
+				bool additional_descriptors_;
+				
 			protected:
 				void mousePressEvent(QGraphicsSceneMouseEvent *event);
+				
+				friend class DataItemScene;
 		};
 	}
 }	

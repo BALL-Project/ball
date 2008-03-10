@@ -16,6 +16,8 @@ using namespace BALL::VIEW;
 using namespace BALL::VIEW::Exception;
 
 
+
+/// TODO: set additional_descriptors_ and center data only if ==0 !!!
 SDFInputDataItem::SDFInputDataItem(QString filename,SortedList<int> act, bool cdv, bool crv, DataItemView* view):
 	InputDataItem(filename, cdv, crv, view),
 	activity_values_(act)
@@ -55,7 +57,9 @@ SDFInputDataItem::SDFInputDataItem(QString filename,SortedList<int> act, bool cd
 	}
 }
 
+
 //create DataItem from a save file
+/// TODO: set additional_descriptors_ and center data only if ==0 !!!
 SDFInputDataItem::SDFInputDataItem(QString filename, QString name, DataItemView* view):
 	InputDataItem(filename, view)
 {
@@ -78,6 +82,8 @@ SDFInputDataItem::SDFInputDataItem(QString filename, DataItemView* view):
 	QStringList list = filename_.split("/");
 	setName(list[list.size()-1]);
 	activity_values_.clear();
+	
+	additional_descriptors_ = 0;
 
 	data_ = new QSARData;
 }
@@ -124,8 +130,8 @@ void SDFInputDataItem::readData()
 		throw(InvalidInputDataItem(__FILE__,__LINE__));
 	}
 
-	///erst machen, wenn alle Compounds gelesen sind!!!!!!!!!!
-	if (center_data_)
+	/// center data only if desired by the user and if there are no additional descriptors being read from a csv-file. In the latter case, center is left to be done by the CSVInputDataItem.
+	if (!additional_descriptors_ && center_data_)
 	{
 		data_->centerData(center_y_);
 	}

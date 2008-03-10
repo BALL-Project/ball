@@ -811,9 +811,9 @@ void MainWindow::executePipeline()
 			std::cout << "MW, entry: " << reg_->getModelNo((*it)->getRegistryEntry()->name_abreviation) << std::endl;
 			std::cout <<  "MW, model name: " << (*it)->name().toStdString() << std::endl;*/
 		}
-		catch(WrongDataType)
+		catch(WrongDataType e)
 		{
-			QMessageBox::warning(this," ","Some class labels of this input file are not discrete values! Creation of a classification model is therefore not possible.");	
+			QMessageBox::warning(this," ",e.getMessage());	
 		}
 		catch(ParseError)
 		{

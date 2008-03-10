@@ -127,7 +127,7 @@ void Model::readTrainingData()
 	int t=0; // index in line of training data
 
 	it=descriptor_IDs_.begin();
-
+	cout<<"data_->descriptor_transformations_ : "<<data->descriptor_transformations_.size()<<"  "<<data->descriptor_transformations_[0].size()<<endl;
 	// copy selected descriptors, their names and the information about their transformations (mean and stddev of each descriptor)
 	for(unsigned int j=0; j<data->descriptor_matrix_.size() && (!fs || it!=descriptor_IDs_.end()); j++)
 	{	

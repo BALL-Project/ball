@@ -99,6 +99,11 @@ void CSVInputDataItem::appendData()
 		throw(InvalidInputDataItem(__FILE__,__LINE__));
 	}
 	
+	if (center_data_)
+	{
+		data_->centerData(center_y_);
+	}
+	
 	done_ = 1;
 }
 

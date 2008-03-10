@@ -294,6 +294,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 							Edge* edge = new Edge(input_item_at_pos, csv_item);
 							addItem(edge);
 							main_window->addInputToPipeline(csv_item);
+							input_item_at_pos->additional_descriptors_ = 1;
 						}
 
 						else
