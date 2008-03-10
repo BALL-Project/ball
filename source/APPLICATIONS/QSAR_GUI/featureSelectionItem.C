@@ -18,6 +18,7 @@ FeatureSelectionItem::FeatureSelectionItem(int type, DataItemView* miv):
 	setPixmap(QPixmap("./images/feature_selection.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 
 	feature_selection_ = NULL;
+	validation_statistic_ = 0;
 
 	switch(type)
 	{
@@ -56,6 +57,7 @@ DataItem(fs_item.view_)
 	model_item_ = fs_item.model_item_;
 	name_ = fs_item.name_;
 	setPixmap(fs_item.pixmap());
+	validation_statistic_ = 0;
 
 	if (fs_item.feature_selection_ == NULL)
 	{
@@ -75,9 +77,13 @@ void FeatureSelectionItem::connectWithModelItem()
 		throw InvalidFeatureSelectionItem(__FILE__,__LINE__);
 	}
 	
-	if(done_) return; // do nothing twice..
+	if(done_) return; // do nothing twice...
 
 	feature_selection_ = new FeatureSelection(*(model_item_->model()));
+	if(validation_statistic_>0)
+	{
+		feature_selection_->selectStat(validation_statistic_);
+	}
 	switch(type_)
 	{
 		case 1:	

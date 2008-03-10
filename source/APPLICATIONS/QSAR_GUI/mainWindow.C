@@ -287,7 +287,7 @@ FeatureSelectionItem* MainWindow::createFeatureSelection(FeatureSelectionItem* f
 	}
 
 	FeatureSelectionItem* item = new FeatureSelectionItem(*fs);
-	FeatureSelectionDialog featureSelectionDialog(item);
+	FeatureSelectionDialog featureSelectionDialog(item,model);
 
 	bool ok = false;
 	int exec = 0;
@@ -303,6 +303,7 @@ FeatureSelectionItem* MainWindow::createFeatureSelection(FeatureSelectionItem* f
 				ok = true;
 				item->setModelItem(model);
 				item->setInputModelItem(in_model);
+				item->setValidationStatistic(featureSelectionDialog.getValidationStatistic());
 			}
 			else
 			{

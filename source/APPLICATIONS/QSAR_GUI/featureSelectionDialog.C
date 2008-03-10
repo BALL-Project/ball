@@ -6,10 +6,11 @@
 #include <QtGui/QPushButton>
 
 
+
 using namespace BALL::QSAR::Exception;
 using namespace BALL::VIEW;
 
-FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem):
+FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, ModelItem* model):
 	fs_item_(fsitem)
 {
 	QVBoxLayout* main_layout = new QVBoxLayout(this);
@@ -27,11 +28,34 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem):
 
 	QHBoxLayout* layout2 = new QHBoxLayout();
 	layout2->addWidget(optimize_parameters_);
-
+	
 	main_layout->addLayout(layout1);
+	statistic_box_ = NULL;
+	available_statistics_= NULL;
+	
+	// let user select validation statistic in case of classification model
+	if(!model->getRegistryEntry()->regression)
+	{
+		QHBoxLayout* layout3 = new QHBoxLayout();
+		QLabel* label3 = new QLabel("classification statistic");
+		statistic_box_ = new QComboBox;
+		
+		available_statistics_ = model->getRegistryEntry()->getStatistics();
+		for(uint i=0;i<available_statistics_->size();i++)
+		{
+			statistic_box_->addItem((*available_statistics_)[i].first.c_str(),i);
+		}
+			
+		layout3->addWidget(label3);layout3->addWidget(statistic_box_);
+		main_layout->addLayout(layout3);
+		
+		q_objects_.push_back(layout3);
+		q_objects_.push_back(label3);
+		q_objects_.push_back(statistic_box_);
+	}
+	
 	main_layout->addLayout(layout2);
 	main_layout->addWidget(buttons);
-
 	this->setLayout(main_layout);
 	this->setWindowTitle("Feature Selection:" + fs_item_->name());
 
@@ -49,6 +73,11 @@ FeatureSelectionDialog::~FeatureSelectionDialog()
 {
 	delete k_edit_;
 	delete optimize_parameters_;
+	
+	for(list<QObject*>::iterator it=q_objects_.begin(); it!=q_objects_.end();it++)
+	{
+		delete *it;
+	}
 }	
 
 void FeatureSelectionDialog::applyInput()
@@ -67,6 +96,12 @@ void FeatureSelectionDialog::applyInput()
 	optimize_ = optimize_parameters_->isChecked();
 	fs_item_->setK(k_);
 	fs_item_->setOpt(optimize_);
+	
+	statistic_ = 0;
+	if(statistic_box_!=NULL)
+	{
+		statistic_ = (*available_statistics_)[statistic_box_->currentIndex()].second;
+	}
 }
 
 int FeatureSelectionDialog::k()

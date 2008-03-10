@@ -103,6 +103,13 @@ Registry::Registry()
 	r11.parameterNames.push_back("discretization steps");
 	r11.parameterDefaults.push_back(4);
 	registered_models.push_back(r11);
+	
+	
+	classification_statistics.push_back(make_pair("average accuracy",1));
+	classification_statistics.push_back(make_pair("weighted accuracy",2));
+	classification_statistics.push_back(make_pair("overall accuracy",3));
+	classification_statistics.push_back(make_pair("average MCC",4));
+	classification_statistics.push_back(make_pair("overall MCC",5));
 }
 
 
@@ -151,6 +158,7 @@ RegistryEntry::RegistryEntry(bool k, bool r, String n, String ab, CreateMethod c
 	createKernel1 = NULL;
 	createKernel2 = NULL;
 	reg->model_map[ab] = reg->registered_models.size();
+	registry_ = reg;
 }
 
 
@@ -164,7 +172,17 @@ RegistryEntry::RegistryEntry(bool k, bool r, String n, String ab, CreateKernel1 
 	createKernel1 = c1;
 	createKernel2 = c2;
 	reg->model_map[ab] = reg->registered_models.size();
+	registry_ = reg;
 }
+
+
+const vector<pair<BALL::String,int> >* RegistryEntry::getStatistics()
+{
+	if(regression) return NULL;
+	
+	return &registry_->classification_statistics;
+}
+
 
 RegistryEntry::~RegistryEntry()
 {

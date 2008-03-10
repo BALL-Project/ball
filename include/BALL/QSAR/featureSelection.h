@@ -76,6 +76,8 @@ namespace BALL
 				
 				/** removes descriptors whose values are 0 in all substances from the list of selected features */
 				void removeEmptyDescriptors();
+				
+				void selectStat(int s);
 				//@}
 	
 	

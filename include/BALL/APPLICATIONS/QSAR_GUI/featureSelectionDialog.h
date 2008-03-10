@@ -7,6 +7,7 @@
 #include <QtGui/QCheckBox>
 #include <QtGui/QGridLayout>
 #include <QtGui/QLabel>
+#include <QtGui/QComboBox>
 
 #include <BALL/APPLICATIONS/QSAR_GUI/featureSelectionItem.h>
 
@@ -33,7 +34,7 @@ namespace BALL
 				/**constructor 
 				* @param fsitem FeatureSelectionItem for which the dialog reads in user input
 				*/
-				FeatureSelectionDialog(FeatureSelectionItem* fsitem);
+				FeatureSelectionDialog(FeatureSelectionItem* fsitem, ModelItem* model);
 
 				/** destructor */
 				~FeatureSelectionDialog();	
@@ -45,7 +46,9 @@ namespace BALL
 				int k();
 			
 				/** */
-				bool optimize();	
+				bool optimize();
+				
+				int getValidationStatistic() {return statistic_;};
 	
 			public slots:	
 				void applyInput();
@@ -58,6 +61,15 @@ namespace BALL
 				int k_;
 				bool optimize_;
 				FeatureSelectionItem* fs_item_;
+				
+				QComboBox* statistic_box_;
+				int statistic_;
+				const vector<pair<String,int> >* available_statistics_;
+				
+				/** delete these when destroying this FeatureSelectionDialog */
+				list<QObject*> q_objects_;
+				
+				friend class FeatureSelectionItem;
 		};
 	}
 }

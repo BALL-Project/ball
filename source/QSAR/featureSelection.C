@@ -41,6 +41,14 @@ void FeatureSelection::forwardSelection(int k, bool optPar)
 {
 	forward(0,k,optPar);
 }
+
+
+void FeatureSelection::selectStat(int s)
+{
+	if(model_==0) return;
+	model_->model_val->selectStat(s);
+}
+		
 		
 		
 void FeatureSelection::forward(bool stepwise, int k, bool optPar)

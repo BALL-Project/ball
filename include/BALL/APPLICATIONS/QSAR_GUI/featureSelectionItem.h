@@ -39,6 +39,8 @@ namespace BALL
 				int numberOfFeatures();
 				ModelItem* modelItem();
 				ModelItem* inputModelItem();	
+				
+				int setValidationStatistic(int s) {validation_statistic_=s;};
 
 				int k();
 
@@ -57,8 +59,11 @@ namespace BALL
 				int type_;
 				int k_;
 				bool opt_;
+				int validation_statistic_;
+				
 				
 				friend class DataItemScene;
+				friend class FeatureSelectionDialog;
 		};
 	}
 }
