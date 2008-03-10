@@ -102,8 +102,9 @@ SDFInputDataItem::SDFInputDataItem(SDFInputDataItem& item):
 
 void SDFInputDataItem::readData()
 {
+	if(done_) return; // do nothing twice...
+	
 	string st = filename_.toStdString();
-
 	try
 	{
 		data_->readSDFile(st.c_str(), activity_values_);
@@ -128,6 +129,8 @@ void SDFInputDataItem::readData()
 	{
 		data_->centerData(center_y_);
 	}
+	
+	done_ = 1;
 }
 
 void SDFInputDataItem::mousePressEvent(QGraphicsSceneMouseEvent *event)

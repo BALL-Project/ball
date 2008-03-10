@@ -74,9 +74,10 @@ void FeatureSelectionItem::connectWithModelItem()
 	{
 		throw InvalidFeatureSelectionItem(__FILE__,__LINE__);
 	}
+	
+	if(done_) return; // do nothing twice..
 
 	feature_selection_ = new FeatureSelection(*(model_item_->model()));
-
 	switch(type_)
 	{
 		case 1:	
@@ -91,6 +92,8 @@ void FeatureSelectionItem::connectWithModelItem()
 		default:
 			throw InvalidFeatureSelectionItem(__FILE__,__LINE__);
 	}
+	
+	done_ = 1; // ready!
 }
 
 void FeatureSelectionItem::mousePressEvent(QGraphicsSceneMouseEvent *event)

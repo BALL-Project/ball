@@ -115,6 +115,8 @@ namespace BALL
 			*/
 			void setView(DataItemView* v);
 			DataItemView* view();
+			
+			bool isDone();
 
 // 			void calculateForces();
 // 			bool advance();
@@ -153,6 +155,10 @@ namespace BALL
 			QSet<Edge*>out_edge_list_;
 
 			QString saved_as_;
+			
+			/** has the data already been processed by this DataItem? */
+			bool done_;
+			
 		private:
 		
 			/** @name Private Attributes*/

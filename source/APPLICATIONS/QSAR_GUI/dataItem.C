@@ -24,6 +24,7 @@ DataItem::DataItem():
 	pm.fill(Qt::red);
 	setPixmap(pm);
 	setToolTip(name_);
+	done_ = 0;
 }
 
 DataItem::DataItem(DataItemView* view):
@@ -42,6 +43,7 @@ DataItem::DataItem(DataItemView* view):
 	pm.fill(Qt::white);
 	setPixmap(pm);
 	setToolTip(name_);
+	done_ = 0;
 }
 
 DataItem::DataItem(DataItemView* view, QPixmap pm): 
@@ -58,6 +60,7 @@ DataItem::DataItem(DataItemView* view, QPixmap pm):
 	setZValue(1);
 	setPixmap(pm);
 	setToolTip(name_);
+	done_ = 0;
 }
 
 DataItem::~DataItem()
@@ -109,6 +112,13 @@ QPainterPath DataItem::shape() const
 	//path.addText (0.0, 0.0,QFont(), name_);
 	return path;
 }
+
+
+bool DataItem::isDone()
+{
+	return done_;
+}
+
 
 void DataItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {

@@ -24,16 +24,13 @@ CSVInputDialog::CSVInputDialog(CSVInputDataItem* item):
 	center_response_values_->setChecked(true);
 	QDialogButtonBox* inputDialogButtons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,Qt::Horizontal, this);
 
-	QString message_string = "Number of properties that are to be used as activities:<br>(activity values are assumed to be<br>located in last columns of the table)";
-	
+	QString message_string = "Number of response variables:<br>(assumed to be located in last columns)";
 	QString sep_string = "Character used as seperator<br>within the csv-file:";
-
 
 	alabel_ = new QLabel(message_string,this);
 	blabel_ = new QLabel(sep_string,this);
-	layout_->addWidget(alabel_,1,1,4,1); layout_->addWidget(blabel_,3,2,2,1);
-	layout_->addWidget(activity_edit_,5,1); 
-	layout_->addWidget(seperator_edit_,5,2);
+	layout_->addWidget(alabel_,1,1,3,3); layout_->addWidget(activity_edit_,3,4); 
+	layout_->addWidget(blabel_,4,1,2,3); layout_->addWidget(seperator_edit_,4,4);
 	layout_->addWidget(x_labels_,6,1,Qt::AlignLeft);
 	layout_->addWidget(y_labels_,7,1,Qt::AlignLeft);
 	layout_->addWidget(center_descriptor_values_,8,1,Qt::AlignLeft);
@@ -42,7 +39,6 @@ CSVInputDialog::CSVInputDialog(CSVInputDataItem* item):
 	
 	setLayout(layout_);
 	setWindowTitle("Preferences for " + input_item_->name());
-
 
 	connect(inputDialogButtons, SIGNAL(accepted()), this, SLOT(accept()));
 	connect(inputDialogButtons, SIGNAL(rejected()), this, SLOT(reject()));

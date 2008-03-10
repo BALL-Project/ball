@@ -60,8 +60,9 @@ void CSVInputDataItem::setSeperator(string sep)
 
 void CSVInputDataItem::readData()
 {
+	if(done_) return; // do nothing twice...
+	
 	string st = filename_.toStdString();
-
 	try
 	{
 		data_->readCSVFile(st.c_str(), no_y_, x_labels_, y_labels_, sep_.c_str(), 0);
@@ -74,17 +75,19 @@ void CSVInputDataItem::readData()
 // 	{
 // 		//throw(InvalidInputDataItem(__FILE__,__LINE__));
 // 	}
-
 	if (center_data_)
 	{
 		data_->centerData(center_y_);
 	}
-	
 	cout<<"no response var. = "<<data_->getNoResponseVariables()<<endl;
+	
+	done_ = 1;
 }
 
 void CSVInputDataItem::appendData()
 {
+	if(done_) return; // do nothing twice..
+	
 	string st = filename_.toStdString();
 
 	try
@@ -95,6 +98,8 @@ void CSVInputDataItem::appendData()
 	{
 		throw(InvalidInputDataItem(__FILE__,__LINE__));
 	}
+	
+	done_ = 1;
 }
 
 void CSVInputDataItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
