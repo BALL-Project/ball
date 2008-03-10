@@ -7,6 +7,7 @@
 #include <QtGui/QLineEdit>
 #include <QtGui/QGridLayout>
 #include <QtGui/QLabel>
+#include <QtGui/QComboBox>
 
 #include <BALL/APPLICATIONS/QSAR_GUI/validationItem.h>
 
@@ -30,7 +31,7 @@ namespace BALL
 				/** standard constructor */
 				ValidationDialog();
 
-				ValidationDialog(ValidationItem* val_item);
+				ValidationDialog(ValidationItem* val_item, ModelItem* model);
 
 				/** standard destructor */
 				~ValidationDialog();	
@@ -39,7 +40,10 @@ namespace BALL
 
 				/** returns the k value */
 				int k();	
+				
+				int getValidationStatistic() {return statistic_;};
 	
+				
 			public slots:	
 				/** @name public slots */
 		
@@ -54,9 +58,18 @@ namespace BALL
 				ValidationItem* val_item_;
 
 				QLineEdit* k_edit_;
+				
+				const vector<pair<String,int> >* available_statistics_;
 
 				/** the k value given by the user which is needed for k fold cross validation*/
 				int k_;
+				
+				QComboBox* statistic_box_;
+				int statistic_;
+				
+				
+				/** delete these when destroying this FeatureSelectionDialog */
+				list<QObject*> q_objects_;
 				
 				QLineEdit* n_of_samples_edit_;
 				QLineEdit* n_of_runs_edit_;

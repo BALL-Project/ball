@@ -349,24 +349,24 @@ void DataItemScene::addDropSite()
 
 void DataItemScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
 {
+	QPointF p = mouseEvent->scenePos();
+	QGraphicsItem* item = itemAt(p);
+	if(!item) return; // if there is no item below mouse cursor, do nothing!
+	
 	/// if not doing this, Qt cannot reliably cast to ModelItem*, so that the type of the created ModelItem will be incorrect!
 	if(strcmp(view->name.c_str(),"model_list")==0)
 	{
-		QPointF p = mouseEvent->scenePos();
-		ModelItem* model_item = static_cast<ModelItem*>(itemAt(p));
-		cout<<model_item->getRegistryEntry()->name<<endl;
-		model_item->mousePressEvent(mouseEvent);
+  		ModelItem* model_item = static_cast<ModelItem*>(item);
+  		model_item->mousePressEvent(mouseEvent);
 	}
 	else if(strcmp(view->name.c_str(),"fs_list")==0)
 	{
-		QPointF p = mouseEvent->scenePos();
-		FeatureSelectionItem* fs_item = static_cast<FeatureSelectionItem*>(itemAt(p));
+		FeatureSelectionItem* fs_item = static_cast<FeatureSelectionItem*>(item);
 		fs_item->mousePressEvent(mouseEvent);
 	}
 	else if(strcmp(view->name.c_str(),"val_list")==0)
 	{
-		QPointF p = mouseEvent->scenePos();
-		ValidationItem* val_item = static_cast<ValidationItem*>(itemAt(p));
+		ValidationItem* val_item = static_cast<ValidationItem*>(item);
 		val_item->mousePressEvent(mouseEvent);
 	}	
 	else

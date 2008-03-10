@@ -207,7 +207,7 @@ ModelItem* MainWindow::createModel(ModelItem* model, InputDataItem* input)
 
 	RegistryEntry* entry = model->getRegistryEntry();
 	String name = entry->name_abreviation;
-
+	
 	if (input && !entry->regression)
 	{
 		if (!input->checkForDiscreteY())
@@ -219,7 +219,21 @@ ModelItem* MainWindow::createModel(ModelItem* model, InputDataItem* input)
 
 	modelConfigurationDialog_ = new ModelConfigurationDialog(model, input, this);
 
-	if (modelConfigurationDialog_->exec() == 1)
+	// is there is nothing to be asked of the user, then do not ask him
+	if(entry->parameterNames.size()==0 && !entry->kernel)
+	{
+		modelConfigurationDialog_->createModel();
+		model = modelConfigurationDialog_->modelItem();
+		if (model == NULL)
+		{
+			throw InvalidModelItem(__FILE__,__LINE__);	
+		}
+		else
+		{
+			return model;
+		}
+	}
+	else if (modelConfigurationDialog_->exec() == 1)
 	{	
 		model = modelConfigurationDialog_->modelItem();
 		if (model == NULL)
@@ -333,7 +347,7 @@ ValidationItem* MainWindow::createValidation(ValidationItem* val, ModelItem* mod
 	ValidationItem* item = new ValidationItem(*val);
 	if (val->getValidationType() != 1)
 	{
-		ValidationDialog validationDialog(item);
+		ValidationDialog validationDialog(item, model);
 	
 		bool ok = false;
 		int exec = 0;
@@ -349,6 +363,7 @@ ValidationItem* MainWindow::createValidation(ValidationItem* val, ModelItem* mod
 					validationDialog.applyInput(); 
 					ok = true;
 					item->setModelItem(model);
+					item->setValidationStatistic(validationDialog.getValidationStatistic());
 				}
 				else
 				{

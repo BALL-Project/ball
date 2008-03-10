@@ -48,6 +48,8 @@ namespace BALL
 				/** @name Enums */
 				ModelItem* modelItem();
 				void setModelItem(ModelItem* model_item);
+				
+				int setValidationStatistic(int s) {validation_statistic_=s;};
 
 				/** 
 				* Type of the Item 
@@ -110,6 +112,8 @@ namespace BALL
 				double q2_;
 				
 				double r2_;
+				
+				int validation_statistic_;
 				
 				
 				friend class DataItemScene;

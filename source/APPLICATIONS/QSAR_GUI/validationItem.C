@@ -25,15 +25,15 @@ ValidationItem::ValidationItem(int type, DataItemView* view):
 	switch(type)
 	{
 		case 1:	
-			name_ = "test quality of fit";
+			name_ = "test fit to training data";
 			type_ = type;
 			break;
 		case 2:
-			name_ = "test predictive power (cross validation)";
+			name_ = "cross validation";
 			type_ = type;
 			break;
 		case 3:
-			name_ = "test predictive power (bootstrapping)";
+			name_ = "bootstrapping";
 			type_ = type;
 			break;
 
@@ -70,6 +70,10 @@ ValidationItem* ValidationItem::connectWithModelItem()
 
 	ValidationItem* item = new ValidationItem(type_, view_);
 	
+	if(validation_statistic_>0)
+	{
+		model_item_->model()->model_val->selectStat(validation_statistic_);
+	}
 	switch(type_)
 	{
 		case 1:	

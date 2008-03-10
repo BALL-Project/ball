@@ -7,7 +7,7 @@
 using namespace BALL::QSAR::Exception;
 using namespace BALL::VIEW;
 
-ValidationDialog::ValidationDialog(ValidationItem* val_item):
+ValidationDialog::ValidationDialog(ValidationItem* val_item, ModelItem* model):
 	val_item_(val_item)
 {
 	QVBoxLayout* main_layout = new QVBoxLayout(this);
@@ -15,6 +15,12 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item):
 	QDialogButtonBox* buttons = new QDialogButtonBox(QDialogButtonBox::Cancel,Qt::Horizontal, this);
 	QPushButton* applyButton = new QPushButton("OK", this);
 	buttons->addButton(applyButton, QDialogButtonBox::ApplyRole);
+	
+// 	q_objects_.push_back(main_layout);
+ 	q_objects_.push_back(layout1); 
+// 	q_objects_.push_back(buttons);
+// 	q_objects_.push_back(applyButton);
+	
 
 	if (val_item->getValidationType() == 2)
 	{
@@ -22,6 +28,9 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item):
 		k_edit_ = new QLineEdit(this);
 		layout1->addWidget(klabel,1,1);
 		layout1->addWidget(k_edit_,1,2);
+		
+		q_objects_.push_back(klabel); 
+		q_objects_.push_back(k_edit_);
 	}
 
 	else if (val_item->getValidationType() == 3)
@@ -30,6 +39,9 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item):
 		n_of_samples_edit_ = new QLineEdit(this);
 		layout1->addWidget(label,1,1);
 		layout1->addWidget(n_of_samples_edit_,1,2);
+		
+		q_objects_.push_back(label);
+		q_objects_.push_back(n_of_samples_edit_);
 	}
 		
 	else if (val_item->getValidationType() == 4)
@@ -42,16 +54,44 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item):
 		layout1->addWidget(n_of_runs_edit_,1,2);
 		layout1->addWidget(klabel,2,1);
 		layout1->addWidget(k_edit_,2,2);
+		
+		q_objects_.push_back(k_edit_);
+		q_objects_.push_back(n_of_runs_edit_);
+		q_objects_.push_back(klabel);
+		q_objects_.push_back(label);
+	}
+	
+	main_layout->addLayout(layout1);
+	
+	statistic_box_ = NULL;
+	available_statistics_= NULL;
+	if(!model->getRegistryEntry()->regression)
+	{
+		QHBoxLayout* layout3 = new QHBoxLayout();
+		QLabel* label3 = new QLabel("classification statistic");
+		statistic_box_ = new QComboBox;
+		
+		available_statistics_ = model->getRegistryEntry()->getStatistics();
+		for(uint i=0;i<available_statistics_->size();i++)
+		{
+			statistic_box_->addItem((*available_statistics_)[i].first.c_str(),i);
+		}
+			
+		layout3->addWidget(label3);layout3->addWidget(statistic_box_);
+		main_layout->addLayout(layout3);
+		
+		q_objects_.push_back(layout3);
+		q_objects_.push_back(label3);
+		q_objects_.push_back(statistic_box_);
 	}
 
-	main_layout->addLayout(layout1);
 	main_layout->addWidget(buttons);
 
 	this->setLayout(main_layout);
 	this->setWindowTitle("Model Validation");
 
 	connect(applyButton, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(buttons, SIGNAL(rejected()), this, SLOT(reject()));
+	connect(buttons, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 ValidationDialog::ValidationDialog():
@@ -61,6 +101,10 @@ ValidationDialog::ValidationDialog():
 
 ValidationDialog::~ValidationDialog()
 {
+	for(list<QObject*>::iterator it=q_objects_.begin(); it!=q_objects_.end();it++)
+	{
+		delete *it;
+	}
 }	
 
 void ValidationDialog::applyInput()
@@ -125,6 +169,11 @@ void ValidationDialog::applyInput()
 				throw BALL::VIEW::Exception::InvalidK(__FILE__, __LINE__);
 			}
 			break;
+	}
+	statistic_ = 0;
+	if(statistic_box_!=NULL)
+	{
+		statistic_ = (*available_statistics_)[statistic_box_->currentIndex()].second;
 	}
 }
 

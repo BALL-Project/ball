@@ -32,7 +32,7 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, InputDa
 	entryHasKernel = entry_->kernel;
 	entryHasParameters = entry_->parameterNames.size() > 0;
 	isOptimizable = entry_->optimizableParameters.size() > 0;
-
+	
 	buttons_ = new QDialogButtonBox(QDialogButtonBox::Cancel,Qt::Horizontal, this);
 	okButton_ = new QPushButton("Ok", this);
 	buttons_->addButton(okButton_, QDialogButtonBox::AcceptRole);
@@ -57,18 +57,17 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, InputDa
 
 	pagesWidget = new QStackedWidget(this);
 
+
 	if (entryHasParameters)
 	{
 		modelPage_ = new ModelParameterPage(this);
 		pagesWidget->addWidget(modelPage_);
 	}
-
 	if(entryHasKernel)
 	{
 		kernelPage_ = new KernelParameterPage(this);
 		pagesWidget->addWidget(kernelPage_);
 	}
-
 	if(isOptimizable || entryHasKernel)
 	{
 		optimizePage_ = new OptimizePage(this);
@@ -93,6 +92,7 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, InputDa
 	std::string ab_name = entry_->name_abreviation;
 	std::string name = entry_->name;
 	this->setWindowTitle("Model Properties: " + QString(name.c_str()) + " (" + QString(ab_name.c_str()) + ") ");
+	
 }
 
 ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, MainWindow* parent):
