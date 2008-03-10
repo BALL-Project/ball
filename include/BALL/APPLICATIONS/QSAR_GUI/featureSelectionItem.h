@@ -57,6 +57,8 @@ namespace BALL
 				int type_;
 				int k_;
 				bool opt_;
+				
+				friend class DataItemScene;
 		};
 	}
 }

@@ -174,6 +174,8 @@ namespace BALL
 				QAction* executeAct_;
 				QAction* restoreAct_;
 				QAction* exportAct_;
+				
+				friend class ModelItem;
 		};
 	}
 }	

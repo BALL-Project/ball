@@ -103,7 +103,6 @@ namespace BALL
 				QStackedWidget *pagesWidget;
 				
 				QDialogButtonBox* buttons_;
-				QPushButton* createButton_;
 				QPushButton* okButton_;
 
 				ModelItem* model_item_;

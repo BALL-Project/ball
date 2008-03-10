@@ -26,23 +26,21 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, InputDa
 	param1_is_set_(false),
 	param2_is_set_(false)
 {
+	setMaximumWidth(325);
+	
 	entry_ = model_item_->getRegistryEntry();
 	entryHasKernel = entry_->kernel;
 	entryHasParameters = entry_->parameterNames.size() > 0;
 	isOptimizable = entry_->optimizableParameters.size() > 0;
 
 	buttons_ = new QDialogButtonBox(QDialogButtonBox::Cancel,Qt::Horizontal, this);
-	createButton_ = new QPushButton("Create Model", this);
 	okButton_ = new QPushButton("Ok", this);
-	okButton_->setDisabled(true);
-	buttons_->addButton(createButton_, QDialogButtonBox::ApplyRole);
 	buttons_->addButton(okButton_, QDialogButtonBox::AcceptRole);
 	QHBoxLayout *buttonsLayout = new QHBoxLayout();
 	buttonsLayout->addWidget(buttons_);
 
 	connect(buttons_, SIGNAL(rejected()), this, SLOT(reject()));
-	connect(createButton_, SIGNAL(clicked()), this, SLOT(createModel()));
-	connect(okButton_, SIGNAL(clicked()), this, SLOT(accept()));	
+	connect(okButton_, SIGNAL(clicked()), this, SLOT(createModel()));	
 
 	QVBoxLayout *mainLayout = new QVBoxLayout;
 
@@ -99,7 +97,6 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, InputDa
 
 ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, MainWindow* parent):
 	parent(parent),
-	createButton_(NULL),
 	okButton_(NULL),
 	model_item_(modelitem),
 	input_(NULL),
@@ -198,7 +195,6 @@ ModelConfigurationDialog::~ModelConfigurationDialog()
 	delete contentsWidget;
 	delete pagesWidget;
 	delete buttons_;
-	delete createButton_;
 	delete okButton_;
 	delete modelPage_;
 	delete kernelPage_;
@@ -264,18 +260,6 @@ void ModelConfigurationDialog::changePage(QListWidgetItem* current, QListWidgetI
 	if (pagesWidget->currentWidget() == propertyPage_)
 	{
 		return;
-	}
-
-	else if (pagesWidget->currentWidget() == optimizePage_)
-	{
-		createButton_->setText("Create Model and optimize Parameters");	
-	}
-	else
-	{
-		if (createButton_)
-		{
-			createButton_->setText("Create Model");
-		}
 	}
 }
 
@@ -519,9 +503,6 @@ void ModelConfigurationDialog::createModel()
 				///set the parameters
 				model_item_->model()->setParameters(model_item_->model_parameters);
 			}
-
-			///let user close the dialog and create the model item with the model
-			okButton_->setDisabled(false);
 		}
 
 	}	
@@ -538,6 +519,8 @@ void ModelConfigurationDialog::createModel()
 	{
 		QMessageBox::warning(this, tr("Error"),tr("Model creation failed"));
 	}
+	
+	accept(); // close dialog
 }
 
 ModelItem* ModelConfigurationDialog::modelItem()

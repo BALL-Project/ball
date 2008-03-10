@@ -48,9 +48,13 @@ namespace BALL
 				/** view connected to this scene*/
 				DataItemView* view;
 				
+				void mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent);
+				
 			protected:
 				//void wheelEvent(QWheelEvent *event);
 				//void scaleView(qreal scaleFactor);
+				
+
 
 				/** QT event handler for drop events on this scene
 				*/			

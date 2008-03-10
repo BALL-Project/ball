@@ -110,6 +110,9 @@ namespace BALL
 				double q2_;
 				
 				double r2_;
+				
+				
+				friend class DataItemScene;
 		
 		};
 	}

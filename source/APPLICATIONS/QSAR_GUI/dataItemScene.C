@@ -70,6 +70,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 		if(main_window->drag_source=="model_list")
 		{
 			item = (ModelItem*)main_window->dragged_item;
+			
 			try
 			{
 				if(input_item_at_pos)
@@ -322,7 +323,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 	}
 	QGraphicsScene::dropEvent(event);
  	update();
- 	//view->update();
+ 	view->update();
 }
 
 ///this function allows the dropping of an item anywhere on the scene
@@ -334,4 +335,33 @@ void DataItemScene::addDropSite()
 	///add a transparent rect item with maximal size onto this scene and allow drops onto it 
 	QGraphicsRectItem* rect = addRect(QRectF(0, 0, 16777215, 16777215),QPen(QColor(Qt::transparent)));
 	rect->setAcceptDrops(true);
+}
+
+
+void DataItemScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
+{
+	/// if not doing this, Qt cannot reliably cast to ModelItem*, so that the type of the created ModelItem will be incorrect!
+	if(strcmp(view->name.c_str(),"model_list")==0)
+	{
+		QPointF p = mouseEvent->scenePos();
+		ModelItem* model_item = static_cast<ModelItem*>(itemAt(p));
+		cout<<model_item->getRegistryEntry()->name<<endl;
+		model_item->mousePressEvent(mouseEvent);
+	}
+	else if(strcmp(view->name.c_str(),"fs_list")==0)
+	{
+		QPointF p = mouseEvent->scenePos();
+		FeatureSelectionItem* fs_item = static_cast<FeatureSelectionItem*>(itemAt(p));
+		fs_item->mousePressEvent(mouseEvent);
+	}
+	else if(strcmp(view->name.c_str(),"val_list")==0)
+	{
+		QPointF p = mouseEvent->scenePos();
+		ValidationItem* val_item = static_cast<ValidationItem*>(itemAt(p));
+		val_item->mousePressEvent(mouseEvent);
+	}	
+	else
+	{
+		QGraphicsScene::mousePressEvent(mouseEvent);
+	}
 }

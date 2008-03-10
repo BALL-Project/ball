@@ -117,6 +117,7 @@ void DataItemView::addDropSite()
 	data_scene->addDropSite();
 }
 
+
 /*
 void DataItemView::timerEvent(QTimerEvent *event)
 {

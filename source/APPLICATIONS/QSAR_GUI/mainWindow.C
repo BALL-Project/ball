@@ -522,7 +522,6 @@ void MainWindow::createDockWindows()
 		FeatureSelectionItem* item = new FeatureSelectionItem(i, fs_list_);
 		fs_list_scene_.addItem(item);
 		item->setPos(20,70*(i-1)+20);
-
 	}
 
 	QDockWidget* fsdock = new QDockWidget(tr("Feature Selection"), this);
