@@ -73,6 +73,14 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 			
 			try
 			{
+				
+				if(!input_item_at_pos && !csv_input_item_at_pos)
+				{
+					//main_window->addDisconnectedItem(item);
+					QMessageBox::information(view," ","Please drag the Model onto a SD- or CSV-item within your pipeline!");
+					return;	
+				}
+				
 				if(input_item_at_pos)
 				item = main_window->createModel(item,input_item_at_pos);
 				else if(csv_input_item_at_pos)
@@ -93,10 +101,6 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 					Edge* edge = new Edge(csv_input_item_at_pos, item);
 					addItem(edge);
 					main_window->addModelToPipeline(item);
-				}
-				else
-				{
-					main_window->addDisconnectedItem(item);
 				}
 			}
 			catch(InvalidModelItem)
@@ -133,6 +137,13 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 			ModelItem* model_copy = NULL;
 			try
 			{
+				if (!model_item_at_pos)
+				{
+					//item = main_window->createFeatureSelection(item);
+					//main_window->addDisconnectedItem(item);
+					QMessageBox::information(view," ","Please drag the FeatureSelection onto a Model within your pipeline!");
+					return;	
+				}
 				if (model_item_at_pos)
 				{
 					model_copy = new ModelItem(*model_item_at_pos);
@@ -148,11 +159,6 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 					Edge* edge2 = new Edge(model_item_at_pos, item);
 					addItem(edge2);
 					main_window->addFeatureSelectionToPipeline(item);
-				}
-				else
-				{
-					item = main_window->createFeatureSelection(item);
-					main_window->addDisconnectedItem(item);
 				}
 
 				item->setView(view);
@@ -202,8 +208,10 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				}
 				else
 				{
-					item = main_window->createValidation(item);
-					main_window->addDisconnectedItem(item);
+					//item = main_window->createValidation(item);
+					//main_window->addDisconnectedItem(item);
+					QMessageBox::information(view," ","Please drag the Validation onto a Model within your pipeline!");
+					return;
 				}
 				item->setView(view);
 				addItem(item);

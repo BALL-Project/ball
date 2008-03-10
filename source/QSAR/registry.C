@@ -100,8 +100,8 @@ Registry::Registry()
 	registered_models.push_back(r10);
 	
 	RegistryEntry r11(0,0,"Naive Bayes","nB",(CreateMethod) &ModelFactory<NBModel>::create,this);
-	r11.parameterNames.clear();
-	r11.parameterDefaults.clear();
+	r11.parameterNames.push_back("discretization steps");
+	r11.parameterDefaults.push_back(4);
 	registered_models.push_back(r11);
 }
 
