@@ -59,6 +59,7 @@ namespace BALL
 				QLineEdit* k_edit_;
 				QCheckBox* optimize_parameters_;
 				int k_;
+				double cor_threshold_;
 				bool optimize_;
 				FeatureSelectionItem* fs_item_;
 				

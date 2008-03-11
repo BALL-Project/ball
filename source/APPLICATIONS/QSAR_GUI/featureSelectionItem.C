@@ -20,9 +20,15 @@ FeatureSelectionItem::FeatureSelectionItem(int type, DataItemView* miv):
 	feature_selection_ = NULL;
 	validation_statistic_ = 0;
 	done_= 0;
+	k_ = 0;
+	cor_threshold_ = 0;
 
 	switch(type)
 	{
+		case 0:	
+			name_ = "Remove Colinear Features";
+			type_ = type;
+			break;
 		case 1:	
 			name_ = "Forward Selection";
 			type_ = type;
@@ -88,6 +94,9 @@ void FeatureSelectionItem::connectWithModelItem()
 	}
 	switch(type_)
 	{
+		case 0:
+			feature_selection_->removeHighlyCorrelatedFeatures(cor_threshold_);
+			break;		
 		case 1:	
 			feature_selection_->forwardSelection(k_, opt_);
 			break;

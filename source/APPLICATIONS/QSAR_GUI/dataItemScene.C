@@ -146,13 +146,14 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				}
 				if (model_item_at_pos)
 				{
-					model_copy = new ModelItem(*model_item_at_pos);
+					model_copy = new ModelItem(*model_item_at_pos);	
 					item = main_window->createFeatureSelection(item, model_copy, model_item_at_pos);
+			
 					model_copy->setSaveAttribute(false);
-					
+			
 					addItem(model_copy);
 					main_window->addModelToPipeline(model_copy);
-
+			
 					Edge* edge = new Edge(item, model_copy);
 					addItem(edge);
 					Edge* edge2 = new Edge(model_item_at_pos, item);

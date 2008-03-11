@@ -321,7 +321,7 @@ FeatureSelectionItem* MainWindow::createFeatureSelection(FeatureSelectionItem* f
 
 			if(exec==1)
 			{
-				featureSelectionDialog.applyInput(); 
+ 				featureSelectionDialog.applyInput(); 
 				ok = true;
 				item->setModelItem(model);
 				item->setInputModelItem(in_model);
@@ -336,9 +336,10 @@ FeatureSelectionItem* MainWindow::createFeatureSelection(FeatureSelectionItem* f
 		catch(InvalidK)
 		{
 			ok=false;
-			QMessageBox::information(this, tr(""),tr("Invalid k value"));
+			QMessageBox::information(this, tr(""),tr("Invalid value"));
 		}
 	}
+cout<<"test0 " <<endl<<item->getType()<<flush;
 	return item;
 }
 
@@ -557,11 +558,11 @@ void MainWindow::createDockWindows()
 	windowMenu_->addAction(modeldock->toggleViewAction());
 
 	///create dock widget for listing all available feature selection methods
-	for(uint i=1; i<4;i++)
+	for(uint i=0; i<4;i++)
 	{ 
 		FeatureSelectionItem* item = new FeatureSelectionItem(i, fs_list_);
 		fs_list_scene_.addItem(item);
-		item->setPos(20,70*(i-1)+20);
+		item->setPos(20,70*i+20);
 	}
 	QDockWidget* fsdock = new QDockWidget(tr("Feature Selection"), this);
 	fsdock->setAllowedAreas(Qt::LeftDockWidgetArea);
@@ -582,7 +583,7 @@ void MainWindow::createDockWindows()
 
 	}
 	QDockWidget* validationdock = new QDockWidget(tr("Validation"), this);
-    validationdock->setAllowedAreas(Qt::LeftDockWidgetArea);
+        validationdock->setAllowedAreas(Qt::LeftDockWidgetArea);
 	validationdock->setWidget(val_list_);
 	addDockWidget(Qt::LeftDockWidgetArea, validationdock);
 	windowMenu_->addAction(validationdock->toggleViewAction());
@@ -662,7 +663,7 @@ void MainWindow::restoreDesktop()
 	}
 }
 
-	void MainWindow::exportPipeline()
+void MainWindow::exportPipeline()
 {
 	QString filename = QFileDialog::getSaveFileName(this, tr("Save File as"),"config.txt",tr("text (*.txt)"));
 	exportPipeline(filename, false);
@@ -2109,10 +2110,18 @@ void MainWindow::exportPipeline(QString filename, bool ext)
 		out << "data_file = "<< item->inputModelItem()->inputDataItem()->savedAs() << "\n";
 		int s = item->getValidationStatistic();
 		String stat = item->modelItem()->getRegistryEntry()->getStatName(s);
-		out<< "classification_statistic = "<<stat.c_str()<<endl;
-		out << "k_fold = "<< item->k() <<  "\n";
-		out << "feature_selection_type = "<< item->getType() <<  "\n";
-		out << "output = " << item->modelItem()->savedAs() << "\n";
+		if(item->getType()>0)
+		{
+			out<< "classification_statistic = "<<stat.c_str()<<endl;
+			out << "k_fold = "<< item->k() <<  "\n";
+			out << "feature_selection_type = "<< item->getType() <<  "\n";
+			out << "output = " << item->modelItem()->savedAs() << "\n";
+		}
+		else
+		{
+			out<<"remove_correlated_features = 1"<<endl;
+			out<<"cor_threshold = "<<item->getCorThreshold()<<endl;
+		}
 
 		if (ext)
 		{

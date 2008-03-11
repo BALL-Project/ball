@@ -42,6 +42,7 @@ namespace BALL
 				
 				void setValidationStatistic(int s) {validation_statistic_=s;};
 				int getValidationStatistic() {return validation_statistic_;};	
+				int getCorThreshold() {return cor_threshold_;};
 				
 				int k();
 
@@ -61,6 +62,7 @@ namespace BALL
 				int k_;
 				bool opt_;
 				int validation_statistic_;
+				double cor_threshold_;
 				
 				
 				friend class DataItemScene;
