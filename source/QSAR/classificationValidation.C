@@ -409,20 +409,17 @@ void ClassificationValidation::calculateWeightedAccuracy()
 		{	// accuracy_ = (TP+TN) / (TP+TN+FN+FP)
 			double acc_j = (confusion_matrix_(1,j)+confusion_matrix_(3,j)) / (confusion_matrix_(1,j)+confusion_matrix_(3,j)+confusion_matrix_(4,j)+confusion_matrix_(2,j));
 			
-			accuracy_ = accuracy_ + acc_j*(clas_model->no_substances_[j-1]/no_all);
+			accuracy_ = accuracy_ + acc_j*(((double)clas_model->no_substances_[j-1])/no_all);
 		}
 	}
 	
 	for(int j=1;j<=confusion_matrix_.Ncols();j++) 
 	{	// multi-class accuracy := (TP) / (TP+FN+FP)
 		double acc = (confusion_matrix_(1,j)) / (confusion_matrix_(1,j)+confusion_matrix_(4,j)+confusion_matrix_(2,j));
-		
-		double acc_weighted = acc*(clas_model->no_substances_[j-1]/no_all);
+		double acc_weighted = acc*(((double)clas_model->no_substances_[j-1])/no_all);
 		class_results_(j) += acc_weighted;
 		accuracy_ += acc_weighted;
 	}
-	
-	accuracy_ /= confusion_matrix_.Ncols(); // mean accuracy_ of all classes
 }
 
 

@@ -58,8 +58,6 @@ namespace BALL
 				ValidationItem* val_item_;
 
 				QLineEdit* k_edit_;
-				
-				const vector<pair<String,int> >* available_statistics_;
 
 				/** the k value given by the user which is needed for k fold cross validation*/
 				int k_;

@@ -48,7 +48,7 @@ namespace BALL
 				
 				void readFromFile(string filename);
 				
-				vector<double> getParameters();
+				vector<double> getParameters() const;
 				
 				void setParameters(vector<double>& v);
 				

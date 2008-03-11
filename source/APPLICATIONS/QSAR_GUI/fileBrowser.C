@@ -1,9 +1,10 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/fileBrowser.h>
 #include <QtGui/QHeaderView>
 
+
 using namespace BALL::VIEW;
 
-FileBrowser::FileBrowser()
+FileBrowser::FileBrowser(std::string path)
 {
 	///at the moment, there's only support for sd-files
 	QStringList filters;
@@ -28,8 +29,10 @@ FileBrowser::FileBrowser()
 	setModel(dirmodel_);
 
 	///expand the user's homedir
-	scrollTo(QModelIndex(dirmodel_->index(QDir::homePath())));
-	expand(QModelIndex(dirmodel_->index(QDir::homePath())));
+	QString qpath= QDir::homePath();
+	if(path!="") qpath = qpath.fromStdString(path);
+	expand(QModelIndex(dirmodel_->index(qpath)));
+	scrollTo(QModelIndex(dirmodel_->index(qpath)),QAbstractItemView::PositionAtTop);
 
 	///hide all columns except name
 	hideColumn(1);

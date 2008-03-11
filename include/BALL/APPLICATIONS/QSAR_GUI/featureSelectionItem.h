@@ -40,8 +40,9 @@ namespace BALL
 				ModelItem* modelItem();
 				ModelItem* inputModelItem();	
 				
-				int setValidationStatistic(int s) {validation_statistic_=s;};
-
+				void setValidationStatistic(int s) {validation_statistic_=s;};
+				int getValidationStatistic() {return validation_statistic_;};	
+				
 				int k();
 
 				enum { Type = UserType + 4 };

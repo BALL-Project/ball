@@ -160,9 +160,10 @@ RowVector NBModel::predict(const vector<double>& substance, bool transform)
 }
 
 
-vector<double> NBModel::getParameters()
+vector<double> NBModel::getParameters() const
 {
-	vector<double> d(1,discretization_steps_);
+	vector<double> d;
+	d.push_back(discretization_steps_);
 	return d;
 }
 

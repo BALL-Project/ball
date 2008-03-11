@@ -70,7 +70,7 @@ ValidationItem* ValidationItem::connectWithModelItem()
 
 	ValidationItem* item = new ValidationItem(type_, view_);
 	
-	if(validation_statistic_>0)
+	if(validation_statistic_>=0)
 	{
 		model_item_->model()->model_val->selectStat(validation_statistic_);
 	}
@@ -126,7 +126,15 @@ ValidationItem::~ValidationItem()
 		MainWindow* mw = view_->data_scene->main_window;
 		mw->removeFromPipeline(this);
 	}
-}	
+}
+	
+BALL::String ValidationItem::getStatName()
+{
+	String name="";
+	if(validation_statistic_==-1) return name;
+	
+	return model_item_->getRegistryEntry()->getStatName(validation_statistic_);
+}
 
 void ValidationItem::setModelItem(ModelItem* model_item)
 {

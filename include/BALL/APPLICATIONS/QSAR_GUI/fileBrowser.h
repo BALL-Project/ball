@@ -21,7 +21,7 @@ namespace BALL
 				/** @name Constructors and Destructors */
 			
 				/** constructor */
-				FileBrowser();
+				FileBrowser(std::string path);
 				
 				/** destructor */
 				~FileBrowser();

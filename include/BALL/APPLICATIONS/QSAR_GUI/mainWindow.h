@@ -87,7 +87,9 @@ namespace BALL
 				DataItem* dragged_item;
 				
 				/** name of the widget from which the current drag originated, i.e. "source_list", "model_list" or "view" */
-				string drag_source; 
+				string drag_source;
+				
+				void setLastUsedPath(String path);
 
 			signals:
 				void sendNewValue(int);
@@ -132,6 +134,9 @@ namespace BALL
 				DataItemScene model_list_scene_;
 				DataItemScene fs_list_scene_;
 				DataItemScene val_list_scene_;
+				
+				// path of the last used input
+				String last_path_;
 				
 				/**registry including all available models */	
 				Registry* reg_;

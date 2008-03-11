@@ -49,7 +49,10 @@ namespace BALL
 				ModelItem* modelItem();
 				void setModelItem(ModelItem* model_item);
 				
-				int setValidationStatistic(int s) {validation_statistic_=s;};
+				void setValidationStatistic(int s) {validation_statistic_=s;};
+				int getValidationStatistic() {return validation_statistic_;};
+				
+				String getStatName();
 
 				/** 
 				* Type of the Item 

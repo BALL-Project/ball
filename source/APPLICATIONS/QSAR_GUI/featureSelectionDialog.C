@@ -31,7 +31,6 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 	
 	main_layout->addLayout(layout1);
 	statistic_box_ = NULL;
-	available_statistics_= NULL;
 	
 	// let user select validation statistic in case of classification model
 	if(!model->getRegistryEntry()->regression)
@@ -40,10 +39,10 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 		QLabel* label3 = new QLabel("classification statistic");
 		statistic_box_ = new QComboBox;
 		
-		available_statistics_ = model->getRegistryEntry()->getStatistics();
-		for(uint i=0;i<available_statistics_->size();i++)
+		const vector<String>* statistics = model->getRegistryEntry()->getStatistics();
+		for(uint i=0;i<statistics->size();i++)
 		{
-			statistic_box_->addItem((*available_statistics_)[i].first.c_str(),i);
+			statistic_box_->addItem((*statistics)[i].c_str(),i);
 		}
 			
 		layout3->addWidget(label3);layout3->addWidget(statistic_box_);
@@ -97,10 +96,10 @@ void FeatureSelectionDialog::applyInput()
 	fs_item_->setK(k_);
 	fs_item_->setOpt(optimize_);
 	
-	statistic_ = 0;
+	statistic_ = -1;
 	if(statistic_box_!=NULL)
 	{
-		statistic_ = (*available_statistics_)[statistic_box_->currentIndex()].second;
+		statistic_ = statistic_box_->currentIndex();
 	}
 }
 

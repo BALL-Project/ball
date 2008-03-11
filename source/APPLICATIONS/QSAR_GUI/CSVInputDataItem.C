@@ -74,7 +74,7 @@ void CSVInputDataItem::readData()
 	{
 		data_->centerData(center_y_);
 	}
-	cout<<"no response var. = "<<data_->getNoResponseVariables()<<endl;
+	cout<<"read CSV file."<<endl;
 	
 	done_ = 1;
 }

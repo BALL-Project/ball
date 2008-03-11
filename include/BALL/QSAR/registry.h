@@ -45,6 +45,7 @@ namespace BALL
 				~RegistryEntry();
 				
 				const vector<String>* getStatistics();
+				String getStatName(int s);
 
 				bool kernel;
 				bool regression; // regression or classification?!

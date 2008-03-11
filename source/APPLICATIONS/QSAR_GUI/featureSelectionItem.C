@@ -80,7 +80,7 @@ void FeatureSelectionItem::connectWithModelItem()
 	if(done_) return; // do nothing twice...
 
 	feature_selection_ = new FeatureSelection(*(model_item_->model()));
-	if(validation_statistic_>0)
+	if(validation_statistic_>=0)
 	{
 		feature_selection_->selectStat(validation_statistic_);
 	}

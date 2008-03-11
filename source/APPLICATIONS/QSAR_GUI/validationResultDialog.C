@@ -18,7 +18,7 @@ using namespace BALL::VIEW;
 
 ValidationResultDialog::ValidationResultDialog(ValidationItem* item)
 {
-	///return if there's no parent
+	//return if there's no parent
 	if (item == NULL)
 	{
 		return;
@@ -36,10 +36,20 @@ ValidationResultDialog::ValidationResultDialog(ValidationItem* item)
 
 	if (type < 4)
 	{
-		QLabel* rlabel = new QLabel("R^2",this);
+		String train_fit ="R^2";
+		String pred_qual="Q^2";
+		String n = item->modelItem()->getRegistryEntry()->getStatName(item->getValidationStatistic());
+		
+		if(n!="") 
+		{
+			train_fit = n+"<br>on training data";
+			pred_qual = "predictive<br>"+n;			
+		}
+		
+		QLabel* rlabel = new QLabel(train_fit.c_str(),this);
 		layout->addWidget(rlabel, 0,1);
 		QString tmp;
-		QLabel* qlabel = new QLabel(tmp.setNum(item->k())+ " fold Q^2",this);
+		QLabel* qlabel = new QLabel(tmp.setNum(item->k())+ " fold "+pred_qual.c_str(),this);
 		layout->addWidget(qlabel, 0,2);
 
 		QLabel* rvaluelabel = new QLabel(QString(((String)(item->getR2())).c_str()),this);

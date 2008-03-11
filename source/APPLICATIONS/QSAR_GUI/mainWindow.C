@@ -84,6 +84,14 @@ MainWindow::~MainWindow()
 	delete helpMenu_;
 	delete windowMenu_;	
 	delete fileToolBar_;
+	
+	// save path to last used input file
+	String p = QDir::homePath().toStdString();
+	p = p+"/.QSARGUI";
+	ofstream output(p.c_str());
+	cout<<"writing \'"<<last_path_<<"\' ."<<endl;
+	output<<last_path_<<endl<<flush;
+	output.close();
 }
 
 ///create a new SDFInputItem with the given file
@@ -502,7 +510,18 @@ function for creating the different dock windows
 */
 void MainWindow::createDockWindows()
 {	
-	file_browser_ = new FileBrowser();
+	// read information about last used input path
+	String s = QDir::homePath().toStdString();
+	s = s+"/.QSARGUI";
+	ifstream in(s.c_str());
+	String path="";
+	if(in) 
+	{
+		in>>path;
+		in.close();
+	}
+	last_path_ = path;
+	file_browser_ = new FileBrowser(path.c_str());
 	QDockWidget *filedock = new QDockWidget(tr("Source Filebrowser"), this);
 	filedock->setAllowedAreas(Qt::LeftDockWidgetArea);
 	filedock->setWidget(file_browser_);
@@ -550,7 +569,7 @@ void MainWindow::createDockWindows()
 	addDockWidget(Qt::LeftDockWidgetArea, fsdock);
 	windowMenu_->addAction(fsdock->toggleViewAction());
 	
-	QColor c2(230,230,211);
+	QColor c2(245,244,180);
 	QBrush b2(c2,Qt::SolidPattern);
 	fs_list_->setBackgroundBrush(b2);
 
@@ -813,7 +832,7 @@ void MainWindow::executePipeline()
 		}
 		catch (ModelTrainingError e)
 		{	
-			QString error_string = "The model " + QString(((*it)->model()->getType()->c_str()))+ "  could not be trained because of a singular matrix";
+			QString error_string = e.getMessage();
 			QMessageBox::warning(this,"Error",error_string);
 /*
 			(*it)->setEntry(reg_->getRegistryEntry(String("RR")));
@@ -1929,6 +1948,13 @@ void MainWindow::restoreDesktop(QString filename)
 
 }
 
+
+void MainWindow::setLastUsedPath(String path)
+{
+	last_path_ = path;	
+}
+
+
 void MainWindow::exportPipeline(QString filename, bool ext)
 {
 	int maximum = sdf_input_pipeline_.size() + csv_input_pipeline_.size() + model_pipeline_.size() + val_pipeline_.size() + prediction_pipeline_.size() + disconnected_items_.size(); //all items - fs-items (model items automatically created by feature selection are not exported)
@@ -2081,6 +2107,9 @@ void MainWindow::exportPipeline(QString filename, bool ext)
 		out << "[FeatureSelector]" << "\n";
 		out << "model_file = "<< item->inputModelItem()->savedAs() << "\n";
 		out << "data_file = "<< item->inputModelItem()->inputDataItem()->savedAs() << "\n";
+		int s = item->getValidationStatistic();
+		String stat = item->modelItem()->getRegistryEntry()->getStatName(s);
+		out<< "classification_statistic = "<<stat.c_str()<<endl;
 		out << "k_fold = "<< item->k() <<  "\n";
 		out << "feature_selection_type = "<< item->getType() <<  "\n";
 		out << "output = " << item->modelItem()->savedAs() << "\n";
@@ -2107,6 +2136,9 @@ void MainWindow::exportPipeline(QString filename, bool ext)
 		out << "[Validator]" << "\n";
 		out << "model_file = "<< item->modelItem()->savedAs() << "\n";
 		out << "data_file = "<< item->modelItem()->inputDataItem()->savedAs() << "\n";
+		int s = item->getValidationStatistic();
+		String stat = item->modelItem()->getRegistryEntry()->getStatName(s);
+		out<< "classification_statistic = "<<stat.c_str()<<endl;
 		out << "validation_data_file = "<< "\n";
 		out << "k_fold = "<< item->k() <<  "\n";
 		out << "bootstrap_samples = "<< item->numOfSamples() << "\n";

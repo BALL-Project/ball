@@ -273,10 +273,6 @@ void ModelItem::trainModel()
 {
 	if(done_) return; // do nothing twice...
 	
-	cout<<model_->data->getNoDescriptors()<<endl<<flush;
-	cout<<model_->data->getNoResponseVariables()<<endl<<flush;
-	cout<<model_->data->getNoSubstances()<<endl<<flush;
-	
 	model_->readTrainingData();
 	
 	model_->train();

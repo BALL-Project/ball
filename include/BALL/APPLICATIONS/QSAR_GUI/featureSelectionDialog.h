@@ -64,7 +64,6 @@ namespace BALL
 				
 				QComboBox* statistic_box_;
 				int statistic_;
-				const vector<pair<String,int> >* available_statistics_;
 				
 				/** delete these when destroying this FeatureSelectionDialog */
 				list<QObject*> q_objects_;

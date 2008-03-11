@@ -288,7 +288,10 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 						addItem(item);
 						item->setPos(pos.x(),pos.y());
 						main_window->addInputToPipeline(item);
-
+						
+						String p = path.toStdString(); 
+						p  = p.substr(0,p.find_last_of("/"));
+						main_window->setLastUsedPath(p);
 					}
 					else if (match_txt.exactMatch(path) || match_csv.exactMatch(path))
 					{
@@ -314,6 +317,9 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 							csv_item->setPos(pos.x(),pos.y());
 							main_window->addInputToPipeline(csv_item);
 						}
+						String p = path.toStdString(); 
+						p  = p.substr(0,p.find_last_of("/"));
+						main_window->setLastUsedPath(p);
 					}
 
 				}
