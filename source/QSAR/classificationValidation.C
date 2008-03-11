@@ -18,23 +18,23 @@ ClassificationValidation::ClassificationValidation(ClassificationModel* m) : Val
 
 void ClassificationValidation::selectStat(int s)
 {
-	if(s==1)
+	if(s==0)
 	{
 		qualCalculation = &ClassificationValidation::calculateAverageAccuracy;
 	}
-	else if(s==2)
+	else if(s==1)
 	{
 		qualCalculation = &ClassificationValidation::calculateWeightedAccuracy;
 	}
-	else if(s==3)
+	else if(s==2)
 	{
 		qualCalculation = &ClassificationValidation::calculateOverallAccuracy;
 	}
-	else if(s==4)
+	else if(s==3)
 	{
 		qualCalculation = &ClassificationValidation::calculateAverageMCC;
 	}
-	else if(s==5)
+	else if(s==4)
 	{
 		qualCalculation = &ClassificationValidation::calculateOverallMCC;
 	}

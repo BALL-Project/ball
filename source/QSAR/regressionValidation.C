@@ -596,12 +596,12 @@ double RegressionValidation::getFitRes()
 
 void RegressionValidation::selectStat(int s)
 {
-	if(s==1)
+	if(s==0)
 	{
 		predQualFetcher_ = &RegressionValidation::getQ2;
 		fitQualFetcher_ = &RegressionValidation::getR2;
 	}
-	else if(s==2)
+	else if(s==1)
 	{
 		fitQualFetcher_ = &RegressionValidation::getFregr;
 		predQualFetcher_ = &RegressionValidation::getFcv;

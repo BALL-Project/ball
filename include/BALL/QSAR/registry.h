@@ -44,7 +44,7 @@ namespace BALL
 				RegistryEntry(bool k, bool r, String n, String ab, CreateKernel1 c1, CreateKernel2 c2, Registry* reg);
 				~RegistryEntry();
 				
-				const vector<pair<String,int> >* getStatistics();
+				const vector<String>* getStatistics();
 
 				bool kernel;
 				bool regression; // regression or classification?!
@@ -86,7 +86,7 @@ namespace BALL
 				/** enable fast finding of a RegistryEntry for a given model name */
 				map<String,int> model_map;
 				
-				vector<pair<String,int> > classification_statistics;
+				vector<String> classification_statistics;
 		};
 		
 
