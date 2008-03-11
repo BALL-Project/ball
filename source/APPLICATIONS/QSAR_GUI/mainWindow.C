@@ -921,7 +921,7 @@ void MainWindow::executePipeline()
 		statusBar()->showMessage(tr("Prediction"));
 	}
 
-		///validation
+	///validation
 	for (QSet<ValidationItem*>::Iterator it = val_pipeline_.begin(); it != val_pipeline_.end(); it++)
 	{
 		try

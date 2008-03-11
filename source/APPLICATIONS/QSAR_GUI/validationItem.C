@@ -21,6 +21,7 @@ ValidationItem::ValidationItem(int type, DataItemView* view):
 	r2_(0.0)
 {
 	setPixmap(QPixmap("./images/validation.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+	done_ = 0;
 	
 	switch(type)
 	{
@@ -59,16 +60,19 @@ DataItem(item.view_)
 	model_item_ = item.model_item_;
 	q2_ = item.q2_;
 	r2_ = item.r2_;
+	done_ = item.done_;
 }
 
-ValidationItem* ValidationItem::connectWithModelItem()
+void ValidationItem::connectWithModelItem()
 {
 	if (model_item_ == NULL)
 	{
 		throw InvalidValidationItem(__FILE__,__LINE__);
 	}
 
-	ValidationItem* item = new ValidationItem(type_, view_);
+//	ValidationItem* item = new ValidationItem(type_, view_);
+	
+	if(done_) return; // do nothing twice...
 	
 	if(validation_statistic_>=0)
 	{
@@ -95,7 +99,8 @@ ValidationItem* ValidationItem::connectWithModelItem()
 	r2_ = model_item_->model()->model_val->getFitRes();
 	q2_ = model_item_->model()->model_val->getCVRes();
 
-	return item;
+	done_ = 1;
+	return;
 }
 
 void ValidationItem::mousePressEvent(QGraphicsSceneMouseEvent *event)

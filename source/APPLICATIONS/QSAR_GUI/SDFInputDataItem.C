@@ -113,12 +113,12 @@ void SDFInputDataItem::readData()
 	string st = filename_.toStdString();
 	try
 	{
+		Path p;
+		if(p.find("QSAR/atomic_electron_affinities.data")=="")
+		{    	// use subfolder of executable location...
+			data_->setDataFolder("./data");
+		}
 		data_->readSDFile(st.c_str(), activity_values_);
-
-// 		foreach(CSVFileInfo* csv, csv_files_)
-// 		{
-// 			data_->readCSVFile((csv->file.toStdString()).c_str(), csv->no_y, csv->x_labels, csv->y_labels, csv->sep, 1);
-// 		}
 	}
 	catch(WrongFileFormat)
 	{

@@ -19,6 +19,7 @@ FeatureSelectionItem::FeatureSelectionItem(int type, DataItemView* miv):
 
 	feature_selection_ = NULL;
 	validation_statistic_ = 0;
+	done_= 0;
 
 	switch(type)
 	{
@@ -58,6 +59,7 @@ DataItem(fs_item.view_)
 	name_ = fs_item.name_;
 	setPixmap(fs_item.pixmap());
 	validation_statistic_ = 0;
+	done_ = fs_item.done_;
 
 	if (fs_item.feature_selection_ == NULL)
 	{

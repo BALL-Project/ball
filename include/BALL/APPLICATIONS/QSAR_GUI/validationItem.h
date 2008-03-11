@@ -43,7 +43,7 @@ namespace BALL
 				* carries out the chosen valdidation method and asks for parameters (if needed)
 				* @param modelitem pointer to the ModelItem to which this item should be connected	
 				*/
-				ValidationItem* connectWithModelItem();
+				void connectWithModelItem();
 		
 				/** @name Enums */
 				ModelItem* modelItem();
@@ -117,6 +117,8 @@ namespace BALL
 				double r2_;
 				
 				int validation_statistic_;
+				
+				bool done_;
 				
 				
 				friend class DataItemScene;
