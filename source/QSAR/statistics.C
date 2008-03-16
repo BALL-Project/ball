@@ -94,6 +94,7 @@ double Statistics::getCovariance(const vector<double>& v1, const vector<double>&
 }
 
 
+
 double Statistics::getMean(const vector<double>& v)
 {
 	double sum=0;
@@ -104,7 +105,83 @@ double Statistics::getMean(const vector<double>& v)
 	return sum/v.size();
 }
 
-//--------------------------
+
+
+//---------------- methods for calculating mean, covar, var of matrix-ROWS  ----------
+
+
+double Statistics::getRowCovariance(const vector<vector<double> >& v, int row1, int row2, double mean1, double mean2, SortedList<int>* features_to_use)
+{
+	if (mean1==-1) {mean1=getRowMean(v,row1,features_to_use);}
+	if (mean2==-1) {mean2=getRowMean(v,row2,features_to_use);}
+	double sum_of_squares=0;
+	int size=v.size();
+	SortedList<int>::iterator it;
+	if(features_to_use!=0) 
+	{
+		it=features_to_use->begin();
+		size=features_to_use->size();
+	}	
+	
+	for(uint i=0; i<v.size(); i++)
+	{
+		if(features_to_use!=0 && *it!=(int)i) continue;
+		sum_of_squares+=(v[i][row1]-mean1)*(v[i][row2]-mean2);
+		if(features_to_use!=0) it++;
+	}
+	return sum_of_squares/(size-1);
+}
+
+double Statistics::getRowMean(const vector<vector<double> >& v, int row, SortedList<int>* features_to_use)
+{
+	double sum=0;
+	int size=v.size();
+	SortedList<int>::iterator it;
+	if(features_to_use!=0) 
+	{
+		it=features_to_use->begin();
+		size=features_to_use->size();
+	}	
+	
+	for(uint i=0; i<v.size(); i++)
+	{
+		if(features_to_use!=0 && *it!=(int)i) continue;
+		sum+=v[i][row];
+		if(features_to_use!=0) it++;
+	}
+	return sum/size;
+}
+
+double Statistics::getRowVariance(const vector<vector<double> >& v, int row, double mean, SortedList<int>* features_to_use)
+{
+	if (mean==-1) {	mean=getRowMean(v,row,features_to_use); }
+	double sum_of_squares=0;
+	int size=v.size();
+	SortedList<int>::iterator it;
+	if(features_to_use!=0) 
+	{
+		it=features_to_use->begin();
+		size=features_to_use->size();
+	}
+	
+	for(uint i=0; i<v.size(); i++)
+	{
+		if(features_to_use!=0 && *it!=(int)i) continue;
+		sum_of_squares+=(v[i][row]-mean)*(v[i][row]-mean);
+		if(features_to_use!=0) it++;
+	}
+	return sum_of_squares/(size-1);
+}
+
+double Statistics::getRowStddev(const vector<vector<double> >& v, int row, double mean, SortedList<int>* features_to_use)
+{
+	double var = getRowVariance(v,row,mean,features_to_use);
+	return sqrt(var);
+}
+
+
+// -----------------------------------------------------------------
+
 
 void Statistics::centering(Matrix& m)
 {

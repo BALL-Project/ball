@@ -163,6 +163,9 @@ namespace BALL
 				
 				/** allows to set the data-folder neccessary for computation of descriptors without using BALL_DATA_PATH enviroment variable, which is useful for standalone applications */
 				void setDataFolder(const char* folder);
+				
+				/** removes compounds whose absolute correlation coefficient to another compound is larger than cor_threshold */
+				void removeHighlyCorrelatedCompounds(double& cor_threshold);
 				//@}
 				
 				

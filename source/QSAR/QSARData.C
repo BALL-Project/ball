@@ -1299,3 +1299,68 @@ bool QSARData::checkforDiscreteY(const char* file, SortedList<int>& activity_IDs
 	}
 	return true;
 }
+
+
+void QSARData::removeHighlyCorrelatedCompounds(double& cor_threshold)
+{
+	if(descriptor_matrix_.size()==0)
+	{
+		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be read before highly correlated compounds can be removed!");
+	}
+	
+	/// use only those features that do not have identical values for all compounds !
+	SortedList<int> features_to_use;
+	for(uint i=0; i<descriptor_matrix_.size();i++)
+	{
+		bool identical_values=1;
+		for(uint j=1; j<descriptor_matrix_[0].size();j++)
+		{
+			if(descriptor_matrix_[i][j]!=descriptor_matrix_[i][0])
+			{
+				identical_values=0;
+				break;
+			}
+		}
+		if(!identical_values)
+		{
+			features_to_use.push_back(i);
+		}
+	}
+	
+	vector<double> stddev(descriptor_matrix_[0].size(),0);
+	vector<double> mean(descriptor_matrix_[0].size(),0);
+
+	for(uint i=0; i<mean.size();i++)
+	{
+		mean[i] = Statistics::getRowMean(descriptor_matrix_,i,&features_to_use);
+	}		
+	for(uint i=0; i<stddev.size();i++)
+	{
+		stddev[i] = Statistics::getRowStddev(descriptor_matrix_,i, mean[i],&features_to_use);
+	}
+		
+	double abs_cor_threshold = abs(cor_threshold);
+	SortedList<int> to_be_deleted;
+	
+	for(uint i=0; i<descriptor_matrix_[0].size(); i++)
+	{	
+		if(to_be_deleted.contains(i)) continue;
+		
+		for(uint j=0; j<descriptor_matrix_[0].size(); j++)
+		{
+			if(i==j) continue;
+			if(to_be_deleted.contains(j)) continue;
+			
+			double covar = Statistics::getRowCovariance(descriptor_matrix_,i,j, mean[i],mean[j],&features_to_use);
+			
+			double abs_cor = abs(covar/(stddev[i]*stddev[j]));
+			
+			if(abs_cor>abs_cor_threshold)
+			{
+				cout<<i<<" "<<j<<" : "<<abs_cor<<endl;
+				to_be_deleted.insert(j);
+			}
+		}
+	}
+	removeInvalidSubstances(to_be_deleted);
+}
