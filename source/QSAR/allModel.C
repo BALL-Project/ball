@@ -361,6 +361,7 @@ void ALLModel::readFromFile(string filename)
 			descriptor_matrix_(i,j) = line.getField(j-1," ").toDouble();
 		}
 	}
+	getline(input,line0);  // skip empty line
 	
 	for(int i=1; i<=no_substances;i++) /// read response values
 	{
