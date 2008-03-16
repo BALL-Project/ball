@@ -5,6 +5,7 @@
 
 #include <BALL/QSAR/rrModel.h>
 #include <newmatap.h>
+#include <BALL/SYSTEM/timer.h>
 using namespace BALL::QSAR;
 
 
@@ -47,7 +48,19 @@ void RRModel::train()
 		
 	try
 	{
+	//	Timer timer; timer.start();
 		training_result_ = m.i()*descriptor_matrix_.t()*Y_;
+	//	timer.stop(); cout<<timer.getClockTime()<<endl;
+		
+// 		timer.start();
+// 		Matrix X1 = m;
+// 		Matrix Y1 = descriptor_matrix_.t()*Y_;
+// 		UpperTriangularMatrix U; Matrix M;
+// 		QRZ(X1, U); QRZ(X1, Y1, M);    // Y1 now contains resids
+// 		Matrix test = U.i() * M;	
+// 		timer.stop(); cout<<timer.getClockTime()<<endl;
+// 		
+// 		cout<<(training_result_-test).t()<<endl;
 	}
 	catch(BaseException e)
 	{
