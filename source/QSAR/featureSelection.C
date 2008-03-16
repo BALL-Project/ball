@@ -12,12 +12,14 @@ FeatureSelection::FeatureSelection(Model& m)
 {
 	model_ = &m;
 	weights_ = NULL;
+	quality_increase_cutoff_ = 0.001;
 }
 
 FeatureSelection::FeatureSelection(KernelModel& km)
 {
 	model_ = &km;
 	weights_ = &km.kernel->weights_;
+	quality_increase_cutoff_ = 0.001;
 }
 
 FeatureSelection::~FeatureSelection()
@@ -48,7 +50,16 @@ void FeatureSelection::selectStat(int s)
 	if(model_==0) return;
 	model_->model_val->selectStat(s);
 }
-		
+
+
+void FeatureSelection::setQualityIncreaseCutoff(double& d)
+{
+	if(d<0)
+	{
+		throw Exception::FeatureSelectionParameterError(__FILE__,__LINE__,"The quality increase cutoff value for feature selection must be >= 0 !");
+	}	
+	quality_increase_cutoff_ = d;
+}
 		
 		
 void FeatureSelection::forward(bool stepwise, int k, bool optPar)
@@ -67,7 +78,7 @@ void FeatureSelection::forward(bool stepwise, int k, bool optPar)
 		col=model_->descriptor_IDs_.size();
 	}
 
-	if(col<model_->data->descriptor_matrix_[0].size()*(((double)k-1)/k) || model_->type_!="MLR")
+	if(model_->type_!="ALL" && model_->type_!="SVR" && model_->type_!="SVC" (col<model_->data->descriptor_matrix_[0].size()*(((double)k-1)/k) || model_->type_!="MLR"))
 	{
 		if(!optPar || !model_->optimizeParameters(k))
 		{
@@ -147,7 +158,7 @@ void FeatureSelection::forward(bool stepwise, int k, bool optPar)
 		}
 	
 		// if Q^2 with the new descriptor is not larger than before, it is not selected and feature selection is stopped.
-		if (best_q2 <= old_q2 || model_->descriptor_IDs_.size()==lines-1) 
+		if (best_q2 <= old_q2+quality_increase_cutoff_ || model_->descriptor_IDs_.size()==lines-1) 
 		{
 			break;
 		}
@@ -162,8 +173,7 @@ void FeatureSelection::forward(bool stepwise, int k, bool optPar)
 				backwardSelection(k,optPar); /// => STEPWISE !!
 				old_q2=model_->model_val->getCVRes();
 			}
-		}
-		
+		}		
 	}
 
 	delete irrelevantDescriptors;
@@ -295,7 +305,7 @@ void FeatureSelection::backwardSelection(int k, bool optPar)
 		}
 	
 		// if Q^2 is not larger than before, no descriptor is removed and feature selection is stopped.
-		if (best_q2 <= old_q2) 
+		if (best_q2 <= old_q2+quality_increase_cutoff_) 
 		{
 			break;
 		}

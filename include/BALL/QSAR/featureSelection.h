@@ -78,6 +78,10 @@ namespace BALL
 				void removeEmptyDescriptors();
 				
 				void selectStat(int s);
+				
+				/** Sets a cutoff value for feature selections. \n
+				If the preditive quality is increased by less than d after adding/removing a descriptor, feature selection is stopped. */
+				void setQualityIncreaseCutoff(double& d);
 				//@}
 	
 	
@@ -105,6 +109,9 @@ namespace BALL
 				
 				/** implements forward selection; if stepwise==1, backwardSelection() is called after each forward step, i.e. after adding a feature. */
 				void forward(bool stepwise, int k, bool optPar);
+				
+				/** if the preditive quality is increased by less than this value after adding/removing a descriptor, feature selection is stopped. */
+				double quality_increase_cutoff_;
 				//@}
 		};
 	}

@@ -93,6 +93,13 @@ namespace BALL
 				public:
 					WrongFileFormat(const char* file, unsigned long line, const char* input_file) throw();
 			};
+			
+			/** exception for specification of an invalid parameters for feature selection */
+			class FeatureSelectionParameterError : public BALL::Exception::GeneralException
+			{
+				public:
+					FeatureSelectionParameterError(const char* file, unsigned long line, const char* mess) throw();
+			};
 
 
 		}

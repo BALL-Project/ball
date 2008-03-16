@@ -88,6 +88,15 @@ ModelParameterError::ModelParameterError(const char* file, unsigned long line, c
 	BALL::Exception::globalHandler.setMessage(String(message_));
 }
 
+
+FeatureSelectionParameterError::FeatureSelectionParameterError(const char* file, unsigned long line, const char* mess) throw() : GeneralException(file,line)
+{
+	name_= "FeatureSelectionParameterError";
+	message_ = mess;
+	BALL::Exception::globalHandler.setName(String(name_));
+	BALL::Exception::globalHandler.setMessage(String(message_));
+}
+
 TooManyPLSComponents::TooManyPLSComponents(const char* file, unsigned long line, int comp, int features) throw() : GeneralException(file,line)
 {
 	name_= "TooManyPLSComponents";
