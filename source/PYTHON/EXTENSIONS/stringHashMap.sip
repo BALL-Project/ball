@@ -5,6 +5,7 @@ template <ValueType>
 {
 %TypeHeaderCode
 #include <BALL/DATATYPE/stringHashMap.h>
+#include "sipBALLString.h"
 #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
@@ -108,6 +109,7 @@ template <ValueType>
 {
 %TypeHeaderCode
 #include <BALL/DATATYPE/stringHashMap.h>
+#include "sipBALLString.h"
 #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
@@ -191,6 +193,7 @@ template <ValueType>
 {
 %TypeHeaderCode
 #include <BALL/DATATYPE/stringHashMap.h>
+#include "sipBALLString.h"
 #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
@@ -273,6 +276,7 @@ template <ValueType>
 {
 %TypeHeaderCode
 #include <BALL/DATATYPE/stringHashMap.h>
+#include "sipBALLString.h"
 #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
