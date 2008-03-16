@@ -78,7 +78,7 @@ void FeatureSelection::forward(bool stepwise, int k, bool optPar)
 		col=model_->descriptor_IDs_.size();
 	}
 
-	if(model_->type_!="ALL" && model_->type_!="SVR" && model_->type_!="SVC" (col<model_->data->descriptor_matrix_[0].size()*(((double)k-1)/k) || model_->type_!="MLR"))
+	if(model_->type_!="ALL" && model_->type_!="SVR" && model_->type_!="SVC" && (col<model_->data->descriptor_matrix_[0].size()*(((double)k-1)/k) || model_->type_!="MLR"))
 	{
 		if(!optPar || !model_->optimizeParameters(k))
 		{
