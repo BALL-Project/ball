@@ -4,6 +4,7 @@
 // 
 
 #include <BALL/QSAR/QSARData.h>
+#include <set>
 
 using namespace BALL::QSAR;
 
@@ -1043,17 +1044,24 @@ vector<QSARData*> QSARData::generateExternalSet(double fraction)
 	gsl_rng * r = gsl_rng_alloc (gsl_rng_ranlxd2);
 	
 	SortedList<unsigned int> val;
+	set<uint> map_val;
 	unsigned int no_val = static_cast<unsigned int>(descriptor_matrix_[0].size()*fraction);
 	
 	PreciseTime pt;
 	gsl_rng_set(r,pt.now().getSeconds());
 	
-	/// randomly draw the desired number of external validation compounds
+	/// randomly draw without replacement the desired number of external validation compounds
 	for(unsigned int i=0;i<no_val;i++)
 	{
 		int pos = gsl_rng_uniform_int(r,descriptor_matrix_[0].size()-1);
+		if(map_val.find(pos)!=map_val.end())
+		{
+			i--; // no increase, since no new validation compound was selected
+			continue;
+		}
 		v[1]->insertSubstance(this,pos);
 		val.insert(pos);
+		map_val.insert(pos);
 	}
 	
 	/// all compounds not drawn before make up the training set
