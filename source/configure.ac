@@ -75,6 +75,7 @@ AC_ARG_WITH(opengl-libs,       [  --with-opengl-libs=DIR  OpenGL/Mesa libraries 
 AC_ARG_WITH(mesa,              [  --with-mesa             use MESA instead of OpenGL])
 
 dnl  ** GLEW **
+AC_ARG_ENABLE(glew,						 [  --disable-glew          disable check for GLEW library (default:enabled)])
 AC_ARG_WITH(glew-incl,         [  --with-glew-incl=DIR    GLEW header files are in DIR])
 AC_ARG_WITH(glew-libs,         [  --with-glew-libs=DIR    GLEW libraries are in DIR])
 
@@ -163,6 +164,12 @@ if test "$with_qt_mt" = "yes" -o "${with_qt_mt+set}" != set; then
 else
 	USE_THREADSAFE_QT=false
 	QT_MT_SUFFIX=""
+fi
+
+if test "$enable_glew" != "no"; then
+	GLEW="true"
+else
+	GLEW="false"
 fi
 
 if test "$with_glew_incl" != "" ; then
