@@ -443,8 +443,8 @@ namespace BALL
 		{
 			Vector3 result;
 			r.x /= (size_.x - 1.);
-			r.y /= (size_.x - 1.);
-			r.z /= (size_.x - 1.);
+			r.y /= (size_.y - 1.);
+			r.z /= (size_.z - 1.);
 
 			result.x = mapping_[0] * r.x + mapping_[1] * r.y + mapping_[2] * r.z + origin_.x;
 			result.y = mapping_[3] * r.x + mapping_[4] * r.y + mapping_[5] * r.z + origin_.y;
@@ -464,9 +464,10 @@ namespace BALL
 			result.y = inverse_mapping_[3] * r.x + inverse_mapping_[4] * r.y + inverse_mapping_[5] * r.z;
 			result.z = inverse_mapping_[6] * r.x + inverse_mapping_[7] * r.y + inverse_mapping_[8] * r.z;
 
-			result.x *= (spacing_.x - 1);
-			result.y *= (spacing_.y - 1);
-			result.z *= (spacing_.z - 1);
+			result.x *= (size_.x - 1);
+			result.y *= (size_.y - 1);
+			result.z *= (size_.z - 1);
+
 			return result;
 		}
 		
