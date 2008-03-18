@@ -25,8 +25,8 @@
 // Nonnegative relative tolerance for an acceptable step.
 #define LINESEARCH__DEFAULT_XTOL 0.1
 
-#define BALL_DEBUG
-//#undef BALL_DEBUG
+//#define BALL_DEBUG
+#undef BALL_DEBUG
 
 namespace BALL 
 {
