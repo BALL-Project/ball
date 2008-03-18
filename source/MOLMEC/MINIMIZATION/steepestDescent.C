@@ -233,7 +233,7 @@ namespace BALL
 		// Compute the new direction
 		updateDirection();
 		
-		double step;
+		double step = 0.;
 		bool result = line_search_.minimize(step);
 		
 		if (!result)
