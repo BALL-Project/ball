@@ -677,6 +677,8 @@ void EditableScene::setElementCursor()
 }
 
 // Slot to change to EDIT__MODE
+// TODO: popup a message box if the currently highlighted atom container does not have a
+//			 suitable representation
 void EditableScene::editMode_()
 {
 	if (!fragment_db_initialized_)
@@ -687,36 +689,6 @@ void EditableScene::editMode_()
 	}
 
 	List<AtomContainer*> acs = getContainers_();
-
-	MainControl* mc = getMainControl();
-	HashSet<Composite*> systems = mc->getCompositeManager().getComposites();
-
-	List<Representation*> reps = mc->getRepresentationManager().getRepresentations();
-	List<Representation*>::Iterator rit = reps.begin();
-	for (;rit != reps.end(); rit++)
-	{
-		Representation& rep = **rit;
-		if (rep.getModelType() != MODEL_BALL_AND_STICK)
-		{
-			rep.setHidden(true);
-			getMainControl()->update(rep);
-			continue;
-		}
-
-		List<const Composite*>::ConstIterator cit = rep.getComposites().begin();
-		for (;cit != rep.getComposites().end(); ++cit)
-		{
-			systems.erase((Composite*)*cit);
-		}
-	}
-
-	HashSet<Composite*>::Iterator cit = systems.begin();
-	for (; +cit; ++cit)
-	{
-		List<Composite*> comp;
-		comp.push_back(*cit);
-		notify_(new CreateRepresentationMessage(comp, MODEL_BALL_AND_STICK, COLORING_ELEMENT));
-	}
 
 	List<Composite*> sel;
 	List<AtomContainer*>::iterator lit = acs.begin();
@@ -1422,9 +1394,6 @@ void EditableScene::createNewMolecule()
 	msg->setSelection(sel);
 	notify_(msg);
 
-	List<Composite*> comp;
-	comp.push_back(s);
-	notify_(new CreateRepresentationMessage(comp, MODEL_BALL_AND_STICK, COLORING_ELEMENT));
 	editMode_();
 }
 
