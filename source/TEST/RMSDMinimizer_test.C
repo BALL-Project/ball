@@ -29,7 +29,7 @@ CHECK(RMSDMinimizer::Result RMSDMinimizer::computeTransformation(const AtomBijec
 	// ????
 RESULT
 
-CHECK(RMSDMinimizer::Reszlt RMSDMinimizer::computeTransformation
+CHECK(RMSDMinimizer::Result RMSDMinimizer::computeTransformation
     (const RMSDMinimizer::PointVector& X, const RMSDMinimizer::PointVector& Y)
     throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates))
 	Points A;
