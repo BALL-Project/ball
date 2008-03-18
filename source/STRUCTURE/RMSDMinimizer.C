@@ -160,6 +160,10 @@ namespace BALL
 		}
 		double rmsd = sqrt(fabs((sum_of_squares - 2.0 * eval_max)) / double(X.size()));
 
+		// free space used by gsl
+		gsl_vector_free(eval);
+		gsl_matrix_free(evec);
+
 		return make_pair(T, rmsd);
 	}
 
