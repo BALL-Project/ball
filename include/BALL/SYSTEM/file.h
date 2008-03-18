@@ -649,7 +649,7 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		BinaryFileAdaptor(bool swap_endian = false)
+		BinaryFileAdaptor()
 			throw();
 
 		/// Detailed constructor
@@ -697,10 +697,10 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	BinaryFileAdaptor<T>::BinaryFileAdaptor(bool swap_endian)
+	BinaryFileAdaptor<T>::BinaryFileAdaptor()
 		throw()
 		: data_(),
-			swap_endian_(swap_endian)
+			swap_endian_(false)
 	{
 	}
 
