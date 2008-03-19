@@ -98,6 +98,7 @@ namespace BALL
 				ConnectionObject(),
 				Embeddable("BALL::VIEW::MainControl"),
 				about_to_quit_(false),
+ 				multi_threading_mode_(true),
 				fragment_db_(),
 				model_information_(new ModelInformation()),
 				selection_(),
@@ -113,7 +114,6 @@ namespace BALL
 				locking_widget_(0),
 				stop_simulation_(false),
 				simulation_thread_(0),
- 				multi_threading_mode_(true),
 				modular_widgets_(),
 				simulation_icon_(0),
 				working_dir_(),
@@ -131,7 +131,6 @@ namespace BALL
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new MainControl " << this << std::endl;
 		#endif
-
 			setObjectName(name);
 
 			// store and load the INIFile from the Users homedir
