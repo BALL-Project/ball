@@ -106,6 +106,7 @@
 %Include KCFFile.sip
 %Include MOL2File.sip
 %Include MOLFile.sip
+%Include NMRStarFile.sip
 %Include PDBFile.sip
 %Include PDBInfo.sip
 %Include PDBRecords.sip

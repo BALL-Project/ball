@@ -120,6 +120,8 @@ class Atom
    // const Molecule* getMolecule() const throw();
    Molecule* getMolecule() throw();
 
+	 Position getIndex() const;
+
    void setName(const String& /name/) throw();
    const String& getName() const throw();
    String getFullName(FullNameType /type/ = ADD_VARIANT_EXTENSIONS) const throw();

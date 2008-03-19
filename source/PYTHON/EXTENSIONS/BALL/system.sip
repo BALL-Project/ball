@@ -34,6 +34,10 @@ class System
   Size countAtoms() const;
 	Size countSecondaryStructures() const;
 	Size countResidues() const;
+	Size countChains() const;
+	Size countProteins() const;
+	Molecule* getMolecule(Position);
+
   void prepend(Molecule& /Transfer/);
   void append(Molecule& /Transfer/);
   void insert(Molecule& /Transfer/);
