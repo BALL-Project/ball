@@ -65,6 +65,10 @@ namespace BALL
 
 	SmartsParser::SPNode::~SPNode()
 	{
+		if (first_edge_)
+			delete (first_edge_);
+		if (second_edge_)
+		delete (second_edge_);
 	}
 
 	void SmartsParser::SPNode::setRecursive(bool recursive)
