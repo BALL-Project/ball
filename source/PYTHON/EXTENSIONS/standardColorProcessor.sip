@@ -100,7 +100,7 @@ class ResidueNameColorProcessor
   ResidueNameColorProcessor() throw();
 	void setTransparency(Size) throw();
 	virtual void getColor(const Composite&, ColorRGBA&);
-  //StringHashMap<ColorRGBA> & getColorMap();
+  StringHashMap<ColorRGBA> & getColorMap();
   //constStringHashMap<ColorRGBA> & getColorMap() const;
 };
 
