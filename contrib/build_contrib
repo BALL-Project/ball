@@ -103,7 +103,7 @@ cd ..
 echo
 echo cleanup ...
 echo
-rm -rf lp_solve_55 fftw* glew* sip* gsl* qt* mkspecs phrasebooks man plugins translations demos examples info share build.log
+rm -rf mkspecs phrasebooks man plugins translations demos examples info share build.log
 
 echo
 echo Finished building contrib package
