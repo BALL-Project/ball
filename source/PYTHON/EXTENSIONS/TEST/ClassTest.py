@@ -5,7 +5,11 @@ true = 1
 import sys
 import traceback
 import os
-sys.path.append(os.environ["BALL_PY_LIBPATH"])
+
+path_string = os.environ["BALL_PY_LIBPATH"]
+paths = path_string.split(":")
+print paths
+sys.path += paths
 
 from BALL import *
 
