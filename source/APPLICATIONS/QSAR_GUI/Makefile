@@ -107,8 +107,7 @@ QSARTool:	$(OBJECTS)	$(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_LIBS)
 	
 QSARTool-static:	$(OBJECTS)	$(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $@ $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_PATH)/lib/Linux-x86_64-g++_4.1.1/libBALL.a $(BALL_PATH)/lib/Linux-x86_64-g++_4.1.1/libVIEW.a $(BALL_PATH)/contrib/newmat/libnewmat.a $(BALL_PATH)/contrib/libsvm/libsvm.a $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgsl.a  $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgslcblas.a
-	$(BALL_PATH)/contrib/qwt-5.0.2/lib/libqwt.a -L/share/opt/x86_64_sl4/qt-4.2.2-gcc_4.1.1/lib -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql -lGLU -lGL
+	$(CXX)	$(LDFLAGS) -o $@ $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_PATH)/lib/Linux-x86_64-g++_4.1.1/libBALL.a $(BALL_PATH)/lib/Linux-x86_64-g++_4.1.1/libVIEW.a $(BALL_PATH)/contrib/newmat/libnewmat.a $(BALL_PATH)/contrib/libsvm/libsvm.a $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgsl.a  $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgslcblas.a $(BALL_PATH)/contrib/qwt-5.0.2/lib/libqwt.a -L/share/opt/x86_64_sl4/qt-4.2.2-gcc_4.1.1/lib -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql -lGLU -lGL
 
 depend: $(MOC_SOURCES)
 

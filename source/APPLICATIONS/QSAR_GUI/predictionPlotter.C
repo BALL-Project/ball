@@ -2,7 +2,6 @@
 
 #include <qwt_plot_curve.h>
 #include <qwt_plot_marker.h>
-#include <qwt_symbol.h>
 #include <qwt_plot_zoomer.h>
 
 
@@ -42,10 +41,6 @@ void PredictionPlotter::plotObservedVsExpected()
 		return;
 	}
 	
-	QwtSymbol sym;
-	sym.setStyle(QwtSymbol::Ellipse);
-	sym.setSize(5,5);
-	
 	double min_y=1e10;
 	double max_y=-1e10;
 	double min_x=1e10;
@@ -56,7 +51,7 @@ void PredictionPlotter::plotObservedVsExpected()
 	for (QList<RowVector>::ConstIterator it = results->begin(); it != results->end(); it++,i++)
 	{
 		QwtPlotMarker* marker= new QwtPlotMarker;
-		marker->setSymbol(sym);
+		marker->setSymbol(data_symbol);
 		double observed = (*it)(1);
 		double expected = (*data_->getActivity(i))[0];
 		if(observed<min_y) min_y=observed;
@@ -65,9 +60,17 @@ void PredictionPlotter::plotObservedVsExpected()
 		if(expected>max_x) max_x=expected;
 		marker->setValue(expected,observed);
 		marker->attach(this);
-		QString s =(*comp_names)[i].c_str();
+		
+		if(show_data_labels)
+		{
+			QString s =(*comp_names)[i].c_str();
+			QwtText label(s);
+			label.setFont(data_label_font);
+			marker->setLabel(label);
+			marker->setLabelAlignment(data_label_alignment);
+		}
 		//names_.push_back(s);
-		marker->setTitle(s);
+		//marker->setTitle(s);
 	}
 	QString s1 = "expected";
 	QString s2 = "observed";
@@ -94,25 +97,31 @@ void PredictionPlotter::plotObserved()
 		return;
 	}
 	
-	QwtSymbol sym;
-	sym.setStyle(QwtSymbol::Ellipse);
-	sym.setSize(5,5);
-	
 	double min_y=1e10;
 	double max_y=-1e10;
 	double min_x=1e10;
 	double max_x=-1e10;
 	
 	int i = 0;
+	const vector<string>* comp_names = data_->getSubstanceNames();
 	for (QList<RowVector>::ConstIterator it = results->begin(); it != results->end(); it++,i++)
 	{
 		QwtPlotMarker* marker= new QwtPlotMarker;
-		marker->setSymbol(sym);
+		marker->setSymbol(data_symbol);
 		double value = (*it)(1);
 		if(value<min_y) min_y=value;
 		if(value>max_y) max_y=value;
 		marker->setValue(i,(*it)(1));
 		marker->attach(this);
+		
+		if(show_data_labels)
+		{
+			QString s =(*comp_names)[i].c_str();
+			QwtText label(s);
+			label.setFont(data_label_font);
+			marker->setLabel(label);
+			marker->setLabelAlignment(data_label_alignment);
+		}
 	}
 		
 	min_x = 0;
