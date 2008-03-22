@@ -51,7 +51,9 @@ SOURCES       = dataItem.C\
 		connectionManager.C\
 		moc_connectionManager.C\
 		CSVInputDataItem.C\
-		SDFInputDataItem.C
+		SDFInputDataItem.C\
+		plotter.C\
+		predictionPlotter.C
 # 		connectionsList.C\
 # 		moc_connectionsList.C
 	
@@ -94,7 +96,9 @@ OBJECTS       = dataItem.o \
 		connectionManager.o\
 		moc_connectionManager.o\
 		CSVInputDataItem.o\
-		SDFInputDataItem.o
+		SDFInputDataItem.o\
+		plotter.o\
+		predictionPlotter.o
 # 		connectionsList.o\
 # 		moc_connectionsList.o
 
@@ -103,7 +107,8 @@ QSARTool:	$(OBJECTS)	$(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_LIBS)
 	
 QSARTool-static:	$(OBJECTS)	$(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $@ $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_PATH)/lib/Linux-x86_64-g++_4.1.1/libBALL.a $(BALL_PATH)/lib/Linux-x86_64-g++_4.1.1/libVIEW.a $(BALL_PATH)/contrib/newmat/libnewmat.a $(BALL_PATH)/contrib/libsvm/libsvm.a $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgsl.a  $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgslcblas.a -L/share/opt/x86_64_sl4/qt-4.2.2-gcc_4.1.1/lib -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql -lGLU -lGL
+	$(CXX)	$(LDFLAGS) -o $@ $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_PATH)/lib/Linux-x86_64-g++_4.1.1/libBALL.a $(BALL_PATH)/lib/Linux-x86_64-g++_4.1.1/libVIEW.a $(BALL_PATH)/contrib/newmat/libnewmat.a $(BALL_PATH)/contrib/libsvm/libsvm.a $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgsl.a  $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgslcblas.a
+	$(BALL_PATH)/contrib/qwt-5.0.2/lib/libqwt.a -L/share/opt/x86_64_sl4/qt-4.2.2-gcc_4.1.1/lib -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql -lGLU -lGL
 
 depend: $(MOC_SOURCES)
 
@@ -160,6 +165,8 @@ moc_SDFInputDialog.C: $(INC_PATH)SDFInputDialog.h
 	
 moc_CSVInputDialog.C: $(INC_PATH)CSVInputDialog.h
 	$(MOC) $^ -o $@
+	
+	
 
 moc_dataItemView.o: moc_dataItemView.C 
 	$(CXX) -c $(CXXFLAGS) $(BALL_INCLUDES) -o moc_dataItemView.o moc_dataItemView.C

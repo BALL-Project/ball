@@ -896,6 +896,7 @@ Optional Packages:
   --with-x                use the X Window System
   --with-newmat=DIR      newmat source/header are in DIR
   --with-libsvm=DIR      libsvm source/header are in DIR
+  --with-qwt=DIR         qwt (Qt widgets for technical applications) main directory
 
 Some influential environment variables:
   CXX         C++ compiler command
@@ -1833,6 +1834,14 @@ if test "$with_newmat" != "" ; then
 else
 	USE_NEWMAT=false
 	NEWMAT_PATH=""
+fi
+
+if test "$with_qwt" != "" ; then
+	USE_QWT=true
+	QWT_PATH=${with_qwt}
+else
+	USE_QWT=false
+	QWT_PATH=""
 fi
 
 
@@ -23328,7 +23337,7 @@ BALL_INCLUDES="-I$BALL_PATH/include ${BALL_INCLUDES}"
 BINFMT="${BINFMT}-${CXX_NAME}"
 BINFMT_INDEX=""
 
-BALL_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES} -I${NEWMAT_PATH} -I${LIBSVM_PATH}"
+BALL_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
 
 LIBS="${LIBS} ${FFTW_LIBS} ${GSL_LIBS} -lm"
 VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
@@ -23339,10 +23348,17 @@ fi
 
 if test "${USE_LIBSVM}" = true ; then
 	BALL_LIBS=${BALL_LIBS}" -L${LIBSVM_PATH} -lsvm"
+	BALL_INCLUDES=${BALL_INCLUDES}" -I${LIBSVM_PATH}"
 fi
 
 if test "${USE_NEWMAT}" = true ; then
 	BALL_LIBS=${BALL_LIBS}" -L${NEWMAT_PATH} -lnewmat"
+	BALL_INCLUDES=${BALL_INCLUDES}" -I${NEWMAT_PATH}"
+fi
+
+if test "${USE_QWT}" = true ; then
+	BALL_LIBS=${BALL_LIBS}" -L${QWT_PATH}/lib -lqwt"
+	BALL_INCLUDES=${BALL_INCLUDES}" -I${QWT_PATH}/src -I${QT_INCPATH}/QtCore -I${QT_INCPATH}/QtGui"
 fi
 
 LDFLAGS="$LDFLAGS"

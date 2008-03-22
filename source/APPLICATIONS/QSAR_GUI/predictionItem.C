@@ -1,6 +1,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/predictionItem.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/exception.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/mainWindow.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/predictionPlotter.h>
 
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>
@@ -18,6 +19,7 @@ PredictionItem::PredictionItem(InputDataItem* input_item, ModelItem* model_item,
 {
 	setPixmap(QPixmap("./images/prediction.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 	name_ = "Prediction for " + input_item->name();
+	pred_plotter_ = NULL;
 }
 
 PredictionItem::PredictionItem(PredictionItem& item):
@@ -28,6 +30,7 @@ DataItem(item.view_)
 	model_item_ = item.model_item_;
 	results_ = item.results_;
 	input_data_item_ = item.input_data_item_;
+	pred_plotter_ = item.pred_plotter_;
 }
 
 PredictionItem::~PredictionItem()
@@ -35,11 +38,13 @@ PredictionItem::~PredictionItem()
 	MainWindow* mw = view_->data_scene->main_window;
 	mw->removeFromPipeline(this);
 	delete dotted_edge_;
-	//model_item_->deletePredictionInputEdge(Edge* edge)
+	delete pred_plotter_;
 }
 
 void PredictionItem::connectWithModelItem()
 {
+	if(done_) return;   // do nothing twice !
+	
 	for(unsigned int i=0; i<input_data_item_->data()->getNoSubstances();i++)
 	{
 		vector<double>* substance = input_data_item_->data()->getSubstance(i);
@@ -47,6 +52,8 @@ void PredictionItem::connectWithModelItem()
 		results_ << res;
 		delete substance;
 	}
+	
+	done_ = 1;
 }
 
 ModelItem* PredictionItem::modelItem()
@@ -93,5 +100,17 @@ void PredictionItem::setDottedEdge(DottedEdge* edge)
 DottedEdge* PredictionItem::dottedEdge()
 {
 	return dotted_edge_;
+}
+
+void PredictionItem::showPredictionPlotter()
+{
+	if(pred_plotter_ == NULL)
+	{
+		pred_plotter_=new PredictionPlotter(this);
+	}
+	else
+	{
+		pred_plotter_->show();
+	}
 }
 

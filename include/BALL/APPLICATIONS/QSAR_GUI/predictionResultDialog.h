@@ -4,6 +4,7 @@
 #include <QtGui/QDialog>
 #include <BALL/APPLICATIONS/QSAR_GUI/predictionItem.h>
 
+
 namespace BALL
 {
 	namespace VIEW
@@ -46,6 +47,9 @@ namespace BALL
 
 				/** the compund names*/
 				const vector<string>* compound_names_; 	
+				
+				PredictionItem* pred_item_;
+		
 		};			
 	}
 }

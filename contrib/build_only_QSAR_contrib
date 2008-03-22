@@ -7,16 +7,11 @@ CPATH=`pwd`
 
 echo building contrib package from $CPATH ...
 
-# Try to use gtar, fall back to tar if it doesn't exist
-TAR=`which gtar`
-if test "$TAR" = "" ;  then
-	TAR=tar
-fi
 
-
-gunzip newmat.tar.gz; $TAR xif newmat.tar;
-gunzip libsvm.tar.gz; $TAR xif libsvm.tar;
-gunzip gsl-1.8.tar.gz; $TAR xif gsl-1.8.tar;
+tar -xzf newmat.tar.gz;
+tar -xzf libsvm.tar.gz;
+tar -xzf gsl-1.8.tar.gz;
+tar -xzf qwt-5.0.2.tar.gz;
 
 echo
 echo building gsl ...
@@ -41,6 +36,16 @@ cd libsvm
 make
 cd ..
 
+
+echo
+echo building Qwt ...
+echo
+cd qwt-5.0.2
+qmake; make;
+cd src; make staticlib;
+cd ..
+make clean
+cd ..
 
 echo
 echo Finished building QSAR contrib package

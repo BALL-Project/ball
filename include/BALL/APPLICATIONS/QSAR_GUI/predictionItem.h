@@ -7,6 +7,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/dottedEdge.h>
 
 
+
 namespace BALL
 {
 	namespace VIEW
@@ -16,6 +17,9 @@ namespace BALL
 		*
 		* @todo
 		*/
+		
+		class PredictionPlotter;
+		
 		class PredictionItem : public DataItem
 		{
 			public:
@@ -45,6 +49,8 @@ namespace BALL
 				void setDottedEdge(DottedEdge* edge);
 				DottedEdge* dottedEdge();
 
+				void showPredictionPlotter();
+				
 		
 			protected:
 				void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -58,6 +64,8 @@ namespace BALL
 				ModelItem* model_item_;
 				InputDataItem* input_data_item_;
 				DottedEdge* dotted_edge_;
+				
+				PredictionPlotter* pred_plotter_;
 		
 		};
 	}

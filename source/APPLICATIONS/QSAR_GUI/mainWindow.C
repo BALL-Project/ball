@@ -5,6 +5,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/CSVInputDialog.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/dottedEdge.h>
 
+
 #include <QtGui/QMessageBox>
 #include <QtGui/QFileDialog>
 #include <QtGui/QMenuBar>
@@ -684,8 +685,10 @@ void MainWindow::showModelProperties(ModelItem* modelitem)
 
 void MainWindow::showPredictionResults(PredictionItem* item)
 {
-	PredictionResultDialog predictionResultDialog(item);
-	predictionResultDialog.exec();
+	//PredictionResultDialog predictionResultDialog(item);
+	//predictionResultDialog.exec();
+	/// for TESTING, show plot only
+	item->showPredictionPlotter();
 }
 
 void MainWindow::showValidationResults(ValidationItem* item)
