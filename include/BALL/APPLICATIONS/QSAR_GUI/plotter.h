@@ -35,12 +35,20 @@ namespace BALL
 				
 				/** determines whether or not labels for each data point are to be drawn */
 				bool show_data_labels;
+				
+				/** prints the current contents of the plot to a file */
+				void printToFile(QString& file);
 
 				
 				
 			protected slots:
 				
 				void labelsChangeState();
+				
+				void save();
+				
+				void print();
+				
 			
 			
 			protected:
@@ -62,9 +70,12 @@ namespace BALL
 				std::list<QString> names_;
 				
 				QPushButton* okButton_;
+				QCheckBox* show_labels_;
+				QPushButton* saveButton_;
+				QPushButton* printButton_;
 				QHBoxLayout* buttonsLayout_;
 				QVBoxLayout* main_layout_;
-				QCheckBox* show_labels_;
+				
 	
 			
 		};

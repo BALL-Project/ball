@@ -1,5 +1,8 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/plotter.h>
 #include <iostream>
+#include <QPrinter>
+#include <QFileDialog>
+#include <QPrintDialog>
  
 using namespace BALL::VIEW;
 using namespace std;
@@ -10,7 +13,7 @@ Plotter::Plotter(DataItem* item)
 	
 	data_symbol.setStyle(QwtSymbol::Ellipse);
 	data_symbol.setSize(5,5);
-	data_label_font.setPixelSize(7);
+	data_label_font.setPointSize(6);
 	data_label_alignment=Qt::AlignRight;
 	show_data_labels = 1;
 	
@@ -19,10 +22,14 @@ Plotter::Plotter(DataItem* item)
 	okButton_ = new QPushButton("Ok", this);
 	show_labels_ = new QCheckBox("show labels",this);
 	show_labels_->setChecked(show_data_labels);
+	saveButton_ = new QPushButton("save",this);
+	printButton_ = new QPushButton("print",this);
 	
 	buttonsLayout_ = new QHBoxLayout;
 	buttonsLayout_->addWidget(okButton_);
 	buttonsLayout_->addWidget(show_labels_);
+	buttonsLayout_->addWidget(saveButton_);
+	buttonsLayout_->addWidget(printButton_);
 	buttonsLayout_->setAlignment(Qt::AlignLeft);
 	
 	main_layout_ = new QVBoxLayout;
@@ -32,6 +39,8 @@ Plotter::Plotter(DataItem* item)
 	
 	connect(okButton_, SIGNAL(clicked()), this, SLOT(close()));
 	connect(show_labels_, SIGNAL(clicked()), this, SLOT(labelsChangeState()));
+	connect(saveButton_, SIGNAL(clicked()), this, SLOT(save()));
+	connect(printButton_,SIGNAL(clicked()),this,SLOT(print()));
 	
 	resize(600,400);
 	qwt_plot_->resize(600,400);
@@ -49,9 +58,11 @@ Plotter::~Plotter()
 	delete buttonsLayout_;
 	delete main_layout_;
 	delete show_labels_;
+	delete saveButton_;
+	delete printButton_;
 }
 
-
+// SLOT
 void Plotter::labelsChangeState()
 {
 	
@@ -67,5 +78,35 @@ void Plotter::labelsChangeState()
 		plot();
 	}
 }
+
+// SLOT
+void Plotter::save()
+{
+	QString file = QFileDialog::getSaveFileName(this, tr("Save Plot"),
+			QDir::homePath(), tr("Images (*.png *.xpm *.jpg *.pdf *.ps *.eps)"));
+	
+	if(file!="") printToFile(file);
+}
+
+// SLOT
+void Plotter::print()
+{
+	QPrinter printer(QPrinter::HighResolution);
+	QPrintDialog print_dialog(&printer,this);
+	if (print_dialog.exec() == QDialog::Accepted) 
+	{
+		qwt_plot_->print(printer);
+	}
+}
+
+
+void Plotter::printToFile(QString& file)
+{
+	QPrinter printer(QPrinter::HighResolution);
+	printer.setOutputFileName(file);
+	qwt_plot_->print(printer);
+}
+
+
 
 
