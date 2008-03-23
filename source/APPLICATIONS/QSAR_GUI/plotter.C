@@ -54,12 +54,12 @@ Plotter::~Plotter()
 	std::cout<<"Plotter::~Plotter()"<<std::endl;
 	
 	delete qwt_plot_;
-	delete okButton_;
-	delete buttonsLayout_;
-	delete main_layout_;
-	delete show_labels_;
-	delete saveButton_;
+ 	delete okButton_;
+ 	delete main_layout_;
+ 	delete show_labels_;
+ 	delete saveButton_;
 	delete printButton_;
+	delete buttonsLayout_;
 }
 
 // SLOT

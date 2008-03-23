@@ -913,9 +913,13 @@ void MainWindow::executePipeline()
 		{
 			(*it)->connectWithModelItem();
 		}
-		catch(...)
+		catch(BALL::Exception::GeneralException e)
 		{	
-			QMessageBox::about(this,"Error","Pred");
+			QMessageBox::about(this,"Error",e.getMessage());
+		}
+		catch(BaseException e)
+		{	
+			QMessageBox::about(this,"Error",e.what());
 		}
 		value++;
 		emit sendNewValue(value);

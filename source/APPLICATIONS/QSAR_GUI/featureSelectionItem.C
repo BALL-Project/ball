@@ -96,15 +96,23 @@ void FeatureSelectionItem::connectWithModelItem()
 	{
 		case 0:
 			feature_selection_->removeHighlyCorrelatedFeatures(cor_threshold_);
+			model_item_->model()->readTrainingData();
+			model_item_->model()->train();
 			break;		
 		case 1:	
 			feature_selection_->forwardSelection(k_, opt_);
+			model_item_->model()->readTrainingData();
+			model_item_->model()->train();
 			break;
 		case 2:
 			feature_selection_->backwardSelection(k_, opt_);
+			model_item_->model()->readTrainingData();
+			model_item_->model()->train();
 			break;
 		case 3:					
 			feature_selection_->stepwiseSelection(k_, opt_);
+			model_item_->model()->readTrainingData();
+			model_item_->model()->train();
 			break;
 		default:
 			throw InvalidFeatureSelectionItem(__FILE__,__LINE__);
