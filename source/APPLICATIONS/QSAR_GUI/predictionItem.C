@@ -35,10 +35,14 @@ DataItem(item.view_)
 
 PredictionItem::~PredictionItem()
 {
-	MainWindow* mw = view_->data_scene->main_window;
-	mw->removeFromPipeline(this);
 	delete dotted_edge_;
 	delete pred_plotter_;
+	if (view_->name == "view")
+	{
+		MainWindow* mw = view_->data_scene->main_window;
+		mw->removeFromPipeline(this);
+	}
+	// everything else is done by base-class destructor!!
 }
 
 void PredictionItem::connectWithModelItem()

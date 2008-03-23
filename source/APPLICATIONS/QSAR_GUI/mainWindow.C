@@ -947,7 +947,7 @@ void MainWindow::executePipeline()
 
 bool MainWindow::removeFromPipeline(DataItem* item)
 {
-/*	if(disconnected_items_.remove(item))
+	if(disconnected_items_.remove(item))
 	{
 		return 1;
 	}
@@ -1039,8 +1039,7 @@ bool MainWindow::removeFromPipeline(DataItem* item)
 // 			std::cout << "disconnected NOT erased" << std::endl;
 // 			return 0;
 // 		}
-	}
-	*/
+	} 
 }
 
 void MainWindow::addDisconnectedItem(DataItem* item)

@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QtGui/QDialogButtonBox>
 #include <QHBoxLayout>
+#include <QCheckBox>
 
 #include <qwt_symbol.h>
 
@@ -17,8 +18,10 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class Plotter : public QwtPlot
-		{				
+		class Plotter : public QFrame
+		{	
+			Q_OBJECT		
+			
 			public: 
 				
 				/** the symbol to be used for each data point within the plots */
@@ -32,25 +35,36 @@ namespace BALL
 				
 				/** determines whether or not labels for each data point are to be drawn */
 				bool show_data_labels;
-			
-			
+
+				
+				
+			protected slots:
+				
+				void labelsChangeState();
 			
 			
 			protected:
 				/** constructor */
 				Plotter(DataItem* item);
 			
-				~Plotter();
+				~Plotter();		
+				
+				/** (re)plots all data. \n
+				Must be implemented by derived classes. */
+				virtual void plot() = 0;
 				
 				DataItem* item_;
+				
+				QwtPlot* qwt_plot_;
 				
 				/** contains a name for each plotted data point.\n
 				Can be used e.g. for mouse-over effects... */
 				std::list<QString> names_;
 				
-				QDialogButtonBox* buttons_;
 				QPushButton* okButton_;
 				QHBoxLayout* buttonsLayout_;
+				QVBoxLayout* main_layout_;
+				QCheckBox* show_labels_;
 	
 			
 		};

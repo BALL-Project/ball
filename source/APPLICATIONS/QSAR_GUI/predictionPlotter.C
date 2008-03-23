@@ -4,6 +4,7 @@
 #include <qwt_plot_marker.h>
 #include <qwt_plot_zoomer.h>
 
+#include <QColor>
 
 using namespace BALL::VIEW;
 
@@ -15,6 +16,13 @@ PredictionPlotter::PredictionPlotter(PredictionItem* item)
 	pred_item_ = item;
 	data_ = pred_item_->inputDataItem()->data();
 	
+	plot();
+}
+
+
+void PredictionPlotter::plot()
+{
+	qwt_plot_->clear();
 	if(data_->getNoResponseVariables()!=0)
 	{
 		plotObservedVsExpected();
@@ -22,7 +30,7 @@ PredictionPlotter::PredictionPlotter(PredictionItem* item)
 	else
 	{
 		plotObserved();
-	}
+	}	
 }
 
 
@@ -59,7 +67,7 @@ void PredictionPlotter::plotObservedVsExpected()
 		if(expected<min_x) min_x=expected;
 		if(expected>max_x) max_x=expected;
 		marker->setValue(expected,observed);
-		marker->attach(this);
+		marker->attach(qwt_plot_); // attached object will be automatically deleted by QwtPlot
 		
 		if(show_data_labels)
 		{
@@ -74,15 +82,25 @@ void PredictionPlotter::plotObservedVsExpected()
 	}
 	QString s1 = "expected";
 	QString s2 = "observed";
-	setAxisTitle(0,s2);
-	setAxisTitle(2,s1);
+	qwt_plot_->setAxisTitle(0,s2);
+	qwt_plot_->setAxisTitle(2,s1);
 	
-	replot();
-	setAxisScale(0,min_y-1,max_y+1);
-	setAxisScale(2,min_x-1,max_x+1);
+	double x_border=(max_x-min_x)*0.05;
+	double y_border=(max_y-min_y)*0.05;
+	min_x-=x_border; min_y-=y_border;
+	max_x+=x_border; max_y+=y_border;
 	
-	QwtPlot::resize(600,400);
-	QwtPlot::show();
+	QwtPlotCurve* diagonal = new QwtPlotCurve;
+	double x[2]; x[0]=min_x; x[1]=max_x;
+	double y[2]; y[0]=min_x; y[1]=max_x;
+	diagonal->setData(x,y,2);
+	QColor c(135,135,135);
+	QPen pen(c);
+	diagonal->setPen(pen);
+	diagonal->attach(qwt_plot_); // attached object will be automatically deleted by QwtPlot
+	qwt_plot_->setAxisScale(0,min_y,max_y);
+	qwt_plot_->setAxisScale(2,min_x,max_x);
+	qwt_plot_->replot();
 }
 
 
@@ -112,7 +130,7 @@ void PredictionPlotter::plotObserved()
 		if(value<min_y) min_y=value;
 		if(value>max_y) max_y=value;
 		marker->setValue(i,(*it)(1));
-		marker->attach(this);
+		marker->attach(qwt_plot_);
 		
 		if(show_data_labels)
 		{
@@ -128,13 +146,15 @@ void PredictionPlotter::plotObserved()
 	max_x = results->size();
 	QString s1 = "compounds";
 	QString s2 = "predicted activity";
-	setAxisTitle(0,s2);
-	setAxisTitle(2,s1);
+	qwt_plot_->setAxisTitle(0,s2);
+	qwt_plot_->setAxisTitle(2,s1);
 	
-	replot();
-	setAxisScale(0,min_y-1,max_y+1);
-	setAxisScale(2,min_x-1,max_x+1);
+	double x_border=(max_x-min_x)*0.05;
+	double y_border=(max_y-min_y)*0.05;
+	min_x-=x_border; min_y-=y_border;
+	max_x+=x_border; max_y+=y_border;
 	
-	QwtPlot::resize(600,400);
-	QwtPlot::show();
+ 	qwt_plot_->setAxisScale(0,min_y,max_y);
+ 	qwt_plot_->setAxisScale(2,min_x,max_x);
+	qwt_plot_->replot();
 }

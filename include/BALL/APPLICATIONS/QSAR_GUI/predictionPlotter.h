@@ -21,6 +21,8 @@ namespace BALL
 			private:
 				PredictionItem* pred_item_;
 				QSARData* data_;
+				
+				void plot();
 			
 			
 			

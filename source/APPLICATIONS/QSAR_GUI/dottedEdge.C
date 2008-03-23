@@ -42,7 +42,7 @@ DottedEdge::~DottedEdge()
 
 	line = QLineF(mapFromItem(source_, source_->width() +1., source_->height() +1.), mapFromItem(dest_, 0, 0));
 
-	prepareGeometryChange();
+	//prepareGeometryChange();
 	source_point_ = line.p1();
  	dest_point_ = line.p2();
 	return;
@@ -52,7 +52,7 @@ DottedEdge::~DottedEdge()
  void DottedEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
 	adjust();
-	QColor color = Qt::lightGray;
+	QColor color = Qt::darkGray;
 	painter->setPen(QPen(color, 1, Qt::DotLine));
 	QLineF line(source_point_.x(), source_point_.y(),dest_point_.x(), dest_point_.y());
 	painter->drawLine(line);

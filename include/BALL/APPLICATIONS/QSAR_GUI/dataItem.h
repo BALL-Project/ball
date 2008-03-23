@@ -54,11 +54,9 @@ namespace BALL
 			/** @name Accessors */
 			
 			/** returns the ingoing edges of the item*/
-			//QList<Edge*> inEdges() const;
 			QSet<Edge*> inEdges() const;
 
 			/** returns the outgoing edges of the item*/
-			//QList<Edge*> outEdges() const;
 			QSet<Edge*> outEdges() const;
 
 			/** QT function; returns the shape of the item*/
@@ -117,9 +115,6 @@ namespace BALL
 			DataItemView* view();
 			
 			bool isDone();
-
-// 			void calculateForces();
-// 			bool advance();
 		
 			enum { Type = UserType + 1 };
 		
@@ -147,11 +142,9 @@ namespace BALL
 			QString name_;
 		
 			/** list of ingoing edges*/
-			//QList<Edge*>in_edge_list_;
 			QSet<Edge*>in_edge_list_;
 			
 			/** list of outgoing edges*/
-			//QList<Edge*>out_edge_list_;
 			QSet<Edge*>out_edge_list_;
 
 			QString saved_as_;

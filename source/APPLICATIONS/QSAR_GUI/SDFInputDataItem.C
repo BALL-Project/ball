@@ -90,11 +90,11 @@ SDFInputDataItem::SDFInputDataItem(QString filename, DataItemView* view):
 
 SDFInputDataItem::~SDFInputDataItem()
 {
-// 	if (view_->name == "view")
-// 	{
-// 		MainWindow* mw = view_->data_scene->main_window;
-// 		mw->removeFromPipeline(this);
-// 	}
+	if (view_->name == "view")
+	{
+		MainWindow* mw = view_->data_scene->main_window;
+		mw->removeFromPipeline(this);
+	}
 }
 
 SDFInputDataItem::SDFInputDataItem(SDFInputDataItem& item):

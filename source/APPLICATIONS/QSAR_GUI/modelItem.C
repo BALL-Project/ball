@@ -70,7 +70,7 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, DataItemVie
 	}
 	QPixmap pm = QPixmap("./images/model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
 	setPixmap(pm);
-	setName(QString(entry_->name_abreviation.c_str()));	
+	setName(QString(entry_->name_abreviation.c_str()));
 }
 
 ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, int kernelType, double parameter1, double parameter2, DataItemView* miv): 
@@ -103,7 +103,7 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, int kernelT
 	
 	QPixmap pm = QPixmap("./images/kernel_model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
 	setPixmap(pm);
-	setName(QString(entry_->name_abreviation.c_str()));	
+	setName(QString(entry_->name_abreviation.c_str()));
 }
 
 ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, String s1, String s2,DataItemView* miv):
@@ -187,7 +187,6 @@ DataItem(item.view_)
 
 ModelItem::~ModelItem()
 {
-
 	if (view_->name == "view")
 	{
 		MainWindow* mw = view_->data_scene->main_window;
