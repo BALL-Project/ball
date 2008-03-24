@@ -55,11 +55,11 @@ Plotter::~Plotter()
 	
 	delete qwt_plot_;
  	delete okButton_;
- 	delete main_layout_;
  	delete show_labels_;
  	delete saveButton_;
 	delete printButton_;
 	delete buttonsLayout_;
+	delete main_layout_;
 }
 
 // SLOT

@@ -42,11 +42,10 @@ PredictionResultDialog::PredictionResultDialog(PredictionItem* item)
 	QTableWidget* table = new QTableWidget(results_->size(), 2, this);	
 	table->verticalHeader()->hide();
 	table->setHorizontalHeaderLabels (labels);
-	table->setAlternatingRowColors(true);
-	table->setDragDropMode(QAbstractItemView::NoDragDrop);
+	table->setAlternatingRowColors(true);					
+	table->setDragDropMode(QAbstractItemView::NoDragDrop);		
 	table->setEditTriggers(QAbstractItemView::NoEditTriggers);
-	table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
-	table->horizontalHeader()->setResizeMode(2,QHeaderView::Stretch); 
+	table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);		
 
 	if(results_->size() == compound_names_->size())
 	{	

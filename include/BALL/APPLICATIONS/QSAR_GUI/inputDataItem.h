@@ -38,7 +38,7 @@ namespace BALL
 				
 				/** Returns a pointer to the data saved in the item*/
 				QSARData* data();
-				enum { Type = UserType + 2 };
+			//	enum { Type = UserType + 2 };
 		
 				/** Returns the type of the item as an int. This type information is used by qgraphicsitem_cast() to distinguish between types. */
 				int type() const { return Type; }

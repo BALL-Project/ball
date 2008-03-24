@@ -69,6 +69,9 @@ using namespace BALL::Exception;
 
 	///maximize the main window on startup
 	showMaximized();
+	
+	drag_start_time = drag_start_time.now();
+	min_drag_time=0.3;
 
 	connect(this, SIGNAL(sendNewValue(int)), progress_bar_, SLOT(setValue(int))); 
  }
@@ -685,10 +688,8 @@ void MainWindow::showModelProperties(ModelItem* modelitem)
 
 void MainWindow::showPredictionResults(PredictionItem* item)
 {
-	//PredictionResultDialog predictionResultDialog(item);
-	//predictionResultDialog.exec();
-	/// for TESTING, show plot only
-	item->showPredictionPlotter();
+	PredictionResultDialog predictionResultDialog(item);
+	predictionResultDialog.exec();
 }
 
 void MainWindow::showValidationResults(ValidationItem* item)
@@ -775,14 +776,14 @@ void MainWindow::executePipeline()
 	///read in the input files
 	for (QSet<SDFInputDataItem*>::Iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
 	{
-// 		try
+		try
 		{
 			(*it)->readData();	
 		}
-// 		catch(...)
-// 		{
-// 			
-// 		}
+		catch(BALL::Exception::GeneralException e)
+		{
+			QMessageBox::warning(this,"Error",e.getMessage());
+		}
 
 		value++;
 		emit sendNewValue(value);
@@ -790,19 +791,21 @@ void MainWindow::executePipeline()
 
 	for (QSet<CSVInputDataItem*>::Iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
 	{
-		if ((*it)->append())
+		try
 		{
-			(*it)->appendData();
+			if ((*it)->append())
+			{
+				(*it)->appendData();
+			}
+			else 
+			{
+				(*it)->readData();
+			}
 		}
-		else 
+		catch(BALL::Exception::GeneralException e)
 		{
-			(*it)->readData();
+			QMessageBox::warning(this,"Error",e.getMessage());
 		}
-	
-// 		catch(...)
-// 		{
-// 			
-// 		}
 
 		value++;
 		emit sendNewValue(value);
@@ -880,7 +883,7 @@ void MainWindow::executePipeline()
 	///feature selection
 	for (QSet<FeatureSelectionItem*>::Iterator it = fs_pipeline_.begin(); it != fs_pipeline_.end(); it++)
 	{	
-		//try
+		try
 		{
 			QString num;
 			(*it)->connectWithModelItem();	
@@ -891,11 +894,10 @@ void MainWindow::executePipeline()
 			(*it)->modelItem()->trainModel();
 			(*it)->modelItem()->setName(new_name);
 		}
-		//catch (...)
-// 		{
-// 			QString error_string = "FS";
-// 			QMessageBox::about(this,"Error",error_string);
-// 		}
+		catch(BALL::Exception::GeneralException e)
+		{
+			QMessageBox::warning(this,"Error",e.getMessage());
+		}
 		value++;
 		emit sendNewValue(value);
 	}
@@ -1947,10 +1949,9 @@ void MainWindow::restoreDesktop(QString filename)
 		}//while (!file.atEnd()) 
 		file.close();
 	}
-
-	catch(...)
+	catch(BALL::Exception::GeneralException e)
 	{
-		throw InvalidPipeline(__FILE__,__LINE__);
+		QMessageBox::warning(this,"Error",e.getMessage());
 	}
 
 }

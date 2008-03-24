@@ -50,6 +50,8 @@ namespace BALL
 				
 				void mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent);
 				
+				QPointF getOffset(DataItem* item);
+				
 			protected:
 				//void wheelEvent(QWheelEvent *event);
 				//void scaleView(qreal scaleFactor);

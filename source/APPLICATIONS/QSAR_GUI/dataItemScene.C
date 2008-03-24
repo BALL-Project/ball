@@ -17,7 +17,7 @@ using namespace BALL::QSAR::Exception;
 using namespace BALL::VIEW;
 using namespace BALL::VIEW::Exception;
 
-static QPointF offset = QPointF(100.,100.);
+static QPointF default_offset = QPointF(-10.,100.);
 
 DataItemScene::DataItemScene()
  {
@@ -29,8 +29,42 @@ void DataItemScene::setMainWindow(MainWindow* mw)
 	main_window = mw;
 }
 
+
+QPointF DataItemScene::getOffset(DataItem* item)
+{
+	// InputDataItem created together with a PredictionItem
+	if(item->type()==SDFInputDataItem::Type || item->type()==CSVInputDataItem::Type)
+	{
+		QPointF(-120,-70);
+	}	
+	if(item->type()==ValidationItem::Type) // ValidationItem	
+	{
+		return QPointF(100,0);
+	}
+	if(item->type()==PredictionItem::Type) // PredictionItem	
+	{
+		return QPointF(-120,50);
+	}
+	else return default_offset;	
+}
+
+
 void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 {
+	// if the "drag" was very short, is was no real drag at all, so there is nothing being dropped!
+	/// -> process mouse clicks instead of drops :
+	if(main_window->drag_start_time.now().getSeconds()-main_window->drag_start_time.getSeconds() < main_window->min_drag_time) 
+	{
+		if(main_window->dragged_item->type()==PredictionItem::Type)
+		{
+			((PredictionItem*)main_window->dragged_item)->showPredictionPlotter();
+		}
+		
+		return;
+	}
+	
+	
+	
 	QPointF pos = event->scenePos();
 	
 	/// move SDFInputDataItem
@@ -50,6 +84,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 	/// move PredictionItem
 	else if (event->mimeData()->hasFormat("application/x-predictiondata")) 
 	{
+		
 		PredictionItem* source_item = (PredictionItem*)main_window->dragged_item;
 		source_item->setPos(pos.x(),pos.y());
 	}
@@ -89,7 +124,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				item->setView(view);
 				addItem(item);
 				item->setPos(pos.x(),pos.y());
-				item->setPos(pos + offset);
+				item->setPos(pos + getOffset(item));
 				if (input_item_at_pos)
 				{
 					Edge* edge = new Edge(input_item_at_pos, item);
@@ -144,29 +179,24 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 					QMessageBox::information(view," ","Please drag the FeatureSelection onto a Model within your pipeline!");
 					return;	
 				}
-				if (model_item_at_pos)
-				{
-					model_copy = new ModelItem(*model_item_at_pos);	
-					item = main_window->createFeatureSelection(item, model_copy, model_item_at_pos);
-			
-					model_copy->setSaveAttribute(false);
-			
-					addItem(model_copy);
-					main_window->addModelToPipeline(model_copy);
-			
-					Edge* edge = new Edge(item, model_copy);
-					addItem(edge);
-					Edge* edge2 = new Edge(model_item_at_pos, item);
-					addItem(edge2);
-					main_window->addFeatureSelectionToPipeline(item);
-					
-					model_copy->setPos(pos + 2*offset);
-				}
-
+		
+				model_copy = new ModelItem(*model_item_at_pos);	
+				item = main_window->createFeatureSelection(item, model_copy, model_item_at_pos);
+		
 				item->setView(view);
 				addItem(item);
-				item->setPos(pos.x(),pos.y());
-				item->setPos(pos + offset);
+				item->setPos(pos + getOffset(item));
+				
+				model_copy->setSaveAttribute(false);
+				addItem(model_copy);
+				main_window->addModelToPipeline(model_copy);
+				model_copy->setPos(pos + 2*getOffset(model_copy));
+		
+				Edge* edge = new Edge(item, model_copy);
+				addItem(edge);
+				Edge* edge2 = new Edge(model_item_at_pos, item);
+				addItem(edge2);
+				main_window->addFeatureSelectionToPipeline(item);
 			}
 
 			catch(InvalidFeatureSelectionItem)
@@ -201,24 +231,21 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				
 			try
 			{
-				if (model_item_at_pos)
-				{
-					item = main_window->createValidation(item, model_item_at_pos);
-					Edge* edge = new Edge(model_item_at_pos, item);
-					addItem(edge);
-					main_window->addValidationToPipeline(item);
-				}
-				else
+				if (!model_item_at_pos)
 				{
 					//item = main_window->createValidation(item);
 					//main_window->addDisconnectedItem(item);
 					QMessageBox::information(view," ","Please drag the Validation onto a Model within your pipeline!");
 					return;
 				}
+				
+				item = main_window->createValidation(item, model_item_at_pos);
 				item->setView(view);
 				addItem(item);
-				item->setPos(pos);
-				item->setPos(pos + offset);
+				item->setPos(pos + getOffset(item));
+				Edge* edge = new Edge(model_item_at_pos, item);
+				addItem(edge);
+				main_window->addValidationToPipeline(item);
 			}
 			catch(InvalidValidationItem)
 			{
@@ -269,13 +296,15 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 
 						ModelItem* model_item_at_pos = qgraphicsitem_cast<ModelItem*>(itemAt(pos)); 
 
-						if (model_item_at_pos)
+						if(model_item_at_pos)
 						{
-							item->setPos(pos.x(),pos.y());
 							PredictionItem* pred_item = main_window->createPrediction(item,model_item_at_pos);
 							addItem(pred_item);
-							pred_item->setPos(pos.x(),pos.y());
-		
+							pred_item->setPos(pos+getOffset(pred_item));
+							addItem(item);
+							QPointF p0 = QPointF(-120,-70);
+							item->setPos(pos+p0);
+				
 							Edge* edge = new Edge(model_item_at_pos, pred_item);
 							addItem(edge);
 							model_item_at_pos->addPredictionInputEdge(edge);
@@ -286,8 +315,12 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 							pred_item->setDottedEdge(dedge);
 							main_window->addPredictionToPipeline(pred_item);
 						}
-						addItem(item);
-						item->setPos(pos.x(),pos.y());
+						else
+						{
+							addItem(item);
+							item->setPos(pos);
+						}
+						
 						main_window->addInputToPipeline(item);
 						
 						String p = path.toStdString(); 
@@ -340,24 +373,35 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 	QGraphicsScene::dropEvent(event);
  	update();
  	view->update();
-}
+	
+}  // END of  void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 
-///this function allows the dropping of an item anywhere on the scene
+
+
+
+//this function allows the dropping of an item anywhere on the scene
 void DataItemScene::addDropSite()
 {
-	///set the scene rect on the maximal possible value
+	//set the scene rect on the maximal possible value
 	setSceneRect(0,0, 16777215, 16777215);
 	
-	///add a transparent rect item with maximal size onto this scene and allow drops onto it 
+	//add a transparent rect item with maximal size onto this scene and allow drops onto it 
 	QGraphicsRectItem* rect = addRect(QRectF(0, 0, 16777215, 16777215),QPen(QColor(Qt::transparent)));
 	rect->setAcceptDrops(true);
 }
 
 
+
+// currently only used for right mouse clicks == start of drag
+// left clicks are currently being handled by DataItemView::contextMenuEvent(QContextMenuEvent *event)
 void DataItemScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
 {
+	if(mouseEvent->button()!=Qt::LeftButton) return;
+	
 	QPointF p = mouseEvent->scenePos();
 	QGraphicsItem* item = itemAt(p);
+	main_window->drag_start_time = main_window->drag_start_time.now();
+	
 	if(!item) return; // if there is no item below mouse cursor, do nothing!
 	
 	/// if not doing this, Qt cannot reliably cast to ModelItem*, so that the type of the created ModelItem will be incorrect!

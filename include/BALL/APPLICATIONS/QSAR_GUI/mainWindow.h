@@ -88,6 +88,10 @@ namespace BALL
 				
 				/** name of the widget from which the current drag originated, i.e. "source_list", "model_list" or "view" */
 				string drag_source;
+				PreciseTime drag_start_time;
+				
+				/* shortest desired duration of a mouse drag in units of seconds */
+				double min_drag_time;
 				
 				void setLastUsedPath(String path);
 
