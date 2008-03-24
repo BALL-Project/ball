@@ -92,8 +92,6 @@ namespace BALL
 		
 			QPointF source_position_;
 			QPointF dest_position_;
-
-		//	void minDistance();
 		};
 	}
 }

@@ -21,8 +21,6 @@ static qreal arrow_size = 10.0;
 	source_->addOutEdge(this);
 	dest_->addInEdge(this);
 
-	source_point_ = mapFromItem(source_, 0, 0);
-	dest_point_ = mapFromItem(dest_, 0, 0);	
 	adjust();
  }
 
@@ -60,16 +58,63 @@ DataItem *Edge::sourceNode()
 
  void Edge::adjust()
  {	
-	QLineF line = QLineF(mapFromItem(source_, source_->width() +1., source_->height() +1.), mapFromItem(dest_, 0, 0));
-
-	prepareGeometryChange();
-	source_point_ = line.p1();
-	dest_point_ = line.p2();
-
-// 	prepareGeometryChange();
-// 	minDistance();
-
-	return;
+	double s_w = source_->width()/2;
+	double s_h = source_->height()/2;
+	double d_w = dest_->width()/2;
+	double d_h = dest_->height()/2;
+	QPointF s1 = mapFromItem(source_, 0, 0);
+	QPointF s2 = mapFromItem(source_,0,source_->height());
+	QPointF d1 = mapFromItem(dest_, 0, 0);
+	QPointF d2 = mapFromItem(dest_, 0,dest_->height());
+	
+	source_point_ = s1;
+	dest_point_ = d1;
+	
+	if(d1.y()>s2.y())   // dest below source
+	{
+		QPointF s21 = mapFromItem(source_,s_w,source_->height());
+		source_point_ = s21;
+		
+		if(s2.y()+source_->height()>d1.y()) 
+		{
+			if(d1.x()>s2.x()+source_->width()) // dest to the immediate lower right of source
+			{
+				dest_point_ = mapFromItem(dest_,0,d_h);
+				return;
+			}
+			if(d1.x()+dest_->width()<s1.x()) // dest to the immediate lower left of source
+			{
+				dest_point_ = mapFromItem(dest_,dest_->width(),d_h);
+				return;
+			}
+		}
+		
+		dest_point_ = mapFromItem(dest_, d_w,0);
+		return;
+	}
+	
+	QPointF d3 = mapFromItem(dest_,dest_->width(),dest_->height());
+	// dest above source
+	if(d2.y()<s1.y() && d2.x()>s1.x()-source_->width() && d3.x()<s1.x()+2*source_->width())
+	{
+		source_point_ = mapFromItem(source_,s_w,0);
+		dest_point_ = mapFromItem(dest_, d_w,dest_->height());
+		return;
+	}
+	
+	QPointF s3 = mapFromItem(source_,source_->width(),source_->height());
+	if(d1.x()>s3.x()) // dest to the right of source
+	{
+		source_point_ = mapFromItem(source_,source_->width(),s_h);
+		dest_point_ = mapFromItem(dest_, 0,d_h);
+		return;
+	}
+	else // dest dest to the left of source
+	{
+		source_point_ = mapFromItem(source_,0,s_h);
+		dest_point_ = mapFromItem(dest_, dest_->width(),d_h);
+		return;
+	}
  }
 
  void Edge::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
@@ -130,61 +175,3 @@ const QPointF Edge::getDestPosition() const
 {
 	return dest_position_;
 }
-
-// void Edge::minDistance()
-// {
-// 	vector<int> distances;
-// 	QVector<QPointF> source;
-// 	QVector<QPointF> dest;
-// 
-// 	QPointF p1 = mapFromItem(dest_, 0, 0);
-// 	QPointF p2 = mapFromItem(dest_, dest_->width()/2, 0);
-// 	QPointF p3 = mapFromItem(dest_, 0, dest_->height()/2);
-// 	QPointF p4 = mapFromItem(source_, source_->width(), source_->height());
-// 	QPointF p5 = mapFromItem(source_, source_->width()/2, source_->height());
-// 	QPointF p6 = mapFromItem(source_, source_->width(), source_->height()/2);
-// 
-// 	source << p4 << p5 << p6;
-// 	dest << p1 << p2 << p3;
-// 
-// 	foreach(QPointF source_point, source)
-// 	{
-// 		foreach(QPointF dest_point, dest)
-// 		{
-// 			QLineF line(source_point, dest_point);
-// 			distances.push_back((int)(line.length()));	
-// 		}
-// 	} 
-// 
-// 	int min = distances.at(0);
-// 	QPointF tmp1;
-// 	QPointF tmp2;
-// 
-// 	for (uint i = 0; i< distances.size(); i++)
-// 	{	
-// 		if (distances[i] < min)
-// 		{
-// 			min = distances[i];
-// 
-// 			if (i < 3)
-// 			{
-// 				tmp1 = p1;
-// 				tmp2 = dest.at(i); 
-// 			}
-// 			else if (3 <= i < 6)
-// 			{
-// 				tmp1 = p2;
-// 				tmp2 = dest.at(i);
-// 			}
-// 			else
-// 			{
-// 				tmp1 = p3;
-// 				tmp2 = dest.at(i);
-// 			}
-// 		}
-// 	}
-// 	source_point_ = tmp2;
-// 	dest_point_ = tmp1;
-// 
-// 	//vector<int>::iterator min_it = min_element(distances.begin(), distances.end());	
-// }
