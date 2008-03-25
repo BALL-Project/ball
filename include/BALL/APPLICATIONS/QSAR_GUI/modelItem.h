@@ -17,8 +17,10 @@ namespace BALL
 		*
 		* @todo
 		*/
-		class ModelItem : public DataItem
+		class ModelItem : public QObject, public DataItem
 		{
+			Q_OBJECT
+			
 			public:
 				/** @name Constructors and Destructors*/
 		

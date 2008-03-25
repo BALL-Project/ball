@@ -54,7 +54,8 @@ SOURCES       = dataItem.C\
 		SDFInputDataItem.C\
 		plotter.C\
 		moc_plotter.C\
-		predictionPlotter.C
+		predictionPlotter.C\
+		moc_modelItem.C
 # 		connectionsList.C\
 # 		moc_connectionsList.C
 	
@@ -100,7 +101,8 @@ OBJECTS       = dataItem.o \
 		SDFInputDataItem.o\
 		plotter.o\
 		moc_plotter.o\
-		predictionPlotter.o
+		predictionPlotter.o\
+		moc_modelItem.o
 # 		connectionsList.o\
 # 		moc_connectionsList.o
 
@@ -169,8 +171,15 @@ moc_CSVInputDialog.C: $(INC_PATH)CSVInputDialog.h
 		
 moc_plotter.C: $(INC_PATH)plotter.h
 	$(MOC) $^ -o $@
-	
 
+moc_modelItem.C: $(INC_PATH)modelItem.h
+	$(MOC) $^ -o $@	
+
+
+
+
+moc_modelItem.o: moc_modelItem.C 
+	$(CXX) -c $(CXXFLAGS) $(BALL_INCLUDES) $^ -o $@
 
 moc_dataItemView.o: moc_dataItemView.C 
 	$(CXX) -c $(CXXFLAGS) $(BALL_INCLUDES) -o moc_dataItemView.o moc_dataItemView.C
