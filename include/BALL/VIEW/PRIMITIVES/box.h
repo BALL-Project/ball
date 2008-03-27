@@ -43,8 +43,10 @@ namespace BALL
 					Construct new Box.
 					The properties of this Box are set to:
   				  - color - to the color black
-						- width, depth, height - to zero
-						- rigth_vector to 0, 1, 0
+						- width, depth, height - to one
+						- right_vector to 0, 1, 0
+						- heigth_vector to 1, 0, 0
+						- depth_vector to 0, 0, 1
 					\par
 					\return      Box new constructed Box
 			*/
@@ -55,11 +57,15 @@ namespace BALL
 			Box(const Box& box);
 
 			Box(const Vector3& point, 
-					const Vector3& right_vector  = Vector3( 0, 1, 0),
-					const Vector3& height_vector = Vector3(-1, 0, 0),
-					float depth = 1);
+					const Vector3& right_vector,
+					const Vector3& height_vector,
+					float depth);
 
-
+			Box(const Vector3& point, 
+					const Vector3& right_vector  = Vector3(0, 1, 0),
+					const Vector3& height_vector = Vector3(1, 0, 0),
+					const Vector3& depth_vector = Vector3(0, 0, 1));
+			
 			//@}
 			/** @name Destructors */
 			//@{

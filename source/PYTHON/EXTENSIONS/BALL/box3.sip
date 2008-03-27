@@ -13,7 +13,8 @@ class Box3
 	public:
   Box3();
   Box3(Box3&);
-  Box3(Vector3&, Vector3&);
+  Box3(Vector3&, Vector3&, Vector3&, float);
+  Box3(Vector3&, Vector3&, Vector3&, Vector3&);
 
   void set(Box3&);
   // Box3& operator = (Box3& box);

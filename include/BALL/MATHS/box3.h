@@ -26,7 +26,7 @@ namespace BALL
 	/**	Generic three-dimensional Box.
 			This class describes a three-dimensional box.
 			A box is given by the coordinates of the lower left front corner,
-			width, height, depth and the right vector.\\
+			a right vector, a height vector and a depth vector.\\
 	*/
 	template <typename T>
 	class TBox3
@@ -49,12 +49,27 @@ namespace BALL
 		TBox3(const TBox3& box);
 
 		/**	Detailed constructor.
+				@param point the lower left corner of the box
+				@param right_vector the right vector of the box
+				@param heigth_vector the height vector of the box
+				@param depth the depth of the box
+		*/
+		TBox3(const TVector3<T>& point, 
+					const TVector3<T>& right_vector,
+					const TVector3<T>& height_vector,
+					const T& depth = 1);
+		
+		/**	Detailed constructor.
+				@param point the lower left corner of the box
+				@param right_vector the right vector of the box
+				@param heigth_vector the height vector of the box
+				@param depth_vector the depth vector of the box
 		*/
 		TBox3(const TVector3<T>& point, 
 					const TVector3<T>& right_vector  = TVector3<T>((T) 0, (T)1, (T)0),
-					const TVector3<T>& height_vector = TVector3<T>((T)-1, (T)0, (T)0),
-					const T& depth = 1);
-
+					const TVector3<T>& height_vector = TVector3<T>((T) 1, (T)0, (T)0),
+					const TVector3<T>& depth_vector  = TVector3<T>((T) 0, (T)0, (T)1));
+		
 		/**	Destructor.	
 		*/	
 		virtual ~TBox3()
@@ -97,13 +112,13 @@ namespace BALL
 		T getWidth() const { return width_;}
 
 		/// Set height
-		void setHeight(T height) ;
+		void setHeight(T height);
 		
 		/// Get height
 		T getHeight() const { return height_;}
 
 		/// Set depth
-		void setDepth(T depth)  { depth_ = depth;}
+		void setDepth(T depth);
 
 		/// Get depth
 		T getDepth() const { return depth_;}
@@ -125,7 +140,14 @@ namespace BALL
 		
 		/// Set the height vector
 		void setHeightVector(const TVector3<T>& v);
-
+		
+		/// Get the depth vector
+		const TVector3<T>& getDepthVector() const
+			{ return depth_vector_;}
+		
+		/// Set the depth vector
+		void setDepthVector(const TVector3<T>& v);
+		
 		/**	Calculate the surface area.
 				@return T the surface
 		*/
@@ -192,6 +214,7 @@ namespace BALL
 		TVector3<T> point_;
 		TVector3<T> right_vector_;
 		TVector3<T> height_vector_;
+		TVector3<T> depth_vector_;
 
 		T width_;
 		T height_;
@@ -205,16 +228,32 @@ namespace BALL
 		: point_(point),
 			right_vector_(right_vector),
 			height_vector_(height_vector),
+			depth_vector_((right_vector % height_vector).normalize() * depth),
 			width_(right_vector.getLength()),
 			height_(height_vector.getLength()),
 			depth_(depth)
 	{}
-
+	
+	template <typename T>
+	TBox3<T>::TBox3(const TVector3<T>& point, 
+									const TVector3<T>& right_vector,
+									const TVector3<T>& height_vector,
+									const TVector3<T>& depth_vector)
+		: point_(point),
+			right_vector_(right_vector),
+			height_vector_(height_vector),
+			depth_vector_(depth_vector),
+			width_(right_vector.getLength()),
+			height_(height_vector.getLength()),
+			depth_(depth_vector.getLength())
+	{}
+	
 	template <typename T>
 	TBox3<T>::TBox3()
 		:	point_((T)0, (T)0, (T)0),
 			right_vector_((T)0, (T)1, (T)0),
-			height_vector_((T)-1, (T)0, (T)0),
+			height_vector_((T)1, (T)0, (T)0),
+			depth_vector_((T)0, (T)0, (T)1),
 			width_((T)1),
 			height_((T)1),
 			depth_((T)1)
@@ -226,6 +265,7 @@ namespace BALL
 		: point_(box.point_),
 			right_vector_(box.right_vector_),
 			height_vector_(box.height_vector_),
+			depth_vector_(box.depth_vector_),
 			width_(box.width_),
 			height_(box.height_),
 			depth_(box.depth_)
@@ -238,6 +278,7 @@ namespace BALL
 		point_ = box.point_;
 		right_vector_ = box.right_vector_;
 		height_vector_ = box.height_vector_;
+		depth_vector_ = box.depth_vector_;
 		width_ = box.width_;
 		height_ = box.height_;
 		depth_ = box.depth_;
@@ -257,6 +298,7 @@ namespace BALL
 		point_.swap(box.point_);
 		right_vector_.swap(box.right_vector_);
 		height_vector_.swap(box.height_vector_);
+		depth_vector_.swap(box.depth_vector_);
 
 		std::swap(width_, box.width_);
 		std::swap(height_, box.height_);
@@ -269,6 +311,7 @@ namespace BALL
 		point_.clear();
 		right_vector_ = TVector3<T>((T)0, (T)1, (T)0);
 		height_vector_ = TVector3<T>((T)-1, (T)0, (T)0);
+		depth_vector_ = TVector3<T>((T)0, (T)0, (T)1);
 		width_ = (T) 1;
 		height_ = (T) 1;
 		depth_  = (T) 1;
@@ -295,6 +338,15 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
+	void TBox3<T>::setDepth(T depth) 
+	{
+		depth_vector_.normalize();
+		depth_vector_ *= depth;
+		depth_ = depth;
+	}
+	
+	template <typename T>
+	BALL_INLINE
 	void TBox3<T>::setRightVector(const TVector3<T>& v)
 	{
 		right_vector_ = v;
@@ -308,21 +360,26 @@ namespace BALL
 		height_vector_ = v;
 		height_ = height_vector_.getLength();
 	}
-
+	
+	template <typename T>
+	BALL_INLINE
+	void TBox3<T>::setDepthVector(const TVector3<T>& v)
+	{
+		depth_vector_ = v;
+		depth_ = depth_vector_.getLength();
+	}
+	
 	template <typename T>
 	BALL_INLINE 
 	T TBox3<T>::getSurface() const
 	{
 		return ((width_  * height_ + width_  * depth_  + height_ * depth_) * 2);
 	}
-
+	
 	template <typename T>
 	TVector3<T> TBox3<T>::getDiagonalVector() const
 	{
-		TVector3<T> v = right_vector_ % height_vector_;
-		v.normalize();
-		v *= depth_;
-		return (v + right_vector_ + height_vector_);
+		return (right_vector_ + height_vector_ + depth_vector_);
 	}
 
 	template <typename T>
@@ -335,7 +392,13 @@ namespace BALL
 	template <typename T>
 	bool TBox3<T>::operator == (const TBox3<T>& box) const
 	{
-		return (point_ == box.point_ && right_vector_ == box.right_vector_ && height_vector_ == box.height_vector_ &&width_ == box.width_ && height_ == box.height_ && depth_ == box.depth_);
+		return (point_ 					== box.point_ 					&&
+						right_vector_ 	== box.right_vector_ 		&&
+						height_vector_ 	== box.height_vector_ 	&&
+						depth_vector_ 	== box.depth_vector_ 		&&
+						width_ 					== box.width_ 					&&
+						height_ 				== box.height_ 					&&
+						depth_ 					== box.depth_);
 	}
 
 	template <typename T>
@@ -352,9 +415,10 @@ namespace BALL
 		return (point_.isValid() && 
 						right_vector_.isValid() &&
 						height_vector_.isValid() &&
+						depth_vector_.isValid() &&
 						!right_vector_.isZero() &&
 						!height_vector_.isZero() && 
-						right_vector_.isOrthogonalTo(height_vector_));
+						!depth_vector_.isZero());
 						
 	}
 
@@ -375,6 +439,9 @@ namespace BALL
 		s << "height_vector: " << height_vector_ << std::endl;
 
 		BALL_DUMP_DEPTH(s, depth);
+		s << "depth_vector: " << depth_vector_ << std::endl;
+		
+		BALL_DUMP_DEPTH(s, depth);
 		s << "width: " << width_ << std::endl;
 		
 		BALL_DUMP_DEPTH(s, depth);
@@ -391,32 +458,35 @@ namespace BALL
 	*/
 	//@{
 	/**	Input operator.
-			Reads in two objects of type TVector3 a and b 
+			Reads in four objects of type TVector3 point, right, height, depth 
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TBox3<T>& box)
 	{
-		TVector3<T> point, right, height;
-		T depth;
+		TVector3<T> point, right, height, depth;
 		s >> point >> right >> height >> depth;
 		box.setPoint(point);
 		box.setRightVector(right);
 		box.setHeightVector(height);
-		box.setDepth(depth);
+		box.setDepthVector(depth);
 		return s;
 	}
 
 	/**	Output Operator.
-			Writes the two coordinates of the box to an output stream.
+			Writes the coordinates of the lower left corner of the box,
+			and the three spanning vectors to an output stream.
 			The vectors are enclosed by brackets. \par
 			<b>Example:</b> \par
-			<tt>((0 1 2) (7.5 3.4 10))</tt> \par
+			<tt>((0 0 0) (0 1 0) (1 0 0) (0 0 1)</tt> \par
 			@see TVector3::operator<<
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TBox3<T>& box)
 	{
-		return s << box.getPoint() << " " << box.getRightVector() << " " << box.getHeightVector() << " " << box.getDepth();
+		return s << box.getPoint() << " " 
+						 << box.getRightVector() << " " 
+						 << box.getHeightVector() << " " 
+						 << box.getDepthVector();
 	}
 	//@}
 

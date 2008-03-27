@@ -17,7 +17,8 @@ class Box
 
   Box() throw();
   Box(const Box&) throw();
-  Box(const Vector3&, const Vector3& = Vector3( 0, 1, 0), const Vector3& = Vector3(-1, 0, 0), float = 1) throw();
+  Box(const Vector3&, const Vector3&, const Vector3&, float) throw();
+  Box(const Vector3&, const Vector3& = Vector3( 0, 1, 0), const Vector3& = Vector3(1, 0, 0), const Vector3& = Vector3(0, 0, 1)) throw();
   bool isValid() const throw();
 //  const Box& operator = (const Box&) throw();
   void clear() throw();

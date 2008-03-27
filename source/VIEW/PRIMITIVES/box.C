@@ -33,7 +33,14 @@ namespace BALL
 		{
 		}
 
-
+		Box::Box(const Vector3& point, 
+				const Vector3& right_vector,
+				const Vector3& height_vector,
+				const Vector3& depth_vector)
+			: GeometricObject(),
+				Box3(point, right_vector, height_vector, depth_vector)
+		{}
+		
 		Box::~Box()
 		{
 			#ifdef BALL_VIEW_DEBUG
@@ -82,7 +89,7 @@ namespace BALL
 		void Box::getVertices(vector<Vector3>& vertices) const
 		{
 			vertices.push_back(point_);
-			vertices.push_back(point_ + right_vector_ * width_ + height_vector_ * height_);
+			vertices.push_back(point_ + right_vector_ * width_ + height_vector_ * height_ + depth_vector_ * depth_);
 		}
 
 

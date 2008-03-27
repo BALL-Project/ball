@@ -1247,7 +1247,7 @@ namespace BALL
 			Vector3 v2(box.getHeightVector());
 			if (v2.getSquareLength() != 0) v2.normalize();
 
-			Vector3 v3(box.getRightVector() % box.getHeightVector());
+			Vector3 v3(box.getDepthVector());
 			if (v3.getSquareLength() != 0) v3.normalize();
 
 			float m[16] = { v1.x, v1.y, v1.z, 0,
@@ -1258,7 +1258,7 @@ namespace BALL
 
 			glScalef(box.getRightVector().getLength(),
 							 box.getHeightVector().getLength(),
-							 box.getDepth());
+							 box.getDepthVector().getLength());
 
 			GL_boxes_list_[display_lists_index_].draw();
 
@@ -2361,7 +2361,7 @@ namespace BALL
 
 			if (vol.draw_box)
 			{
-				Box box(origin, vol.x, vol.y, vol.z.getLength());
+				Box box(origin, vol.x, vol.y, vol.z);
 				box.setColor(stage_->getBackgroundColor().getInverseColor());
 				Position dli = display_lists_index_;
 				display_lists_index_ = DRAWING_MODE_WIREFRAME * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + drawing_precision_;
