@@ -99,7 +99,7 @@ namespace BALL
 				void sendNewValue(int);
 		
 			public slots:
-				void showModelProperties(ModelItem* modelitem);
+				//void showModelProperties(ModelItem* modelitem);
 				void showPredictionResults(PredictionItem* item);
 				void showValidationResults(ValidationItem* item);
 				void showInputDataProperties(InputDataItem* item);

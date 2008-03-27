@@ -86,7 +86,12 @@ void DataItemView::contextMenuEvent(QContextMenuEvent *event)
 	
 		if (ModelItem* model_item_at_pos = qgraphicsitem_cast<ModelItem *>(itemAt(pos)))
 		{
-			data_scene->main_window->showModelProperties(model_item_at_pos);
+			//data_scene->main_window->showModelProperties(model_item_at_pos);
+			QMenu menu(this);
+			menu.addAction(model_item_at_pos->save_action);
+			menu.addAction(model_item_at_pos->load_action);
+			menu.addAction(model_item_at_pos->properties_action);
+			menu.exec(event->globalPos());
 		}
 	
 		else if (SDFInputDataItem* item_at_pos = qgraphicsitem_cast<SDFInputDataItem *>(itemAt(pos)))

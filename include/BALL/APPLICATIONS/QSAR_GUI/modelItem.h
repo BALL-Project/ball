@@ -109,6 +109,7 @@ namespace BALL
 				void setInputDataItem(InputDataItem* item);
 				void addPredictionInputEdge(Edge* edge);
 				void deletePredictionInputEdge(Edge* edge);
+				void createActions();
 
 				/** @name Enums */
 				/** 
@@ -129,7 +130,16 @@ namespace BALL
 				int grid_search_steps;
 				int grid_search_recursions;
 				int k_fold;
-				
+
+				QAction* save_action;
+				QAction* load_action;
+				QAction* properties_action;
+
+			public slots:
+				void saveModel();
+				void loadModel();	
+				void showProperties();
+
 			private:
 				/** @name Private Attributes*/
 

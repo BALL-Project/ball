@@ -5,6 +5,7 @@
 #include <BALL/QSAR/exception.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/exception.h>
 #include <QtGui/QMessageBox>
+#include <QtGui/QFileDialog>
 
 using namespace BALL::QSAR;
 using namespace BALL::QSAR::Exception;
@@ -39,6 +40,7 @@ ModelItem::ModelItem(RegistryEntry* entry,  DataItemView* miv):
 	}
 	setPixmap(pm);
 	setName(QString(entry_->name_abreviation.c_str()));
+	createActions();
 }
 
 ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, DataItemView* miv):
@@ -71,6 +73,7 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, DataItemVie
 	QPixmap pm = QPixmap("./images/model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
 	setPixmap(pm);
 	setName(QString(entry_->name_abreviation.c_str()));
+	createActions();
 }
 
 ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, int kernelType, double parameter1, double parameter2, DataItemView* miv): 
@@ -104,6 +107,7 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, int kernelT
 	QPixmap pm = QPixmap("./images/kernel_model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
 	setPixmap(pm);
 	setName(QString(entry_->name_abreviation.c_str()));
+	createActions();
 }
 
 ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, String s1, String s2,DataItemView* miv):
@@ -136,9 +140,11 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, String s1, 
 	QPixmap pm = QPixmap("./images/kernel_model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
 	setPixmap(pm);
 	setName(QString(entry_->name_abreviation.c_str()));
+	createActions();
 }
 
 ModelItem::ModelItem(ModelItem& item):
+QObject(),
 DataItem(item.view_)
 {
 	view_ = item.view_;
@@ -158,6 +164,9 @@ DataItem(item.view_)
 	k_fold = item.k_fold;
 	save_attribute_ = item.save_attribute_;
 	prediction_input_edges_ = item.prediction_input_edges_;
+	save_action = item.save_action;
+	load_action = item.load_action;
+	properties_action = item.properties_action;
 
 	QSARData q;
 
@@ -193,6 +202,9 @@ ModelItem::~ModelItem()
 		mw->removeFromPipeline(this);
 	}
 	delete model_;
+	delete save_action;
+	delete load_action;
+	delete properties_action;
 }
 
 void ModelItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -311,4 +323,51 @@ void ModelItem::deletePredictionInputEdge(Edge* edge)
 		prediction_input_edges_.erase(prediction_input_edges_.find(edge));
 	}
 	delete edge;
+}
+
+void ModelItem::createActions()
+{
+	save_action = new QAction(QIcon("./images/save_desktop.png"),tr("Save model"), this);
+	connect(save_action, SIGNAL(triggered()), this, SLOT(saveModel()));
+
+	load_action = new QAction(QIcon("./images/save_desktop.png"),tr("Load model"), this);
+	connect(load_action, SIGNAL(triggered()), this, SLOT(loadModel()));
+
+	properties_action = new QAction(QIcon("./images/save_desktop.png"),tr("Show Properties"), this);
+	connect(properties_action, SIGNAL(triggered()), this, SLOT(showProperties()));
+}
+
+void ModelItem::saveModel()
+{
+	if(done_)
+	{
+		QString filename = QFileDialog::getSaveFileName(view_, tr("Save File as"),"",tr("text (*.txt)"));
+		model_->saveToFile(filename.toStdString());
+	}
+	else
+	{
+		QMessageBox::warning(view_,"Error","Model must have been trained before the results can be saved to a file!");
+	}
+}
+
+void ModelItem::loadModel()
+{
+	QString filename = QFileDialog::getOpenFileName(view_, tr("Open Model"),"",tr("text (*.txt)"));
+	if (!filename.isEmpty())
+	{
+		try
+		{
+			model_->readFromFile(filename.toStdString());
+		}
+		catch(WrongDataType e)
+		{
+			QMessageBox::warning(view_,"Error",e.getMessage());
+		}
+	}	
+}
+
+void ModelItem::showProperties()
+{
+	ModelConfigurationDialog* modelConfigurationDialog = new ModelConfigurationDialog(this, view_->data_scene->main_window);
+	modelConfigurationDialog->exec();
 }

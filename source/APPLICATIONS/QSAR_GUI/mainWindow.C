@@ -587,7 +587,7 @@ void MainWindow::createDockWindows()
 
 	}
 	QDockWidget* validationdock = new QDockWidget(tr("Validation"), this);
-        validationdock->setAllowedAreas(Qt::LeftDockWidgetArea);
+	validationdock->setAllowedAreas(Qt::LeftDockWidgetArea);
 	validationdock->setWidget(val_list_);
 	addDockWidget(Qt::LeftDockWidgetArea, validationdock);
 	windowMenu_->addAction(validationdock->toggleViewAction());
@@ -680,11 +680,11 @@ void MainWindow::saveDesktop()
 }
 
 
-void MainWindow::showModelProperties(ModelItem* modelitem)
-{
-	modelConfigurationDialog_ = new ModelConfigurationDialog(modelitem, this);
-	modelConfigurationDialog_->exec();
-}	
+// void MainWindow::showModelProperties(ModelItem* modelitem)
+// {
+// 	modelConfigurationDialog_ = new ModelConfigurationDialog(modelitem, this);
+// 	modelConfigurationDialog_->exec();
+// }	
 
 void MainWindow::showPredictionResults(PredictionItem* item)
 {
