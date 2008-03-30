@@ -164,9 +164,9 @@ DataItem(item.view_)
 	k_fold = item.k_fold;
 	save_attribute_ = item.save_attribute_;
 	prediction_input_edges_ = item.prediction_input_edges_;
-	save_action = item.save_action;
-	load_action = item.load_action;
-	properties_action = item.properties_action;
+	
+	// do NOT copy from 'item' but connect to the methods of this new object!!
+	createActions();
 
 	QSARData q;
 
