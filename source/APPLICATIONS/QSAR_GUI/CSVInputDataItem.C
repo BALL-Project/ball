@@ -3,6 +3,7 @@
 
 #include <BALL/QSAR/exception.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/exception.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/inputDataDialog.h>
 
 #include <QtGui/QDialog>
 #include <QtGui/QDrag>
@@ -154,4 +155,10 @@ void CSVInputDataItem::setAppend(bool append)
 bool CSVInputDataItem::append()
 {
 	return append_;
+}
+
+void CSVInputDataItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+	InputDataDialog inputDataDialog(this);
+	inputDataDialog.exec();
 }

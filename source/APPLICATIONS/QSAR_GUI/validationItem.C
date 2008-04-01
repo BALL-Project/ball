@@ -1,6 +1,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/validationItem.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/exception.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/mainWindow.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/validationResultDialog.h>
 
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>
@@ -198,4 +199,10 @@ int ValidationItem::k()
 Matrix* ValidationItem::resultOfRandTest()
 {
 	return &result_of_rand_test_;
+}
+
+void ValidationItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+	ValidationResultDialog validationResultDialog(this);
+	validationResultDialog.exec();
 }

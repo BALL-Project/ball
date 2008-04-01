@@ -368,6 +368,15 @@ void ModelItem::loadModel()
 
 void ModelItem::showProperties()
 {
-	ModelConfigurationDialog* modelConfigurationDialog = new ModelConfigurationDialog(this, view_->data_scene->main_window);
-	modelConfigurationDialog->exec();
+	ModelConfigurationDialog modelConfigurationDialog(this, view_->data_scene->main_window);
+	modelConfigurationDialog.exec();
+}
+
+void ModelItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+	QMenu menu(view_);
+	menu.addAction(save_action);
+	menu.addAction(load_action);
+	menu.addAction(properties_action);
+	menu.exec(event->screenPos());
 }

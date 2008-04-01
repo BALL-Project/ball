@@ -3,6 +3,7 @@
 
 #include <BALL/QSAR/exception.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/exception.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/inputDataDialog.h>
 
 #include <QtGui/QDialog>
 #include <QtGui/QDrag>
@@ -181,3 +182,8 @@ void SDFInputDataItem::setActivityValues(SortedList<int> act)
 // 	}
 // }
 
+void SDFInputDataItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+	InputDataDialog inputDataDialog(this);
+	inputDataDialog.exec();
+}

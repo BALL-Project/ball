@@ -53,7 +53,7 @@ void DataItemView::keyPressEvent(QKeyEvent *event)
 	QList<QGraphicsItem*> itemlist = scene()->items(); 
 	DataItem* item = static_cast<DataItem*>(scene()->focusItem ());
 
-     	if (!item)
+    if (!item)
 	{
 		return;
 	}
@@ -77,45 +77,6 @@ void DataItemView::keyPressEvent(QKeyEvent *event)
 		QGraphicsView::keyPressEvent(event);
 	}
  }
-
-void DataItemView::contextMenuEvent(QContextMenuEvent *event)
-{
-	if (name == "view")
-	{
-		QPoint pos = event->pos();	
-	
-		if (ModelItem* model_item_at_pos = qgraphicsitem_cast<ModelItem *>(itemAt(pos)))
-		{
-			//data_scene->main_window->showModelProperties(model_item_at_pos);
-			QMenu menu(this);
-			menu.addAction(model_item_at_pos->save_action);
-			menu.addAction(model_item_at_pos->load_action);
-			menu.addAction(model_item_at_pos->properties_action);
-			menu.exec(event->globalPos());
-		}
-	
-		else if (SDFInputDataItem* item_at_pos = qgraphicsitem_cast<SDFInputDataItem *>(itemAt(pos)))
-		{
-			data_scene->main_window->showInputDataProperties(item_at_pos);
-		}
-
-		else if (CSVInputDataItem* item_at_pos = qgraphicsitem_cast<CSVInputDataItem *>(itemAt(pos)))
-		{
-			data_scene->main_window->showInputDataProperties(item_at_pos);
-		}
-
-		else if (PredictionItem* item_at_pos = qgraphicsitem_cast<PredictionItem *>(itemAt(pos)))
-		{
-			data_scene->main_window->showPredictionResults(item_at_pos);
-		}
-	
-		else if (ValidationItem* item_at_pos = qgraphicsitem_cast<ValidationItem *>(itemAt(pos)))
-		{
-			data_scene->main_window->showValidationResults(item_at_pos);
-		}
-
-	}
-}
 
 void DataItemView::addDropSite()
 {

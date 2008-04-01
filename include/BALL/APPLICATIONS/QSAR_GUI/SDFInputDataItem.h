@@ -53,6 +53,7 @@ namespace BALL
 				
 			protected:
 				void mousePressEvent(QGraphicsSceneMouseEvent *event);
+				void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 				
 				friend class DataItemScene;
 		};

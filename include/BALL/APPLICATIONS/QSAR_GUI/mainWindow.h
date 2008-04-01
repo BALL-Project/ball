@@ -23,8 +23,8 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/modelConfigurationDialog.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/featureSelectionDialog.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/validationDialog.h>
-#include <BALL/APPLICATIONS/QSAR_GUI/predictionResultDialog.h>
-#include <BALL/APPLICATIONS/QSAR_GUI/validationResultDialog.h>
+
+
 
 #include <BALL/QSAR/registry.h>
 
@@ -97,12 +97,6 @@ namespace BALL
 
 			signals:
 				void sendNewValue(int);
-		
-			public slots:
-				//void showModelProperties(ModelItem* modelitem);
-				void showPredictionResults(PredictionItem* item);
-				void showValidationResults(ValidationItem* item);
-				void showInputDataProperties(InputDataItem* item);
 			
 			private slots:
 				
@@ -117,6 +111,7 @@ namespace BALL
 				void executePipeline();
 				void exportPipeline();
 				void exportPipeline(QString filename, bool ext);
+				void saveModels();
 
 			private:
 		
@@ -183,6 +178,7 @@ namespace BALL
 				QAction* executeAct_;
 				QAction* restoreAct_;
 				QAction* exportAct_;
+				QAction* saveModelsAct_;
 				
 				friend class ModelItem;
 		};

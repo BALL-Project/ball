@@ -2,6 +2,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/exception.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/mainWindow.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/predictionPlotter.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/predictionResultDialog.h>
 
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>
@@ -116,5 +117,11 @@ void PredictionItem::showPredictionPlotter()
 	{
 		pred_plotter_->show();
 	}
+}
+
+void PredictionItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+	PredictionResultDialog predictionResultDialog(this);
+	predictionResultDialog.exec();
 }
 

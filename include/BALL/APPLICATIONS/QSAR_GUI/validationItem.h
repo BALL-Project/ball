@@ -89,6 +89,7 @@ namespace BALL
 				* defines how the item deals with mouse clicks
 				*/
 				void mousePressEvent(QGraphicsSceneMouseEvent *event);
+				void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 		
 				/** @name Private Attributes */
 	

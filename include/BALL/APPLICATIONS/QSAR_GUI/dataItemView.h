@@ -66,12 +66,6 @@ namespace BALL
 			*/
 			void keyPressEvent(QKeyEvent* event);
 
-			/** event handler for drag enter events
-			* handles incoming drags from other widgets
-			*/
-
-			/** handles clicks with the right mouse button in order to show a context menu*/
-			void contextMenuEvent(QContextMenuEvent *event);
 			void scaleView(qreal scaleFactor);
 // 			void timerEvent(QTimerEvent *event);
 			

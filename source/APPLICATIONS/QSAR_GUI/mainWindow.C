@@ -467,6 +467,10 @@ void MainWindow::createActions()
 	exportAct_ = new QAction(QIcon("./images/save.png"),tr("Export Pipeline"), this);
 	exportAct_->setStatusTip(tr("Exports the Pipeline in a configuration file for the QSAR Pipeline Package"));
 	connect(exportAct_, SIGNAL(triggered()), this, SLOT(exportPipeline()));
+
+	saveModelsAct_ = new QAction(QIcon(),tr("Save Models"), this);
+	saveModelsAct_ ->setStatusTip(tr("Saves all models in the pipeline"));
+	connect(saveModelsAct_ , SIGNAL(triggered()), this, SLOT(saveModels()));
  }
 
 /*
@@ -498,6 +502,7 @@ function for setting up the tool bars
 	fileToolBar_->addAction(delAct_);
 	fileToolBar_->addAction(saveAct_);
 	fileToolBar_->addAction(exportAct_);
+	fileToolBar_->addAction(saveModelsAct_);
 	fileToolBar_->addAction(restoreAct_);
 	fileToolBar_->addAction(executeAct_);
  }
@@ -679,29 +684,9 @@ void MainWindow::saveDesktop()
 	exportPipeline(filename, true);
 }
 
-
-// void MainWindow::showModelProperties(ModelItem* modelitem)
-// {
-// 	modelConfigurationDialog_ = new ModelConfigurationDialog(modelitem, this);
-// 	modelConfigurationDialog_->exec();
-// }	
-
-void MainWindow::showPredictionResults(PredictionItem* item)
+void MainWindow::saveModels()
 {
-	PredictionResultDialog predictionResultDialog(item);
-	predictionResultDialog.exec();
-}
-
-void MainWindow::showValidationResults(ValidationItem* item)
-{
-	ValidationResultDialog validationResultDialog(item);
-	validationResultDialog.exec();
-}
-
-void MainWindow::showInputDataProperties(InputDataItem* item)
-{
-	InputDataDialog inputDataDialog(item);
-	inputDataDialog.exec();	  
+	QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "/home", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 }
 
 Registry* MainWindow::registry()
