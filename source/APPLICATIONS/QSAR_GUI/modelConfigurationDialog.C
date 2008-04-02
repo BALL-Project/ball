@@ -192,16 +192,16 @@ ModelConfigurationDialog::ModelConfigurationDialog():
 ///destructor
 ModelConfigurationDialog::~ModelConfigurationDialog()
 {
-// 	delete contentsWidget;
-// 	delete pagesWidget;
-// 	delete buttons_;
-// 	delete okButton_;
-// 	delete modelPage_;
-// 	delete kernelPage_;
-// 	delete optimizePage_;
-// 	delete propertyPage_;
-// 	delete connectionsPage_;
-// 	delete dataPage_;
+	delete contentsWidget;
+	delete pagesWidget;
+	delete buttons_;
+	delete okButton_;
+	delete modelPage_;
+	delete kernelPage_;
+	delete optimizePage_;
+	delete propertyPage_;
+	delete connectionsPage_;
+	delete dataPage_;
 }
 
 ///function for setting up the icon box to the left of the dialog
