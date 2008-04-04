@@ -107,6 +107,20 @@ make
 cd ..
 
 echo
+echo building Qwt ...
+echo
+cd qwt-5.0.2
+echo "using " `qmake -v`
+echo "If the above stated Qt-version is not the one of the Qt library (>4.2.0) that will be used for BALL,"
+echo "you will get problems linking your applications!!"
+echo 
+qmake; make;
+cd src; make staticlib;
+cd ..
+make clean
+cd ..
+
+echo
 echo building Qt ...
 echo
 cd qt*
