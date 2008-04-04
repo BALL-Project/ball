@@ -343,7 +343,6 @@ FeatureSelectionItem* MainWindow::createFeatureSelection(FeatureSelectionItem* f
 			QMessageBox::information(this, tr(""),tr("Invalid value"));
 		}
 	}
-cout<<"test0 " <<endl<<item->getType()<<flush;
 	return item;
 }
 
@@ -467,10 +466,6 @@ void MainWindow::createActions()
 	exportAct_ = new QAction(QIcon("./images/save.png"),tr("Export Pipeline"), this);
 	exportAct_->setStatusTip(tr("Exports the Pipeline in a configuration file for the QSAR Pipeline Package"));
 	connect(exportAct_, SIGNAL(triggered()), this, SLOT(exportPipeline()));
-
-	saveModelsAct_ = new QAction(QIcon(),tr("Save Models"), this);
-	saveModelsAct_ ->setStatusTip(tr("Saves all models in the pipeline"));
-	connect(saveModelsAct_ , SIGNAL(triggered()), this, SLOT(saveModels()));
  }
 
 /*
@@ -502,7 +497,6 @@ function for setting up the tool bars
 	fileToolBar_->addAction(delAct_);
 	fileToolBar_->addAction(saveAct_);
 	fileToolBar_->addAction(exportAct_);
-	fileToolBar_->addAction(saveModelsAct_);
 	fileToolBar_->addAction(restoreAct_);
 	fileToolBar_->addAction(executeAct_);
  }
@@ -684,18 +678,31 @@ void MainWindow::saveDesktop()
 	exportPipeline(filename, true);
 }
 
-void MainWindow::saveModels()
+void MainWindow::saveModels(String directory)
 {
-	QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-
-	int model_counter = 0;
-
-	for (QSet<ModelItem*>::Iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
+	try
 	{
-		model_counter++;
-		ModelItem* item = (*it); 
-		QString name;
-		item->saveModel(dir + item->name() + name.setNum(model_counter) + ".txt");
+		for (QSet<ModelItem*>::Iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
+		{
+			// if model has not yet been trained, there is nothing to be saved
+			if(!(*it)->isDone()) continue;
+			
+			Model* model = (*it)->model();
+			String file = directory;
+			String f1 = (*it)->savedAs().toStdString();
+			if(f1=="")
+			{
+				throw GeneralException(__FILE__,__LINE__,"Model saving error ", "model must be assigned a file to be saved to!");
+			}
+			file += f1;
+			cout<<file<<endl;
+			(*it)->setSavedAs(QString(file.c_str()));
+			model->saveToFile(file);
+		}
+	}
+	catch(GeneralException e)
+	{	
+		QMessageBox::about(this, tr("Error"),e.getMessage());
 	}
 }
 
@@ -1983,6 +1990,9 @@ void MainWindow::exportPipeline(QString filename, bool ext)
 	int prediction_counter = 0;
 
 	QString name;
+	
+	String f = filename.toStdString();
+	String directory = f.substr(0,f.find_last_of("/")+1);
 			
 	if (ext)
 	{
@@ -2093,6 +2103,10 @@ void MainWindow::exportPipeline(QString filename, bool ext)
 
 		}
 	}
+	
+	/// save models to files
+	saveModels(directory);
+	
 			
 	///Feature Selection Items
 	for (QSet<FeatureSelectionItem*>::Iterator it = fs_pipeline_.begin(); it != fs_pipeline_.end(); it++)

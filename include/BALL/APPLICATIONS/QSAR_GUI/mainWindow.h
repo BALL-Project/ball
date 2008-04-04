@@ -111,7 +111,6 @@ namespace BALL
 				void executePipeline();
 				void exportPipeline();
 				void exportPipeline(QString filename, bool ext);
-				void saveModels();
 
 			private:
 		
@@ -121,6 +120,7 @@ namespace BALL
 				void createActions();
 				void createDockWindows();
 				void createDialogs();
+				void saveModels(String directory);
 			
 				/** @name Private Attributes */
 
@@ -178,7 +178,6 @@ namespace BALL
 				QAction* executeAct_;
 				QAction* restoreAct_;
 				QAction* exportAct_;
-				QAction* saveModelsAct_;
 				
 				friend class ModelItem;
 		};

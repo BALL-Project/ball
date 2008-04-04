@@ -11,6 +11,7 @@ using namespace BALL::QSAR;
 using namespace BALL::QSAR::Exception;
 using namespace BALL::VIEW;
 using namespace BALL::VIEW::Exception;
+using namespace BALL::Exception;
 
 
 ModelItem::ModelItem(RegistryEntry* entry,  DataItemView* miv):
@@ -289,7 +290,6 @@ void ModelItem::trainModel()
 	model_->train();
 	
 	done_ = 1; //ready!
-
 }
 
 void  ModelItem::setSaveAttribute(bool save)
@@ -339,26 +339,32 @@ void ModelItem::createActions()
 
 void ModelItem::saveModel()
 {
-	if(done_)
+	try
 	{
-		QString filename = QFileDialog::getSaveFileName(view_, tr("Save File as"),"",tr("text (*.txt)"));
-		model_->saveToFile(filename.toStdString());
+		if(done_)
+		{
+			QString filename = QFileDialog::getSaveFileName(view_, tr("Save File as"),"",tr("text (*.txt)"));
+			model_->saveToFile(filename.toStdString());
+		}
 	}
-	else
-	{
-		QMessageBox::warning(view_,"Error","Model must have been trained before the results can be saved to a file!");
-	}
+	catch(GeneralException e)
+	{	
+		QMessageBox::about(view_, tr("Error"),e.getMessage());
+	}	
 }
 
 void ModelItem::saveModel(QString file)
 {
-	if(done_)
+	try
 	{
-		model_->saveToFile(file.toStdString());
+		if(done_)
+		{
+			model_->saveToFile(file.toStdString());
+		}
 	}
-	else
-	{
-		QMessageBox::warning(view_,"Error","Model must have been trained before the results can be saved to a file!");
+	catch(GeneralException e)
+	{	
+		QMessageBox::about(view_, tr("Error"),e.getMessage());
 	}
 }
 
