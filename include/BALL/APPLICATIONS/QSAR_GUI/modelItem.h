@@ -110,6 +110,7 @@ namespace BALL
 				void addPredictionInputEdge(Edge* edge);
 				void deletePredictionInputEdge(Edge* edge);
 				void createActions();
+				void saveModel(QString file);
 
 				/** @name Enums */
 				/** 

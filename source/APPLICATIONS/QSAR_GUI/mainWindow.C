@@ -686,7 +686,17 @@ void MainWindow::saveDesktop()
 
 void MainWindow::saveModels()
 {
-	QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "/home", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+	QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+
+	int model_counter = 0;
+
+	for (QSet<ModelItem*>::Iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
+	{
+		model_counter++;
+		ModelItem* item = (*it); 
+		QString name;
+		item->saveModel(dir + item->name() + name.setNum(model_counter) + ".txt");
+	}
 }
 
 Registry* MainWindow::registry()

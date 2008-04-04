@@ -350,6 +350,18 @@ void ModelItem::saveModel()
 	}
 }
 
+void ModelItem::saveModel(QString file)
+{
+	if(done_)
+	{
+		model_->saveToFile(file.toStdString());
+	}
+	else
+	{
+		QMessageBox::warning(view_,"Error","Model must have been trained before the results can be saved to a file!");
+	}
+}
+
 void ModelItem::loadModel()
 {
 	QString filename = QFileDialog::getOpenFileName(view_, tr("Open Model"),"",tr("text (*.txt)"));
@@ -374,9 +386,12 @@ void ModelItem::showProperties()
 
 void ModelItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
-	QMenu menu(view_);
-	menu.addAction(save_action);
-	menu.addAction(load_action);
-	menu.addAction(properties_action);
-	menu.exec(event->screenPos());
+	if (view_->name == "view")
+	{
+		QMenu menu(view_);
+		menu.addAction(save_action);
+		menu.addAction(load_action);
+		menu.addAction(properties_action);
+		menu.exec(event->screenPos());
+	}
 }

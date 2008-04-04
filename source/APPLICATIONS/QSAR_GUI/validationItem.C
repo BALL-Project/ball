@@ -203,6 +203,9 @@ Matrix* ValidationItem::resultOfRandTest()
 
 void ValidationItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
-	ValidationResultDialog validationResultDialog(this);
-	validationResultDialog.exec();
+	if (view_->name == "view")
+	{
+		ValidationResultDialog validationResultDialog(this);
+		validationResultDialog.exec();
+	}
 }

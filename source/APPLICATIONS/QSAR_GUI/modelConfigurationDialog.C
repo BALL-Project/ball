@@ -193,7 +193,7 @@ ModelConfigurationDialog::ModelConfigurationDialog():
 ModelConfigurationDialog::~ModelConfigurationDialog()
 {
 	delete contentsWidget;
-	delete pagesWidget;
+ 	delete pagesWidget;
 	delete buttons_;
 	delete okButton_;
 	delete modelPage_;
