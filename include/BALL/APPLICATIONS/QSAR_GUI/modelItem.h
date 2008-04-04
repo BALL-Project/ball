@@ -11,11 +11,11 @@ using namespace BALL::QSAR;
 namespace BALL
 {
 	namespace VIEW
-	{
+	{		
 		/** @class ModelItem
-		* @brief graphical representation of a QSAR model
-		*
-		* @todo
+		 * @brief graphical representation of a QSAR model
+		 *
+		 * @todo
 		*/
 		class ModelItem : public QObject, public DataItem
 		{
@@ -111,6 +111,7 @@ namespace BALL
 				void deletePredictionInputEdge(Edge* edge);
 				void createActions();
 				void saveModel(QString file);
+				
 
 				/** @name Enums */
 				/** 
@@ -157,6 +158,7 @@ namespace BALL
 				bool save_attribute_;
 
 				QSet<Edge*> prediction_input_edges_;
+		
 
 			protected:
 

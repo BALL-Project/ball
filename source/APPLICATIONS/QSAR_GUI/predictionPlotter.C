@@ -61,7 +61,9 @@ void PredictionPlotter::plotObservedVsExpected()
 		QwtPlotMarker* marker= new QwtPlotMarker;
 		marker->setSymbol(data_symbol);
 		double observed = (*it)(1);
-		double expected = (*data_->getActivity(i))[0];
+		vector<double>* e = data_->getActivity(i);
+		double expected = (*e)[0];
+		delete e;
 		if(observed<min_y) min_y=observed;
 		if(observed>max_y) max_y=observed;
 		if(expected<min_x) min_x=expected;

@@ -3,6 +3,7 @@
 
 #include <BALL/QSAR/exception.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/exception.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/inputPlotter.h>
 
 #include <QtGui/QDialog>
 #include <QtGui/QDrag>
@@ -22,6 +23,7 @@ InputDataItem::InputDataItem(QString filename, bool center_data, bool center_y, 
 	center_y_(center_y)
 {
 	data_ = new QSARData;
+	input_plotter_ = NULL;
 }
 
 InputDataItem::InputDataItem(QString filename, DataItemView* view): 
@@ -29,6 +31,7 @@ InputDataItem::InputDataItem(QString filename, DataItemView* view):
 	filename_(filename),
 	data_(NULL)
 {
+	input_plotter_ = NULL;
 }
 
 InputDataItem::InputDataItem():
@@ -38,11 +41,13 @@ InputDataItem::InputDataItem():
 	center_y_(false),
 	data_(NULL)
 {
+	input_plotter_ = NULL;
 }
 
 InputDataItem::~InputDataItem()
 {
 	delete data_;
+	delete input_plotter_;
 }
 
 InputDataItem::InputDataItem(InputDataItem& item):
@@ -56,6 +61,7 @@ InputDataItem::InputDataItem(InputDataItem& item):
 	setPixmap(item.pixmap());
 	center_data_ = item.center_data_;
 	center_y_ = item.center_data_;
+	input_plotter_ = item.input_plotter_;
 }
 
 QSARData* InputDataItem::data()
@@ -94,3 +100,14 @@ void InputDataItem::setData(QSARData* data)
 	data_ = data;
 }
 
+void InputDataItem::showPlotter()
+{
+	if(input_plotter_ == NULL)
+	{
+		input_plotter_=new InputPlotter(this);
+	}
+	else
+	{
+		input_plotter_->show();
+	}
+}

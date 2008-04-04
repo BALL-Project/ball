@@ -6,13 +6,15 @@
 
 #include <QtGui/QGraphicsSceneMouseEvent>
 
+
 using namespace BALL::QSAR;
 
 namespace BALL
 {
 	namespace VIEW
 	{
-
+		class InputPlotter;
+		
 		/** @class InputDataItem
 		* @brief class for the representation of input data
 		*
@@ -49,6 +51,8 @@ namespace BALL
 				void setCenterDataFlag(bool cd);
 				void setCenterResponseFlag(bool cr);
 				void setData(QSARData* data);
+				
+				void showPlotter();
 
 				virtual bool checkForDiscreteY() = 0;
 
@@ -61,7 +65,8 @@ namespace BALL
 				QString filename_;
 				bool center_data_;
 				bool center_y_;
-		
+				
+				InputPlotter* input_plotter_;
 		};
 	}
 }	

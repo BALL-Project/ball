@@ -59,6 +59,10 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 		{
 			((PredictionItem*)main_window->dragged_item)->showPredictionPlotter();
 		}
+		if(main_window->dragged_item->type()==SDFInputDataItem::Type || main_window->dragged_item->type()==CSVInputDataItem::Type)
+		{
+			((InputDataItem*)main_window->dragged_item)->showPlotter();
+		}
 		
 		return;
 	}

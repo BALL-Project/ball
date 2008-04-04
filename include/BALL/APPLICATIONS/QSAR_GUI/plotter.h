@@ -1,3 +1,6 @@
+#ifndef PLOTTER_H
+#define PLOTTER_H
+
 #include <qwt_plot.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/dataItem.h>
 #include <list>
@@ -81,3 +84,5 @@ namespace BALL
 		};
 	}
 }
+
+#endif // PLOTTER_H
