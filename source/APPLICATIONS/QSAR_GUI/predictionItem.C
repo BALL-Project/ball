@@ -109,6 +109,11 @@ DottedEdge* PredictionItem::dottedEdge()
 
 void PredictionItem::showPredictionPlotter()
 {
+	if(results_.size()==0)
+	{
+		QMessageBox::information(view_,"No predictions","No predictions have been done yet that could be plotted!\nTherefore, click \"Execute Pipeline\" first.");
+		return;	
+	}
 	if(pred_plotter_ == NULL)
 	{
 		pred_plotter_=new PredictionPlotter(this);

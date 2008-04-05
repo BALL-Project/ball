@@ -11,18 +11,31 @@ namespace BALL
 	{		
 		class InputPlotter : public Plotter
 		{
+			Q_OBJECT
+			
 			public:
 				InputPlotter(InputDataItem* item);
 				
+				~InputPlotter();
 				
 		
+			protected slots:
+				
+				void sortChangeState();
+				
 			private:
 				InputDataItem* input_item_;
 				QSARData* data_;
 				
+				QCheckBox* sort_checkbox_;
+				
+				bool sort_;
+				
 				void plot();
 				
 				void plotActivity();
+				
+				void plotSortedActivity();
 			
 	
 		};

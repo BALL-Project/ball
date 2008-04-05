@@ -56,6 +56,7 @@ SOURCES       = dataItem.C\
 		moc_plotter.C\
 		predictionPlotter.C\
 		inputPlotter.C\
+		moc_inputPlotter.C\
 		moc_modelItem.C
 # 		connectionsList.C\
 # 		moc_connectionsList.C
@@ -104,6 +105,7 @@ OBJECTS       = dataItem.o \
 		moc_plotter.o\
 		predictionPlotter.o\
 		inputPlotter.o\
+		moc_inputPlotter.o\
 		moc_modelItem.o
 # 		connectionsList.o\
 # 		moc_connectionsList.o
@@ -177,8 +179,13 @@ moc_plotter.C: $(INC_PATH)plotter.h
 moc_modelItem.C: $(INC_PATH)modelItem.h
 	$(MOC) $^ -o $@	
 
+moc_inputPlotter.C: $(INC_PATH)inputPlotter.h
+	$(MOC) $^ -o $@	
 
 
+
+moc_inputPlotter.o: moc_inputPlotter.C 
+	$(CXX) -c $(CXXFLAGS) $(BALL_INCLUDES) $^ -o $@
 
 moc_modelItem.o: moc_modelItem.C 
 	$(CXX) -c $(CXXFLAGS) $(BALL_INCLUDES) $^ -o $@

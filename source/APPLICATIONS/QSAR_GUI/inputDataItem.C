@@ -102,6 +102,18 @@ void InputDataItem::setData(QSARData* data)
 
 void InputDataItem::showPlotter()
 {
+	if(data_->getNoSubstances()==0)
+	{
+		QMessageBox::information(view_,"No data","Data must be read before it can be plotted!\nTherefore, click \"Execute Pipeline\" first.");
+		return;	
+	}
+	if(data_->getNoResponseVariables()==0)
+	{
+		QMessageBox::information(view_,"No response variable", "This input data does not contain a response variable, so that plotting of the response values is not possible.");
+		return;
+	}
+	
+	
 	if(input_plotter_ == NULL)
 	{
 		input_plotter_=new InputPlotter(this);
