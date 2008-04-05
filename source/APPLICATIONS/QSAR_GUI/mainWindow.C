@@ -695,7 +695,6 @@ void MainWindow::saveModels(String directory)
 				throw GeneralException(__FILE__,__LINE__,"Model saving error ", "model must be assigned a file to be saved to!");
 			}
 			file += f1;
-			cout<<file<<endl;
 			(*it)->setSavedAs(QString(file.c_str()));
 			model->saveToFile(file);
 		}
@@ -889,12 +888,7 @@ void MainWindow::executePipeline()
 		{
 			QString num;
 			(*it)->connectWithModelItem();	
-			(*it)->modelItem()->setName((*it)->modelItem()->name() + " " + num.setNum((*it)->numberOfFeatures()));
-
-			QString new_name = (*it)->modelItem()->name().replace(QRegExp("(\\d+(\\s)*)+"), num.setNum((*it)->numberOfFeatures()));
-			
 			(*it)->modelItem()->trainModel();
-			(*it)->modelItem()->setName(new_name);
 		}
 		catch(BALL::Exception::GeneralException e)
 		{
@@ -2045,13 +2039,15 @@ void MainWindow::exportPipeline(QString filename, bool ext)
 	for (QSet<ModelItem*>::Iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
 	{
 		ModelItem* item = (*it); 
+		
+		// generate file-names for *all* models
+		item->setSavedAs(item->name() + name.setNum(model_counter) + ".mod");
+		model_counter++;
 
+		// do not write a config-file section for model that are created by feature selection.
+		// --> FeatureSelector will create these models; no need to run ModelCreator for these ones!
 		if (item->saveAttribute())
 		{
-			model_counter++;
-		
-			item->setSavedAs(item->name() + name.setNum(model_counter) + ".mod");
-	
 			QString parameter_string;
 			QString tmp;
 			std::vector<double> parameters = item->model_parameters;
