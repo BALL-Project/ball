@@ -201,11 +201,28 @@ Matrix* ValidationItem::resultOfRandTest()
 	return &result_of_rand_test_;
 }
 
-void ValidationItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+void ValidationItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
 	if (view_->name == "view")
 	{
 		ValidationResultDialog validationResultDialog(this);
 		validationResultDialog.exec();
 	}
+}
+
+
+void ValidationItem::writeConfigSection(QTextStream& out)
+{
+	out << "[Validator]" << "\n";
+	out << "validation_type = " << getValidationType() << "\n";
+	out << "model_file = "<< modelItem()->savedAs() << "\n";
+	out << "data_file = "<< modelItem()->inputDataItem()->savedAs() << "\n";
+	int s = getValidationStatistic();
+	String stat = modelItem()->getRegistryEntry()->getStatName(s);
+	out<< "classification_statistic = "<<stat.c_str()<<endl;
+	out << "validation_data_file = "<< "\n";
+	out << "k_fold = "<< k() <<  "\n";
+	out << "bootstrap_samples = "<< numOfSamples() << "\n";
+	out << "no_of_permutation_tests = " <<  numOfRuns() << "\n";
+	out << "output = " << savedAs() << "\n\n";	
 }

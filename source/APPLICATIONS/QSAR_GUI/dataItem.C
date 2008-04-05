@@ -192,15 +192,6 @@ QString DataItem::savedAs()
 	return saved_as_;
 }
 
-QString DataItem::writeConfiguration()
-{
-	QString a;
-	QString b;
-	qreal xc = x();
-	qreal yc = y();
-	QString config = "x_coordinate = " + a.setNum(xc) + QString("\n") + "y_coordinate = " + b.setNum(yc) + QString("\n");
-	return config;
-}
 
 DataItemView* DataItem::view()
 {

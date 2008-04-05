@@ -196,3 +196,27 @@ ModelItem* FeatureSelectionItem::inputModelItem()
 {
 	return input_model_item_;
 }
+
+
+void FeatureSelectionItem::writeConfigSection(QTextStream& out)
+{
+	out << "[FeatureSelector]" << "\n";
+	out << "model_file = "<< inputModelItem()->savedAs() << "\n";
+	out << "data_file = "<< inputModelItem()->inputDataItem()->savedAs() << "\n";
+	int s = getValidationStatistic();
+	String stat = modelItem()->getRegistryEntry()->getStatName(s);
+	if(getType()>0)
+	{
+		out<< "classification_statistic = "<<stat.c_str()<<endl;
+		out << "k_fold = "<< k() <<  "\n";
+		out << "feature_selection_type = "<< getType() <<  "\n";
+		out << "output = " << modelItem()->savedAs() << "\n";
+	}
+	else
+	{
+		out<<"remove_correlated_features = 1"<<endl;
+		out<<"cor_threshold = "<<getCorThreshold()<<endl;
+	}
+	out << "optimize_parameters = " << opt() << "\n";
+	out << "\n";
+}

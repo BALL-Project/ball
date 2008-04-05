@@ -14,6 +14,8 @@
 #include <QtCore/QTextStream>
 #include <QtCore/QHash>
 
+#include <sstream>
+
 using namespace BALL::QSAR;
 using namespace BALL::QSAR::Exception;
 using namespace BALL::VIEW;
@@ -444,11 +446,6 @@ void MainWindow::createActions()
 	clearAct_->setStatusTip(tr("Clears the desktop (the main view)"));
 	connect(clearAct_, SIGNAL(triggered()), this, SLOT(clearDesktop()));
 
-	saveAct_ = new QAction(QIcon("./images/save_desktop.png"),tr("&Save Desktop"), this);
-	saveAct_->setShortcut(tr("Ctrl+S"));
-	saveAct_->setStatusTip(tr("Saves the pipeline on the desktop"));
-	connect(saveAct_, SIGNAL(triggered()), this, SLOT(saveDesktop()));
-
 	delAct_ = new QAction(QIcon("./images/delete_item.png"),tr("&Delete Selection"), this);
 	delAct_->setStatusTip(tr("Deletes the selected Item from the pipeline"));
 	connect(delAct_, SIGNAL(triggered()), this, SLOT(deleteItem()));
@@ -463,8 +460,8 @@ void MainWindow::createActions()
 	restoreAct_->setStatusTip(tr("Restores a Pipeline"));
 	connect(restoreAct_, SIGNAL(triggered()), this, SLOT(restoreDesktop()));
 
-	exportAct_ = new QAction(QIcon("./images/save.png"),tr("Export Pipeline"), this);
-	exportAct_->setStatusTip(tr("Exports the Pipeline in a configuration file for the QSAR Pipeline Package"));
+	exportAct_ = new QAction(QIcon("./images/save.png"),tr("Save Pipeline"), this);
+	exportAct_->setStatusTip(tr("Saves the Pipeline to a configuration file for the QSARPipelinePackage and stores all trained models to files"));
 	connect(exportAct_, SIGNAL(triggered()), this, SLOT(exportPipeline()));
  }
 
@@ -495,7 +492,6 @@ function for setting up the tool bars
 	fileToolBar_->addAction(exitAct_);
 	fileToolBar_->addAction(clearAct_);
 	fileToolBar_->addAction(delAct_);
-	fileToolBar_->addAction(saveAct_);
 	fileToolBar_->addAction(exportAct_);
 	fileToolBar_->addAction(restoreAct_);
 	fileToolBar_->addAction(executeAct_);
@@ -666,17 +662,14 @@ void MainWindow::restoreDesktop()
 	}
 }
 
+
+// SLOT
 void MainWindow::exportPipeline()
 {
 	QString filename = QFileDialog::getSaveFileName(this, tr("Save File as"),"config.txt",tr("text (*.txt)"));
-	exportPipeline(filename, false);
+	exportPipeline(filename);
 }
 
-void MainWindow::saveDesktop()
-{
-	QString filename = QFileDialog::getSaveFileName(this, tr("Save File as"),"pipeline_gui.txt",tr("text (*.txt)"));
-	exportPipeline(filename, true);
-}
 
 void MainWindow::saveModels(String directory)
 {
@@ -1959,7 +1952,7 @@ void MainWindow::setLastUsedPath(String path)
 }
 
 
-void MainWindow::exportPipeline(QString filename, bool ext)
+void MainWindow::exportPipeline(QString filename)
 {
 	int maximum = sdf_input_pipeline_.size() + csv_input_pipeline_.size() + model_pipeline_.size() + val_pipeline_.size() + prediction_pipeline_.size() + disconnected_items_.size(); //all items - fs-items (model items automatically created by feature selection are not exported)
 
@@ -1967,7 +1960,7 @@ void MainWindow::exportPipeline(QString filename, bool ext)
 	{
 		return;
 	}
-
+	
 	int value = 0;
 	progress_bar_->setMaximum(maximum);
 
@@ -1976,59 +1969,28 @@ void MainWindow::exportPipeline(QString filename, bool ext)
 	{
 		return;
 	}
-
 	QTextStream out(&file);
-
-	int model_counter = 0;
-	int val_counter = 0;
-	int prediction_counter = 0;
+	int counter = 0;
 
 	QString name;
-	
 	String f = filename.toStdString();
 	String directory = f.substr(0,f.find_last_of("/")+1);
-			
-	if (ext)
-	{
-		QString num;
-		out << "num of items = " << num.setNum(maximum) << "\n";
-	}
-
-	///Input Items
+	
+	ostringstream positions;
+	positions<<"[ItemPositions]"<<endl;
+	
+	/// SDFInputItems
 	for (QSet<SDFInputDataItem*>::Iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
 	{
 		SDFInputDataItem* item = (*it);
-		QString activity_string;
-		QString tmp;
-		SortedList<int> activities = item->activityValues();
-		activities.front();
-		while(activities.hasNext())
-		{
-			int a = activities.next();
-			activity_string += " "+ tmp.setNum(a);
-		}
-
 		item->setSavedAs(item->name()+".in");
-
-		out << "[InputReader]" << "\n";
-		out << "sd_file = "<< item->filename() << "\n";
-		out << "read_sd_descriptors = "<< 1 << "\n";
-		out << "activity_IDs = "<< activity_string << "\n";
-		out << "center_data = "<< item->centerData() << "\n";
-		out << "center_response = "<< item->centerY() << "\n";
-		out << "output = " << item->savedAs()  << "\n";
-
-		if (ext)
-		{
-			out << item->writeConfiguration();
-		}
-		out << "\n";
-
+		item->writeConfigSection(out);
+		positions<<item->x()<<"  "<<item->y()<<endl;
 		value++;
 		emit sendNewValue(value);
 	}
 
-	///Input Items
+	///CSVInputItems
 	for (QSet<CSVInputDataItem*>::Iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
 	{
 		value++;
@@ -2036,171 +1998,65 @@ void MainWindow::exportPipeline(QString filename, bool ext)
 	}
 
 	///Model Items
-	for (QSet<ModelItem*>::Iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
+	counter=0;
+	for (QSet<ModelItem*>::Iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++,counter++)
 	{
-		ModelItem* item = (*it); 
-		
-		// generate file-names for *all* models
-		item->setSavedAs(item->name() + name.setNum(model_counter) + ".mod");
-		model_counter++;
+		ModelItem* item = (*it);
+		item->setSavedAs(item->name() + name.setNum(counter) + ".mod");
 
 		// do not write a config-file section for model that are created by feature selection.
 		// --> FeatureSelector will create these models; no need to run ModelCreator for these ones!
 		if (item->saveAttribute())
 		{
-			QString parameter_string;
-			QString tmp;
-			std::vector<double> parameters = item->model_parameters;
-			for (unsigned int i = 0; i < parameters.size(); i++)
-			{
-				parameter_string += " "+ tmp.setNum(parameters[i]);
-			}
-	
-			bool hasKernel = item->getRegistryEntry()->kernel;
-	
-			out << "[ModelCreator]" << "\n";
-			out << "data_file = "<< item->inputDataItem()->savedAs() << "\n";
-			out << "model_no = "<< reg_->getModelNo(item->getRegistryEntry()->name_abreviation) << "\n";
-			out << "model_parameters = "<< parameter_string << "\n";
-	
-			if (hasKernel)
-			{
-				out << "kernel_type = "<< item->kernel_function_type <<"\n";
-	
-				if (item->kernel_function_type != 4)
-				{
-					out << "kernel_par1 = "<< item->kernel_parameter1 << "\n";
-					if (item->kernel_function_type == 3)
-					{
-						out << "kernel_par2 = " << item->kernel_parameter2 << "\n";
-					}
-				}
-				out << "grid_search_steps = "<< item->grid_search_steps << "\n";
-				out << "grid_search_stepwidth = "<< item->grid_search_stepwidth <<"\n";
-				out << "grid_search_recursions = "<< item->grid_search_recursions << "\n";
-			}
-	
-			out << "optimize_model_parameters = "<< item->optimize_model_parameters << "\n";
-	
-			if (item->optimize_model_parameters)
-			{
-				out << "k_fold = "<< item->k_fold <<  "\n";
-			}
-			out << "output = "<< item->savedAs() << "\n";
-
-			if (ext)
-			{
-				out << item->writeConfiguration();
-			}
-			out << "\n";
-
+			item->writeConfigSection(out);
+			positions<<item->x()<<"  "<<item->y()<<endl;
 			value++;
 			emit sendNewValue(value);
-
 		}
 	}
 	
 	/// save models to files
 	saveModels(directory);
 	
-			
 	///Feature Selection Items
-	for (QSet<FeatureSelectionItem*>::Iterator it = fs_pipeline_.begin(); it != fs_pipeline_.end(); it++)
+	counter=0;
+	for (QSet<FeatureSelectionItem*>::Iterator it = fs_pipeline_.begin(); it != fs_pipeline_.end(); it++,counter++)
 	{
 		FeatureSelectionItem* item = *it;
-		//fs_counter++;
-		model_counter++;
-
-		//item->setSavedAs(name.setNum(fs_counter) + ".fs");
-
-		///take the part of the model's name before the " "
+		//take the part of the model's name before the " "
 		QList<QString> name_strings = item->modelItem()->name().split(" ");
-		item->modelItem()->setSavedAs(name_strings[0] + name.setNum(model_counter) + ".mod");
-
-		out << "[FeatureSelector]" << "\n";
-		out << "model_file = "<< item->inputModelItem()->savedAs() << "\n";
-		out << "data_file = "<< item->inputModelItem()->inputDataItem()->savedAs() << "\n";
-		int s = item->getValidationStatistic();
-		String stat = item->modelItem()->getRegistryEntry()->getStatName(s);
-		if(item->getType()>0)
-		{
-			out<< "classification_statistic = "<<stat.c_str()<<endl;
-			out << "k_fold = "<< item->k() <<  "\n";
-			out << "feature_selection_type = "<< item->getType() <<  "\n";
-			out << "output = " << item->modelItem()->savedAs() << "\n";
-		}
-		else
-		{
-			out<<"remove_correlated_features = 1"<<endl;
-			out<<"cor_threshold = "<<item->getCorThreshold()<<endl;
-		}
-
-		if (ext)
-		{
-			out << "optimize_parameters = " << item->opt() << "\n";
-			out << item->writeConfiguration();
-		}
-		out << "\n";
-
+		item->modelItem()->setSavedAs(name_strings[0] + name.setNum(counter) + ".mod");
+		item->writeConfigSection(out);
+		positions<<item->x()<<"  "<<item->y()<<endl;
 		value++;
 		emit sendNewValue(value);
 	}	
 		
 	///Validation Items
-	for (QSet<ValidationItem*>::Iterator it = val_pipeline_.begin(); it != val_pipeline_.end(); it++)
+	counter=0;
+	for (QSet<ValidationItem*>::Iterator it = val_pipeline_.begin(); it != val_pipeline_.end(); it++,counter++)
 	{
 		ValidationItem* item = (*it); 
-		val_counter++;
-
-		item->setSavedAs(name.setNum(val_counter)+".val");
-
-		out << "[Validator]" << "\n";
-		out << "model_file = "<< item->modelItem()->savedAs() << "\n";
-		out << "data_file = "<< item->modelItem()->inputDataItem()->savedAs() << "\n";
-		int s = item->getValidationStatistic();
-		String stat = item->modelItem()->getRegistryEntry()->getStatName(s);
-		out<< "classification_statistic = "<<stat.c_str()<<endl;
-		out << "validation_data_file = "<< "\n";
-		out << "k_fold = "<< item->k() <<  "\n";
-		out << "bootstrap_samples = "<< item->numOfSamples() << "\n";
-		out << "no_of_permutation_tests = " <<  item->numOfRuns() << "\n";
-		out << "output = " << item->savedAs() << "\n";
-
-		if (ext)
-		{
-			out << "validation_type = " << item->getValidationType() << "\n";
-			out << item->writeConfiguration(); 
-			
-		}
-		out << "\n";
-
+		item->setSavedAs(name.setNum(counter)+".val");
+		item->writeConfigSection(out);
+		positions<<item->x()<<"  "<<item->y()<<endl;
 		value++;
 		emit sendNewValue(value);
 	}
 
 	///Prediction Items
-	for (QSet<PredictionItem*>::Iterator it = prediction_pipeline_.begin(); it != prediction_pipeline_.end(); it++)
+	counter=0;
+	for (QSet<PredictionItem*>::Iterator it = prediction_pipeline_.begin(); it != prediction_pipeline_.end(); it++,counter++)
 	{
 		PredictionItem* item = (*it); 
-		prediction_counter++;
-	
-		item->setSavedAs(name.setNum(prediction_counter) + ".pred");
-	
-		out << "[Predictor]" << "\n";
-		out << "model_file = "<< item->modelItem()->savedAs() << "\n";
-		out << "data_file = "<< item->inputDataItem()->savedAs() << "\n";
-		out << "print_excepted = "<< 1 << "\n";
-		out << "output = " << filename + "_"+item->savedAs() << "\n";
-
-		if (ext)
-		{
-			out << item->writeConfiguration();
-		}
-		out << "\n";
-
+		item->setSavedAs(name.setNum(counter) + ".pred");
+		item->writeConfigSection(out);
+		positions<<item->x()<<"  "<<item->y()<<endl;
 		value++;
 		emit sendNewValue(value);
 	}
+	
+	out<<positions.str().c_str()<<endl;
 	file.close();
 	progress_bar_->reset();
 }

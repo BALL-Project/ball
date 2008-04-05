@@ -401,3 +401,45 @@ void ModelItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 		menu.exec(event->screenPos());
 	}
 }
+
+void ModelItem::writeConfigSection(QTextStream& out)
+{
+	QString parameter_string;
+	QString tmp;
+	for (unsigned int i = 0; i < model_parameters.size(); i++)
+	{
+		parameter_string += " "+ tmp.setNum(model_parameters[i]);
+	}
+	
+	bool hasKernel = getRegistryEntry()->kernel;
+	
+	out << "[ModelCreator]" << "\n";
+	out << "data_file = "<< inputDataItem()->savedAs() << "\n";
+	out << "model_no = "<< view_->data_scene->main_window->reg_->getModelNo(getRegistryEntry()->name_abreviation) << "\n";
+	out << "model_parameters = "<< parameter_string << "\n";
+	
+	if (hasKernel)
+	{
+		out << "kernel_type = "<< kernel_function_type <<"\n";
+	
+		if (kernel_function_type != 4)
+		{
+			out << "kernel_par1 = "<< kernel_parameter1 << "\n";
+			if (kernel_function_type == 3)
+			{
+				out << "kernel_par2 = " << kernel_parameter2 << "\n";
+			}
+		}
+		out << "grid_search_steps = "<< grid_search_steps << "\n";
+		out << "grid_search_stepwidth = "<< grid_search_stepwidth <<"\n";
+		out << "grid_search_recursions = "<< grid_search_recursions << "\n";
+	}
+	
+	out << "optimize_model_parameters = "<< optimize_model_parameters << "\n";
+	
+	if (optimize_model_parameters)
+	{
+		out << "k_fold = "<< k_fold <<  "\n";
+	}
+	out << "output = "<< savedAs() << "\n\n";
+}

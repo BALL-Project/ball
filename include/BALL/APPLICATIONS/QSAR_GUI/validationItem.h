@@ -63,7 +63,6 @@ namespace BALL
 				/** @name Accessors */
 
 				/**
-#include <BALL/APPLICATIONS/QSAR_GUI/modelItem.h>
 				* returns the item's type
 				*/
 				int type() const { return Type; }
@@ -79,6 +78,9 @@ namespace BALL
 
 				double getQ2();
 				double getR2();
+				
+				/** generates the config-file section for the current model and appends it to out */
+				void writeConfigSection(QTextStream& out);
 		
 			protected:
 			

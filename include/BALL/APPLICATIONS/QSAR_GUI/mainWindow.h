@@ -104,13 +104,12 @@ namespace BALL
 				*/
 				void about();	
 				void clearDesktop();
-				void saveDesktop();
 				void restoreDesktop(QString filename);
 				void deleteItem();
 				void restoreDesktop();
 				void executePipeline();
 				void exportPipeline();
-				void exportPipeline(QString filename, bool ext);
+				void exportPipeline(QString filename);
 
 			private:
 		
@@ -174,7 +173,6 @@ namespace BALL
 				QAction* clearAct_;
 				QAction* delAct_;
 				QAction* modelAct_;
-				QAction* saveAct_;
 				QAction* executeAct_;
 				QAction* restoreAct_;
 				QAction* exportAct_;

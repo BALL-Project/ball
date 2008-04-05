@@ -41,6 +41,9 @@ namespace BALL
 				void setActivityValues(SortedList<int> act);
 				bool checkForDiscreteY();
 				void readData();
+				
+				/** generates the config-file section for the current model and appends it to out */
+				void writeConfigSection(QTextStream& out);
 		
 			private:
 				/** @name Attributes

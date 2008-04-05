@@ -187,3 +187,24 @@ void SDFInputDataItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 	InputDataDialog inputDataDialog(this);
 	inputDataDialog.exec();
 }
+
+
+void SDFInputDataItem::writeConfigSection(QTextStream& out)
+{
+	QString activity_string;
+	QString tmp;
+	SortedList<int> activities = activityValues();
+	activities.front();
+	while(activities.hasNext())
+	{
+		int a = activities.next();
+		activity_string += " "+ tmp.setNum(a);
+	}
+	out << "[InputReader]" << "\n";
+	out << "sd_file = "<< filename() << "\n";
+	out << "read_sd_descriptors = "<< 1 << "\n";
+	out << "activity_IDs = "<< activity_string << "\n";
+	out << "center_data = "<< centerData() << "\n";
+	out << "center_response = "<< centerY() << "\n";
+	out << "output = " << savedAs()  << "\n\n";
+}

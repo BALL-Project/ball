@@ -11,6 +11,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/dataItemView.h>
 
 #include <QtCore/QPointer>
+#include <QtCore/QTextStream>
 
 namespace BALL
 {
@@ -99,8 +100,6 @@ namespace BALL
 			void setSavedAs(QString name);
 
 			QString savedAs();
-
-			QString writeConfiguration();
 		
 			/**set the item's size
 			*@param width in pixel

@@ -130,3 +130,13 @@ void PredictionItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 	predictionResultDialog.exec();
 }
 
+
+void PredictionItem::writeConfigSection(QTextStream& out)
+{
+	out << "[Predictor]" << "\n";
+	out << "model_file = "<< modelItem()->savedAs() << "\n";
+	out << "data_file = "<< inputDataItem()->savedAs() << "\n";
+	out << "print_excepted = "<< 1 << "\n";
+	out << "output = " << savedAs() << "\n\n";
+}
+
