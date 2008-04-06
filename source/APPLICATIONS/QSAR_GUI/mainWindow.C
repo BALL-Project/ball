@@ -463,6 +463,9 @@ void MainWindow::createActions()
 	exportAct_ = new QAction(QIcon("./images/save.png"),tr("Save Pipeline"), this);
 	exportAct_->setStatusTip(tr("Saves the Pipeline to a configuration file for the QSARPipelinePackage and stores all trained models to files"));
 	connect(exportAct_, SIGNAL(triggered()), this, SLOT(exportPipeline()));
+
+	loadModelsAct_ = new QAction(QIcon(),tr("Load Models"), this);
+	connect(loadModelsAct_, SIGNAL(triggered()), this, SLOT(loadModels()));
  }
 
 /*
@@ -495,6 +498,7 @@ function for setting up the tool bars
 	fileToolBar_->addAction(exportAct_);
 	fileToolBar_->addAction(restoreAct_);
 	fileToolBar_->addAction(executeAct_);
+	fileToolBar_->addAction(loadModelsAct_);
  }
 
 /*
@@ -694,7 +698,37 @@ void MainWindow::saveModels(String directory)
 	}
 	catch(GeneralException e)
 	{	
-		QMessageBox::about(this, tr("Error"),e.getMessage());
+		QMessageBox::warning(this, tr("Error"),e.getMessage());
+	}
+}
+
+void MainWindow::loadModels()
+{
+	QString dirname = QFileDialog::getExistingDirectory(this, tr("Open Directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+	QDir dir(dirname);
+	dir.setFilter(QDir::NoDotAndDotDot|QDir::Files);
+	QStringList filters;
+	filters << "*.mod" ;
+	dir.setNameFilters(filters);
+	int num_of_entries = dir.count();
+	int num_of_models = model_pipeline_.size();
+
+	if (num_of_entries != num_of_models)
+	{
+		QMessageBox::warning(this, tr("Error"),"");
+		return;
+	}
+
+	try
+	{
+		for (QSet<ModelItem*>::Iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
+		{
+			(*it)->loadModel(dirname+(*it)->savedAs());
+		}
+	}
+	catch(GeneralException e)
+	{
+		QMessageBox::warning(this, tr("Error"),e.getMessage());
 	}
 }
 
@@ -810,9 +844,13 @@ void MainWindow::executePipeline()
 		statusBar()->showMessage(tr("All input files were read"));
 	}
 
-	///train all models
+	///train all models and set their saved as names
+	int model_counter=0;
+	QString name;
 	for (QSet<ModelItem*>::Iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
 	{
+		(*it)->setSavedAs((*it)->name() + name.setNum(model_counter) + ".mod");
+		model_counter++;
 		try
 		{
 			(*it)->model()->setDataSource((*it)->inputDataItem()->data());
@@ -2001,8 +2039,11 @@ void MainWindow::exportPipeline(QString filename)
 	counter=0;
 	for (QSet<ModelItem*>::Iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++,counter++)
 	{
-		ModelItem* item = (*it);
-		item->setSavedAs(item->name() + name.setNum(counter) + ".mod");
+		ModelItem* item = (*it); 
+		
+		// generate file-names for *all* models
+// 		item->setSavedAs(item->name() + name.setNum(model_counter) + ".mod");
+// 		model_counter++;
 
 		// do not write a config-file section for model that are created by feature selection.
 		// --> FeatureSelector will create these models; no need to run ModelCreator for these ones!

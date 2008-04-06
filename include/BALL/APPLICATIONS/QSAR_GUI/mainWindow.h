@@ -110,6 +110,7 @@ namespace BALL
 				void executePipeline();
 				void exportPipeline();
 				void exportPipeline(QString filename);
+				void loadModels();
 
 			private:
 		
@@ -150,9 +151,7 @@ namespace BALL
 				QSet<ValidationItem*> val_pipeline_;
 				QSet<PredictionItem*> prediction_pipeline_;
 				QSet<DataItem*> disconnected_items_;
-			
-				/** @name Dialogs
-				*/
+		
 				ModelConfigurationDialog* modelConfigurationDialog_;
 
 				/** @name Menues
@@ -176,6 +175,7 @@ namespace BALL
 				QAction* executeAct_;
 				QAction* restoreAct_;
 				QAction* exportAct_;
+				QAction* loadModelsAct_;
 				
 				friend class ModelItem;
 		};

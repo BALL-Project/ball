@@ -111,10 +111,13 @@ namespace BALL
 				void deletePredictionInputEdge(Edge* edge);
 				void createActions();
 				void saveModel(QString file);
+
 				
 				/** generates the config-file section for the current model and appends it to out */
 				void writeConfigSection(QTextStream& out);
 				
+				void loadModel(QString file);
+
 
 				/** @name Enums */
 				/** 

@@ -370,7 +370,7 @@ void ModelItem::saveModel(QString file)
 
 void ModelItem::loadModel()
 {
-	QString filename = QFileDialog::getOpenFileName(view_, tr("Open Model"),"",tr("text (*.txt)"));
+	QString filename = QFileDialog::getOpenFileName(view_, tr("Open Model"),"",tr("models (*.mod)"));
 	if (!filename.isEmpty())
 	{
 		try
@@ -382,6 +382,18 @@ void ModelItem::loadModel()
 			QMessageBox::warning(view_,"Error",e.getMessage());
 		}
 	}	
+}
+
+void ModelItem::loadModel(QString file)
+{
+	try
+	{
+		model_->readFromFile(file.toStdString());
+	}
+	catch(WrongDataType e)
+	{
+		QMessageBox::warning(view_,"Error",e.getMessage());
+	}
 }
 
 void ModelItem::showProperties()
