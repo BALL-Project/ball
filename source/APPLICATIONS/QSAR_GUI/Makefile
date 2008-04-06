@@ -57,7 +57,8 @@ SOURCES       = dataItem.C\
 		predictionPlotter.C\
 		inputPlotter.C\
 		moc_inputPlotter.C\
-		moc_modelItem.C
+		moc_modelItem.C\
+		inputDataItemIO.C
 # 		connectionsList.C\
 # 		moc_connectionsList.C
 	
@@ -106,7 +107,8 @@ OBJECTS       = dataItem.o \
 		predictionPlotter.o\
 		inputPlotter.o\
 		moc_inputPlotter.o\
-		moc_modelItem.o
+		moc_modelItem.o\
+		inputDataItemIO.o
 # 		connectionsList.o\
 # 		moc_connectionsList.o
 

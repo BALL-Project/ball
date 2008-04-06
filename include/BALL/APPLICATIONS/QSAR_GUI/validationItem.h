@@ -80,7 +80,7 @@ namespace BALL
 				double getR2();
 				
 				/** generates the config-file section for the current model and appends it to out */
-				void writeConfigSection(QTextStream& out);
+				void writeConfigSection(ofstream& out);
 		
 			protected:
 			

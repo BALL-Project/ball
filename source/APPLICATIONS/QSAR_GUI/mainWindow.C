@@ -4,7 +4,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/inputDataDialog.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/CSVInputDialog.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/dottedEdge.h>
-
+#include <BALL/APPLICATIONS/QSAR_GUI/inputDataItemIO.h>
 
 #include <QtGui/QMessageBox>
 #include <QtGui/QFileDialog>
@@ -859,14 +859,12 @@ void MainWindow::executePipeline()
 			{
 				(*it)->model()->optimizeParameters((*it)->k_fold);
 			}
-		
 			if ((*it)->optimize_kernel_parameters)
 			{
 				KernelModel* km = (KernelModel*)((*it)->model());
 				km->kernel->gridSearch((*it)->grid_search_stepwidth, (*it)->grid_search_steps,(*it)->grid_search_recursions,(*it)->k_fold);
 				(*it)->setModel(km);
 			}
-			
 			(*it)->trainModel();
 		}
 		catch (ModelTrainingError e)
@@ -1111,6 +1109,7 @@ void MainWindow::restoreDesktop(QString filename)
 		bool pred_section=0;
 		String section="";
 		map<String, DataItem*> filenames_map;
+		InputDataItemIO input_reader(view_);
 		
 		//read all sections
 		for(int i=0;!file.eof();i++)
@@ -1124,11 +1123,11 @@ void MainWindow::restoreDesktop(QString filename)
 			}
 			if(line.hasPrefix("["))
 			{
-				//if(input_section) InputDataItem inputItem(section,filenames_map);
-				//if(model_section) new ModelItem(section,filenames_map);
-				//if(fs_section) new FeatureSelectionItem(section,filenames_map);
-				//if(val_section) new ValidationItem(section,filenames_map);
-				//if(pred_section) new Prediction(section,filenames_map);
+				if(input_section) input_reader.readConfigSection(section,filenames_map);
+				if(model_section) new ModelItem(section,filenames_map,view_);
+				//if(fs_section) new FeatureSelectionItem(section,filenames_map,view_);
+				//if(val_section) new ValidationItem(section,filenames_map,view_);
+				//if(pred_section) new Prediction(section,filenames_map,view_);
 				
 				input_section=0;model_section=0;fs_section=0;
 				val_section=0;pred_section=0;
@@ -1144,11 +1143,11 @@ void MainWindow::restoreDesktop(QString filename)
 			
 			section+=line+"\n"; // store line of current section
 		}
-		//if(input_section) InputDataItem inputItem(section,filenames_map);
-		//if(model_section) new ModelItem(section,filenames_map);
-		//if(fs_section) new FeatureSelectionItem(section,filenames_map);
-		//if(val_section) new ValidationItem(section,filenames_map);
-		//if(pred_section) new Prediction(section,filenames_map);
+		if(input_section) input_reader.readConfigSection(section,filenames_map);
+		if(model_section) new ModelItem(section,filenames_map,view_);
+		//if(fs_section) new FeatureSelectionItem(section,filenames_map,view_);
+		//if(val_section) new ValidationItem(section,filenames_map,view_);
+		//if(pred_section) new Prediction(section,filenames_map,view_);
 		
 		file.close();
 	}
@@ -1177,12 +1176,8 @@ void MainWindow::exportPipeline(QString filename)
 	int value = 0;
 	progress_bar_->setMaximum(maximum);
 
-	QFile file(filename);
-	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-	{
-		return;
-	}
-	QTextStream out(&file);
+	ofstream out(filename.toStdString().c_str());
+	InputDataItemIO input_writer(view_);
 	int counter = 0;
 
 	QString name;
@@ -1197,7 +1192,7 @@ void MainWindow::exportPipeline(QString filename)
 	{
 		SDFInputDataItem* item = (*it);
 		item->setSavedAs(item->name()+".in");
-		item->writeConfigSection(out); // TODO: let function write options for connected CSVInputDataItems
+		input_writer.writeConfigSection(item,out);
 		positions<<item->x()<<"  "<<item->y()<<endl;
 		value++;
 		emit sendNewValue(value);
@@ -1273,7 +1268,7 @@ void MainWindow::exportPipeline(QString filename)
 	}
 	
 	out<<positions.str().c_str()<<endl;
-	file.close();
+	out.close();
 	progress_bar_->reset();
 }
 

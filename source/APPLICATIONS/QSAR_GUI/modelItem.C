@@ -177,11 +177,12 @@ DataItem(item.view_)
 	}
 	else if(entry_->kernel && kernel_function_type < 4)
 	{
-		model_ = entry_->createKernel1(q, 1, 1.0, 1.0);
+		model_ = entry_->createKernel1(q, kernel_function_type, kernel_parameter1, kernel_parameter2);
 	}
 	else
 	{
-		model_ = entry_->createKernel2(q,"", "");
+		Kernel* kernel = ((KernelModel*)item.model())->kernel;
+		model_ = entry_->createKernel2(q,kernel->equation1,kernel->equation2);
 	}
 
 	if (item.model_ != NULL)
@@ -194,6 +195,136 @@ DataItem(item.view_)
 	}
 	
 }
+
+
+
+ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, DataItemView* view)
+	: DataItem(view)
+{
+	istringstream input;
+	input.str(configfile_section);
+		
+	String line;
+	getline(input,line);
+	line.trimLeft();
+	if(!line.hasPrefix("[ModelCreator]"))
+	{
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model reading error","The given section is no model section!");
+	}
+
+	String data_file=""; String output=""; 
+	vector<double> par;
+	int model_no=0;
+	
+	data_file=""; output=""; model_no=0; grid_search_steps=0; grid_search_recursions=0;
+	grid_search_stepwidth=0; k_fold=5; optimize_model_parameters=0;
+	optimize_kernel_parameters=0; kernel_function_type=1; kernel_parameter1=0; kernel_parameter2=0;
+	
+	while(input)
+	{
+		getline(input,line);
+		line.trimLeft();
+	
+		if(line.hasPrefix("data_file"))
+		{
+			data_file = ((String)line.after("=")).trimLeft();
+		}
+		else if(line.hasPrefix("output"))
+		{
+			output = ((String)line.after("=")).trimLeft();
+		}
+		else if(line.hasPrefix("model_parameters"))
+		{
+			line = ((String)line.after("=")).trimLeft();
+			for(uint i=0; i<line.countFields(" ");i++)
+			{
+				par.push_back(line.getField(i).toDouble());
+			}
+		}
+		else if(line.hasPrefix("model_no"))
+		{
+			model_no = ((String)line.after("=")).trimLeft().toInt();
+		}
+		else if(line.hasPrefix("grid_search_steps"))
+		{
+			grid_search_steps = ((String)line.after("=")).trimLeft().toInt();
+		}
+		else if(line.hasPrefix("grid_search_recursions"))
+		{
+			grid_search_recursions = ((String)line.after("=")).trimLeft().toInt();
+		}
+		else if(line.hasPrefix("grid_search_stepwidth"))
+		{
+			grid_search_stepwidth = ((String)line.after("=")).trimLeft().toDouble();
+		}
+		else if(line.hasPrefix("k_fold"))
+		{
+			k_fold = ((String)line.after("=")).trimLeft().toInt();
+		}
+		else if(line.hasPrefix("optimize_model_parameters"))
+		{
+			optimize_model_parameters = ((String)line.after("=")).trimLeft().toDouble();
+		}
+		else if(line.hasPrefix("kernel_type"))
+		{
+			kernel_function_type = ((String)line.after("=")).trimLeft().toInt();
+		}
+		else if(line.hasPrefix("kernel_par1"))
+		{
+			kernel_parameter1 = ((String)line.after("=")).trimLeft().toDouble();
+		}
+		else if(line.hasPrefix("kernel_par2"))
+		{
+			kernel_parameter2 = ((String)line.after("=")).trimLeft().toDouble();
+		}
+	}
+
+	map<String,DataItem*>::iterator it = filenames_map.find(data_file);
+	if(it==filenames_map.end())
+	{
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model reading error","InputDataItem for a model does not exist!");
+	}
+	input_ =  (InputDataItem*) it->second;
+	Registry* reg = view_->data_scene->main_window->registry();
+	if((uint)model_no>reg->registered_models.size())
+	{
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model reading error","The given model-no does not exist!");
+	}
+	entry_ = &reg->registered_models[model_no];
+	if(!entry_->kernel)
+	{
+		model_ = (entry_->create)(*input_->data());
+	}
+	else
+	{
+		model_ = (entry_->createKernel1)(*input_->data(),kernel_function_type,kernel_parameter1,kernel_parameter2);
+		if(grid_search_steps>0 && grid_search_stepwidth>0) optimize_kernel_parameters=1;
+	}
+	
+	model_->setParameters(par);
+	
+	view_->data_scene->addItem(this);
+	view_->data_scene->main_window->addModelToPipeline(this);
+	
+	Edge* edge = new Edge(input_, this);
+	view_->data_scene->addItem(edge);
+	
+	save_attribute_ = 1;
+	QPixmap pm;
+	if(entry_->kernel)
+	{
+		pm = QPixmap("./images/kernel_model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+	}
+	else
+	{
+		pm = QPixmap("./images/model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+	}
+	setPixmap(pm);
+	setName(QString(entry_->name_abreviation.c_str()));
+	createActions();
+}
+
+
 
 ModelItem::~ModelItem()
 {
@@ -286,7 +417,6 @@ void ModelItem::trainModel()
 	if(done_) return; // do nothing twice...
 	
 	model_->readTrainingData();
-	
 	model_->train();
 	
 	done_ = 1; //ready!
@@ -380,8 +510,10 @@ void ModelItem::loadModel()
 		catch(WrongDataType e)
 		{
 			QMessageBox::warning(view_,"Error",e.getMessage());
+			return;
 		}
-	}	
+	}
+	done_ = 1;
 }
 
 void ModelItem::loadModel(QString file)
@@ -393,7 +525,9 @@ void ModelItem::loadModel(QString file)
 	catch(WrongDataType e)
 	{
 		QMessageBox::warning(view_,"Error",e.getMessage());
+		return;
 	}
+	done_ = 1;
 }
 
 void ModelItem::showProperties()
@@ -414,19 +548,19 @@ void ModelItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 	}
 }
 
-void ModelItem::writeConfigSection(QTextStream& out)
+void ModelItem::writeConfigSection(ofstream& out)
 {
-	QString parameter_string;
-	QString tmp;
+	String parameter_string;
+	String tmp;
 	for (unsigned int i = 0; i < model_parameters.size(); i++)
 	{
-		parameter_string += " "+ tmp.setNum(model_parameters[i]);
+		parameter_string += " "+ String(model_parameters[i]);
 	}
 	
 	bool hasKernel = getRegistryEntry()->kernel;
 	
 	out << "[ModelCreator]" << "\n";
-	out << "data_file = "<< inputDataItem()->savedAs() << "\n";
+	out << "data_file = "<< inputDataItem()->savedAs().toStdString() << "\n";
 	out << "model_no = "<< view_->data_scene->main_window->reg_->getModelNo(getRegistryEntry()->name_abreviation) << "\n";
 	out << "model_parameters = "<< parameter_string << "\n";
 	
@@ -453,5 +587,5 @@ void ModelItem::writeConfigSection(QTextStream& out)
 	{
 		out << "k_fold = "<< k_fold <<  "\n";
 	}
-	out << "output = "<< savedAs() << "\n\n";
+	out << "output = "<< savedAs().toStdString() << "\n\n";
 }

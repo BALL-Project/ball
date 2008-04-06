@@ -11,6 +11,7 @@
 #include <QtGui/QApplication>
 #include <QtGui/QMessageBox>
 
+
 using namespace BALL::QSAR;
 using namespace BALL::QSAR::Exception;
 using namespace BALL::VIEW;
@@ -28,18 +29,18 @@ InputDataItem::InputDataItem(QString filename, bool center_data, bool center_y, 
 
 InputDataItem::InputDataItem(QString filename, DataItemView* view): 
 	DataItem(view),
-	filename_(filename),
-	data_(NULL)
+	data_(NULL),
+	filename_(filename)
 {
 	input_plotter_ = NULL;
 }
 
 InputDataItem::InputDataItem():
 	DataItem(NULL),
+	data_(NULL),
 	filename_(""),
 	center_data_(false),
-	center_y_(false),
-	data_(NULL)
+	center_y_(false)
 {
 	input_plotter_ = NULL;
 }
@@ -63,6 +64,7 @@ InputDataItem::InputDataItem(InputDataItem& item):
 	center_y_ = item.center_data_;
 	input_plotter_ = item.input_plotter_;
 }
+
 
 QSARData* InputDataItem::data()
 {

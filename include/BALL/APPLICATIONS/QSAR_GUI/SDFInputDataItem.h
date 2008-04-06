@@ -2,6 +2,7 @@
 #define SDFInputDataItem_H
 
 #include <BALL/APPLICATIONS/QSAR_GUI/inputDataItem.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/CSVInputDataItem.h>
 
 #include <QtGui/QGraphicsSceneMouseEvent>
 
@@ -13,7 +14,7 @@ namespace BALL
 	{
 
 		/** @class SDFInputDataItem
-		* @brief class for the representation of input data
+		* @brief class for the representation of input data read from a SD-file
 		*
 		* @todo
 		*/
@@ -41,9 +42,9 @@ namespace BALL
 				void setActivityValues(SortedList<int> act);
 				bool checkForDiscreteY();
 				void readData();
-				
-				/** generates the config-file section for the current model and appends it to out */
-				void writeConfigSection(QTextStream& out);
+				void appendCSVDescriptors(CSVInputDataItem* item);
+				list<CSVInputDataItem*>* getConnectedCSVItems();
+
 		
 			private:
 				/** @name Attributes
@@ -51,8 +52,8 @@ namespace BALL
 				SortedList<int> activity_values_;
 				
 				/** Are there additional descriptors that are to be read from a csv-file?!\n
-				If yes, do NOT center the input data but leave this to the CSVInputDataItem !! */
-				bool additional_descriptors_;
+				If yes, center the input data only after the data of the last CSVInputDataItem within this list has been read!! */
+				list<CSVInputDataItem*> additional_descriptors_;
 				
 			protected:
 				void mousePressEvent(QGraphicsSceneMouseEvent *event);

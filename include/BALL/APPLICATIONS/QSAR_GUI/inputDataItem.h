@@ -51,6 +51,7 @@ namespace BALL
 				void setCenterDataFlag(bool cd);
 				void setCenterResponseFlag(bool cr);
 				void setData(QSARData* data);
+				void setFilename(String filename) { filename_=filename.c_str();}
 				
 				void showPlotter();
 

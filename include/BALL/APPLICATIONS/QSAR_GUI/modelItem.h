@@ -60,6 +60,9 @@ namespace BALL
 				* @param item the ModelItem that is to be copied
 				*/
 				ModelItem(ModelItem& item);
+				
+				/** Creates a ModelItem from the geiven config-file section, registers it in the view and in the Pipeline-QSets of MainWindow and creates edges */
+				ModelItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, DataItemView* view);
 			
 				/** creates a model
 				* @param inputdata pointer to the item's InputDataItem
@@ -111,13 +114,10 @@ namespace BALL
 				void deletePredictionInputEdge(Edge* edge);
 				void createActions();
 				void saveModel(QString file);
-
-				
-				/** generates the config-file section for the current model and appends it to out */
-				void writeConfigSection(QTextStream& out);
-				
 				void loadModel(QString file);
 
+				/** generates the config-file section for the current model and appends it to out */
+				void writeConfigSection(ofstream& out);
 
 				/** @name Enums */
 				/** 

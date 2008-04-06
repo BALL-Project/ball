@@ -39,6 +39,10 @@ namespace BALL
 				bool checkForDiscreteY();
 				void setAppend(bool append);
 				bool append();
+				string getSeperator() {return sep_;}
+				bool getDescriptorLabels() {return x_labels_;}
+				bool getCompoundLabels() {return y_labels_;}
+				int getNoResponseVariables() {return no_y_;}
 
 			private:
 				/** @name Attributes

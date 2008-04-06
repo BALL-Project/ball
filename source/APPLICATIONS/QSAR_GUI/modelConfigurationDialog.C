@@ -138,7 +138,11 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, MainWin
 
 	connectionsPage_ = new ConnectionsPage(this);
 	pagesWidget->addWidget(connectionsPage_);
-
+	
+	optimizePage_ = 0;
+	kernelPage_ = 0;
+	modelPage_ = 0;
+	
 	contentsWidget->setCurrentRow(0);
 
 	QHBoxLayout *horizontalLayout = new QHBoxLayout();
@@ -192,16 +196,16 @@ ModelConfigurationDialog::ModelConfigurationDialog():
 ///destructor
 ModelConfigurationDialog::~ModelConfigurationDialog()
 {
-	delete contentsWidget;
- 	delete pagesWidget;
-	delete buttons_;
-	delete okButton_;
-	delete modelPage_;
-	delete kernelPage_;
-	delete optimizePage_;
+ 	delete okButton_;
+ 	delete buttons_;
+ 	delete modelPage_;
+  	delete kernelPage_;
+  	delete optimizePage_;
 	delete propertyPage_;
 	delete connectionsPage_;
 	delete dataPage_;
+	delete contentsWidget;
+	delete pagesWidget;
 }
 
 ///function for setting up the icon box to the left of the dialog

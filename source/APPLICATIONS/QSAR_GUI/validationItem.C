@@ -211,12 +211,12 @@ void ValidationItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 }
 
 
-void ValidationItem::writeConfigSection(QTextStream& out)
+void ValidationItem::writeConfigSection(ofstream& out)
 {
 	out << "[Validator]" << "\n";
 	out << "validation_type = " << getValidationType() << "\n";
-	out << "model_file = "<< modelItem()->savedAs() << "\n";
-	out << "data_file = "<< modelItem()->inputDataItem()->savedAs() << "\n";
+	out << "model_file = "<< modelItem()->savedAs().toStdString() << "\n";
+	out << "data_file = "<< modelItem()->inputDataItem()->savedAs().toStdString() << "\n";
 	int s = getValidationStatistic();
 	String stat = modelItem()->getRegistryEntry()->getStatName(s);
 	out<< "classification_statistic = "<<stat.c_str()<<endl;
@@ -224,5 +224,5 @@ void ValidationItem::writeConfigSection(QTextStream& out)
 	out << "k_fold = "<< k() <<  "\n";
 	out << "bootstrap_samples = "<< numOfSamples() << "\n";
 	out << "no_of_permutation_tests = " <<  numOfRuns() << "\n";
-	out << "output = " << savedAs() << "\n\n";	
+	out << "output = " << savedAs().toStdString() << "\n\n";	
 }

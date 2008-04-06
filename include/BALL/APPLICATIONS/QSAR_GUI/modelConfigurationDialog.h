@@ -99,8 +99,8 @@ namespace BALL
 				void createIcons();
 				bool evaluateIndividualKernelFunction(String function);	
 
-				QListWidget *contentsWidget;
-				QStackedWidget *pagesWidget;
+				QListWidget* contentsWidget;
+				QStackedWidget* pagesWidget;
 				
 				QDialogButtonBox* buttons_;
 				QPushButton* okButton_;

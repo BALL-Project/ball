@@ -83,8 +83,6 @@ SDFInputDataItem::SDFInputDataItem(QString filename, DataItemView* view):
 	QStringList list = filename_.split("/");
 	setName(list[list.size()-1]);
 	activity_values_.clear();
-	
-	additional_descriptors_ = 0;
 
 	data_ = new QSARData;
 }
@@ -95,6 +93,13 @@ SDFInputDataItem::~SDFInputDataItem()
 	{
 		MainWindow* mw = view_->data_scene->main_window;
 		mw->removeFromPipeline(this);
+	}
+	
+	// base class destructor will delete the connected QSARData object,
+	// so make sure that CSVInputDataItems that use the same QSARData object do not delete it a second time!
+	for(list<CSVInputDataItem*>::iterator it=additional_descriptors_.begin();it!=additional_descriptors_.end();it++)
+	{
+		(*it)->setData(NULL);
 	}
 }
 
@@ -132,7 +137,7 @@ void SDFInputDataItem::readData()
 	}
 
 	/// center data only if desired by the user and if there are no additional descriptors being read from a csv-file. In the latter case, center is left to be done by the CSVInputDataItem.
-	if (!additional_descriptors_ && center_data_)
+	if (!additional_descriptors_.size()==0 && center_data_)
 	{
 		data_->centerData(center_y_);
 	}
@@ -182,29 +187,26 @@ void SDFInputDataItem::setActivityValues(SortedList<int> act)
 // 	}
 // }
 
-void SDFInputDataItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+void SDFInputDataItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* /*event*/)
 {
 	InputDataDialog inputDataDialog(this);
 	inputDataDialog.exec();
 }
 
-
-void SDFInputDataItem::writeConfigSection(QTextStream& out)
+void SDFInputDataItem::appendCSVDescriptors(CSVInputDataItem* item)
 {
-	QString activity_string;
-	QString tmp;
-	SortedList<int> activities = activityValues();
-	activities.front();
-	while(activities.hasNext())
+	/// make sure that centering is ONLY done by the last CSVInputDataItem!
+	if(additional_descriptors_.size()!=0)
 	{
-		int a = activities.next();
-		activity_string += " "+ tmp.setNum(a);
+		CSVInputDataItem* csv_item = additional_descriptors_.back();
+		csv_item->setCenterDataFlag(0);
+		csv_item->setCenterResponseFlag(0);
 	}
-	out << "[InputReader]" << "\n";
-	out << "sd_file = "<< filename() << "\n";
-	out << "read_sd_descriptors = "<< 1 << "\n";
-	out << "activity_IDs = "<< activity_string << "\n";
-	out << "center_data = "<< centerData() << "\n";
-	out << "center_response = "<< centerY() << "\n";
-	out << "output = " << savedAs()  << "\n\n";
+	additional_descriptors_.push_back(item);
+}
+
+
+list<CSVInputDataItem*>* SDFInputDataItem::getConnectedCSVItems()
+{
+	return &additional_descriptors_;
 }
