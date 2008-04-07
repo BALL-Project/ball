@@ -198,7 +198,7 @@ DataItem(item.view_)
 
 
 
-ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, DataItemView* view)
+ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view)
 	: DataItem(view)
 {
 	istringstream input;
@@ -224,6 +224,10 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 	{
 		getline(input,line);
 		line.trimLeft();
+		if(line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
+		{
+			continue;
+		}
 	
 		if(line.hasPrefix("data_file"))
 		{
@@ -277,6 +281,12 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 		{
 			kernel_parameter2 = ((String)line.after("=")).trimLeft().toDouble();
 		}
+		else
+		{
+			String mess = "Configuration command \""+line+"\" unknown!!";
+			String name = "ModelItem reading error";
+			throw BALL::Exception::GeneralException(__FILE__,__LINE__,name,mess);
+		}
 	}
 
 	map<String,DataItem*>::iterator it = filenames_map.find(data_file);
@@ -305,6 +315,12 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 	
 	view_->data_scene->addItem(this);
 	view_->data_scene->main_window->addModelToPipeline(this);
+	if(item_positions!=0 && item_positions->size()>0)
+	{
+		pair<double,double> pos = item_positions->front();
+		item_positions->pop_front();
+		setPos(pos.first,pos.second);
+	}
 	
 	Edge* edge = new Edge(input_, this);
 	view_->data_scene->addItem(edge);
@@ -322,6 +338,10 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 	setPixmap(pm);
 	setName(QString(entry_->name_abreviation.c_str()));
 	createActions();
+	
+	filenames_map.insert(make_pair(output,this));
+	setSavedAs(output.c_str());
+	done_ = 0; // model not trained yet and no trained model read
 }
 
 

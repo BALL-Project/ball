@@ -292,15 +292,15 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 			if (file_info.isFile())
 			{
 				try
-				{			
+				{	
 					if (match_sd.exactMatch(path))
 					{
 						SDFInputDataItem* item; 
 					 	item = main_window->createSDFInput(path);
 
 						ModelItem* model_item_at_pos = qgraphicsitem_cast<ModelItem*>(itemAt(pos)); 
-
-						if(model_item_at_pos)
+						
+						if(model_item_at_pos) /// create PrecitionItem
 						{
 							PredictionItem* pred_item = main_window->createPrediction(item,model_item_at_pos);
 							addItem(pred_item);
@@ -319,7 +319,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 							pred_item->setDottedEdge(dedge);
 							main_window->addPredictionToPipeline(pred_item);
 						}
-						else
+						else /// create SDFInputDataItem
 						{
 							addItem(item);
 							item->setPos(pos);
@@ -336,7 +336,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 						CSVInputDataItem* csv_item;
 						SDFInputDataItem* input_item_at_pos = qgraphicsitem_cast<SDFInputDataItem*>(itemAt(pos));
 		
-						if (input_item_at_pos)
+						if (input_item_at_pos) /// create CSVInputDataItem and append descriptors
 						{
 							csv_item = main_window->createCSVInput(path);
 							csv_item->setData(input_item_at_pos->data());
@@ -348,7 +348,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 							input_item_at_pos->appendCSVDescriptors(csv_item);
 						}
 
-						else
+						else /// create CSVInputDataItem (no appending of desc.)
 						{
 							csv_item = main_window->createCSVInput(path);
 							addItem(csv_item);

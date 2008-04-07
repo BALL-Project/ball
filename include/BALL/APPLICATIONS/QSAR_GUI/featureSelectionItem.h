@@ -26,6 +26,9 @@ namespace BALL
 				~FeatureSelectionItem();
 			
 				FeatureSelectionItem(FeatureSelectionItem& fs_item); 
+				
+				/** Creates a FeatureSelectionItem from the geiven config-file section, registers it in the view and in the Pipeline-QSets of MainWindow and creates edges */
+				FeatureSelectionItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view);
 
 				void connectWithModelItem();
 
@@ -42,7 +45,7 @@ namespace BALL
 				
 				void setValidationStatistic(int s) {validation_statistic_=s;};
 				int getValidationStatistic() {return validation_statistic_;};	
-				int getCorThreshold() {return cor_threshold_;};
+				double getCorThreshold() {return cor_threshold_;};
 				
 				int k();
 
@@ -66,6 +69,8 @@ namespace BALL
 				bool opt_;
 				int validation_statistic_;
 				double cor_threshold_;
+				bool opt_after_fs_;
+				double quality_increase_cutoff_;
 				
 				
 				friend class DataItemScene;

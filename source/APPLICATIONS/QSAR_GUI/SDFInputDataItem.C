@@ -136,8 +136,8 @@ void SDFInputDataItem::readData()
 		throw(InvalidInputDataItem(__FILE__,__LINE__));
 	}
 
-	/// center data only if desired by the user and if there are no additional descriptors being read from a csv-file. In the latter case, center is left to be done by the CSVInputDataItem.
-	if (!additional_descriptors_.size()==0 && center_data_)
+	/// center data only if desired by the user and if there are no additional descriptors being read from a csv-file. In the latter case, centering is left to be done by the CSVInputDataItem.
+	if (additional_descriptors_.size()==0 && center_data_)
 	{
 		data_->centerData(center_y_);
 	}

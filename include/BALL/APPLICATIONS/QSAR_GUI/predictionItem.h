@@ -28,6 +28,9 @@ namespace BALL
 
 				/** copy constructor */
 				PredictionItem(PredictionItem& item);
+				
+				/** Creates a PredictionItem from the geiven config-file section, registers it in the view and in the Pipeline-QSets of MainWindow and creates edges */
+				PredictionItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view);
 
 				/** destructor */
 				~PredictionItem();

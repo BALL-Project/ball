@@ -55,6 +55,7 @@ namespace BALL
 
 				/** destructor */
 				~MainWindow();
+			
 
 				/** creation of items*/
 				SDFInputDataItem* createSDFInput(QString filename);
@@ -113,6 +114,19 @@ namespace BALL
 				void loadModels();
 
 			private:
+				
+				struct Settings
+				{			
+					String input_data_path;
+					String config_path;
+					int size_x;
+					int size_y;
+					int pos_x;
+					int pos_y;
+				};
+				
+				 /// the last used paths settings
+				Settings settings;
 		
 				void createMenus();
 				void createToolBars();
@@ -134,8 +148,6 @@ namespace BALL
 				DataItemScene fs_list_scene_;
 				DataItemScene val_list_scene_;
 				
-				// path of the last used input
-				String last_path_;
 				
 				/**registry including all available models */	
 				Registry* reg_;

@@ -64,7 +64,7 @@ void InputDataItemIO::writeConfigSection(CSVInputDataItem* csv_item, ofstream& o
 }
 
 
-void InputDataItemIO::readConfigSection(String& configfile_section, map<String, DataItem*>& filenames_map)
+void InputDataItemIO::readConfigSection(String& configfile_section, map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions)
 {
 	istringstream input;
 	input.str(configfile_section);
@@ -92,6 +92,10 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 		getline(input,line);
 		line.trimLeft();
 		
+		if(line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
+		{
+			continue;
+		}		
 		if(line.hasPrefix("sd_file"))
 		{
 			sd_file = ((String)line.after("=")).trimLeft();
@@ -148,6 +152,12 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 		{
 			csv_compound_labels.push_back(((String)line.after("=")).trimLeft().toBool());
 		}
+		else
+		{
+			String mess = "Configuration command \""+line+"\" unknown!!";
+			String name = "InputDataItem reading error";
+			throw BALL::Exception::GeneralException(__FILE__,__LINE__,name,mess);
+		}	
 	}
 	
 	SDFInputDataItem* sd_item=0;
@@ -158,6 +168,14 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 			sd_item = new SDFInputDataItem(sd_file.c_str(), activities,center_data, center_y, view_);
 			view_->data_scene->addItem(sd_item);
 			view_->data_scene->main_window->addInputToPipeline(sd_item);
+			if(item_positions!=0 && item_positions->size()>0)
+			{
+				pair<double,double> pos = item_positions->front();
+				item_positions->pop_front();
+				sd_item->setPos(pos.first,pos.second);
+				sd_item->setCenterDataFlag(center_data);
+				sd_item->setCenterResponseFlag(center_y);
+			}
 		}
 		catch(BALL::Exception::GeneralException e)
 		{
@@ -180,6 +198,16 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 			{
 				csv_item = new CSVInputDataItem(sd_item->data());	
 				csv_item->setAppend(true);
+				if(i==no-1)
+				{
+					csv_item->setCenterDataFlag(center_data);
+					csv_item->setCenterResponseFlag(center_y);
+				}
+				else
+				{
+					csv_item->setCenterDataFlag(0);
+					csv_item->setCenterResponseFlag(0);
+				}
 				csv_item->setView(view_);
 				csv_item->setFilename(csv_file[i]);
 			}
@@ -187,6 +215,8 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 			{
 				csv_item = new CSVInputDataItem(csv_file[i].c_str(),view_);	
 				csv_item->setAppend(false);
+				csv_item->setCenterDataFlag(center_data);
+				csv_item->setCenterResponseFlag(center_y);
 				if(i==0) filenames_map.insert(make_pair(output,csv_item));
 			}					
 			csv_item->setXLabelFlag(csv_desc_labels[i]);
@@ -196,6 +226,12 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 			
  			view_->data_scene->addItem(csv_item);
 			view_->data_scene->main_window->addInputToPipeline(csv_item);
+			if(item_positions!=0 && item_positions->size()>0)
+			{
+				pair<double,double> pos = item_positions->front();
+				item_positions->pop_front();
+				csv_item->setPos(pos.first,pos.second);
+			}
  			Edge* edge = new Edge(sd_item, csv_item);
  			view_->data_scene->addItem(edge);
  			sd_item->appendCSVDescriptors(csv_item);

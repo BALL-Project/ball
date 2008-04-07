@@ -34,6 +34,9 @@ namespace BALL
 				* @param item ValidadionItem that is to be copied
 				*/
 				ValidationItem(ValidationItem& item);
+				
+				/** Creates a ValidationItem from the geiven config-file section, registers it in the view and in the Pipeline-QSets of MainWindow and creates edges */
+				ValidationItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view);
 
 				/** standard destructor
 				*/
@@ -92,6 +95,7 @@ namespace BALL
 				*/
 				void mousePressEvent(QGraphicsSceneMouseEvent *event);
 				void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+				void initName();
 		
 				/** @name Private Attributes */
 	

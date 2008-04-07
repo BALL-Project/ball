@@ -46,6 +46,84 @@ PredictionItem::~PredictionItem()
 	// everything else is done by base-class destructor!!
 }
 
+
+PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view)
+{
+	istringstream input;
+	input.str(configfile_section);
+		
+	String line;
+	getline(input,line);
+	line.trimLeft();
+	if(!line.hasPrefix("[Predictor]"))
+	{
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"PredictionItem reading error","The given section is no prediction section!");
+	}
+	
+	String model="";
+	String data="";
+	String output="";
+	
+	while(input)
+	{
+		getline(input,line);
+		line.trimLeft();
+		if(line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
+		{
+			continue;
+		}
+		if(line.hasPrefix("model_file"))
+		{
+			model = ((String)line.after("=")).trimLeft();
+		}
+		else if(line.hasPrefix("output"))
+		{
+			output = ((String)line.after("=")).trimLeft();
+		}
+		else if(line.hasPrefix("data_file")) // compounds to be predicted
+		{
+			data = ((String)line.after("=")).trimLeft();
+		}
+		else
+		{
+			String mess = "Configuration command \""+line+"\" unknown!!";
+			String name = "ValidationItem reading error";
+			throw BALL::Exception::GeneralException(__FILE__,__LINE__,name,mess);
+		}	
+	}
+	map<String,DataItem*>::iterator it = filenames_map.find(model);
+	if(it==filenames_map.end())
+	{
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"PredictionItem reading error","ModelItem with which the prediction should be done can not be found!");
+	}
+	model_item_ = (ModelItem*) it->second;
+	it = filenames_map.find(data);
+	if(it==filenames_map.end())
+	{
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"PredictionItem reading error","InputDataItem for which the prediction should be done can not be found!");
+	}
+	input_data_item_ = (InputDataItem*) it->second;
+	
+	if(item_positions!=0 && item_positions->size()>0)
+	{
+		pair<double,double> pos = item_positions->front();
+		item_positions->pop_front();
+		setPos(pos.first,pos.second);
+	}
+	
+	dotted_edge_ = new DottedEdge(input_data_item_,this);
+	view_->data_scene->addItem(dotted_edge_);
+	Edge* edge = new Edge(input_data_item_, model_item_);
+	view_->data_scene->addItem(edge);
+	model_item_->addPredictionInputEdge(edge);
+	Edge* edge2 = new Edge(model_item_,this);
+	view_->data_scene->addItem(edge2);	
+	
+	pred_plotter_ = 0;
+	done_ = 0;
+}
+
+
 void PredictionItem::connectWithModelItem()
 {
 	if(done_) return;   // do nothing twice !

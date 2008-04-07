@@ -46,15 +46,29 @@ using namespace BALL::Exception;
 	///create a registry with registered models
 	reg_ = new Registry;
 
-	//path_ = new Path;
-	// 	QDir dir;
-	// 	std::string path = dir.currentPath().toStdString();
-	// 	path_->setDataPath(String(path));
-
 	progress_bar_ = new QProgressBar(this);
 
 	///set the view as central widget
 	setCentralWidget(view_);
+	
+	// read information about last used paths
+	String s = QDir::homePath().toStdString();
+	s = s+"/.QSARGUI";
+	ifstream in(s.c_str());
+	settings.input_data_path=QDir::homePath().toStdString();
+	settings.config_path=QDir::homePath().toStdString();
+	settings.size_x=0; settings.size_y=0;
+	settings.pos_x=0; settings.pos_y=0;
+	if(in) 
+	{
+		in>>settings.input_data_path;
+		if(in) in>>settings.config_path;
+		if(in) in>>settings.size_x;
+		if(in) in>>settings.size_y;
+		if(in) in>>settings.pos_x;
+		if(in) in>>settings.pos_y;
+		in.close();
+	}
 
 	///create actions, menus, tool bars, status bar, dock windows and dialogs
 	createActions();
@@ -66,11 +80,16 @@ using namespace BALL::Exception;
 
 	dragged_item = NULL;
 	
-	///just for style-reasons 
+	//just for style-reasons 
 	setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
-	///maximize the main window on startup
-	showMaximized();
+	if(settings.size_x==0 || settings.size_y==0) showMaximized();
+	else 
+	{
+		resize(settings.size_x,settings.size_y);
+		move(settings.pos_x,settings.pos_y);
+		show();
+	}
 	
 	drag_start_time = drag_start_time.now();
 	min_drag_time=0.3;
@@ -92,11 +111,15 @@ MainWindow::~MainWindow()
 	delete fileToolBar_;
 	
 	// save path to last used input file
-	String p = QDir::homePath().toStdString();
-	p = p+"/.QSARGUI";
-	ofstream output(p.c_str());
-	cout<<"writing \'"<<last_path_<<"\' ."<<endl;
-	output<<last_path_<<endl<<flush;
+	String file = QDir::homePath().toStdString();
+	file = file+"/.QSARGUI";
+	ofstream output(file.c_str());
+	output<<settings.input_data_path<<endl<<flush;
+	output<<settings.config_path<<endl<<flush;
+	QSize s = size();
+	output<<s.width()<<"  "<<s.height()<<endl;
+	QPoint p = pos();
+	output<<p.x()<<"  "<<p.y()<<endl;
 	output.close();
 }
 
@@ -514,18 +537,7 @@ function for creating the different dock windows
 */
 void MainWindow::createDockWindows()
 {	
-	// read information about last used input path
-	String s = QDir::homePath().toStdString();
-	s = s+"/.QSARGUI";
-	ifstream in(s.c_str());
-	String path="";
-	if(in) 
-	{
-		in>>path;
-		in.close();
-	}
-	last_path_ = path;
-	file_browser_ = new FileBrowser(path.c_str());
+	file_browser_ = new FileBrowser(settings.input_data_path.c_str());
 	QDockWidget *filedock = new QDockWidget(tr("Source Filebrowser"), this);
 	filedock->setAllowedAreas(Qt::LeftDockWidgetArea);
 	filedock->setWidget(file_browser_);
@@ -654,8 +666,12 @@ void MainWindow::clearDesktop()
 // SLOT
 void MainWindow::restoreDesktop()
 {
-	QString filename = QFileDialog::getOpenFileName(this, tr("Open File"),"",tr("text (*.txt)"));
-		
+	QString filename = QFileDialog::getOpenFileName(this, tr("Open File"),settings.config_path.c_str(),tr("text (*.txt)"));
+	
+	String s = filename.toStdString();
+	settings.config_path = s.substr(0,s.find_last_of("/")+1);
+	
+	
 	try
 	{
 		restoreDesktop(filename);
@@ -670,7 +686,7 @@ void MainWindow::restoreDesktop()
 // SLOT
 void MainWindow::exportPipeline()
 {
-	QString filename = QFileDialog::getSaveFileName(this, tr("Save File as"),"config.txt",tr("text (*.txt)"));
+	QString filename = QFileDialog::getSaveFileName(this, tr("Save File as"),(settings.config_path+"config.txt").c_str(),tr("text (*.txt)"));
 	exportPipeline(filename);
 }
 
@@ -692,7 +708,6 @@ void MainWindow::saveModels(String directory)
 				throw GeneralException(__FILE__,__LINE__,"Model saving error ", "model must be assigned a file to be saved to!");
 			}
 			file += f1;
-			(*it)->setSavedAs(QString(file.c_str()));
 			model->saveToFile(file);
 		}
 	}
@@ -1111,7 +1126,32 @@ void MainWindow::restoreDesktop(QString filename)
 		map<String, DataItem*> filenames_map;
 		InputDataItemIO input_reader(view_);
 		
-		//read all sections
+		/// first of all, read [ItemPositions] section:
+		list<pair<double,double> > item_positions;
+		bool within_pos_section=0;
+		for(int i=0;!file.eof();i++)
+		{
+			String line="";
+			getline(file,line);
+			if(line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
+			{
+				continue;
+			}
+			if(line.hasPrefix("["))
+			{
+				if(within_pos_section) break;
+				else if(line.hasPrefix("[ItemPositions]")) within_pos_section=1;
+			}
+			else if(within_pos_section)
+			{
+				double x = line.getField(0).toDouble(); double y = line.getField(1).toDouble();
+				item_positions.push_back(make_pair(x,y));
+			}
+		}
+		file.close();
+		file.open(filename.toStdString().c_str());	
+
+		/// read all other sections
 		for(int i=0;!file.eof();i++)
 		{
 			String line="";
@@ -1123,11 +1163,11 @@ void MainWindow::restoreDesktop(QString filename)
 			}
 			if(line.hasPrefix("["))
 			{
-				if(input_section) input_reader.readConfigSection(section,filenames_map);
-				if(model_section) new ModelItem(section,filenames_map,view_);
-				//if(fs_section) new FeatureSelectionItem(section,filenames_map,view_);
-				//if(val_section) new ValidationItem(section,filenames_map,view_);
-				//if(pred_section) new Prediction(section,filenames_map,view_);
+				if(input_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
+ 				if(model_section) new ModelItem(section,filenames_map,&item_positions,view_);
+ 				if(fs_section) new FeatureSelectionItem(section,filenames_map,&item_positions,view_);
+ 				if(val_section) new ValidationItem(section,filenames_map,&item_positions,view_);
+				if(pred_section) new PredictionItem(section,filenames_map,&item_positions,view_);
 				
 				input_section=0;model_section=0;fs_section=0;
 				val_section=0;pred_section=0;
@@ -1143,11 +1183,11 @@ void MainWindow::restoreDesktop(QString filename)
 			
 			section+=line+"\n"; // store line of current section
 		}
-		if(input_section) input_reader.readConfigSection(section,filenames_map);
-		if(model_section) new ModelItem(section,filenames_map,view_);
-		//if(fs_section) new FeatureSelectionItem(section,filenames_map,view_);
-		//if(val_section) new ValidationItem(section,filenames_map,view_);
-		//if(pred_section) new Prediction(section,filenames_map,view_);
+ 		if(input_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
+ 		if(model_section) new ModelItem(section,filenames_map,&item_positions,view_);
+ 		if(fs_section) new FeatureSelectionItem(section,filenames_map,&item_positions,view_);
+ 		if(val_section) new ValidationItem(section,filenames_map,&item_positions,view_);
+		if(pred_section) new PredictionItem(section,filenames_map,&item_positions,view_);
 		
 		file.close();
 	}
@@ -1155,12 +1195,15 @@ void MainWindow::restoreDesktop(QString filename)
 	{
 		QMessageBox::warning(this,"Error",e.getMessage());
 	}
+	
+	view_scene_.update();
+	view_->update();
 }
 
 
 void MainWindow::setLastUsedPath(String path)
 {
-	last_path_ = path;	
+	settings.input_data_path = path;	
 }
 
 
@@ -1191,7 +1234,7 @@ void MainWindow::exportPipeline(QString filename)
 	for (QSet<SDFInputDataItem*>::Iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
 	{
 		SDFInputDataItem* item = (*it);
-		item->setSavedAs(item->name()+".in");
+		item->setSavedAs(item->name()+".dat");
 		input_writer.writeConfigSection(item,out);
 		positions<<item->x()<<"  "<<item->y()<<endl;
 		value++;
@@ -1201,6 +1244,10 @@ void MainWindow::exportPipeline(QString filename)
 	///CSVInputItems
 	for (QSet<CSVInputDataItem*>::Iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
 	{
+		CSVInputDataItem* item = (*it);
+		item->setSavedAs(item->name()+".dat");
+		input_writer.writeConfigSection(item,out);
+		positions<<item->x()<<"  "<<item->y()<<endl;
 		value++;
 		emit sendNewValue(value);
 	}
@@ -1210,12 +1257,9 @@ void MainWindow::exportPipeline(QString filename)
 	for (QSet<ModelItem*>::Iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++,counter++)
 	{
 		ModelItem* item = (*it); 
-		
-		// generate file-names for *all* models
-// 		item->setSavedAs(item->name() + name.setNum(model_counter) + ".mod");
-// 		model_counter++;
+		item->setSavedAs(item->name() + name.setNum(counter) + ".mod");
 
-		// do not write a config-file section for model that are created by feature selection.
+		// do not write a config-file section for models that are created by feature selection.
 		// --> FeatureSelector will create these models; no need to run ModelCreator for these ones!
 		if (item->saveAttribute())
 		{
@@ -1234,11 +1278,9 @@ void MainWindow::exportPipeline(QString filename)
 	for (QSet<FeatureSelectionItem*>::Iterator it = fs_pipeline_.begin(); it != fs_pipeline_.end(); it++,counter++)
 	{
 		FeatureSelectionItem* item = *it;
-		//take the part of the model's name before the " "
-		QList<QString> name_strings = item->modelItem()->name().split(" ");
-		item->modelItem()->setSavedAs(name_strings[0] + name.setNum(counter) + ".mod");
 		item->writeConfigSection(out);
 		positions<<item->x()<<"  "<<item->y()<<endl;
+		positions<<item->modelItem()->x()<<"  "<<item->modelItem()->y()<<endl;
 		value++;
 		emit sendNewValue(value);
 	}	
@@ -1273,729 +1315,4 @@ void MainWindow::exportPipeline(QString filename)
 }
 
 
-/// TODO: the below was removed from restoreDesktop() and should be converted to member-functions of the various DataItems
 
-/*
-	///[INPUT]
-				if (input_section == 1)
-	{
-		QStringList tmp_result;
-	
-					///look for parameters
-		if(line.startsWith("sd_file"))
-		{
-			tmp_result = line.split("=");
-			sd_file = tmp_result[tmp_result.size()-1].trimmed();
-			continue;
-		}
-				
-		else if(line.startsWith("activity_IDs"))
-		{
-			tmp_result = line.split("=");
-			QString act = tmp_result[tmp_result.size()-1];
-			tmp_result = act.split(" ");
-			
-			bool ok;
-			
-			foreach (QString num, tmp_result)
-			{
-				int res = num.toInt(&ok);
-				if (ok && res >= 0)
-				{	
-					activities.insert(res);	
-				}
-			}
-			continue;	
-		}
-	
-		else if(line.startsWith("center_data"))
-		{
-			tmp_result = line.split("=");
-			if (tmp_result[tmp_result.size()-1].trimmed() == "1")
-			{
-				center_data = true;
-			}
-			else if (tmp_result[tmp_result.size()-1].trimmed() == "0")
-			{
-				center_data = false;
-			}
-			continue;
-		}
-		else if(line.startsWith("center_response"))
-		{
-			tmp_result = line.split("=");
-			if (tmp_result[tmp_result.size()-1] == "1")
-			{
-				center_response = true;
-			}
-			else if (tmp_result[tmp_result.size()-1] == "0")
-			{
-				center_response = false;
-			}
-			continue;
-		}
-		
-		else if(line.startsWith("x_coordinate"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-			x = tmp_result[tmp_result.size()-1].toFloat(&ok);
-			continue;
-		}
-		
-		else if(line.startsWith("y_coordinate"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-			y = tmp_result[tmp_result.size()-1].toFloat(&ok);
-		}
-	
-		else if(line.startsWith("output"))
-		{
-			tmp_result = line.split("=");
-			data_output = tmp_result[tmp_result.size()-1].trimmed();
-			continue;
-		}
-	
-		else
-		{
-			continue;
-		}
-					
-		if(sd_file=="")
-		{
-			QMessageBox::critical(this,"Error","SD file must be specified within config-file!");
-			break;
-		}
-	
-		if(data_output=="")
-		{
-			QMessageBox::critical(this,"Error","Output file must be specified within config-file!");
-			break;
-		}
-		if(sd_file!="" && activities.size()==0)
-		{
-			QMessageBox::critical(this,"Error","Activity IDs must be specified within config-file!");
-			break;
-		}
-			
-	
-		std::cout << "Create Input" << std::endl;
-		try
-		{
-			SDFInputDataItem* input;
-			input = new SDFInputDataItem(sd_file, activities,center_data, center_response, view_);
-			input->setPos(x,y);
-			view_scene_.addItem(input);
-			addInputToPipeline(input);
-			hash.insert(data_output, input);	
-		}
-		catch(InvalidActivityID)
-		{
-			QMessageBox::critical(this,"Error","Invalid activity ID");
-			break;
-		}
-	
-	
-		activities.clear();
-		input_section=0;
-		value++;
-		emit sendNewValue(value);
-	}//if (input_section == 1)
-	
-	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	
-				///[MODEL]
-				else if (model_section == 1)
-	{
-		QStringList tmp_result;
-	
-		if(line.startsWith("data_file"))
-		{
-			tmp_result = line.split("=");
-			data = tmp_result[tmp_result.size()-1].trimmed();
-			continue;
-		}
-		else if(line.startsWith("output"))
-		{
-			tmp_result = line.split("=");
-			model_output = tmp_result[tmp_result.size()-1].trimmed();
-			continue;
-		}
-		else if(line.startsWith("model_parameters"))
-		{
-			tmp_result = line.split("=");
-			QString par = tmp_result[tmp_result.size()-1];
-			tmp_result = par.split(" ");
-			
-			bool ok;
-			double res;
-			
-			foreach (QString num, tmp_result)
-			{
-				res = num.toDouble(&ok);
-				if (ok && res >= 0)
-				{	
-					parameters.push_back(res);
-				}
-			}
-			continue;
-		}
-		else if(line.startsWith("model_no"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-						
-			model_no = tmp_result[tmp_result.size()-1].toInt(&ok);
-			continue;
-		}
-		else if(line.startsWith("grid_search_steps"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-						
-			grid_search_steps = tmp_result[tmp_result.size()-1].toInt(&ok);
-			continue;
-		}
-		else if(line.startsWith("grid_search_recursions"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-						
-			grid_search_recursions = tmp_result[tmp_result.size()-1].toInt(&ok);
-			continue;
-		}
-		else if(line.startsWith("grid_search_stepwidth"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-			grid_search_stepwidth = tmp_result[tmp_result.size()-1].toDouble(&ok);
-			continue;
-	
-		}
-		else if(line.startsWith("k_fold"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-			k_fold = tmp_result[tmp_result.size()-1].toInt(&ok);
-			continue;
-		}
-		else if(line.startsWith("optimize_model_parameters"))
-		{
-			tmp_result = line.split("=");
-			if (tmp_result[tmp_result.size()-1] == "1")
-			{
-				optimize_model_parameters = true;
-			}
-			else if (tmp_result[tmp_result.size()-1] == "0")
-			{
-				optimize_model_parameters = false;
-			}
-			continue;
-		}
-		else if(line.startsWith("kernel_type"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-			kernel_type = tmp_result[tmp_result.size()-1].toInt(&ok);
-			continue;
-		}
-		else if(line.startsWith("kernel_par1"))
-		{	
-			tmp_result = line.split("=");
-			bool ok;
-			kernel_par1 = tmp_result[tmp_result.size()-1].toDouble(&ok);
-			continue;
-		}
-		else if(line.startsWith("kernel_par2"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-			kernel_par2 = tmp_result[tmp_result.size()-1].toDouble(&ok);
-			continue;
-		}
-	
-		else if(line.startsWith("x_coordinate"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-						
-			x = tmp_result[tmp_result.size()-1].toFloat(&ok);
-			continue;
-		}
-		
-		else if(line.startsWith("y_coordinate"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-			y = tmp_result[tmp_result.size()-1].toFloat(&ok);
-		}
-	
-		else
-		{
-			continue;
-		}
-	
-		if(data=="")
-		{
-			QMessageBox::critical(this,"Error","QSARData file must be specified within config-file!");
-			break;
-		}
-		if(model_output=="")
-		{
-			QMessageBox::critical(this,"Error","Output file must be specified within config-file!");
-			break;
-		}
-		if(model_no==-1)
-		{
-			QMessageBox::critical(this,"Error","The model type must be specified within config-file!");
-			break;
-		}
-	
-		bool kernel=0;
-	
-		DataItem* d_item = hash.value(data);
-		InputDataItem* input = qgraphicsitem_cast<InputDataItem*>(d_item);
-	
-		ModelItem* model_item = new ModelItem(&reg_->registered_models[model_no], view_);
-					
-		if(reg_->registered_models[model_no].create!=NULL)
-		{
-			model_item = model_item->createModel(input);
-		}
-		else
-		{
-			if(kernel_type==0 || kernel_par1==0)
-			{
-				QMessageBox::critical(this,"Error","For kernel based model, kernel-type and kernel-parameter(s) must be specified!");
-				break;
-			}
-			
-			model_item = model_item->createModel(input, kernel_type, kernel_par1, kernel_par2);
-			kernel=1;
-		}
-					
-		if(parameters.size()>0)
-		{
-			model_item->model()->setParameters(parameters);
-			parameters.clear();
-		}
-		if(optimize_model_parameters)
-		{
-			if(k_fold==0)
-			{
-				QMessageBox::critical(this,"Error","'k_fold' must be set if model parameters are to be optimized!");
-				break;
-			}
-			model_item->model()->optimizeParameters(k_fold);
-		}
-		if(kernel && grid_search_steps>0)
-		{
-			if(k_fold==0)
-			{
-				QMessageBox::critical(this,"Error","'k_fold' must be set if grid search is to be done");
-				break;
-			}
-			if(grid_search_stepwidth==0 && kernel_type!=2)
-			{ 
-				QMessageBox::critical(this,"Error","'grid_search_stepwidth' must be set if grid search is to be done!");
-				break;
-			} 
-			KernelModel* km = (KernelModel*)(model_item->model());
-			km->kernel->gridSearch(grid_search_stepwidth, grid_search_steps,grid_search_recursions,k_fold);
-			model_item->setModel(km);
-		}
-		model_item->setPos(x,y);
-		view_scene_.addItem(model_item);
-		addModelToPipeline(model_item);
-		Edge* edge = new Edge(input, model_item);
-		view_scene_.addItem(edge);
-		hash.insert(model_output, model_item);
-					
-		model_section=0;
-		value++;
-		emit sendNewValue(value);
-	}//if (input_section == 1)
-		
-	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-				///[FEATURE SELECTION]
-				else if (fs_section == 1)
-	{
-		QStringList tmp_result; 
-	
-		if(line.startsWith("model_file"))
-		{
-			tmp_result = line.split("=");
-			fs_model_input = tmp_result[tmp_result.size()-1].trimmed();
-			continue;
-		}
-		else if(line.startsWith("data_file"))
-		{
-			tmp_result = line.split("=");
-			fs_data = tmp_result[tmp_result.size()-1].trimmed();
-			continue;
-		}
-		else if(line.startsWith("feature_selection_type"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-			selection_type = tmp_result[tmp_result.size()-1].toInt(&ok);
-			continue;
-		}
-		else if(line.startsWith("k_fold"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-			fs_k = tmp_result[tmp_result.size()-1].toInt(&ok);
-			continue;
-		}
-		else if(line.startsWith("output"))
-		{
-			tmp_result = line.split("=");
-			fs_output = tmp_result[tmp_result.size()-1].trimmed();
-			continue;
-		}
-			
-		else if(line.startsWith("optimize_parameters"))
-		{
-			tmp_result = line.split("=");
-			if (tmp_result[tmp_result.size()-1] == "1")
-			{
-				opt_par = true;
-			}
-			else if (tmp_result[tmp_result.size()-1] == "0")
-			{
-				opt_par = false;
-			}
-			continue;
-		}
-	
-		else if(line.startsWith("x_coordinate"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-						
-			x = tmp_result[tmp_result.size()-1].toFloat(&ok);
-			continue;
-		}
-		
-		else if(line.startsWith("y_coordinate"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-			y = tmp_result[tmp_result.size()-1].toFloat(&ok);
-		}
-	
-		else
-		{
-			continue;
-		}
-	
-		if(fs_data=="")
-		{
-			QMessageBox::critical(this,"Error","QSARData file must be specified within config-file!");
-			break;
-		}
-		if(fs_model_input=="")
-		{
-			QMessageBox::critical(this,"Error","Model file must be specified within config-file!");
-			break;
-		}
-		if(fs_output=="")
-		{
-			QMessageBox::critical(this,"Error","Output file must be specified within config-file!");
-			break;
-		}
-		if(fs_k==-1)
-		{
-			QMessageBox::critical(this,"Error","k-fold must be specified within config-file!");
-			break;
-		}
-	
-		DataItem* d_item = hash.value(fs_model_input);
-		if (d_item == NULL)
-		{
-			break;
-		}
-		ModelItem* model_item = qgraphicsitem_cast<ModelItem*>(d_item);
-	
-		FeatureSelectionItem* fs_item = new FeatureSelectionItem(selection_type, view_);
-	
-		ModelItem* model_copy = new ModelItem(*model_item);
-	
-		try
-		{
-			fs_item->setModelItem(model_copy);
-			fs_item->setInputModelItem(model_item);
-			fs_item->setK(fs_k);
-			fs_item->setOpt(opt_par);
-	
-						///model is generated automatically, so it doesn't need to be saved as a textfile
-			model_copy->setSaveAttribute(false);
-			model_copy->setPos(x,y);
-	
-			view_scene_.addItem(model_copy);
-			addModelToPipeline(model_copy);
-			hash.insert(fs_output, model_copy);
-	
-			DataItem* it = hash.value(fs_model_input);
-			if (it == NULL)
-			{
-				break;
-			}
-						
-			view_scene_.addItem(fs_item);
-			fs_item->setPos(x,y);
-	
-			Edge* edge = new Edge(fs_item, model_copy);
-			view_scene_.addItem(edge);
-			Edge* edge2 = new Edge(model_item, fs_item);
-			view_scene_.addItem(edge2);
-			addFeatureSelectionToPipeline(fs_item);
-		}
-	
-		catch(InvalidFeatureSelectionItem)
-		{
-			delete model_copy;
-		}
-	
-		std::cout << "Feature Selection" << std::endl;
-		fs_section=0;
-		value++;
-		emit sendNewValue(value);
-	}
-	
-	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-				///[VALIDATION]
-				else if (val_section == 1)
-	{
-		QStringList tmp_result; 
-	
-		if(line.startsWith("model_file"))
-		{
-			tmp_result = line.split("=");
-			val_model_input = tmp_result[tmp_result.size()-1].trimmed();
-			continue;
-		}
-		else if(line.startsWith("data_file"))
-		{
-			tmp_result = line.split("=");
-			val_data = tmp_result[tmp_result.size()-1].trimmed();
-			continue;
-		}
-		else if(line.startsWith("validation_data_file"))
-		{
-			continue;
-		}
-		else if(line.startsWith("k_fold"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-			val_k_folds = tmp_result[tmp_result.size()-1].toInt(&ok);
-			continue;
-		}
-		else if(line.startsWith("bootstrap_samples"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-			bootstrap_samples = tmp_result[tmp_result.size()-1].toInt(&ok);
-			continue;
-		}
-		else if(line.startsWith("no_of_permutation_tests"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-			no_of_permutation_tests = tmp_result[tmp_result.size()-1].toInt(&ok);
-			continue;
-		}
-		else if(line.startsWith("output"))
-		{	
-			tmp_result = line.split("=");
-			val_output = tmp_result[tmp_result.size()-1].trimmed();
-			continue;
-		}
-	
-		else if(line.startsWith("validation_type"))
-		{	
-			tmp_result = line.split("=");
-			bool ok;
-			val_type = tmp_result[tmp_result.size()-1].toInt(&ok);
-			continue;
-		}
-	
-		else if(line.startsWith("x_coordinate"))
-		{
-			tmp_result = line.split("=");
-			bool ok;	
-			x = tmp_result[tmp_result.size()-1].toFloat(&ok);
-			continue;
-		}
-		
-		else if(line.startsWith("y_coordinate"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-			y = tmp_result[tmp_result.size()-1].toFloat(&ok);
-		}
-		else
-		{
-			continue;
-		}
-	
-		if(val_data=="")
-		{
-			QMessageBox::critical(this,"Error","QSARData file must be specified within config-file!");
-			break;
-		}
-		if(val_model_input=="")
-		{
-			QMessageBox::critical(this,"Error","Model file must be specified within config-file!");
-			break;
-		}
-	
-		if(val_k_folds==0 && val_type != 1 && val_type!=3)
-		{
-			QMessageBox::critical(this,"Error","'k_folds' must be specified within config-file!");
-			break;
-		}
-	
-		DataItem* d_item = hash.value(val_model_input);
-		ModelItem* model_item = qgraphicsitem_cast<ModelItem*>(d_item);
-					
-		ValidationItem* val_item = new ValidationItem(val_type, view_);
-		val_item->setModelItem(model_item);
-					
-		switch(val_type)
-		{
-			case 1:
-				break;
-			case 2:
-				val_item->setK(val_k_folds);
-				break;
-			case 3:	
-				val_item->setNumOfSamples(bootstrap_samples);
-				break;
-			case 4:	
-				val_item->setK(val_k_folds);
-				val_item->setNumOfRuns(no_of_permutation_tests);
-				break;
-			default: 
-				throw InvalidValidationItem(__FILE__,__LINE__);
-		}
-	
-		view_scene_.addItem(val_item);
-		val_item->setPos(x,y);
-	
-		Edge* edge = new Edge(model_item, val_item);
-		view_scene_.addItem(edge);
-		addValidationToPipeline(val_item);
-	
-		std::cout << "Validation" << std::endl;
-		val_section=0;
-		value++;
-		emit sendNewValue(value);
-	}
-	
-	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-				///[PREDICTION]
-				else if (pred_section == 1)
-	{
-	
-		if(line.startsWith("model_file"))
-		{
-			tmp_result = line.split("=");
-			pred_model_input = tmp_result[tmp_result.size()-1].trimmed();
-			continue;
-		}
-		else if(line.startsWith("output"))
-		{
-			tmp_result = line.split("=");
-			pred_output = tmp_result[tmp_result.size()-1].trimmed();
-			continue;
-		}
-		else if(line.startsWith("data_file")) 
-		{
-			tmp_result = line.split("=");
-			pred_data = tmp_result[tmp_result.size()-1].trimmed();
-			continue;
-		}
-		else if(line.startsWith("print_excepted")) 
-		{
-			tmp_result = line.split("=");
-			if (tmp_result[tmp_result.size()-1] == "1")
-			{
-				print_excepted = true;
-			}
-			else if (tmp_result[tmp_result.size()-1] == "0")
-			{
-				print_excepted = false;
-			}
-			continue;
-		}
-		else if(line.startsWith("x_coordinate"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-						
-			x = tmp_result[tmp_result.size()-1].toFloat(&ok);
-			continue;
-		}
-		
-		else if(line.startsWith("y_coordinate"))
-		{
-			tmp_result = line.split("=");
-			bool ok;
-			y = tmp_result[tmp_result.size()-1].toFloat(&ok);
-		}
-		else
-		{
-			continue;
-		}
-	
-		if(pred_model_input=="")
-		{
-			QMessageBox::critical(this,"Error","Model file must be specified within config-file!");
-			break;
-		}
-		if(pred_output=="")
-		{
-			QMessageBox::critical(this,"Error","Output file must be specified within config-file!");
-			break;
-		}
-	
-		if(pred_data=="")
-		{
-			QMessageBox::critical(this,"Error","'data file must be specified within config-file!");
-			break;
-		}
-	
-					/// search model in hashmap
-		DataItem* d_item = hash.value(pred_model_input);
-		ModelItem* model_item = qgraphicsitem_cast<ModelItem*>(d_item);
-		
-					/// search input in hashmap
-		d_item = hash.value(pred_data);
-		InputDataItem* i_item = qgraphicsitem_cast<InputDataItem*>(d_item);
-				
-		PredictionItem* pred_item = new PredictionItem(i_item, model_item, view_);
-	
-		view_scene_.addItem(pred_item);
-		pred_item->setPos(x,y);
-	
-		Edge* edge = new Edge(model_item, pred_item);
-		view_scene_.addItem(edge);
-	
-		Edge* edge2 = new Edge(i_item, model_item);
-		view_scene_.addItem(edge2);
-	
-		DottedEdge* dedge = new DottedEdge(i_item, pred_item);
-		view_scene_.addItem(dedge);
-	
-		addPredictionToPipeline(pred_item);
-	
-		std::cout << "Prediction" << std::endl;
-		pred_section=0;
-		value++;
-		emit sendNewValue(value);
-	}
-*/
