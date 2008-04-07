@@ -213,7 +213,7 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 	}
 
 	String data_file=""; String output=""; 
-	vector<double> par;
+	model_parameters.clear();
 	int model_no=0;
 	
 	data_file=""; output=""; model_no=0; grid_search_steps=0; grid_search_recursions=0;
@@ -242,7 +242,7 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 			line = ((String)line.after("=")).trimLeft();
 			for(uint i=0; i<line.countFields(" ");i++)
 			{
-				par.push_back(line.getField(i).toDouble());
+				model_parameters.push_back(line.getField(i).toDouble());
 			}
 		}
 		else if(line.hasPrefix("model_no"))
@@ -311,7 +311,7 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 		if(grid_search_steps>0 && grid_search_stepwidth>0) optimize_kernel_parameters=1;
 	}
 	
-	model_->setParameters(par);
+	model_->setParameters(model_parameters);
 	
 	view_->data_scene->addItem(this);
 	view_->data_scene->main_window->addModelToPipeline(this);
@@ -487,6 +487,8 @@ void ModelItem::createActions()
 	connect(properties_action, SIGNAL(triggered()), this, SLOT(showProperties()));
 }
 
+
+// SLOT
 void ModelItem::saveModel()
 {
 	try
@@ -533,6 +535,7 @@ void ModelItem::loadModel()
 			return;
 		}
 	}
+	
 	done_ = 1;
 }
 
@@ -572,7 +575,7 @@ void ModelItem::writeConfigSection(ofstream& out)
 {
 	String parameter_string;
 	String tmp;
-	for (unsigned int i = 0; i < model_parameters.size(); i++)
+	for (uint i = 0; i < model_parameters.size(); i++)
 	{
 		parameter_string += " "+ String(model_parameters[i]);
 	}

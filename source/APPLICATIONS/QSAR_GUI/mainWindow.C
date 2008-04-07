@@ -667,11 +667,8 @@ void MainWindow::clearDesktop()
 void MainWindow::restoreDesktop()
 {
 	QString filename = QFileDialog::getOpenFileName(this, tr("Open File"),settings.config_path.c_str(),tr("text (*.txt)"));
-	
 	String s = filename.toStdString();
 	settings.config_path = s.substr(0,s.find_last_of("/")+1);
-	
-	
 	try
 	{
 		restoreDesktop(filename);
@@ -688,6 +685,8 @@ void MainWindow::exportPipeline()
 {
 	QString filename = QFileDialog::getSaveFileName(this, tr("Save File as"),(settings.config_path+"config.txt").c_str(),tr("text (*.txt)"));
 	exportPipeline(filename);
+	String s = filename.toStdString();
+	settings.config_path = s.substr(0,s.find_last_of("/")+1);
 }
 
 
@@ -719,26 +718,18 @@ void MainWindow::saveModels(String directory)
 
 void MainWindow::loadModels()
 {
-	QString dirname = QFileDialog::getExistingDirectory(this, tr("Open Directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-	QDir dir(dirname);
-	dir.setFilter(QDir::NoDotAndDotDot|QDir::Files);
-	QStringList filters;
-	filters << "*.mod" ;
-	dir.setNameFilters(filters);
-	int num_of_entries = dir.count();
-	int num_of_models = model_pipeline_.size();
-
-	if (num_of_entries != num_of_models)
-	{
-		QMessageBox::warning(this, tr("Error"),"");
-		return;
-	}
-
 	try
 	{
 		for (QSet<ModelItem*>::Iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
 		{
-			(*it)->loadModel(dirname+(*it)->savedAs());
+			String filename=directory+(*it)->savedAs().toStdString();
+			ifstream input(filename.c_str());
+			// read only existing models
+			if(input)
+			{
+				input.close();
+				(*it)->loadModel(filename);
+			}
 		}
 	}
 	catch(GeneralException e)
@@ -1198,6 +1189,11 @@ void MainWindow::restoreDesktop(QString filename)
 	
 	view_scene_.update();
 	view_->update();
+	
+	/// read all model if respec. files exist in the folder of the config-file
+	String f = filename.toStdString();
+	String directory = f.substr(0,f.find_last_of("/")+1);
+	loadModels(directory);
 }
 
 

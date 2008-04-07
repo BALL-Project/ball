@@ -197,6 +197,7 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 	input_model_item_ = (ModelItem*) it->second;
 	model_item_ = new ModelItem(*input_model_item_);
 	model_item_->setSaveAttribute(false);
+	model_item_->setSavedAs(output.c_str());
 	view_->data_scene->addItem(model_item_);
 	view_->data_scene->main_window->addModelToPipeline(model_item_);
 	
