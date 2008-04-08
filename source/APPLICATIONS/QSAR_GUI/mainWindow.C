@@ -626,7 +626,6 @@ void MainWindow::deleteItem()
 		QList<QGraphicsItem*>::Iterator it = items.begin();
 	
 		DataItem* item = static_cast<DataItem *>(*it);
-		//deleteItem(item);
 		delete item;
 	}
 	else
@@ -1040,7 +1039,7 @@ void MainWindow::restoreDesktop(QString filename)
 	}
 	catch(BALL::Exception::GeneralException e)
 	{
-		QMessageBox::warning(this,"Error",e.getMessage());
+		QMessageBox::warning(this,e.getName(),e.getMessage());
 	}
 	
 	view_scene_.update();

@@ -84,7 +84,7 @@ DataItem::~DataItem()
 		delete *it;
 		delete child;
 	}
-	view_->data_scene->removeItem(this);
+	if(view_->name == "view") view_->data_scene->removeItem(this);
 }
 
 void DataItem::addInEdge(Edge* edge)
