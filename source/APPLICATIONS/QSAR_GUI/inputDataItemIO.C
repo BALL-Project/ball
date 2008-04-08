@@ -61,6 +61,8 @@ void InputDataItemIO::writeConfigSection(CSVInputDataItem* csv_item, ofstream& o
 	out << "center_response = "<< csv_item->centerY() << "\n";
 	out << "output = " << csv_item->savedAs().toStdString() << "\n";
 	out << "\n";
+	
+	written_csv_.insert(csv_item);
 }
 
 

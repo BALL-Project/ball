@@ -20,8 +20,7 @@ using namespace BALL::VIEW::Exception;
 
 /// TODO: set additional_descriptors_ and center data only if ==0 !!!
 SDFInputDataItem::SDFInputDataItem(QString filename,SortedList<int> act, bool cdv, bool crv, DataItemView* view):
-	InputDataItem(filename, cdv, crv, view),
-	activity_values_(act)
+	InputDataItem(filename, cdv, crv, view)
 {
 	//set pixmap
 	QPixmap pm = QPixmap("./images/sdf_icon.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
@@ -33,29 +32,9 @@ SDFInputDataItem::SDFInputDataItem(QString filename,SortedList<int> act, bool cd
 	string st = filename.toStdString();
 	
 	data_ = new QSARData;
-
-	try
-	{
-		data_->readSDFile(st.c_str(), act);
-	}
-	catch(WrongFileFormat)
-	{
-		throw(InvalidInputDataItem(__FILE__,__LINE__));
-	}
-		
-	///this one occurs if there were some properties missing -> this type of sd-files is not supported at the moment
-	catch(PropertyError)
-	{
-		throw(InvalidInputDataItem(__FILE__,__LINE__));
-	}
-
-	center_data_ = cdv;
-	center_y_ = crv;
-
-	if (center_data_)
-	{
-		data_->centerData(center_y_);
-	}
+	
+	if(act.size()==0) activity_values_.clear();
+	else activity_values_ = act;
 }
 
 

@@ -51,10 +51,11 @@ PredictionItem::~PredictionItem()
 
 
 PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view)
+	: DataItem(view)
 {
 	istringstream input;
 	input.str(configfile_section);
-		
+	
 	String line;
 	getline(input,line);
 	line.trimLeft();
@@ -66,7 +67,7 @@ PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*
 	String model="";
 	String data="";
 	String output="";
-	
+
 	while(input)
 	{
 		getline(input,line);
@@ -87,12 +88,16 @@ PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*
 		{
 			data = ((String)line.after("=")).trimLeft();
 		}
+		else if(line.hasPrefix("print_excepted")) 
+		{
+			// ignore this, since it is not relevant for the GUI
+		}
 		else
 		{
 			String mess = "Configuration command \""+line+"\" unknown!!";
 			String name = "ValidationItem reading error";
 			throw BALL::Exception::GeneralException(__FILE__,__LINE__,name,mess);
-		}	
+		}
 	}
 	map<String,DataItem*>::iterator it = filenames_map.find(model);
 	if(it==filenames_map.end())
@@ -106,7 +111,7 @@ PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"PredictionItem reading error","InputDataItem for which the prediction should be done can not be found!");
 	}
 	input_data_item_ = (InputDataItem*) it->second;
-	
+
 	if(item_positions!=0 && item_positions->size()>0)
 	{
 		pair<double,double> pos = item_positions->front();
@@ -120,8 +125,12 @@ PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*
 	view_->data_scene->addItem(edge);
 	model_item_->addPredictionInputEdge(edge);
 	Edge* edge2 = new Edge(model_item_,this);
-	view_->data_scene->addItem(edge2);	
-	
+	view_->data_scene->addItem(edge2);
+		
+	setPixmap(QPixmap("./images/prediction.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+	name_ = "Prediction for " + input_data_item_->name();
+	view_->data_scene->addItem(this);
+	addToPipeline();
 	pred_plotter_ = 0;
 	done_ = 0;
 }
@@ -205,7 +214,7 @@ void PredictionItem::showPredictionPlotter()
 	}
 }
 
-void PredictionItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+void PredictionItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* /*event*/)
 {
 	PredictionResultDialog predictionResultDialog(this);
 	predictionResultDialog.exec();

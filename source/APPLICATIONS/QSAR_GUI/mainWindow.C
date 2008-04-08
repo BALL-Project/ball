@@ -1013,7 +1013,7 @@ void MainWindow::restoreDesktop(QString filename)
  				if(model_section) new ModelItem(section,filenames_map,&item_positions,view_);
  				if(fs_section) new FeatureSelectionItem(section,filenames_map,&item_positions,view_);
  				if(val_section) new ValidationItem(section,filenames_map,&item_positions,view_);
-				//if(pred_section) new PredictionItem(section,filenames_map,&item_positions,view_);
+				if(pred_section) new PredictionItem(section,filenames_map,&item_positions,view_);
 				
 				input_section=0;model_section=0;fs_section=0;
 				val_section=0;pred_section=0;
@@ -1033,7 +1033,7 @@ void MainWindow::restoreDesktop(QString filename)
  		if(model_section) new ModelItem(section,filenames_map,&item_positions,view_);
  		if(fs_section) new FeatureSelectionItem(section,filenames_map,&item_positions,view_);
  		if(val_section) new ValidationItem(section,filenames_map,&item_positions,view_);
-		//if(pred_section) new PredictionItem(section,filenames_map,&item_positions,view_);
+		if(pred_section) new PredictionItem(section,filenames_map,&item_positions,view_);
 		
 		file.close();
 	}
