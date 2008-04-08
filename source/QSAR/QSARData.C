@@ -1159,12 +1159,15 @@ void QSARData::readMatrix(VMatrix& mat, ifstream& in, unsigned int lines, unsign
 	
 	for(unsigned int i=0;i<lines;i++)
 	{
-		getline(in,line);
+		//getline(in,line);
 		for(unsigned int j=0; j<col;j++)
 		{
-			mat[j][i] = line.getField(j,"\t").toDouble();
+			String s;
+			in>>s;
+			mat[j][i]=s.toDouble(); // = line.getField(j,"\t").toDouble();
 		}
 	}
+	getline(in,line); // read until the end of the last matrix-line
 }
 
 void QSARData::readFromFile(string filename)

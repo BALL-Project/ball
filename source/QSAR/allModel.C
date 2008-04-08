@@ -355,12 +355,13 @@ void ALLModel::readFromFile(string filename)
 	for(int i=1; i<=no_substances;i++) /// read descriptor matrix
 	{
 		String line;
-		getline(input,line);
+		//getline(input,line);
 		for(int j=1; j<=no_descriptors;j++)
 		{
 			descriptor_matrix_(i,j) = line.getField(j-1," ").toDouble();
 		}
 	}
+	
 	getline(input,line0);  // skip empty line
 	
 	for(int i=1; i<=no_substances;i++) /// read response values
