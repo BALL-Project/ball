@@ -433,7 +433,7 @@ void DataItemScene::addDropSite()
 void DataItemScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
 {
 	if(mouseEvent->button()!=Qt::LeftButton) return;
-	
+
 	QPointF p = mouseEvent->scenePos();
 	QGraphicsItem* item = itemAt(p);
 	main_window->drag_start_time = main_window->drag_start_time.now();

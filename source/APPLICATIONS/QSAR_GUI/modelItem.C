@@ -542,7 +542,7 @@ void ModelItem::loadModel()
 	done_ = 1;
 }
 
-void ModelItem::loadModel(QString file)
+void ModelItem::loadFromFile(String file)
 {
 	try
 	{

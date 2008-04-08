@@ -102,6 +102,20 @@ void InputDataItem::setData(QSARData* data)
 	data_ = data;
 }
 
+void InputDataItem::loadFromFile(String file)
+{
+	try
+	{
+		data_->readFromFile(file);
+	}
+	catch(WrongDataType e)
+	{
+		QMessageBox::warning(view_,"Error",e.getMessage());
+		return;
+	}
+	done_ = 1;
+}
+
 void InputDataItem::showPlotter()
 {
 	if(data_->getNoSubstances()==0)

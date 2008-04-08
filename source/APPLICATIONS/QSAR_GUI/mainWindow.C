@@ -689,23 +689,50 @@ void MainWindow::exportPipeline()
 }
 
 
-void MainWindow::saveModels(String directory)
+void MainWindow::saveItemsToFiles(String directory)
 {
 	try
 	{
+		for (QSet<SDFInputDataItem*>::Iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
+		{
+			// if input has not been read, there is nothing to be saved
+			if(!(*it)->isDone()) continue;
+			
+			QSARData* data = (*it)->data();
+			String f1 = (*it)->savedAs().toStdString();
+			if(f1=="")
+			{
+				throw GeneralException(__FILE__,__LINE__,"SDF data saving error ", "SDF Input must be assigned a file to be saved to!");
+			}
+			String file = directory+f1;
+			data->saveToFile(file);
+		}
+		for (QSet<CSVInputDataItem*>::Iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
+		{
+			// if input has not been read, there is nothing to be saved
+			if(!(*it)->isDone() || (*it)->append()) continue;
+			
+			QSARData* data= (*it)->data();
+			String f1 = (*it)->savedAs().toStdString();
+			if(f1=="")
+			{
+				throw GeneralException(__FILE__,__LINE__,"CSV saving error ", "CSV Item must be assigned a file to be saved to!");
+			}
+			String file = directory+f1;
+			data->saveToFile(file);
+		}
 		for (QSet<ModelItem*>::Iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
 		{
 			// if model has not yet been trained, there is nothing to be saved
 			if(!(*it)->isDone()) continue;
 			
 			Model* model = (*it)->model();
-			String file = directory;
 			String f1 = (*it)->savedAs().toStdString();
 			if(f1=="")
 			{
-				throw GeneralException(__FILE__,__LINE__,"Model saving error ", "model must be assigned a file to be saved to!");
+				throw GeneralException(__FILE__,__LINE__,"Model saving error ", "Model must be assigned a file to be saved to!");
 			}
-			file += f1;
+			String file = directory+f1;
 			model->saveToFile(file);
 		}
 	}
@@ -715,10 +742,35 @@ void MainWindow::saveModels(String directory)
 	}
 }
 
-void MainWindow::loadModels()
+
+void MainWindow::loadItemsFromFiles(String directory)
 {
 	try
 	{
+		for (QSet<SDFInputDataItem*>::Iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
+		{
+			String filename=directory+(*it)->savedAs().toStdString();
+			ifstream input(filename.c_str());
+			// read only existing models
+			if(input)
+			{
+				input.close();
+				(*it)->loadFromFile(filename);
+			}
+		}
+		for (QSet<CSVInputDataItem*>::Iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
+		{
+			if((*it)->append()) continue;
+			
+			String filename=directory+(*it)->savedAs().toStdString();
+			ifstream input(filename.c_str());
+			// read only existing models
+			if(input)
+			{
+				input.close();
+				(*it)->loadFromFile(filename);
+			}
+		}
 		for (QSet<ModelItem*>::Iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
 		{
 			String filename=directory+(*it)->savedAs().toStdString();
@@ -727,7 +779,7 @@ void MainWindow::loadModels()
 			if(input)
 			{
 				input.close();
-				(*it)->loadModel(filename);
+				(*it)->loadFromFile(filename);
 			}
 		}
 	}
@@ -736,6 +788,7 @@ void MainWindow::loadModels()
 		QMessageBox::warning(this, tr("Error"),e.getMessage());
 	}
 }
+
 
 Registry* MainWindow::registry()
 {
@@ -1045,11 +1098,11 @@ void MainWindow::restoreDesktop(QString filename)
 	view_scene_.update();
 	view_->update();
 	
-	/// read all model if respec. files exist in the folder of the config-file
+	/// read all items if respec. files exist in the folder of the config-file
 	String f = filename.toStdString();
 	uint s = f.find_last_of("/");
 	String directory = f.substr(0,s+1); // name of config-file folder
-	loadModels(directory);
+	loadItemsFromFiles(directory);
 }
 
 
@@ -1078,10 +1131,9 @@ void MainWindow::exportPipeline(QString filename)
 	QString name;
 	String f = filename.toStdString();
 	uint d = f.find_last_of(".");
-	uint s = f.find_last_of("/");cout<<d<<" "<<s<<endl;
+	uint s = f.find_last_of("/");
 	String file_prefix = f.substr(s+1,d-s-1)+"_"; // name of config-file as prefix for output-files
 	String directory = f.substr(0,s+1); // name of folder
-	cout<<file_prefix<<"  "<<directory<<endl;
 	
 	ostringstream positions;
 	positions<<"[ItemPositions]"<<endl;
@@ -1126,9 +1178,6 @@ void MainWindow::exportPipeline(QString filename)
 		}
 	}
 	
-	/// save models to files
-	saveModels(directory);
-	
 	///Feature Selection Items
 	counter=0;
 	for (QSet<FeatureSelectionItem*>::Iterator it = fs_pipeline_.begin(); it != fs_pipeline_.end(); it++,counter++)
@@ -1167,6 +1216,10 @@ void MainWindow::exportPipeline(QString filename)
 	
 	out<<positions.str().c_str()<<endl;
 	out.close();
+	
+	/// save item data to files
+	saveItemsToFiles(directory);
+	
 	progress_bar_->reset();
 }
 

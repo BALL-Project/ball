@@ -54,6 +54,9 @@ namespace BALL
 				void setFilename(String filename) { filename_=filename.c_str();}
 				
 				void showPlotter();
+				
+				/** load preprocessed input data from a file */
+				void loadFromFile(String file);
 
 				virtual bool checkForDiscreteY() = 0;
 				virtual void addToPipeline() = 0;

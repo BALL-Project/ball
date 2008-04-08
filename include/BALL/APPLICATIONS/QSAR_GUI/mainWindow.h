@@ -95,6 +95,7 @@ namespace BALL
 				
 				void setLastUsedPath(String path);
 
+				/** sets for fast search of Items: */
 				QSet<SDFInputDataItem*> sdf_input_pipeline_;
 				QSet<CSVInputDataItem*> csv_input_pipeline_;
 				QSet<ModelItem*> model_pipeline_;
@@ -141,7 +142,8 @@ namespace BALL
 				void createActions();
 				void createDockWindows();
 				void createDialogs();
-				void saveModels(String directory);
+				void saveItemsToFiles(String directory);
+				void loadItemsFromFiles(String directory);
 			
 				/** @name Private Attributes */
 
