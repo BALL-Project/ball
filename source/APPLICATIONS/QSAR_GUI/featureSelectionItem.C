@@ -154,6 +154,7 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 		else if(line.hasPrefix("remove_correlated_features"))
 		{
 			remove_correlated = ((String)line.after("=")).trimLeft().toBool();
+			type_=0;name_="Remove Colinear Features";
 		}
 		else if(line.hasPrefix("cor_threshold"))
 		{
