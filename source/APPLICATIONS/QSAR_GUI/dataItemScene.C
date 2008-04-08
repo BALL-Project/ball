@@ -134,14 +134,12 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 					Edge* edge = new Edge(input_item_at_pos, item);
 					addItem(edge);
 					item->addToPipeline();
-					//main_window->addModelToPipeline(item);
 				}
 				else if(csv_input_item_at_pos)
 				{
 					Edge* edge = new Edge(csv_input_item_at_pos, item);
 					addItem(edge);
 					item->addToPipeline();
-// 					main_window->addModelToPipeline(item);
 				}
 			}
 			catch(InvalidModelItem)
@@ -196,7 +194,6 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				model_copy->setSaveAttribute(false);
 				addItem(model_copy);
 				model_copy->addToPipeline();
-// 				main_window->addModelToPipeline(model_copy);
 				model_copy->setPos(pos + 2*getOffset(model_copy));
 		
 				Edge* edge = new Edge(item, model_copy);
@@ -329,7 +326,6 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 						}
 						
 						item->addToPipeline();
-// 						main_window->addInputToPipeline(item);
 						
 						String p = path.toStdString(); 
 						p  = p.substr(0,p.find_last_of("/"));
@@ -349,7 +345,6 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 							Edge* edge = new Edge(input_item_at_pos, csv_item);
 							addItem(edge);
 							csv_item->addToPipeline();
-// 							main_window->addInputToPipeline(csv_item);
 							input_item_at_pos->appendCSVDescriptors(csv_item);
 						}
 
@@ -359,7 +354,6 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 							addItem(csv_item);
 							csv_item->setPos(pos.x(),pos.y());
 							csv_item->addToPipeline();
-// 							main_window->addInputToPipeline(csv_item);
 						}
 						String p = path.toStdString(); 
 						p  = p.substr(0,p.find_last_of("/"));

@@ -748,53 +748,6 @@ QSet<ModelItem*> MainWindow::getModelPipeline()
 	return model_pipeline_;
 }
 
-// void MainWindow::addInputToPipeline(InputDataItem* item)
-// {
-// 	if (item)
-// 	{
-// 		if (SDFInputDataItem* sdf_item = qgraphicsitem_cast<SDFInputDataItem*>(item))
-// 		{
-// 			sdf_input_pipeline_.insert(sdf_item);
-// 		}
-// 		else if (CSVInputDataItem* csv_item = qgraphicsitem_cast<CSVInputDataItem*>(item))
-// 		{
-// 			csv_input_pipeline_.insert(csv_item);	
-// 		}
-// 	}
-// }
-
-// void MainWindow::addModelToPipeline(ModelItem* item)
-// {
-// 	if (item != NULL)
-// 	{
-// 		model_pipeline_.insert(item);
-// 	}
-// }
-
-// void MainWindow::addPredictionToPipeline(PredictionItem* item)
-// {
-// 	if (item != NULL)
-// 	{
-// 		prediction_pipeline_.insert(item);
-// 	}
-// }
-
-// void MainWindow::addFeatureSelectionToPipeline(FeatureSelectionItem* item)
-// {
-// 	if (item != NULL)
-// 	{
-// 		fs_pipeline_.insert(item);
-// 	}
-// }
-
-// void MainWindow::addValidationToPipeline(ValidationItem* item)
-// {
-// 	if (item != NULL)
-// 	{
-// 		val_pipeline_.insert(item);
-// 	}
-// }
-
 void MainWindow::executePipeline()
 {
 	int maximum = sdf_input_pipeline_.size() + csv_input_pipeline_.size() + model_pipeline_.size() + fs_pipeline_.size() + val_pipeline_.size() + prediction_pipeline_.size();
