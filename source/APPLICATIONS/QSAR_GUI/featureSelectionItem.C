@@ -370,7 +370,6 @@ void FeatureSelectionItem::writeConfigSection(ofstream& out)
 		}
 		out << "k_fold = "<< k() <<  "\n";
 		out << "feature_selection_type = "<< getType() <<  "\n";
-		out << "output = " << modelItem()->savedAs().toStdString() << "\n";
 	}
 	else
 	{
@@ -378,6 +377,7 @@ void FeatureSelectionItem::writeConfigSection(ofstream& out)
 		out<<"cor_threshold = "<<getCorThreshold()<<endl;
 	}
 	out << "optimize_parameters = " << opt() << "\n";
+	out << "output = " << modelItem()->savedAs().toStdString() << "\n";
 	out << "\n";
 }
 
