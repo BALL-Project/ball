@@ -29,8 +29,9 @@ namespace BALL
 			/** constructor
 			@param sourceNode pointer to the source node of the edge
 			@param destNode pointer to the the target node of the edge
+			@param dotted if true, the new edge is not added to edge-lists of source and destination (as is neccessary for prediction-edges)
 			*/
-			Edge(DataItem* sourceNode, DataItem* destNode);
+			Edge(DataItem* sourceNode, DataItem* destNode, bool dotted=0);
 		
 			/** destructor
 			*/
@@ -74,10 +75,8 @@ namespace BALL
 		
 		
 		protected:
-			void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+			virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 			QRectF boundingRect() const;
-		
-		private:
 		
 			/** @name Attributes*/
 		

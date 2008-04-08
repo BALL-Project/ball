@@ -2,10 +2,9 @@
 #define DEDGE_H
 
 #include <QtGui/QPainter>
-#include <QtGui/QStyleOptionGraphicsItem>
 
 #include <BALL/APPLICATIONS/QSAR_GUI/dataItem.h>
-
+#include <BALL/APPLICATIONS/QSAR_GUI/edge.h>
 
 namespace BALL
 {
@@ -18,14 +17,14 @@ namespace BALL
 		*
 		* @todo
 		*/
-		class DottedEdge : public QGraphicsLineItem
+		class DottedEdge : public Edge
 		{
 		public:
 			/** @name Constructors and Destructors*/
 		
 			/** constructor
 			@param destNode*/
-			DottedEdge(DataItem* destNode);
+			//DottedEdge(DataItem* destNode);
 		
 			/** constructor
 			@param sourceNode 
@@ -52,28 +51,28 @@ namespace BALL
 			/** returns the destination position*/
 			QPointF getDestPosition() const;
 		
-			void adjust();
+			//void adjust();
 		
 		
 		protected:
 			void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 			QRectF boundingRect() const;
 		
-		private:
-		
-			/** @name Attributes*/
-		
-			/** pointer to the source node of the edge */
-			DataItem* source_;
-		
-			/** pointer to the destinaton node of the edge */
-			DataItem* dest_;
-		
-			QPointF source_point_;
-			QPointF dest_point_;
-		
-			QPointF source_position_;
-			QPointF dest_position_;
+// 		private:
+// 		
+// 			/** @name Attributes*/
+// 		
+// 			/** pointer to the source node of the edge */
+// 			DataItem* source_;
+// 		
+// 			/** pointer to the destinaton node of the edge */
+// 			DataItem* dest_;
+// 		
+// 			QPointF source_point_;
+// 			QPointF dest_point_;
+// 		
+// 			QPointF source_position_;
+// 			QPointF dest_position_;
 		};
 	}
 }

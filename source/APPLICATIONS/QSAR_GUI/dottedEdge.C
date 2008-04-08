@@ -4,50 +4,28 @@
 using namespace BALL::VIEW;
 
 DottedEdge::DottedEdge(DataItem *source_node, DataItem *dest_node)
+	: Edge(source_node,dest_node,1)
  {
-	setFlag(ItemIsMovable);
-     	setZValue(1);
-	if (!source_node || !dest_node)
-	{
-		if (!source_node && dest_node)
-		{
-			source_ = dest_node;
-			dest_ = dest_node;
-		}
-		if (source_node && !dest_node)
-		{
-			source_ = source_node;
-			dest_ = source_node;	
-		}
-		adjust();
-		return;
-	}
-	source_ = source_node;
-	dest_ = dest_node;
-
-	source_point_ = mapFromItem(source_, 0, 0);
-	dest_point_ = mapFromItem(dest_, 0, 0);	
-	adjust();
  }
 
 DottedEdge::~DottedEdge()
  {
  }
 
- void DottedEdge::adjust()
- {
-	QPointF start = mapFromItem(source_, source_position_);
-	QPointF stop = mapFromItem(dest_, dest_position_);	
-	QLineF line;
-
-	line = QLineF(mapFromItem(source_, source_->width() +1., source_->height() +1.), mapFromItem(dest_, 0, 0));
-
-	//prepareGeometryChange();
-	source_point_ = line.p1();
- 	dest_point_ = line.p2();
-	return;
-
- }
+//  void DottedEdge::adjust()
+//  {
+// 	QPointF start = mapFromItem(source_, source_position_);
+// 	QPointF stop = mapFromItem(dest_, dest_position_);	
+// 	QLineF line;
+// 
+// 	line = QLineF(mapFromItem(source_, source_->width() +1., source_->height() +1.), mapFromItem(dest_, 0, 0));
+// 
+// 	//prepareGeometryChange();
+// 	source_point_ = line.p1();
+//  	dest_point_ = line.p2();
+// 	return;
+// 
+//  }
 
  void DottedEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {

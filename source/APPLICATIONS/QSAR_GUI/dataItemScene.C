@@ -30,22 +30,42 @@ void DataItemScene::setMainWindow(MainWindow* mw)
 }
 
 
-QPointF DataItemScene::getOffset(DataItem* item)
+QPointF DataItemScene::getOffset(QPointF& origin, DataItem* item)
 {
 	// InputDataItem created together with a PredictionItem
+	QPointF pos = default_offset;
 	if(item->type()==SDFInputDataItem::Type || item->type()==CSVInputDataItem::Type)
 	{
-		QPointF(-120,-70);
+		pos = QPointF(-120,-70);
 	}	
-	if(item->type()==ValidationItem::Type) // ValidationItem	
+	else if(item->type()==ValidationItem::Type) // ValidationItem	
 	{
-		return QPointF(100,0);
+		pos = QPointF(100,0);
 	}
-	if(item->type()==PredictionItem::Type) // PredictionItem	
+	else if(item->type()==PredictionItem::Type) // PredictionItem	
 	{
-		return QPointF(-120,50);
+		pos = QPointF(-90,50);
 	}
-	else return default_offset;	
+	
+
+	for(uint i=0; i<50;i++)
+	{
+		QPointF p = origin+pos;
+		if( qgraphicsitem_cast<SDFInputDataItem*>(itemAt(p)) ||
+		    qgraphicsitem_cast<CSVInputDataItem*>(itemAt(p)) ||
+		    qgraphicsitem_cast<ModelItem*>(itemAt(p)) ||
+		    qgraphicsitem_cast<FeatureSelectionItem*>(itemAt(p)) ||
+		    qgraphicsitem_cast<ValidationItem*>(itemAt(p)) ||
+		    qgraphicsitem_cast<PredictionItem*>(itemAt(p)) )
+		{
+			pos+=QPointF(200,0);
+		}
+		else
+		{
+			break;
+		}
+	}
+	return pos;	
 }
 
 
@@ -134,7 +154,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				item->setView(view);
 				addItem(item);
 				item->setPos(pos.x(),pos.y());
-				item->setPos(pos + getOffset(item));
+				item->setPos(pos + getOffset(pos,item));
 				if (input_item_at_pos)
 				{
 					Edge* edge = new Edge(input_item_at_pos, item);
@@ -195,12 +215,13 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				pos = model_item_at_pos->pos();
 				item->setView(view);
 				addItem(item);
-				item->setPos(pos + getOffset(item));
+				pos += getOffset(pos,item);
+				item->setPos(pos);
 				
 				model_copy->setSaveAttribute(false);
 				addItem(model_copy);
 				model_copy->addToPipeline();
-				model_copy->setPos(pos + 2*getOffset(model_copy));
+				model_copy->setPos(pos + getOffset(pos,model_copy));
 		
 				Edge* edge = new Edge(item, model_copy);
 				addItem(edge);
@@ -253,7 +274,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				item->setView(view);
 				pos = model_item_at_pos->pos();
 				addItem(item);
-				item->setPos(pos + getOffset(item));
+				item->setPos(pos + getOffset(pos,item));
 				Edge* edge = new Edge(model_item_at_pos, item);
 				addItem(edge);
 				item->addToPipeline();
@@ -312,9 +333,9 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 							PredictionItem* pred_item = main_window->createPrediction(item,model_item_at_pos);
 							addItem(pred_item);
 							pos = model_item_at_pos->pos();
-							pred_item->setPos(pos+getOffset(pred_item));
+							pred_item->setPos(pos+getOffset(pos,pred_item));
 							addItem(item);
-							QPointF p0 = QPointF(-120,-70);
+							QPointF p0 = QPointF(-90,-50);
 							item->setPos(pos+p0);
 				
 							Edge* edge = new Edge(model_item_at_pos, pred_item);
@@ -351,7 +372,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 							csv_item->setAppend(true);
 							addItem(csv_item);
 							pos = input_item_at_pos->pos();
-							QPointF p0 = QPointF(10,0);
+							QPointF p0 = QPointF(input_item_at_pos->width()+10,0);
 							csv_item->setPos(pos+p0);
 							Edge* edge = new Edge(input_item_at_pos, csv_item);
 							addItem(edge);

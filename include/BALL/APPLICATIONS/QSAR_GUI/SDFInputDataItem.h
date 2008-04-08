@@ -25,7 +25,7 @@ namespace BALL
 				*/
 				
 				SDFInputDataItem(QString filename,SortedList<int> act, bool cdv, bool crv, DataItemView* view);
-				SDFInputDataItem(QString filename, QString name, DataItemView* view);
+				
 				SDFInputDataItem(QString filename, DataItemView* view);
 				
 				~SDFInputDataItem();

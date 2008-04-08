@@ -50,7 +50,7 @@ namespace BALL
 				
 				void mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent);
 				
-				QPointF getOffset(DataItem* item);
+				QPointF getOffset(QPointF& origin,DataItem* item);
 				
 			protected:
 				//void wheelEvent(QWheelEvent *event);

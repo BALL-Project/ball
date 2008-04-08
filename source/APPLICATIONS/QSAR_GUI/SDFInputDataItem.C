@@ -18,7 +18,6 @@ using namespace BALL::VIEW::Exception;
 
 
 
-/// TODO: set additional_descriptors_ and center data only if ==0 !!!
 SDFInputDataItem::SDFInputDataItem(QString filename,SortedList<int> act, bool cdv, bool crv, DataItemView* view):
 	InputDataItem(filename, cdv, crv, view)
 {
@@ -28,8 +27,6 @@ SDFInputDataItem::SDFInputDataItem(QString filename,SortedList<int> act, bool cd
 
 	QStringList list = filename_.split("/");
 	setName(list[list.size()-1]);
-
-	string st = filename.toStdString();
 	
 	data_ = new QSARData;
 	
@@ -37,21 +34,6 @@ SDFInputDataItem::SDFInputDataItem(QString filename,SortedList<int> act, bool cd
 	else activity_values_ = act;
 }
 
-
-//create DataItem from a save file
-/// TODO: set additional_descriptors_ and center data only if ==0 !!!
-SDFInputDataItem::SDFInputDataItem(QString filename, QString name, DataItemView* view):
-	InputDataItem(filename, view)
-{
-	//set properties for visualisation 
-	QPixmap pm = QPixmap(width(),height());
-	pm.fill(Qt::blue);
-	setPixmap(pm);
-	this->setName(name);
-	
-	data_ = new QSARData;
-	data_->readFromFile(filename.toStdString());
-}
 
 SDFInputDataItem::SDFInputDataItem(QString filename, DataItemView* view):
 	InputDataItem(filename, false, false, view)
@@ -161,13 +143,6 @@ void SDFInputDataItem::setActivityValues(SortedList<int> act)
 	activity_values_.assign(act.begin(), act.end());
 }
 
-// void SDFSDFInputDataItem::addCSVFile(CSVFileInfo* csv)
-// {
-// 	if (csv)
-// 	{
-// 		csv_files_ << csv;
-// 	}
-// }
 
 void SDFInputDataItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* /*event*/)
 {

@@ -10,19 +10,23 @@ static const double Pi = 3.141;
 static double TwoPi = 2.0 * Pi;
 static qreal arrow_size = 10.0;
 
- Edge::Edge(DataItem *source_node, DataItem *dest_node)
- {
+ 
+Edge::Edge(DataItem *source_node, DataItem *dest_node, bool dotted)
+{
 	setFlag(ItemIsMovable);
 	setZValue(1);
-
+	
 	source_ = source_node;
 	dest_ = dest_node;
 
-	source_->addOutEdge(this);
-	dest_->addInEdge(this);
+	if(!dotted)
+	{
+		source_->addOutEdge(this);
+		dest_->addInEdge(this);
+	}
 
 	adjust();
- }
+}
 
  Edge::~Edge()
  {
