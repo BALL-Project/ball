@@ -1047,7 +1047,8 @@ void MainWindow::restoreDesktop(QString filename)
 	
 	/// read all model if respec. files exist in the folder of the config-file
 	String f = filename.toStdString();
-	String directory = f.substr(0,f.find_last_of("/")+1);
+	uint s = f.find_last_of("/");
+	String directory = f.substr(0,s+1); // name of config-file folder
 	loadModels(directory);
 }
 
@@ -1076,7 +1077,11 @@ void MainWindow::exportPipeline(QString filename)
 
 	QString name;
 	String f = filename.toStdString();
-	String directory = f.substr(0,f.find_last_of("/")+1);
+	uint d = f.find_last_of(".");
+	uint s = f.find_last_of("/");cout<<d<<" "<<s<<endl;
+	String file_prefix = f.substr(s+1,d-s-1)+"_"; // name of config-file as prefix for output-files
+	String directory = f.substr(0,s+1); // name of folder
+	cout<<file_prefix<<"  "<<directory<<endl;
 	
 	ostringstream positions;
 	positions<<"[ItemPositions]"<<endl;
@@ -1085,7 +1090,7 @@ void MainWindow::exportPipeline(QString filename)
 	for (QSet<SDFInputDataItem*>::Iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
 	{
 		SDFInputDataItem* item = (*it);
-		item->setSavedAs(item->name()+".dat");
+		item->setSavedAs(file_prefix.c_str()+item->name()+".dat");
 		input_writer.writeConfigSection(item,out);
 		positions<<item->x()<<"  "<<item->y()<<endl;
 		value++;
@@ -1096,7 +1101,7 @@ void MainWindow::exportPipeline(QString filename)
 	for (QSet<CSVInputDataItem*>::Iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
 	{
 		CSVInputDataItem* item = (*it);
-		item->setSavedAs(item->name()+".dat");
+		item->setSavedAs(file_prefix.c_str()+item->name()+".dat");
 		input_writer.writeConfigSection(item,out);
 		positions<<item->x()<<"  "<<item->y()<<endl;
 		value++;
@@ -1107,9 +1112,9 @@ void MainWindow::exportPipeline(QString filename)
 	counter=0;
 	for (QSet<ModelItem*>::Iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++,counter++)
 	{
-		ModelItem* item = (*it); 
-		item->setSavedAs(item->name() + name.setNum(counter) + ".mod");
-
+		ModelItem* item = (*it);
+		item->setSavedAs(file_prefix.c_str()+item->name() + name.setNum(counter) + ".mod");
+		
 		// do not write a config-file section for models that are created by feature selection.
 		// --> FeatureSelector will create these models; no need to run ModelCreator for these ones!
 		if (item->saveAttribute())
@@ -1141,7 +1146,7 @@ void MainWindow::exportPipeline(QString filename)
 	for (QSet<ValidationItem*>::Iterator it = val_pipeline_.begin(); it != val_pipeline_.end(); it++,counter++)
 	{
 		ValidationItem* item = (*it); 
-		item->setSavedAs(name.setNum(counter)+".val");
+		item->setSavedAs(file_prefix.c_str()+name.setNum(counter)+".val");
 		item->writeConfigSection(out);
 		positions<<item->x()<<"  "<<item->y()<<endl;
 		value++;
@@ -1153,7 +1158,7 @@ void MainWindow::exportPipeline(QString filename)
 	for (QSet<PredictionItem*>::Iterator it = prediction_pipeline_.begin(); it != prediction_pipeline_.end(); it++,counter++)
 	{
 		PredictionItem* item = (*it); 
-		item->setSavedAs(name.setNum(counter) + ".pred");
+		item->setSavedAs(file_prefix.c_str()+name.setNum(counter) + ".pred");
 		item->writeConfigSection(out);
 		positions<<item->x()<<"  "<<item->y()<<endl;
 		value++;
