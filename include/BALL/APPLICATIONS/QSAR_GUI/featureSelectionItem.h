@@ -55,6 +55,9 @@ namespace BALL
 				/** generates the config-file section for the current model and appends it to out */
 				void writeConfigSection(ofstream& out);
 
+				void addToPipeline();
+				void removeFromPipeline();
+
 		
 			protected:
 				void mousePressEvent(QGraphicsSceneMouseEvent *event);

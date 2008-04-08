@@ -91,8 +91,11 @@ SDFInputDataItem::~SDFInputDataItem()
 {
 	if (view_->name == "view")
 	{
-		MainWindow* mw = view_->data_scene->main_window;
-		mw->removeFromPipeline(this);
+		//if the item was connected to others, delete it from its respective pipeline
+		if (!removeDisconnectedItem())
+		{
+			removeFromPipeline();
+		}
 	}
 	
 	// base class destructor will delete the connected QSARData object,
@@ -209,4 +212,14 @@ void SDFInputDataItem::appendCSVDescriptors(CSVInputDataItem* item)
 list<CSVInputDataItem*>* SDFInputDataItem::getConnectedCSVItems()
 {
 	return &additional_descriptors_;
+}
+
+void SDFInputDataItem::addToPipeline()
+{
+	view_->data_scene->main_window->sdf_input_pipeline_.insert(this);
+}
+
+void SDFInputDataItem::removeFromPipeline()
+{
+	view_->data_scene->main_window->sdf_input_pipeline_.remove(this);
 }

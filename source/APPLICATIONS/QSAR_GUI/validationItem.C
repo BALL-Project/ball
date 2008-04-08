@@ -136,7 +136,7 @@ ValidationItem::ValidationItem(String& configfile_section, std::map<String, Data
 	model_item_ = (ModelItem*) it->second;
 	
 	view_->data_scene->addItem(this);
-	view_->data_scene->main_window->addValidationToPipeline(this);
+	addToPipeline();
 	if(item_positions!=0 && item_positions->size()>0)
 	{
 		pair<double,double> pos = item_positions->front();
@@ -250,8 +250,11 @@ ValidationItem::~ValidationItem()
 {
 	if (view_->name == "view")
 	{
-		MainWindow* mw = view_->data_scene->main_window;
-		mw->removeFromPipeline(this);
+		//if the item was connected to others, delete it from its respective pipeline
+		if (!removeDisconnectedItem())
+		{
+			removeFromPipeline();
+		}
 	}
 }
 	
@@ -346,3 +349,15 @@ void ValidationItem::writeConfigSection(ofstream& out)
 	if(num_of_runs_>0) out << "no_of_permutation_tests = " <<  num_of_runs_ << "\n";
 	out << "output = " << savedAs().toStdString() << "\n\n";	
 }
+
+
+void ValidationItem::addToPipeline()
+{
+	view_->data_scene->main_window->val_pipeline_.insert(this);
+}
+
+void ValidationItem::removeFromPipeline()
+{
+	view_->data_scene->main_window->val_pipeline_.remove(this);
+}
+

@@ -56,6 +56,7 @@ namespace BALL
 				void showPlotter();
 
 				virtual bool checkForDiscreteY() = 0;
+				virtual void addToPipeline() = 0;
 
 			protected:
 				/** @name Attributes

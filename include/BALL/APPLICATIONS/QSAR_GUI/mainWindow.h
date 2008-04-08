@@ -73,12 +73,11 @@ namespace BALL
 				QSet<ModelItem*> getModelPipeline();
 
 				/**add items to pipeline */
-				void addInputToPipeline(InputDataItem* item);
-				void addModelToPipeline(ModelItem* item);
-				void addPredictionToPipeline(PredictionItem* item);
-				void addFeatureSelectionToPipeline(FeatureSelectionItem* item);
-				void addValidationToPipeline(ValidationItem* item);
-				bool removeFromPipeline(DataItem* item);
+				//void addInputToPipeline(InputDataItem* item);
+				//void addModelToPipeline(ModelItem* item);
+				//void addPredictionToPipeline(PredictionItem* item);
+// 				void addFeatureSelectionToPipeline(FeatureSelectionItem* item);
+// 				void addValidationToPipeline(ValidationItem* item);
 				void addDisconnectedItem(DataItem* item);
 
 				QSet<DataItem*> disconnectedItems();
@@ -95,6 +94,14 @@ namespace BALL
 				double min_drag_time;
 				
 				void setLastUsedPath(String path);
+
+				QSet<SDFInputDataItem*> sdf_input_pipeline_;
+				QSet<CSVInputDataItem*> csv_input_pipeline_;
+				QSet<ModelItem*> model_pipeline_;
+				QSet<FeatureSelectionItem*> fs_pipeline_;
+				QSet<ValidationItem*> val_pipeline_;
+				QSet<PredictionItem*> prediction_pipeline_;
+				QSet<DataItem*> disconnected_items_;
 
 			signals:
 				void sendNewValue(int);
@@ -155,14 +162,6 @@ namespace BALL
 
 				QProgressBar* progress_bar_;
 				FileBrowser* file_browser_;
-
-				QSet<SDFInputDataItem*> sdf_input_pipeline_;
-				QSet<CSVInputDataItem*> csv_input_pipeline_;
-				QSet<ModelItem*> model_pipeline_;
-				QSet<FeatureSelectionItem*> fs_pipeline_;
-				QSet<ValidationItem*> val_pipeline_;
-				QSet<PredictionItem*> prediction_pipeline_;
-				QSet<DataItem*> disconnected_items_;
 		
 				ModelConfigurationDialog* modelConfigurationDialog_;
 

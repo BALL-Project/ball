@@ -53,8 +53,11 @@ FeatureSelectionItem::~FeatureSelectionItem()
 {	
 	if (view_ && view_->name == "view")
 	{
-		MainWindow* mw = view_->data_scene->main_window;
-		mw->removeFromPipeline(this);
+		//if the item was connected to others, delete it from its respective pipeline
+		if (!removeDisconnectedItem())
+		{
+			removeFromPipeline();
+		}
 	}
 }
 
@@ -199,14 +202,15 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 	model_item_->setSaveAttribute(false);
 	model_item_->setSavedAs(output.c_str());
 	view_->data_scene->addItem(model_item_);
-	view_->data_scene->main_window->addModelToPipeline(model_item_);
+// 	view_->data_scene->main_window->addModelToPipeline(model_item_);
+	model_item_->addToPipeline();
 	
 	feature_selection_ = new FeatureSelection(*model_item_->model());
 	if(quality_increase_cutoff_!=-1)
 	{
 		feature_selection_->setQualityIncreaseCutoff(quality_increase_cutoff_);
 	}
-	view_->data_scene->main_window->addFeatureSelectionToPipeline(this);
+	addToPipeline();
 	view_->data_scene->addItem(this);
 	if(item_positions!=0 && item_positions->size()>0)
 	{
@@ -376,4 +380,14 @@ void FeatureSelectionItem::writeConfigSection(ofstream& out)
 	}
 	out << "optimize_parameters = " << opt() << "\n";
 	out << "\n";
+}
+
+void FeatureSelectionItem::addToPipeline()
+{
+	view_->data_scene->main_window->fs_pipeline_.insert(this);
+}
+
+void FeatureSelectionItem::removeFromPipeline()
+{
+	view_->data_scene->main_window->fs_pipeline_.remove(this);
 }

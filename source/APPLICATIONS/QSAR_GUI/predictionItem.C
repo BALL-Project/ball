@@ -40,8 +40,11 @@ PredictionItem::~PredictionItem()
 	delete pred_plotter_;
 	if (view_->name == "view")
 	{
-		MainWindow* mw = view_->data_scene->main_window;
-		mw->removeFromPipeline(this);
+		//if the item was connected to others, delete it from its respective pipeline
+		if (!removeDisconnectedItem())
+		{
+			removeFromPipeline();
+		}
 	}
 	// everything else is done by base-class destructor!!
 }
@@ -218,3 +221,12 @@ void PredictionItem::writeConfigSection(ofstream& out)
 	out << "output = " << savedAs().toStdString() << "\n\n";
 }
 
+void PredictionItem::addToPipeline()
+{
+	view_->data_scene->main_window->prediction_pipeline_.insert(this);
+}
+
+void PredictionItem::removeFromPipeline()
+{
+	view_->data_scene->main_window->prediction_pipeline_.remove(this);
+}

@@ -44,6 +44,9 @@ namespace BALL
 				bool getCompoundLabels() {return y_labels_;}
 				int getNoResponseVariables() {return no_y_;}
 
+				void addToPipeline();
+				void removeFromPipeline();
+
 			private:
 				/** @name Attributes
 				*/

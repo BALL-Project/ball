@@ -119,6 +119,8 @@ namespace BALL
 		
 			/** Returns the type of the item as an int. This type information is used by qgraphicsitem_cast() to distinguish between types. */
 			int type() const { return Type; }
+
+			bool removeDisconnectedItem();
 		
 		
 		protected:

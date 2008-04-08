@@ -314,7 +314,7 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 	model_->setParameters(model_parameters);
 	
 	view_->data_scene->addItem(this);
-	view_->data_scene->main_window->addModelToPipeline(this);
+	addToPipeline();
 	if(item_positions!=0 && item_positions->size()>0)
 	{
 		pair<double,double> pos = item_positions->front();
@@ -350,8 +350,11 @@ ModelItem::~ModelItem()
 {
 	if (view_->name == "view")
 	{
-		MainWindow* mw = view_->data_scene->main_window;
-		mw->removeFromPipeline(this);
+		//if the item was connected to others, delete it from its respective pipeline
+		if (!removeDisconnectedItem())
+		{
+			removeFromPipeline();
+		}
 	}
 	delete model_;
 	delete save_action;
@@ -611,4 +614,14 @@ void ModelItem::writeConfigSection(ofstream& out)
 		out << "k_fold = "<< k_fold <<  "\n";
 	}
 	out << "output = "<< savedAs().toStdString() << "\n\n";
+}
+
+void ModelItem::removeFromPipeline()
+{
+	view_->data_scene->main_window->model_pipeline_.remove(this);
+}
+
+void ModelItem::addToPipeline()
+{
+	view_->data_scene->main_window->model_pipeline_.insert(this);
 }

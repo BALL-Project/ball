@@ -45,6 +45,9 @@ namespace BALL
 				void appendCSVDescriptors(CSVInputDataItem* item);
 				list<CSVInputDataItem*>* getConnectedCSVItems();
 
+				void addToPipeline();
+				void removeFromPipeline();
+
 		
 			private:
 				/** @name Attributes

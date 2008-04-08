@@ -225,6 +225,11 @@ QVariant DataItem::itemChange(GraphicsItemChange change, const QVariant &value)
 	return QGraphicsItem::itemChange(change, value);
  }
 
+bool DataItem::removeDisconnectedItem()
+{
+	return view_->data_scene->main_window->disconnected_items_.remove(this);
+}
+
 
 // void DataItem::calculateForces()
 // {	

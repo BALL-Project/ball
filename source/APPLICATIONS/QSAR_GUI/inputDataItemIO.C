@@ -167,7 +167,7 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 		{
 			sd_item = new SDFInputDataItem(sd_file.c_str(), activities,center_data, center_y, view_);
 			view_->data_scene->addItem(sd_item);
-			view_->data_scene->main_window->addInputToPipeline(sd_item);
+			sd_item->addToPipeline();
 			if(item_positions!=0 && item_positions->size()>0)
 			{
 				pair<double,double> pos = item_positions->front();
@@ -225,7 +225,7 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 			csv_item->setSeperator(csv_sep[i]);
 			
  			view_->data_scene->addItem(csv_item);
-			view_->data_scene->main_window->addInputToPipeline(csv_item);
+			csv_item->addToPipeline();
 			if(item_positions!=0 && item_positions->size()>0)
 			{
 				pair<double,double> pos = item_positions->front();

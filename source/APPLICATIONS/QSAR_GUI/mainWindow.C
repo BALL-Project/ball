@@ -748,52 +748,52 @@ QSet<ModelItem*> MainWindow::getModelPipeline()
 	return model_pipeline_;
 }
 
-void MainWindow::addInputToPipeline(InputDataItem* item)
-{
-	if (item)
-	{
-		if (SDFInputDataItem* sdf_item = qgraphicsitem_cast<SDFInputDataItem*>(item))
-		{
-			sdf_input_pipeline_.insert(sdf_item);
-		}
-		else if (CSVInputDataItem* csv_item = qgraphicsitem_cast<CSVInputDataItem*>(item))
-		{
-			csv_input_pipeline_.insert(csv_item);	
-		}
-	}
-}
+// void MainWindow::addInputToPipeline(InputDataItem* item)
+// {
+// 	if (item)
+// 	{
+// 		if (SDFInputDataItem* sdf_item = qgraphicsitem_cast<SDFInputDataItem*>(item))
+// 		{
+// 			sdf_input_pipeline_.insert(sdf_item);
+// 		}
+// 		else if (CSVInputDataItem* csv_item = qgraphicsitem_cast<CSVInputDataItem*>(item))
+// 		{
+// 			csv_input_pipeline_.insert(csv_item);	
+// 		}
+// 	}
+// }
 
-void MainWindow::addModelToPipeline(ModelItem* item)
-{
-	if (item != NULL)
-	{
-		model_pipeline_.insert(item);
-	}
-}
+// void MainWindow::addModelToPipeline(ModelItem* item)
+// {
+// 	if (item != NULL)
+// 	{
+// 		model_pipeline_.insert(item);
+// 	}
+// }
 
-void MainWindow::addPredictionToPipeline(PredictionItem* item)
-{
-	if (item != NULL)
-	{
-		prediction_pipeline_.insert(item);
-	}
-}
+// void MainWindow::addPredictionToPipeline(PredictionItem* item)
+// {
+// 	if (item != NULL)
+// 	{
+// 		prediction_pipeline_.insert(item);
+// 	}
+// }
 
-void MainWindow::addFeatureSelectionToPipeline(FeatureSelectionItem* item)
-{
-	if (item != NULL)
-	{
-		fs_pipeline_.insert(item);
-	}
-}
+// void MainWindow::addFeatureSelectionToPipeline(FeatureSelectionItem* item)
+// {
+// 	if (item != NULL)
+// 	{
+// 		fs_pipeline_.insert(item);
+// 	}
+// }
 
-void MainWindow::addValidationToPipeline(ValidationItem* item)
-{
-	if (item != NULL)
-	{
-		val_pipeline_.insert(item);
-	}
-}
+// void MainWindow::addValidationToPipeline(ValidationItem* item)
+// {
+// 	if (item != NULL)
+// 	{
+// 		val_pipeline_.insert(item);
+// 	}
+// }
 
 void MainWindow::executePipeline()
 {
@@ -981,103 +981,6 @@ void MainWindow::executePipeline()
 	progress_bar_->reset();
 }
 
-
-bool MainWindow::removeFromPipeline(DataItem* item)
-{
-	if(disconnected_items_.remove(item))
-	{
-		return 1;
-	}
-
-	else if (SDFInputDataItem* iitem =  qgraphicsitem_cast<SDFInputDataItem*>(item))
-	{
-		if(sdf_input_pipeline_.remove(iitem))
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-
-	else if (CSVInputDataItem* ciitem =  qgraphicsitem_cast<CSVInputDataItem*>(item))
-	{
-		if(csv_input_pipeline_.remove(ciitem))
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-
-	else if (ModelItem* mitem = qgraphicsitem_cast<ModelItem*>(item))
-	{
-		if(model_pipeline_.remove(mitem))
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-
-	else if (PredictionItem* pitem = qgraphicsitem_cast<PredictionItem*>(item))
-	{
-		if(prediction_pipeline_.remove(pitem))
-		{
-			return 1;
-		}
-		else
-		{
-
-			return 0;
-		}
-	}
-
-	else if (ValidationItem* vitem = qgraphicsitem_cast<ValidationItem*>(item))
-	{
-		if(val_pipeline_.remove(vitem))
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-
-	else if (FeatureSelectionItem* fitem = qgraphicsitem_cast<FeatureSelectionItem*>(item))
-	{
-		if(fs_pipeline_.remove(fitem))
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-
-	
-	else
-	{
-		return 0;
-// 		if(disconnected_items_.remove(item))
-// 		{
-// 			std::cout << "disconnected erased" << std::endl;
-// 			return 1;
-// 		}
-// 		else
-// 		{
-// 			std::cout << "disconnected NOT erased" << std::endl;
-// 			return 0;
-// 		}
-	} 
-}
 
 void MainWindow::addDisconnectedItem(DataItem* item)
 {

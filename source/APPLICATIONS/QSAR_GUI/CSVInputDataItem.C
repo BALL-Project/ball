@@ -40,8 +40,11 @@ CSVInputDataItem::~CSVInputDataItem()
 {
 	if (view_ && view_->name == "view")
 	{
-		MainWindow* mw = view_->data_scene->main_window;
-		mw->removeFromPipeline(this);
+		//if the item was connected to others, delete it from its respective pipeline
+		if (!removeDisconnectedItem())
+		{
+			removeFromPipeline();
+		}
 	}
 	// do NOT delete data_, since this is already done by the base class InputDataItem !
 }
@@ -163,4 +166,14 @@ void CSVInputDataItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* /*event*
 {
 	InputDataDialog inputDataDialog(this);
 	inputDataDialog.exec();
+}
+
+void CSVInputDataItem::addToPipeline()
+{
+	view_->data_scene->main_window->csv_input_pipeline_.insert(this);
+}
+
+void CSVInputDataItem::removeFromPipeline()
+{
+	view_->data_scene->main_window->csv_input_pipeline_.remove(this);
 }
