@@ -17,7 +17,7 @@ using namespace BALL::QSAR::Exception;
 using namespace BALL::VIEW;
 using namespace BALL::VIEW::Exception;
 
-static QPointF default_offset = QPointF(-10.,100.);
+static QPointF default_offset = QPointF(0.,100.);
 
 DataItemScene::DataItemScene()
  {
@@ -121,9 +121,15 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				}
 				
 				if(input_item_at_pos)
-				item = main_window->createModel(item,input_item_at_pos);
+				{
+					item = main_window->createModel(item,input_item_at_pos);
+					pos = input_item_at_pos->pos();
+				}
 				else if(csv_input_item_at_pos)
-				item = main_window->createModel(item,csv_input_item_at_pos);	
+				{
+					item = main_window->createModel(item,csv_input_item_at_pos);	
+					pos = csv_input_item_at_pos->pos();
+				}
 					
 				item->setView(view);
 				addItem(item);
@@ -186,7 +192,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 		
 				model_copy = new ModelItem(*model_item_at_pos);	
 				item = main_window->createFeatureSelection(item, model_copy, model_item_at_pos);
-		
+				pos = model_item_at_pos->pos();
 				item->setView(view);
 				addItem(item);
 				item->setPos(pos + getOffset(item));
@@ -245,6 +251,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				
 				item = main_window->createValidation(item, model_item_at_pos);
 				item->setView(view);
+				pos = model_item_at_pos->pos();
 				addItem(item);
 				item->setPos(pos + getOffset(item));
 				Edge* edge = new Edge(model_item_at_pos, item);
@@ -304,6 +311,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 						{
 							PredictionItem* pred_item = main_window->createPrediction(item,model_item_at_pos);
 							addItem(pred_item);
+							pos = model_item_at_pos->pos();
 							pred_item->setPos(pos+getOffset(pred_item));
 							addItem(item);
 							QPointF p0 = QPointF(-120,-70);
@@ -342,6 +350,9 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 							csv_item->setData(input_item_at_pos->data());
 							csv_item->setAppend(true);
 							addItem(csv_item);
+							pos = input_item_at_pos->pos();
+							QPointF p0 = QPointF(10,0);
+							csv_item->setPos(pos+p0);
 							Edge* edge = new Edge(input_item_at_pos, csv_item);
 							addItem(edge);
 							csv_item->addToPipeline();
@@ -396,8 +407,8 @@ void DataItemScene::addDropSite()
 
 
 
-// currently only used for right mouse clicks == start of drag
-// left clicks are currently being handled by DataItemView::contextMenuEvent(QContextMenuEvent *event)
+// currently only used for left mouse clicks == start of drag
+// right clicks are currently being handled by DataItem::contextMenuEvent(QContextMenuEvent *event)
 void DataItemScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
 {
 	if(mouseEvent->button()!=Qt::LeftButton) return;
