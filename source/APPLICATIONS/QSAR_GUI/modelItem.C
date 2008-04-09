@@ -553,6 +553,17 @@ void ModelItem::loadFromFile(String file)
 		QMessageBox::warning(view_,"Error",e.getMessage());
 		return;
 	}
+	
+	if(!save_attribute_) // if this model was created by a feature selection, also set FeatureSelectionItem::done_ to true
+	{
+		for(QSet<Edge*>::iterator it=in_edge_list_.begin(); it!=in_edge_list_.end();it++)
+		{
+			if((*it)->sourceNode()->type()==FeatureSelectionItem::Type)
+			{
+				(*it)->sourceNode()->setDone(1);
+			}
+		}
+	}
 	done_ = 1;
 }
 

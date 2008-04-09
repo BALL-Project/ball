@@ -114,6 +114,7 @@ namespace BALL
 			DataItemView* view();
 			
 			bool isDone();
+			void setDone(bool b) {done_=b;}
 		
 			enum { Type = UserType + 1 };
 		

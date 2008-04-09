@@ -43,7 +43,6 @@ namespace BALL
 				bool getDescriptorLabels() {return x_labels_;}
 				bool getCompoundLabels() {return y_labels_;}
 				int getNoResponseVariables() {return no_y_;}
-				void setDone(bool b) {done_=b;}
 
 				void addToPipeline();
 				void removeFromPipeline();
