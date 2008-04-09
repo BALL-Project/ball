@@ -154,6 +154,9 @@ namespace BALL
 				
 				/** reads selected descriptors, their names and the information about their transformations (mean and stddev of each descriptor). This function is used after feature selection to read information about the selected features */
 				void readDescriptorInformation();
+				
+				/** reconstructs a Matrix from a given input stream after resizing the given Matrix as specified */
+				void readMatrix(Matrix& mat, ifstream& in, uint lines, uint col);
 				//@}	
 				
 				

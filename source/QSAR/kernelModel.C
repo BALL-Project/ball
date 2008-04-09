@@ -269,7 +269,7 @@ void KernelModel::readFromFile(string filename)
 		}
 	}	
 	getline(input,line0);  // skip empty line 
-
+	
 	if(type_!="SVR") // NO result of training within this file in case of SVR
 	{
 		for(int i=1; i<=no_substances; i++) /// read training result
@@ -284,26 +284,8 @@ void KernelModel::readFromFile(string filename)
 		}
 		getline(input,line0);  // skip empty line 
 	}
-		
-	for(int i=1; i<=no_substances;i++) /// read descriptor matrix
-	{
-		String line;
-		getline(input,line);
-		for(int j=1; j<=no_descriptors;j++)
-		{
-			descriptor_matrix_(i,j) = line.getField(j-1," ").toDouble();
-		}
-	}
+	
+	readMatrix(descriptor_matrix_,input,no_substances,no_descriptors);  /// read descriptor matrix
 	getline(input,line0);  // skip empty line 
-	
-	for(int i=1; i<=no_substances;i++) /// read kernel matrix K_
-	{
-		String line;
-		getline(input,line);
-		for(int j=1; j<=no_substances;j++)
-		{
-			K_(i,j) = line.getField(j-1," ").toDouble();
-		}
-	}
-	
+	readMatrix(K_,input,no_substances,no_substances); 	 /// read kernel matrix K_	
 }

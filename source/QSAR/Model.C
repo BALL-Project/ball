@@ -421,4 +421,22 @@ void Model::addLambda(Matrix& matrix, double& lambda)
 	{
 		matrix(i,i)+=lambda;
 	}
-}	
+}
+	
+void Model::readMatrix(Matrix& mat, ifstream& in, uint lines, uint col)
+{
+	mat.ReSize(lines,col);
+	String line;
+	
+	for(uint i=1;i<=lines;i++)
+	{
+		//getline(in,line);
+		for(uint j=1; j<=col;j++)
+		{
+			String s;
+			in>>s;
+			mat(i,j)=s.toDouble(); // = line.getField(j,"\t").toDouble();
+		}
+	}
+	getline(in,line); // read the rest of the last matrix-line
+}

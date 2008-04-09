@@ -352,26 +352,8 @@ void ALLModel::readFromFile(string filename)
 	}	
 	getline(input,line0);  // skip empty line 
 	
-	for(int i=1; i<=no_substances;i++) /// read descriptor matrix
-	{
-		String line;
-		getline(input,line);
-		for(int j=1; j<=no_descriptors;j++)
-		{
-			descriptor_matrix_(i,j) = line.getField(j-1," ").toDouble();
-		}
-	}
-	
+	readMatrix(descriptor_matrix_,input,no_substances,no_descriptors);  /// read descriptor matrix
 	getline(input,line0);  // skip empty line
-	
-	for(int i=1; i<=no_substances;i++) /// read response values
-	{
-		String line;
-		getline(input,line);
-		for(int j=1; j<=no_y;j++)
-		{
-			Y_(i,j) = line.getField(j-1," ").toDouble();
-		}
-	}
+	readMatrix(Y_,input,no_substances,no_y); /// read response values
 }
 

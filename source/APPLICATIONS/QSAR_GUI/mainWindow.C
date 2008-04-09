@@ -760,7 +760,11 @@ void MainWindow::loadItemsFromFiles(String directory)
 		}
 		for (QSet<CSVInputDataItem*>::Iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
 		{
-			if((*it)->append()) continue;
+			if((*it)->append()) 
+			{
+				(*it)->setDone(1);
+				continue;
+			}
 			
 			String filename=directory+(*it)->savedAs().toStdString();
 			ifstream input(filename.c_str());
