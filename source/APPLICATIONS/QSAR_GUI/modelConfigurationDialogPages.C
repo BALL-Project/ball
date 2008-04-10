@@ -20,15 +20,18 @@ ModelParameterPage::ModelParameterPage(ModelConfigurationDialog *parent)
 	/// group the model parameters
 	QGroupBox *configGroup = new QGroupBox(tr("Model Parameters"), this);
 	QGridLayout *layout = new QGridLayout();
-	String value;
 
 	///create labels and line edits for every model parameter and print out the parameter name and the default value (read from the registry)
 	for (uint i=0; i < parent->entry()->parameterNames.size(); i++)
 	{
-		value = (String)parent->entry()->parameterDefaults[i];
+		ostringstream value;
+		value.precision(3);
+		value << parent->entry()->parameterDefaults[i];
 		QLabel* label = new QLabel(QString(parent->entry()->parameterNames[i].c_str()));
 		edit_ = new QLineEdit(this);
-		edit_->setText(QString(value.c_str()));
+		edit_->setText(QString(value.str().c_str()));
+		edit_->setMinimumSize(50,15);
+		edit_->setMaximumSize(80,30);
 		edits_.push_back(edit_);
 		layout->addWidget(label, i,1);
 		layout->addWidget(edit_, i ,2);
@@ -43,7 +46,7 @@ ModelParameterPage::ModelParameterPage(ModelConfigurationDialog *parent)
 			QLabel* label = new QLabel(QString("*"), this);
 			layout->addWidget(label,parent->entry()->optimizableParameters.next(), 3);
 		}
-		QLabel* label = new QLabel("*: can be automatically optimized by cross validation", this);
+		QLabel* label = new QLabel("*: can be automatically optimized\n    by cross validation", this);
 		layout->addWidget(label,parent->entry()->parameterNames.size()+1,1,1,-1);
 	}
 
@@ -236,7 +239,7 @@ OptimizePage::OptimizePage(ModelConfigurationDialog* parent)
 		QGroupBox *kGroup = new QGroupBox(tr("k"),this);
 		QHBoxLayout* k_layout = new QHBoxLayout();
 		QLabel* label = new QLabel("k for k-fold cross-validation",this);
-		k_edit_ = new QLineEdit(this);
+		k_edit_ = new QLineEdit(this); k_edit_->setMinimumWidth(50);
 		k_layout->addWidget(label);
 		k_layout->addWidget(k_edit_);
 		kGroup->setLayout(k_layout);	
@@ -245,7 +248,7 @@ OptimizePage::OptimizePage(ModelConfigurationDialog* parent)
 
 	if (parent->isOptimizable)
 	{
-		QGroupBox *modelConfigGroup = new QGroupBox(tr("optimized Model Parameters"),this);
+		QGroupBox *modelConfigGroup = new QGroupBox(tr("Model Parameters to be optimized:"),this);
 		QGridLayout* layout1 = new QGridLayout;
 	
 		parent->entry()->optimizableParameters.front();
@@ -281,7 +284,7 @@ OptimizePage::OptimizePage(ModelConfigurationDialog* parent)
 		QLabel* search_label3 = new QLabel(tr("number of recursion steps:"),this);
 		QLabel* parameter1_label = new QLabel(tr("start value for parameter 1"),this);
 		QLabel* parameter2_label = new QLabel(tr("start value for parameter 2"),this);
-		search_edit1_ = new QLineEdit(this);
+		search_edit1_ = new QLineEdit(this); search_edit1_->setMinimumWidth(60);
 		search_edit2_ = new QLineEdit(this);
 		search_edit3_ = new QLineEdit(this);
 		parameter1_edit_ = new QLineEdit(this);

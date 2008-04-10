@@ -26,7 +26,7 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, InputDa
 	param1_is_set_(false),
 	param2_is_set_(false)
 {
-	setMaximumWidth(325);
+	setMaximumWidth(370);
 	
 	entry_ = model_item_->getRegistryEntry();
 	entryHasKernel = entry_->kernel;
@@ -49,10 +49,10 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, InputDa
 
 	contentsWidget = new QListWidget(this);
 	contentsWidget->setViewMode(QListView::IconMode);
-	contentsWidget->setIconSize(QSize(64, 64));
+	contentsWidget->setIconSize(QSize(55, 55));
 	contentsWidget->setMovement(QListView::Static);
-	contentsWidget->setMaximumWidth(170);
-	contentsWidget->setMinimumHeight(250);
+	contentsWidget->setMinimumWidth(135);
+	contentsWidget->setMaximumWidth(135);
 	contentsWidget->setSpacing(1);
 
 	pagesWidget = new QStackedWidget(this);
@@ -74,8 +74,8 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, InputDa
 		pagesWidget->addWidget(optimizePage_);
 	}
 
-	connectionsPage_ = new ConnectionsPage(this);
-	pagesWidget->addWidget(connectionsPage_);
+	connectionsPage_ = NULL; //new ConnectionsPage(this);
+	//pagesWidget->addWidget(connectionsPage_);
 
 	createIcons();
 
@@ -103,6 +103,8 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, MainWin
 	param1_is_set_(false),
 	param2_is_set_(false)
 {
+	setMaximumWidth(370);
+	
 	entry_ = model_item_->getRegistryEntry();
 	entryHasKernel = entry_->kernel;
 	entryHasParameters = entry_->parameterNames.size() > 0;
@@ -120,9 +122,10 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, MainWin
 
 	contentsWidget = new QListWidget(this);
 	contentsWidget->setViewMode(QListView::IconMode);
-	contentsWidget->setIconSize(QSize(64, 64));
+	contentsWidget->setIconSize(QSize(55, 55));
 	contentsWidget->setMovement(QListView::Static);
-	contentsWidget->setMaximumWidth(140);
+	contentsWidget->setMinimumWidth(135);
+	contentsWidget->setMaximumWidth(135);
 	contentsWidget->setSpacing(1);
 	contentsWidget->setFlow(QListView::TopToBottom);
 	contentsWidget->setWrapping(false);
@@ -136,8 +139,8 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, MainWin
 	dataPage_ = new DataPage(this);
 	pagesWidget->addWidget(dataPage_);
 
-	connectionsPage_ = new ConnectionsPage(this);
-	pagesWidget->addWidget(connectionsPage_);
+	connectionsPage_ = NULL ;//new ConnectionsPage(this);
+	//pagesWidget->addWidget(connectionsPage_);
 	
 	optimizePage_ = 0;
 	kernelPage_ = 0;
@@ -171,11 +174,11 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, MainWin
 	dataButton->setTextAlignment(Qt::AlignHCenter);
 	dataButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-	QListWidgetItem *connectionsButton = new QListWidgetItem(contentsWidget);
-	connectionsButton->setIcon(QIcon("./images/connections.png"));
-	connectionsButton->setText(tr("Edit Connections"));
-	connectionsButton->setTextAlignment(Qt::AlignHCenter);
-	connectionsButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+// 	QListWidgetItem *connectionsButton = new QListWidgetItem(contentsWidget);
+// 	connectionsButton->setIcon(QIcon("./images/connections.png"));
+// 	connectionsButton->setText(tr("Edit Connections"));
+// 	connectionsButton->setTextAlignment(Qt::AlignHCenter);
+// 	connectionsButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
 	connect(contentsWidget, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),this, SLOT(changePage(QListWidgetItem *, QListWidgetItem*)));	
 }
@@ -241,11 +244,11 @@ void ModelConfigurationDialog::createIcons()
 		optimizeButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 	}
 
-	QListWidgetItem* connectionsButton = new QListWidgetItem(contentsWidget);
-	connectionsButton->setIcon(QIcon("./images/connections.png"));
-	connectionsButton->setText(tr("Edit Connections"));
-	connectionsButton->setTextAlignment(Qt::AlignHCenter);
-	connectionsButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+// 	QListWidgetItem* connectionsButton = new QListWidgetItem(contentsWidget);
+// 	connectionsButton->setIcon(QIcon("./images/connections.png"));
+// 	connectionsButton->setText(tr("Edit Connections"));
+// 	connectionsButton->setTextAlignment(Qt::AlignHCenter);
+// 	connectionsButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
 	///allow changing of pages by clicking on the corresponding buttons
 	connect(contentsWidget, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),this, SLOT(changePage(QListWidgetItem*, QListWidgetItem*)));	
