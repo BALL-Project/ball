@@ -49,7 +49,17 @@ ValidationResultDialog::ValidationResultDialog(ValidationItem* item)
 		QLabel* rlabel = new QLabel(train_fit.c_str(),this);
 		layout->addWidget(rlabel, 0,1);
 		QString tmp;
-		QLabel* qlabel = new QLabel(tmp.setNum(item->k())+ " fold "+pred_qual.c_str(),this);
+		QLabel* qlabel;
+		
+		if(type<3)
+		{
+			qlabel = new QLabel(tmp.setNum(item->k())+ " fold "+pred_qual.c_str(),this);
+		}
+		else // boostrap
+		{
+			qlabel = new QLabel(QString(pred_qual.c_str())+" of "+tmp.setNum(item->numOfSamples())+ "\nbootstrap samples",this);
+		}
+		
 		layout->addWidget(qlabel, 0,2);
 
 		QLabel* rvaluelabel = new QLabel(QString(((String)(item->getR2())).c_str()),this);
