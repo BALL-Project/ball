@@ -39,8 +39,6 @@ namespace BALL
 				void setNumOfActivities(int num);
 				void setSeperator(string sep);
 				bool checkForDiscreteY();
-				void setAppend(bool append);
-				bool append();
 				string getSeperator() {return sep_;}
 				bool getDescriptorLabels() {return x_labels_;}
 				bool getCompoundLabels() {return y_labels_;}
@@ -58,7 +56,6 @@ namespace BALL
 				int no_y_;
 				bool x_labels_;
 				bool y_labels_;
-				bool append_;
 				string sep_;
 
 			protected:

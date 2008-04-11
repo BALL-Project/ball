@@ -24,13 +24,14 @@ CSVInputDataItem::CSVInputDataItem(QString filename, DataItemView* view):
 
 	QStringList list = filename_.split("/");
 	setName(list[list.size()-1]);
+	append_ = 0;
 
 	data_ = new QSARData();
 }
 
-CSVInputDataItem::CSVInputDataItem(QSARData* data):
-	append_(true)
+CSVInputDataItem::CSVInputDataItem(QSARData* data)	
 {
+	append_ = true;
 	QPixmap pm = QPixmap("./images/csv_icon.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
 	setPixmap(pm);
 	data_ = data;
@@ -46,7 +47,6 @@ CSVInputDataItem::~CSVInputDataItem()
 			removeFromPipeline();
 		}
 	}
-	// do NOT delete data_, since this is already done by the base class InputDataItem !
 }
 
 CSVInputDataItem::CSVInputDataItem(CSVInputDataItem& item):
@@ -161,16 +161,6 @@ void CSVInputDataItem::setNumOfActivities(int num)
 bool CSVInputDataItem::checkForDiscreteY()
 {
 	return true;
-}
-
-void CSVInputDataItem::setAppend(bool append)
-{
-	append_ = append;
-}
-
-bool CSVInputDataItem::append()
-{
-	return append_;
 }
 
 void CSVInputDataItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* /*event*/)

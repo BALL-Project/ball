@@ -23,6 +23,14 @@ DataItemScene::DataItemScene()
  {
 	setItemIndexMethod(NoIndex);	
  }
+ 
+DataItemScene::~DataItemScene()
+{
+	for(list<QGraphicsItemGroup*>::iterator it=groups_.begin(); it!=groups_.end();it++)
+	{
+		delete *it;
+	}
+}
 
 void DataItemScene::setMainWindow(MainWindow* mw)
 {
@@ -369,11 +377,14 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 						{
 							csv_item = main_window->createCSVInput(path);
 							csv_item->setData(input_item_at_pos->data());
-							csv_item->setAppend(true);
+							csv_item->setAppend(true);				
 							addItem(csv_item);
 							pos = input_item_at_pos->pos();
 							QPointF p0 = QPointF(input_item_at_pos->width()+10,0);
 							csv_item->setPos(pos+p0);
+							//QGraphicsItemGroup* group=new QGraphicsItemGroup(input_item_at_pos,this); 
+							//groups_.push_back(group);
+							//group->addToGroup(csv_item);
 							Edge* edge = new Edge(input_item_at_pos, csv_item);
 							addItem(edge);
 							csv_item->addToPipeline();

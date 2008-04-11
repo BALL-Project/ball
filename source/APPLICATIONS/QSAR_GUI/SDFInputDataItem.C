@@ -28,7 +28,7 @@ SDFInputDataItem::SDFInputDataItem(QString filename,SortedList<int> act, bool cd
 	QStringList list = filename_.split("/");
 	setName(list[list.size()-1]);
 	
-	data_ = new QSARData;
+	// data_ is initialized by base class constructor!
 	
 	if(act.size()==0) activity_values_.clear();
 	else activity_values_ = act;
@@ -45,7 +45,7 @@ SDFInputDataItem::SDFInputDataItem(QString filename, DataItemView* view):
 	setName(list[list.size()-1]);
 	activity_values_.clear();
 
-	data_ = new QSARData;
+	// data_ is initialized by base class constructor!
 }
 
 SDFInputDataItem::~SDFInputDataItem()
@@ -60,10 +60,13 @@ SDFInputDataItem::~SDFInputDataItem()
 	}
 	
 	// base class destructor will delete the connected QSARData object,
-	// so make sure that CSVInputDataItems that use the same QSARData object do not delete it a second time!
-	for(list<CSVInputDataItem*>::iterator it=additional_descriptors_.begin();it!=additional_descriptors_.end();it++)
+	// so make sure that connected InputDataItems know that there is no QSARData object any longer!
+	if(!append_)
 	{
-		(*it)->setData(NULL);
+		for(list<CSVInputDataItem*>::iterator it=additional_descriptors_.begin();it!=additional_descriptors_.end();it++)
+		{
+			(*it)->setData(NULL);
+		}
 	}
 }
 
@@ -151,6 +154,7 @@ void SDFInputDataItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* /*event*
 	inputDataDialog.exec();
 }
 
+// called by DataItemScene when dropping a CSVInputDataItem onto this item
 void SDFInputDataItem::appendCSVDescriptors(CSVInputDataItem* item)
 {
 	/// make sure that centering is ONLY done by the last CSVInputDataItem!

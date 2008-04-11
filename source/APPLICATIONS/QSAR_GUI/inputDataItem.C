@@ -25,6 +25,7 @@ InputDataItem::InputDataItem(QString filename, bool center_data, bool center_y, 
 {
 	data_ = new QSARData;
 	input_plotter_ = NULL;
+	append_ = 0;
 }
 
 InputDataItem::InputDataItem(QString filename, DataItemView* view): 
@@ -33,6 +34,7 @@ InputDataItem::InputDataItem(QString filename, DataItemView* view):
 	filename_(filename)
 {
 	input_plotter_ = NULL;
+	append_ = 0;
 }
 
 InputDataItem::InputDataItem():
@@ -43,11 +45,12 @@ InputDataItem::InputDataItem():
 	center_y_(false)
 {
 	input_plotter_ = NULL;
+	append_ = 0;
 }
 
 InputDataItem::~InputDataItem()
 {
-	delete data_;
+	if(!append_) delete data_;
 	delete input_plotter_;
 }
 
@@ -63,6 +66,7 @@ InputDataItem::InputDataItem(InputDataItem& item):
 	center_data_ = item.center_data_;
 	center_y_ = item.center_data_;
 	input_plotter_ = item.input_plotter_;
+	append_ = item.append_;
 }
 
 
@@ -138,4 +142,14 @@ void InputDataItem::showPlotter()
 	{
 		input_plotter_->show();
 	}
+}
+
+void InputDataItem::setAppend(bool append)
+{
+	append_ = append;
+}
+
+bool InputDataItem::append()
+{
+	return append_;
 }

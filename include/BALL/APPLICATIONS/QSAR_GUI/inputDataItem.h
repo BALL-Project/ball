@@ -50,6 +50,8 @@ namespace BALL
 				void setCenterResponseFlag(bool cr);
 				void setData(QSARData* data);
 				void setFilename(String filename) { filename_=filename.c_str();}
+				void setAppend(bool append);
+				bool append();
 				
 				void showPlotter();
 				
@@ -67,6 +69,9 @@ namespace BALL
 				QString filename_;
 				bool center_data_;
 				bool center_y_;
+				
+				/** is the data of this InputDataItem append to another InputDataItem?? */
+				bool append_;
 				
 				InputPlotter* input_plotter_;
 		};

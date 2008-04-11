@@ -3,6 +3,7 @@
 
 //#include <QtGui/QGraphicsView>
 #include <QtGui/QGraphicsScene>
+#include <qobject.h>
 
 
 
@@ -30,7 +31,8 @@ namespace BALL
 
 				/** standard constructor */
 				DataItemScene();
-				//~DataItemScene();
+				
+				~DataItemScene();
 
 				/** @name Accessors */
 			
@@ -66,6 +68,11 @@ namespace BALL
 				//void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
 				//void mousePressEvent(QMouseEvent *event);
 				//void keyPressEvent(QKeyEvent *event);
+				
+				
+			private:
+				
+				std::list<QGraphicsItemGroup*> groups_;
 
 				
 			

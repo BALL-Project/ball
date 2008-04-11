@@ -24,7 +24,7 @@ Edge::Edge(DataItem *source_node, DataItem *dest_node, bool dotted)
 		source_->addOutEdge(this);
 		dest_->addInEdge(this);
 	}
-
+	
 	adjust();
 }
 
@@ -127,6 +127,7 @@ DataItem *Edge::sourceNode()
 	{
 		return;
 	}
+	
 	//adjust();
 	QColor color = Qt::black;
 	painter->setPen(QPen(color));
