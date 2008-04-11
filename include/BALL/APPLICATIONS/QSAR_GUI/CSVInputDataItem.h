@@ -22,8 +22,10 @@ namespace BALL
 				~CSVInputDataItem();
 				CSVInputDataItem(CSVInputDataItem& item);
 				CSVInputDataItem(QSARData* data);
-				void readData();
-				void appendData();
+				
+				/** read the input data */
+				bool execute();
+				
 
 				/** @name Accessors
 				*/
@@ -43,11 +45,14 @@ namespace BALL
 				bool getDescriptorLabels() {return x_labels_;}
 				bool getCompoundLabels() {return y_labels_;}
 				int getNoResponseVariables() {return no_y_;}
-
 				void addToPipeline();
 				void removeFromPipeline();
 
+				
 			private:
+				void readData();
+				void appendData();
+				
 				/** @name Attributes
 				*/
 				int no_y_;

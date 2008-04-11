@@ -136,9 +136,9 @@ PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*
 }
 
 
-void PredictionItem::connectWithModelItem()
+bool PredictionItem::execute()
 {
-	if(done_) return;   // do nothing twice !
+	if(done_) return 0;   // do nothing twice !
 	
 	for(unsigned int i=0; i<input_data_item_->data()->getNoSubstances();i++)
 	{
@@ -149,6 +149,7 @@ void PredictionItem::connectWithModelItem()
 	}
 	
 	done_ = 1;
+	return 1;
 }
 
 ModelItem* PredictionItem::modelItem()

@@ -64,6 +64,17 @@ void CSVInputDataItem::setSeperator(string sep)
 	else sep_=sep;
 }
 
+
+bool CSVInputDataItem::execute()
+{
+	if(done_) return 0; // do nothing twice...
+	
+	if(append_) appendData();
+	else readData();
+	
+	return 1;	
+}
+
 void CSVInputDataItem::readData()
 {
 	if(done_) return; // do nothing twice...

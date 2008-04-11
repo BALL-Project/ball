@@ -122,6 +122,19 @@ namespace BALL
 			int type() const { return Type; }
 
 			bool removeDisconnectedItem();
+			
+			/** executes the DataItem, i.e. its starts reading of input, training of the model and so on, depending on the specific type of DataItem.\n
+			This function must be implemented by each final class derived from DataItem! 
+			@return returns a bool that specifies whether anything had to be done.*/
+			virtual bool execute() = 0;
+			
+			/** removes the respective DataItem from its MainWindow-Pipeline.\n
+			This function  must be implemented by each final class derived from DataItem! */
+			virtual void removeFromPipeline() = 0;
+			
+			/** adds the respective DataItem to its MainWindow-Pipeline.\n
+			This function  must be implemented by each final class derived from DataItem! */
+			virtual void addToPipeline() = 0;
 		
 		
 		protected:

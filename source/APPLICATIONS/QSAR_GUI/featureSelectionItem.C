@@ -236,14 +236,14 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 	done_ = 0;
 }
 
-void FeatureSelectionItem::connectWithModelItem()
+bool FeatureSelectionItem::execute()
 {
 	if (model_item_ == NULL)
 	{
 		throw InvalidFeatureSelectionItem(__FILE__,__LINE__);
 	}
 	
-	if(done_) return; // do nothing twice...
+	if(done_) return 0; // do nothing twice...
 
 	feature_selection_ = new FeatureSelection(*(model_item_->model()));
 	if(validation_statistic_>=0)
@@ -277,6 +277,7 @@ void FeatureSelectionItem::connectWithModelItem()
 	}
 	
 	done_ = 1; // ready!
+	return 1;
 }
 
 void FeatureSelectionItem::mousePressEvent(QGraphicsSceneMouseEvent *event)

@@ -76,9 +76,9 @@ SDFInputDataItem::SDFInputDataItem(SDFInputDataItem& item):
 	setPixmap(item.pixmap());
 }
 
-void SDFInputDataItem::readData()
+bool SDFInputDataItem::execute()
 {
-	if(done_) return; // do nothing twice...
+	if(done_) return 0; // do nothing twice...
 	
 	string st = filename_.toStdString();
 	try
@@ -107,6 +107,7 @@ void SDFInputDataItem::readData()
 	}
 	
 	done_ = 1;
+	return 1;
 }
 
 void SDFInputDataItem::mousePressEvent(QGraphicsSceneMouseEvent *event)

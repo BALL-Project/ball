@@ -810,18 +810,22 @@ void MainWindow::executePipeline()
 	
 	if (maximum == 0)
 	{
+		QMessageBox::about(this,"No pipeline","There is no pipeline to be excuted yet!");
 		return;
 	}
 
 	int value = 0;
 	progress_bar_->setMaximum(maximum);
 	
+	bool done=0;
+	
 	///read in the input files
 	for (QSet<SDFInputDataItem*>::Iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
 	{
 		try
 		{
-			(*it)->readData();	
+			bool b=(*it)->execute();
+			if(!done) done=b;	
 		}
 		catch(BALL::Exception::GeneralException e)
 		{
@@ -836,14 +840,8 @@ void MainWindow::executePipeline()
 	{
 		try
 		{
-			if ((*it)->append())
-			{
-				(*it)->appendData();
-			}
-			else 
-			{
-				(*it)->readData();
-			}
+			bool b=(*it)->execute();
+			if(!done) done=b;
 		}
 		catch(BALL::Exception::GeneralException e)
 		{
@@ -869,18 +867,8 @@ void MainWindow::executePipeline()
 		try
 		{
 			(*it)->model()->setDataSource((*it)->inputDataItem()->data());
-		
-			if ((*it)->optimize_model_parameters)
-			{
-				(*it)->model()->optimizeParameters((*it)->k_fold);
-			}
-			if ((*it)->optimize_kernel_parameters)
-			{
-				KernelModel* km = (KernelModel*)((*it)->model());
-				km->kernel->gridSearch((*it)->grid_search_stepwidth, (*it)->grid_search_steps,(*it)->grid_search_recursions,(*it)->k_fold);
-				(*it)->setModel(km);
-			}
-			(*it)->trainModel();
+			bool b=(*it)->execute();
+			if(!done) done=b;
 		}
 		catch (ModelTrainingError e)
 		{	
@@ -931,8 +919,8 @@ void MainWindow::executePipeline()
 		try
 		{
 			QString num;
-			(*it)->connectWithModelItem();	
-			(*it)->modelItem()->trainModel();
+			bool b=(*it)->execute();
+			if(!done) done=b;
 		}
 		catch(BALL::Exception::GeneralException e)
 		{
@@ -943,7 +931,7 @@ void MainWindow::executePipeline()
 	}
 	if (!fs_pipeline_.empty())
 	{
-		statusBar()->showMessage(tr("Feature Selection"));
+		statusBar()->showMessage(tr("Feature Selections done"));
 	}
 		
 
@@ -953,7 +941,8 @@ void MainWindow::executePipeline()
 	{
 		try
 		{
-			(*it)->connectWithModelItem();
+			bool b=(*it)->execute();
+			if(!done) done=b;
 		}
 		catch(BALL::Exception::GeneralException e)
 		{	
@@ -968,7 +957,7 @@ void MainWindow::executePipeline()
 	}
 	if (!prediction_pipeline_.empty())
 	{
-		statusBar()->showMessage(tr("Prediction"));
+		statusBar()->showMessage(tr("Predictions done"));
 	}
 
 	///validation
@@ -976,18 +965,23 @@ void MainWindow::executePipeline()
 	{
 		try
 		{
-			(*it)->connectWithModelItem();
+			bool b=(*it)->execute();
+			if(!done) done=b;
 		}
-		catch(InconsistentUsage)
-		{
-			QString error_string = "The model " + QString(((*it)->modelItem()->model()->getType()->c_str()))+ "  Model must be trained before its fit to the input data can be evaluated.";
-			QMessageBox::about(this,"Error",error_string);
+		catch(BALL::Exception::GeneralException e)
+		{	
+			QMessageBox::about(this,"Error",e.getMessage());
 		}
 		value++;
 		emit sendNewValue(value);	
 	}
 
 	progress_bar_->reset();
+	if(!done)
+	{
+		QMessageBox a;
+		a.about(this,"Information","Pipeline has not changed,\nso there was nothing to be done!");
+	}
 }
 
 

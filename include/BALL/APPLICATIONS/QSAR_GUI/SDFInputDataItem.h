@@ -41,15 +41,19 @@ namespace BALL
 				SortedList<int> activityValues();
 				void setActivityValues(SortedList<int> act);
 				bool checkForDiscreteY();
-				void readData();
+				
+				/** read the input data */
+				bool execute();
+				
 				void appendCSVDescriptors(CSVInputDataItem* item);
 				list<CSVInputDataItem*>* getConnectedCSVItems();
-
+				
 				void addToPipeline();
 				void removeFromPipeline();
 
 		
 			private:
+				
 				/** @name Attributes
 				*/
 				SortedList<int> activity_values_;

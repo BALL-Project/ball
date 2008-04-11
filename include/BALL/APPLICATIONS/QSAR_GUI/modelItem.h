@@ -88,6 +88,7 @@ namespace BALL
 				/**  destructor */
 				~ModelItem();
 		
+				
 				/** @name Accessors */
 
 				/** sets the item's model
@@ -99,14 +100,19 @@ namespace BALL
 				* @param entry pointer to the entry
 				*/
 				void setEntry(RegistryEntry* entry);
+				
 				/** returns a pointer to the item's Model */
 				Model* model();	
+				
 				/** returns a pointer to the item's InputDataItem */
 				InputDataItem* inputDataItem();	
+				
 				/** returns a pointer to the item's RegistryEntry */
 				RegistryEntry* getRegistryEntry();
+				
 				/** trains the item's model */
-				void trainModel();
+				bool execute();
+				
 				void setSaveAttribute(bool save);
 				bool saveAttribute();
 				void setInputDataItem(InputDataItem* item);
@@ -151,7 +157,9 @@ namespace BALL
 				void loadModel();	
 				void showProperties();
 
-			private:
+				
+			private:							
+				
 				/** @name Private Attributes*/
 
 				/** pointer to the item's input data item */

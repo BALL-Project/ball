@@ -42,11 +42,8 @@ namespace BALL
 				*/
 				~ValidationItem();
 
-				/**
-				* carries out the chosen valdidation method and asks for parameters (if needed)
-				* @param modelitem pointer to the ModelItem to which this item should be connected	
-				*/
-				void connectWithModelItem();
+				/** start the validation */
+				bool execute();
 		
 				/** @name Enums */
 				ModelItem* modelItem();

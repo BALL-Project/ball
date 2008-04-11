@@ -185,7 +185,7 @@ void ValidationItem::initName()
 }
 
 
-void ValidationItem::connectWithModelItem()
+bool ValidationItem::execute()
 {
 	if (model_item_ == NULL)
 	{
@@ -194,7 +194,7 @@ void ValidationItem::connectWithModelItem()
 
 //	ValidationItem* item = new ValidationItem(type_, view_);
 	
-	if(done_) return; // do nothing twice...
+	if(done_) return 0; // do nothing twice...
 	
 	if(validation_statistic_>=0)
 	{
@@ -222,7 +222,7 @@ void ValidationItem::connectWithModelItem()
 	q2_ = model_item_->model()->model_val->getCVRes();
 
 	done_ = 1;
-	return;
+	return 1;
 }
 
 void ValidationItem::mousePressEvent(QGraphicsSceneMouseEvent *event)

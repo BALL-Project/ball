@@ -35,7 +35,7 @@ namespace BALL
 				/** destructor */
 				~PredictionItem();
 	
-				void connectWithModelItem();
+				bool execute();
 				
 				/** @name Accessors */
 
@@ -60,11 +60,13 @@ namespace BALL
 				void addToPipeline();
 				void removeFromPipeline();
 				
+				
 		
 			protected:
 				void mousePressEvent(QGraphicsSceneMouseEvent *event);
 				void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 
+				
 			private:
 
 				/** @name Private Attributes */

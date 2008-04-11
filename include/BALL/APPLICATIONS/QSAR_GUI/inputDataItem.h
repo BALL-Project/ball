@@ -32,8 +32,6 @@ namespace BALL
 				InputDataItem(QString filename, DataItemView* view);
 				InputDataItem(InputDataItem& item);
 				InputDataItem();
-		
-				virtual void readData() = 0;
 
 				/** @name Accessors
 				*/
@@ -59,7 +57,6 @@ namespace BALL
 				void loadFromFile(String file);
 
 				virtual bool checkForDiscreteY() = 0;
-				virtual void addToPipeline() = 0;
 
 			protected:
 				/** @name Attributes

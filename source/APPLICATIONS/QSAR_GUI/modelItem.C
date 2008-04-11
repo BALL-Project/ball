@@ -435,14 +435,26 @@ InputDataItem* ModelItem::inputDataItem()
 	return input_;
 }
 
-void ModelItem::trainModel()
+bool ModelItem::execute()
 {
-	if(done_) return; // do nothing twice...
+	if(done_) return 0; // do nothing twice...
+	
+	if (optimize_model_parameters)
+	{
+		model_->optimizeParameters(k_fold);
+	}
+	if (optimize_kernel_parameters)
+	{
+		KernelModel* km = (KernelModel*)model_;
+		km->kernel->gridSearch(grid_search_stepwidth, grid_search_steps,grid_search_recursions,k_fold);
+		//setModel(km);
+	}
 	
 	model_->readTrainingData();
 	model_->train();
 	
 	done_ = 1; //ready!
+	return 1;
 }
 
 void  ModelItem::setSaveAttribute(bool save)
