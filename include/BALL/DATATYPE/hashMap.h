@@ -778,7 +778,7 @@ namespace BALL
 		Iterator it = find(key);
 		if (it == end())
 		{
-			T value;
+			T value = T();
 			std::pair<Iterator, bool> result = insert(ValueType(key, value));
 			it = result.first;
 		} 
