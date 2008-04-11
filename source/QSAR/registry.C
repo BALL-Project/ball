@@ -8,6 +8,9 @@ Registry::Registry()
 {
 	default_kernel_par1 = 2;
 	default_kernel_par2 = -1;
+	default_k = 5;
+	default_no_permutations = 10;
+	default_no_boostrap_samples = 50;
 	
 	/// add new Model classes here:
 	

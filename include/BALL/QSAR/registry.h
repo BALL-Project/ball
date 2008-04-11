@@ -78,6 +78,15 @@ namespace BALL
 				
 				double default_kernel_par2;
 				
+				/** default value for k-fold cross validation */
+				int default_k;
+				
+				/** the default number of permutations to be done during response permutation testing */
+				int default_no_permutations;
+				
+				/** the default number of boostrap samples */
+				int default_no_boostrap_samples;
+				
 				/** returns the RegistryEntry for a given model name */
 				RegistryEntry* getRegistryEntry(String model_name);
 				

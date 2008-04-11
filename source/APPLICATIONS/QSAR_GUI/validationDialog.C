@@ -1,5 +1,6 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/validationDialog.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/exception.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/mainWindow.h>
 #include <BALL/QSAR/exception.h>
 #include <QtGui/QMessageBox>
 #include <QtGui/QPushButton>
@@ -21,11 +22,15 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item, ModelItem* model):
 // 	q_objects_.push_back(buttons);
 // 	q_objects_.push_back(applyButton);
 	
-
+	Registry* reg = model->view()->data_scene->main_window->registry();
+	QString default_value;
+			
 	if (val_item->getValidationType() == 2)
 	{
 		QLabel* klabel = new QLabel("k for k-fold cross validation");
 		k_edit_ = new QLineEdit(this);
+		default_value.setNum(reg->default_k);
+		k_edit_->setText(default_value);
 		layout1->addWidget(klabel,1,1);
 		layout1->addWidget(k_edit_,1,2);
 		
@@ -37,6 +42,8 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item, ModelItem* model):
 	{
 		QLabel* label = new QLabel("number of samples for bootstrapping");
 		n_of_samples_edit_ = new QLineEdit(this);
+		default_value.setNum(reg->default_no_boostrap_samples);
+		n_of_samples_edit_->setText(default_value);
 		layout1->addWidget(label,1,1);
 		layout1->addWidget(n_of_samples_edit_,1,2);
 		
@@ -49,7 +56,11 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item, ModelItem* model):
 		QLabel* klabel = new QLabel("k for k-fold cross validation");
 		QLabel* label = new QLabel("number of runs for response permutation test");
 		k_edit_ = new QLineEdit(this);
+		default_value.setNum(reg->default_k);
+		k_edit_->setText(default_value);
 		n_of_runs_edit_ = new QLineEdit(this);
+		default_value.setNum(reg->default_no_permutations);
+		n_of_runs_edit_->setText(default_value);
 		layout1->addWidget(label,1,1);
 		layout1->addWidget(n_of_runs_edit_,1,2);
 		layout1->addWidget(klabel,2,1);
