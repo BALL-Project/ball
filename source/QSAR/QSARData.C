@@ -802,7 +802,7 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 	
 	int line=1;
 	SortedList<int> newInvalidDescriptors; 
-	SortedList<int> tmp; 
+	SortedList<int> tmp;
 			
 	for(int i=0; !input.eof(); i++)
 	{
@@ -812,6 +812,9 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 		{
 			break;
 		}
+		istringstream line_stream; // stream that contains the current line
+		line_stream.str(s);
+		
 		if(invalidSubstances_.contains(i))
 		{
 			continue;
@@ -826,7 +829,8 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 		{
 			for(int i=0;i<prop-no_y;i++) 
 			{
-				column_names_.push_back(s.getField(i,sep));
+				String value; line_stream >> value;
+				column_names_.push_back(value);
 			}
 			line++;
 			continue;
@@ -849,7 +853,8 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 				{
 					continue;
 				}
-				substance_names_.push_back(s.getField(i,sep));
+				String value; line_stream >> value;
+				substance_names_.push_back(value);
 				continue;
 			}
 			else if(i==0 && !ylabels && !appendDescriptors)
@@ -872,7 +877,8 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 								
 				try
 				{
-					descriptor_matrix_[no].push_back(s.getField(i,sep).toDouble());
+					String s; line_stream >> s;
+					descriptor_matrix_[no].push_back(s.toDouble());
 				}	
 				catch(BALL::Exception::InvalidFormat g) 
 				{
@@ -886,16 +892,14 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 					{
 						newInvalidDescriptors.insert(no);
 					}
-					
-					
-// 					throw Exception::PropertyError(__FILE__,__LINE__, file, line, "Some descriptor properties are not numerical values!");
 				}
 			}
 			else if(!appendDescriptors)
 			{
 				try
 				{
-					Y_[i-(prop-no_y)].push_back(s.getField(i,sep).toDouble());
+					String value; line_stream >> value;
+					Y_[i-(prop-no_y)].push_back(value.toDouble());
 				}
 				catch(BALL::Exception::InvalidFormat g) 
 				{
