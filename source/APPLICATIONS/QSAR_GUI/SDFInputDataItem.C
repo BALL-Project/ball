@@ -134,7 +134,28 @@ void SDFInputDataItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 bool SDFInputDataItem::checkForDiscreteY()
 {
-	return data_->checkforDiscreteY(filename_.toStdString().c_str(), activity_values_);
+	if(checked_for_discrete_y_) return discrete_y_;
+	
+	try
+	{
+		if(done_) // if data has already been read, check within data-structure
+		{
+			discrete_y_=data_->checkforDiscreteY();
+		}
+		else // if data has not been read, check within file
+		{
+			discrete_y_=data_->checkforDiscreteY(filename_.toStdString().c_str(), activity_values_);
+		}
+	}
+	catch(BALL::Exception::GeneralException e)
+	{	
+		// e.g. input file has not been found
+		QMessageBox::critical(view_,e.getName(),e.getMessage());
+		return 0;
+	}
+	
+	checked_for_discrete_y_ = 1;
+	return discrete_y_;
 }
 
 SortedList<int> SDFInputDataItem::activityValues()

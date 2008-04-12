@@ -26,6 +26,8 @@ InputDataItem::InputDataItem(QString filename, bool center_data, bool center_y, 
 	data_ = new QSARData;
 	input_plotter_ = NULL;
 	append_ = 0;
+	checked_for_discrete_y_ = 0;
+	discrete_y_ = 0;
 }
 
 InputDataItem::InputDataItem(QString filename, DataItemView* view): 
@@ -35,6 +37,8 @@ InputDataItem::InputDataItem(QString filename, DataItemView* view):
 {
 	input_plotter_ = NULL;
 	append_ = 0;
+	checked_for_discrete_y_ = 0;
+	discrete_y_ = 0;
 }
 
 InputDataItem::InputDataItem():
@@ -46,6 +50,8 @@ InputDataItem::InputDataItem():
 {
 	input_plotter_ = NULL;
 	append_ = 0;
+	checked_for_discrete_y_ = 0;
+	discrete_y_ = 0;
 }
 
 InputDataItem::~InputDataItem()
@@ -67,6 +73,8 @@ InputDataItem::InputDataItem(InputDataItem& item):
 	center_y_ = item.center_data_;
 	input_plotter_ = item.input_plotter_;
 	append_ = item.append_;
+	checked_for_discrete_y_ = item.checked_for_discrete_y_;
+	discrete_y_ = item.discrete_y_;
 }
 
 

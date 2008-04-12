@@ -73,6 +73,12 @@ namespace BALL
 				/** is the data of this InputDataItem append to another InputDataItem?? */
 				bool append_;
 				
+				/** has a check for discrete response variables already been done? */
+				bool checked_for_discrete_y_;
+				
+				/** do all response variables contain only discrete values? */
+				bool discrete_y_;
+				
 				InputPlotter* input_plotter_;
 		};
 	}
