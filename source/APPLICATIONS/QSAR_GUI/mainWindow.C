@@ -621,12 +621,60 @@ void MainWindow::createDockWindows()
 void MainWindow::deleteItem()
 {
 	QList<QGraphicsItem*> items = view_scene_.selectedItems();
+
 	if (items.size() > 0)
 	{
-		QList<QGraphicsItem*>::Iterator it = items.begin();
-	
-		DataItem* item = static_cast<DataItem *>(*it);
-		delete item;
+		for (QList<QGraphicsItem*>::Iterator it = items.begin(); it != items.end(); ++it)
+		{	
+			DataItem* item = static_cast<DataItem*>(*it);
+			if (disconnected_items_.contains(item))
+			{
+				delete item;
+				continue;
+			}
+
+			SDFInputDataItem* sdfitem = static_cast<SDFInputDataItem*>(*it);
+			if (sdf_input_pipeline_.contains(sdfitem))
+			{
+				delete sdfitem;
+				continue;
+			}
+
+			CSVInputDataItem* csvitem = static_cast<CSVInputDataItem*>(*it);
+			if (csv_input_pipeline_.contains(csvitem))
+			{
+				delete csvitem;
+				continue;
+			}
+
+			ModelItem* mitem = static_cast<ModelItem*>(*it);
+			if (model_pipeline_.contains(mitem))
+			{
+				delete mitem;
+				continue;
+			}
+
+			FeatureSelectionItem* fsitem = static_cast<FeatureSelectionItem*>(*it);
+			if (fs_pipeline_.contains(fsitem))
+			{
+				delete fsitem;
+				continue;
+			}
+
+			ValidationItem* valitem = static_cast<ValidationItem*>(*it);
+			if (val_pipeline_.contains(valitem))
+			{
+				delete valitem;
+				continue;
+			}
+
+			PredictionItem* preditem = static_cast<PredictionItem*>(*it);
+			if (prediction_pipeline_.contains(preditem))
+			{
+				delete preditem;
+				continue;
+			}
+		}
 	}
 	else
 	{

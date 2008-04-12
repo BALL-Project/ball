@@ -20,6 +20,7 @@ DataItemView::DataItemView(DataItemScene* scene, MainWindow* mw):
 	setFocusPolicy(Qt::ClickFocus);
 	setAlignment(Qt::AlignLeft | Qt::AlignTop);
 	scene->setItemIndexMethod(QGraphicsScene::NoIndex);
+	setDragMode(QGraphicsView::RubberBandDrag);
 	
 	scene->setMainWindow(mw);
 	scene->view = this;
@@ -50,8 +51,7 @@ void DataItemView::scaleView(qreal scaleFactor)
 
 void DataItemView::keyPressEvent(QKeyEvent *event)
  {
-	QList<QGraphicsItem*> itemlist = scene()->items(); 
-	DataItem* item = static_cast<DataItem*>(scene()->focusItem ());
+	DataItem* item = static_cast<DataItem*>(scene()->focusItem());
 
     if (!item)
 	{
@@ -76,6 +76,7 @@ void DataItemView::keyPressEvent(QKeyEvent *event)
 	default: 
 		QGraphicsView::keyPressEvent(event);
 	}
+
  }
 
 void DataItemView::addDropSite()
