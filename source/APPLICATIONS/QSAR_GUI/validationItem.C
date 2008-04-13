@@ -25,6 +25,7 @@ ValidationItem::ValidationItem(int type, DataItemView* view):
 	done_ = 0;
 	type_ = type;
 	initName();
+	result_color_ = QColor(205,225,205);
 }
 
 ValidationItem::ValidationItem(ValidationItem& item):
@@ -40,12 +41,15 @@ DataItem(item.view_)
 	q2_ = item.q2_;
 	r2_ = item.r2_;
 	done_ = item.done_;
+	result_color_ = QColor(205,225,205);
 }
 
 
 ValidationItem::ValidationItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view)
 	: DataItem(view)
 {
+	result_color_ = QColor(205,225,205);
+	
 	istringstream input;
 	input.str(configfile_section);
 		
@@ -220,7 +224,10 @@ bool ValidationItem::execute()
 	
 	r2_ = model_item_->model()->model_val->getFitRes();
 	q2_ = model_item_->model()->model_val->getCVRes();
-
+	
+	if(type_==1) setResultString(r2_);
+	else setResultString(q2_);
+	
 	done_ = 1;
 	return 1;
 }

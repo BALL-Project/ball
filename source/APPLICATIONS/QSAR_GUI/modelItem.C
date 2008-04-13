@@ -30,6 +30,7 @@ ModelItem::ModelItem(RegistryEntry* entry,  DataItemView* miv):
 	entry_(entry),
 	save_attribute_(true)
 {
+	result_color_ = QColor(160,172,182);
 	QPixmap pm;	
 	if (entry_->kernel)
 	{
@@ -59,6 +60,8 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, DataItemVie
 	entry_(entry),
 	save_attribute_(true)
 {
+	result_color_ = QColor(160,172,182);
+	
 	if(!entry_->kernel)
 	{
 		if (input_ != NULL)
@@ -92,6 +95,8 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, int kernelT
 	entry_(entry),
 	save_attribute_(true)
 {
+	result_color_ = QColor(160,172,182);
+	
 	if(entry_->kernel && kernelType < 4)
 	{
 		if (input_ != NULL)
@@ -126,6 +131,8 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, String s1, 
 	entry_(entry),
 	save_attribute_(true)
 {
+	result_color_ = QColor(160,172,182);
+	
 	if(entry_->kernel)
 	{
 		if (input_ != NULL)
@@ -148,6 +155,7 @@ ModelItem::ModelItem(ModelItem& item):
 QObject(),
 DataItem(item.view_)
 {
+	result_color_ = item.result_color_;
 	view_ = item.view_;
 	name_ = item.name_;
 	setPixmap(item.pixmap());
@@ -201,6 +209,7 @@ DataItem(item.view_)
 ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view)
 	: DataItem(view)
 {
+	result_color_=QColor(160,172,182);
 	istringstream input;
 	input.str(configfile_section);
 		
@@ -453,6 +462,7 @@ bool ModelItem::execute()
 	model_->readTrainingData();
 	model_->train();
 	
+	setResultString((int)model_->getDescriptorNames()->size());
 	done_ = 1; //ready!
 	return 1;
 }
@@ -551,6 +561,7 @@ void ModelItem::loadModel()
 		}
 	}
 	
+	setResultString((int)model_->getDescriptorNames()->size());
 	done_ = 1;
 }
 
@@ -576,6 +587,8 @@ void ModelItem::loadFromFile(String file)
 			}
 		}
 	}
+	
+	setResultString((int)model_->getDescriptorNames()->size());
 	done_ = 1;
 }
 

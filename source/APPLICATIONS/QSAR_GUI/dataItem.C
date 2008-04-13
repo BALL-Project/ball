@@ -25,6 +25,7 @@ DataItem::DataItem():
 	setPixmap(pm);
 	setToolTip(name_);
 	done_ = 0;
+	result_ = "";
 }
 
 DataItem::DataItem(DataItemView* view):
@@ -44,6 +45,7 @@ DataItem::DataItem(DataItemView* view):
 	setPixmap(pm);
 	setToolTip(name_);
 	done_ = 0;
+	result_ = "";
 }
 
 DataItem::DataItem(DataItemView* view, QPixmap pm): 
@@ -61,6 +63,7 @@ DataItem::DataItem(DataItemView* view, QPixmap pm):
 	setPixmap(pm);
 	setToolTip(name_);
 	done_ = 0;
+	result_ = "";
 }
 
 DataItem::~DataItem()
@@ -131,6 +134,16 @@ void DataItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
 	painter->drawRect(-1, -1, width_+1, height_+1);
 	QGraphicsPixmapItem::paint(painter, option, widget);
 	painter->drawText(0,0,width_*10, height_, Qt::AlignLeft || Qt::TextWordWrap, name_);
+	
+	if(result_!="")
+	{
+		QBrush brush(result_color_,Qt::SolidPattern);
+		painter->setBrush(brush);
+		painter->drawEllipse(width()-17.5,height()-10, 35,20);
+		font.setBold(0);
+		painter->setFont(font);
+		painter->drawText(width()-17.5,height()-7.5, 35,15, Qt::AlignHCenter,result_);
+	}
 }
 
 void DataItem::setName(QString name)
@@ -230,6 +243,17 @@ bool DataItem::removeDisconnectedItem()
 	return view_->data_scene->main_window->disconnected_items_.remove(this);
 }
 
+void DataItem::setResultString(double value)
+{
+	int v = ceil(value*100);
+	result_.setNum(v/100.);
+}
+
+void DataItem::setResultString(int value)
+{
+	String s=value;
+	result_ = s.c_str();
+}
 
 // void DataItem::calculateForces()
 // {	

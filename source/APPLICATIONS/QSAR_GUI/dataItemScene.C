@@ -471,41 +471,28 @@ void DataItemScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
 
 	QPointF p = mouseEvent->scenePos();
 	QGraphicsItem* item = itemAt(p);
-	if(!item)
-	{
-		return; // if there is no item below mouse cursor, do nothing!
-	}
-
-	QList<QGraphicsItem*> items = selectedItems();
-	if (items.size() == 0)
-	{
-		return;
-	}
+	if(!item) return; // if there is no item below mouse cursor, do nothing!
 
 	main_window->drag_start_time = main_window->drag_start_time.now();
 	
-// 	for (QList<QGraphicsItem*>::Iterator it = items.begin(); it != items.end(); ++it)
-// 	{
-// 		
-		/// if not doing this, Qt cannot reliably cast to ModelItem*, so that the type of the created ModelItem will be incorrect!
-		if(strcmp(view->name.c_str(),"model_list")==0)
-		{
-			ModelItem* model_item = static_cast<ModelItem*>(item);
-			model_item->mousePressEvent(mouseEvent);
-		}
-		else if(strcmp(view->name.c_str(),"fs_list")==0)
-		{
-			FeatureSelectionItem* fs_item = static_cast<FeatureSelectionItem*>(item);
-			fs_item->mousePressEvent(mouseEvent);
-		}
-		else if(strcmp(view->name.c_str(),"val_list")==0)
-		{
-			ValidationItem* val_item = static_cast<ValidationItem*>(item);
-			val_item->mousePressEvent(mouseEvent);
-		}	
-		else
-		{
-			QGraphicsScene::mousePressEvent(mouseEvent);
-		}
-// 	}
+	/// if not doing this, Qt cannot reliably cast to ModelItem*, so that the type of the created ModelItem will be incorrect!
+	if(strcmp(view->name.c_str(),"model_list")==0)
+	{
+		ModelItem* model_item = static_cast<ModelItem*>(item);
+		model_item->mousePressEvent(mouseEvent);
+	}
+	else if(strcmp(view->name.c_str(),"fs_list")==0)
+	{
+		FeatureSelectionItem* fs_item = static_cast<FeatureSelectionItem*>(item);
+		fs_item->mousePressEvent(mouseEvent);
+	}
+	else if(strcmp(view->name.c_str(),"val_list")==0)
+	{
+		ValidationItem* val_item = static_cast<ValidationItem*>(item);
+		val_item->mousePressEvent(mouseEvent);
+	}	
+	else
+	{
+		QGraphicsScene::mousePressEvent(mouseEvent);
+	}
 }

@@ -1030,6 +1030,9 @@ void MainWindow::executePipeline()
 		QMessageBox a;
 		a.about(this,"Information","Pipeline has not changed,\nso there was nothing to be done!");
 	}
+	
+	view_scene_.update();
+	view_->update();
 }
 
 

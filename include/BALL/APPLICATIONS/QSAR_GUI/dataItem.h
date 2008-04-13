@@ -135,6 +135,10 @@ namespace BALL
 			/** adds the respective DataItem to its MainWindow-Pipeline.\n
 			This function  must be implemented by each final class derived from DataItem! */
 			virtual void addToPipeline() = 0;
+			
+			/** set result_ to a given value */
+			void setResultString(double value);
+			void setResultString(int value);
 		
 		
 		protected:
@@ -143,7 +147,8 @@ namespace BALL
 			QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 			void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-
+			
+			
 			/**the item's view*/
 			DataItemView* view_;
 			
@@ -166,6 +171,12 @@ namespace BALL
 			
 			/** has the data already been processed by this DataItem? */
 			bool done_;
+			
+			/** the result that is to be shown on the screen next to this item's pixmap */
+			QString result_;
+			
+			/** background color for the ellipse around result-string */
+			QColor result_color_;
 			
 			
 		private:

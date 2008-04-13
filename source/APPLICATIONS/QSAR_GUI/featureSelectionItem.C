@@ -270,6 +270,7 @@ bool FeatureSelectionItem::execute()
 	}
 	model_item_->model()->readTrainingData();
 	model_item_->model()->train();
+	model_item_->setResultString((int)model_item_->model()->getDescriptorIDs()->size());
 	done_ = 1; // ready!
 	return 1;
 }
