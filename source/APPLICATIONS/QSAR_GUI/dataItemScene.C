@@ -97,6 +97,32 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 	
 	QPointF pos = event->scenePos();
 	
+	/// if more than one item is selected, move all those items and do nothing else
+	QList<QGraphicsItem*> sel_items = selectedItems();
+	if(sel_items.size()>1)
+	{
+		QPointF drag_start = main_window->dragged_item->pos();
+		QPointF translation = pos-drag_start;
+		for(QList<QGraphicsItem*>::iterator it=sel_items.begin(); it!=sel_items.end(); it++)
+		{
+			(*it)->setPos((*it)->pos()+translation);
+			QSet<Edge*> edges=((DataItem*)(*it))->inEdges();
+			for(QSet<Edge*>::iterator it2=edges.begin(); it2!=edges.end();it2++)
+			{
+				(*it2)->adjust();
+			}
+			edges=((DataItem*)(*it))->outEdges();
+			for(QSet<Edge*>::iterator it2=edges.begin(); it2!=edges.end();it2++)
+			{
+				(*it2)->adjust();
+			}
+		}
+		QGraphicsScene::dropEvent(event);
+		update();
+		view->update();
+		return;			
+	}
+	
 	/// move SDFInputDataItem
 	if (event->mimeData()->hasFormat("application/x-sdfinputitemdata")) 
 	{
