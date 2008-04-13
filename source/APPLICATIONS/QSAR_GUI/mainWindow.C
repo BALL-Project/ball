@@ -589,8 +589,8 @@ void MainWindow::createDockWindows()
 	QBrush b2(c2,Qt::SolidPattern);
 	fs_list_->setBackgroundBrush(b2);
 
-	///create dock widget for  model validation
-	for(uint i=1; i<5;i++)
+	///create dock widget for model validation
+	for(uint i=1; i<6;i++)
 	{ 
 		ValidationItem* item = new ValidationItem(i, val_list_);
 		val_list_scene_.addItem(item);

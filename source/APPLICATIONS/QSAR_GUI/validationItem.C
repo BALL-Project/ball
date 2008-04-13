@@ -183,6 +183,11 @@ void ValidationItem::initName()
 			name_ = "response permutation test";
 			break;
 
+		case 5:
+			name_ = "nested cross validation";
+			//TODO: change pixmap
+			break;
+
 			default: throw InvalidFeatureSelectionItem(__FILE__,__LINE__);
 			setName("Val");
 	}
@@ -218,6 +223,8 @@ bool ValidationItem::execute()
 		case 4:	
 			result_of_rand_test_ = model_item_->model()->model_val->yRandomizationTest(num_of_runs_, k_);		
 			break;
+		case 5: 
+			break; //TODO
 		default:
 			throw InvalidValidationItem(__FILE__,__LINE__);
 	}
@@ -297,6 +304,11 @@ void ValidationItem::setNumOfSamples(int num)
 	num_of_samples_ = num;
 }
 
+void ValidationItem::setNumOfNCVFolds(int num)
+{
+	n_of_ncv_folds_ = num;
+}
+
 ModelItem* ValidationItem::modelItem()
 {
 	return model_item_;
@@ -320,6 +332,11 @@ int ValidationItem::numOfRuns()
 int ValidationItem::numOfSamples()
 {
 	return num_of_samples_;
+}
+
+int ValidationItem::numOfNCVFolds()
+{
+	return  n_of_ncv_folds_;
 }
 
 int ValidationItem::k()

@@ -28,8 +28,6 @@ namespace BALL
 			public:
 				/** @name Constructors and Destructors
 				*/
-				/** standard constructor */
-				ValidationDialog();
 
 				ValidationDialog(ValidationItem* val_item, ModelItem* model);
 
@@ -65,14 +63,12 @@ namespace BALL
 				QComboBox* statistic_box_;
 				int statistic_;
 				
-				
-				/** delete these when destroying this FeatureSelectionDialog */
-				list<QObject*> q_objects_;
-				
 				QLineEdit* n_of_samples_edit_;
 				QLineEdit* n_of_runs_edit_;
+				QLineEdit* n_of_ncv_folds_edit_;
 				int n_of_runs_;
 				int n_of_samples_;
+				int n_of_ncv_folds_;
 		};
 	}
 }

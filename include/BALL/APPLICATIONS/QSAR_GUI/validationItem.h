@@ -71,8 +71,10 @@ namespace BALL
 				void setK(int k);
 				void setNumOfRuns(int num);
 				void setNumOfSamples(int num);
+				void setNumOfNCVFolds(int num);
 				int numOfRuns();
 				int numOfSamples();
+				int numOfNCVFolds();
 
 				Matrix* resultOfRandTest();
 
@@ -111,6 +113,8 @@ namespace BALL
 				int num_of_samples_;
 			
 				int num_of_runs_;
+
+				int n_of_ncv_folds_;
 
 				/**
 				* the model item which is connected to this validation item and whose model is validated

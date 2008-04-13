@@ -12,15 +12,10 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item, ModelItem* model):
 	val_item_(val_item)
 {
 	QVBoxLayout* main_layout = new QVBoxLayout(this);
-	QGridLayout* layout1 = new QGridLayout();
+	QGridLayout* layout1 = new QGridLayout(this);
 	QDialogButtonBox* buttons = new QDialogButtonBox(QDialogButtonBox::Cancel,Qt::Horizontal, this);
 	QPushButton* applyButton = new QPushButton("OK", this);
 	buttons->addButton(applyButton, QDialogButtonBox::ApplyRole);
-	
-// 	q_objects_.push_back(main_layout);
- 	q_objects_.push_back(layout1); 
-// 	q_objects_.push_back(buttons);
-// 	q_objects_.push_back(applyButton);
 	
 	Registry* reg = model->view()->data_scene->main_window->registry();
 	QString default_value;
@@ -33,9 +28,6 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item, ModelItem* model):
 		k_edit_->setText(default_value);
 		layout1->addWidget(klabel,1,1);
 		layout1->addWidget(k_edit_,1,2);
-		
-		q_objects_.push_back(klabel); 
-		q_objects_.push_back(k_edit_);
 	}
 
 	else if (val_item->getValidationType() == 3)
@@ -46,9 +38,6 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item, ModelItem* model):
 		n_of_samples_edit_->setText(default_value);
 		layout1->addWidget(label,1,1);
 		layout1->addWidget(n_of_samples_edit_,1,2);
-		
-		q_objects_.push_back(label);
-		q_objects_.push_back(n_of_samples_edit_);
 	}
 		
 	else if (val_item->getValidationType() == 4)
@@ -65,11 +54,14 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item, ModelItem* model):
 		layout1->addWidget(n_of_runs_edit_,1,2);
 		layout1->addWidget(klabel,2,1);
 		layout1->addWidget(k_edit_,2,2);
-		
-		q_objects_.push_back(k_edit_);
-		q_objects_.push_back(n_of_runs_edit_);
-		q_objects_.push_back(klabel);
-		q_objects_.push_back(label);
+	}
+	else if (val_item->getValidationType() == 5)
+	{
+		QLabel* label = new QLabel("number of nested cross validation folds");
+		n_of_ncv_folds_edit_ = new QLineEdit(this);
+
+		layout1->addWidget(label,1,1);
+		layout1->addWidget(n_of_ncv_folds_edit_,1,2);
 	}
 	
 	main_layout->addLayout(layout1);
@@ -89,10 +81,6 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item, ModelItem* model):
 			
 		layout3->addWidget(label3);layout3->addWidget(statistic_box_);
 		main_layout->addLayout(layout3);
-		
-		q_objects_.push_back(layout3);
-		q_objects_.push_back(label3);
-		q_objects_.push_back(statistic_box_);
 	}
 
 	main_layout->addWidget(buttons);
@@ -104,17 +92,8 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item, ModelItem* model):
 	connect(buttons, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
-ValidationDialog::ValidationDialog():
-	val_item_(NULL)
-{
-}
-
 ValidationDialog::~ValidationDialog()
 {
-	for(list<QObject*>::iterator it=q_objects_.begin(); it!=q_objects_.end();it++)
-	{
-		delete *it;
-	}
 }	
 
 void ValidationDialog::applyInput()
@@ -179,6 +158,18 @@ void ValidationDialog::applyInput()
 				throw BALL::VIEW::Exception::InvalidK(__FILE__, __LINE__);
 			}
 			break;
+		case 5:
+			ok = false;
+			num = n_of_ncv_folds_edit_->text().toInt(&ok);
+			if (ok)
+			{
+				n_of_ncv_folds_ = num;
+				val_item_->setNumOfNCVFolds(n_of_ncv_folds_);
+			}
+			else
+			{
+				throw BALL::VIEW::Exception::InvalidK(__FILE__, __LINE__);
+			}
 	}
 	statistic_ = -1;
 	if(statistic_box_!=NULL)
