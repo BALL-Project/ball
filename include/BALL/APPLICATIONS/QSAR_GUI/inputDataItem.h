@@ -7,12 +7,13 @@
 #include <QtGui/QGraphicsSceneMouseEvent>
 
 
-using namespace BALL::QSAR;
 
 namespace BALL
 {
 	namespace VIEW
 	{
+		using namespace BALL::QSAR;
+		
 		class InputPlotter;
 		
 		/** @class InputDataItem
@@ -37,7 +38,7 @@ namespace BALL
 				*/
 				
 				/** Returns a pointer to the data saved in the item*/
-				QSARData* data();
+				QSAR::QSARData* data();
 			//	enum { Type = UserType + 2 };
 		
 				/** Returns the type of the item as an int. This type information is used by qgraphicsitem_cast() to distinguish between types. */
@@ -48,7 +49,7 @@ namespace BALL
 				bool centerY();
 				void setCenterDataFlag(bool cd);
 				void setCenterResponseFlag(bool cr);
-				void setData(QSARData* data);
+				void setData(QSAR::QSARData* data);
 				void setFilename(String filename) { filename_=filename.c_str();}
 				void setAppend(bool append);
 				bool append();
@@ -65,7 +66,7 @@ namespace BALL
 				*/
 		
 				/**pointer to an instance of QSARData that holds the input data read from a file */
-				QSARData* data_;
+				QSAR::QSARData* data_;
 				QString filename_;
 				bool center_data_;
 				bool center_y_;

@@ -7,6 +7,7 @@
 
 
 
+
 namespace BALL
 {
 	namespace VIEW
@@ -15,7 +16,8 @@ namespace BALL
 		class DataItem;
 		class Edge;
 		class DataItemView;
-
+		class ModelItem;
+		
 		/** @class DataItemScene
 		* @brief class for storing all DataItems
 		*
@@ -63,6 +65,8 @@ namespace BALL
 				/** QT event handler for drop events on this scene
 				*/			
 				void dropEvent(QGraphicsSceneDragDropEvent* event);
+				
+				void createExternalValPipeline(ModelItem* model_item, uint folds);
 				//void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
 				//void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
 				//void dragMoveEvent(QGraphicsSceneDragDropEvent *event);

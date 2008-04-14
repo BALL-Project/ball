@@ -173,6 +173,8 @@ DataItem(item.view_)
 	k_fold = item.k_fold;
 	save_attribute_ = item.save_attribute_;
 	prediction_input_edges_ = item.prediction_input_edges_;
+	done_ = item.done_;
+	result_ = item.result_;
 	
 	// do NOT copy from 'item' but connect to the methods of this new object!!
 	createActions();

@@ -115,6 +115,10 @@ namespace BALL
 			
 			bool isDone();
 			void setDone(bool b) {done_=b;}
+			
+			/** Call this function if a change of parameters and/or input has occured.\n
+			done_ of this item and *all of its children* is thus set to false. */
+			void change();
 		
 			enum { Type = UserType + 1 };
 		

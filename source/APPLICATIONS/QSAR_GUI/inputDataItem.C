@@ -83,6 +83,7 @@ QSARData* InputDataItem::data()
 	return data_;
 }
 
+
 QString InputDataItem::filename()
 {
 	return filename_;

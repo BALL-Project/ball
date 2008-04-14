@@ -124,6 +124,15 @@ bool DataItem::isDone()
 	return done_;
 }
 
+void DataItem::change()
+{
+	done_ = 0;
+	for(QSet<Edge*>::iterator it=out_edge_list_.begin(); it!=out_edge_list_.end();it++)
+	{
+		(*it)->destNode()->change();
+	}
+}
+
 
 void DataItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
