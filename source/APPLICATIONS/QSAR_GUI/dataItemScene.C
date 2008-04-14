@@ -6,7 +6,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/featureSelectionItem.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/mainWindow.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/exception.h>
-#include <BALL/APPLICATIONS/QSAR_GUI/inputPartitionItem.h>
+//#include <BALL/APPLICATIONS/QSAR_GUI/inputPartitionItem.h>
 #include <QtCore/QMimeData>
 #include <QtCore/QUrl>
 #include <QtGui/QGraphicsScene>
@@ -452,49 +452,49 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 
 
 // TODO: this function is NOT READY!!
-void DataItemScene::createExternalValPipeline(ModelItem* model_item, uint folds)
-{
-	list<DataItem*> pipe;
-	DataItem* item = model_item;
-	while(item->type()!=SDFInputDataItem::Type && item->type()!=CSVInputDataItem::Type)
-	{
-		pipe.push_front(item);
-		item=(*item->inEdges().begin())->sourceNode();
-	}
-	DataItem* source_item = item;
-	 
-	InputPartitionItem* part = new InputPartitionItem(1);
-	QPointF p0 = source_item->pos();
-	part->setPos(p0+getOffset(p0,source_item));
-	addItem(part);
-	
-	for(list<DataItem*>::iterator it=pipe.begin();it!=pipe.end();it++)
-	{
-		DataItem* new_item=0;
-		item=*it;
-		if(item->type()==ModelItem::Type)
-		{
-			ModelItem* model_item=qgraphicsitem_cast<ModelItem*>(item);
-			new_item = new ModelItem(*model_item);
-		}
-		else if(item->type()==FeatureSelectionItem::Type)
-		{
-			FeatureSelectionItem* fs_item=qgraphicsitem_cast<FeatureSelectionItem*>(item);
-			new_item = new FeatureSelectionItem(*fs_item);
-		}
-		else
-		{
-			cout<<"type not found!!"<<endl<<flush;
-		}
-		new_item->addToPipeline();
-		QPointF p0 = source_item->pos();
-		new_item->setPos(p0+getOffset(p0,new_item));
-		addItem(new_item);
-		Edge* e = new Edge(source_item,new_item);
-		addItem(e);
-		source_item=new_item;
-	}
-}
+// void DataItemScene::createExternalValPipeline(ModelItem* model_item, uint folds)
+// {
+// 	list<DataItem*> pipe;
+// 	DataItem* item = model_item;
+// 	while(item->type()!=SDFInputDataItem::Type && item->type()!=CSVInputDataItem::Type)
+// 	{
+// 		pipe.push_front(item);
+// 		item=(*item->inEdges().begin())->sourceNode();
+// 	}
+// 	DataItem* source_item = item;
+// 	 
+// 	InputPartitionItem* part = new InputPartitionItem(1);
+// 	QPointF p0 = source_item->pos();
+// 	part->setPos(p0+getOffset(p0,source_item));
+// 	addItem(part);
+// 	
+// 	for(list<DataItem*>::iterator it=pipe.begin();it!=pipe.end();it++)
+// 	{
+// 		DataItem* new_item=0;
+// 		item=*it;
+// 		if(item->type()==ModelItem::Type)
+// 		{
+// 			ModelItem* model_item=qgraphicsitem_cast<ModelItem*>(item);
+// 			new_item = new ModelItem(*model_item);
+// 		}
+// 		else if(item->type()==FeatureSelectionItem::Type)
+// 		{
+// 			FeatureSelectionItem* fs_item=qgraphicsitem_cast<FeatureSelectionItem*>(item);
+// 			new_item = new FeatureSelectionItem(*fs_item);
+// 		}
+// 		else
+// 		{
+// 			cout<<"type not found!!"<<endl<<flush;
+// 		}
+// 		new_item->addToPipeline();
+// 		QPointF p0 = source_item->pos();
+// 		new_item->setPos(p0+getOffset(p0,new_item));
+// 		addItem(new_item);
+// 		Edge* e = new Edge(source_item,new_item);
+// 		addItem(e);
+// 		source_item=new_item;
+// 	}
+// }
 
 
 //this function allows the dropping of an item anywhere on the scene

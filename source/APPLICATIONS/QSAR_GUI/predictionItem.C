@@ -215,8 +215,9 @@ void PredictionItem::showPredictionPlotter()
 	}
 }
 
-void PredictionItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* /*event*/)
+void PredictionItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
+	Q_UNUSED (event);
 	PredictionResultDialog predictionResultDialog(this);
 	predictionResultDialog.exec();
 }
