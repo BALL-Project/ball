@@ -59,8 +59,8 @@ SOURCES       = dataItem.C\
 		moc_inputPlotter.C\
 		moc_modelItem.C\
 		inputDataItemIO.C\
-		partitioningItem.C
-#		inputPartitionItem.C
+		partitioningItem.C\
+		inputPartitionItem.C
 # 		connectionsList.C\
 # 		moc_connectionsList.C
 	
@@ -111,8 +111,8 @@ OBJECTS       = dataItem.o \
 		moc_inputPlotter.o\
 		moc_modelItem.o\
 		inputDataItemIO.o\
-		partitioningItem.o
-#		inputPartitionItem.o
+		partitioningItem.o\
+		inputPartitionItem.o
 # 		connectionsList.o\
 # 		moc_connectionsList.o
 

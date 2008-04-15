@@ -1,12 +1,9 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/dataItemScene.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/edge.h>
-#include <BALL/APPLICATIONS/QSAR_GUI/dottedEdge.h>
-#include <BALL/APPLICATIONS/QSAR_GUI/inputDataItem.h>
-#include <BALL/APPLICATIONS/QSAR_GUI/modelItem.h>
-#include <BALL/APPLICATIONS/QSAR_GUI/featureSelectionItem.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/mainWindow.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/exception.h>
-//#include <BALL/APPLICATIONS/QSAR_GUI/inputPartitionItem.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/inputPartitionItem.h>
+
 #include <QtCore/QMimeData>
 #include <QtCore/QUrl>
 #include <QtGui/QGraphicsScene>
@@ -124,26 +121,14 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 		return;			
 	}
 	
-	/// move SDFInputDataItem
-	if (event->mimeData()->hasFormat("application/x-sdfinputitemdata")) 
+	/// move DataItems within pipeline-scene
+	if (event->mimeData()->hasFormat("application/x-csvinputitemdata") || 	
+		event->mimeData()->hasFormat("application/x-predictiondata") ||
+		event->mimeData()->hasFormat("application/x-predictiondata") ||
+		event->mimeData()->hasFormat("application/x-partitemdata") ||
+	        event->mimeData()->hasFormat("application/x-inputpartitemdata"))
 	{
-		SDFInputDataItem* source_item = (SDFInputDataItem*)main_window->dragged_item;
-		source_item->setPos(pos.x(),pos.y());
-	}
-
-	/// move CSVInputDataItem
-	if (event->mimeData()->hasFormat("application/x-csvinputitemdata")) 
-	{
-		CSVInputDataItem* source_item = (CSVInputDataItem*)main_window->dragged_item;
-		source_item->setPos(pos.x(),pos.y());
-	}
-
-	/// move PredictionItem
-	else if (event->mimeData()->hasFormat("application/x-predictiondata")) 
-	{
-		
-		PredictionItem* source_item = (PredictionItem*)main_window->dragged_item;
-		source_item->setPos(pos.x(),pos.y());
+		main_window->dragged_item->setPos(pos.x(),pos.y());
 	}
 
 	/// create or move ModelItem
@@ -304,11 +289,11 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				}
 				
 				item = main_window->createValidation(item, model_item_at_pos);
-				//createExternalValPipeline(model_item_at_pos,2);
 				item->setView(view);
 				pos = model_item_at_pos->pos();
 				addItem(item);
 				item->setPos(pos + getOffset(pos,item));
+				//createExternalValPipeline(model_item_at_pos,2);
 				Edge* edge = new Edge(model_item_at_pos, item);
 				addItem(edge);
 				item->addToPipeline();
@@ -451,50 +436,93 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 
 
 
-// TODO: this function is NOT READY!!
-// void DataItemScene::createExternalValPipeline(ModelItem* model_item, uint folds)
-// {
-// 	list<DataItem*> pipe;
-// 	DataItem* item = model_item;
-// 	while(item->type()!=SDFInputDataItem::Type && item->type()!=CSVInputDataItem::Type)
-// 	{
-// 		pipe.push_front(item);
-// 		item=(*item->inEdges().begin())->sourceNode();
-// 	}
-// 	DataItem* source_item = item;
-// 	 
-// 	InputPartitionItem* part = new InputPartitionItem(1);
-// 	QPointF p0 = source_item->pos();
-// 	part->setPos(p0+getOffset(p0,source_item));
-// 	addItem(part);
-// 	
-// 	for(list<DataItem*>::iterator it=pipe.begin();it!=pipe.end();it++)
-// 	{
-// 		DataItem* new_item=0;
-// 		item=*it;
-// 		if(item->type()==ModelItem::Type)
-// 		{
-// 			ModelItem* model_item=qgraphicsitem_cast<ModelItem*>(item);
-// 			new_item = new ModelItem(*model_item);
-// 		}
-// 		else if(item->type()==FeatureSelectionItem::Type)
-// 		{
-// 			FeatureSelectionItem* fs_item=qgraphicsitem_cast<FeatureSelectionItem*>(item);
-// 			new_item = new FeatureSelectionItem(*fs_item);
-// 		}
-// 		else
-// 		{
-// 			cout<<"type not found!!"<<endl<<flush;
-// 		}
-// 		new_item->addToPipeline();
-// 		QPointF p0 = source_item->pos();
-// 		new_item->setPos(p0+getOffset(p0,new_item));
-// 		addItem(new_item);
-// 		Edge* e = new Edge(source_item,new_item);
-// 		addItem(e);
-// 		source_item=new_item;
-// 	}
-// }
+//TODO: this function is NOT READY!!
+void DataItemScene::createExternalValPipeline(ModelItem* model_item, uint folds)
+{
+	list<DataItem*> pipe;
+	DataItem* item = model_item;
+	while(item->type()!=SDFInputDataItem::Type && item->type()!=CSVInputDataItem::Type)
+	{
+		pipe.push_front(item);
+		item=(*item->inEdges().begin())->sourceNode();
+	}
+	if(item->type()!=CSVInputDataItem::Type && item->type()!=SDFInputDataItem::Type)
+	{	
+		// TODO: convert to exception which is to be caught within dropEvent()
+		QMessageBox::critical(view,"Not possible", "This pipeline does not have an input source. Therefore partitioning of input data and subsequent nested cross validation cannot be done!");
+		return;
+	}
+	InputDataItem* data_item = (InputDataItem*)item;
+	
+	double frac=0.2;
+	PartitioningItem* partitioner = new PartitioningItem(data_item,view,folds,frac);
+	QPointF p0 = data_item->pos();
+	partitioner->setPos(p0+getOffset(p0,data_item));
+	partitioner->addToPipeline();
+	Edge* e = new Edge(data_item,partitioner);
+	addItem(e);
+	addItem(partitioner);
+	
+	for(uint i=0;i<folds;i++)
+	{
+		InputPartitionItem* train_part = new InputPartitionItem(0,view); // trainings-partition of fold i
+		Edge* e0 = new Edge(partitioner,train_part);
+		addItem(e0);
+		addItem(train_part);	
+		InputPartitionItem* test_part = new InputPartitionItem(1,view); // test-partition of fold i
+		Edge* e1 = new Edge(partitioner,test_part);
+		addItem(e1);
+		addItem(test_part);
+		
+		DataItem* source_item = train_part;
+		ModelItem* input_model=0;
+		FeatureSelectionItem* new_fs=0;
+		bool fs_created=0;
+		for(list<DataItem*>::iterator it=pipe.begin();it!=pipe.end();it++)
+		{
+			DataItem* new_item=0;
+			item=*it;
+			if(item->type()==ModelItem::Type)
+			{
+				ModelItem* model_item=qgraphicsitem_cast<ModelItem*>(item);
+				ModelItem* new_model = new ModelItem(*model_item);
+				if(!fs_created) 
+				{
+					new_model->setInputDataItem(train_part);
+					input_model = new_model;
+					new_model->addToPipeline();
+				}
+				else
+				{
+					new_fs->setModelItem(new_model); // set output of FS
+				}
+				new_item=new_model;
+				new_item->change();
+				fs_created=0;
+			}
+			else if(item->type()==FeatureSelectionItem::Type)
+			{
+				FeatureSelectionItem* fs_item=qgraphicsitem_cast<FeatureSelectionItem*>(item);
+				new_fs = new FeatureSelectionItem(*fs_item);
+				new_fs->setInputModelItem(input_model);  // set input of FS
+				new_fs->change();
+				new_item=new_fs;
+				new_item->addToPipeline();
+				fs_created=1;
+			}
+			else
+			{
+				cout<<"item type not found!!"<<endl<<flush;
+			}
+			QPointF p0 = source_item->pos();
+			new_item->setPos(p0+getOffset(p0,new_item));
+			addItem(new_item);
+			Edge* e = new Edge(source_item,new_item);
+			addItem(e);
+			source_item=new_item;
+		}
+	}
+}
 
 
 //this function allows the dropping of an item anywhere on the scene

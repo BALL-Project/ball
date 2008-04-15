@@ -11,7 +11,7 @@ namespace BALL
 		class PartitioningItem : public DataItem
 		{
 			public:
-				PartitioningItem(InputDataItem* input, DataItemView* miv);
+				PartitioningItem(InputDataItem* input, DataItemView* miv, uint folds, double& fraction);
 				~PartitioningItem();
 
 				bool execute();
@@ -19,7 +19,6 @@ namespace BALL
 				enum { Type = UserType + 2703 };
 				int type() const { return Type; }
 	
-				void writeConfigSection(ofstream& out);
 				void addToPipeline();
 				void removeFromPipeline();
 
@@ -28,6 +27,11 @@ namespace BALL
 
 			private:
 				InputDataItem* input_;
+				
+				uint folds_;
+				
+				/** the fraction of compounds of the input data set that is to be used as validation set */
+				double val_fraction_;
 				
 			friend class DataItemScene;
 

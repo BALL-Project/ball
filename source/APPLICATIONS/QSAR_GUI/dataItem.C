@@ -127,6 +127,7 @@ bool DataItem::isDone()
 void DataItem::change()
 {
 	done_ = 0;
+	result_ = "";
 	for(QSet<Edge*>::iterator it=out_edge_list_.begin(); it!=out_edge_list_.end();it++)
 	{
 		(*it)->destNode()->change();
@@ -263,6 +264,7 @@ void DataItem::setResultString(int value)
 	String s=value;
 	result_ = s.c_str();
 }
+
 
 // void DataItem::calculateForces()
 // {	

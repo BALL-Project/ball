@@ -75,7 +75,8 @@ DataItem(fs_item.view_)
 	result_ = fs_item.result_;
 	opt_after_fs_ = fs_item.opt_after_fs_;
 	quality_increase_cutoff_ = fs_item.quality_increase_cutoff_;
-
+	cor_threshold_ = fs_item.cor_threshold_;
+			
 	if (fs_item.feature_selection_ == NULL)
 	{
 		feature_selection_ = NULL;

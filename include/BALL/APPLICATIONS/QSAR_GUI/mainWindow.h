@@ -23,7 +23,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/modelConfigurationDialog.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/featureSelectionDialog.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/validationDialog.h>
-
+#include <BALL/APPLICATIONS/QSAR_GUI/partitioningItem.h>
 
 
 #include <BALL/QSAR/registry.h>
@@ -103,6 +103,7 @@ namespace BALL
 				QSet<ValidationItem*> val_pipeline_;
 				QSet<PredictionItem*> prediction_pipeline_;
 				QSet<DataItem*> disconnected_items_;
+				QSet<PartitioningItem*> partitioning_pipeline_;
 
 			signals:
 				void sendNewValue(int);

@@ -110,6 +110,8 @@ MainWindow::~MainWindow()
 	delete windowMenu_;	
 	delete fileToolBar_;
 	
+	clearDesktop();
+	
 	// save path to last used input file
 	String file = QDir::homePath().toStdString();
 	file = file+"/.QSARGUI";
@@ -700,12 +702,17 @@ void MainWindow::clearDesktop()
 	}
  	csv_input_pipeline_.clear();
 	
-	QSet<DataItem*> disconnected_items_copy = disconnected_items_;
-
-	for (QSet<DataItem*>::iterator it = disconnected_items_copy.begin(); it != disconnected_items_copy.end(); ++it)
+	for (QSet<DataItem*>::iterator it = disconnected_items_.begin(); it != disconnected_items_.end(); ++it)
 	{
 		delete *it;
 	}
+	disconnected_items_.clear();
+	
+	for (QSet<PartitioningItem*>::iterator it = partitioning_pipeline_.begin(); it != partitioning_pipeline_.end(); ++it)
+	{
+		delete *it;
+	}
+	partitioning_pipeline_.clear();
 	
 	view_scene_.update();
 }
@@ -903,6 +910,23 @@ void MainWindow::executePipeline()
 	if (!sdf_input_pipeline_.empty() || csv_input_pipeline_.empty())
 	{
 		statusBar()->showMessage(tr("All input files were read"));
+	}
+	
+	/// partition all input data sets (if desired)
+	for (QSet<PartitioningItem*>::Iterator it = partitioning_pipeline_.begin(); it != partitioning_pipeline_.end(); it++)
+	{
+		try
+		{
+			bool b=(*it)->execute();
+			if(!done) done=b;
+		}
+		catch(BALL::Exception::GeneralException e)
+		{
+			QMessageBox::warning(this,"Error",e.getMessage());
+		}
+
+		value++;
+		emit sendNewValue(value);		
 	}
 
 	///train all models and set their saved as names
