@@ -1,25 +1,13 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BALL", "BALL\BALL.vcproj", "{8D8C19CC-8741-4F1A-9F95-99A219839BE9}"
-	GlobalSection(Qt) = preSolution
-		Integration = True
-	EndGlobalSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libBALL", "libBALL\libBALL.vcproj", "{DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF}"
-	GlobalSection(Qt) = preSolution
-		Integration = True
-	EndGlobalSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libVIEW", "libVIEW\libVIEW.vcproj", "{EED415DA-D9BF-4087-85C8-FC98AACEBB9A}"
-	GlobalSection(Qt) = preSolution
-		Integration = True
-	EndGlobalSection
 EndProject
 Global
-	GlobalSection(Qt) = preSolution
-		Integration = True
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Release|Win32 = Release|Win32
@@ -40,5 +28,17 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
+	GlobalSection(Qt) = preSolution
+		Integration = True
 	EndGlobalSection
 EndGlobal
