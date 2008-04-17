@@ -35,7 +35,7 @@ CPP_SOURCES= $(FFT_SOURCES)\
 #
 # the prefix for the methods defined in the lexer
 #
-PARSER_PREFIX=parsedFunction
+PARSER_PREFIX=ParsedFunction
 
 include ../common.mak
 -include .Dependencies

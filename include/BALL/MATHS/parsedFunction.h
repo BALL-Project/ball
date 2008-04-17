@@ -20,8 +20,8 @@ namespace BALL
     /**  \addtogroup  FunctionClasses
      *  @{
      */  
-	extern StringHashMap<double*> *parsedFunctionConstants;
-	extern StringHashMap<double (*)(double)> *parsedFunctionFunctions;
+	extern StringHashMap<double*> *ParsedFunctionConstants;
+	extern StringHashMap<double (*)(double)> *ParsedFunctionFunctions;
 	
 	/** ParsedFunction.
 	 		This function type contains a double - valued function string like

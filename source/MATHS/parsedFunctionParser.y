@@ -5,10 +5,10 @@
 using namespace BALL;
 using namespace std;
 
-extern int parsedFunctionlex();
-extern void parsedFunctionerror(char* s);
+extern int ParsedFunctionlex();
+extern void ParsedFunctionerror(char* s);
 
-double parsedFunctionResult;
+double ParsedFunctionResult;
 %}
 
 %union {
@@ -34,8 +34,8 @@ input:   /* empty */
 ;
 
 line:    '\n'
-			 | exp ';' 					 { parsedFunctionResult = $1;				}
-			 | exp   '\n'        { parsedFunctionResult = $1;       }
+			 | exp ';' 					 { ParsedFunctionResult = $1;				}
+			 | exp   '\n'        { ParsedFunctionResult = $1;       }
 			 | error '\n'        { yyerrok;                         }
 ;
 
@@ -54,7 +54,7 @@ exp:     NUM               { $$ = $1;                         			        			}
 
 %%
 
-void parsedFunctionerror(char* /* s */)
+void ParsedFunctionerror(char* /* s */)
 {
 	//throw Exception::ParseError(__FILE__, 0,
 	cerr << "Parse Error!" << endl;
