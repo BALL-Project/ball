@@ -5,15 +5,15 @@
 
 #include <BALL/MATHS/parsedFunction.h>
 
-extern int parsedFunctionparse();
-extern double parsedFunctionResult;
-extern void parsedFunction_initBuffer(const char*);
-extern void parsedFunction_delBuffer();
+extern int ParsedFunctionparse();
+extern double ParsedFunctionResult;
+extern void ParsedFunction_initBuffer(const char*);
+extern void ParsedFunction_delBuffer();
 
 namespace BALL
 {
-	StringHashMap<double*> *parsedFunctionConstants;
-	StringHashMap<double(*)(double)> *parsedFunctionFunctions;
+	StringHashMap<double*> *ParsedFunctionConstants;
+	StringHashMap<double(*)(double)> *ParsedFunctionFunctions;
 
 	template <typename arg>
 	ParsedFunction<arg>::ParsedFunction()
@@ -75,13 +75,13 @@ namespace BALL
 		throw(Exception::ParseError)
 	{
 		constants_["X"] = (double) &argument;
-		parsedFunctionConstants = &constants_;
-		parsedFunctionFunctions = &functions_;
-		parsedFunction_initBuffer(expression_.c_str());
-		parsedFunctionparse();
-		parsedFunction_delBuffer();
+		ParsedFunctionConstants = &constants_;
+		ParsedFunctionFunctions = &functions_;
+		ParsedFunction_initBuffer(expression_.c_str());
+		ParsedFunctionparse();
+		ParsedFunction_delBuffer();
 		
-		return parsedFunctionResult;
+		return ParsedFunctionResult;
 	}
 
 	template <>
@@ -90,12 +90,12 @@ namespace BALL
 	{
 		double arg = argument;
 		constants_["X"] = &arg;
-		parsedFunctionConstants = &constants_;
-		parsedFunctionFunctions = &functions_;
-		parsedFunction_initBuffer(expression_.c_str());
-		parsedFunctionparse();
-		parsedFunction_delBuffer();
-		return parsedFunctionResult;
+		ParsedFunctionConstants = &constants_;
+		ParsedFunctionFunctions = &functions_;
+		ParsedFunction_initBuffer(expression_.c_str());
+		ParsedFunctionparse();
+		ParsedFunction_delBuffer();
+		return ParsedFunctionResult;
 	}
 
 

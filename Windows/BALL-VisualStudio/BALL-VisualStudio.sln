@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BALL", "BALL\BALL.vcproj", "{8D8C19CC-8741-4F1A-9F95-99A219839BE9}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libBALL", "libBALL\libBALL.vcproj", "{DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libVIEW", "libVIEW\libVIEW.vcproj", "{EED415DA-D9BF-4087-85C8-FC98AACEBB9A}"
@@ -13,10 +11,6 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8D8C19CC-8741-4F1A-9F95-99A219839BE9}.Debug|Win32.ActiveCfg = Debug|Win32
-		{8D8C19CC-8741-4F1A-9F95-99A219839BE9}.Debug|Win32.Build.0 = Debug|Win32
-		{8D8C19CC-8741-4F1A-9F95-99A219839BE9}.Release|Win32.ActiveCfg = Release|Win32
-		{8D8C19CC-8741-4F1A-9F95-99A219839BE9}.Release|Win32.Build.0 = Release|Win32
 		{DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF}.Debug|Win32.ActiveCfg = Debug|Win32
 		{DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF}.Debug|Win32.Build.0 = Debug|Win32
 		{DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF}.Release|Win32.ActiveCfg = Release|Win32

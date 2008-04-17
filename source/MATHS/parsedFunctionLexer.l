@@ -29,38 +29,38 @@ ID       {LETTER}(({LETTER}|{DIGIT})*)
 "("     {return  '(';}
 ")"     {return  ')';}
 "="     {return  '=';}
-{INT}   {parsedFunctionlval.val=atoi(yytext); return NUM;}
-{REAL}  {parsedFunctionlval.val=atof(yytext); return NUM;}
-{ID}    {if (parsedFunctionFunctions->has(yytext)) 
+{INT}   {ParsedFunctionlval.val=atoi(yytext); return NUM;}
+{REAL}  {ParsedFunctionlval.val=atof(yytext); return NUM;}
+{ID}    {if (ParsedFunctionFunctions->has(yytext)) 
 				 {
-					 double(*func)(double)=(*parsedFunctionFunctions)[yytext];
-					 parsedFunctionlval.func = func;
+					 double(*func)(double)=(*ParsedFunctionFunctions)[yytext];
+					 ParsedFunctionlval.func = func;
 					 return FNCT;
 					}
 					else
-					{ if (parsedFunctionConstants->has(yytext))
+					{ if (ParsedFunctionConstants->has(yytext))
 					  {
-							parsedFunctionlval.var = (*parsedFunctionConstants)[yytext];
+							ParsedFunctionlval.var = (*ParsedFunctionConstants)[yytext];
 							return VAR;
 						}
 						else
 						{
 							double *v = new double;
-							(*parsedFunctionConstants)[yytext] = v;
-							parsedFunctionlval.var = v;
+							(*ParsedFunctionConstants)[yytext] = v;
+							ParsedFunctionlval.var = v;
 							return VAR;
 						}
 					}
 				}
 
 %%
-YY_BUFFER_STATE parsedFunction_buffer;
-void parsedFunction_initBuffer(const char* buf)
+YY_BUFFER_STATE ParsedFunction_buffer;
+void ParsedFunction_initBuffer(const char* buf)
 {
-	parsedFunction_buffer = parsedFunction_scan_string(buf);
+	ParsedFunction_buffer = ParsedFunction_scan_string(buf);
 }
 
-void parsedFunction_delBuffer()
+void ParsedFunction_delBuffer()
 {
-	parsedFunction_delete_buffer(parsedFunction_buffer);
+	ParsedFunction_delete_buffer(ParsedFunction_buffer);
 }
