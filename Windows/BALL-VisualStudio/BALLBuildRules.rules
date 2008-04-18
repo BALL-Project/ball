@@ -7,8 +7,8 @@
 		<CustomBuildRule
 			Name="FlexGenerator"
 			DisplayName="Flex Generator"
-			CommandLine="$(SolutionDir)..\Contrib\bin\flex.exe [AllOptions] [AdditionalOptions] [Inputs]"
-			Outputs="lex.$(InputName).c"
+			CommandLine="$(SolutionDir)..\Contrib\bin\runFlex.bat [AllOptions] [AdditionalOptions] [Inputs]"
+			Outputs="$(InputDir)\$(InputName).C"
 			FileExtensions="*.l"
 			ExecutionDescription="Generating lexical analyser..."
 			>
@@ -105,79 +105,33 @@
 					DisplayName="Output File"
 					Description="The output file containing the implementation of the analyser"
 					Switch="-o[value]"
-					DefaultValue="$(InputDir)\$(InputName).C"
 				/>
 				<StringProperty
 					Name="ScannerPrefix"
 					DisplayName="Scanner Prefix"
 					Description="Specify scanner prefix other than yy"
 					Switch="-P[value]"
-					DefaultValue="$(InputName)"
 				/>
-				<EnumProperty
-					Name="TableCompression"
-					DisplayName="Table Compression"
-					PropertyPageName="Performance"
-					Description="Controls the degree of table compression and, more generally, trade-offs between small scanners and fast scanners."
-					>
-					<Values>
-						<EnumValue
-							Value="0"
-							Switch="-Cem"
-							DisplayName="Equivalence classes and meta-equivalence classes (slowest &amp; smallest)"
-						/>
-						<EnumValue
-							Value="1"
-							Switch="-Cm"
-							DisplayName="Meta-equivalence classes"
-						/>
-						<EnumValue
-							Value="2"
-							Switch="-Ce"
-							DisplayName="Equivalence classes"
-						/>
-						<EnumValue
-							Value="3"
-							Switch="-C"
-							DisplayName="Compress scanner tables"
-						/>
-						<EnumValue
-							Value="4"
-							Switch="-Cfe"
-							DisplayName="Full scanner tables and equivalence classes"
-						/>
-						<EnumValue
-							Value="5"
-							Switch="-CFe"
-							DisplayName="Alternate fast scanner representation and equivalence classes"
-						/>
-						<EnumValue
-							Value="6"
-							Switch="-Cf"
-							DisplayName="Full scanner tables"
-						/>
-						<EnumValue
-							Value="7"
-							Switch="-CF"
-							DisplayName="Alternate fast scanner representation"
-						/>
-						<EnumValue
-							Value="8"
-							Switch="-Cfa"
-							DisplayName="Align data in full scanner tables (fastest &amp; largest)"
-						/>
-						<EnumValue
-							Value="9"
-							Switch="-CFa"
-							DisplayName="Align data in the alternate fast scanner representation (fastest &amp; largest)"
-						/>
-					</Values>
-				</EnumProperty>
 				<StringProperty
 					Name="SkeletonFile"
 					DisplayName="Use custom skeleton"
 					Description="Overrides the default skeleton file from which flex constructs its scanners"
 					Switch="-S[value]"
+				/>
+				<StringProperty
+					Name="InputName"
+					DisplayName="InputName"
+					Description="Pass parser name to bison"
+					Switch="[value]"
+					DefaultValue="$(InputName)"
+				/>
+				<StringProperty
+					Name="InputDir"
+					DisplayName="InputDir"
+					Description="InputDir"
+					HelpFile="Path for the generated files"
+					Switch="[value]"
+					DefaultValue="$(InputDir)"
 				/>
 			</Properties>
 		</CustomBuildRule>

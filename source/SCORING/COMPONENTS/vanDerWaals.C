@@ -537,7 +537,7 @@ type_atom2);
 	// ??? There seems to be something wrong with this switching function.
 
   // BALL_TPL_ARG_INLINE float cubicSwitch(double square_distance,
-  float cubicSwitch(double square_distance,
+  /*float cubicSwitch(double square_distance,
 			const SwitchingCutOnOff& cutoffs)
   {
     float below_off = ((square_distance < cutoffs.cutoff_2) ? 1.0 : 0.0);
@@ -547,7 +547,7 @@ type_atom2);
 				* (cutoffs.cutoff_2 + 2.0 * square_distance - 3.0 * cutoffs.cuton_2)
 				* cutoffs.inverse_distance_off_on_3);
 	}
-
+*/
 
   float noSwitch(double /* square_distance */,
 			const SwitchingCutOnOff& /* cutoffs */)

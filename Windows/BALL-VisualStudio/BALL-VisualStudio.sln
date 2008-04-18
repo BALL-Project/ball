@@ -5,6 +5,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libBALL", "libBALL\libBALL.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libVIEW", "libVIEW\libVIEW.vcproj", "{EED415DA-D9BF-4087-85C8-FC98AACEBB9A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TEST", "TEST\TEST.vcproj", "{BE13AEBE-08B2-4F3E-AF31-5CAA6848DEDA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TEST_ClassTest", "TEST_ClassTest\TEST_ClassTest.vcproj", "{05307BF4-E0A3-4EC3-BDB2-BFC139BDF1EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +23,14 @@ Global
 		{EED415DA-D9BF-4087-85C8-FC98AACEBB9A}.Debug|Win32.Build.0 = Debug|Win32
 		{EED415DA-D9BF-4087-85C8-FC98AACEBB9A}.Release|Win32.ActiveCfg = Release|Win32
 		{EED415DA-D9BF-4087-85C8-FC98AACEBB9A}.Release|Win32.Build.0 = Release|Win32
+		{BE13AEBE-08B2-4F3E-AF31-5CAA6848DEDA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BE13AEBE-08B2-4F3E-AF31-5CAA6848DEDA}.Debug|Win32.Build.0 = Debug|Win32
+		{BE13AEBE-08B2-4F3E-AF31-5CAA6848DEDA}.Release|Win32.ActiveCfg = Release|Win32
+		{BE13AEBE-08B2-4F3E-AF31-5CAA6848DEDA}.Release|Win32.Build.0 = Release|Win32
+		{05307BF4-E0A3-4EC3-BDB2-BFC139BDF1EB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{05307BF4-E0A3-4EC3-BDB2-BFC139BDF1EB}.Debug|Win32.Build.0 = Debug|Win32
+		{05307BF4-E0A3-4EC3-BDB2-BFC139BDF1EB}.Release|Win32.ActiveCfg = Release|Win32
+		{05307BF4-E0A3-4EC3-BDB2-BFC139BDF1EB}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
