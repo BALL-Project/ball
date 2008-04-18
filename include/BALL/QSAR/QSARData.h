@@ -190,7 +190,9 @@ namespace BALL
 				If such values are found, an Exception of type InvalidActivityID is thrown. */
 				void checkActivityIDs(SortedList<int>& act, int no_properties);
 				
-				void insertSubstance(QSARData* source, int s);
+				/** appends compound no <s> taken from the given source to the data of this object.
+				@param backtransformation if set to true, all features of the compound are back-transformed after adding them to this object. */
+				void insertSubstance(const QSARData* source, int s, bool backtransformation=0);
 				
 				/** prints a vector-based matrix to a file */
 				void printMatrix(VMatrix& mat, ostream& out);

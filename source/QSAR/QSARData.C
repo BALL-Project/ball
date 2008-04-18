@@ -1012,8 +1012,8 @@ vector<QSARData*> QSARData::partitionInputData(int p)
 	{
 		v[i] = new QSARData;
 		v[i]->column_names_ = column_names_;
-		v[i]->descriptor_transformations_ = descriptor_transformations_;
-		v[i]->y_transformations_ = y_transformations_;
+		v[i]->descriptor_transformations_.clear();
+		v[i]->y_transformations_.clear();
 		v[i]->descriptor_matrix_.resize(descriptor_matrix_.size());
 		v[i]->Y_.resize(Y_.size());
 	}
@@ -1021,7 +1021,7 @@ vector<QSARData*> QSARData::partitionInputData(int p)
 	for(unsigned int i=0; i<descriptor_matrix_[0].size();i++)
 	{
 		//insert substance i into the (i%p)'th QSARData object
-		v[i%p]->insertSubstance(this, i);
+		v[i%p]->insertSubstance(this, i,1);  // features are backtransformated to original space
 	}	
 	
 	return v;	
@@ -1034,13 +1034,13 @@ vector<QSARData*> QSARData::generateExternalSet(double fraction)
 	v[0] = new QSARData;  // training set 
 	v[1] = new QSARData;  // external validation set
 	
-	v[0]->descriptor_transformations_ = descriptor_transformations_;
-	v[0]->y_transformations_ = y_transformations_;
+	v[0]->descriptor_transformations_.clear();
+	v[0]->y_transformations_.clear();
 	v[0]->column_names_ = column_names_;
 	v[0]->descriptor_matrix_.resize(descriptor_matrix_.size());
 	v[0]->Y_.resize(Y_.size());
-	v[1]->descriptor_transformations_ = descriptor_transformations_;
-	v[1]->y_transformations_ = y_transformations_;
+	v[1]->descriptor_transformations_.clear();
+	v[1]->y_transformations_.clear();
 	v[1]->column_names_ = column_names_;
 	v[1]->descriptor_matrix_.resize(descriptor_matrix_.size());
 	v[1]->Y_.resize(Y_.size());
@@ -1063,7 +1063,7 @@ vector<QSARData*> QSARData::generateExternalSet(double fraction)
 			i--; // no increase, since no new validation compound was selected
 			continue;
 		}
-		v[1]->insertSubstance(this,pos);
+		v[1]->insertSubstance(this,pos,1); // features are backtransformated to original space
 		val.insert(pos);
 		map_val.insert(pos);
 	}
@@ -1074,7 +1074,7 @@ vector<QSARData*> QSARData::generateExternalSet(double fraction)
 	{
 		if(*it!=i)
 		{
-			v[0]->insertSubstance(this,i);
+			v[0]->insertSubstance(this,i,1);  // features are backtransformated to original space
 		}
 		else
 		{
@@ -1086,17 +1086,37 @@ vector<QSARData*> QSARData::generateExternalSet(double fraction)
 }
 
 
-void QSARData::insertSubstance(QSARData* source, int s)
+void QSARData::insertSubstance(const QSARData* source, int s, bool backtransformation)
 {
 	substance_names_.push_back(source->substance_names_[s]);
+	
+	bool backtransf_descr=0;
+	bool backtransf_y=0;
+	if(backtransformation)
+	{
+		if(source->descriptor_transformations_.size()>0) backtransf_descr=1;
+		if(source->y_transformations_.size()>0) backtransf_y=1;
+	}
  	
 	for(unsigned int i=0; i<source->descriptor_matrix_.size();i++)
 	{ 
-		descriptor_matrix_[i].push_back(source->descriptor_matrix_[i][s]);
+		double value = source->descriptor_matrix_[i][s];
+		if(backtransf_descr)
+		{
+			// value = (value*stddev)+mean
+			value = (value*source->descriptor_transformations_[i][1])+source->descriptor_transformations_[i][0];
+		}
+		descriptor_matrix_[i].push_back(value);
 	}
 	
 	for(unsigned int j=0; j<source->Y_.size();j++)
 	{
+		double value = source->Y_[j][s];
+		if(backtransf_y)
+		{
+			// value = (value*stddev)+mean
+			value = (value*source->y_transformations_[j][1])+source->y_transformations_[j][0];
+		}
 		Y_[j].push_back(source->Y_[j][s]);
 	}
 }
