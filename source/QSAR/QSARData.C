@@ -1117,7 +1117,7 @@ void QSARData::insertSubstance(const QSARData* source, int s, bool backtransform
 			// value = (value*stddev)+mean
 			value = (value*source->y_transformations_[j][1])+source->y_transformations_[j][0];
 		}
-		Y_[j].push_back(source->Y_[j][s]);
+		Y_[j].push_back(value);
 	}
 }
 
