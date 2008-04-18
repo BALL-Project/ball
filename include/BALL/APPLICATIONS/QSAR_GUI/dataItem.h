@@ -186,6 +186,8 @@ namespace BALL
 		
 			/** @name Private Attributes*/
 			QPointF newPos_;
+			
+			friend class InputPartitionItem;
 		};
 	}
 }

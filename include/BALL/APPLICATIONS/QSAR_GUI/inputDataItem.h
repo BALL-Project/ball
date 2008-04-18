@@ -80,7 +80,12 @@ namespace BALL
 				/** do all response variables contain only discrete values? */
 				bool discrete_y_;
 				
+				/** the number of InputPartitionItem that have been created from this object */
+				int no_partitions_;
+				
 				InputPlotter* input_plotter_;
+				
+				friend class InputPartitionItem;
 		};
 	}
 }	

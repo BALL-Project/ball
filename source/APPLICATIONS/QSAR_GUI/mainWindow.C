@@ -776,6 +776,20 @@ void MainWindow::saveItemsToFiles(String directory)
 			String file = directory+f1;
 			data->saveToFile(file);
 		}
+		for (QSet<InputPartitionItem*>::Iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end(); it++)
+		{
+			// if input has not been read, there is nothing to be saved
+			if(!(*it)->isDone() || (*it)->append()) continue;
+			
+			QSARData* data= (*it)->data();
+			String f1 = (*it)->savedAs().toStdString();
+			if(f1=="")
+			{
+				throw GeneralException(__FILE__,__LINE__,"<Input-partition saving error ", "Item must be assigned a file to be saved to!");
+			}
+			String file = directory+f1;
+			data->saveToFile(file);
+		}
 		for (QSet<ModelItem*>::Iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
 		{
 			// if model has not yet been trained, there is nothing to be saved
@@ -1233,6 +1247,13 @@ void MainWindow::exportPipeline(QString filename)
 		emit sendNewValue(value);
 	}
 
+	///InputPartitionItems
+	for (QSet<InputPartitionItem*>::Iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end(); it++)
+	{
+		InputPartitionItem* item = (*it);
+		positions<<item->x()<<"  "<<item->y()<<endl;
+	}
+	
 	///Model Items
 	counter=0;
 	for (QSet<ModelItem*>::Iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++,counter++)

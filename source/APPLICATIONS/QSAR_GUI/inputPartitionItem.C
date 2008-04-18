@@ -8,11 +8,40 @@ using namespace BALL::VIEW;
 
 
 
-InputPartitionItem::InputPartitionItem(bool test_partition, DataItemView* view)
+InputPartitionItem::InputPartitionItem(bool test_partition, InputDataItem* input_item)
 {
 	test_partition_ = test_partition;
-	view_ = view;
+	view_ = input_item->view_;
+	partition_ID_ = input_item->no_partitions_;
+	
+	if(test_partition) input_item->no_partitions_++;
+	
+	String name = input_item->name().toStdString();
+	uint index = name.find_last_of("/");
+	if(index!=string::npos)
+	{
+		name=name.substr(index);
+	}
+	index = name.find_first_of(".");
+	if(index!=string::npos)
+	{
+		name=name.substr(0,index);
+	}
+	name_ = name.c_str();
+	
+	if(test_partition) name+="_TEST";
+	else name+="_TRAIN";
+	name += String(partition_ID_)+".dat";
+	
+	saved_as_ = name.c_str();
+	cout<<"saved_as_ = "<<saved_as_.toStdString()<<endl;
 	//TODO: set pixmap depending on whether test_partition_==1 or not...
+}
+
+
+InputPartitionItem::~InputPartitionItem()
+{
+	removeFromPipeline();
 }
 
 
@@ -40,6 +69,18 @@ bool InputPartitionItem::checkForDiscreteY()
 	
 	checked_for_discrete_y_ = 1;
 	return discrete_y_;
+}
+
+
+void InputPartitionItem::removeFromPipeline()
+{
+	view_->data_scene->main_window->partition_pipeline_.remove(this);	
+}
+
+
+void InputPartitionItem::addToPipeline()
+{
+	view_->data_scene->main_window->partition_pipeline_.insert(this);	
 }
 
 

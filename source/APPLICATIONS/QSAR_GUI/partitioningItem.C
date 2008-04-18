@@ -49,7 +49,12 @@ bool PartitioningItem::execute()
 				InputPartitionItem* part=(InputPartitionItem*)((*it)->destNode());
 				part->setData(sets[a]);
 				cout<<"size="<<sets[a]->getNoSubstances()<<"  #features="<<sets[a]->getNoDescriptors()<<endl;
+				
+				// all children of the InputPartitionItems must be executed again,
+				// but InputPartitionItems themselves are already done (data has been loaded!)
 				part->change();
+				part->setDone(1);
+				
 				a++;
 			}
 // 			else

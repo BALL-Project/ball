@@ -293,7 +293,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				pos = model_item_at_pos->pos();
 				addItem(item);
 				item->setPos(pos + getOffset(pos,item));
-				//createExternalValPipeline(model_item_at_pos,2);
+				createExternalValPipeline(model_item_at_pos,2);
 				Edge* edge = new Edge(model_item_at_pos, item);
 				addItem(edge);
 				item->addToPipeline();
@@ -465,14 +465,16 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, uint folds)
 	
 	for(uint i=0;i<folds;i++)
 	{
-		InputPartitionItem* train_part = new InputPartitionItem(0,view); // trainings-partition of fold i
+		InputPartitionItem* train_part = new InputPartitionItem(0,data_item); // trainings-partition of fold i
 		Edge* e0 = new Edge(partitioner,train_part);
 		addItem(e0);
-		addItem(train_part);	
-		InputPartitionItem* test_part = new InputPartitionItem(1,view); // test-partition of fold i
+		addItem(train_part);
+		train_part->addToPipeline();
+		InputPartitionItem* test_part = new InputPartitionItem(1,data_item); // test-partition of fold i
 		Edge* e1 = new Edge(partitioner,test_part);
 		addItem(e1);
 		addItem(test_part);
+		test_part->addToPipeline();
 		
 		DataItem* source_item = train_part;
 		ModelItem* input_model=0;

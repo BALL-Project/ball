@@ -24,6 +24,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/featureSelectionDialog.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/validationDialog.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/partitioningItem.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/inputPartitionItem.h>
 
 
 #include <BALL/QSAR/registry.h>
@@ -104,6 +105,7 @@ namespace BALL
 				QSet<PredictionItem*> prediction_pipeline_;
 				QSet<DataItem*> disconnected_items_;
 				QSet<PartitioningItem*> partitioning_pipeline_;
+				QSet<InputPartitionItem*> partition_pipeline_;
 
 			signals:
 				void sendNewValue(int);

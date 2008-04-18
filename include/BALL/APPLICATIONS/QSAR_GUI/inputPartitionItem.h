@@ -13,14 +13,19 @@ namespace BALL
 			public:
 					
 				/** creates an InputPartitionItem from a given InputDataItem */
-				InputPartitionItem(bool test_partition, DataItemView* view);
+				InputPartitionItem(bool test_partition, InputDataItem* input_item);
+				
+				~InputPartitionItem();
 				
 				
 				/** (until now) InputPartitionItems just store&visualize partitions of the input data, they do not do anything themselves! */
 				bool execute() {return 0;};
-				void removeFromPipeline() {};
-				void addToPipeline() {};
+				
+				
+				void removeFromPipeline();
+				void addToPipeline();
 			
+				bool isTestPartition() {return test_partition_;}
 				
 				bool checkForDiscreteY();
 				
@@ -31,6 +36,9 @@ namespace BALL
 				/** is this partition a test-partition?!\n
 				(If false, it is used for training) */
 				bool test_partition_;
+				
+				/** the ID of this partition; starting at 0 for the first partition that was generated from a specific InputDataItem. */
+				int partition_ID_;
 				
 				void mousePressEvent(QGraphicsSceneMouseEvent *event);
 		
