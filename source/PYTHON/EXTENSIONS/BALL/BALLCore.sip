@@ -281,6 +281,7 @@
 %Include connectedComponentsProcessor.sip
 %Include defaultProcessors.sip
 %Include fragmentDB.sip
+%Include HBondProcessor.sip
 %Include reconstructFragmentProcessor.sip
 %Include geometricProperties.sip
 %Include geometricTransformations.sip

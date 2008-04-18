@@ -328,7 +328,52 @@ namespace BALL
 					std::ostream& operator >> (std::ostream& s);
 			};
 	
-						//@}
+			/** Mapping class between BALL atoms and NMR-Star-File atom entries.
+			 *  
+			 *  The main reason for the existence of this class (instead of maps to pairs of Strings)
+			 *  is the python interface, which is greatly simplified.
+			 */
+			class BALLToBMRBMapping
+			{
+				public:
+					class BMRBIndex
+					{
+						public:
+							BMRBIndex() {}
+
+							BMRBIndex(const String& rid, const String an)
+								: residue_id(rid),
+								  atom_name(an)
+							{ }
+
+							// TODO: we should move the argument of the BALLTo...Mapping to Position instead of String
+							String residue_id;
+							String residue_name;
+							String atom_name;
+					};
+
+					bool hasAtom(Atom* atom)
+					{
+						return (ball_to_bmrb_map_.find(atom) != ball_to_bmrb_map_.end());
+					}
+
+					BMRBIndex& operator() (Atom* atom)
+					{
+						return ball_to_bmrb_map_[atom];
+					}
+
+					void mapTo(Atom* atom, const String& residue_id, const String& atom_name)
+					{
+						BMRBIndex bindex(residue_id, atom_name);
+
+						ball_to_bmrb_map_[atom] = bindex;
+					}
+
+				protected:
+					std::map<Atom*, BMRBIndex> ball_to_bmrb_map_;
+			};
+			
+			//@}
 			/**	@name	Constructors and Destructors
 			*/
 			//@{
@@ -351,10 +396,18 @@ namespace BALL
 			*/
 			const NMRStarFile& operator = (const NMRStarFile& f);
 			
-			/** Read a NMRStarFile.
+			/** Read an NMRStarFile.
 			 */
 			bool read()
 				throw(Exception::ParseError);
+
+			/** Read an NMRStarFile into an AtomContainer using a standard mapping.
+			 */
+			bool read(AtomContainer& ac);
+
+			/** Read an NMRStarFile into an AtomContainer as denoted in the given mapping.
+			 */
+			bool read(AtomContainer& ac, BALLToBMRBMapping& pdb_to_bmrb_mapping);
 
 			/** Clear the object.
 			*/
@@ -523,6 +576,13 @@ namespace BALL
 
 			/// check whether the given String denotes a non-available value
 			bool valueIsValid(String value);
+			
+			/** Apply the shifts read into the AtomContainer as denoted in the mapping.
+			 * 	We assume, that the file was already read!
+			 * 	The shifts are stored as a property under the key 
+			 * 	{\b BALL::ShiftModule::PROPERTY__EXPERIMENTAL__SHIFT}
+			 */
+			bool assignShifts_(AtomContainer& ac, BALLToBMRBMapping& pdb_to_bmrb_mapping);
 
 			//_@}
 			/*_	@name	NMR-Star specific attributes
@@ -559,16 +619,21 @@ namespace BALL
 			StringHashMap< Index> monomeric_polymer_indices_; 
 			vector<MonomericPolymer> monomeric_polymers_; 
 			/// name of the molecular system
-		
 			//	String system_name_;  // TODO wo kommt der her?
 
+			//a map, that stores all bmrb shifts as a pair of (residue_seq_code, atomname) 
+			std::map< std::pair<String, String>, float> bmrb_to_shifts_mapping_;
+		
 			// a dummy saveframe
 			SaveFrame dummy_saveframe_; 
-			
+		
+			// a dummy sample condition
 			SampleCondition dummy_sample_condition_;
 			
+			// a dummy sample
 			Sample dummy_sample_;
 
+			// a dummy shift reference set
 			ShiftReferenceSet dummy_shift_reference_set_; 
 			
 			/// characters, that denote non-available values

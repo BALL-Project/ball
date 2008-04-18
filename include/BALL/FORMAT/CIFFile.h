@@ -19,7 +19,7 @@
 #	include <BALL/KERNEL/molecule.h>
 #endif
 
-#include <multimap.h>
+#include <map>
 
 #define CIFPARSER_LINE_LENGTH 2550
 
