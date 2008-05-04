@@ -32,13 +32,16 @@
 				Name="VCPreBuildEventTool"
 			/>
 			<Tool
-				Name="FlexGenerator"
+				Name="BisonParser"
+			/>
+			<Tool
+				Name="SipGenerator"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
 			/>
 			<Tool
-				Name="BisonParser"
+				Name="FlexGenerator"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -115,13 +118,16 @@
 				Name="VCPreBuildEventTool"
 			/>
 			<Tool
-				Name="FlexGenerator"
+				Name="BisonParser"
+			/>
+			<Tool
+				Name="SipGenerator"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
 			/>
 			<Tool
-				Name="BisonParser"
+				Name="FlexGenerator"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
