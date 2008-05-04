@@ -54,7 +54,7 @@
 				AdditionalOptions="/D BALL_BUILD_DLL&#x0D;&#x0A;"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\include&quot;;&quot;$(SolutionDir)..\include&quot;;&quot;$(SolutionDir)..\Contrib\include&quot;;&quot;$(QTDIR)\include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG"
+				PreprocessorDefinitions="WIN32;_DEBUG;BALL_BUILD_DLL"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
