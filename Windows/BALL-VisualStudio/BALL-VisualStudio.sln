@@ -3,7 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libBALL", "libBALL\libBALL.vcproj", "{DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libVIEW", "libVIEW\libVIEW.vcproj", "{EED415DA-D9BF-4087-85C8-FC98AACEBB9A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libVIEW", "libVIEW\libVIEW.vcproj", "{05821317-82B2-4E5E-9624-2D40FEA7E1A6}"
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TEST", "TEST\TEST.vcproj", "{BE13AEBE-08B2-4F3E-AF31-5CAA6848DEDA}"
 EndProject
@@ -19,10 +22,10 @@ Global
 		{DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF}.Debug|Win32.Build.0 = Debug|Win32
 		{DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF}.Release|Win32.ActiveCfg = Release|Win32
 		{DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF}.Release|Win32.Build.0 = Release|Win32
-		{EED415DA-D9BF-4087-85C8-FC98AACEBB9A}.Debug|Win32.ActiveCfg = Debug|Win32
-		{EED415DA-D9BF-4087-85C8-FC98AACEBB9A}.Debug|Win32.Build.0 = Debug|Win32
-		{EED415DA-D9BF-4087-85C8-FC98AACEBB9A}.Release|Win32.ActiveCfg = Release|Win32
-		{EED415DA-D9BF-4087-85C8-FC98AACEBB9A}.Release|Win32.Build.0 = Release|Win32
+		{05821317-82B2-4E5E-9624-2D40FEA7E1A6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{05821317-82B2-4E5E-9624-2D40FEA7E1A6}.Debug|Win32.Build.0 = Debug|Win32
+		{05821317-82B2-4E5E-9624-2D40FEA7E1A6}.Release|Win32.ActiveCfg = Release|Win32
+		{05821317-82B2-4E5E-9624-2D40FEA7E1A6}.Release|Win32.Build.0 = Release|Win32
 		{BE13AEBE-08B2-4F3E-AF31-5CAA6848DEDA}.Debug|Win32.ActiveCfg = Debug|Win32
 		{BE13AEBE-08B2-4F3E-AF31-5CAA6848DEDA}.Debug|Win32.Build.0 = Debug|Win32
 		{BE13AEBE-08B2-4F3E-AF31-5CAA6848DEDA}.Release|Win32.ActiveCfg = Release|Win32
@@ -34,17 +37,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(Qt) = preSolution
-		Integration = True
-	EndGlobalSection
-	GlobalSection(Qt) = preSolution
-		Integration = True
-	EndGlobalSection
-	GlobalSection(Qt) = preSolution
-		Integration = True
-	EndGlobalSection
-	GlobalSection(Qt) = preSolution
-		Integration = True
 	EndGlobalSection
 EndGlobal
