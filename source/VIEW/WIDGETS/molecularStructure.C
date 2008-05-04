@@ -1239,7 +1239,7 @@ namespace BALL
 					Directory d;
 					// use an absolute filename
 					String name = d.getPath() + FileSystem::PATH_SEPARATOR + md_dialog_.getDCDFile();
-					dcd = new DCDFile(name, File::IN);
+					dcd = new DCDFile(name, File::MODE_IN);
 
 					NewTrajectoryMessage* message = new NewTrajectoryMessage;
 					message->setComposite(*system);
