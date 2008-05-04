@@ -203,5 +203,16 @@
 				/>
 			</Properties>
 		</CustomBuildRule>
+		<CustomBuildRule
+			Name="SipGenerator"
+			DisplayName="SipGenerator"
+			CommandLine="$(SolutionDir)\..\Contrib\bin\sip.exe -e -s &quot;.C&quot; -b BALL.sbf"
+			Outputs="$(InputDir)\$(InputName).C"
+			FileExtensions="*.sip"
+			ExecutionDescription="Generating python bindings..."
+			>
+			<Properties>
+			</Properties>
+		</CustomBuildRule>
 	</Rules>
 </VisualStudioToolFile>
