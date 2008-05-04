@@ -5,6 +5,10 @@
 #ifndef BALL_VIEW_DIALOGS_DOCKPROGRESSDIALOG_H
 #define BALL_VIEW_DIALOGS_DOCKPROGRESSDIALOG_H
 
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
 #ifndef BALL_DATATYPE_OPTIONS_H
 # include <BALL/DATATYPE/options.h>
 #endif

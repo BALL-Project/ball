@@ -7,6 +7,10 @@
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
 
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 # include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif

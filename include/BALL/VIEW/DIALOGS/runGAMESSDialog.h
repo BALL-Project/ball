@@ -7,6 +7,10 @@
 #ifndef BALL_VIEW_DIALOGS_RUNGAMESSDIALOG_H
 #define BALL_VIEW_DIALOGS_RUNGAMESSDIALOG_H
 
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
 #ifndef BALL_SYSTEM_PATH_H
 # include <BALL/SYSTEM/path.h>
 #endif
