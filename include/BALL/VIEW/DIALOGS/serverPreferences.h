@@ -7,6 +7,10 @@
 #ifndef BALL_VIEW_DIALOGS_SERVERPREFERENCES_H
 #define BALL_VIEW_DIALOGS_SERVERPREFERENCES_H
 
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
 #include <QtGui/qwidget.h>
 #include <QtGui/qcheckbox.h>
 #include <QtGui/qlineedit.h>

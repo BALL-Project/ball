@@ -6,6 +6,10 @@
 #ifndef BALL_VIEW_DIALOGS_LABELDIALOG_H
 #define BALL_VIEW_DIALOGS_LABELDIALOG_H
 
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
 #ifndef BALL_FORMAT_INIFILE_H
 #	include <BALL/FORMAT/INIFile.h>
 #endif

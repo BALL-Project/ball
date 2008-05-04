@@ -6,6 +6,10 @@
 #ifndef BALL_VIEW_DIALOGS_OPENBRUKER2DFILE_H
 #define BALL_VIEW_DIALOGS_OPENBRUKER2DFILE_H
 
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
 #endif

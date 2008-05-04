@@ -7,6 +7,10 @@
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
 #define BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
 
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
 #ifdef BALL_COMPILER_MSVC
 # include <ui_downloadPDBFile.h>
 #else

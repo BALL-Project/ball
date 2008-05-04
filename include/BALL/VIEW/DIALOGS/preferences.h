@@ -7,6 +7,10 @@
 #ifndef BALL_VIEW_DIALOGS_PREFERENCES_H
 #define BALL_VIEW_DIALOGS_PREFERENCES_H
 
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
 #include <BALL/DATATYPE/string.h>
 #ifdef BALL_COMPILER_MSVC
 # include <ui_preferences.h>
