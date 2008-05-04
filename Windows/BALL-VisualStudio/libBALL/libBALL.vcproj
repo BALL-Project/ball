@@ -53,7 +53,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D BALL_BUILD_DLL&#x0D;&#x0A;"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\include&quot;;&quot;$(SolutionDir)..\include&quot;;&quot;$(SolutionDir)..\Contrib\include&quot;;&quot;$(QTDIR)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\include&quot;;&quot;$(SolutionDir)..\include&quot;;&quot;$(SolutionDir)..\Contrib\include&quot;;&quot;$(SolutionDir)\..\contrib\include\Python&quot;;&quot;$(QTDIR)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;BALL_BUILD_DLL"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -4149,6 +4149,22 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\SYSTEM\timer.C"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+			</Filter>
+			<Filter
+				Name="PYTHON"
+				>
+				<File
+					RelativePath="..\..\..\source\PYTHON\pyInterpreter.C"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
