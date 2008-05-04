@@ -73,7 +73,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="regex.obj oncrpc.lib QtSql4.lib QtCore4.lib WSock32.lib gsl.lib libfftw3f-3.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)..\Contrib\bin&quot;;&quot;$(QTDIR)\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)..\Contrib\bin&quot;;&quot;$(SolutionDir)\..\Contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				RandomizedBaseAddress="1"
