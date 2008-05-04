@@ -6,7 +6,12 @@
 #ifndef BALL_VIEW_DIALOGS_ATOMOVERVIEW_H
 #define BALL_VIEW_DIALOGS_ATOMOVERVIEW_H
 
-#include <BALL/VIEW/UIC/atomOverviewData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_atomOverview.h>
+#else
+# include <BALL/VIEW/UIC/atomOverviewData.h>
+#endif
+
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>

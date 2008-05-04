@@ -18,7 +18,12 @@
 # include <BALL/VIEW/WIDGETS/SDWidget.h>
 #endif
 
-#include <BALL/VIEW/UIC/pubchemDialogData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_pubchemDialog.h>
+#else
+# include <BALL/VIEW/UIC/pubchemDialogData.h>
+#endif
+
 #include <QtGui/qdialog.h>
 #include <map>
 

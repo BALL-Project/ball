@@ -4,7 +4,12 @@
 #ifndef BALL_VIEW_DIALOGS_CONTOURSURFACEDIALOG_H
 #define BALL_VIEW_DIALOGS_CONTOURSURFACEDIALOG_H
 
-#include <BALL/VIEW/UIC/contourSurfaceDialogData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_contourSurfaceDialog.h>
+#else
+# include <BALL/VIEW/UIC/contourSurfaceDialogData.h>
+#endif
+
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
  #include <BALL/VIEW/DATATYPE/colorRGBA.h>

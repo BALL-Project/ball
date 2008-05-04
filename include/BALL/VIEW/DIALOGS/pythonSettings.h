@@ -4,7 +4,12 @@
 #ifndef BALL_VIEW_DIALOGS_PYTHONSETTINGS_H
 #define BALL_VIEW_DIALOGS_PYTHONSETTINGS_H
 
-#include <BALL/VIEW/UIC/pythonSettingsData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_pythonSettings.h>
+#else
+# include <BALL/VIEW/UIC/pythonSettingsData.h>
+#endif
+
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>

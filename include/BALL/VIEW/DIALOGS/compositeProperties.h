@@ -7,7 +7,12 @@
 #ifndef BALL_VIEW_DIALOGS_COMPOSITEPROPERTIES_H
 #define BALL_VIEW_DIALOGS_COMPOSITEPROPERTIES_H
 
-#include <BALL/VIEW/UIC/compositePropertiesData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_compositeProperties.h>
+#else
+# include <BALL/VIEW/UIC/compositePropertiesData.h>
+#endif
+
 
 #ifndef BALL_CONCEPT_COMPOSITE
 # include <BALL/CONCEPT/composite.h>

@@ -6,7 +6,12 @@
 #ifndef BALL_VIEW_DIALOGS_LABELDIALOG_H
 #define BALL_VIEW_DIALOGS_LABELDIALOG_H
 
-#include <BALL/VIEW/UIC/fieldLinesDialogData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_fieldLinesDialog.h>
+#else
+# include <BALL/VIEW/UIC/fieldLinesDialogData.h>
+#endif
+
 
 #ifndef BALL_COMMON_GLOBAL_H
 # include <BALL/COMMON/global.h>

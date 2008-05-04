@@ -19,7 +19,12 @@
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
-#include <BALL/VIEW/UIC/displayPropertiesData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_displayProperties.h>
+#else
+# include <BALL/VIEW/UIC/displayPropertiesData.h>
+#endif
+
 
 namespace BALL
 {

@@ -13,7 +13,12 @@
 #include <BALL/DATATYPE/options.h>
 #endif
 
-#include <BALL/VIEW/UIC/geometricFitDialogData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_geometricFitDialog.h>
+#else
+# include <BALL/VIEW/UIC/geometricFitDialogData.h>
+#endif
+
 
 namespace BALL
 {

@@ -7,7 +7,12 @@
 #ifndef BALL_VIEW_DIALOGS_CHARMMCONFIGURATIONDIALOG_H
 #define BALL_VIEW_DIALOGS_CHARMMCONFIGURATIONDIALOG_H
 
-#include <BALL/VIEW/UIC/charmmConfigurationDialogData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_charmmConfigurationDialog.h>
+#else
+# include <BALL/VIEW/UIC/charmmConfigurationDialogData.h>
+#endif
+
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>

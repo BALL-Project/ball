@@ -25,7 +25,12 @@
 # include <BALL/DATATYPE/options.h>
 #endif
 
-#include <BALL/VIEW/UIC/dockDialogData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_dockDialog.h>
+#else
+# include <BALL/VIEW/UIC/dockDialogData.h>
+#endif
+
 
 namespace BALL
 {

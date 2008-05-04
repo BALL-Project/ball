@@ -19,7 +19,12 @@
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
-#include <BALL/VIEW/UIC/modelSettingsDialogData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_modelSettingsDialog.h>
+#else
+# include <BALL/VIEW/UIC/modelSettingsDialogData.h>
+#endif
+
 
 #include <QtGui/qcheckbox.h>
 #include <QtGui/QLabel>

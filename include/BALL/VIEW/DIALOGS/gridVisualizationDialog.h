@@ -7,7 +7,12 @@
 #ifndef BALL_VIEW_DIALOGS_GRIDVISUALIZATIONDIALOG_H
 #define BALL_VIEW_DIALOGS_GRIDVISUALIZATIONDIALOG_H
 
-#include <BALL/VIEW/UIC/gridVisualizationDialogData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_gridVisualizationDialog.h>
+#else
+# include <BALL/VIEW/UIC/gridVisualizationDialogData.h>
+#endif
+
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>

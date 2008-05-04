@@ -15,7 +15,12 @@
 # include <BALL/VIEW/KERNEL/clippingPlane.h>
 #endif
 
-#include <BALL/VIEW/UIC/setClippingPlaneData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_setClippingPlane.h>
+#else
+# include <BALL/VIEW/UIC/setClippingPlaneData.h>
+#endif
+
 #include <QtGui/QDialog>
 
 namespace BALL

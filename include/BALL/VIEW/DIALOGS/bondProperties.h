@@ -4,7 +4,12 @@
 #ifndef BALL_VIEW_DIALOGS_BONDPROPERTIES_H
 #define BALL_VIEW_DIALOGS_BONDPROPERTIES_H
 
-#include <BALL/VIEW/UIC/bondPropertiesData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_bondProperties.h>
+#else
+# include <BALL/VIEW/UIC/bondPropertiesData.h>
+#endif
+
 
 #ifndef BALL_KERNEL_ATOM_H
 # include <BALL/KERNEL/atom.h>

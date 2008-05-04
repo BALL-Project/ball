@@ -11,7 +11,12 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#include <BALL/VIEW/UIC/setCameraData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_setCamera.h>
+#else
+# include <BALL/VIEW/UIC/setCameraData.h>
+#endif
+
 #include <QtGui/QDialog>
 
 namespace BALL

@@ -18,7 +18,12 @@
 # include <BALL/VIEW/KERNEL/message.h>
 #endif
 
-#include <BALL/VIEW/UIC/labelDialogData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_labelDialog.h>
+#else
+# include <BALL/VIEW/UIC/labelDialogData.h>
+#endif
+
 
 #include <QtGui/qfont.h>
 

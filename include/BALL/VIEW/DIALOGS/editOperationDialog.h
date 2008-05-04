@@ -7,7 +7,12 @@
 #ifndef BALL_VIEW_DIALOGS_EDITOPERATIONDIALOG_H
 #define BALL_VIEW_DIALOGS_EDITOPERATIONDIALOG_H
 
-#include <BALL/VIEW/UIC/editOperationDialogData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_editOperationDialog.h>
+#else
+# include <BALL/VIEW/UIC/editOperationDialogData.h>
+#endif
+
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 # include <BALL/VIEW/KERNEL/modularWidget.h>

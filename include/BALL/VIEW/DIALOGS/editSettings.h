@@ -7,7 +7,12 @@
 #ifndef BALL_VIEW_DIALOGS_EDITSETTINGS_H
 #define BALL_VIEW_DIALOGS_EDITSETTINGS_H
 
-#include <BALL/VIEW/UIC/editSettingsData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_editSettings.h>
+#else
+# include <BALL/VIEW/UIC/editSettingsData.h>
+#endif
+
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>

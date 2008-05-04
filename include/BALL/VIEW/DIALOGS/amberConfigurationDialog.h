@@ -7,7 +7,12 @@
 #ifndef BALL_VIEW_DIALOGS_AMBERCONFIGURATIONDIALOG_H
 #define BALL_VIEW_DIALOGS_AMBERCONFIGURATIONDIALOG_H
 
-#include <BALL/VIEW/UIC/amberConfigurationDialogData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_amberConfigurationDialog.h>
+#else
+# include <BALL/VIEW/UIC/amberConfigurationDialogData.h>
+#endif
+
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
