@@ -182,6 +182,10 @@
 #define BALL_HAS_FFTW_FLOAT
 #define BALL_FFTW_DEFAULT_TRAITS FloatTraits
 
+// QT options
+#define BALL_HAS_VIEW
+#define BALL_QT_HAS_THREADS
+
 // Define whether to use the ARM style or ANSI style access modifications
 //   ARM style:   BaseClass::foo;
 //   ANSI style:  using BaseClass::foo;
