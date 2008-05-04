@@ -1062,6 +1062,12 @@ namespace BALL
 
 	};
 
+// required for visual studio
+#ifdef BALL_COMPILER_MSVC
+#include <vector>
+template class BALL_EXPORT std::vector<Atom*>;
+#endif
+
 # ifndef BALL_NO_INLINE_FUNCTIONS
 #   include <BALL/KERNEL/atom.iC>
 # endif
