@@ -170,7 +170,7 @@ namespace BALL
 			QAction* 				whats_action_;
 
 			HashMap<const QObject*, String> docu_entries_;
-			HashMap<String, String> classes_to_files_;
+			StringHashMap<String> classes_to_files_;
 		};
   	
 } } // namespaces
