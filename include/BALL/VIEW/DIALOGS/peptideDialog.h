@@ -6,7 +6,12 @@
 #ifndef BALL_VIEW_DIALOGS_PEPTIDEDIALOG_H
 #define BALL_VIEW_DIALOGS_PEPTIDEDIALOG_H
 
-#include <BALL/VIEW/UIC/peptideDialogData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_peptideDialog.h>
+#else
+# include <BALL/VIEW/UIC/peptideDialogData.h>
+#endif
+
 
 #ifndef BALL_STRUCTURE_PEPTIDEBUILDER_H
 #include <BALL/STRUCTURE/peptideBuilder.h>

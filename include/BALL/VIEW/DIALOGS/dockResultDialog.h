@@ -5,7 +5,12 @@
 #ifndef BALL_VIEW_DIALOGS_DOCKRESULTDIALOG_H
 #define BALL_VIEW_DIALOGS_DOCKRESULTDIALOG_H
 
-#include <BALL/VIEW/UIC/dockResultDialogData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_dockResultDialog.h>
+#else
+# include <BALL/VIEW/UIC/dockResultDialogData.h>
+#endif
+
 
 #ifndef BALL_WIDGETS_DOCKINGCONTROLLER_H
 # include <BALL/VIEW/WIDGETS/dockingController.h>

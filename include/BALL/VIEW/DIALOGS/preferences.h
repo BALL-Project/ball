@@ -8,7 +8,12 @@
 #define BALL_VIEW_DIALOGS_PREFERENCES_H
 
 #include <BALL/DATATYPE/string.h>
-#include <BALL/VIEW/UIC/preferencesData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_preferences.h>
+#else
+# include <BALL/VIEW/UIC/preferencesData.h>
+#endif
+
 
 #ifndef BALL_DATATYPE_HASHSET_H
 # include <BALL/DATATYPE/hashSet.h>

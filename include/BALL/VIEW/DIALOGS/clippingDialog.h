@@ -6,7 +6,12 @@
 #ifndef BALL_VIEW_DIALOGS_CLIPPINGDIALOG_H
 #define BALL_VIEW_DIALOGS_CLIPPINGDIALOG_H
 
-#include <BALL/VIEW/UIC/clippingDialogData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_clippingDialog.h>
+#else
+# include <BALL/VIEW/UIC/clippingDialogData.h>
+#endif
+
 
 #ifndef  BALL_VIEW_KERNEL_CLIPPING_PLANE_H
 # include <BALL/VIEW/KERNEL/clippingPlane.h>

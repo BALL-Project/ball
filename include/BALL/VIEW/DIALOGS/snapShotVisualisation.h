@@ -5,7 +5,12 @@
 #include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#include <BALL/VIEW/UIC/snapShotVisualisationData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_snapShotVisualisation.h>
+#else
+# include <BALL/VIEW/UIC/snapShotVisualisationData.h>
+#endif
+
 
 #include <QtGui/QDialog>
 

@@ -7,7 +7,12 @@
 #ifndef BALL_VIEW_DIALOGS_STAGESETTINGS_H
 #define BALL_VIEW_DIALOGS_STAGESETTINGS_H
 
-#include <BALL/VIEW/UIC/stageSettingsData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_stageSettings.h>
+#else
+# include <BALL/VIEW/UIC/stageSettingsData.h>
+#endif
+
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>

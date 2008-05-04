@@ -11,7 +11,12 @@
 # include <BALL/FORMAT/INIFile.h>
 #endif
 
-#include <BALL/VIEW/UIC/mainControlPreferencesData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_mainControlPreferences.h>
+#else
+# include <BALL/VIEW/UIC/mainControlPreferencesData.h>
+#endif
+
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>

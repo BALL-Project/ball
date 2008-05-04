@@ -7,7 +7,12 @@
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
 #define BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
 
-#include <BALL/VIEW/UIC/downloadPDBFileData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_downloadPDBFile.h>
+#else
+# include <BALL/VIEW/UIC/downloadPDBFileData.h>
+#endif
+
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 # include <BALL/VIEW/KERNEL/modularWidget.h>

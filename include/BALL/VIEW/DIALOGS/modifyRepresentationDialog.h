@@ -7,7 +7,12 @@
 #ifndef BALL_VIEW_DIALOGS_MODIFYSURFACEDIALOG_H
 #define BALL_VIEW_DIALOGS_MODIFYSURFACEDIALOG_H
 
-#include <BALL/VIEW/UIC/modifyRepresentationDialogData.h>
+#ifdef BALL_COMPILER_MSVC
+# include <ui_modifyRepresentationDialog.h>
+#else
+# include <BALL/VIEW/UIC/modifyRepresentationDialogData.h>
+#endif
+
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
