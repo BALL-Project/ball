@@ -5,6 +5,7 @@
 
 #include "mainframe.h"
 #include "icons.h"
+#include "demoTutorialDialog.h"
 
 #include <BALL/CONCEPT/moleculeObjectCreator.h>
 #ifdef BALL_HAS_ASIO
@@ -40,10 +41,8 @@
 
 #ifdef BALL_COMPILER_MSVC
 # include "ui_aboutDialog.h"
-# include "ui_demoTutorialDialog.h"
 #else
 # include "aboutDialog.h"
-# include "demoTutorialDialog.h"
 #endif
 
 using namespace std;
