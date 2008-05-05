@@ -12,6 +12,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TEST", "TEST\TEST.vcproj", 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TEST_ClassTest", "TEST_ClassTest\TEST_ClassTest.vcproj", "{05307BF4-E0A3-4EC3-BDB2-BFC139BDF1EB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BALLView", "BALLView\BALLView.vcproj", "{B45D0A45-D1B7-45B4-A78E-C0F2E4B48D0D}"
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -34,6 +39,10 @@ Global
 		{05307BF4-E0A3-4EC3-BDB2-BFC139BDF1EB}.Debug|Win32.Build.0 = Debug|Win32
 		{05307BF4-E0A3-4EC3-BDB2-BFC139BDF1EB}.Release|Win32.ActiveCfg = Release|Win32
 		{05307BF4-E0A3-4EC3-BDB2-BFC139BDF1EB}.Release|Win32.Build.0 = Release|Win32
+		{B45D0A45-D1B7-45B4-A78E-C0F2E4B48D0D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B45D0A45-D1B7-45B4-A78E-C0F2E4B48D0D}.Debug|Win32.Build.0 = Debug|Win32
+		{B45D0A45-D1B7-45B4-A78E-C0F2E4B48D0D}.Release|Win32.ActiveCfg = Release|Win32
+		{B45D0A45-D1B7-45B4-A78E-C0F2E4B48D0D}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
