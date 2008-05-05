@@ -16,7 +16,11 @@
 
 #include <BALL/DATATYPE/regularData3D.h>
 
-#include "demoTutorialDialogData.h"
+#ifdef BALL_COMPILER_MSVC
+# include "ui_demoTutorialDialog.h"
+#else
+# include "demoTutorialDialogData.h"
+#endif
 
 #include <QtGui/QDialog>
 
