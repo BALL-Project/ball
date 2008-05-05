@@ -12,7 +12,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_gridVisualizationDialog.h>
+# include <BALL/VIEW/UIC/ui_gridVisualizationDialog.h>
 #else
 # include <BALL/VIEW/UIC/gridVisualizationDialogData.h>
 #endif

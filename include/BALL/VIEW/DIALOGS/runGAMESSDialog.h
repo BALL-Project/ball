@@ -20,7 +20,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_runGAMESSDialog.h>
+# include <BALL/VIEW/UIC/ui_runGAMESSDialog.h>
 #else
 # include <BALL/VIEW/UIC/runGAMESSDialogData.h>
 #endif

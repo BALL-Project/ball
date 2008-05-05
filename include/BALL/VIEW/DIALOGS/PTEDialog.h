@@ -12,7 +12,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_PTEDialog.h>
+# include <BALL/VIEW/UIC/ui_PTEDialog.h>
 #else
 # include <BALL/VIEW/UIC/PTEDialogData.h>
 #endif

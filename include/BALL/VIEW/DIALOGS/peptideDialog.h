@@ -11,7 +11,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_peptideDialog.h>
+# include <BALL/VIEW/UIC/ui_peptideDialog.h>
 #else
 # include <BALL/VIEW/UIC/peptideDialogData.h>
 #endif

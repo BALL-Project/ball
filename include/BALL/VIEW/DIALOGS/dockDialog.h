@@ -30,7 +30,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_dockDialog.h>
+# include <BALL/VIEW/UIC/ui_dockDialog.h>
 #else
 # include <BALL/VIEW/UIC/dockDialogData.h>
 #endif

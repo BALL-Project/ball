@@ -12,7 +12,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_editSettings.h>
+# include <BALL/VIEW/UIC/ui_editSettings.h>
 #else
 # include <BALL/VIEW/UIC/editSettingsData.h>
 #endif

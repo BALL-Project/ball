@@ -12,7 +12,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_downloadPDBFile.h>
+# include <BALL/VIEW/UIC/ui_downloadPDBFile.h>
 #else
 # include <BALL/VIEW/UIC/downloadPDBFileData.h>
 #endif

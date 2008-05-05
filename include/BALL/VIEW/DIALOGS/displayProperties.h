@@ -24,7 +24,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_displayProperties.h>
+# include <BALL/VIEW/UIC/ui_displayProperties.h>
 #else
 # include <BALL/VIEW/UIC/displayPropertiesData.h>
 #endif

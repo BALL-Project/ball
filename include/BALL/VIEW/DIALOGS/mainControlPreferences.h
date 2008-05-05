@@ -16,7 +16,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_mainControlPreferences.h>
+# include <BALL/VIEW/UIC/ui_mainControlPreferences.h>
 #else
 # include <BALL/VIEW/UIC/mainControlPreferencesData.h>
 #endif

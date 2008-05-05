@@ -24,7 +24,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_modelSettingsDialog.h>
+# include <BALL/VIEW/UIC/ui_modelSettingsDialog.h>
 #else
 # include <BALL/VIEW/UIC/modelSettingsDialogData.h>
 #endif

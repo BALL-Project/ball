@@ -16,7 +16,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_setClippingPlane.h>
+# include <BALL/VIEW/UIC/ui_setClippingPlane.h>
 #else
 # include <BALL/VIEW/UIC/setClippingPlaneData.h>
 #endif

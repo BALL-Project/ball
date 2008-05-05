@@ -10,7 +10,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_molecularDynamicsDialog.h>
+# include <BALL/VIEW/UIC/ui_molecularDynamicsDialog.h>
 #else
 # include <BALL/VIEW/UIC/molecularDynamicsDialogData.h>
 #endif

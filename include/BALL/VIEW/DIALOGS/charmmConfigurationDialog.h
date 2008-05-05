@@ -12,7 +12,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_charmmConfigurationDialog.h>
+# include <BALL/VIEW/UIC/ui_charmmConfigurationDialog.h>
 #else
 # include <BALL/VIEW/UIC/charmmConfigurationDialogData.h>
 #endif

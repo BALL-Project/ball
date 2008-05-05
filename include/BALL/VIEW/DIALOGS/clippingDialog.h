@@ -11,7 +11,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_clippingDialog.h>
+# include <BALL/VIEW/UIC/ui_clippingDialog.h>
 #else
 # include <BALL/VIEW/UIC/clippingDialogData.h>
 #endif

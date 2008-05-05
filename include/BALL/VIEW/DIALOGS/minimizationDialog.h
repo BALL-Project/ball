@@ -10,7 +10,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_minimizationDialog.h>
+# include <BALL/VIEW/UIC/ui_minimizationDialog.h>
 #else
 # include <BALL/VIEW/UIC/minimizationDialogData.h>
 #endif

@@ -12,7 +12,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_networkPreferences.h>
+# include <BALL/VIEW/UIC/ui_networkPreferences.h>
 #else
 # include <BALL/VIEW/UIC/networkPreferencesData.h>
 #endif

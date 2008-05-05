@@ -9,7 +9,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_FDPBDialog.h>
+# include <BALL/VIEW/UIC/ui_FDPBDialog.h>
 #else
 # include <BALL/VIEW/UIC/FDPBDialogData.h>
 #endif

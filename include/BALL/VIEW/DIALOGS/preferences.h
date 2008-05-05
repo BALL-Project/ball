@@ -13,7 +13,7 @@
 
 #include <BALL/DATATYPE/string.h>
 #ifdef BALL_COMPILER_MSVC
-# include <ui_preferences.h>
+# include <BALL/VIEW/UIC/ui_preferences.h>
 #else
 # include <BALL/VIEW/UIC/preferencesData.h>
 #endif

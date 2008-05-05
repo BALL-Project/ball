@@ -12,7 +12,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_amberConfigurationDialog.h>
+# include <BALL/VIEW/UIC/ui_amberConfigurationDialog.h>
 #else
 # include <BALL/VIEW/UIC/amberConfigurationDialogData.h>
 #endif

@@ -12,7 +12,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_parsedFunctionDialog.h>
+# include <BALL/VIEW/UIC/ui_parsedFunctionDialog.h>
 #else
 # include <BALL/VIEW/UIC/parsedFunctionDialogData.h>
 #endif
