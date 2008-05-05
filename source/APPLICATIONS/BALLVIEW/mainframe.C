@@ -40,6 +40,11 @@
 #include <QtGui/QKeyEvent>
 #include <QtGui/QTreeWidget>
 
+#ifdef BALL_COMPILER_MSVC
+# include "ui_aboutDialog.h"
+#else
+# include "aboutDialog.h"
+#endif
 
 using namespace std;
 
