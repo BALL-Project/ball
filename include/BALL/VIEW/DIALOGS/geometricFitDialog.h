@@ -18,7 +18,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_geometricFitDialog.h>
+# include <BALL/VIEW/UIC/ui_geometricFitDialog.h>
 #else
 # include <BALL/VIEW/UIC/geometricFitDialogData.h>
 #endif

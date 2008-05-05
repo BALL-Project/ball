@@ -12,7 +12,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_setCamera.h>
+# include <BALL/VIEW/UIC/ui_setCamera.h>
 #else
 # include <BALL/VIEW/UIC/setCameraData.h>
 #endif

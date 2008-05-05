@@ -9,7 +9,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_contourSurfaceDialog.h>
+# include <BALL/VIEW/UIC/ui_contourSurfaceDialog.h>
 #else
 # include <BALL/VIEW/UIC/contourSurfaceDialogData.h>
 #endif

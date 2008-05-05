@@ -23,7 +23,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_pubchemDialog.h>
+# include <BALL/VIEW/UIC/ui_pubchemDialog.h>
 #else
 # include <BALL/VIEW/UIC/pubchemDialogData.h>
 #endif

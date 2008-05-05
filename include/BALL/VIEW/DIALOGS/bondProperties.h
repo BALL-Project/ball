@@ -9,7 +9,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_bondProperties.h>
+# include <BALL/VIEW/UIC/ui_bondProperties.h>
 #else
 # include <BALL/VIEW/UIC/bondPropertiesData.h>
 #endif

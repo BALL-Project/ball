@@ -11,7 +11,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_fieldLinesDialog.h>
+# include <BALL/VIEW/UIC/ui_fieldLinesDialog.h>
 #else
 # include <BALL/VIEW/UIC/fieldLinesDialogData.h>
 #endif

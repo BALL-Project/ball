@@ -11,7 +11,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_atomOverview.h>
+# include <BALL/VIEW/UIC/ui_atomOverview.h>
 #else
 # include <BALL/VIEW/UIC/atomOverviewData.h>
 #endif

@@ -10,7 +10,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_snapShotVisualisation.h>
+# include <BALL/VIEW/UIC/ui_snapShotVisualisation.h>
 #else
 # include <BALL/VIEW/UIC/snapShotVisualisationData.h>
 #endif

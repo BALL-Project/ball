@@ -9,7 +9,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_pythonSettings.h>
+# include <BALL/VIEW/UIC/ui_pythonSettings.h>
 #else
 # include <BALL/VIEW/UIC/pythonSettingsData.h>
 #endif

@@ -23,7 +23,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_labelDialog.h>
+# include <BALL/VIEW/UIC/ui_labelDialog.h>
 #else
 # include <BALL/VIEW/UIC/labelDialogData.h>
 #endif

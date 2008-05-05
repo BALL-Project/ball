@@ -21,7 +21,7 @@
 #include <QtCore/qdatetime.h>
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_dockProgressDialog.h>
+# include <BALL/VIEW/UIC/ui_dockProgressDialog.h>
 #else
 # include <BALL/VIEW/UIC/dockProgressDialogData.h>
 #endif

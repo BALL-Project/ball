@@ -10,7 +10,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_dockResultDialog.h>
+# include <BALL/VIEW/UIC/ui_dockResultDialog.h>
 #else
 # include <BALL/VIEW/UIC/dockResultDialogData.h>
 #endif

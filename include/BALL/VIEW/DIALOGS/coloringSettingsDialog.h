@@ -12,7 +12,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_coloringSettingsDialog.h>
+# include <BALL/VIEW/UIC/ui_coloringSettingsDialog.h>
 #else
 # include <BALL/VIEW/UIC/coloringSettingsDialogData.h>
 #endif

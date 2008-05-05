@@ -12,7 +12,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_MMFF94ConfigurationDialog.h>
+# include <BALL/VIEW/UIC/ui_MMFF94ConfigurationDialog.h>
 #else
 # include <BALL/VIEW/UIC/MMFF94ConfigurationDialogData.h>
 #endif

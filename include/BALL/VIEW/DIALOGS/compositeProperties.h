@@ -12,7 +12,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_compositeProperties.h>
+# include <BALL/VIEW/UIC/ui_compositeProperties.h>
 #else
 # include <BALL/VIEW/UIC/compositePropertiesData.h>
 #endif

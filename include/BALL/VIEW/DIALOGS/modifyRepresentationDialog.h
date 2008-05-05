@@ -12,7 +12,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <ui_modifyRepresentationDialog.h>
+# include <BALL/VIEW/UIC/ui_modifyRepresentationDialog.h>
 #else
 # include <BALL/VIEW/UIC/modifyRepresentationDialogData.h>
 #endif
