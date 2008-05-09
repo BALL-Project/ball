@@ -1652,8 +1652,13 @@ String GLRenderer::getOpenGLVersion()
 vector<String> GLRenderer::getExtensions()
 {
 	vector<String> string_vector;
-	if (glGetString(GL_EXTENSIONS) == 0) return string_vector;
-	String exts = (char*)glGetString(GL_EXTENSIONS);
+	char* extensions = (char*)glGetString(GL_EXTENSIONS);
+
+	if (!extensions) 
+		return string_vector;
+
+	String exts(extensions);
+
 	exts.split(string_vector);
 	return string_vector;
 }
