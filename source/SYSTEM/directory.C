@@ -18,6 +18,10 @@
 #	include <unistd.h>
 #endif
 
+#ifdef BALL_PLATFORM_WINDOWS
+# include <Tchar.h>
+#endif
+
 #include <iostream>
 #include <errno.h>
 
@@ -40,7 +44,7 @@ namespace BALL
 			if ((buffer = ::_getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	
 			{
 				directory_path_ = buffer;
-				dir_ = CreateFile(buffer,
+				dir_ = CreateFile(_T(buffer),
 													FILE_LIST_DIRECTORY,                // access (read/write) mode
 													FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  // share mode
 													NULL,                               // security descriptor
@@ -77,7 +81,7 @@ namespace BALL
 		}
 		
 		#ifdef BALL_PLATFORM_WINDOWS
-			dir_ = CreateFile(directory_path_.data(),
+			dir_ = CreateFile(_T(directory_path_.data()),
 												FILE_LIST_DIRECTORY,                // access (read/write) mode
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  // share mode
 												NULL,                               // security descriptor
@@ -109,7 +113,7 @@ namespace BALL
 			{	
 				CloseHandle(dir_);
 			}
-			dir_ = CreateFile(directory_path_.data(),
+			dir_ = CreateFile(_T(directory_path_.data()),
 												FILE_LIST_DIRECTORY,                // access (read/write) mode
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  // share mode
 												NULL,                               // security descriptor
@@ -131,7 +135,7 @@ namespace BALL
 			WIN32_FIND_DATA fd;
 		
 	
-			dirent_ = FindFirstFile(pat.data(),&fd);
+			dirent_ = FindFirstFile(_T(pat.data()),&fd);
 			if (dirent_ == INVALID_HANDLE_VALUE)
 			{
 				CloseHandle(dir_);
@@ -140,7 +144,7 @@ namespace BALL
 			}
 			else
 			{
-				entry = fd.cFileName;
+				entry = _T(fd.cFileName);
 			
 				return desynchronize_(true);
 			}
