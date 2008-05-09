@@ -25,8 +25,12 @@
 #include <algorithm>                  // 'reverse'
 
 #ifdef BALL_COMPILER_MSVC
+#ifndef S_ISREG
 #	define S_ISREG _S_ISREG
+#endif
+#ifndef S_ISDIR
 #	define S_ISDIR _S_ISDIR
+#endif
 #	define S_ISCHR _S_ISCHR
 #	define S_ISBLK _S_ISBLK
 #	define S_ISFIFO _S_ISFIFO

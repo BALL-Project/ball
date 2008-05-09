@@ -375,6 +375,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\amberConfigurationDialog.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -386,6 +394,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\atomOverview.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -399,6 +415,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\bondProperties.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -410,6 +434,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\charmmConfigurationDialog.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -423,6 +455,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\clippingDialog.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -434,6 +474,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\coloringSettingsDialog.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -447,6 +495,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\compositeProperties.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -458,6 +514,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\contourSurfaceDialog.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -471,6 +535,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\displayProperties.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -482,6 +554,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\dockDialog.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -495,6 +575,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\dockProgressDialog.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -507,6 +595,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\dockResultDialog.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -518,6 +614,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\downloadPDBFile.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -535,6 +639,7 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
+							CompileAs="2"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -550,6 +655,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\FDPBDialog.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -561,6 +674,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\fieldLinesDialog.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -574,6 +695,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\geometricFitDialog.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -585,6 +714,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\gridVisualizationDialog.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -598,6 +735,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\labelDialog.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -609,6 +754,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\lightSettings.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -622,6 +775,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\mainControlPreferences.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -633,6 +794,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\materialSettings.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -646,6 +815,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\minimizationDialog.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -657,6 +834,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\MMFF94ConfigurationDialog.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -670,6 +855,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\modelSettingsDialog.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -681,6 +874,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\modifyRepresentationDialog.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -694,6 +895,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\molecularDynamicsDialog.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -705,6 +914,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\molecularFileDialog.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -718,6 +935,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\networkPreferences.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -729,6 +954,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\parsedFunctionDialog.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -742,6 +975,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\peptideDialog.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -753,6 +994,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\preferences.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -766,6 +1015,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\PTEDialog.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -777,6 +1034,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\pubchemDialog.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -790,6 +1055,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\pythonSettings.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -801,6 +1074,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\serverPreferences.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -814,6 +1095,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\setCamera.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -825,6 +1114,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\setClippingPlane.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -838,6 +1135,14 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\snapShotVisualisation.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -849,6 +1154,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\stageSettings.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1866,6 +2179,14 @@
 					RelativePath="..\..\..\source\VIEW\SOAP\soapC.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1877,6 +2198,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\SOAP\soapClient.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
