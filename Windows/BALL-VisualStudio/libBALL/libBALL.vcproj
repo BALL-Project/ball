@@ -24,6 +24,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -52,7 +53,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(SolutionDir)\..\Contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\Python&quot;;.\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtSql&quot;;$(QTDIR)\include\QtNetwork"
-				PreprocessorDefinitions="UNICODE;WIN32;QT_THREAD_SUPPORT;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_SQL_LIB;LIBBALL_LIB;QT_NETWORK_LIB;BALL_BUILD_DLL"
+				PreprocessorDefinitions="WIN32;QT_THREAD_SUPPORT;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_SQL_LIB;LIBBALL_LIB;QT_NETWORK_LIB;BALL_BUILD_DLL"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
 				DebugInformationFormat="0"
@@ -68,9 +69,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/NODEFAULTLIB:libcmt"
 				AdditionalDependencies="qtmain.lib QtCore4.lib QtSql4.lib QtNetwork4.lib regex.lib oncrpc.lib gsl_mt.lib cblas_mt.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib WSock32.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
-				AdditionalLibraryDirectories="$(QTDIR)\lib"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\Contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;"
 				GenerateDebugInformation="false"
 				SubSystem="2"
 			/>
