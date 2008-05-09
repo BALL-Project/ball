@@ -22,6 +22,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			>
 			<Tool
@@ -50,8 +51,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\GeneratedFiles;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtSql;$(QTDIR)\include\QtNetwork"
-				PreprocessorDefinitions="UNICODE,WIN32,QT_THREAD_SUPPORT,QT_NO_DEBUG,NDEBUG,QT_CORE_LIB,QT_SQL_LIB,LIBBALL_LIB,QT_NETWORK_LIB"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(SolutionDir)\..\Contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\Python&quot;;.\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtSql&quot;;$(QTDIR)\include\QtNetwork"
+				PreprocessorDefinitions="UNICODE;WIN32;QT_THREAD_SUPPORT;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_SQL_LIB;LIBBALL_LIB;QT_NETWORK_LIB;BALL_BUILD_DLL"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
 				DebugInformationFormat="0"
@@ -67,7 +68,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=" qtmain.lib QtCore4.lib QtSql4.lib QtNetwork4.lib"
+				AdditionalDependencies="qtmain.lib QtCore4.lib QtSql4.lib QtNetwork4.lib regex.lib oncrpc.lib gsl_mt.lib cblas_mt.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib WSock32.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				AdditionalLibraryDirectories="$(QTDIR)\lib"
 				GenerateDebugInformation="false"
@@ -1787,6 +1788,14 @@
 				RelativePath="..\..\..\source\FORMAT\GAMESSDatParserLexer.l"
 				>
 				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="FlexGenerator"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
@@ -1798,6 +1807,14 @@
 			<File
 				RelativePath="..\..\..\source\FORMAT\GAMESSLogParserLexer.l"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="FlexGenerator"
+					/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32"
 					ExcludedFromBuild="true"
@@ -1831,6 +1848,14 @@
 				RelativePath="..\..\..\source\FORMAT\GAMESSDatParserParser.y"
 				>
 				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="BisonParser"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
@@ -1842,6 +1867,14 @@
 			<File
 				RelativePath="..\..\..\source\FORMAT\GAMESSLogParserParser.y"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="BisonParser"
+					/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32"
 					ExcludedFromBuild="true"
@@ -1874,6 +1907,14 @@
 					RelativePath="..\..\..\source\COMMON\constants.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1885,6 +1926,14 @@
 				<File
 					RelativePath="..\..\..\source\COMMON\exception.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1898,6 +1947,14 @@
 					RelativePath="..\..\..\source\COMMON\hash.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1909,6 +1966,14 @@
 				<File
 					RelativePath="..\..\..\source\COMMON\logStream.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1922,6 +1987,14 @@
 					RelativePath="..\..\..\source\COMMON\MD5Hash.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1934,6 +2007,14 @@
 					RelativePath="..\..\..\source\COMMON\rtti.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1945,6 +2026,14 @@
 				<File
 					RelativePath="..\..\..\source\COMMON\version.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1962,6 +2051,14 @@
 					RelativePath="..\..\..\source\CONCEPT\autoDeletable.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1973,6 +2070,14 @@
 				<File
 					RelativePath="..\..\..\source\CONCEPT\client.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1986,6 +2091,14 @@
 					RelativePath="..\..\..\source\CONCEPT\composite.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1997,6 +2110,14 @@
 				<File
 					RelativePath="..\..\..\source\CONCEPT\embeddable.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2010,6 +2131,14 @@
 					RelativePath="..\..\..\source\CONCEPT\enumerator.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2021,6 +2150,14 @@
 				<File
 					RelativePath="..\..\..\source\CONCEPT\factory.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2034,6 +2171,14 @@
 					RelativePath="..\..\..\source\CONCEPT\molecularInformation.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2045,6 +2190,14 @@
 				<File
 					RelativePath="..\..\..\source\CONCEPT\moleculeObjectCreator.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2058,6 +2211,14 @@
 					RelativePath="..\..\..\source\CONCEPT\notification.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2069,6 +2230,14 @@
 				<File
 					RelativePath="..\..\..\source\CONCEPT\object.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2082,6 +2251,14 @@
 					RelativePath="..\..\..\source\CONCEPT\objectCreator.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2093,6 +2270,14 @@
 				<File
 					RelativePath="..\..\..\source\CONCEPT\persistenceManager.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2106,6 +2291,14 @@
 					RelativePath="..\..\..\source\CONCEPT\predicate.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2117,6 +2310,14 @@
 				<File
 					RelativePath="..\..\..\source\CONCEPT\processor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2130,6 +2331,14 @@
 					RelativePath="..\..\..\source\CONCEPT\property.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2141,6 +2350,14 @@
 				<File
 					RelativePath="..\..\..\source\CONCEPT\selectable.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2154,6 +2371,14 @@
 					RelativePath="..\..\..\source\CONCEPT\textPersistenceManager.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2165,6 +2390,14 @@
 				<File
 					RelativePath="..\..\..\source\CONCEPT\timeStamp.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2178,6 +2411,14 @@
 					RelativePath="..\..\..\source\CONCEPT\visitor.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2189,6 +2430,14 @@
 				<File
 					RelativePath="..\..\..\source\CONCEPT\XDRPersistenceManager.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2206,6 +2455,14 @@
 					RelativePath="..\..\..\source\DATATYPE\bitVector.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2217,6 +2474,14 @@
 				<File
 					RelativePath="..\..\..\source\DATATYPE\contourSurface.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2230,6 +2495,14 @@
 					RelativePath="..\..\..\source\DATATYPE\hashGrid.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2241,6 +2514,14 @@
 				<File
 					RelativePath="..\..\..\source\DATATYPE\options.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2254,6 +2535,14 @@
 					RelativePath="..\..\..\source\DATATYPE\regularData1D.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2265,6 +2554,14 @@
 				<File
 					RelativePath="..\..\..\source\DATATYPE\regularData2D.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2278,6 +2575,14 @@
 					RelativePath="..\..\..\source\DATATYPE\regularData3D.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2290,6 +2595,14 @@
 					RelativePath="..\..\..\source\DATATYPE\regularExpression.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2301,6 +2614,14 @@
 				<File
 					RelativePath="..\..\..\source\DATATYPE\string.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2318,6 +2639,14 @@
 					RelativePath="..\..\..\source\ENERGY\atomicContactEnergy.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2329,6 +2658,14 @@
 				<File
 					RelativePath="..\..\..\source\ENERGY\composedEnergyProcessor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2342,6 +2679,14 @@
 					RelativePath="..\..\..\source\ENERGY\coulomb.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2354,6 +2699,14 @@
 					RelativePath="..\..\..\source\ENERGY\distanceCoulomb.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2365,6 +2718,14 @@
 				<File
 					RelativePath="..\..\..\source\ENERGY\energyProcessor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2382,6 +2743,14 @@
 					RelativePath="..\..\..\source\FORMAT\bruker1DFile.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2393,6 +2762,14 @@
 				<File
 					RelativePath="..\..\..\source\FORMAT\bruker2DFile.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2406,6 +2783,14 @@
 					RelativePath="..\..\..\source\FORMAT\DBInterface.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2417,6 +2802,14 @@
 				<File
 					RelativePath="..\..\..\source\FORMAT\DCDFile.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2430,6 +2823,14 @@
 					RelativePath="..\..\..\source\FORMAT\DSN6File.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2441,6 +2842,15 @@
 				<File
 					RelativePath="..\..\..\source\FORMAT\GAMESSDatParserLexer.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						ExcludedFromBuild="true"
@@ -2455,6 +2865,15 @@
 					RelativePath="..\..\..\source\FORMAT\GAMESSDatParserParser.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						ExcludedFromBuild="true"
 						>
@@ -2467,6 +2886,15 @@
 				<File
 					RelativePath="..\..\..\source\FORMAT\GAMESSLogParserLexer.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						ExcludedFromBuild="true"
@@ -2481,6 +2909,15 @@
 					RelativePath="..\..\..\source\FORMAT\GAMESSLogParserParser.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						ExcludedFromBuild="true"
 						>
@@ -2494,6 +2931,14 @@
 					RelativePath="..\..\..\source\FORMAT\genericMolFile.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2505,6 +2950,14 @@
 				<File
 					RelativePath="..\..\..\source\FORMAT\HINFile.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2518,6 +2971,14 @@
 					RelativePath="..\..\..\source\FORMAT\INIFile.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2529,6 +2990,14 @@
 				<File
 					RelativePath="..\..\..\source\FORMAT\JCAMPFile.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2542,6 +3011,14 @@
 					RelativePath="..\..\..\source\FORMAT\KCFFile.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2553,6 +3030,14 @@
 				<File
 					RelativePath="..\..\..\source\FORMAT\lineBasedFile.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2566,6 +3051,14 @@
 					RelativePath="..\..\..\source\FORMAT\MOL2File.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2577,6 +3070,14 @@
 				<File
 					RelativePath="..\..\..\source\FORMAT\MOLFile.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2590,6 +3091,14 @@
 					RelativePath="..\..\..\source\FORMAT\NMRStarFile.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2601,6 +3110,14 @@
 				<File
 					RelativePath="..\..\..\source\FORMAT\parameters.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2614,6 +3131,14 @@
 					RelativePath="..\..\..\source\FORMAT\parameterSection.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2625,6 +3150,14 @@
 				<File
 					RelativePath="..\..\..\source\FORMAT\PDBdefs.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2638,6 +3171,14 @@
 					RelativePath="..\..\..\source\FORMAT\PDBFileDetails.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2649,6 +3190,14 @@
 				<File
 					RelativePath="..\..\..\source\FORMAT\PDBFileGeneral.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2662,6 +3211,14 @@
 					RelativePath="..\..\..\source\FORMAT\PDBInfo.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2673,6 +3230,14 @@
 				<File
 					RelativePath="..\..\..\source\FORMAT\PDBRecords.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2686,6 +3251,14 @@
 					RelativePath="..\..\..\source\FORMAT\resourceFile.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2697,6 +3270,14 @@
 				<File
 					RelativePath="..\..\..\source\FORMAT\SCWRLRotamerFile.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2710,6 +3291,14 @@
 					RelativePath="..\..\..\source\FORMAT\SDFile.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2721,6 +3310,14 @@
 				<File
 					RelativePath="..\..\..\source\FORMAT\trajectoryFile.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2734,6 +3331,14 @@
 					RelativePath="..\..\..\source\FORMAT\TRRFile.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2745,6 +3350,14 @@
 				<File
 					RelativePath="..\..\..\source\FORMAT\XYZFile.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2762,6 +3375,14 @@
 					RelativePath="..\..\..\source\KERNEL\atom.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2773,6 +3394,14 @@
 				<File
 					RelativePath="..\..\..\source\KERNEL\atomContainer.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2786,6 +3415,14 @@
 					RelativePath="..\..\..\source\KERNEL\bond.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2797,6 +3434,14 @@
 				<File
 					RelativePath="..\..\..\source\KERNEL\chain.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2810,6 +3455,14 @@
 					RelativePath="..\..\..\source\KERNEL\expression.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2821,6 +3474,14 @@
 				<File
 					RelativePath="..\..\..\source\KERNEL\expressionParser.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2834,6 +3495,14 @@
 					RelativePath="..\..\..\source\KERNEL\expressionParserLexer.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2845,6 +3514,14 @@
 				<File
 					RelativePath="..\..\..\source\KERNEL\expressionParserParser.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2858,6 +3535,14 @@
 					RelativePath="..\..\..\source\KERNEL\expressionPredicate.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2869,6 +3554,14 @@
 				<File
 					RelativePath="..\..\..\source\KERNEL\expressionTree.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2882,6 +3575,14 @@
 					RelativePath="..\..\..\source\KERNEL\extractors.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2893,6 +3594,14 @@
 				<File
 					RelativePath="..\..\..\source\KERNEL\fragment.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2906,6 +3615,14 @@
 					RelativePath="..\..\..\source\KERNEL\global.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2917,6 +3634,14 @@
 				<File
 					RelativePath="..\..\..\source\KERNEL\molecule.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2930,6 +3655,14 @@
 					RelativePath="..\..\..\source\KERNEL\nucleicAcid.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2941,6 +3674,14 @@
 				<File
 					RelativePath="..\..\..\source\KERNEL\nucleotide.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2954,6 +3695,14 @@
 					RelativePath="..\..\..\source\KERNEL\PDBAtom.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2965,6 +3714,14 @@
 				<File
 					RelativePath="..\..\..\source\KERNEL\predicate.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -2978,6 +3735,14 @@
 					RelativePath="..\..\..\source\KERNEL\protein.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2989,6 +3754,14 @@
 				<File
 					RelativePath="..\..\..\source\KERNEL\PTE.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -3002,6 +3775,14 @@
 					RelativePath="..\..\..\source\KERNEL\residue.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -3013,6 +3794,14 @@
 				<File
 					RelativePath="..\..\..\source\KERNEL\secondaryStructure.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -3026,6 +3815,14 @@
 					RelativePath="..\..\..\source\KERNEL\selector.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -3038,6 +3835,14 @@
 					RelativePath="..\..\..\source\KERNEL\standardPredicates.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -3049,6 +3854,14 @@
 				<File
 					RelativePath="..\..\..\source\KERNEL\system.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -3066,6 +3879,14 @@
 					RelativePath="..\..\..\source\MATHS\analyticalGeometry.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -3077,6 +3898,14 @@
 				<File
 					RelativePath="..\..\..\source\MATHS\angle.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -3090,6 +3919,14 @@
 					RelativePath="..\..\..\source\MATHS\box3.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -3101,6 +3938,14 @@
 				<File
 					RelativePath="..\..\..\source\MATHS\circle3.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -3114,6 +3959,14 @@
 					RelativePath="..\..\..\source\MATHS\common.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -3125,6 +3978,14 @@
 				<File
 					RelativePath="..\..\..\source\MATHS\complex.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -3138,6 +3999,14 @@
 					RelativePath="..\..\..\source\MATHS\FFT1D.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -3149,6 +4018,14 @@
 				<File
 					RelativePath="..\..\..\source\MATHS\FFT2D.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -3162,6 +4039,14 @@
 					RelativePath="..\..\..\source\MATHS\FFT3D.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -3173,6 +4058,14 @@
 				<File
 					RelativePath="..\..\..\source\MATHS\function.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -3186,6 +4079,14 @@
 					RelativePath="..\..\..\source\MATHS\line3.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -3197,6 +4098,14 @@
 				<File
 					RelativePath="..\..\..\source\MATHS\matrix44.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -3210,6 +4119,14 @@
 					RelativePath="..\..\..\source\MATHS\parsedFunction.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -3221,6 +4138,14 @@
 				<File
 					RelativePath="..\..\..\source\MATHS\parsedFunctionLexer.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -3234,6 +4159,14 @@
 					RelativePath="..\..\..\source\MATHS\parsedFunctionParser.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -3245,6 +4178,14 @@
 				<File
 					RelativePath="..\..\..\source\MATHS\piecewiseFunction.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -3258,6 +4199,14 @@
 					RelativePath="..\..\..\source\MATHS\piecewisePolynomial.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -3269,6 +4218,14 @@
 				<File
 					RelativePath="..\..\..\source\MATHS\plane3.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -3282,6 +4239,14 @@
 					RelativePath="..\..\..\source\MATHS\quaternion.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -3293,6 +4258,14 @@
 				<File
 					RelativePath="..\..\..\source\MATHS\randomNumberGenerator.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -3306,6 +4279,14 @@
 					RelativePath="..\..\..\source\MATHS\simpleBox3.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -3317,6 +4298,14 @@
 				<File
 					RelativePath="..\..\..\source\MATHS\sphere3.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -3330,6 +4319,14 @@
 					RelativePath="..\..\..\source\MATHS\surface.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -3341,6 +4338,14 @@
 				<File
 					RelativePath="..\..\..\source\MATHS\vector2.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -3354,6 +4359,14 @@
 					RelativePath="..\..\..\source\MATHS\vector3.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -3365,6 +4378,14 @@
 				<File
 					RelativePath="..\..\..\source\MATHS\vector4.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -3385,6 +4406,14 @@
 						RelativePath="..\..\..\source\MOLMEC\AMBER\amber.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3396,6 +4425,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\AMBER\amberBend.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3409,6 +4446,14 @@
 						RelativePath="..\..\..\source\MOLMEC\AMBER\amberNonBonded.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3421,6 +4466,14 @@
 						RelativePath="..\..\..\source\MOLMEC\AMBER\amberStretch.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3432,6 +4485,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\AMBER\amberTorsion.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3449,6 +4510,14 @@
 						RelativePath="..\..\..\source\MOLMEC\CHARMM\charmm.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3460,6 +4529,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\CHARMM\charmmBend.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3473,6 +4550,14 @@
 						RelativePath="..\..\..\source\MOLMEC\CHARMM\charmmImproperTorsion.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3484,6 +4569,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\CHARMM\charmmNonBonded.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3497,6 +4590,14 @@
 						RelativePath="..\..\..\source\MOLMEC\CHARMM\charmmStretch.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3508,6 +4609,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\CHARMM\charmmTorsion.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3525,6 +4634,14 @@
 						RelativePath="..\..\..\source\MOLMEC\COMMON\assignTypes.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3536,6 +4653,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\COMMON\atomVector.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3549,6 +4674,14 @@
 						RelativePath="..\..\..\source\MOLMEC\COMMON\chargeRuleProcessor.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3560,6 +4693,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\COMMON\forceField.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3573,6 +4714,14 @@
 						RelativePath="..\..\..\source\MOLMEC\COMMON\forceFieldComponent.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3584,6 +4733,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\COMMON\gradient.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3597,6 +4754,14 @@
 						RelativePath="..\..\..\source\MOLMEC\COMMON\periodicBoundary.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3608,6 +4773,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\COMMON\radiusRuleProcessor.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3621,6 +4794,14 @@
 						RelativePath="..\..\..\source\MOLMEC\COMMON\ruleEvaluator.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3632,6 +4813,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\COMMON\ruleProcessor.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3645,6 +4834,14 @@
 						RelativePath="..\..\..\source\MOLMEC\COMMON\snapShot.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3656,6 +4853,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\COMMON\snapShotManager.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3669,6 +4874,14 @@
 						RelativePath="..\..\..\source\MOLMEC\COMMON\support.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3681,6 +4894,14 @@
 						RelativePath="..\..\..\source\MOLMEC\COMMON\typenameRuleProcessor.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3692,6 +4913,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\COMMON\typeRuleProcessor.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3709,6 +4938,14 @@
 						RelativePath="..\..\..\source\MOLMEC\MDSIMULATION\canonicalMD.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3721,6 +4958,14 @@
 						RelativePath="..\..\..\source\MOLMEC\MDSIMULATION\microCanonicalMD.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3732,6 +4977,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\MDSIMULATION\molecularDynamics.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3749,6 +5002,14 @@
 						RelativePath="..\..\..\source\MOLMEC\MINIMIZATION\conjugateGradient.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3760,6 +5021,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\MINIMIZATION\energyMinimizer.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3773,6 +5042,14 @@
 						RelativePath="..\..\..\source\MOLMEC\MINIMIZATION\lineSearch.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3784,6 +5061,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\MINIMIZATION\shiftedLVMM.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3797,6 +5082,14 @@
 						RelativePath="..\..\..\source\MOLMEC\MINIMIZATION\steepestDescent.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3808,6 +5101,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\MINIMIZATION\strangLBFGS.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3825,6 +5126,14 @@
 						RelativePath="..\..\..\source\MOLMEC\MMFF94\MMFF94.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3836,6 +5145,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\MMFF94\MMFF94NonBonded.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3849,6 +5166,14 @@
 						RelativePath="..\..\..\source\MOLMEC\MMFF94\MMFF94OutOfPlaneBend.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3860,6 +5185,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\MMFF94\MMFF94Parameters.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3873,6 +5206,14 @@
 						RelativePath="..\..\..\source\MOLMEC\MMFF94\MMFF94Processors.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3885,6 +5226,14 @@
 						RelativePath="..\..\..\source\MOLMEC\MMFF94\MMFF94StretchBend.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3896,6 +5245,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\MMFF94\MMFF94Torsion.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3913,6 +5270,14 @@
 						RelativePath="..\..\..\source\MOLMEC\PARAMETER\atomTypes.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3924,6 +5289,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\PARAMETER\charmmEEF1.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3937,6 +5310,14 @@
 						RelativePath="..\..\..\source\MOLMEC\PARAMETER\cosineTorsion.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3948,6 +5329,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\PARAMETER\forceFieldParameters.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3961,6 +5350,14 @@
 						RelativePath="..\..\..\source\MOLMEC\PARAMETER\lennardJones.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3972,6 +5369,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\PARAMETER\potential1210.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -3985,6 +5390,14 @@
 						RelativePath="..\..\..\source\MOLMEC\PARAMETER\quadraticAngleBend.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -3996,6 +5409,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\PARAMETER\quadraticBondStretch.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -4009,6 +5430,14 @@
 						RelativePath="..\..\..\source\MOLMEC\PARAMETER\quadraticImproperTorsion.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -4021,6 +5450,14 @@
 						RelativePath="..\..\..\source\MOLMEC\PARAMETER\residueTorsions.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -4032,6 +5469,14 @@
 					<File
 						RelativePath="..\..\..\source\MOLMEC\PARAMETER\templates.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -4050,6 +5495,14 @@
 					RelativePath="..\..\..\source\NMR\anisotropyShiftProcessor.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4061,6 +5514,14 @@
 				<File
 					RelativePath="..\..\..\source\NMR\assignShiftProcessor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4074,6 +5535,14 @@
 					RelativePath="..\..\..\source\NMR\clearShiftProcessor.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4085,6 +5554,14 @@
 				<File
 					RelativePath="..\..\..\source\NMR\createSpectrumProcessor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4098,6 +5575,14 @@
 					RelativePath="..\..\..\source\NMR\EFShiftProcessor.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4109,6 +5594,14 @@
 				<File
 					RelativePath="..\..\..\source\NMR\experiment.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4122,6 +5615,14 @@
 					RelativePath="..\..\..\source\NMR\haighMallionShiftProcessor.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4133,6 +5634,14 @@
 				<File
 					RelativePath="..\..\..\source\NMR\HBondShiftProcessor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4146,6 +5655,14 @@
 					RelativePath="..\..\..\source\NMR\johnsonBoveyShiftProcessor.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4157,6 +5674,14 @@
 				<File
 					RelativePath="..\..\..\source\NMR\peak.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4170,6 +5695,14 @@
 					RelativePath="..\..\..\source\NMR\peakList.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4181,6 +5714,14 @@
 				<File
 					RelativePath="..\..\..\source\NMR\randomCoilShiftProcessor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4194,6 +5735,14 @@
 					RelativePath="..\..\..\source\NMR\shiftModel.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4206,6 +5755,14 @@
 					RelativePath="..\..\..\source\NMR\shiftModule.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4217,6 +5774,14 @@
 				<File
 					RelativePath="..\..\..\source\NMR\spectrum.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4234,6 +5799,14 @@
 					RelativePath="..\..\..\source\QSAR\aromaticityProcessor.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4245,6 +5818,14 @@
 				<File
 					RelativePath="..\..\..\source\QSAR\connectivityBase.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4258,6 +5839,14 @@
 					RelativePath="..\..\..\source\QSAR\connectivityDescriptors.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4269,6 +5858,14 @@
 				<File
 					RelativePath="..\..\..\source\QSAR\descriptor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4282,6 +5879,14 @@
 					RelativePath="..\..\..\source\QSAR\partialChargeBase.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4293,6 +5898,14 @@
 				<File
 					RelativePath="..\..\..\source\QSAR\partialChargeDescriptors.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4306,6 +5919,14 @@
 					RelativePath="..\..\..\source\QSAR\partialChargeProcessor.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4317,6 +5938,14 @@
 				<File
 					RelativePath="..\..\..\source\QSAR\ringPerceptionProcessor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4330,6 +5959,14 @@
 					RelativePath="..\..\..\source\QSAR\simpleBase.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4341,6 +5978,14 @@
 				<File
 					RelativePath="..\..\..\source\QSAR\simpleDescriptors.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4354,6 +5999,14 @@
 					RelativePath="..\..\..\source\QSAR\surfaceBase.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4365,6 +6018,14 @@
 				<File
 					RelativePath="..\..\..\source\QSAR\surfaceDescriptors.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4385,6 +6046,14 @@
 						RelativePath="..\..\..\source\SCORING\COMMON\baseFunction.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -4396,6 +6065,14 @@
 					<File
 						RelativePath="..\..\..\source\SCORING\COMMON\fermiBaseFunction.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -4409,6 +6086,14 @@
 						RelativePath="..\..\..\source\SCORING\COMMON\linearBaseFunction.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -4420,6 +6105,14 @@
 					<File
 						RelativePath="..\..\..\source\SCORING\COMMON\scoringComponent.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -4433,6 +6126,14 @@
 						RelativePath="..\..\..\source\SCORING\COMMON\scoringFunction.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -4444,6 +6145,14 @@
 					<File
 						RelativePath="..\..\..\source\SCORING\COMMON\scoringTypes.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -4461,6 +6170,14 @@
 						RelativePath="..\..\..\source\SCORING\COMPONENTS\aromaticRingStacking.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -4472,6 +6189,14 @@
 					<File
 						RelativePath="..\..\..\source\SCORING\COMPONENTS\buriedPolar.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -4485,6 +6210,14 @@
 						RelativePath="..\..\..\source\SCORING\COMPONENTS\CHPI.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -4496,6 +6229,14 @@
 					<File
 						RelativePath="..\..\..\source\SCORING\COMPONENTS\hydrogenBond.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -4509,6 +6250,14 @@
 						RelativePath="..\..\..\source\SCORING\COMPONENTS\lipophilic.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -4520,6 +6269,14 @@
 					<File
 						RelativePath="..\..\..\source\SCORING\COMPONENTS\nonpolarSolvation.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -4533,6 +6290,14 @@
 						RelativePath="..\..\..\source\SCORING\COMPONENTS\polarSolvation.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -4545,6 +6310,14 @@
 						RelativePath="..\..\..\source\SCORING\COMPONENTS\rotationalEntropyLoss.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -4556,6 +6329,14 @@
 					<File
 						RelativePath="..\..\..\source\SCORING\COMPONENTS\vanDerWaals.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -4573,6 +6354,14 @@
 						RelativePath="..\..\..\source\SCORING\FUNCTIONS\slickEnergy.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -4584,6 +6373,14 @@
 					<File
 						RelativePath="..\..\..\source\SCORING\FUNCTIONS\slickScore.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -4600,6 +6397,14 @@
 					<File
 						RelativePath="..\..\..\source\SCORING\TYPES\fresnoTypes.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -4618,6 +6423,14 @@
 					RelativePath="..\..\..\source\SOLVATION\claverieParameter.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4629,6 +6442,14 @@
 				<File
 					RelativePath="..\..\..\source\SOLVATION\electrostaticPotentialCalculator.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4642,6 +6463,14 @@
 					RelativePath="..\..\..\source\SOLVATION\generalizedBornCase.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4653,6 +6482,14 @@
 				<File
 					RelativePath="..\..\..\source\SOLVATION\molecularSurfaceGrid.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4666,6 +6503,14 @@
 					RelativePath="..\..\..\source\SOLVATION\ooiEnergy.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4677,6 +6522,14 @@
 				<File
 					RelativePath="..\..\..\source\SOLVATION\pair6_12InteractionEnergyProcessor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4690,6 +6543,14 @@
 					RelativePath="..\..\..\source\SOLVATION\pair6_12RDFIntegrator.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4701,6 +6562,14 @@
 				<File
 					RelativePath="..\..\..\source\SOLVATION\pairExpInteractionEnergyProcessor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4714,6 +6583,14 @@
 					RelativePath="..\..\..\source\SOLVATION\pairExpRDFIntegrator.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4725,6 +6602,14 @@
 				<File
 					RelativePath="..\..\..\source\SOLVATION\PCMCavFreeEnergyProcessor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4738,6 +6623,14 @@
 					RelativePath="..\..\..\source\SOLVATION\pierottiCavFreeEnergyProcessor.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4749,6 +6642,14 @@
 				<File
 					RelativePath="..\..\..\source\SOLVATION\poissonBoltzmann.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4762,6 +6663,14 @@
 					RelativePath="..\..\..\source\SOLVATION\reissCavFreeEnergyProcessor.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4773,6 +6682,14 @@
 				<File
 					RelativePath="..\..\..\source\SOLVATION\solventDescriptor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4786,6 +6703,14 @@
 					RelativePath="..\..\..\source\SOLVATION\solventParameter.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4797,6 +6722,14 @@
 				<File
 					RelativePath="..\..\..\source\SOLVATION\uhligCavFreeEnergyProcessor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4814,6 +6747,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\addHydrogenProcessor.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4825,6 +6766,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\analyticalSES.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4838,6 +6787,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\atomBijection.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4849,6 +6806,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\atomTyper.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4862,6 +6827,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\buildBondsProcessor.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4873,6 +6846,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\chainBuilder.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4886,6 +6867,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\connolly.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4897,6 +6886,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\defaultProcessors.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4910,6 +6907,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\fragmentDB.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4921,6 +6926,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\geometricProperties.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4934,6 +6947,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\geometricTransformations.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4945,6 +6966,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\graphEdge.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4958,6 +6987,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\graphFace.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4969,6 +7006,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\graphVertex.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4982,6 +7027,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\HBondProcessor.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -4993,6 +7046,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\kekulizer.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5006,6 +7067,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\molecularGraph.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5017,6 +7086,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\moleculeAssembler.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5030,6 +7107,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\numericalSAS.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5041,6 +7126,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\peptideBuilder.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5054,6 +7147,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\peptides.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5065,6 +7166,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\radialDistributionFunction.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5078,6 +7187,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\RDFIntegrator.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5089,6 +7206,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\RDFParameter.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5102,6 +7227,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\RDFSection.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5113,6 +7246,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\reconstructFragmentProcessor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5126,6 +7267,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\reducedSurface.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5137,6 +7286,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\residueChecker.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5150,6 +7307,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\residueRotamerSet.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5161,6 +7326,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\ringAnalyser.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5174,6 +7347,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\ringClusterer.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5185,6 +7366,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\RMSDMinimizer.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5198,6 +7387,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\rotamerLibrary.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5209,6 +7406,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\rsConstructor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5222,6 +7427,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\RSEdge.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5233,6 +7446,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\RSFace.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5246,6 +7467,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\RSVertex.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5257,6 +7486,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\SASEdge.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5270,6 +7507,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\SASFace.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5281,6 +7526,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\SASVertex.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5294,6 +7547,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\sdGenerator.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5305,6 +7566,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\secondaryStructureProcessor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5318,6 +7587,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\SESEdge.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5329,6 +7606,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\SESFace.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5342,6 +7627,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\SESVertex.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5353,6 +7646,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\smartsMatcher.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5366,6 +7667,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\smartsParser.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5377,6 +7686,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\smartsParserLexer.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5390,6 +7707,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\smartsParserParser.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5401,6 +7726,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\smilesParser.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5414,6 +7747,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\smilesParserLexer.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5425,6 +7766,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\smilesParserParser.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5438,6 +7787,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\solventAccessibleSurface.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5449,6 +7806,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\solventExcludedSurface.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5462,6 +7827,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\structureMapper.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5473,6 +7846,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\surfaceProcessor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5486,6 +7867,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\triangle.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5497,6 +7886,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\triangleEdge.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5510,6 +7907,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\trianglePoint.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5521,6 +7926,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\triangulatedSAS.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5534,6 +7947,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\triangulatedSES.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5546,6 +7967,14 @@
 					RelativePath="..\..\..\source\STRUCTURE\triangulatedSurface.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5557,6 +7986,14 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\UCK.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5573,6 +8010,14 @@
 						RelativePath="..\..\..\source\STRUCTURE\DOCKING\amberEvaluation.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -5584,6 +8029,14 @@
 					<File
 						RelativePath="..\..\..\source\STRUCTURE\DOCKING\conformationSet.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -5597,6 +8050,14 @@
 						RelativePath="..\..\..\source\STRUCTURE\DOCKING\dockingAlgorithm.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -5608,6 +8069,14 @@
 					<File
 						RelativePath="..\..\..\source\STRUCTURE\DOCKING\dockResult.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -5621,6 +8090,14 @@
 						RelativePath="..\..\..\source\STRUCTURE\DOCKING\energeticEvaluation.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -5632,6 +8109,14 @@
 					<File
 						RelativePath="..\..\..\source\STRUCTURE\DOCKING\forceFieldEvaluation.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -5645,6 +8130,14 @@
 						RelativePath="..\..\..\source\STRUCTURE\DOCKING\geometricFit.C"
 						>
 						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Debug|Win32"
 							>
 							<Tool
@@ -5656,6 +8149,14 @@
 					<File
 						RelativePath="..\..\..\source\STRUCTURE\DOCKING\randomEvaluation.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -5674,6 +8175,14 @@
 					RelativePath="..\..\..\source\SYSTEM\directory.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5685,6 +8194,14 @@
 				<File
 					RelativePath="..\..\..\source\SYSTEM\file.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5698,6 +8215,14 @@
 					RelativePath="..\..\..\source\SYSTEM\fileSystem.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5709,6 +8234,14 @@
 				<File
 					RelativePath="..\..\..\source\SYSTEM\path.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5722,6 +8255,14 @@
 					RelativePath="..\..\..\source\SYSTEM\socket.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5733,6 +8274,14 @@
 				<File
 					RelativePath="..\..\..\source\SYSTEM\sysinfo.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5746,6 +8295,14 @@
 					RelativePath="..\..\..\source\SYSTEM\systemCalls.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5758,6 +8315,14 @@
 					RelativePath="..\..\..\source\SYSTEM\TCPTransfer.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -5769,6 +8334,14 @@
 				<File
 					RelativePath="..\..\..\source\SYSTEM\timer.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -5785,6 +8358,14 @@
 				<File
 					RelativePath="..\..\..\source\PYTHON\pyInterpreter.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>

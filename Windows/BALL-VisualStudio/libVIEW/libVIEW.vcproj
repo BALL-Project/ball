@@ -19,6 +19,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			>
 			<Tool
@@ -38,8 +39,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\GeneratedFiles;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtXml;$(QTDIR)\include\QtSql;$(QTDIR)\include\QtOpenGL;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtSvg;$(QTDIR)\include\QtTest;$(SolutionDir)\..\..\include\BALL\VIEW\UIC"
-				PreprocessorDefinitions="UNICODE,WIN32,QT_THREAD_SUPPORT,QT_NO_DEBUG,NDEBUG,QT_CORE_LIB,QT_GUI_LIB,QT_XML_LIB,QT_SQL_LIB,QT_OPENGL_LIB,QT_NETWORK_LIB,QT_SVG_LIB,LIBVIEW_LIB"
+				AdditionalIncludeDirectories=".\GeneratedFiles;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtXml;$(QTDIR)\include\QtSql;$(QTDIR)\include\QtOpenGL;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtSvg;$(SolutionDir)\..\include;$(SolutionDir)\..\contrib\include;$(SolutionDir)\..\contrib\include\python;$(SolutionDir)\..\..\include;$(QTDIR)\include\QtTest;$(SolutionDir)\..\..\include\BALL\VIEW\UIC"
+				PreprocessorDefinitions="UNICODE;WIN32;QT_THREAD_SUPPORT;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_XML_LIB;QT_SQL_LIB;QT_OPENGL_LIB;QT_NETWORK_LIB;QT_SVG_LIB;LIBVIEW_LIB;BALL_VIEW_BUILD_DLL"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
 				DebugInformationFormat="0"
@@ -55,9 +56,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=" qtmain.lib QtCore4.lib QtGui4.lib QtXml4.lib QtSql4.lib QtOpenGL4.lib opengl32.lib glu32.lib QtNetwork4.lib QtSvg4.lib QtTest4.lib"
+				AdditionalDependencies="qtmain.lib QtCore4.lib QtGui4.lib QtXml4.lib QtSql4.lib QtOpenGL4.lib opengl32.lib glu32.lib QtNetwork4.lib QtSvg4.lib QtTest4.lib libBALL.lib glew32.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
-				AdditionalLibraryDirectories="$(QTDIR)\lib"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;;&quot;$(OutDir)&quot;"
 				GenerateDebugInformation="false"
 				SubSystem="2"
 			/>
@@ -170,6 +171,14 @@
 					RelativePath="..\..\..\source\VIEW\DATATYPE\colorExtensions.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -181,6 +190,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DATATYPE\colorHSV.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -194,6 +211,14 @@
 					RelativePath="..\..\..\source\VIEW\DATATYPE\colorMap.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -205,6 +230,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DATATYPE\colorRGBA.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -218,6 +251,14 @@
 					RelativePath="..\..\..\source\VIEW\DATATYPE\colorUnit.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -229,6 +270,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DATATYPE\colorUnitHue.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -242,6 +291,14 @@
 					RelativePath="..\..\..\source\VIEW\DATATYPE\dataset.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -253,6 +310,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DATATYPE\standardDatasets.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -266,6 +331,14 @@
 					RelativePath="..\..\..\source\VIEW\DATATYPE\vertex1.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -277,6 +350,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DATATYPE\vertex2.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -449,6 +530,13 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\editSettings.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -778,6 +866,14 @@
 					RelativePath="..\..\..\source\VIEW\KERNEL\clippingPlane.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -789,6 +885,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\KERNEL\common.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -802,6 +906,14 @@
 					RelativePath="..\..\..\source\VIEW\KERNEL\compositeManager.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -813,6 +925,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\KERNEL\connectionObject.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -826,6 +946,14 @@
 					RelativePath="..\..\..\source\VIEW\KERNEL\geometricObject.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -837,6 +965,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\KERNEL\mainControl.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -850,6 +986,14 @@
 					RelativePath="..\..\..\source\VIEW\KERNEL\message.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -861,6 +1005,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\KERNEL\modelInformation.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -874,6 +1026,14 @@
 					RelativePath="..\..\..\source\VIEW\KERNEL\modularWidget.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -885,6 +1045,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\KERNEL\preferencesEntry.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -898,6 +1066,14 @@
 					RelativePath="..\..\..\source\VIEW\KERNEL\representation.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -909,6 +1085,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\KERNEL\representationManager.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -922,6 +1106,14 @@
 					RelativePath="..\..\..\source\VIEW\KERNEL\server.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -934,6 +1126,14 @@
 					RelativePath="..\..\..\source\VIEW\KERNEL\stage.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -945,6 +1145,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\KERNEL\threads.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -962,6 +1170,14 @@
 					RelativePath="..\..\..\source\VIEW\MODELS\atomBondModelBaseProcessor.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -973,6 +1189,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\MODELS\backboneModel.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -986,6 +1210,14 @@
 					RelativePath="..\..\..\source\VIEW\MODELS\ballAndStickModel.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -997,6 +1229,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\MODELS\cartoonModel.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1010,6 +1250,14 @@
 					RelativePath="..\..\..\source\VIEW\MODELS\colorProcessor.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1021,6 +1269,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\MODELS\fieldLineCreator.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1034,6 +1290,14 @@
 					RelativePath="..\..\..\source\VIEW\MODELS\forceModel.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1045,6 +1309,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\MODELS\HBondModel.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1058,6 +1330,14 @@
 					RelativePath="..\..\..\source\VIEW\MODELS\labelModel.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1069,6 +1349,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\MODELS\lineModel.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1082,6 +1370,14 @@
 					RelativePath="..\..\..\source\VIEW\MODELS\modelProcessor.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1093,6 +1389,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\MODELS\standardColorProcessor.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1106,6 +1410,14 @@
 					RelativePath="..\..\..\source\VIEW\MODELS\surfaceModel.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1117,6 +1429,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\MODELS\vanDerWaalsModel.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1134,6 +1454,14 @@
 					RelativePath="..\..\..\source\VIEW\PRIMITIVES\box.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1145,6 +1473,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\PRIMITIVES\disc.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1158,6 +1494,14 @@
 					RelativePath="..\..\..\source\VIEW\PRIMITIVES\gridVisualisation.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1169,6 +1513,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\PRIMITIVES\label.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1182,6 +1534,14 @@
 					RelativePath="..\..\..\source\VIEW\PRIMITIVES\line.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1193,6 +1553,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\PRIMITIVES\mesh.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1206,6 +1574,14 @@
 					RelativePath="..\..\..\source\VIEW\PRIMITIVES\multiLine.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1217,6 +1593,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\PRIMITIVES\point.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1230,6 +1614,14 @@
 					RelativePath="..\..\..\source\VIEW\PRIMITIVES\quadMesh.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1241,6 +1633,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\PRIMITIVES\simpleBox.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1254,6 +1654,14 @@
 					RelativePath="..\..\..\source\VIEW\PRIMITIVES\sphere.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1265,6 +1673,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\PRIMITIVES\tube.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1278,6 +1694,14 @@
 					RelativePath="..\..\..\source\VIEW\PRIMITIVES\twoColoredLine.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1289,6 +1713,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\PRIMITIVES\twoColoredTube.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1306,6 +1738,14 @@
 					RelativePath="..\..\..\source\VIEW\RENDERING\glDisplayList.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1317,6 +1757,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\RENDERING\glRenderer.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1330,6 +1778,14 @@
 					RelativePath="..\..\..\source\VIEW\RENDERING\POVRenderer.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1341,6 +1797,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\RENDERING\renderer.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1354,6 +1818,14 @@
 					RelativePath="..\..\..\source\VIEW\RENDERING\vertexBuffer.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1365,6 +1837,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\RENDERING\VRMLRenderer.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1434,6 +1914,14 @@
 					RelativePath="..\..\..\source\VIEW\WIDGETS\datasetControl.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1445,6 +1933,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\WIDGETS\dockingController.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1458,6 +1954,14 @@
 					RelativePath="..\..\..\source\VIEW\WIDGETS\dockWidget.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1469,6 +1973,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\WIDGETS\editableScene.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1482,6 +1994,14 @@
 					RelativePath="..\..\..\source\VIEW\WIDGETS\fileObserver.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1493,6 +2013,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\WIDGETS\genericControl.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1506,6 +2034,14 @@
 					RelativePath="..\..\..\source\VIEW\WIDGETS\geometricControl.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1517,6 +2053,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\WIDGETS\helpViewer.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1530,6 +2074,14 @@
 					RelativePath="..\..\..\source\VIEW\WIDGETS\logView.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1541,6 +2093,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\WIDGETS\molecularControl.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1554,6 +2114,14 @@
 					RelativePath="..\..\..\source\VIEW\WIDGETS\molecularStructure.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1565,6 +2133,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\WIDGETS\pyWidget.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1578,6 +2154,14 @@
 					RelativePath="..\..\..\source\VIEW\WIDGETS\scene.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1590,6 +2174,14 @@
 					RelativePath="..\..\..\source\VIEW\WIDGETS\SDWidget.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -1601,6 +2193,14 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\WIDGETS\testFramework.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -1653,7 +2253,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing dataset.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DATATYPE\dataset.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_dataset.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DATATYPE\dataset.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_dataset.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DATATYPE\dataset.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_dataset.cpp&quot;"
 						/>
@@ -1679,7 +2279,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing standardDatasets.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DATATYPE\standardDatasets.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_standardDatasets.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DATATYPE\standardDatasets.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_standardDatasets.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DATATYPE\standardDatasets.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_standardDatasets.cpp&quot;"
 						/>
@@ -1717,7 +2317,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing amberConfigurationDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\amberConfigurationDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_amberConfigurationDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\amberConfigurationDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_amberConfigurationDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\amberConfigurationDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_amberConfigurationDialog.cpp&quot;"
 						/>
@@ -1743,7 +2343,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing atomOverview.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\atomOverview.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_atomOverview.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\atomOverview.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_atomOverview.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\atomOverview.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_atomOverview.cpp&quot;"
 						/>
@@ -1769,7 +2369,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing bondProperties.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\bondProperties.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_bondProperties.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\bondProperties.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_bondProperties.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\bondProperties.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_bondProperties.cpp&quot;"
 						/>
@@ -1795,7 +2395,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing charmmConfigurationDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\charmmConfigurationDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_charmmConfigurationDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\charmmConfigurationDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_charmmConfigurationDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\charmmConfigurationDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_charmmConfigurationDialog.cpp&quot;"
 						/>
@@ -1821,7 +2421,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing clippingDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\clippingDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_clippingDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\clippingDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_clippingDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\clippingDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_clippingDialog.cpp&quot;"
 						/>
@@ -1847,7 +2447,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing coloringSettingsDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\coloringSettingsDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_coloringSettingsDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\coloringSettingsDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_coloringSettingsDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\coloringSettingsDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_coloringSettingsDialog.cpp&quot;"
 						/>
@@ -1873,7 +2473,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing compositeProperties.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\compositeProperties.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_compositeProperties.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\compositeProperties.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_compositeProperties.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\compositeProperties.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_compositeProperties.cpp&quot;"
 						/>
@@ -1899,7 +2499,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing contourSurfaceDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\contourSurfaceDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_contourSurfaceDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\contourSurfaceDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_contourSurfaceDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\contourSurfaceDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_contourSurfaceDialog.cpp&quot;"
 						/>
@@ -1925,7 +2525,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing displayProperties.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\displayProperties.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_displayProperties.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\displayProperties.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_displayProperties.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\displayProperties.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_displayProperties.cpp&quot;"
 						/>
@@ -1951,7 +2551,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing dockDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\dockDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_dockDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\dockDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_dockDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\dockDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_dockDialog.cpp&quot;"
 						/>
@@ -1977,7 +2577,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing dockProgressDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\dockProgressDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_dockProgressDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\dockProgressDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_dockProgressDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\dockProgressDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_dockProgressDialog.cpp&quot;"
 						/>
@@ -2003,7 +2603,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing dockResultDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\dockResultDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_dockResultDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\dockResultDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_dockResultDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\dockResultDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_dockResultDialog.cpp&quot;"
 						/>
@@ -2029,7 +2629,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing downloadPDBFile.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\downloadPDBFile.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_downloadPDBFile.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\downloadPDBFile.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_downloadPDBFile.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\downloadPDBFile.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_downloadPDBFile.cpp&quot;"
 						/>
@@ -2055,7 +2655,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing editSettings.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\editSettings.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_editSettings.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\editSettings.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_editSettings.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\editSettings.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_editSettings.cpp&quot;"
 						/>
@@ -2081,7 +2681,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing FDPBDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\FDPBDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_FDPBDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\FDPBDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_FDPBDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\FDPBDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_FDPBDialog.cpp&quot;"
 						/>
@@ -2107,7 +2707,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing fieldLinesDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\fieldLinesDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_fieldLinesDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\fieldLinesDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_fieldLinesDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\fieldLinesDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_fieldLinesDialog.cpp&quot;"
 						/>
@@ -2133,7 +2733,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing geometricFitDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\geometricFitDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_geometricFitDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\geometricFitDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_geometricFitDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\geometricFitDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_geometricFitDialog.cpp&quot;"
 						/>
@@ -2159,7 +2759,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing gridVisualizationDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\gridVisualizationDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_gridVisualizationDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\gridVisualizationDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_gridVisualizationDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\gridVisualizationDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_gridVisualizationDialog.cpp&quot;"
 						/>
@@ -2185,7 +2785,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing labelDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\labelDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_labelDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\labelDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_labelDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\labelDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_labelDialog.cpp&quot;"
 						/>
@@ -2211,7 +2811,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing lightSettings.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\lightSettings.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_lightSettings.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\lightSettings.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_lightSettings.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\lightSettings.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_lightSettings.cpp&quot;"
 						/>
@@ -2237,7 +2837,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing mainControlPreferences.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\mainControlPreferences.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_mainControlPreferences.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\mainControlPreferences.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_mainControlPreferences.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\mainControlPreferences.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_mainControlPreferences.cpp&quot;"
 						/>
@@ -2263,7 +2863,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing materialSettings.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\materialSettings.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_materialSettings.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\materialSettings.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_materialSettings.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\materialSettings.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_materialSettings.cpp&quot;"
 						/>
@@ -2289,7 +2889,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing minimizationDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\minimizationDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_minimizationDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\minimizationDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_minimizationDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\minimizationDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_minimizationDialog.cpp&quot;"
 						/>
@@ -2315,7 +2915,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing MMFF94ConfigurationDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\MMFF94ConfigurationDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_MMFF94ConfigurationDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\MMFF94ConfigurationDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_MMFF94ConfigurationDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\MMFF94ConfigurationDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_MMFF94ConfigurationDialog.cpp&quot;"
 						/>
@@ -2341,7 +2941,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing modelSettingsDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\modelSettingsDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_modelSettingsDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\modelSettingsDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_modelSettingsDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\modelSettingsDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_modelSettingsDialog.cpp&quot;"
 						/>
@@ -2367,7 +2967,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing modifyRepresentationDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\modifyRepresentationDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_modifyRepresentationDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\modifyRepresentationDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_modifyRepresentationDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\modifyRepresentationDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_modifyRepresentationDialog.cpp&quot;"
 						/>
@@ -2393,7 +2993,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing molecularDynamicsDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\molecularDynamicsDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_molecularDynamicsDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\molecularDynamicsDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_molecularDynamicsDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\molecularDynamicsDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_molecularDynamicsDialog.cpp&quot;"
 						/>
@@ -2419,7 +3019,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing molecularFileDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\molecularFileDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_molecularFileDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\molecularFileDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_molecularFileDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\molecularFileDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_molecularFileDialog.cpp&quot;"
 						/>
@@ -2445,7 +3045,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing networkPreferences.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\networkPreferences.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_networkPreferences.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\networkPreferences.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_networkPreferences.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\networkPreferences.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_networkPreferences.cpp&quot;"
 						/>
@@ -2471,7 +3071,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing parsedFunctionDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\parsedFunctionDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_parsedFunctionDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\parsedFunctionDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_parsedFunctionDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\parsedFunctionDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_parsedFunctionDialog.cpp&quot;"
 						/>
@@ -2497,7 +3097,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing peptideDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\peptideDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_peptideDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\peptideDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_peptideDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\peptideDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_peptideDialog.cpp&quot;"
 						/>
@@ -2523,7 +3123,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing preferences.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\preferences.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_preferences.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\preferences.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_preferences.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\preferences.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_preferences.cpp&quot;"
 						/>
@@ -2549,7 +3149,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing PTEDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\PTEDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_PTEDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\PTEDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_PTEDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\PTEDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_PTEDialog.cpp&quot;"
 						/>
@@ -2575,7 +3175,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing pubchemDialog.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\pubchemDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_pubchemDialog.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\pubchemDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_pubchemDialog.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\pubchemDialog.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_pubchemDialog.cpp&quot;"
 						/>
@@ -2601,7 +3201,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing pythonSettings.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\pythonSettings.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_pythonSettings.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\pythonSettings.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_pythonSettings.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\pythonSettings.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_pythonSettings.cpp&quot;"
 						/>
@@ -2627,7 +3227,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing serverPreferences.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\serverPreferences.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_serverPreferences.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\serverPreferences.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_serverPreferences.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\serverPreferences.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_serverPreferences.cpp&quot;"
 						/>
@@ -2653,7 +3253,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing setCamera.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\setCamera.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_setCamera.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\setCamera.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_setCamera.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\setCamera.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_setCamera.cpp&quot;"
 						/>
@@ -2679,7 +3279,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing setClippingPlane.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\setClippingPlane.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_setClippingPlane.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\setClippingPlane.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_setClippingPlane.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\setClippingPlane.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_setClippingPlane.cpp&quot;"
 						/>
@@ -2705,7 +3305,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing snapShotVisualisation.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\snapShotVisualisation.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_snapShotVisualisation.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\snapShotVisualisation.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_snapShotVisualisation.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\snapShotVisualisation.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_snapShotVisualisation.cpp&quot;"
 						/>
@@ -2731,7 +3331,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing stageSettings.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\stageSettings.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_stageSettings.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\stageSettings.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_stageSettings.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\stageSettings.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_stageSettings.cpp&quot;"
 						/>
@@ -2781,7 +3381,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing mainControl.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\KERNEL\mainControl.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_mainControl.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\KERNEL\mainControl.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_mainControl.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\KERNEL\mainControl.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_mainControl.cpp&quot;"
 						/>
@@ -2995,7 +3595,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing datasetControl.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\datasetControl.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_datasetControl.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\datasetControl.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_datasetControl.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\WIDGETS\datasetControl.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_datasetControl.cpp&quot;"
 						/>
@@ -3021,7 +3621,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing dockingController.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\dockingController.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_dockingController.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\dockingController.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_dockingController.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\WIDGETS\dockingController.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_dockingController.cpp&quot;"
 						/>
@@ -3047,7 +3647,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing dockWidget.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\dockWidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_dockWidget.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\dockWidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_dockWidget.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\WIDGETS\dockWidget.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_dockWidget.cpp&quot;"
 						/>
@@ -3073,7 +3673,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing editableScene.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\editableScene.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_editableScene.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\editableScene.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_editableScene.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\WIDGETS\editableScene.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_editableScene.cpp&quot;"
 						/>
@@ -3099,7 +3699,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing fileObserver.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\fileObserver.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_fileObserver.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\fileObserver.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_fileObserver.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\WIDGETS\fileObserver.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_fileObserver.cpp&quot;"
 						/>
@@ -3125,7 +3725,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing genericControl.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\genericControl.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_genericControl.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\genericControl.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_genericControl.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\WIDGETS\genericControl.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_genericControl.cpp&quot;"
 						/>
@@ -3151,7 +3751,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing geometricControl.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\geometricControl.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_geometricControl.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\geometricControl.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_geometricControl.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\WIDGETS\geometricControl.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_geometricControl.cpp&quot;"
 						/>
@@ -3177,7 +3777,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing helpViewer.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\helpViewer.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_helpViewer.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\helpViewer.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_helpViewer.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\WIDGETS\helpViewer.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_helpViewer.cpp&quot;"
 						/>
@@ -3203,7 +3803,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing logView.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\logView.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_logView.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\logView.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_logView.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\WIDGETS\logView.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_logView.cpp&quot;"
 						/>
@@ -3229,7 +3829,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing molecularControl.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\molecularControl.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_molecularControl.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\molecularControl.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_molecularControl.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\WIDGETS\molecularControl.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_molecularControl.cpp&quot;"
 						/>
@@ -3255,7 +3855,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing molecularStructure.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\molecularStructure.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_molecularStructure.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\molecularStructure.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_molecularStructure.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\WIDGETS\molecularStructure.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_molecularStructure.cpp&quot;"
 						/>
@@ -3281,7 +3881,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing pyWidget.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\pyWidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_pyWidget.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\pyWidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_pyWidget.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\WIDGETS\pyWidget.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_pyWidget.cpp&quot;"
 						/>
@@ -3307,7 +3907,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing scene.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\scene.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_scene.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\scene.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_scene.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\WIDGETS\scene.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_scene.cpp&quot;"
 						/>
@@ -3337,7 +3937,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing testFramework.h..."
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;.\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\testFramework.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_testFramework.cpp&quot;&#x0D;&#x0A;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\WIDGETS\testFramework.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_testFramework.cpp&quot;&#x0D;&#x0A;"
 							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\WIDGETS\testFramework.h"
 							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_testFramework.cpp&quot;"
 						/>
@@ -3704,6 +4304,7 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -4390,18 +4991,6 @@
 			SourceControlFiles="false"
 			>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_amberConfigurationDialog.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\Debug\moc_amberConfigurationDialog.cpp"
 				>
 				<FileConfiguration
@@ -4414,7 +5003,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_atomOverview.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_amberConfigurationDialog.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -4438,10 +5027,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_bondProperties.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_atomOverview.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -4462,10 +5051,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_charmmConfigurationDialog.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_bondProperties.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -4478,6 +5067,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Release\moc_charmmConfigurationDialog.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -4510,18 +5111,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_coloringSettingsDialog.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\Debug\moc_coloringSettingsDialog.cpp"
 				>
 				<FileConfiguration
@@ -4534,10 +5123,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_compositeProperties.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_coloringSettingsDialog.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -4558,7 +5147,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_contourSurfaceDialog.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_compositeProperties.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -4582,10 +5171,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_dataset.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_contourSurfaceDialog.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -4598,6 +5187,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Release\moc_dataset.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -4630,18 +5231,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_displayProperties.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\Debug\moc_displayProperties.cpp"
 				>
 				<FileConfiguration
@@ -4654,10 +5243,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_dockDialog.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_displayProperties.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -4678,10 +5267,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_dockingController.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_dockDialog.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -4702,7 +5291,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_dockProgressDialog.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_dockingController.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -4718,6 +5307,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Release\moc_dockProgressDialog.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -4750,18 +5351,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_dockWidget.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\Release\moc_dockWidget.cpp"
 				>
 				<FileConfiguration
@@ -4774,7 +5363,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_downloadPDBFile.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_dockWidget.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -4798,10 +5387,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_editableScene.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_downloadPDBFile.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -4822,7 +5411,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_editSettings.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_editableScene.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -4838,6 +5427,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Release\moc_editSettings.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -4870,18 +5471,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_fieldLinesDialog.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\Debug\moc_fieldLinesDialog.cpp"
 				>
 				<FileConfiguration
@@ -4894,7 +5483,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_fileObserver.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_fieldLinesDialog.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -4918,10 +5507,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_genericControl.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_fileObserver.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -4942,7 +5531,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_geometricControl.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_genericControl.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -4958,6 +5547,18 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Debug\moc_geometricControl.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -4990,18 +5591,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_gridVisualizationDialog.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\Debug\moc_gridVisualizationDialog.cpp"
 				>
 				<FileConfiguration
@@ -5014,7 +5603,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_helpViewer.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_gridVisualizationDialog.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -5038,10 +5627,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_labelDialog.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_helpViewer.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -5062,10 +5651,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_lightSettings.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_labelDialog.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -5078,6 +5667,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Release\moc_lightSettings.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -5110,18 +5711,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_mainControl.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\Debug\moc_mainControl.cpp"
 				>
 				<FileConfiguration
@@ -5134,7 +5723,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_mainControlPreferences.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_mainControl.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -5158,10 +5747,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_materialSettings.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_mainControlPreferences.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -5182,10 +5771,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_minimizationDialog.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_materialSettings.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -5198,6 +5787,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Release\moc_minimizationDialog.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -5230,18 +5831,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_modelSettingsDialog.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\Debug\moc_modelSettingsDialog.cpp"
 				>
 				<FileConfiguration
@@ -5254,10 +5843,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_modifyRepresentationDialog.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_modelSettingsDialog.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -5278,7 +5867,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_molecularControl.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_modifyRepresentationDialog.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -5294,6 +5883,18 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Debug\moc_molecularControl.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -5326,18 +5927,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_molecularFileDialog.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\Release\moc_molecularFileDialog.cpp"
 				>
 				<FileConfiguration
@@ -5350,10 +5939,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_molecularStructure.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_molecularFileDialog.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -5374,7 +5963,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_networkPreferences.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_molecularStructure.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -5398,7 +5987,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_parsedFunctionDialog.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_networkPreferences.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -5414,6 +6003,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Release\moc_parsedFunctionDialog.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -5446,18 +6047,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_preferences.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\Debug\moc_preferences.cpp"
 				>
 				<FileConfiguration
@@ -5470,7 +6059,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_PTEDialog.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_preferences.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -5494,7 +6083,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_pubchemDialog.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_PTEDialog.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -5518,7 +6107,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_pythonSettings.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_pubchemDialog.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -5534,6 +6123,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Release\moc_pythonSettings.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -5566,18 +6167,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_scene.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\Debug\moc_scene.cpp"
 				>
 				<FileConfiguration
@@ -5590,7 +6179,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_serverPreferences.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_scene.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -5614,10 +6203,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_setCamera.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_serverPreferences.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -5638,10 +6227,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_setClippingPlane.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_setCamera.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -5654,6 +6243,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Release\moc_setClippingPlane.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -5686,18 +6287,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_stageSettings.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\Release\moc_stageSettings.cpp"
 				>
 				<FileConfiguration
@@ -5710,10 +6299,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_standardDatasets.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_stageSettings.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -5734,10 +6323,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_testFramework.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_standardDatasets.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -5750,6 +6339,18 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Debug\moc_testFramework.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
