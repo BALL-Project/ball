@@ -139,7 +139,7 @@
 			Name="BisonParser"
 			DisplayName="Bison Parser"
 			CommandLine="$(SolutionDir)\..\Contrib\bin\runBison.bat [AllOptions] [AdditionalOptions] [Inputs]"
-			Outputs="$(InputName).C $(InputName).h"
+			Outputs="$(InputDir)\$(InputName).C"
 			FileExtensions="*.y"
 			ExecutionDescription="Generating parser based on grammar..."
 			>
@@ -206,12 +206,26 @@
 		<CustomBuildRule
 			Name="SipGenerator"
 			DisplayName="SipGenerator"
-			CommandLine="$(SolutionDir)\..\Contrib\bin\sip.exe -e -s &quot;.C&quot; -b BALL.sbf [Inputs]"
-			Outputs="$(InputDir)\$(InputName).C"
+			CommandLine="$(SolutionDir)\..\Contrib\bin\runSip.bat $(InputDir) [OutputDir] [SBFFile]  [Inputs]"
+			Outputs="$(SolutionDir)\GeneratedFiles\$(InputName).C"
 			FileExtensions="*.sip"
 			ExecutionDescription="Generating python bindings..."
+			BatchingSeparator=""
 			>
 			<Properties>
+				<StringProperty
+					Name="OutputDir"
+					DisplayName="OutputDir"
+					Description="OutputDir"
+					Switch="-c[value]"
+					DefaultValue="$(SolutionDir)\GeneratedFiles\"
+				/>
+				<StringProperty
+					Name="SBFFile"
+					DisplayName="SBFFile"
+					Switch="-b[value]"
+					DefaultValue="$(InputName).sbf"
+				/>
 			</Properties>
 		</CustomBuildRule>
 	</Rules>

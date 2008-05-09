@@ -1,25 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libBALL", "libBALL\libBALL.vcproj", "{DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libVIEW", "libVIEW\libVIEW.vcproj", "{05821317-82B2-4E5E-9624-2D40FEA7E1A6}"
 	GlobalSection(Qt) = preSolution
 		Integration = True
 	EndGlobalSection
 	ProjectSection(ProjectDependencies) = postProject
-		{DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF} = {DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF}
+		{19709205-47E2-45A3-A266-3488F113508D} = {19709205-47E2-45A3-A266-3488F113508D}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TEST", "TEST\TEST.vcproj", "{BE13AEBE-08B2-4F3E-AF31-5CAA6848DEDA}"
 	ProjectSection(ProjectDependencies) = postProject
-		{DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF} = {DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF}
 		{05821317-82B2-4E5E-9624-2D40FEA7E1A6} = {05821317-82B2-4E5E-9624-2D40FEA7E1A6}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TEST_ClassTest", "TEST_ClassTest\TEST_ClassTest.vcproj", "{05307BF4-E0A3-4EC3-BDB2-BFC139BDF1EB}"
 	ProjectSection(ProjectDependencies) = postProject
-		{DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF} = {DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF}
 		{05821317-82B2-4E5E-9624-2D40FEA7E1A6} = {05821317-82B2-4E5E-9624-2D40FEA7E1A6}
 		{BE13AEBE-08B2-4F3E-AF31-5CAA6848DEDA} = {BE13AEBE-08B2-4F3E-AF31-5CAA6848DEDA}
 	EndProjectSection
@@ -29,9 +25,21 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BALLView", "BALLView\BALLVi
 		Integration = True
 	EndGlobalSection
 	ProjectSection(ProjectDependencies) = postProject
-		{DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF} = {DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF}
+		{19709205-47E2-45A3-A266-3488F113508D} = {19709205-47E2-45A3-A266-3488F113508D}
 		{05821317-82B2-4E5E-9624-2D40FEA7E1A6} = {05821317-82B2-4E5E-9624-2D40FEA7E1A6}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libBALL", "libBALL\libBALL.vcproj", "{19709205-47E2-45A3-A266-3488F113508D}"
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TESTS", "TESTS", "{E5AF9472-8B58-49E5-A92A-E8F4BB0A5ED1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BALLModule", "BALLModule\BALLModule.vcproj", "{1C95B07B-2F01-43C3-A619-635E5CE9DF01}"
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,16 +47,11 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF}.Debug|Win32.ActiveCfg = Debug|Win32
-		{DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF}.Debug|Win32.Build.0 = Debug|Win32
-		{DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF}.Release|Win32.ActiveCfg = Release|Win32
-		{DCC9A904-EED8-4F9F-AC07-571BE8F7F3FF}.Release|Win32.Build.0 = Release|Win32
 		{05821317-82B2-4E5E-9624-2D40FEA7E1A6}.Debug|Win32.ActiveCfg = Debug|Win32
 		{05821317-82B2-4E5E-9624-2D40FEA7E1A6}.Debug|Win32.Build.0 = Debug|Win32
 		{05821317-82B2-4E5E-9624-2D40FEA7E1A6}.Release|Win32.ActiveCfg = Release|Win32
 		{05821317-82B2-4E5E-9624-2D40FEA7E1A6}.Release|Win32.Build.0 = Release|Win32
 		{BE13AEBE-08B2-4F3E-AF31-5CAA6848DEDA}.Debug|Win32.ActiveCfg = Debug|Win32
-		{BE13AEBE-08B2-4F3E-AF31-5CAA6848DEDA}.Debug|Win32.Build.0 = Debug|Win32
 		{BE13AEBE-08B2-4F3E-AF31-5CAA6848DEDA}.Release|Win32.ActiveCfg = Release|Win32
 		{BE13AEBE-08B2-4F3E-AF31-5CAA6848DEDA}.Release|Win32.Build.0 = Release|Win32
 		{05307BF4-E0A3-4EC3-BDB2-BFC139BDF1EB}.Debug|Win32.ActiveCfg = Debug|Win32
@@ -59,8 +62,19 @@ Global
 		{B45D0A45-D1B7-45B4-A78E-C0F2E4B48D0D}.Debug|Win32.Build.0 = Debug|Win32
 		{B45D0A45-D1B7-45B4-A78E-C0F2E4B48D0D}.Release|Win32.ActiveCfg = Release|Win32
 		{B45D0A45-D1B7-45B4-A78E-C0F2E4B48D0D}.Release|Win32.Build.0 = Release|Win32
+		{19709205-47E2-45A3-A266-3488F113508D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{19709205-47E2-45A3-A266-3488F113508D}.Debug|Win32.Build.0 = Debug|Win32
+		{19709205-47E2-45A3-A266-3488F113508D}.Release|Win32.ActiveCfg = Release|Win32
+		{19709205-47E2-45A3-A266-3488F113508D}.Release|Win32.Build.0 = Release|Win32
+		{1C95B07B-2F01-43C3-A619-635E5CE9DF01}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1C95B07B-2F01-43C3-A619-635E5CE9DF01}.Debug|Win32.Build.0 = Debug|Win32
+		{1C95B07B-2F01-43C3-A619-635E5CE9DF01}.Release|Win32.ActiveCfg = Release|Win32
+		{1C95B07B-2F01-43C3-A619-635E5CE9DF01}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{05307BF4-E0A3-4EC3-BDB2-BFC139BDF1EB} = {E5AF9472-8B58-49E5-A92A-E8F4BB0A5ED1}
 	EndGlobalSection
 EndGlobal
