@@ -307,6 +307,11 @@ namespace BALL
 	};
 	//@}
 
+	/** needed for windows dlls **/
+#ifdef BALL_COMPILER_MSVC
+	template class BALL_EXPORT TCircle3<float>;
+#endif
+
 	/**	Default three-dimensional circle class of type <b>float</b>
 	 	\ingroup Circle
 	*/

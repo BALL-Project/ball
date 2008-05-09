@@ -38,8 +38,10 @@
 #ifdef BALL_COMPILER_MSVC
 #	ifdef BALL_BUILD_DLL
 #		define BALL_EXPORT __declspec(dllexport)
+#		define BALL_EXTERN_VARIABLE __declspec(dllexport) extern
 #	else
 #		define BALL_EXPORT __declspec(dllimport)
+#		define BALL_EXTERN_VARIABLE __declspec(dllimport) extern
 #	endif
 #	ifdef BALL_VIEW_BUILD_DLL
 #		define BALL_VIEW_EXPORT __declspec(dllexport)
@@ -49,6 +51,7 @@
 #else
 # define BALL_EXPORT
 # define BALL_VIEW_EXPORT
+# define BALL_EXTERN_VARIABLE extern
 #endif
 
 //This declares a BALL_DEPRECATED macro that can be used to mark deprecated api

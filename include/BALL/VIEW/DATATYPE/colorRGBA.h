@@ -482,6 +482,12 @@ namespace BALL
 		extern ColorRGBA 				BALL_SELECTED_COLOR;
 		extern PreciseTime 		 	BALL_SELECTED_COLOR_CHANGE_TIME;
 
+		/** needed for windows dlls **/
+#ifdef BALL_COMPILER_MSVC
+#include <vector>
+template class BALL_VIEW_EXPORT std::vector<ColorRGBA>;
+#endif
+
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/DATATYPE/colorRGBA.iC>
 #		endif

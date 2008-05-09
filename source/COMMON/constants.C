@@ -9,7 +9,7 @@ namespace BALL
 {
 	namespace Constants
 	{
-		// EPSILON (used fr comparisons)
+		// EPSILON (used for comparisons)
 		double EPSILON = 1e-6;
 
 		// PI
