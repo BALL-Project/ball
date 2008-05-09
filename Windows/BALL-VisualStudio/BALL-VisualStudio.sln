@@ -40,6 +40,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BALLModule", "BALLModule\BA
 	GlobalSection(Qt) = preSolution
 		Integration = True
 	EndGlobalSection
+	ProjectSection(ProjectDependencies) = postProject
+		{19709205-47E2-45A3-A266-3488F113508D} = {19709205-47E2-45A3-A266-3488F113508D}
+		{05821317-82B2-4E5E-9624-2D40FEA7E1A6} = {05821317-82B2-4E5E-9624-2D40FEA7E1A6}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

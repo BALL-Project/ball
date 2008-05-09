@@ -147,7 +147,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/NODEFAULTLIB:libcmtd"
-				AdditionalDependencies="qtmaind.lib QtCored4.lib QtSqld4.lib regex.lib oncrpcd.lib gsl_mtd.lib cblas_mtd.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib QtNetworkd4.lib WSock32.lib"
+				AdditionalDependencies="qtmaind.lib QtCored4.lib QtSqld4.lib regex.lib oncrpc.lib gsl_mtd.lib cblas_mtd.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib QtNetworkd4.lib WSock32.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\Contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;"
