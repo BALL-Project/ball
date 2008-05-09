@@ -217,6 +217,11 @@ namespace BALL
 	};
 	//@}
 
+	/** This is required for windows dlls **/
+#ifdef BALL_COMPILER_MSVC
+	template class BALL_EXPORT TSurface<float>;
+#endif
+
 	template <typename T>
 	TSurface<T>::TSurface()
 		throw()

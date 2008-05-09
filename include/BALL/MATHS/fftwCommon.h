@@ -13,19 +13,19 @@
 
 namespace BALL
 {
-	BALL_EXPORT struct DoubleTraits
+	struct BALL_EXPORT DoubleTraits
 	{
 		typedef double ComplexPrecision;
 		typedef fftw_plan FftwPlan;
 	};
 	
-	BALL_EXPORT struct FloatTraits
+	struct BALL_EXPORT FloatTraits
 	{
 		typedef float ComplexPrecision;
 		typedef fftwf_plan FftwPlan;
 	};
 	
-	BALL_EXPORT struct LongDoubleTraits
+	struct BALL_EXPORT LongDoubleTraits
 	{
 		typedef long double ComplexPrecision;
 		typedef fftwl_plan FftwPlan;
