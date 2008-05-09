@@ -124,8 +124,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="qtmaind.lib QtCored4.lib QtGuid4.lib QtXmld4.lib QtSqld4.lib QtOpenGLd4.lib opengl32.lib glu32.lib QtNetworkd4.lib QtSvgd4.lib libBALL.lib glew32.lib QtTestd4.lib"
+				AdditionalOptions="/fixed:no"
+				AdditionalDependencies="qtmaind.lib QtCored4.lib QtGuid4.lib QtXmld4.lib QtSqld4.lib QtOpenGLd4.lib opengl32.lib glu32.lib QtNetworkd4.lib QtSvgd4.lib libBALL.lib glew32d.lib QtTestd4.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
+				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;;&quot;$(OutDir)&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
