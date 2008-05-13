@@ -13,6 +13,7 @@ InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* pa
 	test_partition_ = test_partition;
 	view_ = partitioner->view_;
 	fold_ID_ = partitioner->outEdges().size()/2;
+	partitioner_ = partitioner;
 	
 	String name = partitioner->getInputItem()->name().toStdString();
 	uint index = name.find_last_of("/");
@@ -38,6 +39,8 @@ InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* pa
 	
 	saved_as_ = name.c_str();
 	
+	if(test_partition) name_ = "validation";
+	else name_ = "train";
 	//TODO: set pixmap depending on whether test_partition_==1 or not...
 }
 
@@ -45,6 +48,7 @@ InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* pa
 InputPartitionItem::~InputPartitionItem()
 {
 	removeFromPipeline();
+	partitioner_->removePartition(this);
 }
 
 

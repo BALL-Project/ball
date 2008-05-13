@@ -62,6 +62,14 @@ namespace BALL
 				QSARData();
 				
 				~QSARData();
+				
+				/** @name Predicates */
+				
+				/** tells whether the features have been centered */
+				bool isDataCentered();
+				
+				/** tells whether the response variables have been centered */
+				bool isResponseCentered();
 					
 				/** @name Accessors
 				 */

@@ -24,10 +24,10 @@ DataItemScene::DataItemScene()
  
 DataItemScene::~DataItemScene()
 {
-	for(list<QGraphicsItemGroup*>::iterator it=groups_.begin(); it!=groups_.end();it++)
-	{
-		delete *it;
-	}
+// 	for(list<QGraphicsItemGroup*>::iterator it=groups_.begin(); it!=groups_.end();it++)
+// 	{
+// 		delete *it;
+// 	}
 }
 
 void DataItemScene::setMainWindow(MainWindow* mw)
@@ -40,7 +40,7 @@ QPointF DataItemScene::getOffset(QPointF& origin, DataItem* item)
 {
 	// InputDataItem created together with a PredictionItem
 	QPointF pos = default_offset;
-	if(item->type()==SDFInputDataItem::Type || item->type()==CSVInputDataItem::Type)
+	if(item->type()==SDFInputDataItem::Type || item->type()==CSVInputDataItem::Type || (item->type()==InputPartitionItem::Type && ((InputPartitionItem*)item)->isTestPartition()))
 	{
 		pos = QPointF(-120,-70);
 	}	
@@ -54,7 +54,7 @@ QPointF DataItemScene::getOffset(QPointF& origin, DataItem* item)
 	}
 	else if(item->type()==PartitioningItem::Type) // PartitioningItem	
 	{
-		pos = QPointF(100,0);
+		pos = QPointF(200,-75);
 	}	
 
 	for(uint i=0; i<50;i++)
@@ -268,7 +268,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
      	}
 
 	/// create or move validation item
-	else if (event->mimeData()->hasFormat("application/x-validationdata")) 
+	else if (event->mimeData()->hasFormat("application/x-validationdata") || event->mimeData()->hasFormat("application/x-EXTvalidationdata")) 
 	{
          	if(view->name!="view")
 		{
@@ -298,10 +298,13 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				pos = model_item_at_pos->pos();
 				addItem(item);
 				item->setPos(pos + getOffset(pos,item));
-				createExternalValPipeline(model_item_at_pos,2);
 				Edge* edge = new Edge(model_item_at_pos, item);
 				addItem(edge);
 				item->addToPipeline();
+				if(event->mimeData()->hasFormat("application/x-EXTvalidationdata"))
+				{
+				   createExternalValPipeline(model_item_at_pos,2);
+				}
 			}
 			catch(InvalidValidationItem)
 			{
@@ -473,28 +476,34 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, uint folds)
 	{
 		InputPartitionItem* train_part = new InputPartitionItem(0,partitioner); // training-partition of fold i
 		addItem(train_part);
+		QPointF p0 = partitioner->pos();
+		train_part->setPos(p0+getOffset(p0,train_part));
 		train_part->addToPipeline();
 		Edge* e0 = new Edge(partitioner,train_part);
 		addItem(e0);
 		
 		InputPartitionItem* test_part = new InputPartitionItem(1,partitioner); // test-partition of fold i
-		addItem(test_part);
 		test_part->addToPipeline();
-		Edge* e1 = new Edge(partitioner,test_part);
-		addItem(e1);
+		
+		// add fold to PartitioningItem
+		partitioner->addFold(make_pair(train_part,test_part));
 		
 		DataItem* source_item = train_part;
 		ModelItem* input_model=0;
 		FeatureSelectionItem* new_fs=0;
 		bool fs_created=0;
+		DataItem* new_item=0;
+		ModelItem* target_model=0; // modelItem for which prediction is to be done
+		
 		for(list<DataItem*>::iterator it=pipe.begin();it!=pipe.end();it++)
 		{
-			DataItem* new_item=0;
+			new_item=0;
 			item=*it;
 			if(item->type()==ModelItem::Type)
 			{
-				ModelItem* model_item=qgraphicsitem_cast<ModelItem*>(item);
-				ModelItem* new_model = new ModelItem(*model_item);
+				ModelItem* m_item=qgraphicsitem_cast<ModelItem*>(item);
+				ModelItem* new_model = new ModelItem(*m_item);
+				if(model_item==m_item) target_model = new_model;
 				if(!fs_created) 
 				{
 					new_model->setInputDataItem(train_part);
@@ -530,6 +539,29 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, uint folds)
 			addItem(e);
 			source_item=new_item;
 		}
+		
+		addItem(test_part);
+		p0 = new_item->pos();
+		test_part->setPos(p0+getOffset(p0,test_part));
+		Edge* e1 = new Edge(partitioner,test_part);
+		addItem(e1);
+		
+		// create PredictionItem using the test-partition of the current external fold
+		PredictionItem* pred_item = new PredictionItem(test_part, target_model, view);
+		addItem(pred_item);
+		QPointF pos = target_model->pos();
+		pred_item->setPos(pos+getOffset(pos,pred_item));
+		p0 = QPointF(-90,-50);
+		item->setPos(pos+p0);
+		Edge* edge = new Edge(target_model, pred_item);
+		addItem(edge);
+		target_model->addPredictionInputEdge(edge);
+		Edge* edge2 = new Edge(test_part, target_model);
+		addItem(edge2);	
+		DottedEdge* dedge = new DottedEdge(test_part, pred_item);
+		addItem(dedge);
+		pred_item->setDottedEdge(dedge);
+		pred_item->addToPipeline();
 	}
 }
 

@@ -3,6 +3,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/mainWindow.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/inputPartitionItem.h>
 
+
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>
 
@@ -18,7 +19,7 @@ PartitioningItem::PartitioningItem(InputDataItem* input, DataItemView* miv, uint
 {
 	setPixmap(QPixmap("./images/partitioning.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 	name_ = "Partitioning of "+ input_->name();
-	folds_ = folds;
+	no_folds_ = folds;
 	val_fraction_ = fraction;
 	id_ = input->no_partitioner_;
 	input->no_partitioner_++;
@@ -30,35 +31,32 @@ PartitioningItem::~PartitioningItem()
 	removeFromPipeline();
 }
 
-// void addTrainingsPartition(InputPartitionItem* item)
-// {
-// 	trainings_partitions_.push_back(item);
-// }
-// 
-// void addTestPartition(InputPartitionItem* item);
-// {
-// 	test_partitions_.push_back(item);
-// }
 
 bool PartitioningItem::execute()
 {
 	if(done_) return 0;
 	
-	if(out_edge_list_.size()!=(int)folds_*2)
+	if(out_edge_list_.size()!=(int)no_folds_*2 || out_edge_list_.size()!=2*(int)folds_.size())
 	{
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"PartitioningItem:::execute() error","Wrong number of connected InputPartitionItems!");
 	}
 	
 	QSet<Edge*>::iterator it=out_edge_list_.begin();
-	for(uint i=0; i<folds_;i++)
-	{	cout<<i<<endl;
+	for(uint i=0; i<no_folds_;i++)
+	{	
 		QSARData* data = ((InputDataItem*)(*in_edge_list_.begin())->sourceNode())->data();
 		vector<QSARData*> sets = data->generateExternalSet(val_fraction_); // length==2
+	
 		int a=0;
 		for(uint j=0; j<2;j++)
 		{
 			//if((*it)->destNode()->type()==InputPartitionItem::Type)
 			{
+				if(data->isDataCentered())
+				{
+					sets[a]->centerData(data->isResponseCentered());
+				}				
+				
 				InputPartitionItem* part=(InputPartitionItem*)((*it)->destNode());
 				part->setData(sets[a]);
 				cout<<"size="<<sets[a]->getNoSubstances()<<"  #features="<<sets[a]->getNoDescriptors()<<endl;
@@ -108,7 +106,7 @@ double PartitioningItem::getValFraction()
 
 uint PartitioningItem::getNoFolds()
 {
-	return folds_;
+	return no_folds_;
 }
 
 uint PartitioningItem::getID()
@@ -120,6 +118,35 @@ void PartitioningItem::setID(uint ID)
 {
 	id_ = ID;
 }
+
+void PartitioningItem::addFold(pair<InputPartitionItem*,InputPartitionItem*> fold)
+{
+	folds_.push_back(fold);
+}
+
+
+void PartitioningItem::removePartition(InputPartitionItem* partition)
+{
+	for(list<pair<InputPartitionItem*,InputPartitionItem*> >::iterator it= folds_.begin(); it!=folds_.end(); it++)
+	{
+		if(it->first==partition)
+		{
+			InputPartitionItem* test_part = it->second;
+			it = folds_.erase(it);
+			delete test_part;
+			break;
+		}
+		if(it->second==partition)
+		{
+			InputPartitionItem* train_part = it->first;
+			it = folds_.erase(it);
+			delete train_part;	
+			break;
+		}			
+	}
+	no_folds_--;	
+}
+
 
 void PartitioningItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {

@@ -250,7 +250,14 @@ void ValidationItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	QDrag *drag = new QDrag(event->widget());
 
 	QMimeData *mimeData = new QMimeData;
-	mimeData->setData("application/x-validationdata", itemData);
+	if(type_!=5)
+	{
+		mimeData->setData("application/x-validationdata", itemData);
+	}
+	else
+	{
+		mimeData->setData("application/x-EXTvalidationdata", itemData);
+	}
 	drag->setMimeData(mimeData);
 	drag->setPixmap(this->pixmap());
 	drag->setHotSpot(QPoint(0, 0));

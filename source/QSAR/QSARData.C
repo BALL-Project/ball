@@ -18,6 +18,18 @@ QSARData::~QSARData()
 	
 }
 
+bool QSARData::isDataCentered()
+{
+	if(descriptor_transformations_.size()>0) return 1;
+	return 0;
+}
+
+bool QSARData::isResponseCentered()
+{
+	if(y_transformations_.size()>0) return 1;
+	return 0;
+}
+
 
 void QSARData::setDataFolder(const char* folder)
 {

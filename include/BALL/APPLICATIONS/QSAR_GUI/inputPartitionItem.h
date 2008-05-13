@@ -29,13 +29,18 @@ namespace BALL
 				
 				bool checkForDiscreteY();
 				
-				enum { Type = UserType + 22 };
+				enum { Type = UserType + 133 };
+				
+				int type() const { return Type; }
 				
 		
 			private:
 				/** is this partition a test-partition?!\n
 				(If false, it is used for training) */
 				bool test_partition_;
+				
+				/** PartitioningItem that is used to create the data for this object */
+				PartitioningItem* partitioner_;
 				
 				/** the ID of the fold */
 				int fold_ID_;
