@@ -8,15 +8,13 @@ using namespace BALL::VIEW;
 
 
 
-InputPartitionItem::InputPartitionItem(bool test_partition, InputDataItem* input_item)
+InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* partitioner)
 {
 	test_partition_ = test_partition;
-	view_ = input_item->view_;
-	partition_ID_ = input_item->no_partitions_;
+	view_ = partitioner->view_;
+	fold_ID_ = partitioner->outEdges().size()/2;
 	
-	if(test_partition) input_item->no_partitions_++;
-	
-	String name = input_item->name().toStdString();
+	String name = partitioner->getInputItem()->name().toStdString();
 	uint index = name.find_last_of("/");
 	if(index!=string::npos)
 	{
@@ -29,12 +27,17 @@ InputPartitionItem::InputPartitionItem(bool test_partition, InputDataItem* input
 	}
 	name_ = name.c_str();
 	
-	if(test_partition) name+="_TEST";
+	if(partitioner->getID()>0)
+	{
+		name=name+"_"+partitioner->getID()+"_";
+	}
+	
+	if(test_partition) name+="_TEST";		
 	else name+="_TRAIN";
-	name += String(partition_ID_)+".dat";
+	name += String(fold_ID_)+".dat";
 	
 	saved_as_ = name.c_str();
-	cout<<"saved_as_ = "<<saved_as_.toStdString()<<endl;
+	
 	//TODO: set pixmap depending on whether test_partition_==1 or not...
 }
 

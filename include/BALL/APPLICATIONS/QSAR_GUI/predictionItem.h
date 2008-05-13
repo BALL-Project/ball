@@ -5,7 +5,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/modelItem.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/inputDataItem.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/dottedEdge.h>
-
+#include <BALL/APPLICATIONS/QSAR_GUI/inputPartitionItem.h>
 
 
 namespace BALL
@@ -60,6 +60,8 @@ namespace BALL
 				void addToPipeline();
 				void removeFromPipeline();
 				
+				void addTrainingsPartition(InputPartitionItem* item);
+				void addTestPartition(InputPartitionItem* item);
 				
 		
 			protected:
@@ -78,7 +80,9 @@ namespace BALL
 				DottedEdge* dotted_edge_;
 				
 				PredictionPlotter* pred_plotter_;
-		
+				
+				list<InputPartitionItem*> trainings_partitions_;
+				list<InputPartitionItem*> test_partitions_;		
 		};
 	}
 }

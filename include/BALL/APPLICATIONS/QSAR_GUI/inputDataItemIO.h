@@ -4,6 +4,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/dataItemView.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/CSVInputDataItem.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/SDFInputDataItem.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/partitioningItem.h>
 #include <BALL/DATATYPE/string.h>
 #include <map>
 #include <set>
@@ -26,9 +27,14 @@ namespace BALL
 				
 				void writeConfigSection(SDFInputDataItem* sd_item, ofstream& out);
 				void writeConfigSection(CSVInputDataItem* sd_item, ofstream& out);
+				void writeConfigSection(PartitioningItem* item, ofstream& out);
 						
 				
 			private:
+				
+				/** restore a PartitioningItem. This function is called automatically from readConfigSection() if an InputPartitioner-section is observed. */
+				void readPartitionerSection(String& configfile_section, map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions);
+				
 				DataItemView* view_;
 				
 				set<CSVInputDataItem*> saved_csv_;

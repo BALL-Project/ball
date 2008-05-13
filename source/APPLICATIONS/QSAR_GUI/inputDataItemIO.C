@@ -29,7 +29,6 @@ void InputDataItemIO::writeConfigSection(SDFInputDataItem* sd_item, ofstream& ou
 	out << "activity_IDs = "<< activity_string << "\n";
 	out << "center_data = "<< sd_item->centerData() << "\n";
 	out << "center_response = "<< sd_item->centerY() << "\n";
-	out << "output = " << sd_item->savedAs().toStdString()  << "\n";
 	
 	list<CSVInputDataItem*>* csv_items = sd_item->getConnectedCSVItems();
 	for(list<CSVInputDataItem*>::iterator it=csv_items->begin(); it!=csv_items->end(); it++)
@@ -42,6 +41,7 @@ void InputDataItemIO::writeConfigSection(SDFInputDataItem* sd_item, ofstream& ou
 		
 		written_csv_.insert(*it);
 	}
+	out << "output = " << sd_item->savedAs().toStdString()  << "\n";
 	out<<"\n";
 }
 
@@ -66,6 +66,110 @@ void InputDataItemIO::writeConfigSection(CSVInputDataItem* csv_item, ofstream& o
 }
 
 
+void InputDataItemIO::writeConfigSection(PartitioningItem* item, ofstream& out)
+{
+	out << "[InputPartitioner]" << "\n";
+	out << "input_file = " << item->getInputItem()->savedAs().toStdString()<<"\n";
+	out << "ID = "<<item->getID()<<"\n";
+	out << "val_fraction = " << item->getValFraction()<<"\n";
+	out << "no_folds = "<<item->getNoFolds()<<"\n";
+	out << "\n";
+}
+
+
+void InputDataItemIO::readPartitionerSection(String& configfile_section, map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions)
+{
+	String input_file="";
+	double val_fraction=0;
+	uint no_folds = 0;
+	int ID = -1;
+	
+	istringstream input;
+	input.str(configfile_section);	
+	String line;
+	while(input)
+	{
+		getline(input,line);
+		line.trimLeft();
+		
+		if(line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
+		{
+			continue;
+		}
+				
+		if(line.hasPrefix("input_file"))
+		{
+			input_file = ((String)line.after("=")).trimLeft();
+		}
+		else if(line.hasPrefix("val_fraction"))
+		{
+			val_fraction = ((String)line.after("=")).trimLeft().toDouble();
+		}
+		else if(line.hasPrefix("no_folds"))
+		{
+			no_folds = ((String)line.after("=")).trimLeft().toInt();
+		}
+		else if(line.hasPrefix("ID"))
+		{
+			ID = ((String)line.after("=")).trimLeft().toInt();
+		}		
+	}
+	
+	if(input_file==""||val_fraction==0||no_folds==0||ID==-1)
+	{
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"InputPartitioner reading error","\"input_file\", \"val_fraction\", \"no_folds\" and \"ID\" must be specified within the config section!!");
+	}
+	
+	InputDataItem* input_item;
+	map<String, DataItem*>::iterator it=filenames_map.find(input_file);
+	if(it==filenames_map.end())
+	{
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"InputPartitioner reading error","InputItem from which partitions are to be created could not be found!!");
+	}
+	input_item=(InputDataItem*)it->second;
+	PartitioningItem* partitioner = new PartitioningItem(input_item,view_,no_folds,val_fraction);
+	partitioner->setID(ID);
+	view_->scene()->addItem(partitioner);
+	partitioner->addToPipeline();
+	if(item_positions!=0 && item_positions->size()>0)
+	{
+		pair<double,double> pos = item_positions->front();
+		item_positions->pop_front();
+		partitioner->setPos(pos.first,pos.second);
+	}
+	Edge* e = new Edge(input_item,partitioner);
+	view_->scene()->addItem(e);
+	
+	for(uint i=0; i<no_folds;i++)
+	{
+		InputPartitionItem* train_part = new InputPartitionItem(0,partitioner);
+		view_->scene()->addItem(train_part);
+		train_part->addToPipeline();
+		filenames_map.insert(make_pair(train_part->savedAs().toStdString(),train_part));
+		if(item_positions!=0 && item_positions->size()>0)
+		{
+			pair<double,double> pos = item_positions->front();
+			item_positions->pop_front();
+			train_part->setPos(pos.first,pos.second);
+		}
+		Edge* e0 = new Edge(partitioner,train_part);
+		view_->scene()->addItem(e0);
+		
+		InputPartitionItem* test_part = new InputPartitionItem(1,partitioner);
+		view_->scene()->addItem(test_part);
+		test_part->addToPipeline();
+		filenames_map.insert(make_pair(test_part->savedAs().toStdString(),test_part));
+		if(item_positions!=0 && item_positions->size()>0)
+		{
+			pair<double,double> pos = item_positions->front();
+			item_positions->pop_front();
+			test_part->setPos(pos.first,pos.second);
+		}
+		Edge* e1 = new Edge(partitioner,test_part);
+		view_->scene()->addItem(e1);
+	}	
+}
+
 void InputDataItemIO::readConfigSection(String& configfile_section, map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions)
 {
 	istringstream input;
@@ -76,6 +180,11 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 	line.trimLeft();
 	if(!line.hasPrefix("[InputReader]"))
 	{
+		if(line.hasPrefix("[InputPartitioner]"))
+		{cout<<"test"<<endl;
+			readPartitionerSection(configfile_section, filenames_map, item_positions);
+			return;
+		}
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Input reading error","The given section is no input section!");
 	}
 	

@@ -52,7 +52,10 @@ QPointF DataItemScene::getOffset(QPointF& origin, DataItem* item)
 	{
 		pos = QPointF(-90,50);
 	}
-	
+	else if(item->type()==PartitioningItem::Type) // PartitioningItem	
+	{
+		pos = QPointF(100,0);
+	}	
 
 	for(uint i=0; i<50;i++)
 	{
@@ -62,7 +65,9 @@ QPointF DataItemScene::getOffset(QPointF& origin, DataItem* item)
 		    qgraphicsitem_cast<ModelItem*>(itemAt(p)) ||
 		    qgraphicsitem_cast<FeatureSelectionItem*>(itemAt(p)) ||
 		    qgraphicsitem_cast<ValidationItem*>(itemAt(p)) ||
-		    qgraphicsitem_cast<PredictionItem*>(itemAt(p)) )
+		    qgraphicsitem_cast<PredictionItem*>(itemAt(p)) ||
+		    qgraphicsitem_cast<PartitioningItem*>(itemAt(p)) ||
+		    qgraphicsitem_cast<InputPartitionItem*>(itemAt(p))	)
 		{
 			pos+=QPointF(200,0);
 		}
@@ -454,27 +459,29 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, uint folds)
 	}
 	InputDataItem* data_item = (InputDataItem*)item;
 	
-	double frac=0.2;
+	double frac=0.2;  /// TODO : dialog input-field!
 	PartitioningItem* partitioner = new PartitioningItem(data_item,view,folds,frac);
 	QPointF p0 = data_item->pos();
-	partitioner->setPos(p0+getOffset(p0,data_item));
+	addItem(partitioner);
+	partitioner->setPos(p0+getOffset(p0,partitioner));
 	partitioner->addToPipeline();
 	Edge* e = new Edge(data_item,partitioner);
 	addItem(e);
-	addItem(partitioner);
+	
 	
 	for(uint i=0;i<folds;i++)
 	{
-		InputPartitionItem* train_part = new InputPartitionItem(0,data_item); // trainings-partition of fold i
-		Edge* e0 = new Edge(partitioner,train_part);
-		addItem(e0);
+		InputPartitionItem* train_part = new InputPartitionItem(0,partitioner); // training-partition of fold i
 		addItem(train_part);
 		train_part->addToPipeline();
-		InputPartitionItem* test_part = new InputPartitionItem(1,data_item); // test-partition of fold i
-		Edge* e1 = new Edge(partitioner,test_part);
-		addItem(e1);
+		Edge* e0 = new Edge(partitioner,train_part);
+		addItem(e0);
+		
+		InputPartitionItem* test_part = new InputPartitionItem(1,partitioner); // test-partition of fold i
 		addItem(test_part);
 		test_part->addToPipeline();
+		Edge* e1 = new Edge(partitioner,test_part);
+		addItem(e1);
 		
 		DataItem* source_item = train_part;
 		ModelItem* input_model=0;

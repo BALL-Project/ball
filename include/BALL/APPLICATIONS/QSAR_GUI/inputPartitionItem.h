@@ -1,7 +1,7 @@
 #ifndef INPUTPARTDATAITEM_H
 #define INPUTPARTDATAITEM_H
 
-#include <BALL/APPLICATIONS/QSAR_GUI/inputDataItem.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/partitioningItem.h>
 
 
 namespace BALL
@@ -13,7 +13,7 @@ namespace BALL
 			public:
 					
 				/** creates an InputPartitionItem from a given InputDataItem */
-				InputPartitionItem(bool test_partition, InputDataItem* input_item);
+				InputPartitionItem(bool test_partition,PartitioningItem* input_item);
 				
 				~InputPartitionItem();
 				
@@ -37,8 +37,8 @@ namespace BALL
 				(If false, it is used for training) */
 				bool test_partition_;
 				
-				/** the ID of this partition; starting at 0 for the first partition that was generated from a specific InputDataItem. */
-				int partition_ID_;
+				/** the ID of the fold */
+				int fold_ID_;
 				
 				void mousePressEvent(QGraphicsSceneMouseEvent *event);
 		

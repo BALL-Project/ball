@@ -20,12 +20,25 @@ PartitioningItem::PartitioningItem(InputDataItem* input, DataItemView* miv, uint
 	name_ = "Partitioning of "+ input_->name();
 	folds_ = folds;
 	val_fraction_ = fraction;
+	id_ = input->no_partitioner_;
+	input->no_partitioner_++;
 }
 
 
 PartitioningItem::~PartitioningItem()
 {
+	removeFromPipeline();
 }
+
+// void addTrainingsPartition(InputPartitionItem* item)
+// {
+// 	trainings_partitions_.push_back(item);
+// }
+// 
+// void addTestPartition(InputPartitionItem* item);
+// {
+// 	test_partitions_.push_back(item);
+// }
 
 bool PartitioningItem::execute()
 {
@@ -79,6 +92,33 @@ void PartitioningItem::addToPipeline()
 void PartitioningItem::removeFromPipeline()
 {
 	view_->data_scene->main_window->partitioning_pipeline_.remove(this);
+}
+
+
+InputDataItem* PartitioningItem::getInputItem()
+{
+	return input_;
+}
+
+
+double PartitioningItem::getValFraction()
+{
+	return val_fraction_;
+}
+
+uint PartitioningItem::getNoFolds()
+{
+	return folds_;
+}
+
+uint PartitioningItem::getID()
+{
+	return id_;
+}
+
+void PartitioningItem::setID(uint ID)
+{
+	id_ = ID;
 }
 
 void PartitioningItem::mousePressEvent(QGraphicsSceneMouseEvent *event)

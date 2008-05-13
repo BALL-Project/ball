@@ -676,6 +676,20 @@ void MainWindow::deleteItem()
 				delete preditem;
 				continue;
 			}
+			
+			PartitioningItem* partitem = static_cast<PartitioningItem*>(*it);
+			if (partitioning_pipeline_.contains(partitem))
+			{
+				delete partitem;
+				continue;
+			}
+			
+			InputPartitionItem* ip_item = static_cast<InputPartitionItem*>(*it);
+			if (partition_pipeline_.contains(ip_item))
+			{
+				delete ip_item;
+				continue;
+			}
 		}
 	}
 	else
@@ -820,8 +834,7 @@ void MainWindow::loadItemsFromFiles(String directory)
 		{
 			String filename=directory+(*it)->savedAs().toStdString();
 			ifstream input(filename.c_str());
-			// read only existing models
-			if(input)
+			if(input) // read only existing input data files
 			{
 				input.close();
 				(*it)->loadFromFile(filename);
@@ -837,20 +850,29 @@ void MainWindow::loadItemsFromFiles(String directory)
 			
 			String filename=directory+(*it)->savedAs().toStdString();
 			ifstream input(filename.c_str());
-			// read only existing models
-			if(input)
+			if(input) // read only existing input data files
 			{
 				input.close();
 				(*it)->loadFromFile(filename);
 			}
 		}
+		for (QSet<InputPartitionItem*>::Iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end(); it++)
+		{
+			String filename=directory+(*it)->savedAs().toStdString();
+			ifstream input(filename.c_str());
+			if(input) // read only existing input data files
+			{
+				input.close();
+				(*it)->loadFromFile(filename);
+			}			
+		}
 		for (QSet<ModelItem*>::Iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
 		{
 			String filename=directory+(*it)->savedAs().toStdString();
 			ifstream input(filename.c_str());
-			// read only existing models
-			if(input)
+			if(input) // read only existing models
 			{
+				cout<<"model-file= "<<directory+(*it)->savedAs().toStdString()<<endl;
 				input.close();
 				(*it)->loadFromFile(filename);
 			}
@@ -930,7 +952,7 @@ void MainWindow::executePipeline()
 	for (QSet<PartitioningItem*>::Iterator it = partitioning_pipeline_.begin(); it != partitioning_pipeline_.end(); it++)
 	{
 		try
-		{
+		{cout<<"trying to partition input..."<<endl;
 			bool b=(*it)->execute();
 			if(!done) done=b;
 		}
@@ -941,6 +963,10 @@ void MainWindow::executePipeline()
 
 		value++;
 		emit sendNewValue(value);		
+	}
+	if (!partitioning_pipeline_.empty())
+	{
+		statusBar()->showMessage(tr("Partitioning of input data done"));
 	}
 
 	///train all models and set their saved as names
@@ -1108,6 +1134,7 @@ void MainWindow::restoreDesktop(QString filename)
 		bool fs_section=0;
 		bool val_section=0;	
 		bool pred_section=0;
+		bool partitioner_section=0;
 		String section="";
 		map<String, DataItem*> filenames_map;
 		InputDataItemIO input_reader(view_);
@@ -1150,14 +1177,16 @@ void MainWindow::restoreDesktop(QString filename)
 			if(line.hasPrefix("["))
 			{
 				if(input_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
+				if(partitioner_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
  				if(model_section) new ModelItem(section,filenames_map,&item_positions,view_);
  				if(fs_section) new FeatureSelectionItem(section,filenames_map,&item_positions,view_);
  				if(val_section) new ValidationItem(section,filenames_map,&item_positions,view_);
 				if(pred_section) new PredictionItem(section,filenames_map,&item_positions,view_);
 				
 				input_section=0;model_section=0;fs_section=0;
-				val_section=0;pred_section=0;
+				val_section=0;pred_section=0;partitioner_section=0;
 				if(line.hasPrefix("[InputReader]")) input_section=1;
+				else if(line.hasPrefix("[InputPartitioner]")) partitioner_section=1;
 				else if(line.hasPrefix("[ModelCreator]")) model_section=1;
 				else if(line.hasPrefix("[FeatureSelector]")) fs_section=1;
 				else if(line.hasPrefix("[Validator]")) val_section=1;
@@ -1170,6 +1199,7 @@ void MainWindow::restoreDesktop(QString filename)
 			section+=line+"\n"; // store line of current section
 		}
  		if(input_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
+		if(partitioner_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
  		if(model_section) new ModelItem(section,filenames_map,&item_positions,view_);
  		if(fs_section) new FeatureSelectionItem(section,filenames_map,&item_positions,view_);
  		if(val_section) new ValidationItem(section,filenames_map,&item_positions,view_);
@@ -1245,6 +1275,14 @@ void MainWindow::exportPipeline(QString filename)
 		positions<<item->x()<<"  "<<item->y()<<endl;
 		value++;
 		emit sendNewValue(value);
+	}
+	
+	///PartitioningItems
+	for (QSet<PartitioningItem*>::Iterator it = partitioning_pipeline_.begin(); it != partitioning_pipeline_.end(); it++)
+	{
+		PartitioningItem* item = (*it);
+		input_writer.writeConfigSection(item,out);
+		positions<<item->x()<<"  "<<item->y()<<endl;
 	}
 
 	///InputPartitionItems

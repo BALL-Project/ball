@@ -28,7 +28,7 @@ InputDataItem::InputDataItem(QString filename, bool center_data, bool center_y, 
 	append_ = 0;
 	checked_for_discrete_y_ = 0;
 	discrete_y_ = 0;
-	no_partitions_ = 0;
+	no_partitioner_ = 0;
 }
 
 InputDataItem::InputDataItem(QString filename, DataItemView* view): 
@@ -40,7 +40,7 @@ InputDataItem::InputDataItem(QString filename, DataItemView* view):
 	append_ = 0;
 	checked_for_discrete_y_ = 0;
 	discrete_y_ = 0;
-	no_partitions_ = 0;
+	no_partitioner_ = 0;
 }
 
 InputDataItem::InputDataItem():
@@ -54,7 +54,7 @@ InputDataItem::InputDataItem():
 	append_ = 0;
 	checked_for_discrete_y_ = 0;
 	discrete_y_ = 0;
-	no_partitions_ = 0;
+	no_partitioner_ = 0;
 }
 
 InputDataItem::~InputDataItem()
@@ -78,7 +78,7 @@ InputDataItem::InputDataItem(InputDataItem& item):
 	append_ = item.append_;
 	checked_for_discrete_y_ = item.checked_for_discrete_y_;
 	discrete_y_ = item.discrete_y_;
-	no_partitions_ = item.no_partitions_;
+	no_partitioner_ = item.no_partitioner_;
 }
 
 

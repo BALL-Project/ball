@@ -4,6 +4,7 @@ DIRECTORY=QSAR
 
 THISLIB=$(LIBNAME)
 
+
 CPP_SOURCES=\
 	aromaticityProcessor.C\
 	connectivityBase.C\
