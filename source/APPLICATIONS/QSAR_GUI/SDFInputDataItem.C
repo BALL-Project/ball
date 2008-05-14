@@ -201,5 +201,5 @@ void SDFInputDataItem::addToPipeline()
 
 void SDFInputDataItem::removeFromPipeline()
 {
-	view_->data_scene->main_window->sdf_input_pipeline_.remove(this);
+	view_->data_scene->main_window->sdf_input_pipeline_.erase(this);
 }

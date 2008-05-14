@@ -487,7 +487,7 @@ void ModelItem::setInputDataItem(InputDataItem* item)
 void ModelItem::addPredictionInputEdge(Edge* edge)
 {
 	prediction_input_edges_.insert(edge);
-	if (in_edge_list_.contains(edge))
+	if (in_edge_list_.find(edge)!=in_edge_list_.end())
 	{
 		in_edge_list_.erase(in_edge_list_.find(edge));
 	}
@@ -495,7 +495,7 @@ void ModelItem::addPredictionInputEdge(Edge* edge)
 
 void ModelItem::deletePredictionInputEdge(Edge* edge)
 {
-	if (prediction_input_edges_.contains(edge))
+	if (prediction_input_edges_.find(edge)!=prediction_input_edges_.end())
 	{
 		prediction_input_edges_.erase(prediction_input_edges_.find(edge));
 	}
@@ -581,7 +581,7 @@ void ModelItem::loadFromFile(String file)
 	
 	if(!save_attribute_) // if this model was created by a feature selection, also set FeatureSelectionItem::done_ to true
 	{
-		for(QSet<Edge*>::iterator it=in_edge_list_.begin(); it!=in_edge_list_.end();it++)
+		for(set<Edge*>::iterator it=in_edge_list_.begin(); it!=in_edge_list_.end();it++)
 		{
 			if((*it)->sourceNode()->type()==FeatureSelectionItem::Type)
 			{
@@ -656,7 +656,7 @@ void ModelItem::writeConfigSection(ofstream& out)
 
 void ModelItem::removeFromPipeline()
 {
-	view_->data_scene->main_window->model_pipeline_.remove(this);
+	view_->data_scene->main_window->model_pipeline_.erase(this);
 }
 
 void ModelItem::addToPipeline()

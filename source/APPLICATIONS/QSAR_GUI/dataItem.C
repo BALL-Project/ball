@@ -71,19 +71,19 @@ DataItem::~DataItem()
 	using namespace std;
 	
 	// delete incoming edges
-	for(QSet<Edge*>::iterator it=in_edge_list_.begin(); it!=in_edge_list_.end(); it++)
+	for(set<Edge*>::iterator it=in_edge_list_.begin(); it!=in_edge_list_.end(); it++)
 	{
-		(*it)->sourceNode()->out_edge_list_.remove(*it);
+		(*it)->sourceNode()->out_edge_list_.erase(*it);
 		delete *it;
 		
 	}
 
 	// delete outgoing edges and everthing hanging below these egdes
-	for(QSet<Edge*>::iterator it=out_edge_list_.begin(); it!=out_edge_list_.end(); it++)
+	for(set<Edge*>::iterator it=out_edge_list_.begin(); it!=out_edge_list_.end(); it++)
 	{
 		view_->data_scene->removeItem(*it);
 		DataItem* child = (*it)->destNode();
-		child->in_edge_list_.remove(*it);
+		child->in_edge_list_.erase(*it);
 		delete *it;
 		delete child;
 	}
@@ -100,12 +100,12 @@ void DataItem::addOutEdge(Edge* edge)
 	out_edge_list_.insert(edge);
 }
 
-QSet<Edge*> DataItem::inEdges() const
+set<Edge*> DataItem::inEdges() const
 {
 	return in_edge_list_;
 }
 
-QSet<Edge*> DataItem::outEdges() const
+set<Edge*> DataItem::outEdges() const
 {
 	return out_edge_list_;
 }
@@ -128,7 +128,7 @@ void DataItem::change()
 {
 	done_ = 0;
 	result_ = "";
-	for(QSet<Edge*>::iterator it=out_edge_list_.begin(); it!=out_edge_list_.end();it++)
+	for(set<Edge*>::iterator it=out_edge_list_.begin(); it!=out_edge_list_.end();it++)
 	{
 		(*it)->destNode()->change();
 	}
@@ -191,7 +191,7 @@ QString DataItem::name()
 
 void DataItem::removeInEdge(Edge* edge)
 {
-	if (in_edge_list_.contains(edge))
+	if (in_edge_list_.find(edge)!=in_edge_list_.end())
 	{
 		in_edge_list_.erase(in_edge_list_.find(edge));
 	}
@@ -199,7 +199,7 @@ void DataItem::removeInEdge(Edge* edge)
 
 void DataItem::removeOutEdge(Edge* edge)
 {
-	if (out_edge_list_.contains(edge))
+	if (out_edge_list_.find(edge)!=out_edge_list_.end())
 	{
 		out_edge_list_.erase(out_edge_list_.find(edge));
 	}
@@ -250,7 +250,7 @@ QVariant DataItem::itemChange(GraphicsItemChange change, const QVariant &value)
 
 bool DataItem::removeDisconnectedItem()
 {
-	return view_->data_scene->main_window->disconnected_items_.remove(this);
+	return view_->data_scene->main_window->disconnected_items_.erase(this);
 }
 
 void DataItem::setResultString(double value)

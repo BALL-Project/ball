@@ -174,7 +174,7 @@ namespace BALL
 				/** determines, if the item has to be exported upon saving */
 				bool save_attribute_;
 
-				QSet<Edge*> prediction_input_edges_;
+				std::set<Edge*> prediction_input_edges_;
 		
 
 			protected:

@@ -41,7 +41,7 @@ bool PartitioningItem::execute()
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"PartitioningItem:::execute() error","Wrong number of connected InputPartitionItems!");
 	}
 	
-	QSet<Edge*>::iterator it=out_edge_list_.begin();
+	set<Edge*>::iterator it=out_edge_list_.begin();
 	for(list<pair<InputPartitionItem*,InputPartitionItem*> >::iterator it=folds_.begin(); it!=folds_.end(); it++)
 	{	
 		QSARData* data = ((InputDataItem*)(*in_edge_list_.begin())->sourceNode())->data();
@@ -53,6 +53,8 @@ bool PartitioningItem::execute()
 			sets[0]->centerData(center_y); // train-partition
 			sets[1]->centerData(center_y); // test-partition
 		}
+		delete it->first->data();  // delete old data-objetcs (if any)
+		delete it->second->data(); 
 		it->first->setData(sets[0]);
 		it->second->setData(sets[1]);
 		
@@ -76,7 +78,7 @@ void PartitioningItem::addToPipeline()
 
 void PartitioningItem::removeFromPipeline()
 {
-	view_->data_scene->main_window->partitioning_pipeline_.remove(this);
+	view_->data_scene->main_window->partitioning_pipeline_.erase(this);
 }
 
 

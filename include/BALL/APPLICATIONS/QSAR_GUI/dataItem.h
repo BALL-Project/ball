@@ -5,13 +5,12 @@
 #include <QtGui/QPainter>
 #include <QtGui/QStyleOptionGraphicsItem>
 #include <QtGui/QGraphicsSceneMouseEvent>
-#include <QtCore/QSet>
+#include <QtCore/QPointer>
+#include <QtCore/QTextStream>
 
 #include <BALL/APPLICATIONS/QSAR_GUI/edge.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/dataItemView.h>
-
-#include <QtCore/QPointer>
-#include <QtCore/QTextStream>
+#include <set>
 
 namespace BALL
 {
@@ -55,10 +54,10 @@ namespace BALL
 			/** @name Accessors */
 			
 			/** returns the ingoing edges of the item*/
-			QSet<Edge*> inEdges() const;
+			std::set<Edge*> inEdges() const;
 
 			/** returns the outgoing edges of the item*/
-			QSet<Edge*> outEdges() const;
+			std::set<Edge*> outEdges() const;
 
 			/** QT function; returns the shape of the item*/
 			QPainterPath shape() const;
@@ -165,10 +164,10 @@ namespace BALL
 			QString name_;
 		
 			/** list of ingoing edges*/
-			QSet<Edge*>in_edge_list_;
+			std::set<Edge*> in_edge_list_;
 			
 			/** list of outgoing edges*/
-			QSet<Edge*>out_edge_list_;
+			std::set<Edge*> out_edge_list_;
 
 			QString saved_as_;
 			

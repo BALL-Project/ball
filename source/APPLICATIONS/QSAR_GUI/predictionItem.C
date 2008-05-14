@@ -250,5 +250,5 @@ void PredictionItem::addToPipeline()
 
 void PredictionItem::removeFromPipeline()
 {
-	view_->data_scene->main_window->prediction_pipeline_.remove(this);
+	view_->data_scene->main_window->prediction_pipeline_.erase(this);
 }

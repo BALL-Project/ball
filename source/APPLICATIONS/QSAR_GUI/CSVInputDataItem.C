@@ -198,5 +198,5 @@ void CSVInputDataItem::addToPipeline()
 
 void CSVInputDataItem::removeFromPipeline()
 {
-	view_->data_scene->main_window->csv_input_pipeline_.remove(this);
+	view_->data_scene->main_window->csv_input_pipeline_.erase(this);
 }

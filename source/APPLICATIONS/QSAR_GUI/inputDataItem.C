@@ -123,7 +123,12 @@ void InputDataItem::loadFromFile(String file)
 {
 	try
 	{
-		cout<<"trying to read "<<file<<" ... "<<endl;
+		cout<<"trying to read "<<file<<" ... "<<endl<<flush;
+		if(data_==NULL)
+		{
+			//throw BALL::Exception::GeneralException(__FILE__,__LINE__,"InputDataItem error","InputDataItem not connected to a QSARData object!!");		
+			data_ = new QSARData;
+		}
 		data_->readFromFile(file);
 	}
 	catch(WrongDataType e)

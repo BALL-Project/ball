@@ -28,7 +28,7 @@
 
 
 #include <BALL/QSAR/registry.h>
-
+#include <set>
 #include <BALL/SYSTEM/path.h>
 
 
@@ -71,7 +71,7 @@ namespace BALL
 				//void changeModelItem(ModelItem* model, InputDataItem* input);
 
 				Registry* registry();
-				QSet<ModelItem*> getModelPipeline();
+				set<ModelItem*> getModelPipeline();
 
 				/**add items to pipeline */
 				//void addInputToPipeline(InputDataItem* item);
@@ -81,7 +81,7 @@ namespace BALL
 // 				void addValidationToPipeline(ValidationItem* item);
 				void addDisconnectedItem(DataItem* item);
 
-				QSet<DataItem*> disconnectedItems();
+				set<DataItem*> disconnectedItems();
 
 				/** @name Attributes */
 				/** pointer to the item that is currently being dragged */
@@ -97,15 +97,15 @@ namespace BALL
 				void setLastUsedPath(String path);
 
 				/** sets for fast search of Items: */
-				QSet<SDFInputDataItem*> sdf_input_pipeline_;
-				QSet<CSVInputDataItem*> csv_input_pipeline_;
-				QSet<ModelItem*> model_pipeline_;
-				QSet<FeatureSelectionItem*> fs_pipeline_;
-				QSet<ValidationItem*> val_pipeline_;
-				QSet<PredictionItem*> prediction_pipeline_;
-				QSet<DataItem*> disconnected_items_;
-				QSet<PartitioningItem*> partitioning_pipeline_;
-				QSet<InputPartitionItem*> partition_pipeline_;
+				set<SDFInputDataItem*> sdf_input_pipeline_;
+				set<CSVInputDataItem*> csv_input_pipeline_;
+				set<ModelItem*> model_pipeline_;
+				set<FeatureSelectionItem*> fs_pipeline_;
+				set<ValidationItem*> val_pipeline_;
+				set<PredictionItem*> prediction_pipeline_;
+				set<DataItem*> disconnected_items_;
+				set<PartitioningItem*> partitioning_pipeline_;
+				set<InputPartitionItem*> partition_pipeline_;
 
 			signals:
 				void sendNewValue(int);

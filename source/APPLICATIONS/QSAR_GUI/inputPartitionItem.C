@@ -48,7 +48,13 @@ InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* pa
 InputPartitionItem::~InputPartitionItem()
 {
 	removeFromPipeline();
-	//partitioner_->removePartition(this);
+	
+	// check whether partitioner_ has not been deleted yet (which might be the case when clearing entire desktop) 
+	set<PartitioningItem*>& pipe = view_->data_scene->main_window->partitioning_pipeline_;
+	if(pipe.find(partitioner_)!=pipe.end())
+	{
+		partitioner_->removePartition(this);
+	}
 }
 
 
@@ -81,7 +87,7 @@ bool InputPartitionItem::checkForDiscreteY()
 
 void InputPartitionItem::removeFromPipeline()
 {
-	view_->data_scene->main_window->partition_pipeline_.remove(this);	
+	view_->data_scene->main_window->partition_pipeline_.erase(this);	
 }
 
 

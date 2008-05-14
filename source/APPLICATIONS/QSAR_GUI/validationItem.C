@@ -389,6 +389,6 @@ void ValidationItem::addToPipeline()
 
 void ValidationItem::removeFromPipeline()
 {
-	view_->data_scene->main_window->val_pipeline_.remove(this);
+	view_->data_scene->main_window->val_pipeline_.erase(this);
 }
 

@@ -387,5 +387,5 @@ void FeatureSelectionItem::addToPipeline()
 
 void FeatureSelectionItem::removeFromPipeline()
 {
-	view_->data_scene->main_window->fs_pipeline_.remove(this);
+	view_->data_scene->main_window->fs_pipeline_.erase(this);
 }

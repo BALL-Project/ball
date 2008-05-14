@@ -109,13 +109,13 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 		for(QList<QGraphicsItem*>::iterator it=sel_items.begin(); it!=sel_items.end(); it++)
 		{
 			(*it)->setPos((*it)->pos()+translation);
-			QSet<Edge*> edges=((DataItem*)(*it))->inEdges();
-			for(QSet<Edge*>::iterator it2=edges.begin(); it2!=edges.end();it2++)
+			set<Edge*> edges=((DataItem*)(*it))->inEdges();
+			for(set<Edge*>::iterator it2=edges.begin(); it2!=edges.end();it2++)
 			{
 				(*it2)->adjust();
 			}
 			edges=((DataItem*)(*it))->outEdges();
-			for(QSet<Edge*>::iterator it2=edges.begin(); it2!=edges.end();it2++)
+			for(set<Edge*>::iterator it2=edges.begin(); it2!=edges.end();it2++)
 			{
 				(*it2)->adjust();
 			}
@@ -504,16 +504,16 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, uint folds)
 				ModelItem* m_item=qgraphicsitem_cast<ModelItem*>(item);
 				ModelItem* new_model = new ModelItem(*m_item);
 				if(model_item==m_item) target_model = new_model;
+				new_model->setInputDataItem(train_part);
 				if(!fs_created) 
 				{
-					new_model->setInputDataItem(train_part);
 					input_model = new_model;
-					new_model->addToPipeline();
 				}
 				else
 				{
 					new_fs->setModelItem(new_model); // set output of FS
 				}
+				new_model->addToPipeline();
 				new_item=new_model;
 				new_item->change();
 				fs_created=0;
