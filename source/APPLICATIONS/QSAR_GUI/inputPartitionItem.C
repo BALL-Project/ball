@@ -48,7 +48,7 @@ InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* pa
 InputPartitionItem::~InputPartitionItem()
 {
 	removeFromPipeline();
-	partitioner_->removePartition(this);
+	//partitioner_->removePartition(this);
 }
 
 

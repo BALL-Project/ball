@@ -722,6 +722,12 @@ void MainWindow::clearDesktop()
 	}
 	disconnected_items_.clear();
 	
+	for (QSet<InputPartitionItem*>::iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end(); ++it)
+	{
+		delete *it;
+	}
+	partition_pipeline_.clear();
+	
 	for (QSet<PartitioningItem*>::iterator it = partitioning_pipeline_.begin(); it != partitioning_pipeline_.end(); ++it)
 	{
 		delete *it;
@@ -952,7 +958,7 @@ void MainWindow::executePipeline()
 	for (QSet<PartitioningItem*>::Iterator it = partitioning_pipeline_.begin(); it != partitioning_pipeline_.end(); it++)
 	{
 		try
-		{cout<<"trying to partition input..."<<endl;
+		{
 			bool b=(*it)->execute();
 			if(!done) done=b;
 		}

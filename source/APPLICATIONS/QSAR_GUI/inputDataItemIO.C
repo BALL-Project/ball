@@ -167,6 +167,8 @@ void InputDataItemIO::readPartitionerSection(String& configfile_section, map<Str
 		}
 		Edge* e1 = new Edge(partitioner,test_part);
 		view_->scene()->addItem(e1);
+		
+		partitioner->addFold(make_pair(train_part,test_part));
 	}	
 }
 

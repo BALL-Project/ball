@@ -13,18 +13,18 @@ using namespace BALL::VIEW;
 using namespace BALL::VIEW::Exception;
 
 PredictionItem::PredictionItem(InputDataItem* input_item, ModelItem* model_item, DataItemView* view):
-	DataItem(view),
-	model_item_(model_item),
+	ValidationItem(1,view),
 	input_data_item_(input_item),
 	dotted_edge_(NULL)
 {
+	model_item_ = model_item;
 	setPixmap(QPixmap("./images/prediction.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 	name_ = "Prediction for " + input_item->name();
 	pred_plotter_ = NULL;
 }
 
-PredictionItem::PredictionItem(PredictionItem& item):
-DataItem(item.view_)
+PredictionItem::PredictionItem(PredictionItem& item)
+	: ValidationItem(1,item.view_)
 {
 	name_ = item.name_;
 	setPixmap(item.pixmap());
@@ -51,7 +51,7 @@ PredictionItem::~PredictionItem()
 
 
 PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view)
-	: DataItem(view)
+	: ValidationItem(1,view)
 {
 	istringstream input;
 	input.str(configfile_section);
@@ -126,7 +126,7 @@ PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*
 	model_item_->addPredictionInputEdge(edge);
 	Edge* edge2 = new Edge(model_item_,this);
 	view_->data_scene->addItem(edge2);
-		
+	
 	setPixmap(QPixmap("./images/prediction.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 	name_ = "Prediction for " + input_data_item_->name();
 	view_->data_scene->addItem(this);
@@ -140,12 +140,23 @@ bool PredictionItem::execute()
 {
 	if(done_) return 0;   // do nothing twice !
 	
+	// predict activities
 	for(unsigned int i=0; i<input_data_item_->data()->getNoSubstances();i++)
 	{
 		vector<double>* substance = input_data_item_->data()->getSubstance(i);
 		RowVector res = model_item_->model()->predict(*substance,1);
 		results_ << res;
 		delete substance;
+	}
+	
+	// if expected activity values are available, calculate Q^2
+	QSARData* test_data = ((InputDataItem*)dotted_edge_->sourceNode())->data();
+	if(test_data->getNoResponseVariables()>0)
+	{
+		const QSARData* train_data =  model_item_->model()->data;
+		model_item_->model()->setDataSource(test_data);
+		ValidationItem::execute(); // calculate Q^2
+		model_item_->model()->setDataSource(train_data); // reset the model's data
 	}
 	
 	done_ = 1;

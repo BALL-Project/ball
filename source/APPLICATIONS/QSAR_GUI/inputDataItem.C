@@ -123,6 +123,7 @@ void InputDataItem::loadFromFile(String file)
 {
 	try
 	{
+		cout<<"trying to read "<<file<<" ... "<<endl;
 		data_->readFromFile(file);
 	}
 	catch(WrongDataType e)

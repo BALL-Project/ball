@@ -197,7 +197,7 @@ void ValidationItem::initName()
 bool ValidationItem::execute()
 {
 	if (model_item_ == NULL)
-	{
+	{cout<<"model ==NULL!!"<<endl;
 		throw InvalidValidationItem(__FILE__,__LINE__);
 	}
 

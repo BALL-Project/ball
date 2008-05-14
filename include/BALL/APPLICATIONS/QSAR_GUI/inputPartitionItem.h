@@ -48,6 +48,7 @@ namespace BALL
 				void mousePressEvent(QGraphicsSceneMouseEvent *event);
 		
 		};
+		
 	
 	}
 }

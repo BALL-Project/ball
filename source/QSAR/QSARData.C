@@ -1064,7 +1064,7 @@ vector<QSARData*> QSARData::generateExternalSet(double fraction)
 	unsigned int no_val = static_cast<unsigned int>(descriptor_matrix_[0].size()*fraction);
 	
 	PreciseTime pt;
-	gsl_rng_set(r,pt.now().getSeconds());
+	gsl_rng_set(r,pt.now().getMicroSeconds());
 	
 	/// randomly draw without replacement the desired number of external validation compounds
 	for(unsigned int i=0;i<no_val;i++)

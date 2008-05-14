@@ -541,18 +541,17 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, uint folds)
 		}
 		
 		addItem(test_part);
-		p0 = new_item->pos();
-		test_part->setPos(p0+getOffset(p0,test_part));
+		QPointF pos = target_model->pos();
+		p0 = QPointF(-90,-50);
+		test_part->setPos(pos+p0);
 		Edge* e1 = new Edge(partitioner,test_part);
 		addItem(e1);
 		
 		// create PredictionItem using the test-partition of the current external fold
 		PredictionItem* pred_item = new PredictionItem(test_part, target_model, view);
+		//pred_item->setModelItem(target_model);
 		addItem(pred_item);
-		QPointF pos = target_model->pos();
 		pred_item->setPos(pos+getOffset(pos,pred_item));
-		p0 = QPointF(-90,-50);
-		item->setPos(pos+p0);
 		Edge* edge = new Edge(target_model, pred_item);
 		addItem(edge);
 		target_model->addPredictionInputEdge(edge);

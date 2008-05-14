@@ -42,42 +42,29 @@ bool PartitioningItem::execute()
 	}
 	
 	QSet<Edge*>::iterator it=out_edge_list_.begin();
-	for(uint i=0; i<no_folds_;i++)
+	for(list<pair<InputPartitionItem*,InputPartitionItem*> >::iterator it=folds_.begin(); it!=folds_.end(); it++)
 	{	
 		QSARData* data = ((InputDataItem*)(*in_edge_list_.begin())->sourceNode())->data();
 		vector<QSARData*> sets = data->generateExternalSet(val_fraction_); // length==2
-	
-		int a=0;
-		for(uint j=0; j<2;j++)
+		
+		if(data->isDataCentered())
 		{
-			//if((*it)->destNode()->type()==InputPartitionItem::Type)
-			{
-				if(data->isDataCentered())
-				{
-					sets[a]->centerData(data->isResponseCentered());
-				}				
-				
-				InputPartitionItem* part=(InputPartitionItem*)((*it)->destNode());
-				part->setData(sets[a]);
-				cout<<"size="<<sets[a]->getNoSubstances()<<"  #features="<<sets[a]->getNoDescriptors()<<endl;
-				
-				// all children of the InputPartitionItems must be executed again,
-				// but InputPartitionItems themselves are already done (data has been loaded!)
-				part->change();
-				part->setDone(1);
-				
-				a++;
-			}
-// 			else
-// 			{cout<<"else!!"<<endl;
-// 				it++;
-// 				j--;
-// 				continue;
-// 			}
-			it++;
+			bool center_y = data->isResponseCentered();
+			sets[0]->centerData(center_y); // train-partition
+			sets[1]->centerData(center_y); // test-partition
 		}
+		it->first->setData(sets[0]);
+		it->second->setData(sets[1]);
+		
+		//cout<<"size="<<sets[0]->getNoSubstances()<<"  #features="<<sets[]->getNoDescriptors()<<endl;
+		
+		// all children of the InputPartitionItems must be executed again,
+		// but InputPartitionItems themselves are already done (data has been loaded!)
+		it->first->change();
+		it->first->setDone(1);
+		it->second->change();
+		it->second->setDone(1);	
 	}
-	
 	done_ = 1;
 	return 0;
 }
@@ -132,6 +119,7 @@ void PartitioningItem::removePartition(InputPartitionItem* partition)
 		if(it->first==partition)
 		{
 			InputPartitionItem* test_part = it->second;
+			if(test_part==partition) { /* no nothing */}
 			it = folds_.erase(it);
 			delete test_part;
 			break;

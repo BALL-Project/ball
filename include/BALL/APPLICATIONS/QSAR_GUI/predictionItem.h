@@ -1,7 +1,7 @@
 #ifndef PREDICTIONITEM_H
 #define PREDICTIONITEM_H
 
-#include <BALL/APPLICATIONS/QSAR_GUI/dataItem.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/validationItem.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/modelItem.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/inputDataItem.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/dottedEdge.h>
@@ -20,7 +20,7 @@ namespace BALL
 		
 		class PredictionPlotter;
 		
-		class PredictionItem : public DataItem
+		class PredictionItem : public ValidationItem
 		{
 			public:
 				/** @name Constructors and Destructors*/
@@ -75,7 +75,7 @@ namespace BALL
 
 				/** results of the prediction */
 				QList<RowVector> results_;
-				ModelItem* model_item_;
+				//ModelItem* model_item_;
 				InputDataItem* input_data_item_;
 				DottedEdge* dotted_edge_;
 				
