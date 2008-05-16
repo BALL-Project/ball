@@ -36,7 +36,7 @@ bool PartitioningItem::execute()
 {
 	if(done_) return 0;
 	
-	if(out_edge_list_.size()!=(int)no_folds_*2 || out_edge_list_.size()!=2*(int)folds_.size())
+	if(out_edge_list_.size()!=no_folds_*2 || out_edge_list_.size()!=2*folds_.size())
 	{
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"PartitioningItem:::execute() error","Wrong number of connected InputPartitionItems!");
 	}

@@ -84,8 +84,8 @@ void ConnectionManager::addItems()
 		}
 	}
 
-	set<DataItem*> disconnected_items = parent_->modelItem()->view()-> data_scene->main_window->disconnectedItems();
-	for (set<DataItem*>::iterator it = disconnected_items.begin(); it != disconnected_items.end(); it++)
+	Pipeline<DataItem*> disconnected_items = parent_->modelItem()->view()-> data_scene->main_window->disconnectedItems();
+	for (Pipeline<DataItem*>::iterator it = disconnected_items.begin(); it != disconnected_items.end(); it++)
 	{
 		if (qgraphicsitem_cast<FeatureSelectionItem *>(*it))
 		{

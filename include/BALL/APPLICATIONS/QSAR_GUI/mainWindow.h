@@ -25,10 +25,9 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/validationDialog.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/partitioningItem.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/inputPartitionItem.h>
-
+#include <BALL/APPLICATIONS/QSAR_GUI/pipeline.h>
 
 #include <BALL/QSAR/registry.h>
-#include <set>
 #include <BALL/SYSTEM/path.h>
 
 
@@ -71,7 +70,7 @@ namespace BALL
 				//void changeModelItem(ModelItem* model, InputDataItem* input);
 
 				Registry* registry();
-				set<ModelItem*> getModelPipeline();
+				Pipeline<ModelItem*> getModelPipeline();
 
 				/**add items to pipeline */
 				//void addInputToPipeline(InputDataItem* item);
@@ -81,7 +80,7 @@ namespace BALL
 // 				void addValidationToPipeline(ValidationItem* item);
 				void addDisconnectedItem(DataItem* item);
 
-				set<DataItem*> disconnectedItems();
+				Pipeline<DataItem*> disconnectedItems();
 
 				/** @name Attributes */
 				/** pointer to the item that is currently being dragged */
@@ -97,15 +96,15 @@ namespace BALL
 				void setLastUsedPath(String path);
 
 				/** sets for fast search of Items: */
-				set<SDFInputDataItem*> sdf_input_pipeline_;
-				set<CSVInputDataItem*> csv_input_pipeline_;
-				set<ModelItem*> model_pipeline_;
-				set<FeatureSelectionItem*> fs_pipeline_;
-				set<ValidationItem*> val_pipeline_;
-				set<PredictionItem*> prediction_pipeline_;
-				set<DataItem*> disconnected_items_;
-				set<PartitioningItem*> partitioning_pipeline_;
-				set<InputPartitionItem*> partition_pipeline_;
+				Pipeline<SDFInputDataItem*> sdf_input_pipeline_;
+				Pipeline<CSVInputDataItem*> csv_input_pipeline_;
+				Pipeline<ModelItem*> model_pipeline_;
+				Pipeline<FeatureSelectionItem*> fs_pipeline_;
+				Pipeline<ValidationItem*> val_pipeline_;
+				Pipeline<PredictionItem*> prediction_pipeline_;
+				Pipeline<DataItem*> disconnected_items_;
+				Pipeline<PartitioningItem*> partitioning_pipeline_;
+				Pipeline<InputPartitionItem*> partition_pipeline_;
 
 			signals:
 				void sendNewValue(int);

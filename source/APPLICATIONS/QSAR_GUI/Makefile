@@ -60,7 +60,8 @@ SOURCES       = dataItem.C\
 		moc_modelItem.C\
 		inputDataItemIO.C\
 		partitioningItem.C\
-		inputPartitionItem.C
+		inputPartitionItem.C\
+		pipeline.C		
 # 		connectionsList.C\
 # 		moc_connectionsList.C
 	
@@ -112,7 +113,8 @@ OBJECTS       = dataItem.o \
 		moc_modelItem.o\
 		inputDataItemIO.o\
 		partitioningItem.o\
-		inputPartitionItem.o
+		inputPartitionItem.o\
+		pipeline.o
 # 		connectionsList.o\
 # 		moc_connectionsList.o
 

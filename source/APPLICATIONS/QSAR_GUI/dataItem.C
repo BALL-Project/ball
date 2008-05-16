@@ -250,7 +250,12 @@ QVariant DataItem::itemChange(GraphicsItemChange change, const QVariant &value)
 
 bool DataItem::removeDisconnectedItem()
 {
-	return view_->data_scene->main_window->disconnected_items_.erase(this);
+	if(!view_->data_scene->main_window->disconnected_items_.contains(this))
+	{
+		return false;
+	}
+	view_->data_scene->main_window->disconnected_items_.erase(this)!=view_->data_scene->main_window->disconnected_items_.erase(this);
+	return true;
 }
 
 void DataItem::setResultString(double value)

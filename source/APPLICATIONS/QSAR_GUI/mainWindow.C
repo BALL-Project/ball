@@ -702,33 +702,33 @@ void MainWindow::deleteItem()
 ///delete everything on the desktop
 void MainWindow::clearDesktop()
 {
-	set<SDFInputDataItem*> sdf_input_pipeline_copy = sdf_input_pipeline_;
-	for (set<SDFInputDataItem*>::iterator it = sdf_input_pipeline_copy.begin(); it != sdf_input_pipeline_copy.end(); ++it)
+	Pipeline<SDFInputDataItem*> sdf_input_pipeline_copy = sdf_input_pipeline_;
+	for (Pipeline<SDFInputDataItem*>::iterator it = sdf_input_pipeline_copy.begin(); it != sdf_input_pipeline_copy.end(); ++it)
 	{
 		delete *it;
 	}
  	sdf_input_pipeline_.clear();
 
-	set<CSVInputDataItem*> csv_input_pipeline_copy = csv_input_pipeline_;
-	for (set<CSVInputDataItem*>::iterator it = csv_input_pipeline_copy.begin(); it != csv_input_pipeline_copy.end(); ++it)
+	Pipeline<CSVInputDataItem*> csv_input_pipeline_copy = csv_input_pipeline_;
+	for (Pipeline<CSVInputDataItem*>::iterator it = csv_input_pipeline_copy.begin(); it != csv_input_pipeline_copy.end(); ++it)
 	{
 		delete *it;
 	}
  	csv_input_pipeline_.clear();
 	
-	for (set<DataItem*>::iterator it = disconnected_items_.begin(); it != disconnected_items_.end(); ++it)
+	for (Pipeline<DataItem*>::iterator it = disconnected_items_.begin(); it != disconnected_items_.end(); ++it)
 	{
 		delete *it;
 	}
 	disconnected_items_.clear();
 	
-	for (set<InputPartitionItem*>::iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end(); ++it)
+	for (Pipeline<InputPartitionItem*>::iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end(); ++it)
 	{
 		delete *it;
 	}
 	partition_pipeline_.clear();
 	
-	for (set<PartitioningItem*>::iterator it = partitioning_pipeline_.begin(); it != partitioning_pipeline_.end(); ++it)
+	for (Pipeline<PartitioningItem*>::iterator it = partitioning_pipeline_.begin(); it != partitioning_pipeline_.end(); ++it)
 	{
 		delete *it;
 	}
@@ -768,7 +768,7 @@ void MainWindow::saveItemsToFiles(String directory)
 {
 	try
 	{
-		for (set<SDFInputDataItem*>::iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
+		for (Pipeline<SDFInputDataItem*>::iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
 		{
 			// if input has not been read, there is nothing to be saved
 			if(!(*it)->isDone()) continue;
@@ -782,7 +782,7 @@ void MainWindow::saveItemsToFiles(String directory)
 			String file = directory+f1;
 			data->saveToFile(file);
 		}
-		for (set<CSVInputDataItem*>::iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
+		for (Pipeline<CSVInputDataItem*>::iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
 		{
 			// if input has not been read, there is nothing to be saved
 			if(!(*it)->isDone() || (*it)->append()) continue;
@@ -796,7 +796,7 @@ void MainWindow::saveItemsToFiles(String directory)
 			String file = directory+f1;
 			data->saveToFile(file);
 		}
-		for (set<InputPartitionItem*>::iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end(); it++)
+		for (Pipeline<InputPartitionItem*>::iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end(); it++)
 		{
 			// if input has not been read, there is nothing to be saved
 			if(!(*it)->isDone() || (*it)->append()) continue;
@@ -810,7 +810,7 @@ void MainWindow::saveItemsToFiles(String directory)
 			String file = directory+f1;
 			data->saveToFile(file);
 		}
-		for (set<ModelItem*>::iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
+		for (Pipeline<ModelItem*>::iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
 		{
 			// if model has not yet been trained, there is nothing to be saved
 			if(!(*it)->isDone()) continue;
@@ -836,7 +836,7 @@ void MainWindow::loadItemsFromFiles(String directory)
 {
 	try
 	{
-		for (set<SDFInputDataItem*>::iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
+		for (Pipeline<SDFInputDataItem*>::iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
 		{
 			String filename=directory+(*it)->savedAs().toStdString();
 			ifstream input(filename.c_str());
@@ -846,7 +846,7 @@ void MainWindow::loadItemsFromFiles(String directory)
 				(*it)->loadFromFile(filename);
 			}
 		}
-		for (set<CSVInputDataItem*>::iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
+		for (Pipeline<CSVInputDataItem*>::iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
 		{
 			if((*it)->append()) 
 			{
@@ -862,7 +862,7 @@ void MainWindow::loadItemsFromFiles(String directory)
 				(*it)->loadFromFile(filename);
 			}
 		}
-		for (set<InputPartitionItem*>::iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end(); it++)
+		for (Pipeline<InputPartitionItem*>::iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end(); it++)
 		{
 			String filename=directory+(*it)->savedAs().toStdString();
 			ifstream input(filename.c_str());
@@ -872,7 +872,7 @@ void MainWindow::loadItemsFromFiles(String directory)
 				(*it)->loadFromFile(filename);
 			}			
 		}
-		for (set<ModelItem*>::iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
+		for (Pipeline<ModelItem*>::iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
 		{
 			String filename=directory+(*it)->savedAs().toStdString();
 			ifstream input(filename.c_str());
@@ -896,7 +896,7 @@ Registry* MainWindow::registry()
 	return reg_;
 }
 
-set<ModelItem*> MainWindow::getModelPipeline()
+Pipeline<ModelItem*> MainWindow::getModelPipeline()
 {
 	return model_pipeline_;
 }
@@ -917,7 +917,7 @@ void MainWindow::executePipeline()
 	bool done=0;
 	
 	///read in the input files
-	for (set<SDFInputDataItem*>::iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
+	for (Pipeline<SDFInputDataItem*>::iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
 	{
 		try
 		{
@@ -933,7 +933,7 @@ void MainWindow::executePipeline()
 		emit sendNewValue(value);
 	}
 
-	for (set<CSVInputDataItem*>::iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
+	for (Pipeline<CSVInputDataItem*>::iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
 	{
 		try
 		{
@@ -955,7 +955,7 @@ void MainWindow::executePipeline()
 	}
 	
 	/// partition all input data sets (if desired)
-	for (set<PartitioningItem*>::iterator it = partitioning_pipeline_.begin(); it != partitioning_pipeline_.end(); it++)
+	for (Pipeline<PartitioningItem*>::iterator it = partitioning_pipeline_.begin(); it != partitioning_pipeline_.end(); it++)
 	{
 		try
 		{
@@ -978,7 +978,7 @@ void MainWindow::executePipeline()
 	///train all models and set their saved as names
 	int model_counter=0;
 	QString name;
-	for (set<ModelItem*>::iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
+	for (Pipeline<ModelItem*>::iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
 	{
 		(*it)->setSavedAs((*it)->name() + name.setNum(model_counter) + ".mod");
 		model_counter++;
@@ -1032,7 +1032,7 @@ void MainWindow::executePipeline()
 	}
 
 	///feature selection
-	for (set<FeatureSelectionItem*>::iterator it = fs_pipeline_.begin(); it != fs_pipeline_.end(); it++)
+	for (Pipeline<FeatureSelectionItem*>::iterator it = fs_pipeline_.begin(); it != fs_pipeline_.end(); it++)
 	{	
 		try
 		{
@@ -1055,7 +1055,7 @@ void MainWindow::executePipeline()
 
 
 	///activity prediction
-	for (set<PredictionItem*>::iterator it = prediction_pipeline_.begin(); it != prediction_pipeline_.end(); it++)
+	for (Pipeline<PredictionItem*>::iterator it = prediction_pipeline_.begin(); it != prediction_pipeline_.end(); it++)
 	{
 		try
 		{
@@ -1079,7 +1079,7 @@ void MainWindow::executePipeline()
 	}
 
 	///validation
-	for (set<ValidationItem*>::iterator it = val_pipeline_.begin(); it != val_pipeline_.end(); it++)
+	for (Pipeline<ValidationItem*>::iterator it = val_pipeline_.begin(); it != val_pipeline_.end(); it++)
 	{
 		try
 		{
@@ -1114,7 +1114,7 @@ void MainWindow::addDisconnectedItem(DataItem* item)
 	}
 }
 
-set<DataItem*> MainWindow::disconnectedItems()
+Pipeline<DataItem*> MainWindow::disconnectedItems()
 {
 	return disconnected_items_;
 }
@@ -1262,7 +1262,7 @@ void MainWindow::exportPipeline(QString filename)
 	positions<<"[ItemPositions]"<<endl;
 	
 	/// SDFInputItems
-	for (set<SDFInputDataItem*>::iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
+	for (Pipeline<SDFInputDataItem*>::iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
 	{
 		SDFInputDataItem* item = (*it);
 		item->setSavedAs(file_prefix.c_str()+item->name()+".dat");
@@ -1273,7 +1273,7 @@ void MainWindow::exportPipeline(QString filename)
 	}
 
 	///CSVInputItems
-	for (set<CSVInputDataItem*>::iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
+	for (Pipeline<CSVInputDataItem*>::iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
 	{
 		CSVInputDataItem* item = (*it);
 		item->setSavedAs(file_prefix.c_str()+item->name()+".dat");
@@ -1284,7 +1284,7 @@ void MainWindow::exportPipeline(QString filename)
 	}
 	
 	///PartitioningItems
-	for (set<PartitioningItem*>::iterator it = partitioning_pipeline_.begin(); it != partitioning_pipeline_.end(); it++)
+	for (Pipeline<PartitioningItem*>::iterator it = partitioning_pipeline_.begin(); it != partitioning_pipeline_.end(); it++)
 	{
 		PartitioningItem* item = (*it);
 		input_writer.writeConfigSection(item,out);
@@ -1292,7 +1292,7 @@ void MainWindow::exportPipeline(QString filename)
 	}
 
 	///InputPartitionItems
-	for (set<InputPartitionItem*>::iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end(); it++)
+	for (Pipeline<InputPartitionItem*>::iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end(); it++)
 	{
 		InputPartitionItem* item = (*it);
 		positions<<item->x()<<"  "<<item->y()<<endl;
@@ -1300,7 +1300,7 @@ void MainWindow::exportPipeline(QString filename)
 	
 	///Model Items
 	counter=0;
-	for (set<ModelItem*>::iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++,counter++)
+	for (Pipeline<ModelItem*>::iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++,counter++)
 	{
 		ModelItem* item = (*it);
 		item->setSavedAs(file_prefix.c_str()+item->name() + name.setNum(counter) + ".mod");
@@ -1318,7 +1318,7 @@ void MainWindow::exportPipeline(QString filename)
 	
 	///Feature Selection Items
 	counter=0;
-	for (set<FeatureSelectionItem*>::iterator it = fs_pipeline_.begin(); it != fs_pipeline_.end(); it++,counter++)
+	for (Pipeline<FeatureSelectionItem*>::iterator it = fs_pipeline_.begin(); it != fs_pipeline_.end(); it++,counter++)
 	{
 		FeatureSelectionItem* item = *it;
 		item->writeConfigSection(out);
@@ -1330,7 +1330,7 @@ void MainWindow::exportPipeline(QString filename)
 		
 	///Validation Items
 	counter=0;
-	for (set<ValidationItem*>::iterator it = val_pipeline_.begin(); it != val_pipeline_.end(); it++,counter++)
+	for (Pipeline<ValidationItem*>::iterator it = val_pipeline_.begin(); it != val_pipeline_.end(); it++,counter++)
 	{
 		ValidationItem* item = (*it); 
 		item->setSavedAs(file_prefix.c_str()+name.setNum(counter)+".val");
@@ -1342,7 +1342,7 @@ void MainWindow::exportPipeline(QString filename)
 
 	///Prediction Items
 	counter=0;
-	for (set<PredictionItem*>::iterator it = prediction_pipeline_.begin(); it != prediction_pipeline_.end(); it++,counter++)
+	for (Pipeline<PredictionItem*>::iterator it = prediction_pipeline_.begin(); it != prediction_pipeline_.end(); it++,counter++)
 	{
 		PredictionItem* item = (*it); 
 		item->setSavedAs(file_prefix.c_str()+name.setNum(counter) + ".pred");
