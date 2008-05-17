@@ -837,7 +837,7 @@ void MainWindow::saveItemsToFiles(String directory)
 
 
 void MainWindow::loadItemsFromFiles(String directory)
-{
+{return;
 	try
 	{
 		for (Pipeline<SDFInputDataItem*>::iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
@@ -882,7 +882,7 @@ void MainWindow::loadItemsFromFiles(String directory)
 			ifstream input(filename.c_str());
 			if(input) // read only existing models
 			{
-				cout<<"model-file= "<<directory+(*it)->savedAs().toStdString()<<endl;
+				//cout<<"model-file= "<<directory+(*it)->savedAs().toStdString()<<endl;
 				input.close();
 				(*it)->loadFromFile(filename);
 			}

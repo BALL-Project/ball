@@ -72,7 +72,7 @@ DataItem(fs_item.view_)
 	setPixmap(fs_item.pixmap());
 	validation_statistic_ = fs_item.validation_statistic_;
 	done_ = fs_item.done_;
-	result_ = fs_item.result_;
+	result_ = "";
 	opt_after_fs_ = fs_item.opt_after_fs_;
 	quality_increase_cutoff_ = fs_item.quality_increase_cutoff_;
 	cor_threshold_ = fs_item.cor_threshold_;

@@ -3,6 +3,7 @@
 
 #include <BALL/APPLICATIONS/QSAR_GUI/dataItem.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/inputDataItem.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/plotter.h>
 #include <BALL/QSAR/Model.h>
 #include <BALL/QSAR/registry.h>
 
@@ -127,6 +128,8 @@ namespace BALL
 
 				void addToPipeline();
 				void removeFromPipeline();
+				
+				void showPlotter();
 
 				/** @name Enums */
 				/** 
@@ -175,6 +178,8 @@ namespace BALL
 				bool save_attribute_;
 
 				std::set<Edge*> prediction_input_edges_;
+				
+				Plotter* plotter_;
 		
 
 			protected:

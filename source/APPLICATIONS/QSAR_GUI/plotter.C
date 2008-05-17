@@ -51,8 +51,6 @@ Plotter::Plotter(DataItem* item)
 
 Plotter::~Plotter()
 {
-	std::cout<<"Plotter::~Plotter()"<<std::endl;
-	
 	delete qwt_plot_;
  	delete okButton_;
  	delete show_labels_;

@@ -41,6 +41,8 @@ namespace BALL
 				
 				/** prints the current contents of the plot to a file */
 				void printToFile(QString& file);
+				
+				~Plotter();
 
 				
 				
@@ -57,8 +59,6 @@ namespace BALL
 			protected:
 				/** constructor */
 				Plotter(DataItem* item);
-			
-				~Plotter();		
 				
 				/** (re)plots all data. \n
 				Must be implemented by derived classes. */

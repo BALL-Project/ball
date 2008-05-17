@@ -183,7 +183,7 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 	if(!line.hasPrefix("[InputReader]"))
 	{
 		if(line.hasPrefix("[InputPartitioner]"))
-		{cout<<"test"<<endl;
+		{
 			readPartitionerSection(configfile_section, filenames_map, item_positions);
 			return;
 		}

@@ -86,15 +86,20 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 	/// -> process mouse clicks instead of drops :
 	if(main_window->drag_start_time.now().getSeconds()-main_window->drag_start_time.getSeconds() < main_window->min_drag_time) 
 	{
-		if(main_window->dragged_item->type()==PredictionItem::Type)
+		int type = main_window->dragged_item->type();
+		if(type==PredictionItem::Type)
 		{
 			((PredictionItem*)main_window->dragged_item)->showPredictionPlotter();
 		}
-		if(main_window->dragged_item->type()==SDFInputDataItem::Type || main_window->dragged_item->type()==CSVInputDataItem::Type)
+		else if(type==SDFInputDataItem::Type || type==CSVInputDataItem::Type || 
+		type==InputPartitionItem::Type )
 		{
 			((InputDataItem*)main_window->dragged_item)->showPlotter();
 		}
-		
+		else if(type==ModelItem::Type)
+		{
+			((ModelItem*)main_window->dragged_item)->showPlotter();
+		}
 		return;
 	}
 	
@@ -463,7 +468,7 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationI
 	InputDataItem* data_item = (InputDataItem*)item;
 	
 	double frac=val_item->getValFraction();
-	int folds = val_item->numOfNCVFolds();
+	uint folds = val_item->numOfNCVFolds();
 	PartitioningItem* partitioner = new PartitioningItem(data_item,view,folds,frac);
 	QPointF p0 = data_item->pos();
 	addItem(partitioner);
@@ -505,11 +510,10 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationI
 				ModelItem* new_model = new ModelItem(*m_item);
 				if(model_item==m_item) target_model = new_model;
 				new_model->setInputDataItem(train_part);
-				if(!fs_created) 
-				{
-					input_model = new_model;
-				}
-				else
+		
+				input_model = new_model;
+			
+				if(fs_created)
 				{
 					new_fs->setModelItem(new_model); // set output of FS
 				}

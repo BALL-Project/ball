@@ -123,7 +123,6 @@ void InputDataItem::loadFromFile(String file)
 {
 	try
 	{
-		cout<<"trying to read "<<file<<" ... "<<endl<<flush;
 		if(data_==NULL)
 		{
 			//throw BALL::Exception::GeneralException(__FILE__,__LINE__,"InputDataItem error","InputDataItem not connected to a QSARData object!!");		
@@ -151,7 +150,6 @@ void InputDataItem::showPlotter()
 		QMessageBox::information(view_,"No response variable", "This input data does not contain a response variable, so that plotting of the response values is not possible.");
 		return;
 	}
-	
 	
 	if(input_plotter_ == NULL)
 	{

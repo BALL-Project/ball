@@ -6,6 +6,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/exception.h>
 #include <QtGui/QMessageBox>
 #include <QtGui/QFileDialog>
+#include <BALL/APPLICATIONS/QSAR_GUI/coefficientPlotter.h>
 
 using namespace BALL::QSAR;
 using namespace BALL::QSAR::Exception;
@@ -31,6 +32,7 @@ ModelItem::ModelItem(RegistryEntry* entry,  DataItemView* miv):
 	save_attribute_(true)
 {
 	result_color_ = QColor(160,172,182);
+	plotter_ = NULL;
 	QPixmap pm;	
 	if (entry_->kernel)
 	{
@@ -61,6 +63,7 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, DataItemVie
 	save_attribute_(true)
 {
 	result_color_ = QColor(160,172,182);
+	plotter_ = NULL;
 	
 	if(!entry_->kernel)
 	{
@@ -96,6 +99,7 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, int kernelT
 	save_attribute_(true)
 {
 	result_color_ = QColor(160,172,182);
+	plotter_ = NULL;
 	
 	if(entry_->kernel && kernelType < 4)
 	{
@@ -132,6 +136,7 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, String s1, 
 	save_attribute_(true)
 {
 	result_color_ = QColor(160,172,182);
+	plotter_ = NULL;
 	
 	if(entry_->kernel)
 	{
@@ -174,7 +179,8 @@ DataItem(item.view_)
 	save_attribute_ = item.save_attribute_;
 	prediction_input_edges_ = item.prediction_input_edges_;
 	done_ = item.done_;
-	result_ = item.result_;
+	result_ = "";
+	plotter_ = NULL;
 	
 	// do NOT copy from 'item' but connect to the methods of this new object!!
 	createActions();
@@ -350,6 +356,7 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 	setName(QString(entry_->name_abreviation.c_str()));
 	createActions();
 	
+	plotter_ = NULL;
 	filenames_map.insert(make_pair(output,this));
 	setSavedAs(output.c_str());
 	done_ = 0; // model not trained yet and no trained model read
@@ -371,6 +378,7 @@ ModelItem::~ModelItem()
 	delete save_action;
 	delete load_action;
 	delete properties_action;
+	delete plotter_;
 }
 
 void ModelItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -662,4 +670,22 @@ void ModelItem::removeFromPipeline()
 void ModelItem::addToPipeline()
 {
 	view_->data_scene->main_window->model_pipeline_.insert(this);
+}
+
+void ModelItem::showPlotter()
+{
+	// for the moment, we can only plot regression coefficients...
+	if(!entry_->regression)
+	{
+		//QMessageBox::information(view_,"No predictions","No predictions have been done yet that could be plotted!\nTherefore, click \"Execute Pipeline\" first.");
+		return;	
+	}
+	if(plotter_ == NULL)
+	{
+		plotter_=new CoefficientPlotter(this);
+	}
+	else
+	{
+		plotter_->show();
+	}
 }
