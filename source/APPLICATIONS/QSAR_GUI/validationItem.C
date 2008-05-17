@@ -302,12 +302,12 @@ int ValidationItem::getValidationType()
 
 void ValidationItem::setValFraction(double frac)
 {
-	val_fraction_ = fraction;
+	val_fraction_ = frac;
 }
 
 double ValidationItem::getValFraction()
 {
-	return val_fraction;	
+	return val_fraction_;	
 }
 
 void ValidationItem::setK(int k)

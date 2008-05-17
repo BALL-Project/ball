@@ -165,7 +165,7 @@ void ValidationDialog::applyInput()
 		case 5:
 			ok = false;
 			num = n_of_ncv_folds_edit_->text().toInt(&ok);
-			val_fraction_ = val_fraction_edit_->text().toInt(&ok);
+			val_fraction_ = val_fraction_edit_->text().toDouble(&ok);
 			if (ok)
 			{
 				n_of_ncv_folds_ = num;

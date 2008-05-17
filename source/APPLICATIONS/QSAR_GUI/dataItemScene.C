@@ -463,6 +463,7 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationI
 	InputDataItem* data_item = (InputDataItem*)item;
 	
 	double frac=val_item->getValFraction();
+	int folds = val_item->numOfNCVFolds();
 	PartitioningItem* partitioner = new PartitioningItem(data_item,view,folds,frac);
 	QPointF p0 = data_item->pos();
 	addItem(partitioner);
@@ -470,7 +471,6 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationI
 	partitioner->addToPipeline();
 	Edge* e = new Edge(data_item,partitioner);
 	addItem(e);
-	int folds = val_item->numOfNCVFolds();
 	
 	for(uint i=0;i<folds;i++)
 	{

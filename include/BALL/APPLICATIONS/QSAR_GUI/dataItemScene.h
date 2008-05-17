@@ -17,6 +17,7 @@ namespace BALL
 		class Edge;
 		class DataItemView;
 		class ModelItem;
+		class ValidationItem;
 		
 		/** @class DataItemScene
 		* @brief class for storing all DataItems
