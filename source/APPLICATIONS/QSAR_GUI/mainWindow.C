@@ -95,8 +95,10 @@ using namespace BALL::Exception;
 	min_drag_time=0.3;
 
 	connect(this, SIGNAL(sendNewValue(int)), progress_bar_, SLOT(setValue(int))); 
+	
  }
 
+ 
 MainWindow::~MainWindow()
 {
 	delete view_;
@@ -124,6 +126,8 @@ MainWindow::~MainWindow()
 	output<<p.x()<<"  "<<p.y()<<endl;
 	output.close();
 }
+
+
 
 ///create a new SDFInputItem with the given file
 SDFInputDataItem* MainWindow::createSDFInput(QString filename)

@@ -57,11 +57,15 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item, ModelItem* model):
 	}
 	else if (val_item->getValidationType() == 5)
 	{
-		QLabel* label = new QLabel("number of nested cross validation folds");
+		QLabel* label1 = new QLabel("fraction of data to be set aside for validation");
+		val_fraction_edit_ = new QLineEdit(this);
+		QLabel* label2 = new QLabel("number of nested cross validation folds");
 		n_of_ncv_folds_edit_ = new QLineEdit(this);
 
-		layout1->addWidget(label,1,1);
-		layout1->addWidget(n_of_ncv_folds_edit_,1,2);
+		layout1->addWidget(label1,1,1);
+		layout1->addWidget(val_fraction_edit_,1,2);
+		layout1->addWidget(label2,2,1);
+		layout1->addWidget(n_of_ncv_folds_edit_,2,2);
 	}
 	
 	main_layout->addLayout(layout1);
@@ -161,9 +165,11 @@ void ValidationDialog::applyInput()
 		case 5:
 			ok = false;
 			num = n_of_ncv_folds_edit_->text().toInt(&ok);
+			val_fraction_ = val_fraction_edit_->text().toInt(&ok);
 			if (ok)
 			{
 				n_of_ncv_folds_ = num;
+				val_item_->setValFraction(val_fraction_);
 				val_item_->setNumOfNCVFolds(n_of_ncv_folds_);
 			}
 			else

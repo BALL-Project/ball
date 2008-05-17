@@ -66,7 +66,7 @@ namespace BALL
 				*/			
 				void dropEvent(QGraphicsSceneDragDropEvent* event);
 				
-				void createExternalValPipeline(ModelItem* model_item, uint folds);
+				void createExternalValPipeline(ModelItem* model_item, ValidationItem* val_item);
 				//void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
 				//void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
 				//void dragMoveEvent(QGraphicsSceneDragDropEvent *event);

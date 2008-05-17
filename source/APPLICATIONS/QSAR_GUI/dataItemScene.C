@@ -303,7 +303,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				item->addToPipeline();
 				if(event->mimeData()->hasFormat("application/x-EXTvalidationdata"))
 				{
-				   createExternalValPipeline(model_item_at_pos,2);
+				   createExternalValPipeline(model_item_at_pos,item);
 				}
 			}
 			catch(InvalidValidationItem)
@@ -445,7 +445,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 
 
 //TODO: this function is NOT READY!!
-void DataItemScene::createExternalValPipeline(ModelItem* model_item, uint folds)
+void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationItem* val_item)
 {
 	list<DataItem*> pipe;
 	DataItem* item = model_item;
@@ -462,7 +462,7 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, uint folds)
 	}
 	InputDataItem* data_item = (InputDataItem*)item;
 	
-	double frac=0.2;  /// TODO : dialog input-field!
+	double frac=val_item->getValFraction();
 	PartitioningItem* partitioner = new PartitioningItem(data_item,view,folds,frac);
 	QPointF p0 = data_item->pos();
 	addItem(partitioner);
@@ -470,7 +470,7 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, uint folds)
 	partitioner->addToPipeline();
 	Edge* e = new Edge(data_item,partitioner);
 	addItem(e);
-	
+	int folds = val_item->numOfNCVFolds();
 	
 	for(uint i=0;i<folds;i++)
 	{

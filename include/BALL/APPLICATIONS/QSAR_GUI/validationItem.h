@@ -75,6 +75,9 @@ namespace BALL
 				int numOfRuns();
 				int numOfSamples();
 				int numOfNCVFolds();
+				
+				void setValFraction(double frac);
+				double getValFraction();
 
 				Matrix* resultOfRandTest();
 
@@ -126,6 +129,9 @@ namespace BALL
 				double q2_;
 				
 				double r2_;
+				
+				/** in case of nested cross validation: the fraction of the input data that should be set aside for validation */
+				double val_fraction_;
 				
 				int validation_statistic_;
 				

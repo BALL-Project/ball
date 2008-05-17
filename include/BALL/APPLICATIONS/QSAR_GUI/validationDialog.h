@@ -66,9 +66,11 @@ namespace BALL
 				QLineEdit* n_of_samples_edit_;
 				QLineEdit* n_of_runs_edit_;
 				QLineEdit* n_of_ncv_folds_edit_;
+				QLineEdit* val_fraction_edit_;
 				int n_of_runs_;
 				int n_of_samples_;
 				int n_of_ncv_folds_;
+				double val_fraction_;
 		};
 	}
 }

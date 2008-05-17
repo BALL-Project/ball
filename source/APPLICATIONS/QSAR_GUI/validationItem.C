@@ -224,13 +224,16 @@ bool ValidationItem::execute()
 			result_of_rand_test_ = model_item_->model()->model_val->yRandomizationTest(num_of_runs_, k_);		
 			break;
 		case 5: 
-			break; //TODO
+			break; //TODO: calculate the mean of the Q^2 values of all PredictionItems
 		default:
 			throw InvalidValidationItem(__FILE__,__LINE__);
 	}
 	
-	r2_ = model_item_->model()->model_val->getFitRes();
-	q2_ = model_item_->model()->model_val->getCVRes();
+	if(type_!=5)
+	{
+		r2_ = model_item_->model()->model_val->getFitRes();
+		q2_ = model_item_->model()->model_val->getCVRes();
+	}
 	
 	if(type_==1) setResultString(r2_);
 	else setResultString(q2_);
@@ -295,6 +298,16 @@ void ValidationItem::setModelItem(ModelItem* model_item)
 int ValidationItem::getValidationType()
 {
 	return type_;
+}
+
+void ValidationItem::setValFraction(double frac)
+{
+	val_fraction_ = fraction;
+}
+
+double ValidationItem::getValFraction()
+{
+	return val_fraction;	
 }
 
 void ValidationItem::setK(int k)
