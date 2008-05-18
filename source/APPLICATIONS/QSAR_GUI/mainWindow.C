@@ -442,7 +442,7 @@ PredictionItem* MainWindow::createPrediction(InputDataItem* input, ModelItem* mo
 
  void MainWindow::about()
 {
-	QMessageBox::information(this, tr("About QSAR_GUI"), tr("QSAR_GUI is developed by Lisa Blass<br>lisa@bioinf.uni-sb.de"),
+	QMessageBox::information(this, tr("About QSAR_GUI"), tr("Version 0.4\n2008-05-19"),
 	QMessageBox::Ok);
 }
 
@@ -837,7 +837,7 @@ void MainWindow::saveItemsToFiles(String directory)
 
 
 void MainWindow::loadItemsFromFiles(String directory)
-{return;
+{
 	try
 	{
 		for (Pipeline<SDFInputDataItem*>::iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
