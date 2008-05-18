@@ -181,7 +181,7 @@ DataItem(item.view_)
 	done_ = item.done_;
 	result_ = "";
 	plotter_ = NULL;
-	
+		
 	// do NOT copy from 'item' but connect to the methods of this new object!!
 	createActions();
 
@@ -208,8 +208,7 @@ DataItem(item.view_)
 	else
 	{
 		model_ = NULL;
-	}
-	
+	}	
 }
 
 
@@ -490,6 +489,7 @@ bool  ModelItem::saveAttribute()
 void ModelItem::setInputDataItem(InputDataItem* item)
 {
 	input_ = item;
+	model_->setDataSource(item->data());
 }
 
 void ModelItem::addPredictionInputEdge(Edge* edge)

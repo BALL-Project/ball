@@ -64,6 +64,9 @@ namespace BALL
 				@param s if (s==1) R^2 and Q^2 are used \n
 				if(s==2) F_regr and F_cv are used. */
 				virtual void selectStat(int s) = 0;
+				
+				/** return the ID of selected validation statistic */
+				int getStat();
 				//@}
 				
 				
@@ -99,6 +102,9 @@ namespace BALL
 				
 				/** pointer to the model, which the object of this class should test */
 				Model* model_;
+				
+				/** the selected validation statistic */
+				int validation_statistic_;
 				//@}
 			
 		};

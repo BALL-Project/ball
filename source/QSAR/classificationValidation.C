@@ -18,6 +18,10 @@ ClassificationValidation::ClassificationValidation(ClassificationModel* m) : Val
 
 void ClassificationValidation::selectStat(int s)
 {
+	if(s>=0 && s<=4)
+	{
+		validation_statistic_ = s;
+	}
 	if(s==0)
 	{
 		qualCalculation = &ClassificationValidation::calculateAverageAccuracy;

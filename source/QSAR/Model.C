@@ -45,6 +45,7 @@ void Model::operator=(const Model& m)
 	vector<double> v=m.getParameters();
 	setParameters(v);
 	data = m.data;
+	model_val->selectStat(m.model_val->getStat()); // set validation statistic
 }
 	
 

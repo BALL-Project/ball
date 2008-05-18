@@ -19,9 +19,7 @@ namespace BALL
 				ModelItem* model_item_;
 				
 				void plot();
-			
-			
-			
+		
 			
 			
 		};

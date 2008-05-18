@@ -3,6 +3,7 @@
 #include <QPrinter>
 #include <QFileDialog>
 #include <QPrintDialog>
+#include <qwt_plot_zoomer.h>
  
 using namespace BALL::VIEW;
 using namespace std;

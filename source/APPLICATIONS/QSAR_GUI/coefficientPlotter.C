@@ -93,6 +93,7 @@ void CoefficientPlotter::plot()
 		curve_i->setPen(pen);
 		curve_i->attach(qwt_plot_); // attached object will be automatically deleted by QwtPlot
 	}
+		
 	
 	QString s1 = "features";
 	QString s2 = "coefficient values";
@@ -103,6 +104,15 @@ void CoefficientPlotter::plot()
 	double y_border=(max_y-min_y)*0.05;
 	min_x-=x_border; min_y-=y_border;
 	max_x+=x_border; max_y+=y_border;
+	
+	QwtPlotCurve* zero_line = new QwtPlotCurve;
+	double x[2]; x[0]=min_x; x[1]=max_x;
+	double y[2]; y[0]=0; y[1]=0;
+	zero_line->setData(x,y,2);
+	QColor c(135,135,135); // grey
+	QPen pen(c);
+	zero_line->setPen(pen);
+	zero_line->attach(qwt_plot_);
 	
 	qwt_plot_->setAxisScale(0,min_y,max_y);
 	qwt_plot_->setAxisScale(2,min_x,max_x);

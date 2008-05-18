@@ -598,11 +598,13 @@ void RegressionValidation::selectStat(int s)
 {
 	if(s==0)
 	{
+		validation_statistic_ = 0;
 		predQualFetcher_ = &RegressionValidation::getQ2;
 		fitQualFetcher_ = &RegressionValidation::getR2;
 	}
 	else if(s==1)
 	{
+		validation_statistic_ = 1;
 		fitQualFetcher_ = &RegressionValidation::getFregr;
 		predQualFetcher_ = &RegressionValidation::getFcv;
 	}

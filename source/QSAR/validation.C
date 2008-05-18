@@ -12,13 +12,18 @@ using namespace BALL::QSAR;
 
 Validation::Validation(Model* m)
 {
-	model_=m;	
+	model_=m;
+	validation_statistic_ = 0;
 }
 
 Validation::~Validation()
 {
 }
 
+int Validation::getStat()
+{
+	return validation_statistic_;
+}
 
 void Validation::setTrainingLine(int train_line, int current_line)
 {	
