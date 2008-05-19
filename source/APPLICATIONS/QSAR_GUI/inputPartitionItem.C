@@ -16,7 +16,7 @@ InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* pa
 	partitioner_ = partitioner;
 	
 	String name = partitioner->getInputItem()->name().toStdString();
-	uint index = name.find_last_of("/");
+	int index = name.find_last_of("/");
 	if(index!=string::npos)
 	{
 		name=name.substr(index);
