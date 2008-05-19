@@ -80,6 +80,11 @@ namespace BALL
 				double getValFraction();
 
 				Matrix* resultOfRandTest();
+				
+				void addExternalFoldValidation(ValidationItem* item);
+				
+				/** returns the number of nested cross validation folds in case of nested cross validation (else returns 0) */
+				int getNoExternalFolds();
 
 				double getQ2();
 				double getR2();
@@ -132,6 +137,9 @@ namespace BALL
 				
 				/** in case of nested cross validation: the fraction of the input data that should be set aside for validation */
 				double val_fraction_;
+				
+				/** in case of nested cross validation this member will contain pointers to the validations of the nested cross validation folds, so that the average quality statistic can be calculated */
+				list<ValidationItem*> external_validations_;
 				
 				int validation_statistic_;
 				

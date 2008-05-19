@@ -262,7 +262,6 @@ ModelItem* MainWindow::createModel(ModelItem* model, InputDataItem* input)
 
 	modelConfigurationDialog_ = new ModelConfigurationDialog(model, input, this);
 
-	// is there is nothing to be asked of the user, then do not ask him
 	if(entry->parameterNames.size()==0 && !entry->kernel)
 	{
 		modelConfigurationDialog_->createModel();
@@ -1330,7 +1329,19 @@ void MainWindow::exportPipeline(QString filename)
 		positions<<item->modelItem()->x()<<"  "<<item->modelItem()->y()<<endl;
 		value++;
 		emit sendNewValue(value);
-	}	
+	}
+		
+	///Prediction Items
+	counter=0;
+	for (Pipeline<PredictionItem*>::iterator it = prediction_pipeline_.begin(); it != prediction_pipeline_.end(); it++,counter++)
+	{
+		PredictionItem* item = (*it); 
+		item->setSavedAs(file_prefix.c_str()+name.setNum(counter) + ".pred");
+		item->writeConfigSection(out);
+		positions<<item->x()<<"  "<<item->y()<<endl;
+		value++;
+		emit sendNewValue(value);
+	}
 		
 	///Validation Items
 	counter=0;
@@ -1338,18 +1349,6 @@ void MainWindow::exportPipeline(QString filename)
 	{
 		ValidationItem* item = (*it); 
 		item->setSavedAs(file_prefix.c_str()+name.setNum(counter)+".val");
-		item->writeConfigSection(out);
-		positions<<item->x()<<"  "<<item->y()<<endl;
-		value++;
-		emit sendNewValue(value);
-	}
-
-	///Prediction Items
-	counter=0;
-	for (Pipeline<PredictionItem*>::iterator it = prediction_pipeline_.begin(); it != prediction_pipeline_.end(); it++,counter++)
-	{
-		PredictionItem* item = (*it); 
-		item->setSavedAs(file_prefix.c_str()+name.setNum(counter) + ".pred");
 		item->writeConfigSection(out);
 		positions<<item->x()<<"  "<<item->y()<<endl;
 		value++;

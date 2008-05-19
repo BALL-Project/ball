@@ -565,6 +565,9 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationI
 		addItem(dedge);
 		pred_item->setDottedEdge(dedge);
 		pred_item->addToPipeline();
+		
+		// add PredictionItem (which also calculates quality statistic) to nested cross validation item, so that the average predictive quality can later be calculated
+		val_item->addExternalFoldValidation(pred_item);
 	}
 }
 

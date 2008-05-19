@@ -105,6 +105,22 @@ ValidationItem::ValidationItem(String& configfile_section, std::map<String, Data
 		{
 			num_of_runs_ = ((String)line.after("=")).trimLeft().toInt();
 		}
+		else if(line.hasPrefix("external_validation_predictions"))
+		{
+			String file_names = ((String)line.after("=")).trimLeft();
+			int no = file_names.countFields();
+			for(int i=0; i<no; i++)
+			{
+				String file_i = file_names.getField(i);
+				map<String,DataItem*>::iterator it = filenames_map.find(file_i);
+				if(it==filenames_map.end())
+				{
+					throw BALL::Exception::GeneralException(__FILE__,__LINE__,"ValidationItem reading error","PredictionItem of a nested cross validation fold could not be found!");
+				}
+				ValidationItem* pred_i = (ValidationItem*) it->second;
+				addExternalFoldValidation(pred_i);	
+			}
+		}
 		else if(line.hasPrefix("output"))
 		{
 			output = ((String)line.after("=")).trimLeft();
@@ -155,10 +171,14 @@ ValidationItem::ValidationItem(String& configfile_section, std::map<String, Data
 	setSavedAs(output.c_str());
 	
 	///set type of validation to be done:
-	if(k_<=0) type_ = 1;
-	else if(num_of_samples_<=0) type_ = 2;
-	else type_ = 3;
-	if(num_of_runs_>0) type_ = 4;
+	if(val_data!="" || external_validations_.size()>0) type_ = 5;
+	else
+	{
+		if(k_<=0) type_ = 1;
+		else if(num_of_samples_<=0) type_ = 2;
+		else type_ = 3;
+		if(num_of_runs_>0) type_ = 4;
+	}
 	
 	initName();
 	done_ = 0;
@@ -224,7 +244,14 @@ bool ValidationItem::execute()
 			result_of_rand_test_ = model_item_->model()->model_val->yRandomizationTest(num_of_runs_, k_);		
 			break;
 		case 5: 
-			break; //TODO: calculate the mean of the Q^2 values of all PredictionItems
+			q2_ = 0;
+			for(list<ValidationItem*>::iterator it=external_validations_.begin(); it!=external_validations_.end(); it++)
+			{
+				q2_ += (*it)->getQ2();
+			}
+			q2_ /= external_validations_.size(); // average Q^2 obtained from nested cross validation			
+			break; 
+		
 		default:
 			throw InvalidValidationItem(__FILE__,__LINE__);
 	}
@@ -384,6 +411,17 @@ void ValidationItem::writeConfigSection(ofstream& out)
 	out << "[Validator]" << "\n";
 	out << "model_file = "<< modelItem()->savedAs().toStdString() << "\n";
 	out << "data_file = "<< modelItem()->inputDataItem()->savedAs().toStdString() << "\n";
+	
+	// for nested cross validation save the names of the prediction output-files in order to be able to restore the pipeline later
+	if(external_validations_.size()>0)
+	{
+		out<<"external_validation_predictions = ";
+		for(list<ValidationItem*>::iterator it=external_validations_.begin(); it!=external_validations_.end(); it++)
+		{
+			out<<(*it)->savedAs().toStdString()<<" ";
+		}
+		out<<endl;
+	}
 	int s = getValidationStatistic();
 	String stat = modelItem()->getRegistryEntry()->getStatName(s);
 	if(stat!="") out<< "classification_statistic = "<<stat.c_str()<<endl;
@@ -405,3 +443,12 @@ void ValidationItem::removeFromPipeline()
 	view_->data_scene->main_window->val_pipeline_.erase(this);
 }
 
+void ValidationItem::addExternalFoldValidation(ValidationItem* item)
+{
+	external_validations_.push_back(item);
+}
+
+int ValidationItem::getNoExternalFolds()
+{
+	return external_validations_.size();
+}

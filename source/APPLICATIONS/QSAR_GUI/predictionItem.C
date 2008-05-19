@@ -131,6 +131,8 @@ PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*
 	name_ = "Prediction for " + input_data_item_->name();
 	view_->data_scene->addItem(this);
 	addToPipeline();
+	filenames_map.insert(make_pair(output,this));
+	setSavedAs(output.c_str());
 	pred_plotter_ = 0;
 	done_ = 0;
 }
@@ -153,10 +155,15 @@ bool PredictionItem::execute()
 	QSARData* test_data = ((InputDataItem*)dotted_edge_->sourceNode())->data();
 	if(test_data->getNoResponseVariables()>0)
 	{
-		const QSARData* train_data =  model_item_->model()->data;
+		const QSARData* train_data_backup =  model_item_->model()->data;
+		int r2_backup = r2_;
+		
+		// ValidationItem::execute() will set r2_; but since we are using _external_ data for the prediction and are assesing the quality of fit to it (and not the training-data), we save the obtained quality statistic in q2_ insteadfset
 		model_item_->model()->setDataSource(test_data);
 		ValidationItem::execute(); // calculate Q^2
-		model_item_->model()->setDataSource(train_data); // reset the model's data
+		model_item_->model()->setDataSource(train_data_backup); // reset the model's data
+		q2_ = r2_;
+		r2_ = r2_backup;
 	}
 	
 	done_ = 1;

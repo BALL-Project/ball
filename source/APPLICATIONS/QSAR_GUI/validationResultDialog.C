@@ -34,7 +34,7 @@ ValidationResultDialog::ValidationResultDialog(ValidationItem* item)
 
 	int type = item->getValidationType();
 
-	if (type < 4)
+	if (type < 4 || type==5)
 	{
 		String train_fit ="R^2";
 		String pred_qual="Q^2";
@@ -55,9 +55,13 @@ ValidationResultDialog::ValidationResultDialog(ValidationItem* item)
 		{
 			qlabel = new QLabel(tmp.setNum(item->k())+ " fold "+pred_qual.c_str(),this);
 		}
-		else // boostrap
+		else if(type==4) // boostrap
 		{
 			qlabel = new QLabel(QString(pred_qual.c_str())+" of "+tmp.setNum(item->numOfSamples())+ "\nbootstrap samples",this);
+		}
+		else if(type==5)
+		{
+			qlabel = new QLabel(tmp.setNum(item->getNoExternalFolds())+ " fold nested "+pred_qual.c_str(),this);
 		}
 		
 		layout->addWidget(qlabel, 0,2);
