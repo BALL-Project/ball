@@ -841,7 +841,7 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 		{
 			for(int i=0;i<prop-no_y;i++) 
 			{
-				String value; line_stream >> value;
+				String value; getline(line_stream,value,sep[0]);
 				column_names_.push_back(value);
 			}
 			line++;
@@ -865,7 +865,7 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 				{
 					continue;
 				}
-				String value; line_stream >> value;
+				String value; getline(line_stream,value,sep[0]);
 				substance_names_.push_back(value);
 				continue;
 			}
@@ -889,7 +889,7 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 								
 				try
 				{
-					String s; line_stream >> s;
+					String s; getline(line_stream,s,sep[0]);
 					descriptor_matrix_[no].push_back(s.toDouble());
 				}	
 				catch(BALL::Exception::InvalidFormat g) 
@@ -910,7 +910,7 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 			{
 				try
 				{
-					String value; line_stream >> value;
+					String value; getline(line_stream,value,sep[0]);
 					Y_[i-(prop-no_y)].push_back(value.toDouble());
 				}
 				catch(BALL::Exception::InvalidFormat g) 
@@ -1187,7 +1187,7 @@ void QSARData::saveToFile(string filename)
 	printMatrix(y_transformations_,out);
 }
 
-void QSARData::readMatrix(VMatrix& mat, ifstream& in, unsigned int lines, unsigned int col)
+void QSARData::readMatrix(VMatrix& mat, ifstream& in, char seperator, unsigned int lines, unsigned int col)
 {
 	Column c(lines,0);
 	mat.resize(col,c);
@@ -1199,7 +1199,7 @@ void QSARData::readMatrix(VMatrix& mat, ifstream& in, unsigned int lines, unsign
 		for(unsigned int j=0; j<col;j++)
 		{
 			String s;
-			in>>s;
+			getline(in,s,seperator); 
 			mat[j][i]=s.toDouble(); // = line.getField(j,"\t").toDouble();
 		}
 	}
@@ -1228,10 +1228,10 @@ void QSARData::readFromFile(string filename)
 	descriptor_matrix_.clear();
 	Y_.clear();
 	
-	readMatrix(descriptor_matrix_, in, no_subst, no_desc); /// read descriptor matrix
+	readMatrix(descriptor_matrix_, in, '\t', no_subst, no_desc); /// read descriptor matrix
 	getline(in,line); // skip empty line
 	
-	readMatrix(Y_, in, no_subst, no_y);  /// read response values
+	readMatrix(Y_, in, '\t', no_subst, no_y);  /// read response values
 	getline(in,line); // skip empty line
 	
 	getline(in,line);
@@ -1250,11 +1250,11 @@ void QSARData::readFromFile(string filename)
 	
 	if(center_data)     /// read information about centering of data
 	{
-		readMatrix(descriptor_transformations_,in,2,no_desc);
+		readMatrix(descriptor_transformations_,in,'\t',2,no_desc);
 		if(center_y)
 		{	
 			getline(in,line); // skip empty line
-			readMatrix(y_transformations_,in,2,no_y);
+			readMatrix(y_transformations_,in,'\t',2,no_y);
 		}
 	}
 	else		/// delete all centering information if no centering was done on current input data

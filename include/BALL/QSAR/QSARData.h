@@ -192,7 +192,7 @@ namespace BALL
 				void removeInvalidSubstances(SortedList<int>& inv);
 				
 				/** reconstructs a vector based matrix from a file */
-				void readMatrix(VMatrix& mat, ifstream& in, unsigned int lines, unsigned int col);
+				void readMatrix(VMatrix& mat, ifstream& in, char seperator, unsigned int lines, unsigned int col);
 				
 				/** checks whether the given list of activity IDs contains any values <0 or values that are larger than the number of properties in the current input file.\n
 				If such values are found, an Exception of type InvalidActivityID is thrown. */
