@@ -94,6 +94,9 @@ namespace BALL
 				double min_drag_time;
 				
 				void setLastUsedPath(String path);
+				
+				/** checks whether the given item exists in any of this MainWindow's pipelines */
+				bool itemExists(DataItem* item);
 
 				/** sets for fast search of Items: */
 				Pipeline<SDFInputDataItem*> sdf_input_pipeline_;

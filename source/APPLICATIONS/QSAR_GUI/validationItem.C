@@ -23,6 +23,7 @@ ValidationItem::ValidationItem(int type, DataItemView* view):
 {
 	setPixmap(QPixmap("./images/validation.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 	done_ = 0;
+	nested_val_item_ = NULL;
 	type_ = type;
 	initName();
 	result_color_ = QColor(205,225,205);
@@ -41,7 +42,27 @@ DataItem(item.view_)
 	q2_ = item.q2_;
 	r2_ = item.r2_;
 	done_ = item.done_;
+	nested_val_item_ = NULL;
 	result_color_ = QColor(205,225,205);
+}
+
+ValidationItem::~ValidationItem()
+{
+	if (view_->name == "view")
+	{
+		//if the item was connected to others, delete it from its respective pipeline
+		if (!removeDisconnectedItem())
+		{
+			removeFromPipeline();
+		}
+	}
+	if(nested_val_item_!=NULL && view_->data_scene->main_window->val_pipeline_.contains(nested_val_item_))
+	{
+		nested_val_item_->external_validations_.remove(this);
+		
+		// one fold validation (this item) is being deleted, so that the average of the remaining predictive qualities has to calculated anew ...
+		nested_val_item_->change();
+	}
 }
 
 
@@ -71,6 +92,7 @@ ValidationItem::ValidationItem(String& configfile_section, std::map<String, Data
 	validation_statistic_=-1;	
 	q2_=0;
 	r2_=0;
+	nested_val_item_ = NULL;
 	
 	while(input)
 	{
@@ -118,7 +140,7 @@ ValidationItem::ValidationItem(String& configfile_section, std::map<String, Data
 					throw BALL::Exception::GeneralException(__FILE__,__LINE__,"ValidationItem reading error","PredictionItem of a nested cross validation fold could not be found!");
 				}
 				ValidationItem* pred_i = (ValidationItem*) it->second;
-				addExternalFoldValidation(pred_i);	
+				addExternalFoldValidation(pred_i);
 			}
 		}
 		else if(line.hasPrefix("output"))
@@ -217,14 +239,12 @@ void ValidationItem::initName()
 bool ValidationItem::execute()
 {
 	if (model_item_ == NULL)
-	{cout<<"model ==NULL!!"<<endl;
+	{
 		throw InvalidValidationItem(__FILE__,__LINE__);
 	}
-
-//	ValidationItem* item = new ValidationItem(type_, view_);
 	
 	if(done_) return 0; // do nothing twice...
-	
+
 	if(validation_statistic_>=0)
 	{
 		model_item_->model()->model_val->selectStat(validation_statistic_);
@@ -296,18 +316,6 @@ void ValidationItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	QGraphicsItem::mousePressEvent(event);
 }
 
-
-ValidationItem::~ValidationItem()
-{
-	if (view_->name == "view")
-	{
-		//if the item was connected to others, delete it from its respective pipeline
-		if (!removeDisconnectedItem())
-		{
-			removeFromPipeline();
-		}
-	}
-}
 	
 BALL::String ValidationItem::getStatName()
 {
@@ -446,6 +454,7 @@ void ValidationItem::removeFromPipeline()
 void ValidationItem::addExternalFoldValidation(ValidationItem* item)
 {
 	external_validations_.push_back(item);
+	item->nested_val_item_ = this;
 }
 
 int ValidationItem::getNoExternalFolds()

@@ -1364,5 +1364,19 @@ void MainWindow::exportPipeline(QString filename)
 	progress_bar_->reset();
 }
 
+bool MainWindow::itemExists(DataItem* item)
+{
+	if(sdf_input_pipeline_.contains((SDFInputDataItem*)item)) return 1;
+	if(csv_input_pipeline_.contains((CSVInputDataItem*)item)) return 1;
+	if(model_pipeline_.contains((ModelItem*)item)) return 1;
+	if(fs_pipeline_.contains((FeatureSelectionItem*)item)) return 1;
+	if(val_pipeline_.contains((ValidationItem*)item)) return 1;
+	if(prediction_pipeline_.contains((PredictionItem*)item)) return 1;
+	if(disconnected_items_.contains(item)) return 1;
+	if(partitioning_pipeline_.contains((PartitioningItem*)(item))) return 1;
+	if(partition_pipeline_.contains((InputPartitionItem*)item)) return 1;
+	
+	return 0;
+}
 
 

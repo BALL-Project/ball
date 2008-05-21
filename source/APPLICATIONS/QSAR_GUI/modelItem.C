@@ -675,7 +675,7 @@ void ModelItem::addToPipeline()
 void ModelItem::showPlotter()
 {
 	// for the moment, we can only plot regression coefficients...
-	if(!entry_->regression)
+	if(!entry_->regression || ((RegressionModel*)model_)->getTrainingResult()->Ncols()==0)
 	{
 		//QMessageBox::information(view_,"No predictions","No predictions have been done yet that could be plotted!\nTherefore, click \"Execute Pipeline\" first.");
 		return;	

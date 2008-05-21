@@ -141,9 +141,10 @@ namespace BALL
 				/** in case of nested cross validation this member will contain pointers to the validations of the nested cross validation folds, so that the average quality statistic can be calculated */
 				list<ValidationItem*> external_validations_;
 				
-				int validation_statistic_;
+				/** in case of a item that holds the results of validation of _one_ nested cross validation fold, this member points to the item that should display the _average_ predictive quality of all external folds */
+				ValidationItem* nested_val_item_;
 				
-				bool done_;
+				int validation_statistic_;
 				
 				
 				friend class DataItemScene;

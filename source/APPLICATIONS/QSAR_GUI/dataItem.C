@@ -74,8 +74,8 @@ DataItem::~DataItem()
 	for(set<Edge*>::iterator it=in_edge_list_.begin(); it!=in_edge_list_.end(); it++)
 	{
 		(*it)->sourceNode()->out_edge_list_.erase(*it);
-		delete *it;
-		
+		view_->data_scene->removeItem(*it);
+		delete *it;	
 	}
 
 	// delete outgoing edges and everthing hanging below these egdes
@@ -83,9 +83,16 @@ DataItem::~DataItem()
 	{
 		view_->data_scene->removeItem(*it);
 		DataItem* child = (*it)->destNode();
-		child->in_edge_list_.erase(*it);
-		delete *it;
-		delete child;
+		if(view_->data_scene->main_window->itemExists(child))
+		{
+			child->in_edge_list_.erase(*it);
+			delete *it;
+			delete child;
+		}
+		else
+		{
+			cout<<"child does not exist!"<<endl;
+		}
 	}
 	if(view_->name == "view") view_->data_scene->removeItem(this);
 }
@@ -130,7 +137,19 @@ void DataItem::change()
 	result_ = "";
 	for(set<Edge*>::iterator it=out_edge_list_.begin(); it!=out_edge_list_.end();it++)
 	{
-		(*it)->destNode()->change();
+		if(view_->data_scene->main_window->itemExists((*it)->destNode()))
+		{
+			(*it)->destNode()->change();
+		}
+		else
+		{
+			cout<<"found non-existing egde-destination!!"<<endl;
+			set<Edge*>::iterator tmp = it; tmp--;
+			view_->data_scene->removeItem(*it);
+			delete *it;
+			out_edge_list_.erase(it);
+			it = tmp;
+		}			
 	}
 }
 

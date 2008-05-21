@@ -49,7 +49,7 @@ InputPartitionItem::~InputPartitionItem()
 {
 	removeFromPipeline();
 	
-	// check whether partitioner_ has not been deleted yet (which might be the case when clearing entire desktop) 
+	//check whether partitioner_ has not been deleted yet (which might be the case when clearing entire desktop) 
 	Pipeline<PartitioningItem*>& pipe = view_->data_scene->main_window->partitioning_pipeline_;
 	if(pipe.find(partitioner_)!=pipe.end())
 	{

@@ -58,8 +58,6 @@ bool PartitioningItem::execute()
 		it->first->setData(sets[0]);
 		it->second->setData(sets[1]);
 		
-		//cout<<"size="<<sets[0]->getNoSubstances()<<"  #features="<<sets[]->getNoDescriptors()<<endl;
-		
 		// all children of the InputPartitionItems must be executed again,
 		// but InputPartitionItems themselves are already done (data has been loaded!)
 		it->first->change();
@@ -121,8 +119,8 @@ void PartitioningItem::removePartition(InputPartitionItem* partition)
 		if(it->first==partition)
 		{
 			InputPartitionItem* test_part = it->second;
-			if(test_part==partition) { /* no nothing */}
 			it = folds_.erase(it);
+			no_folds_--;
 			delete test_part;
 			break;
 		}
@@ -130,11 +128,11 @@ void PartitioningItem::removePartition(InputPartitionItem* partition)
 		{
 			InputPartitionItem* train_part = it->first;
 			it = folds_.erase(it);
+			no_folds_--;
 			delete train_part;	
 			break;
 		}			
-	}
-	no_folds_--;	
+	}	
 }
 
 
@@ -157,3 +155,4 @@ void PartitioningItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	itemChange(ItemPositionChange, pos());
 	QGraphicsItem::mousePressEvent(event);
 }
+

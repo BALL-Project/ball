@@ -140,7 +140,7 @@ void InputDataItem::loadFromFile(String file)
 
 void InputDataItem::showPlotter()
 {
-	if(data_->getNoSubstances()==0)
+	if(data_==0 || data_->getNoSubstances()==0)
 	{
 		QMessageBox::information(view_,"No data","Data must be read before it can be plotted!\nTherefore, click \"Execute Pipeline\" first.");
 		return;	
