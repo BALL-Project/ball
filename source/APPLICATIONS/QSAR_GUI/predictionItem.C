@@ -123,7 +123,6 @@ PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*
 	view_->data_scene->addItem(dotted_edge_);
 	Edge* edge = new Edge(input_data_item_, model_item_);
 	view_->data_scene->addItem(edge);
-	model_item_->addPredictionInputEdge(edge);
 	Edge* edge2 = new Edge(model_item_,this);
 	view_->data_scene->addItem(edge2);
 	
