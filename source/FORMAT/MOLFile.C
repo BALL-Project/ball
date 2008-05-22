@@ -422,6 +422,17 @@ namespace BALL
 				}
 				else if (tag == "CHG") // charge
 				{
+          // now formal charges solely stored in the M CHG line are also parsed
+          // Example:
+          //M  CHG  2  27  -1  28  -1
+          String line = getLine().getSubstring(7);
+          vector<String> toks;
+          line.split(toks," ");
+          for(unsigned int i=1;i<toks.size();i+=2)
+          {
+            // now adjust formal charge of atom 
+            atom_map[toks[i].trim().toInt()-1]->setFormalCharge(toks[i+1].trim().toInt());
+          }				
 				}
 				else if (tag == "RAD") // radical
 				{
