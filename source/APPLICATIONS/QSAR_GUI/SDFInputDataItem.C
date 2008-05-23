@@ -91,7 +91,7 @@ bool SDFInputDataItem::execute()
 		{    	// use subfolder of executable location...
 			data_->setDataFolder("./data");
 		}
-		data_->readSDFile(st.c_str(), activity_values_);
+		data_->readSDFile(st.c_str(), activity_values_, use_SD_properties_);
 	}
 	catch(WrongFileFormat)
 	{
@@ -202,4 +202,9 @@ void SDFInputDataItem::addToPipeline()
 void SDFInputDataItem::removeFromPipeline()
 {
 	view_->data_scene->main_window->sdf_input_pipeline_.erase(this);
+}
+
+void SDFInputDataItem::useSDProperties(bool b)
+{
+	use_SD_properties_ = b;
 }

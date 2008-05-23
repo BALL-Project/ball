@@ -42,6 +42,9 @@ namespace BALL
 				void setActivityValues(SortedList<int> act);
 				bool checkForDiscreteY();
 				
+				/** specifies whether or not properties of the SD-file should be used as descriptors */
+				void useSDProperties(bool b);
+				
 				/** read the input data */
 				bool execute();
 				
@@ -57,6 +60,8 @@ namespace BALL
 				/** @name Attributes
 				*/
 				SortedList<int> activity_values_;
+				
+				bool use_SD_properties_;
 				
 				/** Are there additional descriptors that are to be read from a csv-file?!\n
 				If yes, center the input data only after the data of the last CSVInputDataItem within this list has been read!! */

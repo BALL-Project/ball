@@ -49,6 +49,7 @@ namespace BALL
 			/** @name Attributes
 			*/
 			QLineEdit* activity_edit_;
+			QCheckBox* sd_descriptors_checkbox_;
 			QCheckBox* center_descriptor_values_;
 			QCheckBox* center_response_values_;
 			SortedList<int> numbers_;

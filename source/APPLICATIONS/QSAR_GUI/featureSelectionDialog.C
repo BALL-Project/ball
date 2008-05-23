@@ -13,6 +13,8 @@ using namespace BALL::VIEW;
 FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, ModelItem* model):
 	fs_item_(fsitem)
 {
+	Registry* reg = model->getRegistryEntry()->getRegistry();
+	
 	QVBoxLayout* main_layout = new QVBoxLayout(this);
 	QHBoxLayout* layout1 = new QHBoxLayout(this);
 	k_edit_ = new QLineEdit(this);
@@ -23,6 +25,7 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 	
 	if(fsitem->getType()>0) // no validation statistics for removal of colineal features
 	{
+		k_edit_->setText(String(reg->default_k).c_str());
 		optimize_parameters_ = new QCheckBox("optimize model parameters", this);
 	
 		QLabel* klabel = new QLabel("k for k-fold cross validation");
@@ -60,6 +63,8 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 	}
 	else
 	{
+		double cor = reg->default_correlation_cutoff;
+		k_edit_->setText(String(cor).c_str());
 		QLabel* label = new QLabel("correlation threshold");
 		layout1->addWidget(label);
 		layout1->addWidget(k_edit_);

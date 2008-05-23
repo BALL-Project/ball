@@ -14,6 +14,7 @@ ALLModel::ALLModel(const QSARData& q, double kw) : NonLinearModel(q)
 	kw_ = kw;
 	type_ = "ALL";
 	lambda_ = 0.005;
+	training_result_.ReSize(0,0);
 }
 
 ALLModel::~ALLModel()
@@ -303,7 +304,7 @@ void ALLModel::readFromFile(string filename)
 	bool centered_data = line0.getField(4,"\t").toInt();
 	bool centered_y = line0.getField(5,"\t").toInt();
 	int no_substances = line0.getField(6,"\t").toInt();
-	training_result_.ReSize(no_substances,no_y);
+	training_result_.ReSize(0,0);
 	descriptor_matrix_.ReSize(no_substances,no_descriptors);
 	Y_.ReSize(no_substances,no_y);
 	descriptor_names_.clear();

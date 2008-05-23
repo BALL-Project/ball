@@ -58,6 +58,7 @@ namespace BALL
 				CreateKernel2 createKernel2;
 				vector<String> parameterNames;
 				vector<double> parameterDefaults;
+				Registry* getRegistry();
 				
 			private:
 				Registry* registry_;
@@ -87,16 +88,29 @@ namespace BALL
 				/** the default number of boostrap samples */
 				int default_no_boostrap_samples;
 				
+				/** the default value for the fraction of the input data that should be set aside in case of external/nested validation */ 
+				double default_valdition_fraction;
+				
+				/** the default number of nested validation folds */
+				int default_nested_folds;
+				
+				/** the default value for the absolute value of the correlation coefficient for removing of nearly colinear features */
+				double default_correlation_cutoff;
+				
 				/** returns the RegistryEntry for a given model name */
 				RegistryEntry* getRegistryEntry(String model_name);
 				
 				/** return the ID of a specified model */
 				int getModelNo(String model_name);
 				
+				
+			private:
 				/** enable fast finding of a RegistryEntry for a given model name */
 				map<String,int> model_map;
 				
 				vector<String> classification_statistics;
+				
+				friend class RegistryEntry;
 		};
 		
 

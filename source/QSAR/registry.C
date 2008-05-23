@@ -11,6 +11,9 @@ Registry::Registry()
 	default_k = 5;
 	default_no_permutations = 10;
 	default_no_boostrap_samples = 50;
+	default_valdition_fraction = 0.2;
+	default_nested_folds = 4;
+	default_correlation_cutoff = 0.97;
 	
 	/// add new Model classes here:
 	
@@ -201,5 +204,11 @@ BALL::String RegistryEntry::getStatName(int s)
 
 RegistryEntry::~RegistryEntry()
 {
+}
+
+
+Registry* RegistryEntry::getRegistry()
+{
+	return registry_;
 }
 

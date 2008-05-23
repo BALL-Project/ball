@@ -31,7 +31,15 @@ void CoefficientPlotter::plot()
 		return;
 	}
 	
-	const vector<string>* feature_names = model->getDescriptorNames();
+	const vector<string>* feature_names;
+	if(!model_item_->getRegistryEntry()->kernel)
+	{
+		feature_names = model->getDescriptorNames();
+	}
+	else
+	{
+		feature_names = model->getSubstanceNames();
+	}
 	
 	double min_y=1e10;
 	double max_y=-1e10;

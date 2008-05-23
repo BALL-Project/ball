@@ -17,6 +17,7 @@ SDFInputDialog::SDFInputDialog(SDFInputDataItem* item):
 
 	QGridLayout* layout = new QGridLayout(this);
 	activity_edit_ = new QLineEdit();
+	sd_descriptors_checkbox_ = new QCheckBox("use other properties as descriptors", this);
 	center_descriptor_values_ = new QCheckBox("center descriptor values", this);
 	center_descriptor_values_->setChecked(true);
 	center_response_values_ = new QCheckBox("center response values",this);
@@ -60,9 +61,10 @@ SDFInputDialog::SDFInputDialog(SDFInputDataItem* item):
 
 	layout->addWidget(alabel,1,1,1,2);
 	layout->addWidget(activity_edit_,2,1,1,2);
-	layout->addWidget(center_descriptor_values_,3,1,Qt::AlignLeft);
-	layout->addWidget(center_response_values_,4,1,Qt::AlignLeft);;
-	layout->addWidget(SDFInputDialogButtons,5,1,1,2, Qt::AlignHCenter);
+	layout->addWidget(sd_descriptors_checkbox_,3,1,Qt::AlignLeft);
+	layout->addWidget(center_descriptor_values_,4,1,Qt::AlignLeft);
+	layout->addWidget(center_response_values_,5,1,Qt::AlignLeft);;
+	layout->addWidget(SDFInputDialogButtons,6,1,1,2, Qt::AlignHCenter);
 
 	this->setLayout(layout);
 	this->setWindowTitle("Preferences for " + input_item_->name());
@@ -122,6 +124,7 @@ void SDFInputDialog::getNumbers()
 		throw BALL::QSAR::Exception::InvalidActivityID(__FILE__,__LINE__);
 	}
 
+	input_item_->useSDProperties(sd_descriptors_checkbox_->isChecked());
 	input_item_->setCenterDataFlag(center_descriptor_values_->isChecked());
 	input_item_->setCenterResponseFlag(center_response_values_->isChecked());
 	input_item_->setActivityValues(numbers_);

@@ -55,7 +55,7 @@ ValidationResultDialog::ValidationResultDialog(ValidationItem* item)
 		{
 			qlabel = new QLabel(tmp.setNum(item->k())+ " fold "+pred_qual.c_str(),this);
 		}
-		else if(type==4) // boostrap
+		else if(type==3) // boostrap
 		{
 			qlabel = new QLabel(QString(pred_qual.c_str())+" of "+tmp.setNum(item->numOfSamples())+ "\nbootstrap samples",this);
 		}
