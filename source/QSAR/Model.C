@@ -4,6 +4,7 @@
 //
 
 #include <BALL/QSAR/Model.h>
+#include <BALL/QSAR/kernelModel.h>
 using namespace BALL::QSAR;
 
 
@@ -441,3 +442,54 @@ void Model::readMatrix(Matrix& mat, ifstream& in, uint lines, uint col)
 	}
 	getline(in,line); // read the rest of the last matrix-line
 }
+
+void Model::readModelParametersFromFile(ifstream& input)
+{
+	String line;
+	getline(input,line);  // skip comment line
+	getline(input,line);
+	int c = line.countFields("\t");
+	vector<double> v;
+	for(int i=0; i<c; i++)
+	{
+		v.push_back(line.getField(i,"\t").toDouble());
+	}
+	setParameters(v);
+	getline(input,line);  // skip empty line
+}
+
+
+void Model::readDescriptorInformationFromFile(ifstream& input, int no_descriptors, bool transformation)
+{
+	descriptor_names_.clear();
+	descriptor_transformations_.ReSize(2,no_descriptors);
+	String line;
+	getline(input,line);  // skip comment line
+	for(int i=1; i<=no_descriptors; i++)
+	{
+		getline(input,line);
+		unsigned int id = (unsigned int) line.getField(0,"\t").toInt();
+		descriptor_IDs_.push_back(id);
+		descriptor_names_.push_back(line.getField(1,"\t"));
+		if(transformation)
+		{
+			descriptor_transformations_(1,i)= line.getField(2,"\t").toDouble();
+			descriptor_transformations_(2,i)=line.getField(3,"\t").toDouble();
+		}
+	}
+	getline(input,line);  // skip empty line	
+}
+
+void Model::readResponseTransformationFromFile(ifstream& input, int no_y)
+{
+	y_transformations_.ReSize(2,no_y);
+	String line;
+	for(int i=1; i<=no_y; i++)
+	{
+		getline(input,line);
+		y_transformations_(1,i)=line.getField(0,"\t").toDouble();	
+		y_transformations_(2,i)=line.getField(1,"\t").toDouble();
+	}
+	getline(input,line);  // skip empty line
+}
+

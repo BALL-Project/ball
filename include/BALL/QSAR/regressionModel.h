@@ -67,6 +67,13 @@ namespace BALL
 				//@}
 				
 				
+				/** @name Input and Output. The following methods can be used to implement the functions saveToFile() and readFromFile() in final classes derived from this base-class 
+				 */
+				//@{
+				void readDescriptorInformationFromFile(ifstream& in, int no_descriptors, bool transformation, int no_coefficients);
+				//@}
+				
+				
 				friend class RegressionValidation;
 				
 		};

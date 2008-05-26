@@ -65,6 +65,16 @@ namespace BALL
 				/** resulting matrix with one column for each modeled activity and with one coefficient for each substance (i.e. one column for each column for Model.Y) */
 				//Matrix B;
 				//@}
+				
+				
+				/** @name Input and Output. The following methods can be used to implement the functions saveToFile() and readFromFile() in final classes derived from this base-class 
+				 */
+				//@{
+				void readKernelParametersFromFile(ifstream& in);
+				//void saveKernelParametersToFile(ofstream& in);
+				//}@
+				
+			
 		};
 	}
 }

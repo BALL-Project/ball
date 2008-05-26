@@ -206,73 +206,23 @@ void KernelModel::readFromFile(string filename)
 	bool centered_data = line0.getField(4,"\t").toInt();
 	bool centered_y = line0.getField(5,"\t").toInt();
 	int no_substances = line0.getField(6,"\t").toInt();
+	getline(input,line0);  // skip empty line
+	
 	training_result_.ReSize(no_substances,no_y);
-	descriptor_matrix_.ReSize(no_substances,no_descriptors);
-	K_.ReSize(no_substances,no_substances);
 	descriptor_names_.clear();
 	substance_names_.clear();
-	if(centered_data)
-	{
-		descriptor_transformations_.ReSize(2,no_descriptors);
-	}
-	getline(input,line0);  // skip empty line
-	getline(input,line0);  // skip comment line
-	getline(input,line0); 		/// read kernel parameters
-	kernel->type = line0.getField(0,"\t").toInt();
-	if(kernel->type!=4)
-	{
-		kernel->par1 = line0.getField(1,"\t").toDouble();
-		kernel->par2 = line0.getField(2,"\t").toDouble();
-	}
-	else
-	{
-		kernel->equation1 = line0.getField(1,"\t");
-		kernel->equation1 = line0.getField(1,"\t");
-	}
-	getline(input,line0);  // skip empty line
-	getline(input,line0);  // skip comment line
 	
-	getline(input,line0);	   /// read model parameters
-	int c = line0.countFields("\t");
-	vector<double> v;
-	for(int i=0; i<c; i++)
+	readKernelParametersFromFile(input);
+	readModelParametersFromFile(input);
+	if(centered_y)
 	{
-		v.push_back(line0.getField(i,"\t").toDouble());
+		readResponseTransformationFromFile(input, no_y);
 	}
-	setParameters(v);
-	getline(input,line0);  // skip empty line
-	
-	if(centered_y)  /// read information about transformation of response
-	{
-		y_transformations_.ReSize(2,no_y);
-		for(int i=1; i<=no_y; i++)
-		{
-			getline(input,line0);
-			y_transformations_(1,i)=line0.getField(0,"\t").toDouble();	
-			y_transformations_(2,i)=line0.getField(1,"\t").toDouble();
-		}
-		getline(input,line0);  // skip empty line 
-	}
-	getline(input,line0);  // skip comment line 
-
-	for(int i=1; i<=no_descriptors; i++) /// read descriptors and infor. about their transformation
-	{
-		String line;
-		getline(input,line);
-		unsigned int id = (unsigned int) line.getField(0,"\t").toInt();
-		descriptor_IDs_.push_back(id);
-		descriptor_names_.push_back(line.getField(1,"\t"));
-		if(centered_data)
-		{
-			descriptor_transformations_(1,i)= line.getField(2,"\t").toDouble();
-			descriptor_transformations_(2,i)= line.getField(3,"\t").toDouble();
-		}
-	}	
-	getline(input,line0);  // skip empty line 
+	Model::readDescriptorInformationFromFile(input, no_descriptors, centered_data);
 	
 	if(type_!="SVR") // NO result of training within this file in case of SVR
 	{
-		for(int i=1; i<=no_substances; i++) /// read training result
+		for(int i=1; i<=no_substances; i++) // read training result
 		{
 			String line;
 			getline(input,line);
@@ -285,7 +235,28 @@ void KernelModel::readFromFile(string filename)
 		getline(input,line0);  // skip empty line 
 	}
 	
-	readMatrix(descriptor_matrix_,input,no_substances,no_descriptors);  /// read descriptor matrix
+	readMatrix(descriptor_matrix_,input,no_substances,no_descriptors);  // read descriptor matrix
 	getline(input,line0);  // skip empty line 
-	readMatrix(K_,input,no_substances,no_substances); 	 /// read kernel matrix K_	
+	readMatrix(K_,input,no_substances,no_substances); 	// read kernel matrix K_
+	
+}
+
+
+void KernelModel::readKernelParametersFromFile(ifstream& input)
+{
+	String line;
+	getline(input,line);  // skip comment line
+	getline(input,line);
+	kernel->type = line.getField(0,"\t").toInt();
+	if(kernel->type!=4)
+	{
+		kernel->par1 = line.getField(1,"\t").toDouble();
+		kernel->par2 = line.getField(2,"\t").toDouble();
+	}
+	else
+	{
+		kernel->equation1 = line.getField(1,"\t");
+		kernel->equation1 = line.getField(1,"\t");
+	}
+	getline(input,line);  // skip empty line
 }

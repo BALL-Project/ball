@@ -248,7 +248,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				
 				model_copy->setSaveAttribute(false);
 				addItem(model_copy);
-				model_copy->addToPipeline();
+				model_copy->addToPipeline();	
 				model_copy->setPos(pos + getOffset(pos,model_copy));
 		
 				Edge* edge = new Edge(item, model_copy);

@@ -235,56 +235,40 @@ void RegressionModel::readFromFile(string filename)
 	int no_y = line0.getField(3,"\t").toInt();
 	bool centered_data = line0.getField(4,"\t").toInt();
 	bool centered_y = line0.getField(5,"\t").toInt();
-	training_result_.ReSize(no_descriptors,no_y);
-	descriptor_names_.clear();
-	if(centered_data)
-	{
-		descriptor_transformations_.ReSize(2,no_descriptors);
-	}
-	getline(input,line0);  // skip empty line
-	getline(input,line0);  // skip comment line
-	
-	getline(input,line0);	   /// read model parameters
-	int c = line0.countFields("\t");
-	vector<double> v;
-	for(int i=0; i<c; i++)
-	{
-		v.push_back(line0.getField(i,"\t").toDouble());
-	}
-	setParameters(v);
 	getline(input,line0);  // skip empty line
 	
+	readModelParametersFromFile(input);
 	if(centered_y)
 	{
-		y_transformations_.ReSize(2,no_y);
-		for(int i=1; i<=no_y; i++)
-		{
-			getline(input,line0);
-			y_transformations_(1,i)=line0.getField(0,"\t").toDouble();	
-			y_transformations_(2,i)=line0.getField(1,"\t").toDouble();
-		}
-		getline(input,line0);  // skip empty line 
+		readResponseTransformationFromFile(input, no_y);
 	}
-	getline(input,line0);  // skip comment line 
-	
-	for(int i=1; !input.eof(); i++)
+	readDescriptorInformationFromFile(input, no_descriptors, centered_data, no_y);
+}
+
+
+void RegressionModel::readDescriptorInformationFromFile(ifstream& input, int no_descriptors, bool transformation, int no_coefficients)
+{
+	descriptor_names_.clear();
+	descriptor_transformations_.ReSize(2,no_descriptors);
+	training_result_.ReSize(no_descriptors,no_coefficients);
+	String line;
+	getline(input,line);  // skip comment line
+	for(int i=1; i<=no_descriptors; i++)
 	{
-		String line;
 		getline(input,line);
-		if(line==""){break;}
-		unsigned int id = line.getField(0,"\t").toInt();
+		unsigned int id = (unsigned int) line.getField(0,"\t").toInt();
 		descriptor_IDs_.push_back(id);
 		descriptor_names_.push_back(line.getField(1,"\t"));
 		int j=2;
-		for(; j<2+no_y; j++)
+		for(; j<2+no_coefficients; j++)
 		{	
 			training_result_(i,j-1) = line.getField(j,"\t").toDouble();
 		}
-		if(centered_data)
+		if(transformation)
 		{
 			descriptor_transformations_(1,i)= line.getField(j,"\t").toDouble();
 			descriptor_transformations_(2,i)=line.getField(j+1,"\t").toDouble();
 		}
-			
 	}
+	getline(input,line);  // skip empty line	
 }

@@ -31,6 +31,7 @@ ModelItem::ModelItem(RegistryEntry* entry,  DataItemView* miv):
 	entry_(entry),
 	save_attribute_(true)
 {
+	no_training_ = 0;
 	result_color_ = QColor(160,172,182);
 	plotter_ = NULL;
 	QPixmap pm;	
@@ -62,6 +63,7 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, DataItemVie
 	entry_(entry),
 	save_attribute_(true)
 {
+	no_training_ = 0;
 	result_color_ = QColor(160,172,182);
 	plotter_ = NULL;
 	
@@ -98,6 +100,7 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, int kernelT
 	entry_(entry),
 	save_attribute_(true)
 {
+	no_training_ = 0;
 	result_color_ = QColor(160,172,182);
 	plotter_ = NULL;
 	
@@ -135,6 +138,7 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, String s1, 
 	entry_(entry),
 	save_attribute_(true)
 {
+	no_training_ = 0;
 	result_color_ = QColor(160,172,182);
 	plotter_ = NULL;
 	
@@ -181,6 +185,7 @@ DataItem(item.view_)
 	done_ = item.done_;
 	result_ = "";
 	plotter_ = NULL;
+	no_training_ = 0;
 		
 	// do NOT copy from 'item' but connect to the methods of this new object!!
 	createActions();
@@ -216,6 +221,7 @@ DataItem(item.view_)
 ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view)
 	: DataItem(view)
 {
+	no_training_ = 0;
 	result_color_=QColor(160,172,182);
 	istringstream input;
 	input.str(configfile_section);
@@ -455,7 +461,7 @@ InputDataItem* ModelItem::inputDataItem()
 
 bool ModelItem::execute()
 {
-	if(done_) return 0; // do nothing twice...
+	if(isDone()) return 0; // do nothing twice...
 	
 	if (optimize_model_parameters)
 	{
@@ -469,11 +475,60 @@ bool ModelItem::execute()
 	}
 	
 	model_->readTrainingData();
-	model_->train();
+	if(!no_training_)
+	{cout<<"doing training for "<<this<<endl<<flush;
+		model_->train();
+	}
 	
 	setResultString((int)model_->getDescriptorNames()->size());
 	done_ = 1; //ready!
 	return 1;
+}
+
+
+bool ModelItem::isDone()
+{
+	if(done_) return 1;
+	
+	// if this item has (only) a FeatureSelectionItem as parent, the FeatureSelectionItem will train this model after selecting features ... so do nothing here!
+	bool only_fs_items=1;
+	for(set<Edge*>::iterator it=in_edge_list_.begin();it!=in_edge_list_.end();it++)
+	{
+		if((*it)->sourceNode()->type()!=FeatureSelectionItem::Type)
+		{
+			only_fs_items = 0;
+			break;
+		}
+	}
+	if(only_fs_items)
+	{
+		no_training_ = 1;
+		return 0;
+	}
+	
+	// if this model is the last child of a pipeline train it in order to be able to display the coefficients
+	if(out_edge_list_.size()==0)
+	{
+		no_training_ = 0;
+		return 0;
+	}
+	
+	// if this item's outgoing edges are connected to FeatureSelectionItems only, save time by not training this model
+	for(set<Edge*>::iterator it=out_edge_list_.begin();it!=out_edge_list_.end();it++)
+	{
+		if((*it)->destNode()->type()!=FeatureSelectionItem::Type)
+		{
+			no_training_ = 0;
+			return 0;
+		}
+	}
+	no_training_ = 1;
+	return 0;
+}
+
+void ModelItem::disableTraining()
+{
+	no_training_ = 1;
 }
 
 void  ModelItem::setSaveAttribute(bool save)

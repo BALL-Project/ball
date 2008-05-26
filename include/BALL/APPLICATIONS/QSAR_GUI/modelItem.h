@@ -130,6 +130,12 @@ namespace BALL
 				void removeFromPipeline();
 				
 				void showPlotter();
+				
+				void disableTraining();
+				
+				/** Tests if anything is still to be done for this model. \n
+				This function checks whether this ModelItem has already been executed or if it has outgoing edges only to FeatureSelectionItems. In both cases, false is returned. */
+				bool isDone();
 
 				/** @name Enums */
 				/** 
@@ -180,6 +186,9 @@ namespace BALL
 				std::set<Edge*> prediction_input_edges_;
 				
 				Plotter* plotter_;
+				
+				/** if set to true, training is not done for this model, e.g. because it serves as input for a feature selection only */
+				bool no_training_;
 		
 
 			protected:

@@ -112,7 +112,7 @@ namespace BALL
 			void setView(DataItemView* v);
 			DataItemView* view();
 			
-			bool isDone();
+			virtual bool isDone();
 			void setDone(bool b) {done_=b;}
 			
 			/** Call this function if a change of parameters and/or input has occured.\n

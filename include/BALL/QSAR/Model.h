@@ -154,9 +154,21 @@ namespace BALL
 				
 				/** reads selected descriptors, their names and the information about their transformations (mean and stddev of each descriptor). This function is used after feature selection to read information about the selected features */
 				void readDescriptorInformation();
+				//@}
 				
+				
+				/** @name Input and Output. The following methods can be used to implement the functions saveToFile() and readFromFile() in final classes derived from this base-class 
+				 */
+				//@{
 				/** reconstructs a Matrix from a given input stream after resizing the given Matrix as specified */
 				void readMatrix(Matrix& mat, ifstream& in, uint lines, uint col);
+				
+				void readModelParametersFromFile(ifstream& in);
+				//void saveModelParametersToFile(ofstream& in);
+				void readDescriptorInformationFromFile(ifstream& in, int no_descriptors, bool transformation);
+				//void saveDescriptorInformationToFile(ofstream& in);
+				void readResponseTransformationFromFile(ifstream& in, int no_y);
+				//void saveResponseTransformationToFile(ofstream& in);
 				//@}	
 				
 				

@@ -200,7 +200,7 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 	{
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Feature selection reading error","ModelItem to which the feature selection should be applied can not be found!");
 	}
-	input_model_item_ = (ModelItem*) it->second;
+	setInputModelItem((ModelItem*) it->second);	
 	model_item_ = new ModelItem(*input_model_item_);
 	model_item_->setSaveAttribute(false);
 	model_item_->setSavedAs(output.c_str());
@@ -335,7 +335,7 @@ void FeatureSelectionItem::setModelItem(ModelItem* model_item)
 
 void FeatureSelectionItem::setInputModelItem(ModelItem* model_item)
 {
-	input_model_item_ = model_item;
+	input_model_item_ = model_item;	
 }
 
 bool FeatureSelectionItem::opt()
