@@ -71,6 +71,8 @@ namespace BALL
 				 */
 				//@{
 				void readDescriptorInformationFromFile(ifstream& in, int no_descriptors, bool transformation, int no_coefficients);
+				
+				void saveDescriptorInformationToFile(ofstream& out);
 				//@}
 				
 				

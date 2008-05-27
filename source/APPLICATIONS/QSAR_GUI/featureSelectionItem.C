@@ -252,6 +252,7 @@ bool FeatureSelectionItem::execute()
 	{
 		feature_selection_->selectStat(validation_statistic_);
 	}
+	
 	switch(type_)
 	{
 		case 0:
@@ -269,7 +270,9 @@ bool FeatureSelectionItem::execute()
 			break;
 		default:
 			throw InvalidFeatureSelectionItem(__FILE__,__LINE__);
+			break;
 	}
+
 	model_item_->model()->readTrainingData();
 	model_item_->model()->train();
 	model_item_->setResultString((int)model_item_->model()->getDescriptorIDs()->size());

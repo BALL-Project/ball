@@ -57,6 +57,13 @@ namespace BALL
 				vector<int> no_substances_;
 				//@}
 				
+				/** @name Input and Output. The following methods can be used to implement the functions saveToFile() and readFromFile() in final classes derived from this base-class 
+				 */
+				//@{
+				void readClassInformationFromFile(ifstream& input, int no_classes);
+				void saveClassInformationToFile(ofstream& out);
+				//@}
+				
 	
 				/** @name Attributes
 				 */

@@ -476,7 +476,7 @@ bool ModelItem::execute()
 	
 	model_->readTrainingData();
 	if(!no_training_)
-	{cout<<"doing training for "<<this<<endl<<flush;
+	{
 		model_->train();
 	}
 	
@@ -518,17 +518,31 @@ bool ModelItem::isDone()
 	{
 		if((*it)->destNode()->type()!=FeatureSelectionItem::Type)
 		{
-			no_training_ = 0;
+			no_training_ = 0; // --> enableTraining()
 			return 0;
 		}
 	}
-	no_training_ = 1;
+	disableTraining();
 	return 0;
 }
 
 void ModelItem::disableTraining()
 {
-	no_training_ = 1;
+	if(!no_training_) // do only if training has not yet been disabled...
+	{
+		no_training_ = 1;
+		
+		QPixmap pm;
+		if (entry_->kernel)
+		{
+			pm = QPixmap("./images/kernel_model_deactivated.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+		}
+		else 
+		{
+			pm = QPixmap("./images/model_deactivated.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+		}
+		setPixmap(pm);
+	}
 }
 
 void  ModelItem::setSaveAttribute(bool save)

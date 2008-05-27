@@ -347,9 +347,12 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 				item_positions->pop_front();
 				csv_item->setPos(pos.first,pos.second);
 			}
- 			Edge* edge = new Edge(sd_item, csv_item);
- 			view_->data_scene->addItem(edge);
- 			sd_item->appendCSVDescriptors(csv_item);
+ 			if(sd_item) 
+			{
+				Edge* edge = new Edge(sd_item, csv_item);
+				view_->data_scene->addItem(edge);
+				sd_item->appendCSVDescriptors(csv_item);
+			}
 		}
 	}
 	catch(BALL::Exception::GeneralException e)

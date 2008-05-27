@@ -206,12 +206,12 @@ void KernelModel::readFromFile(string filename)
 	bool centered_data = line0.getField(4,"\t").toInt();
 	bool centered_y = line0.getField(5,"\t").toInt();
 	int no_substances = line0.getField(6,"\t").toInt();
-	getline(input,line0);  // skip empty line
 	
 	training_result_.ReSize(no_substances,no_y);
 	descriptor_names_.clear();
 	substance_names_.clear();
 	
+	getline(input,line0);  // skip empty line
 	readKernelParametersFromFile(input);
 	readModelParametersFromFile(input);
 	if(centered_y)
@@ -239,6 +239,7 @@ void KernelModel::readFromFile(string filename)
 	getline(input,line0);  // skip empty line 
 	readMatrix(K_,input,no_substances,no_substances); 	// read kernel matrix K_
 	
+	input.close();	
 }
 
 

@@ -164,11 +164,14 @@ namespace BALL
 				void readMatrix(Matrix& mat, ifstream& in, uint lines, uint col);
 				
 				void readModelParametersFromFile(ifstream& in);
-				//void saveModelParametersToFile(ofstream& in);
+				void saveModelParametersToFile(ofstream& out);
 				void readDescriptorInformationFromFile(ifstream& in, int no_descriptors, bool transformation);
-				//void saveDescriptorInformationToFile(ofstream& in);
+				
+				/** overloaded by class RegressionModel, whose member function can also save coefficients and coefficient-errors */
+				virtual void saveDescriptorInformationToFile(ofstream& out);
+				
 				void readResponseTransformationFromFile(ifstream& in, int no_y);
-				//void saveResponseTransformationToFile(ofstream& in);
+				void saveResponseTransformationToFile(ofstream& out);
 				//@}	
 				
 				

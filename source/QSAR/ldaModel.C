@@ -133,7 +133,7 @@ vector<double> LDAModel::getParameters() const
 
 
 void LDAModel::saveToFile(string filename)
-{
+{cout<<"LDAModel::saveToFile()"<<endl<<flush;
 	if(sigma_.Nrows()==0)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must have been trained before the results can be saved to a file!");
@@ -178,12 +178,12 @@ void LDAModel::saveToFile(string filename)
 		out<<"stderr(s) of coeff.";
 	}
 	out<<endl;
-	
+	cout<<"descriptor_matrix_.Ncols()="<<descriptor_matrix_.Ncols()<<endl<<flush;
 	/// write (selected) descriptors and information about their transformation
 	if(!descriptor_IDs_.empty())
 	{
 		descriptor_IDs_.front();
-		for(int i=0; i<descriptor_matrix_.Ncols();i++)
+		for(int i=0; i<descriptor_IDs_.size();i++)
 		{
 			out<<String(descriptor_IDs_.next())<<"\t"<<descriptor_names_[i]<<"\t";
 			
@@ -230,6 +230,7 @@ void LDAModel::saveToFile(string filename)
 	{
 		out<<mean_vectors_[i]<<endl;
 	}
+	out.close();
 }
 
 
@@ -257,87 +258,21 @@ void LDAModel::readFromFile(string filename)
 	int no_y = line0.getField(3,"\t").toInt();
 	bool centered_data = line0.getField(4,"\t").toInt();
 	int no_classes = line0.getField(5,"\t").toInt();
-	//int no_subst = line0.getField(6,"\t").toInt();
 
-	sigma_.ReSize(no_descriptors,no_descriptors);
-	Matrix means(no_classes,no_descriptors);
-	mean_vectors_.resize(no_y,means);
-	no_substances_.clear();
-	descriptor_names_.clear();
 	substance_names_.clear();
-	labels_.clear();
-	if(centered_data)
-	{
-		descriptor_transformations_.ReSize(2,no_descriptors);
-	}
 	
-	getline(input,line0);  // skip empty line
-	getline(input,line0);  // skip comment line
-	
-	getline(input,line0);	   /// read model parameters
-	int c = line0.countFields("\t");
-	vector<double> v;
-	for(int i=0; i<c; i++)
-	{
-		v.push_back(line0.getField(i,"\t").toDouble());
-	}
-	setParameters(v);
-	getline(input,line0);  // skip empty line
-	getline(input,line0);  // skip comment line 
-	
-	for(int i=1; i<=no_descriptors; i++) /// read descriptors and infor. about their transformation
-	{
-		String line;
-		getline(input,line);
-		unsigned int id = (unsigned int) line.getField(0,"\t").toInt();
-		descriptor_IDs_.push_back(id);
-		descriptor_names_.push_back(line.getField(1,"\t"));
-		if(centered_data)
-		{
-			descriptor_transformations_(1,i)= line.getField(2,"\t").toDouble();
-			descriptor_transformations_(2,i)= line.getField(3,"\t").toDouble();
-		}
-	}	
-	getline(input,line0);  // skip empty line 
-	getline(input,line0);  // skip comment line 
-	
-	getline(input,line0);    /// read class-labels_
-	for(int i=0;i<no_classes;i++)
-	{
-		labels_.push_back(line0.getField(i,"\t").toInt());
-	}	
-	getline(input,line0);  // skip empty line 
-	getline(input,line0);  // skip comment line 
-	
-	getline(input,line0);	/// read numbers of substances of all classes
-	for(int i=0; i<no_descriptors; i++)
-	{
-		int n = line0.getField(i,"\t").toInt();
-		no_substances_.push_back(n);
-	}
+	getline(input,line0);  // skip empty line	
+	readModelParametersFromFile(input);
+	Model::readDescriptorInformationFromFile(input, no_descriptors, centered_data);
+	readClassInformationFromFile(input, no_classes);
+	readMatrix(sigma_,input,no_descriptors,no_descriptors); 
 	getline(input,line0);  // skip empty line 
 	
-	for(int i=1; i<=no_descriptors;i++) /// read matrix sigma_
+	mean_vectors_.resize(no_y);
+	for(int c=0; c<no_y;c++) // read all mean-vector matrices
 	{
-		String line;
-		getline(input,line);
-		for(int j=1; j<=no_descriptors;j++)
-		{
-			sigma_(i,j) = line.getField(j-1," ").toDouble();
-		}
+		readMatrix(mean_vectors_[c],input,no_classes,no_descriptors);
 	}
-	getline(input,line0);  // skip empty line 
-
-	for(int c=0; c<no_y;c++) /// read all mean-vector matrices
-	{
-		for(int i=1; i<=no_classes;i++) 
-		{
-			String line;
-			getline(input,line);
-			for(int j=1; j<=no_descriptors;j++)
-			{
-				mean_vectors_[c](i,j) = line.getField(j-1," ").toDouble();
-			}
-		}
-	}
+	
+	input.close();
 }

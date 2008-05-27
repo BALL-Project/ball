@@ -157,7 +157,6 @@ SDFInputDataItem* MainWindow::createSDFInput(QString filename)
 				throw InvalidInputDataItem(__FILE__,__LINE__);
 			}
 		}
-
 		catch(BALL::QSAR::Exception::InvalidActivityID e)
 		{
 			ok = false;
@@ -1036,7 +1035,7 @@ void MainWindow::executePipeline()
 
 	///feature selection
 	for (Pipeline<FeatureSelectionItem*>::iterator it = fs_pipeline_.begin(); it != fs_pipeline_.end(); it++)
-	{	
+	{
 		try
 		{
 			QString num;

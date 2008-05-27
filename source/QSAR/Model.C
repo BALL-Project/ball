@@ -458,6 +458,17 @@ void Model::readModelParametersFromFile(ifstream& input)
 	getline(input,line);  // skip empty line
 }
 
+void Model::saveModelParametersToFile(ofstream& out)
+{
+	out<<"# model-parameters"<<endl;
+	vector<double> v = getParameters();
+	for(unsigned int i=0;i<v.size();i++)
+	{
+		out<<v[i]<<"\t";
+	}
+	out<<endl<<endl;
+}
+
 
 void Model::readDescriptorInformationFromFile(ifstream& input, int no_descriptors, bool transformation)
 {
@@ -480,6 +491,53 @@ void Model::readDescriptorInformationFromFile(ifstream& input, int no_descriptor
 	getline(input,line);  // skip empty line	
 }
 
+
+void Model::saveDescriptorInformationToFile(ofstream& out)
+{
+	out<<"# ID\tdescriptor-name\tcoefficient(s)\t";
+	
+	bool centered_data = (descriptor_transformations_.Ncols()>0);
+	
+	if(centered_data)
+	{
+		out<<"mean of desc.\tstddev of desc.\t";
+	}
+	if(stderr)
+	{
+		out<<"stderr(s) of coeff.";
+	}
+	out<<endl;
+	
+	if(!descriptor_IDs_.empty())  // write information about transformation of descriptors
+	{
+		descriptor_IDs_.front();
+		for(uint i=0; i<descriptor_IDs_.size();i++)
+		{
+			out<<String(descriptor_IDs_.next())<<"\t"<<descriptor_names_[i]<<"\t";
+			if(centered_data)
+			{
+				out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";
+			}
+			out <<"\n";
+		}
+	}
+	else
+	{
+		for(uint i=0; i<descriptor_names_.size();i++)
+		{
+			out<<String(i)<<"\t"<<descriptor_names_[i]<<"\t";
+			if(centered_data)
+			{
+				out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";
+			}
+			out <<"\n";
+		}
+	}
+		
+	out.close();
+}
+
+
 void Model::readResponseTransformationFromFile(ifstream& input, int no_y)
 {
 	y_transformations_.ReSize(2,no_y);
@@ -491,5 +549,18 @@ void Model::readResponseTransformationFromFile(ifstream& input, int no_y)
 		y_transformations_(2,i)=line.getField(1,"\t").toDouble();
 	}
 	getline(input,line);  // skip empty line
+}
+
+
+void Model::saveResponseTransformationToFile(ofstream& out)
+{
+	if(y_transformations_.Ncols()!=0)
+	{
+		for(int i=1;i<=y_transformations_.Ncols();i++)
+		{
+			out<<y_transformations_(1,i)<<"\t"<<y_transformations_(2,i)<<endl;
+		}
+		out<<endl;
+	}	
 }
 

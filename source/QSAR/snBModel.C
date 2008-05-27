@@ -163,77 +163,17 @@ void SNBModel::saveToFile(string filename)
 	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tno of classes"<<endl;
 	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<no_substances_.size()<<"\n\n";
 
-	out<<"# model-parameters"<<endl;  /// write model parameters 
-	vector<double> v = getParameters();
-	for(unsigned int i=0;i<v.size();i++)
-	{
-		out<<v[i]<<"\t";
-	}
-	out<<endl;
+	saveModelParametersToFile(out);
+	saveDescriptorInformationToFile(out);
+	saveClassInformationToFile(out);
 	
-	out<<"\n# ID\tdescriptor-name\t";
-	if(centered_data)
-	{
-		out<<"mean of desc.\tstddev of desc.\t";
-	}
-	if(stderr)
-	{
-		out<<"stderr(s) of coeff.";
-	}
-	out<<endl;
-	
-	/// write (selected) descriptors and information about their transformation
-	if(!descriptor_IDs_.empty())
-	{
-		descriptor_IDs_.front();
-		for(int i=0; i<descriptor_matrix_.Ncols();i++)
-		{
-			out<<String(descriptor_IDs_.next())<<"\t"<<descriptor_names_[i]<<"\t";
-			
-			if(centered_data)
-			{
-				out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";
-			}
-			out <<"\n";
-		}
-	}
-	else
-	{
-		for(int i=0; i<descriptor_matrix_.Ncols();i++)
-		{
-			out<<String(i)<<"\t"<<descriptor_names_[i]<<"\t";
-	
-			if(centered_data)
-			{
-				out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";
-			}
-			out <<"\n";
-		}
-		
-	}	
-	out<<endl;
-	
-	out<<"# class-labels_\n";
-	for(unsigned int i=0; i<labels_.size();i++) /// write class-labels_
-	{
-		out<<labels_[i]<<"\t";
-	}
-	out<<endl<<endl;
-	
-	out<<"# no of substances of each class\n";
-	for(unsigned int i=0;i<no_substances_.size();i++)  /// write numbers of substances of each class
-	{
-		out<<no_substances_[i]<<"\t";
-	}
-	out<<endl<<endl;
-	
-	/// write mean_ matrices
+	// write mean_ matrices
 	for(uint i=0; i<mean_.size();i++)
 	{
 		out<<mean_[i]<<endl;
 	}
 	
-	/// write stddev_ matrices
+	// write stddev_ matrices
 	for(uint i=0; i<stddev_.size();i++)
 	{
 		out<<stddev_[i]<<endl;
@@ -267,90 +207,24 @@ void SNBModel::readFromFile(string filename)
 	int no_classes = line0.getField(5,"\t").toInt();
 	//int no_subst = line0.getField(6,"\t").toInt();
 
-	no_substances_.clear();
-	descriptor_names_.clear();
 	substance_names_.clear();
-	labels_.clear();
-	if(centered_data)
+	
+	getline(input,line0);  // skip empty line	
+	readModelParametersFromFile(input);
+	readDescriptorInformationFromFile(input, no_descriptors, centered_data);
+	readClassInformationFromFile(input, no_classes);
+	
+	mean_.resize(no_y);
+	for(int c=0; c<no_y;c++) // read all mean-vector matrices
 	{
-		descriptor_transformations_.ReSize(2,no_descriptors);
+		readMatrix(mean_[c],input,no_classes,no_descriptors);
+		getline(input,line0);  // skip empty line
 	}
 	
-	getline(input,line0);  // skip empty line
-	getline(input,line0);  // skip comment line
-	
-	getline(input,line0);	   /// read model parameters
-	int c = line0.countFields("\t");
-	vector<double> v;
-	for(int i=0; i<c; i++)
+	stddev_.resize(no_y);
+	for(int act=0;act<no_y;act++)  // read all stddev matrices (each containing a stddev for each feature for each class)
 	{
-		v.push_back(line0.getField(i,"\t").toDouble());
-	}
-	setParameters(v);
-	getline(input,line0);  // skip empty line
-	getline(input,line0);  // skip comment line 
-	
-	for(int i=1; i<=no_descriptors; i++) /// read descriptors and infor. about their transformation
-	{
-		String line;
-		getline(input,line);
-		unsigned int id = (unsigned int) line.getField(0,"\t").toInt();
-		descriptor_IDs_.push_back(id);
-		descriptor_names_.push_back(line.getField(1,"\t"));
-		if(centered_data)
-		{
-			descriptor_transformations_(1,i)= line.getField(2,"\t").toDouble();
-			descriptor_transformations_(2,i)= line.getField(3,"\t").toDouble();
-		}
-	}	
-	getline(input,line0);  // skip empty line 
-	getline(input,line0);  // skip comment line 
-	
-	getline(input,line0);    /// read class-labels_
-	for(int i=0;i<no_classes;i++)
-	{
-		labels_.push_back(line0.getField(i,"\t").toInt());
-	}	
-	getline(input,line0);  // skip empty line 
-	getline(input,line0);  // skip comment line 
-	
-	getline(input,line0);	/// read numbers of substances of all classes
-	for(int i=0; i<no_descriptors; i++)
-	{
-		int n = line0.getField(i,"\t").toInt();
-		no_substances_.push_back(n);
-	}
-	getline(input,line0);  // skip empty line 
-	
-	Matrix m(no_classes,no_descriptors);
-	mean_.resize(no_y,m);
-	stddev_.resize(no_y,m);
-	
-	for(int act=0;act<no_y;act++) /// read all mean matrices (each containing a mean for each feature for each class)
-	{
-		for(int i=1; i<=no_classes;i++)
-		{
-			String line;
-			getline(input,line);
-			for(int j=1; j<=no_descriptors;j++)
-			{
-				mean_[act](i,j) = line.getField(j-1," ").toDouble();
-			}
-		}
+		readMatrix(stddev_[act],input,no_classes,no_descriptors);
 		getline(input,line0);  // skip empty line 
-	}
-	
-	for(int act=0;act<no_y;act++)   /// read all stddev matrices (each containing a stddev for each feature for each class)
-	{
-		for(int i=1; i<=no_classes;i++)
-		{
-			String line;
-			getline(input,line);
-			for(int j=1; j<=no_descriptors;j++)
-			{
-				stddev_[act](i,j) = line.getField(j-1," ").toDouble();
-			}
-		}
-		getline(input,line0);  // skip empty line 	
 	}
 }

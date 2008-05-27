@@ -67,7 +67,7 @@ namespace BALL
 				Matrix min_max_;
 				
 				/** One probability Matrix for each modelled activity and each class. \n
-				Each Matrix stores in each cell the probability for a feature being with specific range to be in a specific class  */
+				Each Matrix stores in each cell the probability for a feature lying within a specific range to be in a specific class  */
 				vector<vector<Matrix> > probabilities_;
 							
 

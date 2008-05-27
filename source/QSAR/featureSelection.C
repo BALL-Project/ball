@@ -64,7 +64,6 @@ void FeatureSelection::setQualityIncreaseCutoff(double& d)
 		
 void FeatureSelection::forward(bool stepwise, int k, bool optPar)
 {
-	
 	unsigned int columns=model_->data->descriptor_matrix_.size();
 	unsigned int lines=model_->data->descriptor_matrix_[0].size();
 	SortedList<unsigned int>* irrelevantDescriptors = findIrrelevantDescriptors();
@@ -93,7 +92,7 @@ void FeatureSelection::forward(bool stepwise, int k, bool optPar)
 	{	
 		oldWeights=*weights_;
 	}
-	
+
 	model_->descriptor_IDs_.clear();
 	double old_q2=0;
 	// do while there is an increase of Q^2 (and no of columns < no of lines)
@@ -135,7 +134,7 @@ void FeatureSelection::forward(bool stepwise, int k, bool optPar)
 			{
 				updateWeights(old_descr,model_->descriptor_IDs_,oldWeights);
 			}
-
+			
 			try
 			{
 				if(!optPar || !model_->optimizeParameters(k))
@@ -175,7 +174,7 @@ void FeatureSelection::forward(bool stepwise, int k, bool optPar)
 			}
 		}		
 	}
-
+	
 	delete irrelevantDescriptors;
 	
 	// if feature selection leads to no increase of Q^2, use old descriptors and weights_

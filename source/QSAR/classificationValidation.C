@@ -105,7 +105,6 @@ void ClassificationValidation::crossValidation(int k, bool restore)
 		testAllSubstances(0);  // do not transform cross-validation test-data again...
 		average_accuracy += accuracy_;
 	}
-	
 	accuracy_cv_ = average_accuracy/k;
 	class_results_ = class_results_/k;
 	
@@ -123,14 +122,16 @@ void ClassificationValidation::testAllSubstances(bool transform)
 {	
 	confusion_matrix_.ReSize(4,clas_model->labels_.size());
 	confusion_matrix_=0;
+	class_results_.ReSize(clas_model->labels_.size());
+	class_results_ = 0;
 	
 	for(int i=0; i<(int)test_substances_.size();i++) // for all substances in test-data
 	{
 		RowVector rv=model_->predict(test_substances_[i],transform);
-			
+		
 		for(int c=1; c<=test_Y_.Ncols();c++) // for all modelled activities
 		{			
-			int y_ic= static_cast<int>(test_Y_(i+1,c));
+			int y_ic= static_cast<int>(test_Y_(i+1,c)); 
 			int rv_ic = static_cast<int>(rv(c));
 			
 			for(int k=1;k<=confusion_matrix_.Ncols();k++)   // set TP,FP,TN,FN for all classes
@@ -160,8 +161,9 @@ void ClassificationValidation::testAllSubstances(bool transform)
 			}
 		}
 		
-	}
 		
+	}
+	
 	(this->*qualCalculation)();
 }
 
@@ -312,8 +314,7 @@ void ClassificationValidation::bootstrap(int k, bool restore)
 		model_->descriptor_matrix_=desc_backup;   // prevent confusion of cross-validation coefficients with coefficients
 		model_->Y_=y_backup;
 		model_->train();
-	}	
-
+	}
 }
 
 
@@ -385,12 +386,14 @@ void ClassificationValidation::calculateAverageAccuracy()
 			accuracy_ += (confusion_matrix_(1,j)+confusion_matrix_(3,j)) / (confusion_matrix_(1,j)+confusion_matrix_(3,j)+confusion_matrix_(4,j)+confusion_matrix_(2,j));
 		}
 	}
-	
-	for(int j=1;j<=confusion_matrix_.Ncols();j++) // calculate accuracy_ of all classes
-	{	// multi-class accuracy := (TP) / (TP+FN+FP)
-		double acc = (confusion_matrix_(1,j)) / (confusion_matrix_(1,j)+confusion_matrix_(4,j)+confusion_matrix_(2,j));
-		class_results_(j) += acc;
-		accuracy_ += acc;
+	else
+	{
+		for(int j=1;j<=confusion_matrix_.Ncols();j++) // calculate accuracy_ of all classes
+		{	// multi-class accuracy := (TP) / (TP+FN+FP)
+			double acc = (confusion_matrix_(1,j)) / (confusion_matrix_(1,j)+confusion_matrix_(4,j)+confusion_matrix_(2,j));
+			class_results_(j) += acc;
+			accuracy_ += acc;
+		}
 	}
 	
 	accuracy_ /= confusion_matrix_.Ncols(); // mean accuracy_ of all classes
@@ -416,13 +419,15 @@ void ClassificationValidation::calculateWeightedAccuracy()
 			accuracy_ = accuracy_ + acc_j*(((double)clas_model->no_substances_[j-1])/no_all);
 		}
 	}
-	
-	for(int j=1;j<=confusion_matrix_.Ncols();j++) 
-	{	// multi-class accuracy := (TP) / (TP+FN+FP)
-		double acc = (confusion_matrix_(1,j)) / (confusion_matrix_(1,j)+confusion_matrix_(4,j)+confusion_matrix_(2,j));
-		double acc_weighted = acc*(((double)clas_model->no_substances_[j-1])/no_all);
-		class_results_(j) += acc_weighted;
-		accuracy_ += acc_weighted;
+	else
+	{
+		for(int j=1;j<=confusion_matrix_.Ncols();j++) 
+		{	// multi-class accuracy := (TP) / (TP+FN+FP)
+			double acc = (confusion_matrix_(1,j)) / (confusion_matrix_(1,j)+confusion_matrix_(4,j)+confusion_matrix_(2,j));
+			double acc_weighted = acc*(((double)clas_model->no_substances_[j-1])/no_all);
+			class_results_(j) += acc_weighted;
+			accuracy_ += acc_weighted;
+		}
 	}
 }
 

@@ -132,83 +132,13 @@ void RegressionModel::saveToFile(string filename)
 	}
 	
 	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tcentered response?"<<endl;
-	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<training_result_.Ncols()<<"\t"<<centered_data<<"\t"<<centered_y<<"\n";
+	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<training_result_.Ncols()<<"\t"<<centered_data<<"\t"<<centered_y<<"\n\n";
 	
-	out<<endl<<"# model-parameters"<<endl;  /// write model parameters 
-	vector<double> v = getParameters();
-	for(unsigned int i=0;i<v.size();i++)
-	{
-		out<<v[i]<<"\t";
-	}
-	out<<endl;
+	saveModelParametersToFile(out);
+	saveResponseTransformationToFile(out);
+	saveDescriptorInformationToFile(out);
 	
-	if(centered_y)
-	{
-		out<<endl;
-		for(int i=1;i<=y_transformations_.Ncols();i++)
-		{
-			out<<y_transformations_(1,i)<<"\t"<<y_transformations_(2,i)<<"\n";
-		}
-	}	
-	
-	out<<"\n# ID\tdescriptor-name\tcoefficient(s)\t";
-	if(centered_data)
-	{
-		out<<"mean of desc.\tstddev of desc.\t";
-	}
-	if(stderr)
-	{
-		out<<"stderr(s) of coeff.";
-	}
-	out<<endl;
-	
-	if(!descriptor_IDs_.empty())  /// write descriptors and information about their transformation
-	{
-		descriptor_IDs_.front();
-		for(int i=0; i<training_result_.Nrows();i++)
-		{
-			out<<String(descriptor_IDs_.next())<<"\t"<<descriptor_names_[i]<<"\t";
-		
-			for(int j=1; j<=training_result_.Ncols();j++) 
-			{
-				out<<training_result_(i+1,j)<<"\t";
-			}
-			if(centered_data)
-			{
-				out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";
-			}
-			for(int j=1; j<=coeffErrors->Ncols();j++)
-			{
-				out<<(*coeffErrors)(i+1,j)<<"\t";
-			}
-			
-			
-			out <<"\n";
-		}
-		out.close();
-	}
-	else
-	{
-		for(int i=0; i<training_result_.Nrows();i++)
-		{
-			out<<String(i)<<"\t"<<descriptor_names_[i]<<"\t";
-
-			for(int j=1; j<=training_result_.Ncols();j++) 
-			{
-				out<<training_result_(i+1,j)<<"\t";
-			}
-			if(centered_data)
-			{
-				out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";
-			}
-			for(int j=1; j<=coeffErrors->Ncols();j++)
-			{
-				out<<(*coeffErrors)(i+1,j)<<"\t";
-			}
-			out <<"\n";
-		}
-		out.close();
-	}	
+	out.close();
 }
 
 
@@ -235,14 +165,16 @@ void RegressionModel::readFromFile(string filename)
 	int no_y = line0.getField(3,"\t").toInt();
 	bool centered_data = line0.getField(4,"\t").toInt();
 	bool centered_y = line0.getField(5,"\t").toInt();
-	getline(input,line0);  // skip empty line
 	
+	getline(input,line0);  // skip empty line
 	readModelParametersFromFile(input);
 	if(centered_y)
 	{
 		readResponseTransformationFromFile(input, no_y);
 	}
 	readDescriptorInformationFromFile(input, no_descriptors, centered_data, no_y);
+	
+	input.close();
 }
 
 
@@ -272,3 +204,75 @@ void RegressionModel::readDescriptorInformationFromFile(ifstream& input, int no_
 	}
 	getline(input,line);  // skip empty line	
 }
+
+void RegressionModel::saveDescriptorInformationToFile(ofstream& out)
+{
+	out<<"# ID\tdescriptor-name\tcoefficient(s)\t";
+	
+	bool centered_data = (descriptor_transformations_.Ncols()>0);
+	
+	if(centered_data)
+	{
+		out<<"mean of desc.\tstddev of desc.\t";
+	}
+	if(stderr)
+	{
+		out<<"stderr(s) of coeff.";
+	}
+	out<<endl;
+	
+	const Matrix* coeffErrors = validation->getCoefficientErrors();
+	
+	if(!descriptor_IDs_.empty())  // write descriptors and information about their transformation
+	{
+		descriptor_IDs_.front();
+		bool trained = (training_result_.Ncols()==descriptor_IDs_.size());
+		for(uint i=0; i<descriptor_IDs_.size();i++)
+		{
+			out<<String(descriptor_IDs_.next())<<"\t"<<descriptor_names_[i]<<"\t";
+		
+			if(trained)
+			{
+				for(int j=1; j<=training_result_.Ncols();j++) 
+				{
+					out<<training_result_(i+1,j)<<"\t";
+				}
+			}
+			if(centered_data)
+			{
+				out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";
+			}
+			for(int j=1; j<=coeffErrors->Ncols();j++)
+			{
+				out<<(*coeffErrors)(i+1,j)<<"\t";
+			}
+			out <<"\n";
+		}
+	}
+	else
+	{
+		bool trained = (training_result_.Ncols()==descriptor_names_.size());
+		for(int i=0; i<descriptor_names_.size();i++)
+		{
+			out<<String(i)<<"\t"<<descriptor_names_[i]<<"\t";
+
+			if(trained)
+			{
+				for(int j=1; j<=training_result_.Ncols();j++) 
+				{
+					out<<training_result_(i+1,j)<<"\t";
+				}
+			}
+			if(centered_data)
+			{
+				out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";
+			}
+			for(int j=1; j<=coeffErrors->Ncols();j++)
+			{
+				out<<(*coeffErrors)(i+1,j)<<"\t";
+			}
+			out <<"\n";
+		}
+	}
+}
+

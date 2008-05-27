@@ -46,3 +46,44 @@ void ClassificationModel::readLabels()
 		labels_.push_back(l.next());
 	}
 }
+
+void ClassificationModel::readClassInformationFromFile(ifstream& input, int no_classes)
+{
+	labels_.clear();
+	no_substances_.clear();
+	
+	String line;
+	getline(input,line);  // skip comment line 
+	getline(input,line);    
+	for(int i=0;i<no_classes;i++)
+	{
+		labels_.push_back(line.getField(i,"\t").toInt());
+	}	
+	getline(input,line);  // skip empty line
+	getline(input,line);  // skip comment line 
+	getline(input,line);
+	for(int i=0; i<no_classes; i++)
+	{
+		int n = line.getField(i,"\t").toInt();
+		no_substances_.push_back(n);
+	}
+	getline(input,line);  // skip empty line 
+}
+
+
+void ClassificationModel::saveClassInformationToFile(ofstream& out)
+{
+	out<<"# class-labels_\n";
+	for(unsigned int i=0; i<labels_.size();i++) // write class-labels_
+	{
+		out<<labels_[i]<<"\t";
+	}
+	out<<endl<<endl;
+	
+	out<<"# no of substances of each class\n";
+	for(unsigned int i=0;i<no_substances_.size();i++)  // write numbers of substances of each class
+	{
+		out<<no_substances_[i]<<"\t";
+	}
+	out<<endl<<endl;
+}
