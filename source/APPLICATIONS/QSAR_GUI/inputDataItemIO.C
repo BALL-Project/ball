@@ -25,7 +25,7 @@ void InputDataItemIO::writeConfigSection(SDFInputDataItem* sd_item, ofstream& ou
 	}
 	out << "[InputReader]" << "\n";
 	out << "sd_file = "<< sd_item->filename().toStdString() << "\n";
-	out << "read_sd_descriptors = "<< 1 << "\n";
+	out << "read_sd_descriptors = "<< sd_item->useSDProperties() << "\n";
 	out << "activity_IDs = "<< activity_string << "\n";
 	out << "center_data = "<< sd_item->centerData() << "\n";
 	out << "center_response = "<< sd_item->centerY() << "\n";
@@ -282,6 +282,7 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 			view_->data_scene->addItem(sd_item);
 			sd_item->addToPipeline();
 			sd_item->setSavedAs(output.c_str());
+			sd_item->useSDProperties(read_sd_descriptors);
 			if(item_positions!=0 && item_positions->size()>0)
 			{
 				pair<double,double> pos = item_positions->front();

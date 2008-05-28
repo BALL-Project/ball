@@ -215,67 +215,12 @@ void ALLModel::saveToFile(string filename)
 	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tcentered response?\tno of substances"<<endl;
 	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<descriptor_matrix_.Nrows()<<"\n\n";
 		
-	out<<"# model-parameters"<<endl;  /// write model parameters 
-	vector<double> v = getParameters();
-	for(unsigned int i=0;i<v.size();i++)
-	{
-		out<<v[i]<<"\t";
-	}
-	out<<endl;
+	saveModelParametersToFile(out);
+	saveResponseTransformationToFile(out);
+	saveDescriptorInformationToFile(out);
+	out<<descriptor_matrix_<<endl;
+	out<<Y_<<endl;
 	
-	if(centered_y) /// write information about transformation of result
-	{
-		out<<endl;
-		for(int i=1;i<=y_transformations_.Ncols();i++)
-		{
-			out<<y_transformations_(1,i)<<"\t"<<y_transformations_(2,i)<<"\n";
-		}
-	}	
-		
-	out<<"\n# ID\tdescriptor-name\t";
-	if(centered_data)
-	{
-		out<<"mean of desc.\tstddev of desc.\t";
-	}
-	if(stderr)
-	{
-		out<<"stderr(s) of coeff.";
-	}
-	out<<endl;
-	
-	/// write (selected) descriptors and information about their transformation
-	if(!descriptor_IDs_.empty())
-	{
-		descriptor_IDs_.front();
-		for(int i=0; i<descriptor_matrix_.Ncols();i++)
-		{
-			out<<String(descriptor_IDs_.next())<<"\t"<<descriptor_names_[i]<<"\t";
-			
-			if(centered_data)
-			{
-				out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";
-			}
-			out <<"\n";
-		}
-	}
-	else
-	{
-		for(int i=0; i<descriptor_matrix_.Ncols();i++)
-		{
-			out<<String(i)<<"\t"<<descriptor_names_[i]<<"\t";
-	
-			if(centered_data)
-			{
-				out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";
-			}
-			out <<"\n";
-		}
-		
-	}	
-	out<<endl;
-		
-	out<<descriptor_matrix_<<endl; /// write descriptor matrix
-	out<<Y_<<endl;  		    /// write response values
 	out.close();
 }
 

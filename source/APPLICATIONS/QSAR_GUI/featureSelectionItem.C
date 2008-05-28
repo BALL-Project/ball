@@ -115,6 +115,7 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 	opt_after_fs_ = 0;
 	quality_increase_cutoff_=-1;
 	opt_ = 0;
+	feature_selection_ = NULL;
 	
 	while(input)
 	{
@@ -247,10 +248,15 @@ bool FeatureSelectionItem::execute()
 	
 	if(done_) return 0; // do nothing twice...
 
+	delete feature_selection_;
 	feature_selection_ = new FeatureSelection(*(model_item_->model()));
 	if(validation_statistic_>=0)
 	{
 		feature_selection_->selectStat(validation_statistic_);
+	}
+	if(quality_increase_cutoff_>=0)
+	{
+		feature_selection_->setQualityIncreaseCutoff(quality_increase_cutoff_);
 	}
 	
 	switch(type_)
@@ -271,6 +277,10 @@ bool FeatureSelectionItem::execute()
 		default:
 			throw InvalidFeatureSelectionItem(__FILE__,__LINE__);
 			break;
+	}
+	if(opt_after_fs_)
+	{
+		model_item_->model()->optimizeParameters(k_);
 	}
 
 	model_item_->model()->readTrainingData();
@@ -372,13 +382,15 @@ void FeatureSelectionItem::writeConfigSection(ofstream& out)
 		}
 		out << "k_fold = "<< k() <<  "\n";
 		out << "feature_selection_type = "<< getType() <<  "\n";
+		if(quality_increase_cutoff_>0) out<<"quality_increase_cutoff = "<<quality_increase_cutoff_<<"\n";
 	}
 	else
 	{
 		out<<"remove_correlated_features = 1"<<endl;
 		out<<"cor_threshold = "<<getCorThreshold()<<endl;
 	}
-	out << "optimize_parameters = " << opt() << "\n";
+	if(opt_) out << "optimize_parameters = " << opt() << "\n";
+	if(opt_after_fs_) out << "opt_par_after_fs = "<< opt_after_fs_ << "\n";
 	out << "output = " << modelItem()->savedAs().toStdString() << "\n";
 	out << "\n";
 }
@@ -391,4 +403,9 @@ void FeatureSelectionItem::addToPipeline()
 void FeatureSelectionItem::removeFromPipeline()
 {
 	view_->data_scene->main_window->fs_pipeline_.erase(this);
+}
+
+void FeatureSelectionItem::setQualityIncreaseCutoff(double cutoff)
+{
+	quality_increase_cutoff_ = cutoff;
 }

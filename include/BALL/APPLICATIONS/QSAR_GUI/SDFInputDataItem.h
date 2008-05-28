@@ -45,6 +45,8 @@ namespace BALL
 				/** specifies whether or not properties of the SD-file should be used as descriptors */
 				void useSDProperties(bool b);
 				
+				bool useSDProperties();
+				
 				/** read the input data */
 				bool execute();
 				

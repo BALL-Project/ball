@@ -58,6 +58,7 @@ namespace BALL
 				
 				void addToPipeline();
 				void removeFromPipeline();
+				void setQualityIncreaseCutoff(double cutoff);
 
 
 		

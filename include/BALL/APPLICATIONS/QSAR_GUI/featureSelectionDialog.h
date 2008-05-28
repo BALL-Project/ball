@@ -57,6 +57,7 @@ namespace BALL
 			
 				/** @name Private Attributes*/
 				QLineEdit* k_edit_;
+				QLineEdit* cutoff_;
 				QCheckBox* optimize_parameters_;
 				int k_;
 				double cor_threshold_;

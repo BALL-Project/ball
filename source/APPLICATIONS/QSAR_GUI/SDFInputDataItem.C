@@ -208,3 +208,8 @@ void SDFInputDataItem::useSDProperties(bool b)
 {
 	use_SD_properties_ = b;
 }
+
+bool SDFInputDataItem::useSDProperties()
+{
+	return use_SD_properties_;
+}

@@ -87,6 +87,19 @@ void KernelModel::saveToFile(string filename)
 	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tcentered response?\tno of substances"<<endl;
 	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<descriptor_matrix_.Nrows()<<"\n\n";
 	
+	saveKernelParametersToFile(out);
+	saveModelParametersToFile(out);
+	saveResponseTransformationToFile(out);
+	Model::saveDescriptorInformationToFile(out);
+	saveTrainingResult(out);
+	
+	out<<descriptor_matrix_<<endl; 
+	out<<K_<<endl;			
+	
+	out.close();
+	
+	
+	/*
 	out<<"# kernel-type_\tkernel-par1\tkernel-par2\n";
 	out<<kernel->type<<"\t";	/// write kernel parameters
 	if(kernel->type!=4)
@@ -178,7 +191,7 @@ void KernelModel::saveToFile(string filename)
 	out<<descriptor_matrix_<<endl; /// write descriptor matrix
 	out<<K_<<endl;			/// write kernel matrix K_
 	out.close();
-		
+	*/
 }
 
 
@@ -219,22 +232,7 @@ void KernelModel::readFromFile(string filename)
 		readResponseTransformationFromFile(input, no_y);
 	}
 	Model::readDescriptorInformationFromFile(input, no_descriptors, centered_data);
-	
-	if(type_!="SVR") // NO result of training within this file in case of SVR
-	{
-		for(int i=1; i<=no_substances; i++) // read training result
-		{
-			String line;
-			getline(input,line);
-			substance_names_.push_back(line.getField(0,"\t"));
-			for(int j=1; j<=no_y; j++)
-			{
-				training_result_(i,j) = line.getField(j,"\t").toDouble();
-			}
-		}
-		getline(input,line0);  // skip empty line 
-	}
-	
+	readTrainingResult(input, no_substances, no_y);
 	readMatrix(descriptor_matrix_,input,no_substances,no_descriptors);  // read descriptor matrix
 	getline(input,line0);  // skip empty line 
 	readMatrix(K_,input,no_substances,no_substances); 	// read kernel matrix K_
@@ -260,4 +258,61 @@ void KernelModel::readKernelParametersFromFile(ifstream& input)
 		kernel->equation1 = line.getField(1,"\t");
 	}
 	getline(input,line);  // skip empty line
+}
+
+
+void KernelModel::saveKernelParametersToFile(ofstream& out)
+{
+	out<<"# kernel-type_\tkernel-par1\tkernel-par2\n";
+	out<<kernel->type<<"\t";
+	if(kernel->type!=4)
+	{
+		out<<kernel->par1<<"\t"<<kernel->par2<<"\n";
+	}
+	else
+	{
+		out<<kernel->equation1<<"\t"<<kernel->equation2<<endl;
+	}
+	out<<endl;
+}
+
+
+void KernelModel::readTrainingResult(ifstream& input, int no_substances, int no_y)
+{
+	if(type_!="SVR") // NO result of training within this file in case of SVR
+	{
+		String line;
+		for(int i=1; i<=no_substances; i++) // read training result
+		{
+			getline(input,line);
+			substance_names_.push_back(line.getField(0,"\t"));
+			for(int j=1; j<=no_y; j++)
+			{
+				training_result_(i,j) = line.getField(j,"\t").toDouble();
+			}
+		}
+		getline(input,line);  // skip empty line 
+	}
+}
+
+void KernelModel::saveTrainingResult(ofstream& out)
+{
+	if(type_!="SVR") // NO training_result matrix in case of SVR
+	{
+		const Matrix* coeffErrors = validation->getCoefficientErrors();
+		for(int i=1; i<=training_result_.Nrows();i++) // write training result
+		{
+			out<<substance_names_[i-1]<<"\t";
+			for(int j=1;j<=training_result_.Ncols();j++)
+			{
+				out<<training_result_(i,j)<<"\t";
+			}
+			for(int j=1; j<=coeffErrors->Ncols();j++)
+			{
+				out<<(*coeffErrors)(i,j)<<"\t";
+			}
+			out<<endl;
+		}
+		out<<endl;
+	}
 }

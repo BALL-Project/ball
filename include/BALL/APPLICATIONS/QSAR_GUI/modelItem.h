@@ -132,6 +132,7 @@ namespace BALL
 				void showPlotter();
 				
 				void disableTraining();
+				void enableTraining();
 				
 				/** Tests if anything is still to be done for this model. \n
 				This function checks whether this ModelItem has already been executed or if it has outgoing edges only to FeatureSelectionItems. In both cases, false is returned. */

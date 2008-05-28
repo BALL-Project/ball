@@ -33,6 +33,8 @@ namespace BALL
 				
 				int type() const { return Type; }
 				
+				String getOutputFilename();
+				
 		
 			private:
 				/** is this partition a test-partition?!\n
@@ -44,6 +46,8 @@ namespace BALL
 				
 				/** the ID of the fold */
 				int fold_ID_;
+				
+				String output_filename_;
 				
 				void mousePressEvent(QGraphicsSceneMouseEvent *event);
 		

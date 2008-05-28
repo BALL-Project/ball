@@ -292,45 +292,6 @@ ModelItem* MainWindow::createModel(ModelItem* model, InputDataItem* input)
 	}
 }
 
-// void MainWindow::changeModelItem(ModelItem* model, InputDataItem* input)
-// {
-// 	//if the input item is invalid do nothing and return
-// 	if (model==NULL || input==NULL )
-// 	{
-// 		throw InvalidModelItem(__FILE__,__LINE__);
-// 	}
-// 
-// 	RegistryEntry* entry = model->getRegistryEntry();
-// 	String name = entry->name_abreviation;
-// 	std::cout << "CM " << name.c_str() << std::endl;
-// 
-// 	if (input && !entry->regression)
-// 	{
-// 		if (!input->checkForDiscreteY())
-// 		{
-// 			QMessageBox::information(this," ","Some class labels of this input file are not discrete values! Creation of a classification model is therefore not possible.");
-// 			throw InvalidModelItem(__FILE__,__LINE__);	
-// 		}
-// 	}
-// 
-// 	//create the model's configuration dialog with the information from the corresponding registry entry for that model
-// 	modelConfigurationDialog_ = new ModelConfigurationDialog(model, input, this);
-// 
-// 	if (modelConfigurationDialog_->exec() == 1)
-// 	{	
-// 		model = modelConfigurationDialog_->modelItem();
-// 		if (model == NULL)
-// 		{
-// 			std::cout << "CM Invalid Model" << std::endl;
-// 			throw InvalidModelItem(__FILE__,__LINE__);	
-// 		}
-// 	}
-// 	else
-// 	{
-// 		std::cout << "CM Invalid Model" << std::endl;
-// 		throw InvalidModelItem(__FILE__,__LINE__);
-// 	}
-// }
 
 ///create a new FeatureSelectionItem, that is connected to the given ModelItems
 FeatureSelectionItem* MainWindow::createFeatureSelection(FeatureSelectionItem* fs, ModelItem* model, ModelItem* in_model)
@@ -805,6 +766,7 @@ void MainWindow::saveItemsToFiles(String directory)
 			
 			QSARData* data= (*it)->data();
 			String f1 = (*it)->savedAs().toStdString();
+			cout<<"f1="<<f1<<endl;
 			if(f1=="")
 			{
 				throw GeneralException(__FILE__,__LINE__,"<Input-partition saving error ", "Item must be assigned a file to be saved to!");
@@ -994,27 +956,6 @@ void MainWindow::executePipeline()
 		{	
 			QString error_string = e.getMessage();
 			QMessageBox::warning(this,"Error",error_string);
-/*
-			(*it)->setEntry(reg_->getRegistryEntry(String("RR")));
-			changeModelItem(*it,(*it)->inputDataItem());
-			(*it)->setName(QString((*it)->getRegistryEntry()->name_abreviation.c_str()));
-			(*it)->setSaveAttribute(true);
-
- 			ModelItem* old_model = new ModelItem(**it);
-			(*it) = new ModelItem(reg_->getRegistryEntry(BALL::String("RR")), view_);
-			view_scene_.addItem(*it);
-			(*it)->setEntry(reg_->getRegistryEntry(BALL::String("RR")));
-			(*it) = createModel(*it,old_model->inputDataItem());
-			delete old_model;
-
-			(*it)->setModel(NULL);
-			(*it)->setEntry(reg_->getRegistryEntry(BALL::String("RR")));
-			(*it) = createModel(*it,(*it)->inputDataItem());	
-			(*it)->setName(QString((*it)->getRegistryEntry()->name_abreviation.c_str()));	
-
-			changeModelItem(*it,(*it)->inputDataItem());
-			std::cout << "MW, entry: " << reg_->getModelNo((*it)->getRegistryEntry()->name_abreviation) << std::endl;
-			std::cout <<  "MW, model name: " << (*it)->name().toStdString() << std::endl;*/
 		}
 		catch(WrongDataType e)
 		{
@@ -1297,6 +1238,8 @@ void MainWindow::exportPipeline(QString filename)
 	for (Pipeline<InputPartitionItem*>::iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end(); it++)
 	{
 		InputPartitionItem* item = (*it);
+		String n = file_prefix+item->getOutputFilename();
+		item->setSavedAs(n.c_str());
 		positions<<item->x()<<"  "<<item->y()<<endl;
 	}
 	

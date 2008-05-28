@@ -533,8 +533,7 @@ void Model::saveDescriptorInformationToFile(ofstream& out)
 			out <<"\n";
 		}
 	}
-		
-	out.close();
+	out<<endl;
 }
 
 

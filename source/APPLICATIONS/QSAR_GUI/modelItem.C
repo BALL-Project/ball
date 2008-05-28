@@ -167,21 +167,20 @@ DataItem(item.view_)
 	result_color_ = item.result_color_;
 	view_ = item.view_;
 	name_ = item.name_;
-	setPixmap(item.pixmap());
 	input_ = item.input_;
 	entry_ = item.entry_;
 	kernel_function_type = item.kernel_function_type;
 	kernel_parameter1 = item.kernel_parameter1;
 	kernel_parameter2 = item.kernel_parameter2;
 	model_parameters = item.model_parameters;
-	optimize_model_parameters = item.optimize_model_parameters;
-	optimize_kernel_parameters = item.optimize_kernel_parameters;
-	grid_search_stepwidth = item.grid_search_stepwidth;
-	grid_search_steps = item.grid_search_steps;
-	grid_search_recursions = item.grid_search_recursions;
+	optimize_model_parameters = 0; // don't do this for a ModelItem created by a FeatureSelection ...
+	optimize_kernel_parameters = 0;
+	grid_search_stepwidth = 0;
+	grid_search_steps = 0;
+	grid_search_recursions = 0;
 	k_fold = item.k_fold;
 	save_attribute_ = item.save_attribute_;
-	prediction_input_edges_ = item.prediction_input_edges_;
+	//prediction_input_edges_ = item.prediction_input_edges_;
 	done_ = item.done_;
 	result_ = "";
 	plotter_ = NULL;
@@ -189,6 +188,17 @@ DataItem(item.view_)
 		
 	// do NOT copy from 'item' but connect to the methods of this new object!!
 	createActions();
+	
+	QPixmap pm;	
+	if (entry_->kernel)
+	{
+		pm = QPixmap("./images/kernel_model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+	}
+	else 
+	{
+		pm = QPixmap("./images/model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+	}
+	setPixmap(pm);
 
 	QSARData q;
 
@@ -241,6 +251,7 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 	data_file=""; output=""; model_no=0; grid_search_steps=0; grid_search_recursions=0;
 	grid_search_stepwidth=0; k_fold=5; optimize_model_parameters=0;
 	optimize_kernel_parameters=0; kernel_function_type=1; kernel_parameter1=0; kernel_parameter2=0;
+	no_training_ = 0;
 	
 	while(input)
 	{
@@ -302,6 +313,10 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 		else if(line.hasPrefix("kernel_par2"))
 		{
 			kernel_parameter2 = ((String)line.after("=")).trimLeft().toDouble();
+		}
+		else if(line.hasPrefix("no_training"))
+		{
+			no_training_ = ((String)line.after("=")).trimLeft().toBool();
 		}
 		else
 		{
@@ -500,7 +515,7 @@ bool ModelItem::isDone()
 			break;
 		}
 	}
-	if(only_fs_items)
+	if(only_fs_items) // this item will be trained by FSItems, so don't change icon
 	{
 		no_training_ = 1;
 		return 0;
@@ -509,7 +524,7 @@ bool ModelItem::isDone()
 	// if this model is the last child of a pipeline train it in order to be able to display the coefficients
 	if(out_edge_list_.size()==0)
 	{
-		no_training_ = 0;
+		enableTraining();
 		return 0;
 	}
 	
@@ -518,7 +533,7 @@ bool ModelItem::isDone()
 	{
 		if((*it)->destNode()->type()!=FeatureSelectionItem::Type)
 		{
-			no_training_ = 0; // --> enableTraining()
+			enableTraining();
 			return 0;
 		}
 	}
@@ -540,6 +555,25 @@ void ModelItem::disableTraining()
 		else 
 		{
 			pm = QPixmap("./images/model_deactivated.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+		}
+		setPixmap(pm);
+	}
+}
+
+void ModelItem::enableTraining()
+{
+	if(no_training_) // do only if training has been disabled...
+	{
+		no_training_ = 0;
+		
+		QPixmap pm;
+		if (entry_->kernel)
+		{
+			pm = QPixmap("./images/kernel_model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+		}
+		else 
+		{
+			pm = QPixmap("./images/model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
 		}
 		setPixmap(pm);
 	}
@@ -704,6 +738,7 @@ void ModelItem::writeConfigSection(ofstream& out)
 	out << "data_file = "<< inputDataItem()->savedAs().toStdString() << "\n";
 	out << "model_no = "<< view_->data_scene->main_window->reg_->getModelNo(getRegistryEntry()->name_abreviation) << "\n";
 	out << "model_parameters = "<< parameter_string << "\n";
+	if(no_training_) out<<"no_training = 1\n";
 	
 	if (hasKernel)
 	{

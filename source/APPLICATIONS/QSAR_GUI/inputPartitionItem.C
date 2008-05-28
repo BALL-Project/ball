@@ -15,29 +15,25 @@ InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* pa
 	fold_ID_ = partitioner->outEdges().size()/2;
 	partitioner_ = partitioner;
 	
-	String name = partitioner->getInputItem()->name().toStdString();
-	int index = name.find_last_of("/");
+	output_filename_ = partitioner->getInputItem()->name().toStdString();
+	int index = output_filename_.find_last_of("/");
 	if(index!=string::npos)
 	{
-		name=name.substr(index);
+		output_filename_=output_filename_.substr(index);
 	}
-	index = name.find_first_of(".");
+	index = output_filename_.find_first_of(".");
 	if(index!=string::npos)
 	{
-		name=name.substr(0,index);
+		output_filename_=output_filename_.substr(0,index);
 	}
-	name_ = name.c_str();
-	
 	if(partitioner->getID()>0)
 	{
-		name=name+"_"+partitioner->getID()+"_";
+		output_filename_=output_filename_+"_"+partitioner->getID()+"_";
 	}
 	
-	if(test_partition) name+="_TEST";		
-	else name+="_TRAIN";
-	name += String(fold_ID_)+".dat";
-	
-	saved_as_ = name.c_str();
+	if(test_partition) output_filename_+="_TEST";		
+	else output_filename_+="_TRAIN";
+	output_filename_ += String(fold_ID_)+".dat";
 	
 	if(test_partition) name_ = "validation";
 	else name_ = "train";
@@ -55,6 +51,13 @@ InputPartitionItem::~InputPartitionItem()
 	{
 		partitioner_->removePartition(this);
 	}
+}
+
+
+BALL::String InputPartitionItem::getOutputFilename()
+{
+
+	return output_filename_;
 }
 
 

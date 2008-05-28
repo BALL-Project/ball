@@ -133,7 +133,7 @@ vector<double> LDAModel::getParameters() const
 
 
 void LDAModel::saveToFile(string filename)
-{cout<<"LDAModel::saveToFile()"<<endl<<flush;
+{
 	if(sigma_.Nrows()==0)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must have been trained before the results can be saved to a file!");
@@ -160,6 +160,22 @@ void LDAModel::saveToFile(string filename)
 	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tno of classes"<<endl;
 	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<no_substances_.size()<<"\n\n";
 
+	saveModelParametersToFile(out);
+	saveResponseTransformationToFile(out);
+	saveDescriptorInformationToFile(out);
+	saveClassInformationToFile(out);
+	out<<sigma_<<endl;
+	
+	for(unsigned int i=0; i<mean_vectors_.size();i++)   // write all mean-vector matrices
+	{
+		out<<mean_vectors_[i]<<endl;
+	}
+
+	out.close();
+	
+	
+	/*
+	
 	out<<"# model-parameters"<<endl;  /// write model parameters 
 	vector<double> v = getParameters();
 	for(unsigned int i=0;i<v.size();i++)
@@ -230,7 +246,7 @@ void LDAModel::saveToFile(string filename)
 	{
 		out<<mean_vectors_[i]<<endl;
 	}
-	out.close();
+	out.close();*/
 }
 
 

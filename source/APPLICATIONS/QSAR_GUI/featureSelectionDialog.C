@@ -22,14 +22,22 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 	QPushButton* applyButton = new QPushButton("OK");
 	buttons->addButton(applyButton, QDialogButtonBox::ApplyRole);
 	optimize_parameters_ = 0;
+	cutoff_ = 0;
 	
 	if(fsitem->getType()>0) // no validation statistics for removal of colineal features
 	{
 		k_edit_->setText(String(reg->default_k).c_str());
 		optimize_parameters_ = new QCheckBox("optimize model parameters", this);
 	
-		QLabel* klabel = new QLabel("k for k-fold cross validation");
-	
+		QLabel* klabel = new QLabel("k for k-fold cross validation",this);
+		
+		QHBoxLayout* cutoff_layout = new QHBoxLayout(this);
+		QLabel* cutoff_label = new QLabel("quality increase cutoff");
+		cutoff_ = new QLineEdit(this);
+		cutoff_->setText("0.001");
+		cutoff_layout->addWidget(cutoff_label);
+		cutoff_layout->addWidget(cutoff_);
+		
 		layout1->addWidget(klabel);
 		layout1->addWidget(k_edit_);
 	
@@ -37,6 +45,7 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 		layout2->addWidget(optimize_parameters_);
 		
 		main_layout->addLayout(layout1);
+		main_layout->addLayout(cutoff_layout);
 		statistic_box_ = NULL;
 		
 		// let user select validation statistic in case of classification model
@@ -114,6 +123,10 @@ void FeatureSelectionDialog::applyInput()
 		if(statistic_box_!=NULL)
 		{
 			statistic_ = statistic_box_->currentIndex();
+		}
+		if(cutoff_!=NULL)
+		{
+			fs_item_->setQualityIncreaseCutoff(cutoff_->text().toDouble(&ok));
 		}
 	}
 	else

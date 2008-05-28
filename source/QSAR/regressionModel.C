@@ -102,9 +102,11 @@ void RegressionModel::show()
 
 void RegressionModel::saveToFile(string filename)
 {
+	bool trained = 1;
 	if(training_result_.Nrows()==0)
 	{
-		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must have been trained before the results can be saved to a file!");
+		//throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must have been trained before the results can be saved to a file!");
+		trained = 0;
 	}
 	ofstream out(filename.c_str());
 	
@@ -131,8 +133,8 @@ void RegressionModel::saveToFile(string filename)
 		sel_features = data->getNoDescriptors();
 	}
 	
-	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tcentered response?"<<endl;
-	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<training_result_.Ncols()<<"\t"<<centered_data<<"\t"<<centered_y<<"\n\n";
+	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tcentered response?\ttrained?"<<endl;
+	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<trained<<"\n\n";
 	
 	saveModelParametersToFile(out);
 	saveResponseTransformationToFile(out);
@@ -165,6 +167,7 @@ void RegressionModel::readFromFile(string filename)
 	int no_y = line0.getField(3,"\t").toInt();
 	bool centered_data = line0.getField(4,"\t").toInt();
 	bool centered_y = line0.getField(5,"\t").toInt();
+	bool trained = line0.getField(6,"\t").toInt();
 	
 	getline(input,line0);  // skip empty line
 	readModelParametersFromFile(input);
@@ -172,8 +175,7 @@ void RegressionModel::readFromFile(string filename)
 	{
 		readResponseTransformationFromFile(input, no_y);
 	}
-	readDescriptorInformationFromFile(input, no_descriptors, centered_data, no_y);
-	
+	readDescriptorInformationFromFile(input, no_descriptors, centered_data, no_y*trained);
 	input.close();
 }
 
@@ -185,6 +187,7 @@ void RegressionModel::readDescriptorInformationFromFile(ifstream& input, int no_
 	training_result_.ReSize(no_descriptors,no_coefficients);
 	String line;
 	getline(input,line);  // skip comment line
+	
 	for(int i=1; i<=no_descriptors; i++)
 	{
 		getline(input,line);
@@ -274,5 +277,6 @@ void RegressionModel::saveDescriptorInformationToFile(ofstream& out)
 			out <<"\n";
 		}
 	}
+	out<<endl;
 }
 
