@@ -28,7 +28,7 @@ InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* pa
 	}
 	if(partitioner->getID()>0)
 	{
-		output_filename_=output_filename_+"_"+partitioner->getID()+"_";
+		output_filename_=output_filename_+"_"+String(partitioner->getID());
 	}
 	
 	if(test_partition) output_filename_+="_TEST";		
@@ -37,6 +37,18 @@ InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* pa
 	
 	if(test_partition) name_ = "validation";
 	else name_ = "train";
+	
+	String s = partitioner->getInputItem()->savedAs().toStdString();
+	int index2 = s.find_first_of("_");
+	if(index2!=string::npos)
+	{
+		saved_as_ = s.substr(0,index2+1).c_str();
+	}		
+	saved_as_ += output_filename_.c_str();
+	 
+	//cout<<"output_filename_="<<output_filename_<<endl;
+	//cout<<"saved_as_="<<saved_as_.toStdString()<<endl;
+	
 	//TODO: set pixmap depending on whether test_partition_==1 or not...
 }
 
