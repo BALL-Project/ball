@@ -5,19 +5,25 @@
 #include <BALL/SYSTEM/path.h>
 #include <BALL/STRUCTURE/assignBondOrderProcessor.h>
 
+#include <queue>
+
 //#define DEBUG
 #undef DEBUG
 
 namespace BALL
 {
-	const String GAFFTypeProcessor::Option::ATOMTYPE_FILENAME = "atomtype_filename";
+	const String GAFFTypeProcessor::Option::ATOMTYPE_FILENAME  = "atomtype_filename";
 	const String GAFFTypeProcessor::Default::ATOMTYPE_FILENAME = "Amber/GAFFTypes.dat";
 //	const String GAFFTypeProcessor::Default::ATOMTYPE_FILENAME = "Amber/AMBERTypes.dat";
+
+	const String GAFFTypeProcessor::Option::GAFF_ATOMTYPE_POSTPROCESSING  = "gaff_atomtype_postprocessing";
+	const bool   GAFFTypeProcessor::Default::GAFF_ATOMTYPE_POSTPROCESSING = true;
 
 	GAFFTypeProcessor::GAFFTypeProcessor()
 		: UnaryProcessor<Composite>()
 	{
 		options.setDefault(Option::ATOMTYPE_FILENAME, Default::ATOMTYPE_FILENAME);
+		options.setDefault(Option::GAFF_ATOMTYPE_POSTPROCESSING, Default::GAFF_ATOMTYPE_POSTPROCESSING);
 		parseAtomtypeTableFile_();
 	}
 
@@ -26,6 +32,7 @@ namespace BALL
 			options(new_options)
 	{
 		options.setDefault(Option::ATOMTYPE_FILENAME, Default::ATOMTYPE_FILENAME);
+		options.setDefault(Option::GAFF_ATOMTYPE_POSTPROCESSING, Default::GAFF_ATOMTYPE_POSTPROCESSING);
 		parseAtomtypeTableFile_();
 	}
 
@@ -51,6 +58,12 @@ namespace BALL
 			{
 				value = assignAtomtype_(*atom_it);
 			}	
+
+			// decide whether we want post-processing of atom types
+			if (options.getBool(Option::GAFF_ATOMTYPE_POSTPROCESSING))
+			{
+				postProcessAtomTypes_(mol);
+			}
 		}
 
 		return Processor::CONTINUE;
@@ -274,8 +287,8 @@ namespace BALL
 				if (  !(*atom_it)->hasProperty("IsPureAliphatic")
             ||!(*atom_it)->getProperty("IsPureAliphatic").getBool())
 					(*atom_it)->setProperty("IsPureAliphatic",(bool) purely_aliphatic);
-				else if (  !(*atom_it)->hasProperty("IsPureAromatic")
-            ||!(*atom_it)->getProperty("IsPureAromatic").getBool())
+				if (  !(*atom_it)->hasProperty("IsPureAromatic")
+						||!(*atom_it)->getProperty("IsPureAromatic").getBool())
 					(*atom_it)->setProperty("IsPureAromatic",(bool) purely_aromatic);
 			}
 		}
@@ -412,8 +425,10 @@ namespace BALL
 						if(		 (ces_parsers_.find(to_match) != ces_parsers_.end())
 								&& (ces_parsers_[to_match]->match(atom)))
 						{
-							atom.setProperty("atomtype", typeDefinition.atom_type );
-							cout << "atom name: " << atom.getName() << " atomtype:" << typeDefinition.atom_type << endl;
+							atom.setProperty("atomtype", typeDefinition.atom_type);
+#ifdef DEBUG
+							Log.info() << "atom name: " << atom.getName() << " atomtype:" << typeDefinition.atom_type << endl;
+#endif
 
 							return true;	
 						}
@@ -425,4 +440,125 @@ namespace BALL
 		return false;
 	}
 
+	void GAFFTypeProcessor::postProcessAtomTypes_(Molecule* molecule)
+	{
+		// first the code that corresponds to atadjust() in antechamber/atomtype.c
+
+		// what we try to do is the following: for each pair of conjugated atoms of particular atom types,
+		// try to achieve that the types differ along double bonds and are identical along single bonds.
+		//
+		// To this end, we will do a breadth-first search
+		std::queue<Atom*> search_queue;
+		std::map<Atom*, Index> new_type;
+
+		for (AtomIterator at_it = molecule->beginAtom(); +at_it; ++at_it)
+		{
+			for (Atom::BondIterator bond_it = at_it->beginBond(); +bond_it; ++bond_it)
+			{
+				const String& atomtype_first  = at_it->getProperty("atomtype").getString();
+				const String& atomtype_second = bond_it->getPartner(*at_it)->getProperty("atomtype").getString();
+				if (	(  	 (atomtype_first == "cc") || (atomtype_first == "ce") || (atomtype_first == "cg") 
+						 		|| (atomtype_first == "pc") || (atomtype_first == "pe") || (atomtype_first == "nc") 
+						 		|| (atomtype_first == "ne") )
+					  &&(  	 (atomtype_second == "cc") || (atomtype_second == "ce") || (atomtype_second == "cg") 
+						 		|| (atomtype_second == "pc") || (atomtype_second == "pe") || (atomtype_second == "nc") 
+						 		|| (atomtype_second == "ne") ) )
+				{
+					new_type[&*at_it] = 0;
+					new_type[bond_it->getPartner(*at_it)] = 0;
+				}
+			}
+		}
+
+	
+		Size number_to_cleanup = new_type.size();
+
+		// do we still have atom types to fix?
+		while (number_to_cleanup > 0)
+		{
+			// start the search at the first non-fixed atom
+			std::map<Atom*, Index>::iterator map_it = new_type.begin();
+			while ((map_it != new_type.end() && (map_it->second != 0)))
+			{
+				std::cout << "name: " << map_it->first->getName() << std::endl;
+				++map_it;
+			}
+
+			search_queue.push(map_it->first);
+
+			// and set its value fixed to 1
+			map_it->second = 1;
+			// one atom has now been fixed
+			--number_to_cleanup;
+
+			while (!search_queue.empty())
+			{
+				Atom* current_atom = search_queue.front();
+				search_queue.pop();
+
+				// iterate over current_atom's children
+				for (Atom::BondIterator bond_it = current_atom->beginBond(); +bond_it; ++bond_it)
+				{
+					// is this one of the interesting atoms?
+					Atom* child = bond_it->getPartner(*current_atom);
+					if (new_type.find(child) != new_type.end())
+					{
+						// have we seen it before?
+						if (new_type[child] == 0)
+						{
+							// nope => set its type and insert it into the queue
+							//
+							// single (1), double (2), triple (3), 
+							// aromatic single (7), aromatic double (8), 
+							// delocalized (9) and conjugated (6)
+							if (!bond_it->hasProperty("GAFFBondType"))
+							{
+								Log.error() << "GAFFTypeProcessor::postProcessAtomTypes_: missing bond type information! aborting!" << std::endl;
+								return;
+							}
+
+							Index bond_type = bond_it->getProperty("GAFFBondType").getInt();
+
+							if ( (bond_type == AssignBondOrderProcessor::SB) || (bond_type == AssignBondOrderProcessor::sb) )
+							{
+								// this is a single or aromatic single bond => propagate the same type as the parent atom
+								new_type[child] = new_type[current_atom];
+								--number_to_cleanup;
+							}
+							else if ( 	 (bond_type == AssignBondOrderProcessor::DB) 
+												|| (bond_type == AssignBondOrderProcessor::db) 
+												|| (bond_type == AssignBondOrderProcessor::TB) )
+							{
+								// this is a double, aromatic double, or triple bond => invert the type
+								new_type[child] = -new_type[current_atom];
+								--number_to_cleanup;
+							}
+							else
+							{
+								Log.error() << "GAFFTypeProcessor::postProcessAtomTypes_: delocalized or conjugated bond not allowed for this atom type! aborting!" << std::endl;
+								return;
+							}
+
+							search_queue.push(child);
+						}
+					}
+				}
+			}
+		}
+
+		// now compute the new types for our atoms
+		std::map<Atom*, Index>::iterator map_it = new_type.begin();
+		for (; map_it != new_type.end(); ++map_it)
+		{
+			if (map_it->second == -1)
+			{
+				// we compute the name of the new type by increasing the second letter by one position in the alphabet (e.g. cc => cd)
+				String new_atom_type = map_it->first->getProperty("atomtype").getString();
+				new_atom_type[1]+=1;
+
+				map_it->first->setProperty("atomtype", new_atom_type);
+			}
+		}
+
+	}
 }

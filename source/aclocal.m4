@@ -4988,7 +4988,7 @@ if test "${LPSOLVE_SUPPORT}" = "true" ; then
 		else
 			SAVE_LIBS=${LIBS}
 			SAVE_LDFLAGS=${LDFLAGS}
-			LPSOLVE_LIBS="${LPSOLVE_LIBS} -lm -lcolamd -ldl"
+			LPSOLVE_LIBS="${LPSOLVE_LIBS} -lm -ldl"
 			LIBS=${LPSOLVE_LIBS}
 			LDFLAGS="${LDFLAGS} -I${LPSOLVE_INCDIR}"
 			LPSOLVE_LINKS=0
