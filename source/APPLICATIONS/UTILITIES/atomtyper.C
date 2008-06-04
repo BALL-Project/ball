@@ -33,6 +33,10 @@ int main(int argc, char** argv){
 
 	GAFFTypeProcessor gt(options);
 	S.apply(gt);
+
+	for (AtomIterator at_it = S.beginAtom(); +at_it; ++at_it)
+		std::cout << "atom name: " << at_it->getName() << " atomtype  " << at_it->getProperty("atomtype").getString() << std::endl;
+
 	MOL2File m("rockaz.mol2", std::ios::out);
 	m << S;
 	m.close();

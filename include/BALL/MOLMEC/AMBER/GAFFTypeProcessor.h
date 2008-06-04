@@ -51,14 +51,20 @@ namespace BALL
 
 			struct Option
 			{
-				// path to the file containing the atom type definitions
+				/// path to the file containing the atom type definitions
 				static const String ATOMTYPE_FILENAME;
+
+				/// switch cleanup of GAFF types (cc=>cd, ...) on or off
+				static const String GAFF_ATOMTYPE_POSTPROCESSING;
 			};
 			
 			struct Default
 			{
-				// path to the file containing the atom type definitions
+				/// path to the file containing the atom type definitions
 				static const String ATOMTYPE_FILENAME;
+				
+				/// switch cleanup of GAFF types (cc=>cd, ...) on or off
+				static const bool GAFF_ATOMTYPE_POSTPROCESSING;
 			};
 
 			GAFFTypeProcessor();
@@ -67,6 +73,7 @@ namespace BALL
 			virtual Processor::Result operator() (Composite &composite);
 
 			Options options;
+
 		protected:
 			// helper functions used in identifying the correct atom type
 			std::vector<TypeDefinition> getCarbonTypes_()   { return atom_types_[6];  }
@@ -98,6 +105,10 @@ namespace BALL
 			/** Check the atom against each possible atom type and try to assign one.
 			 */
 			bool assignAtomtype_(Atom& atom);
+
+			/** Postprocessing and cleanup for GAFF types
+			 */
+			void postProcessAtomTypes_(Molecule* molecule);
 
 			//for every CESstring in atomtable store the "predicate tree"
 			//built by GAFFCESParser

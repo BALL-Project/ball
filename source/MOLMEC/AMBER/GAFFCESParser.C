@@ -908,7 +908,7 @@ namespace BALL
 		{
 			return 0;
 		}
-		Size up_to = std::min(cesstring_.size()-read_start_, max_size);
+		Size up_to = std::min(cesstring_.size()-read_start_, (size_t)max_size);
 		// note: this is extremely inefficient, but the strings are short
 		for (int i=0; read_start_<up_to; read_start_++, i++)
 		{ 
