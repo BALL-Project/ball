@@ -479,10 +479,7 @@ namespace BALL
 			// start the search at the first non-fixed atom
 			std::map<Atom*, Index>::iterator map_it = new_type.begin();
 			while ((map_it != new_type.end() && (map_it->second != 0)))
-			{
-				std::cout << "name: " << map_it->first->getName() << std::endl;
 				++map_it;
-			}
 
 			search_queue.push(map_it->first);
 
@@ -507,10 +504,6 @@ namespace BALL
 						if (new_type[child] == 0)
 						{
 							// nope => set its type and insert it into the queue
-							//
-							// single (1), double (2), triple (3), 
-							// aromatic single (7), aromatic double (8), 
-							// delocalized (9) and conjugated (6)
 							if (!bond_it->hasProperty("GAFFBondType"))
 							{
 								Log.error() << "GAFFTypeProcessor::postProcessAtomTypes_: missing bond type information! aborting!" << std::endl;
@@ -548,6 +541,103 @@ namespace BALL
 
 		// now compute the new types for our atoms
 		std::map<Atom*, Index>::iterator map_it = new_type.begin();
+		for (; map_it != new_type.end(); ++map_it)
+		{
+			if (map_it->second == -1)
+			{
+				// we compute the name of the new type by increasing the second letter by one position in the alphabet (e.g. cc => cd)
+				String new_atom_type = map_it->first->getProperty("atomtype").getString();
+				new_atom_type[1]+=1;
+
+				map_it->first->setProperty("atomtype", new_atom_type);
+			}
+		}
+
+		// now the code that corresponds to cpadjust() in antechamber/atomtype.c
+
+		// This is nearly equivalent to atadjust, just for cp only and with slightly different propagation rules
+		new_type.clear();
+
+		for (AtomIterator at_it = molecule->beginAtom(); +at_it; ++at_it)
+		{
+			for (Atom::BondIterator bond_it = at_it->beginBond(); +bond_it; ++bond_it)
+			{
+				const String& atomtype_first  = at_it->getProperty("atomtype").getString();
+				const String& atomtype_second = bond_it->getPartner(*at_it)->getProperty("atomtype").getString();
+
+				if (   (atomtype_first  == "cp")
+					  && (atomtype_second == "cp") )
+				{
+					new_type[&*at_it] = 0;
+					new_type[bond_it->getPartner(*at_it)] = 0;
+				}
+			}
+		}
+
+	
+		number_to_cleanup = new_type.size();
+
+		// do we still have atom types to fix?
+		while (number_to_cleanup > 0)
+		{
+			// start the search at the first non-fixed atom
+			std::map<Atom*, Index>::iterator map_it = new_type.begin();
+			while ((map_it != new_type.end() && (map_it->second != 0)))
+				++map_it;
+
+			search_queue.push(map_it->first);
+
+			// and set its value fixed to 1
+			map_it->second = 1;
+			// one atom has now been fixed
+			--number_to_cleanup;
+
+			while (!search_queue.empty())
+			{
+				Atom* current_atom = search_queue.front();
+				search_queue.pop();
+
+				// iterate over current_atom's children
+				for (Atom::BondIterator bond_it = current_atom->beginBond(); +bond_it; ++bond_it)
+				{
+					// is this one of the interesting atoms?
+					Atom* child = bond_it->getPartner(*current_atom);
+					if (new_type.find(child) != new_type.end())
+					{
+						// have we seen it before?
+						if (new_type[child] == 0)
+						{
+							// nope => set its type and insert it into the queue
+							if (!bond_it->hasProperty("GAFFBondType"))
+							{
+								Log.error() << "GAFFTypeProcessor::postProcessAtomTypes_: missing bond type information! aborting!" << std::endl;
+								return;
+							}
+
+							Index bond_type = bond_it->getProperty("GAFFBondType").getInt();
+
+							if (bond_type == AssignBondOrderProcessor::SB)
+							{
+								// this is a single bond => propagate the same type as the parent atom
+								new_type[child] = new_type[current_atom];
+								--number_to_cleanup;
+							}
+							else 
+							{
+								// this is anything but a single bond => invert the type
+								new_type[child] = -new_type[current_atom];
+								--number_to_cleanup;
+							}
+
+							search_queue.push(child);
+						}
+					}
+				}
+			}
+		}
+
+		// now compute the new types for our atoms
+		map_it = new_type.begin();
 		for (; map_it != new_type.end(); ++map_it)
 		{
 			if (map_it->second == -1)
