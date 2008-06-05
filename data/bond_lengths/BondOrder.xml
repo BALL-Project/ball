@@ -65,6 +65,12 @@
 		<penalty valence="4">0</penalty>
 		<penalty valence="5">32</penalty>
 	</entry>
+	<entry id="81">
+		<elementstring>C</elementstring>
+		<smartstring>SMARTS([$([#6D3](~[#8D1])(~[#8D1]))])</smartstring>
+		<penalty valence="3">0</penalty>
+		<penalty valence="4">0</penalty>
+	</entry>
 	<entry id="8">
 		<elementstring>C</elementstring>
 		<smartstring>SMARTS([OD1,SD1]~[CD3]~[OD1,SD1])</smartstring>
@@ -129,7 +135,7 @@
 	</entry>
 	<entry id="17">
 		<elementstring>N</elementstring>
-		<smartstring>SMARTS([ND3]) OR SMARTS([nD3])</smartstring>
+		<smartstring>SMARTS([#7D3])</smartstring>
 		<penalty valence="2">32</penalty>
 		<penalty valence="3">0</penalty>
 		<penalty valence="4">1</penalty>
@@ -137,10 +143,21 @@
 	</entry>
 	<entry id="18">
 		<elementstring>N</elementstring>
-		<smartstring>SMARTS([ND4]) OR SMARTS([nD4])</smartstring>
+		<smartstring>SMARTS([#7D4])</smartstring>
 		<penalty valence="2">64</penalty>
 		<penalty valence="3">0</penalty>
 		<penalty valence="4">64</penalty>
+		</entry>
+	<entry id="18">
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([#7D5])</smartstring>
+		<penalty valence="5">0</penalty>
+	</entry>
+	<entry id="191">
+		<elementstring>O</elementstring>
+		<smartstring>SMARTS([$([#8D1](~[#6D3]~[#8D1]))])</smartstring>
+		<penalty valence="1">0</penalty>
+		<penalty valence="2">0</penalty>
 	</entry>
 	<entry id="19">
 		<elementstring>O</elementstring>
