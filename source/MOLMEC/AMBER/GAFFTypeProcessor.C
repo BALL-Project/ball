@@ -104,6 +104,10 @@ namespace BALL
 			String to_parse = "";
 			if (typeDefinition.atomic_property != "*")
 				to_parse = typeDefinition.atomic_property;
+			else
+				// for our parser to work, we need to convert the GAFF 
+				// wildcard * to a grammatically correct APS
+				to_parse = "[*]";
 			to_parse += typeDefinition.chemical_environment;
 
 			ces_parsers_.insert(to_parse, new GAFFCESParser(to_parse));
@@ -194,45 +198,47 @@ namespace BALL
 		std::vector<std::vector<Atom* > >::iterator ring_it = sssr_.begin();
 		for(;ring_it != sssr_.end();++ring_it)
 		{
-			String property;
+			String in_ring_property;
+			String num_rings_property;
+
 			// mark the number of occurence for the given feature
 			int occurence = 0;
 			bool in_ring = false;
 			
-			// in default: set number of occurence of property for every atom 
-			std::vector<Atom*>::iterator atom_it = ring_it->begin();
-			for(;atom_it != ring_it->end();++atom_it)
-			{
-				(*atom_it)->setProperty(property, (int) occurence);
-			}
-
 			switch (ring_it->size())
 			{
-				case 3: property = "In3Ring";
+				case 3: in_ring_property = "In3Ring";
+								num_rings_property = "NumberOf3Rings";
 								occurence = 1;
 								in_ring = true;
 								break;
-				case 4: property = "In4Ring";
+				case 4: in_ring_property = "In4Ring";
+								num_rings_property = "NumberOf4Rings";
 								occurence = 1;
 								in_ring = true;
 								break;
-				case 5: property = "In5Ring";
+				case 5: in_ring_property = "In5Ring";
+								num_rings_property = "NumberOf5Rings";
 								occurence = 1;
 								in_ring = true;
 								break;
-				case 6: property = "In6Ring";
+				case 6: in_ring_property = "In6Ring";
+								num_rings_property = "NumberOf6Rings";
 								occurence = 1;
 								in_ring = true;
 								break;
-				case 7: property = "In7Ring";
+				case 7: in_ring_property = "In7Ring";
+								num_rings_property = "NumberOf7Rings";
 								occurence = 1;
 								in_ring = true;
 								break;
-				case 8: property = "In8Ring";
+				case 8: in_ring_property = "In8Ring";
+								num_rings_property = "NumberOf8Rings";
 								occurence = 1;
 								in_ring = true;
 								break;
-				case 9: property = "In9Ring";
+				case 9: in_ring_property = "In9Ring";
+								num_rings_property = "NumberOf9Rings";
 								occurence = 1;
 								in_ring = true;
 								break;
@@ -241,12 +247,12 @@ namespace BALL
 
 			// set property to current in ring for every atom
 			// note: we count the occurence of the property within an atom
-			atom_it = ring_it->begin();
+			std::vector<Atom*>::iterator atom_it = ring_it->begin();
 			for(;atom_it != ring_it->end();++atom_it)
 			{
-				 occurence = ((*atom_it)->getProperty(property).getInt()) + occurence;
-				(*atom_it)->setProperty(property, (int) occurence);
-				(*atom_it)->setProperty(property, (bool) in_ring);
+				 occurence = ((*atom_it)->getProperty(num_rings_property).getInt()) + occurence;
+				(*atom_it)->setProperty(in_ring_property, (bool) in_ring);
+				(*atom_it)->setProperty(num_rings_property, (int) occurence);
 			}
 		}
 	}
@@ -417,11 +423,16 @@ namespace BALL
 						String to_match = "";
 						if (typeDefinition.atomic_property != "*")
 							to_match = typeDefinition.atomic_property;
+						else 
+							// for our parser to work, we need to convert the GAFF 
+							// wildcard * to a grammatically correct APS
+							to_match = "[*]";
 						to_match += typeDefinition.chemical_environment;
+
 #ifdef DEBUG
 						Log.info() << "GAFFTypeProcessor: combined APS/CES to match is " << to_match << std::endl;
 #endif
-						
+
 						if(		 (ces_parsers_.find(to_match) != ces_parsers_.end())
 								&& (ces_parsers_[to_match]->match(atom)))
 						{
@@ -436,7 +447,9 @@ namespace BALL
 				}	
 			}
 		}
-		std::cout << "could not assing a type for atom " << atom.getFullName() << std::endl;
+		std::cout << "could not assing a type for atom " << atom.getFullName() << "! Setting type to DU" << std::endl;
+		atom.setProperty("atomtype", String("DU"));
+
 		return false;
 	}
 

@@ -57,6 +57,7 @@ extern void yyerror(char* s);
 %token					  TK_APS_NINE_RING
 %token					  TK_APS_RING
 %token					  TK_APS_NON_RING
+%token					  TK_APS_TRUE
 %token<number>  	TK_APS_NUMBER
 
 %type	<number>				connection
@@ -97,7 +98,10 @@ aps_or_term: aps_term {
 	};
 
 
-aps_term: optional_aps_number TK_APS_DELOCALIZED connection { 
+aps_term: TK_APS_TRUE {
+		GAFFCESParser::state.current_aps_type = (GAFFCESParser::APSMatcher::APSType) (GAFFCESParser::APSMatcher::APS_TRUE);
+	}
+	| optional_aps_number TK_APS_DELOCALIZED connection { 
 		GAFFCESParser::state.current_aps_type = (GAFFCESParser::APSMatcher::APSType) (GAFFCESParser::APSMatcher::DELOCALIZED_BOND + $3);
 	}
 	|	optional_aps_number TK_APS_PURE_SINGLE_BOND connection {

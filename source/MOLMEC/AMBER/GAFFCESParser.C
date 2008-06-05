@@ -150,7 +150,7 @@ namespace BALL
 			case IS_3_RING_ATOM:
 				if(atom.getProperty("In3Ring").getBool())
 				{
-						if(  (aps.feature_number == atom.getProperty("In3Ring").getInt())
+						if(  (aps.feature_number == atom.getProperty("NumberOf3Rings").getInt())
 							 ||	(aps.feature_number < 0))
 							{
 									result = true;
@@ -160,7 +160,7 @@ namespace BALL
 			case IS_4_RING_ATOM:
 				if(atom.getProperty("In4Ring").getBool())
 				{
-						if(  (aps.feature_number == atom.getProperty("In4Ring").getInt())
+						if(  (aps.feature_number == atom.getProperty("NumberOf4Rings").getInt())
 							 ||	(aps.feature_number < 0))
 							{
 									result = true;
@@ -170,7 +170,7 @@ namespace BALL
 			case IS_5_RING_ATOM:
 				if(atom.getProperty("In5Ring").getBool())
 				{
-						if(  (aps.feature_number == atom.getProperty("In5Ring").getInt())
+						if(  (aps.feature_number == atom.getProperty("NumberOf5Rings").getInt())
 							 ||	(aps.feature_number < 0))
 							{
 									result = true;
@@ -180,7 +180,7 @@ namespace BALL
 			case IS_6_RING_ATOM:
 				if(atom.getProperty("In6Ring").getBool())
 				{
-						if(  (aps.feature_number == atom.getProperty("In6Ring").getInt())
+						if(  (aps.feature_number == atom.getProperty("NumberOf6Rings").getInt())
 							 ||	(aps.feature_number < 0))
 							{
 									result = true;
@@ -190,7 +190,7 @@ namespace BALL
 			case IS_7_RING_ATOM:
 				if(atom.getProperty("In7Ring").getBool())
 				{
-						if(  (aps.feature_number == atom.getProperty("In7Ring").getInt())
+						if(  (aps.feature_number == atom.getProperty("NumberOf7Rings").getInt())
 							 ||	(aps.feature_number < 0))
 							{
 									result = true;
@@ -200,7 +200,7 @@ namespace BALL
 			case IS_8_RING_ATOM:
 			if(atom.getProperty("In8Ring").getBool())
 				{
-						if(  (aps.feature_number == atom.getProperty("In8Ring").getInt())
+						if(  (aps.feature_number == atom.getProperty("NumberOf8Rings").getInt())
 							 ||	(aps.feature_number < 0))
 							{
 									result = true;
@@ -210,7 +210,7 @@ namespace BALL
 			case IS_9_RING_ATOM:
 				if(atom.getProperty("In9Ring").getBool())
 				{
-						if(  (aps.feature_number == atom.getProperty("In9Ring").getInt())
+						if(  (aps.feature_number == atom.getProperty("NumberOf9Rings").getInt())
 							 ||	(aps.feature_number < 0))
 							{
 									result = true;
@@ -286,6 +286,9 @@ namespace BALL
 			case NO_AROMATIC_BOND_TO_PARENT:
 				return !hasBond_(&atom, &predecessor, AssignBondOrderProcessor::AB, aps.feature_number);
 				break;
+			case APS_TRUE:
+				return true;
+				break;
 		}
 
 		return result;
@@ -294,7 +297,8 @@ namespace BALL
 	String GAFFCESParser::APSMatcher::printAPS()
 	{
 		String result = "";
-		if ((aps_terms.size() == 1) && (aps_terms[1].size() == 0))
+
+		if ((aps_terms.size() == 1) && (aps_terms[0].size() == 0))
 			result = "[*]";
 		else
 		{
@@ -303,7 +307,7 @@ namespace BALL
 			for (Position i=0; i<aps_terms.size(); i++)
 			{
 				std::vector<GAFFCESParser::APSMatcher::APSTerm >& or_terms = aps_terms[i];
-				if (aps_terms[i].size() == 0)
+				if (aps_terms[i].size() == 0 || ((aps_terms[i].size() == 1) && (or_terms[0].type == APS_TRUE)))
 					result += "*";
 				else
 				{
@@ -362,6 +366,7 @@ namespace BALL
 		else
 			Log.info() << "no match!" << std::endl;
 #endif
+
 		return and_result;
 	}
 
@@ -447,13 +452,10 @@ namespace BALL
 		parser_->current_root_predicate->children.push_back(wildcardsConnectionPredicate);	
 	}
 
-	//add a TruePredicate to "predicate tree"
+	// add a TruePredicate to "predicate tree"; since this is equivalent to not testing
+	// a predicate at all, we just do nothing
 	void GAFFCESParser::CESPredicate::addTruePredicate()
 	{
-		TruePredicate* truePredicate = new TruePredicate(parser_);
-		truePredicate->parent = parser_->current_root_predicate;
-		parser_->current_predicate = truePredicate;
-		parser_->current_root_predicate->children.push_back(truePredicate);
 	}
 
 	//check if atom matches "predicates in predicate-tree"
@@ -480,99 +482,55 @@ namespace BALL
 				return false;
 		}
 
+		bool result = false;
 		//present predicate has child-predicates
-		if(!(children.empty()))
+		// match the current predicate before testing its children
+		if(match(atom))
 		{
-			//present predicate isn't root and matches atom
-			if((parser_->root_predicate != this) && (match(atom)))
-			{
-				//stores if a children-predicate is already matched or not
-				std::vector<bool>match_events((children.size()),false);
-	
-				Atom::BondIterator bond_it = atom.beginBond();
-				for(;+bond_it;++bond_it)
-				{
-					Atom& partnerAtom = *(bond_it->getPartner(atom));
-					if (parent->alreadySeenThisAtom(&partnerAtom))
-						continue;
+			if (children.empty())
+				return true;
 
-					for (Size i=0; (i<children.size()); i++)
+			//stores if a children-predicate is already matched or not
+			std::vector<bool>match_events((children.size()),false);
+
+			Atom::BondIterator bond_it = atom.beginBond();
+			for(;+bond_it;++bond_it)
+			{
+				Atom& partnerAtom = *(bond_it->getPartner(atom));
+				if (parent->alreadySeenThisAtom(&partnerAtom))
+					continue;
+
+				for (Size i=0; (i<children.size()); i++)
+				{
+					//if predicate wasn't matched before
+					if(!(match_events[i]))
 					{
-						//if predicate wasn't matched before
-						if(!(match_events[i]))
+						//if one match of atom and predicate is found
+						if((*children[i])(partnerAtom))
 						{
-							//if one match of atom and predicate is found
-							if((*children[i])(partnerAtom))
-							{
-								//mark predicate as matched and start with next partnerAtom
-								match_events[i] = true;
-								break;
-							}
+							//mark predicate as matched and start with next partnerAtom
+							match_events[i] = true;
+							break;
 						}
 					}
 				}
-				//number of partnerAtoms and number of 
-				//corresponding predicate-children
-				//can differ, but all occurring predicate-children 
-				//have to be matched by a partnerAtom
-				for(std::vector<bool>::iterator match_it = match_events.begin() ; match_it != match_events.end();++match_it)
-				{
-					//if any match_event is false, no complete match could be found
-					if(!(*(match_it)))
-					{
-						return false;	
-					}
-				}			
-				return true;
 			}
-			//root_predicate cannot be matched with any atom in CES
-			//therefore: only matching of all its children
-			else if(parser_->root_predicate == this)
+			//number of partnerAtoms and number of 
+			//corresponding predicate-children
+			//can differ, but all occurring predicate-children 
+			//have to be matched by a partnerAtom
+			for(std::vector<bool>::iterator match_it = match_events.begin(); 
+																			match_it != match_events.end();
+																			++match_it)
 			{
-				//stores if a children-predicate is already matched or not
-				std::vector<bool>match_events((children.size()),false);
-	
-				Atom::BondIterator bond_it = atom.beginBond();
-				for(;+bond_it;++bond_it)
-				{
-					Atom& partnerAtom = *(bond_it->getPartner(atom));
-	
-					for (Size i=0; (i<children.size()); i++)
-					{
-						//if predicate was'nt matched before
-						if(!(match_events[i]))
-						{
-							//if one match of atom and predicate is found
-							if((*children[i])(partnerAtom))
-							{
-								//mark predicate as matched and start with next partnerAtom
-								match_events[i] = true;
-								break;
-							}
-						}
-					}
-				}
-				//number of partnerAtoms and number of 
-				//corresponding predicate-children
-				//can differ, but all occurring predicate-children 
-				//have to be matched by a partnerAtom
-				for(Size i=0; i<match_events.size(); i++)
-				{
-					//if any match_event is false, no complete match could be found
-					if(!match_events[i])
-					{
-						return false;	
-					}
-				}			
-				return true;
-			}
-		}
-		else
-		{
-			return match(atom);
+				//if any match_event is false, no complete match could be found
+				if(!(*(match_it)))
+					return false;	
+			}			
+			result = true;
 		}
 
-		return false;
+		return result;
 	}
 		
 

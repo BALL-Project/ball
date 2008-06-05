@@ -64,7 +64,8 @@ namespace BALL
 							NO_DELOCALIZED_BOND_TO_PARENT,
 							AROMATIC_BOND,
 							AROMATIC_BOND_TO_PARENT,
-							NO_AROMATIC_BOND_TO_PARENT
+							NO_AROMATIC_BOND_TO_PARENT,
+							APS_TRUE
 						};
 
 						class APSTerm
@@ -297,7 +298,9 @@ namespace BALL
 			Size read(char* buf, Size max_size);
 
 			static State state;
-			CESPredicate root;
+
+			/// The root atom has no CESPredicate to test, so it's considered always true
+			TruePredicate root;
 			//fixed root of the "predicate tree"
 			CESPredicate* root_predicate;
 			//parent-predicate of current_predicate
