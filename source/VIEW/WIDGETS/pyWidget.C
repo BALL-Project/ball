@@ -1690,7 +1690,7 @@ bool PyWidget::storeScript_()
 	QString qtext = getCurrentScript();
 	if (qtext.size() == 0) 
 	{
-		setStatusbarText("Editor is empty, aborting...", true);
+		setStatusbarText("Editor is empty, aborting...", false);
 		return false;
 	}
 
