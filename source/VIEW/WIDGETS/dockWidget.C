@@ -84,28 +84,18 @@ namespace BALL
 			getMainControl()->initPopupMenu(MainControl::WINDOWS)->addAction(window_menu_entry_);
 		}
 
-		void DockWidget::writePreferences(INIFile& inifile)
+		void DockWidget::writePreferences(INIFile& /*inifile*/)
 			throw()
 		{
-			if (window_menu_entry_ != 0)
-			{
- 				inifile.insertValue("WINDOWS", getIdentifier() + "::on", String(window_menu_entry_->isChecked()));
-			}
+			// writing of preferences should be completely covered by saveState that has to 
+			// be called from the widget we are used from (usually MainControl)
 		}
 
-		void DockWidget::fetchPreferences(INIFile & inifile)
+		void DockWidget::fetchPreferences(INIFile & /*inifile*/)
 			throw()
 		{
-			// if the INIFile does not have the information to restore the state of the dockwidgets,
-			// make only the default widgets visible
-			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on"))
-			{
-				setWidgetVisible(inifile.getValue("WINDOWS", getIdentifier() + "::on").toBool());
-			}
-			else if (!default_visible_)
-			{
-				setWidgetVisible(false);
-			}
+			// reading of preferences should be completely covered by restoreState that has to 
+			// be called from the widget we are used from (usually MainControl)
 		}
 
 		void DockWidget::dropEvent(QDropEvent* e)

@@ -63,6 +63,9 @@ using std::istream;
 using std::ostream;
 using std::endl;
 
+//#define BALL_VIEW_DEBUG
+#undef BALL_VIEW_DEBUG
+
 namespace BALL
 {
 	namespace VIEW
@@ -1390,8 +1393,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				QByteArray s(mys.c_str());
 				s = s.fromBase64(s);
 				restoreState(s);
-				// workaround for some bug in some QT versions:
-				// restoreState(s);
 			}
 			catch(...)
 			{
