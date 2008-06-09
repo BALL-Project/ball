@@ -29,7 +29,6 @@ using namespace BALL::Exception;
 	view_ = new DataItemView(&view_scene_,this);
 	view_->name = "view";
 	view_->mapToScene(0,0);
-	view_->addDropSite();
 
 	model_list_ = new DataItemView(&model_list_scene_,this);
 	model_list_->name = "model_list";

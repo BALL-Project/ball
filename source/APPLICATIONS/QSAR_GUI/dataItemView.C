@@ -50,7 +50,7 @@ void DataItemView::scaleView(qreal scaleFactor)
 
 
 void DataItemView::keyPressEvent(QKeyEvent *event)
- {
+{
 	DataItem* item = static_cast<DataItem*>(scene()->focusItem());
 
     if (!item)
@@ -76,64 +76,5 @@ void DataItemView::keyPressEvent(QKeyEvent *event)
 	default: 
 		QGraphicsView::keyPressEvent(event);
 	}
-
- }
-
-void DataItemView::addDropSite()
-{
-	data_scene->addDropSite();
 }
 
-
-/*
-void DataItemView::timerEvent(QTimerEvent *event)
-{
-	std::cout << "timer event" << std::endl;
-
-	Q_UNUSED(event);
-
-	QList<DataItem* > dataitems;
-	foreach (QGraphicsItem *item, scene()->items()) 
-	{
-		if (DataItem* it = static_cast<DataItem *>(item))
-		{
-			std::cout << "timer event: item added" << std::endl;
-			dataitems << it;
-		}
-		else
-		{
-			std::cout << "timer event: item not added" << std::endl;
-		}
-	}
-
-	foreach (DataItem* item, dataitems)
-	{
-		item->calculateForces();
-	}
-
-	bool itemsMoved = false;
-
-	foreach (DataItem* item, dataitems) 
-	{
-		if (item->advance())
-		{
-			itemsMoved = true;
-		}
-	}
-
-	if (!itemsMoved) 
-	{
-		killTimer(timer_id_);
-		timer_id_ = 0;
-	}
-}
-
-void DataItemView::itemMoved()
-{
-	if (!timer_id_)
-	{
-		std::cout << "start timer" << std::endl;
-		timer_id_ = startTimer(50);
-	}
-}
-*/

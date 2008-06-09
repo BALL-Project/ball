@@ -43,7 +43,6 @@ namespace BALL
 				* @param mw the new main window
 				*/
 				void setMainWindow(MainWindow* mw);
-				void addDropSite();
 				
 				/** @name Attributes*/
 
@@ -66,6 +65,8 @@ namespace BALL
 				/** QT event handler for drop events on this scene
 				*/			
 				void dropEvent(QGraphicsSceneDragDropEvent* event);
+				
+				void dragMoveEvent(QGraphicsSceneDragDropEvent* event);
 				
 				void createExternalValPipeline(ModelItem* model_item, ValidationItem* val_item);
 				//void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);

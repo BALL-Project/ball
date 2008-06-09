@@ -572,15 +572,10 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationI
 }
 
 
-//this function allows the dropping of an item anywhere on the scene
-void DataItemScene::addDropSite()
+// overloading QGraphicsScene::dragMoveEvent() since in older Qt-version it only allows dropping onto items!
+void DataItemScene::dragMoveEvent(QGraphicsSceneDragDropEvent* event)
 {
-	//set the scene rect on the maximal possible value
-	setSceneRect(0,0, 16777215, 16777215);
-	
-	//add a transparent rect item with maximal size onto this scene and allow drops onto it 
-	QGraphicsRectItem* rect = addRect(QRectF(0, 0, 16777215, 16777215),QPen(QColor(Qt::transparent)));
-	rect->setAcceptDrops(true);
+	event->accept();
 }
 
 
