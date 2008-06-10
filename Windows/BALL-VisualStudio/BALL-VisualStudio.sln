@@ -34,7 +34,494 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BALLModule", "BALLModule\BA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TESTS", "TESTS", "{FE361039-D2AB-441B-9291-ED784AF5F357}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Class_Test", "TESTS\Class_Test\Class_Test.vcproj", "{8C25F14C-4F23-42E5-9E80-B41C518542F0}"
+Project("{721C1940-D2DB-4166-9D53-3160E19F718C}") = "ClassTest_test", "TESTS\ClassTest_test\ClassTest_test.vcproj", "{5041CB64-9336-4682-BB35-AE6DE7CBFC00}"
+EndProject
+Project("{CFEB5DC7-CF27-4D11-895F-005910B758BA}") = "Debug_test", "TESTS\Debug_test\Debug_test.vcproj", "{AD64F059-6CAA-46F7-9FEC-005059D109CE}"
+EndProject
+Project("{25C133C1-3E0F-4A8B-8B6E-01A7EB0D8511}") = "RegularExpression_test", "TESTS\RegularExpression_test\RegularExpression_test.vcproj", "{81D98903-4DBD-4A43-A725-F83D4B75E178}"
+EndProject
+Project("{B76F14A1-17E5-49E7-9038-CEDF27703507}") = "GlobalTypes_test", "TESTS\GlobalTypes_test\GlobalTypes_test.vcproj", "{7706E467-CF2E-4125-965F-A59F610E3EBA}"
+EndProject
+Project("{4FEB3488-03E7-4775-BFC3-E7C99C8407A4}") = "Limits_test", "TESTS\Limits_test\Limits_test.vcproj", "{45B653CE-50F4-4B94-BF65-B43582457972}"
+EndProject
+Project("{FB4B17AC-04CE-4802-A973-BB268223D487}") = "VersionInfo_test", "TESTS\VersionInfo_test\VersionInfo_test.vcproj", "{0862B221-7B20-4804-93A6-275EE49726A7}"
+EndProject
+Project("{8E3649CB-FBC6-4486-8038-04B4A567A69B}") = "RTTI_test", "TESTS\RTTI_test\RTTI_test.vcproj", "{A0B64AA7-ED14-4B80-940D-B2E0B715C7E6}"
+EndProject
+Project("{71C04A40-33C9-4F92-9550-E5B62C492DB9}") = "MathsCommon_test", "TESTS\MathsCommon_test\MathsCommon_test.vcproj", "{C3929438-6A38-4763-B4F9-8C20E7F59C08}"
+EndProject
+Project("{2EAE10EA-2D73-4EAE-813C-7EBB63A20AFF}") = "AnalyticalGeometry_test", "TESTS\AnalyticalGeometry_test\AnalyticalGeometry_test.vcproj", "{333B115B-0943-416A-91A5-6FF658BDA8F0}"
+EndProject
+Project("{B5114D7F-4682-4485-917E-ED0AE3CAC63F}") = "Angle_test", "TESTS\Angle_test\Angle_test.vcproj", "{539C3F12-E329-468B-A9D0-C66E9F8FE25E}"
+EndProject
+Project("{6B22B66D-A931-40AA-8337-1743B7AC7862}") = "Vector2_test", "TESTS\Vector2_test\Vector2_test.vcproj", "{F58653C1-18A5-47ED-A29C-9E860A3BDAAE}"
+EndProject
+Project("{4AD09E25-853C-483F-9D9C-B5AB18BAD7F1}") = "Vector3_test", "TESTS\Vector3_test\Vector3_test.vcproj", "{2B6BCD44-3F92-4A5A-9BBB-11F9265C2CEF}"
+EndProject
+Project("{CE2C43FA-C0C3-4F76-A5B0-E6748FB8BB8B}") = "Vector4_test", "TESTS\Vector4_test\Vector4_test.vcproj", "{B484EAF9-D62E-46ED-8905-AF7238E4E9FF}"
+EndProject
+Project("{CCC5D442-572D-48B4-BAC2-A044C3977416}") = "Quaternion_test", "TESTS\Quaternion_test\Quaternion_test.vcproj", "{1B1A0411-1533-49C3-9147-46387C7E311C}"
+EndProject
+Project("{A56311BA-ABC7-4E26-9B32-42089219E068}") = "Matrix44_test", "TESTS\Matrix44_test\Matrix44_test.vcproj", "{EEECBD47-9FE6-475A-9AE1-3F962467A1DE}"
+EndProject
+Project("{09BD5FA3-C412-43DE-97C0-E67E3C024C05}") = "NumericalIntegrator_test", "TESTS\NumericalIntegrator_test\NumericalIntegrator_test.vcproj", "{B2967A55-0E12-4555-A1EE-FF58E818F85C}"
+EndProject
+Project("{5FC649CA-FA91-461C-8AE2-A6821030AA1A}") = "Line3_test", "TESTS\Line3_test\Line3_test.vcproj", "{A145FDBE-9DB3-438B-8EFE-493C23DEEA92}"
+EndProject
+Project("{951590FA-3CB2-45C5-9F51-3812C081B688}") = "Circle3_test", "TESTS\Circle3_test\Circle3_test.vcproj", "{6AD29D2F-CBFC-4B6D-9896-AB067301A55D}"
+EndProject
+Project("{8FC2A196-EF0C-4889-B283-4E303F41DC88}") = "SimpleBox3_test", "TESTS\SimpleBox3_test\SimpleBox3_test.vcproj", "{12C64B9D-9C1F-40B8-8769-306EA340FA16}"
+EndProject
+Project("{EA07DB34-D8C5-49E5-86EB-DA2F0BDFF0D3}") = "Box3_test", "TESTS\Box3_test\Box3_test.vcproj", "{3F702B65-30B5-4F2E-94F6-F8699FD34441}"
+EndProject
+Project("{CF45C722-FBB2-4544-B668-5310FFF84AF0}") = "Plane3_test", "TESTS\Plane3_test\Plane3_test.vcproj", "{AD6A3344-6AA5-42E5-A116-C26554128AF0}"
+EndProject
+Project("{B81AF5D8-662E-4C20-B470-4F967DE770B1}") = "Sphere3_test", "TESTS\Sphere3_test\Sphere3_test.vcproj", "{D966CE30-A30B-43C9-9A52-9FF8DE7D7948}"
+EndProject
+Project("{BDB4B980-0D4F-4769-82A1-287D2608817E}") = "Surface_test", "TESTS\Surface_test\Surface_test.vcproj", "{B966B3EB-9EB1-4CD9-B9CB-1E384F7CCBA8}"
+EndProject
+Project("{54E3F34C-8F6A-4C2E-A2F0-4B5927ABAD26}") = "Function_test", "TESTS\Function_test\Function_test.vcproj", "{2D414C7D-0EEF-4A7C-B25D-F79AAF262283}"
+EndProject
+Project("{958161F3-5AF9-4820-83E6-3A1F8B791129}") = "PiecewiseFunction_test", "TESTS\PiecewiseFunction_test\PiecewiseFunction_test.vcproj", "{ECE1786F-7FEF-4A05-8E77-EA6C01132FAB}"
+EndProject
+Project("{76E76B56-4AA3-4754-9480-012DCFE4A18C}") = "PiecewisePolynomial_test", "TESTS\PiecewisePolynomial_test\PiecewisePolynomial_test.vcproj", "{08078746-4444-4728-A210-B7977DE2F460}"
+EndProject
+Project("{C6E0DA88-CEAF-4BE1-8F3B-88533C6D1365}") = "Directory_test", "TESTS\Directory_test\Directory_test.vcproj", "{CA2793C5-4DD9-479E-B0AC-0340C70A3929}"
+EndProject
+Project("{33798E3D-78AB-43FF-ABE1-36D31844C553}") = "FileSystem_test", "TESTS\FileSystem_test\FileSystem_test.vcproj", "{9090BE09-9A27-460E-9522-D1B6B46524C3}"
+EndProject
+Project("{6A2C00F6-428D-4756-8B40-0CD2CBF21EC1}") = "File_test", "TESTS\File_test\File_test.vcproj", "{65A31D05-7812-4DE1-B139-60084BFC43D3}"
+EndProject
+Project("{642CD555-D4ED-4B43-B798-64D49904DBBA}") = "Path_test", "TESTS\Path_test\Path_test.vcproj", "{D34923E3-81C3-4D9B-8B0A-39FC46A45E62}"
+EndProject
+Project("{4580234A-C7CD-4F4E-AA7F-5D7AF74CA726}") = "PreciseTime_test", "TESTS\PreciseTime_test\PreciseTime_test.vcproj", "{34EFBCFC-9102-4639-B3E1-90E25451E3A8}"
+EndProject
+Project("{02DDA0C0-23C1-47B3-AF08-9C05EA7A222E}") = "Socket_test", "TESTS\Socket_test\Socket_test.vcproj", "{B6D7D840-10B2-430B-A12B-ADA75AA0C2A6}"
+EndProject
+Project("{3BA52AD8-D788-438B-BC9C-543FFCD005B2}") = "Sysinfo_test", "TESTS\Sysinfo_test\Sysinfo_test.vcproj", "{E95DD153-0333-48CE-8C96-BE3F7414C7F4}"
+EndProject
+Project("{D02572E7-007C-4BC1-B87E-F1C82A1ACD3A}") = "TCPTransfer_test", "TESTS\TCPTransfer_test\TCPTransfer_test.vcproj", "{B19B1499-F11E-4B7D-929D-3C53C7113B12}"
+EndProject
+Project("{68003F89-FCC4-4593-9EC8-CFB8E1ECE293}") = "Timer_test", "TESTS\Timer_test\Timer_test.vcproj", "{5C8FAABD-2A8B-4302-BE72-59A464D53243}"
+EndProject
+Project("{33D25FB3-480C-4B19-B8D5-16B44BF4F487}") = "TimeStamp_test", "TESTS\TimeStamp_test\TimeStamp_test.vcproj", "{F35080AE-AFB4-4F58-BEA7-8AC5ED982C23}"
+EndProject
+Project("{23AF1613-259F-4417-8D7A-A0F1C2538738}") = "TransformationManager_test", "TESTS\TransformationManager_test\TransformationManager_test.vcproj", "{F3F9523E-0B87-40AB-BE43-237636F54902}"
+EndProject
+Project("{6108025F-5870-4BD2-9E07-5656B9E9DA53}") = "Bit_test", "TESTS\Bit_test\Bit_test.vcproj", "{73159AD8-BB65-4854-8D3A-37CC6399E65D}"
+EndProject
+Project("{FE8F8DC2-A633-4B05-8AB5-4511A38FFFD0}") = "BitVector_test", "TESTS\BitVector_test\BitVector_test.vcproj", "{2F170464-1D63-4288-8FDD-F1ECB713C22D}"
+EndProject
+Project("{B70E453A-2F97-43C5-9D99-3218C7AEF180}") = "Contour_test", "TESTS\Contour_test\Contour_test.vcproj", "{A4F2683A-8C31-4550-BBA8-698B515DE68F}"
+EndProject
+Project("{D260FEE5-23E1-43CC-A913-24B14804CCF3}") = "ContourLine_test", "TESTS\ContourLine_test\ContourLine_test.vcproj", "{3F59E4E0-1A32-429B-9866-4399C1FC4C31}"
+EndProject
+Project("{7EC80499-D853-4F93-8371-0BEFCB401B2C}") = "List_test", "TESTS\List_test\List_test.vcproj", "{E90F8365-4A08-4767-8F61-D7842FBC3DBC}"
+EndProject
+Project("{EBC7FDA7-FA0D-480F-A3D6-A2E26C4EACDE}") = "Hash_test", "TESTS\Hash_test\Hash_test.vcproj", "{82F2D988-AA2D-4ED2-A0B8-B72DB93B0381}"
+EndProject
+Project("{E61C6C43-575A-4ABC-BA07-76D13BFA5092}") = "HashMap_test", "TESTS\HashMap_test\HashMap_test.vcproj", "{7862C3C3-3CE5-43C6-821C-FBA6D810FD4A}"
+EndProject
+Project("{40953DF2-2763-4C4B-9A31-DBE4E2A4C6E9}") = "StringHashMap_test", "TESTS\StringHashMap_test\StringHashMap_test.vcproj", "{A95DBBA5-0290-44A7-88C5-F549C04911D2}"
+EndProject
+Project("{F8BC43D8-9F8A-4194-AEDE-11357C0D588E}") = "HashSet_test", "TESTS\HashSet_test\HashSet_test.vcproj", "{0066FE76-E603-421A-AB2E-58E68763CA69}"
+EndProject
+Project("{A8C30201-2517-4E67-8AAF-4B2ADD3DAAD6}") = "HashGrid3_test", "TESTS\HashGrid3_test\HashGrid3_test.vcproj", "{702D8F2C-7054-422E-83FB-9B32EB42A355}"
+EndProject
+Project("{88D9D73F-FD1A-4127-BC8B-F0C2A435E744}") = "HashGridBox3_test", "TESTS\HashGridBox3_test\HashGridBox3_test.vcproj", "{8FCC928A-6614-4B6A-98C2-D3B9C61056DD}"
+EndProject
+Project("{F5E43157-1F83-4BD7-B12F-A2C5D796C7F4}") = "HashGrid3DataIteratorTraits_test", "TESTS\HashGrid3DataIteratorTraits_test\HashGrid3DataIteratorTraits_test.vcproj", "{F5A1D790-B2C3-4A87-9862-BBB18B089B6C}"
+EndProject
+Project("{9E2CE688-0426-4B12-97C3-570C41D27CFB}") = "HashGrid3BoxIteratorTraits_test", "TESTS\HashGrid3BoxIteratorTraits_test\HashGrid3BoxIteratorTraits_test.vcproj", "{D046F76E-85FD-472F-B485-F9A54BE27B0E}"
+EndProject
+Project("{6D15E142-6879-47AE-A830-0EBD15DBE149}") = "HashGrid3DataItem_test", "TESTS\HashGrid3DataItem_test\HashGrid3DataItem_test.vcproj", "{5C5DDC88-7A73-44FB-8374-0FE6595E370D}"
+EndProject
+Project("{F842B48B-764B-4BCE-9CE5-31DE3E92BF90}") = "HashGrid3NeighborBoxItem_test", "TESTS\HashGrid3NeighborBoxItem_test\HashGrid3NeighborBoxItem_test.vcproj", "{14DE697E-9DAD-4A7B-97AE-B2D9D754720C}"
+EndProject
+Project("{E21805B9-4FC7-4243-89E2-B6D596CBD92A}") = "Options_test", "TESTS\Options_test\Options_test.vcproj", "{7504A6A7-8CAC-49EA-8AB8-9FC09416A7DA}"
+EndProject
+Project("{3A5A9D6D-4525-4CE9-B7D2-8F8AAE68B69C}") = "String_test1", "TESTS\String_test1\String_test1.vcproj", "{BDF950B8-54DA-4DB5-A177-F0685492FEF7}"
+EndProject
+Project("{99354236-90C0-4A50-8254-D31149DA3AE4}") = "String_test2", "TESTS\String_test2\String_test2.vcproj", "{68E5AB59-82AD-4FCC-81CC-B174431E5A22}"
+EndProject
+Project("{441E8E40-5823-42D4-BED5-42FAEEEA4C42}") = "String_test3", "TESTS\String_test3\String_test3.vcproj", "{11714DEF-F6E9-4A3E-825F-35975FD1408C}"
+EndProject
+Project("{FAA6F1FF-718B-4843-AF1D-30CAB687B39A}") = "String_test4", "TESTS\String_test4\String_test4.vcproj", "{E9B27867-CCA6-43AB-9AE5-452A273E07ED}"
+EndProject
+Project("{7E1B8CA7-DBCA-407A-89CE-8667EFE8F7B5}") = "Substring_test", "TESTS\Substring_test\Substring_test.vcproj", "{DB0307F5-9EE4-47B3-A50D-7F2D703C7D0D}"
+EndProject
+Project("{EA6690EC-20D1-4EDE-A616-62221FAFA36B}") = "Triple_test", "TESTS\Triple_test\Triple_test.vcproj", "{D1809544-2D5C-4E5C-99F4-0E555105AEA0}"
+EndProject
+Project("{D3C822AF-6A95-4068-8AED-41DD05454398}") = "Quadruple_test", "TESTS\Quadruple_test\Quadruple_test.vcproj", "{9FE3E233-5583-4D35-B8FC-D11FD7E85C2B}"
+EndProject
+Project("{F44E9189-EBE2-422E-87CA-B7E086608C83}") = "RegularData1D_test", "TESTS\RegularData1D_test\RegularData1D_test.vcproj", "{8DEBEB89-4A29-4927-8BE5-84A980980194}"
+EndProject
+Project("{661F0D6B-8126-4FC0-BF54-8931216ABB1E}") = "RegularData2D_test", "TESTS\RegularData2D_test\RegularData2D_test.vcproj", "{CEA67776-4028-471A-9CEB-2014F910272F}"
+EndProject
+Project("{A79F121F-82A6-42C9-B70E-1774FACA20D7}") = "RegularData3D_test", "TESTS\RegularData3D_test\RegularData3D_test.vcproj", "{960A8227-A24E-4669-9342-72CF1CE2CD96}"
+EndProject
+Project("{5E19FC71-C5F0-4D92-9D83-AD63257DF114}") = "ContourSurface_test", "TESTS\ContourSurface_test\ContourSurface_test.vcproj", "{DB810ABB-3553-474A-8DC7-938A5ADC3F31}"
+EndProject
+Project("{02379BB5-347E-4F81-A35C-6E4C1F427BF0}") = "LogStream_test", "TESTS\LogStream_test\LogStream_test.vcproj", "{25C2A56C-3D73-44E4-8ADA-BAAC77F9CAAE}"
+EndProject
+Project("{C2DE15DF-2280-4447-9D62-49802F7B1505}") = "AutoDeletable_test", "TESTS\AutoDeletable_test\AutoDeletable_test.vcproj", "{06D06D73-1CA3-4781-B197-A99003C157AC}"
+EndProject
+Project("{143DBD87-C3FE-4E13-8762-48AE907E5604}") = "Factory_test", "TESTS\Factory_test\Factory_test.vcproj", "{D6C92165-5667-439A-AE87-02B214D3D731}"
+EndProject
+Project("{20B70D83-CD16-4D93-9145-BA5E024AF7EB}") = "Object_test", "TESTS\Object_test\Object_test.vcproj", "{4EAB6471-57C8-4B65-856B-31E372C84008}"
+EndProject
+Project("{CD672804-C45E-4328-B628-74B6F1749747}") = "PersistentObject_test", "TESTS\PersistentObject_test\PersistentObject_test.vcproj", "{222900BB-7966-4DDE-BBF9-4199A9B5B554}"
+EndProject
+Project("{2E8EF851-0C20-4DFB-AC7E-6CE3CEA49C11}") = "PersistenceManager_test", "TESTS\PersistenceManager_test\PersistenceManager_test.vcproj", "{5851FCD8-0A38-4A68-BBBC-F8EB468D10BC}"
+EndProject
+Project("{4650CB76-33A8-47D1-AAA5-15A9713B3E45}") = "TextPersistenceManager_test", "TESTS\TextPersistenceManager_test\TextPersistenceManager_test.vcproj", "{6359ECB0-D201-4D97-BE4F-05E8FA4F24BC}"
+EndProject
+Project("{22A2BFBB-4C12-43A7-80E6-C8DBB6906CA0}") = "Selectable_test", "TESTS\Selectable_test\Selectable_test.vcproj", "{F742E924-1BAF-4FE5-8278-D3F94A27095B}"
+EndProject
+Project("{A9C79CA9-C4B1-43FE-A90E-2AC1B7DB0D18}") = "NamedProperty_test", "TESTS\NamedProperty_test\NamedProperty_test.vcproj", "{591911C2-8FA3-4BA9-8CA4-B6896864914B}"
+EndProject
+Project("{8FA1BD0B-B2F2-4943-8E1D-BBEFF5C19E9C}") = "PropertyManager_test", "TESTS\PropertyManager_test\PropertyManager_test.vcproj", "{94271134-9576-42C3-B8AC-DFE5B6C6EA4F}"
+EndProject
+Project("{8EDB0F92-608A-4061-8903-AB7E15FBD735}") = "Composite_test1", "TESTS\Composite_test1\Composite_test1.vcproj", "{C70CA7D7-5A1F-455B-91B6-D5AC22AEF4F8}"
+EndProject
+Project("{3368D7AC-72D7-4B1A-B51D-7D96CA2FD7BB}") = "Composite_test2", "TESTS\Composite_test2\Composite_test2.vcproj", "{3A656A95-F702-4875-B678-73C218B3C545}"
+EndProject
+Project("{B8B65706-FDC6-4B77-ABC6-64A9E6559CD4}") = "CompositeCompositeIteratorTraits_test", "TESTS\CompositeCompositeIteratorTraits_test\CompositeCompositeIteratorTraits_test.vcproj", "{7C92454F-E98F-4BA4-A83F-02CA4B39D323}"
+EndProject
+Project("{CECA1646-EA7B-4CC4-90B6-7C9117ABEA48}") = "CompositeChildcompositeIteratorTraits_test", "TESTS\CompositeChildcompositeIteratorTraits_test\CompositeChildcompositeIteratorTraits_test.vcproj", "{7E7F79AF-6E80-46B1-BFAC-F979BCCF5CF3}"
+EndProject
+Project("{48D9FC2A-E6DF-4A40-A0B6-A1B22C927A56}") = "CompositeAncestorIteratorTraits_test", "TESTS\CompositeAncestorIteratorTraits_test\CompositeAncestorIteratorTraits_test.vcproj", "{A1140055-4064-468B-A798-804DFE52F9AB}"
+EndProject
+Project("{19C2D263-F399-4681-98D3-4CBDE525661B}") = "Embeddable_test", "TESTS\Embeddable_test\Embeddable_test.vcproj", "{0B1D48D6-B205-4094-AA6B-299033839BAE}"
+EndProject
+Project("{6E9BDAA2-5333-437B-98A1-5D4651487093}") = "BaseIterator_test", "TESTS\BaseIterator_test\BaseIterator_test.vcproj", "{6EBB6C8C-B54C-493E-964C-60BF914FD1D8}"
+EndProject
+Project("{5E346DE2-8FCF-4A1A-858D-7EE9C20850C0}") = "ConstForwardIterator_test", "TESTS\ConstForwardIterator_test\ConstForwardIterator_test.vcproj", "{15B89B8A-B274-4CC2-BC1A-CC15AEACEB20}"
+EndProject
+Project("{306A3DB0-878C-4D91-B869-BC8D50579264}") = "ForwardIterator_test", "TESTS\ForwardIterator_test\ForwardIterator_test.vcproj", "{9B0D37AB-5905-4EA5-9D85-63AB3B8DC5E2}"
+EndProject
+Project("{6AE9C8B7-8804-430F-80A6-8AB6403BA789}") = "ConstBidirectionalIterator_test", "TESTS\ConstBidirectionalIterator_test\ConstBidirectionalIterator_test.vcproj", "{78092C09-6C92-48AD-A160-A1B94A090730}"
+EndProject
+Project("{05743D0C-397B-49B9-BFB6-74D6DC2BD3CE}") = "BidirectionalIterator_test", "TESTS\BidirectionalIterator_test\BidirectionalIterator_test.vcproj", "{C6D45C03-6C8E-42FA-93AC-431F0C546D52}"
+EndProject
+Project("{B69B85F7-C5E9-4BF7-A176-A75BA4E8FDFD}") = "ConstRandomAccessIterator_test", "TESTS\ConstRandomAccessIterator_test\ConstRandomAccessIterator_test.vcproj", "{71F9B14E-D464-4302-8903-C7D964DCB64A}"
+EndProject
+Project("{C1C61BE1-CD54-4F08-92A3-958C3C5D005B}") = "RandomAccessIterator_test", "TESTS\RandomAccessIterator_test\RandomAccessIterator_test.vcproj", "{5552FC42-2FDA-45DA-9805-960FCD71CFD2}"
+EndProject
+Project("{4C29CFF3-B3C8-43C6-ABB2-51D063CB124D}") = "PTE_test", "TESTS\PTE_test\PTE_test.vcproj", "{0159160D-92CA-48E7-BF0A-EB8D2B4A90C5}"
+EndProject
+Project("{A26FC9F2-5406-4F37-A56B-88498585CA38}") = "Atom_test", "TESTS\Atom_test\Atom_test.vcproj", "{4F4F2924-B485-4AE5-A78E-A1BA9D499595}"
+EndProject
+Project("{3B39087D-BF84-45AF-932F-9D9937FFF309}") = "AtomStaticAtomAttributes_test", "TESTS\AtomStaticAtomAttributes_test\AtomStaticAtomAttributes_test.vcproj", "{9405F8FB-A0C2-4E7D-887B-A8B7AD8715B5}"
+EndProject
+Project("{4EF60743-CE7E-46A4-911B-7E2FAC0F9F93}") = "AtomAttributeVector_test", "TESTS\AtomAttributeVector_test\AtomAttributeVector_test.vcproj", "{68094A42-6502-4A6C-94F1-99F1AB86E38E}"
+EndProject
+Project("{8BB0809B-9100-441A-86CD-AFE76FF818CF}") = "Bond_test", "TESTS\Bond_test\Bond_test.vcproj", "{3BE8082C-7C8D-4D9C-84DC-3A0BCAD746E4}"
+EndProject
+Project("{B426BC02-17C0-4798-AF5D-7AE60E7EA84F}") = "AtomContainer_test", "TESTS\AtomContainer_test\AtomContainer_test.vcproj", "{9371DBA5-BF78-4FA4-A045-4B688C216EA7}"
+EndProject
+Project("{13BD7047-A7F2-402A-9A03-0B19F23B9FB2}") = "Fragment_test", "TESTS\Fragment_test\Fragment_test.vcproj", "{9B4CE04A-A301-4340-8378-585406E97F84}"
+EndProject
+Project("{25369153-B474-4874-AB0C-F15302F0CA29}") = "Chain_test", "TESTS\Chain_test\Chain_test.vcproj", "{6FD60149-5031-4735-8681-6E5C1E5760BB}"
+EndProject
+Project("{1B289A59-B233-4374-8CC4-95C599E80EB2}") = "Molecule_test", "TESTS\Molecule_test\Molecule_test.vcproj", "{59681BBB-E0B9-4800-8C67-58E9A9B312CB}"
+EndProject
+Project("{FAB530EE-0C20-4DA8-89CA-E962C9E6E440}") = "SecondaryStructure_test", "TESTS\SecondaryStructure_test\SecondaryStructure_test.vcproj", "{4FC8F47D-66AD-4327-9CDB-01340DF04C6A}"
+EndProject
+Project("{F7DA62D0-19FB-424B-A54B-F6377E271447}") = "System_test", "TESTS\System_test\System_test.vcproj", "{9AB0C3AC-4EC2-43C1-B2F0-DE7BA1EA22E6}"
+EndProject
+Project("{1D2E9507-39EE-43B5-AC06-9BC63D64FC7C}") = "Protein_test", "TESTS\Protein_test\Protein_test.vcproj", "{7CF83401-77A6-4EA4-AF58-8F348C78ABA5}"
+EndProject
+Project("{891B947E-5F75-41CE-9920-BEFA8A811619}") = "PDBAtom_test", "TESTS\PDBAtom_test\PDBAtom_test.vcproj", "{1C1A1FCF-1CC8-491E-A8DE-6A6D9BE74740}"
+EndProject
+Project("{ABCEE496-2AAA-43FC-B565-73E99A684F58}") = "NucleicAcid_test", "TESTS\NucleicAcid_test\NucleicAcid_test.vcproj", "{468A0B9E-9A2A-45D3-A104-5E3AA017A735}"
+EndProject
+Project("{805F3C3D-DA1B-4114-AC0A-637DD0BE12A9}") = "Nucleotide_test", "TESTS\Nucleotide_test\Nucleotide_test.vcproj", "{2B3A7B92-9D22-40E3-B603-B7DC5A5FCAF1}"
+EndProject
+Project("{AE4394EB-589C-4106-8831-6A1EF1949AD6}") = "Residue_test", "TESTS\Residue_test\Residue_test.vcproj", "{456B49D6-E999-4ADF-A484-7424C44ABA90}"
+EndProject
+Project("{899CBDAB-50FC-4124-815E-671F5A790AB6}") = "Expression_test", "TESTS\Expression_test\Expression_test.vcproj", "{D1A2B50B-B712-420D-888E-C73631F934C1}"
+EndProject
+Project("{434F5755-805A-477B-A89C-9B371E5840AB}") = "ExpressionParser_test", "TESTS\ExpressionParser_test\ExpressionParser_test.vcproj", "{188A4B9B-A185-401C-82D1-958F308A48E2}"
+EndProject
+Project("{AD003EC8-8E68-488E-B0D0-E3D0779B03BB}") = "ExpressionPredicate_test", "TESTS\ExpressionPredicate_test\ExpressionPredicate_test.vcproj", "{8CB908CF-1048-4F4D-9657-ADC2CED5F359}"
+EndProject
+Project("{15C12002-4A59-4FDE-874F-32C69B9ACDD4}") = "ExpressionTree_test", "TESTS\ExpressionTree_test\ExpressionTree_test.vcproj", "{551D7714-B19A-4169-AFE6-627B709AC805}"
+EndProject
+Project("{F122B350-D317-4F04-A568-84CC60931317}") = "KernelPredicate_test", "TESTS\KernelPredicate_test\KernelPredicate_test.vcproj", "{A6EEDC68-8DFC-4AE5-9C03-1AC57156F4EA}"
+EndProject
+Project("{638E9AD7-CC6B-4F50-9C3E-D9A9E6EDD7BA}") = "Selector_test", "TESTS\Selector_test\Selector_test.vcproj", "{8AC918E9-25B1-47B8-8320-B23CD4156B11}"
+EndProject
+Project("{DCDB5C83-9347-450A-BDB4-1FB2BC97A5D9}") = "RuleEvaluator_test", "TESTS\RuleEvaluator_test\RuleEvaluator_test.vcproj", "{5B3A0E22-1E1B-4084-8418-B615DFAF78B2}"
+EndProject
+Project("{6E7E177F-22C6-4A14-A89C-040A1ECE7394}") = "StandardPredicates_test", "TESTS\StandardPredicates_test\StandardPredicates_test.vcproj", "{8A225AB6-8493-44DF-8E50-2F6DFB306069}"
+EndProject
+Project("{EADC7785-053B-4306-8DAD-F606CFB2B4C7}") = "DefaultProcessors_test", "TESTS\DefaultProcessors_test\DefaultProcessors_test.vcproj", "{6626316B-B5F2-4DED-B394-397F479A8CC7}"
+EndProject
+Project("{F84B7383-A5A2-45CD-B75A-475914C070F7}") = "FragmentDB_test", "TESTS\FragmentDB_test\FragmentDB_test.vcproj", "{1917CDE9-8A10-4693-86E7-D2A1003AF3BB}"
+EndProject
+Project("{A195C01E-046C-4E07-B1AA-1F5FC12B4423}") = "NormalizeNamesProcessor_test", "TESTS\NormalizeNamesProcessor_test\NormalizeNamesProcessor_test.vcproj", "{66379634-7F29-4EED-B0FD-5FB9CECFAF47}"
+EndProject
+Project("{CD4DBBE7-0F0B-4046-A445-0DCC1F0F9083}") = "ForEach_test", "TESTS\ForEach_test\ForEach_test.vcproj", "{00DCF49E-4613-4CED-8D55-8E1157E35389}"
+EndProject
+Project("{FF238355-901D-4492-A189-EB198BDAA42C}") = "GlobalKernel_test", "TESTS\GlobalKernel_test\GlobalKernel_test.vcproj", "{207EFF6C-125E-43A1-8B4A-D777022C3C80}"
+EndProject
+Project("{29923A89-D32D-4DF6-9AF1-A9BF9B352C2B}") = "CompositeIteratorTraits_test", "TESTS\CompositeIteratorTraits_test\CompositeIteratorTraits_test.vcproj", "{A6F92A30-AB1C-46C4-9AC6-5D371098536B}"
+EndProject
+Project("{619672E8-8B9A-4506-BEC1-8E8824F89E1C}") = "AtomIterator_test", "TESTS\AtomIterator_test\AtomIterator_test.vcproj", "{4D374126-C5EA-4487-AEF1-1C233D6E26FC}"
+EndProject
+Project("{AABA811B-09D3-4AEE-9A5B-513FF7B352C0}") = "AtomBondIteratorTraits_test", "TESTS\AtomBondIteratorTraits_test\AtomBondIteratorTraits_test.vcproj", "{9ADACACB-D034-49D4-9B7A-D8C7CF6539A7}"
+EndProject
+Project("{3A5505D7-4606-4A32-8887-EE9E2F8C0603}") = "Extractors_test", "TESTS\Extractors_test\Extractors_test.vcproj", "{4F3FF4A2-58B8-456F-A530-F3CE76174079}"
+EndProject
+Project("{5DCAA9FC-2069-4724-9B9E-3E882277236F}") = "Gradient_test", "TESTS\Gradient_test\Gradient_test.vcproj", "{6523CBF1-910C-4202-94F0-3DDF8B3E382E}"
+EndProject
+Project("{EBB824E0-1107-4A49-8E58-55B3165B9B2E}") = "AtomVector_test", "TESTS\AtomVector_test\AtomVector_test.vcproj", "{4CE548D7-6C4A-4CAD-B145-81FF3C538E81}"
+EndProject
+Project("{F4F16136-6B6A-4824-84B3-B065256EC966}") = "MolmecSupport_test", "TESTS\MolmecSupport_test\MolmecSupport_test.vcproj", "{B5C6DB27-EE86-4465-B4BC-1BCF758EA5F2}"
+EndProject
+Project("{D3BDBE7A-9836-477B-8D66-AE78E4CDC1D4}") = "SnapShot_test", "TESTS\SnapShot_test\SnapShot_test.vcproj", "{8C9A1258-1128-43EB-B26F-8895BB5BE5BF}"
+EndProject
+Project("{E9BBAA10-6422-415E-B4EE-01FE22FED7EF}") = "SnapShotManager_test", "TESTS\SnapShotManager_test\SnapShotManager_test.vcproj", "{02D79798-5E4C-4D58-8167-E034B8F98197}"
+EndProject
+Project("{2B7EFD98-79D2-4DA5-A063-5BFEB1E81A4D}") = "ForceField_test", "TESTS\ForceField_test\ForceField_test.vcproj", "{DFBA69C0-FF59-412D-8C2D-159F6C625202}"
+EndProject
+Project("{0631C7D5-4B2F-4564-9A00-C298F953941F}") = "AmberFF_test", "TESTS\AmberFF_test\AmberFF_test.vcproj", "{F5814DA7-C5E5-451C-B84E-E4C6DDBB2D86}"
+EndProject
+Project("{DAE4CA97-FA51-4641-A7DE-68D599349DAD}") = "MMFF94_test", "TESTS\MMFF94_test\MMFF94_test.vcproj", "{49D7522B-D95A-42A0-AE14-A2EB0C6E6C11}"
+EndProject
+Project("{6B7AB656-3D85-49EA-81B9-51DB2972EECC}") = "CharmmFF_test", "TESTS\CharmmFF_test\CharmmFF_test.vcproj", "{761349EC-9CA6-49EA-8453-28CCC35B0B3A}"
+EndProject
+Project("{5E3991FD-D7F4-4D06-B100-6B81504C91FA}") = "EnergyMinimizer_test", "TESTS\EnergyMinimizer_test\EnergyMinimizer_test.vcproj", "{ACBFA35D-37AC-47CE-8033-E9303E00DA99}"
+EndProject
+Project("{D1B42495-719D-4C75-89B5-DF48E4B783F8}") = "LineSearch_test", "TESTS\LineSearch_test\LineSearch_test.vcproj", "{7DB8EC29-D4B0-48DB-BBAB-16F05E473A9F}"
+EndProject
+Project("{948D751B-EF99-4EE5-9DF2-23BCFFA9A7B7}") = "SteepestDescentMinimizer_test", "TESTS\SteepestDescentMinimizer_test\SteepestDescentMinimizer_test.vcproj", "{BFCD80E3-AF33-4CF4-8052-0AB1AC1F6724}"
+EndProject
+Project("{7F4EA2BE-6C1C-4EEB-8515-C984F1009E3B}") = "ConjugateGradientMinimizer_test", "TESTS\ConjugateGradientMinimizer_test\ConjugateGradientMinimizer_test.vcproj", "{6BE3392A-351D-4196-A43D-0E4513A7CAFA}"
+EndProject
+Project("{EA99F9B3-0541-4AD1-B2F3-EE509D34113C}") = "StrangLBFGSMinimizer_test", "TESTS\StrangLBFGSMinimizer_test\StrangLBFGSMinimizer_test.vcproj", "{558D5479-140B-4E56-A9B4-012FB131A740}"
+EndProject
+Project("{B01F0546-AC7F-46FC-8639-B66BA7580F08}") = "ShiftedLVMMMinimizer_test", "TESTS\ShiftedLVMMMinimizer_test\ShiftedLVMMMinimizer_test.vcproj", "{B1578F46-7E26-4423-BEA6-0C22159BB516}"
+EndProject
+Project("{4AA525DD-8A0A-448C-A98F-4C3CB917BECD}") = "AtomTypes_test", "TESTS\AtomTypes_test\AtomTypes_test.vcproj", "{992F58F4-0487-41DA-A664-80A66AE7FF17}"
+EndProject
+Project("{4EC5B065-9188-43E5-AB4C-B301FE730B27}") = "AssignShiftProcessor_test", "TESTS\AssignShiftProcessor_test\AssignShiftProcessor_test.vcproj", "{B37AA99C-A84F-45F3-BCDD-BE405684652C}"
+EndProject
+Project("{EADC8703-675F-4139-B560-90B7178E49CA}") = "RandomCoilShiftProcessor_test", "TESTS\RandomCoilShiftProcessor_test\RandomCoilShiftProcessor_test.vcproj", "{A2CE6862-2AF4-4C93-A5D3-83E02086F99F}"
+EndProject
+Project("{37C3DBBD-5D2F-434E-AD82-460F56C7735B}") = "AnisotropyShiftProcessor_test", "TESTS\AnisotropyShiftProcessor_test\AnisotropyShiftProcessor_test.vcproj", "{A3AF9BFD-70D6-41E5-806E-E7CA31C2050C}"
+EndProject
+Project("{BF4C8B35-A206-4334-9CDE-C73F635F1FD8}") = "ClearShiftProcessor_test", "TESTS\ClearShiftProcessor_test\ClearShiftProcessor_test.vcproj", "{178BB749-7787-415E-888C-7D8A34B2A82F}"
+EndProject
+Project("{3AA98FD0-6ABE-4A93-949E-5ADE40125DA1}") = "CreateSpectrumProcessor_test", "TESTS\CreateSpectrumProcessor_test\CreateSpectrumProcessor_test.vcproj", "{851B9DDC-2990-4D1A-B851-99CC2449E007}"
+EndProject
+Project("{1FAC8B5C-8F47-42BC-B493-3C7A59E6C3A3}") = "EFShiftProcessor_test", "TESTS\EFShiftProcessor_test\EFShiftProcessor_test.vcproj", "{E3E495ED-7980-476C-94A3-4D4835C5F23A}"
+EndProject
+Project("{8975061D-5785-4B2A-B5A8-712150609DFA}") = "HaighMallionShiftProcessor_test", "TESTS\HaighMallionShiftProcessor_test\HaighMallionShiftProcessor_test.vcproj", "{47868522-A9B4-46F1-A224-46A32EDAC844}"
+EndProject
+Project("{68EDD587-F63C-442B-B34B-9D2055F82E1F}") = "JohnsonBoveyShiftProcessor_test", "TESTS\JohnsonBoveyShiftProcessor_test\JohnsonBoveyShiftProcessor_test.vcproj", "{784713A5-5850-4AF2-870E-9949583B7891}"
+EndProject
+Project("{290FB18C-22FF-4BE0-983E-97C0D261095D}") = "ShiftModel_test", "TESTS\ShiftModel_test\ShiftModel_test.vcproj", "{90DCE833-7A9D-48C6-ABE9-B079B23AA7F4}"
+EndProject
+Project("{8FF0B8F0-90D1-44B8-9304-8250C15E7842}") = "ShiftModule_test", "TESTS\ShiftModule_test\ShiftModule_test.vcproj", "{D56BE4E8-E790-48D8-95A6-2EE5DDCCB14D}"
+EndProject
+Project("{F81DC552-7BE9-4E66-AC5B-E7E627224782}") = "Spectrum_test", "TESTS\Spectrum_test\Spectrum_test.vcproj", "{7DA2EDDC-6F95-4B55-B519-77FF729684BB}"
+EndProject
+Project("{8522E05B-7C09-4277-B5C4-8A56841E33C2}") = "Peak_test", "TESTS\Peak_test\Peak_test.vcproj", "{8C346C4F-69F0-4F1E-82E1-D79FE779D418}"
+EndProject
+Project("{29BC6400-377A-432E-8AE3-3CA9A054FCE9}") = "PeakList_test", "TESTS\PeakList_test\PeakList_test.vcproj", "{051E7B53-96A4-42C2-9C53-7402A05B4E2C}"
+EndProject
+Project("{92720DC5-969A-4B0A-AEBD-1249E8D0143C}") = "LineBasedFile_test", "TESTS\LineBasedFile_test\LineBasedFile_test.vcproj", "{27E5DCAA-7799-42F3-AB57-59D51D05A3C2}"
+EndProject
+Project("{E71DFB96-B787-46E0-B19C-85523AF56535}") = "BinaryFileAdaptor_test", "TESTS\BinaryFileAdaptor_test\BinaryFileAdaptor_test.vcproj", "{B2045F25-815A-42F7-B332-54B49FFF21E0}"
+EndProject
+Project("{BD85D176-40A3-4190-B36B-2F00E1347C67}") = "Bruker1DFile_test", "TESTS\Bruker1DFile_test\Bruker1DFile_test.vcproj", "{F9A89BDB-B9FA-465E-B32B-1078CD0694B9}"
+EndProject
+Project("{86B5441B-7A46-40DD-8CFD-13CB063B1C26}") = "Bruker2DFile_test", "TESTS\Bruker2DFile_test\Bruker2DFile_test.vcproj", "{6EF9E897-50D9-4B47-8179-0C607EEFA6E8}"
+EndProject
+Project("{FA1C7A91-615D-4FFD-87AC-CF1E31E092FC}") = "INIFile_test", "TESTS\INIFile_test\INIFile_test.vcproj", "{163DBBA4-5464-4AEE-A9F3-D49160175DB7}"
+EndProject
+Project("{C859F14D-0294-42BC-9A0C-6DD03BCB5C57}") = "JCAMPFile_test", "TESTS\JCAMPFile_test\JCAMPFile_test.vcproj", "{C3647B57-BCC4-47FB-BF1E-2FEF4F6DDF83}"
+EndProject
+Project("{55B999C6-BA4C-4999-8EA3-F1F6726CD2CB}") = "KCFFile_test", "TESTS\KCFFile_test\KCFFile_test.vcproj", "{9B9BCDC6-E6CE-4398-96AF-02B804BDFE53}"
+EndProject
+Project("{A4750A8F-FFD5-4AF3-B24C-46E1B676F34F}") = "Parameters_test", "TESTS\Parameters_test\Parameters_test.vcproj", "{08D10A7D-15A8-48C1-841B-7704B00D0B14}"
+EndProject
+Project("{56976191-706F-4C67-8627-2F8523D3F8C9}") = "ParameterSection_test", "TESTS\ParameterSection_test\ParameterSection_test.vcproj", "{4A5F6A0D-72A1-463C-9051-AB8145484F3C}"
+EndProject
+Project("{3CB7CB20-B37B-4967-A4B2-DF6F5974304D}") = "ResourceFile_test", "TESTS\ResourceFile_test\ResourceFile_test.vcproj", "{6F3AFE89-8779-472E-9934-E340FD0CE9A3}"
+EndProject
+Project("{F5DD7216-A999-467C-A73D-9C8006662F5A}") = "GenericMolFile_test", "TESTS\GenericMolFile_test\GenericMolFile_test.vcproj", "{F2C1B61E-C16D-48F0-850F-7AA2AC6A89AF}"
+EndProject
+Project("{BAB22D03-D2F6-400C-9F77-D359C2C8B797}") = "HINFile_test", "TESTS\HINFile_test\HINFile_test.vcproj", "{3E9E7D31-258D-4B36-BA8A-8514DBF97E86}"
+EndProject
+Project("{20D7B0DB-FDD0-42B9-AF16-481DEE085193}") = "MOLFile_test", "TESTS\MOLFile_test\MOLFile_test.vcproj", "{5915C1C8-F677-41FA-B421-340AEDA00F87}"
+EndProject
+Project("{793B6192-CE4A-4DF9-BAB0-16B86BE69BC4}") = "SDFile_test", "TESTS\SDFile_test\SDFile_test.vcproj", "{2BA5E094-4DB4-4B74-8F98-05A089569981}"
+EndProject
+Project("{FA692506-8D92-4F48-B883-FBD9521D6A87}") = "MOL2File_test", "TESTS\MOL2File_test\MOL2File_test.vcproj", "{45E02CE7-61C3-4157-8760-229C611C59CD}"
+EndProject
+Project("{B714AB3B-32D6-4D56-9462-DE5AC88397BE}") = "NMRStarFile_test", "TESTS\NMRStarFile_test\NMRStarFile_test.vcproj", "{3190C92B-3449-4E87-BD00-B0C60440C6A9}"
+EndProject
+Project("{7A6387D8-1398-4B11-972B-9915D9BB66C8}") = "DCDFile_test", "TESTS\DCDFile_test\DCDFile_test.vcproj", "{0FD30361-2266-4456-A5EE-B9D7B39CB1A0}"
+EndProject
+Project("{9CE46C2C-EF33-4A34-B957-0096D1D95E3F}") = "PDBRecords_test", "TESTS\PDBRecords_test\PDBRecords_test.vcproj", "{5E24817B-9641-456E-88F5-8B59D24D91FE}"
+EndProject
+Project("{5F0B2007-5417-4321-837D-75947F0149C5}") = "PDBInfo_test", "TESTS\PDBInfo_test\PDBInfo_test.vcproj", "{3C79B762-3A7A-4A9E-BFEB-EC15388DCE0F}"
+EndProject
+Project("{ECA02361-2622-4A30-A1FB-194AEC5C56D3}") = "PDBFile_test", "TESTS\PDBFile_test\PDBFile_test.vcproj", "{DE898A35-7566-489D-977D-03B0DBB6755F}"
+EndProject
+Project("{9B4D9204-63C9-450A-86DD-AADB5E556A1C}") = "TrajectoryFile_test", "TESTS\TrajectoryFile_test\TrajectoryFile_test.vcproj", "{FF9972D3-6698-475A-9732-9F4EDBAB240F}"
+EndProject
+Project("{AD5CDEFF-A702-4288-BF66-1A76BCF49189}") = "XYZFile_test", "TESTS\XYZFile_test\XYZFile_test.vcproj", "{FDDDA37B-7EB4-496B-8EE0-E144B285B23E}"
+EndProject
+Project("{A4624A7A-0F76-47A5-9EC2-CEC17E95A9FC}") = "SCWRLRotamerFile_test", "TESTS\SCWRLRotamerFile_test\SCWRLRotamerFile_test.vcproj", "{3E35B828-BCA0-474C-9962-0DE8BD6D8B82}"
+EndProject
+Project("{23CFCADF-9B56-4300-A7B0-6C036663CF6B}") = "AtomicContactEnergy_test", "TESTS\AtomicContactEnergy_test\AtomicContactEnergy_test.vcproj", "{ACD21E97-5F99-4C8C-8441-B3C6138560CA}"
+EndProject
+Project("{00ECC9C2-E3C6-4D5C-9BE0-91B13EA1F875}") = "ComposedEnergyProcessor_test", "TESTS\ComposedEnergyProcessor_test\ComposedEnergyProcessor_test.vcproj", "{758DDBC9-CDE7-4712-93F7-58EE9580AB7C}"
+EndProject
+Project("{9A560948-D24E-4016-AFBB-326619E2A82E}") = "EnergyProcessor_test", "TESTS\EnergyProcessor_test\EnergyProcessor_test.vcproj", "{AA022B90-B2C8-4DFA-8604-C986A8A6D46B}"
+EndProject
+Project("{AFB8FD39-7695-4AB2-B6DB-1C25BB49F18A}") = "OoiEnergy_test", "TESTS\OoiEnergy_test\OoiEnergy_test.vcproj", "{4522593B-CECD-49E4-A34A-E012CD1423A5}"
+EndProject
+Project("{8A8D3709-8C8B-4EAB-9CA5-8026E4B7CE20}") = "Enumerator_test", "TESTS\Enumerator_test\Enumerator_test.vcproj", "{96893005-F86E-420A-890B-72FF8F55E731}"
+EndProject
+Project("{B69FC485-AB1A-43CA-AA0E-584CF20B8690}") = "EnumeratorIndex_test", "TESTS\EnumeratorIndex_test\EnumeratorIndex_test.vcproj", "{94662230-3808-4AEE-8982-FB72F35DD56E}"
+EndProject
+Project("{4219A618-0A7D-4EAD-A957-2A27705EBDC7}") = "AnalyticalSES_test", "TESTS\AnalyticalSES_test\AnalyticalSES_test.vcproj", "{3DDE7EAB-BCE3-45FB-9200-12A768FE7D97}"
+EndProject
+Project("{B5B55C51-B4B8-4191-B6BA-214EFF2987A8}") = "MolecularGraph_test", "TESTS\MolecularGraph_test\MolecularGraph_test.vcproj", "{915E48DC-0689-4624-949F-9176C4558BD4}"
+EndProject
+Project("{563FA135-B72E-466F-AABC-3C4B7A899065}") = "NumericalSAS_test", "TESTS\NumericalSAS_test\NumericalSAS_test.vcproj", "{1DFEFFFE-FCC3-4433-9712-D258DD4FEA19}"
+EndProject
+Project("{B6985C41-7CEE-42CA-AA43-A417B8F05142}") = "PeptideBuilder_test", "TESTS\PeptideBuilder_test\PeptideBuilder_test.vcproj", "{949DE578-0956-4FF0-9755-2B84BD1C24B4}"
+EndProject
+Project("{FD61692B-0E8F-473C-8534-C3A7D308E9F4}") = "Peptides_test", "TESTS\Peptides_test\Peptides_test.vcproj", "{E6F37426-B8D0-4C6C-A53F-B6BDD921A77C}"
+EndProject
+Project("{50287A03-9FE0-4A3D-9B05-90EB11E5378D}") = "RadialDistributionFunction_test", "TESTS\RadialDistributionFunction_test\RadialDistributionFunction_test.vcproj", "{13BB723C-2D5B-440A-BA37-C5E5F8DC43DB}"
+EndProject
+Project("{020A9E95-AC90-41A8-BEC6-E078112DBB4C}") = "RDFIntegrator_test", "TESTS\RDFIntegrator_test\RDFIntegrator_test.vcproj", "{D8C2836E-6376-4176-A9B5-7CEF1570978E}"
+EndProject
+Project("{567B8100-26E8-49A2-835A-4F8B0B928526}") = "RDFParameter_test", "TESTS\RDFParameter_test\RDFParameter_test.vcproj", "{D04D3108-8EB5-4B67-B10F-121942445328}"
+EndProject
+Project("{D2FC91FC-3B32-4563-836D-A186C0E11C78}") = "RDFSection_test", "TESTS\RDFSection_test\RDFSection_test.vcproj", "{874CC8FE-3172-4593-BE7B-50612F05562E}"
+EndProject
+Project("{F9B9B129-770A-41EE-B975-E8DDC0FC3CC1}") = "ReconstructFragmentProcessor_test", "TESTS\ReconstructFragmentProcessor_test\ReconstructFragmentProcessor_test.vcproj", "{53339AC3-FE9E-4213-B9BF-9A389729ED08}"
+EndProject
+Project("{408AC32E-3340-4721-B6B0-CD041D65D320}") = "ResidueChecker_test", "TESTS\ResidueChecker_test\ResidueChecker_test.vcproj", "{B24BBF3C-347E-4AAD-A882-D7B22294EA49}"
+EndProject
+Project("{5E96DACF-5893-44D9-A405-539A223554BF}") = "SmilesParser_test", "TESTS\SmilesParser_test\SmilesParser_test.vcproj", "{7AC52B15-2831-4D10-BE06-C03BBC9347BE}"
+EndProject
+Project("{583071A2-EEEF-44C6-86C4-862EB55283E2}") = "AtomBijection_test", "TESTS\AtomBijection_test\AtomBijection_test.vcproj", "{431E2D0D-564F-4A2A-8C5F-D850F6F9BBA7}"
+EndProject
+Project("{0A7A1516-2ACC-4ED0-81D3-8E52597A9153}") = "SmartsParser_test", "TESTS\SmartsParser_test\SmartsParser_test.vcproj", "{E2D63137-B845-4DE5-9D3E-D8EE99B0700F}"
+EndProject
+Project("{579896AE-6F77-42D1-A2F8-6673A60E4D5A}") = "SmartsMatcher_test", "TESTS\SmartsMatcher_test\SmartsMatcher_test.vcproj", "{3445CBA7-503E-495F-A2FB-12EBDD6C153F}"
+EndProject
+Project("{DEEBCF5E-4215-4A74-B128-5C3F1743E0DE}") = "StructureMapper_test", "TESTS\StructureMapper_test\StructureMapper_test.vcproj", "{FA779452-DB51-4F0E-BA7A-F98690891E1D}"
+EndProject
+Project("{9554AE72-5666-42B1-BA83-7B94B55A81BE}") = "TransformationProcessor_test", "TESTS\TransformationProcessor_test\TransformationProcessor_test.vcproj", "{8EC1B945-F4D3-47F1-B6F8-426DF2A24CE0}"
+EndProject
+Project("{04442B84-E9E9-4667-96A0-968A04FACE98}") = "TranslationProcessor_test", "TESTS\TranslationProcessor_test\TranslationProcessor_test.vcproj", "{F2C38D2B-38C4-4285-85D1-96368B3B922B}"
+EndProject
+Project("{027343E1-02EB-4B89-9F87-5832ADA30AFF}") = "SurfaceProcessor_test", "TESTS\SurfaceProcessor_test\SurfaceProcessor_test.vcproj", "{C3BDE551-83D0-44C4-A7A6-719683E15AC9}"
+EndProject
+Project("{EE0B414B-E4DF-4967-8861-FD2BF527ED31}") = "SecondaryStructureProcessor_test", "TESTS\SecondaryStructureProcessor_test\SecondaryStructureProcessor_test.vcproj", "{08BEEA6E-F4CC-49EC-99B7-CC6D5FA33399}"
+EndProject
+Project("{AFAC54F4-E8D2-4C23-860F-9BBB67B5A15C}") = "UCK_test", "TESTS\UCK_test\UCK_test.vcproj", "{14DE4C5A-ABA3-4BB2-A43C-E35B52342D64}"
+EndProject
+Project("{57B53E85-4ED8-4CB5-9912-66311BFA6D32}") = "BuildBondsProcessor_test", "TESTS\BuildBondsProcessor_test\BuildBondsProcessor_test.vcproj", "{C4DE9D4F-569A-404B-A877-A4FCF89A5AA5}"
+EndProject
+Project("{5DBCC71F-07AB-4989-B9BD-803852E5E476}") = "DockResult_test", "TESTS\DockResult_test\DockResult_test.vcproj", "{EB0DD114-C260-402A-991B-5AD95CB49758}"
+EndProject
+Project("{EFA3868B-FC46-4A15-8E82-7350EC042489}") = "MoleculeAssembler_test", "TESTS\MoleculeAssembler_test\MoleculeAssembler_test.vcproj", "{BC65C3E8-2958-4A84-AF6E-7766C228A3DA}"
+EndProject
+Project("{495098AE-DFF6-4AB3-BB19-A0C26FC34ED9}") = "SDGenerator_test", "TESTS\SDGenerator_test\SDGenerator_test.vcproj", "{EE95DD94-A666-4BDB-8AC1-ABA23CE67F99}"
+EndProject
+Project("{C0CC45D9-A985-4963-95F2-F1F4E3A3EF1B}") = "ChainBuilder_test", "TESTS\ChainBuilder_test\ChainBuilder_test.vcproj", "{196B5C85-40E9-4370-A0DD-234DDECA31DC}"
+EndProject
+Project("{03CA66A7-A548-4DB0-AB36-D16003BFF5E3}") = "RSConstructor_test", "TESTS\RSConstructor_test\RSConstructor_test.vcproj", "{0898AE61-9BBF-4076-AD3C-E4C53DF205FE}"
+EndProject
+Project("{CB88706B-AC28-4873-B83E-A2752BE56EDB}") = "RingAnalyser_test", "TESTS\RingAnalyser_test\RingAnalyser_test.vcproj", "{D4067FFD-0B7A-42D4-8C42-1D03E4BC639F}"
+EndProject
+Project("{D5281BE7-204C-4F74-A870-B533B10E82CF}") = "RingClusterer_test", "TESTS\RingClusterer_test\RingClusterer_test.vcproj", "{B46A6434-9ABA-4368-8CD6-4C3A52C58504}"
+EndProject
+Project("{3289AAFF-B213-48B5-BF27-BA6F9126BA52}") = "ResidueRotamerSet_test", "TESTS\ResidueRotamerSet_test\ResidueRotamerSet_test.vcproj", "{2CDF5158-76AB-4753-9620-E3F8DA06E54C}"
+EndProject
+Project("{AAA54404-C5C6-4F98-B609-5DBBB3D17E50}") = "RotamerLibrary_test", "TESTS\RotamerLibrary_test\RotamerLibrary_test.vcproj", "{15930083-972D-4442-98AD-EE978883837A}"
+EndProject
+Project("{7F36111C-10A5-42A6-A8D9-060FC72C4ADB}") = "PoissonBoltzmann_test", "TESTS\PoissonBoltzmann_test\PoissonBoltzmann_test.vcproj", "{6D088509-AEC8-4045-B99B-69CA3A1B189D}"
+EndProject
+Project("{2C06F48B-79A9-4F43-B784-C4BA827D0217}") = "SolventDescriptor_test", "TESTS\SolventDescriptor_test\SolventDescriptor_test.vcproj", "{481A3524-F848-4F12-B2B3-A49EA0BBAC34}"
+EndProject
+Project("{9C4C1BCC-886B-4039-A898-5B74FFA813DA}") = "SolventParameter_test", "TESTS\SolventParameter_test\SolventParameter_test.vcproj", "{99DE7B52-032C-4CB4-ADB2-48595A2398D5}"
+EndProject
+Project("{802212A2-9386-4532-A955-443D3EDDFFCB}") = "ClaverieParameter_test", "TESTS\ClaverieParameter_test\ClaverieParameter_test.vcproj", "{BEE41BD9-E045-4348-8852-80D257B42883}"
+EndProject
+Project("{D0CA6598-2911-466D-BDA3-413ABAC57FC1}") = "ReissCavFreeEnergyProcessor_test", "TESTS\ReissCavFreeEnergyProcessor_test\ReissCavFreeEnergyProcessor_test.vcproj", "{993E5357-C9FB-408E-A0C8-A1EF25F82901}"
+EndProject
+Project("{5705EA3B-2435-4F03-A2D3-BAF182443A3A}") = "UhligCavFreeEnergyProcessor_test", "TESTS\UhligCavFreeEnergyProcessor_test\UhligCavFreeEnergyProcessor_test.vcproj", "{FC5DEF34-9FDB-46F3-A2AF-FD28FFAAA709}"
+EndProject
+Project("{25C2755F-63CF-4CA0-99D2-3A5111B66A09}") = "PCMCavFreeEnergyProcessor_test", "TESTS\PCMCavFreeEnergyProcessor_test\PCMCavFreeEnergyProcessor_test.vcproj", "{866AE6C3-0122-40A4-9CB1-CBFB98C148EE}"
+EndProject
+Project("{022867A7-FAB1-4809-99CE-7C91A4805151}") = "PierottiCavFreeEnergyProcessor_test", "TESTS\PierottiCavFreeEnergyProcessor_test\PierottiCavFreeEnergyProcessor_test.vcproj", "{DFAD2054-0AF9-449E-8DB5-FE660D8D2553}"
+EndProject
+Project("{478CA47D-7B98-4E15-AF71-70F873B534A0}") = "Pair6_12RDFIntegrator_test", "TESTS\Pair6_12RDFIntegrator_test\Pair6_12RDFIntegrator_test.vcproj", "{60B3D559-5792-4125-8C9A-B4156A31E171}"
+EndProject
+Project("{30A0B4B3-276C-4778-B216-9C17931BC537}") = "Pair6_12InteractionEnergyProcessor_test", "TESTS\Pair6_12InteractionEnergyProcessor_test\Pair6_12InteractionEnergyProcessor_test.vcproj", "{2CDBDEE9-A5A9-42AC-8E4A-CC5F43723791}"
+EndProject
+Project("{4D375E4F-3214-4F6E-BA85-606A41FD0FC5}") = "PairExpInteractionEnergyProcessor_test", "TESTS\PairExpInteractionEnergyProcessor_test\PairExpInteractionEnergyProcessor_test.vcproj", "{E1931272-F24F-47F9-9EA6-59C8360A09E9}"
+EndProject
+Project("{8858141D-2597-4722-B529-D836674437BE}") = "PairExpRDFIntegrator_test", "TESTS\PairExpRDFIntegrator_test\PairExpRDFIntegrator_test.vcproj", "{BC6CFAF7-0039-4528-84D5-B18A30B16943}"
+EndProject
+Project("{87E75421-028A-4E22-927E-345E801F349C}") = "PARSE_test", "TESTS\PARSE_test\PARSE_test.vcproj", "{DAAABC5A-42CD-4F69-AB5E-24092AB6B3B3}"
+EndProject
+Project("{6074B61A-1CEE-419C-B99B-29ACC637A0BD}") = "AromaticityProcessor_test", "TESTS\AromaticityProcessor_test\AromaticityProcessor_test.vcproj", "{06C155DE-880C-4C09-98D8-B14363EB34A2}"
+EndProject
+Project("{6EE2F48C-615D-4900-BBAE-6E464C13FE0A}") = "ConnectivityBase_test", "TESTS\ConnectivityBase_test\ConnectivityBase_test.vcproj", "{2C71CE45-1C4C-4770-9209-0F58D7701D6F}"
+EndProject
+Project("{8EFB9D0D-17FA-4E28-B0F5-63C25701A4C9}") = "ConnectivityDescriptors_test", "TESTS\ConnectivityDescriptors_test\ConnectivityDescriptors_test.vcproj", "{1D70177B-3ED2-46EF-BE18-B36746FB8FC8}"
+EndProject
+Project("{06935D39-E681-42B0-AA9C-3392B5929704}") = "Descriptor_test", "TESTS\Descriptor_test\Descriptor_test.vcproj", "{E332C277-A047-4226-A86B-ABE55D2B17AC}"
+EndProject
+Project("{169AA7AE-024E-480B-9009-5B9EC91FA981}") = "PartialChargeProcessor_test", "TESTS\PartialChargeProcessor_test\PartialChargeProcessor_test.vcproj", "{D053CDB0-F5A1-40EC-A7E6-1D8FCD9DA610}"
+EndProject
+Project("{20A2982F-C150-4C0B-909D-FEC0207E368D}") = "PartialChargeBase_test", "TESTS\PartialChargeBase_test\PartialChargeBase_test.vcproj", "{319B5E46-4FEE-42FF-A2D1-56751FF8D11F}"
+EndProject
+Project("{91303D0F-652F-4E4F-B3DB-951DD7DCB194}") = "PartialChargeDescriptors_test", "TESTS\PartialChargeDescriptors_test\PartialChargeDescriptors_test.vcproj", "{91E06172-D910-4E05-88F2-84DAEBC15BCD}"
+EndProject
+Project("{08396321-DECB-4423-A7FB-AF0AC82FACBF}") = "RingPerceptionProcessor_test", "TESTS\RingPerceptionProcessor_test\RingPerceptionProcessor_test.vcproj", "{C8ED8122-6BBF-4C24-B5AC-8351D05D0533}"
+EndProject
+Project("{EE6859A1-ED35-41D0-B22D-21441E4E6A88}") = "SimpleBase_test", "TESTS\SimpleBase_test\SimpleBase_test.vcproj", "{901ADC1B-3D11-4ACA-9737-753583290137}"
+EndProject
+Project("{CC2B07B2-0D93-4D04-A8B0-2EEC70E998EE}") = "SimpleDescriptors_test", "TESTS\SimpleDescriptors_test\SimpleDescriptors_test.vcproj", "{D4DBCBFF-33F0-4E3C-BD6B-15BF9B83DE22}"
+EndProject
+Project("{1FA9245B-BF42-4E0F-A3A9-431086427DAA}") = "SurfaceBase_test", "TESTS\SurfaceBase_test\SurfaceBase_test.vcproj", "{06038212-2B15-4C2F-BA09-46438C4C3FBF}"
+EndProject
+Project("{F225932B-25BE-45A5-B8DD-FDD6BB868A03}") = "SurfaceDescriptors_test", "TESTS\SurfaceDescriptors_test\SurfaceDescriptors_test.vcproj", "{47E975E7-A1CE-4D1A-AF77-46B21E222200}"
+EndProject
+Project("{93F358FB-FEE5-4D5A-9935-37329999A8A3}") = "XDRPersistenceManager_test", "TESTS\XDRPersistenceManager_test\XDRPersistenceManager_test.vcproj", "{E117BBFD-E098-4D7A-A468-4608C792A59C}"
+EndProject
+Project("{A806F508-36A4-48F5-BB9A-07913FBB9B05}") = "BallAndStickModel_test", "TESTS\BallAndStickModel_test\BallAndStickModel_test.vcproj", "{D82E03DE-8789-4A1D-AB1E-C2F1E0E7BC79}"
+EndProject
+Project("{A549AD89-0267-49C8-B4C5-B09668D9746A}") = "AddCartoonModel_test", "TESTS\AddCartoonModel_test\AddCartoonModel_test.vcproj", "{612D4118-5369-4158-8FEC-9F4FA177C940}"
+EndProject
+Project("{03569EEE-2783-4242-9751-1E6A5080B624}") = "LabelModel_test", "TESTS\LabelModel_test\LabelModel_test.vcproj", "{A1BA745A-D0BA-4EFE-AF99-E3EBF90ADBBD}"
+EndProject
+Project("{E73F5408-B2E1-403A-8485-D0ACA6CE6B11}") = "LineModel_test", "TESTS\LineModel_test\LineModel_test.vcproj", "{093BB872-4274-445E-8FCE-93669F0475ED}"
+EndProject
+Project("{48459796-27D0-46B9-9D15-CDDDF92F8C9A}") = "SurfaceModel_test", "TESTS\SurfaceModel_test\SurfaceModel_test.vcproj", "{7A1CBF5D-F705-4BF7-8CA6-2765133C8EF7}"
+EndProject
+Project("{118DBA48-6E79-4117-A8AA-9E649FAC9EBC}") = "HBondModel_test", "TESTS\HBondModel_test\HBondModel_test.vcproj", "{88E43CCE-70F0-4696-B2D4-8526ED28B0C5}"
+EndProject
+Project("{8A55424E-2A64-4533-A835-C59E5676A5F4}") = "ColorRGBA_test", "TESTS\ColorRGBA_test\ColorRGBA_test.vcproj", "{E836F04D-4E3B-490C-9B79-6A9068D6E5FA}"
+EndProject
+Project("{0D264930-D32A-4655-B051-83C8ED6290A7}") = "RMSDMinimizer_test", "TESTS\RMSDMinimizer_test\RMSDMinimizer_test.vcproj", "{4051412E-3220-44FD-B259-87E738AA2A1C}"
+EndProject
+Project("{E1B9AD40-7C53-4AA2-A5AE-BF9B8CB61DB0}") = "DBInterface_test", "TESTS\DBInterface_test\DBInterface_test.vcproj", "{B5378A0A-BD3C-4482-8A10-B7CBE149040C}"
+EndProject
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "computeNewGUID", "computeNewGUID\computeNewGUID.vbproj", "{25070DA4-342B-404D-8A22-3D5B5402D96F}"
 EndProject
@@ -88,16 +575,6 @@ Global
 		{1C95B07B-2F01-43C3-A619-635E5CE9DF01}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{1C95B07B-2F01-43C3-A619-635E5CE9DF01}.Release|Win32.ActiveCfg = Release|Win32
 		{1C95B07B-2F01-43C3-A619-635E5CE9DF01}.Release|Win32.Build.0 = Release|Win32
-		{8C25F14C-4F23-42E5-9E80-B41C518542F0}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{8C25F14C-4F23-42E5-9E80-B41C518542F0}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{8C25F14C-4F23-42E5-9E80-B41C518542F0}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{8C25F14C-4F23-42E5-9E80-B41C518542F0}.Debug|Win32.ActiveCfg = Debug|Win32
-		{8C25F14C-4F23-42E5-9E80-B41C518542F0}.Debug|Win32.Build.0 = Debug|Win32
-		{8C25F14C-4F23-42E5-9E80-B41C518542F0}.Release|Any CPU.ActiveCfg = Release|Win32
-		{8C25F14C-4F23-42E5-9E80-B41C518542F0}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{8C25F14C-4F23-42E5-9E80-B41C518542F0}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{8C25F14C-4F23-42E5-9E80-B41C518542F0}.Release|Win32.ActiveCfg = Release|Win32
-		{8C25F14C-4F23-42E5-9E80-B41C518542F0}.Release|Win32.Build.0 = Release|Win32
 		{25070DA4-342B-404D-8A22-3D5B5402D96F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{25070DA4-342B-404D-8A22-3D5B5402D96F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25070DA4-342B-404D-8A22-3D5B5402D96F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -113,7 +590,250 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{8C25F14C-4F23-42E5-9E80-B41C518542F0} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{5041CB64-9336-4682-BB35-AE6DE7CBFC00} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{AD64F059-6CAA-46F7-9FEC-005059D109CE} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{81D98903-4DBD-4A43-A725-F83D4B75E178} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{7706E467-CF2E-4125-965F-A59F610E3EBA} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{45B653CE-50F4-4B94-BF65-B43582457972} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{0862B221-7B20-4804-93A6-275EE49726A7} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{A0B64AA7-ED14-4B80-940D-B2E0B715C7E6} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{C3929438-6A38-4763-B4F9-8C20E7F59C08} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{333B115B-0943-416A-91A5-6FF658BDA8F0} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{539C3F12-E329-468B-A9D0-C66E9F8FE25E} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{F58653C1-18A5-47ED-A29C-9E860A3BDAAE} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{2B6BCD44-3F92-4A5A-9BBB-11F9265C2CEF} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{B484EAF9-D62E-46ED-8905-AF7238E4E9FF} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{1B1A0411-1533-49C3-9147-46387C7E311C} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{EEECBD47-9FE6-475A-9AE1-3F962467A1DE} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{B2967A55-0E12-4555-A1EE-FF58E818F85C} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{A145FDBE-9DB3-438B-8EFE-493C23DEEA92} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{6AD29D2F-CBFC-4B6D-9896-AB067301A55D} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{12C64B9D-9C1F-40B8-8769-306EA340FA16} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{3F702B65-30B5-4F2E-94F6-F8699FD34441} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{AD6A3344-6AA5-42E5-A116-C26554128AF0} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{D966CE30-A30B-43C9-9A52-9FF8DE7D7948} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{B966B3EB-9EB1-4CD9-B9CB-1E384F7CCBA8} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{2D414C7D-0EEF-4A7C-B25D-F79AAF262283} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{ECE1786F-7FEF-4A05-8E77-EA6C01132FAB} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{08078746-4444-4728-A210-B7977DE2F460} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{CA2793C5-4DD9-479E-B0AC-0340C70A3929} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{9090BE09-9A27-460E-9522-D1B6B46524C3} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{65A31D05-7812-4DE1-B139-60084BFC43D3} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{D34923E3-81C3-4D9B-8B0A-39FC46A45E62} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{34EFBCFC-9102-4639-B3E1-90E25451E3A8} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{B6D7D840-10B2-430B-A12B-ADA75AA0C2A6} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{E95DD153-0333-48CE-8C96-BE3F7414C7F4} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{B19B1499-F11E-4B7D-929D-3C53C7113B12} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{5C8FAABD-2A8B-4302-BE72-59A464D53243} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{F35080AE-AFB4-4F58-BEA7-8AC5ED982C23} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{F3F9523E-0B87-40AB-BE43-237636F54902} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{73159AD8-BB65-4854-8D3A-37CC6399E65D} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{2F170464-1D63-4288-8FDD-F1ECB713C22D} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{A4F2683A-8C31-4550-BBA8-698B515DE68F} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{3F59E4E0-1A32-429B-9866-4399C1FC4C31} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{E90F8365-4A08-4767-8F61-D7842FBC3DBC} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{82F2D988-AA2D-4ED2-A0B8-B72DB93B0381} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{7862C3C3-3CE5-43C6-821C-FBA6D810FD4A} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{A95DBBA5-0290-44A7-88C5-F549C04911D2} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{0066FE76-E603-421A-AB2E-58E68763CA69} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{702D8F2C-7054-422E-83FB-9B32EB42A355} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{8FCC928A-6614-4B6A-98C2-D3B9C61056DD} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{F5A1D790-B2C3-4A87-9862-BBB18B089B6C} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{D046F76E-85FD-472F-B485-F9A54BE27B0E} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{5C5DDC88-7A73-44FB-8374-0FE6595E370D} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{14DE697E-9DAD-4A7B-97AE-B2D9D754720C} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{7504A6A7-8CAC-49EA-8AB8-9FC09416A7DA} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{BDF950B8-54DA-4DB5-A177-F0685492FEF7} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{68E5AB59-82AD-4FCC-81CC-B174431E5A22} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{11714DEF-F6E9-4A3E-825F-35975FD1408C} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{E9B27867-CCA6-43AB-9AE5-452A273E07ED} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{DB0307F5-9EE4-47B3-A50D-7F2D703C7D0D} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{D1809544-2D5C-4E5C-99F4-0E555105AEA0} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{9FE3E233-5583-4D35-B8FC-D11FD7E85C2B} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{8DEBEB89-4A29-4927-8BE5-84A980980194} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{CEA67776-4028-471A-9CEB-2014F910272F} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{960A8227-A24E-4669-9342-72CF1CE2CD96} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{DB810ABB-3553-474A-8DC7-938A5ADC3F31} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{25C2A56C-3D73-44E4-8ADA-BAAC77F9CAAE} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{06D06D73-1CA3-4781-B197-A99003C157AC} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{D6C92165-5667-439A-AE87-02B214D3D731} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{4EAB6471-57C8-4B65-856B-31E372C84008} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{222900BB-7966-4DDE-BBF9-4199A9B5B554} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{5851FCD8-0A38-4A68-BBBC-F8EB468D10BC} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{6359ECB0-D201-4D97-BE4F-05E8FA4F24BC} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{F742E924-1BAF-4FE5-8278-D3F94A27095B} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{591911C2-8FA3-4BA9-8CA4-B6896864914B} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{94271134-9576-42C3-B8AC-DFE5B6C6EA4F} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{C70CA7D7-5A1F-455B-91B6-D5AC22AEF4F8} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{3A656A95-F702-4875-B678-73C218B3C545} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{7C92454F-E98F-4BA4-A83F-02CA4B39D323} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{7E7F79AF-6E80-46B1-BFAC-F979BCCF5CF3} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{A1140055-4064-468B-A798-804DFE52F9AB} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{0B1D48D6-B205-4094-AA6B-299033839BAE} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{6EBB6C8C-B54C-493E-964C-60BF914FD1D8} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{15B89B8A-B274-4CC2-BC1A-CC15AEACEB20} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{9B0D37AB-5905-4EA5-9D85-63AB3B8DC5E2} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{78092C09-6C92-48AD-A160-A1B94A090730} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{C6D45C03-6C8E-42FA-93AC-431F0C546D52} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{71F9B14E-D464-4302-8903-C7D964DCB64A} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{5552FC42-2FDA-45DA-9805-960FCD71CFD2} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{0159160D-92CA-48E7-BF0A-EB8D2B4A90C5} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{4F4F2924-B485-4AE5-A78E-A1BA9D499595} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{9405F8FB-A0C2-4E7D-887B-A8B7AD8715B5} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{68094A42-6502-4A6C-94F1-99F1AB86E38E} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{3BE8082C-7C8D-4D9C-84DC-3A0BCAD746E4} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{9371DBA5-BF78-4FA4-A045-4B688C216EA7} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{9B4CE04A-A301-4340-8378-585406E97F84} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{6FD60149-5031-4735-8681-6E5C1E5760BB} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{59681BBB-E0B9-4800-8C67-58E9A9B312CB} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{4FC8F47D-66AD-4327-9CDB-01340DF04C6A} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{9AB0C3AC-4EC2-43C1-B2F0-DE7BA1EA22E6} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{7CF83401-77A6-4EA4-AF58-8F348C78ABA5} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{1C1A1FCF-1CC8-491E-A8DE-6A6D9BE74740} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{468A0B9E-9A2A-45D3-A104-5E3AA017A735} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{2B3A7B92-9D22-40E3-B603-B7DC5A5FCAF1} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{456B49D6-E999-4ADF-A484-7424C44ABA90} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{D1A2B50B-B712-420D-888E-C73631F934C1} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{188A4B9B-A185-401C-82D1-958F308A48E2} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{8CB908CF-1048-4F4D-9657-ADC2CED5F359} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{551D7714-B19A-4169-AFE6-627B709AC805} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{A6EEDC68-8DFC-4AE5-9C03-1AC57156F4EA} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{8AC918E9-25B1-47B8-8320-B23CD4156B11} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{5B3A0E22-1E1B-4084-8418-B615DFAF78B2} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{8A225AB6-8493-44DF-8E50-2F6DFB306069} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{6626316B-B5F2-4DED-B394-397F479A8CC7} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{1917CDE9-8A10-4693-86E7-D2A1003AF3BB} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{66379634-7F29-4EED-B0FD-5FB9CECFAF47} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{00DCF49E-4613-4CED-8D55-8E1157E35389} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{207EFF6C-125E-43A1-8B4A-D777022C3C80} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{A6F92A30-AB1C-46C4-9AC6-5D371098536B} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{4D374126-C5EA-4487-AEF1-1C233D6E26FC} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{9ADACACB-D034-49D4-9B7A-D8C7CF6539A7} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{4F3FF4A2-58B8-456F-A530-F3CE76174079} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{6523CBF1-910C-4202-94F0-3DDF8B3E382E} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{4CE548D7-6C4A-4CAD-B145-81FF3C538E81} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{B5C6DB27-EE86-4465-B4BC-1BCF758EA5F2} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{8C9A1258-1128-43EB-B26F-8895BB5BE5BF} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{02D79798-5E4C-4D58-8167-E034B8F98197} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{DFBA69C0-FF59-412D-8C2D-159F6C625202} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{F5814DA7-C5E5-451C-B84E-E4C6DDBB2D86} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{49D7522B-D95A-42A0-AE14-A2EB0C6E6C11} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{761349EC-9CA6-49EA-8453-28CCC35B0B3A} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{ACBFA35D-37AC-47CE-8033-E9303E00DA99} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{7DB8EC29-D4B0-48DB-BBAB-16F05E473A9F} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{BFCD80E3-AF33-4CF4-8052-0AB1AC1F6724} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{6BE3392A-351D-4196-A43D-0E4513A7CAFA} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{558D5479-140B-4E56-A9B4-012FB131A740} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{B1578F46-7E26-4423-BEA6-0C22159BB516} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{992F58F4-0487-41DA-A664-80A66AE7FF17} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{B37AA99C-A84F-45F3-BCDD-BE405684652C} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{A2CE6862-2AF4-4C93-A5D3-83E02086F99F} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{A3AF9BFD-70D6-41E5-806E-E7CA31C2050C} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{178BB749-7787-415E-888C-7D8A34B2A82F} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{851B9DDC-2990-4D1A-B851-99CC2449E007} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{E3E495ED-7980-476C-94A3-4D4835C5F23A} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{47868522-A9B4-46F1-A224-46A32EDAC844} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{784713A5-5850-4AF2-870E-9949583B7891} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{90DCE833-7A9D-48C6-ABE9-B079B23AA7F4} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{D56BE4E8-E790-48D8-95A6-2EE5DDCCB14D} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{7DA2EDDC-6F95-4B55-B519-77FF729684BB} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{8C346C4F-69F0-4F1E-82E1-D79FE779D418} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{051E7B53-96A4-42C2-9C53-7402A05B4E2C} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{27E5DCAA-7799-42F3-AB57-59D51D05A3C2} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{B2045F25-815A-42F7-B332-54B49FFF21E0} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{F9A89BDB-B9FA-465E-B32B-1078CD0694B9} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{6EF9E897-50D9-4B47-8179-0C607EEFA6E8} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{163DBBA4-5464-4AEE-A9F3-D49160175DB7} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{C3647B57-BCC4-47FB-BF1E-2FEF4F6DDF83} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{9B9BCDC6-E6CE-4398-96AF-02B804BDFE53} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{08D10A7D-15A8-48C1-841B-7704B00D0B14} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{4A5F6A0D-72A1-463C-9051-AB8145484F3C} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{6F3AFE89-8779-472E-9934-E340FD0CE9A3} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{F2C1B61E-C16D-48F0-850F-7AA2AC6A89AF} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{3E9E7D31-258D-4B36-BA8A-8514DBF97E86} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{5915C1C8-F677-41FA-B421-340AEDA00F87} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{2BA5E094-4DB4-4B74-8F98-05A089569981} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{45E02CE7-61C3-4157-8760-229C611C59CD} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{3190C92B-3449-4E87-BD00-B0C60440C6A9} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{0FD30361-2266-4456-A5EE-B9D7B39CB1A0} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{5E24817B-9641-456E-88F5-8B59D24D91FE} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{3C79B762-3A7A-4A9E-BFEB-EC15388DCE0F} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{DE898A35-7566-489D-977D-03B0DBB6755F} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{FF9972D3-6698-475A-9732-9F4EDBAB240F} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{FDDDA37B-7EB4-496B-8EE0-E144B285B23E} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{3E35B828-BCA0-474C-9962-0DE8BD6D8B82} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{ACD21E97-5F99-4C8C-8441-B3C6138560CA} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{758DDBC9-CDE7-4712-93F7-58EE9580AB7C} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{AA022B90-B2C8-4DFA-8604-C986A8A6D46B} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{4522593B-CECD-49E4-A34A-E012CD1423A5} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{96893005-F86E-420A-890B-72FF8F55E731} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{94662230-3808-4AEE-8982-FB72F35DD56E} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{3DDE7EAB-BCE3-45FB-9200-12A768FE7D97} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{915E48DC-0689-4624-949F-9176C4558BD4} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{1DFEFFFE-FCC3-4433-9712-D258DD4FEA19} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{949DE578-0956-4FF0-9755-2B84BD1C24B4} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{E6F37426-B8D0-4C6C-A53F-B6BDD921A77C} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{13BB723C-2D5B-440A-BA37-C5E5F8DC43DB} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{D8C2836E-6376-4176-A9B5-7CEF1570978E} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{D04D3108-8EB5-4B67-B10F-121942445328} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{874CC8FE-3172-4593-BE7B-50612F05562E} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{53339AC3-FE9E-4213-B9BF-9A389729ED08} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{B24BBF3C-347E-4AAD-A882-D7B22294EA49} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{7AC52B15-2831-4D10-BE06-C03BBC9347BE} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{431E2D0D-564F-4A2A-8C5F-D850F6F9BBA7} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{E2D63137-B845-4DE5-9D3E-D8EE99B0700F} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{3445CBA7-503E-495F-A2FB-12EBDD6C153F} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{FA779452-DB51-4F0E-BA7A-F98690891E1D} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{8EC1B945-F4D3-47F1-B6F8-426DF2A24CE0} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{F2C38D2B-38C4-4285-85D1-96368B3B922B} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{C3BDE551-83D0-44C4-A7A6-719683E15AC9} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{08BEEA6E-F4CC-49EC-99B7-CC6D5FA33399} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{14DE4C5A-ABA3-4BB2-A43C-E35B52342D64} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{C4DE9D4F-569A-404B-A877-A4FCF89A5AA5} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{EB0DD114-C260-402A-991B-5AD95CB49758} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{BC65C3E8-2958-4A84-AF6E-7766C228A3DA} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{EE95DD94-A666-4BDB-8AC1-ABA23CE67F99} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{196B5C85-40E9-4370-A0DD-234DDECA31DC} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{0898AE61-9BBF-4076-AD3C-E4C53DF205FE} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{D4067FFD-0B7A-42D4-8C42-1D03E4BC639F} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{B46A6434-9ABA-4368-8CD6-4C3A52C58504} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{2CDF5158-76AB-4753-9620-E3F8DA06E54C} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{15930083-972D-4442-98AD-EE978883837A} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{6D088509-AEC8-4045-B99B-69CA3A1B189D} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{481A3524-F848-4F12-B2B3-A49EA0BBAC34} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{99DE7B52-032C-4CB4-ADB2-48595A2398D5} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{BEE41BD9-E045-4348-8852-80D257B42883} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{993E5357-C9FB-408E-A0C8-A1EF25F82901} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{FC5DEF34-9FDB-46F3-A2AF-FD28FFAAA709} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{866AE6C3-0122-40A4-9CB1-CBFB98C148EE} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{DFAD2054-0AF9-449E-8DB5-FE660D8D2553} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{60B3D559-5792-4125-8C9A-B4156A31E171} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{2CDBDEE9-A5A9-42AC-8E4A-CC5F43723791} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{E1931272-F24F-47F9-9EA6-59C8360A09E9} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{BC6CFAF7-0039-4528-84D5-B18A30B16943} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{DAAABC5A-42CD-4F69-AB5E-24092AB6B3B3} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{06C155DE-880C-4C09-98D8-B14363EB34A2} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{2C71CE45-1C4C-4770-9209-0F58D7701D6F} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{1D70177B-3ED2-46EF-BE18-B36746FB8FC8} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{E332C277-A047-4226-A86B-ABE55D2B17AC} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{D053CDB0-F5A1-40EC-A7E6-1D8FCD9DA610} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{319B5E46-4FEE-42FF-A2D1-56751FF8D11F} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{91E06172-D910-4E05-88F2-84DAEBC15BCD} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{C8ED8122-6BBF-4C24-B5AC-8351D05D0533} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{901ADC1B-3D11-4ACA-9737-753583290137} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{D4DBCBFF-33F0-4E3C-BD6B-15BF9B83DE22} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{06038212-2B15-4C2F-BA09-46438C4C3FBF} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{47E975E7-A1CE-4D1A-AF77-46B21E222200} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{E117BBFD-E098-4D7A-A468-4608C792A59C} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{D82E03DE-8789-4A1D-AB1E-C2F1E0E7BC79} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{612D4118-5369-4158-8FEC-9F4FA177C940} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{A1BA745A-D0BA-4EFE-AF99-E3EBF90ADBBD} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{093BB872-4274-445E-8FCE-93669F0475ED} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{7A1CBF5D-F705-4BF7-8CA6-2765133C8EF7} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{88E43CCE-70F0-4696-B2D4-8526ED28B0C5} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{E836F04D-4E3B-490C-9B79-6A9068D6E5FA} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{4051412E-3220-44FD-B259-87E738AA2A1C} = {FE361039-D2AB-441B-9291-ED784AF5F357}
+		{B5378A0A-BD3C-4482-8A10-B7CBE149040C} = {FE361039-D2AB-441B-9291-ED784AF5F357}
 		{25070DA4-342B-404D-8A22-3D5B5402D96F} = {FE361039-D2AB-441B-9291-ED784AF5F357}
 	EndGlobalSection
 EndGlobal
