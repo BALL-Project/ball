@@ -39,6 +39,9 @@ namespace BALL
 				/** Removes the fold (== _both_ training- and test-partition) of the given partition  */
 				void removePartition(InputPartitionItem* partition);
 				
+				/** checks whether all partitions have already been created */
+				bool isDone();
+				
 
 			protected:
 				void mousePressEvent(QGraphicsSceneMouseEvent *event);

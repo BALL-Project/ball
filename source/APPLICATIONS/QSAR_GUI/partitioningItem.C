@@ -34,7 +34,7 @@ PartitioningItem::~PartitioningItem()
 
 bool PartitioningItem::execute()
 {
-	if(done_) return 0;
+	if(isDone()) return 0;
 	
 	if(out_edge_list_.size()!=no_folds_*2 || out_edge_list_.size()!=2*folds_.size())
 	{
@@ -67,6 +67,27 @@ bool PartitioningItem::execute()
 	}
 	done_ = 1;
 	return 0;
+}
+
+bool PartitioningItem::isDone()
+{
+	if(done_) return 1;
+	
+	bool all_children_done=1;
+	for(list<pair<InputPartitionItem*,InputPartitionItem*> >::iterator it=folds_.begin(); it!=folds_.end(); it++)
+	{
+		if(!it->first->isDone())
+		{
+			all_children_done = 0;
+			break;
+		}
+		if(!it->second->isDone())
+		{
+			all_children_done = 0;
+			break;
+		}
+	}
+	return all_children_done;	
 }
 
 void PartitioningItem::addToPipeline()

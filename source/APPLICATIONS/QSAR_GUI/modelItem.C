@@ -34,16 +34,7 @@ ModelItem::ModelItem(RegistryEntry* entry,  DataItemView* miv):
 	no_training_ = 0;
 	result_color_ = QColor(160,172,182);
 	plotter_ = NULL;
-	QPixmap pm;	
-	if (entry_->kernel)
-	{
-		pm = QPixmap("./images/kernel_model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
-	}
-	else 
-	{
-		pm = QPixmap("./images/model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
-	}
-	setPixmap(pm);
+	setPixmap();
 	setName(QString(entry_->name_abreviation.c_str()));
 	createActions();
 }
@@ -79,8 +70,7 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, DataItemVie
 			model_ = (*entry_->create)(q);
 		}
 	}
-	QPixmap pm = QPixmap("./images/model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
-	setPixmap(pm);
+	setPixmap();
 	setName(QString(entry_->name_abreviation.c_str()));
 	createActions();
 }
@@ -117,8 +107,7 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, int kernelT
 		}
 	}
 	
-	QPixmap pm = QPixmap("./images/kernel_model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
-	setPixmap(pm);
+	setPixmap();
 	setName(QString(entry_->name_abreviation.c_str()));
 	createActions();
 }
@@ -154,8 +143,7 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, String s1, 
 			model_ = entry_->createKernel2(q,s1, s2);
 		}
 	}
-	QPixmap pm = QPixmap("./images/kernel_model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
-	setPixmap(pm);
+	setPixmap();
 	setName(QString(entry_->name_abreviation.c_str()));
 	createActions();
 }
@@ -189,16 +177,7 @@ DataItem(item.view_)
 	// do NOT copy from 'item' but connect to the methods of this new object!!
 	createActions();
 	
-	QPixmap pm;	
-	if (entry_->kernel)
-	{
-		pm = QPixmap("./images/kernel_model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
-	}
-	else 
-	{
-		pm = QPixmap("./images/model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
-	}
-	setPixmap(pm);
+	setPixmap();
 
 	QSARData q;
 
@@ -363,22 +342,15 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 	view_->data_scene->addItem(edge);
 	
 	save_attribute_ = 1;
-	QPixmap pm;
-	if(entry_->kernel)
-	{
-		pm = QPixmap("./images/kernel_model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
-	}
-	else
-	{
-		pm = QPixmap("./images/model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
-	}
-	setPixmap(pm);
+	setPixmap();
 	setName(QString(entry_->name_abreviation.c_str()));
 	createActions();
 	
 	plotter_ = NULL;
 	filenames_map.insert(make_pair(output,this));
 	setSavedAs(output.c_str());
+	
+	setPixmap();
 	done_ = 0; // model not trained yet and no trained model read
 }
 
@@ -546,17 +518,7 @@ void ModelItem::disableTraining()
 	if(!no_training_) // do only if training has not yet been disabled...
 	{
 		no_training_ = 1;
-		
-		QPixmap pm;
-		if (entry_->kernel)
-		{
-			pm = QPixmap("./images/kernel_model_deactivated.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
-		}
-		else 
-		{
-			pm = QPixmap("./images/model_deactivated.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
-		}
-		setPixmap(pm);
+		setPixmap();
 	}
 }
 
@@ -565,8 +527,15 @@ void ModelItem::enableTraining()
 	if(no_training_) // do only if training has been disabled...
 	{
 		no_training_ = 0;
-		
-		QPixmap pm;
+		setPixmap();
+	}
+}
+
+void ModelItem::setPixmap()
+{
+	QPixmap pm;
+	if(!no_training_)
+	{
 		if (entry_->kernel)
 		{
 			pm = QPixmap("./images/kernel_model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
@@ -575,8 +544,19 @@ void ModelItem::enableTraining()
 		{
 			pm = QPixmap("./images/model.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
 		}
-		setPixmap(pm);
 	}
+	else
+	{	
+		if (entry_->kernel)
+		{
+			pm = QPixmap("./images/kernel_model_deactivated.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+		}
+		else 
+		{
+			pm = QPixmap("./images/model_deactivated.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+		}
+	}
+	QGraphicsPixmapItem::setPixmap(pm);
 }
 
 void  ModelItem::setSaveAttribute(bool save)

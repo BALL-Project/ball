@@ -190,6 +190,8 @@ namespace BALL
 				
 				/** if set to true, training is not done for this model, e.g. because it serves as input for a feature selection only */
 				bool no_training_;
+				
+				void setPixmap();
 		
 
 			protected:

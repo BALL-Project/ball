@@ -229,11 +229,11 @@ void RegressionModel::saveDescriptorInformationToFile(ofstream& out)
 	if(!descriptor_IDs_.empty())  // write descriptors and information about their transformation
 	{
 		descriptor_IDs_.front();
-		bool trained = (training_result_.Ncols()==descriptor_IDs_.size());
+		bool trained = (training_result_.Nrows()==descriptor_IDs_.size());
+		
 		for(uint i=0; i<descriptor_IDs_.size();i++)
 		{
 			out<<String(descriptor_IDs_.next())<<"\t"<<descriptor_names_[i]<<"\t";
-		
 			if(trained)
 			{
 				for(int j=1; j<=training_result_.Ncols();j++) 

@@ -1166,7 +1166,7 @@ void MainWindow::restoreDesktop(QString filename)
 	/// read all items if respec. files exist in the folder of the config-file
 	String f = filename.toStdString();
 	uint s = f.find_last_of("/");
-	String directory = f.substr(0,s+1); // name of config-file folder
+	String directory = f.substr(0,s+1); // name of config-file folder	
 	loadItemsFromFiles(directory);
 }
 
