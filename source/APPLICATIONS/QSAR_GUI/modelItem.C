@@ -450,6 +450,8 @@ bool ModelItem::execute()
 {
 	if(isDone()) return 0; // do nothing twice...
 	
+	model_->setDataSource(input_->data());
+	
 	if (optimize_model_parameters)
 	{
 		model_->optimizeParameters(k_fold);
@@ -613,6 +615,7 @@ void ModelItem::saveModel()
 	{
 		if(done_)
 		{
+			model_->setDataSource(input_->data());
 			QString filename = QFileDialog::getSaveFileName(view_, tr("Save File as"),"",tr("text (*.txt)"));
 			model_->saveToFile(filename.toStdString());
 		}
@@ -623,13 +626,14 @@ void ModelItem::saveModel()
 	}	
 }
 
-void ModelItem::saveModel(QString file)
+void ModelItem::saveToFile(String file)
 {
 	try
 	{
 		if(done_)
 		{
-			model_->saveToFile(file.toStdString());
+			model_->setDataSource(input_->data()); // neccessary when saving a pipeline directly after restoring it if it includes nested validations
+			model_->saveToFile(file);
 		}
 	}
 	catch(GeneralException e)

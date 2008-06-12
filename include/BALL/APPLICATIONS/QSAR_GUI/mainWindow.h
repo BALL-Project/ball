@@ -147,7 +147,11 @@ namespace BALL
 				void createActions();
 				void createDockWindows();
 				void createDialogs();
-				void saveItemsToFiles(String directory);
+				
+				/** saves the data of all InputItems and ModelItems to files.
+				@param archive if specified, the created files are compressed and saved as an archive (e.g. *.tar.gz) */
+				void saveItemsToFiles(String directory, String archive="", String configfile="");
+				
 				void loadItemsFromFiles(String directory);
 			
 				/** @name Private Attributes */

@@ -702,7 +702,7 @@ void MainWindow::clearDesktop()
 // SLOT
 void MainWindow::restoreDesktop()
 {
-	QString filename = QFileDialog::getOpenFileName(this, tr("Open File"),settings.config_path.c_str(),tr("text (*.txt)"));
+	QString filename = QFileDialog::getOpenFileName(this, tr("Open File"),settings.config_path.c_str(),tr("Pipeline (*.tar.gz *.conf)"));
 	String s = filename.toStdString();
 	settings.config_path = s.substr(0,s.find_last_of("/")+1);
 	try
@@ -719,15 +719,16 @@ void MainWindow::restoreDesktop()
 // SLOT
 void MainWindow::exportPipeline()
 {
-	QString filename = QFileDialog::getSaveFileName(this, tr("Save File as"),(settings.config_path+"config.txt").c_str(),tr("text (*.txt)"));
+	QString filename = QFileDialog::getSaveFileName(this, tr("Save File as"),(settings.config_path+"config.tar.gz").c_str(),tr("Pipeline (*.tar.gz *.conf)"));
 	exportPipeline(filename);
 	String s = filename.toStdString();
 	settings.config_path = s.substr(0,s.find_last_of("/")+1);
 }
 
 
-void MainWindow::saveItemsToFiles(String directory)
+void MainWindow::saveItemsToFiles(String directory, String archive, String configfile)
 {
+	String files;
 	try
 	{
 		for (Pipeline<SDFInputDataItem*>::iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
@@ -742,6 +743,7 @@ void MainWindow::saveItemsToFiles(String directory)
 				throw GeneralException(__FILE__,__LINE__,"SDF data saving error ", "SDF Input must be assigned a file to be saved to!");
 			}
 			String file = directory+f1;
+			files+=f1+" ";
 			data->saveToFile(file);
 		}
 		for (Pipeline<CSVInputDataItem*>::iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
@@ -756,6 +758,7 @@ void MainWindow::saveItemsToFiles(String directory)
 				throw GeneralException(__FILE__,__LINE__,"CSV saving error ", "CSV Item must be assigned a file to be saved to!");
 			}
 			String file = directory+f1;
+			files+=f1+" ";
 			data->saveToFile(file);
 		}
 		for (Pipeline<InputPartitionItem*>::iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end(); it++)
@@ -765,12 +768,12 @@ void MainWindow::saveItemsToFiles(String directory)
 			
 			QSARData* data= (*it)->data();
 			String f1 = (*it)->savedAs().toStdString();
-			cout<<"f1="<<f1<<endl;
 			if(f1=="")
 			{
 				throw GeneralException(__FILE__,__LINE__,"<Input-partition saving error ", "Item must be assigned a file to be saved to!");
 			}
 			String file = directory+f1;
+			files+=f1+" ";
 			data->saveToFile(file);
 		}
 		for (Pipeline<ModelItem*>::iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
@@ -778,19 +781,32 @@ void MainWindow::saveItemsToFiles(String directory)
 			// if model has not yet been trained, there is nothing to be saved
 			if(!(*it)->isDone()) continue;
 			
-			Model* model = (*it)->model();
 			String f1 = (*it)->savedAs().toStdString();
 			if(f1=="")
 			{
 				throw GeneralException(__FILE__,__LINE__,"Model saving error ", "Model must be assigned a file to be saved to!");
 			}
 			String file = directory+f1;
-			model->saveToFile(file);
+			files+=f1+" ";
+			(*it)->saveToFile(file);
 		}
 	}
 	catch(GeneralException e)
 	{	
 		QMessageBox::warning(this, tr("Error"),e.getMessage());
+	}
+	
+	if(archive!="")
+	{
+		int index=configfile.find_last_of("/");
+		if(index!=string::npos)
+		{
+			configfile=configfile.substr(index+1); // no path; filename only!
+		}		
+		String call = "cd "+directory+"; tar -czf "+archive+" "+files+" "+configfile;
+		system(call.c_str());	// compress output files
+		call = "cd "+directory+"; rm -f "+files+" "+configfile;
+		system(call.c_str());	// delete uncompressed files
 	}
 }
 
@@ -947,7 +963,6 @@ void MainWindow::executePipeline()
 		model_counter++;
 		try
 		{
-			(*it)->model()->setDataSource((*it)->inputDataItem()->data());
 			bool b=(*it)->execute();
 			if(!done) done=b;
 		}
@@ -1069,12 +1084,26 @@ Pipeline<DataItem*> MainWindow::disconnectedItems()
 
 void MainWindow::restoreDesktop(QString filename)
 {
-	ifstream file(filename.toStdString().c_str());
+	String configfile = filename.toStdString();
+	uint s = configfile.find_last_of("/");
+	String directory = configfile.substr(0,s+1); // name of config-file folder
+	bool archive = 0;
+	
+	if(configfile.size()>7 && configfile.substr(configfile.size()-7)==".tar.gz")
+	{
+		archive = 1;
+		String call = "cd "+directory+"; tar -xzvf "+configfile+" > archive_contents.tmp";
+		system(call.c_str());  // extrace files from archive
+		configfile = configfile.substr(0,configfile.size()-7)+".conf"; //config-file within archive will always have extension ".conf"
+	}	
+	
+	ifstream file(configfile.c_str());
 	if(!file)
 	{
-		cout<<"file does not exist!!"<<endl;
+		cout<<"configfile file '"<<configfile<<"' does not exist!!"<<endl;
 		return;
 	}
+	
 	try
 	{
 		bool input_section=0;
@@ -1110,7 +1139,7 @@ void MainWindow::restoreDesktop(QString filename)
 			}
 		}
 		file.close();
-		file.open(filename.toStdString().c_str());	
+		file.open(configfile.c_str());	
 
 		/// read all other sections
 		for(int i=0;!file.eof();i++)
@@ -1163,11 +1192,23 @@ void MainWindow::restoreDesktop(QString filename)
 	view_scene_.update();
 	view_->update();
 	
-	/// read all items if respec. files exist in the folder of the config-file
-	String f = filename.toStdString();
-	uint s = f.find_last_of("/");
-	String directory = f.substr(0,s+1); // name of config-file folder	
+	/// read all items if respec. files exist in the folder of the config-file	
 	loadItemsFromFiles(directory);
+	
+	if(archive)
+	{	
+		string file = directory+"archive_contents.tmp";
+		ifstream in(file.c_str());
+		String files="";
+		while(in)
+		{
+			String tmp;
+			in >> tmp;
+			files += tmp+" ";
+		}
+		String call = "cd "+directory+"; "+"rm -f "+files+" archive_contents.tmp";
+		system(call.c_str());   // delete uncompressed files		
+	}
 }
 
 
@@ -1189,17 +1230,23 @@ void MainWindow::exportPipeline(QString filename)
 	int value = 0;
 	progress_bar_->setMaximum(maximum);
 
-	ofstream out(filename.toStdString().c_str());
 	InputDataItemIO input_writer(view_);
 	int counter = 0;
 
 	QString name;
-	String f = filename.toStdString();
-	uint d = f.find_last_of(".");
-	uint s = f.find_last_of("/");
-	String file_prefix = f.substr(s+1,d-s-1)+"_"; // name of config-file as prefix for output-files
-	String directory = f.substr(0,s+1); // name of folder
+	String configfile = filename.toStdString();
+	String archive="";
+	if(configfile.size()>7 && configfile.substr(configfile.size()-7)==".tar.gz")
+	{
+		archive = configfile;
+		configfile = configfile.substr(0,configfile.size()-7)+".conf";
+	}
+	uint d = configfile.find_last_of(".");
+	uint s = configfile.find_last_of("/");
+	String file_prefix = configfile.substr(s+1,d-s-1)+"_"; // name of config-file as prefix for output-files
+	String directory = configfile.substr(0,s+1); // name of folder
 	
+	ofstream out(configfile.c_str());
 	ostringstream positions;
 	positions<<"[ItemPositions]"<<endl;
 	
@@ -1300,7 +1347,7 @@ void MainWindow::exportPipeline(QString filename)
 	out.close();
 	
 	/// save item data to files
-	saveItemsToFiles(directory);
+	saveItemsToFiles(directory,archive,configfile);
 	
 	progress_bar_->reset();
 }

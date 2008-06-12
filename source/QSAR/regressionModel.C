@@ -102,6 +102,12 @@ void RegressionModel::show()
 
 void RegressionModel::saveToFile(string filename)
 {
+	if(data==0)
+	{
+		cout<<"Error: no QSARData object assigned to model! Can not save model!"<<endl;
+		return;
+	}	
+	
 	bool trained = 1;
 	if(training_result_.Nrows()==0)
 	{

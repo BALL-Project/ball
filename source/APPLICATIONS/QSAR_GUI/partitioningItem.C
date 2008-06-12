@@ -87,6 +87,7 @@ bool PartitioningItem::isDone()
 			break;
 		}
 	}
+	
 	return all_children_done;	
 }
 
