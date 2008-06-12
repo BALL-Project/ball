@@ -462,14 +462,15 @@ namespace BALL
 	{	
 		synchronize_();
 		String entry;
-		#ifdef BALL_COMPILER_MSVC
-			getFirstEntry(entry);
-			if (entry==item) return desynchronize_(true);
-		#endif
+
+		getFirstEntry(entry);
+		if (entry==item) return desynchronize_(true);
+
 		while (getNextEntry(entry))
 		{
 			if (entry == item) return desynchronize_(true);
 		}
+
 		return desynchronize_(false);
 	}
 
