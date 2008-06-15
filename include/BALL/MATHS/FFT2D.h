@@ -47,6 +47,7 @@ namespace BALL
 		
 			typedef std::complex<typename ComplexTraits::ComplexPrecision> Complex;
 			typedef TRegularData2D<std::complex<typename ComplexTraits::ComplexPrecision> >	ComplexVector;
+			typedef typename TRegularData2D<std::complex<typename ComplexTraits::ComplexPrecision> >::IndexType IndexType;
 
       BALL_CREATE(TFFT2D)
 
@@ -63,10 +64,8 @@ namespace BALL
 				throw();
 
 			/** Detailed constructor.  \par
-			 		@param ldnX The binary logarithm of the number of grid points in X direction (we use the logarithm to
-										 ensure that the number of points is a power of two, which is important for
-										 the FFT)
-					@param ldnY The binary logarithm of the number of grid points in Y direction
+			 		@param nX The number of grid points in X direction 
+					@param nY The number of grid points in Y direction
 					@param stepPhysX The step width in X direction in physical space
 					@param stepPhysY The step width in Y direction in physical space
 					@param origin The origin of the coordinate system
@@ -74,7 +73,7 @@ namespace BALL
 																space
 			 */
 			 // AR: ldn is not any longer the binary logarithm but the absolute number of grid points
-			TFFT2D(Size ldnX, Size ldnY, double stepPhysX=1., double stepPhysY=1., Vector2 origin=Vector2(0.,0.), bool inFourierSpace=false)
+			TFFT2D(Size nX, Size nY, double stepPhysX=1., double stepPhysY=1., Vector2 origin=Vector2(0.,0.), bool inFourierSpace=false)
 				throw();
       
 			/// Destructor
@@ -263,6 +262,19 @@ namespace BALL
 			const Complex& operator[](const Vector2& pos) const
 				throw(Exception::OutOfGrid);
 				
+
+			/** Nonmutable random access operator.
+					@note No range checking is done. For a more robust version, please
+					use getData.
+				*/
+			const Complex& operator [] (const IndexType& index) const throw() { return TRegularData2D<Complex>::operator [](index); }
+
+			/** Mutable random access operator.
+					@note No range checking is done. For a more robust version, please
+					use getData.
+			*/
+			Complex& operator [] (const IndexType& index) throw() {  return TRegularData2D<Complex>::operator [](index); }
+			
 			/** AR: Access the (raw) data at Position pos.
 			 */
 			Complex& operator[](const Position& pos)

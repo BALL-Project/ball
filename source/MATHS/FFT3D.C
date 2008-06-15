@@ -135,7 +135,6 @@ namespace BALL
 	}
 	
 	template <>
-	BALL_INLINE
 	const TFFT3D<DoubleTraits>& TFFT3D<DoubleTraits>::operator = (const TFFT3D& fft3D)
 		throw()
 	{
@@ -432,7 +431,6 @@ namespace BALL
 	}
 	
 	template <>
-	BALL_INLINE
 	const TFFT3D<FloatTraits>& TFFT3D<FloatTraits>::operator = (const TFFT3D& fft3D)
 		throw()
 	{
@@ -732,7 +730,6 @@ namespace BALL
 	}
 	
 	template <>
-	BALL_INLINE
 	const TFFT3D<LongDoubleTraits>& TFFT3D<LongDoubleTraits>::operator = (const TFFT3D& fft3D)
 		throw()
 	{
