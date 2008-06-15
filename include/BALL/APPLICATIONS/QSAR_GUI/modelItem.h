@@ -161,11 +161,13 @@ namespace BALL
 				QAction* save_action;
 				QAction* load_action;
 				QAction* properties_action;
+				QAction* plot_features_action;
 
 			public slots:
 				void saveModel();
 				void loadModel();	
 				void showProperties();
+				void showFeaturePlotter();
 
 				
 			private:							
@@ -187,6 +189,8 @@ namespace BALL
 				std::set<Edge*> prediction_input_edges_;
 				
 				Plotter* plotter_;
+				
+				Plotter* feature_plotter_;
 				
 				/** if set to true, training is not done for this model, e.g. because it serves as input for a feature selection only */
 				bool no_training_;

@@ -7,6 +7,7 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QFileDialog>
 #include <BALL/APPLICATIONS/QSAR_GUI/coefficientPlotter.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/featurePlotter.h>
 
 using namespace BALL::QSAR;
 using namespace BALL::QSAR::Exception;
@@ -34,6 +35,7 @@ ModelItem::ModelItem(RegistryEntry* entry,  DataItemView* miv):
 	no_training_ = 0;
 	result_color_ = QColor(160,172,182);
 	plotter_ = NULL;
+	feature_plotter_ = NULL;
 	setPixmap();
 	setName(QString(entry_->name_abreviation.c_str()));
 	createActions();
@@ -57,6 +59,7 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, DataItemVie
 	no_training_ = 0;
 	result_color_ = QColor(160,172,182);
 	plotter_ = NULL;
+	feature_plotter_ = NULL;
 	
 	if(!entry_->kernel)
 	{
@@ -93,6 +96,7 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, int kernelT
 	no_training_ = 0;
 	result_color_ = QColor(160,172,182);
 	plotter_ = NULL;
+	feature_plotter_ = NULL;
 	
 	if(entry_->kernel && kernelType < 4)
 	{
@@ -130,6 +134,7 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, String s1, 
 	no_training_ = 0;
 	result_color_ = QColor(160,172,182);
 	plotter_ = NULL;
+	feature_plotter_ = NULL;
 	
 	if(entry_->kernel)
 	{
@@ -155,7 +160,7 @@ DataItem(item.view_)
 	result_color_ = item.result_color_;
 	view_ = item.view_;
 	name_ = item.name_;
-	input_ = item.input_;
+	input_ = NULL;
 	entry_ = item.entry_;
 	kernel_function_type = item.kernel_function_type;
 	kernel_parameter1 = item.kernel_parameter1;
@@ -169,9 +174,10 @@ DataItem(item.view_)
 	k_fold = item.k_fold;
 	save_attribute_ = item.save_attribute_;
 	//prediction_input_edges_ = item.prediction_input_edges_;
-	done_ = item.done_;
+	done_ = 0;
 	result_ = "";
 	plotter_ = NULL;
+	feature_plotter_ = NULL;
 	no_training_ = 0;
 		
 	// do NOT copy from 'item' but connect to the methods of this new object!!
@@ -347,6 +353,7 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 	createActions();
 	
 	plotter_ = NULL;
+	feature_plotter_ = NULL;
 	filenames_map.insert(make_pair(output,this));
 	setSavedAs(output.c_str());
 	
@@ -595,6 +602,7 @@ void ModelItem::deletePredictionInputEdge(Edge* edge)
 	delete edge;
 }
 
+
 void ModelItem::createActions()
 {
 	save_action = new QAction(QIcon("./images/save_desktop.png"),tr("Save model"), this);
@@ -605,6 +613,9 @@ void ModelItem::createActions()
 
 	properties_action = new QAction(QIcon("./images/save_desktop.png"),tr("Show Properties"), this);
 	connect(properties_action, SIGNAL(triggered()), this, SLOT(showProperties()));
+	
+	plot_features_action = new QAction("plot features",this);
+	connect(plot_features_action,SIGNAL(triggered()),this,SLOT(showFeaturePlotter()));
 }
 
 
@@ -703,6 +714,7 @@ void ModelItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 		menu.addAction(save_action);
 		menu.addAction(load_action);
 		menu.addAction(properties_action);
+		menu.addAction(plot_features_action);
 		menu.exec(event->screenPos());
 	}
 }
@@ -775,5 +787,19 @@ void ModelItem::showPlotter()
 	else
 	{
 		plotter_->show();
+	}
+}
+
+
+// SLOT
+void ModelItem::showFeaturePlotter()
+{
+	if(feature_plotter_ == NULL)
+	{
+		feature_plotter_=new FeaturePlotter(this);
+	}
+	else
+	{
+		feature_plotter_->show();
 	}
 }

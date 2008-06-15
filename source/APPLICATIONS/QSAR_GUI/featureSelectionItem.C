@@ -67,24 +67,16 @@ DataItem(fs_item.view_)
 	type_ = fs_item.type_;
 	k_ = fs_item.k_;
 	opt_ = fs_item.opt_;
-	model_item_ = fs_item.model_item_;
+	model_item_ = NULL;
 	name_ = fs_item.name_;
 	setPixmap(fs_item.pixmap());
 	validation_statistic_ = fs_item.validation_statistic_;
-	done_ = fs_item.done_;
+	done_ = 0;
 	result_ = "";
 	opt_after_fs_ = fs_item.opt_after_fs_;
 	quality_increase_cutoff_ = fs_item.quality_increase_cutoff_;
 	cor_threshold_ = fs_item.cor_threshold_;
-			
-	if (fs_item.feature_selection_ == NULL)
-	{
-		feature_selection_ = NULL;
-	}
-	else
-	{
-		feature_selection_ = new FeatureSelection(*model_item_->model());
-	}
+	feature_selection_ = NULL;
 }
 
 

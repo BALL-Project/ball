@@ -449,7 +449,6 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 
 
 
-//TODO: this function is NOT READY!!
 void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationItem* val_item)
 {
 	list<DataItem*> pipe;
@@ -507,7 +506,7 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationI
 			if(item->type()==ModelItem::Type)
 			{
 				ModelItem* m_item=qgraphicsitem_cast<ModelItem*>(item);
-				ModelItem* new_model = new ModelItem(*m_item);
+				ModelItem* new_model = new ModelItem(*m_item); // copies model-/kernel-parameters
 				if(model_item==m_item) target_model = new_model;
 				new_model->setInputDataItem(train_part);
 		
@@ -525,7 +524,7 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationI
 			else if(item->type()==FeatureSelectionItem::Type)
 			{
 				FeatureSelectionItem* fs_item=qgraphicsitem_cast<FeatureSelectionItem*>(item);
-				new_fs = new FeatureSelectionItem(*fs_item);
+				new_fs = new FeatureSelectionItem(*fs_item); // copies FS-parameters
 				new_fs->setInputModelItem(input_model);  // set input of FS
 				new_fs->change();
 				new_item=new_fs;
