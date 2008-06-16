@@ -62,8 +62,8 @@ SOURCES       = dataItem.C\
 		partitioningItem.C\
 		inputPartitionItem.C\
 		pipeline.C\
-		coefficientPlotter.C\
-		featurePlotter.C	
+		coefficientPlotter.C
+#	featurePlotter.C	
 # 		connectionsList.C\
 # 		moc_connectionsList.C
 	
@@ -117,8 +117,8 @@ OBJECTS       = dataItem.o \
 		partitioningItem.o\
 		inputPartitionItem.o\
 		pipeline.o\
-		coefficientPlotter.o\
-		featurePlotter.o
+		coefficientPlotter.o
+#		featurePlotter.o
 # 		connectionsList.o\
 # 		moc_connectionsList.o
 

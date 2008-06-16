@@ -67,6 +67,9 @@ namespace BALL
 			protected:
 				void mousePressEvent(QGraphicsSceneMouseEvent *event);
 				void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+				
+				//overlaods ValidationItem::setValidationInput()
+				void setValidationInput();
 
 				
 			private:
@@ -80,6 +83,8 @@ namespace BALL
 				DottedEdge* dotted_edge_;
 				
 				PredictionPlotter* pred_plotter_;
+				
+				QSARData* test_data_;
 				
 				list<InputPartitionItem*> trainings_partitions_;
 				list<InputPartitionItem*> test_partitions_;		

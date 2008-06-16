@@ -7,7 +7,7 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QFileDialog>
 #include <BALL/APPLICATIONS/QSAR_GUI/coefficientPlotter.h>
-#include <BALL/APPLICATIONS/QSAR_GUI/featurePlotter.h>
+//#include <BALL/APPLICATIONS/QSAR_GUI/featurePlotter.h>
 
 using namespace BALL::QSAR;
 using namespace BALL::QSAR::Exception;
@@ -203,12 +203,12 @@ DataItem(item.view_)
 
 	if (item.model_ != NULL)
 	{
-		(*model_).operator=(*item.model_);
+		*model_ = *item.model_; // copy descriptor-IDs and parameters
 	}
-	else
-	{
-		model_ = NULL;
-	}	
+// 	else
+// 	{
+// 		model_=NULL;
+// 	}	
 }
 
 
@@ -457,6 +457,15 @@ bool ModelItem::execute()
 {
 	if(isDone()) return 0; // do nothing twice...
 	
+	if(input_==0)
+	{
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model training error","ModelItem is not connected to an InputItem!");
+	}
+	if(input_->data()==0)
+	{
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model training error","Data has not been read by InputItem!");
+	}
+	
 	model_->setDataSource(input_->data());
 	
 	if (optimize_model_parameters)
@@ -485,6 +494,7 @@ bool ModelItem::execute()
 bool ModelItem::isDone()
 {
 	if(done_) return 1;
+	if(!save_attribute_) return 1; // if model is trained by FeatureSelectionItem, do nothing here !
 	
 	// if this item has (only) a FeatureSelectionItem as parent, the FeatureSelectionItem will train this model after selecting features ... so do nothing here!
 	bool only_fs_items=1;
@@ -796,7 +806,7 @@ void ModelItem::showFeaturePlotter()
 {
 	if(feature_plotter_ == NULL)
 	{
-		feature_plotter_=new FeaturePlotter(this);
+	//	feature_plotter_=new FeaturePlotter(this);
 	}
 	else
 	{

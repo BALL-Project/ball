@@ -236,6 +236,13 @@ void ValidationItem::initName()
 }
 
 
+// overloaded by PredictionItem 
+void ValidationItem::setValidationInput()
+{
+	model_item_->model()->setDataSource(model_item_->inputDataItem()->data());
+}
+
+
 bool ValidationItem::execute()
 {
 	if (model_item_ == NULL)
@@ -244,6 +251,8 @@ bool ValidationItem::execute()
 	}
 	
 	if(done_) return 0; // do nothing twice...
+	
+	setValidationInput();
 
 	if(validation_statistic_>=0)
 	{

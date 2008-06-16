@@ -238,7 +238,8 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 					return;	
 				}
 		
-				model_copy = new ModelItem(*model_item_at_pos);	
+				model_copy = new ModelItem(*model_item_at_pos);
+				model_copy->setInputDataItem(model_item_at_pos->inputDataItem());
 				item = main_window->createFeatureSelection(item, model_copy, model_item_at_pos);
 				pos = model_item_at_pos->pos();
 				item->setView(view);
@@ -506,7 +507,7 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationI
 			if(item->type()==ModelItem::Type)
 			{
 				ModelItem* m_item=qgraphicsitem_cast<ModelItem*>(item);
-				ModelItem* new_model = new ModelItem(*m_item); // copies model-/kernel-parameters
+				ModelItem* new_model = new ModelItem(*m_item); // copies model-/kernel-parameters and save_attribute_ 
 				if(model_item==m_item) target_model = new_model;
 				new_model->setInputDataItem(train_part);
 		

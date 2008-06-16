@@ -106,6 +106,7 @@ namespace BALL
 				void mousePressEvent(QGraphicsSceneMouseEvent *event);
 				void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 				void initName();
+				virtual void setValidationInput();
 		
 				/** @name Private Attributes */
 	

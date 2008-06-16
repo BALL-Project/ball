@@ -124,7 +124,8 @@ namespace BALL
 				void executePipeline();
 				void exportPipeline();
 				void exportPipeline(QString filename);
-				void loadModels();
+				void print();
+				void printToFile();
 
 			private:
 				

@@ -36,7 +36,7 @@ void Model::operator=(const Model& m)
 {
 	if(type_!=m.type_)
 	{
-		String message = "Wrong useage of '='-operator. A copy of a "+m.type_+" model is no "+type_+" model!";
+		String message = "Wrong usage of '='-operator. A copy of a "+m.type_+" model is no "+type_+" model!";
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,message.c_str());
 	}
 	descriptor_names_=m.descriptor_names_;
@@ -45,7 +45,6 @@ void Model::operator=(const Model& m)
 	descriptor_IDs_=m.descriptor_IDs_;
 	vector<double> v=m.getParameters();
 	setParameters(v);
-	data = m.data;
 	model_val->selectStat(m.model_val->getStat()); // set validation statistic
 }
 	

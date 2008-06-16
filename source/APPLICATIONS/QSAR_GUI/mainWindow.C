@@ -12,6 +12,8 @@
 #include <QtGui/QStatusBar>
 #include <QtGui/QDockWidget>
 #include <QtCore/QTextStream>
+#include <QtGui/QPrinter>
+#include <QtGui/QPrintDialog>
 
 #include <sstream>
 #include <map>
@@ -400,7 +402,7 @@ PredictionItem* MainWindow::createPrediction(InputDataItem* input, ModelItem* mo
 
  void MainWindow::about()
 {
-	QMessageBox::information(this, tr("About QSAR_GUI"), tr("Version 0.50\n2008-05-30"),
+	QMessageBox::information(this, tr("About QSAR_GUI"), tr("Version 0.61\n2008-06-18"),
 	QMessageBox::Ok);
 }
 
@@ -454,10 +456,33 @@ void MainWindow::createActions()
 	loadModelsAct_ = new QAction(QIcon(),tr("Load Models"), this);
 	connect(loadModelsAct_, SIGNAL(triggered()), this, SLOT(loadModels()));
  }
+ 
+ 
+// SLOT
+void MainWindow::print()
+{
+	 QPrinter printer(QPrinter::HighResolution);
+	 QPrintDialog print_dialog(&printer,this);
+	 if (print_dialog.exec() == QDialog::Accepted) 
+	 {
+		 QPainter painter(&printer);
+		 view_scene_.render(&painter);
+	 }
+}
 
-/*
-function for setting up the menus
-*/
+ 
+// SLOT
+void MainWindow::printToFile()
+{
+	 QString file = QFileDialog::getSaveFileName(this, tr("Save File as"),(settings.config_path+"pipeline.eps").c_str(),tr("Graphic (*.eps *.ps *.pdf)"));
+	 if(file=="") return;
+	 QPrinter printer(QPrinter::HighResolution);
+	 QPainter painter(&printer);
+	 printer.setOutputFileName(file);
+	 view_scene_.render(&painter);
+}
+
+
  void MainWindow::createMenus()
  {
 	fileMenu_ = menuBar()->addMenu(tr("&File"));
@@ -480,12 +505,17 @@ function for setting up the tool bars
  {	
 	fileToolBar_ = addToolBar(tr("File"));
 	fileToolBar_->addAction(exitAct_);
+	fileToolBar_->addSeparator();
 	fileToolBar_->addAction(clearAct_);
 	fileToolBar_->addAction(delAct_);
+	fileToolBar_->addSeparator();
 	fileToolBar_->addAction(exportAct_);
 	fileToolBar_->addAction(restoreAct_);
+	QAction* print = new QAction(QIcon("./images/printer1.png"),"Print",this);
+	fileToolBar_->addAction(print);
+	fileToolBar_->addSeparator();
 	fileToolBar_->addAction(executeAct_);
-	fileToolBar_->addAction(loadModelsAct_);
+	connect(print, SIGNAL(triggered()), this, SLOT(print()));
  }
 
 /*
@@ -703,6 +733,7 @@ void MainWindow::clearDesktop()
 void MainWindow::restoreDesktop()
 {
 	QString filename = QFileDialog::getOpenFileName(this, tr("Open File"),settings.config_path.c_str(),tr("Pipeline (*.tar.gz *.conf)"));
+	if(filename=="") return;
 	String s = filename.toStdString();
 	settings.config_path = s.substr(0,s.find_last_of("/")+1);
 	try
@@ -720,6 +751,7 @@ void MainWindow::restoreDesktop()
 void MainWindow::exportPipeline()
 {
 	QString filename = QFileDialog::getSaveFileName(this, tr("Save File as"),(settings.config_path+"config.tar.gz").c_str(),tr("Pipeline (*.tar.gz *.conf)"));
+	if(filename=="") return;
 	exportPipeline(filename);
 	String s = filename.toStdString();
 	settings.config_path = s.substr(0,s.find_last_of("/")+1);
@@ -966,18 +998,10 @@ void MainWindow::executePipeline()
 			bool b=(*it)->execute();
 			if(!done) done=b;
 		}
-		catch (ModelTrainingError e)
+		catch (BALL::Exception::GeneralException e)
 		{	
 			QString error_string = e.getMessage();
 			QMessageBox::warning(this,"Error",error_string);
-		}
-		catch(WrongDataType e)
-		{
-			QMessageBox::warning(this," ",e.getMessage());	
-		}
-		catch(ParseError)
-		{
-			QMessageBox::warning(this," ","The individual kernel functions were invalid");	
 		}
 		value++;
 		emit sendNewValue(value);
@@ -1038,15 +1062,15 @@ void MainWindow::executePipeline()
 	///validation
 	for (Pipeline<ValidationItem*>::iterator it = val_pipeline_.begin(); it != val_pipeline_.end(); it++)
 	{
-		try
+		//try
 		{
 			bool b=(*it)->execute();
 			if(!done) done=b;
 		}
-		catch(BALL::Exception::GeneralException e)
-		{	
-			QMessageBox::about(this,"Error",e.getMessage());
-		}
+// 		catch(BALL::Exception::GeneralException e)
+// 		{	
+// 			QMessageBox::about(this,"Error",e.getMessage());
+// 		}
 		value++;
 		emit sendNewValue(value);	
 	}

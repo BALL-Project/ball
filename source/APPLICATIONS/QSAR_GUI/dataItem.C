@@ -157,6 +157,7 @@ void DataItem::change()
 void DataItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
 	QFont font;
+	font.setPixelSize(10.5);
 	font.setBold(true);
 	painter->setFont(font);
 	//painter->drawRoundRect(-1, -1, width_+1, height_+1);

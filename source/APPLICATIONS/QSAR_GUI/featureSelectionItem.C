@@ -195,6 +195,7 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 	}
 	setInputModelItem((ModelItem*) it->second);	
 	model_item_ = new ModelItem(*input_model_item_);
+	model_item_->setInputDataItem(input_model_item_->inputDataItem());
 	model_item_->setSaveAttribute(false);
 	model_item_->setSavedAs(output.c_str());
 	view_->data_scene->addItem(model_item_);
@@ -240,6 +241,7 @@ bool FeatureSelectionItem::execute()
 	
 	if(done_) return 0; // do nothing twice...
 
+	model_item_->setInputDataItem(input_model_item_->inputDataItem());
 	delete feature_selection_;
 	feature_selection_ = new FeatureSelection(*(model_item_->model()));
 	if(validation_statistic_>=0)
