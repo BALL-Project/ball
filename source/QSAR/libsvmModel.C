@@ -25,8 +25,8 @@ LibsvmModel::LibsvmModel(const QSARData& q, int k_type, double p1, double p2) : 
 
 LibsvmModel::~LibsvmModel()
 {
-	svm_destroy_model(svm_train_result_);
-	//free(parameters_);
+	delete svm_train_result_;
+	delete x_space_;
 }
 
 

@@ -537,25 +537,65 @@ void MainWindow::createDockWindows()
 	filedock->setWidget(file_browser_);
 	addDockWidget(Qt::LeftDockWidgetArea, filedock);
 	windowMenu_->addAction(filedock->toggleViewAction());
-
-	///create dock widget for listing all available models
-	int j=0;
-	for(uint i=0; i<reg_->registered_models.size();i++)
-	{ 
-		ModelItem* item = new ModelItem(&reg_->registered_models[i], model_list_);
-		model_list_scene_.addItem(item);
-		if (reg_->registered_models[i].kernel)
-		{
-			j++;
-			item->setPos(120,70*(j-1)+20);
+	
+	uint row_height=65; uint col_width=65;
+	uint x_offset = 10; uint y_offset = 50;
+	uint x=x_offset; uint y=y_offset;
+	
+	QPen pen; pen.setStyle(Qt::SolidLine);
+	pen.setWidth(1); pen.setColor(QColor(220,220,220));
+	
+	uint y0=y_offset;
+	for(uint a=0; a<3; a++)
+	{
+		uint no_models=0;
+		QGraphicsTextItem* text0 = new QGraphicsTextItem;
+		if(a==0) text0->setPlainText("Linear regression models");
+		else if(a==1) text0->setPlainText("Nonlinear regression models");
+		else if(a==2) text0->setPlainText("Classification models");
+		QGraphicsRectItem* rect0 = new QGraphicsRectItem(0,0,text0->boundingRect().width()+20,text0->boundingRect().height(),text0);
+		model_list_scene_.addItem(text0);
+		rect0->setPen(pen);
+		text0->setPos(x_offset,y-30);
+		for(uint i=0; i<reg_->registered_models.size();i++)
+		{ 
+			if(a==0 && (reg_->registered_models[i].kernel || !reg_->registered_models[i].regression)) continue; // create only lin. model 
+			else if(a==1 && (!reg_->registered_models[i].kernel ||  !reg_->registered_models[i].regression)) continue; // create only kernel models
+			else if(a==2 && (reg_->registered_models[i].regression)) continue; // create only classification models
+			
+			ModelItem* item = new ModelItem(&reg_->registered_models[i], model_list_);
+			model_list_scene_.addItem(item);
+			uint col=no_models%3;
+			uint row=no_models/3;
+			x=col*col_width+x_offset;
+			y=row*row_height+y0;
+			item->setPos(x,y);
+			no_models++;
 		}
-		else
-		{
-			item->setPos(20,70*(i-j)+20);
-		}
+		y+=2*y_offset;
+		y0=y;
 	}
+	
 
-	QDockWidget *modeldock = new QDockWidget(tr("Models"), this);
+	
+	///create dock widget for listing all available models
+// 	int j=0;
+// 	for(uint i=0; i<reg_->registered_models.size();i++)
+// 	{ 
+// 		ModelItem* item = new ModelItem(&reg_->registered_models[i], model_list_);
+// 		model_list_scene_.addItem(item);
+// 		if (reg_->registered_models[i].kernel)
+// 		{
+// 			j++;
+// 			item->setPos(120,70*(j-1)+20);
+// 		}
+// 		else
+// 		{
+// 			item->setPos(20,70*(i-j)+20);
+// 		}
+// 	}
+
+	QDockWidget* modeldock = new QDockWidget(tr("Models"), this);
 	modeldock->setAllowedAreas(Qt::LeftDockWidgetArea);
 	modeldock->setWidget(model_list_);
 	

@@ -73,6 +73,10 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, DataItemVie
 			model_ = (*entry_->create)(q);
 		}
 	}
+	else
+	{
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model creation error","Kernel type and kernel parameters must be specified for creation of a kernel based model!");
+	}
 	setPixmap();
 	setName(QString(entry_->name_abreviation.c_str()));
 	createActions();
@@ -109,6 +113,12 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, int kernelT
 			QSARData q;
 			model_ = entry_->createKernel1(q, kernel_function_type, kernel_parameter1, kernel_parameter2);
 		}
+	}
+	else
+	{
+		if(kernelType<4)
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"KernelModel creation error","The desired model is no KernelModel!");
+		else throw BALL::Exception::GeneralException(__FILE__,__LINE__,"KernelModel creation error","Given kernel-type unknown!");
 	}
 	
 	setPixmap();
@@ -148,6 +158,11 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, String s1, 
 			model_ = entry_->createKernel2(q,s1, s2);
 		}
 	}
+	else
+	{
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"KernelModel creation error","The desired model is no KernelModel!");
+	}
+	
 	setPixmap();
 	setName(QString(entry_->name_abreviation.c_str()));
 	createActions();
@@ -162,16 +177,20 @@ DataItem(item.view_)
 	name_ = item.name_;
 	input_ = NULL;
 	entry_ = item.entry_;
+	
+	// if the new ModelItem is created for a feature selection, the following parameters are ignored (since this model will be trained by the FeatureSelectionItem)
+	// if the new ModelItem is created for a Trainings-Partition, the parameters are used to optimize model- and kernel-parameter is the same way as the source model
 	kernel_function_type = item.kernel_function_type;
 	kernel_parameter1 = item.kernel_parameter1;
 	kernel_parameter2 = item.kernel_parameter2;
 	model_parameters = item.model_parameters;
-	optimize_model_parameters = 0; // don't do this for a ModelItem created by a FeatureSelection ...
-	optimize_kernel_parameters = 0;
-	grid_search_stepwidth = 0;
-	grid_search_steps = 0;
-	grid_search_recursions = 0;
+	optimize_model_parameters = item.optimize_model_parameters;
+	optimize_kernel_parameters = item.optimize_model_parameters;
+	grid_search_stepwidth = item.grid_search_stepwidth;
+	grid_search_steps = item.grid_search_steps;
+	grid_search_recursions = item.grid_search_recursions;
 	k_fold = item.k_fold;
+	
 	save_attribute_ = item.save_attribute_;
 	//prediction_input_edges_ = item.prediction_input_edges_;
 	done_ = 0;
@@ -784,6 +803,8 @@ void ModelItem::addToPipeline()
 
 void ModelItem::showPlotter()
 {
+	if(model_==NULL) return;
+	
 	// for the moment, we can only plot regression coefficients...
 	if(!entry_->regression || ((RegressionModel*)model_)->getTrainingResult()->Ncols()==0)
 	{

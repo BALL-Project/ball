@@ -588,7 +588,7 @@ void DataItemScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
 
 	QPointF p = mouseEvent->scenePos();
 	QGraphicsItem* item = itemAt(p);
-	if(!item) return; // if there is no item below mouse cursor, do nothing!
+	if(!item || item->type()<DataItem::Type) return; // if there is no item below mouse cursor, do nothing!
 
 	main_window->drag_start_time = main_window->drag_start_time.now();
 	
