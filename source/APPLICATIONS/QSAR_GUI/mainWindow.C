@@ -402,7 +402,7 @@ PredictionItem* MainWindow::createPrediction(InputDataItem* input, ModelItem* mo
 
  void MainWindow::about()
 {
-	QMessageBox::information(this, tr("About QSAR_GUI"), tr("Version 0.61\n2008-06-18"),
+	QMessageBox::information(this, tr("About QSAR_GUI"), tr("Version 0.62\n2008-06-17"),
 	QMessageBox::Ok);
 }
 
@@ -539,7 +539,7 @@ void MainWindow::createDockWindows()
 	windowMenu_->addAction(filedock->toggleViewAction());
 	
 	uint row_height=65; uint col_width=65;
-	uint x_offset = 10; uint y_offset = 50;
+	uint x_offset = 20; uint y_offset = 50;
 	uint x=x_offset; uint y=y_offset;
 	
 	QPen pen; pen.setStyle(Qt::SolidLine);
