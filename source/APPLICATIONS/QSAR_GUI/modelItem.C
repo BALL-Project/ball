@@ -175,6 +175,7 @@ DataItem(item.view_)
 	grid_search_recursions = item.grid_search_recursions;
 	k_fold = item.k_fold;
 	
+	no_training_ = 0;
 	save_attribute_ = item.save_attribute_;
 	//prediction_input_edges_ = item.prediction_input_edges_;
 
