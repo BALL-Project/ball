@@ -196,6 +196,15 @@ namespace BALL
 				bool no_training_;
 				
 				void setPixmap();
+				
+				/** a label for this item to be displayed as a mouse-over effect */
+				QGraphicsTextItem* hover_label_;
+				
+				/** a rect around hover_label_ */
+				QGraphicsRectItem* hover_rect_;
+				
+				/** initializes those members for which this can be done identically, no matter from which constructors this item is created*/
+				void init();
 		
 
 			protected:
@@ -208,6 +217,8 @@ namespace BALL
 				*/
 				void mousePressEvent(QGraphicsSceneMouseEvent *event);
 				void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+				void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
+				void hoverLeaveEvent (QGraphicsSceneHoverEvent* event);
 				
 				friend class DataItemScene;
 		};

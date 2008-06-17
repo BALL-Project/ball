@@ -33,12 +33,8 @@ ModelItem::ModelItem(RegistryEntry* entry,  DataItemView* miv):
 	save_attribute_(true)
 {
 	no_training_ = 0;
-	result_color_ = QColor(160,172,182);
-	plotter_ = NULL;
-	feature_plotter_ = NULL;
-	setPixmap();
 	setName(QString(entry_->name_abreviation.c_str()));
-	createActions();
+	init();
 }
 
 ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, DataItemView* miv):
@@ -57,9 +53,6 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, DataItemVie
 	save_attribute_(true)
 {
 	no_training_ = 0;
-	result_color_ = QColor(160,172,182);
-	plotter_ = NULL;
-	feature_plotter_ = NULL;
 	
 	if(!entry_->kernel)
 	{
@@ -77,9 +70,9 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, DataItemVie
 	{
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model creation error","Kernel type and kernel parameters must be specified for creation of a kernel based model!");
 	}
-	setPixmap();
 	setName(QString(entry_->name_abreviation.c_str()));
-	createActions();
+	init();
+	
 }
 
 ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, int kernelType, double parameter1, double parameter2, DataItemView* miv): 
@@ -98,9 +91,6 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, int kernelT
 	save_attribute_(true)
 {
 	no_training_ = 0;
-	result_color_ = QColor(160,172,182);
-	plotter_ = NULL;
-	feature_plotter_ = NULL;
 	
 	if(entry_->kernel && kernelType < 4)
 	{
@@ -120,10 +110,8 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, int kernelT
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"KernelModel creation error","The desired model is no KernelModel!");
 		else throw BALL::Exception::GeneralException(__FILE__,__LINE__,"KernelModel creation error","Given kernel-type unknown!");
 	}
-	
-	setPixmap();
 	setName(QString(entry_->name_abreviation.c_str()));
-	createActions();
+	init();
 }
 
 ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, String s1, String s2,DataItemView* miv):
@@ -142,9 +130,6 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, String s1, 
 	save_attribute_(true)
 {
 	no_training_ = 0;
-	result_color_ = QColor(160,172,182);
-	plotter_ = NULL;
-	feature_plotter_ = NULL;
 	
 	if(entry_->kernel)
 	{
@@ -163,9 +148,8 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, String s1, 
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"KernelModel creation error","The desired model is no KernelModel!");
 	}
 	
-	setPixmap();
 	setName(QString(entry_->name_abreviation.c_str()));
-	createActions();
+	init();
 }
 
 ModelItem::ModelItem(ModelItem& item):
@@ -193,16 +177,6 @@ DataItem(item.view_)
 	
 	save_attribute_ = item.save_attribute_;
 	//prediction_input_edges_ = item.prediction_input_edges_;
-	done_ = 0;
-	result_ = "";
-	plotter_ = NULL;
-	feature_plotter_ = NULL;
-	no_training_ = 0;
-		
-	// do NOT copy from 'item' but connect to the methods of this new object!!
-	createActions();
-	
-	setPixmap();
 
 	QSARData q;
 
@@ -224,10 +198,7 @@ DataItem(item.view_)
 	{
 		*model_ = *item.model_; // copy descriptor-IDs and parameters
 	}
-// 	else
-// 	{
-// 		model_=NULL;
-// 	}	
+	init();
 }
 
 
@@ -353,7 +324,7 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 	}
 	
 	model_->setParameters(model_parameters);
-	
+	init();
 	view_->data_scene->addItem(this);
 	addToPipeline();
 	if(item_positions!=0 && item_positions->size()>0)
@@ -367,17 +338,22 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 	view_->data_scene->addItem(edge);
 	
 	save_attribute_ = 1;
-	setPixmap();
+
 	setName(QString(entry_->name_abreviation.c_str()));
-	createActions();
 	
-	plotter_ = NULL;
-	feature_plotter_ = NULL;
 	filenames_map.insert(make_pair(output,this));
 	setSavedAs(output.c_str());
-	
+}
+
+void ModelItem::init()
+{
+	plotter_ = NULL;
+	feature_plotter_ = NULL;
+	result_color_ = QColor(160,172,182);
 	setPixmap();
-	done_ = 0; // model not trained yet and no trained model read
+	setAcceptsHoverEvents(1);
+	createActions();
+	hover_rect_ = NULL;
 }
 
 
@@ -397,6 +373,7 @@ ModelItem::~ModelItem()
 	delete load_action;
 	delete properties_action;
 	delete plotter_;
+	delete hover_rect_;
 }
 
 void ModelItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -819,6 +796,34 @@ void ModelItem::showPlotter()
 	{
 		plotter_->show();
 	}
+}
+
+
+void ModelItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
+{	
+	hover_rect_ = new QGraphicsRectItem(this);
+	hover_label_ = new QGraphicsTextItem(entry_->name.c_str(),hover_rect_);
+	
+	float width=hover_label_->boundingRect().width();
+	float x=event->pos().x();
+// 	cout<<mapToScene(event->pos()).x()+width<<"  "<<view_->data_scene->width()<<endl;
+// 	if(mapToScene(event->pos()).x()+width>view_->data_scene->width())
+// 	{
+// 		x-=width;
+// 	}
+	hover_rect_->setPos(x,event->pos().y());
+	
+	hover_rect_->setRect(0,0,width,hover_label_->boundingRect().height());
+	QBrush brush; brush.setColor(QColor(230,230,22,100));
+	brush.setStyle(Qt::SolidPattern);
+	hover_rect_->setBrush(brush);
+}
+		
+void ModelItem::hoverLeaveEvent (QGraphicsSceneHoverEvent* /*event*/)
+{
+	//delete hover_label_;
+	delete hover_rect_;
+	hover_rect_ = NULL;
 }
 
 

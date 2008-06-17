@@ -532,11 +532,12 @@ function for creating the different dock windows
 void MainWindow::createDockWindows()
 {	
 	file_browser_ = new FileBrowser(settings.input_data_path.c_str());
-	QDockWidget *filedock = new QDockWidget(tr("Source Filebrowser"), this);
+	QDockWidget* filedock = new QDockWidget(tr("Source Filebrowser"), this);
 	filedock->setAllowedAreas(Qt::LeftDockWidgetArea);
 	filedock->setWidget(file_browser_);
 	addDockWidget(Qt::LeftDockWidgetArea, filedock);
 	windowMenu_->addAction(filedock->toggleViewAction());
+	model_list_->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 	
 	uint row_height=65; uint col_width=65;
 	uint x_offset = 20; uint y_offset = 50;

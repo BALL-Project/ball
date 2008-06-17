@@ -179,10 +179,10 @@ namespace BALL
 
 				/** @name Menues
 				*/
-				QMenu *fileMenu_;
-				QMenu *editMenu_;
-				QMenu *helpMenu_;
-				QMenu *windowMenu_;
+				QMenu* fileMenu_;
+				QMenu* editMenu_;
+				QMenu* helpMenu_;
+				QMenu* windowMenu_;
 			
 				/** @name Toolbars
 				*/
