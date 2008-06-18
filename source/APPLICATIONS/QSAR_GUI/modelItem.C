@@ -7,6 +7,7 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QFileDialog>
 #include <BALL/APPLICATIONS/QSAR_GUI/coefficientPlotter.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/bayesPlotter.h>
 //#include <BALL/APPLICATIONS/QSAR_GUI/featurePlotter.h>
 
 using namespace BALL::QSAR;
@@ -784,18 +785,27 @@ void ModelItem::showPlotter()
 	if(model_==NULL) return;
 	
 	// for the moment, we can only plot regression coefficients...
-	if(!entry_->regression || ((RegressionModel*)model_)->getTrainingResult()->Ncols()==0)
+	if(entry_->regression && ((RegressionModel*)model_)->getTrainingResult()->Ncols()!=0)
 	{
-		//QMessageBox::information(view_,"No predictions","No predictions have been done yet that could be plotted!\nTherefore, click \"Execute Pipeline\" first.");
-		return;	
+		if(plotter_ == NULL)
+		{
+			plotter_=new CoefficientPlotter(this);
+		}
+		else
+		{
+			plotter_->show();
+		}
 	}
-	if(plotter_ == NULL)
+	else if(*model_->getType()=="snB")
 	{
-		plotter_=new CoefficientPlotter(this);
-	}
-	else
-	{
-		plotter_->show();
+		if(plotter_ == NULL)
+		{
+			plotter_=new BayesPlotter(this);
+		}
+		else
+		{
+			plotter_->show();
+		}
 	}
 }
 

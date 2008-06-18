@@ -13,6 +13,9 @@ CoefficientPlotter::CoefficientPlotter(ModelItem* model_item)
 	: Plotter(model_item)
 {
 	model_item_ = model_item;
+	qwt_plot_->enableAxis(QwtPlot::yLeft);
+	qwt_plot_->enableAxis(QwtPlot::yRight,0);
+	QwtPlotZoomer* zoomer = new QwtPlotZoomer(qwt_plot_->canvas());
 	plot();
 }
 
@@ -122,7 +125,7 @@ void CoefficientPlotter::plot()
 	zero_line->setPen(pen);
 	zero_line->attach(qwt_plot_);
 	
-	qwt_plot_->setAxisScale(0,min_y,max_y);
-	qwt_plot_->setAxisScale(2,min_x,max_x);
+	qwt_plot_->setAxisScale(QwtPlot::yLeft,min_y,max_y);
+	qwt_plot_->setAxisScale(QwtPlot::xBottom,min_x,max_x);
 	qwt_plot_->replot();
 }

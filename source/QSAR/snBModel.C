@@ -135,6 +135,35 @@ RowVector SNBModel::predict(const vector<double>& substance, bool transform)
 }
 
 
+double SNBModel::calculateProbability(int activitiy_index, int class_index, int feature_index, double feature_value)
+{
+	int no_features = mean_[0].Ncols();
+	int no_classes = mean_[0].Nrows();
+	if(mean_.size()==0)
+	{
+		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before a probability for a given feature value can be calculated!");
+	}
+	if(activitiy_index>=(int)stddev_.size() || class_index>=no_classes || feature_index>=no_features || activitiy_index<0 || class_index<0 || feature_index<0)
+	{
+		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Index of of bound for parameters given to SNBModel::calculateProbability() !");
+	}
+	
+	double pdf_sum=0; // sum of all pdf-values for the given feature-value
+	vector<double> pdf_values(no_classes);
+	
+	for(int i=0; i<no_classes;i++) // calculate pdf-value for given feature-value to be dervied from each class
+	{
+		double stddev = stddev_[activitiy_index](i+1,feature_index+1);
+		if(stddev==0) stddev = 0.000001; // zero is not allowed by the below equation
+		pdf_values[i] = (1/(stddev*sqrt(2*Constants::PI))) * exp(-pow((feature_value-mean_[activitiy_index](i+1,feature_index+1)),2)/(2*stddev));
+		pdf_sum += pdf_values[i];
+	}
+	double probability = pdf_values[class_index]/pdf_sum;
+	cout<<probability<<"  ";
+	return probability;	
+}
+
+
 void SNBModel::saveToFile(string filename)
 {
 	if(mean_.size()==0)

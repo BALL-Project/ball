@@ -45,6 +45,8 @@ namespace BALL{
 				void saveToFile(string filename);
 				
 				void readFromFile(string filename);
+				
+				double calculateProbability(int activitiy_index, int class_index, int feature_index, double feature_value);
 				//@}
 				
 				
