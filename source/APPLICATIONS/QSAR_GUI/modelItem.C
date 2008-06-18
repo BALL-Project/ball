@@ -803,19 +803,34 @@ void ModelItem::showPlotter()
 void ModelItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
 {	
 	hover_rect_ = new QGraphicsRectItem(this);
-	hover_label_ = new QGraphicsTextItem(entry_->name.c_str(),hover_rect_);
+	stringstream s; s.str(entry_->name);
+	String name="";
+	for(int i=0;s;i++) // insert line-break after every second word
+	{
+		String word; s >> word;
+		if(word=="") break;
+		if(i>0) name+="\n";
+		name+=word+" ";
+		word="";
+		s >> word;
+		name+=word;
+	}
 	
-	float width=hover_label_->boundingRect().width();
+	QGraphicsTextItem label(name.c_str());
+	float width=label.boundingRect().width();
 	float x=event->pos().x();
-// 	cout<<mapToScene(event->pos()).x()+width<<"  "<<view_->data_scene->width()<<endl;
-// 	if(mapToScene(event->pos()).x()+width>view_->data_scene->width())
-// 	{
-// 		x-=width;
-// 	}
+	//cout<<mapToScene(event->pos()).x()+width<<"  "<<view_->data_scene->width()<<endl;
+	float f0=mapToScene(event->pos()).x()+width+20;
+	if(f0>view_->data_scene->width())
+	{
+		x-=f0-view_->data_scene->width();
+	}
+	
 	hover_rect_->setPos(x,event->pos().y());
+	hover_label_ = new QGraphicsTextItem(name.c_str(),hover_rect_);
 	
 	hover_rect_->setRect(0,0,width,hover_label_->boundingRect().height());
-	QBrush brush; brush.setColor(QColor(230,230,22,100));
+	QBrush brush; brush.setColor(QColor(230,230,22,110));
 	brush.setStyle(Qt::SolidPattern);
 	hover_rect_->setBrush(brush);
 }
