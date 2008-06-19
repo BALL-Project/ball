@@ -6,8 +6,8 @@
 #ifndef NBMODEL
 #define NBMODEL
 
-#ifndef CLASSIFICATION
-#include <BALL/QSAR/classificationModel.h>
+#ifndef BAYESMODEL
+#include <BALL/QSAR/bayesModel.h>
 #endif
 
 #ifndef STATISTICS
@@ -25,7 +25,7 @@ namespace BALL
 	{
 
 		/** class for naive Bayes */
-		class NBModel : public ClassificationModel
+		class NBModel : public BayesModel
 		{ 
 			public:
 				/** @name Constructors and Destructors
@@ -51,6 +51,10 @@ namespace BALL
 				vector<double> getParameters() const;
 				
 				void setParameters(vector<double>& v);
+				
+				bool isTrained();
+				
+				vector<double> calculateProbabilities(int activitiy_index, int feature_index, double feature_value);
 				
 				//@}
 				

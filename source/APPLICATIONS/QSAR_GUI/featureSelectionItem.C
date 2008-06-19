@@ -280,6 +280,7 @@ bool FeatureSelectionItem::execute()
 	model_item_->model()->readTrainingData();
 	model_item_->model()->train();
 	model_item_->setResultString((int)model_item_->model()->getDescriptorIDs()->size());
+	model_item_->setDone(1); // set done_ to 1, so that model will be saved to file when exporting the pipeline
 	done_ = 1; // ready!
 	return 1;
 }

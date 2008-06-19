@@ -11,7 +11,7 @@ using namespace BALL::QSAR;
 
 
 
-SNBModel::SNBModel(const QSARData& q) : ClassificationModel(q) 
+SNBModel::SNBModel(const QSARData& q) : BayesModel(q) 
 {
 	type_="snB";
 	mean_.resize(0);
@@ -58,7 +58,7 @@ void SNBModel::train()
 			// sort values of current feature into the respective vector (one for each class)
 			for(int j=1; j<=descriptor_matrix_.Nrows();j++)
 			{
-				uint index = label_to_pos.find(Y_(j,act+1))->second;
+				uint index = label_to_pos.find((int)Y_(j,act+1))->second;
 				class_values[index].push_back(descriptor_matrix_(j,i));
 				if(act==0 && i==1) no_substances_[index]++;
 			}
@@ -135,17 +135,17 @@ RowVector SNBModel::predict(const vector<double>& substance, bool transform)
 }
 
 
-double SNBModel::calculateProbability(int activitiy_index, int class_index, int feature_index, double feature_value)
+vector<double> SNBModel::calculateProbabilities(int activitiy_index, int feature_index, double feature_value)
 {
-	int no_features = mean_[0].Ncols();
-	int no_classes = mean_[0].Nrows();
 	if(mean_.size()==0)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before a probability for a given feature value can be calculated!");
 	}
-	if(activitiy_index>=(int)stddev_.size() || class_index>=no_classes || feature_index>=no_features || activitiy_index<0 || class_index<0 || feature_index<0)
+	int no_features = mean_[0].Ncols();
+	int no_classes = mean_[0].Nrows();
+	if(activitiy_index>=(int)stddev_.size() || feature_index>=no_features || activitiy_index<0 || feature_index<0)
 	{
-		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Index of of bound for parameters given to SNBModel::calculateProbability() !");
+		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Index of bound for parameters given to SNBModel::calculateProbability() !");
 	}
 	
 	double pdf_sum=0; // sum of all pdf-values for the given feature-value
@@ -158,18 +158,30 @@ double SNBModel::calculateProbability(int activitiy_index, int class_index, int 
 		pdf_values[i] = (1/(stddev*sqrt(2*Constants::PI))) * exp(-pow((feature_value-mean_[activitiy_index](i+1,feature_index+1)),2)/(2*stddev));
 		pdf_sum += pdf_values[i];
 	}
-	double probability = pdf_values[class_index]/pdf_sum;
-	cout<<probability<<"  ";
-	return probability;	
+	for(int i=0; i<no_classes;i++) // convert pdf-values to probabilities
+	{
+		pdf_values[i]/=pdf_sum;
+	}
+	return pdf_values;	
+}
+
+
+bool SNBModel::isTrained()
+{
+	uint sel_features=descriptor_IDs_.size();
+	if(sel_features==0)
+	{
+		sel_features = data->getNoDescriptors();
+	}
+	if(mean_.size()>0 && (uint)mean_[0].Ncols()==sel_features) return true;
+	return false;
 }
 
 
 void SNBModel::saveToFile(string filename)
 {
-	if(mean_.size()==0)
-	{
-		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must have been trained before the results can be saved to a file!");
-	}
+	bool trained = 1;
+	if(mean_.size()==0) trained=0;
 	ofstream out(filename.c_str());
 	
 	bool centered_data = 0;
@@ -189,11 +201,14 @@ void SNBModel::saveToFile(string filename)
 		sel_features = data->getNoDescriptors();
 	}
 	
-	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tno of classes"<<endl;
-	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<no_substances_.size()<<"\n\n";
+	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tno of classes\ttrained?"<<endl;
+	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<no_substances_.size()<<"\t"<<trained<<"\n\n";
 
 	saveModelParametersToFile(out);
 	saveDescriptorInformationToFile(out);
+	
+	if(!trained) return;
+	
 	saveClassInformationToFile(out);
 	
 	// write mean_ matrices
@@ -234,6 +249,7 @@ void SNBModel::readFromFile(string filename)
 	int no_y = line0.getField(3,"\t").toInt();
 	bool centered_data = line0.getField(4,"\t").toInt();
 	int no_classes = line0.getField(5,"\t").toInt();
+	bool trained = line0.getField(6,"\t").toBool();
 	//int no_subst = line0.getField(6,"\t").toInt();
 
 	substance_names_.clear();
@@ -241,6 +257,9 @@ void SNBModel::readFromFile(string filename)
 	getline(input,line0);  // skip empty line	
 	readModelParametersFromFile(input);
 	readDescriptorInformationFromFile(input, no_descriptors, centered_data);
+	
+	if(!trained) return;
+	
 	readClassInformationFromFile(input, no_classes);
 	
 	mean_.resize(no_y);

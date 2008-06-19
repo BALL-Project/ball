@@ -8,7 +8,7 @@
 #include <QtGui/QFileDialog>
 #include <BALL/APPLICATIONS/QSAR_GUI/coefficientPlotter.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/bayesPlotter.h>
-//#include <BALL/APPLICATIONS/QSAR_GUI/featurePlotter.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/featurePlotter.h>
 
 using namespace BALL::QSAR;
 using namespace BALL::QSAR::Exception;
@@ -794,9 +794,10 @@ void ModelItem::showPlotter()
 		else
 		{
 			plotter_->show();
+			plotter_->raise();
 		}
 	}
-	else if(*model_->getType()=="snB")
+	else if((*model_->getType()=="snB"||*model_->getType()=="nB") && ((BayesModel*)model_)->isTrained())
 	{
 		if(plotter_ == NULL)
 		{
@@ -805,6 +806,7 @@ void ModelItem::showPlotter()
 		else
 		{
 			plotter_->show();
+			plotter_->raise();
 		}
 	}
 }
@@ -858,7 +860,7 @@ void ModelItem::showFeaturePlotter()
 {
 	if(feature_plotter_ == NULL)
 	{
-	//	feature_plotter_=new FeaturePlotter(this);
+		feature_plotter_=new FeaturePlotter(this);
 	}
 	else
 	{

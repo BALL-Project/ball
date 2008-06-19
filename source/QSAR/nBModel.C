@@ -11,7 +11,7 @@ using namespace BALL::QSAR;
 
 
 
-NBModel::NBModel(const QSARData& q) : ClassificationModel(q) 
+NBModel::NBModel(const QSARData& q) : BayesModel(q) 
 {
 	type_="nB";
 	probabilities_.resize(0);
@@ -177,6 +177,48 @@ void NBModel::setParameters(vector<double>& v)
 		throw Exception::ModelParameterError(__FILE__,__LINE__,c.c_str());
 	}
 	discretization_steps_ = (int) v[0];	
+}
+
+
+bool NBModel::isTrained()
+{
+	uint sel_features=descriptor_IDs_.size();
+	if(sel_features==0)
+	{
+		sel_features = data->getNoDescriptors();
+	}
+
+	if(probabilities_.size()>0 && (uint)min_max_.Ncols()==sel_features) return true;
+	return false;
+}
+
+
+vector<double> NBModel::calculateProbabilities(int activitiy_index, int feature_index, double feature_value)
+{
+	if(probabilities_.size()==0 || probabilities_[0].size()==0)
+	{
+		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before a probability for a given feature value can be calculated!");
+	}
+	int no_features = probabilities_[0][0].Ncols();
+	int no_classes = probabilities_[0].size();
+	if(activitiy_index>=(int)probabilities_.size() || feature_index>=no_features || activitiy_index<0 || feature_index<0)
+	{
+		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Index of bound for parameters given to SNBModel::calculateProbability() !");
+	}
+	
+	uint no_discretizations = probabilities_[0][0].Nrows();
+	double step = (min_max_(2,feature_index+1)-min_max_(1,feature_index+1))/no_discretizations;
+	int disc_index = (int)((feature_value-min_max_(1,feature_index+1))/step)+1;
+	
+	if(disc_index<1) disc_index=1;
+	else if(disc_index>(int)no_discretizations) disc_index=no_discretizations;
+	
+	vector<double> prob(no_classes);
+	for(uint i=0; i<no_classes;i++)
+	{
+		prob[i] = probabilities_[activitiy_index][i](disc_index,feature_index+1);
+	}
+	return prob;
 }
 		
 

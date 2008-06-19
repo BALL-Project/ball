@@ -6,10 +6,6 @@
 #ifndef SNBMODEL
 #define SNBMODEL
 
-#ifndef CLASSIFICATION
-#include <BALL/QSAR/classificationModel.h>
-#endif
-
 #ifndef STATISTICS
 #include <BALL/QSAR/statistics.h>
 #endif
@@ -18,12 +14,16 @@
 #include <BALL/QSAR/sortedList.h>
 #endif
 
+#ifndef BAYESMODEL
+#include <BALL/QSAR/bayesModel.h>
+#endif
+
 
 namespace BALL{
 	namespace QSAR {
 
 		/** class for simple naive Bayes */
-		class SNBModel : public ClassificationModel
+		class SNBModel : public BayesModel
 		{ 
 			public:
 				/** @name Constructors and Destructors
@@ -44,9 +44,13 @@ namespace BALL{
 				
 				void saveToFile(string filename);
 				
+				bool isTrained();
+				
 				void readFromFile(string filename);
 				
-				double calculateProbability(int activitiy_index, int class_index, int feature_index, double feature_value);
+				/** calculate the probability for the specified feature to assume the given value for each class
+				@return a probability for each class */
+				vector<double> calculateProbabilities(int activitiy_index, int feature_index, double feature_value);
 				//@}
 				
 				

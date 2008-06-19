@@ -103,14 +103,6 @@ namespace BALL
 				
 				/** reconstruct a saved Model from a file */
 				virtual void readFromFile(string filename) = 0;
-				//@}
-				
-				
-				/** @name Attributes
-				 */
-				//@{
-				/** pointer to the input data class for this model */
-				const QSARData* data;
 				
 				/** returns a const pointer to the descriptor matrix of this model */
 				const Matrix* getDescriptorMatrix();
@@ -129,6 +121,14 @@ namespace BALL
 				
 				/** returns the type of the current model, e.g. "MLR", "PLS", ... */
 				const string* getType();
+				//@}
+				
+				
+				/** @name Attributes
+				 */
+				//@{
+				/** pointer to the input data class for this model */
+				const QSARData* data;
 				
 				/** a ModelValidation object, that is used to validate this model and that will contain the results of the validations */
 				Validation* model_val;

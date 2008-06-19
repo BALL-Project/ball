@@ -63,8 +63,8 @@ SOURCES       = dataItem.C\
 		inputPartitionItem.C\
 		pipeline.C\
 		coefficientPlotter.C\
-		bayesPlotter
-#	featurePlotter.C	
+		bayesPlotter\
+		featurePlotter.C	
 # 		connectionsList.C\
 # 		moc_connectionsList.C
 	
@@ -119,8 +119,8 @@ OBJECTS       = dataItem.o \
 		inputPartitionItem.o\
 		pipeline.o\
 		coefficientPlotter.o\
-		bayesPlotter.o
-#		featurePlotter.o
+		bayesPlotter.o\
+		featurePlotter.o
 # 		connectionsList.o\
 # 		moc_connectionsList.o
 

@@ -71,7 +71,7 @@ void FeaturePlotter::plot()
 		}
 	}	
 	
-	for(int i=1; i<=3; i++)
+	for(int i=1; i<=no_features; i++)
 	{
 		values[i-1].front();
 		QwtPlotCurve* curve_i = new QwtPlotCurve;

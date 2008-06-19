@@ -53,6 +53,7 @@ ifeq ($(USE_NEWMAT),true)
 		knnModel.C\
 		rrModel.C\
 		fitModel.C\
+		bayesModel.C\
 		snBModel.C\
 		nBModel.C
 		
