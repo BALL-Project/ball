@@ -187,7 +187,7 @@ bool NBModel::isTrained()
 	{
 		sel_features = data->getNoDescriptors();
 	}
-
+	
 	if(probabilities_.size()>0 && (uint)min_max_.Ncols()==sel_features) return true;
 	return false;
 }
@@ -224,10 +224,8 @@ vector<double> NBModel::calculateProbabilities(int activitiy_index, int feature_
 
 void NBModel::saveToFile(string filename)
 {
-	if(probabilities_.size()==0)
-	{
-		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must have been trained before the results can be saved to a file!");
-	}
+	bool trained = 1;
+	if(probabilities_.size()==0) trained = 0;
 	ofstream out(filename.c_str());
 	
 	bool centered_data = 0;
@@ -247,11 +245,14 @@ void NBModel::saveToFile(string filename)
 		sel_features = data->getNoDescriptors();
 	}
 	
-	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tno of classes"<<endl;
-	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<no_substances_.size()<<"\n\n";
+	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tno of classes\ttrained?"<<endl;
+	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<no_substances_.size()<<"\t"<<trained<<"\n\n";
 
 	saveModelParametersToFile(out);
 	saveDescriptorInformationToFile(out);
+	
+	if(!trained) return;
+	
 	saveClassInformationToFile(out);
 	
 	out<<min_max_<<endl;
@@ -293,13 +294,16 @@ void NBModel::readFromFile(string filename)
 	int no_y = line0.getField(3,"\t").toInt();
 	bool centered_data = line0.getField(4,"\t").toInt();
 	int no_classes = line0.getField(5,"\t").toInt();
-	//int no_subst = line0.getField(6,"\t").toInt();
+	bool trained = line0.getField(6,"\t").toBool();
 
 	substance_names_.clear();
 	
 	getline(input,line0);  // skip empty line	
 	readModelParametersFromFile(input);
 	readDescriptorInformationFromFile(input, no_descriptors, centered_data);
+	
+	if(!trained) return;
+	
 	readClassInformationFromFile(input, no_classes);
 	readMatrix(min_max_,input,2,no_descriptors);
 	getline(input,line0);  // skip empty line	
