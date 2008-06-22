@@ -116,7 +116,7 @@ void BayesPlotter::plot()
 {
 	BayesModel* snb = (BayesModel*) model_item_->model();
 	spectrogram_ = new QwtPlotSpectrogram();
-	double y0=-16; double y1=36; double res=0.1;
+	double y0=-3; double y1=3; double res=0.1;
 	
 	spectrogram_->setData(SpectrogramData(snb,snb->getDescriptorNames()->size()-1,y0,y1,res,this));
 	spectrogram_->attach(qwt_plot_);
