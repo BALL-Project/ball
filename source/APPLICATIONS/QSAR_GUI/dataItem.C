@@ -267,6 +267,12 @@ QVariant DataItem::itemChange(GraphicsItemChange change, const QVariant &value)
 	}
 	return QGraphicsItem::itemChange(change, value);
  }
+ 
+void DataItem::adjustEdges()
+{
+	itemChange(GraphicsItemChange(),QVariant(1));
+}
+	 
 
 bool DataItem::removeDisconnectedItem()
 {

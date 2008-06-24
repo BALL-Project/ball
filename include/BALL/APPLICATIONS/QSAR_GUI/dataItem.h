@@ -142,6 +142,8 @@ namespace BALL
 			/** set result_ to a given value */
 			void setResultString(double value);
 			void setResultString(int value);
+			
+			void adjustEdges();
 		
 		
 		protected:

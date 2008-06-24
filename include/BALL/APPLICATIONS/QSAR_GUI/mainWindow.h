@@ -166,6 +166,8 @@ namespace BALL
 				void saveItemsToFiles(String directory, String archive="", String configfile="");
 				
 				void loadItemsFromFiles(String directory);
+				
+				void readPartitionPositions(list<pair<double,double> >* item_positions);
 			
 				/** @name Private Attributes */
 

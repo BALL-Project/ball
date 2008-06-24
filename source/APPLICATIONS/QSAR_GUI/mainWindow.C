@@ -1154,6 +1154,21 @@ Pipeline<DataItem*> MainWindow::disconnectedItems()
 /// IMPORT & EXPORT
 ///
 
+void MainWindow::readPartitionPositions(list<pair<double,double> >* item_positions)
+{
+	if(item_positions==NULL) return;
+
+	for (Pipeline<InputPartitionItem*>::iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end() && item_positions->size()>0; it++)
+	{
+		pair<double,double> pos = item_positions->front();
+		(*it)->setPos(pos.first,pos.second);
+		item_positions->pop_front();
+		(*it)->adjustEdges();
+		cout<<pos.first<<" "<<pos.second<<endl;
+	}
+}
+
+
 void MainWindow::restoreDesktop(QString filename)
 {
 	String configfile = filename.toStdString();
@@ -1210,8 +1225,10 @@ void MainWindow::restoreDesktop(QString filename)
 				item_positions.push_back(make_pair(x,y));
 			}
 		}
+		
 		file.close();
 		file.open(configfile.c_str());	
+		bool first_model=1;
 
 		/// read all other sections
 		for(int i=0;!file.eof();i++)
@@ -1227,7 +1244,15 @@ void MainWindow::restoreDesktop(QString filename)
 			{
 				if(input_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
 				if(partitioner_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
- 				if(model_section) new ModelItem(section,filenames_map,&item_positions,view_);
+				if(model_section) 
+				{
+					if(first_model)
+					{
+						readPartitionPositions(&item_positions);
+						first_model=0;
+					}
+					new ModelItem(section,filenames_map,&item_positions,view_);
+				}
  				if(fs_section) new FeatureSelectionItem(section,filenames_map,&item_positions,view_);
  				if(val_section) new ValidationItem(section,filenames_map,&item_positions,view_);
 				if(pred_section) new PredictionItem(section,filenames_map,&item_positions,view_);
@@ -1249,7 +1274,15 @@ void MainWindow::restoreDesktop(QString filename)
 		}
  		if(input_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
 		if(partitioner_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
- 		if(model_section) new ModelItem(section,filenames_map,&item_positions,view_);
+ 		if(model_section) 
+		{
+			if(first_model)
+			{
+				readPartitionPositions(&item_positions);
+				first_model=0;
+			}
+			new ModelItem(section,filenames_map,&item_positions,view_);
+		}
  		if(fs_section) new FeatureSelectionItem(section,filenames_map,&item_positions,view_);
  		if(val_section) new ValidationItem(section,filenames_map,&item_positions,view_);
 		if(pred_section) new PredictionItem(section,filenames_map,&item_positions,view_);
