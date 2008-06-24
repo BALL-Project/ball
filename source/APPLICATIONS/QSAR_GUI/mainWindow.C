@@ -518,12 +518,9 @@ function for setting up the tool bars
 	fileToolBar_->addAction(executeAct_);
 	connect(print, SIGNAL(triggered()), this, SLOT(print()));
 	
-	int id = system("qsub");
-	if(id==0)
-	{
-		fileToolBar_->addAction(submit_action);
-		connect(submit_action, SIGNAL(triggered()), this, SLOT(submit()));
-	}
+
+	fileToolBar_->addAction(submit_action);
+	connect(submit_action, SIGNAL(triggered()), this, SLOT(submit()));	
  }
  
 
