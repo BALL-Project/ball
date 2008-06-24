@@ -229,7 +229,7 @@ namespace BALL
 				if (   (atom_type_normalization_factor_   < 0.00001) 
 				    || (bond_length_normalization_factor_ < 0.00001) ) 
 				{
-					Log.info() << "AssignBondOrderProcessor::getTotalPenalty: normalization factor zero  - falling back to atomtype penalty" << std::endl;
+					//Log.info() << "AssignBondOrderProcessor::getTotalPenalty: normalization factor zero  - falling back to atomtype penalty" << std::endl;
 					return sol.atom_type_penalty;
 				}
 				else
@@ -330,8 +330,11 @@ namespace BALL
 					bool operator < (const PQ_Entry_& b) const;  
 					
 					float coarsePenalty() const {
-						return (  (1.-alpha_) * (estimated_atom_type_penalty / atom_type_normalization_factor_)
-								    + (alpha_* estimated_bond_length_penalty / bond_length_normalization_factor_));}
+						return ( ( (    (atom_type_normalization_factor_ < 0.0001)
+										     || (bond_length_normalization_factor_ < 0.0001)) ? 
+											 estimated_atom_type_penalty :
+											 ((1.-alpha_) * (estimated_atom_type_penalty / atom_type_normalization_factor_)
+								    		+ (alpha_* estimated_bond_length_penalty / bond_length_normalization_factor_))));}
 					float finePenalty() const {return estimated_bond_length_penalty;}
 
 					/// the estimated atom type penalty
@@ -390,6 +393,9 @@ namespace BALL
 			
 			/// Processor is in a useable valid state. //TODO
 			bool valid_;
+
+			/// Processor is in an evaluation mode. Default is false
+			bool evaluation_mode_;
 
 			// Map for storing the bonds fixed orders
 			// if a bond is free, the map returns 0

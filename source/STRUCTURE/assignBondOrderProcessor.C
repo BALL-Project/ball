@@ -37,6 +37,9 @@
 //#define DEBUG_ESTIMATE
 #undef DEBUG_ESTIMATE
 
+#define UNNORMALIZED_DEBUG 1
+//#undef UNNORMALIZED_DEBUG
+
 
 using namespace std;
 using namespace BALL::VIEW;
@@ -95,6 +98,7 @@ namespace BALL
 		: UnaryProcessor<AtomContainer>(),
 			options(),
 			valid_(true),
+			evaluation_mode_(false),
 			bond_to_index_(),
 			total_num_of_bonds_(),
 			fixed_val_(),
@@ -120,6 +124,7 @@ namespace BALL
 		:	UnaryProcessor<AtomContainer>(abop),
 			options(abop.options),
 			valid_(abop.valid_),
+			evaluation_mode_(abop.evaluation_mode_),
 			bond_to_index_(abop.bond_to_index_),
 			total_num_of_bonds_(abop.total_num_of_bonds_),
 			fixed_val_(abop.fixed_val_),
@@ -160,6 +165,7 @@ namespace BALL
 
 		options = abop.options;
 		valid_ = abop.valid_;
+		evaluation_mode_ = abop.evaluation_mode_;
 		bond_to_index_ = abop.bond_to_index_;
 		total_num_of_bonds_ = abop.total_num_of_bonds_;
 		fixed_val_ = abop.fixed_val_;
@@ -191,7 +197,8 @@ namespace BALL
 		ac_ = 0;
 
 		valid_ = readAtomPenalties_();
-		
+		evaluation_mode_ = false;
+
 		max_bond_order_ = options.getInteger(Option::MAX_BOND_ORDER);
 		alpha_ = options.getReal(Option::BOND_LENGTH_WEIGHTING);
 		max_number_of_solutions_ = options.getInteger(Option::MAX_NUMBER_OF_SOLUTIONS);
@@ -623,7 +630,6 @@ cout << "\nNach initialisierung : queue size = " << queue_.size() << endl;
 	bool AssignBondOrderProcessor::estimatePenalty_(PQ_Entry_& entry)
 	{
 #if defined DEBUG || defined DEBUG_ESTIMATE
-//#ifdef DEBUG
 cout << " - - PE - - - - - - - - " << endl;
 #endif
 
@@ -744,6 +750,12 @@ cout << "  * atom " << a_it->getFullName() << " is block " << block +1 << " : "
 #if defined DEBUG || defined DEBUG_ESTIMATE
 cout << "  * valence explosion for atom " <<   a_it->getFullName() << endl;
 #endif
+				if (evaluation_mode_)
+				{
+					Log.info() << "  AssignBondOrderProcessor: valence explosion for atom " 
+						<<   a_it->getFullName()  << " val: " << valence << " free bo: "<<  num_free_bonds <<  " : Ruleid " <<  block +1 << " with length:" <<  block_to_length_[block] << endl;
+				}
+
 				return false;
 			}
 
@@ -765,13 +777,38 @@ cout << "  * atom " <<   a_it->getFullName() << " closed with valence " << valen
 cout << " and atom type penalty +" << penalties_[current_start_index + valence - current_start_valence] << " = " << estimated_atom_penalty 
 	   << " and bond length penalty +" << current_bond_length_penalty << " = " << estimated_bond_penalty << endl;
 #endif
+				if (evaluation_mode_ && ( penalties_[current_start_index + valence - current_start_valence] >0) )
+				{
+					Log.info() << a_it->getFullName() << " : Ruleid " <<  block +1 
+											<< " penalty: "  <<  penalties_[current_start_index + valence - current_start_valence] << endl;
+				}
+				
 				}
 				else
 				{
-
-#ifdef DEBUG
-cout << " but too small" << endl;
+#if defined DEBUG 
+cout << "valence of "<< a_it->getFullName() << " too small : " << valence <<   " < " <<  current_start_valence << endl;
 #endif
+					if (evaluation_mode_)
+					{
+						Log.info() << "AssignBondOrderProcessor: Valence of " << a_it->getFullName() 
+												<< " is too small : " << valence <<   " < " <<  current_start_valence << endl;
+					}
+					return false;
+				}
+
+				// This is needed for the evaluatePenalty method
+				if (valence > current_end_valence)
+				{
+#if defined DEBUG 
+					cout << "valence of "<< a_it->getFullName() << " too big" << endl;
+#endif
+					if (evaluation_mode_)
+					{
+						Log.info() << "AssignBondOrderProcessor: Valence of " << a_it->getFullName() 
+												<< " is too big" << endl;
+					}
+
 					return false;
 				}
 			}
@@ -1014,7 +1051,6 @@ cout << " atom type pen: " << entry.estimated_atom_type_penalty << " bond len pe
 
 		} // next block
 
-	
 		return true;
 	}
 	
@@ -1202,7 +1238,7 @@ cout << " - - preassign penalty classes  - - - - - - - - " << endl;
 cout << at->getFullName() << endl;
 #endif
 			
-				// find the first matching atom definition, whose index gives the block
+				// find the __first__ matching atom definition, whose index gives the block
 				for (Size j = 0; !found && (j < block_definition_.size()); j++)
 				{	
 					Expression exp(block_definition_[j].second);
@@ -1242,6 +1278,11 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 					return false;
 				}
 			}
+
+#ifdef UNNORMALIZED_DEBUG
+atom_type_normalization_factor_ = 0.;
+#endif 			
+
 		}
 		else
 		{
@@ -1338,9 +1379,12 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 
 					// set the aromatic rings	
 					AromaticityProcessor ap;
+					ap.options.setBool(AromaticityProcessor::Option::OVERWRITE_BOND_ORDERS, true); 
 					ap.aromatize(rings, *ac_);
+
 				}
 			}
+
 			return solutions_[i].valid;
 		}
 		else return false;
@@ -1764,7 +1808,7 @@ cout << "AssignBondOrderProcessor::PQ_Entry_::operator <: " <<  coarsePenalty() 
 	// For testing 
 	float AssignBondOrderProcessor::evaluatePenalty(AtomContainer* ac)
 	{
-
+		evaluation_mode_ = true;
 		if (valid_ && readAtomPenalties_())
 		{
 			// Assign penalty classes
@@ -1793,18 +1837,21 @@ cout << "AssignBondOrderProcessor::PQ_Entry_::operator <: " <<  coarsePenalty() 
 				entry.last_bond = ac->countBonds()-1;
 				if (estimatePenalty_(entry))
 				{	
+					evaluation_mode_ = false;
 					return entry.coarsePenalty();
 				}
 				else
 				{
 					Log.info() << "Error in estimatePenalty" << endl;
+					evaluation_mode_ = false;
 					return -1.;
 				}
 			}
 		}
 
 		Log.info() << "Error in evaluatePenalty: valid: " <<  valid_ << " readAtomPenalties:" << readAtomPenalties_() << endl;
-		
+
+		evaluation_mode_ = false;
 		return -1.;
 	}
 
