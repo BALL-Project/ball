@@ -1451,7 +1451,8 @@ void MainWindow::submitToCluster(String configfile)
 {
 	uint d = configfile.find_last_of(".");
 	uint s = configfile.find_last_of("/");
-	String file = configfile.substr(s+1,d-s-1); // name of config-file as prefix for output-files
+	String file = configfile.substr(0,d); // name of config-file as prefix for output-files
+	cout<<"file="<<file<<endl;
 	String directory = configfile.substr(0,s+1); // name of folder
 	
 	String script = file+".csh";
