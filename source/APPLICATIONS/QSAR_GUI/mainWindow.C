@@ -516,9 +516,14 @@ function for setting up the tool bars
 	QAction* submit_action = new QAction(QIcon("./images/cluster.png"),"Submit job",this);
 	fileToolBar_->addSeparator();
 	fileToolBar_->addAction(executeAct_);
-	fileToolBar_->addAction(submit_action);
 	connect(print, SIGNAL(triggered()), this, SLOT(print()));
-	connect(submit_action, SIGNAL(triggered()), this, SLOT(submit()));
+	
+	int id = system("qsub");
+	if(id==0)
+	{
+		fileToolBar_->addAction(submit_action);
+		connect(submit_action, SIGNAL(triggered()), this, SLOT(submit()));
+	}
  }
  
 

@@ -34,8 +34,8 @@ void InputDataItemIO::writeConfigSection(SDFInputDataItem* sd_item, ofstream& ou
 	for(list<CSVInputDataItem*>::iterator it=csv_items->begin(); it!=csv_items->end(); it++)
 	{
 		out << "csv_file = " << (*it)->filename().toStdString()<<"\n";
-		out << "csv_separator = "<< (*it)->getSeperator()<<"\n";
-		out << "csv_desc_labels = "<< (*it)->getDescriptorLabels()<<"\n";
+		out << "csv_separator = "<<"\""<<(*it)->getSeperator()<<"\"\n";
+		out << "csv_desc_labels = "<<(*it)->getDescriptorLabels()<<"\n";
 		out << "csv_compound_labels = "<< (*it)->getCompoundLabels()<<"\n";
 		out << "csv_no_response = "<< (*it)->getNoResponseVariables()<<"\n";
 		
@@ -53,7 +53,7 @@ void InputDataItemIO::writeConfigSection(CSVInputDataItem* csv_item, ofstream& o
 	
 	out << "[InputReader]" << "\n";
 	out << "csv_file = " << csv_item->filename().toStdString()<<"\n";
-	out << "csv_separator = "<< csv_item->getSeperator()<<"\n";
+	out << "csv_separator = "<<"\""<<csv_item->getSeperator()<<"\"\n";
 	out << "csv_desc_labels = "<<csv_item->getDescriptorLabels()<<"\n";
 	out << "csv_compound_labels = "<<csv_item->getCompoundLabels()<<"\n";
 	out << "csv_no_response = "<<csv_item->getNoResponseVariables()<<"\n";
