@@ -742,6 +742,8 @@ void ModelItem::writeConfigSection(ofstream& out)
 	out << "data_file = "<< inputDataItem()->savedAs().toStdString() << "\n";
 	out << "model_no = "<< view_->data_scene->main_window->reg_->getModelNo(getRegistryEntry()->name_abreviation) << "\n";
 	out << "model_parameters = "<< parameter_string << "\n";
+	
+	isDone(); // set no_training_ appropriately
 	if(no_training_) out<<"no_training = 1\n";
 	
 	if (hasKernel)
