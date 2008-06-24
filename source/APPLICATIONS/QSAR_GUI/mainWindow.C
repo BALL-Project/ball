@@ -1164,7 +1164,6 @@ void MainWindow::readPartitionPositions(list<pair<double,double> >* item_positio
 		(*it)->setPos(pos.first,pos.second);
 		item_positions->pop_front();
 		(*it)->adjustEdges();
-		cout<<pos.first<<" "<<pos.second<<endl;
 	}
 }
 
