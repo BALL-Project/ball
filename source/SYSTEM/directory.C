@@ -589,7 +589,11 @@ namespace BALL
 			FileSystem::canonizePath(directory_path_);
 			return isValid();
 		}
+#ifdef BALL_PLATFORM_WINDOWS
 		if ((buffer = ::_getcwd(NULL, MAX_PATH_LENGTH)) != NULL)
+#else
+		if ((buffer = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)
+#endif
 		{
 			directory_path_ = buffer;
 			free(buffer);
