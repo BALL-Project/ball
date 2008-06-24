@@ -79,8 +79,13 @@ namespace BALL
 // 				void addFeatureSelectionToPipeline(FeatureSelectionItem* item);
 // 				void addValidationToPipeline(ValidationItem* item);
 				void addDisconnectedItem(DataItem* item);
+				
 
 				Pipeline<DataItem*> disconnectedItems();
+				
+				/** submits the pipeline that was saved into configfile to a cluster */
+				void submitToCluster(String configfile);
+				
 
 				/** @name Attributes */
 				/** pointer to the item that is currently being dragged */
@@ -122,11 +127,18 @@ namespace BALL
 				void deleteItem();
 				void restoreDesktop();
 				void executePipeline();
-				void exportPipeline();
+				
+				/** exports the pipeline to files and return the name of the created config-file */
+				String exportPipeline();
+				
+			//	void exportPipeline(QString filename, bool ext);
 				void exportPipeline(QString filename);
 				void print();
 				void printToFile();
-
+				
+				/** submits the current pipeline to a cluster */
+				void submit();
+				
 			private:
 				
 				struct Settings

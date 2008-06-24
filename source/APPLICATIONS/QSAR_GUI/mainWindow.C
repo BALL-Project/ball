@@ -513,10 +513,14 @@ function for setting up the tool bars
 	fileToolBar_->addAction(restoreAct_);
 	QAction* print = new QAction(QIcon("./images/printer1.png"),"Print",this);
 	fileToolBar_->addAction(print);
+	QAction* submit_action = new QAction(QIcon("./images/cluster.png"),"Submit job",this);
 	fileToolBar_->addSeparator();
 	fileToolBar_->addAction(executeAct_);
+	fileToolBar_->addAction(submit_action);
 	connect(print, SIGNAL(triggered()), this, SLOT(print()));
+	connect(submit_action, SIGNAL(triggered()), this, SLOT(submit()));
  }
+ 
 
 /*
 function for setting up the status bar
@@ -789,13 +793,14 @@ void MainWindow::restoreDesktop()
 
 
 // SLOT
-void MainWindow::exportPipeline()
+BALL::String MainWindow::exportPipeline()
 {
 	QString filename = QFileDialog::getSaveFileName(this, tr("Save File as"),(settings.config_path+"config.tar.gz").c_str(),tr("Pipeline (*.tar.gz *.conf)"));
-	if(filename=="") return;
-	exportPipeline(filename);
 	String s = filename.toStdString();
+	if(filename=="") return s;
+	exportPipeline(filename);
 	settings.config_path = s.substr(0,s.find_last_of("/")+1);
+	return s;
 }
 
 
@@ -1432,4 +1437,30 @@ bool MainWindow::itemExists(DataItem* item)
 	return 0;
 }
 
+// SLOT
+void MainWindow::submit()
+{
+	String configfile = exportPipeline();
+	if(configfile!="")
+	{
+		submitToCluster(configfile);
+	}	
+}
+
+void MainWindow::submitToCluster(String configfile)
+{
+	uint d = configfile.find_last_of(".");
+	uint s = configfile.find_last_of("/");
+	String file_prefix = configfile.substr(s+1,d-s-1)+"_"; // name of config-file as prefix for output-files
+	String directory = configfile.substr(0,s+1); // name of folder
+	
+	String script = file_prefix+".csh";
+	ofstream out(script.c_str());
+	out<<"InputReader "<<configfile<<"; InputPartitioner "<<configfile<<"; ModelCreator "<<configfile<<"; FeatureSelector "<<configfile<<"; Predictor "<<configfile<<endl;
+	out.close();
+	
+	String call = "cd "+directory+"; qsub -cwd "+script;
+	system(call.c_str());
+	
+}
 
