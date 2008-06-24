@@ -1451,10 +1451,10 @@ void MainWindow::submitToCluster(String configfile)
 {
 	uint d = configfile.find_last_of(".");
 	uint s = configfile.find_last_of("/");
-	String file_prefix = configfile.substr(s+1,d-s-1)+"_"; // name of config-file as prefix for output-files
+	String file = configfile.substr(s+1,d-s-1); // name of config-file as prefix for output-files
 	String directory = configfile.substr(0,s+1); // name of folder
 	
-	String script = file_prefix+".csh";
+	String script = file+".csh";
 	ofstream out(script.c_str());
 	out<<"InputReader "<<configfile<<"; InputPartitioner "<<configfile<<"; ModelCreator "<<configfile<<"; FeatureSelector "<<configfile<<"; Predictor "<<configfile<<endl;
 	out.close();
