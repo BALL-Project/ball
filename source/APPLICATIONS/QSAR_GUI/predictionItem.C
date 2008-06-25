@@ -21,6 +21,7 @@ PredictionItem::PredictionItem(InputDataItem* input_item, ModelItem* model_item,
 	setPixmap(QPixmap("./images/prediction.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 	name_ = "Prediction for " + input_item->name();
 	pred_plotter_ = NULL;
+	dotted_edge_ = NULL;
 }
 
 PredictionItem::PredictionItem(PredictionItem& item)
@@ -32,6 +33,7 @@ PredictionItem::PredictionItem(PredictionItem& item)
 	results_ = item.results_;
 	input_data_item_ = item.input_data_item_;
 	pred_plotter_ = item.pred_plotter_;
+	dotted_edge_ = NULL;
 }
 
 PredictionItem::~PredictionItem()

@@ -296,6 +296,12 @@ void DataItem::setResultString(int value)
 	result_ = s.c_str();
 }
 
+void DataItem::changeSlot()
+{
+	change();
+	view_->data_scene->update();
+}
+
 
 // void DataItem::calculateForces()
 // {	

@@ -14,6 +14,7 @@ include ../../common.mak
 ####### Files
 
 SOURCES       = dataItem.C\
+		moc_dataItem.C\
 		dataItemView.C \
 		dataItemScene.C \
 		edge.C \
@@ -26,6 +27,7 @@ SOURCES       = dataItem.C\
 		inputDataItem.C \
 		modelItem.C\
 		validationItem.C\
+		moc_validationItem.C\
 		featureSelectionItem.C\
 		SDFInputDialog.C\
 		CSVInputDialog.C\
@@ -70,6 +72,7 @@ SOURCES       = dataItem.C\
 	
 
 OBJECTS       = dataItem.o \
+		moc_dataItem.o\
 		dataItemView.o \
 		dataItemScene.o \
 		edge.o \
@@ -82,6 +85,7 @@ OBJECTS       = dataItem.o \
 		inputDataItem.o \
 		modelItem.o\
 		validationItem.o\
+		moc_validationItem.o\
 		featureSelectionItem.o\
 		SDFInputDialog.o\
 		CSVInputDialog.o\
@@ -132,6 +136,13 @@ QSARTool-static:	$(OBJECTS)	$(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $@ $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_PATH)/lib/Linux-x86_64-g++_4.1.1/libBALL.a $(BALL_PATH)/lib/Linux-x86_64-g++_4.1.1/libVIEW.a $(BALL_PATH)/contrib/newmat/libnewmat.a $(BALL_PATH)/contrib/libsvm/libsvm.a $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgsl.a  $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgslcblas.a $(BALL_PATH)/contrib/qwt-5.0.2/lib/libqwt.a -L/share/opt/x86_64_sl4/qt-4.4.0-gcc_4.2.1/lib -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql -lGLU -lGL
 
 depend: $(MOC_SOURCES)
+
+
+moc_validationItem.C:	$(INC_PATH)validationItem.h
+	$(MOC) $^ -o $@
+
+moc_dataItem.C: $(INC_PATH)dataItem.h
+	$(MOC) $^ -o $@
 
 moc_dataItemView.C: $(INC_PATH)dataItemView.h
 	$(MOC) $(INC_PATH)dataItemView.h -o moc_dataItemView.C

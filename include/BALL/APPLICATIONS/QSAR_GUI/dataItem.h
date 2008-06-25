@@ -23,8 +23,10 @@ namespace BALL
 		*
 		* @todo
 		*/
-		class DataItem : public QGraphicsPixmapItem
+		class DataItem : public QObject, public QGraphicsPixmapItem
 		{
+			Q_OBJECT
+					
 		public:
 		
 			/** @name Constructors and Destructors*/
@@ -114,12 +116,12 @@ namespace BALL
 			
 			virtual bool isDone();
 			void setDone(bool b) {done_=b;}
+		
+			enum { Type = UserType + 1 };
 			
 			/** Call this function if a change of parameters and/or input has occured.\n
 			done_ of this item and *all of its children* is thus set to false. */
 			void change();
-		
-			enum { Type = UserType + 1 };
 		
 			/** Returns the type of the item as an int. This type information is used by qgraphicsitem_cast() to distinguish between types. */
 			int type() const { return Type; }
@@ -144,6 +146,11 @@ namespace BALL
 			void setResultString(int value);
 			
 			void adjustEdges();
+			
+			
+		public slots:
+			/** this slot calls change() and updates the QGraphicsScene afterwards */
+			void changeSlot();	
 		
 		
 		protected:
@@ -182,6 +189,8 @@ namespace BALL
 			/** background color for the ellipse around result-string */
 			QColor result_color_;
 			
+			/** actions to be used for context menus */
+			std::list<QAction*> context_menu_actions_;
 			
 		private:
 		

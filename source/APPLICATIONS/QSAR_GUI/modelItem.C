@@ -154,7 +154,6 @@ ModelItem::ModelItem(InputDataItem* inputdata, RegistryEntry* entry, String s1, 
 }
 
 ModelItem::ModelItem(ModelItem& item):
-QObject(),
 DataItem(item.view_)
 {
 	result_color_ = item.result_color_;
@@ -370,12 +369,6 @@ ModelItem::~ModelItem()
 			removeFromPipeline();
 		}
 	}
-	delete model_;
-	delete save_action;
-	delete load_action;
-	delete properties_action;
-	delete plotter_;
-	delete hover_rect_;
 }
 
 void ModelItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -613,17 +606,21 @@ void ModelItem::deletePredictionInputEdge(Edge* edge)
 
 void ModelItem::createActions()
 {
-	save_action = new QAction(QIcon("./images/save_desktop.png"),tr("Save model"), this);
+	QAction* save_action = new QAction(QIcon("./images/save_desktop.png"),tr("Save model"), this);
 	connect(save_action, SIGNAL(triggered()), this, SLOT(saveModel()));
+	context_menu_actions_.push_back(save_action);
 
-	load_action = new QAction(QIcon("./images/save_desktop.png"),tr("Load model"), this);
+	QAction* load_action = new QAction(QIcon("./images/save_desktop.png"),tr("Load model"), this);
 	connect(load_action, SIGNAL(triggered()), this, SLOT(loadModel()));
+	context_menu_actions_.push_back(load_action);
 
-	properties_action = new QAction(QIcon("./images/save_desktop.png"),tr("Show Properties"), this);
+	QAction* properties_action = new QAction(QIcon("./images/save_desktop.png"),tr("Show Properties"), this);
 	connect(properties_action, SIGNAL(triggered()), this, SLOT(showProperties()));
+	context_menu_actions_.push_back(properties_action);
 	
-	plot_features_action = new QAction("plot features",this);
+	QAction* plot_features_action = new QAction("plot features",this);
 	connect(plot_features_action,SIGNAL(triggered()),this,SLOT(showFeaturePlotter()));
+	context_menu_actions_.push_back(plot_features_action);
 }
 
 
@@ -719,10 +716,10 @@ void ModelItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 	if (view_->name == "view")
 	{
 		QMenu menu(view_);
-		menu.addAction(save_action);
-		menu.addAction(load_action);
-		menu.addAction(properties_action);
-		menu.addAction(plot_features_action);
+		for(list<QAction*>::iterator it=context_menu_actions_.begin(); it!=context_menu_actions_.end(); it++)
+		{
+			menu.addAction(*it);
+		}
 		menu.exec(event->screenPos());
 	}
 }

@@ -474,6 +474,7 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationI
 	addItem(partitioner);
 	partitioner->setPos(p0+getOffset(p0,partitioner));
 	partitioner->addToPipeline();
+	val_item->setPartitioner(partitioner);
 	Edge* e = new Edge(data_item,partitioner);
 	addItem(e);
 	

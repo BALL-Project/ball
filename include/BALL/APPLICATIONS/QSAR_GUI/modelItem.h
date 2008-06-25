@@ -18,7 +18,7 @@ namespace BALL
 		 *
 		 * @todo
 		*/
-		class ModelItem : public QObject, public DataItem
+		class ModelItem : public DataItem
 		{
 			Q_OBJECT
 			
@@ -157,11 +157,6 @@ namespace BALL
 				int grid_search_steps;
 				int grid_search_recursions;
 				int k_fold;
-
-				QAction* save_action;
-				QAction* load_action;
-				QAction* properties_action;
-				QAction* plot_features_action;
 
 			public slots:
 				void saveModel();

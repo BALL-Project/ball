@@ -3,18 +3,21 @@
 
 #include <BALL/APPLICATIONS/QSAR_GUI/dataItem.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/modelItem.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/partitioningItem.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		/** @class ModelItem
+		/** @class ValidationItem
 		* @brief graphical representation of a model validation 
 		*
 		* @todo
 		*/
 		class ValidationItem : public DataItem
 		{
+			Q_OBJECT
+
 			public:
 				/** @name Constructors and Destructors*/
 
@@ -91,6 +94,8 @@ namespace BALL
 				
 				/** generates the config-file section for the current model and appends it to out */
 				void writeConfigSection(ofstream& out);
+				
+				void setPartitioner(PartitioningItem* partitioner);
 
 				virtual void addToPipeline();
 				virtual void removeFromPipeline();
@@ -107,6 +112,7 @@ namespace BALL
 				void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 				void initName();
 				virtual void setValidationInput();
+			
 		
 				/** @name Private Attributes */
 	
@@ -142,10 +148,27 @@ namespace BALL
 				/** in case of nested cross validation this member will contain pointers to the validations of the nested cross validation folds, so that the average quality statistic can be calculated */
 				list<ValidationItem*> external_validations_;
 				
+				/** in case of nested cross validation this member will contain a pointer to the PartitioningItem used to create training- and validation-partitions */
+				PartitioningItem* partitioner_;
+				
 				/** in case of a item that holds the results of validation of _one_ nested cross validation fold, this member points to the item that should display the _average_ predictive quality of all external folds */
 				ValidationItem* nested_val_item_;
 				
 				int validation_statistic_;
+				
+			
+			protected slots:
+				void showPredictionDialog();
+				
+				/** calls DataItem::change and in case of nested validation also calls change() for each connected PartitioningItem */
+				void changeSlot();
+				
+			private:
+				
+				/** created context menu actions and adds them to member-list context_menu_actions_ */
+				void createActions();
+				
+				void init();
 				
 				
 				friend class DataItemScene;

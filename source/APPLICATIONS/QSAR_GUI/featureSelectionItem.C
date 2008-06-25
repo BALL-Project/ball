@@ -180,6 +180,10 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 				throw BALL::Exception::GeneralException(__FILE__,__LINE__,name,mess);
 			}				
 		}
+		else if(line.hasPrefix("done"))
+		{
+			// ignore this line; it is used for the command-line programms only
+		}
 		else
 		{
 			String mess = "Configuration command \""+line+"\" unknown!!";
@@ -365,6 +369,7 @@ ModelItem* FeatureSelectionItem::inputModelItem()
 void FeatureSelectionItem::writeConfigSection(ofstream& out)
 {
 	out << "[FeatureSelector]" << "\n";
+	if(done_) out<<"done = "<<done_<<endl;
 	out << "model_file = "<< inputModelItem()->savedAs().toStdString() << "\n";
 	out << "data_file = "<< inputModelItem()->inputDataItem()->savedAs().toStdString() << "\n";
 	int s = getValidationStatistic();

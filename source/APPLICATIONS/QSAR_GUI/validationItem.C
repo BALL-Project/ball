@@ -21,29 +21,25 @@ ValidationItem::ValidationItem(int type, DataItemView* view):
 	q2_(0.0),
 	r2_(0.0)
 {
-	setPixmap(QPixmap("./images/validation.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
-	done_ = 0;
 	nested_val_item_ = NULL;
 	type_ = type;
-	initName();
-	result_color_ = QColor(205,225,205);
+	partitioner_ = NULL;
+	init();	
 }
 
 ValidationItem::ValidationItem(ValidationItem& item):
 DataItem(item.view_)
 {
-	name_ = item.name_;
-	setPixmap(item.pixmap());
 	type_ = item.type_;
 	k_ = item.k_;
 	num_of_samples_ = item.num_of_samples_;
 	num_of_runs_ = item.num_of_runs_;
 	model_item_ = item.model_item_;
-	q2_ = item.q2_;
-	r2_ = item.r2_;
-	done_ = item.done_;
+	q2_ = -1;
+	r2_ = -1;
 	nested_val_item_ = NULL;
-	result_color_ = QColor(205,225,205);
+	partitioner_ = NULL;
+	init();	
 }
 
 ValidationItem::~ValidationItem()
@@ -139,8 +135,25 @@ ValidationItem::ValidationItem(String& configfile_section, std::map<String, Data
 				{
 					throw BALL::Exception::GeneralException(__FILE__,__LINE__,"ValidationItem reading error","PredictionItem of a nested cross validation fold could not be found!");
 				}
-				ValidationItem* pred_i = (ValidationItem*) it->second;
+				PredictionItem* pred_i = (PredictionItem*) it->second;
 				addExternalFoldValidation(pred_i);
+				
+				if(i==0) // all folds of ONE validationItem for nested validation come from 
+					// ONE PartitioningItem
+				{
+					Edge* edge = pred_i->dottedEdge();
+ 					if(edge!=NULL)
+ 					{
+						if(edge->sourceNode()->inEdges().size()>0)
+						{						
+							DataItem* tmp = (*edge->sourceNode()->inEdges().begin())->sourceNode();
+							if(tmp->type()==PartitioningItem::Type)
+							{
+								setPartitioner((PartitioningItem*)tmp);
+							}
+						}
+ 					}
+				}
 			}
 		}
 		else if(line.hasPrefix("output"))
@@ -189,7 +202,6 @@ ValidationItem::ValidationItem(String& configfile_section, std::map<String, Data
 	Edge* edge = new Edge(model_item_, this);
 	view_->data_scene->addItem(edge);
 
-	setPixmap(QPixmap("./images/validation.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 	setSavedAs(output.c_str());
 	
 	///set type of validation to be done:
@@ -201,9 +213,16 @@ ValidationItem::ValidationItem(String& configfile_section, std::map<String, Data
 		else type_ = 3;
 		if(num_of_runs_>0) type_ = 4;
 	}
-	
+	init();	
+}
+
+
+void ValidationItem::init()
+{
+	result_color_ = QColor(205,225,205);
 	initName();
-	done_ = 0;
+	setPixmap(QPixmap("./images/validation.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+	createActions();
 }
 
 
@@ -235,6 +254,32 @@ void ValidationItem::initName()
 	}
 }
 
+void ValidationItem::createActions()
+{
+	if(type_>2) // for other types, redoing the validation makes no sense, since that would yield
+	{	// the same result
+		QAction* redo_action = new QAction("Redo", this);
+		connect(redo_action, SIGNAL(triggered()), this, SLOT(changeSlot()));	
+		context_menu_actions_.push_back(redo_action);
+	}
+	QAction* show_values = new QAction("Show predictions", this);
+	connect(show_values, SIGNAL(triggered()), this, SLOT(showPredictionDialog()));
+	context_menu_actions_.push_back(show_values);
+}
+
+
+void ValidationItem::changeSlot()
+{
+	DataItem::change();
+	if(partitioner_!=NULL) partitioner_->change();
+	else cout<<"partitioner_ not set!!"<<endl;
+	view_->data_scene->update();
+}
+
+void ValidationItem::setPartitioner(PartitioningItem* partitioner)
+{
+	partitioner_ = partitioner;
+}
 
 // overloaded by PredictionItem 
 void ValidationItem::setValidationInput()
@@ -297,6 +342,7 @@ bool ValidationItem::execute()
 	done_ = 1;
 	return 1;
 }
+
 
 void ValidationItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {	
@@ -413,15 +459,25 @@ Matrix* ValidationItem::resultOfRandTest()
 	return &result_of_rand_test_;
 }
 
-void ValidationItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* /*event*/)
+void ValidationItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
 	if (view_->name == "view")
 	{
-		ValidationResultDialog validationResultDialog(this);
-		validationResultDialog.exec();
+		QMenu menu(view_);
+		for(list<QAction*>::iterator it=context_menu_actions_.begin(); it!=context_menu_actions_.end(); it++)
+		{
+			menu.addAction(*it);
+		}
+		menu.exec(event->screenPos());
 	}
 }
 
+// SLOT
+void ValidationItem::showPredictionDialog()
+{
+	ValidationResultDialog validationResultDialog(this);
+	validationResultDialog.exec();
+}
 
 void ValidationItem::writeConfigSection(ofstream& out)
 {
