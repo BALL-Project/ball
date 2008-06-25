@@ -294,6 +294,10 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 		{
 			no_training_ = ((String)line.after("=")).trimLeft().toBool();
 		}
+		else if(line.hasPrefix("done"))
+		{
+			// ignore this line; it is used for the command-line programms only
+		}
 		else
 		{
 			String mess = "Configuration command \""+line+"\" unknown!!";
@@ -736,6 +740,7 @@ void ModelItem::writeConfigSection(ofstream& out)
 	bool hasKernel = getRegistryEntry()->kernel;
 	
 	out << "[ModelCreator]" << "\n";
+	if(isDone()) out << "done = "<<1<<endl;
 	out << "data_file = "<< inputDataItem()->savedAs().toStdString() << "\n";
 	out << "model_no = "<< view_->data_scene->main_window->reg_->getModelNo(getRegistryEntry()->name_abreviation) << "\n";
 	out << "model_parameters = "<< parameter_string << "\n";

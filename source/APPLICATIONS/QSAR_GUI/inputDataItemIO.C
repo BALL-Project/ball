@@ -24,6 +24,7 @@ void InputDataItemIO::writeConfigSection(SDFInputDataItem* sd_item, ofstream& ou
 		activity_string += " "+ String(a);
 	}
 	out << "[InputReader]" << "\n";
+	if(sd_item->isDone()) out<<"done = "<<1<<endl;
 	out << "sd_file = "<< sd_item->filename().toStdString() << "\n";
 	out << "read_sd_descriptors = "<< sd_item->useSDProperties() << "\n";
 	out << "activity_IDs = "<< activity_string << "\n";
@@ -52,6 +53,7 @@ void InputDataItemIO::writeConfigSection(CSVInputDataItem* csv_item, ofstream& o
 	if(written_csv_.find(csv_item)!=written_csv_.end()) return;
 	
 	out << "[InputReader]" << "\n";
+	if(csv_item->isDone()) out<<"done = "<<1<<endl;
 	out << "csv_file = " << csv_item->filename().toStdString()<<"\n";
 	out << "csv_separator = "<<"\""<<csv_item->getSeperator()<<"\"\n";
 	out << "csv_desc_labels = "<<csv_item->getDescriptorLabels()<<"\n";
@@ -69,6 +71,7 @@ void InputDataItemIO::writeConfigSection(CSVInputDataItem* csv_item, ofstream& o
 void InputDataItemIO::writeConfigSection(PartitioningItem* item, ofstream& out)
 {
 	out << "[InputPartitioner]" << "\n";
+	if(item->isDone()) out<<"done = "<<1<<endl;
 	out << "input_file = " << item->getInputItem()->savedAs().toStdString()<<"\n";
 	out << "ID = "<<item->getID()<<"\n";
 	out << "val_fraction = " << item->getValFraction()<<"\n";
@@ -112,6 +115,10 @@ void InputDataItemIO::readPartitionerSection(String& configfile_section, map<Str
 		else if(line.hasPrefix("ID"))
 		{
 			ID = ((String)line.after("=")).trimLeft().toInt();
+		}
+		else if(line.hasPrefix("done"))
+		{
+			// ignore this line; it is used for the command-line programms only
 		}		
 	}
 	
@@ -265,6 +272,10 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 		{
 			csv_compound_labels.push_back(((String)line.after("=")).trimLeft().toBool());
 		}
+		else if(line.hasPrefix("done"))
+		{
+			// ignore this line; it is used for the command-line programms only
+		}		
 		else
 		{
 			String mess = "Configuration command \""+line+"\" unknown!!";
