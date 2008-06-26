@@ -248,6 +248,10 @@ void ValidationItem::initName()
 			name_ = "nested cross validation";
 			//TODO: change pixmap
 			break;
+			
+		case 6: 
+			name_ = "calculate coefficient stddev";
+			break;
 
 			default: throw InvalidFeatureSelectionItem(__FILE__,__LINE__);
 			setName("Val");
@@ -272,7 +276,6 @@ void ValidationItem::changeSlot()
 {
 	DataItem::change();
 	if(partitioner_!=NULL) partitioner_->change();
-	else cout<<"partitioner_ not set!!"<<endl;
 	view_->data_scene->update();
 }
 
@@ -326,17 +329,44 @@ bool ValidationItem::execute()
 			q2_ /= external_validations_.size(); // average Q^2 obtained from nested cross validation			
 			break; 
 		
+		case 6:
+			if(!model_item_->getRegistryEntry()->regression)
+			{
+				throw BALL::Exception::GeneralException(__FILE__,__LINE__,"validation error","coefficient stddev can only be calculated for regression models!");
+			}		
+			((RegressionModel*)model_item_->model())->validation->calculateCoefficientStddev(num_of_samples_,1);
+			break;	
+		
 		default:
 			throw InvalidValidationItem(__FILE__,__LINE__);
 	}
 	
-	if(type_!=5)
+	if(type_<5)
 	{
 		r2_ = model_item_->model()->model_val->getFitRes();
 		q2_ = model_item_->model()->model_val->getCVRes();
 	}
-	
+
 	if(type_==1) setResultString(r2_);
+	else if(type_==6)
+	{
+		const Matrix* coeff_stddev = ((RegressionModel*)model_item_->model())->validation->getCoefficientStddev();
+		
+		// calculate&display average stddev
+		double mean_stddev=0;
+		int rows=coeff_stddev->Nrows();
+		int cols=coeff_stddev->Ncols();
+		cout<<rows<<" | "<<cols<<endl;
+		for(int i=1; i<=rows;i++)
+		{
+			for(int j=1; j<=cols;j++)
+			{
+				mean_stddev += (*coeff_stddev)(i,j);
+				cout<<(*coeff_stddev)(i,j)<<" "<<flush;
+			}
+		}
+		setResultString(mean_stddev/(rows*cols));
+	}
 	else setResultString(q2_);
 	
 	done_ = 1;

@@ -30,7 +30,7 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item, ModelItem* model):
 		layout1->addWidget(k_edit_,1,2);
 	}
 
-	else if (val_item->getValidationType() == 3)
+	else if (val_item->getValidationType() == 3 || val_item->getValidationType() == 6)
 	{
 		QLabel* label = new QLabel("number of samples for bootstrapping");
 		n_of_samples_edit_ = new QLineEdit(this);
@@ -109,73 +109,75 @@ void ValidationDialog::applyInput()
 		k_ = num;
 	}
 
-	switch(val_item_->getValidationType())
+	if(val_item_->getValidationType()==2)
 	{
-		case 2:
-			ok = false;
-			num = k_edit_->text().toInt(&ok);
-			if (ok)
-			{	
-				k_ = num;
-				val_item_->setK(k_);
-			}
-			else
-			{
-				throw BALL::VIEW::Exception::InvalidK(__FILE__, __LINE__);
-			}
-			break;
-		case 3:	
-			ok = false;
-			num = n_of_samples_edit_->text().toInt(&ok);
-			if (ok)
-			{	
-				n_of_samples_ = num;
-				val_item_->setNumOfSamples(n_of_samples_);
-			}	
-			else
-			{
-				throw BALL::VIEW::Exception::InvalidK(__FILE__, __LINE__);
-			}
-			break;
-		case 4:	
-			ok = false;
-			num = k_edit_->text().toInt(&ok);
-			if (ok)
-			{	
-				k_ = num;
-				val_item_->setK(k_);
-			}
-			else
-			{
-				throw BALL::VIEW::Exception::InvalidK(__FILE__, __LINE__);
-			}
-			
-			ok = false;
-			num = n_of_runs_edit_ ->text().toInt(&ok);
-			if (ok)
-			{	
-				n_of_runs_ = num;
-				val_item_->setNumOfRuns(n_of_runs_);
-			}
-			else
-			{
-				throw BALL::VIEW::Exception::InvalidK(__FILE__, __LINE__);
-			}
-			break;
-		case 5:
-			ok = false;
-			num = n_of_ncv_folds_edit_->text().toInt(&ok);
-			val_fraction_ = val_fraction_edit_->text().toDouble(&ok);
-			if (ok)
-			{
-				n_of_ncv_folds_ = num;
-				val_item_->setValFraction(val_fraction_);
-				val_item_->setNumOfNCVFolds(n_of_ncv_folds_);
-			}
-			else
-			{
-				throw BALL::VIEW::Exception::InvalidK(__FILE__, __LINE__);
-			}
+		ok = false;
+		num = k_edit_->text().toInt(&ok);
+		if (ok)
+		{	
+			k_ = num;
+			val_item_->setK(k_);
+		}
+		else
+		{
+			throw BALL::VIEW::Exception::InvalidK(__FILE__, __LINE__);
+		}
+	}
+	else if(val_item_->getValidationType()==3 || val_item_->getValidationType()==6)
+	{
+		ok = false;
+		num = n_of_samples_edit_->text().toInt(&ok);
+		if (ok)
+		{	
+			n_of_samples_ = num;
+			val_item_->setNumOfSamples(n_of_samples_);
+		}	
+		else
+		{
+			throw BALL::VIEW::Exception::InvalidK(__FILE__, __LINE__);
+		}
+	}
+	else if(val_item_->getValidationType()==4)
+	{	
+		ok = false;
+		num = k_edit_->text().toInt(&ok);
+		if (ok)
+		{	
+			k_ = num;
+			val_item_->setK(k_);
+		}
+		else
+		{
+			throw BALL::VIEW::Exception::InvalidK(__FILE__, __LINE__);
+		}
+		
+		ok = false;
+		num = n_of_runs_edit_ ->text().toInt(&ok);
+		if (ok)
+		{	
+			n_of_runs_ = num;
+			val_item_->setNumOfRuns(n_of_runs_);
+		}
+		else
+		{
+			throw BALL::VIEW::Exception::InvalidK(__FILE__, __LINE__);
+		}
+	}
+	else if(val_item_->getValidationType()==5)
+	{
+		ok = false;
+		num = n_of_ncv_folds_edit_->text().toInt(&ok);
+		val_fraction_ = val_fraction_edit_->text().toDouble(&ok);
+		if (ok)
+		{
+			n_of_ncv_folds_ = num;
+			val_item_->setValFraction(val_fraction_);
+			val_item_->setNumOfNCVFolds(n_of_ncv_folds_);
+		}
+		else
+		{
+			throw BALL::VIEW::Exception::InvalidK(__FILE__, __LINE__);
+		}
 	}
 	statistic_ = -1;
 	if(statistic_box_!=NULL)

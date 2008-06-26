@@ -100,6 +100,10 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 		{
 			((ModelItem*)main_window->dragged_item)->showPlotter();
 		}
+// 		else if(type==ValidationItem::Type)
+// 		{
+// 			((ValidationItem*)main_window->dragged_item)->showPlotter();
+// 		}
 		return;
 	}
 	

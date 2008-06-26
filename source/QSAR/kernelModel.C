@@ -61,7 +61,7 @@ void KernelModel::saveToFile(string filename)
 	}
 	ofstream out(filename.c_str());
 	
-	const Matrix* coeffErrors = validation->getCoefficientErrors();
+	const Matrix* coeffErrors = validation->getCoefficientStddev();
 	bool stderr=0;
 	if(coeffErrors->Ncols()!=0)
 	{
@@ -299,7 +299,7 @@ void KernelModel::saveTrainingResult(ofstream& out)
 {
 	if(type_!="SVR") // NO training_result matrix in case of SVR
 	{
-		const Matrix* coeffErrors = validation->getCoefficientErrors();
+		const Matrix* coeffErrors = validation->getCoefficientStddev();
 		for(int i=1; i<=training_result_.Nrows();i++) // write training result
 		{
 			out<<substance_names_[i-1]<<"\t";

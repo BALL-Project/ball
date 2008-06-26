@@ -219,7 +219,7 @@ void RegressionValidation::testInputData(bool transform)
 }
 
 
-void RegressionValidation::calculateCoefficientErrors(int k, bool b)
+void RegressionValidation::calculateCoefficientStddev(int k, bool b)
 {
 	if(model_->data->descriptor_matrix_.size()==0 || model_->data->Y_.size()==0)
 	{
@@ -237,7 +237,7 @@ void RegressionValidation::calculateCoefficientErrors(int k, bool b)
 	{
 		no_descriptors=model_->descriptor_IDs_.size();
 	}
-	coefficient_errors_.ReSize(no_descriptors, no_activities);
+	coefficient_stddev_.ReSize(no_descriptors, no_activities);
 	
 	if(b==1)
 	{
@@ -261,7 +261,11 @@ void RegressionValidation::calculateCoefficientErrors(int k, bool b)
 				var_mc+=pow((*results)[i](m,c),2);
 			}
 			mean_mc /= k;
-			coefficient_errors_(m,c)= sqrt(abs(var_mc-k*mean_mc)/(k-1));
+			
+			// calculate standard deviation of coefficient
+			// = sqrt(1/k * \sum_{i=1}^k (x_i \^bar x)^2)
+			// <=> sqrt(1/k (\sum_{i=1}^k x_i - k*\bar x^2))
+			coefficient_stddev_(m,c)= sqrt(abs(var_mc-k*mean_mc)/(k-1));
 		}
 	}
 			
@@ -618,9 +622,9 @@ void RegressionValidation::setCVRes(double d)
 
 
 
-const Matrix* RegressionValidation::getCoefficientErrors()
+const Matrix* RegressionValidation::getCoefficientStddev()
 {
-	return &coefficient_errors_;
+	return &coefficient_stddev_;
 }
 
 

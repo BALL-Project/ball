@@ -33,7 +33,7 @@ void RegressionModel::show()
 // 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must have been trained before the results can be saved displayed!");
 // 	}
 	
-	const Matrix* coeffErrors = validation->getCoefficientErrors();
+	const Matrix* coeffErrors = validation->getCoefficientStddev();
 	bool stderr=0;
 	if(coeffErrors->Ncols()!=0)
 	{
@@ -116,7 +116,7 @@ void RegressionModel::saveToFile(string filename)
 	}
 	ofstream out(filename.c_str());
 	
-	const Matrix* coeffErrors = validation->getCoefficientErrors();
+	const Matrix* coeffErrors = validation->getCoefficientStddev();
 	bool stderr=0;
 	if(coeffErrors->Ncols()!=0)
 	{
@@ -230,7 +230,7 @@ void RegressionModel::saveDescriptorInformationToFile(ofstream& out)
 	}
 	out<<endl;
 	
-	const Matrix* coeffErrors = validation->getCoefficientErrors();
+	const Matrix* coeffErrors = validation->getCoefficientStddev();
 	
 	if(!descriptor_IDs_.empty())  // write descriptors and information about their transformation
 	{

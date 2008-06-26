@@ -545,6 +545,8 @@ void MainWindow::createDockWindows()
 	windowMenu_->addAction(filedock->toggleViewAction());
 	model_list_->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 	
+	
+	///create dock widget for listing all available models
 	uint row_height=65; uint col_width=65;
 	uint x_offset = 20; uint y_offset = 50;
 	uint x=x_offset; uint y=y_offset;
@@ -583,9 +585,6 @@ void MainWindow::createDockWindows()
 		y0=y;
 	}
 	
-
-	
-	///create dock widget for listing all available models
 // 	int j=0;
 // 	for(uint i=0; i<reg_->registered_models.size();i++)
 // 	{ 
@@ -631,7 +630,7 @@ void MainWindow::createDockWindows()
 	fs_list_->setBackgroundBrush(b2);
 
 	///create dock widget for model validation
-	for(uint i=1; i<6;i++)
+	for(uint i=1; i<7;i++)
 	{ 
 		ValidationItem* item = new ValidationItem(i, val_list_);
 		val_list_scene_.addItem(item);
