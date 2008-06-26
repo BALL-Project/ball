@@ -253,19 +253,19 @@ void RegressionValidation::calculateCoefficientStddev(int k, bool b)
 		for(int m=1;m<=no_descriptors; m++) // for all descriptors
 		{			
 			double mean_mc=0;
-			double var_mc=0;
+			double sumsquares_mc=0;
 			
 			for(int i=0; i<k;i++) // for all training results
 			{
 				mean_mc+=(*results)[i](m,c);
-				var_mc+=pow((*results)[i](m,c),2);
+				sumsquares_mc+=pow((*results)[i](m,c),2);
 			}
 			mean_mc /= k;
 			
 			// calculate standard deviation of coefficient
 			// = sqrt(1/k * \sum_{i=1}^k (x_i \^bar x)^2)
 			// <=> sqrt(1/k (\sum_{i=1}^k x_i - k*\bar x^2))
-			coefficient_stddev_(m,c)= sqrt(abs(var_mc-k*mean_mc)/(k-1));
+			coefficient_stddev_(m,c)= sqrt(abs(sumsquares_mc-k*pow(mean_mc,2))/(k-1));
 		}
 	}
 			
