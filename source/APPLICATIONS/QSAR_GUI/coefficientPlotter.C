@@ -44,6 +44,13 @@ void CoefficientPlotter::plot()
 		feature_names = model->getSubstanceNames();
 	}
 	
+	bool show_stddev=0;
+	const Matrix* coeff_stddev = model->validation->getCoefficientStddev();
+	if(coeff_stddev!=NULL && coeff_stddev->Nrows()==coefficient_matrix->Nrows() && coeff_stddev->Ncols()==coefficient_matrix->Ncols())
+	{
+		show_stddev=1;
+	}
+	
 	double min_y=1e10;
 	double max_y=-1e10;
 	double min_x=1;
@@ -77,6 +84,22 @@ void CoefficientPlotter::plot()
 				label.setFont(data_label_font);
 				marker->setLabel(label);
 				marker->setLabelAlignment(data_label_alignment);
+			}
+			
+			if(show_stddev)
+			{
+				double* sx = new double[2];
+				double* sy = new double[2];
+				double stddev = (*coeff_stddev)(j,i);
+				sx[0]=j; sx[1]=j;
+				sy[0]=coefficient_j-stddev; sy[1]=coefficient_j+stddev;
+				QwtPlotCurve* error_bar = new QwtPlotCurve;
+				error_bar->setData(sx,sy,2);
+				QColor c(135,135,135); // grey
+				QPen pen(c);
+				error_bar->setPen(pen);
+				error_bar->attach(qwt_plot_);
+				delete sx; delete sy;
 			}
 		}
 	

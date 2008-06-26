@@ -356,13 +356,11 @@ bool ValidationItem::execute()
 		double mean_stddev=0;
 		int rows=coeff_stddev->Nrows();
 		int cols=coeff_stddev->Ncols();
-		cout<<rows<<" | "<<cols<<endl;
 		for(int i=1; i<=rows;i++)
 		{
 			for(int j=1; j<=cols;j++)
 			{
 				mean_stddev += (*coeff_stddev)(i,j);
-				cout<<(*coeff_stddev)(i,j)<<" "<<flush;
 			}
 		}
 		setResultString(mean_stddev/(rows*cols));

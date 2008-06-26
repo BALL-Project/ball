@@ -302,7 +302,12 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 					QMessageBox::information(view," ","Please drag the Validation onto a Model within your pipeline!");
 					return;
 				}
-				
+				if(item->getValidationType()==6 && !model_item_at_pos->getRegistryEntry()->regression)
+				{
+					QMessageBox::information(view," ","Calculation of standard deviations of coefficients can only be done for regression models!");
+					return;
+				}
+								
 				item = main_window->createValidation(item, model_item_at_pos);
 				item->setView(view);
 				pos = model_item_at_pos->pos();
