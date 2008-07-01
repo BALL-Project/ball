@@ -114,6 +114,12 @@ namespace BALL
 				/** trains the item's model */
 				bool execute();
 				
+				/** optimizes only the model parameters according to the setting of the item and does nothing else (no training); for use by FeatureSelectionItem */
+				void optimizeModelParameters();
+				
+				/** optimizes only the kernel parameters according to the setting of this item and does nothing else (no training); for use by FeatureSelectionItem */
+				void optimizeKernelParameters();
+				
 				void setSaveAttribute(bool save);
 				bool saveAttribute();
 				void setInputDataItem(InputDataItem* item);

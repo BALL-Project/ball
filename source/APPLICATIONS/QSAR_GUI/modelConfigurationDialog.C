@@ -446,6 +446,10 @@ void ModelConfigurationDialog::applyOptimizedParameters()
 			model_item_->optimize_kernel_parameters = false;
 		}
 	}
+	else
+	{
+		model_item_->optimize_kernel_parameters = false;
+	}
 }
 
 ///function for creating a model item with the given parameters
@@ -556,7 +560,6 @@ bool ModelConfigurationDialog::evaluateIndividualKernelFunction(String function)
 	try
 	{
 		ParsedFunction<float> parsed_function(function);
-		//parsed_function(1.0);
 	}
 	catch(ParseError)
 	{

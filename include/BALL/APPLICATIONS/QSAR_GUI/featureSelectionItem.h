@@ -77,7 +77,13 @@ namespace BALL
 				bool opt_;
 				int validation_statistic_;
 				double cor_threshold_;
-				bool opt_after_fs_;
+				
+				/** indicates whether the model parameters of the reduced model should be optimized. If true, this will be done in the same way as for the original/unreduced model */
+				bool post_optimization_model_par_;
+				
+				/** indicates whether the kernel parameters of the reduced model should be optimized. If true, this will be done in the same way as for the original/unreduced model */
+				bool post_optimization_kernel_par_;
+				
 				double quality_increase_cutoff_;
 				
 				

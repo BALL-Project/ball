@@ -44,9 +44,6 @@ namespace BALL
 
 				/** returns k for k-cross-validation*/
 				int k();
-			
-				/** */
-				bool optimize();
 				
 				int getValidationStatistic() {return statistic_;};
 	
@@ -56,19 +53,19 @@ namespace BALL
 			private:
 			
 				/** @name Private Attributes*/
-				QLineEdit* k_edit_;
+				QLineEdit* edit_;
 				QLineEdit* cutoff_;
-				QCheckBox* optimize_parameters_;
+				QCheckBox* checkbox_post_optimization_model_par_;
+				QCheckBox* checkbox_post_optimization_kernel_par_;
 				int k_;
 				double cor_threshold_;
-				bool optimize_;
+				bool post_optimization_model_par_;
+				bool post_optimization_kernel_par_;
 				FeatureSelectionItem* fs_item_;
 				
 				QComboBox* statistic_box_;
 				int statistic_;
-				
-				/** delete these when destroying this FeatureSelectionDialog */
-				list<QObject*> q_objects_;
+
 				
 				friend class FeatureSelectionItem;
 		};

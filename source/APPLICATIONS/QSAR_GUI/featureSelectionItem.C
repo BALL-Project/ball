@@ -22,9 +22,10 @@ FeatureSelectionItem::FeatureSelectionItem(int type, DataItemView* miv):
 	done_= 0;
 	k_ = 0;
 	cor_threshold_ = 0;
-	opt_after_fs_ = 0;
 	quality_increase_cutoff_ = -1;
 	opt_ = 0;
+	post_optimization_model_par_ = 0;
+	post_optimization_kernel_par_ = 0;
 
 	switch(type)
 	{
@@ -73,10 +74,11 @@ DataItem(fs_item.view_)
 	validation_statistic_ = fs_item.validation_statistic_;
 	done_ = 0;
 	result_ = "";
-	opt_after_fs_ = fs_item.opt_after_fs_;
 	quality_increase_cutoff_ = fs_item.quality_increase_cutoff_;
 	cor_threshold_ = fs_item.cor_threshold_;
 	feature_selection_ = NULL;
+	post_optimization_model_par_ = fs_item.post_optimization_model_par_;
+	post_optimization_kernel_par_ = fs_item.post_optimization_kernel_par_;
 }
 
 
@@ -104,10 +106,11 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 	bool remove_correlated=0; // == type_=0
 	cor_threshold_=-10;
 	quality_increase_cutoff_ = -1;
-	opt_after_fs_ = 0;
 	quality_increase_cutoff_=-1;
 	opt_ = 0;
 	feature_selection_ = NULL;
+	post_optimization_model_par_ = 0;
+	post_optimization_kernel_par_ = 0;
 	
 	while(input)
 	{
@@ -155,14 +158,34 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 		{
 			cor_threshold_ = ((String)line.after("=")).trimLeft().toDouble();
 		}
-		else if(line.hasPrefix("opt_par_after_fs"))
+		else if(line.hasPrefix("opt_model_par_after_fs"))
 		{
-			opt_after_fs_ = ((String)line.after("=")).trimLeft().toBool();
+			post_optimization_model_par_ = ((String)line.after("=")).trimLeft().toBool();
 		}
-		else if(line.hasPrefix("optimize_parameters"))
+		else if(line.hasPrefix("opt_kernel_par_after_fs"))
 		{
-			opt_ = ((String)line.after("=")).trimLeft().toBool();
+			post_optimization_kernel_par_ = ((String)line.after("=")).trimLeft().toBool();
 		}
+		else if(line.hasPrefix("grid_search_steps"))
+		{
+			// ignore this line; it is used for the command-line programs only
+		}
+		else if(line.hasPrefix("grid_search_recursions"))
+		{
+			// ignore this line; it is used for the command-line programs only
+		}
+		else if(line.hasPrefix("grid_search_stepwidth"))
+		{
+			// ignore this line; it is used for the command-line programs only
+		}
+		else if(line.hasPrefix("opt_k_fold"))
+		{
+			// ignore this line; it is used for the command-line programs only
+		}
+// 		else if(line.hasPrefix("optimize_parameters"))
+// 		{
+// 			opt_ = ((String)line.after("=")).trimLeft().toBool();
+// 		}
 		else if(line.hasPrefix("classification_statistic")) // currently unused by regressions!
 		{
 			String s = ((String)line.after("=")).trimLeft();
@@ -233,6 +256,11 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 	setSavedAs(output.c_str());
 	filenames_map.insert(make_pair(output,model_item_));
 	setPixmap(QPixmap("./images/feature_selection.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+	
+	// TODO : save/load this information
+	post_optimization_model_par_ = 0;
+	post_optimization_kernel_par_ = 0;
+	
 	done_ = 0;
 }
 
@@ -276,14 +304,14 @@ bool FeatureSelectionItem::execute()
 			throw InvalidFeatureSelectionItem(__FILE__,__LINE__);
 			break;
 	}
-	if(opt_after_fs_)
-	{
-		model_item_->model()->optimizeParameters(k_);
-	}
+
+	if(post_optimization_model_par_) model_item_->optimizeModelParameters();
+	if(post_optimization_kernel_par_) model_item_->optimizeKernelParameters();
 
 	model_item_->model()->readTrainingData();
 	model_item_->model()->train();
 	model_item_->setResultString((int)model_item_->model()->getDescriptorIDs()->size());
+
 	model_item_->setDone(1); // set done_ to 1, so that model will be saved to file when exporting the pipeline
 	done_ = 1; // ready!
 	return 1;
@@ -390,7 +418,22 @@ void FeatureSelectionItem::writeConfigSection(ofstream& out)
 		out<<"cor_threshold = "<<getCorThreshold()<<endl;
 	}
 	if(opt_) out << "optimize_parameters = " << opt() << "\n";
-	if(opt_after_fs_) out << "opt_par_after_fs = "<< opt_after_fs_ << "\n";
+	
+	bool b=0;
+	if(post_optimization_model_par_) 
+	{
+		out << "opt_model_par_after_fs = "<< 1 << "\n";
+		out << "opt_k_fold = "<<model_item_->k_fold<< "\n";
+		b=1;
+	}
+	if(post_optimization_kernel_par_)
+	{
+		out << "opt_kernel_par_after_fs = "<< 1 << "\n";
+		out << "grid_search_steps = "<<model_item_->grid_search_steps << "\n";
+		out << "grid_search_recursions = "<<model_item_->grid_search_recursions << "\n";
+		out << "grid_search_stepwidth = " <<model_item_->grid_search_stepwidth << "\n";
+		if(!b) out << "opt_k_fold = "<<model_item_->k_fold << "\n";
+	}
 	out << "output = " << modelItem()->savedAs().toStdString() << "\n";
 	out << "\n";
 }

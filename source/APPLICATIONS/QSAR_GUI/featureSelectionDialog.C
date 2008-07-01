@@ -17,17 +17,28 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 	
 	QVBoxLayout* main_layout = new QVBoxLayout(this);
 	QHBoxLayout* layout1 = new QHBoxLayout(this);
-	k_edit_ = new QLineEdit(this);
 	QDialogButtonBox* buttons = new QDialogButtonBox(QDialogButtonBox::Cancel);
 	QPushButton* applyButton = new QPushButton("OK");
 	buttons->addButton(applyButton, QDialogButtonBox::ApplyRole);
-	optimize_parameters_ = 0;
+	checkbox_post_optimization_model_par_ =0;
+	checkbox_post_optimization_kernel_par_=0;
 	cutoff_ = 0;
+	edit_ = new QLineEdit(this);
 	
-	if(fsitem->getType()>0) // no validation statistics for removal of colineal features
+	if(fsitem->getType()>0)
 	{
-		k_edit_->setText(String(reg->default_k).c_str());
-		optimize_parameters_ = new QCheckBox("optimize model parameters", this);
+		edit_->setText(String(reg->default_k).c_str());
+		
+		checkbox_post_optimization_model_par_ = new QCheckBox("optimize model parameters afterwards", this);
+		if(!model->optimize_model_parameters || model->k_fold<2)
+		{
+			checkbox_post_optimization_model_par_->setEnabled(0);
+		}
+		checkbox_post_optimization_kernel_par_ = new QCheckBox("optimize kernel parameters afterwards", this);
+		if(!model->optimize_kernel_parameters || model->k_fold<2)
+		{
+			checkbox_post_optimization_kernel_par_->setEnabled(0);
+		}
 	
 		QLabel* klabel = new QLabel("k for k-fold cross validation",this);
 		
@@ -39,10 +50,11 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 		cutoff_layout->addWidget(cutoff_);
 		
 		layout1->addWidget(klabel);
-		layout1->addWidget(k_edit_);
+		layout1->addWidget(edit_);
 	
-		QHBoxLayout* layout2 = new QHBoxLayout();
-		layout2->addWidget(optimize_parameters_);
+		//QHBoxLayout* layout2 = new QHBoxLayout();
+		//layout2->addWidget(checkbox_post_optimization_model_par_);
+		//layout2->addWidget(checkbox_post_optimization_kernel_par_);
 		
 		main_layout->addLayout(layout1);
 		main_layout->addLayout(cutoff_layout);
@@ -63,23 +75,34 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 				
 			layout3->addWidget(label3);layout3->addWidget(statistic_box_);
 			main_layout->addLayout(layout3);
-			
-			q_objects_.push_back(layout3);
-			q_objects_.push_back(label3);
-			q_objects_.push_back(statistic_box_);
 		}
-		main_layout->addLayout(layout2);
+	//	main_layout->addlayout(layout2);
+		main_layout->addWidget(checkbox_post_optimization_model_par_);
+		main_layout->addWidget(checkbox_post_optimization_kernel_par_);
 	}
-	else
+	else   // no validation statistics for removal of colineal features
 	{
 		double cor = reg->default_correlation_cutoff;
-		k_edit_->setText(String(cor).c_str());
+		edit_->setText(String(cor).c_str());
 		QLabel* label = new QLabel("correlation threshold");
 		layout1->addWidget(label);
-		layout1->addWidget(k_edit_);
-		main_layout->addLayout(layout1);
+		layout1->addWidget(edit_);
 		
-		//q_objects_.push_back(label);
+		
+		checkbox_post_optimization_model_par_ = new QCheckBox("optimize model parameters afterwards", this);
+		if(!model->optimize_model_parameters || model->k_fold<2)
+		{
+			checkbox_post_optimization_model_par_->setEnabled(0);
+		}
+		checkbox_post_optimization_kernel_par_ = new QCheckBox("optimize kernel parameters afterwards", this);
+		if(!model->optimize_kernel_parameters || model->k_fold<2)
+		{
+			checkbox_post_optimization_kernel_par_->setEnabled(0);
+		}
+		
+		main_layout->addLayout(layout1);
+		main_layout->addWidget(checkbox_post_optimization_model_par_);
+		main_layout->addWidget(checkbox_post_optimization_kernel_par_);
 	}
 	
 	main_layout->addWidget(buttons);
@@ -90,21 +113,19 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 	connect(buttons, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
+
 FeatureSelectionDialog::FeatureSelectionDialog():
-	k_edit_(NULL),
-	optimize_parameters_(NULL)
+	edit_(NULL)
 {
+	post_optimization_model_par_ = 0;
+	post_optimization_kernel_par_ = 0;
 }
 
 FeatureSelectionDialog::~FeatureSelectionDialog()
 {
- 	delete k_edit_;
- 	delete optimize_parameters_;
- 	
-	for(list<QObject*>::iterator it=q_objects_.begin(); it!=q_objects_.end();it++)
-	{
-		delete *it;
-	}
+ 	delete edit_;
+ 	delete checkbox_post_optimization_model_par_;
+	delete checkbox_post_optimization_kernel_par_;
 }	
 
 void FeatureSelectionDialog::applyInput()
@@ -113,11 +134,12 @@ void FeatureSelectionDialog::applyInput()
 	
 	if(fs_item_->getType()>0) // no validation statistics for removal of colineal features
 	{
-		int num = k_edit_->text().toInt(&ok);
-		k_ = num;
-		optimize_ = optimize_parameters_->isChecked();
+		k_ =  edit_->text().toInt(&ok);
+		post_optimization_model_par_ = checkbox_post_optimization_model_par_->isChecked();
+		post_optimization_kernel_par_ = checkbox_post_optimization_kernel_par_->isChecked();
 		fs_item_->setK(k_);
-		fs_item_->setOpt(optimize_);
+		fs_item_->post_optimization_model_par_ = post_optimization_model_par_;
+		fs_item_->post_optimization_kernel_par_ = post_optimization_kernel_par_;
 		
 		statistic_ = -1;
 		if(statistic_box_!=NULL)
@@ -131,13 +153,12 @@ void FeatureSelectionDialog::applyInput()
 	}
 	else
 	{
-		fs_item_->cor_threshold_=k_edit_->text().toDouble(&ok);
+		fs_item_->cor_threshold_=edit_->text().toDouble(&ok);
 		statistic_ = -1;
 		k_ = 0;
-		optimize_ = 0;
+		post_optimization_model_par_ = 0;
+		post_optimization_kernel_par_ = 0;
 	}
-	
-//	if(!ok) throw BALL::VIEW::Exception::InvalidK(__FILE__, __LINE__);
 }
 
 int FeatureSelectionDialog::k()
@@ -145,7 +166,3 @@ int FeatureSelectionDialog::k()
 	return k_;
 }
 
-bool FeatureSelectionDialog::optimize()
-{
-	return optimize_;
-}

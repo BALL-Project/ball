@@ -169,7 +169,7 @@ DataItem(item.view_)
 	kernel_parameter2 = item.kernel_parameter2;
 	model_parameters = item.model_parameters;
 	optimize_model_parameters = item.optimize_model_parameters;
-	optimize_kernel_parameters = item.optimize_model_parameters;
+	optimize_kernel_parameters = item.optimize_kernel_parameters;
 	grid_search_stepwidth = item.grid_search_stepwidth;
 	grid_search_steps = item.grid_search_steps;
 	grid_search_recursions = item.grid_search_recursions;
@@ -276,7 +276,7 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 		}
 		else if(line.hasPrefix("optimize_model_parameters"))
 		{
-			optimize_model_parameters = ((String)line.after("=")).trimLeft().toDouble();
+			optimize_model_parameters = ((String)line.after("=")).trimLeft().toBool();
 		}
 		else if(line.hasPrefix("kernel_type"))
 		{
@@ -463,11 +463,11 @@ bool ModelItem::execute()
 	
 	model_->setDataSource(input_->data());
 	
-	if (optimize_model_parameters)
+	if (!no_training_ && optimize_model_parameters)
 	{
 		model_->optimizeParameters(k_fold);
 	}
-	if (optimize_kernel_parameters)
+	if (!no_training_ && optimize_kernel_parameters)
 	{
 		KernelModel* km = (KernelModel*)model_;
 		km->kernel->gridSearch(grid_search_stepwidth, grid_search_steps,grid_search_recursions,k_fold);
@@ -483,6 +483,30 @@ bool ModelItem::execute()
 	setResultString((int)model_->getDescriptorNames()->size());
 	done_ = 1; //ready!
 	return 1;
+}
+
+
+void ModelItem::optimizeModelParameters()
+{
+	cout<<"optimizing model parameters..."<<endl;
+	if(optimize_model_parameters && k_fold>=2)
+	{
+		model_->optimizeParameters(k_fold);	
+	}
+}
+
+
+void ModelItem::optimizeKernelParameters()
+{
+	cout<<"optimizing kernel parameters..."<<endl;
+	if(optimize_kernel_parameters && k_fold>=2)
+	{
+		/// search locally around current kernel parameters
+		KernelModel* km = (KernelModel*)model_;
+		double start_par1 = km->kernel->par1 - ((grid_search_steps/2.)*grid_search_stepwidth);
+		double start_par2 = km->kernel->par2 - ((grid_search_steps/2.)*grid_search_stepwidth);
+		km->kernel->gridSearch(grid_search_stepwidth, grid_search_steps,grid_search_recursions,k_fold,start_par1,start_par2);
+	}	
 }
 
 
@@ -862,12 +886,17 @@ void ModelItem::hoverLeaveEvent (QGraphicsSceneHoverEvent* /*event*/)
 // SLOT
 void ModelItem::showFeaturePlotter()
 {
-	if(feature_plotter_ == NULL)
+	if(model_==NULL) return;
+	
+	if(entry_->regression && ((RegressionModel*)model_)->getTrainingResult()->Ncols()!=0)
 	{
-		feature_plotter_=new FeaturePlotter(this);
-	}
-	else
-	{
-		feature_plotter_->show();
+		if(feature_plotter_ == NULL)
+		{
+			feature_plotter_=new FeaturePlotter(this);
+		}
+		else
+		{
+			feature_plotter_->show();
+		}
 	}
 }
