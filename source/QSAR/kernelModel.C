@@ -55,10 +55,17 @@ void KernelModel::operator=(const Model& m)
 
 void KernelModel::saveToFile(string filename)
 {
-	if(training_result_.Nrows()==0 && type_!="SVR")
+// 	if(training_result_.Nrows()==0 && type_!="SVR")
+// 	{
+// 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must have been trained before the results can be saved to a file!");
+// 	}
+	bool trained = 1;
+	if(training_result_.Nrows()==0)
 	{
-		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must have been trained before the results can be saved to a file!");
+		trained = 0;
 	}
+	
+	
 	ofstream out(filename.c_str());
 	
 	const Matrix* coeffErrors = validation->getCoefficientStddev();
@@ -84,114 +91,21 @@ void KernelModel::saveToFile(string filename)
 		sel_features = data->getNoDescriptors();
 	}
 	
-	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tcentered response?\tno of substances"<<endl;
-	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<descriptor_matrix_.Nrows()<<"\n\n";
+	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tcentered response?\tno of substances\ttrained?"<<endl;
+	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<descriptor_matrix_.Nrows()<<"\t"<<trained<<"\n\n";
 	
 	saveKernelParametersToFile(out);
 	saveModelParametersToFile(out);
 	saveResponseTransformationToFile(out);
 	Model::saveDescriptorInformationToFile(out);
-	saveTrainingResult(out);
 	
+	if(!trained) return;
+	
+	saveTrainingResult(out);
 	out<<descriptor_matrix_<<endl; 
 	out<<K_<<endl;			
 	
 	out.close();
-	
-	
-	/*
-	out<<"# kernel-type_\tkernel-par1\tkernel-par2\n";
-	out<<kernel->type<<"\t";	/// write kernel parameters
-	if(kernel->type!=4)
-	{
-		out<<kernel->par1<<"\t"<<kernel->par2<<"\n";
-	}
-	else
-	{
-		out<<kernel->equation1<<"\t"<<kernel->equation2<<endl;
-	}
-	
-	out<<endl<<"# model-parameters"<<endl;  /// write model parameters 
-	vector<double> v = getParameters();
-	for(unsigned int i=0;i<v.size();i++)
-	{
-		out<<v[i]<<"\t";
-	}
-	out<<endl;
-	
-	if(centered_y) /// write information about transformation of result
-	{
-		out<<endl;
-		for(int i=1;i<=y_transformations_.Ncols();i++)
-		{
-			out<<y_transformations_(1,i)<<"\t"<<y_transformations_(2,i)<<"\n";
-		}
-	}	
-		
-	out<<"\n# ID\tdescriptor-name\t";
-	if(centered_data)
-	{
-		out<<"mean of desc.\tstddev of desc.\t";
-	}
-	if(stderr)
-	{
-		out<<"stderr(s) of coeff.";
-	}
-	out<<endl;  
-	
-	/// write (selected) descriptors and information about their transformation
-	if(!descriptor_IDs_.empty())
-	{
-		descriptor_IDs_.front();
-		for(int i=0; i<descriptor_matrix_.Ncols() && descriptor_IDs_.hasNext();i++)
-		{
-			out<<String(descriptor_IDs_.next())<<"\t"<<descriptor_names_[i]<<"\t";
-			
-			if(centered_data)
-			{
-				out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";
-			}
-			out <<"\n";
-		}
-	}
-	else
-	{
-		for(int i=0; i<descriptor_matrix_.Ncols();i++)
-		{
-			out<<String(i)<<"\t"<<descriptor_names_[i]<<"\t";
-	
-			if(centered_data)
-			{
-				out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";
-			}
-			out <<"\n";
-		}
-		
-	}	
-	out<<endl;
-	
-	if(type_!="SVR") // NO training_result matrix in case of SVR
-	{
-		for(int i=1; i<=training_result_.Nrows();i++) /// write training result
-		{
-			out<<substance_names_[i-1]<<"\t";
-			for(int j=1;j<=training_result_.Ncols();j++)
-			{
-				out<<training_result_(i,j)<<"\t";
-			}
-			for(int j=1; j<=coeffErrors->Ncols();j++)
-			{
-				out<<(*coeffErrors)(i,j)<<"\t";
-			}
-			out<<endl;
-		}
-		out<<endl;
-	}
-	
-	out<<descriptor_matrix_<<endl; /// write descriptor matrix
-	out<<K_<<endl;			/// write kernel matrix K_
-	out.close();
-	*/
 }
 
 
@@ -219,6 +133,7 @@ void KernelModel::readFromFile(string filename)
 	bool centered_data = line0.getField(4,"\t").toInt();
 	bool centered_y = line0.getField(5,"\t").toInt();
 	int no_substances = line0.getField(6,"\t").toInt();
+	bool trained = line0.getField(7,"\t").toInt();
 	
 	training_result_.ReSize(no_substances,no_y);
 	descriptor_names_.clear();
@@ -232,6 +147,9 @@ void KernelModel::readFromFile(string filename)
 		readResponseTransformationFromFile(input, no_y);
 	}
 	Model::readDescriptorInformationFromFile(input, no_descriptors, centered_data);
+	
+	if(!trained) return;
+	
 	readTrainingResult(input, no_substances, no_y);
 	readMatrix(descriptor_matrix_,input,no_substances,no_descriptors);  // read descriptor matrix
 	getline(input,line0);  // skip empty line 
