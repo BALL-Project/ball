@@ -1,0 +1,475 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+#include <iostream>
+
+#include <BALL/STRUCTURE/hybridisationProcessor.h>
+#include <BALL/KERNEL/forEach.h>
+#include <BALL/SYSTEM/path.h>
+#include <BALL/KERNEL/expression.h>
+#include <BALL/KERNEL/residue.h>
+#include <BALL/QSAR/ringPerceptionProcessor.h>
+#include <BALL/KERNEL/PTE.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
+
+// Qt
+#include <BALL/VIEW/KERNEL/common.h>
+#include <QtXml/QtXml>
+#include <Qt/qdom.h>
+
+//#define DEBUG 1
+#undef DEBUG
+
+using namespace std;
+using namespace BALL::VIEW;
+
+namespace BALL 
+{
+	const String HybridisationProcessor::Method::SMART_MATCHING = "smart_matching";
+	const String HybridisationProcessor::Method::STRUCTURE_BASED = "structure_based";
+	const String HybridisationProcessor::Method::GAFF_BASED = "GAFF_based";
+
+	const char* HybridisationProcessor::Option::ATOM_TYPE_SMARTS_FILENAME = "atom_type_smarts_filename";
+	const char* HybridisationProcessor::Default::ATOM_TYPE_SMARTS_FILENAME = "bondtyping/atomtypes.xml";
+	
+	const String  HybridisationProcessor::Option::METHOD = "method";
+	const String  HybridisationProcessor::Default::METHOD = HybridisationProcessor::Method::SMART_MATCHING;
+
+	HybridisationProcessor::HybridisationProcessor()
+		: UnaryProcessor<AtomContainer>(),
+			options(),
+			num_hybridisation_states_(),
+			atom_type_smarts_()
+	{
+		setDefaultOptions();
+		valid_ = readAtomTypeSmartsFromFile_();
+	}
+
+	HybridisationProcessor::HybridisationProcessor(const HybridisationProcessor& hp)
+		:	UnaryProcessor<AtomContainer>(hp),
+			options(),
+			num_hybridisation_states_(hp.num_hybridisation_states_), //TODO?
+			atom_type_smarts_(hp.atom_type_smarts_)
+	{
+	}
+
+	HybridisationProcessor::HybridisationProcessor(const String& file_name)	throw(Exception::FileNotFound)
+		:	UnaryProcessor<AtomContainer>(),
+			options(),
+			num_hybridisation_states_(0)
+	{
+		valid_ = readAtomTypeSmartsFromFile_(file_name);
+	}
+
+	HybridisationProcessor::~HybridisationProcessor()
+	{
+		setDefaultOptions();  // TODO: Why??
+	}
+
+	HybridisationProcessor& HybridisationProcessor::operator = (const HybridisationProcessor& hp)
+	{
+		valid_ = hp.valid_;
+		atom_type_smarts_ = hp.atom_type_smarts_;
+		num_hybridisation_states_ = hp.num_hybridisation_states_; // TODO?
+		return *this;
+	}
+
+	bool HybridisationProcessor::start()
+	{
+		num_hybridisation_states_ = 0;
+		return true;
+	}
+
+	Size HybridisationProcessor::getNumberOfHybridisationStatesSet()
+	{
+		return num_hybridisation_states_;
+	}
+
+	double HybridisationProcessor::AverageBondAngle_(Atom* a)
+	{
+		Atom* atom1;
+		Atom* atom2;
+	
+		double angleSum = 0.0;
+		Vector3 v1, v2;
+		Size n = 0; 						// number of bonds
+
+		Atom::BondIterator b_it1;
+		Atom::BondIterator b_it2;
+		for (b_it1 = a->beginBond(); +b_it1; ++b_it1)
+		{
+			b_it2 = b_it1;
+			++b_it2;
+			for (; +b_it2; ++b_it2)
+			{
+				atom1 = b_it1->getPartner(*a);
+				atom2 = b_it2->getPartner(*a);
+
+				v1 = atom1->getPosition() - a->getPosition();
+				v2 = atom2->getPosition() - a->getPosition();
+
+				angleSum += v1.getAngle(v2);
+				++n;
+			}
+		}
+
+		if (n >= 1)
+			return angleSum / n * 180.0 / M_PI;
+		else
+			return 0.0;
+	}
+
+
+	Processor::Result HybridisationProcessor::operator () (AtomContainer& ac)
+	{
+#ifdef DEBUG				
+		Log.info() << "HybridisationProcessor::operator() : \n\tmethod: " 
+							 << options.get(Option::METHOD)<< "\n"
+							<< "\tnum of smarts read from file: " << atom_type_smarts_.size()  << "\n" << endl; 
+#endif 		
+
+		if (options.get(Option::METHOD) == Method::SMART_MATCHING)
+		{
+			AtomIterator ait;
+			BALL_FOREACH_ATOM(ac, ait)
+			{
+				// initialize with 0
+				ait->setProperty("HybridisationState", 0);
+
+#ifdef DEBUG					
+		if (ait->getResidue())
+		{
+		 Log.info() << ait->getResidue()->getFullName();
+		}
+		Log.info() << " " << ait->getName() << " " << ait->getPosition() << " --> " << endl;
+#endif 	
+
+				bool found = false;
+				// find the __first__ matching atom type smarts
+				for (Size j = 0; !found && (j < atom_type_smarts_.size()); j++)
+				{	
+					Expression exp(atom_type_smarts_[j].first);
+					if (exp(*ait))
+					{
+						ait->setProperty("HybridisationState", int(atom_type_smarts_[j].second));
+						found = true;
+
+#ifdef DEBUG		
+	Log.info() 	<< "    smarts num "<< j+1 << " " << (atom_type_smarts_[j].first)<< " : " 
+							<<  ait->getProperty("HybridisationState").getInt()	<< endl;
+	found = false;
+#endif 
+					}
+				}
+				
+				if (!found)
+				{
+					Log.info() << "HybridisationProcessor: No hybridisation state found for atom "; 	
+					if (ait->getResidue())
+					{
+						Log.info() 	<< (ait->getResidue())->getFullName() << " : ";
+					}
+					Log.info() << ait->getFullName() << endl;
+				}
+
+			} // end of FOREACH_ATOM
+		}
+		else if (options.get(Option::METHOD) == Method::STRUCTURE_BASED) 
+		{
+			//
+			// first, we check the averaged bond angle
+			//
+			//		angle > 155         --> 1
+			//		angle e [115, 155]  --> 2
+			//		angle < 115 && !H 	--> 3
+			
+			AtomIterator ait;
+			float angle;
+
+			for (ait = ac.beginAtom(); +ait; ++ait)
+			{
+#ifdef DEBUG
+	cout << "\n*** " << ait->getFullName() << "*******************"  << endl;
+#endif
+				angle = AverageBondAngle_(&*ait);
+
+#ifdef DEBUG
+	cout << " aver bond angle: " << angle ;
+#endif
+				
+				if (angle > 155.0)
+				{	
+					ait->setProperty("HybridisationState", 1);
+				}
+				else if ( (angle <= 155.0) && (angle > 115.))
+				{	
+					ait->setProperty("HybridisationState", 2);
+				}
+				else if (ait->getElement().getName() != "Hydrogen")
+				{		
+					ait->setProperty("HybridisationState", 3);
+				}
+
+#ifdef DEBUG
+	cout << " --> hyb: " << 	ait->getProperty("HybridisationState").getInt() << endl;
+#endif
+			}
+
+			// Check the rings 
+			// 	 	5-rings: averaged_ring_torsion < 7.5 --> "HybridisationState" 2
+			//		6-rings: averaged_ring_torsion < 12  --> "HybridisationState" 2
+			//
+			vector<vector<Atom*> > rings;
+			RingPerceptionProcessor rpp;
+			ac.apply(rpp);
+			rpp.calculateSSSR(rings, ac);
+
+			double averaged_ring_torsion; // torsion 
+			Atom* b;
+
+			for(Size i=0; i<rings.size(); ++i)
+			{
+				// 5-rings
+				if (rings[i].size() == 5)
+				{
+#ifdef DEBUG
+	cout << "\t 5-ring " << i << ": " << (rings[i][0])->getFullName() << " " << (rings[i][1])->getFullName()
+				<< (rings[i][2])->getFullName() << " "	<< rings[i][3]->getFullName() << " "
+				<< (rings[i][4])->getFullName() << endl;
+#endif
+					averaged_ring_torsion = 
+					 (fabs(calculateTorsionAngle(*(rings[i][0]),*(rings[i][1]),*(rings[i][2]),
+																			 *(rings[i][3])).toDegree()) +
+						fabs(calculateTorsionAngle(*(rings[i][1]),*(rings[i][2]),*(rings[i][3]),
+																			 *(rings[i][4])).toDegree()) +	
+						fabs(calculateTorsionAngle(*(rings[i][2]),*(rings[i][3]),*(rings[i][4]),
+																			 *(rings[i][0])).toDegree()) +	
+						fabs(calculateTorsionAngle(*(rings[i][3]),*(rings[i][4]),*(rings[i][0]),
+																			 *(rings[i][1])).toDegree()) +	
+						fabs(calculateTorsionAngle(*(rings[i][4]),*(rings[i][0]),*(rings[i][1]),
+																			 *(rings[i][2])).toDegree())
+					 ) / 5.0;	
+
+#ifdef DEBUG
+	cout << "\t\t aver tor angle: " << averaged_ring_torsion;  
+#endif
+					if (averaged_ring_torsion <= 7.5)
+					{
+						for (Size j=0; j<rings[i].size(); ++j)
+						{
+							b = rings[i][j];
+							if (b->countBonds() == 2)
+							{
+								b->setProperty("HybridisationState", 2);
+#ifdef DEBUG
+	cout << "\t\t\t " <<  b->getFullName() << " --> hyb: " <<  b->getProperty("HybridisationState").getInt() << endl;  
+#endif
+							}
+						}
+					}
+				} // now check the 6 rings
+				else 	if (rings[i].size() == 6)
+				{
+#ifdef DEBUG
+	cout << "\t 6-ring " << i << ": " << rings[i][0]->getFullName() << " " << rings[i][1]->getFullName()
+				<< rings[i][2]->getFullName() << " "	<< rings[i][3]->getFullName() << " "
+				<< rings[i][4]->getFullName() << " "	<< rings[i][5]->getFullName() <<  endl;
+#endif
+
+					averaged_ring_torsion = 
+					( fabs(calculateTorsionAngle(*(rings[i][0]),*(rings[i][1]),*(rings[i][2]),
+																			 *(rings[i][3])).toDegree()) +
+						fabs(calculateTorsionAngle(*(rings[i][1]),*(rings[i][2]),*(rings[i][3]),
+																			 *(rings[i][4])).toDegree()) +	
+						fabs(calculateTorsionAngle(*(rings[i][2]),*(rings[i][3]),*(rings[i][4]),
+																			 *(rings[i][5])).toDegree()) +	
+						fabs(calculateTorsionAngle(*(rings[i][3]),*(rings[i][4]),*(rings[i][5]),
+																			 *(rings[i][0])).toDegree()) +	
+						fabs(calculateTorsionAngle(*(rings[i][4]),*(rings[i][5]),*(rings[i][0]),
+																			 *(rings[i][1])).toDegree()) +
+						fabs(calculateTorsionAngle(*(rings[i][5]),*(rings[i][0]),*(rings[i][1]),
+																			 *(rings[i][2])).toDegree())
+				  ) / 7.0; //  TODO: TILL fragen!
+
+#ifdef DEBUG
+	cout << "\t\t aver tor angle: " << averaged_ring_torsion;  
+#endif
+
+					if (averaged_ring_torsion <= 12.0)
+					{
+						for (Size j=0; j<rings[i].size(); ++j)
+						{
+							b = rings[i][j];
+							if (   (b->countBonds() == 2) 
+									|| (b->countBonds() == 3))
+							{	
+								b->setProperty("HybridisationState", 2);
+#ifdef DEBUG
+	cout << "\t\t\t " <<  b->getFullName() << " --> hyb: " <<  b->getProperty("HybridisationState").getInt() << endl;  
+#endif
+							}
+						}
+					}
+
+				} 
+			}// end of all rings
+
+
+			//
+			// Make sure, that neighboring atoms have same hybridization (sp or sp2) 
+			//
+			bool openNbr = false; // TILL fragen!!
+			Atom::BondIterator b_it;
+			BALL::Atom* a;
+			for (ait = ac.beginAtom(); +ait; ++ait)
+			{
+				if (   (ait->getProperty("HybridisationState").getInt() == 2) 
+						|| (ait->getProperty("HybridisationState").getInt() == 1))
+				{
+					openNbr = false;
+					for (b_it = ait->beginBond(); +b_it; ++b_it)
+					{
+						a = b_it->getPartner(*ait);
+						if (    (a->getProperty("HybridisationState").getInt() < 3)
+								 || (a->countBonds() == 1))
+						{
+							openNbr = true;
+							break;
+						}
+					}
+#ifdef DEBUG	
+if (!openNbr)
+{
+	cout << " openNbr-Correction for" <<  ait->getFullName() << " --> hyb: "; }
+#endif
+
+					if ((!openNbr) && (ait->getProperty("HybridisationState").getInt() == 2))
+					{	
+						ait->setProperty("HybridisationState", 3);
+
+#ifdef DEBUG	
+					cout	<<  ait->getProperty("HybridisationState").getInt() << endl;  
+#endif
+					}
+					else if ((!openNbr) && (ait->getProperty("HybridisationState").getInt() == 1))
+					{
+						ait->setProperty("HybridisationState", 2);
+#ifdef DEBUG	
+					cout	<<  ait->getProperty("HybridisationState").getInt() << endl;  
+#endif
+					}	
+				}
+			}
+		} // End of the structure-based method
+		else if (options.get(Option::METHOD) == Method::GAFF_BASED) 
+		{
+		}
+		return Processor::BREAK;
+	}
+
+	void HybridisationProcessor::setAtomTypeSmarts(const String& file_name) 
+		throw(Exception::FileNotFound)
+	{
+		atom_type_smarts_.clear();
+		valid_ = readAtomTypeSmartsFromFile_(file_name);
+	}
+
+	bool HybridisationProcessor::readAtomTypeSmartsFromFile_(const String& file_name) 
+		throw(Exception::FileNotFound)
+	{
+		// test file or set default file
+		String filename(file_name);
+		if (file_name == "")
+		{
+			filename = String(options.get(HybridisationProcessor::Option::ATOM_TYPE_SMARTS_FILENAME));
+		}
+
+		Path path;
+
+		String filepath = path.find(filename);
+		if (filepath == "")
+		{
+			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+		}
+		
+		QString errorStr;
+		int errorLine;
+		int errorColumn;
+
+		QFile file((filepath.c_str()));
+		if (!file.open(QFile::ReadOnly | QFile::Text)) 
+		{
+			Log.error() << "HybridisationProcessor: cannot read file " << filename << std::endl;
+			Log.error() << "Reason was: " << ascii(file.errorString()) << std::endl;
+			return 1;
+		}
+
+		// read the document
+		QDomDocument domDocument;
+		if (!domDocument.setContent(&file, true, &errorStr, &errorLine,
+					&errorColumn)) 
+		{
+			Log.error() << "Parse error in line " << errorLine << " column " << errorColumn 
+									<<  " of file " << filename << endl;
+			Log.error() << "Reason was: " << ascii(errorStr) << std::endl;
+			return 1;
+		}
+		// get the root element...
+		QDomElement root = domDocument.documentElement();	
+		
+		// ... and get all entries
+		QDomNodeList entries = domDocument.elementsByTagName("entry");
+
+		for (unsigned int i= 0; i < entries.length(); i++)
+		{
+			pair<String, Size> tmp;
+
+			// get the smart expression (tag smartstring) 
+			// NOTE: each entry should have just ONE smart expression)
+			QDomNodeList smartstrings = entries.item(i).toElement().elementsByTagName("smartstring");
+			
+			if (smartstrings.length() == 1)
+			{
+				tmp.first = ascii(smartstrings.item(0).toElement().firstChild().nodeValue());	
+			} 
+			else if (smartstrings.length() == 0)
+			{
+					Log.warn() << "HybridisationProcessor: Parse error in file " << filename 
+										<< " : no SMARTS-string found in entry " 
+										<< i << endl;
+			}  
+			else
+			{
+					Log.error() <<  "HybridisationProcessor: Parse error in file " << filename 
+											<< " : more than one item in entry " << i << endl;
+			}
+
+			// now read the corresponding hybridisation state
+			QDomNodeList hyb_state =  entries.item(i).toElement().elementsByTagName("hybridisationstate");
+			if (hyb_state.length() == 1)
+			{	
+				tmp.second = (hyb_state.item(0).toElement().firstChild().nodeValue()).toInt();
+			}
+			else
+			{
+					Log.error() << "HybridisationProcessor: Parse error in file " << filename 
+											<< " : no hybridisation state found for entry " 
+											<< i << " : " << tmp.first << endl;
+			}
+			
+			atom_type_smarts_.push_back(tmp);
+
+		} // next entry	
+
+		return true;
+	}
+	
+	void HybridisationProcessor::setDefaultOptions()
+	{
+		options.setDefault(HybridisationProcessor::Option::ATOM_TYPE_SMARTS_FILENAME,
+											 HybridisationProcessor::Default::ATOM_TYPE_SMARTS_FILENAME);
+		options.setDefault(HybridisationProcessor::Option::METHOD,
+											 HybridisationProcessor::Default::METHOD);
+	}
+
+} // namespace BALL

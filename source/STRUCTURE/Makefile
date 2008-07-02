@@ -40,9 +40,9 @@ CPP_SOURCES=\
 	graphEdge.C\
 	graphFace.C\
 	graphVertex.C\
-	kekulizer.C\
-	molecularGraph.C\
 	HBondProcessor.C\
+	hybridisationProcessor.C\
+	kekulizer.C\
 	moleculeAssembler.C\
 	molecularGraph.C\
 	numericalSAS.C\
