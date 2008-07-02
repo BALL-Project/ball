@@ -233,13 +233,15 @@ OptimizePage::OptimizePage(ModelConfigurationDialog* parent)
 	}
 	
 	QVBoxLayout* mainLayout = new QVBoxLayout();
+	Registry* reg = parent->parent->registry();
 
 	if (parent->isOptimizable || parent->entryHasKernel)
 	{
-		QGroupBox *kGroup = new QGroupBox(tr("k"),this);
+		QGroupBox* kGroup = new QGroupBox(tr("k"),this);
 		QHBoxLayout* k_layout = new QHBoxLayout();
 		QLabel* label = new QLabel("k for k-fold cross-validation",this);
 		k_edit_ = new QLineEdit(this); k_edit_->setMinimumWidth(50);
+		k_edit_->setText(parent->defaultValueToQString(reg->default_k));
 		k_layout->addWidget(label);
 		k_layout->addWidget(k_edit_);
 		kGroup->setLayout(k_layout);	
@@ -275,7 +277,7 @@ OptimizePage::OptimizePage(ModelConfigurationDialog* parent)
 	}
 
 	if (parent->entryHasKernel)	
-	{
+	{		
 		QGroupBox* kernelConfigGroup = new QGroupBox(tr("Optimize Kernel Parameters"),this);
 	
 		QGridLayout *layout2 = new QGridLayout();
@@ -285,10 +287,15 @@ OptimizePage::OptimizePage(ModelConfigurationDialog* parent)
 		QLabel* parameter1_label = new QLabel(tr("start value for parameter 1"),this);
 		QLabel* parameter2_label = new QLabel(tr("start value for parameter 2"),this);
 		search_edit1_ = new QLineEdit(this); search_edit1_->setMinimumWidth(60);
+		search_edit1_->setText(parent->defaultValueToQString(reg->default_gridsearch_steps));
 		search_edit2_ = new QLineEdit(this);
+		search_edit2_->setText(parent->defaultValueToQString(reg->default_gridsearch_stepwidth,2));
 		search_edit3_ = new QLineEdit(this);
+		search_edit3_->setText(parent->defaultValueToQString(reg->default_gridsearch_recursion));
 		parameter1_edit_ = new QLineEdit(this);
+		parameter1_edit_->setText(parent->defaultValueToQString(reg->default_gridsearch_par1_start,2));
 		parameter2_edit_ = new QLineEdit(this);
+		parameter2_edit_->setText(parent->defaultValueToQString(reg->default_gridsearch_par2_start,2));
 		
 		layout2->addWidget(search_label1,1,1);
 		layout2->addWidget(search_label2,2,1);

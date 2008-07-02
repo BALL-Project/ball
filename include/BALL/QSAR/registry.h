@@ -97,6 +97,12 @@ namespace BALL
 				/** the default value for the absolute value of the correlation coefficient for removing of nearly colinear features */
 				double default_correlation_cutoff;
 				
+				double default_gridsearch_stepwidth;
+				int default_gridsearch_recursion;
+				int default_gridsearch_steps;
+				double default_gridsearch_par1_start;
+				double default_gridsearch_par2_start;
+				
 				/** returns the RegistryEntry for a given model name */
 				RegistryEntry* getRegistryEntry(String model_name);
 				

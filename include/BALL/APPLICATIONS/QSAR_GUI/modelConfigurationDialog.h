@@ -73,6 +73,9 @@ namespace BALL
 				/** returns the second string of an individual kernel*/
 				std::string KernelString2();
 				
+				QString defaultValueToQString(double& value, int precision);
+				QString defaultValueToQString(int& value);
+				
 				MainWindow* parent;
 
 

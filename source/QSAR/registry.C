@@ -15,6 +15,12 @@ Registry::Registry()
 	default_nested_folds = 4;
 	default_correlation_cutoff = 0.97;
 	
+	default_gridsearch_stepwidth = 0.25;
+	default_gridsearch_recursion = 0;
+	default_gridsearch_steps = 20;
+	default_gridsearch_par1_start = 0.25;
+	default_gridsearch_par2_start = -0.25;
+	
 	/// add new Model classes here:
 	
 	RegistryEntry r0(0,1,"Multiple Linear Regression", "MLR", (CreateMethod) &ModelFactory<MLRModel>::create,this);

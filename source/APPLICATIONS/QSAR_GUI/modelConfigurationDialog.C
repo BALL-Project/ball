@@ -567,3 +567,23 @@ bool ModelConfigurationDialog::evaluateIndividualKernelFunction(String function)
 	}
 	return 1;
 }
+
+
+QString ModelConfigurationDialog::defaultValueToQString(double& value, int precision)
+{
+	ostringstream stream;
+	stream.precision(precision);
+	stream << value;
+	QString text(stream.str().c_str());
+	return text;	
+}
+
+
+QString ModelConfigurationDialog::defaultValueToQString(int& value)
+{
+	ostringstream stream;
+	stream.precision(0);
+	stream << value;
+	QString text(stream.str().c_str());
+	return text;	
+}

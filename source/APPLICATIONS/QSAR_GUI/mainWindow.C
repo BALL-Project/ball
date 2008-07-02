@@ -24,13 +24,14 @@ using namespace BALL::VIEW;
 using namespace BALL::VIEW::Exception;
 using namespace BALL::Exception;
 
-///set up the main window
+///set up they main window
  MainWindow::MainWindow()
  {
 	///set up the main scenes & views
 	view_ = new DataItemView(&view_scene_,this);
 	view_->name = "view";
 	view_->mapToScene(0,0);
+	view_->setDragMode(QGraphicsView::RubberBandDrag);
 
 	model_list_ = new DataItemView(&model_list_scene_,this);
 	model_list_->name = "model_list";

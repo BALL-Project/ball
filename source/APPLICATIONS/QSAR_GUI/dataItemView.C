@@ -20,7 +20,6 @@ DataItemView::DataItemView(DataItemScene* scene, MainWindow* mw):
 	setFocusPolicy(Qt::ClickFocus);
 	setAlignment(Qt::AlignLeft | Qt::AlignTop);
 	scene->setItemIndexMethod(QGraphicsScene::NoIndex);
-	setDragMode(QGraphicsView::RubberBandDrag);
 	
 	scene->setMainWindow(mw);
 	scene->view = this;
