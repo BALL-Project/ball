@@ -175,6 +175,7 @@ KernelParameterPage::KernelParameterPage(ModelConfigurationDialog* parent)
 	connect(this, SIGNAL(hasIndividualKernel(bool)), individualKernelExtension_, SLOT(setVisible(bool)));
 	connect(this, SIGNAL(hasKernelParameter1(bool)), kernelParameter1Extension_, SLOT(setVisible(bool)));
 	connect(this, SIGNAL(hasKernelParameter2(bool)), kernelParameter2Extension_, SLOT(setVisible(bool)));
+	showKernelFunction(0); // when opening dialog, show first function
  }
 
 void KernelParameterPage::showExtensions(int id)

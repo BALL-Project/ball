@@ -305,6 +305,7 @@ bool FeatureSelectionItem::execute()
 			break;
 	}
 
+	cout<<"opt's : "<<post_optimization_model_par_<<"  "<<post_optimization_kernel_par_<<endl;
 	if(post_optimization_model_par_) model_item_->optimizeModelParameters();
 	if(post_optimization_kernel_par_) model_item_->optimizeKernelParameters();
 

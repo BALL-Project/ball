@@ -378,7 +378,8 @@ void ModelConfigurationDialog::applyOptimizedParameters()
 		if (ok)
 		{	
 			model_item_->k_fold = k;
-			model_item_->optimize_model_parameters = true;
+			if(isOptimizable) model_item_->optimize_model_parameters = true;
+			else model_item_->optimize_model_parameters=false;
 		}	
 	}
 	

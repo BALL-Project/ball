@@ -166,6 +166,8 @@ void Kernel::calculateKernelMatrix(Matrix& K, Matrix& m1, Matrix& m2, Matrix& ou
 void Kernel::gridSearch(double step_width, int steps, int recursions, int k, bool opt, double par1_start, double par2_start)
 {
 	bool first_rec=1;
+	
+	// do once + one time for each desired recursion
 	for(int i=0; i<=recursions;i++)
 	{
 		gridSearch(step_width,steps,first_rec,k,par1_start,par1_start,opt);

@@ -27,19 +27,7 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 	
 	if(fsitem->getType()>0)
 	{
-		edit_->setText(String(reg->default_k).c_str());
-		
-		checkbox_post_optimization_model_par_ = new QCheckBox("optimize model parameters afterwards", this);
-		if(!model->optimize_model_parameters || model->k_fold<2)
-		{
-			checkbox_post_optimization_model_par_->setEnabled(0);
-		}
-		checkbox_post_optimization_kernel_par_ = new QCheckBox("optimize kernel parameters afterwards", this);
-		if(!model->optimize_kernel_parameters || model->k_fold<2)
-		{
-			checkbox_post_optimization_kernel_par_->setEnabled(0);
-		}
-	
+		edit_->setText(String(reg->default_k).c_str());	
 		QLabel* klabel = new QLabel("k for k-fold cross validation",this);
 		
 		QHBoxLayout* cutoff_layout = new QHBoxLayout(this);
@@ -72,13 +60,10 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 			{
 				statistic_box_->addItem((*statistics)[i].c_str(),i);
 			}
-				
+
 			layout3->addWidget(label3);layout3->addWidget(statistic_box_);
 			main_layout->addLayout(layout3);
 		}
-	//	main_layout->addlayout(layout2);
-		main_layout->addWidget(checkbox_post_optimization_model_par_);
-		main_layout->addWidget(checkbox_post_optimization_kernel_par_);
 	}
 	else   // no validation statistics for removal of colineal features
 	{
@@ -86,24 +71,22 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 		edit_->setText(String(cor).c_str());
 		QLabel* label = new QLabel("correlation threshold");
 		layout1->addWidget(label);
-		layout1->addWidget(edit_);
-		
-		
-		checkbox_post_optimization_model_par_ = new QCheckBox("optimize model parameters afterwards", this);
-		if(!model->optimize_model_parameters || model->k_fold<2)
-		{
-			checkbox_post_optimization_model_par_->setEnabled(0);
-		}
-		checkbox_post_optimization_kernel_par_ = new QCheckBox("optimize kernel parameters afterwards", this);
-		if(!model->optimize_kernel_parameters || model->k_fold<2)
-		{
-			checkbox_post_optimization_kernel_par_->setEnabled(0);
-		}
-		
+		layout1->addWidget(edit_);		
 		main_layout->addLayout(layout1);
-		main_layout->addWidget(checkbox_post_optimization_model_par_);
-		main_layout->addWidget(checkbox_post_optimization_kernel_par_);
 	}
+	
+	checkbox_post_optimization_model_par_ = new QCheckBox("optimize model parameters afterwards", this);
+	if(!model->optimize_model_parameters || model->k_fold<2)
+	{
+		checkbox_post_optimization_model_par_->setEnabled(0);
+	}
+	checkbox_post_optimization_kernel_par_ = new QCheckBox("optimize kernel parameters afterwards", this);
+	if(!model->optimize_kernel_parameters || model->k_fold<2)
+	{
+		checkbox_post_optimization_kernel_par_->setEnabled(0);
+	}
+	main_layout->addWidget(checkbox_post_optimization_model_par_);
+	main_layout->addWidget(checkbox_post_optimization_kernel_par_);
 	
 	main_layout->addWidget(buttons);
 	this->setLayout(main_layout);
@@ -131,15 +114,15 @@ FeatureSelectionDialog::~FeatureSelectionDialog()
 void FeatureSelectionDialog::applyInput()
 {
 	bool ok = 0;
+	post_optimization_model_par_ = checkbox_post_optimization_model_par_->isChecked();
+	post_optimization_kernel_par_ = checkbox_post_optimization_kernel_par_->isChecked();
+	fs_item_->post_optimization_model_par_ = post_optimization_model_par_;
+	fs_item_->post_optimization_kernel_par_ = post_optimization_kernel_par_;
 	
 	if(fs_item_->getType()>0) // no validation statistics for removal of colineal features
 	{
 		k_ =  edit_->text().toInt(&ok);
-		post_optimization_model_par_ = checkbox_post_optimization_model_par_->isChecked();
-		post_optimization_kernel_par_ = checkbox_post_optimization_kernel_par_->isChecked();
 		fs_item_->setK(k_);
-		fs_item_->post_optimization_model_par_ = post_optimization_model_par_;
-		fs_item_->post_optimization_kernel_par_ = post_optimization_kernel_par_;
 		
 		statistic_ = -1;
 		if(statistic_box_!=NULL)
@@ -156,8 +139,6 @@ void FeatureSelectionDialog::applyInput()
 		fs_item_->cor_threshold_=edit_->text().toDouble(&ok);
 		statistic_ = -1;
 		k_ = 0;
-		post_optimization_model_par_ = 0;
-		post_optimization_kernel_par_ = 0;
 	}
 }
 
