@@ -176,18 +176,34 @@ namespace BALL
 		}
 		else if (options.get(Option::METHOD) == Method::STRUCTURE_BASED) 
 		{
-			//
-			// first, we check the averaged bond angle
-			//
+			// This method is a reimplementation of the openbabel code 
+			// for determination of hybridisation states as denoted 
+			// in the file mol.cpp
+			// 
+			// openbabel divides into several passes:
+			// Pass 1: Assign estimated hybridization based on avg. angles 
+			// Pass 2: look for 5-member rings with torsions <= 7.5 degrees
+    	//         and 6-member rings with torsions <= 12 degrees
+    	//         (set all atoms with at least two bonds to sp2)
+			// Pass 3: "Antialiasing" If an atom marked as sp hybrid isn't
+    	//          bonded to another or an sp2 hybrid isn't bonded
+    	//          to another (or terminal atoms in both cases)
+    	//          mark them to a lower hybridization for now 
+			//         //TODO: not sure what lower means: smaller hyb 
+			//                 number or lower energy (higher hyb num)
+
+			// Pass 1: Assign estimated hybridization based on avg. angles 
 			//		angle > 155         --> 1
 			//		angle e [115, 155]  --> 2
-			//		angle < 115 && !H 	--> 3
+			//		angle < 115 && !H 	--> 3  all other cases :-)
+			//		hydrogens:    --> 0
 			
 			AtomIterator ait;
 			float angle;
 
 			for (ait = ac.beginAtom(); +ait; ++ait)
 			{
+
 #ifdef DEBUG
 	cout << "\n*** " << ait->getFullName() << "*******************"  << endl;
 #endif
@@ -209,12 +225,16 @@ namespace BALL
 				{		
 					ait->setProperty("HybridisationState", 3);
 				}
-
+				else if (ait->getElement().getName() == "Hydrogen")
+				{
+					ait->setProperty("HybridisationState", 0);
+				}
 #ifdef DEBUG
 	cout << " --> hyb: " << 	ait->getProperty("HybridisationState").getInt() << endl;
 #endif
 			}
 
+			// Pass 2:
 			// Check the rings 
 			// 	 	5-rings: averaged_ring_torsion < 7.5 --> "HybridisationState" 2
 			//		6-rings: averaged_ring_torsion < 12  --> "HybridisationState" 2
@@ -258,6 +278,9 @@ namespace BALL
 						for (Size j=0; j<rings[i].size(); ++j)
 						{
 							b = rings[i][j];
+							// if an aromatic ring atom has valence 3, it is already set
+              // to sp2 because the average angles should be 120 anyway
+              // so only look for valence 2
 							if (b->countBonds() == 2)
 							{
 								b->setProperty("HybridisationState", 2);
@@ -289,7 +312,7 @@ namespace BALL
 																			 *(rings[i][1])).toDegree()) +
 						fabs(calculateTorsionAngle(*(rings[i][5]),*(rings[i][0]),*(rings[i][1]),
 																			 *(rings[i][2])).toDegree())
-				  ) / 7.0; //  TODO: TILL fragen!
+				  ) / 6.0; 
 
 #ifdef DEBUG
 	cout << "\t\t aver tor angle: " << averaged_ring_torsion;  
@@ -314,11 +337,16 @@ namespace BALL
 				} 
 			}// end of all rings
 
-
+			// Pass 3: "Antialiasing" If an atom marked as sp hybrid isn't
+    	//          bonded to another or an sp2 hybrid isn't bonded
+    	//          to another (or terminal atoms in both cases)
+    	//          mark them to a lower hybridization for now
+			
 			//
-			// Make sure, that neighboring atoms have same hybridization (sp or sp2) 
+			// Make sure, that neighboring atoms have same hybridization (sp or sp2)
+			//  NOTE: the default case is hybridisation 3 !!!
 			//
-			bool openNbr = false; // TILL fragen!!
+			bool openNbr = false; // denotes whether _all_ neighbours are still free
 			Atom::BondIterator b_it;
 			BALL::Atom* a;
 			for (ait = ac.beginAtom(); +ait; ++ait)
@@ -329,6 +357,7 @@ namespace BALL
 					openNbr = false;
 					for (b_it = ait->beginBond(); +b_it; ++b_it)
 					{
+						// get the neighbouring atom
 						a = b_it->getPartner(*ait);
 						if (    (a->getProperty("HybridisationState").getInt() < 3)
 								 || (a->countBonds() == 1))
@@ -340,9 +369,9 @@ namespace BALL
 #ifdef DEBUG	
 if (!openNbr)
 {
-	cout << " openNbr-Correction for" <<  ait->getFullName() << " --> hyb: "; }
+	cout << " openNbr-Correction for" <<  ait->getFullName() << " --> hyb: "; 
+}
 #endif
-
 					if ((!openNbr) && (ait->getProperty("HybridisationState").getInt() == 2))
 					{	
 						ait->setProperty("HybridisationState", 3);
