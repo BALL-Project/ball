@@ -26,18 +26,20 @@ InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* pa
 	{
 		output_filename_=output_filename_.substr(0,index);
 	}
+	
+	String postfix="";
 	if(partitioner->getID()>0)
 	{
-		output_filename_=output_filename_+"_"+String(partitioner->getID());
+		postfix="_"+String(partitioner->getID());
 	}
+	if(test_partition) postfix+="_TEST";		
+	else postfix+="_TRAIN";
+	postfix += String(fold_ID_)+".dat";
 	
-	if(test_partition) output_filename_+="_TEST";		
-	else output_filename_+="_TRAIN";
-	output_filename_ += String(fold_ID_)+".dat";
+	output_filename_+=postfix;	
 	
 	if(test_partition) name_ = "validation";
 	else name_ = "train";
-	
 	
 	/// set saved_as_, the name of this item prefixed by the name of the configfile
 	String s = partitioner->getInputItem()->savedAs().toStdString();
@@ -46,12 +48,10 @@ InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* pa
 	{
 		saved_as_ = s.substr(0,index2).c_str();
 	}		
-	if(test_partition) saved_as_+="_TEST";		
-	else saved_as_+="_TRAIN";
-	saved_as_ += String(fold_ID_).c_str(); saved_as_+=".dat";
+	saved_as_+=postfix.c_str();
 	 
 	//cout<<"output_filename_="<<output_filename_<<endl;
-	//cout<<"saved_as_="<<saved_as_.toStdString()<<endl;
+	//cout<<"saved_as_="<<saved_as_.toStdString()<<endl<<endl;
 	
 	//TODO: set pixmap depending on whether test_partition_==1 or not...
 }
