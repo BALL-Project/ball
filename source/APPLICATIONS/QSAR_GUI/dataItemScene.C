@@ -242,7 +242,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 					return;	
 				}
 		
-				model_copy = new ModelItem(*model_item_at_pos);
+				model_copy = new ModelItem(*model_item_at_pos);				
 				model_copy->setInputDataItem(model_item_at_pos->inputDataItem());
 				item = main_window->createFeatureSelection(item, model_copy, model_item_at_pos);
 				pos = model_item_at_pos->pos();

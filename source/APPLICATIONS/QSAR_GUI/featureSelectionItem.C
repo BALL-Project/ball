@@ -272,8 +272,11 @@ bool FeatureSelectionItem::execute()
 	}
 	
 	if(done_) return 0; // do nothing twice...
-
+	
+	/// set input data source of this model and copy the descriptor IDs from the previous model. The latter is important if there are several successive feature selections to be done
 	model_item_->setInputDataItem(input_model_item_->inputDataItem());
+	model_item_->model()->copyDescriptorIDs(*input_model_item_->model());
+	
 	delete feature_selection_;
 	feature_selection_ = new FeatureSelection(*(model_item_->model()));
 	if(validation_statistic_>=0)
@@ -284,7 +287,7 @@ bool FeatureSelectionItem::execute()
 	{
 		feature_selection_->setQualityIncreaseCutoff(quality_increase_cutoff_);
 	}
-	
+
 	switch(type_)
 	{
 		case 0:
@@ -305,7 +308,6 @@ bool FeatureSelectionItem::execute()
 			break;
 	}
 
-	cout<<"opt's : "<<post_optimization_model_par_<<"  "<<post_optimization_kernel_par_<<endl;
 	if(post_optimization_model_par_) model_item_->optimizeModelParameters();
 	if(post_optimization_kernel_par_) model_item_->optimizeKernelParameters();
 

@@ -177,8 +177,9 @@ void FeatureSelection::forward(bool stepwise, int k, bool optPar)
 	
 	delete irrelevantDescriptors;
 	
-	// if feature selection leads to no increase of Q^2, use old descriptors and weights_
-	if(old_q2<q2_allDes) 
+	// if feature selection leads to no increase of Q^2, use old descriptors and weights_.
+	// Also use old descriptors, if no better combination of descriptors could be found by this feature selection run, since features not selected by the previous feature selection may not be used!!
+	if(old_q2<q2_allDes || model_->descriptor_IDs_.size()==0) 
 	{	
 		model_->model_val->setCVRes(q2_allDes);
 		model_->descriptor_IDs_=old_descr;
@@ -187,7 +188,7 @@ void FeatureSelection::forward(bool stepwise, int k, bool optPar)
 			*weights_=oldWeights;
 		}
 	}
-	else
+	else 
 	{	
 		model_->model_val->setCVRes(old_q2);
 		if(weights_!=NULL && weights_->Ncols()>0) 

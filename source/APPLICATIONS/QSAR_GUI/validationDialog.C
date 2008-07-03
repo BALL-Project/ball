@@ -71,7 +71,7 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item, ModelItem* model):
 	main_layout->addLayout(layout1);
 	
 	statistic_box_ = NULL;
-	if(!model->getRegistryEntry()->regression)
+	if(!model->getRegistryEntry()->regression && val_item->getValidationType()!=6)
 	{
 		QHBoxLayout* layout3 = new QHBoxLayout();
 		QLabel* label3 = new QLabel("classification statistic");

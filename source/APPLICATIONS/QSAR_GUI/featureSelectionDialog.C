@@ -51,7 +51,7 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 		// let user select validation statistic in case of classification model
 		if(!model->getRegistryEntry()->regression)
 		{
-			QHBoxLayout* layout3 = new QHBoxLayout();
+			QHBoxLayout* layout3 = new QHBoxLayout;
 			QLabel* label3 = new QLabel("classification statistic");
 			statistic_box_ = new QComboBox;
 			

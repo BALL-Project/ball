@@ -309,6 +309,7 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 	map<String,DataItem*>::iterator it = filenames_map.find(data_file);
 	if(it==filenames_map.end())
 	{
+		cout<<"\""<<data_file<<"\" not found!"<<endl;
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model reading error","InputDataItem for a model does not exist!");
 	}
 	input_ =  (InputDataItem*) it->second;

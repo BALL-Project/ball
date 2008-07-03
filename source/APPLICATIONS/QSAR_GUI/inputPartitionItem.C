@@ -38,13 +38,17 @@ InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* pa
 	if(test_partition) name_ = "validation";
 	else name_ = "train";
 	
+	
+	/// set saved_as_, the name of this item prefixed by the name of the configfile
 	String s = partitioner->getInputItem()->savedAs().toStdString();
-	int index2 = s.find_first_of("_");
+	int index2 = s.find_first_of(".");
 	if(index2!=string::npos)
 	{
-		saved_as_ = s.substr(0,index2+1).c_str();
+		saved_as_ = s.substr(0,index2).c_str();
 	}		
-	saved_as_ += output_filename_.c_str();
+	if(test_partition) saved_as_+="_TEST";		
+	else saved_as_+="_TRAIN";
+	saved_as_ += String(fold_ID_).c_str(); saved_as_+=".dat";
 	 
 	//cout<<"output_filename_="<<output_filename_<<endl;
 	//cout<<"saved_as_="<<saved_as_.toStdString()<<endl;

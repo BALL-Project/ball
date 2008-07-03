@@ -403,7 +403,7 @@ PredictionItem* MainWindow::createPrediction(InputDataItem* input, ModelItem* mo
 
  void MainWindow::about()
 {
-	QMessageBox::information(this, tr("About QSAR_GUI"), tr("Version 0.63\n2008-06-19"),
+	QMessageBox::information(this, tr("About QSAR_GUI"), tr("Version 0.66\n2008-07-02"),
 	QMessageBox::Ok);
 }
 

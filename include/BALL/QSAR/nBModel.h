@@ -24,7 +24,7 @@ namespace BALL
 	namespace QSAR 
 	{
 
-		/** class for naive Bayes */
+		/** class for Naive Bayes */
 		class NBModel : public BayesModel
 		{ 
 			public:

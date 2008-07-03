@@ -16,6 +16,8 @@ NBModel::NBModel(const QSARData& q) : BayesModel(q)
 	type_="nB";
 	probabilities_.resize(0);
 	discretization_steps_ = 5;
+	discretizeFeatures = &NBModel::equalSpaceDiscretization;
+	discretizeTestDataFeatures = &NBModel::equalSpaceDiscretizationTestData;
 }
 
 NBModel::~NBModel()
@@ -42,55 +44,36 @@ void NBModel::train()
 		label_to_pos.insert(make_pair(labels_[i],i));
 	}	
 
-	
 	min_max_.ReSize(2,no_features);
 	min_max_.Row(1) = 1e10;
 	min_max_.Row(2) = -1e10;
-	
-	// find minimum and maximum of each feature
-	for(uint i=1;i<=no_features;i++)
-	{
-		for(uint j=1;j<=no_compounds;j++)
-		{
-			if(descriptor_matrix_(j,i)<min_max_(1,i))
-			{
-				min_max_(1,i) = descriptor_matrix_(j,i);
-			}
-			if(descriptor_matrix_(j,i)>min_max_(2,i))
-			{
-				min_max_(2,i) = descriptor_matrix_(j,i);
-			}
-		}
-	}
-
 	
 	probabilities_.clear();
 	probabilities_.resize(no_activities);
 	no_substances_.clear();
 	no_substances_.resize(no_classes,0);
-
+	
+	/// discretize the training data features
+	(this->*discretizeFeatures)(discretization_steps_,min_max_);
+	
+	probabilities_.resize(no_activities);
 	for(uint act=0; act<no_activities;act++)
 	{
+		// the number of members of each feature-bin as a sum over all classes
 		Matrix sums(discretization_steps_,no_features); sums = 0;
-		probabilities_[act].resize(no_classes,sums);
 		
+		probabilities_[act].resize(no_classes,sums);
+	
 		for(uint i=1;i<=no_features;i++)
 		{
-			double step = (min_max_(2,i)-min_max_(1,i))/discretization_steps_;
-			
 			for(uint j=1;j<=no_compounds;j++)
 			{
+				uint feat_bucket = descriptor_matrix_(j,i);
 				uint class_id = label_to_pos.find(Y_(j,act+1))->second;
-				if(act==0 && i==1) no_substances_[class_id]++;
-				
-				uint feat_bucket = (uint)((descriptor_matrix_(j,i)-min_max_(1,i))/step)+1;		
-				if(feat_bucket>discretization_steps_) feat_bucket=discretization_steps_; // for max.
-				
-				probabilities_[act][class_id](feat_bucket,i)++;
-				sums(feat_bucket,i)++;
+				probabilities_[act][class_id](feat_bucket+1,i)++;
+				sums(feat_bucket+1,i)++;
 			}	
 		}
-;		
 		for(uint i=1;i<=no_features;i++)
 		{
 			for(uint j=1; j<=discretization_steps_;j++)
@@ -106,9 +89,7 @@ void NBModel::train()
 				}
 			}
 		}
-			
 	}
-	
 }
 
 
@@ -129,6 +110,9 @@ RowVector NBModel::predict(const vector<double>& substance, bool transform)
 	RowVector result(no_activities);
 	result=0;
 	
+	/// discretize the test data features according to the discretization of training data
+	(this->*discretizeTestDataFeatures)(s,min_max_);
+	
 	for(uint act=0; act<no_activities;act++)
 	{
 		vector<double> substance_prob(no_classes,1); // prob. for the entire substance
@@ -137,14 +121,11 @@ RowVector NBModel::predict(const vector<double>& substance, bool transform)
 		
 		for(uint i=1; i<=no_features;i++)
 		{
-			double step = (min_max_(2,i)-min_max_(1,i))/no_discretizations;
-			int disc_index = (int)((s(i)-min_max_(1,i))/step)+1;
-			if(disc_index<1) disc_index=1;
-			else if(disc_index>(int)no_discretizations) disc_index=no_discretizations;			
+			double feature_bucket = s(i);
 			
 			for(uint j=0;j<no_classes;j++)
 			{
-				substance_prob[j] *= probabilities_[act][j](disc_index,i);
+				substance_prob[j] *= probabilities_[act][j](feature_bucket+1,i);
 				
 				if(i==no_features-1 && substance_prob[j]>max)
 				{
@@ -176,7 +157,7 @@ void NBModel::setParameters(vector<double>& v)
 		c = c+" given: "+String(v.size());
 		throw Exception::ModelParameterError(__FILE__,__LINE__,c.c_str());
 	}
-	discretization_steps_ = (int) v[0];	
+	discretization_steps_ = (int) v[0];
 }
 
 
