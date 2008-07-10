@@ -25,6 +25,14 @@
 	#include <BALL/DATATYPE/options.h>
 #endif
 
+#ifndef BALL_DATATYPE_STRINGHASHMAP_H
+	#include <BALL/DATATYPE/stringHashMap.h>
+#endif
+
+
+#include <map>
+
+
 namespace BALL 
 {
 
@@ -48,6 +56,11 @@ namespace BALL
 				 */
 				static const char* ATOM_TYPE_SMARTS_FILENAME;
 				
+				/** Name to the file where the atom types, corresponding
+				 * hybridisation states, and bond angles are stored in (force field based method).
+				 */
+				static const char* ATOM_TYPE_FF_FILENAME;
+				
 				/** If true, the existing bonds are deleted before 
 				 *  bonds detection begins. If the atoms are in 
 				 *  non-bond distance no bonds will be build! Note
@@ -56,7 +69,7 @@ namespace BALL
 				 */
 
 				/**	Technique to compute the hybridisation states.
-				*/
+				 */
 				static const String METHOD; 
 
 			};
@@ -67,7 +80,12 @@ namespace BALL
 				/// default file name for the atom type smarts
 				static const char* ATOM_TYPE_SMARTS_FILENAME;
 				
-				/// this option is set to 
+				/** default file name for the atom types, hybridisation states, and
+				 *  bond angles (force field based)
+				 */
+				static const char* ATOM_TYPE_FF_FILENAME;
+				
+				/// this option is set to
 				/// HybridisationProcessor::Method::SMART_MATCHING
 				/// by default
 				static const String METHOD;
@@ -77,7 +95,7 @@ namespace BALL
 			{
 				static const String SMART_MATCHING;
 				static const String STRUCTURE_BASED; 
-				static const String GAFF_BASED; 
+				static const String FF_BASED; 
 			};
 
 
@@ -85,7 +103,7 @@ namespace BALL
 		
 
 			/** @name	Constructors and Destructors
-			*/
+			 */
 			//@{
 
 			BALL_CREATE(HybridisationProcessor);
@@ -96,15 +114,16 @@ namespace BALL
 			/// copy construcor
 			HybridisationProcessor(const HybridisationProcessor& hp);
 		
-			/// constructor with parameter filename
-			HybridisationProcessor(const String& file_name) throw(Exception::FileNotFound);
+			/// Constructor with parameter filename for the smarts based algorithm
+			/// and parameter filename for the force field based method
+			HybridisationProcessor(const String& smarts_file_name, const String& ff_file_name) throw(Exception::FileNotFound);
 			
 			/// destructor
 			virtual ~HybridisationProcessor();
 			//@}
 
 			/**	@name	Processor-related methods 
-			*/
+			 */
 			//@{
 
 			/// processor method which is called before the operator () call
@@ -115,7 +134,7 @@ namespace BALL
 			//@}
 
 			/**	@name	Accessors
-			*/
+			 */
 			//@{
 			/// Return the number of hybridisation states set during the last application.
 			Size getNumberOfHybridisationStatesSet(); 
@@ -128,24 +147,46 @@ namespace BALL
 			//@}
 
 			/** @name Assignment
-			*/
+			 */
 			//@{
 			/// assignment operator
 			HybridisationProcessor& operator = (const HybridisationProcessor& hp);
 			//@}
 
 			/** @name Public Attributes
-			*/
+			 */
 			//@{
 			/// options
 			Options options;
 
 			/** reset the options to default values
-			*/
+			 */
 			void setDefaultOptions();
 			//@}
 			
 		protected:
+			
+			/** Struct for atom types and hybridization states
+			 */
+			struct Elements_
+			{
+				/// The type
+				String type;
+				/// Hybridization state
+				unsigned char hyb;
+			};
+			
+			/** The atom names for each bond angle
+			 */
+			struct AtomNames_
+			{
+				/// First atom
+				String a1;
+				/// Second atom
+				String a2;
+				/// Third atom
+				String a3;
+			};
 			
 			/// method to read the paramter file
 			bool readAtomTypeSmartsFromFile_(const String& file_name = "") throw(Exception::FileNotFound);
@@ -155,9 +196,22 @@ namespace BALL
 
 			/// structure where atom type smarts and the corresponding hybridisation states are stored in
 			vector< pair<String, Size> > atom_type_smarts_;
+			
+			/** Contains the bond angles and their atom types. The bond angles 
+			 *  are stored in 'rad'.
+			 */
+			StringHashMap<StringHashMap<StringHashMap<multimap<float, AtomNames_> > > > bond_angles_;
+			
+			bool readAndInitBondAnglesFromFile_(const String& file_name = "") throw(Exception::FileNotFound);
+			
+			/** Maps the atom types onto their elements
+			 */
+			StringHashMap<Elements_> elements_;
+			
 
 			/// the Processors state
 			bool valid_;
+			
 	
 			/// computes the averaged bond angle for the given Atom
 			double AverageBondAngle_(Atom* a);

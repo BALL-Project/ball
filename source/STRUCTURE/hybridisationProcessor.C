@@ -11,6 +11,9 @@
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/FORMAT/parameters.h>
+#include <BALL/FORMAT/parameterSection.h>
+#include <BALL/MATHS/common.h>
 
 // Qt
 #include <BALL/VIEW/KERNEL/common.h>
@@ -27,10 +30,13 @@ namespace BALL
 {
 	const String HybridisationProcessor::Method::SMART_MATCHING = "smart_matching";
 	const String HybridisationProcessor::Method::STRUCTURE_BASED = "structure_based";
-	const String HybridisationProcessor::Method::GAFF_BASED = "GAFF_based";
+	const String HybridisationProcessor::Method::FF_BASED = "FF_based";
 
 	const char* HybridisationProcessor::Option::ATOM_TYPE_SMARTS_FILENAME = "atom_type_smarts_filename";
 	const char* HybridisationProcessor::Default::ATOM_TYPE_SMARTS_FILENAME = "bondtyping/atomtypes.xml";
+	
+	const char* HybridisationProcessor::Option::ATOM_TYPE_FF_FILENAME = "atom_type_gaff_filename";
+	const char* HybridisationProcessor::Default::ATOM_TYPE_FF_FILENAME = "bondtyping/GAFFbondangles.ini";
 	
 	const String  HybridisationProcessor::Option::METHOD = "method";
 	const String  HybridisationProcessor::Default::METHOD = HybridisationProcessor::Method::SMART_MATCHING;
@@ -39,26 +45,33 @@ namespace BALL
 		: UnaryProcessor<AtomContainer>(),
 			options(),
 			num_hybridisation_states_(),
-			atom_type_smarts_()
+			atom_type_smarts_(),
+			bond_angles_(),
+			elements_()
 	{
 		setDefaultOptions();
 		valid_ = readAtomTypeSmartsFromFile_();
+		valid_ &= readAndInitBondAnglesFromFile_();
 	}
 
 	HybridisationProcessor::HybridisationProcessor(const HybridisationProcessor& hp)
 		:	UnaryProcessor<AtomContainer>(hp),
 			options(),
 			num_hybridisation_states_(hp.num_hybridisation_states_), //TODO?
-			atom_type_smarts_(hp.atom_type_smarts_)
+			atom_type_smarts_(hp.atom_type_smarts_),
+			bond_angles_(hp.bond_angles_),
+			elements_(hp.elements_),
+			valid_(hp.valid_)
 	{
 	}
 
-	HybridisationProcessor::HybridisationProcessor(const String& file_name)	throw(Exception::FileNotFound)
+	HybridisationProcessor::HybridisationProcessor(const String& smarts_file_name, const String& gaff_angle_file_name)	throw(Exception::FileNotFound)
 		:	UnaryProcessor<AtomContainer>(),
 			options(),
 			num_hybridisation_states_(0)
 	{
-		valid_ = readAtomTypeSmartsFromFile_(file_name);
+		valid_ = readAtomTypeSmartsFromFile_(smarts_file_name);
+		valid_ &= readAndInitBondAnglesFromFile_(gaff_angle_file_name);
 	}
 
 	HybridisationProcessor::~HybridisationProcessor()
@@ -71,6 +84,8 @@ namespace BALL
 		valid_ = hp.valid_;
 		atom_type_smarts_ = hp.atom_type_smarts_;
 		num_hybridisation_states_ = hp.num_hybridisation_states_; // TODO?
+		bond_angles_ = hp.bond_angles_;
+		elements_ = hp.elements_;
 		return *this;
 	}
 
@@ -390,8 +405,95 @@ if (!openNbr)
 				}
 			}
 		} // End of the structure-based method
-		else if (options.get(Option::METHOD) == Method::GAFF_BASED) 
+		else if (options.get(Option::METHOD) == Method::FF_BASED) 
 		{
+			AtomIterator ait;
+			// initialize all hybridization states with 0
+			BALL_FOREACH_ATOM(ac, ait)
+			{
+				ait->setProperty("HybridisationState", 0);
+			}
+#ifdef DEBUG
+			cout << "HybProc: ============================== " << endl;
+#endif
+			
+			BALL_FOREACH_ATOM(ac, ait)
+			{
+				if (ait->getProperty("HybridisationState").getInt() == 0)
+				{
+					// Check only "free" states
+					
+					// Calculate the average of all estimations for a certain atom
+					double av_hyb = 0.;
+					Size num = 0;
+					Atom::BondIterator bit1 = ait->beginBond();
+					for(; +bit1; ++bit1)
+					{
+						Atom::BondIterator bit2 = bit1;
+						++bit2;
+						for(; +bit2; ++bit2)
+						{
+							float angle = calculateBondAngle(*(bit1->getPartner(*ait)), *ait, *(bit2->getPartner(*ait)));
+							
+							
+							// Find the corresponding element combination
+							String a1_sym = bit1->getPartner(*ait)->getElement().getSymbol();
+							String a2_sym = ait->getElement().getSymbol();
+							String a3_sym = bit2->getPartner(*ait)->getElement().getSymbol();
+							
+							multimap<float, AtomNames_> &names = (a1_sym < a3_sym) ? bond_angles_[a1_sym][a2_sym][a3_sym] : bond_angles_[a3_sym][a2_sym][a1_sym];
+							
+							if (names.size() == 0)
+							{
+								// We have an atom combination which is not in the database.
+								continue;
+							}
+							
+							// Calculate the bond angle in the data base which fits best the real angle
+							multimap<float, AtomNames_>::iterator mit = names.lower_bound(angle);
+							if (mit != names.begin())
+							{
+								multimap<float, AtomNames_>::iterator mit2 = mit;
+								--mit2;
+								if (mit != names.end())
+								{
+									if (angle - mit2->first < mit->first - angle)
+									{
+										// mit2 fits best
+										mit = mit2;
+									}
+								}
+								else
+								{
+									mit = mit2;
+								}
+							}
+							
+#ifdef DEBUG
+							cout << "HybProc**: " << Angle(angle).toDegree() << " " << a1_sym << " " << a2_sym << " " << a3_sym << " " << (int)elements_[mit->second.a2].hyb << endl;
+#endif
+							
+							// Take the atom types and assign the hybridization
+							av_hyb += (double)elements_[mit->second.a2].hyb;
+							++num;
+						}
+					}
+					
+					// Estimated (averaged) hybridization
+					if (num != 0)
+					{
+						av_hyb /= (double)num;
+					}
+					
+#ifdef DEBUG
+					cout << "HybProc: " << ait->getName() << " " << av_hyb << endl;
+#endif
+					
+					// Round the state
+					int hyb = (int)Maths::round(av_hyb);
+					ait->setProperty("HybridisationState", hyb);
+				}
+			}
 		}
 		return Processor::BREAK;
 	}
@@ -402,6 +504,98 @@ if (!openNbr)
 		atom_type_smarts_.clear();
 		valid_ = readAtomTypeSmartsFromFile_(file_name);
 	}
+	
+	bool HybridisationProcessor::readAndInitBondAnglesFromFile_(const String& file_name) 
+		throw (Exception::FileNotFound)
+	{
+		// test file or set default file
+		String filename(file_name);
+		if (file_name == "")
+		{
+			filename = String(options.get(HybridisationProcessor::Option::ATOM_TYPE_FF_FILENAME));
+		}
+		
+		Path path;
+
+		String filepath = path.find(filename);
+		if (filepath == "")
+		{
+			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+		}
+		
+		// Read the contents from the ini file
+		Parameters parameters(filepath);
+		parameters.init();
+		ParameterSection ele_types;
+		if (!ele_types.extractSection(parameters, "AtomTypes"))
+		{
+			Log.error() << "HybridisationProcessor::extractSection: didn't find section for AtomTypes" << endl;
+			return false;
+		}
+    // Read the atom types and corresponding elements
+		Size index_el = ele_types.getColumnIndex("element");
+		Size index_hyb = ele_types.getColumnIndex("hybridization");
+		for(Size i = 0; i < ele_types.getNumberOfKeys(); ++i)
+		{
+			Elements_ el;
+			el.type = ele_types.getValue(i, index_el);
+			el.hyb = (unsigned char)atoi(ele_types.getValue(i,index_hyb).c_str());
+			elements_[ele_types.getKey(i)] = el;
+		}
+
+		// Read the combinations of bend angles
+		ParameterSection angles;
+		if (!angles.extractSection(parameters, "BondAngles"))
+		{
+			Log.error() << "HybridisationProcessor::extractSection: didn't find section for BondAngles" << endl;
+			return false;
+		}
+		
+		String    fields[4];
+		Size index_r = angles.getColumnIndex("theta");
+		for(Size i = 0; i < angles.getNumberOfKeys(); ++i)
+		{
+			String key = angles.getKey(i);
+			// Split the key into its three parts
+			if (key.split(fields, 3) == 3)
+			{
+				StringHashMap<Elements_>::Iterator a1 = elements_.find(fields[0]);
+				if (a1 == elements_.end())
+				{
+					Log.error() << "Could not find atom type " << a1->first << endl;
+					return false;
+				}
+				StringHashMap<Elements_>::Iterator a2 = elements_.find(fields[1]);
+				if (a2 == elements_.end())
+				{
+					Log.error() << "Could not find atom type " << a2->first << endl;
+					return false;
+				}
+				StringHashMap<Elements_>::Iterator a3 = elements_.find(fields[2]);
+				if (a3 == elements_.end())
+				{
+					Log.error() << "Could not find atom type " << a3->first << endl;
+					return false;
+				}
+				AtomNames_ atom;
+				atom.a2 = a2->first;
+				if (a1->first < a3->first)
+				{
+					atom.a1 = a1->first;
+					atom.a3 = a3->first;
+					bond_angles_[elements_[atom.a1].type][elements_[atom.a2].type][elements_[atom.a3].type].insert(make_pair((float)atof(angles.getValue(i, index_r).c_str()), atom));
+				}
+				else
+				{
+					atom.a3 = a1->first;
+					atom.a1 = a3->first;
+					bond_angles_[elements_[atom.a3].type][elements_[atom.a2].type][elements_[atom.a1].type].insert(make_pair((float)atof(angles.getValue(i, index_r).c_str()), atom));
+				}
+			}
+		}
+		return true;
+	}
+	
 
 	bool HybridisationProcessor::readAtomTypeSmartsFromFile_(const String& file_name) 
 		throw(Exception::FileNotFound)
@@ -497,6 +691,8 @@ if (!openNbr)
 	{
 		options.setDefault(HybridisationProcessor::Option::ATOM_TYPE_SMARTS_FILENAME,
 											 HybridisationProcessor::Default::ATOM_TYPE_SMARTS_FILENAME);
+		options.setDefault(HybridisationProcessor::Option::ATOM_TYPE_FF_FILENAME,
+											 HybridisationProcessor::Default::ATOM_TYPE_FF_FILENAME);
 		options.setDefault(HybridisationProcessor::Option::METHOD,
 											 HybridisationProcessor::Default::METHOD);
 	}
