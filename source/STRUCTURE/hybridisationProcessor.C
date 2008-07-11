@@ -433,13 +433,15 @@ if (!openNbr)
 						++bit2;
 						for(; +bit2; ++bit2)
 						{
-							float angle = calculateBondAngle(*(bit1->getPartner(*ait)), *ait, *(bit2->getPartner(*ait)));
+							Atom* a1 = bit1->getPartner(*ait);
+							Atom* a3 = bit2->getPartner(*ait);
+							float angle = calculateBondAngle(*a1, *ait, *a3);
 							
 							
 							// Find the corresponding element combination
-							String a1_sym = bit1->getPartner(*ait)->getElement().getSymbol();
+							String a1_sym = a1->getElement().getSymbol();
 							String a2_sym = ait->getElement().getSymbol();
-							String a3_sym = bit2->getPartner(*ait)->getElement().getSymbol();
+							String a3_sym = a3->getElement().getSymbol();
 							
 							multimap<float, AtomNames_> &names = (a1_sym < a3_sym) ? bond_angles_[a1_sym][a2_sym][a3_sym] : bond_angles_[a3_sym][a2_sym][a1_sym];
 							
@@ -476,6 +478,31 @@ if (!openNbr)
 							// Take the atom types and assign the hybridization
 							av_hyb += (double)elements_[mit->second.a2].hyb;
 							++num;
+							
+							if (a1->countBonds() == 1)
+							{
+								if (a1_sym < a3_sym)
+								{
+									a1->setProperty("HybridisationState", elements_[mit->second.a1].hyb);
+								}
+								else
+								{
+									a1->setProperty("HybridisationState", elements_[mit->second.a3].hyb);
+								}
+							}
+							
+							if (a3->countBonds() == 1)
+							{
+								if (a1_sym < a3_sym)
+								{
+									a3->setProperty("HybridisationState", elements_[mit->second.a3].hyb);
+								}
+								else
+								{
+									a3->setProperty("HybridisationState", elements_[mit->second.a1].hyb);
+								}
+							}
+							
 						}
 					}
 					
