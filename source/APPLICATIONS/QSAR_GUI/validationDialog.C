@@ -12,7 +12,7 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item, ModelItem* model):
 	val_item_(val_item)
 {
 	QVBoxLayout* main_layout = new QVBoxLayout(this);
-	QGridLayout* layout1 = new QGridLayout(this);
+	QGridLayout* layout1 = new QGridLayout;
 	QDialogButtonBox* buttons = new QDialogButtonBox(QDialogButtonBox::Cancel,Qt::Horizontal, this);
 	QPushButton* applyButton = new QPushButton("OK", this);
 	buttons->addButton(applyButton, QDialogButtonBox::ApplyRole);
@@ -73,7 +73,7 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item, ModelItem* model):
 	statistic_box_ = NULL;
 	if(!model->getRegistryEntry()->regression && val_item->getValidationType()!=6)
 	{
-		QHBoxLayout* layout3 = new QHBoxLayout();
+		QHBoxLayout* layout3 = new QHBoxLayout;
 		QLabel* label3 = new QLabel("classification statistic");
 		statistic_box_ = new QComboBox;
 		

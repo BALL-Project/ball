@@ -16,7 +16,7 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 	Registry* reg = model->getRegistryEntry()->getRegistry();
 	
 	QVBoxLayout* main_layout = new QVBoxLayout(this);
-	QHBoxLayout* layout1 = new QHBoxLayout(this);
+	QHBoxLayout* layout1 = new QHBoxLayout;
 	QDialogButtonBox* buttons = new QDialogButtonBox(QDialogButtonBox::Cancel);
 	QPushButton* applyButton = new QPushButton("OK");
 	buttons->addButton(applyButton, QDialogButtonBox::ApplyRole);
@@ -30,7 +30,7 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 		edit_->setText(String(reg->default_k).c_str());	
 		QLabel* klabel = new QLabel("k for k-fold cross validation",this);
 		
-		QHBoxLayout* cutoff_layout = new QHBoxLayout(this);
+		QHBoxLayout* cutoff_layout = new QHBoxLayout;
 		QLabel* cutoff_label = new QLabel("quality increase cutoff");
 		cutoff_ = new QLineEdit(this);
 		cutoff_->setText("0.001");
@@ -89,8 +89,8 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 	main_layout->addWidget(checkbox_post_optimization_kernel_par_);
 	
 	main_layout->addWidget(buttons);
-	this->setLayout(main_layout);
-	this->setWindowTitle("Feature Selection:" + fs_item_->name());
+	setLayout(main_layout);
+	setWindowTitle("Feature Selection:" + fs_item_->name());
 
 	connect(applyButton, SIGNAL(clicked()), this, SLOT(accept()));
 	connect(buttons, SIGNAL(rejected()), this, SLOT(reject()));

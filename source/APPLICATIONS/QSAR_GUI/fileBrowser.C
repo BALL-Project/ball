@@ -6,7 +6,7 @@ using namespace BALL::VIEW;
 
 FileBrowser::FileBrowser(std::string path)
 {
-	///at the moment, there's only support for sd-files
+	///display only sdf, csv and txt-files
 	QStringList filters;
 	filters << "*.sdf"	
 			<< "*.csv"	
@@ -17,7 +17,7 @@ FileBrowser::FileBrowser(std::string path)
 	///set display filters: list all directories, list files, don't list "." and ".."
 	dirmodel_->setFilter(QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot);
 	dirmodel_->setNameFilters(filters);
-
+	
 	///drag and drop related stuff
 	setDragEnabled (true);
 	setDragDropMode(QAbstractItemView::DragOnly);
@@ -33,7 +33,7 @@ FileBrowser::FileBrowser(std::string path)
 	if(path!="") qpath = qpath.fromStdString(path);
 	expand(QModelIndex(dirmodel_->index(qpath)));
 	scrollTo(QModelIndex(dirmodel_->index(qpath)),QAbstractItemView::PositionAtTop);
-
+	
 	///hide all columns except name
 	hideColumn(1);
 	hideColumn(2);
