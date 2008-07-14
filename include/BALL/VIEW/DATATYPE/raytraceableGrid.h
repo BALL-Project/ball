@@ -40,6 +40,8 @@ namespace BALL
 				
 				float getGridMaxValue() throw();
 
+				void binaryWrite(const String& filename) const throw(Exception::FileNotFound);
+
 			protected:
 				RegularData3D* grid_;
 		};
