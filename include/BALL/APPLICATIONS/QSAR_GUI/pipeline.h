@@ -46,6 +46,13 @@ namespace BALL
 					return list_.end();
 				};
 				
+				iterator erase(iterator it)
+				{
+					iterator list_it = it->second;
+					map_.erase(it);
+					return list_.erase(list_it);
+				};
+				
 				bool contains(X object)
 				{
 					if(map_.find(object)==map_.end())

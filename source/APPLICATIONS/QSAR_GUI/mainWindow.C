@@ -103,7 +103,6 @@ using namespace BALL::Exception;
  
 MainWindow::~MainWindow()
 {
-	delete view_;
 	delete model_list_;
 	delete fs_list_;
 	delete reg_;
@@ -115,6 +114,7 @@ MainWindow::~MainWindow()
 	delete fileToolBar_;
 	
 	clearDesktop();
+	delete view_;
 	
 	// save path to last used input file
 	String file = QDir::homePath().toStdString();
