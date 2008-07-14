@@ -65,7 +65,11 @@ namespace BALL
 	{
 		if (isInitialized())
 		{
+			// TODO: for some reason, finalize crashes on Windows, at least if no python
+			//       module has been found. We need to fix this correctly.
+#ifndef BALL_COMPILER_MSVC
 			Py_Finalize();
+#endif
 		}
 
 		valid_ = false;
