@@ -4,6 +4,7 @@
 // $Id:$
 //
 
+#include <limits>
 #include <BALL/VIEW/DATATYPE/raytraceableGrid.h>
 namespace BALL
 {

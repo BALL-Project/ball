@@ -29,9 +29,9 @@
 
 #include <BALL/VIEW/DATATYPE/raytraceableGrid.h>
 
-#ifndef APIENTRY
-#define APIENTRY
-#endif
+//#ifndef APIENTRY
+//#define APIENTRY
+//#endif
 
 class QFont;
 

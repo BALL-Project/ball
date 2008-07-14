@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="BALLModule"
 	ProjectGUID="{1C95B07B-2F01-43C3-A619-635E5CE9DF01}"
 	RootNamespace="BALLModule"
@@ -5464,7 +5464,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\GeneratedFiles\sipBALLStringHashMap.C"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -5476,6 +5475,38 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\GeneratedFiles\sipBALLString.C"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\GeneratedFiles\sipBALLStringHashMap.C"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -6150,6 +6181,14 @@
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\BALL.sip"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="SipGenerator"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 	</Files>
