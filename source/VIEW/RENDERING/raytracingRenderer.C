@@ -182,12 +182,14 @@ namespace BALL
 		void RaytracingRenderer::setStereoMode(StereoMode state)
 			throw()
 		{
+
 		}
 
 		///
 		RaytracingRenderer::StereoMode RaytracingRenderer::getStereoMode() const
 			throw()
 		{
+			return NO_STEREO;
 		}
 
 		RaytracingRenderer::RenderMode RaytracingRenderer::getRenderMode() const
