@@ -257,10 +257,6 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 	filenames_map.insert(make_pair(output,model_item_));
 	setPixmap(QPixmap("./images/feature_selection.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 	
-	// TODO : save/load this information
-	post_optimization_model_par_ = 0;
-	post_optimization_kernel_par_ = 0;
-	
 	done_ = 0;
 }
 
