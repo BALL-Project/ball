@@ -10,6 +10,13 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		void RaytraceableGrid::binaryWrite(const String& filename) const 
+			throw(Exception::FileNotFound)
+		{
+			//Odin
+			//implement saving here
+		}
+
 		float RaytraceableGrid::getGridMinValue()
 			throw()
 		{

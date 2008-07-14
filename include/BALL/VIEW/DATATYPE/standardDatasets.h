@@ -326,6 +326,9 @@ class BALL_VIEW_EXPORT RaytraceableGridController
 	virtual bool createMenuEntries();
 
 	///
+	virtual bool write(Dataset* set, String filetype, String filename);
+
+	///
 	virtual QMenu* buildContextMenu(QTreeWidgetItem* item);
 
 	///
