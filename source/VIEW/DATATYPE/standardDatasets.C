@@ -23,6 +23,7 @@
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/STRUCTURE/DOCKING/dockResult.h>
+#include <BALL/DATATYPE/regularData3D.h>
 
 #include <QtGui/QFileDialog>
 
@@ -30,6 +31,68 @@ using namespace std;
 
 namespace BALL
 {
+	/////////////////////////////////////////////
+	// Specialization for the default float type of TRegularData3D
+	// possibly not the best location
+
+	template<>
+	void TRegularData3D<float>::binaryWriteRaw(const String& filename) const
+		throw(Exception::FileNotFound)		
+	{	
+		String coreName = filename;
+		String::size_type dotIndex = filename.find_last_of(".");
+		if (dotIndex != -1)
+		{
+			coreName = filename.getSubstring(0, dotIndex);				
+		}
+		
+		String headerFN = coreName + ".vrt.vh";
+		Log.info() << "Creating grid header '" << headerFN << "'" << std::endl;
+		
+		std::ofstream header(headerFN.c_str());
+		if(!header.is_open()) 
+		{
+			throw Exception::FileNotFound(__FILE__, __LINE__, filename+".header");
+		}	
+
+		// dimensions
+		header << size_.x << " " << size_.y << " " << size_.z << " ";
+		// bit depth, for float datasets used to determine TFF table resolution
+		header << 8 << " ";
+		// voxel sizes
+		header << spacing_.x << " " << spacing_.y << " " << spacing_.z << " ";		
+
+		// unused header information
+		//header << data_.size() << " ";
+		//header << origin_.x << " " << origin_.y << " " << origin_.z << " ";
+		//header << dimension_.x << " " << dimension_.y << " " << dimension_.z << " ";		
+
+		header.close();
+
+		Log.info() << "Header written" << std::endl;
+
+		String rawFileFN = coreName + ".vrt";
+		Log.info() << "Creating raw file '" << rawFileFN << "'" << std::endl;
+
+		std::ofstream rawFile(rawFileFN.c_str(), std::ios::out | std::ios::binary);
+		if(!rawFile.is_open())
+		{
+			throw Exception::FileNotFound(__FILE__, __LINE__, filename+".raw");
+		}
+		
+		for (unsigned int i = 0; i < data_.size(); i++)
+		{
+			rawFile.write((const char*)&data_[i], sizeof(float));
+		}
+		
+		rawFile.close();
+
+		Log.info() << "Raw data written" << std::endl;		
+		Log.info() << "File saved succesfully" << std::endl;
+	}	
+
+	/////////////////////////////////////////////
+
 	namespace VIEW
 	{
 
@@ -1024,6 +1087,7 @@ namespace BALL
 			type_ = type;
 			setIdentifier("RaytraceableGridController");
 			registerThis();
+			file_formats_.push_back("vrt");
 		}
 
 		RaytraceableGridController::RaytraceableGridController(RaytraceableGridController& rc)
@@ -1032,6 +1096,7 @@ namespace BALL
 		{
 			setIdentifier("RaytraceableGridController");
 			registerThis();
+			file_formats_.assign(rc.file_formats_.begin(), rc.file_formats_.end());
 		}
 
 		RaytraceableGridController::~RaytraceableGridController()
