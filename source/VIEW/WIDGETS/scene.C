@@ -410,26 +410,42 @@ namespace BALL
 
 			makeCurrent();
 
+		#ifdef ENABLE_RAYTRACING
+
+			initializeRaytracing();
+
+		#else
+
 			gl_renderer_->init(*this);
 			gl_renderer_->initSolid();
 			if (stage_->getLightSources().size() == 0) setDefaultLighting(false);
 			gl_renderer_->updateCamera();
 			gl_renderer_->enableVertexBuffers(want_to_use_vertex_buffer_);
- 			stage_settings_->getGLSettings();
+ 			stage_settings_->getGLSettings();		
+
+		#endif
 		}
 
 #ifdef ENABLE_RAYTRACING	
+
 		void Scene::initializeRaytracing()
 		{
-			rt_renderer_->init(*this);
+			rt_renderer_->init(*this);			
 		}
 #endif
 
 		void Scene::paintGL()
 		{
 			time_ = PreciseTime::now();
+
+		#ifdef ENABLE_RAYTRACING
+			
+			rt_renderer_->raytraceAllRepresentations();
+
+		#else
+
 			// cannot call update here, because it calls updateGL
-   		renderView_(DISPLAY_LISTS_RENDERING);
+   			renderView_(DISPLAY_LISTS_RENDERING);
 			glFlush();
 
 			if (info_string_ != "")
@@ -445,7 +461,7 @@ namespace BALL
 			}
 
 			renderGrid_();
-
+		#endif
 			if (show_fps_)
 			{
 				float ti = 1000000.0 / (PreciseTime::now().getMicroSeconds() - time_.getMicroSeconds());
@@ -503,8 +519,19 @@ namespace BALL
 
 		void Scene::resizeGL(int width, int height)
 		{
+
+		#ifdef ENABLE_RAYTRACING
+
+			rt_renderer_->setSize(width, height);
+			rt_renderer_->updateCamera();
+
+		#else
+
 			gl_renderer_->setSize(width, height);
-			gl_renderer_->updateCamera();
+			gl_renderer_->updateCamera();			
+
+		#endif
+
 			content_changed_ = true;
 		}
 

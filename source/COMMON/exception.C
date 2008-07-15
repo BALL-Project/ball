@@ -314,6 +314,11 @@ namespace BALL
 			{
 			}
 
+			CUDAError::CUDAError(const char *file, int line, const BALL::String &error)
+				throw()
+				: GeneralException(file, line, String("CUDA error: ") + error, "")
+			{
+			}
 
 			DEF_EXCEPTION(OutOfRange, "the range of the operation was invalid")
 
@@ -333,7 +338,7 @@ namespace BALL
 
 			DEF_EXCEPTION(BufferOverflow, "the maximum buffersize has been reached")
 
-			DEF_EXCEPTION(OutOfGrid, "a point was outside a grid")
+			DEF_EXCEPTION(OutOfGrid, "a point was outside a grid")			
 
 		
 			GlobalExceptionHandler::GlobalExceptionHandler()

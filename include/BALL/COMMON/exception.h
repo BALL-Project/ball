@@ -459,6 +459,16 @@ namespace BALL
 			///
 			TooManyBonds(const char* file, int line, const String& error) throw();
 		};
+		
+		/**	CUDA Error
+			CUDA or any of its calls caused an error
+		*/
+		class BALL_EXPORT CUDAError 
+			: public Exception::GeneralException
+		{
+			public:
+			CUDAError(const char* file, int line, const String& error) throw();									
+		};
 
 		/** Class handling uncaught exception globally.
 		*/
