@@ -213,23 +213,23 @@ namespace BALL
 				throw();
 
 			void setupGridClipPlanes_(const GridVisualisation& slice);
-			Scene* 								scene_;
+			Scene* scene_;
 
 			///
-			DrawingMode 					drawing_mode_;
+			DrawingMode drawing_mode_;
 
 			//_
-			float 								x_scale_;
+			float x_scale_;
 
 			//_
-			float 								y_scale_;
+			float y_scale_;
 	
-			Vector3 								normal_vector_;
+			Vector3 normal_vector_;
 	
-			StereoMode 							stereo_;
-			RenderMode 							render_mode_;
+			StereoMode stereo_;
+			RenderMode render_mode_;
 
-			bool 										picking_mode_;
+			bool picking_mode_;
 		};
 
 

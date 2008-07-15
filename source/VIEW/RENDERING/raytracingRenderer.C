@@ -66,13 +66,13 @@ namespace BALL
 			if (stage == 0)
 			{
 				// I am not sure, if heigth and width are in the correct order... copied this from glRenderer.C
-				Renderer::init(Stage(), scene.width(), scene.height());
+				Renderer::init(Stage(), scene.height(), scene.width());
 
 			}
 			else
 			{
 				// I am not sure, if heigth and width are in the correct order... copied this from glRenderer.C
-				Renderer::init(*stage, scene.width(), scene.height());
+				Renderer::init(*stage, scene.height(), scene.width());
 
 			}
 
@@ -87,7 +87,7 @@ namespace BALL
 			return true;
 		}
 		
-		void RaytracingRenderer::setLights(bool reset_all) 						throw()
+		void RaytracingRenderer::setLights(bool reset_all) throw()
 		{
 			// prepare the lights :-)
 		}
@@ -182,14 +182,14 @@ namespace BALL
 		void RaytracingRenderer::setStereoMode(StereoMode state)
 			throw()
 		{
-
+			stereo_ = state;
 		}
 
 		///
 		RaytracingRenderer::StereoMode RaytracingRenderer::getStereoMode() const
 			throw()
 		{
-			return NO_STEREO;
+			return stereo_;
 		}
 
 		RaytracingRenderer::RenderMode RaytracingRenderer::getRenderMode() const
@@ -216,7 +216,7 @@ namespace BALL
 				return false;
 			}
 
-			drawing_mode_ 		  = representation.getDrawingMode();
+			drawing_mode_ = representation.getDrawingMode();
 
 			/* Lukas: perhaps we can consider different drawing modes, 
 			 * transparency..
@@ -243,7 +243,7 @@ namespace BALL
 		String  RaytracingRenderer::getRenderer()
 			throw()
 		{
-			return (char*)"";	
+			return (char*)"BALLView CUDA ray caster v1";	
 		}
 
 		void RaytracingRenderer::initPerspective()

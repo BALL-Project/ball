@@ -96,16 +96,18 @@ void RaytraceableContourSurfaceDialog::setDefaultRangeValues_()
 void RaytraceableContourSurfaceDialog::add()
 {
 	//std::cout << " model reated- close()" << std::endl;
-	double new_threshold = 3.;
-	addModel_(new_threshold);
+	//double new_threshold = 3.;
+	//addModel_(new_threshold);
+	addModel_(current_threshold_);
 }
 
 void RaytraceableContourSurfaceDialog::accept()
 {
 	//std::cout << "new model created - waiting()" << std::endl;
 	// get the new threshold
-	double new_threshold = 3.;
-	addModel_(new_threshold);
+	//double new_threshold = 3.;
+	//addModel_(new_threshold);
+	addModel_(current_threshold_);
 	QDialog::accept();
 }
 
