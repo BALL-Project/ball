@@ -464,18 +464,14 @@ bool ModelItem::execute()
 	
 	model_->setDataSource(input_->data());
 	
-	if (!no_training_ && optimize_model_parameters)
+	if (!no_training_)
 	{
-		model_->optimizeParameters(k_fold);
-	}
-	if (!no_training_ && optimize_kernel_parameters)
-	{
-		KernelModel* km = (KernelModel*)model_;
-		km->kernel->gridSearch(grid_search_stepwidth, grid_search_steps,grid_search_recursions,k_fold);
-		//setModel(km);
+		optimizeModelParameters();
+		optimizeKernelParameters();
 	}
 	
 	model_->readTrainingData();
+	
 	if(!no_training_)
 	{
 		model_->train();
@@ -489,9 +485,9 @@ bool ModelItem::execute()
 
 void ModelItem::optimizeModelParameters()
 {
-	cout<<"optimizing model parameters..."<<endl;
 	if(optimize_model_parameters && k_fold>=2)
 	{
+		cout<<"optimizing model parameters..."<<endl;
 		model_->optimizeParameters(k_fold);	
 	}
 }
@@ -499,14 +495,12 @@ void ModelItem::optimizeModelParameters()
 
 void ModelItem::optimizeKernelParameters()
 {
-	cout<<"optimizing kernel parameters..."<<endl;
 	if(optimize_kernel_parameters && k_fold>=2)
 	{
+		cout<<"optimizing kernel parameters..."<<endl;
 		/// search locally around current kernel parameters
 		KernelModel* km = (KernelModel*)model_;
-		double start_par1 = km->kernel->par1 - ((grid_search_steps/2.)*grid_search_stepwidth);
-		double start_par2 = km->kernel->par2 - ((grid_search_steps/2.)*grid_search_stepwidth);
-		km->kernel->gridSearch(grid_search_stepwidth, grid_search_steps,grid_search_recursions,k_fold,start_par1,start_par2);
+		km->kernel->gridSearch(grid_search_stepwidth, grid_search_steps,grid_search_recursions,k_fold);
 	}	
 }
 

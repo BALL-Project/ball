@@ -167,10 +167,33 @@ void Kernel::gridSearch(double step_width, int steps, int recursions, int k, boo
 {
 	bool first_rec=1;
 	
-	// do once + one time for each desired recursion
+	/// search locally around current kernel parameters, but always start with par1>0 und par2<0
+	if(par1_start==0) 
+	{
+		if(type==2) 
+		{
+			if(par1<1) par1_start=par1*pow(2,steps/2.);
+			else par1_start=10;
+		}
+		else par1_start=par1-((steps/2.)*step_width);
+		if(par1_start<=0)
+		{
+			par1_start=par1;
+		}
+	}
+	if(par2_start==0) 
+	{
+		par2_start=par1+((steps/2.)*step_width);
+		if(par2_start>=0)
+		{
+			par2_start=par2;
+		}
+	}
+	
+	/// run grid-search once + one time for each desired recursion
 	for(int i=0; i<=recursions;i++)
 	{
-		gridSearch(step_width,steps,first_rec,k,par1_start,par1_start,opt);
+		gridSearch(step_width,steps,first_rec,k,par1_start,par2_start,opt);
 		step_width = step_width/10;
 		steps = 20;
 		first_rec = 0;
@@ -183,21 +206,18 @@ void Kernel::gridSearch(double step_width, int steps, int recursions, int k, boo
 
 void Kernel::gridSearch(double step_width, int steps, bool first_rec, int k, double par1_start, double par2_start, bool opt)
 {	
-	//cout << "doing grid search ... "<<endl;
+	if(par1_start==0 || (type==3&&par2_start==0)) 
+	{
+		throw Exception::KernelParameterError(__FILE__,__LINE__,"Kernel Parameter start-values for grid search must be not be zero !!");
+	}
 	
 	double best_par1=par1;
 	double best_par2=par2;
 	model_->model_val->crossValidation(4,0);
 	double best_cvres=model_->model_val->getCVRes();
-	//cout<<" begin="<<best_cvres<<endl;
-	if(par1_start!=0)
-	{
-		par1=par1_start;
-	}
-	if(par2_start!=0)
-	{
-		par2=par2_start;
-	}
+
+	par1=par1_start;
+	par2=par2_start;
 	
 	if(type!=3) // for kernels that use only 1 parameter
 	{
