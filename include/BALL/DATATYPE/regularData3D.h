@@ -425,6 +425,15 @@ namespace BALL
 		 		@exception FileNotFound thrown if file could not be written
 		*/
 		void binaryWrite(const String& filename) const
+			throw(Exception::FileNotFound);		
+
+		/**
+		* Writes out raw binary plus text header file.
+		* !!!WARNING!!! This method is defined only for float template parameters.
+		* If you try it to call it from any other specialization, it will give out
+		* compile error that the function has no body.
+		*/ 
+		void binaryWriteRaw(const String& filename) const
 			throw(Exception::FileNotFound);
 
 		/** Read the grid contents from a file written with binaryWrite
