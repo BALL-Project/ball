@@ -641,9 +641,12 @@ void ModelItem::createActions()
 	connect(properties_action, SIGNAL(triggered()), this, SLOT(showProperties()));
 	context_menu_actions_.push_back(properties_action);
 	
-	QAction* plot_features_action = new QAction("plot features",this);
-	connect(plot_features_action,SIGNAL(triggered()),this,SLOT(showFeaturePlotter()));
-	context_menu_actions_.push_back(plot_features_action);
+	if(entry_->regression) 
+	{
+		QAction* plot_features_action = new QAction("plot features",this);
+		connect(plot_features_action,SIGNAL(triggered()),this,SLOT(showFeaturePlotter()));
+		context_menu_actions_.push_back(plot_features_action);
+	}
 }
 
 
@@ -872,7 +875,6 @@ void ModelItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
 		
 void ModelItem::hoverLeaveEvent (QGraphicsSceneHoverEvent* /*event*/)
 {
-	//delete hover_label_;
 	delete hover_rect_;
 	hover_rect_ = NULL;
 }

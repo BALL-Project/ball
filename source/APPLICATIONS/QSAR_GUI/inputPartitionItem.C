@@ -53,7 +53,17 @@ InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* pa
 	//cout<<"output_filename_="<<output_filename_<<endl;
 	//cout<<"saved_as_="<<saved_as_.toStdString()<<endl<<endl;
 	
+	QPixmap pm;
 	//TODO: set pixmap depending on whether test_partition_==1 or not...
+	if(test_partition)
+	{
+		pm = QPixmap("./images/test_part.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation);
+	}
+	else
+	{
+		pm = QPixmap("./images/train_part.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation);
+	}
+	setPixmap(pm);
 }
 
 

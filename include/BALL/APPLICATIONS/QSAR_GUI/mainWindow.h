@@ -139,6 +139,9 @@ namespace BALL
 				/** submits the current pipeline to a cluster */
 				void submit();
 				
+				/** displays a preferences dialog that allow setting the cluster's queue parameters */
+				void preferencesDialog();
+				
 			private:
 				
 				struct Settings
@@ -149,6 +152,10 @@ namespace BALL
 					int size_y;
 					int pos_x;
 					int pos_y;
+					
+					/** the prefix for submitting a job to the cluster, \n
+					  e.g. "qsub -cwd" or "bsub" or "qsub -q long.q" ... **/
+					String submit_prefix;
 				};
 				
 				 /// the last used paths settings

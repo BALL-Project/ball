@@ -61,6 +61,7 @@ using namespace BALL::Exception;
 	settings.config_path=QDir::homePath().toStdString();
 	settings.size_x=0; settings.size_y=0;
 	settings.pos_x=0; settings.pos_y=0;
+	settings.submit_prefix = "qsub -cwd";
 	if(in) 
 	{
 		in>>settings.input_data_path;
@@ -69,6 +70,9 @@ using namespace BALL::Exception;
 		if(in) in>>settings.size_y;
 		if(in) in>>settings.pos_x;
 		if(in) in>>settings.pos_y;
+		string tmp;
+		getline(in,tmp);  // read the rest of the line
+		if(in) getline(in,settings.submit_prefix);
 		in.close();
 	}
 
@@ -126,6 +130,7 @@ MainWindow::~MainWindow()
 	output<<s.width()<<"  "<<s.height()<<endl;
 	QPoint p = pos();
 	output<<p.x()<<"  "<<p.y()<<endl;
+	output<<settings.submit_prefix<<endl;
 	output.close();
 }
 
@@ -403,7 +408,7 @@ PredictionItem* MainWindow::createPrediction(InputDataItem* input, ModelItem* mo
 
  void MainWindow::about()
 {
-	QMessageBox::information(this, tr("About QSAR_GUI"), tr("Version 0.66\n2008-07-02"),
+	QMessageBox::information(this, tr("About QSAR_GUI"), tr("Version 0.67\n2008-07-15"),
 	QMessageBox::Ok);
 }
 
@@ -490,6 +495,9 @@ void MainWindow::printToFile()
 	fileMenu_->addAction(exitAct_);
 
 	editMenu_ = menuBar()->addMenu(tr("&Edit"));
+	QAction* pref = new QAction(tr("&Preferences"), this);
+	connect(pref, SIGNAL(triggered()), this, SLOT(preferencesDialog()));
+	editMenu_->addAction(pref);
 
 	windowMenu_ = menuBar()->addMenu(tr("&Windows"));
 
@@ -498,6 +506,35 @@ void MainWindow::printToFile()
 	helpMenu_ = menuBar()->addMenu(tr("&Help"));
 	helpMenu_->addAction(aboutAct_);
  }
+ 
+ 
+ // SLOT
+ void MainWindow::preferencesDialog()
+ {
+	QDialog dialog;
+	QVBoxLayout main_layout;
+	
+	QHBoxLayout h_layout;
+	QLabel label("Queue submit prefix");
+	QLineEdit edit;
+	edit.setText(settings.submit_prefix.c_str());
+	h_layout.addWidget(&label);
+	h_layout.addWidget(&edit);
+	main_layout.addLayout(&h_layout);
+	
+	QDialogButtonBox buttons(QDialogButtonBox::Ok |QDialogButtonBox::Cancel,Qt::Horizontal);
+	main_layout.addWidget(&buttons);
+	connect(&buttons, SIGNAL(accepted()), &dialog, SLOT(accept()));
+	connect(&buttons, SIGNAL(rejected()), &dialog, SLOT(reject()));
+	
+	dialog.setLayout(&main_layout);
+	 
+	if(dialog.exec()) // if user clicks "ok"
+	{
+		settings.submit_prefix = edit.text().toStdString();
+	}	 
+ } 
+ 
 
 /*
 function for setting up the tool bars
@@ -1486,7 +1523,7 @@ void MainWindow::submitToCluster(String configfile)
 	uint d = configfile.find_last_of(".");
 	uint s = configfile.find_last_of("/");
 	String file = configfile.substr(0,d); // name of config-file as prefix for output-files
-	cout<<"file="<<file<<endl;
+	//cout<<"file="<<file<<endl;
 	String directory = configfile.substr(0,s+1); // name of folder
 	
 	String script = file+".csh";
@@ -1494,7 +1531,8 @@ void MainWindow::submitToCluster(String configfile)
 	out<<"InputReader "<<configfile<<"; InputPartitioner "<<configfile<<"; ModelCreator "<<configfile<<"; FeatureSelector "<<configfile<<"; Predictor "<<configfile<<endl;
 	out.close();
 	
-	String call = "cd "+directory+"; qsub -cwd "+script;
+	String call = "cd "+directory+"; ";
+	call+=settings.submit_prefix+" "+script;
 	system(call.c_str());
 	
 }
