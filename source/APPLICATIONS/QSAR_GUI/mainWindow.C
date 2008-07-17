@@ -516,7 +516,7 @@ void MainWindow::printToFile()
 	QVBoxLayout main_layout;
 	
 	QHBoxLayout h_layout;
-	QLabel label("Queue submit prefix");
+	QLabel label("Queue submitting command");
 	QLineEdit edit;
 	edit.setText(settings.submit_prefix.c_str());
 	h_layout.addWidget(&label);
