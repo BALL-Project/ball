@@ -72,7 +72,8 @@ using namespace BALL::Exception;
 		if(in) in>>settings.pos_y;
 		string tmp;
 		getline(in,tmp);  // read the rest of the line
-		if(in) getline(in,settings.submit_prefix);
+		if(in) getline(in,tmp);
+		if(tmp!="") settings.submit_prefix=tmp;
 		in.close();
 	}
 
