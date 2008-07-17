@@ -22,6 +22,11 @@
 #	include<BALL/KERNEL/expression.h>
 #endif
 
+#ifndef BALL_DATATYPE_OPTIONS_H
+# include <BALL/DATATYPE/options.h>
+#endif
+
+
 #include <set>
 #include <map>
 
@@ -38,6 +43,30 @@ namespace BALL
 		public:
 
 		BALL_CREATE(EmpiricalHSShiftProcessor)
+		
+		static const int VERBOSITY_LEVEL_CRITICAL;
+		static const int VERBOSITY_LEVEL_DEBUG;
+
+		/** @name Constant Definitions
+		*/
+		//@{
+		/// Option names
+		struct BALL_EXPORT Option
+		{	
+			/** verbosity of the processor
+			 */
+			static const char* VERBOSITY;
+			
+		};
+		
+		/// Default values for options
+		struct BALL_EXPORT Default
+		{
+			static const int VERBOSITY;
+		};
+	
+		//@}
+
 
 		/**	@name Enums and Constants.
 		*/
@@ -58,12 +87,6 @@ namespace BALL
 		EmpiricalHSShiftProcessor()
 			throw();
 
-			
-		/**	Copy constructor.
-		*/
-		EmpiricalHSShiftProcessor(const 	EmpiricalHSShiftProcessor& processor)
-			throw();
-			
 		/**	Destructor.
 		*/
 		virtual ~EmpiricalHSShiftProcessor()
@@ -159,86 +182,20 @@ namespace BALL
 			throw();
 			
 		//@}
+		/** @name Public Attributes
+			*/
+			//@{
+			/// options
+			Options options;
+
+			/** reset the options to default values
+			*/
+			void setDefaultOptions();
+			//@}
 
 		protected:
 		
-	/** nested classe for computing Bicubic splines 
- 	*/
-	/*	class CubicSpline1D_
-		{
-			public:
-				CubicSpline1D_() {};
-
-				void createSpline(const std::vector<float>& sample_positions, 
-													const std::vector<float>& sample_values,bool return_average = false); // spline
-				float operator () (float x); // splint
-
-				std::vector<float>& getCurvature();
-				void setCurvature(std::vector<float> curvature);
-				void setValues(std::vector<float> values);
-				void setPositions(std::vector<float> positions);
-				// this is necessary to allow for "corrected" averages as in the case of ShiftX NMR-prediction
-				void setAverage(float average) {average_ = average;}
-				float getAverage() {return average_;}
-
-				// we allow to set the spline upper and lower bounds to something different from the x-axis extrema.
-				// this allows extrapolation
-				void setLowerBound(float lb) {lower_bound_ = lb;}
-				void setUpperBound(float ub) {upper_bound_ = ub;}
-
-				float getLowerBound() {return lower_bound_;}
-				float getUpperBound() {return upper_bound_;}
-			private :
-				std::vector<float> sample_positions_;
-				std::vector<float> sample_values_;
-				std::vector<float> curvature_;
-				bool return_average_;
-			  float average_;
-
-				float lower_bound_;
-				float upper_bound_;
-		};*/
-
-//		public: // tO do : rÜCKGÄNGIG
-/*		class CubicSpline2D_
-		{
-			public:
-				CubicSpline2D_() {};
-
-				// Simple version of spline creation. Assumes that all rows have the same x-positions
-				void createBiCubicSpline(const std::vector<float>& sample_positions_x,
-																 const std::vector<float>& sample_positions_y,
-																 const std::vector<std::vector<float> >& sample_values); // splie2
-				//precompute the second derivatives	
-				void createBiCubicSpline(const std::vector<std::vector<float> >& sample_positions_x,
-						const std::vector<float>& sample_positions_y,
-						const std::vector<std::vector<float> >& sample_values); // splie2
-				float operator () (float x, float y); // splin2
-				float getAverage() { return average_; };
-
-				void  setLowerBound(float lb) {y_lower_bound_ = lb;}
-				void  setUpperBound(float ub) {y_upper_bound_ = ub;}
-
-				float getLowerBound() {return y_lower_bound_;}
-				float getUpperBound() {return y_upper_bound_;}
-
-				CubicSpline1D& getSpline(Position i) {return splines_[i];}
-				const CubicSpline1D& getSpline(Position i) const {return splines_[i];}
-
-				Size getNumberOfSplines() const {return splines_.size();}	
-			private :
-				std::vector< std::vector<float> > sample_positions_x_;
-				std::vector<float> sample_positions_y_;
-				std::vector<CubicSpline1D_> splines_;
-
-				float average_;
-				float y_lower_bound_;
-				float y_upper_bound_;
-		}; */
-
-	//	protected:	//todO: RÜCKGÄNGIG
-
-
+		
 		/*_ Neested class providing atom properties for the shift computations 
 		 * */	
 		class BALL_EXPORT PropertiesForShift_
@@ -247,7 +204,8 @@ namespace BALL
 							
 				/** Default constructor.
 				 */
-				PropertiesForShift_() throw();
+				PropertiesForShift_(int verbosity_ = EmpiricalHSShiftProcessor::VERBOSITY_LEVEL_CRITICAL) 
+					throw();
 
 				/** A pointer to the atom, whose properties are computed and stored. 
 				 */
@@ -319,6 +277,9 @@ namespace BALL
 				bool 			hasHN_HBond_(Residue* residue) throw();
 				bool 			hasO_HBond_(Residue* residue) throw();
 				
+			private:
+				// verbosity of the classes methods
+				int     verbosity_;
 		}; // end of nested class
 		
 
@@ -351,7 +312,7 @@ namespace BALL
 
 				/*_  Constructors and Destructors.
 				*/
-				ShiftHyperSurface_() throw();
+				ShiftHyperSurface_(int verbosity = EmpiricalHSShiftProcessor::VERBOSITY_LEVEL_CRITICAL) throw();
 
 				/*_ Detailed constructor. 
 				 *  Creates a ShiftHyperSurface given the <b>filename<\b> of the data file, 
@@ -377,7 +338,9 @@ namespace BALL
 				 *  by the {\tt operator () } given __not__ the property-value, but the property name. 
 				 *  
 				 */
-				ShiftHyperSurface_(String filename, String atomtype, String firstproperty, String secondproperty)
+				ShiftHyperSurface_(String filename, String atomtype, 
+													 String firstproperty, String secondproperty, 
+													 int verbosity = EmpiricalHSShiftProcessor::VERBOSITY_LEVEL_CRITICAL)
 					throw(Exception::FileNotFound);  
 
 				/**	Destructor.
@@ -478,6 +441,9 @@ namespace BALL
 				// Note: this average maybe weighted in non-obvious ways! 
 				float average_;
 
+				// verbosity of the method
+				int verbosity_;
+
 				// The underlying data of the hypersurface as read from the file.
 				vector<String> 					 y_axis_values_;
 				vector<vector<String> >  x_axis_values_;
@@ -532,7 +498,7 @@ namespace BALL
 		// Map containing possible correction terms for ssbonds.
 		std::map<String, float> ssbond_correction_;
 
-			private:
+	private:
 
 		/*_ Some debugging functions printing parameter/effector/target information
 		 *   to the Log stream.
@@ -547,6 +513,9 @@ namespace BALL
 			*/
 		void			postprocessing_() throw();
 
-		};// end of class
+		/// The verbosity of this class as taken from the options
+		int 			verbosity_;
+
+	};// end of class
 } // end of namespace
 #endif // BALL_NMR_EMPIRICALHSSHIFTPROCESSOR_H

@@ -145,7 +145,7 @@ namespace BALL
 		}
 		else
 		{
-				Log.error() << "RandomCoilShiftProcessor: could not perform a postprocessing. (" 
+				Log.error() << "Error in RandomCoilShiftProcessor: no system found for postprocessing. (" 
 				 					<< __FILE__ << " " << __LINE__ << ")" <<  std::endl;
 		}
 	}

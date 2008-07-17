@@ -7,9 +7,13 @@ using namespace std;
 namespace BALL 
 {
 	
+	const int CubicSpline2D::VERBOSITY_LEVEL_DEBUG = 10;
+	const int CubicSpline2D::VERBOSITY_LEVEL_CRITICAL = 5;
+
 	//	Default constructor.
 	CubicSpline2D::CubicSpline2D()
 		throw()
+		: verbosity_(VERBOSITY_LEVEL_DEBUG)
 	{}	
 	
 	CubicSpline2D::CubicSpline2D(const std::vector<std::vector<float> >& sample_positions_x,
@@ -20,7 +24,8 @@ namespace BALL
 										const std::vector<float>& x_lower_derivatives,  
 										const std::vector<float>& x_upper_derivatives,
 										float y_lower_derivative, 
-										float y_upper_derivative)
+										float y_upper_derivative,
+										int verbosity)
 		throw()
 		:	sample_positions_x_(sample_positions_x),
 			sample_positions_y_(sample_positions_y),
@@ -38,7 +43,8 @@ namespace BALL
 			x_lower_derivatives_(x_lower_derivatives),
 			x_upper_derivatives_(x_upper_derivatives),
 			y_lower_derivative_(y_lower_derivative),
-			y_upper_derivative_(y_upper_derivative)
+			y_upper_derivative_(y_upper_derivative),
+			verbosity_(verbosity)
 	{	
 		x_default_values_.resize(sample_positions_y_.size(), std::numeric_limits<float>::min());
 		y_default_value_ = std::numeric_limits<float>::min();
@@ -81,7 +87,8 @@ namespace BALL
 										const std::vector<float>& x_lower_derivatives,
 										const std::vector<float>& x_upper_derivatives,
 										float y_lower_derivative,
-										float y_upper_derivative)
+										float y_upper_derivative,
+										int   verbosity)
 		throw()
 		: sample_positions_x_(sample_positions_x),
 			sample_positions_y_(sample_positions_y),
@@ -99,7 +106,8 @@ namespace BALL
 			x_lower_derivatives_(x_lower_derivatives),
 			x_upper_derivatives_(x_upper_derivatives),
 			y_lower_derivative_(y_lower_derivative),
-			y_upper_derivative_(y_upper_derivative)
+			y_upper_derivative_(y_upper_derivative),
+			verbosity_(verbosity)
 	{
 		x_is_natural_.resize(sample_positions_y.size(), is_natural);
 		
@@ -117,16 +125,6 @@ namespace BALL
 //------------------------------simple constructors-----------------------------------------------------
 
 	
-	/*	// Assuming that all rows have the same x-positions, 
-		// we have to create a full set of x-positions
-		std::vector<std::vector<float> > complete_x_positions(sample_positions_y.size());
-		for (Position i=0; i<complete_x_positions.size(); i++)
-		{
-			complete_x_positions[i] = sample_positions_x;
-		}
-		
-		sample_positions_x_ = complete_x_positions;
-		*/
 	CubicSpline2D::CubicSpline2D(const std::vector<float>& sample_positions_x,
 										const std::vector<float>& sample_positions_y,
 										const std::vector<std::vector<float> >& sample_values, 
@@ -135,7 +133,8 @@ namespace BALL
 										const std::vector<float>& x_lower_derivatives,  
 										const std::vector<float>& x_upper_derivatives,
 										float y_lower_derivative, 
-										float y_upper_derivative)
+										float y_upper_derivative,
+										int 	verbosity)
 		throw()
 		:	sample_positions_x_(),
 			sample_positions_y_(sample_positions_y),
@@ -153,7 +152,8 @@ namespace BALL
 			x_lower_derivatives_(x_lower_derivatives),
 			x_upper_derivatives_(x_upper_derivatives),
 			y_lower_derivative_(y_lower_derivative),
-			y_upper_derivative_(y_upper_derivative)
+			y_upper_derivative_(y_upper_derivative),
+			verbosity_(verbosity)
 	{	
 		// Assuming that all rows have the same x-positions, 
 		// we have to create a full set of x-positions
@@ -206,7 +206,8 @@ namespace BALL
 										const std::vector<float>& x_lower_derivatives,
 										const std::vector<float>& x_upper_derivatives,
 										float y_lower_derivative,
-										float y_upper_derivative)
+										float y_upper_derivative,
+										int		verbosity)
 		throw()
 		: sample_positions_x_(),
 			sample_positions_y_(sample_positions_y),
@@ -224,7 +225,8 @@ namespace BALL
 			x_lower_derivatives_(x_lower_derivatives),
 			x_upper_derivatives_(x_upper_derivatives),
 			y_lower_derivative_(y_lower_derivative),
-			y_upper_derivative_(y_upper_derivative)
+			y_upper_derivative_(y_upper_derivative),
+			verbosity_(verbosity)
 	{
 		// Assuming that all rows have the same x-positions, 
 		// we have to create a full set of x-positions
@@ -248,8 +250,6 @@ namespace BALL
 		createBiCubicSpline();
 	}
 	
-	
-			
 	// Copy  constructor
 	CubicSpline2D::CubicSpline2D(const CubicSpline2D& cs2D)
 		throw() 
@@ -270,7 +270,8 @@ namespace BALL
 			x_lower_derivatives_(cs2D.x_lower_derivatives_),
 			x_upper_derivatives_(cs2D.x_upper_derivatives_),
 			y_lower_derivative_(cs2D.y_lower_derivative_),
-			y_upper_derivative_(cs2D.y_upper_derivative_)
+			y_upper_derivative_(cs2D.y_upper_derivative_),
+			verbosity_(cs2D.verbosity_)
 	{
 	}
 			
@@ -278,21 +279,6 @@ namespace BALL
 	CubicSpline2D::~CubicSpline2D()
 		throw() 
 	{}
-
-/*	// simple version of spline creation. Assumes that all rows have the same x-positions
-	// !!!!!!!!!!!TODO!!!! einfache Konstruktoren!!!!!
-	void CubicSpline2D::createBiCubicSpline(const std::vector<float>& sample_positions_x, 
-			const std::vector<float>& sample_positions_y, 
-			const std::vector<std::vector<float> >& sample_values) 
-	{
-		std::vector<std::vector<float> > complete_x_positions(sample_positions_y_.size());
-		for (Position i=0; i<complete_x_positions.size(); i++)
-		{
-			complete_x_positions[i] = sample_positions_x;
-		}
-		
-		createBiCubicSpline(complete_x_positions, sample_positions_y, sample_values);
-	} */
 
 	// A complex version to create a 2D Cubic spline. 
 	void CubicSpline2D::createBiCubicSpline()
@@ -313,6 +299,8 @@ namespace BALL
 			// compute a 1D spline
 			CubicSpline1D cs(sample_positions_x_[j], sample_values_[j], x_lower_bounds_[j], x_upper_bounds_[j], 
 											 return_average_, x_default_values_[j], x_is_natural_[j], x_lower_derivatives_[j], x_upper_derivatives_[j]);
+			cs.setVerbosity(verbosity_);
+
 			if (return_average_)
 			{
 				default_value_ += cs.getDefaultValue()/m;
@@ -320,6 +308,13 @@ namespace BALL
 			// store the 1D splines
 			splines_.push_back(cs);	
 		}
+	}
+
+	void CubicSpline2D::setVerbosity(int verbosity)
+	{
+		verbosity_ = verbosity;
+		for (Position i=0; i<splines_.size(); i++)
+			splines_[i].setVerbosity(verbosity_);
 	}
 
 	float CubicSpline2D::operator () (float x, float y)
@@ -356,7 +351,7 @@ namespace BALL
 										 y_lower_bound_, y_upper_bound_, 
 										 return_average_, default_value, 
 										 y_is_natural_, y_lower_derivative_, y_upper_derivative_);
-
+		cs.setVerbosity(verbosity_);
 		// Evaluate the new spline at y.
 		return cs(y);
 	}
@@ -415,8 +410,8 @@ namespace BALL
 	}
 	
 	/** Sets the flag {\tt is_natural_} for the x-th spline to true. 
-			 *  By default the method recomputes the spline. 
-			 *  If the argument is false, no recomputation is done.*/
+	 *  By default the method recomputes the spline. 
+	 *  If the argument is false, no recomputation is done.*/
 	void CubicSpline2D::makeXNatural(Index x, bool recompute)
 		throw()
 	{

@@ -8,10 +8,14 @@
 
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/protein.h>
+#include <BALL/STRUCTURE/peptides.h>
 #include <BALL/NMR/shiftModule.h>
 
 //#define NMRSTAR_DEBUG 1
 #undef NMRSTAR_DEBUG
+
+//#define NMRSTAR_DEBUG_MAPPING 1
+#undef NMRSTAR_DEBUG_MAPPING
 
 using namespace std;
 
@@ -58,7 +62,7 @@ namespace BALL
 		// TODO: if POSITION_VALUE_NA, FLOAT_VALUE_NA ... -> NA ausgeben
 		if (values.size() != errors.size() && errors.size() != units.size())
 		{
-			Log.warn() << "Missing values in Sample Conditions." << std::endl;
+			Log.warn() << "NMRStarFile::SampleCondition: Warning: Missing values in Sample Conditions." << std::endl;
 			return s;
 		}
 		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
@@ -410,7 +414,7 @@ namespace BALL
 	{
 		if (hasMonomericPolymer(mp.label_name))
 		{
-			Log.warn() << "A Monomer with that name was overwritten!" << std::endl;  
+			Log.warn() << "NMRStarFile::addMonomericPolymer(): Warning: A Monomer with that name was overwritten!" << std::endl;  
 			// delete the old entry
 			vector<NMRStarFile::MonomericPolymer>::iterator mpi = monomeric_polymers_.begin() + monomeric_polymer_indices_[mp.label_name] ;
 			monomeric_polymers_.erase(mpi);
@@ -480,10 +484,227 @@ namespace BALL
 	}
 
 
+	
+ 	NMRStarFile::BALLToBMRBMapping::BALLToBMRBMapping(Protein* protein, const NMRStarFile* nmr_data)
+		: ball_to_bmrb_map_(),
+			protein_(protein),
+			chain_(0),
+			nmr_data_(nmr_data),
+			mismatches_(0)
+	{ }
+	
+	NMRStarFile::BALLToBMRBMapping::BALLToBMRBMapping(Chain* chain, const NMRStarFile* nmr_data)
+		: ball_to_bmrb_map_(),
+			protein_(0),
+			chain_(chain),
+			nmr_data_(nmr_data),
+			mismatches_(0)
+	{ }
+
+	bool NMRStarFile::BALLToBMRBMapping::hasAtom(Atom* atom)
+	{
+		return (ball_to_bmrb_map_.find(atom) != ball_to_bmrb_map_.end());
+	}
+	
+	const Atom* NMRStarFile::BALLToBMRBMapping::findNMRAtomInProtein(const NMRAtomData& atom)
+	{
+		// get the residue corresponding to the one we found in the NMRFile
+		if (atom.residue_seq_code <= protein_->countResidues())
+		{
+			const Residue* residue = protein_->getResidue(atom.residue_seq_code-1);
+			
+			// TODO: decide whether to map using a class option
+			if (residue->getName() != atom.residue_label)
+			{
+				Log.warn() << "NMRStarFile::findNMRAtomInProtein(): Warning: Residues have different types in NMRStarFile and BALL sequence!" << std::endl;
+				Log.warn() << "             NMRStarFile: " << atom.residue_label << std::endl;
+				Log.warn() << "             BALL:        " << residue->getName() << std::endl;
+			}
+
+			for (AtomConstIterator at_it = residue->beginAtom(); +at_it; ++at_it)
+			{
+				if (at_it->getName() == atom.atom_name)
+					return &*at_it;
+			}
+		}
+
+		return NULL;
+	}
+	
+	bool  NMRStarFile::BALLToBMRBMapping::createTrivialMapping()
+	{
+		// walk over the NMRAtomData sets of the nmr data file
+		// NOTE: currently, we walk only over the first of those data sets
+		const vector<NMRAtomDataSet>& nmr_data_sets = nmr_data_->getNMRData();
+
+		if (nmr_data_sets.size() == 0)
+		{
+			Log.error() << "NMRStarFile::BALLToBMRBMapping::createTrivialMapping(): no atom data sets found!" << std::endl;
+
+			return false;
+		}
+
+		if (nmr_data_sets.size() > 1)
+		{
+			Log.error() << "NMRStarFile::BALLToBMRBMapping::createTrivialMapping(): can't compute mapping for more than one data set!" << std::endl;
+
+			return false;
+		}
+
+		// TODO: insert the data from the NMRAtomDataSet (like conditions) as properties!
+		for (Position current_nmr_atom = 0; 
+				current_nmr_atom < nmr_data_sets[0].atom_data.size(); 
+				++current_nmr_atom)
+		{
+			const Atom* ball_atom = findNMRAtomInProtein(nmr_data_sets[0].atom_data[current_nmr_atom]);
+
+			BMRBIndex b_index(0, current_nmr_atom);
+
+			if (ball_atom)
+				ball_to_bmrb_map_[ball_atom] = b_index;
+		}
+
+		return true;
+	}
+	
+	bool NMRStarFile::BALLToBMRBMapping::createMapping(const String& aligned_ball_sequence,
+																											const String& aligned_nmrstar_sequence)
+	{	
+		bool result = true;
+		int matches = 0;
+
+		// check whether the alignment is valid
+		if ((aligned_ball_sequence.size()==0) || (aligned_nmrstar_sequence.size() ==0) )
+		{	
+			Log.warn() << "BALLToBMRBMapping::createMapping(): Warning one of the aligned strings has length zero!" << endl;
+			return false;
+		}	
+
+		if (aligned_ball_sequence.size() != aligned_nmrstar_sequence.size())
+		{
+			Log.error() << "BALLToBMRBMapping::createMapping(): There was no correct alignment" << std::endl;
+			return false;
+		}
+
+		// to speed up the mapping, we store all NMRAtomData in a hashmap:
+		// (residue_id,atom_name) ----> index of the corresponding NMRAtomData 
+		// We might want to change it into a HashMap, but HashMap cant cope with 
+		// the pair of Position and String as index!
+		std::map< std::pair<Position, String>, Position> indices;
+
+		// get the NMR data
+		// NOTE: we take the zero's dataset!
+		if (nmr_data_->atom_data_sets_.size() == 0)
+		{
+			return false;
+		}
+		std::vector<NMRAtomData> nmr_data = nmr_data_->atom_data_sets_[0].atom_data;
+
+		// fill the map storing all indices
+		for (Position i = 0; i < nmr_data.size(); i++)
+		{	
+			std::pair<Position, String> tuple(nmr_data[i].residue_seq_code , nmr_data[i].atom_name);
+			indices[tuple] = i;	
+		}
+
+		// the actual residue indices for the following loop
+		Position ball_residue_idx = 0;
+		Position nmr_residue_idx = 0;
+
+		// now create BALLToBMRBMappings for the given alignment
+		for (Position i=0; i < aligned_ball_sequence.size(); i++)	
+		{
+			if (   (aligned_ball_sequence[i] == '-') 
+					&& (aligned_nmrstar_sequence == '-'))
+			{
+				Log.warn() << "BALLToBMRBMapping::createMapping(): Warning: gaps in both aligned sequences!" << endl;
+				return false;
+			}
+			else
+			{
+				if (aligned_ball_sequence[i] == '-')
+				{
+					// this NMR residue has no assigned BALL residue 
+					nmr_residue_idx++;
+#if defined NMRSTAR_DEBUG || defined NMRSTAR_DEBUG_MAPPING
+					Log.warn() << "BALLToBMRBMapping::createMapping(): Warning: nmr residue nr" << i << " " 
+						<< aligned_nmrstar_sequence[i] << " has no assigned ball residue!" << endl; 
+#endif
+
+				}
+				else if (aligned_nmrstar_sequence[i] == '-')
+				{
+					// this BALL residue has no assigned NMR residue
+					ball_residue_idx++;	
+
+#if defined NMRSTAR_DEBUG || defined NMRSTAR_DEBUG_MAPPING					
+					Log.warn() << "BALLToBMRBMapping::createMapping(): Warning: ball residue nr " << i << " " 
+						<< aligned_ball_sequence[i] << " has no assigned nmr residue!" << endl; 
+#endif
+				}
+				else //if (aligned_ball_sequence[i] == aligned_nmrstar_sequence[i])
+				{         
+					// there is a correspondence found between nmr and ball 
+					nmr_residue_idx++;
+					ball_residue_idx++;
+
+					// find for all atoms the corresponding NMRAtomData
+					Residue* residue = 0;
+					if (protein_)
+						residue = protein_->getResidue(ball_residue_idx);
+					else if (chain_)
+						residue = chain_->getResidue(ball_residue_idx);
+
+					for (AtomIterator at_it = residue->beginAtom(); +at_it; ++at_it)
+					{	
+						std::pair<Position, String> tuple(nmr_residue_idx, at_it->getName());
+						// find the correct entry-index of the NMRAtomData
+						if (indices.find(tuple) != indices.end())
+						{
+							// and store them in the mapping
+							Position nmr_atom = indices[tuple];
+							BALLToBMRBMapping::BMRBIndex b_index(0, nmr_atom);
+							ball_to_bmrb_map_[&*at_it] = b_index;
+						}
+						else
+						{
+
+#if defined NMRSTAR_DEBUG || defined NMRSTAR_DEBUG_MAPPING
+							Log.warn()<< "BALLToBMRBMapping::createMapping(): Warning: Could'n find ball atom "
+								<< at_it->getName() << " " << at_it->getResidue()->getName()
+								<< " in nmr residue nr " << nmr_residue_idx << endl;
+#endif
+						}
+					}
+
+					if (aligned_ball_sequence[i] != aligned_nmrstar_sequence[i])
+					{
+						mismatches_++; 
+
+#if defined NMRSTAR_DEBUG || defined NMRSTAR_DEBUG_MAPPING
+						Log.warn() << "BALLToBMRBMapping::createMapping(): Warning: assigned ball residue " 
+							<< aligned_ball_sequence[i] << " to nmr residue " << aligned_nmrstar_sequence[i] << endl;
+#endif
+					}
+					else
+					{
+						matches++;
+					}
+				} // end of else no gaps
+			}// end of else not '-''-'
+		} // end of for all alignment positions
+
+#if defined NMRSTAR_DEBUG || defined NMRSTAR_DEBUG_MAPPING
+	Log.info() << " Mapping matches:  " << matches << endl;
+#endif
+		return result;
+	}
+	
 ////////////////////////////////////////////////////////////////
 
 	NMRStarFile::NMRStarFile()
 		:	CIFFile(),
+			valid_(false),
 			number_of_shift_sets_(0),
 			entry_information_(),
 			molecular_system_(),
@@ -503,6 +724,7 @@ namespace BALL
 	}
 
 		:	CIFFile(f),
+			valid_(f.valid_),
 			number_of_shift_sets_		(f.number_of_shift_sets_),
 			entry_information_  (f.entry_information_),	
 			molecular_system_   (f.	molecular_system_),
@@ -518,6 +740,7 @@ namespace BALL
 	NMRStarFile::NMRStarFile(const String& file_name, File::OpenMode open_mode)
 		throw (Exception::FileNotFound)
 		:	CIFFile(file_name, open_mode),
+			valid_(false),
 			number_of_shift_sets_(0),
 			entry_information_(),
 			molecular_system_(),
@@ -543,7 +766,7 @@ namespace BALL
 	const NMRStarFile& NMRStarFile::operator = (const NMRStarFile& f)		
 	{
 		CIFFile::operator = (f);
-
+		valid_ = f.valid_;
 		number_of_shift_sets_		= f.number_of_shift_sets_;
 		entry_information_  = f.entry_information_;
 		molecular_system_   = f.molecular_system_; 
@@ -609,6 +832,9 @@ namespace BALL
 	std::cout << "NMRStarFile::findDependiencies_()" << std::endl;	
 #endif
 			findDependiencies_();
+			
+			valid_ = true;
+
 		//}
 		/*catch (Exception::GeneralException e)
 		{
@@ -623,7 +849,10 @@ namespace BALL
 
 	bool NMRStarFile::read(AtomContainer& ac)
 	{
+		// read the NMRStarFile's information
 		bool result = read();
+
+		// ... if valid try to assign to the AtomContainer's atoms 
 		if (result)
 		{
 			// first check, if the given AtomContainer is a valid protein
@@ -638,12 +867,13 @@ namespace BALL
       	if (system->countProteins() > 0)
       	{	 
         	ProteinIterator pit = system->beginProtein();
-        	// we take the first protein of the system
+        	
+					// NOTE: we take the first protein of the system
         	protein = RTTI::castTo<Protein>(*pit);
      		}
 				else
 				{
-					Log.error() << "NMRStarfile::read(): No protein found in the system." << endl;
+					Log.error() << "NMRStarfile::read(): No protein found in the given AtomContainer." << endl;
 					return false;
 				}
     	} 
@@ -656,33 +886,97 @@ namespace BALL
 			// Since no explicit mapping AtomContainer-->BMRB
 			// is given, we try to find a trivial mapping 
 			// by exactly matching residues and atom names
-			BALLToBMRBMapping pdb_to_bmrb_mapping;
-			Position i=1;
-					
-			// create the mapping: take the 
-			for (ResidueIterator res_it = protein->beginResidue(); +res_it; res_it++)
-			{
-				for (AtomIterator at_it = res_it->beginAtom(); +at_it; at_it++)
-				{
-					// TODO: we should move the argument of the BALLTo...Mapping to Position instead of String
-					pdb_to_bmrb_mapping.mapTo(&*at_it, String(i), at_it->getName());
-				}
-				++i;
-			}
+			BALLToBMRBMapping pdb_to_bmrb_mapping(protein, this);
+			pdb_to_bmrb_mapping.createTrivialMapping();
 
 			// now assign the shifts via the mapping
-			result = assignShifts_(ac, pdb_to_bmrb_mapping);
+			result = assignShifts_(pdb_to_bmrb_mapping);
 		}
 		return result;
 	}
 
-	bool NMRStarFile::read(	AtomContainer& ac,  
-													BALLToBMRBMapping& pdb_to_bmrb_mapping)
+	bool NMRStarFile::assignShifts( AtomContainer& ac,
+													const String& aligned_ball_sequence,
+													const String& aligned_nmrstar_sequence)
 	{
-		bool result = read();
+		// read the NMRStarFile's information
+		bool result = valid_;
+		
+		Protein* prot = 0;
+		Chain* chain = 0;	
+		if (result)
+		{	
+			// check, if the AtomContainer is a protein
+			// first check, if the given AtomContainer is a valid protein
+			if (RTTI::isKindOf<Protein>(ac))
+			{
+				prot = RTTI::castTo<Protein>(ac);
+			}	
+			if (RTTI::isKindOf<Chain>(ac))
+			{
+				chain = RTTI::castTo<Chain>(ac);
+			}
+			else if (RTTI::isKindOf<System>(ac))
+			{
+				System* system =  RTTI::castTo<System>(ac);
+				if (system->countProteins() > 0)
+				{	 
+					ProteinIterator pit = system->beginProtein();
+
+					// NOTE: we take the first protein of the system
+					prot = RTTI::castTo<Protein>(*pit);
+				}
+				else
+				{
+					Log.error() << "NMRStarfile::assignShifts(): No protein found in the given AtomContainer." << endl;
+					result = false;
+				}
+			} 
+			else
+			{
+				Log.error() << "NMRStarfile::assignShifts(): Cannot assign shifts to a non-protein." << endl;
+				result = false;
+			}
+		}		
+		// ... if valid try to assign to the AtomContainer's atoms 
+		if (result && prot)
+		{
+			// create a mapping
+			BALLToBMRBMapping pdb_to_bmrb_mapping(prot, this);
+			pdb_to_bmrb_mapping.createMapping(aligned_ball_sequence, aligned_nmrstar_sequence);
+
+#if defined NMRSTAR_DEBUG_MAPPING
+Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: " 
+						<< pdb_to_bmrb_mapping.getNumberOfMismatches()<< endl;
+#endif
+			// now assign the shifts via the mapping
+			result = assignShifts_(pdb_to_bmrb_mapping);
+		}
+		else if (result && chain)
+		{
+			// create a mapping
+			BALLToBMRBMapping chain_to_bmrb_mapping(chain, this);
+			chain_to_bmrb_mapping.createMapping(aligned_ball_sequence, aligned_nmrstar_sequence);
+
+#if defined NMRSTAR_DEBUG_MAPPING
+Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: " 
+						<< chain_to_bmrb_mapping.getNumberOfMismatches()<< endl;
+#endif
+			// now assign the shifts via the mapping
+			result = assignShifts_(chain_to_bmrb_mapping);
+
+		}
+		return result;
+	}
+
+	bool NMRStarFile::assignShifts(BALLToBMRBMapping& ball_to_bmrb_mapping)
+	{	
+		// do we have a valid NMRStarFile's instance?
+		bool result = valid_;
+		// .. and assign the shifts via the given mapping
 		if (result)
 		{
-			result = assignShifts_(ac, pdb_to_bmrb_mapping);
+			result = assignShifts_(ball_to_bmrb_mapping);
 		}
 		return result;
 	}
@@ -690,58 +984,32 @@ namespace BALL
 
   //  Apply the shifts read into to the AtomContainer as denoted in the mapping.
 	//  We assume, that the file was already read!
-	bool NMRStarFile::assignShifts_(	AtomContainer& ac, 
-																		BALLToBMRBMapping& pdb_to_bmrb_mapping)
+	bool NMRStarFile::assignShifts_(BALLToBMRBMapping& ball_to_bmrb_mapping)
 	{
-    Protein* protein;
-    if (RTTI::isKindOf<Protein>(ac))
-    {
-      protein = RTTI::castTo<Protein>(ac);
-    }
-    else if (RTTI::isKindOf<System>(ac))
-    {
-			System* system =  RTTI::castTo<System>(ac);
-      if (system->countProteins() > 0)
-      { 
-        ProteinIterator pit = system->beginProtein();
-        // we take the first protein of the system
-        protein = RTTI::castTo<Protein>(*pit);
-      }
-			else
-			{
-				Log.error() << "NMRStarfile::assignShifts: No protein found in the system." << endl;
-				return false;
-			}
-    } 
-    else
-    {
-      Log.error() << "NMRStarfile::assignShifts: Cannot assign shifts to a non-protein." << endl;
-      return false;
-    }
+		ResidueIterator r_it;
+		if (ball_to_bmrb_mapping.getProtein())
+			r_it =  ball_to_bmrb_mapping.getProtein()->beginResidue();
+		else if (ball_to_bmrb_mapping.getChain())
+			r_it =  ball_to_bmrb_mapping.getChain()->beginResidue();
 
 		// map the shifts via the pdb_bmrb_mapping into the given AtomContainer
-		for (ResidueIterator r_it = protein->beginResidue(); +r_it; r_it++)
+		for (;//ResidueIterator r_it = ball_to_bmrb_mapping.getProtein()->beginResidue(); 
+				 +r_it; r_it++)
 		{
 			for (AtomIterator a_it = r_it->beginAtom(); +a_it; a_it++)
 			{
-				if (pdb_to_bmrb_mapping.hasAtom(&*a_it))
+				if (ball_to_bmrb_mapping.hasAtom(&*a_it))
 				{
-					BALLToBMRBMapping::BMRBIndex& bindex = pdb_to_bmrb_mapping(&*a_it);
+					BALLToBMRBMapping::BMRBIndex& bindex = ball_to_bmrb_mapping(&*a_it);
+					NMRAtomData& nmr_atom = atom_data_sets_[bindex.first].atom_data[bindex.second];
 
-					std::pair<String, String> index(bindex.residue_id, bindex.atom_name);
-					if (bmrb_to_shifts_mapping_.find(index) != bmrb_to_shifts_mapping_.end())
-					{
-						a_it->setProperty(ShiftModule::PROPERTY__EXPERIMENTAL__SHIFT,	
-															bmrb_to_shifts_mapping_[index]);
-					}
+					a_it->setProperty(ShiftModule::PROPERTY__EXPERIMENTAL__SHIFT,	nmr_atom.shift_value);
 				}
 			}
 		}
-    
+
 		return true;
 	}
-
-
 
 
 	{
@@ -758,7 +1026,42 @@ namespace BALL
 		return max;
 	}
 
-	
+	String NMRStarFile::getResidueSequence()
+	{	
+		if (monomeric_polymers_.size() > 0)
+		{				
+			if (monomeric_polymers_.size() > 1)
+			{ 
+				Log.warn() << "NMRStarFile::getResidueSequence(): Warning: more than one monomeric polymer!" << endl;
+			}
+			
+			if (atom_data_sets_.size()>0)
+			{	
+				bool identical_sequences = true;
+
+				std::vector<NMRAtomData> atom_data = atom_data_sets_[0].atom_data;
+				String residue_sequence = monomeric_polymers_[0].residue_sequence;
+
+				for (Position j=0; identical_sequences && (j < atom_data.size()); j++)
+				{
+					if (residue_sequence[atom_data[j].residue_seq_code - 1] != Peptides::OneLetterCode(atom_data[j].residue_label))
+					{
+						identical_sequences = false;
+						Log.warn() << "NMRStarFile::getResidueSequence(): Warning: Inconsistent residue sequence information." << endl;
+					}
+				}
+		
+				if (identical_sequences)
+				{
+					return monomeric_polymers_[0].residue_sequence;
+				}
+			}
+		}
+		return String("");
+		
+	}
+
+
 	const std::vector<NMRStarFile::NMRAtomDataSet>& NMRStarFile::getNMRData() const
 	{
 		return atom_data_sets_;
@@ -773,7 +1076,7 @@ namespace BALL
 				return sample_conditions_[i]; 
 			}
 		}
-		Log.warn() << "Returned a dummy sample condition!" << std::endl;
+		Log.warn() << "NMRStarFile::getSampleConditionByName(): Warning: Returned a dummy sample condition!" << std::endl;
 		return dummy_sample_condition_;
 	}
 
@@ -786,7 +1089,7 @@ namespace BALL
 				return sample_conditions_[i]; 
 			}
 		}
-		Log.warn() << "Returned a dummy sample condition!" << std::endl;
+		Log.warn() << "NMRStarFile::getSampleConditionByName(): Warning: Returned a dummy sample condition!" << std::endl;
 		return dummy_sample_condition_;
 	}
 	
@@ -809,7 +1112,7 @@ namespace BALL
 			return samples_[i];
 		else
 		{	
-			Log.warn() << "Returned a dummy sample!" << std::endl;
+			Log.warn() << "NMRStarFile::getSample(): Warning: Returned a dummy sample!" << std::endl;
 			return dummy_sample_;
 		}
 	}	
@@ -824,7 +1127,7 @@ namespace BALL
 			}
 		}
 		
-		Log.warn() << "Returned a dummy sample!" << std::endl;
+		Log.warn() << "NMRStarFile::getSample(): Warning: Returned a dummy sample!" << std::endl;
 		return  dummy_sample_;
 	}
 
@@ -838,7 +1141,7 @@ namespace BALL
 				return shift_references_[i]; 
 			}
 		}
-		Log.warn() << "Returned a dummy shift reference set!" << std::endl;
+		Log.warn() << "NMRStarFile::getShiftReferenceSetByName(): Warning: Returned a dummy shift reference set!" << std::endl;
 
 		return dummy_shift_reference_set_;
 	}
@@ -852,7 +1155,7 @@ namespace BALL
 				return shift_references_[i]; 
 			}
 		}
-		Log.warn() << "Returned a dummy shift reference set!" << std::endl;
+		Log.warn() << "NMRStarFile::getShiftReferenceSetByName(): Warning: Returned a dummy shift reference set!" << std::endl;
 
 		return dummy_shift_reference_set_;
 	}
@@ -868,7 +1171,7 @@ namespace BALL
 			{
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("entry_information");
 				if (saveframes.size() > 1)
-					Log.warn() << "NMRFile has more than one entry information saveframe! " << std::endl; 
+					Log.warn() << "NMRStarFile::readEntryInformation_(): Warning: NMRFile has more than one entry information saveframe! " << std::endl; 
 				for (Size sf = 0; sf < saveframes.size(); sf++)
 				{
 					if (saveframes[sf].hasItem("_Entry_type"))
@@ -902,7 +1205,7 @@ namespace BALL
 			{
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("molecular_system");
 				if (saveframes.size() > 1)
-					Log.warn() << "NMRFile has more than one molecular system saveframe! " << std::endl; 
+					Log.warn() << "NMRStarFile::readMolSystem_(): Warning: NMRFile has more than one molecular system saveframe! " << std::endl; 
 				for (Size sf = 0; sf < saveframes.size(); sf++)
 				{
 					// read the paired entries
@@ -1007,7 +1310,7 @@ namespace BALL
 			{
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("monomeric_polymer");
 				if (saveframes.size() > 1)
-					Log.warn() << "NMRFile has more than one monomeric polymer saveframe! " << std::endl; 
+					Log.warn() << "NMRStarFile::readMonomericPolymers_(): Warning: NMRFile has more than one monomeric polymer saveframe! " << std::endl; 
 				for (Size sf = 0; sf < saveframes.size(); sf++)
 				{
 					NMRStarFile::MonomericPolymer mp;
@@ -1199,7 +1502,7 @@ namespace BALL
 			{
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("chemical_shift_reference");
 				if (saveframes.size() > 1)
-					Log.warn() << "NMRFile has more than one chemical_shift_reference saveframe! " << std::endl; 
+					Log.warn() << "NMRStarFile::readShiftReferences_(): Warning: NMRFile has more than one chemical_shift_reference saveframe! " << std::endl; 
 
 				for (Size sf = 0; sf < saveframes.size(); sf++)
 				{
@@ -1292,9 +1595,6 @@ namespace BALL
 
 	void NMRStarFile::readShifts_()
 	{
-		// clear the bmrb_to_shifts map
-		bmrb_to_shifts_mapping_.clear();
-
 		// in most cases we just have one datablock ...
 		for (Size db=0; db < datablocks_.size(); db++)
 		{
@@ -1304,7 +1604,7 @@ namespace BALL
 
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("assigned_chemical_shifts");
 				if (saveframes.size() > 1)
-					Log.warn() << "NMRStarfile::readShifts(): File has more than one assigned_chemical_shifts saveframe! " << std::endl; 
+					Log.warn() << "NMRStarfile::readShifts(): Warning: File has more than one assigned_chemical_shifts saveframe! " << std::endl; 
 				number_of_shift_sets_ =  saveframes.size();
 				for (Size sf = 0; sf < saveframes.size(); sf++)
 				{
@@ -1356,9 +1656,6 @@ namespace BALL
 									// store in the NMRdataset
 									atom_data_set.atom_data.push_back(atom_data);
 
-									//store in the bmrb_to_shifts map
-									std::pair<String, String> tuple(atom_data.residue_seq_code, atom_data.atom_name);
-									bmrb_to_shifts_mapping_[tuple] = atom_data.shift_value;	
 								}
 
 								// look for the sample conditions
@@ -1419,7 +1716,7 @@ namespace BALL
 			{
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("sample");
 				if (saveframes.size() > 1)
-					Log.warn() << "NMRFile has more than one sample saveframe! " << std::endl; 
+					Log.warn() << "NMRStarFile::readSamples_(): Warning: NMRFile has more than one sample saveframe! " << std::endl; 
 
 				for (Size sf = 0; sf < saveframes.size(); sf++)
 				{
@@ -1493,7 +1790,7 @@ namespace BALL
 			{
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("NMR_spectrometer");
 				if (saveframes.size() > 1)
-					Log.warn() << "NMRFile has more than one NMR spectrometer  saveframe! " << std::endl; 
+					Log.warn() << "NMRStarFile::readNMRSpectrometer_(): Warning: NMRFile has more than one NMR spectrometer  saveframe! " << std::endl; 
 
 				for (Size sf = 0; sf < saveframes.size(); sf++)
 				{

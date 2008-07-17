@@ -12,19 +12,26 @@
 # include <BALL/COMMON/limits.h>
 #endif
 
+#ifndef BALL_DATATYPE_OPTIONS_H
+# include <BALL/DATATYPE/options.h>
+#endif
+
 namespace BALL 
 {
 
 	class BALL_EXPORT CubicSpline1D
 	{
 		public:	
-
-			BALL_CREATE(CubicSpline1D)
 			
-			//@}
+			static const int VERBOSITY_LEVEL_DEBUG;
+			static const int VERBOSITY_LEVEL_CRITICAL;
+
 			/** @name	Constructors and Destructors.
 			*/
 			//@{
+	
+			BALL_CREATE(CubicSpline1D)
+			
 
 			/**	Default constructor.
 			*/
@@ -48,7 +55,8 @@ namespace BALL
 										bool return_average = false, 
 										bool is_natural = true, 
 									  float lower_derivative = 0.0,
-										float upper_derivative = 0.0)
+										float upper_derivative = 0.0,
+										int verbosity = VERBOSITY_LEVEL_DEBUG)
 				throw();
 		
 			/** Detailed constructor.
@@ -68,7 +76,8 @@ namespace BALL
 										float default_value,
 										bool is_natural = true, 
 									  float lower_derivative = 0.0,
-										float upper_derivative = 0.0)
+										float upper_derivative = 0.0,
+										int verbosity = VERBOSITY_LEVEL_DEBUG)
 				throw();
 		
 			/** Detailed constructor.
@@ -90,7 +99,8 @@ namespace BALL
 										float upper_bound,	
 										bool is_natural = true, 
 									  float lower_derivative = 0.0,
-										float upper_derivative = 0.0)
+										float upper_derivative = 0.0,
+										int verbosity = VERBOSITY_LEVEL_DEBUG)
 				throw();
 			
 			/** Detailed constructor.
@@ -113,7 +123,8 @@ namespace BALL
 										float default_value = std::numeric_limits<float>::min(), 
 										bool is_natural = true, 
 									  float lower_derivative = 0.0,
-										float upper_derivative = 0.0)
+										float upper_derivative = 0.0,
+										int verbosity = VERBOSITY_LEVEL_DEBUG)
 				throw();
 
 
@@ -127,7 +138,11 @@ namespace BALL
 			virtual ~CubicSpline1D()
 				throw();
 	
-		
+			///
+			void setVerbosity(int verbosity) { verbosity_ = verbosity; }
+
+			///
+			int  getVerbosity() const { return verbosity_; }
 			
 			/** A method to evaluate the spline at the access value x.
 			 *  If the access value is out of bound
@@ -222,7 +237,6 @@ namespace BALL
 			/** Returns the first derivative of the upper sample point of the spline.  */
 			float getUpperDerivative() const  throw() {return upper_derivative_;}
 
-			
 		private :	
 			
 			/**	A method to create a spline. 
@@ -264,6 +278,9 @@ namespace BALL
 			
 			// Value of the first derivative of the upper sample position
 			float upper_derivative_;
+
+			///
+			int	verbosity_;
 	};
 
 }

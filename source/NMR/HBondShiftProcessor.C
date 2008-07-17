@@ -545,7 +545,7 @@ namespace BALL
 		}
 		else
 		{
-			Log.error() << "HBondShiftProcessor: could not perform a postprocessing. (" 
+			Log.error() << "Error in HBondShiftProcessor: no system found for postprocessing. (" 
 				 					<< __FILE__ << " " << __LINE__ << ")" <<  std::endl;
 
 		}

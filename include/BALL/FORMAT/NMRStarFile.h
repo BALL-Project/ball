@@ -6,11 +6,15 @@
 #define BALL_FORMAT_NMRSTARFILE_H
 
 #ifndef BALL_FORMAT_CIFFILE_H
-# include<BALL/FORMAT/CIFFile.h>
+# include <BALL/FORMAT/CIFFile.h>
 #endif
 
 #ifndef BALL_COMMON_LIMITS_H
-# include<BALL/COMMON/limits.h>
+# include <BALL/COMMON/limits.h>
+#endif
+
+#ifndef BALL_KERNEL_PROTEIN_H
+#	include <BALL/KERNEL/protein.h>
 #endif
 
 #include <vector>
@@ -330,47 +334,47 @@ namespace BALL
 	
 			/** Mapping class between BALL atoms and NMR-Star-File atom entries.
 			 *  
-			 *  The main reason for the existence of this class (instead of maps to pairs of Strings)
+			 *  The main reason for the existence of this class (instead of maps to atompointer,position,position)
 			 *  is the python interface, which is greatly simplified.
 			 */
 			class BALLToBMRBMapping
 			{
 				public:
-					class BMRBIndex
-					{
-						public:
-							BMRBIndex() {}
+					//<saveframe_id, atom_id_in_nmr_atom_data_set>
+					typedef std::pair<Position, Position> BMRBIndex;
+						
+					/** constructor
+					*/
+					BALLToBMRBMapping(Protein* protein, const NMRStarFile* nmr_data);
+					BALLToBMRBMapping(Chain* chain, const NMRStarFile* nmr_data);
 
-							BMRBIndex(const String& rid, const String an)
-								: residue_id(rid),
-								  atom_name(an)
-							{ }
+					bool hasAtom(Atom* atom);
+				
+					BMRBIndex& operator() (Atom* atom){return ball_to_bmrb_map_[atom];}
 
-							// TODO: we should move the argument of the BALLTo...Mapping to Position instead of String
-							String residue_id;
-							String residue_name;
-							String atom_name;
-					};
+					Protein* getProtein() 						{return protein_;}
+					const Protein* getProtein() const {return protein_;}
+					void setProtein(Protein* protein) {protein_ = protein;}
+					
+					Chain* getChain() 						{return chain_;}
+					const Chain* getChain() const {return chain_;}
+					void setChain(Chain* chain)   {chain_ = chain;}
 
-					bool hasAtom(Atom* atom)
-					{
-						return (ball_to_bmrb_map_.find(atom) != ball_to_bmrb_map_.end());
-					}
+					const Atom* findNMRAtomInProtein(const NMRAtomData& atom);
 
-					BMRBIndex& operator() (Atom* atom)
-					{
-						return ball_to_bmrb_map_[atom];
-					}
+					bool createTrivialMapping();
+					bool createMapping(	const String& aligned_ball_sequence,
+															const String& aligned_nmrstar_sequence);
 
-					void mapTo(Atom* atom, const String& residue_id, const String& atom_name)
-					{
-						BMRBIndex bindex(residue_id, atom_name);
-
-						ball_to_bmrb_map_[atom] = bindex;
-					}
-
+					int getNumberOfMismatches(){return mismatches_;}
 				protected:
-					std::map<Atom*, BMRBIndex> ball_to_bmrb_map_;
+					std::map<const Atom*, BMRBIndex> ball_to_bmrb_map_;
+
+					// NOTE: do *not* attempt to delete these pointers!
+					Protein* 					 protein_;
+					Chain* 				 		 chain_;
+					const NMRStarFile* nmr_data_;
+					int                mismatches_;
 			};
 			
 			//@}
@@ -401,13 +405,24 @@ namespace BALL
 			bool read()
 				throw(Exception::ParseError);
 
-			/** Read an NMRStarFile into an AtomContainer using a standard mapping.
+			/** Read an NMRStarFile and assign the shifts to the
+			 * given AtomContainer using a trivial standard mapping.
+			 * 	If the AtomContainer is a system, the first protein in choosen. 
 			 */
 			bool read(AtomContainer& ac);
 
-			/** Read an NMRStarFile into an AtomContainer as denoted in the given mapping.
+			/** Assign the shifts to the given AtomContainer as 
+			 * denoted in the given {\b ball_to_bmrb_mapping}.
 			 */
-			bool read(AtomContainer& ac, BALLToBMRBMapping& pdb_to_bmrb_mapping);
+			bool assignShifts(BALLToBMRBMapping& ball_to_bmrb_mapping); 
+
+			/** Assign the shifts to the given
+			 *  AtomContainer as pointed out in the alignment.
+			 *  The alignmed sequences should be given in 
+			 *  OneLetterCode, where '-' denotes a gap.
+			 */
+			bool assignShifts(AtomContainer& ac, const String& aligned_ball_sequence,
+												const String& aligned_nmrstar_sequence);  
 
 			/** Clear the object.
 			*/
@@ -510,7 +525,14 @@ namespace BALL
 			/// adds a Monomeric Polymer
 			/// if a poymer with the same name already exists, it will be overwritten! 
 			void addMonomericPolymer(NMRStarFile::MonomericPolymer mp);
+		
 
+			// get the sequence of residues of the 0-th monomeric polymer in the file
+			// Compares the 0-th monomeric_polymers residue sequence with the actual stored
+			// NMR shifts. If there is a mismatch, a warning is given!
+			// If there is a mismatch or there is no monomeric_polymers residue sequence an empty 
+			// String is returned.
+			String getResidueSequence();
 			
 		//@}
 
@@ -582,12 +604,17 @@ namespace BALL
 			 * 	The shifts are stored as a property under the key 
 			 * 	{\b BALL::ShiftModule::PROPERTY__EXPERIMENTAL__SHIFT}
 			 */
-			bool assignShifts_(AtomContainer& ac, BALLToBMRBMapping& pdb_to_bmrb_mapping);
+			bool assignShifts_(BALLToBMRBMapping& pdb_to_bmrb_mapping);
 
 			//_@}
 			/*_	@name	NMR-Star specific attributes
 			*/
 			//_@{
+
+			/*_ A flag indicating validity of this instance. A sole NMRStarFile
+				instance cannot be valid, because it does not have any information.
+			*/
+			bool valid_;
 
 			/// the number of shift data sets  
 			Size number_of_shift_sets_; 
@@ -621,9 +648,6 @@ namespace BALL
 			/// name of the molecular system
 			//	String system_name_;  // TODO wo kommt der her?
 
-			//a map, that stores all bmrb shifts as a pair of (residue_seq_code, atomname) 
-			std::map< std::pair<String, String>, float> bmrb_to_shifts_mapping_;
-		
 			// a dummy saveframe
 			SaveFrame dummy_saveframe_; 
 		

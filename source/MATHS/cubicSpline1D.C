@@ -5,7 +5,10 @@
 using namespace std;
 
 namespace BALL 
-{	
+{
+	const int CubicSpline1D::VERBOSITY_LEVEL_CRITICAL = 5;
+	const int CubicSpline1D::VERBOSITY_LEVEL_DEBUG = 10;
+
 	CubicSpline1D::CubicSpline1D()
 		throw() 
 		: sample_positions_(),
@@ -17,12 +20,15 @@ namespace BALL
 			upper_bound_(), 
 			is_natural_(),
 			lower_derivative_(),
-			upper_derivative_()
-	{}	
+			upper_derivative_(),
+			verbosity_(VERBOSITY_LEVEL_DEBUG)
+	{
+	}	
 	
 	CubicSpline1D::CubicSpline1D(const std::vector<float>& sample_positions, 
-																		const std::vector<float>& sample_values, bool return_average, 
-																		bool is_natural, float lower_derivative, float upper_derivative)
+															 const std::vector<float>& sample_values, bool return_average, 
+															 bool is_natural, float lower_derivative, float upper_derivative,
+															 int verbosity)
 		throw()
 		: sample_positions_(sample_positions),
 			sample_values_(sample_values),
@@ -33,7 +39,8 @@ namespace BALL
 			upper_bound_(sample_positions[sample_positions.size()-1]),
 			is_natural_(is_natural),
 			lower_derivative_(lower_derivative),
-			upper_derivative_(upper_derivative)
+			upper_derivative_(upper_derivative),
+			verbosity_(verbosity)
 	{
 		// Compute the spline.
 		createSpline();	
@@ -41,7 +48,8 @@ namespace BALL
 
 	CubicSpline1D::CubicSpline1D(const std::vector<float>& sample_positions, 
 															 const std::vector<float>& sample_values, float default_value, 
-															 bool is_natural, float lower_derivative, float upper_derivative)
+															 bool is_natural, float lower_derivative, float upper_derivative,
+															 int verbosity)
 		throw()
 		: sample_positions_(sample_positions),
 			sample_values_(sample_values),
@@ -52,7 +60,8 @@ namespace BALL
 			upper_bound_(sample_positions[sample_positions.size()-1]),
 			is_natural_(is_natural),
 			lower_derivative_(lower_derivative),
-			upper_derivative_(upper_derivative)
+			upper_derivative_(upper_derivative),
+			verbosity_(verbosity)
 	{
 		// Compute the spline.
 		createSpline();
@@ -62,7 +71,8 @@ namespace BALL
 	CubicSpline1D::CubicSpline1D(const std::vector<float>& sample_positions, 
 															 const std::vector<float>& sample_values, float default_value, 
 															 float lower_bound, float upper_bound, 
-															 bool is_natural, float lower_derivative, float upper_derivative)
+															 bool is_natural, float lower_derivative, float upper_derivative,
+															 int verbosity)
 		throw()
 		: sample_positions_(sample_positions),
 			sample_values_(sample_values),
@@ -73,7 +83,8 @@ namespace BALL
 			upper_bound_(upper_bound),
 			is_natural_(is_natural),
 			lower_derivative_(lower_derivative),
-			upper_derivative_(upper_derivative)
+			upper_derivative_(upper_derivative),
+			verbosity_(verbosity)
 	{
 		// Compute the spline.
 		createSpline();
@@ -81,10 +92,11 @@ namespace BALL
 	
 	
 	CubicSpline1D::CubicSpline1D(const std::vector<float>& sample_positions, 
-										                const std::vector<float>& sample_values, 
-																		float lower_bound, float upper_bound,  
-																		bool return_average, float default_value,
-																		bool is_natural, float lower_derivative, float upper_derivative)
+										           const std::vector<float>& sample_values, 
+															 float lower_bound, float upper_bound,  
+															 bool return_average, float default_value,
+															 bool is_natural, float lower_derivative, float upper_derivative,
+															 int verbosity)
 		throw() 
 		: sample_positions_(sample_positions),
 			sample_values_(sample_values),
@@ -95,13 +107,13 @@ namespace BALL
 			upper_bound_(upper_bound),
 			is_natural_(is_natural),
 			lower_derivative_(lower_derivative),
-			upper_derivative_(upper_derivative)
+			upper_derivative_(upper_derivative),
+			verbosity_(verbosity)
 
 	{
 		// Compute the spline.
 		createSpline();			
 	}
-
 	
 	CubicSpline1D::CubicSpline1D(const CubicSpline1D& cs1D)
 		throw() 
@@ -114,7 +126,8 @@ namespace BALL
 			upper_bound_(cs1D.upper_bound_), 
 			is_natural_(cs1D.is_natural_),
 			lower_derivative_(cs1D.lower_derivative_),
-			upper_derivative_(cs1D.upper_derivative_)
+			upper_derivative_(cs1D.upper_derivative_),
+			verbosity_(cs1D.verbosity_)
 	{
 	}
 			
@@ -126,7 +139,8 @@ namespace BALL
 		throw()
 	{
 		// Do we have reasonable data?
-		if (sample_values_.size() != sample_positions_.size())
+		if (	 (sample_values_.size() != sample_positions_.size()) 
+				&& (verbosity_ >= VERBOSITY_LEVEL_CRITICAL))
 		{	
 			Log.error() << "CubicSpline1D_::createSpline: number of sample positions != number of sample values" << std::endl;
 			return;
@@ -212,7 +226,8 @@ namespace BALL
 		throw()
 	{
 		// Do we have enough curvature values?
-		if (curvature.size() != sample_positions_.size())
+		if (   (curvature.size() != sample_positions_.size()) 
+				&& (verbosity_ >= VERBOSITY_LEVEL_CRITICAL))
 		{
 			Log.warn()<< "CubicSpline1D_::setCurvature: number of curvature values != number of sample values" << std::endl;
 		}
@@ -296,12 +311,12 @@ namespace BALL
 		throw()
 	{
 		unsigned int n = sample_positions_.size();
-
 		// Is this access-value inside the boundaries?
 		if ((sample_positions_.size() > 0) && ((x < lower_bound_) || (x > upper_bound_)))
 		{
 			// Something _really_ bad happened.
-			if (!return_average_)
+			if (		(!return_average_) 
+					 && (verbosity_ >= VERBOSITY_LEVEL_CRITICAL))
 			{
 				Log.warn() << "invalid : access value " << x << " not between "<< sample_positions_[0] << " and " 
 									<< sample_positions_[n-1]<< std::endl;
@@ -333,7 +348,8 @@ namespace BALL
 		} 
 		
 		float spacing = sample_positions_[upper_index] - sample_positions_[lower_index];
-		if (spacing == 0.0)
+		if (	 (spacing == 0.0) 
+				&& (verbosity_ >= VERBOSITY_LEVEL_CRITICAL))
 		{
 			Log.warn() << "Zero length interval" << std::endl;
 			return std::numeric_limits<float>::min();
@@ -347,6 +363,4 @@ namespace BALL
 
 		return result;
 	}
-	
-	
 }	

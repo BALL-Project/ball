@@ -18,6 +18,9 @@ namespace BALL
 	{
 		public:
 
+			static const int VERBOSITY_LEVEL_DEBUG;
+			static const int VERBOSITY_LEVEL_CRITICAL;
+
 			BALL_CREATE(CubicSpline2D)
 
 			//@}
@@ -55,7 +58,8 @@ namespace BALL
 										const std::vector<float>& x_lower_derivatives = std::vector<float>(),  
 										const std::vector<float>& x_upper_derivatives = std::vector<float>(),
 										float y_lower_derivative = 0., 
-										float y_upper_derivative = 0.)
+										float y_upper_derivative = 0.,
+										int verbosity = VERBOSITY_LEVEL_DEBUG)
 				throw();
 		
 		
@@ -89,7 +93,8 @@ namespace BALL
 										const std::vector<float>& x_lower_derivatives = std::vector<float>(), 
 										const std::vector<float>& x_upper_derivatives = std::vector<float>(),
 										float y_lower_derivative = 0.0,
-										float y_upper_derivative = 0.0)
+										float y_upper_derivative = 0.0,
+										int verbosity = VERBOSITY_LEVEL_DEBUG)
 				throw();
 			
 //-------------------------- Constructors with equal x sample positions for all y ------------------------
@@ -120,7 +125,8 @@ namespace BALL
 										const std::vector<float>& x_lower_derivatives = std::vector<float>(),  
 										const std::vector<float>& x_upper_derivatives = std::vector<float>(),
 										float y_lower_derivative = 0., 
-										float y_upper_derivative = 0.)
+										float y_upper_derivative = 0.,
+										int verbosity = VERBOSITY_LEVEL_DEBUG)
 				throw();
 		
 		/** Detailed constructor
@@ -152,7 +158,8 @@ namespace BALL
 										const std::vector<float>& x_lower_derivatives = std::vector<float>(), 
 										const std::vector<float>& x_upper_derivatives = std::vector<float>(),
 										float y_lower_derivative = 0.0,
-										float y_upper_derivative = 0.0)
+										float y_upper_derivative = 0.0,
+										int verbosity = VERBOSITY_LEVEL_DEBUG)
 				throw();
 
 			
@@ -166,6 +173,9 @@ namespace BALL
 			virtual ~CubicSpline2D()
 				throw();
 	
+			/// Set the verbosity of the spline computation and evaluation.
+			void setVerbosity(int verbosity);
+
 			/** A method to evaluate the 2Dspline at the access values x | y.
 			 *  First all spline in y-direction are evaluated at x.
 			 *  Based on these values a temporary 1D spline is created, 
@@ -337,7 +347,8 @@ namespace BALL
 			// Value of the first derivatives of the upper y sample position
 			float 								y_upper_derivative_;
 
-			
+			///
+			int 									verbosity_;
 	};
 
 

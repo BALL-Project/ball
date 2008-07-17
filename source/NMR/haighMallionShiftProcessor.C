@@ -562,7 +562,7 @@ namespace BALL
 		}
 		else
 		{	
-			Log.error() << "HaighMallionShiftProcessor: could not perform a postprocessing. (" 
+			Log.error() << "Error in HaighMallionShiftProcessor: no system found for postprocessing. (" 
 				 					<< __FILE__ << " " << __LINE__ << ")" <<  std::endl;
 		}
 	}

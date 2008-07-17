@@ -27,6 +27,11 @@ using namespace std;
 
 namespace BALL 
 {
+	const int EmpiricalHSShiftProcessor::VERBOSITY_LEVEL_CRITICAL = 5;
+	const int EmpiricalHSShiftProcessor::VERBOSITY_LEVEL_DEBUG = 10;
+
+	const char* EmpiricalHSShiftProcessor::Option::VERBOSITY = "empirical_HS_shift_processor";
+	const int EmpiricalHSShiftProcessor::Default::VERBOSITY = EmpiricalHSShiftProcessor::VERBOSITY_LEVEL_CRITICAL;
 	
 	const char* EmpiricalHSShiftProcessor::PROPERTY__EHS_SHIFT= "EmpiricalHSShift";
 
@@ -34,15 +39,9 @@ namespace BALL
 		throw()
 		:	ShiftModule()
 	{
+		setDefaultOptions();
 	}
 
-	EmpiricalHSShiftProcessor::EmpiricalHSShiftProcessor(const EmpiricalHSShiftProcessor& processor)
-		throw()
-		:	ShiftModule(processor)
-		{
-		}
-
-	
 	EmpiricalHSShiftProcessor::~EmpiricalHSShiftProcessor()
 		throw()
 	{
@@ -51,6 +50,12 @@ namespace BALL
 	void EmpiricalHSShiftProcessor::init()
 		throw()
 	{	
+		verbosity_ = options.getInteger(Option::VERBOSITY);
+	
+		//for TEST ing
+		//verbosity_ = 10;
+
+		
 		// By default, we assume the worst...
 		valid_ = false;
 
@@ -94,6 +99,14 @@ namespace BALL
 		}
 	
 		// Check for the options.
+		int verbosity = options.getInteger(Option::VERBOSITY);
+		if (parameter_section.options.has("verbosity"))
+		{
+			verbosity = parameter_section.options.getInteger("verbosity");
+		}
+		options.setInteger(Option::VERBOSITY, verbosity);
+		verbosity_ = verbosity;
+
 		exclude_prolins_ = false;
 		if (parameter_section.options.has("exclude_prolins"))
 		{
@@ -183,7 +196,7 @@ namespace BALL
 				String atom_type = target_names_[i];
 				String first_property = (*it).first.first ;
 				String second_property = (*it).first.second;
-				ShiftHyperSurface_ shs( (*it).second, atom_type, first_property, second_property); 
+				ShiftHyperSurface_ shs( (*it).second, atom_type, first_property, second_property, verbosity_); 
 										
 				if (shs.isvalid())
 				{
@@ -229,14 +242,20 @@ namespace BALL
 		// If there were no targets, return immediately.
 		if (targets_.size() == 0)
 		{	
-			Log.info() << "EmpiricalHSShiftProcessor: no targets found!" << std::endl;
+			if (verbosity_ >= VERBOSITY_LEVEL_DEBUG)
+			{
+				Log.info() << "EmpiricalHSShiftProcessor: no targets found!" << std::endl;
+			}
 			return true;
 		}
 		
 		// If there are no hypersurfaces, return immediately.
 		if (hypersurfaces_.size() == 0)
-		{
-			Log.info() << "EmpiricalHSShiftProcessor: no hypersurfaces created!" << std::endl;
+		{	
+			if (verbosity_ >= VERBOSITY_LEVEL_DEBUG)
+			{
+				Log.info() << "EmpiricalHSShiftProcessor: no hypersurfaces created!" << std::endl;
+			}
 			return true; 
 		}
 		
@@ -311,7 +330,7 @@ namespace BALL
 			{
 				if (atom->getName() == target_names_[i])
 				{	
-					PropertiesForShift_  property;
+					PropertiesForShift_  property(verbosity_);
 					if( property.computeProperties_(atom, target_property_names_[i]))
 						targets_.push_back(property);
 					
@@ -371,230 +390,12 @@ namespace BALL
 	}
 	
 
-// 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~:CubicSpline:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// 
-/*
-	void EmpiricalHSShiftProcessor::CubicSpline1D_::createSpline(const std::vector<float>& sample_positions, 
-											const std::vector<float>& sample_values, bool return_average)
-	{
-		// store the out of bound behaviour flag 
-		return_average_ =  return_average;
-		
-		// store the lower and upper bounds
-		lower_bound_ = sample_positions[0];
-		upper_bound_ = sample_positions[sample_positions.size()-1];
-
-		// do we have reasonable data?
-		if (sample_values.size() != sample_positions.size())
-		{	
-			std::cerr << "CubicSpline1D_::createSpline: number of sample positions != number of sample values" << std::endl;
-			return;
-		}		
-		
-		average_ = 0.;
-		// in case we have too less values or the access-values is out of bound
-		// we want to return the average -> compute the average
-		for (Position i=0; i < sample_values.size(); i++)
-		{
-			average_ += sample_values[i];
-		}
-		average_ /= sample_values.size();
-			
-		//
-		// now we compute the spline
-		// 
-		float p, qn, sig,un;
-		std::vector<float> u;
-
-		sample_positions_ = sample_positions;
-		sample_values_ = sample_values;
-		int n = sample_positions.size();
-
-		//initialize the vectors
-		curvature_.resize(n,0.);
-		u.resize(n,0.); 
-		
-		//natural spline
-		curvature_[0] = 0.;        //-0.5;
-		u[0] = 0.0;                // (3.0/(sample_positions[1]-sample_positions[0]))*((sample_values[1]-sample_values[0])/(sample_positions[1]-sample_positions[0])-yp1);
-
-		for (int i=1;i < n-1;i++) 
-		{
-			//This is the decomposition loop of the tridiagonal algorithm.
-			//curvature_ and u are used for temporary
-			//storage of the decomposed factors.
-			sig = (sample_positions[i]-sample_positions[i-1]) / (sample_positions[i+1]-sample_positions[i-1]);
-			p = sig*curvature_[i-1] + 2.0;
-			curvature_[i] = (sig-1.0)/p;
-			u[i] =  (sample_values[i+1]-sample_values[i]) / (sample_positions[i+1]-sample_positions[i]) 
-				    - (sample_values[i]-sample_values[i-1]) / (sample_positions[i]-sample_positions[i-1]);
-			u[i] =  (6.0*u[i] / (sample_positions[i+1] - sample_positions[i-1]) - sig*u[i-1])/p;
-		}
-
-		// for natural splines 
-		qn = 0.0;
-		un = 0.0; 
-		//else
-		// * we have a specified first derivative.
-		// qn=0.5;
-		// un=(3.0/(sample_positions[n]-sample_positions[n-1]))*(ypn-(sample_values[n]-sample_values[n-1])/(sample_positions[n]-sample_positions[n-1]));
-		// *
-
-		curvature_[n-1] = (un-qn*u[n-2])/(qn*curvature_[n-2] + 1.0);
-
-		//This is the backsubstitution loop of the tridiagonal algorithm.
-		for (int k = n-2; k >= 0; k--) 
-		{	
-			curvature_[k] = curvature_[k]*curvature_[k+1] + u[k]; 
-		}	
-		return;	
-	}
-
-	vector<float>& EmpiricalHSShiftProcessor::CubicSpline1D_::getCurvature()
-	{
-		return curvature_;
-	}				
-
-	void EmpiricalHSShiftProcessor::CubicSpline1D_::setCurvature(std::vector<float> curvature)
-	{
-		curvature_ = curvature;
-	}
-	
-	void EmpiricalHSShiftProcessor::CubicSpline1D_::setValues(std::vector<float> values)
-	{
-		sample_values_ = values;
-	}
-	
-	void EmpiricalHSShiftProcessor::CubicSpline1D_::setPositions(std::vector<float> positions)
-	{
-		sample_positions_= positions;
-	}
-
-	float EmpiricalHSShiftProcessor::CubicSpline1D_::operator() (float x)
-	{
-		unsigned int n=sample_positions_.size();
-		// is this x position inside the boundaries?
-
-		if ((sample_positions_.size() > 0) && ((x < lower_bound_) || (x>upper_bound_)))
-		{
-			// something _really_ bad happened
-			if (!return_average_)
-			{
-				std::cerr << "invalid x position : " << x << " not between "<< sample_positions_[0] << " and " 
-									<< sample_positions_[n-1]<< std::endl;
-				return std::numeric_limits<float>::min();
-			}
-			else
-			{
-				return average_;
-			}
-		}
-
-		// Do we have enough points ?
-		if (sample_positions_.size() < 3)
-		{
-			return average_;
-		}
-			
-		// first, we find the indices bracketing the value x. we use bisection here
-		int lower_index=0, upper_index=n-1;
-		int index;
-		while (upper_index - lower_index > 1) 
-		{
-			index=(upper_index + lower_index)/2;
-			if (sample_positions_[index] > x) upper_index=index;
-			else lower_index=index;
-		} 
-		
-		float spacing=sample_positions_[upper_index]-sample_positions_[lower_index];
-		if (spacing == 0.0)
-		{
-			std::cerr << "Zero length interval" << std::endl;
-			return std::numeric_limits<float>::min();
-		}
-
-		float a = (sample_positions_[upper_index]-x)/spacing; 
-		float b = (x-sample_positions_[lower_index])/spacing;
-
-		float result = a*sample_values_[lower_index]+b*sample_values_[upper_index]
-						 +((a*a*a-a)*curvature_[lower_index]+(b*b*b-b)*curvature_[upper_index])*(spacing*spacing)/6.0;
-
-		return result;
-	}
-		*/
-  /*
-	void EmpiricalHSShiftProcessor::CubicSpline2D_::createBiCubicSpline(const std::vector<float>& sample_positions_x, 
-																				const std::vector<float>& sample_positions_y, 
-																			  const std::vector<std::vector<float> >& sample_values) 
-	{
-		std::vector<std::vector<float> > complete_x_positions(sample_positions_y.size());
-		for (Position i=0; i<complete_x_positions.size(); i++)
-		{
-			complete_x_positions[i] = sample_positions_x;
-		}
-		createBiCubicSpline(complete_x_positions, sample_positions_y, sample_values);
-	}
-
-	void EmpiricalHSShiftProcessor::CubicSpline2D_::createBiCubicSpline(const std::vector<std::vector<float> >& sample_positions_x, 
-																				const std::vector<float>& sample_positions_y, 
-																			  const std::vector<std::vector<float> >& sample_values) 
-	{
-		// store the upper and lower bounds
-		y_lower_bound_ = sample_positions_y[0];
-		y_upper_bound_ = sample_positions_y[sample_positions_y.size()-1];
-
-		sample_positions_x_ = sample_positions_x;
-		sample_positions_y_ = sample_positions_y;
-		int m = sample_positions_x_.size();
-
-		CubicSpline1D_ cs; 
-		average_ = 0.;
-		for (int j = 0; j < m; j++)
-		{
-			// compute a 1Dspline
-			cs.createSpline(sample_positions_x[j], sample_values[j], true);
-			average_ += cs.getAverage()/m;
-			// store the spline
-			splines_.push_back(cs);	
-		}
-
-	}
-
-	float EmpiricalHSShiftProcessor::CubicSpline2D_::operator () (float x, float y)
-	{
-		CubicSpline1D_ cs;
-
-		std::vector<float> positions;
-		std::vector<float> values; 
-
-		// number of rows
-		int n = sample_positions_y_.size();  
-
-		//evaluate the stored help table at position x
-		for (int i = 0; i < n ;i++)
-		{
-			values.push_back(splines_[i](x));
-		}
-
-		// construct a new spline at these positions
-		cs.createSpline(sample_positions_y_, values, true);
-		cs.setLowerBound(y_lower_bound_);
-		cs.setUpperBound(y_upper_bound_);
-
-		//evaluate the new spline at position y
-		return cs(y);
-	} */
-
-// 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~:PropertiesForShift_:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // 
-
-
-
 	
-	EmpiricalHSShiftProcessor::PropertiesForShift_::PropertiesForShift_()
+	EmpiricalHSShiftProcessor::PropertiesForShift_::PropertiesForShift_(int verbosity)
 		throw()
+		: verbosity_(verbosity)
 	{
 	}
 	
@@ -639,7 +440,10 @@ namespace BALL
 
 		if (num_of_atoms != 3)
 		{
-			Log.info() << "EmpiricalHSShiftProcessor: torsion angle of " << residue->getName() << " could not be computed!" << std::endl;
+			if (verbosity_ >= VERBOSITY_LEVEL_DEBUG)
+			{
+				Log.info() << "EmpiricalHSShiftProcessor: torsion angle of " << residue->getName() << " could not be computed!" << std::endl;
+			}
 			return FLOAT_VALUE_NA;
 		}
 		
@@ -667,7 +471,10 @@ namespace BALL
 		String residue_name = residue->getName();
 		if (residue_name == "GLY")
 		{ 
-			Log.info() << "EmpiricalHSShiftProcessor: torsion angle of a glycine could not be computed!" << std::endl;
+			if (verbosity_ >= VERBOSITY_LEVEL_DEBUG)
+			{
+				Log.info() << "EmpiricalHSShiftProcessor: torsion angle of a glycine could not be computed!" << std::endl;
+			}
 			return FLOAT_VALUE_NA;
 		}
 		else if (residue_name == "ALA")
@@ -756,10 +563,14 @@ namespace BALL
 
 		if (num_of_atoms != 4)
 		{
-			Log.info() << "EmpiricalHSShiftProcessor: chi torsion angle of " << residue->getID() << "-"<<  residue->getName() << " could not be computed!" << std::endl;
-			return FLOAT_VALUE_NA;
+			if (verbosity_ >= VERBOSITY_LEVEL_DEBUG)
+			{
+				Log.info() << "EmpiricalHSShiftProcessor: chi torsion angle of " << residue->getID() << "-"<<  residue->getName() << " could not be computed!" << std::endl;
+			}
 
+			return FLOAT_VALUE_NA;
 		}
+
 		Vector3 a = N->getPosition();
 		Vector3 b = CA->getPosition();
 		Vector3 c = CB->getPosition();
@@ -967,7 +778,10 @@ namespace BALL
 
 		if (num_of_atoms != 4)
 		{
-			Log.info() << "EmpiricalHSShiftProcessor: chi2 torsion angle of " << residue->getID() << "-"  << residue->getName() << " could not be computed!" << std::endl;
+			if (verbosity_ >= VERBOSITY_LEVEL_DEBUG)
+			{
+				Log.info() << "EmpiricalHSShiftProcessor: chi2 torsion angle of " << residue->getID() << "-"  << residue->getName() << " could not be computed!" << std::endl;
+			}
 			return FLOAT_VALUE_NA;
 		}
 			
@@ -991,7 +805,8 @@ namespace BALL
 		throw()
 	{
 		char ret = CHAR_VALUE_NA;
-		if (residue->getSecondaryStructure() == 0)
+		if (   (residue->getSecondaryStructure() == 0) 
+				&& (verbosity_ >= VERBOSITY_LEVEL_DEBUG))
 		{
 			Log.info() << "EmpiricalHSShiftProcessor: no secondary structure available. Consider precomputing!" << std::endl;
 		}
@@ -1755,28 +1570,46 @@ namespace BALL
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~:ShiftHyperSurface_:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // 
 
-
-	
-	EmpiricalHSShiftProcessor::ShiftHyperSurface_::ShiftHyperSurface_()
+	EmpiricalHSShiftProcessor::ShiftHyperSurface_::ShiftHyperSurface_(int verbosity)
 		throw()
 		: type_(),
 			first_property_(),
 			second_property_(),
 			s2d_(),
 			s1d_(),
-			table_()
+			table_(),
+			row_averages_(),
+			col_averages_(),
+			row_spacing_(),
+			col_spacing_(),
+			invalid_(),
+			average_(), 
+			verbosity_(verbosity),
+			y_axis_values_(),
+			x_axis_values_(),
+			sample_values_()
 	{
 	}
 	
 	EmpiricalHSShiftProcessor::ShiftHyperSurface_::ShiftHyperSurface_(String filename, String atomtype, 
-																																		String firstproperty, String secondproperty)
+																																		String firstproperty, String secondproperty, int verbosity)
 		throw(Exception::FileNotFound)
 		:	type_(),
 			first_property_(),
 			second_property_(),
 			s2d_(),
 			s1d_(),
-			table_()
+			table_(),
+			row_averages_(),
+			col_averages_(),
+			row_spacing_(),
+			col_spacing_(),
+			invalid_(),
+			average_(), 
+			verbosity_(verbosity),
+			y_axis_values_(),
+			x_axis_values_(),
+			sample_values_()
 	{			
 		// Find the data file.
 		BALL::Path p;
@@ -1814,7 +1647,10 @@ namespace BALL
 			// Create a 1D spline.	
 			vector<float> x_axis;
 			convertToReal_(x_axis_values_[0], x_axis);
+
 			CubicSpline1D s(x_axis, sample_values_[0], average_);
+
+			s.setVerbosity(verbosity_);
 
 			// Set the lower and upper bounds of the 1D spline.
 			// TODO: in den Construktor
@@ -1864,6 +1700,7 @@ namespace BALL
 
 				// Create and store a bicubic spline.
 				s2d_ = CubicSpline2D(x_axis, y_axis, sample_values_);
+				s2d_.setVerbosity(verbosity_);
 
 				// Build the lower and upper bounds like SHIFTX.
 				for (Position i=0; i < s2d_.getNumberOfSplines(); i++)
@@ -1905,7 +1742,8 @@ namespace BALL
 					
 					// ...create the 1D cubic spline...
 					CubicSpline1D s(x_axis, sample_values_[i], row_averages_[y_axis_values_[i]]);	 
-			
+					s.setVerbosity(verbosity_);
+
 					//...and the set bounds as read from the datafile.
           if (row_spacing_ != FLOAT_VALUE_NA)
           {
@@ -1929,10 +1767,11 @@ namespace BALL
 					// ...convert the data,...
 					vector<float> x_axis;
 					convertToReal_(x_axis_values_[i], x_axis);
-					
+
 					// ...create a 1D bicubic spline...
 					CubicSpline1D s(x_axis, sample_values_[i], true);  //TODo: wieso hat der keine defaultwerte?? 
-					
+					s.setVerbosity(verbosity_);
+
 					//...and set the bounds as read from the datafile.
           if (row_spacing_ != FLOAT_VALUE_NA)
           {
@@ -1944,16 +1783,19 @@ namespace BALL
 					s1d_[y_axis_values_[i]] = s;
 				}
 			}  
-			else if (type_ == DISCRETE__REAL)
+			else if (   (type_ == DISCRETE__REAL ) 
+					     && (verbosity_ >= VERBOSITY_LEVEL_CRITICAL))
 			{ 
 				Log.error() << "EmpiricalHSShiftProcessor: case DISCRETE__REAL is not implemented ("	
 										<< __FILE__ << " " << __LINE__ << ")" <<  std::endl;
 			} // Case look-up table
 			else if ( (type_ == DISCRETE__DISCRETE) || (type_ == CHI__DISCRETE)|| (type_ == DISCRETE__CHI) || (type_ == CHI__CHI) )
 			{
-				if (x_axis_values_.size() != y_axis_values_.size())
+				if (    (x_axis_values_.size() != y_axis_values_.size()) 
+						&&  (verbosity_ >= VERBOSITY_LEVEL_CRITICAL))
 				{
-					Log.error() << "EmpiricalHSShiftProcessor: invalid hypersuface table in file "<< filename << "! (" 
+					Log.error() << "EmpiricalHSShiftProcessor: invalid hypersuface table in file " 
+											<< filename << "! (" 
 											<< __FILE__ << " " << __LINE__ << ")" <<  std::endl;
 				}
 				else  // If the file is valid...
@@ -1970,19 +1812,19 @@ namespace BALL
 					}
 				}
 			}	
-			else if (type_ == CHI__REAL)
+			else if (   (type_ == CHI__REAL) 
+							 && (verbosity_ >= VERBOSITY_LEVEL_CRITICAL))
 			{	
 				// Fortunately this case does not occur -> this method should not be send.
 				Log.error() << "EmpiricalHSShiftProcessor: case CHI__REAL is not implemented (" 
 				<< __FILE__ << " " << __LINE__ << ")" <<  std::endl;
-
 			}		
-			else if (type_ == CHI__CHI)
+			else if (   (type_ == CHI__CHI) 
+					     && (verbosity_ >= VERBOSITY_LEVEL_CRITICAL))
 			{
 				// Fortunately this case does not occur -> this method should not be send.
 				Log.error() << "EmpiricalHSShiftProcessor: case CHI__CHI is not implemented (" 
 				<< __FILE__ << " " << __LINE__ << ")" <<  std::endl;
-
 			}
 		}
 	}
@@ -2248,9 +2090,14 @@ namespace BALL
 				else if (chi_value < 360.)
 					string1 = "300.000000";
 				else
-					Log.error() << "EmpiricalHSShiftProcessor: " << properties.current_atom->getName() << ": " 
+				{	
+					if (verbosity_ >= VERBOSITY_LEVEL_CRITICAL)
+					{ 
+						Log.error() << "EmpiricalHSShiftProcessor: " << properties.current_atom->getName() << ": " 
 						<< second_property_ << "-value is not valid! ("
 				 		<< __FILE__ << " " << __LINE__ << ")" <<  std::endl;
+					}
+				}
 			}
 		}
 		
@@ -2271,9 +2118,14 @@ namespace BALL
 				else if (chi_value < 360.)
 					string2 = "300.000000";
 				else 	
-					Log.error() << "EmpiricalHSShiftProcessor: " << properties.current_atom->getName() << ": " 
+				{	
+					if (verbosity_ >= VERBOSITY_LEVEL_CRITICAL)
+					{
+						Log.error() << "EmpiricalHSShiftProcessor: " << properties.current_atom->getName() << ": " 
 						<< second_property_ << "-value is not valid! ("
 				 		<< __FILE__ << " " << __LINE__ << ")" <<  std::endl;
+					}
+				}
 			}
 		}
 		
@@ -2368,7 +2220,9 @@ namespace BALL
 				shift = average_;
 			}
 			else // Yes -> evaluate.
+			{
 				shift = s1d_[properties[second_property_].second](properties[first_property_].first);
+			}
 		}// Case of 1D splines -- part 2:
 		else if (type_ == DISCRETE__REAL)
 		{	
@@ -2390,7 +2244,8 @@ namespace BALL
 			else // Yes -> evaluate.
 				shift = s1d_[properties[first_property_].second](properties[second_property_].first);
 		}
-		else if (type_ == CHI__REAL)
+		else if (   (type_ == CHI__REAL) 
+				     && (verbosity_ >= VERBOSITY_LEVEL_CRITICAL))
 		{	
 			Log.error() << "EmpiricalHSShiftProcessor: CHI REAL should NEVER be called (at " 
 				<< __FILE__ << " " << __LINE__ << ")" <<  std::endl;
@@ -2415,8 +2270,11 @@ namespace BALL
 		}
 		else
 		{	
-			Log.error() << "EmpiricalHSShiftProcessor: Unknown type of properties! (at " 
+			if (verbosity_ >= VERBOSITY_LEVEL_CRITICAL)
+			{
+				Log.error() << "EmpiricalHSShiftProcessor: Unknown type of properties! (at " 
 				<< __FILE__ << " " << __LINE__ << ")" <<  std::endl;
+			}
 		}
 		
 		// if one of the values is FLOAT_VALUE_IGNORE, we will _in all cases_ return zero
@@ -2568,10 +2426,19 @@ namespace BALL
 		}
 		else
 		{
-			Log.error() << "EmpiricalHSShiftProcessor: found no system -> could not perform a postprocessing (" 
+			if (verbosity_ >= VERBOSITY_LEVEL_DEBUG)
+			{
+				Log.error() << "Error in EmpiricalHSShiftProcessor: no system found for postprocessing. (" 
 									<< __FILE__ << " " << __LINE__ << ")" <<  std::endl;
-
+			}
 		}
 	}
 	
+	
+	void EmpiricalHSShiftProcessor::setDefaultOptions()
+	{			
+		options.setDefaultInteger(EmpiricalHSShiftProcessor::Option::VERBOSITY,
+													    EmpiricalHSShiftProcessor::Default::VERBOSITY);
+	}
+
 } // namespace BALL

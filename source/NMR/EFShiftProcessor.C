@@ -485,7 +485,7 @@ namespace BALL
 		}
 		else
 		{
-			Log.error() << "EFShiftProcessor: could not perform a postprocessing. (" 
+			Log.error() << "Error in EFShiftProcessor: no system found for postprocessing. (" 
 				 					<< __FILE__ << " " << __LINE__ << ")" <<  std::endl;
 		}
 	}
