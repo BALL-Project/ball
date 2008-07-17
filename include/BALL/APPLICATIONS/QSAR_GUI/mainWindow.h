@@ -156,6 +156,9 @@ namespace BALL
 					/** the prefix for submitting a job to the cluster, \n
 					  e.g. "qsub -cwd" or "bsub" or "qsub -q long.q" ... **/
 					String submit_prefix;
+					
+					/** path to the installation of QSARPipelinePackage */
+					String tools_path;
 				};
 				
 				 /// the last used paths settings

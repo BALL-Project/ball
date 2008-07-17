@@ -62,6 +62,7 @@ using namespace BALL::Exception;
 	settings.size_x=0; settings.size_y=0;
 	settings.pos_x=0; settings.pos_y=0;
 	settings.submit_prefix = "qsub -cwd";
+	settings.tools_path="";
 	if(in) 
 	{
 		in>>settings.input_data_path;
@@ -74,6 +75,8 @@ using namespace BALL::Exception;
 		getline(in,tmp);  // read the rest of the line
 		if(in) getline(in,tmp);
 		if(tmp!="") settings.submit_prefix=tmp;
+		if(in) getline(in,tmp);
+		if(tmp!="") settings.tools_path=tmp;
 		in.close();
 	}
 
@@ -132,6 +135,7 @@ MainWindow::~MainWindow()
 	QPoint p = pos();
 	output<<p.x()<<"  "<<p.y()<<endl;
 	output<<settings.submit_prefix<<endl;
+	output<<settings.tools_path<<endl;
 	output.close();
 }
 
@@ -523,6 +527,14 @@ void MainWindow::printToFile()
 	h_layout.addWidget(&edit);
 	main_layout.addLayout(&h_layout);
 	
+	QHBoxLayout h2_layout;
+	QLabel label2("Path to QSARPipelinePackage");
+	QLineEdit edit2;
+	edit2.setText(settings.tools_path.c_str());
+	h2_layout.addWidget(&label2);
+	h2_layout.addWidget(&edit2);
+	main_layout.addLayout(&h2_layout);
+	
 	QDialogButtonBox buttons(QDialogButtonBox::Ok |QDialogButtonBox::Cancel,Qt::Horizontal);
 	main_layout.addWidget(&buttons);
 	connect(&buttons, SIGNAL(accepted()), &dialog, SLOT(accept()));
@@ -533,6 +545,7 @@ void MainWindow::printToFile()
 	if(dialog.exec()) // if user clicks "ok"
 	{
 		settings.submit_prefix = edit.text().toStdString();
+		settings.tools_path = edit2.text().toStdString();
 	}	 
  } 
  
@@ -1529,7 +1542,24 @@ void MainWindow::submitToCluster(String configfile)
 	
 	String script = file+".csh";
 	ofstream out(script.c_str());
-	out<<"InputReader "<<configfile<<"; InputPartitioner "<<configfile<<"; ModelCreator "<<configfile<<"; FeatureSelector "<<configfile<<"; Predictor "<<configfile<<endl;
+	
+	String ir=""; String ip=""; String mc="";
+	String fs=""; String pr="";
+	if(settings.tools_path!="")
+	{
+		ir=settings.tools_path+"/";
+		ip=ir; mc=ir; fs=ir; pr=ir;
+	}
+	ir.append("InputReader"); ip.append("InputPartitioner");
+	mc.append("ModelCreator"); fs.append("FeatureSelector");
+	pr.append("Predictor");
+		
+		
+	out<<ir<<" "<<configfile<<endl;
+	out<<ip<<" "<<configfile<<endl;
+	out<<mc<<" "<<configfile<<endl;
+	out<<fs<<" "<<configfile<<endl;
+	out<<pr<<" "<<configfile<<endl;
 	out.close();
 	
 	String call = "cd "+directory+"; ";
