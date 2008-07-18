@@ -230,6 +230,10 @@ namespace BALL
 			RenderMode render_mode_;
 
 			bool picking_mode_;
+
+		private:
+
+			bool initialize();
 		};
 
 
