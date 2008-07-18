@@ -77,10 +77,12 @@ using namespace BALL::Exception;
 		getline(in,tmp);  // read the rest of the line
 		if(in) getline(in,tmp);
 		if(tmp!="") settings.submit_prefix=tmp;
+		tmp="";
 		if(in) getline(in,tmp);
 		if(tmp!="") settings.tools_path=tmp;
 		if(in) in>>settings.send_email;
 		getline(in,tmp);  // read the rest of the line
+		tmp="";
 		if(in) getline(in,tmp);
 		if(tmp!="") settings.email_address=tmp;
 		in.close();
