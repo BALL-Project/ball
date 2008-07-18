@@ -159,6 +159,12 @@ namespace BALL
 					
 					/** path to the installation of QSARPipelinePackage */
 					String tools_path;
+					
+					/** determines whether an email is to be send after completion of a submitted job */
+					bool send_email;
+					
+					/** determines to which email address a notification of job completion should be send */
+					String email_address;
 				};
 				
 				 /// the last used paths settings

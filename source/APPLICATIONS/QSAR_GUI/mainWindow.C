@@ -63,6 +63,8 @@ using namespace BALL::Exception;
 	settings.pos_x=0; settings.pos_y=0;
 	settings.submit_prefix = "qsub -cwd";
 	settings.tools_path="";
+	settings.send_email=0;
+	settings.email_address="";
 	if(in) 
 	{
 		in>>settings.input_data_path;
@@ -77,6 +79,10 @@ using namespace BALL::Exception;
 		if(tmp!="") settings.submit_prefix=tmp;
 		if(in) getline(in,tmp);
 		if(tmp!="") settings.tools_path=tmp;
+		if(in) in>>settings.send_email;
+		getline(in,tmp);  // read the rest of the line
+		if(in) getline(in,tmp);
+		if(tmp!="") settings.email_address=tmp;
 		in.close();
 	}
 
@@ -136,6 +142,8 @@ MainWindow::~MainWindow()
 	output<<p.x()<<"  "<<p.y()<<endl;
 	output<<settings.submit_prefix<<endl;
 	output<<settings.tools_path<<endl;
+	output<<settings.send_email<<endl;
+	output<<settings.email_address<<endl;
 	output.close();
 }
 
@@ -535,7 +543,19 @@ void MainWindow::printToFile()
 	h2_layout.addWidget(&edit2);
 	main_layout.addLayout(&h2_layout);
 	
-	QDialogButtonBox buttons(QDialogButtonBox::Ok |QDialogButtonBox::Cancel,Qt::Horizontal);
+	QCheckBox checkbox("send email when job is finished?");
+	checkbox.setChecked(settings.send_email);
+	main_layout.addWidget(&checkbox);
+	
+	QHBoxLayout h3_layout;
+	QLabel label3("email address");
+	QLineEdit edit3;
+	edit3.setText(settings.email_address.c_str());
+	h3_layout.addWidget(&label3);
+	h3_layout.addWidget(&edit3);
+	main_layout.addLayout(&h3_layout);
+	
+	QDialogButtonBox buttons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,Qt::Horizontal);
 	main_layout.addWidget(&buttons);
 	connect(&buttons, SIGNAL(accepted()), &dialog, SLOT(accept()));
 	connect(&buttons, SIGNAL(rejected()), &dialog, SLOT(reject()));
@@ -546,6 +566,8 @@ void MainWindow::printToFile()
 	{
 		settings.submit_prefix = edit.text().toStdString();
 		settings.tools_path = edit2.text().toStdString();
+		settings.send_email= checkbox.isChecked();
+		settings.email_address = edit3.text().toStdString();
 	}	 
  } 
  
@@ -1560,11 +1582,16 @@ void MainWindow::submitToCluster(String configfile)
 	out<<mc<<" "<<configfile<<endl;
 	out<<fs<<" "<<configfile<<endl;
 	out<<pr<<" "<<configfile<<endl;
+	if(settings.send_email && settings.email_address!="")
+	{
+		
+		out<<"echo -e \"Subject: "<<script<<" is ready!\nProcess '"<<script<<"' is ready!\nTime: `date`\n\n \" | sendmail "<<settings.email_address<<endl;
+	}
+		
 	out.close();
 	
 	String call = "cd "+directory+"; ";
 	call+=settings.submit_prefix+" "+script;
 	system(call.c_str());
-	
 }
 
