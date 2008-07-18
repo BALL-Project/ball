@@ -64,26 +64,27 @@ namespace BALL
 
 			Stage* stage = scene.getStage();
 			if (stage == 0)
-			{
-				// I am not sure, if heigth and width are in the correct order... copied this from glRenderer.C
+			{			
 				Renderer::init(Stage(), scene.height(), scene.width());
-
 			}
 			else
-			{
-				// I am not sure, if heigth and width are in the correct order... copied this from glRenderer.C
+			{				
 				Renderer::init(*stage, scene.height(), scene.width());
-
 			}
-
-			return true;
+						
+			return initialize();
 		}
 		
 		bool RaytracingRenderer::init(const Stage& stage, float height, float width)
 			throw()
 		{
-			Renderer::init(stage, height, width);
+			Renderer::init(stage, height, width);			
 			
+			return initialize();
+		}
+
+		bool RaytracingRenderer::initialize()
+		{
 			return true;
 		}
 		
