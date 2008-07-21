@@ -1012,7 +1012,7 @@ void MainWindow::loadItemsFromFiles(String directory)
 			ifstream input(filename.c_str());
 			if(input) // read only existing models
 			{
-				//cout<<"model-file= "<<directory+(*it)->savedAs().toStdString()<<endl;
+				//cout<<"model-file= "<<directory+(*it)->savedAs().toStdString()<<endl<<flush;
 				input.close();
 				(*it)->loadFromFile(filename);
 			}

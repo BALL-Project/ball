@@ -134,10 +134,9 @@ vector<double> LDAModel::getParameters() const
 
 void LDAModel::saveToFile(string filename)
 {
-	if(sigma_.Nrows()==0)
-	{
-		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must have been trained before the results can be saved to a file!");
-	}
+	bool trained = 1;
+	if(sigma_.Nrows()==0) trained=0;
+	
 	ofstream out(filename.c_str());
 	
 	bool centered_data = 0;
@@ -157,12 +156,15 @@ void LDAModel::saveToFile(string filename)
 		sel_features = data->getNoDescriptors();
 	}
 	
-	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tno of classes"<<endl;
-	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<no_substances_.size()<<"\n\n";
+	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tno of classes\ttrained?"<<endl;
+	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<no_substances_.size()<<"\t"<<trained<<"\n\n";
 
 	saveModelParametersToFile(out);
 	saveResponseTransformationToFile(out);
 	saveDescriptorInformationToFile(out);
+	
+	if(!trained) return;
+	
 	saveClassInformationToFile(out);
 	out<<sigma_<<endl;
 	
@@ -172,81 +174,6 @@ void LDAModel::saveToFile(string filename)
 	}
 
 	out.close();
-	
-	
-	/*
-	
-	out<<"# model-parameters"<<endl;  /// write model parameters 
-	vector<double> v = getParameters();
-	for(unsigned int i=0;i<v.size();i++)
-	{
-		out<<v[i]<<"\t";
-	}
-	out<<endl;
-	
-	out<<"\n# ID\tdescriptor-name\t";
-	if(centered_data)
-	{
-		out<<"mean of desc.\tstddev of desc.\t";
-	}
-	if(stderr)
-	{
-		out<<"stderr(s) of coeff.";
-	}
-	out<<endl;
-	cout<<"descriptor_matrix_.Ncols()="<<descriptor_matrix_.Ncols()<<endl<<flush;
-	/// write (selected) descriptors and information about their transformation
-	if(!descriptor_IDs_.empty())
-	{
-		descriptor_IDs_.front();
-		for(int i=0; i<descriptor_IDs_.size();i++)
-		{
-			out<<String(descriptor_IDs_.next())<<"\t"<<descriptor_names_[i]<<"\t";
-			
-			if(centered_data)
-			{
-				out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";
-			}
-			out <<"\n";
-		}
-	}
-	else
-	{
-		for(int i=0; i<descriptor_matrix_.Ncols();i++)
-		{
-			out<<String(i)<<"\t"<<descriptor_names_[i]<<"\t";
-	
-			if(centered_data)
-			{
-				out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";
-			}
-			out <<"\n";
-		}
-		
-	}	
-	out<<endl;
-	
-	out<<"# class-labels_\n";
-	for(unsigned int i=0; i<labels_.size();i++) /// write class-labels_
-	{
-		out<<labels_[i]<<"\t";
-	}
-	out<<endl<<endl;
-	
-	out<<"# no of substances of each class\n";
-	for(unsigned int i=0;i<no_substances_.size();i++)  /// write numbers of substances of each class
-	{
-		out<<no_substances_[i]<<"\t";
-	}
-	out<<endl<<endl;
-	
-	out<<sigma_<<endl;	/// write Matrix sigma_
-	
-	for(unsigned int i=0; i<mean_vectors_.size();i++)   /// write all mean-vector matrices
-	{
-		out<<mean_vectors_[i]<<endl;
-	}
-	out.close();*/
 }
 
 
@@ -274,12 +201,16 @@ void LDAModel::readFromFile(string filename)
 	int no_y = line0.getField(3,"\t").toInt();
 	bool centered_data = line0.getField(4,"\t").toInt();
 	int no_classes = line0.getField(5,"\t").toInt();
+	bool trained = line0.getField(6,"\t").toBool();
 
 	substance_names_.clear();
 	
 	getline(input,line0);  // skip empty line	
 	readModelParametersFromFile(input);
 	Model::readDescriptorInformationFromFile(input, no_descriptors, centered_data);
+	
+	if(!trained) return;
+	
 	readClassInformationFromFile(input, no_classes);
 	readMatrix(sigma_,input,no_descriptors,no_descriptors); 
 	getline(input,line0);  // skip empty line 

@@ -76,11 +76,11 @@ void RRModel::train()
 void RRModel::setParameters(vector<double>& v)
 {	
 	if(v.size()!=1)
-{
+	{
 		String c = "Wrong number of model parameters! Needed: 1;";
 		c = c+" given: "+String(v.size());
 		throw Exception::ModelParameterError(__FILE__,__LINE__,c.c_str());
-}
+	}
 	lambda_=v[0];
 }
 
