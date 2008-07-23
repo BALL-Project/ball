@@ -16,6 +16,10 @@
 #endif
 
 #include <vector>
+#include <iostream>
+#include <fstream>
+#include <iterator>
+#include <algorithm>
 
 namespace BALL
 {
@@ -78,7 +82,7 @@ namespace BALL
 		///
 		TRegularData1D(const CoordinateType& origin, const CoordinateType& dimension, const CoordinateType& spacing)
 			throw(Exception::OutOfMemory);
-		
+
 		/// This constructor sets origin to 0.0 and dimension to 1.0
 		TRegularData1D(const IndexType& size)
 			throw(Exception::OutOfMemory);
@@ -328,7 +332,7 @@ namespace BALL
 
 		///	The spacing
 		CoordinateType	spacing_;
-		
+
 		///	The data
 		VectorType			data_;
 
@@ -756,6 +760,51 @@ namespace BALL
 			data_.resize(0);
 			throw Exception::OutOfMemory(__FILE__, __LINE__, new_size * sizeof(ValueType));			
 		}
+	}
+
+	/** @name Stream I/O */
+	//@{
+	/// Output operator
+	template <typename ValueType>
+  std::ostream& operator << (std::ostream& os, const TRegularData1D<ValueType>& data)
+    throw()
+  {
+    // Write the grid origin, dimension, and number of grid points
+    os << data.getOrigin() << std::endl
+       << data.getOrigin() + data.getDimension() << std::endl
+       << data.getSize() - 1 << std::endl;
+
+    // Write the array contents.
+    std::copy(data.begin(), data.end(), std::ostream_iterator<ValueType>(os, "\n"));
+    return os;
+	}
+
+	/// Input operator
+	template <typename ValueType>
+  std::istream& operator >> (std::istream& is, TRegularData1D<ValueType>& grid)
+    throw()
+  {
+    typename TRegularData1D<ValueType>::CoordinateType origin;
+    typename TRegularData1D<ValueType>::CoordinateType dimension;
+    typename TRegularData1D<ValueType>::IndexType size;
+
+    is >> origin;
+    is >> dimension;
+    is >> size;
+		
+		dimension -= origin;
+		size++;
+
+    grid.resize(size);
+		grid.setOrigin(origin);
+		grid.setDimension(dimension);
+
+		std::copy(std::istream_iterator<ValueType>(is), 
+							std::istream_iterator<ValueType>(), 
+							grid.begin());
+		//		std::copy_n(std::istream_iterator<ValueType>(is), grid.size(), grid.begin());
+		
+		return is;
 	}
 
 	template <typename ValueType>
