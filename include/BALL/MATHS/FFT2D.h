@@ -922,7 +922,7 @@ namespace BALL
 	const RegularData2D& operator << (RegularData2D& to, const TFFT2D<ComplexTraits>& from)
 		throw()
 	{
-		// first decide if the FFT3D data is in Fourier space.
+		// first decide if the FFT2D data is in Fourier space.
 		if (!from.isInFourierSpace())
 		{
 			// create a new grid
@@ -939,18 +939,21 @@ namespace BALL
 			double normalization = 1./(pow((float)(lengthX*lengthY),from.getNumberOfInverseTransforms()));
 			typename TFFT2D<ComplexTraits>::Complex dataIn;
 			typename TFFT2D<ComplexTraits>::Complex dataOut;
-			
-			for (Position i = 0; i < from.size(); i++)
+
+			typename TFFT2D<ComplexTraits>::IndexType current_index;
+			typename RegularData2D::IndexType regdat_index;
+			for (current_index.x = 0; current_index.x < lengthX; current_index.x++)
 			{
-				Position x, y;
+				for (current_index.y = 0; current_index.y < lengthY; current_index.y++)
+				{
+					regdat_index.x = current_index.x;
+					regdat_index.y = current_index.y;
 
-				y =  i % lengthY;
-				x =  i / lengthY;
-
-				dataIn  = from[i];
-				dataOut = dataIn;
+					dataIn  = from[current_index];
+					dataOut = dataIn;
 				
-				newGrid[x + y*lengthY] = dataOut.real()*normalization;
+					newGrid[regdat_index] = dataOut.real()*normalization;
+				}
 			}
 
 			to = newGrid;
@@ -988,6 +991,7 @@ namespace BALL
 			typename TFFT2D<ComplexTraits>::Complex dataIn;
 			typename TFFT2D<ComplexTraits>::Complex dataOut;
 	
+			RegularData2D::IndexType current_index;
 			for (Position i = 0; i < from.size(); i++)
 			{
 				y =  i % lengthY;
@@ -1030,7 +1034,10 @@ namespace BALL
 				dataIn = from[i];
 				dataOut = dataIn;
 
-				newGrid[x + y*lengthY] = (dataOut*(typename ComplexTraits::ComplexPrecision)normalization*from.phase(r)).real();
+				current_index.x = x;
+				current_index.y = y;
+
+				newGrid[current_index] = (dataOut*(typename ComplexTraits::ComplexPrecision)normalization*from.phase(r)).real();
 			}
 
 			to = newGrid;
