@@ -285,6 +285,12 @@ namespace BALL
 
 		private:
 		
+		//_wrapper function around getcwd to handle different naming conventions in different OS
+		String getcwd_();
+
+		//_wrapper function around chdir to handle different naming conventions in different OS
+		int chdir_(const String& new_dir);
+
 		//_switch to this dir
 		void synchronize_();
 
@@ -297,8 +303,8 @@ namespace BALL
 		DIR*						dir_;
 		dirent*					dirent_;
 #endif
-		String					directory_path_;
-		String					backup_path_;
+		String  directory_path_;
+		String	backup_path_;
 	};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

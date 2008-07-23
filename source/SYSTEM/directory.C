@@ -461,6 +461,7 @@ namespace BALL
 	bool Directory::has(const String& item) //const
 	{	
 		synchronize_();
+
 		String entry;
 
 		getFirstEntry(entry);
