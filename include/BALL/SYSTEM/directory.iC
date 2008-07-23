@@ -5,25 +5,50 @@
 //
 
 BALL_INLINE
-void Directory::synchronize_()
+String Directory::getcwd_()
 {
 	char* buffer;
+	
 	#ifdef BALL_COMPILER_MSVC
 		buffer = ::_getcwd(NULL, MAX_PATH_LENGTH);
-	  if (buffer != directory_path_)
-		{
-	    backup_path_ = buffer;
-			::_chdir(directory_path_.data());
-		}
 	#else
 		buffer = ::getcwd(NULL, MAX_PATH_LENGTH);
-	  if (buffer != directory_path_)
-		{
-			backup_path_ = buffer;
-			::chdir(directory_path_.data());
-		}
 	#endif
-	free(buffer);
+
+	String result(buffer);
+	free (buffer);
+
+	return result;
+}
+
+BALL_INLINE
+int Directory::chdir_(const String& new_dir)
+{
+	#ifdef BALL_COMPILER_MSVC
+		return ::_chdir(new_dir.data());
+	#else
+		return ::chdir(new_dir.data());
+	#endif
+}
+
+BALL_INLINE
+void Directory::synchronize_()
+{
+	String cwd = getcwd_();
+	String canonical_path(directory_path_);
+
+	// We need to ensure that trailing slashes are handled correctly!
+	cwd+=FileSystem::PATH_SEPARATOR;
+	canonical_path+=FileSystem::PATH_SEPARATOR;
+
+	FileSystem::canonizePath(cwd);
+	FileSystem::canonizePath(canonical_path);
+
+	if (cwd != canonical_path)
+	{
+		backup_path_ = cwd;
+		chdir_(directory_path_);
+	}
 }
 
 BALL_INLINE
@@ -33,11 +58,7 @@ bool Directory::desynchronize_(bool result1)
 	{
 		return result1;
 	}
-	#ifdef BALL_COMPILER_MSVC
-	  bool result2 = (::_chdir(backup_path_.data()) == 0);
-	#else
-	  bool result2 = (::chdir(backup_path_.data()) == 0);
-	#endif
+	bool result2 = (chdir_(backup_path_) == 0);
   backup_path_ = "";
 
   return (result1 && result2);
