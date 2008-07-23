@@ -125,10 +125,17 @@ namespace BALL
 		origin_ = fft1d.origin_;
 		stepPhys_ = fft1d.stepPhys_;
 		stepFourier_ = fft1d.stepFourier_;
+
+		data_ = fft1d.data_;
+		length_ = fft1d.data_.size();
+		
+		inFourierSpace_ = fft1d.inFourierSpace_;
+
     minPhys_ = ((-1.)*origin_);
     maxPhys_ = (((length_-1)*stepPhys_)-origin_);
     minFourier_ = ((-1.)*(length_/2.-1)*stepFourier_);
     maxFourier_ = ((length_/2.)*stepFourier_);
+
     numPhysToFourier_ = fft1d.numPhysToFourier_;
 		numFourierToPhys_ = fft1d.numFourierToPhys_;
 		
@@ -141,8 +148,6 @@ namespace BALL
 			fftw_destroy_plan(planBackward_);
 		}
 		
-		data_ = fft1d.data_;
-		length_ = fft1d.data_.size();
 		if (length_ != 0)
 		{
 			planCalculated_ = true;
