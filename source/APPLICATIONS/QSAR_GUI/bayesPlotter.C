@@ -8,7 +8,7 @@ using namespace BALL::VIEW;
 
 
 SpectrogramData::SpectrogramData(BayesModel* snb, const double& max_x, const double& min_y, const double& max_y, const double& y_resolution, BayesPlotter* plotter, bool copy):
-	QwtRasterData(QRectF(0, min_y, max_x, max_y-min_y))
+	QwtRasterData(QRectF(0, min_y, max_x+1, max_y-min_y))
 {
 	min_x_=0; min_y_=min_y;
 	max_x_=max_x;	
@@ -47,7 +47,7 @@ double SpectrogramData::value(double x, double y) const
 		    
 void SpectrogramData::precalculateProb()
 {
-	int x_size = (int) (max_x_-min_x_);
+	int x_size = (int) (max_x_-min_x_+1);
 	plotter_->data_.resize(x_size);
 	int y_size = (int) ((max_y_-min_y_)/y_resolution_);
 	
@@ -135,7 +135,7 @@ void BayesPlotter::plot()
 	rightAxis->setColorMap(spectrogram_->data().range(),spectrogram_->colorMap());
 	qwt_plot_->setAxisScale(QwtPlot::yRight,spectrogram_->data().range().minValue(), spectrogram_->data().range().maxValue());
 	cout<<"axis set to : "<<spectrogram_->data().range().minValue()<<","<<spectrogram_->data().range().maxValue()<<endl;
-	qwt_plot_->setAxisScale(QwtPlot::xBottom,0,snb->getDescriptorNames()->size()-1);
+	qwt_plot_->setAxisScale(QwtPlot::xBottom,0,snb->getDescriptorNames()->size());
 	qwt_plot_->setAxisScale(QwtPlot::yLeft,y0,y1);
 	
 	qwt_plot_->replot();
