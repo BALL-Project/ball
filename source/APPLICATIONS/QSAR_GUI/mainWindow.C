@@ -1598,7 +1598,7 @@ void MainWindow::submitToCluster(String configfile)
 		
 	if(settings.send_email && settings.email_address!="")
 	{	
-		out<<"start_time=`date`"<<endl;
+		out<<"setenv start_time `date`"<<endl;
 	}
 	out<<ir<<" "<<configfile<<endl;
 	out<<ip<<" "<<configfile<<endl;
@@ -1607,7 +1607,7 @@ void MainWindow::submitToCluster(String configfile)
 	out<<pr<<" "<<configfile<<endl;
 	if(settings.send_email && settings.email_address!="")
 	{
-		out<<"echo \"Subject: "<<script<<" is ready!\\"<<endl<<"Process '"<<script<<"' is ready!\\"<<endl<<"Start Time: $start_time\\"<<endl<<"End time: `date`\\"<<endl<<"\\"<<endl<<" \" | sendmail "<<settings.email_address<<endl;
+		out<<"echo \"Subject: "<<configfile<<" is ready!\\"<<endl<<"Process '"<<script<<"' is ready!\\"<<endl<<"Start Time: $start_time\\"<<endl<<"End time: `date`\\"<<endl<<"\\"<<endl<<" \" | sendmail "<<settings.email_address<<endl;
 	}
 		
 	out.close();
