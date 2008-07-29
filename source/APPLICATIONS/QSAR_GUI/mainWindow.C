@@ -1605,7 +1605,7 @@ void MainWindow::submitToCluster(String configfile)
 	if(settings.send_email && settings.email_address!="")
 	{
 		
-		out<<"echo -e \"Subject: "<<script<<" is ready!\nProcess '"<<script<<"' is ready!\nTime: `date`\n\n \" | sendmail "<<settings.email_address<<endl;
+		out<<"echo -e \"Subject: "<<script<<" is ready!\\\nProcess '"<<script<<"' is ready!\\\nTime: `date`\\\n\\\n \" | sendmail "<<settings.email_address<<endl;
 	}
 		
 	out.close();
