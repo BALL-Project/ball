@@ -55,6 +55,7 @@ void QSARData::readFiles(char* directory)
 	descriptor_matrix_.resize(60);
 	column_names_.resize(60,"");
 	Y_.resize(1);
+	class_names_.clear();
 	
 	for(int n=0; filenames; n++)
 	{
@@ -123,6 +124,7 @@ void QSARData::readSDFile(const char* file)
 	Y_.clear();
 	descriptor_transformations_.clear();
 	y_transformations_.clear();
+	class_names_.clear();
 	descriptor_matrix_.resize(60);
 	column_names_.resize(60,"");
 	Y_.resize(1);
@@ -218,7 +220,7 @@ vector<BALL::String>* QSARData::readPropertyNames(String sd_file)
 }
 
 
-void QSARData::readSDFile(const char* file, SortedList<int>& activity_IDs, bool useExDesc, bool append)
+void QSARData::readSDFile(const char* file, SortedList<int>& activity_IDs, bool useExDesc, bool append, bool translate_class_labels)
 {
 	if(!append)
 	{
@@ -230,6 +232,7 @@ void QSARData::readSDFile(const char* file, SortedList<int>& activity_IDs, bool 
 		y_transformations_.clear();
 		descriptor_matrix_.resize(60);
 		column_names_.resize(60,"");
+		class_names_.clear();
 	}
 
 	string f=file;
@@ -333,20 +336,39 @@ void QSARData::readSDFile(const char* file, SortedList<int>& activity_IDs, bool 
 			}
 			else if(*act_it==i) // read activities
 			{
-				try
+				if(!translate_class_labels)
 				{
-					Y_[act].push_back(String(m.getNamedProperty(i).getString()).toDouble());
-					act++; act_it++;
-				}
-				catch(BALL::Exception::InvalidFormat g) 
-				{
-					//String a="property '";
-					//a = a + m.getNamedProperty(i).getString() + "' is no numerical value!";
-					//throw Exception::PropertyError(__FILE__,__LINE__, file, n, a.c_str());
-					Y_[act].push_back(0);
-					if(!invalidSubstances_.contains(n))
+					try
 					{
-						newInvalidSubstances.insert(n);
+						Y_[act].push_back(String(m.getNamedProperty(i).getString()).toDouble());
+						act++; act_it++;
+					}
+					catch(BALL::Exception::InvalidFormat g) 
+					{
+						//String a="property '";
+						//a = a + m.getNamedProperty(i).getString() + "' is no numerical value!";
+						//throw Exception::PropertyError(__FILE__,__LINE__, file, n, a.c_str());
+						Y_[act].push_back(0);
+						if(!invalidSubstances_.contains(n))
+						{
+							newInvalidSubstances.insert(n);
+						}
+					}
+				}
+				else
+				{
+					String value = String(m.getNamedProperty(i).getString());
+					map<String,int>::iterator it=class_names_.find(value);
+					if(it!=class_names_.end())
+					{
+						Y_[act].push_back(it->second);
+					}
+					else
+					{
+						// assign ID for new class label
+						int id = class_names_.size();
+						Y_[act].push_back(id);
+						class_names_.insert(make_pair(value,id));
 					}
 				}
 			}
@@ -782,7 +804,7 @@ void QSARData::calculateBALLDescriptors(Molecule& m)
 }
 
 
-void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabels, const char* sep, bool appendDescriptors)
+void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabels, const char* sep, bool appendDescriptors, bool translate_class_labels)
 {
 	ifstream input0(file);
 	String s;
@@ -908,14 +930,33 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 			}
 			else if(!appendDescriptors)
 			{
-				try
+				String value; getline(line_stream,value,sep[0]);
+				
+				if(!translate_class_labels)
 				{
-					String value; getline(line_stream,value,sep[0]);
-					Y_[i-(prop-no_y)].push_back(value.toDouble());
+					try
+					{
+						Y_[i-(prop-no_y)].push_back(value.toDouble());
+					}
+					catch(BALL::Exception::InvalidFormat g) 
+					{
+						throw Exception::PropertyError(__FILE__,__LINE__, file, line, "Some properties for activities are not numerical values!");
+					}
 				}
-				catch(BALL::Exception::InvalidFormat g) 
+				else
 				{
-					throw Exception::PropertyError(__FILE__,__LINE__, file, line, "Some properties for activities are not numerical values!");
+					map<String,int>::iterator it=class_names_.find(value);
+					if(it!=class_names_.end())
+					{
+						Y_[i-(prop-no_y)].push_back(it->second);
+					}
+					else
+					{
+						// assign ID for new class label
+						int id = class_names_.size();
+						Y_[i-(prop-no_y)].push_back(id);
+						class_names_.insert(make_pair(value,id));
+					}
 				}
 			}
 		} 
@@ -1024,6 +1065,7 @@ vector<QSARData*> QSARData::partitionInputData(int p)
 	{
 		v[i] = new QSARData;
 		v[i]->column_names_ = column_names_;
+		v[i]->class_names_ = class_names_;
 		v[i]->descriptor_transformations_.clear();
 		v[i]->y_transformations_.clear();
 		v[i]->descriptor_matrix_.resize(descriptor_matrix_.size());
@@ -1051,11 +1093,13 @@ vector<QSARData*> QSARData::generateExternalSet(double fraction)
 	v[0]->column_names_ = column_names_;
 	v[0]->descriptor_matrix_.resize(descriptor_matrix_.size());
 	v[0]->Y_.resize(Y_.size());
+	v[0]->class_names_ = class_names_;
 	v[1]->descriptor_transformations_.clear();
 	v[1]->y_transformations_.clear();
 	v[1]->column_names_ = column_names_;
 	v[1]->descriptor_matrix_.resize(descriptor_matrix_.size());
 	v[1]->Y_.resize(Y_.size());
+	v[1]->class_names_ = class_names_;
 	
 	gsl_rng * r = gsl_rng_alloc (gsl_rng_ranlxd2);
 	
@@ -1166,8 +1210,9 @@ void QSARData::saveToFile(string filename)
 			center_y = 1;
 		}
 	}
+	bool translated_class_labels = (class_names_.size()>0);
 	
-	out << descriptor_matrix_[0].size()<<"\t"<<descriptor_matrix_.size()<<"\t"<<Y_.size()<<"\t"<<center_data<<"\t"<<center_y<<endl<<endl;
+	out << descriptor_matrix_[0].size()<<"\t"<<descriptor_matrix_.size()<<"\t"<<Y_.size()<<"\t"<<center_data<<"\t"<<center_y<<"\t"<<translated_class_labels<<endl<<endl;
 	
 	printMatrix(descriptor_matrix_,out);
 	printMatrix(Y_,out);
@@ -1185,6 +1230,20 @@ void QSARData::saveToFile(string filename)
 	
 	printMatrix(descriptor_transformations_,out);
 	printMatrix(y_transformations_,out);
+	
+	if(translated_class_labels) 
+	{
+		vector<String> ordered_names(class_names_.size(),"");
+		for(map<String,int>::iterator it=class_names_.begin();it!=class_names_.end();it++)
+		{
+			ordered_names[it->second]=it->first;
+		}
+		for(uint i=0; i<ordered_names.size();i++)
+		{
+			out<<ordered_names[i]<<"\t";
+		}
+		out<<endl<<endl;	
+	}
 }
 
 void QSARData::readMatrix(VMatrix& mat, ifstream& in, char seperator, unsigned int lines, unsigned int col)
@@ -1216,11 +1275,17 @@ void QSARData::readFromFile(string filename)
 	
 	String line;
 	getline(in,line);
+	int no_fields = line.countFields("\t");
 	unsigned int no_subst = (unsigned int) line.getField(0,"\t").toInt();
 	unsigned int no_desc = (unsigned int) line.getField(1,"\t").toInt();
 	unsigned int no_y = (unsigned int) line.getField(2,"\t").toInt();
 	bool center_data = (bool) line.getField(3,"\t").toInt();
 	bool center_y = (bool) line.getField(4,"\t").toInt();
+	bool translated_class_labels = 0;
+	if(no_fields>5)
+	{
+		translated_class_labels = (bool) line.getField(5,"\t").toBool();
+	}
 	column_names_.resize(no_desc);
 	substance_names_.resize(no_subst);
 	getline(in,line); // skip empty line
@@ -1261,6 +1326,17 @@ void QSARData::readFromFile(string filename)
 	{
 		descriptor_transformations_.clear();
 		y_transformations_.clear();
+	}
+	
+	class_names_.clear();
+	if(translated_class_labels)
+	{
+		getline(in,line); // skip empty line
+		uint no_labels = line.countFields("\t");
+		for(uint i=0; i<no_labels;i++)
+		{
+			class_names_.insert(make_pair(line.getField(i),i));
+		}
 	}
 }
 

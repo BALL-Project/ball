@@ -80,18 +80,9 @@ void CSVInputDataItem::readData()
 	if(done_) return; // do nothing twice...
 	
 	string st = filename_.toStdString();
-	try
-	{
-		data_->readCSVFile(st.c_str(), no_y_, x_labels_, y_labels_, sep_.c_str(), 0);
-	}
-	catch(WrongFileFormat)
-	{
-		throw(InvalidInputDataItem(__FILE__,__LINE__));
-	}
-// 	catch(PropertyError e)
-// 	{
-// 		//throw(InvalidInputDataItem(__FILE__,__LINE__));
-// 	}
+	
+	data_->readCSVFile(st.c_str(), no_y_, x_labels_, y_labels_, sep_.c_str(), 0, nonnumeric_class_names_);
+
 	if (center_data_)
 	{
 		data_->centerData(center_y_);
@@ -107,14 +98,8 @@ void CSVInputDataItem::appendData()
 	
 	string st = filename_.toStdString();
 
-	try
-	{	cout<<"trying to append to  "<<data_->getNoSubstances()<<"  "<<data_->getNoDescriptors()<<endl;
-		data_->readCSVFile(st.c_str(), no_y_, x_labels_, y_labels_, sep_.c_str(), 1);
-	}
-	catch(WrongFileFormat)
-	{
-		throw(InvalidInputDataItem(__FILE__,__LINE__));
-	}
+	cout<<"trying to append to  "<<data_->getNoSubstances()<<"  "<<data_->getNoDescriptors()<<endl;
+	data_->readCSVFile(st.c_str(), no_y_, x_labels_, y_labels_, sep_.c_str(), 1);
 	
 	if (center_data_)
 	{

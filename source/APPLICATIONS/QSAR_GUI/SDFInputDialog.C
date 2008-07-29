@@ -18,6 +18,7 @@ SDFInputDialog::SDFInputDialog(SDFInputDataItem* item):
 	QGridLayout* layout = new QGridLayout(this);
 	activity_edit_ = new QLineEdit();
 	sd_descriptors_checkbox_ = new QCheckBox("use other properties as descriptors", this);
+	class_names_checkbox_ = new QCheckBox("non-numeric class names",this);
 	center_descriptor_values_ = new QCheckBox("center descriptor values", this);
 	center_descriptor_values_->setChecked(true);
 	center_response_values_ = new QCheckBox("center response values",this);
@@ -62,16 +63,33 @@ SDFInputDialog::SDFInputDialog(SDFInputDataItem* item):
 	layout->addWidget(alabel,1,1,1,2);
 	layout->addWidget(activity_edit_,2,1,1,2);
 	layout->addWidget(sd_descriptors_checkbox_,3,1,Qt::AlignLeft);
-	layout->addWidget(center_descriptor_values_,4,1,Qt::AlignLeft);
-	layout->addWidget(center_response_values_,5,1,Qt::AlignLeft);;
-	layout->addWidget(SDFInputDialogButtons,6,1,1,2, Qt::AlignHCenter);
+	layout->addWidget(class_names_checkbox_,4,1,Qt::AlignLeft);
+	layout->addWidget(center_descriptor_values_,5,1,Qt::AlignLeft);
+	layout->addWidget(center_response_values_,6,1,Qt::AlignLeft);;
+	layout->addWidget(SDFInputDialogButtons,7,1,1,2, Qt::AlignHCenter);
 
 	this->setLayout(layout);
 	this->setWindowTitle("Preferences for " + input_item_->name());
 
 	connect(SDFInputDialogButtons, SIGNAL(accepted()), this, SLOT(accept()));
 	connect(SDFInputDialogButtons, SIGNAL(rejected()), this, SLOT(reject()));
+	connect(class_names_checkbox_,SIGNAL(clicked()),this,SLOT(classNamesChange()));
 }
+
+
+// SLOT
+void SDFInputDialog::classNamesChange()
+{
+	if(class_names_checkbox_->isChecked())
+	{
+		center_response_values_->setChecked(0);
+		center_response_values_->setEnabled(0);
+	}
+	else
+	{
+		center_response_values_->setEnabled(1);
+	}
+}	
 
 
 SDFInputDialog::SDFInputDialog():
@@ -128,6 +146,7 @@ void SDFInputDialog::getNumbers()
 	input_item_->setCenterDataFlag(center_descriptor_values_->isChecked());
 	input_item_->setCenterResponseFlag(center_response_values_->isChecked());
 	input_item_->setActivityValues(numbers_);
+	input_item_->setNonNumericClassNames(class_names_checkbox_->isChecked());
 }
 
 SortedList<int> SDFInputDialog::numbers()

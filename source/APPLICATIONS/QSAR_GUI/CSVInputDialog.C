@@ -18,6 +18,7 @@ CSVInputDialog::CSVInputDialog(CSVInputDataItem* item):
 	
 	x_labels_ = new QCheckBox("File contains descriptor names", this);
 	y_labels_ = new QCheckBox("File contains compound names", this);
+	class_names_checkbox_ = new QCheckBox("non-numeric class names",this);
 	center_descriptor_values_ = new QCheckBox("Center descriptor values", this);
 	center_descriptor_values_->setChecked(true);
 	center_response_values_ = new QCheckBox("Center response values",this);
@@ -33,15 +34,17 @@ CSVInputDialog::CSVInputDialog(CSVInputDataItem* item):
 	layout_->addWidget(blabel_,4,1,2,3); layout_->addWidget(seperator_edit_,4,4);
 	layout_->addWidget(x_labels_,6,1,Qt::AlignLeft);
 	layout_->addWidget(y_labels_,7,1,Qt::AlignLeft);
-	layout_->addWidget(center_descriptor_values_,8,1,Qt::AlignLeft);
-	layout_->addWidget(center_response_values_,9,1,Qt::AlignLeft);;
-	layout_->addWidget(inputDialogButtons,10,1,1,2, Qt::AlignHCenter);
+	layout_->addWidget(class_names_checkbox_,8,1,Qt::AlignLeft);
+	layout_->addWidget(center_descriptor_values_,9,1,Qt::AlignLeft);
+	layout_->addWidget(center_response_values_,10,1,Qt::AlignLeft);;
+	layout_->addWidget(inputDialogButtons,11,1,1,2, Qt::AlignHCenter);
 	
 	setLayout(layout_);
 	setWindowTitle("Preferences for " + input_item_->name());
 
 	connect(inputDialogButtons, SIGNAL(accepted()), this, SLOT(accept()));
 	connect(inputDialogButtons, SIGNAL(rejected()), this, SLOT(reject()));
+	connect(class_names_checkbox_,SIGNAL(clicked()),this,SLOT(classNamesChange()));
 }
 
 CSVInputDialog::~CSVInputDialog()
@@ -56,6 +59,22 @@ CSVInputDialog::~CSVInputDialog()
 	delete alabel_;
 	delete blabel_;
 }
+
+
+// SLOT
+void CSVInputDialog::classNamesChange()
+{
+	if(class_names_checkbox_->isChecked())
+	{
+		center_response_values_->setChecked(0);
+		center_response_values_->setEnabled(0);
+	}
+	else
+	{
+		center_response_values_->setEnabled(1);
+	}
+}	
+
 
 void CSVInputDialog::readNumY()
 {
@@ -82,6 +101,7 @@ void CSVInputDialog::readNumY()
 	input_item_->setYLabelFlag(y_labels_->isChecked());
 	input_item_->setNumOfActivities(no_y_);
 	input_item_->setSeperator(sep.toStdString());
+	input_item_->setNonNumericClassNames(class_names_checkbox_->isChecked());
 }
 
 bool CSVInputDialog::xLabels()

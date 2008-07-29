@@ -53,6 +53,8 @@ namespace BALL
 				void setFilename(String filename) { filename_=filename.c_str();}
 				void setAppend(bool append);
 				bool append();
+				void setNonNumericClassNames(bool b) {nonnumeric_class_names_ = b;}
+				bool getNonNumericClassNames() {return nonnumeric_class_names_;}
 				
 				void showPlotter();
 				
@@ -79,6 +81,9 @@ namespace BALL
 				
 				/** do all response variables contain only discrete values? */
 				bool discrete_y_;
+				
+				/** determines whether class names are to be convertig to IDs while reading the input data */
+				bool nonnumeric_class_names_;
 				
 				/** the number of PartitioningItems that are connected to this item */
 				int no_partitioner_;

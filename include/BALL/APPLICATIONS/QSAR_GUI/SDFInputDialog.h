@@ -43,6 +43,7 @@ namespace BALL
 		
 		public slots:
 			void getNumbers();
+			void classNamesChange();
 
 		private:
 		
@@ -52,6 +53,7 @@ namespace BALL
 			QCheckBox* sd_descriptors_checkbox_;
 			QCheckBox* center_descriptor_values_;
 			QCheckBox* center_response_values_;
+			QCheckBox* class_names_checkbox_;
 			SortedList<int> numbers_;
 			bool input_ok_;
 			SDFInputDataItem* input_item_;

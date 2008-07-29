@@ -30,6 +30,7 @@ void InputDataItemIO::writeConfigSection(SDFInputDataItem* sd_item, ofstream& ou
 	out << "activity_IDs = "<< activity_string << "\n";
 	out << "center_data = "<< sd_item->centerData() << "\n";
 	out << "center_response = "<< sd_item->centerY() << "\n";
+	if(sd_item->getNonNumericClassNames()) out << "nonnumeric_class_names = 1\n";
 	
 	list<CSVInputDataItem*>* csv_items = sd_item->getConnectedCSVItems();
 	for(list<CSVInputDataItem*>::iterator it=csv_items->begin(); it!=csv_items->end(); it++)
@@ -59,6 +60,7 @@ void InputDataItemIO::writeConfigSection(CSVInputDataItem* csv_item, ofstream& o
 	out << "csv_desc_labels = "<<csv_item->getDescriptorLabels()<<"\n";
 	out << "csv_compound_labels = "<<csv_item->getCompoundLabels()<<"\n";
 	out << "csv_no_response = "<<csv_item->getNoResponseVariables()<<"\n";
+	if(csv_item->getNonNumericClassNames()) out << "nonnumeric_class_names = 1\n";
 	out << "center_data = "<< csv_item->centerData() << "\n";
 	out << "center_response = "<< csv_item->centerY() << "\n";
 	out << "output = " << csv_item->savedAs().toStdString() << "\n";
@@ -201,6 +203,7 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 	bool center_data=0; bool center_y=0; bool read_sd_descriptors=0;
 	double val_fraction=0;
 	SortedList<int> activities;
+	bool nonnumeric_class_names = 0;
 	
 	vector<String> csv_file; vector<String> csv_sep;
 	vector<bool> csv_desc_labels; vector<bool> csv_compound_labels;
@@ -272,6 +275,10 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 		{
 			csv_compound_labels.push_back(((String)line.after("=")).trimLeft().toBool());
 		}
+		else if(line.hasPrefix("nonnumeric_class_names"))
+		{
+			nonnumeric_class_names = ((String)line.after("=")).trimLeft().toBool();
+		}
 		else if(line.hasPrefix("done"))
 		{
 			// ignore this line; it is used for the command-line programms only
@@ -294,6 +301,7 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 			sd_item->addToPipeline();
 			sd_item->setSavedAs(output.c_str());
 			sd_item->useSDProperties(read_sd_descriptors);
+			sd_item->setNonNumericClassNames(nonnumeric_class_names);
 			if(item_positions!=0 && item_positions->size()>0)
 			{
 				pair<double,double> pos = item_positions->front();
@@ -344,7 +352,8 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 				csv_item->setCenterDataFlag(center_data);
 				csv_item->setCenterResponseFlag(center_y);
 				if(i==0) filenames_map.insert(make_pair(output,csv_item));
-			}					
+			}
+			csv_item->setNonNumericClassNames(nonnumeric_class_names);
 			csv_item->setXLabelFlag(csv_desc_labels[i]);
 			csv_item->setYLabelFlag(csv_compound_labels[i]);
 			csv_item->setNumOfActivities(csv_no_response[i]);

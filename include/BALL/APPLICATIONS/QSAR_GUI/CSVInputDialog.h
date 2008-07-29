@@ -41,6 +41,7 @@ namespace BALL
 		
 		public slots:
 			void readNumY();
+			void classNamesChange();
 
 		private:
 		
@@ -52,6 +53,7 @@ namespace BALL
 			QCheckBox* y_labels_;
 			QCheckBox* center_descriptor_values_;
 			QCheckBox* center_response_values_;
+			QCheckBox* class_names_checkbox_;
 			QGridLayout* layout_;
 			QLabel* alabel_;
 			QLabel* blabel_;

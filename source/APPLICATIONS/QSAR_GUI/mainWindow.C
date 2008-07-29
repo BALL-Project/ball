@@ -14,6 +14,7 @@
 #include <QtCore/QTextStream>
 #include <QtGui/QPrinter>
 #include <QtGui/QPrintDialog>
+#include <QtGui/QShortcut>
 
 #include <sstream>
 #include <map>
@@ -459,6 +460,9 @@ void MainWindow::createActions()
 	delAct_ = new QAction(QIcon("./images/delete_item.png"),tr("&Delete Selection"), this);
 	delAct_->setStatusTip(tr("Deletes the selected Item from the pipeline"));
 	connect(delAct_, SIGNAL(triggered()), this, SLOT(deleteItem()));
+	
+	QShortcut* del_shortcut = new QShortcut(QKeySequence::Delete,this);
+	connect(del_shortcut,SIGNAL(activated()),this,SLOT(deleteItem()));
 
 	executeAct_ = new QAction(QIcon("./images/run_pipeline.png"),tr("&Execute Pipeline"), this);
 	executeAct_->setShortcut(tr("Ctrl+E"));

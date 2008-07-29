@@ -93,7 +93,7 @@ namespace BALL
 				@param file the sd-file containing the input 
 				@param useExDesc if set to 1, descriptors read from the sd-file will be used in addition to those calculated by BALL internally 
 				@param append if set to 1, the substances read from the sd-file will be appended as new lines to the current descriptor_matrix */
-				void readSDFile(const char* file, SortedList<int>& act, bool useExDesc=1, bool append=0);
+				void readSDFile(const char* file, SortedList<int>& act, bool useExDesc=1, bool append=0, bool translate_class_labels=0);
 	
 				/** 
 				Calculates descriptors for one molecule and saves them into one new line of descriptor_matrix 
@@ -123,7 +123,7 @@ namespace BALL
 				@param ylabel if ==1, names of substances are read from the first column of the table 
 				@param sep the character used to seperate the cells of the table
 				@param appendDescriptors if set to 1, descriptors will be read from the file and appended as new columns to the current descriptor_matrix */
-				void readCSVFile(const char* file, int no_y, bool xlabels, bool ylabels, const char* sep=",", bool appendDescriptors=0);
+				void readCSVFile(const char* file, int no_y, bool xlabels, bool ylabels, const char* sep=",", bool appendDescriptors=0, bool translate_class_labels=0);
 	
 				/** for testing purposes only: change Y-matrix according to the given equations */
 				void manipulateY(vector<String> v);
@@ -233,6 +233,9 @@ namespace BALL
 				SortedList<int> invalidSubstances_;
 				
 				String data_folder_;
+				
+				/** in case of classification data sets with non-numeric class labels, this member maps the names of the individual classes to their assigned id. */ 
+				map<String,int> class_names_;
 				//@}
 
 				

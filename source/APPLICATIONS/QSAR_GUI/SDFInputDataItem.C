@@ -91,7 +91,7 @@ bool SDFInputDataItem::execute()
 		{    	// use subfolder of executable location...
 			data_->setDataFolder("./data");
 		}
-		data_->readSDFile(st.c_str(), activity_values_, use_SD_properties_);
+		data_->readSDFile(st.c_str(), activity_values_, use_SD_properties_, nonnumeric_class_names_);
 	}
 	catch(WrongFileFormat)
 	{
