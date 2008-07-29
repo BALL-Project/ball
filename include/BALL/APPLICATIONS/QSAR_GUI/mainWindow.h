@@ -102,6 +102,9 @@ namespace BALL
 				
 				/** checks whether the given item exists in any of this MainWindow's pipelines */
 				bool itemExists(DataItem* item);
+				
+				 /** before calling QGraphicsScene-update, checks for all models whether they are to be disabled and sets pixmaps accordingly */
+				void updatePipelineScene();
 
 				/** sets for fast search of Items: */
 				Pipeline<SDFInputDataItem*> sdf_input_pipeline_;

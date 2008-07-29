@@ -814,7 +814,7 @@ void MainWindow::deleteItem()
 	{
 		QMessageBox::information(this, tr(" "),tr("No item selected"));
 	}
-	view_scene_.update(); // remove junk from screen
+	updatePipelineScene(); // remove junk from screen
 }
 
 ///delete everything on the desktop
@@ -852,8 +852,19 @@ void MainWindow::clearDesktop()
 	}
 	partitioning_pipeline_.clear();
 	
+	updatePipelineScene();
+}
+
+
+void MainWindow::updatePipelineScene()
+{
+	for (Pipeline<ModelItem*>::iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
+	{
+		(*it)->isDone(); // checks whether model is to be disabled and sets pixmap accordingly
+	}
 	view_scene_.update();
 }
+	
 
 // SLOT
 void MainWindow::restoreDesktop()
@@ -1209,7 +1220,7 @@ void MainWindow::executePipeline()
 		a.about(this,"Information","Pipeline has not changed,\nso there was nothing to be done!");
 	}
 	
-	view_scene_.update();
+	updatePipelineScene();
 	view_->update();
 }
 
@@ -1372,7 +1383,7 @@ void MainWindow::restoreDesktop(QString filename)
 		QMessageBox::warning(this,e.getName(),e.getMessage());
 	}
 	
-	view_scene_.update();
+	updatePipelineScene();
 	view_->update();
 	
 	/// read all items if respec. files exist in the folder of the config-file	

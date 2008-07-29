@@ -82,6 +82,8 @@ QPointF DataItemScene::getOffset(QPointF& origin, DataItem* item)
 
 void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 {
+	if(view->name != "view") return;
+	
 	// if the "drag" was very short, is was no real drag at all, so there is nothing being dropped!
 	/// -> process mouse clicks instead of drops :
 	if(main_window->drag_start_time.now().getSeconds()-main_window->drag_start_time.getSeconds() < main_window->min_drag_time) 
@@ -452,7 +454,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 		event->ignore();
 	}
 	QGraphicsScene::dropEvent(event);
- 	update();
+ 	main_window->updatePipelineScene();
  	view->update();
 	
 }  // END of  void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)

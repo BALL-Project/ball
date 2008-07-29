@@ -897,3 +897,4 @@ void ModelItem::showFeaturePlotter()
 		}
 	}
 }
+
