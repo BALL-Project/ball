@@ -1596,8 +1596,10 @@ void MainWindow::submitToCluster(String configfile)
 	mc.append("ModelCreator"); fs.append("FeatureSelector");
 	pr.append("Predictor");
 		
-		
-	out<<"start_time=`date`"<<endl;
+	if(settings.send_email && settings.email_address!="")
+	{	
+		out<<"start_time=`date`"<<endl;
+	}
 	out<<ir<<" "<<configfile<<endl;
 	out<<ip<<" "<<configfile<<endl;
 	out<<mc<<" "<<configfile<<endl;
