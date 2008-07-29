@@ -28,6 +28,13 @@ void LDAModel::train()
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be read into the model before training!");
 	}
 	readLabels();
+	
+	// map values of Y to their index
+	map<int,uint> label_to_pos; 
+	for(uint i=0;i<labels_.size();i++)
+	{
+		label_to_pos.insert(make_pair(labels_[i],i));
+	}
 
 	// calculate sigma_ = covariance matrix of descriptors
 	sigma_.ReSize(descriptor_matrix_.Ncols(),descriptor_matrix_.Ncols());
@@ -56,14 +63,13 @@ void LDAModel::train()
 		for(int i=1;i<=descriptor_matrix_.Nrows();i++) // calculate sum vector of each class
 		{
 			int yi = static_cast<int>(Y_(i,c+1)); // Y_ will contains only ints for classifications
-			int pos = yi - labels_[0]; 
-			if(labels_[pos]==yi)
-			{
-				mean_vectors_[c].Row(pos+1) += descriptor_matrix_.Row(i);
-				if(c==0) no_substances_c[pos]++;
-			}
+			int pos = label_to_pos.find(yi)->second; 
+			
+			mean_vectors_[c].Row(pos+1) += descriptor_matrix_.Row(i);
+			if(c==0) no_substances_c[pos]++;
+			
 		}
-	
+		
 		for(int i=1; i<=mean_vectors_[c].Nrows();i++) // calculate mean vector of each class
 		{
 			if(no_substances_c[i-1]==0)
@@ -78,6 +84,7 @@ void LDAModel::train()
 			no_substances_[i] += no_substances_c[i];
 		}
 	}
+	
 }
 
 

@@ -916,7 +916,6 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 				}	
 				catch(BALL::Exception::InvalidFormat g) 
 				{
-					
 					descriptor_matrix_[no].push_back(0);
 					if(!tmp.contains(i))
 					{
@@ -931,7 +930,7 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 			else if(!appendDescriptors)
 			{
 				String value; getline(line_stream,value,sep[0]);
-				cout<<"value="<<value<<endl;
+				
 				if(!translate_class_labels)
 				{
 					try

@@ -1071,7 +1071,7 @@ void MainWindow::executePipeline()
 		try
 		{
 			bool b=(*it)->execute();
-			if(!done) done=b;	
+			if(!done) done=b;
 		}
 		catch(BALL::Exception::GeneralException e)
 		{
@@ -1163,6 +1163,10 @@ void MainWindow::executePipeline()
 		{
 			QMessageBox::warning(this,"Error",e.getMessage());
 		}
+		catch(BaseException e)
+		{
+			QMessageBox::warning(this,"Error",e.what());
+		}
 		value++;
 		emit sendNewValue(value);
 	}
@@ -1171,7 +1175,6 @@ void MainWindow::executePipeline()
 		statusBar()->showMessage(tr("Feature Selections done"));
 	}
 		
-
 
 	///activity prediction
 	for (Pipeline<PredictionItem*>::iterator it = prediction_pipeline_.begin(); it != prediction_pipeline_.end(); it++)
@@ -1200,15 +1203,15 @@ void MainWindow::executePipeline()
 	///validation
 	for (Pipeline<ValidationItem*>::iterator it = val_pipeline_.begin(); it != val_pipeline_.end(); it++)
 	{
-		//try
+		try
 		{
 			bool b=(*it)->execute();
 			if(!done) done=b;
 		}
-// 		catch(BALL::Exception::GeneralException e)
-// 		{	
-// 			QMessageBox::about(this,"Error",e.getMessage());
-// 		}
+		catch(BALL::Exception::GeneralException e)
+		{	
+			QMessageBox::about(this,"Error",e.getMessage());
+		}
 		value++;
 		emit sendNewValue(value);	
 	}
