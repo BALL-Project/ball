@@ -1597,6 +1597,7 @@ void MainWindow::submitToCluster(String configfile)
 	pr.append("Predictor");
 		
 		
+	out<<"start_time=`date`"<<endl;
 	out<<ir<<" "<<configfile<<endl;
 	out<<ip<<" "<<configfile<<endl;
 	out<<mc<<" "<<configfile<<endl;
@@ -1605,7 +1606,7 @@ void MainWindow::submitToCluster(String configfile)
 	if(settings.send_email && settings.email_address!="")
 	{
 		
-		out<<"echo -e \"Subject: "<<script<<" is ready!\\\nProcess '"<<script<<"' is ready!\\\nTime: `date`\\\n\\\n \" | sendmail "<<settings.email_address<<endl;
+		out<<"echo -e \"Subject: "<<script<<" is ready!\\\nProcess '"<<script<<"' is ready!\\\nStart Time: $start_time\\\nEnd time: `date`\\\n\\\n \" | sendmail "<<settings.email_address<<endl;
 	}
 		
 	out.close();
