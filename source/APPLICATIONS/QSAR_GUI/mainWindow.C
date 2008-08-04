@@ -664,22 +664,7 @@ void MainWindow::createDockWindows()
 		y+=2*y_offset;
 		y0=y;
 	}
-	
-// 	int j=0;
-// 	for(uint i=0; i<reg_->registered_models.size();i++)
-// 	{ 
-// 		ModelItem* item = new ModelItem(&reg_->registered_models[i], model_list_);
-// 		model_list_scene_.addItem(item);
-// 		if (reg_->registered_models[i].kernel)
-// 		{
-// 			j++;
-// 			item->setPos(120,70*(j-1)+20);
-// 		}
-// 		else
-// 		{
-// 			item->setPos(20,70*(i-j)+20);
-// 		}
-// 	}
+
 
 	QDockWidget* modeldock = new QDockWidget(tr("Models"), this);
 	modeldock->setAllowedAreas(Qt::LeftDockWidgetArea);
@@ -693,7 +678,7 @@ void MainWindow::createDockWindows()
 	windowMenu_->addAction(modeldock->toggleViewAction());
 
 	///create dock widget for listing all available feature selection methods
-	for(uint i=0; i<4;i++)
+	for(uint i=0; i<5;i++)
 	{ 
 		FeatureSelectionItem* item = new FeatureSelectionItem(i, fs_list_);
 		fs_list_scene_.addItem(item);

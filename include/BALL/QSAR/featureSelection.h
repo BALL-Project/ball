@@ -74,6 +74,10 @@ namespace BALL
 				void removeHighlyCorrelatedFeatures(double& cor_threshold);
 				
 				
+				/** removes those features that do not have a correlation greater than the specified value to any of the response variables */
+				void removeLowResponseCorrelation(double& min_correlation);
+				
+				
 				/** removes descriptors whose values are 0 in all substances from the list of selected features */
 				void removeEmptyDescriptors();
 				

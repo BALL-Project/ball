@@ -25,7 +25,7 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 	cutoff_ = 0;
 	edit_ = new QLineEdit(this);
 	
-	if(fsitem->getType()>0)
+	if(fsitem->getType()>0 && fsitem->getType()!=4)
 	{
 		edit_->setText(String(reg->default_k).c_str());	
 		QLabel* klabel = new QLabel("k for k-fold cross validation",this);
@@ -69,7 +69,9 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 	{
 		double cor = reg->default_correlation_cutoff;
 		edit_->setText(String(cor).c_str());
-		QLabel* label = new QLabel("correlation threshold");
+		QLabel* label;
+		if(fsitem->getType()==0) label = new QLabel("max correlation between features");
+		else label = new QLabel("min correlation with response");
 		layout1->addWidget(label);
 		layout1->addWidget(edit_);		
 		main_layout->addLayout(layout1);
@@ -119,7 +121,7 @@ void FeatureSelectionDialog::applyInput()
 	fs_item_->post_optimization_model_par_ = post_optimization_model_par_;
 	fs_item_->post_optimization_kernel_par_ = post_optimization_kernel_par_;
 	
-	if(fs_item_->getType()>0) // no validation statistics for removal of colineal features
+	if(fs_item_->getType()>0 && fs_item_->getType()!=4) // no validation statistics for removal of colineal features
 	{
 		k_ =  edit_->text().toInt(&ok);
 		fs_item_->setK(k_);

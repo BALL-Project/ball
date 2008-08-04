@@ -18,6 +18,7 @@ InputPlotter::InputPlotter(InputDataItem* item)
 	connect(sort_checkbox_, SIGNAL(clicked()), this, SLOT(sortChangeState()));
 	
 	plot();
+	QwtPlotZoomer* zoomer = new QwtPlotZoomer(qwt_plot_->canvas());
 }
 
 

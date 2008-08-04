@@ -17,6 +17,7 @@ PredictionPlotter::PredictionPlotter(PredictionItem* item)
 	data_ = pred_item_->inputDataItem()->data();
 	
 	plot();
+	QwtPlotZoomer* zoomer = new QwtPlotZoomer(qwt_plot_->canvas());
 }
 
 

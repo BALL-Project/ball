@@ -571,7 +571,7 @@ void FeatureSelection::removeEmptyDescriptors()
 
 
 void FeatureSelection::removeHighlyCorrelatedFeatures(double& cor_threshold)
-{
+{	
 	removeEmptyDescriptors(); // -> descriptor_IDs now contains the IDs of all non-empty descriptors
 
 	vector<double> stddev(model_->data->getNoDescriptors(),1);
@@ -605,9 +605,70 @@ void FeatureSelection::removeHighlyCorrelatedFeatures(double& cor_threshold)
 			if(abs_cor>abs_cor_threshold)
 			{
 				model_->descriptor_IDs_.erase(it2); // element at this position is deleted and it2 is automagically set to next element
+				it2--; // make sure also to check the next feature in the next iteration...
 			}
 		}
 	}
+}
+
+
+void FeatureSelection::removeLowResponseCorrelation(double& min_correlation)
+{
+	removeEmptyDescriptors(); // -> descriptor_IDs now contains the IDs of all non-empty descriptors
+	
+	vector<double> desc_stddev(model_->data->getNoDescriptors(),1);
+	vector<double> desc_mean(model_->data->getNoDescriptors(),0);
+	
+	uint no_y=model_->data->Y_.size();
+	vector<double> y_stddev(no_y,1);
+	vector<double> y_mean(no_y,0);
+	
+	// if data has not been centered, calculate mean and stddev of each feature
+	if(model_->data->descriptor_transformations_.size()==0)
+	{
+		for(uint i=0; i<desc_mean.size();i++)
+		{
+			desc_mean[i] = Statistics::getMean(model_->data->descriptor_matrix_[i]);
+		}		
+		for(uint i=0; i<desc_stddev.size();i++)
+		{
+			desc_stddev[i] = Statistics::getStddev(model_->data->descriptor_matrix_[i], desc_mean[i]);
+		}
+	}
+	// if response variables have not been centered, calculate their mean and stddev
+	if(model_->data->y_transformations_.size()==0)
+	{
+		for(uint i=0; i<y_mean.size();i++)
+		{
+			y_mean[i] = Statistics::getMean(model_->data->Y_[i]);
+		}		
+		for(uint i=0; i<y_stddev.size();i++)
+		{
+			y_stddev[i] = Statistics::getStddev(model_->data->Y_[i], y_mean[i]);
+		}
+	}
+		
+	double abs_cor_threshold = abs(min_correlation);
+	
+	/// check correlation of each feature with each response variable
+	for(SortedList<uint>::iterator it = model_->descriptor_IDs_.begin(); it!=model_->descriptor_IDs_.end(); it++)
+	{	
+		double max_abs_cor = 0;
+		
+		for(uint i=0;i<no_y;i++)
+		{
+			double covar = Statistics::getCovariance(model_->data->descriptor_matrix_[*it], model_->data->Y_[i],desc_mean[*it],y_mean[i]);
+			
+			double abs_cor = abs(covar/(desc_stddev[*it]*y_stddev[i]));
+			if(abs_cor>max_abs_cor) max_abs_cor=abs_cor;
+		}
+		
+		if(max_abs_cor<abs_cor_threshold)
+		{
+			model_->descriptor_IDs_.erase(it); // element at this position is deleted and 'it' is automagically set to next element
+			it--; // make sure also to check the next feature in the next iteration...
+		}
+	}	
 }
 
 

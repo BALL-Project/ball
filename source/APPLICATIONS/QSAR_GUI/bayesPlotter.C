@@ -103,10 +103,10 @@ BayesPlotter::BayesPlotter(ModelItem* model_item)
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"BayesPlotter error","BayesPlotter can only be created for a SNBModel!");
 	}
 	
-//	QwtPlotZoomer* zoomer = new QwtPlotZoomer(qwt_plot_->canvas());
 	qwt_plot_->setAxisTitle(QwtPlot::xBottom,"Features");
 	qwt_plot_->enableAxis(QwtPlot::yRight);	
 	plot();
+	QwtPlotZoomer* zoomer = new QwtPlotZoomer(qwt_plot_->canvas());
 }
 
 

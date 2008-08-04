@@ -45,7 +45,7 @@ Plotter::Plotter(DataItem* item)
 	
 	resize(600,400);
 	qwt_plot_->resize(600,400);
-	qwt_plot_->show();	
+	qwt_plot_->show();
 }
 
 

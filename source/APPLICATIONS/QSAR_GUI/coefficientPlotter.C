@@ -15,8 +15,8 @@ CoefficientPlotter::CoefficientPlotter(ModelItem* model_item)
 	model_item_ = model_item;
 	qwt_plot_->enableAxis(QwtPlot::yLeft);
 	qwt_plot_->enableAxis(QwtPlot::yRight,0);
-	QwtPlotZoomer* zoomer = new QwtPlotZoomer(qwt_plot_->canvas());
 	plot();
+	QwtPlotZoomer* zoomer = new QwtPlotZoomer(qwt_plot_->canvas());
 }
 
 

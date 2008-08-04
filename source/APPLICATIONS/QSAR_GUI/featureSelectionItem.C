@@ -45,6 +45,10 @@ FeatureSelectionItem::FeatureSelectionItem(int type, DataItemView* miv):
 			name_ = "Stepwise Selection";
 			type_ = type;
 			break;
+		case 4:
+			name_ = "Remove Low Response Correlation";
+			type_ = type;
+			break;
 
 		default: throw InvalidFeatureSelectionItem(__FILE__,__LINE__);
 	}
@@ -294,11 +298,14 @@ bool FeatureSelectionItem::execute()
 			break;
 		case 2:
 			feature_selection_->backwardSelection(k_, opt_);
-			
 			break;
 		case 3:					
 			feature_selection_->stepwiseSelection(k_, opt_);
 			break;
+		case 4:					
+			feature_selection_->removeLowResponseCorrelation(cor_threshold_);
+			break;
+			
 		default:
 			throw InvalidFeatureSelectionItem(__FILE__,__LINE__);
 			break;

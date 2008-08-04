@@ -14,6 +14,7 @@ FeaturePlotter::FeaturePlotter(ModelItem* model_item)
 {
 	model_item_ = model_item;
 	plot();
+	QwtPlotZoomer* zoomer = new QwtPlotZoomer(qwt_plot_->canvas());
 }
 
 
