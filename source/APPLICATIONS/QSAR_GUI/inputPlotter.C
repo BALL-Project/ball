@@ -1,7 +1,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/inputPlotter.h>
 
 #include <qwt_plot_marker.h>
-
+#include <qwt_plot_zoomer.h>
 
 using namespace BALL::VIEW;
 

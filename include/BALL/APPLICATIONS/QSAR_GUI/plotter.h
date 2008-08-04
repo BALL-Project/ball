@@ -12,6 +12,7 @@
 #include <QHBoxLayout>
 #include <QCheckBox>
 
+
 #include <qwt_symbol.h>
 
 
