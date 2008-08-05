@@ -140,7 +140,7 @@ void RegressionModel::saveToFile(string filename)
 	}
 	
 	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tcentered response?\ttrained?"<<endl;
-	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<data->getNoResponseVariables()<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<trained<<"\n\n";
+	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<trained<<"\n\n";
 	
 	saveModelParametersToFile(out);
 	saveResponseTransformationToFile(out);
