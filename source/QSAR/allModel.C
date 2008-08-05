@@ -212,8 +212,11 @@ void ALLModel::saveToFile(string filename)
 		sel_features = data->getNoDescriptors();
 	}
 	
+	int no_y = training_result_.Ncols();
+	if(no_y==0) no_y = y_transformations_.Ncols(); // correct no because transformation information will have to by read anyway when reading this model later ...
+	
 	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tcentered response?\tno of substances"<<endl;
-	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<descriptor_matrix_.Nrows()<<"\n\n";
+	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<no_y<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<descriptor_matrix_.Nrows()<<"\n\n";
 		
 	saveModelParametersToFile(out);
 	saveResponseTransformationToFile(out);

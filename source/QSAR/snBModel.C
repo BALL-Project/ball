@@ -201,8 +201,11 @@ void SNBModel::saveToFile(string filename)
 		sel_features = data->getNoDescriptors();
 	}
 	
+	int no_y = mean_.size();
+	if(no_y==0) no_y = y_transformations_.Ncols(); // correct no because transformation information will have to by read anyway when reading this model later ...
+	
 	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tno of classes\ttrained?"<<endl;
-	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<no_substances_.size()<<"\t"<<trained<<"\n\n";
+	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<no_y<<"\t"<<centered_data<<"\t"<<no_substances_.size()<<"\t"<<trained<<"\n\n";
 
 	saveModelParametersToFile(out);
 	saveDescriptorInformationToFile(out);
@@ -258,7 +261,11 @@ void SNBModel::readFromFile(string filename)
 	readModelParametersFromFile(input);
 	readDescriptorInformationFromFile(input, no_descriptors, centered_data);
 	
-	if(!trained) return;
+	if(!trained) 
+	{
+		mean_.resize(0);
+		return;
+	}
 	
 	readClassInformationFromFile(input, no_classes);
 	

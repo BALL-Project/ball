@@ -163,8 +163,12 @@ void LDAModel::saveToFile(string filename)
 		sel_features = data->getNoDescriptors();
 	}
 	
+	
+	int no_y = sigma_.Ncols();
+	if(no_y==0) no_y = y_transformations_.Ncols(); // correct no because transformation information will have to by read anyway when reading this model later ...
+	
 	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tno of classes\ttrained?"<<endl;
-	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<no_substances_.size()<<"\t"<<trained<<"\n\n";
+	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<no_y<<"\t"<<centered_data<<"\t"<<no_substances_.size()<<"\t"<<trained<<"\n\n";
 
 	saveModelParametersToFile(out);
 	saveResponseTransformationToFile(out);
@@ -216,7 +220,11 @@ void LDAModel::readFromFile(string filename)
 	readModelParametersFromFile(input);
 	Model::readDescriptorInformationFromFile(input, no_descriptors, centered_data);
 	
-	if(!trained) return;
+	if(!trained) 
+	{
+		sigma_.ReSize(0,0);
+		return;
+	}
 	
 	readClassInformationFromFile(input, no_classes);
 	readMatrix(sigma_,input,no_descriptors,no_descriptors); 

@@ -91,8 +91,11 @@ void KernelModel::saveToFile(string filename)
 		sel_features = data->getNoDescriptors();
 	}
 	
+	int no_y = training_result_.Ncols();
+	if(no_y==0) no_y = y_transformations_.Ncols(); // correct no because transformation information will have to by read anyway when reading this model later ...
+	
 	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tcentered response?\tno of substances\ttrained?"<<endl;
-	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<descriptor_matrix_.Nrows()<<"\t"<<trained<<"\n\n";
+	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<no_y<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<descriptor_matrix_.Nrows()<<"\t"<<trained<<"\n\n";
 	
 	saveKernelParametersToFile(out);
 	saveModelParametersToFile(out);
@@ -135,7 +138,8 @@ void KernelModel::readFromFile(string filename)
 	int no_substances = line0.getField(6,"\t").toInt();
 	bool trained = line0.getField(7,"\t").toInt();
 	
-	training_result_.ReSize(no_substances,no_y);
+	if(trained) training_result_.ReSize(no_substances,no_y);
+	else training_result_.ReSize(0,0);
 	descriptor_names_.clear();
 	substance_names_.clear();
 	

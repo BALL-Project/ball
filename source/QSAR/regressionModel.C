@@ -109,11 +109,8 @@ void RegressionModel::saveToFile(string filename)
 	}	
 	
 	bool trained = 1;
-	if(training_result_.Nrows()==0)
-	{
-		//throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must have been trained before the results can be saved to a file!");
-		trained = 0;
-	}
+	if(training_result_.Nrows()==0) trained = 0;
+	
 	ofstream out(filename.c_str());
 	
 	const Matrix* coeffErrors = validation->getCoefficientStddev();
@@ -139,8 +136,11 @@ void RegressionModel::saveToFile(string filename)
 		sel_features = data->getNoDescriptors();
 	}
 	
+	int no_y = training_result_.Ncols();
+	if(no_y==0) no_y = y_transformations_.Ncols(); // correct no because transformation information will have to by read anyway when reading this model later ...
+	
 	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tcentered response?\ttrained?"<<endl;
-	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<trained<<"\n\n";
+	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<no_y<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<trained<<"\n\n";
 	
 	saveModelParametersToFile(out);
 	saveResponseTransformationToFile(out);
