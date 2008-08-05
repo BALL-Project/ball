@@ -465,7 +465,7 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationI
 {
 	list<DataItem*> pipe;
 	DataItem* item = model_item;
-	while(item->type()!=SDFInputDataItem::Type && item->type()!=CSVInputDataItem::Type)
+	while(item!=NULL && item->type()!=SDFInputDataItem::Type && item->type()!=CSVInputDataItem::Type)
 	{
 		pipe.push_front(item);
 		item=(*item->inEdges().begin())->sourceNode();

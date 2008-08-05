@@ -114,6 +114,8 @@ namespace BALL
 			
 				/** returns a const pointer to the matrix containing the standart deviations of all predicted coefficients */
 				const Matrix* getCoefficientStddev();
+				
+				void setCoefficientStddev(const Matrix* stddev);
 				//@}
 				
 	

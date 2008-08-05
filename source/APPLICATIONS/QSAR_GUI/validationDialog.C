@@ -59,8 +59,10 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item, ModelItem* model):
 	{
 		QLabel* label1 = new QLabel("fraction of data to be set aside for validation");
 		val_fraction_edit_ = new QLineEdit(this);
+		val_fraction_edit_->setText("0.25");
 		QLabel* label2 = new QLabel("number of nested cross validation folds");
 		n_of_ncv_folds_edit_ = new QLineEdit(this);
+		n_of_ncv_folds_edit_->setText("4");
 
 		layout1->addWidget(label1,1,1);
 		layout1->addWidget(val_fraction_edit_,1,2);

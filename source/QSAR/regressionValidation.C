@@ -628,6 +628,10 @@ const Matrix* RegressionValidation::getCoefficientStddev()
 }
 
 
+void RegressionValidation::setCoefficientStddev(const Matrix* stddev)
+{
+	coefficient_stddev_ = *stddev;	
+}
 
 
 /*

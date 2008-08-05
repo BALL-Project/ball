@@ -2,6 +2,7 @@
 #include <qwt_plot_curve.h>
 #include <qwt_plot_marker.h>
 #include <qwt_plot_zoomer.h>
+#include <qwt_plot_panner.h>
 
 #include <QColor>
 
@@ -17,6 +18,7 @@ CoefficientPlotter::CoefficientPlotter(ModelItem* model_item)
 	qwt_plot_->enableAxis(QwtPlot::yRight,0);
 	plot();
 	QwtPlotZoomer* zoomer = new QwtPlotZoomer(qwt_plot_->canvas());
+	//new QwtPlotPanner(qwt_plot_->canvas());
 }
 
 

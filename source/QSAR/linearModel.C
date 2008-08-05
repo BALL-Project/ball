@@ -16,6 +16,12 @@ LinearModel::~LinearModel()
 {
 }
 
+void LinearModel::operator=(const Model& m)
+{
+	Model::operator=(m);
+	validation->setCoefficientStddev(((LinearModel*) &m)->validation->getCoefficientStddev());
+}
+
 RowVector LinearModel::predict(const vector<double>& substance, bool transform)
 {
 	if(training_result_.Ncols()==0)

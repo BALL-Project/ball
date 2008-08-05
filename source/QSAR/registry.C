@@ -10,7 +10,7 @@ Registry::Registry()
 	default_kernel_par2 = -1;
 	default_k = 5;
 	default_no_permutations = 10;
-	default_no_boostrap_samples = 50;
+	default_no_boostrap_samples = 10;
 	default_valdition_fraction = 0.2;
 	default_nested_folds = 4;
 	default_correlation_cutoff = 0.97;

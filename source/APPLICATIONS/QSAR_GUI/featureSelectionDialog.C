@@ -2,6 +2,7 @@
 #include <iostream>
 #include <BALL/QSAR/exception.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/exception.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/mainWindow.h>
 #include <QtGui/QMessageBox>
 #include <QtGui/QPushButton>
 
@@ -17,6 +18,7 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 	
 	QVBoxLayout* main_layout = new QVBoxLayout(this);
 	QHBoxLayout* layout1 = new QHBoxLayout;
+	QHBoxLayout* layout2 = NULL;
 	QDialogButtonBox* buttons = new QDialogButtonBox(QDialogButtonBox::Cancel);
 	QPushButton* applyButton = new QPushButton("OK");
 	buttons->addButton(applyButton, QDialogButtonBox::ApplyRole);
@@ -24,8 +26,9 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 	checkbox_post_optimization_kernel_par_=0;
 	cutoff_ = 0;
 	edit_ = new QLineEdit(this);
+	edit2_ = NULL;
 	
-	if(fsitem->getType()>0 && fsitem->getType()!=4)
+	if(fsitem->getType()>0 && fsitem->getType()<4)
 	{
 		edit_->setText(String(reg->default_k).c_str());	
 		QLabel* klabel = new QLabel("k for k-fold cross validation",this);
@@ -69,12 +72,29 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 	{
 		double cor = reg->default_correlation_cutoff;
 		edit_->setText(String(cor).c_str());
-		QLabel* label;
+		QLabel* label = NULL;
 		if(fsitem->getType()==0) label = new QLabel("max correlation between features");
-		else label = new QLabel("min correlation with response");
+		else if(fsitem->getType()==4) label = new QLabel("min correlation with response");
+		else if(fsitem->getType()==5) 
+		{
+			QLabel* description = new QLabel("Remove each feature whose absolut coefficient value\nis smaller than d times its standard deviation.");
+			label = new QLabel("d = ",this);
+			edit_->setText("1");
+			main_layout->addWidget(description);
+			edit2_ = new QLineEdit(this);
+			QString t;
+			t.setNum(model->view()->data_scene->main_window->registry()->default_no_boostrap_samples);
+			edit2_->setText(t);
+			QLabel* label2 = new QLabel("number of bootstrap samples",this);
+			layout2 = new QHBoxLayout;
+			layout2->addWidget(label2);
+			layout2->addWidget(edit2_);
+		}
+	
 		layout1->addWidget(label);
 		layout1->addWidget(edit_);		
 		main_layout->addLayout(layout1);
+		if(layout2!=NULL) main_layout->addLayout(layout2);
 	}
 	
 	checkbox_post_optimization_model_par_ = new QCheckBox("optimize model parameters afterwards", this);
@@ -121,7 +141,7 @@ void FeatureSelectionDialog::applyInput()
 	fs_item_->post_optimization_model_par_ = post_optimization_model_par_;
 	fs_item_->post_optimization_kernel_par_ = post_optimization_kernel_par_;
 	
-	if(fs_item_->getType()>0 && fs_item_->getType()!=4) // no validation statistics for removal of colineal features
+	if(fs_item_->getType()>0 && fs_item_->getType()<4) // no validation statistics for removal of colineal features
 	{
 		k_ =  edit_->text().toInt(&ok);
 		fs_item_->setK(k_);
@@ -140,7 +160,8 @@ void FeatureSelectionDialog::applyInput()
 	{
 		fs_item_->cor_threshold_=edit_->text().toDouble(&ok);
 		statistic_ = -1;
-		k_ = 0;
+		if(fs_item_->getType()==5) fs_item_->setK(edit2_->text().toInt(&ok));
+		else k_ = 0;
 	}
 }
 

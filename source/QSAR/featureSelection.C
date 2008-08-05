@@ -4,6 +4,7 @@
 // 
 
 #include <BALL/QSAR/featureSelection.h>
+#include <newmatio.h>
 using namespace BALL::QSAR;
 
 
@@ -689,7 +690,7 @@ void FeatureSelection::implicitSelection(LinearModel& lm, int act, double d)
 	{
 		lm.descriptor_IDs_.front(); 
 		for(int i=1; i<=training_result->Nrows() && lm.descriptor_IDs_.hasNext(); i++)
-		{		
+		{	
 			int id=lm.descriptor_IDs_.next();
 			// consider only those descriptors that are already part of BOTH models AND that have a coefficient outside of 0 +/- stddev
 			if (  (model_->descriptor_IDs_.empty() || model_->descriptor_IDs_.contains(id))

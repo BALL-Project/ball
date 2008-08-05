@@ -49,6 +49,11 @@ FeatureSelectionItem::FeatureSelectionItem(int type, DataItemView* miv):
 			name_ = "Remove Low Response Correlation";
 			type_ = type;
 			break;
+			
+		case 5:
+			name_ = "Remove small coefficients";
+			type_ = type;
+			break;
 
 		default: throw InvalidFeatureSelectionItem(__FILE__,__LINE__);
 	}
@@ -140,6 +145,7 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 			else if(type_==1) name_="Forward Selection";
 			else if(type_==2) name_="Backward Selection";
 			else if(type_==3) name_="Stepwise Selection";
+			else if(type_==4) name_ = "Remove Low Response Correlation";
 		}
 		else if(line.hasPrefix("k_fold"))
 		{
@@ -305,6 +311,18 @@ bool FeatureSelectionItem::execute()
 		case 4:					
 			feature_selection_->removeLowResponseCorrelation(cor_threshold_);
 			break;
+			
+		case 5:
+		{
+			LinearModel* lm = ((LinearModel*)model_item_->model());
+			LinearModel* in_lm = ((LinearModel*)input_model_item_->model());
+			lm = in_lm; // copy training result !
+			lm->validation->calculateCoefficientStddev(k_,1);
+			//lm->validation->setCoefficientStddev(in_lm->validation->getCoefficientStddev());
+			cout<<*lm->validation->getCoefficientStddev()<<endl;
+			feature_selection_->implicitSelection(*lm,1,cor_threshold_);
+			break;
+		}
 			
 		default:
 			throw InvalidFeatureSelectionItem(__FILE__,__LINE__);

@@ -54,6 +54,7 @@ namespace BALL
 			
 				/** @name Private Attributes*/
 				QLineEdit* edit_;
+				QLineEdit* edit2_;
 				QLineEdit* cutoff_;
 				QCheckBox* checkbox_post_optimization_model_par_;
 				QCheckBox* checkbox_post_optimization_kernel_par_;

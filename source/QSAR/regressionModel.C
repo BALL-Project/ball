@@ -140,7 +140,7 @@ void RegressionModel::saveToFile(string filename)
 	}
 	
 	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tcentered response?\ttrained?"<<endl;
-	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<Y_.Ncols()<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<trained<<"\n\n";
+	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<data->getNoResponseVariables()<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<trained<<"\n\n";
 	
 	saveModelParametersToFile(out);
 	saveResponseTransformationToFile(out);
@@ -190,7 +190,8 @@ void RegressionModel::readDescriptorInformationFromFile(ifstream& input, int no_
 {
 	descriptor_names_.clear();
 	descriptor_transformations_.ReSize(2,no_descriptors);
-	training_result_.ReSize(no_descriptors,no_coefficients);
+	if(no_coefficients>0) training_result_.ReSize(no_descriptors,no_coefficients);
+	else training_result_.ReSize(0,0);
 	String line;
 	getline(input,line);  // skip comment line
 	
