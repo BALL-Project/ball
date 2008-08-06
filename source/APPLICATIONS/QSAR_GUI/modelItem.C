@@ -357,9 +357,7 @@ void ModelItem::init()
 	feature_plotter_ = NULL;
 	result_color_ = QColor(160,172,182);
 	setPixmap();
-	setAcceptsHoverEvents(1);
 	createActions();
-	hover_rect_ = NULL;
 }
 
 
@@ -818,45 +816,83 @@ void ModelItem::showPlotter()
 }
 
 
-void ModelItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
-{	
-	hover_rect_ = new QGraphicsRectItem(this);
-	stringstream s; s.str(entry_->name);
-	String name="";
-	for(int i=0;s;i++) // insert line-break after every second word
-	{
-		String word; s >> word;
-		if(word=="") break;
-		if(i>0) name+="\n";
-		name+=word+" ";
-		word="";
-		s >> word;
-		name+=word;
-	}
-	
-	QGraphicsTextItem label(name.c_str());
-	float width=label.boundingRect().width();
-	float x=event->pos().x();
-	//cout<<mapToScene(event->pos()).x()+width<<"  "<<view_->data_scene->width()<<endl;
-	float f0=mapToScene(event->pos()).x()+width+20;
-	if(f0>view_->data_scene->width())
-	{
-		x-=f0-view_->data_scene->width();
-	}
-	
-	hover_rect_->setPos(x,event->pos().y());
-	hover_label_ = new QGraphicsTextItem(name.c_str(),hover_rect_);
-	
-	hover_rect_->setRect(0,0,width,hover_label_->boundingRect().height());
-	QBrush brush; brush.setColor(QColor(230,230,22,110));
-	brush.setStyle(Qt::SolidPattern);
-	hover_rect_->setBrush(brush);
-}
-		
-void ModelItem::hoverLeaveEvent (QGraphicsSceneHoverEvent* /*event*/)
+BALL::String ModelItem::getMouseOverText()
 {
-	delete hover_rect_;
-	hover_rect_ = NULL;
+	String message="";
+	bool b=(view_->name=="view");
+	
+	if(!b)
+	{
+		stringstream s; s.str(entry_->name);
+		for(int i=0;s;i++) // insert line-break after every second word
+		{
+			String word; s >> word;
+			if(word=="") break;
+			if(i>0) message+="\n";
+			message+=word+" ";
+			word="";
+			s >> word;
+			message+=word;
+		}
+	}
+	else message=entry_->name;
+	
+	if(no_training_)
+	{
+		message+="\n  training deactivated";
+		return message;
+	}
+	
+	if(b && entry_->parameterNames.size()>0)
+	{
+		message+="\n  ";
+		const vector<double>& par = model_->getParameters();
+		SortedList<int>& opt_par = entry_->optimizableParameters;
+		SortedList<int>::iterator it = opt_par.begin();
+		for(uint i=0; i<entry_->parameterNames.size()&&i<par.size(); i++)
+		{
+			message+=entry_->parameterNames[i];
+			if(!done_&&optimize_model_parameters&&it!=opt_par.end()&&*it==(int)i)
+			{
+				message+=" will be optimized by cross validation";
+				it++;
+			}
+			else 
+			{
+				String t(par[i]);
+				int index = t.find_last_not_of("0");
+				if(index!=string::npos)
+				{
+					if(index+1<=t.size()&&t[index]!='.') index++;
+					message+="="+t.substr(0,index);
+				}
+				else message+=t;
+			}
+			if(i<par.size()-1) message+="\n";
+		}
+	}
+	if(b && entry_->kernel)
+	{
+		message+="\n  ";
+		KernelModel* km = (KernelModel*) model_;
+		if(km->kernel->type==1) message+="polyn. kernel, ";
+		else if(km->kernel->type==2) message+="RBF kernel, ";
+		else if(km->kernel->type==3) message+="sigm. kernel, ";
+		if(done_||!optimize_kernel_parameters)
+		{
+			if(km->kernel->type==1) message+="degree="+String(km->kernel->par1);
+			else if(km->kernel->type==2) message+="gamma="+String(km->kernel->par1);
+			else if(km->kernel->type==3) message+="c="+String(km->kernel->par1)+", d="+String(km->kernel->par2);
+		}	
+		else
+		{
+			if(km->kernel->type==1) message+="degree ";
+			else if(km->kernel->type==2) message+="gamma ";
+			else if(km->kernel->type==3) message+="c and d ";
+			message+="will be optimized by grid search";
+		}	
+	}
+	return message;	
 }
 
 

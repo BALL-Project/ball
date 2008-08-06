@@ -1602,3 +1602,15 @@ void MainWindow::submitToCluster(String configfile)
 	system(call.c_str());
 }
 
+
+BALL::String BALL::VIEW::valueToString(double value)
+{
+	BALL::String t(value);
+	int index = t.find_last_not_of("0");
+	if(index!=string::npos)
+	{
+		if(index+1<=t.size()&&t[index]!='.') index++;
+		t=t.substr(0,index);
+	}
+	return t;
+}

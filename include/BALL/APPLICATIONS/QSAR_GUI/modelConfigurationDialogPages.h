@@ -6,6 +6,7 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QCheckBox>
 #include <QtGui/QComboBox>
+#include <QtGui/QGroupBox>
 
 #include <BALL/APPLICATIONS/QSAR_GUI/modelConfigurationDialog.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/connectionManager.h>
@@ -73,9 +74,12 @@ namespace BALL
 		*/
 		class OptimizePage : public QWidget
 		{
+			Q_OBJECT
+					
 			public:
 				OptimizePage(ModelConfigurationDialog* parent);
 				OptimizePage();
+				QCheckBox* enable_checkbox;
 				std::vector<QLineEdit*> edits_;
 				std::vector<QLabel*> labels_;
 				QLineEdit* edit_;
@@ -88,6 +92,13 @@ namespace BALL
 				//QLineEdit* kernel_k_edit_;
 				QLineEdit* parameter1_edit_;
 				QLineEdit* parameter2_edit_;
+				
+			private:
+				/** used to activate/deactivate everthing if checkbox is clicked */
+				list<QGroupBox*> groupboxes;
+				
+			private slots:
+				void enableCheckboxChange();
 		};
 
 		/** @class ModelPropertiesPage

@@ -1,6 +1,5 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/modelConfigurationDialogPages.h>
 #include <QtGui/QLabel>
-#include <QtGui/QGroupBox>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QLineEdit>
@@ -239,6 +238,12 @@ OptimizePage::OptimizePage(ModelConfigurationDialog* parent)
 	if (parent->isOptimizable || parent->entryHasKernel)
 	{
 		QGroupBox* kGroup = new QGroupBox(tr("k"),this);
+		groupboxes.push_back(kGroup);
+		
+		enable_checkbox = new QCheckBox("enable optimizations",this);
+		mainLayout->addWidget(enable_checkbox);
+		connect(enable_checkbox,SIGNAL(clicked()),this,SLOT(enableCheckboxChange()));
+		
 		QHBoxLayout* k_layout = new QHBoxLayout();
 		QLabel* label = new QLabel("k for k-fold cross-validation",this);
 		k_edit_ = new QLineEdit(this); k_edit_->setMinimumWidth(50);
@@ -248,10 +253,11 @@ OptimizePage::OptimizePage(ModelConfigurationDialog* parent)
 		kGroup->setLayout(k_layout);	
 		mainLayout->addWidget(kGroup);
 	}
-
+	
 	if (parent->isOptimizable)
 	{
 		QGroupBox *modelConfigGroup = new QGroupBox(tr("Model Parameters to be optimized:"),this);
+		groupboxes.push_back(modelConfigGroup);
 		QGridLayout* layout1 = new QGridLayout;
 	
 		parent->entry()->optimizableParameters.front();
@@ -280,6 +286,7 @@ OptimizePage::OptimizePage(ModelConfigurationDialog* parent)
 	if (parent->entryHasKernel)	
 	{		
 		QGroupBox* kernelConfigGroup = new QGroupBox(tr("Optimize Kernel Parameters"),this);
+		groupboxes.push_back(kernelConfigGroup);
 	
 		QGridLayout *layout2 = new QGridLayout();
 		QLabel* search_label1 = new QLabel(tr("number of steps for grid search:"),this);
@@ -317,7 +324,19 @@ OptimizePage::OptimizePage(ModelConfigurationDialog* parent)
 		mainLayout->addLayout(kernelLayout);
 	}
 	setLayout(mainLayout);	
+	enableCheckboxChange();
  }
+ 
+ 
+void OptimizePage::enableCheckboxChange()
+{
+	bool enable=enable_checkbox->isChecked();
+	
+	for(list<QGroupBox*>::iterator it=groupboxes.begin();it!=groupboxes.end();it++)
+	{
+		(*it)->setEnabled(enable);
+	}
+}
 
 
 ModelPropertiesPage::ModelPropertiesPage(ModelConfigurationDialog* parent)

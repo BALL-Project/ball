@@ -60,6 +60,7 @@ namespace BALL
 				void removeFromPipeline();
 				void setQualityIncreaseCutoff(double cutoff);		
 				
+				BALL::String getMouseOverText();
 				
 			private:
 			

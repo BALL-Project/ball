@@ -90,7 +90,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 		main_window->dragged_item=NULL;
 		return;
 	}
-	cout<<"test0"<<endl;
+
 	// if the "drag" was very short, is was no real drag at all, so there is nothing being dropped!
 	/// -> process mouse clicks instead of drops :
 	if(main_window->drag_start_time.now().getSeconds()-main_window->drag_start_time.getSeconds() < main_window->min_drag_time) 
@@ -151,11 +151,10 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 			main_window->dragged_item->setPos(pos.x(),pos.y());
 		}
 		main_window->dragged_item=NULL;
-		return;
 	}
 	
 	/// create SDFInputDataItem and CSVInputDataItem
-	if ((event->mimeData()->hasUrls()))
+	else if ((event->mimeData()->hasUrls()))
 	{
 		QList<QUrl> urlList = event->mimeData()->urls();
 		QString path;
@@ -288,7 +287,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				item = main_window->createModel(item,csv_input_item_at_pos);	
 				pos = csv_input_item_at_pos->pos();
 			}
-				
+	
 			item->setView(view);
 			addItem(item);
 			item->setPos(pos.x(),pos.y());

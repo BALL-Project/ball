@@ -371,6 +371,14 @@ void ModelConfigurationDialog::applyKernelParameters()
 void ModelConfigurationDialog::applyOptimizedParameters()
 {
 	bool ok = false;
+	
+	// check whether user wants the current model to be optimized.
+	if(!optimizePage_->enable_checkbox->isChecked())
+	{
+		model_item_->optimize_model_parameters=false;
+		model_item_->optimize_kernel_parameters=false;
+		return;
+	}
 
 	if(isOptimizable || entryHasKernel)
 	{

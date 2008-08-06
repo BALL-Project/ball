@@ -35,6 +35,10 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		
+		BALL::String valueToString(double value);
+		
+		
 		class ModelConfigurationDialog;
 
 		/** @class MainWindow

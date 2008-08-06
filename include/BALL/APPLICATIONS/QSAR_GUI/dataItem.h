@@ -10,6 +10,7 @@
 
 #include <BALL/APPLICATIONS/QSAR_GUI/edge.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/dataItemView.h>
+#include <BALL/DATATYPE/string.h>
 #include <set>
 
 namespace BALL
@@ -147,6 +148,11 @@ namespace BALL
 			
 			void adjustEdges();
 			
+			/** returns the help message that is to be displayed by a mouse-over effect.\n
+			The default is an empty string, so that no mouse-over help would be shown. 
+			Overloading functions in derived classed can be used to show the desired message for each item. */
+			virtual BALL::String getMouseOverText();
+			
 			
 		public slots:
 			/** this slot calls change() and updates the QGraphicsScene afterwards */
@@ -154,14 +160,16 @@ namespace BALL
 		
 		
 		protected:
-			/** @name Protected Attributes */
-
+			
+			/** @name Protected Accessors */
 			QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 			void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 			
 			virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
 			
+			
+			/** @name Protected Attributes */
 			/**the item's view*/
 			DataItemView* view_;
 			
@@ -198,6 +206,20 @@ namespace BALL
 		
 			/** @name Private Attributes*/
 			QPointF newPos_;
+			
+			/** a label for this item to be displayed as a mouse-over effect */
+			QGraphicsTextItem* hover_label_;
+				
+			/** a rect around hover_label_ */
+			QGraphicsRectItem* hover_rect_;
+			
+			/** @name Private Accessors*/
+			void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
+			void hoverLeaveEvent (QGraphicsSceneHoverEvent* event);
+			void hoverMoveEvent(QGraphicsSceneHoverEvent* event);
+			
+			/** initializes those members for which this can be done identically, no matter from which constructors this item is created*/
+			void init();
 			
 			friend class InputPartitionItem;
 		};

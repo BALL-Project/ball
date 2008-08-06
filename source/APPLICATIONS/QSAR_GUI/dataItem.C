@@ -16,16 +16,10 @@ DataItem::DataItem():
 	name_(""),
 	saved_as_("")
 {
-	setFlag(ItemIsMovable);
-	setFlag(ItemIsSelectable);
-	setFlag(ItemIsFocusable);
-	setZValue(1);
 	QPixmap pm = QPixmap(width_,height_);
 	pm.fill(Qt::red);
 	setPixmap(pm);
-	setToolTip(name_);
-	done_ = 0;
-	result_ = "";
+	init();
 }
 
 DataItem::DataItem(DataItemView* view):
@@ -35,17 +29,10 @@ DataItem::DataItem(DataItemView* view):
 	name_(""),
 	saved_as_("")
 {
-	setFlag(ItemIsMovable);
-	setFlag(ItemIsSelectable);
-	setFlag(ItemIsFocusable);
-	setToolTip(QString(name_));
-	setZValue(1);
 	QPixmap pm = QPixmap(width_,height_);
 	pm.fill(Qt::white);
 	setPixmap(pm);
-	setToolTip(name_);
-	done_ = 0;
-	result_ = "";
+	init();
 }
 
 DataItem::DataItem(DataItemView* view, QPixmap pm): 
@@ -55,15 +42,21 @@ DataItem::DataItem(DataItemView* view, QPixmap pm):
 	name_(""),
 	saved_as_("")
 {
+	setPixmap(pm);
+	init();
+}
+
+void DataItem::init()
+{
 	setFlag(ItemIsMovable);
 	setFlag(ItemIsSelectable);
 	setFlag(ItemIsFocusable);
-	setToolTip(QString(name_));
 	setZValue(1);
-	setPixmap(pm);
 	setToolTip(name_);
 	done_ = 0;
 	result_ = "";
+	hover_rect_ = NULL;
+	setAcceptsHoverEvents(1);	
 }
 
 DataItem::~DataItem()
@@ -121,7 +114,6 @@ QPainterPath DataItem::shape() const
 {
 	QPainterPath path;
 	path.addRect(-2,-2, height_+2, width_+2);
-	//path.addText (0.0, 0.0,QFont(), name_);
 	return path;
 }
 
@@ -302,6 +294,7 @@ void DataItem::changeSlot()
 	view_->data_scene->update();
 }
 
+
 void DataItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
 	QByteArray itemData;
@@ -320,5 +313,50 @@ void DataItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	itemChange(ItemPositionChange, pos());
 	QGraphicsItem::mousePressEvent(event);
 }
+
+BALL::String DataItem::getMouseOverText()
+{
+	// as default return an empty string, so that no mouse-over help is shown.
+	String s="";
+	return s;
+}
+
+void DataItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
+{	
+	String message=getMouseOverText();
+	if(message=="") return;
+	
+	hover_rect_ = new QGraphicsRectItem(this);
+	QGraphicsTextItem label(message.c_str());
+	float width=label.boundingRect().width();
+	float x=event->pos().x();
+	//cout<<mapToScene(event->pos()).x()+width<<"  "<<view_->data_scene->width()<<endl;
+	float f0=mapToScene(event->pos()).x()+width+20;
+	if(f0>view_->data_scene->width())
+	{
+		x-=f0-view_->data_scene->width();
+	}
+	
+	hover_rect_->setPos(x+10,event->pos().y()+10);
+	hover_label_ = new QGraphicsTextItem(message.c_str(),hover_rect_);
+	
+	hover_rect_->setRect(0,0,width,hover_label_->boundingRect().height());
+	QBrush brush; brush.setColor(QColor(230,230,22,110));
+	brush.setStyle(Qt::SolidPattern);
+	hover_rect_->setBrush(brush);
+}
+
+void DataItem::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
+{
+	if(event->type()==QEvent::Drop) cout<<"TEST"<<endl;
+	if(hover_rect_!=NULL) hover_rect_->setPos(event->pos().x()+10,event->pos().x()+10);
+}
+		
+void DataItem::hoverLeaveEvent (QGraphicsSceneHoverEvent* /*event*/)
+{
+	delete hover_rect_;
+	hover_rect_ = NULL;
+}
+
 
 
