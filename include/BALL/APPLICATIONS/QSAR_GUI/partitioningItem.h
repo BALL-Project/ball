@@ -43,9 +43,6 @@ namespace BALL
 				bool isDone();
 				
 
-			protected:
-				void mousePressEvent(QGraphicsSceneMouseEvent *event);
-
 			private:
 				InputDataItem* input_;
 				

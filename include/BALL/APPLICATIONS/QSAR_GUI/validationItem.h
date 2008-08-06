@@ -108,7 +108,6 @@ namespace BALL
 				* QT event handler \n
 				* defines how the item deals with mouse clicks
 				*/
-				void mousePressEvent(QGraphicsSceneMouseEvent *event);
 				void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 				void initName();
 				virtual void setValidationInput();

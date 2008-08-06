@@ -70,7 +70,6 @@ namespace BALL
 				list<CSVInputDataItem*> additional_descriptors_;
 				
 			protected:
-				void mousePressEvent(QGraphicsSceneMouseEvent *event);
 				void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 				
 				friend class DataItemScene;

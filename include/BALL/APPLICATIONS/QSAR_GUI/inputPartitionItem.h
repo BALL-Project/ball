@@ -48,8 +48,6 @@ namespace BALL
 				int fold_ID_;
 				
 				String output_filename_;
-				
-				void mousePressEvent(QGraphicsSceneMouseEvent *event);
 		
 		};
 		

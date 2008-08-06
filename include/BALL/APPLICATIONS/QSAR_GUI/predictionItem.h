@@ -65,7 +65,6 @@ namespace BALL
 				
 		
 			protected:
-				void mousePressEvent(QGraphicsSceneMouseEvent *event);
 				void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 				
 				//overlaods ValidationItem::setValidationInput()

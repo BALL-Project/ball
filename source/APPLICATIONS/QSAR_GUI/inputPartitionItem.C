@@ -124,24 +124,3 @@ void InputPartitionItem::addToPipeline()
 {
 	view_->data_scene->main_window->partition_pipeline_.insert(this);	
 }
-
-
-void InputPartitionItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-	QByteArray itemData;
-	QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-	QDrag *drag = new QDrag(event->widget());
-
-	/// set member-pointer of main_window to the current object in order to gain access to this object from another widget 
-	view_->data_scene->main_window->dragged_item = this;
-	view_->data_scene->main_window->drag_source = view_->name;
-
-	QMimeData *mimeData = new QMimeData;
-	mimeData->setData("application/x-inputpartitemdata", itemData);
-	drag->setMimeData(mimeData);
-	drag->setPixmap(pixmap());
-	drag->setHotSpot(QPoint(0, 0));
-	drag->start();
-	itemChange(ItemPositionChange, pos());
-	QGraphicsItem::mousePressEvent(event);
-}

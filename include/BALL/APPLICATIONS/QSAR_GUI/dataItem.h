@@ -160,6 +160,8 @@ namespace BALL
 
 			void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 			
+			virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+			
 			/**the item's view*/
 			DataItemView* view_;
 			

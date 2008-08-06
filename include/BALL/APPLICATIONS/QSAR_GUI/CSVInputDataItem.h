@@ -59,7 +59,6 @@ namespace BALL
 				string sep_;
 
 			protected:
-				void mousePressEvent(QGraphicsSceneMouseEvent *event);
 				void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 		
 		};

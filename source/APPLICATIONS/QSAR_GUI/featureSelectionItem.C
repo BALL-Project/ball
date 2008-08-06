@@ -341,25 +341,6 @@ bool FeatureSelectionItem::execute()
 	return 1;
 }
 
-void FeatureSelectionItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{	
-	/// set member-pointer of main_window to the current object in order to gain access to this object from another widget 
-	view_->data_scene->main_window->dragged_item = this;
-	view_->data_scene->main_window->drag_source = view_->name;
-
-	QByteArray itemData;
-    QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-	QDrag *drag = new QDrag(event->widget());
-
-	QMimeData *mimeData = new QMimeData;
-	mimeData->setData("application/x-fsitemdata", itemData);
-	drag->setMimeData(mimeData);
-	drag->setPixmap(this->pixmap());
-	drag->setHotSpot(QPoint(0, 0));
-	drag->start();
-	itemChange(ItemPositionChange, pos());
-	QGraphicsItem::mousePressEvent(event);
-}
 
 int FeatureSelectionItem::numberOfFeatures()
 {

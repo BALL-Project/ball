@@ -82,13 +82,19 @@ QPointF DataItemScene::getOffset(QPointF& origin, DataItem* item)
 
 void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 {
-	if(view->name != "view") return;
+	uint type = 0;
+	if(main_window->dragged_item!=NULL) type=main_window->dragged_item->type();
 	
+	if(view->name!="view" || ((main_window->dragged_item==NULL||type<QVariant::UserType) && !event->mimeData()->hasUrls())) 
+	{
+		main_window->dragged_item=NULL;
+		return;
+	}
+	cout<<"test0"<<endl;
 	// if the "drag" was very short, is was no real drag at all, so there is nothing being dropped!
 	/// -> process mouse clicks instead of drops :
 	if(main_window->drag_start_time.now().getSeconds()-main_window->drag_start_time.getSeconds() < main_window->min_drag_time) 
 	{
-		int type = main_window->dragged_item->type();
 		if(type==PredictionItem::Type)
 		{
 			((PredictionItem*)main_window->dragged_item)->showPredictionPlotter();
@@ -106,247 +112,51 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 // 		{
 // 			((ValidationItem*)main_window->dragged_item)->showPlotter();
 // 		}
+		main_window->dragged_item=NULL;
 		return;
 	}
 	
 	QPointF pos = event->scenePos();
 	
-	/// if more than one item is selected, move all those items and do nothing else
-	QList<QGraphicsItem*> sel_items = selectedItems();
-	if(sel_items.size()>1)
+	/// move DataItems within pipeline-scene (if no drop from another DataItemScene)
+	if (main_window->drag_source==view->name)
 	{
-		QPointF drag_start = main_window->dragged_item->pos();
-		QPointF translation = pos-drag_start;
-		for(QList<QGraphicsItem*>::iterator it=sel_items.begin(); it!=sel_items.end(); it++)
+		// if more than one item is selected, move all those items and do nothing else
+		QList<QGraphicsItem*> sel_items = selectedItems();
+		if(sel_items.size()>1)
 		{
-			(*it)->setPos((*it)->pos()+translation);
-			set<Edge*> edges=((DataItem*)(*it))->inEdges();
-			for(set<Edge*>::iterator it2=edges.begin(); it2!=edges.end();it2++)
+			QPointF drag_start = main_window->dragged_item->pos();
+			QPointF translation = pos-drag_start;
+			for(QList<QGraphicsItem*>::iterator it=sel_items.begin(); it!=sel_items.end(); it++)
 			{
-				(*it2)->adjust();
+				(*it)->setPos((*it)->pos()+translation);
+				set<Edge*> edges=((DataItem*)(*it))->inEdges();
+				for(set<Edge*>::iterator it2=edges.begin(); it2!=edges.end();it2++)
+				{
+					(*it2)->adjust();
+				}
+				edges=((DataItem*)(*it))->outEdges();
+				for(set<Edge*>::iterator it2=edges.begin(); it2!=edges.end();it2++)
+				{
+					(*it2)->adjust();
+				}
 			}
-			edges=((DataItem*)(*it))->outEdges();
-			for(set<Edge*>::iterator it2=edges.begin(); it2!=edges.end();it2++)
-			{
-				(*it2)->adjust();
-			}
+			QGraphicsScene::dropEvent(event);
+			update();
+			view->update();
+			return;			
 		}
-		QGraphicsScene::dropEvent(event);
-		update();
-		view->update();
-		return;			
+		else  // move only one time
+		{
+			main_window->dragged_item->setPos(pos.x(),pos.y());
+		}
+		main_window->dragged_item=NULL;
+		return;
 	}
 	
-	/// move DataItems within pipeline-scene
-	if (event->mimeData()->hasFormat("application/x-csvinputitemdata") || 	
-		event->mimeData()->hasFormat("application/x-predictiondata") ||
-		event->mimeData()->hasFormat("application/x-predictiondata") ||
-		event->mimeData()->hasFormat("application/x-partitemdata") ||
-	        event->mimeData()->hasFormat("application/x-inputpartitemdata"))
+	/// create SDFInputDataItem and CSVInputDataItem
+	if ((event->mimeData()->hasUrls()))
 	{
-		main_window->dragged_item->setPos(pos.x(),pos.y());
-	}
-
-	/// create or move ModelItem
-	else if (event->mimeData()->hasFormat("application/x-modelitemdata")) 
-	{
-		if(view->name!="view")
-		{
-			return;
-		}
-
-		ModelItem* item;
-		SDFInputDataItem* input_item_at_pos = qgraphicsitem_cast<SDFInputDataItem *>(itemAt(pos));
-		CSVInputDataItem* csv_input_item_at_pos = qgraphicsitem_cast<CSVInputDataItem *>(itemAt(pos));
-		
-		/// create a new model that is to be placed into the view-widget
-		if(main_window->drag_source=="model_list")
-		{
-			item = (ModelItem*)main_window->dragged_item;
-			
-			try
-			{
-				
-				if(!input_item_at_pos && !csv_input_item_at_pos)
-				{
-					//main_window->addDisconnectedItem(item);
-					QMessageBox::information(view," ","Please drag the Model onto a SD- or CSV-item within your pipeline!");
-					return;	
-				}
-				
-				if(input_item_at_pos)
-				{
-					item = main_window->createModel(item,input_item_at_pos);
-					pos = input_item_at_pos->pos();
-				}
-				else if(csv_input_item_at_pos)
-				{
-					item = main_window->createModel(item,csv_input_item_at_pos);	
-					pos = csv_input_item_at_pos->pos();
-				}
-					
-				item->setView(view);
-				addItem(item);
-				item->setPos(pos.x(),pos.y());
-				item->setPos(pos + getOffset(pos,item));
-				if (input_item_at_pos)
-				{
-					Edge* edge = new Edge(input_item_at_pos, item);
-					addItem(edge);
-					item->addToPipeline();
-				}
-				else if(csv_input_item_at_pos)
-				{
-					Edge* edge = new Edge(csv_input_item_at_pos, item);
-					addItem(edge);
-					item->addToPipeline();
-				}
-			}
-			catch(InvalidModelItem)
-			{
-			}
-		}
-		
-		/// if a ModelItem is to be moved WITHIN the view-widget:
-		else if(main_window->drag_source=="view")
-		{
-			item = (ModelItem*)main_window->dragged_item;
-			item->setPos(pos.x(),pos.y());
-		}
-		main_window->drag_source = "view"; // set back to "default"
-	}
-
-	/// create or move feature selection item
-	else if (event->mimeData()->hasFormat("application/x-fsitemdata")) 
-	{
-		if(view->name!="view")
-		{
-			return;
-		}
-
-		FeatureSelectionItem* item;
-		ModelItem* model_item_at_pos = qgraphicsitem_cast<ModelItem *>(itemAt(pos));
-		
-		// create a new feature selection item that is to be placed into the view-widget
-		if(main_window->drag_source=="fs_list")
-		{
-			item = (FeatureSelectionItem*)main_window->dragged_item;
-			
-			//create a FeatureSelectionItem that is connected to a ModelItem
-			ModelItem* model_copy = NULL;
-			try
-			{
-				if (!model_item_at_pos)
-				{
-					//item = main_window->createFeatureSelection(item);
-					//main_window->addDisconnectedItem(item);
-					QMessageBox::information(view," ","Please drag the FeatureSelection onto a Model within your pipeline!");
-					return;	
-				}
-		
-				model_copy = new ModelItem(*model_item_at_pos);				
-				model_copy->setInputDataItem(model_item_at_pos->inputDataItem());
-				item = main_window->createFeatureSelection(item, model_copy, model_item_at_pos);
-				pos = model_item_at_pos->pos();
-				item->setView(view);
-				addItem(item);
-				pos += getOffset(pos,item);
-				item->setPos(pos);
-				
-				model_copy->setSaveAttribute(false);
-				addItem(model_copy);
-				model_copy->addToPipeline();	
-				model_copy->setPos(pos + getOffset(pos,model_copy));
-		
-				Edge* edge = new Edge(item, model_copy);
-				addItem(edge);
-				Edge* edge2 = new Edge(model_item_at_pos, item);
-				addItem(edge2);
-				item->addToPipeline();
-			}
-
-			catch(InvalidFeatureSelectionItem)
-			{
-				delete model_copy;
-			}	
-		}
-
-		else if(main_window->drag_source=="view")
-		{
-			item = (FeatureSelectionItem*)main_window->dragged_item;
-			item->setPos(pos.x(),pos.y());
-		}
-		main_window->drag_source = "view"; // set back to "default"
-     	}
-
-	/// create or move validation item
-	else if (event->mimeData()->hasFormat("application/x-validationdata") || event->mimeData()->hasFormat("application/x-EXTvalidationdata")) 
-	{
-         	if(view->name!="view")
-		{
-			return;
-		}
-
-		ValidationItem* item;
-		ModelItem* model_item_at_pos = qgraphicsitem_cast<ModelItem *>(itemAt(pos));
-		
-		// create a new validation item that is to be placed into the view-widget
-		if(main_window->drag_source=="val_list")
-		{
-			item = (ValidationItem*)main_window->dragged_item;
-				
-			try
-			{
-				if (!model_item_at_pos)
-				{
-					//item = main_window->createValidation(item);
-					//main_window->addDisconnectedItem(item);
-					QMessageBox::information(view," ","Please drag the Validation onto a Model within your pipeline!");
-					return;
-				}
-				if(item->getValidationType()==6 && !model_item_at_pos->getRegistryEntry()->regression)
-				{
-					QMessageBox::information(view," ","Calculation of standard deviations of coefficients can only be done for regression models!");
-					return;
-				}
-								
-				item = main_window->createValidation(item, model_item_at_pos);
-				item->setView(view);
-				pos = model_item_at_pos->pos();
-				addItem(item);
-				item->setPos(pos + getOffset(pos,item));
-				Edge* edge = new Edge(model_item_at_pos, item);
-				addItem(edge);
-				item->addToPipeline();
-				if(event->mimeData()->hasFormat("application/x-EXTvalidationdata"))
-				{
-				   createExternalValPipeline(model_item_at_pos,item);
-				}
-			}
-			catch(InvalidValidationItem)
-			{
-// 				delete item;
-			}
-
-		}
-		
-		else if(main_window->drag_source=="view")
-		{
-			item = (ValidationItem*)main_window->dragged_item;
-			item->setPos(pos.x(),pos.y());
-		}
-		
-		main_window->drag_source = "view"; // set back to "default"
-     	} 
-
-	/// drag and drop from filebrowser to mainview
-	else if ((event->mimeData()->hasUrls()))
-	{
-		if(view->name!="view")
-		{
-			return;
-		}
-
 		QList<QUrl> urlList = event->mimeData()->urls();
 		QString path;
 		
@@ -368,7 +178,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 					if (match_sd.exactMatch(path))
 					{
 						SDFInputDataItem* item; 
-					 	item = main_window->createSDFInput(path);
+						item = main_window->createSDFInput(path);
 
 						ModelItem* model_item_at_pos = qgraphicsitem_cast<ModelItem*>(itemAt(pos)); 
 						
@@ -447,8 +257,153 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				{
 				}
 			}
-		} 
+		}
 	}
+
+	/// create ModelItem
+	else if (type==ModelItem::Type) 
+	{
+		ModelItem* item;
+		SDFInputDataItem* input_item_at_pos = qgraphicsitem_cast<SDFInputDataItem *>(itemAt(pos));
+		CSVInputDataItem* csv_input_item_at_pos = qgraphicsitem_cast<CSVInputDataItem *>(itemAt(pos));
+		
+		if(main_window->drag_source!="model_list") return;
+		
+		item = (ModelItem*)main_window->dragged_item;
+		try
+		{
+			if(!input_item_at_pos && !csv_input_item_at_pos)
+			{
+				//main_window->addDisconnectedItem(item);
+				QMessageBox::information(view," ","Please drag the Model onto a SD- or CSV-item within your pipeline!");
+				return;	
+			}
+			if(input_item_at_pos)
+			{
+				item = main_window->createModel(item,input_item_at_pos);
+				pos = input_item_at_pos->pos();
+			}
+			else if(csv_input_item_at_pos)
+			{
+				item = main_window->createModel(item,csv_input_item_at_pos);	
+				pos = csv_input_item_at_pos->pos();
+			}
+				
+			item->setView(view);
+			addItem(item);
+			item->setPos(pos.x(),pos.y());
+			item->setPos(pos + getOffset(pos,item));
+			if (input_item_at_pos)
+			{
+				Edge* edge = new Edge(input_item_at_pos, item);
+				addItem(edge);
+				item->addToPipeline();
+			}
+			else if(csv_input_item_at_pos)
+			{
+				Edge* edge = new Edge(csv_input_item_at_pos, item);
+				addItem(edge);
+				item->addToPipeline();
+			}
+		}
+		catch(InvalidModelItem)
+		{
+		}
+		main_window->drag_source = "view"; // set back to "default"
+	}
+
+	/// create feature selection item
+	else if (type==FeatureSelectionItem::Type) 
+	{
+		FeatureSelectionItem* item;
+		ModelItem* model_item_at_pos = qgraphicsitem_cast<ModelItem *>(itemAt(pos));
+		
+		if(main_window->drag_source!="fs_list") return;
+		
+		item = (FeatureSelectionItem*)main_window->dragged_item;
+		
+		//create a FeatureSelectionItem that is connected to a ModelItem
+		ModelItem* model_copy = NULL;
+		try
+		{
+			if (!model_item_at_pos)
+			{
+				QMessageBox::information(view," ","Please drag the FeatureSelection onto a Model within your pipeline!");
+				return;	
+			}
+			model_copy = new ModelItem(*model_item_at_pos);				
+			model_copy->setInputDataItem(model_item_at_pos->inputDataItem());
+			item = main_window->createFeatureSelection(item, model_copy, model_item_at_pos);
+			pos = model_item_at_pos->pos();
+			item->setView(view);
+			addItem(item);
+			pos += getOffset(pos,item);
+			item->setPos(pos);
+			
+			model_copy->setSaveAttribute(false);
+			addItem(model_copy);
+			model_copy->addToPipeline();	
+			model_copy->setPos(pos + getOffset(pos,model_copy));
+	
+			Edge* edge = new Edge(item, model_copy);
+			addItem(edge);
+			Edge* edge2 = new Edge(model_item_at_pos, item);
+			addItem(edge2);
+			item->addToPipeline();
+		}
+		catch(InvalidFeatureSelectionItem)
+		{
+			delete model_copy;
+		}
+		main_window->drag_source = "view"; // set back to "default"
+     	}
+
+	/// create validation item
+	else if (type==ValidationItem::Type) 
+	{
+		ValidationItem* item;
+		ModelItem* model_item_at_pos = qgraphicsitem_cast<ModelItem *>(itemAt(pos));
+		
+		if(main_window->drag_source!="val_list") return;
+		
+		item = (ValidationItem*)main_window->dragged_item;
+		// create a new validation item that is to be placed into the view-widget	
+		try
+		{
+			if (!model_item_at_pos)
+			{
+				//item = main_window->createValidation(item);
+				//main_window->addDisconnectedItem(item);
+				QMessageBox::information(view," ","Please drag the Validation onto a Model within your pipeline!");
+				return;
+			}
+			if(item->getValidationType()==6 && !model_item_at_pos->getRegistryEntry()->regression)
+			{
+				QMessageBox::information(view," ","Calculation of standard deviations of coefficients can only be done for regression models!");
+				return;
+			}
+							
+			item = main_window->createValidation(item, model_item_at_pos);
+			item->setView(view);
+			pos = model_item_at_pos->pos();
+			addItem(item);
+			item->setPos(pos + getOffset(pos,item));
+			Edge* edge = new Edge(model_item_at_pos, item);
+			addItem(edge);
+			item->addToPipeline();
+			if(item->getValidationType()==5)
+			{
+				createExternalValPipeline(model_item_at_pos,item);
+			}
+		}
+		catch(InvalidValidationItem)
+		{
+			//delete item;
+		}
+
+		main_window->drag_source = "view"; // set back to "default"
+     	} 
+
 	else 
 	{	
 		event->ignore();
@@ -456,7 +411,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 	QGraphicsScene::dropEvent(event);
  	main_window->updatePipelineScene();
  	view->update();
-	
+	main_window->dragged_item=NULL;
 }  // END of  void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 
 
