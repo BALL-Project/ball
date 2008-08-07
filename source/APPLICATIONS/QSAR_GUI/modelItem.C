@@ -837,13 +837,30 @@ BALL::String ModelItem::getMouseOverText()
 	}
 	else message=entry_->name;
 	
+	if(!b) return message;
+	
 	if(no_training_)
 	{
 		message+="\n  training deactivated";
 		return message;
 	}
 	
-	if(b && entry_->parameterNames.size()>0)
+	bool fs=0;
+	bool fs_opt_par=0;
+	bool fs_opt_ker=0;
+	if(in_edge_list_.size()!=0&&(*in_edge_list_.begin())->sourceNode()->type()==FeatureSelectionItem::Type) fs=1;
+	if(fs)
+	{
+		FeatureSelectionItem* fs_item = (FeatureSelectionItem*) (*in_edge_list_.begin())->sourceNode();
+		if(fs_item->getPostFSModelParOpt()) fs_opt_par=1;
+		if(fs_item->getPostFSKernelParOpt()) fs_opt_ker=1;
+	}
+	
+	cout<<"fs="<<fs<<endl;
+	cout<<"fs_opt_par="<<fs_opt_par<<endl;
+	cout<<"fs_opt_ker="<<fs_opt_ker<<endl<<endl;
+	
+	if(entry_->parameterNames.size()>0)
 	{
 		message+="\n  ";
 		const vector<double>& par = model_->getParameters();
@@ -852,7 +869,9 @@ BALL::String ModelItem::getMouseOverText()
 		for(uint i=0; i<entry_->parameterNames.size()&&i<par.size(); i++)
 		{
 			message+=entry_->parameterNames[i];
-			if(!done_&&optimize_model_parameters&&it!=opt_par.end()&&*it==(int)i)
+			if(!done_&&
+			    (!fs&&optimize_model_parameters&&it!=opt_par.end()&&*it==(int)i)
+			 || (fs&&fs_opt_par&&it!=opt_par.end()&&*it==(int)i))
 			{
 				message+=" will be optimized by cross validation";
 				it++;
@@ -871,14 +890,14 @@ BALL::String ModelItem::getMouseOverText()
 			if(i<par.size()-1) message+="\n";
 		}
 	}
-	if(b && entry_->kernel)
+	if(entry_->kernel)
 	{
 		message+="\n  ";
 		KernelModel* km = (KernelModel*) model_;
 		if(km->kernel->type==1) message+="polyn. kernel, ";
 		else if(km->kernel->type==2) message+="RBF kernel, ";
 		else if(km->kernel->type==3) message+="sigm. kernel, ";
-		if(done_||!optimize_kernel_parameters)
+		if(done_||(!fs&&!optimize_kernel_parameters)||(fs&&!fs_opt_ker))
 		{
 			if(km->kernel->type==1) message+="degree="+String(km->kernel->par1);
 			else if(km->kernel->type==2) message+="gamma="+String(km->kernel->par1);

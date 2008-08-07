@@ -62,6 +62,9 @@ namespace BALL
 				
 				BALL::String getMouseOverText();
 				
+				bool getPostFSModelParOpt() {return post_optimization_model_par_;}
+				bool getPostFSKernelParOpt() {return post_optimization_kernel_par_;}
+				
 			private:
 			
 				FeatureSelection* feature_selection_;
