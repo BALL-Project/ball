@@ -856,10 +856,6 @@ BALL::String ModelItem::getMouseOverText()
 		if(fs_item->getPostFSKernelParOpt()) fs_opt_ker=1;
 	}
 	
-	cout<<"fs="<<fs<<endl;
-	cout<<"fs_opt_par="<<fs_opt_par<<endl;
-	cout<<"fs_opt_ker="<<fs_opt_ker<<endl<<endl;
-	
 	if(entry_->parameterNames.size()>0)
 	{
 		message+="\n  ";
