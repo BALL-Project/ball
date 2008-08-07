@@ -170,3 +170,20 @@ bool InputDataItem::append()
 {
 	return append_;
 }
+
+BALL::String InputDataItem::getMouseOverText()
+{
+	String s="";
+	if(data_!=NULL)
+	{
+		if(data_->getNoSubstances()>0)
+		{
+			s=String(data_->getNoSubstances())+" compounds\n";
+			s+=String(data_->getNoDescriptors())+" features\n";
+			int no_y=data_->getNoResponseVariables();
+			s+=String(no_y)+" response variable";
+			if(no_y!=1) s+="s";
+		}
+	}
+	return s;
+}

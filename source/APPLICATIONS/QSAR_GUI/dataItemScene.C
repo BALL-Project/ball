@@ -119,7 +119,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 	QPointF pos = event->scenePos();
 	
 	/// move DataItems within pipeline-scene (if no drop from another DataItemScene)
-	if (main_window->drag_source==view->name)
+	if (main_window->dragged_item!=NULL && main_window->drag_source==view->name)
 	{
 		// if more than one item is selected, move all those items and do nothing else
 		QList<QGraphicsItem*> sel_items = selectedItems();
@@ -273,7 +273,6 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 		{
 			if(!input_item_at_pos && !csv_input_item_at_pos)
 			{
-				//main_window->addDisconnectedItem(item);
 				QMessageBox::information(view," ","Please drag the Model onto a SD- or CSV-item within your pipeline!");
 				return;	
 			}
@@ -330,6 +329,17 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				QMessageBox::information(view," ","Please drag the FeatureSelection onto a Model within your pipeline!");
 				return;	
 			}
+			if(item->getType()==4 && !model_item_at_pos->getRegistryEntry()->regression)
+			{
+				QMessageBox::information(view," ","Removal of features uncorrelated with reponse variable\ncan only be done for regression models!");
+				return;
+			}
+			if(item->getType()==5 && (!model_item_at_pos->getRegistryEntry()->regression||model_item_at_pos->getRegistryEntry()->kernel))
+			{
+				QMessageBox::information(view," ","Removal of insignificant coefficients\ncan only be done for linear regression models!");
+				return;
+			}
+			
 			model_copy = new ModelItem(*model_item_at_pos);				
 			model_copy->setInputDataItem(model_item_at_pos->inputDataItem());
 			item = main_window->createFeatureSelection(item, model_copy, model_item_at_pos);
@@ -371,8 +381,6 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 		{
 			if (!model_item_at_pos)
 			{
-				//item = main_window->createValidation(item);
-				//main_window->addDisconnectedItem(item);
 				QMessageBox::information(view," ","Please drag the Validation onto a Model within your pipeline!");
 				return;
 			}

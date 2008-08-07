@@ -44,6 +44,9 @@ namespace BALL
 				
 
 			private:
+				
+				BALL::String getMouseOverText();
+				
 				InputDataItem* input_;
 				
 				uint no_folds_;

@@ -94,6 +94,7 @@ void Plotter::print()
 	QPrintDialog print_dialog(&printer,this);
 	if (print_dialog.exec() == QDialog::Accepted) 
 	{
+		printer.setResolution(600);
 		qwt_plot_->print(printer);
 	}
 }
@@ -103,6 +104,7 @@ void Plotter::printToFile(QString& file)
 {
 	QPrinter printer(QPrinter::HighResolution);
 	printer.setOutputFileName(file);
+	printer.setResolution(600);
 	qwt_plot_->print(printer);
 }
 

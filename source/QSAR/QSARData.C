@@ -810,6 +810,15 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 	String s;
 	getline(input0,s);
 	int prop=s.countFields(sep);
+	
+	int nec_min_size=1;
+	if(no_y>0) nec_min_size=no_y;
+	if(ylabels) nec_min_size++;
+	if(prop<nec_min_size)
+	{
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"CSV-file reading error","Too few columns found in file. Most likely, the wrong seperator symbol was specified!!");
+	}
+	
 	int old_size=descriptor_matrix_.size(); 
 		
 	if(!appendDescriptors)

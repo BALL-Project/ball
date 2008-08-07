@@ -99,7 +99,7 @@ void CSVInputDataItem::appendData()
 	string st = filename_.toStdString();
 
 	cout<<"trying to append to  "<<data_->getNoSubstances()<<"  "<<data_->getNoDescriptors()<<endl;
-	data_->readCSVFile(st.c_str(), no_y_, x_labels_, y_labels_, sep_.c_str(), 1);
+	data_->readCSVFile(st.c_str(), no_y_, x_labels_, y_labels_, sep_.c_str(), 1, nonnumeric_class_names_);
 	
 	if (center_data_)
 	{

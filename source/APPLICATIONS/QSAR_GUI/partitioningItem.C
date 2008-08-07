@@ -66,7 +66,7 @@ bool PartitioningItem::execute()
 		it->second->setDone(1);	
 	}
 	done_ = 1;
-	return 0;
+	return 1;
 }
 
 bool PartitioningItem::isDone()
@@ -155,4 +155,12 @@ void PartitioningItem::removePartition(InputPartitionItem* partition)
 			break;
 		}			
 	}	
+}
+
+
+BALL::String PartitioningItem::getMouseOverText()
+{
+	String s="Random partitioning of input\n";
+	s+="  fraction of data set aside for validation="+valueToString(val_fraction_);
+	return s;
 }

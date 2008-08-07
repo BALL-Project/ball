@@ -424,7 +424,7 @@ PredictionItem* MainWindow::createPrediction(InputDataItem* input, ModelItem* mo
 
  void MainWindow::about()
 {
-	QMessageBox::information(this, tr("About QSAR_GUI"), tr("Version 0.68\n2008-07-29"),
+	QMessageBox::information(this, tr("About QSAR_GUI"), tr("Version 0.69\n2008-08-07"),
 	QMessageBox::Ok);
 }
 
@@ -1078,6 +1078,10 @@ void MainWindow::executePipeline()
 		{
 			QMessageBox::warning(this,"Error",e.getMessage());
 		}
+		catch(BaseException e)
+		{
+			QMessageBox::warning(this,"Error",e.what());
+		}
 
 		value++;
 		emit sendNewValue(value);
@@ -1606,7 +1610,7 @@ void MainWindow::submitToCluster(String configfile)
 BALL::String BALL::VIEW::valueToString(double value)
 {
 	BALL::String t(value);
-	int index = t.find_last_not_of("0");
+	uint index = (uint)t.find_last_not_of("0");
 	if(index!=string::npos)
 	{
 		if(index+1<=t.size()&&t[index]!='.') index++;

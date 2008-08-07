@@ -90,6 +90,10 @@ namespace BALL
 				
 				InputPlotter* input_plotter_;
 				
+				
+			private:
+				BALL::String getMouseOverText();
+				
 				friend class InputPartitionItem;
 				friend class PartitioningItem;
 		};
