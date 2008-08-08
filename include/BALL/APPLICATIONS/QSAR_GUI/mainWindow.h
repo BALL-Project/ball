@@ -191,6 +191,11 @@ namespace BALL
 				void loadItemsFromFiles(String directory);
 				
 				void readPartitionPositions(list<pair<double,double> >* item_positions);
+				
+				/** check whether the pipeline is not empty. Can be called before saving, submitting, printing the current pipeline.\n
+				If no items have been created yet, a message box is displayed 
+				@return true if pipelines are empty, false otherwise */
+				bool checkForEmptyPipelines();
 			
 				/** @name Private Attributes */
 

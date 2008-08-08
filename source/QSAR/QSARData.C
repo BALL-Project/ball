@@ -386,18 +386,25 @@ void QSARData::readSDFile(const char* file, SortedList<int>& activity_IDs, bool 
 void QSARData::removeInvalidDescriptors(SortedList<int>& inv)
 {
 	inv.front();
+	
+	bool rm_names=0;
+	if(column_names_.size()==descriptor_matrix_.size()) rm_names=1;
+	else cout<<column_names_.size()<<"  "<<descriptor_matrix_.size()<<endl;
+	
 	for(int i=0;inv.hasNext();i++)
 	{
 		int pos=inv.next()-i; // i already deleted columns --> descriptor_matrix_ is i columns shorter
 		vector<vector<double> >::iterator del = static_cast<vector<vector<double> >::iterator> (&descriptor_matrix_[pos]);
 		descriptor_matrix_.erase(del);
 		
-		if(column_names_.size()==descriptor_matrix_.size()) // do only if names of descriptors have been set
+		string n="";
+		if(rm_names) // do only if names of descriptors have been set
 		{
 			vector<string>::iterator sdel=static_cast<vector<string>::iterator> (&column_names_[pos]);
+			n=*sdel;
 			column_names_.erase(sdel);
 		}
-		cout << "deleted descriptor "<<pos+i<<" due to invalid values!"<<endl;
+		cout << "deleted descriptor #"<<pos+i<<", \""<<n<<"\", due to invalid values!"<<endl;
 	}
 }
 
@@ -873,7 +880,10 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 			for(int i=0;i<prop-no_y;i++) 
 			{
 				String value; getline(line_stream,value,sep[0]);
-				column_names_.push_back(value);
+				
+				// if labels for compounds are given (located in first column)
+				// then do not read name of first column
+				if(i>0||!ylabels) column_names_.push_back(value);
 			}
 			line++;
 			continue;
@@ -890,13 +900,13 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 				
 		for(int i=0;i<prop;i++) //read current line consisting of descriptor and activity values
 		{	
-			if(i==0 && ylabels)
+			if(i==0 && ylabels) // read first cell containing compound name
 			{
+				String value; getline(line_stream,value,sep[0]);
 				if(appendDescriptors)
 				{
 					continue;
 				}
-				String value; getline(line_stream,value,sep[0]);
 				substance_names_.push_back(value);
 				continue;
 			}

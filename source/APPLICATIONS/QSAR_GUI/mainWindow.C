@@ -486,6 +486,8 @@ void MainWindow::createActions()
 // SLOT
 void MainWindow::print()
 {
+	if(checkForEmptyPipelines()) return;
+	
 	 QPrinter printer(QPrinter::HighResolution);
 	 QPrintDialog print_dialog(&printer,this);
 	 if (print_dialog.exec() == QDialog::Accepted) 
@@ -499,6 +501,8 @@ void MainWindow::print()
 // SLOT
 void MainWindow::printToFile()
 {
+	if(checkForEmptyPipelines()) return;
+	
 	 QString file = QFileDialog::getSaveFileName(this, tr("Save File as"),(settings.config_path+"pipeline.eps").c_str(),tr("Graphic (*.eps *.ps *.pdf)"));
 	 if(file=="") return;
 	 QPrinter printer(QPrinter::HighResolution);
@@ -872,6 +876,8 @@ void MainWindow::restoreDesktop()
 // SLOT
 BALL::String MainWindow::exportPipeline()
 {
+	if(checkForEmptyPipelines()) return "";
+	
 	QString filename = QFileDialog::getSaveFileName(this, tr("Save File as"),(settings.config_path+"config.tar.gz").c_str(),tr("Pipeline (*.tar.gz *.conf)"));
 	String s = filename.toStdString();
 	if(filename=="") return s;
@@ -1407,12 +1413,6 @@ void MainWindow::setLastUsedPath(String path)
 void MainWindow::exportPipeline(QString filename)
 {
 	int maximum = sdf_input_pipeline_.size() + csv_input_pipeline_.size() + model_pipeline_.size() + val_pipeline_.size() + prediction_pipeline_.size() + disconnected_items_.size(); //all items - fs-items (model items automatically created by feature selection are not exported)
-
-	if (maximum == 0)
-	{
-		return;
-	}
-	
 	int value = 0;
 	progress_bar_->setMaximum(maximum);
 
@@ -1556,6 +1556,8 @@ bool MainWindow::itemExists(DataItem* item)
 // SLOT
 void MainWindow::submit()
 {
+	if(checkForEmptyPipelines()) return;
+	
 	String configfile = exportPipeline();
 	if(configfile!="")
 	{
@@ -1607,6 +1609,17 @@ void MainWindow::submitToCluster(String configfile)
 }
 
 
+bool MainWindow::checkForEmptyPipelines()
+{
+	int maximum = sdf_input_pipeline_.size() + csv_input_pipeline_.size() + model_pipeline_.size() + val_pipeline_.size() + prediction_pipeline_.size() + disconnected_items_.size(); //all items - fs-items (model items automatically created by feature selection are not exported)
+	if (maximum == 0)
+	{
+		QMessageBox::about(this,"No pipeline","There is no pipeline yet!");
+		return 1;
+	}
+	return 0;
+}
+
 BALL::String BALL::VIEW::valueToString(double value)
 {
 	BALL::String t(value);
@@ -1618,3 +1631,4 @@ BALL::String BALL::VIEW::valueToString(double value)
 	}
 	return t;
 }
+
