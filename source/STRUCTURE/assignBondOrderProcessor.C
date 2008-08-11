@@ -294,6 +294,7 @@ cout << ")" << endl;
 
 	Processor::Result AssignBondOrderProcessor::operator () (AtomContainer& ac)
 	{
+
 #ifdef DEBUG
 cout << "  OPTIONS:" << endl;
 cout << " \t Algorithm: " <<  options[Option::Option::ALGORITHM] << endl;
@@ -1422,10 +1423,9 @@ atom_type_normalization_factor_ = 0.;
 
 		if (found_a_sol)
 		{
-			bool compute_also_non_optimal_solutions = options.getReal(Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS);
 			bool next_solution_is_optimal = (getTotalPenalty(solutions_[0]) == getTotalPenalty(sol)); 
 
-			if ( next_solution_is_optimal || compute_also_non_optimal_solutions )
+			if ( next_solution_is_optimal || compute_also_non_optimal_solutions_ )
 			{
 				solutions_.push_back(sol);
 				apply(solutions_.size()-1);
