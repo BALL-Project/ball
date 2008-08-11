@@ -866,8 +866,8 @@ BALL::String ModelItem::getMouseOverText()
 		{
 			message+=entry_->parameterNames[i];
 			if(!done_&&
-			    (!fs&&optimize_model_parameters&&it!=opt_par.end()&&*it==(int)i)
-			 || (fs&&fs_opt_par&&it!=opt_par.end()&&*it==(int)i))
+			    ((!fs&&optimize_model_parameters&&it!=opt_par.end()&&*it==(int)i)
+			 || (fs&&fs_opt_par&&it!=opt_par.end()&&*it==(int)i)))
 			{
 				message+=" will be optimized by cross validation";
 				it++;
