@@ -149,6 +149,10 @@ namespace BALL
 				/** displays a preferences dialog that allow setting the cluster's queue parameters */
 				void preferencesDialog();
 				
+				/** switches to fullscreen and from fullscreen back to normal view */
+				void fullscreen();
+				
+				
 			private:
 				
 				struct Settings
@@ -209,6 +213,12 @@ namespace BALL
 				DataItemScene fs_list_scene_;
 				DataItemScene val_list_scene_;
 				
+				/** List of all dock-widget of the mainWindow. It is used for switching to/from fullscreen mode by hiding all dockwidgets */
+				list<QDockWidget*> dockwidgets_;
+				
+				/** is fullscreen currently enabled? */
+				bool fullscreen_;
+				
 				
 				/**registry including all available models */	
 				Registry* reg_;
@@ -240,7 +250,7 @@ namespace BALL
 				QAction* executeAct_;
 				QAction* restoreAct_;
 				QAction* exportAct_;
-				QAction* loadModelsAct_;
+				QAction* fullscreen_action_;
 				
 				friend class ModelItem;
 		};

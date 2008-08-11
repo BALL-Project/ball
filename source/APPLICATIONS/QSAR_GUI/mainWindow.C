@@ -28,7 +28,9 @@ using namespace BALL::Exception;
 ///set up they main window
  MainWindow::MainWindow()
  {
-	///set up the main scenes & views
+	fullscreen_ = 0;
+	 
+	 ///set up the main scenes & views
 	view_ = new DataItemView(&view_scene_,this);
 	view_->name = "view";
 	view_->mapToScene(0,0);
@@ -597,15 +599,32 @@ function for setting up the tool bars
 	fileToolBar_->addAction(restoreAct_);
 	QAction* print = new QAction(QIcon("./images/printer1.png"),"Print",this);
 	fileToolBar_->addAction(print);
+	
 	QAction* submit_action = new QAction(QIcon("./images/cluster.png"),"Submit job",this);
 	fileToolBar_->addSeparator();
 	fileToolBar_->addAction(executeAct_);
 	connect(print, SIGNAL(triggered()), this, SLOT(print()));
-	
-
 	fileToolBar_->addAction(submit_action);
 	connect(submit_action, SIGNAL(triggered()), this, SLOT(submit()));	
+	
+	fullscreen_action_ = new QAction(QIcon(""),"Fullscreen",this);
+	fileToolBar_->addAction(fullscreen_action_);
+	connect(fullscreen_action_, SIGNAL(triggered()), this, SLOT(fullscreen()));
  }
+ 
+ 
+// SLOT 
+void MainWindow::fullscreen()
+{
+	fullscreen_ = !fullscreen_;
+	for(list<QDockWidget*>::iterator it=dockwidgets_.begin(); it!=dockwidgets_.end(); it++)
+	{
+		(*it)->setVisible(!fullscreen_);
+	}
+	fileToolBar_->setVisible(!fullscreen_);
+ 	if(fullscreen_)	menuBar()->addAction(fullscreen_action_);
+ 	else menuBar()->removeAction(fullscreen_action_);
+}
  
 
 /*
@@ -623,6 +642,7 @@ void MainWindow::createDockWindows()
 {	
 	file_browser_ = new FileBrowser(settings.input_data_path.c_str());
 	QDockWidget* filedock = new QDockWidget(tr("Source Filebrowser"), this);
+	dockwidgets_.push_back(filedock);
 	filedock->setAllowedAreas(Qt::LeftDockWidgetArea);
 	filedock->setWidget(file_browser_);
 	addDockWidget(Qt::LeftDockWidgetArea, filedock);
@@ -671,6 +691,7 @@ void MainWindow::createDockWindows()
 
 
 	QDockWidget* modeldock = new QDockWidget(tr("Models"), this);
+	dockwidgets_.push_back(modeldock);
 	modeldock->setAllowedAreas(Qt::LeftDockWidgetArea);
 	modeldock->setWidget(model_list_);
 	
@@ -689,6 +710,7 @@ void MainWindow::createDockWindows()
 		item->setPos(20,70*i+20);
 	}
 	QDockWidget* fsdock = new QDockWidget(tr("Feature Selection"), this);
+	dockwidgets_.push_back(fsdock);
 	fsdock->setAllowedAreas(Qt::LeftDockWidgetArea);
 	fsdock->setWidget(fs_list_);
 	addDockWidget(Qt::LeftDockWidgetArea, fsdock);
@@ -707,6 +729,7 @@ void MainWindow::createDockWindows()
 
 	}
 	QDockWidget* validationdock = new QDockWidget(tr("Validation"), this);
+	dockwidgets_.push_back(validationdock);
 	validationdock->setAllowedAreas(Qt::LeftDockWidgetArea);
 	validationdock->setWidget(val_list_);
 	addDockWidget(Qt::LeftDockWidgetArea, validationdock);
@@ -720,6 +743,7 @@ void MainWindow::createDockWindows()
 	tabifyDockWidget(fsdock, validationdock);
 
 	QDockWidget* progressdock = new QDockWidget(tr("Progress"), this);
+	dockwidgets_.push_back(progressdock);
 	progressdock->setAllowedAreas(Qt::LeftDockWidgetArea);
 	progressdock->setWidget(progress_bar_);
 	addDockWidget(Qt::LeftDockWidgetArea, progressdock);
