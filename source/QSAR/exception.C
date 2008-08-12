@@ -113,3 +113,11 @@ WrongFileFormat::WrongFileFormat(const char* file, unsigned long line, const cha
 	BALL::Exception::globalHandler.setName(String(name_));
 	BALL::Exception::globalHandler.setMessage(String(message_));
 }
+
+ConfigurationReadingError::ConfigurationReadingError(const char* file, unsigned long line, const char* message) throw() : GeneralException(file,line)
+{
+	name_= "ConfigurationReadingError";
+	message_ = message;
+	BALL::Exception::globalHandler.setName(String(name_));
+	BALL::Exception::globalHandler.setMessage(String(message_));
+}

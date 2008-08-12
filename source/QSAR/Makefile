@@ -23,6 +23,7 @@ CPP_SOURCES=\
 ifeq ($(USE_NEWMAT),true)
 	ifeq ($(BALL_HAS_GSL),true)
 		CPP_SOURCES+=\
+		configIO.C\
 		classificationModel.C\
 		classificationValidation.C\
 		exception.C\

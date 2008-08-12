@@ -100,6 +100,13 @@ namespace BALL
 				public:
 					FeatureSelectionParameterError(const char* file, unsigned long line, const char* mess) throw();
 			};
+			
+			/** exception that is thrown when parameters are missing or incorrect within an config-file section */
+			class ConfigurationReadingError : public BALL::Exception::GeneralException
+			{
+				public: 
+					ConfigurationReadingError(const char* file, unsigned long line, const char* message) throw();
+			};
 
 
 		}
