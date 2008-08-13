@@ -4,10 +4,12 @@
 using namespace BALL::QSAR;
 
 // ALLModel::kw_ will not be used so it can be set to an arbitrary value
-KNNModel::KNNModel(const QSARData& q, int k) : ALLModel(q,1)
+KNNModel::KNNModel(const QSARData& q, int k) 
+	: ALLModel(q,1)
 {
 	type_ = "KNN";
 	k_ = k;
+	default_no_opt_steps_ = 20;
 }
 
 
@@ -71,10 +73,11 @@ bool KNNModel::optimizeParameters(int d, int no_steps)
 			best_q2=validation->getQ2();
 			best_no=i;
 		}
-// 		else
-// 		{
-// 			break;
-// 		}
+		
+		if(validation->getQ2()<best_q2*0.5)
+		{
+			break;
+		}
 	}
 	k_=best_no;
 	validation->setQ2(best_q2);

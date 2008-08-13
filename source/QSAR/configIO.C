@@ -726,7 +726,7 @@ PredictionConfiguration ConfigIO::readPredictionConfiguration(istream* input)
 			
 		if(j==0)
 		{
-			if(line.hasPrefix("[Predictor]"))
+			if(!line.hasPrefix("[Predictor]"))
 			{
 				throw Exception::ConfigurationReadingError(__FILE__,__LINE__,"The given secton is no Prediction-section!!");
 			}

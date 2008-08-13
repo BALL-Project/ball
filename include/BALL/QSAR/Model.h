@@ -83,7 +83,9 @@ namespace BALL
 				The number of selected features (=descriptors) is NOT changed by this method. Use class FeatureSelection in order to do this.\n
 				@return 1 if parameters were optimized using cross-validation. The best Q2 value is assumed to be saved in ModelValidation.Q2 \n
 				0 if the model has no parameters to be optimized, so that no cross-validation was done.*/
-				virtual bool optimizeParameters(int /*k*/, int /*no_steps*/=30){return 0;};
+				virtual bool optimizeParameters(int /*k*/, int /*no_steps*/){return 0;};
+				
+				bool optimizeParameters(int k);
 				
 				virtual double calculateStdErr()
 				{return -1.0;};
@@ -136,6 +138,11 @@ namespace BALL
 				
 				
 			protected:
+				
+				/** The default number of steps for model parameter optimization. \n
+				It can be adjusted by the different types of models. \n
+				Standard default value is 30. */
+				int default_no_opt_steps_; 
 			
 				/** @name Accessors
 				 */

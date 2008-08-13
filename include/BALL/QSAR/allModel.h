@@ -10,6 +10,7 @@
 #include <BALL/QSAR/nonlinearModel.h>
 #endif
 
+
 namespace BALL
 {
 	namespace QSAR 
@@ -58,7 +59,7 @@ namespace BALL
 				/** @name Accessors
 				 */
 				//@{
-				void calculateWeights(Matrix& dist, RowVector& w);
+				virtual void calculateWeights(Matrix& dist, RowVector& w);
 				
 				/** calculates weighted Matrix X^T*X  */
 				void calculateXX(RowVector& w, Matrix& res);

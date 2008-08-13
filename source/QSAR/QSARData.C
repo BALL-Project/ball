@@ -248,18 +248,18 @@ void QSARData::readSDFile(const char* file, SortedList<int>& activity_IDs, bool 
 	// read all molecules in the sd-file
 	for(int n=0; input.getSize()!=0; n++) 
 	{	
-		Molecule m;
+		Molecule* m;
 		
 		try
 		{
-			input>>m;
+			m=input.read();
 		}
 		catch(BALL::Exception::ParseError e)
 		{
 			throw Exception::WrongFileFormat(__FILE__,__LINE__,file);
 		}
 				
-		int no=m.countNamedProperties();
+		int no=m->countNamedProperties();
 
 		if (n==0) // for the first substance
 		{	
@@ -280,7 +280,7 @@ void QSARData::readSDFile(const char* file, SortedList<int>& activity_IDs, bool 
 			}	
 			else
 			{				
-				setDescriptorNames(m, activity_IDs, useExDesc);  // set names of all descriptors
+				setDescriptorNames(*m, activity_IDs, useExDesc);  // set names of all descriptors
 				// resize descriptor_matrix_ for first substance
 				for(int i=0; useExDesc && i<no_descriptors;i++)
 				{
@@ -291,7 +291,7 @@ void QSARData::readSDFile(const char* file, SortedList<int>& activity_IDs, bool 
 			}
 		}
 		
-		substance_names_.push_back(m.getName());
+		substance_names_.push_back(m->getName());
 
 		// if some substance has not the same number of properties as the first substance
 		if(useExDesc && no!=no_properties)
@@ -312,7 +312,7 @@ void QSARData::readSDFile(const char* file, SortedList<int>& activity_IDs, bool 
 				{	
 					try				
 					{	
-						descriptor_matrix_[des].push_back(String(m.getNamedProperty(i).getString()).toDouble());
+						descriptor_matrix_[des].push_back(String(m->getNamedProperty(i).getString()).toDouble());
 					}
 					// descriptors with invalid entries will be removed ...
 					catch(BALL::Exception::InvalidFormat g)
@@ -340,7 +340,7 @@ void QSARData::readSDFile(const char* file, SortedList<int>& activity_IDs, bool 
 				{
 					try
 					{
-						Y_[act].push_back(String(m.getNamedProperty(i).getString()).toDouble());
+						Y_[act].push_back(String(m->getNamedProperty(i).getString()).toDouble());
 						act++; act_it++;
 					}
 					catch(BALL::Exception::InvalidFormat g) 
@@ -357,7 +357,7 @@ void QSARData::readSDFile(const char* file, SortedList<int>& activity_IDs, bool 
 				}
 				else
 				{
-					String value = String(m.getNamedProperty(i).getString());
+					String value = String(m->getNamedProperty(i).getString());
 					map<String,int>::iterator it=class_names_.find(value);
 					if(it!=class_names_.end())
 					{
@@ -373,7 +373,8 @@ void QSARData::readSDFile(const char* file, SortedList<int>& activity_IDs, bool 
 				}
 			}
 		}
-		calculateBALLDescriptors(m); // calculate BALL-descriptors
+		calculateBALLDescriptors(*m); // calculate BALL-descriptors
+		delete m; // delete the completly processed molecule!
 	}
 
 	removeInvalidDescriptors(newInvalidDescriptors);

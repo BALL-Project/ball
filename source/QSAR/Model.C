@@ -12,6 +12,7 @@ using namespace BALL::QSAR;
 Model::Model(const QSARData& q)
 {
 	data=&q;
+	default_no_opt_steps_ = 30;
 }
 
 
@@ -562,3 +563,8 @@ void Model::saveResponseTransformationToFile(ofstream& out)
 	}	
 }
 
+
+bool Model::optimizeParameters(int k)
+{
+	return optimizeParameters(k, default_no_opt_steps_);
+}

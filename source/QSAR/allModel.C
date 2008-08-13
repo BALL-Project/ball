@@ -15,6 +15,7 @@ ALLModel::ALLModel(const QSARData& q, double kw) : NonLinearModel(q)
 	type_ = "ALL";
 	lambda_ = 0.005;
 	training_result_.ReSize(0,0);
+	default_no_opt_steps_ = 100;
 }
 
 ALLModel::~ALLModel()
@@ -137,12 +138,12 @@ void ALLModel::calculateXY(RowVector& w, Matrix& res)
 }
 
 
-bool ALLModel::optimizeParameters(int k, int /*no_steps*/)
+bool ALLModel::optimizeParameters(int k, int no_steps)
 {
 	double best_q2=0;
 	double best_kw=0;
 	kw_ = 0;
-	for(int i=1;kw_<15.0;i++)
+	for(int i=0;i<no_steps;i++)
 	{
 		kw_+=0.25;
 		validation->crossValidation(k);
@@ -153,11 +154,11 @@ bool ALLModel::optimizeParameters(int k, int /*no_steps*/)
 		}
 		else if(validation->getQ2()<best_q2*0.5)
 		{
-			validation->setQ2(best_q2);
 			break;
 		}
 	}
 	kw_=best_kw;
+	validation->setQ2(best_q2);
 	
 	return 1;
 }
