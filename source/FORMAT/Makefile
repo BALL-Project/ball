@@ -48,7 +48,8 @@ CPP_SOURCES=\
 	trajectoryFile.C\
 	TRRFile.C\
 	XYZFile.C\
-	SCWRLRotamerFile.C
+	SCWRLRotamerFile.C\
+	molFileFactory.C
 
 ifeq ($(BALL_HAS_VIEW),true)
 	CPP_SOURCES+=DBInterface.C
