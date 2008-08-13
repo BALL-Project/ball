@@ -56,7 +56,8 @@ void DataItem::init()
 	done_ = 0;
 	result_ = "";
 	hover_rect_ = NULL;
-	setAcceptsHoverEvents(1);	
+	setAcceptsHoverEvents(1);
+	setShapeMode(QGraphicsPixmapItem::BoundingRectShape);
 }
 
 DataItem::~DataItem()
@@ -344,6 +345,8 @@ void DataItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
 	QBrush brush; brush.setColor(QColor(230,230,22,130));
 	brush.setStyle(Qt::SolidPattern);
 	hover_rect_->setBrush(brush);
+// 	hover_rect_->setZValue(100);
+// 	hover_label_->setZValue(102);
 }
 
 void DataItem::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
