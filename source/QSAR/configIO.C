@@ -68,11 +68,12 @@ InputConfiguration ConfigIO::readInputConfiguration(istream* input)
 			putbackLine(input,line);
 			break;
 		}	
+		
 		if(line.hasPrefix("done"))
 		{
 			conf.done = ((String)line.after("=")).trimLeft().toBool();
 		}
-		if(line.hasPrefix("sd_file"))
+		else if(line.hasPrefix("sd_file"))
 		{
 			conf.sd_file = ((String)line.after("=")).trimLeft();
 		}
@@ -195,11 +196,12 @@ InputPartitioningConfiguration ConfigIO::readInputPartitioningConfiguration(istr
 			putbackLine(input,line);
 			break;
 		}	
+		
 		if(line.hasPrefix("done"))
 		{
 			conf.done = ((String)line.after("=")).trimLeft().toBool();
 		}		
-		if(line.hasPrefix("input_file"))
+		else if(line.hasPrefix("input_file"))
 		{
 			conf.input_file = ((String)line.after("=")).trimLeft();
 		}
@@ -301,7 +303,7 @@ ModelConfiguration ConfigIO::readModelConfiguration(istream* input)
 		{
 			conf.done = ((String)line.after("=")).trimLeft().toBool();
 		}
-		if(line.hasPrefix("data_file"))
+		else if(line.hasPrefix("data_file"))
 		{
 			conf.data_file = ((String)line.after("=")).trimLeft();
 		}
@@ -446,7 +448,7 @@ FeatureSelectionConfiguration ConfigIO::readFeatureSelectionConfiguration(istrea
 		{
 			conf.done = ((String)line.after("=")).trimLeft().toBool();
 		}
-		if(line.hasPrefix("model_file"))
+		else if(line.hasPrefix("model_file"))
 		{
 			conf.model = ((String)line.after("=")).trimLeft();
 		}
@@ -615,7 +617,11 @@ ValidationConfiguration ConfigIO::readValidationConfiguration(istream* input)
 			break;
 		}			
 			
-		if(line.hasPrefix("model_file"))
+		if(line.hasPrefix("done"))
+		{
+			conf.done = ((String)line.after("=")).trimLeft().toBool();
+		}
+		else if(line.hasPrefix("model_file"))
 		{
 			conf.model = ((String)line.after("=")).trimLeft();
 		}
@@ -738,7 +744,11 @@ PredictionConfiguration ConfigIO::readPredictionConfiguration(istream* input)
 			break;
 		}	
 			
-		if(line.hasPrefix("model_file"))
+		if(line.hasPrefix("done"))
+		{
+			conf.done = ((String)line.after("=")).trimLeft().toBool();
+		}
+		else if(line.hasPrefix("model_file"))
 		{
 			conf.model = ((String)line.after("=")).trimLeft();
 		}
