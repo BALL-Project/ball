@@ -115,10 +115,13 @@ void RegressionValidation::testAllSubstances(bool transform)
 	
 	RowVector mean_Y(test_Y_.Ncols()); // mean of each activity
 	//RowVector sum_of_squares(test_Y_.Ncols());
+	
+	/// In case of external test data (for which 'transform'==1), data in test_Y_ has been backtransformed to original space and model_->predict() will return the activity value in original space.
+	/// In case of internal testing ('transform'==0), data in test_Y_ is in transformed space and model->predict() will return the activity value in the same space.
+	
 	for(int i=1; i<=test_Y_.Ncols();i++)
 	{
-		mean_Y(i)=Statistics::getMean(test_Y_, i);
-		//sum_of_squares(i)=Statistics::sq(test_Y_,i,mean_Y(i));
+		mean_Y(i)=Statistics::getMean(test_Y_, i);	
 	}
 	//ssT_ =  sum_of_squares.Sum();
 	
@@ -146,7 +149,6 @@ void RegressionValidation::testAllSubstances(bool transform)
 	{
 		std_err_ = std_err_/test_substances_.size();
 	}*/	
-
 }
 
 
@@ -214,6 +216,7 @@ void RegressionValidation::testInputData(bool transform)
 	{
 		col=model_->descriptor_IDs_.size();
 	}
+	
 	//F_regr_ = gsl_cdf_fdist_P((R2_*(lines-col-1))/((1-R2_)*col), col, lines-col-1);
 //	F_regr_ = gsl_cdf_fdist_P( (ssR_*(lines-col-1))/(ssE_*col), col,lines-col-1 );
 }

@@ -252,6 +252,10 @@ void ValidationItem::initName()
 		case 6: 
 			name_ = "calculate coefficient stddev";
 			break;
+			
+		case 7: 
+			name_ = "test fit to external data";
+			break;
 
 			default: throw InvalidFeatureSelectionItem(__FILE__,__LINE__);
 			setName("Val");
@@ -336,18 +340,22 @@ bool ValidationItem::execute()
 			}		
 			((RegressionModel*)model_item_->model())->validation->calculateCoefficientStddev(num_of_samples_,1);
 			break;	
+			
+		case 7: 
+			model_item_->model()->model_val->testInputData(1);
+			break;
 		
 		default:
 			throw InvalidValidationItem(__FILE__,__LINE__);
 	}
 	
-	if(type_<5)
+	if(type_<5 || type_==7)
 	{
 		r2_ = model_item_->model()->model_val->getFitRes();
 		q2_ = model_item_->model()->model_val->getCVRes();
 	}
 
-	if(type_==1) setResultString(r2_);
+	if(type_==1||type_==7) setResultString(r2_);
 	else if(type_==6)
 	{
 		const Matrix* coeff_stddev = ((RegressionModel*)model_item_->model())->validation->getCoefficientStddev();

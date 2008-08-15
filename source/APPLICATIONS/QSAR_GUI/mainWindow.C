@@ -621,9 +621,9 @@ void MainWindow::fullscreen()
 	{
 		(*it)->setVisible(!fullscreen_);
 	}
-	fileToolBar_->setVisible(!fullscreen_);
- 	if(fullscreen_)	menuBar()->addAction(fullscreen_action_);
- 	else menuBar()->removeAction(fullscreen_action_);
+	//fileToolBar_->setVisible(!fullscreen_);
+ 	//if(fullscreen_)	menuBar()->addAction(fullscreen_action_);
+ 	//else menuBar()->removeAction(fullscreen_action_);
 }
  
 
@@ -643,12 +643,12 @@ void MainWindow::createDockWindows()
 	file_browser_ = new FileBrowser(settings.input_data_path.c_str());
 	QDockWidget* filedock = new QDockWidget(tr("Source Filebrowser"), this);
 	dockwidgets_.push_back(filedock);
-	filedock->setAllowedAreas(Qt::LeftDockWidgetArea);
+	filedock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
 	filedock->setWidget(file_browser_);
-	addDockWidget(Qt::LeftDockWidgetArea, filedock);
+	addDockWidget(Qt::RightDockWidgetArea, filedock);
 	windowMenu_->addAction(filedock->toggleViewAction());
 	model_list_->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-	
+
 	
 	///create dock widget for listing all available models
 	uint row_height=65; uint col_width=65;
@@ -692,7 +692,7 @@ void MainWindow::createDockWindows()
 
 	QDockWidget* modeldock = new QDockWidget(tr("Models"), this);
 	dockwidgets_.push_back(modeldock);
-	modeldock->setAllowedAreas(Qt::LeftDockWidgetArea);
+	modeldock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
 	modeldock->setWidget(model_list_);
 	
 	QColor c1(160,172,182);
@@ -711,7 +711,7 @@ void MainWindow::createDockWindows()
 	}
 	QDockWidget* fsdock = new QDockWidget(tr("Feature Selection"), this);
 	dockwidgets_.push_back(fsdock);
-	fsdock->setAllowedAreas(Qt::LeftDockWidgetArea);
+	fsdock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
 	fsdock->setWidget(fs_list_);
 	addDockWidget(Qt::LeftDockWidgetArea, fsdock);
 	windowMenu_->addAction(fsdock->toggleViewAction());
@@ -730,7 +730,7 @@ void MainWindow::createDockWindows()
 	}
 	QDockWidget* validationdock = new QDockWidget(tr("Validation"), this);
 	dockwidgets_.push_back(validationdock);
-	validationdock->setAllowedAreas(Qt::LeftDockWidgetArea);
+	validationdock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
 	validationdock->setWidget(val_list_);
 	addDockWidget(Qt::LeftDockWidgetArea, validationdock);
 	windowMenu_->addAction(validationdock->toggleViewAction());
@@ -744,7 +744,7 @@ void MainWindow::createDockWindows()
 
 	QDockWidget* progressdock = new QDockWidget(tr("Progress"), this);
 	dockwidgets_.push_back(progressdock);
-	progressdock->setAllowedAreas(Qt::LeftDockWidgetArea);
+	progressdock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
 	progressdock->setWidget(progress_bar_);
 	addDockWidget(Qt::LeftDockWidgetArea, progressdock);
 	windowMenu_->addAction(progressdock->toggleViewAction());	

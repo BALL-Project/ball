@@ -13,7 +13,7 @@ using namespace BALL::VIEW;
 using namespace BALL::VIEW::Exception;
 
 PredictionItem::PredictionItem(InputDataItem* input_item, ModelItem* model_item, DataItemView* view):
-	ValidationItem(1,view),
+	ValidationItem(7,view),
 	input_data_item_(input_item),
 	dotted_edge_(NULL)
 {
@@ -53,7 +53,7 @@ PredictionItem::~PredictionItem()
 
 
 PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view)
-	: ValidationItem(1,view)
+	: ValidationItem(7,view)
 {
 	istringstream input;
 	input.str(configfile_section);
