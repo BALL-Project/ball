@@ -38,7 +38,7 @@
 //#define DEBUG_ESTIMATE 1
 #undef DEBUG_ESTIMATE
 
-//#define DEBUG_ADD_HYDROGENS 
+//#define DEBUG_ADD_HYDROGENS 1
 #undef DEBUG_ADD_HYDROGENS
 
 #define UNNORMALIZED_DEBUG 1
@@ -288,7 +288,6 @@ cout << ")" << endl;
 			}
 			else
 			{	
-
 				entry.last_bond++;
 				Bond* current_bond = index_to_bond_[entry.last_bond];
 				// take the next bond and try all bond orders
@@ -312,7 +311,6 @@ cout << ")" << endl;
 							 && current_bond->getProperty("VIRTUAL__BOND").getBool())*/
 					if (entry.last_bond >= total_num_of_bonds_)
 					{	
-
 						int virtual_bond_index = entry.last_bond - total_num_of_bonds_;
 						int max_virtual_hydrogens = 
 						 		virtual_bond_index_to_number_of_virtual_hydrogens_[virtual_bond_index];
@@ -531,12 +529,6 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 				// Generate penalty values for all atoms in the AtomContainer ac
 				if (preassignPenaltyClasses_() && precomputeBondLengthPenalties_())
 				{
-					if (add_missing_hydrogens_)
-					{
-						computeVirtualHydrogens_();
-
-					}
-
 					bool found_a_sol = false;
 					Solution_ sol;
 
@@ -547,7 +539,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 
 						// Initialize the priority queue
 						PQ_Entry_ entry(alpha_, atom_type_normalization_factor_, bond_length_normalization_factor_);
-						entry.bond_orders.resize(total_num_of_bonds_ + num_of_virtual_bonds_,0);
+						entry.bond_orders.resize(total_num_of_bonds_ + num_of_virtual_bonds_,-1);
 						entry.last_bond = 0;
 
 						// TODO: can we improve the heuristic by pre-setting all 
@@ -751,7 +743,6 @@ cout << " - - PE - - - - - - - - " << endl;
 		for (; a_it != ac_->endAtom() && valid ; a_it++, current_atom_index++)
 		{
 
-
 #if defined DEBUG || defined DEBUG_ESTIMATE
 cout << " ++A+++++++++++++++" << endl;
 #endif
@@ -814,9 +805,13 @@ cout << " ++A+++++++++++++++" << endl;
 			if (     add_missing_hydrogens_
 					 && (atom_to_virtual_bond_index_.find(&*a_it) != atom_to_virtual_bond_index_.end()))
 			{
-				virtual_order = entry.bond_orders[atom_to_virtual_bond_index_[&*a_it] + total_num_of_bonds_];
+				virtual_order = std::max(0,entry.bond_orders[atom_to_virtual_bond_index_[&*a_it] + total_num_of_bonds_]);
 				valence += virtual_order;
 			}
+
+			// decide, whether there is a free virtual bond left => atom not closed yet!
+			if (add_missing_hydrogens_ && (entry.last_bond != total_num_of_bonds_ + num_of_virtual_bonds_ - 1))
+				closed = false;
 
 			// Now all orders of already fixed bonds and fixed virtual 
 			// hydrogen bonds are summed up in valence.
@@ -905,9 +900,11 @@ cout << "  * valence explosion for atom " <<   a_it->getFullName() << endl;
 			{	
 				// get the current penalty vector 
 				int block = atom_to_block_[current_atom_index][virtual_order];
-				
+
 				if (block < 0)
 				{
+					Log.error() << "AssignBondOrderProcessor::estimatePenalty(): Error: could not find current penalty vector for " << current_atom_index << " " << virtual_order << "!" << std::endl;
+										
 					return false; 
 				}
 
@@ -967,9 +964,10 @@ cout << "valence of "<< a_it->getFullName() << " too small : " << valence <<   "
 #endif
 					if (evaluation_mode_)
 					{
-						Log.info() << "AssignBondOrderProcessor: Valence of " << a_it->getFullName() 
+						Log.info() << "AssignBondOrderProcessor::estimatePenalty(): Error in evaluation: Valence of " << a_it->getFullName() 
 												<< " is too small : " << valence   
-												<<   " < " <<  current_start_valence << endl;
+												<<   " < " <<  current_start_valence 
+												<< " Consider adding hydrogen atoms!" << endl;
 					}
 					return false;
 				}
@@ -1093,9 +1091,15 @@ cout << " => " << 	estimated_bond_penalty  << endl;
 cout << "			 Hi Anne estimatePenalty () atom " << a_it->getFullName() << " heuristical best pen: " << min_atom_type_penalty << endl;*/
 
 				// estimate the penalties //TODO	
-				estimated_atom_penalty += estimateAtomTypePenalty_(&*a_it, current_atom_index, 
+				float current_atom_type_penalty = estimateAtomTypePenalty_(&*a_it, current_atom_index, 
 			                         valence, virtual_order, num_free_bonds);
-				estimated_bond_penalty += estimateBondLengthPenalty_(&*a_it, current_atom_index,	
+
+				if (current_atom_type_penalty >= 0)
+					estimated_atom_penalty += current_atom_type_penalty;			
+				else
+					return false;
+				
+				estimated_bond_penalty += estimateBondLengthPenalty_(current_atom_index,	
 						free_bonds, virtual_order,  valence, num_free_bonds);
 			
 			} // end of heuristic
@@ -1184,11 +1188,12 @@ cout << "  * valence explosion for atom " <<   atom->getFullName() << endl;
 		
 		if (!found_a_value)
 			min_atom_type_penalty = -1;
+	
 		return min_atom_type_penalty; // if fn > 0 !!TODO
 	}
 	
 
-	float AssignBondOrderProcessor::estimateBondLengthPenalty_(Atom* atom, Index atom_index, 
+	float AssignBondOrderProcessor::estimateBondLengthPenalty_(Index atom_index, 
 			vector<Bond*> free_bonds, int fixed_virtual_order,  int fixed_valence, int num_free_bonds )
 	{	
 		//TODO: Jede Bindung sollte einfach ihr Minimum kennen??
@@ -1546,7 +1551,6 @@ cout << "Treffer : " << atom->getFullName() << " with index " << atom->getIndex(
 		return -1;
 	}
 
-
 	bool AssignBondOrderProcessor::preassignPenaltyClasses_()	
 	{
 #if defined DEBUG_READ 
@@ -1571,20 +1575,47 @@ cout << " - - preassign penalty classes  - - - - - - - - " << endl;
 			Position no_atoms = a_tmp.countAtoms();
 			
 			// resize the data structure
+			atom_to_block_.clear(); // needed in case this function is called twice!
 			vector<int> tmp(1,-1);
 			atom_to_block_.resize(no_atoms,tmp);
 
 			// initialize the inverse atom type penalty normalization factor 
 			atom_type_normalization_factor_ = 0.;
+		
+			// create the dummy bond needed for all virtual bonds 
+			if (add_missing_hydrogens_) 
+			{
+				if (!virtual_bond_)
+				{
+					virtual_bond_ = new Bond;
+					virtual_bond_->setProperty("VIRTUAL__BOND", true);
+					index_to_bond_.push_back(virtual_bond_);
+					bond_to_index_[virtual_bond_] = index_to_bond_.size()-1;
+					bond_fixed_[virtual_bond_] 	= 0;
+				}
 			
+				// clear the virtual bond stuff
+				num_of_virtual_bonds_ = 0;
+				number_of_virtual_hydrogens_.clear();
+				virtual_bond_index_to_number_of_virtual_hydrogens_.clear();
+				virtual_bond_index_to_atom_.clear();
+				atom_to_virtual_bond_index_.clear();
+			}
+
 			// for each atom
 			for (Position i = 0; i < no_atoms; ++i)
 			{
 				Atom* at = a_tmp.getAtom(i);
+
+				// for reasons only known to BALL, getIndex yields completely strange results for
+				// the atoms here, so we need to add a Property which we can later read out
+				ac_->getAtom(i)->setProperty("AssignBondOrderProcessorAtomNo", i);
 				bool found = false; 
 #ifdef DEBUG_READ
 cout << at->getFullName() << endl;
 #endif
+				// add maximal penalty to the inverse atom type normalization factor
+				float max_penalty_per_atom = 0;
 			
 				// find the __first__ matching atom definition, whose index gives the block
 				for (Size j = 0; !found && (j < block_definition_.size()); j++)
@@ -1604,25 +1635,37 @@ cout << "Treffer : " << at->getFullName() << " with index " << at->getIndex() <<
 						atom_to_block_[i][0]=j;
 						found = true;
 
-						// add maximal penalty to the inverse atom type normalization factor
-						float max_penalty = 0;
 						for(Size k = 0; k < block_to_length_[j]; k++)
 						{
 							float current_pen = penalties_[k + block_to_start_idx_[j]];
-							if (max_penalty < current_pen)
-							{
-								max_penalty = current_pen;
-							}
+							max_penalty_per_atom = std::max(max_penalty_per_atom, current_pen);
 						}
-						atom_type_normalization_factor_+= max_penalty;
 
 					}
 				}
+				
+				if (add_missing_hydrogens_)
+				{
+					// at this point, we cannot use the atom pointer "at", since it points
+					// into a copy of the molecule we really want to process. hence, we have
+					// to take the atom from the original atom container
+					float max_virtual_penalty = computeVirtualHydrogens_(ac_->getAtom(i));
+
+					max_penalty_per_atom = std::max(max_virtual_penalty, max_penalty_per_atom);
+				}
+
+				if (max_penalty_per_atom >= 0)
+					atom_type_normalization_factor_+= max_penalty_per_atom;
+				else
+					found = false;
+
 
 				if (!found)
 				{
 					Log.error() << "AssignBondOrderProcessor: No penalty type found for atom " 
 											<< at->getFullName() << endl;
+
+					atom_to_block_[i][0]=-1;
 					return false;
 				}
 			}
@@ -1637,7 +1680,7 @@ for (Size i=0; i < 	atom_to_block_.size() ; i++)
 {	
 	Atom* at = a_tmp.getAtom(i);
 	cout << at-> getFullName()<< " : ";
-	for (Size j=0; j < atom_to_block_.size(); j++)
+	for (Size j=0; j < atom_to_block_[i].size(); j++)
 	{
 		cout << atom_to_block_[i][j] << " "; 
 	}
@@ -1659,34 +1702,13 @@ cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 
 	// NOTE: add the moment we assume, that this method is called 
 	//       AFTER preassignPenaltyClasses() and precomputeBondLengthPenalties()
-	bool AssignBondOrderProcessor::computeVirtualHydrogens_()
+	float AssignBondOrderProcessor::computeVirtualHydrogens_(Atom* atom)
 	{
 	#if defined DEBUG_ADD_HYDROGENS || defined DEBUG
 		cout << " - - computeVirtualHydrogens  - - - - - - - - " << endl;
 	#endif
-		if (!valid_)
-		{	
-			Log.error() << "Error: processors state is invalid." << __FILE__ << " " << __LINE__ << endl;
-			return false;
-		}
-
-		bool ret = true;
-	
-		if (!virtual_bond_)
-		{
-			virtual_bond_ = new Bond;
-			virtual_bond_->setProperty("VIRTUAL__BOND", true);
-			index_to_bond_.push_back(virtual_bond_);
-			bond_to_index_[virtual_bond_] = index_to_bond_.size()-1;
-			bond_fixed_[virtual_bond_] 	= 0;
-		}
-
-		// clear the virtual bond stuff
-		num_of_virtual_bonds_ = 0;
- 		number_of_virtual_hydrogens_.clear();
-		virtual_bond_index_to_number_of_virtual_hydrogens_.clear();
-		virtual_bond_index_to_atom_.clear();
-		atom_to_virtual_bond_index_.clear();
+		
+		float max_penalty = 0;
 
 		// get the averaged bond lengths
 		//	BuildBondsProcessor bbp; 
@@ -1694,124 +1716,85 @@ cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 
 		// compute the hybridisation states of all atoms TODO
 		
-		// try to add missing hydrogens
-		if (ac_)
-		{
 		/*	// compute the hybridisation states 
-			HybridisationProcessor hp;
-			hp.options.set(HybridisationProcessor::Option::METHOD, HybridisationProcessor::Method::FF_BASED);
-			ac_->apply(hp);
-			*/
-			// iterate over all atoms and add a hydrogen atom and bond 
-			// 	if suggested by the hybridisation state 
-			AtomIterator ait;
-			Size free_valences = 0;
+		HybridisationProcessor hp;
+		hp.options.set(HybridisationProcessor::Option::METHOD, HybridisationProcessor::Method::FF_BASED);
+		ac_->apply(hp);
+		*/
+		// iterate over all atoms and add a hydrogen atom and bond 
+		// 	if suggested by the hybridisation state 
+		Size free_valences = 0;
 
-			BALL_FOREACH_ATOM(*ac_, ait)
+		vector<Atom*> atoms_to_delete;
+
+		//ait->getProperty("HybridisationState", 0);
+		
+		if (  (atom->getElement() == PTE[Element::H])
+				||(atom->getElement() == PTE[Element::He]))
+			free_valences = atom->getElement().getGroup() - atom->countBonds();
+		else
+			free_valences = 18 - atom->getElement().getGroup() - atom->countBonds();
+		
+		if (free_valences > 0)
+		{
+			//
+			//  insert this virtual bond into the processors speed-up data structures
+			//
+			// NOTE: a virtual bond represents all possible hydrogen bond for an atom
+			num_of_virtual_bonds_++;
+			// store the max number of possible additional hydrogens 
+			number_of_virtual_hydrogens_[atom] = free_valences;
+			virtual_bond_index_to_number_of_virtual_hydrogens_.push_back(free_valences);
+			// connect the virtual bond to this atom via its index
+			virtual_bond_index_to_atom_.push_back(atom);
+			atom_to_virtual_bond_index_[atom] = num_of_virtual_bonds_ -1;
+
+			// NOTE: these datastructures are for both original and virtual bonds!
+			index_to_bond_.push_back(virtual_bond_);
+			free_bonds_.push_back(virtual_bond_);	
+
+			/*				bool found_bond_lengths = false;
+								Size atom_num1 = 0; 
+								Size atom_num2 = 0; */
+
+			for (Size i = 1; i <= free_valences; i++)
 			{
-				vector<Atom*> atoms_to_delete;
+				// add a hydrogen atom  
+				Atom* hydrogen = new Atom;
+				hydrogen->setElement(PTE[Element::H]);
+				hydrogen->setProperty("VIRTUAL__ATOM", true);
+				atom->getMolecule()->insert(*hydrogen);
+				atoms_to_delete.push_back(hydrogen);
 
-				//ait->getProperty("HybridisationState", 0);
-				
-				if (  (ait->getElement() == PTE[Element::H])
-						|| (ait->getElement() == PTE[Element::He]))
-					free_valences = ait->getElement().getGroup() - ait->countBonds();
-				else
-					free_valences = 18 - ait->getElement().getGroup() - ait->countBonds();
-				
- 				
- 				if (free_valences > 0)
+				// and a bond to the atomcontainer
+				Bond* new_bond = atom->createBond(*hydrogen);
+				new_bond->setProperty("VIRTUAL__BOND", true);
+				new_bond->setOrder(1);
+
+				// update the penalty classes! 
+				int penalty_class = getPenaltyClass_(atom);
+				int atom_index = atom->getProperty("AssignBondOrderProcessorAtomNo").getUnsignedInt();
+				atom_to_block_[atom_index].push_back(penalty_class);
+
+				if (penalty_class != -1)
 				{
-					//
-					//  insert this virtual bond into the processors speed-up data structures
-					//
-					// NOTE: a virtual bond represents all possible hydrogen bond for an atom
-					num_of_virtual_bonds_++;
-					// store the max number of possible additional hydrogens 
-					number_of_virtual_hydrogens_[&*ait] = free_valences;
-					virtual_bond_index_to_number_of_virtual_hydrogens_.push_back(free_valences);
-					// connect the virtual bond to this atom via its index
-					virtual_bond_index_to_atom_.push_back(&*ait);
-					atom_to_virtual_bond_index_[&*ait] = num_of_virtual_bonds_ -1;
-
-
-					// NOTE: these datastructures are for both original and virtual bonds!
-					index_to_bond_.push_back(virtual_bond_);
-					free_bonds_.push_back(virtual_bond_);	
-
-					/*				bool found_bond_lengths = false;
-										Size atom_num1 = 0; 
-										Size atom_num2 = 0; */
-
-					for (Size i = 1; i <= free_valences; i++)
+					for(Size k = 0; k < block_to_length_[penalty_class]; k++)
 					{
-						// add a hydrogen atom  
-						Atom* hydrogen = new Atom;
-						hydrogen->setElement(PTE[Element::H]);
-						hydrogen->setProperty("VIRTUAL__ATOM", true);
-						ait->getMolecule()->insert(*hydrogen);
-						atoms_to_delete.push_back(hydrogen);
-
-						// and a bond to the atomcontainer
-						Bond* new_bond = ait->createBond(*hydrogen);
-						new_bond->setProperty("VIRTUAL__BOND", true);
-						new_bond->setOrder(1);
-						/*			
-						// set the bond length
-						atom_num1 = hydrogen->getElement().getAtomicNumber();
-						atom_num2 = ait->getElement().getAtomicNumber();
-
-						found_bond_lengths = false;
-						if (   bond_lengths.find(atom_num1) != bond_lengths.end() 
-						&& (bond_lengths[atom_num1].find(atom_num2) != bond_lengths[atom_num1].end()))
-						{
-						found_bond_lengths = true;
-						}
-						else if ( bond_lengths.find(atom_num2) != bond_lengths.end() 
-						&& (bond_lengths[atom_num2].find(atom_num1) != bond_lengths[atom_num2].end()))
-						{
-						Size tmp = atom_num1;
-						atom_num1 = atom_num2;
-						atom_num2 = tmp;
-						found_bond_lengths = true;
-						}
-
-						if (found_bond_lengths)
-						{
-						HashMap<Bond::BondOrder, float> tmp_bond_lengths =  bond_lengths[atom_num1][atom_num2];
-
-						if (tmp_bond_lengths.find((Bond::BondOrder)1) != tmp_bond_lengths.end())
-						{
-						new_bond->setProperty("VIRTUAL__LENGTH", (int)tmp_bond_lengths[(Bond::BondOrder)1]);
-						}
-						}
-						else
-						{
-						Log.error() << "Error: no bond length found! " << __FILE__ << " " << __LINE__ << endl;
-						}
-						*/		
-
-						// NOTE: add the moment we assume, that this method is called 
-						//       AFTER preassignPenaltyClasses() and precomputeBondLengthPenalties()
-
-						// update the penalty classes! 
-						atom_to_block_[ait->getIndex()].push_back(getPenaltyClass_(&*ait));
-
-					}
-
-					// delete all virtual atoms and bonds
-					for (Size i=0; i < atoms_to_delete.size(); i++)
-					{
-						atoms_to_delete[i]->destroy();
-						//NOTE: doing so, all adjacent bonds will be deleted automatically
+						float current_pen = penalties_[k + block_to_start_idx_[penalty_class]];
+						max_penalty = std::max(max_penalty, current_pen);
 					}
 				}
 			}
-		} 
-		else
-			ret= false;
 
-		return ret;
+			// delete all virtual atoms and bonds
+			for (Size i=0; i < atoms_to_delete.size(); i++)
+			{
+				delete(atoms_to_delete[i]);//->destroy();
+				//NOTE: doing so, all adjacent bonds will be deleted automatically
+			}
+		}
+
+		return max_penalty;
 	}
 
 
@@ -1934,7 +1917,7 @@ cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 					HashMap<Atom*, int>::Iterator it = tmp_virtual_hydrogens.find(&*a_it);
 					if (it != solutions_[i].number_of_virtual_hydrogens.end())
 					{
-						int missing_hydrogens = it->second;
+						Size missing_hydrogens = (Size)it->second;
 						for (Size m=0; m < missing_hydrogens; m++)
 						{
 							// add a hydrogen atom  
@@ -2411,6 +2394,13 @@ cout << "AssignBondOrderProcessor::PQ_Entry_::operator <: " <<  coarsePenalty() 
 	// For testing 
 	float AssignBondOrderProcessor::evaluatePenalty(AtomContainer* ac)
 	{	
+		// NOTE: this function is *never* allowed to add missing hydrogens => store it temporarily
+		// and store it again later
+		bool add_missing_hydrogens_backup = add_missing_hydrogens_;
+		add_missing_hydrogens_ = false;
+
+		float ret = -1;
+
 		evaluation_mode_ = true;
 		if (valid_ && readAtomPenalties_())
 		{
@@ -2425,7 +2415,7 @@ cout << "AssignBondOrderProcessor::PQ_Entry_::operator <: " <<  coarsePenalty() 
 				bond_to_index_.clear();
 				index_to_bond_.clear();
 				index_to_bond_.resize(ac->countBonds(),0);
-				entry.bond_orders.resize(ac->countBonds(),0);
+				entry.bond_orders.resize(ac->countBonds(),-1);
 				int i=0;
 				
 				BALL_FOREACH_BOND(*ac, a_it, b_it)
@@ -2444,13 +2434,13 @@ cout << "AssignBondOrderProcessor::PQ_Entry_::operator <: " <<  coarsePenalty() 
 				if (estimatePenalty_(entry))
 				{	
 					evaluation_mode_ = false;
-					return entry.coarsePenalty();
+					ret = entry.coarsePenalty();
 				}
 				else
 				{
-					Log.info() << "Error in estimatePenalty" << endl;
+					Log.info() << "AssignBondOrderProcessor::evaluatePenalty(): estimatePenalty() returned an error!" << endl;
 					evaluation_mode_ = false;
-					return -1.;
+					ret = -1.;
 				}
 			}
 		}
@@ -2459,7 +2449,10 @@ cout << "AssignBondOrderProcessor::PQ_Entry_::operator <: " <<  coarsePenalty() 
 
 
 		evaluation_mode_ = false;
-		return -1.;
+
+		add_missing_hydrogens_ = add_missing_hydrogens_backup;
+
+		return ret;
 	}
 
 

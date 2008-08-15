@@ -404,10 +404,10 @@ namespace BALL
 			bool precomputeBondLengthPenalties_();
 
 			/** Adds missing hydrogens as virtual hydrogens to the 
-			 *  given AtomContainer. "virtual" means that no  
+			 *  given Atom. "virtual" means that NO  
 			 *  atoms and bonds are added to the AtomContainer. 
 			 */
-			bool computeVirtualHydrogens_();
+			float computeVirtualHydrogens_(Atom* atom);
 
 #ifdef BALL_HAS_LPSOLVE
 			/** Setup the integer linear program.
@@ -547,8 +547,7 @@ namespace BALL
 
 			/// Method to estimate the bond length penalty
 			/// NOTE virtual bonds are excluded!
-			float estimateBondLengthPenalty_(Atom* atom,
-																			 Index atom_index, // the atom index
+			float estimateBondLengthPenalty_(Index atom_index, // the atom index
 																			 vector<Bond*> free_bonds, 
 																			 int fixed_virtual_order,  
 																			 int fixed_valence, 
