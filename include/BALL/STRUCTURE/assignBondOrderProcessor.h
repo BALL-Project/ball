@@ -94,6 +94,10 @@ namespace BALL
 				/**	compute bond orders for all bonds of type aromatic bond order
 				*/
 				static const char* OVERWRITE_SELECTED_BONDS; 	
+				
+				/**	add hydrogens based on the hybridization processor
+				*/
+				static const char* ADD_HYDROGENS;
 
 				/**	overwrite all charges
 				*/
@@ -145,7 +149,8 @@ namespace BALL
 				static const bool OVERWRITE_DOUBLE_BOND_ORDERS;
 				static const bool OVERWRITE_TRIPLE_BOND_ORDERS;
 				static const bool OVERWRITE_QUADRUPLE_BOND_ORDERS;
-				static const bool OVERWRITE_AROMATIC_BOND_ORDERS; 
+				static const bool OVERWRITE_AROMATIC_BOND_ORDERS;
+				static const bool ADD_HYDROGENS;
 				static const bool OVERWRITE_CHARGES;
 				static const bool ASSIGN_CHARGES;
 				static const bool KEKULIZE_RINGS;
@@ -240,9 +245,11 @@ namespace BALL
 			}
 
 			/** Set the AtomContainer ac_'s bond orders to the ones found 
-			 * in the (already computed!) i-th solution.
-			 * Returns true if the i-th solution is valid 
-			 * NOTE: start counting in 0
+			 * in the (already computed!) i-th solution, start counting in 0!
+			 * Returns true if the i-th solution is valid.
+			 * NOTE: all virtual hydrogens added to the processed AtomContainer
+			 * 			 by a previous call of apply will be deleted by the current
+			 * 			 call!
 			 */
 			bool apply(Position i);
 
@@ -296,11 +303,18 @@ namespace BALL
 					/// denotes whether the problem could be solved or not  
 					bool valid;
 					
-					/// the result : the complete set of bond orders for _ALL_ bonds
+					/// the result : the set of bond orders for _ALL_ original bonds
 					HashMap<Bond*, int> bond_orders;
+					
+					/// the result part2: the atoms with n additional hydrogens
+					HashMap<Atom*, int> number_of_virtual_hydrogens;
+				
+					/// the virtual atoms and bonds that should be deleted when the next 
+					/// solution is applied
+					vector<Atom*> atoms_to_delete;
+					vector<Bond*> bonds_to_delete;
 
 					/// the values of the objective function
-					//float penalty;	
 					float atom_type_penalty;
 					float bond_length_penalty;
 			};
@@ -346,7 +360,7 @@ namespace BALL
 					/// the i-th entry denotes the bondorder of the i-th bond
 					/// unset bonds get the order 0
 					vector<int> bond_orders;
-					
+			
 					/// the last considered bond
 					Position last_bond;
 
@@ -369,7 +383,15 @@ namespace BALL
 			 *  is applied to has an atom with no matching penalty block. 
 			 */
 			bool preassignPenaltyClasses_();
-	
+		
+			/**
+			 * Finds the first matching SMARTS-expression in the penalty-vector
+			 * and returns its index.
+			 * If there is no matching expression, -1 is returned.
+			 */
+			int getPenaltyClass_(Atom* atom);
+
+
 			/** Precomputes for every bond of the AtomContainer to which the 
 			 *	processor is applied to the possible bond length penalties
 			 *	resulting from deviation of the actual bond length to 
@@ -380,6 +402,12 @@ namespace BALL
 			 *	the compare to the longest known bond for this atom pair. 
 			 */
 			bool precomputeBondLengthPenalties_();
+
+			/** Adds missing hydrogens as virtual hydrogens to the 
+			 *  given AtomContainer. "virtual" means that no  
+			 *  atoms and bonds are added to the AtomContainer. 
+			 */
+			bool computeVirtualHydrogens_();
 
 #ifdef BALL_HAS_LPSOLVE
 			/** Setup the integer linear program.
@@ -410,7 +438,32 @@ namespace BALL
 			// TODO: constructor... Ersetzung
 			// Vector for mapping from variable indices onto bonds (all bonds)
 			std::vector<Bond*> index_to_bond_;
+	
 
+
+			// ***************** datastructures for virtual hydrogen bonds ****************** //TODO Constructor
+			//
+			// 	NOTE: a virtual bond represents ALL possible hydrogen 
+			// 				bonds for a given atom
+			//
+			/// the atoms with upto n possible additional hydrogens
+			HashMap<Atom*, int> number_of_virtual_hydrogens_;  //TODO get rid of
+			//
+			/// the max number of virtual hydrogens per virtual bond index
+			std::vector<int> virtual_bond_index_to_number_of_virtual_hydrogens_; // TODO Do we need this?
+			//	
+			/// the number of virtual bonds
+			Position num_of_virtual_bonds_;
+			//
+			/// the virtual bond index assigned to this atom!
+			vector<Atom*> virtual_bond_index_to_atom_;
+			HashMap<Atom*, int> atom_to_virtual_bond_index_;
+			//
+			//
+			//
+
+			// ********************* ILP stuff ***********************
+			//
 			// Vector for mapping from variable indices onto free bonds in the
 			// order used by the ILP
 			std::vector<Bond*> ilp_index_to_free_bond_;
@@ -423,7 +476,7 @@ namespace BALL
 			Position total_num_of_bonds_; 
 
 			// TODO
-			/// num of free bonds 
+			/// num of free bonds without virtual bonds!
 			int num_of_free_bonds_;
 
 			// stores the number of bonds
@@ -445,7 +498,7 @@ namespace BALL
 			/// TODO: Konstruktor.... apply-methods
 			// denotes the index of the last applied solution
 			// -1 if there was no valid solution applied
-			Position last_applied_solution_;
+			int last_applied_solution_;
 			
 			/// the AtomContainer, the processor is operating on
 			AtomContainer* ac_;
@@ -468,6 +521,12 @@ namespace BALL
 			/// flag to indicate, whether also non-optimal solutions should be computed //TODO
 			bool compute_also_non_optimal_solutions_;
 
+			/// flag for adding missing hydrogens
+			bool add_missing_hydrogens_;
+
+			/// a virtual dummy bond
+			Bond* virtual_bond_;
+
 			////////// for Algorithm::A_START   ComputeAllSolutions::A_STAR ///////
 			/// 
 			bool	performAStarStep_(Solution_& sol);
@@ -478,6 +537,22 @@ namespace BALL
 			/// Method to estimate the f = g* +h*
 			/// returns true, if the entry is still valid
 			bool estimatePenalty_(PQ_Entry_& entry);
+		
+			/// Method to estimate the atom type penalty for a given unclosed atom
+			float estimateAtomTypePenalty_(Atom* atom, 
+																		 Index atom_index, // the atom index
+																		 int fixed_valence,  // its so far fixed valence (incl. virtual H's)
+																		 int fixed_virtual_order, // its so far fixed virtual H's
+																		 int num_free_bonds);   // its number of unfixed original bonds
+
+			/// Method to estimate the bond length penalty
+			/// NOTE virtual bonds are excluded!
+			float estimateBondLengthPenalty_(Atom* atom,
+																			 Index atom_index, // the atom index
+																			 vector<Bond*> free_bonds, 
+																			 int fixed_virtual_order,  
+																			 int fixed_valence, 
+																			 int num_free_bonds);
 
 			// filled by readAtomPenalties_
 			// organized in imaginarey blocks of length  
@@ -488,13 +563,16 @@ namespace BALL
 			vector<Position> block_to_start_idx_;
 			vector<Size> block_to_length_;
 			vector<int> block_to_start_valence_;
-			
 			// TODO
 			// stores the defining element and the SMART-string of each block
 			vector<pair<String, String> > block_definition_;
 
-			// stores which atom belongs to which block
-			vector<int> atom_to_block_;
+
+			// stores which atom belongs to which vector of blocks 
+			// the first vector element denotes the penalty block 
+			// assigned to the atom without any additional VIRTUAL Hydrogens
+			// the second element with one additional Hydrogen and so on. 
+			vector< vector<int> > atom_to_block_;
 					
 			///stores the possible bond lengths penalties per order // TODO: constructor etc
 			HashMap<Bond*, vector<float> > bond_lengths_penalties_;
