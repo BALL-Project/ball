@@ -645,7 +645,7 @@ void MainWindow::createDockWindows()
 	dockwidgets_.push_back(filedock);
 	filedock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
 	filedock->setWidget(file_browser_);
-	addDockWidget(Qt::RightDockWidgetArea, filedock);
+	addDockWidget(Qt::LeftDockWidgetArea, filedock);
 	windowMenu_->addAction(filedock->toggleViewAction());
 	model_list_->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
@@ -699,7 +699,7 @@ void MainWindow::createDockWindows()
 	QBrush b1(c1,Qt::SolidPattern);
 	model_list_->setBackgroundBrush(b1);
 	
-	addDockWidget(Qt::LeftDockWidgetArea, modeldock);
+	addDockWidget(Qt::RightDockWidgetArea, modeldock);
 	windowMenu_->addAction(modeldock->toggleViewAction());
 
 	///create dock widget for listing all available feature selection methods
@@ -713,7 +713,7 @@ void MainWindow::createDockWindows()
 	dockwidgets_.push_back(fsdock);
 	fsdock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
 	fsdock->setWidget(fs_list_);
-	addDockWidget(Qt::LeftDockWidgetArea, fsdock);
+	addDockWidget(Qt::RightDockWidgetArea, fsdock);
 	windowMenu_->addAction(fsdock->toggleViewAction());
 	
 	QColor c2(245,244,180);
@@ -730,7 +730,7 @@ void MainWindow::createDockWindows()
 	}
 	QDockWidget* validationdock = new QDockWidget(tr("Validation"), this);
 	dockwidgets_.push_back(validationdock);
-	validationdock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
+	validationdock->setAllowedAreas(Qt::RightDockWidgetArea|Qt::RightDockWidgetArea);
 	validationdock->setWidget(val_list_);
 	addDockWidget(Qt::LeftDockWidgetArea, validationdock);
 	windowMenu_->addAction(validationdock->toggleViewAction());
@@ -741,6 +741,7 @@ void MainWindow::createDockWindows()
 
 	tabifyDockWidget(modeldock,fsdock);
 	tabifyDockWidget(fsdock, validationdock);
+	modeldock->raise();
 
 	QDockWidget* progressdock = new QDockWidget(tr("Progress"), this);
 	dockwidgets_.push_back(progressdock);
@@ -900,11 +901,25 @@ void MainWindow::restoreDesktop()
 // SLOT
 BALL::String MainWindow::exportPipeline()
 {
+	return exportPipeline(0);
+}
+
+
+BALL::String MainWindow::exportPipeline(bool no_immediate_archiving)
+{
 	if(checkForEmptyPipelines()) return "";
 	
 	QString filename = QFileDialog::getSaveFileName(this, tr("Save File as"),(settings.config_path+"config.tar.gz").c_str(),tr("Pipeline (*.tar.gz *.conf)"));
 	String s = filename.toStdString();
 	if(filename=="") return s;
+	
+	if(no_immediate_archiving && s.hasSuffix(".tar.gz"))
+	{
+		String tmp = s.before(".tar.gz");
+		filename = tmp.c_str();
+		filename += ".conf";
+	}
+	
 	exportPipeline(filename);
 	settings.config_path = s.substr(0,s.find_last_of("/")+1);
 	return s;
@@ -1582,7 +1597,7 @@ void MainWindow::submit()
 {
 	if(checkForEmptyPipelines()) return;
 	
-	String configfile = exportPipeline();
+	String configfile = exportPipeline(1);
 	if(configfile!="")
 	{
 		submitToCluster(configfile);
@@ -1593,11 +1608,20 @@ void MainWindow::submitToCluster(String configfile)
 {
 	uint d = configfile.find_last_of(".");
 	uint s = configfile.find_last_of("/");
-	String file = configfile.substr(0,d); // name of config-file as prefix for output-files
-	//cout<<"file="<<file<<endl;
-	String directory = configfile.substr(0,s+1); // name of folder
+	String file_prefix = configfile.substr(0,d); // prefix for output-files
+	String short_file_prefix = configfile.substr(s+1,d-s); // prefix without folders
 	
-	String script = file+".csh";
+	String directory = configfile.substr(0,s+1); // name of folder
+	bool archive = configfile.hasSuffix(".tar.gz");
+	if(archive)
+	{
+		file_prefix = configfile.before(".tar.gz");
+		short_file_prefix = configfile.substr(s+1);
+		short_file_prefix = short_file_prefix.before(".tar.gz");
+		configfile = file_prefix+".conf";
+	}
+	
+	String script = file_prefix+".csh";
 	ofstream out(script.c_str());
 	
 	String ir=""; String ip=""; String mc="";
@@ -1615,14 +1639,21 @@ void MainWindow::submitToCluster(String configfile)
 	{	
 		out<<"setenv start_time `date`"<<endl;
 	}
+	out<<"cd "<<directory<<endl;
 	out<<ir<<" "<<configfile<<endl;
 	out<<ip<<" "<<configfile<<endl;
 	out<<mc<<" "<<configfile<<endl;
 	out<<fs<<" "<<configfile<<endl;
-	out<<pr<<" "<<configfile<<endl;
+	out<<pr<<" "<<configfile<<endl<<endl;
+	
+	if(archive)
+	{
+		out<<"tar -cz "<<short_file_prefix<<"* -f "<<short_file_prefix<<".tar.gz"<<endl;
+		out<<"rm -f "<<short_file_prefix<<"*.dat "<<short_file_prefix<<"*.mod "<<short_file_prefix<<"*.conf "<<script<<endl<<endl;	
+	}
 	if(settings.send_email && settings.email_address!="")
 	{
-		out<<"echo \"Subject: "<<configfile.substr(s+1)<<" is ready!\\"<<endl<<"Process '"<<script<<"' is ready!\\"<<endl<<"Start Time: $start_time\\"<<endl<<"End time: `date`\\"<<endl<<"\\"<<endl<<" \" | sendmail "<<settings.email_address<<endl;
+		out<<"echo \"Subject: "<<short_file_prefix<<" is ready!\\"<<endl<<"Process '"<<script<<"' is ready!\\"<<endl<<"Start Time: $start_time\\"<<endl<<"End time: `date`\\"<<endl<<"\\"<<endl<<" \" | sendmail "<<settings.email_address<<endl;
 	}
 		
 	out.close();

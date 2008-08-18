@@ -200,6 +200,10 @@ namespace BALL
 				If no items have been created yet, a message box is displayed 
 				@return true if pipelines are empty, false otherwise */
 				bool checkForEmptyPipelines();
+				
+				/** exports the current Pipeline to file(s).
+				@param no_immediate_archiving if true, the pipeline is saved as several files even if tar.gz archive was chosen. All created files will later be archived _after_ all calculation on the cluster for this pipeline are ready. */
+				String exportPipeline(bool no_immediate_archiving);
 			
 				/** @name Private Attributes */
 
