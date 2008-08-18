@@ -9,6 +9,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/coefficientPlotter.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/bayesPlotter.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/featurePlotter.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/componentPlotter.h>
 
 using namespace BALL::QSAR;
 using namespace BALL::QSAR::Exception;
@@ -355,6 +356,7 @@ void ModelItem::init()
 {
 	plotter_ = NULL;
 	feature_plotter_ = NULL;
+	component_plotter_ = NULL;
 	result_color_ = QColor(160,172,182);
 	setPixmap();
 	createActions();
@@ -625,6 +627,13 @@ void ModelItem::createActions()
 		connect(plot_features_action,SIGNAL(triggered()),this,SLOT(showFeaturePlotter()));
 		context_menu_actions_.push_back(plot_features_action);
 	}
+	String type = entry_->name_abreviation;
+	if(type=="PLS"||type=="OPLS"||type=="PCR"||type=="KPCR"||type=="KPLS")
+	{
+		QAction* plot_components_action = new QAction("plot components",this);
+		connect(plot_components_action,SIGNAL(triggered()),this,SLOT(showComponentPlotter()));
+		context_menu_actions_.push_back(plot_components_action);
+	}		
 }
 
 
@@ -715,7 +724,7 @@ void ModelItem::showProperties()
 	modelConfigurationDialog.exec();
 }
 
-void ModelItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+void ModelItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
 	if (view_->name == "view")
 	{
@@ -925,6 +934,25 @@ void ModelItem::showFeaturePlotter()
 		else
 		{
 			feature_plotter_->show();
+		}
+	}
+}
+
+
+// SLOT
+void ModelItem::showComponentPlotter()
+{
+	if(model_==NULL) return;
+	
+	if(entry_->regression && ((RegressionModel*)model_)->getTrainingResult()->Ncols()!=0)
+	{
+		if(component_plotter_ == NULL)
+		{
+			component_plotter_=new ComponentPlotter(this);
+		}
+		else
+		{
+			component_plotter_->show();
 		}
 	}
 }

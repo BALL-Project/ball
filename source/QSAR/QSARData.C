@@ -1360,7 +1360,7 @@ void QSARData::readFromFile(string filename)
 }
 
 
-vector<double>* QSARData::getSubstance(int s)
+vector<double>* QSARData::getSubstance(int s) const
 {
 	vector<double>* v = new vector<double>(descriptor_matrix_.size(),0);
 	for(unsigned int i=0; i<descriptor_matrix_.size();i++)
@@ -1378,7 +1378,7 @@ vector<double>* QSARData::getSubstance(int s)
 }
 
 
-vector<double>* QSARData::getActivity(int s)
+vector<double>* QSARData::getActivity(int s) const
 {
 	vector<double>* v = new vector<double>(Y_.size(),0);
 	for(uint i=0; i<Y_.size();i++)

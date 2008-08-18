@@ -66,7 +66,9 @@ SOURCES       = dataItem.C\
 		pipeline.C\
 		coefficientPlotter.C\
 		bayesPlotter\
-		featurePlotter.C	
+		featurePlotter.C\
+		componentPlotter.C\
+		moc_componentPlotter.C
 # 		connectionsList.C\
 # 		moc_connectionsList.C
 	
@@ -124,7 +126,9 @@ OBJECTS       = dataItem.o \
 		pipeline.o\
 		coefficientPlotter.o\
 		bayesPlotter.o\
-		featurePlotter.o
+		featurePlotter.o\
+		componentPlotter.o\
+		moc_componentPlotter.o
 # 		connectionsList.o\
 # 		moc_connectionsList.o
 
@@ -206,6 +210,9 @@ moc_modelItem.C: $(INC_PATH)modelItem.h
 
 moc_inputPlotter.C: $(INC_PATH)inputPlotter.h
 	$(MOC) $^ -o $@	
+	
+moc_componentPlotter.C: $(INC_PATH)componentPlotter.h
+	$(MOC) $^ -o $@	
 
 
 
@@ -258,6 +265,9 @@ moc_connectionsList.o: moc_connectionsList.C
 	$(CXX) -c $(CXXFLAGS) $(BALL_INCLUDES) -o moc_connectionsList.o moc_connectionsList.C
 
 moc_plotter.o: moc_plotter.C
+	$(CXX) -c $(CXXFLAGS) $(BALL_INCLUDES) $^ -o $@
+
+moc_componentPlotter.o: moc_componentPlotter.C
 	$(CXX) -c $(CXXFLAGS) $(BALL_INCLUDES) $^ -o $@
 
 

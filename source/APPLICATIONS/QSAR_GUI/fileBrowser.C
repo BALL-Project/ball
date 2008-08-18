@@ -8,10 +8,7 @@ FileBrowser::FileBrowser(std::string path)
 {
 	///display only sdf, csv and txt-files
 	QStringList filters;
-	filters << "*.sdf"	
-			<< "*.csv"	
-			<< "*.txt";
-	
+	filters << "*.sdf"<<"*.csv"<< "*.txt";
 	dirmodel_ = new QDirModel(this);
 
 	///set display filters: list all directories, list files, don't list "." and ".."

@@ -151,11 +151,11 @@ namespace BALL
 				@param fraction the fraction of this current coumpounds that should be used as external validation set (by random drawing) */
 				vector<QSARData*> generateExternalSet(double fraction);
 				
-				/** returns a pointer to a vector containing the UNcentered descriptor values for the s'th substance of the current data set */
-				vector<double>* getSubstance(int s);
+				/** returns a pointer to a new vector containing the UNcentered descriptor values for the s'th substance of the current data set */
+				vector<double>* getSubstance(int s) const;
 				
-				/** returns a pointer to a vector containing the UNcentered response values for the s'th substance of the current data set */
-				vector<double>* getActivity(int s);
+				/** returns a pointer to a new vector containing the UNcentered response values for the s'th substance of the current data set */
+				vector<double>* getActivity(int s) const;
 				
 				/** returns the number of response variables */
 				unsigned int getNoResponseVariables() const;

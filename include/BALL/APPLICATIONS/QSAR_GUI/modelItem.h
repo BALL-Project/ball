@@ -169,7 +169,7 @@ namespace BALL
 				void loadModel();	
 				void showProperties();
 				void showFeaturePlotter();
-
+				void showComponentPlotter();
 				
 			private:							
 				
@@ -192,6 +192,8 @@ namespace BALL
 				Plotter* plotter_;
 				
 				Plotter* feature_plotter_;
+				
+				Plotter* component_plotter_;
 				
 				/** if set to true, training is not done for this model, e.g. because it serves as input for a feature selection only */
 				bool no_training_;
