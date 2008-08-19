@@ -49,6 +49,17 @@
 # define BALL_VIEW_EXPORT
 #endif
 
+//This declares a BALL_DEPRECATED macro that can be used to mark deprecated api
+//It is essentially copied from Qt 4.4.1 but simplified, thus there might be
+//some cases where it does not work as expected, yet.
+#if defined(BALL_COMPILER_MSVC) && (_MSC_VER >= 1300)
+    #define BALL_DEPRECATED __declspec(deprecated)
+#elif defined(BALL_COMPILER_GXX) && (BALL_COMPILER_VERSION_MAJOR - 0 > 3 || (BALL_COMPILER_VERSION_MAJOR - 0 == 3 && BALL_COMPILER_VERSION_MINOR - 0 >= 2))
+    #define BALL_DEPRECATED __attribute__((deprecated))
+#else
+    #define BALL_DEPRECATED
+#endif
+
 namespace BALL
 {
 
