@@ -1,4 +1,4 @@
-  // -*- Mode: C_++; tab-width: 2; -*-
+  // -*- Mode: weights_++; tab-width: 2; -*-
 // vi: set ts=2:
 //
 //
@@ -41,10 +41,6 @@ void PLSModel::train()
 	int cols=descriptor_matrix_.Ncols();
 
 	Matrix X=descriptor_matrix_;
-	//Matrix U_; // Matrix U_ saves all vectors u
-	//Matrix W_; // Matrix W_ saves all vectors w
-	//Matrix C_; // Matrix C_ saves all vectors c
-	//Matrix T_;  // Matrix T_ saves all vectors t
 	Matrix P;  // Matrix P saves all vectors p
 
 	ColumnVector w;
@@ -84,33 +80,33 @@ void PLSModel::train()
 		if(j==0)
 		{
 			U_ = u;
-			W_ = w;	
-			C_ = c;
+			loadings_ = w;	
+			weights_ = c;
 			P = p;
-			T_ = t;
+			latent_variables_ = t;
 		}
 		else
 		{
 			//w = w*(p.t()*w).i();
 			U_ = U_|u;
-			W_ = W_|w;
-			C_ = C_|c;
+			loadings_ = loadings_|w;
+			weights_ = weights_|c;
 			P = P|p;
-			T_ = T_ | t;
+			latent_variables_ = latent_variables_ | t;
 		}
 	}
 
 	try  // p's are not orthogonal to each other, so that in rare cases P.t()*W_ is not invertible
 	{
-		W_ = W_*(P.t()*W_).i();
+		loadings_ = loadings_*(P.t()*loadings_).i();
 	}
 	catch(SingularException e)
 	{
 		IdentityMatrix I(P.Ncols());
 		I = I*0.0001;
-		W_ = W_*(P.t()*W_+I).i();
+		loadings_ = loadings_*(P.t()*loadings_+I).i();
 	}
-	training_result_=W_*C_.t();
+	training_result_=loadings_*weights_.t();
 
 }
 
@@ -141,26 +137,9 @@ bool PLSModel::optimizeParameters(int k, int no_steps)
 }
 
 
-const Matrix* PLSModel::getT()
-{ 
-	return &T_;
-}
-
-
-const Matrix* PLSModel::getW()
-{
-	return &W_;
-}
-
 const Matrix* PLSModel::getU()
 { 
 	return &U_;
-}
-
-
-const Matrix* PLSModel::getC()
-{
-	return &C_;
 }
 
 

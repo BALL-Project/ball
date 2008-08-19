@@ -56,7 +56,8 @@ ifeq ($(USE_NEWMAT),true)
 		fitModel.C\
 		bayesModel.C\
 		snBModel.C\
-		nBModel.C
+		nBModel.C\
+		latentVariableModel.C
 		
 		ifeq ($(USE_LIBSVM),true)
 			CPP_SOURCES+=\

@@ -18,12 +18,14 @@
 #include <newmatap.h>
 #include <newmatio.h>
 
+#include <BALL/QSAR/latentVariableModel.h>
+
 
 namespace BALL 
 {
 	namespace QSAR
 	{
-		class PCRModel : public LinearModel
+		class PCRModel : public LinearModel, public LatentVariableModel
 		{
 			public:
 

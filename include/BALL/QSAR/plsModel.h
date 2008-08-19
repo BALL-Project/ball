@@ -18,12 +18,14 @@
 #include <BALL/QSAR/exception.h>
 #endif
 
+#include <BALL/QSAR/latentVariableModel.h>
+
 
 namespace BALL
 {
 	namespace QSAR
 	{	
-		class PLSModel : public LinearModel
+		class PLSModel : public LinearModel, public LatentVariableModel
 		{
 			public:
 				/** @name Constructors and Destructors
@@ -51,16 +53,7 @@ namespace BALL
 				void setNoComponents(int no);
 				
 				/** get the number of PLS components */
-				int getNoComponents();			
-
-				/** returns a pointer to the  PLS score matrix T */
-				const Matrix* getT();
-
-				/** returns a pointer to the  PLS X-weights matrix W */
-				const Matrix* getW();
-				
-				/** returns a pointer to the  PLS components-weights matrix C */
-				const Matrix* getC();
+				int getNoComponents();
 				
 				/** returns a pointer to the  PLS Y-scores matrix U */
 				const Matrix* getU();
@@ -75,13 +68,8 @@ namespace BALL
 				/** @name Attributes
 				 */
 				//@{
-				Matrix T_;
-
-				Matrix W_;
 				
 				Matrix U_;
-
-				Matrix C_;
 	
 				int no_components_;
 				//@}
