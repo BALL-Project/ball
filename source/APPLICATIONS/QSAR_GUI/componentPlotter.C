@@ -42,46 +42,50 @@ void ComponentPlotter::selectedCompChanged()
 void ComponentPlotter::calculateComponents()
 {
 	RegressionModel* model = (RegressionModel*)model_item_->model();
-	const Matrix* coefficient_matrix = model->getTrainingResult();
 	
-	if(coefficient_matrix->Ncols()==0)
-	{
-		cout<<"Model must be trained before coefficients can be plotted!"<<endl;
-		return;
-	}
 	if(!model_item_->getRegistryEntry()->latent_variables)
 	{
 		cout<<"Plotting of components can only be done for models that create principle components or partial least squares components!"<<endl;
 		return;
 	}
-
+	if(model_item_->inputDataItem()->data()==NULL)
+	{
+		cout<<"No input data! Thus creation of PCR/PLS components for plotting is not possible!"<<endl;
+		return;
+	}
+	if(model_item_->inputDataItem()->data()->getNoResponseVariables()==0)
+	{
+		cout<<"There should be response variable(s) for plotting of PLS/PCR components"<<endl;
+		return;
+	}
+	
 	uint no_components=0;
 	
 	LatentVariableModel* lv_model = dynamic_cast<LatentVariableModel*>(model_item_->model());
 	component_matrix_ = lv_model->getLatentVariables();
-	
 	if(component_matrix_->Ncols()==0||component_matrix_->Nrows()==0)
 	{
-		if(model_item_->inputDataItem()->data()==NULL)
-		{
-			cout<<"No input data! Thus creation of PCR/PLS components for plotting is not possible!"<<endl;
-			return;
-		}
 		model->setDataSource(model_item_->inputDataItem()->data());
 		model->readTrainingData();
 		model->train(); // train first, since W_ is not saved to file...
 		
 		component_matrix_ = lv_model->getLatentVariables();
 	}
+	// if model is trained, plot latente variables of CURRENT input data, which might be different from the model's trainings data!!
+	else
+	{
+		model->setDataSource(model_item_->inputDataItem()->data());
+		model->readTrainingData();
+	}
 	
 	no_components=component_matrix_->Ncols();
 	if(no_components<2) return;
-	
 	
 	uint size = model_item_->model()->data->getNoSubstances();
 	min_response_value_ = 1e10;
 	max_response_value_ = -1e10;
 	const Matrix* Y = model_item_->model()->getY();
+	
 	for(uint j=1; j<=size; j++)
 	{
 		//vector<double>* resp = model_item_->model()->data->getActivity(j-1);
@@ -100,7 +104,7 @@ void ComponentPlotter::calculateComponents()
 		component_two_combobox_->addItem(tmp.c_str(),i);
 	}
 	component_one_combobox_->setCurrentIndex(0);
-	component_two_combobox_->setCurrentIndex(1);
+	component_two_combobox_->setCurrentIndex(1);	
 }
 
 
@@ -109,7 +113,7 @@ void ComponentPlotter::plot()
 	qwt_plot_->clear();
 	
 	if(component_matrix_==NULL||component_matrix_->Ncols()==0) calculateComponents();
-	if(component_matrix_==NULL||component_matrix_->Ncols()==0) return; // only 1 component	
+	if(component_matrix_==NULL||component_matrix_->Ncols()<2) return; // only 1 component	
 	
 	double min_y=1e10;
 	double max_y=-1e10;
@@ -165,8 +169,8 @@ void ComponentPlotter::plot()
 	QString s2 = component_two_combobox_->itemText(component_two_combobox_->currentIndex());
 	LatentVariableModel* lv_model = dynamic_cast<LatentVariableModel*>(model_item_->model());
 	const Matrix* weights = lv_model->getWeights();
-	s1 += "  w="; s1+=String((*weights)(comp_one,1)).c_str();
-	s2 += "  w="; s2+=String((*weights)(comp_two,1)).c_str();
+	s1 += "  c="; s1+=String((*weights)(comp_one,1)).c_str();
+	s2 += "  c="; s2+=String((*weights)(comp_two,1)).c_str();
 	
 	qwt_plot_->setAxisTitle(QwtPlot::yLeft,s2);
 	qwt_plot_->setAxisTitle(QwtPlot::xBottom,s1);
