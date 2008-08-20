@@ -12,10 +12,11 @@ using namespace BALL::VIEW;
 
 
 
-ComponentPlotter::ComponentPlotter(ModelItem* model_item)
+ComponentPlotter::ComponentPlotter(ModelItem* model_item, bool plot_loadings)
 	: Plotter(model_item)
 {
 	model_item_ = model_item;
+	plot_loadings_ = plot_loadings;
 	component_one_combobox_ = new QComboBox(this);
 	component_two_combobox_ = new QComboBox(this);
 	component_matrix_ = NULL;
@@ -62,43 +63,62 @@ void ComponentPlotter::calculateComponents()
 	uint no_components=0;
 	
 	LatentVariableModel* lv_model = dynamic_cast<LatentVariableModel*>(model_item_->model());
-	component_matrix_ = lv_model->getLatentVariables();
-	if(component_matrix_->Ncols()==0||component_matrix_->Nrows()==0)
+	
+	if(!plot_loadings_)
 	{
-		model->setDataSource(model_item_->inputDataItem()->data());
-		model->readTrainingData();
-		model->train(); // train first, since W_ is not saved to file...
-		
 		component_matrix_ = lv_model->getLatentVariables();
+		if(component_matrix_->Ncols()==0||component_matrix_->Nrows()==0)
+		{
+			model->setDataSource(model_item_->inputDataItem()->data());
+			model->readTrainingData();
+			model->train(); 
+			component_matrix_ = lv_model->getLatentVariables();
+		}
+		// if model is trained, plot latent variables of CURRENT input data, which might be different from the model's trainings data!!
+		else
+		{
+			model->setDataSource(model_item_->inputDataItem()->data());
+			model->readTrainingData();
+		}
+		
+		no_components=component_matrix_->Ncols();
+		if(no_components<2) return;
+		
+		uint size = model_item_->model()->data->getNoSubstances();
+		min_response_value_ = 1e10;
+		max_response_value_ = -1e10;
+		const Matrix* Y = model_item_->model()->getY();
+		for(uint j=1; j<=size; j++)
+		{
+			//vector<double>* resp = model_item_->model()->data->getActivity(j-1);
+			//int response_value = (int)(*resp)[0];
+			//delete resp;
+			double response_value = (*Y)(j,1);
+			if(response_value<min_response_value_) min_response_value_=response_value;
+			if(response_value>max_response_value_) max_response_value_=response_value;
+		}
 	}
-	// if model is trained, plot latente variables of CURRENT input data, which might be different from the model's trainings data!!
 	else
 	{
-		model->setDataSource(model_item_->inputDataItem()->data());
-		model->readTrainingData();
+		component_matrix_ = lv_model->getLoadings();
+		if(component_matrix_->Ncols()==0||component_matrix_->Nrows()==0)
+		{
+			model->setDataSource(model_item_->inputDataItem()->data());
+			model->readTrainingData();
+			model->train();
+			component_matrix_ = lv_model->getLoadings();
+		}
+		// if model has already been trained, there is no need to read the current input data, since the reponse values are not displayed in a loading plot (as opposed to a latent variable plot)
 	}
 	
 	no_components=component_matrix_->Ncols();
 	if(no_components<2) return;
-	
-	uint size = model_item_->model()->data->getNoSubstances();
-	min_response_value_ = 1e10;
-	max_response_value_ = -1e10;
-	const Matrix* Y = model_item_->model()->getY();
-	
-	for(uint j=1; j<=size; j++)
-	{
-		//vector<double>* resp = model_item_->model()->data->getActivity(j-1);
-		//int response_value = (int)(*resp)[0];
-		//delete resp;
-		double response_value = (*Y)(j,1);
-		if(response_value<min_response_value_) min_response_value_=response_value;
-		if(response_value>max_response_value_) max_response_value_=response_value;
-	}
 
 	for(uint i=1;i<=no_components;i++)
 	{
-		String tmp="component ";
+		String tmp;
+		if(!plot_loadings_) tmp="component ";
+		else tmp="loading ";
 		tmp+=String(i);
 		component_one_combobox_->addItem(tmp.c_str(),i);
 		component_two_combobox_->addItem(tmp.c_str(),i);
@@ -120,7 +140,9 @@ void ComponentPlotter::plot()
 	double min_x=1e10;
 	double max_x=-1e10;
 	const uint size = component_matrix_->Nrows();
-	const vector<string>* feature_names = model_item_->model()->getSubstanceNames();
+	const vector<string>* feature_names;
+	if(!plot_loadings_) feature_names = model_item_->model()->getSubstanceNames();
+	else feature_names = model_item_->model()->getDescriptorNames();
 
 	uint comp_one=component_one_combobox_->itemData(component_one_combobox_->currentIndex()).toInt();
 	uint comp_two=component_two_combobox_->itemData(component_two_combobox_->currentIndex()).toInt();
@@ -129,29 +151,32 @@ void ComponentPlotter::plot()
 	color_map.setColorInterval(QColor(0,255,0),QColor(255,0,0));
 	QwtDoubleInterval interval(min_response_value_,max_response_value_);
 	
-	// use response value in transformation space (if transf. was done), so that it is more suitable for a linear color map
+	// use response value in transformation space (if transf. was done), since it is more suitable for a linear color map
 	const Matrix* Y = model_item_->model()->getY();
 	
 	for(uint j=1; j<=size; j++)
 	{
 		QwtPlotMarker* marker= new QwtPlotMarker;
 		QwtSymbol symbol = data_symbol;
-		//vector<double>* resp = model_item_->model()->data->getActivity(j-1);
-		//double response_value = (*resp)[0];
-		//delete resp;
-		double response_value = (*Y)(j,1);
-		QBrush b(QColor(color_map.rgb(interval,response_value)),Qt::SolidPattern);
-		symbol.setBrush(b);
 		
-		marker->setSymbol(symbol);
+		if(!plot_loadings_)
+		{
+			//vector<double>* resp = model_item_->model()->data->getActivity(j-1);
+			//double response_value = (*resp)[0];
+			//delete resp;
+			double response_value = (*Y)(j,1);
+			QBrush b(QColor(color_map.rgb(interval,response_value)),Qt::SolidPattern);
+			symbol.setBrush(b);
+			symbol.setSize(6,6);
+		}
+	
 		double x_j = (*component_matrix_)(j,comp_one);
 		double y_j = (*component_matrix_)(j,comp_two);
-		
 		if(y_j<min_y) min_y=y_j;
 		if(y_j>max_y) max_y=y_j;
 		if(x_j<min_x) min_x=x_j;
 		if(x_j>max_x) max_x=x_j;
-		
+		marker->setSymbol(symbol);
 		marker->setValue(x_j,y_j);
 		marker->attach(qwt_plot_); // attached object will be automatically deleted by QwtPlot
 		
@@ -169,8 +194,12 @@ void ComponentPlotter::plot()
 	QString s2 = component_two_combobox_->itemText(component_two_combobox_->currentIndex());
 	LatentVariableModel* lv_model = dynamic_cast<LatentVariableModel*>(model_item_->model());
 	const Matrix* weights = lv_model->getWeights();
-	s1 += "  c="; s1+=String((*weights)(comp_one,1)).c_str();
-	s2 += "  c="; s2+=String((*weights)(comp_two,1)).c_str();
+	
+	if(!plot_loadings_)
+	{
+		s1 += "  c="; s1+=String((*weights)(comp_one,1)).c_str();
+		s2 += "  c="; s2+=String((*weights)(comp_two,1)).c_str();
+	}
 	
 	qwt_plot_->setAxisTitle(QwtPlot::yLeft,s2);
 	qwt_plot_->setAxisTitle(QwtPlot::xBottom,s1);

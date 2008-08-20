@@ -15,7 +15,7 @@ namespace BALL
 			Q_OBJECT
 			
 			public:
-				ComponentPlotter(ModelItem* model_item);
+				ComponentPlotter(ModelItem* model_item, bool plot_loadings);
 		
 			
 			private:
@@ -31,11 +31,15 @@ namespace BALL
 				
 				double max_response_value_;
 				
+				/** should the loadings be plotted or the latent variables? */
+				bool plot_loadings_;
+				
 				QComboBox* component_one_combobox_;
 				QComboBox* component_two_combobox_;
 				
 			private slots:
 				void selectedCompChanged();
+				
 				
 		};
 	}

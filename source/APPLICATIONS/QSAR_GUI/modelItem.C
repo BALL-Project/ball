@@ -356,7 +356,8 @@ void ModelItem::init()
 {
 	plotter_ = NULL;
 	feature_plotter_ = NULL;
-	component_plotter_ = NULL;
+	latent_variable_plotter_ = NULL;
+	loading_plotter_ = NULL;
 	result_color_ = QColor(160,172,182);
 	setPixmap();
 	createActions();
@@ -629,10 +630,17 @@ void ModelItem::createActions()
 	}
 	if(entry_->latent_variables)
 	{
-		QAction* plot_components_action = new QAction("plot components",this);
-		connect(plot_components_action,SIGNAL(triggered()),this,SLOT(showComponentPlotter()));
+		QAction* plot_components_action = new QAction("plot loadings",this);
+		connect(plot_components_action,SIGNAL(triggered()),this,SLOT(showLoadingPlotter()));
 		context_menu_actions_.push_back(plot_components_action);
-	}		
+	}
+	if(entry_->latent_variables)
+	{
+		QAction* plot_components_action = new QAction("plot components",this);
+		connect(plot_components_action,SIGNAL(triggered()),this,SLOT(showLatentVariablePlotter()));
+		context_menu_actions_.push_back(plot_components_action);
+	}
+		
 }
 
 
@@ -936,17 +944,31 @@ void ModelItem::showFeaturePlotter()
 
 
 // SLOT
-void ModelItem::showComponentPlotter()
+void ModelItem::showLatentVariablePlotter()
 {
 	if(model_==NULL) return;
 	
 	if(entry_->regression && ((RegressionModel*)model_)->getTrainingResult()->Ncols()!=0)
 	{
-		if(component_plotter_ == NULL)
+		if(latent_variable_plotter_ == NULL)
 		{
-			component_plotter_=new ComponentPlotter(this);
+			latent_variable_plotter_=new ComponentPlotter(this,0);
 		}
-		component_plotter_->show();
+		latent_variable_plotter_->show();
 	}
 }
 
+// SLOT
+void ModelItem::showLoadingPlotter()
+{
+	if(model_==NULL) return;
+	
+	if(entry_->regression && ((RegressionModel*)model_)->getTrainingResult()->Ncols()!=0)
+	{
+		if(latent_variable_plotter_ == NULL)
+		{
+			loading_plotter_=new ComponentPlotter(this,1);
+		}
+		loading_plotter_->show();
+	}
+}
