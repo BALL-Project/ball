@@ -293,7 +293,7 @@ bool FeatureSelectionItem::execute()
 	{
 		feature_selection_->setQualityIncreaseCutoff(quality_increase_cutoff_);
 	}
-
+	
 	switch(type_)
 	{
 		case 0:

@@ -4,6 +4,7 @@
 //
 
 #include <BALL/QSAR/kpcrModel.h>
+#include <BALL/QSAR/pcrModel.h>
 #include <newmatio.h>
 
 
@@ -53,13 +54,28 @@ void KPCRModel::train()
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be read into the model before training!");
 	}
+	
 	kernel->calculateKernelMatrix(descriptor_matrix_, K_);
-	PCRModel m(*data,frac_var_,1);
-	m.descriptor_matrix_=K_;	
+	
+	SymmetricMatrix S(descriptor_matrix_.Nrows());
+	S << K_;
+	PCRModel::calculateEigenvectors(S,frac_var_,loadings_);
+
+	latent_variables_.ReSize(descriptor_matrix_.Nrows(),loadings_.Ncols());
+	for(uint i=1;i<=loadings_.Ncols();i++)
+	{
+		latent_variables_.Column(i)=K_*loadings_.Column(i);
+	}
+
+	RRModel m(*data);
+	m.descriptor_matrix_=latent_variables_;
 	m.Y_=Y_;
 	m.train();
-		
-	training_result_ = *m.getTrainingResult();
+	
+	//result of RR is a linear combination of latente variables 
+	// = column with length=no of latente variables => matrix for more than one modelled activity
+	weights_ = *m.getTrainingResult();
+	training_result_ = loadings_*weights_;
 }
 
 

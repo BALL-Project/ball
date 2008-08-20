@@ -1,4 +1,4 @@
-// -*- Mode: C_++; tab-width: 2; -*-
+// -*- Mode: weights_++; tab-width: 2; -*-
 // vi: set ts=2:
 //
 //
@@ -87,9 +87,9 @@ void KPLSModel::train()
 	kernel->calculateKernelMatrix(descriptor_matrix_, K_);
 
 	//Matrix U_; // Matrix U_ saves all vectors u
-	//Matrix W_; // Matrix W_ saves all vectors w
-	//Matrix C_; // Matrix C_ saves all vectors c
-	//Matrix T_;  // Matrix T_ saves all vectors t
+	//Matrix loadings_; // Matrix loadings_ saves all vectors w
+	//Matrix weights_; // Matrix weights_ saves all vectors c
+	//Matrix latent_variables_;  // Matrix latent_variables_ saves all vectors t
 	Matrix P;  // Matrix P saves all vectors p
 
 	ColumnVector w;
@@ -129,22 +129,22 @@ void KPLSModel::train()
 		
 		if(j==0)
 		{
-			W_ = w;	
-			C_ = c;
+			loadings_ = w;	
+			weights_ = c;
 			P = p;
-			T_ = t;
+			latent_variables_ = t;
 		}
 		else
 		{
-			W_ = W_|w;
-			C_ = C_|c;
+			loadings_ = loadings_|w;
+			weights_ = weights_|c;
 			P = P|p;
-			T_ = T_ | t;
+			latent_variables_ = latent_variables_ | t;
 		}
 	}
 
-	W_ = W_*(P.t()*W_).i();
-	training_result_=W_*C_.t();
+	loadings_ = loadings_*(P.t()*loadings_).i();
+	training_result_=loadings_*weights_.t();
 }
 
 
@@ -193,25 +193,7 @@ bool KPLSModel::optimizeParameters(int k, int no_steps)
 	return 1;
 }
 
-
-const Matrix* KPLSModel::getT()
-{ 
-	return &T_;
-}
-
-
-const Matrix* KPLSModel::getW()
-{
-	return &W_;
-}
-
 const Matrix* KPLSModel::getU()
 { 
 	return &U_;
-}
-
-
-const Matrix* KPLSModel::getC()
-{
-	return &C_;
 }

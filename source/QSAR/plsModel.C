@@ -107,7 +107,6 @@ void PLSModel::train()
 		loadings_ = loadings_*(P.t()*loadings_+I).i();
 	}
 	training_result_=loadings_*weights_.t();
-
 }
 
 

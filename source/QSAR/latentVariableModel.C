@@ -1,5 +1,5 @@
 #include <BALL/QSAR/latentVariableModel.h>
- 
+#include <iostream.h>
 using namespace BALL::QSAR;
 
 

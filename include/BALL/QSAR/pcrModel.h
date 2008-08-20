@@ -35,7 +35,7 @@ namespace BALL
 				/** constructur
 				@param q QSAR-wrapper object, from which the data for this model should be taken
 				@param frac_var the part of the variance that is to be explained by the latent variables; as many latent variables as necessary to achieve this are created */
-				PCRModel(const QSARData& q, double frac_var=0.99, bool k=0);
+				PCRModel(const QSARData& q, double frac_var=0.99);
 
 				~PCRModel();
 				//@}
@@ -53,19 +53,21 @@ namespace BALL
 				void setParameters(vector<double>& v);
 				
 				vector<double> getParameters() const;
+				
+				/** calculates the first eigenvectors of the given matrix 'data' and saves them as columns of matrix 'output' 
+				@param frac_var the fraction of the variance that is to the covered the selected eigenvectors */
+				static void calculateEigenvectors(const SymmetricMatrix& data, double frac_var, Matrix& output);
 				//@}
 
 				
 				
 			protected:
 				
-				/** fraction of the variance that is to be explained */
-				double frac_var_; 
-				
 				/** @name Attributes
 				*/
 				//@{
-				bool kernel_;	
+				/** fraction of the variance that is to be explained */
+				double frac_var_; 
 				//@}
 
 		};

@@ -627,8 +627,7 @@ void ModelItem::createActions()
 		connect(plot_features_action,SIGNAL(triggered()),this,SLOT(showFeaturePlotter()));
 		context_menu_actions_.push_back(plot_features_action);
 	}
-	String type = entry_->name_abreviation;
-	if(type=="PLS"||type=="OPLS"||type=="PCR"||type=="KPCR"||type=="KPLS")
+	if(entry_->latent_variables)
 	{
 		QAction* plot_components_action = new QAction("plot components",this);
 		connect(plot_components_action,SIGNAL(triggered()),this,SLOT(showComponentPlotter()));
@@ -931,10 +930,7 @@ void ModelItem::showFeaturePlotter()
 		{
 			feature_plotter_=new FeaturePlotter(this);
 		}
-		else
-		{
-			feature_plotter_->show();
-		}
+		feature_plotter_->show();
 	}
 }
 
@@ -950,10 +946,7 @@ void ModelItem::showComponentPlotter()
 		{
 			component_plotter_=new ComponentPlotter(this);
 		}
-		else
-		{
-			component_plotter_->show();
-		}
+		component_plotter_->show();
 	}
 }
 

@@ -18,6 +18,8 @@ namespace BALL
 		class LatentVariableModel
 		{ 
 			public:
+				LatentVariableModel();				
+				
 				/** Return the latent variable matrix as computed by the last training.\n
 				It contains one loading vector in each column. Each loading vector contains the importance of each feature for a latente variable. */
 				const Matrix* getLatentVariables();
@@ -31,7 +33,6 @@ namespace BALL
 				const Matrix* getLoadings();
 			
 			protected:
-				LatentVariableModel();
 				
 				/** The loading-matrix which contains one loading vector in each column. Each loading vector contains the importance of each feature for a latente variable. */
 				Matrix latent_variables_;

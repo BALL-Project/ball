@@ -17,6 +17,7 @@ Plotter::Plotter(DataItem* item)
 	data_label_font.setPointSize(6);
 	data_label_alignment=Qt::AlignRight;
 	show_data_labels = 1;
+	zoomer_ = NULL;
 	
 	qwt_plot_ = new QwtPlot;
 	

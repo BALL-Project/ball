@@ -23,7 +23,7 @@ namespace BALL
 	namespace QSAR
 	{
 		/** class for kernel principal component regression */
-		class KPCRModel : public KernelModel
+		class KPCRModel : public KernelModel, public LatentVariableModel
 		{
 			public:
 				/** @name Constructors and Destructors

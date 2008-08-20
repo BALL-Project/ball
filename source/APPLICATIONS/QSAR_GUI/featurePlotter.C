@@ -14,7 +14,7 @@ FeaturePlotter::FeaturePlotter(ModelItem* model_item)
 {
 	model_item_ = model_item;
 	plot();
-	QwtPlotZoomer* zoomer = new QwtPlotZoomer(qwt_plot_->canvas());
+	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas());
 }
 
 
@@ -142,8 +142,6 @@ void FeaturePlotter::plot()
 	double y_border=(max_y-min_y)*0.05;
 	min_x-=x_border; min_y-=y_border;
 	max_x+=x_border; max_y+=y_border;
-	
-	cout<<"min_x= "<<min_x<<"  max_x="<<max_x<<endl;
 	
 	QwtPlotCurve* zero_line = new QwtPlotCurve;
 	double x[2]; x[0]=min_x; x[1]=max_x;

@@ -14,12 +14,14 @@
 #include <BALL/QSAR/nonlinearModel.h>
 #endif
 
+#include <BALL/QSAR/latentVariableModel.h>
+
 namespace BALL
 {
 	namespace QSAR
 	{
 		/** kernel partial-least-squares class */
-		class KPLSModel : public KernelModel
+		class KPLSModel : public KernelModel, public LatentVariableModel
 		{
 			public:
 				/** @name Constructors and Destructors
@@ -52,15 +54,6 @@ namespace BALL
 				
 				void setNoComponents(int d);
 				
-				/** returns a pointer to the  PLS score matrix T */
-				const Matrix* getT();
-
-				/** returns a pointer to the  PLS X-weights matrix W */
-				const Matrix* getW();
-				
-				/** returns a pointer to the  PLS components-weights matrix C */
-				const Matrix* getC();
-				
 				/** returns a pointer to the  PLS Y-scores matrix U */
 				const Matrix* getU();
 				
@@ -73,14 +66,7 @@ namespace BALL
 			protected:
 				/** @name Attributes
 				 */
-				//@{
-				Matrix T_;
-
-				Matrix W_;
-				
 				Matrix U_;
-
-				Matrix C_;
 				
 				int no_components_;
 				//@}

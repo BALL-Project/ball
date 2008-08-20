@@ -12,10 +12,8 @@
 #include <QHBoxLayout>
 #include <QCheckBox>
 
-
 #include <qwt_symbol.h>
-
-
+#include <qwt_plot_zoomer.h>
 
 
 namespace BALL
@@ -79,6 +77,8 @@ namespace BALL
 				QPushButton* printButton_;
 				QHBoxLayout* buttonsLayout_;
 				QVBoxLayout* main_layout_;
+				
+				QwtPlotZoomer* zoomer_;
 				
 	
 			

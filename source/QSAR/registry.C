@@ -34,12 +34,14 @@ Registry::Registry()
 	RegistryEntry r01(0,1,"Principal Component Regression","PCR",(CreateMethod) &ModelFactory<PCRModel>::create,this);
 	r01.parameterNames.push_back("Fraction of variance to be explained");
 	r01.parameterDefaults.push_back(0.95);
+	r01.latent_variables=1;
 	registered_models.push_back(r01);
 	
 	RegistryEntry r1(0,1,"Partial Least Squares","PLS",(CreateMethod) &ModelFactory<PLSModel>::create,this);
 	r1.parameterNames.push_back("number of PLS components");
 	r1.parameterDefaults.push_back(10);
 	r1.optimizableParameters.push_back(0);
+	r1.latent_variables=1;
 	registered_models.push_back(r1);
 
 	RegistryEntry r2(0,1,"Orthogonal Partial Least Squares","OPLS",(CreateMethod) &ModelFactory<OPLSModel>::create,this);
@@ -49,6 +51,7 @@ Registry::Registry()
 	r2.parameterDefaults.push_back(10);
 	r2.optimizableParameters.push_back(0);
 	r2.optimizableParameters.push_back(1);
+	r2.latent_variables=1;
 	registered_models.push_back(r2);
 	
 	RegistryEntry r3(0,1,"Automated Lazy Learning","ALL",(CreateMethod) &ModelFactory<ALLModel>::create,this);
@@ -71,11 +74,13 @@ Registry::Registry()
 	r4.parameterNames.push_back("number of PLS components");
 	r4.parameterDefaults.push_back(10);
 	r4.optimizableParameters.push_back(0);
+	r4.latent_variables=1;
 	registered_models.push_back(r4);
 	
 	RegistryEntry r5(1,1,"Kernel Principal Component Regression","KPCR",(CreateKernel1) &ModelFactory<KPCRModel>::createKernel1, (CreateKernel2) &ModelFactory<KPCRModel>::createKernel2,this);
 	r5.parameterNames.push_back("Fraction of variance to be explained");
 	r5.parameterDefaults.push_back(0.95);
+	r5.latent_variables=1;
 	registered_models.push_back(r5);
 	
 	RegistryEntry r6(1,1,"Gausssian Process","GP",(CreateKernel1) &ModelFactory<GPModel>::createKernel1, (CreateKernel2) &ModelFactory<GPModel>::createKernel2,this);
@@ -171,6 +176,7 @@ RegistryEntry::RegistryEntry(bool k, bool r, String n, String ab, CreateMethod c
 	createKernel2 = NULL;
 	reg->model_map[ab] = reg->registered_models.size();
 	registry_ = reg;
+	latent_variables = 0;
 }
 
 
@@ -185,6 +191,7 @@ RegistryEntry::RegistryEntry(bool k, bool r, String n, String ab, CreateKernel1 
 	createKernel2 = c2;
 	reg->model_map[ab] = reg->registered_models.size();
 	registry_ = reg;
+	latent_variables = 0;
 }
 
 

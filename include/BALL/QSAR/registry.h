@@ -49,6 +49,7 @@ namespace BALL
 
 				bool kernel;
 				bool regression; // regression or classification?!
+				bool latent_variables; // is this a latent variable model?!
 				SortedList<int> optimizableParameters;
 				//bool optimizable;
 				String name; // name of the Model
