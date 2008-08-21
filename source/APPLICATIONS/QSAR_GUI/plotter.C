@@ -70,12 +70,12 @@ void Plotter::labelsChangeState()
 	if(a==0) // unchecked
 	{
 		show_data_labels = 0;
-		plot();
+		plot(0);
 	}
 	else if(a==2) // checked
 	{
 		show_data_labels = 1;
-		plot();
+		plot(0);
 	}
 }
 

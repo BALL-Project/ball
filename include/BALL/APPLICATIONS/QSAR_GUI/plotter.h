@@ -61,7 +61,7 @@ namespace BALL
 				
 				/** (re)plots all data. \n
 				Must be implemented by derived classes. */
-				virtual void plot() = 0;
+				virtual void plot(bool zoom=1) = 0;
 				
 				DataItem* item_;
 				

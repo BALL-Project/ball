@@ -18,7 +18,7 @@ namespace BALL
 			private:
 				ModelItem* model_item_;
 				
-				void plot();
+				void plot(bool zoom);
 		
 			
 			

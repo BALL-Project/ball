@@ -15,6 +15,7 @@ using namespace BALL::VIEW;
 ComponentPlotter::ComponentPlotter(ModelItem* model_item, bool plot_loadings)
 	: Plotter(model_item)
 {
+	zoomer_ = NULL;
 	model_item_ = model_item;
 	plot_loadings_ = plot_loadings;
 	component_one_combobox_ = new QComboBox(this);
@@ -22,7 +23,7 @@ ComponentPlotter::ComponentPlotter(ModelItem* model_item, bool plot_loadings)
 	component_matrix_ = NULL;
 	qwt_plot_->enableAxis(QwtPlot::yLeft);
 	qwt_plot_->enableAxis(QwtPlot::yRight,0);
-	plot();
+	plot(1);
 	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas());
 
 	buttonsLayout_->addWidget(component_one_combobox_);
@@ -34,8 +35,9 @@ ComponentPlotter::ComponentPlotter(ModelItem* model_item, bool plot_loadings)
 
 void ComponentPlotter::selectedCompChanged()
 {
-	plot();
 	delete zoomer_;
+	zoomer_ = NULL;
+	plot(1);
 	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas());
 }
 
@@ -128,7 +130,7 @@ void ComponentPlotter::calculateComponents()
 }
 
 
-void ComponentPlotter::plot()
+void ComponentPlotter::plot(bool zoom)
 {
 	qwt_plot_->clear();
 	
@@ -224,8 +226,12 @@ void ComponentPlotter::plot()
 	zero_line2->setPen(pen);
 	zero_line2->attach(qwt_plot_);
 	
-	qwt_plot_->setAxisScale(QwtPlot::yLeft,min_y,max_y);
-	qwt_plot_->setAxisScale(QwtPlot::xBottom,min_x,max_x);
+	if(zoom)
+	{
+		qwt_plot_->setAxisScale(QwtPlot::yLeft,min_y,max_y);
+		qwt_plot_->setAxisScale(QwtPlot::xBottom,min_x,max_x);
+	}
+	
 	qwt_plot_->replot();
 	
 	//qwt_plot_->axisWidget(QwtPlot::yRight)->setColorBarEnabled(true);

@@ -31,11 +31,11 @@ namespace BALL
 				
 				bool sort_;
 				
-				void plot();
+				void plot(bool zoom);
 				
-				void plotActivity();
+				void plotActivity(bool zoom);
 				
-				void plotSortedActivity();
+				void plotSortedActivity(bool zoom);
 			
 	
 		};

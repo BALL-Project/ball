@@ -19,7 +19,7 @@ namespace BALL
 		
 			
 			private:
-				void plot();
+				void plot(bool zoom);
 				
 				const Matrix* component_matrix_;
 				

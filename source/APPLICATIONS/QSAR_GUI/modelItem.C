@@ -965,7 +965,7 @@ void ModelItem::showLoadingPlotter()
 	
 	if(entry_->regression && ((RegressionModel*)model_)->getTrainingResult()->Ncols()!=0)
 	{
-		if(latent_variable_plotter_ == NULL)
+		if(loading_plotter_ == NULL)
 		{
 			loading_plotter_=new ComponentPlotter(this,1);
 		}

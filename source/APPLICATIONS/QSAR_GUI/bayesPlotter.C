@@ -105,14 +105,14 @@ BayesPlotter::BayesPlotter(ModelItem* model_item)
 	
 	qwt_plot_->setAxisTitle(QwtPlot::xBottom,"Features");
 	qwt_plot_->enableAxis(QwtPlot::yRight);	
-	plot();
+	plot(1);
 	QwtPlotZoomer* zoomer = new QwtPlotZoomer(qwt_plot_->canvas());
 }
 
 
 
 
-void BayesPlotter::plot()
+void BayesPlotter::plot(bool zoom)
 {
 	BayesModel* snb = (BayesModel*) model_item_->model();
 	spectrogram_ = new QwtPlotSpectrogram();
@@ -135,8 +135,12 @@ void BayesPlotter::plot()
 	rightAxis->setColorMap(spectrogram_->data().range(),spectrogram_->colorMap());
 	qwt_plot_->setAxisScale(QwtPlot::yRight,spectrogram_->data().range().minValue(), spectrogram_->data().range().maxValue());
 	cout<<"axis set to : "<<spectrogram_->data().range().minValue()<<","<<spectrogram_->data().range().maxValue()<<endl;
-	qwt_plot_->setAxisScale(QwtPlot::xBottom,0,snb->getDescriptorNames()->size());
-	qwt_plot_->setAxisScale(QwtPlot::yLeft,y0,y1);
+	
+	if(zoom)
+	{
+		qwt_plot_->setAxisScale(QwtPlot::xBottom,0,snb->getDescriptorNames()->size());
+		qwt_plot_->setAxisScale(QwtPlot::yLeft,y0,y1);
+	}
 	
 	qwt_plot_->replot();
 }

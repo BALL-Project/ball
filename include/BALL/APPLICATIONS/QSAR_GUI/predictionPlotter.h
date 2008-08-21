@@ -14,16 +14,16 @@ namespace BALL
 			public:
 				PredictionPlotter(PredictionItem* item);
 				
-				void plotObservedVsExpected();
+				void plotObservedVsExpected(bool zoom);
 				
-				void plotObserved();
+				void plotObserved(bool zoom);
 		
 			
 			private:
 				PredictionItem* pred_item_;
 				QSARData* data_;
 				
-				void plot();
+				void plot(bool zoom);
 			
 			
 			

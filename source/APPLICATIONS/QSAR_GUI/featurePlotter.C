@@ -13,13 +13,13 @@ FeaturePlotter::FeaturePlotter(ModelItem* model_item)
 	: Plotter(model_item)
 {
 	model_item_ = model_item;
-	plot();
+	plot(1);
 	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas());
 }
 
 
 
-void FeaturePlotter::plot()
+void FeaturePlotter::plot(bool zoom)
 {
 	qwt_plot_->clear();
 	
@@ -151,8 +151,11 @@ void FeaturePlotter::plot()
 	QPen pen(c);
 	zero_line->setPen(pen);
 	zero_line->attach(qwt_plot_);
-	
-	qwt_plot_->setAxisScale(0,min_y,max_y);
-	qwt_plot_->setAxisScale(2,min_x,max_x);
+
+	if(zoom)
+	{
+		qwt_plot_->setAxisScale(0,min_y,max_y);
+		qwt_plot_->setAxisScale(2,min_x,max_x);
+	}
 	qwt_plot_->replot();
 }

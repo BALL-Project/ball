@@ -17,7 +17,7 @@ InputPlotter::InputPlotter(InputDataItem* item)
 	buttonsLayout_->addWidget(sort_checkbox_);
 	connect(sort_checkbox_, SIGNAL(clicked()), this, SLOT(sortChangeState()));
 	
-	plot();
+	plot(1);
 	QwtPlotZoomer* zoomer = new QwtPlotZoomer(qwt_plot_->canvas());
 }
 
@@ -27,16 +27,16 @@ InputPlotter::~InputPlotter()
 	delete sort_checkbox_;	
 }
 
-void InputPlotter::plot()
+void InputPlotter::plot(bool zoom)
 {
 	qwt_plot_->clear();
 	if(sort_)
 	{
-		plotSortedActivity();
+		plotSortedActivity(zoom);
 	}
 	else
 	{
-		plotActivity();
+		plotActivity(zoom);
 	}
 }
 
@@ -49,17 +49,17 @@ void InputPlotter::sortChangeState()
 	if(a==0) // unchecked
 	{
 		sort_ = 0;
-		plot();
+		plot(1);
 	}
 	else if(a==2) // checked
 	{
 		sort_ = 1;
-		plot();
+		plot(1);
 	}
 }
 
 
-void InputPlotter::plotActivity()
+void InputPlotter::plotActivity(bool zoom)
 {
 	const vector<string>* names = data_->getSubstanceNames();
 	uint no = data_->getNoResponseVariables();
@@ -105,13 +105,16 @@ void InputPlotter::plotActivity()
 	double min_x=0-x_border; min_y-=y_border;
 	double max_x=data_->getNoSubstances()+x_border; max_y+=y_border;
 	
-	qwt_plot_->setAxisScale(0,min_y,max_y);
-	qwt_plot_->setAxisScale(2,min_x,max_x);
+	if(zoom)
+	{
+		qwt_plot_->setAxisScale(0,min_y,max_y);
+		qwt_plot_->setAxisScale(2,min_x,max_x);
+	}
 	qwt_plot_->replot();	
 }
 
 
-void InputPlotter::plotSortedActivity()
+void InputPlotter::plotSortedActivity(bool zoom)
 {
 	const vector<string>* names = data_->getSubstanceNames();
 	uint no = data_->getNoResponseVariables();
@@ -164,7 +167,10 @@ void InputPlotter::plotSortedActivity()
 	double min_x=0-x_border; min_y-=y_border;
 	double max_x=data_->getNoSubstances()+x_border; max_y+=y_border;
 	
-	qwt_plot_->setAxisScale(0,min_y,max_y);
-	qwt_plot_->setAxisScale(2,min_x,max_x);
+	if(zoom)
+	{
+		qwt_plot_->setAxisScale(0,min_y,max_y);
+		qwt_plot_->setAxisScale(2,min_x,max_x);
+	}
 	qwt_plot_->replot();	
 }
