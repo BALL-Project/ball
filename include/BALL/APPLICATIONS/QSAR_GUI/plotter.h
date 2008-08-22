@@ -35,6 +35,10 @@ namespace BALL
 				/** determines how each label is aligned with respect to its data point */
 				Qt::Alignment data_label_alignment;
 				
+				/** the symbol to be used for each data point within the plots during printing or saving to file.\n
+				By default it is equal to data_symbol */
+				QwtSymbol print_data_symbol;
+				
 				/** determines whether or not labels for each data point are to be drawn */
 				bool show_data_labels;
 				

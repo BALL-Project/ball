@@ -14,7 +14,7 @@ FeaturePlotter::FeaturePlotter(ModelItem* model_item)
 {
 	model_item_ = model_item;
 	plot(1);
-	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas());
+	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
 }
 
 
@@ -157,5 +157,4 @@ void FeaturePlotter::plot(bool zoom)
 		qwt_plot_->setAxisScale(0,min_y,max_y);
 		qwt_plot_->setAxisScale(2,min_x,max_x);
 	}
-	qwt_plot_->replot();
 }

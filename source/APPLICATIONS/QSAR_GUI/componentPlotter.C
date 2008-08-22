@@ -6,6 +6,9 @@
 #include <qwt_scale_widget.h>
 #include <qwt_color_map.h>
 
+#include <qwt_legend.h>
+#include <qwt_legend_item.h>
+
 #include <QColor>
 
 using namespace BALL::VIEW;
@@ -22,9 +25,13 @@ ComponentPlotter::ComponentPlotter(ModelItem* model_item, bool plot_loadings)
 	component_two_combobox_ = new QComboBox(this);
 	component_matrix_ = NULL;
 	qwt_plot_->enableAxis(QwtPlot::yLeft);
-	qwt_plot_->enableAxis(QwtPlot::yRight,0);
+	qwt_plot_->enableAxis(QwtPlot::yRight,1);
+	
+	data_symbol.setSize(6,6);
+	print_data_symbol.setSize(5,5);
+	
 	plot(1);
-	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas());
+	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
 
 	buttonsLayout_->addWidget(component_one_combobox_);
 	buttonsLayout_->addWidget(component_two_combobox_);
@@ -38,7 +45,7 @@ void ComponentPlotter::selectedCompChanged()
 	delete zoomer_;
 	zoomer_ = NULL;
 	plot(1);
-	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas());
+	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
 }
 
 
@@ -169,7 +176,6 @@ void ComponentPlotter::plot(bool zoom)
 			double response_value = (*Y)(j,1);
 			QBrush b(QColor(color_map.rgb(interval,response_value)),Qt::SolidPattern);
 			symbol.setBrush(b);
-			symbol.setSize(6,6);
 		}
 	
 		double x_j = (*component_matrix_)(j,comp_one);
@@ -232,7 +238,12 @@ void ComponentPlotter::plot(bool zoom)
 		qwt_plot_->setAxisScale(QwtPlot::xBottom,min_x,max_x);
 	}
 	
-	qwt_plot_->replot();
-	
-	//qwt_plot_->axisWidget(QwtPlot::yRight)->setColorBarEnabled(true);
+	if(!plot_loadings_)
+	{	
+		QwtScaleWidget* rightAxis = qwt_plot_->axisWidget(QwtPlot::yRight);
+		rightAxis->setTitle("response value");
+		rightAxis->setColorBarEnabled(true);
+		rightAxis->setColorMap(interval,color_map);
+		qwt_plot_->setAxisScale(QwtPlot::yRight,min_response_value_,max_response_value_);
+	}
 }

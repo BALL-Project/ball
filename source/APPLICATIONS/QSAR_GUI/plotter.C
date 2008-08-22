@@ -17,8 +17,9 @@ Plotter::Plotter(DataItem* item)
 	data_label_font.setPointSize(6);
 	data_label_alignment=Qt::AlignRight;
 	show_data_labels = 1;
-	zoomer_ = NULL;
+	print_data_symbol = data_symbol;
 	
+	zoomer_ = NULL;
 	qwt_plot_ = new QwtPlot;
 	
 	okButton_ = new QPushButton("Ok", this);
@@ -71,26 +72,47 @@ void Plotter::labelsChangeState()
 	{
 		show_data_labels = 0;
 		plot(0);
+		qwt_plot_->replot();
 	}
 	else if(a==2) // checked
 	{
 		show_data_labels = 1;
 		plot(0);
+		qwt_plot_->replot();
 	}
 }
 
 // SLOT
 void Plotter::save()
 {
+	QwtSymbol symbol_backup = data_symbol;
+	if(data_symbol!=print_data_symbol)
+	{
+		data_symbol = print_data_symbol;
+		plot(0);
+	}
+	
 	QString file = QFileDialog::getSaveFileName(this, tr("Save Plot"),
 			QDir::homePath(), tr("Images (*.png *.xpm *.jpg *.pdf *.ps *.eps)"));
-	
 	if(file!="") printToFile(file);
+	
+	if(data_symbol!=symbol_backup)
+	{
+		data_symbol = symbol_backup;
+		plot(0);
+	}
 }
 
 // SLOT
 void Plotter::print()
 {
+	QwtSymbol symbol_backup = data_symbol;
+	if(data_symbol!=print_data_symbol)
+	{
+		data_symbol = print_data_symbol;
+		plot(0);
+	}
+	
 	QPrinter printer(QPrinter::HighResolution);
 	QPrintDialog print_dialog(&printer,this);
 	if (print_dialog.exec() == QDialog::Accepted) 
@@ -98,15 +120,34 @@ void Plotter::print()
 		printer.setResolution(600);
 		qwt_plot_->print(printer);
 	}
+	
+	if(data_symbol!=symbol_backup)
+	{
+		data_symbol = symbol_backup;
+		plot(0);
+	}
 }
 
 
 void Plotter::printToFile(QString& file)
 {
+	QwtSymbol symbol_backup = data_symbol;
+	if(data_symbol!=print_data_symbol)
+	{
+		data_symbol = print_data_symbol;
+		plot(0);
+	}
+	
 	QPrinter printer(QPrinter::HighResolution);
 	printer.setOutputFileName(file);
 	printer.setResolution(600);
 	qwt_plot_->print(printer);
+	
+	if(data_symbol!=symbol_backup)
+	{
+		data_symbol = symbol_backup;
+		plot(0);
+	}
 }
 
 

@@ -17,7 +17,7 @@ PredictionPlotter::PredictionPlotter(PredictionItem* item)
 	data_ = pred_item_->inputDataItem()->data();
 	
 	plot(1);
-	QwtPlotZoomer* zoomer = new QwtPlotZoomer(qwt_plot_->canvas());
+	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
 }
 
 
@@ -107,7 +107,6 @@ void PredictionPlotter::plotObservedVsExpected(bool zoom)
 		qwt_plot_->setAxisScale(0,min_y,max_y);
 		qwt_plot_->setAxisScale(2,min_x,max_x);
 	}
-	qwt_plot_->replot();
 }
 
 
@@ -166,5 +165,4 @@ void PredictionPlotter::plotObserved(bool zoom)
 		qwt_plot_->setAxisScale(0,min_y,max_y);
 		qwt_plot_->setAxisScale(2,min_x,max_x);
 	}
-	qwt_plot_->replot();
 }

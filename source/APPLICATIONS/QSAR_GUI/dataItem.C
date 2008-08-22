@@ -7,6 +7,7 @@
 #include <QtGui/QApplication>
 #include <QtGui/QGraphicsScene>
 
+
 using namespace BALL::VIEW;
 
 DataItem::DataItem(): 
