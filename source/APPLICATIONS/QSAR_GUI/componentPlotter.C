@@ -63,7 +63,7 @@ void ComponentPlotter::calculateComponents()
 		cout<<"No input data! Thus creation of PCR/PLS components for plotting is not possible!"<<endl;
 		return;
 	}
-	if(model_item_->inputDataItem()->data()->getNoResponseVariables()==0)
+	if(!plot_loadings_ && model_item_->inputDataItem()->data()->getNoResponseVariables()==0)
 	{
 		cout<<"There should be response variable(s) for plotting of PLS/PCR components"<<endl;
 		return;
@@ -83,12 +83,6 @@ void ComponentPlotter::calculateComponents()
 			model->train(); 
 			component_matrix_ = lv_model->getLatentVariables();
 		}
-		// if model is trained, plot latent variables of CURRENT input data, which might be different from the model's trainings data!!
-		else
-		{
-			model->setDataSource(model_item_->inputDataItem()->data());
-			model->readTrainingData();
-		}
 		
 		no_components=component_matrix_->Ncols();
 		if(no_components<2) return;
@@ -96,13 +90,12 @@ void ComponentPlotter::calculateComponents()
 		uint size = model_item_->model()->data->getNoSubstances();
 		min_response_value_ = 1e10;
 		max_response_value_ = -1e10;
-		const Matrix* Y = model_item_->model()->getY();
-		for(uint j=1; j<=size; j++)
+		const QSARData* data = model_item_->inputDataItem()->data();
+		for(uint j=0; j<size; j++)
 		{
-			//vector<double>* resp = model_item_->model()->data->getActivity(j-1);
-			//int response_value = (int)(*resp)[0];
-			//delete resp;
-			double response_value = (*Y)(j,1);
+			vector<double>* resp = data->getActivity(j);
+			double response_value = (*resp)[0];
+			delete resp;
 			if(response_value<min_response_value_) min_response_value_=response_value;
 			if(response_value>max_response_value_) max_response_value_=response_value;
 		}
@@ -117,7 +110,6 @@ void ComponentPlotter::calculateComponents()
 			model->train();
 			component_matrix_ = lv_model->getLoadings();
 		}
-		// if model has already been trained, there is no need to read the current input data, since the reponse values are not displayed in a loading plot (as opposed to a latent variable plot)
 	}
 	
 	no_components=component_matrix_->Ncols();
@@ -160,8 +152,7 @@ void ComponentPlotter::plot(bool zoom)
 	color_map.setColorInterval(QColor(0,255,0),QColor(255,0,0));
 	QwtDoubleInterval interval(min_response_value_,max_response_value_);
 	
-	// use response value in transformation space (if transf. was done), since it is more suitable for a linear color map
-	const Matrix* Y = model_item_->model()->getY();
+	const QSARData* data = model_item_->inputDataItem()->data();
 	
 	for(uint j=1; j<=size; j++)
 	{
@@ -170,10 +161,9 @@ void ComponentPlotter::plot(bool zoom)
 		
 		if(!plot_loadings_)
 		{
-			//vector<double>* resp = model_item_->model()->data->getActivity(j-1);
-			//double response_value = (*resp)[0];
-			//delete resp;
-			double response_value = (*Y)(j,1);
+			vector<double>* resp = model_item_->model()->data->getActivity(j-1);
+			double response_value = (*resp)[0];
+			delete resp;
 			QBrush b(QColor(color_map.rgb(interval,response_value)),Qt::SolidPattern);
 			symbol.setBrush(b);
 		}
