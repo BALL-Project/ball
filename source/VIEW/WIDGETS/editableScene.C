@@ -1539,8 +1539,6 @@ void EditableScene::computeBondOrders()
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_singleBO_box->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_doubleBO_box->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_tripleBO_box->isChecked();
-	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_QUADRUPLE_BOND_ORDERS] = bond_order_dialog.overwrite_quadrupleBO_box->isChecked();
-	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_AROMATIC_BOND_ORDERS] 	= bond_order_dialog.overwrite_aromaticBO_box->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::ASSIGN_CHARGES] 									= bond_order_dialog.assign_charges_checkBox->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_CHARGES] 							= bond_order_dialog.overwrite_charges_checkBox->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::KEKULIZE_RINGS] 									= bond_order_dialog.kekulizeBonds_button->isChecked();

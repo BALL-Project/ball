@@ -42,6 +42,28 @@ namespace BALL
 	/**	Bond creation processor
 			\ingroup StructureMiscellaneous
 	*/
+	
+	/// Called with default options the processor computes all 
+	/// possible bond orders with optimal value and 
+	/// applies the first solution to the given AtomContainer ac_.
+	/// All further optimal solutions can be applied by calling
+	/// the method apply(i). Additional solutions can be computed 
+	/// by calling the method computeNextSolution()
+	/// Example code: 
+ 	/// 	AssignBondOrderProcessor bop;	
+	/// 	bop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
+	/// 	...
+	///		sys.apply(bop);
+	///		i = bop.getNumberOfComputedSolutions();
+	/// 	bop.apply(i-1);
+	/// 	... 
+	/// 	while (bop.computeNextSolution())
+	///		{
+	///   	  i++;
+	///     	bop.apply(i);
+	/// 	}
+
+
 	class BALL_EXPORT AssignBondOrderProcessor 
 		: public UnaryProcessor<AtomContainer> 
 	{
@@ -82,14 +104,6 @@ namespace BALL
 				/**	compute bond orders for all bonds of type triple bond order
 				*/
 				static const char* OVERWRITE_TRIPLE_BOND_ORDERS;	
-				
-				/**	compute bond orders for all bonds of type quadruple bond order
-				*/
-				static const char* OVERWRITE_QUADRUPLE_BOND_ORDERS;	
-				
-				/**	compute bond orders for all bonds of type aromatic bond order
-				*/
-				static const char* OVERWRITE_AROMATIC_BOND_ORDERS; 	
 				
 				/**	compute bond orders for all bonds of type aromatic bond order
 				*/
@@ -148,13 +162,10 @@ namespace BALL
 				static const bool OVERWRITE_SINGLE_BOND_ORDERS;
 				static const bool OVERWRITE_DOUBLE_BOND_ORDERS;
 				static const bool OVERWRITE_TRIPLE_BOND_ORDERS;
-				static const bool OVERWRITE_QUADRUPLE_BOND_ORDERS;
-				static const bool OVERWRITE_AROMATIC_BOND_ORDERS;
 				static const bool ADD_HYDROGENS;
 				static const bool OVERWRITE_CHARGES;
 				static const bool ASSIGN_CHARGES;
 				static const bool KEKULIZE_RINGS;
-				static const bool ENFORCE_OCTETT_RULE;// TODO weg!	
 				static const String ALGORITHM;
 				static const String INIFile;
 				static const int MAX_BOND_ORDER;	
@@ -197,8 +208,17 @@ namespace BALL
 
 			/// processor method which is called before the operator () call
 			virtual bool start();
+	
+			/// clears the datastructures
+			void clear();
 
-			/// operator () for the processor
+			/// operator () for the processor 
+			/// Called with default options the processor computes all 
+			/// possible bond orders with optimal value and 
+			/// applies the first solution to the given AtomContainer ac_
+			/// NOTE: Having used the ASTAR-option (default)
+			/// the method getNumberOfComputedSolutions() will return the 
+			/// number of optimal solutions+1!
 			virtual Processor::Result operator () (AtomContainer& ac);
 
 			/// processor method which is called after the operator () call
@@ -209,10 +229,29 @@ namespace BALL
 			/**	@name	Accessors
 			*/
 			//@{
-			/// Return the number of bonds built during the last application.
+			/// Returns the number of bonds built during the last application.
+			/// NOTE: bonds to newly added hydrogens are excluded.
 			Size getNumberOfBondOrdersSet();
 		
+			/// Returns the number of added hydrogens in Solution i.
+			Size getNumberOfAddedHydrogens(Position i)
+			{	
+				if (i >= solutions_.size())
+				{
+					Log.error() << "AssignBondOrderProcessor: No solution with index " << i << std::endl;
+					return 0;
+				}
+				int num_hydrogens = 0;
+				
+				HashMap<Atom*, int>::Iterator it = solutions_[i].number_of_virtual_hydrogens.begin(); 
+				for (; it != solutions_[i].number_of_virtual_hydrogens.end(); it++)
+					num_hydrogens += it->second;
+				return num_hydrogens;
+			}
+
 			/// Returns the number of already computed solutions
+			/// NOTE: Having applied the operator with ASTAR-option
+			/// 			this method returns the number of optimal solutions+1!
 			Size getNumberOfComputedSolutions() {return solutions_.size();}
 
 			/// Returns the total penalty of solution i
@@ -232,9 +271,9 @@ namespace BALL
 			float getTotalPenalty(const Solution_& sol) 
 			{
 				if (   (atom_type_normalization_factor_   < 0.00001) 
-				    || (bond_length_normalization_factor_ < 0.00001) ) 
+				    || (bond_length_normalization_factor_ < 0.00001)
+						|| (alpha_ < 0.0001)) 
 				{
-					//Log.info() << "AssignBondOrderProcessor::getTotalPenalty: normalization factor zero  - falling back to atomtype penalty" << std::endl;
 					return sol.atom_type_penalty;
 				}
 				else
@@ -255,6 +294,8 @@ namespace BALL
 
 			/* Computes and applies another solution
 			*  Returns false if no further solution can be found.
+			*  Ignores the options  MAX_NUMBER_OF_SOLUTIONS and
+			*	 											COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS.
 			*/
 			bool computeNextSolution();
 			//@}
@@ -312,7 +353,7 @@ namespace BALL
 					/// the virtual atoms and bonds that should be deleted when the next 
 					/// solution is applied
 					vector<Atom*> atoms_to_delete;
-					vector<Bond*> bonds_to_delete;
+					//vector<Bond*> bonds_to_delete;
 
 					/// the values of the objective function
 					float atom_type_penalty;
@@ -345,14 +386,15 @@ namespace BALL
 					
 					float coarsePenalty() const {
 						return ( ( (    (atom_type_normalization_factor_ < 0.0001)
-										     || (bond_length_normalization_factor_ < 0.0001)) ? 
+										     || (bond_length_normalization_factor_ < 0.0001)
+												 || (alpha_ < 0.0001)) ? 
 											 estimated_atom_type_penalty :
 											 ((1.-alpha_) * (estimated_atom_type_penalty / atom_type_normalization_factor_)
 								    		+ (alpha_* estimated_bond_length_penalty / bond_length_normalization_factor_))));}
 					float finePenalty() const {return estimated_bond_length_penalty;}
 
 					/// the estimated atom type penalty
-					float estimated_atom_type_penalty;   //estimated_f
+					float estimated_atom_type_penalty;   
 					/// the estimated bond length penalty
 					float estimated_bond_length_penalty;
 
@@ -361,7 +403,7 @@ namespace BALL
 					/// unset bonds get the order 0
 					vector<int> bond_orders;
 			
-					/// the last considered bond
+					/// the index of the bond last considered 
 					Position last_bond;
 
 					protected:
@@ -419,7 +461,7 @@ namespace BALL
 			bool solveILP_(Solution_& solution);
 #endif
 			
-			/// Processor is in a useable valid state. //TODO
+			/// Processor is in a useable valid state. 
 			bool valid_;
 
 			/// Processor is in an evaluation mode. Default is false
@@ -435,22 +477,21 @@ namespace BALL
 			/// Map for storing the bonds associated index (all bonds)
 			HashMap<Bond*, Index> bond_to_index_;
 			
-			// TODO: constructor... Ersetzung
 			// Vector for mapping from variable indices onto bonds (all bonds)
 			std::vector<Bond*> index_to_bond_;
 	
 
 
-			// ***************** datastructures for virtual hydrogen bonds ****************** //TODO Constructor
+			// ***************** datastructures for virtual hydrogen bonds ****************** 
 			//
 			// 	NOTE: a virtual bond represents ALL possible hydrogen 
 			// 				bonds for a given atom
 			//
 			/// the atoms with upto n possible additional hydrogens
-			HashMap<Atom*, int> number_of_virtual_hydrogens_;  //TODO get rid of
+			HashMap<Atom*, int> number_of_virtual_hydrogens_;  
 			//
 			/// the max number of virtual hydrogens per virtual bond index
-			std::vector<int> virtual_bond_index_to_number_of_virtual_hydrogens_; // TODO Do we need this?
+			std::vector<int> virtual_bond_index_to_number_of_virtual_hydrogens_;  
 			//	
 			/// the number of virtual bonds
 			Position num_of_virtual_bonds_;
@@ -459,6 +500,9 @@ namespace BALL
 			vector<Atom*> virtual_bond_index_to_atom_;
 			HashMap<Atom*, int> atom_to_virtual_bond_index_;
 			//
+			//
+			/// a virtual dummy bond
+			Bond* virtual_bond_;
 			//
 			//
 
@@ -471,19 +515,14 @@ namespace BALL
 			// number of bond variables in the ILP
 			Position ilp_number_of_free_bonds_;
 
-			//TODO
+
+			// ******************* general
+
 			/// the number of bonds given (free + fixed!)
 			Position total_num_of_bonds_; 
 
-			// TODO
 			/// num of free bonds without virtual bonds!
 			int num_of_free_bonds_;
-
-			// stores the number of bonds
-			//Position num_of_bonds_; // Position total_no_bonds = ac.countBonds();
-
-			// not necessary because of getIndex()
-			//HashMap<Atom*, int> atom_to_index_;
 
 			/// store for all atom-indices the atoms fixed valences 
 			std::vector<Position> fixed_val_;
@@ -491,11 +530,12 @@ namespace BALL
 			// storing the solutions
 			vector<Solution_> solutions_;
 			
-			/// the optimal penalty // TODO: Konsturktor, getMehtod... filled correctly in all applications?
-			int optimal_penalty_; // TODO atomtype vs bond length penalty
-		
-		
-			/// TODO: Konstruktor.... apply-methods
+			/// the inverse of the atom type penalty normalization factor
+			float atom_type_normalization_factor_;
+
+			/// the inverse of the bond length penalty normalization factor
+			float bond_length_normalization_factor_;
+
 			// denotes the index of the last applied solution
 			// -1 if there was no valid solution applied
 			int last_applied_solution_;
@@ -509,29 +549,21 @@ namespace BALL
 			/// balance parameter between atom type and bond length penalty
 			float alpha_; 
 
-			/// the inverse of the atom type penalty normalization factor
-			float atom_type_normalization_factor_;
-
-			/// the inverse of the bond length penalty normalization factor
-			float bond_length_normalization_factor_;
-
-			/// the max number of solutions to compute //TODO
+			/// the max number of solutions to compute 
 			int max_number_of_solutions_;
 
-			/// flag to indicate, whether also non-optimal solutions should be computed //TODO
+			/// flag to indicate, whether also non-optimal solutions should be computed 
 			bool compute_also_non_optimal_solutions_;
 
 			/// flag for adding missing hydrogens
 			bool add_missing_hydrogens_;
 
-			/// a virtual dummy bond
-			Bond* virtual_bond_;
 
-			////////// for Algorithm::A_START   ComputeAllSolutions::A_STAR ///////
+			////////// ************ for Algorithm::A_START ************ /////////
 			/// 
 			bool	performAStarStep_(Solution_& sol);
 
-			/// the priority queue //TODO constr...
+			/// the priority queue 
 			priority_queue<PQ_Entry_> queue_;
 			
 			/// Method to estimate the f = g* +h*
@@ -558,13 +590,13 @@ namespace BALL
 			// block_to_length_[i], starting from 
 			// block_to_start_idx_[i] associating 
 			// block_to_start_valence_[i] to the start_idx
+			/// the penalty administrations datastructures
 			vector<int> penalties_;
 			vector<Position> block_to_start_idx_;
 			vector<Size> block_to_length_;
 			vector<int> block_to_start_valence_;
-			// TODO
 			// stores the defining element and the SMART-string of each block
-			vector<pair<String, String> > block_definition_;
+			vector<pair<String, String> > block_definition_; 
 
 
 			// stores which atom belongs to which vector of blocks 
@@ -573,7 +605,7 @@ namespace BALL
 			// the second element with one additional Hydrogen and so on. 
 			vector< vector<int> > atom_to_block_;
 					
-			///stores the possible bond lengths penalties per order // TODO: constructor etc
+			///stores the possible bond lengths penalties per order 
 			HashMap<Bond*, vector<float> > bond_lengths_penalties_;
 
 #ifdef BALL_HAS_LPSOLVE
