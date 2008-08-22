@@ -135,8 +135,6 @@ namespace BALL
 				void addToPipeline();
 				void removeFromPipeline();
 				
-				void showPlotter();
-				
 				void disableTraining();
 				void enableTraining();
 				
@@ -168,6 +166,7 @@ namespace BALL
 				void saveModel();
 				void loadModel();	
 				void showProperties();
+				void showPlotter();
 				void showFeaturePlotter();
 				void showLatentVariablePlotter();
 				void showLoadingPlotter();

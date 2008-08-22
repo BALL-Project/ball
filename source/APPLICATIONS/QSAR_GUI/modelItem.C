@@ -624,6 +624,12 @@ void ModelItem::createActions()
 	
 	if(entry_->regression) 
 	{
+		QAction* plot_features_action = new QAction("plot coefficients",this);
+		connect(plot_features_action,SIGNAL(triggered()),this,SLOT(showPlotter()));
+		context_menu_actions_.push_back(plot_features_action);
+	}
+	if(entry_->regression) 
+	{
 		QAction* plot_features_action = new QAction("plot features",this);
 		connect(plot_features_action,SIGNAL(triggered()),this,SLOT(showFeaturePlotter()));
 		context_menu_actions_.push_back(plot_features_action);
@@ -800,6 +806,7 @@ void ModelItem::addToPipeline()
 	view_->data_scene->main_window->model_pipeline_.insert(this);
 }
 
+// SLOT
 void ModelItem::showPlotter()
 {
 	if(model_==NULL) return;
@@ -811,11 +818,9 @@ void ModelItem::showPlotter()
 		{
 			plotter_=new CoefficientPlotter(this);
 		}
-		else
-		{
-			plotter_->show();
-			plotter_->raise();
-		}
+		plotter_->show();
+		plotter_->raise();
+		
 	}
 	else if((*model_->getType()=="snB"||*model_->getType()=="nB") && ((BayesModel*)model_)->isTrained())
 	{
@@ -823,11 +828,8 @@ void ModelItem::showPlotter()
 		{
 			plotter_=new BayesPlotter(this);
 		}
-		else
-		{
-			plotter_->show();
-			plotter_->raise();
-		}
+		plotter_->show();
+		plotter_->raise();
 	}
 }
 
