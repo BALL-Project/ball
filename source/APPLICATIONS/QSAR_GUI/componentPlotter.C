@@ -25,7 +25,8 @@ ComponentPlotter::ComponentPlotter(ModelItem* model_item, bool plot_loadings)
 	component_two_combobox_ = new QComboBox(this);
 	component_matrix_ = NULL;
 	qwt_plot_->enableAxis(QwtPlot::yLeft);
-	qwt_plot_->enableAxis(QwtPlot::yRight,1);
+	if(!plot_loadings_) qwt_plot_->enableAxis(QwtPlot::yRight,1);
+	else qwt_plot_->enableAxis(QwtPlot::yRight,0);
 	
 	data_symbol.setSize(6,6);
 	print_data_symbol.setSize(5,5);
