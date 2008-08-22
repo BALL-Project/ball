@@ -19,9 +19,7 @@
 	<entry id="1">
 		<elementstring>H</elementstring>
 		<smartstring>element(H)</smartstring>
-		<penalty valence="0">64</penalty>
 		<penalty valence="1">0</penalty>
-		<penalty valence="2">64</penalty>
 	</entry>
 	<entry id="2">
 		<elementstring>F</elementstring>
