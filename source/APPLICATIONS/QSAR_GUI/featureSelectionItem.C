@@ -51,12 +51,12 @@ FeatureSelectionItem::FeatureSelectionItem(int type, DataItemView* miv):
 			break;
 			
 		case 5:
-			name_ = "Remove small coefficients";
+			name_ = "Remove Insignificant Coefficients";
 			type_ = type;
 			break;
 			
 		case 6:
-			name_ = "Single scan";
+			name_ = "TwinScan";
 			type_ = type;
 			break;
 
@@ -151,6 +151,8 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 			else if(type_==2) name_="Backward Selection";
 			else if(type_==3) name_="Stepwise Selection";
 			else if(type_==4) name_ = "Remove Low Response Correlation";
+			else if(type_==5) name_ = "Remove Insignificant Coefficients";
+			else if(type_==6) name_ = "TwinScan";
 		}
 		else if(line.hasPrefix("k_fold"))
 		{
@@ -330,7 +332,7 @@ bool FeatureSelectionItem::execute()
 		}
 		
 		case 6:		
-			feature_selection_->singleScan(k_,opt_);
+			feature_selection_->twinScan(k_,opt_);
 			break;
 			
 		default:

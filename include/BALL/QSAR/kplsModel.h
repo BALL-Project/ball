@@ -42,7 +42,6 @@ namespace BALL
 				/** @name Accessors
 				 */
 				//@{
-				RowVector predict(const vector<double>& substance, bool transform=1);
 				
 				void train();
 				

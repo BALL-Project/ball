@@ -44,6 +44,8 @@ namespace BALL
 				
 				virtual void readFromFile(string filename);
 				
+				virtual RowVector predict(const vector<double>& substance, bool transform);
+				
 				void operator=(const Model& m);
 				//@}
 				

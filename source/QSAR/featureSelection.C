@@ -128,7 +128,7 @@ void FeatureSelection::forward(bool stepwise, int k, bool optPar)
 			{
 				continue;
 			}
-		
+			
 			model_->descriptor_IDs_.insert(des_it,i);
 			
 			if(weights_!=NULL && weights_->Ncols()>0)
@@ -385,11 +385,8 @@ void FeatureSelection::stepwiseSelection(int k, bool optPar)
 }
 
 
-void FeatureSelection::singleScan(int k, bool optPar)
+void FeatureSelection::twinScan(int k, bool optPar)
 {
-	cout<<"k="<<k<<"  optPar="<<optPar<<endl<<flush;
-	
-	
 	unsigned int columns=model_->data->descriptor_matrix_.size();
 	unsigned int lines=model_->data->descriptor_matrix_[0].size();
 	SortedList<unsigned int>* irrelevantDescriptors = findIrrelevantDescriptors();
@@ -432,7 +429,11 @@ void FeatureSelection::singleScan(int k, bool optPar)
 	des_it = model_->descriptor_IDs_.begin();
 	irr_it = irrelevantDescriptors->begin();
 	
-	for(unsigned int i=0; i<columns; i++)
+	SortedList<pair<double,uint> > potential_descriptors; // sorted descendingly by their increase of prediction quality during the first scan
+	
+	SortedList<pair<double,uint> >::Iterator it_to_best=potential_descriptors.end();
+	
+	for(uint i=0; i<columns; i++)
 	{	
 		// do not insert a descriptor more than one time and do not use irrelevant descriptors
 		bool c=0;
@@ -450,7 +451,7 @@ void FeatureSelection::singleScan(int k, bool optPar)
 		{
 			continue;
 		}
-	
+		
 		model_->descriptor_IDs_.insert(des_it,i);
 		
 		if(weights_!=NULL && weights_->Ncols()>0)
@@ -471,41 +472,30 @@ void FeatureSelection::singleScan(int k, bool optPar)
 			model_->descriptor_IDs_.deleteLastInsertion();
 			continue;
 		}
+		
+		SortedList<pair<double,uint> >::Iterator it = potential_descriptors.insert(make_pair(1-model_->model_val->getCVRes(),i));
+		
 		if(model_->model_val->getCVRes() > best_q2)
 		{
 			best_q2=model_->model_val->getCVRes();
 			best_col=i;
+			it_to_best = it;
 		}
 		model_->descriptor_IDs_.deleteLastInsertion();
 	}
 	
 	model_->descriptor_IDs_.insert(best_col);
+	potential_descriptors.erase(it_to_best);
 	
 	/// now check ONCE for each remaining (non-empty) descriptor, whether it can increase the prediction quality
-	des_it = model_->descriptor_IDs_.begin();
-	irr_it = irrelevantDescriptors->begin();
-	double old_q2=best_q2;
-	for(unsigned int i=0; i<columns; i++)
+ 	double old_q2=best_q2;
+	
+	potential_descriptors.front();
+	while(potential_descriptors.hasNext())
 	{
-		// do not insert a descriptor more than one time and do not use irrelevant descriptors
-		bool c=0;
-		if(*des_it==i) 
-		{
-			des_it++;
-			c=1;
-		}
-		if(*irr_it==i)
-		{
-			irr_it++;
-			c=1;
-		}
-		if(c==1)
-		{
-			continue;
-		}
-		
-		model_->descriptor_IDs_.insert(des_it,i);
-		
+		uint i = potential_descriptors.next().second;
+		model_->descriptor_IDs_.insert(i);
+	
 		try
 		{
 			if(!optPar || !model_->optimizeParameters(k))

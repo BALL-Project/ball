@@ -41,6 +41,18 @@ void LibsvmModel::train()
 	struct svm_problem* prob = createProblem();
 	svm_train_result_ = svm_train(prob,&parameters_);
 	free(prob->y);free(prob->x);free(prob);
+	
+	const double* const *sv_coef = svm_train_result_->sv_coef;
+	//const svm_node* const *SV = svm_train_result_->SV;
+	
+	training_result_.ReSize(K_.Nrows(),Y_.Ncols());
+	for(int i=0;i<svm_train_result_->l;i++) // l=#support vectors == #compounds
+	{
+		for(int j=0;j<svm_train_result_->nr_class-1;j++)
+		{
+			training_result_(i+1,j+1) = sv_coef[j][i];
+		}
+	}
 }
 
 
@@ -104,71 +116,40 @@ void LibsvmModel::createParameters()
 }
 
 
-RowVector LibsvmModel::predict(const vector<double>& substance, bool transform)
-{	
-	if(svm_train_result_==NULL)
-	{
-		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before it can predict the activitiy of substances!");
-	}
-	RowVector input=getSubstanceVector(substance, transform);
-	Matrix K_t(input.Nrows(), descriptor_matrix_.Nrows());
-	kernel->calculateKernelMatrix(K_,input, descriptor_matrix_, K_t);
-		
-	svm_node* node = Malloc(struct svm_node, K_t.Ncols()+1);
-	
-	for(int i=1; i<=K_t.Ncols(); i++)
-	{
-		node[i-1].index = i-1;
-		node[i-1].value = K_t(1,i);
-	}
-	node[K_t.Ncols()].index = -1;
-	node[K_t.Ncols()].value = '?';
-		
-	double res = svm_predict(svm_train_result_, node);
-	
-	RowVector rv(1);
-	rv << res;
-	
-	if(transform && y_transformations_.Ncols()!=0)
-	{
-		backTransformPrediction(rv);
-	}
+// RowVector LibsvmModel::predict(const vector<double>& substance, bool transform)
+// {	
+// 	if(svm_train_result_==NULL)
+// 	{
+// 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before it can predict the activitiy of substances!");
+// 	}
+// 	RowVector input=getSubstanceVector(substance, transform);
+// 	Matrix K_t(input.Nrows(), descriptor_matrix_.Nrows());
+// 	kernel->calculateKernelMatrix(K_,input, descriptor_matrix_, K_t);
+// 		
+// 	svm_node* node = Malloc(struct svm_node, K_t.Ncols()+1);
+// 	
+// 	for(int i=1; i<=K_t.Ncols(); i++)
+// 	{
+// 		node[i-1].index = i-1;
+// 		node[i-1].value = K_t(1,i);
+// 	}
+// 	node[K_t.Ncols()].index = -1;
+// 	node[K_t.Ncols()].value = '?';
+// 		
+// 	double res = svm_predict(svm_train_result_, node);
+// 	
+// 	RowVector rv(1);
+// 	rv << res;
+// 	
+// 	if(transform && y_transformations_.Ncols()!=0)
+// 	{
+// 		backTransformPrediction(rv);
+// 	}
+// 
+// 	free(node);
+// 	return rv;
+// }
 
-	free(node);
-	return rv;
-}
-
-
-void LibsvmModel::saveToFile(string filename)
-{	
-	KernelModel::saveToFile(filename.c_str());
-	String f2=filename;
-	if(f2.size()>3)
-	{
-		f2 = f2.substr(0,f2.size()-3)+"SVR";
-	}
-	else
-	{
-		f2 = "SVR";
-	}
-	svm_save_model(f2.c_str(),svm_train_result_);
-}
-
-
-void LibsvmModel::readFromFile(string filename)
-{
-	KernelModel::readFromFile(filename);
-	String f2=filename;
-	if(f2.size()>3)
-	{
-		f2 = f2.substr(0,f2.size()-3)+"SVR";
-	}
-	else
-	{
-		f2 = "SVR";
-	}
-	svm_train_result_ = svm_load_model(f2.c_str());
-}
 
 void LibsvmModel::setParameters(vector<double>& v)
 {

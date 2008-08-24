@@ -53,12 +53,29 @@ void KernelModel::operator=(const Model& m)
 }
 
 
+RowVector KernelModel::predict(const vector<double>& substance, bool transform)
+{	
+	if(training_result_.Ncols()==0)
+	{
+		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before it can predict the activitiy of substances!");
+	}	
+	RowVector input=getSubstanceVector(substance,transform);
+		
+	Matrix K_t(input.Nrows(), descriptor_matrix_.Nrows());  
+	kernel->calculateKernelMatrix(K_,input, descriptor_matrix_, K_t); // dim: 1xn
+
+	RowVector res = K_t*training_result_;  // dim: 1xc
+	
+	if(transform && y_transformations_.Ncols()!=0)
+	{
+		backTransformPrediction(res);
+	}
+	return res;
+}
+
+
 void KernelModel::saveToFile(string filename)
 {
-// 	if(training_result_.Nrows()==0 && type_!="SVR")
-// 	{
-// 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must have been trained before the results can be saved to a file!");
-// 	}
 	bool trained = 1;
 	if(training_result_.Nrows()==0)
 	{
@@ -201,40 +218,34 @@ void KernelModel::saveKernelParametersToFile(ofstream& out)
 
 void KernelModel::readTrainingResult(ifstream& input, int no_substances, int no_y)
 {
-	if(type_!="SVR") // NO result of training within this file in case of SVR
+	String line;
+	for(int i=1; i<=no_substances; i++) // read training result
 	{
-		String line;
-		for(int i=1; i<=no_substances; i++) // read training result
+		getline(input,line);
+		substance_names_.push_back(line.getField(0,"\t"));
+		for(int j=1; j<=no_y; j++)
 		{
-			getline(input,line);
-			substance_names_.push_back(line.getField(0,"\t"));
-			for(int j=1; j<=no_y; j++)
-			{
-				training_result_(i,j) = line.getField(j,"\t").toDouble();
-			}
+			training_result_(i,j) = line.getField(j,"\t").toDouble();
 		}
-		getline(input,line);  // skip empty line 
 	}
+	getline(input,line);  // skip empty line 
 }
 
 void KernelModel::saveTrainingResult(ofstream& out)
 {
-	if(type_!="SVR") // NO training_result matrix in case of SVR
+	const Matrix* coeffErrors = validation->getCoefficientStddev();
+	for(int i=1; i<=training_result_.Nrows();i++) // write training result
 	{
-		const Matrix* coeffErrors = validation->getCoefficientStddev();
-		for(int i=1; i<=training_result_.Nrows();i++) // write training result
+		out<<substance_names_[i-1]<<"\t";
+		for(int j=1;j<=training_result_.Ncols();j++)
 		{
-			out<<substance_names_[i-1]<<"\t";
-			for(int j=1;j<=training_result_.Ncols();j++)
-			{
-				out<<training_result_(i,j)<<"\t";
-			}
-			for(int j=1; j<=coeffErrors->Ncols();j++)
-			{
-				out<<(*coeffErrors)(i,j)<<"\t";
-			}
-			out<<endl;
+			out<<training_result_(i,j)<<"\t";
+		}
+		for(int j=1; j<=coeffErrors->Ncols();j++)
+		{
+			out<<(*coeffErrors)(i,j)<<"\t";
 		}
 		out<<endl;
 	}
+	out<<endl;
 }

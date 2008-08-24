@@ -331,6 +331,8 @@ void DataItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
 	
 	hover_rect_ = new QGraphicsRectItem(this);
 	QGraphicsTextItem label(message.c_str());
+	QFont font; font.setPixelSize(10);
+	label.setFont(font);
 	float width=label.boundingRect().width();
 	float x=event->pos().x();
 	//cout<<mapToScene(event->pos()).x()+width<<"  "<<view_->data_scene->width()<<endl;
@@ -342,6 +344,7 @@ void DataItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
 	
 	hover_rect_->setPos(x+10,event->pos().y()+10);
 	hover_label_ = new QGraphicsTextItem(message.c_str(),hover_rect_);
+	hover_label_->setFont(font);
 	
 	hover_rect_->setRect(0,0,width,hover_label_->boundingRect().height());
 	QBrush brush; brush.setColor(QColor(230,230,22,155));

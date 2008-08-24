@@ -148,27 +148,6 @@ void KPLSModel::train()
 }
 
 
-RowVector KPLSModel::predict(const vector<double>& substance, bool transform)
-{	
-	if(training_result_.Ncols()==0)
-	{
-		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before it can predict the activitiy of substances!");
-	}	
-	RowVector input=getSubstanceVector(substance,transform);
-		
-	Matrix K_t(input.Nrows(), descriptor_matrix_.Nrows());
-	kernel->calculateKernelMatrix(K_,input, descriptor_matrix_, K_t);
-
-	RowVector res = K_t*training_result_;
-	
-	if(transform && y_transformations_.Ncols()!=0)
-	{
-		backTransformPrediction(res);
-	}
-	return res;
-}
-
-
 bool KPLSModel::optimizeParameters(int k, int no_steps)
 {
 	double best_q2=0;

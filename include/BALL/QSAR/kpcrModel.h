@@ -47,8 +47,6 @@ namespace BALL
 				/** set the fraction of the variance that should be explained by the latente variables. */
 				void setFracVar(double frac_var);
 				
-				RowVector predict(const vector<double>& substance, bool transform=1);
-				
 				void train();
 				
 				void setParameters(vector<double>& v);

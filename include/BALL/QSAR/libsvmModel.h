@@ -35,15 +35,11 @@ namespace BALL
 				//@{				
 				void train();
 				
-				RowVector predict(const vector<double>& substance, bool transform=1);
+				//RowVector predict(const vector<double>& substance, bool transform=1);
 				
 				void setParameters(vector<double>& v);
 				
 				vector<double> getParameters() const;
-				
-				void saveToFile(string filename);
-				
-				void readFromFile(string filename);
 				//@}
 				
 				

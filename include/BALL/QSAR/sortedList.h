@@ -35,6 +35,7 @@ namespace BALL
 				{
 					out_It = std::list<X>::begin();
 					search_it = std::list<X>::begin();
+					last_insertion=std::list<X>::end();
 				};
 				//@}
 				
@@ -44,8 +45,8 @@ namespace BALL
 				 */
 				//@{
 				/** inserts id into the list at the correct position, i.e. it keeps the list sorted ascendingly. */
-				void insert(X id)
-				{
+				Iterator insert(X id)
+				{					
 					Iterator tmp=search_it;
 					tmp--;
 					if((search_it==std::list<X>::end() || *search_it>=id) && (search_it==std::list<X>::begin() || *tmp<id))
@@ -63,6 +64,7 @@ namespace BALL
 						std::list<X>::insert(it,id);
 						last_insertion=--it;
 					}
+					return last_insertion;
 				};
 				
 				
@@ -74,7 +76,7 @@ namespace BALL
 				
 				
 				/** inserts a value at the given position, after checking that this is the correct location */
-				void insert(Iterator it, X id)
+				Iterator insert(Iterator it, X id)
 				{
 					Iterator tmp=it;
 					tmp--;
@@ -87,6 +89,7 @@ namespace BALL
 					{
 						insert(id);
 					}
+					return last_insertion;
 				};
 					
 				
@@ -135,7 +138,7 @@ namespace BALL
 					}
 					if(*it==id) 
 					{
-						std::list<X>::erase(it);
+						erase(it);
 					}
 				};
 				
@@ -143,19 +146,31 @@ namespace BALL
 				/** erases the element at the given position and sets the given iterator to the next element of the list */
 				void erase(Iterator& it)
 				{
+					if(it==std::list<X>::end()) return;
+					bool reset_out_it=(out_It==it);
+					bool reset_last_insertion=(last_insertion==it);
+					bool reset_search_it=(search_it==it);
+					
 					Iterator tmp=it;
 					tmp++;
 					std::list<X>::erase(it);
 					it=tmp;
+					
+					if(reset_out_it) out_It=it;
+					if(reset_last_insertion) last_insertion=std::list<X>::end();
+					if(reset_search_it) search_it=it;
 				};
 										
 				
 				/** removes the newest element, i.e. the last inserted element of this list.*/
 				void deleteLastInsertion()
 				{
+					// last insertion has already been erased!
+					if(last_insertion==std::list<X>::end()) return;
+					
 					if(!std::list<X>::empty())
 					{
-						std::list<X>::erase(last_insertion);
+						erase(last_insertion);
 					}
 				};
 		
