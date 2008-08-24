@@ -628,6 +628,12 @@ void ModelItem::createActions()
 		connect(plot_features_action,SIGNAL(triggered()),this,SLOT(showPlotter()));
 		context_menu_actions_.push_back(plot_features_action);
 	}
+	else if((*model_->getType()=="snB"||*model_->getType()=="nB"))
+	{
+		QAction* plot_features_action = new QAction("plot training result",this);
+		connect(plot_features_action,SIGNAL(triggered()),this,SLOT(showPlotter()));
+		context_menu_actions_.push_back(plot_features_action);
+	}
 	if(entry_->regression) 
 	{
 		QAction* plot_features_action = new QAction("plot features",this);
