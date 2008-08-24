@@ -54,6 +54,11 @@ FeatureSelectionItem::FeatureSelectionItem(int type, DataItemView* miv):
 			name_ = "Remove small coefficients";
 			type_ = type;
 			break;
+			
+		case 6:
+			name_ = "Single scan";
+			type_ = type;
+			break;
 
 		default: throw InvalidFeatureSelectionItem(__FILE__,__LINE__);
 	}
@@ -323,6 +328,10 @@ bool FeatureSelectionItem::execute()
 			feature_selection_->implicitSelection(*lm,1,cor_threshold_);
 			break;
 		}
+		
+		case 6:		
+			feature_selection_->singleScan(k_,opt_);
+			break;
 			
 		default:
 			throw InvalidFeatureSelectionItem(__FILE__,__LINE__);
@@ -465,7 +474,7 @@ BALL::String FeatureSelectionItem::getMouseOverText()
 	
 	if(type_==0) message="maximal desired correlation\nbetween features="+valueToString(cor_threshold_);
 		
- 	else if(type_<4)
+ 	else if(type_<4||type_==6)
 	{
 // 			if(type_==1) message="forward feature selection\n";
 // 			if(type_==3) message="backward feature selection\n";

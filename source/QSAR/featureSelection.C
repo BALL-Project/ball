@@ -385,6 +385,155 @@ void FeatureSelection::stepwiseSelection(int k, bool optPar)
 }
 
 
+void FeatureSelection::singleScan(int k, bool optPar)
+{
+	cout<<"k="<<k<<"  optPar="<<optPar<<endl<<flush;
+	
+	
+	unsigned int columns=model_->data->descriptor_matrix_.size();
+	unsigned int lines=model_->data->descriptor_matrix_[0].size();
+	SortedList<unsigned int>* irrelevantDescriptors = findIrrelevantDescriptors();
+	
+	// ------ Q2 value for regression using all descriptors  --- //
+	double q2_allDes=0;
+	SortedList<unsigned int> old_descr=model_->descriptor_IDs_;
+	int col=model_->descriptor_matrix_.Ncols();
+	if(model_->descriptor_IDs_.size()!=0)
+	{
+		col=model_->descriptor_IDs_.size();
+	}
+
+	if(lines<1000 && col<1000 && model_->type_!="ALL" && model_->type_!="SVR" && model_->type_!="SVC" && (col<model_->data->descriptor_matrix_[0].size()*(((double)k-1)/k) || model_->type_!="MLR"))
+	{
+		if(!optPar || !model_->optimizeParameters(k))
+		{
+			model_->model_val->crossValidation(k);
+		}
+		q2_allDes=model_->model_val->getCVRes();
+	}
+	// --------------------------------------------------------- //
+	
+	RowVector oldWeights;
+	if(weights_!=NULL)
+	{	
+		oldWeights=*weights_;
+	}
+
+	model_->descriptor_IDs_.clear();
+	// do while there is an increase of Q^2 (and no of columns < no of lines)
+	int crossValidation_lines = (int)(((double)lines/k)*(k-1));
+	
+	SortedList<unsigned int>::Iterator des_it;
+	SortedList<unsigned int>::Iterator irr_it;
+
+	/// find the best feature to be selected first
+	int best_col=0; 
+	double best_q2=0;
+	des_it = model_->descriptor_IDs_.begin();
+	irr_it = irrelevantDescriptors->begin();
+	
+	for(unsigned int i=0; i<columns; i++)
+	{	
+		// do not insert a descriptor more than one time and do not use irrelevant descriptors
+		bool c=0;
+		if(*des_it==i) 
+		{
+			des_it++;
+			c=1;
+		}
+		if(*irr_it==i)
+		{
+			irr_it++;
+			c=1;
+		}
+		if(c==1)
+		{
+			continue;
+		}
+	
+		model_->descriptor_IDs_.insert(des_it,i);
+		
+		if(weights_!=NULL && weights_->Ncols()>0)
+		{
+			updateWeights(old_descr,model_->descriptor_IDs_,oldWeights);
+		}
+		
+		try
+		{
+			if(!optPar || !model_->optimizeParameters(k))
+			{
+				model_->model_val->crossValidation(k,0);
+			}
+		}
+		catch(Exception::NoPCAVariance e)
+		{   
+			// if selected descriptor(s) yield no PCA eigenvectors, ignore this combination of descriptors!
+			model_->descriptor_IDs_.deleteLastInsertion();
+			continue;
+		}
+		if(model_->model_val->getCVRes() > best_q2)
+		{
+			best_q2=model_->model_val->getCVRes();
+			best_col=i;
+		}
+		model_->descriptor_IDs_.deleteLastInsertion();
+	}
+	
+	model_->descriptor_IDs_.insert(best_col);
+	
+	/// now check ONCE for each remaining (non-empty) descriptor, whether it can increase the prediction quality
+	des_it = model_->descriptor_IDs_.begin();
+	irr_it = irrelevantDescriptors->begin();
+	double old_q2=best_q2;
+	for(unsigned int i=0; i<columns; i++)
+	{
+		// do not insert a descriptor more than one time and do not use irrelevant descriptors
+		bool c=0;
+		if(*des_it==i) 
+		{
+			des_it++;
+			c=1;
+		}
+		if(*irr_it==i)
+		{
+			irr_it++;
+			c=1;
+		}
+		if(c==1)
+		{
+			continue;
+		}
+		
+		model_->descriptor_IDs_.insert(des_it,i);
+		
+		try
+		{
+			if(!optPar || !model_->optimizeParameters(k))
+			{
+				model_->model_val->crossValidation(k,0);
+			}
+		}
+		catch(Exception::NoPCAVariance e)
+		{ 
+			// if selected descriptor(s) yield no PCA eigenvectors, ignore this combination of descriptors!
+			model_->descriptor_IDs_.deleteLastInsertion();
+			continue;
+		}
+		
+		if(model_->model_val->getCVRes()<=old_q2+quality_increase_cutoff_) // delete descriptor if no quality increase
+		{
+			model_->descriptor_IDs_.deleteLastInsertion();
+		}
+		else
+		{
+			old_q2=model_->model_val->getCVRes();
+		}
+	}
+	
+	delete irrelevantDescriptors;
+}
+
+
 /*
 void FeatureSelection::forwardSelection(bool optPar)
 {

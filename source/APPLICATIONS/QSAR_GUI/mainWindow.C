@@ -703,7 +703,7 @@ void MainWindow::createDockWindows()
 	windowMenu_->addAction(modeldock->toggleViewAction());
 
 	///create dock widget for listing all available feature selection methods
-	for(uint i=0; i<6;i++)
+	for(uint i=0; i<=6;i++)
 	{ 
 		FeatureSelectionItem* item = new FeatureSelectionItem(i, fs_list_);
 		fs_list_scene_.addItem(item);

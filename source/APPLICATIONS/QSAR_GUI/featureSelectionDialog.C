@@ -28,7 +28,7 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 	edit_ = new QLineEdit(this);
 	edit2_ = NULL;
 	
-	if(fsitem->getType()>0 && fsitem->getType()<4)
+	if((fsitem->getType()>0&&fsitem->getType()<4) || fsitem->getType()==6)
 	{
 		edit_->setText(String(reg->default_k).c_str());	
 		QLabel* klabel = new QLabel("k for k-fold cross validation",this);
@@ -141,7 +141,7 @@ void FeatureSelectionDialog::applyInput()
 	fs_item_->post_optimization_model_par_ = post_optimization_model_par_;
 	fs_item_->post_optimization_kernel_par_ = post_optimization_kernel_par_;
 	
-	if(fs_item_->getType()>0 && fs_item_->getType()<4) // no validation statistics for removal of colineal features
+	if((fs_item_->getType()>0&&fs_item_->getType()<4)||fs_item_->getType()==6) // no validation statistics for removal of colineal features
 	{
 		k_ =  edit_->text().toInt(&ok);
 		fs_item_->setK(k_);

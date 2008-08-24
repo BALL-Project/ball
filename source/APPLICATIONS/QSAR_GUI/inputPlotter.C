@@ -46,6 +46,7 @@ void InputPlotter::sortChangeState()
 {
 	
 	int a = sort_checkbox_->checkState();
+	delete zoomer_;
 	if(a==0) // unchecked
 	{
 		sort_ = 0;
@@ -56,6 +57,7 @@ void InputPlotter::sortChangeState()
 		sort_ = 1;
 		plot(1);
 	}
+	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
 }
 
 

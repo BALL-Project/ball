@@ -263,8 +263,8 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 	else if (type==ModelItem::Type) 
 	{
 		ModelItem* item;
-		SDFInputDataItem* input_item_at_pos = qgraphicsitem_cast<SDFInputDataItem *>(itemAt(pos));
-		CSVInputDataItem* csv_input_item_at_pos = qgraphicsitem_cast<CSVInputDataItem *>(itemAt(pos));
+		SDFInputDataItem* input_item_at_pos = qgraphicsitem_cast<SDFInputDataItem*>(itemAt(pos));
+		CSVInputDataItem* csv_input_item_at_pos = qgraphicsitem_cast<CSVInputDataItem*>(itemAt(pos));
 		
 		if(main_window->drag_source!="model_list") return;
 		
