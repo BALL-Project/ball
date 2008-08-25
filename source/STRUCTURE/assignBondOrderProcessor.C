@@ -60,6 +60,9 @@ namespace BALL
 	
 	const char* AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS = "overwrite_triple_bond_orders";
 	const bool  AssignBondOrderProcessor::Default::OVERWRITE_TRIPLE_BOND_ORDERS = true;
+	
+	const char* AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS = "overwrite_selected_bonds";
+	const bool  AssignBondOrderProcessor::Default::OVERWRITE_SELECTED_BONDS = false;
 
 	const char* AssignBondOrderProcessor::Option::ADD_HYDROGENS = "add_hydrogens_by_hybridisation_processor";
 	const bool  AssignBondOrderProcessor::Default::ADD_HYDROGENS = false;
@@ -441,6 +444,7 @@ cout << " \t Overwrite bonds (single, double, triple, quad, aroma):"
 		 << options.getBool(Option::OVERWRITE_SINGLE_BOND_ORDERS) << " " 
 		 << options.getBool(Option::OVERWRITE_DOUBLE_BOND_ORDERS) << " " 
 		 << options.getBool(Option::OVERWRITE_TRIPLE_BOND_ORDERS) << " " 
+		 << options.getBool(Option::OVERWRITE_SELECTED_BONDS) << " " 
 		<< endl;
 
 cout << " \t Add hydrogens : " << options.getBool(Option::ADD_HYDROGENS) << endl;
@@ -468,6 +472,7 @@ cout << endl;
 			bool overwrite_single_bonds = options.getBool(Option::OVERWRITE_SINGLE_BOND_ORDERS);
 			bool overwrite_double_bonds = options.getBool(Option::OVERWRITE_DOUBLE_BOND_ORDERS);
 			bool overwrite_triple_bonds = options.getBool(Option::OVERWRITE_TRIPLE_BOND_ORDERS);
+			bool overwrite_selected_bonds = options.getBool(Option::OVERWRITE_SELECTED_BONDS);
 
 			// What kind of composite do we have?
 			if (RTTI::isKindOf<Molecule>(ac))
@@ -511,14 +516,29 @@ cout << endl;
 							bond_index_counter++;
 						}
 
-						// According to the options and current bond order 
-						// a bond is a free variable of the ILP or not.
-						// YES: add a variable in the bond side constraint + ????TODO 
-						// NO: equality in the bonds side constraint + ?????TODO
-						switch (bnd->getOrder())
+						if (overwrite_selected_bonds)
 						{
-							case Bond::ORDER__SINGLE:
+							if (bnd->isSelected())
 							{
+								bond_fixed_[bnd] 	= 0;	 
+							}
+							else
+							{
+								fixed += 1;
+								bond_fixed_[bnd] 	= 1;
+								num_fixed_bonds++;
+							}
+						}
+						else
+						{
+							// According to the options and current bond order 
+							// a bond is a free variable of the ILP or not.
+							// YES: add a variable in the bond side constraint   
+							// NO: equality in the bonds side constraint 
+							switch (bnd->getOrder())
+							{
+								case Bond::ORDER__SINGLE:
+								{
 									if (overwrite_single_bonds)
 									{	
 										bond_fixed_[bnd] 	= 0;	 
@@ -530,52 +550,53 @@ cout << endl;
 										num_fixed_bonds++;
 									}
 									break;
-							}
-							case Bond::ORDER__DOUBLE:
-							{
-								if (overwrite_double_bonds)
+								}
+								case Bond::ORDER__DOUBLE:
 								{
-									bond_fixed_[bnd] = 0;
+									if (overwrite_double_bonds)
+									{
+										bond_fixed_[bnd] = 0;
+									}
+									else
+									{
+										fixed += 2;
+										bond_fixed_[bnd] 	= 2;
+										num_fixed_bonds++;
+									}
+									break;
 								}
-								else
+								case Bond::ORDER__TRIPLE:
 								{
-									fixed += 2;
-									bond_fixed_[bnd] 	= 2;
-									num_fixed_bonds++;
+									if (overwrite_triple_bonds)
+									{
+										bond_fixed_[bnd] = 0;
+									}
+									else
+									{	
+										fixed += 3;
+										bond_fixed_[bnd] = 3;
+										num_fixed_bonds++;
+									}
+									break;
 								}
-								break;
-							}
-							case Bond::ORDER__TRIPLE:
-							{
-								if (overwrite_triple_bonds)
+								case Bond::ORDER__QUADRUPLE:
 								{
-									bond_fixed_[bnd] = 0;
-								}
-								else
-								{	
-									fixed += 3;
-									bond_fixed_[bnd] = 3;
-									num_fixed_bonds++;
-								}
-								break;
-							}
-							case Bond::ORDER__QUADRUPLE:
-							{
 									fixed += 4;
 									bond_fixed_[bnd] = 4;
 									num_fixed_bonds++;
-								break;
-							}
-							case Bond::ORDER__AROMATIC:
-							{
+									break;
+								}
+								case Bond::ORDER__AROMATIC:
+								{
 									fixed += 1;
 									bond_fixed_[bnd] 	= 1; 
 									num_fixed_bonds++;
-								break;
-							}	
-							default: //Bond::ORDER__UNKNOWN:
-							{
+									break;
+								}	
+								default: //Bond::ORDER__UNKNOWN:
+								{
 									bond_fixed_[bnd] = 0;
+								}
 							}
 						}
 					}
@@ -1875,6 +1896,9 @@ cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 	
 	 	options.setDefaultBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS, 
 	 												 AssignBondOrderProcessor::Default::OVERWRITE_TRIPLE_BOND_ORDERS); 
+	 	
+		options.setDefaultBool(AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS, 
+	 												 AssignBondOrderProcessor::Default::OVERWRITE_SELECTED_BONDS); 
 
 		options.setDefaultBool(AssignBondOrderProcessor::Option::ADD_HYDROGENS,
 												   AssignBondOrderProcessor::Default::ADD_HYDROGENS);	

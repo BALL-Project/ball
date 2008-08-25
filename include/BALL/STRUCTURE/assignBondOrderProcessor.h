@@ -105,7 +105,9 @@ namespace BALL
 				*/
 				static const char* OVERWRITE_TRIPLE_BOND_ORDERS;	
 				
-				/**	compute bond orders for all bonds of type aromatic bond order
+				/**	compute bond orders for all selected bonds
+				 *  NOTE: This option has higher priority than 
+				 *  the OVERWRITE_BOND_ORDER-Options.
 				*/
 				static const char* OVERWRITE_SELECTED_BONDS; 	
 				
@@ -162,6 +164,7 @@ namespace BALL
 				static const bool OVERWRITE_SINGLE_BOND_ORDERS;
 				static const bool OVERWRITE_DOUBLE_BOND_ORDERS;
 				static const bool OVERWRITE_TRIPLE_BOND_ORDERS;
+				static const bool OVERWRITE_SELECTED_BONDS;
 				static const bool ADD_HYDROGENS;
 				static const bool OVERWRITE_CHARGES;
 				static const bool ASSIGN_CHARGES;

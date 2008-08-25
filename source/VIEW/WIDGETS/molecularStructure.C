@@ -476,9 +476,9 @@ namespace BALL
 			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS] 		= bond_order_dialog_.overwrite_singleBO_box->isChecked();
 			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS] 		= bond_order_dialog_.overwrite_doubleBO_box->isChecked();
 			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS] 		= bond_order_dialog_.overwrite_tripleBO_box->isChecked();
-			abop.options[AssignBondOrderProcessor::Option::ASSIGN_CHARGES] 									= bond_order_dialog_.assign_charges_checkBox->isChecked();
-			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_CHARGES] 							= bond_order_dialog_.overwrite_charges_checkBox->isChecked();
+			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS] 		= bond_order_dialog_.overwrite_selected_bonds_box->isChecked();
 			abop.options[AssignBondOrderProcessor::Option::KEKULIZE_RINGS] 									= bond_order_dialog_.kekulizeBonds_button->isChecked();
+			abop.options[AssignBondOrderProcessor::Option::ADD_HYDROGENS] 									= bond_order_dialog_.add_hydrogens_checkBox->isChecked();
 			abop.options[AssignBondOrderProcessor::Option::ALGORITHM] 											= bond_order_dialog_.ILP_button->isChecked() ? AssignBondOrderProcessor::Algorithm::ILP : AssignBondOrderProcessor::Algorithm::A_STAR;
 			abop.options[AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING]						= (bond_order_dialog_.penalty_balance_slider->value()/100.);
 		

@@ -145,7 +145,10 @@ CHECK(setDefaultOptions())
 	
 	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS),
 												AssignBondOrderProcessor::Default::OVERWRITE_TRIPLE_BOND_ORDERS)
-
+	
+	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS),  
+												AssignBondOrderProcessor::Default::OVERWRITE_SELECTED_BONDS)
+		
 	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::ADD_HYDROGENS),
 												   AssignBondOrderProcessor::Default::ADD_HYDROGENS)
 
@@ -758,9 +761,10 @@ RESULT
 
 
 CHECK(Option:::KEKULIZE_RINGS using A* )
-	
-	// NOTE : this option only depends on the AROMATICITY processor
-	
+	// NOTE :this option only depends on the AROMATICITY processor
+	//       so there is really not much we can test here, so we 
+	//       just execute the processor to have a chance of 
+	//       catching bugs with valgrind if they sneak in
 	AssignBondOrderProcessor testbop;	
 	
 	// true
@@ -786,8 +790,9 @@ RESULT
 
 CHECK(OVERWRITE_SINGLE_BOND_ORDERS  using A* )	
 	// This test is very hand made 
-	// The optimal solution can be reached by construction, 
-	// but a better solution is found!
+	// By construction the optimal solution can be reached if _all_ 
+	// bonds were considered, but with the current option 
+	// only a better solution is found!
 	AssignBondOrderProcessor testbop;	
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, false);
@@ -812,8 +817,9 @@ RESULT
 
 CHECK(OVERWRITE_DOUBLE_BOND_ORDERS using A* )
 	// This test is very hand made 
-	// The optimal solution can be reached by construction, 
-	// but a better solution is found!
+	// By construction the optimal solution can be reached if _all_ 
+	// bonds were considered, but with the current option 
+	// only a better solution is found!
 	AssignBondOrderProcessor testbop;	
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, false);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, true);
@@ -838,8 +844,9 @@ RESULT
 
 CHECK(OVERWRITE_TRIPLE_BOND_ORDERS using A* )	
 	// This test is very hand made 
-	// The optimal solution can be reached by construction, 
-	// but a better solution is found!
+	// By construction the optimal solution can be reached if _all_ 
+	// bonds were considered, but with the current option 
+	// only a better solution is found!
 	AssignBondOrderProcessor testbop;	
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, false);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, false);
@@ -864,7 +871,30 @@ RESULT
 
 
 CHECK(OVERWRITE_SELECTED_BONDS using A* )
-  //TODO
+  AssignBondOrderProcessor testbop;	
+	
+	System sys40;
+	MOL2File mol40("data/AssignBondOrderProcessor_test_C4_input.mol2", std::ios::in);
+	mol40 >> sys40;	
+	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128)
+	
+	// now select 3 bonds
+	AtomIterator a_it;
+	Atom::BondIterator b_it;
+	int counter = 0;
+	for (a_it = sys40.beginAtom(); a_it != sys40.endAtom(); a_it++)
+	{
+		for (b_it = a_it->beginBond(); (b_it != a_it->endBond()) && (counter < 7); b_it++)
+		{
+			counter++;
+			b_it->setSelected(true);
+		}
+	}
+
+	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS, true);
+	sys40.apply(testbop);
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0)
+
 RESULT
 
 

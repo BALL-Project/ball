@@ -1498,7 +1498,7 @@ void EditableScene::saturateWithHydrogens()
 	getMainControl()->update(*ac, true);
 }
 
-/* Annes test */
+
 void EditableScene::computeBondOrders()
 {
 	if (getMainControl()->isBusy()) return;
@@ -1539,9 +1539,9 @@ void EditableScene::computeBondOrders()
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_singleBO_box->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_doubleBO_box->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_tripleBO_box->isChecked();
-	abop.options[AssignBondOrderProcessor::Option::ASSIGN_CHARGES] 									= bond_order_dialog.assign_charges_checkBox->isChecked();
-	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_CHARGES] 							= bond_order_dialog.overwrite_charges_checkBox->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS] 		= bond_order_dialog.overwrite_selected_bonds_box->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::KEKULIZE_RINGS] 									= bond_order_dialog.kekulizeBonds_button->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::ADD_HYDROGENS] 									= bond_order_dialog.add_hydrogens_checkBox->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::ALGORITHM] 											= bond_order_dialog.ILP_button->isChecked() ? AssignBondOrderProcessor::Algorithm::ILP : AssignBondOrderProcessor::Algorithm::A_STAR;
 	abop.options[AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING]						= (bond_order_dialog.penalty_balance_slider->value()/100.);
 	
@@ -1605,7 +1605,6 @@ void EditableScene::computeBondOrders()
 
 	getMainControl()->update(*containers.front(), true);
 }
-/* end of Annes Test*/
 
 
 void EditableScene::optimizeStructure()
