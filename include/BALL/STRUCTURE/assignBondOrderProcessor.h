@@ -43,27 +43,28 @@ namespace BALL
 			\ingroup StructureMiscellaneous
 	*/
 	
-	/// Called with default options the processor computes all 
-	/// possible bond orders with optimal value and 
-	/// applies the first solution to the given AtomContainer ac_.
-	/// All further optimal solutions can be applied by calling
-	/// the method apply(i). Additional solutions can be computed 
-	/// by calling the method computeNextSolution()
-	/// Example code: 
- 	/// 	AssignBondOrderProcessor bop;	
-	/// 	bop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
-	/// 	...
-	///		sys.apply(bop);
-	///		i = bop.getNumberOfComputedSolutions();
-	/// 	bop.apply(i-1);
-	/// 	... 
-	/// 	while (bop.computeNextSolution())
-	///		{
-	///   	  i++;
-	///     	bop.apply(i);
-	/// 	}
-
-
+	/** Assignment of bond orders from topology information.
+	 *  
+	 *  Called with default options the processor computes all 
+	 *  possible bond orders with optimal value and 
+	 *  applies the first solution to the given AtomContainer ac_.
+	 *  All further optimal solutions can be applied by calling
+	 *  the method apply(i). Additional solutions can be computed 
+	 *  by calling the method computeNextSolution()
+	 *  Example code: 
+ 	 *  	AssignBondOrderProcessor bop;	
+	 *  	bop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
+	 *  	...
+	 *   	sys.apply(bop);
+	 *   	i = bop.getNumberOfComputedSolutions();
+	 *  	bop.apply(i-1);
+	 *  	... 
+	 *  	while (bop.computeNextSolution())
+	 *   	{
+	 *    	  i++;
+	 *      	bop.apply(i);
+	 *  	}
+	 */
 	class BALL_EXPORT AssignBondOrderProcessor 
 		: public UnaryProcessor<AtomContainer> 
 	{
@@ -198,7 +199,7 @@ namespace BALL
 			/// copy construcor
 			AssignBondOrderProcessor(const AssignBondOrderProcessor& abop);
 		
-			/// constructor with parameter filename //TODO
+			// constructor with parameter filename //TODO
 			//AssignBondOrderProcessor(const String& file_name) throw(Exception::FileNotFound);
 			
 			/// destructor
@@ -215,13 +216,14 @@ namespace BALL
 			/// clears the datastructures
 			void clear();
 
-			/// operator () for the processor 
-			/// Called with default options the processor computes all 
-			/// possible bond orders with optimal value and 
-			/// applies the first solution to the given AtomContainer ac_
-			/// NOTE: Having used the ASTAR-option (default)
-			/// the method getNumberOfComputedSolutions() will return the 
-			/// number of optimal solutions+1!
+			/** operator () for the processor 
+			 * Called with default options the processor computes all 
+			 * possible bond orders with optimal value and 
+			 * applies the first solution to the given AtomContainer ac_.
+			 * NOTE: Having used the ASTAR-option (default)
+			 * the method getNumberOfComputedSolutions() will return the 
+			 * number of optimal solutions+1!
+			 */
 			virtual Processor::Result operator () (AtomContainer& ac);
 
 			/// processor method which is called after the operator () call
@@ -232,8 +234,9 @@ namespace BALL
 			/**	@name	Accessors
 			*/
 			//@{
-			/// Returns the number of bonds built during the last application.
-			/// NOTE: bonds to newly added hydrogens are excluded.
+			/** Returns the number of bonds built during the last application.
+			 * NOTE: bonds to newly added hydrogens are excluded.
+			 */
 			Size getNumberOfBondOrdersSet();
 		
 			/// Returns the number of added hydrogens in Solution i.
@@ -252,9 +255,10 @@ namespace BALL
 				return num_hydrogens;
 			}
 
-			/// Returns the number of already computed solutions
-			/// NOTE: Having applied the operator with ASTAR-option
-			/// 			this method returns the number of optimal solutions+1!
+			/** Returns the number of already computed solutions
+			 * NOTE: Having applied the operator with ASTAR-option
+			 * 			this method returns the number of optimal solutions+1!
+			 */
 			Size getNumberOfComputedSolutions() {return solutions_.size();}
 
 			/// Returns the total penalty of solution i
