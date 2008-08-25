@@ -64,7 +64,7 @@ namespace BALL
 	const char* AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS = "overwrite_selected_bonds";
 	const bool  AssignBondOrderProcessor::Default::OVERWRITE_SELECTED_BONDS = false;
 
-	const char* AssignBondOrderProcessor::Option::ADD_HYDROGENS = "add_hydrogens_by_hybridisation_processor";
+	const char* AssignBondOrderProcessor::Option::ADD_HYDROGENS = "add_hydrogens_by_processor";
 	const bool  AssignBondOrderProcessor::Default::ADD_HYDROGENS = false;
 
 	const char* AssignBondOrderProcessor::Option::OVERWRITE_CHARGES = "overwrite_existing_charges";
@@ -378,7 +378,27 @@ cout << ")" << endl;
 						sol.number_of_virtual_hydrogens[atom] = num_H;
 					}
 				}
-				
+
+				// compute the total charge
+				float charge = 0;
+				for (AtomIterator a_it = ac_->beginAtom(); a_it != ac_->endAtom(); a_it++)
+				{
+					int valence = 0;
+					for (Atom::BondIterator b_it = a_it->beginBond(); b_it != a_it->endBond(); b_it++)
+					{
+						valence += b_it->getOrder();
+					}
+
+					if (  (a_it->getElement() == PTE[Element::H])
+							||(a_it->getElement() == PTE[Element::He]))
+					{	
+						charge += a_it->getElement().getGroup() - valence;
+					}
+					else
+						charge += 18 - a_it->getElement().getGroup() - valence;
+				}
+				sol.total_charge = charge;
+		
 				return true;
 			}
 			else // no leaf
@@ -2392,7 +2412,8 @@ cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 			number_of_virtual_hydrogens(),
 			atoms_to_delete(),
 			atom_type_penalty(0.),
-			bond_length_penalty(0.)
+			bond_length_penalty(0.),
+			total_charge(0.)
 	{
 	}
 
@@ -2408,6 +2429,7 @@ cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 		atoms_to_delete.clear();
 		atom_type_penalty = 0.;
 		bond_length_penalty = 0.;
+		total_charge = 0.;
 	}
 	
 	//////////////////////////// the PQ_Entry_ - class

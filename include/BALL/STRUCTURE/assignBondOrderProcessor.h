@@ -112,7 +112,7 @@ namespace BALL
 				*/
 				static const char* OVERWRITE_SELECTED_BONDS; 	
 				
-				/**	add hydrogens based on the hybridization processor
+				/**	add hydrogens based on free valences
 				*/
 				static const char* ADD_HYDROGENS;
 
@@ -262,6 +262,33 @@ namespace BALL
 			 */
 			Size getNumberOfComputedSolutions() {return solutions_.size();}
 
+			/// Return the total charge of solution i
+			float getTotalCharge(Position i)
+			{
+				if (i >= solutions_.size())
+				{
+					Log.error() << "AssignBondOrderProcessor: No solution with index " << i << std::endl;
+
+					return Limits<float>::max();
+				}
+				else
+					return getTotalCharge(solutions_[i]);
+
+			}
+			
+			/// Returns the total charge of a solution 
+			float getTotalCharge(const Solution_& sol) 
+			{
+				if (sol.valid) 
+				{
+					return sol.total_charge;
+				}
+				else
+				{
+					return 0; 				
+				} 
+			}
+
 			/// Returns the total penalty of solution i
 			float getTotalPenalty(Position i)
 			{
@@ -301,10 +328,10 @@ namespace BALL
 			bool apply(Position i);
 
 			/** Computes and applies one of the next best solutions.
-			*   Returns false if no further solution can be found.
-			*   Ignores the options  MAX_NUMBER_OF_SOLUTIONS and
-			*	 											COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS.
-			*/
+			 *  Returns false if no further solution can be found.
+			 *  Ignores the options  MAX_NUMBER_OF_SOLUTIONS and
+			 *											 COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS.
+			 */
 			bool computeNextSolution();
 			//@}
 			
@@ -366,6 +393,7 @@ namespace BALL
 					// the values of the objective function
 					float atom_type_penalty;
 					float bond_length_penalty;
+					float total_charge;
 			};
 			
 			// Nested class storing a priority queue entry for the A-STAR-Option

@@ -407,6 +407,43 @@ CHECK(getTotalPenalty(Position i) and operator() A* single solution)
 
 RESULT
 
+CHECK(getTotalCharge(Position i))
+  AssignBondOrderProcessor testbop;		
+	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
+
+	//testbop.options.dump();
+	
+	System sys;
+	MOL2File mol_in("data/AssignBondOrderProcessor_test_AMHTAR01.mol2", std::ios::in);
+	mol_in >> sys;
+	sys.apply(testbop);
+	TEST_REAL_EQUAL(testbop.getTotalCharge(0), 1.)
+	TEST_REAL_EQUAL(testbop.getTotalCharge(3), 3.)
+	TEST_REAL_EQUAL(testbop.getTotalCharge(7), 5.)
+
+	System sys2;
+	MOL2File mol_in2("data/AssignBondOrderProcessor_test_AN06.mol2", std::ios::in);
+	mol_in2 >> sys2;
+	sys2.apply(testbop);
+	TEST_REAL_EQUAL(testbop.getTotalCharge(0), 1.)	
+	TEST_REAL_EQUAL(testbop.getTotalCharge(2), -1.)	
+
+	System sys3;
+	MOL2File mol_in3("data/AssignBondOrderProcessor_test_BEWCUB.mol2", std::ios::in);
+	mol_in3 >> sys3;	
+	sys3.apply(testbop);
+	TEST_REAL_EQUAL(testbop.getTotalCharge(0), -2.)
+	TEST_REAL_EQUAL(testbop.getTotalCharge(2), -4 )
+	
+	System sys40;
+	MOL2File mol40("data/AssignBondOrderProcessor_test_C3_input.mol2", std::ios::in);
+	mol40 >> sys40;	
+	sys40.apply(testbop);
+	TEST_REAL_EQUAL(testbop.getTotalCharge(0), -4.)
+
+RESULT
+
+
 CHECK(testing bond order assignment using ILP - single sol)
  	//TODO
 RESULT
