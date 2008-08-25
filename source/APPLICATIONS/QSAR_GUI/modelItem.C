@@ -268,6 +268,7 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 		{
 			cout<<"\""<<conf.descriptor_source_model<<"\" not found!"<<endl;
 			throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model reading error","ModelItem from which the descriptor IDs are to be taken can not be found!");
+			return;
 		}
 		descriptor_source_model_ = (ModelItem*) it->second;
 		edge = new Edge(descriptor_source_model_, this);
@@ -744,13 +745,11 @@ void ModelItem::writeConfigSection(ofstream& out)
 void ModelItem::removeFromPipeline()
 {
 	view_->data_scene->main_window->model_pipeline_.erase(this);
-	view_->data_scene->main_window->all_items_pipeline_.erase(this);
 }
 
 void ModelItem::addToPipeline()
 {
 	view_->data_scene->main_window->model_pipeline_.insert(this);
-	view_->data_scene->main_window->all_items_pipeline_.insert(this);
 }
 
 // SLOT

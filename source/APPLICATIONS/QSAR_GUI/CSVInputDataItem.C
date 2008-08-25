@@ -160,11 +160,9 @@ void CSVInputDataItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* /*event*
 void CSVInputDataItem::addToPipeline()
 {
 	view_->data_scene->main_window->csv_input_pipeline_.insert(this);
-	view_->data_scene->main_window->all_items_pipeline_.insert(this);
 }
 
 void CSVInputDataItem::removeFromPipeline()
 {
 	view_->data_scene->main_window->csv_input_pipeline_.erase(this);
-	view_->data_scene->main_window->all_items_pipeline_.erase(this);
 }

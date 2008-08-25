@@ -94,13 +94,11 @@ bool PartitioningItem::isDone()
 void PartitioningItem::addToPipeline()
 {
 	view_->data_scene->main_window->partitioning_pipeline_.insert(this);
-	view_->data_scene->main_window->all_items_pipeline_.insert(this);
 }
 
 void PartitioningItem::removeFromPipeline()
 {
 	view_->data_scene->main_window->partitioning_pipeline_.erase(this);
-	view_->data_scene->main_window->all_items_pipeline_.erase(this);
 }
 
 

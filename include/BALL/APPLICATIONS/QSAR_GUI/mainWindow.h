@@ -119,10 +119,6 @@ namespace BALL
 				Pipeline<DataItem*> disconnected_items_;
 				Pipeline<PartitioningItem*> partitioning_pipeline_;
 				Pipeline<InputPartitionItem*> partition_pipeline_;
-				
-				/** Pipeline that contains pointers to ALL items of all different types.\n
-				It is used to save and restore everthing in the correct order */
-				Pipeline<DataItem*> all_items_pipeline_;
 
 			signals:
 				void sendNewValue(int);

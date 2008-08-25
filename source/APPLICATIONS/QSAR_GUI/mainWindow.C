@@ -806,8 +806,6 @@ void MainWindow::clearDesktop()
 	}
 	partitioning_pipeline_.clear();
 	
-	all_items_pipeline_.clear();
-	
 	updatePipelineScene();
 }
 
@@ -1360,6 +1358,7 @@ void MainWindow::restoreDesktop(QString filename)
 	catch(BALL::Exception::GeneralException e)
 	{
 		QMessageBox::warning(this,e.getName(),e.getMessage());
+		return;
 	}
 	
 	updatePipelineScene();
@@ -1398,7 +1397,6 @@ void MainWindow::exportPipeline(QString filename)
 	progress_bar_->setMaximum(maximum);
 
 	InputDataItemIO input_writer(view_);
-	int counter = 0;
 
 	QString name;
 	String configfile = filename.toStdString();
@@ -1417,7 +1415,8 @@ void MainWindow::exportPipeline(QString filename)
 	ostringstream positions;
 	positions<<"[ItemPositions]"<<endl;
 	
-	/*
+	int counter = 0;
+	
 	/// SDFInputItems
 	for (Pipeline<SDFInputDataItem*>::iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
 	{
@@ -1509,68 +1508,6 @@ void MainWindow::exportPipeline(QString filename)
 		positions<<item->x()<<"  "<<item->y()<<endl;
 		value++;
 		emit sendNewValue(value);
-	}
-	*/
-	
-	int model_counter=0;
-	for (Pipeline<DataItem*>::iterator it = all_items_pipeline_.begin(); it != all_items_pipeline_.end(); it++)
-	{
-		DataItem* item = *it;
-		int type = item->type();
-		
-		if(type==CSVInputDataItem::Type)
-		{
-			CSVInputDataItem* csv_item = (CSVInputDataItem*) item;
-			item->setSavedAs(file_prefix.c_str()+item->name()+".dat");
-			input_writer.writeConfigSection(csv_item,out);
-		}
-		else if(type==SDFInputDataItem::Type)
-		{
-			SDFInputDataItem* sdf_item = (SDFInputDataItem*) item;
-			item->setSavedAs(file_prefix.c_str()+item->name()+".dat");
-			input_writer.writeConfigSection(sdf_item,out);
-		}
-		else if(type==PartitioningItem::Type)
-		{
-			PartitioningItem* partitioner = (PartitioningItem*) item;
-			input_writer.writeConfigSection(partitioner,out);
-		}
-		else if(type==InputPartitionItem::Type)
-		{
-			InputPartitionItem* part_item = (InputPartitionItem*) item;
-			String n = file_prefix+part_item->getOutputFilename();
-			item->setSavedAs(n.c_str());
-		}
-		else
-		{
-			if(type==ModelItem::Type)
-			{
-				ModelItem* model_item = (ModelItem*) item;
-							
-				model_item->setSavedAs(file_prefix.c_str()+item->name() + name.setNum(model_counter) + ".mod");
-				model_counter++;
-				
-				if (!model_item->saveAttribute()) continue;
-			}
-			if(type==ValidationItem::Type)
-			{
-				item->setSavedAs(file_prefix.c_str()+name.setNum(counter)+".val");
-			}
-			if(type==PredictionItem::Type)
-			{
-				item->setSavedAs(file_prefix.c_str()+name.setNum(counter) + ".pred");
-			}
-			item->writeConfigSection(out);
-		}
-		
-		positions<<item->x()<<"  "<<item->y()<<endl;
-		if(type==FeatureSelectionItem::Type) 
-		{
-			FeatureSelectionItem* fs_item = (FeatureSelectionItem*) item;
-			positions<<fs_item->modelItem()->x()<<"  "<<fs_item->modelItem()->y()<<endl;
-		}
-		value++;
-		emit sendNewValue(value);	
 	}
 	
 	out<<positions.str().c_str()<<endl;

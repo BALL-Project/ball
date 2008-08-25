@@ -133,6 +133,7 @@ ValidationItem::ValidationItem(String& configfile_section, std::map<String, Data
 				map<String,DataItem*>::iterator it = filenames_map.find(file_i);
 				if(it==filenames_map.end())
 				{
+					cout<<file_i<<" can not be found!!"<<endl;
 					throw BALL::Exception::GeneralException(__FILE__,__LINE__,"ValidationItem reading error","PredictionItem of a nested cross validation fold could not be found!");
 				}
 				PredictionItem* pred_i = (PredictionItem*) it->second;
@@ -186,7 +187,7 @@ ValidationItem::ValidationItem(String& configfile_section, std::map<String, Data
 	map<String,DataItem*>::iterator it = filenames_map.find(mod);
 	if(it==filenames_map.end())
 	{
-		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"ValidationItem reading error","ModelItem for wich the validation should be done can not be found!");
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"ValidationItem reading error","ModelItem for which the validation should be done can not be found!");
 	}
 	model_item_ = (ModelItem*) it->second;
 	
@@ -517,13 +518,11 @@ void ValidationItem::writeConfigSection(ofstream& out)
 void ValidationItem::addToPipeline()
 {
 	view_->data_scene->main_window->val_pipeline_.insert(this);
-	view_->data_scene->main_window->all_items_pipeline_.insert(this);
 }
 
 void ValidationItem::removeFromPipeline()
 {
 	view_->data_scene->main_window->val_pipeline_.erase(this);
-	view_->data_scene->main_window->all_items_pipeline_.erase(this);
 }
 
 void ValidationItem::addExternalFoldValidation(ValidationItem* item)

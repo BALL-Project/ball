@@ -235,6 +235,7 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 	map<String,DataItem*>::iterator it = filenames_map.find(mod);
 	if(it==filenames_map.end())
 	{
+		cout<<mod<<" can not be found!"<<endl;
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Feature selection reading error","ModelItem to which the feature selection should be applied can not be found!");
 	}
 	setInputModelItem((ModelItem*) it->second);	
@@ -457,13 +458,11 @@ void FeatureSelectionItem::writeConfigSection(ofstream& out)
 void FeatureSelectionItem::addToPipeline()
 {
 	view_->data_scene->main_window->fs_pipeline_.insert(this);
-	view_->data_scene->main_window->all_items_pipeline_.insert(this);
 }
 
 void FeatureSelectionItem::removeFromPipeline()
 {
 	view_->data_scene->main_window->fs_pipeline_.erase(this);
-	view_->data_scene->main_window->all_items_pipeline_.erase(this);
 }
 
 void FeatureSelectionItem::setQualityIncreaseCutoff(double cutoff)
