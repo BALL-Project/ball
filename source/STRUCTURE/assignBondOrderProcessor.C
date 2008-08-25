@@ -270,6 +270,8 @@ namespace BALL
 		num_of_virtual_bonds_ = 0;
 		virtual_bond_index_to_atom_.clear();
 		atom_to_virtual_bond_index_.clear();
+
+		delete(virtual_bond_);
 		virtual_bond_ = NULL; 
 
 		ilp_index_to_free_bond_.clear();
