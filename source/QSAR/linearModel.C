@@ -32,7 +32,7 @@ void LinearModel::calculateOffsets()
 	{	
 		offsets_(i) = residuals.Column(i).Sum() / training_result_.Nrows();
 	}
-	cout<<"offset : "<<offsets_(1)<<endl<<flush;
+	//cout<<"offset : "<<offsets_(1)<<endl<<flush;
 }
 
 
