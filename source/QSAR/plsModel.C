@@ -108,6 +108,8 @@ void PLSModel::train()
 	}
 	weights_=weights_.t(); // transform, so that one column contains the importances of all latent variables for modelling the response (-> weights_ will have more than one column in case of more than one modelled response variable)
 	training_result_=loadings_*weights_;
+	
+	calculateOffsets();
 }
 
 

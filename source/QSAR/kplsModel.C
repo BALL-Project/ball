@@ -145,6 +145,8 @@ void KPLSModel::train()
 
 	loadings_ = loadings_*(P.t()*loadings_).i();
 	training_result_=loadings_*weights_.t();
+	
+	calculateOffsets();
 }
 
 

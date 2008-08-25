@@ -38,25 +38,37 @@ void LibsvmModel::train()
 	}
 
 	kernel->calculateKernelMatrix(descriptor_matrix_, K_);
-	struct svm_problem* prob = createProblem();
-	svm_train_result_ = svm_train(prob,&parameters_);
-	free(prob->y);free(prob->x);free(prob);
-	
-	const double* const *sv_coef = svm_train_result_->sv_coef;
-	//const svm_node* const *SV = svm_train_result_->SV;
-	
+	struct svm_problem* prob = NULL;
 	training_result_.ReSize(K_.Nrows(),Y_.Ncols());
-	for(int i=0;i<svm_train_result_->l;i++) // l=#support vectors == #compounds
+	offsets_.ReSize(Y_.Ncols());
+	
+	for(int act=1; act<=Y_.Ncols(); act++)
 	{
-		for(int j=0;j<svm_train_result_->nr_class-1;j++)
+		prob = createProblem(act);
+		svm_train_result_ = svm_train(prob,&parameters_);
+		free(prob->y);free(prob->x);free(prob);
+		
+		const double* const *sv_coef = svm_train_result_->sv_coef;
+		//const svm_node* const *SV = svm_train_result_->SV;
+
+		for(int i=0;i<svm_train_result_->l;i++) // l=#support vectors == #compounds
 		{
-			training_result_(i+1,j+1) = sv_coef[j][i];
+			for(int j=0;j<svm_train_result_->nr_class-1;j++)
+			{
+				training_result_(i+1,j+1) = sv_coef[j][i];
+			}
 		}
+		
+		offsets_(act) = svm_train_result_->rho[0];
+		
+		//free(prob);
+		//free(prob->y); free(prob->x);
+		svm_destroy_model(svm_train_result_);
 	}
 }
 
 
-struct svm_problem* LibsvmModel::createProblem()
+struct svm_problem* LibsvmModel::createProblem(int response_id)
 {
 	struct svm_problem* prob = Malloc(svm_problem,1);
 	prob->l = K_.Nrows();
@@ -73,7 +85,7 @@ struct svm_problem* LibsvmModel::createProblem()
 	{
 		//prob->x[i-1] = Malloc(struct svm_node, cols+1);	
 		prob->x[i-1] = &x_space_[index];
-		prob->y[i-1] = Y_(i,1);
+		prob->y[i-1] = Y_(i,response_id);
 		x_space_[index].index = 0;
 		x_space_[index].value = i; // numer of current row
 		index++;

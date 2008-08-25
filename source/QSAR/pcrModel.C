@@ -69,7 +69,7 @@ void PCRModel::train()
 	calculateEigenvectors(X,frac_var_,loadings_);
 
 	latent_variables_.ReSize(descriptor_matrix_.Nrows(),loadings_.Ncols());
-	for(uint i=1;i<=loadings_.Ncols();i++)
+	for(int i=1;i<=loadings_.Ncols();i++)
 	{
 		latent_variables_.Column(i)=descriptor_matrix_*loadings_.Column(i);
 	}
@@ -83,6 +83,8 @@ void PCRModel::train()
 	// = column with length=no of latente variables => matrix for more than one modelled activity
 	weights_ = *m.getTrainingResult();
 	training_result_ = loadings_*weights_;
+	
+	calculateOffsets();
 }
 
 

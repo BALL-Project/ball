@@ -49,5 +49,5 @@ void MLRModel::train()
 		return;
 	}
 
-	
+	calculateOffsets();
 }

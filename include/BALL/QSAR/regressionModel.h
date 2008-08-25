@@ -64,12 +64,16 @@ namespace BALL
 				SVMModel : m x (c*no of classes) \n
 				SVRModel : m x (c*no of classes)    */
 				Matrix training_result_;
+				
+				RowVector offsets_;
 				//@}
 				
 				
 				/** @name Input and Output. The following methods can be used to implement the functions saveToFile() and readFromFile() in final classes derived from this base-class 
 				 */
 				//@{
+				virtual void calculateOffsets() = 0;
+				
 				void readDescriptorInformationFromFile(ifstream& in, int no_descriptors, bool transformation, int no_coefficients);
 				
 				void saveDescriptorInformationToFile(ofstream& out);

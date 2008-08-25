@@ -65,6 +65,8 @@ void GPModel::train()
 // 	L_ = K_.i();
 	
 	training_result_ = L_*Y_; // B: one coefficient for each substance; dim: nxc
+	
+	calculateOffsets();
 }
 
 

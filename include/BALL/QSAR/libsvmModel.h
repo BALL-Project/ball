@@ -45,7 +45,7 @@ namespace BALL
 				
 			private:
 				
-				struct svm_problem* createProblem();
+				struct svm_problem* createProblem(int response_id);
 				
 				void createParameters();
 				

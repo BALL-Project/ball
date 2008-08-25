@@ -69,8 +69,8 @@ void RRModel::train()
 		throw Exception::SingularMatrixError(__FILE__,__LINE__,"Matrix for RR training is singular!! Check that descriptor_matrix_ does not contain empty columns and that lambda is not too small!");
 		return;
 	}
-
 	
+	calculateOffsets();	
 }
 
 void RRModel::setParameters(vector<double>& v)

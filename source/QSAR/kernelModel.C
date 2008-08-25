@@ -53,6 +53,19 @@ void KernelModel::operator=(const Model& m)
 }
 
 
+void KernelModel::calculateOffsets()
+{
+	Matrix residuals = (K_*training_result_)-Y_;
+	int no_act=training_result_.Ncols();
+	offsets_.ReSize(no_act);
+	for(int i=1; i<=no_act; i++)
+	{	
+		offsets_(i) = residuals.Column(i).Sum() / training_result_.Nrows();
+	}
+	cout<<"offset : "<<offsets_(1)<<endl<<flush;
+}
+
+
 RowVector KernelModel::predict(const vector<double>& substance, bool transform)
 {	
 	if(training_result_.Ncols()==0)
@@ -123,7 +136,9 @@ void KernelModel::saveToFile(string filename)
 	
 	saveTrainingResult(out);
 	out<<descriptor_matrix_<<endl; 
-	out<<K_<<endl;			
+	out<<K_<<endl;	
+	out<<"# offsets"<<endl;
+	out<<offsets_<<endl;		
 	
 	out.close();
 }
@@ -175,6 +190,10 @@ void KernelModel::readFromFile(string filename)
 	readMatrix(descriptor_matrix_,input,no_substances,no_descriptors);  // read descriptor matrix
 	getline(input,line0);  // skip empty line 
 	readMatrix(K_,input,no_substances,no_substances); 	// read kernel matrix K_
+	getline(input,line0);  // skip empty line 
+	getline(input,line0);  // skip comment line 
+	if(input.eof()) offsets_.ReSize(0);
+	else readMatrix(offsets_,input,1,no_y);
 	
 	input.close();	
 }

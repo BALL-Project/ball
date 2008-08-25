@@ -25,6 +25,10 @@ namespace BALL
 				NonLinearModel(const QSARData& q);
 
 				~NonLinearModel();
+				
+			protected:
+				/** do nothing for non-kernel models. KernelModel on the other hand overloads this function... */
+				virtual void calculateOffsets() {};
 				//@}	
 	
 	

@@ -76,6 +76,8 @@ void KPCRModel::train()
 	// = column with length=no of latente variables => matrix for more than one modelled activity
 	weights_ = *m.getTrainingResult();
 	training_result_ = loadings_*weights_;
+	
+	calculateOffsets();
 }
 
 

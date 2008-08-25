@@ -4,6 +4,8 @@
 // 
 
 #include <BALL/QSAR/regressionModel.h>
+#include <newmat/newmatio.h>
+
 using namespace BALL::QSAR;
 
 
@@ -11,6 +13,7 @@ RegressionModel::RegressionModel(const QSARData& q) : Model(q)
 {
 	validation=new RegressionValidation(this);
 	model_val=validation;
+	offsets_.ReSize(0);
 }
 
 RegressionModel::~RegressionModel() 
@@ -145,6 +148,8 @@ void RegressionModel::saveToFile(string filename)
 	saveModelParametersToFile(out);
 	saveResponseTransformationToFile(out);
 	saveDescriptorInformationToFile(out);
+	out<<"# offsets"<<endl;
+	out<<offsets_<<endl;
 	
 	out.close();
 }
@@ -182,6 +187,11 @@ void RegressionModel::readFromFile(string filename)
 		readResponseTransformationFromFile(input, no_y);
 	}
 	readDescriptorInformationFromFile(input, no_descriptors, centered_data, no_y*trained);
+	getline(input,line0);  // skip empty line 
+	getline(input,line0);  // skip comment line 
+	if(input.eof()) offsets_.ReSize(0);
+	else readMatrix(offsets_,input,1,no_y);
+	
 	input.close();
 }
 
