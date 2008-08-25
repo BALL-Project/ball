@@ -55,11 +55,12 @@ namespace BALL
 			///
 			void reject();
 
-
 			protected slots:
 
-			virtual void browseParameterFiles();
-			virtual void balanceParameterChanged();
+				virtual void browseParameterFiles_();
+				virtual void balanceParameterChanged_();
+
+				virtual void validateBOBoxes_();
 
 			protected:
 

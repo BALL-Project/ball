@@ -33,22 +33,63 @@ namespace BALL
 			connect( close_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
 			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
 			connect( reset_button, SIGNAL( clicked() ), this, SLOT( resetOptions() ) );
-			connect( browse_button, SIGNAL( clicked() ), this, SLOT( browseParameterFiles() ) );	
-			connect( penalty_balance_slider, SIGNAL( valueChanged(int) ), this, SLOT( balanceParameterChanged() ) );
+			connect( browse_button, SIGNAL( clicked() ), this, SLOT( browseParameterFiles_() ) );	
+			connect( penalty_balance_slider, SIGNAL( valueChanged(int) ), this, SLOT( balanceParameterChanged_() ) );
 
+			connect(overwrite_singleBO_box, SIGNAL(stateChanged(int)), this, SLOT(validateBOBoxes_()));
+			connect(overwrite_doubleBO_box, SIGNAL(stateChanged(int)), this, SLOT(validateBOBoxes_()));
+			connect(overwrite_tripleBO_box, SIGNAL(stateChanged(int)), this, SLOT(validateBOBoxes_()));
+			connect(overwrite_selected_bonds_box, SIGNAL(stateChanged(int)), this, SLOT(validateBOBoxes_()));
+
+			validateBOBoxes_();
 		}
 
 		AssignBondOrderConfigurationDialog::~AssignBondOrderConfigurationDialog()
 		{
 		}
 
-		void AssignBondOrderConfigurationDialog::balanceParameterChanged()
+		void AssignBondOrderConfigurationDialog::balanceParameterChanged_()
 		{
 			atom_type_penalty_label->setText(String((int)(100 - penalty_balance_slider->value())).c_str());
 			bond_length_penalty_label ->setText(String(penalty_balance_slider->value()).c_str());
 		}
 
-		void AssignBondOrderConfigurationDialog::browseParameterFiles()
+		void AssignBondOrderConfigurationDialog::validateBOBoxes_()
+		{
+			// if one of the bond orders is checked, the "selected" box must be
+			// de-activated and vice versa
+			bool bond_orders_checked = (   overwrite_singleBO_box->isChecked() 
+																	|| overwrite_doubleBO_box->isChecked()
+																	|| overwrite_tripleBO_box->isChecked() );
+
+			bool    selected_checked = overwrite_selected_bonds_box->isChecked();
+/*
+			// this is just a safety check: it should never be possible to check
+			// both kinds of boxes, but you never know... :-)
+			if (bond_orders_checked && selected_checked)
+			{
+				bond_orders_checked = false;
+				selected_checked    = false;
+			}
+
+			overwrite_singleBO_box->setDisabled(selected_checked);
+			overwrite_doubleBO_box->setDisabled(selected_checked);
+			overwrite_tripleBO_box->setDisabled(selected_checked);
+
+			overwrite_selected_bonds_box->setDisabled(bond_orders_checked); */
+			if (selected_checked)
+			{
+				overwrite_singleBO_box->setChecked(!selected_checked);
+				overwrite_doubleBO_box->setChecked(!selected_checked);
+				overwrite_tripleBO_box->setChecked(!selected_checked);
+			}
+			overwrite_singleBO_box->setDisabled(selected_checked);
+			overwrite_doubleBO_box->setDisabled(selected_checked);
+			overwrite_tripleBO_box->setDisabled(selected_checked);
+		
+		}
+
+		void AssignBondOrderConfigurationDialog::browseParameterFiles_()
 		{
 			// look up the full path of the parameter file
 			Path p;
