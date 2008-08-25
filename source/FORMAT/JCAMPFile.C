@@ -64,7 +64,6 @@ namespace BALL
 		while (readLine())
 		{
 			JCAMPValue value;
-		
 			try
 			{
 				//overread a comment 
@@ -82,6 +81,34 @@ namespace BALL
 
 						static String key = groups[1];
 						Size number_of_values = groups[2].toString().toInt() + 1;
+
+						// first try to parse the remainder of this line
+						std::vector<String> remainder;
+						getLine().split(remainder, ")"); // take the part right of the array definition
+						if (remainder.size() > 2)
+						{
+							throw Exception::ParseError(__FILE__, __LINE__, getName(), 
+																	String("Error parsing array entry on line ") 
+																	+ String(getLineNumber()));
+						}
+
+						if (remainder.size() == 2)
+						{
+							std::vector<String> fields;
+							remainder[1].split(fields);
+							for (Position i=0; i<fields.size(); i++)
+							{
+								if (!fields[i].isFloat())
+								{
+									Log.error() << "Warning: " << fields[i] << " is not a float!" << std::endl;
+								}
+								else
+								{
+									value.numeric_value.push_back(fields[i].toDouble());
+								}
+							}
+						}
+
 						while (value.numeric_value.size() < number_of_values)
 						{
 							if (!readLine() || getLine().hasPrefix("#")) 

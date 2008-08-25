@@ -88,6 +88,7 @@ atom:
 			if ($2 != 0) 
 			{ 
 				SmilesParser::state.current_parser->createBonds($1, $2); 
+				delete ($2);
 			} 
 		}
 	|	'[' opt_isotope atom_symbol opt_chirality opt_hydrogens opt_charge ']' opt_connection_list

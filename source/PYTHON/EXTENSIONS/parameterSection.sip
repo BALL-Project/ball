@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parameterSection.sip,v 1.2 2005/12/23 17:02:53 amoll Exp $
+// $Id$
 //
 
 	class ParameterSection 

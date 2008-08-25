@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reconstructFragmentProcessor.sip,v 1.6 2003/11/01 09:27:39 oliver Exp $
+// $Id$
 //
 
 class ReconstructFragmentProcessor 

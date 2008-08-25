@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.sip,v 1.11.30.1 2007/03/25 21:37:10 oliver Exp $
+// $Id$
 //
 
 class LineBasedFile

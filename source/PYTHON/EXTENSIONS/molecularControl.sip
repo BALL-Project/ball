@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.sip,v 1.12.16.1 2007/03/25 21:37:14 oliver Exp $
+// $Id$
 //
 
 class MolecularControl

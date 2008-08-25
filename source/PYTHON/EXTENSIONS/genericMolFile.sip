@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.sip,v 1.11.18.1 2007/03/25 21:37:08 oliver Exp $
+// $Id$
 //
 
 	class GenericMolFile

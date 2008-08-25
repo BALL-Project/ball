@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.sip,v 1.13 2004/09/22 21:07:06 oliver Exp $
+// $Id$
 //
 
 class Vector3
@@ -9,7 +9,7 @@ class Vector3
 {
 %TypeHeaderCode
 	#include <BALL/MATHS/vector3.h>
-	#include "sipBALLIndex.h"
+	#include "sipAPIBALL.h"
 	using namespace BALL;
 	using namespace BALL::Exception;
 %End

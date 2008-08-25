@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtensions.sip,v 1.1.4.1 2007/03/25 21:37:05 oliver Exp $
+// $Id$
 //
 
 class ColorExtension2 

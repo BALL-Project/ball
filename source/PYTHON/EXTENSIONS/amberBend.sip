@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberBend.sip,v 1.5 2004/12/27 17:24:55 amoll Exp $
+// $Id$
 //
 
 class AmberBend 

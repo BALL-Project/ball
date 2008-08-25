@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: SteepestDescentMinimizer_test.C,v 1.5.30.3 2007/05/16 15:56:36 aleru Exp $")
+START_TEST(SteepestDescentMinimizer, "$Id: SteepestDescentMinimizer_test.C,v 1.5.30.3 2007/05/16 15:56:36 aleru Exp $")
 
 using namespace BALL;
 

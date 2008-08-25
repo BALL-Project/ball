@@ -1,14 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: client.sip,v 1.5.20.1 2007/03/25 21:37:04 oliver Exp $
+// $Id$
 //
 
 class Client
 {
 %TypeHeaderCode
 	#include <BALL/CONCEPT/client.h>
+	#include <BALL/COMMON/exception.h>
+
 	using namespace BALL;
+	using namespace BALL::Exception;
 %End
 	public:
 	class InvalidClient

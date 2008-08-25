@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.sip,v 1.5.26.1 2007/03/25 21:37:06 oliver Exp $
+// $Id$
 //
 
 class Composite

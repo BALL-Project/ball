@@ -47,6 +47,7 @@ namespace BALL
 		
 			typedef std::complex<typename ComplexTraits::ComplexPrecision> Complex;
 			typedef TRegularData2D<std::complex<typename ComplexTraits::ComplexPrecision> >	ComplexVector;
+			typedef typename TRegularData2D<std::complex<typename ComplexTraits::ComplexPrecision> >::IndexType IndexType;
 
       BALL_CREATE(TFFT2D)
 
@@ -63,10 +64,8 @@ namespace BALL
 				throw();
 
 			/** Detailed constructor.  \par
-			 		@param ldnX The binary logarithm of the number of grid points in X direction (we use the logarithm to
-										 ensure that the number of points is a power of two, which is important for
-										 the FFT)
-					@param ldnY The binary logarithm of the number of grid points in Y direction
+			 		@param nX The number of grid points in X direction 
+					@param nY The number of grid points in Y direction
 					@param stepPhysX The step width in X direction in physical space
 					@param stepPhysY The step width in Y direction in physical space
 					@param origin The origin of the coordinate system
@@ -74,7 +73,7 @@ namespace BALL
 																space
 			 */
 			 // AR: ldn is not any longer the binary logarithm but the absolute number of grid points
-			TFFT2D(Size ldnX, Size ldnY, double stepPhysX=1., double stepPhysY=1., Vector2 origin=Vector2(0.,0.), bool inFourierSpace=false)
+			TFFT2D(Size nX, Size nY, double stepPhysX=1., double stepPhysY=1., Vector2 origin=Vector2(0.,0.), bool inFourierSpace=false)
 				throw();
       
 			/// Destructor
@@ -263,6 +262,19 @@ namespace BALL
 			const Complex& operator[](const Vector2& pos) const
 				throw(Exception::OutOfGrid);
 				
+
+			/** Nonmutable random access operator.
+					@note No range checking is done. For a more robust version, please
+					use getData.
+				*/
+			const Complex& operator [] (const IndexType& index) const throw() { return TRegularData2D<Complex>::operator [](index); }
+
+			/** Mutable random access operator.
+					@note No range checking is done. For a more robust version, please
+					use getData.
+			*/
+			Complex& operator [] (const IndexType& index) throw() {  return TRegularData2D<Complex>::operator [](index); }
+			
 			/** AR: Access the (raw) data at Position pos.
 			 */
 			Complex& operator[](const Position& pos)
@@ -910,7 +922,7 @@ namespace BALL
 	const RegularData2D& operator << (RegularData2D& to, const TFFT2D<ComplexTraits>& from)
 		throw()
 	{
-		// first decide if the FFT3D data is in Fourier space.
+		// first decide if the FFT2D data is in Fourier space.
 		if (!from.isInFourierSpace())
 		{
 			// create a new grid
@@ -927,18 +939,21 @@ namespace BALL
 			double normalization = 1./(pow((float)(lengthX*lengthY),from.getNumberOfInverseTransforms()));
 			typename TFFT2D<ComplexTraits>::Complex dataIn;
 			typename TFFT2D<ComplexTraits>::Complex dataOut;
-			
-			for (Position i = 0; i < from.size(); i++)
+
+			typename TFFT2D<ComplexTraits>::IndexType current_index;
+			typename RegularData2D::IndexType regdat_index;
+			for (current_index.x = 0; current_index.x < lengthX; current_index.x++)
 			{
-				Position x, y;
+				for (current_index.y = 0; current_index.y < lengthY; current_index.y++)
+				{
+					regdat_index.x = current_index.x;
+					regdat_index.y = current_index.y;
 
-				y =  i % lengthY;
-				x =  i / lengthY;
-
-				dataIn  = from[i];
-				dataOut = dataIn;
+					dataIn  = from[current_index];
+					dataOut = dataIn;
 				
-				newGrid[x + y*lengthY] = dataOut.real()*normalization;
+					newGrid[regdat_index] = dataOut.real()*normalization;
+				}
 			}
 
 			to = newGrid;
@@ -976,6 +991,7 @@ namespace BALL
 			typename TFFT2D<ComplexTraits>::Complex dataIn;
 			typename TFFT2D<ComplexTraits>::Complex dataOut;
 	
+			RegularData2D::IndexType current_index;
 			for (Position i = 0; i < from.size(); i++)
 			{
 				y =  i % lengthY;
@@ -1018,7 +1034,10 @@ namespace BALL
 				dataIn = from[i];
 				dataOut = dataIn;
 
-				newGrid[x + y*lengthY] = (dataOut*(typename ComplexTraits::ComplexPrecision)normalization*from.phase(r)).real();
+				current_index.x = x;
+				current_index.y = y;
+
+				newGrid[current_index] = (dataOut*(typename ComplexTraits::ComplexPrecision)normalization*from.phase(r)).real();
 			}
 
 			to = newGrid;

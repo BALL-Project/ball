@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyCompositeList.sip,v 1.3 2005/12/23 17:02:56 amoll Exp $
+// $Id$
 //
 
 %MappedType PyCompositeList
 {
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyCompositeList.h>
-	#include "sipBALLComposite.h"
+	#include "sipAPIBALL.h"
   #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 

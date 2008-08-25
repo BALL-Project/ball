@@ -297,6 +297,11 @@ namespace BALL
 		// three vectors containing the base vectors of the box in
 		// nanometers
 		Vector3 box1_, box2_, box3_;
+
+		BinaryFileAdaptor<Size> adapt_size_;
+		BinaryFileAdaptor<char> adapt_char_;
+		BinaryFileAdaptor<float> adapt_float_;
+		BinaryFileAdaptor<double> adapt_double_;
 	};
 } // namespace BALL
 

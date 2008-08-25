@@ -3496,7 +3496,11 @@ if test "${USE_VIEW}" = true ; then
 
 	dnl Check for OpenGL/Mesa
 	CF_VIEW_OPENGL
-	CF_VIEW_GLEW
+
+	dnl Check for GLEW
+	if test "${GLEW}" = "true"; then
+		CF_VIEW_GLEW
+	fi
 
 	dnl Check for QT basics (version, headers, existence of library)
 	CF_VIEW_QT_BASICS

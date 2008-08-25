@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.sip,v 1.5 2003/11/01 09:27:39 oliver Exp $
+// $Id$
 //
 
 class ResidueChecker
@@ -11,6 +11,7 @@ class ResidueChecker
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/residueChecker.h>
 	using namespace BALL;
+	typedef UnaryProcessor<Residue> ResidueProcessor;
 %End
 	
   public:

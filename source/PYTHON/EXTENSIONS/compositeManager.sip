@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.sip,v 1.7 2005/12/23 17:02:50 amoll Exp $
+// $Id$
 //
 class CompositeManager
 {

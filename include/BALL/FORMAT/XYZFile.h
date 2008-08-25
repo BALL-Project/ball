@@ -99,8 +99,11 @@ namespace BALL
 			return *this;
 		}
 
+		///@deprecated Instead of this method use XYZFile::getComment()
+		BALL_DEPRECATED const String& getComent() const { return comment_; }
+		
 		///
-		const String& getComent() const { return comment_;}
+		const String& getComment() const { return comment_; }
 
 		private:
 

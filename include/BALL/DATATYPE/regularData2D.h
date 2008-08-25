@@ -999,30 +999,41 @@ namespace BALL
 	void TRegularData2D<ValueType>::binaryWrite(const String& filename) const
 		throw(Exception::FileNotFound)
 	{
-		std::ofstream outfile(filename.c_str(), std::ios::out | std::ios::binary);
-		if (!outfile.good()) 
-		{
+		File outfile(filename.c_str(), std::ios::out|std::ios::binary);
+		if (!outfile.isValid()) 
 			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
-		}
 
+		// write all information we need to recreate the grid
 		BinaryFileAdaptor<BlockValueType> adapt_block;
 		BinaryFileAdaptor<ValueType>			adapt_single;
+		BinaryFileAdaptor<float>				  adapt_float;
 		
-		// write all information we need to recreate the grid
-		BinaryFileAdaptor<CoordinateType> adapt_coordinate;
 		BinaryFileAdaptor<Size> 					adapt_size;
 
 		adapt_size.setData(data_.size());
 		outfile << adapt_size;
 		
-		adapt_coordinate.setData(origin_);
-		outfile << adapt_coordinate;
+		// NOTE: we do not use the binary file adaptor to write out the Vector2-variables here,
+		// 			 the reason is a bit stupid: the data layout of Vector2 has a three-byte "hole"
+		//			 that is automatically padded by the compiler to ensure the correct alignment.
+		//			 valgrind is very unhappy when we write these uninitialized values out, even
+		//       though they are entirely harmless. To prevent false-positives in the error checking,
+		//			 we write out the members of the vectors instead. This even saves some bytes in the
+		//       output (not that it would matter...)
+		adapt_float.setData(origin_.x);
+		outfile << adapt_float;
+		adapt_float.setData(origin_.y);
+		outfile << adapt_float;
 
-		adapt_coordinate.setData(dimension_);
-		outfile << adapt_coordinate;
+		adapt_float.setData(dimension_.x);
+		outfile << adapt_float;
+		adapt_float.setData(dimension_.y);
+		outfile << adapt_float;
 
-		adapt_coordinate.setData(spacing_);
-		outfile << adapt_coordinate;
+		adapt_float.setData(spacing_.x);
+		outfile << adapt_float;
+		adapt_float.setData(spacing_.y);
+		outfile << adapt_float;
 
 		BinaryFileAdaptor<IndexType> adapt_index;
 		adapt_index.setData(size_);
@@ -1064,20 +1075,26 @@ namespace BALL
 		BinaryFileAdaptor< ValueType >		  adapt_single;
 		
 		// read all information we need to recreate the grid
-		BinaryFileAdaptor<CoordinateType> adapt_coordinate;
 		BinaryFileAdaptor<Size> 					adapt_size;
+		BinaryFileAdaptor<float>					adapt_float;
 
 		infile >> adapt_size;
 		Size new_size = adapt_size.getData();
 	
-		infile >> adapt_coordinate;
-		origin_ = adapt_coordinate.getData();
+		infile >> adapt_float;
+		origin_.x = adapt_float.getData();
+		infile >> adapt_float;
+		origin_.y = adapt_float.getData();
 
-		infile >> adapt_coordinate;
-		dimension_ = adapt_coordinate.getData();
+		infile >> adapt_float;
+		dimension_.x = adapt_float.getData();
+		infile >> adapt_float;
+		dimension_.y = adapt_float.getData();
 
-		infile >> adapt_coordinate;
-		spacing_ = adapt_coordinate.getData();
+		infile >> adapt_float;
+		spacing_.x = adapt_float.getData();
+		infile >> adapt_float;
+		spacing_.y = adapt_float.getData();
 
 		BinaryFileAdaptor<IndexType> adapt_index;
 		infile >> adapt_index;

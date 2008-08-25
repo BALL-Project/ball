@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.sip,v 1.1 2003/11/24 22:46:33 amoll Exp $
+// $Id$
 //
 
 class Sphere 

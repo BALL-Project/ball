@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationList.sip,v 1.2.16.1 2007/03/25 21:38:51 oliver Exp $
+// $Id$
 //
 
 %MappedType RepresentationList
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/KERNEL/representationManager.h>
-	#include "sipBALLRepresentation.h"
+	#include "sipAPIBALL.h"
   #include <BALL/PYTHON/pyBALLSipHelper.h>	
 	using namespace BALL;
 	using namespace BALL::VIEW;

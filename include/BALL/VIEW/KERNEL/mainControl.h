@@ -621,7 +621,7 @@ namespace BALL
 
 			/// See above
 			void setMultithreading(bool state)
-				throw() { multi_threading_mode_ = state;}
+				throw() {multi_threading_mode_ = state;}
 
 			///
 			bool isBusy() const;
@@ -888,6 +888,7 @@ namespace BALL
 			void init_();
 
 			bool 								about_to_quit_;
+			bool								multi_threading_mode_;	
 
 			//_
 			FragmentDB fragment_db_;
@@ -908,7 +909,7 @@ namespace BALL
 			*/
 			QLabel* 										message_label_;
 
-			RepresentationManager 						primitive_manager_;
+			RepresentationManager 			primitive_manager_;
 			CompositeManager 						composite_manager_;
 
 			MainControlPreferences* 		main_control_preferences_;
@@ -921,8 +922,6 @@ namespace BALL
 			bool 											  stop_simulation_;
 
 			SimulationThread* 					simulation_thread_;
-
-			bool 												multi_threading_mode_;
 
 			/*_	A list containing all modular widgets.
 					This list is modified by addModularWidget and

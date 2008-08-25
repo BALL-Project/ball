@@ -1,8 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.sip,v 1.4 2003/10/31 23:15:50 oliver Exp $
+// $Id$
 //
+
+%ModuleHeaderCode
+	#include <BALL/SOLVATION/poissonBoltzmann.h>
+	using namespace BALL;
+%End
 
 class FDPB
 {
@@ -44,13 +49,12 @@ class FDPB
 		ERROR__SETUP_REQUIRED,
 		NUMBER_OF_ERRORS
 	};
-	class Option
+	struct Option
 	{
 %TypeHeaderCode
 	#include <BALL/SOLVATION/poissonBoltzmann.h>
 	using namespace BALL;
 %End
-		public:
 		static const String& VERBOSITY;
 
 		static const String& PRINT_TIMING;
@@ -75,13 +79,12 @@ class FDPB
 		static const String& BOUNDING_BOX_LOWER;
 		static const String& BOUNDING_BOX_UPPER;
 	};
-	class Boundary
+	struct Boundary
 	{
 %TypeHeaderCode
 	#include <BALL/SOLVATION/poissonBoltzmann.h>
 	using namespace BALL;
 %End
-		public:
 		static const String& ZERO;
 
 		static const String& DEBYE;
@@ -89,17 +92,16 @@ class FDPB
 		static const String& DIPOLE;
 		static const String& FOCUSING;
 	};
-	class ChargeDistribution
+	struct ChargeDistribution
 	{
 %TypeHeaderCode
 	#include <BALL/SOLVATION/poissonBoltzmann.h>
 	using namespace BALL;
 %End
-		public:
 		static const String& TRILINEAR;
 		static const String& UNIFORM;
 	};
-	class DielectricSmoothing
+	struct DielectricSmoothing
 	{
 %TypeHeaderCode
 	#include <BALL/SOLVATION/poissonBoltzmann.h>

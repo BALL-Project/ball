@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: system.sip,v 1.9.28.2 2007/05/16 15:56:31 aleru Exp $
+// $Id$
 //
 
 class System

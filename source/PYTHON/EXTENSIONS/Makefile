@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.38.8.6 2007/08/07 17:11:18 oliver Exp $
+# $Id: Makefile,v 1.38.8.5 2007-06-12 20:17:53 oliver Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -33,10 +33,9 @@ SIP_HEADER_FILES =\
 	
 SIP_DIR=sip_files
 SIP_OPTS=-c $(SIP_DIR) -e -s ".C" -b BALL.sbf
-SIPFLAGS += $(SIP_INCLUDES) $(PYTHON_INCLUDES) 
-CXXFLAGS += $(SIPFLAGS)
+SIPFLAGS += $(PYTHON_INCLUDES) $(SIP_INCLUDES)
 
-ADD_INCLUDES=$(SIP_INCLUDES) $(PYTHON_INCLUDES) 
+ADD_INCLUDES=$(SIPFLAGS)
  
 PYBALL_SOURCES = \
 	pyBALLSipHelper.C\
@@ -65,10 +64,10 @@ sip:
 
 
 BALLmodule.so:  $(CPP_OBJECTS)
-	$(DYNAR) $(DYNAROPTS_PYMODULE) BALLmodule.so $(SIP_OBJECTS) $(PYBALL_OBJECTS) $(SIP_LIB) -L$(BALL_PATH)/lib/$(BINFMT) $(BALL_LIBS) $(PYTHON_LIBS)
+	$(DYNAR) $(DYNAROPTS_PYMODULE) BALLmodule.so $(SIP_OBJECTS) $(PYBALL_OBJECTS) $(SIP_LIB) -L$(BALL_PATH)/lib $(BALL_LIBS) $(PYTHON_LIBS)
 
 install:	BALLmodule.so
-	cp BALLmodule.so  $(BALL_PATH)/lib/$(BINFMT)
+	cp BALLmodule.so  $(BALL_PATH)/lib
 	 
 CLEAN_FILES = \
 	BALLmodule.so\

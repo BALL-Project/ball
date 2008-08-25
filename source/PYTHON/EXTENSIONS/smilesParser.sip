@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smilesParser.sip,v 1.6 2003/10/29 22:54:47 oliver Exp $
+// $Id$
 //
 
 class SmilesParser

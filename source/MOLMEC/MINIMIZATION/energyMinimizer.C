@@ -12,8 +12,8 @@
 
 using namespace std;
 
-// #define BALL_DEBUG
-#undef BALL_DEBUG
+#define BALL_DEBUG
+//#undef BALL_DEBUG
 
 namespace BALL 
 {

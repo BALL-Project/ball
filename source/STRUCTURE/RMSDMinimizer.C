@@ -150,7 +150,7 @@ namespace BALL
 		q_max.getRotationMatrix(t2);
 		Matrix4x4 t3;
 		t3.setTranslation(barycenter_Y);
-		Matrix4x4 T = t1 * t2 * t3;
+		Matrix4x4 T = t3 * t2 * t1;
 
 		// Compute final RMSD
 		double sum_of_squares = 0.0;
@@ -159,6 +159,10 @@ namespace BALL
 			sum_of_squares += X[i].getSquareLength() + Y[i].getSquareLength();
 		}
 		double rmsd = sqrt(fabs((sum_of_squares - 2.0 * eval_max)) / double(X.size()));
+
+		// free space used by gsl
+		gsl_vector_free(eval);
+		gsl_matrix_free(evec);
 
 		return make_pair(T, rmsd);
 	}

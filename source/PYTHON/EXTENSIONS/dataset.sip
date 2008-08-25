@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dataset.sip,v 1.1.4.2 2007/05/10 22:18:43 amoll Exp $
+// $Id$
 //
 
 class Dataset

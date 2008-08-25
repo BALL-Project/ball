@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.sip,v 1.4.26.1 2007/03/25 21:37:10 oliver Exp $
+// $Id$
 //
 
 class Label 

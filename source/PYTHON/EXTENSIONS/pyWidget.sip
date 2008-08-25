@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.sip,v 1.12.16.2 2007/05/13 15:35:35 amoll Exp $
+// $Id$
 //
 
 class PyWidget
