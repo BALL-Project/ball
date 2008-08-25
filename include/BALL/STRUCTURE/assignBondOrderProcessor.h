@@ -234,6 +234,7 @@ namespace BALL
 			/**	@name	Accessors
 			*/
 			//@{
+
 			/** Returns the number of bonds built during the last application.
 			 * NOTE: bonds to newly added hydrogens are excluded.
 			 */
@@ -255,9 +256,9 @@ namespace BALL
 				return num_hydrogens;
 			}
 
-			/** Returns the number of already computed solutions
-			 * NOTE: Having applied the operator with ASTAR-option
-			 * 			this method returns the number of optimal solutions+1!
+			/** Returns the number of already computed solutions.
+			 *  NOTE: Having applied the operator with option ALGORITHM::ASTAR
+			 * 			  this method returns the number of optimal solutions+1!
 			 */
 			Size getNumberOfComputedSolutions() {return solutions_.size();}
 
@@ -274,7 +275,7 @@ namespace BALL
 					return getTotalPenalty(solutions_[i]);
 			}
 
-			/// Returns the total penalty of a solution 
+			/// Returns the total penalty of the given solution 
 			float getTotalPenalty(const Solution_& sol) 
 			{
 				if (   (atom_type_normalization_factor_   < 0.00001) 
@@ -293,15 +294,15 @@ namespace BALL
 			/** Set the AtomContainer ac_'s bond orders to the ones found 
 			 * in the (already computed!) i-th solution, start counting in 0!
 			 * Returns true if the i-th solution is valid.
-			 * NOTE: all virtual hydrogens added to the processed AtomContainer
+			 * NOTE: All virtual hydrogens added to the processed AtomContainer
 			 * 			 by a previous call of apply will be deleted by the current
 			 * 			 call!
 			 */
 			bool apply(Position i);
 
-			/* Computes and applies another solution
-			*  Returns false if no further solution can be found.
-			*  Ignores the options  MAX_NUMBER_OF_SOLUTIONS and
+			/** Computes and applies one of the next best solutions.
+			*   Returns false if no further solution can be found.
+			*   Ignores the options  MAX_NUMBER_OF_SOLUTIONS and
 			*	 											COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS.
 			*/
 			bool computeNextSolution();
@@ -330,65 +331,64 @@ namespace BALL
 
 		protected:
 			
-			/// Nested class storing the parameters of a solution to our ILP
+			// Nested class storing the parameters of a solution to our ILP
 			class Solution_
 			{	
 				friend class AssignBondOrderProcessor;
 
 				public:
-					/// Default constructor
+					// Default constructor
 					Solution_();
 				
-					/// Destructor
+					// Destructor
 					virtual ~Solution_();
 					
-					/// 
+					// 
 					void clear();
 				
-					/// equality operator // TODO
+					// equality operator // TODO
 					bool operator == (Solution_ b);
 
-					/// denotes whether the problem could be solved or not  
+					// denotes whether the problem could be solved or not  
 					bool valid;
 					
-					/// the result : the set of bond orders for _ALL_ original bonds
+					// the result : the set of bond orders for _ALL_ original bonds
 					HashMap<Bond*, int> bond_orders;
 					
-					/// the result part2: the atoms with n additional hydrogens
+					// the result part2: the atoms with n additional hydrogens
 					HashMap<Atom*, int> number_of_virtual_hydrogens;
 				
-					/// the virtual atoms and bonds that should be deleted when the next 
-					/// solution is applied
+					// the virtual atoms and bonds that should be deleted when the next 
+					// solution is applied
 					vector<Atom*> atoms_to_delete;
 					//vector<Bond*> bonds_to_delete;
 
-					/// the values of the objective function
+					// the values of the objective function
 					float atom_type_penalty;
 					float bond_length_penalty;
 			};
 			
-			/// Nested class storing a priority queue entry for the A-STAR-Option
+			// Nested class storing a priority queue entry for the A-STAR-Option
 			class PQ_Entry_
 			{	
 				friend class AssignBondOrderProcessor;
 
 				public:
 				
-					/// Default constructor
+					// Default constructor
 					PQ_Entry_(float alpha = 0., float atom_type_normalization_factor = 1., float bond_length_normalization_factor = 1.);
 								
-					/// Copy constructor
+					// Copy constructor
 					PQ_Entry_(const PQ_Entry_& entry);
 
-					/// Destructor
+					// Destructor
 					virtual ~PQ_Entry_();
 					
-					/// 
+					// 
 					void clear();
 					
-					/** the less operator
-					 *  note: we want a reverse sort, hence we actually return a "greater"
-					 */
+					// the less operator.
+					// NOTE: we want a reverse sort, hence we actually return a "greater" 
 					bool operator < (const PQ_Entry_& b) const;  
 					
 					float coarsePenalty() const {
@@ -400,17 +400,17 @@ namespace BALL
 								    		+ (alpha_* estimated_bond_length_penalty / bond_length_normalization_factor_))));}
 					float finePenalty() const {return estimated_bond_length_penalty;}
 
-					/// the estimated atom type penalty
+					// the estimated atom type penalty
 					float estimated_atom_type_penalty;   
-					/// the estimated bond length penalty
+					// the estimated bond length penalty
 					float estimated_bond_length_penalty;
 
-					/// the bond orders 
-					/// the i-th entry denotes the bondorder of the i-th bond
-					/// unset bonds get the order 0
+					// the bond orders 
+					// the i-th entry denotes the bondorder of the i-th bond
+					// unset bonds get the order 0
 					vector<int> bond_orders;
 			
-					/// the index of the bond last considered 
+					// the index of the bond last considered 
 					Position last_bond;
 
 					protected:
@@ -425,7 +425,7 @@ namespace BALL
 			 */
 			bool readAtomPenalties_()	throw(Exception::FileNotFound());
 			
-			/** Assigns to every atom of the AtomContainer to which the
+			/** Assigns every atom of the AtomContainer to which the
 			 *  processor is applied to a block of possible valences 
 			 *  and the corresponding penalties.	
 			 *  Returns false if the AtomContainer to which the processor 
