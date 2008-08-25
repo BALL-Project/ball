@@ -262,18 +262,21 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 	/// create ModelItem
 	else if (type==ModelItem::Type) 
 	{
+		if(main_window->drag_source!="model_list") return;
+		
 		ModelItem* item;
 		SDFInputDataItem* input_item_at_pos = qgraphicsitem_cast<SDFInputDataItem*>(itemAt(pos));
 		CSVInputDataItem* csv_input_item_at_pos = qgraphicsitem_cast<CSVInputDataItem*>(itemAt(pos));
-		
-		if(main_window->drag_source!="model_list") return;
+		ModelItem* model_item_at_pos = qgraphicsitem_cast<ModelItem*>(itemAt(pos));
 		
 		item = (ModelItem*)main_window->dragged_item;
 		try
 		{
-			if(!input_item_at_pos && !csv_input_item_at_pos)
+			DataItem* source = dynamic_cast<DataItem*>(itemAt(pos));
+			
+			if(!input_item_at_pos && !csv_input_item_at_pos && !model_item_at_pos)
 			{
-				QMessageBox::information(view," ","Please drag the Model onto a SD- or CSV-item within your pipeline!");
+				QMessageBox::information(view," ","Please drag the Model onto a SD-item, a CSV-item or anto another model within your pipeline!");
 				return;	
 			}
 			if(input_item_at_pos)
@@ -286,23 +289,24 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				item = main_window->createModel(item,csv_input_item_at_pos);	
 				pos = csv_input_item_at_pos->pos();
 			}
+			else if(model_item_at_pos)
+			{
+				
+				item = main_window->createModel(item,model_item_at_pos->inputDataItem());
+				
+				// ModelItem::execute() will copy the descriptors before training 'item'
+				item->descriptor_source_model_ = model_item_at_pos;
+				pos = model_item_at_pos->pos();
+			}
 	
 			item->setView(view);
 			addItem(item);
 			item->setPos(pos.x(),pos.y());
 			item->setPos(pos + getOffset(pos,item));
-			if (input_item_at_pos)
-			{
-				Edge* edge = new Edge(input_item_at_pos, item);
-				addItem(edge);
-				item->addToPipeline();
-			}
-			else if(csv_input_item_at_pos)
-			{
-				Edge* edge = new Edge(csv_input_item_at_pos, item);
-				addItem(edge);
-				item->addToPipeline();
-			}
+			
+			Edge* edge = new Edge(source, item);
+			addItem(edge);
+			item->addToPipeline();
 		}
 		catch(InvalidModelItem)
 		{

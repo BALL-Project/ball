@@ -517,11 +517,13 @@ void ValidationItem::writeConfigSection(ofstream& out)
 void ValidationItem::addToPipeline()
 {
 	view_->data_scene->main_window->val_pipeline_.insert(this);
+	view_->data_scene->main_window->all_items_pipeline_.insert(this);
 }
 
 void ValidationItem::removeFromPipeline()
 {
 	view_->data_scene->main_window->val_pipeline_.erase(this);
+	view_->data_scene->main_window->all_items_pipeline_.erase(this);
 }
 
 void ValidationItem::addExternalFoldValidation(ValidationItem* item)

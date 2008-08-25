@@ -760,68 +760,8 @@ void MainWindow::deleteItem()
 	{
 		for (QList<QGraphicsItem*>::Iterator it = items.begin(); it != items.end(); ++it)
 		{	
-			DataItem* item = static_cast<DataItem*>(*it);
-			if (disconnected_items_.find(item)!=disconnected_items_.end())
-			{
-				delete item;
-				continue;
-			}
-
-			SDFInputDataItem* sdfitem = static_cast<SDFInputDataItem*>(*it);
-			if (sdf_input_pipeline_.find(sdfitem)!=sdf_input_pipeline_.end())
-			{
-				delete sdfitem;
-				continue;
-			}
-
-			CSVInputDataItem* csvitem = static_cast<CSVInputDataItem*>(*it);
-			if (csv_input_pipeline_.find(csvitem)!=csv_input_pipeline_.end())
-			{
-				delete csvitem;
-				continue;
-			}
-
-			ModelItem* mitem = static_cast<ModelItem*>(*it);
-			if (model_pipeline_.find(mitem)!=model_pipeline_.end())
-			{
-				delete mitem;
-				continue;
-			}
-
-			FeatureSelectionItem* fsitem = static_cast<FeatureSelectionItem*>(*it);
-			if (fs_pipeline_.find(fsitem)!=fs_pipeline_.end())
-			{
-				delete fsitem;
-				continue;
-			}
-
-			ValidationItem* valitem = static_cast<ValidationItem*>(*it);
-			if (val_pipeline_.find(valitem)!=val_pipeline_.end())
-			{
-				delete valitem;
-				continue;
-			}
-
-			PredictionItem* preditem = static_cast<PredictionItem*>(*it);
-			if (prediction_pipeline_.find(preditem)!=prediction_pipeline_.end())
-			{
-				delete preditem;
-				continue;
-			}
-			
-			PartitioningItem* partitem = static_cast<PartitioningItem*>(*it);
-			if (partitioning_pipeline_.find(partitem)!=partitioning_pipeline_.end())
-			{
-				delete partitem;
-				continue;
-			}
-			
-			InputPartitionItem* ip_item = static_cast<InputPartitionItem*>(*it);
-			if (partition_pipeline_.find(ip_item)!=partition_pipeline_.end())
-			{
-				delete ip_item;
-				continue;
-			}
+			DataItem* item = dynamic_cast<DataItem*>(*it);
+			delete item;
 		}
 	}
 	else
@@ -865,6 +805,8 @@ void MainWindow::clearDesktop()
 		delete *it;
 	}
 	partitioning_pipeline_.clear();
+	
+	all_items_pipeline_.clear();
 	
 	updatePipelineScene();
 }
@@ -970,7 +912,7 @@ void MainWindow::saveItemsToFiles(String directory, String archive, String confi
 			String f1 = (*it)->savedAs().toStdString();
 			if(f1=="")
 			{
-				throw GeneralException(__FILE__,__LINE__,"<Input-partition saving error ", "Item must be assigned a file to be saved to!");
+				throw GeneralException(__FILE__,__LINE__,"Input-partition saving error ", "Item must be assigned a file to be saved to!");
 			}
 			String file = directory+f1;
 			files+=f1+" ";
@@ -1475,6 +1417,7 @@ void MainWindow::exportPipeline(QString filename)
 	ostringstream positions;
 	positions<<"[ItemPositions]"<<endl;
 	
+	/*
 	/// SDFInputItems
 	for (Pipeline<SDFInputDataItem*>::iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
 	{
@@ -1567,6 +1510,68 @@ void MainWindow::exportPipeline(QString filename)
 		value++;
 		emit sendNewValue(value);
 	}
+	*/
+	
+	int model_counter=0;
+	for (Pipeline<DataItem*>::iterator it = all_items_pipeline_.begin(); it != all_items_pipeline_.end(); it++)
+	{
+		DataItem* item = *it;
+		int type = item->type();
+		
+		if(type==CSVInputDataItem::Type)
+		{
+			CSVInputDataItem* csv_item = (CSVInputDataItem*) item;
+			item->setSavedAs(file_prefix.c_str()+item->name()+".dat");
+			input_writer.writeConfigSection(csv_item,out);
+		}
+		else if(type==SDFInputDataItem::Type)
+		{
+			SDFInputDataItem* sdf_item = (SDFInputDataItem*) item;
+			item->setSavedAs(file_prefix.c_str()+item->name()+".dat");
+			input_writer.writeConfigSection(sdf_item,out);
+		}
+		else if(type==PartitioningItem::Type)
+		{
+			PartitioningItem* partitioner = (PartitioningItem*) item;
+			input_writer.writeConfigSection(partitioner,out);
+		}
+		else if(type==InputPartitionItem::Type)
+		{
+			InputPartitionItem* part_item = (InputPartitionItem*) item;
+			String n = file_prefix+part_item->getOutputFilename();
+			item->setSavedAs(n.c_str());
+		}
+		else
+		{
+			if(type==ModelItem::Type)
+			{
+				ModelItem* model_item = (ModelItem*) item;
+							
+				model_item->setSavedAs(file_prefix.c_str()+item->name() + name.setNum(model_counter) + ".mod");
+				model_counter++;
+				
+				if (!model_item->saveAttribute()) continue;
+			}
+			if(type==ValidationItem::Type)
+			{
+				item->setSavedAs(file_prefix.c_str()+name.setNum(counter)+".val");
+			}
+			if(type==PredictionItem::Type)
+			{
+				item->setSavedAs(file_prefix.c_str()+name.setNum(counter) + ".pred");
+			}
+			item->writeConfigSection(out);
+		}
+		
+		positions<<item->x()<<"  "<<item->y()<<endl;
+		if(type==FeatureSelectionItem::Type) 
+		{
+			FeatureSelectionItem* fs_item = (FeatureSelectionItem*) item;
+			positions<<fs_item->modelItem()->x()<<"  "<<fs_item->modelItem()->y()<<endl;
+		}
+		value++;
+		emit sendNewValue(value);	
+	}
 	
 	out<<positions.str().c_str()<<endl;
 	out.close();
@@ -1576,6 +1581,7 @@ void MainWindow::exportPipeline(QString filename)
 	
 	progress_bar_->reset();
 }
+
 
 bool MainWindow::itemExists(DataItem* item)
 {

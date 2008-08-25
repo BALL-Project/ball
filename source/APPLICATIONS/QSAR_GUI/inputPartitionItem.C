@@ -116,11 +116,13 @@ bool InputPartitionItem::checkForDiscreteY()
 
 void InputPartitionItem::removeFromPipeline()
 {
-	view_->data_scene->main_window->partition_pipeline_.erase(this);	
+	view_->data_scene->main_window->partition_pipeline_.erase(this);
+	view_->data_scene->main_window->all_items_pipeline_.erase(this);
 }
 
 
 void InputPartitionItem::addToPipeline()
 {
-	view_->data_scene->main_window->partition_pipeline_.insert(this);	
+	view_->data_scene->main_window->partition_pipeline_.insert(this);
+	view_->data_scene->main_window->all_items_pipeline_.insert(this);
 }

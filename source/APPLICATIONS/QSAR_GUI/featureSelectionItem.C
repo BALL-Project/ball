@@ -457,11 +457,13 @@ void FeatureSelectionItem::writeConfigSection(ofstream& out)
 void FeatureSelectionItem::addToPipeline()
 {
 	view_->data_scene->main_window->fs_pipeline_.insert(this);
+	view_->data_scene->main_window->all_items_pipeline_.insert(this);
 }
 
 void FeatureSelectionItem::removeFromPipeline()
 {
 	view_->data_scene->main_window->fs_pipeline_.erase(this);
+	view_->data_scene->main_window->all_items_pipeline_.erase(this);
 }
 
 void FeatureSelectionItem::setQualityIncreaseCutoff(double cutoff)

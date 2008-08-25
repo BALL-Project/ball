@@ -252,6 +252,7 @@ ModelConfiguration::ModelConfiguration()
 {
 	done=0;
 	data_file="";
+	descriptor_source_model = "";
 	output="";
 	model_no=-1; 
 	kernel_type=0;
@@ -310,6 +311,10 @@ ModelConfiguration ConfigIO::readModelConfiguration(istream* input)
 		else if(line.hasPrefix("output"))
 		{
 			conf.output = ((String)line.after("=")).trimLeft();
+		}
+		else if(line.hasPrefix("descriptor_source_model"))
+		{
+			conf.descriptor_source_model = ((String)line.after("=")).trimLeft();
 		}
 		else if(line.hasPrefix("model_parameters"))
 		{

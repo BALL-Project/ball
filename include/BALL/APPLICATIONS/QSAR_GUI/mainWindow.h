@@ -110,7 +110,6 @@ namespace BALL
 				 /** before calling QGraphicsScene-update, checks for all models whether they are to be disabled and sets pixmaps accordingly */
 				void updatePipelineScene();
 
-				/** sets for fast search of Items: */
 				Pipeline<SDFInputDataItem*> sdf_input_pipeline_;
 				Pipeline<CSVInputDataItem*> csv_input_pipeline_;
 				Pipeline<ModelItem*> model_pipeline_;
@@ -120,6 +119,10 @@ namespace BALL
 				Pipeline<DataItem*> disconnected_items_;
 				Pipeline<PartitioningItem*> partitioning_pipeline_;
 				Pipeline<InputPartitionItem*> partition_pipeline_;
+				
+				/** Pipeline that contains pointers to ALL items of all different types.\n
+				It is used to save and restore everthing in the correct order */
+				Pipeline<DataItem*> all_items_pipeline_;
 
 			signals:
 				void sendNewValue(int);

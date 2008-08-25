@@ -142,6 +142,10 @@ namespace BALL
 			This function  must be implemented by each final class derived from DataItem! */
 			virtual void addToPipeline() = 0;
 			
+			/** writes a config-section for the current DataItem.\n
+			The default implementation does nothing, but it is overloaded by the various derived classes */
+			virtual void writeConfigSection(std::ofstream& out) {};
+			
 			/** set result_ to a given value */
 			void setResultString(double value);
 			void setResultString(int value);

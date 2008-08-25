@@ -177,6 +177,8 @@ namespace BALL
 
 				/** pointer to the item's input data item */
 				InputDataItem* input_;
+				
+				ModelItem* descriptor_source_model_;
 
 				/** pointer to the item's model */
 				Model* model_;

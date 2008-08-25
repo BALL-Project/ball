@@ -46,6 +46,7 @@ namespace BALL
 			bool done;
 			String data_file;
 			String output;
+			String descriptor_source_model;
 			vector<double> model_parameters;
 			int model_no; 
 			int kernel_type;

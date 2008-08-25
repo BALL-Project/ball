@@ -48,9 +48,10 @@ namespace BALL
 				
 				iterator erase(iterator it)
 				{
-					iterator list_it = it->second;
-					map_.erase(it);
-					return list_.erase(list_it);
+					erase(*it);
+// 					iterator list_it = it->second;
+// 					map_.erase(it);
+// 					return list_.erase(list_it);
 				};
 				
 				bool contains(X object)

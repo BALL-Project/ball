@@ -6,6 +6,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/exception.h>
 #include <QtGui/QMessageBox>
 #include <QtGui/QFileDialog>
+#include <BALL/QSAR/configIO.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/coefficientPlotter.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/bayesPlotter.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/featurePlotter.h>
@@ -208,130 +209,48 @@ DataItem(item.view_)
 ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view)
 	: DataItem(view)
 {
-	no_training_ = 0;
-	result_color_=QColor(160,172,182);
 	istringstream input;
 	input.str(configfile_section);
-		
-	String line;
-	getline(input,line);
-	line.trimLeft();
-	if(!line.hasPrefix("[ModelCreator]"))
-	{
-		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model reading error","The given section is no model section!");
-	}
-
-	String data_file=""; String output=""; 
-	model_parameters.clear();
-	int model_no=0;
+	ModelConfiguration conf = ConfigIO::readModelConfiguration(&input);
 	
-	data_file=""; output=""; model_no=0; grid_search_steps=0; grid_search_recursions=0;
-	grid_search_stepwidth=0; k_fold=5; optimize_model_parameters=0;
-	optimize_kernel_parameters=0; kernel_function_type=1; kernel_parameter1=0; kernel_parameter2=0;
-	no_training_ = 0;
-	
-	while(input)
-	{
-		getline(input,line);
-		line.trimLeft();
-		if(line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
-		{
-			continue;
-		}
-	
-		if(line.hasPrefix("data_file"))
-		{
-			data_file = ((String)line.after("=")).trimLeft();
-		}
-		else if(line.hasPrefix("output"))
-		{
-			output = ((String)line.after("=")).trimLeft();
-		}
-		else if(line.hasPrefix("model_parameters"))
-		{
-			line = ((String)line.after("=")).trimLeft();
-			for(uint i=0; i<line.countFields(" ");i++)
-			{
-				model_parameters.push_back(line.getField(i).toDouble());
-			}
-		}
-		else if(line.hasPrefix("model_no"))
-		{
-			model_no = ((String)line.after("=")).trimLeft().toInt();
-		}
-		else if(line.hasPrefix("grid_search_steps"))
-		{
-			grid_search_steps = ((String)line.after("=")).trimLeft().toInt();
-		}
-		else if(line.hasPrefix("grid_search_recursions"))
-		{
-			grid_search_recursions = ((String)line.after("=")).trimLeft().toInt();
-		}
-		else if(line.hasPrefix("grid_search_stepwidth"))
-		{
-			grid_search_stepwidth = ((String)line.after("=")).trimLeft().toDouble();
-		}
-		else if(line.hasPrefix("k_fold"))
-		{
-			k_fold = ((String)line.after("=")).trimLeft().toInt();
-		}
-		else if(line.hasPrefix("optimize_model_parameters"))
-		{
-			optimize_model_parameters = ((String)line.after("=")).trimLeft().toBool();
-		}
-		else if(line.hasPrefix("kernel_type"))
-		{
-			kernel_function_type = ((String)line.after("=")).trimLeft().toInt();
-		}
-		else if(line.hasPrefix("kernel_par1"))
-		{
-			kernel_parameter1 = ((String)line.after("=")).trimLeft().toDouble();
-		}
-		else if(line.hasPrefix("kernel_par2"))
-		{
-			kernel_parameter2 = ((String)line.after("=")).trimLeft().toDouble();
-		}
-		else if(line.hasPrefix("no_training"))
-		{
-			no_training_ = ((String)line.after("=")).trimLeft().toBool();
-		}
-		else if(line.hasPrefix("done"))
-		{
-			// ignore this line; it is used for the command-line programms only
-		}
-		else
-		{
-			String mess = "Configuration command \""+line+"\" unknown!!";
-			String name = "ModelItem reading error";
-			throw BALL::Exception::GeneralException(__FILE__,__LINE__,name,mess);
-		}
-	}
-
-	map<String,DataItem*>::iterator it = filenames_map.find(data_file);
+	map<String,DataItem*>::iterator it = filenames_map.find(conf.data_file);
 	if(it==filenames_map.end())
 	{
-		cout<<"\""<<data_file<<"\" not found!"<<endl;
+		cout<<"\""<<conf.data_file<<"\" not found!"<<endl;
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model reading error","InputDataItem for a model does not exist!");
 	}
 	input_ =  (InputDataItem*) it->second;
 	Registry* reg = view_->data_scene->main_window->registry();
-	if((uint)model_no>reg->registered_models.size())
+	if((uint)conf.model_no>reg->registered_models.size())
 	{
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model reading error","The given model-no does not exist!");
 	}
-	entry_ = &reg->registered_models[model_no];
+	entry_ = &reg->registered_models[conf.model_no];
 	if(!entry_->kernel)
 	{
 		model_ = (entry_->create)(*input_->data());
 	}
 	else
 	{
-		model_ = (entry_->createKernel1)(*input_->data(),kernel_function_type,kernel_parameter1,kernel_parameter2);
-		if(grid_search_steps>0 && grid_search_stepwidth>0) optimize_kernel_parameters=1;
+		model_ = (entry_->createKernel1)(*input_->data(),conf.kernel_type,conf.kernel_par1,conf.kernel_par2);
 	}
 	
-	model_->setParameters(model_parameters);
+	kernel_function_type = conf.kernel_type;
+	kernel_parameter1 = conf.kernel_par1;
+	kernel_parameter2 = conf.kernel_par2;
+	model_parameters = conf.model_parameters;
+	optimize_model_parameters = conf.optimize_model_parameters;
+	grid_search_stepwidth = conf.grid_search_stepwidth;
+	grid_search_steps = conf.grid_search_steps;
+	grid_search_recursions = conf.grid_search_recursions;
+	k_fold = conf.k_fold;
+	no_training_ = conf.no_training;
+	if(grid_search_stepwidth>0 && grid_search_steps>0) optimize_kernel_parameters=1;
+	else optimize_kernel_parameters=0;
+	
+	model_->setParameters(conf.model_parameters);
 	init();
+	
 	view_->data_scene->addItem(this);
 	addToPipeline();
 	if(item_positions!=0 && item_positions->size()>0)
@@ -341,15 +260,26 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 		setPos(pos.first,pos.second);
 	}
 	
-	Edge* edge = new Edge(input_, this);
-	view_->data_scene->addItem(edge);
+	Edge* edge;
+	if(conf.descriptor_source_model!="")
+	{
+		map<String,DataItem*>::iterator it = filenames_map.find(conf.descriptor_source_model);
+		if(it==filenames_map.end())
+		{
+			cout<<"\""<<conf.descriptor_source_model<<"\" not found!"<<endl;
+			throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model reading error","ModelItem from which the descriptor IDs are to be taken can not be found!");
+		}
+		descriptor_source_model_ = (ModelItem*) it->second;
+		edge = new Edge(descriptor_source_model_, this);
+	}
+	else edge = new Edge(input_, this);
 	
+	view_->data_scene->addItem(edge);
 	save_attribute_ = 1;
-
 	setName(QString(entry_->name_abreviation.c_str()));
 	
-	filenames_map.insert(make_pair(output,this));
-	setSavedAs(output.c_str());
+	filenames_map.insert(make_pair(conf.output,this));
+	setSavedAs(conf.output.c_str());
 }
 
 void ModelItem::init()
@@ -358,6 +288,7 @@ void ModelItem::init()
 	feature_plotter_ = NULL;
 	latent_variable_plotter_ = NULL;
 	loading_plotter_ = NULL;
+	descriptor_source_model_ = NULL;
 	result_color_ = QColor(160,172,182);
 	setPixmap();
 	createActions();
@@ -444,6 +375,10 @@ bool ModelItem::execute()
 	}
 	
 	model_->setDataSource(input_->data());
+	if(descriptor_source_model_!=NULL)
+	{
+		model_->copyDescriptorIDs(*descriptor_source_model_->model());
+	}
 	
 	if (!no_training_)
 	{
@@ -770,6 +705,10 @@ void ModelItem::writeConfigSection(ofstream& out)
 	out << "[ModelCreator]" << "\n";
 	if(isDone()) out << "done = "<<1<<endl;
 	out << "data_file = "<< inputDataItem()->savedAs().toStdString() << "\n";
+	if(descriptor_source_model_!=NULL) 
+	{
+		out<<"descriptor_source_model = " <<descriptor_source_model_->savedAs().toStdString()<<endl;
+	}
 	out << "model_no = "<< view_->data_scene->main_window->reg_->getModelNo(getRegistryEntry()->name_abreviation) << "\n";
 	out << "model_parameters = "<< parameter_string << "\n";
 	
@@ -805,11 +744,13 @@ void ModelItem::writeConfigSection(ofstream& out)
 void ModelItem::removeFromPipeline()
 {
 	view_->data_scene->main_window->model_pipeline_.erase(this);
+	view_->data_scene->main_window->all_items_pipeline_.erase(this);
 }
 
 void ModelItem::addToPipeline()
 {
 	view_->data_scene->main_window->model_pipeline_.insert(this);
+	view_->data_scene->main_window->all_items_pipeline_.insert(this);
 }
 
 // SLOT
