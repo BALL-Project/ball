@@ -190,6 +190,9 @@ namespace BALL
 	{
 		setDefaultOptions();
 		clear();
+
+		delete(virtual_bond_);
+
 #ifdef BALL_HAS_LPSOLVE
 		if (ilp_)
 			delete_lp(ilp_);
@@ -214,7 +217,11 @@ namespace BALL
 		num_of_virtual_bonds_ = abop.num_of_virtual_bonds_;
 		virtual_bond_index_to_atom_ = abop.virtual_bond_index_to_atom_;
 		atom_to_virtual_bond_index_ = abop.atom_to_virtual_bond_index_;
+
+		// if we already had a virtual bond, we need to get it out of the way
+		delete(virtual_bond_);
 		virtual_bond_ = abop.virtual_bond_; 
+
 		ilp_index_to_free_bond_ = abop.ilp_index_to_free_bond_;
 		ilp_number_of_free_bonds_ = abop.ilp_number_of_free_bonds_;
 		total_num_of_bonds_ = abop.total_num_of_bonds_;
@@ -240,6 +247,7 @@ namespace BALL
 		bond_lengths_penalties_ = abop.bond_lengths_penalties_;
 
 #ifdef BALL_HAS_LPSOLVE
+		// TODO: if this class already had an ilp, do we need to delete it?
 		if (abop.ilp_)
 			ilp_ = copy_lp(abop.ilp_);
 		else
@@ -1955,7 +1963,8 @@ cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 				{	
 					for (Size j=0; j < solutions_[last_applied_solution_].atoms_to_delete.size(); j++)
 					{
-						solutions_[last_applied_solution_].atoms_to_delete[j]->destroy();
+						delete(solutions_[last_applied_solution_].atoms_to_delete[j]);
+						//solutions_[last_applied_solution_].atoms_to_delete[j]->destroy();
 						//NOTE: all adajacent bonds of these atoms will be deleted automatically
 					}
 				}
