@@ -43,6 +43,12 @@ namespace BALL
 	BALL_EXPORT void calculateResidueChiAngles(	const Chain& fragment, 
 																							HashMap<const Residue*,float>& residue_angles);
 	
+	/**	Calculate the Chi Angles for a given residue in radian. 
+	 * If the given residue has no chi angle, zero is returned.
+	*/
+	BALL_EXPORT float calculateResidueChiAngles(const Residue& residue);
+
+
 	/**	Calculate the Chi2 Angles for each residue.
 			This method computes the chi2 angle of each residue and stores it in the given hash map.    
 			All angles are in radian. Note, that the hash map is NOT cleaned up, but the results are
@@ -62,6 +68,11 @@ namespace BALL
 	BALL_EXPORT void calculateResidueChi2Angles(	const Chain& fragment, 
 																							HashMap<const Residue*,float>& residue_angles);
 	
+	
+	/**	Calculate the Chi2 Angles for a given residue in radian. 
+	 * If the given residue has no chi angle, zero is returned.
+	*/
+	BALL_EXPORT float calculateResidueChi2Angles(const Residue& residue);
 
 }
 
