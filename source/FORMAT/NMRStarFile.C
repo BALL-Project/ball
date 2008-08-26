@@ -706,6 +706,7 @@ namespace BALL
 		:	CIFFile(),
 			valid_(false),
 			number_of_shift_sets_(0),
+			number_of_assigned_shifts_(0),
 			entry_information_(),
 			molecular_system_(),
 			atom_data_sets_(),
@@ -715,6 +716,9 @@ namespace BALL
 			nmr_spectrometer_(),
 			monomeric_polymer_indices_(),
 			monomeric_polymers_(),
+			has_H_shifts_(false),
+			has_C_shifts_(false),
+			has_N_shifts_(false),
 			dummy_saveframe_(),
 			dummy_sample_condition_(),
 			dummy_sample_(),
@@ -726,12 +730,16 @@ namespace BALL
 		:	CIFFile(f),
 			valid_(f.valid_),
 			number_of_shift_sets_		(f.number_of_shift_sets_),
+			number_of_assigned_shifts_(f.number_of_assigned_shifts_),
 			entry_information_  (f.entry_information_),	
 			molecular_system_   (f.	molecular_system_),
 			samples_						(f.samples_),
 			nmr_spectrometer_		(f.nmr_spectrometer_),
 			monomeric_polymer_indices_(f.monomeric_polymer_indices_),
 			monomeric_polymers_	(f.monomeric_polymers_),
+			has_H_shifts_				(f.has_H_shifts_),
+			has_C_shifts_				(f.has_C_shifts_),
+			has_N_shifts_				(f.has_N_shifts_),
 			dummy_saveframe_		(f.dummy_saveframe_),
 			dummy_sample_condition_(f.dummy_sample_condition_),
 			dummy_sample_				(f.dummy_sample_),
@@ -742,6 +750,7 @@ namespace BALL
 		:	CIFFile(file_name, open_mode),
 			valid_(false),
 			number_of_shift_sets_(0),
+			number_of_assigned_shifts_(0),
 			entry_information_(),
 			molecular_system_(),
 			atom_data_sets_(),
@@ -751,6 +760,9 @@ namespace BALL
 			nmr_spectrometer_(),	
 			monomeric_polymer_indices_(),
 			monomeric_polymers_(),
+			has_H_shifts_(false),
+			has_C_shifts_(false),
+			has_N_shifts_(false),
 			dummy_saveframe_(),
 			dummy_sample_condition_(),
 			dummy_sample_(),
@@ -768,6 +780,7 @@ namespace BALL
 		CIFFile::operator = (f);
 		valid_ = f.valid_;
 		number_of_shift_sets_		= f.number_of_shift_sets_;
+		number_of_assigned_shifts_ = f.number_of_assigned_shifts_;
 		entry_information_  = f.entry_information_;
 		molecular_system_   = f.molecular_system_; 
 		atom_data_sets_			= f.atom_data_sets_;
@@ -777,6 +790,9 @@ namespace BALL
 		nmr_spectrometer_		= f.nmr_spectrometer_;	
 		monomeric_polymer_indices_ 	= f.monomeric_polymer_indices_;
 		monomeric_polymers_ 				= f.monomeric_polymers_;
+		has_H_shifts_       = f.has_H_shifts_;
+		has_C_shifts_       = f.has_C_shifts_;
+		has_N_shifts_       = f.has_N_shifts_;
 		dummy_saveframe_						= f.dummy_saveframe_;
 		dummy_sample_condition_			= f.dummy_sample_condition_;
 		dummy_sample_								= f.dummy_sample_;
@@ -973,6 +989,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 	{	
 		// do we have a valid NMRStarFile's instance?
 		bool result = valid_;
+
 		// .. and assign the shifts via the given mapping
 		if (result)
 		{
@@ -986,6 +1003,8 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 	//  We assume, that the file was already read!
 	bool NMRStarFile::assignShifts_(BALLToBMRBMapping& ball_to_bmrb_mapping)
 	{
+		number_of_assigned_shifts_ = 0;
+
 		ResidueIterator r_it;
 		if (ball_to_bmrb_mapping.getProtein())
 			r_it =  ball_to_bmrb_mapping.getProtein()->beginResidue();
@@ -1004,6 +1023,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 					NMRAtomData& nmr_atom = atom_data_sets_[bindex.first].atom_data[bindex.second];
 
 					a_it->setProperty(ShiftModule::PROPERTY__EXPERIMENTAL__SHIFT,	nmr_atom.shift_value);
+					number_of_assigned_shifts_++;
 				}
 			}
 		}
@@ -1637,11 +1657,27 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 									if (pos > -1) atom_data.residue_label = current_loop->values[line][pos];
 
 									pos = current_loop->getKeyIndex("_Atom_name");
-									if (pos > -1) atom_data.atom_name = current_loop->values[line][pos];
+									if (pos > -1) 
+										atom_data.atom_name = current_loop->values[line][pos];
 
 									pos = current_loop->getKeyIndex("_Atom_type");
-									if (pos > -1) atom_data.atom_type = current_loop->values[line][pos].toChar();
-							
+									if (pos > -1) 
+									{
+										atom_data.atom_type = current_loop->values[line][pos].toChar();
+										if (!has_H_shifts_ && (String(atom_data.atom_type) == "H"))
+										{
+											has_H_shifts_ = true;
+										
+										}if (!has_C_shifts_ && (String(atom_data.atom_type) == "C"))
+										{	
+											has_C_shifts_ = true;
+										}
+										if (!has_N_shifts_ && (String(atom_data.atom_type) == "N"))
+										{		
+											has_N_shifts_ = true;	
+										}
+									}
+
 									pos = current_loop->getKeyIndex("_Chem_shift_value");
 									atom_data.shift_value = ( (pos > -1) && valueIsValid(current_loop->values[line][pos]) 
 										 												? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
@@ -1874,6 +1910,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 	{
 		CIFFile::clear();
 		number_of_shift_sets_ = 0;
+		number_of_assigned_shifts_ = 0;
 		//entry_information_.clear();
 		//molecular_system_.clear();
 		atom_data_sets_.clear();
@@ -1881,6 +1918,9 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 		shift_references_.clear();
 		//nmr_spectrometer_.clear();
 		monomeric_polymers_.clear();
+		has_H_shifts_ = false;
+	 	has_C_shifts_ = false;
+	 	has_N_shifts_ = false;
 		dummy_saveframe_.clear();	
 		//dummy_sample_condition_.clear();
 		//dummy_shift_reference_set_.clear();

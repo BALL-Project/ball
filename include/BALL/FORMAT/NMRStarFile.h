@@ -439,6 +439,8 @@ namespace BALL
 			*/
 			Size getNumberOfAtoms()    
 
+			Size getNumberOfShiftsAssigned() {return number_of_assigned_shifts_;};
+
 			/** Get the extracted data for the atoms.
 			*/
 			const std::vector<NMRAtomDataSet>& getNMRData()	const;
@@ -534,6 +536,10 @@ namespace BALL
 			// String is returned.
 			String getResidueSequence();
 			
+			bool hasHshifts() const {return has_H_shifts_;};
+			bool hasCshifts() const {return has_C_shifts_;};
+			bool hasNshifts() const {return has_N_shifts_;};
+
 		//@}
 
 
@@ -619,6 +625,9 @@ namespace BALL
 			/// the number of shift data sets  
 			Size number_of_shift_sets_; 
 
+			/// the number of assigned shifts during the last call of assignShifts()
+			Size number_of_assigned_shifts_;
+
 			/// the general entry data 
 			EntryInformation entry_information_;
 			
@@ -647,6 +656,11 @@ namespace BALL
 			vector<MonomericPolymer> monomeric_polymers_; 
 			/// name of the molecular system
 			//	String system_name_;  // TODO wo kommt der her?
+			
+			/// stores, which shifts are given in the file
+			bool has_H_shifts_;
+			bool has_C_shifts_;
+			bool has_N_shifts_;
 
 			// a dummy saveframe
 			SaveFrame dummy_saveframe_; 
