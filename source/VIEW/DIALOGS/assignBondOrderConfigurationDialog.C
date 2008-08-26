@@ -58,12 +58,12 @@ namespace BALL
 		{
 			// if one of the bond orders is checked, the "selected" box must be
 			// de-activated and vice versa
+			bool    selected_checked = overwrite_selected_bonds_box->isChecked();
+		
+			/* // Version 1
 			bool bond_orders_checked = (   overwrite_singleBO_box->isChecked() 
 																	|| overwrite_doubleBO_box->isChecked()
 																	|| overwrite_tripleBO_box->isChecked() );
-
-			bool    selected_checked = overwrite_selected_bonds_box->isChecked();
-/*
 			// this is just a safety check: it should never be possible to check
 			// both kinds of boxes, but you never know... :-)
 			if (bond_orders_checked && selected_checked)
@@ -77,6 +77,7 @@ namespace BALL
 			overwrite_tripleBO_box->setDisabled(selected_checked);
 
 			overwrite_selected_bonds_box->setDisabled(bond_orders_checked); */
+			// Version 2
 			if (selected_checked)
 			{
 				overwrite_singleBO_box->setChecked(!selected_checked);

@@ -526,7 +526,9 @@ namespace BALL
 			else if (abop.getNumberOfComputedSolutions() < 2)
 			{		
 				String nr = abop.getNumberOfBondOrdersSet();
-				setStatusbarText(String("Assigned orders to ") + nr + " bonds.", true);
+				int charge = (int)abop.getTotalCharge(0);
+				setStatusbarText(String("Assigned orders to ") + nr 
+						+ " bonds. Resulting total charge: " + String(charge) + ".", true);
 			}
 			else 
 			{

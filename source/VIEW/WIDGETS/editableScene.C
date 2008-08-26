@@ -176,14 +176,12 @@ void EditableScene::initializeWidget(MainControl& main_control)
 
 	Path path;
 	
-	/* Annes Test */
 	QIcon icon4(path.find("graphics/assignBondOrders.png").c_str());
 	bondorders_ = new QAction(icon4, "Quickly optimize bond orders", this);
 	bondorders_->setObjectName(bondorders_->text());
 	bondorders_->setToolTip("Edit mode: Quickly optimize the highlighted structures bond orders");
 	registerForHelpSystem(bondorders_, "scene.html#bondorders");
 	connect(bondorders_, SIGNAL(triggered()), this, SLOT(computeBondOrders()));
-	/* end of Annes Test */
 
 	QIcon icon(path.find("graphics/minimize.png").c_str());
 	optimize_ = new QAction(icon, "Quickly optimize structure", this);
@@ -228,7 +226,6 @@ void EditableScene::checkMenu(MainControl& main_control)
 	optimize_->setEnabled(selected_system);
 	add_hydrogens_->setEnabled(selected_system);
 	
-	// Annes Test
 	List<Composite*> highl = getMainControl()->getMolecularControlSelection();
 	List<Composite*>::Iterator lit = highl.begin();
 	bool selected_system_or_molecule =   (highl.size() == 1)
@@ -1032,7 +1029,6 @@ void EditableScene::showContextMenu(QPoint pos)
 
 		menu.addAction(optimize_);
 		menu.addAction(add_hydrogens_);
-		// Annes Test
 		menu.addAction(bondorders_);
 	}
 
@@ -1652,7 +1648,6 @@ void EditableScene::addToolBarEntries(QToolBar* tb)
 	toolbar_actions_.push_back(element_action_);
 	toolbar_actions_.push_back(add_hydrogens_);
 	toolbar_actions_.push_back(optimize_);
-	// Annes Test
 	toolbar_actions_.push_back(bondorders_);
 	Scene::addToolBarEntries(tb);
 	toolbar_->insertSeparator(element_action_);

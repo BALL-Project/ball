@@ -164,7 +164,6 @@ class BALL_VIEW_EXPORT EditableScene
 	void createNewMolecule();
 	void saturateWithHydrogens();
 	void optimizeStructure();
-	// Annes Test
 	void computeBondOrders();
 
 	// slots for communication with PTEDialog
@@ -235,9 +234,8 @@ class BALL_VIEW_EXPORT EditableScene
 	void renderGrid_();
 
 	QAction* edit_id_, *new_molecule_, *optimize_, *add_hydrogens_, *element_action_;	
-	// Annes Test
 	QAction* bondorders_;
-	//
+	
 	Atom* current_atom_;
 	Bond* current_bond_;
 
