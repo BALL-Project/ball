@@ -1602,7 +1602,7 @@ void MainWindow::submitToCluster(String configfile)
 	out.close();
 	
 	String call = "cd "+directory+"; ";
-	call+=settings.submit_prefix+" "+script;
+	call+=settings.submit_prefix+" "+script+" &";
 	system(call.c_str());
 }
 
