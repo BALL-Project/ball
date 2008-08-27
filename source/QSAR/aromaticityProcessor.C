@@ -21,6 +21,7 @@ namespace BALL
 	AromaticityProcessor::AromaticityProcessor()
 		:	UnaryProcessor<AtomContainer>()
 	{
+		setDefaultOptions();
 	}
 
 	AromaticityProcessor::AromaticityProcessor(const AromaticityProcessor& aro)
