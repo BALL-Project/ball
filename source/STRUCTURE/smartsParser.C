@@ -145,7 +145,7 @@ namespace BALL
 				}
 				break;
 			case SINGLE_OR_AROMATIC:
-				if (bond->getOrder() == Bond::ORDER__SINGLE || bond->getOrder() == Bond::ORDER__AROMATIC)
+				if (bond->getOrder() == Bond::ORDER__SINGLE || bond->isAromatic())
 				{
 					matches = true;
 				}
@@ -163,7 +163,7 @@ namespace BALL
 				}
 				break;
 			case AROMATIC: 
-				if (bond->getOrder() == Bond::ORDER__AROMATIC)
+				if (bond->isAromatic())
 				{
 					matches = true;
 				}
@@ -250,22 +250,27 @@ namespace BALL
 		double count(0);
 		for (Atom::BondConstIterator bit = atom->beginBond(); +bit; ++bit)
 		{
-			switch(bit->getOrder())
+			// NOTE: we test the aromatic case first, since the bond might have
+			//       single or double order, but the property IS_AROMATIC and
+			//       we cannot handle this through the switch() below
+			if (bit->isAromatic())
+				count += 1.5;
+			else
 			{
-				case Bond::ORDER__SINGLE:		
-					count += 1; 
-					break;
-				case Bond::ORDER__AROMATIC: 
-					count += 1.5; 
-					break;
-				case Bond::ORDER__DOUBLE:		
-					count += 2;
-					break;
-				case Bond::ORDER__TRIPLE:		
-					count += 3;
-					break;
-				default:
-					Log.error() << "SmartsParser: errorneous bond order (" << bit->getOrder() << ")" << endl;
+				switch(bit->getOrder())
+				{
+					case Bond::ORDER__SINGLE:		
+						count += 1; 
+						break;
+					case Bond::ORDER__DOUBLE:		
+						count += 2;
+						break;
+					case Bond::ORDER__TRIPLE:		
+						count += 3;
+						break;
+					default:
+						Log.error() << "SmartsParser: errorneous bond order (" << bit->getOrder() << ")" << endl;
+				}
 			}
 		}
 		return Size(count);
