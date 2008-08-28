@@ -452,12 +452,18 @@ namespace BALL
 	};
 
 
-	/** Predicate class for atoms bearing aromatic bonds.
+	/** Predicate class for atoms bearing a certain number of aromatic bonds.
 			Arguments of this class are	<b> required </b> to consist 
 			of an relational operator and a number between 1 and 8.
+			The default is ">0" which means that the atom under siege has to bear
+			at least one aromatic bond to make this predicate's operator () () return
+			true.
+
+			A bond is defined as aromatic if it has the property Bond::IS_AROMATIC set, or
+			if its bond order equals Bond::ORDER__AROMATIC.
 	 */
 	class BALL_EXPORT AromaticBondsPredicate
-		:	public NumberOfBondsPredicate
+		:	public ExpressionPredicate
 	{
 		public:
 			BALL_CREATE(AromaticBondsPredicate)
@@ -467,6 +473,10 @@ namespace BALL
 					@return true, if the predicate is true, false otherwise
 			*/
 			virtual bool operator () (const Atom& atom) const
+				throw();
+
+		protected:
+			bool testPredicate_(const Atom& atom) const
 				throw();
 	};
 

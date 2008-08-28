@@ -316,7 +316,7 @@ namespace BALL
 		if (s.size() > 2)
 		{
 			// There can only be an operator followed by a number < 9
-			Log.error() << "DoubleBondsPredicate::operator () (): "
+			Log.error() << "NumberOfBondsPredicate::testPredicate_(): "
 				<< "argument_ too long " << std::endl;
 			return false;
 		}
@@ -381,7 +381,7 @@ namespace BALL
 					}
 
 				default:
-					Log.error() << "doubleBond::operator (): Illegal operator " 
+					Log.error() << "NumberOfBondsPredicate::testPredicate_(): Illegal operator " 
 						<< s[0] << std::endl;
 					return false;
 			}
@@ -394,7 +394,7 @@ namespace BALL
 			}
 			catch (Exception::InvalidFormat& e)
 			{
-				Log.error() << "InRingPredicate::operator () (): "
+				Log.error() << "NumberOfBondsPredicate::testPredicate_(): "
 					<< "argument format is broken: " << argument_ << std::endl;
 				return(false);
 			}
@@ -436,7 +436,105 @@ namespace BALL
 	bool AromaticBondsPredicate::operator () (const Atom& atom) const
 		throw()
 	{
-		return testPredicate_(atom, Bond::ORDER__AROMATIC);
+		return testPredicate_(atom);
+	}
+
+	bool AromaticBondsPredicate::testPredicate_(const Atom& atom) const
+		throw()
+	{
+		String s = argument_;
+		s.trim();
+
+		if (s.size() > 2)
+		{
+			// There can only be an operator followed by a number < 9
+			Log.error() << "AromaticBondsPredicate::operator () (): "
+				<< "argument_ too long " << std::endl;
+			return false;
+		}
+		
+		Size count = 0;
+		Size i = 0;
+		for (; i < atom.countBonds(); ++i)
+		{
+			const Bond* bond = atom.getBond(i);
+
+			if (bond->isAromatic())
+				count++;
+		}
+
+		Size n;
+		if (s.size() == 2)
+		{
+			try
+			{
+				n = ((String) s[1]).toInt();
+			}
+			catch (Exception::InvalidFormat& e)
+			{
+				Log.error() << "AromaticBondsPredicate::testPredicate_(): "
+					<< "argument format is broken: " << argument_ << std::endl;
+				return(false);
+			}
+			switch (s[0]) 
+			{
+				case '<' :
+					if (count < n)
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+
+				case '>' :
+					if (count > n)
+					{
+						return true;
+					}
+					else 
+					{
+						return false;
+					}
+
+				case '=':
+					if (count == n)
+					{
+						return true;
+					}
+					else 
+					{
+						return false;
+					}
+
+				default:
+					Log.error() << "AromaticBondsPredicate::testPredicate_(): Illegal operator " 
+						<< s[0] << std::endl;
+					return false;
+			}
+		}
+		else 
+		{
+			try
+			{
+				n = ((String) s[0]).toInt();
+			}
+			catch (Exception::InvalidFormat& e)
+			{
+				Log.error() << "AromaticBondsPredicate::testPredicate_(): "
+					<< "argument format is broken: " << argument_ << std::endl;
+				return(false);
+			}
+			if (count == n)
+			{
+				return true;
+			}
+			else 
+			{
+				return false;
+			}
+		}
 	}
 
 	ConnectedToPredicate::CTPNode::CTPNode()
@@ -1164,7 +1262,7 @@ namespace BALL
 				break;
 
 			case CTPNode::BONDTYPE__AROMATIC:
-				if (bond.getOrder() == Bond::ORDER__AROMATIC) result = true;
+				if (bond.isAromatic()) result = true;
 				else result = false;
 				break;
 
@@ -1355,7 +1453,7 @@ namespace BALL
 			{
 				dcount++;
 			}
-			if ((atom.getBond(i))->getOrder() == Bond::ORDER__AROMATIC)
+			if ((atom.getBond(i))->isAromatic())
 			{
 				acount++;
 			}
@@ -1824,12 +1922,14 @@ namespace BALL
 		: ExpressionPredicate(),
 			last_molecule_(0)
 	{
+		arom_proc_.options.setBool(AromaticityProcessor::Option::OVERWRITE_BOND_ORDERS, false);
 	}
 
 	SMARTSPredicate::SMARTSPredicate(const SMARTSPredicate& pred)
 		throw()
 		: ExpressionPredicate(pred),
-			last_molecule_(0)
+			last_molecule_(0),
+			arom_proc_(pred.arom_proc_)
 	{
 	}
 

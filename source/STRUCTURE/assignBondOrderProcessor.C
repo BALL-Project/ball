@@ -611,7 +611,15 @@ cout << endl;
 								}	
 								default: //Bond::ORDER__UNKNOWN:
 								{
-									bond_fixed_[bnd] = 0;
+									// the bond might still be aromatic, if it has the IS_AROMATIC - property set!
+									if (bnd->isAromatic())
+									{
+										fixed += 1;
+										bond_fixed_[bnd] 	= 1; 
+										num_fixed_bonds++;
+									}
+									else
+										bond_fixed_[bnd] = 0;
 								}
 							}
 						}
@@ -1516,13 +1524,8 @@ cout << " AssignBondOrderProcessor::preassignPenaltyClasses_()" << endl;
 		// Determine for each atom the corresponding valence- and penalty-block	
 		if (ac_)
 		{
-			// Since the Expression-matcher changes the bond orders we need to copy it
-			// TODO: this should be fixed in expression matching!
-			// NOTE: this works as expected since currently, the processor is always applied to molecules!
-			Molecule a_tmp = *((Molecule*)ac_);
-
 			// get the number of atoms
-			Position no_atoms = a_tmp.countAtoms();
+			Position no_atoms = ac_->countAtoms();
 			
 			// resize the data structure
 			atom_to_block_.clear(); // needed in case this function is called twice!
@@ -1555,7 +1558,7 @@ cout << " AssignBondOrderProcessor::preassignPenaltyClasses_()" << endl;
 			// for each atom
 			for (Position i = 0; i < no_atoms; ++i)
 			{
-				Atom* at = a_tmp.getAtom(i);
+				Atom* at = ac_->getAtom(i);
 
 				// for reasons only known to BALL, getIndex yields completely strange results for
 				// the atoms here, so we need to add a Property which we can later read out
@@ -1593,9 +1596,6 @@ cout << "preassignPenaltyClasses_() HIT : " << at->getFullName() << " with index
 				
 				if (add_missing_hydrogens_)
 				{
-					// at this point, we cannot use the atom pointer "at", since it points
-					// into a copy of the molecule we really want to process. hence, we have
-					// to take the atom from the original atom container
 					float max_virtual_penalty = computeVirtualHydrogens_(ac_->getAtom(i));
 
 					max_penalty_per_atom = std::max(max_virtual_penalty, max_penalty_per_atom);
@@ -1625,7 +1625,7 @@ atom_type_normalization_factor_ = 0.;
 cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~ " << endl;
 for (Size i=0; i < 	atom_to_block_.size() ; i++)
 {	
-	Atom* at = a_tmp.getAtom(i);
+	Atom* at = ac_->getAtom(i);
 	cout << at-> getFullName()<< " : ";
 	for (Size j=0; j < atom_to_block_[i].size(); j++)
 	{
