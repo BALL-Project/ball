@@ -68,8 +68,6 @@ bool compareBondOrder(System& sys)
 	BALL_FOREACH_BOND(sys, a_it, b_it)
 	{
 		all_bonds_equal &= ( b_it->getProperty("FORMER_ORDER").getInt() == b_it->getOrder());
-		/*if (b_it->getProperty("FORMER_ORDER").getInt() != b_it->getOrder())
-			cout << b_it->getOrder()<<   " " << b_it->getProperty("FORMER_ORDER").getInt() << " " << b_it->getFirstAtom()->getFullName() << " " << b_it->getSecondAtom()->getFullName() << endl; */
 	}
 	return all_bonds_equal;
 }
@@ -152,12 +150,6 @@ CHECK(setDefaultOptions())
 	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::ADD_HYDROGENS),
 												   AssignBondOrderProcessor::Default::ADD_HYDROGENS)
 
-	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::OVERWRITE_CHARGES),
-												   AssignBondOrderProcessor::Default::OVERWRITE_CHARGES)
-		
-	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::ASSIGN_CHARGES),
-													 AssignBondOrderProcessor::Default::ASSIGN_CHARGES)
-	
 	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::KEKULIZE_RINGS),
 													 AssignBondOrderProcessor::Default::KEKULIZE_RINGS)	
 		
