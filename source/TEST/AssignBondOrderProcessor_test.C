@@ -805,7 +805,7 @@ CHECK(Option:::KEKULIZE_RINGS using A* )
 	TEST_EQUAL(compareBondOrder(sys30), true)
 	
 	// false
-	testbop.options.setBool(AssignBondOrderProcessor::Option::ADD_HYDROGENS, false);
+	testbop.options.setBool(AssignBondOrderProcessor::Option::KEKULIZE_RINGS, false);
 	
 	System sys31;
 	MOL2File mol31("data/AssignBondOrderProcessor_test_AMPTRB10_arom_sol0.mol2", std::ios::in);
