@@ -401,11 +401,11 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 			item->setPos(pos + getOffset(pos,item));
 			Edge* edge = new Edge(model_item_at_pos, item);
 			addItem(edge);
-			item->addToPipeline();
 			if(item->getValidationType()==5)
 			{
 				createExternalValPipeline(model_item_at_pos,item);
 			}
+			item->addToPipeline();
 		}
 		catch(InvalidValidationItem)
 		{

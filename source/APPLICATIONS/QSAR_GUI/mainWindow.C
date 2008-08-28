@@ -1035,8 +1035,7 @@ void MainWindow::executePipeline()
 	
 	bool done=0;
 	
-	///read in the input files
-	for (Pipeline<SDFInputDataItem*>::iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
+	for(Pipeline<DataItem*>::iterator it = all_items_pipeline_.begin(); it != all_items_pipeline_.end(); it++)
 	{
 		try
 		{
@@ -1050,144 +1049,6 @@ void MainWindow::executePipeline()
 
 		value++;
 		emit sendNewValue(value);
-	}
-
-	for (Pipeline<CSVInputDataItem*>::iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
-	{
-		try
-		{
-			bool b=(*it)->execute();
-			if(!done) done=b;
-		}
-		catch(BALL::Exception::GeneralException e)
-		{
-			QMessageBox::warning(this,"Error",e.getMessage());
-		}
-		catch(BaseException e)
-		{
-			QMessageBox::warning(this,"Error",e.what());
-		}
-
-		value++;
-		emit sendNewValue(value);
-	}
-	
-	if (!sdf_input_pipeline_.empty() || csv_input_pipeline_.empty())
-	{
-		statusBar()->showMessage(tr("All input files were read"));
-	}
-	
-	/// partition all input data sets (if desired)
-	for (Pipeline<PartitioningItem*>::iterator it = partitioning_pipeline_.begin(); it != partitioning_pipeline_.end(); it++)
-	{
-		try
-		{
-			bool b=(*it)->execute();
-			if(!done) done=b;
-		}
-		catch(BALL::Exception::GeneralException e)
-		{
-			QMessageBox::warning(this,"Error",e.getMessage());
-		}
-
-		value++;
-		emit sendNewValue(value);		
-	}
-	if (!partitioning_pipeline_.empty())
-	{
-		statusBar()->showMessage(tr("Partitioning of input data done"));
-	}
-
-	///train all models and set their saved as names
-	int model_counter=0;
-	QString name;
-	for (Pipeline<ModelItem*>::iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
-	{
-		(*it)->setSavedAs((*it)->name() + name.setNum(model_counter) + ".mod");
-		model_counter++;
-		try
-		{
-			bool b=(*it)->execute();
-			if(!done) done=b;
-		}
-		catch (BALL::Exception::GeneralException e)
-		{	
-			QString error_string = e.getMessage();
-			QMessageBox::warning(this,"Error",error_string);
-		}
-		value++;
-		emit sendNewValue(value);
-	}
-
-	if (!model_pipeline_.empty())
-	{
-		statusBar()->showMessage(tr("All models were trained"));
-	}
-
-	///feature selection
-	for (Pipeline<FeatureSelectionItem*>::iterator it = fs_pipeline_.begin(); it != fs_pipeline_.end(); it++)
-	{
-		try
-		{
-			QString num;
-			bool b=(*it)->execute();
-			if(!done) done=b;
-		}
-		catch(BALL::Exception::GeneralException e)
-		{
-			QMessageBox::warning(this,"Error",e.getMessage());
-		}
-		catch(BaseException e)
-		{
-			QMessageBox::warning(this,"Error",e.what());
-		}
-		value++;
-		emit sendNewValue(value);
-	}
-	if (!fs_pipeline_.empty())
-	{
-		statusBar()->showMessage(tr("Feature Selections done"));
-	}
-		
-
-	///activity prediction
-	for (Pipeline<PredictionItem*>::iterator it = prediction_pipeline_.begin(); it != prediction_pipeline_.end(); it++)
-	{
-		try
-		{
-			bool b=(*it)->execute();
-			if(!done) done=b;
-		}
-		catch(BALL::Exception::GeneralException e)
-		{	
-			QMessageBox::about(this,"Error",e.getMessage());
-		}
-		catch(BaseException e)
-		{	
-			QMessageBox::about(this,"Error",e.what());
-		}
-		value++;
-		emit sendNewValue(value);
-	}
-	if (!prediction_pipeline_.empty())
-	{
-		statusBar()->showMessage(tr("Predictions done"));
-	}
-
-	///validation
-	for (Pipeline<ValidationItem*>::iterator it = val_pipeline_.begin(); it != val_pipeline_.end(); it++)
-	{
-		try
-		{
-			bool b=(*it)->execute();
-			if(!done) done=b;
-		}
-		catch(BALL::Exception::GeneralException e)
-		{	
-			QMessageBox::about(this,"Error",e.getMessage());
-		}
-		value++;
-		emit sendNewValue(value);	
 	}
 
 	progress_bar_->reset();
@@ -1233,7 +1094,6 @@ void MainWindow::readPartitionPositions(list<pair<double,double> >* item_positio
 		(*it)->adjustEdges();
 	}
 }
-
 
 void MainWindow::restoreDesktop(QString filename)
 {
@@ -1293,8 +1153,7 @@ void MainWindow::restoreDesktop(QString filename)
 		}
 		
 		file.close();
-		file.open(configfile.c_str());	
-		bool first_model=1;
+		file.open(configfile.c_str());
 
 		/// read all other sections
 		for(int i=0;!file.eof();i++)
@@ -1310,15 +1169,7 @@ void MainWindow::restoreDesktop(QString filename)
 			{
 				if(input_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
 				if(partitioner_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
-				if(model_section) 
-				{
-					if(first_model)
-					{
-						readPartitionPositions(&item_positions);
-						first_model=0;
-					}
-					new ModelItem(section,filenames_map,&item_positions,view_);
-				}
+				if(model_section) new ModelItem(section,filenames_map,&item_positions,view_);
  				if(fs_section) new FeatureSelectionItem(section,filenames_map,&item_positions,view_);
  				if(val_section) new ValidationItem(section,filenames_map,&item_positions,view_);
 				if(pred_section) new PredictionItem(section,filenames_map,&item_positions,view_);
@@ -1340,15 +1191,7 @@ void MainWindow::restoreDesktop(QString filename)
 		}
  		if(input_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
 		if(partitioner_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
- 		if(model_section) 
-		{
-			if(first_model)
-			{
-				readPartitionPositions(&item_positions);
-				first_model=0;
-			}
-			new ModelItem(section,filenames_map,&item_positions,view_);
-		}
+ 		if(model_section) new ModelItem(section,filenames_map,&item_positions,view_);
  		if(fs_section) new FeatureSelectionItem(section,filenames_map,&item_positions,view_);
  		if(val_section) new ValidationItem(section,filenames_map,&item_positions,view_);
 		if(pred_section) new PredictionItem(section,filenames_map,&item_positions,view_);
@@ -1417,97 +1260,92 @@ void MainWindow::exportPipeline(QString filename)
 	
 	int counter = 0;
 	
-	/// SDFInputItems
+	/// First, set all output filenames!
 	for (Pipeline<SDFInputDataItem*>::iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
 	{
 		SDFInputDataItem* item = (*it);
 		item->setSavedAs(file_prefix.c_str()+item->name()+".dat");
-		input_writer.writeConfigSection(item,out);
-		positions<<item->x()<<"  "<<item->y()<<endl;
-		value++;
-		emit sendNewValue(value);
 	}
 
-	///CSVInputItems
 	for (Pipeline<CSVInputDataItem*>::iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
 	{
 		CSVInputDataItem* item = (*it);
 		item->setSavedAs(file_prefix.c_str()+item->name()+".dat");
-		input_writer.writeConfigSection(item,out);
-		positions<<item->x()<<"  "<<item->y()<<endl;
-		value++;
-		emit sendNewValue(value);
-	}
-	
-	///PartitioningItems
-	for (Pipeline<PartitioningItem*>::iterator it = partitioning_pipeline_.begin(); it != partitioning_pipeline_.end(); it++)
-	{
-		PartitioningItem* item = (*it);
-		input_writer.writeConfigSection(item,out);
-		positions<<item->x()<<"  "<<item->y()<<endl;
 	}
 
-	///InputPartitionItems
 	for (Pipeline<InputPartitionItem*>::iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end(); it++)
 	{
 		InputPartitionItem* item = (*it);
 		String n = file_prefix+item->getOutputFilename();
 		item->setSavedAs(n.c_str());
-		positions<<item->x()<<"  "<<item->y()<<endl;
 	}
 	
-	///Model Items
 	counter=0;
 	for (Pipeline<ModelItem*>::iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++,counter++)
 	{
 		ModelItem* item = (*it);
 		item->setSavedAs(file_prefix.c_str()+item->name() + name.setNum(counter) + ".mod");
-		
-		// do not write a config-file section for models that are created by feature selection.
-		// --> FeatureSelector will create these models; no need to run ModelCreator for these ones!
-		if (item->saveAttribute())
-		{
-			item->writeConfigSection(out);
-			positions<<item->x()<<"  "<<item->y()<<endl;
-			value++;
-			emit sendNewValue(value);
-		}
 	}
-	
-	///Feature Selection Items
-	counter=0;
-	for (Pipeline<FeatureSelectionItem*>::iterator it = fs_pipeline_.begin(); it != fs_pipeline_.end(); it++,counter++)
-	{
-		FeatureSelectionItem* item = *it;
-		item->writeConfigSection(out);
-		positions<<item->x()<<"  "<<item->y()<<endl;
-		positions<<item->modelItem()->x()<<"  "<<item->modelItem()->y()<<endl;
-		value++;
-		emit sendNewValue(value);
-	}
-		
-	///Prediction Items
+
 	counter=0;
 	for (Pipeline<PredictionItem*>::iterator it = prediction_pipeline_.begin(); it != prediction_pipeline_.end(); it++,counter++)
 	{
 		PredictionItem* item = (*it); 
 		item->setSavedAs(file_prefix.c_str()+name.setNum(counter) + ".pred");
-		item->writeConfigSection(out);
-		positions<<item->x()<<"  "<<item->y()<<endl;
-		value++;
-		emit sendNewValue(value);
 	}
 		
-	///Validation Items
 	counter=0;
 	for (Pipeline<ValidationItem*>::iterator it = val_pipeline_.begin(); it != val_pipeline_.end(); it++,counter++)
 	{
 		ValidationItem* item = (*it); 
 		item->setSavedAs(file_prefix.c_str()+name.setNum(counter)+".val");
-		item->writeConfigSection(out);
+	}
+	
+	/// Write all configfile-sections in the order in which the items were created!!
+	for (Pipeline<DataItem*>::iterator it = all_items_pipeline_.begin(); it != all_items_pipeline_.end(); it++)
+	{
+		DataItem* item = *it;
+		int type = item->type();
+		
+		if(type==CSVInputDataItem::Type)
+		{
+			CSVInputDataItem* csv_item = (CSVInputDataItem*) item;
+//			item->setSavedAs(file_prefix.c_str()+item->name()+".dat");
+			input_writer.writeConfigSection(csv_item,out);
+		}
+		else if(type==SDFInputDataItem::Type)
+		{
+			SDFInputDataItem* sdf_item = (SDFInputDataItem*) item;
+//			item->setSavedAs(file_prefix.c_str()+item->name()+".dat");
+			input_writer.writeConfigSection(sdf_item,out);
+		}
+		else if(type==PartitioningItem::Type)
+		{
+			PartitioningItem* partitioner = (PartitioningItem*) item;
+			input_writer.writeConfigSection(partitioner,out,positions);
+			continue;
+		}
+		else
+		{
+			if(type==ModelItem::Type)
+			{
+				ModelItem* model_item = (ModelItem*) item;
+				if (!model_item->saveAttribute()) continue;
+			}
+			item->writeConfigSection(out);
+		}
+		
+		// save the item's own position!
 		positions<<item->x()<<"  "<<item->y()<<endl;
+		
+		if(type==FeatureSelectionItem::Type) 
+		{
+			FeatureSelectionItem* fs_item = (FeatureSelectionItem*) item;
+			positions<<fs_item->modelItem()->x()<<"  "<<fs_item->modelItem()->y()<<endl;
+		}
+		
 		value++;
-		emit sendNewValue(value);
+		emit sendNewValue(value);	
 	}
 	
 	out<<positions.str().c_str()<<endl;

@@ -70,7 +70,7 @@ void InputDataItemIO::writeConfigSection(CSVInputDataItem* csv_item, ofstream& o
 }
 
 
-void InputDataItemIO::writeConfigSection(PartitioningItem* item, ofstream& out)
+void InputDataItemIO::writeConfigSection(PartitioningItem* item, ofstream& out, ostringstream& item_positions)
 {
 	out << "[InputPartitioner]" << "\n";
 	if(item->isDone()) out<<"done = "<<1<<endl;
@@ -79,6 +79,18 @@ void InputDataItemIO::writeConfigSection(PartitioningItem* item, ofstream& out)
 	out << "val_fraction = " << item->getValFraction()<<"\n";
 	out << "no_folds = "<<item->getNoFolds()<<"\n";
 	out << "\n";
+	
+	if(item_positions!=NULL)
+	{
+		item_positions<<item->pos().x()<<" "<<item->pos().y()<<endl;
+		for(list<pair<InputPartitionItem*,InputPartitionItem*> >::iterator it= item->folds_.begin(); it!=item->folds_.end(); it++)
+		{
+			QPointF p = it->first->pos();
+			item_positions<<p.x()<<" "<<p.y()<<endl;
+			p = it->second->pos();
+			item_positions<<p.x()<<" "<<p.y()<<endl;
+		}
+	}
 }
 
 
@@ -155,12 +167,12 @@ void InputDataItemIO::readPartitionerSection(String& configfile_section, map<Str
 		view_->scene()->addItem(train_part);
 		train_part->addToPipeline();
 		filenames_map.insert(make_pair(train_part->savedAs().toStdString(),train_part));
-// 		if(item_positions!=0 && item_positions->size()>0)
-// 		{
-// 			pair<double,double> pos = item_positions->front();
-// 			item_positions->pop_front();
-// 			train_part->setPos(pos.first,pos.second);
-// 		}
+		if(item_positions!=0 && item_positions->size()>0)
+		{
+			pair<double,double> pos = item_positions->front();
+			item_positions->pop_front();
+			train_part->setPos(pos.first,pos.second);
+		}
 		Edge* e0 = new Edge(partitioner,train_part);
 		view_->scene()->addItem(e0);
 		
@@ -168,12 +180,12 @@ void InputDataItemIO::readPartitionerSection(String& configfile_section, map<Str
 		view_->scene()->addItem(test_part);
 		test_part->addToPipeline();
 		filenames_map.insert(make_pair(test_part->savedAs().toStdString(),test_part));
-// 		if(item_positions!=0 && item_positions->size()>0)
-// 		{
-// 			pair<double,double> pos = item_positions->front();
-// 			item_positions->pop_front();
-// 			test_part->setPos(pos.first,pos.second);
-// 		}
+		if(item_positions!=0 && item_positions->size()>0)
+		{
+			pair<double,double> pos = item_positions->front();
+			item_positions->pop_front();
+			test_part->setPos(pos.first,pos.second);
+		}
 		Edge* e1 = new Edge(partitioner,test_part);
 		view_->scene()->addItem(e1);
 		

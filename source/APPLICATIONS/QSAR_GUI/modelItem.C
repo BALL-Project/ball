@@ -378,6 +378,7 @@ bool ModelItem::execute()
 	model_->setDataSource(input_->data());
 	if(descriptor_source_model_!=NULL)
 	{
+		cout<<"copied "<<descriptor_source_model_->model()->getDescriptorIDs()->size()<<" descriptor IDs"<<endl;
 		model_->copyDescriptorIDs(*descriptor_source_model_->model());
 	}
 	
@@ -745,11 +746,13 @@ void ModelItem::writeConfigSection(ofstream& out)
 void ModelItem::removeFromPipeline()
 {
 	view_->data_scene->main_window->model_pipeline_.erase(this);
+	view_->data_scene->main_window->all_items_pipeline_.erase(this);
 }
 
 void ModelItem::addToPipeline()
 {
 	view_->data_scene->main_window->model_pipeline_.insert(this);
+	view_->data_scene->main_window->all_items_pipeline_.insert(this);
 }
 
 // SLOT

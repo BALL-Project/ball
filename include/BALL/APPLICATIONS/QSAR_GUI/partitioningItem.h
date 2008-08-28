@@ -63,6 +63,7 @@ namespace BALL
 				
 				
 			friend class DataItemScene;
+			friend class InputDataItemIO;
 
 		};
 	}

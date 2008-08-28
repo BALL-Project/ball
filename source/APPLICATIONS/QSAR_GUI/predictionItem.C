@@ -241,9 +241,11 @@ void PredictionItem::writeConfigSection(ofstream& out)
 void PredictionItem::addToPipeline()
 {
 	view_->data_scene->main_window->prediction_pipeline_.insert(this);
+	view_->data_scene->main_window->all_items_pipeline_.insert(this);
 }
 
 void PredictionItem::removeFromPipeline()
 {
 	view_->data_scene->main_window->prediction_pipeline_.erase(this);
+	view_->data_scene->main_window->all_items_pipeline_.erase(this);
 }

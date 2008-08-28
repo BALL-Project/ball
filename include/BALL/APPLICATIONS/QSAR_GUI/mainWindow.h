@@ -119,6 +119,8 @@ namespace BALL
 				Pipeline<DataItem*> disconnected_items_;
 				Pipeline<PartitioningItem*> partitioning_pipeline_;
 				Pipeline<InputPartitionItem*> partition_pipeline_;
+				
+				Pipeline<DataItem*> all_items_pipeline_;
 
 			signals:
 				void sendNewValue(int);
@@ -192,8 +194,6 @@ namespace BALL
 				void saveItemsToFiles(String directory, String archive="", String configfile="");
 				
 				void loadItemsFromFiles(String directory);
-				
-				void readPartitionPositions(list<pair<double,double> >* item_positions);
 				
 				/** check whether the pipeline is not empty. Can be called before saving, submitting, printing the current pipeline.\n
 				If no items have been created yet, a message box is displayed 

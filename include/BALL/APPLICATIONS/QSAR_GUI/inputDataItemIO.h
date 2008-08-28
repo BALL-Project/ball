@@ -27,7 +27,7 @@ namespace BALL
 				
 				void writeConfigSection(SDFInputDataItem* sd_item, ofstream& out);
 				void writeConfigSection(CSVInputDataItem* sd_item, ofstream& out);
-				void writeConfigSection(PartitioningItem* item, ofstream& out);
+				void writeConfigSection(PartitioningItem* item, ofstream& out, ostringstream& item_positions);
 						
 				
 			private:
