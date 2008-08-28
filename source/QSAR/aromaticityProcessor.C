@@ -822,7 +822,7 @@ namespace BALL
 							{
 								if (ring.has(b_it->getPartner(**it)))
 								{
-									b_it->setProperty("IsAromatic", true);
+									b_it->setProperty(Bond::IS_AROMATIC);
 									if (overwrite_bond_orders_)
 									{
 										b_it->setOrder(Bond::ORDER__AROMATIC);
@@ -842,7 +842,7 @@ namespace BALL
 						{
 							if (ring.has(b_it->getPartner(**it)))
 							{
-								b_it->setProperty("IsAromatic", true);
+								b_it->setProperty(Bond::IS_AROMATIC);
 								if (overwrite_bond_orders_)
 								{	
 									b_it->setOrder(Bond::ORDER__AROMATIC);
@@ -865,7 +865,7 @@ namespace BALL
 					{
 						if (ring.has(b_it->getPartner(**it)))
 						{
-							b_it->setProperty("IsAromatic", true);
+							b_it->setProperty(Bond::IS_AROMATIC);
 							if (overwrite_bond_orders_)
 							{
 								b_it->setOrder(Bond::ORDER__AROMATIC);
