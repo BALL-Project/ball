@@ -143,7 +143,10 @@ namespace BALL
 		*/
 		enum Property
 		{
-			NUMBER_OF_PROPERTIES = 0
+			/// This property can be used to store aromaticity information without overwriting bond orders.
+			IS_AROMATIC = 0,
+			///
+			NUMBER_OF_PROPERTIES
 		};
 		//@}  
 
@@ -326,6 +329,13 @@ namespace BALL
 		/// Return the bond order
 		Order getOrder() const throw();
 	
+		/** Returns true if this bond is aromatic.
+		 *
+		 * 	A bond is defined as aromatic, if it has the property Bond::IS_AROMATIC or if
+		 * 	it has the order Bond::ORDER__AROMATIC
+		 */
+		bool isAromatic() const throw();
+
 		/// Set the bond type
 		void setType(Type bond_type) throw();
 	
