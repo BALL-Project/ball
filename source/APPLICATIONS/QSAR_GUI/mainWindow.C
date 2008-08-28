@@ -1082,18 +1082,6 @@ Pipeline<DataItem*> MainWindow::disconnectedItems()
 /// IMPORT & EXPORT
 ///
 
-void MainWindow::readPartitionPositions(list<pair<double,double> >* item_positions)
-{
-	if(item_positions==NULL) return;
-
-	for (Pipeline<InputPartitionItem*>::iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end() && item_positions->size()>0; it++)
-	{
-		pair<double,double> pos = item_positions->front();
-		(*it)->setPos(pos.first,pos.second);
-		item_positions->pop_front();
-		(*it)->adjustEdges();
-	}
-}
 
 void MainWindow::restoreDesktop(QString filename)
 {
