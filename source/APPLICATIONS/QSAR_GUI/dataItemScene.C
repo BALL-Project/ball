@@ -477,9 +477,11 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationI
 		bool fs_created=0;
 		DataItem* new_item=0;
 		ModelItem* target_model=0; // modelItem for which prediction is to be done
+		DataItem* last_item=0;
 		
 		for(list<DataItem*>::iterator it=pipe.begin();it!=pipe.end();it++)
 		{
+			last_item=new_item;
 			new_item=0;
 			item=*it;
 			if(item->type()==ModelItem::Type)
@@ -494,6 +496,12 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationI
 				if(fs_created)
 				{
 					new_fs->setModelItem(new_model); // set output of FS
+				}
+				
+				if(m_item->descriptor_source_model_!=NULL && last_item!=NULL && last_item->type()==ModelItem::Type)
+				{
+					// connect new ModelItem to previously created ModelItem if descriptors are to be copied...
+					new_model->descriptor_source_model_ = dynamic_cast<ModelItem*>(last_item);
 				}
 				new_model->addToPipeline();
 				new_item=new_model;

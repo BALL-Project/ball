@@ -199,7 +199,8 @@ DataItem(item.view_)
 
 	if (item.model_ != NULL)
 	{
-		*model_ = *item.model_; // copy descriptor-IDs and parameters
+		*model_ = *item.model_; // copies descriptor-IDs and parameters
+		model_->deleteDescriptorIDs(); // just to make sure that no descriptors are accidentally reused when copying pipelines ...
 	}
 	init();
 }
