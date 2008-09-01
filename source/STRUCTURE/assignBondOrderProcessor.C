@@ -840,7 +840,6 @@ cout << "AssignBondOrderProcessor::called estimatePenalty_()"<< endl;
 		float current_bond_length_penalty = 0; // length penalty of the bonds already set
 		bool valid = true;
 		int  num_free_bonds = 0; // without VIRTUAL__BOND's!
-		
 
 		// NOTE: this variable indexes the currently addressed atom. We cannot rely on
 		// 			 getIndex for this task since this is relative to the static atom array,
@@ -1659,7 +1658,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 
 		// iterate over all atoms and add a hydrogen atom and bond 
 		// 	if suggested by the free valences. 
-		Size free_valences = 0;
+		int free_valences = 0;
 
 		vector<Atom*> atoms_to_delete;
 
@@ -1670,7 +1669,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 			free_valences = atom->getElement().getGroup() - atom->countBonds();
 		else
 			free_valences = 18 - atom->getElement().getGroup() - atom->countBonds();
-		
+
 		if (free_valences > 0)
 		{
 			//
@@ -1689,7 +1688,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 			index_to_bond_.push_back(virtual_bond_);
 			free_bonds_.push_back(virtual_bond_);	
 
-			for (Size i = 1; i <= free_valences; i++)
+			for (int i = 1; i <= free_valences; i++)
 			{
 				// add a hydrogen atom  
 				Atom* hydrogen = new Atom;
@@ -1886,6 +1885,41 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		else return false;
 	}
 
+
+	const System& AssignBondOrderProcessor::getSolution(Position i)
+		throw(Exception::IndexOverflow)
+	{
+		if (i >= solutions_.size())
+		{
+			//Log.error() << "AssignBondOrderProcessor: No solution with index " << i << std::endl;
+			Exception::IndexOverflow e(__FILE__, __LINE__, i, solutions_.size());
+
+			throw(e);
+		}
+		else
+		{	
+			// apply the i-th solution
+			apply(i);
+
+			// What kind of composite do we have?
+			if (RTTI::isKindOf<System>(*ac_))
+			{
+				return *(RTTI::castTo<System>(*ac_));
+			}
+			else if (RTTI::isKindOf<Molecule>(*ac_))
+			{
+				Molecule* m = RTTI::castTo<Molecule>(*ac_);
+				return *(m->getSystem());
+			}
+			else
+			{ 
+				Exception::GeneralException e(__FILE__, __LINE__);
+				throw(e);
+			}
+		}
+	}
+
+
 	bool AssignBondOrderProcessor::computeNextSolution()
 	{
 		Solution_ sol;
@@ -1930,12 +1964,12 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 
 		if (found_a_sol)
 		{
-			bool next_solution_is_optimal = (getTotalPenalty(solutions_[0]) == getTotalPenalty(sol)); 
+			//bool next_solution_is_optimal = (getTotalPenalty(solutions_[0]) == getTotalPenalty(sol)); 
 
-				solutions_.push_back(sol);
-				apply(solutions_.size()-1);
-				
-				return true;
+			solutions_.push_back(sol);
+			apply(solutions_.size()-1);
+			
+			return true;
 		}
 
 		return false;
