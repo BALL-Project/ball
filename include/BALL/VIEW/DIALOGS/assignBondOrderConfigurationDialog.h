@@ -13,8 +13,17 @@
 #endif
 
 #ifndef BALL_STRUCTURE_ASSIGNBONDORDERPROCESSOR_H
- # include <BALL/STRUCTURE/assignBondOrderProcessor.h>
+# include <BALL/STRUCTURE/assignBondOrderProcessor.h>
 #endif
+
+#ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
+# include <BALL/VIEW/KERNEL/mainControl.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
+# include <BALL/VIEW/KERNEL/modularWidget.h>
+#endif
+
 
 namespace BALL
 {
@@ -30,6 +39,7 @@ namespace BALL
 		class BALL_VIEW_EXPORT AssignBondOrderConfigurationDialog
 			: public QDialog,
 				public Ui_AssignBondOrderConfigurationDialogData,
+				public ModularWidget,
 				public PreferencesEntry
 		{
 			friend class MolecularStructure;
@@ -38,12 +48,21 @@ namespace BALL
 			
 			public:
 
+			BALL_EMBEDDABLE(AssignBondOrderConfigurationDialog,ModularWidget)
+
 			/// Constructor
 			AssignBondOrderConfigurationDialog(QWidget* parent = NULL, const char* name = "AssignBondOrderConfigurationDialog");
 
 			/// Destructor
-			virtual ~AssignBondOrderConfigurationDialog();
-			
+			virtual ~AssignBondOrderConfigurationDialog() throw();
+				
+			///
+			virtual void initializeWidget(MainControl& main_control);
+
+			///
+			virtual void checkMenu(MainControl& main_control)
+				throw();
+
 			public slots:
 
 			///
@@ -65,9 +84,11 @@ namespace BALL
 			protected:
 
 			private:
-			String getValue_(const QCheckBox* box) const;
-			float getValue_(const QLineEdit* edit) const
-				throw(Exception::InvalidFormat);
+				
+				String getValue_(const QCheckBox* box) const;
+				
+				float getValue_(const QLineEdit* edit) const
+					throw(Exception::InvalidFormat);
 		};
 	}
 }

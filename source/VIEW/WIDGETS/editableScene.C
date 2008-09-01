@@ -177,6 +177,7 @@ void EditableScene::initializeWidget(MainControl& main_control)
 	main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
 	Path path;
+
 	
 	QIcon icon4(path.find("graphics/assignBondOrders.png").c_str());
 	bondorders_ = new QAction(icon4, "Quickly optimize bond orders", this);
@@ -184,6 +185,7 @@ void EditableScene::initializeWidget(MainControl& main_control)
 	bondorders_->setToolTip("Edit mode: Quickly optimize the highlighted structures bond orders");
 	registerForHelpSystem(bondorders_, "scene.html#bondorders");
 	connect(bondorders_, SIGNAL(triggered()), this, SLOT(computeBondOrders()));
+
 
 	QIcon icon(path.find("graphics/minimize.png").c_str());
 	optimize_ = new QAction(icon, "Quickly optimize structure", this);
@@ -233,9 +235,10 @@ void EditableScene::checkMenu(MainControl& main_control)
 	bool selected_system_or_molecule =   (highl.size() == 1)
 																		&& (RTTI::isKindOf<System>(**lit) || RTTI::isKindOf<Molecule>(**lit) ) ;
 
-	bondorders_->setEnabled(selected_system_or_molecule);
-
-
+	bondorders_->setEnabled(selected_system_or_molecule && !busy);
+	optimize_->setEnabled(selected_system_or_molecule && !busy);
+	add_hydrogens_->setEnabled(selected_system_or_molecule && !busy);
+	
 	element_action_->setEnabled(!busy && edit_mode);
 
 	new_molecule_->setEnabled(!busy);

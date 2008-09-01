@@ -92,7 +92,8 @@ namespace BALL
 
 			assign_bond_orders_id_ = insertMenuEntry(MainControl::BUILD, "&Assign Bond Orders", this, 
 																												SLOT(runBondOrderAssignment()), Qt::CTRL+Qt::Key_O);
-			setMenuHint("Assign bond orders to a selected structure.");
+			setMenuHint("Assign bond orders to a selected structure."); 
+			setIcon("assignBondOrders.png", false); //true);
 
 			
 
@@ -592,6 +593,7 @@ namespace BALL
 			minimization_id_->setEnabled( one_system && composites_muteable);
 			mdsimulation_id_->setEnabled( one_system && composites_muteable);
 
+			assign_bond_orders_id_->setEnabled( one_system && composites_muteable);
 			calculate_hbonds_id_->setEnabled( one_system && composites_muteable);
 
 			// prevent changes to forcefields, if simulation is running
@@ -602,7 +604,6 @@ namespace BALL
 			bool allow = composites_muteable && one_system;
 			add_hydrogens_id_->setEnabled( allow);
 			build_bonds_id_->setEnabled( allow);
-			assign_bond_orders_id_->setEnabled( allow);
 			check_structure_id_->setEnabled( allow);
 			calculate_ss_id_->setEnabled( allow);
 			center_camera_id_->setEnabled(allow);
