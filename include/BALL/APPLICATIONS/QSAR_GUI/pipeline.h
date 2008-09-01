@@ -34,6 +34,22 @@ namespace BALL
 					map_.insert(make_pair(object,it));
 				};
 				
+				/** insert 'object' before 'it' */
+				void insert(X object, iterator it)
+				{
+					iterator ins_it = list_.insert(object,it);
+					map_.insert(make_pair(object,ins_it));
+				};
+				
+				/** insert 'object' after the second object */
+				void insertAfter(X object, X before_this_object)
+				{
+					iterator it = find(before_this_object);
+					if(it!=list_.end()) it++;
+					iterator ins_it = list_.insert(it,object);
+					map_.insert(make_pair(object,ins_it));
+				};
+				
 				iterator erase(X object)
 				{
 					map_iterator map_it = map_.find(object);

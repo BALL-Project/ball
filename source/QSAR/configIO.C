@@ -29,11 +29,11 @@ InputConfiguration::InputConfiguration()
 	validation_fraction=0;
 	separate_activity_file=0;
 	within_section=0;
-	csv_file = "";
-	csv_no_response=0;
-	csv_desc_labels = 0;
-	csv_compound_labels = 0;
-	csv_separator = ",";
+	csv_file.resize(0);
+	csv_no_response.resize(0);
+	csv_desc_labels.resize(0);
+	csv_compound_labels.resize(0);
+	csv_separator.resize(0);
 	nonnumeric_class_names=0;
 	done=0;
 }
@@ -112,23 +112,23 @@ InputConfiguration ConfigIO::readInputConfiguration(istream* input)
 		}
 		else if(line.hasPrefix("csv_file"))
 		{
-			conf.csv_file = ((String)line.after("=")).trimLeft();
+			conf.csv_file.push_back(((String)line.after("=")).trimLeft());
 		}
 		else if(line.hasPrefix("csv_separator"))
 		{
-			conf.csv_separator = ((String)((String)line.after("=")).after("\"")).before("\"");
+			conf.csv_separator.push_back(((String)((String)line.after("=")).after("\"")).before("\""));
 		}
 		else if(line.hasPrefix("csv_desc_labels"))
 		{
-			conf.csv_desc_labels = ((String)line.after("=")).trimLeft().toBool();
+			conf.csv_desc_labels.push_back(((String)line.after("=")).trimLeft().toBool());
 		}
 		else if(line.hasPrefix("csv_no_response"))
 		{
-			conf.csv_no_response = ((String)line.after("=")).trimLeft().toInt();
+			conf.csv_no_response.push_back(((String)line.after("=")).trimLeft().toInt());
 		}
 		else if(line.hasPrefix("csv_compound_labels"))
 		{
-			conf.csv_compound_labels = ((String)line.after("=")).trimLeft().toBool();
+			conf.csv_compound_labels.push_back(((String)line.after("=")).trimLeft().toBool());
 		}
 		else if(line.hasPrefix("nonnumeric_class_names"))
 		{
@@ -141,7 +141,13 @@ InputConfiguration ConfigIO::readInputConfiguration(istream* input)
 		}
 	}
 	
-	if(conf.sd_file=="" && conf.csv_file=="")
+	uint no=conf.csv_file.size();
+	if(no!=conf.csv_separator.size()||no!=conf.csv_desc_labels.size()||no!=conf.csv_compound_labels.size()||no!=conf.csv_no_response.size())
+	{
+		throw Exception::ConfigurationReadingError(__FILE__,__LINE__,"Some options for CSV-files to be appended to other input data are missing!");
+	}
+	
+	if(conf.sd_file=="" && (conf.csv_file.size()==0 || conf.csv_file[0]==""))
 	{
 		throw Exception::ConfigurationReadingError(__FILE__,__LINE__,"SD-file or CSV-file must be specified within config-file!");
 	}

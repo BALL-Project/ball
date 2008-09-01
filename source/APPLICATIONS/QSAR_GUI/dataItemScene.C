@@ -232,7 +232,16 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 							//group->addToGroup(csv_item);
 							Edge* edge = new Edge(input_item_at_pos, csv_item);
 							addItem(edge);
-							csv_item->addToPipeline();
+							
+							// place the new CSV-item into the pipeline at the correct position, i.e. after the SD-item or after the last CSV-item already appended to it
+							DataItem* d;
+							if(input_item_at_pos->additional_descriptors_.size()>0)
+							{
+								d = input_item_at_pos->additional_descriptors_.back();
+							}
+							else d = input_item_at_pos;
+							main_window->all_items_pipeline_.insertAfter(csv_item,d);
+							
 							input_item_at_pos->appendCSVDescriptors(csv_item);
 						}
 

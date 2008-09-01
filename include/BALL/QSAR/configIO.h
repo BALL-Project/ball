@@ -19,11 +19,11 @@ namespace BALL
 			double validation_fraction;
 			bool separate_activity_file;
 			bool within_section;
-			String csv_file;
-			int csv_no_response;
-			bool csv_desc_labels;
-			bool csv_compound_labels;
-			String csv_separator;
+			vector<String> csv_file;
+			vector<int> csv_no_response;
+			vector<bool> csv_desc_labels;
+			vector<bool> csv_compound_labels;
+			vector<String> csv_separator;
 			bool nonnumeric_class_names;
 			bool done;
 		};

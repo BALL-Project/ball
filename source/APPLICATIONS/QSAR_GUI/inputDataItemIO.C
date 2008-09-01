@@ -1,5 +1,6 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/inputDataItemIO.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/mainWindow.h>
+#include <BALL/QSAR/configIO.h>
 
 #include <QtGui/QMessageBox>
 
@@ -205,146 +206,47 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 {
 	istringstream input;
 	input.str(configfile_section);
-		
-	String line;
-	getline(input,line);
-	line.trimLeft();
-	if(!line.hasPrefix("[InputReader]"))
+	
+	InputConfiguration conf;
+	try
 	{
-		if(line.hasPrefix("[InputPartitioner]"))
-		{
-			readPartitionerSection(configfile_section, filenames_map, item_positions);
-			return;
-		}
-		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Input reading error","The given section is no input section!");
+		conf = ConfigIO::readInputConfiguration(&input);
 	}
-	
-	String sd_file=""; String output=""; String separate_activity_file="";
-	bool center_data=0; bool center_y=0; bool read_sd_descriptors=0;
-	double val_fraction=0;
-	SortedList<int> activities;
-	bool nonnumeric_class_names = 0;
-	
-	vector<String> csv_file; vector<String> csv_sep;
-	vector<bool> csv_desc_labels; vector<bool> csv_compound_labels;
-	vector<int> csv_no_response;
-	
-	
-	while(input)
+	catch(BALL::Exception::GeneralException e)
 	{
-		getline(input,line);
-		line.trimLeft();
-		
-		if(line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
-		{
-			continue;
-		}		
-		if(line.hasPrefix("sd_file"))
-		{
-			sd_file = ((String)line.after("=")).trimLeft();
-		}
-		else if(line.hasPrefix("output"))
-		{
-			output = ((String)line.after("=")).trimLeft();
-		}
-		else if(line.hasPrefix("separate_activity_file"))
-		{
-			separate_activity_file = ((String)line.after("=")).trimLeft().toBool();
-		}
-		else if(line.hasPrefix("activity_IDs"))
-		{
-			String act = ((String)line.after("=")).trimLeft();
-			for(uint i=0; i<act.countFields(" ");i++)
-			{
-				activities.push_back(act.getField(i).toInt());
-			}
-		}
-		else if(line.hasPrefix("center_data"))
-		{
-			center_data = ((String)line.after("=")).trimLeft().toBool();
-		}
-		else if(line.hasPrefix("center_response"))
-		{
-			center_y = ((String)line.after("=")).trimLeft().toBool();
-		}
-		else if(line.hasPrefix("external_val_fraction"))
-		{
-			val_fraction = ((String)line.after("=")).trimLeft().toDouble();
-		}
-		else if(line.hasPrefix("read_sd_descriptors"))
-		{
-			read_sd_descriptors = ((String)line.after("=")).trimLeft().toBool();
-		}
-		else if(line.hasPrefix("csv_file"))
-		{
-			csv_file.push_back(((String)line.after("=")).trimLeft());
-		}
-		else if(line.hasPrefix("csv_separator"))
-		{
-			csv_sep.push_back(((String)((String)line.after("=")).after("\"")).before("\""));
-		}
-		else if(line.hasPrefix("csv_desc_labels"))
-		{
-			csv_desc_labels.push_back(((String)line.after("=")).trimLeft().toBool());
-		}
-		else if(line.hasPrefix("csv_no_response"))
-		{
-			csv_no_response.push_back(((String)line.after("=")).trimLeft().toInt());
-		}
-		else if(line.hasPrefix("csv_compound_labels"))
-		{
-			csv_compound_labels.push_back(((String)line.after("=")).trimLeft().toBool());
-		}
-		else if(line.hasPrefix("nonnumeric_class_names"))
-		{
-			nonnumeric_class_names = ((String)line.after("=")).trimLeft().toBool();
-		}
-		else if(line.hasPrefix("done"))
-		{
-			// ignore this line; it is used for the command-line programms only
-		}		
-		else
-		{
-			String mess = "Configuration command \""+line+"\" unknown!!";
-			String name = "InputDataItem reading error";
-			throw BALL::Exception::GeneralException(__FILE__,__LINE__,name,mess);
-		}	
+		QMessageBox::critical(view_,"Error reading SD-input",e.getMessage());
 	}
 	
 	SDFInputDataItem* sd_item=0;
-	if(sd_file!="")
+	if(conf.sd_file!="")
 	{
 		try
 		{
-			sd_item = new SDFInputDataItem(sd_file.c_str(), activities,center_data, center_y, view_);
+			sd_item = new SDFInputDataItem(conf.sd_file.c_str(), conf.activities,conf.center_data, conf.center_y, view_);
 			view_->data_scene->addItem(sd_item);
 			sd_item->addToPipeline();
-			sd_item->setSavedAs(output.c_str());
-			sd_item->useSDProperties(read_sd_descriptors);
-			sd_item->setNonNumericClassNames(nonnumeric_class_names);
+			sd_item->setSavedAs(conf.output.c_str());
+			sd_item->useSDProperties(conf.read_sd_descriptors);
+			sd_item->setNonNumericClassNames(conf.nonnumeric_class_names);
 			if(item_positions!=0 && item_positions->size()>0)
 			{
 				pair<double,double> pos = item_positions->front();
 				item_positions->pop_front();
 				sd_item->setPos(pos.first,pos.second);
-				sd_item->setCenterDataFlag(center_data);
-				sd_item->setCenterResponseFlag(center_y);
+				sd_item->setCenterDataFlag(conf.center_data);
+				sd_item->setCenterResponseFlag(conf.center_y);
 			}
 		}
 		catch(BALL::Exception::GeneralException e)
 		{
 			QMessageBox::critical(view_,"Error reading SD-input",e.getMessage());
 		}
-		filenames_map.insert(make_pair(output,sd_item));
+		filenames_map.insert(make_pair(conf.output,sd_item));
 	}
-	
-	uint no=csv_file.size();
-	if(no!=csv_sep.size()||no!=csv_desc_labels.size()||no!=csv_compound_labels.size()||no!=csv_no_response.size())
-	{
-		QMessageBox::critical(view_,"Error reading CSV-inputs","Some csv-options are missing!");
-	}
+
 	try
 	{
+		uint no=conf.csv_file.size();
 		for(uint i=0; i<no;i++)
 		{
 			CSVInputDataItem* csv_item;
@@ -354,8 +256,8 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 				csv_item->setAppend(true);
 				if(i==no-1)
 				{
-					csv_item->setCenterDataFlag(center_data);
-					csv_item->setCenterResponseFlag(center_y);
+					csv_item->setCenterDataFlag(conf.center_data);
+					csv_item->setCenterResponseFlag(conf.center_y);
 				}
 				else
 				{
@@ -363,22 +265,22 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 					csv_item->setCenterResponseFlag(0);
 				}
 				csv_item->setView(view_);
-				csv_item->setFilename(csv_file[i]);
+				csv_item->setFilename(conf.csv_file[i]);
 			}
 			else
 			{
-				csv_item = new CSVInputDataItem(csv_file[i].c_str(),view_);	
+				csv_item = new CSVInputDataItem(conf.csv_file[i].c_str(),view_);	
 				csv_item->setAppend(false);
-				csv_item->setCenterDataFlag(center_data);
-				csv_item->setCenterResponseFlag(center_y);
-				if(i==0) filenames_map.insert(make_pair(output,csv_item));
+				csv_item->setCenterDataFlag(conf.center_data);
+				csv_item->setCenterResponseFlag(conf.center_y);
+				if(i==0) filenames_map.insert(make_pair(conf.output,csv_item));
 			}
-			csv_item->setNonNumericClassNames(nonnumeric_class_names);
-			csv_item->setXLabelFlag(csv_desc_labels[i]);
-			csv_item->setYLabelFlag(csv_compound_labels[i]);
-			csv_item->setNumOfActivities(csv_no_response[i]);
-			csv_item->setSeperator(csv_sep[i]);
-			csv_item->setSavedAs(output.c_str());
+			csv_item->setNonNumericClassNames(conf.nonnumeric_class_names);
+			csv_item->setXLabelFlag(conf.csv_desc_labels[i]);
+			csv_item->setYLabelFlag(conf.csv_compound_labels[i]);
+			csv_item->setNumOfActivities(conf.csv_no_response[i]);
+			csv_item->setSeperator(conf.csv_separator[i]);
+			csv_item->setSavedAs(conf.output.c_str());
 			
  			view_->data_scene->addItem(csv_item);
 			csv_item->addToPipeline();
