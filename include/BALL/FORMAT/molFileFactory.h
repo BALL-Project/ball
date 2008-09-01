@@ -1,6 +1,8 @@
 #ifndef MOLFILEFACTORY_H
 #define MOLFILEFACTORY_H
 
+#include <BALL/SYSTEM/file.h>
+
 namespace BALL
 {
 
@@ -22,7 +24,7 @@ class MolFileFactory
          * @return a pointer to a subclass of GenericMolFile, NULL if none is appropriate. Be aware, that
          *         the file handle has not been checked for validity and that you have to delete it yourself
          */
-        static GenericMolFile* open(const String& name);
+        static GenericMolFile* open(const String& name, File::OpenMode open_mode = std::ios::in);
 };
 
 }
