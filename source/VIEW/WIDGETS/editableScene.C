@@ -39,6 +39,8 @@
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MATHS/angle.h>
 
+#include <sstream>
+
 using std::endl;
 
 namespace BALL
@@ -1551,21 +1553,30 @@ void EditableScene::computeBondOrders()
 	{
 		setStatusbarText(String("Could not find a valid bond order assignment.", true));
 	}
-	else if (abop.getNumberOfComputedSolutions() < 2)
-	{		
-		String nr = abop.getNumberOfBondOrdersSet();
-		setStatusbarText(String("Assigned orders to ") + nr + " bonds.", true);
-	}
-	else 
+	else
 	{	
-		for (Size i = 0; i < abop.getNumberOfComputedSolutions(); i++)
-		{
-			Log.info() << "Solution " << i+1 << " has penalty "  
-								 <<  abop.getTotalPenalty(i) << "." << endl;
-
-		}
 		String nr = abop.getNumberOfComputedSolutions();
 		setStatusbarText(String("Found ") + nr + " bond order assignments.", true);
+	
+		Log.info()<< "  > Result AssignBondOrderProcessor: " << endl;
+
+		for (Size i = 0; i < abop.getNumberOfComputedSolutions(); i++)
+		{
+			ostringstream stream_description;
+			stream_description.setf(std::ios_base::fixed);
+			stream_description.precision(2);
+
+			stream_description  << "      Solution " << i 
+						 						 << " has penalty " << abop.getTotalPenalty(i)
+						 						 << ", charge " << abop.getTotalCharge(i)
+												 << ", " <<  abop.getNumberOfAddedHydrogens(i) << " added hydrogens.";
+ 
+			String description = stream_description.str();
+
+			Log.info() << description << endl; 
+		}
+
+		ms->showBondOrderAssignmentResults(abop);
 	}
 
 	getMainControl()->update(*containers.front(), true);

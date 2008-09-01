@@ -36,6 +36,8 @@
 
 #include <QtGui/qmenubar.h>
 
+#include <sstream>
+
 using namespace std;
 
 namespace BALL
@@ -54,7 +56,8 @@ namespace BALL
 				minimization_dialog_(parent),
 				md_dialog_(parent),
 				fdpb_dialog_(0),
-				bond_order_dialog_(parent)
+				bond_order_dialog_(parent),
+				bond_order_results_dialog_(parent)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "New MolecularStructure " << this << std::endl;
@@ -427,6 +430,7 @@ namespace BALL
 			setStatusbarText(result, true);
 		}
 
+		
 		void MolecularStructure::runBondOrderAssignment(bool show_dialog)
 		{
 			// Make sure we run one instance of a assignment at a time only.
@@ -442,7 +446,7 @@ namespace BALL
 				return;
 			}
 			
-			setStatusbarText("assigning bond orders ...", true);
+			setStatusbarText("  > assigning bond orders ...", true);
 
 			// Retrieve the selected atom container and abort if nothing is selected.
 			List<AtomContainer*> containers;
@@ -523,29 +527,48 @@ namespace BALL
 			{
 				setStatusbarText(String("Could not find a valid bond order assignment.", true));
 			}
-			else if (abop.getNumberOfComputedSolutions() < 2)
-			{		
-				String nr = abop.getNumberOfBondOrdersSet();
-				int charge = (int)abop.getTotalCharge(0);
-				setStatusbarText(String("Assigned orders to ") + nr 
-						+ " bonds. Resulting total charge: " + String(charge) + ".", true);
-			}
-			else 
-			{
-				for (Size i = 0; i < abop.getNumberOfComputedSolutions(); i++)
-				{
-					Log.info() << "Solution " << i+1 << " has penalty "  
-								 <<  abop.getTotalPenalty(i) << "." << endl;
-
-				}
-
+			else
+			{	
 				String nr = abop.getNumberOfComputedSolutions();
 				setStatusbarText(String("Found ") + nr + " bond order assignments.", true);
-			}
+			
+				Log.info()<< "  > Result AssignBondOrderProcessor: " << endl;
 
+				for (Size i = 0; i < abop.getNumberOfComputedSolutions(); i++)
+				{
+					ostringstream stream_description;
+					stream_description.setf(std::ios_base::fixed);
+					stream_description.precision(2);
+
+					stream_description  << "      Solution " << i 
+								 						 << " has penalty " << abop.getTotalPenalty(i)
+								 						 << ", charge " << abop.getTotalCharge(i)
+														 << ", " <<  abop.getNumberOfAddedHydrogens(i) << " added hydrogens.";
+ 
+					String description = stream_description.str();
+
+					Log.info() << description << endl; 
+				}
+
+				showBondOrderAssignmentResults(abop);
+			}
+			
 			getMainControl()->update(*containers.front(), true);
 		}
+		
+		
+		void MolecularStructure::showBondOrderAssignmentResults(AssignBondOrderProcessor& bop)
+		{
+			bond_order_results_dialog_.setProcessor(&bop);
+			bond_order_results_dialog_.createEntries();
 
+			// Execute the assign bond order dialog
+			// and abort if cancel is clicked or nonsense arguments are given
+			if (!bond_order_results_dialog_.exec())
+			{
+				return;
+			}
+		}
 
 		void MolecularStructure::centerCamera(Composite* composite)
 		{
@@ -984,6 +1007,7 @@ namespace BALL
 		{
 			minimization_dialog_.readPreferenceEntries(inifile);
 		//	bond_order_dialog_.readPreferenceEntries(inifile); // TODO:
+		//  bond_order_results_dialog_.readPreferenceEntries(inifile); // TODO:
 			md_dialog_.readPreferenceEntries(inifile);
 			amber_dialog_.readPreferenceEntries(inifile);
 			charmm_dialog_.readPreferenceEntries(inifile);
@@ -1012,6 +1036,7 @@ namespace BALL
 		{
 			minimization_dialog_.writePreferenceEntries(inifile);
 			//bond_order_dialog_.writePreferenceEntries(inifile); // TODO
+			//bond_order_results_dialog_.writePreferenceEntries(inifile); // TODO
 			md_dialog_.writePreferenceEntries(inifile);
 			amber_dialog_.writePreferenceEntries(inifile);
 			charmm_dialog_.writePreferenceEntries(inifile);

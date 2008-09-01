@@ -30,6 +30,12 @@
 #	include <BALL/COMMON/limits.h>
 #endif
 
+#ifndef BALL_COMMON_EXCEPTION_H
+# include <BALL/COMMON/exception.h>
+#endif
+
+#include <map>
+#include <vector>
 #include <queue>
 
 #ifdef BALL_HAS_LPSOLVE
@@ -285,6 +291,25 @@ namespace BALL
 			 *  @see Option::MAX_NUMBER_OF_SOLUTIONS
 			 */
 			Size getNumberOfComputedSolutions() {return solutions_.size();}
+
+
+			/** Returns a pointer to the original Molecule as AtomContainer.
+			 */
+			AtomContainer* getAtomContainer() {return ac_;}
+
+			/** Returns a nonmutable pointer to the original Molecule as AtomContainer.
+			 */
+			AtomContainer const* getAtomContainer() const {return ac_;}
+
+			/** Returns a reference to original system, to which solution i was applied.
+			 *   
+			 *   <b>NOTE:</b> This method has the same effect as calling \link apply(i) apply(i)\endlink!
+			 *
+			 *  @param  i index of the solution, whose bond order assignment should be applied. 
+			 * 	@return const System& - the original system with bond order assignment of solution i. 
+			 * 					If i is invalid, an Exception is thrown.
+			 */
+			const System& getSolution(Position i) throw(Exception::IndexOverflow);
 
 			/**Returns the total charge of solution i.
 			
@@ -573,10 +598,10 @@ namespace BALL
 
 			// Map for storing the bonds fixed orders
 			// if a bond is free, the map returns 0
-			map<Bond*, int> bond_fixed_;
+			std::map<Bond*, int> bond_fixed_;
 
 			// all free bonds in the atom container
-			vector<Bond*> free_bonds_;
+			std::vector<Bond*> free_bonds_;
 
 			// Map for storing the bonds associated index (all bonds)
 			HashMap<Bond*, Index> bond_to_index_;

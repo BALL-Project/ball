@@ -39,6 +39,10 @@
 # include <BALL/VIEW/DIALOGS/assignBondOrderConfigurationDialog.h>
 #endif
 
+#ifndef BALL_VIEW_DIALOGS_ASSIGNBONDORDERRESULTSDIALOG_H
+# include <BALL/VIEW/DIALOGS/assignBondOrderResultsDialog.h>
+#endif
+
 #ifndef BALL_MOLMEC_AMBER_AMBER_H
 # include <BALL/MOLMEC/AMBER/amber.h>
 #endif
@@ -217,6 +221,12 @@ namespace BALL
 			
 			///
 			const AssignBondOrderConfigurationDialog& getBondOrderDialog() const { return bond_order_dialog_;}
+	
+			///
+			AssignBondOrderResultsDialog& getBondOrderResultsDialog() { return bond_order_results_dialog_;}
+			
+			///
+			const AssignBondOrderResultsDialog& getBondOrderResultsDialog() const { return bond_order_results_dialog_;}
 
 					
 			public slots:
@@ -237,13 +247,22 @@ namespace BALL
 			void buildBonds();
 			
 			/** Assigns bond orders.
-					If selected molecular objects are available Bond Orders will be set
-					for each bond object in the selection list using the assign_bond_order processor.
-					A CompositeMessage will be sent for each object in the
-					selection list.
+					If a single selected molecular object is available Bond Orders will be set
+					for each bond object of the selected AtomContainer using the assign_bond_order processor.
+					A CompositeMessage will be sent for the object in the selection list.
 					The number of bond orders changed will be written into the Log object.
 			*/
 			void runBondOrderAssignment(bool show_dialog = true);
+			
+
+			/** Shows the results of the given BondOrderAssigner.
+					All bond order assignment sets found by the given BondOrderAssigner will be presented
+					as structural sketch, additional scoring information is provided by click on the entry.
+					A single assignment can either be applied to the selected AtomContainer, or a copy of the
+					original system with the bond order assignment of the current result is added to the 
+					Structure list. 
+			*/
+		void showBondOrderAssignmentResults(AssignBondOrderProcessor& bop);
 
 			/** Adds hydrogens.
 					If selected molecular objects are available hydrogens will be created
@@ -366,6 +385,7 @@ namespace BALL
 			MolecularDynamicsDialog 		md_dialog_;
 			FDPBDialog* 												fdpb_dialog_;
 			AssignBondOrderConfigurationDialog 	bond_order_dialog_;
+			AssignBondOrderResultsDialog				bond_order_results_dialog_;
 			Position 														force_field_id_;
 		};
 

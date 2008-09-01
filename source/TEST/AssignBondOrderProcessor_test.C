@@ -67,6 +67,8 @@ bool compareBondOrder(System& sys)
 	Atom::BondIterator b_it;
 	BALL_FOREACH_BOND(sys, a_it, b_it)
 	{
+		if ( b_it->getProperty("FORMER_ORDER").getInt() != b_it->getOrder())
+			cout << b_it->getFirstAtom()->getFullName() << " " << b_it->getSecondAtom()->getFullName() << "    new:" << b_it->getOrder() << "  old:" << b_it->getProperty("FORMER_ORDER").getInt() << endl;
 		all_bonds_equal &= ( b_it->getProperty("FORMER_ORDER").getInt() == b_it->getOrder());
 	}
 	return all_bonds_equal;
@@ -126,6 +128,17 @@ CHECK(getNumberOfComputedSolutions())
 	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 0)
 RESULT
 
+
+CHECK(getAtomContainer())
+  AssignBondOrderProcessor testbop;
+	TEST_EQUAL(testbop.getAtomContainer()==NULL, true)
+	
+	System sys;
+	MOL2File mol_in("data/AssignBondOrderProcessor_test_AMHTAR01.mol2", std::ios::in);
+	mol_in >> sys;
+	sys.apply(testbop);
+	TEST_EQUAL(testbop.getAtomContainer()==(&*(sys.beginMolecule())), true)
+RESULT
 
 
 CHECK(setDefaultOptions())
@@ -315,6 +328,23 @@ CHECK( operator() and apply(Position i) A* single solution )
 	sys15.apply(testbop);
 	testbop.apply(5);
 	TEST_EQUAL(compareBondOrder(sys15), true)
+
+	System sys16;
+	MOL2File mol16("data/AssignBondOrderProcessor_test_AAA.mol2", std::ios::in);
+	mol16 >> sys16;
+	storeBondOrders(sys16);	
+	sys16.apply(testbop);
+	testbop.apply(0);
+	TEST_EQUAL(compareBondOrder(sys16), true)
+
+	/*
+	System sys17;
+	MOL2File mol17("data/AssignBondOrderProcessor_test_all_peptides.mol2", std::ios::in);
+	mol17 >> sys17;
+	storeBondOrders(sys17);	
+	sys17.apply(testbop);
+	testbop.apply(0);
+	TEST_EQUAL(compareBondOrder(sys17), true)*/
 
 RESULT
 
@@ -660,9 +690,6 @@ RESULT
 
 
 
-
-
-
 CHECK(Option::MAX_NUMBER_OF_SOLUTIONS  - Default and value  using A*)
   AssignBondOrderProcessor testbop;	
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
@@ -942,6 +969,38 @@ CHECK(AssignBondOrderProcessor& operator = (const AssignBondOrderProcessor& abop
 	AssignBondOrderProcessor abop1, abop2;
 	abop2 = abop1;
 RESULT
+
+
+CHECK(getSolution(Position i))
+	// There is really not much we can test here, so we just execute the method
+	// to have a chance of catching bugs with valgrind if they sneak in
+	AssignBondOrderProcessor testbop;	
+	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
+//	testbop.options.setBool(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 0);
+	System sys4;
+	MOL2File mol4("data/AssignBondOrderProcessor_test_CITSED10_sol_6.mol2", std::ios::in);
+	mol4 >> sys4;
+	sys4.apply(testbop);
+
+	Size limit = testbop.getNumberOfComputedSolutions();
+	System sys;
+	for (Size i=0; i<limit; i++)
+	{
+		sys = testbop.getSolution(i);
+		bool no_exception = true;
+		try {
+			sys = testbop.getSolution(i);
+			const System& ref_sys = testbop.getSolution(i);
+		} catch (...)	{
+			no_exception = false;
+		}
+		TEST_EQUAL(no_exception, true)	
+	}
+
+	TEST_EXCEPTION(Exception::IndexOverflow, testbop.getSolution(limit))
+	
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

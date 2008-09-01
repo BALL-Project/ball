@@ -21,6 +21,7 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	assignBondOrderConfigurationDialog.C\
+	assignBondOrderResultsDialog.C\
 	atomOverview.C\
 	amberConfigurationDialog.C\
 	bondProperties.C\
@@ -67,6 +68,7 @@ PYTHON_CPP_SOURCES=\
 
 MOC_SOURCES=\
 	assignBondOrderConfigurationDialog_moc.C\
+	assignBondOrderResultsDialog_moc.C\
 	amberConfigurationDialog_moc.C\
 	atomOverview_moc.C\
 	minimizationDialog_moc.C\
@@ -113,6 +115,7 @@ PYTHON_MOC_SOURCES=\
 
 UIC_SOURCES=\
 	assignBondOrderConfigurationDialogData.C\
+	assignBondOrderResultsDialogData.C\
 	amberConfigurationDialogData.C\
 	atomOverviewData.C\
 	bondPropertiesData.C\
