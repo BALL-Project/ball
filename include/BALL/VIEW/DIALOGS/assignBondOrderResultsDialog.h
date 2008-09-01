@@ -99,7 +99,7 @@ namespace BALL
 					
 					QTreeWidgetItem *														root_;
 					
-					QTreeWidgetItem *														activated_item_;
+					QTreeWidgetItem *														activated_item_;	
 			};
 	}
 }

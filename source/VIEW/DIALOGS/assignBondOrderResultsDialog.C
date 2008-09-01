@@ -70,7 +70,7 @@ namespace BALL
 				System* org_system = sd_systems_.find(activated_item_)->second;
 				System* new_system = new System(*org_system);
 
-			  new_system->setName(solution_systems_[activated_item_]->getName());
+				new_system->setName(solution_systems_[activated_item_]->getName());
 				getMainControl()->insert(*new_system);
 				getMainControl()->update(*new_system);
 			}

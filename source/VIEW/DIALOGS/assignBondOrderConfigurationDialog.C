@@ -4,6 +4,7 @@
 
 #include <BALL/VIEW/DIALOGS/assignBondOrderConfigurationDialog.h>
 #include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/SYSTEM/path.h>
 
 #include <BALL/STRUCTURE/assignBondOrderProcessor.h>
@@ -21,13 +22,18 @@ namespace BALL
 		AssignBondOrderConfigurationDialog::AssignBondOrderConfigurationDialog(QWidget* parent, const char* name)
 			:	QDialog(parent),
 				Ui_AssignBondOrderConfigurationDialogData(),
+				ModularWidget(name),
 				PreferencesEntry()
 		{
 			setupUi(this);
 
-			setINIFileSectionName("ILP"); // TODO naming
+			setINIFileSectionName("BONDORDERASSIGNER"); 
 			setObjectName(name);
+			// for preferences	
 			registerWidgets_();
+			// for actions, icons...
+			ModularWidget::registerWidget(this);
+			hide();
 
 			// signals and slots connections
 			connect( close_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
@@ -45,6 +51,7 @@ namespace BALL
 		}
 
 		AssignBondOrderConfigurationDialog::~AssignBondOrderConfigurationDialog()
+			throw()
 		{
 		}
 
@@ -136,7 +143,15 @@ namespace BALL
 			return ascii(edit->text()).toFloat();
 		}
 
-	
+		void  AssignBondOrderConfigurationDialog::initializeWidget(MainControl&)
+		{
+		}
+
+		void  AssignBondOrderConfigurationDialog::checkMenu(MainControl& main_control)
+			throw()
+		{
+		}
+
 		void AssignBondOrderConfigurationDialog::resetOptions()
 		{
 			PreferencesEntry::restoreDefaultValues();
