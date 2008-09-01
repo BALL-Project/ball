@@ -207,6 +207,16 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 	istringstream input;
 	input.str(configfile_section);
 	
+	String line;
+	getline(input,line);
+	if(line.hasPrefix("[InputPartitioner]"))
+	{
+		ConfigIO::putbackLine(&input,line);
+		readPartitionerSection(configfile_section,filenames_map,item_positions);
+		return;
+	}
+	ConfigIO::putbackLine(&input,line);
+	
 	InputConfiguration conf;
 	try
 	{
