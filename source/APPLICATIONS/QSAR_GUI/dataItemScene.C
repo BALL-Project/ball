@@ -241,6 +241,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 							}
 							else d = input_item_at_pos;
 							main_window->all_items_pipeline_.insertAfter(csv_item,d);
+							main_window->csv_input_pipeline_.insert(csv_item);
 							
 							input_item_at_pos->appendCSVDescriptors(csv_item);
 						}
