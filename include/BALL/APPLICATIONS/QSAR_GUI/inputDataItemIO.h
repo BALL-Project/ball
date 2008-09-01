@@ -25,7 +25,7 @@ namespace BALL
 				/** reads the given config-file section, creates all neccessary SDFInputDataItems and CSVInputDataItems, registers them in the view and in the Pipeline-QSets of MainWindow and creates edges between those input items */
 				void readConfigSection(String& configfile_section, std::map<String, DataItem*>& filenames_map,list<pair<double,double> >* item_positions);
 				
-				void writeConfigSection(SDFInputDataItem* sd_item, ofstream& out);
+				void writeConfigSection(SDFInputDataItem* sd_item, ofstream& out, ostringstream& item_positions);
 				void writeConfigSection(CSVInputDataItem* sd_item, ofstream& out);
 				void writeConfigSection(PartitioningItem* item, ofstream& out, ostringstream& item_positions);
 						

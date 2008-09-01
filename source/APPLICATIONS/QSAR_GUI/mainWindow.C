@@ -1298,14 +1298,14 @@ void MainWindow::exportPipeline(QString filename)
 		if(type==CSVInputDataItem::Type)
 		{
 			CSVInputDataItem* csv_item = (CSVInputDataItem*) item;
-//			item->setSavedAs(file_prefix.c_str()+item->name()+".dat");
+			if(csv_item->append()) continue;
 			input_writer.writeConfigSection(csv_item,out);
 		}
 		else if(type==SDFInputDataItem::Type)
 		{
 			SDFInputDataItem* sdf_item = (SDFInputDataItem*) item;
-//			item->setSavedAs(file_prefix.c_str()+item->name()+".dat");
-			input_writer.writeConfigSection(sdf_item,out);
+			input_writer.writeConfigSection(sdf_item,out,positions);
+			continue;
 		}
 		else if(type==PartitioningItem::Type)
 		{

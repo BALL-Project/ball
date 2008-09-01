@@ -12,7 +12,7 @@ InputDataItemIO::InputDataItemIO(DataItemView* view)
 	view_ = view;
 }
 
-void InputDataItemIO::writeConfigSection(SDFInputDataItem* sd_item, ofstream& out)
+void InputDataItemIO::writeConfigSection(SDFInputDataItem* sd_item, ofstream& out, ostringstream& item_positions)
 {
 	String activity_string;
 	String tmp;
@@ -32,6 +32,10 @@ void InputDataItemIO::writeConfigSection(SDFInputDataItem* sd_item, ofstream& ou
 	out << "center_response = "<< sd_item->centerY() << "\n";
 	if(sd_item->getNonNumericClassNames()) out << "nonnumeric_class_names = 1\n";
 	
+	QPointF pos = sd_item->pos();
+	// save position of this item to given stream
+	item_positions<<pos.x()<<"  "<<pos.y()<<endl;
+	
 	list<CSVInputDataItem*>* csv_items = sd_item->getConnectedCSVItems();
 	for(list<CSVInputDataItem*>::iterator it=csv_items->begin(); it!=csv_items->end(); it++)
 	{
@@ -40,6 +44,10 @@ void InputDataItemIO::writeConfigSection(SDFInputDataItem* sd_item, ofstream& ou
 		out << "csv_desc_labels = "<<(*it)->getDescriptorLabels()<<"\n";
 		out << "csv_compound_labels = "<< (*it)->getCompoundLabels()<<"\n";
 		out << "csv_no_response = "<< (*it)->getNoResponseVariables()<<"\n";
+		
+		QPointF pos = (*it)->pos();
+		// save position of appended CSV-item to given stream
+		item_positions<<pos.x()<<"  "<<pos.y()<<endl;
 		
 		written_csv_.insert(*it);
 	}
