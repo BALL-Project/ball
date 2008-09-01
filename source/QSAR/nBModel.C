@@ -64,16 +64,25 @@ void NBModel::train()
 		
 		probabilities_[act].resize(no_classes,sums);
 	
-		for(uint i=1;i<=no_features;i++)
+		for(uint j=1;j<=no_compounds;j++)
 		{
-			for(uint j=1;j<=no_compounds;j++)
+			uint class_id = label_to_pos.find(Y_(j,act+1))->second;
+			no_substances_[class_id]++;
+			for(uint i=1;i<=no_features;i++)
 			{
 				uint feat_bucket = descriptor_matrix_(j,i);
-				uint class_id = label_to_pos.find(Y_(j,act+1))->second;
 				probabilities_[act][class_id](feat_bucket+1,i)++;
 				sums(feat_bucket+1,i)++;
 			}	
 		}
+		
+// 		cout<<"sums:"<<endl;
+// 		cout<<sums<<endl;
+// 		cout<<"#of feature values in each bin for CLASS 0:"<<endl;
+// 		cout<<probabilities_[0][0]<<endl;
+// 		cout<<"#of feature values in each bin for CLASS 1:"<<endl;
+// 		cout<<probabilities_[0][1]<<endl;
+		
 		for(uint i=1;i<=no_features;i++)
 		{
 			for(uint j=1; j<=discretization_steps_;j++)
