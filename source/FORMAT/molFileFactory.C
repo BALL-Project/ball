@@ -12,21 +12,21 @@
 namespace BALL
 {
 
-GenericMolFile* MolFileFactory::open(const String& name)
+GenericMolFile* MolFileFactory::open(const String& name, File::OpenMode open_mode)
 {
     String tmp = name.right(5);
     tmp.toLower(0, 5);
 
-    if(tmp.hasSuffix(".pdb")) {
-        return new PDBFile(name);
+    if(tmp.hasSuffix(".pdb") || tmp.hasSuffix(".ent") || tmp.hasSuffix(".brk")) {
+        return new PDBFile(name, open_mode);
     } else if(tmp.hasSuffix(".hin")) {
-        return new HINFile(name);
+        return new HINFile(name, open_mode);
     } else if(tmp.hasSuffix(".mol")) {
-        return new MOLFile(name);
+        return new MOLFile(name, open_mode);
     } else if(tmp.hasSuffix(".mol2")) {
-        return new MOL2File(name);
+        return new MOL2File(name, open_mode);
 //    } else if(tmp.hasSuffix(".xyz")) {
-//        return new XYZFile(name);
+//        return new XYZFile(name, open_mode);
     } else {
         return NULL;
     }
