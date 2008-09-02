@@ -78,13 +78,13 @@ namespace BALL
 				
 				/** Discretizes test data according to the given discretization of the training data.
 				@param discretization_information the discretization according to which the current descriptor_matrix should be discretized. */
-				void (ClassificationModel::* discretizeTestDataFeatures)(RowVector& compound, const Matrix& discretization_information);
+				void (ClassificationModel::* discretizeTestDataFeatures)(RowVector& compound, int bins, const Matrix& discretization_information);
 				
 				
 				/** discretizes each feature in such a way that each created bin has an equal range of values */
 				void equalSpaceDiscretization(int bins, Matrix& discretization_information);
 				
-				void equalSpaceDiscretizationTestData(RowVector& compound, const Matrix& discretization_information);
+				void equalSpaceDiscretizationTestData(RowVector& compound, int bins, const Matrix& discretization_information);
 				
 				
 				

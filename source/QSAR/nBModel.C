@@ -120,8 +120,8 @@ RowVector NBModel::predict(const vector<double>& substance, bool transform)
 	result=0;
 	
 	/// discretize the test data features according to the discretization of training data
-	(this->*discretizeTestDataFeatures)(s,min_max_);
-	
+	(this->*discretizeTestDataFeatures)(s,discretization_steps_,min_max_);
+
 	for(uint act=0; act<no_activities;act++)
 	{
 		vector<double> substance_prob(no_classes,1); // prob. for the entire substance
@@ -145,6 +145,9 @@ RowVector NBModel::predict(const vector<double>& substance, bool transform)
 		}
 		result(act+1) = best_label;	
 	}	
+	
+// 	cout<<"discretized s="<<s;
+// 	cout<<"predicted class="<<result;
 	
 	return result;	
 }

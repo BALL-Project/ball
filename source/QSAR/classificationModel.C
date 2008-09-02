@@ -128,7 +128,7 @@ void ClassificationModel::equalSpaceDiscretization(int bins, Matrix& discretizat
 }
 
 
-void ClassificationModel::equalSpaceDiscretizationTestData(RowVector& compound, const Matrix& discretization_information)
+void ClassificationModel::equalSpaceDiscretizationTestData(RowVector& compound, int bins, const Matrix& discretization_information)
 {
 	if(compound.Ncols()!=discretization_information.Ncols())
 	{
@@ -136,7 +136,6 @@ void ClassificationModel::equalSpaceDiscretizationTestData(RowVector& compound, 
 	}
 	
 	uint no_features = compound.Ncols();
-	uint bins = discretization_information.Nrows();
 
 	for(uint i=1;i<=no_features;i++)
 	{
