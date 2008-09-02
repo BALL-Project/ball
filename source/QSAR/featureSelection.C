@@ -55,9 +55,9 @@ void FeatureSelection::selectStat(int s)
 
 void FeatureSelection::setQualityIncreaseCutoff(double& d)
 {
-	if(d<0)
+	if(d<-1 || d>1)
 	{
-		throw Exception::FeatureSelectionParameterError(__FILE__,__LINE__,"The quality increase cutoff value for feature selection must be >= 0 !");
+		throw Exception::FeatureSelectionParameterError(__FILE__,__LINE__,"The quality increase cutoff value for feature selection must be between -1 and 1 !");
 	}	
 	quality_increase_cutoff_ = d;
 }

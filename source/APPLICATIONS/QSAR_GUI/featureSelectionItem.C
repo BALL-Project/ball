@@ -297,10 +297,8 @@ bool FeatureSelectionItem::execute()
 	{
 		feature_selection_->selectStat(validation_statistic_);
 	}
-	if(quality_increase_cutoff_>=0)
-	{
-		feature_selection_->setQualityIncreaseCutoff(quality_increase_cutoff_);
-	}
+	
+	feature_selection_->setQualityIncreaseCutoff(quality_increase_cutoff_);
 	
 	switch(type_)
 	{
@@ -427,7 +425,7 @@ void FeatureSelectionItem::writeConfigSection(ofstream& out)
 		}
 		out << "k_fold = "<< k() <<  "\n";
 		out << "feature_selection_type = "<< getType() <<  "\n";
-		if(quality_increase_cutoff_>0) out<<"quality_increase_cutoff = "<<quality_increase_cutoff_<<"\n";
+		out<<"quality_increase_cutoff = "<<quality_increase_cutoff_<<"\n";
 	}
 	else
 	{
