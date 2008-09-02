@@ -5,6 +5,10 @@
 # include <BALL/COMMON/global.h>
 #endif
 
+#ifndef BALL_DATATYPE_OPTIONS_H
+# include <BALL/DATATYPE/options.h>
+#endif
+
 #include <BALL/KERNEL/system.h>
 #include <QtGui/qwidget.h>
 
@@ -18,12 +22,45 @@ namespace BALL
 			: public QWidget
 		{
 			public:
+		
+				/** @name Constant Definitions
+				*/
+				//@{
+				/// Option names
+				struct BALL_EXPORT Option
+				{		
+					/**	show hydrogen atoms.
+					*/
+		 			static const char* SHOW_HYDROGENS;
+				};
+
+				/// Default values for options
+				struct BALL_EXPORT Default
+				{
+					static const bool SHOW_HYDROGENS;
+				};
+			
+				//@}
 
 				///
-				SDWidget(QWidget *parent = 0);
+				SDWidget(QWidget *parent = 0, bool show_hydrogens = false);
 
 				///
 				SDWidget(const System& system, QWidget *parent = 0, bool resize_to_parent = true);
+	
+      	///
+      	virtual ~SDWidget();
+
+				/** @name Public Attributes
+				*/
+				//@{
+				/// options
+				Options options;
+
+				/** Resets the options to default values.
+				*/
+				void setDefaultOptions();
+				//@}
 
 				///
 				void plot(const System& system, bool clear = true, bool create_sd = true);
