@@ -125,7 +125,7 @@ namespace BALL
 				queries->update();
 
 				// now update the view
-				sdwidget_.plot(S, true, false); //DO we need this?
+				sdwidget_.plot(S, true, false); 
 				switchView(current_item, num_of_sol-1);
 			}	
 			else

@@ -179,8 +179,6 @@ namespace BALL
 				static const bool OVERWRITE_TRIPLE_BOND_ORDERS;
 				static const bool OVERWRITE_SELECTED_BONDS;
 				static const bool ADD_HYDROGENS;
-				static const bool OVERWRITE_CHARGES;
-				static const bool ASSIGN_CHARGES;
 				static const bool KEKULIZE_RINGS;
 				static const String ALGORITHM;
 				static const String INIFile;
