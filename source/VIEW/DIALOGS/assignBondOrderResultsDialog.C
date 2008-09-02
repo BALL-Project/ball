@@ -21,7 +21,7 @@ namespace BALL
 			: QDialog(parent),
 				Ui_AssignBondOrderResultsDialogData(),
 				ModularWidget(name),
-				sdwidget_(),
+				sdwidget_(0,true),
 				bond_order_processor_(0),
 				root_(NULL), 
 				activated_item_(NULL)
@@ -136,21 +136,7 @@ namespace BALL
 		
 		void AssignBondOrderResultsDialog::finished()
 		{
-/*			hide();
-			
-			QTreeWidgetItem* item = queries->currentItem();
-			// is this item connected with a system?
-			if (sd_systems_.find(item) == sd_systems_.end()) return;
-
-			//ParsedResult_& res = descriptions_.find(item)->second;
-
-			System* org_system = sd_systems_.find(item)->second;
-			System* new_system = new System(*org_system);
-
-			new_system->setName(res.name);
-			getMainControl()->insert(*new_system);
-			getMainControl()->update(*new_system);
-			*/
+			hide();	
 		}
 		
 		void AssignBondOrderResultsDialog::createEntries()
@@ -287,10 +273,9 @@ namespace BALL
 		void AssignBondOrderResultsDialog::checkMenu(MainControl& main_control)
 			throw()
 		{
-			bool busy = main_control.compositesAreLocked();
-			//TODO: inhibit actions, if the composites are already busy
+			// We added the actions in MainControl, so this functionality is done there!
+			//bool busy = main_control.compositesAreLocked();
 			//action1_->setEnabled(!busy);
-			//action2_->setEnabled(!busy);
 		}
 
 	}

@@ -12,11 +12,17 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		SDWidget::SDWidget(QWidget *parent)
+		const char* SDWidget::Option::SHOW_HYDROGENS = "sd_widget_show_hydrogens";
+		const bool  SDWidget::Default::SHOW_HYDROGENS = false;
+
+		SDWidget::SDWidget(QWidget *parent, bool show_hydrogens)
 			: QWidget(parent),
+				options(),
 				resize_to_parent_(true),
 				clear_(true)
 		{
+			setDefaultOptions();
+			options[SDWidget::Option::SHOW_HYDROGENS] = show_hydrogens;
 			setBackgroundRole(QPalette::Base);
 			setAutoFillBackground(true);
 		}
@@ -32,6 +38,9 @@ namespace BALL
 			plot(system);
 		}
 
+		SDWidget::~SDWidget()
+		{}
+		
 		void SDWidget::plot(const System& system, bool clear, bool create_sd)
 		{
 			clear_ = clear;
@@ -83,12 +92,15 @@ namespace BALL
 			setFont(newFont);
  
 			QFontMetrics fontMetrics(newFont);
+			
+			// check if hydrogen atoms should be shown!
+			bool show_H = options.getBool(Option::SHOW_HYDROGENS);
 
 			AtomIterator at_it = system_.beginAtom();
 			std::set<Atom*> already_seen;
 			for (; +at_it; ++at_it)
 			{
-				if (at_it->getElement() == PTE[Element::H]) continue;
+				if ((at_it->getElement() == PTE[Element::H]) && !show_H) continue;
 				already_seen.insert(&(*at_it));	
 
 				Atom::BondIterator b_it = at_it->beginBond();
@@ -104,7 +116,7 @@ namespace BALL
 								 // treat each bond only once
 								 (std::find(already_seen.begin(), already_seen.end(), partner) == already_seen.end()) 
 								 // we don't draw hydrogens
-							&& (partner->getElement() != PTE[Element::H])
+							&& !((partner->getElement() == PTE[Element::H]) && !show_H)
 						 )
 					{
 						Vector3 to3d = partner->getPosition() - center;
@@ -243,6 +255,13 @@ namespace BALL
 			clear_ = true;
 			system_.clear();
 			update();
+		}
+		
+		void SDWidget::setDefaultOptions()
+		{		
+	
+	 		options.setDefaultBool(SDWidget::Option::SHOW_HYDROGENS,
+	 												 	 SDWidget::Default::SHOW_HYDROGENS);
 		}
 
 	}
