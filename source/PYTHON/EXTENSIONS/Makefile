@@ -67,7 +67,7 @@ BALLmodule.so:  $(CPP_OBJECTS)
 	$(DYNAR) $(DYNAROPTS_PYMODULE) BALLmodule.so $(SIP_OBJECTS) $(PYBALL_OBJECTS) $(SIP_LIB) -L$(BALL_PATH)/lib $(BALL_LIBS) $(PYTHON_LIBS)
 
 install:	BALLmodule.so
-	cp BALLmodule.so  $(BALL_PATH)/lib
+	cp BALLmodule.so  $(BALL_PATH)/lib/$(BINFMT)/
 	 
 CLEAN_FILES = \
 	BALLmodule.so\
