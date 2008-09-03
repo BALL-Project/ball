@@ -21,7 +21,8 @@ DIRS=\
 	MODELS\
 	PRIMITIVES\
 	RENDERING\
-	WIDGETS
+	WIDGETS\
+	INPUT
 
 default: dirs
 
