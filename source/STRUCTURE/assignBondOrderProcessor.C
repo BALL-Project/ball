@@ -44,6 +44,8 @@
 //#define UNNORMALIZED_DEBUG 1
 #undef UNNORMALIZED_DEBUG
 
+//#define DEBUG_RULES
+#undef DEBUG_RULES
 
 using namespace std;
 using namespace BALL::VIEW;
@@ -1578,7 +1580,26 @@ cout << " AssignBondOrderProcessor::preassignPenaltyClasses_()" << endl;
 #ifdef DEBUG_READ
 cout << "preassignPenaltyClasses_() HIT : " << at->getFullName() << " with index " << at->getIndex() << " assigned to block  "<< j+1 << " : " << block_definition_[j].first << "   "
 		<<  block_definition_[j].second << endl;
+#endif	
+
+
+#ifdef DEBUG_RULES
+	int valence = 0;
+	Atom::BondIterator b_it;	
+	for (b_it=at->beginBond(); b_it != at->endBond(); b_it++)
+	{
+		valence+=b_it->getOrder();
+	}
+
+	int current_start_index   = block_to_start_idx_[j];
+	int current_start_valence = block_to_start_valence_[j];
+
+	if (penalties_[current_start_index + valence  - current_start_valence] > 0)
+	{ 	
+		cout <<   at->getFullName()  << " :  Rule " << j+1 << "  penalty: " << 	penalties_[current_start_index + valence  - current_start_valence] << endl;
+	}
 #endif
+
 						// store the penalty block's index
 						// NOTE: we start counting at 0!
 						atom_to_block_[i][0]=j;
