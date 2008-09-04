@@ -750,7 +750,7 @@ template <>
 			planCalculated_ = true;
 			planForward_  = fftwl_plan_dft_2d(lengthX_, lengthY_, reinterpret_cast<fftwl_complex*>(dataAdress_),
 																							reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_FORWARD, FFTW_ESTIMATE);
-			planBackward_ = fftwl_plan_dft_2d(lengthX_, lengthY_, reinterpret_cast<fftwf_complex*>(dataAdress_),
+			planBackward_ = fftwl_plan_dft_2d(lengthX_, lengthY_, reinterpret_cast<fftwl_complex*>(dataAdress_),
 																							reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);	
 		}
 		else
