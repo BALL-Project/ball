@@ -657,6 +657,13 @@ namespace BALL
 			*/
 			virtual void resizeGL(int width, int height);
 
+			/**
+			 * Handle custom events.
+			 * This function handles custom events that for example are sent by the input device drivers
+			 * \param evt A pointer to the event that shell be processed
+			 */
+			virtual void customEvent(QEvent* evt);
+
 			/** Catch mouse move events, store the actual mouse position in this scene
 					widget and sent events accordingly.
 					\param  e the QT-mouse event (See QT-library for mouse events)

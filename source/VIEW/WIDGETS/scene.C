@@ -32,6 +32,8 @@
 #include <BALL/VIEW/PRIMITIVES/disc.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
 
+#include <BALL/VIEW/INPUT/transformationEvent6D.h>
+
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/directory.h>
@@ -1862,6 +1864,33 @@ namespace BALL
 		}
 
 		//##########################EVENTS#################################
+
+		void Scene::customEvent(QEvent* evt)
+		{
+			TransformationEvent6D* trans = dynamic_cast<TransformationEvent6D*>(evt);
+
+			if(trans) {
+				move(trans->getTranslation() * 0.01);
+
+				Camera& camera = stage_->getCamera();
+
+				Quaternion q1;
+				q1.set(camera.getLookUpVector(), 0.5*Angle(-trans->getRotation().y, false).toRadian());
+
+				Quaternion q2;
+				q2.set(camera.getRightVector(), 0.5*Angle(-trans->getRotation().x, false).toRadian());
+
+				Quaternion q3;
+				q3.set(camera.getViewVector(), 0.5*Angle(-trans->getRotation().z, false).toRadian());
+
+				q1 += q2 + q3;
+
+				camera.rotate(q1, system_origin_);
+
+				printf("Got event");
+			}
+
+		}
 
 		void Scene::mouseMoveEvent(QMouseEvent* e)
 		{

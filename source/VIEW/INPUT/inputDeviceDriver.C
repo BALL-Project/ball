@@ -17,7 +17,6 @@ namespace BALL
 
 		InputDeviceDriver::~InputDeviceDriver()
 		{
-			tearDown();
 		}
 
 		Scene* InputDeviceDriver::getReceiver()
