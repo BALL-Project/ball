@@ -1275,7 +1275,7 @@ namespace BALL
 			HashSet<Composite*>::Iterator rit = roots.begin();
 			for (; +rit; ++rit)
 			{
-				getMainControl()->update((**rit), false);
+				getMainControl()->updateRepresentationsOf((**rit), false);
 			}
 		}
 
