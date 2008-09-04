@@ -12,6 +12,11 @@ namespace BALL
 		{
 		}
 
+		int SpaceNavigatorDriver::deadzone(int x) {
+			int sign = x > 0 ? 1 : -1;
+			return x * sign > 10 ? x  - sign * 10 : 0.0;
+		}
+
 		void SpaceNavigatorDriver::run()
 		{
 		spnav_event sev;
@@ -25,16 +30,16 @@ namespace BALL
 				}
 
 				if(spnav_poll_event(&sev) && (sev.type == SPNAV_EVENT_MOTION)) {
-					printf("got motion event: t(%d, %d, %d) ", sev.motion.x, sev.motion.y, sev.motion.z);
-					printf("r(%d, %d, %d)\n", sev.motion.rx, sev.motion.ry, sev.motion.rz);
+					printf("got motion event: t(%d, %d, %d) ", deadzone(sev.motion.x), deadzone(sev.motion.y), deadzone(sev.motion.z));
+					printf("r(%d, %d, %d)\n", deadzone(sev.motion.rx), deadzone(sev.motion.ry), deadzone(sev.motion.rz));
 
-					emitPositionChange(sev.motion.x, sev.motion.y, sev.motion.z,
-					                   sev.motion.rx, sev.motion.ry, sev.motion.rz);
+					emitPositionChange( deadzone(sev.motion.x), deadzone(sev.motion.y), deadzone(sev.motion.z),
+					                    deadzone(sev.motion.rx), deadzone(sev.motion.ry), deadzone(sev.motion.rz));
 
 					drop=true;
 				}
 
-				msleep(10);
+				msleep(20);
 			}
 		}
 
