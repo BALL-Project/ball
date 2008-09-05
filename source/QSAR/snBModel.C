@@ -114,7 +114,7 @@ RowVector SNBModel::predict(const vector<double>& substance, bool transform)
 		// finally find most probable class
 		vector<double> substance_prob(no_classes,1); // the prob for the given subst. to be in each of the classes
 		double max=0;
-		int best_label=0;
+		int best_label=labels_[0];
 		for(uint i=0; i<no_features;i++)
 		{
 			for(uint j=0; j<no_classes;j++)

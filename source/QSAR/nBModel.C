@@ -126,7 +126,7 @@ RowVector NBModel::predict(const vector<double>& substance, bool transform)
 	{
 		vector<double> substance_prob(no_classes,1); // prob. for the entire substance
 		double max=0;
-		int best_label=0;
+		int best_label=labels_[0];
 		
 		for(uint i=1; i<=no_features;i++)
 		{
@@ -136,7 +136,7 @@ RowVector NBModel::predict(const vector<double>& substance, bool transform)
 			{
 				substance_prob[j] *= probabilities_[act][j](feature_bucket+1,i);
 				
-				if(i==no_features-1 && substance_prob[j]>max)
+				if(i==no_features && substance_prob[j]>max)
 				{
 					max = substance_prob[j];
 					best_label = labels_[j];
@@ -146,8 +146,10 @@ RowVector NBModel::predict(const vector<double>& substance, bool transform)
 		result(act+1) = best_label;	
 	}	
 	
-// 	cout<<"discretized s="<<s;
-// 	cout<<"predicted class="<<result;
+// 	cout<<"no features = "<<s.Ncols()<<endl;
+// 	cout<<"descriptor_IDs_="<<descriptor_IDs_.toStr()<<endl;
+//  	cout<<"discretized s="<<s;
+//  	cout<<"predicted class="<<result;
 	
 	return result;	
 }
@@ -320,4 +322,5 @@ void NBModel::readFromFile(string filename)
 		}
 	}
 	input.close();
+	
 }

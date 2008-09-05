@@ -99,6 +99,8 @@ namespace BALL
 
 				virtual void addToPipeline();
 				virtual void removeFromPipeline();
+				
+				BALL::String getMouseOverText();
 		
 			protected:
 			

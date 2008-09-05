@@ -371,6 +371,9 @@ void ClassificationValidation::calculateOverallAccuracy()
 		N += (int)confusion_matrix_(j,1);
 	}
 	accuracy_ = ((double)TP) / N;
+	
+// 	cout<<confusion_matrix_;
+// 	cout<<"overall ACC="<<accuracy_<<endl;
 }
 		
 

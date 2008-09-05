@@ -507,7 +507,7 @@ void ValidationItem::writeConfigSection(ofstream& out)
 	int s = getValidationStatistic();
 	String stat = modelItem()->getRegistryEntry()->getStatName(s);
 	if(stat!="") out<< "classification_statistic = "<<stat.c_str()<<endl;
-	//out << "validation_data_file = "<< "\n";    /// TODO: external validation not supported yet
+	
 	if(type_>0) out << "k_fold = "<< k() <<  "\n";
 	if(num_of_samples_>0) out << "bootstrap_samples = "<< num_of_samples_ << "\n";
 	if(num_of_runs_>0) out << "no_of_permutation_tests = " <<  num_of_runs_ << "\n";
@@ -536,4 +536,17 @@ void ValidationItem::addExternalFoldValidation(ValidationItem* item)
 int ValidationItem::getNoExternalFolds()
 {
 	return external_validations_.size();
+}
+
+BALL::String ValidationItem::getMouseOverText()
+{
+	String message="";
+	if(view_->name!="view") return message;
+	
+	if(!model_item_->getRegistryEntry()->regression)
+	{
+		message+="using ";
+		message += modelItem()->getRegistryEntry()->getStatName(validation_statistic_);
+	}
+	return message;				
 }

@@ -64,6 +64,7 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 				statistic_box_->addItem((*statistics)[i].c_str(),i);
 			}
 
+			if(statistics->size()>2) statistic_box_->setCurrentIndex(2); // use overall ACC as default
 			layout3->addWidget(label3);layout3->addWidget(statistic_box_);
 			main_layout->addLayout(layout3);
 		}
