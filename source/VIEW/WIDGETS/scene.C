@@ -271,6 +271,8 @@ namespace BALL
 
 			if (RTTI::isKindOf<RepresentationMessage>(*message)) 
 			{
+				bool needs_updategl = true;
+
 				RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
 				Representation* rep = rm->getRepresentation();
 				switch (rm->getType())
@@ -290,13 +292,19 @@ namespace BALL
 						gl_renderer_->removeRepresentation(*rep);
 						break;
 
+					case RepresentationMessage::FINISHED_UPDATE:
+						needs_updategl = false;
+						break;
+
 					default:
 						break;
 				}
 
 				content_changed_ = true;
 
-				update(false);
+				if (needs_updategl)
+					update(false);
+
 				return;
 			}
 
@@ -2860,7 +2868,6 @@ namespace BALL
 		void Scene::updateGL()
 		{
  			QGLWidget::updateGL();
-
 		}
 
 		void Scene::setOffScreenRendering(bool enabled, Size factor)
