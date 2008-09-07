@@ -59,10 +59,6 @@ namespace BALL
 			///
 			virtual void initializeWidget(MainControl& main_control);
 
-			///
-			virtual void checkMenu(MainControl& main_control)
-				throw();
-
 			public slots:
 
 			///

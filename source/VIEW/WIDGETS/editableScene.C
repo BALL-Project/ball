@@ -1506,6 +1506,7 @@ void EditableScene::computeBondOrders()
 	AssignBondOrderProcessor abop;
 
 	// read the options from the dialog
+	// bond_order_dialog.setOptionsForProcessor(abop);
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_singleBO_box->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_doubleBO_box->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_tripleBO_box->isChecked();
@@ -1547,6 +1548,8 @@ void EditableScene::computeBondOrders()
 		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= true;
 	}
 
+	// automatically applying a solution might confuse the user --> set to false
+	abop.options.setBool(AssignBondOrderProcessor::Option::APPLY_FIRST_SOLUTION, false);
 
 	// apply
 	containers.front()->apply(abop);

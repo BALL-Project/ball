@@ -207,6 +207,8 @@ namespace BALL
 				//switch View to the first solution
 				queries->setCurrentItem(first_item_in_list);
 				first_item_in_list->setSelected(true);
+
+				bond_order_processor_->resetBondOrders();
 				switchView(first_item_in_list, 0);
 			}
 		}
@@ -269,14 +271,5 @@ namespace BALL
 		void AssignBondOrderResultsDialog::initializeWidget(MainControl&)
 		{
 		}
-
-		void AssignBondOrderResultsDialog::checkMenu(MainControl& main_control)
-			throw()
-		{
-			// We added the actions in MainControl, so this functionality is done there!
-			//bool busy = main_control.compositesAreLocked();
-			//action1_->setEnabled(!busy);
-		}
-
 	}
 }
