@@ -89,18 +89,6 @@ namespace BALL
 
 		public:
 
-			// TODO: move to the GAFF-Stuff
-			enum BOND_TYPES
-			{
-				sb,
-				SB,
-				db,
-				DB,
-				TB,
-				DL,
-				AB
-			};
-
 			/** @name Constant Definitions
 			*/
 			//@{

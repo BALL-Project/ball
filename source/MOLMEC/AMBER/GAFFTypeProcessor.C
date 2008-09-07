@@ -2,6 +2,8 @@
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/QSAR/aromaticityProcessor.h>
 #include <BALL/KERNEL/PTE.h>
+#include <BALL/KERNEL/selector.h>
+#include <BALL/KERNEL/forEach.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/STRUCTURE/assignBondOrderProcessor.h>
 
@@ -50,6 +52,8 @@ namespace BALL
 		if (RTTI::isKindOf<Molecule>(composite))
 		{
 			Molecule *mol = RTTI::castTo<Molecule>(composite);
+
+			precomputeBondProperties_(mol);
 
 			precomputeAtomProperties_(mol);
 
@@ -122,9 +126,8 @@ namespace BALL
 		}
 	}
 
-	// store connectivity, number of attached H-atoms and 
-	// number of attached N,O,F,Cl and Br-atoms for every atom in molecule
-	void GAFFTypeProcessor::precomputeAtomProperties_(Molecule* molecule)
+	// compute aromaticity, ring memberships, GAFF bond typization, ...
+	void GAFFTypeProcessor::precomputeBondProperties_(Molecule* molecule)
 	{
 		current_molecule_ = molecule;
 		RingPerceptionProcessor rpp;
@@ -134,6 +137,15 @@ namespace BALL
 		arp.options.setBool(AromaticityProcessor::Option::OVERWRITE_BOND_ORDERS, false);
 		arp.aromatize(sssr_, *molecule);
 	
+		annotateBondTypes_();
+	}
+
+	// store connectivity, number of attached H-atoms and 
+	// number of attached N,O,F,Cl and Br-atoms for every atom in molecule
+	// NOTE: this function requires that precomputeBondProperties_ has been
+	//       called previously
+	void GAFFTypeProcessor::precomputeAtomProperties_(Molecule* molecule)
+	{
 		annotateRingSizes_();
 		annotateAliphaticAndAromaticRingAtoms_();
 		annotatePlanarRingAtoms_();
@@ -193,6 +205,97 @@ namespace BALL
 		}
 	}
 	
+	void GAFFTypeProcessor::annotateBondTypes_()
+	{
+		// store the old selection
+		std::list<Atom*> old_atom_selection;
+		std::list<Bond*> old_bond_selection;
+
+		// NOTE: we store each bond twice, but this does not really matter...
+		for (AtomIterator a_it = current_molecule_->beginAtom(); +a_it; ++a_it)
+		{
+			if (a_it->isSelected())
+			{
+				old_atom_selection.push_back(&*a_it);
+			}
+			for (Atom::BondIterator b_it = a_it->beginBond(); +b_it; ++b_it)
+			{
+				if (b_it->isSelected())
+				{
+					old_bond_selection.push_back(&*b_it);
+				}
+			}
+		}
+
+		current_molecule_->deselect();
+		
+		// find conjugated atoms:
+		// select all carboxyl anions and nitro groups for delocalized bond types 
+		Selector select("SMARTS([#16D1,#8D1]) AND SMARTS([#16D1,#8D1]~[*D3]~[#16D1,#8D1])");
+		//						Selector select("SMARTS([#16D1,#8D1]) AND SMARTS([#16D1,#8D1]~*~[#16D1,#8D1]) AND (SMARTS(a) OR SMARTS(*=,#*-,=*=,#*) OR SMARTS([N,P,O,S]=,#*-[*;!H0]) OR SMARTS(*=,#*-[F,Cl,Br,I]) OR SMARTS(*=,#*-[N,P,O,S;!H0]))");
+		current_molecule_->apply(select);
+
+		// we know that the selected atoms only have one bond each. so we only need to make sure it really is a double bond
+		List<Atom*> selected_atoms = select.getSelectedAtoms();
+		List<Atom*>::iterator it = selected_atoms.begin();					
+		for(;it != selected_atoms.end(); ++it)
+		{
+			Atom::BondIterator bond_it = (*it)->beginBond();
+			for(;+bond_it;++bond_it)
+			{
+				if (bond_it->getOrder() == Bond::ORDER__DOUBLE)
+					bond_it->setProperty("GAFFBondType", DL);
+			}
+		}
+
+		// restore the old selection
+		current_molecule_->deselect();
+
+		for (list<Atom*>::iterator al_it = old_atom_selection.begin(); al_it != old_atom_selection.end(); ++al_it)
+			(*al_it)->select();
+		for (list<Bond*>::iterator bl_it = old_bond_selection.begin(); bl_it != old_bond_selection.end(); ++bl_it)
+			(*bl_it)->select();
+
+		AtomIterator a_it = current_molecule_->beginAtom();
+		Atom::BondIterator b_it;
+		BALL_FOREACH_BOND(*current_molecule_, a_it, b_it)
+		{
+			// b_it is no delocalized bond 
+			if(!b_it->hasProperty("GAFFBondType") || (b_it->getProperty("GAFFBondType").getInt() != DL))
+			{
+				switch(b_it->getOrder())
+				{
+					case Bond::ORDER__SINGLE:
+						if (b_it->isAromatic())
+						{
+							b_it->setProperty("GAFFBondType", sb);
+						}
+						else
+						{
+							b_it->setProperty("GAFFBondType",  SB);
+						}
+						break;
+					case Bond::ORDER__DOUBLE:
+						if (b_it->isAromatic())
+						{
+							b_it->setProperty("GAFFBondType",  db);
+						}
+						else
+						{
+							b_it->setProperty("GAFFBondType",  DB);
+						}
+						break;
+					case Bond::ORDER__TRIPLE:
+						b_it->setProperty("GAFFBondType", TB);
+						break;
+					case Bond::ORDER__AROMATIC:
+						b_it->setProperty("GAFFBondType", AB);
+						break;
+				}
+			}
+		}
+	}
+
 	void GAFFTypeProcessor::annotateRingSizes_()
 	{
 		std::vector<std::vector<Atom* > >::iterator ring_it = sssr_.begin();
@@ -325,8 +428,8 @@ namespace BALL
 					for(;+constBond_it;++constBond_it)
 					{
 						if(    (constBond_it->hasProperty("GAFFBondType")) && 
-									((constBond_it->getProperty("GAFFBondType").getInt() == AssignBondOrderProcessor::DB)
-								|| (constBond_it->getProperty("GAFFBondType").getInt() == AssignBondOrderProcessor::db)))
+									((constBond_it->getProperty("GAFFBondType").getInt() == DB)
+								|| (constBond_it->getProperty("GAFFBondType").getInt() == db)))
 						{
 							const Atom* partner_atom = constBond_it->getBoundAtom(**atom_it);
 							if (!partner_atom->getProperty("InRing").getBool())
@@ -525,15 +628,15 @@ namespace BALL
 
 							Index bond_type = bond_it->getProperty("GAFFBondType").getInt();
 
-							if ( (bond_type == AssignBondOrderProcessor::SB) || (bond_type == AssignBondOrderProcessor::sb) )
+							if ( (bond_type == SB) || (bond_type == sb) )
 							{
 								// this is a single or aromatic single bond => propagate the same type as the parent atom
 								new_type[child] = new_type[current_atom];
 								--number_to_cleanup;
 							}
-							else if ( 	 (bond_type == AssignBondOrderProcessor::DB) 
-												|| (bond_type == AssignBondOrderProcessor::db) 
-												|| (bond_type == AssignBondOrderProcessor::TB) )
+							else if ( 	 (bond_type == DB) 
+												|| (bond_type == db) 
+												|| (bond_type == TB) )
 							{
 								// this is a double, aromatic double, or triple bond => invert the type
 								new_type[child] = -new_type[current_atom];
@@ -629,7 +732,7 @@ namespace BALL
 
 							Index bond_type = bond_it->getProperty("GAFFBondType").getInt();
 
-							if (bond_type == AssignBondOrderProcessor::SB)
+							if (bond_type == SB)
 							{
 								// this is a single bond => propagate the same type as the parent atom
 								new_type[child] = new_type[current_atom];

@@ -67,6 +67,17 @@ namespace BALL
 				static const bool GAFF_ATOMTYPE_POSTPROCESSING;
 			};
 
+			enum BOND_TYPES
+			{
+				sb,
+				SB,
+				db,
+				DB,
+				TB,
+				DL,
+				AB
+			};
+
 			GAFFTypeProcessor();
 			GAFFTypeProcessor(const Options& new_options);
 			virtual ~GAFFTypeProcessor();
@@ -91,10 +102,16 @@ namespace BALL
 			void parseAtomtypeTableFile_()
 				throw(Exception::FileNotFound);
 	
+			/// compute aromaticity, ring memberships, GAFF bond typization, ...
+			void precomputeBondProperties_(Molecule* molecule);
+
 			/** Store connectivity, number of attached H-atoms and 
 			 *  number of attached N,O,F,Cl and Br-atoms for every atom in molecule
 			 */
 			void precomputeAtomProperties_(Molecule* molecule);
+
+			/// Helper for precomputeBondProperties
+			void annotateBondTypes_();
 
 			/// Helper for precomputeAtomProperties
 			void annotateRingSizes_();

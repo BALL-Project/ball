@@ -19,7 +19,6 @@
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/expression.h>
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
-#include <BALL/KERNEL/selector.h>
 #include <BALL/STRUCTURE/hybridisationProcessor.h>
 
 // Qt
@@ -749,80 +748,6 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 						}
 
 					}
-					/*
-					 *       					GAFF STUFF 
-					 *       TODO: Move somewhere else!!
-					 */
-					if (solutions_.size() > 0)
-					{		
-						if (options.getBool(Option::APPLY_FIRST_SOLUTION))
-							apply(0);	
-
-						// set informations required for atom type assignment.
-						// select all carboxyl anions and nitro groups for 
-						// delocalized bond types in GAFF
-						//TODO clear Selection for system!!!
-
-						// find conjugated atoms
-						ac.deselect();
-						Selector select("SMARTS([#16D1,#8D1]) AND SMARTS([#16D1,#8D1]~[*D3]~[#16D1,#8D1])");
-//						Selector select("SMARTS([#16D1,#8D1]) AND SMARTS([#16D1,#8D1]~*~[#16D1,#8D1]) AND (SMARTS(a) OR SMARTS(*=,#*-,=*=,#*) OR SMARTS([N,P,O,S]=,#*-[*;!H0]) OR SMARTS(*=,#*-[F,Cl,Br,I]) OR SMARTS(*=,#*-[N,P,O,S;!H0]))");
-						ac.apply(select);
-
-						// we know that the selected atoms only have one bond each. so we only need to make sure it really is a double bond
-						List<Atom*> selected_atoms = select.getSelectedAtoms();
-						List<Atom*>::iterator it = selected_atoms.begin();					
-						for(;it != selected_atoms.end(); ++it)
-						{
-							Atom::BondIterator bond_it = (*it)->beginBond();
-							for(;+bond_it;++bond_it)
-							{
-								if (bond_it->getOrder() == Bond::ORDER__DOUBLE)
-									bond_it->setProperty("GAFFBondType", DL);
-							}
-						}
-						ac.deselect();
-
-						AtomIterator a_it = ac.beginAtom();
-						Atom::BondIterator b_it;
-						BALL_FOREACH_BOND(ac, a_it, b_it)
-						{
-							//TODO definition of  AB aromatic bond??
-							// b_it is no delocalized bond 
-							if(!b_it->hasProperty("GAFFBondType") || (b_it->getProperty("GAFFBondType").getInt() != DL))
-							{
-								switch(b_it->getOrder())
-								{
-									case 1:
-										if (b_it->getProperty("IsAromatic").getBool())
-										{
-											b_it->setProperty("GAFFBondType", sb);
-										}
-										else
-										{
-											b_it->setProperty("GAFFBondType",  SB);
-										}
-										break;
-									case 2:
-										if (b_it->getProperty("IsAromatic").getBool())
-										{
-											b_it->setProperty("GAFFBondType",  db);
-										}
-										else
-										{
-											b_it->setProperty("GAFFBondType",  DB);
-										}
-										break;
-									case 3:
-										b_it->setProperty("GAFFBondType", TB);
-										break;
-								}
-							}
-						}
-					}
-					/*
-					 *   END OF GAFF STUFF
-					 */
 				} // end of if preassign worked out
 			} // end of if molecule
 		}
