@@ -486,7 +486,10 @@ namespace BALL
 			abop.options[AssignBondOrderProcessor::Option::ADD_HYDROGENS] 									= bond_order_dialog_.add_hydrogens_checkBox->isChecked();
 			abop.options[AssignBondOrderProcessor::Option::ALGORITHM] 											= bond_order_dialog_.ILP_button->isChecked() ? AssignBondOrderProcessor::Algorithm::ILP : AssignBondOrderProcessor::Algorithm::A_STAR;
 			abop.options[AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING]						= (bond_order_dialog_.penalty_balance_slider->value()/100.);
-		
+			
+			// automatically applying a solution might confuse the user --> set to false
+			abop.options.setBool(AssignBondOrderProcessor::Option::APPLY_FIRST_SOLUTION, false);
+			
 			// get the parameter folder
 			abop.options[AssignBondOrderProcessor::Option::INIFile] = ascii(bond_order_dialog_.parameter_file_edit->text());
 

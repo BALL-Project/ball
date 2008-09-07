@@ -90,6 +90,9 @@ namespace BALL
 	const char* AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING = "bond_length_weighting";
 	const float AssignBondOrderProcessor::Default::BOND_LENGTH_WEIGHTING = 0.;
 
+	const char* AssignBondOrderProcessor::Option::APPLY_FIRST_SOLUTION = "apply_first_solution";
+	const bool  AssignBondOrderProcessor::Default::APPLY_FIRST_SOLUTION = true;
+
 	AssignBondOrderProcessor::AssignBondOrderProcessor()
 		: UnaryProcessor<AtomContainer>(),
 			options(),
@@ -475,6 +478,7 @@ cout << " \t alpha: " << options[Option::Option::BOND_LENGTH_WEIGHTING] << endl;
 cout << " \t max bond order: " << options[Option::MAX_BOND_ORDER] << endl;
 cout << " \t max number of solutions " << options[Option::MAX_NUMBER_OF_SOLUTIONS] << endl;
 cout << " \t compute also non-optimal solutions: " << options.getBool(Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS) << endl;
+cout << " \t apply first solution : " <<  options.getBool(Option::APPLY_FIRST_SOLUTION) << endl;
 cout << " \t valid : " << valid_ << endl;
 cout << endl;
 #endif
@@ -497,6 +501,9 @@ cout << endl;
 			{
 				// Store the AtomContainer
 				ac_ = &ac;
+
+				// Store the original bond orders as a "special" solution
+				storeOriginalConfiguration_();
 
 				// Store the total number of bonds
 				total_num_of_bonds_ = ac.countBonds();
@@ -737,7 +744,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 									  && (last_sol_is_optimal || (compute_also_non_optimal_solutions_))
 									)
 						{	
-							found_another = computeNextSolution();
+							found_another = computeNextSolution(options.getBool(Option::APPLY_FIRST_SOLUTION));
 							last_sol_is_optimal &= (getTotalPenalty(0)==getTotalPenalty(solutions_.size()-1));
 						}
 
@@ -747,8 +754,9 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 					 *       TODO: Move somewhere else!!
 					 */
 					if (solutions_.size() > 0)
-					{				
-						apply(0);	
+					{		
+						if (options.getBool(Option::APPLY_FIRST_SOLUTION))
+							apply(0);	
 
 						// set informations required for atom type assignment.
 						// select all carboxyl anions and nitro groups for 
@@ -1751,6 +1759,23 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		return max_penalty;
 	}
 
+	void AssignBondOrderProcessor::storeOriginalConfiguration_()
+	{
+		starting_configuration_.valid = true;
+
+		AtomIterator a_it = ac_->beginAtom();
+		Atom::BondIterator b_it;
+		BALL_FOREACH_BOND(*ac_, a_it, b_it)
+		{
+			starting_configuration_.bond_orders[&*b_it] = b_it->getOrder();
+		}
+	}
+
+	void AssignBondOrderProcessor::resetBondOrders()
+	{
+		apply_(starting_configuration_);
+		last_applied_solution_ = -1;
+	}
 
 	void AssignBondOrderProcessor::setDefaultOptions()
 	{		
@@ -1791,6 +1816,8 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		options.setDefaultReal(AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING,
 													 AssignBondOrderProcessor::Default::BOND_LENGTH_WEIGHTING);	
 
+		options.setDefaultBool(AssignBondOrderProcessor::Option::APPLY_FIRST_SOLUTION,
+ 														AssignBondOrderProcessor::Default::APPLY_FIRST_SOLUTION);
 	}
 
 	Size  AssignBondOrderProcessor::getNumberOfBondOrdersSet()
@@ -1802,87 +1829,96 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		return 0;
 	}
 
+	bool AssignBondOrderProcessor::apply_(Solution_& solution)
+	{
+		if (solution.valid)
+		{
+			// we assume, that the AtomContainer is valid and the correct one! 
+
+			// delete all former VIRTUAL BONDs
+			// did we already applied a solution?
+			if (last_applied_solution_>=0)
+			{	
+				for (Size j=0; j < solutions_[last_applied_solution_].atoms_to_delete.size(); j++)
+				{
+					//NOTE: all adajacent bonds of these atoms will be deleted automatically
+					delete(solutions_[last_applied_solution_].atoms_to_delete[j]); 
+				}
+			}
+
+			// set all the original bonds to the assigned order
+			AtomIterator a_it = ac_->beginAtom();
+			Atom::BondIterator b_it = a_it->beginBond();
+
+			HashMap<Bond*, int> tmp_bond_orders = solution.bond_orders;
+
+			BALL_FOREACH_BOND(*ac_, a_it, b_it)
+			{
+				HashMap<Bond*, int>::Iterator it = tmp_bond_orders.find(&*b_it);
+				if (it != solution.bond_orders.end())
+				{
+					b_it->setOrder(it->second);
+				}
+			}
+
+			// for each virtual bond add the corresponding number of hydrogens
+			solution.atoms_to_delete.clear();
+			//solutions_[i].bonds_to_delete.clear();
+
+			HashMap<Atom*, int> tmp_virtual_hydrogens = solution.number_of_virtual_hydrogens;
+
+			int num_of_atoms = ac_->countAtoms()+1;
+
+			vector<Vector3> pos;
+			pos.push_back(Vector3(1.,0.,0.));
+			pos.push_back(Vector3(0.,1.,0.));
+			pos.push_back(Vector3(0.,0.,1.));
+			pos.push_back(Vector3(0.7,0.,0.7));
+
+			a_it = ac_->beginAtom();
+			b_it = a_it->beginBond();
+			BALL_FOREACH_ATOM(*ac_, a_it)
+			{
+				HashMap<Atom*, int>::Iterator it = tmp_virtual_hydrogens.find(&*a_it);
+				if (it != solution.number_of_virtual_hydrogens.end())
+				{
+					Size missing_hydrogens = (Size)it->second;
+					for (Size m=0; m < missing_hydrogens; m++)
+					{
+						// add a hydrogen atom  
+						Atom* hydrogen = new Atom;
+						hydrogen->setElement(PTE[Element::H]);
+						hydrogen->setName(PTE[Element::H].getSymbol()+String(num_of_atoms));
+						num_of_atoms++;
+						hydrogen->setProperty("VIRTUAL__ATOM", true);
+						a_it->getFragment()->insert(*hydrogen);
+						solution.atoms_to_delete.push_back(hydrogen);
+
+						// TODO set the Position correctly
+						hydrogen->setPosition(a_it->getPosition() + pos[m] );
+
+						// and a bond
+						Bond* new_bond = a_it->createBond(*hydrogen);
+						new_bond->setProperty("VIRTUAL__BOND", true);
+						new_bond->setOrder(1);
+						//solution.bonds_to_delete.push_back(new_bond);
+					}
+				}
+			}
+		}
+
+		return solution.valid;
+	}
+
 	bool AssignBondOrderProcessor::apply(Position i)
 	{
+		bool result = false;
 		if (i < solutions_.size())
 		{
-			if (solutions_[i].valid)
+			result = apply_(solutions_[i]);
+
+			if (result)
 			{
-				// we assume, that the AtomContainer is valid and the correct one! 
-				
-				// delete all former VIRTUAL BONDs
-				// did we already applied a solution?
-				if (last_applied_solution_>=0)
-				{	
-					for (Size j=0; j < solutions_[last_applied_solution_].atoms_to_delete.size(); j++)
-					{
-						delete(solutions_[last_applied_solution_].atoms_to_delete[j]); //TODO or destroy?
-						//solutions_[last_applied_solution_].atoms_to_delete[j]->destroy();
-						//NOTE: all adajacent bonds of these atoms will be deleted automatically
-					}
-				}
-
-				// set all the original bonds to the assigned order
-				AtomIterator a_it = ac_->beginAtom();
-				Atom::BondIterator b_it = a_it->beginBond();
-				
-				HashMap<Bond*, int> tmp_bond_orders = solutions_[i].bond_orders;
-
-				BALL_FOREACH_BOND(*ac_, a_it, b_it)
-				{
-					HashMap<Bond*, int>::Iterator it = tmp_bond_orders.find(&*b_it);
-					if (it != solutions_[i].bond_orders.end())
-					{
-						b_it->setOrder(it->second);
-					}
-				}
-
-				// for each virtual bond add the corresponding number of hydrogens
-				solutions_[i].atoms_to_delete.clear();
-				//solutions_[i].bonds_to_delete.clear();
-
-				HashMap<Atom*, int> tmp_virtual_hydrogens = solutions_[i].number_of_virtual_hydrogens;
-				
-				int num_of_atoms = ac_->countAtoms()+1;
-
-				vector<Vector3> pos;
-				pos.push_back(Vector3(1.,0.,0.));
-				pos.push_back(Vector3(0.,1.,0.));
-				pos.push_back(Vector3(0.,0.,1.));
-				pos.push_back(Vector3(0.7,0.,0.7));
-
-				a_it = ac_->beginAtom();
-				b_it = a_it->beginBond();
-				BALL_FOREACH_ATOM(*ac_, a_it)
-				{
-					HashMap<Atom*, int>::Iterator it = tmp_virtual_hydrogens.find(&*a_it);
-					if (it != solutions_[i].number_of_virtual_hydrogens.end())
-					{
-						Size missing_hydrogens = (Size)it->second;
-						for (Size m=0; m < missing_hydrogens; m++)
-						{
-							// add a hydrogen atom  
-							Atom* hydrogen = new Atom;
-							hydrogen->setElement(PTE[Element::H]);
-							hydrogen->setName(PTE[Element::H].getSymbol()+String(num_of_atoms));
-							num_of_atoms++;
-							hydrogen->setProperty("VIRTUAL__ATOM", true);
-							a_it->getFragment()->insert(*hydrogen);
-							solutions_[i].atoms_to_delete.push_back(hydrogen);
-
-							// TODO set the Position correctly
-							hydrogen->setPosition(a_it->getPosition() + pos[m] );
-							
-							// and a bond
-							Bond* new_bond = a_it->createBond(*hydrogen);
-							new_bond->setProperty("VIRTUAL__BOND", true);
-							new_bond->setOrder(1);
-							//solutions_[i].bonds_to_delete.push_back(new_bond);
-						}
-					}
-				}
-
-
 				// denote the application of this solution
 				last_applied_solution_ = i;
 
@@ -1897,13 +1933,11 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 					AromaticityProcessor ap;
 					ap.options.setBool(AromaticityProcessor::Option::OVERWRITE_BOND_ORDERS, true); 
 					ap.aromatize(rings, *ac_);
-
 				}
 			}
-
-			return solutions_[i].valid;
 		}
-		else return false;
+
+		return result;
 	}
 
 
@@ -1941,7 +1975,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 	}
 
 
-	bool AssignBondOrderProcessor::computeNextSolution()
+	bool AssignBondOrderProcessor::computeNextSolution(bool apply_solution)
 	{
 		Solution_ sol;
 		bool found_a_sol = false;
@@ -1988,7 +2022,8 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 			//bool next_solution_is_optimal = (getTotalPenalty(solutions_[0]) == getTotalPenalty(sol)); 
 
 			solutions_.push_back(sol);
-			apply(solutions_.size()-1);
+			if (apply_solution)
+				apply(solutions_.size()-1);
 			
 			return true;
 		}

@@ -147,11 +147,6 @@ namespace BALL
 		{
 		}
 
-		void  AssignBondOrderConfigurationDialog::checkMenu(MainControl& main_control)
-			throw()
-		{
-		}
-
 		void AssignBondOrderConfigurationDialog::resetOptions()
 		{
 			PreferencesEntry::restoreDefaultValues();

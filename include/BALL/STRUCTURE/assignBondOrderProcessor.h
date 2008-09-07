@@ -164,11 +164,15 @@ namespace BALL
 				 */
 				static const char* COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS;
 
-				/** The weighting of bond length penalties wrt valence penalties.
+				/** weighting of bond length penalties wrt valence penalties.
 				 *  If set to zero, the valence penalty will not be normalized. 
 				 */
 				static const char* BOND_LENGTH_WEIGHTING;
-
+				
+				/** apply the first solution directly.
+				 * Default is false.
+				 */
+				static const char* APPLY_FIRST_SOLUTION;
 			};
 
 			/// Default values for options
@@ -186,6 +190,7 @@ namespace BALL
 				static const int MAX_NUMBER_OF_SOLUTIONS;
 				static const bool COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS;
 				static const float BOND_LENGTH_WEIGHTING;
+				static const bool APPLY_FIRST_SOLUTION;
 			};
 
 			struct BALL_EXPORT Algorithm
@@ -397,13 +402,20 @@ namespace BALL
 			 */
 			bool apply(Position i);
 
+			/** Reset all bond orders and assigned hydrogens.
+			 *  
+			 *  Resets the AtomContainer we are operating on to the configuration it had 
+			 *  before applying the AssignBondOrderProcessor.
+			 */
+			void resetBondOrders();
+
 			/** Computes and applies one of the next best solutions.
 			 *
 			 *  Ignores the options  \link MAX_NUMBER_OF_SOLUTIONS MAX_NUMBER_OF_SOLUTIONS \endlink and
 			 *											 \link COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS\endlink .
 			 * @return bool - false if no further solution can be found.
 			 */
-			bool computeNextSolution();
+			bool computeNextSolution(bool apply_solution = true);
 			//@}
 			
 			/** @name Assignment
@@ -578,6 +590,14 @@ namespace BALL
 			 */
 			float computeVirtualHydrogens_(Atom* atom);
 
+			/** Apply the given solution.
+			 */
+			bool apply_(Solution_& solution);
+
+			/** Stores the original configuration of the atom container.
+			 */
+			void storeOriginalConfiguration_();
+
 #ifdef BALL_HAS_LPSOLVE
 			/** Setup the integer linear program.
 			 */
@@ -656,6 +676,9 @@ namespace BALL
 
 			// storing the solutions
 			vector<Solution_> solutions_;
+
+			// the original conformation before we computed anything
+			Solution_ starting_configuration_;
 			
 			// the inverse of the atom type penalty normalization factor
 			float atom_type_normalization_factor_;
