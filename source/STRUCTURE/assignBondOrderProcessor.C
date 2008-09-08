@@ -746,7 +746,14 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 							found_another = computeNextSolution(options.getBool(Option::APPLY_FIRST_SOLUTION));
 							last_sol_is_optimal &= (getTotalPenalty(0)==getTotalPenalty(solutions_.size()-1));
 						}
+					}
 
+					if (solutions_.size() > 0)
+					{
+						if (options.getBool(Option::APPLY_FIRST_SOLUTION))
+						{
+							apply(0);
+						}
 					}
 				} // end of if preassign worked out
 			} // end of if molecule
