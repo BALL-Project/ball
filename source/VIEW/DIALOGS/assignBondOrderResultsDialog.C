@@ -73,7 +73,19 @@ namespace BALL
 
 				new_system->setName(solution_systems_[activated_item_]->getName());
 				getMainControl()->insert(*new_system);
-				getMainControl()->update(*new_system);
+				getMainControl()->update(*new_system);		
+				
+				//highlight as before
+				List<Composite*> sel;
+				Composite* to_highlight = bond_order_processor_->getAtomContainer()->getParent();
+
+				if (to_highlight)
+				{
+					sel.push_back(to_highlight);
+					ControlSelectionMessage* msg = new ControlSelectionMessage();
+					msg->setSelection(sel);
+					notify_(msg);
+				}
 			}
 			else
 			{
