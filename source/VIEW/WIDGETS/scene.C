@@ -1870,24 +1870,26 @@ namespace BALL
 			TransformationEvent6D* trans = dynamic_cast<TransformationEvent6D*>(evt);
 
 			if(trans) {
-				move(trans->getTranslation() * 0.01);
+                Vector3 tmp = trans->getTranslation() * 0.01;
+                tmp.z = -tmp.z;
+				move(-tmp);
 
 				Camera& camera = stage_->getCamera();
 
 				Quaternion q1;
-				q1.set(camera.getLookUpVector(), 0.5*Angle(-trans->getRotation().y, false).toRadian());
+				q1.set(camera.getLookUpVector(), 0.3 * Angle(-trans->getRotation().y, false).toRadian());
 
 				Quaternion q2;
-				q2.set(camera.getRightVector(), 0.5*Angle(-trans->getRotation().x, false).toRadian());
+				q2.set(camera.getRightVector(),  0.3 * Angle(-trans->getRotation().x, false).toRadian());
 
 				Quaternion q3;
-				q3.set(camera.getViewVector(), 0.5*Angle(-trans->getRotation().z, false).toRadian());
+				q3.set(camera.getViewVector(),   0.3 * Angle(-trans->getRotation().z, false).toRadian());
 
 				q1 += q2 + q3;
 
 				camera.rotate(q1, system_origin_);
 
-				printf("Got event");
+//				printf("Got event");
 			}
 
 		}

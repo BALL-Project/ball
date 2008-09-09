@@ -14,13 +14,13 @@ namespace BALL
 
 		int SpaceNavigatorDriver::deadzone(int x) {
 			int sign = x > 0 ? 1 : -1;
-			return x * sign > 10 ? x  - sign * 10 : 0.0;
+			return x * sign > 15 ? x  - sign * 15 : 0.0;
 		}
 
 		void SpaceNavigatorDriver::run()
 		{
-		spnav_event sev;
-		bool drop=false;
+			spnav_event sev;
+			bool drop=false;
 
 			while(isEnabled()) {
 				if(drop) {
