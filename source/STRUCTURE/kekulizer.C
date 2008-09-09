@@ -208,7 +208,7 @@ bool Kekuliser::setup(Molecule& mol)
 	{
 		// set formal charges
 		HashMap<Atom*,Index>::Iterator hit = max_valence_.begin();
-		for (;+hit;++hit)
+		for (; hit != max_valence_.end(); ++hit)
 		{
 			Atom* atom = hit->first;
 			Size nr = 0;

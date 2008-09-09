@@ -631,9 +631,9 @@ namespace BALL
 		}
 
 		// merge the messages
-		for (HashMap<EdgeItem<Index, Index>*, HashMap<TNode_*, vector<PathMessage_> > >::Iterator it1 = array_A.begin(); +it1; ++it1)
+		for (HashMap<EdgeItem<Index, Index>*, HashMap<TNode_*, vector<PathMessage_> > >::Iterator it1 = array_A.begin(); it1 != array_A.end(); ++it1)
 		{
-			for (HashMap<TNode_*, vector<PathMessage_> >::Iterator it2 = it1->second.begin(); +it2; ++it2)
+			for (HashMap<TNode_*, vector<PathMessage_> >::Iterator it2 = it1->second.begin(); it2 != it1->second.end(); ++it2)
 			{
 				if (it2->second.size() > 1)
 				{
@@ -652,12 +652,12 @@ namespace BALL
 		HashMap<TNode_*, vector<PathMessage_> > array_B;
 
 		// handle inverse-edge collisions
-		for (HashMap<EdgeItem<Index, Index>*, HashMap<TNode_*, vector<PathMessage_> > >::Iterator it1 = array_A.begin(); +it1; ++it1)
+		for (HashMap<EdgeItem<Index, Index>*, HashMap<TNode_*, vector<PathMessage_> > >::Iterator it1 = array_A.begin(); it1 != array_A.end(); ++it1)
 		{
-			for (HashMap<TNode_*, vector<PathMessage_> >::Iterator it2 = it1->second.begin(); +it2; ++it2)
+			for (HashMap<TNode_*, vector<PathMessage_> >::Iterator it2 = it1->second.begin(); it2 != it1->second.end(); ++it2)
 			{
 				HashMap<TNode_*, vector<PathMessage_> >::Iterator it3 = it2;
-				for(++it3; +it3; ++it3)
+				for(++it3; it3 != it1->second.end(); ++it3)
 				{
 					BitVector beer = it2->second[0].beep | it3->second[0].beep;
 					
@@ -670,7 +670,7 @@ namespace BALL
 		}
 
 		// handle collisions
-		for (HashMap<TNode_*, vector<PathMessage_> >::Iterator it1 = array_B.begin(); +it1; ++it1)
+		for (HashMap<TNode_*, vector<PathMessage_> >::Iterator it1 = array_B.begin(); it1 != array_B.end(); ++it1)
 		{
 			for (vector<PathMessage_>::iterator it2 = it1->second.begin(); it2 != it1->second.end(); ++it2)
 			{
@@ -1056,7 +1056,8 @@ namespace BALL
 		}
 		
 		// delete TNodes
-		for (HashMap<NodeItem<Index, Index>* , TNode_*>::Iterator it = atom_to_tnode_.begin(); +it; ++it)
+		for (HashMap<NodeItem<Index, Index>* , TNode_*>::Iterator it = atom_to_tnode_.begin(); 
+				 it != atom_to_tnode_.end(); ++it)
 		{
 			delete it->second;
 		}

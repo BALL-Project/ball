@@ -146,7 +146,7 @@ namespace BALL
 		// now iterate over the atoms.
 
 		HashMap<const Atom*,float>::Iterator it = atom_areas.begin();
-		for (; +it; ++it)
+		for (; it != atom_areas.end(); ++it)
 		{
 			R = it->first->getRadius() * 1e-10 + sigma1 / 2.0;
 			deltaGspher =	

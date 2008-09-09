@@ -1,17 +1,9 @@
-#!/bin/bash 
-
+#!/bin/bash -e 
 # Contrib path
 CPATH=`echo $0 | sed "s/\/build_contrib//"`
 cd $CPATH
 CPATH=`pwd`
-
 echo building contrib package from $CPATH ...
-
-# Try to use gtar, fall back to tar if it doesn't exist
-TAR=`which gtar`
-if test "$TAR" = "" ;  then
-	TAR=tar
-fi
 
 DPATH=$CPATH
 
@@ -26,46 +18,44 @@ fi
 
 mbuild()
 {
-	make 2>&1 >> ../build.log  &&		make install 2>&1 >> ../build.log
-
-	ERROR_CODE=$?
-	if [ $ERROR_CODE != 0 ]
-	then
-		echo
-		echo -------------------------------------------
-		echo Error: Could not build the contrib package!
-		echo Please have a look into $DPATH/build.log
-		echo -------------------------------------------
-		echo
-		exit $ERROR_CODE
-	fi
+	make -j2 &> ../build.log 
+	make install &> ../build.log
 }
 
 echo
 echo extracting packages to $DPATH ...
-for i in ./*.gz; do gunzip $i; $TAR xif `basename $i .gz`; done;
+for i in ./*.gz; do tar xzf $i; done;
+for i in ./*.tgz; do tar xzf $i; done;
 
 touch build.log
-install -d include 
-install -d lib
-
-echo
-echo building lpsolve ...
-echo
-cd lp_solve_5.5
-make -f Makefile.Linux 2>&1 >> ../build.log || exit
-install -d ../include/lpsolve
-install *.h ../include/lpsolve
-install lpsolve55/liblpsolve55.a ../lib
-cd ..
-
+install -d include lib
 
 echo
 echo building fftw ...
 echo
 cd fftw*
-./configure --enable-double --with-pic -q --prefix=$DPATH 2>&1 >> ../build.log || exit
+# Configure for ppc
+./configure CFLAGS="-arch ppc" --with-combined-threads --enable-altivec --enable-threads --with-gcc-arch=G5 --enable-float -q --prefix=$DPATH &> ../build.log
+# Clean
+make clean  &> ../build.log
 mbuild
+cd ../lib/
+# Rename library
+mv ./libfftw3f.a ./libfftw3-ppc.a
+
+cd ../fftw*
+# Configure for i386
+./configure CFLAGS="-arch i386" --with-combined-threads --enable-sse2 --enable-threads --enable-double -q --prefix=$DPATH &> ../build.log
+# Clean
+make clean  &> ../build.log
+# Make
+mbuild
+cd ../lib/
+# Rename library
+mv ./libfftw3.a ./libfftw3-i386.a
+# lipo everything together
+lipo -create libfftw3-i386.a libfftw3-ppc.a -output libfftw3.a
+rm libfftw3-i386.a libfftw3-ppc.a
 cd ..
 
 echo
@@ -80,7 +70,7 @@ echo
 echo building sip ...
 echo
 cd sip*
-python configure.py -b $DPATH/bin -d $DPATH/lib -e $DPATH/include 2>&1 >> ../build.log || exit
+python configure.py -n -b $DPATH/bin -d $DPATH/lib -e $DPATH/include &> ../build.log
 mbuild
 cd ..
 
@@ -88,7 +78,7 @@ echo
 echo building gsl ...
 echo
 cd gsl*
-./configure --prefix=$DPATH &> ../build.log 2>&1 >> ../build.log || exit
+./configure --disable-dependency-tracking CFLAGS="-isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386" LDFLAGS="-Wl,-syslibroot,/Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386" --prefix=$DPATH &> ../build.log
 mbuild
 cd ..
 
@@ -96,14 +86,13 @@ echo
 echo building Qt ...
 echo
 cd qt*
-./configure -no-qt3support -silent -nomake examples -no-nis -confirm-license --prefix=$DPATH 2>&1 >> ../build.log || exit
+./configure -no-qt3support -silent -no-nis -confirm-license -universal --prefix=$DPATH &> ../build.log
 mbuild
 cd ..
 
 echo
 echo cleanup ...
 echo
-rm -rf mkspecs phrasebooks man plugins translations demos examples info share build.log
 
 echo
 echo Finished building contrib package

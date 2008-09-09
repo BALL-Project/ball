@@ -324,8 +324,6 @@ AC_DEFUN(CF_DETECT_OS,[
 AC_SUBST(OSMAJOR)
 AC_SUBST(OS)
 AC_SUBST(OSREV)
-AC_SUBST(BINFMT)
-AC_SUBST(BINFMT_PATH)
 AC_SUBST(ARCHITECTURE)
 RANLIB="echo"
 
@@ -1039,11 +1037,11 @@ TEMPLATE_DIR="ii_files"
 dnl  set the default binary format (if none selected)
 dnl
 if test "${BINFMT_64_BIT}" = true ; then
-IRIX_BINFMT=64
-CXX_NAME="${CXX_NAME}_64"
+	IRIX_BINFMT=64
+	CXX_NAME="${CXX_NAME}_64"
 else
-IRIX_BINFMT=N32
-CXX_NAME="${CXX_NAME}_N32"
+	IRIX_BINFMT=N32
+	CXX_NAME="${CXX_NAME}_N32"
 fi
 
 PROJECT[]_TYPENAME=typename
@@ -1084,24 +1082,24 @@ MAKEDEP_CXX_OPTS="-M 2>/dev/null"
 MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
 if test "${IRIX_BINFMT}" = 64 ; then
-DEF_BOOL=false
-CXXFLAGS="$CXXFLAGS -64 -LANG:std"
-DYNAROPTS="-64 ${DYNAROPTS}"
-CXXFLAGS_O="${CXXFLAGS_O} -O3 -OPT:Olimit=60000 -multigot -G 5 -DEBUG:woff=3333"
-CXXFLAGS_D="${CXXFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,3333,1110,1209"
-CXXFLAGS_DI="${CXXFLAGS_DI} -g"
-LDFLAGS="$LDFLAGS -64 -LANG:std"
-AC_DEFINE(IRIX64,)
+	DEF_BOOL=false
+	CXXFLAGS="$CXXFLAGS -64 -LANG:std"
+	DYNAROPTS="-64 ${DYNAROPTS}"
+	CXXFLAGS_O="${CXXFLAGS_O} -O3 -OPT:Olimit=60000 -multigot -G 5 -DEBUG:woff=3333"
+	CXXFLAGS_D="${CXXFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,3333,1110,1209"
+	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
+	LDFLAGS="$LDFLAGS -64 -LANG:std"
+	AC_DEFINE(IRIX64,)
 fi
 if test "${IRIX_BINFMT}" = N32 ; then
-DEF_BOOL=false
-CXXFLAGS="$CXXFLAGS -n32 -LANG:std"
-DYNAROPTS="-n32 ${DYNAROPTS}"
-CXXFLAGS_O="${CXXFLAGS_O} -O3 -OPT:Olimit=60000 -multigot -G 5 -DEBUG:woff=3333"
-CXXFLAGS_D="${CXXFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,3333,1110,1209"
-CXXFLAGS_DI="${CXXFLAGS_DI} -g"
-LDFLAGS="$LDFLAGS -n32 -LANG:std"
-AC_DEFINE(IRIX32,)
+	DEF_BOOL=false
+	CXXFLAGS="$CXXFLAGS -n32 -LANG:std"
+	DYNAROPTS="-n32 ${DYNAROPTS}"
+	CXXFLAGS_O="${CXXFLAGS_O} -O3 -OPT:Olimit=60000 -multigot -G 5 -DEBUG:woff=3333"
+	CXXFLAGS_D="${CXXFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,3333,1110,1209"
+	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
+	LDFLAGS="$LDFLAGS -n32 -LANG:std"
+	AC_DEFINE(IRIX32,)
 fi
 
 dnl
@@ -1175,15 +1173,15 @@ AC_DEFINE(PROJECT[]_MUST_CAST_TEMPLATE_FUNCTION_ARGS,)
 dnl  set the default binary format (if none selected)
 dnl
 if test "${BINFMT_64_BIT}" = true ; then
-SUN_BINFMT=V9
-CXX_NAME="${CXX_NAME}_V9"
-LDFLAGS="${LDFLAGS} -xarch=v9"
-CXXFLAGS="${CXXFLAGS} -xarch=v9"
-AROPTS="${AROPTS} -xarch=v9"
-DYNAROPTS="-xarch=v9 ${DYNAROPTS}"
+	SUN_BINFMT=V9
+	CXX_NAME="${CXX_NAME}_V9"
+	LDFLAGS="${LDFLAGS} -xarch=v9"
+	CXXFLAGS="${CXXFLAGS} -xarch=v9"
+	AROPTS="${AROPTS} -xarch=v9"
+	DYNAROPTS="-xarch=v9 ${DYNAROPTS}"
 else
-SUN_BINFMT=V8
-CXX_NAME="${CXX_NAME}_V8"
+	SUN_BINFMT=V8
+	CXX_NAME="${CXX_NAME}_V8"
 fi
 
 DEF_BOOL=true
@@ -2915,7 +2913,7 @@ AC_DEFUN(CF_VIEW_QT_BASICS, [
 			QT_LIBPATH="${QTDIR}/lib"
 		fi
 		if test "${QT_LIBPATH}" = "" ; then
-			CF_FIND_LIB(QT_LIBPATH, libQtCore, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${PROJECT[]_PATH}/contrib/lib)
+			CF_FIND_LIB(QT_LIBPATH, libQtCore, ${QTDIR}/lib ${QTDIR}/lib ${PROJECT[]_PATH}/contrib/lib)
 		fi
 	fi
 
@@ -2944,7 +2942,7 @@ AC_DEFUN(CF_VIEW_QT_BASICS, [
 			AC_MSG_RESULT((${QT_LIBPATH}))	
 		fi
 		if test "${QT_LIBPATH}" = "" ; then
-			CF_FIND_LIB(QT_LIBPATH, libQtGui, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${PROJECT[]_PATH}/contrib/lib)
+			CF_FIND_LIB(QT_LIBPATH, libQtGui, ${QTDIR}/lib ${QTDIR}/lib ${PROJECT[]_PATH}/contrib/lib)
 			AC_MSG_RESULT((${QT_LIBPATH}))	
 		fi
 		if test "${QT_LIBPATH}" = "" ; then
@@ -2971,7 +2969,7 @@ AC_DEFUN(CF_VIEW_QT_BASICS, [
 			AC_MSG_RESULT((${QT_LIBPATH}))	
 		fi
 		if test "${QT_LIBPATH}" = "" ; then
-			CF_FIND_LIB(QT_LIBPATH, libQtSql, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${PROJECT[]_PATH}/contrib/lib)
+			CF_FIND_LIB(QT_LIBPATH, libQtSql, ${QTDIR}/lib ${QTDIR}/lib ${PROJECT[]_PATH}/contrib/lib)
 			AC_MSG_RESULT((${QT_LIBPATH}))	
 		fi
 		if test "${QT_LIBPATH}" = "" ; then
@@ -2999,7 +2997,7 @@ AC_DEFUN(CF_VIEW_QT_BASICS, [
 			AC_MSG_RESULT((${QT_LIBPATH}))	
 		fi
 		if test "${QT_LIBPATH}" = "" ; then
-			CF_FIND_LIB(QT_LIBPATH, libQtopenGL, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${PROJECT[]_PATH}/contrib/lib)
+			CF_FIND_LIB(QT_LIBPATH, libQtopenGL, ${QTDIR}/lib ${QTDIR}/lib ${PROJECT[]_PATH}/contrib/lib)
 			AC_MSG_RESULT((${QT_LIBPATH}))	
 		fi
 		if test "${QT_LIBPATH}" = "" ; then
@@ -3479,12 +3477,14 @@ dnl
 dnl    search for X-libs and includes, QT and 3D stuff (OpenGL/MESA)
 dnl 
 if test "${USE_VIEW}" = true ; then
-	AC_PATH_X
-	X11_INCPATH=${x_includes}
-	X11_LIBPATH=${x_libraries}
+	if test "${OS}" != "Darwin" ; then
+		AC_PATH_X
+		X11_INCPATH=${x_includes}
+		X11_LIBPATH=${x_libraries}
 
-	if test "${no_x}" = "yes" ; then
-		USE_VIEW=false
+		if test "${no_x}" = "yes" ; then
+			USE_VIEW=false
+		fi
 	fi
 
 	if test "${X11_LIBPATH}" = "/usr/lib" -o "${X11_LIBPATH}" = "" ; then
@@ -4635,116 +4635,28 @@ if test "$LEX" = :; then
   LEX=${am_missing_run}flex
 fi])
 
-
-AC_DEFUN(CF_CHECK_MULTI_BUILD,[
-	if test "${MULTI_BUILD}" = "true" ; then
-		AC_MSG_CHECKING(multi-platform build)
-		AC_MSG_RESULT(enabled)
-
-		dnl   add the binary format to the list of supported binary formats
-		dnl   held in config/binary_formats. Avoid double entries
-		dnl
-		if test "${MULTI_BUILD}" = "true" ; then
-			touch ${BINFORMAT_FILE}
-			if test "`${GREP} \^${BINFMT}\\$ ${BINFORMAT_FILE}`" = "" ; then
-				echo ${BINFMT} >> ${BINFORMAT_FILE}
-			fi
-		fi
-
-		dnl
-		dnl   create the global config.h (the one including the platform specific
-		dnl   config.h.${BINFMT})
-		dnl
-		${CAT} config/config.h.header | ${SED} 1,2d > config.h
-
-		dnl
-		dnl add an error line to catch all compilations without -DBMFT=
-		dnl (this is usually a problem with a missing "include config.mak" in the makefile.
-		dnl
-		echo "#ifndef BFMT" >> config.h
-		echo ["# error] PROJECT [was configured in MULTI BUILD mode! Please specify -DBMFT!" >> config.h]
-		echo "#endif" >> config.h
-		echo "" >> config.h
-
-		LINES=`cat config/binary_formats | wc -l`
-		i=1
-		while test $i -le $LINES ; do
-			BFMT=`cat ${BINFORMAT_FILE} | ${SED} -n ${i}p`
-			echo "#if ( BFMT == $i )" >> config.h
-			echo ["# include <]PROJECT[/CONFIG/config.h.${BFMT}>" >> config.h]
-			echo "#endif" >> config.h
-			echo " " >> config.h
-			i=`expr $i + 1`
-		done
-		${CAT} config/config.h.footer | ${SED} 1,2d >> config.h
-		${MKDIR} ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG 2>/dev/null
-		if test -f ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG/config.h ; then
-			if test "`${DIFF} ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG/config.h config.h`" != "" ; then
-				${RM} ${PROJECT[]_PATH}/include/PROJECT/CONFIG/config.h
-				${MV} config.h  ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG/config.h
-			else
-				${RM} config.h
-			fi
-		else
-			${MV} config.h  ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG/config.h
-		fi
-
-		dnl   define the string to substitute in common.mak
-		BINFMT_PATH="/${BINFMT}"
-		BINFMT_INDEX="-DBFMT="`${GREP} -n ${BINFMT} ${BINFORMAT_FILE} | ${CUT} -d: -f1 | ${TAIL} -1`
-	else
-		BINFMT_INDEX=""
-		BINFMT_PATH=""
-	fi
-])
-
-AC_DEFUN(CF_MULTI_BUILD_SHADOW, [
-	if test "${MULTI_BUILD}" = "true" ; then
-		AC_MSG_RESULT(creating shadow directories...)
-		config/shadowsource.sh `pwd`"/${BINFMT}" `pwd` "${SUBDIRS} TEST BENCHMARKS EXAMPLES TUTORIAL APPLICATIONS"
-		${RM} -fr `pwd`/${BINFMT}/TEST/data 2>/dev/null
-		${RM} -fr `pwd`/${BINFMT}/BENCHMARKS/data 2>/dev/null
-		${LN} -s `pwd`/TEST/data `pwd`/${BINFMT}/TEST 2>/dev/null
-		${LN} -s `pwd`/TEST/runtests `pwd`/${BINFMT}/TEST 2>/dev/null
-		${LN} -s `pwd`/BENCHMARKS/data `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
-		${LN} -s `pwd`/BENCHMARKS/runbenchmarks `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
-
-		${CP} config/Makefile.multiplatform Makefile
-	fi
-])
-
 AC_DEFUN(CF_MOVE_CONFIG_FILES, [
-	if test "${MULTI_BUILD}" = "true" ; then
-		${MV} Makefile.tmp ${BINFMT}/Makefile
-		${MV} common.mak.tmp ${BINFMT}/common.mak
-		${MV} config.mak.tmp ${BINFMT}/config.mak
-		${MV} rules.mak.tmp ${BINFMT}/rules.mak
-		${MV} targets.mak.tmp ${BINFMT}/targets.mak
-	  mkdir ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG 2>/dev/null
-	  ${MV} -f config.h $PROJECT[]_PATH/include/PROJECT[]/CONFIG/config.h.${BINFMT}
-	else
-		${MV} Makefile.tmp Makefile
-		${MV} common.mak.tmp common.mak
-		${MV} config.mak.tmp config.mak
-		${MV} rules.mak.tmp rules.mak
-		${MV} targets.mak.tmp targets.mak
+	${MV} Makefile.tmp Makefile
+	${MV} common.mak.tmp common.mak
+	${MV} config.mak.tmp config.mak
+	${MV} rules.mak.tmp rules.mak
+	${MV} targets.mak.tmp targets.mak
 
-		dnl
-		dnl move that damned file only if it differs from the previous
-		dnl version. Otherwise we have to rebuild _everything_ after each configure
-		dnl
-		if test -f $PROJECT[]_PATH/include/PROJECT[]/CONFIG/config.h ; then
-			if test "`${DIFF} config.h $PROJECT[]_PATH/include/PROJECT[]/CONFIG/config.h`" != "" ; then
-				${MV} -f config.h $PROJECT[]_PATH/include/PROJECT[]/CONFIG/config.h
-			fi
-		else
-			dnl
-			dnl  create the directory PROJECT[]/include/CONFIG
-			dnl  and move config.h to that directory
-			dnl
-			mkdir ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG 2>/dev/null
+	dnl
+	dnl move that damned file only if it differs from the previous
+	dnl version. Otherwise we have to rebuild _everything_ after each configure
+	dnl
+	if test -f $PROJECT[]_PATH/include/PROJECT[]/CONFIG/config.h ; then
+		if test "`${DIFF} config.h $PROJECT[]_PATH/include/PROJECT[]/CONFIG/config.h`" != "" ; then
 			${MV} -f config.h $PROJECT[]_PATH/include/PROJECT[]/CONFIG/config.h
 		fi
+	else
+		dnl
+		dnl  create the directory PROJECT[]/include/CONFIG
+		dnl  and move config.h to that directory
+		dnl
+		mkdir ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG 2>/dev/null
+		${MV} -f config.h $PROJECT[]_PATH/include/PROJECT[]/CONFIG/config.h
 	fi
 ])
 
@@ -4752,13 +4664,8 @@ AC_DEFUN(CF_CLEAR_DEP_FILES, [
 	dnl
 	dnl   make sure the dependencies and object lists are (re)built
 	dnl
-	if test "${MULTI_BUILD}" = "true" ; then
-		${RM}  ${BINFMT}/.Dependencies 2>/dev/null
-		${RM}  ${BINFMT}/lib*.objects 2>/dev/null
-	else
-		${RM}  .Dependencies 2>/dev/null
-		${RM}  lib*.objects 2>/dev/null
-	fi
+	${RM}  .Dependencies 2>/dev/null
+	${RM}  lib*.objects 2>/dev/null
 ])
 
 

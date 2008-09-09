@@ -725,8 +725,8 @@ namespace BALL
 		current_model_ = INVALID_INDEX;
 		current_record_ = INVALID_INDEX;
 		record_fields_ = 0;
-		PDB_atom_map_.destroy();
-		residue_map_.destroy();
+		PDB_atom_map_.clear();
+		residue_map_.clear();
 		ssbond_list_.clear();
 		helix_list_.clear();
 		sheet_list_.clear();

@@ -142,7 +142,7 @@ namespace BALL
 		HashMap<const Atom*,float>::Iterator it = atom_areas.begin();
 		HashMap<const Atom*,float>::Iterator it_red = atom_areas_reduced.begin();
 
-		for (; +it; ++it, ++it_red)
+		for (; it != atom_areas.end(); ++it, ++it_red)
 		{
 			// R = 2 * it->first->getRadius() * 1e-10 / sigma1;
 			S = it->first->getRadius() * 1e-10 + sigma1 / 2.0;

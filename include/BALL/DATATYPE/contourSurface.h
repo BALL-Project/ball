@@ -26,6 +26,16 @@
 #include <vector>
 #include <math.h>
 
+namespace __gnu_cxx
+{
+  template<>
+  struct hash<std::pair<BALL::Position, BALL::Position> >
+  {
+    size_t operator () (const std::pair<BALL::Position, BALL::Position>& p) const
+    {return (size_t)(p.first + p.second);}
+	};
+}
+
 namespace BALL
 {
 	template<>

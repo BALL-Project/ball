@@ -146,7 +146,7 @@ void AtomTyper::assignTo(Molecule& mol)
 	std::set<const Atom*> atoms_to_match;
 	HashSet<Atom*>::Iterator atoms_it;
 	HashMap<String, vector<Position> >::Iterator eit = element_to_rules_.begin();
-	for (; +eit; ++eit)
+	for (; eit != element_to_rules_.end(); ++eit)
 	{
 		if (atoms_.size() == 0) break;
 

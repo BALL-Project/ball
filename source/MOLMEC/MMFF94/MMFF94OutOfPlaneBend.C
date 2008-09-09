@@ -164,7 +164,7 @@ namespace BALL
 			const Index tp2 = partners[2]->getType();
 
 			// check for parameters in a step down procedure
-			bool found = parameters_.getParameters(tp0, type_j, tp1, tp2, this_bend.k_oop);
+			bool found = parameters_.assignParameters(tp0, type_j, tp1, tp2, this_bend.k_oop);
 
 			if (!found)
 			{

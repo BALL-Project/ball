@@ -162,7 +162,7 @@ namespace BALL
 		{
 			vector<Dataset*> result;
 			HashMap<Dataset*, QTreeWidgetItem*>::Iterator it = dataset_to_item_.begin();
-			for (; +it; ++it)
+			for (; it != dataset_to_item_.end(); ++it)
 			{
 				result.push_back((*it).first);
 			}

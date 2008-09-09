@@ -7,8 +7,8 @@
 #ifndef BALL_MATHS_PARSEDFUNCTION_H
 #define BALL_MATHS_PARSEDFUNCTION_H
 
-#ifndef BALL_DATATYPE_HASHMAP_H
-# include <BALL/DATATYPE/hashMap.h>
+#ifndef BALL_DATATYPE_STRINGHASHMAP_H
+# include <BALL/DATATYPE/stringHashMap.h>
 #endif
 
 #include <numeric>
@@ -20,8 +20,8 @@ namespace BALL
     /**  \addtogroup  FunctionClasses
      *  @{
      */  
-	extern HashMap<String, double*> *parsedFunctionConstants;
-	extern HashMap<String, double (*)(double)> *parsedFunctionFunctions;
+	extern StringHashMap<double*> *parsedFunctionConstants;
+	extern StringHashMap<double (*)(double)> *parsedFunctionFunctions;
 	
 	/** ParsedFunction.
 	 		This function type contains a double - valued function string like
@@ -79,11 +79,11 @@ namespace BALL
 
 		/** The table of constants
 		 */
-		HashMap<String, double*> constants_;
+		StringHashMap<double*> constants_;
 
 		/** The table of functions
 		 */
-		HashMap<String, double (*)(double)> functions_;
+		StringHashMap<double (*)(double)> functions_;
 		
 		protected:
 			String expression_;

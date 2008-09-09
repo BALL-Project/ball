@@ -450,7 +450,7 @@ namespace BALL
 		{
 			List<Representation*> selection;
  			HashMap<QTreeWidgetItem*, Representation*>::ConstIterator it = item_to_representation_.begin();
-			for (; +it; ++it)
+			for (; it != item_to_representation_.end(); ++it)
 			{
 				QTreeWidgetItem* item = (*it).first;
 				if (listview->isItemSelected(item))
@@ -736,7 +736,7 @@ namespace BALL
 			}
 
 			HashMap<ClippingPlane*, QTreeWidgetItem*>::Iterator mit = plane_to_item_.begin();
-			for (; +mit; ++mit)
+			for (; mit != plane_to_item_.end(); ++mit)
 			{
 				if (!to_have_planes.has(mit->first)) removeItem_(mit->second);
 			}

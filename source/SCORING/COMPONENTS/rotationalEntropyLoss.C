@@ -56,7 +56,7 @@ namespace BALL
 			receptor_(0),
 			bind_distance_offset_(0.0f),
 			calculation_method_(0),
-			fresno_types_(0)
+			fresno_types_()
 	{
 		// set component name
 		setName("RotationalEntropyLoss");
@@ -77,7 +77,7 @@ namespace BALL
 			receptor_(0),
 			bind_distance_offset_(0.0f),
 			calculation_method_(0),
-			fresno_types_(0)
+			fresno_types_()
 	{
 		// set component name
 		setName("SLICK RotationalEntropyLoss");

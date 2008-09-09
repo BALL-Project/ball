@@ -126,7 +126,7 @@ CHECK(bool operator () (const Atom& atom) const throw())
 	Expression e;
 	Size counter;
 	HashMap<String, Size>::ConstIterator exp_iterator = test_expressions.begin();
-	for (; +exp_iterator; ++exp_iterator)
+	for (; exp_iterator !=test_expressions.end(); ++exp_iterator)
 	{
 		counter = 0;
 		e.setExpression(exp_iterator->first);

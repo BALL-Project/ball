@@ -27,6 +27,18 @@
 	#include <BALL/DATATYPE/options.h>
 #endif
 
+
+namespace __gnu_cxx
+{
+  template<>
+  struct hash<BALL::Bond::BondOrder>
+  {
+    size_t operator () (const BALL::Bond::BondOrder o) const
+    {return (size_t)o;}
+	};
+}
+
+
 namespace BALL 
 {
 

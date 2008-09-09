@@ -7,6 +7,6 @@
 #   Oliver Kohlbacher
 #
 
-include @BALL_PATH@/source@BINFMT_PATH@/config.mak
-include @BALL_PATH@/source@BINFMT_PATH@/rules.mak
-include @BALL_PATH@/source@BINFMT_PATH@/targets.mak
+include @BALL_PATH@/source/config.mak
+include @BALL_PATH@/source/rules.mak
+include @BALL_PATH@/source/targets.mak

@@ -153,10 +153,10 @@ namespace BALL
 										 		 Atom& atom1, Atom& atom2, Atom& atom3) const;
 		
 		/// Bend emperical reference angle
-		double calculateBendEmpericalReferenceAngle(Atom& atom1, Atom& atom2, Atom& atom3) const;
+		double calculateBendEmpiricalReferenceAngle(Atom& atom1, Atom& atom2, Atom& atom3) const;
 		
 		/// Bend emperical force constant
-		double calculateBendEmpericalForceConstant(Atom& atom1, Atom& atom2, Atom& atom3, double angle_0) const;
+		double calculateBendEmpiricalForceConstant(Atom& atom1, Atom& atom2, Atom& atom3, double angle_0) const;
 
 		/// Calculate the radius value per Schomaker-Stevenson Rule
 		double calculateStretchR0(const Bond& bond);

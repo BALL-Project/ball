@@ -222,7 +222,7 @@ namespace BALL
 								<< atoms[2]->getType() << " " << atoms[3]->getType() << " " << std::endl;
 #endif
 
-						bool found = parameters_.getParameters(this_torsion.type, type_a1, type_a2, type_a3, type_a4,
+						bool found = parameters_.assignParameters(this_torsion.type, type_a1, type_a2, type_a3, type_a4,
 																									 this_torsion.v1, this_torsion.v2, this_torsion.v3);
 						
 

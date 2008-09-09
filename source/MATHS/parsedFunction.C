@@ -12,8 +12,8 @@ extern void parsedFunction_delBuffer();
 
 namespace BALL
 {
-	HashMap<String, double*> *parsedFunctionConstants;
-	HashMap<String, double(*)(double)> *parsedFunctionFunctions;
+	StringHashMap<double*> *parsedFunctionConstants;
+	StringHashMap<double(*)(double)> *parsedFunctionFunctions;
 
 	template <typename arg>
 	ParsedFunction<arg>::ParsedFunction()
