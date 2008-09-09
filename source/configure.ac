@@ -573,9 +573,9 @@ BALL_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
 
 LIBS="${LIBS} ${FFTW_LIBS} ${GSL_LIBS} -lm"
 VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
-BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
+BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib -lBALL ${LIBS}"
 if test "${USE_VIEW}" = true ; then
-	BALL_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
+	BALL_LIBS="-L${BALL_PATH}/lib -lVIEW -lBALL ${VIEW_LIBS}"
 fi
 
 LDFLAGS="$LDFLAGS"
@@ -643,9 +643,6 @@ AC_SUBST(STD_CPP_INCLUDES)  dnl standard include paths of C++ compiler
 AC_SUBST(MAKEDEP_OPTS)      dnl options for makedep (needed for Linux)
 AC_SUBST(BALL_TYPENAME)			dnl if the compiler requires the use of typename
 														dnl this variable is set to "typename". "" otherwise.
-AC_SUBST(BINFMT_INDEX)      dnl BFMT: binformat index of the current BINFMT - passed to the compiler
-														dnl   as -DBFMT=${BINFMT_INDEX} to decide which config.h to use
-														dnl   used in multi-platform build only!
 
 dnl         LINKER
 
@@ -765,7 +762,6 @@ dnl
 
 SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SCORING SOLVATION STRUCTURE SYSTEM ${VIEW} ${PYTHON}"
 AC_SUBST(SUBDIRS)
-BINFMT_PATH=""
 
 AC_PREFIX_DEFAULT(`cd ..; pwd`)
 

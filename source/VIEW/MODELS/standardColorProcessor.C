@@ -316,7 +316,7 @@ namespace BALL
 			}
 				
 			HashMap<const Residue*, Position>::Iterator it = residue_map_.find(residue);
-			if (!+it)
+			if (it == residue_map_.end())
 			{
 				color_to_be_set.set(default_color_);
 				return;

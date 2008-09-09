@@ -202,11 +202,11 @@ namespace BALL
 			double kb_sbmb;
 			double r0_sbmb;
 			bool  sbmb_exists;
-			bool  emperical;
+			bool  empirical;
 		};
 
 		///
-		struct EmpericalBondData
+		struct EmpiricalBondData
 		{
 			double kb;
 			double r0;
@@ -214,7 +214,7 @@ namespace BALL
 	
 		///
 		typedef HashMap<Position, BondData> StretchMap;
-		typedef HashMap<Position, EmpericalBondData> EmpericalStretchMap;
+		typedef HashMap<Position, EmpiricalBondData> EmpiricalStretchMap;
 
 		BALL_CREATE(MMFF94StretchParameters)
 
@@ -233,16 +233,16 @@ namespace BALL
 			throw();
 
 		///
-		StretchMap::ConstIterator getParameters(Position type1, Position type2) const;
+		bool assignParameters(Position type1, Position type2, BondData& data) const;
 
 		///
-		bool readEmpericalParameters(const String& filename);
+		bool readEmpiricalParameters(const String& filename);
 
 		///
 		const StretchMap& getBondParameters() const { return parameters_;}
 		
 		///
-		const EmpericalStretchMap& getEmpericalParameters() const { return emperical_parameters_;}
+		const EmpiricalStretchMap& getEmpiricalParameters() const { return empirical_parameters_;}
 
 		static double radii[];
 		static double electronegatives[];
@@ -254,7 +254,7 @@ namespace BALL
 		/// standard parameters 
 		StretchMap parameters_;
 		mutable StretchMap buffered_parameters_;
-		EmpericalStretchMap emperical_parameters_;
+		EmpiricalStretchMap empirical_parameters_;
 	};
 
 ///////////////////////////////////////////////////////////////////////////
@@ -287,7 +287,7 @@ namespace BALL
 			throw();
 
 		///
-		bool getParameters(Position bend_type,
+		bool assignParameters(Position bend_type,
 											 Position atom_type1, Position atom_type2, Position atom_type3, 
 											 double& ka, double& angle) const;
 
@@ -334,11 +334,11 @@ namespace BALL
 			throw();
 
 		///
-		bool getParameters(Position stretch_bend_type, const Atom& atom1, const Atom& atom2, const Atom& atom3, 
+		bool assignParameters(Position stretch_bend_type, const Atom& atom1, const Atom& atom2, const Atom& atom3, 
 											 double& kba_ijk, double& kba_kji) const;
 
 		/// read parameters for stretch-bends and for assignment by periodic table row
-		bool readEmpericalParameters(const String& by_row_filename)
+		bool readEmpiricalParameters(const String& by_row_filename)
 			throw(Exception::FileNotFound);
 		
 		//@}
@@ -389,7 +389,7 @@ namespace BALL
 			throw();
 
 		///
-		bool getParameters(Position type_index,
+		bool assignParameters(Position type_index,
 											 Index at1, Index at2, Index at3, Index at4,
 											 double& v1, double& v2, double& v3) const;
 
@@ -437,7 +437,7 @@ namespace BALL
 			throw();
 
 		///
-		bool getParameters(Index at1, Index at2, Index at3, Index at4, double& v) const;
+		bool assignParameters(Index at1, Index at2, Index at3, Index at4, double& v) const;
 
 		protected:
 
@@ -488,13 +488,13 @@ namespace BALL
 			throw();
 
 		///
+		double getR(Position atom_type) const;
+
+		/// Retrieve vdW parameters for a single atom type
 		const VDWEntry& getParameters(Index at) const;
 
 		///
-		double getR(Position atom_type) const;
-
-		///
-		bool getParameters(Position at1, Position at2, double& rij, double& rij_7_, double& eij) const;
+		bool assignParameters(Position at1, Position at2, double& rij, double& rij_7_, double& eij) const;
 
 		protected:
 
@@ -551,7 +551,7 @@ namespace BALL
 		double getPartialCharge(Position at1, Position at2, Position bt) const;
 		
 		///
-		bool readEmpericalParameters(const String& filename)
+		bool readEmpiricalParameters(const String& filename)
 			throw(Exception::FileNotFound);
 
 		///

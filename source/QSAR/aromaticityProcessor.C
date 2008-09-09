@@ -167,7 +167,7 @@ namespace BALL
 		}
 
 		// handle the sp2n containing rings, all the rings are stored in atom_to_rings
-		for (HashMap<Atom*, vector<HashSet<Atom*> > >::Iterator it=atom_to_rings.begin(); +it; ++it)
+		for (HashMap<Atom*, vector<HashSet<Atom*> > >::Iterator it = atom_to_rings.begin(); it != atom_to_rings.end(); ++it)
 		{
 			if (it->second.size() > 1)
 			{

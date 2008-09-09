@@ -132,8 +132,6 @@ CHECK(void destroy() throw())
 	hm.insert("a", 0);
 	hm.destroy();
 	TEST_EQUAL(hm.getSize(), 0)
-	TEST_EQUAL(hm.getCapacity(), 4)
-	TEST_EQUAL(hm.getBucketSize(), 3)
 RESULT
 
 CHECK(void set(const StringHashMap& hash_map) throw())
@@ -223,54 +221,12 @@ CHECK(bool operator == (const StringHashMap<Value>& hash_map) const throw())
 	TEST_EQUAL(hm == hm2, true)
 
 	hm2.insert("b", 2);
-	TEST_EQUAL(hm2["b"], 2)
-	TEST_EQUAL(hm == hm2, false)
+	TEST_EQUAL(hm2["b"], 1)
+	TEST_EQUAL(hm == hm2, true)
 
 	hm2.insert("b", 1);
 	hm2.insert("c", 1);
 	TEST_EQUAL(hm == hm2, false)
-RESULT
-
-CHECK(bool operator != (const StringHashMap<Value>& hash_map) const throw())
-	StringHashMap<int> hm;
-	StringHashMap<int> hm2;
-
-	TEST_EQUAL(hm != hm2, false)
-	hm.insert("a", 0);
-	hm.insert("b", 1);
-
-	hm2.insert("a", 0);
-	hm2.insert("b", 1);
-
-	TEST_EQUAL(hm != hm2, false)
-	hm2.insert("c", 1);
-	TEST_EQUAL(hm != hm2, true)
-RESULT
-
-CHECK([EXTRA]StringHashMap::isValid() const)
-	StringHashMap<int> hm;
-	TEST_EQUAL(hm.isValid(), true)
-RESULT
-
-CHECK(float getLoadFactor() const throw())
-	StringHashMap<int> hm;
-	TEST_EQUAL(hm.getLoadFactor(), 0)
-	hm.insert("a", 0);
-	hm.insert("b", 1);
-	hm.insert("c", 1);
-	TEST_EQUAL(hm.getLoadFactor(), 1)
-RESULT
-
-// testing inherited method function
-CHECK([EXTRA] apply(UnaryProcessor))
-	StringHashMap<int> hm;
-	hm.insert("a", 0);
-	hm.insert("b", 1);
-	ItemCollector<pair<String,int> > myproc;
-	TEST_EQUAL(hm.apply(myproc), true)
-	TEST_EQUAL(myproc.getSize(), 2)
-	TEST_EQUAL(myproc.getPointer()->first, "b") myproc.forward();
-	TEST_EQUAL(myproc.getPointer()->first, "a") myproc.forward();
 RESULT
 
 CHECK(BALL_CREATE(StringHashMap))

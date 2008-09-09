@@ -95,7 +95,7 @@ namespace BALL
       
       options->append("*** Options of algorithm ***");
       Options::ConstIterator it = alg_opt.begin();
-      for (; +it; ++it)
+      for (; it != alg_opt.end(); ++it)
 			{
 				s = it->first.c_str();
 				s.append(" : ");
@@ -110,7 +110,7 @@ namespace BALL
 			{
 				options->append("\n*** Options of scoring function ***");
 				it = sf_opt.begin();
-				for (; +it; ++it)
+				for (; it != sf_opt.end(); ++it)
 					{
 						s = it->first.c_str();
 						s.append(" : ");

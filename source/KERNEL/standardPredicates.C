@@ -1849,7 +1849,7 @@ namespace BALL
  		}
 
 		HashMap<Molecule*, TimeStamp>::Iterator it = call_time_map_.find(mol);
-		if (!+it || it->second.isOlderThan(mol->getModificationTime()))
+		if ((it == call_time_map_.end()) || it->second.isOlderThan(mol->getModificationTime()))
 		{
 			mol->apply(ring_proc_);
 			mol->apply(arom_proc_);

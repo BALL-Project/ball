@@ -392,7 +392,7 @@ namespace BALL
 			text.append("\n\n*** Options of algorithm ***\n");
 			const Options& alg_opt = dock_res_->getDockingOptions();
 			Options::ConstIterator it = alg_opt.begin();
-			for(; +it; ++it)
+			for(; it != alg_opt.end(); ++it)
 			{
 				text.append(it->first.c_str());
 				text.append(" : ");
@@ -443,7 +443,7 @@ namespace BALL
 			{
 				text.append("\n\n*** Options of scoring function ***\n");
 				Options::ConstIterator it = scoring_opt.begin();
-				for(; +it; ++it)
+				for(; it != scoring_opt.end(); ++it)
 				{
 					text.append(it->first.c_str());
 					text.append(" : ");

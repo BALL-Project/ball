@@ -166,7 +166,7 @@ namespace BALL
 
 			sb_parameters_.setEquivalences(equivalences);
 			sb_parameters_.readParameters(filename1);
-			sb_parameters_.readEmpericalParameters(filename2);
+			sb_parameters_.readEmpiricalParameters(filename2);
 		}
 
 		bool ok = true;
@@ -228,7 +228,7 @@ namespace BALL
 					this_bend.ATIJK = getBendType(*it1, *it2, atom1, atom2, atom3);
 					this_bend.is_linear = atom_types[atom_type_a2].lin;
 
-					if (bend_parameters_.getParameters(this_bend.ATIJK, 
+					if (bend_parameters_.assignParameters(this_bend.ATIJK, 
 																			  atom_type_a1, 
 																				atom_type_a2, 
 																				atom_type_a3, 
@@ -237,7 +237,7 @@ namespace BALL
 						// sometimes the ka values are lacking, try the emperical rule
 						if (this_bend.ka == 0)
 						{
-							this_bend.ka = calculateBendEmpericalForceConstant(atom1, atom2, atom3, this_bend.theta0);
+							this_bend.ka = calculateBendEmpiricalForceConstant(atom1, atom2, atom3, this_bend.theta0);
 							this_bend.emperical = true;
 						}
 
@@ -251,8 +251,8 @@ namespace BALL
 
 					// ok we will try the emperical rule
 					this_bend.emperical = true;
-					this_bend.theta0 = calculateBendEmpericalReferenceAngle(atom1, atom2, atom3);
-					this_bend.ka = calculateBendEmpericalForceConstant(atom1, atom2, atom3, this_bend.theta0);
+					this_bend.theta0 = calculateBendEmpiricalReferenceAngle(atom1, atom2, atom3);
+					this_bend.ka = calculateBendEmpiricalForceConstant(atom1, atom2, atom3, this_bend.theta0);
 
 					if (this_bend.ka != -1)
 					{
@@ -289,7 +289,6 @@ namespace BALL
 		MMFF94StretchParameters::StretchMap::ConstIterator stretch_it;
 
 		const vector<Bond*>& bonds = mmff94_->getBonds();
-		bool use_selection = getForceField()->getUseSelection();
 		
 		vector<Bond*>::const_iterator bond_it = bonds.begin();
 		for (; bond_it != bonds.end(); bond_it++)
@@ -297,26 +296,14 @@ namespace BALL
 			Atom& atom1 = *(Atom*)(*bond_it)->getFirstAtom();
 			Atom& atom2 = *(Atom*)(*bond_it)->getSecondAtom();
 
-		// WARNING: since we do not yet know whether the stretch will be needed for
-		// 				  an enabled StretchBend, we cannot skip the setup for non-selected
-		// 					stretches here!
-		/*	if (use_selection && (!atom1.isSelected() && !atom2.isSelected()))
-			{
-				continue;
-			}
-			*/
-
-			stretch_it = stretch_parameters_->getParameters(atom1.getType(), atom2.getType());
-			
+			static MMFF94StretchParameters::BondData data;
 			const bool is_sbmb = (**bond_it).hasProperty("MMFF94SBMB");
 			dummy_stretch.sbmb = is_sbmb;
 			dummy_stretch.atom1 = &atom1; 
 			dummy_stretch.atom2 = &atom2;
 
-			if (+stretch_it)
+			if (stretch_parameters_->assignParameters(atom1.getType(), atom2.getType(), data))
 			{
-				const MMFF94StretchParameters::BondData& data = stretch_it->second;
-
 				if (is_sbmb)
 				{
 					dummy_stretch.r0 = data.r0_sbmb;
@@ -328,13 +315,13 @@ namespace BALL
 					dummy_stretch.kb = data.kb_normal;
 				}
 
-				(**bond_it).setProperty("MMFF94RBL", (double) dummy_stretch.r0);
+				(**bond_it).setProperty("MMFF94RBL", (double)dummy_stretch.r0);
 				stretches_.push_back(dummy_stretch);
 
 				continue;
 			}
 
-			// try emperical values
+			// try empirical values
 			double r0 = calculateStretchR0(**bond_it);
 			double k  = calculateStretchConstant(**bond_it, r0);
 
@@ -404,7 +391,7 @@ namespace BALL
 			stretch_it1 = stretch_map.find((long) a1 * (long) a2);
 			stretch_it2 = stretch_map.find((long) a2 * (long) a3);
 
-			if (!+stretch_it1 || !+stretch_it2)
+			if (stretch_it1 == stretch_map.end() || stretch_it2 == stretch_map.end())
 			{
 				errorOccured_("stretch", *a1, *a2, *a3);
 				continue;
@@ -425,7 +412,7 @@ namespace BALL
 
 			// get kba_ijk and kba_kji
 			if (sb.sbtijk == -1 ||
-			    !sb_parameters_.getParameters(sb.sbtijk, *a1, *a2, *a3, sb.kba_ijk, sb.kba_kji))
+			    !sb_parameters_.assignParameters(sb.sbtijk, *a1, *a2, *a3, sb.kba_ijk, sb.kba_kji))
 			{
 				errorOccured_("stretch-bend", *a1, *a2, *a3);
 				continue;
@@ -919,7 +906,7 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		return sum_bond_types;
 	}
 
-	double MMFF94StretchBend::calculateBendEmpericalReferenceAngle(Atom& atom1, Atom& atom2, Atom& atom3) const
+	double MMFF94StretchBend::calculateBendEmpiricalReferenceAngle(Atom& atom1, Atom& atom2, Atom& atom3) const
 	{
 		const vector<MMFF94AtomType>& atd = mmff94_->getAtomTypes();
 
@@ -952,7 +939,7 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		return 120;
 	}
 		
-	double MMFF94StretchBend::calculateBendEmpericalForceConstant(Atom& atom1, Atom& atom2, Atom& atom3, double angle_0) const
+	double MMFF94StretchBend::calculateBendEmpiricalForceConstant(Atom& atom1, Atom& atom2, Atom& atom3, double angle_0) const
 	{
 		double degree_to_radian= Constants::PI / 180.0;
 		angle_0 *= degree_to_radian;
@@ -1230,9 +1217,9 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 
 		Index ij = getMMFF94Index(a1.getElement().getAtomicNumber(), a2.getElement().getAtomicNumber());
 
-		if (stretch_parameters_->getEmpericalParameters().has(ij))
+		if (stretch_parameters_->getEmpiricalParameters().has(ij))
 		{
-			const MMFF94StretchParameters::EmpericalBondData& bd = stretch_parameters_->getEmpericalParameters()[ij];
+			const MMFF94StretchParameters::EmpiricalBondData& bd = stretch_parameters_->getEmpiricalParameters()[ij];
 			const double kb = bd.kb * pow((bd.r0 / r0), 6);
 			return kb;
 		}

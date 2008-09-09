@@ -245,7 +245,7 @@ namespace BALL
 			INI_out.insertValue("ALGORITHM", "name", docking_algorithm_);
 			INI_out.appendSection("ALGORITHM_OPTIONS");
 			Options::ConstIterator it = docking_options_.begin();
-			for (; +it; ++it)
+			for (; it != docking_options_.end(); ++it)
 			{
 				INI_out.insertValue("ALGORITHM_OPTIONS", it->first, it->second);
 			}
@@ -258,7 +258,7 @@ namespace BALL
 				section = String("SCORING_OPTIONS_") + String(i);
 				INI_out.appendSection(section);
 				it = scorings_[i].options_.begin();
-				for (; +it; ++it)
+				for (; it != scorings_[i].options_.end(); ++it)
 				{
 					INI_out.insertValue(section, it->first, it->second);
 				}

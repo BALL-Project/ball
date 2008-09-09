@@ -57,7 +57,6 @@ namespace BALL
 				type_map_.insert(std::pair<Atom*, Size>(*atom_it, FresnoTypes::UNKNOWN));
 			}
 
-			HashMap<const Atom*, Size>::Iterator it = type_map_.begin();
 			ConnectedToPredicate connectedTo;
 			String symbol;
 			const Atom* atom;
@@ -87,7 +86,8 @@ namespace BALL
 			metals.insert("Zn");
 			metals.insert("Fe");
 
-			for (; +it; ++it)
+			HashMap<const Atom*, Size>::Iterator it = type_map_.begin();
+			for (; it != type_map_.end(); ++it)
 			{
 				atom = it->first;
 				symbol = atom->getElement().getSymbol();
@@ -320,7 +320,7 @@ namespace BALL
 		{
 			old_polar_counter = polar_counter;
 
-			for (it = type_map_.begin(); +it; ++it)
+			for (it = type_map_.begin(); it != type_map_.end(); ++it)
 			{
 				atom = it->first;
 				symbol = atom->getElement().getSymbol();
@@ -463,7 +463,7 @@ namespace BALL
 		// ======
 		//
 
-		for (it = type_map_.begin(); +it; ++it)
+		for (it = type_map_.begin(); it != type_map_.end(); ++it)
 		{
 			atom = it->first;
 			symbol = atom->getElement().getSymbol();

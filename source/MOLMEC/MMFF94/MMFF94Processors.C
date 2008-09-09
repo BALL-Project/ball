@@ -131,7 +131,7 @@ bool MMFF94AtomTyper::assignAromaticType_5_(Atom& atom, Position L5, bool anion,
 
 	// try full match
 	HashMap<String, AromaticType>::ConstIterator it = aromatic_types_5_map_.find(key);
-	if (+it)
+	if (it != aromatic_types_5_map_.end())
 	{
 		const AromaticType& type = it->second;
 		bool found = true;
@@ -555,7 +555,7 @@ void MMFF94ChargeProcessor::assignPartialCharges_()
 			// otherwise take it from the parameter file
 			it = types_to_charges_.find(type);
 
-			if (+it)
+			if (it != types_to_charges_.end())
 			{
 				atom.setCharge(it->second);
 			}
@@ -753,7 +753,7 @@ bool MMFF94ChargeProcessor::finish()
 		{
 			Atom* atom2 = (Atom*)bit->getPartner(atom);
 			hit = charges.find(atom2);
-			if (+hit)
+			if (hit != charges.end())
 			{
 				hit->second += c;
 			}
@@ -767,7 +767,7 @@ bool MMFF94ChargeProcessor::finish()
 
 	// now add up all charges
 	HashMap<Atom*, float>::Iterator cit = charges.begin();
-	for (; +cit; ++cit)
+	for (; cit != charges.begin(); ++cit)
 	{
 		Atom& atom = *cit->first;
 		atom.setCharge(atom.getCharge() + cit->second);

@@ -125,13 +125,13 @@ namespace BALL
 				has_changed_ = dock_dialog.has_changed_;
 				// dialogs in hashmaps are dynamically allocated in method initializeWidget()
 				HashMap<int, QDialog*>::Iterator it = algorithm_dialogs_.begin();
-				for (; +it; ++it)
+				for (; it != algorithm_dialogs_.end(); ++it)
 				{
 					delete it->second;
 					algorithm_dialogs_.erase(it);
 				}
 				algorithm_dialogs_ = dock_dialog.algorithm_dialogs_;
-				for (it = scoring_dialogs_.begin(); +it; ++it)
+				for (it = scoring_dialogs_.begin(); it != scoring_dialogs_.end(); ++it)
 				{
 					delete it->second;
 					scoring_dialogs_.erase(it);
@@ -282,7 +282,7 @@ namespace BALL
 			scoringFuncChosen();
 			
 			HashMap<int, QDialog*>::Iterator it = algorithm_dialogs_.begin();
-			for (; +it; ++it)
+			for (; it != algorithm_dialogs_.end(); ++it)
 			{
 #ifdef BALL_HAS_FFTW
 				GeometricFitDialog* dialog = dynamic_cast<GeometricFitDialog*>(it->second);
@@ -329,7 +329,7 @@ namespace BALL
 			}
 			
 			HashMap<int, QDialog*>::Iterator it = algorithm_dialogs_.begin();
-			for (; +it; ++it)
+			for (; it != algorithm_dialogs_.end();  ++it)
 			{
 #ifdef BALL_HAS_FFTW
 				GeometricFitDialog* dialog = dynamic_cast<GeometricFitDialog*>(it->second);

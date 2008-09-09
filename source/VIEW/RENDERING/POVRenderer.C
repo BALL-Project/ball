@@ -406,7 +406,7 @@ namespace BALL
 
 			// write all colors
 			ColorMap::ConstIterator cit = color_map_.begin();
-			for (; +cit; ++cit)
+			for (; cit != color_map_.end(); ++cit)
 			{
 				out << "#declare c" << cit->second << " = " << POVColorRGBA(ColorRGBA(cit->first)) << ";" << endl;
 			}

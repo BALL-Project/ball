@@ -79,7 +79,7 @@ CHECK(Processor::Result operator () (Composite& composite) throw())
 	Selector s;
 	TEST_EQUAL(s.getNumberOfSelectedAtoms(), 0)
 	HashMap<String, Size>::ConstIterator exp_iterator = test_expressions.begin();
-	for (; +exp_iterator; ++exp_iterator)
+	for (; exp_iterator != test_expressions.end(); ++exp_iterator)
 	{
 		S.deselect();
 		s.setExpression(exp_iterator->first);
@@ -128,7 +128,7 @@ CHECK(Size getNumberOfSelectedAtoms() const throw())
 	Selector s;
 	TEST_EQUAL(s.getNumberOfSelectedAtoms(), 0)
 	HashMap<String, Size>::ConstIterator exp_iterator = test_expressions.begin();
-	for (; +exp_iterator; ++exp_iterator)
+	for (; exp_iterator != test_expressions.end(); ++exp_iterator)
 	{
 		S.deselect();
 		s.setExpression(exp_iterator->first);

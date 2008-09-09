@@ -234,11 +234,11 @@ namespace BALL
 			atom_types_.readParameters(prefix + "MMFFPROP.PAR");
 			equivalences_.readParameters(prefix + "MMFFDEF.PAR");
 			bond_parameters_.readParameters(prefix + "MMFFBOND.PAR");
-			bond_parameters_.readEmpericalParameters(prefix + "MMFFBNDK.PAR");
+			bond_parameters_.readEmpiricalParameters(prefix + "MMFFBNDK.PAR");
 			parameters_initialized_ = true;
 
 			es_parameters_.readParameters(prefix + "MMFFCHG.PAR");
-			es_parameters_.readEmpericalParameters(prefix + "MMFFPBCI.PAR");
+			es_parameters_.readEmpiricalParameters(prefix + "MMFFPBCI.PAR");
 
 			atom_typer_.setup(prefix + "TYPES.PAR");
 			atom_typer_.setupHydrogenTypes(prefix + "MMFFHDEF.PAR");
@@ -427,13 +427,13 @@ namespace BALL
 
 	bool MMFF94::assignMMFF94BondType(Bond& bond) const
 	{
+		static MMFF94StretchParameters::BondData data;
 		MMFF94StretchParameters::StretchMap::ConstIterator it;
-		it = bond_parameters_.getParameters(bond.getFirstAtom()->getType(),
-																				bond.getSecondAtom()->getType());
-
-		if (!+it) return false;
-
-		const MMFF94StretchParameters::BondData& data = it->second;
+		if (!bond_parameters_.assignParameters(bond.getFirstAtom()->getType(),
+																				bond.getSecondAtom()->getType(), data))
+		{
+			return false;
+		}
 
 #ifdef BALL_DEBUG_TEST
 		if (!data.sbmb_exists && !data.standard_bond_exists)
@@ -448,12 +448,10 @@ namespace BALL
 		{
 			is_sbmb = true;
 		}
-
 		else if (!data.sbmb_exists && data.standard_bond_exists)
 		{
 			is_sbmb = false;
 		}
-
 		else
 		{
 			const Atom& atom1 = *(Atom*)bond.getFirstAtom();
@@ -559,7 +557,7 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 				Atom* atom1 = (Atom*)(**bit).getFirstAtom();
 				Atom* atom2 = (Atom*)(**bit).getFirstAtom();
 				it = atom_map.find(atom1);
-				if (+it)
+				if (it != atom_map.end())
 				{
 					it->second ++;
 				}
@@ -569,7 +567,7 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 				}
 
 				it = atom_map.find(atom2);
-				if (+it)
+				if (it != atom_map.end())
 				{
 					it->second ++;
 				}
@@ -583,7 +581,7 @@ Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
 		// if an atom has two aromatic bonds, make one a single and one a double bond
 		vector<Bond*> bonds;
 		it = atom_map.begin();
-		for (; +it; ++it)
+		for (; it != atom_map.end(); ++it)
 		{
 			if (it->second < 2) continue;
 

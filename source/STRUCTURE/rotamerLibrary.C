@@ -134,9 +134,9 @@ namespace BALL
 		if (backbone_dependent_)
 		{
 			HashMap<Index, HashMap<Index, HashMap<String, ResidueRotamerSet> > >::ConstIterator it1 = bb_dep_sets_.begin();
-			for (; +it1; ++it1)
+			for (; it1 != bb_dep_sets_.end(); ++it1)
 			{
-				for (HashMap<Index, HashMap<String, ResidueRotamerSet> >::ConstIterator it2 = it1->second.begin(); +it2; ++it2)
+				for (HashMap<Index, HashMap<String, ResidueRotamerSet> >::ConstIterator it2 = it1->second.begin(); it2 != it1->second.end(); ++it2)
 				{
 					number += it2->second.size();
 				}
@@ -155,11 +155,11 @@ namespace BALL
 		if (backbone_dependent_)
 		{
 			HashMap<Index, HashMap<Index, HashMap<String, ResidueRotamerSet> > >::ConstIterator it1 = bb_dep_sets_.begin();
-			for (; +it1; ++it1)
+			for (; it1 != bb_dep_sets_.end(); ++it1)
 			{
-				for (HashMap<Index, HashMap<String, ResidueRotamerSet> >::ConstIterator it2 = it1->second.begin(); +it2; ++it2)
+				for (HashMap<Index, HashMap<String, ResidueRotamerSet> >::ConstIterator it2 = it1->second.begin(); it2 != it1->second.end(); ++it2)
 				{
-					for (HashMap<String, ResidueRotamerSet>::ConstIterator it3 = it2->second.begin(); +it3; ++it3)
+					for (HashMap<String, ResidueRotamerSet>::ConstIterator it3 = it2->second.begin(); it3 != it2->second.end(); ++it3)
 					{
 						number += it3->second.getNumberOfRotamers();
 					}
@@ -168,7 +168,7 @@ namespace BALL
 		}
 		else
 		{
-			for (HashMap<String, ResidueRotamerSet>::ConstIterator it = bb_indep_sets_.begin(); +it; ++it)
+			for (HashMap<String, ResidueRotamerSet>::ConstIterator it = bb_indep_sets_.begin(); it != bb_indep_sets_.end(); ++it)
 			{
 				number += it->second.getNumberOfRotamers();
 			}
@@ -183,9 +183,9 @@ namespace BALL
 		if (backbone_dependent_)
 		{
 			HashMap<Index, HashMap<Index, HashMap<String, ResidueRotamerSet> > >::ConstIterator it1 = bb_dep_sets_.begin();
-    	for (; +it1; ++it1)
+    	for (; it1 != bb_dep_sets_.end(); ++it1)
     	{
-      	for (HashMap<Index, HashMap<String, ResidueRotamerSet> >::ConstIterator it2 = it1->second.begin(); +it2; ++it2)
+      	for (HashMap<Index, HashMap<String, ResidueRotamerSet> >::ConstIterator it2 = it1->second.begin(); it2 != it1->second.end(); ++it2)
       	{
 					if (it2->second.has(name))
 					{
@@ -267,7 +267,7 @@ namespace BALL
 		Size number_of_phis(bb_dep_sets_.size());
 		vector<Index> torsions;
 		HashSet<Index> unique_torsion;
-		for (HashMap<Index, HashMap<Index, HashMap<String, ResidueRotamerSet> > >::ConstIterator it1 = bb_dep_sets_.begin(); +it1; ++it1)
+		for (HashMap<Index, HashMap<Index, HashMap<String, ResidueRotamerSet> > >::ConstIterator it1 = bb_dep_sets_.begin(); it1 != bb_dep_sets_.end(); ++it1)
 		{
 			// same number of discrete angels of phi and psi?
 			if (number_of_phis != it1->second.size())
@@ -281,7 +281,7 @@ namespace BALL
 				unique_torsion.insert(it1->first);
 			}
 
-			for (HashMap<Index, HashMap<String, ResidueRotamerSet> >::ConstIterator it2 = it1->second.begin(); +it2; ++it2)
+			for (HashMap<Index, HashMap<String, ResidueRotamerSet> >::ConstIterator it2 = it1->second.begin(); it2 != it1->second.end(); ++it2)
 			{
 				if (!unique_torsion.has(it1->first))
 				{

@@ -247,7 +247,7 @@ MMFF94StretchParameters::BondData::BondData()
 		kb_sbmb(0),
 		r0_sbmb(0),
 		sbmb_exists(0),
-		emperical(0)
+		empirical(0)
 {
 }
 
@@ -276,11 +276,19 @@ const MMFF94StretchParameters& MMFF94StretchParameters::operator =
 }
 
 
-MMFF94StretchParameters::StretchMap::ConstIterator 
-	MMFF94StretchParameters::getParameters(Position type1, Position type2) const
+bool MMFF94StretchParameters::assignParameters(Position type1, Position type2, MMFF94StretchParameters::BondData& data) const
 {
 	// take the standard value
-	return parameters_.find(getMMFF94Index(type1, type2));
+	MMFF94StretchParameters::StretchMap::ConstIterator it = parameters_.find(getMMFF94Index(type1, type2));
+	if (it != parameters_.end())
+	{
+		data = it->second;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 bool MMFF94StretchParameters::setup_(const vector<vector<String> >& lines)	
@@ -344,9 +352,9 @@ Position getMMFF94Index(Position atom_type1, Position atom_type2)
 	return atom_type1 * MMFF94_number_atom_types + atom_type2;
 }
 
-bool MMFF94StretchParameters::readEmpericalParameters(const String& filename)
+bool MMFF94StretchParameters::readEmpiricalParameters(const String& filename)
 {
-	emperical_parameters_.clear();
+	empirical_parameters_.clear();
 
 	LineBasedFile infile(filename);
 	vector<String> fields;
@@ -373,14 +381,14 @@ bool MMFF94StretchParameters::readEmpericalParameters(const String& filename)
 			const Position type2 = fields[1].toUnsignedInt();
 			const Position index = getMMFF94Index(type1, type2);
 
-			EmpericalStretchMap::Iterator it = emperical_parameters_.find(index);
+			EmpiricalStretchMap::Iterator it = empirical_parameters_.find(index);
 
-			if (it == emperical_parameters_.end())
+			if (it == empirical_parameters_.end())
 			{
-				it = emperical_parameters_.insert(pair<Position, EmpericalBondData>(index, EmpericalBondData())).first;
+				it = empirical_parameters_.insert(pair<Position, EmpiricalBondData>(index, EmpiricalBondData())).first;
 			}
 
-			EmpericalBondData& data = it->second;
+			EmpiricalBondData& data = it->second;
 
 			data.r0 = fields[2].toDouble();
 			data.kb = fields[3].toDouble(); 
@@ -451,7 +459,7 @@ const MMFF94BendParameters& MMFF94BendParameters::operator = (const MMFF94BendPa
 	return *this;
 }
 
-bool MMFF94BendParameters::getParameters(Position bond_type,
+bool MMFF94BendParameters::assignParameters(Position bond_type,
 		Position atom_type1, Position atom_type2, Position atom_type3, double& ka, double& angle) const
 {
 	BendMap::ConstIterator it;
@@ -459,7 +467,7 @@ bool MMFF94BendParameters::getParameters(Position bond_type,
 	Position index = getIndex_(bond_type, atom_type1, atom_type2, atom_type3);
 
 	it = parameters_.find(index);
-	if (+it)
+	if (it != parameters_.end())
 	{
 		ka = it->second.first;
 		angle = it->second.second;
@@ -474,7 +482,7 @@ bool MMFF94BendParameters::getParameters(Position bond_type,
 																		atom_type2, 
 																		equiv_->getEquivalence(atom_type3, p)));
 
-		if (+it)
+		if (it != parameters_.end())
 		{
 			ka = it->second.first;
 			angle = it->second.second;
@@ -563,7 +571,7 @@ const MMFF94StretchBendParameters& MMFF94StretchBendParameters::operator = (cons
 	return *this;
 }
 
-bool MMFF94StretchBendParameters::getParameters(Position bend_type,
+bool MMFF94StretchBendParameters::assignParameters(Position bend_type,
 		const Atom& atom1, const Atom& atom2, const Atom& atom3, 
 		double& kb_ijk, double& kb_kji) const
 {
@@ -632,7 +640,7 @@ bool MMFF94StretchBendParameters::setup_(const vector<vector<String> >& lines)
 }
 
 
-bool MMFF94StretchBendParameters::readEmpericalParameters(const String& by_row_filename)
+bool MMFF94StretchBendParameters::readEmpiricalParameters(const String& by_row_filename)
 	throw(Exception::FileNotFound)
 {
 	LineBasedFile infile(by_row_filename);
@@ -739,7 +747,7 @@ const MMFF94TorsionParameters& MMFF94TorsionParameters::operator = (const MMFF94
 	return *this;
 }
 
-bool MMFF94TorsionParameters::getParameters(Position torsion_type,
+bool MMFF94TorsionParameters::assignParameters(Position torsion_type,
 		Index at1, Index at2, Index at3, Index at4,
 		double& v1, double& v2, double& v3) const
 {
@@ -772,7 +780,7 @@ bool MMFF94TorsionParameters::getParameters(Position torsion_type,
 
 		it = parameters_.find(index2);
 
-		if (+it)
+		if (it != parameters_.end())
 		{
 			const vector<double>& v = (*it).second;
 			v1 = v[0];
@@ -853,7 +861,7 @@ const MMFF94PlaneParameters& MMFF94PlaneParameters::operator = (const MMFF94Plan
 	return *this;
 }
 
-bool MMFF94PlaneParameters::getParameters(Index at1, Index at2, Index at3, Index at4, double& v) const
+bool MMFF94PlaneParameters::assignParameters(Index at1, Index at2, Index at3, Index at4, double& v) const
 {
 	String index = getIndex_(at1, at2, at3, at4);
 
@@ -881,7 +889,7 @@ bool MMFF94PlaneParameters::getParameters(Index at1, Index at2, Index at3, Index
 		{
 			it = parameters_.find(index2);
 
-			if (+it)
+			if (it != parameters_.end())
 			{
 #ifdef BALL_DEBUG_MMFF
 	Log.info() << " Found OOP Parameter " << v << std::endl;
@@ -973,6 +981,7 @@ const MMFF94VDWParameters::VDWEntry& MMFF94VDWParameters::getParameters(Index at
 	return parameters_[at];
 }
 
+
 bool MMFF94VDWParameters::setup_(const vector<vector<String> >& lines)
 {
 	parameters_.clear();
@@ -1042,7 +1051,7 @@ double MMFF94VDWParameters::getR(Position t) const
 	return r;
 }
 
-bool MMFF94VDWParameters::getParameters(Position at1, Position at2, double& rij, double& rij_7, double& eij) const
+bool MMFF94VDWParameters::assignParameters(Position at1, Position at2, double& rij, double& rij_7, double& eij) const
 {
 	const Position index = at1 * MMFF94_number_atom_types + at2;
 
@@ -1064,7 +1073,7 @@ bool MMFF94VDWParameters::getParameters(Position at1, Position at2, double& rij,
 	// equation 4
 	const double l = (ri - rj) / (ri + rj);
 
-	// zero pointers are catched above
+	// zero pointers are caught above
 	const VDWEntry& e1 = getParameters(at1);
 	const VDWEntry& e2 = getParameters(at2);
 	
@@ -1212,7 +1221,7 @@ double MMFF94ESParameters::getPartialCharge(Position at1, Position at2, Position
 	return r;
 }
 
-bool MMFF94ESParameters::readEmpericalParameters(const String& filename)
+bool MMFF94ESParameters::readEmpiricalParameters(const String& filename)
 	throw(Exception::FileNotFound)
 {
 	phis_.resize(MMFF94_number_atom_types);

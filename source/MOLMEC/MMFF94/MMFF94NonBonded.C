@@ -175,7 +175,7 @@ namespace BALL
 			data.qi = atom1->getCharge();
 			data.qj = atom2->getCharge();
 
-			vdw_parameters_.getParameters(atom1->getType(), atom2->getType(), data.rij, data.rij_7, data.eij);
+			vdw_parameters_.assignParameters(atom1->getType(), atom2->getType(), data.rij, data.rij_7, data.eij);
 
 #ifdef BALL_MMFF94_DEBUG
 			Log.info() << "NB pair " << atom1->getName() << " " << atom2->getName() << std::endl;

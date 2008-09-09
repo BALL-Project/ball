@@ -155,7 +155,7 @@ CHECK(chemical shifts/with rings)
 		if (shifts.size() != 0)
 		{
 			StringHashMap<float>::Iterator it = shifts.begin();
-			for (; +it; ++it)
+			for (; it != shifts.end(); ++it)
 			{
 				STATUS("unassigned shift for: " << it->first)
 			}

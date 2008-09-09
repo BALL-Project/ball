@@ -47,6 +47,19 @@
 #	include <BALL/KERNEL/secondaryStructure.h>
 #endif
 
+namespace __gnu_cxx
+{
+  template<>
+	struct hash<BALL::Quadruple<BALL::String, BALL::PDB::Character, BALL::PDB::Integer, BALL::PDB::AChar> >
+  {
+		size_t
+    operator()(const BALL::Quadruple<BALL::String, BALL::PDB::Character, BALL::PDB::Integer, BALL::PDB::AChar>& f) const
+    { return (size_t)f.third; }
+	};
+}
+
+
+
 namespace BALL 
 {
 
@@ -789,6 +802,10 @@ namespace BALL
 		/// Read partial charges from cols 76-80?
 		bool parse_partial_charges_;
 	};
+
+
+
+
 
 	/** Hash 
 	* \ingroup  StructureFormats

@@ -136,7 +136,7 @@ namespace BALL
 		double deltaGcav = 0;
 
 		HashMap<const Atom*,float>::Iterator it = atom_areas.begin();
-		for (; +it; ++it)
+		for (; it != atom_areas.end(); ++it)
 		{
 			R = 2 * it->first->getRadius() * 1e-10 / s1;
 

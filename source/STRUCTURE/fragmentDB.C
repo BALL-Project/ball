@@ -781,7 +781,10 @@ namespace BALL
 	const Fragment* FragmentDB::getFragment(const String& fragment_name) const
 	{
 		const StringHashMap<Position>::ConstIterator to_find = name_to_frag_index_.find(fragment_name);
-		if (!+to_find) return 0;
+		if (to_find == name_to_frag_index_.end()) 
+		{
+			return 0;	
+		}
 		
 		return fragments_[to_find->second];
 	}
@@ -931,7 +934,10 @@ namespace BALL
 	const Residue* FragmentDB::getResidue(const String& fragment_name) const 
 	{
 		const StringHashMap<Position>::ConstIterator to_find = name_to_frag_index_.find(fragment_name);
-		if (!+to_find) return 0;
+		if (to_find == name_to_frag_index_.end())
+		{
+			return 0;
+		}
 		
 		return fragments_[(*to_find).second];
 	}
@@ -942,7 +948,10 @@ namespace BALL
 		list<String> names;
 
 		StringHashMap<list<Position> >::ConstIterator to_find = name_to_variants_.find(name);
-		if (!+to_find) return names;
+		if (to_find == name_to_variants_.end())  
+		{
+			return names;	
+		}
 		
 		list<Position>::const_iterator it = (*to_find).second.begin();
 		const list<Position>::const_iterator end_it = (*to_find).second.end();
@@ -1021,7 +1030,7 @@ namespace BALL
 		NameMap::ConstIterator it;
 		String match_name(r_name + ":*");
 		it = map.find(match_name);
-		if (+it)
+		if (it != map.end())
 		{
 			it->second.split(s, 2, ":");
 			r_name = s[0];
@@ -1036,7 +1045,7 @@ namespace BALL
 		// first, try to match exactly
 		match_name = r_name + ":" + a_name;
 		it = map.find(match_name);
-		if (+it)
+		if (it != map.end())
 		{
 			it->second.split(s, 2, ":");
 			a_name = s[1];
@@ -1048,7 +1057,7 @@ namespace BALL
 			// second, try wildcard match for residue names
 			match_name = "*:" + a_name;
 			it = map.find(match_name);
-			if (+it)
+			if (it != map.end())
 			{
 				it->second.split(s, 2, ":");
 				a_name = s[1];
@@ -1412,9 +1421,12 @@ namespace BALL
 		{
 			const String atom_name = frag_atom_it->getName().trim();
 			const StringHashMap<const Atom*>::Iterator to_find = template_names.find(atom_name);
-			if (!+to_find) continue;
+			if (to_find == template_names.end()) 
+			{
+				continue;	
+			}
 			
-			const Atom* tplate_atom = (*to_find).second;
+			const Atom* tplate_atom = to_find->second;
 
 			// we found two matching atoms. Great! Now check their bonds..
 			// iterate over all bonds of the template
