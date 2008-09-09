@@ -40,8 +40,9 @@ namespace BALL
 		void InputDeviceDriver::emitPositionChange(double x, double y, double z,
 		                                           double a, double b, double c)
 		{
-			qApp->postEvent(static_cast<QObject*>(receiver_),
-			                new TransformationEvent6D(x, y, z, a, b, c));
+			QCoreApplication::instance()->postEvent(
+			                      static_cast<QObject*>(receiver_),
+			                      new TransformationEvent6D(x, y, z, a, b, c));
 		}
 	}
 }
