@@ -373,22 +373,58 @@ cout << ")" << endl;
 				}
 
 				// compute the total charge
+				// TODO: the favoured Nobel gas configuration should be stored in class PTE
+				// NOTE: this is just a workaround as long no core-developer decision has been made.
 				float charge = 0;
 				for (AtomIterator a_it = ac_->beginAtom(); a_it != ac_->endAtom(); a_it++)
 				{
 					int valence = 0;
+					int atom_charge = 0;				
 					for (Atom::BondIterator b_it = a_it->beginBond(); b_it != a_it->endBond(); b_it++)
 					{
-						valence += b_it->getOrder();
+						valence += sol.bond_orders[&*b_it];	
 					}
+					
+					if (sol.number_of_virtual_hydrogens.find(&*a_it) != sol.number_of_virtual_hydrogens.end())
+						valence += sol.number_of_virtual_hydrogens[&*a_it];
 
-					if (  (a_it->getElement() == PTE[Element::H])
-							||(a_it->getElement() == PTE[Element::He]))
+					// Note: This is just an heuristic! 
+					if (  a_it->getElement() == PTE[Element::H])
+							//|(a_it->getElement() == PTE[Element::He]))
 					{	
-						charge += a_it->getElement().getGroup() - valence;
+						atom_charge -= a_it->getElement().getGroup() - valence;
+					}
+					else if (  (a_it->getElement().getGroup() == 1)
+							    ||(a_it->getElement().getGroup() == 2) )
+					{
+						atom_charge += a_it->getElement().getGroup() - valence;
+					}
+					else if ((a_it->getElement().getAtomicNumber() == 5))
+					{
+						//TODO ask Dirk
+					}
+					else if (a_it->getElement().getAtomicNumber() <= 9)
+					{
+						atom_charge -= 18 - a_it->getElement().getGroup() - valence;
+					}
+					else if ((a_it->getElement().getAtomicNumber() == 13))
+					{
+						atom_charge += a_it->getElement().getGroup() -10 - valence;
+					}
+					else if ((a_it->getElement().getAtomicNumber() <= 17) &&
+										(a_it->getElement().getAtomicNumber() >= 14) )
+					{
+						atom_charge -= 18 - a_it->getElement().getGroup() - valence;
 					}
 					else
-						charge += 18 - a_it->getElement().getGroup() - valence;
+					{
+						//TODO ask Dirk
+					}
+					charge += atom_charge;
+/*	//Anne
+	if (atom_charge != 0)
+		cout << a_it->getFullName() << "  charge: " << atom_charge << endl; 
+*/					
 				}
 				// store the total charge
 				sol.total_charge = charge;
@@ -610,24 +646,9 @@ cout << endl;
 									num_fixed_bonds++;
 									break;
 								}
-								case Bond::ORDER__AROMATIC:
-								{
-									fixed += 1;
-									bond_fixed_[bnd] 	= 1; 
-									num_fixed_bonds++;
-									break;
-								}	
 								default: //Bond::ORDER__UNKNOWN:
 								{
-									// the bond might still be aromatic, if it has the IS_AROMATIC - property set!
-									if (bnd->isAromatic())
-									{
-										fixed += 1;
-										bond_fixed_[bnd] 	= 1; 
-										num_fixed_bonds++;
-									}
-									else
-										bond_fixed_[bnd] = 0;
+									bond_fixed_[bnd] = 0;
 								}
 							}
 						}
@@ -1951,8 +1972,6 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 
 		if (found_a_sol)
 		{
-			//bool next_solution_is_optimal = (getTotalPenalty(solutions_[0]) == getTotalPenalty(sol)); 
-
 			solutions_.push_back(sol);
 			if (apply_solution)
 				apply(solutions_.size()-1);
