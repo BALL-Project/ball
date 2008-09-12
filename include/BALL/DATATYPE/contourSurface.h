@@ -26,7 +26,7 @@
 #include <vector>
 #include <math.h>
 
-namespace __gnu_cxx
+namespace BALL_EXT_NAMESPACE
 {
   template<>
   struct hash<std::pair<BALL::Position, BALL::Position> >

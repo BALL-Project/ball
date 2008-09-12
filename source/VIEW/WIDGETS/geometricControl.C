@@ -341,9 +341,6 @@ namespace BALL
 		{
 			if (state != representation.isHidden()) return;
 
-			if (!state)  setStatusbarText("Hide representation.");
-			else 				 setStatusbarText("Show representation.");
-				
 			representation.setHidden(!state);
 			if (!representation.isHidden()) 
 			{

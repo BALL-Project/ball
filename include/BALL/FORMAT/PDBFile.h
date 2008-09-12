@@ -47,7 +47,7 @@
 #	include <BALL/KERNEL/secondaryStructure.h>
 #endif
 
-namespace __gnu_cxx
+namespace BALL_EXT_NAMESPACE
 {
   template<>
 	struct hash<BALL::Quadruple<BALL::String, BALL::PDB::Character, BALL::PDB::Integer, BALL::PDB::AChar> >

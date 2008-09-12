@@ -28,7 +28,7 @@
 #endif
 
 
-namespace __gnu_cxx
+namespace BALL_EXT_NAMESPACE
 {
   template<>
   struct hash<BALL::Bond::BondOrder>
