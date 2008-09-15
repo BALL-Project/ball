@@ -729,7 +729,8 @@ MAKEDEP_OPTS
 BALL_TYPENAME
 OPENGL_LIBOPTS
 OPENGL_LIBPATH
-QT_LIBOPTS
+QT_BALL_LIBOPTS
+QT_VIEW_LIBOPTS
 QT_LIBPATH
 QT_MT_SUFFIX
 X11_LIBOPTS
@@ -21950,22 +21951,31 @@ echo "${ECHO_T}yes" >&6; }
 		{ echo "$as_me:$LINENO: checking linking against QT libraries" >&5
 echo $ECHO_N "checking linking against QT libraries... $ECHO_C" >&6; }
 
+		GENERIC_QT_LIBPATH=""
+		DARWIN_QT_LIBPATH=""
 		if test "${QT_LIBPATH}" != "/usr/lib" ; then
-			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
-			QT_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
-			if test "${OS}" = "Darwin" ; then
-				QTQGL_LIBOPTS="-F${QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
-				QT_LIBOPTS="-F${QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
-			fi
-		else
-			QT_LIBPATH=""
-			QTQGL_LIBOPTS=" -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
-			QT_LIBOPTS="-lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
-			if test "${OS}" = "Darwin" ; then
-				QTQGL_LIBOPTS="-framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
-				QT_LIBOPTS="-framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
-			fi
+			GENERIC_QT_LIBPATH="-L${QT_LIBPATH}"
+			DARWIN_QT_LIBPATH="-F${QT_LIBPATH}"
 		fi
+
+		if test "${OS}" = "Darwin" ; then
+			QTQGL_LIBOPTS="${DARWIN_QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
+			QT_BALL_LIBOPTS="${DARWIN_QT_LIBPATH} -framework QtCore -framework QtSql"
+			QT_VIEW_LIBOPTS="${DARWIN_QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest"
+		else
+			QTQGL_LIBOPTS="${GENERIC_QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
+			QT_BALL_LIBOPTS="${GENERIC_QT_LIBPATH} -lQtCore -lQtSql"
+			QT_VIEW_LIBOPTS="${GENERIC_QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest"
+		fi
+
+		cat >>confdefs.h <<_ACEOF
+#define QT_BALL_LIBOPTS ${QT_BALL_LIBOPTS}
+_ACEOF
+
+		cat >>confdefs.h <<_ACEOF
+#define QT_VIEW_LIBOPTS ${QT_VIEW_LIBOPTS}
+_ACEOF
+
 
 		SAVE_LIBS=${LIBS}
 		LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
@@ -22016,7 +22026,7 @@ rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
 
 		if test "${QT_LINKING_OK+set}" != set ; then
 			SAVE_LIBS=${LIBS}
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+			LIBS="${QT_VIEW_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
 			cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -22066,7 +22076,7 @@ rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
 		if test "${QT_LINKING_OK+set}" != set ; then
 			SAVE_LIBS=${LIBS}
 			X11_LIBOPTS="-lXrender -lfreetype ${X11_LIBOPTS}"
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+			LIBS="${QT_VIEW_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
 			cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -22167,7 +22177,7 @@ echo "${ECHO_T}yes" >&6; }
 								{ echo "$as_me:$LINENO: checking QT library version" >&5
 echo $ECHO_N "checking QT library version... $ECHO_C" >&6; }
 		SAVE_LIBS=${LIBS}
-		LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+		LIBS="${QT_BALL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 		if test "${OS}" = "Darwin" ; then
 			DYLD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${GLEW_LIBPATH}:${DYLD_LIBRARY_PATH}"
 			export DYLD_LIBRARY_PATH
@@ -23850,7 +23860,7 @@ BINFMT_INDEX=""
 BALL_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
 
 LIBS="${LIBS} ${FFTW_LIBS} ${GSL_LIBS} -lm"
-VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+VIEW_LIBS="${VIEW_LIBS} ${QT_VIEW_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib -lBALL ${LIBS}"
 if test "${USE_VIEW}" = true ; then
 	BALL_LIBS="-L${BALL_PATH}/lib -lVIEW -lBALL ${VIEW_LIBS}"
@@ -24740,7 +24750,8 @@ MAKEDEP_OPTS!$MAKEDEP_OPTS$ac_delim
 BALL_TYPENAME!$BALL_TYPENAME$ac_delim
 OPENGL_LIBOPTS!$OPENGL_LIBOPTS$ac_delim
 OPENGL_LIBPATH!$OPENGL_LIBPATH$ac_delim
-QT_LIBOPTS!$QT_LIBOPTS$ac_delim
+QT_BALL_LIBOPTS!$QT_BALL_LIBOPTS$ac_delim
+QT_VIEW_LIBOPTS!$QT_VIEW_LIBOPTS$ac_delim
 QT_LIBPATH!$QT_LIBPATH$ac_delim
 QT_MT_SUFFIX!$QT_MT_SUFFIX$ac_delim
 X11_LIBOPTS!$X11_LIBOPTS$ac_delim
@@ -24770,7 +24781,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 45; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 46; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

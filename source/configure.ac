@@ -569,7 +569,7 @@ BINFMT_INDEX=""
 BALL_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
 
 LIBS="${LIBS} ${FFTW_LIBS} ${GSL_LIBS} -lm"
-VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+VIEW_LIBS="${VIEW_LIBS} ${QT_VIEW_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib -lBALL ${LIBS}"
 if test "${USE_VIEW}" = true ; then
 	BALL_LIBS="-L${BALL_PATH}/lib -lVIEW -lBALL ${VIEW_LIBS}"
@@ -645,7 +645,8 @@ dnl         LINKER
 
 AC_SUBST(OPENGL_LIBOPTS)    dnl compiler options for OpenGL libs (-Lxxx -lGLU -lGL)
 AC_SUBST(OPENGL_LIBPATH)    dnl path to OpenGL libs (without -L)
-AC_SUBST(QT_LIBOPTS)        dnl copiler options for QT libs (-Lxxx -lqgl -lqt)
+AC_SUBST(QT_BALL_LIBOPTS)        dnl copiler options for QT libs (-Lxxx -lqgl -lqt)
+AC_SUBST(QT_VIEW_LIBOPTS)        dnl copiler options for QT libs (-Lxxx -lqgl -lqt)
 AC_SUBST(QT_LIBPATH)        dnl path to QT libs (without -L)
 AC_SUBST(QT_MT_SUFFIX)      dnl Either "" or "-mt" if multithreading is enabled.
 AC_SUBST(MOC)        				dnl path to QT meta object compiler
