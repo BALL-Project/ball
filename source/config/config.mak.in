@@ -87,7 +87,8 @@ OPENGL_LIBOPTS      = @OPENGL_LIBOPTS@
 
 QT_LIBPATH          = @QT_LIBPATH@
 QT_MT_SUFFIX        = @QT_MT_SUFFIX@
-QT_LIBOPTS          = @QT_LIBOPTS@
+QT_BALL_LIBOPTS     = @QT_BALL_LIBOPTS@
+QT_VIEW_LIBOPTS     = @QT_VIEW_LIBOPTS@
 MOC                 = @MOC@
 UIC                 = @UIC@
 
