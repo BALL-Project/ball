@@ -13,14 +13,6 @@ dnl
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
-dnl
-dnl    Disable caching in MULTI_BUILD mode - just to be sure
-dnl
-if test "${MULTI_BUILD}" = "true" ; then
-	${RM} config.cache
-fi
-
-
 dnl 
 dnl    Some initialization stuff...
 dnl 
@@ -403,6 +395,11 @@ dnl
 dnl		checks for header files
 dnl
 
+dnl		
+dnl		try to locate stl extensions
+dnl
+CF_FIND_EXT_NAMESPACE
+
 dnl
 dnl		some platforms need to include ieeefp.h
 dnl		for the definition of finite
@@ -766,11 +763,6 @@ AC_SUBST(SUBDIRS)
 AC_PREFIX_DEFAULT(`cd ..; pwd`)
 
 dnl
-dnl   Check for multi-platform build.
-dnl
-CF_CHECK_MULTI_BUILD
-
-dnl
 dnl 	Create output files. Move them to temporary location
 dnl		only, because some of them will require additional
 dnl		modification (in MULTI_BUILD mode).
@@ -782,7 +774,6 @@ AC_OUTPUT([
 	common.mak.tmp:config/common.mak.in 
 	Makefile.tmp:config/Makefile.in
 ])
-CF_MULTI_BUILD_SHADOW
 CF_MOVE_CONFIG_FILES
 
 dnl

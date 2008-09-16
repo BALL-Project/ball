@@ -16,8 +16,15 @@
 #endif
 
 #include <utility>
-#include <ext/hash_map>
 #include <algorithm>
+
+#ifdef BALL_EXT_INCLUDE_PREFIX
+# include <ext/hash_map>
+# include <ext/hash_fun.h>
+#else
+# include <hash_map>
+# include <hash_fun.h>
+#endif
 
 namespace BALL_EXT_NAMESPACE
 {
@@ -28,18 +35,20 @@ namespace BALL_EXT_NAMESPACE
 		size_t operator()(const T* x) const { return (size_t)x; }
 	};
 
-  template<>
-	struct hash<BALL::LongSize>
-	{
-		size_t operator()(BALL::LongSize x) const { return (size_t)x; }
-	};
-
-
 	template<>
   struct hash<BALL::String>
   {
     size_t operator () (const BALL::String& s) const {return __stl_hash_string(s.c_str());}
 	};
+
+#ifdef BALL_NEEDS_LONGSIZE_HASH
+  template<>
+	struct hash<BALL::LongSize>
+	{
+		size_t operator()(BALL::LongSize x) const { return (size_t)x; }
+	};
+#endif
+
 }
 
 namespace BALL
