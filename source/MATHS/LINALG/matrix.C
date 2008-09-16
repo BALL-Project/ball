@@ -8,13 +8,14 @@
 #endif
 
 #include <values.h>
+#include <limits>
 
 
 namespace BALL 
 {
 	// machine-epsilon for IEEE-754 double-precision floating point
 	template <class valuetype, class mtraits>
-	double Matrix<valuetype,mtraits>::MACHINE_EPSILON = 1e-15;
+	double Matrix<valuetype, mtraits>::MACHINE_EPSILON = std::numeric_limits<double>::epsilon();
 
 	
 	// ----- constructors -----
