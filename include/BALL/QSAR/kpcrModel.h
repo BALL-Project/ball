@@ -31,7 +31,7 @@ namespace BALL
 				//@{
 				KPCRModel(const QSARData& q, int k_type, double p1, double p2=-1);
 				
-				KPCRModel(const QSARData& q, RowVector& w);
+				KPCRModel(const QSARData& q, Vector<double>& w);
 				
 				KPCRModel(const QSARData& q, String s1, String s2);
 				

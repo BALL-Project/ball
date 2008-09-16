@@ -35,7 +35,7 @@ namespace BALL
 				/** @name Accessors
 				 */
 				//@{
-				virtual RowVector predict(const vector<double>& substance, bool transform=1);
+				virtual Vector<double> predict(const vector<double>& substance, bool transform=1);
 	
 			protected:
 				void calculateOffsets();

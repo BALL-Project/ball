@@ -35,9 +35,9 @@ namespace BALL
 				In order to find the optimal number of latente variables for the current data of this model, run findNoLatenteVariables() first. */
 				void train();
 				
-				const Matrix* getWOrtho();
+				const Matrix<double>* getWOrtho();
 				
-				const Matrix* getTOrtho();
+				const Matrix<double>* getTOrtho();
 				
 				int getNoOrthoComponents();
 				
@@ -56,8 +56,8 @@ namespace BALL
 				/** @name Attributes
 				 */
 				//@{
-				Matrix T_ortho_;
-				Matrix W_ortho_;
+				Matrix<double> T_ortho_;
+				Matrix<double> W_ortho_;
 				
 				int no_ortho_components_;
 				//@}

@@ -144,7 +144,7 @@ namespace BALL
 			
 			/** writes a config-section for the current DataItem.\n
 			The default implementation does nothing, but it is overloaded by the various derived classes */
-			virtual void writeConfigSection(std::ofstream& out) {};
+			virtual void writeConfigSection(std::ofstream& /*out*/) {};
 			
 			/** set result_ to a given value */
 			void setResultString(double value);

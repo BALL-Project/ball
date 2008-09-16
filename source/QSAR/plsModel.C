@@ -4,9 +4,6 @@
 //
 
 #include <BALL/QSAR/plsModel.h>
-#include <newmatio.h>
-
-//using namespace std;
 using namespace BALL::QSAR;
 
 
@@ -39,21 +36,33 @@ void PLSModel::train()
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be read into the model before training!");
 	}
 	int cols=descriptor_matrix_.Ncols();
+	
+	Matrix<double> X=descriptor_matrix_;
+	Matrix<double> P;  // Matrix P saves all vectors p
+	
+	// determine the number of components that are to be created.
+	// no_components_ contains the number of components desired by the user, 
+	// but obviously we cannot calculate more PLS components than features
+	uint components_to_create = no_components_;
+	if(cols<no_components_) components_to_create=cols;
+	
+	U_.resize(X.Nrows(),components_to_create);
+	loadings_.resize(cols,components_to_create);
+	weights_.resize(Y_.getColumnCount(),components_to_create);
+	latent_variables_.resize(descriptor_matrix_.Nrows(),components_to_create);
+	P.resize(cols,components_to_create);
 
-	Matrix X=descriptor_matrix_;
-	Matrix P;  // Matrix P saves all vectors p
-
-	ColumnVector w;
-	ColumnVector t;
-	ColumnVector c;
-	ColumnVector u(X.Nrows());
-	for (int i=1; i<=u.Nrows(); i++)
+	Vector<double> w; w.setVectorType(1); // column-vector
+	Vector<double> t; t.setVectorType(1); // column-vector
+	Vector<double> c; c.setVectorType(1); // column-vector
+	Vector<double> u(X.Nrows()); u.setVectorType(1); // column-vector
+	for (uint i=1; i<=u.getSize(); i++)
 	{
 		u(i)=Y_(i,1);	
 	}
-	ColumnVector u_old;
+	Vector<double> u_old; u_old.setVectorType(1); // column-vector
 	
-	for(int j=0; j<no_components_ && j<cols; j++)
+	for(int j=0; j<components_to_create; j++)
 	{
 		for(int i=0; i<10000;i++)
 		{	
@@ -63,7 +72,7 @@ void PLSModel::train()
 			c = Y_.t()*t / Statistics::scalarProduct(t);
 			u_old=u;
 			u = Y_*c / Statistics::scalarProduct(c); 
-		
+	
 			if (Statistics::euclDistance(u,u_old)/Statistics::euclNorm(u)>0.0000001) 
 			{ 
 				continue;				
@@ -73,37 +82,27 @@ void PLSModel::train()
 				break;
 			}
 		}
-		Matrix p = X.t()*t / Statistics::scalarProduct(t);
-		X = X - t*p.t();
-		//Y_ = Y_ - t*c.t();
+		Vector<double> p = X.t()*t / Statistics::scalarProduct(t);
 		
-		if(j==0)
-		{
-			U_ = u;
-			loadings_ = w;	
-			weights_ = c;
-			P = p;
-			latent_variables_ = t;
-		}
-		else
-		{
-			//w = w*(p.t()*w).i();
-			U_ = U_|u;
-			loadings_ = loadings_|w;
-			weights_ = weights_|c;
-			P = P|p;
-			latent_variables_ = latent_variables_ | t;
-		}
+		Matrix<double> TP;
+		t.dotProduct(p,TP); // t.p.t() -> dim. nxm
+		X -= TP;
+	
+		U_.copyVectorToColumn(u,j+1);
+		loadings_.copyVectorToColumn(w,j+1);
+		weights_.copyVectorToColumn(c,j+1);
+		P.copyVectorToColumn(p,j+1);
+		latent_variables_.copyVectorToColumn(t,j+1);
 	}
 
 	try  // p's are not orthogonal to each other, so that in rare cases P.t()*W_ is not invertible
 	{
 		loadings_ = loadings_*(P.t()*loadings_).i();
 	}
-	catch(SingularException e)
+	catch(BALL::Exception::GeneralException e)
 	{
-		IdentityMatrix I(P.Ncols());
-		I = I*0.0001;
+		Matrix<double> I; I.setToIdentity(P.Ncols());
+		I*=0.0001;
 		loadings_ = loadings_*(P.t()*loadings_+I).i();
 	}
 	weights_=weights_.t(); // transform, so that one column contains the importances of all latent variables for modelling the response (-> weights_ will have more than one column in case of more than one modelled response variable)
@@ -117,7 +116,7 @@ bool PLSModel::optimizeParameters(int k, int no_steps)
 {
 	double best_q2=0;
 	int best_no=1;
-	for(unsigned int i=1; i<=no_steps && i<=data->getNoDescriptors() && (descriptor_IDs_.empty() || i<descriptor_IDs_.size()); i++)
+	for(int i=1; i<=no_steps && i<=data->getNoDescriptors() && (descriptor_IDs_.empty() || i<descriptor_IDs_.size()); i++)
 	{
 		no_components_=i;
 		validation->crossValidation(k);
@@ -139,7 +138,7 @@ bool PLSModel::optimizeParameters(int k, int no_steps)
 }
 
 
-const Matrix* PLSModel::getU()
+const BALL::Matrix<double>* PLSModel::getU()
 { 
 	return &U_;
 }

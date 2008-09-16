@@ -51,7 +51,7 @@ namespace BALL
 				@param k no of cross validation folds
 				@param restore if restore==1, Model.descriptor_matrix and RegressionModel.training_result is restored after cross validation 
 				@param results pointer to vector that should take all matrices RegressionModel.training_result produced during this cross validation run */
-				void crossValidation(int k, vector<Matrix>* results, bool restore=1);
+				void crossValidation(int k, vector<BALL::Matrix<double> >* results, bool restore=1);
 				
 				
 				/** starts bootstrapping with k samples \n
@@ -63,14 +63,14 @@ namespace BALL
 				@param k no of bootstrap samples
 				@param restore if restore==1, Model.descriptor_matrix and RegressionModel.training_result is restored after bootstrapping
 				@param results pointer to vector that should take all matrices RegressionModel.training_result produced during this bootstrapping */
-				void bootstrap(int k, vector<Matrix>* results, bool restore=1);
+				void bootstrap(int k, vector<BALL::Matrix<double> >* results, bool restore=1);
 				
-				void bootstrap1(int k, vector<Matrix>* results, bool restore=1);
+				void bootstrap1(int k, vector<BALL::Matrix<double> >* results, bool restore=1);
 				
 				/** Y randomization test \n
 				Randomizes all columns of model.Y, trains the model, runs crossValidation and testInputData and saves the resulting R2 and Q2 value to a matrix with 2 columns; the R2 values makeing up the first colum, the Q2 value the second.
 				@param runs this is repeated as often as specified by 'runs' */
-				Matrix yRandomizationTest(int runs, int k);
+				BALL::Matrix<double> yRandomizationTest(int runs, int k);
 				
 				/** get the Q^2 value.\n
 				If no cross-validation has been done yet, -1 is returned */
@@ -113,9 +113,9 @@ namespace BALL
 				void calculateCoefficientStddev(int k, bool b);
 			
 				/** returns a const pointer to the matrix containing the standart deviations of all predicted coefficients */
-				const Matrix* getCoefficientStddev();
+				const BALL::Matrix<double>* getCoefficientStddev();
 				
-				void setCoefficientStddev(const Matrix* stddev);
+				void setCoefficientStddev(const BALL::Matrix<double>* stddev);
 				//@}
 				
 	
@@ -158,7 +158,7 @@ namespace BALL
 				
 				
 				/** contains the standart deviations of all predicted coefficients in one column for each modelled activity */
-				Matrix coefficient_stddev_;
+				BALL::Matrix<double> coefficient_stddev_;
 				
 				/** pointer to the regression model, which the object of this class should test */
 				RegressionModel* regr_model_;

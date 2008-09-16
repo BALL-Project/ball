@@ -42,7 +42,7 @@ namespace BALL
 				//@{
 				void train();
 				
-				RowVector predict(const vector<double>& substance, bool transform=1);
+				Vector<double> predict(const vector<double>& substance, bool transform=1);
 				
 				void saveToFile(string filename);
 				
@@ -68,11 +68,11 @@ namespace BALL
 				
 				
 				/** the minmum (row1) and maximum (row2) of each feature. */
-				Matrix min_max_;
+				Matrix<double> min_max_;
 				
 				/** One probability Matrix for each modelled activity and each class. \n
 				Each Matrix stores in each cell the probability for a feature lying within a specific range to be in a specific class  */
-				vector<vector<Matrix> > probabilities_;
+				vector<vector<Matrix<double> > > probabilities_;
 							
 
 				

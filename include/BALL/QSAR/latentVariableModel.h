@@ -6,7 +6,9 @@
 #ifndef LVMODEL
 #define LVMODEL
 
-#include <newmat.h>
+#ifndef BALL_LINALG_MATRIX_H
+#include <BALL/MATHS/LINALG/matrix.h>
+#endif
 
 
 namespace BALL
@@ -22,26 +24,26 @@ namespace BALL
 				
 				/** Return the latent variable matrix as computed by the last training.\n
 				It contains one loading vector in each column. Each loading vector contains the importance of each feature for a latente variable. */
-				const Matrix* getLatentVariables();
+				const Matrix<double>* getLatentVariables();
 				
 				/** Return the weights matrix as computed by the last training.\n
 				It contains one weight vector in each column. Each weight vector contains the importance of each latente variable for modelling the result. */
-				const Matrix* getWeights();
+				const Matrix<double>* getWeights();
 				
 				/** Return the loading matrix as computed by the last training.\n
 				It contains one loading vector in each column. Each loading vector contains the importance of each feature for a latente variable. */
-				const Matrix* getLoadings();
+				const Matrix<double>* getLoadings();
 			
 			protected:
 				
 				/** The loading-matrix which contains one loading vector in each column. Each loading vector contains the importance of each feature for a latente variable. */
-				Matrix latent_variables_;
+				Matrix<double> latent_variables_;
 				
 				/** The loading-matrix which contains one loading vector in each column. Each loading vector contains the importance of each feature for a latente variable. */
-				Matrix loadings_;
+				Matrix<double> loadings_;
 				
 				/** The weights-matrix which contains one weight vector in each column. Each weight vector contains the importance of each latente variable for modelling the result. */
-				Matrix weights_;
+				Matrix<double> weights_;
 				
 		};
 	}

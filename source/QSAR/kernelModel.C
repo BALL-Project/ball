@@ -4,7 +4,6 @@
 // 
 
 #include <BALL/QSAR/kernelModel.h>
-#include <newmatio.h>
 
 using namespace BALL::QSAR; 
 
@@ -23,7 +22,7 @@ KernelModel::KernelModel(const QSARData& q, String f, String g) : NonLinearModel
 }
 		
 		
-KernelModel::KernelModel(const QSARData& q, RowVector& w) : NonLinearModel(q)
+KernelModel::KernelModel(const QSARData& q, Vector<double>& w) : NonLinearModel(q)
 {
 	kernel=new Kernel(this,w);
 }
@@ -55,29 +54,30 @@ void KernelModel::operator=(const Model& m)
 
 void KernelModel::calculateOffsets()
 {
-	Matrix residuals = (K_*training_result_)-Y_;
+	Matrix<double> residuals = (K_*training_result_)-Y_;
 	int no_act=training_result_.Ncols();
-	offsets_.ReSize(no_act);
+	offsets_.resize(no_act);
+	offsets_.setVectorType(0); // this is no Column vector
 	for(int i=1; i<=no_act; i++)
 	{	
-		offsets_(i) = residuals.Column(i).Sum() / training_result_.Nrows();
+		offsets_(i) = residuals.colSum(i) / training_result_.Nrows();
 	}
 	//cout<<"offset : "<<offsets_(1)<<endl<<flush;
 }
 
 
-RowVector KernelModel::predict(const vector<double>& substance, bool transform)
+BALL::Vector<double> KernelModel::predict(const vector<double>& substance, bool transform)
 {	
 	if(training_result_.Ncols()==0)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before it can predict the activitiy of substances!");
 	}	
-	RowVector input=getSubstanceVector(substance,transform);
+	Vector<double> input=getSubstanceVector(substance,transform);
 		
-	Matrix K_t(input.Nrows(), descriptor_matrix_.Nrows());  
-	kernel->calculateKernelMatrix(K_,input, descriptor_matrix_, K_t); // dim: 1xn
+	Vector<double> K_t;
+	kernel->calculateKernelVector(K_,input, descriptor_matrix_, K_t); // dim: 1xn
 
-	RowVector res = K_t*training_result_;  // dim: 1xc
+	Vector<double> res = K_t*training_result_;  // dim: 1xc
 	
 	if(transform && y_transformations_.Ncols()!=0)
 	{
@@ -98,7 +98,7 @@ void KernelModel::saveToFile(string filename)
 	
 	ofstream out(filename.c_str());
 	
-	const Matrix* coeffErrors = validation->getCoefficientStddev();
+	const Matrix<double>* coeffErrors = validation->getCoefficientStddev();
 	bool stderr=0;
 	if(coeffErrors->Ncols()!=0)
 	{
@@ -192,8 +192,8 @@ void KernelModel::readFromFile(string filename)
 	readMatrix(K_,input,no_substances,no_substances); 	// read kernel matrix K_
 	getline(input,line0);  // skip empty line 
 	getline(input,line0);  // skip comment line 
-	if(input.eof()) offsets_.ReSize(0);
-	else readMatrix(offsets_,input,1,no_y);
+	if(input.eof()) offsets_.resize(0);
+	else readVector(offsets_,input,1,no_y);
 	
 	input.close();	
 }
@@ -252,7 +252,7 @@ void KernelModel::readTrainingResult(ifstream& input, int no_substances, int no_
 
 void KernelModel::saveTrainingResult(ofstream& out)
 {
-	const Matrix* coeffErrors = validation->getCoefficientStddev();
+	const Matrix<double>* coeffErrors = validation->getCoefficientStddev();
 	for(int i=1; i<=training_result_.Nrows();i++) // write training result
 	{
 		out<<substance_names_[i-1]<<"\t";

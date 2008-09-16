@@ -359,7 +359,7 @@ bool ValidationItem::execute()
 	if(type_==1||type_==7) setResultString(r2_);
 	else if(type_==6)
 	{
-		const Matrix* coeff_stddev = ((RegressionModel*)model_item_->model())->validation->getCoefficientStddev();
+		const Matrix<double>* coeff_stddev = ((RegressionModel*)model_item_->model())->validation->getCoefficientStddev();
 		
 		// calculate&display average stddev
 		double mean_stddev=0;
@@ -463,7 +463,7 @@ int ValidationItem::k()
 	return k_;
 }
 
-Matrix* ValidationItem::resultOfRandTest()
+BALL::Matrix<double>* ValidationItem::resultOfRandTest()
 {
 	return &result_of_rand_test_;
 }

@@ -6,6 +6,9 @@
 #include <BALL/QSAR/pcrModel.h>
 using namespace BALL::QSAR;
 
+#ifndef BALL_LINALG_SVDSOLVER_H
+#include <BALL/MATHS/LINALG/SVDSolver.h>
+#endif
 
 
 PCRModel::PCRModel(const QSARData& q, double frac_var) : LinearModel(q) 
@@ -23,37 +26,51 @@ void PCRModel::setFracVar(double frac_var)
 	frac_var_=frac_var;
 }
 
-void PCRModel::calculateEigenvectors(const SymmetricMatrix& data, double frac_var, Matrix& output)
+void PCRModel::calculateEigenvectors(const Matrix<double>& data, double frac_var, Matrix<double>& output)
 {
-	// newmat sorts eigenvalues and -vectors ascendingly !!
-	Matrix eigenVectors;
-	DiagonalMatrix eigenValues; 
-	EigenValues(data,eigenValues,eigenVectors);
-	int first_eigenvector=eigenValues.Ncols();
-	int last_eigenvector=eigenValues.Ncols();
+	SVDSolver<double> solver(data);
+	solver.computeSVD();
+	Vector<double> singular_values = solver.getSingularValues();
+	
+	cout<<"SV="<<singular_values<<endl;
 
-	// find the smallest eigenvector that should be taken into account
-	double complete_var=eigenValues.Sum();
+	// find the smallest singular vector that should be taken into account
+	// complete variance == sum of all eigen-values == sum of squared singular values
+	double complete_var=singular_values.sum();
+	
 	double explained_var=0;
 	int cols=0; 
 	if(complete_var==0)
 	{
 		throw Exception::NoPCAVariance(__FILE__,__LINE__,"No variance present to be explained by PCA!");
 	}
-	for (; last_eigenvector>=1 && cols<data.Nrows() && explained_var/complete_var<frac_var ; last_eigenvector--) 
+	
+	int last_vector=1;
+	for (; last_vector<=singular_values.getSize() && cols<data.Nrows() && explained_var/complete_var<frac_var ; last_vector++) 
 	{
-		explained_var+=eigenValues(last_eigenvector);
+		// (singular-value)^2 == eigen-value
+		explained_var+=singular_values(last_vector);
 		cols++;
 	}
-	last_eigenvector++;
+	last_vector--;
 	
-	output.ReSize(data.Ncols(),cols);
-	int c=1;
-	for (int i=first_eigenvector; i>=last_eigenvector ; i--)
+	cout<<"variance="<<complete_var<<endl;
+	cout<<"last_vector="<<last_vector<<endl;
+	
+	output.ReSize(data.Nrows(),cols);
+	
+	// getRightSingularVectors() returns V.t() NOT V, so we have to transform back to V here !!
+	Matrix<double> V = solver.getRightSingularVectors().t();
+	
+	for (int i=1; i<=data.Nrows(); i++)
 	{
-		output.Column(c)=eigenVectors.Column(i);
-		c++;
+		for (int j=1; j<=last_vector ; j++)
+		{
+			output(i,j) = V(i,j);
+		}
 	}
+	
+	cout<<output.Nrows()<<"  "<<output.Ncols()<<endl;
 }
 
 
@@ -63,16 +80,11 @@ void PCRModel::train()
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be read into the model before training!");
 	}
-	SymmetricMatrix X;
-	X << descriptor_matrix_.t()*descriptor_matrix_;
+	Matrix<double> XX = descriptor_matrix_.t()*descriptor_matrix_;
 	
-	calculateEigenvectors(X,frac_var_,loadings_);
+	calculateEigenvectors(XX,frac_var_,loadings_);
 
-	latent_variables_.ReSize(descriptor_matrix_.Nrows(),loadings_.Ncols());
-	for(int i=1;i<=loadings_.Ncols();i++)
-	{
-		latent_variables_.Column(i)=descriptor_matrix_*loadings_.Column(i);
-	}
+	latent_variables_=descriptor_matrix_*loadings_;
 	
 	RRModel m(*data);
 	m.descriptor_matrix_=latent_variables_;

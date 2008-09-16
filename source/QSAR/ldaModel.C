@@ -4,7 +4,6 @@
 //
 
 #include <BALL/QSAR/ldaModel.h>
-#include <newmatio.h>
 
 using namespace BALL::QSAR;
 
@@ -46,9 +45,9 @@ void LDAModel::train()
 			sigma_(i,j)=Statistics::getCovariance(descriptor_matrix_,i,j,mi);
 		}
 	}
-	IdentityMatrix I(sigma_.Ncols());
-	I=I*lambda_;
-	sigma_=sigma_+I;
+	Matrix<double> I; I.setToIdentity(sigma_.Ncols());
+	I*=lambda_;
+	sigma_+=I;
 	sigma_=sigma_.i();
 
 	mean_vectors_.resize(Y_.Ncols());
@@ -57,7 +56,7 @@ void LDAModel::train()
 	for(int c=0; c<Y_.Ncols();c++)
 	{
 		vector<int> no_substances_c(labels_.size(),0);  // no of substances in each class for activitiy c
-		mean_vectors_[c].ReSize(labels_.size(),descriptor_matrix_.Ncols());
+		mean_vectors_[c].resize(labels_.size(),descriptor_matrix_.Ncols());
 		mean_vectors_[c]=0;
 		
 		for(int i=1;i<=descriptor_matrix_.Nrows();i++) // calculate sum vector of each class
@@ -65,7 +64,11 @@ void LDAModel::train()
 			int yi = static_cast<int>(Y_(i,c+1)); // Y_ will contains only ints for classifications
 			int pos = label_to_pos.find(yi)->second; 
 			
-			mean_vectors_[c].Row(pos+1) += descriptor_matrix_.Row(i);
+			for(int j=1; j<descriptor_matrix_.Ncols();j++)
+			{
+				mean_vectors_[c](pos+1,j) += descriptor_matrix_(i,j);
+			}
+			
 			if(c==0) no_substances_c[pos]++;
 			
 		}
@@ -74,9 +77,13 @@ void LDAModel::train()
 		{
 			if(no_substances_c[i-1]==0)
 			{
-				mean_vectors_[c].Row(i)=exp(100);  // set mean of classes NOT occurring for activitiy c to inf
+				mean_vectors_[c].setRow(i,exp(100));  // set mean of classes NOT occurring for activitiy c to inf
 			}
-			mean_vectors_[c].Row(i) = mean_vectors_[c].Row(i)/no_substances_c[i-1];
+			
+			for(int j=1; j<descriptor_matrix_.Ncols();j++)
+			{
+				mean_vectors_[c](i,j) = mean_vectors_[c](i,j)/no_substances_c[i-1];
+			}
 		}
 		
 		for(unsigned int i=0; i<no_substances_.size();i++) // update overall number of substances per class
@@ -88,24 +95,29 @@ void LDAModel::train()
 }
 
 
-RowVector LDAModel::predict(const vector<double>& substance, bool transform)
+BALL::Vector<double> LDAModel::predict(const vector<double>& substance, bool transform)
 {
 	if(sigma_.Ncols()==0)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before it can predict the activitiy of substances!");
 	}
 	// search class to which the given substance has the smallest distance
-	RowVector s = getSubstanceVector(substance,transform);
+	Vector<double> s = getSubstanceVector(substance,transform); // dim: 1xm
+	
 	int min_k=0;
 	double min_dist = 99999999;
-	RowVector result(mean_vectors_.size());
+	Vector<double> result(mean_vectors_.size());
 	
 	for(unsigned int c=0; c<mean_vectors_.size();c++)
 	{
 		for (int k=1; k<=mean_vectors_[c].Nrows();k++)
 		{
-			RowVector diff=s-mean_vectors_[c].Row(k);
-			double dist = (diff*sigma_*diff.t()).AsScalar();
+			Vector<double> diff(s.getSize());
+			for(uint i=1; i<=s.getSize(); i++)
+			{
+				diff(i) = s(i)-mean_vectors_[c](k,i);
+			}
+			double dist = diff*sigma_*diff.t();
 			if(dist<min_dist)
 			{
 				min_dist=dist;

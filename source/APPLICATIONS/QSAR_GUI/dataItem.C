@@ -7,8 +7,8 @@
 #include <QtGui/QApplication>
 #include <QtGui/QGraphicsScene>
 
-
 using namespace BALL::VIEW;
+using namespace std;
 
 DataItem::DataItem(): 
 	view_(NULL),

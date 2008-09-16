@@ -13,13 +13,13 @@ KNNModel::KNNModel(const QSARData& q, int k)
 }
 
 
-void KNNModel::calculateWeights(Matrix& dist, RowVector& w)
+void KNNModel::calculateWeights(Matrix<double>& dist, Vector<double>& w)
 {
 	// set first k entries of similarity vector w to 1
 	//   and all other entries to 0
 	//   ==> KNN instead of ALL	
 	
-	w.ReSize(dist.Ncols());
+	w.resize(dist.getColumnCount());
 	w=1;
 	
 	SortedList<pair<double,int> > ranking;

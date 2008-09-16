@@ -1044,7 +1044,7 @@ void MainWindow::executePipeline()
 		}
 		catch(BALL::Exception::GeneralException e)
 		{
-			QMessageBox::warning(this,"Error",e.getMessage());
+			QMessageBox::warning(this,e.getName(),e.getMessage());
 		}
 
 		value++;

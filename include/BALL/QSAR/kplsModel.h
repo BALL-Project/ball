@@ -29,7 +29,7 @@ namespace BALL
 				//@{
 				KPLSModel(const QSARData& q, int k_type, double p1, double p2=-1);
 				
-				KPLSModel(const QSARData& q, RowVector& w);
+				KPLSModel(const QSARData& q, Vector<double>& w);
 				
 				KPLSModel(const QSARData& q, String s1, String s2);
 				
@@ -54,7 +54,7 @@ namespace BALL
 				void setNoComponents(int d);
 				
 				/** returns a pointer to the  PLS Y-scores matrix U */
-				const Matrix* getU();
+				const Matrix<double>* getU();
 				
 				void setParameters(vector<double>& v);
 				
@@ -65,7 +65,7 @@ namespace BALL
 			protected:
 				/** @name Attributes
 				 */
-				Matrix U_;
+				Matrix<double> U_;
 				
 				int no_components_;
 				//@}

@@ -26,7 +26,7 @@ namespace BALL
 				//@{
 				GPModel(const QSARData& q, int k_type, double p1, double p2=-1);
 				
-				GPModel(const QSARData& q, RowVector& w);
+				GPModel(const QSARData& q, Vector<double>& w);
 				
 				/** constructor that sets KernelModel.f to s1 and KernelModel.g to s2 */
 				GPModel(const QSARData& q, String s1, String s2);
@@ -41,7 +41,7 @@ namespace BALL
 				//@{
 				void train();
 				
-				RowVector predict(const vector<double>& substance, bool transform=1);
+				Vector<double> predict(const vector<double>& substance, bool transform=1);
 				
 				/** calculates standart error for the last prediction as \f$ \sqrt{k(x_*,x_*)-\sum_{i=1}^n \sum_{j=1}^n k(x_*,x_i)*k(x_*,x_j)-L_{ij} } \f$*/
 				double calculateStdErr();
@@ -55,12 +55,12 @@ namespace BALL
 				/** @name Attributes
 				 */
 				//@{
-				Matrix L_;
+				Matrix<double> L_;
 				
 				/** the last predicted substance */
-				RowVector input_;
+				Vector<double> input_;
 				
-				Matrix K_t_;
+				Vector<double> K_t_;
 				
 				double lambda_;
 				//@}

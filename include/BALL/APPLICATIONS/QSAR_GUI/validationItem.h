@@ -82,7 +82,7 @@ namespace BALL
 				void setValFraction(double frac);
 				double getValFraction();
 
-				Matrix* resultOfRandTest();
+				Matrix<double>* resultOfRandTest();
 				
 				void addExternalFoldValidation(ValidationItem* item);
 				
@@ -137,7 +137,7 @@ namespace BALL
 				*/
 				ModelItem* model_item_;
 
-				Matrix result_of_rand_test_;
+				Matrix<double> result_of_rand_test_;
 
 				double q2_;
 				

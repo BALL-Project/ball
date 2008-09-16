@@ -4,9 +4,7 @@
 // 
 
 #include <BALL/QSAR/gpModel.h>
-#include <newmatio.h>
 using namespace BALL::QSAR; 
-
 
 
 GPModel::GPModel(const QSARData& q, int k_type, double p1, double p2) : KernelModel(q,k_type,p1,p2) 
@@ -15,7 +13,7 @@ GPModel::GPModel(const QSARData& q, int k_type, double p1, double p2) : KernelMo
 	lambda_ = 0.001;
 }
 
-GPModel::GPModel(const QSARData& q, RowVector& w) : KernelModel(q,w) 
+GPModel::GPModel(const QSARData& q, Vector<double>& w) : KernelModel(q,w) 
 {
 	type_="GP";
 	lambda_ = 0.001;
@@ -46,15 +44,20 @@ void GPModel::train()
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be read into the model before training!");
 	}
 	kernel->calculateKernelMatrix(descriptor_matrix_, K_);
-	IdentityMatrix I(K_.Nrows());
+	
+	Matrix<double> I(K_.Nrows(),K_.Nrows());
+	I = 0;
+	for(int i=1; i<I.Nrows();i++)
+	{
+		I(i,i)=1;
+	}
 	
 	try
 	{
 		L_ = (K_+I*pow(lambda_,2)).i();  // dim: nxn
 	}
-	catch(BaseException e)
+	catch(BALL::Exception::GeneralException e)
 	{
-		cout<<e.what()<<endl;
 		L_.ReSize(0,0);
 		throw Exception::SingularMatrixError(__FILE__,__LINE__,"Matrix for GP training is singular!! Check that descriptor_matrix_ does not contain empty columns and/or lambda is large enough!");
 		return;
@@ -70,7 +73,7 @@ void GPModel::train()
 }
 
 
-RowVector GPModel::predict(const vector<double>& substance, bool transform)
+BALL::Vector<double> GPModel::predict(const vector<double>& substance, bool transform)
 {
 	if(training_result_.Ncols()==0)
 	{
@@ -78,8 +81,9 @@ RowVector GPModel::predict(const vector<double>& substance, bool transform)
 	}
 	input_=getSubstanceVector(substance,transform);
 	
-	kernel->calculateKernelMatrix(K_, input_, descriptor_matrix_, K_t_); // dim: 1xn
-	RowVector res = K_t_*training_result_; // dim: 1xc
+	kernel->calculateKernelVector(K_, input_, descriptor_matrix_, K_t_); // dim: 1xn
+	
+	Vector<double> res = K_t_*training_result_;
 	
 	if(transform && y_transformations_.Ncols()!=0)
 	{
@@ -91,18 +95,20 @@ RowVector GPModel::predict(const vector<double>& substance, bool transform)
 
 double GPModel::calculateStdErr()
 {
-	Matrix mx;
-	kernel->calculateKernelMatrix(input_,mx); // k(x*,x*), dim: 1x1
+	Matrix<double> mx;
+	Matrix<double> m1(1,input_.getSize());
+	m1.copyVectorToRow(input_,1);
+	kernel->calculateKernelMatrix(m1,mx); // k(x*,x*), dim: 1x1
 	
 	double sum=0;
-	for(int i=1; i<=K_t_.Ncols();i++)
+	for(uint i=1; i<=K_t_.getSize();i++)
 	{
-		for(int j=1; j<=K_t_.Ncols();j++)
+		for(uint j=1; j<=K_t_.getSize();j++)
 		{
-			sum+=K_t_(1,i)*K_t_(1,j)*L_(i,j); // k(x*,_i)*k(x*,x_j)*L_ij
+			sum+=K_t_(i)*K_t_(j)*L_(i,j); // k(x*,_i)*k(x*,x_j)*L_ij
 		}
 	}
-	double res=sqrt(abs(mx.AsScalar()-sum));
+	double res=sqrt(abs(mx(1,1)-sum));
 	return res;	
 }
 

@@ -153,7 +153,7 @@ bool PredictionItem::execute()
 	for(unsigned int i=0; i<input_data_item_->data()->getNoSubstances();i++)
 	{
 		vector<double>* substance = input_data_item_->data()->getSubstance(i);
-		RowVector res = model_item_->model()->predict(*substance,1);
+		Vector<double> res = model_item_->model()->predict(*substance,1);
 		results_ << res;
 		delete substance;
 	}
@@ -163,7 +163,7 @@ bool PredictionItem::execute()
 	if(test_data_->getNoResponseVariables()>0)
 	{
 		const QSARData* train_data_backup =  model_item_->model()->data;
-		int r2_backup = r2_;
+		double r2_backup = r2_;
 		
 		// ValidationItem::execute() will set r2_; but since we are using _external_ data for the prediction and are assesing the quality of fit to it (and not the training-data), we save the obtained quality statistic in q2_ insteadfset
 		
@@ -183,7 +183,7 @@ ModelItem* PredictionItem::modelItem()
 	return model_item_;
 }
 
-const QList<RowVector>* PredictionItem::results()
+const QList<BALL::Vector<double> >* PredictionItem::results()
 {
 	return &results_;
 }

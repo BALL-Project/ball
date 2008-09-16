@@ -4,7 +4,6 @@
 //
 
 #include <BALL/QSAR/nBModel.h>
-#include <newmatio.h>
 
 using namespace BALL::QSAR;
 
@@ -44,9 +43,9 @@ void NBModel::train()
 		label_to_pos.insert(make_pair(labels_[i],i));
 	}	
 
-	min_max_.ReSize(2,no_features);
-	min_max_.Row(1) = 1e10;
-	min_max_.Row(2) = -1e10;
+	min_max_.resize(2,no_features);
+	min_max_.setRow(1,1e10);
+	min_max_.setRow(2,-1e10);
 	
 	probabilities_.clear();
 	probabilities_.resize(no_activities);
@@ -60,17 +59,18 @@ void NBModel::train()
 	for(uint act=0; act<no_activities;act++)
 	{
 		// the number of members of each feature-bin as a sum over all classes
-		Matrix sums(discretization_steps_,no_features); sums = 0;
+		Matrix<double> sums(discretization_steps_,no_features); sums = 0;
 		
 		probabilities_[act].resize(no_classes,sums);
 	
 		for(uint j=1;j<=no_compounds;j++)
 		{
-			uint class_id = label_to_pos.find(Y_(j,act+1))->second;
+			uint class_id = label_to_pos.find((int)Y_(j,act+1))->second;
 			no_substances_[class_id]++;
 			for(uint i=1;i<=no_features;i++)
 			{
-				uint feat_bucket = descriptor_matrix_(j,i);
+				// features have been discretized, so that descriptor_matrix_ contains only uint's
+				uint feat_bucket = (uint)descriptor_matrix_(j,i);
 				probabilities_[act][class_id](feat_bucket+1,i)++;
 				sums(feat_bucket+1,i)++;
 			}	
@@ -102,22 +102,21 @@ void NBModel::train()
 }
 
 
-RowVector NBModel::predict(const vector<double>& substance, bool transform)
+BALL::Vector<double> NBModel::predict(const vector<double>& substance, bool transform)
 {
 	if(probabilities_.size()==0)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before it can predict the activitiy of substances!");
 	}
 	
-	RowVector s = getSubstanceVector(substance,transform);
+	Vector<double> s = getSubstanceVector(substance,transform);
 	
 	uint no_activities = probabilities_.size();
 	uint no_classes = probabilities_[0].size();
 	uint no_features = probabilities_[0][0].Ncols();
-	uint no_discretizations = probabilities_[0][0].Nrows();
 	
-	RowVector result(no_activities);
-	result=0;
+	Vector<double> result(no_activities);
+	result=0; result.setVectorType(0);
 	
 	/// discretize the test data features according to the discretization of training data
 	(this->*discretizeTestDataFeatures)(s,discretization_steps_,min_max_);
@@ -130,7 +129,8 @@ RowVector NBModel::predict(const vector<double>& substance, bool transform)
 		
 		for(uint i=1; i<=no_features;i++)
 		{
-			double feature_bucket = s(i);
+			// features were discretized, so they contain only uint's
+			uint feature_bucket = (uint) s(i);
 			
 			for(uint j=0;j<no_classes;j++)
 			{
@@ -194,8 +194,8 @@ vector<double> NBModel::calculateProbabilities(int activitiy_index, int feature_
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before a probability for a given feature value can be calculated!");
 	}
-	int no_features = probabilities_[0][0].Ncols();
-	int no_classes = probabilities_[0].size();
+	uint no_features = probabilities_[0][0].Ncols();
+	uint no_classes = probabilities_[0].size();
 	if(activitiy_index>=(int)probabilities_.size() || feature_index>=no_features || activitiy_index<0 || feature_index<0)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Index of bound for parameters given to SNBModel::calculateProbability() !");
@@ -322,5 +322,10 @@ void NBModel::readFromFile(string filename)
 		}
 	}
 	input.close();
-	
+	if(((String)filename).hasSuffix("nB2.mod")) 
+	{
+		cout<<descriptor_IDs_.size()<<endl<<flush;
+		cout<<descriptor_IDs_.toStr()<<endl<<flush;
+		cout<<descriptor_IDs_.size()<<endl<<flush;
+	}
 }

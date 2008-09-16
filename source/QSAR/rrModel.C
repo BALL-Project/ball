@@ -4,8 +4,8 @@
 // 
 
 #include <BALL/QSAR/rrModel.h>
-#include <newmatap.h>
-#include <BALL/SYSTEM/timer.h>
+//#include <BALL/SYSTEM/timer.h>
+
 using namespace BALL::QSAR;
 
 
@@ -37,13 +37,13 @@ void RRModel::train()
 		//return;
 	}
 
-  	Matrix m = descriptor_matrix_.t()*descriptor_matrix_;
+  	Matrix<double> m = descriptor_matrix_.t()*descriptor_matrix_;
 
 	if(lambda_ != 0)
 	{
-		IdentityMatrix im(m.Nrows());
-		im=im*lambda_;
-		m=m+im;
+		Matrix<double> I; I.setToIdentity(m.Nrows());
+		I*=lambda_;
+		m+=I;
 	}
 		
 	try
@@ -62,9 +62,8 @@ void RRModel::train()
 // 		
 // 		cout<<(training_result_-test).t()<<endl;
 	}
-	catch(BaseException e)
+	catch(BALL::Exception::GeneralException e)
 	{
-		cout<<e.what()<<endl;
 		training_result_.ReSize(0,0);
 		throw Exception::SingularMatrixError(__FILE__,__LINE__,"Matrix for RR training is singular!! Check that descriptor_matrix_ does not contain empty columns and that lambda is not too small!");
 		return;

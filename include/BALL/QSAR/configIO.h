@@ -1,6 +1,7 @@
 #include <istream>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/QSAR/sortedList.h>
+#include <istream> 
  
 namespace BALL
 {
@@ -126,13 +127,13 @@ namespace BALL
 		
 				static FeatureSelectionConfiguration readFeatureSelectionConfiguration(std::istream* input);
 		
-				static InputConfiguration readInputConfiguration(istream* input);
+				static InputConfiguration readInputConfiguration(std::istream* input);
 		
-				static InputPartitioningConfiguration readInputPartitioningConfiguration(istream* input);
+				static InputPartitioningConfiguration readInputPartitioningConfiguration(std::istream* input);
 				
-				static ValidationConfiguration readValidationConfiguration(istream* input);
+				static ValidationConfiguration readValidationConfiguration(std::istream* input);
 				
-				static PredictionConfiguration readPredictionConfiguration(istream* input);		
+				static PredictionConfiguration readPredictionConfiguration(std::istream* input);		
 		};
 	}
 }

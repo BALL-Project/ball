@@ -5,8 +5,6 @@
 
 #include <BALL/QSAR/kpcrModel.h>
 #include <BALL/QSAR/pcrModel.h>
-#include <newmatio.h>
-
 
 using namespace BALL::QSAR;
 
@@ -17,7 +15,7 @@ KPCRModel::KPCRModel(const QSARData& q, int k_type, double p1, double p2) : Kern
 	frac_var_=0.99;
 }
 
-KPCRModel::KPCRModel(const QSARData& q, RowVector& w) : KernelModel(q, w) 
+KPCRModel::KPCRModel(const QSARData& q, Vector<double>& w) : KernelModel(q, w) 
 {
 	type_="KPCR";
 	frac_var_=0.99;
@@ -57,15 +55,10 @@ void KPCRModel::train()
 	
 	kernel->calculateKernelMatrix(descriptor_matrix_, K_);
 	
-	SymmetricMatrix S(descriptor_matrix_.Nrows());
-	S << K_;
-	PCRModel::calculateEigenvectors(S,frac_var_,loadings_);
-
-	latent_variables_.ReSize(descriptor_matrix_.Nrows(),loadings_.Ncols());
-	for(uint i=1;i<=loadings_.Ncols();i++)
-	{
-		latent_variables_.Column(i)=K_*loadings_.Column(i);
-	}
+	PCRModel::calculateEigenvectors(K_,frac_var_,loadings_);
+	
+	latent_variables_ = K_*loadings_;
+	
 
 	RRModel m(*data);
 	m.descriptor_matrix_=latent_variables_;

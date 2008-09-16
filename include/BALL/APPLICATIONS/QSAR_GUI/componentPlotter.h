@@ -21,7 +21,7 @@ namespace BALL
 			private:
 				void plot(bool zoom);
 				
-				const Matrix* component_matrix_;
+				const Matrix<double>* component_matrix_;
 				
 				ModelItem* model_item_;
 				

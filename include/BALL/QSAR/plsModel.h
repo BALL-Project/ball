@@ -56,7 +56,7 @@ namespace BALL
 				int getNoComponents();
 				
 				/** returns a pointer to the  PLS Y-scores matrix U */
-				const Matrix* getU();
+				const Matrix<double>* getU();
 				
 				void setParameters(vector<double>& v);
 				
@@ -69,7 +69,7 @@ namespace BALL
 				 */
 				//@{
 				
-				Matrix U_;
+				Matrix<double> U_;
 	
 				int no_components_;
 				//@}

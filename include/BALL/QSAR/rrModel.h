@@ -14,7 +14,7 @@
 #include <BALL/QSAR/exception.h>
 #endif
 
-#include <newmatio.h>
+
 
 namespace BALL
 {
@@ -49,6 +49,7 @@ namespace BALL
 				 */
 				//@{
 				double lambda_;
+				
 				//@}
 		};
 	}

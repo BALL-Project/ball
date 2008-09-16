@@ -37,7 +37,7 @@ void PredictionPlotter::plot(bool zoom)
 
 void PredictionPlotter::plotObservedVsExpected(bool zoom)
 {
-	const QList<RowVector>* results = pred_item_->results();
+	const QList<Vector<double> >* results = pred_item_->results();
 	
 	if(results==0)
 	{
@@ -57,7 +57,7 @@ void PredictionPlotter::plotObservedVsExpected(bool zoom)
 ;	
 	int i = 0;
 	const vector<string>* comp_names = data_->getSubstanceNames();
-	for (QList<RowVector>::ConstIterator it = results->begin(); it != results->end(); it++,i++)
+	for (QList<Vector<double> >::ConstIterator it = results->begin(); it != results->end(); it++,i++)
 	{
 		QwtPlotMarker* marker= new QwtPlotMarker;
 		marker->setSymbol(data_symbol);
@@ -113,7 +113,7 @@ void PredictionPlotter::plotObservedVsExpected(bool zoom)
 
 void PredictionPlotter::plotObserved(bool zoom)
 {
-	const QList<RowVector>* results = pred_item_->results();
+	const QList<Vector<double> >* results = pred_item_->results();
 	
 	if(results==0)
 	{
@@ -128,7 +128,7 @@ void PredictionPlotter::plotObserved(bool zoom)
 	
 	int i = 0;
 	const vector<string>* comp_names = data_->getSubstanceNames();
-	for (QList<RowVector>::ConstIterator it = results->begin(); it != results->end(); it++,i++)
+	for (QList<Vector<double> >::ConstIterator it = results->begin(); it != results->end(); it++,i++)
 	{
 		QwtPlotMarker* marker= new QwtPlotMarker;
 		marker->setSymbol(data_symbol);

@@ -4,7 +4,6 @@
 //
 
 #include <BALL/QSAR/oplsModel.h>
-#include <newmatio.h>
 #include <BALL/QSAR/statistics.h>
  
 using namespace BALL::QSAR;
@@ -22,7 +21,7 @@ OPLSModel::~OPLSModel()
 
 void OPLSModel::train()
 {
-	Matrix X=descriptor_matrix_;
+	Matrix<double> X=descriptor_matrix_;
 	
 	
 // 	double d[]={-1,-1,1,-1,-1,1,1,1};
@@ -34,20 +33,30 @@ void OPLSModel::train()
 // 	Y_ << e;
 	int cols = descriptor_matrix_.Ncols();
 	
-	ColumnVector w;
-	ColumnVector t;
-	ColumnVector c;
-	ColumnVector u(X.Nrows());
+	Vector<double> w; w.setVectorType(1); // column-vector
+	Vector<double> t; t.setVectorType(1); // column-vector
+	Vector<double> c; c.setVectorType(1); // column-vector
+	Vector<double> u(X.Nrows());  u.setVectorType(1); // column-vector
 	
-	for (int i=1; i<=u.Nrows(); i++)
+	for (uint i=1; i<=u.getSize(); i++)
 	{
 		u(i)=Y_(i,1);
 	}
-	ColumnVector u_old;
+	Vector<double> u_old; u_old.setVectorType(1); // column-vector
 	//w = X.t()*u / Statistics::scalarProduct(u);
 	//w = w / Statistics::euclNorm(w);	
+	
+	// determine the number of orthogonal components that are to be created.
+	// no_ortho_components_ contains the number of components desired by the user, 
+	// but obviously the number of orthogonal components must be <= #features-1
+	// since we will need at least one non-orthogonal component as well
+	uint orthogonal_components_to_create = no_ortho_components_;
+	if(cols-1<no_ortho_components_) orthogonal_components_to_create=cols-1;
+	
+	W_ortho_.resize(cols,orthogonal_components_to_create);
+	T_ortho_.resize(descriptor_matrix_.Nrows(),orthogonal_components_to_create);
 
-	for(int j=0; j<no_ortho_components_ && j<cols-1; j++)
+	for(int j=0; j<orthogonal_components_to_create; j++)
 	{	
 		for(int i=0; ;i++)
 		{
@@ -69,33 +78,19 @@ void OPLSModel::train()
 			}
 		}
 	
-		ColumnVector p = X.t()*t / Statistics::scalarProduct(t);
-		ColumnVector w_ortho = p - ((w.t()*p).AsScalar() / (w.t()*w).AsScalar())*w;
+		Vector<double> p = X.t()*t / Statistics::scalarProduct(t);
+		Vector<double> w_ortho = w*((w.t()*p) / (w.t()*w));
+		w_ortho = p-w_ortho;
 		w_ortho = w_ortho / Statistics::euclNorm(w_ortho);
-		ColumnVector t_ortho = X*w_ortho / Statistics::scalarProduct(w_ortho); 
-		ColumnVector p_ortho = X.t()*t_ortho / Statistics::scalarProduct(t_ortho);
+		Vector<double> t_ortho = X*w_ortho / Statistics::scalarProduct(w_ortho); 
+		Vector<double> p_ortho = X.t()*t_ortho / Statistics::scalarProduct(t_ortho);
 		
-		Matrix E_OPLS = X - t_ortho*p_ortho.t(); 
-		X = E_OPLS;
+		Matrix<double> TP; 
+		t_ortho.dotProduct(p_ortho,TP); // t.p.t() -> dim. nxm
+		X -= TP; 
 		
-		if(j==0)
-		{
-			W_ortho_ = w_ortho;
-			//W = w;	
-			//C = c;
-			//P = p;
-			//P_ortho = p_ortho;
-			T_ortho_ = t_ortho;
-		}
-		else
-		{
-			W_ortho_ = W_ortho_ | w_ortho;
-			//W = W|w;
-			//C = C|c;
-			//P = P|p;
-			//P_ortho = P_ortho | p_ortho;
-			T_ortho_ = T_ortho_ | t_ortho;
-		}
+		W_ortho_.copyVectorToColumn(w_ortho,j+1);
+		T_ortho_.copyVectorToColumn(t_ortho,j+1);
 	}
 		
 	descriptor_matrix_ = X;
@@ -103,13 +98,13 @@ void OPLSModel::train()
 }
 
 
-const Matrix* OPLSModel::getTOrtho()
+const BALL::Matrix<double>* OPLSModel::getTOrtho()
 { 
 	return &T_ortho_;
 }
 
 
-const Matrix* OPLSModel::getWOrtho()
+const BALL::Matrix<double>* OPLSModel::getWOrtho()
 {
 	return &W_ortho_;
 }

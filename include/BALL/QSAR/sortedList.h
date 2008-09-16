@@ -10,7 +10,6 @@
 #include <iterator>
 #include <iostream>
 #include <BALL/DATATYPE/string.h>
-#include <newmat.h>
 
 
 namespace BALL
@@ -238,7 +237,12 @@ namespace BALL
 					last_insertion=std::list<X>::begin();
 					out_It=std::list<X>::begin();
 					search_it=std::list<X>::begin();
-				}
+				};
+				
+				uint size()
+				{
+					return std::list<X>::size();
+				};
 				//@}
 				
 				

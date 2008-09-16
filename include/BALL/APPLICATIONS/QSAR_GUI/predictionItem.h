@@ -44,7 +44,7 @@ namespace BALL
 				ModelItem* modelItem();
 
 				/** returns the results of the prediction*/
-				const QList<RowVector>* results();
+				const QList<Vector<double> >* results();
 
 				enum { Type = UserType + 6};
 				int type() const { return Type; }
@@ -76,7 +76,7 @@ namespace BALL
 				/** @name Private Attributes */
 
 				/** results of the prediction */
-				QList<RowVector> results_;
+				QList<Vector<double> > results_;
 				//ModelItem* model_item_;
 				InputDataItem* input_data_item_;
 				DottedEdge* dotted_edge_;

@@ -4,7 +4,6 @@
 // 
 
 #include <BALL/QSAR/featureSelection.h>
-#include <newmatio.h>
 using namespace BALL::QSAR;
 
 
@@ -88,7 +87,7 @@ void FeatureSelection::forward(bool stepwise, int k, bool optPar)
 	}
 	// --------------------------------------------------------- //
 	
-	RowVector oldWeights;
+	Vector<double> oldWeights;
 	if(weights_!=NULL)
 	{	
 		oldWeights=*weights_;
@@ -131,7 +130,7 @@ void FeatureSelection::forward(bool stepwise, int k, bool optPar)
 			
 			model_->descriptor_IDs_.insert(des_it,i);
 			
-			if(weights_!=NULL && weights_->Ncols()>0)
+			if(weights_!=NULL && weights_->getSize()>0)
 			{
 				updateWeights(old_descr,model_->descriptor_IDs_,oldWeights);
 			}
@@ -184,7 +183,7 @@ void FeatureSelection::forward(bool stepwise, int k, bool optPar)
 	{	
 		model_->model_val->setCVRes(q2_allDes);
 		model_->descriptor_IDs_=old_descr;
-		if(weights_!=NULL && weights_->Ncols()>0)
+		if(weights_!=NULL && weights_->getSize()>0)
 		{
 			*weights_=oldWeights;
 		}
@@ -192,7 +191,7 @@ void FeatureSelection::forward(bool stepwise, int k, bool optPar)
 	else 
 	{	
 		model_->model_val->setCVRes(old_q2);
-		if(weights_!=NULL && weights_->Ncols()>0) 
+		if(weights_!=NULL && weights_->getSize()>0) 
 		{
 			updateWeights(old_descr,model_->descriptor_IDs_,oldWeights);
 		}
@@ -235,7 +234,7 @@ void FeatureSelection::backwardSelection(int k, bool optPar)
 	}
 	// --------------------------------------------------------- //
 	
-	RowVector oldWeights;
+	Vector<double> oldWeights;
 	if(weights_!=NULL)
 	{	
 		oldWeights=*weights_;
@@ -278,7 +277,7 @@ void FeatureSelection::backwardSelection(int k, bool optPar)
 			//des_it=tmp;
 			
 			
-			if(weights_!=NULL && weights_->Ncols()>0)
+			if(weights_!=NULL && weights_->getSize()>0)
 			{
 				updateWeights(old_descr,model_->descriptor_IDs_,oldWeights);
 			}
@@ -326,7 +325,7 @@ void FeatureSelection::backwardSelection(int k, bool optPar)
 	{	
 		model_->model_val->setCVRes(q2_allDes);
 		model_->descriptor_IDs_=old_descr;
-		if(weights_!=NULL && weights_->Ncols()>0)
+		if(weights_!=NULL && weights_->getSize()>0)
 		{
 			*weights_=oldWeights;
 		}
@@ -334,7 +333,7 @@ void FeatureSelection::backwardSelection(int k, bool optPar)
 	else
 	{	
 		model_->model_val->setCVRes(old_q2);
-		if(weights_!=NULL && weights_->Ncols()>0) 
+		if(weights_!=NULL && weights_->getSize()>0) 
 		{
 			updateWeights(old_descr,model_->descriptor_IDs_,oldWeights);
 		}
@@ -410,7 +409,7 @@ void FeatureSelection::twinScan(int k, bool optPar)
 	}
 	// --------------------------------------------------------- //
 	
-	RowVector oldWeights;
+	Vector<double> oldWeights;
 	if(weights_!=NULL)
 	{	
 		oldWeights=*weights_;
@@ -454,7 +453,7 @@ void FeatureSelection::twinScan(int k, bool optPar)
 		
 		model_->descriptor_IDs_.insert(des_it,i);
 		
-		if(weights_!=NULL && weights_->Ncols()>0)
+		if(weights_!=NULL && weights_->getSize()>0)
 		{
 			updateWeights(old_descr,model_->descriptor_IDs_,oldWeights);
 		}
@@ -521,6 +520,36 @@ void FeatureSelection::twinScan(int k, bool optPar)
 	}
 	
 	delete irrelevantDescriptors;
+	
+	
+	// if feature selection leads to no increase of Q^2, use old descriptors and weights_.
+	// Also use old descriptors, if no better combination of descriptors could be found by this feature selection run, since features not selected by the previous feature selection may not be used!!
+	if(old_q2<q2_allDes || model_->descriptor_IDs_.size()==0) 
+	{	
+		model_->model_val->setCVRes(q2_allDes);
+		model_->descriptor_IDs_=old_descr;
+		if(weights_!=NULL && weights_->getSize()>0)
+		{
+			*weights_=oldWeights;
+		}
+	}
+	else 
+	{	
+		model_->model_val->setCVRes(old_q2);
+		if(weights_!=NULL && weights_->getSize()>0) 
+		{
+			updateWeights(old_descr,model_->descriptor_IDs_,oldWeights);
+		}
+	}
+	
+	// optimize parameters for the best set of descriptors 
+	if (optPar)
+	{
+		model_->optimizeParameters(k);
+	}
+	
+	// read all information about the selected descriptors (their names, mean, stddev)
+	model_->readDescriptorInformation();
 }
 
 
@@ -816,8 +845,8 @@ void FeatureSelection::removeLowResponseCorrelation(double& min_correlation)
 void FeatureSelection::implicitSelection(LinearModel& lm, int act, double d)
 {
 	SortedList<unsigned int> newIDs;
-	const Matrix* training_result=lm.getTrainingResult();
-	const Matrix* coeff_errors=lm.validation->getCoefficientStddev();
+	const Matrix<double>* training_result=lm.getTrainingResult();
+	const Matrix<double>* coeff_errors=lm.validation->getCoefficientStddev();
 	
 	if(coeff_errors->Nrows()==0)
 	{
@@ -854,9 +883,9 @@ void FeatureSelection::implicitSelection(LinearModel& lm, int act, double d)
 		}	
 	}
 			
-	if(weights_!=NULL && weights_->Ncols()>0)
+	if(weights_!=NULL && weights_->getSize()>0)
 	{
-		RowVector oldWeights = *weights_;
+		Vector<double> oldWeights = *weights_;
 		updateWeights(model_->descriptor_IDs_,newIDs,oldWeights);
 	}
 	model_->descriptor_IDs_=newIDs;
@@ -866,9 +895,9 @@ void FeatureSelection::implicitSelection(LinearModel& lm, int act, double d)
 }
 
 
-void FeatureSelection::updateWeights(SortedList<unsigned int>& oldDescIDs, SortedList<unsigned int>& newDescIDs, RowVector& oldWeights)
+void FeatureSelection::updateWeights(SortedList<unsigned int>& oldDescIDs, SortedList<unsigned int>& newDescIDs, Vector<double>& oldWeights)
 {
-	weights_->ReSize(newDescIDs.size());
+	weights_->resize(newDescIDs.size());
 	
 	SortedList<unsigned int>::Iterator it = newDescIDs.begin();
 	int posNew=1;

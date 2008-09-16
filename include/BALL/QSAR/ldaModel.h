@@ -40,7 +40,7 @@ namespace BALL{
 				//@{
 				void train();
 				
-				RowVector predict(const vector<double>& substance, bool transform=1);
+				Vector<double> predict(const vector<double>& substance, bool transform=1);
 
 				void setParameters(vector<double>& v);
 				
@@ -57,13 +57,13 @@ namespace BALL{
 				 */
 				//@{
 				/** covariance matrix of descriptors */
-				Matrix sigma_;
+				Matrix<double> sigma_;
 				
 
 				double lambda_;				
 
 				/** vector containing one matrix for each modelled activity. Each matrix contains a mean vector of a class in each line */
-				vector<Matrix> mean_vectors_;
+				vector<Matrix<double> > mean_vectors_;
 				//@}
 		};
 	}

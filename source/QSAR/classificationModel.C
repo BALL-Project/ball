@@ -89,14 +89,14 @@ void ClassificationModel::saveClassInformationToFile(ofstream& out)
 }
 
 
-void ClassificationModel::equalSpaceDiscretization(int bins, Matrix& discretization_information)
+void ClassificationModel::equalSpaceDiscretization(int bins, Matrix<double>& discretization_information)
 {
 	uint no_features = descriptor_matrix_.Ncols();
 	uint no_compounds = descriptor_matrix_.Nrows();
 	
 	discretization_information.ReSize(2,no_features);
-	discretization_information.Row(1) = 1e10; // minimum of each feature in first row
-	discretization_information.Row(2) = -1e10; // maximum of each feature in second row
+	discretization_information.setRow(1,1e10); // minimum of each feature in first row
+	discretization_information.setRow(2,-1e10); // maximum of each feature in second row
 	
 	// find minimum and maximum of each feature
 	for(uint i=1;i<=no_features;i++)
@@ -128,14 +128,14 @@ void ClassificationModel::equalSpaceDiscretization(int bins, Matrix& discretizat
 }
 
 
-void ClassificationModel::equalSpaceDiscretizationTestData(RowVector& compound, int bins, const Matrix& discretization_information)
+void ClassificationModel::equalSpaceDiscretizationTestData(Vector<double>& compound, int bins, const Matrix<double>& discretization_information)
 {
-	if(compound.Ncols()!=discretization_information.Ncols())
+	if(compound.getSize()!=discretization_information.getColumnCount())
 	{
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Discretization error","no of features of test compound and of discretized training data are different!");
 	}
 	
-	uint no_features = compound.Ncols();
+	uint no_features = compound.getSize();
 
 	for(uint i=1;i<=no_features;i++)
 	{

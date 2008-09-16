@@ -51,7 +51,7 @@ namespace BALL
 				/** starts training the FitModel using Levenberg-Marquardt */		
 				void train();
 				
-				RowVector predict(const vector<double>& substance, bool transform=1);
+				Vector<double> predict(const vector<double>& substance, bool transform=1);
 				
 				void setInitialGuess(vector<double>& d);
 				//@}
@@ -77,8 +77,8 @@ namespace BALL
 	
 
 				
-		const Matrix* fitX;
-		Matrix* fitY;
+		const Matrix<double>* fitX;
+		Matrix<double>* fitY;
 		String* equation;
 		vector<String>* diffEquations;
 		ParsedFunction<double>* f;

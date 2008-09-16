@@ -8,7 +8,7 @@ CPATH=`pwd`
 echo building contrib package from $CPATH ...
 
 
-tar -xzf newmat.tar.gz;
+tar -xzf clapack3.tar.gz;
 tar -xzf libsvm.tar.gz;
 tar -xzf gsl-1.8.tar.gz;
 tar -xzf qwt-5.0.2.tar.gz;
@@ -22,12 +22,13 @@ make
 make install
 cd ..
 
-echo
-echo building newmat ...
-echo 
-cd newmat
-make
-cd ..
+# at the moment clapack has to install manually...
+# echo
+# echo building clapack ...
+# echo 
+# cd CLAPACK
+# make
+# cd ..
 
 echo
 echo building libsvm ...

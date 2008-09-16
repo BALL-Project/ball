@@ -218,7 +218,7 @@ void Model::readDescriptorInformation()
 }
 
 
-RowVector Model::getSubstanceVector(const vector<double>& substance, bool transform)
+BALL::Vector<double> Model::getSubstanceVector(const vector<double>& substance, bool transform)
 {
 	if(transform==1 && descriptor_transformations_.Ncols()==0)
 	{
@@ -239,7 +239,8 @@ RowVector Model::getSubstanceVector(const vector<double>& substance, bool transf
 		length=descriptor_IDs_.size();
 	}
 	
-	RowVector v(length);
+	Vector<double> v(length);
+	v.setVectorType(0); // this is a row, not a column-vector
 	
 	// if no feature selection was done, i.e. if descriptor_IDs_ is empty
 	if (!fs)
@@ -291,7 +292,7 @@ RowVector Model::getSubstanceVector(const vector<double>& substance, bool transf
 }
 
 
-RowVector Model::getSubstanceVector(const RowVector& substance, bool transform)
+BALL::Vector<double> Model::getSubstanceVector(const Vector<double>& substance, bool transform)
 {
 	bool fs=0; // has feature selection being done?
 	if(!descriptor_IDs_.empty())
@@ -307,16 +308,17 @@ RowVector Model::getSubstanceVector(const RowVector& substance, bool transform)
 		length=descriptor_IDs_.size();
 	}
 	
-	RowVector v(length);
+	Vector<double> v(length);
+	v.setVectorType(0); // this is a row, not a column-vector
 	
 	// if no feature selection was done, i.e. if descriptor_IDs_ is empty
 	if (!fs)
 	{
 		if(transform)
 		{
-			for(int i=1; i<length;i++)
+			for(int i=1; i<=length;i++)
 			{
-				double stddev=descriptor_transformations_(2,i+1);
+				double stddev=descriptor_transformations_(2,i);
 				if(stddev==0) {stddev=0.001;}
 				v(i)=(substance(i)-descriptor_transformations_(1,i))/stddev;
 			}
@@ -332,10 +334,10 @@ RowVector Model::getSubstanceVector(const RowVector& substance, bool transform)
 	{
 		if(transform)
 		{
-			for(int i=1; i<length;i++)
+			for(int i=1; i<=length;i++)
 			{
-				t=*it;
-				double stddev=descriptor_transformations_(2,i+1);
+				t=*it; // descr. IDs start at 0 !
+				double stddev=descriptor_transformations_(2,i);
 				if(stddev==0) {stddev=0.001;}
 				v(i)=(substance(t+1)-descriptor_transformations_(1,i))/stddev;
 				it++;
@@ -343,10 +345,10 @@ RowVector Model::getSubstanceVector(const RowVector& substance, bool transform)
 		}
 		else
 		{
-			for(int i=1; i<length;i++)
+			for(int i=1; i<=length;i++)
 			{
 				t=*it;
-				v(i+1)=substance(t+1);
+				v(i)=substance(t+1);
 				it++;
 			}
 		}
@@ -356,7 +358,7 @@ RowVector Model::getSubstanceVector(const RowVector& substance, bool transform)
 }
 
 
-void Model::backTransformPrediction(RowVector& pred)
+void Model::backTransformPrediction(Vector<double>& pred)
 {
 	for(int i=1; i<=y_transformations_.Ncols();i++)
 	{
@@ -366,7 +368,7 @@ void Model::backTransformPrediction(RowVector& pred)
 }
 
 
-const Matrix* Model::getDescriptorMatrix()
+const BALL::Matrix<double>* Model::getDescriptorMatrix()
 {
 	return &descriptor_matrix_;
 }
@@ -384,7 +386,7 @@ const vector<string>* Model::getDescriptorNames()
 }
 
 	
-const Matrix* Model::getY()
+const BALL::Matrix<double>* Model::getY()
 {
 	return &Y_;
 }
@@ -412,7 +414,7 @@ void Model::setDataSource(const QSARData* q)
 	data = q;
 }
 
-void Model::addLambda(Matrix& matrix, double& lambda)
+void Model::addLambda(Matrix<double>& matrix, double& lambda)
 {
 	if(matrix.Nrows()!=matrix.Ncols())
 	{
@@ -425,7 +427,7 @@ void Model::addLambda(Matrix& matrix, double& lambda)
 	}
 }
 	
-void Model::readMatrix(Matrix& mat, ifstream& in, uint lines, uint col)
+void Model::readMatrix(Matrix<double>& mat, ifstream& in, uint lines, uint col)
 {
 	mat.ReSize(lines,col);
 	String line;
@@ -439,6 +441,21 @@ void Model::readMatrix(Matrix& mat, ifstream& in, uint lines, uint col)
 			in>>s;
 			mat(i,j)=s.toDouble(); // = line.getField(j,"\t").toDouble();
 		}
+	}
+	getline(in,line); // read the rest of the last matrix-line
+}
+
+void Model::readVector(Vector<double>& vec, ifstream& in, uint no_cells, bool column_vector)
+{
+	vec.resize(no_cells);
+	vec.setVectorType(column_vector);
+	String line;
+	
+	for(uint i=1;i<=no_cells;i++)
+	{
+		String s;
+		in>>s;
+		vec(i)=s.toDouble(); // = line.getField(j,"\t").toDouble();
 	}
 	getline(in,line); // read the rest of the last matrix-line
 }

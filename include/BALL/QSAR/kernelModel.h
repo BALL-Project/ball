@@ -34,7 +34,7 @@ namespace BALL
 				
 				KernelModel(const QSARData& q, String f, String g);
 						
-				KernelModel(const QSARData& q, RowVector& w);
+				KernelModel(const QSARData& q, Vector<double>& w);
 				
 				KernelModel(const QSARData& q, const LinearModel& lm, int column);
 				
@@ -44,7 +44,7 @@ namespace BALL
 				
 				virtual void readFromFile(string filename);
 				
-				virtual RowVector predict(const vector<double>& substance, bool transform);
+				virtual Vector<double> predict(const vector<double>& substance, bool transform);
 				
 				void operator=(const Model& m);
 				//@}
@@ -62,7 +62,7 @@ namespace BALL
 				 */
 				//@{
 				/** Matrix containing the pairwise distances between all substances */
-				Matrix K_;
+				Matrix<double> K_;
 				
 				/** resulting matrix with one column for each modeled activity and with one coefficient for each substance (i.e. one column for each column for Model.Y) */
 				//Matrix B;

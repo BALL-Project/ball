@@ -4,7 +4,6 @@
 // 
 
 #include <BALL/QSAR/regressionModel.h>
-#include <newmat/newmatio.h>
 
 using namespace BALL::QSAR;
 
@@ -13,7 +12,7 @@ RegressionModel::RegressionModel(const QSARData& q) : Model(q)
 {
 	validation=new RegressionValidation(this);
 	model_val=validation;
-	offsets_.ReSize(0);
+	offsets_.resize(0);
 }
 
 RegressionModel::~RegressionModel() 
@@ -22,7 +21,7 @@ RegressionModel::~RegressionModel()
 }
 
 
-const Matrix* RegressionModel::getTrainingResult() const
+const BALL::Matrix<double>* RegressionModel::getTrainingResult() const
 {
 	return &training_result_;
 }
@@ -36,7 +35,7 @@ void RegressionModel::show()
 // 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must have been trained before the results can be saved displayed!");
 // 	}
 	
-	const Matrix* coeffErrors = validation->getCoefficientStddev();
+	const Matrix<double>* coeffErrors = validation->getCoefficientStddev();
 	bool stderr=0;
 	if(coeffErrors->Ncols()!=0)
 	{
@@ -116,7 +115,7 @@ void RegressionModel::saveToFile(string filename)
 	
 	ofstream out(filename.c_str());
 	
-	const Matrix* coeffErrors = validation->getCoefficientStddev();
+	const Matrix<double>* coeffErrors = validation->getCoefficientStddev();
 	bool stderr=0;
 	if(coeffErrors->Ncols()!=0)
 	{
@@ -189,8 +188,8 @@ void RegressionModel::readFromFile(string filename)
 	readDescriptorInformationFromFile(input, no_descriptors, centered_data, no_y*trained);
 	getline(input,line0);  // skip empty line 
 	getline(input,line0);  // skip comment line 
-	if(input.eof()) offsets_.ReSize(0);
-	else readMatrix(offsets_,input,1,no_y);
+	if(input.eof()) offsets_.resize(0);
+	else readVector(offsets_,input,1,no_y);
 	
 	input.close();
 }
@@ -241,12 +240,12 @@ void RegressionModel::saveDescriptorInformationToFile(ofstream& out)
 	}
 	out<<endl;
 	
-	const Matrix* coeffErrors = validation->getCoefficientStddev();
+	const Matrix<double>* coeffErrors = validation->getCoefficientStddev();
 	
 	if(!descriptor_IDs_.empty())  // write descriptors and information about their transformation
 	{
 		descriptor_IDs_.front();
-		bool trained = (training_result_.Nrows()==descriptor_IDs_.size());
+		bool trained = (training_result_.getRowCount()==descriptor_IDs_.size());
 		
 		for(uint i=0; i<descriptor_IDs_.size();i++)
 		{
@@ -271,8 +270,8 @@ void RegressionModel::saveDescriptorInformationToFile(ofstream& out)
 	}
 	else
 	{
-		bool trained = (training_result_.Ncols()==descriptor_names_.size());
-		for(int i=0; i<descriptor_names_.size();i++)
+		bool trained = (training_result_.getColumnCount()==descriptor_names_.size());
+		for(uint i=0; i<descriptor_names_.size();i++)
 		{
 			out<<String(i)<<"\t"<<descriptor_names_[i]<<"\t";
 

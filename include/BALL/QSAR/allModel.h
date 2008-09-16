@@ -33,7 +33,7 @@ namespace BALL
 				//@{
 				void setKw(double kw);
 				
-				virtual RowVector predict(const vector<double>& substance, bool transform=1);
+				virtual Vector<double> predict(const vector<double>& substance, bool transform=1);
 				
 				/** automated lazy learning does not have a seperate training step */
 				void train(){};
@@ -59,16 +59,16 @@ namespace BALL
 				/** @name Accessors
 				 */
 				//@{
-				virtual void calculateWeights(Matrix& dist, RowVector& w);
+				virtual void calculateWeights(BALL::Matrix<double>& dist, BALL::Vector<double>& w);
 				
-				/** calculates weighted Matrix X^T*X  */
-				void calculateXX(RowVector& w, Matrix& res);
+				/** calculates weighted BALL::Matrix<double> X^T*X  */
+				void calculateXX(BALL::Vector<double>& w, BALL::Matrix<double>& res);
 			
-				/** calculates weighted Matrix X^T*Y  */
-				void calculateXY(RowVector& w, Matrix& res);
+				/** calculates weighted BALL::Matrix<double> X^T*Y  */
+				void calculateXY(BALL::Vector<double>& w, BALL::Matrix<double>& res);
 				
-				/** calculates pairwise euclidean distance between all substances of m1 and m2 and saves them to Matrix output */
-				void calculateEuclDistanceMatrix(Matrix& m1, Matrix& m2, Matrix& output);
+				/** calculates pairwise euclidean distance between all substances of m1 and m2 and saves them to BALL::Matrix<double> output */
+				void calculateEuclDistanceMatrix(BALL::Matrix<double>& m1, BALL::Matrix<double>& m2, BALL::Matrix<double>& output);
 				//@}
 				
 				

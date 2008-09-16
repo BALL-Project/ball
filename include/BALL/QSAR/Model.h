@@ -6,7 +6,8 @@
 #define MODEL
 
 #include <vector>
-#include <newmat.h>
+
+#include <BALL/MATHS/LINALG/matrix.h>
 
 #ifndef VALIDATION
 #include <BALL/QSAR/validation.h>
@@ -28,6 +29,7 @@
 
 namespace BALL 
 {
+	
 	namespace QSAR
 	{
 		class Model
@@ -70,7 +72,7 @@ namespace BALL
 				If (transform==1): each descriptor value is transformed according to the centering of the respective column of QSARData.descriptor_matrix used to train this model. \n
 				If the substance to be predicted is part of the same input data (e.g. same SD-file) as the training data (as is the case during cross validation), transform should therefore be set to 0. 
 				@return a RowVector containing one value for each predicted activity*/
-				virtual RowVector predict(const vector<double>& substance, bool transform) =0; 
+				virtual Vector<double> predict(const vector<double>& substance, bool transform) =0; 
 				
 				/** removes all entries from descriptor_IDs */
 				void deleteDescriptorIDs();
@@ -107,7 +109,7 @@ namespace BALL
 				virtual void readFromFile(string filename) = 0;
 				
 				/** returns a const pointer to the descriptor matrix of this model */
-				const Matrix* getDescriptorMatrix();
+				const Matrix<double>* getDescriptorMatrix();
 				
 				/** returns a const pointer to the names of the substances of this model */
 				const vector<string>* getSubstanceNames();
@@ -116,7 +118,7 @@ namespace BALL
 				const vector<string>* getDescriptorNames();
 				
 				/** returns a const pointer to the activity values of this model */
-				const Matrix* getY();
+				const Matrix<double>* getY();
 				
 				/** manually specify a set of descriptors */
 				void setDescriptorIDs(const SortedList<unsigned int>& sl);
@@ -147,17 +149,17 @@ namespace BALL
 				/** @name Accessors
 				 */
 				//@{
-				/** returns a RowVector containing only the values for these descriptors, that have been selected for this model \n
+				/** returns a Row-Vector containing only the values for these descriptors, that have been selected for this model \n
 				@param substance a vector of *all* descriptor values for the substance to be predicted */
-				RowVector getSubstanceVector(const vector<double>& substance, bool transform);
+				Vector<double> getSubstanceVector(const vector<double>& substance, bool transform);
 				
-				RowVector getSubstanceVector(const RowVector& substance, bool transform);
+				Vector<double> getSubstanceVector(const Vector<double>& substance, bool transform);
 				
 				/** transforms a prediction (obtained by Model.train()) according to the inverse of the transformation(s) of the activity values of the training data */
-				void backTransformPrediction(RowVector& pred);
+				void backTransformPrediction(Vector<double>& pred);
 				
 				/** adds offset lambda to the diagonal of the given matrix */
-				void addLambda(Matrix& matrix, double& lambda);
+				void addLambda(Matrix<double>& matrix, double& lambda);
 				
 				/** reads selected descriptors, their names and the information about their transformations (mean and stddev of each descriptor). This function is used after feature selection to read information about the selected features */
 				void readDescriptorInformation();
@@ -167,8 +169,10 @@ namespace BALL
 				/** @name Input and Output. The following methods can be used to implement the functions saveToFile() and readFromFile() in final classes derived from this base-class 
 				 */
 				//@{
-				/** reconstructs a Matrix from a given input stream after resizing the given Matrix as specified */
-				void readMatrix(Matrix& mat, ifstream& in, uint lines, uint col);
+				/** reconstructs a Matrix<double> from a given input stream after resizing the given Matrix<double> as specified */
+				void readMatrix(Matrix<double>& mat, ifstream& in, uint lines, uint col);
+				
+				void readVector(Vector<double>& vec, ifstream& in, uint no_cells, bool column_vector);
 				
 				void readModelParametersFromFile(ifstream& in);
 				void saveModelParametersToFile(ofstream& out);
@@ -187,7 +191,7 @@ namespace BALL
 				 */
 				//@{
 				/** newmat-matrix containing the values of each descriptor for each substance */ 
-				Matrix descriptor_matrix_;
+				Matrix<double> descriptor_matrix_;
 					
 				/** names of all substances */
 				vector<string> substance_names_;
@@ -197,15 +201,15 @@ namespace BALL
 				
 				/** 2xm dimensional matrix (m=no of descriptors) containing mean and stddev of each selected descriptor. \n
 				The content of this matrix is updated only by Model.readTrainingData() */
-				Matrix descriptor_transformations_;
+				Matrix<double> descriptor_transformations_;
 				
 				/** 2xc dimensional matrix (c=no of activities) containing mean and stddev of each activity.\n
 				The content of this matrix is updated only by Model.readTrainingData() */
-				Matrix y_transformations_;
+				Matrix<double> y_transformations_;
 				
-				/** newmat-Matrix containing the experimentally determined results (active/non-active) for each substance. \n
+				/** newmat-Matrix<double> containing the experimentally determined results (active/non-active) for each substance. \n
 				Each column contains the values for one activity. */
-				Matrix Y_;
+				Matrix<double> Y_;
 
 				/** The type of model, e.g. "MLR", "GP", ... */
 				String type_;

@@ -33,7 +33,7 @@ namespace BALL{
 				//@{
 				void train();
 				
-				RowVector predict(const vector<double>& substance, bool transform);
+				Vector<double> predict(const vector<double>& substance, bool transform);
 				
 				void saveToFile(string filename);
 				
@@ -45,7 +45,7 @@ namespace BALL{
 				/** @name Attributes
 				 */
 				//@{
-				Matrix training_result_;
+				Matrix<double> training_result_;
 				//@}
 				
 		};

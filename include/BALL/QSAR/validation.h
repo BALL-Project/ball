@@ -58,7 +58,7 @@ namespace BALL
 				
 				virtual void bootstrap(int k,  bool restore=1) = 0;
 				
-				virtual Matrix yRandomizationTest(int runs, int k) = 0;
+				virtual Matrix<double> yRandomizationTest(int runs, int k) = 0;
 				
 				/** select the desired statistic to be used for validating the models
 				@param s if (s==1) R^2 and Q^2 are used \n
@@ -94,7 +94,7 @@ namespace BALL
 				vector<vector<double> > test_substances_;
 				
 				/** contains the experimentally determined results (activities) for all current test-substances in one column for each activity */
-				Matrix test_Y_;
+				Matrix<double> test_Y_;
 				
 				/** contains the names of all current test-substances */
 				vector<string> substances_names_;

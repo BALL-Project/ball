@@ -4,9 +4,8 @@
 //
 
 #include <BALL/QSAR/allModel.h>
-#include <newmatio.h>
-using namespace BALL::QSAR;
 
+using namespace BALL::QSAR;
 
 
 ALLModel::ALLModel(const QSARData& q, double kw) : NonLinearModel(q) 
@@ -33,7 +32,7 @@ double ALLModel::getKw()
 	return kw_;
 }
 
-void ALLModel::calculateEuclDistanceMatrix(Matrix& m1, Matrix& m2, Matrix& output)
+void ALLModel::calculateEuclDistanceMatrix(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output)
 {
 	output.ReSize(m1.Nrows(),m2.Nrows());
 	output=0;
@@ -49,50 +48,56 @@ void ALLModel::calculateEuclDistanceMatrix(Matrix& m1, Matrix& m2, Matrix& outpu
 }
 
 
-RowVector ALLModel::predict(const vector<double>& substance, bool transform)
+BALL::Vector<double> ALLModel::predict(const vector<double>& substance, bool transform)
 {
 	if(descriptor_matrix_.Ncols()==0)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Training data must be read into the ALL-model before the activity of a substance can be predicted!");
 	}
- 	RowVector v=getSubstanceVector(substance,transform);
- 	Matrix dist;
+ 	Vector<double> v0=getSubstanceVector(substance,transform);
+ 	
+	Matrix<double> v(1,v0.getSize()); v.copyVectorToRow(v0,1);
+	Matrix<double> dist;
 	
 	// calculate distances between the given substance and the substances of X
 	// dimension of dist: 1xn 
  	calculateEuclDistanceMatrix(v, descriptor_matrix_, dist);
-	RowVector w;
+	Vector<double> w;
 	calculateWeights(dist, w);
-	
-	Matrix XX;
+	cout<<"predict(): dist.size="<<dist.getRowCount()<<"  "<<dist.getColumnCount()<<endl;
+	cout<<"predict(): w.size="<<w.getSize()<<endl;
+	Matrix<double> XX;
 	
 	// calculate X.t()*X as cross-products weighted by the similarity of the given substance to the respective row of X
- 	calculateXX(w, XX);
+	calculateXX(w, XX);
 	
- 	Matrix XY;
+ 	Matrix<double> XY;
 	
 	// calculate X.t()*Y_ as cross-products weighted by the similarity of the given substance to the respective row of X
  	calculateXY(w, XY);
 	
 	// rigde regression in order to be able to cope with linearly dependent columns, i.e. singular matrices
-	IdentityMatrix im(XX.Nrows());
+	Matrix<double> im; im.setToIdentity(XX.Nrows());
+	im*=lambda_;
+	XX+=im;
+	Matrix<double> train = XX.i();
 	
-	im=im*lambda_;
-	XX=XX+im;
-	Matrix train = XX.i()*XY;
-	RowVector res;
-	res = v*train;
+	train*=XY;
+	
+	Vector<double> res(Y_.getColumnCount());
+	res = v0*train;
 	
 	if(transform && y_transformations_.Ncols()!=0)
 	{
 		backTransformPrediction(res);
 	}
+	
 	return res;	
 }
 
-void ALLModel::calculateWeights(Matrix& dist, RowVector& w)
+void ALLModel::calculateWeights(Matrix<double>& dist, Vector<double>& w)
 {
-	w.ReSize(dist.Ncols());
+	w.resize(dist.Ncols());
 	for(int i=1; i<=dist.Ncols();i++)
 	{
 		w(i)=exp(-pow(dist(1,i),2)/(2*pow(kw_,2)));
@@ -100,9 +105,9 @@ void ALLModel::calculateWeights(Matrix& dist, RowVector& w)
 }
 
 
-void ALLModel::calculateXX(RowVector& w, Matrix& res)
+void ALLModel::calculateXX(Vector<double>& w, Matrix<double>& res)
 {
-	res.ReSize(descriptor_matrix_.Ncols(),descriptor_matrix_.Ncols());
+	res.resize(descriptor_matrix_.Ncols(),descriptor_matrix_.Ncols());
 	res=0;
 	// for all descriptors, calculate their weighted cross-product
 	for(int i=1; i<=descriptor_matrix_.Ncols();i++)
@@ -120,9 +125,9 @@ void ALLModel::calculateXX(RowVector& w, Matrix& res)
 }
 
 
-void ALLModel::calculateXY(RowVector& w, Matrix& res)
+void ALLModel::calculateXY(Vector<double>& w, Matrix<double>& res)
 {
-	res.ReSize(descriptor_matrix_.Ncols(),Y_.Ncols());
+	res.resize(descriptor_matrix_.Ncols(),Y_.Ncols());
 	res=0;
 	
 	for(int i=1; i<=descriptor_matrix_.Ncols();i++)
@@ -190,7 +195,7 @@ void ALLModel::saveToFile(string filename)
 {
 	ofstream out(filename.c_str());
 	
-	const Matrix* coeffErrors = validation->getCoefficientStddev();
+	const Matrix<double>* coeffErrors = validation->getCoefficientStddev();
 	bool stderr=0;
 	if(coeffErrors->Ncols()!=0)
 	{

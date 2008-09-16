@@ -4,7 +4,6 @@
 //
 
 #include <BALL/QSAR/logitModel.h>
-#include <newmatio.h>
 using namespace BALL::QSAR;
 
 
@@ -27,30 +26,40 @@ void LogitModel::train()
 	
 	int lines=descriptor_matrix_.Nrows();
 	int col=descriptor_matrix_.Ncols();
-	training_result_.ReSize(col,Y_.Ncols());
+	training_result_.resize(col,Y_.Ncols());
 		
 	for(int c=1; c<=Y_.Ncols();c++)	
 	{
-		ColumnVector beta(col);
+		Vector<double> beta(col);
 		beta = 0;
 		for( int b=0;b<100;b++)
 		{
 			// calculate matrix W and vector p
-			ColumnVector p(lines);
-			DiagonalMatrix W(lines);
+			Vector<double> p(lines);
+			Matrix<double> W(lines,lines); W=0; // diagonal matrix
 			for(int i=1; i<=lines;i++)
 			{
-				double nom = exp((descriptor_matrix_.Row(i)*beta).AsScalar());
+				Vector<double> v; v.setVectorType(0);
+				descriptor_matrix_.copyRowToVector(v,i);
+				double nom = exp(v*beta);
 				p(i)=nom/(1+nom);
-				W(i)=p(i)*(1/(1+nom));
+				W(i,i)=p(i)*(1/(1+nom));
 			}
-			ColumnVector beta_old=beta;
+			Vector<double> beta_old=beta;
 			
-			IdentityMatrix I(col);
-			I=I*0.0001;
-			Matrix xwx = (descriptor_matrix_.t()*W*descriptor_matrix_) + I;
+			Matrix<double> I; I.setToIdentity(col); 
+			I*=0.0001;
+			Matrix<double> xwx;
+			xwx = descriptor_matrix_.t();
+			xwx*=W;
+			xwx*=descriptor_matrix_;
+			xwx+= I;
 			
-			beta = beta + (xwx.i()*descriptor_matrix_.t()*(Y_.Column(c)-p));
+			for(uint i=1; i<Y_.getRowCount(); i++)
+			{
+				p(i) = Y_(c,i)-p(i);
+			}
+			beta += xwx.i()*descriptor_matrix_.t()*p;
 			//beta = xwx.i()*descriptor_matrix_.t()*W*(descriptor_matrix_*beta+W.i()*(Y_.Column(c)-p));
 			
 			if (Statistics::euclDistance(beta,beta_old)/Statistics::euclNorm(beta)<0.01) 
@@ -58,27 +67,27 @@ void LogitModel::train()
 				break;
 			}
 		}
-		training_result_.Column(c) = beta;
+		training_result_.copyVectorToColumn(beta,c);
 	}
 }
 
 
-RowVector LogitModel::predict(const vector<double>& substance, bool transform)
+BALL::Vector<double> LogitModel::predict(const vector<double>& substance, bool transform)
 {
 	if(training_result_.Ncols()==0)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before it can predict the activitiy of substances!");
 	}
 
-	RowVector v=getSubstanceVector(substance, transform);
-	RowVector res=v*training_result_;
+	Vector<double> v=getSubstanceVector(substance, transform);
+	Vector<double> res=v*training_result_;
 
 	if(transform)
 	{
 		backTransformPrediction(res);
 	}
 
-	for(int i=1; i<=res.Ncols();i++)
+	for(int i=1; i<=res.getSize();i++)
 	{
 		if(res(i)>=0)
 		{

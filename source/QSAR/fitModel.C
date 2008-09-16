@@ -4,7 +4,7 @@
 //
 
 #include <BALL/QSAR/fitModel.h>
-#include <newmatio.h>
+
 using namespace BALL::QSAR;
 #include <BALL/COMMON/exception.h>
 
@@ -28,22 +28,19 @@ FitModel::FitModel(const QSARData& q, vector<String>& eq, vector<vector<String> 
 	allEquations_=eq;
 }
 
-// FitModel::~FitModel()
-// {
-// }
 
-RowVector FitModel::predict(const vector<double>& substance, bool transform)
+BALL::Vector<double> FitModel::predict(const vector<double>& substance, bool transform)
 {
 	if(training_result_.Ncols()==0)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before it can predict the activitiy of substances!");
 	}
-	RowVector v=getSubstanceVector(substance,transform);
-	RowVector res(Y_.Ncols());
+	Vector<double> v=getSubstanceVector(substance,transform);
+	Vector<double> res(Y_.Ncols()); res.setVectorType(0);
 	
 	String var="";
 	// replace all x-values for the current substance
-	for(int j=0; j<v.Ncols();j++)
+	for(uint j=0; j<v.getSize();j++)
 	{
 		var=var+"x"+String(j)+"="+String(v(j+1))+";";
 	}
@@ -121,7 +118,7 @@ void FitModel::train()
 	
 	for(c=0; c<(unsigned int)Y_.Ncols(); c++)
 	{	
- 		fitY=new Matrix(Y_.Nrows(),1);
+ 		fitY=new Matrix<double>(Y_.Nrows(),1);
 		for(int n=1; n<=Y_.Nrows(); n++)
 		{
 			(*fitY)(n,1)=Y_(n,c+1);
@@ -179,13 +176,13 @@ void FitModel::train()
 }
 
 
-double BALL::QSAR::getFunctionValue(double X, void* params)
+double BALL::QSAR::getFunctionValue(double X, void* /*params*/)
 {
 	return (*f)(X);	
 }
 
 
-int BALL::QSAR::setF(const gsl_vector* x, void* params, gsl_vector* f)
+int BALL::QSAR::setF(const gsl_vector* x, void* /*params*/, gsl_vector* f)
 {
 	ParsedFunction<float> f0 = (*equation);
 	f0(0);
@@ -216,7 +213,7 @@ int BALL::QSAR::setF(const gsl_vector* x, void* params, gsl_vector* f)
 }
 
 
-int BALL::QSAR::setDf(const gsl_vector * x, void *params, gsl_matrix * df)
+int BALL::QSAR::setDf(const gsl_vector * x, void* /*params*/, gsl_matrix * df)
 {
 	ParsedFunction<float> f0 = (*equation);
 	f0(0);

@@ -74,7 +74,7 @@ SDFInputDataItem::SDFInputDataItem(SDFInputDataItem& item):
 	InputDataItem(filename_, center_data_, center_y_ ,item.view_)
 {
 	data_ = new QSARData(*item.data_) ;
- 	activity_values_.assign(item.activity_values_.begin(), item.activity_values_.end() );
+ 	activity_values_ = item.activity_values_;
 	name_ = item.name_;
 	setPixmap(item.pixmap());
 }

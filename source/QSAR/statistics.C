@@ -4,10 +4,10 @@
 // 
 
 #include <BALL/QSAR/statistics.h>
+#include <iostream>
+
 using namespace BALL::QSAR;
-
-
-
+using namespace std;
 
 void Statistics::scaling(vector<vector<double> >& m)
 {
@@ -183,7 +183,7 @@ double Statistics::getRowStddev(const vector<vector<double> >& v, int row, doubl
 // -----------------------------------------------------------------
 
 
-void Statistics::centering(Matrix& m)
+void Statistics::centering(Matrix<double>& m)
 {
 	for (int i=1; i<=m.Ncols(); i++)
 	{
@@ -192,7 +192,7 @@ void Statistics::centering(Matrix& m)
 }
 
 
-void Statistics::centering(Matrix& m, int col)
+void Statistics::centering(Matrix<double>& m, int col)
 {
 	double mean=getMean(m, col);
 	double std=sqrt(getVariance(m, col, mean));
@@ -203,7 +203,7 @@ void Statistics::centering(Matrix& m, int col)
 	}
 }
 
-double Statistics::getMean(const Matrix& m, int col)
+double Statistics::getMean(const Matrix<double>& m, int col)
 {
 	double sum=0;
 	for(int i=1; i<=m.Nrows(); i++)
@@ -213,7 +213,7 @@ double Statistics::getMean(const Matrix& m, int col)
 	return sum/m.Nrows();
 }
 
-double Statistics::getVariance(const Matrix& m, int col, double mean)
+double Statistics::getVariance(const Matrix<double>& m, int col, double mean)
 {
 	if (mean==-1) {	mean=getMean(m,col); }
 	double sum_of_squares=0;
@@ -224,13 +224,13 @@ double Statistics::getVariance(const Matrix& m, int col, double mean)
 	return sum_of_squares/(m.Nrows()-1);
 }
 
-double Statistics::getStddev(const Matrix& m, int col, double mean)
+double Statistics::getStddev(const Matrix<double>& m, int col, double mean)
 {
 	double d = getVariance(m,col,mean);
 	return sqrt(d);
 }
 
-double Statistics::getCovariance(const Matrix& m, int col1, int col2, double mean1, double mean2)
+double Statistics::getCovariance(const Matrix<double>& m, int col1, int col2, double mean1, double mean2)
 {
 	if (mean1==-1) {mean1=getMean(m,col1);}
 	if (mean2==-1) {mean2=getMean(m,col2);}
@@ -243,7 +243,7 @@ double Statistics::getCovariance(const Matrix& m, int col1, int col2, double mea
 }
 
 
-double Statistics::sq(const Matrix& m, int col, double mean)
+double Statistics::sq(const Matrix<double>& m, int col, double mean)
 {
 	if (mean==-1) {	mean=getMean(m,col); }
 	double sum_of_squares=0;
@@ -254,16 +254,16 @@ double Statistics::sq(const Matrix& m, int col, double mean)
 	return sum_of_squares;
 }
 
-double Statistics::euclNorm(const ColumnVector& cv)
+double Statistics::euclNorm(const Vector<double>& cv)
 {
 	return sqrt(scalarProduct(cv));
 }
 
 
-double Statistics::scalarProduct(const ColumnVector& cv)
+double Statistics::scalarProduct(const Vector<double>& cv)
 {
 	double n=0;
-	for(int i=1; i<=cv.Nrows();i++)
+	for(int i=1; i<=cv.getSize();i++)
 	{
 		n+=cv(i)*cv(i);
 	}
@@ -271,10 +271,10 @@ double Statistics::scalarProduct(const ColumnVector& cv)
 }
 
 
-double Statistics::euclDistance(const ColumnVector& c1, const ColumnVector& c2)
+double Statistics::euclDistance(const Vector<double>& c1, const Vector<double>& c2)
 {
 	double n=0;
-	for(int i=1; i<=c1.Nrows();i++)
+	for(int i=1; i<=c1.getSize();i++)
 	{
 		n+=pow((c1(i)-c2(i)),2);
 	}
@@ -284,7 +284,7 @@ double Statistics::euclDistance(const ColumnVector& c1, const ColumnVector& c2)
 //---------------------------
 
 
-double Statistics::distance(const Matrix& m, int& row1, int& row2, double& p)
+double Statistics::distance(const Matrix<double>& m, int& row1, int& row2, double& p)
 {
 	double dist=0;
 	for (int j=1; j<=m.Ncols(); j++)
@@ -302,7 +302,7 @@ double Statistics::distance(const Matrix& m, int& row1, int& row2, double& p)
 }
 
 
-double Statistics::distance(const Matrix& m1, const Matrix& m2, int& row1, int& row2, double& p)
+double Statistics::distance(const Matrix<double>& m1, const Matrix<double>& m2, int& row1, int& row2, double& p)
 {
 	if(m1.Ncols()!=m2.Ncols()) 
 	{
@@ -324,7 +324,7 @@ double Statistics::distance(const Matrix& m1, const Matrix& m2, int& row1, int& 
 }
 
 
-double Statistics::distance(const Matrix& m1, const Matrix& m2, int& row1, int& row2, String& f, String& g)
+double Statistics::distance(const Matrix<double>& m1, const Matrix<double>& m2, int& row1, int& row2, String& f, String& g)
 {
 	if(m1.Ncols()!=m2.Ncols()) 
 	{
@@ -348,7 +348,7 @@ double Statistics::distance(const Matrix& m1, const Matrix& m2, int& row1, int& 
 }
 
 
-double Statistics::euclDistance(const Matrix& m1, const Matrix& m2, int row1, int row2)
+double Statistics::euclDistance(const Matrix<double>& m1, const Matrix<double>& m2, int row1, int row2)
 {
 	if(m1.Ncols()!=m2.Ncols()) 
 	{

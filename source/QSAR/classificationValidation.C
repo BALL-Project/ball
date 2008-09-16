@@ -5,7 +5,6 @@
 #include <BALL/QSAR/classificationValidation.h>
 #include <BALL/QSAR/statistics.h>
 #include <BALL/QSAR/classificationModel.h>
-#include <newmatio.h>
 
 using namespace BALL::QSAR;
 
@@ -51,9 +50,9 @@ void ClassificationValidation::crossValidation(int k, bool restore)
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be fetched from input-files by QSARData before cross-validation can be done!");
 	}
 	
-	Matrix desc_backup;
-	//Matrix res_backup;
-	Matrix y_backup;
+	Matrix<double> desc_backup;
+	//Matrix<double> res_backup;
+	Matrix<double> y_backup;
 	if(restore)
 	{
 		desc_backup=model_->descriptor_matrix_; // save matrices in order in restore them after cross-validation
@@ -68,7 +67,7 @@ void ClassificationValidation::crossValidation(int k, bool restore)
 		col=model_->descriptor_IDs_.size();
 	}
 	double average_accuracy=0;
-	class_results_.ReSize(clas_model->labels_.size());
+	class_results_.resize(clas_model->labels_.size());
 	class_results_ = 0;
 	
 	// test k times
@@ -122,12 +121,12 @@ void ClassificationValidation::testAllSubstances(bool transform)
 {	
 	confusion_matrix_.ReSize(4,clas_model->labels_.size());
 	confusion_matrix_=0;
-	class_results_.ReSize(clas_model->labels_.size());
+	class_results_.resize(clas_model->labels_.size());
 	class_results_ = 0;
 	
 	for(int i=0; i<(int)test_substances_.size();i++) // for all substances in test-data
 	{
-		RowVector rv=model_->predict(test_substances_[i],transform);
+		Vector<double> rv=model_->predict(test_substances_[i],transform);
 		
 		for(int c=1; c<=test_Y_.Ncols();c++) // for all modelled activities
 		{			
@@ -174,7 +173,7 @@ void ClassificationValidation::testInputData(bool transform)
 	test_substances_.resize(lines);
 	test_Y_.ReSize(lines,model_->data->Y_.size());
 	
-	class_results_.ReSize(clas_model->labels_.size());
+	class_results_.resize(clas_model->labels_.size());
 	class_results_ = 0;
 	
 	bool back_transform=0;
@@ -201,9 +200,9 @@ void ClassificationValidation::bootstrap(int k, bool restore)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be fetched from input-files by QSARData before bootstrapping can be done!");
 	}
-	Matrix desc_backup;
-	Matrix res_backup;
-	Matrix y_backup;
+	Matrix<double> desc_backup;
+	Matrix<double> res_backup;
+	Matrix<double> y_backup;
 	if(restore)
 	{
 		desc_backup=model_->descriptor_matrix_; // save matrices in order in restore them after cross-validation
@@ -211,7 +210,7 @@ void ClassificationValidation::bootstrap(int k, bool restore)
 		y_backup=model_->Y_;
 	}
 
-	class_results_.ReSize(clas_model->labels_.size());
+	class_results_.resize(clas_model->labels_.size());
 	class_results_ = 0;
 	accuracy_cv_=0;
 	int N = model_->data->descriptor_matrix_[0].size();
@@ -227,10 +226,10 @@ void ClassificationValidation::bootstrap(int k, bool restore)
 	
 	double overall_fit=0;
 	double overall_pred=0;
-	RowVector class_results_pred; 
-	class_results_pred.ReSize(clas_model->labels_.size()); class_results_pred=0;
-	RowVector class_results_fit; 
-	class_results_fit.ReSize(clas_model->labels_.size()); class_results_fit=0;
+	Vector<double> class_results_pred; 
+	class_results_pred.resize(clas_model->labels_.size()); class_results_pred=0;
+	Vector<double> class_results_fit; 
+	class_results_fit.resize(clas_model->labels_.size()); class_results_fit=0;
 
 	for(int i=0; i<k; i++) // create and evaluate k bootstrap samples
 	{
@@ -306,7 +305,7 @@ void ClassificationValidation::bootstrap(int k, bool restore)
 	class_results_fit = class_results_fit/k;
 	
 	accuracy_cv_ = 0.632*overall_pred + 0.368*overall_fit;
-	class_results_ = 0.632*class_results_pred + 0.368*class_results_fit;
+	class_results_ = class_results_pred*0.632 + class_results_fit*0.368;
 	
 	gsl_rng_free(r);
 	if(restore)
@@ -318,18 +317,18 @@ void ClassificationValidation::bootstrap(int k, bool restore)
 }
 
 
-Matrix ClassificationValidation::yRandomizationTest(int runs, int k)
+BALL::Matrix<double> ClassificationValidation::yRandomizationTest(int runs, int k)
 {
-	Matrix y_backup=model_->Y_;
-	Matrix desc_backup=model_->descriptor_matrix_;
-	//Matrix res_backup=clas_model->training_result_;
+	Matrix<double> y_backup=model_->Y_;
+	Matrix<double> desc_backup=model_->descriptor_matrix_;
+	//Matrix<double> res_backup=clas_model->training_result_;
 	vector<vector<double> > dataY_backup=model_->data->Y_;
 				
 	//vector<double> c(2,-1);
 	//vector<vector<double> > results(runs,2);
-	Matrix results(runs,2);
+	Matrix<double> results(runs,2);
 	results=-1;
-	class_results_.ReSize(clas_model->labels_.size());
+	class_results_.resize(clas_model->labels_.size());
 	class_results_ = 0;
 
 	for(int i=0; i<runs;i++)
@@ -480,13 +479,13 @@ void ClassificationValidation::calculateOverallMCC()
 
 
 
-const Matrix* ClassificationValidation::getConfusionMatrix()
+const BALL::Matrix<double>* ClassificationValidation::getConfusionMatrix()
 {
 	return &confusion_matrix_;
 }
 
 
-const RowVector* ClassificationValidation::getClassResults()
+const BALL::Vector<double>* ClassificationValidation::getClassResults()
 {
 	return &class_results_;
 }

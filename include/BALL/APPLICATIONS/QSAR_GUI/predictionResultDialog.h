@@ -41,7 +41,7 @@ namespace BALL
 				/** @name Private Attributes */
 			
 				/** the results of the validation */
-				const QList<RowVector>* results_;
+				const QList<Vector<double> >* results_;
 			
 				QString file_name_;
 

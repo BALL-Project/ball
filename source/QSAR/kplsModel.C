@@ -4,7 +4,6 @@
 //
 
 #include <BALL/QSAR/kplsModel.h>
-#include <newmatio.h>
 #include <BALL/QSAR/mlrModel.h>
 
 using namespace BALL::QSAR;
@@ -17,7 +16,7 @@ KPLSModel::KPLSModel(const QSARData& q, int k_type, double p1, double p2) : Kern
 }
 
 
-KPLSModel::KPLSModel(const QSARData& q, RowVector& w) : KernelModel(q,w) 
+KPLSModel::KPLSModel(const QSARData& q, Vector<double>& w) : KernelModel(q,w) 
 {
 	no_components_=1;
 	type_="KPLS";
@@ -86,24 +85,34 @@ void KPLSModel::train()
 	
 	kernel->calculateKernelMatrix(descriptor_matrix_, K_);
 
-	//Matrix U_; // Matrix U_ saves all vectors u
-	//Matrix loadings_; // Matrix loadings_ saves all vectors w
-	//Matrix weights_; // Matrix weights_ saves all vectors c
-	//Matrix latent_variables_;  // Matrix latent_variables_ saves all vectors t
-	Matrix P;  // Matrix P saves all vectors p
+	Matrix<double> P;  // Matrix P saves all vectors p
 
-	ColumnVector w;
-	ColumnVector t;
-	ColumnVector c;
-	ColumnVector u(K_.Nrows());
-	for (int i=1; i<=u.Nrows(); i++)
+	int cols=K_.Ncols();
+	
+	// determine the number of components that are to be created.
+	// no_components_ contains the number of components desired by the user, 
+	// but obviously we cannot calculate more PLS components than features
+	int features = descriptor_matrix_.Ncols();
+	uint components_to_create = no_components_;
+	if(features<no_components_) components_to_create=features;
+
+	U_.resize(K_.Nrows(),components_to_create);
+	loadings_.resize(cols,components_to_create);
+	weights_.resize(Y_.getColumnCount(),components_to_create);
+	latent_variables_.resize(K_.Nrows(),components_to_create);
+	P.resize(cols,components_to_create);
+	
+	Vector<double> w; w.setVectorType(1);
+	Vector<double> t; t.setVectorType(1);
+	Vector<double> c; c.setVectorType(1);
+	Vector<double> u(K_.Nrows()); c.setVectorType(1);
+	for (uint i=1; i<=u.getSize(); i++)
 	{
 		u(i)=Y_(i,1);	
 	}
-	ColumnVector u_old;
-	int cols = descriptor_matrix_.Ncols();
+	Vector<double> u_old; u_old.setVectorType(1);
 	
-	for(int j=0; j<no_components_ & j<cols; j++)
+	for(int j=0; j<components_to_create; j++)
 	{
 		for(int i=0;i<10000 ;i++)
 		{	
@@ -123,24 +132,18 @@ void KPLSModel::train()
 				break;
 			}
 		}
-		Matrix p = K_.t()*t / Statistics::scalarProduct(t);
-		K_ = K_ - t*p.t();
+		Vector<double> p = K_.t()*t / Statistics::scalarProduct(t);
+		
+		Matrix<double> TP; 
+		t.dotProduct(p,TP); // t.p.t() -> dim. nxn
+		K_ -= TP;
 		//Y_ = Y_ - t*c.t();
 		
-		if(j==0)
-		{
-			loadings_ = w;	
-			weights_ = c;
-			P = p;
-			latent_variables_ = t;
-		}
-		else
-		{
-			loadings_ = loadings_|w;
-			weights_ = weights_|c;
-			P = P|p;
-			latent_variables_ = latent_variables_ | t;
-		}
+		U_.copyVectorToColumn(u,j+1);
+		loadings_.copyVectorToColumn(w,j+1);
+		weights_.copyVectorToColumn(c,j+1);
+		P.copyVectorToColumn(p,j+1);
+		latent_variables_.copyVectorToColumn(t,j+1);
 	}
 
 	loadings_ = loadings_*(P.t()*loadings_).i();
@@ -154,7 +157,7 @@ bool KPLSModel::optimizeParameters(int k, int no_steps)
 {
 	double best_q2=0;
 	int best_no=1;
-	for(unsigned int i=1; i<=no_steps && i<=data->getNoDescriptors() && (descriptor_IDs_.empty() || i<descriptor_IDs_.size());i++)
+	for(uint i=1; i<=no_steps && i<=data->getNoDescriptors() && (descriptor_IDs_.empty() || i<descriptor_IDs_.size());i++)
 	{	
 		no_components_=i;
 		validation->crossValidation(k);
@@ -174,7 +177,7 @@ bool KPLSModel::optimizeParameters(int k, int no_steps)
 	return 1;
 }
 
-const Matrix* KPLSModel::getU()
+const BALL::Matrix<double>* KPLSModel::getU()
 { 
 	return &U_;
 }

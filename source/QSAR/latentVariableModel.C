@@ -6,25 +6,25 @@ using namespace BALL::QSAR;
 
 LatentVariableModel::LatentVariableModel()
 {
-	latent_variables_.ReSize(0,0);
-	loadings_.ReSize(0,0);
-	weights_.ReSize(0,0);
+	latent_variables_.resize(0,0);
+	loadings_.resize(0,0);
+	weights_.resize(0,0);
 }
 
 
-const Matrix* LatentVariableModel::getLoadings()
+const BALL::Matrix<double>* LatentVariableModel::getLoadings()
 {
 	return &loadings_;
 }
 
 
-const Matrix* LatentVariableModel::getLatentVariables()
+const BALL::Matrix<double>* LatentVariableModel::getLatentVariables()
 {
 	return &latent_variables_;
 }
 
 
-const Matrix* LatentVariableModel::getWeights()
+const BALL::Matrix<double>* LatentVariableModel::getWeights()
 {
 	return &weights_;
 }

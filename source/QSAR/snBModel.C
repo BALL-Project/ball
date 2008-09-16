@@ -4,7 +4,6 @@
 //
 
 #include <BALL/QSAR/snBModel.h>
-#include <newmatio.h>
 
 using namespace BALL::QSAR;
 
@@ -74,20 +73,20 @@ void SNBModel::train()
 }
 
 
-RowVector SNBModel::predict(const vector<double>& substance, bool transform)
+BALL::Vector<double> SNBModel::predict(const vector<double>& substance, bool transform)
 {
 	if(mean_.size()==0)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before it can predict the activitiy of substances!");
 	}
 	
-	RowVector s = getSubstanceVector(substance,transform);
+	Vector<double> s = getSubstanceVector(substance,transform);
 	
 	uint no_activities = mean_.size();
 	uint no_classes = mean_[0].Nrows();
 	uint no_features = mean_[0].Ncols();
 	
-	RowVector result(no_activities);
+	Vector<double> result(no_activities);
 	result=0;
 	
 	for(uint act=0; act<no_activities;act++)

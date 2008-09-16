@@ -72,19 +72,19 @@ namespace BALL
 				/** Interface function-definition for discretization of features.\n
 				Thus, various functions that do the actual discretization can be created as members of ClassificationModel, allowing switching of the discretization technique by only (re-)setting this function-pointer.
 				@param bins the number of discrete values to be created for each features 
-				@param discretization_information a Matrix into which the information about the applied discretization should be saved (into one column per feature). \n
-				This Matrix can later be used to discretize test data according to the discretization of the training data. */
-				void (ClassificationModel::* discretizeFeatures)(int bins, Matrix& discretization_information);
+				@param discretization_information a BALL::Matrix<double> into which the information about the applied discretization should be saved (into one column per feature). \n
+				This BALL::Matrix<double> can later be used to discretize test data according to the discretization of the training data. */
+				void (ClassificationModel::* discretizeFeatures)(int bins, BALL::Matrix<double>& discretization_information);
 				
 				/** Discretizes test data according to the given discretization of the training data.
 				@param discretization_information the discretization according to which the current descriptor_matrix should be discretized. */
-				void (ClassificationModel::* discretizeTestDataFeatures)(RowVector& compound, int bins, const Matrix& discretization_information);
+				void (ClassificationModel::* discretizeTestDataFeatures)(Vector<double>& compound, int bins, const BALL::Matrix<double>& discretization_information);
 				
 				
 				/** discretizes each feature in such a way that each created bin has an equal range of values */
-				void equalSpaceDiscretization(int bins, Matrix& discretization_information);
+				void equalSpaceDiscretization(int bins, BALL::Matrix<double>& discretization_information);
 				
-				void equalSpaceDiscretizationTestData(RowVector& compound, int bins, const Matrix& discretization_information);
+				void equalSpaceDiscretizationTestData(Vector<double>& compound, int bins, const BALL::Matrix<double>& discretization_information);
 				
 				
 				

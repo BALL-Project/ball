@@ -4,7 +4,6 @@
 // 
 
 #include <BALL/QSAR/mlrModel.h>
-#include <newmatap.h>
 using namespace BALL::QSAR;
 
 
@@ -34,16 +33,15 @@ void MLRModel::train()
 		//return;
 	}
 
-  	Matrix m = descriptor_matrix_.t()*descriptor_matrix_;
+  	Matrix<double> m = descriptor_matrix_.t()*descriptor_matrix_;
 
 		
 	try
 	{
 		training_result_ = m.i()*descriptor_matrix_.t()*Y_;
 	}
-	catch(BaseException e)
+	catch(BALL::Exception::GeneralException e)
 	{
-		cout<<e.what()<<endl;
 		training_result_.ReSize(0,0);
 		throw Exception::SingularMatrixError(__FILE__,__LINE__,"Matrix for MLR training is singular!! Check that descriptor_matrix_ does not contain empty columns!");
 		return;

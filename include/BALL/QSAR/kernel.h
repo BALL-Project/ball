@@ -42,7 +42,7 @@ namespace BALL
 				
 				Kernel(Model* m, String f, String g);
 						
-				Kernel(Model* m, RowVector& w);
+				Kernel(Model* m, Vector<double>& w);
 				
 				/** constructor for weighted distance kernel.
 				@param column no of column of LinearModel.training_result that is to be used as weights vector */
@@ -55,17 +55,21 @@ namespace BALL
 				/** @name Accessors
 				 */
 				//@{
-				/** calculates pairwise distances between all substances in Matrix input and saves them to Matrix output.\n
+				/** calculates pairwise distances between all substances in Matrix<double> input and saves them to Matrix<double> output.\n
 				If Kernel.weights is not empty, function Kernel.calculateWeightedDistanceMatrix() is used \n 
 				Else if: Kernel.f=="" and Kernel.g="", the distance between two substances a and b is calculated as \f$ \sum_{i=1}^m (input_{ai} * input_{bi})^p \f$, with m=\#descriptors  \n
 				Else: distance is calculated as \f$ g(\sum_{i=1}^m f(input_{ai}, input_{bi})) \f$*/
-				void calculateKernelMatrix(Matrix& input, Matrix& output);
+				void calculateKernelMatrix(Matrix<double>& input, Matrix<double>& output);
 				
-				/** calculates pairwise distance between all substances of m1 and m2 and saves them to Matrix output. \n
+				/** calculates pairwise distance between all substances of m1 and m2 and saves them to Matrix<double> output. \n
 				If Kernel.weights is not empty, function Kernel.calculateWeightedDistanceMatrix() is used \n 
 				Esle if: Kernel.f=="" and Kernel.g="", the distance between two substances a and b is calculated as \f$ \sum_{i=1}^m (m1_{ai} * m2_{bi})^p \f$, with m=\#descriptors \n
 				Else: distance is calculated as \f$ g(\sum_{i=1}^m f(m1_{ai}, m2_{bi})) \f$*/
-				void calculateKernelMatrix(Matrix& K, Matrix& m1, Matrix& m2, Matrix& output);
+				void calculateKernelMatrix(Matrix<double>& K, Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output);
+				
+				
+				/** transforms test data 'input' into the kernel-saves and saves it to matrix 'output' */
+				void calculateKernelVector(Matrix<double>& K,Vector<double>& m1, Matrix<double>& m2, Vector<double>& output);
 				
 				/** grid search for the best kernel parameters
 				@param opt if ==1, Model.optitimizeParameters() is used in each step of grid search, optimizing the parameter of the *Model* in addition to those of the kernel.
@@ -111,32 +115,32 @@ namespace BALL
 
 				void gridSearch(double step_width, int steps, bool first_rec, int k, double par1_start, double par2_start, bool opt);
 
-				/** calculates pairwise distances between all substances in Matrix input, weighted by the contribution of every descriptor (as encoded in Kernel.weights), and saves them to Matrix output.\n
+				/** calculates pairwise distances between all substances in Matrix<double> input, weighted by the contribution of every descriptor (as encoded in Kernel.weights), and saves them to Matrix<double> output.\n
 				Distance between two substances a and b is calculated as \f$ \sum_{i=1}^m w_i * (input_{ai}- input_{bi})^2 \f$, with m=\#descriptors */
-				void calculateWeightedKernelMatrix(Matrix& input, Matrix& output);
+				void calculateWeightedKernelMatrix(Matrix<double>& input, Matrix<double>& output);
 				
 				
-				/** calculates pairwise distances between all substances of m1 and m2, weighted by the contribution of every descriptor (as encoded in Kernel.weights), and saves them to Matrix output.\n
+				/** calculates pairwise distances between all substances of m1 and m2, weighted by the contribution of every descriptor (as encoded in Kernel.weights), and saves them to Matrix<double> output.\n
 				Distance between two substances a and b is calculated as \f$ \sum_{i=1}^m w_i * (m1_{ai}- m2_{bi})^2 \f$, with m=\#descriptors */
-				void calculateWeightedKernelMatrix(Matrix& m1, Matrix& m2, Matrix& output);
+				void calculateWeightedKernelMatrix(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output);
 				
 				
-				void calculateKernelMatrix1(Matrix& input, Matrix& output);
+				void calculateKernelMatrix1(Matrix<double>& input, Matrix<double>& output);
 				
-				void calculateKernelMatrix2(Matrix& input, Matrix& output);
+				void calculateKernelMatrix2(Matrix<double>& input, Matrix<double>& output);
 				
-				void calculateKernelMatrix3(Matrix& input, Matrix& output);
+				void calculateKernelMatrix3(Matrix<double>& input, Matrix<double>& output);
 				
-				void calculateKernelMatrix4(Matrix& input, Matrix& output);
+				void calculateKernelMatrix4(Matrix<double>& input, Matrix<double>& output);
 				
 				
-				void calculateKernelMatrix1(Matrix& m1, Matrix& m2, Matrix& output);
+				void calculateKernelMatrix1(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output);
 				
-				void calculateKernelMatrix2(Matrix& m1, Matrix& m2, Matrix& output);
+				void calculateKernelMatrix2(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output);
 				
-				void calculateKernelMatrix3(Matrix& m1, Matrix& m2, Matrix& output);
+				void calculateKernelMatrix3(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output);
 				
-				void calculateKernelMatrix4(Matrix& m1, Matrix& m2, Matrix& output);
+				void calculateKernelMatrix4(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output);
 				//@}
 				
 				
@@ -146,7 +150,7 @@ namespace BALL
 				/** pointer to the model which uses this kernel */
 				Model* model_;
 				
-				RowVector weights_;
+				Vector<double> weights_;
 				//@}
 				
 				

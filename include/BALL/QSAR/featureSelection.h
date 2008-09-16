@@ -100,7 +100,7 @@ namespace BALL
 				/** @name Accessors
 				 */
 				//@{
-				void updateWeights(SortedList<unsigned int>& oldDescIDs, SortedList<unsigned int>& newDescIDs, RowVector& oldWeights);
+				void updateWeights(SortedList<unsigned int>& oldDescIDs, SortedList<unsigned int>& newDescIDs, Vector<double>& oldWeights);
 				//@}
 				
 				
@@ -115,7 +115,7 @@ namespace BALL
 				Model* model_;
 				
 				/** pointer to KernelModel.weights (if the model to be optimized is a KernelModel) */
-				RowVector* weights_;
+				Vector<double>* weights_;
 				
 				/** implements forward selection; if stepwise==1, backwardSelection() is called after each forward step, i.e. after adding a feature. */
 				void forward(bool stepwise, int k, bool optPar);

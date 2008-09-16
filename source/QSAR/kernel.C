@@ -4,7 +4,6 @@
 //
 
 #include <BALL/QSAR/kernel.h>
-#include <newmatio.h>
 
 using namespace BALL::QSAR;
 
@@ -61,7 +60,7 @@ Kernel::Kernel(Model* m, String s1, String s2)
 }
 
 
-Kernel::Kernel(Model* m, RowVector& w)
+Kernel::Kernel(Model* m, Vector<double>& w)
 {
 	type = 5;
 	model_=m;
@@ -76,12 +75,12 @@ Kernel::Kernel(Model* m, const LinearModel& lm, int column)
 	par1=2;
 	type = 5;
 	
-	const Matrix* w = lm.getTrainingResult();
+	const Matrix<double>* w = lm.getTrainingResult();
 	if(w->Nrows()==0)
 	{
 		throw Exception::KernelParameterError(__FILE__,__LINE__, "linear model_ must be trained before its weights_ can be used for a weighted kernel function!");
 	}
-	RowVector v(w->Nrows());
+	Vector<double> v(w->getSize());
 	for(int i=1; i<=w->Nrows();i++)
 	{
 		v(i)=(*w)(i,column);
@@ -95,7 +94,18 @@ Kernel::~Kernel()
 {
 }
 
-void Kernel::calculateKernelMatrix(Matrix& input, Matrix& output)
+void Kernel::calculateKernelVector(Matrix<double>& K, Vector<double>& m1, Matrix<double>& m2, Vector<double>& output)
+{
+	Matrix<double> M1(1,m1.getSize());
+	M1.copyVectorToRow(m1,1);
+	Matrix<double> out(1,m1.getSize());
+	calculateKernelMatrix(K,M1,m2,out);
+	output.resize(m1.getSize());
+	output.setVectorType(0); // row-vector
+	out.copyRowToVector(output,1);	
+}
+
+void Kernel::calculateKernelMatrix(Matrix<double>& input, Matrix<double>& output)
 {
 	if(type==1)
 	{
@@ -113,22 +123,24 @@ void Kernel::calculateKernelMatrix(Matrix& input, Matrix& output)
 	{
 		calculateKernelMatrix4(input, output);
 	}
-	else if(type==5 && weights_.Ncols()!=0)
+	else if(type==5 && weights_.getSize()!=0)
 	{
 		calculateWeightedKernelMatrix(input, output); 
 		if(*model_->getType()=="GP"){return;}
 	}
 	
-	// center Matrix output
- 	IdentityMatrix I(output.Ncols());
- 	ColumnVector iv(output.Ncols());
+	// center Matrix<double> output
+ 	Matrix<double> I; I.setToIdentity(output.Ncols());
+ 	Vector<double> iv(output.Ncols());
  	iv=1;
  	double d=(double)1/output.Ncols();
- 	output = (I-d*iv*iv.t())*output*(I-d*iv*iv.t());
+	
+	I-=iv*d*iv.t();
+ 	output = I*output*I;
 }
 
 
-void Kernel::calculateKernelMatrix(Matrix& K, Matrix& m1, Matrix& m2, Matrix& output)
+void Kernel::calculateKernelMatrix(Matrix<double>& K, Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output)
 {
 	if(type==1)
 	{
@@ -146,20 +158,22 @@ void Kernel::calculateKernelMatrix(Matrix& K, Matrix& m1, Matrix& m2, Matrix& ou
 	{
 		calculateKernelMatrix4(m1,m2,output);
 	}
-	else if(type==5 && weights_.Ncols()!=0)
+	else if(type==5 && weights_.getSize()!=0)
 	{
 		calculateWeightedKernelMatrix(m1, m2, output); 
 		if(*model_->getType()=="GP"){return;}
 	}
 	
-	// center Matrix output
-	IdentityMatrix I(output.Ncols()); //dim: nxn
- 	ColumnVector iv(m2.Nrows()); //dim: nx1
- 	iv=1;
-	ColumnVector ivt(output.Nrows());
- 	ivt=1;
+	// center Matrix<double> output
+	Matrix<double> I; I.setToIdentity(output.Ncols());
+ 	Vector<double> iv(m2.Nrows(),1,0); //dim: nx1  // initial value=1, ColumnVector=false
+	Vector<double> ivt(output.Nrows(),1,1);  // initial value=1, ColumnVector=true
+ 	
  	double d=(double)1/output.Ncols();
- 	output = (output-d*ivt*(iv.t()*K))*(I-d*iv*iv.t());
+	
+	I -= iv*d*iv.t();
+	output -= ivt*d*(iv.t()*K);
+ 	output *= I;
 }
 
 
@@ -306,7 +320,7 @@ void Kernel::gridSearch(double step_width, int steps, bool first_rec, int k, dou
 
 
 
-void Kernel::calculateKernelMatrix1(Matrix& input, Matrix& output) // polynomial kernel
+void Kernel::calculateKernelMatrix1(Matrix<double>& input, Matrix<double>& output) // polynomial kernel
 {
 	output.ReSize(input.Nrows(),input.Nrows());
 	//output=0;
@@ -324,7 +338,7 @@ void Kernel::calculateKernelMatrix1(Matrix& input, Matrix& output) // polynomial
 }
 
 
-void Kernel::calculateKernelMatrix1(Matrix& m1, Matrix& m2, Matrix& output) // polynomial kernel
+void Kernel::calculateKernelMatrix1(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output) // polynomial kernel
 {
 	output.ReSize(m1.Nrows(),m2.Nrows());
 	//output=0;
@@ -338,7 +352,7 @@ void Kernel::calculateKernelMatrix1(Matrix& m1, Matrix& m2, Matrix& output) // p
 }
 
 
-void Kernel::calculateKernelMatrix2(Matrix& input, Matrix& output) // radial basis function kernel
+void Kernel::calculateKernelMatrix2(Matrix<double>& input, Matrix<double>& output) // radial basis function kernel
 {
 	output.ReSize(input.Nrows(),input.Nrows());
 	for(int i=1; i<=input.Nrows();i++)
@@ -354,7 +368,7 @@ void Kernel::calculateKernelMatrix2(Matrix& input, Matrix& output) // radial bas
 }		
 		
 		
-void Kernel::calculateKernelMatrix2(Matrix& m1, Matrix& m2, Matrix& output) // radial basis function kernel
+void Kernel::calculateKernelMatrix2(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output) // radial basis function kernel
 {
 	output.ReSize(m1.Nrows(),m2.Nrows());
 	for(int i=1; i<=m1.Nrows();i++)
@@ -367,7 +381,7 @@ void Kernel::calculateKernelMatrix2(Matrix& m1, Matrix& m2, Matrix& output) // r
 }		
 		
 		
-void Kernel::calculateKernelMatrix3(Matrix& input, Matrix& output) // sigmoid kernel
+void Kernel::calculateKernelMatrix3(Matrix<double>& input, Matrix<double>& output) // sigmoid kernel
 {
 	output.ReSize(input.Nrows(),input.Nrows());
 	for(int i=1; i<=input.Nrows();i++)
@@ -383,7 +397,7 @@ void Kernel::calculateKernelMatrix3(Matrix& input, Matrix& output) // sigmoid ke
 }		
 		
 		
-void Kernel::calculateKernelMatrix3(Matrix& m1, Matrix& m2, Matrix& output) // sigmoid kernel
+void Kernel::calculateKernelMatrix3(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output) // sigmoid kernel
 {
 	output.ReSize(m1.Nrows(),m2.Nrows());
 	for(int i=1; i<=m1.Nrows();i++)
@@ -397,7 +411,7 @@ void Kernel::calculateKernelMatrix3(Matrix& m1, Matrix& m2, Matrix& output) // s
 }		
 		
 		
-void Kernel::calculateKernelMatrix4(Matrix& input, Matrix& output) // individual kernel
+void Kernel::calculateKernelMatrix4(Matrix<double>& input, Matrix<double>& output) // individual kernel
 {
 	output.ReSize(input.Nrows(),input.Nrows());
 	for(int i=1; i<=input.Nrows();i++)
@@ -412,7 +426,7 @@ void Kernel::calculateKernelMatrix4(Matrix& input, Matrix& output) // individual
 }		
 		
 		
-void Kernel::calculateKernelMatrix4(Matrix& m1, Matrix& m2, Matrix& output) // individual kernel
+void Kernel::calculateKernelMatrix4(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output) // individual kernel
 {
 	output.ReSize(m1.Nrows(),m2.Nrows());
 	for(int i=1; i<=m1.Nrows();i++)
@@ -425,9 +439,9 @@ void Kernel::calculateKernelMatrix4(Matrix& m1, Matrix& m2, Matrix& output) // i
 }		
 
 
-void Kernel::calculateWeightedKernelMatrix(Matrix& input, Matrix& output)
+void Kernel::calculateWeightedKernelMatrix(Matrix<double>& input, Matrix<double>& output)
 {
-	if (input.Ncols()!=weights_.Ncols())
+	if (input.Ncols()!=weights_.getSize())
 	{
 		throw Exception::KernelParameterError(__FILE__,__LINE__, "Kernel.weights_ has wrong size! One weight for each column of the given matrix is needed in order to be able to calculate a weighted distance matrix!");
 	}
@@ -450,7 +464,7 @@ void Kernel::calculateWeightedKernelMatrix(Matrix& input, Matrix& output)
 }
 
 
-void Kernel::calculateWeightedKernelMatrix(Matrix& m1, Matrix& m2, Matrix& output)
+void Kernel::calculateWeightedKernelMatrix(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output)
 {
 	output.ReSize(m1.Nrows(),m2.Nrows());
 	output=0;

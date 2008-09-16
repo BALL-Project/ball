@@ -92,12 +92,13 @@ cd gsl*
 mbuild
 cd ..
 
-echo
-echo building newmat ...
-echo 
-cd newmat
-make
-cd ..
+# at the moment clapack has to install manually...
+# echo
+# echo building clapack ...
+# echo 
+# cd CLAPACK
+# make
+# cd ..
 
 echo
 echo building libsvm ...

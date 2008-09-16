@@ -27,7 +27,7 @@ void CoefficientPlotter::plot(bool zoom)
 	qwt_plot_->clear();
 	
 	RegressionModel* model = (RegressionModel*)model_item_->model();
-	const Matrix* coefficient_matrix = model->getTrainingResult();
+	const Matrix<double>* coefficient_matrix = model->getTrainingResult();
 	
 	if(coefficient_matrix->Ncols()==0)
 	{
@@ -46,7 +46,7 @@ void CoefficientPlotter::plot(bool zoom)
 	}
 	
 	bool show_stddev=0;
-	const Matrix* coeff_stddev = model->validation->getCoefficientStddev();
+	const Matrix<double>* coeff_stddev = model->validation->getCoefficientStddev();
 	if(coeff_stddev!=NULL && coeff_stddev->Nrows()==coefficient_matrix->Nrows() && coeff_stddev->Ncols()==coefficient_matrix->Ncols())
 	{
 		show_stddev=1;

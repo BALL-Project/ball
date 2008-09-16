@@ -47,10 +47,10 @@ PredictionResultDialog::PredictionResultDialog(PredictionItem* item)
 	table->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);		
 
-	if(results_->size() == compound_names_->size())
+	if(((uint)results_->size()) == compound_names_->size())
 	{	
 		int i = 0;
-		for (QList<RowVector>::ConstIterator it = results_->begin(); it != results_->end(); it++)
+		for (QList<Vector<double> >::ConstIterator it = results_->begin(); it != results_->end(); it++)
 		{
 			QTableWidgetItem* name = new QTableWidgetItem(QString(compound_names_->at(i).c_str()));
     			table->setItem(i, 0, name);
@@ -100,10 +100,10 @@ void PredictionResultDialog::saveToFile()
 
 	QTextStream out(&file);
 
-	if(results_->size() == compound_names_->size())
+	if(((uint)results_->size()) == compound_names_->size())
 	{	
 		int i = 0;
-		for (QList<RowVector>::ConstIterator it = results_->begin(); it != results_->end(); it++)
+		for (QList<Vector<double> >::ConstIterator it = results_->begin(); it != results_->end(); it++)
 		{
 			out << QString(compound_names_->at(i).c_str()) << "\t" << QString((((String)(*it)(1)).c_str())) << "\n";
 			i++;

@@ -5,7 +5,6 @@
 
 #include <BALL/QSAR/libsvmModel.h>
 #define Malloc(type,n) (type *)malloc((n)*sizeof(type))
-#include <newmatio.h>
 
 using namespace BALL::QSAR;
 
@@ -40,7 +39,7 @@ void LibsvmModel::train()
 	kernel->calculateKernelMatrix(descriptor_matrix_, K_);
 	struct svm_problem* prob = NULL;
 	training_result_.ReSize(K_.Nrows(),Y_.Ncols());
-	offsets_.ReSize(Y_.Ncols());
+	offsets_.resize(Y_.Ncols());
 	
 	for(int act=1; act<=Y_.Ncols(); act++)
 	{
@@ -194,4 +193,3 @@ vector<double> LibsvmModel::getParameters() const
 	d.push_back(C_);
 	return d;
 }
-	

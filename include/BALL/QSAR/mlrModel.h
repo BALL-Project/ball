@@ -15,8 +15,6 @@
 #endif
 
 
-#include <newmatio.h>
-
 namespace BALL
 {
 	namespace QSAR

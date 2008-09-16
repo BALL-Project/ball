@@ -40,7 +40,7 @@ namespace BALL{
 				//@{
 				void train();
 				
-				RowVector predict(const vector<double>& substance, bool transform=1);
+				Vector<double> predict(const vector<double>& substance, bool transform=1);
 				
 				void saveToFile(string filename);
 				
@@ -59,10 +59,10 @@ namespace BALL{
 				 */
 				//@{
 				/** vector containing one matrix for each modelled activity which holds the mean of each feature for each class */
-				vector<Matrix> mean_;
+				vector<Matrix<double> > mean_;
 				
 				/** vector containing one matrix for each modelled activity which holds the standard deviation of each feature for each class */
-				vector<Matrix> stddev_;
+				vector<Matrix<double> > stddev_;
 							
 
 				

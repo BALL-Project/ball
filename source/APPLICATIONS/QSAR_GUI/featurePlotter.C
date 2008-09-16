@@ -24,8 +24,8 @@ void FeaturePlotter::plot(bool zoom)
 	qwt_plot_->clear();
 	
 	Model* model = model_item_->model();
-	const Matrix* descriptor_matrix = model->getDescriptorMatrix();
-	const Matrix* Y = model->getY();
+	const Matrix<double>* descriptor_matrix = model->getDescriptorMatrix();
+	const Matrix<double>* Y = model->getY();
 	
 	// try to read data
 	if(descriptor_matrix->Ncols()==0 || Y->Ncols()==0)

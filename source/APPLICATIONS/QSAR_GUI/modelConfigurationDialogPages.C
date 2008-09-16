@@ -484,13 +484,14 @@ DataPage::DataPage(ModelConfigurationDialog* parent)
 
 	QString tmp;
 	QLabel* num_of_descriptors;
+	
 	if (descriptor_ids_->size() == 0)
 	{
 		num_of_descriptors = new QLabel("There are " + tmp.setNum(descriptor_names_->size()) + " descriptors in this model");
 	}
 	else
 	{
-			num_of_descriptors = new QLabel("There are " + tmp.setNum(descriptor_ids_->size()) + " descriptors in this model");
+		num_of_descriptors = new QLabel("There are " + tmp.setNum(descriptor_ids_->size()) + " descriptors in this model");
 	}
 	
 	mainLayout->addWidget(num_of_descriptors);

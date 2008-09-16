@@ -41,7 +41,7 @@ namespace BALL
 				RegressionValidation* validation;
 				
 				/** returns a const pointer to the matrix containing the coefficients obtained by Model.train() */
-				const Matrix* getTrainingResult() const; 
+				const BALL::Matrix<double>* getTrainingResult() const; 
 				
 				virtual void saveToFile(string filename);
 				
@@ -55,7 +55,7 @@ namespace BALL
 				/** @name Attributes
 				 */
 				//@{
-				/** Matrix containing the coefficients obtained by Model.train().\n
+				/** BALL::Matrix<double> containing the coefficients obtained by Model.train().\n
 				raining_result will have the following dimensions for the different types of models, with m=no of descriptors and c=no of modelled activities (=no of columns of Model.Y) : \n
 				LinearModel : mxc \n
 				KernelModel : nxc \n
@@ -63,9 +63,10 @@ namespace BALL
 				FitModel : mxc \n
 				SVMModel : m x (c*no of classes) \n
 				SVRModel : m x (c*no of classes)    */
-				Matrix training_result_;
+				BALL::Matrix<double> training_result_;
 				
-				RowVector offsets_;
+				// RowVector holding the regression constants (one value for each feature)
+				Vector<double> offsets_;
 				//@}
 				
 				

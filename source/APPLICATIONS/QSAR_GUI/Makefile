@@ -139,6 +139,14 @@ QSARTool:	$(OBJECTS)	$(SPECIAL_OBJECTS)
 QSARTool-static:	$(OBJECTS)	$(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $@ $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_PATH)/lib/Linux-x86_64-g++_4.1.2/libBALL.a $(BALL_PATH)/lib/Linux-x86_64-g++_4.1.2/libVIEW.a $(BALL_PATH)/contrib/newmat/libnewmat.a $(BALL_PATH)/contrib/libsvm/libsvm.a $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgsl.a  $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgslcblas.a $(BALL_PATH)/contrib/qwt-5.0.2/lib/libqwt.a -L/share/opt/x86_64_sl4/qt-4.4.0-gcc_4.2.1/lib -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql -lGLU -lGL
 
+
+QSARTool-static2:	$(OBJECTS)	$(SPECIAL_OBJECTS)
+	$(CXX)	$(LDFLAGS) -o $@ $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_PATH)/lib/Linux-i386-g++_4.1.2/libVIEW.a $(BALL_PATH)/contrib/qwt-5.0.2/lib/libqwt.so -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql -lGLU -lGL $(BALL_PATH)/lib/Linux-i386-g++_4.1.2/libBALL.a /media/sda6/clapack/lapack_LINUX.a $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgslcblas.a /media/sda6/clapack/blas_LINUX.a $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgsl.a /media/sda6/clapack/F2CLIBS/libF77.a /media/sda6/clapack/F2CLIBS/libI77.a $(BALL_PATH)/contrib/libsvm/libsvm.a
+
+	
+# 	/media/sda6/clapack/lapack_LINUX.a  /media/sda6/clapack/blas_LINUX.a /media/sda6/clapack/F2CLIBS/libF77.a /media/sda6/clapack/F2CLIBS/libI77.a /media/sda7/BALL-git/contrib/gsl-1.8/gsl-1.8/lib/libgslcblas.a
+
+
 depend: $(MOC_SOURCES)
 
 
