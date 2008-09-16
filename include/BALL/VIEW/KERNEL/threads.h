@@ -9,9 +9,8 @@
 # include <BALL/SYSTEM/TCPTransfer.h>
 #endif
 
-#include <QtCore/qthread.h>
-#include <QtGui/qevent.h>
-#include <QtCore/QCustomEvent>
+#include <QtCore/QThread>
+#include <QtCore/QEvent>
 
 namespace BALL
 {

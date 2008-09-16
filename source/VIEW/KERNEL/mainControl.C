@@ -42,18 +42,17 @@
 #include <BALL/SYSTEM/path.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 
-#include <QtGui/qstatusbar.h>  // statusbar
-#include <QtGui/qtooltip.h>
-#include <QtGui/qpushbutton.h> // needed for preferences
-#include <QtGui/qcursor.h>     // wait cursor
-#include <QtGui/qmessagebox.h> 
-#include <QtGui/qfiledialog.h> 
+#include <QtGui/QStatusBar>  // statusbar
+#include <QtGui/QToolTip>
+#include <QtGui/QPushButton> // needed for preferences
+#include <QtGui/QCursor>     // wait cursor
+#include <QtGui/QMessageBox>
+#include <QtGui/QFileDialog>
 #include <QtGui/QMenuBar>
 #include <QtGui/QLabel>
 #include <QtGui/QAction>
-#include <QtCore/qtimer.h>
+#include <QtCore/QTimer>
 #include <QtCore/QEvent>
-#include <QtCore/QCustomEvent>
 
 #include <algorithm> // sort
 
