@@ -12,10 +12,9 @@
 
 namespace BALL 
 {
-	// for testing using a relativly large value (IEEE single-precision machine epsilon)
-	// (real machine-epsilon for IEEE-precision double should be at 10^-15)
+	// machine-epsilon for IEEE-754 double-precision floating point
 	template <class valuetype, class mtraits>
-	double Matrix<valuetype,mtraits>::MACHINE_EPSILON = 1e-06;
+	double Matrix<valuetype,mtraits>::MACHINE_EPSILON = 1e-15;
 
 	
 	// ----- constructors -----
@@ -145,7 +144,6 @@ namespace BALL
 					if(singular_values(i)>max_sv) max_sv=singular_values(i);
 					if(singular_values(i)<min_sv) min_sv=singular_values(i);
 					
-					//if(singular_values(i)>SINGULARITY_THRESHOLD)
 					singular_value_matrix(i,j) = 1/singular_values(i);
 				}
 			}
