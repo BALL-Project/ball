@@ -4668,6 +4668,98 @@ AC_DEFUN(CF_CLEAR_DEP_FILES, [
 	${RM}  lib*.objects 2>/dev/null
 ])
 
+AC_DEFUN(CF_FIND_EXT_NAMESPACE, [
+	dnl
+	dnl Determine the include paths and the name of the namespace where extensions to the STL are
+	dnl located, e.g. hash_map, if present.
+	dnl
+	AC_MSG_CHECKING(for prefix of include paths for stl extensions)
+	for TMP_EXT_INCLUDE_PREFIX in "" "ext/"; do
+		AC_TRY_COMPILE(
+		[
+		#include <${TMP_EXT_INCLUDE_PREFIX}hash_map>
+		],
+		[
+		],
+		EXT_INCLUDE_PREFIX_FOUND=true
+		)
+		if test "${EXT_INCLUDE_PREFIX_FOUND}" = "true" ; then
+			break;
+		fi;
+	done
+	if test "${EXT_INCLUDE_PREFIX_FOUND}" = "true" ; then
+		AC_MSG_RESULT([found ("${TMP_EXT_INCLUDE_PREFIX}")])
+		if test "${TMP_EXT_INCLUDE_PREFIX}" = "ext/" ; then
+			AC_DEFINE(PROJECT[]_EXT_INCLUDE_PREFIX)
+		fi
+	else
+		AC_MSG_RESULT(not found!)
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([Could not find the location of hash_map include files!])
+		AC_MSG_RESULT([BALL requires a C++ compiler that provides at least the hash_map extension to the STL.])
+		AC_MSG_RESULT([If your compiler *does* provide a hash_map implementation, but in a non-standard path,])
+		AC_MSG_RESULT([try adding it as an additional include path and please contact the BALL developers!])
+		AC_MSG_RESULT()
+		CF_ERROR
+	fi
+	
+	dnl
+	dnl Now try to determine the correct namespace to use
+	dnl
+	AC_MSG_CHECKING(for the STL extension namespace)
+	for TMP_EXT_NAMESPACE in "std" "stdext" "__gnu_cxx" "" ; do
+		AC_TRY_COMPILE(
+		[
+		#include <${TMP_EXT_INCLUDE_PREFIX}hash_map>
+		],
+		[
+		${TMP_EXT_NAMESPACE}::hash_map<int, int> a;
+		],
+		EXT_NAMESPACE_FOUND=true
+		)
+		if test "${EXT_NAMESPACE_FOUND}" = "true" ; then
+			break;
+		fi
+	done
+	if test "${EXT_NAMESPACE_FOUND}" = "true" ; then
+		AC_MSG_RESULT([found ("${TMP_EXT_NAMESPACE}")])
+		PROJECT[]_EXT_NAMESPACE=${TMP_EXT_NAMESPACE}
+		AC_DEFINE_UNQUOTED(PROJECT[]_EXT_NAMESPACE, ${PROJECT[]_EXT_NAMESPACE})
+	else
+		AC_MSG_RESULT(not found!)
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([Could not find the name of the namespace containing hash_map!])
+		AC_MSG_RESULT([BALL requires a C++ compiler that provides at least the hash_map extension to the STL.])
+		AC_MSG_RESULT([If your compiler *does* provide a hash_map implementation, but in a non-standard namespace,])
+		AC_MSG_RESULT([please contact the BALL developers!])
+		AC_MSG_RESULT()
+		CF_ERROR
+	fi
+
+	dnl
+	dnl Now try to find out whether there is already a hash function for PROJECT[]::LongSize
+	dnl
+	AC_MSG_CHECKING(whether LongSize hash is required)
+	AC_TRY_COMPILE(
+	[
+	template<>
+	struct hash<${BALL_ULONG64_TYPE}>
+	{
+		size_t operator()(${BALL_ULONG64_TYPE} x) const { return (size_t)x; }
+	};
+	],
+	[
+	],
+	NEEDS_LONGSIZE_HASH=true
+	)
+	if test "${NEEDS_LONGSIZE_HASH}" = "true" ; then
+		AC_MSG_RESULT(yes)
+		AC_DEFINE(PROJECT[]_NEEDS_LONGSIZE_HASH)
+	else
+		AC_MSG_RESULT(no)
+	fi
+])
+
 
 AC_DEFUN(CF_VALGRIND, [
 	dnl	

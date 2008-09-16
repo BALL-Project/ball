@@ -28,7 +28,6 @@
 #endif
 
 #include <algorithm>
-#include <ext/hash_fun.h>
 
 namespace BALL 
 {

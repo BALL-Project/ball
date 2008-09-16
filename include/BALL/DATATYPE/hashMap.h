@@ -16,10 +16,17 @@
 #endif
 
 #include <utility>
-#include <ext/hash_map>
 #include <algorithm>
 
-namespace __gnu_cxx
+#ifdef BALL_EXT_INCLUDE_PREFIX
+# include <ext/hash_map>
+# include <ext/hash_fun.h>
+#else
+# include <hash_map>
+# include <hash_fun.h>
+#endif
+
+namespace BALL_EXT_NAMESPACE
 {
 
 	template<class T>
@@ -28,18 +35,20 @@ namespace __gnu_cxx
 		size_t operator()(const T* x) const { return (size_t)x; }
 	};
 
-  template<>
-	struct hash<BALL::LongSize>
-	{
-		size_t operator()(BALL::LongSize x) const { return (size_t)x; }
-	};
-
-
 	template<>
   struct hash<BALL::String>
   {
     size_t operator () (const BALL::String& s) const {return __stl_hash_string(s.c_str());}
 	};
+
+#ifdef BALL_NEEDS_LONGSIZE_HASH
+  template<>
+	struct hash<BALL::LongSize>
+	{
+		size_t operator()(BALL::LongSize x) const { return (size_t)x; }
+	};
+#endif
+
 }
 
 namespace BALL
@@ -51,7 +60,7 @@ namespace BALL
 	*/
 	template <class Key, class T>
 	class HashMap
-	  : public __gnu_cxx::hash_map<Key,T>
+	  : public BALL_EXT_NAMESPACE::hash_map<Key,T>
 	{
 		public:
 
@@ -72,7 +81,7 @@ namespace BALL
 			
 			///@name OpenMS style typedefs
 			//@{
-			typedef __gnu_cxx::hash_map<Key,T> Base;
+			typedef BALL_EXT_NAMESPACE::hash_map<Key,T> Base;
 			typedef typename Base::value_type ValueType;
 			typedef Key KeyType;
 			typedef typename Base::value_type* PointerType;
@@ -99,7 +108,7 @@ namespace BALL
 			/// Equality operator. Check whether two two hashmaps contain the same elements. O(n) runtime.
 			bool operator == (const HashMap<Key, T>& rhs) const;
 			
-			Size size() const { return __gnu_cxx::hash_map<Key, T>::size(); }
+			Size size() const { return BALL_EXT_NAMESPACE::hash_map<Key, T>::size(); }
 	};
 	
 	//******************************************************************************************
@@ -133,8 +142,8 @@ namespace BALL
 		// Equality if bothe have the same size and every element of lhs is 
 		// is contained in lhs. Testing the other way round is obviously
 		// unnecessary.
-		ConstIterator it(__gnu_cxx::hash_map<Key, T>::begin());
-		for (; it != __gnu_cxx::hash_map<Key, T>::end(); ++it)
+		ConstIterator it(BALL_EXT_NAMESPACE::hash_map<Key, T>::begin());
+		for (; it != BALL_EXT_NAMESPACE::hash_map<Key, T>::end(); ++it)
 		{
 			if (!rhs.has(it->first)) return false;
 		}
