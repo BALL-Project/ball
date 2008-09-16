@@ -7,12 +7,15 @@
 #include <BALL/MATHS/LINALG/SVDSolver.h>
 #endif
 
+#include <values.h>
+
 
 namespace BALL 
 {
-	
+	// for testing using a relativly large value (IEEE single-precision machine epsilon)
+	// (real machine-epsilon for IEEE-precision double should be at 10^-15)
 	template <class valuetype, class mtraits>
-	double Matrix<valuetype,mtraits>::SINGULARITY_THRESHOLD = 0.01;
+	double Matrix<valuetype,mtraits>::MACHINE_EPSILON = 1e-06;
 
 	
 	// ----- constructors -----
@@ -129,6 +132,9 @@ namespace BALL
 		Vector<double> singular_values = solver.getSingularValues();
 		Matrix<double> singular_value_matrix(singular_values.getSize(),singular_values.getSize());
 		
+		double max_sv = MINDOUBLE;
+		double min_sv = MAXDOUBLE;
+		
 		for(size_t i=1; i<=singular_values.getSize(); i++)
 		{
 			for(size_t j=1; j<=singular_value_matrix.getColumnCount(); j++)
@@ -136,16 +142,20 @@ namespace BALL
 				if(i!=j) singular_value_matrix(i,j)=0;
 				else 
 				{
-					if(singular_values(i)>SINGULARITY_THRESHOLD)
+					if(singular_values(i)>max_sv) max_sv=singular_values(i);
+					if(singular_values(i)<min_sv) min_sv=singular_values(i);
+					
+					//if(singular_values(i)>SINGULARITY_THRESHOLD)
 					singular_value_matrix(i,j) = 1/singular_values(i);
-					else
-					{
-						std::cout<<singular_values<<std::endl;
-						throw BALL::Exception::GeneralException(__FILE__,__LINE__,"SingularMatrix","Given matrix is singular and thus can not be inverted!");
-						//singular_value_matrix(i,j) = 0;
-					}
 				}
 			}
+		}
+		
+		if(min_sv/max_sv<5*MACHINE_EPSILON)
+		{
+			std::cout<<"min_sv/max_sv="<<min_sv/max_sv<<std::endl;
+			std::cout<<singular_values<<std::endl;
+			throw BALL::Exception::GeneralException(__FILE__,__LINE__,"SingularMatrix","Given matrix is singular and thus can not be inverted!");
 		}
 
 		// getRightSingularVectors() returns V.t() NOT V, so that we need to transpose back to V here !!

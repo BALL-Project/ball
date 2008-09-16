@@ -5,6 +5,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/CSVInputDialog.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/dottedEdge.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/inputDataItemIO.h>
+#include <BALL/SYSTEM/timer.h>
 
 #include <QtGui/QMessageBox>
 #include <QtGui/QFileDialog>
@@ -1034,6 +1035,7 @@ void MainWindow::executePipeline()
 	progress_bar_->setMaximum(maximum);
 	
 	bool done=0;
+	Timer timer; timer.start();
 	
 	for(Pipeline<DataItem*>::iterator it = all_items_pipeline_.begin(); it != all_items_pipeline_.end(); it++)
 	{
@@ -1050,6 +1052,8 @@ void MainWindow::executePipeline()
 		value++;
 		emit sendNewValue(value);
 	}
+	
+	timer.stop(); cout<<"Time for executing pipeline: "<<timer.getClockTime()<<endl;
 
 	progress_bar_->reset();
 	if(!done)

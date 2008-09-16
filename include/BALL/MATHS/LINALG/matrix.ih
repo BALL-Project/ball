@@ -78,7 +78,7 @@ namespace BALL {
 		typedef valuetype* PointerType;
 		
 		
-		static double SINGULARITY_THRESHOLD;
+		static double MACHINE_EPSILON;
 		
 
 		public:

@@ -64,8 +64,7 @@ BALL::Vector<double> ALLModel::predict(const vector<double>& substance, bool tra
  	calculateEuclDistanceMatrix(v, descriptor_matrix_, dist);
 	Vector<double> w;
 	calculateWeights(dist, w);
-	cout<<"predict(): dist.size="<<dist.getRowCount()<<"  "<<dist.getColumnCount()<<endl;
-	cout<<"predict(): w.size="<<w.getSize()<<endl;
+
 	Matrix<double> XX;
 	
 	// calculate X.t()*X as cross-products weighted by the similarity of the given substance to the respective row of X
