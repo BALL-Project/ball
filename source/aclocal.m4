@@ -4742,11 +4742,15 @@ AC_DEFUN(CF_FIND_EXT_NAMESPACE, [
 	AC_MSG_CHECKING(whether LongSize hash is required)
 	AC_TRY_COMPILE(
 	[
+	#include <${TMP_EXT_INCLUDE_PREFIX}hash_map>
+
+	namespace ${TMP_EXT_NAMESPACE} {
 	template<>
 	struct hash<${BALL_ULONG64_TYPE}>
 	{
 		size_t operator()(${BALL_ULONG64_TYPE} x) const { return (size_t)x; }
 	};
+	}
 	],
 	[
 	],
