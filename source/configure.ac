@@ -395,11 +395,6 @@ dnl
 dnl		checks for header files
 dnl
 
-dnl		
-dnl		try to locate stl extensions
-dnl
-CF_FIND_EXT_NAMESPACE
-
 dnl
 dnl		some platforms need to include ieeefp.h
 dnl		for the definition of finite
@@ -438,6 +433,11 @@ dnl			the machine.
 dnl
 CF_GET_TYPE_SIZES
 CF_C_BIGENDIAN
+
+dnl
+dnl		try to locate stl extensions
+dnl
+CF_FIND_EXT_NAMESPACE
 
 dnl
 dnl		Checks for a couple of headers files and whether they are required.
