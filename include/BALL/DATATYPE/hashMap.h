@@ -73,8 +73,8 @@ namespace BALL
 				:	public Exception::GeneralException
 			{
 				public:
-				IllegalKey(const char* file, int line, const String& function)
-					:	Exception::GeneralException(file, line, function, "")
+				IllegalKey(const char* file, int line)
+					:	Exception::GeneralException(file, line)
 				{
 				}
 			};
@@ -121,7 +121,7 @@ namespace BALL
 		ConstIterator it = find(key);
 		if (it == Base::end())
 		{
-			throw IllegalKey(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+			throw IllegalKey(__FILE__, __LINE__);
 		}
 		else
 		{
