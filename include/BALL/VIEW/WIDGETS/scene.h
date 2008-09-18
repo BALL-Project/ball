@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.16.1 2007/03/25 21:26:24 oliver Exp $
+// $Id: scene.h,v 1.66.16.1 2007-03-25 21:26:24 oliver Exp $
+// v 1.67 (2008.09.12) modified by Annette Treichel
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -18,6 +19,7 @@
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
 #endif 
+
 
 // has to come after BALL includes to prevent problems with Visual Studio Net
 #include <QtOpenGL/qgl.h>
@@ -424,6 +426,9 @@ namespace BALL
 			static void setPOVNumber(Position pos) { pov_nr_ = pos;}
 
 			///
+			static void setVRMLNumber(Position pos) {vrml_nr_ = pos;}
+
+			///
 			void rotate(float degree_right, float degree_up);
 
 			///
@@ -502,7 +507,7 @@ namespace BALL
 			/// show an dialog to save an PNG file to
 			void showExportPNGDialog();
 
-			///
+			/// opens the VIEW/DIALOGS/PrintingDialog for vrml and stl export
 			void showExportVRMLDialog();
 
 			/// Enable or disable model previews e.g. while rotating
@@ -742,7 +747,7 @@ namespace BALL
 			QAction *rotate_action_, *picking_action_, *move_action_;
 			QAction *no_stereo_action_, *active_stereo_action_, *dual_stereo_action_, *fullscreen_action_;
 			QAction *record_animation_action_, *start_animation_action_, *clear_animation_action_, *cancel_animation_action_;
-			QAction *animation_export_POV_action_, *animation_export_PNG_action_, *animation_repeat_action_;
+			QAction *animation_export_POV_action_, *animation_export_VRML_action_, 	*animation_export_PNG_action_, *animation_repeat_action_;
 			QAction *switch_grid_;
 			QMenu* create_coordinate_system_;
 			
@@ -782,6 +787,8 @@ namespace BALL
 			static Position screenshot_nr_;
 			// nr of last pov file export
 			static Position pov_nr_;
+			//nr of last vrml or stl export
+			static Position vrml_nr_;
 
 			static QGLFormat gl_format_;
 			List<Camera> animation_points_;

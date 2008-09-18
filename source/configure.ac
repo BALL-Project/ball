@@ -13,14 +13,6 @@ dnl
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
-dnl
-dnl    Disable caching in MULTI_BUILD mode - just to be sure
-dnl
-if test "${MULTI_BUILD}" = "true" ; then
-	${RM} config.cache
-fi
-
-
 dnl 
 dnl    Some initialization stuff...
 dnl 
@@ -415,6 +407,7 @@ fi
 dnl 	check for standard C headers
 dnl 	and how to run the preprocessor
 AC_HEADER_STDC
+CF_CHECK_MAP
 
 
 
@@ -766,14 +759,9 @@ AC_SUBST(SUBDIRS)
 AC_PREFIX_DEFAULT(`cd ..; pwd`)
 
 dnl
-dnl   Check for multi-platform build.
-dnl
-CF_CHECK_MULTI_BUILD
-
-dnl
 dnl 	Create output files. Move them to temporary location
 dnl		only, because some of them will require additional
-dnl		modification (in MULTI_BUILD mode).
+dnl		modification
 dnl
 AC_OUTPUT([
  	config.mak.tmp:config/config.mak.in 
@@ -782,7 +770,6 @@ AC_OUTPUT([
 	common.mak.tmp:config/common.mak.in 
 	Makefile.tmp:config/Makefile.in
 ])
-CF_MULTI_BUILD_SHADOW
 CF_MOVE_CONFIG_FILES
 
 dnl

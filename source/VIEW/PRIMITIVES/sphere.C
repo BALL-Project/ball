@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.C,v 1.5.28.1 2007/03/25 22:02:36 oliver Exp $
+// $Id: sphere.C,v 1.5.28.1 2007-03-25 22:02:36 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 

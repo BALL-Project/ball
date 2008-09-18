@@ -16,6 +16,7 @@ CPP_SOURCES=\
 	glRenderer.C\
 	renderer.C\
 	POVRenderer.C\
+	STLRenderer.C\
 	VRMLRenderer.C\
 	vertexBuffer.C
 

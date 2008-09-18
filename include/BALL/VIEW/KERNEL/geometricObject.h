@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.39.16.2 2007/03/28 13:51:45 amoll Exp $
+// $Id: geometricObject.h,v 1.39.16.2 2007-03-28 13:51:45 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -180,6 +180,11 @@ namespace BALL
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(std::vector<Vector3>&) const {};
 
+			//Getter for printable:
+			virtual Position isType()
+				throw() {return -1;}
+				
+
 			//@}
 
 			private:
@@ -191,6 +196,7 @@ namespace BALL
 
 			// the composite, which is represented by this geometric object
 			const Composite* composite_;
+
 		};
 
 		///

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.16.3 2007/04/11 12:06:25 amoll Exp $
+// $Id: scene.C,v 1.174.16.3 2007-04-11 12:06:25 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -16,11 +16,13 @@
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
+#include <BALL/VIEW/DIALOGS/printingDialog.h>
 
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
+#include <BALL/VIEW/RENDERING/STLRenderer.h>
 
 #include <BALL/VIEW/PRIMITIVES/simpleBox.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
@@ -49,6 +51,8 @@
 #include <QtGui/QFileDialog>
 #include <QtGui/QInputDialog>
 #include <QtOpenGL/QGLPixelBuffer>
+#include <QtGui/qmessagebox.h>
+
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
@@ -65,6 +69,7 @@ namespace BALL
 
 		Position Scene::screenshot_nr_ = 100000;
 		Position Scene::pov_nr_ = 100000;
+		Position Scene::vrml_nr_ = 100000;
 		bool Scene::offscreen_rendering_ = true;
 		QSize Scene::PNG_size_ = QSize(1500,1000);
 
@@ -271,8 +276,6 @@ namespace BALL
 
 			if (RTTI::isKindOf<RepresentationMessage>(*message)) 
 			{
-				bool needs_updategl = true;
-
 				RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
 				Representation* rep = rm->getRepresentation();
 				switch (rm->getType())
@@ -292,19 +295,13 @@ namespace BALL
 						gl_renderer_->removeRepresentation(*rep);
 						break;
 
-					case RepresentationMessage::FINISHED_UPDATE:
-						needs_updategl = false;
-						break;
-
 					default:
 						break;
 				}
 
 				content_changed_ = true;
 
-				if (needs_updategl)
-					update(false);
-
+				update(false);
 				return;
 			}
 
@@ -369,6 +366,7 @@ namespace BALL
 				case SceneMessage::EXPORT_POVRAY:
 					exportPOVRay();
 					return;
+
 
 				case SceneMessage::ENTER_ROTATE_MODE:
 					rotateMode_();
@@ -1406,6 +1404,9 @@ namespace BALL
 
 			inifile.appendSection("EXPORT");
 			inifile.insertValue("EXPORT", "POVNR", String(pov_nr_));
+			inifile.insertValue("EXPORT", "VRMLNR", String(vrml_nr_));
+
+
 			inifile.insertValue("EXPORT", "PNGNR", String(screenshot_nr_));
 			writeLights_(inifile);
 
@@ -1430,6 +1431,12 @@ namespace BALL
 			{
 				pov_nr_ = inifile.getValue("EXPORT", "POVNR").toUnsignedInt();
 			}
+
+			if (inifile.hasEntry("EXPORT", "VRMLNR"))
+			{
+				vrml_nr_ = inifile.getValue("EXPORT", "VRMLNR").toUnsignedInt();
+			}
+
 
 			if (inifile.hasEntry("EXPORT", "PNGNR"))
 			{
@@ -1701,6 +1708,7 @@ namespace BALL
 			setMenuHelp(help_url);
 			animation_export_POV_action_->setCheckable(true);
 
+
 			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, SLOT(dummySlot()));
 			setMenuHelp(help_url);
 			animation_repeat_action_->setCheckable(true);
@@ -1753,8 +1761,8 @@ namespace BALL
 			setIcon("povray.png", false);
 			setMenuHint("tips.html#povray");
 
-//   			insertMenuEntry(MainControl::FILE_EXPORT, "VRML...", this, SLOT(showExportVRMLDialog()));
-//   			setMenuHint("Export a VRML file from the Scene");
+ 			insertMenuEntry(MainControl::FILE_EXPORT, "3D Prototyping Export", this, SLOT(showExportVRMLDialog()));
+ 			setMenuHint("Export a VRML or stl file from the scene");
 
 			// ====================================== MODES =====================================
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
@@ -2444,34 +2452,149 @@ namespace BALL
 			rb_->show();
 		}
 
+		//Opens a dialog in which parts of the scene can be exported as VRML or stl files
 		void Scene::showExportVRMLDialog()
 		{
-			String start = String(screenshot_nr_) + ".vrml";
-			screenshot_nr_ ++;
-			QFileDialog fd(0, "Export to a VRML file", getMainControl()->getWorkingDir().c_str(), "*.vrml");
-			fd.setAcceptMode(QFileDialog::AcceptSave);
-			fd.selectFile(start.c_str());
-			fd.setFileMode(QFileDialog::AnyFile);
-			if (fd.exec() != QDialog::Accepted ||
-					fd.selectedFiles().size() == 0)
-			{
-				return;
-			}
+			bool change = false;
+			Position count = 0;
+			PrintingDialog ts;
+			ts.setFilename(QString::number(vrml_nr_));
+			ts.exec();
 
-			String filename = ascii(*fd.selectedFiles().begin());
-			VRMLRenderer vrml(filename);
+			bool *checked = ts.reps;
+			bool ve = ts.export_vrml();
+			bool se = ts.export_stl();
 
-			if (exportScene(vrml))
-			{
-				setStatusbarText("Saved VRML to " + filename);
-				setWorkingDirFromFilename_(filename);
-				return;
-			}
+			//prepare the filename
+			QString filename = ts.getFilename();
+			QString vrml_end = ".vrml";
+			QString stl_end = ".stl"; 
+			filename.remove( vrml_end );
+			filename.remove( stl_end );
+
+			MainControl* mc = getMainControl();
+			RepresentationManager& rm = mc->getRepresentationManager();
+			RepresentationList::ConstIterator rit;
 			
+			if ( ve || se)
+			{	
+				if ( ts.split() )
+				//every representation gets its own file
+				{
+				//at the beginning all reps are hidden (see "saving base stats")
+				count = 0;
+				//number of filepartition
+				Position partCounter = 0;
 
-			setStatusbarText("Could not save VRML", true);
+				//now all representations are hidden. in the next iteration we show one that was not hidden before and print
+				rit = rm.getRepresentations().begin();
+				for (; rit != rm.getRepresentations().end(); rit++)
+				{
+					if(checked[count])
+					{
+						//show one, print all (meaning just the one)	
+						(*rit)->setHidden(false);
+
+						QString vtemp = filename;
+						
+						if (ve)
+						{
+							vtemp.append("_");
+							vtemp.append(QString::number(partCounter));
+							vtemp.append(".vrml");
+							VRMLRenderer vrml(ascii(vtemp));
+							if ( exportScene(vrml) )
+							{
+								change = true;
+							}
+						}
+						if (se)
+						{
+							vtemp = filename;
+							vtemp.append("_");
+							vtemp.append(QString::number(partCounter));
+							vtemp.append(".stl");
+							STLRenderer stl(ascii(vtemp));
+							if ( exportScene(stl) )
+							{
+								change = true;
+							}						}	
+
+						//hide again (for all other reps)
+						(*rit)->setHidden(true);
+						partCounter++;	
+					}
+					count++;	
+				}
+			}
+				else
+				//print in single file case
+				{
+					count = 0;
+
+					//make all checked representations visible
+					rit = rm.getRepresentations().begin();
+					for (; rit != rm.getRepresentations().end(); rit++)
+					{
+						if(checked[count])
+						{
+							(*rit)->setHidden(false);
+						}
+						count++;
+					}								
+
+					QString vtemp = filename;				
+
+					//export as requested
+					if (ve)
+					{
+						vtemp.append(".vrml");
+						VRMLRenderer vrml(ascii(vtemp));
+						if ( exportScene(vrml) )
+						{
+							change = true;
+						}
+					}
+					if (se)
+					{
+						vtemp = filename;
+						vtemp.append(".stl");
+						STLRenderer stl(ascii(vtemp));
+						if ( exportScene(stl) )
+						{
+							change = true;
+						}
+					}	
+				}
+			}
+
+			//it is very important to restore the representations just when a basestats array was created
+			//as he is only created if an export was made whenever the export is started the "change" boolean is set true
+			if ( change )
+			{	
+				//now we have to restore the basestats:
+				bool *base = ts.basestats;
+				count = 0;
+//				rit = mc->getRepresentationManager().representations_.begin();
+//				for (; !(rit == mc->getRepresentationManager().representations_.end()); rit++)
+				rit = rm.getRepresentations().begin();
+				for (; rit != rm.getRepresentations().end(); rit++)
+				{
+					if(base[count])
+					{
+						(*rit)->setHidden(false);
+					}
+					else
+					{
+						(*rit)->setHidden(true);
+					}	
+					count ++;
+				}		
+				setWorkingDirFromFilename_(ascii(filename));
+				vrml_nr_ ++;
+			}
+			getMainControl()->redrawAllRepresentations();			
 		}
-
 
 		void Scene::printScene()
 		{
@@ -2868,6 +2991,7 @@ namespace BALL
 		void Scene::updateGL()
 		{
  			QGLWidget::updateGL();
+
 		}
 
 		void Scene::setOffScreenRendering(bool enabled, Size factor)
