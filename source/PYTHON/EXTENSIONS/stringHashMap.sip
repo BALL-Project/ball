@@ -19,7 +19,8 @@ template <ValueType>
 	// convert the hash map to a dictionary
 	for (StringHashMap<ValueType>::Iterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		PyObject* key = sipConvertFromInstance(&(it->first), sipClass_String, sipTransferObj);
+		// NOTE: keys into a string hash map are const!
+		PyObject* key = sipConvertFromInstance(const_cast<String*>(&(it->first)), sipClass_String, sipTransferObj);
 		if (key == NULL)
 		{
 			Py_DECREF(dict);
@@ -123,7 +124,8 @@ template <ValueType>
 	// convert the hash map to a dictionary
 	for (StringHashMap<double>::Iterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		PyObject* key = sipConvertFromInstance(&(it->first), sipClass_String, sipTransferObj);
+		// NOTE: keys into a string hash map are const!
+		PyObject* key = sipConvertFromInstance(const_cast<String*>(&(it->first)), sipClass_String, sipTransferObj);
 		if (key == NULL)
 		{
 			Py_DECREF(dict);
@@ -207,7 +209,8 @@ template <ValueType>
 	// convert the hash map to a dictionary
 	for (StringHashMap<float>::Iterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		PyObject* key = sipConvertFromInstance(&(it->first), sipClass_String, sipTransferObj);
+		// NOTE: keys into a string hash map are const!
+		PyObject* key = sipConvertFromInstance(const_cast<String*>(&(it->first)), sipClass_String, sipTransferObj);
 		if (key == NULL)
 		{
 			Py_DECREF(dict);
@@ -290,7 +293,8 @@ template <ValueType>
 	// convert the hash map to a dictionary
 	for (StringHashMap<int>::Iterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		PyObject* key = sipConvertFromInstance(&(it->first), sipClass_String, sipTransferObj);
+		// NOTE: keys into a string hash map are const!
+		PyObject* key = sipConvertFromInstance(const_cast<String*>(&(it->first)), sipClass_String, sipTransferObj);
 		if (key == NULL)
 		{
 			Py_DECREF(dict);
