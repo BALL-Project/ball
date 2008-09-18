@@ -706,6 +706,7 @@ ac_ct_CXX
 EXEEXT
 OBJEXT
 CXXCPP
+BALL_HAS_HASH_MAP
 BALL_HAS_XDR
 LEX
 LEX_OUTPUT_ROOT
@@ -4983,39 +4984,38 @@ $as_echo "no" >&6; }
 fi
   fi
 if test "${CXX_IDENTIFIED}" != true ; then
-{ $as_echo "$as_me:$LINENO: checking for GNU compiler" >&5
+	{ $as_echo "$as_me:$LINENO: checking for GNU compiler" >&5
 $as_echo_n "checking for GNU compiler... " >&6; }
-cat > /tmp/$$.conftest.c << EOF
-#ifdef __GNUC__
-GXX:true
-#else
-GXX:false
-#endif
+	cat > /tmp/$$.conftest.c << EOF
+	#ifdef __GNUC__
+	GXX:true
+	#else
+	GXX:false
+	#endif
 EOF
 
-IS_GXX=`${CXX} -E /tmp/$$.conftest.c 2>/dev/null | ${EGREP} GXX|${CUT} -d: -f2|${TR} -d " "`
-if test "${IS_GXX}" = "true" ; then
-{ $as_echo "$as_me:$LINENO: result: yes" >&5
+	IS_GXX=`${CXX} -E /tmp/$$.conftest.c 2>/dev/null | ${EGREP} GXX|${CUT} -d: -f2|${TR} -d " "`
+	if test "${IS_GXX}" = "true" ; then
+		{ $as_echo "$as_me:$LINENO: result: yes" >&5
 $as_echo "yes" >&6; }
-HAS_GPLUSPLUS=true
-CXX_NAME="g++"
-CXX_IDENTIFIED=true
+		HAS_GPLUSPLUS=true
+		CXX_NAME="g++"
+		CXX_IDENTIFIED=true
 
-cat >>confdefs.h <<\_ACEOF
+								cat >>confdefs.h <<\_ACEOF
 #define BALL_COMPILER_GXX /**/
 _ACEOF
 
-cat >>confdefs.h <<\_ACEOF
+		cat >>confdefs.h <<\_ACEOF
 #define BALL_COMPILER GXX
 _ACEOF
 
-else
-{ $as_echo "$as_me:$LINENO: result: no" >&5
+	else
+		{ $as_echo "$as_me:$LINENO: result: no" >&5
 $as_echo "no" >&6; }
-HAS_GPLUSPLUS=false
-fi
-${RM} /tmp/$$.conftest.c
-
+		HAS_GPLUSPLUS=false
+	fi
+	${RM} /tmp/$$.conftest.c
   fi
 if test "${CXX_IDENTIFIED}" != true ; then
 { $as_echo "$as_me:$LINENO: checking for KAI C++ compiler" >&5
@@ -5300,8 +5300,12 @@ CXXFLAGS_D="${CXXFLAGS_D} -Wall -W -pedantic -Wno-long-long"
 CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 
 if test "${OS}" = "Darwin" ; then
-	CXXFLAGS_O="${CXXFLAGS_O} -O1 -Wall -W -pedantic -Wno-long-long -Wno-long-double"
-	CXXFLAGS_D="${CXXFLAGS_D} -O1"
+	if test "${CXX_VERSION_1}" -lt 4 ; then
+		CXXFLAGS_O="${CXXFLAGS_O} -O1 -Wall -W -pedantic -Wno-long-long -Wno-long-double"
+	else
+		CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long -Wno-long-double"
+	fi
+	CXXFLAGS_D="${CXXFLAGS_D} -O3"
 else
 	CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
 fi
@@ -6553,6 +6557,42 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 fi
+
+
+	{ $as_echo "$as_me:$LINENO: checking for hash map" >&5
+$as_echo_n "checking for hash map... " >&6; }
+	if test "${HAS_GPLUSPLUS}" = true ; then
+		BALL_HAS_HASH_MAP="true"
+		{ $as_echo "$as_me:$LINENO: result: enable std::hash_map" >&5
+$as_echo "enable std::hash_map" >&6; }
+	else
+		{ $as_echo "$as_me:$LINENO: result: disabled" >&5
+$as_echo "disabled" >&6; }
+	fi
+	if test "${BALL_HAS_HASH_MAP}" = true ; then
+		cat >>confdefs.h <<\_ACEOF
+#define BALL_HAS_HASH_MAP 1
+_ACEOF
+
+		cat >>confdefs.h <<\_ACEOF
+#define BALL_MAP_NAMESPACE __gnu_cxx
+_ACEOF
+
+		cat >>confdefs.h <<\_ACEOF
+#define BALL_MAP_NAME __gnu_cxx::hash_map<Key,T>
+_ACEOF
+
+	else
+		cat >>confdefs.h <<\_ACEOF
+#define BALL_MAP_NAMESPACE std
+_ACEOF
+
+		cat >>confdefs.h <<\_ACEOF
+#define BALL_MAP_NAME std::map<Key,T>
+_ACEOF
+
+	fi
+
 
 
 
@@ -19003,8 +19043,8 @@ $as_echo "(${GSL_INCDIR})" >&6; }
   	fi
 
 
-	  { $as_echo "$as_me:$LINENO: checking for libgsl.so" >&5
-$as_echo_n "checking for libgsl.so... " >&6; }
+	  { $as_echo "$as_me:$LINENO: checking for libgsl" >&5
+$as_echo_n "checking for libgsl... " >&6; }
   	if test "${GSL_LIBDIR}" != "" ; then
       if test -a "${GSL_LIBDIR}/libgsl.a" ; then
 		  	GSL_LIBDIR="${GSL_LIBDIR}/"
@@ -19146,8 +19186,8 @@ $as_echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
 	  else
-			{ $as_echo "$as_me:$LINENO: checking for libgslcblas.so" >&5
-$as_echo_n "checking for libgslcblas.so... " >&6; }
+			{ $as_echo "$as_me:$LINENO: checking for libgslcblas" >&5
+$as_echo_n "checking for libgslcblas... " >&6; }
 			if test "${GSL_LIBDIR}" != "" ; then
 				if test -a "${GSL_LIBDIR}/libgslcblas.a" ; then
 					{ $as_echo "$as_me:$LINENO: result: ${GSL_LIBDIR}/libgslcblas.a" >&5
@@ -19157,8 +19197,8 @@ $as_echo "${GSL_LIBDIR}/libgslcblas.a" >&6; }
 $as_echo "(not found!)" >&6; }
 					{ $as_echo "$as_me:$LINENO: result: " >&5
 $as_echo "" >&6; }
-					{ $as_echo "$as_me:$LINENO: result: The GSL library could not be found. Please specify the path to <libgsl.so>" >&5
-$as_echo "The GSL library could not be found. Please specify the path to <libgsl.so>" >&6; }
+					{ $as_echo "$as_me:$LINENO: result: The GSL library could not be found. Please specify the path to <libgsl.${SHARED_LIB_SUFFIX}>" >&5
+$as_echo "The GSL library could not be found. Please specify the path to <libgsl.${SHARED_LIB_SUFFIX}>" >&6; }
 					{ $as_echo "$as_me:$LINENO: result: by passing the option --with-gsl-libs=DIR to configure." >&5
 $as_echo "by passing the option --with-gsl-libs=DIR to configure." >&6; }
 					{ $as_echo "$as_me:$LINENO: result: You may also set the environment variable GSL_LIB_DIR to the correct" >&5
@@ -20542,7 +20582,7 @@ $as_echo "(${QT_INCPATH})" >&6; }
 	{ $as_echo "$as_me:$LINENO: checking for libQtCore" >&5
 $as_echo_n "checking for libQtCore... " >&6; }
 	if test "${QTDIR}" != "" ; then
-		if test -a "${QTDIR}/lib/libQtCore.so" ; then
+		if test -a "${QTDIR}/lib/libQtCore.${SHARED_LIB_SUFFIX}" ; then
 			QT_LIBPATH="${QTDIR}/lib"
 		fi
 		if test "${QT_LIBPATH}" = "" ; then
@@ -20697,7 +20737,7 @@ $as_echo "(${QT_LIBPATH})" >&6; }
 	{ $as_echo "$as_me:$LINENO: checking for libQtGui" >&5
 $as_echo_n "checking for libQtGui... " >&6; }
 	if test "${QTDIR}" != "" ; then
-		if test -a "${QTDIR}/lib/libQtGui.so" ; then
+		if test -a "${QTDIR}/lib/libQtGui.${SHARED_LIB_SUFFIX}" ; then
 			QT_LIBPATH="${QTDIR}/lib"
 			{ $as_echo "$as_me:$LINENO: result: (${QT_LIBPATH})" >&5
 $as_echo "(${QT_LIBPATH})" >&6; }
@@ -20846,13 +20886,16 @@ $as_echo "" >&6; }
 $as_echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
+		else
+			{ $as_echo "$as_me:$LINENO: result: " >&5
+$as_echo "" >&6; }
 		fi
 	fi
 
 	{ $as_echo "$as_me:$LINENO: checking for libQtSql" >&5
 $as_echo_n "checking for libQtSql... " >&6; }
 	if test "${QTDIR}" != "" ; then
-		if test -a "${QTDIR}/lib/libQtSql.so" ; then
+		if test -a "${QTDIR}/lib/libQtSql.${SHARED_LIB_SUFFIX}" ; then
 			QT_LIBPATH="${QTDIR}/lib"
 			{ $as_echo "$as_me:$LINENO: result: (${QT_LIBPATH})" >&5
 $as_echo "(${QT_LIBPATH})" >&6; }
@@ -21001,6 +21044,9 @@ $as_echo "" >&6; }
 $as_echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
+		else
+			{ $as_echo "$as_me:$LINENO: result: " >&5
+$as_echo "" >&6; }
 		fi
 	fi
 
@@ -21008,7 +21054,7 @@ $as_echo "$as_me: error: Aborted." >&2;}
 	{ $as_echo "$as_me:$LINENO: checking for libQtOpenGL" >&5
 $as_echo_n "checking for libQtOpenGL... " >&6; }
 	if test "${QTDIR}" != "" ; then
-		if test -a "${QTDIR}/lib/libQtOpenGL.so" ; then
+		if test -a "${QTDIR}/lib/libQtOpenGL.${SHARED_LIB_SUFFIX}" ; then
 			QT_LIBPATH="${QTDIR}/lib"
 			{ $as_echo "$as_me:$LINENO: result: (${QT_LIBPATH})" >&5
 $as_echo "(${QT_LIBPATH})" >&6; }
@@ -21157,6 +21203,9 @@ $as_echo "" >&6; }
 $as_echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
+		else
+			{ $as_echo "$as_me:$LINENO: result: " >&5
+$as_echo "" >&6; }
 		fi
 	fi
 
@@ -23878,8 +23927,6 @@ SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SCOR
 
 
 
-CF_CHECK_MULTI_BUILD
-
 ac_config_files="$ac_config_files config.mak.tmp:config/config.mak.in rules.mak.tmp:config/rules.mak.in targets.mak.tmp:config/targets.mak.in common.mak.tmp:config/common.mak.in Makefile.tmp:config/Makefile.in"
 
 cat >confcache <<\_ACEOF
@@ -25113,7 +25160,6 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
 $as_echo "$as_me: WARNING: Unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
-CF_MULTI_BUILD_SHADOW
 
 	${MV} Makefile.tmp Makefile
 	${MV} common.mak.tmp common.mak

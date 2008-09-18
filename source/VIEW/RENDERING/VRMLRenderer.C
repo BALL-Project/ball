@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.C,v 1.6.20.1 2007/03/25 21:57:01 oliver Exp $
+// $Id: VRMLRenderer.C,v 1.6.20.1 2007-03-25 21:57:01 oliver Exp $
+// modified by Annette Treichel (2008.09.12)
 //
 
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
@@ -34,7 +35,7 @@ VRMLRenderer::VRMLRenderer()
 	throw()
 	: Renderer(),
 		outfile_(),
-		current_intend_(0)
+		current_indent_(0)
 {
 }
 
@@ -43,7 +44,7 @@ VRMLRenderer::VRMLRenderer(const String& name)
 	: Renderer(),
 		width(600),
 		height(600),
-		current_intend_(0)
+		current_indent_(0)
 {
 	outfile_.open(name, std::ios::out);
 
@@ -64,14 +65,14 @@ void VRMLRenderer::clear()
 	throw()
 {
 	outfile_.clear();
-	current_intend_ = 0;
+	current_indent_ = 0;
 }
 
 void VRMLRenderer::setFileName(const String& name)
 	throw(Exception::FileNotFound)
 {
 	outfile_.open(name, std::ios::out);
-	current_intend_ = 0;
+	current_indent_ = 0;
 
 	out_("#VRML V2.0 utf8");
 	out_("");
@@ -125,14 +126,24 @@ bool VRMLRenderer::init(const Stage& stage)
 	Vector3 look_at      = camera.getLookAtPosition();// camera.getLookAtPosition();
 */
 
+	//prepatation for use of sclaing
+	scalingUsed = false;
+
 	return true;
 }
 
 bool VRMLRenderer::finish()
 	throw()
 {
+	//before finishing we write the scaling if was used
+	String infos = "# Biggest Values: (" + (String)(bigX) + "|"+ (String)(bigY) + "|"+ (String)(bigZ) + "); Smallest Values: (" + (String)smallX + "|"+ (String)smallY + "|"+ (String)smallZ +")";
+	String scaling = "# Boxsize: " + (String)(bigX - smallX) + " "+ (String)(bigY - smallY) + " "+ (String)(bigZ - smallZ) + "; Volume (unscaled, [mm^3]): "+ String((bigX - smallX)*(bigY - smallY)*(bigZ - smallZ));
+	out_(infos);
+	out_(scaling);
+
+
 	outfile_.close();
-	current_intend_ = 0;
+	current_indent_ = 0;
 
 	return true;
 }
@@ -158,7 +169,7 @@ void VRMLRenderer::header_(const Vector3& translation, const ColorRGBA& color,
 void VRMLRenderer::footer_()
 	throw()
 {
-	current_intend_ --;
+	current_indent_ --;
 	outfinish_("}");
 	outfinish_("}");
 	outfinish_("]");
@@ -176,19 +187,71 @@ void VRMLRenderer::renderSphere_(const Sphere& sphere)
 }
 
 
-void VRMLRenderer::renderTube_(const Tube& tube)
+void VRMLRenderer::renderLine_(const Line& miniTube)
 	throw()
 {
-	header_(tube.getVertex1(), tube.getColor());
+	static Vector3 default_angle(0,1,0);
+
+	Vector3 v = miniTube.getVertex2() - miniTube.getVertex1(); 
+
+	float f = v.getAngle(default_angle);
+	Vector3 a = default_angle % v;
+
+	String r;
+	if (!Maths::isZero(a.getSquareLength()))
+	{
+		a.normalize();
+		r = String(a.x) + " " + 
+				String(a.y) + " " + 
+				String(a.z) + " ";
+
+		r += String(f);
+	}
+
+	header_(miniTube.getVertex1() + v / 2.0, miniTube.getColor(), r);
 	outheader_("geometry Cylinder {");
-	Vector3 v = tube.getVertex2() - tube.getVertex1(); 
 	out_("height " + String(v.getLength()));
-	out_("radius " + String(tube.getRadius()));
+	out_("radius " + String((v.getLength() / 100.0)));
 	footer_();
 }
 
+void VRMLRenderer::renderTwoColoredLine_(const TwoColoredLine& miniTube)
+	throw()
+{
+	static Vector3 default_angle(0,1,0);
 
-void VRMLRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
+	Vector3 v = miniTube.getVertex2() - miniTube.getVertex1(); 
+
+	float f = v.getAngle(default_angle);
+	Vector3 a = default_angle % v;
+
+	String r;
+	if (!Maths::isZero(a.getSquareLength()))
+	{
+		a.normalize();
+		r = String(a.x) + " " + 
+				String(a.y) + " " + 
+				String(a.z) + " ";
+
+		r += String(f);
+	}
+
+	//erste halbe linie:
+	header_(miniTube.getVertex1() + v / 4.0, miniTube.getColor(), r);
+	outheader_("geometry Cylinder {");
+	out_("height " + String((v.getLength() / 2.0)));
+	out_("radius " + String((v.getLength() / 100.0)));
+	footer_();
+
+	//zweite halbe Linie:
+	header_(miniTube.getVertex1() + v / (4.0 / 3.0), miniTube.getColor2(), r);
+	outheader_("geometry Cylinder {");
+	out_("height " + String((v.getLength() / 2.0)));
+	out_("radius " + String((v.getLength() / 100.0 )));
+	footer_();
+}
+
+void VRMLRenderer::renderTube_(const Tube& tube)
 	throw()
 {
 	static Vector3 default_angle(0,1,0);
@@ -196,7 +259,7 @@ void VRMLRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
 	Vector3 v = tube.getVertex2() - tube.getVertex1(); 
 
 	float f = v.getAngle(default_angle);
-	Vector3 a = v % default_angle;
+	Vector3 a = default_angle % v;
 
 	String r;
 	if (!Maths::isZero(a.getSquareLength()))
@@ -217,6 +280,44 @@ void VRMLRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
 }
 
 
+void VRMLRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
+	throw()
+{
+	static Vector3 default_angle(0,1,0);
+
+	Vector3 v = tube.getVertex2() - tube.getVertex1(); 
+
+	float f = v.getAngle(default_angle);
+	Vector3 a = default_angle % v;
+
+	String r;
+	if (!Maths::isZero(a.getSquareLength()))
+	{
+		a.normalize();
+		r = String(a.x) + " " + 
+				String(a.y) + " " + 
+				String(a.z) + " ";
+
+		r += String(f);
+	}
+
+
+	//erstes halbes rohr:
+	header_(tube.getVertex1() + v / 4.0, tube.getColor(), r);
+	outheader_("geometry Cylinder {");
+	out_("height " + String((v.getLength() / 2.0)));
+	out_("radius " + String(tube.getRadius()));
+	footer_();
+
+	//zweites halbes rohr:
+	header_(tube.getVertex1() + v / (4.0 / 3.0), tube.getColor2(), r);
+	outheader_("geometry Cylinder {");
+	out_("height " + String((v.getLength() / 2.0)));
+	out_("radius " + String(tube.getRadius()));
+	footer_();
+}
+
+
 void VRMLRenderer::VRMLColor(const ColorRGBA& color)
 	throw()
 {
@@ -225,7 +326,7 @@ void VRMLRenderer::VRMLColor(const ColorRGBA& color)
 	out_("diffuseColor " + VRMLColorRGBA(color));
 
 	out_("shininess 0.5");
-	current_intend_ --;
+	current_indent_ --;
 	outfinish_("}");
 	outfinish_("}");
 }
@@ -243,15 +344,60 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 	// print vertices
 	vector<Vector3>::const_iterator itv = mesh.vertex.begin(); 
 	for (; itv != mesh.vertex.end(); itv++)
-	{
+	{ 
 		String out = VRMLVector3(*itv);
 		if (itv != mesh.vertex.end()) 
 		{
 			out += ",";
 		}
 		out_(out);
+
+		//scaling max and min search
+		if(scalingUsed)
+		{
+			//X value:
+			if (smallX > (*itv).x)
+			{
+				smallX = (*itv).x;
+			}
+			if (bigX < (*itv).x)
+			{
+				bigX = (*itv).x;
+			}
+
+			//Y value:
+			if (smallY > (*itv).y)
+			{
+				smallY = (*itv).y;
+			}
+			if (bigY < (*itv).y)
+			{
+				bigY = (*itv).y;
+			}
+
+			//Z value:
+			if (smallZ > (*itv).z)
+			{
+				smallZ = (*itv).z;
+			}
+			if (bigZ < (*itv).z)
+			{
+				bigZ = (*itv).z;
+			}
+		}
+		else
+		{
+			//als initiationswerte werden einfach die ersten Koordinaten genommen
+			smallX = (*itv).x;
+			bigX = (*itv).x;
+			smallY = (*itv).y;
+			bigY = (*itv).y;
+			smallZ = (*itv).z;
+			bigZ = (*itv).z;
+			scalingUsed = true;
+		}
 	}
-	current_intend_ --;
+	current_indent_ --;
 	outfinish_("]");
 	out_("}"); // correct
 	
@@ -261,7 +407,7 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 	vector<Surface::Triangle>::const_iterator itt = mesh.triangle.begin(); 
 	for (; itt != mesh.triangle.end(); itt++)
 	{
-		String out = (String((*itt).v1) + " " 
+  	String out = (String((*itt).v1) + " " 
 						 + String((*itt).v2) + " " 
 						 + String((*itt).v3) + ", -1"); 
 
@@ -274,7 +420,8 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 	outfinish_("]");
 	
 	// print normals =====================================
-	outheader_("normal Normal {");
+	//Normals are not needed for printing and increase amount of data therefore I take them away	
+/*	outheader_("normal Normal {");
 	outheader_("vector [");
 	itv = mesh.normal.begin(); 
 	for (; itv != mesh.normal.end(); itv++)
@@ -288,7 +435,7 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 	}
 	outfinish_("]");
 	outfinish_("}");
-
+*/
 	/*
 	outheader_("normalIndex [");
 	for (Position i = 0; i < mesh.vertex.size(); i++)
@@ -318,7 +465,7 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 			out_(out);
 		}
 	}
-	current_intend_ --;
+	current_indent_ --;
 	outfinish_("]");
 	out_("}");
 
@@ -337,12 +484,12 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 void VRMLRenderer::out_(const String& data)
 	throw()
 {
-	if (current_intend_ < 0)
+	if (current_indent_ < 0)
 	{
 //   		BALLVIEW_DEBUG
 	}
 	String out;
-	for (Index p=0; p< current_intend_; p++)
+	for (Index p=0; p< current_indent_; p++)
 	{
 		out += " ";
 	}

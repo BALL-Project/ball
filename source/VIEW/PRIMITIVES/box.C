@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box.C,v 1.4.28.1 2007/03/25 22:02:33 oliver Exp $
+// $Id: box.C,v 1.4.28.1 2007-03-25 22:02:33 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIVES/box.h>
 
@@ -33,7 +33,8 @@ namespace BALL
 			throw()
 			: GeometricObject(),
 				Box3(point, right_vector, height_vector, depth)
-		{}
+		{
+		}
 
 
 		Box::~Box()

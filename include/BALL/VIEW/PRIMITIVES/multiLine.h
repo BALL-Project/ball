@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: multiLine.h,v 1.1.4.1 2007/03/25 21:26:09 oliver Exp $
+// $Id: multiLine.h,v 1.1.4.1 2007-03-25 21:26:09 oliver Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIVES_MULTILINE_H
@@ -92,6 +92,11 @@ namespace BALL
 			
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const;
+
+			//Method for printability
+			Position isType()
+				throw() { return 6; }
+
 
 			vector<Vector3> tangents;
 			vector<Vector3> vertices;

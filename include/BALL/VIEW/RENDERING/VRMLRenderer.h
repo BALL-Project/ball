@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.h,v 1.8.20.1 2007/03/25 21:26:14 oliver Exp $
+// $Id: VRMLRenderer.h,v 1.8.20.1 2007-03-25 21:26:14 oliver Exp $
+// v. 1.9 (2008.09.12) Annette Treichel
 //
 
 #ifndef BALL_VIEW_RENDERING_VRMLRENDERER_H
@@ -116,6 +117,12 @@ class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
 	void renderMesh_(const Mesh& mesh)
 		throw();
 
+	void renderLine_(const Line& miniTube)
+		throw();
+
+	void renderTwoColoredLine_(const TwoColoredLine& miniTube)
+		throw();
+
 	void renderTube_(const Tube& tube)
 		throw();
 
@@ -126,10 +133,10 @@ class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
 		throw();
 
 	void outheader_(const String& data)
-		throw() {out_(data); current_intend_ += 1;}
+		throw() {out_(data); current_indent_ += 1;}
 
 	void outfinish_(const String& data)
-		throw() {out_(data); current_intend_ -= 1;}
+		throw() {out_(data); current_indent_ -= 1;}
 
 	Size width, height;
 
@@ -146,7 +153,13 @@ class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
 
 	Vector3   origin_;
 	Matrix4x4 rotation_;
-	Index current_intend_;
+	Index current_indent_;
+
+	//size estimate for afterwards scaling for printing
+	float smallX, smallY, smallZ, bigX, bigY, bigZ; 
+
+	//boolean showing if scaling is relevant afterall
+	bool scalingUsed;
 };
   
 } } // namespaces

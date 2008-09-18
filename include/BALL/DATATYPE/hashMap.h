@@ -16,10 +16,13 @@
 #endif
 
 #include <utility>
-#include <ext/hash_map>
+
 #include <algorithm>
 
-namespace BALL_EXT_NAMESPACE
+#ifdef BALL_HAS_HASH_MAP
+#include <ext/hash_map>
+
+namespace BALL_MAP_NAMESPACE
 {
 
 	template<class T>
@@ -41,6 +44,7 @@ namespace BALL_EXT_NAMESPACE
     size_t operator () (const BALL::String& s) const {return __stl_hash_string(s.c_str());}
 	};
 }
+#endif
 
 namespace BALL
 {
@@ -51,7 +55,7 @@ namespace BALL
 	*/
 	template <class Key, class T>
 	class HashMap
-	  : public BALL_EXT_NAMESPACE::hash_map<Key,T>
+	  : public BALL_MAP_NAME
 	{
 		public:
 
@@ -72,7 +76,7 @@ namespace BALL
 			
 			///@name OpenMS style typedefs
 			//@{
-			typedef BALL_EXT_NAMESPACE::hash_map<Key,T> Base;
+			typedef BALL_MAP_NAME Base;
 			typedef typename Base::value_type ValueType;
 			typedef Key KeyType;
 			typedef typename Base::value_type* PointerType;
@@ -99,7 +103,7 @@ namespace BALL
 			/// Equality operator. Check whether two two hashmaps contain the same elements. O(n) runtime.
 			bool operator == (const HashMap<Key, T>& rhs) const;
 			
-			Size size() const { return BALL_EXT_NAMESPACE::hash_map<Key, T>::size(); }
+			Size size() const { return BALL_MAP_NAME::size(); }
 	};
 	
 	//******************************************************************************************
@@ -133,8 +137,8 @@ namespace BALL
 		// Equality if bothe have the same size and every element of lhs is 
 		// is contained in lhs. Testing the other way round is obviously
 		// unnecessary.
-		ConstIterator it(BALL_EXT_NAMESPACE::hash_map<Key, T>::begin());
-		for (; it != BALL_EXT_NAMESPACE::hash_map<Key, T>::end(); ++it)
+		ConstIterator it(BALL_MAP_NAME::begin());
+		for (; it != BALL_MAP_NAME::end(); ++it)
 		{
 			if (!rhs.has(it->first)) return false;
 		}

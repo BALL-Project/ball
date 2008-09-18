@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredLine.C,v 1.4.28.1 2007/03/25 22:02:36 oliver Exp $
+// $Id: twoColoredLine.C,v 1.4.28.1 2007-03-25 22:02:36 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
 

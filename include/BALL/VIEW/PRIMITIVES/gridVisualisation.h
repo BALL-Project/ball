@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualisation.h,v 1.1.4.1 2007/03/25 21:26:08 oliver Exp $
+// $Id: gridVisualisation.h,v 1.1.4.1 2007-03-25 21:26:08 oliver Exp $
 //
 
 #ifndef  BALL_VIEW_PRIMITIV_GRIDSLICE_H
@@ -87,6 +87,11 @@ namespace BALL
 
 			///
 			Size getDotSize() const { return dot_size_;}
+
+			//Method for printability
+			Position isType()
+				throw() { return 2; }
+
 
 			Vector3 origin, x,y,z;
 			float max_dim;

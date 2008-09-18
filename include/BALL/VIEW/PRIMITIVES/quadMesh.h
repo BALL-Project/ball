@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadMesh.h,v 1.1.4.1 2007/03/25 21:26:11 oliver Exp $
+// $Id: quadMesh.h,v 1.1.4.1 2007-03-25 21:26:11 oliver Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_QUADMESH_H
@@ -62,6 +62,11 @@ namespace BALL
 
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const { vertices = vertex;}
+
+			//Method for printability
+			Position isType()
+				throw() { return 8; }
+
 			
 			/** The colors belonging to each vertex. If this list has *less* entries than
 					there are vertices in this mesh, we take the first element to color the whole

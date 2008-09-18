@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.C,v 1.4.28.1 2007/03/25 22:02:35 oliver Exp $
+// $Id: point.C,v 1.4.28.1 2007-03-25 22:02:35 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIVES/point.h>
 
