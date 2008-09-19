@@ -107,15 +107,15 @@ namespace BALL
 					if(s==2) F_regr and F_cv are used. */
 				void selectStat(int s);
 				
-				/** calculates standart deviations for all predicted coefficients and saves them to RegressionModel.coefficient_stddev_ \n
+				/** calculates standart deviations for all predicted coefficients and saves them to coefficient_stddev_ \n
 				@param b if b==1, bootstrapping is used; else: cross-validation
 				@param k number of bootstrap samples resp. cross-validation steps */
-				void calculateCoefficientStddev(int k, bool b);
+				void calculateCoefficientStdErrors(int k, bool b);
 			
 				/** returns a const pointer to the matrix containing the standart deviations of all predicted coefficients */
-				const BALL::Matrix<double>* getCoefficientStddev();
+				const BALL::Matrix<double>* getCoefficientStdErrors();
 				
-				void setCoefficientStddev(const BALL::Matrix<double>* stddev);
+				void setCoefficientStdErrors(const BALL::Matrix<double>* stddev);
 				//@}
 				
 	
@@ -158,7 +158,7 @@ namespace BALL
 				
 				
 				/** contains the standart deviations of all predicted coefficients in one column for each modelled activity */
-				BALL::Matrix<double> coefficient_stddev_;
+				BALL::Matrix<double> coefficient_stderr_;
 				
 				/** pointer to the regression model, which the object of this class should test */
 				RegressionModel* regr_model_;

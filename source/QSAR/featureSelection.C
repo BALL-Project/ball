@@ -846,7 +846,7 @@ void FeatureSelection::implicitSelection(LinearModel& lm, int act, double d)
 {
 	SortedList<unsigned int> newIDs;
 	const Matrix<double>* training_result=lm.getTrainingResult();
-	const Matrix<double>* coeff_errors=lm.validation->getCoefficientStddev();
+	const Matrix<double>* coeff_errors=lm.validation->getCoefficientStdErrors();
 	
 	if(coeff_errors->Nrows()==0)
 	{

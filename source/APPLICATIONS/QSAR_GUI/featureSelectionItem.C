@@ -323,9 +323,9 @@ bool FeatureSelectionItem::execute()
 			LinearModel* lm = ((LinearModel*)model_item_->model());
 			LinearModel* in_lm = ((LinearModel*)input_model_item_->model());
 			lm = in_lm; // copy training result !
-			lm->validation->calculateCoefficientStddev(k_,1);
+			lm->validation->calculateCoefficientStdErrors(k_,1);
 			//lm->validation->setCoefficientStddev(in_lm->validation->getCoefficientStddev());
-			cout<<*lm->validation->getCoefficientStddev()<<endl;
+			//cout<<*lm->validation->getCoefficientStdErrors()<<endl;
 			feature_selection_->implicitSelection(*lm,1,cor_threshold_);
 			break;
 		}

@@ -6,10 +6,13 @@
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>
 
+
 using namespace BALL::QSAR;
 using namespace BALL::QSAR::Exception;
 using namespace BALL::VIEW;
 using namespace BALL::VIEW::Exception;
+
+
 
 
 ValidationItem::ValidationItem(int type, DataItemView* view):
@@ -224,6 +227,7 @@ void ValidationItem::init()
 	initName();
 	setPixmap(QPixmap("./images/validation.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 	createActions();
+	coeff_stderr_ratio_ = 0;
 }
 
 
@@ -339,7 +343,7 @@ bool ValidationItem::execute()
 			{
 				throw BALL::Exception::GeneralException(__FILE__,__LINE__,"validation error","coefficient stddev can only be calculated for regression models!");
 			}		
-			((RegressionModel*)model_item_->model())->validation->calculateCoefficientStddev(num_of_samples_,1);
+			((RegressionModel*)model_item_->model())->validation->calculateCoefficientStdErrors(num_of_samples_,1);
 			break;	
 			
 		case 7: 
@@ -359,20 +363,33 @@ bool ValidationItem::execute()
 	if(type_==1||type_==7) setResultString(r2_);
 	else if(type_==6)
 	{
-		const Matrix<double>* coeff_stddev = ((RegressionModel*)model_item_->model())->validation->getCoefficientStddev();
+		const Matrix<double>* coeff_stddev = ((RegressionModel*)model_item_->model())->validation->getCoefficientStdErrors();
+		const Matrix<double>* training_result = ((RegressionModel*)model_item_->model())->getTrainingResult();
 		
 		// calculate&display average stddev
 		double mean_stddev=0;
 		int rows=coeff_stddev->Nrows();
 		int cols=coeff_stddev->Ncols();
-		for(int i=1; i<=rows;i++)
+		if(training_result->getColumnCount()==cols && training_result->getRowCount()==rows)
 		{
-			for(int j=1; j<=cols;j++)
+			for(int i=1; i<=rows;i++) // for each feature
 			{
-				mean_stddev += (*coeff_stddev)(i,j);
+				for(int j=1; j<=cols;j++) // for each activity
+				{
+					double t_ij = (*training_result)(i,j);
+					double s_ij = (*coeff_stddev)(i,j);
+					cout<<s_ij<<" "<<t_ij<<"  ";
+					if(abs(t_ij)>Matrix<double>::MACHINE_EPSILON && abs(s_ij)>Matrix<double>::MACHINE_EPSILON)
+					{
+						cout<<s_ij/t_ij;
+						mean_stddev += abs(s_ij/t_ij);
+					}
+					cout<<endl;
+				}
 			}
+			coeff_stderr_ratio_ = mean_stddev/(rows*cols);
+			setResultString(coeff_stderr_ratio_);
 		}
-		setResultString(mean_stddev/(rows*cols));
 	}
 	else setResultString(q2_);
 	
@@ -547,6 +564,10 @@ BALL::String ValidationItem::getMouseOverText()
 	{
 		message+="using ";
 		message += modelItem()->getRegistryEntry()->getStatName(validation_statistic_);
+	}
+	else if(done_ && type_==6)
+	{
+		message+="average ratio between stddev\nand coeff: "+String(coeff_stderr_ratio_);
 	}
 	return message;				
 }

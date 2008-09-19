@@ -194,7 +194,7 @@ void ALLModel::saveToFile(string filename)
 {
 	ofstream out(filename.c_str());
 	
-	const Matrix<double>* coeffErrors = validation->getCoefficientStddev();
+	const Matrix<double>* coeffErrors = validation->getCoefficientStdErrors();
 	bool stderr=0;
 	if(coeffErrors->Ncols()!=0)
 	{

@@ -143,6 +143,8 @@ namespace BALL
 				
 				double r2_;
 				
+				double coeff_stderr_ratio_;
+				
 				/** in case of nested cross validation: the fraction of the input data that should be set aside for validation */
 				double val_fraction_;
 				

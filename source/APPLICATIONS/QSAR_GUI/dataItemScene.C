@@ -180,10 +180,11 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 						item = main_window->createSDFInput(path);
 
 						ModelItem* model_item_at_pos = qgraphicsitem_cast<ModelItem*>(itemAt(pos)); 
+						PredictionItem* pred_item = NULL;
 						
 						if(model_item_at_pos) /// create PrecitionItem
 						{
-							PredictionItem* pred_item = main_window->createPrediction(item,model_item_at_pos);
+							pred_item = main_window->createPrediction(item,model_item_at_pos);
 							addItem(pred_item);
 							pos = model_item_at_pos->pos();
 							pred_item->setPos(pos+getOffset(pos,pred_item));
@@ -199,7 +200,6 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 							DottedEdge* dedge = new DottedEdge(item, pred_item);
 							addItem(dedge);
 							pred_item->setDottedEdge(dedge);
-							pred_item->addToPipeline();
 						}
 						else /// create SDFInputDataItem
 						{
@@ -208,6 +208,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 						}
 						
 						item->addToPipeline();
+						if(pred_item) pred_item->addToPipeline();
 						
 						String p = path.toStdString(); 
 						p  = p.substr(0,p.find_last_of("/"));

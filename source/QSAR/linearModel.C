@@ -19,7 +19,7 @@ LinearModel::~LinearModel()
 void LinearModel::operator=(const Model& m)
 {
 	Model::operator=(m);
-	validation->setCoefficientStddev(((LinearModel*) &m)->validation->getCoefficientStddev());
+	validation->setCoefficientStdErrors(((LinearModel*) &m)->validation->getCoefficientStdErrors());
 }
 
 

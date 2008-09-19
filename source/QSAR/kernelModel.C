@@ -98,7 +98,7 @@ void KernelModel::saveToFile(string filename)
 	
 	ofstream out(filename.c_str());
 	
-	const Matrix<double>* coeffErrors = validation->getCoefficientStddev();
+	const Matrix<double>* coeffErrors = validation->getCoefficientStdErrors();
 	bool stderr=0;
 	if(coeffErrors->Ncols()!=0)
 	{
@@ -252,7 +252,7 @@ void KernelModel::readTrainingResult(ifstream& input, int no_substances, int no_
 
 void KernelModel::saveTrainingResult(ofstream& out)
 {
-	const Matrix<double>* coeffErrors = validation->getCoefficientStddev();
+	const Matrix<double>* coeffErrors = validation->getCoefficientStdErrors();
 	for(int i=1; i<=training_result_.Nrows();i++) // write training result
 	{
 		out<<substance_names_[i-1]<<"\t";

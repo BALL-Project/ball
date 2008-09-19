@@ -455,7 +455,8 @@ bool ModelItem::isDone()
 	// if this item's outgoing edges are connected to FeatureSelectionItems only, save time by not training this model
 	for(set<Edge*>::iterator it=out_edge_list_.begin();it!=out_edge_list_.end();it++)
 	{
-		if((*it)->destNode()->type()!=FeatureSelectionItem::Type)
+		// if insignificant features are to be removed (FS-type 5), the model has to be trained first
+		if((*it)->destNode()->type()!=FeatureSelectionItem::Type || ((FeatureSelectionItem*)(*it)->destNode())->getType()==5)
 		{
 			enableTraining();
 			return 0;

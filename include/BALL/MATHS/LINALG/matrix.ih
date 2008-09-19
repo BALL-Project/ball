@@ -44,7 +44,7 @@
 #ifdef HAS_BLAS
 extern "C"
 {
-# include <cblas.h>
+# include "cblas.h"
 }
 #endif
 
@@ -78,11 +78,10 @@ namespace BALL {
 		typedef valuetype* PointerType;
 		
 		
-		static double MACHINE_EPSILON;
-		
-
 		public:
-
+			
+			static double MACHINE_EPSILON;
+	
 			/**
 			 *  Default constructor, creating a matrix of size 0x0 in
 			 *  row_major format.

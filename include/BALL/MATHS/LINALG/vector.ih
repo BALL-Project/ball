@@ -24,7 +24,7 @@
 #ifdef HAS_BLAS
 extern "C"
 {
-# include <cblas.h>
+# include "cblas.h"
 }
 #endif
 

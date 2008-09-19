@@ -46,7 +46,7 @@ void CoefficientPlotter::plot(bool zoom)
 	}
 	
 	bool show_stddev=0;
-	const Matrix<double>* coeff_stddev = model->validation->getCoefficientStddev();
+	const Matrix<double>* coeff_stddev = model->validation->getCoefficientStdErrors();
 	if(coeff_stddev!=NULL && coeff_stddev->Nrows()==coefficient_matrix->Nrows() && coeff_stddev->Ncols()==coefficient_matrix->Ncols())
 	{
 		show_stddev=1;

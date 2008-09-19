@@ -149,6 +149,8 @@ bool PredictionItem::execute()
 {
 	if(done_) return 0;   // do nothing twice !
 	
+	cout<<"no test compounds="<<input_data_item_->data()->getNoSubstances()<<endl;
+	
 	// predict activities
 	for(unsigned int i=0; i<input_data_item_->data()->getNoSubstances();i++)
 	{
@@ -160,6 +162,7 @@ bool PredictionItem::execute()
 	
 	// if expected activity values are available, calculate Q^2
 	test_data_ = ((InputDataItem*)dotted_edge_->sourceNode())->data();
+	
 	if(test_data_->getNoResponseVariables()>0)
 	{
 		const QSARData* train_data_backup =  model_item_->model()->data;
