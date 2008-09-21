@@ -33,6 +33,7 @@
 #include <BALL/VIEW/PRIMITIVES/line.h>
 
 #include <BALL/VIEW/INPUT/transformationEvent6D.h>
+#include <BALL/VIEW/INPUT/buttonEvent.h>
 
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/SYSTEM/path.h>
@@ -1867,31 +1868,47 @@ namespace BALL
 
 		void Scene::customEvent(QEvent* evt)
 		{
-			TransformationEvent6D* trans = dynamic_cast<TransformationEvent6D*>(evt);
-
-			if(trans) {
-                Vector3 tmp = trans->getTranslation() * 0.01;
-                tmp.z = -tmp.z;
-				move(-tmp);
-
-				Camera& camera = stage_->getCamera();
-
-				Quaternion q1;
-				q1.set(camera.getLookUpVector(), 0.3 * Angle(-trans->getRotation().y, false).toRadian());
-
-				Quaternion q2;
-				q2.set(camera.getRightVector(),  0.3 * Angle(-trans->getRotation().x, false).toRadian());
-
-				Quaternion q3;
-				q3.set(camera.getViewVector(),   0.3 * Angle(-trans->getRotation().z, false).toRadian());
-
-				q1 += q2 + q3;
-
-				camera.rotate(q1, system_origin_);
-
-//				printf("Got event");
+			switch(static_cast<EventsIDs>(evt->type())) {
+				case TRANSFORMATION_EVENT_6D:
+					transformationEvent6D(static_cast<TransformationEvent6D*>(evt));
+					break;
+				case BUTTON_RELEASE_EVENT:
+					buttonReleaseEvent(static_cast<ButtonEvent*>(evt));
+					break;
+				case BUTTON_PRESS_EVENT:
+					buttonPressEvent(static_cast<ButtonEvent*>(evt));
+					break;
 			}
+		}
 
+		void Scene::transformationEvent6D(TransformationEvent6D* evt)
+		{
+			Vector3 tmp = evt->getTranslation() * 0.01;
+			tmp.z = -tmp.z;
+			move(-tmp);
+
+			Camera& camera = stage_->getCamera();
+
+			Quaternion q1;
+			q1.set(camera.getLookUpVector(), 0.3 * Angle(-evt->getRotation().y, false).toRadian());
+
+			Quaternion q2;
+			q2.set(camera.getRightVector(),  0.3 * Angle(-evt->getRotation().x, false).toRadian());
+
+			Quaternion q3;
+			q3.set(camera.getViewVector(),   0.3 * Angle(-evt->getRotation().z, false).toRadian());
+
+			q1 += q2 + q3;
+
+			camera.rotate(q1, system_origin_);
+		}
+
+		void Scene::buttonPressEvent(ButtonEvent* evt)
+		{
+		}
+
+		void Scene::buttonReleaseEvent(ButtonEvent* evt)
+		{
 		}
 
 		void Scene::mouseMoveEvent(QMouseEvent* e)

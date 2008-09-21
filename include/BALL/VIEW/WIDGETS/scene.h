@@ -48,6 +48,9 @@ namespace BALL
 		class AnimationThread;
 		class ClippingPlane;
 
+		class TransformationEvent6D;
+		class ButtonEvent;
+
 		/**	Scene is the main visualization widget that shows the graphical Representation 's.
 				To do this, the class Scene must be a child of the MainControl.
 				Because the MainControl is also the main application object
@@ -658,11 +661,26 @@ namespace BALL
 			virtual void resizeGL(int width, int height);
 
 			/**
-			 * Handle custom events.
-			 * This function handles custom events that for example are sent by the input device drivers
+			 * This function handles custom events that for example are sent 
+			 * by the input device drivers
 			 * \param evt A pointer to the event that shell be processed
 			 */
 			virtual void customEvent(QEvent* evt);
+
+			/**
+			 * Function that interpretes the transformation events sent to customEvent()
+			 */
+			virtual void transformationEvent6D(TransformationEvent6D* evt);
+
+			/**
+			 * Function that interpretes the button press events sent to customEvent()
+			 */
+			virtual void buttonPressEvent(ButtonEvent* evt);
+
+			/**
+			 * Function that interpretes the button release events sent to customEvent()
+			 */
+			virtual void buttonReleaseEvent(ButtonEvent* evt);
 
 			/** Catch mouse move events, store the actual mouse position in this scene
 					widget and sent events accordingly.

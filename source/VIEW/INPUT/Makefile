@@ -18,9 +18,11 @@ UIC_DIR=$(BALL_PATH)/include/BALL/VIEW/UIC
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
+	deviceEvent.C\
 	transformationEvent6D.C\
+	buttonEvent.C\
 	inputDeviceDriver.C\
-	spaceNavigatorDriver.C\
+	spaceNavigatorDriver.C
 
 PYTHON_CPP_SOURCES=
 
