@@ -78,7 +78,16 @@ namespace BALL
 			MESSAGE_EVENT = 60000,
 
 			/// Event to print output from a Thread
-			LOG_EVENT
+			LOG_EVENT,
+
+			/// Event that encodes a 6 dimensional transformation
+			TRANSFORMATION_EVENT_6D,
+
+			/// Event for button press events of custom input devices
+			BUTTON_PRESS_EVENT,
+
+			/// Event for button press events of custom input devices
+			BUTTON_RELEASE_EVENT
 		};
 
 		//@}
