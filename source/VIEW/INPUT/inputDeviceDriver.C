@@ -42,7 +42,7 @@ namespace BALL
 		{
 			QCoreApplication::instance()->postEvent(
 			                      static_cast<QObject*>(receiver_),
-			                      new TransformationEvent6D(x, y, z, a, b, c));
+			                      new TransformationEvent6D(this, x, y, z, a, b, c));
 		}
 	}
 }
