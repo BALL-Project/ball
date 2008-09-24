@@ -514,6 +514,16 @@ namespace BALL
 		number_of_bonds_ = 0;
 	}
 
+	Atom* Atom::getPartnerAtom(Position i) throw(Exception::IndexOverflow)
+	{
+		return getBond(i)->getBoundAtom(*this);
+	}
+
+	const Atom* Atom::getPartnerAtom(Position i) const throw(Exception::IndexOverflow)
+	{
+		return getBond(i)->getBoundAtom(*this);
+	}
+
 	bool Atom::hasBond(const Bond& bond) const
 		throw()
 	{
