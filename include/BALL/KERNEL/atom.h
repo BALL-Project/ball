@@ -597,6 +597,25 @@ namespace BALL
 					@see       Bond::destroy
 			*/
 			void destroyBonds()	throw();
+
+			/**
+			 * Returns the Atom bound at the i-th bond. This is a convenience function for:
+			 * getBond(i)->getBoundAtom(*this)
+			 *
+			 * @param i The index of the partner atom
+			 * @throw Exception::IndexOverflow is thrown if i >= countBonds(). This 
+			 *        exception originates from getBond(i)
+			 */
+			Atom* getPartnerAtom(Position i) throw(Exception::IndexOverflow);
+
+			/**
+			 * Returns the Atom bound at the i-th bond. This is a convenience function for:
+			 * getBond(i)->getBoundAtom(*this)
+			 *
+			 * @param i The index of the partner atom
+			 */
+			const Atom* getPartnerAtom(Position i) const throw(Exception::IndexOverflow);
+
 			//@}
 
 			/** @name Predicates 
