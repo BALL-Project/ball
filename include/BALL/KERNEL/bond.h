@@ -344,6 +344,13 @@ namespace BALL
 										 0 if the atom is not part of the bond
 		*/
 		const Atom* getBoundAtom(const Atom& atom) const throw();
+
+		/** Return the partner of the atom in this bond.
+				@param			 atom an atom
+				@return      Atom a pointer to the atom,
+										 0 if the atom is not part of the bond
+		*/
+		Atom* getBoundAtom(const Atom& atom);
 		//@}
 
 		/** @name Predicates 
