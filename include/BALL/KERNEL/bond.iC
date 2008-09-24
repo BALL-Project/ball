@@ -164,7 +164,25 @@ const Atom* Bond::getBoundAtom(const Atom& atom) const
 	}
 
 	return 0;
-}                                                                                                                                           
+}
+
+BALL_INLINE
+Atom* Bond::getBoundAtom(const Atom& atom)
+{
+	if (first_ == &atom)
+	{
+		return second_;
+	}
+	else
+	{
+		if (second_ == &atom)
+		{
+			return first_;
+		}
+	}
+
+	return 0;
+}
 
 BALL_INLINE
 bool Bond::isBondOf(const Atom& atom) const
