@@ -2,6 +2,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/exception.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/mainWindow.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/validationResultDialog.h>
+#include <BALL/QSAR/configIO.h>
 
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>
@@ -72,122 +73,48 @@ ValidationItem::ValidationItem(String& configfile_section, std::map<String, Data
 	
 	istringstream input;
 	input.str(configfile_section);
-		
-	String line;
-	getline(input,line);
-	line.trimLeft();
-	if(!line.hasPrefix("[Validator]"))
+	ValidationConfiguration conf = ConfigIO::readValidationConfiguration(&input);
+
+	int no = conf.external_predictions.size();
+	for(int i=0; i<no; i++)
 	{
-		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"ValidationItem reading error","The given section is no validation section!");
-	}
-	
-	String mod="";
-	String data="";
-	String val_data=""; /// TODO: external validation not supported yet
-	String output="";
-	k_=0;
-	num_of_samples_=0;
-	num_of_runs_ = 0;
-	validation_statistic_=-1;	
-	q2_=0;
-	r2_=0;
-	nested_val_item_ = NULL;
-	
-	while(input)
-	{
-		getline(input,line);
-		line.trimLeft();
-		if(line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
+		String file_i = conf.external_predictions[i];
+		map<String,DataItem*>::iterator it = filenames_map.find(file_i);
+		if(it==filenames_map.end())
 		{
-			continue;
+			cout<<file_i<<" can not be found!!"<<endl;
+			throw BALL::Exception::GeneralException(__FILE__,__LINE__,"ValidationItem reading error","PredictionItem of a nested cross validation fold could not be found!");
 		}
+		PredictionItem* pred_i = (PredictionItem*) it->second;
+		addExternalFoldValidation(pred_i);
 		
-		if(line.hasPrefix("model_file"))
+		if(i==0) // all folds of ONE validationItem for nested validation come from 
+			// ONE PartitioningItem
 		{
-			mod = ((String)line.after("=")).trimLeft();
-		}
-		else if(line.hasPrefix("data_file"))
-		{
-			data = ((String)line.after("=")).trimLeft();
-		}
-		else if(line.hasPrefix("validation_data_file"))
-		{
-			val_data = ((String)line.after("=")).trimLeft();
-		}
-		else if(line.hasPrefix("k_fold"))
-		{
-			k_ = ((String)line.after("=")).trimLeft().toInt();
-		}
-		else if(line.hasPrefix("bootstrap_samples"))
-		{
-			num_of_samples_ = ((String)line.after("=")).trimLeft().toInt();
-		}
-		else if(line.hasPrefix("no_of_permutation_tests"))
-		{
-			num_of_runs_ = ((String)line.after("=")).trimLeft().toInt();
-		}
-		else if(line.hasPrefix("external_validation_predictions"))
-		{
-			String file_names = ((String)line.after("=")).trimLeft();
-			int no = file_names.countFields();
-			for(int i=0; i<no; i++)
+			Edge* edge = pred_i->dottedEdge();
+			if(edge!=NULL)
 			{
-				String file_i = file_names.getField(i);
-				map<String,DataItem*>::iterator it = filenames_map.find(file_i);
-				if(it==filenames_map.end())
-				{
-					cout<<file_i<<" can not be found!!"<<endl;
-					throw BALL::Exception::GeneralException(__FILE__,__LINE__,"ValidationItem reading error","PredictionItem of a nested cross validation fold could not be found!");
-				}
-				PredictionItem* pred_i = (PredictionItem*) it->second;
-				addExternalFoldValidation(pred_i);
-				
-				if(i==0) // all folds of ONE validationItem for nested validation come from 
-					// ONE PartitioningItem
-				{
-					Edge* edge = pred_i->dottedEdge();
- 					if(edge!=NULL)
- 					{
-						if(edge->sourceNode()->inEdges().size()>0)
-						{						
-							DataItem* tmp = (*edge->sourceNode()->inEdges().begin())->sourceNode();
-							if(tmp->type()==PartitioningItem::Type)
-							{
-								setPartitioner((PartitioningItem*)tmp);
-							}
-						}
- 					}
+				if(edge->sourceNode()->inEdges().size()>0)
+				{						
+					DataItem* tmp = (*edge->sourceNode()->inEdges().begin())->sourceNode();
+					if(tmp->type()==PartitioningItem::Type)
+					{
+						setPartitioner((PartitioningItem*)tmp);
+					}
 				}
 			}
 		}
-		else if(line.hasPrefix("output"))
-		{
-			output = ((String)line.after("=")).trimLeft();
-		}
-		else if(line.hasPrefix("classification_statistic")) // currently unused by regressions!
-		{
-			String s = ((String)line.after("=")).trimLeft();
-			if(s=="average accuracy") validation_statistic_=0;
-			else if(s=="weighted average accuracy") validation_statistic_=1;
-			else if(s=="overall accuracy") validation_statistic_=2;
-			else if(s=="average MCC") validation_statistic_=3;
-			else if(s=="overall MCC") validation_statistic_=4;
-			else if(s!="")
-			{
-				String mess ="qualitiy statistic \'"+s+"\' unknown!\n";
-				mess+="  possible choices are: \"average accuracy\", \"weighted average accuracy\", \"overall accuracy\", \"average MCC\" and \"overall MCC\"";
-				String name = "ValidationItem reading error";
-				throw BALL::Exception::GeneralException(__FILE__,__LINE__,name,mess);
-			}					
-		}
-		else
-		{
-			String mess = "Configuration command \""+line+"\" unknown!!";
-			String name = "ValidationItem reading error";
-			throw BALL::Exception::GeneralException(__FILE__,__LINE__,name,mess);
-		}	
 	}
-	map<String,DataItem*>::iterator it = filenames_map.find(mod);
+	
+	
+	// conf.data is not used since the inputItem connected to the modelItem is used for obtaining input data
+	
+	k_ = conf.k_folds;
+	num_of_samples_ = conf.bootstrap_samples;
+	num_of_runs_ = conf.no_of_permutation_tests;
+	validation_statistic_ = conf.statistic;
+	
+	map<String,DataItem*>::iterator it = filenames_map.find(conf.model);
 	if(it==filenames_map.end())
 	{
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"ValidationItem reading error","ModelItem for which the validation should be done can not be found!");
@@ -206,10 +133,10 @@ ValidationItem::ValidationItem(String& configfile_section, std::map<String, Data
 	Edge* edge = new Edge(model_item_, this);
 	view_->data_scene->addItem(edge);
 
-	setSavedAs(output.c_str());
+	setSavedAs(conf.output.c_str());
 	
 	///set type of validation to be done:
-	if(val_data!="" || external_validations_.size()>0) type_ = 5;
+	if(conf.data!="" || conf.external_predictions.size()>0) type_ = 5;
 	else
 	{
 		if(k_<=0) type_ = 1;

@@ -105,60 +105,19 @@ void InputDataItemIO::writeConfigSection(PartitioningItem* item, ofstream& out, 
 
 void InputDataItemIO::readPartitionerSection(String& configfile_section, map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions)
 {
-	String input_file="";
-	double val_fraction=0;
-	uint no_folds = 0;
-	int ID = -1;
-	
 	istringstream input;
 	input.str(configfile_section);	
-	String line;
-	while(input)
-	{
-		getline(input,line);
-		line.trimLeft();
+	InputPartitioningConfiguration conf = ConfigIO::readInputPartitioningConfiguration(&input);
 		
-		if(line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
-		{
-			continue;
-		}
-				
-		if(line.hasPrefix("input_file"))
-		{
-			input_file = ((String)line.after("=")).trimLeft();
-		}
-		else if(line.hasPrefix("val_fraction"))
-		{
-			val_fraction = ((String)line.after("=")).trimLeft().toDouble();
-		}
-		else if(line.hasPrefix("no_folds"))
-		{
-			no_folds = ((String)line.after("=")).trimLeft().toInt();
-		}
-		else if(line.hasPrefix("ID"))
-		{
-			ID = ((String)line.after("=")).trimLeft().toInt();
-		}
-		else if(line.hasPrefix("done"))
-		{
-			// ignore this line; it is used for the command-line programms only
-		}		
-	}
-	
-	if(input_file==""||val_fraction==0||no_folds==0||ID==-1)
-	{
-		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"InputPartitioner reading error","\"input_file\", \"val_fraction\", \"no_folds\" and \"ID\" must be specified within the config section!!");
-	}
-	
 	InputDataItem* input_item;
-	map<String, DataItem*>::iterator it=filenames_map.find(input_file);
+	map<String, DataItem*>::iterator it=filenames_map.find(conf.input_file);
 	if(it==filenames_map.end())
 	{
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"InputPartitioner reading error","InputItem from which partitions are to be created could not be found!!");
 	}
 	input_item=(InputDataItem*)it->second;
-	PartitioningItem* partitioner = new PartitioningItem(input_item,view_,no_folds,val_fraction);
-	partitioner->setID(ID);
+	PartitioningItem* partitioner = new PartitioningItem(input_item,view_,conf.no_folds,conf.validation_fraction);
+	partitioner->setID(conf.ID);
 	view_->scene()->addItem(partitioner);
 	partitioner->addToPipeline();
 	if(item_positions!=0 && item_positions->size()>0)
@@ -170,7 +129,7 @@ void InputDataItemIO::readPartitionerSection(String& configfile_section, map<Str
 	Edge* e = new Edge(input_item,partitioner);
 	view_->scene()->addItem(e);
 	
-	for(uint i=0; i<no_folds;i++)
+	for(int i=0; i<conf.no_folds;i++)
 	{
 		InputPartitionItem* train_part = new InputPartitionItem(0,partitioner);
 		view_->scene()->addItem(train_part);

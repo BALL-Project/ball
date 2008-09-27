@@ -94,13 +94,14 @@ namespace BALL
 			String model;
 			String data;
 			String validation_data;
-			int feat_type;
+			//int feat_type;
 			String output;
 			int k_folds;
 			int bootstrap_samples;
 			int no_of_permutation_tests;
 			int statistic;
 			String statistic_name;
+			vector<String> external_predictions;
 			bool for_visualization_only;
 			bool done;
 		};

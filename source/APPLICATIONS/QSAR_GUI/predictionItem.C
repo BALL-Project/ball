@@ -3,6 +3,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/mainWindow.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/predictionPlotter.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/predictionResultDialog.h>
+#include <BALL/QSAR/configIO.h>
 
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>
@@ -57,57 +58,15 @@ PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*
 {
 	istringstream input;
 	input.str(configfile_section);
+	PredictionConfiguration conf = ConfigIO::readPredictionConfiguration(&input);
 	
-	String line;
-	getline(input,line);
-	line.trimLeft();
-	if(!line.hasPrefix("[Predictor]"))
-	{
-		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"PredictionItem reading error","The given section is no prediction section!");
-	}
-	
-	String model="";
-	String data="";
-	String output="";
-
-	while(input)
-	{
-		getline(input,line);
-		line.trimLeft();
-		if(line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
-		{
-			continue;
-		}
-		if(line.hasPrefix("model_file"))
-		{
-			model = ((String)line.after("=")).trimLeft();
-		}
-		else if(line.hasPrefix("output"))
-		{
-			output = ((String)line.after("=")).trimLeft();
-		}
-		else if(line.hasPrefix("data_file")) // compounds to be predicted
-		{
-			data = ((String)line.after("=")).trimLeft();
-		}
-		else if(line.hasPrefix("print_excepted")) 
-		{
-			// ignore this, since it is not relevant for the GUI
-		}
-		else
-		{
-			String mess = "Configuration command \""+line+"\" unknown!!";
-			String name = "ValidationItem reading error";
-			throw BALL::Exception::GeneralException(__FILE__,__LINE__,name,mess);
-		}
-	}
-	map<String,DataItem*>::iterator it = filenames_map.find(model);
+	map<String,DataItem*>::iterator it = filenames_map.find(conf.model);
 	if(it==filenames_map.end())
 	{
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"PredictionItem reading error","ModelItem with which the prediction should be done can not be found!");
 	}
 	model_item_ = (ModelItem*) it->second;
-	it = filenames_map.find(data);
+	it = filenames_map.find(conf.data);
 	if(it==filenames_map.end())
 	{
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"PredictionItem reading error","InputDataItem for which the prediction should be done can not be found!");
@@ -132,8 +91,8 @@ PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*
 	name_ = "Prediction for " + input_data_item_->name();
 	view_->data_scene->addItem(this);
 	addToPipeline();
-	filenames_map.insert(make_pair(output,this));
-	setSavedAs(output.c_str());
+	filenames_map.insert(make_pair(conf.output,this));
+	setSavedAs(conf.output.c_str());
 	pred_plotter_ = 0;
 	done_ = 0;
 }

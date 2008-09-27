@@ -586,7 +586,7 @@ ValidationConfiguration::ValidationConfiguration()
 	model="";
 	data="";
 	validation_data="";
-	feat_type=-1;
+	//feat_type=-1;
 	output="";
 	k_folds=0;
 	bootstrap_samples=0;
@@ -594,6 +594,7 @@ ValidationConfiguration::ValidationConfiguration()
 	statistic=0;
 	statistic_name="average accuracy";
 	for_visualization_only = 0;
+	external_predictions.resize(0);
 	done=0;
 }
 
@@ -679,6 +680,13 @@ ValidationConfiguration ConfigIO::readValidationConfiguration(istream* input)
 		else if(line.hasPrefix("external_validation_predictions"))
 		{
 			conf.for_visualization_only=1;
+			
+			String file_names = ((String)line.after("=")).trimLeft();
+			int no = file_names.countFields();
+			for(int i=0; i<no; i++)
+			{
+				conf.external_predictions.push_back(file_names.getField(i));
+			}
 		}
 		else
 		{

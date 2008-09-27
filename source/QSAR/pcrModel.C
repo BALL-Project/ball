@@ -32,8 +32,6 @@ void PCRModel::calculateEigenvectors(const Matrix<double>& data, double frac_var
 	solver.computeSVD();
 	Vector<double> singular_values = solver.getSingularValues();
 	
-	cout<<"SV="<<singular_values<<endl;
-
 	// find the smallest singular vector that should be taken into account
 	// complete variance == sum of all eigen-values == sum of squared singular values
 	double complete_var=singular_values.sum();
@@ -53,10 +51,7 @@ void PCRModel::calculateEigenvectors(const Matrix<double>& data, double frac_var
 		cols++;
 	}
 	last_vector--;
-	
-	cout<<"variance="<<complete_var<<endl;
-	cout<<"last_vector="<<last_vector<<endl;
-	
+
 	output.ReSize(data.Nrows(),cols);
 	
 	// getRightSingularVectors() returns V.t() NOT V, so we have to transform back to V here !!
@@ -69,8 +64,6 @@ void PCRModel::calculateEigenvectors(const Matrix<double>& data, double frac_var
 			output(i,j) = V(i,j);
 		}
 	}
-	
-	cout<<output.Nrows()<<"  "<<output.Ncols()<<endl;
 }
 
 

@@ -150,7 +150,7 @@ void ComponentPlotter::plot(bool zoom)
 	uint comp_two=component_two_combobox_->itemData(component_two_combobox_->currentIndex()).toInt();
 
 	QwtLinearColorMap color_map;
-	color_map.setColorInterval(QColor(0,255,0),QColor(255,0,0));
+	color_map.setColorInterval(QColor(255,0,0),QColor(0,255,0));
 	QwtDoubleInterval interval(min_response_value_,max_response_value_);
 	
 	const QSARData* data = model_item_->inputDataItem()->data();
