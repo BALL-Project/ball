@@ -98,15 +98,17 @@ void Kernel::calculateKernelVector(Matrix<double>& K, Vector<double>& m1, Matrix
 {
 	Matrix<double> M1(1,m1.getSize());
 	M1.copyVectorToRow(m1,1);
-	Matrix<double> out(1,m1.getSize());
+	Matrix<double> out;
 	calculateKernelMatrix(K,M1,m2,out);
-	output.resize(m1.getSize());
+	output.resize(out.getColumnCount());
 	output.setVectorType(0); // row-vector
 	out.copyRowToVector(output,1);	
 }
 
 void Kernel::calculateKernelMatrix(Matrix<double>& input, Matrix<double>& output)
 {
+	output.resize(input.getColumnCount(),input.getColumnCount());
+	
 	if(type==1)
 	{
 		calculateKernelMatrix1(input, output);
@@ -142,6 +144,8 @@ void Kernel::calculateKernelMatrix(Matrix<double>& input, Matrix<double>& output
 
 void Kernel::calculateKernelMatrix(Matrix<double>& K, Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output)
 {
+	output.resize(m1.getRowCount(),K.getColumnCount());
+		
 	if(type==1)
 	{
 		calculateKernelMatrix1(m1,m2,output);
@@ -167,12 +171,12 @@ void Kernel::calculateKernelMatrix(Matrix<double>& K, Matrix<double>& m1, Matrix
 	// center Matrix<double> output
 	Matrix<double> I; I.setToIdentity(output.Ncols());
  	Vector<double> iv(m2.Nrows(),1,0); //dim: nx1  // initial value=1, ColumnVector=false
-	Vector<double> ivt(output.Nrows(),1,1);  // initial value=1, ColumnVector=true
- 	
+	Vector<double> ivt(m2.Nrows(),1,1);  // initial value=1, ColumnVector=true
+	
  	double d=(double)1/output.Ncols();
 	
-	I -= iv*d*iv.t();
-	output -= ivt*d*(iv.t()*K);
+	I -= iv*d*iv.t(); 
+	output -= ivt*d*(iv.t()*K); 
  	output *= I;
 }
 
