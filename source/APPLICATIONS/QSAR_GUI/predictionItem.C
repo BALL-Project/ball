@@ -108,8 +108,6 @@ bool PredictionItem::execute()
 {
 	if(done_) return 0;   // do nothing twice !
 	
-	cout<<"no test compounds="<<input_data_item_->data()->getNoSubstances()<<endl;
-	
 	// predict activities
 	for(unsigned int i=0; i<input_data_item_->data()->getNoSubstances();i++)
 	{
@@ -196,7 +194,7 @@ void PredictionItem::writeConfigSection(ofstream& out)
 	out << "[Predictor]" << "\n";
 	out << "model_file = "<< modelItem()->savedAs().toStdString() << "\n";
 	out << "data_file = "<< inputDataItem()->savedAs().toStdString() << "\n";
-	out << "print_excepted = "<< 1 << "\n";
+	out << "print_expected = "<< 1 << "\n";
 	out << "output = " << savedAs().toStdString() << "\n\n";
 }
 
