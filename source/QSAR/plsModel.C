@@ -95,7 +95,7 @@ void PLSModel::train()
 		latent_variables_.copyVectorToColumn(t,j+1);
 	}
 
-	try  // p's are not orthogonal to each other, so that in rare cases P.t()*W_ is not invertible
+	try  // p's are not orthogonal to each other, so that in rare cases P.t()*loadings_ is not invertible
 	{
 		loadings_ = loadings_*(P.t()*loadings_).i();
 	}

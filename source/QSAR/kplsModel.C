@@ -146,7 +146,16 @@ void KPLSModel::train()
 		latent_variables_.copyVectorToColumn(t,j+1);
 	}
 
-	loadings_ = loadings_*(P.t()*loadings_).i();
+	try // p's are not orthogonal to each other, so that in rare cases P.t()*loadings_ is not invertible
+	{
+		loadings_ = loadings_*(P.t()*loadings_).i();
+	}
+	catch(BALL::Exception::GeneralException e)
+	{
+		Matrix<double> I; I.setToIdentity(P.Ncols());
+		I*=0.0001;
+		loadings_ = loadings_*(P.t()*loadings_+I).i();
+	}
 	training_result_=loadings_*weights_.t();
 	
 	calculateOffsets();
