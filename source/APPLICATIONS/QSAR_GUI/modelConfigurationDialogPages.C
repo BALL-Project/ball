@@ -64,6 +64,8 @@ KernelParameterPage::KernelParameterPage(ModelConfigurationDialog* parent)
 	{
 		return;
 	}
+	
+	registry_ = parent->parent->registry();
 
 	///---------------------CONFIG GROUP----------------------------------
 
@@ -90,7 +92,7 @@ KernelParameterPage::KernelParameterPage(ModelConfigurationDialog* parent)
 	///label and line edit for kernel parameter 1
 	QLabel* kernelParamLabel1 = new QLabel(tr("Parameter 1:"), this);
 	kernel_param_edit1_ = new QLineEdit(this);
-	kernel_param_edit1_->setText(QString(((String)(parent->parent->registry()->default_kernel_par1)).c_str()));
+	kernel_param_edit1_->setText(QString(((String)(registry_->default_kernel_par1)).c_str()));
 
 	//QLabel* param = new QLabel(QString(((String)(parent->model()->model()->getParameters()[i])).c_str()));
 
@@ -105,7 +107,7 @@ KernelParameterPage::KernelParameterPage(ModelConfigurationDialog* parent)
 	///label and line edit for kernel parameter 2 (if available with the chosen kernel type)
 	QLabel* kernelParamLabel2 = new QLabel(tr("Parameter 2:"), this);
 	kernel_param_edit2_ = new QLineEdit(this);
-	kernel_param_edit2_->setText(QString(((String)(parent->parent->registry()->default_kernel_par2)).c_str()));
+	kernel_param_edit2_->setText(QString(((String)(registry_->default_kernel_par2)).c_str()));
 
 	QHBoxLayout *param2Layout = new QHBoxLayout();
 	param2Layout->addWidget(kernelParamLabel2);
@@ -211,6 +213,7 @@ void KernelParameterPage::showKernelFunction(int id)
 		case 1:
 			function_string = "Funktion2";
 			function_label_->setPixmap(QPixmap("./images/radial_basis_kernel.png"));
+			kernel_param_edit1_->setText(QString(((String)(registry_->default_rbf_par)).c_str()));
 			break;
 		case 2: 
 			function_string = "Funktion3";
@@ -221,7 +224,8 @@ void KernelParameterPage::showKernelFunction(int id)
 			function_label_->setPixmap(QPixmap());
 			break;
 	}
-	//function_label_->setText(function_string);
+	
+	if(id!=1) kernel_param_edit1_->setText(QString(((String)(registry_->default_kernel_par1)).c_str()));
 }
 
 OptimizePage::OptimizePage(ModelConfigurationDialog* parent)

@@ -12,6 +12,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/connectionManager.h>
 #include <BALL/QSAR/sortedList.h>
 
+
 namespace BALL
 {
 	namespace VIEW
@@ -65,6 +66,7 @@ namespace BALL
 				QWidget* kernelParameter1Extension_;
 				QWidget* kernelParameter2Extension_;
 				QWidget* individualKernelExtension_;
+				QSAR::Registry* registry_;
 		};
 		
 		/** @class OptimizePage

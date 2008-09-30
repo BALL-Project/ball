@@ -76,9 +76,14 @@ namespace BALL
 				
 				vector<RegistryEntry> registered_models;
 				
+				/** default value for first parameter of non-rbf kernels */
 				double default_kernel_par1;
 				
+				/** default value for second parameter of non-rbf kernels */
 				double default_kernel_par2;
+				
+				/** default value for parameter of rbf kernels */
+				double default_rbf_par;
 				
 				/** default value for k-fold cross validation */
 				int default_k;

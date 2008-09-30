@@ -772,6 +772,10 @@ namespace BALL {
 			Inversion is done by use of SVD */
 			Matrix<valuetype, mtraits> i();
 			
+			/** returns the Moore-Penrose Pseudo-Inverse of this matrix.\n
+			Inversion is done by use of SVD */
+			Matrix<valuetype, mtraits> pseudoInverse();
+			
 			/** convenience-function that resize the current matrix and sets the diagonal elements to 1 and all other elements to zero */
 			void setToIdentity(size_t rows);
 			

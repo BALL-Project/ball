@@ -6,8 +6,10 @@ using namespace BALL::QSAR;
 
 Registry::Registry()
 {
-	default_kernel_par1 = 2;
-	default_kernel_par2 = -1;
+	default_kernel_par1 = 2; // default value for first parameter of non-rbf kernels
+	default_kernel_par2 = -1; // default value for second parameter of non-rbf kernels
+	default_rbf_par=0.005; // default value for parameter of rbf kernels
+	
 	default_k = 5;
 	default_no_permutations = 10;
 	default_no_boostrap_samples = 10;

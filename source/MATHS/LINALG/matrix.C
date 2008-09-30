@@ -7,7 +7,6 @@
 #include <BALL/MATHS/LINALG/SVDSolver.h>
 #endif
 
-#include <values.h>
 #include <limits>
 
 
@@ -130,25 +129,13 @@ namespace BALL
 		SVDSolver<double> solver(*this);
 		solver.computeSVD();
 		Vector<double> singular_values = solver.getSingularValues();
-		Matrix<double> singular_value_matrix(singular_values.getSize(),singular_values.getSize());
+		uint n=getRowCount();
+		uint m=getColumnCount();
+		uint no_sv=singular_values.getSize(); // == min(n,m)
+		Matrix<double> S_i(m,n);
 		
-		double max_sv = MINDOUBLE;
-		double min_sv = MAXDOUBLE;
-		
-		for(size_t i=1; i<=singular_values.getSize(); i++)
-		{
-			for(size_t j=1; j<=singular_value_matrix.getColumnCount(); j++)
-			{
-				if(i!=j) singular_value_matrix(i,j)=0;
-				else 
-				{
-					if(singular_values(i)>max_sv) max_sv=singular_values(i);
-					if(singular_values(i)<min_sv) min_sv=singular_values(i);
-					
-					singular_value_matrix(i,j) = 1/singular_values(i);
-				}
-			}
-		}
+		double max_sv = singular_values(1);
+		double min_sv = singular_values(no_sv);
 		
 		if(min_sv/max_sv<5*MACHINE_EPSILON)
 		{
@@ -156,10 +143,67 @@ namespace BALL
 			std::cout<<singular_values<<std::endl;
 			throw BALL::Exception::GeneralException(__FILE__,__LINE__,"SingularMatrix","Given matrix is singular and thus can not be inverted!");
 		}
+		
+		for(size_t i=1; i<=m; i++)
+		{
+			for(size_t j=1; j<=n; j++)
+			{
+				if(i!=j) S_i(i,j)=0;
+				else S_i(i,j) = 1/singular_values(i);
+			}
+		}
 
 		// getRightSingularVectors() returns V.t() NOT V, so that we need to transpose back to V here !!
-		return solver.getRightSingularVectors().t()*singular_value_matrix*solver.getLeftSingularVectors().t();
+		return solver.getRightSingularVectors().t()*S_i*solver.getLeftSingularVectors().t();
 	}
+	
+	
+	template <>
+	Matrix<double> Matrix<double>::pseudoInverse()
+	{
+		// SVD decomposes matrix A as:
+		//	A = U*S*V.t()
+		//	=> A^{-1} = ( U*S*V.t() )^{-1}
+		//		= (V.t()).i()*S.i()*U.i()
+		//		= V*S.i()*U.t()
+		// since the inverse of the eigenvector-Matrices are their transposes. 
+		// Furthermore, the inverse of S can be obtained as 1/si, where si are the diagonal elements (the eigenvalues).
+		// see Press, W.M.(1986), Numerical recipes: The art of scientific computing
+		
+		SVDSolver<double> solver(*this);
+		solver.computeSVD();
+		Vector<double> singular_values = solver.getSingularValues();
+		
+		uint n=getRowCount();
+		uint m=getColumnCount();
+		uint no_sv=singular_values.getSize(); // == min(n,m)
+		Matrix<double> S_i(m,n);
+		
+		double max_sv = singular_values(1);
+		double min_sv = singular_values(no_sv);
+		
+		for(size_t i=1; i<=m; i++)
+		{
+			for(size_t j=1; j<=n; j++)
+			{
+				if(i!=j) S_i(i,j)=0;
+				else S_i(i,j) = 1/singular_values(i);
+			}
+		}
+		
+		if(min_sv/max_sv<5*MACHINE_EPSILON)
+		{
+			for(uint a=no_sv;a>1;a--)
+			{
+				S_i(a,a)=0;
+				if(singular_values(a-1)/singular_values(1)>5*MACHINE_EPSILON) break;
+			}
+		}
+	
+		// getRightSingularVectors() returns V.t() NOT V, so that we need to transpose back to V here !!
+		return solver.getRightSingularVectors().t()*S_i*solver.getLeftSingularVectors().t();
+	}
+	
 	
 	
 	// ----- addition -----
