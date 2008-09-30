@@ -4,7 +4,6 @@
 //
 
 #include <BALL/QSAR/kernel.h>
-#include "../config.h"
 
 using namespace BALL::QSAR;
 
