@@ -4,6 +4,7 @@
 //
 
 #include <BALL/QSAR/kernel.h>
+#include "../config.h"
 
 using namespace BALL::QSAR;
 
@@ -181,32 +182,42 @@ void Kernel::calculateKernelMatrix(Matrix<double>& K, Matrix<double>& m1, Matrix
 }
 
 
-void Kernel::gridSearch(double step_width, int steps, int recursions, int k, bool opt, double par1_start, double par2_start)
+void Kernel::gridSearch(double step_width, int steps, int recursions, int k, bool opt)
 {
 	bool first_rec=1;
 	
+	if(step_width<=0)
+	{
+		throw Exception::KernelParameterError(__FILE__,__LINE__,"step-width for kernel parameter grid search must be > 0 !");
+	}
+	
 	/// search locally around current kernel parameters, but always start with par1>0 und par2<0
-	if(par1_start==0) 
+	double par1_start;
+	double par2_start;
+	if(type==2) 
 	{
-		if(type==2) 
-		{
-			if(par1<1) par1_start=par1*pow(2,steps/2.);
-			else par1_start=10;
-		}
-		else par1_start=par1-((steps/2.)*step_width);
-		if(par1_start<=0)
-		{
-			par1_start=par1;
-		}
+		if(par1<1) par1_start=par1*pow(2,steps/2.);
+		else par1_start=10;
 	}
-	if(par2_start==0) 
+	else par1_start=par1-((steps/2.)*step_width);
+	if(par1_start<=0)
 	{
-		par2_start=par1+((steps/2.)*step_width);
-		if(par2_start>=0)
-		{
-			par2_start=par2;
-		}
+		par1_start=step_width;
 	}
+
+	par2_start=par2+((steps/2.)*step_width);
+	if(par2_start>=0)
+	{
+		par2_start=-step_width;
+	}
+	
+#ifdef BALL_DEBUG
+	cout<<"starting kernel parameter grid search:"<<endl;
+	cout<<"\tstep-width="<<step_width<<", "<<steps<<" steps, "<<recursions<<" recursions"<<endl;
+	cout<<"\tusing "<<k<<"-fold cross-validation"<<endl;
+	if(opt) cout<<"\toptimizing model parameters in EACH step of grid search"<<endl;
+	cout<<"\tparmeter1 start-value="<<par1_start<<"  parmeter2 start-value="<<par2_start<<endl<<flush;
+#endif	
 	
 	/// run grid-search once + one time for each desired recursion
 	for(int i=0; i<=recursions;i++)
@@ -218,9 +229,15 @@ void Kernel::gridSearch(double step_width, int steps, int recursions, int k, boo
 		par1_start=par1-step_width;
 		par2_start=par2+step_width;
 	}
-
-
+	
+#ifdef BALL_DEBUG
+	cout<<"grid search done!"<<endl;
+	cout<<"\tparameter1="<<par1<<"  parameter2="<<par2<<endl;
+#endif
+	
 }
+
+
 
 void Kernel::gridSearch(double step_width, int steps, bool first_rec, int k, double par1_start, double par2_start, bool opt)
 {	

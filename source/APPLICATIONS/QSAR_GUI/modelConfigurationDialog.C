@@ -431,29 +431,29 @@ void ModelConfigurationDialog::applyOptimizedParameters()
 			model_item_->optimize_kernel_parameters = false;
 		}
 
-		///read in start value for parameter 1
-		ok = false;
-		double tmp5 = optimizePage_->parameter1_edit_->text().toDouble(&ok);
-		if (ok)
-		{
-			parameter1_start_ = tmp5;
-		}
-		else
-		{
-			model_item_->optimize_kernel_parameters = false;
-		}
-	
-		///read in start value for parameter 2
-		ok = false;
-		double tmp6 = optimizePage_->parameter2_edit_->text().toDouble(&ok);
-		if (ok)
-		{
-			parameter2_start_ = tmp6;
-		}
-		else
-		{
-			model_item_->optimize_kernel_parameters = false;
-		}
+// 		//read in start value for parameter 1
+// 		ok = false;
+// 		double tmp5 = optimizePage_->parameter1_edit_->text().toDouble(&ok);
+// 		if (ok)
+// 		{
+// 			parameter1_start_ = tmp5;
+// 		}
+// 		else
+// 		{
+// 			model_item_->optimize_kernel_parameters = false;
+// 		}
+// 	
+// 		//read in start value for parameter 2
+// 		ok = false;
+// 		double tmp6 = optimizePage_->parameter2_edit_->text().toDouble(&ok);
+// 		if (ok)
+// 		{
+// 			parameter2_start_ = tmp6;
+// 		}
+// 		else
+// 		{
+// 			model_item_->optimize_kernel_parameters = false;
+// 		}
 	}
 	else
 	{

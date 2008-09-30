@@ -292,18 +292,18 @@ OptimizePage::OptimizePage(ModelConfigurationDialog* parent)
 		QLabel* search_label1 = new QLabel(tr("number of steps for grid search:"),this);
 		QLabel* search_label2 = new QLabel(tr("width of grid search:"),this);
 		QLabel* search_label3 = new QLabel(tr("number of recursion steps:"),this);
-		QLabel* parameter1_label = new QLabel(tr("start value for parameter 1"),this);
-		QLabel* parameter2_label = new QLabel(tr("start value for parameter 2"),this);
+// 		QLabel* parameter1_label = new QLabel(tr("start value for parameter 1"),this);
+// 		QLabel* parameter2_label = new QLabel(tr("start value for parameter 2"),this);
 		search_edit1_ = new QLineEdit(this); search_edit1_->setMinimumWidth(60);
 		search_edit1_->setText(parent->defaultValueToQString(reg->default_gridsearch_steps));
 		search_edit2_ = new QLineEdit(this);
 		search_edit2_->setText(parent->defaultValueToQString(reg->default_gridsearch_stepwidth,2));
 		search_edit3_ = new QLineEdit(this);
 		search_edit3_->setText(parent->defaultValueToQString(reg->default_gridsearch_recursion));
-		parameter1_edit_ = new QLineEdit(this);
-		parameter1_edit_->setText(parent->defaultValueToQString(reg->default_gridsearch_par1_start,2));
-		parameter2_edit_ = new QLineEdit(this);
-		parameter2_edit_->setText(parent->defaultValueToQString(reg->default_gridsearch_par2_start,2));
+// 		parameter1_edit_ = new QLineEdit(this);
+// 		parameter1_edit_->setText(parent->defaultValueToQString(reg->default_gridsearch_par1_start,2));
+// 		parameter2_edit_ = new QLineEdit(this);
+// 		parameter2_edit_->setText(parent->defaultValueToQString(reg->default_gridsearch_par2_start,2));
 		
 		layout2->addWidget(search_label1,1,1);
 		layout2->addWidget(search_label2,2,1);
@@ -311,10 +311,10 @@ OptimizePage::OptimizePage(ModelConfigurationDialog* parent)
 		layout2->addWidget(search_edit1_,1,2);
 		layout2->addWidget(search_edit2_,2,2);
 		layout2->addWidget(search_edit3_,3,2);
-		layout2->addWidget(parameter1_label,5,1);
-		layout2->addWidget(parameter2_label,6,1);
-		layout2->addWidget(parameter1_edit_,5,2);
-		layout2->addWidget(parameter2_edit_,6,2);
+// 		layout2->addWidget(parameter1_label,5,1);
+// 		layout2->addWidget(parameter2_label,6,1);
+// 		layout2->addWidget(parameter1_edit_,5,2);
+// 		layout2->addWidget(parameter2_edit_,6,2);
 		
 		QVBoxLayout *kernelLayout = new QVBoxLayout();
 		kernelConfigGroup->setLayout(layout2);

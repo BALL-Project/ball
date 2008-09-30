@@ -71,14 +71,13 @@ namespace BALL
 				/** transforms test data 'input' into the kernel-saves and saves it to matrix 'output' */
 				void calculateKernelVector(Matrix<double>& K,Vector<double>& m1, Matrix<double>& m2, Vector<double>& output);
 				
-				/** grid search for the best kernel parameters
+				/** grid search for the best kernel parameters.\n
+				Grid search is done locally around the current kernel parameter value(s).
 				@param opt if ==1, Model.optitimizeParameters() is used in each step of grid search, optimizing the parameter of the *Model* in addition to those of the kernel.
-				@param par1_start start value for par1
-				@param par2_start start value for par2
 				@param step_width the size of each step to be made
 				@param steps the number of steps for grid search 
 				@param recursions number of recursions of grid search; in each recursion the step width is decreased by factor of 10 and searching is done in 20 steps around the values of the best kernel parameters determined in last recursion */
-				void gridSearch(double step_width, int steps, int recursions, int k, bool opt=0, double par1_start=0, double par2_start=0);
+				void gridSearch(double step_width, int steps, int recursions, int k, bool opt=0);
 				//@}
 				
 				

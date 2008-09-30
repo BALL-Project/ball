@@ -153,7 +153,7 @@ void KPLSModel::train()
 	catch(BALL::Exception::GeneralException e)
 	{
 		Matrix<double> I; I.setToIdentity(P.Ncols());
-		I*=0.0001;
+		I*=0.001;
 		loadings_ = loadings_*(P.t()*loadings_+I).i();
 	}
 	training_result_=loadings_*weights_.t();
