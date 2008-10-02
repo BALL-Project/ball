@@ -180,7 +180,7 @@ void Kernel::calculateKernelMatrix(Matrix<double>& K, Matrix<double>& m1, Matrix
  	output *= I;
 }
 
-
+#define BALL_DEBUG
 void Kernel::gridSearch(double step_width, int steps, int recursions, int k, bool opt)
 {
 	bool first_rec=1;
@@ -259,6 +259,9 @@ void Kernel::gridSearch(double step_width, int steps, bool first_rec, int k, dou
 		{
 			for(int i=1;i<=steps;i++)
 			{
+			#ifdef BALL_DEBUG
+				cout<<"kernel-parameter="<<par1<<endl<<flush;
+			#endif
 				if(!opt || !model_->optimizeParameters(k))
 				{
 					model_->model_val->crossValidation(k,0);
@@ -280,6 +283,9 @@ void Kernel::gridSearch(double step_width, int steps, bool first_rec, int k, dou
 		{
 			for(int i=1;i<=steps;i++)
 			{
+			#ifdef BALL_DEBUG
+				cout<<"kernel-parameter="<<par1<<endl<<flush;
+			#endif
 				//cout <<par1<<endl;
 				if(!opt || !model_->optimizeParameters(k))
 				{
@@ -304,10 +310,16 @@ void Kernel::gridSearch(double step_width, int steps, bool first_rec, int k, dou
 		
 		for(int i=1;i<=steps;i++)
 		{
+		#ifdef BALL_DEBUG
+			cout<<"kernel-parameter1="<<par1<<endl<<flush;
+		#endif
 			par2 = start2;
 			
 			for(int j=1;j<=steps;j++)
 			{
+			#ifdef BALL_DEBUG
+				cout<<"kernel-parameter2="<<par2<<endl<<flush;
+			#endif
 				if(!opt || !model_->optimizeParameters(k))
 				{
 					model_->model_val->crossValidation(k,0);

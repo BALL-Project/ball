@@ -99,7 +99,7 @@ void PLSModel::train()
 	{
 		loadings_ = loadings_*(P.t()*loadings_).i();
 	}
-	catch(BALL::Exception::GeneralException e)
+	catch(BALL::Exception::MatrixIsSingular e)
 	{
 		Matrix<double> I; I.setToIdentity(P.Ncols());
 		I*=0.0001;

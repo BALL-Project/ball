@@ -46,15 +46,15 @@ namespace BALL
 				/** inserts id into the list at the correct position, i.e. it keeps the list sorted ascendingly. */
 				Iterator insert(X id)
 				{					
-					Iterator tmp=search_it;
-					tmp--;
-					if((search_it==std::list<X>::end() || *search_it>=id) && (search_it==std::list<X>::begin() || *tmp<id))
-					{
-						std::list<X>::insert(search_it,id);
-						last_insertion=--search_it;
-					}
-					else
-					{
+// 					Iterator tmp=search_it;
+// 					tmp--;
+// 					if((search_it==std::list<X>::end() || *search_it>=id) && (search_it==std::list<X>::begin() || *tmp<id))
+// 					{
+// 						std::list<X>::insert(search_it,id);
+// 						last_insertion=--search_it;
+// 					}
+// 					else
+// 					{
 						Iterator it=std::list<X>::begin();
 						while(*it<id && it!=std::list<X>::end())
 						{
@@ -62,7 +62,7 @@ namespace BALL
 						}
 						std::list<X>::insert(it,id);
 						last_insertion=--it;
-					}
+					//}
 					return last_insertion;
 				};
 				

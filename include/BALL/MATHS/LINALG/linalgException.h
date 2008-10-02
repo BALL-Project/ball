@@ -49,6 +49,16 @@ namespace BALL
 				~MatrixNotQuadratic()
 					throw();
 		};
+		
+		class MatrixIsSingular : public BALL::Exception::GeneralException
+		{
+			public:
+				MatrixIsSingular(const char* file, unsigned long line) 
+						throw();
+
+				~MatrixIsSingular()
+						throw();
+		};		
 
 // 		class OutOfMemory : public std::bad_alloc
 // 		{

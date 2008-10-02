@@ -34,6 +34,17 @@ MatrixNotRegular::~MatrixNotRegular() throw()
 {
 }
 
+MatrixIsSingular::MatrixIsSingular(const char* file, unsigned long line) 
+	throw() : GeneralException(file,line)
+{
+	name_= "MatrixIsSingular";
+	BALL::Exception::globalHandler.setName(String(name_));
+}
+
+MatrixIsSingular::~MatrixIsSingular() throw()
+{
+}
+
 MatrixNotQuadratic::MatrixNotQuadratic() throw()
 {
 	name_= "MatrixNotQuadratic";
