@@ -65,6 +65,9 @@ namespace BALL
 				bool getPostFSModelParOpt() {return post_optimization_model_par_;}
 				bool getPostFSKernelParOpt() {return post_optimization_kernel_par_;}
 				
+				/** overloads DataItem::change(), so that the data-source for the model_item_ is updated (neccessary if input data was replaced) */
+				void change();
+				
 			private:
 			
 				FeatureSelection* feature_selection_;

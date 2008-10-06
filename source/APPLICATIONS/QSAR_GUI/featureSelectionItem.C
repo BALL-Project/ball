@@ -352,6 +352,13 @@ bool FeatureSelectionItem::execute()
 }
 
 
+void FeatureSelectionItem::change()
+{
+	model_item_->setInputDataItem(input_model_item_->inputDataItem());
+	DataItem::change();
+}
+
+
 int FeatureSelectionItem::numberOfFeatures()
 {
 	return model_item_->model()->getDescriptorIDs()->size();
