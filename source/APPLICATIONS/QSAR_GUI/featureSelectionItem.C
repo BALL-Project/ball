@@ -354,7 +354,10 @@ bool FeatureSelectionItem::execute()
 
 void FeatureSelectionItem::change()
 {
-	model_item_->setInputDataItem(input_model_item_->inputDataItem());
+	if(model_item_ && input_model_item_)
+	{
+		model_item_->setInputDataItem(input_model_item_->inputDataItem());
+	}
 	DataItem::change();
 }
 
