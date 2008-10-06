@@ -744,7 +744,7 @@ void ModelItem::writeConfigSection(ofstream& out)
 	
 	out << "optimize_model_parameters = "<< optimize_model_parameters << "\n";
 	
-	if (optimize_model_parameters)
+	if (optimize_model_parameters || optimize_kernel_parameters)
 	{
 		out << "k_fold = "<< k_fold <<  "\n";
 	}
