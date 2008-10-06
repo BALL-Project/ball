@@ -42,6 +42,8 @@ namespace BALL
 				/** checks whether all partitions have already been created */
 				bool isDone();
 				
+				void setInput(InputDataItem* new_input);
+				
 
 			private:
 				

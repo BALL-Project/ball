@@ -113,6 +113,49 @@ set<Edge*> DataItem::outEdges() const
 	return out_edge_list_;
 }
 
+/// at the moment this works only for InputItems (since only ModelItem::input_) is being reset !!
+void DataItem::transferEdges(DataItem* other_item)
+{
+	InputDataItem* is_input = dynamic_cast<InputDataItem*>(this);
+// 	ModelItem* is_model = dynamic_cast<ModelItem*>(this);
+// 	PredictionItem* is_prediction = dynamic_cast<PredictionItem*>(this);
+// 	ValidationItem* is_validation = dynamic_cast<ValidationItem*>(this);
+	
+	if(!is_input /*&&!is_model&&!is_prediction&&!is_prediction*/)
+	{
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"transferEdges Error","transferring edges from the given type of item is not (yet) supported!");
+	}
+	
+	// transfer incoming edges
+	for(set<Edge*>::iterator it=other_item->in_edge_list_.begin(); it!=other_item->in_edge_list_.end(); it++)
+	{
+		(*it)->setDestNode(this);
+		addInEdge(*it);
+	}
+	other_item->in_edge_list_.clear();
+	
+	// transfer outgoing edges
+	for(set<Edge*>::iterator it=other_item->out_edge_list_.begin(); it!=other_item->out_edge_list_.end(); it++)
+	{
+		(*it)->setSourceNode(this);
+		addOutEdge(*it);
+		
+		uint source_type=(*it)->destNode()->type();
+		if(is_input && source_type==ModelItem::Type)
+		{
+			ModelItem* modelitem = dynamic_cast<ModelItem*>((*it)->destNode());
+			modelitem->setInput(is_input);
+		}
+		if(is_input && source_type==PartitioningItem::Type)
+		{
+			PartitioningItem* paritem = dynamic_cast<PartitioningItem*>((*it)->destNode());
+			paritem->setInput(is_input);
+		}
+	}
+	other_item->out_edge_list_.clear();
+}
+
+
 QPainterPath DataItem::shape() const
 {
 	QPainterPath path;

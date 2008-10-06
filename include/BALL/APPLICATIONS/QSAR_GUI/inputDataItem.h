@@ -62,6 +62,7 @@ namespace BALL
 				void loadFromFile(String file);
 
 				virtual bool checkForDiscreteY() = 0;
+			
 
 			protected:
 				/** @name Attributes

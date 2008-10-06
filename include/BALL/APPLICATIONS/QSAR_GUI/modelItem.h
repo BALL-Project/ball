@@ -161,6 +161,11 @@ namespace BALL
 				int grid_search_steps;
 				int grid_search_recursions;
 				int k_fold;
+				
+				void setInput(InputDataItem* new_input);
+				
+				/** overloads DataItem::change(), so that all plotters that have already been created are deleted */
+				void change();
 
 			public slots:
 				void saveModel();

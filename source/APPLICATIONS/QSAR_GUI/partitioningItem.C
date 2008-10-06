@@ -166,3 +166,8 @@ BALL::String PartitioningItem::getMouseOverText()
 	s+="  fraction of data set aside for validation="+valueToString(val_fraction_);
 	return s;
 }
+
+void PartitioningItem::setInput(InputDataItem* new_input)
+{
+	input_= new_input;
+}

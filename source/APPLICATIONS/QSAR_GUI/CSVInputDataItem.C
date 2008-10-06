@@ -168,3 +168,31 @@ void CSVInputDataItem::removeFromPipeline()
 	view_->data_scene->main_window->csv_input_pipeline_.erase(this);
 	view_->data_scene->main_window->all_items_pipeline_.erase(this);
 }
+
+
+void CSVInputDataItem::replaceItem(InputDataItem* old_item)
+{
+	transferEdges(old_item);  // steal the old item's edges
+	
+	// put the new item into the the pipeline at the same position
+	CSVInputDataItem* old_csv = dynamic_cast<CSVInputDataItem*>(old_item); 
+	if(old_csv)
+	{
+		Pipeline<CSVInputDataItem*>::iterator csv_it=view_->data_scene->main_window->csv_input_pipeline_.find(old_csv);
+		if(csv_it!=view_->data_scene->main_window->csv_input_pipeline_.end())
+		{
+			view_->data_scene->main_window->csv_input_pipeline_.insert(csv_it,this);
+			view_->data_scene->main_window->csv_input_pipeline_.erase(csv_it);
+		}
+		else view_->data_scene->main_window->csv_input_pipeline_.insert(this);
+	}
+	else view_->data_scene->main_window->csv_input_pipeline_.insert(this);	
+	
+	view_->data_scene->main_window->all_items_pipeline_.insert(this);	
+	
+	// kill the old item
+	delete old_item;	
+	
+	// finially, make sure that the entire pipeline created by use of this input is reset
+	change();
+}

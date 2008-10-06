@@ -188,6 +188,44 @@ void SDFInputDataItem::removeFromPipeline()
 	view_->data_scene->main_window->all_items_pipeline_.erase(this);
 }
 
+void SDFInputDataItem::replaceItem(InputDataItem* old_item)
+{	
+	SDFInputDataItem* old_sdf = dynamic_cast<SDFInputDataItem*>(old_item); 
+	if(old_sdf)
+	{
+		// delete all features that were read from CSV-files appended to the old SDF-item
+		for(list<CSVInputDataItem*>::iterator csv_it=old_sdf->additional_descriptors_.begin(); csv_it!=old_sdf->additional_descriptors_.end(); csv_it++)
+		{
+			delete *csv_it;
+		}
+		
+		// put the new item into the the pipeline at the same position
+		Pipeline<SDFInputDataItem*>::iterator sdf_it=view_->data_scene->main_window->sdf_input_pipeline_.find(old_sdf);
+		if(sdf_it!=view_->data_scene->main_window->sdf_input_pipeline_.end())
+		{
+			view_->data_scene->main_window->sdf_input_pipeline_.insert(sdf_it,this);
+		}
+		else view_->data_scene->main_window->sdf_input_pipeline_.insert(this);
+	}	
+	else view_->data_scene->main_window->sdf_input_pipeline_.insert(this);
+	
+	Pipeline<DataItem*>::iterator it = view_->data_scene->main_window->all_items_pipeline_.find(old_item);
+	if(it!=view_->data_scene->main_window->all_items_pipeline_.end())
+	{
+		view_->data_scene->main_window->all_items_pipeline_.insert(it,this);
+	}
+	else
+	{
+		view_->data_scene->main_window->all_items_pipeline_.insert(this);
+	}
+	
+	transferEdges(old_item);  // steal the old item's edges
+	delete old_item; // then kill the old item
+		
+	// finially, make sure that the entire pipeline created by use of this input is reset
+	change();
+}
+
 void SDFInputDataItem::useSDProperties(bool b)
 {
 	use_SD_properties_ = b;

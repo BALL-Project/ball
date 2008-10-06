@@ -45,6 +45,10 @@ namespace BALL
 				int getNoResponseVariables() {return no_y_;}
 				void addToPipeline();
 				void removeFromPipeline();
+				
+				/** Replace the given InputDataItem.\n
+				Thus all edges are transferred from the old item to this item, the latter one is inserted into the correct pipeline at the same position than the old item, which is then deleted.*/
+				void replaceItem(InputDataItem* old_item);
 
 				
 			private:

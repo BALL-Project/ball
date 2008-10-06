@@ -35,9 +35,9 @@ namespace BALL
 				};
 				
 				/** insert 'object' before 'it' */
-				void insert(X object, iterator it)
+				void insert(iterator it, X object)
 				{
-					iterator ins_it = list_.insert(object,it);
+					iterator ins_it = list_.insert(it,object);
 					map_.insert(make_pair(object,ins_it));
 				};
 				
@@ -64,7 +64,7 @@ namespace BALL
 				
 				iterator erase(iterator it)
 				{
-					erase(*it);
+					return erase(*it);
 // 					iterator list_it = it->second;
 // 					map_.erase(it);
 // 					return list_.erase(list_it);

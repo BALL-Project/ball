@@ -363,6 +363,12 @@ InputDataItem* ModelItem::inputDataItem()
 	return input_;
 }
 
+void ModelItem::setInput(InputDataItem* new_input)
+{
+	input_ = new_input;
+}
+
+
 bool ModelItem::execute()
 {
 	if(isDone()) return 0; // do nothing twice...
@@ -877,6 +883,20 @@ BALL::String ModelItem::getMouseOverText()
 		}	
 	}
 	return message;	
+}
+
+
+void ModelItem::change()
+{
+	DataItem::change();
+	delete feature_plotter_; 
+	delete plotter_; 
+	delete latent_variable_plotter_;
+	delete loading_plotter_;
+	feature_plotter_=NULL;
+	plotter_=NULL;
+	latent_variable_plotter_=NULL;
+	loading_plotter_=NULL;
 }
 
 

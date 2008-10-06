@@ -153,7 +153,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 		main_window->dragged_item=NULL;
 	}
 	
-	/// create SDFInputDataItem and CSVInputDataItem
+	/// create SDFInputDataItem or CSVInputDataItem
 	else if ((event->mimeData()->hasUrls()))
 	{
 		QList<QUrl> urlList = event->mimeData()->urls();
@@ -168,48 +168,63 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 
 		foreach (QUrl url, urlList)
 		{
-			path = url.toLocalFile();
-			QFileInfo file_info(path);
-			if (file_info.isFile())
+			try
 			{
-				try
-				{	
+				
+				path = url.toLocalFile();
+				QFileInfo file_info(path);
+				if (file_info.isFile())
+				{
 					if (match_sd.exactMatch(path))
 					{
-						SDFInputDataItem* item; 
-						item = main_window->createSDFInput(path);
-
-						ModelItem* model_item_at_pos = qgraphicsitem_cast<ModelItem*>(itemAt(pos)); 
-						PredictionItem* pred_item = NULL;
-						
-						if(model_item_at_pos) /// create PrecitionItem
+						SDFInputDataItem* item=NULL;
+	
+						/// replace SD-item by new SD-item
+						SDFInputDataItem* existing_input_item = dynamic_cast<SDFInputDataItem*>(itemAt(pos)); 
+						if(existing_input_item!=NULL)
 						{
-							pred_item = main_window->createPrediction(item,model_item_at_pos);
-							addItem(pred_item);
-							pos = model_item_at_pos->pos();
-							pred_item->setPos(pos+getOffset(pos,pred_item));
-							addItem(item);
-							QPointF p0 = QPointF(-90,-50);
-							item->setPos(pos+p0);
-				
-							Edge* edge = new Edge(model_item_at_pos, pred_item);
-							addItem(edge);
-							model_item_at_pos->addPredictionInputEdge(edge);
-							Edge* edge2 = new Edge(item, model_item_at_pos);
-							addItem(edge2);	
-							DottedEdge* dedge = new DottedEdge(item, pred_item);
-							addItem(dedge);
-							pred_item->setDottedEdge(dedge);
-						}
-						else /// create SDFInputDataItem
-						{
+							/// TODO: show warning dialog?!
+							item = main_window->createSDFInput(path);
+							QPointF pos = existing_input_item->pos();
 							addItem(item);
 							item->setPos(pos);
+							item->replaceItem(existing_input_item);
 						}
 						
-						item->addToPipeline();
-						if(pred_item) pred_item->addToPipeline();
-						
+						else
+						{
+							item = main_window->createSDFInput(path);
+							ModelItem* model_item_at_pos = qgraphicsitem_cast<ModelItem*>(itemAt(pos)); 
+							PredictionItem* pred_item = NULL;
+							
+							if(model_item_at_pos) /// create PrecitionItem
+							{
+								pred_item = main_window->createPrediction(item,model_item_at_pos);
+								addItem(pred_item);
+								pos = model_item_at_pos->pos();
+								pred_item->setPos(pos+getOffset(pos,pred_item));
+								addItem(item);
+								QPointF p0 = QPointF(-90,-50);
+								item->setPos(pos+p0);
+					
+								Edge* edge = new Edge(model_item_at_pos, pred_item);
+								addItem(edge);
+								model_item_at_pos->addPredictionInputEdge(edge);
+								Edge* edge2 = new Edge(item, model_item_at_pos);
+								addItem(edge2);	
+								DottedEdge* dedge = new DottedEdge(item, pred_item);
+								addItem(dedge);
+								pred_item->setDottedEdge(dedge);
+							}
+							else /// create SDFInputDataItem
+							{
+								addItem(item);
+								item->setPos(pos);
+							}
+							item->addToPipeline();
+							if(pred_item) pred_item->addToPipeline();
+						}
+	
 						String p = path.toStdString(); 
 						p  = p.substr(0,p.find_last_of("/"));
 						main_window->setLastUsedPath(p);
@@ -217,56 +232,64 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 					else if (match_txt.exactMatch(path) || match_csv.exactMatch(path))
 					{
 						CSVInputDataItem* csv_item;
-						SDFInputDataItem* input_item_at_pos = qgraphicsitem_cast<SDFInputDataItem*>(itemAt(pos));
-		
-						if (input_item_at_pos) /// create CSVInputDataItem and append descriptors
-						{
-							csv_item = main_window->createCSVInput(path);
-							csv_item->setData(input_item_at_pos->data());
-							csv_item->setAppend(true);				
-							addItem(csv_item);
-							pos = input_item_at_pos->pos();
-							QPointF p0 = QPointF(input_item_at_pos->width()+10,0);
-							csv_item->setPos(pos+p0);
-							//QGraphicsItemGroup* group=new QGraphicsItemGroup(input_item_at_pos,this); 
-							//groups_.push_back(group);
-							//group->addToGroup(csv_item);
-							Edge* edge = new Edge(input_item_at_pos, csv_item);
-							addItem(edge);
-							
-							// place the new CSV-item into the pipeline at the correct position, i.e. after the SD-item or after the last CSV-item already appended to it
-							DataItem* d;
-							if(input_item_at_pos->additional_descriptors_.size()>0)
+						
+						/// replace SD-item by new SD-item
+						InputDataItem* existing_input_item = qgraphicsitem_cast<InputDataItem*>(itemAt(pos));
+						bool ok=0; 
+						//if(existing_input_item)
+						//{
+						//	/// TODO: show selection dialog !!
+						//	csv_item = main_window->createCSVInput(path);
+						//	csv_item->replaceItem(existing_input_item);
+						//}
+	
+						if(!ok)
+						{						
+							SDFInputDataItem* input_item_at_pos = qgraphicsitem_cast<SDFInputDataItem*>(itemAt(pos));
+							if (input_item_at_pos) /// create CSVInputDataItem and append descriptors
 							{
-								d = input_item_at_pos->additional_descriptors_.back();
+								csv_item = main_window->createCSVInput(path);
+								csv_item->setData(input_item_at_pos->data());
+								csv_item->setAppend(true);				
+								addItem(csv_item);
+								pos = input_item_at_pos->pos();
+								QPointF p0 = QPointF(input_item_at_pos->width()+10,0);
+								csv_item->setPos(pos+p0);
+								//QGraphicsItemGroup* group=new QGraphicsItemGroup(input_item_at_pos,this); 
+								//groups_.push_back(group);
+								//group->addToGroup(csv_item);
+								Edge* edge = new Edge(input_item_at_pos, csv_item);
+								addItem(edge);
+								
+								// place the new CSV-item into the pipeline at the correct position, i.e. after the SD-item or after the last CSV-item already appended to it
+								DataItem* d;
+								if(input_item_at_pos->additional_descriptors_.size()>0)
+								{
+									d = input_item_at_pos->additional_descriptors_.back();
+								}
+								else d = input_item_at_pos;
+								main_window->all_items_pipeline_.insertAfter(csv_item,d);
+								main_window->csv_input_pipeline_.insert(csv_item);
+								
+								input_item_at_pos->appendCSVDescriptors(csv_item);
 							}
-							else d = input_item_at_pos;
-							main_window->all_items_pipeline_.insertAfter(csv_item,d);
-							main_window->csv_input_pipeline_.insert(csv_item);
-							
-							input_item_at_pos->appendCSVDescriptors(csv_item);
-						}
-
-						else /// create CSVInputDataItem (no appending of desc.)
-						{
-							csv_item = main_window->createCSVInput(path);
-							addItem(csv_item);
-							csv_item->setPos(pos.x(),pos.y());
-							csv_item->addToPipeline();
+	
+							else /// create CSVInputDataItem (no appending of desc.)
+							{
+								csv_item = main_window->createCSVInput(path);
+								addItem(csv_item);
+								csv_item->setPos(pos.x(),pos.y());
+								csv_item->addToPipeline();
+							}
 						}
 						String p = path.toStdString(); 
 						p  = p.substr(0,p.find_last_of("/"));
 						main_window->setLastUsedPath(p);
 					}
-
-				}
-				catch(InvalidInputDataItem)
-				{
-				}
-				catch(InvalidPredictionItem)
-				{
 				}
 			}
+			catch(InvalidInputDataItem) {}
+			catch(InvalidPredictionItem) {} // if 'cancel' has been clicked within the dialogs
 		}
 	}
 
@@ -281,10 +304,11 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 		ModelItem* model_item_at_pos = qgraphicsitem_cast<ModelItem*>(itemAt(pos));
 		
 		item = (ModelItem*)main_window->dragged_item;
+		
+		DataItem* source = dynamic_cast<DataItem*>(itemAt(pos));
+		
 		try
 		{
-			DataItem* source = dynamic_cast<DataItem*>(itemAt(pos));
-			
 			if(!input_item_at_pos && !csv_input_item_at_pos && !model_item_at_pos)
 			{
 				QMessageBox::information(view," ","Please drag the Model onto a SD-item, a CSV-item or anto another model within your pipeline!");
@@ -319,9 +343,8 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 			addItem(edge);
 			item->addToPipeline();
 		}
-		catch(InvalidModelItem)
-		{
-		}
+		catch(InvalidModelItem) {}  // if 'cancel' has been clicked within the dialogs
+
 		main_window->drag_source = "view"; // set back to "default"
 	}
 

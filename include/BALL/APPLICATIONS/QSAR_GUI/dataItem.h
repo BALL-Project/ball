@@ -93,6 +93,12 @@ namespace BALL
 			@param edge
 			*/
 			void removeOutEdge(Edge* edge);
+			
+			/** Transfers all egdes from the given item to this item.\n
+			(The egde-lists of 'other_item' will thus be empty after calling this function)\n
+			This function can therefore be helpful when an item is to be replaced by a new item. */
+			void transferEdges(DataItem* other_item);
+			
 		
 			/**set the item's name
 			*@param name
@@ -121,8 +127,9 @@ namespace BALL
 			enum { Type = UserType + 1 };
 			
 			/** Call this function if a change of parameters and/or input has occured.\n
-			done_ of this item and *all of its children* is thus set to false. */
-			void change();
+			done_ of this item and *all of its children* is thus set to false. \n
+			If creating an overloading function, make sure let it call this base-function! */
+			virtual void change();
 		
 			/** Returns the type of the item as an int. This type information is used by qgraphicsitem_cast() to distinguish between types. */
 			int type() const { return Type; }
