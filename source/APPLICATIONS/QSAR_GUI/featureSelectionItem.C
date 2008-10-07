@@ -3,6 +3,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/exception.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/featureSelectionItem.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/mainWindow.h>
+#include <BALL/QSAR/configIO.h>
 
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>
@@ -101,148 +102,36 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 {
 	istringstream input;
 	input.str(configfile_section);
-		
-	String line;
-	getline(input,line);
-	line.trimLeft();
-	if(!line.hasPrefix("[FeatureSelector]"))
-	{
-		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"FeatureSelection reading error","The given section is no feature selection section!");
-	}
+	FeatureSelectionConfiguration conf = ConfigIO::readFeatureSelectionConfiguration(&input);
 	
-	String mod="";
-	String data="";
-	type_=-1;
-	String output="";
-	k_=-1;
-	String accuracy="average accuracy";
-	validation_statistic_=0;
-	bool remove_correlated=0; // == type_=0
-	cor_threshold_=-10;
-	quality_increase_cutoff_ = -1;
-	quality_increase_cutoff_=-1;
-	opt_ = 0;
-	feature_selection_ = NULL;
-	post_optimization_model_par_ = 0;
-	post_optimization_kernel_par_ = 0;
-	
-	while(input)
-	{
-		getline(input,line);
-		line.trimLeft();
-		if(line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
-		{
-			continue;
-		}
-		
-		if(line.hasPrefix("model_file"))
-		{
-			mod = ((String)line.after("=")).trimLeft();
-		}
-		else if(line.hasPrefix("data_file"))
-		{
-			data = ((String)line.after("=")).trimLeft();
-		}
-		else if(line.hasPrefix("feature_selection_type"))
-		{
-			type_ = ((String)line.after("=")).trimLeft().toInt();
-			if(type_==0) name_="Remove Colinear Features";
-			else if(type_==1) name_="Forward Selection";
-			else if(type_==2) name_="Backward Selection";
-			else if(type_==3) name_="Stepwise Selection";
-			else if(type_==4) name_ = "Remove Low Response Correlation";
-			else if(type_==5) name_ = "Remove Insignificant Coefficients";
-			else if(type_==6) name_ = "TwinScan";
-		}
-		else if(line.hasPrefix("k_fold"))
-		{
-			k_ = ((String)line.after("=")).trimLeft().toInt();
-		}
-		else if(line.hasPrefix("quality_increase_cutoff"))
-		{
-			quality_increase_cutoff_=((String)line.after("=")).trimLeft().toDouble();				
-		}
-		else if(line.hasPrefix("output"))
-		{
-			output = ((String)line.after("=")).trimLeft();
-		}
-		else if(line.hasPrefix("remove_correlated_features"))
-		{
-			remove_correlated = ((String)line.after("=")).trimLeft().toBool();
-			type_=0;name_="Remove Colinear Features";
-		}
-		else if(line.hasPrefix("cor_threshold"))
-		{
-			cor_threshold_ = ((String)line.after("=")).trimLeft().toDouble();
-		}
-		else if(line.hasPrefix("opt_model_par_after_fs"))
-		{
-			post_optimization_model_par_ = ((String)line.after("=")).trimLeft().toBool();
-		}
-		else if(line.hasPrefix("opt_kernel_par_after_fs"))
-		{
-			post_optimization_kernel_par_ = ((String)line.after("=")).trimLeft().toBool();
-		}
-		else if(line.hasPrefix("grid_search_steps"))
-		{
-			// ignore this line; it is used for the command-line programs only
-		}
-		else if(line.hasPrefix("grid_search_recursions"))
-		{
-			// ignore this line; it is used for the command-line programs only
-		}
-		else if(line.hasPrefix("grid_search_stepwidth"))
-		{
-			// ignore this line; it is used for the command-line programs only
-		}
-		else if(line.hasPrefix("opt_k_fold"))
-		{
-			// ignore this line; it is used for the command-line programs only
-		}
-// 		else if(line.hasPrefix("optimize_parameters"))
-// 		{
-// 			opt_ = ((String)line.after("=")).trimLeft().toBool();
-// 		}
-		else if(line.hasPrefix("classification_statistic")) // currently unused by regressions!
-		{
-			String s = ((String)line.after("=")).trimLeft();
-			accuracy = s;
-			if(s=="average accuracy") validation_statistic_=0;
-			else if(s=="weighted average accuracy") validation_statistic_=1;
-			else if(s=="overall accuracy") validation_statistic_=2;
-			else if(s=="average MCC") validation_statistic_=3;
-			else if(s=="overall MCC") validation_statistic_=4;
-			else if(s!="")
-			{
-				String mess ="qualitiy statistic \'"+s+"\' unknown!\n";
-				mess+="  possible choices are: \"average accuracy\", \"weighted average accuracy\", \"overall accuracy\", \"average MCC\" and \"overall MCC\"";
-				String name = "FeatureSelection reading error";
-				throw BALL::Exception::GeneralException(__FILE__,__LINE__,name,mess);
-			}				
-		}
-		else if(line.hasPrefix("done"))
-		{
-			// ignore this line; it is used for the command-line programms only
-		}
-		else
-		{
-			String mess = "Configuration command \""+line+"\" unknown!!";
-			String name = "FeatureSelectionItem reading error";
-			throw BALL::Exception::GeneralException(__FILE__,__LINE__,name,mess);
-		}
-	}
-	
-	map<String,DataItem*>::iterator it = filenames_map.find(mod);
+	map<String,DataItem*>::iterator it = filenames_map.find(conf.model);
 	if(it==filenames_map.end())
 	{
-		cout<<mod<<" can not be found!"<<endl;
-		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Feature selection reading error","ModelItem to which the feature selection should be applied can not be found!");
+		String m = "ModelItem \"";
+		m += conf.model+"\" to which the feature selection should be applied can not be found!";
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Feature selection reading error",m.c_str());
 	}
 	setInputModelItem((ModelItem*) it->second);	
 	model_item_ = new ModelItem(*input_model_item_);
 	model_item_->setInputDataItem(input_model_item_->inputDataItem());
+	
+	// set feature selection parameters
+	type_ = conf.feat_type;
+	validation_statistic_ = conf.statistic;
+	quality_increase_cutoff_ = conf.quality_increase_cutoff;
+	cor_threshold_ = conf.cor_threshold;
+	k_ = conf.k_fold;
+	name_ = conf.selection_name.c_str();
+	
+	// model-/kernel-parameter optimization parameters
+	model_item_->k_fold = conf.opt_k_fold;
+	model_item_->grid_search_steps = conf.grid_search_steps;
+	model_item_->grid_search_stepwidth = conf.grid_search_stepwidth;
+	model_item_->grid_search_recursions = conf.grid_search_recursions;
+	
+	// configure output model-item and add it to scene
 	model_item_->setSaveAttribute(false);
-	model_item_->setSavedAs(output.c_str());
+	model_item_->setSavedAs(conf.output.c_str());
 	view_->data_scene->addItem(model_item_);
 	model_item_->addToPipeline();
 	
@@ -265,14 +154,13 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 			model_item_->setPos(pos.first,pos.second);
 		}
 	}		
-	
 	Edge* edge1 = new Edge(input_model_item_, this);
 	Edge* edge2 = new Edge(this, model_item_);
 	view_->data_scene->addItem(edge1);
 	view_->data_scene->addItem(edge2);
 	
-	setSavedAs(output.c_str());
-	filenames_map.insert(make_pair(output,model_item_));
+	setSavedAs(conf.output.c_str());
+	filenames_map.insert(make_pair(conf.output,model_item_));
 	setPixmap(QPixmap("./images/feature_selection.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 	
 	done_ = 0;

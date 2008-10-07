@@ -405,7 +405,7 @@ FeatureSelectionConfiguration::FeatureSelectionConfiguration()
 
 	model="";
 	data_file="";
-	feat_type=-1;
+	feat_type=0;
 	output="";
 	k_fold=-1;
 	statistic_name="average accuracy";
@@ -421,6 +421,7 @@ FeatureSelectionConfiguration::FeatureSelectionConfiguration()
 	grid_search_recursions = 0;
 	grid_search_stepwidth = 0;
 	opt_k_fold = 0;
+	selection_name = "";
 }
 
 
@@ -571,6 +572,20 @@ FeatureSelectionConfiguration ConfigIO::readFeatureSelectionConfiguration(istrea
 	{
 		throw Exception::ConfigurationReadingError(__FILE__,__LINE__,"\"opt_k_fold\", \"grid_search_steps\" and \"grid_search_stepwidth\" must be specified when kernel parameters should be optimized after feature selection!");		
 	}
+	
+	if(conf.feat_type==0) conf.selection_name="Remove Colinear Features";
+	else if(conf.feat_type==1) conf.selection_name="Forward Selection";
+	else if(conf.feat_type==2) conf.selection_name="Backward Selection";
+	else if(conf.feat_type==3) conf.selection_name="Stepwise Selection";
+	else if(conf.feat_type==4) conf.selection_name="Remove Low Response Correlation";
+	else if(conf.feat_type==5) conf.selection_name="Remove Insignificant Coefficients";
+	else if(conf.feat_type==6) conf.selection_name="TwinScan";
+	else
+	{
+		String mess = "feature-selection type \"";
+		mess+=conf.feat_type+"\" is unknown!";
+		throw Exception::ConfigurationReadingError(__FILE__,__LINE__,mess.c_str());
+	}	
 	
 	return conf;
 }

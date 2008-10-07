@@ -73,6 +73,7 @@ namespace BALL
 			int k_fold;
 			bool within_section;
 			String statistic_name;
+			String selection_name;
 			int statistic;
 			bool remove_correlated;
 			double cor_threshold;
