@@ -129,8 +129,9 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 			QPointF translation = pos-drag_start;
 			for(QList<QGraphicsItem*>::iterator it=sel_items.begin(); it!=sel_items.end(); it++)
 			{
-				(*it)->setPos((*it)->pos()+translation);
-				set<Edge*> edges=((DataItem*)(*it))->inEdges();
+				DataItem* item = (DataItem*)(*it);
+				item->setPos((*it)->pos()+translation);
+				set<Edge*> edges=item->inEdges();
 				for(set<Edge*>::iterator it2=edges.begin(); it2!=edges.end();it2++)
 				{
 					(*it2)->adjust();

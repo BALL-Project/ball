@@ -410,5 +410,40 @@ void DataItem::hoverLeaveEvent (QGraphicsSceneHoverEvent* /*event*/)
 	setZValue(0);
 }
 
+void DataItem::setPos(QPointF point)
+{
+	setPos(point.x(),point.y());
+}
+
+
+void DataItem::setPos(double x, double y)
+{
+	QGraphicsPixmapItem::setPos(x,y);
+	
+	if(view_->name!="view") return; // do only for the pipeline-view
+	
+	QRectF rect = view_->data_scene->sceneRect();
+	double width = rect.width();
+	double height = rect.height();
+	bool resize=0;
+	
+	if(x>width-200)
+	{
+		resize=1;
+		width+=300;
+	}
+	if(y>height-200)
+	{
+		resize=1;
+		height+=300;
+	}
+	if(resize) 
+	{
+		rect.setWidth(width);
+		rect.setHeight(height);
+		view_->data_scene->setSceneRect(rect);
+		view_->ensureVisible(x,y,width,height);
+	}	
+}
 
 

@@ -164,6 +164,11 @@ namespace BALL
 			Overloading functions in derived classed can be used to show the desired message for each item. */
 			virtual BALL::String getMouseOverText();
 			
+			/** overloads QGraphicsPixmapItem::setPos(), so that the scene will automatically resized if an item is placed near the upper or right border */
+			void setPos(double x, double y);
+			void setPos(QPointF point);
+			
+			
 			
 		public slots:
 			/** this slot calls change() and updates the QGraphicsScene afterwards */
