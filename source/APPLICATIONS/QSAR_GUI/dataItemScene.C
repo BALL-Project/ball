@@ -54,7 +54,7 @@ QPointF DataItemScene::getOffset(QPointF& origin, DataItem* item)
 	}
 	else if(item->type()==PartitioningItem::Type) // PartitioningItem	
 	{
-		pos = QPointF(200,-75);
+		pos = QPointF(200,-200);
 	}	
 
 	for(uint i=0; i<50;i++)
@@ -465,9 +465,11 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationI
 {
 	list<DataItem*> pipe;
 	DataItem* item = model_item;
+	DataItem* first_model = NULL;
 	while(item!=NULL && item->type()!=SDFInputDataItem::Type && item->type()!=CSVInputDataItem::Type)
 	{
 		pipe.push_front(item);
+		first_model = item;
 		item=(*item->inEdges().begin())->sourceNode();
 	}
 	if(item->type()!=CSVInputDataItem::Type && item->type()!=SDFInputDataItem::Type)
@@ -481,7 +483,7 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationI
 	double frac=val_item->getValFraction();
 	uint folds = val_item->numOfNCVFolds();
 	PartitioningItem* partitioner = new PartitioningItem(data_item,view,folds,frac);
-	QPointF p0 = data_item->pos();
+	QPointF p0 = first_model->pos();
 	addItem(partitioner);
 	partitioner->setPos(p0+getOffset(p0,partitioner));
 	partitioner->addToPipeline();
