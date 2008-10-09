@@ -59,15 +59,9 @@ void KPCRModel::train()
 	
 	latent_variables_ = K_*loadings_;
 	
-
-	RRModel m(*data);
-	m.descriptor_matrix_=latent_variables_;
-	m.Y_=Y_;
-	m.train();
-	
 	//result of RR is a linear combination of latente variables 
 	// = column with length=no of latente variables => matrix for more than one modelled activity
-	weights_ = *m.getTrainingResult();
+	weights_ = (latent_variables_.t()*latent_variables_).pseudoInverse()*latent_variables_.t()*Y_;
 	training_result_ = loadings_*weights_;
 	
 	calculateOffsets();

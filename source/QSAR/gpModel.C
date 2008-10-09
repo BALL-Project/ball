@@ -52,21 +52,19 @@ void GPModel::train()
 		I(i,i)=1;
 	}
 	
-	try
-	{
-		L_ = (K_+I*pow(lambda_,2)).i();  // dim: nxn
-	}
-	catch(BALL::Exception::GeneralException e)
-	{
-		L_.ReSize(0,0);
-		throw Exception::SingularMatrixError(__FILE__,__LINE__,"Matrix for GP training is singular!! Check that descriptor_matrix_ does not contain empty columns and/or lambda is large enough!");
-		return;
-	}
-
-// 	double l = pow(lambda_,2);
-// 	addLambda(K_,l);
-// 	L_ = K_.i();
+// 	try
+// 	{
+// 		L_ = (K_+I*pow(lambda_,2)).i();  // dim: nxn
+// 	}
+// 	catch(BALL::Exception::GeneralException e)
+// 	{
+// 		L_.ReSize(0,0);
+// 		throw Exception::SingularMatrixError(__FILE__,__LINE__,"Matrix for GP training is singular!! Check that descriptor_matrix_ does not contain empty columns and/or lambda is large enough!");
+// 		return;
+// 	}
 	
+	L_ = K_.pseudoInverse();  // dim: nxn
+
 	training_result_ = L_*Y_; // B: one coefficient for each substance; dim: nxc
 	
 	calculateOffsets();
