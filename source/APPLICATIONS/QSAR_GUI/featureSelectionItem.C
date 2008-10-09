@@ -122,6 +122,7 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 	cor_threshold_ = conf.cor_threshold;
 	k_ = conf.k_fold;
 	name_ = conf.selection_name.c_str();
+	opt_ = conf.opt;
 	
 	// model-/kernel-parameter optimization parameters
 	post_optimization_model_par_ = conf.opt_model_after_fs;
