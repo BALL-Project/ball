@@ -573,7 +573,7 @@ FeatureSelectionConfiguration ConfigIO::readFeatureSelectionConfiguration(istrea
 		throw Exception::ConfigurationReadingError(__FILE__,__LINE__,"\"opt_k_fold\", \"grid_search_steps\" and \"grid_search_stepwidth\" must be specified when kernel parameters should be optimized after feature selection!");		
 	}
 	
-	if(conf.feat_type==0) conf.selection_name="Remove Colinear Features";
+	if(conf.feat_type==0 && conf.remove_correlated) conf.selection_name="Remove Colinear Features";
 	else if(conf.feat_type==1) conf.selection_name="Forward Selection";
 	else if(conf.feat_type==2) conf.selection_name="Backward Selection";
 	else if(conf.feat_type==3) conf.selection_name="Stepwise Selection";

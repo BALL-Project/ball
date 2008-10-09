@@ -124,6 +124,8 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 	name_ = conf.selection_name.c_str();
 	
 	// model-/kernel-parameter optimization parameters
+	post_optimization_model_par_ = conf.opt_model_after_fs;
+	post_optimization_kernel_par_ = conf.opt_kernel_after_fs;
 	model_item_->k_fold = conf.opt_k_fold;
 	model_item_->grid_search_steps = conf.grid_search_steps;
 	model_item_->grid_search_stepwidth = conf.grid_search_stepwidth;
