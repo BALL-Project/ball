@@ -146,7 +146,7 @@ void RegressionModel::saveToFile(string filename)
 	
 	saveModelParametersToFile(out);
 	saveResponseTransformationToFile(out);
-	saveDescriptorInformationToFile(out);
+	RegressionModel::saveDescriptorInformationToFile(out);
 	out<<"# offsets"<<endl;
 	out<<offsets_<<endl;
 	
@@ -270,7 +270,7 @@ void RegressionModel::saveDescriptorInformationToFile(ofstream& out)
 	}
 	else
 	{
-		bool trained = (training_result_.getColumnCount()==descriptor_names_.size());
+		bool trained = (training_result_.getRowCount()==descriptor_names_.size());
 		for(uint i=0; i<descriptor_names_.size();i++)
 		{
 			out<<String(i)<<"\t"<<descriptor_names_[i]<<"\t";
