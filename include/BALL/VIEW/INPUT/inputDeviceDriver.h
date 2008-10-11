@@ -12,8 +12,7 @@ namespace BALL
 		class InputDeviceDriver
 		{
 			public:
-				//TODO Finalize the constructor, take an associated object
-				InputDeviceDriver(Scene* reciever);
+				InputDeviceDriver(QWidget* reciever);
 				virtual ~InputDeviceDriver();
 
 				virtual bool setUp() = 0;
@@ -31,7 +30,7 @@ namespace BALL
 			private:
 				QMutex receiverLock;
 
-				Scene* receiver_;
+				QWidget* receiver_;
 				bool enabled_;
 		};
 
