@@ -10,7 +10,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		InputDeviceDriver::InputDeviceDriver(Scene* scene)
+		InputDeviceDriver::InputDeviceDriver(QWidget* scene)
 			: receiver_(scene), enabled_(false)
 		{
 		}
