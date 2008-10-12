@@ -8,6 +8,8 @@
 SOURCES		= $(CPP_SOURCES) $(MOC_SOURCES) $(ADD_CPP_SOURCES) $(ADD_MOC_SOURCES)
 OBJECTS 	= $(SOURCES:.C=.o)
 
+COLLECT_OBJECTS = $(SOURCES:.C=.$(COLLECT_OBJECT_EXTENSION))
+
 # support for conditional Pythone source compilation
 #  PYTHON_SUPPORT has to be defined as empty (do not build Python stuff) 
 #  or as true (build everything)
@@ -30,7 +32,7 @@ default_clean:
 
 collectlib:	default
 	@echo "collecting objects from $(DIRECTORY)..."
-	@for i in $(OBJECTS); do echo $(DIRECTORY)/$$i >>@BALL_PATH@/source/$(THISLIB).objects ; done
+	@for i in $(COLLECT_OBJECTS); do echo $(DIRECTORY)/$$i >>@BALL_PATH@/source/$(THISLIB).objects ; done
 
 
 depend: $(CPP_SOURCES)

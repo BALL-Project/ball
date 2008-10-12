@@ -4,28 +4,28 @@
 EXEEXT=.py
 
 XDR_DEPENDENT_EXECUTABLES = \
-$(PREFIX)XDRPersistenceManager_test$(EXEEXT)
+$(TEST_PREFIX)XDRPersistenceManager_test$(EXEEXT)
 
 VIEW_DEPENDENT_EXECUTABLES=\
 
 EXECUTABLES_BASIC = \
-	$(PREFIX)ClassTest_test$(EXEEXT)\
-	$(PREFIX)VersionInfo_test$(EXEEXT)
+	$(TEST_PREFIX)ClassTest_test$(EXEEXT)\
+	$(TEST_PREFIX)VersionInfo_test$(EXEEXT)
 
 EXECUTABLES_MATHS = \
 
 EXECUTABLES_SYSTEM = \
-	$(PREFIX)SysInfo_test$(EXEEXT)
+	$(TEST_PREFIX)SysInfo_test$(EXEEXT)
 
 EXECUTABLES_DATATYPES = \
-	$(PREFIX)RegularExpression_test$(EXEEXT)\
-	$(PREFIX)String_test1$(EXEEXT)\
+	$(TEST_PREFIX)RegularExpression_test$(EXEEXT)\
+	$(TEST_PREFIX)String_test1$(EXEEXT)\
 
 EXECUTABLES_CONCEPTS = \
 
 EXECUTABLES_KERNEL = \
-	$(PREFIX)Atom_test$(EXEEXT)\
-	$(PREFIX)Bond_test$(EXEEXT)\
+	$(TEST_PREFIX)Atom_test$(EXEEXT)\
+	$(TEST_PREFIX)Bond_test$(EXEEXT)\
 
 
 EXECUTABLES_MOLMEC = \
