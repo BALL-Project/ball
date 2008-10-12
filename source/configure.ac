@@ -46,6 +46,7 @@ AC_ARG_ENABLE(optimization,    [  --disable-optimization  Do not optimize the li
 AC_ARG_ENABLE(debuginfo,       [  --enable-debuginfo      add -g to the compiler flags (to create debug information)])
 AC_ARG_ENABLE(VIEW,            [  --disable-VIEW          disable the compilation of the visualization component])
 AC_ARG_ENABLE(64,              [  --enable-64             create 64 bit binaries (if allowed by the compiler)])
+AC_ARG_ENABLE(libtool,         [  --enable-libtool        use libtool for compiling and linking the libraries.])
 AC_ARG_WITH(compiler,          [  --with-compiler=CXX     use CXX as C++ compiler])
 AC_ARG_WITH(cxxflags,          [  --with-cxxflags=FLAGS   add FLAGS to the C++ compiler flags (commas are converted to blanks)])
 AC_ARG_WITH(ldflags,           [  --with-ldflags=FLAGS    add FLAGS to the linker flags (commas are converted to blanks)])
@@ -102,6 +103,13 @@ AC_ARG_WITH(gsl-incl,          [  --with-gsl-incl=DIR     gsl includes are in DI
 dnl
 dnl    interpret switches...
 dnl
+if test "x$prefix" = xNONE ; then
+	PREFIX=${ac_default_prefix}
+else
+	PREFIX=${prefix}
+fi
+AC_SUBST(PREFIX)
+
 if test "$enable_optimization" = "no" ; then
 	DEBUG=true
 else
@@ -119,6 +127,15 @@ if test "$enable_64" = "yes" ; then
 else
 	BINFMT_64_BIT=false
 fi
+
+if test "$enable_libtool" = "yes" ; then
+	USE_LIBTOOL=true
+	INSTALL_TARGET=install.libtool
+else
+	USE_LIBTOOL=false
+	INSTALL_TARGET=install.shared
+fi
+AC_SUBST(INSTALL_TARGET)
 
 if test "$with_compiler" != "" ; then
 	CXX=$with_compiler
@@ -302,6 +319,16 @@ dnl   binary formats. configure will add a line with ${BINFMT} to this file
 BINFORMAT_FILE=config/binary_formats
 BALL_PATH=`cd ..; pwd`
 
+
+if test "${PREFIX}" = "${BALL_PATH}" ; then
+	INSTALL_HEADERS_TARGET=
+	INSTALL_DATA_TARGET=
+else
+	INSTALL_HEADERS_TARGET=install.headers
+	INSTALL_DATA_TARGET=install.data
+fi
+AC_SUBST(INSTALL_HEADERS_TARGET)
+AC_SUBST(INSTALL_DATA_TARGET)
 
 dnl
 dnl   check for programs used to determine architecture
@@ -629,6 +656,14 @@ AC_SUBST(DEPENDENCY_GREPS)  dnl command line to remove non-BALL headers from the
 
 dnl         COMPILER
 
+COLLECT_OBJECT_EXTENSION=o
+if test "${USE_LIBTOOL}" = "true" ; then
+	AC_PROG_LIBTOOL
+	CXX="${BALL_PATH}/source/libtool --tag=CXX --mode=compile ${CXX}"
+	COLLECT_OBJECT_EXTENSION=lo
+fi
+AC_SUBST(COLLECT_OBJECT_EXTENSION)
+
 AC_SUBST(CXX)               dnl C++ compiler (absolute path)
 CC=CXX
 AC_SUBST(CC)
@@ -664,10 +699,6 @@ AC_SUBST(CPP_MODE_FLAGS)    dnl set to CXXFLAGS_D|CXXFLAGS_O, depending on BALL_
 AC_SUBST(CPP_MODE_FLAGS_NO_OPTIMIZATION)    
                             dnl set to CXXFLAGS_D|"", depending on BALL_DEBUG
 
-
-
-
-
 dnl					ARCHIVER
 
 dnl if nothing has been defined for AR/AROPTS,
@@ -696,6 +727,17 @@ dnl  we just use the standard settings to create dynamic libraries.
 dnl
 if test "${DYNAROPTS_PYMODULE}" = "" ; then
   DYNAROPTS_PYMODULE="${DYNAROPTS}"
+fi
+
+dnl
+dnl We should switch to version-info sooner or later, but for now, we really
+dnl cannot guarantee binary compatibility between releases, so lets rather err
+dnl on the safe side...
+dnl
+if test "${USE_LIBTOOL}" = "true" ; then
+	DYNAR="${BALL_PATH}/source/libtool --tag=CXX --mode=link ${DYNAR} -release ${BALL_VERSION_STRING} -rpath ${PREFIX}/lib"
+	SHARED_LIB_SUFFIX=la
+	AC_SUBST(SHARED_LIB_SUFFIX)
 fi
 
 AC_SUBST(AR)

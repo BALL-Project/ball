@@ -32,7 +32,7 @@ sharedlibs: $(SHARED_LIBS)
 
 staticlibs: $(STATIC_LIBS)
 
-install:	install.shared
+install:	@INSTALL_TARGET@ @INSTALL_HEADERS_TARGET@ @INSTALL_DATA_TARGET@
 
 BALLView:
 	@( cd APPLICATIONS/BALLVIEW; make )
@@ -99,29 +99,43 @@ lib:	.Dependencies dirs collect $(SHARED_LIBS)
 	@$(ECHO) " "
 	@$(ECHO) "If you use the shared libraries, don't forget to add"
 	@$(ECHO) "the path "
-	@$(ECHO) " $(BALL_PATH)/lib"
+	@$(ECHO) " $(PREFIX)/lib"
 	@$(ECHO) "to your LD_LIBRARY_PATH. "
 	@$(ECHO) "@ADDITIONAL_COMMENTS@"
 
+install.headers:
+	$(CP) -R $(BALL_PATH)/include/BALL $(PREFIX)/include
+
+install.data:
+	$(BALL_PATH)/source/install-sh -d $(PREFIX)/share/BALL
+	$(CP) -R $(BALL_PATH)/data $(PREFIX)/share/BALL
+	
+install.libtool:
+	@$(ECHO) Installing libraries under $(PREFIX)/lib...
+	$(BALL_PATH)/source/install-sh -d $(PREFIX)/lib
+	$(BALL_PATH)/source/libtool --mode=install install -c libBALL.la $(PREFIX)/lib/libBALL.la
+	$(BALL_PATH)/source/libtool --mode=install install -c libVIEW.la $(PREFIX)/lib/libVIEW.la
+	$(BALL_PATH)/source/libtool -n --finish $(PREFIX)/lib
+
 install.static:	
-	@$(ECHO) Installing static libraries under $(BALL_PATH)/lib...
-	@-mkdir $(BALL_PATH)/lib 2>/dev/null | cat >/dev/null
-	@-mkdir $(BALL_PATH)/lib 2>/dev/null | cat >/dev/null
-	@$(MV) -f $(STATIC_LIBS) $(BALL_PATH)/lib
+	@$(ECHO) Installing static libraries under $(PREFIX)/lib...
+	@-mkdir $(PREFIX)/lib 2>/dev/null | cat >/dev/null
+	@-mkdir $(PREFIX)/lib 2>/dev/null | cat >/dev/null
+	@$(MV) -f $(STATIC_LIBS) $(PREFIX)/lib
 
 install.shared:	
-	@$(ECHO) Installing shared libraries under $(BALL_PATH)/lib...
-	@-mkdir $(BALL_PATH)/lib 2>/dev/null | cat >/dev/null 
-	@-mkdir $(BALL_PATH)/lib 2>/dev/null | cat >/dev/null
-	@$(MV) -f $(SHARED_LIBS) $(BALL_PATH)/lib
+	@$(ECHO) Installing shared libraries under $(PREFIX)/lib...
+	@-mkdir $(PREFIX)/lib 2>/dev/null | cat >/dev/null 
+	@-mkdir $(PREFIX)/lib 2>/dev/null | cat >/dev/null
+	@$(MV) -f $(SHARED_LIBS) $(PREFIX)/lib
 
 delete.static:	
-	@$(ECHO) deleting static libraries under $(BALL_PATH)/lib...
-	@set -e; for i in $(STATIC_LIBS) ; do $(RM) $(BALL_PATH)/lib//$$i 2>/dev/null ; done
+	@$(ECHO) deleting static libraries under $(PREFIX)/lib...
+	@set -e; for i in $(STATIC_LIBS) ; do $(RM) $(PREFIX)/lib//$$i 2>/dev/null ; done
 
 delete.shared:	
-	@$(ECHO) deleting shared libraries under $(BALL_PATH)/lib...
-	@set -e; for i in $(SHARED_LIBS) ; do $(RM) $(BALL_PATH)/lib/$$i 2>/dev/null ; done
+	@$(ECHO) deleting shared libraries under $(PREFIX)/lib...
+	@set -e; for i in $(SHARED_LIBS) ; do $(RM) $(PREFIX)/lib/$$i 2>/dev/null ; done
 
 .Dependencies:
 	@$(MAKE) depend

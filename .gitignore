@@ -1,5 +1,6 @@
 contrib/*
 *.o
+*.lo
 *_moc.C
 *.dh
 .Dependencies

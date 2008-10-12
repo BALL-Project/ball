@@ -30,6 +30,8 @@ ADD_DYNAROPTS_LIBVIEW = @ADD_DYNAROPTS_LIBVIEW@
 # suffix of shared library filenames
 SHARED_LIB_SUFFIX = @SHARED_LIB_SUFFIX@
 EXEEXT = @EXEEXT@
+
+COLLECT_OBJECT_EXTENSION = @COLLECT_OBJECT_EXTENSION@
  
 # C++ compiler
 CXX=@CXX@
@@ -61,6 +63,9 @@ OSMAJOR	 =@OSMAJOR@
 BALL_PATH	= @BALL_PATH@
 BALL_INCLUDES	= @BALL_INCLUDES@
 BALL_LIBS       = @BALL_LIBS@
+
+# The installation prefix
+PREFIX = @PREFIX@
 
 # USE_VIEW contains true if VIEW support is to be built, false otherwise
 # VIEW_PLATFORM either contains Mesa or OpenGL (so far)
