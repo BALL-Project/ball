@@ -47,6 +47,7 @@ AC_ARG_ENABLE(debuginfo,       [  --enable-debuginfo      add -g to the compiler
 AC_ARG_ENABLE(VIEW,            [  --disable-VIEW          disable the compilation of the visualization component])
 AC_ARG_ENABLE(64,              [  --enable-64             create 64 bit binaries (if allowed by the compiler)])
 AC_ARG_ENABLE(libtool,         [  --enable-libtool        use libtool for compiling and linking the libraries.])
+AC_ARG_WITH(libtool-rpath,     [  --with-libtool-rpath    use libtool-rpath instead of the standard (i.e. --prefix)])
 AC_ARG_WITH(compiler,          [  --with-compiler=CXX     use CXX as C++ compiler])
 AC_ARG_WITH(cxxflags,          [  --with-cxxflags=FLAGS   add FLAGS to the C++ compiler flags (commas are converted to blanks)])
 AC_ARG_WITH(ldflags,           [  --with-ldflags=FLAGS    add FLAGS to the linker flags (commas are converted to blanks)])
@@ -136,6 +137,12 @@ else
 	INSTALL_TARGET=install.shared
 fi
 AC_SUBST(INSTALL_TARGET)
+
+if test"$with_libtool_rpath" != "" ; then
+	LIBTOOL_RPATH=$with_libtool_rpath
+else
+	LIBTOOL_RPATH=${PREFIX}
+fi
 
 if test "$with_compiler" != "" ; then
 	CXX=$with_compiler
@@ -735,7 +742,7 @@ dnl cannot guarantee binary compatibility between releases, so lets rather err
 dnl on the safe side...
 dnl
 if test "${USE_LIBTOOL}" = "true" ; then
-	DYNAR="${BALL_PATH}/source/libtool --tag=CXX --mode=link ${DYNAR} -release ${BALL_VERSION_STRING} -rpath ${PREFIX}/lib"
+	DYNAR="${BALL_PATH}/source/libtool --tag=CXX --mode=link ${DYNAR} -release ${BALL_VERSION_STRING} -rpath ${LIBTOOL_RPATH}/lib"
 	SHARED_LIB_SUFFIX=la
 	AC_SUBST(SHARED_LIB_SUFFIX)
 fi
