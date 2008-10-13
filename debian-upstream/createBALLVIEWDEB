@@ -5,7 +5,7 @@
 # if the second: $1 == source
 
 export BALL_PATH=`pwd | sed "s/debian$//g" | sed "s/debian-upstream$//g"`
-export PNAME=ballview
+export PNAME=ball
 export PNAMEC=$PNAME"-common"
 
 if [ $# == 0 ] || [ $1 != "source" ]
@@ -14,45 +14,50 @@ then
 	cp -r debian-upstream debian
 
 	cd $BALL_PATH/debian 								&&
-	mkdir -p $PNAME/usr/bin 						&&
-	mkdir -p $PNAME/usr/lib/BALL 				&&
-	mkdir -p $PNAME/usr/share/man/man1 	&&		
+	mkdir -p libball/usr/lib						&&
+	mkdir -p libball/usr/share/BALL		  &&
+	mkdir -p libball-dev/usr/include    &&
+	mkdir -p ballview/usr/bin 					#&&
+#	mkdir -p $PNAME/usr/share/man/man1 	&&		
 
-	mkdir -p $PNAMEC/usr/share/BALL/doc && 				
-	mkdir -p $PNAMEC/usr/share/doc/ballview/html/
+#	mkdir -p $PNAMEC/usr/share/BALL/doc && 				
+#	mkdir -p $PNAMEC/usr/share/doc/ballview/html/
 fi
 
-
 cd $BALL_PATH/debian
-rm -f BALLView 
+#rm -f BALLView 
 
-cp ../debian-upstream/BALLView $PNAME/usr/bin/ 														&&
-cp ../lib/*/* $PNAME/usr/lib/BALL   																			&&
-cp -r ../source/APPLICATIONS/BALLVIEW/BALLView $PNAME/usr/lib/BALL 				&&
+#cp ../debian-upstream/BALLView $PNAME/usr/bin/ 														&&
+cp    ../debian-install/ball/lib/*             libball/usr/lib/						&&
+cp -r ../debian-install/ball/share/BALL/data   libball/usr/share/BALL   	&&
+cp -r ../debian-install/ball/include/BALL      libball-dev/usr/include    &&
+cp    ../source/APPLICATIONS/BALLVIEW/BALLView ballview/usr/bin/				 #&&
+#cp    ../debian-install/ball/bin/BALLView    ballview/usr/bin/
+#cp -r ../source/APPLICATIONS/BALLVIEW/BALLView $PNAME/usr/lib/BALL 				&&
+#cp    ../source/APPLICATIONS/BALLVIEW/BALLView $PNAME/usr/bin/						&&
 
-cp -r ../doc/BALLView 							$PNAMEC/usr/share/doc/ballview/html/	&&
-cp -r ../doc/BALL 									$PNAMEC/usr/share/doc/ballview/html/ 	&&
-cp    ../doc/TUTORIAL/tutorial.pdf 	$PNAMEC/usr/share/doc/ballview/ 			&&
-cp -r ../doc/classes 								$PNAMEC/usr/share/BALL/doc 						&&
-cp -r ../doc/internal 							$PNAMEC/usr/share/BALL/doc/internal 	&&
-cd $PNAMEC/usr/share/BALL/doc/																						&&
-cd -																																			&&
+#cp -r ../doc/BALLView 							$PNAMEC/usr/share/doc/ballview/html/	&&
+#cp -r ../doc/BALL 									$PNAMEC/usr/share/doc/ballview/html/ 	&&
+#cp    ../doc/TUTORIAL/tutorial.pdf 	$PNAMEC/usr/share/doc/ballview/ 			&&
+#cp -r ../doc/classes 								$PNAMEC/usr/share/BALL/doc 						&&
+#cp -r ../doc/internal 							$PNAMEC/usr/share/BALL/doc/internal 	&&
+#cd $PNAMEC/usr/share/BALL/doc/																						&&
+#cd -																																			&&
 
-cp ../debian-upstream/ballview.1 $PNAME/usr/share/man/man1/ 							&&
-cp ../debian-upstream/ballview.1 $PNAME/usr/share/man/man1/BALLView.1 		&&
-gzip -9 $PNAME/usr/share/man/man1/ballview.1 						&&
-gzip -9 $PNAME/usr/share/man/man1/BALLView.1 						&&
+#cp ../debian-upstream/ballview.1 $PNAME/usr/share/man/man1/ 							&&
+#cp ../debian-upstream/ballview.1 $PNAME/usr/share/man/man1/BALLView.1 		&&
+#gzip -9 $PNAME/usr/share/man/man1/ballview.1 						&&
+#gzip -9 $PNAME/usr/share/man/man1/BALLView.1 						&&
 
-cp -r ../data 									$PNAMEC/usr/share/BALL 	&&
-cp -r ../source/EXAMPLES/PYTHON $PNAMEC/usr/share/BALL 	&&
+#cp -r ../source/EXAMPLES/PYTHON $PNAMEC/usr/share/BALL 	&&
 
-chmod ugo-x $PNAMEC/usr/share/BALL/data/QSAR/* 					&&
-chmod ugo-x $PNAMEC/usr/share/BALL/data/CHARMM/charmm* 	&&
-chmod ugo-x $PNAMEC/usr/share/BALL/data/graphics/* 			&&
-chmod ugo-x $PNAMEC/usr/share/BALL/PYTHON/*.py 					&&
-chmod ugo-x $PNAMEC/usr/share/BALL/data/structures/* 		&&
-chmod 755   $PNAMEC/usr/share/BALL/data/structures/DB/ 	&&
-chmod ugo+x $PNAME/usr/bin/BALLView 										&&
+#chmod ugo-x $PNAMEC/usr/share/BALL/data/QSAR/* 					&&
+#chmod ugo-x $PNAMEC/usr/share/BALL/data/CHARMM/charmm* 	&&
+#chmod ugo-x $PNAMEC/usr/share/BALL/data/graphics/* 			&&
+#chmod ugo-x $PNAMEC/usr/share/BALL/PYTHON/*.py 					&&
+#chmod ugo-x $PNAMEC/usr/share/BALL/data/structures/* 		&&
+#chmod 755   $PNAMEC/usr/share/BALL/data/structures/DB/ 	&&
+#chmod ugo+x $PNAME/usr/bin/BALLView 										&&
 
 if [ $# == 1 ] && [ $1 == "source" ]
 then
