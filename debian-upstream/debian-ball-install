@@ -18,12 +18,17 @@ then
 	rm -f config.cache || true
 	autoconf &&
 	./configure \
-	 --disable-debuginfo\
-	 --enable-optimization\
-	 --enable-python\
-	 --with-qt-libs=/usr/lib\
-	 --with-moc=/usr/bin/moc-qt4\
-	 --with-uic=/usr/bin/uic-qt4
+		--enable-libtool \
+		--prefix=$BALL_PATH/debian-install/ball/usr \
+		--enable-optimization \
+		--disable-debuginfo \
+		--enable-glew \
+		--enable-python \
+		--enable-fftw \
+		--enable-gsl \
+		--with-qt-libs=/usr/lib \
+		--with-moc=/usr/bin/moc-qt4 \
+		--with-uic=/usr/bin/uic-qt4
 	 exit $?
 fi
  																			

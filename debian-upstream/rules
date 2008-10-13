@@ -64,9 +64,9 @@ binary-arch: build install
 #	dh_installinit
 #	dh_installcron
 #	dh_installinfo
-	dh_installman -p ballview
+	dh_installman -p libball
 	dh_link
-	dh_strip -p ballview
+	dh_strip -p libball
 	dh_compress
 	dh_fixperms
 #	dh_perl
