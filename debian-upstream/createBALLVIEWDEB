@@ -12,26 +12,30 @@ if [ $# == 0 ] || [ $1 != "source" ]
 then
 	rm -rf debian 2>/dev/null
 	cp -r debian-upstream debian
-
+fi
 	cd $BALL_PATH/debian 								&&
 	mkdir -p libball/usr/lib						&&
 	mkdir -p libball/usr/share/BALL		  &&
 	mkdir -p libball-dev/usr/include    &&
+	mkdir -p libball-dev/usr/lib		    &&
 	mkdir -p ballview/usr/bin 					#&&
 #	mkdir -p $PNAME/usr/share/man/man1 	&&		
 
 #	mkdir -p $PNAMEC/usr/share/BALL/doc && 				
 #	mkdir -p $PNAMEC/usr/share/doc/ballview/html/
-fi
+#fi
 
 cd $BALL_PATH/debian
 #rm -f BALLView 
 
 #cp ../debian-upstream/BALLView $PNAME/usr/bin/ 														&&
-cp    ../debian-install/ball/lib/*             libball/usr/lib/						&&
-cp -r ../debian-install/ball/share/BALL/data   libball/usr/share/BALL   	&&
-cp -r ../debian-install/ball/include/BALL      libball-dev/usr/include    &&
-cp    ../source/APPLICATIONS/BALLVIEW/BALLView ballview/usr/bin/				 #&&
+cp    /usr/lib/*             libball/usr/lib/						&&
+cp -r /usr/share/BALL/data   libball/usr/share/BALL   	&&
+cp -r /usr/include/BALL      libball-dev/usr/include    &&
+cp    ../source/APPLICATIONS/BALLVIEW/BALLView ballview/usr/bin/				  		&&
+
+mv libball/usr/lib/libBALL.so libball-dev/usr/lib	&&
+mv libball/usr/lib/libVIEW.so libball-dev/usr/lib
 #cp    ../debian-install/ball/bin/BALLView    ballview/usr/bin/
 #cp -r ../source/APPLICATIONS/BALLVIEW/BALLView $PNAME/usr/lib/BALL 				&&
 #cp    ../source/APPLICATIONS/BALLVIEW/BALLView $PNAME/usr/bin/						&&
@@ -62,13 +66,13 @@ cp    ../source/APPLICATIONS/BALLVIEW/BALLView ballview/usr/bin/				 #&&
 if [ $# == 1 ] && [ $1 == "source" ]
 then
 	echo ready for packaging...
-else
-	mkdir $PNAME/DEBIAN 							&&
-	cp * $PNAME/DEBIAN 2>/dev/null    
-	chmod -R 0755 $PNAME/DEBIAN 			&&
-	strip --strip-unneeded $PNAME/usr/lib/BALL/* &&
-	dpkg -b $PNAME BALLView.deb 			&&
-	rm -rf $PNAME 										&&
-	mv BALLView.deb ~
+#else
+#	mkdir $PNAME/DEBIAN 							&&
+#	cp * $PNAME/DEBIAN 2>/dev/null    
+#	chmod -R 0755 $PNAME/DEBIAN 			&&
+#	strip --strip-unneeded $PNAME/usr/lib/BALL/* &&
+#	dpkg -b $PNAME BALLView.deb 			&&
+#	rm -rf $PNAME 										&&
+#	mv BALLView.deb ~
 fi
 

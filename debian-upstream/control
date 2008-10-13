@@ -10,8 +10,8 @@ Standards-Version: 3.7.2
 Package: libball
 Section: science
 Architecture: any
-Depends: ${shlibs:Depends}, python, libqt4-core, libqt4-gui, libqt4-sql, libfftw3,
-	libglew, libgsl0
+Depends: ${shlibs:Depends}, python, libqt4-core, libqt4-gui, libqt4-sql, libfftw3-3,
+	libglew1.5, libgsl0ldbl
 Description: BALL (Biochemical Algorithms Library) is an application framework 
  in C++ that has been specifically designed for rapid software 
  development in Molecular Modeling and Computational Molecular Biology. 
@@ -46,7 +46,7 @@ Description: BALL (Biochemical Algorithms Library) is an application framework
 
 Package: ballview
 Architecture: any
-Depends: ${shlibs:Depends}, python, libball, libview
+Depends: ${shlibs:Depends}, python, libball
 Description: A free molecular modeling and molecular graphics tool
  BALLView provides fast OpenGL-based visualization of molecular structures, 
  molecular mechanics methods (minimization, MD simulation using the 

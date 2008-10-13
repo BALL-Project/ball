@@ -19,7 +19,7 @@ then
 	autoconf &&
 	./configure \
 		--enable-libtool \
-		--prefix=$BALL_PATH/debian-install/ball/usr \
+		--prefix=/usr \
 		--enable-optimization \
 		--disable-debuginfo \
 		--enable-glew \
