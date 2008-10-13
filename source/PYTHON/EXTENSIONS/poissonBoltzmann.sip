@@ -136,8 +136,8 @@ class FDPB
 		static const float SOLUTE_DC;
 		static const float RMS_CRITERION;
 		static const float MAX_CRITERION;
-		static const Index MAX_ITERATIONS;
-		static const Index CHECK_AFTER_ITERATIONS;
+		static const int MAX_ITERATIONS;
+		static const int CHECK_AFTER_ITERATIONS;
 	};
 
 	class FastAtomStruct
@@ -152,7 +152,7 @@ class FDPB
 		float x;
 		float y;
 		float z;
-		Index index;
+		int index;
 	};
 	typedef struct FastAtomStruct FastAtom;
 	public:
