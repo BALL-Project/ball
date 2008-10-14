@@ -25,6 +25,9 @@ SIP_SOURCES=\
 SIP_OBJECTS	=	\
 	$(sources:.C=.o)
 
+SIP_LIBTOOL_OBJECTS	=	\
+	$(sources:.C=.lo)
+
 SIP_HEADERS = \
 	$(PYBALL_SOURCES:.C=.h) \
 
@@ -46,6 +49,7 @@ PYBALL_SOURCES = \
 	pyDatasetVector.C
 	
 PYBALL_OBJECTS  = $(PYBALL_SOURCES:.C=.o)
+PYBALL_LIBTOOL_OBJECTS  = $(PYBALL_SOURCES:.C=.lo)
  
 CPP_SOURCES = $(SIP_SOURCES:.h=.C) $(PYBALL_SOURCES)
 CPP_OBJECTS = $(SIP_OBJECTS) $(PYBALL_OBJECTS)
@@ -72,6 +76,8 @@ install:	BALLmodule.so
 CLEAN_FILES = \
 	BALLmodule.so\
 	$(CPP_OBJECTS) \
+	$(PYBALL_LIBTOOL_OBJECTS) \
+	$(SIP_LIBTOOL_OBJECTS) \
 	$(SIP_SOURCES) \
 	$(SIP_HEADERS) \
 	$(SIP_HEADER_FILES) \
@@ -80,6 +86,7 @@ CLEAN_FILES = \
 clean:
 	@echo "removing object files, libraries, and source/header files produced by SIP..."
 	@-$(RM) -f $(CLEAN_FILES) 2>/dev/null
+	@-$(RM) -f .libs/*
 	@-$(RM) -fr $(SIP_DIR)
 
 depend: sip  Makefile.inc .Dependencies
