@@ -1,9 +1,9 @@
 #!/bin/bash 
-# script to create a Debian source package from a BALL CVS tree
-# arguments: $1 == BALL CVS branch
+# script to create a Debian source package from a BALL git tree
+# arguments: $1 == BALL git branch
 # arguments: $2 == BALL version number
 if test $# != 2 ; then
-	echo "createDebianSource <CVS tag> <BALL version number>"
+	echo "createDebianSource <git tag> <BALL version number>"
 	exit
 fi
 
