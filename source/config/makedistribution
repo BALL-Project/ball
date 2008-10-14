@@ -4,39 +4,41 @@
 #
 
 # check whether the revision number is given as the first argument
-# (CVS tag!)
-if test $# != 1 ; then
-	echo "makdistribution <CVS tag>"
+# (git tag!)
+if test $# -lt 1 ; then
+	echo "makdistribution <git tag> <(optional) directories and files to include into the checkout>"
 	exit
 else
 	TAG=$1
+	shift 1
+	KEEP_DIRS=$@
 fi
 
-# create a dummy directory and extract the current CVS version of BALL
-echo "extracting BALL revision $1 from cvs..."
-cd /tmp
-install -d $USER
-cd $USER
-rm -fr BALL-dist 2>/dev/null
-install -d BALL-dist
-cd BALL-dist
-cvs -q co -r ${TAG} BALL 1>cvs_extract.log 2>cvs_extract_err.log || ( echo "cannot extract revision ${TAG} of BALL" >&0 && exit )
-# remove CVS information
-REMOVE=`find . -name CVS -type d`
-rm -fr ${REMOVE} 2>/dev/null
-rm -fr BALL/Windows/Libs/Python\ Module/CVS 2>/dev/null
-rm -fr BALL/Windows/Libs/Python\ Module/Debug/CVS 2>/dev/null
-rm -fr BALL/Windows/Libs/Python\ Module/Release/CVS 2>/dev/null
-cd BALL/source
-FILE="BALL-`grep BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | head -1 | awk '{print $3}'| tr -d \\"`.tar"
-mv config/Makefile.dummy .
-cd ../../
+BALL_PATH=$(pwd)
+
+# find out if we are in the right directory
+if test ! -d source -o ! -d data -o ! -d include -o ! -d doc -o ! -d debian-upstream ; then
+	echo "Please call this script in the root of a BALL-checkout (the directory containing source, data, include, ...)!"
+	exit
+fi
+
+# create a dummy directory and extract the current git version of BALL
+echo "extracting paths ${KEEP_DIRS} of BALL revision ${TAG} from git..."
+
+BALL_ARCHIVE=$(mktemp -p${BALL_PATH} ball-archive.XXXXXX) || exit 1
+
+git archive --format=tar --prefix=ball-${TAG}/ ${TAG} ${KEEP_DIRS} 2>/dev/null > ${BALL_ARCHIVE} || exit 1
+
+# determine the version number contained in the checkout
+version="$(tar xOf ${BALL_ARCHIVE} ball-${TAG}/include/BALL/COMMON/version.h | grep BALL_RELEASE_STRING | head -1 | awk '{print $3}' | tr -d \")"
+echo "BALL checkout has version " $version
+FILE=ball-${version}.tar
+# mv config/Makefile.dummy .
 
 echo "creating archive ${FILE}..."
-DIR=`basename ${FILE} .tar` 
-mv BALL ${DIR}
-tar cf ${FILE} ${DIR}
+mv ${BALL_ARCHIVE} ${FILE}
 
-echo "compressing archive $FILE..."
-gzip -9 $FILE
-mv ${FILE}.gz ~
+echo "compressing archive ${FILE}..."
+#gzip -9 $FILE
+gzip -2 $FILE
+echo "Successfully created ${FILE}.gz"
