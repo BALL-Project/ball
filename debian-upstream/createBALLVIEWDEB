@@ -29,7 +29,8 @@ cd $BALL_PATH/debian
 #rm -f BALLView 
 
 #cp ../debian-upstream/BALLView $PNAME/usr/bin/ 														&&
-cp    /usr/lib/*             libball/usr/lib/						&&
+cp    /usr/lib/libBALL*      libball/usr/lib/						&&
+cp    /usr/lib/libVIEW*      libball/usr/lib/						&&
 cp -r /usr/share/BALL/data   libball/usr/share/BALL   	&&
 cp -r /usr/include/BALL      libball-dev/usr/include    &&
 cp    ../source/APPLICATIONS/BALLVIEW/BALLView ballview/usr/bin/				  		&&
