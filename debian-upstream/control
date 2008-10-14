@@ -2,7 +2,7 @@ Source: ball
 Section: science
 Priority: optional
 Maintainer: Andreas Hildebrandt <anhi@bioinf.uni-sb.de>
-Build-Depends: debhelper (>= 4), libqt4-dev, libqt4-gui, sip4, python-sip4-dev, 
+Build-Depends: debhelper (>= 4), libtool, libqt4-dev, libqt4-gui, sip4, python-sip4-dev, 
  flex, bison, autoconf, libglew-dev, libfftw3-dev, libgsl0-dev, python-dev, 
  doxygen, tidy, texlive-base, texlive-latex-recommended, texlive-latex-extra, gs-common
 Standards-Version: 3.7.2
