@@ -22,6 +22,12 @@ KEEP_DIRS="data debian-upstream doc include README source"
 # get name of the BALL tgz
 BFILE=$(source/config/makedistribution $1 ${KEEP_DIRS} | tr -d "\n"  | sed "s/^.* \([^ ]*\)$/\1/g")
 
+# does it look like a filename?
+if test x$(echo $(basename ${BFILE}) | grep ball-.*.tar.gz) == x"" ; then
+	echo "Error: makedistribution seems to have aborted! Are you sure that $1 is something we can check out?"
+	exit 1
+fi
+
 # extract the version from the tgz
 VERSION=$(basename ${BFILE} .tar.gz | sed "s_ball-__")
 echo $BFILE", version "${VERSION}
