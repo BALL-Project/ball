@@ -27,7 +27,7 @@ Description: BALL (Biochemical Algorithms Library) is an application framework
  Homepage: www.ball-project.org
 
 Package: libball-dev
-Section: science
+Section: libdevel
 Architecture: any
 Depends: libball
 Description: BALL (Biochemical Algorithms Library) is an application framework 

@@ -1,7 +1,7 @@
 #!/bin/bash 
 # script to create a Debian source package from a BALL git tree
 # arguments: $1 == BALL git branch
-if test $# != 2 ; then
+if test $# != 1 ; then
 	echo "createDebianSource <git tag>"
 	exit
 fi
@@ -60,11 +60,8 @@ rm -f debian/README
 echo "building debian source package..."
 dpkg-buildpackage -S -sa -rfakeroot
 cd ..
-
-#rm -f ballview-$2-debian-binary.tar.gz 
-#tar czf ballview-$2-debian-binary.tar.gz  *.deb
-#tar czf ballview-$2-debian-source.tar.gz \
-#		ballview*.dsc \
-#		ballview*.changes \
-#		*orig.tar.gz \
-#		*.diff.gz
+rm -rf "ball-"${VERSION}
+mv * ${BALL_PATH}
+cd ${BALL_PATH}
+rm -rf ${tempdir}
+echo "Done! Now use, e.g., pbuilder to build binary packages."

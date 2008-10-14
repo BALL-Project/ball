@@ -9,9 +9,8 @@ between up- and downstream authors.
 There are three different scripts in this folder:
 
 createDebianSource:
-Intended to create a Debin source package from CVS.
-It does a CVS checkout, and creates a tarball that
-is then moved to /var/tmp/$USER and extracted there.
+Intended to create a Debian source package from git.
+It does a git checkout, and creates a tarball.
 To prevent unnecessary overhead for other platforms,
 it also removes the Windows and MacOS folders and
 afterwards creates a new tarball.
@@ -19,12 +18,13 @@ Finally the package building process is started and
 the following two scripts are started.
 
 debian-ball-install:
-Build script, that may be reused for other platforms.
+Build script that may be reused for other platforms.
 
 createBALLVIEWDEB:
 It copies all relevant files like binaries, 
-documentation, data files and so on into the folder
-debian/ballview for the packaging later on.
+documentation, data files and so on into the folders
+debian/{libball,libball-dev,ballview} for the packaging 
+later on.
 
 If you have any questions on this approach, feel
 free to contact the authors:
