@@ -1,49 +1,55 @@
 #!/bin/bash 
 # script to create a Debian source package from a BALL git tree
 # arguments: $1 == BALL git branch
-# arguments: $2 == BALL version number
 if test $# != 2 ; then
-	echo "createDebianSource <git tag> <BALL version number>"
+	echo "createDebianSource <git tag>"
 	exit
 fi
 
 #create tgz
-export BALL_PATH=`pwd | sed "s/debian$//g" | sed "s/debian-upstream$//g" | sed "s/source$//g"`
-cd $BALL_PATH
+BALL_PATH=$(pwd)
+
+# find out if we are in the right directory
+if test ! -d source -o ! -d data -o ! -d include -o ! -d doc -o ! -d debian-upstream ; then
+	echo "Please call this script in the root of a BALL-checkout (the directory containing source, data, include, ...)!"
+	exit
+fi
+
 echo Using BALL_PATH: $BALL_PATH
-cd source/config
-echo "Creating CVS checkout..."
+echo "Creating git checkout..."
+KEEP_DIRS="data debian-upstream doc include README source"
+
 # get name of the BALL tgz
-BFILE=`./makedistribution $1 | grep "compressing archive" | sed "s/compressing archive //" | sed "s/\.\.\.//"`".gz"
-echo $BFILE
+BFILE=$(source/config/makedistribution $1 ${KEEP_DIRS} | tr -d "\n"  | sed "s/^.* \([^ ]*\)$/\1/g")
 
-# create working folder
-cd /var/tmp
-mkdir $USER 2>/dev/null
-cd $USER
-rm -rf ballview* 2>/dev/null
+# extract the version from the tgz
+VERSION=$(basename ${BFILE} .tar.gz | sed "s_ball-__")
+echo $BFILE", version "${VERSION}
 
-# rename and move the tgz
-FILE2="ballview_"$2".orig.tar.gz"
-echo $FILE2
-cp $HOME/$BFILE $FILE2
+# we need to manipulate some of the files in the distribution => extract our new and shiny tgz again...
 
-# extract content of tgz to new folder
+# rename the tgz
+ORIG_FILE=$(basename ${BFILE} .tar.gz).orig.tar.gz
+mv ${BALL_PATH}/${BFILE} ${BALL_PATH}/${ORIG_FILE}
+
+# create working directory
+tempdir=$(mktemp -d)
+cd ${tempdir}
+
+# extract content of tgz into working directory
 echo "Extracting tgz..."
-tar xzf $FILE2
-BDIR=`find . -maxdepth 1 -type d | grep BALL | grep -v dist`
-echo $BDIR
-rm -rf "ballview-"$2 		2>/dev/null
-mv $BDIR "ballview-"$2
-# create a new tgz without the unneeded overhead for other platforms:
-rm -rf "ballview-"$2/Windows
-rm -rf "ballview-"$2/MacOSX
-rm $FILE2
-tar czf $FILE2 "ballview-"$2
-cd "ballview-"$2
+tar xzf ${BALL_PATH}/${ORIG_FILE} > /dev/null
+BDIR=`find . -maxdepth 1 -type d | grep ball | grep -v dist`
+mv ${BDIR} ball-${VERSION}
+
+# create a new orig.tar.gz with the updated paths
+rm ${BALL_PATH}/${ORIG_FILE}
+tar czf ${BALL_PATH}/${ORIG_FILE} "ball-"${VERSION}
+
+# now create the debianized .tar.gz file
+cd "ball-"${VERSION}
 
 # copy debian control files
-pwd
 cp -r debian-upstream debian
 rm -f debian/createDebianSource
 rm -f debian/debian-ball-install
@@ -51,15 +57,14 @@ rm -f debian/createBALLVIEWDEB
 rm -f debian/README
 
 # build package
-echo "Compiling..."
-dpkg-buildpackage -rfakeroot &&
-lintian /var/tmp/$USER/*.deb
-cd /var/tmp/$USER/
-rm -f ballview-$2-debian-binary.tar.gz 
-tar czf ballview-$2-debian-binary.tar.gz  *.deb
-tar czf ballview-$2-debian-source.tar.gz \
-		ballview*.dsc \
-		ballview*.changes \
-		*orig.tar.gz \
-		*.diff.gz
+echo "building debian source package..."
+dpkg-buildpackage -S -sa -rfakeroot
+cd ..
 
+#rm -f ballview-$2-debian-binary.tar.gz 
+#tar czf ballview-$2-debian-binary.tar.gz  *.deb
+#tar czf ballview-$2-debian-source.tar.gz \
+#		ballview*.dsc \
+#		ballview*.changes \
+#		*orig.tar.gz \
+#		*.diff.gz
