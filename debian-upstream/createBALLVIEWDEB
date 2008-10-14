@@ -13,13 +13,14 @@ then
 	rm -rf debian 2>/dev/null
 	cp -r debian-upstream debian
 fi
-	cd $BALL_PATH/debian 								&&
-	mkdir -p libball/usr/lib						&&
-	mkdir -p libball/usr/share/BALL		  &&
-	mkdir -p libball-dev/usr/include    &&
-	mkdir -p libball-dev/usr/lib		    &&
-	mkdir -p ballview/usr/bin 					#&&
-#	mkdir -p $PNAME/usr/share/man/man1 	&&		
+	cd $BALL_PATH/debian 								 &&
+	mkdir -p libball/usr/lib						 &&
+	mkdir -p libball/usr/share/BALL		   &&
+	mkdir -p libball-dev/usr/include     &&
+	mkdir -p libball-dev/usr/lib		   	 &&
+	mkdir -p libball-dev/usr/share/BALL	 &&
+	mkdir -p ballview/usr/bin 					 &&
+	mkdir -p ballview/usr/share/man/man1	#&&
 
 #	mkdir -p $PNAMEC/usr/share/BALL/doc && 				
 #	mkdir -p $PNAMEC/usr/share/doc/ballview/html/
@@ -36,7 +37,9 @@ cp -r /usr/include/BALL      libball-dev/usr/include    &&
 cp    ../source/APPLICATIONS/BALLVIEW/BALLView ballview/usr/bin/				  		&&
 
 mv libball/usr/lib/libBALL.so libball-dev/usr/lib	&&
-mv libball/usr/lib/libVIEW.so libball-dev/usr/lib
+mv libball/usr/lib/libBALL.a  libball-dev/usr/lib &&
+mv libball/usr/lib/libVIEW.so libball-dev/usr/lib &&
+mv libball/usr/lib/libVIEW.a  libball-dev/usr/lib &&
 #cp    ../debian-install/ball/bin/BALLView    ballview/usr/bin/
 #cp -r ../source/APPLICATIONS/BALLVIEW/BALLView $PNAME/usr/lib/BALL 				&&
 #cp    ../source/APPLICATIONS/BALLVIEW/BALLView $PNAME/usr/bin/						&&
@@ -49,20 +52,24 @@ mv libball/usr/lib/libVIEW.so libball-dev/usr/lib
 #cd $PNAMEC/usr/share/BALL/doc/																						&&
 #cd -																																			&&
 
-#cp ../debian-upstream/ballview.1 $PNAME/usr/share/man/man1/ 							&&
-#cp ../debian-upstream/ballview.1 $PNAME/usr/share/man/man1/BALLView.1 		&&
+cp ../debian-upstream/ballview.1 ballview/usr/share/man/man1/ 							&&
+cp ../debian-upstream/ballview.1 ballview/usr/share/man/man1/BALLView.1 		&&
 #gzip -9 $PNAME/usr/share/man/man1/ballview.1 						&&
 #gzip -9 $PNAME/usr/share/man/man1/BALLView.1 						&&
 
-#cp -r ../source/EXAMPLES/PYTHON $PNAMEC/usr/share/BALL 	&&
+cp -r ../source/EXAMPLES/PYTHON libball-dev/usr/share/BALL 	&&
 
-#chmod ugo-x $PNAMEC/usr/share/BALL/data/QSAR/* 					&&
-#chmod ugo-x $PNAMEC/usr/share/BALL/data/CHARMM/charmm* 	&&
-#chmod ugo-x $PNAMEC/usr/share/BALL/data/graphics/* 			&&
-#chmod ugo-x $PNAMEC/usr/share/BALL/PYTHON/*.py 					&&
-#chmod ugo-x $PNAMEC/usr/share/BALL/data/structures/* 		&&
-#chmod 755   $PNAMEC/usr/share/BALL/data/structures/DB/ 	&&
-#chmod ugo+x $PNAME/usr/bin/BALLView 										&&
+chmod ugo-x libball/usr/share/BALL/data/QSAR/* 					&&
+chmod ugo-x libball/usr/share/BALL/data/CHARMM/charmm* 	&&
+chmod ugo-x libball/usr/share/BALL/data/graphics/* 			&&
+#chmod ugo-x libball/usr/share/BALL/PYTHON/*.py 					&&
+chmod ugo-x libball/usr/share/BALL/data/structures/* 		&&
+chmod 755   libball/usr/share/BALL/data/structures/DB/ 	&&
+chmod ugo+x ballview/usr/bin/BALLView 									&&
+
+strip --strip-unneeded libball/usr/lib/*     &&
+strip --strip-unneeded libball-dev/usr/lib/* &&
+strip --strip-unneeded ballview/usr/bin/*   
 
 if [ $# == 1 ] && [ $1 == "source" ]
 then
@@ -71,7 +78,6 @@ then
 #	mkdir $PNAME/DEBIAN 							&&
 #	cp * $PNAME/DEBIAN 2>/dev/null    
 #	chmod -R 0755 $PNAME/DEBIAN 			&&
-#	strip --strip-unneeded $PNAME/usr/lib/BALL/* &&
 #	dpkg -b $PNAME BALLView.deb 			&&
 #	rm -rf $PNAME 										&&
 #	mv BALLView.deb ~
