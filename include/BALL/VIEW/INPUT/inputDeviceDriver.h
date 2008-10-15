@@ -3,6 +3,8 @@
 
 #include <QtCore/QMutex>
 
+class QWidget;
+
 namespace BALL
 {
 	namespace VIEW
@@ -22,7 +24,7 @@ namespace BALL
 				bool isEnabled() { return enabled_; }
 
 				void setReceiver(Scene* s);
-				Scene* getReceiver();
+				QWidget* getReceiver();
 
 			protected:
 				void emitPositionChange(double x, double y, double y, double a, double b, double c);
