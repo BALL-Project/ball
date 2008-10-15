@@ -19,7 +19,7 @@ namespace BALL
 		{
 		}
 
-		Scene* InputDeviceDriver::getReceiver()
+		QWidget* InputDeviceDriver::getReceiver()
 		{
 			QMutexLocker locker(&receiverLock);
 			return receiver_;
