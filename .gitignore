@@ -15,3 +15,4 @@ source/rules.mak
 source/libBALL.objects
 source/libVIEW.objects
 source/qt.version
+include/BALL/VIEW/UIC/*
