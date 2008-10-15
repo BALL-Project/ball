@@ -1,4 +1,4 @@
-Source: ball-1.2
+Source: ball
 Section: science
 Priority: optional
 Maintainer: Andreas Hildebrandt <anhi@bioinf.uni-sb.de>
@@ -20,10 +20,9 @@ Description: The Biochemical Algorithms Library
  for Molecular Mechanics, advanced solvation methods, comparison and 
  analysis of protein structures, file import/export, and visualization.
  BALL is currently being developed in the groups of Oliver Kohlbacher
- (University of Tuebingen, Germany), Andreas Hildebrandt (Saarland University,
- Saarbruecken, Germany), and Hans-Peter Lenhof (Saarland University, Saarbruecken,
- Germany).
- BALL is available under the GPL licence.
+ (University of Tuebingen, Germany), Andreas Hildebrandt (Saarland 
+ University, Saarbruecken, Germany), and Hans-Peter Lenhof (Saarland 
+ University, Saarbruecken, Germany).
  .
  Homepage: www.ball-project.org
 
@@ -39,10 +38,9 @@ Description: The Biochemical Algorithms Library
  for Molecular Mechanics, advanced solvation methods, comparison and 
  analysis of protein structures, file import/export, and visualization.
  BALL is currently being developed in the groups of Oliver Kohlbacher
- (University of Tuebingen, Germany), Andreas Hildebrandt (Saarland University,
- Saarbruecken, Germany), and Hans-Peter Lenhof (Saarland University, Saarbruecken,
- Germany).
- BALL is available under the GPL licence.
+ (University of Tuebingen, Germany), Andreas Hildebrandt (Saarland 
+ University, Saarbruecken, Germany), and Hans-Peter Lenhof (Saarland 
+ University, Saarbruecken, Germany).
  .
  Homepage: www.ball-project.org
 
@@ -64,8 +62,6 @@ Description: A free molecular modeling and molecular graphics tool
  It provides an extensive set of data structures as well as classes 
  for Molecular Mechanics, advanced solvation methods, comparison and 
  analysis of protein structures, file import/export, and visualization.
- .
- BALLView is available under the LGPL licence.
  .
  Homepage: www.BALLView.org
 
