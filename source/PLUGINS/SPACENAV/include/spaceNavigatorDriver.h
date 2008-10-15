@@ -13,7 +13,7 @@ namespace BALL
 		class SpaceNavigatorDriver : public InputDeviceDriver, protected QThread
 		{
 			public:
-				SpaceNavigatorDriver(Scene* receiver);
+				SpaceNavigatorDriver(QWidget* receiver);
 
 				bool setUp();
 				bool tearDown();

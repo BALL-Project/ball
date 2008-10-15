@@ -108,6 +108,11 @@ AC_ARG_ENABLE(lpsolve,				 [  --enable-lpsolve        enable the build of BALL w
 AC_ARG_WITH(lpsolve-lib,			 [  --with-lpsolve-lib=DIR  liblpsolve55 is in DIR])
 AC_ARG_WITH(lpsolve-incl,			 [  --with-lpsolve-incl=DIR lpsolve includes are in DIR])
 
+dnl ** Stuff for the plugins **
+AC_ARG_ENABLE(spacenavigator,    [  --enable-spacenavigator    enable the build of the SpaceNav plugin for Space Navigator input devices])
+AC_ARG_WITH(spacenavigator-lib,  [  --with-spacenavigator-lib  the directory in which libspnav can be found])
+AC_ARG_WITH(spacenavigator-incl, [  --with-spacenavigator-incl the directory in which the headers of libspnav can be found])
+
 dnl
 dnl    interpret switches...
 dnl
@@ -331,6 +336,7 @@ else
 	GSL_SUPPORT=
 fi
 
+<<<<<<< HEAD:source/configure.ac
 # support for lpsolve 
 if test "$with_lpsolve" != "" -a "$with_lpsolve" != "no" -o "$enable_lpsolve" = yes ; then
 	LPSOLVE_SUPPORT=true
@@ -346,6 +352,16 @@ if test "$with_lpsolve" != "" -a "$with_lpsolve" != "no" -o "$enable_lpsolve" = 
 	fi
 else
 	LPSOLVE_SUPPORT=
+=======
+if test "$enable_spacenavigator" != "no" -a "$USE_VIEW" == "true"; then
+	BUILD_SPACENAV=true
+	SPACENAV_LIBDIR=${with_spacenavigator_lib}
+	SPACENAV_INCLDIR=${with_spacenavigator_incl}
+else
+	BUILD_SPACENAVIGATOR=false
+	SPACENAV_LIBDIR=""
+	SPACENAV_INCLDIR=""
+>>>>>>> 2ea72a3... Moved the SpaceNavigatorDriver to a plugin:source/configure.ac
 fi
 
 dnl
@@ -865,6 +881,15 @@ if test "$BALL_HAS_SSTREAM" = yes ; then
 	AC_DEFINE(BALL_HAS_SSTREAM)
 fi
 
+dnl
+dnl Plugin substitutions
+dnl
+
+dnl define BUILD_SPACENAV
+AC_SUBST(BUILD_SPACENAV)
+AC_SUBST(SPACENAV_LIBDIR)
+AC_SUBST(SPACENAV_INCLDIR)
+
 dnl	
 dnl		 make target "clean" should also remove 
 dnl    template repositories. The name of this directory 
@@ -876,7 +901,7 @@ dnl
 dnl    create files
 dnl
 
-SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SCORING SOLVATION STRUCTURE SYSTEM ${VIEW} ${PYTHON}"
+SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SCORING SOLVATION STRUCTURE SYSTEM ${VIEW} ${PYTHON} PLUGINS"
 AC_SUBST(SUBDIRS)
 
 AC_PREFIX_DEFAULT(`cd ..; pwd`)

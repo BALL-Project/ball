@@ -118,6 +118,13 @@ PYTHON_LIBS					= @PYTHON_LIBS@
 PYTHON_EXECUTABLE	  =	@PYTHON_EXECUTABLE@
 
 #
+# Defines for the plugins
+#
+BUILD_SPACENAV      = @BUILD_SPACENAV@
+SPACENAV_LIBDIR     = @SPACENAV_LIBDIR@
+SPACENAV_INCLDIR    = @SPACENAV_INCLDIR@
+
+#
 # Support for valgrind, a memory leak checker.
 # Try "make valgrind" in source/TEST.
 #
