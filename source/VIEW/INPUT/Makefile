@@ -21,8 +21,7 @@ CPP_SOURCES=\
 	deviceEvent.C\
 	transformationEvent6D.C\
 	buttonEvent.C\
-	inputDeviceDriver.C\
-	spaceNavigatorDriver.C
+	inputDeviceDriver.C
 
 PYTHON_CPP_SOURCES=
 

@@ -955,6 +955,9 @@ USE_VIEW
 BALL_HAS_VIEW
 VIEW_PLATFORM
 LIBVIEW
+BUILD_SPACENAV
+SPACENAV_LIBDIR
+SPACENAV_INCLDIR
 TEMPLATE_DIR
 SUBDIRS
 LIBOBJS
@@ -1570,6 +1573,7 @@ Optional Features:
   --enable-longdbl-cplx   use long double precision floats for Complex type
   --enable-gsl            enable the build of BALL with support for GSL (GNU Scientific Library)
   --enable-lpsolve        enable the build of BALL with support for lpsolve55)
+  --enable-spacenavigator    enable the build of the SpaceNav plugin for Space Navigator input devices
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
   --enable-fast-install[=PKGS]
@@ -1612,6 +1616,8 @@ Optional Packages:
   --with-gsl-incl=DIR     gsl includes are in DIR
   --with-lpsolve-lib=DIR  liblpsolve55 is in DIR
   --with-lpsolve-incl=DIR lpsolve includes are in DIR
+  --with-spacenavigator-lib  the directory in which libspnav can be found
+  --with-spacenavigator-incl the directory in which the headers of libspnav can be found
   --with-boost[=DIR]      use boost (default is yes) - it is possible to
                           specify the root directory for boost (optional)
   --with-boost-libdir=LIB_DIR
@@ -2411,6 +2417,24 @@ if test "${with_lpsolve_incl+set}" = set; then
 fi
 
 
+# Check whether --enable-spacenavigator was given.
+if test "${enable_spacenavigator+set}" = set; then
+  enableval=$enable_spacenavigator;
+fi
+
+
+# Check whether --with-spacenavigator-lib was given.
+if test "${with_spacenavigator_lib+set}" = set; then
+  withval=$with_spacenavigator_lib;
+fi
+
+
+# Check whether --with-spacenavigator-incl was given.
+if test "${with_spacenavigator_incl+set}" = set; then
+  withval=$with_spacenavigator_incl;
+fi
+
+
 if test "x$prefix" = xNONE ; then
 	PREFIX=${ac_default_prefix}
 else
@@ -2630,6 +2654,7 @@ else
 	GSL_SUPPORT=
 fi
 
+<<<<<<< HEAD:source/configure.ac
 # support for lpsolve
 if test "$with_lpsolve" != "" -a "$with_lpsolve" != "no" -o "$enable_lpsolve" = yes ; then
 	LPSOLVE_SUPPORT=true
@@ -2645,6 +2670,16 @@ if test "$with_lpsolve" != "" -a "$with_lpsolve" != "no" -o "$enable_lpsolve" = 
 	fi
 else
 	LPSOLVE_SUPPORT=
+=======
+if test "$enable_spacenavigator" != "no" -a "$USE_VIEW" == "true"; then
+	BUILD_SPACENAV=true
+	SPACENAV_LIBDIR=${with_spacenavigator_lib}
+	SPACENAV_INCLDIR=${with_spacenavigator_incl}
+else
+	BUILD_SPACENAVIGATOR=false
+	SPACENAV_LIBDIR=""
+	SPACENAV_INCLDIR=""
+>>>>>>> 2ea72a3... Moved the SpaceNavigatorDriver to a plugin:source/configure.ac
 fi
 
 
@@ -27294,13 +27329,13 @@ if test "${lt_cv_nm_interface+set}" = set; then
 else
   lt_cv_nm_interface="BSD nm"
   echo "int some_variable = 0;" > conftest.$ac_ext
-  (eval echo "\"\$as_me:27297: $ac_compile\"" >&5)
+  (eval echo "\"\$as_me:27332: $ac_compile\"" >&5)
   (eval "$ac_compile" 2>conftest.err)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:27300: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
+  (eval echo "\"\$as_me:27335: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
   (eval "$NM \"conftest.$ac_objext\"" 2>conftest.err > conftest.out)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:27303: output\"" >&5)
+  (eval echo "\"\$as_me:27338: output\"" >&5)
   cat conftest.out >&5
   if $GREP 'External.*some_variable' conftest.out > /dev/null; then
     lt_cv_nm_interface="MS dumpbin"
@@ -28399,7 +28434,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 28402 "configure"' > conftest.$ac_ext
+  echo '#line 28437 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -30372,11 +30407,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:30375: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:30410: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:30379: \$? = $ac_status" >&5
+   echo "$as_me:30414: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -30696,11 +30731,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:30699: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:30734: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:30703: \$? = $ac_status" >&5
+   echo "$as_me:30738: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -30801,11 +30836,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:30804: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:30839: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:30808: \$? = $ac_status" >&5
+   echo "$as_me:30843: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -30856,11 +30891,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:30859: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:30894: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:30863: \$? = $ac_status" >&5
+   echo "$as_me:30898: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -33617,7 +33652,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 33620 "configure"
+#line 33655 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -33717,7 +33752,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 33720 "configure"
+#line 33755 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -35720,11 +35755,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:35723: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:35758: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:35727: \$? = $ac_status" >&5
+   echo "$as_me:35762: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -35819,11 +35854,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:35822: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:35857: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:35826: \$? = $ac_status" >&5
+   echo "$as_me:35861: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -35871,11 +35906,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:35874: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:35909: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:35878: \$? = $ac_status" >&5
+   echo "$as_me:35913: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -36980,7 +37015,12 @@ fi
 
 
 
-SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SCORING SOLVATION STRUCTURE SYSTEM ${VIEW} ${PYTHON}"
+
+
+
+
+
+SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SCORING SOLVATION STRUCTURE SYSTEM ${VIEW} ${PYTHON} PLUGINS"
 
 
 
@@ -38197,9 +38237,9 @@ USE_VIEW!$USE_VIEW$ac_delim
 BALL_HAS_VIEW!$BALL_HAS_VIEW$ac_delim
 VIEW_PLATFORM!$VIEW_PLATFORM$ac_delim
 LIBVIEW!$LIBVIEW$ac_delim
-TEMPLATE_DIR!$TEMPLATE_DIR$ac_delim
-SUBDIRS!$SUBDIRS$ac_delim
-LIBOBJS!$LIBOBJS$ac_delim
+BUILD_SPACENAV!$BUILD_SPACENAV$ac_delim
+SPACENAV_LIBDIR!$SPACENAV_LIBDIR$ac_delim
+SPACENAV_INCLDIR!$SPACENAV_INCLDIR$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -38241,10 +38281,13 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+TEMPLATE_DIR!$TEMPLATE_DIR$ac_delim
+SUBDIRS!$SUBDIRS$ac_delim
+LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 1; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 4; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

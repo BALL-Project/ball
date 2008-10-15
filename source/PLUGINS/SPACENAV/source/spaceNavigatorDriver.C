@@ -1,4 +1,4 @@
-#include <BALL/VIEW/INPUT/spaceNavigatorDriver.h>
+#include <spaceNavigatorDriver.h>
 
 #include <spnav.h>
 
@@ -7,14 +7,14 @@ namespace BALL
 	namespace VIEW
 	{
 
-		SpaceNavigatorDriver::SpaceNavigatorDriver(Scene* receiver)
+		SpaceNavigatorDriver::SpaceNavigatorDriver(QWidget* receiver)
 			: InputDeviceDriver(receiver)
 		{
 		}
 
 		int SpaceNavigatorDriver::deadzone(int x) {
 			int sign = x > 0 ? 1 : -1;
-			return x * sign > 15 ? x  - sign * 15 : 0.0;
+			return x * sign > 15 ? x - sign * 15 : 0;
 		}
 
 		void SpaceNavigatorDriver::run()
