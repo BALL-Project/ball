@@ -18,6 +18,9 @@ RANLIB = @RANLIB@
 # dynamic archiver (to create shared libraries)
 DYNAR = @DYNAR@
 
+# linker (to create executables)
+LD = @LD@
+
 # options for library generation
 AROPTS  = @AROPTS@
 
