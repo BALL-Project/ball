@@ -5,6 +5,7 @@ Maintainer: Andreas Hildebrandt <anhi@bioinf.uni-sb.de>
 Build-Depends: debhelper (>= 4), libtool, libqt4-dev, libqt4-gui, sip4, python-sip4-dev, 
  flex, bison, autoconf, libglew-dev, libfftw3-dev, libgsl0-dev, python-dev, 
  doxygen, tidy, texlive-base, texlive-latex-recommended, texlive-latex-extra, gs-common
+XS-Python-Version: all
 Standards-Version: 3.7.3
 
 Package: libball-1.2
@@ -65,3 +66,10 @@ Description: A free molecular modeling and molecular graphics tool
  .
  Homepage: www.BALLView.org
 
+Package: python-ball-1.2
+Architecture: any
+Section: python
+Depends: ${shlibs:Depends}, ${python:Depends}, python-sip4 (>= 4.7.2), python-sip4 (<< 4.8), python, libball-1.2
+Description: Python bindings for the Biochemical Algorithms Library
+	python-ball-1.2 provides simple scripting access to the functionality of the
+	Biochemical Algorithms Library (BALL).

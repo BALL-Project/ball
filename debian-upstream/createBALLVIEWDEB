@@ -8,38 +8,54 @@ export BALL_PATH=`pwd | sed "s/debian$//g" | sed "s/debian-upstream$//g"`
 export PNAME=ball
 export PNAMEC=$PNAME"-common"
 
+VERSION="1.2"
+
 if [ $# == 0 ] || [ $1 != "source" ]
 then
 	rm -rf debian 2>/dev/null
 	cp -r debian-upstream debian
 fi
 	cd $BALL_PATH/debian 								 &&
-	mkdir -p libball/usr/lib						 &&
-	mkdir -p libball/usr/share/BALL		   &&
-	mkdir -p libball-dev/usr/include     &&
-	mkdir -p libball-dev/usr/lib		   	 &&
-	mkdir -p libball-dev/usr/share/BALL	 &&
-	mkdir -p ballview/usr/bin 					 &&
-	mkdir -p ballview/usr/share/man/man1	#&&
+	mkdir -p libball-${VERSION}/usr/lib						  				&&
+	mkdir -p libball-${VERSION}/usr/share/BALL		  				&&
+	mkdir -p libball-${VERSION}-dev/usr/include     				&&
+	mkdir -p libball-${VERSION}-dev/usr/lib		   	  				&&
+	mkdir -p ballview-${VERSION}/usr/bin 					  				&&
+	mkdir -p ballview-${VERSION}/usr/share/man/man1					&&
+	mkdir -p python-ball-${VERSION}/usr/share/BALL  				&&
+	mkdir -p python-ball-${VERSION}/usr/lib/python-support/BALL/python2.4 &&
+	mkdir -p python-ball-${VERSION}/usr/lib/python-support/BALL/python2.5
 
 #	mkdir -p $PNAMEC/usr/share/BALL/doc && 				
 #	mkdir -p $PNAMEC/usr/share/doc/ballview/html/
 #fi
 
 cd $BALL_PATH/debian
-#rm -f BALLView 
 
-#cp ../debian-upstream/BALLView $PNAME/usr/bin/ 														&&
-cp    /usr/lib/libBALL*      libball/usr/lib/						&&
-cp    /usr/lib/libVIEW*      libball/usr/lib/						&&
-cp -r /usr/share/BALL/data   libball/usr/share/BALL   	&&
-cp -r /usr/include/BALL      libball-dev/usr/include    &&
-cp    ../source/APPLICATIONS/BALLVIEW/BALLView ballview/usr/bin/				  		&&
+# remember the targets of the ldconfig symbolic links
+LIBBALL_TARGET=$(ls -l /usr/lib/libBALL.so)
+LIBBALL_TARGET=${LIBBALL_TARGET#*-> }
+LIBBALL_TARGET=$(basename ${LIBBALL_TARGET})
 
-mv libball/usr/lib/libBALL.so libball-dev/usr/lib	&&
-mv libball/usr/lib/libBALL.a  libball-dev/usr/lib &&
-mv libball/usr/lib/libVIEW.so libball-dev/usr/lib &&
-mv libball/usr/lib/libVIEW.a  libball-dev/usr/lib &&
+LIBVIEW_TARGET=$(ls -l /usr/lib/libVIEW.so)
+LIBVIEW_TARGET=${LIBVIEW_TARGET#*-> }
+LIBVIEW_TARGET=$(basename ${LIBVIEW_TARGET})
+
+# get rid of the symbolic links before we copy anything
+rm    /usr/lib/libBALL.so																						&&
+rm    /usr/lib/libVIEW.so																						&&
+cp    /usr/lib/libBALL*      libball-${VERSION}/usr/lib/						&&
+cp    /usr/lib/libVIEW*      libball-${VERSION}/usr/lib/						&&
+cp -r /usr/share/BALL/data   libball-${VERSION}/usr/share/BALL   	  &&
+cp -r /usr/include/BALL      libball-${VERSION}-dev/usr/include     &&
+ln -s /usr/lib/${LIBBALL_TARGET} libball-${VERSION}-dev/usr/lib/libBALL.so &&
+ln -s /usr/lib/${LIBVIEW_TARGET} libball-${VERSION}-dev/usr/lib/libVIEW.so &&
+cp    ../source/APPLICATIONS/BALLVIEW/BALLView ballview-${VERSION}/usr/bin/				  		&&
+
+mv libball-${VERSION}/usr/lib/libBALL.a   libball-${VERSION}-dev/usr/lib &&
+mv libball-${VERSION}/usr/lib/libBALL.la  libball-${VERSION}-dev/usr/lib &&
+mv libball-${VERSION}/usr/lib/libVIEW.a   libball-${VERSION}-dev/usr/lib &&
+mv libball-${VERSION}/usr/lib/libVIEW.la  libball-${VERSION}-dev/usr/lib &&
 #cp    ../debian-install/ball/bin/BALLView    ballview/usr/bin/
 #cp -r ../source/APPLICATIONS/BALLVIEW/BALLView $PNAME/usr/lib/BALL 				&&
 #cp    ../source/APPLICATIONS/BALLVIEW/BALLView $PNAME/usr/bin/						&&
@@ -52,24 +68,26 @@ mv libball/usr/lib/libVIEW.a  libball-dev/usr/lib &&
 #cd $PNAMEC/usr/share/BALL/doc/																						&&
 #cd -																																			&&
 
-cp ../debian-upstream/ballview.1 ballview/usr/share/man/man1/ 							&&
-cp ../debian-upstream/ballview.1 ballview/usr/share/man/man1/BALLView.1 		&&
+cp ../debian-upstream/ballview.1 ballview-${VERSION}/usr/share/man/man1/ 							&&
+cp ../debian-upstream/ballview.1 ballview-${VERSION}/usr/share/man/man1/BALLView.1 		&&
 #gzip -9 $PNAME/usr/share/man/man1/ballview.1 						&&
 #gzip -9 $PNAME/usr/share/man/man1/BALLView.1 						&&
 
-cp -r ../source/EXAMPLES/PYTHON libball-dev/usr/share/BALL 	&&
+cp -r ../source/EXAMPLES/PYTHON python-ball-${VERSION}/usr/share/BALL &&
+cp /usr/lib/BALLmodule.so python-ball-${VERSION}/usr/lib/python-support/BALL/python2.4 &&
+cp /usr/lib/BALLmodule.so python-ball-${VERSION}/usr/lib/python-support/BALL/python2.5 &&
 
-chmod ugo-x libball/usr/share/BALL/data/QSAR/* 					&&
-chmod ugo-x libball/usr/share/BALL/data/CHARMM/charmm* 	&&
-chmod ugo-x libball/usr/share/BALL/data/graphics/* 			&&
-#chmod ugo-x libball/usr/share/BALL/PYTHON/*.py 					&&
-chmod ugo-x libball/usr/share/BALL/data/structures/* 		&&
-chmod 755   libball/usr/share/BALL/data/structures/DB/ 	&&
-chmod ugo+x ballview/usr/bin/BALLView 									&&
+chmod ugo-x libball-${VERSION}/usr/share/BALL/data/QSAR/* 					&&
+chmod ugo-x libball-${VERSION}/usr/share/BALL/data/CHARMM/charmm* 	&&
+chmod ugo-x libball-${VERSION}/usr/share/BALL/data/graphics/* 			&&
+chmod ugo-x libball-${VERSION}/usr/share/BALL/data/structures/* 		&&
+chmod 755   libball-${VERSION}/usr/share/BALL/data/structures/DB/ 	&&
+chmod ugo+x ballview-${VERSION}/usr/bin/BALLView 									  &&
+chmod ugo-x python-ball-${VERSION}/usr/share/BALL/PYTHON/*.py 			&&
 
-strip --strip-unneeded libball/usr/lib/*     &&
-strip --strip-unneeded libball-dev/usr/lib/* &&
-strip --strip-unneeded ballview/usr/bin/*   
+strip --strip-unneeded libball-${VERSION}/usr/lib/*.so &&
+strip --strip-unneeded ballview-${VERSION}/usr/bin/*   &&
+strip --strip-unneeded python-ball-${VERSION}/usr/lib/python-support/BALL/python2.{4,5}/*.so 
 
 if [ $# == 1 ] && [ $1 == "source" ]
 then
