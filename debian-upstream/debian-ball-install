@@ -37,14 +37,6 @@ if [ $1 == "build" ]
 then
 	cd $BALL_PATH/source 
 	make doc 			
-	if [ -f ~/.testBALLpackage ]
-	then
-		touch $BALL_PATH/source/APPLICATIONS/BALLVIEW/BALLView
-		mkdir $BALL_PATH/lib 						2>/dev/null
-		mkdir $BALL_PATH/lib/Linux 			2>/dev/null
-		touch $BALL_PATH/lib/Linux/foo 	2>/dev/null
-		exit 0
-	fi
 	make depend 	&&
 	mymake 				&&
 	make install 	&&	

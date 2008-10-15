@@ -19,7 +19,7 @@ RANLIB = @RANLIB@
 DYNAR = @DYNAR@
 
 # linker (to create executables)
-LD = @LD@
+LINKER = @LINKER@
 
 # options for library generation
 AROPTS  = @AROPTS@

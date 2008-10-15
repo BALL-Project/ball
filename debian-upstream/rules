@@ -60,13 +60,13 @@ binary-arch: build install
 #	dh_installemacsen
 #	dh_installpam
 #	dh_installmime
-#	dh_python
+	dh_pysupport
 #	dh_installinit
 #	dh_installcron
 #	dh_installinfo
-	dh_installman -p ballview
+	dh_installman -p ballview-1.2
 	dh_link
-	dh_strip -p libball
+	dh_strip -p libball-1.2
 	dh_compress
 	dh_fixperms
 #	dh_perl

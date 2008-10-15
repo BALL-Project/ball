@@ -749,12 +749,12 @@ dnl cannot guarantee binary compatibility between releases, so lets rather err
 dnl on the safe side...
 dnl
 if test "${USE_LIBTOOL}" = "true" ; then
+	LINKER="${BALL_PATH}/source/libtool --tag=CXX --mode=link ${DYNAR}"
 	DYNAR="${BALL_PATH}/source/libtool --tag=CXX --mode=link ${DYNAR} -export-dynamic -release ${BALL_VERSION_STRING} -rpath ${LIBTOOL_RPATH}/lib"
 	SHARED_LIB_SUFFIX=la
 	AC_SUBST(SHARED_LIB_SUFFIX)
-	LD="${BALL_PATH}/source/libtool --tag=CXX --mode=link ${DYNAR}"
 else
-	LD=DYNAR
+	LINKER="${DYNAR}"
 fi
 
 AC_SUBST(AR)
@@ -765,7 +765,7 @@ AC_SUBST(DYNAROPTS_PYMODULE)
 AC_SUBST(ADD_DYNAROPTS_LIBBALL)
 AC_SUBST(ADD_DYNAROPTS_LIBVIEW)
 AC_SUBST(RANLIB)
-AC_SUBST(LD)
+AC_SUBST(LINKER)
 
 
 dnl				  MISC
