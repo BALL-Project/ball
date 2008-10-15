@@ -682,7 +682,7 @@ dnl		Here go the g++-specific options
 dnl
 CXXFLAGS="${CXXFLAGS} -pipe"
 CXX_MAKEDEPEND="${CXX}"
-MAKEDEP_CXX_OPTS="-M"
+MAKEDEP_CXX_OPTS="-MM"
 CXXFLAGS_D="${CXXFLAGS_D} -Wall -W -pedantic -Wno-long-long"
 CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 
