@@ -8,6 +8,7 @@
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
+#include <BALL/KERNEL/standardPredicates.h>
 
 #include <list>
 #include <set>
@@ -27,7 +28,6 @@ namespace BALL
 
 	void DNAMutator::mutate(Residue* res, const String& base) throw(Exception::InvalidOption)
 	{
-#warning "TODO: Add capabilities into the FragmentDB that allows the retrival of Molecule type information"
 		if(base != "A" && base != "T" && base != "G" &&
 			 base != "C" && base != "U" )
 		{
@@ -275,6 +275,18 @@ namespace BALL
 		from->apply(p);
 	}
 
+	bool DNAMutator::isPurine(const Atom& baseNitrogen) const
+	{
+		RingFinder f(5);
+		return f(baseNitrogen);
+	}
+
+	bool DNAMutator::isPyrimidine(const Atom& baseNitrogen) const
+	{
+		RingFinder f(6);
+		f(baseNitrogen);
+		return f.getRingAtoms().size() == 6;
+	}
 
 }
 

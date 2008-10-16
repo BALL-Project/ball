@@ -28,6 +28,8 @@ namespace BALL
 			 * @param res A pointer to the Residue that will be changed
 			 * @param base A string specifiying the base which will be used to replace
 			 *             the current one. Can be one of "A", "T", "G", "C" and "U".
+			 *
+			 * @todo Add capabilities into the FragmentDB that allows the retrival of Molecule type information
 			 */
 			void mutate(Residue* res, const String& base) throw(Exception::InvalidOption);
 
@@ -52,6 +54,10 @@ namespace BALL
 
 			Vector3 getNormalVector(Atom* at);
 			Vector3 getConnectionVector(Atom* at);
+
+			bool isPurine(const Atom& baseNitrogen) const;
+			bool isPyrimidine(const Atom& baseNitrogen) const;
+
 	};
 }
 
