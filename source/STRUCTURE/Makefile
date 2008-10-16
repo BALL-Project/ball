@@ -34,6 +34,7 @@ CPP_SOURCES=\
 	chainBuilder.C\
 	connolly.C\
 	defaultProcessors.C\
+	DNAMutator.C\
 	fragmentDB.C\
 	geometricProperties.C\
 	geometricTransformations.C\
