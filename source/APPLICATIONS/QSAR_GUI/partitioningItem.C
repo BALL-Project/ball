@@ -13,7 +13,7 @@ using namespace BALL::VIEW;
 using namespace BALL::VIEW::Exception;
 
 
-PartitioningItem::PartitioningItem(InputDataItem* input, DataItemView* miv, uint folds, double& fraction):
+PartitioningItem::PartitioningItem(InputDataItem* input, DataItemView* miv, uint folds, double& fraction, int ID):
 	DataItem(miv),
 	input_(input)
 {
@@ -21,8 +21,17 @@ PartitioningItem::PartitioningItem(InputDataItem* input, DataItemView* miv, uint
 	name_ = "Partitioning of "+ input_->name();
 	no_folds_ = folds;
 	val_fraction_ = fraction;
-	id_ = input->no_partitioner_;
-	input->no_partitioner_++;
+	
+	if(ID==-1) // if this item is _not_ been restored from an archive (i.e. no ID was set for this item)
+	{
+		if(!input->partitioner_IDs_.empty()) id_=input->partitioner_IDs_.back()+1;
+		else id_=0;
+	}
+	else
+	{
+		id_ = ID;
+	}
+	input->partitioner_IDs_.push_back(id_);
 }
 
 

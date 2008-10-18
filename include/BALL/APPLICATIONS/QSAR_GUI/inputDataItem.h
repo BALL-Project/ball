@@ -86,8 +86,8 @@ namespace BALL
 				/** determines whether class names are to be convertig to IDs while reading the input data */
 				bool nonnumeric_class_names_;
 				
-				/** the number of PartitioningItems that are connected to this item */
-				int no_partitioner_;
+				/** the IDs of PartitioningItems that are connected to this item */
+				SortedList<int> partitioner_IDs_;
 				
 				InputPlotter* input_plotter_;
 				

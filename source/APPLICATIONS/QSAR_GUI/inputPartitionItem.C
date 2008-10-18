@@ -15,18 +15,7 @@ InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* pa
 	fold_ID_ = partitioner->outEdges().size()/2;
 	partitioner_ = partitioner;
 	
-	output_filename_ = partitioner->getInputItem()->name().toStdString();
-	int index = output_filename_.find_last_of("/");
-	if(index!=string::npos)
-	{
-		output_filename_=output_filename_.substr(index);
-	}
-	index = output_filename_.find_first_of(".");
-	if(index!=string::npos)
-	{
-		output_filename_=output_filename_.substr(0,index);
-	}
-	
+	/// set saved_as_, so that it can be used during restoring a pipeline
 	String postfix="";
 	if(partitioner->getID()>0)
 	{
@@ -35,13 +24,6 @@ InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* pa
 	if(test_partition) postfix+="_TEST";		
 	else postfix+="_TRAIN";
 	postfix += String(fold_ID_)+".dat";
-	
-	output_filename_+=postfix;	
-	
-	if(test_partition) name_ = "validation";
-	else name_ = "train";
-	
-	/// set saved_as_, the name of this item prefixed by the name of the configfile
 	String s = partitioner->getInputItem()->savedAs().toStdString();
 	int index2 = s.find_first_of(".");
 	if(index2!=string::npos)
@@ -49,21 +31,21 @@ InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* pa
 		saved_as_ = s.substr(0,index2).c_str();
 	}		
 	saved_as_+=postfix.c_str();
-	 
-	//cout<<"output_filename_="<<output_filename_<<endl;
-	//cout<<"saved_as_="<<saved_as_.toStdString()<<endl<<endl;
 	
+	/// set pixmap and name of this item
 	QPixmap pm;
-	//TODO: set pixmap depending on whether test_partition_==1 or not...
 	if(test_partition)
 	{
 		pm = QPixmap("./images/test_part.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation);
+		name_ = "validation";
 	}
 	else
 	{
 		pm = QPixmap("./images/train_part.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation);
+		name_ = "train";
 	}
 	setPixmap(pm);
+
 }
 
 
@@ -83,6 +65,29 @@ InputPartitionItem::~InputPartitionItem()
 BALL::String InputPartitionItem::getOutputFilename()
 {
 
+	output_filename_ = partitioner_->getInputItem()->name().toStdString();
+	int index = output_filename_.find_last_of("/");
+	if(index!=string::npos)
+	{
+		output_filename_=output_filename_.substr(index);
+	}
+	index = output_filename_.find_first_of(".");
+	if(index!=string::npos)
+	{
+		output_filename_=output_filename_.substr(0,index);
+	}
+	
+	String postfix="";
+	if(partitioner_->getID()>0)
+	{
+		postfix="_"+String(partitioner_->getID());
+	}
+	if(test_partition_) postfix+="_TEST";		
+	else postfix+="_TRAIN";
+	postfix += String(fold_ID_)+".dat";
+	
+	output_filename_+=postfix;	
+	
 	return output_filename_;
 }
 

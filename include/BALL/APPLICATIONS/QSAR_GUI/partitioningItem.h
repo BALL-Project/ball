@@ -13,7 +13,7 @@ namespace BALL
 		class PartitioningItem : public DataItem
 		{
 			public:
-				PartitioningItem(InputDataItem* input, DataItemView* miv, uint folds, double& fraction);
+				PartitioningItem(InputDataItem* input, DataItemView* miv, uint folds, double& fraction, int ID=-1);
 				~PartitioningItem();
 
 				bool execute();

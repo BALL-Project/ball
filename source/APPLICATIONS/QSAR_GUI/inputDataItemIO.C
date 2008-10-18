@@ -116,8 +116,7 @@ void InputDataItemIO::readPartitionerSection(String& configfile_section, map<Str
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"InputPartitioner reading error","InputItem from which partitions are to be created could not be found!!");
 	}
 	input_item=(InputDataItem*)it->second;
-	PartitioningItem* partitioner = new PartitioningItem(input_item,view_,conf.no_folds,conf.validation_fraction);
-	partitioner->setID(conf.ID);
+	PartitioningItem* partitioner = new PartitioningItem(input_item,view_,conf.no_folds,conf.validation_fraction,conf.ID);
 	view_->scene()->addItem(partitioner);
 	partitioner->addToPipeline();
 	if(item_positions!=0 && item_positions->size()>0)
