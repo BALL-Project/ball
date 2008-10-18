@@ -608,7 +608,7 @@ function for setting up the tool bars
 	fileToolBar_->addAction(submit_action);
 	connect(submit_action, SIGNAL(triggered()), this, SLOT(submit()));	
 	
-	fullscreen_action_ = new QAction(QIcon(""),"Fullscreen",this);
+	fullscreen_action_ = new QAction(QIcon("./images/window_fullscreen.png"),"Fullscreen",this);
 	fileToolBar_->addAction(fullscreen_action_);
 	connect(fullscreen_action_, SIGNAL(triggered()), this, SLOT(fullscreen()));
  }
@@ -621,6 +621,8 @@ void MainWindow::fullscreen()
 	for(list<QDockWidget*>::iterator it=dockwidgets_.begin(); it!=dockwidgets_.end(); it++)
 	{
 		(*it)->setVisible(!fullscreen_);
+		if(fullscreen_) fullscreen_action_->setIcon(QIcon("./images/window_nofullscreen.png"));
+		else fullscreen_action_->setIcon(QIcon("./images/window_fullscreen.png"));
 	}
 	//fileToolBar_->setVisible(!fullscreen_);
  	//if(fullscreen_)	menuBar()->addAction(fullscreen_action_);
