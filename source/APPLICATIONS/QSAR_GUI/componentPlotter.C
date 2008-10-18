@@ -141,11 +141,11 @@ void ComponentPlotter::plot(bool zoom)
 	double max_y=-1e10;
 	double min_x=1e10;
 	double max_x=-1e10;
-	const uint size = component_matrix_->Nrows();
 	const vector<string>* feature_names;
 	if(!plot_loadings_) feature_names = model_item_->model()->getSubstanceNames();
 	else feature_names = model_item_->model()->getDescriptorNames();
-
+	const uint size = feature_names->size();
+	
 	uint comp_one=component_one_combobox_->itemData(component_one_combobox_->currentIndex()).toInt();
 	uint comp_two=component_two_combobox_->itemData(component_two_combobox_->currentIndex()).toInt();
 
