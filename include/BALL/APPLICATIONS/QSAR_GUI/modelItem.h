@@ -215,16 +215,6 @@ namespace BALL
 				BALL::String getMouseOverText();
 		
 
-			protected:
-
-				/** @name Protected Event Handlers */
-
-				/**
-				* QT event handler \n
-				* defines how the item deals with mouse clicks
-				*/
-				void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
-				
 				friend class DataItemScene;
 		};
 	}

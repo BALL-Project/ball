@@ -196,8 +196,8 @@ void ValidationItem::initName()
 
 void ValidationItem::createActions()
 {
-	if(type_>2) // for other types, redoing the validation makes no sense, since that would yield
-	{	// the same result
+	if(type_>2 && type_!=7) // for other types, redoing the validation makes no sense, since that would always yield the same result
+	{	
 		QAction* redo_action = new QAction("Redo", this);
 		connect(redo_action, SIGNAL(triggered()), this, SLOT(changeSlot()));	
 		context_menu_actions_.push_back(redo_action);
@@ -410,19 +410,6 @@ int ValidationItem::k()
 BALL::Matrix<double>* ValidationItem::resultOfRandTest()
 {
 	return &result_of_rand_test_;
-}
-
-void ValidationItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
-{
-	if (view_->name == "view")
-	{
-		QMenu menu(view_);
-		for(list<QAction*>::iterator it=context_menu_actions_.begin(); it!=context_menu_actions_.end(); it++)
-		{
-			menu.addAction(*it);
-		}
-		menu.exec(event->screenPos());
-	}
 }
 
 // SLOT

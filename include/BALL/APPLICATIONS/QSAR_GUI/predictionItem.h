@@ -22,6 +22,8 @@ namespace BALL
 		
 		class PredictionItem : public ValidationItem
 		{
+			Q_OBJECT
+			
 			public:
 				/** @name Constructors and Destructors*/
 				PredictionItem(InputDataItem* input_item, ModelItem* model, DataItemView* view);
@@ -52,8 +54,6 @@ namespace BALL
 				void setDottedEdge(DottedEdge* edge);
 				DottedEdge* dottedEdge();
 
-				void showPredictionPlotter();
-				
 				/** generates the config-file section for the current model and appends it to out */
 				void writeConfigSection(ofstream& out);
 				
@@ -65,13 +65,17 @@ namespace BALL
 				
 		
 			protected:
-				void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
-				
 				//overlaods ValidationItem::setValidationInput()
 				void setValidationInput();
-
+				
+			protected slots:
+				void showPredictionDialog();
+				
+			public slots:
+				void showPredictionPlotter();
 				
 			private:
+				void createActions();
 
 				/** @name Private Attributes */
 

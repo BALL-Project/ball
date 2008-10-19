@@ -29,6 +29,7 @@ InputDataItem::InputDataItem(QString filename, bool center_data, bool center_y, 
 	checked_for_discrete_y_ = 0;
 	discrete_y_ = 0;
 	partitioner_IDs_.clear();
+	createActions();
 }
 
 InputDataItem::InputDataItem(QString filename, DataItemView* view): 
@@ -41,6 +42,7 @@ InputDataItem::InputDataItem(QString filename, DataItemView* view):
 	checked_for_discrete_y_ = 0;
 	discrete_y_ = 0;
 	partitioner_IDs_.clear();
+	createActions();
 }
 
 InputDataItem::InputDataItem():
@@ -55,6 +57,7 @@ InputDataItem::InputDataItem():
 	checked_for_discrete_y_ = 0;
 	discrete_y_ = 0;
 	partitioner_IDs_.clear();
+	createActions();
 }
 
 InputDataItem::~InputDataItem()
@@ -79,6 +82,7 @@ InputDataItem::InputDataItem(InputDataItem& item):
 	checked_for_discrete_y_ = item.checked_for_discrete_y_;
 	discrete_y_ = item.discrete_y_;
 	partitioner_IDs_ = item.partitioner_IDs_;
+	createActions();
 }
 
 
@@ -155,10 +159,7 @@ void InputDataItem::showPlotter()
 	{
 		input_plotter_=new InputPlotter(this);
 	}
-	else
-	{
-		input_plotter_->show();
-	}
+	input_plotter_->show();
 }
 
 void InputDataItem::setAppend(bool append)
@@ -186,4 +187,11 @@ BALL::String InputDataItem::getMouseOverText()
 		}
 	}
 	return s;
+}
+
+void InputDataItem::createActions()
+{
+	QAction* plot_action = new QAction(QIcon(""),tr("Plot data"), this);
+	connect(plot_action, SIGNAL(triggered()), this, SLOT(showPlotter()));
+	context_menu_actions_.push_back(plot_action);
 }

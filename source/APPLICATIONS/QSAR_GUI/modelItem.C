@@ -688,18 +688,6 @@ void ModelItem::showProperties()
 	modelConfigurationDialog.exec();
 }
 
-void ModelItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
-{
-	if (view_->name == "view")
-	{
-		QMenu menu(view_);
-		for(list<QAction*>::iterator it=context_menu_actions_.begin(); it!=context_menu_actions_.end(); it++)
-		{
-			menu.addAction(*it);
-		}
-		menu.exec(event->screenPos());
-	}
-}
 
 void ModelItem::writeConfigSection(ofstream& out)
 {

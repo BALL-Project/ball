@@ -106,13 +106,11 @@ namespace BALL
 			
 				/** @name Protected Event Handlers */
 
-				/**
-				* QT event handler \n
-				* defines how the item deals with mouse clicks
-				*/
-				void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 				void initName();
 				virtual void setValidationInput();
+				
+				/** created context menu actions and adds them to member-list context_menu_actions_ */
+				virtual void createActions();
 			
 		
 				/** @name Private Attributes */
@@ -161,16 +159,12 @@ namespace BALL
 				
 			
 			protected slots:
-				void showPredictionDialog();
+				virtual void showPredictionDialog();
 				
 				/** calls DataItem::change and in case of nested validation also calls change() for each connected PartitioningItem */
 				void changeSlot();
 				
 			private:
-				
-				/** created context menu actions and adds them to member-list context_menu_actions_ */
-				void createActions();
-				
 				void init();
 				
 				

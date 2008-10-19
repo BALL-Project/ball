@@ -23,6 +23,7 @@ PredictionItem::PredictionItem(InputDataItem* input_item, ModelItem* model_item,
 	name_ = "Prediction for " + input_item->name();
 	pred_plotter_ = NULL;
 	dotted_edge_ = NULL;
+	createActions();
 }
 
 PredictionItem::PredictionItem(PredictionItem& item)
@@ -35,6 +36,8 @@ PredictionItem::PredictionItem(PredictionItem& item)
 	input_data_item_ = item.input_data_item_;
 	pred_plotter_ = item.pred_plotter_;
 	dotted_edge_ = NULL;
+	createActions();
+	
 }
 
 PredictionItem::~PredictionItem()
@@ -95,6 +98,7 @@ PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*
 	setSavedAs(conf.output.c_str());
 	pred_plotter_ = 0;
 	done_ = 0;
+	createActions();
 }
 
 
@@ -175,17 +179,21 @@ void PredictionItem::showPredictionPlotter()
 	{
 		pred_plotter_=new PredictionPlotter(this);
 	}
-	else
-	{
-		pred_plotter_->show();
-	}
+	pred_plotter_->show();
 }
 
-void PredictionItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
+
+void PredictionItem::showPredictionDialog()
 {
-	Q_UNUSED (event);
 	PredictionResultDialog predictionResultDialog(this);
 	predictionResultDialog.exec();
+}
+
+void PredictionItem::createActions()
+{
+	QAction* show_plotter = new QAction(QIcon(""),tr("Plot predictions"), this);
+	connect(show_plotter, SIGNAL(triggered()), this, SLOT(showPredictionPlotter()));
+	context_menu_actions_.push_back(show_plotter);
 }
 
 

@@ -184,6 +184,8 @@ namespace BALL
 			
 			virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
 			
+			void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+			
 			
 			/** @name Protected Attributes */
 			/**the item's view*/

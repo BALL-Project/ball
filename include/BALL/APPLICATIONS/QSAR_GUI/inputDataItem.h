@@ -23,6 +23,8 @@ namespace BALL
 		*/
 		class InputDataItem : public DataItem
 		{
+			Q_OBJECT
+					
 			public:
 				/** @name Constructors and Destructors
 				*/
@@ -55,14 +57,15 @@ namespace BALL
 				bool append();
 				void setNonNumericClassNames(bool b) {nonnumeric_class_names_ = b;}
 				bool getNonNumericClassNames() {return nonnumeric_class_names_;}
-				
-				void showPlotter();
-				
+			
 				/** load preprocessed input data from a file */
 				void loadFromFile(String file);
 
 				virtual bool checkForDiscreteY() = 0;
 			
+			public slots:
+				void showPlotter();
+				
 
 			protected:
 				/** @name Attributes
@@ -90,6 +93,8 @@ namespace BALL
 				SortedList<int> partitioner_IDs_;
 				
 				InputPlotter* input_plotter_;
+				
+				void createActions();
 				
 				
 			private:
