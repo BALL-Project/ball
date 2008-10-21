@@ -36,3 +36,5 @@ BALL_INCLUDES+=$(PYTHON_INCLUDES)
 
 depend: $(MOC_SOURCES)
 
+inputPlugin_moc.C: ../../../include/BALL/VIEW/INPUT/inputPlugin.h
+	moc $< -o $@

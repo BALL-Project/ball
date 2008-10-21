@@ -22,7 +22,8 @@ DIRS=\
 	PRIMITIVES\
 	RENDERING\
 	WIDGETS\
-	INPUT
+	INPUT\
+	PLUGIN
 
 default: dirs
 
