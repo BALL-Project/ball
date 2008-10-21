@@ -45,8 +45,6 @@
 # include "aboutDialog.h"
 #endif
 
-#include <BALL/VIEW/INPUT/spaceNavigatorDriver.h>
-
 using namespace std;
 
 namespace BALL
@@ -178,14 +176,6 @@ namespace BALL
  		qApp->installEventFilter(this);
 
 		setStatusbarText("Ready.");
-
-		SpaceNavigatorDriver* drv = new SpaceNavigatorDriver(scene_);
-
-		if(!drv->setUp()) {
-			delete drv;
-		} else {
-			drv->setEnabled(true);
-		}
 
 	}
 
