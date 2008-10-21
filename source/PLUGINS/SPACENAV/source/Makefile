@@ -15,7 +15,11 @@ DIRECTORY=PLUGINS/SPACENAV/source
 
 CPP_SOURCES=\
 	spaceNavigatorPlugin.C\
-	spaceNavigatorDriver.C
+	spaceNavigatorDriver.C\
+	logo.C
+
+MOC_SOURCES=\
+	spaceNavigatorPlugin_moc.C
 
 all: $(LIBRARY)
 
@@ -30,4 +34,10 @@ clean: default_clean
 
 %.so: $(OBJECTS)
 	$(CXX) -shared $(LDFLAGS) -o $@ $(OBJECTS) -L$(SPACENAV_LIBDIR) $(LIBS)
+
+spaceNavigatorPlugin_moc.C: ../include/spaceNavigatorPlugin.h
+	${MOC} ${BALL_INCLUDES} $< -o $@
+
+logo.C: logo.qrc
+	rcc $< -o $@
 

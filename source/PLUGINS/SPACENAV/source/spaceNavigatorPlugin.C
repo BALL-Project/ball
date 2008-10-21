@@ -2,13 +2,18 @@
 
 #include <spaceNavigatorDriver.h>
 
-#include <QtCore/QString>
-#include <QtGui/QPixmap>
+
+Q_EXPORT_PLUGIN2(pluginSpaceNavigator, BALL::VIEW::SpaceNavigatorPlugin)
 
 namespace BALL
 {
 	namespace VIEW
 	{
+		SpaceNavigatorPlugin::SpaceNavigatorPlugin()
+			: icon_(":logo.png"), is_active_(false)
+		{
+		}
+
 		QString SpaceNavigatorPlugin::getName() const
 		{
 			return QString("SpaceNavigator");
@@ -21,7 +26,7 @@ namespace BALL
 
 		const QPixmap* SpaceNavigatorPlugin::getIcon() const
 		{
-			return NULL;
+			return &icon_;
 		}
 
 		QDialog* SpaceNavigatorPlugin::getConfigDialog()

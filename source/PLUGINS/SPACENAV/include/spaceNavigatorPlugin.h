@@ -1,21 +1,25 @@
 #ifndef SPACENAVIGATORPLUGIN_H
 #define SPACENAVIGATORPLUGIN_H
 
-#include <BALL/VIEW/INPUT/inputPlugin.h>
+#include <QtCore/QObject>
+#include <QtGui/QPixmap>
 
-class QWidget;
+#include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
+#include <BALL/VIEW/INPUT/inputPlugin.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		class SpaceNavigatorPlugin : InputPlugin
+		class SpaceNavigatorPlugin : public QObject, public VIEWPlugin, public InputPlugin
 		{
 			Q_OBJECT
-			Q_INTERFACES(VIEWPlugin)
+			Q_INTERFACES(BALL::VIEW::VIEWPlugin BALL::VIEW::InputPlugin)
 
 			public:
+				SpaceNavigatorPlugin();
+
 				const QPixmap* getIcon() const;
 				QString getName() const;
 				QString getDescription() const;
@@ -26,11 +30,11 @@ namespace BALL
 
 				InputDeviceDriver* startDriver(QWidget* receiver);
 
-			public slots:
-				virtual void activate();
-				virtual void deactivate();
+				void activate();
+				void deactivate();
 
 			private:
+				QPixmap icon_;
 				bool is_active_;
 		};
 	}
