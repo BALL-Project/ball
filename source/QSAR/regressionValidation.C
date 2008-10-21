@@ -5,6 +5,7 @@
 #include <BALL/QSAR/regressionValidation.h>
 #include <BALL/QSAR/statistics.h>
 #include <BALL/QSAR/regressionModel.h>
+#include <BALL/QSAR/kernelModel.h>
 #include <gsl/gsl_rng.h>
 
 
@@ -227,10 +228,13 @@ void RegressionValidation::calculateCoefficientStdErrors(int k, bool b)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be fetched from input-files by QSARData before standart errors of coefficients can be calculated!");
 	}
+	if(dynamic_cast<KernelModel*>(model_))
+	{
+		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Calculation of the standard deviation of regression coefficients can only be done for _linear_ regression models in a meaningful way!");
+	}
 	Matrix<double> desc_backup=model_->descriptor_matrix_; // save matrices in order in restore them after cross-validation
 	Matrix<double> res_backup=regr_model_->training_result_;
 	Matrix<double> y_backup=model_->Y_;
-	
 	
 	int no_activities=model_->data->Y_.size();
 	vector<Matrix<double> >* results = new vector<Matrix<double> >;

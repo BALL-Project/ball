@@ -423,9 +423,9 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				QMessageBox::information(view," ","Please drag the Validation onto a Model within your pipeline!");
 				return;
 			}
-			if(item->getValidationType()==6 && !model_item_at_pos->getRegistryEntry()->regression)
+			if(item->getValidationType()==6 && (!model_item_at_pos->getRegistryEntry()->regression || model_item_at_pos->getRegistryEntry()->kernel))
 			{
-				QMessageBox::information(view," ","Calculation of standard deviations of coefficients can only be done for regression models!");
+				QMessageBox::information(view," ","Calculation of standard deviations of coefficients can only be done for linear regression models!");
 				return;
 			}
 							
