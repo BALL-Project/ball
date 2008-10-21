@@ -52,6 +52,7 @@ CPP_SOURCES=\
 	networkPreferences.C\
 	parsedFunctionDialog.C\
 	peptideDialog.C\
+	pluginDialog.C\
 	preferences.C\
 	exportGeometryDialog.C\
 	PTEDialog.C\
@@ -100,6 +101,7 @@ MOC_SOURCES=\
 	networkPreferences_moc.C\
 	parsedFunctionDialog_moc.C\
 	peptideDialog_moc.C\
+	pluginDialog_moc.C\
 	preferences_moc.C\
 	exportGeometryDialog_moc.C\
 	PTEDialog_moc.C\

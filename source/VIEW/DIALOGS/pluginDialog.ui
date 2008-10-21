@@ -1,0 +1,177 @@
+<ui version="4.0" >
+ <class>PluginDialog</class>
+ <widget class="QDialog" name="PluginDialog" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>543</width>
+    <height>331</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Configure Plugins</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2" >
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout" >
+     <item>
+      <widget class="QListView" name="pluginView" >
+       <property name="autoFillBackground" >
+        <bool>false</bool>
+       </property>
+       <property name="alternatingRowColors" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout" >
+       <item>
+        <widget class="QPushButton" name="togglePluginButton" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <property name="text" >
+          <string>Activate</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="settingsButton" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <property name="text" >
+          <string>Settings</string>
+         </property>
+         <property name="icon" >
+          <iconset>
+           <normaloff>../../../../../../../../usr/kde/4.1/share/icons/oxygen/16x16/actions/configure.png</normaloff>../../../../../../../../usr/kde/4.1/share/icons/oxygen/16x16/actions/configure.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pluginDirButton" >
+         <property name="text" >
+          <string>Add Plugin Directory</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer" >
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox" >
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pluginView</sender>
+   <signal>clicked(QModelIndex)</signal>
+   <receiver>PluginDialog</receiver>
+   <slot>pluginChanged(QModelIndex)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>161</x>
+     <y>136</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>PluginDialog</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>359</x>
+     <y>308</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>497</x>
+     <y>227</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>PluginDialog</receiver>
+   <slot>revertChanges()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>293</x>
+     <y>309</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>-5</x>
+     <y>34</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pluginDirButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PluginDialog</receiver>
+   <slot>addPluginDirectory()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>472</x>
+     <y>71</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>271</x>
+     <y>165</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>togglePluginButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PluginDialog</receiver>
+   <slot>activatePlugin()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>442</x>
+     <y>15</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>511</x>
+     <y>129</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>pluginChanged(QModelIndex)</slot>
+  <slot>revertChanges()</slot>
+  <slot>addPluginDirectory()</slot>
+  <slot>showPluginSettings()</slot>
+  <slot>togglePluginState()</slot>
+ </slots>
+</ui>
