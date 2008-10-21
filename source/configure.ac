@@ -138,7 +138,7 @@ else
 fi
 AC_SUBST(INSTALL_TARGET)
 
-if test"$with_libtool_rpath" != "" ; then
+if test "$with_libtool_rpath" != "" ; then
 	LIBTOOL_RPATH=$with_libtool_rpath
 else
 	LIBTOOL_RPATH=${PREFIX}
