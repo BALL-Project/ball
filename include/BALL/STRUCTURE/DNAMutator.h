@@ -29,7 +29,9 @@ namespace BALL
 			 * @param base A string specifiying the base which will be used to replace
 			 *             the current one. Can be one of "A", "T", "G", "C" and "U".
 			 *
-			 * @todo Add capabilities into the FragmentDB that allows the retrival of Molecule type information
+			 * @todo - Add capabilities into the FragmentDB that allows the retrival of Molecule type information
+			 *       - Currently only Purine - Purine and Pyrimidine - Pyrimidine conversion is "exact". It is quite
+			 *         hard to get Purine - Pyrimidine conversion right without hardcoding
 			 */
 			void mutate(Residue* res, const String& base) throw(Exception::InvalidOption);
 
@@ -52,8 +54,11 @@ namespace BALL
 			void rotateBases(AtomContainer* from, Atom* from_at, 
 			                 AtomContainer* to,   Atom* to_at);
 
+			const Atom* getSecondNitro(const std::vector<const Atom*>& ring_atoms, const Atom* base);
+
 			Vector3 getNormalVector(Atom* at);
 			Vector3 getConnectionVector(Atom* at);
+			Vector3 getOrthogonalVector(const Vector3& n, const Atom* base, const Atom* at);
 
 			bool isPurine(const Atom& baseNitrogen) const;
 			bool isPyrimidine(const Atom& baseNitrogen) const;

@@ -239,7 +239,6 @@ namespace BALL
 	void DNAMutator::rotateBases(AtomContainer* from, Atom* from_at,
 	                             AtomContainer* to,   Atom* to_at)
 	{
-		
 		//First we have to align the bases with each other.
 		Vector3 from_connection = getConnectionVector(from_at).normalize();
 		Vector3 to_connection = getConnectionVector(to_at).normalize();
@@ -255,24 +254,78 @@ namespace BALL
 		rotation.rotate(to_connection.getAngle(from_connection), rot);
 
 		TransformationProcessor p(rotation*trans);
-		from->apply(p);	
+		from->apply(p);
 
 		/*
  		 * Now all that is left to do is to rotate around to_connection
 		 * Here the rotation that minimizes the distance between the bases
 		 * has to be chosen.
 		 */
-		Vector3 from_norm = getNormalVector(from_at);
-		Vector3 to_norm   = getNormalVector(to_at);
-
 		trans.setIdentity();
 		trans.translate(to_at->getPosition());
 
 		rotation.setIdentity();
-		rotation.rotate(-from_norm.getAngle(to_norm), to_connection);
-		
+
+		bool from_is_purine = isPurine(*from_at);
+    bool to_is_purine = isPurine(*to_at);
+
+		/*
+		 * If both bases are of the same type, we try to find the
+		 * second nitrogen in the first ring and to rotate them
+		 * onto each other. Otherwise all that is left todo is
+		 * to rotate them into the same plane.
+		 */
+		if(from_is_purine == to_is_purine) {
+			int ring_size;
+			if(from_is_purine) {
+				ring_size = 5;
+			} else {
+				ring_size = 6;
+			}
+
+			std::cout << "Hallo" << std::endl;
+
+			RingFinder finder(ring_size);
+			finder(*from_at);
+			const Atom* from_snd_nitro = getSecondNitro(finder.getRingAtoms(), from_at);
+
+			finder(*to_at);
+			const Atom* to_snd_nitro = getSecondNitro(finder.getRingAtoms(), to_at);
+
+			Vector3 a = getOrthogonalVector(to_connection, to_at, to_snd_nitro).normalize();
+			Vector3 b = getOrthogonalVector(to_connection, from_at, from_snd_nitro).normalize();
+
+			std::cout << a << " " << b << std::endl;
+
+			Vector3 rot = a % b;
+			std::cout << rot << " " << to_connection << " " << from_connection << std::endl;
+			rotation.rotate(-a.getAngle(b), rot);
+		} else {
+			const Vector3 from_norm = getNormalVector(from_at);
+			const Vector3 to_norm   = getNormalVector(to_at);
+
+			rotation.rotate(-from_norm.getAngle(to_norm), to_connection);
+		}
+
 		p.setTransformation(trans*rotation);
 		from->apply(p);
+	}
+
+	Vector3 DNAMutator::getOrthogonalVector(const Vector3& n, const Atom* base, const Atom* at)
+	{
+		Vector3 dist = at->getPosition() - base->getPosition();
+		return dist - n * ((n * dist));
+	}
+
+	const Atom* DNAMutator::getSecondNitro(const std::vector<const Atom*>& ring_atoms, const Atom* base)
+	{
+		for(size_t i = 0; i < ring_atoms.size(); ++i) {
+			if((ring_atoms[i] != base) && (ring_atoms[i]->getElement().getSymbol() == "N")) {
+				return ring_atoms[i];
+			}
+		}
+
+		return NULL;
 	}
 
 	bool DNAMutator::isPurine(const Atom& baseNitrogen) const
