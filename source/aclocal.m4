@@ -3128,21 +3128,21 @@ AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
 		X=`pwd`
 		AC_MSG_CHECKING(linking against QT libraries)
 
-		GENERIC_QT_LIBPATH=""
-		DARWIN_QT_LIBPATH=""
 		if test "${QT_LIBPATH}" != "/usr/lib" ; then
-			GENERIC_QT_LIBPATH="-L${QT_LIBPATH}"
-			DARWIN_QT_LIBPATH="-F${QT_LIBPATH}"
-		fi
-
-		if test "${OS}" = "Darwin" ; then
-			QTQGL_LIBOPTS="${DARWIN_QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
-			QT_BALL_LIBOPTS="${DARWIN_QT_LIBPATH} -framework QtCore -framework QtSql"
-			QT_VIEW_LIBOPTS="${DARWIN_QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest"
-		else
-			QTQGL_LIBOPTS="${GENERIC_QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
-			QT_BALL_LIBOPTS="${GENERIC_QT_LIBPATH} -lQtCore -lQtSql"
-			QT_VIEW_LIBOPTS="${GENERIC_QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest"
+			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
+			QT_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
+			if test "${OS}" = "Darwin" ; then
+				QTQGL_LIBOPTS="-F${QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
+				QT_LIBOPTS="-F${QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
+			fi
+		else 
+			QT_LIBPATH=""
+			QTQGL_LIBOPTS=" -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
+			QT_LIBOPTS="-lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
+			if test "${OS}" = "Darwin" ; then
+				QTQGL_LIBOPTS="-framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
+				QT_LIBOPTS="-framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
+			fi
 		fi
 
 		SAVE_LIBS=${LIBS}
@@ -3152,7 +3152,7 @@ AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
 
 		if test "${QT_LINKING_OK+set}" != set ; then
 			SAVE_LIBS=${LIBS}
-			LIBS="${QT_VIEW_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
 			AC_TRY_LINK([#include <QtOpenGL/QGLWidget>], [QGLWidget wid;], QT_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
 		fi
@@ -3160,7 +3160,7 @@ AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
 		if test "${QT_LINKING_OK+set}" != set ; then
 			SAVE_LIBS=${LIBS}
 			X11_LIBOPTS="-lXrender -lfreetype ${X11_LIBOPTS}"
-			LIBS="${QT_VIEW_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
 			AC_TRY_LINK([#include <QtOpenGL/QGLWidget>], [QGLWidget wid;], QT_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
 		fi
@@ -3180,7 +3180,7 @@ AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
 		dnl
 		AC_MSG_CHECKING(QT library version)
 		SAVE_LIBS=${LIBS}
-		LIBS="${QT_BALL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+		LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 		if test "${OS}" = "Darwin" ; then
 			DYLD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${GLEW_LIBPATH}:${DYLD_LIBRARY_PATH}"
 			export DYLD_LIBRARY_PATH
