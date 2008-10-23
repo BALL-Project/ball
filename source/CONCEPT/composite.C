@@ -1180,6 +1180,36 @@ namespace BALL
 			}
 		}
 
+		deleteChildrenList_(composites);
+
+		// Return the number of composites deleted.
+		return composites.size();
+	}
+
+	Size Composite::removeUnselected()
+	{
+		// Collect all unselected composites in a list.
+		std::list<Composite*> composites;
+		for (CompositeIterator ci = beginComposite(); +ci; ++ci)
+		{
+			/*
+			 * Each composite has a list of child composites that containes
+			 * itself. Thus: do not delete yourself
+			 */
+			if (!ci->isSelected() && (this != &*ci ))
+			{
+				composites.push_back(&*ci);
+			}
+		}
+
+		deleteChildrenList_(composites);
+
+		// Return the number of composites deleted.
+		return composites.size();
+	}
+
+	void Composite::deleteChildrenList_(std::list<Composite*>& composites)
+	{
 		// Remove all composites from their hierarchy (to avoid recursive
 		// deletion).
 		std::list<Composite*>::iterator li;
@@ -1196,13 +1226,10 @@ namespace BALL
 		for (li = composites.begin(); li != composites.end(); ++li)
 		{
 			if ((*li)->isAutoDeletable())
-			{	
+			{
 				delete *li;
 			}
 		}
-
-		// Return the number of composites deleted.
-		return composites.size();
 	}
 
 	void Composite::clear()

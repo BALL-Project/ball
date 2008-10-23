@@ -555,16 +555,30 @@ namespace BALL
 		/**	Remove selected subcomposites.
 				This method iterates over all children of the current composite
 				and removes all selected composites by <tt>delete</tt>ing them.
-				If the respective Composite are not \link AutoDeletable \endlink,	
-				they are just \link remove\endlink d from the hierarchy, but not 
+				If the respective Composite are not \link AutoDeletable \endlink,
+				they are just \link remove\endlink d from the hierarchy, but not
 				deleted.
 
 				This method is useful in combination with the \link Selector \endlink
 				class in order to remove unwanted partitions of kernel data structures.
-			
+
 				@return the number of composites deleted.
 		*/
 		Size removeSelected() throw();
+
+		/** Remove unselected subcomposites.
+		    This method iterates over all children of the current composite
+		    and removes all unselected composites by <tt>delete</tt>ing them.
+		    If the respective Composite are not \link AutoDeletable \endlink,
+		    they are just \link remove\endlink d from the hierarchy, but not
+		    deleted.
+
+		    This method is useful in combination with the \link Selector \endlink
+		    class in order to remove unwanted partitions of kernel data structures.
+
+		    @return the number of composites deleted.
+		*/
+		Size removeUnselected();
 
 		/** This instance and its subtree is removed form its tree and 
 				replaced by <tt>composite</tt> and its subtree.
@@ -1419,6 +1433,8 @@ B		*/
 		void determineSelection_() throw();
 		void select_(bool update_parent = true) throw();
 		void deselect_(bool update_parent = true) throw();
+
+		void deleteChildrenList_(std::list<Composite*>& composites);
 
 		// private attributes
 		
