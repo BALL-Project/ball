@@ -29,6 +29,7 @@ CPP_SOURCES=\
 	analyticalSES.C\
 	atomBijection.C\
 	atomTyper.C\
+	bindingPocketProcessor.C\
 	buildBondsProcessor.C\
 	chainBuilder.C\
 	connolly.C\
