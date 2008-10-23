@@ -1,3 +1,10 @@
+/*
+ * File: BALL/STRUCTURE/DNAMutator.C
+ * Created: 23.10.2008
+ * 
+ * Author: Daniel Stoeckel
+ */
+
 #include <BALL/STRUCTURE/DNAMutator.h>
 
 #include <BALL/KERNEL/residue.h>
@@ -6,10 +13,10 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/standardPredicates.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
-#include <BALL/KERNEL/standardPredicates.h>
-
+#include <BALL/STRUCTURE/RMSDMinimizer.h>
 #include <list>
 #include <set>
 
@@ -17,6 +24,10 @@
 
 namespace BALL
 {
+	const char* DNAMutator::bases_[] = {
+		"Adenine", "Thymine", "Guanine", "Cytosine", "Uracile"
+	};
+
 	DNAMutator::DNAMutator(FragmentDB* frag)
 		: db_(frag), keep_db_(true)
 	{
@@ -26,45 +37,74 @@ namespace BALL
 		}
 	}
 
-	void DNAMutator::mutate(Residue* res, const String& base) throw(Exception::InvalidOption)
+	DNAMutator::~DNAMutator()
 	{
-		if(base != "A" && base != "T" && base != "G" &&
-			 base != "C" && base != "U" )
-		{
-			throw Exception::InvalidOption(__FILE__, __LINE__,
-                       "Expected A, T, G, C or U, got " + base + "!");
+		if(!keep_db_) {
+			delete db_;
+		}
+	}
+
+	void DNAMutator::mutate(Residue* res, Base base) throw(Exception::InvalidOption)
+	{
+		Fragment* frag = db_->getFragmentCopy(bases_[static_cast<int>(base)]);
+
+		//If we did not get a vaild fragment it is not present in the Fragment DB.
+		//Time to bail out.
+		if(!frag) {
+			throw Exception::InvalidOption(__FILE__, __LINE__, "Could not find the specified base, please check your FragmentDB");
 		}
 
-		Fragment* frag = db_->getFragmentCopy("Adenine");
-
+		//Get everything needed from the input residue
 		Atom* res_at = selectBaseAtoms(res);
-
 		if(!res_at) {
 			throw Exception::InvalidOption(__FILE__, __LINE__, "Could not select the base. Did you specify a valid nucleotide?");
 		}
 
+		Atom* res_connection_at = getConnectionAtom(res_at);
+		if(!res_connection_at) {
+			throw Exception::InvalidOption(__FILE__, __LINE__, "Could not find the C1 carbon of the specified residue");
+		}
+
+		res_at->destroyBond(*res_connection_at);
+		Vector3 res_connection = res_connection_at->getPosition() - res_at->getPosition();
+
+		//Get everything needed from the output fragment
 		Atom* frag_at = selectBaseAtoms(frag);
-
 		if(!frag_at) {
-			throw Exception::InvalidOption(__FILE__, __LINE__, "Could not select the space in the new nucleotide.");
+			throw Exception::InvalidOption(__FILE__, __LINE__, "Could not select the base in the new nucleotide.");
 		}
 
-		for(AtomIterator it = frag->beginAtom(); +it; ++it) {
-			if(!it->isSelected()) {
-				frag->remove(*it);
-			}
+		const Atom* frag_connection_at = getConnectionAtom(frag_at);
+		if(!frag_connection_at) {
+			throw Exception::InvalidOption(__FILE__, __LINE__, "Could not find the C1 carbon of the new base. Check your FragmentDB");
 		}
 
-		rotateBases(frag, frag_at, res, res_at);
-		HINFile f("sdfsdf.hin", std::ios::out);
-		System s;
-		Molecule m;
-		m.insert(*frag);
-		s.insert(m);
-		f << s;
-		f.close();
+		frag_at->destroyBond(*frag_connection_at);
+		Vector3 frag_connection = frag_connection_at->getPosition() - frag_at->getPosition();
 
+		//We do not need the atoms of the sugar backbone any longer, this is important
+		//for the RMSDMinimizer to work
 
+		frag->removeUnselected();
+
+		if(isPurine(*frag_at) == isPurine(*res_at)) {
+			rotateSameBases(frag, res);
+		} else {
+			rotateBases(frag, frag_at, res_at, frag_connection, res_connection);
+		}
+
+		//Now it is save to delete the base atoms of the input residue
+		res->removeSelected();
+		frag->deselect();
+		res->setName(frag->getName());
+
+		//I do believe that splice has been declared private for some reason
+		//however it is not obvious to me and thus ignored.
+		//If this class does wierd things first try to replace the line below
+		static_cast<Fragment*>(res)->splice(*frag);
+		delete frag;
+
+		frag_at->createBond(*res_connection_at);
 	}
 
 	Atom* DNAMutator::getAttachmentAtom(AtomContainer* res)
@@ -74,9 +114,8 @@ namespace BALL
 				continue;
 			}
 
-
 			/**
- 			 * Exploit that the nitrogen connecting the sugar backbone and the
+			 * Exploit that the nitrogen connecting the sugar backbone and the
 			 * base has 3 bonds to carbon atoms.
 			 * This of course must be changed if there are fancier bases
 			 */
@@ -104,77 +143,13 @@ namespace BALL
 			throw Exception::InvalidOption(__FILE__, __LINE__, "Invalid residue specified");
 		}
 
-		std::list<Atom*> queue;
-/*
- * The code below is safer, but much more complicated. Use this if the assumption
- * should not hold that the sugar backbone does not contain a nitrogen!
- */
-#if 0
-		std::list<Atom*> path;
-		queue.push_front(n);
-
-		bool found_nitro = false;
-
-		std::set<Atom*> visited;
-		while(queue.size() > 0) {
-			Atom* current = queue.front();
-			queue.pop_front();
-
-			if(visited.find(current) != visited.end()) {
-				continue;
-			}
-
-      // If necessary backtrack along the path
-			while((path.size() > 0) && !path.front()->isBoundTo(*current)) {
-				path.pop_front();
-			}
-
-			bool bound_to_nitrogen = current->isBoundTo(*n);
-
-      /*
- 			 * If 5 atoms have already been investigated and the nitrogen is not
- 			 * found, we are not on the ring and should backtrack
- 			 */
-			if((path.size() == 5) && !bound_to_nitrogen) {
-				continue;
-			}
-
-			path.push_front(current);
-
-			if((path.size() > 2) && bound_to_nitrogen) {
-				found_nitro = true;
-				break;
-			}
-
-			visited.insert(current);
-
-			int num_bonds = current->countBonds();
-			for(int i = 0; i < num_bonds; ++i) {
-				Atom* partner = current->getPartnerAtom(i);
-
-				if(visited.find(partner) == visited.end()) {
-					queue.push_front(partner);
-				}
-			}
-		}
-
-		//We should now have a path with length > 4. If not something
-		//has gone wrong.
-		if(path.size() <= 4) {
-			return NULL;
-		}
-
-		//Now lets do a simple BFS to select the base's atoms
-		queue.clear();
-		queue.push_front(path.front());
-#endif
-
 		n->select();
 
 		/*
 		 * The sugar backbone should not contain a nitrogen. So lets simply
 		 * select a nitrogen != n and do a BFS to select the remaining base atoms
 		 */
+		std::list<Atom*> queue;
 		for(AtomIterator it = res->beginAtom(); +it; ++it) {
 			if((it->getElement().getSymbol() == "N") && (&*it != n)) {
 				queue.push_back(&*it);
@@ -204,15 +179,15 @@ namespace BALL
 		return n;
 	}
 
-	Vector3 DNAMutator::getNormalVector(Atom* at)
+	Vector3 DNAMutator::getNormalVector(const Atom* at)
 	{
 		Vector3 dists[2];
 
 		int i = 0;
-		AtomBondIterator it = at->beginBond();
+		AtomBondConstIterator it = at->beginBond();
 
 		while((i < 2) && (it != at->endBond())) {
-			Atom* partner = it->getBoundAtom(*at);
+			const Atom* partner = it->getBoundAtom(*at);
 			if(partner->isSelected()) {
 				dists[i] = partner->getPosition() - at->getPosition();
 				++i;
@@ -223,26 +198,32 @@ namespace BALL
 		return (dists[0] % dists[1]).normalize();
 	}
 
-	Vector3 DNAMutator::getConnectionVector(Atom* at)
+	Atom* DNAMutator::getConnectionAtom(Atom* at)
 	{
-		Vector3 result;
 		for(AtomBondIterator it = at->beginBond(); +it; ++it) {
 			Atom* partner = it->getBoundAtom(*at);
 			if(!partner->isSelected()) {
-				result = partner->getPosition() - at->getPosition();
+				return partner;
 			}
 		}
 
-		return result;
+		return NULL;
 	}
 
-	void DNAMutator::rotateBases(AtomContainer* from, Atom* from_at,
-	                             AtomContainer* to,   Atom* to_at)
+	void DNAMutator::rotateSameBases(AtomContainer* from, AtomContainer* to)
+	{
+		AtomBijection bij;
+		bij.assignByName(*from, *to);
+		Matrix4x4 trafo = RMSDMinimizer::computeTransformation(bij).first;
+		TransformationProcessor tr;
+		tr.setTransformation(trafo);
+		from->apply(tr);
+	}
+
+	void DNAMutator::rotateBases(AtomContainer* from, const Atom* from_at, const Atom* to_at,
+	                             const Vector3& from_connection, const Vector3& to_connection)
 	{
 		//First we have to align the bases with each other.
-		Vector3 from_connection = getConnectionVector(from_at).normalize();
-		Vector3 to_connection = getConnectionVector(to_at).normalize();
-
 		Vector3 rot = from_connection % to_connection;
 
 		Matrix4x4 trans;
@@ -257,55 +238,18 @@ namespace BALL
 		from->apply(p);
 
 		/*
- 		 * Now all that is left to do is to rotate around to_connection
+		 * Now all that is left to do is to rotate around to_connection
 		 * Here the rotation that minimizes the distance between the bases
 		 * has to be chosen.
 		 */
 		trans.setIdentity();
 		trans.translate(to_at->getPosition());
 
+		const Vector3 from_norm = getNormalVector(from_at);
+		const Vector3 to_norm   = getNormalVector(to_at);
+
 		rotation.setIdentity();
-
-		bool from_is_purine = isPurine(*from_at);
-    bool to_is_purine = isPurine(*to_at);
-
-		/*
-		 * If both bases are of the same type, we try to find the
-		 * second nitrogen in the first ring and to rotate them
-		 * onto each other. Otherwise all that is left todo is
-		 * to rotate them into the same plane.
-		 */
-		if(from_is_purine == to_is_purine) {
-			int ring_size;
-			if(from_is_purine) {
-				ring_size = 5;
-			} else {
-				ring_size = 6;
-			}
-
-			std::cout << "Hallo" << std::endl;
-
-			RingFinder finder(ring_size);
-			finder(*from_at);
-			const Atom* from_snd_nitro = getSecondNitro(finder.getRingAtoms(), from_at);
-
-			finder(*to_at);
-			const Atom* to_snd_nitro = getSecondNitro(finder.getRingAtoms(), to_at);
-
-			Vector3 a = getOrthogonalVector(to_connection, to_at, to_snd_nitro).normalize();
-			Vector3 b = getOrthogonalVector(to_connection, from_at, from_snd_nitro).normalize();
-
-			std::cout << a << " " << b << std::endl;
-
-			Vector3 rot = a % b;
-			std::cout << rot << " " << to_connection << " " << from_connection << std::endl;
-			rotation.rotate(-a.getAngle(b), rot);
-		} else {
-			const Vector3 from_norm = getNormalVector(from_at);
-			const Vector3 to_norm   = getNormalVector(to_at);
-
-			rotation.rotate(-from_norm.getAngle(to_norm), to_connection);
-		}
+		rotation.rotate(-from_norm.getAngle(to_norm), to_connection);
 
 		p.setTransformation(trans*rotation);
 		from->apply(p);

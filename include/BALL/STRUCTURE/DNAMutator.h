@@ -1,3 +1,10 @@
+/*
+ * File: BALL/STRUCTURE/DNAMutator.h
+ * Created: 23.10.2008
+ * 
+ * Author: Daniel Stoeckel
+ */
+
 #ifndef DNAMUTATOR_H
 #define DNAMUTATOR_H
 
@@ -9,16 +16,27 @@ namespace BALL
 	class FragmentDB;
 	class Residue;
 	class AtomContainer;
-	class Atom;	
+	class Atom;
 
-	class DNAMutator 
+	class BALL_EXPORT DNAMutator
 	{
 		public:
+			/**
+			 * Entries of this enum are used for the selection of bases in the <b>mutate</b> function
+			 */
+			enum Base { ADENINE = 0, THYMINE = 1, GUANINE = 2, CYTOSINE = 3, URACILE = 4 };
+
 			/**
 			 * Constructs a DNAMutator instance using the specified FragmentDB
 			 * If nothing or NULL is passed a default FragmentDB is used
 			 */
 			DNAMutator(FragmentDB* frag = NULL);
+
+			/**
+			 * The destructor of the the DNAMutator must delete the FragmentDB instance
+			 * iff it has been auto generated
+			 */
+			~DNAMutator();
 
 			/**
 			 * This method changes a given base to another one. Changing the base
@@ -33,7 +51,7 @@ namespace BALL
 			 *       - Currently only Purine - Purine and Pyrimidine - Pyrimidine conversion is "exact". It is quite
 			 *         hard to get Purine - Pyrimidine conversion right without hardcoding
 			 */
-			void mutate(Residue* res, const String& base) throw(Exception::InvalidOption);
+			void mutate(Residue* res, Base base) throw(Exception::InvalidOption);
 
 		private:
 			FragmentDB* db_;
@@ -46,23 +64,25 @@ namespace BALL
 			Atom* getAttachmentAtom(AtomContainer* res);
 
 			/**
- 			 * Selects the atoms in a base. If succesfull it returns
- 			 * the pointer to the attachment nitrogen.
- 			 */ 
+			 * Selects the atoms in a base. If succesfull it returns
+			 * the pointer to the attachment nitrogen.
+			 */
 			Atom* selectBaseAtoms(AtomContainer* res);
 
-			void rotateBases(AtomContainer* from, Atom* from_at, 
-			                 AtomContainer* to,   Atom* to_at);
+			void rotateBases(AtomContainer* from, const Atom* from_at, const Atom* to_at,
+			                 const Vector3& from_connection, const Vector3& to_connection);
+			void rotateSameBases(AtomContainer* from, AtomContainer* to);
 
 			const Atom* getSecondNitro(const std::vector<const Atom*>& ring_atoms, const Atom* base);
 
-			Vector3 getNormalVector(Atom* at);
-			Vector3 getConnectionVector(Atom* at);
+			Vector3 getNormalVector(const Atom* at);
+			Atom* getConnectionAtom(Atom* at);
 			Vector3 getOrthogonalVector(const Vector3& n, const Atom* base, const Atom* at);
 
 			bool isPurine(const Atom& baseNitrogen) const;
 			bool isPyrimidine(const Atom& baseNitrogen) const;
 
+			static const char* bases_[];
 	};
 }
 
