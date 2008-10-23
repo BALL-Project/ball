@@ -83,7 +83,7 @@ DataItem::~DataItem()
 		{
 			child->in_edge_list_.erase(*it);
 			delete *it;
-			delete child;
+			if(child->in_edge_list_.size()==0) delete child;
 		}
 		else
 		{

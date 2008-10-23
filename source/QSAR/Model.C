@@ -223,7 +223,18 @@ BALL::Vector<double> Model::getSubstanceVector(const vector<double>& substance, 
 	if(transform==1 && descriptor_transformations_.Ncols()==0)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Transformation of test data requested although no scaling of training data was done!!");
-	}				
+	}
+	
+	if( (data!=NULL && data->getNoDescriptors()!=substance.size()) || (data==NULL&&substance.size()<=descriptor_IDs_.back()) )	
+	{
+		String message="For compounds whose activity is to be predicted, the same features must be available as for the training data!\n";
+		message+="No of features of given compound: ";
+		message+=String(substance.size())+"\n";
+		message+="No of required features: ";
+		if(data) message+=String(data->getNoDescriptors());
+		else message+=String(descriptor_IDs_.back());
+		throw Exception::InconsistentUsage(__FILE__,__LINE__,message.c_str());
+	}
 
 	bool fs=0; // has feature selection being done?
 	if(!descriptor_IDs_.empty())
@@ -287,13 +298,27 @@ BALL::Vector<double> Model::getSubstanceVector(const vector<double>& substance, 
 			}
 		}
 	}
-	
 	return v;	
 }
 
 
 BALL::Vector<double> Model::getSubstanceVector(const Vector<double>& substance, bool transform)
 {
+	if(transform==1 && descriptor_transformations_.Ncols()==0)
+	{
+		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Transformation of test data requested although no scaling of training data was done!!");
+	}
+	if( (data!=NULL && data->getNoDescriptors()!=substance.getSize()) || (data==NULL&&substance.getSize()<=descriptor_IDs_.back()) )
+	{
+		String message="For compounds whose activity is to be predicted, the same number of features must be present than within the training data!\n";
+		message+="No of features of given compound: ";
+		message+=String(substance.getSize())+"\n";
+		message+="No of required features: ";
+		if(data) message+=String(data->getNoDescriptors());
+		else message+=String(descriptor_IDs_.back());
+		throw Exception::InconsistentUsage(__FILE__,__LINE__,message.c_str());
+	}
+	
 	bool fs=0; // has feature selection being done?
 	if(!descriptor_IDs_.empty())
 	{
@@ -353,7 +378,6 @@ BALL::Vector<double> Model::getSubstanceVector(const Vector<double>& substance, 
 			}
 		}
 	}
-	
 	return v;	
 }
 
