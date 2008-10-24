@@ -82,6 +82,7 @@ BALL::Vector<double> GPModel::predict(const vector<double>& substance, bool tran
 	kernel->calculateKernelVector(K_, input_, descriptor_matrix_, K_t_); // dim: 1xn
 	
 	Vector<double> res = K_t_*training_result_;
+	if(offsets_.getSize()==res.getSize()) res -= offsets_;
 	
 	if(transform && y_transformations_.Ncols()!=0)
 	{

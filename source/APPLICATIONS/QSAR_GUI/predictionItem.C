@@ -27,7 +27,7 @@ PredictionItem::PredictionItem(InputDataItem* input_item, ModelItem* model_item,
 }
 
 PredictionItem::PredictionItem(PredictionItem& item)
-	: ValidationItem(1,item.view_)
+	: ValidationItem(7,item.view_)
 {
 	name_ = item.name_;
 	setPixmap(item.pixmap());

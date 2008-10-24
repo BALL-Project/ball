@@ -141,6 +141,7 @@ void Plotter::printToFile(QString& file)
 	QPrinter printer(QPrinter::HighResolution);
 	printer.setOutputFileName(file);
 	printer.setResolution(600);
+	printer.setOrientation(QPrinter::Landscape);
 	qwt_plot_->print(printer);
 	
 	if(data_symbol!=symbol_backup)
