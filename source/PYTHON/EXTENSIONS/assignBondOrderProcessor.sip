@@ -9,10 +9,6 @@
 	typedef UnaryProcessor<Composite> CompositeProcessor;
 %End
 
-//#ifdef BALL_HAS_LPSOLVE
-//		struct _lprec;
-//		typedef struct _lprec lprec;
-//#endif
 
 
 class AssignBondOrderProcessor 
@@ -35,17 +31,6 @@ class AssignBondOrderProcessor
 %End
 
 	public:
-		enum BOND_TYPES
-		{
-			sb,
-			SB,
-			db,
-			DB,
-			TB,
-			DL,
-			AB
-		};
-
 		struct Option
 		{
 %TypeHeaderCode
@@ -59,11 +44,15 @@ class AssignBondOrderProcessor
 			static const char* ADD_HYDROGENS;
 			static const char* KEKULIZE_RINGS;
 			static const char* ALGORITHM; 
+			static const char* HEURISTIC;
 			static const char* INIFile;	
 			static const char* MAX_BOND_ORDER;
 			static const char* MAX_NUMBER_OF_SOLUTIONS;
 			static const char* COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS;
-			static const char* BOND_LENGTH_WEIGHTING;
+			static const char* BOND_LENGTH_WEIGHTING;	
+			static const char* APPLY_FIRST_SOLUTION;
+			static const char* GREEDY_K_SIZE;
+			static const char* BRANCH_AND_BOUND_CUTOFF;
 		};
 
 		struct Default
@@ -78,12 +67,17 @@ class AssignBondOrderProcessor
 			static const bool OVERWRITE_SELECTED_BONDS;
 			static const bool ADD_HYDROGENS;
 			static const bool KEKULIZE_RINGS;
-			static const String ALGORITHM;
+			static const String ALGORITHM;	
+			static const String HEURISTIC;
 			static const String INIFile;
 			static const int MAX_BOND_ORDER;	
 			static const int MAX_NUMBER_OF_SOLUTIONS;
 			static const bool COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS;
-			static const float BOND_LENGTH_WEIGHTING;
+			static const float BOND_LENGTH_WEIGHTING;	
+			static const bool APPLY_FIRST_SOLUTION;
+			static const int GREEDY_K_SIZE;
+			static const float BRANCH_AND_BOUND_CUTOFF;
+
 		};
 
 		struct Algorithm
@@ -92,11 +86,24 @@ class AssignBondOrderProcessor
 	#include <BALL/STRUCTURE/assignBondOrderProcessor.h>
 	using namespace BALL;
 %End
-
 			static const String A_STAR;
-			static const String ILP; 
+			static const String ILP; 	
+			static const String K_GREEDY;
+			static const String BRANCH_AND_BOUND;
 		};
 		
+		struct Heuristic
+		{
+%TypeHeaderCode
+	#include <BALL/STRUCTURE/assignBondOrderProcessor.h>
+	using namespace BALL;
+%End
+
+			static const String SIMPLE;
+			static const String MEDIUM; 
+			static const String TIGHT;
+		};
+
 	//	BALL_CREATE(AssignBondOrderProcessor);
 		
 		AssignBondOrderProcessor();
@@ -116,10 +123,14 @@ class AssignBondOrderProcessor
 		//AtomContainer const* getAtomContainer() const;
 		const System& getSolution(Position /i/) throw(IndexOverflow);
 		float getTotalCharge(Position /i/);
-		//float getTotalCharge(const Solution_& sol);
+		//float getTotalCharge(Solution_ /sol/);
 		float getTotalPenalty(Position /i/);
-		//float getTotalPenalty(const Solution_& sol); 
+		//float getTotalPenalty(Solution_ /sol/); 
+		int getNumberOfNodeExpansions(Position /i/);
+		//int getNumberOfNodeExpansions(Solution_ /sol/);
+		int getQueueSize(Position /i/);
 		bool apply(Position /i/); 
+		void resetBondOrders();
 		bool computeNextSolution();
 		//AssignBondOrderProcessor& operator = (const AssignBondOrderProcessor& abop);
 		void setDefaultOptions();

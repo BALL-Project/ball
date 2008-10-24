@@ -46,21 +46,16 @@
 //#define DEBUG_RULES
 #undef DEBUG_RULES
 
-//#define HEURISTIC_1
-#undef HEURISTIC_1
-
-//#define HEURISTIC_2
-#undef HEURISTIC_2
-
-#define HEURISTIC_3
-//#undef HEURISTIC_3
-
 #define INFINITE_PENALTY 1e5
 
 using namespace std;
 using namespace BALL::VIEW;
 namespace BALL 
 {	
+	const String AssignBondOrderProcessor::Heuristic::SIMPLE = "heurisic_simple";
+	const String AssignBondOrderProcessor::Heuristic::MEDIUM = "heuristic_medium";
+	const String AssignBondOrderProcessor::Heuristic::TIGHT = "heuristic_tight";
+
 	const String AssignBondOrderProcessor::Algorithm::A_STAR = "a_star";
 	const String AssignBondOrderProcessor::Algorithm::ILP = "ilp";
 	const String AssignBondOrderProcessor::Algorithm::K_GREEDY = "k_greedy";
@@ -99,6 +94,9 @@ namespace BALL
 	const char* AssignBondOrderProcessor::Option::ALGORITHM = "algorithm";
 	const String AssignBondOrderProcessor::Default::ALGORITHM = AssignBondOrderProcessor::Algorithm::A_STAR;
 		
+	const char* AssignBondOrderProcessor::Option::HEURISTIC = "heuristic";
+	const String AssignBondOrderProcessor::Default::HEURISTIC = AssignBondOrderProcessor::Heuristic::TIGHT;
+	
 	const char* AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING = "bond_length_weighting";
 	const float AssignBondOrderProcessor::Default::BOND_LENGTH_WEIGHTING = 0.;
 
@@ -106,7 +104,7 @@ namespace BALL
 	const bool  AssignBondOrderProcessor::Default::APPLY_FIRST_SOLUTION = true;
 	
 	const char* AssignBondOrderProcessor::Option::GREEDY_K_SIZE = "size_of_greedy_priority_queue";
-	const int  AssignBondOrderProcessor::Default::GREEDY_K_SIZE = 1;
+	const int  AssignBondOrderProcessor::Default::GREEDY_K_SIZE = 5;
 	
 	const char* AssignBondOrderProcessor::Option::BRANCH_AND_BOUND_CUTOFF = "branch_and_bound_cutoff";
 	const float  AssignBondOrderProcessor::Default::BRANCH_AND_BOUND_CUTOFF = 1.2;
@@ -559,11 +557,11 @@ cout << ")" << endl;
 		return false;
 	}
 
-	vector<AssignBondOrderProcessor::PQ_Entry_> AssignBondOrderProcessor::performGreedy_(PQ_Entry_& entry, int greedy_k)
-	{	
+	vector<AssignBondOrderProcessor::PQ_Entry_> AssignBondOrderProcessor::performGreedy_(PQ_Entry_& entry, Size greedy_k)
+	{
 		vector<PQ_Entry_> greedy_set(greedy_k, entry);
 		// this is needed, since in the beginning, we have not yet seen k entries
-		int greedy_set_size = 1; 
+		Size greedy_set_size = 1; 
 		greedy_node_expansions_ = 0;
 		
 		for (Position i =0; i < ac_->countBonds(); i++)
@@ -572,12 +570,12 @@ cout << ")" << endl;
 			if (bond_fixed_[index_to_bond_[entry.last_bond]])
 			{
 				// Store this bond order in all nodes of our k-greedy-set
-				for (int j=0; j < greedy_k; j++)
+				Size min_size = std::min(greedy_set.size(), greedy_k);
+
+				for (Size j=0; j < min_size; j++)
 				{
 					PQ_Entry_& current_entry = greedy_set[j];
 					current_entry.last_bond = i;
-
-					current_entry = greedy_set[j];
 					current_entry.bond_orders[current_entry.last_bond] = bond_fixed_[index_to_bond_[current_entry.last_bond]];
 					// we don't need to check the return value since invalid solutions have INFINITE_PENALTY
 					estimatePenalty_(current_entry, false);
@@ -586,8 +584,8 @@ cout << ")" << endl;
 			else // Bond is free -> try all bond orders for all nodes in our greedy set
 			{	
 				queue_ = priority_queue<PQ_Entry_>();
-
-				for (int j=0; j < std::min(greedy_set_size, greedy_k); j++)
+				Size min_size =  std::min(greedy_set_size, greedy_k);
+				for (Size j=0; j < min_size; j++)
 				{
 					greedy_node_expansions_++;
 					PQ_Entry_& current_entry = greedy_set[j];
@@ -649,6 +647,8 @@ cout << ")" << endl;
 #ifdef DEBUG 
 cout << "  OPTIONS:" << endl;
 cout << " \t Algorithm: " <<  options[Option::Option::ALGORITHM] << endl;
+cout << " \t Heuristic: " <<  options[Option::Option::HEURISTIC] << endl;
+
 cout << " \t Overwrite bonds (single, double, triple, selected):" 
 		 << options.getBool(Option::OVERWRITE_SINGLE_BOND_ORDERS) << " " 
 		 << options.getBool(Option::OVERWRITE_DOUBLE_BOND_ORDERS) << " " 
@@ -1295,11 +1295,8 @@ cout << " ERROR: "<< a_it->getFullName() << " valence too small : " << valence <
 				// 			 in the heuristic! 
 				
 				float current_atom_type_penalty = 0.;
-				//if (options.get(Option::ALGORITHM) == Algorithm::Algorithm::A_STAR) // this if-clause is probably not necessary! TODO
-				//{ 
-					current_atom_type_penalty = estimateAtomTypePenalty_(&*a_it, current_atom_index, 
+				current_atom_type_penalty = estimateAtomTypePenalty_(&*a_it, current_atom_index, 
 			                         valence, virtual_order, num_free_bonds, entry);
-				//} //Anne //TODO
 
 				if (current_atom_type_penalty >= 0)
 					estimated_atom_penalty += current_atom_type_penalty;			
@@ -1359,33 +1356,34 @@ cout << " ) : atom type pen = " << entry.estimated_atom_type_penalty << ", bond 
 				{ 
 					// at which position in the current penalty vector are we at the moment?
 					int i = current_start_valence;
-#ifdef HEURISTIC_1
-				 // this is the default case
-				 // Position i = current_start_valence;
-#endif
-
-#ifdef HEURISTIC_2
-					// at which position in the current penalty vector are we at the moment?
-					i = (fixed_valence + num_free_bonds < current_start_valence) 
-						? current_start_valence
-						: fixed_valence + num_free_bonds;
-#endif
-
-#ifdef HEURISTIC_3
-					// find a lower bound
-					// at which position in the current penalty vector are we at the moment?
-					// NOTE: all variables are signed ints, since we need -1 to flag invalid conformations
-					i = (fixed_valence + num_free_bonds < current_start_valence) 
-						? current_start_valence
-						: fixed_valence + num_free_bonds;
-
-					// find an upper bound for sum of all bond orders	
-					int max_valence = fixed_valence;
-					
-					// check all neighboring atoms, whose connecting bonds are free
-					Atom::BondIterator b_it = atom->beginBond();
-					for (; b_it != atom->endBond(); b_it++)
+					if (options.get(Option::HEURISTIC) == Heuristic::SIMPLE) 	
 					{
+				 		// this is the default case
+				 		// Position i = current_start_valence;
+					}
+					else if (options.get(Option::HEURISTIC) == Heuristic::MEDIUM) 	
+					{
+						// at which position in the current penalty vector are we at the moment?
+						i = (fixed_valence + num_free_bonds < current_start_valence) 
+							? current_start_valence
+							: fixed_valence + num_free_bonds;
+					}
+					else if (options.get(Option::HEURISTIC) == Heuristic::TIGHT) 
+					{
+						// find a lower bound
+						// at which position in the current penalty vector are we at the moment?
+						// NOTE: all variables are signed ints, since we need -1 to flag invalid conformations
+						i = (fixed_valence + num_free_bonds < current_start_valence) 
+							? current_start_valence
+							: fixed_valence + num_free_bonds;
+
+						// find an upper bound for sum of all bond orders	
+						int max_valence = fixed_valence;
+
+						// check all neighboring atoms, whose connecting bonds are free
+						Atom::BondIterator b_it = atom->beginBond();
+						for (; b_it != atom->endBond(); b_it++)
+						{
 							// compute the sum of bond orders that are already set
 							// 				 the number of free bonds
 							// 				 the number of virtual bonds
@@ -1394,54 +1392,59 @@ cout << " ) : atom type pen = " << entry.estimated_atom_type_penalty << ", bond 
 							int neighbors_num_free_bonds = 0;
 							int neighbors_virtual_bonds = 0;
 
-						// is this bond free?
-						if (    (bond_to_index_[&*b_it] > (Index)entry.last_bond)
-								 || (entry.bond_orders[bond_to_index_[&*b_it]] <= 0)   ) // ???
-						{
-														
-							// check all bonds of the neighbor atom
-							Atom::BondIterator neighbor_b_it = neighbor->beginBond();
-							for (; neighbor_b_it != neighbor->endBond(); neighbor_b_it++)
+							// is this bond free?
+							if (    (bond_to_index_[&*b_it] > (Index)entry.last_bond)
+									|| (entry.bond_orders[bond_to_index_[&*b_it]] <= 0)   ) // ???
 							{
-								// Do we have a valid bond? 
-								if ( bond_to_index_.find(&*neighbor_b_it) != bond_to_index_.end())
+
+								// check all bonds of the neighbor atom
+								Atom::BondIterator neighbor_b_it = neighbor->beginBond();
+								for (; neighbor_b_it != neighbor->endBond(); neighbor_b_it++)
 								{
-									// Is this bond already fixed?
-									if (    (bond_to_index_[&*neighbor_b_it] <= (Index)entry.last_bond)
-											&& (entry.bond_orders[bond_to_index_[&*neighbor_b_it]] > 0)   )
+									// Do we have a valid bond? 
+									if ( bond_to_index_.find(&*neighbor_b_it) != bond_to_index_.end())
 									{
-										neighbors_bond_order += entry.bond_orders[bond_to_index_[&*neighbor_b_it]];
-									}
-									else //free
-									{
-										neighbors_num_free_bonds++;
+										// Is this bond already fixed?
+										if (    (bond_to_index_[&*neighbor_b_it] <= (Index)entry.last_bond)
+												&& (entry.bond_orders[bond_to_index_[&*neighbor_b_it]] > 0)   )
+										{
+											neighbors_bond_order += entry.bond_orders[bond_to_index_[&*neighbor_b_it]];
+										}
+										else //free
+										{
+											neighbors_num_free_bonds++;
+										}
 									}
 								}
+								// count the virtual bonds
+								if (    add_missing_hydrogens_
+										&& (atom_to_virtual_bond_index_.find(neighbor) != atom_to_virtual_bond_index_.end()))
+								{
+									neighbors_virtual_bonds = std::max(0,entry.bond_orders[atom_to_virtual_bond_index_[neighbor] + total_num_of_bonds_]);
+								}
 							}
-							// count the virtual bonds
-							if (    add_missing_hydrogens_
-									&& (atom_to_virtual_bond_index_.find(neighbor) != atom_to_virtual_bond_index_.end()))
-							{
-								neighbors_virtual_bonds = std::max(0,entry.bond_orders[atom_to_virtual_bond_index_[neighbor] + total_num_of_bonds_]);
-							}
-						}
-						// TODO: not sure if it always works correctly!
-						int n_atom_index = neighbor->getProperty("AssignBondOrderProcessorAtomNo").getUnsignedInt();
-						// compute the maximal bond order for the connecting bond (neighbor -- atom)
-						int n_block = atom_to_block_[n_atom_index][neighbors_virtual_bonds];
-						int n_current_start_valence = block_to_start_valence_[n_block];
-						int n_current_block_length  = block_to_length_[n_block];
-						int n_current_end_valence   = n_current_start_valence + n_current_block_length-1;
-						
-						// add the maximal possible bond order
-						max_valence += (n_current_end_valence - (neighbors_num_free_bonds-1) 
-																									-  neighbors_virtual_bonds 
-																									-  neighbors_bond_order);
+							// TODO: not sure if it always works correctly!
+							int n_atom_index = neighbor->getProperty("AssignBondOrderProcessorAtomNo").getUnsignedInt();
+							// compute the maximal bond order for the connecting bond (neighbor -- atom)
+							int n_block = atom_to_block_[n_atom_index][neighbors_virtual_bonds];
+							int n_current_start_valence = block_to_start_valence_[n_block];
+							int n_current_block_length  = block_to_length_[n_block];
+							int n_current_end_valence   = n_current_start_valence + n_current_block_length-1;
 
-					}// end of all neighbors
+							// add the maximal possible bond order
+							max_valence += (n_current_end_valence - (neighbors_num_free_bonds-1) 
+									-  neighbors_virtual_bonds 
+									-  neighbors_bond_order);
 
-				 	current_end_valence = std::min(current_end_valence, max_valence);
-#endif
+						}// end of all neighbors
+
+						current_end_valence = std::min(current_end_valence, max_valence);
+					}
+					else 
+					{
+						Log.error() << __FILE__ << " " << __LINE__ << " : No heuristic defined! Please check the option Option::HEURISTIC."  << endl;
+						return min_atom_type_penalty; 
+					}
 				
 					// for every remaining valence of the atom under consideration
 					// (we know there is at least one)
@@ -2121,6 +2124,9 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 
 		options.setDefault(AssignBondOrderProcessor::Option::ALGORITHM,
 													 AssignBondOrderProcessor::Default::ALGORITHM);		
+		
+		options.setDefault(AssignBondOrderProcessor::Option::HEURISTIC,
+													 AssignBondOrderProcessor::Default::HEURISTIC);		
 
 		options.setDefaultReal(AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING,
 													 AssignBondOrderProcessor::Default::BOND_LENGTH_WEIGHTING);	
@@ -2210,7 +2216,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 						a_it->getFragment()->insert(*hydrogen);
 						solution.atoms_to_delete.push_back(hydrogen);
 
-						// TODO set the Position correctly
+						// TODO: set the Hydrogen's Positions correctly!
 						hydrogen->setPosition(a_it->getPosition() + pos[m] );
 
 						// and a bond

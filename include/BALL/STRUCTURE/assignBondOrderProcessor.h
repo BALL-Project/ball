@@ -132,6 +132,10 @@ namespace BALL
 				*/
 				static const char* ALGORITHM; 
 				
+				/**	heuristic defining the tightness of the search critria
+				*/
+				static const char* HEURISTIC; //TODO TEST 
+
 				/** the penalty parameter file
 				 */
 				static const char* INIFile;	
@@ -185,6 +189,7 @@ namespace BALL
 				static const bool ADD_HYDROGENS;
 				static const bool KEKULIZE_RINGS;
 				static const String ALGORITHM;
+				static const String HEURISTIC;
 				static const String INIFile;
 				static const int MAX_BOND_ORDER;	
 				static const int MAX_NUMBER_OF_SOLUTIONS;
@@ -203,6 +208,13 @@ namespace BALL
 				static const String BRANCH_AND_BOUND;
 			};
 			
+			struct BALL_EXPORT Heuristic
+			{
+				static const String SIMPLE;
+				static const String MEDIUM; 
+				static const String TIGHT;
+			};
+
 			//@}
 		
 
@@ -788,7 +800,7 @@ namespace BALL
 			float greedy_bond_length_penalty_; 
 
 			// //////// ************ for Algorithm::K_GREEDY ************ /////////
-			vector<PQ_Entry_> performGreedy_(PQ_Entry_& entry, int greedy_k  = 10);
+			vector<PQ_Entry_> performGreedy_(PQ_Entry_& entry, Size greedy_k  = 10);
 			int greedy_node_expansions_;
 			int queue_size_;
 
