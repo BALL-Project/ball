@@ -1,4 +1,6 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/predictionPlotter.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/validationItem.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/predictionItem.h>
 
 #include <qwt_plot_curve.h>
 #include <qwt_plot_marker.h>
@@ -14,7 +16,20 @@ PredictionPlotter::PredictionPlotter(PredictionItem* item)
 	: Plotter(item)
 {
 	pred_item_ = item;
+	val_item_ = NULL;
 	data_ = pred_item_->inputDataItem()->data();
+	
+	plot(1);
+	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
+}
+
+
+PredictionPlotter::PredictionPlotter(ValidationItem* item)
+	: Plotter(item)
+{
+	pred_item_ = NULL;
+	val_item_ = item;
+	data_ = NULL;
 	
 	plot(1);
 	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
@@ -24,7 +39,7 @@ PredictionPlotter::PredictionPlotter(PredictionItem* item)
 void PredictionPlotter::plot(bool zoom)
 {
 	qwt_plot_->clear();
-	if(data_->getNoResponseVariables()!=0)
+	if(val_item_ || data_->getNoResponseVariables()!=0)
 	{
 		plotObservedVsExpected(zoom);
 	}
@@ -37,51 +52,80 @@ void PredictionPlotter::plot(bool zoom)
 
 void PredictionPlotter::plotObservedVsExpected(bool zoom)
 {
-	const QList<Vector<double> >* results = pred_item_->results();
+	/// find all PredictionItems whose predictions are to be plotted
+	list<PredictionItem*> pred_items;
+	if(pred_item_!=NULL) pred_items.push_back(pred_item_);
+	else
+	{
+		for(list<ValidationItem*>::iterator it=val_item_->external_validations_.begin(); it!=val_item_->external_validations_.end();it++)
+		{
+			PredictionItem* p = dynamic_cast<PredictionItem*>(*it);
+			if(p) pred_items.push_back(p);
+		}
+	}
 	
-	if(results==0)
-	{
-		cout<<"Results must be read before plotting can be done!"<<endl;
-		return;
-	}
-	if(data_->getNoResponseVariables()==0)
-	{
-		cout<<"There are no response values in the input data to be plotted as 'expected' within an 'observed-vs-expected' plot !"<<endl;
-		return;
-	}
+	
+	/// now do the plotting for each PredictionItem
 	
 	double min_y=1e10;
 	double max_y=-1e10;
 	double min_x=1e10;
 	double max_x=-1e10;
-;	
-	int i = 0;
-	const vector<string>* comp_names = data_->getSubstanceNames();
-	for (QList<Vector<double> >::ConstIterator it = results->begin(); it != results->end(); it++,i++)
+	
+	int p=0;
+	for(list<PredictionItem*>::iterator p_it=pred_items.begin(); p_it!=pred_items.end(); p_it++,p++)
 	{
-		QwtPlotMarker* marker= new QwtPlotMarker;
-		marker->setSymbol(data_symbol);
-		double observed = (*it)(1);
-		vector<double>* e = data_->getActivity(i);
-		double expected = (*e)[0];
-		delete e;
-		if(observed<min_y) min_y=observed;
-		if(observed>max_y) max_y=observed;
-		if(expected<min_x) min_x=expected;
-		if(expected>max_x) max_x=expected;
-		marker->setValue(expected,observed);
-		marker->attach(qwt_plot_); // attached object will be automatically deleted by QwtPlot
-		
-		if(show_data_labels)
+		QSARData* p_data;
+		if(pred_item_) p_data = data_;
+		else p_data = (*p_it)->test_data_;
+		const QList<Vector<double> >* results = (*p_it)->results();
+		if(results==0)
 		{
-			QString s =(*comp_names)[i].c_str();
-			QwtText label(s);
-			label.setFont(data_label_font);
-			marker->setLabel(label);
-			marker->setLabelAlignment(data_label_alignment);
+			cout<<"Results must be read before plotting can be done!"<<endl;
+			return;
 		}
-		//names_.push_back(s);
-		//marker->setTitle(s);
+		if(p_data->getNoResponseVariables()==0)
+		{
+			cout<<"There are no response values in the input data to be plotted as 'expected' within an 'observed-vs-expected' plot !"<<endl;
+			return;
+		}
+		QwtSymbol symbol = data_symbol;
+		if(val_item_)
+		{
+			QBrush brush=data_symbol.brush();
+			brush.setColor(generateColor(pred_items.size(),p));
+			symbol.setBrush(brush);
+		}
+	;	
+		int i = 0;
+		const vector<string>* comp_names = p_data->getSubstanceNames();
+		
+		for (QList<Vector<double> >::ConstIterator it = results->begin(); it != results->end(); it++,i++)
+		{
+			QwtPlotMarker* marker= new QwtPlotMarker;
+			marker->setSymbol(symbol);
+			double observed = (*it)(1);
+			vector<double>* e = p_data->getActivity(i);
+			double expected = (*e)[0];
+			delete e;
+			if(observed<min_y) min_y=observed;
+			if(observed>max_y) max_y=observed;
+			if(expected<min_x) min_x=expected;
+			if(expected>max_x) max_x=expected;
+			marker->setValue(expected,observed);
+			marker->attach(qwt_plot_); // attached object will be automatically deleted by QwtPlot
+			
+			if(show_data_labels)
+			{
+				QString s =(*comp_names)[i].c_str();
+				QwtText label(s);
+				label.setFont(data_label_font);
+				marker->setLabel(label);
+				marker->setLabelAlignment(data_label_alignment);
+			}
+			//names_.push_back(s);
+			//marker->setTitle(s);
+		}
 	}
 	QString s1 = "expected";
 	QString s2 = "observed";
@@ -113,6 +157,8 @@ void PredictionPlotter::plotObservedVsExpected(bool zoom)
 
 void PredictionPlotter::plotObserved(bool zoom)
 {
+	if(pred_item_==NULL) return;
+	
 	const QList<Vector<double> >* results = pred_item_->results();
 	
 	if(results==0)

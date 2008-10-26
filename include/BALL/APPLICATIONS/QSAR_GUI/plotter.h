@@ -67,6 +67,8 @@ namespace BALL
 				Must be implemented by derived classes. */
 				virtual void plot(bool zoom=1) = 0;
 				
+				QColor generateColor(int no_colors, int current_no);
+				
 				DataItem* item_;
 				
 				QwtPlot* qwt_plot_;

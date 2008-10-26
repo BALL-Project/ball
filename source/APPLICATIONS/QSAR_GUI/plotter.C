@@ -151,6 +151,19 @@ void Plotter::printToFile(QString& file)
 	}
 }
 
+QColor Plotter::generateColor(int no_colors, int current_no)
+{
+	int k = round(pow(no_colors,1/3.));
+	int n = pow(3.,k)-1;
+	int width = 255./k;
+	
+	int R = (current_no/3)*width;
+	int G = ((current_no+2)/3)*width;
+	int B = ((n-current_no-1)/3)*width;
+	
+	return QColor(R,G,B);
+}
+
 
 
 

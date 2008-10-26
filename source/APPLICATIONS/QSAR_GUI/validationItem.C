@@ -155,6 +155,7 @@ void ValidationItem::init()
 	setPixmap(QPixmap("./images/validation.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 	createActions();
 	coeff_stderr_ratio_ = 0;
+	plotter_ = NULL;
 }
 
 
@@ -205,8 +206,24 @@ void ValidationItem::createActions()
 	QAction* show_values = new QAction("Show predictions", this);
 	connect(show_values, SIGNAL(triggered()), this, SLOT(showPredictionDialog()));
 	context_menu_actions_.push_back(show_values);
+	
+	if(type_==5)
+	{
+		QAction* show_plotter = new QAction(QIcon(""),tr("Plot all predictions"), this);
+		connect(show_plotter, SIGNAL(triggered()), this, SLOT(showPlotter()));
+		context_menu_actions_.push_back(show_plotter);
+	}
 }
 
+
+void ValidationItem::showPlotter()
+{
+	if(plotter_ == NULL)
+	{
+		plotter_=new PredictionPlotter(this);
+	}
+	plotter_->show();
+}
 
 void ValidationItem::changeSlot()
 {

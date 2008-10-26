@@ -3,6 +3,7 @@
 
 #include <BALL/APPLICATIONS/QSAR_GUI/dataItem.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/modelItem.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/predictionPlotter.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/partitioningItem.h>
 
 namespace BALL
@@ -164,11 +165,16 @@ namespace BALL
 				/** calls DataItem::change and in case of nested validation also calls change() for each connected PartitioningItem */
 				void changeSlot();
 				
+				void showPlotter();
+				
 			private:
 				void init();
 				
+				PredictionPlotter* plotter_;
+				
 				
 				friend class DataItemScene;
+				friend class PredictionPlotter;
 		
 		};
 	}

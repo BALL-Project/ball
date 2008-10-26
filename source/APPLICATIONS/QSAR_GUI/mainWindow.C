@@ -763,7 +763,7 @@ void MainWindow::deleteItem()
 	{
 		for (QList<QGraphicsItem*>::Iterator it = items.begin(); it != items.end(); ++it)
 		{	
-			DataItem* item = dynamic_cast<DataItem*>(*it);
+			DataItem* item = (DataItem*)(*it);
 			if(itemExists(item)) // just as backup to make sure that the item has not already been deleted
 			{
 				delete item;

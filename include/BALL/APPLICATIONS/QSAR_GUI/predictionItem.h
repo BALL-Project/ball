@@ -90,7 +90,9 @@ namespace BALL
 				QSARData* test_data_;
 				
 				list<InputPartitionItem*> trainings_partitions_;
-				list<InputPartitionItem*> test_partitions_;		
+				list<InputPartitionItem*> test_partitions_;	
+					
+			friend class PredictionPlotter;
 		};
 	}
 }
