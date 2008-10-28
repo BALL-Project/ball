@@ -442,7 +442,7 @@ void DataItem::setPos(double x, double y)
 		rect.setWidth(width);
 		rect.setHeight(height);
 		view_->data_scene->setSceneRect(rect);
-		view_->ensureVisible(x,y,width,height);
+		//view_->ensureVisible(x,y,width,height);
 	}	
 }
 

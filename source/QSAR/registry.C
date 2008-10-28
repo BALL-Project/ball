@@ -59,7 +59,7 @@ Registry::Registry()
 	RegistryEntry r3(0,1,"Automated Lazy Learning","ALL",(CreateMethod) &ModelFactory<ALLModel>::create,this);
 	r3.parameterNames.push_back("kernel width");
 	r3.parameterNames.push_back("lambda");
-	r3.parameterDefaults.push_back(4);
+	r3.parameterDefaults.push_back(6);
 	r3.parameterDefaults.push_back(0.003);
 	r3.optimizableParameters.push_back(0);
 	registered_models.push_back(r3);

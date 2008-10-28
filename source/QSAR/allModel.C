@@ -149,7 +149,7 @@ bool ALLModel::optimizeParameters(int k, int no_steps)
 	kw_ = 0;
 	for(int i=0;i<no_steps;i++)
 	{
-		kw_+=0.5;
+		kw_+=1;
 		validation->crossValidation(k);
 		if(validation->getQ2()>best_q2)
 		{
