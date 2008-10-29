@@ -54,7 +54,7 @@ void KernelModel::operator=(const Model& m)
 
 void KernelModel::calculateOffsets()
 {
-	Matrix<double> residuals = (K_*training_result_)-Y_;
+	Matrix<double> residuals = (K_*training_result_)-Y_;	
 	int no_act=training_result_.Ncols();
 	offsets_.resize(no_act);
 	offsets_.setVectorType(0); // this is no Column vector
@@ -62,7 +62,6 @@ void KernelModel::calculateOffsets()
 	{	
 		offsets_(i) = residuals.colSum(i) / training_result_.Nrows();
 	}
-	//cout<<"offset : "<<offsets_(1)<<endl<<flush;
 }
 
 

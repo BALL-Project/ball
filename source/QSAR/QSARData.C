@@ -209,7 +209,7 @@ vector<BALL::String>* QSARData::readPropertyNames(String sd_file)
 	int no = m.countNamedProperties();
 	
 	vector<String>* names = new vector<String>;
-	names->resize(no);cout<<"size = "<<no<<endl;
+	names->resize(no);
 	
 	for(int i=0; i<no;i++)
 	{

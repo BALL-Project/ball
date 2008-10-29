@@ -54,7 +54,7 @@ void GPModel::train()
 	
 // 	try
 // 	{
-// 		L_ = (K_+I*pow(lambda_,2)).i();  // dim: nxn
+// 		L_ = (K_+I*lambda_).i();  // dim: nxn
 // 	}
 // 	catch(BALL::Exception::GeneralException e)
 // 	{

@@ -94,12 +94,12 @@ Kernel::~Kernel()
 {
 }
 
-void Kernel::calculateKernelVector(Matrix<double>& K, Vector<double>& m1, Matrix<double>& m2, Vector<double>& output)
+void Kernel::calculateKernelVector(Matrix<double>& K, Vector<double>& input, Matrix<double>& descriptor_matrix, Vector<double>& output)
 {
-	Matrix<double> M1(1,m1.getSize());
-	M1.copyVectorToRow(m1,1);
+	Matrix<double> M1(1,input.getSize());
+	M1.copyVectorToRow(input,1);
 	Matrix<double> out;
-	calculateKernelMatrix(K,M1,m2,out);
+	calculateKernelMatrix(K,M1,descriptor_matrix,out);
 	output.resize(out.getColumnCount());
 	output.setVectorType(0); // row-vector
 	out.copyRowToVector(output,1);	
@@ -132,13 +132,13 @@ void Kernel::calculateKernelMatrix(Matrix<double>& input, Matrix<double>& output
 	}
 	
 	// center Matrix<double> output
- 	Matrix<double> I; I.setToIdentity(output.Ncols());
- 	Vector<double> iv(output.Ncols());
- 	iv=1;
- 	double d=(double)1/output.Ncols();
-	
-	I-=iv*d*iv.t();
- 	output = I*output*I;
+//  	Matrix<double> I; I.setToIdentity(output.Ncols());
+//  	Vector<double> iv(output.Ncols());
+//  	iv=1;
+//  	double d=1./output.Ncols();
+// 	
+// 	I-=iv*d*iv.t();
+//  	output = I*output*I;
 }
 
 
@@ -169,15 +169,15 @@ void Kernel::calculateKernelMatrix(Matrix<double>& K, Matrix<double>& m1, Matrix
 	}
 	
 	// center Matrix<double> output
-	Matrix<double> I; I.setToIdentity(output.Ncols());
- 	Vector<double> iv(m2.Nrows(),1,0); //dim: nx1  // initial value=1, ColumnVector=false
-	Vector<double> ivt(m2.Nrows(),1,1);  // initial value=1, ColumnVector=true
-	
- 	double d=(double)1/output.Ncols();
-	
-	I -= iv*d*iv.t(); 
-	output -= ivt*d*(iv.t()*K); 
- 	output *= I;
+// 	Matrix<double> I; I.setToIdentity(output.Ncols());
+//  	Vector<double> iv(m2.Nrows()); //dim: nx1 
+// 	iv = 1;
+// 			
+//  	double d=1./output.Ncols();
+// 	
+// 	I -= iv*d*iv.t(); 
+// 	output -= iv.t()*d*(iv.t()*K); 
+//  	output *= I;
 }
 
 #define BALL_DEBUG
@@ -365,7 +365,6 @@ void Kernel::calculateKernelMatrix1(Matrix<double>& input, Matrix<double>& outpu
 			output(i,j)=d;
 			output(j,i)=d;
 		}
-		
 	}
 }
 
