@@ -28,7 +28,7 @@ include ../../../common.mak
 
 LIBS=-lspnav
 
-BALL_INCLUDES+=-I../include
+BALL_INCLUDES+=-I../include -I${SPACENAV_INCLDIR}
 
 clean: default_clean
 
