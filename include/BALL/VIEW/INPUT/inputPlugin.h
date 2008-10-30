@@ -14,7 +14,8 @@ namespace BALL
 			public:
 				virtual ~InputPlugin() {}
 
-				virtual InputDeviceDriver* startDriver(QWidget* receiver) = 0;
+				virtual void setReceiver(QWidget* receiver) = 0;
+				virtual InputDeviceDriver* startDriver() = 0;
 		};
 	}
 }

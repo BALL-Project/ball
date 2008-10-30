@@ -108,6 +108,7 @@ QT_BALL_LIBOPTS     = @QT_BALL_LIBOPTS@
 QT_VIEW_LIBOPTS     = @QT_VIEW_LIBOPTS@
 MOC                 = @MOC@
 UIC                 = @UIC@
+RCC                 = @RCC@
 
 SIP            			= @SIP@
 SIP_LIB        			= @SIP_LIB@
@@ -120,9 +121,9 @@ PYTHON_EXECUTABLE	  =	@PYTHON_EXECUTABLE@
 #
 # Defines for the plugins
 #
-BUILD_SPACENAV      = @BUILD_SPACENAV@
-SPACENAV_LIBDIR     = @SPACENAV_LIBDIR@
-SPACENAV_INCLDIR    = @SPACENAV_INCLDIR@
+SPACENAV_SUPPORT    = @SPACENAV_SUPPORT@
+SPACENAV_LIBS       = @SPACENAV_LIBS@
+SPACENAV_INCLUDES   = @SPACENAV_INCLUDES@
 
 #
 # Support for valgrind, a memory leak checker.

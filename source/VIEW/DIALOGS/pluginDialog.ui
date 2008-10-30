@@ -154,7 +154,7 @@
    <sender>togglePluginButton</sender>
    <signal>clicked()</signal>
    <receiver>PluginDialog</receiver>
-   <slot>activatePlugin()</slot>
+   <slot>togglePluginState()</slot>
    <hints>
     <hint type="sourcelabel" >
      <x>442</x>
