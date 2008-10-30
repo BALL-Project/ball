@@ -1,6 +1,7 @@
 #ifndef PLUGINMANAGER_H
 #define PLUGINMANAGER_H
 
+#include <QtCore/QString>
 #include <QtCore/QHash>
 
 class QPluginLoader;
