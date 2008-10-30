@@ -95,16 +95,19 @@ void PLSModel::train()
 		latent_variables_.copyVectorToColumn(t,j+1);
 	}
 
-	try  // p's are not orthogonal to each other, so that in rare cases P.t()*loadings_ is not invertible
-	{
-		loadings_ = loadings_*(P.t()*loadings_).i();
-	}
-	catch(BALL::Exception::MatrixIsSingular e)
-	{
-		Matrix<double> I; I.setToIdentity(P.Ncols());
-		I*=0.0001;
-		loadings_ = loadings_*(P.t()*loadings_+I).i();
-	}
+// 	try  // p's are not orthogonal to each other, so that in rare cases P.t()*loadings_ is not invertible
+// 	{
+// 		loadings_ = loadings_*(P.t()*loadings_).i();
+// 	}
+// 	catch(BALL::Exception::MatrixIsSingular e)
+// 	{
+// 		Matrix<double> I; I.setToIdentity(P.Ncols());
+// 		I*=0.0001;
+// 		loadings_ = loadings_*(P.t()*loadings_+I).i();
+// 	}
+	
+	loadings_ = loadings_*(P.t()*loadings_).pseudoInverse();
+	
 	weights_=weights_.t(); // transform, so that one column contains the importances of all latent variables for modelling the response (-> weights_ will have more than one column in case of more than one modelled response variable)
 	training_result_=loadings_*weights_;
 	
