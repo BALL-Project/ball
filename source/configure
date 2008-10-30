@@ -874,6 +874,10 @@ LPSOLVE_SUPPORT
 LPSOLVE_INCLUDES
 LPSOLVE_LIBS
 BALL_HAS_LPSOLVE
+SPACENAV_SUPPORT
+SPACENAV_INCLUDES
+SPACENAV_LIBS
+BALL_HAS_SPACENAV
 XMKMF
 MOC
 UIC
@@ -955,9 +959,6 @@ USE_VIEW
 BALL_HAS_VIEW
 VIEW_PLATFORM
 LIBVIEW
-BUILD_SPACENAV
-SPACENAV_LIBDIR
-SPACENAV_INCLDIR
 TEMPLATE_DIR
 SUBDIRS
 LIBOBJS
@@ -1598,6 +1599,7 @@ Optional Packages:
   --with-qt-mt            use a threadsafe version of the QT lib (libqt-mt)
   --with-moc=MOC          use MOC as the absolute path to the QT meta object compiler (moc)
   --with-uic=UIC          use UIC as the absolute path to the QT user interface compiler (uic)
+  --with-rcc=RCC          use RCC as the absolute path to the QT resource compiler (rcc)
   --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL
   --with-opengl-libs=DIR  OpenGL/Mesa libraries are in DIR/GL
   --with-mesa             use MESA instead of OpenGL
@@ -2241,6 +2243,12 @@ if test "${with_uic+set}" = set; then
 fi
 
 
+# Check whether --with-rcc was given.
+if test "${with_rcc+set}" = set; then
+  withval=$with_rcc;
+fi
+
+
 # Check whether --with-opengl-incl was given.
 if test "${with_opengl_incl+set}" = set; then
   withval=$with_opengl_incl;
@@ -2557,6 +2565,12 @@ else
 	UIC=uic
 fi
 
+if test "$with_rcc" != "" ; then
+	RCC=$with_rcc
+else
+	RCC=rcc
+fi
+
 if test "$with_libxnet" != "no" ; then
 	USE_LIBXNET=true
 else
@@ -2654,7 +2668,6 @@ else
 	GSL_SUPPORT=
 fi
 
-<<<<<<< HEAD:source/configure.ac
 # support for lpsolve
 if test "$with_lpsolve" != "" -a "$with_lpsolve" != "no" -o "$enable_lpsolve" = yes ; then
 	LPSOLVE_SUPPORT=true
@@ -2670,16 +2683,16 @@ if test "$with_lpsolve" != "" -a "$with_lpsolve" != "no" -o "$enable_lpsolve" = 
 	fi
 else
 	LPSOLVE_SUPPORT=
-=======
+fi
+
 if test "$enable_spacenavigator" != "no" -a "$USE_VIEW" == "true"; then
-	BUILD_SPACENAV=true
+	SPACENAV_SUPPORT=true
 	SPACENAV_LIBDIR=${with_spacenavigator_lib}
 	SPACENAV_INCLDIR=${with_spacenavigator_incl}
 else
-	BUILD_SPACENAVIGATOR=false
+	SPACENAV_SUPPORT=false
 	SPACENAV_LIBDIR=""
 	SPACENAV_INCLDIR=""
->>>>>>> 2ea72a3... Moved the SpaceNavigatorDriver to a plugin:source/configure.ac
 fi
 
 
@@ -22062,6 +22075,361 @@ fi
 
 fi
 
+if test "${SPACENAV_SUPPORT}" == true ; then
+
+	{ echo "$as_me:$LINENO: checking Checking for spacenavigator support" >&5
+echo $ECHO_N "checking Checking for spacenavigator support... $ECHO_C" >&6; }
+
+
+
+
+				if test "${SPACENAV_SUPPORT}" = "true" ; then
+		{ echo "$as_me:$LINENO: result: enabled" >&5
+echo "${ECHO_T}enabled" >&6; }
+
+		cat >>confdefs.h <<\_ACEOF
+#define BALL_HAS_SPACENAV 1
+_ACEOF
+
+		cat >>confdefs.h <<\_ACEOF
+#define BALL_HAS_SPACENAV_H 1
+_ACEOF
+
+
+		{ echo "$as_me:$LINENO: checking for spacenavigator header files" >&5
+echo $ECHO_N "checking for spacenavigator header files... $ECHO_C" >&6; }
+
+	_INCLUDES=
+
+		if test "${SPACENAV_INCDIR}" != "" ; then
+	_INCLUDES=${SPACENAV_INCDIR}
+	fi
+
+	if test "${_INCLUDES}" = "" ; then
+		for i in /usr/include /opt/include ${SPACENAV_INCPATH} ; do
+			if test -f "$i/spnav.h" -a "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" ; then
+		for i in /usr/*/include /opt/*/include ; do
+			if test -f "$i/spnav.h" -a "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" ; then
+		for i in /opt/*/*/include /usr/*/*/include /usr/local/*/*/include ; do
+			if test -f "$i/spnav.h" -a "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" -a "${FIND}" != "-" ; then
+		if test "${FIND_KNOWS_PATH}" = false ; then
+			FIND_OPT="-name"
+			_TMP_FIND_NAME="spnav.h"
+			while test _`${EGREP} / $_TMP_FIND_NAME`_ != __ ; do
+				_TMP_FIND_NAME=`echo ${_TMP_FIND_NAME}|${CUT} -d/ -f2-`
+			done
+
+			FIND_ARG="\*${_TMP_FIND_NAME}\*"
+		else
+			FIND_OPT="-path"
+			FIND_ARG="\*spnav.h\*"
+		fi
+
+		_TMP=`${FIND} /usr ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+		for j in ${_TMP} ; do
+			if test "${_INCLUDES}" = "" ; then
+				_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+			fi
+		done
+
+		if test "${_INCLUDES}" = "" ; then
+			_TMP=`${FIND} /opt ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_INCLUDES}" = "" ; then
+					_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+				fi
+			done
+		fi
+
+		if test "${_INCLUDES}" = "" -a "${SPACENAV_INCPATH}" != ""; then
+			for i in ${SPACENAV_INCPATH} /dev/null ; do
+				_TMP=`${FIND} $i ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+				for j in ${_TMP} ; do
+					if test "${_INCLUDES}" = "" ; then
+						_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+					fi
+				done
+			done
+		fi
+	fi
+
+	SPACENAV_INCDIR="${_INCLUDES}"
+
+		if test "${SPACENAV_INCDIR}" = "" ; then
+      { echo "$as_me:$LINENO: result: (not found!)" >&5
+echo "${ECHO_T}(not found!)" >&6; }
+		  { echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+		  { echo "$as_me:$LINENO: result: The header files for the spacenavigator support could not be found. Please specify the path to <spnav.h>" >&5
+echo "${ECHO_T}The header files for the spacenavigator support could not be found. Please specify the path to <spnav.h>" >&6; }
+		  { echo "$as_me:$LINENO: result: by passing the option --with-spacenavigator-incl=DIR to configure." >&5
+echo "${ECHO_T}by passing the option --with-spacenavigator-incl=DIR to configure." >&6; }
+		  { echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+		  { echo "$as_me:$LINENO: result: These files are needed for the spacenavigator input plugin." >&5
+echo "${ECHO_T}These files are needed for the spacenavigator input plugin." >&6; }
+		  { echo "$as_me:$LINENO: result: Please install the library on your system, or disable it with --disable-spacenavigator." >&5
+echo "${ECHO_T}Please install the library on your system, or disable it with --disable-spacenavigator." >&6; }
+		  { echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+
+	{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+	{ echo "$as_me:$LINENO: result: Configure failed. If you cannot solve your problem with the aid" >&5
+echo "${ECHO_T}Configure failed. If you cannot solve your problem with the aid" >&6; }
+	{ echo "$as_me:$LINENO: result: of the above error message, please contact the BALL mailing list" >&5
+echo "${ECHO_T}of the above error message, please contact the BALL mailing list" >&6; }
+	{ echo "$as_me:$LINENO: result: or the BALL developers. Please enclose the file 'conf.diag.tar'" >&5
+echo "${ECHO_T}or the BALL developers. Please enclose the file 'conf.diag.tar'" >&6; }
+	{ echo "$as_me:$LINENO: result: which has been created in source. It contains the relevant" >&5
+echo "${ECHO_T}which has been created in source. It contains the relevant" >&6; }
+	{ echo "$as_me:$LINENO: result: files from this configure run. In most cases, the information" >&5
+echo "${ECHO_T}files from this configure run. In most cases, the information" >&6; }
+	{ echo "$as_me:$LINENO: result: is necessary to diagnose what went wrong. This file contains" >&5
+echo "${ECHO_T}is necessary to diagnose what went wrong. This file contains" >&6; }
+	{ echo "$as_me:$LINENO: result: information about your system setup and versions of compilers" >&5
+echo "${ECHO_T}information about your system setup and versions of compilers" >&6; }
+	{ echo "$as_me:$LINENO: result: and other tools installed in your system." >&5
+echo "${ECHO_T}and other tools installed in your system." >&6; }
+	{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+
+	TARFILE=conf.diag.tar
+	if test -f $TARFILE ; then
+		${RM} $TARFILE ;
+	fi
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+	tar cf $TARFILE $FILES
+
+	{ { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
+
+
+	{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+	{ echo "$as_me:$LINENO: result: Configure failed. If you cannot solve your problem with the aid" >&5
+echo "${ECHO_T}Configure failed. If you cannot solve your problem with the aid" >&6; }
+	{ echo "$as_me:$LINENO: result: of the above error message, please contact the BALL mailing list" >&5
+echo "${ECHO_T}of the above error message, please contact the BALL mailing list" >&6; }
+	{ echo "$as_me:$LINENO: result: or the BALL developers. Please enclose the file 'conf.diag.tar'" >&5
+echo "${ECHO_T}or the BALL developers. Please enclose the file 'conf.diag.tar'" >&6; }
+	{ echo "$as_me:$LINENO: result: which has been created in source. It contains the relevant" >&5
+echo "${ECHO_T}which has been created in source. It contains the relevant" >&6; }
+	{ echo "$as_me:$LINENO: result: files from this configure run. In most cases, the information" >&5
+echo "${ECHO_T}files from this configure run. In most cases, the information" >&6; }
+	{ echo "$as_me:$LINENO: result: is necessary to diagnose what went wrong. This file contains" >&5
+echo "${ECHO_T}is necessary to diagnose what went wrong. This file contains" >&6; }
+	{ echo "$as_me:$LINENO: result: information about your system setup and versions of compilers" >&5
+echo "${ECHO_T}information about your system setup and versions of compilers" >&6; }
+	{ echo "$as_me:$LINENO: result: and other tools installed in your system." >&5
+echo "${ECHO_T}and other tools installed in your system." >&6; }
+	{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+
+	TARFILE=conf.diag.tar
+	if test -f $TARFILE ; then
+		${RM} $TARFILE ;
+	fi
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+	tar cf $TARFILE $FILES
+
+	{ { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
+
+	  else
+  		{ echo "$as_me:$LINENO: result: (${SPACENAV_INCDIR})" >&5
+echo "${ECHO_T}(${SPACENAV_INCDIR})" >&6; }
+  		SPACENAV_INCLUDES="-I${SPACENAV_INCDIR}"
+  	fi
+
+
+	  { echo "$as_me:$LINENO: checking for libspnav.so" >&5
+echo $ECHO_N "checking for libspnav.so... $ECHO_C" >&6; }
+  	if test "${SPACENAV_LIBDIR}" != "" ; then
+      if test -a "${SPACENAV_LIBDIR}/libspnav.so" ; then
+		  	SPACENAV_LIBDIR="${SPACENAV_LIBDIR}/"
+  		fi
+  	fi
+
+	_LIBS=
+
+		if test "${SPACENAV_LIBDIR}" != "" ; then
+		_LIBS=${SPACENAV_LIBDIR}
+	fi
+
+	if test "${SPACENAV_LIBPATH}" = "" ; then
+		_LIBDIRS="/usr/lib /opt/lib /usr/local/lib"
+	else
+		_LIBDIRS="${SPACENAV_LIBPATH}"
+	fi
+
+	if test "${_LIBS}" = "" ; then
+		for i in ${_LIBDIRS} ; do
+			for j in $i/libspnav.* ; do
+				if test -f "$j" -a "${_LIBS}" = ""; then
+					_LIBS="$i"
+				fi
+			done
+		done
+	fi
+
+	if test "${_LIBS}" = "" ; then
+		for i in /usr/lib /opt/lib /usr/*/lib /opt/*/lib ; do
+			for j in $i/libspnav.* ; do
+				if test -f "$j" -a "${_LIBS}" = ""; then
+					_LIBS="$i"
+				fi
+			done
+		done
+	fi
+
+	if test "${_LIBS}" = "" ; then
+		for i in /opt/*/*/lib /usr/*/*/lib /usr/local/*/*/lib ; do
+			for j in $i/libspnav.* ; do
+				if test -f "$j" -a "${_LIBS}" = ""; then
+					_LIBS="$i"
+				fi
+			done
+		done
+	fi
+
+	if test "${_LIBS}" = "" -a "${FIND}" != "-" ; then
+		if test "${_LIBS}" = "" -a "${SPACENAV_LIBPATH}" != ""; then
+			for i in ${SPACENAV_LIBPATH} /dev/null; do
+				if test "${_LIBS}" = "" ; then
+					_TMP=`${FIND} $i -name "libspnav.*" -print 2>/dev/null`
+					for j in ${_TMP} ; do
+						if test "${_LIBS}" = "" ; then
+							_LIBS=`echo $j|${SED} "s/\/libspnav\\..*/\//"`
+						fi
+					done
+				fi
+			done
+		fi
+
+		if test "${_LIBS}" = "" ; then
+			_TMP=`${FIND} /opt -name "libspnav.*" -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_LIBS}" = "" ; then
+					_LIBS=`echo $j|${SED} "s/\/libspnav\\..*/\//"`
+				fi
+			done
+		fi
+
+		if test "${_LIBS}" = "" ; then
+			_TMP=`${FIND} /usr -name "libspnav.*" -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_LIBS}" = "" ; then
+					_LIBS=`echo $j|${SED} "s/\/libspnav\\..*/\//"`
+				fi
+			done
+		fi
+
+	fi
+
+	SPACENAV_LIBDIR="${_LIBS}"
+
+
+  	if test "${SPACENAV_LIBDIR}" = "" ; then
+      { echo "$as_me:$LINENO: result: (not found!)" >&5
+echo "${ECHO_T}(not found!)" >&6; }
+		  { echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+		  { echo "$as_me:$LINENO: result: The spacenavigator library could not be found. Please specify the path to libspnav.so" >&5
+echo "${ECHO_T}The spacenavigator library could not be found. Please specify the path to libspnav.so" >&6; }
+		  { echo "$as_me:$LINENO: result: by passing the option --with-spacenavigator-lib=DIR to configure." >&5
+echo "${ECHO_T}by passing the option --with-spacenavigator-lib=DIR to configure." >&6; }
+		  { echo "$as_me:$LINENO: result: You may also set the environment variable SPACENAV_LIBDIR to the correct" >&5
+echo "${ECHO_T}You may also set the environment variable SPACENAV_LIBDIR to the correct" >&6; }
+		  { echo "$as_me:$LINENO: result: path - configure will recognize this, too." >&5
+echo "${ECHO_T}path - configure will recognize this, too." >&6; }
+		  { echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+		  { echo "$as_me:$LINENO: result: These files are needed for the spacenavigator input plugin." >&5
+echo "${ECHO_T}These files are needed for the spacenavigator input plugin." >&6; }
+		  { echo "$as_me:$LINENO: result: Please install the library on your system, or disable it with --disable-spacenavigator." >&5
+echo "${ECHO_T}Please install the library on your system, or disable it with --disable-spacenavigator." >&6; }
+		  { echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+
+	{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+	{ echo "$as_me:$LINENO: result: Configure failed. If you cannot solve your problem with the aid" >&5
+echo "${ECHO_T}Configure failed. If you cannot solve your problem with the aid" >&6; }
+	{ echo "$as_me:$LINENO: result: of the above error message, please contact the BALL mailing list" >&5
+echo "${ECHO_T}of the above error message, please contact the BALL mailing list" >&6; }
+	{ echo "$as_me:$LINENO: result: or the BALL developers. Please enclose the file 'conf.diag.tar'" >&5
+echo "${ECHO_T}or the BALL developers. Please enclose the file 'conf.diag.tar'" >&6; }
+	{ echo "$as_me:$LINENO: result: which has been created in source. It contains the relevant" >&5
+echo "${ECHO_T}which has been created in source. It contains the relevant" >&6; }
+	{ echo "$as_me:$LINENO: result: files from this configure run. In most cases, the information" >&5
+echo "${ECHO_T}files from this configure run. In most cases, the information" >&6; }
+	{ echo "$as_me:$LINENO: result: is necessary to diagnose what went wrong. This file contains" >&5
+echo "${ECHO_T}is necessary to diagnose what went wrong. This file contains" >&6; }
+	{ echo "$as_me:$LINENO: result: information about your system setup and versions of compilers" >&5
+echo "${ECHO_T}information about your system setup and versions of compilers" >&6; }
+	{ echo "$as_me:$LINENO: result: and other tools installed in your system." >&5
+echo "${ECHO_T}and other tools installed in your system." >&6; }
+	{ echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6; }
+
+	TARFILE=conf.diag.tar
+	if test -f $TARFILE ; then
+		${RM} $TARFILE ;
+	fi
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+	tar cf $TARFILE $FILES
+
+	{ { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
+
+	  else
+			{ echo "$as_me:$LINENO: result: ${SPACENAV_LIBDIR}/libspnav.so" >&5
+echo "${ECHO_T}${SPACENAV_LIBDIR}/libspnav.so" >&6; }
+  		SPACENAV_LIBS="-L${SPACENAV_LIBDIR} -lspnav"
+  	fi
+
+		BALL_HAS_SPACENAV=true
+
+
+	else
+		{ echo "$as_me:$LINENO: result: disabled" >&5
+echo "${ECHO_T}disabled" >&6; }
+	fi
+
+
+fi
+
 QT_MIN_VERSION=410
 QT_MAX_VERSION=499
 QT_RECOMMENDED_VERSION=4.1.0
@@ -27329,13 +27697,13 @@ if test "${lt_cv_nm_interface+set}" = set; then
 else
   lt_cv_nm_interface="BSD nm"
   echo "int some_variable = 0;" > conftest.$ac_ext
-  (eval echo "\"\$as_me:27332: $ac_compile\"" >&5)
+  (eval echo "\"\$as_me:27700: $ac_compile\"" >&5)
   (eval "$ac_compile" 2>conftest.err)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:27335: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
+  (eval echo "\"\$as_me:27703: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
   (eval "$NM \"conftest.$ac_objext\"" 2>conftest.err > conftest.out)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:27338: output\"" >&5)
+  (eval echo "\"\$as_me:27706: output\"" >&5)
   cat conftest.out >&5
   if $GREP 'External.*some_variable' conftest.out > /dev/null; then
     lt_cv_nm_interface="MS dumpbin"
@@ -28434,7 +28802,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 28437 "configure"' > conftest.$ac_ext
+  echo '#line 28805 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -30407,11 +30775,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:30410: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:30778: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:30414: \$? = $ac_status" >&5
+   echo "$as_me:30782: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -30731,11 +31099,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:30734: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:31102: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:30738: \$? = $ac_status" >&5
+   echo "$as_me:31106: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -30836,11 +31204,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:30839: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:31207: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:30843: \$? = $ac_status" >&5
+   echo "$as_me:31211: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -30891,11 +31259,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:30894: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:31262: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:30898: \$? = $ac_status" >&5
+   echo "$as_me:31266: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -33652,7 +34020,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 33655 "configure"
+#line 34023 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -33752,7 +34120,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 33755 "configure"
+#line 34123 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -35755,11 +36123,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:35758: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:36126: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:35762: \$? = $ac_status" >&5
+   echo "$as_me:36130: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -35854,11 +36222,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:35857: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:36225: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:35861: \$? = $ac_status" >&5
+   echo "$as_me:36229: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -35906,11 +36274,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:35909: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:36277: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:35913: \$? = $ac_status" >&5
+   echo "$as_me:36281: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -37015,12 +37383,7 @@ fi
 
 
 
-
-
-
-
-
-SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SCORING SOLVATION STRUCTURE SYSTEM ${VIEW} ${PYTHON} PLUGINS"
+SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SCORING SOLVATION STRUCTURE SYSTEM ${VIEW} ${PYTHON} PLUGIN EXTENSIONS"
 
 
 
@@ -38156,6 +38519,10 @@ LPSOLVE_SUPPORT!$LPSOLVE_SUPPORT$ac_delim
 LPSOLVE_INCLUDES!$LPSOLVE_INCLUDES$ac_delim
 LPSOLVE_LIBS!$LPSOLVE_LIBS$ac_delim
 BALL_HAS_LPSOLVE!$BALL_HAS_LPSOLVE$ac_delim
+SPACENAV_SUPPORT!$SPACENAV_SUPPORT$ac_delim
+SPACENAV_INCLUDES!$SPACENAV_INCLUDES$ac_delim
+SPACENAV_LIBS!$SPACENAV_LIBS$ac_delim
+BALL_HAS_SPACENAV!$BALL_HAS_SPACENAV$ac_delim
 XMKMF!$XMKMF$ac_delim
 MOC!$MOC$ac_delim
 UIC!$UIC$ac_delim
@@ -38236,10 +38603,6 @@ ADDITIONAL_COMMENTS!$ADDITIONAL_COMMENTS$ac_delim
 USE_VIEW!$USE_VIEW$ac_delim
 BALL_HAS_VIEW!$BALL_HAS_VIEW$ac_delim
 VIEW_PLATFORM!$VIEW_PLATFORM$ac_delim
-LIBVIEW!$LIBVIEW$ac_delim
-BUILD_SPACENAV!$BUILD_SPACENAV$ac_delim
-SPACENAV_LIBDIR!$SPACENAV_LIBDIR$ac_delim
-SPACENAV_INCLDIR!$SPACENAV_INCLDIR$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -38281,13 +38644,14 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+LIBVIEW!$LIBVIEW$ac_delim
 TEMPLATE_DIR!$TEMPLATE_DIR$ac_delim
 SUBDIRS!$SUBDIRS$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 4; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 5; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

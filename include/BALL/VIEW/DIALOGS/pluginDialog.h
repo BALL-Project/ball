@@ -1,10 +1,11 @@
-#ifndef PLUGINDIALOG_H
-#define PLUGINDIALOG_H
+#ifndef BALL_VIEW_PLUGINDIALOG_H
+#define BALL_VIEW_PLUGINDIALOG_H
 
 #include <BALL/VIEW/UIC/pluginDialogData.h>
 
 #include <QtCore/QModelIndex>
 #include <QtGui/QItemDelegate>
+#include <QtGui/QDialog>
 
 namespace BALL
 {
@@ -12,7 +13,7 @@ namespace BALL
 	{
 		class VIEWPlugin;
 
-		class PluginItemDelegate : public QItemDelegate
+/*		class PluginItemDelegate : public QItemDelegate
 		{
 			Q_OBJECT
 
@@ -20,7 +21,7 @@ namespace BALL
 				QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 				void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 		};
-
+*/
 		class PluginModel : public QAbstractListModel
 		{
 			Q_OBJECT
@@ -50,7 +51,7 @@ namespace BALL
 				virtual void togglePluginState();
 
 			private:
-				VIEWPlugin* active_plugin_;
+				QModelIndex active_index_;
 				PluginModel model_;
 		};
 

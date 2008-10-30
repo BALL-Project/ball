@@ -11,7 +11,7 @@ DIRECTORY=VIEW/PLUGIN
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
-	pluginManager.C
+	VIEWPlugin.C
 
 include ../../common.mak
 -include .Dependencies

@@ -66,6 +66,7 @@ AC_ARG_WITH(qt-libs,           [  --with-qt-libs=DIR      QT libraries are in DI
 AC_ARG_WITH(qt-mt,             [  --with-qt-mt            use a threadsafe version of the QT lib (libqt-mt)])
 AC_ARG_WITH(moc,               [  --with-moc=MOC          use MOC as the absolute path to the QT meta object compiler (moc)])
 AC_ARG_WITH(uic,               [  --with-uic=UIC          use UIC as the absolute path to the QT user interface compiler (uic)])
+AC_ARG_WITH(rcc,               [  --with-rcc=RCC          use RCC as the absolute path to the QT resource compiler (rcc)])
 AC_ARG_WITH(opengl-incl,       [  --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL])
 AC_ARG_WITH(opengl-libs,       [  --with-opengl-libs=DIR  OpenGL/Mesa libraries are in DIR/GL])
 AC_ARG_WITH(mesa,              [  --with-mesa             use MESA instead of OpenGL])
@@ -239,6 +240,12 @@ else
 	UIC=uic
 fi
 
+if test "$with_rcc" != "" ; then	
+	RCC=$with_rcc
+else
+	RCC=rcc
+fi
+
 if test "$with_libxnet" != "no" ; then	
 	USE_LIBXNET=true
 else
@@ -336,7 +343,6 @@ else
 	GSL_SUPPORT=
 fi
 
-<<<<<<< HEAD:source/configure.ac
 # support for lpsolve 
 if test "$with_lpsolve" != "" -a "$with_lpsolve" != "no" -o "$enable_lpsolve" = yes ; then
 	LPSOLVE_SUPPORT=true
@@ -352,16 +358,16 @@ if test "$with_lpsolve" != "" -a "$with_lpsolve" != "no" -o "$enable_lpsolve" = 
 	fi
 else
 	LPSOLVE_SUPPORT=
-=======
+fi
+
 if test "$enable_spacenavigator" != "no" -a "$USE_VIEW" == "true"; then
-	BUILD_SPACENAV=true
+	SPACENAV_SUPPORT=true
 	SPACENAV_LIBDIR=${with_spacenavigator_lib}
 	SPACENAV_INCLDIR=${with_spacenavigator_incl}
 else
-	BUILD_SPACENAVIGATOR=false
+	SPACENAV_SUPPORT=false
 	SPACENAV_LIBDIR=""
 	SPACENAV_INCLDIR=""
->>>>>>> 2ea72a3... Moved the SpaceNavigatorDriver to a plugin:source/configure.ac
 fi
 
 dnl
@@ -633,6 +639,12 @@ if test "${LPSOLVE_SUPPORT}" == true ; then
 	CF_LPSOLVE
 fi
 
+dnl Spacenavigator input plugin support
+dnl
+if test "${SPACENAV_SUPPORT}" == true ; then
+	CF_SPACENAV
+fi
+
 dnl
 dnl		VIEW
 dnl
@@ -881,15 +893,6 @@ if test "$BALL_HAS_SSTREAM" = yes ; then
 	AC_DEFINE(BALL_HAS_SSTREAM)
 fi
 
-dnl
-dnl Plugin substitutions
-dnl
-
-dnl define BUILD_SPACENAV
-AC_SUBST(BUILD_SPACENAV)
-AC_SUBST(SPACENAV_LIBDIR)
-AC_SUBST(SPACENAV_INCLDIR)
-
 dnl	
 dnl		 make target "clean" should also remove 
 dnl    template repositories. The name of this directory 
@@ -901,7 +904,7 @@ dnl
 dnl    create files
 dnl
 
-SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SCORING SOLVATION STRUCTURE SYSTEM ${VIEW} ${PYTHON} PLUGINS"
+SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SCORING SOLVATION STRUCTURE SYSTEM ${VIEW} ${PYTHON} PLUGIN EXTENSIONS"
 AC_SUBST(SUBDIRS)
 
 AC_PREFIX_DEFAULT(`cd ..; pwd`)
