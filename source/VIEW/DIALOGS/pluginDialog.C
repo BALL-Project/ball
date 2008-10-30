@@ -158,11 +158,11 @@ namespace BALL
 				active_plugin->deactivate();
 				togglePluginButton->setText("Activate");
 			} else {
-				active_plugin->activate();
-
 				// TODO: this should be somewhere else! :-)
 				InputPlugin* ptr = qobject_cast<InputPlugin*>(active_object);
 				ptr->setReceiver(Scene::getInstance(0));
+
+				active_plugin->activate();
 
 				togglePluginButton->setText("Deactivate");
 			}
