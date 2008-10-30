@@ -17,6 +17,10 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/STRUCTURE/RMSDMinimizer.h>
+
+#include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
+#include <BALL/MOLMEC/COMMON/forceField.h>
+
 #include <list>
 #include <set>
 
@@ -28,8 +32,26 @@ namespace BALL
 		"Adenine", "Thymine", "Guanine", "Cytosine", "Uracile"
 	};
 
-	DNAMutator::DNAMutator(FragmentDB* frag)
-		: db_(frag), keep_db_(true)
+	const Size DNAMutator::default_num_steps_ = 50;
+
+	DNAMutator::DNAMutator(EnergyMinimizer* mini, FragmentDB* frag)
+		: keep_db_(true), minimizer_(mini), db_(frag), num_steps_(default_num_steps_)
+	{
+	}
+
+	DNAMutator::~DNAMutator()
+	{
+		freeDB_();
+	}
+
+	void DNAMutator::freeDB_()
+	{
+		if(!keep_db_ && db_) {
+			delete db_;
+		}
+	}
+
+	void DNAMutator::setup()
 	{
 		if(!db_) {
 			keep_db_ = false;
@@ -37,15 +59,22 @@ namespace BALL
 		}
 	}
 
-	DNAMutator::~DNAMutator()
+	void DNAMutator::setMinimizer(EnergyMinimizer* mini)
 	{
-		if(!keep_db_) {
-			delete db_;
-		}
+		minimizer_ = mini;
 	}
 
-	void DNAMutator::mutate(Residue* res, Base base) throw(Exception::InvalidOption)
+	void DNAMutator::setFragmentDB(FragmentDB* frag)
 	{
+		freeDB_();
+		db_ = frag;
+		keep_db_ = true;
+	}
+
+	void DNAMutator::mutate(Residue* res, Base base, bool optimize) throw(Exception::InvalidOption)
+	{
+		setup();
+
 		Fragment* frag = db_->getFragmentCopy(bases_[static_cast<int>(base)]);
 
 		//If we did not get a vaild fragment it is not present in the Fragment DB.
@@ -105,6 +134,36 @@ namespace BALL
 		delete frag;
 
 		frag_at->createBond(*res_connection_at);
+
+		if(optimize) {
+			if(!minimizer_) {
+				Log.warn() << "No minimizer was specified but optimize was requested! Please make sure you set up the DNAMutator correctly!\n";
+			}
+
+			if(!optimize_(res)) {
+				Log.error() << "Could not optimize the generated base. Chack that your minimizer correctly set up!\n";
+			}
+		}
+	}
+
+	bool DNAMutator::optimize_(Residue* frag)
+	{
+		if(!minimizer_->isValid()) {
+			return false;
+		}
+
+		minimizer_->getForceField()->setup(*frag->getAtom(0)->getMolecule()->getSystem());
+		minimizer_->setup(*minimizer_->getForceField());
+
+		frag->select();
+
+		if(!minimizer_->minimize(num_steps_)) {
+			Log.warn() << "Optimization did not converge. Try a larger number of steps\n";
+		}
+
+		frag->deselect();
+
+		return true;
 	}
 
 	Atom* DNAMutator::getAttachmentAtom(AtomContainer* res)
