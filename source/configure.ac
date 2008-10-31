@@ -7,6 +7,7 @@ dnl Author:
 dnl   Oliver Kohlbacher
 dnl   Andreas Hildebrandt
 dnl   Marc Sturm
+dnl   Marcel Schumann
 dnl
 
 dnl
@@ -105,6 +106,16 @@ dnl ** GSL **
 AC_ARG_ENABLE(gsl,             [  --enable-gsl            enable the build of BALL with support for GSL (GNU Scientific Library)])
 AC_ARG_WITH(gsl-lib,           [  --with-gsl-lib=DIR      libgsl is in DIR])
 AC_ARG_WITH(gsl-incl,          [  --with-gsl-incl=DIR     gsl includes are in DIR])
+
+dnl ** libsvm **
+AC_ARG_WITH(libsvm,           [  --with-libsvm=DIR      libgsl is in DIR])
+
+dnl ** qwt **
+AC_ARG_WITH(qwt,           [  --with-qwt=DIR      qwt (Qt Widget for Technical Applications) is in DIR])
+
+dnl ** cblas **
+AC_ARG_ENABLE(cblas,          [  --enable-cblas      enable building those parts of BALL that depend on CBLAS (Basic Linear Algebra Subprograms in C)])
+AC_ARG_WITH(cblas-libs,           [  --with-cblas-libs=DIR      full path&filename of all BLAS libraries to be used])
 
 dnl
 dnl    interpret switches...
@@ -293,6 +304,37 @@ if test "$with_gsl" != "" -a "$with_gsl" != "no" -o "$enable_gsl" = yes ; then
 else
 	GSL_SUPPORT=
 fi
+
+# support for libsvm
+if test "$with_libsvm" != "" ; then
+	BALL_HAS_LIBSVM=true
+	LIBSVM_LIBDIR=${with_libsvm}
+	LIBSVM_INCDIR=${with_libsvm}
+else
+	LIBSVM_SUPPORT=
+fi
+
+# support for qwt
+if test "$with_qwt" != "" ; then
+	BALL_HAS_QWT=true
+	QWT_LIBDIR=${with_qwt}/lib
+	QWT_INCDIR=${with_qwt}/src/include
+else
+	QWT_SUPPORT=
+fi
+
+
+# support for CBLAS-interface
+if test "$enable_cblas" = yes -o "$with_cblas_libs" != ""; then
+	BALL_HAS_CBLAS=true
+else
+	BALL_HAS_CBLAS=
+fi
+
+if test "$with_cblas_libs" != ""; then
+	CBLAS_LIBS=${with_cblas_libs}
+fi
+
 
 dnl
 dnl 	global definitions
@@ -554,7 +596,7 @@ CF_VALGRIND
 dnl
 dnl		include the default BALL include path
 dnl
-BALL_INCLUDES="-I$BALL_PATH/include ${BALL_INCLUDES}"
+BALL_INCLUDES="-I$BALL_PATH/include ${BALL_INCLUDES} -I${LIBSVM_INCDIR} -I${QWT_INCDIR} -I${QT_INCPATH}/QtGui -I${QT_INCPATH}/QtCore"
 
 dnl
 dnl		expand BINFMT to include the compiler name
@@ -564,7 +606,7 @@ BINFMT_INDEX=""
 
 BALL_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
 
-LIBS="${LIBS} ${FFTW_LIBS} ${GSL_LIBS} -lm"
+LIBS="${LIBS} ${FFTW_LIBS} ${GSL_LIBS} -L${LIBSVM_LIBDIR} -lsvm -L${QWT_LIBDIR} -lqwt ${CBLAS_LIBS} -lm"
 VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
 if test "${USE_VIEW}" = true ; then
@@ -744,6 +786,16 @@ dnl			define BALL_HAS_SSTREAM
 if test "$BALL_HAS_SSTREAM" = yes ; then
 	AC_DEFINE(BALL_HAS_SSTREAM)
 fi
+
+dnl	LIBSVM_SUPPORT
+AC_SUBST(BALL_HAS_LIBSVM)
+
+dnl	QWT_SUPPORT
+AC_SUBST(BALL_HAS_QWT)
+
+dnl	CBLAS_SUPPORT
+AC_SUBST(BALL_HAS_CBLAS)
+
 
 dnl	
 dnl		 make target "clean" should also remove 

@@ -20,7 +20,7 @@ CPP_SOURCES=\
 	surfaceDescriptors.C
 	
 
-ifeq ($(USE_NEWMAT),true)
+ifeq ($(BALL_HAS_CBLAS),true)
 	ifeq ($(BALL_HAS_GSL),true)
 		CPP_SOURCES+=\
 		configIO.C\
@@ -59,7 +59,7 @@ ifeq ($(USE_NEWMAT),true)
 		nBModel.C\
 		latentVariableModel.C
 		
-		ifeq ($(USE_LIBSVM),true)
+		ifeq ($(BALL_HAS_LIBSVM),true)
 			CPP_SOURCES+=\
 			svmModel.C\
 			svrModel.C\
