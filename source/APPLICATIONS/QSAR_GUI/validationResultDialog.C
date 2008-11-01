@@ -49,7 +49,7 @@ ValidationResultDialog::ValidationResultDialog(ValidationItem* item)
 		QLabel* rlabel = new QLabel(train_fit.c_str(),this);
 		layout->addWidget(rlabel, 0,1);
 		QString tmp;
-		QLabel* qlabel;
+		QLabel* qlabel=NULL;
 		
 		if(type<3)
 		{

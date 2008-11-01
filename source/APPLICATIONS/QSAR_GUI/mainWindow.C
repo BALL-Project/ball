@@ -946,7 +946,7 @@ void MainWindow::saveItemsToFiles(String directory, String archive, String confi
 	if(archive!="")
 	{
 		int index=configfile.find_last_of("/");
-		if(index!=string::npos)
+		if(index!=(int)string::npos)
 		{
 			configfile=configfile.substr(index+1); // no path; filename only!
 		}		
@@ -1096,7 +1096,7 @@ Pipeline<DataItem*> MainWindow::disconnectedItems()
 void MainWindow::restoreDesktop(QString filename)
 {
 	String configfile = filename.toStdString();
-	uint s = configfile.find_last_of("/");
+	int s = configfile.find_last_of("/");
 	String directory = configfile.substr(0,s+1); // name of config-file folder
 	bool archive = 0;
 	
@@ -1247,8 +1247,8 @@ void MainWindow::exportPipeline(QString filename)
 		archive = configfile;
 		configfile = configfile.substr(0,configfile.size()-7)+".conf";
 	}
-	uint d = configfile.find_last_of(".");
-	uint s = configfile.find_last_of("/");
+	int d = configfile.find_last_of(".");
+	int s = configfile.find_last_of("/");
 	String file_prefix = configfile.substr(s+1,d-s-1)+"_"; // name of config-file as prefix for output-files
 	String directory = configfile.substr(0,s+1); // name of folder
 	
@@ -1385,8 +1385,8 @@ void MainWindow::submit()
 
 void MainWindow::submitToCluster(String configfile)
 {
-	uint d = configfile.find_last_of(".");
-	uint s = configfile.find_last_of("/");
+	int d = configfile.find_last_of(".");
+	int s = configfile.find_last_of("/");
 	String file_prefix = configfile.substr(0,d); // prefix for output-files
 	String short_file_prefix = configfile.substr(s+1,d-s); // prefix without folders
 	
@@ -1457,10 +1457,10 @@ bool MainWindow::checkForEmptyPipelines()
 BALL::String BALL::VIEW::valueToString(double value)
 {
 	BALL::String t(value);
-	uint index = (uint)t.find_last_not_of("0");
-	if(index!=string::npos)
+	int index = (uint)t.find_last_not_of("0");
+	if(index!=(int)string::npos)
 	{
-		if(index+1<=t.size()&&t[index]!='.') index++;
+		if(index+1<=(int)t.size()&&t[index]!='.') index++;
 		t=t.substr(0,index);
 	}
 	return t;

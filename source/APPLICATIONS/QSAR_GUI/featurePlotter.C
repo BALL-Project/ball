@@ -64,7 +64,7 @@ void FeaturePlotter::plot(bool zoom)
 	
 	// sort ascendingly according to activity value
 	vector<SortedList<pair<double,double> > > values(no_features);
-	for(int i=1; i<=no_features; i++)
+	for(uint i=1; i<=no_features; i++)
 	{
 		for(uint j=1; j<=no_compounds; j++)
 		{
@@ -72,7 +72,7 @@ void FeaturePlotter::plot(bool zoom)
 		}
 	}	
 	
-	for(int i=1; i<=no_features; i++)
+	for(uint i=1; i<=no_features; i++)
 	{
 		values[i-1].front();
 		QwtPlotCurve* curve_i = new QwtPlotCurve;

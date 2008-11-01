@@ -211,7 +211,7 @@ BALL::String RegistryEntry::getStatName(int s)
 	String name = ""; 
 	if(!regression) statistics = &registry_->classification_statistics;
 	
-	if(statistics==0 || s<0 || s>=statistics->size()) return name;
+	if(statistics==0 || s<0 || s>=(int)statistics->size()) return name;
 		
 	return (*statistics)[s];
 }

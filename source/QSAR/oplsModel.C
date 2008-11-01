@@ -56,7 +56,7 @@ void OPLSModel::train()
 	W_ortho_.resize(cols,orthogonal_components_to_create);
 	T_ortho_.resize(descriptor_matrix_.Nrows(),orthogonal_components_to_create);
 
-	for(int j=0; j<orthogonal_components_to_create; j++)
+	for(uint j=0; j<orthogonal_components_to_create; j++)
 	{	
 		for(int i=0; ;i++)
 		{

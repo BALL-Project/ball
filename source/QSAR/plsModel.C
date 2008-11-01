@@ -62,7 +62,7 @@ void PLSModel::train()
 	}
 	Vector<double> u_old; u_old.setVectorType(1); // column-vector
 	
-	for(int j=0; j<components_to_create; j++)
+	for(uint j=0; j<components_to_create; j++)
 	{
 		for(int i=0; i<10000;i++)
 		{	
@@ -119,7 +119,7 @@ bool PLSModel::optimizeParameters(int k, int no_steps)
 {
 	double best_q2=0;
 	int best_no=1;
-	for(int i=1; i<=no_steps && i<=data->getNoDescriptors() && (descriptor_IDs_.empty() || i<descriptor_IDs_.size()); i++)
+	for(int i=1; i<=no_steps && i<=(int)data->getNoDescriptors() && (descriptor_IDs_.empty() || i<(int)descriptor_IDs_.size()); i++)
 	{
 		no_components_=i;
 		validation->crossValidation(k);

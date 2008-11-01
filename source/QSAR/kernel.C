@@ -472,7 +472,7 @@ void Kernel::calculateKernelMatrix4(Matrix<double>& m1, Matrix<double>& m2, Matr
 
 void Kernel::calculateWeightedKernelMatrix(Matrix<double>& input, Matrix<double>& output)
 {
-	if (input.Ncols()!=weights_.getSize())
+	if (input.getColumnCount()!=weights_.getSize())
 	{
 		throw Exception::KernelParameterError(__FILE__,__LINE__, "Kernel.weights_ has wrong size! One weight for each column of the given matrix is needed in order to be able to calculate a weighted distance matrix!");
 	}

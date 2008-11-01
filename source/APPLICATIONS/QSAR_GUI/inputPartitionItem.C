@@ -26,7 +26,7 @@ InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* pa
 	postfix += String(fold_ID_)+".dat";
 	String s = partitioner->getInputItem()->savedAs().toStdString();
 	int index2 = s.find_first_of(".");
-	if(index2!=string::npos)
+	if(index2!=(int)string::npos)
 	{
 		saved_as_ = s.substr(0,index2).c_str();
 	}		
@@ -67,12 +67,12 @@ BALL::String InputPartitionItem::getOutputFilename()
 
 	output_filename_ = partitioner_->getInputItem()->name().toStdString();
 	int index = output_filename_.find_last_of("/");
-	if(index!=string::npos)
+	if(index!=(int)string::npos)
 	{
 		output_filename_=output_filename_.substr(index);
 	}
 	index = output_filename_.find_first_of(".");
-	if(index!=string::npos)
+	if(index!=(int)string::npos)
 	{
 		output_filename_=output_filename_.substr(0,index);
 	}

@@ -417,7 +417,7 @@ void FeatureSelection::twinScan(int k, bool optPar)
 
 	model_->descriptor_IDs_.clear();
 	// do while there is an increase of Q^2 (and no of columns < no of lines)
-	int crossValidation_lines = (int)(((double)lines/k)*(k-1));
+	// int crossValidation_lines = (int)(((double)lines/k)*(k-1));
 	
 	SortedList<unsigned int>::Iterator des_it;
 	SortedList<unsigned int>::Iterator irr_it;

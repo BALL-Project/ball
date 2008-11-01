@@ -89,7 +89,7 @@ void ClassificationModel::saveClassInformationToFile(ofstream& out)
 }
 
 
-void ClassificationModel::equalSpaceDiscretization(int bins, Matrix<double>& discretization_information)
+void ClassificationModel::equalSpaceDiscretization(uint bins, Matrix<double>& discretization_information)
 {
 	uint no_features = descriptor_matrix_.Ncols();
 	uint no_compounds = descriptor_matrix_.Nrows();
@@ -128,7 +128,7 @@ void ClassificationModel::equalSpaceDiscretization(int bins, Matrix<double>& dis
 }
 
 
-void ClassificationModel::equalSpaceDiscretizationTestData(Vector<double>& compound, int bins, const Matrix<double>& discretization_information)
+void ClassificationModel::equalSpaceDiscretizationTestData(Vector<double>& compound, uint bins, const Matrix<double>& discretization_information)
 {
 	if(compound.getSize()!=discretization_information.getColumnCount())
 	{
@@ -142,7 +142,7 @@ void ClassificationModel::equalSpaceDiscretizationTestData(Vector<double>& compo
 		double step_width = (discretization_information(2,i)-discretization_information(1,i))/bins;
 		int feat_bucket = (int)((compound(i)-discretization_information(1,i))/step_width);
 		if(feat_bucket<1) feat_bucket=0;
-		else if(feat_bucket>=(int)bins) feat_bucket=bins-1;
+		else if((uint)feat_bucket>=bins) feat_bucket=bins-1;
 		compound(i) = feat_bucket;
 	}
 }

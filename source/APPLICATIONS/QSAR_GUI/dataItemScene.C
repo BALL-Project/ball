@@ -235,7 +235,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 						CSVInputDataItem* csv_item;
 						
 						/// replace SD-item by new SD-item
-						InputDataItem* existing_input_item = qgraphicsitem_cast<InputDataItem*>(itemAt(pos));
+						//InputDataItem* existing_input_item = qgraphicsitem_cast<InputDataItem*>(itemAt(pos));
 						bool ok=0; 
 						//if(existing_input_item)
 						//{

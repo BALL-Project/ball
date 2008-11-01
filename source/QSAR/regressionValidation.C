@@ -370,7 +370,7 @@ void RegressionValidation::bootstrap1(int k, vector<Matrix<double> >* results, b
 		{
 			Vector<double> rv=model_->predict(test_substances_[i],0);
 			double e = 0; double r = 0;
-			for(uint act=1; act<=test_Y_.Ncols();act++) // for each response variable
+			for(uint act=1; act<=test_Y_.getColumnCount();act++) // for each response variable
 			{
 				e += pow(test_Y_(i+1,act)-rv(act),2);
 				r += pow(mean_Y(act)-rv(act),2);

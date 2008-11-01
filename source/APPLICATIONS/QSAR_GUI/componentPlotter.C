@@ -162,7 +162,7 @@ void ComponentPlotter::plot(bool zoom)
 		
 		if(!plot_loadings_)
 		{
-			vector<double>* resp = model_item_->model()->data->getActivity(j-1);
+			vector<double>* resp = data->getActivity(j-1);
 			double response_value = (*resp)[0];
 			delete resp;
 			QBrush b(QColor(color_map.rgb(interval,response_value)),Qt::SolidPattern);

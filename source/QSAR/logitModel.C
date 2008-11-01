@@ -87,7 +87,7 @@ BALL::Vector<double> LogitModel::predict(const vector<double>& substance, bool t
 		backTransformPrediction(res);
 	}
 
-	for(int i=1; i<=res.getSize();i++)
+	for(uint i=1; i<=res.getSize();i++)
 	{
 		if(res(i)>=0)
 		{

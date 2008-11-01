@@ -118,7 +118,7 @@ void SDFInputDialog::getNumbers()
 	for (int i = 0; i < substrings.size(); i++)
 	{
 		num = substrings[i].toInt(&ok);
-		if (ok && num >= 0 && num < property_names_->size())
+		if (ok && num >= 0 && num < (int)property_names_->size())
 		{	
 			numbers_.insert(num);
 		}

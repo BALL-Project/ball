@@ -839,9 +839,9 @@ BALL::String ModelItem::getMouseOverText()
 			{
 				String t(par[i]);
 				int index = t.find_last_not_of("0");
-				if(index!=string::npos)
+				if(index!=(int)string::npos)
 				{
-					if(index+1<=t.size()&&t[index]!='.') index++;
+					if(index+1<=(int)t.size()&&t[index]!='.') index++;
 					message+="="+t.substr(0,index);
 				}
 				else message+=t;

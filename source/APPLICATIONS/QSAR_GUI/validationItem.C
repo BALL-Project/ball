@@ -312,13 +312,13 @@ bool ValidationItem::execute()
 		
 		// calculate&display average stddev
 		double mean_stddev=0;
-		int rows=coeff_stddev->Nrows();
-		int cols=coeff_stddev->Ncols();
+		uint rows=coeff_stddev->getRowCount();
+		uint cols=coeff_stddev->getColumnCount();
 		if(training_result->getColumnCount()==cols && training_result->getRowCount()==rows)
 		{
-			for(int i=1; i<=rows;i++) // for each feature
+			for(uint i=1; i<=rows;i++) // for each feature
 			{
-				for(int j=1; j<=cols;j++) // for each activity
+				for(uint j=1; j<=cols;j++) // for each activity
 				{
 					double t_ij = (*training_result)(i,j);
 					double s_ij = (*coeff_stddev)(i,j);

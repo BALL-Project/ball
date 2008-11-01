@@ -263,7 +263,7 @@ double Statistics::euclNorm(const Vector<double>& cv)
 double Statistics::scalarProduct(const Vector<double>& cv)
 {
 	double n=0;
-	for(int i=1; i<=cv.getSize();i++)
+	for(uint i=1; i<=cv.getSize();i++)
 	{
 		n+=cv(i)*cv(i);
 	}
@@ -274,7 +274,7 @@ double Statistics::scalarProduct(const Vector<double>& cv)
 double Statistics::euclDistance(const Vector<double>& c1, const Vector<double>& c2)
 {
 	double n=0;
-	for(int i=1; i<=c1.getSize();i++)
+	for(uint i=1; i<=c1.getSize();i++)
 	{
 		n+=pow((c1(i)-c2(i)),2);
 	}

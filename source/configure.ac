@@ -311,16 +311,16 @@ if test "$with_libsvm" != "" ; then
 	LIBSVM_LIBDIR=${with_libsvm}
 	LIBSVM_INCDIR=${with_libsvm}
 else
-	LIBSVM_SUPPORT=
+	BALL_HAS_LIBSVM=
 fi
 
 # support for qwt
 if test "$with_qwt" != "" ; then
 	BALL_HAS_QWT=true
 	QWT_LIBDIR=${with_qwt}/lib
-	QWT_INCDIR=${with_qwt}/src/include
+	QWT_INCDIR=${with_qwt}/src
 else
-	QWT_SUPPORT=
+	BALL_HAS_QWT=
 fi
 
 

@@ -37,14 +37,14 @@ void PCRModel::calculateEigenvectors(const Matrix<double>& data, double frac_var
 	double complete_var=singular_values.sum();
 	
 	double explained_var=0;
-	int cols=0; 
+	uint cols=0; 
 	if(complete_var==0)
 	{
 		throw Exception::NoPCAVariance(__FILE__,__LINE__,"No variance present to be explained by PCA!");
 	}
 	
-	int last_vector=1;
-	for (; last_vector<=singular_values.getSize() && cols<data.Nrows() && explained_var/complete_var<frac_var ; last_vector++) 
+	uint last_vector=1;
+	for (; last_vector<=singular_values.getSize() && cols<data.getRowCount() && explained_var/complete_var<frac_var ; last_vector++) 
 	{
 		// (singular-value)^2 == eigen-value
 		explained_var+=singular_values(last_vector);
@@ -57,9 +57,9 @@ void PCRModel::calculateEigenvectors(const Matrix<double>& data, double frac_var
 	// getRightSingularVectors() returns V.t() NOT V, so we have to transform back to V here !!
 	Matrix<double> V = solver.getRightSingularVectors().t();
 	
-	for (int i=1; i<=data.Nrows(); i++)
+	for (uint i=1; i<=data.getRowCount(); i++)
 	{
-		for (int j=1; j<=last_vector ; j++)
+		for (uint j=1; j<=last_vector ; j++)
 		{
 			output(i,j) = V(i,j);
 		}
