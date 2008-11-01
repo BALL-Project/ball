@@ -1364,6 +1364,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			message_label_->setText("");
 		}
 
+		void MainControl::restoreWindows()
+			throw()
+		{
+			restoreWindows(preferences_file_);
+		}
+
 		void MainControl::restoreWindows(const INIFile& inifile)
 			throw()
 		{
