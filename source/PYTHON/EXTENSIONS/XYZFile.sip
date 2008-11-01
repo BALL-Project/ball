@@ -18,5 +18,5 @@ class XYZFile
   XYZFile(const String&, OpenMode /openmode/ = std::ios::in) throw(FileNotFound);
   ~XYZFile() throw();
   virtual bool write(const System&) throw(File::CannotWrite);
-  virtual bool read(System&);
+  virtual bool read(System&) throw(ParseError);
 };
