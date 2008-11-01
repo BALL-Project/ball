@@ -109,7 +109,7 @@ namespace BALL
 
 		// Add the BALL library path to the Python search path
 		// to make sure Python can find the BALL extensions.
-		runSingleString_("sys.path.append(\"" BALL_PATH "/lib/" BALL_BINFMT "\")", Py_single_input);
+		runSingleString_("sys.path.append(\"" BALL_PATH "/lib/" "\")", Py_single_input);
 		start_log_ += error_message_;
 #ifdef BALL_OS_DARWIN // Quick hack for Darwin BALLVIew installer // [20050624/OK]
 		runSingleString_("sys.path.append(\"/Library/BALL/Library/Python\")", Py_single_input);
