@@ -7,8 +7,8 @@
 #ifndef BALL_FORMAT_XYZFILE_H
 #define BALL_FORMAT_XYZFILE_H
 
-#ifndef BALL_SYSTEM_FILE_H
-#	include <BALL/SYSTEM/file.h>
+#ifndef BALL_FORMAT_GENERICMOLFILE_H
+#	include <BALL/FORMAT/genericMolFile.h>
 #endif
 
 namespace BALL 
@@ -32,7 +32,7 @@ namespace BALL
     	\ingroup  StructureFormats
 	*/
 	class BALL_EXPORT XYZFile
-		: public File
+		: public GenericMolFile
 	{
 		public:
 
@@ -73,11 +73,13 @@ namespace BALL
 		
 		/**	Read a system from the XYZ file
 		*/
-		virtual bool read(System&	system);
+		virtual bool read(System&	system)
+			throw(Exception::ParseError);
 
 		/**	Read a system from the XYZ file
 		*/
 		virtual XYZFile& operator >> (System& system)
+			throw(Exception::ParseError)
 		{
 			read(system);
 			return *this;
@@ -86,6 +88,7 @@ namespace BALL
 		/**	Write a system to the XYZ file
 		*/
 		virtual XYZFile& operator << (const System& system)
+			throw(File::CannotWrite)
 		{
 			write(system);
 			return *this;

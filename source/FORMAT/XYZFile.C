@@ -19,18 +19,20 @@ namespace BALL
 {
 
 	XYZFile::XYZFile()
+		: GenericMolFile()
 	{
 	}
 
 	XYZFile::XYZFile(const String& name, File::OpenMode open_mode)
 		throw(Exception::FileNotFound)
-		: File(name, open_mode)
+		: GenericMolFile()
 	{
+		GenericMolFile::open(name, open_mode);
 	}
 
 	XYZFile::XYZFile(const XYZFile& file)
 		throw(Exception::FileNotFound)
-		: File(file)
+		: GenericMolFile(file)
 	{
 	}
 
@@ -68,6 +70,7 @@ namespace BALL
 	}
 
 	bool XYZFile::read(System& system)
+		throw(Exception::ParseError)
 	{
 		// remove old rubbish from the system
 		system.destroy();
