@@ -309,7 +309,8 @@ PyWidget::PyWidget(QWidget *parent, const char *name)
 		intend_(0),
 		running_(false),
 		silent_(false),
-		full_silent_(false)
+		full_silent_(false),
+		script_mode_(false)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new PyWidget " << this << std::endl;
