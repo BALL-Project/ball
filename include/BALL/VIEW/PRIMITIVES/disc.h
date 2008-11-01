@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: disc.h,v 1.8.16.1 2007/03/25 21:26:08 oliver Exp $
+// $Id: disc.h,v 1.8.16.1 2007-03-25 21:26:08 oliver Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_DISC_H
@@ -128,6 +128,11 @@ namespace BALL
 			
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const;
+
+			//Method for printability
+			Position isType()
+				throw() { return 1; }
+
 
 
 			//@}

@@ -407,6 +407,7 @@ fi
 dnl 	check for standard C headers
 dnl 	and how to run the preprocessor
 AC_HEADER_STDC
+CF_CHECK_MAP
 
 
 
@@ -766,7 +767,7 @@ AC_PREFIX_DEFAULT(`cd ..; pwd`)
 dnl
 dnl 	Create output files. Move them to temporary location
 dnl		only, because some of them will require additional
-dnl		modification (in MULTI_BUILD mode).
+dnl		modification
 dnl
 AC_OUTPUT([
  	config.mak.tmp:config/config.mak.in 

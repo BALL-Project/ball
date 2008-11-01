@@ -94,8 +94,8 @@ macos_pkg: $(EXECUTABLE)
 	@$(CP) -r $(BALL_PATH)/data $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL
 	@echo "Copying BALLView"
 	@$(CP) BALLView $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents/MacOS/
-	@echo "Copying QT libraries..."
-	@$(CP) $(QT_LIBPATH)/libqt$(QT_MT_SUFFIX).$(SHARED_LIB_SUFFIX) $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL/Library/
+	@echo "Copying contrib libraries..."
+	@$(CP) $(BALL_PATH)/contrib/lib/lib*dylib $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL/Library/
 	
 	
 	

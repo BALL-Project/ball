@@ -105,6 +105,35 @@ But this form of stereo projection does not require a specific type of graphics 
 To use antialiasing in POV-Ray, the flag "+A0.3" can be added.
 </div>
 
+<h2 align = center>Data provision for 3D printing<a name="3d_printing"></a></h2>
+<div align="justify">Printing service provider as <a href="http://www.rapidobject.com/">Rapid Object</a> for example produce 
+syntheic or ceramic models out of proper data. The representation data has to be sent as a VRML<a href="tips.html#VRML"> (with textures and colours) 
+or a .stl<a href="tips.html#stl"> (just structure) file. Therefore BALLView can create VRML<a href="tips.html#VRML"> or .stl<a href="tips.html#stl"> exports. </br>
+<b>Important note:</b> At the moment just representations consiting only of meshes (SES, SAS, Ribbon, Cartoon, Backbone) are printable.
+Other representations can be exported but most enterprises will not be willing to print them as they contain cutting planes. Also all files with more than
+one representation are not printable as the printer print one cohering block.
+</br>For the export of several representations which have to have the same scale after printing the VRML export contains two rows with
+usefull information, as maximum and minimum X, Y, and Z values, the boxsize of a box the representation fits into and the volume of this
+box, as this is the worstcase volume one has to pay for if printing. These lines are at the very end of the file. 
+</br> <b>Warning:</b> All exports take very long (and in this time BALLView will not react or redraw its surface) so don't panic, just wait. (worstcase so far: 60 minutes)
+</div>
+
+<h2 align = center>VRML exports<a name="VRML"></a></h2>
+<div align="justify">The printability and printing information is to be found in "Data provision for 3D printing"<a href="tips.html#3d_printing">.
+VRML describes the representation by writing primitives as spheres, tubes and lines. As these are allways complete and without holes
+the combination of several primitives (others than meshes which are just describing the surface) isn't printable anymore.
+The VRML export warns the user as soon as a representation is used which is not printable. </br> As printability is also violated as soon as more
+than one representation is put into a common file the VRML export produces a question window in this case. The user can decide if he wants
+to export nethertheless into one file (is sensible if he wants just to view the data not to print it). If he decides to want them to be exported into
+several files the representations will get a "_XX" appended where XX is the number of visible representation in chronological order of their creation.
+</div>
+
+<h2 align = center>stl exports<a name="stl"></a></h2>
+<div align="justify"> Another type of printing data format is stl. It is not very interessting as a colourless model is not really cheaper
+than a coloured one. stl contains no primitives just meshes but the representations which are not prinable are the same as for VRML as the export takes
+a very long time and creates huge amounts of data and therefore an intelligent export of the "Ball and Stick" representation for example would be infeasible.
+</div>
+
 <h2 align = center>Create animations<a name="animations"></a></h2>
 <div align="justify">
 BALLView can create fly by animations from the Scene, either for creating on screen presentations or 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: multiLine.C,v 1.1.4.1 2007/03/25 22:02:34 oliver Exp $
+// $Id: multiLine.C,v 1.1.4.1 2007-03-25 22:02:34 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIVES/multiLine.h>
 

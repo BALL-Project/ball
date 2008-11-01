@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredLine.h,v 1.10.16.1 2007/03/25 21:26:12 oliver Exp $
+// $Id: twoColoredLine.h,v 1.10.16.1 2007-03-25 21:26:12 oliver Exp $
 //
 
 #ifndef BALL_VIEW_VIEW_PRIMITIVES_TWOCOLOREDLINE_H
@@ -172,6 +172,11 @@ namespace BALL
 			
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const;
+
+			//Method for printability
+			Position isType()
+				throw() { return 12; }
+
 
 			//@}
 		};
