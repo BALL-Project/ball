@@ -139,6 +139,13 @@ namespace BALL
 			}
 		}
 
+		void GLDisplayList::endDefinition()
+			throw()
+		{ 
+			CHECK_GL_ERROR
+			glEndList(); 
+		}
+
 		void GLDisplayList::dump(ostream& s, Size depth) const
 			throw()
 		{
