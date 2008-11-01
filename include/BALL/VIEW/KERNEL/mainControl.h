@@ -406,7 +406,11 @@ namespace BALL
 			virtual void writePreferences(INIFile &inifile)
 				throw();
 			
-			/// Restore the positions the main window and of all DockWindow's from the INIFile
+			/// Restore the positions the main window and of all DockWindow's from the INIFile assigned to this instance.
+			virtual void restoreWindows()
+				throw();
+	
+			/// Restore the positions the main window and of all DockWindow's from a given inifile
 			virtual void restoreWindows(const INIFile& inifile)
 				throw();
 	
