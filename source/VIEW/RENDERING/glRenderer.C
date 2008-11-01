@@ -336,9 +336,9 @@ void GLRenderer::setLights(bool reset_all)
 
 	if (reset_all)
 	{
-		GLenum LIGHTS_MAX = GL_MAX_LIGHTS;
-		if (LIGHTS_MAX > 10) LIGHTS_MAX = 10;
-		for (; light_nr < GL_LIGHT0 + LIGHTS_MAX; light_nr++)
+		GLint lights_max;
+		glGetIntegerv(GL_MAX_LIGHTS, &lights_max);
+		for (; (GLint)light_nr < GL_LIGHT0 + lights_max; light_nr++)
 		{
 			glDisable(light_nr);
 		}
@@ -420,7 +420,7 @@ void GLRenderer::setLights(bool reset_all)
 
 		// setup the angle of the light cone
 		GLfloat angle = 180;
-		if (it->getAngle() <= 90)
+		if (it->getAngle().toDegree() <= 90)
 		{
 			angle = it->getAngle().toDegree();
 		}

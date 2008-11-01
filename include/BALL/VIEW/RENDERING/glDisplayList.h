@@ -155,7 +155,7 @@ class BALL_VIEW_EXPORT GLDisplayList
 			\see         startDefinition
 	*/
 	void endDefinition()
-		throw() { glEndList(); }
+		throw(); 
 
 	/** Draw the display list.
 			If this method is called the graphical representation of this
