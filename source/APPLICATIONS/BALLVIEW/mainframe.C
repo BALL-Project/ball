@@ -310,6 +310,10 @@ namespace BALL
 		tb->addAction(stop_simulation_action_);
 		tb->addAction(preferences_action_);
 		HelpViewer::getInstance(1)->addToolBarEntries(tb);
+
+		// we have changed the child widgets stored in the maincontrol (e.g. toolbars), so we have
+		// to restore the window state again!
+		restoreWindows();
 	}
 
 	void Mainframe::about()
