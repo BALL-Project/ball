@@ -135,18 +135,38 @@ namespace BALL
 			throw();
 
 		/** Get the number of points of the TriangulatedSurface.
+		 * 	@deprecated Use TriangulatedSurface::getNumberOfPoints() instead
 		*/
-		Size numberOfPoints() const
+		BALL_DEPRECATED Size numberOfPoints() const
+			throw();
+
+		/** Get the number of points of the TriangulatedSurface.
+		 * 	@deprecated Use TriangulatedSurface::getNumberOfPoints() instead
+		*/
+		Size getNumberOfPoints() const
+			throw();
+
+		/** Get the number of edges of the TriangulatedSurface.
+		 * 	@deprecated Use TriangulatedSurface::getNumberOfEdges() instead
+		*/
+		BALL_DEPRECATED Size numberOfEdges() const
 			throw();
 
 		/** Get the number of edges of the TriangulatedSurface.
 		*/
-		Size numberOfEdges() const
+		Size getNumberOfEdges() const
 			throw();
 
 		/** Get the number of triangles of the TriangulatedSurface.
+		 * 	@deprecated Use TriangulatedSurface::getNumberOfTriangles() instead
 		*/
-		Size numberOfTriangles() const
+		BALL_DEPRECATED Size numberOfTriangles() const
+			throw();
+
+		/** Get the number of triangles of the TriangulatedSurface.
+		 * 	Use TriangulatedSurface::getNumberOfTriangles() instead
+		*/
+		Size getNumberOfTriangles() const
 			throw();
 
 		/** Remove a point from the TriangulatedSurface.

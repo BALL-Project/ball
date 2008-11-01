@@ -68,8 +68,7 @@ namespace BALL
 	}
 
 
-	void TriangulatedSurface::set
-			(const TriangulatedSurface& surface, bool)
+	void TriangulatedSurface::set(const TriangulatedSurface& surface, bool)
 		throw()
 	{
 		if (this != &surface)
@@ -79,8 +78,7 @@ namespace BALL
 	}
 
 
-	TriangulatedSurface& TriangulatedSurface::operator =
-			(const TriangulatedSurface& surface)
+	TriangulatedSurface& TriangulatedSurface::operator = (const TriangulatedSurface& surface)
 		throw()
 	{
 		if (this != &surface)
@@ -121,6 +119,12 @@ namespace BALL
 		return number_of_points_;
 	}
 
+	Size TriangulatedSurface::getNumberOfPoints() const
+		throw()
+	{
+		return number_of_points_;
+	}
+
 
 	Size TriangulatedSurface::numberOfEdges() const
 		throw()
@@ -128,6 +132,11 @@ namespace BALL
 		return number_of_edges_;
 	}
 
+	Size TriangulatedSurface::getNumberOfEdges() const
+		throw()
+	{
+		return number_of_edges_;
+	}
 
 	Size TriangulatedSurface::numberOfTriangles() const
 		throw()
@@ -135,6 +144,11 @@ namespace BALL
 		return number_of_triangles_;
 	}
 
+	Size TriangulatedSurface::getNumberOfTriangles() const
+		throw()
+	{
+		return number_of_triangles_;
+	}
 
 	void TriangulatedSurface::remove(TrianglePoint* point, bool deep)
 		throw()
@@ -323,8 +337,7 @@ namespace BALL
 	}
 
 
-	TriangulatedSurface& TriangulatedSurface::operator +=
-			(const TriangulatedSurface& surface)
+	TriangulatedSurface& TriangulatedSurface::operator += (const TriangulatedSurface& surface)
 		throw()
 	{
 		std::list<TrianglePoint*>::const_iterator p;
@@ -667,10 +680,12 @@ namespace BALL
 		{
 			if (*p == NULL)
 			{
+				Log.error() << "Error: TriangulatedSurface contains null pointer!" << std::endl;
 				return false;
 			}
 			if ((*p)->index_ != i)
 			{
+				Log.error() << "Error: TriangulatedSurface contains index mismatch!" << std::endl;
 				return false;
 			}
 			i++;
@@ -783,6 +798,10 @@ namespace BALL
 				triangle_vector[i]->edge_[2] = edge_vector[(*t)->edge_[2]->index_];
 				i++;
 			}
+		}
+		else
+		{
+			Log.error() << "Error: surface can not be copied!" << std::endl;
 		}
 	}
 
@@ -1405,19 +1424,19 @@ namespace BALL
 	std::ostream& operator << (std::ostream& s,
 														 const TriangulatedSurface& surface)
 	{
-		s << "Points: " << surface.numberOfPoints() << "\n";
+		s << "Points: " << surface.getNumberOfPoints() << "\n";
 		TriangulatedSurface::ConstPointIterator p;
 		for (p = surface.beginPoint(); p != surface.endPoint(); p++)
 		{
 			s << **p << "\n";
 		}
-		s << "Edges: " << surface.numberOfEdges() << "\n";
+		s << "Edges: " << surface.getNumberOfEdges() << "\n";
 		TriangulatedSurface::ConstEdgeIterator e;
 		for (e = surface.beginEdge(); e != surface.endEdge(); e++)
 		{
 			s << **e << "\n";
 		}
-		s << "Triangles: " << surface.numberOfTriangles() << "\n";
+		s << "Triangles: " << surface.getNumberOfTriangles() << "\n";
 		TriangulatedSurface::ConstTriangleIterator t;
 		for (t = surface.beginTriangle(); t != surface.endTriangle(); t++)
 		{
