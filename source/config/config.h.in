@@ -197,6 +197,15 @@
 // Define whether inline functions may be used as template parameters.
 #undef BALL_HAS_INLINE_TPL_ARGS
 
+// Defines the prefix needed when including extensions to the stl
+#undef BALL_EXT_INCLUDE_PREFIX 
+
+// Defines the namespace where extensions to the stl are located.
+#define BALL_EXT_NAMESPACE std
+
+// Defines whether the HashMap already provides LongSize hashing
+#undef BALL_NEEDS_LONGSIZE_HASH
+
 // Define the precision for the BALL Complex type. This is mainly used
 // to determine the FFTW default type
 #define BALL_COMPLEX_PRECISION float

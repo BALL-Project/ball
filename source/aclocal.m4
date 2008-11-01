@@ -676,7 +676,7 @@ dnl		Here go the g++-specific options
 dnl
 CXXFLAGS="${CXXFLAGS} -pipe"
 CXX_MAKEDEPEND="${CXX}"
-MAKEDEP_CXX_OPTS="-M"
+MAKEDEP_CXX_OPTS="-MM"
 CXXFLAGS_D="${CXXFLAGS_D} -Wall -W -pedantic -Wno-long-long"
 CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 
@@ -3132,22 +3132,25 @@ AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
 		X=`pwd`
 		AC_MSG_CHECKING(linking against QT libraries)
 
+		GENERIC_QT_LIBPATH=""
+		DARWIN_QT_LIBPATH=""
 		if test "${QT_LIBPATH}" != "/usr/lib" ; then
-			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
-			QT_LIBOPTS="-L${QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
-			if test "${OS}" = "Darwin" ; then
-				QTQGL_LIBOPTS="-F${QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
-				QT_LIBOPTS="-F${QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
-			fi
-		else 
-			QT_LIBPATH=""
-			QTQGL_LIBOPTS=" -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
-			QT_LIBOPTS="-lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
-			if test "${OS}" = "Darwin" ; then
-				QTQGL_LIBOPTS="-framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
-				QT_LIBOPTS="-framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
-			fi
+			GENERIC_QT_LIBPATH="-L${QT_LIBPATH}"
+			DARWIN_QT_LIBPATH="-F${QT_LIBPATH}"
 		fi
+
+		if test "${OS}" = "Darwin" ; then
+			QTQGL_LIBOPTS="${DARWIN_QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
+			QT_BALL_LIBOPTS="${DARWIN_QT_LIBPATH} -framework QtCore -framework QtSql"
+			QT_VIEW_LIBOPTS="${DARWIN_QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest"
+		else
+			QTQGL_LIBOPTS="${GENERIC_QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
+			QT_BALL_LIBOPTS="${GENERIC_QT_LIBPATH} -lQtCore -lQtSql"
+			QT_VIEW_LIBOPTS="${GENERIC_QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest"
+		fi
+
+		AC_DEFINE_UNQUOTED(QT_BALL_LIBOPTS, ${QT_BALL_LIBOPTS})
+		AC_DEFINE_UNQUOTED(QT_VIEW_LIBOPTS, ${QT_VIEW_LIBOPTS})
 
 		SAVE_LIBS=${LIBS}
 		LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
@@ -3156,7 +3159,7 @@ AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
 
 		if test "${QT_LINKING_OK+set}" != set ; then
 			SAVE_LIBS=${LIBS}
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+			LIBS="${QT_VIEW_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
 			AC_TRY_LINK([#include <QtOpenGL/QGLWidget>], [QGLWidget wid;], QT_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
 		fi
@@ -3164,7 +3167,7 @@ AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
 		if test "${QT_LINKING_OK+set}" != set ; then
 			SAVE_LIBS=${LIBS}
 			X11_LIBOPTS="-lXrender -lfreetype ${X11_LIBOPTS}"
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+			LIBS="${QT_VIEW_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
 			AC_TRY_LINK([#include <QtOpenGL/QGLWidget>], [QGLWidget wid;], QT_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
 		fi
@@ -3184,7 +3187,7 @@ AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
 		dnl
 		AC_MSG_CHECKING(QT library version)
 		SAVE_LIBS=${LIBS}
-		LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+		LIBS="${QT_BALL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 		if test "${OS}" = "Darwin" ; then
 			DYLD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${GLEW_LIBPATH}:${DYLD_LIBRARY_PATH}"
 			export DYLD_LIBRARY_PATH
@@ -4670,6 +4673,102 @@ AC_DEFUN(CF_CLEAR_DEP_FILES, [
 	dnl
 	${RM}  .Dependencies 2>/dev/null
 	${RM}  lib*.objects 2>/dev/null
+])
+
+AC_DEFUN(CF_FIND_EXT_NAMESPACE, [
+	dnl
+	dnl Determine the include paths and the name of the namespace where extensions to the STL are
+	dnl located, e.g. hash_map, if present.
+	dnl
+	AC_MSG_CHECKING(for prefix of include paths for stl extensions)
+	for TMP_EXT_INCLUDE_PREFIX in "" "ext/"; do
+		AC_TRY_COMPILE(
+		[
+		#include <${TMP_EXT_INCLUDE_PREFIX}hash_map>
+		],
+		[
+		],
+		EXT_INCLUDE_PREFIX_FOUND=true
+		)
+		if test "${EXT_INCLUDE_PREFIX_FOUND}" = "true" ; then
+			break;
+		fi;
+	done
+	if test "${EXT_INCLUDE_PREFIX_FOUND}" = "true" ; then
+		AC_MSG_RESULT([found ("${TMP_EXT_INCLUDE_PREFIX}")])
+		if test "${TMP_EXT_INCLUDE_PREFIX}" = "ext/" ; then
+			AC_DEFINE(PROJECT[]_EXT_INCLUDE_PREFIX)
+		fi
+	else
+		AC_MSG_RESULT(not found!)
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([Could not find the location of hash_map include files!])
+		AC_MSG_RESULT([BALL requires a C++ compiler that provides at least the hash_map extension to the STL.])
+		AC_MSG_RESULT([If your compiler *does* provide a hash_map implementation, but in a non-standard path,])
+		AC_MSG_RESULT([try adding it as an additional include path and please contact the BALL developers!])
+		AC_MSG_RESULT()
+		CF_ERROR
+	fi
+	
+	dnl
+	dnl Now try to determine the correct namespace to use
+	dnl
+	AC_MSG_CHECKING(for the STL extension namespace)
+	for TMP_EXT_NAMESPACE in "std" "stdext" "__gnu_cxx" "" ; do
+		AC_TRY_COMPILE(
+		[
+		#include <${TMP_EXT_INCLUDE_PREFIX}hash_map>
+		],
+		[
+		${TMP_EXT_NAMESPACE}::hash_map<int, int> a;
+		],
+		EXT_NAMESPACE_FOUND=true
+		)
+		if test "${EXT_NAMESPACE_FOUND}" = "true" ; then
+			break;
+		fi
+	done
+	if test "${EXT_NAMESPACE_FOUND}" = "true" ; then
+		AC_MSG_RESULT([found ("${TMP_EXT_NAMESPACE}")])
+		PROJECT[]_EXT_NAMESPACE=${TMP_EXT_NAMESPACE}
+		AC_DEFINE_UNQUOTED(PROJECT[]_EXT_NAMESPACE, ${PROJECT[]_EXT_NAMESPACE})
+	else
+		AC_MSG_RESULT(not found!)
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([Could not find the name of the namespace containing hash_map!])
+		AC_MSG_RESULT([BALL requires a C++ compiler that provides at least the hash_map extension to the STL.])
+		AC_MSG_RESULT([If your compiler *does* provide a hash_map implementation, but in a non-standard namespace,])
+		AC_MSG_RESULT([please contact the BALL developers!])
+		AC_MSG_RESULT()
+		CF_ERROR
+	fi
+
+	dnl
+	dnl Now try to find out whether there is already a hash function for PROJECT[]::LongSize
+	dnl
+	AC_MSG_CHECKING(whether LongSize hash is required)
+	AC_TRY_COMPILE(
+	[
+	#include <${TMP_EXT_INCLUDE_PREFIX}hash_map>
+
+	namespace ${TMP_EXT_NAMESPACE} {
+	template<>
+	struct hash<${BALL_ULONG64_TYPE}>
+	{
+		size_t operator()(${BALL_ULONG64_TYPE} x) const { return (size_t)x; }
+	};
+	}
+	],
+	[
+	],
+	NEEDS_LONGSIZE_HASH=true
+	)
+	if test "${NEEDS_LONGSIZE_HASH}" = "true" ; then
+		AC_MSG_RESULT(yes)
+		AC_DEFINE(PROJECT[]_NEEDS_LONGSIZE_HASH)
+	else
+		AC_MSG_RESULT(no)
+	fi
 ])
 
 
