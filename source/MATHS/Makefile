@@ -2,6 +2,9 @@ DIRECTORY=MATHS
 
 THISLIB=$(LIBNAME)
 
+MATHS_SUBDIRS=\
+	LINALG
+
 FFT_SOURCES=$(BALL_HAS_FFTW:true=FFT1D.C FFT2D.C FFT3D.C)
 
 PARSER_SOURCES= \
@@ -40,9 +43,30 @@ PARSER_PREFIX=parsedFunction
 include ../common.mak
 -include .Dependencies
 
-depend: $(PARSER_SOURCES)
+depend: $(PARSER_SOURCES) subdirsdepend
 
-default_clean: clean_flex_bison
+default: echodir $(OBJECTS) dirs
+
+collectlib: subdirscollectlib
+
+dirs: dummy
+	@$(MAKE) subdirs SUBDIRS="$(MATHS_SUBDIRS)" TARGET=default
+
+subdirs:	dummy
+	@set -e; for i in $(SUBDIRS); do cd $$i; if $(MAKE) $(TARGET); then cd .. ; else cd .. ; exit 1 ; fi ; done
+
+subdirsdepend:	dummy
+	@echo "" > .Dependencies
+	@for i in $(MATHS_SUBDIRS); do ( cd $$i; echo "" >.Dependencies; cd .. ) ; done
+	@$(MAKE) subdirs SUBDIRS="$(MATHS_SUBDIRS)" TARGET=depend
+
+subdirsclean:
+	@$(MAKE) subdirs SUBDIRS="$(MATHS_SUBDIRS)" TARGET=default_clean
+
+subdirscollectlib:	dummy
+	@$(MAKE) subdirs SUBDIRS="$(MATHS_SUBDIRS)" TARGET=collectlib LIBNAME="$(THISLIB)"
+
+default_clean: clean_flex_bison subdirsclean
 
 clean_flex_bison:
 	@-$(RM) parsedFunctionParser.C parsedFunctionLexer.C parsedFunctionParser.h *.bak 2>/dev/null
@@ -57,3 +81,4 @@ parsedFunctionParser.o: parsedFunctionParser.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@ || \
 	../config/fixbison parsedFunctionParser.C
 
+dummy:

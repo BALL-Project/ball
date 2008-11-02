@@ -1,3 +1,6 @@
+#ifndef CONFIG_IO_H
+#define CONFIG_IO_H
+
 #include <istream>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/QSAR/sortedList.h>
@@ -139,3 +142,6 @@ namespace BALL
 		};
 	}
 }
+
+
+#endif // CONFIG_IO_H
