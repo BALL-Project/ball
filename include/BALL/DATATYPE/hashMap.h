@@ -50,7 +50,6 @@ namespace BALL_EXT_NAMESPACE
 #endif
 
 }
-#endif
 
 namespace BALL
 {
