@@ -6,6 +6,7 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/dottedEdge.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/inputDataItemIO.h>
 #include <BALL/SYSTEM/timer.h>
+#include <BALL/FORMAT/INIFile.h>
 
 #include <QtGui/QMessageBox>
 #include <QtGui/QFileDialog>
@@ -30,6 +31,7 @@ using namespace BALL::Exception;
  MainWindow::MainWindow()
  {
 	fullscreen_ = 0;
+	settings.main_window = this;
 	 
 	 ///set up the main scenes & views
 	view_ = new DataItemView(&view_scene_,this);
@@ -60,7 +62,6 @@ using namespace BALL::Exception;
 	// read information about last used paths
 	String s = QDir::homePath().toStdString();
 	s = s+"/.QSARGUI";
-	ifstream in(s.c_str());
 	settings.input_data_path=QDir::homePath().toStdString();
 	settings.config_path=QDir::homePath().toStdString();
 	settings.size_x=0; settings.size_y=0;
@@ -69,28 +70,7 @@ using namespace BALL::Exception;
 	settings.tools_path="";
 	settings.send_email=0;
 	settings.email_address="";
-	if(in) 
-	{
-		in>>settings.input_data_path;
-		if(in) in>>settings.config_path;
-		if(in) in>>settings.size_x;
-		if(in) in>>settings.size_y;
-		if(in) in>>settings.pos_x;
-		if(in) in>>settings.pos_y;
-		string tmp;
-		getline(in,tmp);  // read the rest of the line
-		if(in) getline(in,tmp);
-		if(tmp!="") settings.submit_prefix=tmp;
-		tmp="";
-		if(in) getline(in,tmp);
-		if(tmp!="") settings.tools_path=tmp;
-		if(in) in>>settings.send_email;
-		getline(in,tmp);  // read the rest of the line
-		tmp="";
-		if(in) getline(in,tmp);
-		if(tmp!="") settings.email_address=tmp;
-		in.close();
-	}
+	settings.readFromFile(s);
 
 	///create actions, menus, tool bars, status bar, dock windows and dialogs
 	createActions();
@@ -106,12 +86,6 @@ using namespace BALL::Exception;
 	setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
 	if(settings.size_x==0 || settings.size_y==0) showMaximized();
-	else 
-	{
-		resize(settings.size_x,settings.size_y);
-		move(settings.pos_x,settings.pos_y);
-		show();
-	}
 	
 	drag_start_time = drag_start_time.now();
 	min_drag_time=0.3;
@@ -139,18 +113,58 @@ MainWindow::~MainWindow()
 	// save path to last used input file
 	String file = QDir::homePath().toStdString();
 	file = file+"/.QSARGUI";
-	ofstream output(file.c_str());
-	output<<settings.input_data_path<<endl<<flush;
-	output<<settings.config_path<<endl<<flush;
-	QSize s = size();
-	output<<s.width()<<"  "<<s.height()<<endl;
-	QPoint p = pos();
-	output<<p.x()<<"  "<<p.y()<<endl;
-	output<<settings.submit_prefix<<endl;
-	output<<settings.tools_path<<endl;
-	output<<settings.send_email<<endl;
-	output<<settings.email_address<<endl;
-	output.close();
+	
+	settings.saveToFile(file);
+}
+
+void MainWindow::Settings::saveToFile(String file)
+{
+	INIFile out(file);
+	out.appendSection("QPipeViz");
+	out.insertValue("QPipeViz","input_data_path",input_data_path);
+	QSize s = main_window->size();
+	String size = String(s.width())+" "+String(s.height());
+	out.insertValue("QPipeViz","window_size",size);
+	QPoint p = main_window->pos();
+	String pos = String(p.x())+"  "+String(p.y());
+	out.insertValue("QPipeViz","window_position",pos);
+	out.insertValue("QPipeViz","submit_prefix",submit_prefix);
+	out.insertValue("QPipeViz","tools_path",tools_path);
+	out.insertValue("QPipeViz","send_email",send_email);
+	out.insertValue("QPipeViz","email_address",email_address);
+	out.write();
+}
+
+void MainWindow::Settings::readFromFile(String file)
+{
+	ifstream test_existence(file.c_str());
+	if(!test_existence) return;
+	test_existence.close();	
+	
+	try
+	{
+		INIFile ini(file);
+		ini.read();
+		if(ini.hasEntry("QPipeViz","input_data_path")) input_data_path = ini.getValue("QPipeViz","input_data_path");
+		if(ini.hasEntry("QPipeViz","window_size")) 
+		{
+			String s = ini.getValue("QPipeViz","window_size");
+			size_x=s.getField(0).toInt(); size_y=s.getField(1).toInt();
+			main_window->resize(size_x,size_y);
+		}
+		if(ini.hasEntry("QPipeViz","window_position"))
+		{
+			String position = ini.getValue("QPipeViz","window_position");
+			pos_x=position.getField(0).toInt(); pos_y=position.getField(1).toInt();
+			main_window->move(pos_x,pos_y);
+		}
+		if(ini.hasEntry("QPipeViz","submit_prefix")) submit_prefix = ini.getValue("QPipeViz","submit_prefix");
+		if(ini.hasEntry("QPipeViz","tools_path")) tools_path = ini.getValue("QPipeViz","tools_path");
+		if(ini.hasEntry("QPipeViz","send_email")) send_email = ini.getValue("QPipeViz","email").toBool();
+		if(ini.hasEntry("QPipeViz","email_address")) email_address = ini.getValue("QPipeViz","email_address");
+	}
+	// if there are unacceptable entries in the ini-file, ignore the file
+	catch(BALL::Exception::GeneralException e) { }
 }
 
 

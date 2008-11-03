@@ -177,6 +177,12 @@ namespace BALL
 					
 					/** determines to which email address a notification of job completion should be send */
 					String email_address;
+					
+					MainWindow* main_window;
+					
+					void saveToFile(String file);
+					
+					void readFromFile(String file);
 				};
 				
 				 /// the last used paths settings

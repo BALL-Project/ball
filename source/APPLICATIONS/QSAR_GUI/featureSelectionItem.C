@@ -331,7 +331,7 @@ void FeatureSelectionItem::writeConfigSection(ofstream& out)
 	else
 	{
 		if(getType()==0) out<<"remove_correlated_features = 1"<<endl;
-		if(getType()==4) out<<"cor_threshold = "<<getCorThreshold()<<endl;
+		out<<"cor_threshold = "<<getCorThreshold()<<endl;
 	}
 	
 	if(opt_) out << "optimize_parameters = " << opt() << "\n";
