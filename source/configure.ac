@@ -673,6 +673,7 @@ dnl         COMPILER
 COLLECT_OBJECT_EXTENSION=o
 if test "${USE_LIBTOOL}" = "true" ; then
 	AC_PROG_LIBTOOL
+	AC_FIX_LIBTOOL
 	CXX="${BALL_PATH}/source/libtool --tag=CXX --mode=compile ${CXX}"
 	COLLECT_OBJECT_EXTENSION=lo
 fi

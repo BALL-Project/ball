@@ -2380,7 +2380,7 @@ else
 fi
 
 
-if test"$with_libtool_rpath" != "" ; then
+if test "$with_libtool_rpath" != "" ; then
 	LIBTOOL_RPATH=$with_libtool_rpath
 else
 	LIBTOOL_RPATH=${PREFIX}
@@ -40275,6 +40275,19 @@ LIBTOOL='$(SHELL) $(top_builddir)/libtool'
 
 
 
+
+
+	# by Marcelo Magallon <mmagallo@efis.ucr.ac.cr>
+	# Turn around -rpath problem with libtool 1.0c
+	# This define should be improbable enough to not conflict with anything
+	if test "$OS" = Linux ; then
+			{ echo "$as_me:$LINENO: result: Fixing libtool for -rpath problems." >&5
+echo "${ECHO_T}Fixing libtool for -rpath problems." >&6; }
+			sed < libtool > libtool-2 \
+			's/^hardcode_libdir_flag_spec.*$'/'hardcode_libdir_flag_spec=" -D__LIBTOOL_IGNORE_RPATH__ "/'
+			mv libtool-2 libtool
+			chmod 755 libtool
+	fi
 
 	CXX="${BALL_PATH}/source/libtool --tag=CXX --mode=compile ${CXX}"
 	COLLECT_OBJECT_EXTENSION=lo

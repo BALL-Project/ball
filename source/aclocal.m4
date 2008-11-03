@@ -4919,6 +4919,22 @@ AC_DEFUN(CF_CHECK_MAP, [
 	AC_SUBST(PROJECT[]_HAS_HASH_MAP)
 ])
 
+dnl
+dnl fix libtool breakage due to -rpath option
+dnl
+AC_DEFUN(AC_FIX_LIBTOOL, [
+	# by Marcelo Magallon <mmagallo@efis.ucr.ac.cr>
+	# Turn around -rpath problem with libtool 1.0c
+	# This define should be improbable enough to not conflict with anything
+	if test "$OS" = Linux ; then
+			AC_MSG_RESULT([Fixing libtool for -rpath problems.])
+			sed < libtool > libtool-2 \
+			's/^hardcode_libdir_flag_spec.*$'/'hardcode_libdir_flag_spec=" -D__LIBTOOL_IGNORE_RPATH__ "/'
+			mv libtool-2 libtool
+			chmod 755 libtool
+	fi
+])
+
 # libtool.m4 - Configure libtool for the host system. -*-Autoconf-*-
 ## Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005, 2006, 2007,
 ## 2008  Free Software Foundation, Inc.
