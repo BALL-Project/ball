@@ -5,8 +5,7 @@
 # if the second: $1 == source
 
 export BALL_PATH=`pwd | sed "s/debian$//g" | sed "s/debian-upstream$//g"`
-export PNAME=ball
-export PNAMEC=$PNAME"-common"
+export BALL_INSTALL_PATH=${BALL_PATH}/debian/ball/usr
 
 VERSION="1.2"
 
@@ -42,14 +41,14 @@ LIBVIEW_TARGET=${LIBVIEW_TARGET#*-> }
 LIBVIEW_TARGET=$(basename ${LIBVIEW_TARGET})
 
 # get rid of the symbolic links before we copy anything
-rm    /usr/lib/libBALL.so																						&&
-rm    /usr/lib/libVIEW.so																						&&
-cp    /usr/lib/libBALL*      libball-${VERSION}/usr/lib/						&&
-cp    /usr/lib/libVIEW*      libball-${VERSION}/usr/lib/						&&
-cp -r /usr/share/BALL/data   libball-${VERSION}/usr/share/BALL   	  &&
-cp -r /usr/include/BALL      libball-${VERSION}-dev/usr/include     &&
-ln -s /usr/lib/${LIBBALL_TARGET} libball-${VERSION}-dev/usr/lib/libBALL.so &&
-ln -s /usr/lib/${LIBVIEW_TARGET} libball-${VERSION}-dev/usr/lib/libVIEW.so &&
+rm    ${BALL_INSTALL_PATH}/lib/libBALL.so																						&&
+rm    ${BALL_INSTALL_PATH}/lib/libVIEW.so																						&&
+cp    ${BALL_INSTALL_PATH}/lib/libBALL*      libball-${VERSION}/usr/lib/						&&
+cp    ${BALL_INSTALL_PATH}/lib/libVIEW*      libball-${VERSION}/usr/lib/						&&
+cp -r ${BALL_INSTALL_PATH}/share/BALL/data   libball-${VERSION}/usr/share/BALL   	  &&
+cp -r ${BALL_INSTALL_PATH}/include/BALL      libball-${VERSION}-dev/usr/include     &&
+ln -s ${BALL_INSTALL_PATH}/lib/${LIBBALL_TARGET} libball-${VERSION}-dev/usr/lib/libBALL.so &&
+ln -s ${BALL_INSTALL_PATH}/lib/${LIBVIEW_TARGET} libball-${VERSION}-dev/usr/lib/libVIEW.so &&
 cp    ../source/APPLICATIONS/BALLVIEW/BALLView ballview-${VERSION}/usr/bin/				  		&&
 
 mv libball-${VERSION}/usr/lib/libBALL.a   libball-${VERSION}-dev/usr/lib &&
@@ -74,8 +73,8 @@ cp ../debian-upstream/ballview.1 ballview-${VERSION}/usr/share/man/man1/BALLView
 #gzip -9 $PNAME/usr/share/man/man1/BALLView.1 						&&
 
 cp -r ../source/EXAMPLES/PYTHON python-ball-${VERSION}/usr/share/BALL &&
-cp /usr/lib/BALLmodule.so python-ball-${VERSION}/usr/lib/python-support/BALL/python2.4 &&
-cp /usr/lib/BALLmodule.so python-ball-${VERSION}/usr/lib/python-support/BALL/python2.5 &&
+cp ${BALL_INSTALL_PATH}/lib/BALLmodule.so python-ball-${VERSION}/usr/lib/python-support/BALL/python2.4 &&
+cp ${BALL_INSTALL_PATH}/lib/BALLmodule.so python-ball-${VERSION}/usr/lib/python-support/BALL/python2.5 &&
 
 chmod ugo-x libball-${VERSION}/usr/share/BALL/data/QSAR/* 					&&
 chmod ugo-x libball-${VERSION}/usr/share/BALL/data/CHARMM/charmm* 	&&
@@ -88,6 +87,7 @@ chmod ugo-x python-ball-${VERSION}/usr/share/BALL/PYTHON/*.py 			&&
 strip --strip-unneeded libball-${VERSION}/usr/lib/*.so &&
 strip --strip-unneeded ballview-${VERSION}/usr/bin/*   &&
 strip --strip-unneeded python-ball-${VERSION}/usr/lib/python-support/BALL/python2.{4,5}/*.so 
+#TODO: change rpath
 
 if [ $# == 1 ] && [ $1 == "source" ]
 then
