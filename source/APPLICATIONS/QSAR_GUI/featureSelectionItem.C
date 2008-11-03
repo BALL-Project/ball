@@ -318,7 +318,7 @@ void FeatureSelectionItem::writeConfigSection(ofstream& out)
 	out << "data_file = "<< inputModelItem()->inputDataItem()->savedAs().toStdString() << "\n";
 	int s = getValidationStatistic();
 	String stat = modelItem()->getRegistryEntry()->getStatName(s);
-	if(getType()>0)
+	if(getType()>0 && getType()!=4)
 	{
 		if(!input_model_item_->getRegistryEntry()->regression)
 		{
@@ -330,9 +330,10 @@ void FeatureSelectionItem::writeConfigSection(ofstream& out)
 	}
 	else
 	{
-		out<<"remove_correlated_features = 1"<<endl;
-		out<<"cor_threshold = "<<getCorThreshold()<<endl;
+		if(getType()==0) out<<"remove_correlated_features = 1"<<endl;
+		if(getType()==4) out<<"cor_threshold = "<<getCorThreshold()<<endl;
 	}
+	
 	if(opt_) out << "optimize_parameters = " << opt() << "\n";
 	
 	bool b=0;
@@ -392,7 +393,7 @@ BALL::String FeatureSelectionItem::getMouseOverText()
 		}		
 		message+="quality increase cutoff="+valueToString(quality_increase_cutoff_);
 	}
-	else if(type_==4) message="maximal minimal correlation between\neach feature and response="+valueToString(cor_threshold_);
+	else if(type_==4) message="minimal correlation between\neach feature and response="+valueToString(cor_threshold_);
 	else if(type_==5) message="Remove each feature whose absolut coefficient value\nis smaller than d times its standard deviation\nd="+valueToString(cor_threshold_);
 	return message;				
 }

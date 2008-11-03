@@ -75,7 +75,11 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 		edit_->setText(String(cor).c_str());
 		QLabel* label = NULL;
 		if(fsitem->getType()==0) label = new QLabel("max correlation between features");
-		else if(fsitem->getType()==4) label = new QLabel("min correlation with response");
+		else if(fsitem->getType()==4)
+		{
+			label = new QLabel("min correlation with response");
+			edit_->setText(String(0.15).c_str());			
+		}
 		else if(fsitem->getType()==5) 
 		{
 			QLabel* description = new QLabel("Remove each feature whose absolut coefficient value\nis smaller than d times its standard deviation.");
