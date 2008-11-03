@@ -3,7 +3,7 @@
 
 mymake()
 {
-	make "MAKE=make -j4"
+	make "MAKE=make -j2"
 }
 
 #adapt to your settings

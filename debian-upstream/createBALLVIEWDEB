@@ -31,11 +31,11 @@ fi
 cd $BALL_PATH/debian
 
 # remember the targets of the ldconfig symbolic links
-LIBBALL_TARGET=$(ls -l /usr/lib/libBALL.so)
+LIBBALL_TARGET=$(ls -l ${BALL_INSTALL_PATH}/lib/libBALL.so)
 LIBBALL_TARGET=${LIBBALL_TARGET#*-> }
 LIBBALL_TARGET=$(basename ${LIBBALL_TARGET})
 
-LIBVIEW_TARGET=$(ls -l /usr/lib/libVIEW.so)
+LIBVIEW_TARGET=$(ls -l ${BALL_INSTALL_PATH}/lib/libVIEW.so)
 LIBVIEW_TARGET=${LIBVIEW_TARGET#*-> }
 LIBVIEW_TARGET=$(basename ${LIBVIEW_TARGET})
 
@@ -62,7 +62,7 @@ mv libball-${VERSION}/usr/lib/libVIEW.la  libball-${VERSION}-dev/usr/lib &&
 #cp    ../source/APPLICATIONS/BALLVIEW/BALLView $PNAME/usr/bin/						&&
 
 # copy the documentation
-cp    ${BALL_PATH}/doc/BALLView/*							ballview-${VERSION}/usr/share/doc/ballview-${VERSION}/html	&&
+cp -r ${BALL_PATH}/doc/BALLView/*							ballview-${VERSION}/usr/share/doc/ballview-${VERSION}/html	&&
 cp    ${BALL_PATH}/doc/TUTORIAL/tutorial.pdf 	libball-${VERSION}-doc/usr/share/doc/libball-1.2/						&&
 cp -r ${BALL_PATH}/doc/classes 								libball-${VERSION}/usr/share/BALL/doc												&&
 cp -r ${BALL_PATH}/doc/internal 							libball-${VERSION}/usr/share/BALL/doc												&&
@@ -86,7 +86,7 @@ chmod ugo-x python-ball-${VERSION}/usr/share/BALL/PYTHON/*.py 			&&
 
 strip --strip-unneeded libball-${VERSION}/usr/lib/*.so &&
 strip --strip-unneeded ballview-${VERSION}/usr/bin/*   &&
-strip --strip-unneeded python-ball-${VERSION}/usr/lib/python-support/BALL/python2.{4,5}/*.so 
+strip --strip-unneeded python-ball-${VERSION}/usr/lib/python2.5/site-packages/*.so
 
 if [ $# == 1 ] && [ $1 == "source" ]
 then
