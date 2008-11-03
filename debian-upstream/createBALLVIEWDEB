@@ -42,6 +42,9 @@ LIBVIEW_TARGET=$(basename ${LIBVIEW_TARGET})
 # get rid of the symbolic links before we copy anything
 rm    ${BALL_INSTALL_PATH}/lib/libBALL.so																						&&
 rm    ${BALL_INSTALL_PATH}/lib/libVIEW.so																						&&
+# remove static libs. comment out if you need them
+rm -f ${BALL_INSTALL_PATH}/lib/libBALL.a																						&&
+rm -f ${BALL_INSTALL_PATH}/lib/libVIEW.a																						&&
 cp    ${BALL_INSTALL_PATH}/lib/libBALL*      libball-${VERSION}/usr/lib/						&&
 cp    ${BALL_INSTALL_PATH}/lib/libVIEW*      libball-${VERSION}/usr/lib/						&&
 cp -r ${BALL_INSTALL_PATH}/share/BALL/data   libball-${VERSION}/usr/share/BALL   	  &&
@@ -53,7 +56,7 @@ cp    ${BALL_PATH}/source/APPLICATIONS/BALLVIEW/BALLView ballview-${VERSION}/usr
 mv libball-${VERSION}/usr/lib/libBALL.la  libball-${VERSION}-dev/usr/lib &&
 mv libball-${VERSION}/usr/lib/libVIEW.la  libball-${VERSION}-dev/usr/lib &&
 
-# uncomment the following two lines if you want static libs in your debian package
+# uncomment the following two lines and comment out the ones after that
 #mv libball-${VERSION}/usr/lib/libBALL.a   libball-${VERSION}-dev/usr/lib &&
 #mv libball-${VERSION}/usr/lib/libVIEW.a   libball-${VERSION}-dev/usr/lib &&
 
