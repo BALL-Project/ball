@@ -16,15 +16,15 @@ LIB_VERSION	= 0
 LIBNAME		= libBALL
 
 # 	names of the static libraries
-STATIC_LIBS	= libBALL.a @LIBVIEW@
+STATIC_LIBS	= libBALL.a libVIEW.a
 
 #	names of the shared libraries
-SHARED_LIBS	= $(STATIC_LIBS:.a=.@SHARED_LIB_SUFFIX@)
+SHARED_LIBS	= $(STATIC_LIBS:.a=.la)
 
 # names of the library object file lists
 OBJECT_LISTS = $(STATIC_LIBS:.a=.objects)
 
-.SUFFIXES:	.objects .a	.@SHARED_LIB_SUFFIX@
+.SUFFIXES:	.objects .a	.la
 
 default:	lib
 
@@ -32,7 +32,7 @@ sharedlibs: $(SHARED_LIBS)
 
 staticlibs: $(STATIC_LIBS)
 
-install:	@INSTALL_TARGET@ @INSTALL_HEADERS_TARGET@ @INSTALL_DATA_TARGET@
+install:	install.libtool install.headers install.data
 
 BALLView:
 	@( cd APPLICATIONS/BALLVIEW; make )
@@ -47,7 +47,7 @@ clean:
 	@$(ECHO) "Cleaning up object files, cores,  and (uninstalled) library files..."
 	@$(MAKE) subdirs SUBDIRS="$(DIRS) TEST BENCHMARKS EXAMPLES TUTORIAL APPLICATIONS" TARGET=default_clean
 	@-$(RM) -f  $(STATIC_LIBS) $(SHARED_LIBS)
-	@-$(RM) -rf .Dependencies */.Dependencies *.objects *~ @TEMPLATE_DIR@
+	@-$(RM) -rf .Dependencies */.Dependencies *.objects *~ 
 
 lib_clean:
 	@$(ECHO) "Removing all installed libraries..."
@@ -68,16 +68,16 @@ libVIEW.objects:
 collect:	$(OBJECT_LISTS)
 	
 
-libBALL.@SHARED_LIB_SUFFIX@: libBALL.objects
-	$(DYNAR) $(ADD_DYNAROPTS_LIBBALL) $(DYNAROPTS) libBALL.@SHARED_LIB_SUFFIX@ `cat libBALL.objects` $(QT_BALL_LIBOPTS) $(PYTHON_LIBS) $(FFTW_LIBS) $(GSL_LIBS) -lm
+libBALL.la: libBALL.objects
+	$(DYNAR) $(ADD_DYNAROPTS_LIBBALL) $(DYNAROPTS) libBALL.la `cat libBALL.objects` $(QT_LIBOPTS) $(PYTHON_LIBS) $(FFTW_LIBS) $(GSL_LIBS) -lm
 
-libVIEW.@SHARED_LIB_SUFFIX@: libVIEW.objects libBALL.@SHARED_LIB_SUFFIX@
-	$(DYNAR) $(ADD_DYNAROPTS_LIBVIEW) $(DYNAROPTS) libVIEW.@SHARED_LIB_SUFFIX@ `cat libVIEW.objects` -L. -lBALL $(QT_VIEW_LIBOPTS) $(OPENGL_LIBOPTS) $(X11_LIBOPTS) $(PYTHON_LIBS) -lm
+libVIEW.la: libVIEW.objects libBALL.la
+	$(DYNAR) $(ADD_DYNAROPTS_LIBVIEW) $(DYNAROPTS) libVIEW.la `cat libVIEW.objects` -L. -lBALL $(QT_LIBOPTS) $(OPENGL_LIBOPTS) $(X11_LIBOPTS) $(PYTHON_LIBS) -lm
 
 .objects.a:	
 	@ $(ECHO) "Creating library $@ ..."
 	@ $(AR) $(AROPTS) $*.a `cat $*.objects`
-	@ @RANLIB@ $*.a
+	@ echo $*.a
 
 lib:	.Dependencies dirs collect $(SHARED_LIBS)
 	@$(ECHO) " "
@@ -101,7 +101,7 @@ lib:	.Dependencies dirs collect $(SHARED_LIBS)
 	@$(ECHO) "the path "
 	@$(ECHO) " $(PREFIX)/lib"
 	@$(ECHO) "to your LD_LIBRARY_PATH. "
-	@$(ECHO) "@ADDITIONAL_COMMENTS@"
+	@$(ECHO) ""
 
 install.headers:
 	@$(ECHO) Installing headers under $(PREFIX)/include...
