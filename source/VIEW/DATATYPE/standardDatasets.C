@@ -20,6 +20,7 @@
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/FORMAT/DSN6File.h>
+#include <BALL/FORMAT/CCP4File.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/STRUCTURE/DOCKING/dockResult.h>
@@ -303,6 +304,10 @@ namespace BALL
 		{
 			type_ = type;
 			file_formats_.push_back("3dg");
+			file_formats_.push_back("ccp4");
+			file_formats_.push_back("omap");
+			file_formats_.push_back("map");
+			file_formats_.push_back("dsn6");
 			setIdentifier("RegularData3DController");
 			registerThis();
 		}
@@ -327,14 +332,35 @@ namespace BALL
 			return true;
 		}
 
-		Dataset* RegularData3DController::open(String /*filetype*/, String filename)
+		Dataset* RegularData3DController::open(String filetype, String filename)
 		{
 			RegularData3D* d3 = new RegularData3D;
-			(*d3).binaryRead(filename);
 			RegularData3DDataset* set = new RegularData3DDataset;
-			set->setData(d3);
-			set->setName(getNameFromFileName_(filename));
-			set->setType(type_);
+			if(filetype == "ccp4" || filetype == "map")
+			{
+				CCP4File* ccp4file = new CCP4File(filename);
+				ccp4file->read(*d3);
+				ccp4file->close();
+				set->setData(d3);
+				set->setName(getNameFromFileName_(filename));
+				set->setType("Electron Density");
+			}
+			else if(filetype == "omap" || filetype == "dsn6")
+			{
+				DSN6File* dsn6file = new DSN6File(filename);
+				dsn6file->read(*d3);
+				dsn6file->close();
+				set->setData(d3);
+				set->setName(getNameFromFileName_(filename));
+				set->setType("Electron Density");
+			}
+			else
+			{
+				(*d3).binaryRead(filename);
+				set->setData(d3);
+				set->setName(getNameFromFileName_(filename));
+				set->setType(type_);
+			}
 			return set;
 		}
 

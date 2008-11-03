@@ -155,13 +155,13 @@ namespace BALL
 		cell_scaling_ = (float)header_value;
 
 		header_value = readHeaderValue_(header, 9);
-		crystal_dimension_.x = (float)header_value / (cell_scaling_ * sampling_rate_.x);  
+		crystal_dimension_.x = (float)header_value / cell_scaling_;  
 
 		header_value = readHeaderValue_(header, 10);
-		crystal_dimension_.y = (float)header_value / (cell_scaling_ * sampling_rate_.y);
+		crystal_dimension_.y = (float)header_value / cell_scaling_;
 
 		header_value = readHeaderValue_(header, 11);
-		crystal_dimension_.z = (float)header_value / (cell_scaling_ * sampling_rate_.z);
+		crystal_dimension_.z = (float)header_value / cell_scaling_;
 
 		header_value = readHeaderValue_(header, 12);
 		alpha_ = Angle((float)header_value / cell_scaling_, false);
@@ -179,14 +179,18 @@ namespace BALL
 		plus_ = (float)header_value;
 
 		// convert from grid space to cartesian coordinates (inspired by the VMD code :-) )
-		Vector3 x_tmp(crystal_dimension_.x, 0., 0.);
+		Vector3 scaled_axes(crystal_dimension_.x/sampling_rate_.x,
+												crystal_dimension_.y/sampling_rate_.y,
+											 	crystal_dimension_.z/sampling_rate_.z);
+		
+		Vector3 x_tmp(scaled_axes.x, 0., 0.);
 		Vector3 y_tmp(cos(gamma_.toRadian()), sin(gamma_.toRadian()), 0.);
-		y_tmp *= crystal_dimension_.y;
+		y_tmp *= scaled_axes.y;
 		Vector3 z_tmp( cos(beta_.toRadian()), 
 									(cos(alpha_.toRadian()) - cos(beta_.toRadian())*cos(gamma_.toRadian())) / sin(gamma_.toRadian()),
 									0.);
 		z_tmp.z = sqrt(1.0 - z_tmp.x*z_tmp.x - z_tmp.y*z_tmp.y);
-		z_tmp *= crystal_dimension_.z;
+		z_tmp *= scaled_axes.z;
 
 		origin_.x = x_tmp.x * start_.x + y_tmp.x * start_.y + z_tmp.x * start_.z;
 		origin_.y = y_tmp.y * start_.y + z_tmp.y * start_.z;

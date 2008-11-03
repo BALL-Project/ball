@@ -3,6 +3,7 @@ SET(SOURCES_LIST
 	antechamberFile.C
 	bruker1DFile.C
 	bruker2DFile.C
+	CCP4File.C
 	DCDFile.C
 	DSN6File.C
 	GAMESSDatFile.C

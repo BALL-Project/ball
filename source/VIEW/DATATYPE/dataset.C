@@ -303,7 +303,7 @@ namespace BALL
 			result += " (";
 			for (Position p = 0; p < file_formats_.size(); p++)
 			{
-				result += "*.";
+				result += " *.";
 				result += file_formats_[p];
 			}
 

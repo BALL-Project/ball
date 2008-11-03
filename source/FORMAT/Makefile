@@ -26,6 +26,7 @@ CPP_SOURCES=\
 	antechamberFile.C\
 	bruker1DFile.C\
 	bruker2DFile.C\
+	CCP4File.C\
 	DCDFile.C\
 	DSN6File.C\
 	genericMolFile.C\
