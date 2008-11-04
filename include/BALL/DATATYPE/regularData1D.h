@@ -323,6 +323,38 @@ namespace BALL
 			throw(Exception::FileNotFound);
 		//@}
 	
+		/** Calculate the mean of the dataset
+		 		@return ValueType
+		*/
+		ValueType calculateMean() const throw()
+		{
+			IndexType data_points	= getSize();
+			ValueType mean = 0;
+			for (IndexType i = 0; i < data_points; i++)
+			{
+			  mean += getData(i);
+			}
+			mean /= data_points;
+			return mean;
+		}
+		
+		/** Calculate the standard deviation of the dataset
+		 		@return ValueType
+		*/
+		ValueType calculateSD() const throw()
+		{
+			IndexType data_points	= getSize();
+			ValueType stddev = 0;
+			ValueType mean = calculateMean();
+			for (IndexType i = 0; i < data_points; i++)
+			{
+				stddev += (pow(getData(i)-mean,2));
+			}
+			stddev /= (data_points-1);
+			stddev = sqrt(stddev);
+			return stddev;
+		}
+		
 		protected:
 		///	The origin of the data set
 		CoordinateType	origin_;

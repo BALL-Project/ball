@@ -382,6 +382,38 @@ namespace BALL
 			throw(Exception::FileNotFound);
 		//@}
 	
+		/** Calculate the mean of the dataset
+		 		@return ValueType
+		*/
+		ValueType calculateMean() const throw()
+		{
+			Position data_points	= (getSize().x * getSize().y);
+			ValueType mean = 0;
+			for (Position i = 0; i < data_points; i++)
+			{
+			  mean += getData(i);
+			}
+			mean /= data_points;
+			return mean;
+		}
+		
+		/** Calculate the standard deviation of the dataset
+		 		@return ValueType
+		*/
+		ValueType calculateSD() const throw()
+		{
+			Position data_points	= (getSize().x * getSize().y);
+			ValueType stddev = 0;
+			ValueType mean = calculateMean();
+			for (Position i = 0; i < data_points; i++)
+			{
+				stddev += (pow(getData(i)-mean,2));
+			}
+			stddev /= (data_points-1);
+			stddev = sqrt(stddev);
+			return stddev;
+		}
+		
 		protected:
 			
 		/// The grid data
