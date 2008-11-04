@@ -361,6 +361,10 @@ namespace BALL
 				set->setName(getNameFromFileName_(filename));
 				set->setType(type_);
 			}
+			float dens_mean = d3->calculateMean();
+			float dens_stddev = d3->calculateSD();
+      Log.info() << "Density Mean: " << dens_mean << endl; 
+      Log.info() << "Density Sigma: " << dens_stddev << endl; 
 			return set;
 		}
 
