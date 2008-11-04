@@ -173,8 +173,8 @@ namespace BALL
 		space_group_ = readBinValueasInt_(header, 22);
 		deviation_sigma_ = readBinValueasFloat_(header, 54);
 
-		Log.info() << "Mean : " << mean_density_ << std::endl;
-		Log.info() << "Sigma: " << deviation_sigma_ << std::endl;
+		Log.info() << "Mean from file: " << mean_density_ << std::endl;
+		Log.info() << "Sigma from file: " << deviation_sigma_ << std::endl;
 		
 		// convert from grid space to cartesian coordinates
 		Vector3 scaled_axes(cell_dimension_.x/sampling_rate_.x,
@@ -230,9 +230,9 @@ namespace BALL
 				Log.error() << "CCP4File::readSymmetryRecords(): Error: File seems to be truncated" << std::endl;
 				return false;
 			}
-			else if (offset > 0)
+			else if ((offset - offset_symops_)< 0)
 			{
-				Log.error() << "CCP4File::readSymmetryRecords(): Error: File larger than expected" << std::endl;
+				Log.info() << "CCP4File::readSymmetryRecords(): Error: Symmetry Record smaller than expected" << std::endl;
 				return false;
 			}
 		}
@@ -306,7 +306,7 @@ namespace BALL
 		
 		if (int(getSize()) > int(4*(extent_.x*extent_.y*extent_.z)))
 		{
-			Log.info() << "CCP4File::read(): Warning: datablock bigger than expected. But continueing anyway." << std::endl;
+			Log.info() << "CCP4File::read(): Warning: datablock bigger than expected. But continuing anyway." << std::endl;
 		}
 		
 		Size global_index = 0;
