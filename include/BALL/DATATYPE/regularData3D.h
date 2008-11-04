@@ -418,6 +418,16 @@ namespace BALL
 			 ValueType& llb, ValueType& rlb, ValueType& lub, ValueType& rub) const
       throw(Exception::OutOfGrid);
 		
+		/** Calculate the mean of the dataset
+		 		@return ValueType
+		*/
+		ValueType calculateMean() const;
+		
+		/** Calculate the standard deviation of the dataset
+		 		@return ValueType
+		*/
+		ValueType calculateSD() const;
+		
 		/** Write the grid contents in a (non-portable) binary format.
 		 * 	\par Note: this currently only works correctly for orthogonal grids.
 		 		@exception FileNotFound thrown if file could not be written
@@ -441,38 +451,6 @@ namespace BALL
 		void binaryRead(const String& filename)
 			throw(Exception::FileNotFound);
 		//@}
-		
-		/** Calculate the mean of the dataset
-		 		@return ValueType
-		*/
-		ValueType calculateMean() const throw()
-		{
-			Position data_points	= (getSize().x * getSize().y * getSize().z);
-			ValueType mean = 0;
-			for (Position i = 0; i < data_points; i++)
-			{
-			  mean += getData(i);
-			}
-			mean /= data_points;
-			return mean;
-		}
-		
-		/** Calculate the standard deviation of the dataset
-		 		@return ValueType
-		*/
-		ValueType calculateSD() const throw()
-		{
-			Position data_points	= (getSize().x * getSize().y * getSize().z);
-			ValueType stddev = 0;
-			ValueType mean = calculateMean();
-			for (Position i = 0; i < data_points; i++)
-			{
-				stddev += (pow(getData(i)-mean,2));
-			}
-			stddev /= (data_points-1);
-			stddev = sqrt(stddev);
-			return stddev;
-		}
 		
 		protected:
 			
@@ -1273,7 +1251,36 @@ namespace BALL
     return operator [] (position);
 	}
 
+	template <typename ValueType>
+  BALL_INLINE
+	ValueType TRegularData3D<ValueType>::calculateMean() const
+	{
+		Position data_points	= (size_.x * size_.y * size_.z);
+		ValueType mean = 0;
+		for (Position i = 0; i < data_points; i++)
+		{
+		  mean += data_[i];
+		}
+		mean /= data_points;
+		return mean;
+	}
 
+	template <typename ValueType>
+  BALL_INLINE
+	ValueType TRegularData3D<ValueType>::calculateSD() const
+	{
+		Position data_points	= (size_.x * size_.y * size_.z);
+		ValueType stddev = 0;
+		ValueType mean = this->calculateMean();
+		for (Position i = 0; i < data_points; i++)
+		{
+			stddev += (pow(data_[i]-mean,2));
+		}
+		stddev /= (data_points-1);
+		stddev = sqrt(stddev);
+		return stddev;
+	}
+	
 	template <typename ValueType>
 	void TRegularData3D<ValueType>::clear()
 	{

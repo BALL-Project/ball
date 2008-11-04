@@ -310,6 +310,16 @@ namespace BALL
 		void rescale(const IndexType& new_size)
 			throw(Exception::OutOfMemory);
 
+		/** Calculate the mean of the dataset
+		 		@return ValueType
+		*/
+		ValueType calculateMean() const;
+		
+		/** Calculate the standard deviation of the dataset
+		 		@return ValueType
+		*/
+		ValueType calculateSD() const;
+		
 		/** Write the grid contents in a (non-portable) binary format.
 		 		@exception FileNotFound thrown if file could not be written
 		*/
@@ -323,37 +333,6 @@ namespace BALL
 			throw(Exception::FileNotFound);
 		//@}
 	
-		/** Calculate the mean of the dataset
-		 		@return ValueType
-		*/
-		ValueType calculateMean() const throw()
-		{
-			IndexType data_points	= getSize();
-			ValueType mean = 0;
-			for (IndexType i = 0; i < data_points; i++)
-			{
-			  mean += getData(i);
-			}
-			mean /= data_points;
-			return mean;
-		}
-		
-		/** Calculate the standard deviation of the dataset
-		 		@return ValueType
-		*/
-		ValueType calculateSD() const throw()
-		{
-			IndexType data_points	= getSize();
-			ValueType stddev = 0;
-			ValueType mean = calculateMean();
-			for (IndexType i = 0; i < data_points; i++)
-			{
-				stddev += (pow(getData(i)-mean,2));
-			}
-			stddev /= (data_points-1);
-			stddev = sqrt(stddev);
-			return stddev;
-		}
 		
 		protected:
 		///	The origin of the data set
@@ -680,6 +659,36 @@ namespace BALL
 		return data_[index];
 	}
 			
+	template <typename ValueType>
+	BALL_INLINE
+	ValueType TRegularData1D<ValueType>::calculateMean() const
+	{
+		IndexType data_points	= this->getSize();
+		ValueType mean = 0;
+		for (IndexType i = 0; i < data_points; i++)
+		{
+		  mean += data_[i];
+		}
+		mean /= data_points;
+		return mean;
+	}
+	
+	template <typename ValueType>
+	BALL_INLINE
+	ValueType TRegularData1D<ValueType>::calculateSD() const
+	{
+		IndexType data_points	= this->getSize();
+		ValueType stddev = 0;
+		ValueType mean = this->calculateMean();
+		for (IndexType i = 0; i < data_points; i++)
+		{
+			stddev += (pow(data_[i]-mean,2));
+		}
+		stddev /= (data_points-1);
+		stddev = sqrt(stddev);
+		return stddev;
+	}
+		
 	template <typename ValueType>
 	BALL_INLINE
 	ValueType TRegularData1D<ValueType>::operator () (const CoordinateType& x) const
