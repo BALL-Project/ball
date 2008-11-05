@@ -641,6 +641,7 @@ ValidationConfiguration ConfigIO::readValidationConfiguration(istream* input)
 		}
 		if(j>0 && line.hasPrefix("["))
 		{
+			putbackLine(input,line);
 			break;
 		}			
 			
