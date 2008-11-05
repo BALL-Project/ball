@@ -6,6 +6,7 @@
 #include <BALL/QSAR/statistics.h>
 #include <BALL/QSAR/regressionModel.h>
 #include <BALL/QSAR/kernelModel.h>
+#include <BALL/QSAR/latentVariableModel.h>
 #include <gsl/gsl_rng.h>
 
 
@@ -35,6 +36,48 @@ void RegressionValidation::crossValidation(int k, bool restore)
 }
 
 
+void RegressionValidation::backupTrainingResults()
+{
+	backup_data_.descriptor_matrix = regr_model_->descriptor_matrix_;
+	backup_data_.training_result = regr_model_->training_result_;
+	backup_data_.Y = regr_model_->Y_;
+	
+	KernelModel* k_model = dynamic_cast<KernelModel*>(regr_model_);
+	LatentVariableModel* lv_model = dynamic_cast<LatentVariableModel*>(regr_model_);
+	if(k_model)
+	{
+		backup_data_.K = k_model->K_;
+	}
+	if(lv_model)
+	{
+		backup_data_.latent_variables = *lv_model->getLatentVariables();
+		backup_data_.loadings = *lv_model->getLoadings();
+		backup_data_.weights = *lv_model->getWeights();
+	}	
+}
+
+
+void RegressionValidation::restoreTrainingResults()
+{
+	regr_model_->descriptor_matrix_ = backup_data_.descriptor_matrix;
+	regr_model_->training_result_ = backup_data_.training_result;
+	regr_model_->Y_ = backup_data_.Y;
+	
+	KernelModel* k_model = dynamic_cast<KernelModel*>(regr_model_);
+	LatentVariableModel* lv_model = dynamic_cast<LatentVariableModel*>(regr_model_);
+	if(k_model)
+	{
+		k_model->K_ = backup_data_.K;
+	}
+	if(lv_model)
+	{
+		lv_model->latent_variables_ = backup_data_.latent_variables;
+		lv_model->loadings_ = backup_data_.loadings;
+		lv_model->weights_ = backup_data_.weights;
+	}
+}
+
+
 void RegressionValidation::crossValidation(int k, vector<Matrix<double> >* results, bool restore)
 {
 	if(model_->data->descriptor_matrix_.size()==0 || model_->data->Y_.size()==0)
@@ -42,15 +85,7 @@ void RegressionValidation::crossValidation(int k, vector<Matrix<double> >* resul
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be fetched from input-files by QSARData before cross-validation can be done!");
 	}
 	
-	Matrix<double> desc_backup;
-	Matrix<double> res_backup;
-	Matrix<double> y_backup;
-	if(restore)
-	{
-		desc_backup=model_->descriptor_matrix_; // save matrices in order in restore them after cross-validation
-		res_backup=regr_model_->training_result_;
-		y_backup=model_->Y_;
-	}
+	if(restore) backupTrainingResults();
 	
 	int lines=model_->data->descriptor_matrix_[0].size();
 	int col=model_->data->descriptor_matrix_.size();
@@ -100,12 +135,7 @@ void RegressionValidation::crossValidation(int k, vector<Matrix<double> >* resul
 	
 	std_err_ = std_err_ / ((k-1)*lines);
 	
-	if(restore)
-	{
-		model_->descriptor_matrix_=desc_backup;   // prevent confusion of cross-validation coefficients with coefficients
-		regr_model_->training_result_=res_backup; // derived from training with complete input data
-		model_->Y_=y_backup;
-	}
+	if(restore) restoreTrainingResults();
 }
 
 
@@ -232,9 +262,7 @@ void RegressionValidation::calculateCoefficientStdErrors(int k, bool b)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Calculation of the standard deviation of regression coefficients can only be done for _linear_ regression models in a meaningful way!");
 	}
-	Matrix<double> desc_backup=model_->descriptor_matrix_; // save matrices in order in restore them after cross-validation
-	Matrix<double> res_backup=regr_model_->training_result_;
-	Matrix<double> y_backup=model_->Y_;
+	backupTrainingResults();
 	
 	int no_activities=model_->data->Y_.size();
 	vector<Matrix<double> >* results = new vector<Matrix<double> >;
@@ -277,13 +305,9 @@ void RegressionValidation::calculateCoefficientStdErrors(int k, bool b)
 			coefficient_stderr_(m,c) /= sqrt(k);
 		}
 	}
-			
-
-
+	
 	delete results;
-	model_->descriptor_matrix_=desc_backup;   // prevent confusion of cross-validation coefficients with coefficients
-	regr_model_->training_result_=res_backup; // derived from training with complete input data
-	model_->Y_=y_backup;
+	restoreTrainingResults();
 }
 
 
@@ -300,16 +324,7 @@ void RegressionValidation::bootstrap1(int k, vector<Matrix<double> >* results, b
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be fetched from input-files by QSARData before bootstrapping can be done!");
 	}
-	Matrix<double> desc_backup;
-	Matrix<double> res_backup;
-	Matrix<double> y_backup;
-	if(restore)
-	{
-		desc_backup=model_->descriptor_matrix_; // save matrices in order in restore them after cross-validation
-		res_backup=regr_model_->training_result_;
-		y_backup=model_->Y_;
-	}
-	
+	if(restore) backupTrainingResults();
 	
 	Q2_=0; max_error_=0; double r2=0;
 	int N = model_->data->descriptor_matrix_[0].size();
@@ -418,12 +433,7 @@ void RegressionValidation::bootstrap1(int k, vector<Matrix<double> >* results, b
 	Q2_ = 0.632*Q2_ + 0.368*r2;
 	
 	gsl_rng_free(r);
-	if(restore)
-	{
-		model_->descriptor_matrix_=desc_backup;   // prevent confusion of cross-validation coefficients with coefficients
-		regr_model_->training_result_=res_backup; // derived from training with complete input data
-		model_->Y_=y_backup;
-	}
+	if(restore) restoreTrainingResults();
 }
 
 
@@ -433,15 +443,7 @@ void RegressionValidation::bootstrap(int k, vector<Matrix<double> >* results, bo
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be fetched from input-files by QSARData before bootstrapping can be done!");
 	}
-	Matrix<double> desc_backup;
-	Matrix<double> res_backup;
-	Matrix<double> y_backup;
-	if(restore)
-	{
-		desc_backup=model_->descriptor_matrix_; // save matrices in order in restore them after cross-validation
-		res_backup=regr_model_->training_result_;
-		y_backup=model_->Y_;
-	}
+	if(restore) backupTrainingResults();
 	
 	
 	Q2_=0; double r2=0; max_error_=0;
@@ -523,12 +525,7 @@ void RegressionValidation::bootstrap(int k, vector<Matrix<double> >* results, bo
 	Q2_ = 0.632*Q2_ + 0.368*r2;
 		
 	gsl_rng_free(r);
-	if(restore)
-	{
-		model_->descriptor_matrix_=desc_backup;   // prevent confusion of cross-validation coefficients with coefficients
-		regr_model_->training_result_=res_backup; // derived from training with complete input data
-		model_->Y_=y_backup;
-	}
+	if(restore) restoreTrainingResults();
 }
 
 
@@ -539,9 +536,7 @@ BALL::Matrix<double> RegressionValidation::yRandomizationTest(int runs, int k)
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be fetched from input-files by QSARData object before response permutation tests can be done!");
 	}	
 	
-	Matrix<double> y_backup=model_->Y_;
-	Matrix<double> desc_backup=model_->descriptor_matrix_;
-	Matrix<double> res_backup=regr_model_->training_result_;
+	backupTrainingResults();
 	vector<vector<double> > dataY_backup=model_->data->Y_;
 				
 	Matrix<double> results(runs,2);
@@ -558,9 +553,7 @@ BALL::Matrix<double> RegressionValidation::yRandomizationTest(int runs, int k)
 		results(i+1,2)=Q2_;
 	}	
 	
-	model_->Y_=y_backup;
-	model_->descriptor_matrix_=desc_backup;
-	regr_model_->training_result_=res_backup;
+	restoreTrainingResults();
 	QSARData* data = const_cast <QSARData*> (model_->data);
 	data->Y_=dataY_backup;
 	

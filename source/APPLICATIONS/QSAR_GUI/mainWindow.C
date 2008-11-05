@@ -122,6 +122,7 @@ void MainWindow::Settings::saveToFile(String file)
 	INIFile out(file);
 	out.appendSection("QPipeViz");
 	out.insertValue("QPipeViz","input_data_path",input_data_path);
+	out.insertValue("QPipeViz","config_path",config_path);
 	QSize s = main_window->size();
 	String size = String(s.width())+" "+String(s.height());
 	out.insertValue("QPipeViz","window_size",size);
@@ -146,6 +147,7 @@ void MainWindow::Settings::readFromFile(String file)
 		INIFile ini(file);
 		ini.read();
 		if(ini.hasEntry("QPipeViz","input_data_path")) input_data_path = ini.getValue("QPipeViz","input_data_path");
+		if(ini.hasEntry("QPipeViz","config_path")) config_path = ini.getValue("QPipeViz","config_path");
 		if(ini.hasEntry("QPipeViz","window_size")) 
 		{
 			String s = ini.getValue("QPipeViz","window_size");
@@ -563,7 +565,7 @@ void MainWindow::printToFile()
 	main_layout.addLayout(&h_layout);
 	
 	QHBoxLayout h2_layout;
-	QLabel label2("Path to QSARPipelinePackage");
+	QLabel label2("Path of QPipeStarter");
 	QLineEdit edit2;
 	edit2.setText(settings.tools_path.c_str());
 	h2_layout.addWidget(&label2);
@@ -1417,27 +1419,19 @@ void MainWindow::submitToCluster(String configfile)
 	String script = file_prefix+".csh";
 	ofstream out(script.c_str());
 	
-	String ir=""; String ip=""; String mc="";
-	String fs=""; String pr="";
+	String prog="";
 	if(settings.tools_path!="")
 	{
-		ir=settings.tools_path+"/";
-		ip=ir; mc=ir; fs=ir; pr=ir;
+		prog=settings.tools_path+"/";
 	}
-	ir.append("InputReader"); ip.append("InputPartitioner");
-	mc.append("ModelCreator"); fs.append("FeatureSelector");
-	pr.append("Predictor");
+	prog.append("QPipeStarter");
 		
 	if(settings.send_email && settings.email_address!="")
 	{	
 		out<<"setenv start_time `date`"<<endl;
 	}
 	out<<"cd "<<directory<<endl;
-	out<<ir<<" "<<configfile<<endl;
-	out<<ip<<" "<<configfile<<endl;
-	out<<mc<<" "<<configfile<<endl;
-	out<<fs<<" "<<configfile<<endl;
-	out<<pr<<" "<<configfile<<endl<<endl;
+	out<<prog<<" "<<configfile<<endl<<endl;
 	
 	if(archive)
 	{

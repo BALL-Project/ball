@@ -45,6 +45,7 @@ namespace BALL
 				/** The weights-matrix which contains one weight vector in each column. Each weight vector contains the importance of each latente variable for modelling the result. */
 				Matrix<double> weights_;
 				
+				friend class RegressionValidation;	
 		};
 	}
 }

@@ -78,6 +78,8 @@ namespace BALL
 				void saveKernelParametersToFile(ofstream& out);
 				void saveTrainingResult(ofstream& out);
 				void readTrainingResult(ifstream& input, int no_substances, int no_y);
+				
+				friend class RegressionValidation;
 				//}@
 				
 			

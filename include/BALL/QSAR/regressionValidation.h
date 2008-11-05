@@ -121,11 +121,27 @@ namespace BALL
 	
 			private:
 				
+				struct BackupData
+				{
+					Matrix<double> descriptor_matrix;
+					Matrix<double> training_result;
+					Matrix<double> Y;
+					Matrix<double> K;
+					Matrix<double> latent_variables;
+					Matrix<double> loadings;
+					Matrix<double> weights;
+				};
+				
+				
 				/** @name Accessors
 				 */
 				//@{	
 				/** Tests the current model with all substances in the (unchanged) test data set */
 				void testAllSubstances(bool transform);
+				
+				void backupTrainingResults();
+				
+				void restoreTrainingResults();
 				//@}
 				
 				
@@ -162,6 +178,8 @@ namespace BALL
 				
 				/** pointer to the regression model, which the object of this class should test */
 				RegressionModel* regr_model_;
+				
+				BackupData backup_data_;
 				//@}				
 				
 		};

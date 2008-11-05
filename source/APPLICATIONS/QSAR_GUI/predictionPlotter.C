@@ -96,7 +96,7 @@ void PredictionPlotter::plotObservedVsExpected(bool zoom)
 			brush.setColor(generateColor(pred_items.size(),p));
 			symbol.setBrush(brush);
 		}
-	;	
+	
 		int i = 0;
 		const vector<string>* comp_names = p_data->getSubstanceNames();
 		

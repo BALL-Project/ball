@@ -136,7 +136,7 @@ void KernelModel::saveToFile(string filename)
 	
 	saveTrainingResult(out);
 	out<<descriptor_matrix_<<endl; 
-	out<<K_<<endl;	
+	out<<K_<<endl;
 	out<<"# offsets"<<endl;
 	out<<offsets_<<endl;		
 	
