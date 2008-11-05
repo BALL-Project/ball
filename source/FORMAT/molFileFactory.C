@@ -6,7 +6,7 @@
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/FORMAT/SDFile.h>
-//#include <BALL/FORMAT/XYZFile.h>
+#include <BALL/FORMAT/XYZFile.h>
 
 #include <BALL/DATATYPE/string.h>
 
@@ -28,8 +28,8 @@ namespace BALL
 			return new SDFile(name, open_mode);
 		} else if(tmp.hasSuffix(".mol2")) {
 			return new MOL2File(name, open_mode);
-	//	} else if(tmp.hasSuffix(".xyz")) {
-	//		return new XYZFile(name, open_mode);
+		} else if(tmp.hasSuffix(".xyz")) {
+			return new XYZFile(name, open_mode);
 		} else {
 			return NULL;
 		}
