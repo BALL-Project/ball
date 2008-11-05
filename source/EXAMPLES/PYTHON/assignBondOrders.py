@@ -25,6 +25,7 @@ for i in range(abop.getNumberOfComputedSolutions()):
 
 
 abop.apply(abop.getNumberOfComputedSolutions()-1)
+
 getMainControl().update(system)
 
 
