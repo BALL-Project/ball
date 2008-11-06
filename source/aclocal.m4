@@ -3158,11 +3158,11 @@ AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
 		if test "${OS}" = "Darwin" ; then
 			QTQGL_LIBOPTS="${DARWIN_QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql"
 			QT_BALL_LIBOPTS="${DARWIN_QT_LIBPATH} -framework QtCore -framework QtSql"
-			QT_VIEW_LIBOPTS="${DARWIN_QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest"
+			QT_VIEW_LIBOPTS="${QT_BALL_LIBOPTS} -framework QtOpenGL -framework QtGui -framework QtTest"
 		else
 			QTQGL_LIBOPTS="${GENERIC_QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql"
 			QT_BALL_LIBOPTS="${GENERIC_QT_LIBPATH} -lQtCore -lQtSql"
-			QT_VIEW_LIBOPTS="${GENERIC_QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest"
+			QT_VIEW_LIBOPTS="${QT_BALL_LIBOPTS} -lQtOpenGL -lQtGui -lQtTest"
 		fi
 
 		AC_DEFINE_UNQUOTED(QT_BALL_LIBOPTS, ${QT_BALL_LIBOPTS})
