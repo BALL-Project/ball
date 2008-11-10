@@ -15,6 +15,14 @@
 #	include <BALL/COMMON/hash.h>
 #endif
 
+#ifndef BALL_DATATYPE_TRIPLE_H
+#	include <BALL/DATATYPE/triple.h>
+#endif
+
+#ifndef BALL_DATATYPE_QUADRUPLE_H
+#	include <BALL/DATATYPE/quadruple.h>
+#endif
+
 #include <utility>
 #include <algorithm>
 
@@ -26,6 +34,89 @@
 #else
 # include <hash_map>
 # include <hash_fun.h>
+#endif
+
+#ifdef BALL_HAS_UNORDERED_MAP
+namespace std
+{
+	namespace tr1
+	{
+		// borrowed from boost
+		template<typename T> 
+		void hash_combine_ala_boost(size_t & seed, T const & v)
+		{
+			hash<T> h;
+			seed ^= h(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
+		}
+
+		template<class A, class B>
+		struct hash<pair<A, B> > : public std::unary_function<pair<A,B>, size_t>
+		{
+			inline size_t
+			operator()(pair<A, B> p) const
+			{
+				size_t seed = 0;
+				hash_combine_ala_boost(seed, p.first);
+				hash_combine_ala_boost(seed, p.second);
+
+				return seed;
+			}
+		};
+
+		template <class A, class B, class C>
+		struct hash< ::BALL::Triple<A, B, C> > : public std::unary_function< ::BALL::Triple<A, B, C>, size_t>
+		{
+			inline size_t
+			operator()(::BALL::Triple<A, B, C> t) const
+			{
+				size_t seed = 0;
+				hash_combine_ala_boost(seed, t.first);
+				hash_combine_ala_boost(seed, t.second);
+				hash_combine_ala_boost(seed, t.third);
+
+				return seed;
+			}
+		};
+
+		template <class A, class B, class C, class D>
+		struct hash< ::BALL::Quadruple<A, B, C, D> > : public std::unary_function< ::BALL::Quadruple<A, B, C, D>, size_t> 
+		{
+			inline size_t
+			operator()(::BALL::Quadruple<A, B, C, D> q) const
+			{
+				size_t seed = 0;
+				hash_combine_ala_boost(seed, q.first);
+				hash_combine_ala_boost(seed, q.second);
+				hash_combine_ala_boost(seed, q.third);
+				hash_combine_ala_boost(seed, q.fourth);
+
+				return seed;
+			}
+		};
+
+		template<>
+		struct hash<const ::BALL::String&> : public std::unary_function<const ::BALL::String&, size_t>
+		{
+			inline size_t
+			operator()(const ::BALL::String& s) const
+			{
+				hash<const string&> h;
+				return h(s);
+			}
+		};
+
+		template<>
+		struct hash< ::BALL::String > : public std::unary_function< ::BALL::String, size_t >
+		{
+			inline size_t
+			operator()( ::BALL::String s) const
+			{
+				hash<string> h;
+				return h(s);
+			}
+		};
+	}
+}
 #endif
 
 #ifdef BALL_HAS_HASH_MAP

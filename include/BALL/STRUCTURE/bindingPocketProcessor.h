@@ -45,7 +45,7 @@ namespace BALL
     
     /** Options
      */
-    typedef struct Option
+    struct Option
     {
       /// use only heavy atoms for computation
       static const String HEAVY_ONLY;
@@ -87,7 +87,7 @@ namespace BALL
     
     /** Defaults
      */
-    typedef struct Default
+    struct Default
     {
       static const bool HEAVY_ONLY;
       static const bool PARSE_INI_FILE;

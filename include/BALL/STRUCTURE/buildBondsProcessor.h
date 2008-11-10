@@ -183,7 +183,7 @@ namespace BALL
 			Size num_bonds_;
 		
 			/// structure where bond order distances are stored in
-			HashMap<Size, HashMap<Size, HashMap<Bond::BondOrder, float> > > bond_lengths_;
+			HashMap<Size, HashMap<Size, HashMap<int, float> > > bond_lengths_;
 
 			/// structure were the bond maxima stored in (used in buildBonds_)
 			HashMap<Size, HashMap<Size, float> > max_bond_lengths_;

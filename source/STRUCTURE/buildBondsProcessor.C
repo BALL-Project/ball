@@ -418,14 +418,14 @@ namespace BALL
 	
 		Bond::BondOrder order = Bond::ORDER__UNKNOWN;
 		float min_dist(Limits<float>::max());
-		HashMap<Bond::BondOrder, float> bonds = bond_lengths_[e1][e2];
-		HashMap<Bond::BondOrder, float>::ConstIterator it = bonds.begin();
+		HashMap<int, float> bonds = bond_lengths_[e1][e2];
+		HashMap<int, float>::ConstIterator it = bonds.begin();
 		for (; it != bonds.end(); ++it)
 		{
 			if (min_dist > Maths::abs(it->second-length))
 			{
 				min_dist = Maths::abs(it->second-length);
-				order = it->first;
+				order = (Bond::BondOrder)it->first;
 			}
 		}
 		return order;
