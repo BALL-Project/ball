@@ -881,7 +881,7 @@ namespace BALL
 			List<Composite*> cl = getMainControl()->getMolecularControlSelection();
 			List<const Composite*> ccl;
 			List<Composite*>::iterator cit = cl.begin();
-			for (; cit != cl.end(); cit++);
+			for (; cit != cl.end(); cit++)
 			{
 				ccl.push_back(*cit);
 			}

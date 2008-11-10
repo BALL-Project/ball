@@ -1333,7 +1333,7 @@ namespace BALL
 
 		void MolecularControl::enableUpdates_(bool state)
 		{
-			if (ignore_messages_ = !state) return;
+			if (ignore_messages_ == !state) return;
 
 			ignore_messages_ = !state;
 			listview->setUpdatesEnabled(state);
@@ -1525,7 +1525,7 @@ namespace BALL
 
 			if (atoms.size() < 3 || atoms.size() > 4) return;
 
-			if (atoms.size() == 3) atoms.push_back(0);
+			if (atoms.size() == 3) atoms.push_back((Atom*)0);
 
 			showAngle(atoms[0], atoms[1], atoms[2], atoms[3]);
 		}
