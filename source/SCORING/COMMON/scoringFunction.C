@@ -142,7 +142,7 @@ namespace BALL
 
 
 		// Check the environment
-		if (system == 0 || (molecule1_ == 0 || molecule2_ == 0))
+		if (molecule1_ == 0 || molecule2_ == 0)
 		{
 			Log.error() << "ScoringFunction::setup(): No system or molecules defined"
 				<< std::endl;

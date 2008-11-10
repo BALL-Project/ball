@@ -186,7 +186,7 @@ namespace BALL
 	{
 		// walk up to the root
 		Composite* composite_ptr = this;
-		for (; composite_ptr->parent_ != 0; composite_ptr = composite_ptr->parent_);
+		for (; composite_ptr->parent_ != 0; composite_ptr = composite_ptr->parent_) {};
 
 		return *composite_ptr;
 	}
@@ -274,7 +274,7 @@ namespace BALL
 			composite_ptr = composite_ptr->previous_;
 
 			for (; ++index < 0 && composite_ptr != 0; 
-					 composite_ptr = composite_ptr->previous_);
+					 composite_ptr = composite_ptr->previous_) {};
 		} 
 		else 
 		{
@@ -284,7 +284,7 @@ namespace BALL
 				composite_ptr = composite_ptr->next_;
 
 				for (; --index > 0 && composite_ptr != 0; 
-						 composite_ptr = composite_ptr->next_);
+						 composite_ptr = composite_ptr->next_) {};
 			}
 		}
 		return composite_ptr;

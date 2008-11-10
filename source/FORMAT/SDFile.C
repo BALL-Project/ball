@@ -102,7 +102,7 @@ namespace BALL
 		catch (Exception::ParseError& e)
 		{
 			// Read through to the end of the MOLFile (marked by $$$)
-			while (readLine() && !getLine().hasPrefix("$$$$"));
+			while (readLine() && !getLine().hasPrefix("$$$$")) {};
 
 			// Keep the memory tidy.
 			if (molecule != 0)

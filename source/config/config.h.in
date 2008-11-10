@@ -132,6 +132,14 @@
 #undef BALL_XDRREC_CREATE_VOID_VOID_UINT
 #undef BALL_XDRREC_CREATE_VOID
 
+
+// Defines the prefix needed when including extensions to the stl
+#undef BALL_EXT_INCLUDE_PREFIX 
+
+// Defines whether the HashMap already provides LongSize hashing
+#undef BALL_NEEDS_LONGSIZE_HASH
+
+#undef BALL_HAS_UNORDERED_MAP
 // If ext/hash_map is defined, we use this instead of std::map
 #undef BALL_HAS_HASH_MAP
 #define BALL_MAP_NAMESPACE __gnu_cxx
@@ -196,15 +204,6 @@
 
 // Define whether inline functions may be used as template parameters.
 #undef BALL_HAS_INLINE_TPL_ARGS
-
-// Defines the prefix needed when including extensions to the stl
-#undef BALL_EXT_INCLUDE_PREFIX 
-
-// Defines the namespace where extensions to the stl are located.
-#define BALL_EXT_NAMESPACE std
-
-// Defines whether the HashMap already provides LongSize hashing
-#undef BALL_NEEDS_LONGSIZE_HASH
 
 // Define the precision for the BALL Complex type. This is mainly used
 // to determine the FFTW default type

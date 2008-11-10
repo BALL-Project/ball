@@ -46,21 +46,7 @@ namespace BALL
 	bool Options::isReal(const String& key) const
 	 throw()
 	{
-		errno = 0;
-		char*	endptr;
-		String value(get(key));
-
-		// an empty String is no real number
-		if (value =="")
-		{
-			return false;
-		}
-		
-		// try to convert it to a number
-		::strtod(value.c_str(), &endptr);
-
-		// return and tell whether it happend to work
-		return (errno == 0) && (endptr != value.c_str());
+		return get(key).isFloat();
 	}
 
 	bool Options::isVector(const String& key) const 

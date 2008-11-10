@@ -195,7 +195,7 @@ namespace BALL
 		AtomContainer::dump(s, depth);
 		// just to avoid these damned compiler warnings
 		// (dump_indent_depth_ was declared but never referenced)
-		if (dump_indent_depth_ == 0) ;
+		if (dump_indent_depth_ == 0) {};
 	 
 		BALL_DUMP_STREAM_SUFFIX(s)
 	}

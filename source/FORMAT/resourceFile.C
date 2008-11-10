@@ -89,7 +89,7 @@ namespace BALL
 	{
 		ResourceEntry* entry = this;
 		
-		for (; entry->parent_ != 0; entry = entry->parent_);
+		for (; entry->parent_ != 0; entry = entry->parent_) {};
 
 		return* entry;
 	}

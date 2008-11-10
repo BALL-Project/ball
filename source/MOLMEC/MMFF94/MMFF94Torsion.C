@@ -641,7 +641,7 @@ Log.error() << "# " << atoms[0]->getName() << " "
 		////////////////////////////////////////////
 		if (atj.crd == 4)
 		{
-			if (atk.crd == 3  &&  (atk.val == 4 || atk.val == 34 | atk.mltb))
+			if (atk.crd == 3  &&  (atk.val == 4 || atk.val == 34 || atk.mltb))
 			{
 				return true; // zero values
 			}
@@ -662,7 +662,7 @@ Log.error() << "# " << atoms[0]->getName() << " "
 		////////////////////////////////////////////
 		if (atk.crd == 4)
 		{
-			if (atj.crd == 3  &&  (atj.val == 4 || atj.val == 34 | atj.mltb))
+			if (atj.crd == 3  &&  (atj.val == 4 || atj.val == 34 || atj.mltb))
 			{
 				return true; // zero values
 			}

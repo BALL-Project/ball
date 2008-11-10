@@ -49,7 +49,7 @@ namespace BALL
 			 *  for each recognized key in ShiftedLVMMMinimizer::options. \par
 			 *  For each symbol the required type is given under parameters.
 			 */
-			typedef struct Option
+			struct Option
 			{
 				/** Which update method should be used?
 				 */
