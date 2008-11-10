@@ -8,6 +8,9 @@ Build-Depends: debhelper (>= 4), libtool, libqt4-dev, libqt4-gui, sip4, python-s
  gs-common, texlive-latex-extra, graphviz
 XS-Python-Version: all
 Standards-Version: 3.7.3
+Vcs-Browser: http://svn.debian.org/wsvn/debian-med/trunk/packages/ball/trunk/?rev=0&sc=0
+Vcs-Svn: svn://svn.debian.org/svn/debian-med/trunk/packages/ball/trunk/
+Homepage: http://www.ballview.org
 
 Package: libball-1.2
 Section: science
@@ -56,7 +59,7 @@ Description: A free molecular modeling and molecular graphics tool
  AMBER, CHARMM, and MMFF94 force fields), calculation and visualization 
  of electrostatic properties (FDPB) and molecular editing features.
  .
- BALLView is based on BALL (Biochemical Algorithms Library) , 
+ BALLView is based on BALL (Biochemical Algorithms Library), 
  which is currently being developed in the groups of Hans-Peter Lenhof 
  (Saarland University, Saarbruecken, Germany) and Oliver Kohlbacher 
  (University of Tuebingen, Germany). BALL is an application framework 
