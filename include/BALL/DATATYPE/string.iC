@@ -646,7 +646,7 @@ bool String::isFloat() const
 	throw()
 {
 	double d;
-	return ((std::istringstream(*this) >> d).eof() && (!isSpace()));
+	return (std::istringstream(*this) >> d).eof();
 }
 
 BALL_INLINE 
