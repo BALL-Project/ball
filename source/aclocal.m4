@@ -679,6 +679,7 @@ if test "${HAS_GPLUSPLUS}" = true; then
 		if test "${CXX_VERSION_2}" -ge 3; then
 			AC_MSG_RESULT(yes)
 			CXXFLAGS="${CXXFLAGS} -std=c++0x"
+			USE_TR1=true
 		else
 			AC_MSG_RESULT(no)
 		fi
@@ -4821,7 +4822,7 @@ dnl	Check for hash_map instead of map to speed up things
 dnl
 AC_DEFUN(CF_CHECK_MAP, [
 	AC_MSG_CHECKING(for hash map)
-	if test "${HAS_GPLUSPLUS}" = true ; then
+	if test "${HAS_GPLUSPLUS}" = true -a "${USE_TR1}" = true ; then
 		AC_MSG_CHECKING(...trying tr1::unordered_map)
 		AC_TRY_COMPILE(
 		[
