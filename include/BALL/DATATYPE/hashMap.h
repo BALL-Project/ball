@@ -18,7 +18,9 @@
 #include <utility>
 #include <algorithm>
 
-#ifdef BALL_EXT_INCLUDE_PREFIX
+#if   defined(BALL_HAS_UNORDERED_MAP)
+# include <tr1/unordered_map>
+#elif defined(BALL_EXT_INCLUDE_PREFIX)
 # include <ext/hash_map>
 # include <ext/hash_fun.h>
 #else
@@ -26,9 +28,9 @@
 # include <hash_fun.h>
 #endif
 
-namespace BALL_EXT_NAMESPACE
+#ifdef BALL_HAS_HASH_MAP
+namespace BALL_MAP_NAMESPACE
 {
-
 	template<class T>
   struct hash<T*>
   {
@@ -48,8 +50,8 @@ namespace BALL_EXT_NAMESPACE
 		size_t operator()(BALL::LongSize x) const { return (size_t)x; }
 	};
 #endif
-
 }
+#endif // BALL_HAS_HASH_MAP
 
 namespace BALL
 {

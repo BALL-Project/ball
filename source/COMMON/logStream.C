@@ -6,6 +6,7 @@
 
 #include <limits>
 #include <string>
+#include <cstring>
 #include <BALL/COMMON/logStream.h>
 
 #define BUFFER_LENGTH 32768
@@ -73,7 +74,7 @@ namespace BALL
 			while (line_end < pptr())
 			{
 				// search for the first end of line
-				for (; line_end < pptr() && *line_end != '\n'; line_end++);
+				for (; line_end < pptr() && *line_end != '\n'; line_end++) {};
 
 				if (line_end >= pptr()) 
 				{
@@ -84,10 +85,7 @@ namespace BALL
 
 					// if length was too large, we copied one byte less than BUFFER_LENGTH to have
 					// room for the final \0
-					if (length == (size_t)(BUFFER_LENGTH - 1))
-						buf[BUFFER_LENGTH] = '\0';
-					else
-						buf[length] = '\0';
+					buf[length] = '\0';
 
 					incomplete_line_ += &(buf[0]);
 

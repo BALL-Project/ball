@@ -140,7 +140,7 @@ namespace BALL
 
     for (;;)
     {
-      for (div = 3; (div <= sqr) && ((l % div) != 0); div += 2);
+      for (div = 3; (div <= sqr) && ((l % div) != 0); div += 2) {};
 
       if (div > sqr)
 			{

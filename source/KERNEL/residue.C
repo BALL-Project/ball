@@ -443,7 +443,7 @@ namespace BALL
 			if (chain != 0)
 			{
 				ResidueConstIterator res_it = chain->beginResidue();
-				for (; +res_it && &(*res_it) != this && !res_it->isAminoAcid(); ++res_it);
+				for (; +res_it && &(*res_it) != this && !res_it->isAminoAcid(); ++res_it) {};
 
 				return (&(*res_it) == this);
 			}
@@ -462,7 +462,7 @@ namespace BALL
 			if (chain != 0)
 			{
 				ResidueConstIterator res_it(chain->endResidue());
-				for (--res_it; +res_it && &(*res_it) != this && !res_it->isAminoAcid(); --res_it);
+				for (--res_it; +res_it && &(*res_it) != this && !res_it->isAminoAcid(); --res_it) {};
 				return (&(*res_it) == this);
 			}
 		}

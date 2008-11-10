@@ -22,6 +22,7 @@
 #include <stdlib.h>                   // 'getenv'
 #include <sys/stat.h>         // 'stat', 'lstat'
 #include <stdio.h>                    // 'rename'
+#include <algorithm>                  // 'reverse'
 
 #ifdef BALL_COMPILER_MSVC
 #	define S_ISREG _S_ISREG

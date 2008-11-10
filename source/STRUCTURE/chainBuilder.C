@@ -217,7 +217,7 @@ namespace BALL
 		for (Size i = 0; i != chain_area.size(); i++)
 		{
 			val.push_back(INT_MAX);           
-			prev_nodes.push_back(0);        
+			prev_nodes.push_back((Atom*)0);        
 		}
 
 

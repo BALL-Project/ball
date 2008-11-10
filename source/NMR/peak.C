@@ -14,7 +14,7 @@ namespace BALL
 		return ((position_.x < peak.position_.x) 
 						|| ((position_.x == peak.position_.x) && 
 								((position_.y < peak.position_.y) 
-								 || (position_.y == peak.position_.y) && (position_.z < peak.position_.z))));
+								 || ((position_.y == peak.position_.y) && (position_.z < peak.position_.z)))));
 	}
 
 	template <>
@@ -23,6 +23,6 @@ namespace BALL
 		return ((position_.x > peak.position_.x) 
 						|| ((position_.x == peak.position_.x) && 
 								((position_.y > peak.position_.y) 
-								 || (position_.y == peak.position_.y) && (position_.z > peak.position_.z))));
+								 || ((position_.y == peak.position_.y) && (position_.z > peak.position_.z)))));
 	}
 } // namespace BALL

@@ -789,7 +789,7 @@ namespace BALL
 		// is still unknown.
 		if (link_mark_ != 0)
 		{
-			std::pair<CTPNode*, CTPNode*> tmp(child, 0);
+			std::pair<CTPNode*, CTPNode*> tmp(child, (CTPNode*)0);
 			link_map_.insert(std::pair<char, std::pair<CTPNode*, CTPNode*> >(link_mark_, tmp));
 			link_mark_ = 0;
 		}

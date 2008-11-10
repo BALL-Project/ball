@@ -51,7 +51,7 @@ namespace BALL
 			 *  for each recognized key in StrangLBFGSMinimizer::options. \par
 			 *  For each symbol the required type is given under parameters.
 			 */
-			typedef struct Option 
+			struct Option 
 			{
 				/** Should the improved version be used?
 				 */

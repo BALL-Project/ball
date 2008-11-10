@@ -16,7 +16,7 @@ dnl
 dnl 
 dnl    Some initialization stuff...
 dnl 
-AC_INIT(BALL, 1.2, ball-bugs@bioinf.uni-sb.de)
+AC_INIT([BALL],[1.2],[ball-bugs@bioinf.uni-sb.de])
 AC_CONFIG_HEADER([
 	config.h:config/config.h.in
 ])
@@ -477,11 +477,6 @@ CF_GET_TYPE_SIZES
 CF_C_BIGENDIAN
 
 dnl
-dnl		try to locate stl extensions
-dnl
-CF_FIND_EXT_NAMESPACE
-
-dnl
 dnl		Checks for a couple of headers files and whether they are required.
 dnl
 AC_TYPE_SIZE_T
@@ -830,13 +825,14 @@ dnl 	Create output files. Move them to temporary location
 dnl		only, because some of them will require additional
 dnl		modification
 dnl
-AC_OUTPUT([
+AC_CONFIG_FILES([
  	config.mak.tmp:config/config.mak.in 
  	rules.mak.tmp:config/rules.mak.in 
  	targets.mak.tmp:config/targets.mak.in 
 	common.mak.tmp:config/common.mak.in 
 	Makefile.tmp:config/Makefile.in
 ])
+AC_OUTPUT
 CF_MOVE_CONFIG_FILES
 
 dnl

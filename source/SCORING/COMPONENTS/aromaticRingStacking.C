@@ -164,7 +164,7 @@ namespace BALL
 		for (SSSR_it = SSSR_l.begin(); SSSR_it != SSSR_l.end(); ++SSSR_it)
 		{
 			std::vector< Atom* >::iterator ring_atom_it = SSSR_it->begin();
-			if ((*ring_atom_it)->hasProperty("IsAromatic"));
+			if ((*ring_atom_it)->hasProperty("IsAromatic"))
 			{
 				CHPI::AromaticRing* current_ring = new CHPI::AromaticRing(*SSSR_it);
 				ligand_rings_.push_back(*current_ring);

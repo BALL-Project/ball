@@ -142,7 +142,7 @@ BALL_INLINE
 bool Composite::isRootOf(const Composite& composite) const
 	throw()
 {
-  return ((parent_ == 0) && (isAncestorOf(composite) == true) || (&composite == this));
+  return (((parent_ == 0) && (isAncestorOf(composite) == true)) || (&composite == this));
 }
   
 BALL_INLINE 
