@@ -22101,8 +22101,8 @@ echo $ECHO_N "checking for spacenavigator header files... $ECHO_C" >&6; }
 
 	_INCLUDES=
 
-		if test "${SPACENAV_INCDIR}" != "" ; then
-	_INCLUDES=${SPACENAV_INCDIR}
+		if test "${SPACENAV_INCLDIR}" != "" ; then
+	_INCLUDES=${SPACENAV_INCLDIR}
 	fi
 
 	if test "${_INCLUDES}" = "" ; then
@@ -22171,9 +22171,9 @@ echo $ECHO_N "checking for spacenavigator header files... $ECHO_C" >&6; }
 		fi
 	fi
 
-	SPACENAV_INCDIR="${_INCLUDES}"
+	SPACENAV_INCLDIR="${_INCLUDES}"
 
-		if test "${SPACENAV_INCDIR}" = "" ; then
+		if test "${SPACENAV_INCLDIR}" = "" ; then
       { echo "$as_me:$LINENO: result: (not found!)" >&5
 echo "${ECHO_T}(not found!)" >&6; }
 		  { echo "$as_me:$LINENO: result: " >&5
@@ -22263,9 +22263,9 @@ echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
 	  else
-  		{ echo "$as_me:$LINENO: result: (${SPACENAV_INCDIR})" >&5
-echo "${ECHO_T}(${SPACENAV_INCDIR})" >&6; }
-  		SPACENAV_INCLUDES="-I${SPACENAV_INCDIR}"
+  		{ echo "$as_me:$LINENO: result: (${SPACENAV_INCLDIR})" >&5
+echo "${ECHO_T}(${SPACENAV_INCLDIR})" >&6; }
+  		SPACENAV_INCLUDES="-I${SPACENAV_INCLDIR}"
   	fi
 
 
