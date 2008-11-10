@@ -20,8 +20,8 @@ AC_DEFUN([CF_SPACENAV], [
 		AC_DEFINE(PROJECT[]_HAS_SPACENAV_H)
 
 		AC_MSG_CHECKING(for spacenavigator header files)
-   	CF_FIND_HEADER(SPACENAV_INCDIR, spnav.h, ${SPACENAV_INCPATH})
-		if test "${SPACENAV_INCDIR}" = "" ; then
+   	CF_FIND_HEADER(SPACENAV_INCLDIR, spnav.h, ${SPACENAV_INCPATH})
+		if test "${SPACENAV_INCLDIR}" = "" ; then
       AC_MSG_RESULT((not found!))
 		  AC_MSG_RESULT()
 		  AC_MSG_RESULT([The header files for the spacenavigator support could not be found. Please specify the path to <spnav.h>])
@@ -33,8 +33,8 @@ AC_DEFUN([CF_SPACENAV], [
 			CF_ERROR
 		  CF_ERROR
 	  else
-  		AC_MSG_RESULT((${SPACENAV_INCDIR}))
-  		SPACENAV_INCLUDES="-I${SPACENAV_INCDIR}"
+  		AC_MSG_RESULT((${SPACENAV_INCLDIR}))
+  		SPACENAV_INCLUDES="-I${SPACENAV_INCLDIR}"
   	fi
 
 		dnl
