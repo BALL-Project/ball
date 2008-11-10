@@ -1,6 +1,6 @@
-ball (1.2-1) unstable; urgency=low
+ball (1.2-1)  UNRELEASED; urgency=low
 
   * Initial release (Closes: #407665)
 
- -- Andreas Hildebrandt <anhi@bioinf.uni-sb.de>  Sat, 20 Jan 2007 13:34:29 +0100
+ -- Andreas Hildebrandt <anhi@bioinf.uni-sb.de>  Mon, 10 Nov 2008 13:34:29 +0100
 

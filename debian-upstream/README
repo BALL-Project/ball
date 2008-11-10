@@ -1,7 +1,8 @@
 This directory contains all necessary means to create
-a Debian package from a BALL CVS tree. It was created
-by Andreas Moll from the BALL project team (upstream
-author) and can be freely used by any downstream author
+a Debian package from a BALL git tree. It was created
+by Andreas Hildebrandt from the BALL project team (upstream
+author), based on earlier work by Andreas Moll,
+and can be freely used by any downstream author
 to do the packaging. The directory is named
 debian-upstream to prevent any potential problems
 between up- and downstream authors.
@@ -14,8 +15,8 @@ It does a git checkout, and creates a tarball.
 To prevent unnecessary overhead for other platforms,
 it also removes the Windows and MacOS folders and
 afterwards creates a new tarball.
-Finally the package building process is started and
-the following two scripts are started.
+Finally, the package building process is started and
+the following two scripts are run.
 
 debian-ball-install:
 Build script that may be reused for other platforms.
@@ -29,4 +30,4 @@ later on.
 If you have any questions on this approach, feel
 free to contact the authors:
 
-www.ballview.org
+www.ball-project.org
