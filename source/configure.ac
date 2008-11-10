@@ -55,7 +55,7 @@ AC_ARG_WITH(arflags,           [  --with-arflags=FLAGS    add FLAGS to the flags
 AC_ARG_WITH(dynarflags,        [  --with-dynarflags=FLAGS add FLAGS to the flags for the creation of the shared libraries])
 AC_ARG_WITH(libxnet,           [  --without-libxnet       use -lsocket -lnsl rather than -lxnet (under Solaris)])
 AC_ARG_WITH(xdr,               [  --without-xdr           no RPC/XDR headers available - do not build portable binary persistence support])
-AC_ARG_WITH(ball-path,         [  --with-ballpath=PATH    use PATH as the compiled-in BALL_PATH (required, e.g., for finding the data directory])
+AC_ARG_WITH(ball-path,         [  --with-ball-path=PATH   use PATH as the compiled-in BALL_PATH (required, e.g., for finding the data directory])
 
 dnl  ** QT/X11 **
 AC_ARG_WITH(qt,                [  --with-qt=QTDIR         QT is installed in QTDIR. Prefer this over the following options.])
@@ -165,10 +165,10 @@ if test "$with_arflags" != "" ; then
 fi
 
 dnl we will require this later when we AC_SUBST the BALL_PATH that is compiled in into config.h
-if test "$with_ballpath" != "" ; then
-	FINAL_BALL_PATH="${with_ballpath}"
+if test "$with_ball_path" != "" ; then
+	FINAL_BALL_PATH="${with_ball_path}"
 else
-	FINAL_BALL_PATH=${BALL_PATH}
+	FINAL_BALL_PATH=`cd ..; pwd`
 fi
 
 if test "$with_qt" != "" ; then

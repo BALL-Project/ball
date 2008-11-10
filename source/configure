@@ -1565,7 +1565,7 @@ Optional Packages:
   --with-dynarflags=FLAGS add FLAGS to the flags for the creation of the shared libraries
   --without-libxnet       use -lsocket -lnsl rather than -lxnet (under Solaris)
   --without-xdr           no RPC/XDR headers available - do not build portable binary persistence support
-  --with-ballpath=PATH    use PATH as the compiled-in BALL_PATH (required, e.g., for finding the data directory
+  --with-ball-path=PATH   use PATH as the compiled-in BALL_PATH (required, e.g., for finding the data directory
   --with-qt=QTDIR         QT is installed in QTDIR. Prefer this over the following options.
   --with-qt-incl=DIR      QT header files are in DIR
   --with-qt-libs=DIR      QT libraries are in DIR
@@ -2406,10 +2406,10 @@ if test "$with_arflags" != "" ; then
 	AROPTS="${AROPTS}`echo $with_arflags|tr ,  \  `"
 fi
 
-if test "$with_ballpath" != "" ; then
-	FINAL_BALL_PATH="${with_ballpath}"
+if test "$with_ball_path" != "" ; then
+	FINAL_BALL_PATH="${with_ball_path}"
 else
-	FINAL_BALL_PATH=${BALL_PATH}
+	FINAL_BALL_PATH=`cd ..; pwd`
 fi
 
 if test "$with_qt" != "" ; then
