@@ -5,6 +5,7 @@
 #include <QtCore/QHash>
 
 class QPluginLoader;
+class QObject;
 
 namespace BALL
 {
