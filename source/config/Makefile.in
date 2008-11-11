@@ -26,6 +26,8 @@ OBJECT_LISTS = $(STATIC_LIBS:.a=.objects)
 
 .SUFFIXES:	.objects .a	.@SHARED_LIB_SUFFIX@
 
+.PHONY: libBALL.objects libVIEW.objects
+
 default:	lib
 
 sharedlibs: $(SHARED_LIBS)
