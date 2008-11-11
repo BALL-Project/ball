@@ -46,7 +46,9 @@ namespace BALL
 	bool Options::isReal(const String& key) const
 	 throw()
 	{
-		return get(key).isFloat();
+		// an empty string is no real number
+		const String& value = get(key);
+		return (!value.isEmpty() && value.isFloat());
 	}
 
 	bool Options::isVector(const String& key) const 
