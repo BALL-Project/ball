@@ -448,7 +448,6 @@ fi
 dnl 	check for standard C headers
 dnl 	and how to run the preprocessor
 AC_HEADER_STDC
-CF_CHECK_MAP
 
 
 
@@ -475,6 +474,10 @@ dnl			the machine.
 dnl
 CF_GET_TYPE_SIZES
 CF_C_BIGENDIAN
+
+dnl Check for the presence of hash_map. This check depends on the types determined
+dnl in CF_GET_TYPE_SIZES. It _must_ be called afterwards!
+CF_CHECK_MAP
 
 dnl
 dnl		Checks for a couple of headers files and whether they are required.
