@@ -676,6 +676,7 @@ if test "${USE_LIBTOOL}" = "true" ; then
 	COLLECT_OBJECT_EXTENSION=lo
 fi
 AC_SUBST(COLLECT_OBJECT_EXTENSION)
+AC_SUBST(USE_LIBTOOL)
 
 AC_SUBST(CXX)               dnl C++ compiler (absolute path)
 CC=CXX
