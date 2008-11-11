@@ -407,7 +407,7 @@ namespace BALL
 		};
 
 		strncpy(formats, "%.6s", 4);
-		strncpy(&(formats[4]), format_string, sizeof(formats));
+		strncpy(&(formats[4]), format_string, sizeof(formats)-4);
 		formats[sizeof(formats) - 1] = '\0';
 		va_start(var_args, format_string);
 		record_fields_ = 0;
