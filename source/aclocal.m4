@@ -3675,11 +3675,11 @@ AC_DEFUN(CF_PYTHON, [
 			if test "${PYTHON_LIBPATH}" = "" ; then
 				PYTHON_LIBPATH="${PYTHON_PREFIX}/lib/python${PYTHON_VERSION}/config/"
 			fi
-			PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`
+			PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.so 2>/dev/null`
 			if test "${PYTHON_LIBS}" = "" ; then
 				dnl test if 64 path is used
 				PYTHON_LIBPATH="${PYTHON_PREFIX}/lib64/python${PYTHON_VERSION}/config/"
-				PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`	
+				PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.so 2>/dev/null`	
 
 				if test "${PYTHON_LIBS}" = "" ; then
 					AC_MSG_RESULT()
