@@ -645,7 +645,7 @@ BALL_INLINE
 bool String::isFloat() const 
 	throw()
 {
-	double d;
+	double d=0.;
 	return ((std::istringstream(*this) >> d).eof() && (d==0. || isnormal(d)));
 }
 
