@@ -122,8 +122,8 @@ RESULT
 ComposedEnergyProcessor cep2;
 CHECK(ComposedEnergyProcessor::ComposedEnergyProcessor(EnergyProcessorList proc_list))
   EnergyProcessorList epl;
-	epl.push_back(pep1);
-	epl.push_back(pep2);
+	epl.push_back((EnergyProcessor*)pep1);
+	epl.push_back((EnergyProcessor*)pep2);
 	cep2 = ComposedEnergyProcessor(epl);
 	TEST_EQUAL(cep2.isValid(), true)
 	TEST_EQUAL(cep2.getNumberOfEnergyProcessors(), 2)
