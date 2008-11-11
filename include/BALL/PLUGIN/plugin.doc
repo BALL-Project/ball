@@ -1,0 +1,9 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
+/** \defgroup Plugin support
+ * 	\ingroup Foundation 
+ *	 This chapter contains all relevant information on 
+ *	 writing plugins for BALL.
+ */
