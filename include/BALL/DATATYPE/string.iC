@@ -645,8 +645,16 @@ BALL_INLINE
 bool String::isFloat() const 
 	throw()
 {
+	// for compatibility, we treat the empty string as a float that will be cast to 0
+	if (size() == 0)
+		return true;
+
 	double d=0.;
-	return ((std::istringstream(*this) >> d).eof() && (d==0. || isnormal(d)));
+	std::istringstream sstr(*this);
+
+	sstr >> d;
+
+	return (!sstr.fail() && sstr.eof());
 }
 
 BALL_INLINE 
