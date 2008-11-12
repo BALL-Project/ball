@@ -3556,6 +3556,8 @@ fi
 dnl
 dnl		Python extension support
 dnl
+dnl   TODO: make sure that all configure options are really parsed
+dnl
 AC_DEFUN(CF_PYTHON, [
 	dnl
 	dnl  variable subsitutions for config.mak
@@ -3579,6 +3581,11 @@ AC_DEFUN(CF_PYTHON, [
 			CF_ERROR
 		fi
 		AC_DEFINE(PROJECT[]_PYTHON_SUPPORT)
+
+		dnl
+		dnl first, run the macro provided by the autoconf archive
+		dnl
+		AC_PYTHON_DEVEL(>= '2.3')
 
 		dnl 
 		dnl Find the python executable (specified via --with-python)
@@ -3611,58 +3618,8 @@ AC_DEFUN(CF_PYTHON, [
 			CF_ERROR
 		fi
 			
-		dnl
-		dnl	 Run python to retrieve some useful configuration information
-		dnl	
-		AC_MSG_CHECKING(for Python version)
-		PYTHON_VERSION=`${PYTHON_EXECUTABLE} -c 'import sys;print sys.version' | ${SED} -n 1p | ${CUT} -d\  -f1`
-		AC_MSG_RESULT(${PYTHON_VERSION})
-		PYTHON_VERSION_NUMBER_1=`echo ${PYTHON_VERSION} | ${CUT} -d. -f1`
-		PYTHON_VERSION_NUMBER_2=`echo ${PYTHON_VERSION} | ${CUT} -d. -f2`
-		PYTHON_VERSION_NUMBER_3=`echo ${PYTHON_VERSION} | ${CUT} -d. -f3`
-
-		dnl
-		dnl	shorten the release number to Major.minor (only those are used to construct
-		dnl include and lib paths)
-		dnl
-		PYTHON_VERSION="${PYTHON_VERSION_NUMBER_1}.${PYTHON_VERSION_NUMBER_2}"
-		
-		dnl
-		dnl  We need at least Python 2.3
-		dnl
-		if test "${PYTHON_VERSION_NUMBER_1}" -le 1 -o "${PYTHON_VERSION_NUMBER_2}" -lt 2 ; then
-			AC_MSG_RESULT()
-			AC_MSG_RESULT([Python version 2.3 or above required!])
-			AC_MSG_RESULT([Please donwload and install Python from])
-			AC_MSG_RESULT([  http://www.python.org])
-			CF_ERROR
-		fi
-		
-		AC_MSG_CHECKING(for Python installation paths)
-		PYTHON_PREFIX=`${PYTHON_EXECUTABLE} -c 'import sys;print sys.prefix'`
-		AC_MSG_RESULT(${PYTHON_PREFIX})
-
-
-		dnl
-		dnl  Python include path
-		dnl
-		AC_MSG_CHECKING(for Python.h)
-		if test "${PYTHON_INC_PATH}" = "" ; then
-			PYTHON_INC_PATH="${PYTHON_PREFIX}/include/python${PYTHON_VERSION}"
-		fi
-		CF_FIND_HEADER(PYTHON_INC_PATH, Python.h, ${PYTHON_INCLUDE_PATH})
-		if test "${PYTHON_INC_PATH}" = "" ; then
-			AC_MSG_RESULT(not found!)
-			AC_MSG_RESULT()
-			AC_MSG_RESULT([Please specify the path to the directory that contains])
-			AC_MSG_RESULT([Python.h using the option --with-python-incl=DIR])
-			AC_MSG_RESULT([or ensure that Python is installed in the correct directory])
-			AC_MSG_RESULT([(sys.prefix is ${PYTHON_PREFIX})])
-			CF_ERROR
-		else
-			AC_MSG_RESULT(${PYTHON_INC_PATH})
-			PYTHON_INCLUDES="-I${PYTHON_INC_PATH}"
-		fi
+		PYTHON_INCLUDES="${PYTHON_CPPFLAGS}"	
+		PYTHON_INC_PATH=`echo ${PYTHON_INCLUDES} | sed s+-I++g`
 
 		dnl
 		dnl	Python library path
@@ -3671,47 +3628,10 @@ AC_DEFUN(CF_PYTHON, [
     if test "${OS}" = "Darwin" ; then
  			PYTHON_LIBS="-framework Python"
 		else     
-			AC_MSG_CHECKING(for libpython)
-			if test "${PYTHON_LIBPATH}" = "" ; then
-				PYTHON_LIBPATH="${PYTHON_PREFIX}/lib/python${PYTHON_VERSION}/config/"
-			fi
-			PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.so 2>/dev/null`
-			if test "${PYTHON_LIBS}" = "" ; then
-				dnl test if 64 path is used
-				PYTHON_LIBPATH="${PYTHON_PREFIX}/lib64/python${PYTHON_VERSION}/config/"
-				PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.so 2>/dev/null`	
-
-				if test "${PYTHON_LIBS}" = "" ; then
-					AC_MSG_RESULT()
-					AC_MSG_RESULT(No libpython*a found in ${PYTHON_LIBPATH}. Please specify)
-					AC_MSG_RESULT(the path where your Python library resides using --with-python-libs=DIR)
-					AC_MSG_RESULT(or ensure that libpython is installed in the correct directory)
-					AC_MSG_RESULT([(sys.prefix is ]${PYTHON_PREFIX}[)])
-					CF_ERROR
-				fi
-			fi
-			AC_MSG_RESULT(${PYTHON_LIBS})
-
-			if test "${PYTHON_LDOPTS}" = "" ; then
-				PYTHON_MAKEFILE=`${FIND} ${PYTHON_LIBPATH} -name Makefile 2>/dev/null`
-				if test "${PYTHON_MAKEFILE}" = "" ; then
-					AC_MSG_RESULT()
-					AC_MSG_RESULT(Makefile in the Python lib/config directory not found!)
-					AC_MSG_RESULT(Please specify the correct options needed to link)
-					AC_MSG_RESULT(against the Python library using)
-					AC_MSG_RESULT( --with-python-ldopts=OPTIONS)
-					AC_MSG_RESULT([(e.g. --with-python-ldopts="-ltermcap -lm")])
-					CF_ERROR
-				fi
-				PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
-				PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^BASEMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
-				PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LOCALMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-` -lm"
-				PYTHON_LIBS=`echo ${PYTHON_LIBS} | ${TR} -s " "`
-			fi
+			PYTHON_LIBS="${PYTHON_LDFLAGS} ${PYTHON_EXTRA_LDFLAGS} ${PYTHON_EXTRA_LIBS}"
 			AC_MSG_RESULT(Linker options for Python library: ${PYTHON_LIBS})
 		fi
 
-		
 		dnl
 		dnl	 SIP executable
 		dnl
@@ -11621,4 +11541,269 @@ AC_SUBST([SED])
 AC_MSG_RESULT([$SED])
 ])
 
+# ===========================================================================
+#            http://autoconf-archive.cryp.to/ac_python_devel.html
+# ===========================================================================
+#
+# SYNOPSIS
+#
+#   AC_PYTHON_DEVEL([version])
+#
+# DESCRIPTION
+#
+#   Note: Defines as a precious variable "PYTHON_VERSION". Don't override it
+#   in your configure.ac.
+#
+#   This macro checks for Python and tries to get the include path to
+#   'Python.h'. It provides the $(PYTHON_CPPFLAGS) and $(PYTHON_LDFLAGS)
+#   output variables. It also exports $(PYTHON_EXTRA_LIBS) and
+#   $(PYTHON_EXTRA_LDFLAGS) for embedding Python in your code.
+#
+#   You can search for some particular version of Python by passing a
+#   parameter to this macro, for example ">= '2.3.1'", or "== '2.4'". Please
+#   note that you *have* to pass also an operator along with the version to
+#   match, and pay special attention to the single quotes surrounding the
+#   version number. Don't use "PYTHON_VERSION" for this: that environment
+#   variable is declared as precious and thus reserved for the end-user.
+#
+#   This macro should work for all versions of Python >= 2.1.0. As an end
+#   user, you can disable the check for the python version by setting the
+#   PYTHON_NOVERSIONCHECK environment variable to something else than the
+#   empty string.
+#
+#   If you need to use this macro for an older Python version, please
+#   contact the authors. We're always open for feedback.
+#
+# LAST MODIFICATION
+#
+#   2008-04-12
+#
+# COPYLEFT
+#
+#   Copyright (c) 2008 Sebastian Huber <sebastian-huber@web.de>
+#   Copyright (c) 2008 Alan W. Irwin <irwin@beluga.phys.uvic.ca>
+#   Copyright (c) 2008 Rafael Laboissiere <rafael@laboissiere.net>
+#   Copyright (c) 2008 Andrew Collier <colliera@ukzn.ac.za>
+#   Copyright (c) 2008 Matteo Settenvini <matteo@member.fsf.org>
+#   Copyright (c) 2008 Horst Knorr <hk_classes@knoda.org>
+#
+#   This program is free software: you can redistribute it and/or modify it
+#   under the terms of the GNU General Public License as published by the
+#   Free Software Foundation, either version 3 of the License, or (at your
+#   option) any later version.
+#
+#   This program is distributed in the hope that it will be useful, but
+#   WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+#   Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License along
+#   with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+#   As a special exception, the respective Autoconf Macro's copyright owner
+#   gives unlimited permission to copy, distribute and modify the configure
+#   scripts that are the output of Autoconf when processing the Macro. You
+#   need not follow the terms of the GNU General Public License when using
+#   or distributing such scripts, even though portions of the text of the
+#   Macro appear in them. The GNU General Public License (GPL) does govern
+#   all other use of the material that constitutes the Autoconf Macro.
+#
+#   This special exception to the GPL applies to versions of the Autoconf
+#   Macro released by the Autoconf Macro Archive. When you make and
+#   distribute a modified version of the Autoconf Macro, you may extend this
+#   special exception to the GPL to apply to your modified version as well.
+
+AC_DEFUN([AC_PYTHON_DEVEL],[
+	#
+	# Allow the use of a (user set) custom python version
+	#
+	AC_ARG_VAR([PYTHON_VERSION],[The installed Python
+		version to use, for example '2.3'. This string
+		will be appended to the Python interpreter
+		canonical name.])
+
+	AC_PATH_PROG([PYTHON],[python[$PYTHON_VERSION]])
+	if test -z "$PYTHON"; then
+	   AC_MSG_ERROR([Cannot find python$PYTHON_VERSION in your system path])
+	   PYTHON_VERSION=""
+	fi
+
+	#
+	# Check for a version of Python >= 2.1.0
+	#
+	AC_MSG_CHECKING([for a version of Python >= '2.1.0'])
+	ac_supports_python_ver=`$PYTHON -c "import sys, string; \
+		ver = string.split(sys.version)[[0]]; \
+		print ver >= '2.1.0'"`
+	if test "$ac_supports_python_ver" != "True"; then
+		if test -z "$PYTHON_NOVERSIONCHECK"; then
+			AC_MSG_RESULT([no])
+			AC_MSG_FAILURE([
+This version of the AC@&t@_PYTHON_DEVEL macro
+doesn't work properly with versions of Python before
+2.1.0. You may need to re-run configure, setting the
+variables PYTHON_CPPFLAGS, PYTHON_LDFLAGS, PYTHON_SITE_PKG,
+PYTHON_EXTRA_LIBS and PYTHON_EXTRA_LDFLAGS by hand.
+Moreover, to disable this check, set PYTHON_NOVERSIONCHECK
+to something else than an empty string.
+])
+		else
+			AC_MSG_RESULT([skip at user request])
+		fi
+	else
+		AC_MSG_RESULT([yes])
+	fi
+
+	#
+	# if the macro parameter ``version'' is set, honour it
+	#
+	if test -n "$1"; then
+		AC_MSG_CHECKING([for a version of Python $1])
+		ac_supports_python_ver=`$PYTHON -c "import sys, string; \
+			ver = string.split(sys.version)[[0]]; \
+			print ver $1"`
+		if test "$ac_supports_python_ver" = "True"; then
+	   	   AC_MSG_RESULT([yes])
+		else
+			AC_MSG_RESULT([no])
+			AC_MSG_ERROR([this package requires Python $1.
+If you have it installed, but it isn't the default Python
+interpreter in your system path, please pass the PYTHON_VERSION
+variable to configure. See ``configure --help'' for reference.
+])
+			PYTHON_VERSION=""
+		fi
+	fi
+
+	#
+	# Check if you have distutils, else fail
+	#
+	AC_MSG_CHECKING([for the distutils Python package])
+	ac_distutils_result=`$PYTHON -c "import distutils" 2>&1`
+	if test -z "$ac_distutils_result"; then
+		AC_MSG_RESULT([yes])
+	else
+		AC_MSG_RESULT([no])
+		AC_MSG_ERROR([cannot import Python module "distutils".
+Please check your Python installation. The error was:
+$ac_distutils_result])
+		PYTHON_VERSION=""
+	fi
+
+	#
+	# Check for Python include path
+	#
+	AC_MSG_CHECKING([for Python include path])
+	if test -z "$PYTHON_CPPFLAGS"; then
+		python_path=`$PYTHON -c "import distutils.sysconfig; \
+           		print distutils.sysconfig.get_python_inc();"`
+		if test -n "${python_path}"; then
+		   	python_path="-I$python_path"
+		fi
+		PYTHON_CPPFLAGS=$python_path
+	fi
+	AC_MSG_RESULT([$PYTHON_CPPFLAGS])
+	AC_SUBST([PYTHON_CPPFLAGS])
+
+	#
+	# Check for Python library path
+	#
+	AC_MSG_CHECKING([for Python library path])
+	if test -z "$PYTHON_LDFLAGS"; then
+		# (makes two attempts to ensure we've got a version number
+		# from the interpreter)
+		py_version=`$PYTHON -c "from distutils.sysconfig import *; \
+			from string import join; \
+			print join(get_config_vars('VERSION'))"`
+		if test "$py_version" == "[None]"; then
+			if test -n "$PYTHON_VERSION"; then
+				py_version=$PYTHON_VERSION
+			else
+				py_version=`$PYTHON -c "import sys; \
+					print sys.version[[:3]]"`
+			fi
+		fi
+
+		PYTHON_LDFLAGS=`$PYTHON -c "from distutils.sysconfig import *; \
+			from string import join; \
+			print '-L' + get_python_lib(0,1), \
+		      	'-lpython';"`$py_version
+	fi
+	AC_MSG_RESULT([$PYTHON_LDFLAGS])
+	AC_SUBST([PYTHON_LDFLAGS])
+
+	#
+	# Check for site packages
+	#
+	AC_MSG_CHECKING([for Python site-packages path])
+	if test -z "$PYTHON_SITE_PKG"; then
+		PYTHON_SITE_PKG=`$PYTHON -c "import distutils.sysconfig; \
+		        print distutils.sysconfig.get_python_lib(0,0);"`
+	fi
+	AC_MSG_RESULT([$PYTHON_SITE_PKG])
+	AC_SUBST([PYTHON_SITE_PKG])
+
+	#
+	# libraries which must be linked in when embedding
+	#
+	AC_MSG_CHECKING(python extra libraries)
+	if test -z "$PYTHON_EXTRA_LIBS"; then
+	   PYTHON_EXTRA_LIBS=`$PYTHON -c "import distutils.sysconfig; \
+                conf = distutils.sysconfig.get_config_var; \
+                print conf('LOCALMODLIBS'), conf('LIBS')"`
+	fi
+	AC_MSG_RESULT([$PYTHON_EXTRA_LIBS])
+	AC_SUBST(PYTHON_EXTRA_LIBS)
+
+	#
+	# linking flags needed when embedding
+	#
+	AC_MSG_CHECKING(python extra linking flags)
+	if test -z "$PYTHON_EXTRA_LDFLAGS"; then
+		PYTHON_EXTRA_LDFLAGS=`$PYTHON -c "import distutils.sysconfig; \
+			conf = distutils.sysconfig.get_config_var; \
+			print conf('LINKFORSHARED')"`
+	fi
+	AC_MSG_RESULT([$PYTHON_EXTRA_LDFLAGS])
+	AC_SUBST(PYTHON_EXTRA_LDFLAGS)
+
+	#
+	# final check to see if everything compiles alright
+	#
+	AC_MSG_CHECKING([consistency of all components of python development environment])
+	AC_LANG_PUSH([C])
+	# save current global flags
+	LIBS="$ac_save_LIBS $PYTHON_LDFLAGS"
+	CPPFLAGS="$ac_save_CPPFLAGS $PYTHON_CPPFLAGS"
+	AC_TRY_LINK([
+		#include <Python.h>
+	],[
+		Py_Initialize();
+	],[pythonexists=yes],[pythonexists=no])
+
+	AC_MSG_RESULT([$pythonexists])
+
+        if test ! "$pythonexists" = "yes"; then
+	   AC_MSG_ERROR([
+  Could not link test program to Python. Maybe the main Python library has been
+  installed in some non-standard library path. If so, pass it to configure,
+  via the LDFLAGS environment variable.
+  Example: ./configure LDFLAGS="-L/usr/non-standard-path/python/lib"
+  ============================================================================
+   ERROR!
+   You probably have to install the development version of the Python package
+   for your distribution.  The exact name of this package varies among them.
+  ============================================================================
+	   ])
+	  PYTHON_VERSION=""
+	fi
+	AC_LANG_POP
+	# turn back to default flags
+	CPPFLAGS="$ac_save_CPPFLAGS"
+	LIBS="$ac_save_LIBS"
+
+	#
+	# all done!
+	#
+])
 
