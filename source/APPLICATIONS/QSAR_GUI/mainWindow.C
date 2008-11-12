@@ -443,7 +443,8 @@ PredictionItem* MainWindow::createPrediction(InputDataItem* input, ModelItem* mo
 
  void MainWindow::about()
 {
-	QMessageBox::information(this, tr("About QSAR_GUI"), tr("Version 0.69\n2008-08-07"),
+	String s = "Version 0.75\nbuild "+String(__DATE__);
+	QMessageBox::information(this, tr("About QSAR_GUI"), tr(s.c_str()),
 	QMessageBox::Ok);
 }
 

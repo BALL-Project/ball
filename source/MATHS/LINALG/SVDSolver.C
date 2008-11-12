@@ -117,7 +117,8 @@ namespace BALL
 		// done.
 		return true;
 	}
-
+			
+					
 	template <>
 	bool SVDSolver<double, StandardTraits>::computeSVD_lapack()
 		throw(Exception::OutOfMemory)
@@ -130,6 +131,16 @@ namespace BALL
 		size_t size = matrix_->getSize();
 		std::vector<double> matrix_copy(size);
 		cblas_dcopy(size, &(*matrix_)[0], 1, (double*)&(matrix_copy[0]), 1);
+		
+		
+		// Regularize matrix_copy in order to prevent strange effects when netlib-lapack assumes matissa of length 53bit instead of 52bit.
+		// Else lapack sometimes computes incorrect singular values that might even turn out to be 'nan' !!
+		// Note that (on most systems) you still need to force your program to use the exact IEEE754 double-precision (52bit mantissa).
+		for(int i=0; i<matrix_copy.size();i+=matrix_->getColumnCount()+1)
+		{
+			matrix_copy[i] += 1e-14;
+		}
+		
 
 		// lapack wants things in col major always. If our array was stored in row major,
 		// we will have to compute the SVD of the transposed matrix instead. This means that

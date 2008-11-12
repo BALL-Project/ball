@@ -58,7 +58,7 @@ void KPCRModel::train()
 	PCRModel::calculateEigenvectors(K_,frac_var_,loadings_);
 	
 	latent_variables_ = K_*loadings_;
-	
+
 	//result of RR is a linear combination of latente variables 
 	// = column with length=no of latente variables => matrix for more than one modelled activity
 	weights_ = (latent_variables_.t()*latent_variables_).pseudoInverse()*latent_variables_.t()*Y_;

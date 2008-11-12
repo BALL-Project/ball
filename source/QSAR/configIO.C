@@ -639,7 +639,7 @@ ValidationConfiguration ConfigIO::readValidationConfiguration(istream* input)
 			}
 			else continue;
 		}
-		if(j>0 && line.hasPrefix("["))
+		else if(line.hasPrefix("["))
 		{
 			putbackLine(input,line);
 			break;
