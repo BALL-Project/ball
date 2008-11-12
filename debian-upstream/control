@@ -8,7 +8,7 @@ Build-Depends: debhelper (>= 4), libtool, libqt4-dev, libqt4-gui, libqt4-opengl,
  libxmu-dev, doxygen, tidy, texlive-base, texlive-latex-recommended, 
  texlive-fonts-recommended, gs-common, texlive-latex-extra, graphviz
 XS-Python-Version: all
-Standards-Version: 3.7.3
+Standards-Version: 3.8.0
 Vcs-Browser: http://svn.debian.org/wsvn/debian-med/trunk/packages/ball/trunk/?rev=0&sc=0
 Vcs-Svn: svn://svn.debian.org/svn/debian-med/trunk/packages/ball/trunk/
 Homepage: http://www.ballview.org
@@ -18,7 +18,7 @@ Section: science
 Architecture: any
 Depends: ${shlibs:Depends}, libqt4-core, libqt4-gui, libqt4-sql, libfftw3-3,
  libglew1.5, libgsl0ldbl, libqt4-opengl, libxrender1, libxmu6
-Description: The Biochemical Algorithms Library
+Description: Biochemical Algorithms Library
  BALL (Biochemical Algorithms Library) is an application framework 
  in C++ that has been specifically designed for rapid software 
  development in Molecular Modeling and Computational Molecular Biology. 
@@ -29,27 +29,15 @@ Description: The Biochemical Algorithms Library
  (University of Tuebingen, Germany), Andreas Hildebrandt (Saarland 
  University, Saarbruecken, Germany), and Hans-Peter Lenhof (Saarland 
  University, Saarbruecken, Germany).
- .
- Homepage: www.ball-project.org
 
 Package: libball-1.2-dev
 Section: libdevel
 Architecture: any
 Depends: libball-1.2
 Recommends: libball-1.2-doc
-Description: The Biochemical Algorithms Library
- BALL (Biochemical Algorithms Library) is an application framework 
- in C++ that has been specifically designed for rapid software 
- development in Molecular Modeling and Computational Molecular Biology. 
- It provides an extensive set of data structures as well as classes 
- for Molecular Mechanics, advanced solvation methods, comparison and 
- analysis of protein structures, file import/export, and visualization.
- BALL is currently being developed in the groups of Oliver Kohlbacher
- (University of Tuebingen, Germany), Andreas Hildebrandt (Saarland 
- University, Saarbruecken, Germany), and Hans-Peter Lenhof (Saarland 
- University, Saarbruecken, Germany).
- .
- Homepage: www.ball-project.org
+Description: Header files for the Biochemical Algorithms Library
+ This package comprises the header files allowing to create
+ one's own applications with the BAL library.
 
 Package: ballview-1.2
 Architecture: any
@@ -60,7 +48,9 @@ Description: A free molecular modeling and molecular graphics tool
  AMBER, CHARMM, and MMFF94 force fields), calculation and visualization 
  of electrostatic properties (FDPB) and molecular editing features.
  .
- BALLView is based on BALL (Biochemical Algorithms Library), 
+ BALLView can be considered a graphical user interface on the basis of
+ BALL (Biochemical Algorithms Library), having taken the most common
+ demands of protein chemists and biophysicists in particular taken into account.
  which is currently being developed in the groups of Hans-Peter Lenhof 
  (Saarland University, Saarbruecken, Germany) and Oliver Kohlbacher 
  (University of Tuebingen, Germany). BALL is an application framework 
@@ -69,26 +59,19 @@ Description: A free molecular modeling and molecular graphics tool
  It provides an extensive set of data structures as well as classes 
  for Molecular Mechanics, advanced solvation methods, comparison and 
  analysis of protein structures, file import/export, and visualization.
- .
- Homepage: www.BALLView.org
 
 Package: python-ball-1.2
 Architecture: any
 Section: python
 Depends: ${shlibs:Depends}, ${python:Depends}, python-sip4 (>= 4.7.2), python-sip4 (<< 4.8), python2.5, libball-1.2
 Description: Python bindings for the Biochemical Algorithms Library
- python-ball-1.2 provides simple scripting access to the functionality of the
+ This package provides scripting access to the functionality of the
  Biochemical Algorithms Library (BALL).
- BALL is available under the LGPL license.
- .
- Homepage: www.ball-project.org
 
 Package: libball-1.2-doc
 Architecture: all
 Section: doc
 Depends: libball-1.2
 Description: Documentation for the BALL library
- .
- BALL is available under the LGPL license.
- .
- Homepage: www.ball-project.org
+ The package comprises an extensive manual introducing to molecular dynamics
+ and its programming with BALL.
