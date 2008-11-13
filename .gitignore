@@ -3,8 +3,10 @@ contrib/*
 *.lo
 *_moc.C
 *.dh
+*.swp
 .Dependencies
 lib/*
+source/autom4te.cache
 source/Makefile
 source/config.lic
 source/config.log
