@@ -1,2 +1,5 @@
 *_test
+*_test[1-4]
 *_test.log
+*.TMP
+*.vgr
