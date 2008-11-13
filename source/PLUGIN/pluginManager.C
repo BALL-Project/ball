@@ -44,7 +44,14 @@ namespace BALL
 		QPluginLoader* loader = new QPluginLoader(plugin_name);
 
 		qDebug() << "Trying to load plugin: " << plugin_name;
-		plugin = qobject_cast<BALLPlugin*>(loader->instance());
+		if (loader->load())
+		{
+			plugin = qobject_cast<BALLPlugin*>(loader->instance());
+		}
+		else
+		{
+			qDebug() << "Error:" << loader->errorString();
+		}
 
 		if(plugin) {
 			qDebug("loaded plugin");
