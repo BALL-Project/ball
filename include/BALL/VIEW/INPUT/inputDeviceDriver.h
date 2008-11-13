@@ -27,7 +27,7 @@ namespace BALL
 				QWidget* getReceiver();
 
 			protected:
-				void emitPositionChange(double x, double y, double y, double a, double b, double c);
+				void emitPositionChange(double x, double y, double z, double a, double b, double c);
 
 			private:
 				QMutex receiverLock;
