@@ -2,7 +2,7 @@
 
 
 using namespace BALL::QSAR;
-
+using namespace BALL;
 
 Registry::Registry()
 {
@@ -124,11 +124,18 @@ Registry::Registry()
 	registered_models.push_back(r11);
 	
 	
-	classification_statistics.push_back("average accuracy");
-	classification_statistics.push_back("weighted accuracy");
+	classification_statistics.push_back("average sensitivity");
+	classification_statistics.push_back("weighted sensitivity");
 	classification_statistics.push_back("overall accuracy");
 	classification_statistics.push_back("average MCC");
 	classification_statistics.push_back("overall MCC");
+	
+	feature_selection_names.push_back("forward selection");
+	feature_selection_names.push_back("backward selection");
+	feature_selection_names.push_back("stepwise selection");
+	feature_selection_names.push_back("Remove Low Response Correlation");
+	feature_selection_names.push_back("Remove Insignificant Coefficients");
+	feature_selection_names.push_back("TwinScan");
 }
 
 
@@ -165,7 +172,21 @@ int Registry::getModelNo(String model_name)
 	}
 	return -1;	
 }
-		
+
+const vector<BALL::String>* Registry::getClassificationStatistics()
+{
+	return &classification_statistics;
+}
+
+const vector<String>* Registry::getRegressionStatistics()
+{
+	return NULL;
+}
+
+const vector<String>* Registry::getFeatureSelectionNames()
+{
+	return &feature_selection_names;
+}
 
 RegistryEntry::RegistryEntry(bool k, bool r, String n, String ab, CreateMethod c0, Registry* reg)
 {
@@ -197,7 +218,7 @@ RegistryEntry::RegistryEntry(bool k, bool r, String n, String ab, CreateKernel1 
 }
 
 
-const vector<BALL::String>* RegistryEntry::getStatistics()
+const vector<String>* RegistryEntry::getStatistics()
 {
 	if(regression) return NULL;
 	

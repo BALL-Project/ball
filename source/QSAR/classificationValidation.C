@@ -11,8 +11,8 @@ using namespace BALL::QSAR;
 
 ClassificationValidation::ClassificationValidation(ClassificationModel* m) : Validation(m)
 {
-	clas_model = m; accuracy_=-1; accuracy_cv_=-1; accuracy_input_test_=-1;
-	qualCalculation = &ClassificationValidation::calculateAverageAccuracy;
+	clas_model = m; quality_=-1; quality_cv_=-1; quality_input_test_=-1;
+	qualCalculation = &ClassificationValidation::calculateAverageSensitivity;
 }
 
 void ClassificationValidation::selectStat(int s)
@@ -23,11 +23,11 @@ void ClassificationValidation::selectStat(int s)
 	}
 	if(s==0)
 	{
-		qualCalculation = &ClassificationValidation::calculateAverageAccuracy;
+		qualCalculation = &ClassificationValidation::calculateAverageSensitivity;
 	}
 	else if(s==1)
 	{
-		qualCalculation = &ClassificationValidation::calculateWeightedAccuracy;
+		qualCalculation = &ClassificationValidation::calculateWeightedSensitivity;
 	}
 	else if(s==2)
 	{
@@ -102,9 +102,9 @@ void ClassificationValidation::crossValidation(int k, bool restore)
 		// test Model with model_->predict() for each line of test-data
 		model_->train();
 		testAllSubstances(0);  // do not transform cross-validation test-data again...
-		average_accuracy += accuracy_;
+		average_accuracy += quality_;
 	}
-	accuracy_cv_ = average_accuracy/k;
+	quality_cv_ = average_accuracy/k;
 	class_results_ = class_results_/k;
 	
 	if(restore)
@@ -187,10 +187,9 @@ void ClassificationValidation::testInputData(bool transform)
 	{
 		setTestLine(i,i,back_transform);
 	}
-	//cout<<test_Y_<<endl;
 	
 	testAllSubstances(transform);
-	accuracy_input_test_ = accuracy_;
+	quality_input_test_ = quality_;
 }
 
 
@@ -212,7 +211,7 @@ void ClassificationValidation::bootstrap(int k, bool restore)
 
 	class_results_.resize(clas_model->labels_.size());
 	class_results_ = 0;
-	accuracy_cv_=0;
+	quality_cv_=0;
 	int N = model_->data->descriptor_matrix_[0].size();
 	int no_descriptors=model_->data->descriptor_matrix_.size();
 	if(!model_->descriptor_IDs_.empty())
@@ -265,7 +264,7 @@ void ClassificationValidation::bootstrap(int k, bool restore)
 		test_Y_.ReSize(test_size,model_->data->Y_.size());
 		
 	
-		/// create test data set and calculate accuracy_ of prediction
+		/// create test data set and calculate quality_ of prediction
 		int test_line=0;
 		for(int j=0; j<N;j++) 
 		{
@@ -276,12 +275,12 @@ void ClassificationValidation::bootstrap(int k, bool restore)
 			}
 		}
 		testAllSubstances(0);
-		overall_pred+=accuracy_;
+		overall_pred+=quality_;
 		class_results_pred+=class_results_;		
 	
 		class_results_ = 0; // clear pred. result before adding training fit result!!
 		
-		/// create test data set and calculate accuracy_ of fit to training data	
+		/// create test data set and calculate quality_ of fit to training data	
 		test_substances_.resize(N);
 		test_Y_.ReSize(N,model_->data->Y_.size());
 		test_line=0;
@@ -295,7 +294,7 @@ void ClassificationValidation::bootstrap(int k, bool restore)
 			}
 		}
 		testAllSubstances(0);
-		overall_fit+=accuracy_;
+		overall_fit+=quality_;
 		class_results_fit+=class_results_;
 	}
 	
@@ -304,7 +303,7 @@ void ClassificationValidation::bootstrap(int k, bool restore)
 	class_results_pred = class_results_pred/k;
 	class_results_fit = class_results_fit/k;
 	
-	accuracy_cv_ = 0.632*overall_pred + 0.368*overall_fit;
+	quality_cv_ = 0.632*overall_pred + 0.368*overall_fit;
 	class_results_ = class_results_pred*0.632 + class_results_fit*0.368;
 	
 	gsl_rng_free(r);
@@ -336,10 +335,10 @@ BALL::Matrix<double> ClassificationValidation::yRandomizationTest(int runs, int 
 		yRand(); // randomize all columns of Y_
 		crossValidation(k,0);
 		testInputData(0);
-		//results[i][0]=accuracy_input_test_;
-		//results[i][1]=accuracy_cv_;
-		results(i+1,1)=accuracy_input_test_;
-		results(i+1,2)=accuracy_cv_;
+		//results[i][0]=quality_input_test_;
+		//results[i][1]=quality_cv_;
+		results(i+1,1)=quality_input_test_;
+		results(i+1,2)=quality_cv_;
 	}
 	
 	class_results_ = class_results_/runs;
@@ -369,67 +368,43 @@ void ClassificationValidation::calculateOverallAccuracy()
 	{
 		N += (int)confusion_matrix_(j,1);
 	}
-	accuracy_ = ((double)TP) / N;
-	
-// 	cout<<confusion_matrix_;
-// 	cout<<"overall ACC="<<accuracy_<<endl;
+	quality_ = ((double)TP) / N;
 }
 		
 
 
-void ClassificationValidation::calculateAverageAccuracy()
+void ClassificationValidation::calculateAverageSensitivity()
 {
-	accuracy_=0;
+	quality_=0;
 	
-	if(confusion_matrix_.Ncols()<2) // for binary classification normal df. of accuracy
-	{
-		for(int j=1;j<=confusion_matrix_.Ncols();j++) // calculate accuracy_ of all classes
-		{	// (TP+TN) / (TP+TN+FN+FP)
-			accuracy_ += (confusion_matrix_(1,j)+confusion_matrix_(3,j)) / (confusion_matrix_(1,j)+confusion_matrix_(3,j)+confusion_matrix_(4,j)+confusion_matrix_(2,j));
-		}
-	}
-	else
-	{
-		for(int j=1;j<=confusion_matrix_.Ncols();j++) // calculate accuracy_ of all classes
-		{	// multi-class accuracy := (TP) / (TP+FN+FP)
-			double acc = (confusion_matrix_(1,j)) / (confusion_matrix_(1,j)+confusion_matrix_(4,j)+confusion_matrix_(2,j));
-			class_results_(j) += acc;
-			accuracy_ += acc;
-		}
+	for(int j=1;j<=confusion_matrix_.Ncols();j++) // calculate quality_ of all classes
+	{	
+		double acc = (confusion_matrix_(1,j)) / (confusion_matrix_(1,j)+confusion_matrix_(4,j));
+		class_results_(j) += acc;
+		quality_ += acc;
 	}
 	
-	accuracy_ /= confusion_matrix_.Ncols(); // mean accuracy_ of all classes
+	quality_ /= confusion_matrix_.Ncols(); // mean quality_ of all classes
 }
 
 
-void ClassificationValidation::calculateWeightedAccuracy()
+void ClassificationValidation::calculateWeightedSensitivity()
 {
-	accuracy_=0;
+	quality_=0;
 	int no_all=0;
+	
 	// get number of substances that were used for training the model_
 	for(int i=0; i<(int)clas_model->no_substances_.size();i++)
 	{
 		no_all += clas_model->no_substances_[i];
 	}
-	
-	if(confusion_matrix_.Ncols()<2) // for binary classification normal df. of accuracy
-	{
-		for(int j=1;j<=confusion_matrix_.Ncols();j++)
-		{	// accuracy_ = (TP+TN) / (TP+TN+FN+FP)
-			double acc_j = (confusion_matrix_(1,j)+confusion_matrix_(3,j)) / (confusion_matrix_(1,j)+confusion_matrix_(3,j)+confusion_matrix_(4,j)+confusion_matrix_(2,j));
-			
-			accuracy_ = accuracy_ + acc_j*(((double)clas_model->no_substances_[j-1])/no_all);
-		}
-	}
-	else
-	{
-		for(int j=1;j<=confusion_matrix_.Ncols();j++) 
-		{	// multi-class accuracy := (TP) / (TP+FN+FP)
-			double acc = (confusion_matrix_(1,j)) / (confusion_matrix_(1,j)+confusion_matrix_(4,j)+confusion_matrix_(2,j));
-			double acc_weighted = acc*(((double)clas_model->no_substances_[j-1])/no_all);
-			class_results_(j) += acc_weighted;
-			accuracy_ += acc_weighted;
-		}
+
+	for(int j=1;j<=confusion_matrix_.Ncols();j++) 
+	{	
+		double acc = (confusion_matrix_(1,j)) / (confusion_matrix_(1,j)+confusion_matrix_(4,j));
+		double acc_weighted = acc*(((double)clas_model->no_substances_[j-1])/no_all);
+		class_results_(j) += acc_weighted;
+		quality_ += acc_weighted;
 	}
 }
 
@@ -437,8 +412,9 @@ void ClassificationValidation::calculateWeightedAccuracy()
 
 void ClassificationValidation::calculateAverageMCC()
 {
-	accuracy_=0;
+	quality_=0;
 	double MCC=0;
+	
 	for(int j=1;j<=confusion_matrix_.Ncols();j++)
 	{
 		int TP = (int)confusion_matrix_(1,j);
@@ -455,13 +431,13 @@ void ClassificationValidation::calculateAverageMCC()
 		class_results_(j) += d;
 		MCC += d;
 	}
-	accuracy_ = MCC/confusion_matrix_.Ncols();
+	quality_ = MCC/confusion_matrix_.Ncols();
 }
 	
 	
 void ClassificationValidation::calculateOverallMCC()
 {
-	accuracy_=0;
+	quality_=0;
 	int TP = 0; int FP=0; int TN=0; int FN=0;
 	for(int j=1;j<=confusion_matrix_.Ncols();j++)
 	{
@@ -474,7 +450,7 @@ void ClassificationValidation::calculateOverallMCC()
 	double denom = ((double)(TP+FP))*(TP+FN)*(TN+FP)*(TN+FN);
 	if(denom!=0) denom = sqrt(denom);
 	else denom = 1; 
-	accuracy_= nom/denom;
+	quality_= nom/denom;
 }
 
 
@@ -493,30 +469,30 @@ const BALL::Vector<double>* ClassificationValidation::getClassResults()
 
 double ClassificationValidation::getAccuracyInputTest()
 {
-	return accuracy_input_test_;
+	return quality_input_test_;
 }
 
 
 double ClassificationValidation::getAccuracyCV()
 {
-	return accuracy_cv_;
+	return quality_cv_;
 }
 
 
 double ClassificationValidation::getCVRes()
 {
-	return accuracy_cv_;
+	return quality_cv_;
 }
 				
 
 				
 void ClassificationValidation::setCVRes(double d)
 {
-	accuracy_cv_=d;
+	quality_cv_=d;
 }
 
 
 double ClassificationValidation::getFitRes()
 {
-	return accuracy_input_test_;
+	return quality_input_test_;
 }

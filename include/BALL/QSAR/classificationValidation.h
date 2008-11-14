@@ -50,7 +50,7 @@ namespace BALL
 				
 				void testInputData(bool transform=0);
 				
-				/** return pointer to the matrix containing the number of TP, FP, FN, TN in one column for each class  */
+				/** return pointer to the matrix containing the number of TP, FP, TN, FN in one column for each class  */
 				const BALL::Matrix<double>* getConfusionMatrix();
 				
 				/** returns a RowVector holding the one value contituting the validation result for each class if "average accuracy" or "average MCC" is chosen (see selectStat()). */
@@ -84,10 +84,10 @@ namespace BALL
 				void testAllSubstances(bool transform);
 				
 				/** calculate average accuracy with the current values of TP, FP, FN, TN in matrix ClassificationValidation.predictions. */
-				void calculateAverageAccuracy();
+				void calculateAverageSensitivity();
 				
 				/** calculate weighted average accuracy of all classes. Weighted by the number of training compounds within each class */
-				void calculateWeightedAccuracy();
+				void calculateWeightedSensitivity();
 				
 				/** calculate accuracy for all classes at once */
 				void calculateOverallAccuracy();
@@ -106,14 +106,14 @@ namespace BALL
 				/** matrix containing the number of TP, FP, FN, TN in one column for each class  */
 				BALL::Matrix<double> confusion_matrix_;
 				
-				/** RowVector holding the one value contituting the validation result for each class if "average accuracy" or "average MCC" is chosen (see selectStat()). */
+				/** RowVector holding the one value contituting the validation result for each class if "average sensitivity" or "average MCC" is chosen (see selectStat()). */
 				Vector<double> class_results_;
 			
-				double accuracy_;
+				double quality_;
 				
-				double accuracy_input_test_;
+				double quality_input_test_;
 				
-				double accuracy_cv_;
+				double quality_cv_;
 
 				/** pointer to the regression model, which the object of this class should test */
 				ClassificationModel* clas_model;

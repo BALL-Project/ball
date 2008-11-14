@@ -115,12 +115,17 @@ namespace BALL
 				/** return the ID of a specified model */
 				int getModelNo(String model_name);
 				
+				const vector<String>* getClassificationStatistics();
+				const vector<String>* getRegressionStatistics();
+				const vector<String>* getFeatureSelectionNames();
+				
 				
 			private:
 				/** enable fast finding of a RegistryEntry for a given model name */
 				map<String,int> model_map;
 				
 				vector<String> classification_statistics;
+				vector<String> feature_selection_names;
 				
 				friend class RegistryEntry;
 		};

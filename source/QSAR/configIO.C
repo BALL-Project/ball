@@ -1,5 +1,6 @@
 #include <BALL/QSAR/configIO.h>
 #include <BALL/QSAR/exception.h>
+#include <BALL/QSAR/registry.h>
  
 using namespace BALL::QSAR;
 using namespace std;
@@ -428,6 +429,7 @@ FeatureSelectionConfiguration::FeatureSelectionConfiguration()
 FeatureSelectionConfiguration ConfigIO::readFeatureSelectionConfiguration(istream* input)
 {
 	FeatureSelectionConfiguration conf;
+	Registry reg;
 	
 	for(int j=0;!input->eof();j++) // read ONE FeatureSelector section
 	{		
@@ -500,15 +502,27 @@ FeatureSelectionConfiguration ConfigIO::readFeatureSelectionConfiguration(istrea
 		{
 			String s = ((String)line.after("=")).trimLeft();
 			conf.statistic_name = s;
-			if(s=="average accuracy") conf.statistic=0;
-			else if(s=="weighted average accuracy") conf.statistic=1;
-			else if(s=="overall accuracy") conf.statistic=2;
-			else if(s=="average MCC") conf.statistic=3;
-			else if(s=="overall MCC") conf.statistic=4;
-			else
+			
+			const vector<String>* stats = reg.getClassificationStatistics();
+			string choices = ""; 
+			bool ok=0;
+			for(uint i=0; i<stats->size();i++)
+			{
+				if(s==(*stats)[i])
+				{
+					ok=1;
+					conf.statistic=i;
+					break;
+				}
+				else
+				{
+					choices += (*stats)[i]+", ";
+				}
+			}
+			if(!ok)
 			{
 				String m = "qualitiy statistic \'"+s+"\' unknown!\n";
-				m+="possible choices are: \"average accuracy\", \"weighted average accuracy\", \"overall accuracy\", \"average MCC\" and \"overall MCC\"";
+				m+="possible choices are: "+choices;
 				
 				throw Exception::ConfigurationReadingError(__FILE__,__LINE__,m.c_str());
 			}				
@@ -573,19 +587,18 @@ FeatureSelectionConfiguration ConfigIO::readFeatureSelectionConfiguration(istrea
 		throw Exception::ConfigurationReadingError(__FILE__,__LINE__,"\"opt_k_fold\", \"grid_search_steps\" and \"grid_search_stepwidth\" must be specified when kernel parameters should be optimized after feature selection!");		
 	}
 	
-	if(conf.feat_type==0 || conf.remove_correlated) conf.selection_name="Remove Colinear Features";
-	else if(conf.feat_type==1) conf.selection_name="Forward Selection";
-	else if(conf.feat_type==2) conf.selection_name="Backward Selection";
-	else if(conf.feat_type==3) conf.selection_name="Stepwise Selection";
-	else if(conf.feat_type==4) conf.selection_name="Remove Low Response Correlation";
-	else if(conf.feat_type==5) conf.selection_name="Remove Insignificant Coefficients";
-	else if(conf.feat_type==6) conf.selection_name="TwinScan";
+	if(conf.remove_correlated) conf.selection_name="Remove Colinear Features";
+	else if(conf.feat_type>=0 && conf.feat_type<(int)reg.getFeatureSelectionNames()->size())
+	{
+		conf.selection_name=(*reg.getFeatureSelectionNames())[conf.feat_type];
+	}
 	else
 	{
 		String mess = "feature-selection type \"";
 		mess+=conf.feat_type+"\" is unknown!";
 		throw Exception::ConfigurationReadingError(__FILE__,__LINE__,mess.c_str());
-	}	
+	}
+	
 	
 	return conf;
 }
@@ -617,6 +630,7 @@ ValidationConfiguration::ValidationConfiguration()
 ValidationConfiguration ConfigIO::readValidationConfiguration(istream* input)
 {
 	ValidationConfiguration conf;
+	Registry reg;
 	
 	for(int j=0;!input->eof();j++) // read ONE Validator section
 	{
@@ -681,15 +695,28 @@ ValidationConfiguration ConfigIO::readValidationConfiguration(istream* input)
 		{
 			String s = ((String)line.after("=")).trimLeft();
 			conf.statistic_name = s;
-			if(s=="average accuracy") conf.statistic=0;
-			else if(s=="weighted average accuracy") conf.statistic=1;
-			else if(s=="overall accuracy") conf.statistic=2;
-			else if(s=="average MCC") conf.statistic=3; 
-			else if(s=="overall MCC") conf.statistic=4;
-			else
+			
+			const vector<String>* stats = reg.getClassificationStatistics();
+			string choices = ""; 
+			bool ok=0;
+			for(uint i=0; i<stats->size();i++)
 			{
-				String m="qualitiy statistic \'"+s+"\' unknown!\n";
-				m+="possible choices are: \"average accuracy\", \"weighted average accuracy\", \"overall accuracy\", \"average MCC\" and \"overall MCC\"";
+				if(s==(*stats)[i])
+				{
+					ok=1;
+					conf.statistic=i;
+					break;
+				}
+				else
+				{
+					choices += (*stats)[i]+", ";
+				}
+			}
+			if(!ok)
+			{
+				String m = "qualitiy statistic \'"+s+"\' unknown!\n";
+				m+="possible choices are: "+choices;
+				
 				throw Exception::ConfigurationReadingError(__FILE__,__LINE__,m.c_str());
 			}				
 		}
