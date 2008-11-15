@@ -70,7 +70,7 @@ void readCharges(vector<String>& filenames)
 	}
 
 	HashMap<String, float>::Iterator it = charge_map.begin();
-	for (; +it; ++it)
+	for (; it != charge_map.end(); ++it)
 	{
 		Log.info() << it->first << "   " << it->second << std::endl;
 	}
@@ -903,7 +903,7 @@ HashSet<String> type_errors_lower;
 
 Size wrong_types, type_errors;
 
-bool testType(System& system, String filename, AtomTyper& typer)
+bool testType(System& system, String filename, AtomTyper& /* typer */)
 {
 //    	typer.assignTo(system);
 
@@ -1328,7 +1328,7 @@ int main(int argc, char** argv)
 
 	int result = runtests(files);
 	StringHashMap<float>::Iterator hit = AtomTyper::rule_times.begin();
-	for (; +hit; ++hit)
+	for (; hit != AtomTyper::rule_times.end(); ++hit)
 	{
 		Log.error() << hit->first << " " << hit->second << std::endl;
 	}

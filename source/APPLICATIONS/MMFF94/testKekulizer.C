@@ -274,7 +274,7 @@ int main(int argc, char** argv)
 
 	int result = runtests(files);
 	StringHashMap<float>::Iterator hit = AtomTyper::rule_times.begin();
-	for (; +hit; ++hit)
+	for (; hit != AtomTyper::rule_times.end(); ++hit)
 	{
 		Log.error() << hit->first << " " << hit->second << std::endl;
 	}
