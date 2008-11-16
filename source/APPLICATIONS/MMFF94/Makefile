@@ -20,13 +20,13 @@ include ../../common.mak
 
 # required for clean and depend
 CPP_SOURCES=$(EXECUTABLES:=.C)
-OBJECTS=$(EXECUTABLES:=.o)
+OBJECTS=$(EXECUTABLES:=.$(OBJECT_EXTENSION))
 
-.o:
-	$(CXX) $(CXXFLAGS) $*.o $(LDFLAGS) -o $@ $(LIBS)
+%: %.$(OBJECT_EXTENSION)
+	$(LINKER) $(CXXFLAGS) $*.$(OBJECT_EXTENSION) $(LDFLAGS) -o $@ $(LIBS)
 
-%%.C:
-	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.C $(LDFLAGS) -o $@ $(LIBS)
+#%%.C:
+#	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.C $(LDFLAGS) -o $@ $(LIBS)
 
 clean:  default_clean
 	@$(RM) -rf *.o *~ *.log _*.TMP core a.out $(EXECUTABLES)

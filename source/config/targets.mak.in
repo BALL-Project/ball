@@ -24,8 +24,9 @@ echodir:
 
 # .dh -- dummy header files for 
 # .il -- Intel CC otimizer files
+# .libs/* -- libtool - directories
 default_clean:
-	@-$(RM) -rf *.dh *il *~ @TEMPLATE_DIR@ core core.* $(OBJECTS) $(MOC_SOURCES) $(UIC_SOURCES) $(ADD_MOC_SOURCES) $(EXECUTABLES) $(EXECUTABLE)
+	@-$(RM) -rf *.dh *il *~ @TEMPLATE_DIR@ core core.* .libs/* $(OBJECTS) $(MOC_SOURCES) $(UIC_SOURCES) $(ADD_MOC_SOURCES) $(EXECUTABLES) $(EXECUTABLE)
 
 
 collectlib:	default
@@ -36,4 +37,4 @@ collectlib:	default
 depend: $(CPP_SOURCES)
 	@echo "creating dependencies for $(DIRECTORY)..."
 	@echo "" > .Dependencies
-	@@CXX_MAKEDEPEND@ @MAKEDEP_CXX_OPTS@ $(CPP_SOURCES) $(ADD_CPP_SOURCES) $(STD_CPP_INCLUDES) $(ADD_INCLUDES) $(BALL_INCLUDES) @MAKEDEP_CXX_SUFFIX@
+	@@CXX_MAKEDEPEND@ @MAKEDEP_CXX_OPTS@ $(CPP_SOURCES) $(ADD_CPP_SOURCES) $(STD_CPP_INCLUDES) $(ADD_INCLUDES) $(BALL_INCLUDES) @MAKEDEP_LIBTOOL_FIX@ @MAKEDEP_CXX_SUFFIX@ 

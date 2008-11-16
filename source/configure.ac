@@ -669,15 +669,18 @@ AC_SUBST(DEPENDENCY_GREPS)  dnl command line to remove non-BALL headers from the
 dnl         COMPILER
 
 OBJECT_EXTENSION=o
+MAKEDEP_LIBTOOL_FIX=
 USE_LIBTOOL_FOR_BALL=false
 if test "${USE_LIBTOOL}" = "true" ; then
 	AC_PROG_LIBTOOL
 	AC_FIX_LIBTOOL
 	CXX="${BALL_PATH}/source/libtool --tag=CXX --mode=compile ${CXX}"
 	OBJECT_EXTENSION=lo
+	MAKEDEP_LIBTOOL_FIX=" | ${SED} s/.o:/.lo:/g"
 	USE_LIBTOOL_FOR_BALL=true
 fi
 AC_SUBST(OBJECT_EXTENSION)
+AC_SUBST(MAKEDEP_LIBTOOL_FIX)
 AC_SUBST(USE_LIBTOOL_FOR_BALL)
 
 AC_SUBST(CXX)               dnl C++ compiler (absolute path)

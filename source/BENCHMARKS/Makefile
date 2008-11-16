@@ -23,7 +23,7 @@ include ../targets.mak
 
 # required for clean and depend
 CPP_SOURCES=$(EXECUTABLES:$(EXEEXT)=.C)
-OBJECTS=$(EXECUTABLES:$(EXEEXT)=.o)
+OBJECTS=$(EXECUTABLES:$(EXEEXT)=.$(OBJECT_EXTENSION))
 VALGRINDS=$(EXECUTABLES:$(EXEEXT)=.vgr)
 
 all:	$(EXECUTABLES)
@@ -31,11 +31,8 @@ all:	$(EXECUTABLES)
 # remove the library specific flags
 LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)
 
-.o:
-	$(CXX) $(CXXFLAGS) $*.o $(LDFLAGS) -o $@ $(LIBS)
-# 
-%%.C:
-	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.C $(LDFLAGS) -o $@ $(LIBS)
+%: %.$(OBJECT_EXTENSION)
+	$(LINKER) $(CXXFLAGS) $*.$(OBJECT_EXTENSION) $(LDFLAGS) -o $@ $(LIBS)
 
 bench:	$(EXECUTABLES)
 	@./runbenchmarks $(EXECUTABLES)
