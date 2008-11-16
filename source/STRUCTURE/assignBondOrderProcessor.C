@@ -46,6 +46,9 @@
 //#define DEBUG_RULES
 #undef DEBUG_RULES
 
+//#define DEBUG_BOND_LENGTH
+//#undef DEBUG_BOND_LENGTH
+
 #define INFINITE_PENALTY 1e5
 
 using namespace std;
@@ -923,17 +926,14 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 							// take the top solution as cutoff
 							greedy_atom_type_penalty_   = greedy_set[0].estimated_atom_type_penalty;
 							greedy_bond_length_penalty_ = greedy_set[0].estimated_bond_length_penalty; 
-
-							//ANNE
-		//cout << " Anne: greedy bond : " << greedy_bond_length_penalty_ << endl;
-		//cout << " Anne: greedy atom : " << greedy_atom_type_penalty_ << endl;
 						}
 
 						// clear the queue
 						queue_ = priority_queue<PQ_Entry_>();
 						
-						// initialize the step counter
-						step_ = 0;
+						// initialize the step counter with the 
+						// number steps needed by k_greedy
+						step_ = greedy_node_expansions_; 
 
 						// Initialize the priority queue
 						entry = PQ_Entry_(alpha_, atom_type_normalization_factor_, bond_length_normalization_factor_);
@@ -1676,6 +1676,8 @@ cout << " ) : atom type pen = " << entry.estimated_atom_type_penalty << ", bond 
 cout << " AssignBondOrderProcessor::precomputeBondLengthPenalties_:   " << endl;
 #endif
 
+		float diff_cutoff = 0.4;
+
 		// get the relevant options
 		// this is also done in the start-method, 
 		// but when performing an evalution the start-method is not called!
@@ -1738,8 +1740,12 @@ cout << " AssignBondOrderProcessor::precomputeBondLengthPenalties_:   " << endl;
 					HashMap<Bond::BondOrder, float> tmp_bond_lengths =  bond_lengths[atom_num1][atom_num2];
 					
 					// the current bond length
-					float bond_length = b_it->getLength();	
+					float bond_length = b_it->getLength();
+					Size min_order = 0;
 
+#ifdef  DEBUG_BOND_LENGTH
+cout << b_it->getSecondAtom()->getFullName() << "-" << b_it->getOrder() <<"-" <<  b_it->getFirstAtom()->getFullName() << endl;
+#endif
 					// for all possible bond orders precompute the penalties
 					// here we try square deviation
 					// NOTE: we ommit the aromatic bonds!
@@ -1748,6 +1754,10 @@ cout << " AssignBondOrderProcessor::precomputeBondLengthPenalties_:   " << endl;
 						if (tmp_bond_lengths.find((Bond::BondOrder)i) != tmp_bond_lengths.end())
 						{
 							penalties[i] = pow((bond_length - tmp_bond_lengths[(Bond::BondOrder)i]),(int)2);
+
+#ifdef  DEBUG_BOND_LENGTH
+cout << "        order " << i << " : " << 	penalties[i] << endl;
+#endif
 							if (max_bond_length_deviation < penalties[i])
 							{
 								max_bond_length_deviation = penalties[i];
@@ -1755,6 +1765,7 @@ cout << " AssignBondOrderProcessor::precomputeBondLengthPenalties_:   " << endl;
 							if (min_bond_length_deviation > penalties[i])
 							{
 								min_bond_length_deviation = penalties[i];
+								min_order = i;
 							}
 						}
 						else
@@ -1770,7 +1781,10 @@ cout << " AssignBondOrderProcessor::precomputeBondLengthPenalties_:   " << endl;
 					// the missing bond orders are really unlikely
 					// and we set a penalty to 2*max_deviation_found (for this bond)
 					if (!complete)
-					{	
+					{
+#ifdef  DEBUG_BOND_LENGTH
+	cout << "   NOT COMPLETE" << endl;
+#endif
 						max_bond_length_deviation *= 2.;
 
 						for (Size i = 1; i <= (unsigned int)max_bond_order_; i++)
@@ -1781,6 +1795,34 @@ cout << " AssignBondOrderProcessor::precomputeBondLengthPenalties_:   " << endl;
 							}
 					  }
 					}
+					
+					// filter our irrelevant penalty differences 
+					// like aromatic bonds stuck between order 1 and 2
+					if ((min_order > 0) && (min_order <= (unsigned int)max_bond_order_))
+					{
+						if (   (min_order > 1)  
+								&& (   fabs(penalties[min_order]-penalties[min_order-1]) 
+									  < (diff_cutoff*(penalties[min_order-1]+penalties[min_order])))
+							 )
+						{
+#ifdef  DEBUG_BOND_LENGTH
+	cout << "     order " << min_order << " <- order " << min_order-1 << endl;
+#endif
+							penalties[min_order] = penalties[min_order-1];
+						}
+						if (   (min_order < (unsigned int)max_bond_order_)  
+								&& (   fabs(penalties[min_order]-penalties[min_order+1]) 
+									  < (diff_cutoff*(penalties[min_order+1]+penalties[min_order])))
+							 )
+						{
+							penalties[min_order] = penalties[min_order+1];
+#ifdef  DEBUG_BOND_LENGTH
+	cout << "     order " << min_order << " <- order " << min_order+1 << endl;
+#endif
+						}
+
+					}
+					
 				}
 				else
 				{
@@ -1792,6 +1834,21 @@ Log.info() << " WARNING: AssignBondOrderProcessor found no bond length informati
 				//else: since we have no information, we handle 
 				//every bond order the same, namely assign 0. :-)	
 				bond_lengths_penalties_[&(*b_it)] = penalties;
+
+#ifdef  DEBUG_BOND_LENGTH
+	cout << "  pen " <<  penalties[b_it->getOrder()] << " cutoff : " ;
+	if (b_it->getOrder()> 1)  
+	{  
+		cout << "to left: " << fabs(penalties[b_it->getOrder()]-penalties[b_it->getOrder()-1]) << " ? " 
+												<< diff_cutoff*(penalties[b_it->getOrder()-1]+penalties[b_it->getOrder()]) << "   ";
+	}
+	if (b_it->getOrder() < (unsigned int)max_bond_order_) 
+	{
+		cout << "to right: " << fabs(penalties[b_it->getOrder()]-penalties[b_it->getOrder()+1]) << " ? "
+												<< diff_cutoff*(penalties[b_it->getOrder()+1]+penalties[b_it->getOrder()]);
+ 	}
+	cout << endl;
+#endif
 
 				// add the bonds max deviation to the inverse bond length normalization factor
 				bond_length_normalization_factor_ += max_bond_length_deviation;
@@ -2825,7 +2882,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		}
 		else
 		{ 
-			if (coarsePenalty() == b.coarsePenalty() && finePenalty() > b.finePenalty())
+			if ((coarsePenalty() == b.coarsePenalty()) && (finePenalty() > b.finePenalty()))
 			{
 				value = true;
 			}
@@ -2883,6 +2940,10 @@ cout << "AssignBondOrderProcessor::PQ_Entry_::operator <: " <<  coarsePenalty() 
 				{	
 					evaluation_mode_ = false;
 					ret = entry.coarsePenalty();
+
+#ifdef  DEBUG_BOND_LENGTH
+cout << "coarse: " << ret << "  fine" << entry.finePenalty() << endl;
+#endif
 				}
 				else
 				{

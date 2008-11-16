@@ -23,7 +23,7 @@ system.apply(abop)
 for i in range(abop.getNumberOfComputedSolutions()):
   print "solution ", str(i) , ": penalty ", str(abop.getTotalPenalty(i)), ", charge ", abop.getTotalCharge(i), " , ", abop.getNumberOfAddedHydrogens(i) , " added hydrogens."
 
-
+# apply the last solution
 abop.apply(abop.getNumberOfComputedSolutions()-1)
 
 getMainControl().update(system)

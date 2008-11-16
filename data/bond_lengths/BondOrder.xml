@@ -33,7 +33,9 @@
 		<smartstring>SMARTS(Cl)</smartstring>
 		<penalty valence="0">64</penalty>
 		<penalty valence="1">0</penalty>
-		<penalty valence="2">64</penalty>
+		<penalty valence="2">64</penalty>	
+		<penalty valence="3">128</penalty>
+		<penalty valence="4">128</penalty>
 	</entry>
 	<entry id="4">
 		<elementstring>Br</elementstring>

@@ -189,12 +189,22 @@ CHECK(setDefaultOptions())
 
 	TEST_EQUAL(testbop.options.get(AssignBondOrderProcessor::Option::ALGORITHM),
 													 AssignBondOrderProcessor::Default::ALGORITHM)
+	
+TEST_EQUAL(testbop.options.get(AssignBondOrderProcessor::Option::HEURISTIC),
+													 AssignBondOrderProcessor::Default::HEURISTIC)
 
 	TEST_EQUAL(testbop.options.getReal(AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING),
 													 AssignBondOrderProcessor::Default::BOND_LENGTH_WEIGHTING)
 	
 	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::APPLY_FIRST_SOLUTION),
-													 AssignBondOrderProcessor::Default::APPLY_FIRST_SOLUTION)
+													 AssignBondOrderProcessor::Default::APPLY_FIRST_SOLUTION)	
+
+	TEST_EQUAL(testbop.options.getInteger(AssignBondOrderProcessor::Option::GREEDY_K_SIZE),
+													 AssignBondOrderProcessor::Default::GREEDY_K_SIZE)
+	
+	TEST_EQUAL(testbop.options.getInteger(AssignBondOrderProcessor::Option::BRANCH_AND_BOUND_CUTOFF),
+													 AssignBondOrderProcessor::Default::BRANCH_AND_BOUND_CUTOFF)
+
 
 RESULT
 
@@ -1060,6 +1070,22 @@ CHECK(getSolution(Position i))
 
 	TEST_EXCEPTION(Exception::IndexOverflow, testbop.getSolution(limit))
 	
+RESULT
+
+
+CHECK(int getNumberOfNodeExpansions(Position i)) //TODO
+RESULT
+
+CHECK(int getNumberOfNodeExpansions(const Solution_& sol)) //TODO
+
+RESULT
+
+CHECK(int getQueueSize(Position i)) //TODO
+
+RESULT
+
+CHECK(int getQueueSize(const Solution_& sol)) //TODO
+
 RESULT
 
 
