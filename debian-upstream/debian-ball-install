@@ -21,6 +21,7 @@ then
 		--enable-libtool \
 		--prefix=$BALL_PATH/debian/ball/usr \
 		--with-libtool-rpath=/usr \
+		--disable-static \
 		--with-ball-path=/usr/share/BALL \
 		--enable-optimization \
 		--disable-debuginfo \
