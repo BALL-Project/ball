@@ -72,7 +72,7 @@ include ../targets.mak
 
 # required for clean and depend
 CPP_SOURCES=$(EXECUTABLES:$(EXEEXT)=.C)
-OBJECTS=$(EXECUTABLES:$(EXEEXT)=.o)
+OBJECTS=$(EXECUTABLES:$(EXEEXT)=.$(OBJECT_EXTENSION))
 VALGRINDS=$(EXECUTABLES:$(EXEEXT)=.vgr)
 
 # remove the library specific flags
@@ -83,14 +83,14 @@ LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)
 # do not optimize tests (reduces compile time drastically)
 CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION) -g
 
-.o:
-	$(LINKER) $(CXXFLAGS) $*.o $(LDFLAGS) -o $@ $(LIBS)
-# 
-%%.C:
-	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.C $(LDFLAGS) -o $@ $(LIBS)
+%: %.$(OBJECT_EXTENSION)
+	$(LINKER) $(CXXFLAGS) $*.$(OBJECT_EXTENSION) $(LDFLAGS) -o $@ $(LIBS)
 
-.o.vgr: 
-	@$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.o $(LDFLAGS) -o $@ $(LIBS)
+%.$(OBJECT_EXTENSION): %.C
+	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.C -o $@ -c
+
+.$(OBJECT_EXTENSION).vgr: 
+	@$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.$(OBJECT_EXTENSION) $(LDFLAGS) -o $@ $(LIBS)
 	$(VALGRIND) $(VALGRIND_OPTS) $* 2>$*.vgr || true
 
 dummy:
@@ -154,6 +154,6 @@ others_test:	$(EXECUTABLES_OTHERS)
 	@./runtests -section "OTHERS" $(TEST_OPTIONS) $(EXECUTABLES_OTHERS)
 
 clean:	default_clean
-	@$(RM) -rf *.o *~ *.vgr *.log ii_files Templates.DB	SunWS_cache *.TMP core core.* a.out $(EXECUTABLES)
+	@$(RM) -rf *.o *.lo .libs/* *~ *.vgr *.log ii_files Templates.DB	SunWS_cache *.TMP core core.* a.out $(EXECUTABLES)
 
 valgrind: $(VALGRINDS)

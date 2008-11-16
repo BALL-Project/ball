@@ -47,32 +47,5 @@ LIB_CXXFLAGS = $(NONLIB_CXXFLAGS)
 clean:	default_clean
 	@-$(RM) -f $(EXECUTABLES) *.o 2>/dev/null
 
-proteinMapper:	proteinMapper.o 
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
-
-PDB2discover:	PDB2discover.o 
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
-
-amberEnergy:	amberEnergy.o 
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
-
-energy:	energy.o 
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
-
-bindingEnergy:	bindingEnergy.o 
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
-
-BALLVIEWClient:	BALLVIEWClient.o 
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(BALL_LIBS)
-
-ramachandran:	ramachandran.o 
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
-
-PDBChecker:	PDBChecker.o 
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
-
-addHydrogens:	addHydrogens.o
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
-
-SASAreas:	SASAreas.o 
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+%: %.$(OBJECT_EXTENSION)
+	$(LINKER) $(CXXFLAGS) $*.$(OBJECT_EXTENSION) $(LDFLAGS) -o $@ $(LIBS)
