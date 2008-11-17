@@ -14,22 +14,24 @@ namespace BALL
 		{
 			public:
 				VRPNDriver();
-				VRPNDriver(QWidget* receiver, QString server_name);
+				VRPNDriver(QWidget* receiver);
 
-				void handle_function(double x, double y, double z, double rx, double ry, double rz);
 				bool setUp();
 				bool tearDown();
-				int vrpn_got_report;
+				
+				void handle_function(double x, double y, double z, double rx, double ry, double rz);
 
 				void setEnabled(bool enabled);
+				void setServer(QString server);
 				
+				int vrpn_got_report;
 
 			private:
 				void run();
-
 				int deadzone(double x);
 				
-				vrpn_Analog_Remote* analog;
+				QString server_;
+				vrpn_Analog_Remote* analog_;
 		};
 
 	}

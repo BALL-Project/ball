@@ -19,10 +19,10 @@ namespace BALL
 	{
 
 		
-		VRPNDriver::VRPNDriver(QWidget* receiver, QString server)
-			: InputDeviceDriver(receiver)
+		VRPNDriver::VRPNDriver(QWidget* receiver)
+			: InputDeviceDriver(receiver),
+				analog_(0)
 		{
-			analog = new vrpn_Analog_Remote((server.toStdString()).c_str());
 		}
 
 		int VRPNDriver::deadzone(double x) {
@@ -51,11 +51,11 @@ namespace BALL
 
 			while(isEnabled())
 			{
-				analog->mainloop();
+				analog_->mainloop();
 				vrpn_got_report = 0;
 				while (!vrpn_got_report)
 				{
-					analog->mainloop();
+					analog_->mainloop();
 					msleep(25);
 				}
 			}
@@ -63,13 +63,18 @@ namespace BALL
 
 		bool VRPNDriver::setUp()
 		{
-			analog->register_change_handler(this, analog_handler);
-			return true;
+			if (!analog_)
+			{
+				analog_ = new vrpn_Analog_Remote((server_.toStdString()).c_str());
+				analog_->register_change_handler(this, analog_handler);
+				return true;
+			}
+			else {return false;}
 		}
 
 		bool VRPNDriver::tearDown()
 		{
-			setEnabled(false);
+			delete analog_;
 			return true;
 		}
 
@@ -77,11 +82,16 @@ namespace BALL
 		{
 			InputDeviceDriver::setEnabled(enabled);
 
-			if(enabled) {
+			if(enabled)
+			{
 				start();
 			}
 		}
 
+		void VRPNDriver::setServer(QString server)
+		{
+			server_ = server; 
+		}
 	}
 }
 
