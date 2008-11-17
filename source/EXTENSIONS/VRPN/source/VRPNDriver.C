@@ -1,0 +1,87 @@
+#include <stdio.h>
+#include <VRPNDriver.h>
+
+
+void analog_handler(void* userdata, const vrpn_ANALOGCB a)
+{
+	//for (int i=0; i< a.num_channel; i++)
+	//{
+	// 	printf("C%d = %+1.4lf   ", i, a.channel[i]);
+	//	printf("\n");
+	//}
+	((BALL::VIEW::VRPNDriver *)userdata)->handle_function( a.channel[0], a.channel[1], a.channel[2],
+	                                                       a.channel[3], a.channel[4], a.channel[5]);
+}
+
+namespace BALL
+{
+	namespace VIEW
+	{
+
+		
+		VRPNDriver::VRPNDriver(QWidget* receiver, QString server)
+			: InputDeviceDriver(receiver)
+		{
+			analog = new vrpn_Analog_Remote((server.toStdString()).c_str());
+		}
+
+		int VRPNDriver::deadzone(double x) {
+			x*=1000;
+			int sign = x > 0 ? 1 : -1;
+			return x * sign > 50 ? x - sign * 50 : 0;
+		}
+		
+		
+		void VRPNDriver::handle_function(double x, double y, double z, double rx, double ry, double rz)
+		{
+			//printf("x=%+1.4f, y=%+1.4f, z=%+1.4f, rx=%+1.4f, ry=%+1.4f, rz=%+1.4f\n", x, y, z, rx, ry, rz);
+			//printf("x=%d, y=%d, z=%d, rx=%d, ry=%d, rz=%d\n", deadzone(x), deadzone(y), deadzone(z), 
+			//																								deadzone(rx), deadzone(ry), deadzone(rz));
+			if(!vrpn_got_report)
+			{
+			emitPositionChange( deadzone(x), deadzone(z), deadzone(y),
+			                    deadzone(rx), deadzone(ry), deadzone(rz) );
+			}
+			vrpn_got_report = 1;
+		}
+		
+
+		void VRPNDriver::run()
+		{
+
+			while(isEnabled())
+			{
+				analog->mainloop();
+				vrpn_got_report = 0;
+				while (!vrpn_got_report)
+				{
+					analog->mainloop();
+					msleep(25);
+				}
+			}
+		}
+
+		bool VRPNDriver::setUp()
+		{
+			analog->register_change_handler(this, analog_handler);
+			return true;
+		}
+
+		bool VRPNDriver::tearDown()
+		{
+			setEnabled(false);
+			return true;
+		}
+
+		void VRPNDriver::setEnabled(bool enabled)
+		{
+			InputDeviceDriver::setEnabled(enabled);
+
+			if(enabled) {
+				start();
+			}
+		}
+
+	}
+}
+
