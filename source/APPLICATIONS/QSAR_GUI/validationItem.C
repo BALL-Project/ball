@@ -161,38 +161,7 @@ void ValidationItem::init()
 
 void ValidationItem::initName()
 {
-	switch(type_)
-	{
-		case 1:	
-			name_ = "test fit to training data";
-			break;
-		case 2:
-			name_ = "cross validation";
-			break;
-		case 3:
-			name_ = "bootstrapping";
-			break;
-
-		case 4:
-			name_ = "response permutation test";
-			break;
-
-		case 5:
-			name_ = "nested cross validation";
-			//TODO: change pixmap
-			break;
-			
-		case 6: 
-			name_ = "calculate coefficient stddev";
-			break;
-			
-		case 7: 
-			name_ = "test fit to external data";
-			break;
-
-			default: throw InvalidFeatureSelectionItem(__FILE__,__LINE__);
-			setName("Val");
-	}
+	name_ = view_->data_scene->main_window->registry()->getValidationName(type_).c_str();
 }
 
 void ValidationItem::createActions()
@@ -322,7 +291,7 @@ bool ValidationItem::execute()
 				{
 					double t_ij = (*training_result)(i,j);
 					double s_ij = (*coeff_stddev)(i,j);
-					cout<<s_ij<<" "<<t_ij<<"  ";
+					
 					if(abs(t_ij)>Matrix<double>::MACHINE_EPSILON && abs(s_ij)>Matrix<double>::MACHINE_EPSILON)
 					{
 						cout<<s_ij/t_ij;

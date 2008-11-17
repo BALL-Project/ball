@@ -40,11 +40,21 @@ namespace BALL
 		{
 			public:
 			
-				RegistryEntry(bool k, bool r, String n, String ab, CreateMethod c0, Registry* reg);
-				RegistryEntry(bool k, bool r, String n, String ab, CreateKernel1 c1, CreateKernel2 c2, Registry* reg);
+				/** Constructor for a RegistryEntry for a linear model.
+				@param ID *unique* identifier for the model
+				@param n the name of the model 
+				@param ab *unique* abbreviation of the model-name */
+				RegistryEntry(bool k, bool r, String n, String ab, CreateMethod c0, Registry* reg, uint ID);
+				
+				/** Constructor for a RegistryEntry for a non-linear model.
+				@param ID *unique* identifier for the model 
+				@param n the name of the model 
+				@param ab *unique* abbreviation of the model-name */
+				RegistryEntry(bool k, bool r, String n, String ab, CreateKernel1 c1, CreateKernel2 c2, Registry* reg, uint ID);
+				
 				~RegistryEntry();
 				
-				const vector<String>* getStatistics();
+				const map<uint,String>* getStatistics();
 				String getStatName(int s);
 
 				bool kernel;
@@ -115,17 +125,19 @@ namespace BALL
 				/** return the ID of a specified model */
 				int getModelNo(String model_name);
 				
-				const vector<String>* getClassificationStatistics();
-				const vector<String>* getRegressionStatistics();
-				const vector<String>* getFeatureSelectionNames();
+				String getClassificationStatisticName(uint no);
+				String getFeatureSelectionName(uint no);
+				String getValidationName(uint no);
+				const map<uint,String>* getClassificationStatistics();
 				
 				
 			private:
 				/** enable fast finding of a RegistryEntry for a given model name */
 				map<String,int> model_map;
 				
-				vector<String> classification_statistics;
-				vector<String> feature_selection_names;
+				map<uint,String> classification_statistics;
+				map<uint,String> feature_selection_names;
+				map<uint,String> validation_names;
 				
 				friend class RegistryEntry;
 		};

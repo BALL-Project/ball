@@ -28,41 +28,8 @@ FeatureSelectionItem::FeatureSelectionItem(int type, DataItemView* miv):
 	post_optimization_model_par_ = 0;
 	post_optimization_kernel_par_ = 0;
 
-	switch(type)
-	{
-		case 0:	
-			name_ = "Remove Colinear Features";
-			type_ = type;
-			break;
-		case 1:	
-			name_ = "Forward Selection";
-			type_ = type;
-			break;
-		case 2:
-			name_ = "Backward Selection";
-			type_ = type;
-			break;
-		case 3:
-			name_ = "Stepwise Selection";
-			type_ = type;
-			break;
-		case 4:
-			name_ = "Remove Low Response Correlation";
-			type_ = type;
-			break;
-			
-		case 5:
-			name_ = "Remove Insignificant Coefficients";
-			type_ = type;
-			break;
-			
-		case 6:
-			name_ = "TwinScan";
-			type_ = type;
-			break;
-
-		default: throw InvalidFeatureSelectionItem(__FILE__,__LINE__);
-	}
+	type_ = type;
+	name_ = view_->data_scene->main_window->registry()->getFeatureSelectionName(type_).c_str();
 }
 
 FeatureSelectionItem::~FeatureSelectionItem()

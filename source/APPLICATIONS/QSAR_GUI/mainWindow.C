@@ -746,7 +746,6 @@ void MainWindow::createDockWindows()
 		ValidationItem* item = new ValidationItem(i, val_list_);
 		val_list_scene_.addItem(item);
 		item->setPos(20,70*(i-1)+20);
-
 	}
 	QDockWidget* validationdock = new QDockWidget(tr("Validation"), this);
 	dockwidgets_.push_back(validationdock);

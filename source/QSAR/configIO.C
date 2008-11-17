@@ -503,20 +503,20 @@ FeatureSelectionConfiguration ConfigIO::readFeatureSelectionConfiguration(istrea
 			String s = ((String)line.after("=")).trimLeft();
 			conf.statistic_name = s;
 			
-			const vector<String>* stats = reg.getClassificationStatistics();
+			const map<uint,String>* stats = reg.getClassificationStatistics();
 			string choices = ""; 
 			bool ok=0;
-			for(uint i=0; i<stats->size();i++)
+			for(map<uint,String>::const_iterator it=stats->begin();it!=stats->end(); it++)
 			{
-				if(s==(*stats)[i])
+				if(s==it->second)
 				{
 					ok=1;
-					conf.statistic=i;
+					conf.statistic=it->first;
 					break;
 				}
 				else
 				{
-					choices += (*stats)[i]+", ";
+					choices += it->second+", ";
 				}
 			}
 			if(!ok)
@@ -588,9 +588,9 @@ FeatureSelectionConfiguration ConfigIO::readFeatureSelectionConfiguration(istrea
 	}
 	
 	if(conf.remove_correlated) conf.selection_name="Remove Colinear Features";
-	else if(conf.feat_type>=0 && conf.feat_type<(int)reg.getFeatureSelectionNames()->size())
+	else if(conf.feat_type>=0)
 	{
-		conf.selection_name=(*reg.getFeatureSelectionNames())[conf.feat_type];
+		conf.selection_name=reg.getFeatureSelectionName(conf.feat_type);
 	}
 	else
 	{
@@ -696,20 +696,20 @@ ValidationConfiguration ConfigIO::readValidationConfiguration(istream* input)
 			String s = ((String)line.after("=")).trimLeft();
 			conf.statistic_name = s;
 			
-			const vector<String>* stats = reg.getClassificationStatistics();
+			const map<uint,String>* stats = reg.getClassificationStatistics();
 			string choices = ""; 
 			bool ok=0;
-			for(uint i=0; i<stats->size();i++)
+			for(map<uint,String>::const_iterator it=stats->begin();it!=stats->end(); it++)
 			{
-				if(s==(*stats)[i])
+				if(s==it->second)
 				{
 					ok=1;
-					conf.statistic=i;
+					conf.statistic=it->first;
 					break;
 				}
 				else
 				{
-					choices += (*stats)[i]+", ";
+					choices += it->second+", ";
 				}
 			}
 			if(!ok)

@@ -79,10 +79,10 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item, ModelItem* model):
 		QLabel* label3 = new QLabel("classification statistic");
 		statistic_box_ = new QComboBox;
 		
-		const vector<String>* statistics = model->getRegistryEntry()->getStatistics();
-		for(uint i=0;i<statistics->size();i++)
+		const map<uint,String>* statistics = model->getRegistryEntry()->getStatistics();
+		for(map<uint,String>::const_iterator it=statistics->begin(); it!=statistics->end(); ++it)
 		{
-			statistic_box_->addItem((*statistics)[i].c_str(),i);
+			statistic_box_->addItem(it->second.c_str(),it->first);
 		}
 			
 		layout3->addWidget(label3);layout3->addWidget(statistic_box_);
