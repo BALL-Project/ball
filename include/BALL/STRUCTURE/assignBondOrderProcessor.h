@@ -124,6 +124,10 @@ namespace BALL
 				*/
 				static const char* ADD_HYDROGENS;
 
+				/**	resolve penalty ties based on structural information
+				*/
+				static const char* USE_FINE_PENALTY;
+
 				/**	kekulize rings
 				*/
 				static const char* KEKULIZE_RINGS;
@@ -187,6 +191,7 @@ namespace BALL
 				static const bool OVERWRITE_TRIPLE_BOND_ORDERS;
 				static const bool OVERWRITE_SELECTED_BONDS;
 				static const bool ADD_HYDROGENS;
+				static const bool USE_FINE_PENALTY;
 				static const bool KEKULIZE_RINGS;
 				static const String ALGORITHM;
 				static const String HEURISTIC;
@@ -571,7 +576,7 @@ namespace BALL
 				public:
 				
 					// Default constructor
-					PQ_Entry_(float alpha = 0., float atom_type_normalization_factor = 1., float bond_length_normalization_factor = 1.);
+					PQ_Entry_(float alpha = 0., float atom_type_normalization_factor = 1., float bond_length_normalization_factor = 1., bool use_fine_penalty=true);
 								
 					// Copy constructor
 					PQ_Entry_(const PQ_Entry_& entry);
@@ -622,6 +627,7 @@ namespace BALL
 						float alpha_;
 						float atom_type_normalization_factor_;
 						float bond_length_normalization_factor_;
+						bool  use_fine_penalty_;
 				};
 
 			/** Reads and stores the penalty-INIFile (for example BondOrder.ini).
@@ -793,6 +799,9 @@ namespace BALL
 
 			// flag for adding missing hydrogens
 			bool add_missing_hydrogens_;
+
+			// flag for using fine penalties derived from 3d information
+			bool use_fine_penalty_;
 			
 			// //////// ************ for Algorithm::BRANCH_AND_BOUND ************ /////////
 			bool performBranchAndBound_();
