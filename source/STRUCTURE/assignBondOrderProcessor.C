@@ -12,7 +12,8 @@
 #include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/COMMON/limits.h>
 #include <BALL/SYSTEM/path.h>
-#include <BALL/FORMAT/resourceFile.h>
+#include <BALL/FORMAT/parameters.h>
+#include <BALL/FORMAT/parameterSection.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/QSAR/aromaticityProcessor.h>
@@ -47,7 +48,7 @@
 #undef DEBUG_RULES
 
 //#define DEBUG_BOND_LENGTH
-//#undef DEBUG_BOND_LENGTH
+#undef DEBUG_BOND_LENGTH
 
 #define INFINITE_PENALTY 1e5
 
@@ -78,6 +79,9 @@ namespace BALL
 
 	const char* AssignBondOrderProcessor::Option::ADD_HYDROGENS = "add_hydrogens_by_processor";
 	const bool  AssignBondOrderProcessor::Default::ADD_HYDROGENS = false;
+
+	const char* AssignBondOrderProcessor::Option::USE_FINE_PENALTY = "use_fine_penalty";
+	const bool  AssignBondOrderProcessor::Default::USE_FINE_PENALTY = true;
 
 	const char* AssignBondOrderProcessor::Option::KEKULIZE_RINGS = "kekulize_aromatic_rings";
 	const bool  AssignBondOrderProcessor::Default::KEKULIZE_RINGS = true;
@@ -142,6 +146,7 @@ namespace BALL
 			max_number_of_solutions_(),
 			compute_also_non_optimal_solutions_(),
 			add_missing_hydrogens_(),
+			use_fine_penalty_(),
 			greedy_atom_type_penalty_(0.),
 			greedy_bond_length_penalty_(0.),
 			greedy_node_expansions_(0),
@@ -192,6 +197,7 @@ namespace BALL
 			max_number_of_solutions_(abop.max_number_of_solutions_),
 			compute_also_non_optimal_solutions_(abop.compute_also_non_optimal_solutions_),
 			add_missing_hydrogens_(abop.add_missing_hydrogens_),	
+			use_fine_penalty_(abop.use_fine_penalty_),	
 			greedy_atom_type_penalty_(abop.greedy_atom_type_penalty_),
 			greedy_bond_length_penalty_(abop.greedy_bond_length_penalty_),
 			greedy_node_expansions_(abop.greedy_node_expansions_),
@@ -265,6 +271,7 @@ namespace BALL
 		max_number_of_solutions_ = abop.max_number_of_solutions_;
 		compute_also_non_optimal_solutions_ = abop.compute_also_non_optimal_solutions_;
 		add_missing_hydrogens_ = abop.add_missing_hydrogens_;	
+		use_fine_penalty_ = abop.use_fine_penalty_;	
 		greedy_atom_type_penalty_ = abop.greedy_atom_type_penalty_,
 		greedy_bond_length_penalty_ = abop.greedy_bond_length_penalty_,
 		greedy_node_expansions_ = abop.greedy_node_expansions_;
@@ -325,6 +332,7 @@ namespace BALL
 		max_number_of_solutions_ = options.getInteger(Option::MAX_NUMBER_OF_SOLUTIONS);
 		compute_also_non_optimal_solutions_ = options.getBool(Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS);
 		add_missing_hydrogens_ = options.getBool(Option::ADD_HYDROGENS);
+		use_fine_penalty_ = options.getBool(Option::USE_FINE_PENALTY);
 		
 		greedy_atom_type_penalty_ = 0;
 		greedy_bond_length_penalty_ = 0;
@@ -629,9 +637,9 @@ cout << ")" << endl;
 				
 				greedy_set_size = 0; 
 				// now copy at most k elements from the queue to the greedy set
-				for (int current_element = 0; 
-						     current_element < greedy_k && !queue_.empty(); 
-								 current_element++)
+				for (Position current_element = 0; 
+						     			(current_element < greedy_k) && !queue_.empty(); 
+								 			current_element++)
 				{
 					greedy_set[current_element] = queue_.top();
 					queue_.pop();
@@ -660,6 +668,7 @@ cout << " \t Overwrite bonds (single, double, triple, selected):"
 		<< endl;
 
 cout << " \t Add hydrogens : " << options.getBool(Option::ADD_HYDROGENS) << endl;
+cout << " \t Use fine penalty : " << options.getBool(Option::USE_FINE_PENALTY) << endl;
 cout << " \t Kekulizer: " << options.getBool(Option::KEKULIZE_RINGS)  << endl;
 cout << " \t Penalty file " << options[Option::Option::INIFile] << endl;
 cout << " \t alpha: " << options[Option::BOND_LENGTH_WEIGHTING] << endl;
@@ -830,7 +839,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 						// Further solutions will be computed calling the method computeNextSolution
 
 						// Initialize the priority queue
-						PQ_Entry_ entry(alpha_, atom_type_normalization_factor_, bond_length_normalization_factor_);
+						PQ_Entry_ entry(alpha_, atom_type_normalization_factor_, bond_length_normalization_factor_, use_fine_penalty_);
 						entry.bond_orders.resize(total_num_of_bonds_ + num_of_virtual_bonds_,-1);
 						entry.last_bond = 0;
 
@@ -891,14 +900,14 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 					{
 						int greedy_k = options.getInteger(Option::GREEDY_K_SIZE);
 						// Create a dummy entry for initialization of the greedy set
-						PQ_Entry_ entry(alpha_, atom_type_normalization_factor_, bond_length_normalization_factor_);
+						PQ_Entry_ entry(alpha_, atom_type_normalization_factor_, bond_length_normalization_factor_, use_fine_penalty_);
 						entry.bond_orders.resize(total_num_of_bonds_ + num_of_virtual_bonds_, -1);
 						entry.last_bond = 0;
 						
 						// Perfrom the greedy search ...
 						vector<PQ_Entry_> greedy_set = performGreedy_(entry, greedy_k);
 						// ... and create the solutions.
-						for (int i=0; i<greedy_set.size();i++)//std::min(greedy_k, expanded_sols); i++)
+						for (Position i=0; i<greedy_set.size();i++)//std::min(greedy_k, expanded_sols); i++)
 						{
 							PQ_Entry_& entry = greedy_set[i];
 							Solution_ sol(entry, this, greedy_node_expansions_, greedy_k);
@@ -911,7 +920,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 						// Initialize the greedy search
 						int greedy_k = options.getInteger(Option::GREEDY_K_SIZE);
 						// Create a dummy entry for initialization of the greedy set
-						PQ_Entry_ entry(alpha_, atom_type_normalization_factor_, bond_length_normalization_factor_);
+						PQ_Entry_ entry(alpha_, atom_type_normalization_factor_, bond_length_normalization_factor_, use_fine_penalty_);
 						entry.bond_orders.resize(total_num_of_bonds_ + num_of_virtual_bonds_, -1);
 						entry.last_bond = 0;
 						
@@ -936,7 +945,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 						step_ = greedy_node_expansions_; 
 
 						// Initialize the priority queue
-						entry = PQ_Entry_(alpha_, atom_type_normalization_factor_, bond_length_normalization_factor_);
+						entry = PQ_Entry_(alpha_, atom_type_normalization_factor_, bond_length_normalization_factor_, use_fine_penalty_);
 						entry.bond_orders.resize(total_num_of_bonds_ + num_of_virtual_bonds_,-1);
 						entry.last_bond = 0;
 
@@ -1697,10 +1706,15 @@ cout << " AssignBondOrderProcessor::precomputeBondLengthPenalties_:   " << endl;
 		// and store them in bond_lengths_penalties_
 		if (ac_)
 		{	
-			// get the averaged bond lengths
-			BuildBondsProcessor bbp; 
-			HashMap<Size, HashMap<Size, HashMap<Bond::BondOrder, float> > > bond_lengths = bbp.getBondMap();
-			// 
+			// read the bond length parameters
+			Path path;
+			String pfilename(path.find("bond_lengths/bond_lengths_mmff94.ini"));
+
+			Parameters parameter_file(pfilename);
+
+			ParameterSection bond_lengths;
+			bond_lengths.extractSection(parameter_file, "BondLengths");
+
 			AtomIterator a_it = ac_->beginAtom();
 			Atom::BondIterator b_it = a_it->beginBond();
 			BALL_FOREACH_BOND(*ac_, a_it, b_it)
@@ -1708,9 +1722,14 @@ cout << " AssignBondOrderProcessor::precomputeBondLengthPenalties_:   " << endl;
 				// the precomputed bond length penalties
 				vector<float> penalties(max_bond_order_ + 1, 0.);
 				// the bond atoms 
-				Size atom_num1 = b_it->getFirstAtom()->getElement().getAtomicNumber();
-				Size atom_num2 = b_it->getSecondAtom()->getElement().getAtomicNumber();
+				String atom_type_1 = b_it->getFirstAtom()->getElement().getSymbol();
+				String atom_con_1(b_it->getFirstAtom()->countBonds());
+
+				String atom_type_2 = b_it->getSecondAtom()->getElement().getSymbol();
+				String atom_con_2(b_it->getSecondAtom()->countBonds());
 				
+				String key = atom_type_1+" "+atom_con_1+" "+atom_type_2+" "+atom_con_2+" ";
+
 				// the current max and min bond length deviation
 				// bonds without predefined lenght penalty will get penalty zero!
 				// This is no problem for the heuristic, since this bond will
@@ -1718,82 +1737,67 @@ cout << " AssignBondOrderProcessor::precomputeBondLengthPenalties_:   " << endl;
 				float max_bond_length_deviation = 0.; 
 				float min_bond_length_deviation = std::numeric_limits<float>::max();
 
-				bool found_bond_lengths = false;
-				if (   bond_lengths.find(atom_num1) != bond_lengths.end() 
-						&& (bond_lengths[atom_num1].find(atom_num2) != bond_lengths[atom_num1].end()))
-				{
-					found_bond_lengths = true;
-				}
-				else if ( bond_lengths.find(atom_num2) != bond_lengths.end() 
-						&& (bond_lengths[atom_num2].find(atom_num1) != bond_lengths[atom_num2].end()))
-				{
-					atom_num1 = b_it->getSecondAtom()->getElement().getAtomicNumber();
-					atom_num2 = b_it->getFirstAtom()->getElement().getAtomicNumber();
-					found_bond_lengths = true;
-				}
-
-				if (found_bond_lengths) 
-				{
-					bool complete = true;
-					max_bond_length_deviation = 0.;
-					// the averaged bond length of atom1 and atom2
-					HashMap<Bond::BondOrder, float> tmp_bond_lengths =  bond_lengths[atom_num1][atom_num2];
+				bool complete = true;
+				max_bond_length_deviation = 0.;
 					
-					// the current bond length
-					float bond_length = b_it->getLength();
-					Size min_order = 0;
+				// the current bond length
+				float bond_length = b_it->getLength();
+				Size min_order = 0;
 
 #ifdef  DEBUG_BOND_LENGTH
 cout << b_it->getSecondAtom()->getFullName() << "-" << b_it->getOrder() <<"-" <<  b_it->getFirstAtom()->getFullName() << endl;
 #endif
-					// for all possible bond orders precompute the penalties
-					// here we try square deviation
-					// NOTE: we ommit the aromatic bonds!
-					for (Size i = 1; i <= (unsigned int)max_bond_order_; i++)
+				// for all possible bond orders, precompute the penalties
+				// here we try square deviation
+				// NOTE: we omit the aromatic bonds!
+				for (Position i = 1; i <= (Position)max_bond_order_; i++)
+				{
+					String current_key = key+String(i);
+
+					if (bond_lengths.has(current_key, "r0"))
 					{
-						if (tmp_bond_lengths.find((Bond::BondOrder)i) != tmp_bond_lengths.end())
-						{
-							penalties[i] = pow((bond_length - tmp_bond_lengths[(Bond::BondOrder)i]),(int)2);
+						const String& bond_length_string = bond_lengths.getValue(current_key, "r0");
+						penalties[i] = pow((bond_length - bond_length_string.toFloat()),(int)2);
 
 #ifdef  DEBUG_BOND_LENGTH
 cout << "        order " << i << " : " << 	penalties[i] << endl;
 #endif
-							if (max_bond_length_deviation < penalties[i])
-							{
-								max_bond_length_deviation = penalties[i];
-							}
-							if (min_bond_length_deviation > penalties[i])
-							{
-								min_bond_length_deviation = penalties[i];
-								min_order = i;
-							}
-						}
-						else
+						if (max_bond_length_deviation < penalties[i])
 						{
-							complete = false;
+							max_bond_length_deviation = penalties[i];
+						}
+						if (min_bond_length_deviation > penalties[i])
+						{
+							min_bond_length_deviation = penalties[i];
+							min_order = i;
 						}
 					}
-					
-					// store the min at position zero
-					penalties[0] = min_bond_length_deviation;
-
-					// in case we got no complete set, we assume 
-					// the missing bond orders are really unlikely
-					// and we set a penalty to 2*max_deviation_found (for this bond)
-					if (!complete)
+					else
 					{
+						complete = false;
+						penalties[i] = -1.;
+					}
+				}
+
+				// store the min at position zero
+				penalties[0] = min_bond_length_deviation;
+
+				// in case we got no complete set, we assume 
+				// the missing bond orders are really unlikely
+				// and we set a penalty to 2*max_deviation_found (for this bond)
+				if (!complete)
+				{
 #ifdef  DEBUG_BOND_LENGTH
 	cout << "   NOT COMPLETE" << endl;
 #endif
-						max_bond_length_deviation *= 2.;
+					max_bond_length_deviation *= 2.;
 
-						for (Size i = 1; i <= (unsigned int)max_bond_order_; i++)
+					for (Position i = 1; i <= (Position)max_bond_order_; i++)
+					{
+						if (penalties[i] < 0)
 						{
-							if (tmp_bond_lengths.find((Bond::BondOrder)i) == tmp_bond_lengths.end())
-							{
-								penalties[i] = max_bond_length_deviation; //pow((bond_length - max_bond_length),(int)2);
-							}
-					  }
+							penalties[i] = max_bond_length_deviation; //pow((bond_length - max_bond_length),(int)2);
+						}
 					}
 					
 					// filter our irrelevant penalty differences 
@@ -1820,14 +1824,7 @@ cout << "        order " << i << " : " << 	penalties[i] << endl;
 	cout << "     order " << min_order << " <- order " << min_order+1 << endl;
 #endif
 						}
-
 					}
-					
-				}
-				else
-				{
-Log.info() << " WARNING: AssignBondOrderProcessor found no bond length information for bond " 
-					 << b_it->getFirstAtom()->getElement() << " " << b_it->getSecondAtom()->getElement() << endl;
 				}
 
 				//store the b_it's penalties in the hashmap
@@ -2163,6 +2160,9 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 
 		options.setDefaultBool(AssignBondOrderProcessor::Option::ADD_HYDROGENS,
 												   AssignBondOrderProcessor::Default::ADD_HYDROGENS);	
+
+		options.setDefaultBool(AssignBondOrderProcessor::Option::USE_FINE_PENALTY,
+												   AssignBondOrderProcessor::Default::USE_FINE_PENALTY);	
 
 		options.setDefaultBool(AssignBondOrderProcessor::Option::KEKULIZE_RINGS,
 													 AssignBondOrderProcessor::Default::KEKULIZE_RINGS);	
@@ -2830,14 +2830,15 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 	//////////////////////////// the PQ_Entry_ - class
 	
 	// Default constructor
-	AssignBondOrderProcessor::PQ_Entry_::PQ_Entry_(float alpha, float atom_type_normalization_factor, float bond_length_normalization_factor)
+	AssignBondOrderProcessor::PQ_Entry_::PQ_Entry_(float alpha, float atom_type_normalization_factor, float bond_length_normalization_factor, bool use_fine_penalty)
 		: estimated_atom_type_penalty(0.), 
 			estimated_bond_length_penalty(0.),
 			bond_orders(),
 			last_bond(),
 			alpha_(alpha),
 			atom_type_normalization_factor_(atom_type_normalization_factor), 
-			bond_length_normalization_factor_(bond_length_normalization_factor)
+			bond_length_normalization_factor_(bond_length_normalization_factor),
+			use_fine_penalty_(use_fine_penalty)
 	{
 	}
 
@@ -2849,7 +2850,8 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 			last_bond(entry.last_bond),
 			alpha_(entry.alpha_),
 			atom_type_normalization_factor_(entry.atom_type_normalization_factor_), 
-			bond_length_normalization_factor_(entry.bond_length_normalization_factor_)
+			bond_length_normalization_factor_(entry.bond_length_normalization_factor_),
+			use_fine_penalty_(entry.use_fine_penalty_)
 	{	
 	}
 	
@@ -2868,7 +2870,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		bond_orders.clear();
 		atom_type_normalization_factor_ = 0;
 		bond_length_normalization_factor_ = 0;
-
+		use_fine_penalty_ = true;
 	}
 
 	// the less operator
@@ -2882,9 +2884,12 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		}
 		else
 		{ 
-			if ((coarsePenalty() == b.coarsePenalty()) && (finePenalty() > b.finePenalty()))
+			if (coarsePenalty() == b.coarsePenalty())
 			{
-				value = true;
+				if (!use_fine_penalty_ || (finePenalty() > b.finePenalty()))
+				{
+					value = true;
+				}
 			}
 		}
 
@@ -2913,7 +2918,7 @@ cout << "AssignBondOrderProcessor::PQ_Entry_::operator <: " <<  coarsePenalty() 
 			ac_ = ac;
 			if (preassignPenaltyClasses_() && precomputeBondLengthPenalties_())
 			{
-				PQ_Entry_ entry(alpha_, atom_type_normalization_factor_, bond_length_normalization_factor_);
+				PQ_Entry_ entry(alpha_, atom_type_normalization_factor_, bond_length_normalization_factor_, use_fine_penalty_);
 				
 				AtomIterator a_it = ac_->beginAtom();
 				Atom::BondIterator b_it = a_it->beginBond();
