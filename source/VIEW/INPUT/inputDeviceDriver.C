@@ -45,7 +45,6 @@ namespace BALL
 			QCoreApplication::instance()->postEvent(
 			                      static_cast<QObject*>(receiver_),
 			                      new TransformationEvent6D(this, st*x, st*y, st*z, sr*a, sr*b, sr*c));
-			Log.info() << "Subba" << std::endl;
 		}
 	}
 }

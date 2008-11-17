@@ -41,7 +41,8 @@ namespace BALL
 
 		InputDeviceDriver* VRPNPlugin::startDriver()
 		{
-			VRPNDriver* driver = new VRPNDriver(receiver_, "device0@localhost");
+			VRPNDriver* driver = new VRPNDriver(receiver_); 
+			driver->setServer("device0@localhost");
 		  driver->setUp();
 			driver->setEnabled(true);
 			return(driver);
