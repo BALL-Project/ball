@@ -41,6 +41,7 @@
 #include <fstream>
 #include <sys/types.h>
 #include <map>
+#include <algorithm>
 
 #ifdef BALL_HAS_UNISTD_H
 #	include <unistd.h>			// 'access', 'rename', 'truncate'
