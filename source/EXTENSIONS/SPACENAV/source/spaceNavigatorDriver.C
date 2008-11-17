@@ -14,7 +14,7 @@ namespace BALL
 
 		int SpaceNavigatorDriver::deadzone(int x) {
 			int sign = x > 0 ? 1 : -1;
-			return x * sign > 15 ? x - sign * 15 : 0;
+			return x * sign > 50 ? x - sign * 50 : 0;
 		}
 
 		void SpaceNavigatorDriver::run()
