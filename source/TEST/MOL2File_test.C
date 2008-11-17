@@ -186,6 +186,21 @@ CHECK([Extra]Handling of subfragments)
 	}
 RESULT
 
+CHECK([Extra]Handling of static sets)
+	MOL2File f("data/MOL2File_test4.mol2");
+	System S;
+	CAPTURE_OUTPUT_LEVEL(2000)
+	f >> S;
+	COMPARE_OUTPUT("");
+	f.close();
+	TEST_EQUAL(f.getNumberOfSets(), 1)
+	MOL2File::SetStruct& set = f.getSet(0);
+
+	TEST_EQUAL(set.number_of_members, 16)
+	for (Position i=0; i<set.number_of_members; i++)
+		TEST_EQUAL(set.static_members[i], i+1)
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
