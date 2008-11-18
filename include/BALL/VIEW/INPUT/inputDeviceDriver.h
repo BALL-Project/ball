@@ -28,6 +28,7 @@ namespace BALL
 
 			protected:
 				void emitPositionChange(double x, double y, double z, double a, double b, double c);
+				void emitPositionChange(double x, double y, double z, double q1, double q2, double q3, double q4);
 
 			private:
 				QMutex receiverLock;

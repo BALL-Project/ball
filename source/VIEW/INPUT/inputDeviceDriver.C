@@ -1,6 +1,7 @@
 #include <BALL/VIEW/INPUT/inputDeviceDriver.h>
 
 #include <BALL/VIEW/INPUT/transformationEvent6D.h>
+#include <BALL/VIEW/INPUT/headTrackingEvent.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
 #include <QtCore/QMutexLocker>
@@ -45,6 +46,14 @@ namespace BALL
 			QCoreApplication::instance()->postEvent(
 			                      static_cast<QObject*>(receiver_),
 			                      new TransformationEvent6D(this, st*x, st*y, st*z, sr*a, sr*b, sr*c));
+		}
+		
+		void InputDeviceDriver::emitPositionChange(double x, double y, double z,
+		                                           double q1, double q2, double q3, double q4)
+		{
+			QCoreApplication::instance()->postEvent(
+			                      static_cast<QObject*>(receiver_),
+			                      new HeadTrackingEvent(this, x, y, z, q1, q2, q3, q4));
 		}
 	}
 }

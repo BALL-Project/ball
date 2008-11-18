@@ -20,6 +20,7 @@ THISLIB=$(LIBNAME)
 CPP_SOURCES=\
 	deviceEvent.C\
 	transformationEvent6D.C\
+	headTrackingEvent.C\
 	buttonEvent.C\
 	inputDeviceDriver.C
 
