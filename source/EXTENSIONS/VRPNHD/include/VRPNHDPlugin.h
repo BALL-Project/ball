@@ -1,5 +1,5 @@
-#ifndef VRPNPLUGIN_H
-#define VRPNPLUGIN_H
+#ifndef VRPNHDPLUGIN_H
+#define VRPNHDPLUGIN_H
 
 #include <QtCore/QObject>
 #include <QtGui/QPixmap>
@@ -13,13 +13,13 @@ namespace BALL
 	namespace VIEW
 	{
 
-		class VRPNPlugin : public QObject, public BALLPlugin, public VIEWPlugin, public InputPlugin
+		class VRPNHDPlugin : public QObject, public BALLPlugin, public VIEWPlugin, public InputPlugin
 		{
 			Q_OBJECT
 			Q_INTERFACES(BALL::BALLPlugin BALL::VIEW::VIEWPlugin BALL::VIEW::InputPlugin)
 
 			public:
-				VRPNPlugin();
+				VRPNHDPlugin();
 
 				const QPixmap* getIcon() const;
 				QString getName() const;
@@ -43,5 +43,5 @@ namespace BALL
 	}
 }
 
-#endif //VRPNPLUGIN_H
+#endif //VRPNHDPLUGIN_H
 
