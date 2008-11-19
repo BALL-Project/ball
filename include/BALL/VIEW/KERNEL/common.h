@@ -83,8 +83,11 @@ namespace BALL
 			/// Event that encodes a 6 dimensional transformation
 			TRANSFORMATION_EVENT_6D,
 			
-			/// Event that encodes a head tracking position change
+			/// Event that encodes a head tracker position change
 			HEADTRACKING_EVENT,
+
+			/// Event that encodes a motion tracker position change
+			MOTIONTRACKING_EVENT,
 
 			/// Event for button press events of custom input devices
 			BUTTON_PRESS_EVENT,
