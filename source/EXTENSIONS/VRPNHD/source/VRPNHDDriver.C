@@ -41,8 +41,11 @@ namespace BALL
 			{
 				if(s==0)
 				{
-					emitPositionChange( deadzone(x), deadzone(z), deadzone(y),
-			                     		deadzone(q1), deadzone(q2), deadzone(q3), deadzone(q4) );
+					emitPositionChange(x, z, y, q1, q2, q3, q4 );
+				}
+				else if(s==1)
+				{
+					emitHeadChange(x, z, y, q1, q2, q3, q4);
 				}
 			}
 			vrpn_got_report = 1;
