@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Resource object code
 **
-** Created: Tue Nov 11 14:05:40 2008
-**      by: The Resource Compiler for Qt version 4.4.0
+** Created: Tue Nov 18 16:56:57 2008
+**      by: The Resource Compiler for Qt version 4.2.2
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -10,7 +10,7 @@
 #include <QtCore/qglobal.h>
 
 static const unsigned char qt_resource_data[] = {
-  // /home/cyphr/BALL/source/EXTENSIONS/SPACENAV/source/logo.png
+  // /home/bioinfo/BALL/source/EXTENSIONS/VRPN/source/logo.png
   0x0,0x0,0xe,0x81,
   0x89,
   0x50,0x4e,0x47,0xd,0xa,0x1a,0xa,0x0,0x0,0x0,0xd,0x49,0x48,0x44,0x52,0x0,
@@ -266,32 +266,17 @@ static const unsigned char qt_resource_struct[] = {
 
 };
 
-QT_BEGIN_NAMESPACE
-
-extern bool qRegisterResourceData
-    (int, const unsigned char *, const unsigned char *, const unsigned char *);
-
-extern bool qUnregisterResourceData
-    (int, const unsigned char *, const unsigned char *, const unsigned char *);
-
-QT_END_NAMESPACE
-
-
-int QT_MANGLE_NAMESPACE(qInitResources)()
+int qInitResources()
 {
-    QT_PREPEND_NAMESPACE(qRegisterResourceData)
-        (0x01, qt_resource_struct, qt_resource_name, qt_resource_data);
+    extern bool qRegisterResourceData(int, const unsigned char *, const unsigned char *, const unsigned char *);
+    qRegisterResourceData(0x01, qt_resource_struct, qt_resource_name, qt_resource_data);
     return 1;
 }
-
-Q_CONSTRUCTOR_FUNCTION(QT_MANGLE_NAMESPACE(qInitResources))
-
-int QT_MANGLE_NAMESPACE(qCleanupResources)()
+Q_CONSTRUCTOR_FUNCTION(qInitResources)
+int qCleanupResources()
 {
-    QT_PREPEND_NAMESPACE(qUnregisterResourceData)
-       (0x01, qt_resource_struct, qt_resource_name, qt_resource_data);
+    extern bool qUnregisterResourceData(int, const unsigned char *, const unsigned char *, const unsigned char *);
+    qUnregisterResourceData(0x01, qt_resource_struct, qt_resource_name, qt_resource_data);
     return 1;
 }
-
-Q_DESTRUCTOR_FUNCTION(QT_MANGLE_NAMESPACE(qCleanupResources))
-
+Q_DESTRUCTOR_FUNCTION(qCleanupResources)

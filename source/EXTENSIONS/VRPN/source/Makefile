@@ -9,10 +9,10 @@
 
 .PHONY: all clean depend
 
-VRPN_INCLUDES = -I/home/cyphr/HIWI/software/vrpn
-QUAT_INCLUDES = -I/home/cyphr/HIWI/software/quat
-VRPN_LIBS = -L/home/cyphr/HIWI/software/vrpn/pc_linux/ -lvrpn
-QUAT_LIBS = -L/home/cyphr/HIWI/software/quat/pc_linux/ -lquat
+VRPN_INCLUDES = -I/home/bioinfo/vrpn
+QUAT_INCLUDES = -I/home/bioinfo/quat
+VRPN_LIBS = -L/home/bioinfo/vrpn/pc_linux/ -lvrpn
+QUAT_LIBS = -L/home/bioinfo/quat/pc_linux/ -lquat
 
 LIBRARY=pluginVRPN.so
 
