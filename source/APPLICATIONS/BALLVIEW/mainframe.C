@@ -44,6 +44,7 @@
 #else
 # include "aboutDialog.h"
 #endif
+#include <BALL/VIEW/DIALOGS/pluginDialog.h>
 
 using namespace std;
 
@@ -326,6 +327,9 @@ namespace BALL
 
 	void Mainframe::about()
 	{
+		PluginDialog p(this);
+		p.exec();
+		return;
 		// Display about dialog
 		QDialog w;
  		Ui_AboutDialog about;

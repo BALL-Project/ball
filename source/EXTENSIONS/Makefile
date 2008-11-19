@@ -20,6 +20,8 @@ ifeq ($(SPACENAV_SUPPORT), true)
 SUBDIRS+="SPACENAV"
 endif
 
+SUBDIRS+=VRPN VRPNHD
+
 depend: subdirs_depend
 
 subdirs_depend:

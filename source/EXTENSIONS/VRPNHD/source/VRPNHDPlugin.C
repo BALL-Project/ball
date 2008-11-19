@@ -42,7 +42,7 @@ namespace BALL
 		InputDeviceDriver* VRPNHDPlugin::startDriver()
 		{
 			VRPNHDDriver* driver = new VRPNHDDriver(receiver_); 
-			driver->setServer("Tracker0@localhost");
+			driver->setServer("DTrack@localhost");
 		  driver->setUp();
 			driver->setEnabled(true);
 			return(driver);
