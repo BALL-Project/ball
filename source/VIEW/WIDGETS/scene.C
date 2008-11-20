@@ -133,7 +133,9 @@ namespace BALL
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
 				toolbar_(new QToolBar("3D View Controls", this)),
-				mode_group_(new QActionGroup(this))
+				mode_group_(new QActionGroup(this)),
+				left_eye_widget_(0),
+				right_eye_widget_(0)
 		{
 			setAcceptDrops(true);
 #ifdef BALL_VIEW_DEBUG
@@ -177,7 +179,9 @@ namespace BALL
 				show_fps_(false),
 				toolbar_(new QToolBar("3D View Controls", this)),
 				mode_group_(new QActionGroup(this)),
-				volume_width_(FLT_MAX)
+				volume_width_(FLT_MAX),
+				left_eye_widget_(0),
+				right_eye_widget_(0)
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (2) " << this << std::endl;
@@ -211,7 +215,9 @@ namespace BALL
 				animation_thread_(0),
 				stop_animation_(false),
 				toolbar_(new QToolBar("3D View Controls", this)),
-				mode_group_(new QActionGroup(this))
+				mode_group_(new QActionGroup(this)),
+				left_eye_widget_(0),
+				right_eye_widget_(0)
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (3) " << this << std::endl;
@@ -236,6 +242,8 @@ namespace BALL
 
 				delete stage_;
 				delete gl_renderer_;
+				delete left_eye_widget_;
+				delete right_eye_widget_;
 
                 //rt_renderer_ & rt_render_window are smart pointers
 
@@ -602,10 +610,22 @@ namespace BALL
 				return;
 			}
 
+			// ok, this is going the stereo way...
+			if (gl_renderer_->getStereoMode() == GLRenderer::DUAL_VIEW_DIFFERENT_DISPLAY_STEREO)
+			{
+				left_eye_widget_->setRenderMode(mode);
+				right_eye_widget_->setRenderMode(mode);
+
+				left_eye_widget_->updateGL();
+				right_eye_widget_->updateGL();
+				makeCurrent();
+				return;
+			}
+				
+
 			glDrawBuffer(GL_BACK_LEFT);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			// ok, this is going the stereo way...
 			stereo_camera_ = stage_->getCamera();
 
 			Vector3 old_view_point = stage_->getCamera().getViewPoint();
@@ -632,10 +652,6 @@ namespace BALL
 								nearf,farf);
 				glViewport(0, 0, width() / 2, height());
 
-				if (stage_->swapSideBySideStereo())
-				{
-					diff *= -1;
-				}
 		  }
 			else
 			{
@@ -646,13 +662,16 @@ namespace BALL
 									nearf,farf);
 			}
 
+			if (stage_->swapSideBySideStereo())
+				diff *= -1;
+
 			// draw models
       glMatrixMode(GL_MODELVIEW);
 			if (gl_renderer_->getStereoMode() == GLRenderer::ACTIVE_STEREO)
 			{
 				glDrawBuffer(GL_BACK_RIGHT);
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			}
+			}	
 
 			glPushMatrix();
 			stereo_camera_.setViewPoint(old_view_point + diff);
@@ -1830,6 +1849,11 @@ namespace BALL
 			setMenuHelp("tips.html#3D");
 			dual_stereo_action_->setCheckable(true);
 
+			dual_stereo_different_display_action_ = insertMenuEntry (
+ 					MainControl::DISPLAY_STEREO, "Side by Side on Different Displays", this, SLOT(enterDualStereoDifferentDisplays()));
+			setMenuHelp("tips.html#3D");
+			dual_stereo_different_display_action_->setCheckable(true);
+
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Store Viewpoint", this, SLOT(storeViewPoint()));
 			setMenuHint("Store the current viewpoint");
@@ -2119,7 +2143,6 @@ namespace BALL
 			info_string_ = "";
 
 			if (isAnimationRunning()) return;
-
 			makeCurrent();
 
 			mouse_button_is_pressed_ = true;
@@ -2985,6 +3008,8 @@ namespace BALL
 			no_stereo_action_->setChecked(true);
 			active_stereo_action_->setChecked(false);
 			dual_stereo_action_->setChecked(false);
+			dual_stereo_different_display_action_->setChecked(false);
+
 
 			if (gl_renderer_->getStereoMode() == GLRenderer::NO_STEREO) return;
 
@@ -2995,6 +3020,9 @@ namespace BALL
 			glLoadIdentity();
 			gl_renderer_->initPerspective();
 			glMatrixMode(GL_MODELVIEW);
+
+			delete left_eye_widget_;
+			delete right_eye_widget_;
 
 			setFullScreen(false);
 		}
@@ -3022,23 +3050,50 @@ namespace BALL
 		void Scene::enterActiveStereo()
 			throw()
 		{
+			delete left_eye_widget_;
+			delete right_eye_widget_;
+
 			gl_renderer_->setStereoMode(GLRenderer::ACTIVE_STEREO);
 			setFullScreen(true);
 
 			no_stereo_action_->setChecked(false);
 			active_stereo_action_->setChecked(true);
 			dual_stereo_action_->setChecked(false);
+			dual_stereo_different_display_action_->setChecked(false);
 		}
 
 		void Scene::enterDualStereo()
 			throw()
 		{
+			delete left_eye_widget_;
+			delete right_eye_widget_;
+
 			gl_renderer_->setStereoMode(GLRenderer::DUAL_VIEW_STEREO);
 			setFullScreen(true);
 
 			no_stereo_action_->setChecked(false);
 			active_stereo_action_->setChecked(false);
 			dual_stereo_action_->setChecked(true);
+			dual_stereo_different_display_action_->setChecked(false);
+		}
+
+		void Scene::enterDualStereoDifferentDisplays()
+			throw()
+		{
+			gl_renderer_->setStereoMode(GLRenderer::DUAL_VIEW_DIFFERENT_DISPLAY_STEREO);
+
+			no_stereo_action_->setChecked(false);
+			active_stereo_action_->setChecked(false);
+			dual_stereo_action_->setChecked(false);
+			dual_stereo_different_display_action_->setChecked(true);
+
+			left_eye_widget_ = new StereoHalfImage(stage_, this, 0, true);
+			right_eye_widget_ = new StereoHalfImage(stage_, this, 1, false);
+
+			left_eye_widget_->show();
+			right_eye_widget_->showFullScreen();
+
+			setFullScreen(false);
 		}
 
 		void Scene::setCamera(const Camera& camera)
