@@ -49,6 +49,7 @@ namespace BALL
 		class ClippingPlane;
 
 		class TransformationEvent6D;
+		class MotionTrackingEvent;
 		class ButtonEvent;
 
 		/**	Scene is the main visualization widget that shows the graphical Representation 's.
@@ -673,6 +674,11 @@ namespace BALL
 			virtual void transformationEvent6D(TransformationEvent6D* evt);
 
 			/**
+			 * Function that interpretes the motion tracker events sent to customEvent()
+			 */
+			virtual void motionTrackingEvent(MotionTrackingEvent* evt);
+
+			/**
 			 * Function that interpretes the button press events sent to customEvent()
 			 */
 			virtual void buttonPressEvent(ButtonEvent* evt);
@@ -777,6 +783,7 @@ namespace BALL
 			QMenu* create_coordinate_system_;
 			
 			Vector3 system_origin_;
+			Vector3 oldtrack_origin_;
 
 			bool need_update_;
 			bool update_running_;

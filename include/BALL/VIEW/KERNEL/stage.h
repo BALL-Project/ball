@@ -255,6 +255,23 @@ namespace BALL
 			*/
 			//@{
 
+			/// Move the camera along the right vector
+			void moveRight(float translation)
+				throw() { view_point_ += right_vector_*translation; look_at_ += right_vector_*translation; }
+
+			/// Move the camera along the up vector
+			void moveUp(float translation)
+				throw() { view_point_ += look_up_vector_*translation; look_at_ += look_up_vector_*translation; }
+
+			/// Move the camera along the view vector
+			void moveForward(float translation)
+				throw() { 
+						Vector3 normal_view_vector(view_vector_);
+						normal_view_vector.normalize();
+						view_point_ += normal_view_vector*translation; 
+						look_at_ += normal_view_vector*translation; 
+			}
+
 			/// Get the position of the camera
 			const Vector3& getViewPoint() const
 				throw() { return view_point_;}
