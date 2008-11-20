@@ -95,6 +95,13 @@ namespace BALL
 		{
 			setupUi(this);
 			pluginView->setModel(&model_);
+
+			QString plugin_path(BALL_PATH);
+			plugin_path += "/plugins";
+
+			PluginManager& man = PluginManager::instance();
+			man.setPluginDirectory(plugin_path);
+			model_.pluginsLoaded();
 		}
 
 		void PluginDialog::applyChanges()
@@ -140,7 +147,10 @@ namespace BALL
 
 		void PluginDialog::addPluginDirectory()
 		{
-			QString dir = QFileDialog::getExistingDirectory(0, "Select a plugin directory", "/home/daniel/source/BALL");
+			QString plugin_path(BALL_PATH);
+			plugin_path += "/plugins";
+
+			QString dir = QFileDialog::getExistingDirectory(0, "Select a plugin directory", plugin_path);
 			PluginManager& man = PluginManager::instance();
 			man.setPluginDirectory(dir);
 			model_.pluginsLoaded();
