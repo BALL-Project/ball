@@ -74,7 +74,10 @@ namespace BALL
 				ACTIVE_STEREO,
 
 				/// Stereo mode for output on two projectors
-				DUAL_VIEW_STEREO
+				DUAL_VIEW_STEREO,
+
+				/// Stereo mode for output on two projectors with one display per head
+				DUAL_VIEW_DIFFERENT_DISPLAY_STEREO
 			};
 
 			///

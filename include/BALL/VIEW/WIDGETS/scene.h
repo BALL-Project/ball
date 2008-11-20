@@ -16,6 +16,10 @@
 # include <BALL/VIEW/RENDERING/glRenderer.h>
 #endif
 
+#ifndef BALL_VIEW_WIDGETS_STEREOHALFIMAGE_H
+#	include <BALL/VIEW/WIDGETS/stereoHalfImage.h>
+#endif
+
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
 #endif 
@@ -110,6 +114,7 @@ namespace BALL
 				public ModularWidget
 		{
 			friend class AnimationThread;
+			friend class StereoHalfImage;
 
         #ifdef ENABLE_RAYTRACING
                                    
@@ -586,6 +591,10 @@ namespace BALL
 				throw();
 
 			///
+			void enterDualStereoDifferentDisplays()
+				throw();
+
+			///
 			void clearRecordedAnimation()
 				throw();
 			
@@ -835,7 +844,7 @@ namespace BALL
 	
 			// Menu entry IDs
 			QAction *rotate_action_, *picking_action_, *move_action_;
-			QAction *no_stereo_action_, *active_stereo_action_, *dual_stereo_action_, *fullscreen_action_;
+			QAction *no_stereo_action_, *active_stereo_action_, *dual_stereo_action_, *dual_stereo_different_display_action_, *fullscreen_action_;
 			QAction *record_animation_action_, *start_animation_action_, *clear_animation_action_, *cancel_animation_action_;
 			QAction *animation_export_POV_action_, *animation_export_VRML_action_, 	*animation_export_PNG_action_, *animation_repeat_action_;
 			QAction *switch_grid_;
@@ -916,6 +925,9 @@ namespace BALL
 			Vector3 near_left_bot_, near_right_bot_, near_left_top_;
 			String info_string_;
 			float  volume_width_;
+
+			StereoHalfImage* left_eye_widget_;
+			StereoHalfImage* right_eye_widget_;
 		};
 
 

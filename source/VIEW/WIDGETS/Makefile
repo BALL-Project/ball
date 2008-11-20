@@ -26,6 +26,7 @@ CPP_SOURCES=\
 	molecularControl.C\
 	molecularStructure.C\
 	scene.C\
+	stereoHalfImage.C\
 	dockingController.C\
 	helpViewer.C\
 	fileObserver.C\
@@ -54,7 +55,8 @@ MOC_SOURCES=\
 	molecularStructure_moc.C\
 	fileObserver_moc.C\
 	testFramework_moc.C\
-	scene_moc.C
+	scene_moc.C\
+	stereoHalfImage_moc.C
 #	canvasWidget_moc.C\
 #	regularData1DWidget_moc.C\
 #	regularData2DWidget_moc.C\
@@ -93,6 +95,9 @@ molecularStructure_moc.C:	$(HEADER_DIR)/molecularStructure.h
 scene_moc.C:	$(HEADER_DIR)/scene.h
 	$(MOC) $(HEADER_DIR)/scene.h -o $@
 
+stereoHalfImage_moc.C:	$(HEADER_DIR)/stereoHalfImage.h
+	$(MOC) $(HEADER_DIR)/stereoHalfImage.h -o $@
+
 pyWidget_moc.C:	$(HEADER_DIR)/pyWidget.h
 	$(MOC) $(HEADER_DIR)/pyWidget.h -o $@
 
@@ -120,3 +125,4 @@ dockingController_moc.C:	$(HEADER_DIR)/dockingController.h
 testFramework_moc.C:	$(HEADER_DIR)/testFramework.h
 	$(MOC) $(HEADER_DIR)/testFramework.h -o $@
 
+ADD_CXXFLAGS=-g
