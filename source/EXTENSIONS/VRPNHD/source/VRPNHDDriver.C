@@ -34,18 +34,19 @@ namespace BALL
 		
 		void VRPNHDDriver::handle_function(int s, double x, double y, double z, double q1, double q2, double q3, double q4)
 		{
-			printf("s=%d, x=%+1.4f, y=%+1.4f, z=%+1.4f, q1=%+1.4f, q2=%+1.4f, q3=%+1.4f, q4=%+1.4f\n", s, x, y, z, q1, q2, q3, q4);
 			//printf("x=%d, y=%d, z=%d, rx=%d, ry=%d, rz=%d\n", deadzone(x), deadzone(y), deadzone(z), 
 			//																								deadzone(rx), deadzone(ry), deadzone(rz));
 			if(!vrpn_got_report)
 			{
 				if(s==0)
 				{
-					emitPositionChange(x, z, y, q1, q2, q3, q4 );
+					emitHeadChange(x, z, y, q1, q2, q3, q4 );
+					printf("HEAD: x=%+1.4f, y=%+1.4f, z=%+1.4f, q1=%+1.4f, q2=%+1.4f, q3=%+1.4f, q4=%+1.4f\n", x, y, z, q1, q2, q3, q4);
 				}
 				else if(s==1)
 				{
-					emitHeadChange(x, z, y, q1, q2, q3, q4);
+					emitPositionChange(100*x, z*100, -y*100, q1, q2, q3, q4);
+					printf("MOTION: x=%+1.4f, y=%+1.4f, z=%+1.4f, q1=%+1.4f, q2=%+1.4f, q3=%+1.4f, q4=%+1.4f\n", x, y, z, q1, q2, q3, q4);
 				}
 			}
 			vrpn_got_report = 1;

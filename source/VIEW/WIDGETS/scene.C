@@ -33,6 +33,8 @@
 #include <BALL/VIEW/PRIMITIVES/line.h>
 
 #include <BALL/VIEW/INPUT/transformationEvent6D.h>
+#include <BALL/VIEW/INPUT/headTrackingEvent.h>
+#include <BALL/VIEW/INPUT/motionTrackingEvent.h>
 #include <BALL/VIEW/INPUT/buttonEvent.h>
 
 #include <BALL/SYSTEM/timer.h>
@@ -1869,6 +1871,9 @@ namespace BALL
 		void Scene::customEvent(QEvent* evt)
 		{
 			switch(static_cast<EventsIDs>(evt->type())) {
+				case MOTIONTRACKING_EVENT:
+					motionTrackingEvent(static_cast<MotionTrackingEvent*>(evt));
+					break;
 				case TRANSFORMATION_EVENT_6D:
 					transformationEvent6D(static_cast<TransformationEvent6D*>(evt));
 					break;
@@ -1902,7 +1907,22 @@ namespace BALL
 
 			camera.rotate(q1, system_origin_);
 		}
-
+		
+		void Scene::motionTrackingEvent(MotionTrackingEvent* evt)
+		{
+			
+			Vector3 tmp = evt->getOrigin();
+			Vector3 movement = tmp - oldtrack_origin_;
+			Camera& camera = stage_->getCamera();
+			camera.moveRight(movement.x);
+			camera.moveUp(movement.y);
+			camera.moveForward(movement.z);
+			oldtrack_origin_ = tmp;
+			gl_renderer_->updateCamera();
+			updateGL();
+			printf("tach\n");
+		}
+		
 		void Scene::buttonPressEvent(ButtonEvent* evt)
 		{
 		}
