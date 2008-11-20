@@ -77,7 +77,8 @@ namespace BALL
 			if (gl_renderer_ && stage_ && scene_)
 			{
 				gl_renderer_->init(*scene_);
-				gl_renderer_->init(*stage_, width(), height());
+
+				gl_renderer_->setSize(width(), height());
 				gl_renderer_->initSolid();
 				if (stage_->getLightSources().size() == 0) scene_->setDefaultLighting(false);
 				gl_renderer_->updateCamera();
