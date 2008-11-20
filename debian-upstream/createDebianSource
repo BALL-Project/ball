@@ -50,17 +50,10 @@ mv ${BDIR} ball-${VERSION}
 
 # create a new orig.tar.gz with the updated paths
 rm ${BALL_PATH}/${ORIG_FILE}
-tar czf ${BALL_PATH}/${ORIG_FILE} "ball-"${VERSION}
+tar czf ${BALL_PATH}/ball-${VERSION}.tar.gz "ball-"${VERSION}
 
 # now create the debianized .tar.gz file
 cd "ball-"${VERSION}
-
-# copy debian control files
-cp -r debian-upstream debian
-rm -f debian/createDebianSource
-rm -f debian/debian-ball-install
-rm -f debian/createBALLVIEWDEB
-rm -f debian/README
 
 # build package
 echo "building debian source package..."
