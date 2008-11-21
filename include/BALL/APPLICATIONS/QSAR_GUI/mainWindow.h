@@ -178,6 +178,13 @@ namespace BALL
 					/** determines to which email address a notification of job completion should be send */
 					String email_address;
 					
+					/** a folder where data may be stored temporarily */
+					String tmp_folder;
+					
+					/** The character separating directories in a path. \n
+					By default BALL::FileSystem::PATH_SEPARATOR is used */
+					String path_separator;
+					
 					MainWindow* main_window;
 					
 					void saveToFile(String file);

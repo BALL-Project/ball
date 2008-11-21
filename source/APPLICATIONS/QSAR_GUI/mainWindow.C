@@ -17,6 +17,7 @@
 #include <QtGui/QPrinter>
 #include <QtGui/QPrintDialog>
 #include <QtGui/QShortcut>
+#include <QtGui/QTextBrowser>
 
 #include <sstream>
 #include <map>
@@ -70,7 +71,9 @@ using namespace BALL::Exception;
 	settings.tools_path="";
 	settings.send_email=0;
 	settings.email_address="";
+	settings.tmp_folder="";
 	settings.readFromFile(s);
+	settings.path_separator = BALL::FileSystem::PATH_SEPARATOR;
 
 	///create actions, menus, tool bars, status bar, dock windows and dialogs
 	createActions();
@@ -131,8 +134,10 @@ void MainWindow::Settings::saveToFile(String file)
 	out.insertValue("QPipeViz","window_position",pos);
 	out.insertValue("QPipeViz","submit_prefix",submit_prefix);
 	out.insertValue("QPipeViz","tools_path",tools_path);
+	out.insertValue("QPipeViz","tmp_folder",tmp_folder);
 	out.insertValue("QPipeViz","send_email",send_email);
 	out.insertValue("QPipeViz","email_address",email_address);
+	out.insertValue("QPipeViz","path_separator",path_separator);
 	out.write();
 }
 
@@ -164,6 +169,8 @@ void MainWindow::Settings::readFromFile(String file)
 		if(ini.hasEntry("QPipeViz","tools_path")) tools_path = ini.getValue("QPipeViz","tools_path");
 		if(ini.hasEntry("QPipeViz","send_email")) send_email = ini.getValue("QPipeViz","email").toBool();
 		if(ini.hasEntry("QPipeViz","email_address")) email_address = ini.getValue("QPipeViz","email_address");
+		if(ini.hasEntry("QPipeViz","tmp_folder")) tmp_folder = ini.getValue("QPipeViz","tmp_folder");
+		if(ini.hasEntry("QPipeViz","path_separator")) path_separator = ini.getValue("QPipeViz","path_separator");
 	}
 	// if there are unacceptable entries in the ini-file, ignore the file
 	catch(BALL::Exception::GeneralException e) { }
@@ -495,7 +502,7 @@ void MainWindow::createActions()
 	connect(restoreAct_, SIGNAL(triggered()), this, SLOT(restoreDesktop()));
 
 	exportAct_ = new QAction(QIcon("./images/save.png"),tr("Save Pipeline"), this);
-	exportAct_->setStatusTip(tr("Saves the Pipeline to a configuration file for the QSARPipelinePackage and stores all trained models to files"));
+	exportAct_->setStatusTip(tr("Saves the Pipeline"));
 	connect(exportAct_, SIGNAL(triggered()), this, SLOT(exportPipeline()));
 
 	loadModelsAct_ = new QAction(QIcon(),tr("Load Models"), this);
@@ -585,6 +592,14 @@ void MainWindow::printToFile()
 	h3_layout.addWidget(&edit3);
 	main_layout.addLayout(&h3_layout);
 	
+	QHBoxLayout h4_layout;
+	QLabel label4("tmp folder");
+	QLineEdit edit4;
+	edit4.setText(settings.tmp_folder.c_str());
+	h4_layout.addWidget(&label4);
+	h4_layout.addWidget(&edit4);
+	main_layout.addLayout(&h4_layout);
+	
 	QDialogButtonBox buttons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,Qt::Horizontal);
 	main_layout.addWidget(&buttons);
 	connect(&buttons, SIGNAL(accepted()), &dialog, SLOT(accept()));
@@ -598,6 +613,7 @@ void MainWindow::printToFile()
 		settings.tools_path = edit2.text().toStdString();
 		settings.send_email= checkbox.isChecked();
 		settings.email_address = edit3.text().toStdString();
+		settings.tmp_folder = edit4.text().toStdString();
 	}	 
  } 
  
@@ -767,8 +783,7 @@ void MainWindow::createDockWindows()
 	progressdock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
 	progressdock->setWidget(progress_bar_);
 	addDockWidget(Qt::LeftDockWidgetArea, progressdock);
-	windowMenu_->addAction(progressdock->toggleViewAction());	
-	
+	windowMenu_->addAction(progressdock->toggleViewAction());
 }
 
 void MainWindow::deleteItem()
@@ -849,7 +864,7 @@ void MainWindow::restoreDesktop()
 	QString filename = QFileDialog::getOpenFileName(this, tr("Open File"),settings.config_path.c_str(),tr("Pipeline (*.tar.gz *.conf)"));
 	if(filename=="") return;
 	String s = filename.toStdString();
-	settings.config_path = s.substr(0,s.find_last_of("/")+1);
+	settings.config_path = s.substr(0,s.find_last_of(settings.path_separator)+1);
 	try
 	{
 		restoreDesktop(filename);
@@ -884,13 +899,15 @@ BALL::String MainWindow::exportPipeline(bool no_immediate_archiving)
 	}
 	
 	exportPipeline(filename);
-	settings.config_path = s.substr(0,s.find_last_of("/")+1);
+	settings.config_path = s.substr(0,s.find_last_of(settings.path_separator)+1);
 	return s;
 }
 
 
 void MainWindow::saveItemsToFiles(String directory, String archive, String configfile)
 {
+	bool use_tmp=0;
+	if(archive!="" && settings.tmp_folder!="") use_tmp=1;
 	String files;
 	try
 	{
@@ -906,6 +923,7 @@ void MainWindow::saveItemsToFiles(String directory, String archive, String confi
 				throw GeneralException(__FILE__,__LINE__,"SDF data saving error ", "SDF Input must be assigned a file to be saved to!");
 			}
 			String file = directory+f1;
+			if(use_tmp) file = settings.tmp_folder+settings.path_separator+f1;
 			files+=f1+" ";
 			data->saveToFile(file);
 		}
@@ -921,6 +939,7 @@ void MainWindow::saveItemsToFiles(String directory, String archive, String confi
 				throw GeneralException(__FILE__,__LINE__,"CSV saving error ", "CSV Item must be assigned a file to be saved to!");
 			}
 			String file = directory+f1;
+			if(use_tmp) file = settings.tmp_folder+settings.path_separator+f1;
 			files+=f1+" ";
 			data->saveToFile(file);
 		}
@@ -936,6 +955,7 @@ void MainWindow::saveItemsToFiles(String directory, String archive, String confi
 				throw GeneralException(__FILE__,__LINE__,"Input-partition saving error ", "Item must be assigned a file to be saved to!");
 			}
 			String file = directory+f1;
+			if(use_tmp) file = settings.tmp_folder+settings.path_separator+f1;
 			files+=f1+" ";
 			data->saveToFile(file);
 		}
@@ -950,6 +970,7 @@ void MainWindow::saveItemsToFiles(String directory, String archive, String confi
 				throw GeneralException(__FILE__,__LINE__,"Model saving error ", "Model must be assigned a file to be saved to!");
 			}
 			String file = directory+f1;
+			if(use_tmp) file = settings.tmp_folder+settings.path_separator+f1;
 			files+=f1+" ";
 			(*it)->saveToFile(file);
 		}
@@ -961,15 +982,25 @@ void MainWindow::saveItemsToFiles(String directory, String archive, String confi
 	
 	if(archive!="")
 	{
-		int index=configfile.find_last_of("/");
+		int index=configfile.find_last_of(settings.path_separator);
 		if(index!=(int)string::npos)
 		{
 			configfile=configfile.substr(index+1); // no path; filename only!
-		}		
-		String call = "cd "+directory+"; tar -czf "+archive+" "+files+" "+configfile;
-		system(call.c_str());	// compress output files
-		call = "cd "+directory+"; rm -f "+files+" "+configfile;
-		system(call.c_str());	// delete uncompressed files
+		}
+		String call1;
+		String call2;
+		if(!use_tmp)
+		{
+			call1 = "cd "+directory+"; tar -czf "+archive+" "+files+" "+configfile;
+			call2 = "cd "+directory+"; rm -f "+files+" "+configfile;
+		}
+		else
+		{
+			call1 = "cd "+settings.tmp_folder+"; tar -czf "+archive+" "+files+" "+configfile;
+			call2 = "cd "+settings.tmp_folder+"; rm -f "+files+" "+configfile;
+		}
+		system(call1.c_str());	// compress output files (and move archive)
+		system(call2.c_str());	// delete uncompressed files
 	}
 }
 
@@ -1112,16 +1143,27 @@ Pipeline<DataItem*> MainWindow::disconnectedItems()
 void MainWindow::restoreDesktop(QString filename)
 {
 	String configfile = filename.toStdString();
-	int s = configfile.find_last_of("/");
+	int s = configfile.find_last_of(settings.path_separator);
 	String directory = configfile.substr(0,s+1); // name of config-file folder
 	bool archive = 0;
 	
 	if(configfile.size()>7 && configfile.substr(configfile.size()-7)==".tar.gz")
 	{
 		archive = 1;
-		String call = "cd "+directory+"; tar -xzvf "+configfile+" > archive_contents.tmp";
+		String call;
+		if(settings.tmp_folder=="") call = "cd "+directory;
+		else call = "cd "+settings.tmp_folder;
+		call+="; tar -xzvf "+configfile+" > archive_contents.tmp";
 		system(call.c_str());  // extrace files from archive
+		
 		configfile = configfile.substr(0,configfile.size()-7)+".conf"; //config-file within archive will always have extension ".conf"
+		
+		if(settings.tmp_folder!="")
+		{
+			int s = configfile.find_last_of(settings.path_separator);
+			configfile = settings.tmp_folder+settings.path_separator+configfile.substr(s+1);
+			directory = settings.tmp_folder+settings.path_separator;
+		}
 	}	
 	
 	ifstream file(configfile.c_str());
@@ -1256,7 +1298,7 @@ void MainWindow::exportPipeline(QString filename)
 	InputDataItemIO input_writer(view_);
 
 	QString name;
-	String configfile = filename.toStdString();
+	String configfile = filename.toStdString(); // has full path
 	String archive="";
 	if(configfile.size()>7 && configfile.substr(configfile.size()-7)==".tar.gz")
 	{
@@ -1264,11 +1306,13 @@ void MainWindow::exportPipeline(QString filename)
 		configfile = configfile.substr(0,configfile.size()-7)+".conf";
 	}
 	int d = configfile.find_last_of(".");
-	int s = configfile.find_last_of("/");
+	int s = configfile.find_last_of(settings.path_separator);
 	String file_prefix = configfile.substr(s+1,d-s-1)+"_"; // name of config-file as prefix for output-files
 	String directory = configfile.substr(0,s+1); // name of folder
 	
+	if(archive!="" && settings.tmp_folder!="") configfile = settings.tmp_folder+settings.path_separator+configfile.substr(s+1);
 	ofstream out(configfile.c_str());
+	
 	ostringstream positions;
 	positions<<"[ItemPositions]"<<endl;
 	
@@ -1402,7 +1446,7 @@ void MainWindow::submit()
 void MainWindow::submitToCluster(String configfile)
 {
 	int d = configfile.find_last_of(".");
-	int s = configfile.find_last_of("/");
+	int s = configfile.find_last_of(settings.path_separator);
 	String file_prefix = configfile.substr(0,d); // prefix for output-files
 	String short_file_prefix = configfile.substr(s+1,d-s); // prefix without folders
 	
@@ -1422,7 +1466,7 @@ void MainWindow::submitToCluster(String configfile)
 	String prog="";
 	if(settings.tools_path!="")
 	{
-		prog=settings.tools_path+"/";
+		prog=settings.tools_path+settings.path_separator;
 	}
 	prog.append("QPipeStarter");
 		
