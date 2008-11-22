@@ -108,7 +108,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\GeneratedFiles;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtXml;$(QTDIR)\include\QtSql;$(QTDIR)\include\QtOpenGL;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtSvg;$(SolutionDir)\..\include;$(SolutionDir)\..\contrib\include;$(SolutionDir)\..\contrib\include\python;$(SolutionDir)\..\..\include;$(QTDIR)\include\QtTest;$(SolutionDir)\..\..\include\BALL\VIEW\UIC"
+				AdditionalIncludeDirectories=".\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include\QtXml&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include\QtOpenGL&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;;&quot;$(QTDIR)\include\QtSvg&quot;;&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\contrib\include&quot;;&quot;$(SolutionDir)\..\contrib\include\python&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(QTDIR)\include\QtTest&quot;;&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC&quot;"
 				PreprocessorDefinitions="UNICODE;WIN32;QT_THREAD_SUPPORT;QT_CORE_LIB;QT_GUI_LIB;QT_XML_LIB;QT_SQL_LIB;QT_OPENGL_LIB;QT_NETWORK_LIB;QT_SVG_LIB;LIBVIEW_LIB;BALL_VIEW_BUILD_DLL"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
@@ -2128,6 +2128,26 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\..\..\source\VIEW\RENDERING\pixelFormat.C"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath="..\..\..\source\VIEW\RENDERING\POVRenderer.C"
 					>
 					<FileConfiguration
@@ -2188,6 +2208,26 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\..\..\source\VIEW\RENDERING\renderWindow.C"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath="..\..\..\source\VIEW\RENDERING\vertexBuffer.C"
 					>
 					<FileConfiguration
@@ -2227,6 +2267,51 @@
 						/>
 					</FileConfiguration>
 				</File>
+				<Filter
+					Name="RENDERERS"
+					>
+					<File
+						RelativePath="..\..\..\source\VIEW\RENDERING\RENDERERS\glRaytracingWindow.C"
+						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\..\..\source\VIEW\RENDERING\RENDERERS\rtfactRenderer.C"
+						>
+						<FileConfiguration
+							Name="Release|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Debug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="SOAP"
@@ -3989,11 +4074,19 @@
 				Name="RENDERING"
 				>
 				<File
+					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\bufferedRenderer.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\glDisplayList.h"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\glRenderer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\pixelFormat.h"
 					>
 				</File>
 				<File
@@ -4020,6 +4113,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\renderTarget.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\renderWindow.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\vertexBuffer.h"
 					>
 				</File>
@@ -4027,6 +4128,38 @@
 					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\VRMLRenderer.h"
 					>
 				</File>
+				<Filter
+					Name="RENDERERS"
+					>
+					<File
+						RelativePath="..\..\..\include\BALL\VIEW\RENDERING\RENDERERS\cudaVolumeRenderer.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\BALL\VIEW\RENDERING\RENDERERS\glRaytracingWindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\BALL\VIEW\RENDERING\RENDERERS\rtfactRenderer.h"
+						>
+						<FileConfiguration
+							Name="Release|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Debug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+							/>
+						</FileConfiguration>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="WIDGETS"
@@ -6579,18 +6712,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_pythonSettings.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\Debug\moc_pythonSettings.cpp"
 				>
 				<FileConfiguration
@@ -6603,7 +6724,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_pyWidget.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_pythonSettings.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -6627,7 +6748,19 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_raytraceableContourSurfaceDialog.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_pyWidget.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Debug\moc_raytraceableContourSurfaceDialog.cpp"
 				>
 			</File>
 			<File
@@ -6655,18 +6788,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_serverPreferences.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\Debug\moc_serverPreferences.cpp"
 				>
 				<FileConfiguration
@@ -6679,10 +6800,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_setCamera.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_serverPreferences.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -6695,6 +6816,18 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Debug\moc_setCamera.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -6727,10 +6860,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_snapShotVisualisation.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_snapShotVisualisation.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -6739,10 +6872,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_snapShotVisualisation.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_snapShotVisualisation.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
