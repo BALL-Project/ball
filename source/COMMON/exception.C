@@ -319,6 +319,12 @@ namespace BALL
 				: GeneralException(file, line, String("CUDA error: ") + error, "")
 			{
 			}
+			
+			NoBufferAvailable::NoBufferAvailable(const char* file, int line, const String& reason)
+				throw()
+				: GeneralException(file, line, "NoBufferAvailable", String("Unavailable because: ") + reason)
+			{
+			}
 
 			DEF_EXCEPTION(OutOfRange, "the range of the operation was invalid")
 
@@ -338,7 +344,9 @@ namespace BALL
 
 			DEF_EXCEPTION(BufferOverflow, "the maximum buffersize has been reached")
 
-			DEF_EXCEPTION(OutOfGrid, "a point was outside a grid")			
+			DEF_EXCEPTION(OutOfGrid, "a point was outside a grid")	
+
+			DEF_EXCEPTION(FormatUnsupported, "given framebuffer format is not supported")
 
 		
 			GlobalExceptionHandler::GlobalExceptionHandler()

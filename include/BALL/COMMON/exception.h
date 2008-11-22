@@ -470,6 +470,32 @@ namespace BALL
 			CUDAError(const char* file, int line, const String& error) throw();									
 		};
 
+		/**
+		* RenderTarget error
+		* A buffer was requested from \link RenderTarget \endlink but could not be supplied
+		* for some reason at the given moment.
+		* Additional parameter <tt>reason</tt> gives the reason why the buffer could not be 
+		* provided.
+		*/
+		class BALL_EXPORT NoBufferAvailable 
+			: public Exception::GeneralException
+		{
+		public:
+			NoBufferAvailable(const char* file, int line, const String& reason) throw();
+		};
+
+		/**
+		 * BufferedRenderer error
+		 * An unsuported format was requested from \link BufferedRenderer \endlink via
+		 * <tt>setFrameBufferFormat</tt>.
+		 */
+		class BALL_EXPORT FormatUnsupported
+			: public Exception::GeneralException
+		{
+		public:
+			FormatUnsupported(const char* file, int line) throw();
+		};
+
 		/** Class handling uncaught exception globally.
 		*/
 		class BALL_EXPORT GlobalExceptionHandler
