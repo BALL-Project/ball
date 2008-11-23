@@ -60,7 +60,7 @@ CSVInputDataItem::CSVInputDataItem(CSVInputDataItem& item):
 
 void CSVInputDataItem::setSeperator(string sep)
 {
-	if(sep=="tab") {sep_="	";}
+	if(sep=="tabulator") {sep_="	";}
 	else sep_=sep;
 }
 

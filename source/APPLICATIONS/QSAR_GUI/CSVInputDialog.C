@@ -13,8 +13,12 @@ CSVInputDialog::CSVInputDialog(CSVInputDataItem* item):
 	layout_ = new QGridLayout(this);
 	QString tmp; tmp.setNum(0);
 	activity_edit_ = new QLineEdit(tmp);
-	QString sep="tab";
-	seperator_edit_ = new QLineEdit(sep);
+	
+	separator_box_ = new QComboBox;
+	separator_box_->addItem("comma",0);
+	separator_box_->addItem("tabulator",1);
+	separator_box_->addItem("semicolon",2);
+	separator_box_->addItem("space",3);
 	
 	x_labels_ = new QCheckBox("File contains descriptor names", this);
 	y_labels_ = new QCheckBox("File contains compound names", this);
@@ -31,7 +35,7 @@ CSVInputDialog::CSVInputDialog(CSVInputDataItem* item):
 	alabel_ = new QLabel(message_string,this);
 	blabel_ = new QLabel(sep_string,this);
 	layout_->addWidget(alabel_,1,1,3,3); layout_->addWidget(activity_edit_,3,4); 
-	layout_->addWidget(blabel_,4,1,2,3); layout_->addWidget(seperator_edit_,4,4);
+	layout_->addWidget(blabel_,4,1,2,3); layout_->addWidget(separator_box_,4,4);
 	layout_->addWidget(x_labels_,6,1,Qt::AlignLeft);
 	layout_->addWidget(y_labels_,7,1,Qt::AlignLeft);
 	layout_->addWidget(class_names_checkbox_,8,1,Qt::AlignLeft);
@@ -49,7 +53,7 @@ CSVInputDialog::CSVInputDialog(CSVInputDataItem* item):
 
 CSVInputDialog::~CSVInputDialog()
 {
-	delete seperator_edit_;
+	delete separator_box_;
 	delete activity_edit_;
 	delete x_labels_;
 	delete y_labels_;
@@ -79,7 +83,11 @@ void CSVInputDialog::classNamesChange()
 void CSVInputDialog::readNumY()
 {
 	QString input = activity_edit_->text().trimmed();
-	QString sep = seperator_edit_->text().trimmed();
+	QString sep = separator_box_->currentText().trimmed();
+	if(sep=="tabulator") sep="	";
+	else if(sep=="comma") sep=",";
+	else if(sep=="semicolon") sep=";";
+	else if(sep=="space") sep=" ";
 
 	bool ok;
 	int num = 0;

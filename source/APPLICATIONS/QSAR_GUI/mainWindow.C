@@ -1116,7 +1116,6 @@ void MainWindow::executePipeline()
 	}
 	
 	updatePipelineScene();
-	view_->update();
 }
 
 

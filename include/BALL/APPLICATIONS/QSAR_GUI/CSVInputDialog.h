@@ -7,6 +7,7 @@
 #include <QtGui/QCheckBox>
 #include <QtGui/QGridLayout>
 #include <QtGui/QLabel>
+#include <QtGui/QComboBox>
 
 #include <BALL/APPLICATIONS/QSAR_GUI/CSVInputDataItem.h>
 
@@ -47,7 +48,7 @@ namespace BALL
 		
 			/** @name Attributes
 			*/
-			QLineEdit* seperator_edit_;
+			QComboBox* separator_box_;
 			QLineEdit* activity_edit_;
 			QCheckBox* x_labels_;
 			QCheckBox* y_labels_;

@@ -1,6 +1,6 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/fileBrowser.h>
 #include <QtGui/QHeaderView>
-
+#include <BALL/DATATYPE/string.h>
 
 using namespace BALL::VIEW;
 
@@ -10,6 +10,8 @@ FileBrowser::FileBrowser(std::string path)
 	QStringList filters;
 	filters << "*.sdf"<<"*.csv"<< "*.txt";
 	dirmodel_ = new QDirModel(this);
+	icon_provider_ = new FileIconProvider;
+	dirmodel_->setIconProvider(icon_provider_);
 
 	///set display filters: list all directories, list files, don't list "." and ".."
 	dirmodel_->setFilter(QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot);
@@ -39,4 +41,22 @@ FileBrowser::FileBrowser(std::string path)
 
 FileBrowser::~FileBrowser()
 {
+}
+
+
+QIcon FileIconProvider::icon (const QFileInfo& info) const
+{
+	String file = info.absoluteFilePath().toStdString();
+	if(file.hasSuffix("sdf"))
+	{
+		return QIcon("./images/sdf_icon.png");
+	}
+	else if(file.hasSuffix("csv") || file.hasSuffix("txt") )
+	{
+		return QIcon("./images/csv_icon.png");
+	}
+	else
+	{
+		return QFileIconProvider::icon(info);
+	}	
 }

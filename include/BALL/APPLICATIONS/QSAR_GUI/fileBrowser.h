@@ -3,12 +3,20 @@
 
 #include <QtGui/QDirModel>
 #include <QtGui/QTreeView>
+#include <QtGui/QFileIconProvider>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
+		
+		class FileIconProvider : public QFileIconProvider
+		{
+			/** overloads the function of the base-class in such a way that specific icons are returned for sd- and csv-files */
+			QIcon icon (const QFileInfo& info) const;			
+		};
+			
 		/** @class FileBrowser
 		* @brief a simple file browser class
 		*
@@ -31,6 +39,8 @@ namespace BALL
 			
 				/** QDirModel connected to the browser */
 				QDirModel* dirmodel_;
+				
+				FileIconProvider* icon_provider_;
 		};
 	}
 }
