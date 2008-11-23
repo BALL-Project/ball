@@ -219,7 +219,7 @@ namespace BALL
 		border_count = 0;
 					
 		grid_begin = (PointerSizeUInt)grid->getData(0);
-		grid_end = (PointerSizeUInt)grid->getData(grid->size());
+		grid_end = (PointerSizeUInt)grid->getData(grid->size()-1);
 
 		PointerSizeUInt s;
 		PointerSizeUInt t;
