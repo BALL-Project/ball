@@ -72,8 +72,8 @@ using namespace BALL::Exception;
 	settings.send_email=0;
 	settings.email_address="";
 	settings.tmp_folder="";
-	settings.readFromFile(s);
 	settings.path_separator = BALL::FileSystem::PATH_SEPARATOR;
+	settings.readFromFile(s);
 
 	///create actions, menus, tool bars, status bar, dock windows and dialogs
 	createActions();
@@ -95,6 +95,8 @@ using namespace BALL::Exception;
 
 	connect(this, SIGNAL(sendNewValue(int)), progress_bar_, SLOT(setValue(int))); 
 	
+	documentation_= 0;
+	showDocumentation();
  }
 
  
@@ -784,6 +786,31 @@ void MainWindow::createDockWindows()
 	progressdock->setWidget(progress_bar_);
 	addDockWidget(Qt::LeftDockWidgetArea, progressdock);
 	windowMenu_->addAction(progressdock->toggleViewAction());
+}
+
+void MainWindow::showDocumentation()
+{
+	if(!documentation_)
+	{
+		documentation_ = new QDockWidget(this);
+		QTextBrowser* browser = new QTextBrowser(documentation_);
+		documentation_->setWidget(browser);
+		String path = BALL_PATH; 
+		path+=settings.path_separator+"doc"+settings.path_separator+"QPipeViz"+settings.path_separator+"index.html";
+		QUrl qurl = QUrl::fromLocalFile(path.c_str());
+		browser->setSource(qurl);
+		addDockWidget(Qt::LeftDockWidgetArea, documentation_);
+		documentation_->setFloating(1);
+		
+		documentation_->move((int)(pos().x()+width()*0.2),(int)(pos().y()+height()*0.1));
+		documentation_->resize((int)(width()*0.6),(int)(height()*0.8));
+		
+		//documentation_->resize(500,500);
+		dockwidgets_.push_back(documentation_);
+	}
+	
+	
+	
 }
 
 void MainWindow::deleteItem()

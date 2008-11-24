@@ -153,6 +153,8 @@ namespace BALL
 				/** switches to fullscreen and from fullscreen back to normal view */
 				void fullscreen();
 				
+				void showDocumentation();
+				
 				
 			private:
 				
@@ -242,6 +244,7 @@ namespace BALL
 
 				QProgressBar* progress_bar_;
 				FileBrowser* file_browser_;
+				QDockWidget* documentation_;
 		
 				ModelConfigurationDialog* modelConfigurationDialog_;
 
