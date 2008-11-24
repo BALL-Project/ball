@@ -152,7 +152,8 @@ void ValidationItem::init()
 {
 	result_color_ = QColor(205,225,205);
 	initName();
-	setPixmap(QPixmap("./images/validation.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+	String dir = view_->data_scene->main_window->getImageDirectory();
+	setPixmap(QPixmap((dir+"validation.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 	createActions();
 	coeff_stderr_ratio_ = 0;
 	plotter_ = NULL;

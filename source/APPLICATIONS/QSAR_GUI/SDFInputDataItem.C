@@ -22,7 +22,8 @@ SDFInputDataItem::SDFInputDataItem(QString filename,SortedList<int> act, bool cd
 	InputDataItem(filename, cdv, crv, view)
 {
 	//set pixmap
-	QPixmap pm = QPixmap("./images/sdf_icon.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+	String dir = view_->data_scene->main_window->getImageDirectory();
+	QPixmap pm = QPixmap((dir+"sdf_icon.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
 	setPixmap(pm);
 
 	QStringList list = filename_.split("/");
@@ -38,7 +39,8 @@ SDFInputDataItem::SDFInputDataItem(QString filename,SortedList<int> act, bool cd
 SDFInputDataItem::SDFInputDataItem(QString filename, DataItemView* view):
 	InputDataItem(filename, false, false, view)
 {
-	QPixmap pm = QPixmap("./images/sdf_icon.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+	String dir = view_->data_scene->main_window->getImageDirectory();
+	QPixmap pm = QPixmap((dir+"sdf_icon.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
 	setPixmap(pm);
 
 	QStringList list = filename_.split("/");
@@ -88,7 +90,7 @@ bool SDFInputDataItem::execute()
 	{
 		Path p;
 		if(p.find("QSAR/atomic_electron_affinities.data")=="")
-		{    	// use subfolder of executable location...
+		{    	// use subfolder of current working directory
 			data_->setDataFolder("./data");
 		}
 		data_->readSDFile(st.c_str(), activity_values_, use_SD_properties_, nonnumeric_class_names_);

@@ -16,7 +16,8 @@ using namespace BALL::VIEW::Exception;
 FeatureSelectionItem::FeatureSelectionItem(int type, DataItemView* miv):
 	DataItem(miv)
 {
-	setPixmap(QPixmap("./images/feature_selection.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+	String dir = view_->data_scene->main_window->getImageDirectory();
+	setPixmap(QPixmap((dir+"feature_selection.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 
 	feature_selection_ = NULL;
 	validation_statistic_ = 0;

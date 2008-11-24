@@ -5,16 +5,25 @@
 #include <QtGui/QTreeView>
 #include <QtGui/QFileIconProvider>
 
+
 namespace BALL
 {
 	namespace VIEW
 	{
 
+		class MainWindow;		
+		class FileBrowser;
 		
 		class FileIconProvider : public QFileIconProvider
 		{
-			/** overloads the function of the base-class in such a way that specific icons are returned for sd- and csv-files */
-			QIcon icon (const QFileInfo& info) const;			
+			public:
+				FileIconProvider(FileBrowser* file_browser);
+				
+				/** overloads the function of the base-class in such a way that specific icons are returned for sd- and csv-files */
+				QIcon icon (const QFileInfo& info) const;
+					
+			private:
+				FileBrowser* file_browser_;
 		};
 			
 		/** @class FileBrowser
@@ -29,10 +38,12 @@ namespace BALL
 				/** @name Constructors and Destructors */
 			
 				/** constructor */
-				FileBrowser(std::string path);
+				FileBrowser(std::string path, MainWindow* main_window);
 				
 				/** destructor */
 				~FileBrowser();
+				
+				MainWindow* main_window;
 		
 			private:
 				/** @name Private Attributes*/

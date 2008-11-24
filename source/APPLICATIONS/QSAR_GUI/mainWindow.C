@@ -31,6 +31,18 @@ using namespace BALL::Exception;
 ///set up they main window
  MainWindow::MainWindow()
  {
+	init();
+ }
+ 
+ MainWindow::MainWindow(char* executable_directory)
+ {
+	 executable_directory_ = executable_directory;
+	 init();
+ }
+
+ 
+void MainWindow::init()
+{
 	fullscreen_ = 0;
 	settings.main_window = this;
 	 
@@ -74,6 +86,12 @@ using namespace BALL::Exception;
 	settings.tmp_folder="";
 	settings.path_separator = BALL::FileSystem::PATH_SEPARATOR;
 	settings.readFromFile(s);
+	
+	if(executable_directory_!="")
+	{
+		executable_directory_ = executable_directory_.substr(0,executable_directory_.find_last_of(settings.path_separator));
+		cout<<"executable_directory_="<<executable_directory_<<endl;
+	}
 
 	///create actions, menus, tool bars, status bar, dock windows and dialogs
 	createActions();
@@ -97,9 +115,9 @@ using namespace BALL::Exception;
 	
 	documentation_= 0;
 	showDocumentation();
- }
+}
 
- 
+
 MainWindow::~MainWindow()
 {
 	delete model_list_;
@@ -121,6 +139,7 @@ MainWindow::~MainWindow()
 	
 	settings.saveToFile(file);
 }
+
 
 void MainWindow::Settings::saveToFile(String file)
 {
@@ -470,8 +489,10 @@ function for creating actions for every slot the user should have access to
 */
 void MainWindow::createActions()
  {
+	String dir = getImageDirectory();
+	 
 	//exit action: cloes the application
-	exitAct_ = new QAction(QIcon("./images/exit.png"),tr("E&xit"), this);
+	exitAct_ = new QAction(QIcon((dir+"exit.png").c_str()),tr("E&xit"), this);
 	exitAct_->setShortcut(tr("Ctrl+Q"));
 	exitAct_->setStatusTip(tr("Exit the application"));
 	connect(exitAct_, SIGNAL(triggered()), this, SLOT(close()));
@@ -481,29 +502,29 @@ void MainWindow::createActions()
 	aboutAct_->setStatusTip(tr("Show the application's About box"));
 	connect(aboutAct_, SIGNAL(triggered()), this, SLOT(about()));
 
-	clearAct_ = new QAction(QIcon("./images/clear_desktop.png"),tr("&Clear Desktop"), this);
+	clearAct_ = new QAction(QIcon((dir+"clear_desktop.png").c_str()),tr("&Clear Desktop"), this);
 	clearAct_->setShortcut(tr("Ctrl+C"));
 	clearAct_->setStatusTip(tr("Clears the desktop (the main view)"));
 	connect(clearAct_, SIGNAL(triggered()), this, SLOT(clearDesktop()));
 
-	delAct_ = new QAction(QIcon("./images/delete_item.png"),tr("&Delete Selection"), this);
+	delAct_ = new QAction(QIcon((dir+"delete_item.png").c_str()),tr("&Delete Selection"), this);
 	delAct_->setStatusTip(tr("Deletes the selected Item from the pipeline"));
 	connect(delAct_, SIGNAL(triggered()), this, SLOT(deleteItem()));
 	
 	QShortcut* del_shortcut = new QShortcut(QKeySequence::Delete,this);
 	connect(del_shortcut,SIGNAL(activated()),this,SLOT(deleteItem()));
 
-	executeAct_ = new QAction(QIcon("./images/run_pipeline.png"),tr("&Execute Pipeline"), this);
+	executeAct_ = new QAction(QIcon((dir+"run_pipeline.png").c_str()),tr("&Execute Pipeline"), this);
 	executeAct_->setShortcut(tr("Ctrl+E"));
 	executeAct_->setStatusTip(tr("Executes the Pipeline"));
 	connect(executeAct_, SIGNAL(triggered()), this, SLOT(executePipeline()));
 
-	restoreAct_ = new QAction(QIcon("./images/restore_desktop.png"),tr("&Restore Desktop"), this);
+	restoreAct_ = new QAction(QIcon((dir+"restore_desktop.png").c_str()),tr("&Restore Desktop"), this);
 	restoreAct_->setShortcut(tr("Ctrl+R"));
 	restoreAct_->setStatusTip(tr("Restores a Pipeline"));
 	connect(restoreAct_, SIGNAL(triggered()), this, SLOT(restoreDesktop()));
 
-	exportAct_ = new QAction(QIcon("./images/save.png"),tr("Save Pipeline"), this);
+	exportAct_ = new QAction(QIcon((dir+"save.png").c_str()),tr("Save Pipeline"), this);
 	exportAct_->setStatusTip(tr("Saves the Pipeline"));
 	connect(exportAct_, SIGNAL(triggered()), this, SLOT(exportPipeline()));
 
@@ -556,6 +577,9 @@ void MainWindow::printToFile()
 	menuBar()->addSeparator();
 
 	helpMenu_ = menuBar()->addMenu(tr("&Help"));
+	QAction* doc = new QAction(tr("&Documentation"), this);
+	connect(doc, SIGNAL(triggered()), this, SLOT(showDocumentation()));
+	helpMenu_->addAction(doc);
 	helpMenu_->addAction(aboutAct_);
  }
  
@@ -625,6 +649,7 @@ function for setting up the tool bars
 */
  void MainWindow::createToolBars()
  {	
+	String dir = getImageDirectory();
 	fileToolBar_ = addToolBar(tr("File"));
 	fileToolBar_->addAction(exitAct_);
 	fileToolBar_->addSeparator();
@@ -633,17 +658,17 @@ function for setting up the tool bars
 	fileToolBar_->addSeparator();
 	fileToolBar_->addAction(exportAct_);
 	fileToolBar_->addAction(restoreAct_);
-	QAction* print = new QAction(QIcon("./images/printer1.png"),"Print",this);
+	QAction* print = new QAction(QIcon((dir+"printer1.png").c_str()),"Print",this);
 	fileToolBar_->addAction(print);
 	
-	QAction* submit_action = new QAction(QIcon("./images/cluster.png"),"Submit job",this);
+	QAction* submit_action = new QAction(QIcon((dir+"cluster.png").c_str()),"Submit job",this);
 	fileToolBar_->addSeparator();
 	fileToolBar_->addAction(executeAct_);
 	connect(print, SIGNAL(triggered()), this, SLOT(print()));
 	fileToolBar_->addAction(submit_action);
 	connect(submit_action, SIGNAL(triggered()), this, SLOT(submit()));	
 	
-	fullscreen_action_ = new QAction(QIcon("./images/window_fullscreen.png"),"Fullscreen",this);
+	fullscreen_action_ = new QAction(QIcon((dir+"window_fullscreen.png").c_str()),"Fullscreen",this);
 	fileToolBar_->addAction(fullscreen_action_);
 	connect(fullscreen_action_, SIGNAL(triggered()), this, SLOT(fullscreen()));
  }
@@ -652,12 +677,13 @@ function for setting up the tool bars
 // SLOT 
 void MainWindow::fullscreen()
 {
+	String dir = getImageDirectory();
 	fullscreen_ = !fullscreen_;
 	for(list<QDockWidget*>::iterator it=dockwidgets_.begin(); it!=dockwidgets_.end(); it++)
 	{
 		(*it)->setVisible(!fullscreen_);
-		if(fullscreen_) fullscreen_action_->setIcon(QIcon("./images/window_nofullscreen.png"));
-		else fullscreen_action_->setIcon(QIcon("./images/window_fullscreen.png"));
+		if(fullscreen_) fullscreen_action_->setIcon(QIcon((dir+"window_nofullscreen.png").c_str()));
+		else fullscreen_action_->setIcon(QIcon((dir+"window_fullscreen.png").c_str()));
 	}
 	//fileToolBar_->setVisible(!fullscreen_);
  	//if(fullscreen_)	menuBar()->addAction(fullscreen_action_);
@@ -678,7 +704,7 @@ function for creating the different dock windows
 */
 void MainWindow::createDockWindows()
 {	
-	file_browser_ = new FileBrowser(settings.input_data_path.c_str());
+	file_browser_ = new FileBrowser(settings.input_data_path.c_str(),this);
 	QDockWidget* filedock = new QDockWidget(tr("Source Filebrowser"), this);
 	dockwidgets_.push_back(filedock);
 	filedock->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
@@ -792,25 +818,35 @@ void MainWindow::showDocumentation()
 {
 	if(!documentation_)
 	{
-		documentation_ = new QDockWidget(this);
+		documentation_ = new QDockWidget("Documentation",this);
 		QTextBrowser* browser = new QTextBrowser(documentation_);
 		documentation_->setWidget(browser);
+		
 		String path = BALL_PATH; 
 		path+=settings.path_separator+"doc"+settings.path_separator+"QPipeViz"+settings.path_separator+"index.html";
+		if(!ifstream(path.c_str())) // use subfolder of executable's directory
+		{
+			path = executable_directory_+settings.path_separator+"doc"+settings.path_separator+"QPipeViz"+settings.path_separator+"index.html";
+		}		
+		
 		QUrl qurl = QUrl::fromLocalFile(path.c_str());
 		browser->setSource(qurl);
 		addDockWidget(Qt::LeftDockWidgetArea, documentation_);
 		documentation_->setFloating(1);
 		
-		documentation_->move((int)(pos().x()+width()*0.2),(int)(pos().y()+height()*0.1));
-		documentation_->resize((int)(width()*0.6),(int)(height()*0.8));
+		//documentation_->move((int)(pos().x()+width()*0.2),(int)(pos().y()+height()*0.1));
+		int x0=(width()-750)/2;
+		if(x0<0) x0=0;
+		documentation_->move(pos().x()+x0,pos().y());
+		documentation_->resize(750,height());
 		
 		//documentation_->resize(500,500);
 		dockwidgets_.push_back(documentation_);
 	}
-	
-	
-	
+	else
+	{
+		documentation_->setVisible(1);
+	}	
 }
 
 void MainWindow::deleteItem()
@@ -1532,6 +1568,12 @@ bool MainWindow::checkForEmptyPipelines()
 	return 0;
 }
 
+BALL::String MainWindow::getImageDirectory()
+{
+	return executable_directory_+settings.path_separator+"images"+settings.path_separator;
+}
+
+
 BALL::String BALL::VIEW::valueToString(double value)
 {
 	BALL::String t(value);
@@ -1543,4 +1585,3 @@ BALL::String BALL::VIEW::valueToString(double value)
 	}
 	return t;
 }
-

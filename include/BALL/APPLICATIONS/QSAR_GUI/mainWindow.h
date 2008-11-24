@@ -56,6 +56,8 @@ namespace BALL
 	
 				/** constructor*/
 				MainWindow();
+				
+				MainWindow(char* executable_directory);
 
 				/** destructor */
 				~MainWindow();
@@ -90,7 +92,9 @@ namespace BALL
 				/** submits the pipeline that was saved into configfile to a cluster */
 				void submitToCluster(String configfile);
 				
-
+				/** get the directory where the icons for this program are located */
+				String getImageDirectory();
+				
 				/** @name Attributes */
 				/** pointer to the item that is currently being dragged */
 				DataItem* dragged_item;
@@ -197,6 +201,7 @@ namespace BALL
 				 /// the last used paths settings
 				Settings settings;
 		
+				void init();
 				void createMenus();
 				void createToolBars();
 				void createStatusBar();
@@ -270,6 +275,10 @@ namespace BALL
 				QAction* restoreAct_;
 				QAction* exportAct_;
 				QAction* fullscreen_action_;
+				
+				/** The directory of the executable of this program.\n
+				It is used to find subfolders for icons and documentation and has to be set from main.C */
+				String executable_directory_;
 				
 				friend class ModelItem;
 		};

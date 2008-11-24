@@ -17,7 +17,8 @@ void set_fpu (unsigned int mode)
 	set_fpu (0x27F);  /* enforce IEEE754 double-precision */
 	
 	QApplication app(argc, argv);
-	MainWindow mainWin;
+	
+	MainWindow mainWin(argv[0]);
 	mainWin.show();
 
 	return app.exec();
