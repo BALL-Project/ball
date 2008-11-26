@@ -407,17 +407,17 @@ void LightSettings::setDirection_(const Vector3& v)
 Vector3 LightSettings::getPosition_() 
 	throw(Exception::InvalidFormat)
 {
-	return Vector3(ascii(position_x->text()).toFloat(),
-				 			   ascii(position_y->text()).toFloat(),
-			  				 ascii(position_z->text()).toFloat());
+	return Vector3(position_x->text().toFloat(),
+				 			   position_y->text().toFloat(),
+			  				 position_z->text().toFloat());
 }
 
 Vector3 LightSettings::getDirection_() 
 	throw(Exception::InvalidFormat)
 {
-	return Vector3(ascii(direction_x->text()).toFloat(),
-				 			   ascii(direction_y->text()).toFloat(),
-			  				 ascii(direction_z->text()).toFloat());
+	return Vector3(direction_x->text().toFloat(),
+				 			   direction_y->text().toFloat(),
+			  				 direction_z->text().toFloat());
 }
 
 Index LightSettings::getCurrentLightNumber_() const

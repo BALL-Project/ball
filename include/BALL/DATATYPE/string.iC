@@ -4,6 +4,8 @@
 // $Id: string.iC,v 1.44 2003/08/26 08:04:12 oliver Exp $
 //
 
+#include <locale>
+
 BALL_INLINE 
 String::String()
 	throw()
@@ -651,6 +653,7 @@ bool String::isFloat() const
 
 	double d=0.;
 	std::istringstream sstr(*this);
+	sstr.imbue(std::locale("C"));
 
 	sstr >> d;
 

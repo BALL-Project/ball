@@ -41,23 +41,12 @@ namespace BALL
 		String createFloatString(float value, Size precision)
 			throw()
 		{
-			String data(value);
-			for (Position p = 0; p < data.size(); p++)
-			{
-				if (data[p] == '.')
-				{
-					data = data.left(p + precision + 1);
-					data.trimRight("0");
-					if (data == "-0.") data = "0.";
-					if (data[data.size() - 1] == '.') 
-					{
-						data = data(0, data.size() - 1);
-					}
-					return data;
-				}
-			}
+			ostringstream stream;
+			stream << setprecision(precision);
+			stream.imbue(std::locale("C"));
+			stream << value;
 
-			return data;
+			return stream.str();
 		}
 
 		bool stringToVector3(const String& data, Vector3& v)
