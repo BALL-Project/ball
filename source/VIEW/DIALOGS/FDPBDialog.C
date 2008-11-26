@@ -219,15 +219,15 @@ namespace BALL
 			throw()
 		{
 			/// ------------------------------
-			options_[FDPB::Option::SOLVENT_DC] 						= ascii(dc_solvent->text()).toFloat();
-			options_[FDPB::Option::SOLUTE_DC] 						= ascii(dc_interior->text()).toFloat();
-			options_[FDPB::Option::PROBE_RADIUS] 					= ascii(probe_radius->text()).toFloat();
-			options_[FDPB::Option::IONIC_STRENGTH] 				= ascii(ionic_strenght->text()).toFloat();
-			options_[FDPB::Option::ION_RADIUS] 						= ascii(ion_radius->text()).toFloat();
-			options_[FDPB::Option::SPACING] 							= ascii(spacing->text()).toFloat();
-			options_[FDPB::Option::BORDER]								= ascii(border->text()).toFloat();
-			options_[FDPB::Option::TEMPERATURE]						= ascii(temperature->text()).toFloat();
-			options_[FDPB::Option::MAX_ITERATIONS]				= ascii(max_iterations->text()).toFloat();
+			options_[FDPB::Option::SOLVENT_DC] 						= dc_solvent->text().toFloat();
+			options_[FDPB::Option::SOLUTE_DC] 						= dc_interior->text().toFloat();
+			options_[FDPB::Option::PROBE_RADIUS] 					= probe_radius->text().toFloat();
+			options_[FDPB::Option::IONIC_STRENGTH] 				= ionic_strenght->text().toFloat();
+			options_[FDPB::Option::ION_RADIUS] 						= ion_radius->text().toFloat();
+			options_[FDPB::Option::SPACING] 							= spacing->text().toFloat();
+			options_[FDPB::Option::BORDER]								= border->text().toFloat();
+			options_[FDPB::Option::TEMPERATURE]						= temperature->text().toFloat();
+			options_[FDPB::Option::MAX_ITERATIONS]				= max_iterations->text().toFloat();
 
 			/// ------------------------------
 			if (boundary_zero->isChecked())

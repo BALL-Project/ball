@@ -217,6 +217,7 @@ namespace BALL
 #	define BALL_STRING_DEFINE_CONSTRUCTOR_METHOD(type, format_string) \
 	String::String(type t) 	throw()\
 	{ \
+		setlocale(LC_NUMERIC, "C"); \
 		char buffer[128]; \
 	\
 		sprintf(buffer, format_string, t); \
