@@ -41,8 +41,7 @@ namespace BALL
 		}
 		// If the element_symbol entry is valid, it has precedence,
 		// otherwise, we try to extract it from the atom name.
-		Element e(PTE[element_symbol]);
-		if (e == Element::UNKNOWN)
+		if (PTE[element_symbol] == Element::UNKNOWN)
 		{
 			// Otherwise, we try to reconstruct the element
 			// from the atom name (which is dangerous if non-PDB names are
@@ -655,7 +654,7 @@ namespace BALL
 		current_residue_->clearProperty(Residue::PROPERTY__AMINO_ACID);
 		current_residue_->setProperty(Residue::PROPERTY__NON_STANDARD);
 		
-		RegularExpression regular_expression("^OHH|HOH|HHO|H2O|2HO|OH2|SOL|TIP|TIP2|TIP3|TIP4|WAT|D2O$");
+		static RegularExpression regular_expression("^OHH|HOH|HHO|H2O|2HO|OH2|SOL|TIP|TIP2|TIP3|TIP4|WAT|D2O$");
 		if (regular_expression.match(current_residue_->getName()) == true)
 		{
 			current_residue_->setProperty(Residue::PROPERTY__WATER);
