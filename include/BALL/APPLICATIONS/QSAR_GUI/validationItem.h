@@ -102,6 +102,10 @@ namespace BALL
 				virtual void removeFromPipeline();
 				
 				BALL::String getMouseOverText();
+				
+				/** overloads DataItem::change(), so that all plotters that have already been created are deleted */
+				void change();
+				
 		
 			protected:
 			
@@ -158,6 +162,8 @@ namespace BALL
 				
 				int validation_statistic_;
 				
+				PredictionPlotter* plotter_;
+				
 			
 			protected slots:
 				virtual void showPredictionDialog();
@@ -169,8 +175,6 @@ namespace BALL
 				
 			private:
 				void init();
-				
-				PredictionPlotter* plotter_;
 				
 				
 				friend class DataItemScene;

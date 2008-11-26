@@ -47,6 +47,11 @@ void ClassificationModel::readLabels()
 	}
 }
 
+vector<int> ClassificationModel::getClassLabels()
+{
+	return labels_;	
+}
+
 void ClassificationModel::readClassInformationFromFile(ifstream& input, int no_classes)
 {
 	labels_.clear();

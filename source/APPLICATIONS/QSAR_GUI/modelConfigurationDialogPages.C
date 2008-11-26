@@ -65,6 +65,7 @@ KernelParameterPage::KernelParameterPage(ModelConfigurationDialog* parent)
 		return;
 	}
 	
+	dialog_ = parent;	
 	registry_ = parent->parent->registry();
 
 	///---------------------CONFIG GROUP----------------------------------
@@ -204,20 +205,21 @@ void KernelParameterPage::showExtensions(int id)
 void KernelParameterPage::showKernelFunction(int id)
 {
 	QString function_string = "";
+	String dir = dialog_->modelItem()->view()->data_scene->main_window->getImageDirectory();
 	switch (id) 
 	{
 		case 0: 
 			function_string = "Funktion1";
-			function_label_->setPixmap(QPixmap("./images/polynomial_kernel.png"));
+			function_label_->setPixmap(QPixmap((dir+"polynomial_kernel.png").c_str()));
 			break;
 		case 1:
 			function_string = "Funktion2";
-			function_label_->setPixmap(QPixmap("./images/radial_basis_kernel.png"));
+			function_label_->setPixmap(QPixmap((dir+"radial_basis_kernel.png").c_str()));
 			kernel_param_edit1_->setText(QString(((String)(registry_->default_rbf_par)).c_str()));
 			break;
 		case 2: 
 			function_string = "Funktion3";
-			function_label_->setPixmap(QPixmap("./images/sigmoid_kernel.png"));
+			function_label_->setPixmap(QPixmap((dir+"sigmoid_kernel.png").c_str()));
 			break;
 		case 3:
 			function_string = "Funktion4";

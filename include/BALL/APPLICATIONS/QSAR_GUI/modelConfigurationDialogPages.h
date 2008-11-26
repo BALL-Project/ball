@@ -67,6 +67,7 @@ namespace BALL
 				QWidget* kernelParameter2Extension_;
 				QWidget* individualKernelExtension_;
 				QSAR::Registry* registry_;
+				ModelConfigurationDialog* dialog_;
 		};
 		
 		/** @class OptimizePage

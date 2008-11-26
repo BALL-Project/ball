@@ -576,6 +576,7 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationI
 		
 		// create PredictionItem using the test-partition of the current external fold
 		PredictionItem* pred_item = new PredictionItem(test_part, target_model, view);
+		pred_item->setValidationStatistic(val_item->getValidationStatistic());
 		//pred_item->setModelItem(target_model);
 		addItem(pred_item);
 		pred_item->setPos(pos+getOffset(pos,pred_item));

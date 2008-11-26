@@ -95,6 +95,8 @@ namespace BALL
 				/** get the directory where the icons for this program are located */
 				String getImageDirectory();
 				
+				String getDataDirectory();
+				
 				/** @name Attributes */
 				/** pointer to the item that is currently being dragged */
 				DataItem* dragged_item;
@@ -279,6 +281,8 @@ namespace BALL
 				/** The directory of the executable of this program.\n
 				It is used to find subfolders for icons and documentation and has to be set from main.C */
 				String executable_directory_;
+				
+				String data_directory_;
 				
 				friend class ModelItem;
 		};

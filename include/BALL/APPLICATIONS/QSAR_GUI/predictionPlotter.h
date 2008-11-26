@@ -19,10 +19,9 @@ namespace BALL
 				
 				PredictionPlotter(ValidationItem* item);
 				
-				void plotObservedVsExpected(bool zoom);
-				
-				void plotObserved(bool zoom);
-		
+
+			protected:
+				void plot(bool zoom);
 			
 			private:
 				PredictionItem* pred_item_;
@@ -30,11 +29,12 @@ namespace BALL
 				ValidationItem* val_item_;
 				
 				BALL::QSAR::QSARData* data_;
+			
+				void plotObservedVsExpected(bool zoom);
 				
-				void plot(bool zoom);
-			
-			
-			
+				void plotObserved(bool zoom);
+				
+				void plotConfusion(bool zoom);
 			
 			
 		};

@@ -41,7 +41,11 @@ void PredictionPlotter::plot(bool zoom)
 	qwt_plot_->clear();
 	if(val_item_ || data_->getNoResponseVariables()!=0)
 	{
-		plotObservedVsExpected(zoom);
+		if((val_item_ && !val_item_->modelItem()->getRegistryEntry()->regression) || (pred_item_ && !pred_item_->modelItem()->getRegistryEntry()->regression))
+		{
+			plotConfusion(zoom);
+		}
+		else plotObservedVsExpected(zoom);
 	}
 	else
 	{
@@ -212,3 +216,194 @@ void PredictionPlotter::plotObserved(bool zoom)
 		qwt_plot_->setAxisScale(2,min_x,max_x);
 	}
 }
+
+
+void PredictionPlotter::plotConfusion(bool zoom)
+{
+	/// find all PredictionItems whose predictions are to be plotted
+	list<PredictionItem*> pred_items;
+	if(pred_item_!=NULL) pred_items.push_back(pred_item_);
+	else
+	{
+		for(list<ValidationItem*>::iterator it=val_item_->external_validations_.begin(); it!=val_item_->external_validations_.end();it++)
+		{
+			PredictionItem* p = dynamic_cast<PredictionItem*>(*it);
+			if(p) pred_items.push_back(p);
+		}
+	}
+	
+	/// now do the plotting for each PredictionItem
+	
+	vector<int> labels;
+	if(pred_item_) labels = ((ClassificationModel*)pred_item_->modelItem()->model())->getClassLabels();
+	else if(val_item_) labels = ((ClassificationModel*)val_item_->modelItem()->model())->getClassLabels();
+	else
+	{
+		cout<<"no models found whose confusion matrix could be plotted!"<<endl;
+		return;
+	}
+	
+	double min_exp=labels[0];
+	double max_exp=labels[labels.size()-1];
+	map<int,uint> labels_map; // maps the class-IDs to the index in the above vector
+	for(uint i=0; i<labels.size(); i++)
+	{
+		labels_map[labels[i]] = i;
+	}
+	vector<int> TP(labels.size(),0);
+	vector<int> FP(labels.size(),0);
+	vector<int> TN(labels.size(),0);
+	vector<int> FN(labels.size(),0);
+	
+	int p=0;
+	for(list<PredictionItem*>::iterator p_it=pred_items.begin(); p_it!=pred_items.end(); p_it++,p++)
+	{
+		QSARData* p_data;
+		if(pred_item_) p_data = data_;
+		else p_data = (*p_it)->test_data_;
+		const QList<Vector<double> >* results = (*p_it)->results();
+		if(results==0)
+		{
+			cout<<"Results must be read before plotting can be done!"<<endl;
+			return;
+		}
+		if(p_data->getNoResponseVariables()==0)
+		{
+			cout<<"There are no response values in the input data to be plotted as 'expected' within an 'observed-vs-expected' plot !"<<endl;
+			return;
+		}
+		
+		int compound = 0;
+		for(QList<Vector<double> >::ConstIterator it = results->begin(); it != results->end(); it++,compound++)
+		{
+			int observed = (int)((*it)(1));
+			vector<double>* e = p_data->getActivity(compound);
+			int expected = (int)((*e)[0]);
+			delete e;
+			if(observed==expected)
+			{
+				uint id = labels_map[observed];
+				for(uint j=0; j<labels.size();j++)
+				{
+					if(j==id) TP[j]++;
+					else TN[j]++;
+				}
+			}
+			else
+			{
+				uint obs_id = labels_map[observed];
+				uint exp_id = labels_map[expected];
+				for(uint j=0; j<labels.size();j++)
+				{
+					if(j==obs_id) FP[j]++;
+					else if(j==exp_id) FN[j]++;
+					else TN[j]++;
+				}
+			}
+		}
+	}
+	
+// 	for(uint a=0; a<4; a++) // for TP,..,FN
+// 	{
+// 		if(a==0) cout<<"TP:  ";
+// 		else if(a==1) cout<<"FP:  ";
+// 		else if(a==2) cout<<"TN:  ";
+// 		else if(a==3) cout<<"FN:  ";
+// 		for(uint i=0; i<TP.size(); i++) // for each class
+// 		{
+// 			if(a==0) cout<<TP[i]<<"  ";
+// 			else if(a==1) cout<<FP[i]<<"  ";
+// 			else if(a==2) cout<<TN[i]<<"  ";
+// 			else if(a==3) cout<<FN[i]<<"  ";
+// 		}
+// 		cout<<endl<<flush;
+// 	}	
+// 	cout<<"sums: "<<TP[0]+FP[0]+TN[0]+FN[0]<<"  "<<TP[1]+FP[1]+TN[1]+FN[1]<<"  "<<TP[2]+FP[2]+TN[2]+FN[2]<<"  "<<TP[3]+FP[3]+TN[3]+FN[3]<<endl<<flush;
+	
+	int min_y = 999999;
+	int max_y = -999999;
+	vector<QwtPlotCurve*> curves(4);
+	vector<double*> x(4);
+	vector<double*> y(4);
+	
+	for(uint a=0; a<4; a++) // for TP,..,FN
+	{
+		curves[a] = new QwtPlotCurve;
+		x[a] = new double[labels.size()];
+		y[a] = new double[labels.size()];
+		QColor c(135,135,135);
+		if(a==0)
+		{ 
+			c = QColor(70,170,50); // green
+		}
+		else if(a==1)
+		{
+			c = QColor(10,30,195); // blue
+		}
+		else if(a==2)
+		{
+			c = QColor(194,195,7); // yellow
+		}
+		else if(a==3)
+		{
+			c = QColor(100,50,80); // ?!
+		}
+		QPen pen(c);
+		for(uint i=0; i<labels.size(); i++) // for each class
+		{
+			x[a][i] = labels[i];
+			if(a==0) y[a][i] = TP[i]; 
+			else if(a==1) y[a][i] = FP[i]; 
+			else if(a==2) y[a][i] = TN[i];
+			else if(a==3) y[a][i] = FN[i];
+			if(y[a][i]<min_y) min_y=(int)y[a][i];
+			if(y[a][i]>max_y) max_y=(int)y[a][i];
+			
+			QwtPlotMarker* marker = new QwtPlotMarker;
+			marker->setValue(x[a][i],y[a][i]);
+			QwtSymbol symbol = data_symbol;
+			symbol.setPen(pen);
+			QBrush brush(c);
+			symbol.setBrush(brush);
+			//symbol.setSize(0.2,y[a][i]);
+			marker->setSymbol(symbol);
+			marker->attach(qwt_plot_);
+			
+			if(show_data_labels)
+			{
+				String s;
+				if(a==0) s="TP";
+				else if(a==1) s="FP";
+				else if(a==2) s="TN";
+				else if(a==3) s="FN";
+				//s+=", class "+String(labels[i]);
+				QwtText label(s.c_str());
+				label.setFont(data_label_font);
+				marker->setLabel(label);
+				marker->setLabelAlignment(data_label_alignment);
+			}
+		}
+		curves[a]->setData(x[a],y[a],labels.size());
+		delete x[a];
+		delete y[a];
+		if(a==0) pen.setWidth(3);
+		curves[a]->setPen(pen);
+		curves[a]->attach(qwt_plot_); // attached object will be automatically deleted by QwtPlot
+	}
+	
+	QString s1 = "class ID";
+	QString s2 = "number of TP,FP,TN,FN";
+	qwt_plot_->setAxisTitle(0,s2);
+	qwt_plot_->setAxisTitle(2,s1);
+	
+	if(zoom)
+	{
+		double x_border=(max_exp-min_exp)*0.05;
+		double y_border=(max_y-min_y)*0.05;
+		min_exp-=x_border; min_y-=y_border;
+		max_exp+=x_border; max_y+=y_border;
+		qwt_plot_->setAxisScale(QwtPlot::xBottom,min_exp,max_exp);
+		qwt_plot_->setAxisScale(QwtPlot::yLeft,min_y,max_y);
+	}
+}
+

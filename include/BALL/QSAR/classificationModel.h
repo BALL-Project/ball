@@ -42,6 +42,8 @@ namespace BALL
 				//@{
 				/** a ClassificationValidation object, that is used to validate this model and that will contain the results of the validations */
 				ClassificationValidation* validation;
+				
+				vector<int> getClassLabels();
 				//@}
 				
 				

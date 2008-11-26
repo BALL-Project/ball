@@ -63,6 +63,7 @@ ValidationItem::~ValidationItem()
 		// one fold validation (this item) is being deleted, so that the average of the remaining predictive qualities has to calculated anew ...
 		nested_val_item_->change();
 	}
+	delete plotter_;
 }
 
 
@@ -197,9 +198,16 @@ void ValidationItem::showPlotter()
 
 void ValidationItem::changeSlot()
 {
-	DataItem::change();
+	change();
 	if(partitioner_!=NULL) partitioner_->change();
 	view_->data_scene->update();
+}
+
+void ValidationItem::change()
+{
+	DataItem::change();
+	delete plotter_; 
+	plotter_=NULL;
 }
 
 void ValidationItem::setPartitioner(PartitioningItem* partitioner)

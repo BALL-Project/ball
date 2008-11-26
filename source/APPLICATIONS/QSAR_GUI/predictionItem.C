@@ -21,7 +21,7 @@ PredictionItem::PredictionItem(InputDataItem* input_item, ModelItem* model_item,
 	model_item_ = model_item;
 	setPixmap(QPixmap("./images/prediction.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 	name_ = "Prediction for " + input_item->name();
-	pred_plotter_ = NULL;
+	plotter_ = NULL;
 	dotted_edge_ = NULL;
 	createActions();
 }
@@ -34,7 +34,7 @@ PredictionItem::PredictionItem(PredictionItem& item)
 	model_item_ = item.model_item_;
 	results_ = item.results_;
 	input_data_item_ = item.input_data_item_;
-	pred_plotter_ = item.pred_plotter_;
+	plotter_ = item.plotter_;
 	dotted_edge_ = NULL;
 	createActions();
 	
@@ -43,7 +43,7 @@ PredictionItem::PredictionItem(PredictionItem& item)
 PredictionItem::~PredictionItem()
 {
 	delete dotted_edge_;
-	delete pred_plotter_;
+	
 	if (view_->name == "view")
 	{
 		//if the item was connected to others, delete it from its respective pipeline
@@ -96,7 +96,7 @@ PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*
 	addToPipeline();
 	filenames_map.insert(make_pair(conf.output,this));
 	setSavedAs(conf.output.c_str());
-	pred_plotter_ = 0;
+	plotter_ = 0;
 	done_ = 0;
 	createActions();
 }
@@ -175,11 +175,11 @@ void PredictionItem::showPredictionPlotter()
 		QMessageBox::information(view_,"No predictions","No predictions have been done yet that could be plotted!\nTherefore, click \"Execute Pipeline\" first.");
 		return;	
 	}
-	if(pred_plotter_ == NULL)
+	if(plotter_ == NULL)
 	{
-		pred_plotter_=new PredictionPlotter(this);
+		plotter_=new PredictionPlotter(this);
 	}
-	pred_plotter_->show();
+	plotter_->show();
 }
 
 
@@ -217,3 +217,4 @@ void PredictionItem::removeFromPipeline()
 	view_->data_scene->main_window->prediction_pipeline_.erase(this);
 	view_->data_scene->main_window->all_items_pipeline_.erase(this);
 }
+

@@ -163,13 +163,14 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, MainWin
 
 	///add button for this page to the ListWidget
 	QListWidgetItem *propertyButton = new QListWidgetItem(contentsWidget);
-	propertyButton->setIcon(QIcon("./images/modelproperties.png"));
+	String dir = model_item_->view()->data_scene->main_window->getImageDirectory();
+	propertyButton->setIcon(QIcon((dir+"modelproperties.png").c_str()));
 	propertyButton->setText(tr("Model Properties"));
 	propertyButton->setTextAlignment(Qt::AlignHCenter);
 	propertyButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
 	QListWidgetItem *dataButton = new QListWidgetItem(contentsWidget);
-	dataButton->setIcon(QIcon("./images/sdf_icon.png"));
+	dataButton->setIcon(QIcon((dir+"sdf_icon.png").c_str()));
 	dataButton->setText(tr("Descriptors"));
 	dataButton->setTextAlignment(Qt::AlignHCenter);
 	dataButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -214,11 +215,13 @@ ModelConfigurationDialog::~ModelConfigurationDialog()
 ///function for setting up the icon box to the left of the dialog
 void ModelConfigurationDialog::createIcons()
 {
+	String dir = model_item_->view()->data_scene->main_window->getImageDirectory();
+	
 	///add button for model parameter page
 	if (entryHasParameters)
 	{
 		QListWidgetItem* modelParamButton = new QListWidgetItem(contentsWidget);
-		modelParamButton->setIcon(QIcon("./images/modelparameters.png"));
+		modelParamButton->setIcon(QIcon((dir+"modelparameters.png").c_str()));
 		modelParamButton->setText(tr("Model Parameters"));
 		modelParamButton->setTextAlignment(Qt::AlignHCenter);
 		modelParamButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -228,7 +231,7 @@ void ModelConfigurationDialog::createIcons()
 	if(entryHasKernel)
 	{
 		QListWidgetItem* kernelParamButton = new QListWidgetItem(contentsWidget);
-		kernelParamButton->setIcon(QIcon("./images/kernelparameters.png"));
+		kernelParamButton->setIcon(QIcon((dir+"kernelparameters.png").c_str()));
 		kernelParamButton->setText(tr("Kernel Parameters"));
 		kernelParamButton->setTextAlignment(Qt::AlignHCenter);
 		kernelParamButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -238,7 +241,7 @@ void ModelConfigurationDialog::createIcons()
 	if(isOptimizable || entryHasKernel)
 	{
 		QListWidgetItem* optimizeButton = new QListWidgetItem(contentsWidget);
-		optimizeButton->setIcon(QIcon("./images/modeloptimization.png"));
+		optimizeButton->setIcon(QIcon((dir+"modeloptimization.png").c_str()));
 		optimizeButton->setText(tr("Optimize Parameters"));
 		optimizeButton->setTextAlignment(Qt::AlignHCenter);
 		optimizeButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);

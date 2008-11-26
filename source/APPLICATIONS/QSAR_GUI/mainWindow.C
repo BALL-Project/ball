@@ -90,7 +90,6 @@ void MainWindow::init()
 	if(executable_directory_!="")
 	{
 		executable_directory_ = executable_directory_.substr(0,executable_directory_.find_last_of(settings.path_separator));
-		cout<<"executable_directory_="<<executable_directory_<<endl;
 	}
 
 	///create actions, menus, tool bars, status bar, dock windows and dialogs
@@ -112,6 +111,18 @@ void MainWindow::init()
 	min_drag_time=0.3;
 
 	connect(this, SIGNAL(sendNewValue(int)), progress_bar_, SLOT(setValue(int))); 
+	
+	Path p;
+	String file = "QSAR"+settings.path_separator+"atomic_electron_affinities.data";
+	String dir = p.find(file);
+	if(dir=="")
+	{
+		data_directory_ = executable_directory_+settings.path_separator+"data"+settings.path_separator;
+	}
+	else
+	{
+		data_directory_ = "QSAR"+settings.path_separator;
+	}
 	
 	documentation_= 0;
 	showDocumentation();
@@ -1571,6 +1582,11 @@ bool MainWindow::checkForEmptyPipelines()
 BALL::String MainWindow::getImageDirectory()
 {
 	return executable_directory_+settings.path_separator+"images"+settings.path_separator;
+}
+
+BALL::String MainWindow::getDataDirectory()
+{
+	return data_directory_;
 }
 
 

@@ -85,8 +85,6 @@ namespace BALL
 				InputDataItem* input_data_item_;
 				DottedEdge* dotted_edge_;
 				
-				PredictionPlotter* pred_plotter_;
-				
 				QSARData* test_data_;
 				
 				list<InputPartitionItem*> trainings_partitions_;
