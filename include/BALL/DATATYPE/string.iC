@@ -4,8 +4,6 @@
 // $Id: string.iC,v 1.44 2003/08/26 08:04:12 oliver Exp $
 //
 
-#include <locale>
-
 BALL_INLINE 
 String::String()
 	throw()
