@@ -389,8 +389,8 @@ namespace BALL
 		friend class BoxIteratorTraits;
 
 		/** BoxIterators iterate over all non-empty boxes that lie in the
-				direct neighborhood to a box. Such an iterator traverses at most
-				26 boxes.
+				direct neighborhood to a box, and over the box itself. 
+				Such an iterator traverses at most 27 boxes.
 		*/
 		typedef ForwardIterator
 			<HashGridBox3<Item>, HashGridBox3<Item>,
