@@ -25,28 +25,28 @@ Registry::Registry()
 	
 	/// add new Model classes here:
 	
-	RegistryEntry r0(0,1,"Multiple Linear Regression", "MLR", (CreateMethod) &ModelFactory<MLRModel>::create,this,0);
-	registered_models.push_back(r0);
+	RegistryEntry r0(0,1,"Multiple Linear Regression", "MLR", (CreateMethod) &ModelFactory<MLRModel>::create);
+	addEntry(r0,0);
 	
-	RegistryEntry r00(0,1,"Ridge Regression","RR",(CreateMethod) &ModelFactory<RRModel>::create,this,1);
+	RegistryEntry r00(0,1,"Ridge Regression","RR",(CreateMethod) &ModelFactory<RRModel>::create);
 	r00.parameterNames.push_back("lambda");
 	r00.parameterDefaults.push_back(0.003);
-	registered_models.push_back(r00);
+	addEntry(r00,1);
 	
-	RegistryEntry r01(0,1,"Principal Component Regression","PCR",(CreateMethod) &ModelFactory<PCRModel>::create,this,2);
+	RegistryEntry r01(0,1,"Principal Component Regression","PCR",(CreateMethod) &ModelFactory<PCRModel>::create);
 	r01.parameterNames.push_back("Fraction of variance to be explained");
 	r01.parameterDefaults.push_back(0.95);
 	r01.latent_variables=1;
-	registered_models.push_back(r01);
+	addEntry(r01,2);
 	
-	RegistryEntry r1(0,1,"Partial Least Squares","PLS",(CreateMethod) &ModelFactory<PLSModel>::create,this,3);
+	RegistryEntry r1(0,1,"Partial Least Squares","PLS",(CreateMethod) &ModelFactory<PLSModel>::create);
 	r1.parameterNames.push_back("number of PLS components");
 	r1.parameterDefaults.push_back(10);
 	r1.optimizableParameters.push_back(0);
 	r1.latent_variables=1;
-	registered_models.push_back(r1);
+	addEntry(r1,3);
 
-	RegistryEntry r2(0,1,"Orthogonal Partial Least Squares","OPLS",(CreateMethod) &ModelFactory<OPLSModel>::create,this,4);
+	RegistryEntry r2(0,1,"Orthogonal Partial Least Squares","OPLS",(CreateMethod) &ModelFactory<OPLSModel>::create);
 	r2.parameterNames.push_back("number of OPLS components");
 	r2.parameterNames.push_back("number of PLS components");
 	r2.parameterDefaults.push_back(5);
@@ -54,43 +54,43 @@ Registry::Registry()
 	r2.optimizableParameters.push_back(0);
 	r2.optimizableParameters.push_back(1);
 	r2.latent_variables=1;
-	registered_models.push_back(r2);
+	addEntry(r2,4);
 	
-	RegistryEntry r3(0,1,"Automated Lazy Learning","ALL",(CreateMethod) &ModelFactory<ALLModel>::create,this,5);
+	RegistryEntry r3(0,1,"Automated Lazy Learning","ALL",(CreateMethod) &ModelFactory<ALLModel>::create);
 	r3.parameterNames.push_back("kernel width");
 	r3.parameterNames.push_back("lambda");
 	r3.parameterDefaults.push_back(6);
 	r3.parameterDefaults.push_back(0.003);
 	r3.optimizableParameters.push_back(0);
-	registered_models.push_back(r3);
+	addEntry(r3,5);
 	
-	RegistryEntry r31(0,1,"k Nearest Neighbor Regression","KNN",(CreateMethod) &ModelFactory<KNNModel>::create,this,6);
+	RegistryEntry r31(0,1,"k Nearest Neighbor Regression","KNN",(CreateMethod) &ModelFactory<KNNModel>::create);
 	r31.parameterNames.push_back("k (number of nearest neighbors)");
 	r31.parameterNames.push_back("lambda");
 	r31.parameterDefaults.push_back(3);
 	r31.parameterDefaults.push_back(0.003);
 	r31.optimizableParameters.push_back(0);
-	registered_models.push_back(r31);
+	addEntry(r31,6);
 	
-	RegistryEntry r4(1,1,"Kernel Partial Least Squares","KPLS",(CreateKernel1) &ModelFactory<KPLSModel>::createKernel1, (CreateKernel2) &ModelFactory<KPLSModel>::createKernel2,this,7);
+	RegistryEntry r4(1,1,"Kernel Partial Least Squares","KPLS",(CreateKernel1) &ModelFactory<KPLSModel>::createKernel1, (CreateKernel2) &ModelFactory<KPLSModel>::createKernel2);
 	r4.parameterNames.push_back("number of PLS components");
 	r4.parameterDefaults.push_back(10);
 	r4.optimizableParameters.push_back(0);
 	r4.latent_variables=1;
-	registered_models.push_back(r4);
+	addEntry(r4,7);
 	
-	RegistryEntry r5(1,1,"Kernel Principal Component Regression","KPCR",(CreateKernel1) &ModelFactory<KPCRModel>::createKernel1, (CreateKernel2) &ModelFactory<KPCRModel>::createKernel2,this,8);
+	RegistryEntry r5(1,1,"Kernel Principal Component Regression","KPCR",(CreateKernel1) &ModelFactory<KPCRModel>::createKernel1, (CreateKernel2) &ModelFactory<KPCRModel>::createKernel2);
 	r5.parameterNames.push_back("Fraction of variance to be explained");
 	r5.parameterDefaults.push_back(0.95);
 	r5.latent_variables=1;
-	registered_models.push_back(r5);
+	addEntry(r5,8);
 	
-	RegistryEntry r6(1,1,"Gausssian Process","GP",(CreateKernel1) &ModelFactory<GPModel>::createKernel1, (CreateKernel2) &ModelFactory<GPModel>::createKernel2,this,9);
+	RegistryEntry r6(1,1,"Gausssian Process","GP",(CreateKernel1) &ModelFactory<GPModel>::createKernel1, (CreateKernel2) &ModelFactory<GPModel>::createKernel2);
 	r6.parameterNames.push_back("lambda");
 	r6.parameterDefaults.push_back(0.03);
-	registered_models.push_back(r6);
+	addEntry(r6,9);
 	
-	RegistryEntry r9(1,1,"Support Vector Regression","SVR",(CreateKernel1) &ModelFactory<LibsvmModel>::createKernel1, NULL,this,10);
+	RegistryEntry r9(1,1,"Support Vector Regression","SVR",(CreateKernel1) &ModelFactory<LibsvmModel>::createKernel1, NULL);
 	r9.parameterNames.push_back("use nu-SVR (else epsilon-SVR)?");
 	r9.parameterNames.push_back("use shrinking heuristic?");
 	r9.parameterNames.push_back("nu");
@@ -103,25 +103,25 @@ Registry::Registry()
 	r9.parameterDefaults.push_back(0.1);
 	r9.parameterDefaults.push_back(1e-3);
 	r9.parameterDefaults.push_back(1);
-	registered_models.push_back(r9);
+	addEntry(r9,10);
 	
-	RegistryEntry r7(0,0,"Linear Discriminant Analysis","LDA",(CreateMethod) &ModelFactory<LDAModel>::create,this,11);
+	RegistryEntry r7(0,0,"Linear Discriminant Analysis","LDA",(CreateMethod) &ModelFactory<LDAModel>::create);
 	r7.parameterNames.push_back("lambda");
 	r7.parameterDefaults.push_back(0.03);
-	registered_models.push_back(r7);
+	addEntry(r7,11);
 	
-// 	RegistryEntry r8(0,0,"Logistical Regression","Logit",(CreateMethod) &ModelFactory<LogitModel>::create,this,12);
-// 	registered_models.push_back(r8);
+// 	RegistryEntry r8(0,0,"Logistical Regression","Logit",(CreateMethod) &ModelFactory<LogitModel>::create);
+// 	addEntry(r8,12);
 	
-	RegistryEntry r10(0,0,"Simple Naive Bayes","snB",(CreateMethod) &ModelFactory<SNBModel>::create,this,13);
-	r10.parameterNames.clear();
-	r10.parameterDefaults.clear();
-	registered_models.push_back(r10);
+	RegistryEntry r10(0,0,"Simple Naive Bayes","snB",(CreateMethod) &ModelFactory<SNBModel>::create);
+	addEntry(r10,13);
 	
-	RegistryEntry r11(0,0,"Naive Bayes","nB",(CreateMethod) &ModelFactory<NBModel>::create,this,14);
+	RegistryEntry r11(0,0,"Naive Bayes","nB",(CreateMethod) &ModelFactory<NBModel>::create);
 	r11.parameterNames.push_back("discretization steps");
 	r11.parameterDefaults.push_back(4);
-	registered_models.push_back(r11);
+	addEntry(r11,14);
+	
+	
 	
 	classification_statistics[0] = "average sensitivity";
 	classification_statistics[1] = "weighted sensitivity";
@@ -151,16 +151,36 @@ Registry::~Registry()
 {
 }
 
-RegistryEntry* Registry::getRegistryEntry(String model_name)
+RegistryEntry* Registry::getEntry(String model_name)
 {
-	map<String,int>::iterator it = model_map.find(model_name);
-	if(it!=model_map.end())
+	map<String,int>::iterator name_it = model_map.find(model_name);
+	bool ok=0;
+	if(name_it!=model_map.end())
 	{
-		return &registered_models[it->second];
+		map<int,RegistryEntry>::iterator model_it = registered_models.find(name_it->second);
+		if(model_it!=registered_models.end())
+		{	
+			return &model_it->second;
+		}
+	}
+	if(!ok)
+	{
+		String mess = "A model with the name \""+model_name+"\"does not exist!";
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model creation error",mess.c_str());
+	}	
+	return NULL;
+}
+
+RegistryEntry* Registry::getEntry(int ID)
+{
+	map<int,RegistryEntry>::iterator it = registered_models.find(ID);
+	if(it!=registered_models.end())
+	{
+		return &it->second;
 	}
 	else
 	{
-		String mess = "A model with the name \""+model_name+"\"does not exist!";
+		String mess = "A model with the ID \""+String(ID)+"\"does not exist!";
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model creation error",mess.c_str());
 	}	
 	return NULL;
@@ -232,10 +252,40 @@ const map<uint,String>* Registry::getClassificationStatistics()
 {
 	return &classification_statistics;
 }
-	
+
+void Registry::addEntry(RegistryEntry entry, int uniqueID)
+{
+	if(model_map.find(entry.name_abreviation)!=model_map.end())
+	{
+		String mess = "A RegistryEntry for key\""+String(entry.name_abreviation)+"\" already exists!";
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Registry error",mess.c_str());
+	}
+	if(registered_models.find(uniqueID)!=registered_models.end())
+	{
+		String mess = "A RegistryEntry for ID\""+String(uniqueID)+"\" already exists!";
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Registry error",mess.c_str());
+	}
+	entry.registry_ = this;
+	model_map[entry.name_abreviation] = uniqueID;
+	registered_models.insert(make_pair(uniqueID,entry));	
+}
+
+RegistryEntryIterator Registry::beginEntry()
+{
+	return registered_models.begin();
+}
+
+RegistryEntryIterator Registry::endEntry()
+{
+	return registered_models.end();
+}
+
+
+
+//  -----  RegistryEntry  -------
 	
 
-RegistryEntry::RegistryEntry(bool k, bool r, String n, String ab, CreateMethod c0, Registry* reg, uint ID)
+RegistryEntry::RegistryEntry(bool k, bool r, String n, String ab, CreateMethod c0)
 {
 	kernel = k;
 	regression = r;
@@ -244,18 +294,14 @@ RegistryEntry::RegistryEntry(bool k, bool r, String n, String ab, CreateMethod c
 	create = c0;
 	createKernel1 = NULL;
 	createKernel2 = NULL;
-	if(reg->model_map.find(ab)!=reg->model_map.end())
-	{
-		String mess = "A RegistryEntry for key\""+String(ab)+"\" already exists!";
-		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Registry error",mess.c_str());
-	}
-	reg->model_map[ab] = ID;
-	registry_ = reg;
 	latent_variables = 0;
+	parameterNames.resize(0);
+	parameterDefaults.resize(0);
+	optimizableParameters.clear();
 }
 
 
-RegistryEntry::RegistryEntry(bool k, bool r, String n, String ab, CreateKernel1 c1, CreateKernel2 c2, Registry* reg, uint ID)
+RegistryEntry::RegistryEntry(bool k, bool r, String n, String ab, CreateKernel1 c1, CreateKernel2 c2)
 {
 	kernel = k;
 	regression = r;
@@ -264,14 +310,26 @@ RegistryEntry::RegistryEntry(bool k, bool r, String n, String ab, CreateKernel1 
 	create = NULL;
 	createKernel1 = c1;
 	createKernel2 = c2;
-	if(reg->model_map.find(ab)!=reg->model_map.end())
-	{
-		String mess = "A RegistryEntry for key\""+String(ab)+"\" already exists!";
-		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Registry error",mess.c_str());
-	}
-	reg->model_map[ab] = ID;
-	registry_ = reg;
 	latent_variables = 0;
+	parameterNames.resize(0);
+	parameterDefaults.resize(0);
+	optimizableParameters.clear();
+}
+
+RegistryEntry::RegistryEntry(const RegistryEntry& entry)
+{
+	kernel = entry.kernel;
+	regression = entry.regression;
+	name = entry.name;
+	name_abreviation = entry.name_abreviation;
+	create = entry.create;
+	createKernel1 = entry.createKernel1;
+	createKernel2 = entry.createKernel2;
+	latent_variables = entry.latent_variables;
+	parameterNames = entry.parameterNames;
+	parameterDefaults = entry.parameterDefaults;
+	optimizableParameters = entry.optimizableParameters;
+	registry_ = entry.registry_;
 }
 
 

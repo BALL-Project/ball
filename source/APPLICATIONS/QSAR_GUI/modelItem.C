@@ -222,11 +222,7 @@ ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& fi
 	}
 	input_ =  (InputDataItem*) it->second;
 	Registry* reg = view_->data_scene->main_window->registry();
-	if((uint)conf.model_no>reg->registered_models.size())
-	{
-		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model reading error","The given model-no does not exist!");
-	}
-	entry_ = &reg->registered_models[conf.model_no];
+	entry_ = reg->getEntry(conf.model_no);
 	if(!entry_->kernel)
 	{
 		model_ = (entry_->create)(*input_->data());

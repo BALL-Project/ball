@@ -313,6 +313,16 @@ bool ValidationItem::execute()
 			setResultString(coeff_stderr_ratio_);
 		}
 	}
+	else if(type_==4)
+	{
+		double mean_q2=0;
+		for(uint i=1;i<=result_of_rand_test_.getRowCount();i++)
+		{
+			mean_q2+=result_of_rand_test_(i,2);
+		}
+		mean_q2/=result_of_rand_test_.getRowCount();
+		setResultString(mean_q2);
+	}
 	else setResultString(q2_);
 	
 	done_ = 1;

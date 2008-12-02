@@ -745,13 +745,14 @@ void MainWindow::createDockWindows()
 		model_list_scene_.addItem(text0);
 		rect0->setPen(pen);
 		text0->setPos(x_offset,y-30);
-		for(uint i=0; i<reg_->registered_models.size();i++)
+		uint i=0;
+		for(RegistryEntryIterator it=reg_->beginEntry(); it!=reg_->endEntry(); it++,i++)
 		{ 
-			if(a==0 && (reg_->registered_models[i].kernel || !reg_->registered_models[i].regression)) continue; // create only lin. model 
-			else if(a==1 && (!reg_->registered_models[i].kernel ||  !reg_->registered_models[i].regression)) continue; // create only kernel models
-			else if(a==2 && (reg_->registered_models[i].regression)) continue; // create only classification models
+			if(a==0 && (it->second.kernel || !it->second.regression)) continue; // create only lin. model 
+			else if(a==1 && (!it->second.kernel ||  !it->second.regression)) continue; // create only kernel models
+			else if(a==2 && (it->second.regression)) continue; // create only classification models
 			
-			ModelItem* item = new ModelItem(&reg_->registered_models[i], model_list_);
+			ModelItem* item = new ModelItem(&(it->second), model_list_);
 			model_list_scene_.addItem(item);
 			uint col=no_models%3;
 			uint row=no_models/3;

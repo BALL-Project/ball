@@ -44,13 +44,15 @@ namespace BALL
 				@param ID *unique* identifier for the model
 				@param n the name of the model 
 				@param ab *unique* abbreviation of the model-name */
-				RegistryEntry(bool k, bool r, String n, String ab, CreateMethod c0, Registry* reg, uint ID);
+				RegistryEntry(bool k, bool r, String n, String ab, CreateMethod c0);
 				
 				/** Constructor for a RegistryEntry for a non-linear model.
 				@param ID *unique* identifier for the model 
 				@param n the name of the model 
 				@param ab *unique* abbreviation of the model-name */
-				RegistryEntry(bool k, bool r, String n, String ab, CreateKernel1 c1, CreateKernel2 c2, Registry* reg, uint ID);
+				RegistryEntry(bool k, bool r, String n, String ab, CreateKernel1 c1, CreateKernel2 c2);
+				
+				RegistryEntry(const RegistryEntry& entry);
 				
 				~RegistryEntry();
 				
@@ -73,9 +75,12 @@ namespace BALL
 				
 			private:
 				Registry* registry_;
+				
+				friend class Registry;
 		};
 		
 		
+		typedef map<int,RegistryEntry>::iterator RegistryEntryIterator;
 		
 		class Registry
 		{
@@ -83,8 +88,6 @@ namespace BALL
 				Registry();
 
 				~Registry();
-				
-				vector<RegistryEntry> registered_models;
 				
 				/** default value for first parameter of non-rbf kernels */
 				double default_kernel_par1;
@@ -119,8 +122,13 @@ namespace BALL
 				double default_gridsearch_par1_start;
 				double default_gridsearch_par2_start;
 				
+				void addEntry(RegistryEntry entry, int uniqueID);
+				
 				/** returns the RegistryEntry for a given model name */
-				RegistryEntry* getRegistryEntry(String model_name);
+				RegistryEntry* getEntry(String model_name);
+				
+				/** returns the RegistryEntry for a given model ID */
+				RegistryEntry* getEntry(int ID);
 				
 				/** return the ID of a specified model */
 				int getModelNo(String model_name);
@@ -130,8 +138,16 @@ namespace BALL
 				String getValidationName(uint no);
 				const map<uint,String>* getClassificationStatistics();
 				
+				/** returns an iterator to the first model in model_map */
+				RegistryEntryIterator beginEntry();
+				
+				/** returns an iterator past the last model of model_map */
+				RegistryEntryIterator endEntry();
+				
 				
 			private:
+				map<int,RegistryEntry> registered_models;
+				
 				/** enable fast finding of a RegistryEntry for a given model name */
 				map<String,int> model_map;
 				
