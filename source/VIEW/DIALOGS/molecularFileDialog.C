@@ -396,6 +396,7 @@ System* MolecularFileDialog::readPDBFile(String filename, String system_name)
 	try
 	{
 		PDBFile pdb_file(filename);
+		pdb_file.selectAllModels();
 		pdb_file >> *system;
 		pdb_file.close();
 	}
