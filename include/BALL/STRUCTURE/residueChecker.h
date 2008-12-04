@@ -18,12 +18,19 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_STRUCTURE_FRAGMENT_DB_H
-#	include <BALL/STRUCTURE/fragmentDB.h>
+#ifndef BALL_CONCEPT_PROCESSOR_H
+# include <BALL/CONCEPT/processor.h>
+#endif
+
+#ifndef BALL_DATATYPE_BITVECTOR_H
+# include <BALL/DATATYPE/bitVector.h>
 #endif
 
 namespace BALL
 {
+	class FragmentDB;
+	class Residue;
+
 	/**	Residue Consistency Checker.
 			This processor checks residues for internal consistency.
 			It identifies missing or superfluous atoms, suspect bond lengths

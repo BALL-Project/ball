@@ -14,6 +14,8 @@
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/DATATYPE/hashSet.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
+#include <BALL/KERNEL/residue.h>
 
 using namespace std;
 
