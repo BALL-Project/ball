@@ -39,10 +39,6 @@
  #include <BALL/STRUCTURE/defaultProcessors.h>
 #endif
 
-#ifndef BALL_STRUCTURE_FRAGMENTDB_H
- #include <BALL/STRUCTURE/fragmentDB.h>
-#endif
-
 class QLineEdit;
 
 namespace BALL
