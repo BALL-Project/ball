@@ -43,6 +43,9 @@ class FragmentDB
   Fragment* getFragmentCopy(const String& /fragment_name/) const;
   Molecule* getMoleculeCopy(const String& /fragment_name/) const;
   Residue* getResidueCopy(const String& /fragment_name/) const;
+	const StringHashMap<String>& getNamingStandard(const String& /std/) const
+		throw(IllegalKey);
+	vector<String> getAvailableNamingStandards() const;
   const String& getDefaultNamingStandard() const;
 	// BAUSTELLE
   // StringHashMap<StringHashMap<String>*>& getNamingStandards();
