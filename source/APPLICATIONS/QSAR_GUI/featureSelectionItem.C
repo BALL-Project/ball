@@ -296,7 +296,7 @@ void FeatureSelectionItem::writeConfigSection(ofstream& out)
 		out << "k_fold = "<< k() <<  "\n";
 		out<<"quality_increase_cutoff = "<<quality_increase_cutoff_<<"\n";
 	}
-	else
+	if(type_==0||type_==4||type_==5)
 	{
 		out<<"cor_threshold = "<<getCorThreshold()<<endl;
 	}

@@ -738,7 +738,7 @@ ValidationConfiguration ConfigIO::readValidationConfiguration(istream* input)
 		}
 	}
 		
-	if(conf.data=="" && (conf.k_folds>0 || conf.bootstrap_samples>0))
+	if(conf.data=="")
 	{
 		throw Exception::ConfigurationReadingError(__FILE__,__LINE__,"QSARData file must be specified within config-file!");
 	}
