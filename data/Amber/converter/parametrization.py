@@ -6,8 +6,11 @@ class Torsion:
 		self.params = []
 
 class HBond:
-	pass
-
+	def __init__(self, p):
+		self.i = p[0]
+		self.j = p[1]
+		self.a = float(p[2])
+		self.b = float(p[3])
 class ResidueParams:
 	def __init__(self):
 		self.atoms = {}
@@ -44,6 +47,7 @@ class ResidueParams:
 class Parametrization:
 	atoms = {}
 	torsions = {}
+	equivalency_lists = {}
 	improper_torsions = {}
 	bond_stretch = {}
 	angle_bends = {}
@@ -67,11 +71,17 @@ class Parametrization:
 		return self.improper_torsions[partners]
 
 	def write(self, outFile):
+		outFile.write("[Options]\n")
+		outFile.write("key:0\n")
+		outFile.write("@SCEE=1.2\n")
+
 		self.__writeAtomTypes(outFile)
 		self.__writeQuadraticBondStretch(outFile)
 		self.__writeTorsions(outFile)
+		self.__writeImproperTorsions(outFile)
 		self.__writeAngleBend(outFile)
 		self.__writeHydrophilicAtoms(outFile)
+		self.__writeHydrogenBonds(outFile)
 		self.__writeLennardJones(outFile)
 
 	def __writeAtomTypes(self, output):
@@ -114,12 +124,35 @@ class Parametrization:
 
 		for k, v in self.torsions.iteritems():
 			output.write("   1.0  %-2s  %-2s  %-2s  %-2s  " % k)
-			output.write("N  %d  %f  %f  %d \"\"\n" % (len(v.params), 0, 0, 0) )
+			output.write("N  %d  %-3f  %-3f  %d \"\"\n" % (len(v.params), 0, 0, 0) )
 			t = 1
 			for i in v.params:
 				output.write("   1.0  %-2s  %-2s  %-2s  %-2s  " % k)
 				output.write("%d  " % t)
-				output.write("%d  %f  %f  %d   \"\"\n" % i)
+				output.write("%d  %-3f  %-3f  %d   \"\"\n" % i)
+				t += 1
+		output.write("\n")
+
+	def __writeImproperTorsions(self, output):
+		output.write("[ImproperTorsions]\n")
+		output.write("ver:version key:I key:J key:K key:L key:n value:div value:V value:phi0 value:f value:comment\n")
+		output.write("@unit_V=kcal/mol\n")
+		output.write("@unit_phi0=degree\n")
+		output.write("@unit_div=1\n")
+		output.write("@unit_f=1\n")
+		output.write(";\n; energy is calculated as follows:\n;\n")
+		output.write(";   E = (V / div) * (1 + cos(f * phi + phi0))\n;\n;\n")
+		output.write(";  Rev  I   J   K   L   n  div     V         phi0     f    comment\n")
+		output.write(";  --- --- --- --- --- --- --- ---------- ---------- --- -----------------------\n")
+
+		for k, v in self.improper_torsions.iteritems():
+			output.write("   1.0  %-2s  %-2s  %-2s  %-2s  " % k)
+			output.write("N  %d  %-3f  %-3f  %d \"\"\n" % (len(v.params), 0, 0, 0) )
+			t = 1
+			for i in v.params:
+				output.write("   1.0  %-2s  %-2s  %-2s  %-2s  " % k)
+				output.write("%d  " % t)
+				output.write("1  %-3f  %-3f  %d   \"\"\n" % i)
 				t += 1
 		output.write("\n")
 
@@ -144,13 +177,14 @@ class Parametrization:
 
 	def __writeHydrogenBonds(self, output):
 		output.write("[HydrogenBonds]\n")
-		output.write("ver:version key:I key:J value:A value:B")
-		output.write("@unit_A=kcal/mol*A^12")
-		output.write("@unit_B=kcal/mol*A^10")
-		output.write(";\n;\n;  Rev  I   J      A          B")
-		output.write(";  --- --- --- ---------- ----------")
-		for i in h_bonds:
-			output.write("   1.0  %s %s     %f     %f" % (i.i, i.j, i.a, i.b))
+		output.write("ver:version key:I key:J value:A value:B\n")
+		output.write("@unit_A=kcal/mol*A^12\n")
+		output.write("@unit_B=kcal/mol*A^10\n")
+		output.write(";\n;\n;  Rev  I   J      A          B\n")
+		output.write(";  --- --- --- ---------- ----------\n")
+		for i in self.h_bonds:
+			output.write("   1.0  %s %s     %f     %f\n" % (i.i, i.j, i.a, i.b))
+		output.write("\n")
 
 	def __writeLennardJones(self, output):
 		output.write("[LennardJones]\n")
@@ -165,5 +199,10 @@ class Parametrization:
 		for k, v in self.lj_potential.iteritems():
 			output.write("   1.0 %s" % k)
 			output.write("    %f   %f  \"\"\n" % v)
+			if self.equivalency_lists.has_key(k):
+				for i in self.equivalency_lists[k]:
+					output.write("   1.0 %s" % i)
+					output.write("    %f   %f  \"\"\n" % v)
+
 		output.write("\n")
 

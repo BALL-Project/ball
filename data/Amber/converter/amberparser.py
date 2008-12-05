@@ -22,11 +22,8 @@ class AmberParser:
 		self.__parseQuadraticAngleBend(inFile)
 		self.__parseTorsions(inFile)
 		self.__parseImproperTorsions(inFile)
-
-		inFile.readline()
-		inFile.readline()
-		while inFile.readline().strip():
-			pass
+		self.__parseHydrogenBonds(inFile)
+		self.__parseEquivalencyLists(inFile)
 
 		self.__parseLennardJones(inFile)
 
@@ -103,11 +100,15 @@ class AmberParser:
 	def __parseHydrogenBonds(self, input):
 		line = input.readline()
 		while line.strip():
-			hbond = HBond()
-			hbond.i, hbond.j, hbond.a, hbond.b = line.split()
-			self.params.h_bonds.append(hBond)
+			self.params.h_bonds.append(HBond(line.split()[:4]))
 			line = input.readline()
 
+	def __parseEquivalencyLists(self, input):
+		line = input.readline()
+		while line.strip():
+			fields = line.split()
+			self.params.equivalency_lists[fields[0]] = fields[1:]
+			line = input.readline()
 
 	def __parseLennardJones(self, input):
 		line = input.readline()
