@@ -251,6 +251,15 @@ void FeatureSelection::backwardSelection(int k, bool optPar)
 	SortedList<unsigned int>::Iterator des_it;
 	SortedList<unsigned int>::Iterator irr_it;
 	
+	// the quality of the model must always be larger than this value;
+	// if a negative quality_increase_cutoff_ is specified, minimal reduction of
+	// the model's predictive quality by removing descriptors is allowed this way 
+	double min_quality_threshold = q2_allDes;
+	if(quality_increase_cutoff_<0 && min_quality_threshold+quality_increase_cutoff_>=0) 
+	{
+		min_quality_threshold+=quality_increase_cutoff_;
+	}
+	
 	// do while there is an increase of Q^2 
 	while(model_->descriptor_IDs_.size()>1)
 	{	
@@ -305,7 +314,7 @@ void FeatureSelection::backwardSelection(int k, bool optPar)
 		}
 	
 		// if Q^2 is not larger than before, no descriptor is removed and feature selection is stopped.
-		if (best_q2 <= old_q2+quality_increase_cutoff_) 
+		if (best_q2<=old_q2+quality_increase_cutoff_ || best_q2<min_quality_threshold) 
 		{
 			break;
 		}
@@ -320,8 +329,8 @@ void FeatureSelection::backwardSelection(int k, bool optPar)
 
 	delete irrelevantDescriptors;
 	
-	// if feature selection leads to no increase of Q^2, use old descriptors and weights_
-	if(old_q2<q2_allDes) 
+	// if feature selection leads significant decrease of Q^2, use old descriptors and weights_
+	if(old_q2<min_quality_threshold) 
 	{	
 		model_->model_val->setCVRes(q2_allDes);
 		model_->descriptor_IDs_=old_descr;
