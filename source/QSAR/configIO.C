@@ -614,7 +614,7 @@ ValidationConfiguration::ValidationConfiguration()
 	model="";
 	data="";
 	validation_data="";
-	//feat_type=-1;
+	val_type=-1;
 	output="";
 	k_folds=0;
 	bootstrap_samples=0;
@@ -666,6 +666,10 @@ ValidationConfiguration ConfigIO::readValidationConfiguration(istream* input)
 		else if(line.hasPrefix("model_file"))
 		{
 			conf.model = ((String)line.after("=")).trimLeft();
+		}
+		else if(line.hasPrefix("validation_type"))
+		{
+			conf.val_type = ((String)line.after("=")).trimLeft().toInt();
 		}
 		else if(line.hasPrefix("data_file"))
 		{

@@ -71,7 +71,7 @@ ValidationItem::ValidationItem(String& configfile_section, std::map<String, Data
 	: DataItem(view)
 {
 	result_color_ = QColor(205,225,205);
-	
+	type_ = -1;
 	istringstream input;
 	input.str(configfile_section);
 	ValidationConfiguration conf = ConfigIO::readValidationConfiguration(&input);
@@ -114,6 +114,7 @@ ValidationItem::ValidationItem(String& configfile_section, std::map<String, Data
 	num_of_samples_ = conf.bootstrap_samples;
 	num_of_runs_ = conf.no_of_permutation_tests;
 	validation_statistic_ = conf.statistic;
+	type_ = conf.val_type;
 	
 	map<String,DataItem*>::iterator it = filenames_map.find(conf.model);
 	if(it==filenames_map.end())
@@ -136,14 +137,17 @@ ValidationItem::ValidationItem(String& configfile_section, std::map<String, Data
 
 	setSavedAs(conf.output.c_str());
 	
-	///set type of validation to be done:
-	if(k_<2 && conf.external_predictions.size()>0) type_ = 5;
-	else
+	/// if not defined in config-section explicitly, find type of validation to be done:
+	if(type_==-1)
 	{
-		if(k_<=0) type_ = 1;
-		else if(num_of_samples_<=0) type_ = 2;
-		else type_ = 3;
-		if(num_of_runs_>0) type_ = 4;
+		if(k_<2 && conf.external_predictions.size()>0) type_ = 5;
+		else
+		{
+			if(k_<=0) type_ = 1;
+			else if(num_of_samples_<=0) type_ = 2;
+			else type_ = 3;
+			if(num_of_runs_>0) type_ = 4;
+		}
 	}
 	init();	
 }
@@ -429,6 +433,7 @@ void ValidationItem::writeConfigSection(ofstream& out)
 	out << "[Validator]" << "\n";
 	out << "model_file = "<< modelItem()->savedAs().toStdString() << "\n";
 	out << "data_file = "<< modelItem()->inputDataItem()->savedAs().toStdString() << "\n";
+	out << "validation_type = "<<type_<<endl;
 	
 	// for nested cross validation save the names of the prediction output-files in order to be able to restore the pipeline later
 	if(external_validations_.size()>0)

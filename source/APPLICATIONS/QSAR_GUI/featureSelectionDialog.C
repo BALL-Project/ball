@@ -118,7 +118,7 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 	
 	main_layout->addWidget(buttons);
 	setLayout(main_layout);
-	setWindowTitle("Feature Selection:" + fs_item_->name());
+	setWindowTitle(fs_item_->name());
 
 	connect(applyButton, SIGNAL(clicked()), this, SLOT(accept()));
 	connect(buttons, SIGNAL(rejected()), this, SLOT(reject()));

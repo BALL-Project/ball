@@ -98,7 +98,7 @@ namespace BALL
 			String model;
 			String data;
 			String validation_data;
-			//int feat_type;
+			int val_type;
 			String output;
 			int k_folds;
 			int bootstrap_samples;

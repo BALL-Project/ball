@@ -284,13 +284,13 @@ void FeatureSelectionItem::writeConfigSection(ofstream& out)
 	if(done_) out<<"done = "<<done_<<endl;
 	out << "model_file = "<< inputModelItem()->savedAs().toStdString() << "\n";
 	out << "data_file = "<< inputModelItem()->inputDataItem()->savedAs().toStdString() << "\n";
-	int s = getValidationStatistic();
-	String stat = modelItem()->getRegistryEntry()->getStatName(s);
 	out << "feature_selection_type = "<< getType() <<  "\n";
 	if(getType()>0 && getType()!=4)
 	{
-		if(!input_model_item_->getRegistryEntry()->regression)
+		int s = getValidationStatistic();
+		if(!input_model_item_->getRegistryEntry()->regression && s>=0)
 		{
+			String stat = modelItem()->getRegistryEntry()->getStatName(s);
 			out<< "classification_statistic = "<<stat.c_str()<<endl;
 		}
 		out << "k_fold = "<< k() <<  "\n";
