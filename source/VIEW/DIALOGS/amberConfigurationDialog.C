@@ -63,7 +63,7 @@ namespace BALL
 			{
 				// store the new filename in the lineedit field
 
-				parameter_file_edit->setText(filename.c_str());
+				parameter_file_edit->setText(result);
 			}
 		}
 
