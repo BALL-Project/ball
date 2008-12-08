@@ -140,31 +140,32 @@ class InParser:
 		self.fragDB = BALL.FragmentDB("")
 		self.rename = self.fragDB.getNamingStandard("Amber-PDB")
 
-	def __lookup(self, res, name):
+	def __lookup(self, res, name, suffix):
 		try:
-			return str(self.rename[BALL.String(res + ":" + name)])
+			res = str(self.rename[BALL.String(res + ":" + name)]).split(":")
+			return res[0] + suffix + ":" +res[1]
 		except KeyError:
 			pass
 
 		try:
-			return res + ":" + str(self.rename[BALL.String("*:" + name)]).split(":")[1]
+			return res + suffix + ":" + str(self.rename[BALL.String("*:" + name)]).split(":")[1]
 		except KeyError:
 			pass
 
 		try:
-			return str(self.rename[BALL.String(res + ":*")]).split(":")[0] + ":" + name
+			return str(self.rename[BALL.String(res + ":*")]).split(":")[0]  + suffix + ":" + name
 		except KeyError:
 			return None
 
-	def __parseAtoms(self, i, lines, residue):
+	def __parseAtoms(self, i, lines, residue, suffix):
 		while i < len(lines) and lines[i].strip():
 			fields = lines[i].split()
 			name = fields[1]
 			i += 1
-			ball_name = self.__lookup(residue, name)
+			ball_name = self.__lookup(residue, name, suffix)
 
 			if ball_name is None:
-				print "Unknown atom: " + residue + ":" + name
+				print "Unknown atom: " + residue + suffix + ":" + name
 				continue
 
 			atom = self.params.getAtom(ball_name)
@@ -173,7 +174,7 @@ class InParser:
 
 		return i + 1
 
-	def __parseImpropers(self, i, lines, residue):
+	def __parseImpropers(self, i, lines, residue, suffix):
 		while i < len(lines) and not lines[i].startswith("IMPROPER"):
 			i += 1
 
@@ -182,9 +183,9 @@ class InParser:
 			name = lines[i].split()[2]
 			i += 1
 
-			ball_name = self.__lookup(residue, name)
+			ball_name = self.__lookup(residue, name, suffix)
 			if ball_name is None:
-				print "Unknown atom for IMPROPER torsions: " + residue + ":" + name
+				print "Unknown atom for IMPROPER torsions: " + residue + suffix + ":" + name
 				continue
 
 			self.params.impropers.append(ball_name)
@@ -219,8 +220,8 @@ class InParser:
 					break
 				resname = lines[i + 2].split()[0]
 				i += 8
-				i = self.__parseAtoms(i, lines, resname + suffix)
-				i = self.__parseImpropers(i, lines, resname + suffix)
+				i = self.__parseAtoms(i, lines, resname, suffix)
+				i = self.__parseImpropers(i, lines, resname, suffix)
 
 		return self.params
 
