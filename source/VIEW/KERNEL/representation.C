@@ -634,9 +634,15 @@ namespace BALL
 				return "Coordinate System";
 			}
 
-			String name = getModelInformation().getModelName(model_type_).c_str();
+			String name = getModelInformation().getModelName(model_type_) + " " + getCompositeName();
 
-			if (getComposites().size() == 0) return name;
+			return name;
+		}
+
+		String Representation::getCompositeName() const
+			throw()
+		{
+			if (getComposites().size() == 0) return "";
 
 			const Composite* c_ptr = *getComposites().begin();
 
@@ -661,11 +667,9 @@ namespace BALL
 				composite_name = information_.getName();
 			}
 
-			name = name + "  " + composite_name;
+			if (getComposites().size() > 1) composite_name += "...";
 
-			if (getComposites().size() > 1) name += "...";
-
-			return name;
+			return composite_name;
 		}
 
 		void Representation::setComposites(const List<const Composite*>& composites)

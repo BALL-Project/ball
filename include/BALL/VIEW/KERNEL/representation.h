@@ -226,6 +226,10 @@ namespace BALL
 			void setName(const String& name)
 				throw();
 
+			/// Returns a human-readable, potentially abbreviated string describing the molecular entity this representation belongs to
+			String getCompositeName() const
+				throw();
+
 			///
 			void setColoringMethod(ColoringMethod type)
 				throw();
