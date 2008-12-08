@@ -526,7 +526,7 @@ class BALL_VIEW_EXPORT NewSelectionMessage: public Message
 };
 
 /** GeometricObjectSelectionMessage class. \par
-		Send by Scene after picking GeometricObject. \par
+		Sent by Scene after picking GeometricObject. \par
 		Caught by MainControl.
 */
 class BALL_VIEW_EXPORT GeometricObjectSelectionMessage: public Message
