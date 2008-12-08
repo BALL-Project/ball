@@ -48,15 +48,19 @@ namespace BALL
 		#endif
 			
 			listview->setObjectName("MolecularControlList");
-			listview->headerItem()->setText(0, "[visible] Model");
-			listview->headerItem()->setText(1, "Color");
-			listview->headerItem()->setText(2, "Properties");
-			listview->setSortingEnabled(true);
+			listview->headerItem()->setText(0, "[visible] Index");
+			listview->headerItem()->setText(1, "Model");
+			listview->headerItem()->setText(2, "Built from");
+			listview->headerItem()->setText(3, "Color");
+			listview->headerItem()->setText(4, "Properties");
+			listview->setSortingEnabled(false);
 
 			String txt = String("List of the representations: \n") +
-									"1.column: model type and name of the molecular entity, the model was created from\n" +
-									"2.column: used coloring method\n" +
-									"3.column: number of used molecular entities, number of geometric objects. ";
+									"1.column: visible flag\n" +
+									"2.column: model type\n" +
+									"3.column: name of the molecular entity the model was created from\n" +
+									"4.column: used coloring method\n" +
+									"5.column: number of used molecular entities, number of geometric objects. ";
 
 			listview->setToolTip(txt.c_str());
 			
@@ -117,22 +121,27 @@ namespace BALL
 
 			// prevent flickering in GeometricControl, e.g. while a simulation is running
 			// so only update if something changed
-			String new_text1 = rep.getName();
-			bool changed_content = ascii(item->text(0)) != new_text1;
-
 			const ModelInformation& mi = getMainControl()->getModelInformation();
-			String new_text2 = mi.getColoringName(rep.getColoringMethod());
-			changed_content |= ascii(item->text(1)) != new_text2;
 
-			String new_text3 = rep.getProperties();
-			changed_content |= ascii(item->text(2)) != new_text3;
+			String new_text1 = mi.getModelName(rep.getModelType());
+			bool changed_content = ascii(item->text(1)) != new_text1;
+
+			String new_text2 = rep.getCompositeName();
+			changed_content |= ascii(item->text(2)) != new_text2;
+
+			String new_text3 = mi.getColoringName(rep.getColoringMethod());
+			changed_content |= ascii(item->text(3)) != new_text3;
+
+			String new_text4 = rep.getProperties();
+			changed_content |= ascii(item->text(3)) != new_text4;
 
 			if (changed_content)
 			{
 				ignore_change_ = true;
-				item->setText(0, new_text1.c_str());
-				item->setText(1, new_text2.c_str());
-				item->setText(2, new_text3.c_str());
+				item->setText(1, new_text1.c_str());
+				item->setText(2, new_text2.c_str());
+				item->setText(3, new_text3.c_str());
+				item->setText(4, new_text4.c_str());
 			}
 
 			if (rep.isHidden() == (item->checkState(0) == Qt::Checked))
@@ -285,7 +294,9 @@ namespace BALL
 
 			const ModelInformation& mi = getMainControl()->getModelInformation();
 			QStringList sl;
-			sl << rep.getName().c_str()
+			sl << ""
+				 << mi.getModelName(rep.getModelType()).c_str()
+				 << rep.getCompositeName().c_str()
 				 << mi.getColoringName(rep.getColoringMethod()).c_str()
 				 << rep.getProperties().c_str();
 			// create a new list item
@@ -446,14 +457,14 @@ namespace BALL
 			throw()
 		{
 			List<Representation*> selection;
- 			HashMap<QTreeWidgetItem*, Representation*>::ConstIterator it = item_to_representation_.begin();
-			for (; it != item_to_representation_.end(); ++it)
+			QList<QTreeWidgetItem*> selected_items = listview->selectedItems();
+
+			QList<QTreeWidgetItem*>::const_iterator sel_it = selected_items.begin();
+
+			for (; sel_it != selected_items.end(); ++sel_it)
 			{
-				QTreeWidgetItem* item = (*it).first;
-				if (listview->isItemSelected(item))
-				{
-					selection.push_back((*it).second);
-				}
+				if (item_to_representation_.has(*sel_it))
+					selection.push_back(item_to_representation_[*sel_it]);
 			}
 			
 			return selection;
@@ -706,6 +717,7 @@ namespace BALL
 				if (!plane_to_item_.has(plane))
 				{
 					QStringList sl;
+					sl << "";
 					if (plane->cappingEnabled())
 					{
 						sl << "CappingPlane";
@@ -715,6 +727,7 @@ namespace BALL
 						sl << "ClippingPlane";
 					}
 					if (plane->isHidden()) sl << "[hidden]";
+					sl << " ";
 					QTreeWidgetItem* new_item = new QTreeWidgetItem(listview, sl);
 					new_item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
 
