@@ -27,8 +27,6 @@
 		</node>
 	</node>
 	<node>Properties
-		<node>AMINO_ACID
-		</node>
 	</node>
 	<node>Variants
 		<node>ACE-N
