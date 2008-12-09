@@ -62,7 +62,8 @@ CPP_SOURCES=\
 	setClippingPlane.C\
 	serverPreferences.C\
 	snapShotVisualisation.C\
-	stageSettings.C
+	stageSettings.C\
+	stereoSettingsDialog.C
 #	openBruker1DFile.C\
 #	openBruker2DFile.C
 
@@ -112,7 +113,8 @@ MOC_SOURCES=\
 	setCamera_moc.C\
 	setClippingPlane_moc.C\
 	snapShotVisualisation_moc.C\
-	stageSettings_moc.C
+	stageSettings_moc.C\
+	stereoSettingsDialog_moc.C
 #	openBruker1DFile_moc.C\
 #	openBruker2DFile_moc.C\
 
@@ -159,6 +161,7 @@ UIC_SOURCES=\
 	setClippingPlaneData.C\
 	snapShotVisualisationData.C\
 	stageSettingsData.C\
+	stereoSettingsDialogData.C\
 	dockDialogData.C\
 	dockProgressDialogData.C\
 	dockResultDialogData.C
