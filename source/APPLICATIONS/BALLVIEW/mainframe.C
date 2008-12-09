@@ -96,6 +96,7 @@ namespace BALL
 		new MolecularFileDialog(this, "MolecularFileDialog");
 		new DownloadPDBFile(		this, "DownloadPDBFile", false);
 		new PubChemDialog(this, "PubChemDialog");
+		new PluginDialog(this, "PluginDialog");
  		addDockWidget(Qt::LeftDockWidgetArea, new MolecularControl(this, "Structures"));
 		addDockWidget(Qt::LeftDockWidgetArea, new GeometricControl(this, "Representations"));
 		addDockWidget(Qt::TopDockWidgetArea,  new DatasetControl(this, "Datasets"));
