@@ -3,6 +3,10 @@
 
 #include <BALL/VIEW/UIC/pluginDialogData.h>
 
+#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
+# include <BALL/VIEW/KERNEL/modularWidget.h>
+#endif
+
 #include <QtCore/QModelIndex>
 #include <QtGui/QItemDelegate>
 #include <QtGui/QDialog>
@@ -35,13 +39,23 @@ namespace BALL
 				int num_rows_;
 		};
 
-		class PluginDialog : public QDialog, private Ui_PluginDialog
+		class PluginDialog 
+			: public QDialog, 
+				private Ui_PluginDialog,
+				public ModularWidget
 		{
 			Q_OBJECT
+			BALL_EMBEDDABLE(PluginDialog, ModularWidget)
 
 			public:
-				PluginDialog(QWidget* parent);
-				virtual ~PluginDialog() {}
+				PluginDialog(QWidget* parent, const char *name = "PluginDialog");
+				virtual ~PluginDialog() throw() {}
+
+			/** Initialization. This method is called automatically before the main application is started. 
+					It adds the	dialog's menu entries and connections.
+			*/
+			virtual void initializeWidget(MainControl& main_control)
+				throw();
 
 			protected slots:
 				virtual void addPluginDirectory();
