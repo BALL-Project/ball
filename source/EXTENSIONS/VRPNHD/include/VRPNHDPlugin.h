@@ -13,6 +13,7 @@ namespace BALL
 	namespace VIEW
 	{
 
+		class Scene;
 		class VRPNHDPlugin : public QObject, public BALLPlugin, public VIEWPlugin, public InputPlugin
 		{
 			Q_OBJECT
@@ -29,16 +30,18 @@ namespace BALL
 
 				bool isActive() { return is_active_; }
 
-				void setReceiver(QWidget* receiver);
 				InputDeviceDriver* startDriver();
 
 				void activate();
 				void deactivate();
 
+				void setReceiver(QWidget* receiver);
+
+
 			private:
-				QWidget* receiver_;
 				QPixmap icon_;
 				bool is_active_;
+				Scene* receiver_;
 		};
 	}
 }

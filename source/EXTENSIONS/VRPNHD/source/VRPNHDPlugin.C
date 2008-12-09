@@ -1,6 +1,7 @@
 #include <VRPNHDPlugin.h>
-
 #include <VRPNHDDriver.h>
+
+#include <BALL/VIEW/WIDGETS/scene.h>
 
 
 Q_EXPORT_PLUGIN2(pluginVRPNHD, BALL::VIEW::VRPNHDPlugin)
@@ -14,14 +15,14 @@ namespace BALL
 		{
 		}
 
-		void VRPNHDPlugin::setReceiver(QWidget* receiver)
-		{
-			receiver_ = receiver;
-		}
-
 		QString VRPNHDPlugin::getName() const
 		{
 			return QString("VRPN-HD");
+		}
+
+		void VRPNHDPlugin::setReceiver(QWidget* receiver)
+		{
+			receiver_ = (Scene*)receiver;
 		}
 
 		QString VRPNHDPlugin::getDescription() const
@@ -52,6 +53,7 @@ namespace BALL
 		{
 			is_active_ = true;
 
+			receiver_->resetTracking();
 			startDriver();
 		}
 
