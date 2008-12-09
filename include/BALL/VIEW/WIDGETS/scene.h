@@ -486,6 +486,8 @@ namespace BALL
 			///
 			bool isUpdateRunning() const { return update_running_;}
 
+			void resetTracking() {tracking_initialized_ = false;}
+
 			public slots:
 
 			/// Create an coordinate system at current position
@@ -621,7 +623,6 @@ namespace BALL
 			virtual void dragEnterEvent(QDragEnterEvent* e);
 
 
-
 			// dummy slot for menu entries without immediate action (saves many lines code this way)
 			void dummySlot(){}
 
@@ -711,8 +712,6 @@ namespace BALL
 			*/
 			virtual void wheelEvent(QWheelEvent* qmouse_event);
 
-
-
 			void updateGL();
 
 			void renderView_(RenderMode mode)
@@ -783,7 +782,9 @@ namespace BALL
 			QMenu* create_coordinate_system_;
 			
 			Vector3 system_origin_;
-			Vector3 oldtrack_origin_;
+			Vector3 old_trackorigin_;
+			bool tracking_initialized_;
+			Quaternion old_trackrotation_;
 
 			bool need_update_;
 			bool update_running_;
