@@ -31,6 +31,7 @@ namespace BALL
 				mode_(Scene::DIRECT_RENDERING)
 		{
 			prefactor_ = left_eye ? 1. : -1.;
+			setAutoBufferSwap(false);
 		}
 
 		StereoHalfImage::StereoHalfImage(Stage* stage, Scene* scene, Index display_number, bool left_eye)
@@ -44,6 +45,7 @@ namespace BALL
 			gl_renderer_->init(*scene_);
 			gl_renderer_->init(*stage_, width(), height());
 			prefactor_ = left_eye ? 1. : -1.;
+			setAutoBufferSwap(false);
 		}
 
 		void StereoHalfImage::init(Stage* stage, Scene* scene)
