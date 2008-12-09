@@ -42,7 +42,6 @@
     <node>C-term<value>C N-term s 1.33 0.5</value></node>
 	</node>
 	<node>Properties
-		<node>AMINO_ACID</node>
 	</node>
 	<node>Variants
 		<node>Default
