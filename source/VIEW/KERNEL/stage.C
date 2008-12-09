@@ -165,10 +165,19 @@ namespace BALL
 		void Camera::calculateVectors_()
 			throw()
 		{
-			if (!look_up_vector_.isZero()) look_up_vector_.normalize();
-			else look_up_vector_.set(0,1,0);
-
 			view_vector_  = look_at_ - view_point_;
+
+			if (look_up_vector_.isZero())
+				look_up_vector_.set(0,1,0);	
+			else 
+			{
+				Vector3 normalized_view(view_vector_);
+				normalized_view.normalize();
+
+				look_up_vector_ -= normalized_view*(normalized_view*look_up_vector_);
+				look_up_vector_.normalize();
+			}
+
 			right_vector_ = look_up_vector_ % view_vector_;
 			right_vector_ *= -1.0;
 
@@ -242,6 +251,19 @@ namespace BALL
 			translate(origin);
 		}
 
+		void Camera::rotate(const Matrix4x4& mat, const Vector3& origin)
+			throw()
+		{
+			translate(-origin);
+
+			view_point_     = mat*view_point_;
+			look_at_        = mat*look_at_;
+			look_up_vector_ = mat*look_up_vector_;
+
+			calculateVectors_();
+			translate(origin);
+		}
+		
 		Stage::Stage()
 			throw()
 			: background_color_(ColorRGBA(1.,1.,1.,1.)),
