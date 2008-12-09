@@ -5,6 +5,7 @@
 #include <BALL/VIEW/INPUT/inputPlugin.h>
 #include <BALL/COMMON/logStream.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 
 Q_DECLARE_METATYPE(BALL::VIEW::VIEWPlugin*)
 Q_DECLARE_METATYPE(BALL::BALLPlugin*)
@@ -90,8 +91,9 @@ namespace BALL
 			}
 		}
 
-		PluginDialog::PluginDialog(QWidget* parent)
-			: QDialog(parent)
+		PluginDialog::PluginDialog(QWidget* parent, const char* name)
+			: QDialog(parent),
+				ModularWidget(name)
 		{
 			setupUi(this);
 			pluginView->setModel(&model_);
@@ -102,6 +104,16 @@ namespace BALL
 			PluginManager& man = PluginManager::instance();
 			man.setPluginDirectory(plugin_path);
 			model_.pluginsLoaded();
+
+			setObjectName(name);
+			ModularWidget::registerWidget(this);
+			hide();
+		}
+
+		void PluginDialog::initializeWidget(MainControl&)
+			throw()
+		{
+			insertMenuEntry(MainControl::TOOLS, "Load &Plugin", this, SLOT(show()));
 		}
 
 		void PluginDialog::applyChanges()
