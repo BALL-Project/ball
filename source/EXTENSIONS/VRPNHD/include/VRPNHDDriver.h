@@ -25,10 +25,9 @@ namespace BALL
 				void setServer(QString server);
 				
 				int vrpn_got_report;
-
 			private:
 				void run();
-				int deadzone(double x);
+				void dz(double& q1, double& q2, double& q3, double& q4);
 				
 				QString server_;
 				vrpn_Tracker_Remote* tracker_;
