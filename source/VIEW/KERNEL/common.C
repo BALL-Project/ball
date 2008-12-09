@@ -223,6 +223,8 @@ namespace BALL
 			}
 
 			Vector3 max_distance_vector(max_distance_point - look_at_point);
+			if (Maths::isZero(max_distance_vector.getSquareLength()))
+				max_distance_vector.set(0,1,0);
 
 			Vector3 up_vector = Vector3(1,0,0);
 			Vector3 view_vector = up_vector % max_distance_vector;
@@ -252,10 +254,7 @@ namespace BALL
 			view_vector *= distance;
 
 			// update scene
-			Camera camera;
-			camera.setLookAtPosition(look_at_point);
-			camera.setViewPoint(look_at_point- view_vector);
-			camera.setLookUpVector(up_vector);
+			Camera camera(look_at_point - view_vector, look_at_point, up_vector);
 
 			MainControl* mc = getMainControl();
 			if (mc)
@@ -264,6 +263,7 @@ namespace BALL
 				scene_message->getStage().setCamera(camera);
 				mc->sendMessage(*scene_message);
 			}
+
 			return camera;
 		}
 
