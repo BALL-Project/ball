@@ -510,6 +510,29 @@ namespace BALL
 				return;
 			}
 
+<<<<<<< HEAD:source/VIEW/WIDGETS/scene.C
+=======
+			// ok, this is going the stereo way...
+			if (gl_renderer_->getStereoMode() == GLRenderer::DUAL_VIEW_DIFFERENT_DISPLAY_STEREO)
+			{
+				left_eye_widget_->setRenderMode(mode);
+				right_eye_widget_->setRenderMode(mode);
+
+				left_eye_widget_->updateGL();
+				right_eye_widget_->updateGL();
+
+				left_eye_widget_->makeCurrent();
+				left_eye_widget_->swapBuffers();
+
+				right_eye_widget_->makeCurrent();
+				right_eye_widget_->swapBuffers();
+
+				makeCurrent();
+				return;
+			}
+				
+
+>>>>>>> 67c467b... Improved support for tracking plugins.:source/VIEW/WIDGETS/scene.C
 			glDrawBuffer(GL_BACK_LEFT);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -1910,17 +1933,64 @@ namespace BALL
 		
 		void Scene::motionTrackingEvent(MotionTrackingEvent* evt)
 		{
+
+			if (!tracking_initialized_)
+			{
+				old_trackorigin_ = evt->getOrigin();
+				tracking_initialized_ = true;
+				return;
+			}
+
+			Vector3 new_trackorigin = evt->getOrigin();
+			Vector3 movement = new_trackorigin - old_trackorigin_;
+
+			if (!mouse_button_is_pressed_)
+			{
+				old_trackorigin_ = new_trackorigin;
+				return;
+			}
 			
-			Vector3 tmp = evt->getOrigin();
-			Vector3 movement = tmp - oldtrack_origin_;
 			Camera& camera = stage_->getCamera();
+
 			camera.moveRight(movement.x);
 			camera.moveUp(movement.y);
 			camera.moveForward(movement.z);
-			oldtrack_origin_ = tmp;
+			old_trackorigin_ = new_trackorigin;
+
+			//Vector3 v1, v2, v3, v4;
+			//v1 = camera.getRightVector();
+			//v2 = camera.getLookUpVector();
+			//v3 = -(camera.getViewVector());
+			//v4 = camera.getViewPoint();
+			//if (v3.getLength() == 0)
+			//{
+			//	return;
+			//}
+			//v3.normalize();
+
+			//Matrix4x4 to_origin(v1.x, v1.y, v1.z, 0,
+			//										v2.x, v2.y, v2.z, 0,
+			//										v3.x, v3.y, v3.z, 0,
+			//											 0,    0,    0, 1);
+			//Matrix4x4 rotation = to_origin;	
+			//Quaternion qrot = evt->getTransform();
+			//if ((qrot.getAxis().getSquareLength() < 1e-6) || fabs(qrot.getAngle()) < 1e-4)
+			//	return;
+
+			//Matrix4x4 qmat;
+			//qrot.getRotationMatrix(qmat);
+			//rotation *= qmat;
+			//to_origin.transpose();
+			//rotation *= to_origin;
+			//camera.rotate(rotation, v4);
+			//Quaternion new_trackrotation = evt->getTransform();
+			//Quaternion rot  = new_trackrotation - old_trackrotation_;
+			//camera.rotate(new_trackrotation, system_origin_);
+			//old_trackrotation_ = new_trackrotation;
+			//gl_renderer_->updateCamera();
+			//updateGL();
 			gl_renderer_->updateCamera();
 			updateGL();
-			printf("tach\n");
 		}
 		
 		void Scene::buttonPressEvent(ButtonEvent* evt)
@@ -2441,9 +2511,9 @@ namespace BALL
 					new_focal_distance = 7;
 				}
 				
-				if (new_focal_distance > 100) 
+				if (new_focal_distance > 1000) 
 				{
-					new_focal_distance = 100;
+					new_focal_distance = 1000;
 				}
 
 				stage_->setFocalDistance(new_focal_distance);
