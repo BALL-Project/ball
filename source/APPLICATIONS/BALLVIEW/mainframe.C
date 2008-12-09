@@ -23,10 +23,12 @@
 #include <BALL/VIEW/WIDGETS/fileObserver.h>
 #include <BALL/VIEW/WIDGETS/testFramework.h>
 #include <BALL/VIEW/DIALOGS/pubchemDialog.h>
+#include <BALL/VIEW/DIALOGS/pluginDialog.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
+#include <BALL/VIEW/DIALOGS/stereoSettingsDialog.h>
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
 #ifdef BALL_PYTHON_SUPPORT
 #	include <BALL/VIEW/WIDGETS/pyWidget.h>
@@ -97,6 +99,7 @@ namespace BALL
 		new DownloadPDBFile(		this, "DownloadPDBFile", false);
 		new PubChemDialog(this, "PubChemDialog");
 		new PluginDialog(this, "PluginDialog");
+		new StereoSettingsDialog(this, "StereoSettingsDialog");
  		addDockWidget(Qt::LeftDockWidgetArea, new MolecularControl(this, "Structures"));
 		addDockWidget(Qt::LeftDockWidgetArea, new GeometricControl(this, "Representations"));
 		addDockWidget(Qt::TopDockWidgetArea,  new DatasetControl(this, "Datasets"));
@@ -328,9 +331,6 @@ namespace BALL
 
 	void Mainframe::about()
 	{
-		PluginDialog p(this);
-		p.exec();
-		return;
 		// Display about dialog
 		QDialog w;
  		Ui_AboutDialog about;
