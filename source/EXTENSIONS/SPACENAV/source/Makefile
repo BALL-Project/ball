@@ -8,6 +8,8 @@
 #
 
 .PHONY: all clean depend
+SPACENAV_INC = -I/home/bioinfo/spnav/libspnav-0.2
+SPACENAV_LIB= -L/home/bioinfo/spnav/libspnav-0.2 -lspnav
 
 LIBRARY=pluginSpaceNavigator.so
 
@@ -26,12 +28,12 @@ all: $(LIBRARY)
 include ../../../common.mak
 -include .Dependencies
 
-BALL_INCLUDES+=-I../include ${SPACENAV_INCLUDES}
+BALL_INCLUDES+=-I../include ${SPACENAV_INC}
 
 clean: default_clean
 
 %.so: $(OBJECTS)
-	$(CXX) -shared $(LDFLAGS) -o $@ $(OBJECTS) ${SPACENAV_LIBS}
+	$(CXX) -shared $(LDFLAGS) -o $@ $(OBJECTS) ${SPACENAV_LIB}
 
 spaceNavigatorPlugin_moc.C: ../include/spaceNavigatorPlugin.h
 	${MOC} ${BALL_INCLUDES} $< -o $@
