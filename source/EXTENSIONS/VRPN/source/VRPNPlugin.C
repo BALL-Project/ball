@@ -21,7 +21,7 @@ namespace BALL
 
 		QString VRPNPlugin::getName() const
 		{
-			return QString("VRPN");
+			return QString("VRPN-SpaceNavigator");
 		}
 
 		QString VRPNPlugin::getDescription() const

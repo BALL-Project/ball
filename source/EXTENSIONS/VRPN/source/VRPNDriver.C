@@ -10,7 +10,7 @@ void analog_handler(void* userdata, const vrpn_ANALOGCB a)
 	//	printf("\n");
 	//}
 	((BALL::VIEW::VRPNDriver *)userdata)->handle_function( a.channel[0], a.channel[1], a.channel[2],
-	                                                       a.channel[3], a.channel[4], a.channel[5]);
+	                                                       a.channel[3], a.channel[5], a.channel[4]);
 }
 
 namespace BALL
@@ -39,8 +39,8 @@ namespace BALL
 			//																								deadzone(rx), deadzone(ry), deadzone(rz));
 			if(!vrpn_got_report)
 			{
-			emitPositionChange( deadzone(x), deadzone(z), deadzone(y),
-			                    deadzone(rx), deadzone(ry), deadzone(rz) );
+			emitPositionChange( deadzone(-x), deadzone(z), deadzone(y),
+			                    deadzone(rx), deadzone(-ry), deadzone(-rz) );
 			}
 			vrpn_got_report = 1;
 		}
@@ -56,7 +56,7 @@ namespace BALL
 				while (!vrpn_got_report)
 				{
 					analog_->mainloop();
-					msleep(25);
+					msleep(35);
 				}
 			}
 		}

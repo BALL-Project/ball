@@ -1962,35 +1962,35 @@ namespace BALL
 			camera.moveForward(movement.z);
 			old_trackorigin_ = new_trackorigin;
 
-			Vector3 v1, v2, v3, v4, v5;
-			v1 = camera.getRightVector();
-			v2 = camera.getLookUpVector();
-			v3 = -(camera.getViewVector());
-			v4 = camera.getViewPoint();
-			v5 = v4 - v3;
-			if (v3.getLength() == 0)
-				return;
-			
-			v3.normalize();
+			//Vector3 v1, v2, v3, v4, v5;
+			//v1 = camera.getRightVector();
+			//v2 = camera.getLookUpVector();
+			//v3 = -(camera.getViewVector());
+			//v4 = camera.getViewPoint();
+			//v5 = v4 - v3;
+			//if (v3.getLength() == 0)
+			//	return;
+			//
+			//v3.normalize();
 
-			Matrix4x4 to_origin(v1.x, v1.y, v1.z, 0,
-													v2.x, v2.y, v2.z, 0,
-													v3.x, v3.y, v3.z, 0,
-														 0,    0,    0, 1);
+			//Matrix4x4 to_origin(v1.x, v1.y, v1.z, 0,
+			//										v2.x, v2.y, v2.z, 0,
+			//										v3.x, v3.y, v3.z, 0,
+			//											 0,    0,    0, 1);
 
-			if (  (track_rotation.getAxis().getSquareLength() < 1e-6) 
-					|| fabs(track_rotation.getAngle()) < 1e-4)
-				return;
+			//if (  (track_rotation.getAxis().getSquareLength() < 1e-6) 
+			//		|| fabs(track_rotation.getAngle()) < 1e-4)
+			//	return;
 
-			Matrix4x4 qmat;
-			track_rotation.getRotationMatrix(qmat);
-			Matrix4x4 rotation = to_origin;	
-			rotation *= qmat;
-			to_origin.transpose();
-			rotation *= to_origin;
-			camera.rotate(rotation, v4);
+			//Matrix4x4 qmat;
+			//track_rotation.getRotationMatrix(qmat);
+			//Matrix4x4 rotation = to_origin;	
+			//rotation *= qmat;
+			//to_origin.transpose();
+			//rotation *= to_origin;
+			//camera.rotate(rotation, v5);
 
-			old_trackrotation_ = new_trackrotation;
+			//old_trackrotation_ = new_trackrotation;
 
 			//Quaternion new_trackrotation = evt->getTransform();
 			//Quaternion rot  = new_trackrotation - old_trackrotation_;

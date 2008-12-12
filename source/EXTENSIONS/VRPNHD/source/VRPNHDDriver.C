@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <VRPNHDDriver.h>
+#include <quat.h>
 #include <BALL/MATHS/vector3.h>
 #include <BALL/MATHS/quaternion.h>
 
@@ -13,6 +14,16 @@ void tracker_handler(void* userdata, const vrpn_TRACKERCB t)
 	//}
 	((BALL::VIEW::VRPNHDDriver *)userdata)->handle_function( t.sensor, t.pos[0], t.pos[1], t.pos[2],
 	                                                         t.quat[0], t.quat[1], t.quat[2], t.quat[3]);
+	//double matrix[4][4];
+	//q_to_row_matrix(matrix, t.quat);
+	//printf("%+1.2f  %+1.2f  %+1.2f  %+1.2f\n", t.quat[0], t.quat[1], t.quat[2], t.quat[3]);
+	//printf("%+1.1f  %+1.1f  %+1.1f  %+1.1f\n", matrix[0][0], matrix[0][1], matrix[0][2], matrix[0][3]);
+	//printf("%+1.1f  %+1.1f  %+1.1f  %+1.1f\n", matrix[1][0], matrix[1][1], matrix[1][2], matrix[1][3]);
+	//printf("%+1.1f  %+1.1f  %+1.1f  %+1.1f\n", matrix[2][0], matrix[2][1], matrix[2][2], matrix[2][3]);
+	//printf("%+1.1f  %+1.1f  %+1.1f  %+1.1f\n\n", matrix[3][0], matrix[3][1], matrix[3][2], matrix[3][3]);
+	//double euler[3];
+	//q_to_euler(euler, t.quat);
+	//printf("%+1.4f %+1.4f %+1.4f \n", euler[0], euler[1], euler[2]);
 }
 
 namespace BALL
@@ -75,18 +86,18 @@ return;
 			//																								deadzone(rx), deadzone(ry), deadzone(rz));
 			if(!vrpn_got_report)
 			{
-				if(s==0)
-				{
-					emitHeadChange(x, z, y, q1, q2, q3, q4 );
-					printf("HEAD: x=%+1.4f, y=%+1.4f, z=%+1.4f, q1=%+1.4f, q2=%+1.4f, q3=%+1.4f, q4=%+1.4f\n", x, y, z, q1, q2, q3, q4);
-				}
-				else if(s==1)
-				{
-					//dz(q1, q2, q3, q4);
-					//emitPositionChange(100*x, z*100, -y*100, dz(q1)*0.1, dz(q2)*0.1, dz(q3)*0.1, dz(q4)*0.1);
-					emitPositionChange(100*x, z*100, -y*100, q1, q2, q3, q4);
-//					printf("MOTION: x=%+1.4f, y=%+1.4f, z=%+1.4f, q1=%+1.4f, q2=%+1.4f, q3=%+1.4f, q4=%+1.4f\n", x, y, z, q1, q2, q3, q4);
-				}
+				//if(s==0)
+				//{
+				//	emitHeadChange(x, z, y, q1, q2, q3, q4 );
+				//	printf("HEAD: x=%+1.4f, y=%+1.4f, z=%+1.4f, q1=%+1.4f, q2=%+1.4f, q3=%+1.4f, q4=%+1.4f\n", x, y, z, q1, q2, q3, q4);
+				//}
+				//else if(s==1)
+				//{
+				//	//dz(q1, q2, q3, q4);
+				//	//emitPositionChange(100*x, z*100, -y*100, dz(q1)*0.1, dz(q2)*0.1, dz(q3)*0.1, dz(q4)*0.1);
+					emitPositionChange(100*x, z*100, -y*100, q1, q3, q2, q4);
+				//	//printf("MOTION: x=%+1.4f, y=%+1.4f, z=%+1.4f, q1=%+1.4f, q2=%+1.4f, q3=%+1.4f, q4=%+1.4f\n", x, y, z, q1, q2, q3, q4);
+				//}
 			}
 			vrpn_got_report = 1;
 		}
@@ -102,7 +113,7 @@ return;
 				while (!vrpn_got_report)
 				{
 					tracker_->mainloop();
-					msleep(25);
+					msleep(40);
 				}
 			}
 		}
@@ -113,6 +124,8 @@ return;
 			{
 				tracker_ = new vrpn_Tracker_Remote((server_.toStdString()).c_str());
 				tracker_->register_change_handler(this, tracker_handler);
+				//tracker_->set_update_rate(100);
+				//tracker_->reset_origin();
 				return true;
 			}
 			else {return false;}

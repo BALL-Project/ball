@@ -30,16 +30,16 @@ namespace BALL
 				}
 
 				if(spnav_poll_event(&sev) && (sev.type == SPNAV_EVENT_MOTION)) {
-					printf("got motion event: t(%d, %d, %d) ", deadzone(sev.motion.x), deadzone(sev.motion.y), deadzone(sev.motion.z));
-					printf("r(%d, %d, %d)\n", deadzone(sev.motion.rx), deadzone(sev.motion.ry), deadzone(sev.motion.rz));
+					//printf("got motion event: t(%d, %d, %d) ", deadzone(sev.motion.x), deadzone(sev.motion.y), deadzone(sev.motion.z));
+					//printf("r(%d, %d, %d)\n", deadzone(sev.motion.rx), deadzone(sev.motion.ry), deadzone(sev.motion.rz));
 
-					emitPositionChange( deadzone(sev.motion.x), deadzone(sev.motion.y), deadzone(sev.motion.z),
+					emitPositionChange( deadzone(-sev.motion.x), deadzone(-sev.motion.y), deadzone(-sev.motion.z),
 					                    deadzone(sev.motion.rx), deadzone(sev.motion.ry), deadzone(sev.motion.rz));
 
 					drop=true;
 				}
 
-				msleep(20);
+				msleep(35);
 			}
 		}
 

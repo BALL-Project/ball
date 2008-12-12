@@ -17,7 +17,7 @@ namespace BALL
 
 		QString VRPNHDPlugin::getName() const
 		{
-			return QString("VRPN-HD");
+			return QString("VRPN-DTrack");
 		}
 
 		void VRPNHDPlugin::setReceiver(QWidget* receiver)
