@@ -93,6 +93,10 @@ class Parametrization:
 
 		for k, v in self.atoms.iteritems():
 			output.write("    1.0  %-2s  %4.5f   \"\"\n" % (k, v.mass))
+			if self.equivalency_lists.has_key(k):
+				for i in self.equivalency_lists[k]:
+					if not self.atoms.has_key(i):
+						output.write("    1.0  %-2s  %4.5f   \"\"\n" % (i, v.mass))
 
 		output.write("\n")
 
