@@ -7,22 +7,25 @@
 
 #include <BALL/STRUCTURE/DNAMutator.h>
 
-#include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/standardPredicates.h>
+#include <BALL/KERNEL/forEach.h>
+
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/STRUCTURE/RMSDMinimizer.h>
 
-#include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
+#include <BALL/MOLMEC/AMBER/amber.h>
+#include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 
 #include <list>
 #include <set>
+#include <limits>
 
 #include <BALL/FORMAT/HINFile.h>
 
@@ -34,14 +37,15 @@ namespace BALL
 
 	const Size DNAMutator::default_num_steps_ = 50;
 
-	DNAMutator::DNAMutator(EnergyMinimizer* mini, FragmentDB* frag)
-		: keep_db_(true), minimizer_(mini), db_(frag), num_steps_(default_num_steps_)
+	DNAMutator::DNAMutator(EnergyMinimizer* mini, ForceField* ff, FragmentDB* frag)
+		: keep_db_(true), keep_ff_(true), db_(frag), ff_(ff), minimizer_(mini), num_steps_(default_num_steps_)
 	{
 	}
 
 	DNAMutator::~DNAMutator()
 	{
 		freeDB_();
+		freeFF_();
 	}
 
 	void DNAMutator::freeDB_()
@@ -51,17 +55,36 @@ namespace BALL
 		}
 	}
 
+	void DNAMutator::freeFF_()
+	{
+		if(!keep_ff_ && ff_) {
+			delete ff_;
+		}
+	}
+
 	void DNAMutator::setup()
 	{
 		if(!db_) {
 			keep_db_ = false;
 			db_ = new FragmentDB("");
 		}
+
+		if(minimizer_ && !ff_) {
+			keep_ff_ = false;
+			ff_ = new AmberFF();
+		}
 	}
 
 	void DNAMutator::setMinimizer(EnergyMinimizer* mini)
 	{
 		minimizer_ = mini;
+	}
+
+	void DNAMutator::setForceField(ForceField* ff)
+	{
+		freeFF_();
+		ff_ = ff;
+		keep_ff_ = true;
 	}
 
 	void DNAMutator::setFragmentDB(FragmentDB* frag)
@@ -71,7 +94,12 @@ namespace BALL
 		keep_db_ = true;
 	}
 
-	void DNAMutator::mutate(Residue* res, Base base, bool optimize) throw(Exception::InvalidOption)
+	void DNAMutator::setMaxOptimizationSteps(Size steps)
+	{
+		num_steps_ = steps;
+	}
+
+	void DNAMutator::mutate(Fragment* res, Base base, bool optimize) throw(Exception::InvalidOption)
 	{
 		setup();
 
@@ -124,38 +152,34 @@ namespace BALL
 
 		//Now it is save to delete the base atoms of the input residue
 		res->removeSelected();
-		frag->deselect();
 		res->setName(frag->getName());
 
-		//I do believe that splice has been declared private for some reason
-		//however it is not obvious to me and thus ignored.
-		//If this class does wierd things first try to replace the line below
-		static_cast<Fragment*>(res)->splice(*frag);
+		res->splice(*frag);
 		delete frag;
 
 		frag_at->createBond(*res_connection_at);
 
-		if(optimize) {
-			if(!minimizer_) {
-				Log.warn() << "No minimizer was specified but optimize was requested! Please make sure you set up the DNAMutator correctly!\n";
-			}
+		tryFlip_(res, res_connection_at->getPosition(), res_connection);
 
+		if(minimizer_) {
 			if(!optimize_(res)) {
-				Log.error() << "Could not optimize the generated base. Chack that your minimizer correctly set up!\n";
+				Log.error() << "Could not optimize the generated base. Check that your minimizer is set up correctly!\n";
 			}
 		}
+
+		res->deselect();
 	}
 
-	bool DNAMutator::optimize_(Residue* frag)
+	bool DNAMutator::optimize_(Fragment* frag)
 	{
+		frag->select();
+
+		ff_->setup(*frag->getAtom(0)->getMolecule()->getSystem());
+		minimizer_->setup(*ff_);
+
 		if(!minimizer_->isValid()) {
 			return false;
 		}
-
-		minimizer_->getForceField()->setup(*frag->getAtom(0)->getMolecule()->getSystem());
-		minimizer_->setup(*minimizer_->getForceField());
-
-		frag->select();
 
 		if(!minimizer_->minimize(num_steps_)) {
 			Log.warn() << "Optimization did not converge. Try a larger number of steps\n";
@@ -279,18 +303,62 @@ namespace BALL
 		from->apply(tr);
 	}
 
+	/*
+	 * This function is not a member function as it is not possible to create a Matrix4x4 forward declaration
+	 * It is needed as the TransformationProcessor applies its transformation to all atoms in an atom container
+	 * and not only the selected ones.
+	 */
+	void applyTrafoToSelection_(const Matrix4x4& trafo, AtomContainer* cont)
+	{
+		AtomIterator it;
+		BALL_FOREACH_ATOM(*cont, it) {
+			if(it->isSelected()) {
+				it->setPosition(trafo * it->getPosition());
+			}
+		}
+	}
+
+	void DNAMutator::tryFlip_(Fragment* res, const Vector3& connect_atom, const Vector3& axis) const
+	{
+		if(!ff_) {
+			return;
+		}
+
+		ff_->setup(*res->getAtom(0)->getMolecule()->getSystem());
+		double e1 = ff_->updateEnergy();
+
+		Matrix4x4 trans_fwd = Matrix4x4::getIdentity();
+		Matrix4x4 trans_bwd = Matrix4x4::getIdentity();
+		Matrix4x4 rotate = Matrix4x4::getIdentity();
+
+		rotate.rotate(Angle(180, false), axis);
+		trans_fwd.translate(-connect_atom);
+		trans_bwd.translate(connect_atom);
+
+		rotate = trans_bwd * rotate * trans_fwd;
+
+		applyTrafoToSelection_(rotate, res);
+
+		double e2 = ff_->updateEnergy();
+
+		Log.warn() << "Energies: " << e1 << " " << e2 << "\n";
+
+		if(e1 < e2) {
+			applyTrafoToSelection_(rotate, res);
+		}
+
+	}
+
 	void DNAMutator::rotateBases(AtomContainer* from, const Atom* from_at, const Atom* to_at,
 	                             const Vector3& from_connection, const Vector3& to_connection)
 	{
 		//First we have to align the bases with each other.
 		Vector3 rot = from_connection % to_connection;
 
-		Matrix4x4 trans;
-		trans.setIdentity();
+		Matrix4x4 trans = Matrix4x4::getIdentity();
 		trans.setTranslation(-from_at->getPosition());
 
-		Matrix4x4 rotation;
-		rotation.setIdentity();
+		Matrix4x4 rotation = Matrix4x4::getIdentity();
 		rotation.rotate(to_connection.getAngle(from_connection), rot);
 
 		TransformationProcessor p(rotation*trans);
@@ -307,8 +375,25 @@ namespace BALL
 		const Vector3 from_norm = getNormalVector(from_at);
 		const Vector3 to_norm   = getNormalVector(to_at);
 
+		/*
+		 * Setup the rotation around to_connection. The problem here is, that
+		 * it is unknown which vector has to be rotated, so simply try it out...
+		 */
 		rotation.setIdentity();
-		rotation.rotate(-from_norm.getAngle(to_norm), to_connection);
+		Angle a = to_norm.getAngle(from_norm);
+		rotation.rotate(a, to_connection);
+
+		Angle rot_a_fwd = to_norm.getAngle(rotation * from_norm);
+
+		rotation.setIdentity();
+		rotation.rotate(-a, to_connection);
+
+		Angle rot_a_bwd = to_norm.getAngle(rotation * from_norm);
+
+		if(fabs(rot_a_fwd) < fabs(rot_a_bwd)) {
+			rotation.setIdentity();
+			rotation.rotate(a, to_connection);
+		}
 
 		p.setTransformation(trans*rotation);
 		from->apply(p);
