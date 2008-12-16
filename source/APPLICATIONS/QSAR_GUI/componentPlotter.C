@@ -38,6 +38,9 @@ ComponentPlotter::ComponentPlotter(ModelItem* model_item, bool plot_loadings)
 	buttonsLayout_->addWidget(component_two_combobox_);
 	connect(component_one_combobox_,SIGNAL(currentIndexChanged(int)),this,SLOT(selectedCompChanged()));
 	connect(component_two_combobox_,SIGNAL(currentIndexChanged(int)),this,SLOT(selectedCompChanged()));
+	
+	if(plot_loadings_) setWindowTitle("Loadings Plotter");
+	else setWindowTitle("Latent Variable Plotter");
 }
 
 

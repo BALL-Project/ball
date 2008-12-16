@@ -21,6 +21,7 @@ PredictionPlotter::PredictionPlotter(PredictionItem* item)
 	
 	plot(1);
 	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
+	setWindowTitle("Prediction Plotter");
 }
 
 
@@ -33,6 +34,7 @@ PredictionPlotter::PredictionPlotter(ValidationItem* item)
 	
 	plot(1);
 	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
+	setWindowTitle("Nested Validation Prediction-Plotter");
 }
 
 

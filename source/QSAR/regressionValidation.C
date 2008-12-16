@@ -128,7 +128,8 @@ void RegressionValidation::crossValidation(int k, vector<Matrix<double> >* resul
 		model_->train();
 		if(results!=NULL){ results->push_back(*regr_model_->getTrainingResult());}
 		testAllSubstances(0);	  // do not transform cross-validation test-data again...
-		Q2_ += 1-(ssE_/(ssE_+ssR_));
+		//Q2_ += 1-(ssE_/(ssE_+ssR_));
+		Q2_ += (ssR_-ssE_)/ssR_;
 	}
 	Q2_ = Q2_/k;
 //	F_cv_ = gsl_cdf_fdist_P((Q2_*(lines-col-1))/((1-Q2_)*col), col, lines-col-1);
@@ -239,7 +240,8 @@ void RegressionValidation::testInputData(bool transform)
 		setTestLine(i,i,back_transform);
 	}
 	testAllSubstances(transform);
-	R2_= 1-(ssE_/(ssE_+ssR_));
+	//R2_= 1-(ssE_/(ssE_+ssR_));
+	R2_ = (ssR_-ssE_)/ssR_;
 	
 	int col=model_->data->descriptor_matrix_.size();
 	if(!model_->descriptor_IDs_.empty())
@@ -302,7 +304,7 @@ void RegressionValidation::calculateCoefficientStdErrors(int k, bool b)
 			coefficient_stderr_(m,c)= sqrt(abs(sumsquares_mc-k*pow(mean_mc,2))/(k-1));
 			
 			// standard-error == standard-deviation/sqrt(k)
-			coefficient_stderr_(m,c) /= sqrt(k);
+			//coefficient_stderr_(m,c) /= sqrt(k);
 		}
 	}
 	
@@ -413,7 +415,8 @@ void RegressionValidation::bootstrap1(int k, vector<Matrix<double> >* results, b
 			}
 		}
 		testAllSubstances(0);
-		r2 += 1-(ssE_/(ssE_+ssR_));
+		//r2 += 1-(ssE_/(ssE_+ssR_));
+		r2 += (ssR_-ssE_)/ssR_;
 	}
 	
 	int no=0;
@@ -500,7 +503,8 @@ void RegressionValidation::bootstrap(int k, vector<Matrix<double> >* results, bo
 		}
 		if(results!=NULL){ results->push_back(*regr_model_->getTrainingResult());}
 		testAllSubstances(0);
-		Q2_ += 1-(ssE_/(ssE_+ssR_));
+		//Q2_ += 1-(ssE_/(ssE_+ssR_));
+		Q2_ += (ssR_-ssE_)/ssR_;
 		
 		/// create test data set and calculate R^2
 		test_substances_.resize(N);
@@ -516,7 +520,8 @@ void RegressionValidation::bootstrap(int k, vector<Matrix<double> >* results, bo
 			}
 		}
 		testAllSubstances(0);
-		r2 += 1-(ssE_/(ssE_+ssR_));
+		//r2 += 1-(ssE_/(ssE_+ssR_));
+		r2_ += (ssR_-ssE_)/ssR_;
 	}
 	
 	Q2_ = Q2_/k;

@@ -240,6 +240,7 @@ namespace BALL
 				
 				/** List of all dock-widget of the mainWindow. It is used for switching to/from fullscreen mode by hiding all dockwidgets */
 				list<QDockWidget*> dockwidgets_;
+				list<bool> dockwidget_enabled_;
 				
 				/** is fullscreen currently enabled? */
 				bool fullscreen_;

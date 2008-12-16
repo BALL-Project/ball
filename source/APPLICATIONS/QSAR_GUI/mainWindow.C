@@ -530,13 +530,14 @@ void MainWindow::createActions()
 	executeAct_->setStatusTip(tr("Executes the Pipeline"));
 	connect(executeAct_, SIGNAL(triggered()), this, SLOT(executePipeline()));
 
-	restoreAct_ = new QAction(QIcon((dir+"restore_desktop.png").c_str()),tr("&Restore Desktop"), this);
+	restoreAct_ = new QAction(QIcon((dir+"restore_desktop.png").c_str()),tr("&Restore Pipeline"), this);
 	restoreAct_->setShortcut(tr("Ctrl+R"));
 	restoreAct_->setStatusTip(tr("Restores a Pipeline"));
 	connect(restoreAct_, SIGNAL(triggered()), this, SLOT(restoreDesktop()));
 
 	exportAct_ = new QAction(QIcon((dir+"save.png").c_str()),tr("Save Pipeline"), this);
 	exportAct_->setStatusTip(tr("Saves the Pipeline"));
+	exportAct_->setShortcut(tr("Ctrl+S"));
 	connect(exportAct_, SIGNAL(triggered()), this, SLOT(exportPipeline()));
 
 	loadModelsAct_ = new QAction(QIcon(),tr("Load Models"), this);
@@ -580,6 +581,7 @@ void MainWindow::printToFile()
 
 	editMenu_ = menuBar()->addMenu(tr("&Edit"));
 	QAction* pref = new QAction(tr("&Preferences"), this);
+	pref->setShortcut(tr("Ctrl+P"));
 	connect(pref, SIGNAL(triggered()), this, SLOT(preferencesDialog()));
 	editMenu_->addAction(pref);
 
@@ -589,6 +591,9 @@ void MainWindow::printToFile()
 
 	helpMenu_ = menuBar()->addMenu(tr("&Help"));
 	QAction* doc = new QAction(tr("&Documentation"), this);
+	QList<QKeySequence> list;
+	list.push_back(QKeySequence("Ctrl+D")); list.push_back(QKeySequence::HelpContents);
+	doc->setShortcuts(list);  // F1-key or Ctrl+D
 	connect(doc, SIGNAL(triggered()), this, SLOT(showDocumentation()));
 	helpMenu_->addAction(doc);
 	helpMenu_->addAction(aboutAct_);
@@ -681,6 +686,7 @@ function for setting up the tool bars
 	
 	fullscreen_action_ = new QAction(QIcon((dir+"window_fullscreen.png").c_str()),"Fullscreen",this);
 	fileToolBar_->addAction(fullscreen_action_);
+	fullscreen_action_->setShortcut(tr("Ctrl+F"));
 	connect(fullscreen_action_, SIGNAL(triggered()), this, SLOT(fullscreen()));
  }
  
@@ -690,15 +696,27 @@ void MainWindow::fullscreen()
 {
 	String dir = getImageDirectory();
 	fullscreen_ = !fullscreen_;
-	for(list<QDockWidget*>::iterator it=dockwidgets_.begin(); it!=dockwidgets_.end(); it++)
+	if(dockwidget_enabled_.size()!=dockwidgets_.size()) dockwidget_enabled_.resize(dockwidgets_.size(),0);
+	
+	list<bool>::iterator b_it=dockwidget_enabled_.begin();
+	for(list<QDockWidget*>::iterator it=dockwidgets_.begin(); it!=dockwidgets_.end(); it++, b_it++)
 	{
-		(*it)->setVisible(!fullscreen_);
-		if(fullscreen_) fullscreen_action_->setIcon(QIcon((dir+"window_nofullscreen.png").c_str()));
-		else fullscreen_action_->setIcon(QIcon((dir+"window_fullscreen.png").c_str()));
+		if(fullscreen_) 
+		{
+			if((*it)->isVisible()) *b_it=1;
+			(*it)->setVisible(0);
+		}
+		else
+		{
+			if(*b_it==1) 
+			{
+				(*it)->setVisible(1);
+				*b_it=0;
+			}
+		}		
 	}
-	//fileToolBar_->setVisible(!fullscreen_);
- 	//if(fullscreen_)	menuBar()->addAction(fullscreen_action_);
- 	//else menuBar()->removeAction(fullscreen_action_);
+	if(fullscreen_) fullscreen_action_->setIcon(QIcon((dir+"window_nofullscreen.png").c_str()));
+	else fullscreen_action_->setIcon(QIcon((dir+"window_fullscreen.png").c_str()));
 }
  
 

@@ -19,6 +19,7 @@ InputPlotter::InputPlotter(InputDataItem* item)
 	
 	plot(1);
 	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
+	setWindowTitle("Input Data Plotter");
 }
 
 
