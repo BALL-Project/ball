@@ -521,7 +521,7 @@ void RegressionValidation::bootstrap(int k, vector<Matrix<double> >* results, bo
 		}
 		testAllSubstances(0);
 		//r2 += 1-(ssE_/(ssE_+ssR_));
-		r2_ += (ssR_-ssE_)/ssR_;
+		r2 += (ssR_-ssE_)/ssR_;
 	}
 	
 	Q2_ = Q2_/k;
