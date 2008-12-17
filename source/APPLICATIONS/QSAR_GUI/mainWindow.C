@@ -1598,6 +1598,36 @@ bool MainWindow::checkForEmptyPipelines()
 	return 0;
 }
 
+
+int MainWindow::chooseValidationStatisticDialog(ModelItem* modelitem)
+{
+	QDialog dialog;
+	QVBoxLayout main_layout;
+	
+	QHBoxLayout h_layout;
+	QLabel label("Desired quality statistic");
+	QComboBox statistic_box;
+		
+	const map<uint,String>* statistics = modelitem->getRegistryEntry()->getStatistics();
+	for(map<uint,String>::const_iterator it=statistics->begin(); it!=statistics->end(); ++it)
+	{
+		statistic_box.addItem(it->second.c_str(),it->first);
+	}
+			
+	h_layout.addWidget(&label);h_layout.addWidget(&statistic_box);
+	main_layout.addLayout(&h_layout);
+	dialog.setLayout(&main_layout);
+	QDialogButtonBox buttons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,Qt::Horizontal);
+	main_layout.addWidget(&buttons);
+	connect(&buttons, SIGNAL(accepted()), &dialog, SLOT(accept()));
+	connect(&buttons, SIGNAL(rejected()), &dialog, SLOT(reject()));
+	
+	bool ok = dialog.exec();
+	if(ok) return statistic_box.currentIndex();
+	else return 0;	
+}
+
+
 BALL::String MainWindow::getImageDirectory()
 {
 	return executable_directory_+settings.path_separator+"images"+settings.path_separator;

@@ -498,12 +498,18 @@ FeatureSelectionConfiguration ConfigIO::readFeatureSelectionConfiguration(istrea
 		{
 			conf.opt = ((String)line.after("=")).trimLeft().toBool();
 		}
-		else if(line.hasPrefix("classification_statistic")) // currently unused by regressions!
+		else if(line.hasPrefix("classification_statistic") || line.hasPrefix("regression_statistic"))
 		{
 			String s = ((String)line.after("=")).trimLeft();
 			conf.statistic_name = s;
 			
-			const map<uint,String>* stats = reg.getClassificationStatistics();
+			const map<uint,String>* stats;
+			if(line.hasPrefix("classification_statistic"))
+			{
+				stats = reg.getClassificationStatistics();
+			}
+			else stats = reg.getRegressionStatistics();
+			
 			string choices = ""; 
 			bool ok=0;
 			for(map<uint,String>::const_iterator it=stats->begin();it!=stats->end(); it++)
@@ -695,12 +701,18 @@ ValidationConfiguration ConfigIO::readValidationConfiguration(istream* input)
 		{
 			conf.output = ((String)line.after("=")).trimLeft();
 		}
-		else if(line.hasPrefix("classification_statistic")) // currently unused by regressions!
+		else if(line.hasPrefix("classification_statistic") || line.hasPrefix("regression_statistic"))
 		{
 			String s = ((String)line.after("=")).trimLeft();
 			conf.statistic_name = s;
 			
-			const map<uint,String>* stats = reg.getClassificationStatistics();
+			const map<uint,String>* stats;
+			if(line.hasPrefix("classification_statistic"))
+			{
+				stats = reg.getClassificationStatistics();
+			}
+			else stats = reg.getRegressionStatistics();
+			
 			string choices = ""; 
 			bool ok=0;
 			for(map<uint,String>::const_iterator it=stats->begin();it!=stats->end(); it++)
@@ -776,12 +788,14 @@ PredictionConfiguration::PredictionConfiguration()
 	data="";
 	output="";
 	print_expected=1;
+	statistic=0;
 	done=0;
 }
 
 PredictionConfiguration ConfigIO::readPredictionConfiguration(istream* input)
 {
 	PredictionConfiguration conf;
+	Registry reg;
 	
 	for(int j=0;!input->eof();j++) // read ONE Predictor section
 	{
@@ -829,6 +843,41 @@ PredictionConfiguration ConfigIO::readPredictionConfiguration(istream* input)
 		else if(line.hasPrefix("print_expected")) // compounds to be predicted
 		{
 			conf.print_expected = ((String)line.after("=")).trimLeft().toBool();
+		}
+		else if(line.hasPrefix("classification_statistic") || line.hasPrefix("regression_statistic"))
+		{
+			String s = ((String)line.after("=")).trimLeft();
+			conf.statistic_name = s;
+			
+			const map<uint,String>* stats;
+			if(line.hasPrefix("classification_statistic"))
+			{
+				stats = reg.getClassificationStatistics();
+			}
+			else stats = reg.getRegressionStatistics();
+			
+			string choices = ""; 
+			bool ok=0;
+			for(map<uint,String>::const_iterator it=stats->begin();it!=stats->end(); it++)
+			{
+				if(s==it->second)
+				{
+					ok=1;
+					conf.statistic=it->first;
+					break;
+				}
+				else
+				{
+					choices += it->second+", ";
+				}
+			}
+			if(!ok)
+			{
+				String m = "qualitiy statistic \'"+s+"\' unknown!\n";
+				m+="possible choices are: "+choices;
+				
+				throw Exception::ConfigurationReadingError(__FILE__,__LINE__,m.c_str());
+			}				
 		}
 		else
 		{

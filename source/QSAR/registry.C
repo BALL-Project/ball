@@ -129,6 +129,10 @@ Registry::Registry()
 	classification_statistics[3] = "average MCC";
 	classification_statistics[4] = "overall MCC";
 	
+	regression_statistics[0] = "R2/Q2 version1";
+	regression_statistics[1] = "R2/Q2 version2";
+	regression_statistics[2] = "1/predStdErr";
+	
 	feature_selection_names[0] = "Remove Colinear Features";
 	feature_selection_names[1] = "forward selection";
 	feature_selection_names[2] = "backward selection";
@@ -233,6 +237,21 @@ String Registry::getClassificationStatisticName(uint no)
 	return "";
 }
 
+String Registry::getRegressionStatisticName(uint no)
+{
+	map<uint,String>::iterator it = regression_statistics.find(no);
+	if(it!=regression_statistics.end())
+	{
+		return it->second;
+	}
+	else
+	{
+		String mess = "A regression-statistic for number \""+String(no)+"\" does not exist!";
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"regression-statistic error",mess.c_str());
+	}
+	return "";
+}
+
 String Registry::getFeatureSelectionName(uint no)
 {
 	map<uint,String>::iterator it = feature_selection_names.find(no);
@@ -251,6 +270,11 @@ String Registry::getFeatureSelectionName(uint no)
 const map<uint,String>* Registry::getClassificationStatistics()
 {
 	return &classification_statistics;
+}
+
+const map<uint,String>* Registry::getRegressionStatistics()
+{
+	return &regression_statistics;
 }
 
 void Registry::addEntry(RegistryEntry entry, int uniqueID)
@@ -335,8 +359,7 @@ RegistryEntry::RegistryEntry(const RegistryEntry& entry)
 
 const map<uint,String>* RegistryEntry::getStatistics()
 {
-	if(regression) return NULL;
-	
+	if(regression) return &registry_->regression_statistics;
 	return &registry_->classification_statistics;
 }
 
@@ -344,8 +367,7 @@ const map<uint,String>* RegistryEntry::getStatistics()
 BALL::String RegistryEntry::getStatName(int s)
 {
 	if(!regression) return registry_->getClassificationStatisticName(s);
-	
-	return "";
+	return registry_->getRegressionStatisticName(s);
 }
 
 

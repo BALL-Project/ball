@@ -216,6 +216,9 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 								DottedEdge* dedge = new DottedEdge(item, pred_item);
 								addItem(dedge);
 								pred_item->setDottedEdge(dedge);
+								
+								int stat = main_window->chooseValidationStatisticDialog(model_item_at_pos);
+								pred_item->setValidationStatistic(stat);
 							}
 							else /// create SDFInputDataItem
 							{

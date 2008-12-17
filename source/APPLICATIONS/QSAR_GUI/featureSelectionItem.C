@@ -288,10 +288,11 @@ void FeatureSelectionItem::writeConfigSection(ofstream& out)
 	if(getType()>0 && getType()!=4)
 	{
 		int s = getValidationStatistic();
-		if(!input_model_item_->getRegistryEntry()->regression && s>=0)
+		if(s>=0)
 		{
 			String stat = modelItem()->getRegistryEntry()->getStatName(s);
-			out<< "classification_statistic = "<<stat.c_str()<<endl;
+			if(!model_item_->getRegistryEntry()->regression) out<< "classification_statistic = "<<stat.c_str()<<endl;
+			else out<< "regression_statistic = "<<stat.c_str()<<endl;
 		}
 		out << "k_fold = "<< k() <<  "\n";
 		out<<"quality_increase_cutoff = "<<quality_increase_cutoff_<<"\n";
@@ -352,12 +353,9 @@ BALL::String FeatureSelectionItem::getMouseOverText()
 // 			if(type_==3) message="backward feature selection\n";
 // 			if(type_==2) message="stepwise feature selection\n";
 		message="using "+valueToString(k_)+"-fold cross validation\n";
-		if(!model_item_->getRegistryEntry()->regression)
-		{
-			message+="  and ";
-			String stat = modelItem()->getRegistryEntry()->getStatName(validation_statistic_);
-			message+=stat+"\n";
-		}		
+		message+="  and ";
+		String stat = modelItem()->getRegistryEntry()->getStatName(validation_statistic_);
+		message+=stat+"\n";	
 		message+="quality increase cutoff="+valueToString(quality_increase_cutoff_);
 	}
 	else if(type_==4) message="minimal correlation between\neach feature and response="+valueToString(cor_threshold_);

@@ -15,7 +15,7 @@ using namespace BALL::QSAR;
 
 RegressionValidation::RegressionValidation(RegressionModel* m) : Validation(m)
 {
-	ssR_=0; ssE_=0; ssT_=0; Q2_=-1; F_cv_=-1; R2_=-1; std_err_=-1; F_regr_=-1; max_error_=-1;
+	ssR_=0; ssE_=0; ssY_=0; Q2_=-1; F_cv_=-1; R2_=-1; std_err_=-1; F_regr_=-1; max_error_=-1;
 	regr_model_=m;
 	predQualFetcher_ = &RegressionValidation::getQ2;
 	fitQualFetcher_ = &RegressionValidation::getR2;
@@ -129,7 +129,7 @@ void RegressionValidation::crossValidation(int k, vector<Matrix<double> >* resul
 		if(results!=NULL){ results->push_back(*regr_model_->getTrainingResult());}
 		testAllSubstances(0);	  // do not transform cross-validation test-data again...
 		//Q2_ += 1-(ssE_/(ssE_+ssR_));
-		Q2_ += (ssT_-ssE_)/ssT_;
+		Q2_ += quality_;
 	}
 	Q2_ = Q2_/k;
 //	F_cv_ = gsl_cdf_fdist_P((Q2_*(lines-col-1))/((1-Q2_)*col), col, lines-col-1);
@@ -142,7 +142,7 @@ void RegressionValidation::crossValidation(int k, vector<Matrix<double> >* resul
 
 void RegressionValidation::testAllSubstances(bool transform)
 {	
-	ssE_=0; ssR_=0; std_err_=0; ssT_=0;
+	quality_ = 0; ssE_=0; ssR_=0; std_err_=0; ssY_=0;
 	
 	Vector<double> mean_Y(test_Y_.Ncols()); // mean of each activity
 	//RowVector sum_of_squares(test_Y_.Ncols());
@@ -164,7 +164,7 @@ void RegressionValidation::testAllSubstances(bool transform)
 		{
 			error+=pow(test_Y_(i+1,k)-rv(k),2);
 			ssR_+=pow(mean_Y(k)-rv(k),2);
-			ssT_+=pow(mean_Y(k)-test_Y_(i+1,k),2);
+			ssY_+=pow(mean_Y(k)-test_Y_(i+1,k),2);
 		}
 		if (error>max_error_)
 		{
@@ -177,6 +177,9 @@ void RegressionValidation::testAllSubstances(bool transform)
 // 			std_err_ += model_->calculateStdErr();
 // 		}
 	}
+	
+	(this->*qualCalculation)();
+	
 /*	if(model_->type_=="GP")
 	{
 		std_err_ = std_err_/test_substances_.size();
@@ -242,7 +245,7 @@ void RegressionValidation::testInputData(bool transform)
 	}
 	testAllSubstances(transform);
 	//R2_= 1-(ssE_/(ssE_+ssR_));
-	R2_ = (ssT_-ssE_)/ssT_;
+	R2_ = quality_;
 	
 	int col=model_->data->descriptor_matrix_.size();
 	if(!model_->descriptor_IDs_.empty())
@@ -302,7 +305,7 @@ void RegressionValidation::calculateCoefficientStdErrors(int k, bool b)
 			// calculate standard deviation of coefficient
 			// = sqrt(1/k * \sum_{i=1}^k (x_i \^bar x)^2)
 			// <=> sqrt(1/k (\sum_{i=1}^k x_i - k*\bar x^2))
-			coefficient_stderr_(m,c)= sqrt(abs(sumsquares_mc-k*pow(mean_mc,2))/(k-1));
+			coefficient_stderr_(m,c) = sqrt(abs(sumsquares_mc-k*pow(mean_mc,2))/(k-1));
 			
 			// standard-error == standard-deviation/sqrt(k)
 			//coefficient_stderr_(m,c) /= sqrt(k);
@@ -317,127 +320,6 @@ void RegressionValidation::calculateCoefficientStdErrors(int k, bool b)
 void RegressionValidation::bootstrap(int k, bool restore)
 { 
 	bootstrap(k, NULL, restore);
-}
-
-
-
-void RegressionValidation::bootstrap1(int k, vector<Matrix<double> >* results, bool restore)
-{
-	if(model_->data->descriptor_matrix_.size()==0 || model_->data->Y_.size()==0)
-	{
-		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be fetched from input-files by QSARData before bootstrapping can be done!");
-	}
-	if(restore) backupTrainingResults();
-	
-	Q2_=0; max_error_=0; double r2=0;
-	int N = model_->data->descriptor_matrix_[0].size();
-	int no_descriptors=model_->data->descriptor_matrix_.size();
-	if(!model_->descriptor_IDs_.empty())
-	{
-		no_descriptors=model_->descriptor_IDs_.size();
-	}
-	vector<double> errors(N,0); // errors for each substance as sum over all samples
-	vector<int> no_samples(N,0); // number of samples for each substance, that do NOT contain this substance
-	gsl_rng * r = gsl_rng_alloc (gsl_rng_ranlxd2);
-	
-	for(int i=0; i<k; i++) // create and evaluate k bootstrap samples
-	{
-		//gsl_rng_set(r,i);
-		vector<bool> sample_substances(N,0); // IDs of substances of this sample
-		
-		model_->descriptor_matrix_.ReSize(N,no_descriptors);
-		model_->Y_.ReSize(N,model_->data->Y_.size());
-		for(int j=0; j<N;j++)  // create training matrix
-		{
-			//int pos = rand()%N;
-			int pos = gsl_rng_uniform_int(r,N);
-			setTrainingLine(j,pos);
-			sample_substances[pos]=1;
-		}
-		int test_size=0;
-		for(int j=0; j<N;j++)  // find size of test data set
-		{
-			if(sample_substances[j]==1) 
-			{
-				continue;
-			}
-			test_size++;
-		}
-		test_substances_.resize(test_size);
-		test_Y_.ReSize(test_size,model_->data->Y_.size());
-		vector<int> test_IDs(test_size,0); // IDs of the test-substances
-		int test_line=0;
-		for(int j=0; j<N;j++)  // create test data set
-		{
-			if(sample_substances[j]==0) 
-			{	
-				setTestLine(test_line,j);
-				test_IDs[test_line]=j;
-				test_line++;
-			}
-		}
-		model_->train();
-		if(results!=NULL){ results->push_back(*regr_model_->getTrainingResult());}
-		
-		Vector<double> mean_Y(test_Y_.Ncols()); // mean of each activity
-		for(int i=1; i<=test_Y_.Ncols();i++)
-		{
-			mean_Y(i)=Statistics::getMean(test_Y_, i);
-		}
-		for(uint i=0; i<test_substances_.size();i++)  // predict activiti(es) of each test-substance
-		{
-			Vector<double> rv=model_->predict(test_substances_[i],0);
-			double e = 0; double r = 0;
-			for(uint act=1; act<=test_Y_.getColumnCount();act++) // for each response variable
-			{
-				e += pow(test_Y_(i+1,act)-rv(act),2);
-				r += pow(mean_Y(act)-rv(act),2);
-			}
-			
-			if (e>max_error_)
-			{
-				max_error_=e;
-			}
-			
-			errors[test_IDs[i]] += 1-(e/(e+r));
-			no_samples[test_IDs[i]]++;
-		}
-		
-		test_substances_.resize(N);
-		test_Y_.ReSize(N,model_->data->Y_.size());
-		test_IDs.resize(N,0);
-		for(int j=0; j<N;j++)  // create test data set for calculation of R^2
-		{
-			if(sample_substances[j]==1) 
-			{	
-				setTestLine(test_line,j);
-				test_IDs[test_line]=j;
-				test_line++;
-			}
-		}
-		testAllSubstances(0);
-		//r2 += 1-(ssE_/(ssE_+ssR_));
-		r2 += (ssT_-ssE_)/ssT_;
-	}
-	
-	int no=0;
-	for(int i=0; i<N;i++)
-	{
-		if(no_samples[i]==0) 
-		{
-			continue;
-		}
-		Q2_ += errors[i]/no_samples[i];
-		//cout << errors[i] <<"  "<<no_samples[i]<<endl;
-		no++;
-	}
-	Q2_ = Q2_/no;
-	
-	r2 = r2/k;
-	Q2_ = 0.632*Q2_ + 0.368*r2;
-	
-	gsl_rng_free(r);
-	if(restore) restoreTrainingResults();
 }
 
 
@@ -505,7 +387,7 @@ void RegressionValidation::bootstrap(int k, vector<Matrix<double> >* results, bo
 		if(results!=NULL){ results->push_back(*regr_model_->getTrainingResult());}
 		testAllSubstances(0);
 		//Q2_ += 1-(ssE_/(ssE_+ssR_));
-		Q2_ += (ssT_-ssE_)/ssT_;
+		Q2_ += quality_;
 		
 		/// create test data set and calculate R^2
 		test_substances_.resize(N);
@@ -522,7 +404,7 @@ void RegressionValidation::bootstrap(int k, vector<Matrix<double> >* results, bo
 		}
 		testAllSubstances(0);
 		//r2 += 1-(ssE_/(ssE_+ssR_));
-		r2 += (ssT_-ssE_)/ssT_;
+		r2 += quality_;
 	}
 	
 	Q2_ = Q2_/k;
@@ -566,6 +448,26 @@ BALL::Matrix<double> RegressionValidation::yRandomizationTest(int runs, int k)
 	return results;
 }
 
+void RegressionValidation::calculateQOF1()
+{
+	cout<<"calculateQOF1()"<<endl;
+	cout<<ssE_<<" "<<ssR_<<endl;
+	quality_ =  1 - ssE_/(ssE_+ssR_);	
+}
+
+void RegressionValidation::calculateQOF2()
+{
+	cout<<"calculateQOF2()"<<endl;
+	cout<<ssY_<<" "<<ssE_<<endl;
+	quality_ = (ssY_-ssE_)/ssY_;	
+}
+
+void RegressionValidation::calculatePSE()
+{
+	cout<<"calculatePSE()"<<endl;
+	cout<<test_substances_.size()<<" "<<ssE_<<endl;
+	quality_ = 1/sqrt((1./test_substances_.size())*ssE_);	
+}
 
 
 double RegressionValidation::getQ2()
@@ -613,18 +515,31 @@ double RegressionValidation::getFitRes()
 
 void RegressionValidation::selectStat(int s)
 {
+	predQualFetcher_ = &RegressionValidation::getQ2;
+	fitQualFetcher_ = &RegressionValidation::getR2;
+	
 	if(s==0)
 	{
 		validation_statistic_ = 0;
-		predQualFetcher_ = &RegressionValidation::getQ2;
-		fitQualFetcher_ = &RegressionValidation::getR2;
+		qualCalculation = &RegressionValidation::calculateQOF1;
 	}
-	else if(s==1)
+	if(s==1)
 	{
 		validation_statistic_ = 1;
-		fitQualFetcher_ = &RegressionValidation::getFregr;
-		predQualFetcher_ = &RegressionValidation::getFcv;
+		qualCalculation = &RegressionValidation::calculateQOF2;
 	}
+	if(s==2)
+	{
+		validation_statistic_ = 2;
+		qualCalculation = &RegressionValidation::calculatePSE;
+	}
+	
+// 	else if(s==1)
+// 	{
+// 		validation_statistic_ = 1;
+// 		fitQualFetcher_ = &RegressionValidation::getFregr;
+// 		predQualFetcher_ = &RegressionValidation::getFcv;
+// 	}
 }
 				
 				
@@ -632,7 +547,6 @@ void RegressionValidation::setCVRes(double d)
 {
 	setQ2(d);
 }
-
 
 
 const BALL::Matrix<double>* RegressionValidation::getCoefficientStdErrors()
@@ -645,93 +559,3 @@ void RegressionValidation::setCoefficientStdErrors(const Matrix<double>* stderr)
 {
 	coefficient_stderr_ = *stderr;	
 }
-
-
-/*
-void RegressionValidation::crossValidation(int k)
-{
-	int step_width=model_->data->descriptor_matrix_[0].size()/k;
-	int rest=model_->data->descriptor_matrix_[0].size()%k;
-	int lines=model_->data->descriptor_matrix_[0].size();
-	int col=model_->data->descriptor_matrix_.size();
-	if(!model_->descriptor_IDs_.empty())
-	{
-		col=model_->descriptor_IDs_.size();
-	}
-	Q2_=0; ssE_=0; ssR_=0;
-
-	
-	// test k times; one time for each block as test-data
-	for(int i=0; i<k; i++)
-	{	//cout <<"i="<<i<<"------------"<<endl;		
-	
-		if(i!=k-1){
-			model_->Y_.ReSize((k-1)*step_width+rest,model_->data->Y_.size()); 
-			model_->descriptor_matrix_.ReSize((k-1)*step_width+rest,col); 
-			test_substances_.resize(step_width);
-			test_Y_.ReSize(step_width,model_->data->Y_.size());
-			
-		}
-		else
-		{
-			model_->Y_.ReSize((k-1)*step_width,model_->data->Y_.size()); 
-			model_->descriptor_matrix_.ReSize((k-1)*step_width,col);
-			test_substances_.resize(step_width+rest);
-			test_Y_.ReSize(step_width+rest,model_->data->Y_.size());
-		}
-	
-// 		cout << model_->Y_.Nrows()<<" "<<model_->Y_.Ncols()<<endl;
-// 		cout << model_->descriptor_matrix_.Nrows()<<" "<<model_->descriptor_matrix_.Ncols()<<endl;
-// 		cout<<test_substances_.size()<<endl;
-// 		cout<<test_Y_[0].size()<<endl;
-		
-		int current_line=0; // no of line in original data
-		int train_line=0;  // no of line in descriptor_matrix_ of model_
-		int test_line=0;
-
-		// copy each of the k blocks ).element(1,1)
-		// block i = test-data; other blocks=training data 
-		for(int block=0; block<k;block++)
-		{	
-			int end_of_block=(block+1)*step_width-1;
-			
-			// last blocks contains all remaining lines
-			if (block==k-1)
-			{
-				end_of_block=lines-1;
-			}
-	
-			 // copy training data 
-			if(block!=i) 
-			{	//cout << "train-data: lines "<<current_line<<"-"<<end_of_block<<endl;
-				
-				// copy all lines of training data
-				for (;current_line<=end_of_block;current_line++) 
-				{ 
-					setTrainingLine(train_line,current_line);
-					train_line++;
-					//cout <<"\tcopying training data:"<<current_line<<endl;
-				}
-			}
- 			// copy test data
-			else
-			{	//cout << "test-data: lines "<<current_line<<"-"<<end_of_block<<endl;
-				
-				// copy all lines of test data
-				for (;current_line<=end_of_block;current_line++) 
-				{	
-					setTestLine(test_line,current_line);
-					test_line++;
-					//cout <<"\tcopying test data: "<<current_line<<endl;
-				}
-			}
-		}
-		// test Model with model_->predict() for each line of test-data
-		model_->train();
-		testAllSubstances();
-		Q2_ += 1-(ssE_/(ssE_+ssR_));
-	}
-	Q2_ = Q2_/k;
-	std_err_ = std_err_ / ((k-1)*lines);
-}
-*/

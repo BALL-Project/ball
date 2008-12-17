@@ -28,6 +28,7 @@ ValidationItem::ValidationItem(int type, DataItemView* view):
 	nested_val_item_ = NULL;
 	type_ = type;
 	partitioner_ = NULL;
+	validation_statistic_ = -1;
 	init();	
 }
 
@@ -43,6 +44,7 @@ DataItem(item.view_)
 	r2_ = -1;
 	nested_val_item_ = NULL;
 	partitioner_ = NULL;
+	validation_statistic_ = -1;
 	init();	
 }
 
@@ -446,8 +448,12 @@ void ValidationItem::writeConfigSection(ofstream& out)
 		out<<endl;
 	}
 	int s = getValidationStatistic();
-	String stat = modelItem()->getRegistryEntry()->getStatName(s);
-	if(stat!="") out<< "classification_statistic = "<<stat.c_str()<<endl;
+	if(s>=0)
+	{
+		String stat = modelItem()->getRegistryEntry()->getStatName(s);
+		if(!model_item_->getRegistryEntry()->regression) out<< "classification_statistic = "<<stat.c_str()<<endl;
+		else out<< "regression_statistic = "<<stat.c_str()<<endl;
+	}
 	
 	if(type_>0) out << "k_fold = "<< k() <<  "\n";
 	if(num_of_samples_>0) out << "bootstrap_samples = "<< num_of_samples_ << "\n";
@@ -484,7 +490,7 @@ BALL::String ValidationItem::getMouseOverText()
 	String message="";
 	if(view_->name!="view") return message;
 	
-	if(!model_item_->getRegistryEntry()->regression)
+	if(type_!=6 && validation_statistic_>=0)
 	{
 		message+="using ";
 		message += modelItem()->getRegistryEntry()->getStatName(validation_statistic_);

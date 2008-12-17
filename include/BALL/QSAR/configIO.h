@@ -117,6 +117,8 @@ namespace BALL
 			String model;
 			String data;
 			String output;
+			int statistic;
+			String statistic_name;
 			bool print_expected;
 			bool done;
 		};

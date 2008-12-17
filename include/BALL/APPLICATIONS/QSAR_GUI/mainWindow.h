@@ -73,6 +73,8 @@ namespace BALL
 				ValidationItem* createValidation(ValidationItem* val, ModelItem* model=0);
 				PredictionItem* createPrediction(InputDataItem* input, ModelItem* model);
 				
+				int chooseValidationStatisticDialog(ModelItem* modelitem);
+				
 				//void changeModelItem(ModelItem* model, InputDataItem* input);
 
 				Registry* registry();

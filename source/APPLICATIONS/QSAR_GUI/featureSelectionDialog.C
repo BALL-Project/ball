@@ -52,23 +52,21 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 		main_layout->addLayout(cutoff_layout);
 		statistic_box_ = NULL;
 		
-		// let user select validation statistic in case of classification model
-		if(!model->getRegistryEntry()->regression)
+		// let user select validation statistic
+		QHBoxLayout* layout3 = new QHBoxLayout;
+		QLabel* label3 = new QLabel("quality statistic");
+		statistic_box_ = new QComboBox;
+		
+		const map<uint,String>* statistics = model->getRegistryEntry()->getStatistics();
+		for(map<uint,String>::const_iterator it=statistics->begin(); it!=statistics->end(); ++it)
 		{
-			QHBoxLayout* layout3 = new QHBoxLayout;
-			QLabel* label3 = new QLabel("classification statistic");
-			statistic_box_ = new QComboBox;
-			
-			const map<uint,String>* statistics = model->getRegistryEntry()->getStatistics();
-			for(map<uint,String>::const_iterator it=statistics->begin(); it!=statistics->end(); ++it)
-			{
-				statistic_box_->addItem(it->second.c_str(),it->first);
-			}
-
-			if(statistics->size()>2) statistic_box_->setCurrentIndex(2); // use overall ACC as default
-			layout3->addWidget(label3);layout3->addWidget(statistic_box_);
-			main_layout->addLayout(layout3);
+			statistic_box_->addItem(it->second.c_str(),it->first);
 		}
+
+		if(statistics->size()>2) statistic_box_->setCurrentIndex(2); // use overall ACC as default
+		layout3->addWidget(label3);layout3->addWidget(statistic_box_);
+		main_layout->addLayout(layout3);
+		
 	}
 	else   // no validation statistics for removal of colineal features
 	{

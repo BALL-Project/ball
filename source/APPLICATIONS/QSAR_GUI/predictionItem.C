@@ -62,6 +62,7 @@ PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*
 	istringstream input;
 	input.str(configfile_section);
 	PredictionConfiguration conf = ConfigIO::readPredictionConfiguration(&input);
+	validation_statistic_ = conf.statistic;
 	
 	map<String,DataItem*>::iterator it = filenames_map.find(conf.model);
 	if(it==filenames_map.end())
@@ -203,6 +204,13 @@ void PredictionItem::writeConfigSection(ofstream& out)
 	out << "model_file = "<< modelItem()->savedAs().toStdString() << "\n";
 	out << "data_file = "<< inputDataItem()->savedAs().toStdString() << "\n";
 	out << "print_expected = "<< 1 << "\n";
+	int s = getValidationStatistic();
+	if(s>=0)
+	{
+		String stat = modelItem()->getRegistryEntry()->getStatName(s);
+		if(!model_item_->getRegistryEntry()->regression) out<< "classification_statistic = "<<stat.c_str()<<endl;
+		else out<< "regression_statistic = "<<stat.c_str()<<endl;
+	}
 	out << "output = " << savedAs().toStdString() << "\n\n";
 }
 

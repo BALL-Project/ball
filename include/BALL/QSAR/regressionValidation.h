@@ -148,9 +148,13 @@ namespace BALL
 				/** @name Attributes
 				 */
 				//@{
+				
 				double ssR_;
+				
 				double ssE_;
-				double ssT_;
+				
+				/** the sum of squares of the response */
+				double ssY_;
 				
 				/** standart error */
 				double std_err_;
@@ -168,10 +172,16 @@ namespace BALL
 				
 				double max_error_;
 				
+				/** the quality as calcated by the last call of testAllSubstances() according to the chose quality-statistic */
+				double quality_;
+				
 				double (RegressionValidation::* predQualFetcher_)();
 				
 				double (RegressionValidation::* fitQualFetcher_)();
 				
+				void calculateQOF1();
+				void calculateQOF2();
+				void calculatePSE();
 				
 				/** contains the standart deviations of all predicted coefficients in one column for each modelled activity */
 				BALL::Matrix<double> coefficient_stderr_;
@@ -180,6 +190,8 @@ namespace BALL
 				RegressionModel* regr_model_;
 				
 				BackupData backup_data_;
+				
+				void (RegressionValidation::* qualCalculation)();
 				//@}				
 				
 		};

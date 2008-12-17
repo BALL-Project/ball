@@ -134,9 +134,11 @@ namespace BALL
 				int getModelNo(String model_name);
 				
 				String getClassificationStatisticName(uint no);
+				String getRegressionStatisticName(uint no);
 				String getFeatureSelectionName(uint no);
 				String getValidationName(uint no);
 				const map<uint,String>* getClassificationStatistics();
+				const map<uint,String>* getRegressionStatistics();
 				
 				/** returns an iterator to the first model in model_map */
 				RegistryEntryIterator beginEntry();
@@ -152,6 +154,7 @@ namespace BALL
 				map<String,int> model_map;
 				
 				map<uint,String> classification_statistics;
+				map<uint,String> regression_statistics;
 				map<uint,String> feature_selection_names;
 				map<uint,String> validation_names;
 				
