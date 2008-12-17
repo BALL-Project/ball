@@ -28,7 +28,7 @@ ValidationItem::ValidationItem(int type, DataItemView* view):
 	nested_val_item_ = NULL;
 	type_ = type;
 	partitioner_ = NULL;
-	validation_statistic_ = -1;
+	validation_statistic_ = 0;
 	init();	
 }
 
@@ -44,7 +44,7 @@ DataItem(item.view_)
 	r2_ = -1;
 	nested_val_item_ = NULL;
 	partitioner_ = NULL;
-	validation_statistic_ = -1;
+	validation_statistic_ = 0;
 	init();	
 }
 
@@ -490,7 +490,7 @@ BALL::String ValidationItem::getMouseOverText()
 	String message="";
 	if(view_->name!="view") return message;
 	
-	if(type_!=6 && validation_statistic_>=0)
+	if(type_!=6)
 	{
 		message+="using ";
 		message += modelItem()->getRegistryEntry()->getStatName(validation_statistic_);

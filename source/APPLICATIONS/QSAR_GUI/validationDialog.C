@@ -76,7 +76,7 @@ ValidationDialog::ValidationDialog(ValidationItem* val_item, ModelItem* model):
 	if(val_item->getValidationType()!=6)
 	{
 		QHBoxLayout* layout3 = new QHBoxLayout;
-		QLabel* label3 = new QLabel("classification statistic");
+		QLabel* label3 = new QLabel("quality statistic");
 		statistic_box_ = new QComboBox;
 		
 		const map<uint,String>* statistics = model->getRegistryEntry()->getStatistics();

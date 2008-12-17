@@ -450,22 +450,16 @@ BALL::Matrix<double> RegressionValidation::yRandomizationTest(int runs, int k)
 
 void RegressionValidation::calculateQOF1()
 {
-	cout<<"calculateQOF1()"<<endl;
-	cout<<ssE_<<" "<<ssR_<<endl;
 	quality_ =  1 - ssE_/(ssE_+ssR_);	
 }
 
 void RegressionValidation::calculateQOF2()
 {
-	cout<<"calculateQOF2()"<<endl;
-	cout<<ssY_<<" "<<ssE_<<endl;
 	quality_ = (ssY_-ssE_)/ssY_;	
 }
 
 void RegressionValidation::calculatePSE()
 {
-	cout<<"calculatePSE()"<<endl;
-	cout<<test_substances_.size()<<" "<<ssE_<<endl;
 	quality_ = 1/sqrt((1./test_substances_.size())*ssE_);	
 }
 

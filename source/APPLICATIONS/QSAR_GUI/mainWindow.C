@@ -463,7 +463,9 @@ ValidationItem* MainWindow::createValidation(ValidationItem* val, ModelItem* mod
 	}
 	else
 	{
-		item->setModelItem(model);	
+		item->setModelItem(model);
+		int stat = chooseValidationStatisticDialog(model);
+		if(stat>=0) item->setValidationStatistic(stat);	
 	}
 	
 	return item;
