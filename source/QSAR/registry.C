@@ -129,8 +129,8 @@ Registry::Registry()
 	classification_statistics[3] = "average MCC";
 	classification_statistics[4] = "overall MCC";
 	
-	regression_statistics[0] = "R2/Q2 version1";
-	regression_statistics[1] = "R2/Q2 version2";
+	regression_statistics[1] = "R2/Q2 version1";
+	regression_statistics[0] = "R2/Q2 version2";
 	regression_statistics[2] = "1/predStdErr";
 	
 	feature_selection_names[0] = "Remove Colinear Features";

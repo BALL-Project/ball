@@ -512,12 +512,12 @@ void RegressionValidation::selectStat(int s)
 	predQualFetcher_ = &RegressionValidation::getQ2;
 	fitQualFetcher_ = &RegressionValidation::getR2;
 	
-	if(s==0)
+	if(s==1)
 	{
 		validation_statistic_ = 0;
 		qualCalculation = &RegressionValidation::calculateQOF1;
 	}
-	if(s==1)
+	if(s==0)
 	{
 		validation_statistic_ = 1;
 		qualCalculation = &RegressionValidation::calculateQOF2;

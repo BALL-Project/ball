@@ -226,3 +226,8 @@ void PredictionItem::removeFromPipeline()
 	view_->data_scene->main_window->all_items_pipeline_.erase(this);
 }
 
+const QSARData* PredictionItem::getTestData()
+{
+	return test_data_;
+}
+

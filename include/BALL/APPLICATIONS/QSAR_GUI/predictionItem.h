@@ -63,6 +63,8 @@ namespace BALL
 				void addTrainingsPartition(InputPartitionItem* item);
 				void addTestPartition(InputPartitionItem* item);
 				
+				const QSARData* getTestData();
+				
 		
 			protected:
 				//overlaods ValidationItem::setValidationInput()

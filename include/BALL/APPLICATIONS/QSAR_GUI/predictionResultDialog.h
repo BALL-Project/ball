@@ -26,10 +26,6 @@ namespace BALL
 				*/
 				PredictionResultDialog(PredictionItem* item);	
 			
-				/** standard constructor
-				*/
-				PredictionResultDialog();
-			
 				/** destructor
 				*/
 				~PredictionResultDialog();
