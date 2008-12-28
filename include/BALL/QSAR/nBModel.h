@@ -56,6 +56,7 @@ namespace BALL
 				
 				vector<double> calculateProbabilities(int activitiy_index, int feature_index, double feature_value);
 				
+				int getNoResponseVariables();	
 				//@}
 				
 				

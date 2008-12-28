@@ -149,7 +149,7 @@ namespace BALL
 				
 				/** generates a training and an external validation set from the current QSARData object 
 				@param fraction the fraction of this current coumpounds that should be used as external validation set (by random drawing) */
-				vector<QSARData*> generateExternalSet(double fraction);
+				vector<QSARData*> generateExternalSet(double fraction) const;
 				
 				/** returns a pointer to a new vector containing the UNcentered descriptor values for the s'th substance of the current data set */
 				vector<double>* getSubstance(int s) const;
@@ -160,14 +160,14 @@ namespace BALL
 				/** returns the number of response variables */
 				unsigned int getNoResponseVariables() const;
 				
-				const vector<string>* getSubstanceNames();
+				const vector<string>* getSubstanceNames() const;
 				
 				/** checks whether the response variables contain only discrete values. This can be used to check whether the current input data set is suitable for a ClassificationModel */
-				bool checkforDiscreteY();
+				bool checkforDiscreteY() const;
 				
 				
 				/** checks whether the response variables of a specified file contain only discrete values. */
-				bool checkforDiscreteY(const char* file, SortedList<int>& activity_IDs);
+				bool checkforDiscreteY(const char* file, SortedList<int>& activity_IDs) const;
 				
 				/** allows to set the data-folder neccessary for computation of descriptors without using BALL_DATA_PATH enviroment variable, which is useful for standalone applications */
 				void setDataFolder(const char* folder);

@@ -11,6 +11,7 @@
 #include <QtGui/QDialogButtonBox>
 #include <QHBoxLayout>
 #include <QCheckBox>
+#include <QComboBox>
 
 #include <qwt_symbol.h>
 #include <qwt_plot_zoomer.h>
@@ -57,6 +58,8 @@ namespace BALL
 				
 				void print();
 				
+				virtual void activityChange();
+				
 			
 			
 			protected:
@@ -83,11 +86,11 @@ namespace BALL
 				QPushButton* printButton_;
 				QHBoxLayout* buttonsLayout_;
 				QVBoxLayout* main_layout_;
+				QComboBox* activity_combobox_;
 				
 				QwtPlotZoomer* zoomer_;
 				
-	
-			
+				int selected_activity_;	
 		};
 	}
 }

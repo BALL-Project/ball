@@ -40,6 +40,9 @@ namespace BALL
 			private slots:
 				void selectedCompChanged();
 				
+			protected slots:
+				/** overloads Plotter::activityChange(), in order to make sure to recalculate min and max of the response variable in case of a latent-variable-plotter */
+				void activityChange();
 				
 		};
 	}

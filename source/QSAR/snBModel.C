@@ -177,6 +177,13 @@ bool SNBModel::isTrained()
 }
 
 
+int SNBModel::getNoResponseVariables()
+{
+	if(!isTrained()) return 0;
+	else return mean_.size();	
+}
+
+
 void SNBModel::saveToFile(string filename)
 {
 	bool trained = 1;

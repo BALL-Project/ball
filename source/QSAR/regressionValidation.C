@@ -105,7 +105,6 @@ void RegressionValidation::crossValidation(int k, vector<Matrix<double> >* resul
 		test_substances_.resize(test_size);
 		test_Y_.ReSize(test_size,model_->data->Y_.size());
 		
-
 		int train_line=0;  // no of line in descriptor_matrix_ of model_
 		int test_line=0;
 		
@@ -128,7 +127,6 @@ void RegressionValidation::crossValidation(int k, vector<Matrix<double> >* resul
 		model_->train();
 		if(results!=NULL){ results->push_back(*regr_model_->getTrainingResult());}
 		testAllSubstances(0);	  // do not transform cross-validation test-data again...
-		//Q2_ += 1-(ssE_/(ssE_+ssR_));
 		Q2_ += quality_;
 	}
 	Q2_ = Q2_/k;
@@ -147,8 +145,8 @@ void RegressionValidation::testAllSubstances(bool transform)
 	Vector<double> mean_Y(test_Y_.Ncols()); // mean of each activity
 	//RowVector sum_of_squares(test_Y_.Ncols());
 	
-	/// In case of external test data (for which 'transform'==1), data in test_Y_ has been backtransformed to original space and model_->predict() will return the activity value in original space.
-	/// In case of internal testing ('transform'==0), data in test_Y_ is in transformed space and model->predict() will return the activity value in the same space.
+	/// In case of external test data (for which 'transform'==1), data in test_Y_ has been backtransformed to original space and model_->predict(..,1) will return the activity value in original space.
+	/// In case of internal testing ('transform'==0), data in test_Y_ is in transformed space and model->predict(..,0) will return the activity value in the same space.
 	
 	for(int i=1; i<=test_Y_.Ncols();i++)
 	{
@@ -244,7 +242,6 @@ void RegressionValidation::testInputData(bool transform)
 		setTestLine(i,i,back_transform);
 	}
 	testAllSubstances(transform);
-	//R2_= 1-(ssE_/(ssE_+ssR_));
 	R2_ = quality_;
 	
 	int col=model_->data->descriptor_matrix_.size();
@@ -386,7 +383,6 @@ void RegressionValidation::bootstrap(int k, vector<Matrix<double> >* results, bo
 		}
 		if(results!=NULL){ results->push_back(*regr_model_->getTrainingResult());}
 		testAllSubstances(0);
-		//Q2_ += 1-(ssE_/(ssE_+ssR_));
 		Q2_ += quality_;
 		
 		/// create test data set and calculate R^2

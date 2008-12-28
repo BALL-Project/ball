@@ -83,7 +83,7 @@ FeatureSelectionDialog::FeatureSelectionDialog(FeatureSelectionItem* fsitem, Mod
 		{
 			QLabel* description = new QLabel("Remove each feature whose absolut coefficient value\nis smaller than d times its standard deviation.");
 			label = new QLabel("d = ",this);
-			edit_->setText("1");
+			edit_->setText("2");
 			main_layout->addWidget(description);
 			edit2_ = new QLineEdit(this);
 			QString t;

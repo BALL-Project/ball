@@ -1,5 +1,6 @@
 
 #include <BALL/APPLICATIONS/QSAR_GUI/predictionResultDialog.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/mainWindow.h>
 
 #include <QtGui/QDialogButtonBox>
 #include <QtGui/QFileDialog>
@@ -11,7 +12,6 @@
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
 #include <QtGui/QScrollArea>
-#include <QtGui/QTableWidget>
 #include <QtGui/QHeaderView>
 
 using namespace BALL::VIEW;
@@ -35,27 +35,45 @@ PredictionResultDialog::PredictionResultDialog(PredictionItem* item)
 
 	file_name_ = item->name();
 	results_ = item->results();
-	compound_names_ = item->inputDataItem()->data()->getSubstanceNames();
 
 	QStringList labels;
-	labels << "Compound" << "Prediction";
+	labels << "Compound";
 	
 	bool show_expected=0;
 	const QSARData* test_data = 0;
-	if(item->getTestData()->getNoResponseVariables()>0)
+	uint no_y=0;
+	if(item->getTestData()!=0) no_y=item->getTestData()->getNoResponseVariables();
+	else if(results_->size()==0) return; // no prediction=>nothing to be displayed
+	
+	if(no_y>=1)
 	{
 		show_expected=1;
-		labels<<"Expected";
 		test_data = item->getTestData();
+		if(no_y==1) labels<<"Prediction"<<"Expected";
+		else
+		{
+			for(uint i=0; i<no_y;i++)
+			{
+				String p = "Prediction"+String(i);
+				String e = "Expected"+String(i);
+				labels<<p.c_str()<<e.c_str();
+			}
+		}
+	}
+	else
+	{
+		labels<<"Prediction";
 	}
 	
-	QTableWidget* table = new QTableWidget(results_->size(), 2+show_expected, this);	
-	table->verticalHeader()->hide();
-	table->setHorizontalHeaderLabels (labels);
-	table->setAlternatingRowColors(true);					
-	table->setDragDropMode(QAbstractItemView::NoDragDrop);		
-	table->setEditTriggers(QAbstractItemView::NoEditTriggers);
-	table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);		
+	compound_names_ = test_data->getSubstanceNames();
+	
+	table_ = new QTableWidget(results_->size(), 1+no_y*(1+show_expected), this);	
+	table_->verticalHeader()->hide();
+	table_->setHorizontalHeaderLabels (labels);
+	table_->setAlternatingRowColors(true);					
+	table_->setDragDropMode(QAbstractItemView::NoDragDrop);		
+	table_->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	table_->horizontalHeader()->setResizeMode(QHeaderView::Custom);
 
 	if(((uint)results_->size()) == compound_names_->size())
 	{	
@@ -63,25 +81,32 @@ PredictionResultDialog::PredictionResultDialog(PredictionItem* item)
 		for (QList<Vector<double> >::ConstIterator it = results_->begin(); it != results_->end(); it++)
 		{
 			QTableWidgetItem* name = new QTableWidgetItem(QString(compound_names_->at(i).c_str()));
-    			table->setItem(i, 0, name);
-			QTableWidgetItem* pred = new QTableWidgetItem(QString((((String)(*it)(1)).c_str())));
-    			table->setItem(i, 1, pred);
-			if(show_expected)
+    			table_->setItem(i, 0, name);
+			vector<double>* e = 0;
+			if(show_expected) e = test_data->getActivity(i);
+			
+			for(uint act=0; act<e->size(); act++)
 			{
-				vector<double>* e = test_data->getActivity(i);
-				QTableWidgetItem* expected = new QTableWidgetItem(QString(((String((*e)[0])).c_str())));
-				table->setItem(i, 2, expected);
-				delete e;
+				QTableWidgetItem* pred = new QTableWidgetItem(QString((((String)(*it)(1+act)).c_str())));
+				table_->setItem(i, 1+2*act, pred);
+				
+				if(show_expected)
+				{
+					QTableWidgetItem* expected = new QTableWidgetItem(QString(((String((*e)[act])).c_str())));
+					table_->setItem(i, 2+2*act, expected);
+				}
 			}
+			
+			delete e;
 			i++;
 		}
 	}
 
 	QScrollArea* scrollArea = new QScrollArea(this);
-	scrollArea->setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
-	scrollArea->setVerticalScrollBarPolicy ( Qt::ScrollBarAsNeeded );
+	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	scrollArea->setFrameShape(QFrame::NoFrame);
-	scrollArea->setWidget(table);
+	scrollArea->setWidget(table_);
 	scrollArea->setWidgetResizable(true);
 
 	resultGroupLayout->addWidget(scrollArea);
@@ -92,50 +117,121 @@ PredictionResultDialog::PredictionResultDialog(PredictionItem* item)
 	setLayout(mainLayout);	
 	setWindowTitle("Predicted Activity Values for " + item->name());
 	
-	resize(330,450);
+	uint width = 0;
+	for(int i=0; i<table_->columnCount();i++)
+	{
+		width+=table_->columnWidth(i);
+	}
+	width+=65;
+	uint mainWindow_width = item->view()->data_scene->main_window->size().width();
+	if(width<mainWindow_width) resize(width,450);
+	else resize(mainWindow_width,450);
+	table_->setSortingEnabled(1);
 
 	connect(buttons, SIGNAL(accepted()), this, SLOT(accept()));
 	connect(print_button, SIGNAL(clicked()), this, SLOT(saveToFile()));
 }
 
+
 PredictionResultDialog::~PredictionResultDialog()
 {
 }
 
+
 void PredictionResultDialog::saveToFile()
 {
 	QString filename = QFileDialog::getSaveFileName(this, tr("Save File as"),file_name_ +"_prediction_results.txt",tr("text (*.txt)"));
-
 	QFile file(filename);
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
 	{
 		return;
 	}
-
 	ofstream out(file.fileName().toStdString().c_str());
 	
-	bool print_expected=0;
-	const QSARData* test_data = 0;
-	if(pred_item_->getTestData()->getNoResponseVariables()>0)
-	{
-		print_expected=1;
-		test_data = pred_item_->getTestData();
-	}
+	uint no_rows=table_->rowCount();
+	uint no_cols=table_->columnCount();
+	bool use_selection = (table_->selectedItems().size()>1);
 
-	if(((uint)results_->size()) == compound_names_->size())
-	{	
-		int i = 0;
-		for (QList<Vector<double> >::ConstIterator it = results_->begin(); it != results_->end(); it++)
+	list<int> selected_columns;
+	list<int> selected_rows;
+	list<int>::iterator col_it;
+	list<int>::iterator row_it;
+	if(use_selection) 
+	{
+		// find selected columns 
+		QList<QTableWidgetSelectionRange> ranges = table_->selectedRanges();
+		for(int i=0; i<(int)no_cols; i++)
 		{
-			out << compound_names_->at(i) << "\t" << (*it)(1);
-			if(print_expected) 
+			for(QList<QTableWidgetSelectionRange>::iterator it=ranges.begin();it!=ranges.end();it++)
 			{
-				vector<double>* e = test_data->getActivity(i);
-				out<<"\t"<<(*e)[0];
-				delete e;
+				if(i<=it->rightColumn() && i>=it->leftColumn())
+				{
+					selected_columns.push_back(i);
+					break;
+				}
 			}
-			out<< "\n";
-			i++;
+		}
+		col_it=selected_columns.begin();
+		
+		// find selected rows 
+		for(int i=0; i<(int)no_rows; i++)
+		{
+			for(QList<QTableWidgetSelectionRange>::iterator it=ranges.begin();it!=ranges.end();it++)
+			{
+				if(i<=it->bottomRow() && i>=it->topRow())
+				{
+					selected_rows.push_back(i);
+					break;
+				}
+			}
+		}
+		row_it=selected_rows.begin();
+	}
+	
+	// print table-header
+	for(int i=0; i<(int)no_cols; i++)
+	{
+		bool write=0;
+		if(use_selection)
+		{
+			if(col_it!=selected_columns.end() && *col_it==i) 
+			{
+				write=1;
+				col_it++;
+			}			
+		}
+		if(!use_selection || write) out<<table_->horizontalHeaderItem(i)->text().toStdString()<<"\t";
+	
+	}	
+	out<<endl;
+	
+	if(use_selection) col_it=selected_columns.begin();
+	
+	// print data
+	for(int i=0; i<(int)no_rows; i++)
+	{
+		bool wrote_item=0;
+		for(int j=0; j<(int)no_cols; j++)
+		{
+			if(!use_selection || table_->item(i,j)->isSelected())
+			{
+				out<<table_->item(i,j)->text().toStdString()<<"\t";
+				wrote_item=1;
+			}
+			else if(col_it!=selected_columns.end() && *col_it==j && row_it!=selected_rows.end() && *row_it==i)
+			{
+				out<<"\t";
+				col_it++;
+			}
+		}
+		if(wrote_item) 
+		{
+			out<<endl;
+			if(use_selection) 
+			{
+				row_it++;
+				col_it=selected_columns.begin();
+			}
 		}
 	}
 }

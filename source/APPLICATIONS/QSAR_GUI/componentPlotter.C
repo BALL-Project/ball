@@ -41,6 +41,27 @@ ComponentPlotter::ComponentPlotter(ModelItem* model_item, bool plot_loadings)
 	
 	if(plot_loadings_) setWindowTitle("Loadings Plotter");
 	else setWindowTitle("Latent Variable Plotter");
+	
+	calculateComponents();
+	if(component_matrix_==NULL || component_matrix_->Ncols()==0)
+	{
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"ComponentPlotter error","No input data available, thus plot cannot be created!");
+	}
+	
+	// loading-plot is identical for all response variables ...
+	if(!plot_loadings_)
+	{
+		int no_y = model_item_->inputDataItem()->data()->getNoResponseVariables();
+		if(no_y>1)
+		{
+			for(uint i=0; i<no_y;i++)
+			{
+				String s = "Activity "+String(i);
+				activity_combobox_->addItem(s.c_str(),i);
+			}
+			activity_combobox_->show();
+		}
+	}
 }
 
 
@@ -49,7 +70,7 @@ void ComponentPlotter::selectedCompChanged()
 	delete zoomer_;
 	zoomer_ = NULL;
 	plot(1);
-	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
+	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this); // if not creating a new zoomer, zooming will not work correctly
 }
 
 
@@ -98,7 +119,7 @@ void ComponentPlotter::calculateComponents()
 		for(uint j=0; j<size; j++)
 		{
 			vector<double>* resp = data->getActivity(j);
-			double response_value = (*resp)[0];
+			double response_value = (*resp)[selected_activity_];
 			delete resp;
 			if(response_value<min_response_value_) min_response_value_=response_value;
 			if(response_value>max_response_value_) max_response_value_=response_value;
@@ -119,17 +140,28 @@ void ComponentPlotter::calculateComponents()
 	no_components=component_matrix_->Ncols();
 	if(no_components<2) return;
 
-	for(uint i=1;i<=no_components;i++)
+	if(component_one_combobox_->count()==0)
 	{
-		String tmp;
-		if(!plot_loadings_) tmp="component ";
-		else tmp="loading ";
-		tmp+=String(i);
-		component_one_combobox_->addItem(tmp.c_str(),i);
-		component_two_combobox_->addItem(tmp.c_str(),i);
+		for(uint i=1;i<=no_components;i++)
+		{
+			String tmp;
+			if(!plot_loadings_) tmp="component ";
+			else tmp="loading ";
+			tmp+=String(i);
+			component_one_combobox_->addItem(tmp.c_str(),i);
+			component_two_combobox_->addItem(tmp.c_str(),i);
+		}
+		component_one_combobox_->setCurrentIndex(0);
+		component_two_combobox_->setCurrentIndex(1);	
 	}
-	component_one_combobox_->setCurrentIndex(0);
-	component_two_combobox_->setCurrentIndex(1);	
+}
+
+
+// SLOT
+void ComponentPlotter::activityChange()
+{
+	component_matrix_=NULL;  // make sure to recalculate min and max of the response variable
+	Plotter::activityChange();	
 }
 
 
@@ -166,7 +198,7 @@ void ComponentPlotter::plot(bool zoom)
 		if(!plot_loadings_)
 		{
 			vector<double>* resp = data->getActivity(j-1);
-			double response_value = (*resp)[0];
+			double response_value = (*resp)[selected_activity_];
 			delete resp;
 			QBrush b(QColor(color_map.rgb(interval,response_value)),Qt::SolidPattern);
 			symbol.setBrush(b);

@@ -51,6 +51,8 @@ namespace BALL{
 				/** calculate the probability for the specified feature to assume the given value for each class
 				@return a probability for each class */
 				vector<double> calculateProbabilities(int activitiy_index, int feature_index, double feature_value);
+				
+				int getNoResponseVariables();
 				//@}
 				
 				

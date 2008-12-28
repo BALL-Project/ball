@@ -2,6 +2,7 @@
 #define PREDDIALOG_H
 
 #include <QtGui/QDialog>
+#include <QtGui/QTableWidget>
 #include <BALL/APPLICATIONS/QSAR_GUI/predictionItem.h>
 
 
@@ -42,10 +43,11 @@ namespace BALL
 				QString file_name_;
 
 				/** the compund names*/
-				const vector<string>* compound_names_; 	
+				const vector<string>* compound_names_;	
 				
 				PredictionItem* pred_item_;
-		
+				
+				QTableWidget* table_;		
 		};			
 	}
 }

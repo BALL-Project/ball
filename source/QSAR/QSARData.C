@@ -1101,7 +1101,7 @@ vector<QSARData*> QSARData::partitionInputData(int p)
 }
 
 
-vector<QSARData*> QSARData::generateExternalSet(double fraction)
+vector<QSARData*> QSARData::generateExternalSet(double fraction) const
 {
 	vector<QSARData*> v(2);	
 	v[0] = new QSARData;  // training set 
@@ -1395,13 +1395,13 @@ vector<double>* QSARData::getActivity(int s) const
 }
 
 
-const vector<string>* QSARData::getSubstanceNames()
+const vector<string>* QSARData::getSubstanceNames() const
 {
 	return &substance_names_;
 }
 
 
-bool QSARData::checkforDiscreteY()
+bool QSARData::checkforDiscreteY() const
 {
 	for(uint i=0; i<Y_.size();i++)
 	{
@@ -1419,7 +1419,7 @@ bool QSARData::checkforDiscreteY()
 
 
 
-bool QSARData::checkforDiscreteY(const char* file, SortedList<int>& activity_IDs)
+bool QSARData::checkforDiscreteY(const char* file, SortedList<int>& activity_IDs) const
 {
 	SDFile sd(file);
 	sd.disableAtoms();

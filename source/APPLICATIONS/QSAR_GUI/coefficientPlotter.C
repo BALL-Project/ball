@@ -19,6 +19,19 @@ CoefficientPlotter::CoefficientPlotter(ModelItem* model_item)
 	plot(1);
 	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
 	setWindowTitle("Coefficient Plotter");
+	
+	RegressionModel* model = (RegressionModel*)model_item_->model();
+	int no_y = model->getTrainingResult()->getColumnCount();
+	if(no_y>1)
+	{
+		activity_combobox_->addItem("All activities",-1);
+		for(uint i=0; i<no_y;i++)
+		{
+			String s = "Activity "+String(i);
+			activity_combobox_->addItem(s.c_str(),i);
+		}
+		activity_combobox_->show();
+	}
 }
 
 
@@ -59,7 +72,14 @@ void CoefficientPlotter::plot(bool zoom)
 	double max_x=coefficient_matrix->Nrows();
 	const uint size = coefficient_matrix->Nrows();
 	
-	for(int i=1; i<=coefficient_matrix->Ncols(); i++)
+	int start_matrixindex = selected_activity_+1;
+	int end_matrixindex = selected_activity_+1;
+	if(selected_activity_<0) // plot coefficients for all activities at once
+	{
+		start_matrixindex = 1;
+		end_matrixindex = coefficient_matrix->Ncols();
+	}
+	for(int i=start_matrixindex; i<=end_matrixindex; i++)
 	{
 		QwtPlotCurve* curve_i = new QwtPlotCurve;
 		double* x = new double[size];

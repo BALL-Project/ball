@@ -22,6 +22,17 @@ PredictionPlotter::PredictionPlotter(PredictionItem* item)
 	plot(1);
 	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
 	setWindowTitle("Prediction Plotter");
+	
+	uint no_y = data_->getNoResponseVariables();
+	if(no_y>1)
+	{
+		for(uint i=0; i<no_y;i++)
+		{
+			String s = "Activity "+String(i);
+			activity_combobox_->addItem(s.c_str(),i);
+		}
+		activity_combobox_->show();
+	}
 }
 
 
@@ -35,6 +46,17 @@ PredictionPlotter::PredictionPlotter(ValidationItem* item)
 	plot(1);
 	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
 	setWindowTitle("Nested Validation Prediction-Plotter");
+	
+	uint no_y = val_item_->modelItem()->inputDataItem()->data()->getNoResponseVariables();
+	if(no_y>1)
+	{
+		for(uint i=0; i<no_y;i++)
+		{
+			String s = "Activity "+String(i);
+			activity_combobox_->addItem(s.c_str(),i);
+		}
+		activity_combobox_->show();
+	}
 }
 
 
@@ -110,9 +132,9 @@ void PredictionPlotter::plotObservedVsExpected(bool zoom)
 		{
 			QwtPlotMarker* marker= new QwtPlotMarker;
 			marker->setSymbol(symbol);
-			double observed = (*it)(1);
+			double observed = (*it)(selected_activity_+1);
 			vector<double>* e = p_data->getActivity(i);
-			double expected = (*e)[0];
+			double expected = (*e)[selected_activity_];
 			delete e;
 			if(observed<min_y) min_y=observed;
 			if(observed>max_y) max_y=observed;
@@ -278,9 +300,9 @@ void PredictionPlotter::plotConfusion(bool zoom)
 		int compound = 0;
 		for(QList<Vector<double> >::ConstIterator it = results->begin(); it != results->end(); it++,compound++)
 		{
-			int observed = (int)((*it)(1));
+			int observed = (int)((*it)(selected_activity_+1));
 			vector<double>* e = p_data->getActivity(compound);
-			int expected = (int)((*e)[0]);
+			int expected = (int)((*e)[selected_activity_]);
 			delete e;
 			if(observed==expected)
 			{

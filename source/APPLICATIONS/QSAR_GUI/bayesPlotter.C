@@ -57,9 +57,7 @@ void SpectrogramData::precalculateProb()
 		double feature_value=min_y_;
   		for(int j=0; j<y_size;j++)
 		{
-			// replace by : nBModel::getProbability(i,j,act)
-			//double value = pow(2,-(abs((double)i/j)));
-			vector<double> probabilities = snb_->calculateProbabilities(0,i,feature_value);
+			vector<double> probabilities = snb_->calculateProbabilities(plotter_->selected_activity_,i,feature_value);
 			double prob;
 			if(plotter_->class_to_use_>-1) prob=probabilities[plotter_->class_to_use_];
 			else 
@@ -79,7 +77,6 @@ void SpectrogramData::precalculateProb()
 				else prob = max_index;
 			}			
 			
-			//cout<<prob<<" ";
 			if(prob<min_z_) min_z_ = prob;
 			if(prob>max_z_) max_z_ = prob;
 			plotter_->data_[i][j] = prob;
@@ -100,13 +97,24 @@ BayesPlotter::BayesPlotter(ModelItem* model_item)
 			
 	if(*model_item_->model()->getType()!="snB" && *model_item_->model()->getType()!="nB")
 	{
-		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"BayesPlotter error","BayesPlotter can only be created for a SNBModel!");
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"BayesPlotter error","BayesPlotter can only be created for a Bayes model!");
 	}
 	
 	qwt_plot_->setAxisTitle(QwtPlot::xBottom,"Features");
 	qwt_plot_->enableAxis(QwtPlot::yRight);	
 	plot(1);
 	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
+	
+	uint no_y = ((BayesModel*)model_item_->model())->getNoResponseVariables();
+	if(no_y>1)
+	{
+		for(uint i=0; i<no_y;i++)
+		{
+			String s = "Activity "+String(i);
+			activity_combobox_->addItem(s.c_str(),i);
+		}
+		activity_combobox_->show();
+	}
 }
 
 
@@ -114,6 +122,7 @@ BayesPlotter::BayesPlotter(ModelItem* model_item)
 
 void BayesPlotter::plot(bool zoom)
 {
+	delete spectrogram_;
 	BayesModel* snb = (BayesModel*) model_item_->model();
 	spectrogram_ = new QwtPlotSpectrogram();
 	double y0=-3; double y1=3; double res=0.1;

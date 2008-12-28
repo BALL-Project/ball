@@ -11,6 +11,7 @@ using namespace std;
 Plotter::Plotter(DataItem* item)
 {
 	item_ = item;
+	selected_activity_ = 0;
 	
 	data_symbol.setStyle(QwtSymbol::Ellipse);
 	data_symbol.setSize(5,5);
@@ -33,6 +34,8 @@ Plotter::Plotter(DataItem* item)
 	buttonsLayout_->addWidget(show_labels_);
 	buttonsLayout_->addWidget(saveButton_);
 	buttonsLayout_->addWidget(printButton_);
+	activity_combobox_ = new QComboBox;
+	buttonsLayout_->addWidget(activity_combobox_);
 	buttonsLayout_->setAlignment(Qt::AlignLeft);
 	
 	main_layout_ = new QVBoxLayout;
@@ -44,7 +47,9 @@ Plotter::Plotter(DataItem* item)
 	connect(show_labels_, SIGNAL(clicked()), this, SLOT(labelsChangeState()));
 	connect(saveButton_, SIGNAL(clicked()), this, SLOT(save()));
 	connect(printButton_,SIGNAL(clicked()),this,SLOT(print()));
+	connect(activity_combobox_,SIGNAL(currentIndexChanged(int)),this,SLOT(activityChange()));
 	
+	activity_combobox_->hide();
 	resize(600,400);
 	qwt_plot_->resize(600,400);
 	qwt_plot_->show();
@@ -126,6 +131,17 @@ void Plotter::print()
 		data_symbol = symbol_backup;
 		plot(0);
 	}
+}
+
+
+// SLOT
+void Plotter::activityChange()
+{
+	delete zoomer_;
+	selected_activity_ = activity_combobox_->itemData(activity_combobox_->currentIndex()).toInt();
+	plot(1);
+	qwt_plot_->replot();
+	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this); // if not creating a new zoomer, zooming will not work correctly
 }
 
 

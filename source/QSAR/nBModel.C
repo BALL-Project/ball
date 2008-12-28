@@ -188,6 +188,13 @@ bool NBModel::isTrained()
 }
 
 
+int NBModel::getNoResponseVariables()
+{
+	if(!isTrained()) return 0;
+	else return probabilities_.size();	
+}
+
+
 vector<double> NBModel::calculateProbabilities(int activitiy_index, int feature_index, double feature_value)
 {
 	if(probabilities_.size()==0 || probabilities_[0].size()==0)

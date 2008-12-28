@@ -186,6 +186,11 @@ void PredictionItem::showPredictionPlotter()
 
 void PredictionItem::showPredictionDialog()
 {
+	if(results_.size()==0)
+	{
+		QMessageBox::information(view_,"No predictions","No predictions have been done yet that could be displayed!\nTherefore, click \"Execute Pipeline\" first.");
+		return;	
+	}
 	PredictionResultDialog predictionResultDialog(this);
 	predictionResultDialog.exec();
 }

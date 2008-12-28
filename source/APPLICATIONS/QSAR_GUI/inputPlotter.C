@@ -17,6 +17,16 @@ InputPlotter::InputPlotter(InputDataItem* item)
 	buttonsLayout_->addWidget(sort_checkbox_);
 	connect(sort_checkbox_, SIGNAL(clicked()), this, SLOT(sortChangeState()));
 	
+	if(data_->getNoResponseVariables()>1)
+	{
+		for(uint i=0; i<data_->getNoResponseVariables();i++)
+		{
+			String s = "Activity "+String(i);
+			activity_combobox_->addItem(s.c_str(),i);
+		}
+		activity_combobox_->show();
+	}
+	
 	plot(1);
 	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
 	setWindowTitle("Input Data Plotter");
@@ -58,7 +68,7 @@ void InputPlotter::sortChangeState()
 		sort_ = 1;
 		plot(1);
 	}
-	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
+	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this); // if not creating a new zoomer, zooming will not work correctly 
 }
 
 
@@ -81,7 +91,7 @@ void InputPlotter::plotActivity(bool zoom)
 		QwtPlotMarker* marker= new QwtPlotMarker;
 		marker->setSymbol(data_symbol);
 		vector<double>* y0 = data_->getActivity(i);
-		double y = (*y0)[0];
+		double y = (*y0)[selected_activity_];
 		delete y0;
 		if(y<min_y) min_y=y;
 		if(y>max_y) max_y=y;
@@ -132,7 +142,7 @@ void InputPlotter::plotSortedActivity(bool zoom)
 	for(uint i=0; i<data_->getNoSubstances();i++)
 	{
 		vector<double>* y0 = data_->getActivity(i);
-		act.insert((*y0)[0]);
+		act.insert((*y0)[selected_activity_]);
 		delete y0;
 	}
 		

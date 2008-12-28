@@ -26,6 +26,9 @@ namespace BALL
 			/** calculate the probability for the specified feature to assume the given value for each class
 			@return a probability for each class */
 			virtual vector<double> calculateProbabilities(int activitiy_index, int feature_index, double feature_value) = 0;
+			
+			/** returns the number of response variables for which this model has been trained */
+			virtual int getNoResponseVariables() = 0;
 	
 		};
 	}
