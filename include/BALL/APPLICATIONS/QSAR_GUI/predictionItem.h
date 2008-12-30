@@ -26,7 +26,9 @@ namespace BALL
 			
 			public:
 				/** @name Constructors and Destructors*/
-				PredictionItem(InputDataItem* input_item, ModelItem* model, DataItemView* view);
+				/** Constructor.
+				@param input_item The InputDataItem which contains the data-source for the predictions (NOT the training data) */
+				PredictionItem(InputDataItem* test_data_item, ModelItem* model, DataItemView* view);
 
 				/** copy constructor */
 				PredictionItem(PredictionItem& item);
@@ -46,7 +48,7 @@ namespace BALL
 				ModelItem* modelItem();
 
 				/** returns the results of the prediction*/
-				const QList<Vector<double> >* results();
+				const list<Vector<double> >* results();
 
 				enum { Type = UserType + 6};
 				int type() const { return Type; }
@@ -65,6 +67,12 @@ namespace BALL
 				
 				const QSARData* getTestData();
 				
+				/** save the prediction results to a file */
+				void saveToFile(String filename);
+				
+				/** restore prediction-results from a file */
+				void loadFromFile(String filename);
+				
 		
 			protected:
 				//overlaods ValidationItem::setValidationInput()
@@ -82,12 +90,13 @@ namespace BALL
 				/** @name Private Attributes */
 
 				/** results of the prediction */
-				QList<Vector<double> > results_;
+				list<Vector<double> > results_;
 				//ModelItem* model_item_;
-				InputDataItem* input_data_item_;
-				DottedEdge* dotted_edge_;
 				
-				QSARData* test_data_;
+				/** The InputDataItem which contains the data-source for the predictions (NOT the training data) */
+				InputDataItem* test_data_item_;
+				
+				DottedEdge* dotted_edge_;
 				
 				list<InputPartitionItem*> trainings_partitions_;
 				list<InputPartitionItem*> test_partitions_;	

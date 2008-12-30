@@ -103,10 +103,10 @@ void PredictionPlotter::plotObservedVsExpected(bool zoom)
 	int p=0;
 	for(list<PredictionItem*>::iterator p_it=pred_items.begin(); p_it!=pred_items.end(); p_it++,p++)
 	{
-		QSARData* p_data;
+		const QSARData* p_data;
 		if(pred_item_) p_data = data_;
-		else p_data = (*p_it)->test_data_;
-		const QList<Vector<double> >* results = (*p_it)->results();
+		else p_data = (*p_it)->getTestData();
+		const list<Vector<double> >* results = (*p_it)->results();
 		if(results==0)
 		{
 			cout<<"Results must be read before plotting can be done!"<<endl;
@@ -128,7 +128,7 @@ void PredictionPlotter::plotObservedVsExpected(bool zoom)
 		int i = 0;
 		const vector<string>* comp_names = p_data->getSubstanceNames();
 		
-		for (QList<Vector<double> >::ConstIterator it = results->begin(); it != results->end(); it++,i++)
+		for (list<Vector<double> >::const_iterator it = results->begin(); it != results->end(); it++,i++)
 		{
 			QwtPlotMarker* marker= new QwtPlotMarker;
 			marker->setSymbol(symbol);
@@ -187,7 +187,7 @@ void PredictionPlotter::plotObserved(bool zoom)
 {
 	if(pred_item_==NULL) return;
 	
-	const QList<Vector<double> >* results = pred_item_->results();
+	const list<Vector<double> >* results = pred_item_->results();
 	
 	if(results==0)
 	{
@@ -202,7 +202,7 @@ void PredictionPlotter::plotObserved(bool zoom)
 	
 	int i = 0;
 	const vector<string>* comp_names = data_->getSubstanceNames();
-	for (QList<Vector<double> >::ConstIterator it = results->begin(); it != results->end(); it++,i++)
+	for (list<Vector<double> >::const_iterator it = results->begin(); it != results->end(); it++,i++)
 	{
 		QwtPlotMarker* marker= new QwtPlotMarker;
 		marker->setSymbol(data_symbol);
@@ -282,10 +282,10 @@ void PredictionPlotter::plotConfusion(bool zoom)
 	int p=0;
 	for(list<PredictionItem*>::iterator p_it=pred_items.begin(); p_it!=pred_items.end(); p_it++,p++)
 	{
-		QSARData* p_data;
+		const QSARData* p_data;
 		if(pred_item_) p_data = data_;
-		else p_data = (*p_it)->test_data_;
-		const QList<Vector<double> >* results = (*p_it)->results();
+		else p_data = (*p_it)->getTestData();
+		const list<Vector<double> >* results = (*p_it)->results();
 		if(results==0)
 		{
 			cout<<"Results must be read before plotting can be done!"<<endl;
@@ -298,7 +298,7 @@ void PredictionPlotter::plotConfusion(bool zoom)
 		}
 		
 		int compound = 0;
-		for(QList<Vector<double> >::ConstIterator it = results->begin(); it != results->end(); it++,compound++)
+		for(list<Vector<double> >::const_iterator it = results->begin(); it != results->end(); it++,compound++)
 		{
 			int observed = (int)((*it)(selected_activity_+1));
 			vector<double>* e = p_data->getActivity(compound);

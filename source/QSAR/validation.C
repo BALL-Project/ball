@@ -13,13 +13,14 @@ Validation::Validation(Model* m)
 {
 	model_=m;
 	validation_statistic_ = 0;
+	yRand_results_.resize(0,0);
 }
 
 Validation::~Validation()
 {
 }
 
-int Validation::getStat()
+int Validation::getStat() const
 {
 	return validation_statistic_;
 }
@@ -123,5 +124,10 @@ void Validation::yRand()
 	}
 }
 
+
+const BALL::Matrix<double>& Validation::getYRandResults() const
+{
+	return yRand_results_;
+}
 
 

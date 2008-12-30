@@ -106,6 +106,12 @@ namespace BALL
 				/** overloads DataItem::change(), so that all plotters that have already been created are deleted */
 				void change();
 				
+				/** save the result of the applied validation methods to a file */
+				void saveToFile(String filename);
+				
+				/** restore validation-results from a file */
+				void loadFromFile(String filename);
+				
 		
 			protected:
 			
@@ -141,6 +147,8 @@ namespace BALL
 				ModelItem* model_item_;
 
 				Matrix<double> result_of_rand_test_;
+				
+				Matrix<double> coeff_stddev_;
 
 				double q2_;
 				
@@ -163,6 +171,9 @@ namespace BALL
 				int validation_statistic_;
 				
 				PredictionPlotter* plotter_;
+				
+				/** processes the validation results and updates the result-display */
+				void processResults();
 				
 			
 			protected slots:

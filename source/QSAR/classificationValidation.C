@@ -5,6 +5,7 @@
 #include <BALL/QSAR/classificationValidation.h>
 #include <BALL/QSAR/statistics.h>
 #include <BALL/QSAR/classificationModel.h>
+#include <BALL/QSAR/registry.h>
 
 using namespace BALL::QSAR;
 
@@ -316,7 +317,7 @@ void ClassificationValidation::bootstrap(int k, bool restore)
 }
 
 
-BALL::Matrix<double> ClassificationValidation::yRandomizationTest(int runs, int k)
+const BALL::Matrix<double>& ClassificationValidation::yRandomizationTest(int runs, int k)
 {
 	Matrix<double> y_backup=model_->Y_;
 	Matrix<double> desc_backup=model_->descriptor_matrix_;
@@ -325,8 +326,8 @@ BALL::Matrix<double> ClassificationValidation::yRandomizationTest(int runs, int 
 				
 	//vector<double> c(2,-1);
 	//vector<vector<double> > results(runs,2);
-	Matrix<double> results(runs,2);
-	results=-1;
+	yRand_results_.resize(runs,2);
+	yRand_results_=-1;
 	class_results_.resize(clas_model->labels_.size());
 	class_results_ = 0;
 
@@ -335,10 +336,8 @@ BALL::Matrix<double> ClassificationValidation::yRandomizationTest(int runs, int 
 		yRand(); // randomize all columns of Y_
 		crossValidation(k,0);
 		testInputData(0);
-		//results[i][0]=quality_input_test_;
-		//results[i][1]=quality_cv_;
-		results(i+1,1)=quality_input_test_;
-		results(i+1,2)=quality_cv_;
+		yRand_results_(i+1,1)=quality_input_test_;
+		yRand_results_(i+1,2)=quality_cv_;
 	}
 	
 	class_results_ = class_results_/runs;
@@ -350,7 +349,7 @@ BALL::Matrix<double> ClassificationValidation::yRandomizationTest(int runs, int 
 	data->Y_=dataY_backup;
 	model_->train();
 	
-	return results;
+	return yRand_results_;
 }
 
 
@@ -495,4 +494,44 @@ void ClassificationValidation::setCVRes(double d)
 double ClassificationValidation::getFitRes()
 {
 	return quality_input_test_;
+}
+
+void ClassificationValidation::saveToFile(string filename) const
+{
+	saveToFile(filename,quality_input_test_,quality_cv_);	
+}
+
+void ClassificationValidation::saveToFile(string filename, const double& quality_input_test, const double& predictive_quality) const
+{
+	ofstream out(filename.c_str());
+	
+	Registry reg;
+	out<<"# used quality statistic: "<<reg.getClassificationStatisticName(validation_statistic_)<<endl<<endl;
+	out << "Fit to training data = "<<quality_input_test<<endl;
+	out << "Predictive quality = "<<predictive_quality<<endl;	
+}
+
+
+void ClassificationValidation::readFromFile(string filename)
+{
+	ifstream in(filename.c_str());
+	
+	while(in)
+	{
+		String line;
+		getline(in,line);
+		line.trimLeft();
+		if(line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
+		{
+			continue;
+		}
+		if(line.hasPrefix("Fit to training data"))
+		{
+			quality_input_test_ = ((String)line.after("=")).trimLeft().toDouble();
+		}
+		else if(line.hasPrefix("Predictive quality"))
+		{
+			quality_cv_ = ((String)line.after("=")).trimLeft().toDouble();
+		}
+	}
 }

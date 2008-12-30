@@ -1069,6 +1069,36 @@ void MainWindow::saveItemsToFiles(String directory, String archive, String confi
 			files+=f1+" ";
 			(*it)->saveToFile(file);
 		}
+		for (Pipeline<ValidationItem*>::iterator it = val_pipeline_.begin(); it != val_pipeline_.end(); it++)
+		{
+			// if validation has not yet been done, there is nothing to be saved
+			if(!(*it)->isDone()) continue;
+			
+			String f1 = (*it)->savedAs().toStdString();
+			if(f1=="")
+			{
+				throw GeneralException(__FILE__,__LINE__,"Validation saving error ", "Validation must be assigned a file to be saved to!");
+			}
+			String file = directory+f1;
+			if(use_tmp) file = settings.tmp_folder+settings.path_separator+f1;
+			files+=f1+" ";
+			(*it)->saveToFile(file);
+		}
+		for (Pipeline<PredictionItem*>::iterator it = prediction_pipeline_.begin(); it != prediction_pipeline_.end(); it++)
+		{
+			// if validation has not yet been done, there is nothing to be saved
+			if(!(*it)->isDone()) continue;
+			
+			String f1 = (*it)->savedAs().toStdString();
+			if(f1=="")
+			{
+				throw GeneralException(__FILE__,__LINE__,"Prediction saving error ", "Prediction must be assigned a file to be saved to!");
+			}
+			String file = directory+f1;
+			if(use_tmp) file = settings.tmp_folder+settings.path_separator+f1;
+			files+=f1+" ";
+			(*it)->saveToFile(file);
+		}
 	}
 	catch(GeneralException e)
 	{	
@@ -1146,7 +1176,26 @@ void MainWindow::loadItemsFromFiles(String directory)
 			ifstream input(filename.c_str());
 			if(input) // read only existing models
 			{
-				//cout<<"model-file= "<<directory+(*it)->savedAs().toStdString()<<endl<<flush;
+				input.close();
+				(*it)->loadFromFile(filename);
+			}
+		}
+		for (Pipeline<ValidationItem*>::iterator it = val_pipeline_.begin(); it != val_pipeline_.end(); it++)
+		{
+			String filename=directory+(*it)->savedAs().toStdString();
+			ifstream input(filename.c_str());
+			if(input) // read only existing validation-files
+			{
+				input.close();
+				(*it)->loadFromFile(filename);
+			}
+		}
+		for (Pipeline<PredictionItem*>::iterator it = prediction_pipeline_.begin(); it != prediction_pipeline_.end(); it++)
+		{
+			String filename=directory+(*it)->savedAs().toStdString();
+			ifstream input(filename.c_str());
+			if(input) // read only existing validation-files
+			{
 				input.close();
 				(*it)->loadFromFile(filename);
 			}

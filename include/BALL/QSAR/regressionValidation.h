@@ -70,7 +70,7 @@ namespace BALL
 				/** Y randomization test \n
 				Randomizes all columns of model.Y, trains the model, runs crossValidation and testInputData and saves the resulting R2 and Q2 value to a matrix with 2 columns; the R2 values makeing up the first colum, the Q2 value the second.
 				@param runs this is repeated as often as specified by 'runs' */
-				BALL::Matrix<double> yRandomizationTest(int runs, int k);
+				const BALL::Matrix<double>& yRandomizationTest(int runs, int k);
 				
 				/** get the Q^2 value.\n
 				If no cross-validation has been done yet, -1 is returned */
@@ -116,6 +116,12 @@ namespace BALL
 				const BALL::Matrix<double>* getCoefficientStdErrors();
 				
 				void setCoefficientStdErrors(const BALL::Matrix<double>* stddev);
+				
+				void saveToFile(string filename) const;
+				
+				void saveToFile(string filename, const double& r2, const double& q2, const Matrix<double>& coefficient_stddev, const Matrix<double>& yRand_results) const;
+				
+				void readFromFile(string filename);
 				//@}
 				
 	

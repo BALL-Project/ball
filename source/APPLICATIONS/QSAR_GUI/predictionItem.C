@@ -15,7 +15,7 @@ using namespace BALL::VIEW::Exception;
 
 PredictionItem::PredictionItem(InputDataItem* input_item, ModelItem* model_item, DataItemView* view):
 	ValidationItem(7,view),
-	input_data_item_(input_item),
+	test_data_item_(input_item),
 	dotted_edge_(NULL)
 {
 	model_item_ = model_item;
@@ -33,7 +33,7 @@ PredictionItem::PredictionItem(PredictionItem& item)
 	setPixmap(item.pixmap());
 	model_item_ = item.model_item_;
 	results_ = item.results_;
-	input_data_item_ = item.input_data_item_;
+	test_data_item_ = item.test_data_item_;
 	plotter_ = item.plotter_;
 	dotted_edge_ = NULL;
 	createActions();
@@ -75,7 +75,7 @@ PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*
 	{
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"PredictionItem reading error","InputDataItem for which the prediction should be done can not be found!");
 	}
-	input_data_item_ = (InputDataItem*) it->second;
+	test_data_item_ = (InputDataItem*) it->second;
 
 	if(item_positions!=0 && item_positions->size()>0)
 	{
@@ -84,15 +84,15 @@ PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*
 		setPos(pos.first,pos.second);
 	}
 	
-	dotted_edge_ = new DottedEdge(input_data_item_,this);
+	dotted_edge_ = new DottedEdge(test_data_item_,this);
 	view_->data_scene->addItem(dotted_edge_);
-	Edge* edge = new Edge(input_data_item_, model_item_);
+	Edge* edge = new Edge(test_data_item_, model_item_);
 	view_->data_scene->addItem(edge);
 	Edge* edge2 = new Edge(model_item_,this);
 	view_->data_scene->addItem(edge2);
 	
 	setPixmap(QPixmap("./images/prediction.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
-	name_ = "Prediction for " + input_data_item_->name();
+	name_ = "Prediction for " + test_data_item_->name();
 	view_->data_scene->addItem(this);
 	addToPipeline();
 	filenames_map.insert(make_pair(conf.output,this));
@@ -105,7 +105,7 @@ PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*
 
 void PredictionItem::setValidationInput()
 {
-	model_item_->model()->setDataSource(test_data_);
+	model_item_->model()->setDataSource(test_data_item_->data());
 }
 
 
@@ -114,18 +114,15 @@ bool PredictionItem::execute()
 	if(done_) return 0;   // do nothing twice !
 	
 	// predict activities
-	for(unsigned int i=0; i<input_data_item_->data()->getNoSubstances();i++)
+	for(unsigned int i=0; i<test_data_item_->data()->getNoSubstances();i++)
 	{
-		vector<double>* substance = input_data_item_->data()->getSubstance(i);
+		vector<double>* substance = test_data_item_->data()->getSubstance(i);
 		Vector<double> res = model_item_->model()->predict(*substance,1);
-		results_ << res;
+		results_.push_back(res);
 		delete substance;
 	}
 	
-	// if expected activity values are available, calculate Q^2
-	test_data_ = ((InputDataItem*)dotted_edge_->sourceNode())->data();
-	
-	if(test_data_->getNoResponseVariables()>0)
+	if(test_data_item_->data()->getNoResponseVariables()>0)
 	{
 		const QSARData* train_data_backup =  model_item_->model()->data;
 		double r2_backup = r2_;
@@ -148,14 +145,14 @@ ModelItem* PredictionItem::modelItem()
 	return model_item_;
 }
 
-const QList<BALL::Vector<double> >* PredictionItem::results()
+const list<BALL::Vector<double> >* PredictionItem::results()
 {
 	return &results_;
 }
 
 InputDataItem* PredictionItem::inputDataItem()
 {
-	return input_data_item_;
+	return test_data_item_;
 }
 
 
@@ -233,6 +230,107 @@ void PredictionItem::removeFromPipeline()
 
 const QSARData* PredictionItem::getTestData()
 {
-	return test_data_;
+	return test_data_item_->data();
 }
 
+void PredictionItem::saveToFile(String filename)
+{
+	ValidationItem::saveToFile(filename);
+	
+	ofstream out(filename.c_str(),ios::app);
+	out<<endl<<"[Predictions]"<<endl;
+	
+	QSARData* test_data = test_data_item_->data();
+	bool print_expected = (test_data->getNoResponseVariables()>0);
+	int no_act = results_.front().getSize();
+	int no_cols = no_act;
+	if(print_expected)
+	{
+		no_cols*=2;
+		out<<"# format: predition0, expectation0, ..."<<endl;
+	}
+			
+	out<<"expected_values = "<<print_expected<<endl;
+	out<<"dimensions = "<<results_.size()<<" "<<no_cols<<endl;
+	list<Vector<double> >::const_iterator it=results_.begin();
+	for(uint i=0; it!=results_.end(); i++, it++)
+	{	
+		vector<double>* e = 0;
+ 		if(print_expected) e=test_data->getActivity(i);
+		for(int act=0; act<no_act; act++)
+		{
+			out<<((*it)(act+1))<<"\t";
+			if(print_expected) out<<(*e)[act]<<"\t";
+		}
+		delete e;
+		out<<endl;
+	}	
+}
+
+void PredictionItem::loadFromFile(String filename)
+{
+	try
+	{
+		model_item_->model()->model_val->readFromFile(filename);
+	}
+	catch(BALL::Exception::GeneralException e)
+	{
+		QMessageBox::warning(view_,"Error",e.getMessage());
+		return;
+	}
+	r2_ = model_item_->model()->model_val->getFitRes();
+	q2_ = model_item_->model()->model_val->getCVRes();
+	setResultString(q2_);
+	
+	ifstream in(filename.c_str());
+	bool pred_section=0;
+	bool expected_values=0;
+	uint no_rows = 0;
+	uint no_cols = 0;
+	while(in)
+	{
+		String line;
+		getline(in,line);
+		line.trimLeft();
+		if(line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
+		{
+			continue;
+		}
+		if(line.hasPrefix("[Predictions]")) pred_section=1;
+		else if(pred_section)
+		{
+			if(line.hasPrefix("expected_values"))
+			{
+				expected_values = ((String)line.after("=")).trimLeft().toBool();
+			}
+			if(line.hasPrefix("dimensions"))
+			{
+				line = ((String)line.after("="));
+				no_rows = line.getField(0).toInt();
+				no_cols = line.getField(1).toInt();
+				break;
+			}
+		}
+	}
+	
+	int no_act = no_cols;
+	if(expected_values) no_act /= 2;
+	for(uint i=1;i<=no_rows;i++)
+	{
+		Vector<double> v(no_act);
+		int act=1;
+		for(uint j=1; j<=no_cols;j++)
+		{
+			String s;
+			in>>s;
+			if(!expected_values || (j%2)==1)
+			{
+				v(act)=s.toDouble();
+				act++;
+			}
+		}
+		results_.push_back(v);
+	}
+	//getline(in,line); // read the rest of the last matrix-line
+	done_=1;	
+}

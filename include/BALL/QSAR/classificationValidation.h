@@ -63,7 +63,7 @@ namespace BALL
 				/** Y randomization test \n
 				Randomizes all columns of model.Y, trains the model, runs crossValidation and testInputData and saves the resulting accuracy_input_test and accuracy_cv value to a vector, where BALL::Matrix<double>(i,0)=accuracy_input_test, BALL::Matrix<double>(i,1)=accuracy_cv \n
 				@param runs this is repeated as often as specified by 'runs' */
-				BALL::Matrix<double> yRandomizationTest(int runs, int k);
+				const BALL::Matrix<double>& yRandomizationTest(int runs, int k);
 				
 				/** get average accuracy value as determined after cross validation */
 				double getAccuracyCV();
@@ -72,6 +72,12 @@ namespace BALL
 				double getAccuracyInputTest();
 				
 				void selectStat(int s);
+				
+				void saveToFile(string filename) const;
+				
+				void saveToFile(string filename, const double& quality_input_test, const double& predictive_quality) const;
+				
+				void readFromFile(string filename);
 				
 				//@}
 				

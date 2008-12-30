@@ -282,6 +282,14 @@ bool ValidationItem::execute()
 			throw InvalidValidationItem(__FILE__,__LINE__);
 	}
 	
+	processResults();
+	done_ = 1;
+	return 1;
+}
+
+
+void ValidationItem::processResults()
+{
 	if(type_<5 || type_==7)
 	{
 		r2_ = model_item_->model()->model_val->getFitRes();
@@ -291,13 +299,13 @@ bool ValidationItem::execute()
 	if(type_==1||type_==7) setResultString(r2_);
 	else if(type_==6)
 	{
-		const Matrix<double>* coeff_stddev = ((RegressionModel*)model_item_->model())->validation->getCoefficientStdErrors();
+		coeff_stddev_ = *((RegressionModel*)model_item_->model())->validation->getCoefficientStdErrors();
 		const Matrix<double>* training_result = ((RegressionModel*)model_item_->model())->getTrainingResult();
 		
 		// calculate&display average stddev
 		double mean_stddev=0;
-		uint rows=coeff_stddev->getRowCount();
-		uint cols=coeff_stddev->getColumnCount();
+		uint rows=coeff_stddev_.getRowCount();
+		uint cols=coeff_stddev_.getColumnCount();
 		if(training_result->getColumnCount()==cols && training_result->getRowCount()==rows)
 		{
 			for(uint i=1; i<=rows;i++) // for each feature
@@ -305,7 +313,7 @@ bool ValidationItem::execute()
 				for(uint j=1; j<=cols;j++) // for each activity
 				{
 					double t_ij = (*training_result)(i,j);
-					double s_ij = (*coeff_stddev)(i,j);
+					double s_ij = coeff_stddev_(i,j);
 					
 					if(abs(t_ij)>Matrix<double>::MACHINE_EPSILON && abs(s_ij)>Matrix<double>::MACHINE_EPSILON)
 					{
@@ -330,9 +338,6 @@ bool ValidationItem::execute()
 		setResultString(mean_q2);
 	}
 	else setResultString(q2_);
-	
-	done_ = 1;
-	return 1;
 }
 
 	
@@ -501,3 +506,36 @@ BALL::String ValidationItem::getMouseOverText()
 	}
 	return message;				
 }
+
+
+void ValidationItem::saveToFile(String filename)
+{
+	if(model_item_->getRegistryEntry()->regression)
+	{
+		((RegressionModel*)model_item_->model())->validation->saveToFile(filename,r2_,q2_,coeff_stddev_,result_of_rand_test_);
+	}
+	else
+	{
+		((ClassificationModel*)model_item_->model())->validation->saveToFile(filename,r2_,q2_);
+	}
+}
+
+void ValidationItem::loadFromFile(String filename)
+{
+	try
+	{
+		model_item_->model()->model_val->readFromFile(filename);
+	}
+	catch(BALL::Exception::GeneralException e)
+	{
+		QMessageBox::warning(view_,"Error",e.getMessage());
+		return;
+	}
+	r2_ = model_item_->model()->model_val->getFitRes();
+	q2_ = model_item_->model()->model_val->getCVRes();
+	result_of_rand_test_ = model_item_->model()->model_val->getYRandResults();
+	cout<<"loaded Q2 = "<<q2_<<endl;
+	processResults();
+	done_=1;
+}
+

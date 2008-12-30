@@ -7,7 +7,9 @@
 #include <BALL/QSAR/regressionModel.h>
 #include <BALL/QSAR/kernelModel.h>
 #include <BALL/QSAR/latentVariableModel.h>
+#include <BALL/QSAR/registry.h>
 #include <gsl/gsl_rng.h>
+
 
 
 using namespace BALL::QSAR;
@@ -413,7 +415,7 @@ void RegressionValidation::bootstrap(int k, vector<Matrix<double> >* results, bo
 }
 
 
-BALL::Matrix<double> RegressionValidation::yRandomizationTest(int runs, int k)
+const BALL::Matrix<double>& RegressionValidation::yRandomizationTest(int runs, int k)
 {
 	if(model_->data->descriptor_matrix_.size()==0 || model_->data->Y_.size()==0)
 	{
@@ -423,8 +425,8 @@ BALL::Matrix<double> RegressionValidation::yRandomizationTest(int runs, int k)
 	backupTrainingResults();
 	vector<vector<double> > dataY_backup=model_->data->Y_;
 				
-	Matrix<double> results(runs,2);
-	results=-1;
+	yRand_results_.resize(runs,2);
+	yRand_results_=-1;
 
 	for(int i=0; i<runs;i++)
 	{
@@ -433,15 +435,15 @@ BALL::Matrix<double> RegressionValidation::yRandomizationTest(int runs, int k)
 		model_->readTrainingData();
 		model_->train();
 		testInputData(0);	
-		results(i+1,1)=R2_;
-		results(i+1,2)=Q2_;
+		yRand_results_(i+1,1)=R2_;
+		yRand_results_(i+1,2)=Q2_;
 	}	
 	
 	restoreTrainingResults();
 	QSARData* data = const_cast <QSARData*> (model_->data);
 	data->Y_=dataY_backup;
 	
-	return results;
+	return yRand_results_;
 }
 
 void RegressionValidation::calculateQOF1()
@@ -510,12 +512,12 @@ void RegressionValidation::selectStat(int s)
 	
 	if(s==1)
 	{
-		validation_statistic_ = 0;
+		validation_statistic_ = 1;
 		qualCalculation = &RegressionValidation::calculateQOF1;
 	}
 	if(s==0)
 	{
-		validation_statistic_ = 1;
+		validation_statistic_ = 0;
 		qualCalculation = &RegressionValidation::calculateQOF2;
 	}
 	if(s==2)
@@ -548,4 +550,96 @@ const BALL::Matrix<double>* RegressionValidation::getCoefficientStdErrors()
 void RegressionValidation::setCoefficientStdErrors(const Matrix<double>* stderr)
 {
 	coefficient_stderr_ = *stderr;	
+}
+
+
+void RegressionValidation::saveToFile(string filename) const
+{
+	saveToFile(filename,R2_,Q2_,coefficient_stderr_,yRand_results_);	
+}
+
+void RegressionValidation::saveToFile(string filename, const double& r2, const double& q2, const Matrix<double>& coefficient_stddev, const Matrix<double>& yRand_results) const
+{
+	ofstream out(filename.c_str());
+	
+	Registry reg;
+	out<<"# used quality statistic: "<<reg.getRegressionStatisticName(validation_statistic_)<<endl<<endl;	
+	out << "Fit to training data = "<<r2<<endl;
+	out << "Predictive quality = "<<q2<<endl;
+	
+	if(coefficient_stddev.getColumnCount()>0)
+	{
+		out<<endl;
+		out<<"[Coefficient stddev]"<<endl;
+		out<<"dimensions = "<<coefficient_stddev.getRowCount()<<" "<<coefficient_stddev.getColumnCount()<<endl;
+		out<<coefficient_stddev<<endl;
+	}
+	if(yRand_results.getColumnCount()>0)
+	{
+		out<<endl;
+		out<<"[Response Permutation]"<<endl;
+		out<<"dimensions = "<<yRand_results.getRowCount()<<" "<<yRand_results.getColumnCount()<<endl;
+		out<<yRand_results<<endl;
+	}
+}
+
+
+void RegressionValidation::readFromFile(string filename)
+{
+	ifstream in(filename.c_str());
+	
+	bool stddev_section=0;
+	bool yRand_section=0;
+	
+	while(in)
+	{
+		String line;
+		getline(in,line);
+		line.trimLeft();
+		if(line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
+		{
+			continue;
+		}
+		if(stddev_section)
+		{
+			if(line.hasPrefix("dimensions"))
+			{
+				line = ((String)line.after("="));
+				uint no_rows = line.getField(0).toInt();
+				uint no_cols = line.getField(1).toInt();
+				model_->readMatrix(coefficient_stderr_,in,no_rows,no_cols);
+			}
+			stddev_section=0;
+			
+		}
+		else if(yRand_section)
+		{
+			if(line.hasPrefix("dimensions"))
+			{
+				line = ((String)line.after("="));
+				uint no_rows = line.getField(0).toInt();
+				uint no_cols = line.getField(1).toInt();
+				model_->readMatrix(yRand_results_,in,no_rows,no_cols);
+			}
+			yRand_section=0;
+		}
+		if(line.hasPrefix("Fit to training data"))
+		{
+			R2_ = ((String)line.after("=")).trimLeft().toDouble();
+		}
+		else if(line.hasPrefix("Predictive quality"))
+		{
+			Q2_ = ((String)line.after("=")).trimLeft().toDouble();
+		}
+		else if(line.hasPrefix("[Coefficient stddev]"))
+		{
+			yRand_section=0;
+			stddev_section=1;
+		}
+		else if(line.hasPrefix("[Response Permutation]"))
+		{
+			yRand_section=1;
+			stddev_section=0;
+		}
+	}
 }

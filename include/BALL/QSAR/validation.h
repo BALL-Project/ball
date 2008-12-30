@@ -51,6 +51,10 @@ namespace BALL
 				/** set the result of cross-validation to the given value */
 				virtual void setCVRes(double d) = 0;
 				
+				/** return the result of the previous response permutation test .\n
+				The return matrix is empty if no such test has been run yet */	
+				const Matrix<double>& getYRandResults() const;
+				
 				/** Fetches input data from QSARData and tests the current (unchanged) model with all these new substances (without cross-validation!). \n
 				@param transform if transform==1, the test data is transformed in the same way that the training data was transformed before predicting activities. \n
 				If training and test substances are taken from the same input file, set transform to 0 */
@@ -58,7 +62,7 @@ namespace BALL
 				
 				virtual void bootstrap(int k,  bool restore=1) = 0;
 				
-				virtual Matrix<double> yRandomizationTest(int runs, int k) = 0;
+				virtual const Matrix<double>& yRandomizationTest(int runs, int k) = 0;
 				
 				/** select the desired statistic to be used for validating the models
 				@param s if (s==1) R^2 and Q^2 are used \n
@@ -66,7 +70,13 @@ namespace BALL
 				virtual void selectStat(int s) = 0;
 				
 				/** return the ID of selected validation statistic */
-				int getStat();
+				int getStat() const;
+				
+				/** save the result of the applied validation methods to a file */
+				virtual void saveToFile(string filename) const = 0;
+				
+				/** restore validation-results from a file */
+				virtual void readFromFile(string filename) = 0;
 				//@}
 				
 				
@@ -105,6 +115,8 @@ namespace BALL
 				
 				/** the selected validation statistic */
 				int validation_statistic_;
+				
+				Matrix<double> yRand_results_;
 				//@}
 			
 		};

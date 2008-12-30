@@ -78,7 +78,7 @@ PredictionResultDialog::PredictionResultDialog(PredictionItem* item)
 	if(((uint)results_->size()) == compound_names_->size())
 	{	
 		int i = 0;
-		for (QList<Vector<double> >::ConstIterator it = results_->begin(); it != results_->end(); it++)
+		for (list<Vector<double> >::const_iterator it = results_->begin(); it != results_->end(); it++)
 		{
 			QTableWidgetItem* name = new QTableWidgetItem(QString(compound_names_->at(i).c_str()));
     			table_->setItem(i, 0, name);
