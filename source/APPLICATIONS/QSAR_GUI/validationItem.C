@@ -261,6 +261,8 @@ bool ValidationItem::execute()
 			q2_ = 0;
 			for(list<ValidationItem*>::iterator it=external_validations_.begin(); it!=external_validations_.end(); it++)
 			{
+				// if one prediction is not yet ready, stop calc. average quality
+				if(!(*it)->isDone()) return 0;
 				q2_ += (*it)->getQ2();
 			}
 			q2_ /= external_validations_.size(); // average Q^2 obtained from nested cross validation			
@@ -534,8 +536,11 @@ void ValidationItem::loadFromFile(String filename)
 	r2_ = model_item_->model()->model_val->getFitRes();
 	q2_ = model_item_->model()->model_val->getCVRes();
 	result_of_rand_test_ = model_item_->model()->model_val->getYRandResults();
-	cout<<"loaded Q2 = "<<q2_<<endl;
-	processResults();
-	done_=1;
+	
+	if(r2_!=-1 || q2_!=-1) // if some result was loaded
+	{
+		processResults();
+		done_=1;
+	}
 }
 

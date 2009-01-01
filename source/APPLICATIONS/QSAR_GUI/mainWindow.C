@@ -1200,6 +1200,16 @@ void MainWindow::loadItemsFromFiles(String directory)
 				(*it)->loadFromFile(filename);
 			}
 		}
+		
+		// now just display the average predictive quality for all nested-validation items (if all necessary predictions are already done)
+		// --> no time-consuming calculation is done here
+		for (Pipeline<ValidationItem*>::iterator it = val_pipeline_.begin(); it != val_pipeline_.end(); it++)
+		{
+			if((*it)->getValidationType()==5)
+			{
+				(*it)->execute();
+			}
+		}
 	}
 	catch(GeneralException e)
 	{

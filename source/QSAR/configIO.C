@@ -762,9 +762,17 @@ ValidationConfiguration ConfigIO::readValidationConfiguration(istream* input)
 	{
 		throw Exception::ConfigurationReadingError(__FILE__,__LINE__,"Model file must be specified within config-file!");
 	}
+// 	if(conf.val_type==-1)
+// 	{
+// 		throw Exception::ConfigurationReadingError(__FILE__,__LINE__,"Type of Validation to be done must be specified within config-file!");
+// 	}
 	if(conf.output=="")
 	{
 		throw Exception::ConfigurationReadingError(__FILE__,__LINE__,"Output file must be specified within config-file!");
+	}
+	if((conf.val_type==3||conf.val_type==4||conf.val_type==6)  && conf.bootstrap_samples<=0)
+	{
+		throw Exception::ConfigurationReadingError(__FILE__,__LINE__,"The number of bootstrap samples must be specified within config-file!");
 	}
 	if(conf.k_folds==0 && conf.no_of_permutation_tests>0)
 	{

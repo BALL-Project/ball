@@ -280,7 +280,7 @@ void PredictionItem::loadFromFile(String filename)
 	}
 	r2_ = model_item_->model()->model_val->getFitRes();
 	q2_ = model_item_->model()->model_val->getCVRes();
-	setResultString(q2_);
+	if(q2_!=-1) setResultString(q2_);
 	
 	ifstream in(filename.c_str());
 	bool pred_section=0;
@@ -332,5 +332,6 @@ void PredictionItem::loadFromFile(String filename)
 		results_.push_back(v);
 	}
 	//getline(in,line); // read the rest of the last matrix-line
-	done_=1;	
+	
+	if(pred_section) done_=1;	// if predictions were found within file
 }

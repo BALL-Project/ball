@@ -110,7 +110,7 @@ namespace BALL
 				/** calculates standart deviations for all predicted coefficients and saves them to coefficient_stddev_ \n
 				@param b if b==1, bootstrapping is used; else: cross-validation
 				@param k number of bootstrap samples resp. cross-validation steps */
-				void calculateCoefficientStdErrors(int k, bool b);
+				void calculateCoefficientStdErrors(int k, bool b=1);
 			
 				/** returns a const pointer to the matrix containing the standart deviations of all predicted coefficients */
 				const BALL::Matrix<double>* getCoefficientStdErrors();
