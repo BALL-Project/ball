@@ -335,3 +335,9 @@ void PredictionItem::loadFromFile(String filename)
 	
 	if(pred_section) done_=1;	// if predictions were found within file
 }
+
+void PredictionItem::change()
+{
+	results_.clear();
+	ValidationItem::change();
+}

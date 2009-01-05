@@ -73,6 +73,10 @@ namespace BALL
 				/** restore prediction-results from a file */
 				void loadFromFile(String filename);
 				
+				/** overlaods ValidationItem::change() in order to make sure that results_ is cleared */
+				void change();
+				
+				
 		
 			protected:
 				//overlaods ValidationItem::setValidationInput()
