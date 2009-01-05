@@ -21,6 +21,7 @@ RegressionValidation::RegressionValidation(RegressionModel* m) : Validation(m)
 	regr_model_=m;
 	predQualFetcher_ = &RegressionValidation::getQ2;
 	fitQualFetcher_ = &RegressionValidation::getR2;
+	selectStat(0); // choose standard == Q^2
 }
 
 RegressionValidation::~RegressionValidation()
