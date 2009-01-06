@@ -9,7 +9,6 @@
 namespace BALL
 {
 	CCP4File::CCP4File()
-		throw()
 	: File(),
 		swap_bytes_(false),
 		offset_symops_(0),
@@ -31,7 +30,7 @@ namespace BALL
 	}
 
 	CCP4File::CCP4File(const String& name, File::OpenMode open_mode)
-		throw()
+		throw(Exception::FileNotFound)
 		: File(name, open_mode),
 			swap_bytes_(false),
 			offset_symops_(0),
@@ -48,14 +47,12 @@ namespace BALL
 	}
 
 	CCP4File::~CCP4File()
-		throw()
 	{
 		close();
 		clear();
 	}
 
 	const CCP4File& CCP4File::operator = (const CCP4File& file)
-		throw()
 	{
 		File::operator = (file);
 		swap_bytes_ = file.swap_bytes_;
@@ -68,7 +65,6 @@ namespace BALL
 	}
 
 	void CCP4File::clear()
-		throw()
 	{
 		File::clear();
 		swap_bytes_= false;
@@ -80,7 +76,6 @@ namespace BALL
 
 
 	bool CCP4File::operator == (const CCP4File& file) const
-		throw()
 	{
 		return (   (File::operator == (file))
 						 &&(swap_bytes_    == file.swap_bytes_)
@@ -109,7 +104,6 @@ namespace BALL
 	}
 
 	bool CCP4File::readHeader()
-		throw()
 	{
 		// first read the complete 1024 bytes of header information
 		char header[1024];
@@ -213,7 +207,6 @@ namespace BALL
 	}
 
 	bool CCP4File::readSymmetryRecords()
-		throw()
 	{
 		//check if file has special symmetry records
 		int offset = getSize() - int(4*(extent_.x*extent_.y*extent_.z));
@@ -257,7 +250,6 @@ namespace BALL
 	}
 	
 	int CCP4File::readBinValueasInt_(char* data, Position pos)
-		throw()
 	{
 		int int_value = *((int*)(data + 4*pos));
 
@@ -268,7 +260,6 @@ namespace BALL
 	}
 	
 	float CCP4File::readBinValueasFloat_(char* data, Position pos)
-		throw()
 	{
 		float float_value = *((float*)(data + 4*pos));
 
@@ -279,7 +270,6 @@ namespace BALL
 	}
 			
 	bool CCP4File::writeHeader()
-		throw()
 	{
 		// construct a correct header array and write it.
 		// TODO: implement
@@ -287,7 +277,6 @@ namespace BALL
 	}
 
 	bool CCP4File::read(RegularData3D& density_map)
-		throw()
 	{
 
 		// first read the header

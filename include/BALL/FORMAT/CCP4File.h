@@ -36,8 +36,7 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		CCP4File()
-			throw();
+		CCP4File();
 
 		/// Copy constructor
 		CCP4File(const CCP4File& file)
@@ -45,11 +44,10 @@ namespace BALL
 
 		/// Detailed constructor
 		CCP4File(const String& name, File::OpenMode open_mode = std::ios::in)
-			throw();
+			throw(Exception::FileNotFound);
 
 		/// Destructor
-		virtual ~CCP4File()
-			throw();
+		virtual ~CCP4File();
 
 		//@}
 		/** @name Assignment
@@ -57,12 +55,10 @@ namespace BALL
 		//@{
 
 		/// Assignment operator
-		const CCP4File& operator = (const CCP4File& file)
-			throw();
+		const CCP4File& operator = (const CCP4File& file);
 
 		/// Clear method
-		virtual void clear()
-			throw();
+		virtual void clear();
 
 		//@}
 		/** @name Predicates
@@ -70,8 +66,7 @@ namespace BALL
 		//@{
 
 		/// Equality operator
-		bool operator == (const CCP4File& file) const
-			throw();
+		bool operator == (const CCP4File& file) const;
 
 		//@}
 		/// @name Public methods for file handling
@@ -85,24 +80,20 @@ namespace BALL
 		/** Read the header of an existing file.
 				Return true if the header could be read successfully, false ow.
 		*/
-		virtual bool readHeader()
-			throw();
+		virtual bool readHeader();
 		
 		/** Read the symmetry records of an existing file if present.
 				Return true if the symmetry records could be read successfully, false ow.
 		*/
-		virtual bool readSymmetryRecords()
-			throw();
+		virtual bool readSymmetryRecords();
 
 		/** Read the file into a RegularData3D field. **/
-		virtual bool read(RegularData3D& map)
-			throw();
+		virtual bool read(RegularData3D& map);
 		
 		/** Write a header
 				Return true if the header could be written successfully, false ow.
 		*/
-		virtual bool writeHeader()
-			throw();
+		virtual bool writeHeader();
 
 		//@}
 		/** @name Accessors 
@@ -113,11 +104,9 @@ namespace BALL
 
 		protected:
 
-			int readBinValueasInt_(char* header, Position pos)
-				throw();
+			int readBinValueasInt_(char* header, Position pos);
 			
-			float readBinValueasFloat_(char* header, Position pos)
-				throw();
+			float readBinValueasFloat_(char* header, Position pos);
 			
 			/// flag indicating that we have to swap bytes when reading header values
 			bool swap_bytes_;
