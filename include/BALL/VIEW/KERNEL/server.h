@@ -25,14 +25,13 @@
 
 #include <QtCore/qtimer.h>
 #include <QtGui/QLabel>
+#include <QtNetwork/QTcpSocket.h>
 
 class QLabel;
 
 namespace BALL
 {
 	class Composite;
-	class IOStreamSocket;
-	class SockInetBuf;
 
 	namespace VIEW
 	{
@@ -52,8 +51,8 @@ namespace BALL
 			\ingroup ViewKernelClient
 		*/
 		class BALL_VIEW_EXPORT Server
-			: public QTimer,
-   			public ModularWidget
+			: public QTcpServer,
+			  public ModularWidget
 		{
 			public:
 			
@@ -68,7 +67,6 @@ namespace BALL
 					  - no object creator registered
 						- server listening on <tt> VIEW_DEFAULT_PORT</tt> if activated
 					\par
-					\see         QTTimer
 					\see         ModularWidget
 			*/
 			Server(QWidget* parent = 0, const char* name = 0)
@@ -88,9 +86,7 @@ namespace BALL
 				throw();
 
 			/** Explicit default initialization.
-					Calls QTTimer::clear.
 					Calls ConnectionObject::clear.
-					\see QTTimer::clear
 					\see ConnectionObject::clear
 			*/
 			virtual void clear()
@@ -120,23 +116,17 @@ namespace BALL
 			//@{
 
 			/** Activates the server.
-					Creates a new socket stream with the given port and enables the timer
-					that will check
-					every second whether an object will be available at the stream.
-					After this method the <b> timer</b> method will be called every second.
+					Creates a new socket with the given port and connects it with this class.
+					To allow for non-blocking socket IO, we use Qt's readyRead() - slot. 
 					Must be called before other methods!
-					Calls QTTimer::startTimer
-					\see QTTimer::startTimer
-					\see timer
+					\see QTcpSocket::readyRead()
 			*/
 			void activate()
 				throw();
 
 			/** Deactivates the server.
 					If this server is already running this method stops the server
-					and closes the socket stream.
-					Calls QTTimer::stopTimer
-					\see QTTimer::stopTimer
+					and closes the socket.
 			*/
 			void deactivate()
 				throw();
@@ -255,7 +245,6 @@ namespace BALL
 					\param   s output stream where to output the state of this server
 					\param   depth the dumping depth
 					\see     ConnectionObject::dump
-					\see     QTTimer::dump
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
@@ -304,8 +293,7 @@ namespace BALL
 
 			CompositeHashMap composite_hashmap_;
 
-			IOStreamSocket*	iostream_socket_;
-			SockInetBuf*		sock_inet_buf_;
+			QTcpSocket *connected_socket_;
 				
 			// the port to bind to
 			int							port_; 
