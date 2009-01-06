@@ -8,7 +8,6 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/DIALOGS/serverPreferences.h>
-#include <BALL/SYSTEM/socket.h>
 #include <BALL/FORMAT/INIFile.h>
 
 #include <QtGui/qstatusbar.h>
@@ -52,12 +51,10 @@ namespace BALL
 
 		Server::Server(QWidget* parent, const char* name)
 				throw()
-			:	QTimer(parent),
-				ModularWidget(name),
+			:	ModularWidget(name),
 				object_creator_(0),
 				composite_hashmap_(),
-				iostream_socket_(0),
-				sock_inet_buf_(0),
+				socket_(),
 				port_(VIEW_DEFAULT_PORT),
 				server_preferences_(0),
 				server_icon_(0)
@@ -73,8 +70,7 @@ namespace BALL
 		}
 
 		Server::Server(const Server&)
-			: QTimer(),
-				ModularWidget()
+			: ModularWidget()
 		{
 		}
 
@@ -93,12 +89,10 @@ namespace BALL
 		void Server::clear()
 			throw()
 		{
-			QTimer::stop();
 			ConnectionObject::clear();
 		}
 
-
-		// initializes a new socket and starts the timer
+		// initializes a new socket and connects it
 		void Server::activate()
 			throw()
 		{
