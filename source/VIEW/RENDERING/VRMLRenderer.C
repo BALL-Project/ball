@@ -336,6 +336,16 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 {
 	// so we should let VRMLRay know...
 	outheader_("Shape {");
+	// if we have no or only a single color, we need an apearance node for the whole mesh
+	if (mesh.colors.size() == 0)
+	{
+		VRMLColor(ColorRGBA(1.,1,1));
+	} 
+	else if (mesh.colors.size() == 1)
+	{
+		VRMLColor(mesh.colors[0]);
+	}
+	
 	outheader_("geometry IndexedFaceSet {");
 	out_("normalPerVertex TRUE");
 	outheader_("coord Coordinate {");
@@ -448,11 +458,7 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 // print colors ========================================
 	outheader_("color Color {");
 	outheader_("color [");
-	if (mesh.colors.size() == 0)
-	{
-		out_(VRMLColorRGBA(ColorRGBA(1.,1,1)));
-	}
-	else
+	if (mesh.colors.size() > 1)
 	{
 		vector<ColorRGBA>::const_iterator itc = mesh.colors.begin(); 
 		for (; itc != mesh.colors.end(); itc++)
