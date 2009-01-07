@@ -115,6 +115,13 @@ namespace BALL
 			 */
 			void setMaxOptimizationSteps(Size steps);
 
+			/*
+			 * The DNAMutator internally uses the unnamed property mechanism of the Atoms.
+			 * This defaults to property Atom::NUMBER_OF_PROPERTIES. If you already use this
+			 * property in your code you can set another property by passing it to this function.
+			 */
+			void setUsedProperty(Property p);
+
 		private:
 			bool keep_db_;
 			bool keep_ff_;
@@ -124,9 +131,13 @@ namespace BALL
 			EnergyMinimizer* minimizer_;
 
 			Size num_steps_;
+			Property prop_;
 
 			void freeDB_();
 			void freeFF_();
+
+			void mark_();
+			void unmark_();
 
 			void tryFlip_(Fragment* res, const Vector3& connect_atom, const Vector3& axis) const;
 
