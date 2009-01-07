@@ -38,7 +38,7 @@ namespace BALL
 	const Size DNAMutator::default_num_steps_ = 50;
 
 	DNAMutator::DNAMutator(EnergyMinimizer* mini, ForceField* ff, FragmentDB* frag)
-		: keep_db_(true), keep_ff_(true), db_(frag), ff_(ff), minimizer_(mini), num_steps_(default_num_steps_)
+		: keep_db_(true), keep_ff_(true), db_(frag), ff_(ff), minimizer_(mini), num_steps_(default_num_steps_), prop_(Atom::NUMBER_OF_PROPERTIES)
 	{
 	}
 
@@ -97,6 +97,11 @@ namespace BALL
 	void DNAMutator::setMaxOptimizationSteps(Size steps)
 	{
 		num_steps_ = steps;
+	}
+
+	void DNAMutator::setUsedProperty(Property p)
+	{
+		prop_ = p;
 	}
 
 	void DNAMutator::mutate(Fragment* res, Base base, bool optimize) throw(Exception::InvalidOption)
@@ -172,11 +177,10 @@ namespace BALL
 
 	bool DNAMutator::optimize_(Fragment* frag)
 	{
-		frag->select();
-
 		ff_->setup(*frag->getAtom(0)->getMolecule()->getSystem());
 		minimizer_->setup(*ff_);
 
+		frag->select();
 		if(!minimizer_->isValid()) {
 			return false;
 		}
@@ -308,13 +312,10 @@ namespace BALL
 	 * It is needed as the TransformationProcessor applies its transformation to all atoms in an atom container
 	 * and not only the selected ones.
 	 */
-	void applyTrafoToSelection_(const Matrix4x4& trafo, AtomContainer* cont)
+	void applyTrafoToList_(const Matrix4x4& trafo, const std::list<Atom*>& atoms)
 	{
-		AtomIterator it;
-		BALL_FOREACH_ATOM(*cont, it) {
-			if(it->isSelected()) {
-				it->setPosition(trafo * it->getPosition());
-			}
+		for(std::list<Atom*>::const_iterator it = atoms.begin(); it != atoms.end(); ++it) {
+			(*it)->setPosition(trafo * (*it)->getPosition());
 		}
 	}
 
@@ -323,6 +324,16 @@ namespace BALL
 		if(!ff_) {
 			return;
 		}
+
+		std::list<Atom*> atoms;
+		AtomIterator it;
+		BALL_FOREACH_ATOM(*res, it) {
+			if(it->isSelected()) {
+				atoms.push_back(&*it);
+			}
+		}
+
+		res->deselect();
 
 		ff_->setup(*res->getAtom(0)->getMolecule()->getSystem());
 		double e1 = ff_->updateEnergy();
@@ -337,14 +348,14 @@ namespace BALL
 
 		rotate = trans_bwd * rotate * trans_fwd;
 
-		applyTrafoToSelection_(rotate, res);
+		applyTrafoToList_(rotate, atoms);
 
 		double e2 = ff_->updateEnergy();
 
 		Log.warn() << "Energies: " << e1 << " " << e2 << "\n";
 
 		if(e1 < e2) {
-			applyTrafoToSelection_(rotate, res);
+			applyTrafoToList_(rotate, atoms);
 		}
 
 	}
