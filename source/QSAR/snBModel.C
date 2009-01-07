@@ -113,6 +113,7 @@ BALL::Vector<double> SNBModel::predict(const vector<double>& substance, bool tra
 		// finally find most probable class
 		vector<double> substance_prob(no_classes,1); // the prob for the given subst. to be in each of the classes
 		double max=0;
+		double second_best=0;
 		int best_label=labels_[0];
 		for(uint i=0; i<no_features;i++)
 		{
@@ -122,12 +123,21 @@ BALL::Vector<double> SNBModel::predict(const vector<double>& substance, bool tra
 				substance_prob[j] *= probabilities[i][j];
 				if(i==no_features-1 && substance_prob[j]>max)
 				{
+					second_best = max;
 					max = substance_prob[j];
 					best_label = labels_[j];
 				}				
 			}
 		}
-		result(act+1) = best_label;
+		
+		if(max>=second_best+min_prob_diff_)
+		{
+			result(act+1) = best_label;
+		}
+		else
+		{
+			result(act+1) = undef_act_class_id_;
+		}
 	}
 	
 	return result;	
@@ -181,6 +191,32 @@ int SNBModel::getNoResponseVariables()
 {
 	if(!isTrained()) return 0;
 	else return mean_.size();	
+}
+
+
+vector<double> SNBModel::getParameters() const
+{
+	vector<double> d;
+	d.push_back(min_prob_diff_);
+	d.push_back(undef_act_class_id_);
+	return d;
+}
+
+
+void SNBModel::setParameters(vector<double>& v)
+{
+	if(v.size()!=0 && v.size()!=2)
+	{
+		String c = "Wrong number of model parameters! Needed: 2;";
+		c = c+" given: "+String(v.size());
+		throw Exception::ModelParameterError(__FILE__,__LINE__,c.c_str());
+	}
+	
+	if(v.size()==2)
+	{
+		min_prob_diff_ = v[0];
+		undef_act_class_id_ = v[1];
+	}
 }
 
 

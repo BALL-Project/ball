@@ -42,6 +42,10 @@ namespace BALL{
 				
 				Vector<double> predict(const vector<double>& substance, bool transform=1);
 				
+				vector<double> getParameters() const;
+				
+				void setParameters(vector<double>& v);
+				
 				void saveToFile(string filename);
 				
 				bool isTrained();

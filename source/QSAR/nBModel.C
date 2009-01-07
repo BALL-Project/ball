@@ -126,6 +126,7 @@ BALL::Vector<double> NBModel::predict(const vector<double>& substance, bool tran
 		vector<double> substance_prob(no_classes,1); // prob. for the entire substance
 		double max=0;
 		int best_label=labels_[0];
+		double second_best=0;
 		
 		for(uint i=1; i<=no_features;i++)
 		{
@@ -138,12 +139,21 @@ BALL::Vector<double> NBModel::predict(const vector<double>& substance, bool tran
 				
 				if(i==no_features && substance_prob[j]>max)
 				{
+					second_best = max;
 					max = substance_prob[j];
 					best_label = labels_[j];
 				}
 			}
 		}
-		result(act+1) = best_label;	
+		
+		if(max>=second_best+min_prob_diff_)
+		{
+			result(act+1) = best_label;
+		}
+		else
+		{
+			result(act+1) = undef_act_class_id_;
+		}
 	}	
 	
 // 	cout<<"no features = "<<s.Ncols()<<endl;
@@ -159,19 +169,27 @@ vector<double> NBModel::getParameters() const
 {
 	vector<double> d;
 	d.push_back(discretization_steps_);
+	d.push_back(min_prob_diff_);
+	d.push_back(undef_act_class_id_);
 	return d;
 }
 
 
 void NBModel::setParameters(vector<double>& v)
 {
-	if(v.size()!=1)
+	if(v.size()!=1 && v.size()!=3)
 	{
-		String c = "Wrong number of model parameters! Needed: 1;";
+		String c = "Wrong number of model parameters! Needed: 3;";
 		c = c+" given: "+String(v.size());
 		throw Exception::ModelParameterError(__FILE__,__LINE__,c.c_str());
 	}
 	discretization_steps_ = (int) v[0];
+	
+	if(v.size()==3)
+	{
+		min_prob_diff_ = v[1];
+		undef_act_class_id_ = v[2];
+	}
 }
 
 

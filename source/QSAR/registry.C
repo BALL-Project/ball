@@ -114,11 +114,19 @@ Registry::Registry()
 // 	addEntry(r8,12);
 	
 	RegistryEntry r10(0,0,"Simple Naive Bayes","snB",(CreateMethod) &ModelFactory<SNBModel>::create);
+	r10.parameterNames.push_back("min prob difference");
+	r10.parameterNames.push_back("class-id for undef. activity");
+	r10.parameterDefaults.push_back(0);
+	r10.parameterDefaults.push_back(0);
 	addEntry(r10,13);
 	
 	RegistryEntry r11(0,0,"Naive Bayes","nB",(CreateMethod) &ModelFactory<NBModel>::create);
 	r11.parameterNames.push_back("discretization steps");
+	r11.parameterNames.push_back("min prob difference");
+	r11.parameterNames.push_back("class-id for undef. activity");
 	r11.parameterDefaults.push_back(4);
+	r11.parameterDefaults.push_back(0);
+	r11.parameterDefaults.push_back(0);
 	addEntry(r11,14);
 	
 	
