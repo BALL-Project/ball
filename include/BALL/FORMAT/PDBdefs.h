@@ -1168,6 +1168,30 @@ namespace BALL
 				std::list<Position> saltbridges;
 			};
 
+			struct BALL_EXPORT UnitCellInfo
+			{
+				Real     a;
+				Real     b;
+				Real     c;
+				Real     alpha;
+				Real     beta;
+				Real     gamma;
+				LString  space_group;
+				Integer  z_value;
+
+				UnitCellInfo()
+					: a(1.0),
+						b(1.0),
+						c(1.0),
+						alpha(90.0),
+						beta(90.0),
+						gamma(90.0),
+						z_value(1)
+				{
+					strcpy(space_group, "P 1");	
+				}
+			} unitcell_info;
+
 			std::vector<AtomEntry> atoms;
 
 			HashSet<const ::BALL::Atom*>	conect_atoms;

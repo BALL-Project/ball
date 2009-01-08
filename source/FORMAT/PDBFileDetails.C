@@ -562,6 +562,44 @@ namespace BALL
 	}
 
 
+  bool PDBFile::parseRecordCRYST1(const char*  line, Size size)
+	{
+		static PDB::RecordCRYST1 record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordCRYST1& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_CRYST1,
+					 record.record_name, &record.unit_cell.a,
+					 &record.unit_cell.b, &record.unit_cell.c,
+					 &record.unit_cell.alpha, &record.unit_cell.beta,
+					 &record.unit_cell.gamma, record.unit_cell.space_group,
+					 &record.unit_cell.z_value);
+	}
+		
+	bool PDBFile::interpretRecord(const PDB::RecordCRYST1& record )
+	{
+		current_protein_->setProperty("UNITCELL_A", record.unit_cell.a);
+		current_protein_->setProperty("UNITCELL_B", record.unit_cell.b);
+		current_protein_->setProperty("UNITCELL_C", record.unit_cell.c);
+		current_protein_->setProperty("UNITCELL_ALPHA", record.unit_cell.alpha);
+		current_protein_->setProperty("UNITCELL_BETA", record.unit_cell.beta);
+		current_protein_->setProperty("UNITCELL_GAMMA", record.unit_cell.gamma);
+		current_protein_->setProperty("SPACE_GROUP", string(record.unit_cell.space_group));
+		current_protein_->setProperty("Z_VALUE", int(record.unit_cell.z_value));
+		std::cout << record.unit_cell.a << std::endl;
+		std::cout << record.unit_cell.b << std::endl;
+		std::cout << record.unit_cell.c << std::endl;
+		std::cout << record.unit_cell.alpha << std::endl;
+		std::cout << record.unit_cell.beta << std::endl;
+		std::cout << record.unit_cell.gamma << std::endl;
+		std::cout << record.unit_cell.space_group << std::endl;
+		std::cout << record.unit_cell.z_value << std::endl;
+    return true;
+	}
+
+
 	bool PDBFile::parseRecordENDMDL(const char* line, Size size)
 	{
 		static PDB::RecordENDMDL record;
@@ -1036,6 +1074,26 @@ namespace BALL
 	{
 		// Paranoia: remove old crap from structure.
 		structure.clear();
+		
+		// check if the Parent Atomcontainer has crystal information
+		if ((ac.getAtomContainer(0))->hasProperty("UNITCELL_A") &&
+				(ac.getAtomContainer(0))->hasProperty("UNITCELL_B") &&
+				(ac.getAtomContainer(0))->hasProperty("UNITCELL_C") &&
+				(ac.getAtomContainer(0))->hasProperty("UNITCELL_ALPHA") &&
+				(ac.getAtomContainer(0))->hasProperty("UNITCELL_BETA") &&
+				(ac.getAtomContainer(0))->hasProperty("UNITCELL_GAMMA") &&
+				(ac.getAtomContainer(0))->hasProperty("SPACE_GROUP") &&
+				(ac.getAtomContainer(0))->hasProperty("Z_VALUE"))
+		{
+			structure.unitcell_info.a = ac.getAtomContainer(0)->getProperty("UNITCELL_A").getDouble();		
+			structure.unitcell_info.b = ac.getAtomContainer(0)->getProperty("UNITCELL_B").getDouble();		
+			structure.unitcell_info.c = ac.getAtomContainer(0)->getProperty("UNITCELL_C").getDouble();		
+			structure.unitcell_info.alpha = ac.getAtomContainer(0)->getProperty("UNITCELL_ALPHA").getDouble();		
+			structure.unitcell_info.beta = ac.getAtomContainer(0)->getProperty("UNITCELL_BETA").getDouble();		
+			structure.unitcell_info.gamma = ac.getAtomContainer(0)->getProperty("UNITCELL_GAMMA").getDouble();		
+			strcpy(structure.unitcell_info.space_group, ac.getAtomContainer(0)->getProperty("SPACE_GROUP").getString().c_str());		
+			structure.unitcell_info.z_value = ac.getAtomContainer(0)->getProperty("Z_VALUE").getInt();		
+		}
 		
 		// Make sure we have at least one atom:
 		if (ac.beginAtom() == ac.endAtom())
@@ -1633,7 +1691,20 @@ namespace BALL
 		// ????
 	}
 
+  void PDBFile::writeCRYST1Section_(const PDB::Structure& structure)
+  {
+		PDB::RecordCRYST1 cr;
+		cr.unit_cell.a = structure.unitcell_info.a;
+		cr.unit_cell.b = structure.unitcell_info.b;
+		cr.unit_cell.c = structure.unitcell_info.c;
+		cr.unit_cell.alpha = structure.unitcell_info.alpha;
+		cr.unit_cell.beta = structure.unitcell_info.beta;
+		cr.unit_cell.gamma = structure.unitcell_info.gamma;
+		strcpy(cr.unit_cell.space_group, structure.unitcell_info.space_group);
+		cr.unit_cell.z_value = structure.unitcell_info.z_value;
 
+		writeRecord_(cr);
+  }
 
 	void PDBFile::writeConnectivityAnnotationSection_
 		(const PDB::Structure& structure, const BALL::PDBInfo& info)
@@ -1853,4 +1924,16 @@ namespace BALL
 								 cr.salt_bridge_atom[1]);
 	}
 
+	void PDBFile::writeRecord_(const PDB::RecordCRYST1& cr)
+	{
+		writeRecord_(PDB::RECORD_TYPE__CRYST1,
+								 cr.unit_cell.a,
+								 cr.unit_cell.b,
+								 cr.unit_cell.c,
+								 cr.unit_cell.alpha,
+								 cr.unit_cell.beta,
+								 cr.unit_cell.gamma,
+								 cr.unit_cell.space_group,
+								 cr.unit_cell.z_value);
+	}
 } // namespace BALL

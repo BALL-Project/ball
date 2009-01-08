@@ -869,27 +869,6 @@ namespace BALL
 	}
 
 
-	bool PDBFile::parseRecordCRYST1(const char* /* line */, Size /* size */)
-	{
-		return skipCurrentRecord();
-	}
-
-	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordCRYST1& record)
-	{
-		return parseLine(line, size, PDB::FORMAT_CRYST1,
-					 record.record_name, &record.unit_cell.a,
-					 &record.unit_cell.b, &record.unit_cell.c,
-					 &record.unit_cell.alpha, &record.unit_cell.beta,
-					 &record.unit_cell.gamma, record.unit_cell.space_group,
-					 &record.unit_cell.z_value);
-	}
-		
-	bool PDBFile::interpretRecord(const PDB::RecordCRYST1& /* record */)
-	{
-		return true;
-	}
-
-
 	bool PDBFile::parseRecordDBREF(const char* /* line */, Size /* size */)
 	{
 		return skipCurrentRecord();
@@ -1697,8 +1676,8 @@ namespace BALL
     // Terminate each line with a line break and a zero to indicate
     // the string end.
     line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1 - 6] = '\0';
-
-    // Write the line to the stream. Don't flush it (yet).
+    
+		// Write the line to the stream. Don't flush it (yet).
     File::getFileStream() << PDB::RECORD_TYPE_FORMAT[record].string << line_buffer << '\n';
 	}
 

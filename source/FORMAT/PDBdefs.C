@@ -21,7 +21,7 @@ namespace BALL
 		const char* FORMAT_CISPEP  = " %3ld %3.3s %c %4ld%c   %3.3s %c %4ld%c       %3ld       %6f";
 		const char* FORMAT_COMPND  = "  %2ld%-60.60s";
 		const char* FORMAT_CONECT  = "%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld";
-		const char* FORMAT_CRYST1  = "%9f%9f%9f%7f%7f%7f %11.11s%4ld";
+		const char* FORMAT_CRYST1  = "%9.3f%9.3f%9.3f%7.2f%7.2f%7.2f %-11.11s%4ld";
 		const char* FORMAT_DBREF   = " %4.4s %c %4ld%c %4ld%c %6.6s %8.8s %12.12s %5ld%c %5ld%c";
 		const char* FORMAT_END     = "";
 		const char* FORMAT_ENDMDL  = "";
