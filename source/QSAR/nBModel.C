@@ -223,7 +223,7 @@ vector<double> NBModel::calculateProbabilities(int activitiy_index, int feature_
 	uint no_classes = probabilities_[0].size();
 	if(activitiy_index>=(int)probabilities_.size() || feature_index>=(int)no_features || activitiy_index<0 || feature_index<0)
 	{
-		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Index of bound for parameters given to SNBModel::calculateProbability() !");
+		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Index out of bounds for parameters given to SNBModel::calculateProbability() !");
 	}
 	
 	uint no_discretizations = probabilities_[0][0].Nrows();
