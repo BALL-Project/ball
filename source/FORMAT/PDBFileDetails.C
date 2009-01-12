@@ -1072,35 +1072,40 @@ namespace BALL
 	
 	void PDBFile::extractStructure_(const AtomContainer& ac, PDB::Structure& structure)
 	{
+		std::cout << "DEBUG extractStructure_: gets called" << std::endl;
 		// Paranoia: remove old crap from structure.
 		structure.clear();
 		
-		// check if the Parent Atomcontainer has crystal information
-		if ((ac.getAtomContainer(0))->hasProperty("UNITCELL_A") &&
-				(ac.getAtomContainer(0))->hasProperty("UNITCELL_B") &&
-				(ac.getAtomContainer(0))->hasProperty("UNITCELL_C") &&
-				(ac.getAtomContainer(0))->hasProperty("UNITCELL_ALPHA") &&
-				(ac.getAtomContainer(0))->hasProperty("UNITCELL_BETA") &&
-				(ac.getAtomContainer(0))->hasProperty("UNITCELL_GAMMA") &&
-				(ac.getAtomContainer(0))->hasProperty("SPACE_GROUP") &&
-				(ac.getAtomContainer(0))->hasProperty("Z_VALUE"))
-		{
-			structure.unitcell_info.a = ac.getAtomContainer(0)->getProperty("UNITCELL_A").getDouble();		
-			structure.unitcell_info.b = ac.getAtomContainer(0)->getProperty("UNITCELL_B").getDouble();		
-			structure.unitcell_info.c = ac.getAtomContainer(0)->getProperty("UNITCELL_C").getDouble();		
-			structure.unitcell_info.alpha = ac.getAtomContainer(0)->getProperty("UNITCELL_ALPHA").getDouble();		
-			structure.unitcell_info.beta = ac.getAtomContainer(0)->getProperty("UNITCELL_BETA").getDouble();		
-			structure.unitcell_info.gamma = ac.getAtomContainer(0)->getProperty("UNITCELL_GAMMA").getDouble();		
-			strcpy(structure.unitcell_info.space_group, ac.getAtomContainer(0)->getProperty("SPACE_GROUP").getString().c_str());		
-			structure.unitcell_info.z_value = ac.getAtomContainer(0)->getProperty("Z_VALUE").getInt();		
-		}
-		
+
 		// Make sure we have at least one atom:
 		if (ac.beginAtom() == ac.endAtom())
 		{
 			return;
 		}
-
+		
+		// check if the Parent Atomcontainer has crystal information
+		if (ac.countAtomContainers() != 0)
+		{
+			if ((ac.getAtomContainer(0))->hasProperty("UNITCELL_A") &&
+					(ac.getAtomContainer(0))->hasProperty("UNITCELL_B") &&
+					(ac.getAtomContainer(0))->hasProperty("UNITCELL_C") &&
+					(ac.getAtomContainer(0))->hasProperty("UNITCELL_ALPHA") &&
+					(ac.getAtomContainer(0))->hasProperty("UNITCELL_BETA") &&
+					(ac.getAtomContainer(0))->hasProperty("UNITCELL_GAMMA") &&
+					(ac.getAtomContainer(0))->hasProperty("SPACE_GROUP") &&
+					(ac.getAtomContainer(0))->hasProperty("Z_VALUE"))
+			{
+				structure.unitcell_info.a = ac.getAtomContainer(0)->getProperty("UNITCELL_A").getDouble();		
+				structure.unitcell_info.b = ac.getAtomContainer(0)->getProperty("UNITCELL_B").getDouble();		
+				structure.unitcell_info.c = ac.getAtomContainer(0)->getProperty("UNITCELL_C").getDouble();		
+				structure.unitcell_info.alpha = ac.getAtomContainer(0)->getProperty("UNITCELL_ALPHA").getDouble();		
+				structure.unitcell_info.beta = ac.getAtomContainer(0)->getProperty("UNITCELL_BETA").getDouble();		
+				structure.unitcell_info.gamma = ac.getAtomContainer(0)->getProperty("UNITCELL_GAMMA").getDouble();		
+				strcpy(structure.unitcell_info.space_group, ac.getAtomContainer(0)->getProperty("SPACE_GROUP").getString().c_str());		
+				structure.unitcell_info.z_value = ac.getAtomContainer(0)->getProperty("Z_VALUE").getInt();		
+			}
+		}
+		
 		// Walk over all atoms and collect all chains, bonds, etc.
 		Position index = 0; // index of the current atom in the atoms vector
 		for (AtomConstIterator it(ac.beginAtom()); +it; ++it, ++index)
@@ -1693,17 +1698,21 @@ namespace BALL
 
   void PDBFile::writeCRYST1Section_(const PDB::Structure& structure)
   {
-		PDB::RecordCRYST1 cr;
-		cr.unit_cell.a = structure.unitcell_info.a;
-		cr.unit_cell.b = structure.unitcell_info.b;
-		cr.unit_cell.c = structure.unitcell_info.c;
-		cr.unit_cell.alpha = structure.unitcell_info.alpha;
-		cr.unit_cell.beta = structure.unitcell_info.beta;
-		cr.unit_cell.gamma = structure.unitcell_info.gamma;
-		strcpy(cr.unit_cell.space_group, structure.unitcell_info.space_group);
-		cr.unit_cell.z_value = structure.unitcell_info.z_value;
+		std::cout << "Strucki " << structure.unitcell_info.z_value << std::endl;	
+		if (structure.unitcell_info.z_value != -1)
+		{
+			PDB::RecordCRYST1 cr;
+			cr.unit_cell.a = structure.unitcell_info.a;
+			cr.unit_cell.b = structure.unitcell_info.b;
+			cr.unit_cell.c = structure.unitcell_info.c;
+			cr.unit_cell.alpha = structure.unitcell_info.alpha;
+			cr.unit_cell.beta = structure.unitcell_info.beta;
+			cr.unit_cell.gamma = structure.unitcell_info.gamma;
+			strcpy(cr.unit_cell.space_group, structure.unitcell_info.space_group);
+			cr.unit_cell.z_value = structure.unitcell_info.z_value;
 
-		writeRecord_(cr);
+			writeRecord_(cr);
+		}
   }
 
 	void PDBFile::writeConnectivityAnnotationSection_

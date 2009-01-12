@@ -142,7 +142,7 @@ CHECK([Extra] reading a PDB file)
 	PDBFile f(BALL_TEST_DATA_PATH(PDBInfo_test.pdb));
 	System S;
 	f.read(S);
-	TEST_EQUAL(f.info.getSkippedRecords().size(), 155)
+	TEST_EQUAL(f.info.getSkippedRecords().size(), 154)
 
 	PDBRecords::ConstIterator it = f.info.getSkippedRecords().begin();
 	for (Position i = 0; it != f.info.getSkippedRecords().end(); ++it, ++i)

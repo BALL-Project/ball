@@ -1180,15 +1180,15 @@ namespace BALL
 				Integer  z_value;
 
 				UnitCellInfo()
-					: a(1.0),
-						b(1.0),
-						c(1.0),
-						alpha(90.0),
-						beta(90.0),
-						gamma(90.0),
-						z_value(1)
+					: a(0),
+						b(0),
+						c(0),
+						alpha(0),
+						beta(0),
+						gamma(0),
+						z_value(-1)
 				{
-					strcpy(space_group, "P 1");	
+					strcpy(space_group, "");	
 				}
 			} unitcell_info;
 
