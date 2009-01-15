@@ -11,27 +11,32 @@ namespace BALL
 {
 
 	TriangleEdge::TriangleEdge()
-		throw()
 		:	GraphEdge< TrianglePoint,TriangleEdge,Triangle >()
 	{
 	}
 
+	TriangleEdge::TriangleEdge(TrianglePoint* v1, TrianglePoint* v2)
+		:	GraphEdge< TrianglePoint,TriangleEdge,Triangle >()
+	{
+		vertex_[0] = v1;
+		vertex_[1] = v2;
+
+		vertex_[0]->edges_.insert(this);
+		vertex_[1]->edges_.insert(this);
+	}
 
 	TriangleEdge::TriangleEdge(const TriangleEdge& edge, bool deep)
-		throw()
 		:	GraphEdge< TrianglePoint,TriangleEdge,Triangle >(edge,deep)
 	{
 	}
 
 
 	TriangleEdge::~TriangleEdge()
-		throw()
 	{
 	}
 
 
 	void TriangleEdge::setPoint(Position i, TrianglePoint* point)
-		throw()
 	{
 		if (i == 0)
 		{
@@ -45,7 +50,6 @@ namespace BALL
 
 
 	TrianglePoint* TriangleEdge::getPoint(Position i) const
-		throw()
 	{
 		if (i == 0)
 		{
@@ -59,7 +63,6 @@ namespace BALL
 
 
 	void TriangleEdge::setTriangle(Position i, Triangle* triangle)
-		throw()
 	{
 		if (i == 0)
 		{
@@ -73,7 +76,6 @@ namespace BALL
 
 
 	Triangle* TriangleEdge::getTriangle(Position i) const
-		throw()
 	{
 		if (i == 0)
 		{
@@ -87,7 +89,6 @@ namespace BALL
 
 
 	bool TriangleEdge::operator == (const TriangleEdge& edge) const
-		throw()
 	{
 		return ( ((vertex_[0]->point_ == edge.vertex_[0]->point_) &&
 							(vertex_[1]->point_ == edge.vertex_[1]->point_))		||
@@ -97,14 +98,12 @@ namespace BALL
 
 
 	bool TriangleEdge::operator != (const TriangleEdge& edge) const
-		throw()
 	{
 		return ( !(*this == edge) );
 	}
 
 
 	bool TriangleEdge::operator *= (const TriangleEdge&) const
-		throw()
 	{
 		return true;
 	}

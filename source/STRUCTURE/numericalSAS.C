@@ -684,6 +684,12 @@ namespace BALL
 	}
 
 
+	/**
+   * r_1 = (x_1,y_1,z_1) und r_2 = (x_2,y_2,z_2) -> Ikosaeder Punkte
+   * div1 aktueller unterteilungsschritt
+   * div2 anzahl unterteilungen
+   * (x_r,y_r,z_r) -> Ausgabe
+   */ 
 	void divarc(double x1, double y1, double z1,
 							double x2, double y2, double z2,
 							int div1, int div2, double *xr, double *yr, double *zr) {
@@ -691,6 +697,9 @@ namespace BALL
 		double xd, yd, zd, dd, d1, d2, s, x, y, z;
 		double phi, sphi, cphi;
 
+		/*
+ 		 * Berechne die Normale zu r_1 und r_2
+		 */
 		xd = y1*z2-y2*z1;
 		yd = z1*x2-z2*x1;
 		zd = x1*y2-x2*y1;
@@ -699,6 +708,10 @@ namespace BALL
 		{
 			BALL_NSC_ERROR << "divarc: rotation axis of length " << dd << ::std::endl;
 		}
+		/*
+ 		 * Berechne die Laengen der Eingabevektoren
+ 		 */
+
 
 		d1 = x1*x1+y1*y1+z1*z1;
 		if (d1 < 0.5)
@@ -711,11 +724,12 @@ namespace BALL
 			BALL_NSC_ERROR << "divarc: vector 2 of sq.length " << d2 << ::std::endl;
 		}
 
+		//Berechnet den von r_1 und r_2 eingeschlossenen Winkel
 		phi = asin_safe(dd/sqrt(d1*d2));
+		//Berechnet einen Punkt auf der Kugeloberfläche
 		phi = phi*((double)div1)/((double)div2);
 		sphi = sin(phi); cphi = cos(phi);
 		s  = (x1*xd+y1*yd+z1*zd)/dd;
-
 		x = xd*s*(1.-cphi)/dd + x1 * cphi + (yd*z1-y1*zd)*sphi/dd;
 		y = yd*s*(1.-cphi)/dd + y1 * cphi + (zd*x1-z1*xd)*sphi/dd;
 		z = zd*s*(1.-cphi)/dd + z1 * cphi + (xd*y1-x1*yd)*sphi/dd;
@@ -844,6 +858,12 @@ namespace BALL
 				BALL_NSC_ERROR << "ico_dot: n_dot(" << n_dot << ") and tn(" << tn << ") differ" << ::std::endl;
 			}
 		}		/* end of if (tess > 1) */
+
+		for(int i = 0; i < n_dot; ++i)
+		{
+			std::cout << xus[3*i] << " " << xus[3*i + 1] << " " << xus[3*i + 2] << "\n";
+		}
+
 		return n_dot;
 	}		/* end of routine ico_dot_arc */
 
@@ -1014,6 +1034,9 @@ namespace BALL
 								divarc(xki, yki, zki, xji, yji, zji, tl2, tess-tl, &x, &y, &z);
 								divarc(xkj, ykj, zkj, xij, yij, zij, tl, tess-tl2, &x2, &y2, &z2);
 								divarc(xjk, yjk, zjk, xik, yik, zik, tl, tl+tl2, &x3, &y3, &z3);
+								std::cout << "pd" << x << " " << x2 << " " << x3 << "\n";
+								std::cout << y << " " << y2 << " " << y3 << "\n";
+								std::cout << z << " " << z2 << " " << z3 << "\n";
 								x = x+x2+x3; 
 								y = y+y2+y3; 
 								z = z+z2+z3;
