@@ -79,6 +79,12 @@ namespace BALL
 		TrianglePoint()
 			throw();
 
+		/** Detailed constructor.
+ 				This method creates a new TrianglePoint object with the given
+				point and normal.
+    */
+		TrianglePoint(const TVector3<double>& point, const TVector3<double>& normal = TVector3<double>(0.));
+
 		/**	Copy constructor.
 				Create a new TrianglePoint object from another.
 				@param	point	the TrianglePoint object to be copied
@@ -174,7 +180,7 @@ namespace BALL
 
 		protected:
 
-		/*_ The point itselfe
+		/*_ The point itself
 		*/
 		TVector3<double> point_;
 		/*_ The normal vector of the point

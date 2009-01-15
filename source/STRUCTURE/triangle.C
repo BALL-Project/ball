@@ -11,14 +11,38 @@ namespace BALL
 {
 
 	Triangle::Triangle()
-		throw()
 		:	GraphTriangle< TrianglePoint,TriangleEdge,Triangle >()
 	{
 	}
 
+	Triangle::Triangle(TrianglePoint* v1, TrianglePoint* v2, TrianglePoint* v3)
+		:	GraphTriangle< TrianglePoint,TriangleEdge,Triangle >()
+	{
+		vertex_[0] = v1;
+		vertex_[1] = v2;
+		vertex_[2] = v3;
+	}
+
+	Triangle::Triangle(TriangleEdge* e1, TriangleEdge* e2, TriangleEdge* e3)
+		:	GraphTriangle< TrianglePoint,TriangleEdge,Triangle >()
+	{
+		edge_[0] = e1;
+		edge_[1] = e2;
+		edge_[2] = e3;
+
+		vertex_[0] = e1->vertex_[0];
+		vertex_[1] = e1->vertex_[1];
+		vertex_[2] = ((e2->vertex_[0] != e1->vertex_[0]) && 
+		              (e2->vertex_[0] != e1->vertex_[1])) 
+		             ? e2->vertex_[0] 
+		             : e2->vertex_[1];
+
+		vertex_[0]->faces_.insert(this);
+		vertex_[1]->faces_.insert(this);
+		vertex_[2]->faces_.insert(this);
+	}
 
 	Triangle::Triangle(const Triangle& triangle, bool deep)
-		throw()
 		:	GraphTriangle< TrianglePoint,TriangleEdge,Triangle >
 				(triangle,deep)
 	{
@@ -26,13 +50,11 @@ namespace BALL
 
 
 	Triangle::~Triangle()
-		throw()
 	{
 	}
 
 
 	void Triangle::set(const Triangle& triangle, bool deep)
-		throw()
 	{
 		if (this != &triangle)
 		{
@@ -43,7 +65,6 @@ namespace BALL
 
 
 	Triangle& Triangle::operator = (const Triangle& triangle)
-		throw()
 	{
 		if (this != &triangle)
 		{
@@ -57,31 +78,26 @@ namespace BALL
 	void Triangle::setPoint(Position i, TrianglePoint* vertex)
 		throw(Exception::IndexOverflow)
 	{
-		switch (i)
-		{
-			case 0	:	vertex_[0] = vertex; break;
-			case 1	:	vertex_[1] = vertex; break;
-			case 2	:	vertex_[2] = vertex; break;
-			default	:	throw Exception::IndexOverflow(__FILE__,__LINE__,i,2);
+		if (i > 3) {
+			throw Exception::IndexOverflow(__FILE__,__LINE__,i,2);
 		}
+
+		vertex_[i] = vertex;
 	}
 
 
 	TrianglePoint* Triangle::getPoint(Position i) const
 		throw(Exception::IndexOverflow)
 	{
-		switch (i)
-		{
-			case 0	:	return vertex_[0];
-			case 1	:	return vertex_[1];
-			case 2	:	return vertex_[2];
-			default	:	throw Exception::IndexOverflow(__FILE__,__LINE__,i,2);
+		if (i > 3) {
+			throw Exception::IndexOverflow(__FILE__,__LINE__,i,2);
 		}
+
+		return vertex_[i];
 	}
 
 
 	void Triangle::remove(TriangleEdge* edge)
-		throw()
 	{
 		for (Position i = 0; i < 3; i++)
 		{
@@ -94,21 +110,18 @@ namespace BALL
 
 
 	bool Triangle::operator == (const Triangle&) const
-		throw()
 	{
 		return true;
 	}
 
 
 	bool Triangle::operator != (const Triangle&) const
-		throw()
 	{
 		return false;
 	}
 
 
 	bool Triangle::operator *= (const Triangle&) const
-		throw()
 	{
 		return true;
 	}
