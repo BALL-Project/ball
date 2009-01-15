@@ -1045,7 +1045,7 @@ namespace BALL
 			
 	*/
 	template <typename Item>
-class HashGrid3
+	class HashGrid3
 	{
 		public:
 
