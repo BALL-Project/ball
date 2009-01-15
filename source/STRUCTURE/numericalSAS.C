@@ -7,8 +7,11 @@
 #include <utility>
 
 #include <BALL/STRUCTURE/numericalSAS.h>
+#include <BALL/STRUCTURE/triangulatedSurface.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/DATATYPE/hashMap.h>
+#include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/MATHS/surface.h>
 
@@ -1522,5 +1525,165 @@ namespace BALL
 #undef FLAG_VOLUME
 #undef FLAG_ATOM_AREA
  
+Size computeSphereTesselation(TriangulatedSphere& result, int num_points)
+{
+	// first, we decide whether to use an icosahedron or a pentakis dodecahedron
+	// for the tesselation; this only depends on which comes closer to the number
+	// of requested points
+	Size levels_icosahedron  					= (Size)ceil(sqrt((num_points - 2)/10.));
+	Size levels_pentakis_dodecahedron = (Size)ceil(sqrt((num_points - 2)/30.));
+
+	Size num_points_icosahedron 					= (Size)(10*pow(levels_icosahedron, 					(int)2)+2);
+	Size num_points_pentakis_dodecahedron = (Size)(30*pow(levels_pentakis_dodecahedron, (int)2)+2);
+
+	// both numbers are >= num_points -> take the smaller one
+	bool use_icosahedron = num_points_icosahedron < num_points_pentakis_dodecahedron;
+
+	// TODO: as soon as we have a pentakis dodecahedron: remove!
+	use_icosahedron = true;
+
+	Size result_size;
+	if (use_icosahedron)
+	{
+		result.icosaeder();
+		result.setIndices();
+		if (levels_icosahedron > 1)
+		{
+			result.setIndices();
+			result.refine(levels_icosahedron-1);
+		}
+
+		result_size = num_points_icosahedron;
+	}
+	else
+	{
+		//	result.pentakisDodecahedron()
+		result.setIndices();
+		if (levels_pentakis_dodecahedron > 1)
+		{
+			result.refine(levels_pentakis_dodecahedron-1);
+			result.setIndices();
+		}
+
+		result_size = num_points_pentakis_dodecahedron;
+	}
+
+	return result_size;
+}
+
+void computeOccludedPointsPerAtom(AtomContainer& fragment, HashMap<Atom*, float>& atom_areas, float probe_radius, int num_points_requested)
+{
+  // first, precompute a triangulated sphere
+ 	TriangulatedSphere sphere_template_t;
+ 	Size num_points = computeSphereTesselation(sphere_template_t, num_points_requested);		
+
+	float unit_area_per_point = 4.*M_PI/num_points;
+
+ 	// it's simpler to work with surfaces later
+ 	Surface sphere_template;
+ 	sphere_template_t.exportSurface(sphere_template);
+
+ 	// a safety threshold
+ 	float epsilon = 0.2;
+
+ 	// determine the maximum SAS radius
+ 	float max_radius = 0;
+ 	for (AtomIterator at_it = fragment.beginAtom(); +at_it; ++at_it)
+ 	{
+ 		max_radius = std::max(max_radius, at_it->getRadius());
+ 	}
+ 	max_radius += probe_radius;
+
+ 	// build the containing box
+ 	BoundingBoxProcessor bpp;
+
+ 	fragment.apply(bpp);
+
+ 	// and a hash grid containing all atoms
+ 	HashGrid3<Atom*> atom_grid(bpp.getLower()-Vector3(max_radius+epsilon), 
+ 													   bpp.getUpper()-bpp.getLower()+Vector3(max_radius+epsilon), 
+ 														 2*max_radius+epsilon);
+
+ 	for (AtomIterator at_it = fragment.beginAtom(); +at_it; ++at_it)
+ 	{
+ 		if (at_it->getRadius() > 0.)
+ 			atom_grid.insert(at_it->getPosition(), &(*at_it));
+ 	}
+
+ 	// get the Index size of the grid
+ 	const Index size_x = atom_grid.getSizeX();
+ 	const Index size_y = atom_grid.getSizeY();
+ 	const Index size_z = atom_grid.getSizeZ();
+
+ 	// now iterate over all atoms and determine their possibly occluding neighbours
+ 	for (AtomIterator at_it = fragment.beginAtom(); +at_it; ++at_it)
+ 	{
+ 		Vector3 current_center = at_it->getPosition();
+ 		float   current_radius = at_it->getRadius()+probe_radius;
+
+ 		if (current_radius == probe_radius)
+ 			continue;
+
+ 		std::vector<Atom*> neighbours;
+
+ 		// find the atom's box
+ 		HashGridBox3<Atom*>* box = atom_grid.getBox(at_it->getPosition());
+
+ 		// get the indices of the box containing atom B
+ 		Position x, y, z;                            
+ 		atom_grid.getIndices(*box, x, y, z);   
+
+ 		// iterate over all the neighbouring boxes
+ 		for (int nx = x-1; (nx < size_x) && (nx < (int)x+2); nx++)
+ 		{
+ 			if (nx < 0) continue;
+ 			for (int ny = y-1; (ny < size_y) && (ny < (int)y+2); ny++)
+ 			{
+ 				if (ny < 0) continue;     
+ 				for (int nz = z-1; (nz < size_z) && (nz < (int)z+2); nz++)
+ 				{
+ 					if (nz < 0) continue;
+                                
+ 					// get the current neighbouring box
+ 					HashGridBox3<Atom*>* neighbour_box = atom_grid.getBox(nx, ny, nz);
+                                
+ 					// iterate over all atoms of the current neighbouring box
+ 					HashGridBox3<Atom*>::DataIterator data_it;
+ 					for (data_it = neighbour_box->beginData(); +data_it; ++data_it)
+ 					{
+						if (*data_it == &*at_it)
+							continue;
+
+ 						// do the atoms overlap at all?
+ 						float radius_sum = current_radius + (*data_it)->getRadius() + probe_radius;
+ 						if ((current_center-(*data_it)->getPosition()).getSquareLength() <= radius_sum*radius_sum)
+ 							neighbours.push_back(*data_it);
+ 					}
+ 				}
+ 			}
+ 		} // end loop over neighbour boxes
+ 	
+ 		Size num_occluded=0;
+ 		// now we know all the potentially occluding atoms => test each point for overlap
+ 		for (Size current_point_index=0; current_point_index<num_points; ++current_point_index)
+ 		{
+ 			Vector3 current_point = sphere_template.vertex[current_point_index]*current_radius + current_center;
+
+ 			for (Size current_neighbour=0; current_neighbour<neighbours.size(); ++current_neighbour)
+ 			{
+ 				float partner_radius = neighbours[current_neighbour]->getRadius() + probe_radius;
+ 				if ((current_point-neighbours[current_neighbour]->getPosition()).getSquareLength() <= partner_radius*partner_radius)
+ 				{
+ 					++num_occluded;
+ 					break;
+ 				}
+ 			}
+ 		}
+
+		float atom_area = current_radius*current_radius * unit_area_per_point * (num_points - num_occluded);
+		atom_areas[&*at_it] = atom_area;
+ 	}
+
+}
 
 } // namespace BALL
