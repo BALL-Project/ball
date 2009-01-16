@@ -34,6 +34,10 @@
 # include <BALL/COMMON/exception.h>
 #endif
 
+#ifndef BALL_SYSTEM_TIMER_H
+#include <BALL/SYSTEM/timer.h>
+#endif
+
 #include <map>
 #include <vector>
 #include <queue>
@@ -124,6 +128,14 @@ namespace BALL
 				*/
 				static const char* ADD_HYDROGENS;
 
+				/**  compute also the connectivity of the molecule
+				 */
+				static const char* COMPUTE_ALSO_CONNECTIVITY; //TODO TEST
+				
+				/**  the connectivity cut off
+				 */
+				static const char* CONNECTIVITY_CUTOFF; //TODO TEST
+
 				/**	resolve penalty ties based on structural information
 				*/
 				static const char* USE_FINE_PENALTY;
@@ -191,6 +203,8 @@ namespace BALL
 				static const bool OVERWRITE_TRIPLE_BOND_ORDERS;
 				static const bool OVERWRITE_SELECTED_BONDS;
 				static const bool ADD_HYDROGENS;
+				static const bool COMPUTE_ALSO_CONNECTIVITY; 
+				static const float CONNECTIVITY_CUTOFF; 
 				static const bool USE_FINE_PENALTY;
 				static const bool KEKULIZE_RINGS;
 				static const String ALGORITHM;
@@ -800,6 +814,9 @@ namespace BALL
 			// flag for adding missing hydrogens
 			bool add_missing_hydrogens_;
 
+			// flag for computing also the bond connectivity
+			bool compute_also_connectivity_;
+
 			// flag for using fine penalties derived from 3d information
 			bool use_fine_penalty_;
 			
@@ -838,7 +855,7 @@ namespace BALL
 			/// Estimates the bond length penalty for a given unclosed atom.
 			//  NOTE: virtual bonds are excluded!
 			float estimateBondLengthPenalty_(Index atom_index, // the atom index
-																			 vector<Bond*> free_bonds, 
+																			 const vector<Bond*>& free_bonds, 
 																			 int fixed_virtual_order,  
 																			 int fixed_valence, 
 																			 int num_free_bonds);
@@ -870,6 +887,7 @@ namespace BALL
 			// step_ + queue_.size() gives the number of touched nodes.
 			int step_;
 
+			Timer timer_;
 #ifdef BALL_HAS_LPSOLVE
 			lprec* ilp_;
 #endif
