@@ -50,3 +50,6 @@ INCLUDE(include/BALL/STRUCTURE/sources.cmake)
 
 INCLUDE(source/SYSTEM/sources.cmake)
 INCLUDE(include/BALL/SYSTEM/sources.cmake)
+
+INCLUDE(source/XRAY/sources.cmake)
+INCLUDE(include/BALL/XRAY/sources.cmake)
