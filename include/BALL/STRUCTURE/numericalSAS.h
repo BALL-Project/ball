@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalSAS.h,v 1.28 2005/12/23 17:02:03 amoll Exp $
-//
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
 #define BALL_STRUCTURE_NUMERICALSAS_H
@@ -27,7 +25,7 @@ namespace BALL
   class HashMap;
 
 	/**	@name	Fast Numerical Calculation of Solvent Accessible Surface Area.
-			These functions use the algorithm by Eisenhaber, Lijnzaad, Argos, Sander,
+			These functions are based on the algorithm by Eisenhaber, Lijnzaad, Argos, Sander,
 			and Scharf ("The Double Cubic Lattice Method: Efficient Approaches to 
 			numerical Integration of Surface Area and Volume and to Dot
 			Surface Contouring of Molecular Assemblies", J. Comput. Chem. (1995),
@@ -36,7 +34,6 @@ namespace BALL
 			\ingroup Surface
 			@{
 	*/
-
 	
 	/** Calculate the solvent accessible surface area numerically.
 			This method returns the total 
