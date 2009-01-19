@@ -32,9 +32,9 @@ namespace BALL
 
 		vertex_[0] = e1->vertex_[0];
 		vertex_[1] = e1->vertex_[1];
-		vertex_[2] = ((e2->vertex_[0] != e1->vertex_[0]) && 
-		              (e2->vertex_[0] != e1->vertex_[1])) 
-		             ? e2->vertex_[0] 
+		vertex_[2] = ((e2->vertex_[0] != e1->vertex_[0]) &&
+		              (e2->vertex_[0] != e1->vertex_[1]))
+		             ? e2->vertex_[0]
 		             : e2->vertex_[1];
 
 		vertex_[0]->faces_.insert(this);
