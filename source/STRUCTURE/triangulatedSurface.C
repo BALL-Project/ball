@@ -5,9 +5,10 @@
 
 #include <BALL/STRUCTURE/triangulatedSurface.h>
 
+#include <map>
+
 namespace BALL
 {
-
 	TriangulatedSurface::TriangulatedSurface()
 		throw()
 		:	number_of_points_(0),
@@ -1095,12 +1096,113 @@ namespace BALL
 		}
 	}
 
-/*	void TriangulatedSphere::pentakisDodecahedron(bool out)
+	struct PointerPairComparator {
+		typedef std::pair<TrianglePoint*, TrianglePoint*> Input;
+
+		bool operator()(const Input& p1, const Input& p2) {
+			Input a = p1;
+			if((unsigned long)a.first > (unsigned long)a.second) {
+				std::swap(a.first, a.second);
+			}
+
+			Input b = p2;
+			if((unsigned long)b.first > (unsigned long)b.second) {
+				std::swap(b.first, b.second);
+			}
+
+			return (a.first < b.first) || ((a.first == b.first) && (a.second < b.second));
+		}
+
+	};
+
+
+	typedef std::map<std::pair<TrianglePoint*, TrianglePoint*>, TriangleEdge*, PointerPairComparator> EdgeMap;
+
+	TriangleEdge* getEdge_(EdgeMap& edges, TrianglePoint* a, TrianglePoint* b)
+	{
+		EdgeMap::iterator res = edges.find(std::make_pair(a, b));
+		if(res == edges.end()) {
+			res = edges.insert(std::make_pair(std::make_pair(a, b), new TriangleEdge(a, b))).first;
+		}
+
+		return res->second;
+	}
+
+	void TriangulatedSphere::pentakisDodecaeder(bool out)
 	{
 		icosaeder(out);
-		
 
-	}*/
+		number_of_points_ = 32;
+		number_of_edges_ = 90;
+		number_of_triangles_ = 60;
+
+		std::map<Triangle*, TrianglePoint*> new_points;
+		for(std::list<Triangle*>::iterator it = triangles_.begin(); it != triangles_.end(); ++it) {
+			TrianglePoint* p = new TrianglePoint(((*it)->vertex_[0]->point_ + (*it)->vertex_[1]->point_ + (*it)->vertex_[2]->point_).normalize());
+
+			p->normal_ = out ? p->point_ : -p->point_;
+
+			new_points[*it] = p;
+
+			delete *it;
+		}
+
+		EdgeMap edge_map;
+		std::list<Triangle*> new_triangles;
+		for(std::list<TrianglePoint*>::iterator pt = points_.begin(); pt != points_.end(); ++pt) {
+			BALL::HashSet<TriangleEdge*> p_edges((*pt)->edges_);
+			for(TrianglePoint::EdgeIterator et = p_edges.begin(); et != p_edges.end(); ++et) {
+				TrianglePoint* p1 = new_points[(*et)->getTriangle(0)];
+				TrianglePoint* p2 = new_points[(*et)->getTriangle(1)];
+
+				TriangleEdge* e1 = getEdge_(edge_map, *pt, p1);
+				TriangleEdge* e2 = getEdge_(edge_map, p1, p2);
+				TriangleEdge* e3 = getEdge_(edge_map, p2, *pt);
+
+				Triangle* tri = new Triangle(e1, e2, e3);
+
+				if(e1->getTriangle(0) == 0) {
+					e1->setTriangle(0, tri);
+				} else {
+					e1->setTriangle(1, tri);
+				}
+
+				if(e2->getTriangle(0) == 0) {
+					e2->setTriangle(0, tri);
+				} else {
+					e2->setTriangle(1, tri);
+				}
+
+				if(e3->getTriangle(0) == 0) {
+					e3->setTriangle(0, tri);
+				} else {
+					e3->setTriangle(1, tri);
+				}
+
+				new_triangles.push_back(tri);
+
+				(*pt)->remove((*et)->getTriangle(0));
+				(*pt)->remove((*et)->getTriangle(1));
+				(*pt)->remove(*et);
+			}
+		}
+
+		for(std::list<TriangleEdge*>::iterator et = edges_.begin(); et != edges_.end(); ++et) {
+			delete *et;
+		}
+
+		edges_.clear();
+
+		for(EdgeMap::iterator it = edge_map.begin(); it != edge_map.end(); ++it) {
+			edges_.push_back(it->second);
+		}
+
+		for(std::map<Triangle*, TrianglePoint*>::iterator it = new_points.begin(); it != new_points.end(); ++it) {
+			points_.push_back(it->second);
+		}
+
+		std::swap(triangles_, new_triangles);
+	}
 
 	void TriangulatedSphere::icosaeder(bool out)
 	{
