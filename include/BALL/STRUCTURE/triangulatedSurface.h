@@ -459,6 +459,14 @@ namespace BALL
 		*/
 		void icosaeder(bool out = true);
 
+		/** Build a pentakis dodecaeder.
+				If the TriangulatedSphere is not empty, it will be cleared first.
+				The center of the dodecaeder will be the origin, the radius will be 1.
+				@param	out	if out = true the normal vectors will be oriented outside,
+										otherwise they will be oriented inside
+		*/
+		void pentakisDodecaeder(bool out = true);
+
 		/** Refine a triangulated sphere.
 				The center of the sphere must be the origin, the radius must be 1.
 				@param	iterations	the number of refinement iterations
