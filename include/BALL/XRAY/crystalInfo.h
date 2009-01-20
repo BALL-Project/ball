@@ -59,50 +59,50 @@ namespace BALL
 
 			/** Constructor
 			 */
-			CrystalInfo(string group, Vector3 dim, Angle Alpha, Angle Beta, Angle Gamma);
+			//CrystalInfo(string group, Vector3 dim, Angle Alpha, Angle Beta, Angle Gamma);
 			
 			/** Default Constructor
 			 */
 			~CrystalInfo() throw ();
 	
-			bool setSpaceGroup(string sg);
-			string getSpaceGroup();
+			bool setSpaceGroup(const string& sg);
+			const string& getSpaceGroup() const;
 			
-			void setCellDimensions(Vector3 dim);
-			void setCellEdgeLengthA(float a);
-			void setCellEdgeLengthB(float b);
-			void setCellEdgeLengthC(float c);
-			void setCellAngles(Angle alpha, Angle beta, Angle gamma);
-			void setCellAngleAlpha(Angle alpha);
-			void setCellAngleBeta(Angle beta);
-			void setCellAngleGamma(Angle gamma);
+			void setCellDimensions(const Vector3& dim);
+			void setCellEdgeLengthA(const float& a);
+			void setCellEdgeLengthB(const float& b);
+			void setCellEdgeLengthC(const float& c);
+			void setCellAngles(const Angle& alpha, const Angle& beta, const Angle& gamma);
+			void setCellAngleAlpha(const Angle& alpha);
+			void setCellAngleBeta(const Angle& beta);
+			void setCellAngleGamma(const Angle& gamma);
 
-			Size getNumberOfSymOps();
-			Matrix4x4 getSymOp(Position p);
+			Size getNumberOfSymOps() const ;
+			const Matrix4x4& getSymOp(Position p) const;
 
-			Size getNumberOfNCSSymOps();
-			Matrix4x4 getNCS(Position p);
+			Size getNumberOfNCSSymOps() const;
+			const Matrix4x4& getNCS(Position p) const;
 			void pushbackNCS(Matrix4x4 ncsm);
 			void dropNCS(Position p);
 
-			Matrix4x4 getCart2Fract();	
-			Matrix4x4 getFract2Cart();	
+			const Matrix4x4& getCart2Frac() const;	
+			const Matrix4x4& getFrac2Cart() const;	
 
 		protected:
 
 			void calculateMatrices_();
-			bool retrieveSymOps_();
+			bool retrieveSymOps_(const string& sg);
 
+			string space_group_;
+			Vector3 cell_dimensions_;
+			Angle alpha_, beta_, gamma_;
+			string filename_;
+			
 			Matrix4x4 cart2frac_;
 			Matrix4x4 frac2cart_;
 
 			vector<Matrix4x4> ncs_symops_;
 			vector<Matrix4x4> sg_symops_;
-
-			Vector3 cell_dimensions_;
-			Angle alpha_, beta_, gamma_;
-			string space_group_;
-			string filename_;
 
 	};
 }	// namespace BALL
