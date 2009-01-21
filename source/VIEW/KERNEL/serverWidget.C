@@ -1,14 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.18.16.1 2007/03/25 22:02:27 oliver Exp $
 
-#include <BALL/VIEW/KERNEL/server.h>
+#include <BALL/VIEW/KERNEL/serverWidget.h>
 #include <BALL/CONCEPT/client.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/DIALOGS/serverPreferences.h>
+#include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/FORMAT/INIFile.h>
+#include <BALL/SYSTEM/systemCalls.h>
 
 #include <QtGui/qstatusbar.h>
 #include <QtGui/qpixmap.h>
@@ -20,7 +21,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		const char* Server::mini_ray_xpm_[] =
+		const char* ServerWidget::mini_ray_xpm_[] =
 		{
         "16 14 4 1",
         "   c None",
@@ -43,112 +44,87 @@ namespace BALL
         "   ..o          "
 		};        
   
-		Server::NotCompositeObject::NotCompositeObject(const char* file, int line)
+		ServerWidget::NotCompositeObject::NotCompositeObject(const char* file, int line)
 			throw()
 			:	Exception::GeneralException(file, line, string("NotCompositeObject"), string("received an non composite object!"))
 		{
 		}
 
-		Server::Server(QWidget* parent, const char* name)
+		ServerWidget::ServerWidget(QWidget* parent, const char* name)
 				throw()
-			:	ModularWidget(name),
+			:	QObject(parent),
+				ModularWidget(name),
+				server_(this, VIEW_DEFAULT_PORT, true),
 				object_creator_(0),
-				composite_hashmap_(),
-				socket_(),
 				port_(VIEW_DEFAULT_PORT),
 				server_preferences_(0),
 				server_icon_(0)
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "new Server " << this << std::endl;
+				Log.error() << "new ServerWidget " << this << std::endl;
 			#endif
 
 			// register ModularWidget
 			registerWidget(this);
 			
 			unregisterObjectCreator();
+
+			server_.setMainControl(getMainControl());
+
+			connect(this, SIGNAL(lockRequested(bool)), this, SLOT(handleLocking(bool)));
 		}
 
-		Server::Server(const Server&)
-			: ModularWidget()
+		ServerWidget::ServerWidget(const ServerWidget& s)
+			: QObject(),
+				ModularWidget(),
+				server_(this, VIEW_DEFAULT_PORT, true)
 		{
+			// register ModularWidget
+			registerWidget(this);
+			
+			unregisterObjectCreator();
+
+			server_.setMainControl(getMainControl());
 		}
 
-		Server::~Server()
+		ServerWidget::~ServerWidget()
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "Destructing object " << this << " Server" << std::endl;
+				Log.error() << "Destructing object " << this << " ServerWidget" << std::endl;
 			#endif 
+
+			server_.deactivate();
+			server_.terminate();
+			server_.wait();
 
 			ConnectionObject::destroy();
 
 			if (object_creator_ != 0) delete object_creator_;
 		}
 
-		void Server::clear()
+		void ServerWidget::clear()
 			throw()
 		{
 			ConnectionObject::clear();
+
+			server_.deactivate();
 		}
 
-		// initializes a new socket and connects it
-		void Server::activate()
-			throw()
-		{
-			static SockInetBuf sock_inet_buf(SocketBuf::sock_stream);
-			
-			// if the timer is already running, clear it and close the
-			// socket first
-			if (isActive())
-			{
-				stop();
-				sock_inet_buf.close();
-			}
-			
-			if (sock_inet_buf.bind(0, port_) != 0)
-			{
-				Log.error() << "VIEW::Server: cannot bind to port " << port_ << endl;
-				return;
-			}
-
-			sock_inet_buf_ = &sock_inet_buf;
-
-			Log.info() << "VIEW::Server: listening at port " 
-								 << sock_inet_buf_->localhost() << ":"
-								 << sock_inet_buf_->localport() << endl;
-
-			sock_inet_buf_->listen();
-
-			// check once per second
-			setInterval(1000);
-			start();
-		}
-
-		void Server::deactivate()
-				throw()
-		{
-			if (isActive())
-			{
-				Log.info() << "VIEW::Server: stopped." << endl;
-				QTimer::stop();
-				sock_inet_buf_->close();
-			}
-		}
-			
-		int Server::getPort() const
+		int ServerWidget::getPort() const
 			throw()
 		{
 			return port_;
 		}
 		
-		void Server::setPort(const int port)
+		void ServerWidget::setPort(const int port)
 			throw()
 		{
 			port_ = port;
+			server_.setPort(port_);
 		}
 		
-		void Server::initializeWidget(MainControl& main_control)
+		void ServerWidget::initializeWidget(MainControl& main_control)
 			throw()
 		{
 			server_icon_ = new QLabel(main_control.statusBar());
@@ -163,14 +139,14 @@ namespace BALL
 			server_icon_->show();
  		}
 
-		void Server::finalizeWidget(MainControl& main_control)
+		void ServerWidget::finalizeWidget(MainControl& main_control)
 			throw()
 		{
 			main_control.statusBar()->removeWidget(server_icon_);	
 			delete server_icon_;
 		}
 			
-		void Server::initializePreferencesTab(Preferences &preferences)
+		void ServerWidget::initializePreferencesTab(Preferences &preferences)
 			throw()
 		{
 			server_preferences_ = new ServerPreferences();
@@ -178,7 +154,7 @@ namespace BALL
 			preferences.insertEntry(server_preferences_);
 		}
 
-		void Server::finalizePreferencesTab(Preferences &preferences)
+		void ServerWidget::finalizePreferencesTab(Preferences &preferences)
 			throw()
 		{
 			if (server_preferences_ != 0)
@@ -188,7 +164,7 @@ namespace BALL
 			}
 		}
 		
-		void Server::applyPreferences()
+		void ServerWidget::applyPreferences()
 			throw()
 		{
 			if (server_preferences_ == 0) return;
@@ -201,31 +177,34 @@ namespace BALL
 
 				// set the port and active the server
 				setPort(port);
-				activate();
+				server_.start();
 
-				// adjust the tool tip and update the server icon
-				QString tip;
-				tip.sprintf("VIEW Server listening on port %d", port); 
-//   				QToolTip::add(server_icon_, tip);
-				server_icon_->show();
+				if (server_.isRunning())
+				{
+					// adjust the tool tip and update the server icon
+					QString tip;
+					tip.sprintf("VIEW Server listening on port %d", port); 
+					server_icon_->setToolTip(tip);
+					server_icon_->show();
+				}
 			}
 			else
 			{
 				// stop the server
-				deactivate();
+				server_.deactivate();
 
 				// hide the icon
 				server_icon_->hide();
 			}
 		}
-		
-		bool Server::isValid() const
+
+		bool ServerWidget::isValid() const
 			throw()
 		{
 			return (ConnectionObject::isValid());
 		}
 
-		void Server::dump(ostream& s, Size depth) const
+		void ServerWidget::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -238,51 +217,80 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		// main event loop
-	  void Server::timer()
+		void ServerWidget::changeLock(bool lock)
+		{
+			emit lockRequested(lock);
+		}
+
+		void ServerWidget::handleLocking(bool lock)
+		{
+			if (lock)
+			{
+				// try releasing a lock if we already hold one
+				unlockComposites();
+				if (lockComposites())
+					server_.setLocked(true);
+				server_.setLocked(true);
+			}
+			else
+			{
+				unlockComposites();
+				server_.setLocked(false);
+			}
+		}
+
+		ServerWidget::BALLViewServer::BALLViewServer(ServerWidget* parent, Size port, bool restart)
+			: BALLThread(),
+				TCPServerThread(port, true, restart),
+				parent_widget_(parent)
+		{
+		}
+
+		void ServerWidget::BALLViewServer::run()
+		{
+			try {
+				activate();
+			} catch (std::exception& e) {
+				output_(e.what());
+			}
+		}
+
+		void ServerWidget::BALLViewServer::handleConnection()
 		{
 			unsigned int command;
 
-			// wait until socket is read ready
-			if (!sock_inet_buf_->is_readready(0,20))
-			{
-				return;
-			}
-
-			// open stream socket
-			IOStreamSocket iostream_socket(sock_inet_buf_->accept());
-
 			// reading command
-			iostream_socket >> command;
+			connected_stream_ >> command;
 			
 			// process commands
 			switch (command)
 			{
 				case Client::COMMAND__SEND_OBJECT:
-					sendObject(iostream_socket);
+					sendObject();
 				break;
 
    			default:
 					Log.info() << "Server: unkown command." << endl;
+					connected_stream_.close();
 					break;
 			}
 		}
 
-	  void Server::sendObject(IOStreamSocket &iostream_socket)
-				throw(Server::NotCompositeObject)
+	  void ServerWidget::BALLViewServer::sendObject()
+				throw(ServerWidget::NotCompositeObject)
     {
-			Log.info() << "Server: receiving object ... " << endl;
+			output_("Server: receiving object ... \n");
 
 			unsigned long object_handle;
 			
 			// get object handle
-			iostream_socket >> object_handle;
+			connected_stream_ >> object_handle;
 			
-			Log.info() << "creating object: object_creator_ = " << object_creator_ << endl;
+			ObjectCreator* object_creator = &(parent_widget_->getObjectCreator());
+			output_("creating object\n");
 
 			// use specified object creator for inserting the object in the scene
-			Composite* new_composite_ptr = object_creator_->operator()(iostream_socket);
-
+			Composite* new_composite_ptr = object_creator->operator()(connected_stream_);
 			if (new_composite_ptr == 0)
 			{
 				throw NotCompositeObject(__FILE__, __LINE__);
@@ -293,23 +301,45 @@ namespace BALL
 			// get composite with handle
  			CompositeHashMap::Iterator iterator = composite_hashmap_.find(object_handle);
 
+			is_locked_ = false;
+			parent_widget_->changeLock(true);
+			
+			while (!is_locked_)
+			{
+				// give the GUI thread time to update widgets, etc., and try
+				// again in 2 seconds
+				msleep(2000);
+				parent_widget_->changeLock(true);
+			}
+
 		 	// already in hashmap ?
 			if (iterator != composite_hashmap_.end())
 			{
-				getMainControl()->remove(*iterator->second);
-					
+				// tell the main control to get rid of it
+				sendMessage_(new CompositeMessage(*iterator->second,
+																					CompositeMessage::REMOVED_COMPOSITE,
+																					true));
+
 				// remove old composite from hashmap
 				composite_hashmap_.erase(object_handle);
 			}
 
 			// insert new composite 
 			composite_hashmap_.insert(CompositeHashMap::ValueType(object_handle, new_composite_ptr));
-			getMainControl()->insert(*new_composite_ptr);
+			sendMessage_(new CompositeMessage(*new_composite_ptr,
+																			 CompositeMessage::NEW_COMPOSITE,
+																			 true));
+
+			parent_widget_->changeLock(false);
     }
 
+		void ServerWidget::BALLViewServer::setLocked(bool is_locked)
+		{
+			is_locked_ = is_locked;
+		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/server.iC>
+#			include <BALL/VIEW/KERNEL/serverWidget.iC>
 #		endif 
-
-} } // namespaces
+	} 
+} // namespaces

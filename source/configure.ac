@@ -577,6 +577,16 @@ if test "${GSL_SUPPORT}" == true ; then
 fi
 
 dnl
+dnl   boost
+dnl
+CF_BOOST()
+
+dnl
+dnl   asio
+dnl
+CF_ASIO()
+
+dnl
 dnl		VIEW
 dnl
 dnl Currently, we require QT 3.3.x. QT 4.x isn't supported yet.
@@ -608,7 +618,7 @@ BINFMT_INDEX=""
 
 BALL_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
 
-LIBS="${LIBS} ${FFTW_LIBS} ${GSL_LIBS} -lm"
+LIBS="${LIBS} ${FFTW_LIBS} ${GSL_LIBS} ${BOOST_LIBS} -lm"
 VIEW_LIBS="${VIEW_LIBS} ${QT_VIEW_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib -lBALL ${LIBS}"
 if test "${USE_VIEW}" = true ; then

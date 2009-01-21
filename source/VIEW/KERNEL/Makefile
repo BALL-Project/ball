@@ -24,12 +24,13 @@ CPP_SOURCES=\
 	preferencesEntry.C\
   representationManager.C\
   representation.C\
-  server.C\
+  serverWidget.C\
   stage.C\
 	threads.C
 
 MOC_SOURCES=\
-	mainControl_moc.C
+	mainControl_moc.C\
+	serverWidget_moc.C
 
 include ../../common.mak
 -include .Dependencies
@@ -37,3 +38,7 @@ include ../../common.mak
 mainControl_moc.C:  $(BALL_PATH)/include/BALL/VIEW/KERNEL/mainControl.h
 	$(MOC) $(BALL_PATH)/include/BALL/VIEW/KERNEL/mainControl.h -o mainControl_moc.C
  
+serverWidget_moc.C:  $(BALL_PATH)/include/BALL/VIEW/KERNEL/serverWidget.h
+	$(MOC) $(BALL_PATH)/include/BALL/VIEW/KERNEL/serverWidget.h -o serverWidget_moc.C
+ 
+

@@ -15,8 +15,8 @@
 #	include <BALL/CONCEPT/composite.h>
 #endif
 
-#ifndef BALL_SYSTEM_SOCKET_H
-#	include <BALL/SYSTEM/socket.h>
+#ifndef BALL_SYSTEM_NETWORKING_H
+#	include <BALL/SYSTEM/networking.h>
 #endif
 
 #ifndef BALL_CONCEPT_PERSISTENTOBJECT_H       
