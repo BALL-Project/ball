@@ -1,4 +1,3 @@
-// -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
 // $Id: mainframe.C,v 1.62.8.6 2007/06/12 05:42:24 oliver Exp $
@@ -10,7 +9,7 @@
 #include "demoTutorialDialog.h"
 
 #include <BALL/CONCEPT/moleculeObjectCreator.h>
-#include <BALL/VIEW/KERNEL/server.h>
+#include <BALL/VIEW/KERNEL/serverWidget.h>
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -127,7 +126,7 @@ namespace BALL
 		new DisplayProperties(	this, "DisplayProperties");
 
 		// setup the VIEW server
-		Server* server = new Server(this);
+		ServerWidget* server = new ServerWidget(this);
 		// registering object generator
 		MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
 		server->registerObjectCreator(*object_creator);

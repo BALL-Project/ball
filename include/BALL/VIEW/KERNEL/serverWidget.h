@@ -1,11 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.12.16.1 2007/03/25 21:26:03 oliver Exp $
-//
 
-#ifndef BALL_VIEW_KERNEL_SERVER_H
-#define BALL_VIEW_KERNEL_SERVER_H
+#ifndef BALL_VIEW_KERNEL_SERVERWIDGET_H
+#define BALL_VIEW_KERNEL_SERVERWIDGET_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -23,9 +21,16 @@
 # include <BALL/CONCEPT/objectCreator.h>
 #endif
 
+#ifndef BALL_SYSTEM_NETWORKING_H
+# include <BALL/SYSTEM/networking.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_THREADS_H
+# include <BALL/VIEW/KERNEL/threads.h>
+#endif
+
 #include <QtCore/qtimer.h>
 #include <QtGui/QLabel>
-#include <QtNetwork/QTcpSocket.h>
 
 class QLabel;
 
@@ -38,8 +43,8 @@ namespace BALL
 		class ServerPreferences;
 		class Preferences;
 
-		/** Server class.
-				The class Server handles all incoming PersistentObject objects,
+		/** ServerWidget class.
+				The class ServerWidget handles all incoming PersistentObject objects,
 				converts them into Composite objects (if possible) and sents
 				them through the ConnectionObject tree with the message
 				NewCompositeMessage. Also it stores all received Composite objects
@@ -48,50 +53,18 @@ namespace BALL
 				RemovedCompositeMessage will be sent through the ConnectionObject
 				tree and after that the the message NewCompositeMessage with the new
 				received composite will be sent.
-			\ingroup ViewKernelClient
+
+				\ingroup ViewKernelClient
 		*/
-		class BALL_VIEW_EXPORT Server
-			: public QTcpServer,
-			  public ModularWidget
+		class BALL_VIEW_EXPORT ServerWidget
+			  : public QObject,
+					public ModularWidget
 		{
+			Q_OBJECT
+
 			public:
-			
-			BALL_EMBEDDABLE(Server,ModularWidget)
 
-			/**	@name	Constructors
-			*/	
-			//@{
-
-			/** Default Constructor.
-					The state of this server is:
-					  - no object creator registered
-						- server listening on <tt> VIEW_DEFAULT_PORT</tt> if activated
-					\par
-					\see         ModularWidget
-			*/
-			Server(QWidget* parent = 0, const char* name = 0)
-				throw();
-
-			// only for Python interface
-			Server(const Server& server);
-
-			//@}
-			/** @name Destructors 
-			*/
-			//@{
-
-			/** Destructor.
-			*/
-			virtual ~Server()
-				throw();
-
-			/** Explicit default initialization.
-					Calls ConnectionObject::clear.
-					\see ConnectionObject::clear
-			*/
-			virtual void clear()
-				throw();
-			//@}
+			BALL_EMBEDDABLE(ServerWidget,ModularWidget)
 
 			/**	@name	Exceptions
 			*/
@@ -111,29 +84,99 @@ namespace BALL
 			};
 
 			//@}
+			/** BALLView server thread.
+			 *  This class handles the incoming connections for the simple
+			 *  BALL-protocol for sending composites over the net.
+			 */
+			class BALLViewServer
+				: public virtual BALLThread,
+					public virtual TCPServerThread
+			{
+				public:
+					BALLViewServer(ServerWidget* parent, Size port, bool restart = true);
+
+					/** private methodes used for reacting to client requests.
+					*/
+					void sendObject()
+						throw(NotCompositeObject);
+
+					virtual void run();
+
+					/** Handler for successful connections.
+							Virtually overridden method.
+							This method handles the socket stream. When a connection has been
+							made, this function is automatically called through our base classes.
+							Then, the socket stream will be passed onto the object creator and
+							incoming objects will be received.
+							At the moment only Composite objects will be accepted. If
+							another object is received the exception NotCompositeObject
+							will be thrown.				
+							\exception NotCompositeObject thrown if another object than Composite object is received
+					*/
+					virtual void handleConnection();
+
+					/** Used for communication with the parent **/
+					void setLocked(bool is_locked);
+
+				protected:
+					ServerWidget* parent_widget_;
+					Composite* received_composite_;
+
+					typedef HashMap<unsigned long, Composite *> CompositeHashMap;
+					CompositeHashMap composite_hashmap_;
+
+					Size port_;
+					bool is_locked_;
+			};
+
+			/**	@name	Constructors
+			*/	
+			//@{
+
+			/** Default Constructor.
+					The state of this server is:
+					  - no object creator registered
+						- server listening on <tt> VIEW_DEFAULT_PORT</tt> if activated
+					\par
+					\see         ModularWidget
+			*/
+			ServerWidget(QWidget* parent = 0, const char* name = 0)
+				throw();
+
+			// only for Python interface
+			ServerWidget(const ServerWidget& server);
+
+			//@}
+			/** @name Destructors 
+			*/
+			//@{
+
+			/** Destructor.
+			*/
+			virtual ~ServerWidget()
+				throw();
+
+			/** Explicit default initialization.
+					Calls ConnectionObject::clear.
+					\see ConnectionObject::clear
+			*/
+			virtual void clear()
+				throw();
+			//@}
+
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
 
-			/** Activates the server.
-					Creates a new socket with the given port and connects it with this class.
-					To allow for non-blocking socket IO, we use Qt's readyRead() - slot. 
-					Must be called before other methods!
-					\see QTcpSocket::readyRead()
-			*/
-			void activate()
-				throw();
+			/** Start the server.
+			 */
+			virtual void activate() {};
 
-			/** Deactivates the server.
-					If this server is already running this method stops the server
-					and closes the socket.
-			*/
-			void deactivate()
-				throw();
+			/** Stop the server.
+			 */
+			virtual void deactivate() {};
 
 			/**	Set the server port.
-					Set port of this server. Must be called before activate
-					to have any effect.
 					\param  port the new port
 			*/
 			void setPort(const int port)
@@ -148,7 +191,7 @@ namespace BALL
 
 			/** Register a ObjectCreator that is used for converting 
 					PersistentObject objects into Composite objects.
-					Every ObjectCreator, that is still registered, when a Server instance is destructed, will be deleted.
+					Every ObjectCreator, that is still registered, when a ServerWidget instance is destructed, will be deleted.
 					\see ObjectCreator
 			*/
 			void registerObjectCreator(const ObjectCreator& s)
@@ -161,6 +204,14 @@ namespace BALL
 			*/
 			void unregisterObjectCreator()
 				throw();
+
+			/** Return the ObjectCreator.
+			 */
+			ObjectCreator& getObjectCreator();
+
+			/** Return the ObjectCreator, const version.
+			 */
+			const ObjectCreator& getObjectCreator() const;
 
 			/**	Initialize the server widget.
 					This method initializes the icon of this server and adds it
@@ -249,52 +300,35 @@ namespace BALL
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 
+			/** This function is used by the server thread to handle locking of composites across several threads.
+			 *  
+			 *  The protocol is rather complicated: the server thread reacts to a connection, creates a composite,
+			 *  calls changeLock(), this emits the signal "lockRequested", which is finally handled in the slot
+			 *  handleLocking(). The reason for this involved setup is the separation of server and GUI threads,
+			 *  which does not allow to safely lock the composites in the server thread.
+			 */
+			virtual void changeLock(bool lock);
+
 			//@}	
-			protected:
-
-			/** @name Timer method.
-			*/
+			/** @name Signals and Slots
+			 */
 			//@{
-			
-			/** Timer method.
-					Virtually overridden method.
-					This method handles the socket stream. Every second it checks whether
-					a new object is available at the stream. If this is the case the stream
-					will be accepted and the incoming object will be reveiced.
-					At the moment only Composite objects will be accepted. If
-					another object is received the exception NotCompositeObject
-					will be thrown.				
-					\see    QTTimer::timer
-					\exception NotCompositeObject thrown if another object than Composite object is received
-			*/
-			virtual void timer();
-						
-			//@}
+			public slots:
+				void handleLocking(bool lock);
 
+			signals:
+				void lockRequested(bool lock);
+
+			//@}
 			private:
 
-			/** private methodes used for reacting to client requests.
-			*/
-			void sendObject(IOStreamSocket& iostream_socket)
-				throw(NotCompositeObject);
-
-			void setCreatorValue(IOStreamSocket& iostream_socket);
-			void getCreatorValue(IOStreamSocket& iostream_socket);
-			void hasCreatorValue(IOStreamSocket& iostream_socket);
-
+			/** The actual server thread **/
+			BALLViewServer server_;
 
 			/** private storage variables.
 			*/
 			ObjectCreator *object_creator_;
 
-			Composite* received_composite_;
-
-			typedef HashMap<unsigned long, Composite *> CompositeHashMap;
-
-			CompositeHashMap composite_hashmap_;
-
-			QTcpSocket *connected_socket_;
-				
 			// the port to bind to
 			int							port_; 
 
@@ -304,9 +338,8 @@ namespace BALL
 		};
 
 
-
 #		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/server.iC>
+#			include <BALL/VIEW/KERNEL/serverWidget.iC>
 #		endif
   
 	}// namespace VIEW
