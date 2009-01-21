@@ -42,16 +42,18 @@ namespace BALL
 		InputDeviceDriver* SpaceNavigatorPlugin::startDriver()
 		{
 			SpaceNavigatorDriver* driver = new SpaceNavigatorDriver(receiver_);
-		  driver->setUp();
+			if(!driver->setUp()) {
+				delete driver;
+
+				return NULL;
+			}
 			driver->setEnabled(true);
-			return(driver);
+			return driver;
 		}
 
 		void SpaceNavigatorPlugin::activate()
 		{
-			is_active_ = true;
-
-			startDriver();
+			is_active_ = (bool)startDriver();
 		}
 
 		void SpaceNavigatorPlugin::deactivate()
