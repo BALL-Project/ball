@@ -64,17 +64,29 @@ namespace BALL
 
 				/** This flag decides whether surface points and normals will be
 				 *  explicitly computed and stored in the class (default = false).
+				 *
+				 *  Please note that the normals will not have unit length, but will
+				 *  be scaled according such that the sum over all normal lengths yields
+				 *  the surface area.
 				 */
 				static const String COMPUTE_SURFACE;
 
 				/** This flag decides whether surface points and normals per atom
 				 *  will be explicitly computed and stored in the class 
 				 *  (default = false).
+				 *
+				 *  Please note that the normals will not have unit length, but will
+				 *  be scaled according such that the sum over all normal lengths yields
+				 *  the surface area.
 				 */
 				static const String COMPUTE_SURFACE_PER_ATOM;
 
 				/** This flag decides whether a vector of (atom center, surface) per atom
 				 *  will be explicitly computed and stored in the class (default = false).
+				 *
+				 *  Please note that the normals will not have unit length, but will
+				 *  be scaled according such that the sum over all normal lengths yields
+				 *  the surface area.
 				 */
 				static const String COMPUTE_SURFACE_MAP;
 
