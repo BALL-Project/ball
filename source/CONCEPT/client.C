@@ -73,16 +73,15 @@ namespace BALL
 			throw NoPersistentObject(__FILE__, __LINE__);
 		}
 
-		IOStreamSocket iostream_socket;	
-		iostream_socket->connect(host_.c_str(), port_);
+		TCPIOStream tcp_iostream(host_.c_str(), port_);	
 
-		iostream_socket << (Size)COMMAND__SEND_OBJECT << " ";
-		iostream_socket << static_cast<LongSize>(reinterpret_cast<PointerSizeUInt>(&composite)) << endl;
+		tcp_iostream << (Size)COMMAND__SEND_OBJECT << " ";
+		tcp_iostream << static_cast<LongSize>(reinterpret_cast<PointerSizeUInt>(&composite)) << endl;
 
-		pm_.setOstream(iostream_socket);
+		pm_.setOstream(tcp_iostream);
 		composite >> pm_;
 
-		iostream_socket->close();
+		tcp_iostream.close();
 	}
 
 	bool Client::isValid() const

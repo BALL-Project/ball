@@ -145,6 +145,12 @@
 #define BALL_MAP_NAMESPACE __gnu_cxx
 #define BALL_MAP_NAME map
 
+// defined if asio is taken from boost
+#undef BALL_HAS_BOOST_ASIO
+
+// the namespace to use for asio
+#define BALL_ASIO_NAMESPACE boost::asio
+
 // some platforms (e.g. Debian 2.1) do not provide xdr_u_hyper, so we 
 // need a workaround for this
 #undef BALL_HAS_XDR_U_HYPER 

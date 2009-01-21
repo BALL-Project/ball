@@ -44,7 +44,7 @@ namespace BALL
 		return (Composite *)0;
 	}
 
-	Composite *ObjectCreator::operator() (IOStreamSocket &iostream_socket)
+	Composite *ObjectCreator::operator() (TCPIOStream& tcp_iostream)
 			throw()
 	{
 		// initialize the PersistenceManager only one times
@@ -56,7 +56,7 @@ namespace BALL
 		}
 
 		// read persistent object from stream
-		pm_.setIstream(iostream_socket);
+		pm_.setIstream(tcp_iostream);
 		PersistentObject*	po = pm_.readObject();
 		
 		// convert the object
