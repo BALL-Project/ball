@@ -3,11 +3,14 @@
 #include <QtCore/QPluginLoader>
 #include <QtCore/QDir>
 #include <QtCore/QDebug>
+#include <QtCore/QMutex>
 #include <BALL/PLUGIN/BALLPlugin.h>
 #include <BALL/COMMON/logStream.h>
 
 namespace BALL
 {
+	PluginManager* PluginManager::manager_ = NULL;
+
 	PluginManager::PluginManager()
 	{
 	}
@@ -23,9 +26,19 @@ namespace BALL
 
 	PluginManager& PluginManager::instance()
 	{
-		static PluginManager manager;
+		//Make the PluginManager creation thread safe
+		if(!manager_) {
+			//Another thread could have taken over control right now
+			//so lock a mutex to ensure the PluginManager is created only once.
+			QMutex m;
+			m.lock();
+			//Check that the manager has not been created by a concurring thread
+			if(!manager_) {
+				manager_ = new PluginManager();
+			}
+		}
 
-		return manager;
+		return *manager_;
 	}
 
 	void PluginManager::setPluginDirectory(const QString& dir)
