@@ -289,11 +289,11 @@ namespace BALL
 		// first, we decide whether to use an icosahedron or a pentakis dodecahedron
 		// for the tesselation; this only depends on which comes closer to the number
 		// of requested points
-		Size levels_icosahedron  					= (Size)ceil(sqrt((num_points - 2)/10.));
-		Size levels_pentakis_dodecahedron = (Size)ceil(sqrt((num_points - 2)/30.));
+		Size levels_icosahedron  					= (Size)ceil(log((num_points - 2)/10.)/log(4));
+		Size levels_pentakis_dodecahedron = (Size)ceil(log((num_points - 2)/30.)/log(4));
 
-		Size num_points_icosahedron 					= (Size)(10*pow(levels_icosahedron, 					(int)2)+2);
-		Size num_points_pentakis_dodecahedron = (Size)(30*pow(levels_pentakis_dodecahedron, (int)2)+2);
+		Size num_points_icosahedron 					= (Size)(10*pow(4, levels_icosahedron          )+2);
+		Size num_points_pentakis_dodecahedron = (Size)(30*pow(4, levels_pentakis_dodecahedron)+2);
 
 		// both numbers are >= num_points -> take the smaller one
 		bool use_icosahedron = num_points_icosahedron < num_points_pentakis_dodecahedron;
@@ -302,16 +302,16 @@ namespace BALL
 		if (use_icosahedron)
 		{
 			result.icosaeder();
-			if (levels_icosahedron > 1)
-				result.refine(levels_icosahedron-1);
+			if (levels_icosahedron > 0)
+				result.refine(levels_icosahedron);
 
 			result_size = num_points_icosahedron;
 		}
 		else
 		{
 			result.pentakisDodecaeder();
-			if (levels_pentakis_dodecahedron > 1)
-				result.refine(levels_pentakis_dodecahedron-1);
+			if (levels_pentakis_dodecahedron > 0)
+				result.refine(levels_pentakis_dodecahedron);
 
 			result_size = num_points_pentakis_dodecahedron;
 		}
