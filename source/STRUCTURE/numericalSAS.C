@@ -128,6 +128,8 @@ namespace BALL
 		const Index size_y = atom_grid.getSizeY();
 		const Index size_z = atom_grid.getSizeZ();
 
+		Size last_surface_index = 0;
+
 		// now iterate over all atoms and determine their possibly occluding neighbours
 		for (AtomConstIterator at_it = fragment.beginAtom(); +at_it; ++at_it)
 		{
@@ -244,6 +246,29 @@ namespace BALL
 				total_volume_ += atom_volume;
 			}
 
+			if (compute_surface)
+			{
+				float length = current_radius*current_radius * unit_area_per_point;
+				for (Position i=last_surface_index; i<surface_.normal.size(); ++i)
+					surface_.normal[i] *= length;
+				last_surface_index += num_points - num_occluded;
+			}
+
+			if (compute_surface_per_atom)
+			{
+				float length = current_radius*current_radius * unit_area_per_point;
+				Surface& current_surface = atom_surfaces_[&*at_it];
+				for (Position i=0; i<current_surface.normal.size(); ++i)
+					current_surface.normal[i] *= length;
+			}
+
+			if (compute_surface_map)
+			{
+				float length = current_radius*current_radius * unit_area_per_point;
+				Surface& current_surface = (--atom_surface_map_.end())->second;
+				for (Position i=0; i<current_surface.normal.size(); ++i)
+					current_surface.normal[i] *= length;
+			}
 		}
 	}
 
@@ -294,18 +319,6 @@ namespace BALL
 		return result_size;
 	}	
 	
-	// forward
-	int nsc_(double*, double*, int, int, int, double*, double**, double*, double**, int*, int**);
-
-	// Some NSC variables
-	typedef double * point_double;
-	typedef int    * point_int;
-	point_double xpunsp=NULL;
-	point_int    ico_wk=NULL, ico_pt=NULL;
-	double       del_cube;
-	int          n_dot, ico_cube, last_n_dot=0, last_densit=0, last_unsp=0;
-	int          last_cubus=0;
-
 	float calculateSASAtomAreas
 		(const AtomContainer& fragment, HashMap<const Atom*,float>& atom_areas,
 		 float probe_radius, Size number_of_dots)
