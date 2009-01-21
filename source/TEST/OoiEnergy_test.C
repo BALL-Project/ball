@@ -23,7 +23,7 @@ START_TEST(OoiEnergy, "$Id: OoiEnergy_test.C,v 1.6.28.1 2007/03/25 21:47:24 oliv
 
 using namespace BALL;
 
-PRECISION(1.0) // it's not THAT precise
+PRECISION(2.0) // it's not THAT precise
 CHECK(calculateOoiEnergy() / BPTI)
 	System S;
 	PDBFile f("data/OoiEnergy_test.pdb");
