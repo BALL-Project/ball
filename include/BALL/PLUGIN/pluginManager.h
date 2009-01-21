@@ -11,7 +11,7 @@ namespace BALL
 {
 	class BALLPlugin;
 
-	class PluginManager 
+	class PluginManager
 	{
 		public:
 			~PluginManager();
@@ -21,7 +21,7 @@ namespace BALL
 			void setPluginDirectory(const QString& dir);
 
 			BALLPlugin* loadPlugin(const QString& plugin_name);
-			bool unloadPlugin(const QString& plugin); 
+			bool unloadPlugin(const QString& plugin);
 
 			QObject* getPluginInstance(const QString& plugin);
 			QObject* getPluginInstance(int pos);
@@ -35,6 +35,8 @@ namespace BALL
 
 			QString plugin_dir_;
 			QHash<QString, QPluginLoader*> loaders_;
+
+			static PluginManager* manager_;
 	};
 }
 
