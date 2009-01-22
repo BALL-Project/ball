@@ -3,7 +3,7 @@
 //
 
 # include <GL/glew.h>
-#include <BALL/VIEW/RENDERING/RENDERERS/glRenderWindow.h>
+#include <BALL/VIEW/RENDERING/glRenderWindow.h>
 #include <BALL/COMMON/logStream.h>
 
 namespace BALL 
