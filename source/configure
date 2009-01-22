@@ -5112,7 +5112,7 @@ CXX_IDENTIFIED=false
 if test "${CXX_IDENTIFIED}" != true ; then
 { echo "$as_me:$LINENO: checking for Intel C++ compiler" >&5
 echo $ECHO_N "checking for Intel C++ compiler... $ECHO_C" >&6; }
-ICC=`${CXX} -V 2>&1 | ${SED} -n 1p |${SED} "s/Intel(R) C Compiler.*/__INTELCC__/g"| ${SED} "s/Intel(R) C++ Compiler.*/__INTELCC__/g" | ${EGREP} "^__INTELCC__$" | sed -n 1p`
+ICC=`${CXX} -V 2>&1 | ${SED} -n 1p |${SED} "s/Intel(R) C.* Compiler.*/__INTELCC__/g"| ${SED} "s/Intel(R) C++.* Compiler.*/__INTELCC__/g" | ${EGREP} "^__INTELCC__$" | sed -n 1p`
 if test "${ICC}" = "__INTELCC__" ; then
 IS_INTELCC=true
 { echo "$as_me:$LINENO: result: yes" >&5
@@ -5627,7 +5627,7 @@ AROPTS="${AROPTS} -o"
 CXX_MAKEDEPEND="${CXX}"
 MAKEDEP_CXX_OPTS="-M"
 MAKEDEP_CXX_SUFFIX=" >.Dependencies"
-CXXFLAGS="${CXXFLAGS} -KPIC"
+CXXFLAGS="${CXXFLAGS} -fPIC"
 
 if test "${CXX_VERSION_1}" != "" -a "${CXX_VERSION_2}" != "" ; then
   if test ${CXX_VERSION_1} = 8 -a ${CXX_VERSION_2} -ge 1 -o ${CXX_VERSION_1} -ge 9 ; then
