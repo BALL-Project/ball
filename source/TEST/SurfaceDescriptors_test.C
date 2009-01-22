@@ -34,7 +34,7 @@ CHECK(PositiveVdWSurface)
 	S.apply(ps);
 
 	PRECISION(0.001)
-	double results[9] = {76.8123, 37.9932, 93.4437, 74.297, 120.694, 109.587, 17.5974, 33.9075};
+	double results[9] = {76.8874, 37.9932, 93.4062, 74.3345, 120.657, 109.572, 17.5974, 33.9075};
 	for (Size i = 0; i < limit ;++i)
 	{
 		molecule = S.getMolecule(i);
@@ -55,7 +55,7 @@ CHECK(NegativeVdWSurface)
 	S.apply(ns);
 
 	PRECISION(0.001)
-	double results[9] = {53.5374, 74.7739, 87.5337, 96.7243, 91.4622, 171.441, 86.9424, 96.5323};
+	double results[9] = {53.359, 74.417, 87.3552, 96.7243, 91.6465, 171.488, 86.8433, 96.2646};
 	for (Size i = 0; i < limit ;++i)
 	{
 		molecule = S.getMolecule(i);
@@ -75,8 +75,8 @@ CHECK(PositivePolarVdWSurface)
 	PositivePolarVdWSurface pps;
 	S.apply(pps);
 
-	PRECISION(0.0001)
-	double results[] = {0, 0, 0, 0, 0, 23.9134, 0, 0, 0};
+	PRECISION(0.001)
+	double results[] = {0, 0, 0, 0, 0, 23.8242, 0, 0, 0};
 	for (Size i = 0; i < limit ;++i)
 	{
 		molecule = S.getMolecule(i);
@@ -96,8 +96,8 @@ CHECK(NegativePolarVdWSurface)
 	NegativePolarVdWSurface nps;
 	S.apply(nps);
 
-	PRECISION(0.0001)
-	double results[] = {0, 0, 0, 0, 29.9585, 21.2831, 0, 0, 0};
+	PRECISION(0.001)
+	double results[] = {0, 0, 0, 0, 30.006, 21.3342, 0, 0, 0};
 	for (Size i = 0; i < limit ;++i)
 	{
 		molecule = S.getMolecule(i);
@@ -118,7 +118,7 @@ CHECK(HydrophobicVdWSurface)
 	S.apply(hs);
 
 	PRECISION(0.01)
-	double results[] = {130.35, 112.767, 180.977, 171.021, 182.198, 235.831, 104.54, 130.44, 69.0822};
+	double results[] = {130.246, 112.41, 180.761, 171.059, 182.297, 235.902, 104.441, 130.172, 69.0822};
 	for (Size i = 0; i < limit ;++i)
 	{
 		molecule = S.getMolecule(i);
@@ -138,8 +138,8 @@ CHECK(PolarVdWSurface)
 	PolarVdWSurface ps;
 	S.apply(ps);
 
-	PRECISION(0.0001)
-	double results[] = {0, 0, 0, 0, 29.9585, 45.1964, 0, 0, 0};
+	PRECISION(0.001)
+	double results[] = {0, 0, 0, 0, 30.006, 45.1583, 0, 0, 0};
 	for (Size i = 0; i < limit ;++i)
 	{
 		molecule = S.getMolecule(i);
@@ -160,7 +160,7 @@ CHECK(RelPositiveVdWSurface)
 	S.apply(rps);
 
 	PRECISION(0.00001)
-	double results[] = {0.589279, 0.336917, 0.516328, 0.434431, 0.568893, 0.38995, 0.168332, 0.259948, 0};
+	double results[] = {0.590323, 0.337987, 0.516737, 0.434555, 0.568323, 0.389854, 0.168491, 0.260482, 0};
 	for (Size i = 0; i < limit ;++i)
 	{
 		molecule = S.getMolecule(i);
@@ -180,8 +180,8 @@ CHECK(RelNegativeVdWSurface)
 	RelNegativeVdWSurface rns;
 	S.apply(rns);
 
-	PRECISION(0.00001)
-	double results[] = {0.410721, 0.663083, 0.483672, 0.565569, 0.431107, 0.61005, 0.831668, 0.740052};
+	PRECISION(0.0001)
+	double results[] = {0.409677, 0.662013, 0.483263, 0.565445, 0.431677, 0.61005, 0.831509, 0.739518};
 	for (Size i = 0; i < limit ;++i)
 	{
 		molecule = S.getMolecule(i);
@@ -202,7 +202,7 @@ CHECK(RelPositivePolarVdWSurface)
 	S.apply(rpps);
 
 	PRECISION(0.00001)
-	double results[] = {0, 0, 0, 0, 0, 0.0850928, 0, 0, 0};
+	double results[] = {0, 0, 0, 0, 0, 0.0847653, 0, 0, 0};
 	for (Size i = 0; i < limit ;++i)
 	{
 		molecule = S.getMolecule(i);
@@ -223,7 +223,7 @@ CHECK(RelNegativePolarVdWSurface)
 	S.apply(rnps);
 
 	PRECISION(0.00001)
-	double results[] = {0, 0, 0, 0, 0.141209, 0.0757331, 0, 0, 0, 0};
+	double results[] = {0, 0, 0, 0, 0.141335, 0.0759059, 0, 0, 0, 0};
 	for (Size i = 0; i < limit ;++i)
 	{
 		molecule = S.getMolecule(i);
@@ -244,7 +244,7 @@ CHECK(RelHydrophobicVdWSurface)
 	S.apply(rhs);
 
 	PRECISION(0.0001)
-	double results[] = {1, 1, 1, 1, 0.858791, 0.839174, 1, 1, 1};
+	double results[] = {1, 1, 1, 1, 0.858665, 0.839329, 1, 1, 1};
 	for (Size i = 0; i < limit ;++i)
 	{
 		molecule = S.getMolecule(i);
@@ -265,7 +265,7 @@ CHECK(RelPolarVdWSurface)
 	S.apply(rps);
 
 	PRECISION(0.00001)
-	double results[] = {0, 0, 0, 0, 0.141209, 0.160826, 0, 0, 0, 0};
+	double results[] = {0, 0, 0, 0, 0.141335, 0.160671, 0, 0, 0, 0};
 	for (Size i = 0; i < limit ;++i)
 	{
 		molecule = S.getMolecule(i);
@@ -286,7 +286,7 @@ CHECK(VdWVolume)
 	S.apply(vol);
 
 	PRECISION(0.01)
-	double results[] = {108.121, 93.6961, 157.27, 147.551, 175.833, 249.007, 85.4923, 113.514, 52.4826};
+	double results[] = {107.95, 93.5151, 157.119, 147.588, 175.931, 248.93, 85.4505, 113.348, 52.4826};
 	for (Size i = 0; i < limit ;++i)
 	{
 		molecule = S.getMolecule(i);
@@ -307,7 +307,7 @@ CHECK(Density)
 	S.apply(d);
 
 	PRECISION(0.0001)
-	double results[] = {0.778405, 0.833693, 0.783483, 0.814594, 1.36007, 1.26775, 2.95618, 1.79723, 2.36069};
+	double results[] = {0.779635, 0.835307, 0.784235, 0.814392, 1.35931, 1.26814, 2.95763, 1.79985, 2.36069};
 	for (Size i = 0; i < limit ;++i)
 	{
 		molecule = S.getMolecule(i);
@@ -328,7 +328,7 @@ CHECK(VdWSurface)
 	S.apply(s);
 
 	PRECISION(0.01)
-	double results[] = {130.35, 112.767, 180.977, 171.021, 212.157, 281.027, 104.54, 130.44, 69.0822};
+	double results[] = {130.246, 112.41, 180.761, 171.059, 212.303, 281.06, 104.441, 130.172, 69.0822};
 	for (Size i = 0; i < limit ;++i)
 	{
 		molecule = S.getMolecule(i);
