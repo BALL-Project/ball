@@ -44,7 +44,7 @@ namespace BALL
       s = GNUDemangling::demangle(s);
     #else
 			char buf[BALL_MAX_LINE_LENGTH];
-			std::size_t length = BALL_MAX_LINE_LENGTH - 1;
+			unsigned int length = BALL_MAX_LINE_LENGTH - 1;
 			int status = 0;
       string s("_Z");
       s += t.name();
