@@ -79,7 +79,7 @@ RESULT
 
 
 CHECK(PierottiCavFreeEnergyProcessor / Methane)
-	PRECISION(0.001)
+	PRECISION(0.05)
 	HINFile f("data/methane.hin");
 	System S;
 	f >> S;
