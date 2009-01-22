@@ -873,6 +873,7 @@ build_os
 BOOST_SYSTEM_LIB
 ASIO_INCLUDES
 ASIO_LIBS
+BALL_HAS_ASIO
 BOOST_ASIO_LIB
 XMKMF
 MOC
@@ -21110,6 +21111,9 @@ fi
 
 
 
+	BALL_HAS_ASIO=
+
+
 
 # Check whether --with-boost-asio was given.
 if test "${with_boost_asio+set}" = set; then
@@ -21368,6 +21372,10 @@ echo "$as_me: error: Could not link against $ax_lib !" >&2;}
 
 				if test "$ax_cv_boost_asio" = yes; then
 								cat >>confdefs.h <<\_ACEOF
+#define BALL_HAS_ASIO 1
+_ACEOF
+
+		cat >>confdefs.h <<\_ACEOF
 #define BALL_ASIO_NAMESPACE boost::asio
 _ACEOF
 
@@ -21376,6 +21384,7 @@ cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_BOOST_ASIO
 _ACEOF
 
+		BALL_HAS_ASIO=true
 	else
 								{ echo "$as_me:$LINENO: checking for asio header files" >&5
 echo $ECHO_N "checking for asio header files... $ECHO_C" >&6; }
@@ -21465,50 +21474,12 @@ echo "${ECHO_T}The asio headers could not be found. Please specify the path to <
 echo "${ECHO_T}by passing the option --with-asio-incl=DIR to configure." >&6; }
 		  { echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6; }
-		  { echo "$as_me:$LINENO: result: asio is needed for network related functionality." >&5
-echo "${ECHO_T}asio is needed for network related functionality." >&6; }
-		  { echo "$as_me:$LINENO: result: Please install the library on your system, or install a new version of boost containing" >&5
-echo "${ECHO_T}Please install the library on your system, or install a new version of boost containing" >&6; }
-			{ echo "$as_me:$LINENO: result: boost::asio." >&5
-echo "${ECHO_T}boost::asio." >&6; }
+		  { echo "$as_me:$LINENO: result: asio is needed for network related functionality and is not currently strictly necessary." >&5
+echo "${ECHO_T}asio is needed for network related functionality and is not currently strictly necessary." >&6; }
+		  { echo "$as_me:$LINENO: result: You can continue building the library, but the BALLView - server will be disabled." >&5
+echo "${ECHO_T}You can continue building the library, but the BALLView - server will be disabled." >&6; }
 		  { echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6; }
-
-	{ echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6; }
-	{ echo "$as_me:$LINENO: result: Configure failed. If you cannot solve your problem with the aid" >&5
-echo "${ECHO_T}Configure failed. If you cannot solve your problem with the aid" >&6; }
-	{ echo "$as_me:$LINENO: result: of the above error message, please contact the BALL mailing list" >&5
-echo "${ECHO_T}of the above error message, please contact the BALL mailing list" >&6; }
-	{ echo "$as_me:$LINENO: result: or the BALL developers. Please enclose the file 'conf.diag.tar'" >&5
-echo "${ECHO_T}or the BALL developers. Please enclose the file 'conf.diag.tar'" >&6; }
-	{ echo "$as_me:$LINENO: result: which has been created in source. It contains the relevant" >&5
-echo "${ECHO_T}which has been created in source. It contains the relevant" >&6; }
-	{ echo "$as_me:$LINENO: result: files from this configure run. In most cases, the information" >&5
-echo "${ECHO_T}files from this configure run. In most cases, the information" >&6; }
-	{ echo "$as_me:$LINENO: result: is necessary to diagnose what went wrong. This file contains" >&5
-echo "${ECHO_T}is necessary to diagnose what went wrong. This file contains" >&6; }
-	{ echo "$as_me:$LINENO: result: information about your system setup and versions of compilers" >&5
-echo "${ECHO_T}information about your system setup and versions of compilers" >&6; }
-	{ echo "$as_me:$LINENO: result: and other tools installed in your system." >&5
-echo "${ECHO_T}and other tools installed in your system." >&6; }
-	{ echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6; }
-
-	TARFILE=conf.diag.tar
-	if test -f $TARFILE ; then
-		${RM} $TARFILE ;
-	fi
-	FILES="configure configure.ac aclocal.m4 config.log"
-	if test -f config.h ; then FILES="$FILES config.h" ; fi
-	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
-	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
-	tar cf $TARFILE $FILES
-
-	{ { echo "$as_me:$LINENO: error: Aborted." >&5
-echo "$as_me: error: Aborted." >&2;}
-   { (exit 1); exit 1; }; }
-
 		else
 			{ echo "$as_me:$LINENO: result: (${ASIO_INCDIR})" >&5
 echo "${ECHO_T}(${ASIO_INCDIR})" >&6; }
@@ -21517,6 +21488,7 @@ echo "${ECHO_T}(${ASIO_INCDIR})" >&6; }
 _ACEOF
 
 			BALL_INCLUDES="${BALL_INCLUDES} -I${ASIO_INCDIR}"
+			BALL_HAS_ASIO=true
 		fi
 	fi
 
@@ -26669,7 +26641,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 26672 "configure"' > conftest.$ac_ext
+  echo '#line 26644 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -29014,11 +28986,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:29017: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:28989: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:29021: \$? = $ac_status" >&5
+   echo "$as_me:28993: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -29304,11 +29276,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:29307: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:29279: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:29311: \$? = $ac_status" >&5
+   echo "$as_me:29283: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -29408,11 +29380,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:29411: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:29383: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:29415: \$? = $ac_status" >&5
+   echo "$as_me:29387: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -31785,7 +31757,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 31788 "configure"
+#line 31760 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -31885,7 +31857,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 31888 "configure"
+#line 31860 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -34290,11 +34262,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:34293: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:34265: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:34297: \$? = $ac_status" >&5
+   echo "$as_me:34269: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -34394,11 +34366,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:34397: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:34369: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:34401: \$? = $ac_status" >&5
+   echo "$as_me:34373: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -35992,11 +35964,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:35995: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:35967: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:35999: \$? = $ac_status" >&5
+   echo "$as_me:35971: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -36096,11 +36068,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:36099: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:36071: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:36103: \$? = $ac_status" >&5
+   echo "$as_me:36075: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -38320,11 +38292,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:38323: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:38295: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:38327: \$? = $ac_status" >&5
+   echo "$as_me:38299: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -38610,11 +38582,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:38613: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:38585: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:38617: \$? = $ac_status" >&5
+   echo "$as_me:38589: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -38714,11 +38686,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:38717: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:38689: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:38721: \$? = $ac_status" >&5
+   echo "$as_me:38693: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -42280,6 +42252,7 @@ build_os!$build_os$ac_delim
 BOOST_SYSTEM_LIB!$BOOST_SYSTEM_LIB$ac_delim
 ASIO_INCLUDES!$ASIO_INCLUDES$ac_delim
 ASIO_LIBS!$ASIO_LIBS$ac_delim
+BALL_HAS_ASIO!$BALL_HAS_ASIO$ac_delim
 BOOST_ASIO_LIB!$BOOST_ASIO_LIB$ac_delim
 XMKMF!$XMKMF$ac_delim
 MOC!$MOC$ac_delim
@@ -42362,7 +42335,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 87; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 88; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

@@ -13,7 +13,9 @@ DIRECTORY=CONCEPT
 
 THISLIB=$(LIBNAME)
 
-CPP_SOURCES=\
+ASIO_SOURCES=$(BALL_HAS_ASIO:true=client.C)
+
+CPP_SOURCES=$(ASIO_SOURCES)\
 	autoDeletable.C\
 	composite.C\
 	embeddable.C\
@@ -29,8 +31,7 @@ CPP_SOURCES=\
 	visitor.C\
 	objectCreator.C\
 	moleculeObjectCreator.C\
-	molecularInformation.C\
-	client.C
+	molecularInformation.C
 
 ifeq ($(BALL_HAS_XDR),true)
 	CPP_SOURCES += XDRPersistenceManager.C

@@ -11,7 +11,10 @@ DIRECTORY=VIEW/KERNEL
 
 THISLIB=$(LIBNAME)
 
-CPP_SOURCES=\
+ASIO_SOURCES=$(BALL_HAS_ASIO:true=serverWidget.C)
+ASIO_MOC_SOURCES=$(BALL_HAS_ASIO:true=serverWidget_moc.C)
+
+CPP_SOURCES=$(ASIO_SOURCES)\
   clippingPlane.C\
 	common.C\
   compositeManager.C\
@@ -24,13 +27,11 @@ CPP_SOURCES=\
 	preferencesEntry.C\
   representationManager.C\
   representation.C\
-  serverWidget.C\
   stage.C\
 	threads.C
 
-MOC_SOURCES=\
-	mainControl_moc.C\
-	serverWidget_moc.C
+MOC_SOURCES=$(ASIO_MOC_SOURCES)\
+	mainControl_moc.C
 
 include ../../common.mak
 -include .Dependencies

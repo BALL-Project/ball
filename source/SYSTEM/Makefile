@@ -2,12 +2,13 @@ DIRECTORY=SYSTEM
 
 THISLIB=$(LIBNAME)
 
-CPP_SOURCES=\
+ASIO_SOURCES=$(BALL_HAS_ASIO:true=networking.C)
+
+CPP_SOURCES=$(ASIO_SOURCES)\
 	directory.C\
 	file.C\
 	fileSystem.C\
 	path.C\
-	networking.C\
 	sysinfo.C\
 	systemCalls.C\
 	TCPTransfer.C\

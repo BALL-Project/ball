@@ -3755,6 +3755,9 @@ AC_DEFUN(CF_ASIO, [
 	dnl
 	AC_SUBST(ASIO_INCLUDES)
 	AC_SUBST(ASIO_LIBS)
+	AC_SUBST(PROJECT[]_HAS_ASIO)
+
+	PROJECT[]_HAS_ASIO=
 
 	dnl
 	dnl this call does all the hard work
@@ -3768,8 +3771,10 @@ AC_DEFUN(CF_ASIO, [
 		dnl
 		dnl set the namespace accordingly
 		dnl
-		AC_DEFINE(BALL_ASIO_NAMESPACE,boost::asio)
-		AC_DEFINE(BALL_HAS_BOOST_ASIO,,[define whether to take asio from boost or not])
+		AC_DEFINE(PROJECT[]_HAS_ASIO)
+		AC_DEFINE(PROJECT[]_ASIO_NAMESPACE,boost::asio)
+		AC_DEFINE(PROJECT[]_HAS_BOOST_ASIO,,[define whether to take asio from boost or not])
+		PROJECT[]_HAS_ASIO=true
 	else
 		dnl
 		dnl let's see if we can find a boost-less asio
@@ -3782,15 +3787,14 @@ AC_DEFUN(CF_ASIO, [
 		  AC_MSG_RESULT([The asio headers could not be found. Please specify the path to <asio.hpp>])
 		  AC_MSG_RESULT([by passing the option --with-asio-incl=DIR to configure.])
 		  AC_MSG_RESULT()
-		  AC_MSG_RESULT([asio is needed for network related functionality.])
-		  AC_MSG_RESULT([Please install the library on your system, or install a new version of boost containing])
-			AC_MSG_RESULT([boost::asio.])
+		  AC_MSG_RESULT([asio is needed for network related functionality and is not currently strictly necessary.])
+		  AC_MSG_RESULT([You can continue building the library, but the BALLView - server will be disabled.])
 		  AC_MSG_RESULT()
-			CF_ERROR
 		else
 			AC_MSG_RESULT((${ASIO_INCDIR}))
-			AC_DEFINE(BALL_ASIO_NAMESPACE,asio)
+			AC_DEFINE(PROJECT[]_ASIO_NAMESPACE,asio)
 			PROJECT[]_INCLUDES="${PROJECT[]_INCLUDES} -I${ASIO_INCDIR}"
+			PROJECT[]_HAS_ASIO=true
 		fi
 	fi
 ])
