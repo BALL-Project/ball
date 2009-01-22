@@ -847,7 +847,7 @@ dnl   Check for Intel C++ (icc)
 dnl
 AC_DEFUN(CF_IDENTIFY_INTEL, [
 AC_MSG_CHECKING(for Intel C++ compiler)
-ICC=`${CXX} -V 2>&1 | ${SED} -n 1p |${SED} "s/Intel(R) C Compiler.*/__INTELCC__/g"| ${SED} "s/Intel(R) C++ Compiler.*/__INTELCC__/g" | ${EGREP} "^__INTELCC__$" | sed -n 1p`
+ICC=`${CXX} -V 2>&1 | ${SED} -n 1p |${SED} "s/Intel(R) C.* Compiler.*/__INTELCC__/g"| ${SED} "s/Intel(R) C++.* Compiler.*/__INTELCC__/g" | ${EGREP} "^__INTELCC__$" | sed -n 1p`
 if test "${ICC}" = "__INTELCC__" ; then
 IS_INTELCC=true
 AC_MSG_RESULT(yes)
@@ -892,7 +892,7 @@ AROPTS="${AROPTS} -o"
 CXX_MAKEDEPEND="${CXX}"
 MAKEDEP_CXX_OPTS="-M"
 MAKEDEP_CXX_SUFFIX=" >.Dependencies"
-CXXFLAGS="${CXXFLAGS} -KPIC"
+CXXFLAGS="${CXXFLAGS} -fPIC"
 
 dnl
 if test "${CXX_VERSION_1}" != "" -a "${CXX_VERSION_2}" != "" ; then
