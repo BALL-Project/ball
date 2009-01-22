@@ -535,9 +535,6 @@ namespace BALL
 
 		//@}	
 
-		//_
-		HashGridBox3* next_;
-
 		/// This array stores a pointer to the box itself and the 26 neighbours of the current box
 		HashGridBox3* neighbours[27];
 		//  private:
@@ -547,15 +544,13 @@ namespace BALL
 
 	template<typename Item>  
 	HashGridBox3<Item>::HashGridBox3()
-		:	next_(0),
-			first_item_(0)
+		:	first_item_(0)
 	{
 	}
 
 	template<typename Item>  
 	HashGridBox3<Item>::HashGridBox3(const HashGridBox3<Item>& box, bool deep)
-		:	next_(0),
-			first_item_(0)
+		:	first_item_(0)
 	{
 		set(box, deep);
 	}
@@ -1070,7 +1065,7 @@ namespace BALL
 		*/
 		//@{
 
-		typedef HashGridBox3<Item>* BoxIteratorPosition;
+		typedef Position BoxIteratorPosition;
 		
 		class BoxIteratorTraits
 		{
@@ -1142,49 +1137,49 @@ namespace BALL
 				
 			bool isValid() const
 			{
-				return (bound_ != 0 && position_ != 0);
+				return (bound_ != 0 && position_ < bound_->getSize());
 			}
 
 			void invalidate()
 			{
 				bound_ = 0;
-				position_ = 0;
+				position_ = bound_->getSize()+1;
 			}
 
 			void toBegin()
 			{
-				position_ = &bound_->box_[0];
+				position_ = 0;
 			}
 
 			bool isBegin() const
 			{
-				return (position_ == &bound_->box_[0]);
+				return (position_ == 0);
 			}
 
 			void toEnd()
 			{
-				position_ = 0;
+				position_ = bound_->getSize();
 			}
 
 			bool isEnd() const
 			{
-				return (position_ == 0);
+				return (position_ == bound_->getSize());
 			}
 
 			HashGridBox3<Item>& getData()
 			{
-				return *position_;
+				return bound_->box_[position_];
 			}
 
 			const HashGridBox3<Item>& getData() const
 			{
-				return *position_;
+				return bound_->box_[position_];
 			}
 
 			void forward()
 			{
-				position_ = position_->next_;
-			}				
+				++position_;
+			}
 		
 			private:
 
