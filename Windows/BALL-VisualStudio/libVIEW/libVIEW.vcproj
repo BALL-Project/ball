@@ -126,7 +126,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/fixed:no"
-				AdditionalDependencies="qtmaind.lib QtCored4.lib QtGuid4.lib QtXmld4.lib QtSqld4.lib QtOpenGLd4.lib opengl32.lib glu32.lib QtNetworkd4.lib QtSvgd4.lib libBALL.lib glew32d.lib QtTestd4.lib cudamm32d.lib cuda32.lib"
+				AdditionalDependencies="qtmaind.lib QtCored4.lib QtGuid4.lib QtXmld4.lib QtSqld4.lib QtOpenGLd4.lib opengl32.lib glu32.lib QtNetworkd4.lib QtSvgd4.lib libBALL.lib glew32d.lib QtTestd4.lib cudamm32d.lib cuda32.lib rtremoted.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;;&quot;$(OutDir)&quot;"
@@ -2128,16 +2128,8 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\RENDERING\RENDERERS\glRenderWindow.C"
+					RelativePath="..\..\..\source\VIEW\RENDERING\glRenderWindow.C"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"
-						/>
-					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
@@ -4202,7 +4194,6 @@
 						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
-							ExcludedFromBuild="true"
 							>
 							<Tool
 								Name="VCCustomBuildTool"
