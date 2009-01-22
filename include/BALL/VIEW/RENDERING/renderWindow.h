@@ -96,7 +96,7 @@ namespace BALL
             const unsigned int m_minimalHeight;     // minimum height the window can have
 		};
 
-        typedef RenderWindow<int> t_RenderWindow;
+        typedef RenderWindow<float> t_RenderWindow;
 
 	} // namespace VIEW
 
