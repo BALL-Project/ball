@@ -21,6 +21,7 @@
 #include <BALL/VIEW/WIDGETS/testFramework.h>
 #include <BALL/VIEW/DIALOGS/pubchemDialog.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
+#include <BALL/VIEW/DIALOGS/downloadElectronDensity.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
@@ -98,6 +99,7 @@ namespace BALL
 
 		new MolecularFileDialog(this, "MolecularFileDialog");
 		new DownloadPDBFile(		this, "DownloadPDBFile", false);
+		new DownloadElectronDensity(		this, "DownloadElectronDensity", false);
 		new PubChemDialog(this, "PubChemDialog");
 		new PluginDialog(this, "PluginDialog");
  		
@@ -313,6 +315,7 @@ namespace BALL
 		initPopupMenu(MainControl::WINDOWS)->addAction(tb->toggleViewAction());
 		MolecularFileDialog::getInstance(0)->addToolBarEntries(tb);
 		DownloadPDBFile::getInstance(0)->addToolBarEntries(tb);
+		DownloadElectronDensity::getInstance(0)->addToolBarEntries(tb);
 		PubChemDialog::getInstance(0)->addToolBarEntries(tb);
 		Path path;
 

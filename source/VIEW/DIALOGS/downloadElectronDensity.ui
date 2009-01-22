@@ -1,0 +1,256 @@
+<ui version="4.0" >
+ <class>DownloadElectronDensityData</class>
+ <widget class="QDialog" name="DownloadElectronDensityData" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>386</width>
+    <height>268</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Download an electron density</string>
+  </property>
+  <widget class="QPushButton" name="download" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="geometry" >
+    <rect>
+     <x>9</x>
+     <y>225</y>
+     <width>117</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="minimumSize" >
+    <size>
+     <width>0</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="toolTip" >
+    <string>Download PDB file</string>
+   </property>
+   <property name="text" >
+    <string>Download</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+   <property name="default" >
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="buttonClose" >
+   <property name="geometry" >
+    <rect>
+     <x>255</x>
+     <y>225</y>
+     <width>117</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="minimumSize" >
+    <size>
+     <width>0</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="toolTip" >
+    <string>Close window</string>
+   </property>
+   <property name="text" >
+    <string>C&amp;ancel</string>
+   </property>
+   <property name="shortcut" >
+    <string>Alt+A</string>
+   </property>
+   <property name="autoDefault" >
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="button_abort" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="geometry" >
+    <rect>
+     <x>132</x>
+     <y>225</y>
+     <width>117</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="minimumSize" >
+    <size>
+     <width>0</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="toolTip" >
+    <string>Abort download</string>
+   </property>
+   <property name="text" >
+    <string>&amp;Abort</string>
+   </property>
+   <property name="shortcut" >
+    <string>Alt+A</string>
+   </property>
+   <property name="autoDefault" >
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="server" >
+   <property name="geometry" >
+    <rect>
+     <x>108</x>
+     <y>30</y>
+     <width>261</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text" >
+     <string>Uppsala Electron-Density Server</string>
+    </property>
+   </item>
+   <item>
+    <property name="text" >
+     <string>Electron Microscopy Data Bank</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QComboBox" name="entryId" >
+   <property name="geometry" >
+    <rect>
+     <x>109</x>
+     <y>62</y>
+     <width>261</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="toolTip" >
+    <string>Enter PDB ID</string>
+   </property>
+   <property name="editable" >
+    <bool>true</bool>
+   </property>
+   <property name="maxVisibleItems" >
+    <number>100</number>
+   </property>
+   <property name="insertPolicy" >
+    <enum>QComboBox::InsertAtTop</enum>
+   </property>
+   <property name="minimumContentsLength" >
+    <number>4</number>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox" >
+   <property name="enabled" >
+    <bool>true</bool>
+   </property>
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>100</y>
+     <width>361</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="title" >
+    <string>EDS Options</string>
+   </property>
+   <widget class="QLabel" name="edstype" >
+    <property name="geometry" >
+     <rect>
+      <x>31</x>
+      <y>31</y>
+      <width>101</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>Map Type</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox" >
+    <property name="geometry" >
+     <rect>
+      <x>104</x>
+      <y>31</y>
+      <width>231</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text" >
+      <string>2Fobs - Fcalc</string>
+     </property>
+    </item>
+    <item>
+     <property name="text" >
+      <string>Fobs - Fcalc</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QCheckBox" name="checkBox" >
+    <property name="geometry" >
+     <rect>
+      <x>32</x>
+      <y>70</y>
+      <width>271</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="layoutDirection" >
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="text" >
+     <string>Download PDB File</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QLabel" name="entryLabel" >
+   <property name="geometry" >
+    <rect>
+     <x>21</x>
+     <y>62</y>
+     <width>81</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Entry ID</string>
+   </property>
+   <property name="alignment" >
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="serverLabel" >
+   <property name="geometry" >
+    <rect>
+     <x>21</x>
+     <y>30</y>
+     <width>81</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Server</string>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <tabstops>
+  <tabstop>download</tabstop>
+  <tabstop>button_abort</tabstop>
+  <tabstop>buttonClose</tabstop>
+ </tabstops>
+ <includes>
+  <include location="global" >BALL/COMMON/global.h</include>
+ </includes>
+ <resources/>
+ <connections/>
+</ui>

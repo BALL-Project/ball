@@ -66,7 +66,8 @@ CPP_SOURCES=\
 	shortcutDialog.C\
 	snapShotVisualisation.C\
 	stageSettings.C\
-	stereoSettingsDialog.C
+	stereoSettingsDialog.C\
+	downloadElectronDensity.C
 #	openBruker1DFile.C\
 #	openBruker2DFile.C
 
@@ -120,7 +121,8 @@ MOC_SOURCES=\
 	shortcutDialog_moc.C\
 	snapShotVisualisation_moc.C\
 	stageSettings_moc.C\
-	stereoSettingsDialog_moc.C
+	stereoSettingsDialog_moc.C\
+	downloadElectronDensity_moc.C
 #	openBruker1DFile_moc.C\
 #	openBruker2DFile_moc.C\
 
@@ -174,7 +176,8 @@ UIC_SOURCES=\
 	stereoSettingsDialogData.C\
 	dockDialogData.C\
 	dockProgressDialogData.C\
-	dockResultDialogData.C
+	dockResultDialogData.C\
+	downloadElectronDensityData.C
 
 ifeq ($(BALL_HAS_FFTW),true)
 	CPP_SOURCES+=geometricFitDialog.C
