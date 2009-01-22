@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="libBALL"
 	ProjectGUID="{19709205-47E2-45A3-A266-3488F113508D}"
 	RootNamespace="libBALL"
@@ -52,7 +52,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(SolutionDir)\..\Contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\boost\tr1&quot;;&quot;$(SolutionDir)\..\Contrib\include\Python&quot;;.\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(SolutionDir)\..\Contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\Python&quot;;.\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtSql&quot;;$(QTDIR)\include\QtNetwork"
 				PreprocessorDefinitions="WIN32;QT_THREAD_SUPPORT;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_SQL_LIB;LIBBALL_LIB;QT_NETWORK_LIB;BALL_BUILD_DLL"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
@@ -70,10 +70,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/NODEFAULTLIB:libcmt"
-				AdditionalDependencies="qtmain.lib QtCore4.lib QtSql4.lib QtNetwork4.lib QtXml4.lib regex.lib oncrpc.lib gsl_mt.lib cblas_mt.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib WSock32.lib"
+				AdditionalDependencies="qtmain.lib QtCore4.lib QtSql4.lib QtNetwork4.lib regex.lib oncrpc.lib gsl_mt.lib cblas_mt.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib WSock32.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\Contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;"
-				GenerateDebugInformation="true"
+				GenerateDebugInformation="false"
 				SubSystem="2"
 			/>
 			<Tool
@@ -132,7 +132,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(SolutionDir)\..\Contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\boost\tr1&quot;;&quot;$(SolutionDir)\..\Contrib\include\Python&quot;;.\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(SolutionDir)\..\Contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\Python&quot;;.\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtSql&quot;;$(QTDIR)\include\QtNetwork"
 				PreprocessorDefinitions="WIN32;QT_THREAD_SUPPORT;QT_CORE_LIB;QT_SQL_LIB;LIBBALL_LIB;BALL_BUILD_DLL;QT_NETWORK_LIB"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
@@ -150,7 +150,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/NODEFAULTLIB:libcmtd"
-				AdditionalDependencies="qtmaind.lib QtCored4.lib QtSqld4.lib QtXml4d.lib regex.lib oncrpc.lib gsl_mtd.lib cblas_mtd.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib QtNetworkd4.lib WSock32.lib"
+				AdditionalDependencies="qtmaind.lib QtCored4.lib QtSqld4.lib regex.lib oncrpc.lib gsl_mtd.lib cblas_mtd.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib QtNetworkd4.lib WSock32.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\Contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;"
@@ -184,7 +184,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Header Files"
+			Name="Header Dateien"
 			Filter="h"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
@@ -938,14 +938,6 @@
 						RelativePath="..\..\..\include\BALL\MOLMEC\AMBER\amberTorsion.h"
 						>
 					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\MOLMEC\AMBER\GAFFCESParser.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\MOLMEC\AMBER\GAFFTypeProcessor.h"
-						>
-					</File>
 				</Filter>
 				<Filter
 					Name="CHARMM"
@@ -1452,10 +1444,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\STRUCTURE\assignBondOrderProcessor.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\include\BALL\STRUCTURE\atomBijection.h"
 					>
 				</File>
@@ -1501,10 +1489,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\STRUCTURE\HBondProcessor.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\STRUCTURE\hybridisationProcessor.h"
 					>
 				</File>
 				<File
@@ -1744,15 +1728,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\SYSTEM\mutex.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\SYSTEM\networking.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\include\BALL\SYSTEM\path.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\SYSTEM\socket.h"
 					>
 				</File>
 				<File
@@ -1774,14 +1754,30 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="Lexer Files"
+			Name="Form Dateien"
+			Filter="ui"
+			UniqueIdentifier="{99349809-55BA-4b9d-BF79-8FDBB0286EB3}"
+			>
+		</Filter>
+		<Filter
+			Name="Resource Dateien"
+			Filter="qrc;*"
+			UniqueIdentifier="{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}"
+			ParseFiles="false"
+			>
+		</Filter>
+		<Filter
+			Name="Generierte Dateien"
+			Filter="moc;h;cpp"
+			UniqueIdentifier="{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}"
+			SourceControlFiles="false"
+			>
+		</Filter>
+		<Filter
+			Name="Lexerfiles"
 			>
 			<File
 				RelativePath="..\..\..\source\KERNEL\expressionParserLexer.l"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\source\MOLMEC\AMBER\GAFFCESParserLexer.l"
 				>
 			</File>
 			<File
@@ -1838,14 +1834,10 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Parser Files"
+			Name="Parserfiles"
 			>
 			<File
 				RelativePath="..\..\..\source\KERNEL\expressionParserParser.y"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\source\MOLMEC\AMBER\GAFFCESParserParser.y"
 				>
 			</File>
 			<File
@@ -1902,7 +1894,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Source Files"
+			Name="Quelldateien"
 			>
 			<Filter
 				Name="COMMON"
@@ -4506,86 +4498,6 @@
 							/>
 						</FileConfiguration>
 					</File>
-					<File
-						RelativePath="..\..\..\source\MOLMEC\AMBER\GAFFCESParser.C"
-						>
-						<FileConfiguration
-							Name="Release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								CompileAs="2"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								CompileAs="2"
-							/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\source\MOLMEC\AMBER\GAFFCESParserLexer.C"
-						>
-						<FileConfiguration
-							Name="Release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								CompileAs="2"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								CompileAs="2"
-							/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\source\MOLMEC\AMBER\GAFFCESParserParser.C"
-						>
-						<FileConfiguration
-							Name="Release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								CompileAs="2"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								CompileAs="2"
-							/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\source\MOLMEC\AMBER\GAFFTypeProcessor.C"
-						>
-						<FileConfiguration
-							Name="Release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								CompileAs="2"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								CompileAs="2"
-							/>
-						</FileConfiguration>
-					</File>
 				</Filter>
 				<Filter
 					Name="CHARMM"
@@ -6868,26 +6780,6 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\STRUCTURE\assignBondOrderProcessor.C"
-					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\..\..\source\STRUCTURE\atomBijection.C"
 					>
 					<FileConfiguration
@@ -7129,26 +7021,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\HBondProcessor.C"
-					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\..\source\STRUCTURE\hybridisationProcessor.C"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -8356,47 +8228,27 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\SYSTEM\mutex.C"
-					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\..\source\SYSTEM\networking.C"
-					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\..\..\source\SYSTEM\path.C"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\SYSTEM\socket.C"
 					>
 					<FileConfiguration
 						Name="Release|Win32"

@@ -77,9 +77,9 @@ namespace BALL
             }
 
             m_fmt.setWidth(width);
-            m_fmt.setPitch(width);
+            m_fmt.setPitch(width * m_pfm.computeByteSize());
 			m_fmt.setHeight(height);                             
-            m_pixels = t_PixelPtr(new taPixelDatatype[m_fmt.getWidth() * m_fmt.getHeight() * m_pfm.computeByteSize()]);
+            m_pixels = t_PixelPtr(new taPixelDatatype[m_fmt.getWidth() * m_fmt.getHeight() * m_pfm.getNumChannels()]);
 
 			return true;
 		};

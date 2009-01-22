@@ -1,265 +1,37 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
+//
 
 #include <BALL/VIEW/RENDERING/raytracingRenderer.h>
-#include <BALL/VIEW/RENDERING/renderer.h>
-#include <BALL/VIEW/KERNEL/stage.h>
-#include <BALL/VIEW/DATATYPE/colorMap.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
 namespace BALL
 {
 	namespace VIEW
-	{
-	
-		RaytracingRenderer::RaytracingRenderer()
-			throw()
-			: Renderer(),
-				scene_(0)
+	{		
+        bool RaytracingRenderer::supports(const PixelFormat &format) const
 		{
-			
+			return ((format == PixelFormat::RGBA_32) || (format == PixelFormat::RGBF_96));
 		}
 
-		RaytracingRenderer::~RaytracingRenderer()
-			throw()
+		Resolution RaytracingRenderer::getSupportedResolution(
+			const Resolution &min, const Resolution &max,
+			const PixelFormat &format) const
+            throw(BALL::Exception::FormatUnsupported)
 		{
-			clear();
-		}
-		
-		void RaytracingRenderer::clear()
-			throw()
-		{
-		}
-		
-		void RaytracingRenderer::dump(std::ostream& s, Size depth) const
-			throw()
-		{
-			BALL_DUMP_STREAM_PREFIX(s);
-
-			BALL_DUMP_DEPTH(s, depth);
-			BALL_DUMP_HEADER(s, this, this);
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "Drawing Mode: " 		 	<< drawing_mode_  << std::endl;
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "Width: " << width_ << endl;
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "Height: " << height_ << endl;
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "XScale: " << x_scale_ << endl;
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "YScale: " << y_scale_ << endl;
-
-			BALL_DUMP_STREAM_SUFFIX(s);     
-		}
-
-		bool RaytracingRenderer::init(Scene& scene)
-			throw()
-		{
-			scene_ = &scene;
-
-			Stage* stage = scene.getStage();
-			if (stage == 0)
-			{			
-				Renderer::init(Stage(), scene.height(), scene.width());
-			}
-			else
-			{				
-				Renderer::init(*stage, scene.height(), scene.width());
-			}
-						
-			return initialize();
-		}
-		
-		bool RaytracingRenderer::init(const Stage& stage, float height, float width)
-			throw()
-		{
-			Renderer::init(stage, height, width);			
-			
-			return initialize();
-		}
-
-		bool RaytracingRenderer::initialize()
-		{
-			return true;
-		}
-		
-		void RaytracingRenderer::setLights(bool reset_all) throw()
-		{
-			// prepare the lights :-)
-		}
-
-		void RaytracingRenderer::setSize(float width, float height)
-			throw()
-		{
-			width_ 	= width;
-			height_ = height;
-
-			if (width > height)
+			if(!supports(format))
 			{
-				x_scale_ = width / (height * 2);
-				y_scale_ = 0.5;
+                throw BALL::Exception::FormatUnsupported(__FILE__, __LINE__);
 			}
-			else
-			{
-				x_scale_ = 0.5;
-				y_scale_ = height / (width * 2);
-			}
-
-			// Lukas: is there an equivalent to 
-			// 	glViewport(0, 0, (int)width_, (int)height_);
-			// ?
-		}
+			return max;
+		}		   
 		
-		float  RaytracingRenderer::getXScale() const
-			throw()
+		bool RaytracingRenderer::supports(const FrameBufferFormat &format) const
 		{
-			return 	x_scale_;
+            return supports(format.getPixelFormat());				
 		}
 
-		float  RaytracingRenderer::getYScale() const
-			throw()
-		{
-			return 	y_scale_;
-		} 
-	
-		void RaytracingRenderer::updateCamera(const Camera* camera)
-			throw()
-		{
-			if (camera == 0) camera = &stage_->getCamera();
+	} // namespace VIEW
 
-			if (Maths::isZero(camera->getViewVector().getSquareLength()))
-			{
-				Log.error() << "Unvalid camera settings: View point = LookAt point" << std::endl;
-				return;
-			}
+} // namespace BALL
 
-			/*Lukas: is there something else to do?? */
-			
-			normal_vector_ = (-camera->getViewVector().normalize());
-		}
-
-		
-		void RaytracingRenderer::updateBackgroundColor() 
-			throw()
-		{
-			/* Lukas: something similar to 
-			glClearColor((float) stage_->getBackgroundColor().getRed(),
-					(float) stage_->getBackgroundColor().getGreen(),
-					(float) stage_->getBackgroundColor().getBlue(),
-					(float) stage_->getBackgroundColor().getAlpha()); */
-		} 
-		
-		void RaytracingRenderer::initTransparent() 
-			throw()
-		{
-
-		}
-
-		void RaytracingRenderer::initSolid()
-			throw()
-		{
-
-		}
-			
-		void RaytracingRenderer::setAntialiasing(bool state)
-		{
-		}
-
-		void  RaytracingRenderer::removeRepresentation(const Representation& rep)
-			throw()
-		{
-		}
-
-		void  RaytracingRenderer::addRepresentation(const Representation& rep)
-			throw()
-		{
-		}
-	
-		void RaytracingRenderer::setStereoMode(StereoMode state)
-			throw()
-		{
-			stereo_ = state;
-		}
-
-		///
-		RaytracingRenderer::StereoMode RaytracingRenderer::getStereoMode() const
-			throw()
-		{
-			return stereo_;
-		}
-
-		RaytracingRenderer::RenderMode RaytracingRenderer::getRenderMode() const
-			throw()
-		{
-			return render_mode_;
-		}
-	 
-		void RaytracingRenderer::deactivateAllRepresentations()
-			throw()
-		{
-		}
-
-			
-		bool RaytracingRenderer::activateRepresentation(const Representation& representation)
-			throw()
-		{
-			if (representation.isHidden()) return true;
-
-			if (!representation.isValid())
-			{
-				BALLVIEW_DEBUG;
-				representation.dump(std::cout, 0);
-				return false;
-			}
-
-			drawing_mode_ = representation.getDrawingMode();
-
-			/* Lukas: perhaps we can consider different drawing modes, 
-			 * transparency..
-			 if (representation.getDrawingMode() == DRAWING_MODE_DOTS)
-			 {
-			 }
-			 else
-			 {
-			 }
-
-			 if (representation.hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
-			 {
-			 }
-			 else if (representation.getTransparency() == 0)
-			 {
-			 }
-			 else
-			 {
-			 }
-			 */
-			return true;
-		}
-
-		String  RaytracingRenderer::getRenderer()
-			throw()
-		{
-			return (char*)"BALLView CUDA ray caster v1";	
-		}
-
-		void RaytracingRenderer::initPerspective()
-		{
-		}
-		
-		void RaytracingRenderer::raytraceAllRepresentations()
-			throw()
-		{
-		}
-
-/*		void RaytracingRenderer::setColorRGBA_(const ColorRGBA& color)
-			throw()
-		{
-		}*/
-			
-	}
-}

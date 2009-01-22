@@ -35,13 +35,14 @@
 
 // This allows us to switch raytracing on and off. Later, we might add this flag
 // to config.h or remove it completely and always raytracing always.
-//#undef ENABLE_RAYTRACING
-//#define ENABLE_RAYTRACING
+#undef ENABLE_RAYTRACING
+#define ENABLE_RAYTRACING
 			 
 #ifdef ENABLE_RAYTRACING 
-	#ifndef BALL_VIEW_RENDERING_RAYTRACINGRENDERER_H 
-	# include <BALL/VIEW/RENDERING/raytracingRenderer.h>
-	#endif
+	#include <BALL/VIEW/RENDERING/renderWindow.h>
+	#include <BALL/VIEW/RENDERING/raytracingRenderer.h>
+
+    #include <boost/shared_ptr.hpp>
 #endif 
 
 class QMouseEvent;
@@ -110,6 +111,13 @@ namespace BALL
 		{
 			friend class AnimationThread;
 
+        #ifdef ENABLE_RAYTRACING
+                                   
+            typedef boost::shared_ptr<RaytracingRenderer> RaytracingRendererPtr;
+            typedef boost::shared_ptr<t_RenderWindow> RaytracingWindowPtr;
+        
+        #endif
+
 			Q_OBJECT
 
 		  public:
@@ -173,6 +181,23 @@ namespace BALL
 
 				/// Rebuild the contents of the display lists and redraw them
 				REBUILD_DISPLAY_LISTS
+			};
+
+			/**
+			 * Scene may hold several windows for different renering modes.
+			 * If you need to retrieve a particular window, use this enum together
+			 * with Scene::getWindow() to get a reference to it.
+			*/
+			enum WindowType
+			{
+				/// Main window that is always being displayed directly in the QT main interface
+				CONTROL_WINDOW = 0,
+				
+				/// Window into which left eye should be rendered. Indicates same window as CONTROL_WINDOW if no stereo is running.
+				LEFT_EYE_WINDOW,
+
+				/// Window into which right eye should be renderer.  Indicates same window as CONTROL_WINDOW if no stereo is running.
+				RIGHT_EYE_WINDOW
 			};
 				
 			//@} 
@@ -587,6 +612,10 @@ namespace BALL
 
 			///
 			void restoreViewPoint();
+
+#ifdef ENABLE_RAYTRACING
+			RaytracingWindowPtr getWindow(WindowType aWindowType);
+#endif
 	
 			protected slots:
 
@@ -833,7 +862,8 @@ namespace BALL
 			GLRenderer* gl_renderer_;
 
 #ifdef ENABLE_RAYTRACING
-			RaytracingRenderer* rt_renderer_;
+			RaytracingRendererPtr rt_renderer_;
+			RaytracingWindowPtr rt_window_;
 #endif
 
 			static float mouse_sensitivity_;

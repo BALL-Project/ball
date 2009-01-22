@@ -62,7 +62,15 @@
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
 
-//         #define BALL_BENCHMARKING
+#ifdef ENABLE_RAYTRACING
+    
+    #include <BALL/VIEW/RENDERING/RENDERERS/glRenderWindow.h>
+    #include <BALL/VIEW/RENDERING/RENDERERS/cudaVolumeRenderer.h>    
+
+#endif
+
+//#define BALL_BENCHMARKING
+
 
 using std::endl;
 using std::istream;
@@ -72,7 +80,14 @@ namespace BALL
 	namespace VIEW
 	{
 
-		Position Scene::screenshot_nr_ = 100000;
+	#ifdef ENABLE_RAYTRACING    
+
+        typedef CudaVolumeRenderer t_RaytracingRenderer;
+        typedef GLRenderWindow t_RaytracingWindow;    
+
+    #endif
+
+        Position Scene::screenshot_nr_ = 100000;
 		Position Scene::pov_nr_ = 100000;
 		Position Scene::vrml_nr_ = 100000;
 		bool Scene::offscreen_rendering_ = true;
@@ -107,9 +122,10 @@ namespace BALL
 				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage()),
 				gl_renderer_(new GLRenderer()),
-#ifdef ENABLE_RAYTRACING
-				rt_renderer_(new RaytracingRenderer()),
-#endif
+        #ifdef ENABLE_RAYTRACING
+				rt_renderer_(new t_RaytracingRenderer()),
+				rt_window_(new t_RaytracingWindow()),
+        #endif
 				light_settings_(new LightSettings(this)),
 				stage_settings_(new StageSettings(this)),
 				material_settings_(new MaterialSettings(this)),
@@ -143,9 +159,10 @@ namespace BALL
 				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage),
 				gl_renderer_(new GLRenderer),
-#ifdef ENABLE_RAYTRACING
-				rt_renderer_(new RaytracingRenderer()),
-#endif
+        #ifdef ENABLE_RAYTRACING
+				rt_renderer_(new t_RaytracingRenderer()),
+				rt_window_(new t_RaytracingWindow()),
+        #endif
 				light_settings_(0),
 				stage_settings_(0),
 				animation_thread_(0),
@@ -182,9 +199,10 @@ namespace BALL
 				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage(*scene.stage_)),
 				gl_renderer_(new GLRenderer()),
-#ifdef ENABLE_RAYTRACING
-				rt_renderer_(new RaytracingRenderer()),
-#endif
+        #ifdef ENABLE_RAYTRACING
+				rt_renderer_(new t_RaytracingRenderer()),
+				rt_window_(new t_RaytracingWindow()),
+        #endif
 				light_settings_(new LightSettings(this)),
 				stage_settings_(new StageSettings(this)),
 				material_settings_(new MaterialSettings(this)),
@@ -216,9 +234,8 @@ namespace BALL
 
 				delete stage_;
 				delete gl_renderer_;
-#ifdef ENABLE_RAYTRACING
-				delete rt_renderer_;
-#endif
+
+                //rt_renderer_ & rt_render_window are smart pointers
 
 				if (animation_thread_ != 0) delete animation_thread_;
 			}
@@ -276,6 +293,8 @@ namespace BALL
 			{
 				renderView_(REBUILD_DISPLAY_LISTS);
 			}
+
+			//might need some scene refresh in RT
 
 			update_running_ = false;
 			updateGL();
@@ -408,10 +427,14 @@ namespace BALL
 			QGLWidget::initializeGL();
 			if (!format().rgba())  Log.error() << "no rgba mode for OpenGL available." << endl;
 
-			makeCurrent();
+			makeCurrent();			
 
 		#ifdef ENABLE_RAYTRACING
 
+			//initialize the window buffer and OpenGL pasting texture
+			rt_window_->init();
+
+			//initialize the renderer
 			initializeRaytracing();
 
 		#else
@@ -430,7 +453,11 @@ namespace BALL
 
 		void Scene::initializeRaytracing()
 		{
-			rt_renderer_->init(*this);			
+			if(!rt_renderer_->init(*this))
+			{
+				Log.error() << "Raytracing renderer failed to initialize" << endl;
+				throw Exception::GeneralException(__FILE__, __LINE__);
+			}			
 		}
 #endif
 
@@ -440,7 +467,8 @@ namespace BALL
 
 		#ifdef ENABLE_RAYTRACING
 			
-			rt_renderer_->raytraceAllRepresentations();
+            rt_renderer_->renderToBuffer(rt_window_.get(), *stage_);
+            rt_window_->refresh();
 
 		#else
 
@@ -518,12 +546,19 @@ namespace BALL
 		}
 
 		void Scene::resizeGL(int width, int height)
-		{
+		{						
 
 		#ifdef ENABLE_RAYTRACING
 
-			rt_renderer_->setSize(width, height);
-			rt_renderer_->updateCamera();
+			if(!rt_window_->resize(width, height))
+            {
+                Log.error() << "Cannot resize window. Size " << width << " x " << height << " is not supported" << endl;
+            }		
+            if(!rt_renderer_->setFrameBufferFormat(rt_window_->getFormat()))
+			{
+				Log.error() << "Raytracing render does not support window framebuffer format. Seems to be configuration error" << endl;
+				throw Exception::GeneralException(__FILE__, __LINE__);
+			}
 
 		#else
 
@@ -3446,7 +3481,23 @@ namespace BALL
 			delete gl_renderer_;
 			gl_renderer_ = &renderer;
 		}
+#ifdef ENABLE_RAYTRACING
+        Scene::RaytracingWindowPtr Scene::getWindow(WindowType aWindowType)
+		{
+			switch(aWindowType)
+			{
+				case CONTROL_WINDOW:
+				case LEFT_EYE_WINDOW:
+				case RIGHT_EYE_WINDOW:
+						return rt_window_;
+					break;
 
+				default: 
+						return rt_window_;
+					break;
+			}
+		}
+#endif
 		void AnimationThread::mySleep(Size msec) 
 		{
 			msleep(msec);

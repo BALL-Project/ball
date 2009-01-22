@@ -126,7 +126,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/fixed:no"
-				AdditionalDependencies="qtmaind.lib QtCored4.lib QtGuid4.lib QtXmld4.lib QtSqld4.lib QtOpenGLd4.lib opengl32.lib glu32.lib QtNetworkd4.lib QtSvgd4.lib libBALL.lib glew32d.lib QtTestd4.lib"
+				AdditionalDependencies="qtmaind.lib QtCored4.lib QtGuid4.lib QtXmld4.lib QtSqld4.lib QtOpenGLd4.lib opengl32.lib glu32.lib QtNetworkd4.lib QtSvgd4.lib libBALL.lib glew32d.lib QtTestd4.lib cudamm32d.lib cuda32.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;;&quot;$(OutDir)&quot;"
@@ -2128,6 +2128,26 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\..\..\source\VIEW\RENDERING\RENDERERS\glRenderWindow.C"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath="..\..\..\source\VIEW\RENDERING\pixelFormat.C"
 					>
 					<FileConfiguration
@@ -2271,26 +2291,6 @@
 					Name="RENDERERS"
 					>
 					<File
-						RelativePath="..\..\..\source\VIEW\RENDERING\RENDERERS\glRaytracingWindow.C"
-						>
-						<FileConfiguration
-							Name="Release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								CompileAs="2"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								CompileAs="2"
-							/>
-						</FileConfiguration>
-					</File>
-					<File
 						RelativePath="..\..\..\source\VIEW\RENDERING\RENDERERS\rtfactRenderer.C"
 						>
 						<FileConfiguration
@@ -2308,6 +2308,56 @@
 							<Tool
 								Name="VCCLCompilerTool"
 								CompileAs="2"
+							/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+				<Filter
+					Name="CUDA_KERNELS"
+					>
+					<File
+						RelativePath="..\..\..\source\VIEW\RENDERING\CUDA_KERNELS\common.inc.cu"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Compiling kernel $(InputFileName) with NVCC"
+								CommandLine="&quot;$(CUDA_BIN_PATH)\nvcc.exe&quot; -ccbin &quot;C:\Program Files (x86)\Microsoft Visual Studio 8\VC\bin&quot; --cubin -I $(CUDA_INC_PATH) -I $(CUDA_INC_PATH)/../SDK/common/inc $(InputFileName)&#x0D;&#x0A;"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\..\..\source\VIEW\RENDERING\CUDA_KERNELS\raytracer_debug.cu"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Compiling kernel: &apos;$(InputFileName)&apos;"
+								CommandLine="&quot;$(CUDA_BIN_PATH)\nvcc.exe&quot; -ccbin &quot;C:\Program Files (x86)\Microsoft Visual Studio 8\VC\bin&quot; --cubin -I $(CUDA_INC_PATH) -I $(CUDA_INC_PATH)/../SDK/common/inc -I ../../../source/  -o ./GeneratedFiles/$(ConfigurationName)/$(InputName).cubin ../../../source/VIEW/RENDERING/CUDA_KERNELS/$(InputFileName)&#x0D;&#x0A;"
+								AdditionalDependencies="common.inc.cu"
+								Outputs="./GeneratedFiles/$(ConfigurationName)/$(InputName).cubin"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\..\..\source\VIEW\RENDERING\CUDA_KERNELS\test.cu"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Compiling kernel: &apos;$(InputFileName)&apos;"
+								CommandLine="&quot;$(CUDA_BIN_PATH)\nvcc.exe&quot; -ccbin &quot;C:\Program Files (x86)\Microsoft Visual Studio 8\VC\bin&quot; --cubin -I $(CUDA_INC_PATH) -I $(CUDA_INC_PATH)/../SDK/common/inc -I ../../../source/  -o ./GeneratedFiles/$(ConfigurationName)/$(InputName).cubin ../../../source/VIEW/RENDERING/CUDA_KERNELS/$(InputFileName)&#x0D;&#x0A;"
+								AdditionalDependencies="common.inc.cu"
+								Outputs="./GeneratedFiles/$(ConfigurationName)/$(InputName).cubin"
 							/>
 						</FileConfiguration>
 					</File>
@@ -4086,6 +4136,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\glRenderWindow.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\pixelFormat.h"
 					>
 				</File>
@@ -4133,10 +4187,6 @@
 					>
 					<File
 						RelativePath="..\..\..\include\BALL\VIEW\RENDERING\RENDERERS\cudaVolumeRenderer.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\RENDERING\RENDERERS\glRaytracingWindow.h"
 						>
 					</File>
 					<File
