@@ -145,6 +145,9 @@
 #define BALL_MAP_NAMESPACE __gnu_cxx
 #define BALL_MAP_NAME map
 
+// defined if BALL was configured with asio support
+#undef BALL_HAS_ASIO
+
 // defined if asio is taken from boost
 #undef BALL_HAS_BOOST_ASIO
 

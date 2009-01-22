@@ -43,7 +43,6 @@ $(TEST_PREFIX)FileSystem_test$(EXEEXT)\
 $(TEST_PREFIX)File_test$(EXEEXT)\
 $(TEST_PREFIX)Path_test$(EXEEXT)\
 $(TEST_PREFIX)PreciseTime_test$(EXEEXT)\
-$(TEST_PREFIX)Socket_test$(EXEEXT)\
 $(TEST_PREFIX)Sysinfo_test$(EXEEXT)\
 $(TEST_PREFIX)TCPTransfer_test$(EXEEXT)\
 $(TEST_PREFIX)Timer_test$(EXEEXT)\
@@ -285,3 +284,6 @@ $(TEST_PREFIX)RMSDMinimizer_test$(EXEEXT)
 
 SQL_DEPENDENT_EXECUTABLES= \
 $(TEST_PREFIX)DBInterface_test$(EXEEXT)
+
+ASIO_DEPENDENT_EXECUTABLES= \
+$(TEST_PREFIX)Socket_test$(EXEEXT)

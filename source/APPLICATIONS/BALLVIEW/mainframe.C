@@ -9,7 +9,9 @@
 #include "demoTutorialDialog.h"
 
 #include <BALL/CONCEPT/moleculeObjectCreator.h>
+#ifdef BALL_HAS_ASIO
 #include <BALL/VIEW/KERNEL/serverWidget.h>
+#endif
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -126,10 +128,12 @@ namespace BALL
 		new DisplayProperties(	this, "DisplayProperties");
 
 		// setup the VIEW server
-		ServerWidget* server = new ServerWidget(this);
+		#ifdef BALL_HAS_ASIO
+			ServerWidget* server = new ServerWidget(this);
 		// registering object generator
 		MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
 		server->registerObjectCreator(*object_creator);
+		#endif
 
 		new TestFramework(this, "Test Framework");
 

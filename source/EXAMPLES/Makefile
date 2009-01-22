@@ -28,8 +28,10 @@ EXECUTABLES=\
 	energy
 
 ifeq ($(BALL_HAS_VIEW),true)
-	EXECUTABLES += BALLVIEWClient
-	CPP_SOURCES += BALLVIEWClient.C
+	ifeq ($(BALL_HAS_ASIO),true)
+		EXECUTABLES += BALLVIEWClient
+		CPP_SOURCES += BALLVIEWClient.C
+	endif
 endif
 
 default:	$(EXECUTABLES)

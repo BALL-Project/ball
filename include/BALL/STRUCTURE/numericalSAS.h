@@ -30,7 +30,7 @@ namespace BALL
 	class TriangulatedSphere;
 
 	/**	@name	Fast Numerical Calculation of Solvent Accessible Surface Area.
-			These functions are based on the algorithm by Eisenhaber, Lijnzaad, Argos,
+			These functions are loosely based on the algorithm by Eisenhaber, Lijnzaad, Argos,
 			Sander, and Scharf ("The Double Cubic Lattice Method: Efficient Approaches to
 			numerical Integration of Surface Area and Volume and to Dot Surface Contouring
 			of Molecular Assemblies", J. Comput. Chem. (1995), <b>  15 </b>, 273-284)

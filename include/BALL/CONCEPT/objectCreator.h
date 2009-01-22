@@ -19,8 +19,10 @@
 # include <BALL/CONCEPT/textPersistenceManager.h>
 #endif
 
+#ifdef BALL_HAS_ASIO
 #ifndef BALL_SYSTEM_NETWORKING_H
 #	include <BALL/SYSTEM/networking.h>
+#endif
 #endif
 
 #include <vector>
@@ -100,6 +102,7 @@ namespace BALL
 		*/
 		//@{
 
+#ifdef BALL_HAS_ASIO
 		/** Read from a socket stream.
 				This method will be called by the Server to convert objects
 				that are available at the TCPIOStream using the 
@@ -114,6 +117,7 @@ namespace BALL
 		*/
 		Composite *operator() (TCPIOStream &tcp_iostream)
 			throw();
+#endif
 
 		//@}
 
