@@ -53,7 +53,7 @@ namespace BALL
 			{
 				prepareBufferedRendering(stage);
 
-                FrameBufferPtr buffer = renderTarget->getBuffer();
+				FrameBufferPtr buffer = renderTarget->getBuffer();
 				assert(buffer);
 
 				if (buffer->getFormat() != bufferFormat)

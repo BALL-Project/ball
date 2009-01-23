@@ -39,7 +39,7 @@ namespace BALL
 		{
 			public:
 
-			BALL_CREATE(ColorUnit)
+			//BALL_CREATE(ColorUnit)
 			
 			/**	@name	Exceptions
 			*/
@@ -160,7 +160,7 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			virtual ~ColorUnit()
+			~ColorUnit()
 				throw();
 
 			/** Explicit default initialization.
