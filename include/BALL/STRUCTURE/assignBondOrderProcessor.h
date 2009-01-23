@@ -128,14 +128,18 @@ namespace BALL
 				*/
 				static const char* ADD_HYDROGENS;
 
-				/**  compute also the connectivity of the molecule
+				/**  compute also the connectivity of the molecule 
+				 * \par
+				 *   <b>NOTE:</b> This option is still experimental.
 				 */
-				static const char* COMPUTE_ALSO_CONNECTIVITY; //TODO TEST
-				
-				/**  the connectivity cut off
-				 */
-				static const char* CONNECTIVITY_CUTOFF; //TODO TEST
+				static const char* COMPUTE_ALSO_CONNECTIVITY; //TODO
 
+				/**  the connectivity cut off
+				 *  \par
+				 *   <b>NOTE:</b> This option is still experimental
+				 */
+				static const char* CONNECTIVITY_CUTOFF;      //TODO 
+				
 				/**	resolve penalty ties based on structural information
 				*/
 				static const char* USE_FINE_PENALTY;
@@ -148,9 +152,12 @@ namespace BALL
 				*/
 				static const char* ALGORITHM; 
 				
-				/**	heuristic defining the tightness of the search critria
+				/**	heuristic defining the tightness of the search critria 
+				 * @see Option::Heuristic::SIMPLE
+				 * @see Option::Heuristic::MEDIUM
+				 * @see Option::Heuristic::TIGHT
 				*/
-				static const char* HEURISTIC; //TODO TEST 
+				static const char* HEURISTIC;  
 
 				/** the penalty parameter file
 				 */
@@ -174,6 +181,8 @@ namespace BALL
 
 				/** weighting of bond length penalties wrt valence penalties.
 				 *  If set to zero, the valence penalty will not be normalized. 
+				 *  \par
+				 *   <b>NOTE:</b> This option is still experimental.
 				 */
 				static const char* BOND_LENGTH_WEIGHTING;
 				
@@ -183,14 +192,20 @@ namespace BALL
 				static const char* APPLY_FIRST_SOLUTION;
 				
 				/** the size of priority queue for the greedy algorithm.
-				 * Default is 1.
+				 * Default is 1. 
+				 * @see Option::Algorithm::K_GREEDY;
+				 * \par
+				 *   <b>NOTE:</b> This option is still experimental.
 				 */
-				static const char* GREEDY_K_SIZE;	 //TODO TEST
-				
+				static const char* GREEDY_K_SIZE;	 
+
 				/** the percentage cutoff for keeping PQ-Entries in the branch and bound algorithm.
 				 * Default is 1.2.
+				 * @see Option::AlgorithmBRANCH_AND_BOUND;
+				 * \par
+				 *   <b>NOTE:</b> This option is still experimental.
 				 */
-				static const char* BRANCH_AND_BOUND_CUTOFF; //TODO TEST
+				static const char* BRANCH_AND_BOUND_CUTOFF; 
 
 
 			};
@@ -236,13 +251,12 @@ namespace BALL
 
 			//@}
 		
+			BALL_CREATE(AssignBondOrderProcessor);
 
 			/** @name	Constructors and Destructors
 			*/
 			//@{
-
-			BALL_CREATE(AssignBondOrderProcessor);
-			
+					
 			///	Default Constructor
 			AssignBondOrderProcessor();
 		
@@ -263,10 +277,13 @@ namespace BALL
 			/// Processor method which is called before the operator()-call.
 			virtual bool start();
 	
-			/// Clears the datastructures.
+			/** Clears the datastructures.
+			* 	<b>NOTE:</b> The options remain!
+			* 	Use setDefaultOptions() to clear the options.
+			*/
 			void clear();
 
-			/** operator () for the processor 
+			/** Operator () for the processor 
 			 *
 			 * Called with \link Default Default\endlink-options the processor computes all 
 			 * possible bond orders with optimal value and 
@@ -278,7 +295,7 @@ namespace BALL
 			 *
 			 * 	@param  ac  the AtomContainer to which the processor is applied.
 			 */
-			virtual Processor::Result operator () (AtomContainer& ac);
+			virtual Processor::Result operator ()(AtomContainer& ac);
 
 			/// Processor method which is called after the operator()-call.
 			virtual bool finish();
@@ -288,15 +305,6 @@ namespace BALL
 			/**	@name	Accessors
 			*/
 			//@{
-
-			/** Returns the number of bonds built during the last application.
-			 *
-			 *  <b>NOTE:</b> bonds to newly added hydrogens are excluded.
-			 *  @return  Size - the number of bonds built during the last application.
-			 *  @see Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS
-			 *  @see Option::MAX_NUMBER_OF_SOLUTIONS
-			 */
-			Size getNumberOfBondOrdersSet();
 		
 			/** Returns the number of added hydrogens in Solution i.
 			 *
@@ -339,7 +347,7 @@ namespace BALL
 			 */
 			AtomContainer const* getAtomContainer() const {return ac_;}
 
-			/** Returns a reference to original system, to which solution i was applied.
+			/** Returns a reference to the original system to which solution i was applied.
 			 *   
 			 *   <b>NOTE:</b> This method has the same effect as calling \link apply(i) apply(i)\endlink!
 			 *
@@ -363,7 +371,7 @@ namespace BALL
 					return Limits<float>::max();
 				}
 				else
-					return getTotalCharge(solutions_[i]);
+					return getTotalCharge_(solutions_[i]);
 
 			}
 			
@@ -372,7 +380,7 @@ namespace BALL
 			 * @param  sol solution, whose charge should be computed. 
 			 * @return float -  total charge of the given solution.  
 			*/
-			float getTotalCharge(const Solution_& sol) 
+			float getTotalCharge_(const Solution_& sol) 
 			{
 				if (sol.valid) 
 				{
@@ -399,7 +407,7 @@ namespace BALL
 					return Limits<float>::max();
 				}
 				else
-					return getTotalPenalty(solutions_[i]);
+					return getTotalPenalty_(solutions_[i]);
 			}
 
 			/** Returns the total penalty of the given solution.
@@ -408,7 +416,7 @@ namespace BALL
 			 * @return  float -  total penalty of solution i.  
 			 * @see  Option::BOND_LENGTH_WEIGHTING;
 			 */
-			float getTotalPenalty(const Solution_& sol) 
+			float getTotalPenalty_(const Solution_& sol) 
 			{
 				if (   (atom_type_normalization_factor_   < 0.00001) 
 				    || (bond_length_normalization_factor_ < 0.00001)
@@ -423,10 +431,10 @@ namespace BALL
 				} 
 			}
 		 
-			/** Returns the number of node expansions before solution i was found.
+			/* Returns the number of node expansions before solution i was found.
 			 *
-			 * @param    i  index of the solution, whose number of node expansions should be returned.
-			 * @return  int -   number of node expansions before solution i was found.   
+			 * param    i  index of the solution, whose number of node expansions should be returned.
+			 * return  int -   number of node expansions before solution i was found.   
 			 */
 			int getNumberOfNodeExpansions(Position i)
 			{
@@ -440,18 +448,18 @@ namespace BALL
 					return getNumberOfNodeExpansions(solutions_[i]);
 			}
 			
-			/** Returns the number of node expansions before the given solution was found.
+			/* Returns the number of node expansions before the given solution was found.
 			 *
-			 * @param   sol  solution, whose number of node expansions should be returned. 
-			 * @return  int -  number of node expansions before solution i was found.  
+			 * param   sol  solution, whose number of node expansions should be returned. 
+			 * return  int -  number of node expansions before solution i was found.  
 			 */
 			int getNumberOfNodeExpansions(const Solution_& sol){return sol.getNumberOfNodeExpansions();}
 	
 
-			/** Returns the number of node expansions before solution i was found.
+			/* Returns the number of node expansions before solution i was found.
 			 *
-			 * @param    i  index of the solution, whose  queue size should be returned. 
-			 * @return  int -  queue size when solution i was found.  
+			 * param    i  index of the solution, whose  queue size should be returned. 
+			 * return  int -  queue size when solution i was found.  
 			 */
 			int getQueueSize(Position i)
 			{	
@@ -465,10 +473,10 @@ namespace BALL
 					return getQueueSize(solutions_[i]);
 			}
 			
-			/** Returns the queue's size at the moment the given solution was found.
+			/* Returns the queue's size at the moment the given solution was found.
 			 *
-			 * @param   sol  solution, whose queue size should be returned. 
-			 * @return  int -  queue size when the given solution was found.  
+			 * param   sol  solution, whose queue size should be returned. 
+			 * return  int -  queue size when the given solution was found.  
 			 */	
 			int getQueueSize(const Solution_& sol){return sol.getQueueSize();}
 
@@ -483,13 +491,13 @@ namespace BALL
 			 * 			 call!
 			 *
 			 *  @param    i  index of the solution, whose bond orders should be assigned. 
-			 *	@return bool - true if the i-th solution is valid.
+			 *	@return bool - true if the i-th solution is valid, false otherwise.
 			 */
 			bool apply(Position i);
 
 			/** Reset all bond orders and assigned hydrogens.
 			 *  
-			 *  Resets the AtomContainer we are operating on to the configuration it had 
+			 *  Resets the AtomContainer we are operating on to the bond order configuration it had 
 			 *  before applying the AssignBondOrderProcessor.
 			 */
 			void resetBondOrders();
@@ -501,6 +509,18 @@ namespace BALL
 			 * @return bool - false if no further solution can be found.
 			 */
 			bool computeNextSolution(bool apply_solution = true);
+
+			/** Resets the options to default values.
+			*/
+			void setDefaultOptions();
+
+			/** Evaluates the AtomContainer ac's bond orders as specified in 
+			 *  the Options and returns the computed penalty.
+			 *
+			 *  @param 	 ac	AtomContainer, whose bond orders should be evalated.
+			 *  @return  float - computed penalty, -1 if current assignment is not valid or includes aromatic bonds.
+			 */
+			float evaluatePenalty(AtomContainer* ac);
 			//@}
 			
 			/** @name Assignment
@@ -516,19 +536,8 @@ namespace BALL
 			/// options
 			Options options;
 
-			/** Resets the options to default values.
-			*/
-			void setDefaultOptions();
 			//@}
 		
-			/** Evaluates the AtomContainer ac's bond orders as specified in 
-			 *  the Options and returns the computed penalty.
-			 *
-			 *  @param 	 ac	AtomContainer, whose bond orders should be evalated.
-			 *  @return  float - computed penalty.
-			 */
-			float evaluatePenalty(AtomContainer* ac);
-
 		protected:
 			
 			// Nested class storing the parameters of a solution to our ILP
@@ -555,9 +564,6 @@ namespace BALL
 					
 					//
 					int getQueueSize() const {return queue_size;}
-
-					// equality operator // TODO
-					bool operator == (Solution_ b);
 
 					// denotes whether the problem could be solved or not  
 					bool valid;
@@ -643,6 +649,14 @@ namespace BALL
 						float bond_length_normalization_factor_;
 						bool  use_fine_penalty_;
 				};
+			
+			/** Reads, checks and stores the options. 	
+			 *
+			 * @return bool - false if one of the options got an invalid value.
+			 * @return bool - true otherwise
+			 */
+			bool readOptions_();
+			
 
 			/** Reads and stores the penalty-INIFile (for example BondOrder.ini).
 			 *
@@ -654,8 +668,9 @@ namespace BALL
 			 *  processor is applied to a block of possible valences 
 			 *  and the corresponding penalties.	
 			 *  
-			 *  Returns false if the AtomContainer to which the processor 
+			 *  @retval bool - false if the AtomContainer to which the processor 
 			 *  is applied to has an atom with no matching penalty block. 
+			 *	@retval bool - true otherwise
 			 */
 			bool preassignPenaltyClasses_();
 		
@@ -663,7 +678,7 @@ namespace BALL
 			 * Finds the first matching SMARTS-expression in the penalty-vector
 			 * and returns its index.
 			 *
-			 * If there is no matching expression, -1 is returned.
+			 * @retval int - -1 if there is no matching expression
 			 */
 			int getPenaltyClass_(Atom* atom);
 
@@ -671,7 +686,7 @@ namespace BALL
 			/** Precomputes for every bond of the AtomContainer, to which the 
 			 *	processor is applied to, the possible bond length penalties
 			 *	resulting from deviation of the actual bond length to 
-			 *	a standart length for bonds with same atom types and the 
+			 *	a standard length for bonds with same atom types and the 
 			 *	chosen bond order. 
 			 *	\par
 			 *	If there is no information for certain atom pairs, penalty 0
@@ -680,12 +695,14 @@ namespace BALL
 			 *	orders to be really unlikely and we set a penalty 
 			 *	to 2* max_deviation_found (for this bond).
 			 *
-			 *	Returns false, if the AtomContainer is invalid or the processor is in an invalid state.
+			 *	@retval bool - false if the AtomContainer is invalid or the processor is in an invalid state
+			 *	@retval bool - true otherwise
 			 */
 			bool precomputeBondLengthPenalties_();
 
 			/** Adds missing hydrogens as virtual hydrogens to the 
-			 *  given Atom and determines the possible penalty blocks. 
+			 *  given Atom,determines the possible penalty blocks, and 
+			 *  returns the maximal possible atom type penalty.  
 			 *
 			 *  "virtual" means that NO  
 			 *  atoms and bonds are added to the AtomContainer. 
@@ -696,7 +713,7 @@ namespace BALL
 			 */
 			float computeVirtualHydrogens_(Atom* atom);
 
-			/** Apply the given solution.
+			/** Applies the given solution.
 			 */
 			bool apply_(Solution_& solution);
 
@@ -747,7 +764,7 @@ namespace BALL
 			std::vector<int> virtual_bond_index_to_number_of_virtual_hydrogens_;  
 			//	
 			// the number of virtual bonds
-			Position num_of_virtual_bonds_;
+			Size num_of_virtual_bonds_;
 			//
 			// the virtual bond index assigned to this atom!
 			vector<Atom*> virtual_bond_index_to_atom_;
@@ -784,13 +801,13 @@ namespace BALL
 			vector<Solution_> solutions_;
 
 			// the original conformation before we computed anything
-			Solution_ starting_configuration_;
+			Solution_ starting_configuration_; 
 			
 			// the inverse of the atom type penalty normalization factor
 			float atom_type_normalization_factor_;
 
 			// the inverse of the bond length penalty normalization factor
-			float bond_length_normalization_factor_;
+			float bond_length_normalization_factor_; 
 
 			// denotes the index of the last applied solution
 			// -1 if there was no valid solution applied
@@ -828,20 +845,23 @@ namespace BALL
 			// //////// ************ for Algorithm::K_GREEDY ************ /////////
 			vector<PQ_Entry_> performGreedy_(PQ_Entry_& entry, Size greedy_k  = 10);
 			int greedy_node_expansions_;
-			int queue_size_;
-
 			
 			// //////// ************ for Algorithm::A_STAR ************ /////////
 			/// Computes a next solution in the ASTAR - algorithm.
 			bool	performAStarStep_();
+			
+			
+			// ////////              general stuff                      /////////
 
-			/// the priority queue 
+			/// The priority queue. 
 			priority_queue<PQ_Entry_> queue_;
 			
 			/** Estimates the objective function f = g* + h* of the ASTAR - algorithm, if
-			 *  include_heuristic_term == true, otherwise compute only f = g*.
+			 *  include_heuristic_term == true, otherwise compute only f = g*. The
+			 *  result is stored in the PQ_Entry_ entry's member estimated_atom_type_penalty.
 			 *
-			 *  Returns true, if the entry is still valid.
+			 *  @retval bool - true, if the entry is still valid.
+			 *  @retval bool - false otherwise.
 			 */
 			bool estimatePenalty_(PQ_Entry_& entry, bool include_heuristic_term = true);
 		
