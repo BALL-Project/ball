@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading ui file 'raytraceableContourSurfaceDialog.ui'
 **
-** Created: Fri Aug 31 17:37:33 2007
-**      by: Qt User Interface Compiler version 4.2.2
+** Created: Thu Jan 22 22:10:40 2009
+**      by: Qt User Interface Compiler version 4.4.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
 ********************************************************************************/
@@ -20,6 +20,8 @@
 #include <QtGui/QLineEdit>
 #include <QtGui/QPushButton>
 #include <QtGui/QSlider>
+
+QT_BEGIN_NAMESPACE
 
 class Ui_RaytraceableContourSurfaceDialogData
 {
@@ -41,9 +43,10 @@ public:
 
     void setupUi(QDialog *RaytraceableContourSurfaceDialogData)
     {
-    RaytraceableContourSurfaceDialogData->setObjectName(QString::fromUtf8("RaytraceableContourSurfaceDialogData"));
+    if (RaytraceableContourSurfaceDialogData->objectName().isEmpty())
+        RaytraceableContourSurfaceDialogData->setObjectName(QString::fromUtf8("RaytraceableContourSurfaceDialogData"));
     RaytraceableContourSurfaceDialogData->setEnabled(true);
-    RaytraceableContourSurfaceDialogData->setWindowIcon(QIcon());
+    RaytraceableContourSurfaceDialogData->resize(372, 249);
     groupBoxValue = new QGroupBox(RaytraceableContourSurfaceDialogData);
     groupBoxValue->setObjectName(QString::fromUtf8("groupBoxValue"));
     groupBoxValue->setGeometry(QRect(10, 10, 351, 141));
@@ -96,41 +99,96 @@ public:
 
     retranslateUi(RaytraceableContourSurfaceDialogData);
 
-    QSize size(372, 249);
-    size = size.expandedTo(RaytraceableContourSurfaceDialogData->minimumSizeHint());
-    RaytraceableContourSurfaceDialogData->resize(size);
-
-
     QMetaObject::connectSlotsByName(RaytraceableContourSurfaceDialogData);
     } // setupUi
 
     void retranslateUi(QDialog *RaytraceableContourSurfaceDialogData)
     {
     RaytraceableContourSurfaceDialogData->setWindowTitle(QApplication::translate("RaytraceableContourSurfaceDialogData", "Ray-traced Contour Surface Options", 0, QApplication::UnicodeUTF8));
+
+#ifndef QT_NO_TOOLTIP
     RaytraceableContourSurfaceDialogData->setToolTip(QString());
+#endif // QT_NO_TOOLTIP
+
+
+#ifndef QT_NO_TOOLTIP
     groupBoxValue->setToolTip(QApplication::translate("RaytraceableContourSurfaceDialogData", "add contour surface", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+
     groupBoxValue->setTitle(QApplication::translate("RaytraceableContourSurfaceDialogData", "Contour Threshold Value", 0, QApplication::UnicodeUTF8));
+
+#ifndef QT_NO_TOOLTIP
     ContourSurfaceThresholdSlider->setToolTip(QApplication::translate("RaytraceableContourSurfaceDialogData", "choose a contour Surface threshold of value", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+
+
+#ifndef QT_NO_WHATSTHIS
     ContourSurfaceThresholdSlider->setWhatsThis(QApplication::translate("RaytraceableContourSurfaceDialogData", "slider to chose a threshold of a new contour surface", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_WHATSTHIS
+
+
+#ifndef QT_NO_ACCESSIBILITY
     ContourSurfaceThresholdSlider->setAccessibleName(QString());
+#endif // QT_NO_ACCESSIBILITY
+
+
+#ifndef QT_NO_ACCESSIBILITY
     ContourSurfaceThresholdSlider->setAccessibleDescription(QString());
+#endif // QT_NO_ACCESSIBILITY
+
+
+#ifndef QT_NO_TOOLTIP
     ContourSurfaceThresholdLineEdit->setToolTip(QApplication::translate("RaytraceableContourSurfaceDialogData", "contour surface threshold value", "contour surface threshold value", QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+
+
+#ifndef QT_NO_TOOLTIP
     add_button->setToolTip(QString());
+#endif // QT_NO_TOOLTIP
+
     add_button->setText(QApplication::translate("RaytraceableContourSurfaceDialogData", "add", 0, QApplication::UnicodeUTF8));
+
+#ifndef QT_NO_TOOLTIP
     OK_button->setToolTip(QApplication::translate("RaytraceableContourSurfaceDialogData", "add contour surface and close", "add a contour", QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+
     OK_button->setText(QApplication::translate("RaytraceableContourSurfaceDialogData", "OK", 0, QApplication::UnicodeUTF8));
+
+#ifndef QT_NO_TOOLTIP
     cancel_button->setToolTip(QApplication::translate("RaytraceableContourSurfaceDialogData", "cancel dialog", "cancel dialog", QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+
     cancel_button->setText(QApplication::translate("RaytraceableContourSurfaceDialogData", "cancel", 0, QApplication::UnicodeUTF8));
+
+#ifndef QT_NO_TOOLTIP
     groupBoxValue_2->setToolTip(QApplication::translate("RaytraceableContourSurfaceDialogData", "add contour surface", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+
     groupBoxValue_2->setTitle(QApplication::translate("RaytraceableContourSurfaceDialogData", "Contour Threshold Range", 0, QApplication::UnicodeUTF8));
     RangeLabel_min->setText(QApplication::translate("RaytraceableContourSurfaceDialogData", "min", 0, QApplication::UnicodeUTF8));
     RangeLabel_max->setText(QApplication::translate("RaytraceableContourSurfaceDialogData", "max", 0, QApplication::UnicodeUTF8));
     RangeLabel_steps->setText(QApplication::translate("RaytraceableContourSurfaceDialogData", "steps", 0, QApplication::UnicodeUTF8));
+
+#ifndef QT_NO_TOOLTIP
     autoRangeButton->setToolTip(QApplication::translate("RaytraceableContourSurfaceDialogData", "set the contour threshold range to default values", "set the range values to default values", QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+
     autoRangeButton->setText(QApplication::translate("RaytraceableContourSurfaceDialogData", "auto", 0, QApplication::UnicodeUTF8));
+
+#ifndef QT_NO_TOOLTIP
     RangeLineEdit_steps->setToolTip(QApplication::translate("RaytraceableContourSurfaceDialogData", "set the number of steps", "range steps", QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+
+
+#ifndef QT_NO_TOOLTIP
     RangeLineEdit_max->setToolTip(QApplication::translate("RaytraceableContourSurfaceDialogData", "set the maximum theshold", "maximum threshold", QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+
+
+#ifndef QT_NO_TOOLTIP
     RangeLineEdit_min->setToolTip(QApplication::translate("RaytraceableContourSurfaceDialogData", "set the minimum threshold", "minimum threshold", QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+
     Q_UNUSED(RaytraceableContourSurfaceDialogData);
     } // retranslateUi
 
@@ -139,5 +197,7 @@ public:
 namespace Ui {
     class RaytraceableContourSurfaceDialogData: public Ui_RaytraceableContourSurfaceDialogData {};
 } // namespace Ui
+
+QT_END_NAMESPACE
 
 #endif // RAYTRACEABLECONTOURSURFACEDIALOGDATA_H

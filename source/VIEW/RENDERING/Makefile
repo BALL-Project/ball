@@ -14,11 +14,15 @@ THISLIB=$(LIBNAME)
 CPP_SOURCES=\
 	glDisplayList.C\
 	glRenderer.C\
+	glRenderWindow.C\
 	renderer.C\
+	renderWindow.C\
+	pixelFormat.C\
 	POVRenderer.C\
 	STLRenderer.C\
 	VRMLRenderer.C\
 	raytracingRenderer.C\
+	rtfactRenderer.C\
 	vertexBuffer.C
 
 include ../../common.mak

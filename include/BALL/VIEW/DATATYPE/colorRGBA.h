@@ -39,7 +39,7 @@ namespace BALL
 
 			public:
 
-			BALL_CREATE(ColorRGBA)
+//			BALL_CREATE(ColorRGBA)
 
 			/**	@name	Constructors
 			*/	
@@ -109,7 +109,7 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			virtual ~ColorRGBA()
+			~ColorRGBA()
 				throw();
 
 			/** Explicit default initialization.
