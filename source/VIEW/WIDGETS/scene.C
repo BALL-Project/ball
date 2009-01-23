@@ -323,14 +323,18 @@ namespace BALL
 						RepresentationManager& pm = getMainControl()->getRepresentationManager();
 						if (pm.startRendering(rep))
 						{
+#ifndef ENABLE_RAYTRACING
 							gl_renderer_->bufferRepresentation(*rep);
+#endif
 							pm.finishedRendering(rep);
 						}
 						break;
 					}
 
 					case RepresentationMessage::REMOVE:
+#ifndef ENABLE_RAYTRACING
 						gl_renderer_->removeRepresentation(*rep);
+#endif
 						break;
 
 					default:
@@ -576,6 +580,7 @@ namespace BALL
 		void Scene::renderView_(RenderMode mode)
 			throw()
 		{
+#ifndef ENABLE_RAYTRACING
 			makeCurrent();
 
 			if (use_preview_ && preview_) gl_renderer_->setAntialiasing(false);
@@ -696,6 +701,7 @@ namespace BALL
 			content_changed_ = false;
 
 			if (use_preview_ && preview_) gl_renderer_->setAntialiasing(true);
+#endif
 		}
 
 		void Scene::renderRepresentations_(RenderMode mode)
@@ -1441,9 +1447,11 @@ namespace BALL
 
 			rp->setProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM);
 
+#ifndef ENABLE_RAYTRACING
 			// we have to add the representation in the GLRenderer manualy,
 			// because the message wont arrive in Scene::onNotify
 			gl_renderer_->bufferRepresentation(*rp);
+#endif
 
 			// notify GeometricControl
 			notify_(new RepresentationMessage(*rp, RepresentationMessage::ADD));
@@ -3255,6 +3263,9 @@ namespace BALL
 		{
 			if (!draw_grid_) return;
 
+#ifdef ENABLE_RAYTRACING
+Log.error() << "Render grid not yet supported by raytracer!" << std::endl;
+#else
 			const Camera& s = getStage()->getCamera();
 			Vector3 v = s.getViewVector();
 			v.normalize();
@@ -3290,6 +3301,7 @@ namespace BALL
 			}
 
 			gl_renderer_->initSolid();
+#endif
 		}
 
 
