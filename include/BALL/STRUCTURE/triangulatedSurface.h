@@ -92,6 +92,7 @@ namespace BALL
 		 */
 		//@{
 		static TriangulatedSurface* createTube(unsigned int num_vertices, unsigned int subdiv = 0, bool closed = false, bool out = true);
+		static TriangulatedSurface* createDisk(unsigned int num_vertices, bool out = true);
 		//@}
 
 		/**	@name	Assignment

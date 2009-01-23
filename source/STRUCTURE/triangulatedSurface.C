@@ -176,6 +176,52 @@ namespace BALL
 		return result;
 	}
 
+	TriangulatedSurface* TriangulatedSurface::createDisk(unsigned int num_vertices, bool out)
+	{
+		TriangulatedSurface* result = new TriangulatedSurface();
+		result->number_of_points_   = num_vertices + 1;
+		result->number_of_edges_    = 2*num_vertices;
+		result->number_of_triangles_= num_vertices;
+
+		const double angle = 2*M_PI/num_vertices;
+		const TVector3<double> normal(0, 0 , out ? 1 : -1);
+
+		TrianglePoint* center = new TrianglePoint(TVector3<double>(0, 0, 0), normal);
+		result->points_.push_back(center);
+
+		TrianglePoint* p_old = new TrianglePoint(TVector3<double>(1, 0, 0), normal);
+		TrianglePoint* p1 = p_old;
+		result->points_.push_back(p1);
+
+		TriangleEdge* e1 = new TriangleEdge(p1, center);
+		TriangleEdge* e_old = e1;
+		result->edges_.push_back(e1);
+		for(unsigned int i = 1; i < num_vertices; ++i) {
+			TrianglePoint* p     = new TrianglePoint(TVector3<double>(cos(i*angle), sin(i*angle), 0), normal);
+			result->points_.push_back(p);
+
+			TriangleEdge*  e     = new TriangleEdge(p, center);
+			TriangleEdge*  e_top = new TriangleEdge(p, p_old);
+			result->edges_.push_back(e);
+			result->edges_.push_back(e_top);
+
+			Triangle* t = new Triangle(e_old, e_top, e);
+			e_old->face_[1] = e->face_[0] = e_top->face_[0] = t;
+			result->triangles_.push_back(t);
+
+			e_old = e;
+			p_old = p;
+		}
+
+		TriangleEdge* e_top = new TriangleEdge(p1, p_old);
+
+		Triangle* t = new Triangle(e_old, e_top, e1);
+		e_old->face_[1] = e1->face_[0] = e_top->face_[0] = t;
+		result->triangles_.push_back(t);
+
+		return result;
+	}
+
 	void TriangulatedSurface::clear()
 		throw()
 	{
