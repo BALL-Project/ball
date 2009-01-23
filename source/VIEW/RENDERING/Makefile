@@ -25,5 +25,8 @@ CPP_SOURCES=\
 	rtfactRenderer.C\
 	vertexBuffer.C
 
+
 include ../../common.mak
 -include .Dependencies
+
+CXXFLAGS+=-O2
