@@ -91,7 +91,25 @@ namespace BALL
 		/** @name Static Members
 		 */
 		//@{
+
+		/**
+		 * A static function that constructs a triangulated tube. The tube is oriented along the
+		 * z-axis, starts at z=0, ends at z=1 and has radius 1
+		 *
+		 * @param num_vertices The amount of vertices of which the base of the tube is composed
+		 * @param subdiv Controls the amount of subdivisions along the z-axis. Default: 0
+		 * @param closed Should the tube have opend or closed ends? Default: false
+		 * @param out Controls whether the normals of the tube are pointing in or outwards. Default: true
+		 */
 		static TriangulatedSurface* createTube(unsigned int num_vertices, unsigned int subdiv = 0, bool closed = false, bool out = true);
+
+		/**
+		 * A static function that constructs a triangulated disk. The disk lies in the x-y plane
+		 * and has radius 1.
+		 *
+		 * @param num_vertices The amount of vertices of which the border of the disk is composed
+		 * @param out Controls whether the normals of the tube are pointing up or downwards. Default: true
+		 */
 		static TriangulatedSurface* createDisk(unsigned int num_vertices, bool out = true);
 		//@}
 
