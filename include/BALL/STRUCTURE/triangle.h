@@ -88,7 +88,7 @@ namespace BALL
 		 * Its vertices are taken from the edges. This requires the edges
 		 * to be properly oriented in a counter clockwise manner.
 		 */
-		Triangle(TriangleEdge* e1, TriangleEdge* e2, TriangleEdge* e3);
+		Triangle(TriangleEdge* e1, TriangleEdge* e2, TriangleEdge* e3, bool flip_normal = false);
 
 		/**	Copy constructor.
 				Create a new Triangle object from another.

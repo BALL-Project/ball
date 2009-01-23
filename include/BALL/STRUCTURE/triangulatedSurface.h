@@ -88,6 +88,12 @@ namespace BALL
 			throw();
 		//@}
 
+		/** @name Static Members
+		 */
+		//@{
+		static TriangulatedSurface* createTube(unsigned int num_vertices, unsigned int subdiv = 0, bool closed = false, bool out = true);
+		//@}
+
 		/**	@name	Assignment
 		*/
 		//@{
