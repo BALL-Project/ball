@@ -41,6 +41,140 @@ namespace BALL
 		clear();
 	}
 
+	TriangulatedSurface* TriangulatedSurface::createTube(unsigned int num_vertices, unsigned int subdiv, bool closed, bool out)
+	{
+		TriangulatedSurface* result = new TriangulatedSurface();
+		result->number_of_points_ = num_vertices * (subdiv + 2);
+		result->number_of_edges_ =  num_vertices * (3 * subdiv + 4) + (closed ? 2*num_vertices : 0);
+		result->number_of_triangles_ = 2 * num_vertices * (subdiv + 1);
+
+		std::vector<TrianglePoint*> points(result->number_of_points_);
+		std::vector<TriangleEdge*> edges(result->number_of_edges_);
+		std::vector<Triangle*> triangles(result->number_of_triangles_);
+
+		const double angle = 2*M_PI/num_vertices;
+		const double spacing = 1./(subdiv + 1);
+
+		for(unsigned int i = 0; i < num_vertices; ++i) {
+			for(unsigned int j = 0; j < subdiv + 2; ++j) {
+				TVector3<double> coords(cos(i*angle), sin(i*angle), j*spacing);
+				points[i + j*num_vertices] = new TrianglePoint(coords, out ? coords : -coords);
+			}
+		}
+
+		for(unsigned int j = 0; j < subdiv + 1; ++j) {
+			for(unsigned int i = 0; i < num_vertices - 1; ++i) {
+				TriangleEdge* e1 = new TriangleEdge(points[num_vertices * j + i],       points[num_vertices * j + i + 1]);
+				TriangleEdge* e2 = new TriangleEdge(points[num_vertices * j + i + 1],   points[num_vertices * (j + 1) + i + 1]);
+				TriangleEdge* e3 = new TriangleEdge(points[num_vertices * (j + 1) + i + 1], points[num_vertices * j + i]);
+				edges[num_vertices * j + i] = e1;
+				edges[(  subdiv+2 + j) * num_vertices + i] = e2;
+				edges[(2*subdiv+3 + j) * num_vertices + i] = e3;
+
+				Triangle* t = new Triangle(e1, e2, e3, true);
+
+				triangles[2*num_vertices*j + 2*i] = t;
+			}
+
+			TriangleEdge* e1 = new TriangleEdge(points[num_vertices * j + num_vertices - 1], points[num_vertices * j ]);
+			TriangleEdge* e2 = new TriangleEdge(points[num_vertices * j],                    points[num_vertices * (j + 1) ]);
+			TriangleEdge* e3 = new TriangleEdge(points[num_vertices * (j + 1)],              points[num_vertices * j + num_vertices - 1]);
+			edges[num_vertices * j + num_vertices - 1] = e1;
+			edges[(  subdiv+2 + j) * num_vertices + num_vertices - 1] = e2;
+			edges[(2*subdiv+3 + j) * num_vertices + num_vertices - 1] = e3;
+
+			Triangle* t = new Triangle(e1, e2, e3, true);
+			e1->face_[0] = e2->face_[0] = e3->face_[0] = t;
+
+			triangles[2*num_vertices*j + 2*(num_vertices - 1)] = t;
+		}
+
+		for(unsigned int i = 0; i < num_vertices - 1; ++i) {
+			edges[num_vertices * (subdiv + 1) + i] = new TriangleEdge(points[num_vertices * (subdiv+1) + i], points[num_vertices * (subdiv+1) + i +1]);
+		}
+
+		edges[num_vertices * (subdiv + 1) + num_vertices - 1] = new TriangleEdge(points[num_vertices * (subdiv+1) + num_vertices - 1],
+		                                                                         points[num_vertices * (subdiv+1)]);
+
+		for(int i = num_vertices - 1; i >= 0; --i) {
+			TriangleEdge* e1 = edges[num_vertices * (subdiv + 1) + i];
+			TriangleEdge* e2 = edges[(2*subdiv + 3 + subdiv) * num_vertices + i];
+			TriangleEdge* e3 = edges[(  subdiv + 2 + subdiv) * num_vertices + i];
+
+			Triangle* t = new Triangle(e1, e2, e3);
+
+			e1->face_[0] = e2->face_[0] = e3->face_[0] = t;
+
+			triangles[2*num_vertices*subdiv + 2*i + 1] = t;
+		}
+
+		for(unsigned int j = subdiv; j > 0; --j) {
+			for(int i = num_vertices - 1; i >= 0; --i) {
+				TriangleEdge* e1 = edges[num_vertices * j + i];
+				TriangleEdge* e2 = edges[(2*subdiv + 3 + j - 1) * num_vertices + i];
+				TriangleEdge* e3 = edges[(  subdiv + 2 + j - 1) * num_vertices + i];
+
+				Triangle* t = new Triangle(e1, e2, e3);
+
+				e1->face_[1] = e2->face_[1] = e3->face_[1] = t;
+
+				triangles[2*num_vertices*(j-1) + 2*i + 1] = t;
+			}
+		}
+
+		std::copy(triangles.begin(), triangles.end(), std::back_inserter(result->triangles_));
+
+		if(closed) {
+			TrianglePoint* p1 = new TrianglePoint(TVector3<double>(0, 0, 0), out ? TVector3<double>(0,0,-1) : TVector3<double>(0,0,1));
+			TrianglePoint* p2 = new TrianglePoint(TVector3<double>(0, 0, 1), out ? TVector3<double>(0,0,1) : TVector3<double>(0,0,-1));
+			result->points_.push_back(p1);
+			result->points_.push_back(p2);
+
+			TriangleEdge* e_old1 = new TriangleEdge(p1, points[0]);
+			TriangleEdge* e_old2 = new TriangleEdge(p2, points[num_vertices * (subdiv + 1)]);
+			edges[num_vertices * (3*subdiv + 4)] = e_old1;
+			edges[num_vertices * (3*subdiv + 4) + num_vertices] = e_old2;
+			for(unsigned int i = 1; i < num_vertices; ++i) {
+				TriangleEdge* e_new1 = new TriangleEdge(p1, points[i]);
+				edges[num_vertices * (3*subdiv + 4) + i] = e_new1;
+
+				TriangleEdge* e_new2 = new TriangleEdge(p2, points[num_vertices * (subdiv + 1) + i]);
+				edges[num_vertices * (3*subdiv + 4) + num_vertices + i] = e_new2;
+
+				TriangleEdge* e_top1 = edges[i - 1];
+				Triangle* t = new Triangle(e_old1, e_top1, e_new1);
+				e_old1->face_[1] = e_top1->face_[1] = e_new1->face_[0] = t;
+				result->triangles_.push_front(t);
+
+				TriangleEdge* e_top2 = edges[(subdiv + 1)*num_vertices + i - 1];
+				t = new Triangle(e_old2, e_top2, e_new2, true);
+				e_old2->face_[1] = e_top2->face_[1] = e_new2->face_[0] = t;
+				result->triangles_.push_back(t);
+
+				e_old1 = e_new1;
+				e_old2 = e_new2;
+			}
+
+			TriangleEdge* e_new1 = edges[num_vertices * (3*subdiv + 4)];
+			TriangleEdge* e_new2 = edges[num_vertices * (3*subdiv + 5)];
+
+			TriangleEdge* e_top1 = edges[             num_vertices - 1];
+			TriangleEdge* e_top2 = edges[(subdiv + 2)*num_vertices - 1];
+
+			Triangle* t = new Triangle(e_old1, e_top1, e_new1);
+			e_old1->face_[1] = e_top1->face_[1] = e_new1->face_[0] = t;
+			result->triangles_.push_front(t);
+
+			t = new Triangle(e_old2, e_top2, e_new2, true);
+			e_old2->face_[1] = e_top2->face_[1] = e_new2->face_[0] = t;
+			result->triangles_.push_back(t);
+		}
+
+		std::copy(points.begin(), points.end(), std::back_inserter(result->points_));
+		std::copy(edges.begin(), edges.end(), std::back_inserter(result->edges_));
+
+		return result;
+	}
 
 	void TriangulatedSurface::clear()
 		throw()

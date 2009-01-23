@@ -23,15 +23,21 @@ namespace BALL
 		vertex_[2] = v3;
 	}
 
-	Triangle::Triangle(TriangleEdge* e1, TriangleEdge* e2, TriangleEdge* e3)
+	Triangle::Triangle(TriangleEdge* e1, TriangleEdge* e2, TriangleEdge* e3, bool flip_normal)
 		:	GraphTriangle< TrianglePoint,TriangleEdge,Triangle >()
 	{
 		edge_[0] = e1;
 		edge_[1] = e2;
 		edge_[2] = e3;
 
-		vertex_[0] = e1->vertex_[0];
-		vertex_[1] = e1->vertex_[1];
+		if(flip_normal) {
+			vertex_[0] = e1->vertex_[1];
+			vertex_[1] = e1->vertex_[0];
+		} else {
+			vertex_[0] = e1->vertex_[0];
+			vertex_[1] = e1->vertex_[1];
+		}
+
 		vertex_[2] = ((e2->vertex_[0] != e1->vertex_[0]) &&
 		              (e2->vertex_[0] != e1->vertex_[1]))
 		             ? e2->vertex_[0]
