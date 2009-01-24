@@ -8,6 +8,7 @@
 #define BALL_PYTHON_PYLIST_HELPER
 
 #include <BALL/DATATYPE/regularData3D.h>
+#include <BALL/DATATYPE/list.h>
 
 namespace BALL 
 {
