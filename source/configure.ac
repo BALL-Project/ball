@@ -240,7 +240,7 @@ else
 	UIC=uic
 fi
 
-if test "$with_rcc" != "" ; then	
+if test "$with_rcc" != "" ; then
 	RCC=$with_rcc
 else
 	RCC=rcc
@@ -620,6 +620,12 @@ dnl GSL -- The GNU Scientific Library
 dnl
 if test "${GSL_SUPPORT}" == true ; then
 	CF_GSL
+fi
+
+dnl Spacenavigator input plugin support
+dnl
+if test "${SPACENAV_SUPPORT}" == true ; then
+	CF_SPACENAV
 fi
 
 dnl
