@@ -11,6 +11,9 @@ DIRECTORY=VIEW/RENDERING
 
 THISLIB=$(LIBNAME)
 
+VIEW_RENDERING_SUBDIRS=\
+	RENDERERS
+
 CPP_SOURCES=\
 	glDisplayList.C\
 	glRenderer.C\
@@ -22,11 +25,32 @@ CPP_SOURCES=\
 	STLRenderer.C\
 	VRMLRenderer.C\
 	raytracingRenderer.C\
-	rtfactRenderer.C\
 	vertexBuffer.C
-
 
 include ../../common.mak
 -include .Dependencies
 
-CXXFLAGS+=-O2
+depend:	subdirsdepend
+
+default_clean:	subdirsclean
+
+collectlib: subdirscollectlib
+
+dirs: dummy
+	@$(MAKE) subdirs SUBDIRS="$(VIEW_RENDERING_SUBDIRS)" TARGET=default
+
+subdirs:	dummy
+	@set -e; for i in $(SUBDIRS); do cd $$i; if $(MAKE) $(TARGET); then cd .. ; else cd .. ; exit 1 ; fi ; done
+
+subdirsdepend:	dummy
+	@echo "" > .Dependencies
+	@for i in $(VIEW_RENDERING_SUBDIRS); do ( cd $$i; echo "" >.Dependencies; cd .. ) ; done
+	@$(MAKE) subdirs SUBDIRS="$(VIEW_RENDERING_SUBDIRS)" TARGET=depend
+
+subdirsclean:
+	@$(MAKE) subdirs SUBDIRS="$(VIEW_RENDERING_SUBDIRS)" TARGET=default_clean
+
+subdirscollectlib:	dummy
+	@$(MAKE) subdirs SUBDIRS="$(VIEW_RENDERING_SUBDIRS)" TARGET=collectlib LIBNAME="$(THISLIB)"
+
+dummy:
