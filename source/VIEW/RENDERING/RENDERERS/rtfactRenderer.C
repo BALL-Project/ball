@@ -170,6 +170,7 @@ namespace BALL
 							RTAppearanceHandle material = m_renderer.createAppearance("PhongShader");
 							material->setParam("ambientIntensity", float3(0.25, 0.25, 0.25));
 							material->setParam("specularColor", float3(0.774597, 0.774597, 0.774597));
+							material->setParam("reflective", float3(0.0, 0.0, 0.0));
 							material->setParam("shininess", (float)76.8);
 
 							GeoHandle handle;
@@ -205,7 +206,6 @@ namespace BALL
 							float const* normals  = reinterpret_cast<float const*>(&(sphere_template_.normal[0]));
 							Index const* indices  = reinterpret_cast<Index const*>(&(sphere_template_.triangle[0]));
 
-							// TEST
 							ColorRGBA const& color = sphere.getColor();
 
 							RTAppearanceHandle material = m_renderer.createAppearance("PhongShader");
@@ -228,46 +228,57 @@ namespace BALL
 
 						if (RTTI::isKindOf<TwoColoredTube>(**it))
 						{
-							TwoColoredTube const& tube = *(const TwoColoredTube*)*it;
+							TwoColoredTube const& old_tube = *(const TwoColoredTube*)*it;
 
 							float const* vertices = reinterpret_cast<float const*>(&(tube_template_.vertex[0]));
 							float const* normals  = reinterpret_cast<float const*>(&(tube_template_.normal[0]));
 							Index const* indices  = reinterpret_cast<Index const*>(&(tube_template_.triangle[0]));
 
-							// TEST
-							std::vector<ColorRGBA> new_colors(tube_template_.vertex.size());
-							Size num_triangles = tube_template_.triangle.size();
+							// we will produce two tubes using the same vertex/normal/color values, just with the correct offsets
+							ColorRGBA const& color1 = old_tube.getColor();
+							ColorRGBA const& color2 = old_tube.getColor2();
 
-							for (Position i=0; i<num_triangles/2; ++i)
+							RTAppearanceHandle material_1 = m_renderer.createAppearance("PhongShader");
+							material_1->setParam("diffuseColor", float3(color1.getRed(), color1.getGreen(), color1.getBlue()));
+							material_1->setParam("ambientIntensity", float3(0.25, 0.25, 0.25));
+							material_1->setParam("specularColor", float3(0.774597, 0.774597, 0.774597));
+							material_1->setParam("shininess", (float)76.8);
+							material_1->setParam("useVertexColor", false);
+
+							GeoHandle handle_1 = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)tube_template_.triangle.size(), material_1);
+
+							if (color1 == color2)
 							{
-								Surface::Triangle const& t = tube_template_.triangle[i];
-								new_colors[t.v1] = tube.getColor();
-								new_colors[t.v2] = tube.getColor();
-								new_colors[t.v3] = tube.getColor();
-							}
+								GroupHandle tubeGroup = transformTube(old_tube);
+								tubeGroup->add(handle_1);
 
-							for (Position i=num_triangles/2; i<num_triangles; ++i)
+								m_renderer.getRoot()->add(tubeGroup);
+							} 
+							else 
 							{
-								Surface::Triangle const& t = tube_template_.triangle[i];
-								new_colors[t.v1] = tube.getColor2();
-								new_colors[t.v2] = tube.getColor2();
-								new_colors[t.v3] = tube.getColor2();
+								RTAppearanceHandle material_2 = m_renderer.createAppearance("PhongShader");
+								material_2->setParam("diffuseColor", float3(color2.getRed(), color2.getGreen(), color2.getBlue()));
+								material_2->setParam("ambientIntensity", float3(0.25, 0.25, 0.25));
+								material_2->setParam("specularColor", float3(0.774597, 0.774597, 0.774597));
+								material_2->setParam("shininess", (float)76.8);
+								material_2->setParam("useVertexColor", false);
+
+								GeoHandle handle_2 = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)tube_template_.triangle.size(), material_2);
+
+								TwoColoredTube new_tube = old_tube;
+								new_tube.setVertex2(old_tube.getMiddleVertex());
+
+								GroupHandle tubeGroup_1 = transformTube(new_tube);
+								tubeGroup_1->add(handle_1);
+
+								new_tube.setVertex1(old_tube.getVertex2());
+								new_tube.setVertex2(old_tube.getMiddleVertex());
+								GroupHandle tubeGroup_2 = transformTube(new_tube);
+								tubeGroup_2->add(handle_2);
+
+								m_renderer.getRoot()->add(tubeGroup_1);
+								m_renderer.getRoot()->add(tubeGroup_2);
 							}
-
-							float const* colors  = reinterpret_cast<float const*>(&(new_colors[0]));
-
-							RTAppearanceHandle material = m_renderer.createAppearance("PhongShader");
-							material->setParam("diffuseColor", float3(0.4, 0.4, 0.4));
-							material->setParam("ambientIntensity", float3(0.25, 0.25, 0.25));
-							material->setParam("specularColor", float3(0.774597, 0.774597, 0.774597));
-							material->setParam("shininess", (float)76.8);
-							material->setParam("useVertexColor", true);
-
-							GeoHandle handle   = m_renderer.createGeometry(vertices, normals, colors, (const unsigned int*)indices, (unsigned int)tube_template_.triangle.size(), material);
-
-							GroupHandle tubeGroup = transformTube(tube);
-							tubeGroup->add(handle);
-							m_renderer.getRoot()->add(tubeGroup);
 						}
 
 					}
