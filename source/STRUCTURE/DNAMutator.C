@@ -104,7 +104,7 @@ namespace BALL
 		prop_ = p;
 	}
 
-	void DNAMutator::mutate(Fragment* res, Base base, bool optimize) throw(Exception::InvalidOption)
+	void DNAMutator::mutate(Fragment* res, Base base) throw(Exception::InvalidOption)
 	{
 		setup();
 
@@ -117,7 +117,7 @@ namespace BALL
 		}
 
 		//Get everything needed from the input residue
-		Atom* res_at = selectBaseAtoms(res);
+		Atom* res_at = markBaseAtoms(res);
 		if(!res_at) {
 			throw Exception::InvalidOption(__FILE__, __LINE__, "Could not select the base. Did you specify a valid nucleotide?");
 		}
@@ -131,7 +131,7 @@ namespace BALL
 		Vector3 res_connection = res_connection_at->getPosition() - res_at->getPosition();
 
 		//Get everything needed from the output fragment
-		Atom* frag_at = selectBaseAtoms(frag);
+		Atom* frag_at = markBaseAtoms(frag);
 		if(!frag_at) {
 			throw Exception::InvalidOption(__FILE__, __LINE__, "Could not select the base in the new nucleotide.");
 		}
@@ -147,7 +147,7 @@ namespace BALL
 		//We do not need the atoms of the sugar backbone any longer, this is important
 		//for the RMSDMinimizer to work
 
-		frag->removeUnselected();
+		frag->removeNotHavingProperty(prop_);
 
 		if(isPurine(*frag_at) == isPurine(*res_at)) {
 			rotateSameBases(frag, res);
@@ -156,7 +156,7 @@ namespace BALL
 		}
 
 		//Now it is save to delete the base atoms of the input residue
-		res->removeSelected();
+		res->removeHavingProperty(prop_);
 		res->setName(frag->getName());
 
 		res->splice(*frag);
@@ -172,13 +172,29 @@ namespace BALL
 			}
 		}
 
-		res->deselect();
+		unmark_(res);
+	}
+
+	void DNAMutator::mark_(AtomContainer* atoms)
+	{
+		for(AtomIterator it = atoms->beginAtom(); +it; ++it) {
+			it->setProperty(prop_);
+		}
+	}
+
+	void DNAMutator::unmark_(AtomContainer* atoms)
+	{
+		for(AtomIterator it = atoms->beginAtom(); +it; ++it) {
+			it->clearProperty(prop_);
+		}
 	}
 
 	bool DNAMutator::optimize_(Fragment* frag)
 	{
 		ff_->setup(*frag->getAtom(0)->getMolecule()->getSystem());
 		minimizer_->setup(*ff_);
+
+		std::cout << "Setup of minimizer completed" << std::endl;
 
 		frag->select();
 		if(!minimizer_->isValid()) {
@@ -221,20 +237,20 @@ namespace BALL
 		return NULL;
 	}
 
-	Atom* DNAMutator::selectBaseAtoms(AtomContainer* res)
+	Atom* DNAMutator::markBaseAtoms(AtomContainer* res)
 	{
-		res->deselect();
+		unmark_(res);
 		Atom* n = getAttachmentAtom(res);
 
 		if(!n) {
 			throw Exception::InvalidOption(__FILE__, __LINE__, "Invalid residue specified");
 		}
 
-		n->select();
+		n->setProperty(prop_);
 
 		/*
 		 * The sugar backbone should not contain a nitrogen. So lets simply
-		 * select a nitrogen != n and do a BFS to select the remaining base atoms
+		 * mark a nitrogen != n and do a BFS to mark the remaining base atoms
 		 */
 		std::list<Atom*> queue;
 		for(AtomIterator it = res->beginAtom(); +it; ++it) {
@@ -252,12 +268,12 @@ namespace BALL
 			Atom* current = queue.front();
 			queue.pop_front();
 
-			current->select();
+			current->setProperty(prop_);
 
 			int num_bonds = current->countBonds();
 			for(int i = 0; i < num_bonds; ++i) {
 				Atom* partner = current->getPartnerAtom(i);
-				if(!partner->isSelected()) {
+				if(!partner->hasProperty(prop_)) {
 					queue.push_back(partner);
 				}
 			}
@@ -275,7 +291,7 @@ namespace BALL
 
 		while((i < 2) && (it != at->endBond())) {
 			const Atom* partner = it->getBoundAtom(*at);
-			if(partner->isSelected()) {
+			if(partner->hasProperty(prop_)) {
 				dists[i] = partner->getPosition() - at->getPosition();
 				++i;
 			}
@@ -289,7 +305,7 @@ namespace BALL
 	{
 		for(AtomBondIterator it = at->beginBond(); +it; ++it) {
 			Atom* partner = it->getBoundAtom(*at);
-			if(!partner->isSelected()) {
+			if(!partner->hasProperty(prop_)) {
 				return partner;
 			}
 		}
@@ -310,7 +326,7 @@ namespace BALL
 	/*
 	 * This function is not a member function as it is not possible to create a Matrix4x4 forward declaration
 	 * It is needed as the TransformationProcessor applies its transformation to all atoms in an atom container
-	 * and not only the selected ones.
+	 * and not only the marked ones.
 	 */
 	void applyTrafoToList_(const Matrix4x4& trafo, const std::list<Atom*>& atoms)
 	{
@@ -328,14 +344,15 @@ namespace BALL
 		std::list<Atom*> atoms;
 		AtomIterator it;
 		BALL_FOREACH_ATOM(*res, it) {
-			if(it->isSelected()) {
+			if(it->hasProperty(prop_)) {
 				atoms.push_back(&*it);
 			}
 		}
 
-		res->deselect();
-
 		ff_->setup(*res->getAtom(0)->getMolecule()->getSystem());
+
+		res->select();
+
 		double e1 = ff_->updateEnergy();
 
 		Matrix4x4 trans_fwd = Matrix4x4::getIdentity();
@@ -351,6 +368,8 @@ namespace BALL
 		applyTrafoToList_(rotate, atoms);
 
 		double e2 = ff_->updateEnergy();
+
+		res->deselect();
 
 		Log.warn() << "Energies: " << e1 << " " << e2 << "\n";
 

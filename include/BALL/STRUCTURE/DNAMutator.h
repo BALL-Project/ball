@@ -76,17 +76,9 @@ namespace BALL
 			 * @param base A string specifiying the base which will be used to replace
 			 *        the current one. Can be one of "A", "T", "G", "C" and "U".
 			 *
-			 * @param optimize This flag indicates whether the new base should undergo a
-			 *        local optimization. Note that if you decide against a reoptimization
-			 *        only geometric properties of the original base are taken into consideration, which
-			 *        might be _very_ crude.
-			 *        In order to be able to perform an optimization you must provide the mutator
-			 *        with a valid instance of an EnergyMinimizer via the constructor or
-			 *				DNAMutator::setMinimizer()
-			 *
 			 * @todo - Add capabilities into the FragmentDB that allows the retrival of Molecule type information
 			 */
-			void mutate(Fragment* res, Base base, bool optimize=true) throw(Exception::InvalidOption);
+			void mutate(Fragment* res, Base base) throw(Exception::InvalidOption);
 
 			/*
 			 * Set the current minimizer to mini. Passing NULL will disable
@@ -136,8 +128,8 @@ namespace BALL
 			void freeDB_();
 			void freeFF_();
 
-			void mark_();
-			void unmark_();
+			void mark_(AtomContainer* atoms);
+			void unmark_(AtomContainer* atoms);
 
 			void tryFlip_(Fragment* res, const Vector3& connect_atom, const Vector3& axis) const;
 
@@ -158,7 +150,7 @@ namespace BALL
 			 * Selects the atoms in a base. If succesfull it returns
 			 * the pointer to the attachment nitrogen.
 			 */
-			Atom* selectBaseAtoms(AtomContainer* res);
+			Atom* markBaseAtoms(AtomContainer* res);
 
 			void rotateBases(AtomContainer* from, const Atom* from_at, const Atom* to_at,
 			                 const Vector3& from_connection, const Vector3& to_connection);
