@@ -1397,6 +1397,12 @@ B		*/
 			return CompositeConstReverseIterator(beginComposite());
 		}
 
+		/*
+		 * This function removes and deletes all composites that are
+		 * supplied in the list of children.
+		 */
+		void deleteChildrenList_(std::list<Composite*>& composites);
+
 		private:
 		
 		///
@@ -1433,8 +1439,6 @@ B		*/
 		void determineSelection_() throw();
 		void select_(bool update_parent = true) throw();
 		void deselect_(bool update_parent = true) throw();
-
-		void deleteChildrenList_(std::list<Composite*>& composites);
 
 		// private attributes
 		
