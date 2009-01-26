@@ -313,6 +313,11 @@ namespace BALL
 		bool remove(Atom& atom)
 			throw();
 
+		Size removeHavingProperty(BALL::Property p);
+		Size removeNotHavingProperty(BALL::Property p);
+		Size removeHavingProperty(const string& name);
+		Size removeNotHavingProperty(const string& name);
+
 		/** Prepend an AtomContainer at position 0.
 				@param atom_container the AtomContainer to prepend
 		*/

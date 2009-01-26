@@ -328,6 +328,78 @@ namespace BALL
 		return Composite::removeChild(atom);
 	}
 
+	Size AtomContainer::removeHavingProperty(BALL::Property p)
+	{
+		// Collect all unselected composites in a list.
+		std::list<Composite*> atoms;
+		for (AtomIterator ai = beginAtom(); +ai; ++ai)
+		{
+			if (ai->hasProperty(p))
+			{
+				atoms.push_back(&*ai);
+			}
+		}
+
+		deleteChildrenList_(atoms);
+
+		// Return the number of composites deleted.
+		return atoms.size();
+	}
+
+	Size AtomContainer::removeNotHavingProperty(BALL::Property p)
+	{
+		// Collect all unselected composites in a list.
+		std::list<Composite*> atoms;
+		for (AtomIterator ai = beginAtom(); +ai; ++ai)
+		{
+			if (!ai->hasProperty(p))
+			{
+				atoms.push_back(&*ai);
+			}
+		}
+
+		deleteChildrenList_(atoms);
+
+		// Return the number of composites deleted.
+		return atoms.size();
+	}
+
+	Size AtomContainer::removeHavingProperty(const string& name)
+	{
+		// Collect all unselected composites in a list.
+		std::list<Composite*> atoms;
+		for (AtomIterator ai = beginAtom(); +ai; ++ai)
+		{
+			if (ai->hasProperty(name))
+			{
+				atoms.push_back(&*ai);
+			}
+		}
+
+		deleteChildrenList_(atoms);
+
+		// Return the number of composites deleted.
+		return atoms.size();
+	}
+
+	Size AtomContainer::removeNotHavingProperty(const string& name)
+	{
+		// Collect all unselected composites in a list.
+		std::list<Composite*> atoms;
+		for (AtomIterator ai = beginAtom(); +ai; ++ai)
+		{
+			if (!ai->hasProperty(name))
+			{
+				atoms.push_back(&*ai);
+			}
+		}
+
+		deleteChildrenList_(atoms);
+
+		// Return the number of composites deleted.
+		return atoms.size();
+	}
+
 	void AtomContainer::prepend(AtomContainer& atom_container)
 		throw()
 	{
