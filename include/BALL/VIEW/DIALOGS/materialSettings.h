@@ -52,8 +52,7 @@ namespace BALL
 			~MaterialSettings() {}
 
 			/// Apply the new values to the stage
-			void apply()
-				throw();
+			void apply();
 
 			public slots:
 
@@ -61,10 +60,21 @@ namespace BALL
 			virtual void diffuseChanged();
 			virtual void specularChanged();
 			virtual void shininessChanged();
+			virtual void ambientFactorChanged();
+			virtual void specularityFactorChanged();
+			virtual void reflectivenessFactorChanged();
+			virtual void shininessFactorChanged();
+			virtual void updateDirectlyBoxChanged();
+			virtual void spherePointsChanged();
+			virtual void tubePointsChanged();
+			virtual void editAmbientColor();
+			virtual void editSpecularityColor();
+			virtual void editReflectivenessColor();
+			virtual void editShininessColor();
 
 			private:
 
-			void setValues_(const QSlider& slider, QLabel& label);
+			void setValues_(const QSlider& slider, QLabel& label, int divisor);
 		};
 
 	}
