@@ -37,8 +37,9 @@ namespace BALL
 			// signals and slots connections
 			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( cancelPreferences() ) );
 			connect( defaults_button, SIGNAL( clicked() ), this, SLOT( setDefaultValues() ) );
-			connect(entries_listview, SIGNAL(itemSelectionChanged()), this, SLOT(entrySelected()));
+			connect( entries_listview, SIGNAL(itemSelectionChanged()), this, SLOT(entrySelected()));
 			connect( help_button, SIGNAL( clicked() ), this, SLOT( showHelp() ) );
+			//connect( apply_button, SIGNAL( clicked() ), this, SLOT( apply() ) );
 		}
 
 		Preferences::~Preferences()
