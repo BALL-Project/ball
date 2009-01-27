@@ -70,7 +70,6 @@ namespace BALL
 			virtual void editAmbientColor();
 			virtual void editSpecularityColor();
 			virtual void editReflectivenessColor();
-			virtual void editShininessColor();
 
 			private:
 

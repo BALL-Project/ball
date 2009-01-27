@@ -28,7 +28,6 @@ namespace BALL
 			setColor(ambient_color_label, ColorRGBA(1.0, 1.0, 1.0));
 			setColor(reflectiveness_color_label, ColorRGBA(1.0, 1.0, 1.0));
 			setColor(specularity_color_label, ColorRGBA(1.0, 1.0, 1.0));
-			setColor(shininess_color_label, ColorRGBA(1.0, 1.0, 1.0));
 
 			// signals and slots connections
 			connect( specular_slider, SIGNAL( valueChanged(int) ), this, SLOT( specularChanged() ) );
@@ -50,7 +49,6 @@ namespace BALL
 			connect( ambient_color_button, SIGNAL( clicked() ), this, SLOT( editAmbientColor() ) );
 			connect( specularity_color_button, SIGNAL(clicked()), this, SLOT( editSpecularityColor() ) );
 			connect( reflectiveness_color_button, SIGNAL(clicked()), this, SLOT( editReflectivenessColor() ) );
-			connect( shininess_color_button, SIGNAL(clicked()), this, SLOT( editShininessColor() ) );
 
 			registerWidgets_();
 		}
@@ -169,7 +167,6 @@ namespace BALL
 				ColorRGBA color  = VIEW::getColor(ambient_color_label);
 				ColorRGBA color2 = VIEW::getColor(specularity_color_label);
 				ColorRGBA color3 = VIEW::getColor(reflectiveness_color_label);
-				ColorRGBA color4 = VIEW::getColor(shininess_color_label);
 std::cout << " RTFact read __all__ values!" << std::endl;
 				apply();
 			}
@@ -259,12 +256,6 @@ std::cout << " RTFact read __all__ values!" << std::endl;
 			std::cout << "Reflectiveness color is " << color.rgb() << std::endl;
 		}
 		
-		void MaterialSettings::editShininessColor()
-		{
-			QColor color = VIEW::chooseColor(shininess_color_label);
-			std::cout << "Shininess color is " << color.rgb() << std::endl;
-		}
-
 		
 	} // namespace VIEW
 } // namespace BALL
