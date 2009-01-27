@@ -227,9 +227,13 @@ namespace BALL
 	{
 #ifdef BALL_HAS_LPSOLVE
 		if (abop.ilp_)
+		{
 			ilp_ = copy_lp(abop.ilp_);
+		}
 		else
+		{
 			ilp_ = 0;
+		}
 #endif
 	}
 
@@ -241,7 +245,9 @@ namespace BALL
 
 #ifdef BALL_HAS_LPSOLVE
 		if (ilp_)
+		{
 			delete_lp(ilp_);
+		}
 #endif
 	}
 
@@ -301,11 +307,18 @@ namespace BALL
 		timer_ = abop.timer_;
 
 #ifdef BALL_HAS_LPSOLVE
-		// TODO: if this class already had an ilp, do we need to delete it?
+		if (ilp_)
+		{
+			delete_lp(ilp_);
+		}
 		if (abop.ilp_)
+		{
 			ilp_ = copy_lp(abop.ilp_);
+		}
 		else
+		{
 			ilp_ = 0;
+		}
 #endif
 
 		return *this;
@@ -358,9 +371,13 @@ namespace BALL
 		step_ = 0;
 		timer_.clear(); 
 
-		#ifdef BALL_HAS_LPSOLVE
-			ilp_ = NULL;
-		#endif
+#ifdef BALL_HAS_LPSOLVE
+		if (ilp_)
+		{
+			delete_lp(ilp_);
+		}
+		ilp_ = 0;
+#endif
 	}
 		
 	bool AssignBondOrderProcessor::readOptions_()
@@ -420,7 +437,7 @@ namespace BALL
 
 	bool AssignBondOrderProcessor::start()
 	{
-		clear();	
+		clear();
 		valid_ = readAtomPenalties_();
 		evaluation_mode_ = false;
 		return true;
@@ -1083,7 +1100,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 						// Get a first solution
 						found_a_sol = createILP_();
 						found_a_sol &= solveILP_();
-					#else
+#else
 						Log.error() << "Error: BALL was configured without lpsolve support! Try A_STAR instead!" << 
 												__FILE__ << " " << __LINE__<< std::endl;
 #endif
@@ -1139,7 +1156,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 	}
 	
 	bool AssignBondOrderProcessor::finish()
-	{		
+	{
 		return true;
 	}
 
@@ -2695,6 +2712,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 	bool AssignBondOrderProcessor::solveILP_()
 	{
 		Solution_ solution;
+
 		// Let lp_solve solve our problem
 		int ret = solve(ilp_);
 
