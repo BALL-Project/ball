@@ -661,7 +661,7 @@ cout << ")" << endl;
 			if (bond_fixed_[index_to_bond_[entry.last_bond]])
 			{
 				// Store this bond order in all nodes of our k-greedy-set
-				Size min_size = std::min(greedy_set.size(), greedy_k);
+				Size min_size = std::min((Size)greedy_set.size(), greedy_k);
 
 				for (Size j=0; j < min_size; j++)
 				{
