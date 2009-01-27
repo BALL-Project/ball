@@ -54,10 +54,12 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					There are three buttons:
-						-  apply - apply the preferences
+					There are five buttons:
+					  -  ok    - apply the preferences
+						-  apply - apply the preferences, but do no close the window
 						-  cancel - hide the preferences dialog
 						-  defaults - reset the values of the currently selected page
+						-  help  - get help
 					\param       parent the parent QWidget (See QTabDialog in the QT documentation)
 					\param       name (See QDialog in the QT documentation)
 			*/
