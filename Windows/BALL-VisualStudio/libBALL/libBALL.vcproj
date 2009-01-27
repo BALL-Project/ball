@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="libBALL"
 	ProjectGUID="{19709205-47E2-45A3-A266-3488F113508D}"
 	RootNamespace="libBALL"
@@ -132,7 +132,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(SolutionDir)\..\Contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\Python&quot;;.\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtSql&quot;;$(QTDIR)\include\QtNetwork"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(SolutionDir)\..\Contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\boost\tr1&quot;;&quot;$(SolutionDir)\..\Contrib\include\Python&quot;;.\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;"
 				PreprocessorDefinitions="WIN32;QT_THREAD_SUPPORT;QT_CORE_LIB;QT_SQL_LIB;LIBBALL_LIB;BALL_BUILD_DLL;QT_NETWORK_LIB"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
@@ -1728,11 +1728,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\SYSTEM\path.h"
+					RelativePath="..\..\..\include\BALL\SYSTEM\networking.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\SYSTEM\socket.h"
+					RelativePath="..\..\..\include\BALL\SYSTEM\path.h"
 					>
 				</File>
 				<File
@@ -8228,7 +8228,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\SYSTEM\path.C"
+					RelativePath="..\..\..\source\SYSTEM\networking.C"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -8248,7 +8248,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\SYSTEM\socket.C"
+					RelativePath="..\..\..\source\SYSTEM\path.C"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
