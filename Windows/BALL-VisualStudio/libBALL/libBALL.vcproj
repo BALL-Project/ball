@@ -52,7 +52,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(SolutionDir)\..\Contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\Python&quot;;.\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtSql&quot;;$(QTDIR)\include\QtNetwork"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(SolutionDir)\..\Contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\boost\tr1&quot;;&quot;$(SolutionDir)\..\Contrib\include\Python&quot;;.\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;"
 				PreprocessorDefinitions="WIN32;QT_THREAD_SUPPORT;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_SQL_LIB;LIBBALL_LIB;QT_NETWORK_LIB;BALL_BUILD_DLL"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"

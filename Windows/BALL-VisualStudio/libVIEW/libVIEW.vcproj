@@ -39,7 +39,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\GeneratedFiles;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtXml;$(QTDIR)\include\QtSql;$(QTDIR)\include\QtOpenGL;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtSvg;$(SolutionDir)\..\include;$(SolutionDir)\..\contrib\include;$(SolutionDir)\..\contrib\include\python;$(SolutionDir)\..\..\include;$(QTDIR)\include\QtTest;$(SolutionDir)\..\..\include\BALL\VIEW\UIC"
+				AdditionalIncludeDirectories=".\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include\QtXml&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include\QtOpenGL&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;;&quot;$(QTDIR)\include\QtSvg&quot;;&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\boost\tr1&quot;;&quot;$(SolutionDir)\..\contrib\include\python&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(QTDIR)\include\QtTest&quot;;&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC&quot;"
 				PreprocessorDefinitions="UNICODE;WIN32;QT_THREAD_SUPPORT;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_XML_LIB;QT_SQL_LIB;QT_OPENGL_LIB;QT_NETWORK_LIB;QT_SVG_LIB;LIBVIEW_LIB;BALL_VIEW_BUILD_DLL"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
@@ -1032,6 +1032,26 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\printingDialog.C"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\PTEDialog.C"
 					>
 					<FileConfiguration
@@ -1456,7 +1476,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\KERNEL\server.C"
+					RelativePath="..\..\..\source\VIEW\KERNEL\serverWidget.C"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -2131,6 +2151,14 @@
 					RelativePath="..\..\..\source\VIEW\RENDERING\glRenderWindow.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2221,6 +2249,26 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\RENDERING\renderWindow.C"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\RENDERING\STLRenderer.C"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -3672,6 +3720,21 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\printingDialog.h"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Moc&apos;ing printingDialog.h..."
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\DIALOGS\printingDialog.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_printingDialog.cpp&quot;&#x0D;&#x0A;"
+							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\DIALOGS\printingDialog.h"
+							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_printingDialog.cpp&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\PTEDialog.h"
 					>
 					<FileConfiguration
@@ -3980,8 +4043,19 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\server.h"
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\serverWidget.h"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Moc&apos;ing mainControl.h..."
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\KERNEL\serverWidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_serverWidget.cpp&quot;&#x0D;&#x0A;"
+							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;..\..\..\include\BALL\VIEW\KERNEL\serverWidget.h"
+							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_serverWidget.cpp&quot;"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\stage.h"
@@ -4164,6 +4238,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\renderWindow.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\STLRenderer.h"
 					>
 				</File>
 				<File
@@ -5414,6 +5492,21 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\printingDialog.ui"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputPath)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\ui_printingDialog.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\ui_printingDialog.h&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\source\VIEW\DIALOGS\PTEDialog.ui"
 				>
 				<FileConfiguration
@@ -6633,10 +6726,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_parsedFunctionDialog.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_parsedFunctionDialog.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -6645,10 +6738,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_parsedFunctionDialog.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_parsedFunctionDialog.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -6681,18 +6774,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_preferences.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\Debug\moc_preferences.cpp"
 				>
 				<FileConfiguration
@@ -6705,16 +6786,20 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_PTEDialog.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_preferences.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Debug\moc_printingDialog.cpp"
+				>
 			</File>
 			<File
 				RelativePath=".\GeneratedFiles\Release\moc_PTEDialog.cpp"
@@ -6729,7 +6814,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_pubchemDialog.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_PTEDialog.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -6753,10 +6838,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_pythonSettings.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_pubchemDialog.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -6777,10 +6862,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_pyWidget.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_pythonSettings.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -6801,11 +6886,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_raytraceableContourSurfaceDialog.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_scene.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_pyWidget.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -6817,10 +6898,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\GeneratedFiles\Debug\moc_raytraceableContourSurfaceDialog.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\GeneratedFiles\Release\moc_scene.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Debug\moc_scene.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -6851,6 +6948,10 @@
 						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Debug\moc_serverWidget.cpp"
+				>
 			</File>
 			<File
 				RelativePath=".\GeneratedFiles\Debug\moc_setCamera.cpp"
@@ -6949,18 +7050,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_standardDatasets.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\Release\moc_standardDatasets.cpp"
 				>
 				<FileConfiguration
@@ -6973,10 +7062,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_testFramework.cpp"
+				RelativePath=".\GeneratedFiles\Debug\moc_standardDatasets.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -6989,6 +7078,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Release\moc_testFramework.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
