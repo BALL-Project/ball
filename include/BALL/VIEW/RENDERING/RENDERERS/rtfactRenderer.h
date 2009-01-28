@@ -8,9 +8,6 @@
 #define BALLVIEW_RTFACTRENDERER_THROW(exceptionName, message) (throw BALL::Exception::##exceptionName##(__FILE__, __LINE__, message))
 #include <BALL/VIEW/RENDERING/raytracingRenderer.h>
 
-//RTRemote proxy to RTfact
-#include <RTremote/Renderer.hpp>
-
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/KERNEL/representationManager.h>
@@ -18,9 +15,12 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/MATHS/surface.h>
 
+//RTRemote proxy to RTfact
+#include <RTremote/Renderer.hpp>
+
 #include <set>
 
-using namespace RTfact::Remote;
+using RTfact::Remote::GroupHandle;
 
 namespace BALL
 {

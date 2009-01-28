@@ -1,12 +1,20 @@
-#include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
-#include <RTfact/Config/Init.inc.cpp>
+
 //#include <RTfact/Utils/Packets/Detail/Constants.inc.cpp>
 
 #include <BALL/STRUCTURE/triangulatedSurface.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 
-using namespace RTfact::Remote;
+#include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
+
+#include <RTfact/Config/Init.inc.cpp>
+
+using RTfact::Vec3f;
+using RTfact::Remote::GroupHandle;
+using RTfact::Remote::GeoHandle;
+using RTfact::Transform;
+using RTfact::Remote::float3;
+using RTfact::Remote::RTAppearanceHandle;
 
 namespace BALL
 {
@@ -17,16 +25,10 @@ namespace BALL
 		{		     
 			scene_ = &scene;
 
-			using RTfact::Triangle;
-			using RTfact::Vec3f;
-			using RTfact::Remote::GroupHandle;
-			using RTfact::Remote::GeoHandle;
-			using RTfact::Transform;
-			using RTfact::Remote::float3;
-
+			
 			GroupHandle root = m_renderer.getRoot();
 			TriangleVector faces;                               
-			Triangle t(Vec3f<1>(0,0,0),Vec3f<1>(1,0,0),Vec3f<1>(1,1,0));
+			RTfact::Triangle t(Vec3f<1>(0,0,0),Vec3f<1>(1,0,0),Vec3f<1>(1,1,0));
 			t.texCoords[0] = std::make_pair(0.f,0.f);
 			t.texCoords[1] = std::make_pair(0.f,512.f); 
 			t.texCoords[2] = std::make_pair(512.f,0.f);

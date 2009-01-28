@@ -7,10 +7,6 @@
 #include "icons.h"
 #include "demoTutorialDialog.h"
 
-#include <BALL/CONCEPT/moleculeObjectCreator.h>
-#ifdef BALL_HAS_ASIO
-#include <BALL/VIEW/KERNEL/serverWidget.h>
-#endif
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -39,6 +35,11 @@
 
 #include <QtGui/QKeyEvent>
 #include <QtGui/QTreeWidget>
+
+#include <BALL/CONCEPT/moleculeObjectCreator.h>
+#ifdef BALL_HAS_ASIO
+#include <BALL/VIEW/KERNEL/serverWidget.h>
+#endif
 
 #ifdef BALL_COMPILER_MSVC
 # include "ui_aboutDialog.h"
