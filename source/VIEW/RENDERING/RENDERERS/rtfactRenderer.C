@@ -267,6 +267,7 @@ namespace BALL
 
 								GeoHandle handle_2 = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)tube_template_.triangle.size(), material_2);
 
+								try {
 								TwoColoredTube new_tube = old_tube;
 								new_tube.setVertex2(old_tube.getMiddleVertex());
 
@@ -280,6 +281,9 @@ namespace BALL
 
 								m_renderer.getRoot()->add(tubeGroup_1);
 								m_renderer.getRoot()->add(tubeGroup_2);
+								} catch (...) {
+									Log.error() << "Caught a zero-length tube during rendering!" << std::endl;
+								}
 							}
 						}
 

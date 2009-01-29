@@ -147,6 +147,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				IgnoreImportLibrary="true"
 				AdditionalOptions="/export:initBALL"
 				AdditionalDependencies="qtmaind.lib QtCored4.lib QtGuid4.lib libBALL.lib libVIEW.lib QtOpenGLd4.lib opengl32.lib glu32.lib"
 				OutputFile="$(OutDir)\BALL_d.pyd"
@@ -3798,13 +3799,6 @@
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\BALL.sip"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="SipGenerator"
-					/>
-				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32"
 					ExcludedFromBuild="true"
