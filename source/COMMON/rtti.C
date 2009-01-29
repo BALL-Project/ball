@@ -29,7 +29,7 @@
 	// this hack is somewhat rough.
 	namespace abi
 	{
-		extern "C" char* __cxa_demangle(const char*, char*, unsigned int*, int*);
+		extern "C" char* __cxa_demangle(const char*, char*, size_t*, int*);
 	}
 #endif
 
@@ -44,7 +44,7 @@ namespace BALL
       s = GNUDemangling::demangle(s);
     #else
 			char buf[BALL_MAX_LINE_LENGTH];
-			unsigned int length = BALL_MAX_LINE_LENGTH - 1;
+			size_t length = BALL_MAX_LINE_LENGTH - 1;
 			int status = 0;
       string s("_Z");
       s += t.name();
