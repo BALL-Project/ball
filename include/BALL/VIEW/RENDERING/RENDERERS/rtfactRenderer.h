@@ -14,11 +14,10 @@
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/MATHS/surface.h>
+#include <BALL/DATATYPE/hashMap.h>
 
 //RTRemote proxy to RTfact
 #include <RTremote/Renderer.hpp>
-
-#include <set>
 
 using RTfact::Remote::GroupHandle;
 
@@ -34,6 +33,21 @@ namespace BALL
 			: public RaytracingRenderer
 		{	  
 			public:	  
+
+				/** This class encapsulates RTfact's data structures per GeometricObject.
+				 */
+				class RTfactData
+				{
+					public:
+						/// The group this object was assigned to
+						RTfact::Remote::GroupHandle group_handle;
+						
+						/// The object handles
+						std::vector<RTfact::Remote::GeoHandle> object_handles;
+
+						/// The materials
+						std::vector<RTfact::Remote::RTAppearanceHandle> material_handles;
+				};
 
 				/// Default Constructor.
 				RTfactRenderer()
@@ -65,7 +79,11 @@ namespace BALL
 				virtual void prepareBufferedRendering(const Stage& stage);
 				virtual void renderToBufferImpl(FrameBufferPtr buffer);
 
+				void updateMaterialForRepresentation(Representation const* rep);
+
 				GroupHandle transformTube(const TwoColoredTube& tube);
+				void updateMaterialFromStage(RTfact::Remote::RTAppearanceHandle& material);
+
 			private:
 
 				std::vector<RTfact::Remote::RTLightHandle> lights_;
@@ -74,7 +92,7 @@ namespace BALL
 
 				RTfact::Remote::Renderer m_renderer;
 
-				std::set<GeometricObject const*> objects_;
+				HashMap<GeometricObject const*, RTfactData> objects_;
 
 				Surface sphere_template_;
 				Surface tube_template_;

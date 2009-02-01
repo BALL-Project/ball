@@ -529,6 +529,10 @@ namespace BALL
 			bool isUpdateRunning() const { return update_running_;}
 
 			void resetTracking() {tracking_initialized_ = false;}
+// TODO: this pretty hacky!
+#ifdef ENABLE_RAYTRACING
+			void updateRTMaterials(bool only_selected);
+#endif
 
 			public slots:
 

@@ -25,7 +25,6 @@ namespace BALL
 		{		     
 			scene_ = &scene;
 
-			
 			GroupHandle root = m_renderer.getRoot();
 			TriangleVector faces;                               
 			RTfact::Triangle t(Vec3f<1>(0,0,0),Vec3f<1>(1,0,0),Vec3f<1>(1,1,0));
@@ -144,6 +143,8 @@ namespace BALL
 		void RTfactRenderer::renderToBufferImpl(FrameBufferPtr buffer)
 		{		    
 			bool recreate_accel = false;
+			Stage const& stage = *(scene_->getStage());
+
 			RepresentationManager& pm = scene_->getMainControl()->getRepresentationManager();
 
 			RepresentationList::ConstIterator it = pm.getRepresentations().begin();
@@ -159,21 +160,20 @@ namespace BALL
 				{
 					if (objects_.find(*it) == objects_.end())
 					{
+						RTfactData rt_data;
 						recreate_accel = true;
-						objects_.insert(*it);
+
 						if (RTTI::isKindOf<Mesh>(**it))
 						{
 							Mesh const& mesh = *(const Mesh*)*it;
 
 							float const* vertices = reinterpret_cast<float const*>(&(mesh.vertex[0]));
 							float const* normals  = reinterpret_cast<float const*>(&(mesh.normal[0]));
-							Index const* indices = reinterpret_cast<Index const*>(&(mesh.triangle[0]));
+							Index const* indices  = reinterpret_cast<Index const*>(&(mesh.triangle[0]));
+
 
 							RTAppearanceHandle material = m_renderer.createAppearance("PhongShader");
-							material->setParam("ambientIntensity", float3(0.25, 0.25, 0.25));
-							material->setParam("specularColor", float3(0.774597, 0.774597, 0.774597));
-							material->setParam("reflective", float3(0.0, 0.0, 0.0));
-							material->setParam("shininess", (float)76.8);
+							updateMaterialFromStage(material);
 
 							GeoHandle handle;
 
@@ -198,6 +198,10 @@ namespace BALL
 							GroupHandle meshGroup = m_renderer.createGroup(Transform::identity());
 							meshGroup->add(handle);                
 							m_renderer.getRoot()->add(meshGroup);
+
+							rt_data.group_handle = meshGroup;
+							rt_data.object_handles.push_back(handle);
+							rt_data.material_handles.push_back(material);
 						} 
 
 						if (RTTI::isKindOf<Sphere>(**it))
@@ -211,10 +215,9 @@ namespace BALL
 							ColorRGBA const& color = sphere.getColor();
 
 							RTAppearanceHandle material = m_renderer.createAppearance("PhongShader");
+							updateMaterialFromStage(material);
+
 							material->setParam("diffuseColor", float3(color.getRed(), color.getGreen(), color.getBlue()));
-							material->setParam("ambientIntensity", float3(0.25, 0.25, 0.25));
-							material->setParam("specularColor", float3(0.774597, 0.774597, 0.774597));
-							material->setParam("shininess", (float)76.8);
 							material->setParam("useVertexColor", false);
 
 							GeoHandle handle   = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)sphere_template_.triangle.size(), material);
@@ -226,6 +229,10 @@ namespace BALL
 																																*Transform::scale(Vec3f<1>(radius, radius, radius)));
 							sphereGroup->add(handle);
 							m_renderer.getRoot()->add(sphereGroup);
+
+							rt_data.group_handle = sphereGroup;
+							rt_data.object_handles.push_back(handle);
+							rt_data.material_handles.push_back(material);
 						}
 
 						if (RTTI::isKindOf<TwoColoredTube>(**it))
@@ -241,10 +248,9 @@ namespace BALL
 							ColorRGBA const& color2 = old_tube.getColor2();
 
 							RTAppearanceHandle material_1 = m_renderer.createAppearance("PhongShader");
+							updateMaterialFromStage(material_1);
+
 							material_1->setParam("diffuseColor", float3(color1.getRed(), color1.getGreen(), color1.getBlue()));
-							material_1->setParam("ambientIntensity", float3(0.25, 0.25, 0.25));
-							material_1->setParam("specularColor", float3(0.774597, 0.774597, 0.774597));
-							material_1->setParam("shininess", (float)76.8);
 							material_1->setParam("useVertexColor", false);
 
 							GeoHandle handle_1 = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)tube_template_.triangle.size(), material_1);
@@ -259,10 +265,9 @@ namespace BALL
 							else 
 							{
 								RTAppearanceHandle material_2 = m_renderer.createAppearance("PhongShader");
+								updateMaterialFromStage(material_2);
+
 								material_2->setParam("diffuseColor", float3(color2.getRed(), color2.getGreen(), color2.getBlue()));
-								material_2->setParam("ambientIntensity", float3(0.25, 0.25, 0.25));
-								material_2->setParam("specularColor", float3(0.774597, 0.774597, 0.774597));
-								material_2->setParam("shininess", (float)76.8);
 								material_2->setParam("useVertexColor", false);
 
 								GeoHandle handle_2 = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)tube_template_.triangle.size(), material_2);
@@ -271,6 +276,7 @@ namespace BALL
 								TwoColoredTube new_tube = old_tube;
 								new_tube.setVertex2(old_tube.getMiddleVertex());
 
+								GroupHandle all_group = m_renderer.createGroup(Transform::identity());
 								GroupHandle tubeGroup_1 = transformTube(new_tube);
 								tubeGroup_1->add(handle_1);
 
@@ -279,14 +285,24 @@ namespace BALL
 								GroupHandle tubeGroup_2 = transformTube(new_tube);
 								tubeGroup_2->add(handle_2);
 
-								m_renderer.getRoot()->add(tubeGroup_1);
-								m_renderer.getRoot()->add(tubeGroup_2);
+								all_group->add(tubeGroup_1);
+								all_group->add(tubeGroup_2);
+
+								m_renderer.getRoot()->add(all_group);
+
+								rt_data.group_handle = all_group;
+								rt_data.object_handles.push_back(handle_1);
+								rt_data.object_handles.push_back(handle_2);
+								rt_data.material_handles.push_back(material_1);
+								rt_data.material_handles.push_back(material_2);
 								} catch (...) {
 									Log.error() << "Caught a zero-length tube during rendering!" << std::endl;
 								}
 							}
 						}
 
+						// finally, insert our new RTData into the hash map
+						objects_[*it] = rt_data;
 					}
 				}
 			}
@@ -297,6 +313,25 @@ namespace BALL
 			{
 				m_renderer.attachFrameBuffer(fmt.getWidth(), fmt.getHeight(), fmt.getPitch(), (float*)buffer->getData());
 				m_renderer.renderToBuffer();
+			}
+		}
+
+		void RTfactRenderer::updateMaterialForRepresentation(Representation const* rep)
+		{
+			List<GeometricObject*>::ConstIterator it;
+			for (it =  rep->getGeometricObjects().begin();
+					 it != rep->getGeometricObjects().end();
+					 it++)
+			{
+				if (objects_.find(*it) != objects_.end())
+				{
+					RTfactData& rt_data = objects_[*it];
+
+					for (Position i=0; i<rt_data.material_handles.size(); ++i)
+					{
+						updateMaterialFromStage(rt_data.material_handles[i]);
+					}
+				}
 			}
 		}
 
@@ -323,5 +358,36 @@ namespace BALL
 			return m_renderer.createGroup(	Transform::translation(midpoint.x, midpoint.y, midpoint.z)
 																		 *matrix*Transform::scale(Vec3f<1>(radius, radius, len)));
 		}
+
+
+		void RTfactRenderer::updateMaterialFromStage(RTAppearanceHandle& material)
+		{
+			Stage::RaytracingMaterial const& rt_material = scene_->getStage()->getRTMaterial();
+		
+			// ambience
+			float red   = (float)rt_material.ambient_color.getRed()   * rt_material.ambient_intensity;
+			float blue  = (float)rt_material.ambient_color.getBlue()  * rt_material.ambient_intensity;
+			float green = (float)rt_material.ambient_color.getGreen() * rt_material.ambient_intensity;
+
+			material->setParam("ambientIntensity", float3(red, blue, green));
+
+			// specularity
+			red   = (float)rt_material.specular_color.getRed()   * rt_material.specular_intensity;
+			blue  = (float)rt_material.specular_color.getBlue()  * rt_material.specular_intensity;
+			green = (float)rt_material.specular_color.getGreen() * rt_material.specular_intensity;
+
+			material->setParam("specularColor", float3(red, blue, green));
+
+			// reflectiveness
+			red   = (float)rt_material.reflective_color.getRed()   * rt_material.reflective_intensity;
+			blue  = (float)rt_material.reflective_color.getBlue()  * rt_material.reflective_intensity;
+			green = (float)rt_material.reflective_color.getGreen() * rt_material.reflective_intensity;
+
+			material->setParam("reflective", float3(red, blue, green));
+
+			// shininess
+			material->setParam("shininess", rt_material.shininess);
+		}
+
 	}
 }

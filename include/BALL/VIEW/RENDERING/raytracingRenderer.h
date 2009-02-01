@@ -51,6 +51,8 @@ namespace BALL
 			virtual String getRenderer()	
 				throw() = 0;    
 
+			virtual void updateMaterialForRepresentation(Representation const* rep) = 0;
+
         protected:
 
 			/* BufferedRender protected methods */
