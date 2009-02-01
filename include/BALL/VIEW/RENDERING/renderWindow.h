@@ -75,7 +75,7 @@ namespace BALL
              * In addition there is a precondition that \link init \endlink must be called before 
              * getBuffer. If not, \link NoBufferAvailable \endlink exception is thrown.
              */
-            virtual FrameBufferPtr getBuffer() throw(BALL::Exception::NoBufferAvailable);
+            virtual FrameBufferPtr getBuffer() throw(BALL::Exception::NoBufferAvailable);            
 
             /*
              * See \link RenderTarget \endlink for description.
@@ -89,6 +89,7 @@ namespace BALL
 
 		protected:
 			t_PixelPtr m_pixels;					// raw pixel buffer
+            FrameBufferPtr m_framebuffer;           // frame buffer given out to the wild by getBuffer method
 			FrameBufferFormat m_fmt;				// description of the buffer format
             const PixelFormat m_pfm;                // pixel format of the window
 			bool m_bufferLocked;					// pixel buffer is being accessed by another object?            
