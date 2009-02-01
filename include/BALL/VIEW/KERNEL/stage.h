@@ -387,6 +387,23 @@ namespace BALL
 		{
 			public:
 
+			/** This class holds all material parameters passed on to a raytracer.
+			 */
+			class RaytracingMaterial
+			{
+				public:
+					ColorRGBA ambient_color;
+					float     ambient_intensity;
+
+					ColorRGBA specular_color;
+					float			specular_intensity;
+
+					ColorRGBA reflective_color;
+					float			reflective_intensity;
+
+					float     shininess;
+			};
+
 			/**	@name	Constructors and Destructors
 			*/	
 			//@{
@@ -564,6 +581,12 @@ namespace BALL
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 
+			/// Gives access to the default material parameters
+			RaytracingMaterial& getRTMaterial() { return rt_material_; }
+
+			/// Gives access to the default material parameters, const version
+			const RaytracingMaterial& getRTMaterial() const { return rt_material_; }
+
 			protected:
 
 			//_
@@ -597,6 +620,9 @@ namespace BALL
 			float 							diffuse_;
 			float 							ambient_;
 			float 							shininess_;
+
+			// the current default materials used for raytracing
+			RaytracingMaterial  rt_material_;
 		};
 
 	} // namespace VIEW

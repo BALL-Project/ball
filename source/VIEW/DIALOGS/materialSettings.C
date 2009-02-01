@@ -62,12 +62,30 @@ namespace BALL
 			stage.setAmbientIntensity(	((float)ambient_slider->value())   / 100.0);
 			stage.setShininess(					(float)shininess_slider->value());
 
+
 			glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, stage.getShininess());
 			GLfloat values[4];
 			values[0] = values[1] = values[2] =  stage.getSpecularIntensity();
 			values[3] = 1.0;
 			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  values);
 	
+#ifdef ENABLE_RAYTRACING
+			Stage::RaytracingMaterial& rt_material = stage.getRTMaterial();
+
+			rt_material.ambient_color  	 = VIEW::getColor(ambient_color_label);
+			rt_material.specular_color 	 = VIEW::getColor(specularity_color_label);
+			rt_material.reflective_color = VIEW::getColor(reflectiveness_color_label);
+
+			rt_material.ambient_intensity    = ambient_factor_label->text().toFloat();
+			rt_material.specular_intensity   = specularity_factor_label->text().toFloat();
+			rt_material.reflective_intensity = reflectiveness_factor_label->text().toFloat();
+
+			rt_material.shininess          = shininess_factor_label->text().toFloat();
+
+			// TODO! This is currently pretty hacky!
+			Scene::getInstance(0)->updateRTMaterials(apply_to_selected_radioButton->isChecked());
+#endif
+
 			if (update_directly_checkBox->isChecked())
 			{
 
@@ -110,45 +128,30 @@ namespace BALL
 		{ 
 			setValues_(*ambient_factor_slider, *ambient_factor_label, 100);
 			if (update_directly_checkBox->isChecked())
-			{
-				std::cout << "RTFact should change Ambient intensity to "  
-					        << ascii(ambient_factor_label->text()) << std::endl;
-			}
-			apply();
+				apply();
 
 		}
+
 		void MaterialSettings::specularityFactorChanged()
 		{
 			setValues_(*specularity_factor_slider, *specularity_factor_label, 100);	
 			if (update_directly_checkBox->isChecked())
-			{
-				std::cout << "RTFact should change Specularity factor to " 
-									<<  ascii(specularity_factor_label->text()) << std::endl;
-			}
-			apply();
+				apply();
 
 		}
+
 		void MaterialSettings::reflectivenessFactorChanged()
 		{                                            
 			setValues_(*reflectiveness_factor_slider, *reflectiveness_factor_label, 100);	
 			if (update_directly_checkBox->isChecked())
-			{
-				std::cout << "RTFact should change Reflectiveness factor to "  
-					        <<  ascii(reflectiveness_factor_label->text()) << std::endl;
-			}
-			apply();
-
+				apply();
 		}
+
 		void MaterialSettings::shininessFactorChanged()
 		{
 			setValues_(*shininess_factor_slider, *shininess_factor_label, 1);	
 			if (update_directly_checkBox->isChecked())
-			{
-				std::cout << "RTFact should change Shininess factor to "  
-					        <<  ascii(shininess_factor_label->text()) << std::endl;
-			}
-			apply();
-
+				apply();
 		}
 	
 		void MaterialSettings::updateDirectlyBoxChanged()

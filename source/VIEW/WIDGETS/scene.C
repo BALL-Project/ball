@@ -3251,6 +3251,23 @@ namespace BALL
 			getMainControl()->initPopupMenu(MainControl::WINDOWS)->addAction(toolbar_->toggleViewAction());
 		}
 
+#ifdef ENABLE_RAYTRACING
+		void Scene::updateRTMaterials(bool only_selected)
+		{
+			// iterate over all selected representations
+			// TODO: currently this changes ALL representations!
+			RepresentationManager& pm = getMainControl()->getRepresentationManager();
+
+			RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+			for (; it != pm.getRepresentations().end(); ++it)
+			{
+				rt_renderer_->updateMaterialForRepresentation(*it);
+			}
+
+			update(false);
+		}
+#endif
+
 		void Scene::switchShowGrid()
 		{
 			draw_grid_ = !draw_grid_;
