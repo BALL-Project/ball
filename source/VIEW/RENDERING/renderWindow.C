@@ -28,7 +28,7 @@ namespace BALL
         }
 
         template<typename taPixelDatatype>
-        FrameBufferPtr RenderWindow<taPixelDatatype>::getBuffer() throw(BALL::Exception::NoBufferAvailable)
+        FrameBufferPtr RenderWindow<taPixelDatatype>::getBuffer() throw(BALL::Exception::NoBufferAvailable)        
 		{
 			if((m_fmt.getWidth() < m_minimalWidth) || (m_fmt.getHeight() < m_minimalHeight))
             {
@@ -44,7 +44,8 @@ namespace BALL
 			else
 			{
 				m_bufferLocked = true;
-				return FrameBufferPtr(new FrameBuffer(m_pixels.get(), m_fmt));
+                m_framebuffer = FrameBufferPtr(new FrameBuffer(m_pixels.get(), m_fmt));                
+                return m_framebuffer;                
 			}
 		};
 
@@ -75,26 +76,11 @@ namespace BALL
             {
                 return false;
             }
-            
-            //Currently using nearest larger power-of-two resolution, as RTfact does not support general resolution
-            unsigned int pow2Size = 1;            
-            while(pow2Size < width)
-            {
-                pow2Size *= 2;
-            }
-            m_fmt.setWidth(pow2Size / 2);
-            m_fmt.setPitch(pow2Size * m_pfm.computeByteSize() / 2);			
-            pow2Size = 1;
-            while(pow2Size < height)
-            {
-                pow2Size *= 2;
-            }
-            m_fmt.setHeight(pow2Size / 2);
-            
+                       
+            m_fmt.setWidth(width);
+            m_fmt.setPitch(width * m_pfm.computeByteSize());			
+            m_fmt.setHeight(height);
 
-            //m_fmt.setWidth(width);
-            //m_fmt.setPitch(width * m_pfm.computeByteSize());			
-            //m_fmt.setHeight(height);
             m_pixels = t_PixelPtr(new taPixelDatatype[m_fmt.getWidth() * m_fmt.getHeight() * m_pfm.getNumChannels()]);
 
 			return true;
