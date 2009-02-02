@@ -215,12 +215,13 @@ CHECK(Option::ALGORITHM: ILP)
 	// to have a chance of catching bugs with valgrind if they sneak in
 	AssignBondOrderProcessor abop;
 	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::ILP);
-	
+	abop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 1);
+
 	System sys6;
 	MOL2File mol6("data/AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2", std::ios::in);
 	mol6 >> sys6;
 	sys6.apply(abop);
-	TEST_REAL_EQUAL(abop.getTotalPenalty(1), 6 )
+	TEST_REAL_EQUAL(abop.getTotalPenalty(0), 0 )
 RESULT
 CHECK(ALGORITHM: K_GREEDY)
   // There is really not much we can test here, so we just execute the processor
