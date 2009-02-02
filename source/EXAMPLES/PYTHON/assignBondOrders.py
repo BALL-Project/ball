@@ -1,11 +1,18 @@
 #
-# Anna Dehof 2008-09-02
+# Anna Dehof 2009-02-02
 #   get the system and assign bond orders 
 #
 
 import BALL
 
-system = getSystems()[0]
+# for use in BALLView
+#system = getSystems()[0]
+
+# for use without BALLView
+system = BALL.System()
+file = BALL.MOL2File("../../TEST/data/AssignBondOrderProcessor_test_CITSED10_sol_2.mol2")
+file.read(system)
+
 abop = BALL.AssignBondOrderProcessor()
 abop.options.setBool(BALL.AssignBondOrderProcessor.Option.KEKULIZE_RINGS, True) 
 abop.options.setBool(BALL.AssignBondOrderProcessor.Option.OVERWRITE_SINGLE_BOND_ORDERS, True)
@@ -24,11 +31,13 @@ system.apply(abop)
 
 # print all solutions penalty
 for i in range(abop.getNumberOfComputedSolutions()):
-  print "solution ", str(i) , ": penalty ", str(abop.getTotalPenalty(i)), ", charge ", abop.getTotalCharge(i), " , ", abop.getNumberOfAddedHydrogens(i) , " added hydrogens."
+  print "solution ", str(i) , ": penalty ", str(abop.getTotalPenalty(i)), " , ", abop.getNumberOfAddedHydrogens(i) , " added hydrogens."
 
 # apply the last solution
 abop.apply(abop.getNumberOfComputedSolutions()-1)
 
-getMainControl().update(system)
+
+# for use in BALLView
+#getMainControl().update(system)
 
 
