@@ -431,6 +431,15 @@ namespace BALL
 				          << " : Error in options! Please check the option Option::BRANCH_AND_BOUND_CUTOFF."  << endl;
 			ret = false;
 		}
+		if (   (options.get(Option::ALGORITHM) == Algorithm::ILP )  
+				&& (options.getInteger(Option::MAX_NUMBER_OF_SOLUTIONS) > 1))
+		{
+			Log.error() << __FILE__ << " " << __LINE__ 
+				          << " : Error in options! Please check the option Option::MAX_NUMBER_OF_SOLUTIONS."  << endl;
+			ret = false;
+		}
+
+
 		valid_ = ret;
 		return ret;
 	}
@@ -2462,16 +2471,20 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		else if (options.get(Option::ALGORITHM) == Algorithm::K_GREEDY)
 		{
 			// k-greedy does not support computing next solutions!
+			Log.warn() << " K-greedy does not support computing next solutions!" << endl;
 			return false;
 		}	
 		else if (options.get(Option::ALGORITHM) == Algorithm::BRANCH_AND_BOUND)
 		{
 			// branch and bound does not support computing next solutions!
+			Log.warn() << " Branch&Bound does not support computing next solutions!" << endl;
 			found_a_sol = performBranchAndBound_();
 		}
 		else if (options.get(Option::ALGORITHM) == Algorithm::ILP) // ILP
 		{
 #ifdef BALL_HAS_LPSOLVE
+			// NOTE: lpsolve5.5 despite claiming does not support this!
+
 			// first find out if there is a further solution
 			int number_of_solutions = get_solutioncount(ilp_);
 
