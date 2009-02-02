@@ -41,7 +41,8 @@ class AssignBondOrderProcessor
 			static const char* OVERWRITE_DOUBLE_BOND_ORDERS;	
 			static const char* OVERWRITE_TRIPLE_BOND_ORDERS;	
 			static const char* OVERWRITE_SELECTED_BONDS; 	
-			static const char* ADD_HYDROGENS;
+			static const char* ADD_HYDROGENS;	
+			static const char* USE_FINE_PENALTY;
 			static const char* KEKULIZE_RINGS;
 			static const char* ALGORITHM; 
 			static const char* HEURISTIC;
@@ -66,6 +67,7 @@ class AssignBondOrderProcessor
 			static const bool OVERWRITE_TRIPLE_BOND_ORDERS;
 			static const bool OVERWRITE_SELECTED_BONDS;
 			static const bool ADD_HYDROGENS;
+			static const bool USE_FINE_PENALTY;
 			static const bool KEKULIZE_RINGS;
 			static const String ALGORITHM;	
 			static const String HEURISTIC;
@@ -109,25 +111,20 @@ class AssignBondOrderProcessor
 		AssignBondOrderProcessor();
 		AssignBondOrderProcessor(const AssignBondOrderProcessor& /abop/);
 		virtual ~AssignBondOrderProcessor();
-		//virtual bool start();
+		
 		void clear();
 		virtual Processor::Result operator () (AtomContainer& /ac/);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End
-		//virtual bool finish();
-		Size getNumberOfBondOrdersSet();
 		Size getNumberOfAddedHydrogens(Position /i/);
 		Size getNumberOfComputedSolutions();
 		AtomContainer* getAtomContainer();
 		//AtomContainer const* getAtomContainer() const;
 		const System& getSolution(Position /i/) throw(IndexOverflow);
-		float getTotalCharge(Position /i/);
-		//float getTotalCharge(Solution_ /sol/);
+		//float getTotalCharge(Position /i/);
 		float getTotalPenalty(Position /i/);
-		//float getTotalPenalty(Solution_ /sol/); 
 		int getNumberOfNodeExpansions(Position /i/);
-		//int getNumberOfNodeExpansions(Solution_ /sol/);
 		int getQueueSize(Position /i/);
 		bool apply(Position /i/); 
 		void resetBondOrders();
