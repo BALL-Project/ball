@@ -375,23 +375,6 @@ namespace BALL
 
 			}
 			
-			/** Returns the total charge of a solution.
-			 * 
-			 * @param  sol solution, whose charge should be computed. 
-			 * @return float -  total charge of the given solution.  
-			*/
-			float getTotalCharge_(const Solution_& sol) 
-			{
-				if (sol.valid) 
-				{
-					return sol.total_charge;
-				}
-				else
-				{
-					return 0;
-				} 
-			}
-
 			/** Returns the total penalty of solution i.
 			 *
 			 * @param    i  index of the solution, whose penalty should be returned. 
@@ -409,27 +392,6 @@ namespace BALL
 				else
 					return getTotalPenalty_(solutions_[i]);
 			}
-
-			/** Returns the total penalty of the given solution.
-			 *
-			 * @param   sol  solution, whose penalty should be returned. 
-			 * @return  float -  total penalty of solution i.  
-			 * @see  Option::BOND_LENGTH_WEIGHTING;
-			 */
-			float getTotalPenalty_(const Solution_& sol) 
-			{
-				if (   (atom_type_normalization_factor_   < 0.00001) 
-				    || (bond_length_normalization_factor_ < 0.00001)
-						|| (alpha_ < 0.0001)) 
-				{
-					return sol.atom_type_penalty;
-				}
-				else
-				{
-					return (  (1.-alpha_) * (sol.atom_type_penalty/atom_type_normalization_factor_) 
-									+ (alpha_*sol.bond_length_penalty/bond_length_normalization_factor_));
-				} 
-			}
 		 
 			/* Returns the number of node expansions before solution i was found.
 			 *
@@ -445,16 +407,8 @@ namespace BALL
 					return -1;
 				}
 				else
-					return getNumberOfNodeExpansions(solutions_[i]);
+					return getNumberOfNodeExpansions_(solutions_[i]);
 			}
-			
-			/* Returns the number of node expansions before the given solution was found.
-			 *
-			 * param   sol  solution, whose number of node expansions should be returned. 
-			 * return  int -  number of node expansions before solution i was found.  
-			 */
-			int getNumberOfNodeExpansions(const Solution_& sol){return sol.getNumberOfNodeExpansions();}
-	
 
 			/* Returns the number of node expansions before solution i was found.
 			 *
@@ -470,17 +424,9 @@ namespace BALL
 					return -1;
 				}
 				else
-					return getQueueSize(solutions_[i]);
+					return getQueueSize_(solutions_[i]);
 			}
-			
-			/* Returns the queue's size at the moment the given solution was found.
-			 *
-			 * param   sol  solution, whose queue size should be returned. 
-			 * return  int -  queue size when the given solution was found.  
-			 */	
-			int getQueueSize(const Solution_& sol){return sol.getQueueSize();}
-
-
+		
 			/** Applies the i-th precomputed bond order combination.
 			 *
 			 * Set the AtomContainer ac_'s bond orders to the ones found 
@@ -720,6 +666,60 @@ namespace BALL
 			/** Stores the original configuration of the atom container.
 			 */
 			void storeOriginalConfiguration_();
+	
+			/* Returns the queue's size at the moment the given solution was found.
+			 *
+			 * param   sol  solution, whose queue size should be returned. 
+			 * return  int -  queue size when the given solution was found.  
+			 */	
+			int getQueueSize_(const Solution_& sol){return sol.getQueueSize();}
+	
+			/** Returns the total charge of a solution.
+			 * 
+			 * @param  sol solution, whose charge should be computed. 
+			 * @return float -  total charge of the given solution.  
+			*/
+
+			float getTotalCharge_(const Solution_& sol) 
+			{
+				if (sol.valid) 
+				{
+					return sol.total_charge;
+				}
+				else
+				{
+					return 0;
+				} 
+			}
+
+			/** Returns the total penalty of the given solution.
+			 *
+			 * @param   sol  solution, whose penalty should be returned. 
+			 * @return  float -  total penalty of solution i.  
+			 * @see  Option::BOND_LENGTH_WEIGHTING;
+			 */
+			float getTotalPenalty_(const Solution_& sol) 
+			{
+				if (   (atom_type_normalization_factor_   < 0.00001) 
+				    || (bond_length_normalization_factor_ < 0.00001)
+						|| (alpha_ < 0.0001)) 
+				{
+					return sol.atom_type_penalty;
+				}
+				else
+				{
+					return (  (1.-alpha_) * (sol.atom_type_penalty/atom_type_normalization_factor_) 
+									+ (alpha_*sol.bond_length_penalty/bond_length_normalization_factor_));
+				} 
+			}
+			
+			/* Returns the number of node expansions before the given solution was found.
+			 *
+			 * param   sol  solution, whose number of node expansions should be returned. 
+			 * return  int -  number of node expansions before solution i was found.  
+			 */
+			int getNumberOfNodeExpansions_(const Solution_& sol){return sol.getNumberOfNodeExpansions();}
+	
 
 #ifdef BALL_HAS_LPSOLVE
 			/** Setup the integer linear program.
