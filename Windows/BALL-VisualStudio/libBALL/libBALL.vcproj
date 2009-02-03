@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="libBALL"
 	ProjectGUID="{19709205-47E2-45A3-A266-3488F113508D}"
 	RootNamespace="libBALL"
@@ -184,7 +184,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Header Dateien"
+			Name="Header Files"
 			Filter="h"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
@@ -1754,27 +1754,7 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="Form Dateien"
-			Filter="ui"
-			UniqueIdentifier="{99349809-55BA-4b9d-BF79-8FDBB0286EB3}"
-			>
-		</Filter>
-		<Filter
-			Name="Resource Dateien"
-			Filter="qrc;*"
-			UniqueIdentifier="{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}"
-			ParseFiles="false"
-			>
-		</Filter>
-		<Filter
-			Name="Generierte Dateien"
-			Filter="moc;h;cpp"
-			UniqueIdentifier="{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}"
-			SourceControlFiles="false"
-			>
-		</Filter>
-		<Filter
-			Name="Lexerfiles"
+			Name="Lexer Files"
 			>
 			<File
 				RelativePath="..\..\..\source\KERNEL\expressionParserLexer.l"
@@ -1834,7 +1814,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Parserfiles"
+			Name="Parser Files"
 			>
 			<File
 				RelativePath="..\..\..\source\KERNEL\expressionParserParser.y"
@@ -1894,7 +1874,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Quelldateien"
+			Name="Source Files"
 			>
 			<Filter
 				Name="COMMON"
