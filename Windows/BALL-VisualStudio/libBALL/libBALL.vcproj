@@ -73,7 +73,7 @@
 				AdditionalDependencies="qtmain.lib QtCore4.lib QtSql4.lib QtNetwork4.lib regex.lib oncrpc.lib gsl_mt.lib cblas_mt.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib WSock32.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\Contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;"
-				GenerateDebugInformation="false"
+				GenerateDebugInformation="true"
 				SubSystem="2"
 			/>
 			<Tool

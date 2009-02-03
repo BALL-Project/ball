@@ -26,41 +26,7 @@ namespace BALL
 			scene_ = &scene;
 
 			GroupHandle root = m_renderer.getRoot();
-			TriangleVector faces;                               
-			RTfact::Triangle t(Vec3f<1>(0,0,0),Vec3f<1>(1,0,0),Vec3f<1>(1,1,0));
-			t.texCoords[0] = std::make_pair(0.f,0.f);
-			t.texCoords[1] = std::make_pair(0.f,512.f); 
-			t.texCoords[2] = std::make_pair(512.f,0.f);
-			faces.push_back(t);                
-
-			for(TriangleVector::iterator it = faces.begin(); it != faces.end(); it++)
-			{
-				it->normals[0]=it->normal;
-				it->normals[1]=it->normal;
-				it->normals[2]=it->normal;
-			}        
-
-			GeoHandle geo1 = m_renderer.createGeometry(faces);                
-			GroupHandle topGroup = m_renderer.createGroup(Transform::identity());
-			topGroup->add(geo1);                
-
-			root->add(topGroup);
-
-			RTfact::Remote::RTAppearanceHandle mat1 = m_renderer.createAppearance("PhongShader");                
-			mat1->setParam("diffuseColor", float3(1.0, 1.0, 0));
-			mat1->setParam("ambientIntensity", float3(.7, .7, .7));
-
-			geo1->setAppearance(mat1);                                
-
-			m_renderer.setCameraPosition(
-					float3(-1.48978, 4.14466, 11.4965),
-					float3(0.864694, -0.481748, 0.142207),
-					float3(0, 1, 0));            
-
-			//root->setTransform(Transform::rotationY(0.2f));
-			//root->add(geo2);
-			m_renderer.createAccelStruct();
-
+			
 			// prepare the sphere template
 			TriangulatedSphere sphere_template;
 			sphere_template.icosaeder();
@@ -93,6 +59,7 @@ namespace BALL
 			Vector3 direction, light_position;
 			Size current_light=0;
 			List<LightSource>::ConstIterator it = stage.getLightSources().begin();
+			
 			for (; it != stage.getLightSources().end(); ++it, ++current_light)
 			{
 				if (current_light >= num_lights)
@@ -147,6 +114,8 @@ namespace BALL
 
 			RepresentationManager& pm = scene_->getMainControl()->getRepresentationManager();
 
+			static bool has_geometry = false;
+
 			RepresentationList::ConstIterator it = pm.getRepresentations().begin();
 			for (; it != pm.getRepresentations().end(); ++it)
 			{
@@ -162,6 +131,9 @@ namespace BALL
 					{
 						RTfactData rt_data;
 						recreate_accel = true;
+
+						has_geometry = true;
+						objects_.insert(*it);
 
 						if (RTTI::isKindOf<Mesh>(**it))
 						{
@@ -309,7 +281,7 @@ namespace BALL
 			if (recreate_accel)
 				m_renderer.createAccelStruct();
 			FrameBufferFormat fmt = buffer->getFormat();		    
-			if (fmt.getPixelFormat() == PixelFormat::RGBF_96)
+			if ((fmt.getPixelFormat() == PixelFormat::RGBF_96) && has_geometry)
 			{
 				m_renderer.attachFrameBuffer(fmt.getWidth(), fmt.getHeight(), fmt.getPitch(), (float*)buffer->getData());
 				m_renderer.renderToBuffer();

@@ -56,10 +56,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				LinkLibraryDependencies="false"
 				AdditionalDependencies="qtmain.lib QtCore4.lib QtGui4.lib QtSql4.lib QtOpenGL4.lib opengl32.lib glu32.lib QtNetwork4.lib QtSvg4.lib libBALL.lib libVIEW.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;&quot;$(OutDir)&quot;"
-				GenerateDebugInformation="false"
+				GenerateDebugInformation="true"
 				SubSystem="2"
 				HeapReserveSize="100000000"
 				StackReserveSize="100000000"
@@ -433,18 +434,6 @@
 			SourceControlFiles="false"
 			>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_demoTutorialDialog.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\Debug\moc_demoTutorialDialog.cpp"
 				>
 				<FileConfiguration
@@ -457,7 +446,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_mainframe.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_demoTutorialDialog.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -473,6 +462,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Release\moc_mainframe.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool

@@ -430,6 +430,7 @@ namespace BALL
 
 		void Scene::initializeGL()
 		{
+			printf("At least, I got here!\n");
 			QGLWidget::initializeGL();
 			if (!format().rgba())  Log.error() << "no rgba mode for OpenGL available." << endl;
 
