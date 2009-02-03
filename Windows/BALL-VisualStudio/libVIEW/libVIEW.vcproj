@@ -59,7 +59,7 @@
 				AdditionalDependencies="qtmain.lib QtCore4.lib QtGui4.lib QtXml4.lib QtSql4.lib QtOpenGL4.lib glu32.lib QtNetwork4.lib QtSvg4.lib QtTest4.lib libBALL.lib glew32.lib opengl32.lib RTfactRemote.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;;&quot;$(OutDir)&quot;;$(LIB)"
-				GenerateDebugInformation="false"
+				GenerateDebugInformation="true"
 				SubSystem="2"
 			/>
 			<Tool
@@ -2339,7 +2339,7 @@
 							>
 							<Tool
 								Name="VCCLCompilerTool"
-								PreprocessorDefinitions="QT_LEAN_AND_MEAN"
+								PreprocessorDefinitions="RTFACT_UINT_DEFINED"
 								CompileAs="2"
 							/>
 						</FileConfiguration>

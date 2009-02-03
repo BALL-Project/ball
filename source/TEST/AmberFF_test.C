@@ -51,9 +51,11 @@ amber91.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 CHECK(energy test 1 (Single Stretch) [AMBER91])
 	// read a file containing a single stretch
 	HINFile f("data/AmberFF_test_1.hin");	
+
 	System s;
 	f >> s;
 	f.close();
+
 	TEST_EQUAL(s.countAtoms(), 2)
 
 	// setup the force field and
