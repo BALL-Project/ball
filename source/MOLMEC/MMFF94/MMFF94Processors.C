@@ -767,7 +767,7 @@ bool MMFF94ChargeProcessor::finish()
 
 	// now add up all charges
 	HashMap<Atom*, float>::Iterator cit = charges.begin();
-	for (; cit != charges.begin(); ++cit)
+	for (; cit != charges.end(); ++cit)
 	{
 		Atom& atom = *cit->first;
 		atom.setCharge(atom.getCharge() + cit->second);
