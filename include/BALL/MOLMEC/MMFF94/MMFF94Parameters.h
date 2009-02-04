@@ -544,7 +544,7 @@ namespace BALL
 		virtual void clear()
 			throw();
 
-		/** Get the parital charge increment for the two atom types and the bond type.
+		/** Get the partial charge increment for the two atom types and the bond type.
 		 		The increment is for the atom with atom type at1.
 				99 is return if no increment could be calculated.
 		*/
