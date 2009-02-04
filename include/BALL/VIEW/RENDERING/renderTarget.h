@@ -11,6 +11,7 @@
 #include <assert.h>
 #include <vector>
 #include <boost/smart_ptr.hpp>
+#include <boost/shared_array.hpp>
 
 #include <BALL/VIEW/RENDERING/pixelFormat.h>
 
