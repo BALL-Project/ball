@@ -1,7 +1,7 @@
 dnl
 dnl		VIEW support
 dnl
-AC_DEFUN(CF_VIEW, [
+AC_DEFUN([CF_VIEW], [
 dnl
 dnl    search for X-libs and includes, QT and 3D stuff (OpenGL/MESA)
 dnl 

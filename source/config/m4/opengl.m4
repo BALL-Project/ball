@@ -1,4 +1,4 @@
-AC_DEFUN(CF_VIEW_OPENGL, [
+AC_DEFUN([CF_VIEW_OPENGL], [
 dnl
 dnl		Fix up the OpenGL stuff for MacOS X -- here we need to use OpenGL and AGL frameworks
 dnl

@@ -1,7 +1,7 @@
 dnl
 dnl	GSL -- GNU Scientific Library
 dnl
-AC_DEFUN(CF_GSL, [
+AC_DEFUN([CF_GSL], [
 	AC_MSG_CHECKING(Checking for GSL support)
 	dnl
   dnl  variable substitutions required for GSL support

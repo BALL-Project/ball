@@ -1,7 +1,7 @@
 dnl
 dnl   check for the XDR functions: their interface and the libraries they're hidden in.
 dnl
-AC_DEFUN(CF_CHECK_XDR, [
+AC_DEFUN([CF_CHECK_XDR], [
 if test "${PROJECT[]_NO_XDR}" = "true" ; then
 AC_MSG_RESULT([No XDR headers available - building of XDR persistence support disabled])
 AC_DEFINE(PROJECT[]_HAS_XDR, )

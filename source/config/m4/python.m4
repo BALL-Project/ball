@@ -3,7 +3,7 @@ dnl		Python extension support
 dnl
 dnl   TODO: make sure that all configure options are really parsed
 dnl
-AC_DEFUN(CF_PYTHON, [
+AC_DEFUN([CF_PYTHON], [
 	dnl
 	dnl  variable subsitutions for config.mak
 	dnl

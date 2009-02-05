@@ -1,7 +1,7 @@
 dnl
 dnl		general boost support
 dnl
-AC_DEFUN(CF_BOOST, [
+AC_DEFUN([CF_BOOST], [
 	AC_SUBST(BOOST_LIBS)
 
 	AX_BOOST_BASE()
@@ -13,7 +13,7 @@ AC_DEFUN(CF_BOOST, [
 dnl
 dnl		asio support
 dnl
-AC_DEFUN(CF_ASIO, [
+AC_DEFUN([CF_ASIO], [
 	dnl
 	dnl configure arguments
 	dnl

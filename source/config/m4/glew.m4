@@ -2,7 +2,7 @@ dnl
 dnl  Test for GLEW (GL Extensions Wrangler) library used 
 dnl  to handle OpenGL extensions in a more or less portable fashion
 dnl
-AC_DEFUN(CF_VIEW_GLEW, [
+AC_DEFUN([CF_VIEW_GLEW], [
 if test ${VIEW_PLATFORM} = OpenGL ; then
 	AC_MSG_CHECKING(for GLEW library)
 	CF_FIND_LIB(LIBPATH,libGLEW, ${GLEW_LIBPATH})

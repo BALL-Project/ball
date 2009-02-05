@@ -1,7 +1,7 @@
 dnl
 dnl FFTW -- Fastest Fourier Transform in the West
 dnl
-AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
+AC_DEFUN([CF_CHECK_FFTW_SUPPORT], [
 if test "${FFTW_SUPPORT}" = true ; then
 	FFTW_SUPPORT=true
 
