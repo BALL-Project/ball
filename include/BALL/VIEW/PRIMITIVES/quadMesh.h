@@ -63,11 +63,6 @@ namespace BALL
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const { vertices = vertex;}
 
-			//Method for printability
-			Position isType()
-				throw() { return 8; }
-
-			
 			/** The colors belonging to each vertex. If this list has *less* entries than
 					there are vertices in this mesh, we take the first element to color the whole
 					mesh. If it is *empty*, we use the color white.

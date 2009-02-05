@@ -7,6 +7,14 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/common.h>
+
+#include <BALL/VIEW/PRIMITIVES/box.h>
+#include <BALL/VIEW/PRIMITIVES/disc.h>
+#include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
+#include <BALL/VIEW/PRIMITIVES/label.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/simpleBox.h>
+
 #include <QtGui/QFileDialog>
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qlineedit.h>
@@ -231,18 +239,23 @@ void PrintingDialog::accept()
 			for (; git != (*it)->getGeometricObjects().end(); git++)
 			{
 				//now we test if the geo object is printable
-				//therefor geometric object has the method isType that returns a Position value in relation to the number of the representation
 				//all geometric objects that are just helpers as the grid but are not exported are counted as printable
 				// mesh (5) is the only real printable representation
-				bool pgeo = (((*git)->isType()) == 0 || ((*git)->isType()) == 1 || ((*git)->isType()) == 2 || ((*git)->isType()) == 3);
-				pgeo = ( pgeo || ((*git)->isType()) == 5 || ((*git)->isType()) == 9 );
-			
-				if ( !pgeo )
-				//case: not printable
-				{	
-					printable = false;
+				//
+				// TODO: what about spheres, e.g.??
+				if (! (	 RTTI::isKindOf<Box> (**git)
+							 ||RTTI::isKindOf<Disc>(**git)
+							 ||RTTI::isKindOf<GridVisualisation>(**git)
+							 ||RTTI::isKindOf<Label>(**git)
+							 ||RTTI::isKindOf<Mesh>(**git)
+							 ||RTTI::isKindOf<SimpleBox>(**git)
+							)
+					 )
+				{
+					printable=false;
 					break;
 				}
+
 			}
 			
 			if (printable)

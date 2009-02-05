@@ -93,10 +93,6 @@ namespace BALL
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const;
 
-			//Method for printability
-			Position isType()
-				throw() { return 6; }
-
 
 			vector<Vector3> tangents;
 			vector<Vector3> vertices;
