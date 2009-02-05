@@ -49,7 +49,8 @@
 #include <BALL/VIEW/DIALOGS/pluginDialog.h>
 
 using namespace std;
-#define BALL_VIEW_DEBUG
+//#define BALL_VIEW_DEBUG
+
 namespace BALL
 {
 	using namespace std;

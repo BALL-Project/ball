@@ -196,7 +196,6 @@ std::cout << " RTFact read __all__ values!" << std::endl;
 					Log.error() << "Invalid sphere resolution!" << std::endl;
 					return;
 				}
-				std::cout << "Sphere detail level: " << sphere_points <<std::endl;
 				apply();
 			}
 		}
@@ -222,7 +221,6 @@ std::cout << " RTFact read __all__ values!" << std::endl;
 					Log.error() << "Invalid tube resolution!" << std::endl;
 					return;
 				}	
-				std::cout << "Tube points: " << tube_points <<std::endl;
 				apply();
 			}
 		}
