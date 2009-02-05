@@ -21,7 +21,7 @@
 
 using namespace std;
 
-namespace BALL 
+namespace BALL
 {
 	const char* MMFF94::Option::FOLDER = "folder";
 	const char* MMFF94::Option::ASSIGN_CHARGES = "assign_charges"; 
@@ -231,22 +231,23 @@ namespace BALL
 		if (!parameters_initialized_)
 		{
 			String prefix = folder + FileSystem::PATH_SEPARATOR;
-			atom_types_.readParameters(prefix + "MMFFPROP.PAR");
-			equivalences_.readParameters(prefix + "MMFFDEF.PAR");
-			bond_parameters_.readParameters(prefix + "MMFFBOND.PAR");
-			bond_parameters_.readEmpiricalParameters(prefix + "MMFFBNDK.PAR");
+			Parameters p(prefix + "mmff94.ini");
+			atom_types_.readParameters(p, "AtomTypeProperties");
+			equivalences_.readParameters(p, "Equivalences");
+			bond_parameters_.readParameters(p, "BondStretch");
+			bond_parameters_.readEmpiricalParameters(p, "EmpiricalBondParams");
 			parameters_initialized_ = true;
 
-			es_parameters_.readParameters(prefix + "MMFFCHG.PAR");
-			es_parameters_.readEmpiricalParameters(prefix + "MMFFPBCI.PAR");
+			es_parameters_.readParameters(p, "PartialCharges");
+			es_parameters_.readEmpiricalParameters(p, "PartialBondCharges");
 
 			atom_typer_.setup(prefix + "TYPES.PAR");
-			atom_typer_.setupHydrogenTypes(prefix + "MMFFHDEF.PAR");
-			atom_typer_.setupSymbolsToTypes(prefix + "MFFSYMB.PAR");
-			atom_typer_.setupAromaticTypes(prefix + "MMFFAROM.PAR");
+			atom_typer_.setupHydrogenTypes(p, "HydrogenTypes");
+			atom_typer_.setupSymbolsToTypes(p, "Symbols");
+			atom_typer_.setupAromaticTypes(p, "Aromatic");
 			atom_typer_.collectHeteroAtomTypes(atom_types_);
 
-			charge_processor_.setup(prefix + "CHARGES.PAR");
+			charge_processor_.setup("Charges");
 			charge_processor_.setESParameters(es_parameters_);
 		}
 

@@ -11,9 +11,11 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/system.h>
-#include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/STRUCTURE/smartsMatcher.h>
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/FORMAT/parameters.h>
+#include <BALL/FORMAT/parameterSection.h>
+#include <BALL/SYSTEM/path.h>
 
 #include <BALL/SYSTEM/timer.h>
 //    #define BALL_MMFF94_TEST
@@ -21,7 +23,7 @@
 
 using namespace std;
 
-namespace BALL 
+namespace BALL
 {
 
 MMFF94AtomTyper::MMFF94AtomTyper()
@@ -33,73 +35,69 @@ MMFF94AtomTyper::MMFF94AtomTyper(const MMFF94AtomTyper& t)
 {
 }
 
-bool MMFF94AtomTyper::setupHydrogenTypes(const String& filename)
+bool MMFF94AtomTyper::setupHydrogenTypes(Parameters& p, const String& section)
 {
-	LineBasedFile infile(filename);
+	ParameterSection p_sec;
+	p_sec.extractSection(p, section);
 
-	vector<String> fields;
-	
-	while (infile.readLine())
+	for(Position i = 0; i < p_sec.getNumberOfKeys(); ++i)
 	{
-		const String line = infile.getLine();
+		String key = p_sec.getKey(i);
 
-		// comments and empty lines
-		if (line.size() < 2 || line[0] == '*') continue;
-		
-		if (line.split(fields) < 2)
+		if (p_sec.getNumberOfVariables() < 1)
 		{
 			continue;
-			Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
-									<< filename << " Not enough fields in one line " 
-									<< line << std::endl;
+			Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : "
+									<< section << " Not enough fields in one line "
+									<< std::endl;
 			return false;
 		}
 
-		partner_type_to_htype_[fields[0]] = fields[1];
+		partner_type_to_htype_[key] = p_sec.getValue(i, 0);
 	}
 
 	return true;
 }
 
 // read MMFFAROM.PAR to map normal to aromatic types
-bool MMFF94AtomTyper::setupAromaticTypes(const String& filename)
+bool MMFF94AtomTyper::setupAromaticTypes(Parameters& p, const String& section)
 {
 	aromatic_types_5_map_.clear();
 	cation_atoms_.clear();
 
-	LineBasedFile infile(filename);
 	vector<String> fields;
-	
-	while (infile.readLine())
+
+	ParameterSection p_sec;
+	p_sec.extractSection(p, section);
+
+	for(Position i = 0; i < p_sec.getNumberOfKeys(); ++i)
 	{
-		String line;
 		try
 		{
-			line = infile.getLine();
+			String key = p_sec.getKey(i);
 
-			// comments and empty lines
-			if (line.size() < 2 || line[0] == '*') continue;
-			
-			if (line.split(fields) < 7)
+			key.split(fields);
+
+			if (fields.size() + p_sec.getNumberOfVariables() < 7)
 			{
 				continue;
-				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
-										<< filename << " Not enough fields in one line " 
-										<< line << std::endl;
+				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : "
+										<< section << " Not enough fields in one line "
+										<< std::endl;
 				return false;
 			}
 
 			AromaticType type;
-			
-			const String old_type = fields[0];
+
+			const String old_type = fields[1];
 			// special threatment for some of the 5 ring heteroaromatic types later:
 			if (old_type.hasSuffix("*")) continue;
-			
-			type.new_type = fields[1];
-			const Size ring_size = fields[3].toUnsignedInt();
-			const String L5 = fields[4].toUnsignedInt();
-			type.cation = fields[5].toBool();
-			type.anion = fields[6].toBool();
+
+			type.new_type = fields[2];
+			const Size ring_size = p_sec.getValue(i, 1).toUnsignedInt();
+			const String L5 = p_sec.getValue(i, 2).toUnsignedInt();
+			type.cation = p_sec.getValue(i, 3).toBool();
+			type.anion = p_sec.getValue(i, 4).toBool();
 
 			if (ring_size == 5)
 			{
@@ -110,9 +108,9 @@ bool MMFF94AtomTyper::setupAromaticTypes(const String& filename)
 		}
 		catch(...)
 		{
-				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
-										<< filename << " Not enough fields in one line " 
-										<< line << std::endl;
+				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : "
+										<< section << " Not enough fields in one line "
+										<< std::endl;
 				return false;
 		}
 	}
@@ -232,34 +230,32 @@ bool MMFF94AtomTyper::assignAromaticType_5_(Atom& atom, Position L5, bool anion,
 	return true;
 }
 
-bool MMFF94AtomTyper::setupSymbolsToTypes(const String& filename)
+bool MMFF94AtomTyper::setupSymbolsToTypes(Parameters& p, const String& section)
 {
-	LineBasedFile infile(filename);
 	vector<String> fields;
-	
-	while (infile.readLine())
-	{
-		const String line = infile.getLine();
+	ParameterSection p_sec;
+	p_sec.extractSection(p, section);
 
-		// comments and empty lines
-		if (line.size() < 2 || line[0] == '*') continue;
-		
-		if (line.split(fields) < 2)
+	for(Position i = 0; i < p_sec.getNumberOfKeys(); ++i)
+	{
+		String key = p_sec.getKey(i);
+
+		if (p_sec.getNumberOfVariables() < 1)
 		{
-			Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
-									<< filename << " Not enough fields in one line " 
-									<< line << std::endl;
+			Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : "
+									<< section << " Not enough fields in one line "
+									<< std::endl;
 			return false;
 		}
 
 		try
 		{
-			id_to_type_[fields[0]] = fields[1].toUnsignedInt();
+			id_to_type_[key] = p_sec.getValue(i, 0).toUnsignedInt();
 		}
 		catch(...)
 		{
-			Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
-									<< filename << " " << line << std::endl;
+			Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : "
+									<< section << std::endl;
 			return false;
 		}
 	}
@@ -375,7 +371,7 @@ void MMFF94AtomTyper::assignTo(System& s)
 		for (; +ait; ++ait)
 		{
 			Atom& atom = **ait;
- 			String element = atom.getElement().getSymbol();
+			String element = atom.getElement().getSymbol();
 			if ((element != "C" && element != "N") ||
 					hetero_atom_types_.has(atom.getType()))
 			{
@@ -476,37 +472,40 @@ MMFF94ChargeProcessor::MMFF94ChargeProcessor(const MMFF94ChargeProcessor& p)
 {
 }
 
-void MMFF94ChargeProcessor::setup(const String& filename)
+void MMFF94ChargeProcessor::setup(const String& section)
 {
 	clear();
-	LineBasedFile infile(filename);
-	vector<String> fields;
-	
-	while (infile.readLine())
-	{
-		const String line = infile.getLine();
 
-		// comments and empty lines
-		if (line.size() < 2 || line[0] == '*') continue;
-		
-		if (line.split(fields) < 2)
+	Path path;
+	String filename(path.find("MMFF94/mmff94.ini"));
+
+	Parameters p(filename);
+
+	ParameterSection p_sec;
+	p_sec.extractSection(p, section);
+
+	for(Position i = 0; i < p_sec.getNumberOfKeys(); ++i)
+	{
+		String key = p_sec.getKey(i);
+
+		if (p_sec.getNumberOfVariables() < 1)
 		{
-			Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
-									<< filename << " Not enough fields in one line " 
-									<< line << std::endl;
+			Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : "
+									<< section << " Not enough fields in one line "
+									<< std::endl;
 			return;
 		}
 
-		if (fields[1] == "*")
+		if (p_sec.getValue(i, 0) == "*")
 		{
-			rule_types_.insert(fields[0]);
+			rule_types_.insert(key);
 			continue;
 		}
 
-		types_to_charges_[fields[0]] = fields[1].toFloat();
+		types_to_charges_[key] = p_sec.getValue(i, 0).toFloat();
 	}
 }
-		
+
 void MMFF94ChargeProcessor::clear()
 	throw()
 {
