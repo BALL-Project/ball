@@ -959,11 +959,12 @@ int runtests(const vector<String>& filenames)
 {
 	MMFF94AtomTyper typer;
 	typer.setup(Path().find("MMFF94/TYPES.PAR"));
-	typer.setupHydrogenTypes(Path().find("MMFF94/MMFFHDEF.PAR"));
-	typer.setupSymbolsToTypes(Path().find("MMFF94/MFFSYMB.PAR"));
-	typer.setupAromaticTypes(Path().find("MMFF94/MMFFAROM.PAR"));
+	Parameters p(Path().find("MMFF94/mmff94.ini"));
+	typer.setupHydrogenTypes(p, "HydrogenTypes");
+	typer.setupSymbolsToTypes(p, "Symbols");
+	typer.setupAromaticTypes(p, "Aromatic");
 	MMFF94AtomTypes types;
-	types.readParameters(Path().find("MMFF94/MMFFPROP.PAR"));
+	types.readParameters(p, "AtomTypeProperties");
 	typer.collectHeteroAtomTypes(types);
 
 	MMFF94 mmff;

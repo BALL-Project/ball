@@ -66,29 +66,29 @@ namespace BALL
 		virtual void assignTo(System& s);
 
 		/// Read the hydrogen matching from MMFFHDEF.PAR
-		virtual bool setupHydrogenTypes(const String& filename);
+		virtual bool setupHydrogenTypes(Parameters& p, const String& section);
 
 		/// Read the matching from ID to numerical type from MFFSYMB.PAR
-		virtual bool setupSymbolsToTypes(const String& filename);
-		
+		virtual bool setupSymbolsToTypes(Parameters& p, const String& section);
+
 		/// Read the matching from general ID to ID in aromatic rings
-		virtual bool setupAromaticTypes(const String& filename);
+		virtual bool setupAromaticTypes(Parameters& p, const String& section);
 
 		///
 		void collectHeteroAtomTypes(const MMFF94AtomTypes& atom_types);
-		
+
 		protected:
 
 		bool assignAromaticType_5_(Atom& atom, Position L5, bool anion, bool cation);
 
-		StringHashMap<String> 		partner_type_to_htype_;
-		StringHashMap<Position> 	id_to_type_;
+		StringHashMap<String> partner_type_to_htype_;
+		StringHashMap<Position> id_to_type_;
 		HashMap<String, AromaticType> aromatic_types_5_map_;
-		HashSet<String> 					cation_atoms_;
-		MMFF94AtomTypes* 					atom_types_;
-		HashSet<Position> 				hetero_atom_types_;
+		HashSet<String> cation_atoms_;
+		MMFF94AtomTypes* atom_types_;
+		HashSet<Position> hetero_atom_types_;
 	};
-		
+
 
 	/**	Assign MMFF94 Charges
       \ingroup  MMFF94

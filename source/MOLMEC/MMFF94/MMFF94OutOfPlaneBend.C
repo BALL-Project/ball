@@ -96,13 +96,14 @@ namespace BALL
 		if (!parameters_.isInitialized())
 		{
 			Path    path;
-			String  filename(path.find("MMFF94/MMFFOOP.PAR"));
+			String  filename(path.find("MMFF94/mmff94.ini"));
 
 			if (filename == "") throw Exception::FileNotFound(__FILE__, __LINE__, "[empty]");
 
 			const MMFF94AtomTypeEquivalences& equiv = mmff->getEquivalences();
 			parameters_.setEquivalences(equiv);
-			parameters_.readParameters(filename);
+			Parameters p(filename);
+			parameters_.readParameters(p, "OutOfPlane");
 		}
 
 		bends_.clear();

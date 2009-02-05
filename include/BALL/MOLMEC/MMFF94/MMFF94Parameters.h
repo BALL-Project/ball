@@ -23,6 +23,7 @@ namespace BALL
 {
 
 	class Atom;
+	class Parameters;
 
 	Position getMMFF94Index(Position atom_type1, Position atom_type2);
 
@@ -61,7 +62,7 @@ namespace BALL
 		bool isInitialized() { return is_initialized_;}
 
 		///
-		bool readParameters(const String& filename)
+		bool readParameters(Parameters& p, const String& section)
 			throw(Exception::FileNotFound);
 
 		///
@@ -236,7 +237,7 @@ namespace BALL
 		bool assignParameters(Position type1, Position type2, BondData& data) const;
 
 		///
-		bool readEmpiricalParameters(const String& filename);
+		bool readEmpiricalParameters(Parameters& p, const String& section);
 
 		///
 		const StretchMap& getBondParameters() const { return parameters_;}
@@ -338,7 +339,7 @@ namespace BALL
 											 double& kba_ijk, double& kba_kji) const;
 
 		/// read parameters for stretch-bends and for assignment by periodic table row
-		bool readEmpiricalParameters(const String& by_row_filename)
+		bool readEmpiricalParameters(Parameters& p, const String& section)
 			throw(Exception::FileNotFound);
 		
 		//@}
@@ -551,7 +552,7 @@ namespace BALL
 		double getPartialCharge(Position at1, Position at2, Position bt) const;
 		
 		///
-		bool readEmpiricalParameters(const String& filename)
+		bool readEmpiricalParameters(Parameters& p, const String& section)
 			throw(Exception::FileNotFound);
 
 		///
