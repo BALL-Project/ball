@@ -88,11 +88,6 @@ namespace BALL
 			///
 			Size getDotSize() const { return dot_size_;}
 
-			//Method for printability
-			Position isType()
-				throw() { return 2; }
-
-
 			Vector3 origin, x,y,z;
 			float max_dim;
 			Size slices;

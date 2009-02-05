@@ -180,11 +180,6 @@ namespace BALL
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(std::vector<Vector3>&) const {};
 
-			//Getter for printable:
-			virtual Position isType()
-				throw() {return -1;}
-				
-
 			//@}
 
 			private:
