@@ -7,6 +7,9 @@
 #ifndef BALL_STRUCTURE_SURFACE_PROCESSOR_H
 #define BALL_STRUCTURE_SURFACE_PROCESSOR_H
 
+#ifndef BALL_COMMON_EXCEPTION_H
+# include <BALL/COMMON/exception.h>
+#endif
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #	include <BALL/STRUCTURE/reducedSurface.h>
 #endif
@@ -63,10 +66,10 @@ namespace BALL
 		/** @name Constructors and destructor.
 		*/
 		//@{
-		
+
 		/// Default constructor
 		SurfaceProcessor();
-	
+
 		//@}
 
 		/** @name Processor-related methods.
@@ -80,7 +83,7 @@ namespace BALL
 		virtual bool finish();
 
 		///
- 		virtual Processor::Result operator () (Atom&  atom);
+		virtual Processor::Result operator () (Atom&  atom);
 		//@}
 		/** @name Accessors.
 		*/
@@ -88,22 +91,32 @@ namespace BALL
 
 		///
 		const Surface& getSurface() const { return surface_; }
-		
+
 		///
 		Surface& getSurface() { return surface_; }
-	
-		///
-		void setProbeRadius(double radius) { probe_radius_ = radius; }
-		
+
+		/**
+		 * Sets the radius of the used probe sphere
+		 *
+		 * @throw Exception::OutOfRange Specifying a radius <= 0 is illegal
+		 */
+		void setProbeRadius(double radius) throw(Exception::OutOfRange){
+			if(radius <= 0.0) {
+				throw Exception::OutOfRange(__FILE__, __LINE__);
+			}
+
+			probe_radius_ = radius;
+		}
+
 		///
 		double getProbeRadius() const { return probe_radius_; }
-		
+
 		///
 		void setDensity(double density) { density_ = density; }
-		
+
 		///
 		double getDensity() const { return density_; }
-		
+
 		///
 		std::vector<TSphere3<double> >& getSpheres() { return spheres_; }
 
@@ -126,20 +139,20 @@ namespace BALL
 
 		//_
 		SurfaceType											surface_type_;
-		
+
 		//_
 		Surface													surface_;
-		
+
 		//_
 		std::vector<TSphere3<double> >	spheres_;
-		
+
 		//_
 		double													density_;
-		
+
 		//_
 		double													probe_radius_;
 	};
-   
+
 }
 
 #endif //  BALL_STRUCTURE_SURFACE_PROCESSOR_H
