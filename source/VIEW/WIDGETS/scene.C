@@ -16,7 +16,7 @@
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
-#include <BALL/VIEW/DIALOGS/printingDialog.h>
+#include <BALL/VIEW/DIALOGS/exportGeometryDialog.h>
 
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
 
@@ -2457,7 +2457,7 @@ namespace BALL
 		{
 			bool change = false;
 			Position count = 0;
-			PrintingDialog ts;
+			ExportGeometryDialog ts;
 			ts.setFilename(QString::number(vrml_nr_));
 			ts.exec();
 
