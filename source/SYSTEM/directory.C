@@ -576,13 +576,15 @@ namespace BALL
 			FindClose(dirent_);
 		}
 		dir_ = dirent_= INVALID_HANDLE_VALUE;
-		if ((directory_path[0] == FileSystem::PATH_SEPARATOR) || 
+		if (   (directory_path.size() > 0) 
+			&& ((directory_path[0] == FileSystem::PATH_SEPARATOR) || 
 				(directory_path[1] == ':' && 
-				 directory_path[2] == FileSystem::PATH_SEPARATOR))
+				 directory_path[2] == FileSystem::PATH_SEPARATOR)))
 #else
 		dir_ = 0;
 		dirent_ = 0;
-		if (directory_path[0] == FileSystem::PATH_SEPARATOR)		//absolute path
+		if (  (directory_path.size() > 0)
+			&&(directory_path[0] == FileSystem::PATH_SEPARATOR))		//absolute path
 #endif
 		{
 			directory_path_ = directory_path;
