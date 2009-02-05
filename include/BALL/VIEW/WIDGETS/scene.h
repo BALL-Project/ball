@@ -507,7 +507,7 @@ namespace BALL
 			/// show an dialog to save an PNG file to
 			void showExportPNGDialog();
 
-			/// opens the VIEW/DIALOGS/PrintingDialog for vrml and stl export
+			/// opens the VIEW/DIALOGS/GeometryExportDialog for vrml and stl export
 			void showExportVRMLDialog();
 
 			/// Enable or disable model previews e.g. while rotating
