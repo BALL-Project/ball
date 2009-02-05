@@ -39,7 +39,7 @@ namespace BALL
 			options (see QT documentation for details). Using the database support without the
 			enabling the visualization component of BALL is not possible at this time.
 	*/
-	class DBInterface
+	class BALL_EXPORT DBInterface
 	{
 		public:
 		

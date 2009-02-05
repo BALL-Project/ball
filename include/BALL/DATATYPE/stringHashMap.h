@@ -196,17 +196,6 @@ namespace BALL
 			return HashMap<String, Value>::size();
 		}
 		
-		/**	Return the load factor of the hash map.
-				The load factor is defined as the quotient of
-				the hash map size (the number of entries) and the number
-				of buckets.
-		*/
-		float getLoadFactor() const
-			throw()
-		{
-			return (float)HashMap<String, Value>::size() / (float)HashMap<String, Value>::getBucketSize();
-		}
-	
 		//@}
 
 		/**	@name	Predicates */
@@ -223,7 +212,7 @@ namespace BALL
 		*/
 		bool operator != (const StringHashMap<Value>& hash_map) const throw()
 		{
-			return HashMap<String, Value>::operator != (hash_map);
+			return !(HashMap<String, Value>::operator == (hash_map));
 		}
 
 		/** Decide whether the hash map contains a given key.

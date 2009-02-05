@@ -1309,7 +1309,7 @@ namespace BALL
 	struct PointerPairComparator {
 		typedef std::pair<TrianglePoint*, TrianglePoint*> Input;
 
-		bool operator()(const Input& p1, const Input& p2) {
+		bool operator()(const Input& p1, const Input& p2) const {
 			Input a = p1;
 			if((unsigned long)a.first > (unsigned long)a.second) {
 				std::swap(a.first, a.second);

@@ -265,8 +265,7 @@ namespace BALL
 			
 			/** Returns the grid coordinate corresponding to the position.
 			 */
-			Vector3 getGridCoordinates(Position position) const
-				throw();
+			Vector3 getGridCoordinates(Position position) const;
 			
 			/** Returns the data at the grid position closest to <b>  pos </b>,
 				and automatically includes
@@ -665,7 +664,6 @@ namespace BALL
 
 	template <typename ComplexTraits>
 	Vector3 TFFT3D<ComplexTraits>::getGridCoordinates(Position position) const
-		throw()
 	{
 		if (!inFourierSpace_)
 		{

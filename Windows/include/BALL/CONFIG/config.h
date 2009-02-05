@@ -117,6 +117,28 @@
 #define BALL_XDRREC_CREATE_CHAR_CHAR_INT 1
 /* #undef BALL_XDRREC_CREATE_VOID */
 
+// Defines the prefix needed when including extensions to the stl
+#define BALL_EXT_INCLUDE_PREFIX stdext
+
+// Defines whether the HashMap already provides LongSize hashing
+/* #undef BALL_NEEDS_LONGSIZE_HASH */
+
+#define BALL_HAS_UNORDERED_MAP 1
+
+// If ext/hash_map is defined, we use this instead of std::map
+/* #undef BALL_HAS_HASH_MAP */
+#define BALL_MAP_NAMESPACE boost
+#define BALL_MAP_NAME std::tr1::unordered_map<Key, T>
+
+// defined if BALL was configured with asio support
+#define BALL_HAS_ASIO
+
+// defined if asio is taken from boost
+/* #undef BALL_HAS_BOOST_ASIO */
+
+// the namespace to use for asio
+#define BALL_ASIO_NAMESPACE asio
+
 // some platforms (e.g. Debian 2.1) do not provide xdr_u_hyper, so we
 // need a workaround for this
 // #undef BALL_HAS_XDR_U_HYPER 1
@@ -221,7 +243,7 @@
 #define BALL_USE_WINSOCK
 #define mode_t int
 #define BALL_MUST_CAST_TEMPLATE_FUNCTION_ARGS
-#define NOMINMAX
+//#define NOMINMAX
 
 
 
@@ -233,7 +255,10 @@
 
 // Keep Windows from defining min/max, ERROR,... as preprocesor symbols!
 // May he how thought of defining these by default rot in hell!
-#define NOMINMAX
+#ifndef NOMINMAX
+#	define NOMINMAX 1
+#endif
+
 #define NOGDI
 #define NOWINRES
 

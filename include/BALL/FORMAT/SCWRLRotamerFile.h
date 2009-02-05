@@ -50,7 +50,7 @@ namespace BALL
 		const SCWRLRotamerFile& operator = (const SCWRLRotamerFile& file);
 
 		/// input operator
-		void operator >> (RotamerLibrary& rotamer_library) throw();
+		void operator >> (RotamerLibrary& rotamer_library);
 
 		// TODO output operator????
 		//@}

@@ -16,6 +16,8 @@
 #ifdef BALL_HAS_BOOST_ASIO
 #	include <boost/asio.hpp>
 #else
+#define BOOST_DATE_TIME_NO_LIB
+#define BOOST_REGEX_NO_LIB
 # include <asio.hpp>
 #endif
 
@@ -30,7 +32,7 @@ namespace BALL
 	 *  encapsulate a number of details (asio - namespace, correct names of header files, ...)
 	 *  to allow boost-integrated asio as well as the pure library.
 	 */
-	class TCPIOStream
+	class BALL_EXPORT TCPIOStream
 		: public BALL_ASIO_NAMESPACE::ip::tcp::iostream
 	{
 		public:
@@ -59,7 +61,7 @@ namespace BALL
 	 * 	Note that the server is not automatically started but rather waits for a call
 	 * 	to "run".
 	 */
-	class TCPServer
+	class BALL_EXPORT TCPServer
 	{
 		public:
 			TCPServer(Size port, bool restart = true)
@@ -95,7 +97,7 @@ namespace BALL
 
 	/** This class provides a simple TCP Server running in its own QThread.
 	 */
-	class TCPServerThread
+	class BALL_EXPORT TCPServerThread
 		: public TCPServer,
 			public virtual QThread
 	{
