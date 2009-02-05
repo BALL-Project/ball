@@ -58,7 +58,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	int argc = __argc;
 	char** argv = __argv;
 #endif
-printf("Hallo hallo hallo\n");
 	qInstallMsgHandler(logMessages);
 
 	putenv("BALL_RETURN_VALUE=");
