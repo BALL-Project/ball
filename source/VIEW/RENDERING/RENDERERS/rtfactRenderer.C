@@ -133,7 +133,7 @@ namespace BALL
 						recreate_accel = true;
 
 						has_geometry = true;
-						objects_.insert(*it);
+						objects_[*it] = rt_data;
 
 						if (RTTI::isKindOf<Mesh>(**it))
 						{
