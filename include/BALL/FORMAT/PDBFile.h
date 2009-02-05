@@ -47,21 +47,26 @@
 #	include <BALL/KERNEL/secondaryStructure.h>
 #endif
 
-#if defined(BALL_HAS_HASH_MAP) || defined(BALL_HAS_UNORDERED_MAP)
-namespace BALL_MAP_NAMESPACE
+#if defined(BALL_HAS_UNORDERED_MAP) || defined(BALL_HAS_HASHMAP)
+#ifdef BALL_HAS_UNORDERED_MAP
+namespace std
 {
-  template<>
-	struct hash<BALL::Quadruple<BALL::String, BALL::PDB::Character, BALL::PDB::Integer, BALL::PDB::AChar> >
-  {
-		size_t
-    operator()(const BALL::Quadruple<BALL::String, BALL::PDB::Character, BALL::PDB::Integer, BALL::PDB::AChar>& f) const
-    { return (size_t)f.third; }
-	};
+#endif
+	namespace BALL_MAP_NAMESPACE {
+		template<>
+		struct hash<BALL::Quadruple<BALL::String, BALL::PDB::Character, BALL::PDB::Integer, BALL::PDB::AChar> >
+		{
+			size_t
+			operator()(const BALL::Quadruple<BALL::String, BALL::PDB::Character, BALL::PDB::Integer, BALL::PDB::AChar>& f) const
+			{ return (size_t)f.third; }
+		};
+	}
+#ifdef BALL_HAS_UNORDERED_MAP
 }
 #endif
+#endif
 
-
-namespace BALL 
+namespace BALL
 {
 
 	/** PDB file class.
