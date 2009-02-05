@@ -26,7 +26,7 @@
 #include <utility>
 #include <algorithm>
 
-#if   defined(BALL_HAS_UNORDERED_MAP)
+#if defined(BALL_HAS_UNORDERED_MAP)
 # include <tr1/unordered_map>
 #elif defined(BALL_EXT_INCLUDE_PREFIX)
 # include <ext/hash_map>
@@ -37,10 +37,12 @@
 #endif
 
 #ifdef BALL_HAS_UNORDERED_MAP
+
 namespace std
 {
 	namespace tr1
 	{
+		
 		// borrowed from boost
 		template<typename T> 
 		void hash_combine_ala_boost(size_t & seed, T const & v)
@@ -79,10 +81,10 @@ namespace std
 		};
 
 		template <class A, class B, class C, class D>
-		struct hash< ::BALL::Quadruple<A, B, C, D> > : public std::unary_function< ::BALL::Quadruple<A, B, C, D>, size_t> 
+		struct hash< const ::BALL::Quadruple<A, B, C, D> > : public std::unary_function< const ::BALL::Quadruple<A, B, C, D>, size_t> 
 		{
 			inline size_t
-			operator()(::BALL::Quadruple<A, B, C, D> q) const
+			operator()(const ::BALL::Quadruple<A, B, C, D> q) const
 			{
 				size_t seed = 0;
 				hash_combine_ala_boost(seed, q.first);
@@ -94,8 +96,9 @@ namespace std
 			}
 		};
 
+#ifndef BALL_COMPILER_MSVC
 		template<>
-		struct hash<const ::BALL::String&> : public std::unary_function<const ::BALL::String&, size_t>
+		struct hash<const ::BALL::String&> : public std::unary_function<const ::BALL::String &, size_t>
 		{
 			inline size_t
 			operator()(const ::BALL::String& s) const
@@ -104,6 +107,7 @@ namespace std
 				return h(s);
 			}
 		};
+#endif
 
 		template<>
 		struct hash< ::BALL::String > : public std::unary_function< ::BALL::String, size_t >
@@ -115,6 +119,7 @@ namespace std
 				return h(s);
 			}
 		};
+
 	}
 }
 #endif
