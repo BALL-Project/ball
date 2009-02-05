@@ -174,6 +174,8 @@ namespace BALL
 							rt_data.group_handle = meshGroup;
 							rt_data.object_handles.push_back(handle);
 							rt_data.material_handles.push_back(material);
+
+                            has_geometry = true;
 						} 
 
 						if (RTTI::isKindOf<Sphere>(**it))
@@ -205,6 +207,8 @@ namespace BALL
 							rt_data.group_handle = sphereGroup;
 							rt_data.object_handles.push_back(handle);
 							rt_data.material_handles.push_back(material);
+
+                            has_geometry = true;
 						}
 
 						if (RTTI::isKindOf<TwoColoredTube>(**it))
@@ -271,6 +275,8 @@ namespace BALL
 									Log.error() << "Caught a zero-length tube during rendering!" << std::endl;
 								}
 							}
+
+                            has_geometry = true;
 						}
 
 						// finally, insert our new RTData into the hash map
