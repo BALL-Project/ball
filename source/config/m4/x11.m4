@@ -1,5 +1,5 @@
 dnl Try to identify the X11 libraries to link against
-AC_DEFUN(CF_VIEW_X_LINK_TEST, [
+AC_DEFUN([CF_VIEW_X_LINK_TEST], [
 
 	dnl  
 	dnl

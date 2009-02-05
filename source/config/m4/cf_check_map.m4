@@ -1,7 +1,7 @@
 dnl
 dnl	Check for hash_map instead of map to speed up things
 dnl
-AC_DEFUN(CF_CHECK_MAP, [
+AC_DEFUN([CF_CHECK_MAP], [
 	AC_MSG_CHECKING(for hash map)
 	if test "${HAS_GPLUSPLUS}" = true -a "${USE_TR1}" = true ; then
 		AC_MSG_CHECKING(...trying tr1::unordered_map)

@@ -15,7 +15,7 @@ dnl Determine the current version of the code and print it
 dnl to the console to simplify debugging of submitted configure
 dnl output.
 dnl
-AC_DEFUN(CF_VERSION_CHECK,[
+AC_DEFUN([CF_VERSION_CHECK],[
 	MACHINE=`uname -a`
 	AC_MSG_RESULT(This is PROJECT $PROJECT[]_VERSION_STRING compiling.)
 	AC_MSG_RESULT(Host: $MACHINE)
@@ -27,14 +27,14 @@ dnl		we create the file config.lic if the license was
 dnl		accepted and do not show the license the second time
 dnl
 
-AC_DEFUN(CF_CHECK_LICENSE,[
+AC_DEFUN([CF_CHECK_LICENSE],[
 	dnl deprecated -- no check required
 ])
 
 dnl		define a macro to remove the directory name
 dnl		from a fully specified path
 dnl
-AC_DEFUN(CF_BASENAME,[
+AC_DEFUN([CF_BASENAME],[
  	TMP__DIR="$1/"
 	while test "${TMP__DIR}" != "" ; do
 		TMP__NAME=`echo ${TMP__DIR}|${CUT} -d/ -f1`
@@ -48,7 +48,7 @@ AC_DEFUN(CF_BASENAME,[
 dnl    define a macro to abort configure, print an appropriate error message
 dnl    and package up the current stuff relevant to diagnosis into a tar
 dnl    file.
-AC_DEFUN(CF_ERROR,[
+AC_DEFUN([CF_ERROR],[
 	AC_MSG_RESULT()
 	AC_MSG_RESULT([Configure failed. If you cannot solve your problem with the aid])
 	AC_MSG_RESULT([of the above error message, please contact the ]PROJECT[ mailing list])
@@ -63,7 +63,7 @@ AC_DEFUN(CF_ERROR,[
 	AC_ERROR(Aborted.)
 ])
 
-AC_DEFUN(CF_CONF_DIAG_TAR,[
+AC_DEFUN([CF_CONF_DIAG_TAR],[
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then 
 		${RM} $TARFILE ; 
@@ -79,7 +79,7 @@ dnl    define a macro to inform the user about failed tests for programs
 dnl    it checks for the unix command given as second parameter and
 dnl    sets the shell variable given as second parameter to its absolute path
 dnl 
-AC_DEFUN(CF_MSG_PATH_PROG,[
+AC_DEFUN([CF_MSG_PATH_PROG],[
 	AC_PATH_PROG($1,$2,no)
 	if test $$1 = no ; then
 		AC_MSG_RESULT()
@@ -102,7 +102,7 @@ dnl        header.h is the header file name (e.g. wait.h, GL/gl.h)
 dnl        additional dirnames are included in searches these should be absolute names.
 dnl 
 
-AC_DEFUN(CF_FIND_HEADER,[
+AC_DEFUN([CF_FIND_HEADER],[
 	_INCLUDES=
 
 	dnl    immediate return on predefined directory (read from file?)
@@ -192,7 +192,7 @@ dnl        libXXX is the header file name (e.g. libGLUT, libGL) .a, .so etc. sho
 dnl        additional dirnames are included in searches these should be absolute names.
 dnl 
 
-AC_DEFUN(CF_FIND_LIB,[
+AC_DEFUN([CF_FIND_LIB],[
 	_LIBS=
 
 	dnl   immediate "return" on preset directory (read from file?)
@@ -277,7 +277,7 @@ dnl
 dnl   check whether "echo" understands "-n" (required on some
 dnl   platforms to expand '\n')
 dnl
-AC_DEFUN(CF_CHECK_ECHO,[
+AC_DEFUN([CF_CHECK_ECHO],[
 AC_MSG_CHECKING(whether echo accepts -e)
 if `/bin/sh -c "echo -e \"\n\"" >/dev/null 2>&1` ; then
 	if test "`/bin/sh -c echo -e 2>&1`" = "" -a "`/bin/sh -c echo -e OK`" = "OK" ; then
@@ -299,7 +299,7 @@ dnl
 dnl   check whether find can be called with the parameter -path
 dnl   (needed to find headers in a certain path like GL/libgl.h
 dnl
-AC_DEFUN(CF_CHECK_FIND,[
+AC_DEFUN([CF_CHECK_FIND],[
 if test "${FIND}" != "no" ; then
 	RESULT=`${FIND} KERNEL -path . -print 2>&1`
 	if test "${RESULT}" != "" ; then     dnl    did get an error message ... bad.
@@ -313,7 +313,7 @@ fi
 dnl
 dnl    determine OS and architecture and all this stuff
 dnl
-AC_DEFUN(CF_DETECT_OS,[
+AC_DEFUN([CF_DETECT_OS],[
 AC_SUBST(OSMAJOR)
 AC_SUBST(OS)
 AC_SUBST(OSREV)
@@ -480,7 +480,7 @@ dnl     2) look for vendor supplied compilers (CC)
 dnl     3) check for g++, egcs, eg++, gcc
 dnl   Except for Solaris, where the vendor supplied compiler
 dnl   CC (at least releases 5.0 and below) is not usable.
-AC_DEFUN(CF_SEARCH_CXX,[
+AC_DEFUN([CF_SEARCH_CXX],[
 CXX_NAME=""
 case "${OS}" in
 	Solaris )		CXX_SEARCH_ORDER="g++ CC ";;
@@ -566,7 +566,7 @@ done
 dnl
 dnl		Break up the compiler version into its major and minor release numbers
 dnl
-AC_DEFUN(CF_DIGEST_CXX_VERSION,[
+AC_DEFUN([CF_DIGEST_CXX_VERSION],[
 CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
 CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.]//g" | wc -c`
 if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
@@ -587,7 +587,7 @@ dnl
 dnl		Check whether CXX is a GNU compiler and retrieve its
 dnl			version number.
 dnl
-AC_DEFUN(CF_IDENTIFY_GXX,[
+AC_DEFUN([CF_IDENTIFY_GXX],[
 	AC_MSG_CHECKING(for GNU compiler)
 	cat > /tmp/$$.conftest.c << EOF
 	#ifdef __GNUC__
@@ -616,7 +616,7 @@ EOF
 	${RM} /tmp/$$.conftest.c
 ])
 
-AC_DEFUN(CF_GXX_OPTIONS, [
+AC_DEFUN([CF_GXX_OPTIONS], [
 AC_MSG_CHECKING(compiler version)	
 VERSION_FILE=/tmp/$$.gnu_version.C
 echo "__GNUC__.__GNUC_MINOR__.__GNUC_PATCHLEVEL__" > ${VERSION_FILE}
@@ -750,7 +750,7 @@ dnl   from its drivers options when called in verbose mode.
 dnl   Nasty - but seems to work. Anybody with a better solution
 dnl   should feel free to inform me!
 dnl
-AC_DEFUN(CF_IDENTIFY_KAI, [
+AC_DEFUN([CF_IDENTIFY_KAI], [
 AC_MSG_CHECKING(for KAI C++ compiler)
 KAI=`${CXX} -v --version 2>&1 | sed "s/.*KAI.*/__KAI__/g" |sed "s/.*kai.*/__KAI__/g" | ${EGREP} "^__KAI__$" | sed -n 1p`
 if test "${KAI}" = "__KAI__" ; then
@@ -774,7 +774,7 @@ fi
 dnl
 dnl		KAI-C++-specific options
 dnl
-AC_DEFUN(CF_KAI_OPTIONS, [
+AC_DEFUN([CF_KAI_OPTIONS], [
 	AC_MSG_CHECKING(compiler version)
 	echo "int main(){}" > conftest.C
 	CXX_VERSION=`${CXX} -v --version conftest.C 2>&1| ${GREP} "KAI C++ " | ${CUT} -d" " -f3`
@@ -843,7 +843,7 @@ AC_DEFUN(CF_KAI_OPTIONS, [
 dnl
 dnl   Check for Intel C++ (icc)
 dnl
-AC_DEFUN(CF_IDENTIFY_INTEL, [
+AC_DEFUN([CF_IDENTIFY_INTEL], [
 AC_MSG_CHECKING(for Intel C++ compiler)
 ICC=`${CXX} -V 2>&1 | ${SED} -n 1p |${SED} "s/Intel(R) C.* Compiler.*/__INTELCC__/g"| ${SED} "s/Intel(R) C++.* Compiler.*/__INTELCC__/g" | ${EGREP} "^__INTELCC__$" | sed -n 1p`
 if test "${ICC}" = "__INTELCC__" ; then
@@ -867,7 +867,7 @@ fi
 dnl
 dnl		Set the Intel icc-specific options.
 dnl
-AC_DEFUN(CF_INTEL_OPTIONS,[
+AC_DEFUN([CF_INTEL_OPTIONS],[
 AC_MSG_CHECKING(compiler version)
 echo "int main(){}" > conftest.C
 CXX_VERSION=`${CXX} -V conftest.C 2>&1| ${GREP} "Intel(R) C++" | ${SED} -n 1p | ${SED} "s/.*Version //" | ${CUT} -d" " -f1`
@@ -929,7 +929,7 @@ dnl
 dnl   check for the Digital C++ compiler
 dnl
 dnl
-AC_DEFUN(CF_IDENTIFY_COMPAQ,[
+AC_DEFUN([CF_IDENTIFY_COMPAQ],[
 AC_MSG_CHECKING(for Digital/Compaq C++ compiler)
 DIGITAL_CXX=`${CXX} -V 2>/dev/null | ${GREP} "C++" | ${CUT} -d" " -f-2`
 if test "${DIGITAL_CXX}" = "DIGITAL C++" -o "${DIGITAL_CXX}" = "Compaq C++"; then
@@ -950,7 +950,7 @@ fi
 
 ])
 
-AC_DEFUN(CF_COMPAQ_OPTIONS, [
+AC_DEFUN([CF_COMPAQ_OPTIONS], [
 AC_MSG_CHECKING(compiler version)
 echo "int main(){}" > conftest.C
 CXX_VERSION=`${CXX} -V  2>/dev/null| ${GREP} "C++" | ${SED} "s/^.*C++ //" | ${CUT} -d" " -f1 | ${TR} -d V | ${TR} "-" "."`
@@ -1008,7 +1008,7 @@ if test "${OS}" != "Linux" ; then
 fi
 ])
 
-AC_DEFUN(CF_IDENTIFY_SGI, [
+AC_DEFUN([CF_IDENTIFY_SGI], [
 AC_MSG_CHECKING(for SGI/MipsPro C++ compiler)
 SGI_CXX=`${CXX} -version -n32 2>&1 | ${GREP} "MIPSpro" | ${CUT} -d" " -f1`
 if test "${SGI_CXX}" = "MIPSpro"; then
@@ -1028,7 +1028,7 @@ AC_MSG_RESULT(no)
 fi
 ])
 
-AC_DEFUN(CF_MIPSPRO_OPTIONS, [
+AC_DEFUN([CF_MIPSPRO_OPTIONS], [
 AC_MSG_CHECKING(compiler version)
 CXX_VERSION_STRING=`${CXX} -n32 -version 2>&1 | ${EGREP} ersion`
 if test "${CXX_VERSION_STRING}" = "" ; then
@@ -1126,7 +1126,7 @@ AC_DEFINE(MIPS,)
 AC_DEFINE(IRIX,)
 ])
 
-AC_DEFUN(CF_IDENTIFY_SUN, [
+AC_DEFUN([CF_IDENTIFY_SUN], [
 AC_MSG_CHECKING(for SUN WorkShop/Forte C++ compiler)
 SUN_CXX=`${CXX} -V 2>&1 | ${EGREP} -e "(Sun)|(WorkShop)|(Forte)"`
 if test "${SUN_CXX}" != ""; then
@@ -1146,7 +1146,7 @@ AC_MSG_RESULT(no)
 fi
 ])
 
-AC_DEFUN(CF_SUNCC_OPTIONS, [
+AC_DEFUN([CF_SUNCC_OPTIONS], [
 
 AC_MSG_CHECKING(compiler version for Sun C++)
 CXX_VERSION=`echo ${SUN_CXX} | ${SED} "s/^.*C++ //" | ${CUT} -d" " -f1`
@@ -1220,7 +1220,7 @@ dnl
 dnl   Assemble the complete compiler name by adding
 dnl   the release numbers (if known) of the compiler
 dnl
-AC_DEFUN(CF_BUILD_FULL_CXX_NAME, [
+AC_DEFUN([CF_BUILD_FULL_CXX_NAME], [
 AC_MSG_CHECKING(standardized compiler name)
 if test "${CXX_VERSION_1}" != "" ; then
 CXX_NAME="${CXX_NAME}_${CXX_VERSION_1}"
@@ -1242,7 +1242,7 @@ dnl
 dnl
 dnl   checking for DEBUG-Flag
 dnl
-AC_DEFUN(CF_CHECK_DEBUG_FLAG, [
+AC_DEFUN([CF_CHECK_DEBUG_FLAG], [
 AC_MSG_CHECKING(for DEBUG flag)
 if test "$DEBUG" != "" ; then
 dnl   define a debug flag and prevent the compilation of
@@ -1275,7 +1275,7 @@ dnl
 dnl   check for endianness of the architecture
 dnl
 dnl
-AC_DEFUN(CF_C_BIGENDIAN, [
+AC_DEFUN([CF_C_BIGENDIAN], [
 AC_MSG_CHECKING(for byte order)
 AC_TRY_RUN(
 [
@@ -1337,7 +1337,7 @@ dnl
 dnl   check for limits header (class numeric limits, to be precise)
 dnl
 dnl
-AC_DEFUN(CF_CHECK_NUM_LIMITS, [
+AC_DEFUN([CF_CHECK_NUM_LIMITS], [
 AC_MSG_CHECKING(for numeric_limits class)
 AC_TRY_COMPILE(
 [
@@ -1409,7 +1409,7 @@ dnl   check for template arguments needed for friends of template
 dnl   classses. Some compilers require "<>" after the method name,
 dnl   others don't - so let's find it out!
 dnl
-AC_DEFUN(CF_CHECK_TPL_NULL_ARGS, [
+AC_DEFUN([CF_CHECK_TPL_NULL_ARGS], [
 AC_MSG_CHECKING(for null template arguments)
 PROJECT[]_NULL_TEMPLATE_ARGS="NULL"
 AC_TRY_COMPILE(
@@ -1449,7 +1449,7 @@ dnl
 dnl		Check whether the compiler allows parameterization oftemplate functions
 dnl		with inline functions (SGI CC has a problem with that)
 dnl
-AC_DEFUN(CF_CHECK_INLINE_TPL_ARGS, [
+AC_DEFUN([CF_CHECK_INLINE_TPL_ARGS], [
 AC_MSG_CHECKING(for inline template function arguments)
 PROJECT[]_HAS_INLINE_TPL_ARGS=no
 AC_TRY_COMPILE(
@@ -1479,7 +1479,7 @@ dnl
 dnl   check for ANSI compliant <iostream>
 dnl   We need this for the base classes (ios vs. basic_ios<char>) in socket.h/C
 dnl
-AC_DEFUN(CF_CHECK_ANSI_IOSTREAM, [
+AC_DEFUN([CF_CHECK_ANSI_IOSTREAM], [
 AC_MSG_CHECKING(for ANSI compliant iostream)
 PROJECT[]_HAS_ANSI_IOSTREAM=no
 AC_TRY_COMPILE(
@@ -1502,7 +1502,7 @@ dnl
 dnl		check if we can use <sstream> or if we need to support old
 dnl		style strstream
 dnl
-AC_DEFUN(CF_CHECK_HAS_SSTREAM, [
+AC_DEFUN([CF_CHECK_HAS_SSTREAM], [
 AC_MSG_CHECKING(for sstream headers)
 PROJECT[]_HAS_SSTREAM=no
 AC_TRY_COMPILE(
@@ -1525,7 +1525,7 @@ dnl
 dnl   check for ANSI or ARM style access modification
 dnl   either (ARM style) Base::foo or (ANSI style) using Base::foo
 dnl
-AC_DEFUN(CF_CHECK_ARM_ACCESS_MODIFICATION, [
+AC_DEFUN([CF_CHECK_ARM_ACCESS_MODIFICATION], [
 AC_MSG_CHECKING(for ANSI or ARM style access modification)
 PROJECT[]_CFG_USING_METHOD_DIRECTIVE=none
 AC_TRY_COMPILE(
@@ -1584,7 +1584,7 @@ dnl	Check for the sizes of the tzpes and define a set of portable
 dnl		types of different word lengths.
 dnl	This might profit very nicely from stdint.h at some point.
 dnl
-AC_DEFUN(CF_GET_TYPE_SIZES, [
+AC_DEFUN([CF_GET_TYPE_SIZES], [
 dnl
 dnl   check for the size of int and pointers (may cause trouble on 64 bit architectures)
 dnl   we define the type PointerInt (in COMMON/global.h) according to the macro
@@ -1711,7 +1711,7 @@ AC_MSG_RESULT(${PROJECT[]_COMPLEX_PRECISION})
 dnl
 dnl   check whether the <regex.h> header exists
 dnl
-AC_DEFUN(CF_CHECK_REGEX_H, [
+AC_DEFUN([CF_CHECK_REGEX_H], [
 AC_CHECK_HEADER(regex.h, HAS_REGEX_H=true, HAS_REGEX_H=false)
 if test "${HAS_REGEX_H}" = "false" ; then
 AC_CHECK_HEADER(regexp.h, HAS_REGEX_H=true, HAS_REGEX_H=false)
@@ -1733,7 +1733,7 @@ fi
 dnl
 dnl   Check whether ieeefp.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_IEEEFP_H, [
+AC_DEFUN([CF_CHECK_IEEEFP_H], [
 AC_CHECK_HEADERS(ieeefp.h,
 [PROJECT[]_HAS_IEEEFP_H=true],
 [PROJECT[]_HAS_IEEEFP_H=false])
@@ -1745,7 +1745,7 @@ fi
 dnl
 dnl   check for ISO C99 stdint.h
 dnl
-AC_DEFUN(CF_CHECK_STDINT_H, [
+AC_DEFUN([CF_CHECK_STDINT_H], [
 AC_CHECK_HEADERS(stdint.h,
 [PROJECT[]_HAS_STDINT_H=true],
 [PROJECT[]_HAS_STDINT_H=false])
@@ -1757,7 +1757,7 @@ fi
 dnl
 dnl   check whether values.h does really exist
 dnl
-AC_DEFUN(CF_CHECK_VALUES_H, [
+AC_DEFUN([CF_CHECK_VALUES_H], [
 AC_CHECK_HEADERS(values.h,
 [PROJECT[]_HAS_VALUES_H=true],
 [PROJECT[]_HAS_VALUES_H=false])
@@ -1769,7 +1769,7 @@ fi
 dnl
 dnl   Check whether unistd.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_UNISTD_H, [
+AC_DEFUN([CF_CHECK_UNISTD_H], [
 AC_CHECK_HEADERS(unistd.h,
 [PROJECT[]_HAS_UNISTD_H=true],
 [PROJECT[]_HAS_UNISTD_H=false])
@@ -1781,7 +1781,7 @@ fi
 dnl
 dnl   Check whether limits.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_LIMITS_H, [
+AC_DEFUN([CF_CHECK_LIMITS_H], [
 AC_CHECK_HEADERS(limits.h,
 [PROJECT[]_HAS_LIMITS_H=true],
 [PROJECT[]_HAS_LIMITS_H=false])
@@ -1793,7 +1793,7 @@ fi
 dnl
 dnl   Check whether process.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_PROCESS_H, [
+AC_DEFUN([CF_CHECK_PROCESS_H], [
 AC_CHECK_HEADERS(process.h,
 [PROJECT[]_HAS_PROCESS_H=true],
 [PROJECT[]_HAS_PROCESS_H=false])
@@ -1805,7 +1805,7 @@ fi
 dnl
 dnl   Check whether sys/time.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_SYS_TIME_H, [
+AC_DEFUN([CF_CHECK_SYS_TIME_H], [
 AC_CHECK_HEADERS(sys/time.h,
 [PROJECT[]_HAS_SYS_TIME_H=true],
 [PROJECT[]_HAS_SYS_TIME_H=false])
@@ -1817,7 +1817,7 @@ fi
 dnl
 dnl   Check whether sys/stat.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_SYS_STAT_H, [
+AC_DEFUN([CF_CHECK_SYS_STAT_H], [
 AC_CHECK_HEADERS(sys/stat.h,
 [PROJECT[]_HAS_SYS_STAT_H=true],
 [PROJECT[]_HAS_SYS_STAT_H=false])
@@ -1829,7 +1829,7 @@ fi
 dnl
 dnl   Check whether sys/times.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_SYS_TIMES_H, [
+AC_DEFUN([CF_CHECK_SYS_TIMES_H], [
 AC_CHECK_HEADERS(sys/times.h,
 [PROJECT[]_HAS_SYS_TIMES_H=true],
 [PROJECT[]_HAS_SYS_TIMES_H=false])
@@ -1841,7 +1841,7 @@ fi
 dnl
 dnl   Check whether sys/types.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_SYS_TYPES_H, [
+AC_DEFUN([CF_CHECK_SYS_TYPES_H], [
 AC_CHECK_HEADERS(sys/types.h,
 [PROJECT[]_HAS_SYS_TYPES_H=true],
 [PROJECT[]_HAS_SYS_TYPES_H=false])
@@ -1853,7 +1853,7 @@ fi
 dnl
 dnl   Check whether sys/ioctl.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_SYS_IOCTL_H, [
+AC_DEFUN([CF_CHECK_SYS_IOCTL_H], [
 AC_CHECK_HEADERS(sys/ioctl.h,
 [PROJECT[]_HAS_SYS_IOCTL_H=true],
 [PROJECT[]_HAS_SYS_IOCTL_H=false])
@@ -1865,7 +1865,7 @@ fi
 dnl
 dnl   Check whether time.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_TIME_H, [
+AC_DEFUN([CF_CHECK_TIME_H], [
 AC_CHECK_HEADERS(time.h,
 [PROJECT[]_HAS_TIME_H=true],
 [PROJECT[]_HAS_TIME_H=false])
@@ -1877,7 +1877,7 @@ fi
 dnl
 dnl   Check whether sys/param.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_SYS_PARAM_H, [
+AC_DEFUN([CF_CHECK_SYS_PARAM_H], [
 AC_CHECK_HEADERS(sys/param.h,
 [PROJECT[]_HAS_SYS_PARAM_H=true],
 [PROJECT[]_HAS_SYS_PARAM_H=false])
@@ -1889,7 +1889,7 @@ fi
 dnl
 dnl   Check whether dirent.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_DIRENT_H, [
+AC_DEFUN([CF_CHECK_DIRENT_H], [
 AC_CHECK_HEADERS(dirent.h,
 [PROJECT[]_HAS_DIRENT_H=true],
 [PROJECT[]_HAS_DIRENT_H=false])
@@ -1901,7 +1901,7 @@ fi
 dnl
 dnl   Check whether pwd.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_PWD_H, [
+AC_DEFUN([CF_CHECK_PWD_H], [
 AC_CHECK_HEADERS(pwd.h,
 [PROJECT[]_HAS_PWD_H=true],
 [PROJECT[]_HAS_PWD_H=false])
@@ -1913,7 +1913,7 @@ fi
 dnl
 dnl   Check whether direct.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_DIRECT_H, [
+AC_DEFUN([CF_CHECK_DIRECT_H], [
 AC_CHECK_HEADERS(direct.h,
 [PROJECT[]_HAS_DIRECT_H=true],
 [PROJECT[]_HAS_DIRECT_H=false])
@@ -1925,7 +1925,7 @@ fi
 dnl
 dnl   Check whether io.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_IO_H, [
+AC_DEFUN([CF_CHECK_IO_H], [
 AC_CHECK_HEADERS(io.h,
 [PROJECT[]_HAS_IO_H=true],
 [PROJECT[]_HAS_IO_H=false])
@@ -1937,7 +1937,7 @@ fi
 dnl
 dnl   Check whether sys/socket.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_SYS_SOCKET_H, [
+AC_DEFUN([CF_CHECK_SYS_SOCKET_H], [
 AC_CHECK_HEADERS(sys/socket.h,
 [PROJECT[]_HAS_SYS_SOCKET_H=true],
 [PROJECT[]_HAS_SYS_SOCKET_H=false])
@@ -1949,7 +1949,7 @@ fi
 dnl
 dnl   Check whether netinet/in.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_NETINET_IN_H, [
+AC_DEFUN([CF_CHECK_NETINET_IN_H], [
 AC_CHECK_HEADERS(netinet/in.h,
 [PROJECT[]_HAS_NETINET_IN_H=true],
 [PROJECT[]_HAS_NETINET_IN_H=false])
@@ -1961,7 +1961,7 @@ fi
 dnl
 dnl   Check whether netdb.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_NETDB_H, [
+AC_DEFUN([CF_CHECK_NETDB_H], [
 AC_CHECK_HEADERS(netdb.h,
 [PROJECT[]_HAS_NETDB_H=true],
 [PROJECT[]_HAS_NETDB_H=false])
@@ -1973,7 +1973,7 @@ fi
 dnl
 dnl   Check whether arpa/inet.h does really exist.
 dnl
-AC_DEFUN(CF_CHECK_ARPA_INET_H, [
+AC_DEFUN([CF_CHECK_ARPA_INET_H], [
 AC_CHECK_HEADERS(arpa/inet.h,
 [PROJECT[]_HAS_ARPA_INET_H=true],
 [PROJECT[]_HAS_ARPA_INET_H=false])
@@ -1985,7 +1985,7 @@ fi
 dnl
 dnl   Check whether sys/sysinfo.h does exist.
 dnl
-AC_DEFUN(CF_CHECK_SYS_SYSINFO_H, [
+AC_DEFUN([CF_CHECK_SYS_SYSINFO_H], [
 AC_CHECK_HEADERS(sys/sysinfo.h,
 [PROJECT[]_HAS_SYS_SYSINFO_H=true],
 [PROJECT[]_HAS_SYS_SYSINFO_H=false])
@@ -1994,21 +1994,21 @@ AC_DEFINE(PROJECT[]_HAS_SYS_SYSINFO_H,)
 fi
 ])
 
-AC_DEFUN(CF_CHECK_SYSCONF, [
+AC_DEFUN([CF_CHECK_SYSCONF], [
 AC_CHECK_FUNCS(sysconf, HAS_SYSCONF=1)
 if test "${HAS_SYSCONF}" = 1 ; then
 AC_DEFINE(PROJECT[]_HAS_SYSCONF,)
 fi
 ])
 
-AC_DEFUN(CF_CHECK_KILL, [
+AC_DEFUN([CF_CHECK_KILL], [
 AC_CHECK_FUNCS(kill, HAS_KILL=1)
 if test "${HAS_KILL}" = 1 ; then
 AC_DEFINE(PROJECT[]_HAS_KILL,)
 fi
 ])
 
-AC_DEFUN(CF_CHECK_HYPOT, [
+AC_DEFUN([CF_CHECK_HYPOT], [
 AC_CHECK_FUNCS(kill, HAS_HYPOT=1)
 if test "${HAS_HYPOT}" = 1 ; then
 AC_DEFINE(PROJECT[]_HAS_HYPOT,)
@@ -2018,7 +2018,7 @@ fi
 dnl
 dnl   check whether vsnprintf is defined
 dnl
-AC_DEFUN(CF_CHECK_VSNPRINTF, [
+AC_DEFUN([CF_CHECK_VSNPRINTF], [
 	AC_CHECK_FUNCS(vsnprintf, HAVE_VSNPRINTF=1)
 	if test "${HAVE_VSNPRINTF}" = 1 ; then
 		dnl
@@ -2058,7 +2058,7 @@ int main()
 dnl
 dnl   check whether we need sysinfo or gethostname
 dnl
-AC_DEFUN(CF_CHECK_GETHOSTNAME, [
+AC_DEFUN([CF_CHECK_GETHOSTNAME], [
 	AC_CHECK_FUNCS(gethostname, HAVE_GETHOSTNAME=1)
 	if test "${HAVE_GETHOSTNAME}" = 1 ; then
 		AC_DEFINE(PROJECT[]_HAVE_GETHOSTNAME)
@@ -2098,7 +2098,7 @@ AC_DEFUN(CF_CHECK_GETHOSTNAME, [
 	fi
 ])
 
-AC_DEFUN(CF_CHECK_NETLIBS, [
+AC_DEFUN([CF_CHECK_NETLIBS], [
 dnl
 dnl   first check if everythings already defined in libc
 dnl
@@ -2157,7 +2157,7 @@ dnl   require a specialized typename or int
 dnl   We simply compile a short example with all known types
 dnl   and take one that didn't cause a warning (or an error)
 dnl
-AC_DEFUN(CF_CHECK_SOCKET_ARGS_AND_TYPES, [
+AC_DEFUN([CF_CHECK_SOCKET_ARGS_AND_TYPES], [
 AC_MSG_CHECKING(for socketlen type)
 AC_TRY_COMPILE(
 [
@@ -2224,7 +2224,7 @@ fi
 AC_DEFINE_UNQUOTED(PROJECT[]_SOCKLEN_TYPE, ${PROJECT[]_SOCKLEN_TYPE})
 ])
 
-AC_DEFUN(CF_CLEAR_DEP_FILES, [
+AC_DEFUN([CF_CLEAR_DEP_FILES], [
 	dnl
 	dnl   make sure the dependencies and object lists are (re)built
 	dnl
@@ -2232,7 +2232,7 @@ AC_DEFUN(CF_CLEAR_DEP_FILES, [
 	${RM}  lib*.objects 2>/dev/null
 ])
 
-AC_DEFUN(CF_VALGRIND, [
+AC_DEFUN([CF_VALGRIND], [
 	dnl	
 	dnl	Check for the valgrind application (a memory leak tester).
 	dnl Valgrind can be used to identify leaks from the test programs
@@ -2264,7 +2264,7 @@ AC_DEFUN(CF_VALGRIND, [
 dnl
 dnl	Check for hash_map instead of map to speed up things
 dnl
-AC_DEFUN(CF_CHECK_MAP, [
+AC_DEFUN([CF_CHECK_MAP], [
 	AC_MSG_CHECKING(for hash map)
 	if test "${HAS_GPLUSPLUS}" = true -a "${USE_TR1}" = true ; then
 		AC_MSG_CHECKING(...trying tr1::unordered_map)
@@ -2379,7 +2379,7 @@ AC_DEFUN(CF_CHECK_MAP, [
 dnl
 dnl fix libtool breakage due to -rpath option
 dnl
-AC_DEFUN(AC_FIX_LIBTOOL, [
+AC_DEFUN([AC_FIX_LIBTOOL], [
 	# by Marcelo Magallon <mmagallo@efis.ucr.ac.cr>
 	# Turn around -rpath problem with libtool 1.0c
 	# This define should be improbable enough to not conflict with anything
@@ -2392,7 +2392,7 @@ AC_DEFUN(AC_FIX_LIBTOOL, [
 	fi
 ])
 
-AC_DEFUN(CF_MOVE_CONFIG_FILES, [
+AC_DEFUN([CF_MOVE_CONFIG_FILES], [
 	${MV} Makefile.tmp Makefile
 	${MV} common.mak.tmp common.mak
 	${MV} config.mak.tmp config.mak

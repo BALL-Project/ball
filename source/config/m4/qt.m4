@@ -1,4 +1,4 @@
-AC_DEFUN(CF_VIEW_QT_BASICS, [
+AC_DEFUN([CF_VIEW_QT_BASICS], [
 	AC_MSG_CHECKING(for QT headers)
 	if test "${QTDIR}" != "" ; then
 		CF_FIND_HEADER(QT_INCPATH,Qt/qglobal.h,${QTDIR}/include ${PROJECT[]_PATH}/contrib/qt/include)
@@ -151,7 +151,7 @@ AC_DEFUN(CF_VIEW_QT_BASICS, [
 dnl
 dnl Make sure we can link against OpenGL or Mesa
 dnl
-AC_DEFUN(CF_VIEW_OPENGL_LINK_TEST, [
+AC_DEFUN([CF_VIEW_OPENGL_LINK_TEST], [
 	if test "${VIEW_PLATFORM}" = OpenGL ; then
 		if test "${OPENGL_LIBPATH}" != "/usr/lib" -a "${OPENGL_LIBPATH}" != "" ; then
 			OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -lGLU -lGL ${GLEW_LIBOPTS}"
@@ -245,7 +245,7 @@ AC_DEFUN(CF_VIEW_OPENGL_LINK_TEST, [
 ])
 
 
-AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
+AC_DEFUN([CF_VIEW_QT_LINK_TEST], [
 		X=`pwd`
 		AC_MSG_CHECKING(linking against QT libraries)
 
@@ -373,7 +373,7 @@ AC_DEFUN(CF_VIEW_QT_LINK_TEST, [
 	fi
 ])
 
-AC_DEFUN(CF_VIEW_QT_EXECUTABLES, [
+AC_DEFUN([CF_VIEW_QT_EXECUTABLES], [
 	dnl
 	dnl	try to find the MOC (QT meta object compiler)
 	dnl It is usually installed in ${QTDIR}/bin/moc
@@ -490,7 +490,7 @@ AC_DEFUN(CF_VIEW_QT_EXECUTABLES, [
 ])
 
 dnl  Try to identify whether SQL support has been compiled into QT
-AC_DEFUN(CF_VIEW_QT_SQL, [
+AC_DEFUN([CF_VIEW_QT_SQL], [
 	dnl ????
 ])
 

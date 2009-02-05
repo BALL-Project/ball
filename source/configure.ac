@@ -17,6 +17,7 @@ dnl
 dnl    Some initialization stuff...
 dnl 
 AC_INIT([BALL],[1.2],[ball-bugs@bioinf.uni-sb.de])
+AC_CONFIG_MACRO_DIR([config/m4])
 AC_CONFIG_HEADER([
 	config.h:config/config.h.in
 ])
@@ -681,8 +682,8 @@ dnl         COMPILER
 OBJECT_EXTENSION=o
 MAKEDEP_LIBTOOL_FIX=
 USE_LIBTOOL_FOR_BALL=false
+AC_PROG_LIBTOOL
 if test "${USE_LIBTOOL}" = "true" ; then
-	AC_PROG_LIBTOOL
 	AC_FIX_LIBTOOL
 	CXX="${BALL_PATH}/source/libtool --tag=CXX --mode=compile ${CXX}"
 	OBJECT_EXTENSION=lo
