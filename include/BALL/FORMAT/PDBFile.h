@@ -47,7 +47,7 @@
 #	include <BALL/KERNEL/secondaryStructure.h>
 #endif
 
-#ifdef BALL_HAS_HASH_MAP
+#if defined(BALL_HAS_HASH_MAP) || defined(BALL_HAS_UNORDERED_MAP)
 namespace BALL_MAP_NAMESPACE
 {
   template<>

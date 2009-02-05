@@ -76,7 +76,7 @@ namespace BALL
 		}
 
 		// ..then, calculate the grid's diagonal length
-		d = sqrt(3) * spacing;
+		d = sqrt(3.f) * spacing;
 
 		// calculate some constants used for FAST access to the grid.
 		origin = grid->getOrigin();
@@ -335,7 +335,7 @@ namespace BALL
 		}
 				
 		// ..then, calculate the grid's diagonal length
-		d = sqrt(3) * spacing;
+		d = sqrt(3.f) * spacing;
 
 		// calculate some constants used for FAST access to the grid.
 		origin = grid->getOrigin();

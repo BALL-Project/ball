@@ -3,7 +3,16 @@
 #ifndef BALL_VIEW_DIALOGS_PRINTINGDIALOG_H
 #define BALL_VIEW_DIALOGS_PRINTINGDIALOG_H
 
-#include <BALL/VIEW/UIC/printingDialogData.h>
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
+#ifdef BALL_COMPILER_MSVC
+# include <BALL/VIEW/UIC/ui_printingDialog.h>
+#else
+# include <BALL/VIEW/UIC/printingDialogData.h>
+#endif
+
 
 #ifndef  BALL_VIEW_KERNEL_CLIPPING_PLANE_H
 # include <BALL/VIEW/KERNEL/clippingPlane.h>

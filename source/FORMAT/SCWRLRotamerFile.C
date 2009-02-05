@@ -36,7 +36,7 @@ namespace BALL
 			return *this;
 		}
 
-		void SCWRLRotamerFile::operator >> (RotamerLibrary& rotamer_library) throw()
+		void SCWRLRotamerFile::operator >> (RotamerLibrary& rotamer_library)
 		{
 			// now we must decide wether this is a backbone dependent or not
 			RegularExpression match_indep("[A-Z][A-Z][A-Z] [0-9] [0-9] [0-9] [0-9] *[0-9]* *[0-9]* *[0-9\\.]*");

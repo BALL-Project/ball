@@ -296,7 +296,7 @@
 %Include geometricObject.sip
 %Include view-common.sip
 %Include clippingPlane.sip
-%Include server.sip
+//%Include server.sip
 
 // VIEW/DATATYPE
 %Include colorUnit.sip
