@@ -12,6 +12,7 @@
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/COMMON/macros.h>
+#include <BALL/FORMAT/parameters.h>
 
 // #define BALL_DEBUG_MMFF
 // #define BALL_MMFF_TEST
@@ -152,21 +153,18 @@ namespace BALL
 		if (!bend_parameters_.isInitialized())
 		{
 			Path    path;
-			String  filename(path.find("MMFF94/MMFFANG.PAR"));
-			String  filename1(path.find("MMFF94/MMFFSTBN.PAR"));
-			String  filename2(path.find("MMFF94/MMFFDFSB.PAR"));
+			String  filename(path.find("MMFF94/mmff94.ini"));
 
 			if (filename == "") throw Exception::FileNotFound(__FILE__, __LINE__, filename);
-			if (filename1 == "") throw Exception::FileNotFound(__FILE__, __LINE__, filename1);
-			if (filename2 == "") throw Exception::FileNotFound(__FILE__, __LINE__, filename2);
 
 			const MMFF94AtomTypeEquivalences& equivalences = mmff94_->getEquivalences();
 			bend_parameters_.setEquivalences(equivalences);
-			bend_parameters_.readParameters(filename);
+			Parameters p(filename);
+			bend_parameters_.readParameters(p, "AngleBend");
 
 			sb_parameters_.setEquivalences(equivalences);
-			sb_parameters_.readParameters(filename1);
-			sb_parameters_.readEmpiricalParameters(filename2);
+			sb_parameters_.readParameters(p, "StretchBend");
+			sb_parameters_.readEmpiricalParameters(p, "StretchBendEmpirical");
 		}
 
 		bool ok = true;

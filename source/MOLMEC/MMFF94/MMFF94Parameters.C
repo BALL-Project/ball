@@ -8,10 +8,11 @@
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94.h>
-#include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/SYSTEM/path.h>
+#include <BALL/FORMAT/parameterSection.h>
+#include <BALL/FORMAT/parameters.h>
 
 // #define BALL_DEBUG_MMFF
 using namespace std;
@@ -34,44 +35,42 @@ namespace BALL
 		is_initialized_ = false;
 	}
 
-	bool MMFF94ParametersBase::readParameters(const String& filename)
+	bool MMFF94ParametersBase::readParameters(Parameters& p, const String& section)
 		throw(Exception::FileNotFound)
 	{
-		LineBasedFile infile(filename);
+		ParameterSection p_sec;
+		p_sec.extractSection(p, section);
 
 		vector<vector<String> > lines;
 
-		vector<String> fields;
-		
-		while (infile.readLine())
+		for(Position p = 0; p < p_sec.getNumberOfKeys(); ++p)
 		{
-			const String line = infile.getLine();
+			vector<String> fields;
+			String key = p_sec.getKey(p);
 
-			// comments and empty lines
-			if (line == "" || line[0] == '*' || line[0] == '$') continue;
-			
-			if (line.split(fields, " *") < number_expected_fields_)
+			key.split(fields);
+
+			if (fields.size() + p_sec.getNumberOfVariables() != number_expected_fields_)
 			{
-				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
-										<< filename << " Not enough fields in one line " 
-										<< line << std::endl;
+				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : "
+										<< section << " Not enough fields in one line "
+										<< std::endl;
 				return false;
 			}
 
-			lines.push_back(vector<String>());
+			size_t num_keys = fields.size();
+			fields.resize(number_expected_fields_);
 
-			vector<String>& vs = lines[lines.size() - 1];
-			vs.resize(number_expected_fields_);
-
-			for (Position p = 0; p < number_expected_fields_; p++)
-			{
-				vs[p] = fields[p];
+			for(size_t i = num_keys; i < number_expected_fields_; ++i) {
+				fields[i] = p_sec.getValue(p, i - num_keys);
 			}
+
+			lines.push_back(fields);
 		}
 
-		if (!setup_(lines)) 
+		if (!setup_(lines))
 		{
-			Log.error() << "Error while parsing line in File " << filename << std::endl;
+			Log.error() << "Error while parsing line in section " << section << std::endl;
 			return false;
 		}
 
@@ -84,7 +83,7 @@ namespace BALL
 MMFF94AtomTypeEquivalences::MMFF94AtomTypeEquivalences()
 	: MMFF94ParametersBase()
 {
-	number_expected_fields_ = 6;
+	number_expected_fields_ = 7;
 }
 
 MMFF94AtomTypeEquivalences::~MMFF94AtomTypeEquivalences()
@@ -352,28 +351,26 @@ Position getMMFF94Index(Position atom_type1, Position atom_type2)
 	return atom_type1 * MMFF94_number_atom_types + atom_type2;
 }
 
-bool MMFF94StretchParameters::readEmpiricalParameters(const String& filename)
+bool MMFF94StretchParameters::readEmpiricalParameters(Parameters& p, const String& section)
 {
 	empirical_parameters_.clear();
 
-	LineBasedFile infile(filename);
+	ParameterSection p_sec;
+	p_sec.extractSection(p, section);
 	vector<String> fields;
 
 	try
 	{
-		while (infile.readLine())
+		for(Position i = 0; i < p_sec.getNumberOfKeys(); ++i)
 		{
-			// comments
-			if (infile.getLine().hasPrefix("*") || infile.getLine().hasPrefix("$")) 
+			String key = p_sec.getKey(i);
+			key.split(fields);
+
+			if (fields.size() + p_sec.getNumberOfVariables() != 5)
 			{
-				continue;
-			}
-			
-			if (infile.getLine().split(fields) < 5)
-			{
-				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
-										<< filename << " Not 5 fields in one line " 
-										<< infile.getLine() << std::endl;
+				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : "
+										<< section << " Not 5 fields in one line"
+										<< std::endl;
 				return false;
 			}
 
@@ -390,8 +387,8 @@ bool MMFF94StretchParameters::readEmpiricalParameters(const String& filename)
 
 			EmpiricalBondData& data = it->second;
 
-			data.r0 = fields[2].toDouble();
-			data.kb = fields[3].toDouble(); 
+			data.r0 = p_sec.getValue(i, 0).toDouble();
+			data.kb = p_sec.getValue(i, 1).toDouble();
 		}
 	}
 	catch(...)
@@ -551,7 +548,7 @@ Position MMFF94BendParameters::getIndex_(Position bend_type,
 MMFF94StretchBendParameters::MMFF94StretchBendParameters()
 	: MMFF94ParametersBase()
 {
-	number_expected_fields_ = 6;
+	number_expected_fields_ = 7;
 }
 
 MMFF94StretchBendParameters::~MMFF94StretchBendParameters()
@@ -640,35 +637,34 @@ bool MMFF94StretchBendParameters::setup_(const vector<vector<String> >& lines)
 }
 
 
-bool MMFF94StretchBendParameters::readEmpiricalParameters(const String& by_row_filename)
+bool MMFF94StretchBendParameters::readEmpiricalParameters(Parameters& p, const String& section)
 	throw(Exception::FileNotFound)
 {
-	LineBasedFile infile(by_row_filename);
+	ParameterSection p_sec;
+	p_sec.extractSection(p, section);
+
 	vector<String> fields;
 
 	try
 	{
-		while (infile.readLine())
+		for(Position i = 0; i < p_sec.getNumberOfKeys(); ++i)
 		{
-			// comments
-			if (infile.getLine().hasPrefix("*") || infile.getLine().hasPrefix("$")) 
-			{
-				continue;
-			}
-			
-			if (infile.getLine().split(fields) < 5)
+			String key = p_sec.getKey(i);
+			key.split(fields);
+
+			if (fields.size() + p_sec.getNumberOfVariables() < 5)
 			{
 				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
-										<< by_row_filename << " Not 5 fields in one line " 
-										<< infile.getLine() << std::endl;
+										<< section << " Not 5 fields in one line " 
+										<< std::endl;
 				return false;
 			}
 
 			const Position ir = fields[0].toUnsignedInt();
 			const Position jr = fields[1].toUnsignedInt();
 			const Position kr = fields[2].toUnsignedInt();
-			const double    f_ijk = fields[3].toDouble();
-			const double    f_kji = fields[4].toDouble();
+			const double    f_ijk = p_sec.getValue(i, 0).toDouble();
+			const double    f_kji = p_sec.getValue(i, 1).toDouble();
 
 			parameters_[getIndexByRow_(ir, jr, kr)] = pair<double, double>(f_ijk, f_kji);
 		}
@@ -954,7 +950,7 @@ Log.error() << at1 << " " << at2 << " " << at3 << " " << at4 << std::endl;
 MMFF94VDWParameters::MMFF94VDWParameters()
 	: MMFF94ParametersBase()
 {
-	number_expected_fields_ = 6;
+	number_expected_fields_ = 8;
 }
 
 MMFF94VDWParameters::~MMFF94VDWParameters()
@@ -1126,7 +1122,7 @@ bool MMFF94VDWParameters::assignParameters(Position at1, Position at2, double& r
 MMFF94ESParameters::MMFF94ESParameters()
 	: MMFF94ParametersBase()
 {
-	number_expected_fields_ = 4;
+	number_expected_fields_ = 5;
 }
 
 MMFF94ESParameters::~MMFF94ESParameters()
@@ -1221,42 +1217,39 @@ double MMFF94ESParameters::getPartialCharge(Position at1, Position at2, Position
 	return r;
 }
 
-bool MMFF94ESParameters::readEmpiricalParameters(const String& filename)
+bool MMFF94ESParameters::readEmpiricalParameters(Parameters& p, const String& section)
 	throw(Exception::FileNotFound)
 {
 	phis_.resize(MMFF94_number_atom_types);
 	pbcis_.resize(MMFF94_number_atom_types);
 
-	for (Position p = 0; p < MMFF94_number_atom_types; p++)
+	for (Position k = 0; k < MMFF94_number_atom_types; k++)
 	{
-		phis_[p] = MMFF94_INVALID_VALUE;
-		pbcis_[p] = MMFF94_INVALID_VALUE;
+		phis_[k] = MMFF94_INVALID_VALUE;
+		pbcis_[k] = MMFF94_INVALID_VALUE;
 	}
 
-	LineBasedFile infile(filename);
+	ParameterSection p_sec;
+	p_sec.extractSection(p, section);
+
 	vector<String> fields;
 
 	try
 	{
-		while (infile.readLine())
+		for(Position i = 0; i < p_sec.getNumberOfKeys(); ++i)
 		{
-			// comments
-			if (infile.getLine().hasPrefix("*") || infile.getLine().hasPrefix("$")) 
-			{
-				continue;
-			}
-			
-			if (infile.getLine().split(fields) < 4)
+			String key = p_sec.getKey(i);
+			if (1 + p_sec.getNumberOfVariables() < 4)
 			{
 				Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
-										<< filename << " Not 4 fields in one line " 
-										<< infile.getLine() << std::endl;
+										<< section << " Not 4 fields in one line " 
+										<< std::endl;
 				return false;
 			}
 
-			const Position t = fields[1].toUnsignedInt();
-			pbcis_[t] = fields[2].toDouble();
-			phis_[t] = fields[3].toDouble();
+			const Position t = key.toUnsignedInt();
+			pbcis_[t] = p_sec.getValue(i, 0).toDouble();
+			phis_[t]  = p_sec.getValue(i, 1).toDouble();
 		}
 	}
 	catch(...)

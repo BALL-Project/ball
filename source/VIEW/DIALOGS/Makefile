@@ -51,7 +51,7 @@ CPP_SOURCES=\
 	parsedFunctionDialog.C\
 	peptideDialog.C\
 	preferences.C\
-	printingDialog.C\
+	exportGeometryDialog.C\
 	PTEDialog.C\
 	pubchemDialog.C\
 	setCamera.C\
@@ -97,7 +97,7 @@ MOC_SOURCES=\
 	parsedFunctionDialog_moc.C\
 	peptideDialog_moc.C\
 	preferences_moc.C\
-	printingDialog_moc.C\
+	exportGeometryDialog_moc.C\
 	PTEDialog_moc.C\
 	pubchemDialog_moc.C\
 	serverPreferences_moc.C\
@@ -140,7 +140,7 @@ UIC_SOURCES=\
 	parsedFunctionDialogData.C\
 	peptideDialogData.C\
 	preferencesData.C\
-	printingDialogData.C\
+	exportGeometryDialogData.C\
 	PTEDialogData.C\
 	pubchemDialogData.C\
 	pythonSettingsData.C\

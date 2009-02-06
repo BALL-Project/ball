@@ -24,19 +24,21 @@
 			functionality provided by BALL.
 
 		 <center><h1>Biochemical Algorithms Library</h1><p>Reference Manual</center>
-		\version 1.2.1a
+		\version 1.3
 		\author 
 				- Tim Aubertin
 				- Christian Bender
 				- Andreas Bertsch
+				- Lisa Katharina Bla&szlig;
 				- Nicolas Pascal Boghossian
-		 		- Andreas Burchardt
+				- Andreas Burchardt
 				- Andreas Crauser
 				- Anna Dehof
 				- Holger Franken
+				- Jan Fuhrmann
 				- Carla Haid
 				- Andreas Hildebrandt
-				- Jan Fuhrmann
+				- Silke Jansen
 				- Heiko Klein
 				- Andreas Kerzmann
 				- Oliver Kohlbacher
@@ -44,7 +46,10 @@
 				- Bettina Leonhardt
 				- Andreas Moll
 				- Peter M&uuml;ller
+				- Stefan Nickels
 				- Alexander Rurainski
+				- Stefan Schuh
+				- Daniel St&ouml;ckel
 				- Stefan Strobel
 				- Marc Sturm
 				- Nora Toussaint
