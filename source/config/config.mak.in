@@ -70,6 +70,7 @@ BALL_LIBS       = @BALL_LIBS@
 
 # The installation prefix
 PREFIX = @PREFIX@
+LIBDIR = @LIBDIR@
 
 # USE_VIEW contains true if VIEW support is to be built, false otherwise
 # VIEW_PLATFORM either contains Mesa or OpenGL (so far)

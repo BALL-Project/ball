@@ -48,6 +48,7 @@ AC_ARG_ENABLE(debuginfo,       [  --enable-debuginfo      add -g to the compiler
 AC_ARG_ENABLE(VIEW,            [  --disable-VIEW          disable the compilation of the visualization component])
 AC_ARG_ENABLE(64,              [  --enable-64             create 64 bit binaries (if allowed by the compiler)])
 AC_ARG_ENABLE(libtool,         [  --enable-libtool        use libtool for compiling and linking the libraries.])
+AC_ARG_ENABLE(libdir-detect,   [  --enable-libdir-detect  try to decide automatically whether to install into lib64 or lib])
 AC_ARG_WITH(libtool-rpath,     [  --with-libtool-rpath    use libtool-rpath instead of the standard (i.e. --prefix)])
 AC_ARG_WITH(compiler,          [  --with-compiler=CXX     use CXX as C++ compiler])
 AC_ARG_WITH(cxxflags,          [  --with-cxxflags=FLAGS   add FLAGS to the C++ compiler flags (commas are converted to blanks)])
@@ -760,13 +761,24 @@ if test "${DYNAROPTS_PYMODULE}" = "" ; then
 fi
 
 dnl
+dnl Try to determine into which libdir we need to install
+dnl
+LIBDIR=lib
+
+if test "$enable_libdir_detect" = "yes" ; then
+	if test ${ARCHITECTURE} = x86_64; then
+		LIBDIR=lib64
+	fi
+fi
+
+dnl
 dnl We should switch to version-info sooner or later, but for now, we really
 dnl cannot guarantee binary compatibility between releases, so lets rather err
 dnl on the safe side...
 dnl
 if test "${USE_LIBTOOL}" = "true" ; then
 	LINKER="${BALL_PATH}/source/libtool --tag=CXX --mode=link ${DYNAR}"
-	DYNAR="${BALL_PATH}/source/libtool --tag=CXX --mode=link ${DYNAR} -export-dynamic -release ${BALL_VERSION_STRING} -rpath ${LIBTOOL_RPATH}/lib"
+	DYNAR="${BALL_PATH}/source/libtool --tag=CXX --mode=link ${DYNAR} -export-dynamic -release ${BALL_VERSION_STRING} -rpath ${LIBTOOL_RPATH}/${LIBDIR}"
 	SHARED_LIB_SUFFIX=la
 	AC_SUBST(SHARED_LIB_SUFFIX)
 else
@@ -782,7 +794,7 @@ AC_SUBST(ADD_DYNAROPTS_LIBBALL)
 AC_SUBST(ADD_DYNAROPTS_LIBVIEW)
 AC_SUBST(RANLIB)
 AC_SUBST(LINKER)
-
+AC_SUBST(LIBDIR)
 
 dnl				  MISC
 
