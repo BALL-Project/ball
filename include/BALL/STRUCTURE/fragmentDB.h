@@ -222,6 +222,20 @@ namespace BALL
 		*/
 		StringHashMap<NameMap>&	getNamingStandards();
 
+		/**
+		 * Return the naming standard given by std
+		 *
+		 * @return A StringHashMap that maps atom names to atom names
+		 * @throw StringHashMap<String>::IllegalKey if std is not a valid naming standard
+		 */
+		const StringHashMap<String>& getNamingStandard(const String& std) const
+			throw(StringHashMap<String>::IllegalKey);
+
+		/**
+		 * Return a vector of available naming standards
+		 */
+		std::vector<String> getAvailableNamingStandards() const;
+
 		//@}
 
 		/**@name	Debugging and diagnostics 
