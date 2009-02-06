@@ -8,7 +8,7 @@ import BALL
 # for use in BALLView
 #system = getSystems()[0]
 
-# for use without BALLView
+# for use in BALL
 system = BALL.System()
 file = BALL.MOL2File("../../TEST/data/AssignBondOrderProcessor_test_CITSED10_sol_2.mol2")
 file.read(system)
