@@ -10,10 +10,10 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qslider.h>
+#include <QtGui/QPushButton>
+#include <QtGui/QLabel>
+#include <QtGui/QCheckBox>
+#include <QtGui/QSlider>
 #include <QtGui/QStackedWidget>
 #include <QtGui/QListWidget>
 
@@ -28,7 +28,7 @@ namespace BALL
 				PreferencesEntry()
 		{
 			setupUi(this);
-			
+
 			setObjectName(name);
 			stage_ = ((Scene*) parent)->getStage();
 			if (stage_ == 0) return;
@@ -42,7 +42,7 @@ namespace BALL
 			setWidgetStackName("Display");
 			setWidgetStack(widget_stack);
 			registerWidgets_();
-			
+
 			// signals and slots connections
 			connect( color_button, SIGNAL( clicked() ), this, SLOT( colorPressed() ) );
 			connect( capping_color_button, SIGNAL( clicked() ), this, SLOT( cappingColorPressed() ) );
@@ -129,7 +129,7 @@ namespace BALL
 			bool use_buffer = use_vertex_buffers->isChecked();
 			GLRenderer& renderer = scene->getGLRenderer();
 
-			if (use_buffer != renderer.vertexBuffersEnabled() && 
+			if (use_buffer != renderer.vertexBuffersEnabled() &&
 					getMainControl()->getRepresentationManager().getNumberOfRepresentations() > 0)
 			{
 				getMainControl()->setStatusbarText("Because of change in usage of vertex buffer, all Representations have to be deleted!", true);
@@ -145,6 +145,7 @@ namespace BALL
 			}
 
 			renderer.enableVertexBuffers(use_buffer);
+			renderer.setSmoothLines(smooth_lines_->isChecked());
 		}
 
 
@@ -153,6 +154,7 @@ namespace BALL
 			setColor(color_sample, ColorRGBA(0,0,0));
 			animation_smoothness->setValue(25);
 			show_lights_->setChecked(false);
+			smooth_lines_->setChecked(false);
 			enable_fog->setChecked(false);
 			fog_slider->setValue(200);
 
@@ -216,7 +218,7 @@ namespace BALL
 			renderer_label->setText(renderer.getRenderer().c_str());
 			extensions_list->clear();
 			vector<String> extensions = renderer.getExtensions();
-			
+
 			for (Position p = 0; p < extensions.size(); p++)
 			{
 				new QListWidgetItem(extensions[p].c_str(), extensions_list);
@@ -227,6 +229,7 @@ namespace BALL
 				use_vertex_buffers->setEnabled(false);
 			}
 
+			smooth_lines_->setChecked(renderer.getSmoothLines());
 			use_vertex_buffers->setChecked(renderer.vertexBuffersEnabled());
 		}
 

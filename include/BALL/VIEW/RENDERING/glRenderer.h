@@ -13,7 +13,7 @@
 
 #ifndef BALL_MATHS_QUATERNION_H
 # include <BALL/MATHS/quaternion.h>
-#endif 
+#endif
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
@@ -82,7 +82,7 @@ namespace BALL
 			{
 				///
 				RENDER_MODE_UNDEFINED = 0,
-				
+
 				///
 				RENDER_MODE_SOLID,
 
@@ -95,8 +95,8 @@ namespace BALL
 
 			/** WrongModes Exception class.
 					This exeption will be thrown if the <b> drawing_precision_</b> or
-					<b> drawing_mode_</b> are not allowed. 
-					\see         GeneralException			
+					<b> drawing_mode_</b> are not allowed.
+					\see         GeneralException
 			*/
 			class BALL_VIEW_EXPORT WrongModes:	public Exception::GeneralException
 			{
@@ -108,7 +108,7 @@ namespace BALL
 
 			/// Typedef for OPENGL names
 			typedef unsigned int Name;
-			
+
 			/// Default Constructor.
 			GLRenderer()
 				throw();
@@ -146,6 +146,11 @@ namespace BALL
 			/// Set the light sources according to the stage
 			virtual void setLights(bool reset_all = false)
 				throw();
+
+			///Should the lines in the line representation and the wireframe models
+			///be smoothed?
+			virtual void setSmoothLines(bool smooth_lines);
+			virtual bool getSmoothLines();
 
 			/** Pick geometric objects
 			 		\param x1, y1, x2, y2 the rectangle of the selection
@@ -189,20 +194,20 @@ namespace BALL
 				throw();
 
 			// Initialise transparent rendering
-			void initTransparent() 
+			void initTransparent()
 				throw();
 
 			// Initialise solid rendering
 			void initSolid()
 				throw();
-			
+
 			// Initialise always front rendering
 			void initAlwaysFront()
 				throw();
 
 			/// Enable or disable antialiasing
 			void setAntialiasing(bool state);
-			
+
 			/// Remove all VertexBuffer and DisplayLists for the given Representation
 			void removeRepresentation(const Representation& rep)
 				throw();
@@ -218,7 +223,7 @@ namespace BALL
 			/// Test if a Representation has a DisplayList.
 			bool hasDisplayListFor(const Representation& rep) const
 				throw();
-			
+
 			///
 			void setStereoMode(StereoMode state)
 				throw();
@@ -233,7 +238,7 @@ namespace BALL
 
 			///
 			void setRenderMode(RenderMode mode) { render_mode_ = mode;}
-			
+
 			///
 			virtual bool render(const Representation& representation, bool for_display_list = false)
 				throw();
@@ -244,7 +249,7 @@ namespace BALL
 			bool isExtensionSupported(const String& extension) const
 				throw();
 
-			/// 
+			///
 			void clearVertexBuffersFor(Representation& rep)
 				throw();
 
@@ -340,7 +345,7 @@ namespace BALL
 			///
 			virtual void renderClippingPlane_(const ClippingPlane& plane)
 				throw();
-			
+
 			/// Render a grid slice
 			virtual void renderGridVisualisation_(const GridVisualisation& vol)
 				throw();
@@ -352,7 +357,7 @@ namespace BALL
 			//_
 			void createSpheres_()
 				throw();
-			
+
 			//_
 			void createTubes_()
 				throw();
@@ -364,7 +369,7 @@ namespace BALL
 			//_
 			void createDottedSphere_(int precision)
 				throw();
-			
+
 			//_
 			void subdivideTriangle_(Vector3& v1, Vector3& v2, Vector3& v3, int precision)
 				throw();
@@ -386,7 +391,7 @@ namespace BALL
 				throw();
 
 			//_
-			void normalVector3_(const Vector3& v) 
+			void normalVector3_(const Vector3& v)
 				throw();
 
 			//_
@@ -396,7 +401,7 @@ namespace BALL
 			//_
 			void translateVector3_(const Vector3& v)
 				throw();
-			
+
 			//_
 			void texCoordVector3_(const Vector3& v)
 				throw() { glTexCoord3f(v.x, v.y, v.z); }
@@ -467,6 +472,7 @@ namespace BALL
 			RenderMode 							render_mode_;
 
 			bool 										use_vertex_buffer_;
+			bool smooth_lines_;
 			bool 										picking_mode_;
 			ModelType 							model_type_;
 			Position 								display_lists_index_;
