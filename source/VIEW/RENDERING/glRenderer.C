@@ -69,7 +69,7 @@ namespace BALL
 		switch (e)\
 		{\
 			case GL_INVALID_VALUE: Log.error() << " GL_INVALID_VALUE" << std::endl;break;\
- 			case GL_INVALID_ENUM: Log.error() << " GL_INVALID_ENUM" << std::endl;break;\
+			case GL_INVALID_ENUM: Log.error() << " GL_INVALID_ENUM" << std::endl;break;\
 			case GL_INVALID_OPERATION: Log.error() << " GL_INVALID_OPERATION" << std::endl;break;\
 			case GL_STACK_OVERFLOW: Log.error() << " GL_STACK_OVERFLOW" << std::endl;break;\
 			case GL_STACK_UNDERFLOW: Log.error() << " GL_STACK_UNDERFLOW" << std::endl;break;\
@@ -78,7 +78,7 @@ namespace BALL
 		}\
 	}\
 }
-#else 
+#else
 #define CHECK_GL_ERROR
 #endif
 
@@ -97,6 +97,7 @@ GLRenderer::GLRenderer()
 		stereo_(NO_STEREO),
 		render_mode_(RENDER_MODE_UNDEFINED),
 		use_vertex_buffer_(false),
+		smooth_lines_(false),
 		picking_mode_(false),
 		model_type_(MODEL_LINES),
 		drawed_other_object_(false),
@@ -121,7 +122,7 @@ void GLRenderer::clear()
 	if (GL_spheres_list_ != 0) delete[] GL_spheres_list_;
 	if (GL_boxes_list_   != 0) delete[] GL_boxes_list_;
 	if (GL_tubes_list_   != 0) delete[] GL_tubes_list_;
-	
+
 	DisplayListHashMap::Iterator it = display_lists_.begin();
 	for (; it != display_lists_.end(); it++)
 	{
@@ -156,8 +157,10 @@ void GLRenderer::setAntialiasing(bool state)
 	if (state)
 	{
 		glEnable(GL_MULTISAMPLE);
-		// smooth line drawing
-		glEnable(GL_LINE_SMOOTH);
+		if(smooth_lines_) {
+			// smooth line drawing
+			glEnable(GL_LINE_SMOOTH);
+		}
 		// slower, but better results:
 		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -172,13 +175,26 @@ void GLRenderer::setAntialiasing(bool state)
 	}
 }
 
+void GLRenderer::setSmoothLines(bool smooth_lines)
+{
+	smooth_lines_ = smooth_lines;
+}
+
+bool GLRenderer::getSmoothLines()
+{
+	return smooth_lines_;
+}
 
 bool GLRenderer::init(const Stage& stage, float height, float width)
 	throw()
 {
 	Renderer::init(stage, height, width);
- 	
-	glEnable(GL_NORMALIZE);   
+
+	// Force OpenGL to normalize transformed normals to be of unit
+	// length before using the normals in OpenGL's lighting equations
+	// While this corrects potential lighting problems introduced by scaling,
+	// it also slows OpenGL's vertex processing speed since normalization requires extra operations.
+	glEnable(GL_NORMALIZE);
 
 #ifdef BALL_USE_GLEW
 	glewInit();
@@ -196,28 +212,23 @@ bool GLRenderer::init(const Stage& stage, float height, float width)
 #endif
 
 	glFrontFace(GL_CCW);     // selects counterclockwise polygons as front-facing
-	glCullFace(GL_BACK);		 // specify whether front- or back-facing facets can be culled
-
-	// Force OpenGL to normalize transformed normals to be of unit 
-	// length before using the normals in OpenGL's lighting equations
-	// While this corrects potential lighting problems introduced by scaling, 
-	// it also slows OpenGL's vertex processing speed since normalization requires extra operations.
+	glCullFace(GL_BACK);     // specify whether front- or back-facing facets can be culled
 
 	glDisable(GL_FOG);
-	
+
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, false);
 
 	// Specifies the depth comparison function:
 	// Passes if the incoming z value is greater than  or equal to the stored z value
 	glDepthFunc(GL_LEQUAL);
 
-	// specify the clear value for the depth buffer 
+	// specify the clear value for the depth buffer
 	glClearDepth(200.0);
 
 	setAntialiasing(true);
 
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-	// select smooth shading 
+	// select smooth shading
 	glShadeModel(GL_SMOOTH);
 
 	// is problematic on some machines and should not be used:
@@ -236,7 +247,7 @@ bool GLRenderer::init(const Stage& stage, float height, float width)
 
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 	glEnable(GL_COLOR_MATERIAL);
-	
+
 	GLfloat diff[] = {0.4, 0.4, 0.4, 1.0};
 	GLfloat shin[] = {76.8};
 	GLfloat spec[] = {0.774597, 0.774597, 0.774597, 1.0};
@@ -275,16 +286,16 @@ bool GLRenderer::init(const Stage& stage, float height, float width)
 
 	for (Position p = 0; p < 32; p++)
 	{
-		cel_shader_data[p][0] = 
-		cel_shader_data[p][1] = 
+		cel_shader_data[p][0] =
+		cel_shader_data[p][1] =
 		cel_shader_data[p][2] = shader[p];
 	}
 
 	glEnable(GL_TEXTURE_1D);
-	glGenTextures(1, &cel_texture_);		
-	glBindTexture(GL_TEXTURE_1D, cel_texture_);	
+	glGenTextures(1, &cel_texture_);
+	glBindTexture(GL_TEXTURE_1D, cel_texture_);
 	glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB, 32, 0, GL_RGB , GL_FLOAT, cel_shader_data);
-	glBindTexture(GL_TEXTURE_1D, 0);	
+	glBindTexture(GL_TEXTURE_1D, 0);
 
 	//////////////////////////////////////////////////////
 
@@ -293,14 +304,14 @@ bool GLRenderer::init(const Stage& stage, float height, float width)
 	line_list_.clear();
 	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
 	glGenTextures(1, &line_texture_bind_);
-	glBindTexture(GL_TEXTURE_2D, line_texture_bind_); 
+	glBindTexture(GL_TEXTURE_2D, line_texture_bind_);
 	glTexImage2D(GL_TEXTURE_2D, 0, 4, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, line_tex_);
 
 	line_list_.useCompileMode();
 	line_list_.startDefinition();
 
 	glBindTexture(GL_TEXTURE_2D, line_texture_bind_);
-	
+
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP );
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP );
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
@@ -310,7 +321,7 @@ bool GLRenderer::init(const Stage& stage, float height, float width)
 
 	// glEnable( GL_LINE_SMOOTH );
 	glEnable( GL_BLEND );
-//         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );    
+//         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 	// glHint( GL_LINE_SMOOTH_HINT, GL_DONT_CARE );
 
 	line_list_.endDefinition();
@@ -319,15 +330,14 @@ bool GLRenderer::init(const Stage& stage, float height, float width)
 }
 
 
-void GLRenderer::updateBackgroundColor() 
+void GLRenderer::updateBackgroundColor()
 	throw()
 {
 	glClearColor((float) stage_->getBackgroundColor().getRed(),
-							 (float) stage_->getBackgroundColor().getGreen(),
-							 (float) stage_->getBackgroundColor().getBlue(),
-							 (float) stage_->getBackgroundColor().getAlpha());
+	             (float) stage_->getBackgroundColor().getGreen(),
+	             (float) stage_->getBackgroundColor().getBlue(),
+	             (float) stage_->getBackgroundColor().getAlpha());
 }
-	
 
 void GLRenderer::setLights(bool reset_all)
 	throw()
@@ -342,7 +352,7 @@ void GLRenderer::setLights(bool reset_all)
 		{
 			glDisable(light_nr);
 		}
-		
+
 		light_nr = GL_LIGHT0;
 	}
 
@@ -353,12 +363,12 @@ void GLRenderer::setLights(bool reset_all)
 		{
 			continue;
 		}
-		
+
 		// setup the light intensity
-		GLfloat intensity[] = {((float) it->getColor().getRed()) 		* it->getIntensity(),
-													( (float) it->getColor().getGreen()) 	* it->getIntensity(),
-													( (float) it->getColor().getBlue())		* it->getIntensity(),
-													( (float) it->getColor().getAlpha())};
+		GLfloat intensity[] = {((float) it->getColor().getRed())   * it->getIntensity(),
+		                       ((float) it->getColor().getGreen()) * it->getIntensity(),
+		                       ((float) it->getColor().getBlue())  * it->getIntensity(),
+		                       ((float) it->getColor().getAlpha())};
 
 		GLfloat zero[] = {0, 0, 0, 0};
 
@@ -371,7 +381,7 @@ void GLRenderer::setLights(bool reset_all)
 			light_nr++;
 			continue;
 		}
-		
+
 		glLightfv(light_nr, GL_AMBIENT, zero);
 		glLightfv(light_nr, GL_DIFFUSE, intensity);
 		glLightfv(light_nr, GL_SPECULAR, intensity);
@@ -389,9 +399,9 @@ void GLRenderer::setLights(bool reset_all)
 			}
 
 			GLfloat pos[]  = { light_dir.x,
-												 light_dir.y,
-												 light_dir.z,
-												 0.0};  // the 1 is for positional lights
+			                   light_dir.y,
+			                   light_dir.z,
+			                   0.0};  // the 1 is for positional lights
 
 			glLightfv(light_nr, GL_POSITION, pos);
 			glEnable(light_nr);
@@ -411,11 +421,11 @@ void GLRenderer::setLights(bool reset_all)
 			light_pos = it->getPosition();
 			light_dir = it->getDirection() - light_pos;
 		}
-		
+
 		// setup the direction of the light
 		GLfloat dir[] = { light_dir.x,
-											light_dir.y,
-											light_dir.z};
+		                  light_dir.y,
+		                  light_dir.z};
 		glLightfv(light_nr, GL_SPOT_DIRECTION, dir);
 
 		// setup the angle of the light cone
@@ -424,15 +434,15 @@ void GLRenderer::setLights(bool reset_all)
 		{
 			angle = it->getAngle().toDegree();
 		}
-		
+
 		glLightfv(light_nr, GL_SPOT_CUTOFF, &angle);
 		glLightf(light_nr, GL_SPOT_EXPONENT, (GLfloat) 100);
 
 		// setup the position of the lightsource
 		GLfloat pos[]  = { light_pos.x,
-											 light_pos.y,
-											 light_pos.z,
-											 1.0};  // the 1 is for positional lights
+		                   light_pos.y,
+		                   light_pos.z,
+		                   1.0};  // the 1 is for positional lights
 
 		glLightfv(light_nr, GL_POSITION, pos);
 
@@ -482,19 +492,19 @@ void GLRenderer::bufferRepresentation(const Representation& rep)
 
 	display_list->useCompileMode();
 	display_list->startDefinition();
-	
+
 	render(rep, true);
-	
+
 	display_list->endDefinition();
 
 #ifdef BALL_USE_GLEW
 	clearVertexBuffersFor(*(Representation*)&rep);
-	
+
 	if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
 	{
 		// prevent copying the pointers of the buffers later...
 		rep_to_buffers_[&rep] = vector<MeshBuffer*>();
-		
+
 		vector<MeshBuffer*>& buffers = rep_to_buffers_.find(&rep)->second;
 
 		const List<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
@@ -502,7 +512,7 @@ void GLRenderer::bufferRepresentation(const Representation& rep)
 		for (; git != geometric_objects.end(); git++)
 		{
 			const Mesh* const mesh = dynamic_cast<Mesh*>(*git);
-			if (mesh != 0) 
+			if (mesh != 0)
 			{
 				MeshBuffer* buffer = new MeshBuffer;
 				buffer->setMesh(*mesh);
@@ -568,7 +578,7 @@ bool GLRenderer::render(const Representation& representation, bool for_display_l
 			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 			renderRepresentation_(representation, for_display_list);
 
-			// options for second run 
+			// options for second run
 			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 		}
 		initTransparent();
@@ -646,7 +656,7 @@ void GLRenderer::dump(std::ostream& s, Size depth) const
 	BALL_DUMP_DEPTH(s, depth);
 	s << "YScale: " << y_scale_ << endl;
 
-	BALL_DUMP_STREAM_SUFFIX(s);     
+	BALL_DUMP_STREAM_SUFFIX(s);
 }
 
 // =================================================================================
@@ -654,7 +664,7 @@ void GLRenderer::dump(std::ostream& s, Size depth) const
 // =================================================================================
 
 void GLRenderer::renderSphere_(const Sphere& sphere)
-	throw() 
+	throw()
 {
 	initDrawingOthers_();
 
@@ -663,7 +673,7 @@ void GLRenderer::renderSphere_(const Sphere& sphere)
 	translateVector3_(sphere.getPosition());
 	scale_(sphere.getRadius());
 
-	// render spheres of stick models with less precision for atoms with 
+	// render spheres of stick models with less precision for atoms with
 	// more than 2 bonds:
 	if (model_type_ == MODEL_STICK &&
 			drawing_precision_ > DRAWING_PRECISION_LOW)
@@ -676,7 +686,7 @@ void GLRenderer::renderSphere_(const Sphere& sphere)
 			precision--;
 		}
 
-		GL_spheres_list_[drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 
+		GL_spheres_list_[drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION +
 										 precision].draw();
 	}
 	else
@@ -781,7 +791,7 @@ void GLRenderer::renderMultiLine_(const MultiLine& line)
 	}
 
 	glEnd();
-	
+
 //   			glDisable(GL_TEXTURE_2D);
 }
 
@@ -793,8 +803,8 @@ void GLRenderer::renderLabel_(const Label& label)
 	glPushMatrix();
 	glDisable(GL_LIGHTING);
 
-	glRasterPos3f((GLfloat)label.getVertex().x, 
-								(GLfloat)label.getVertex().y, 
+	glRasterPos3f((GLfloat)label.getVertex().x,
+								(GLfloat)label.getVertex().y,
 								(GLfloat)label.getVertex().z);
 
 	QFontMetrics fm(label.getFont());
@@ -858,15 +868,15 @@ void GLRenderer::renderBox_(const Box& box)
 
 	glPushMatrix();
 	setColor4ub_(box);
-	
+
 	translateVector3_(box.getPoint());
 
 	Vector3 v1(box.getRightVector());
 	if (v1.getSquareLength() != 0) v1.normalize();
-	
+
 	Vector3 v2(box.getHeightVector());
 	if (v2.getSquareLength() != 0) v2.normalize();
-	
+
 	Vector3 v3(box.getRightVector() % box.getHeightVector());
 	if (v3.getSquareLength() != 0) v3.normalize();
 
@@ -875,7 +885,7 @@ void GLRenderer::renderBox_(const Box& box)
 									v3.x, v3.y, v3.z, 0,
 									0,0,0,1};
 	glMultMatrixf(m);
-	
+
 	glScalef(box.getRightVector().getLength(),
 					 box.getHeightVector().getLength(),
 					 box.getDepth());
@@ -974,13 +984,13 @@ void GLRenderer::renderTwoColoredLine_(const TwoColoredLine& line)
 	vertexVector3_(line.getVertex1());
 	vertexVector3_(line.getMiddleVertex());
 	glEnd();
-	
+
 	glBegin(GL_LINES);
 	setColorRGBA_(line.getColor2());
 	vertexVector3_(line.getMiddleVertex());
 	vertexVector3_(line.getVertex2());
 	glEnd();
-	
+
 	glEnable(GL_LIGHTING);
 }
 
@@ -1069,7 +1079,7 @@ void GLRenderer::renderMesh_(const Mesh& mesh)
 	// be assigned efficiently
 	bool multiple_colors = true;
 	if (mesh.colors.size() < mesh.vertex.size())
-	{	
+	{
 		if (mesh.colors.size() > 0)
 		{
 			setColorRGBA_(mesh.colors[0]);
@@ -1096,7 +1106,7 @@ void GLRenderer::renderMesh_(const Mesh& mesh)
 		for (Size index = 0; index < nr_triangles; ++index)
 		{
 			glBegin(GL_LINE_STRIP);
-			
+
 			normalVector3_(normal_vector_);
 
 			if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v1]);
@@ -1107,7 +1117,7 @@ void GLRenderer::renderMesh_(const Mesh& mesh)
 
 			if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v3]);
 			vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
-			
+
 			glEnd();
 		}
 	}
@@ -1135,14 +1145,14 @@ void GLRenderer::renderMesh_(const Mesh& mesh)
 		glEnd();
 	}
 	else 		// draw the triangles per cel shading
-	{	
+	{
 		// a part of this code stems from http://nehe.gamedev.net lesson 37
 		glDisable(GL_LIGHTING);
 		glPolygonMode(GL_BACK, GL_LINE);										// Draw Backfacing Polygons As Wireframes
 		glLineWidth(3);																			// Set The Line Width
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_FRONT);																// Don't Draw Any Front-Facing Polygons
-		glDepthFunc(GL_LEQUAL);															// Change The Depth Mode 
+		glDepthFunc(GL_LEQUAL);															// Change The Depth Mode
 		setColorRGBA_(ColorRGBA(0.,0.,0.,1.));
 		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);							// Use The Good Calculations
 		glEnable(GL_LINE_SMOOTH);														// Enable Anti-Aliasing
@@ -1157,20 +1167,20 @@ void GLRenderer::renderMesh_(const Mesh& mesh)
 		glEnd ();													// Tell OpenGL We've Finished
 
 		// reset to normal:
-		glCullFace(GL_BACK);							// Reset The Face To Be Culled 
+		glCullFace(GL_BACK);							// Reset The Face To Be Culled
 		glPolygonMode (GL_BACK, GL_FILL);	// Reset Back-Facing Polygon Drawing Mode
 		glLineWidth(1);										// Set The Line Width
 
 		// map the texture so it simulates shadows:
-		glEnable(GL_TEXTURE_1D);						
-		glBindTexture(GL_TEXTURE_1D, cel_texture_);	
+		glEnable(GL_TEXTURE_1D);
+		glBindTexture(GL_TEXTURE_1D, cel_texture_);
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 		glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
 
 		// some artefacts when using GL_LINEAR:
-//   				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	
+//   				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 //   				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);	
+		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 		vector<float> tex_values;
@@ -1234,7 +1244,7 @@ void GLRenderer::initGLU_(DrawingMode mode)
 		gluQuadricDrawStyle(GLU_quadric_obj_, GLU_POINT);
 	}
 	else
-	{	
+	{
 		BALLVIEW_DEBUG;
 	}
 }
@@ -1292,7 +1302,7 @@ void GLRenderer::createTubes_()
 		for (Position dp = DRAWING_PRECISION_LOW; dp <= DRAWING_PRECISION_ULTRA; dp++)
 		{
 			GL_tubes_list_[mode * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + dp].startDefinition();
-			gluCylinder(GLU_quadric_obj_, 1, 1, 1, slices[dp], 1);  
+			gluCylinder(GLU_quadric_obj_, 1, 1, 1, slices[dp], 1);
 			GL_tubes_list_[mode * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + dp].endDefinition();
 		}
 	}
@@ -1334,40 +1344,40 @@ void GLRenderer::createLineBox_()
 	throw()
 {
 	glBegin(GL_LINES);
-	
+
 	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
 	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
-	
+
 	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
 	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)1);
-	
+
 	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)1);
 	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
-	
+
 	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
 	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
-	
+
 	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
 	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
-	
+
 	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
 	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
-	
+
 	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
 	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)1);
-	
+
 	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)1);
 	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
-	
+
 	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
 	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
 
 	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
 	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
-	
+
 	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
 	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)1);
-	
+
 	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)1);
 	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
 
@@ -1379,12 +1389,12 @@ void GLRenderer::createDotBox_()
 	throw()
 {
 	glBegin(GL_POINTS);
-	
+
 	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
 	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
 	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)1);
 	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
-	
+
 	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
 	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
 	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
@@ -1445,7 +1455,7 @@ void GLRenderer::createSolidBox_()
 }
 
 
-// ############################ PICKING ###################################		
+// ############################ PICKING ###################################
 void GLRenderer::pickObjects1(Position x1, Position y1, Position x2, Position y2)
 	throw()
 {
@@ -1459,32 +1469,32 @@ void GLRenderer::pickObjects1(Position x1, Position y1, Position x2, Position y2
 	glInitNames();
 	glPushName(0);
 	glMatrixMode(GL_PROJECTION);
-	
+
 	glPushMatrix();
 	glLoadIdentity();
-	
+
 	// calculate picking rectangle
 	Size width  = BALL_ABS((Index)x2 - (Index)x1);
 	Size height = BALL_ABS((Index)y2 - (Index)y1);
-	
+
 	Position center_x = BALL_MIN(x2, x1) + width / 2;
 	Position center_y = BALL_MIN(y2, y1) + height / 2;
-	
+
 	if (width == 0)	width = 1;
 	if (height == 0) height = 1;
-	
+
 	single_pick_ = (width <= 3 && height <= 3);
 	clearNames_();
-	
+
 	// calculate picking matrix
 	gluPickMatrix(center_x, viewport[3] - center_y, width, height, viewport);
 
 	// prepare camera
 	initPerspective();
-	
+
 	glMatrixMode(GL_MODELVIEW);
 	updateCamera();
-}			
+}
 
 
 void GLRenderer::pickObjects2(List<GeometricObject*>& objects)
@@ -1495,7 +1505,7 @@ void GLRenderer::pickObjects2(List<GeometricObject*>& objects)
 	glMatrixMode(GL_PROJECTION);
 	// get number of hits
 	int number_of_hits = glRenderMode(GL_RENDER);
-	glPopMatrix();	
+	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	// return if no objects are picked
 	if (number_of_hits == 0)
@@ -1514,25 +1524,25 @@ void GLRenderer::pickObjects2(List<GeometricObject*>& objects)
 	if (single_pick_)
 	{
 		Position z_coord;
-		
+
 		// find minimum z-coord
 		for (Index index = 0; index < number_of_hits; ++index)
 		{
 			names = *object_buffer_ptr;
 			++object_buffer_ptr;
 			z_coord = *object_buffer_ptr;
-			
+
 			object_buffer_ptr += 2;
-			
+
 			if (z_coord <= minimum_z_coord)
 			{
 				minimum_z_coord = z_coord;
 				nearest_name = *object_buffer_ptr;
 			}
-			
+
 			object_buffer_ptr += names;
-		}    
-		
+		}
+
 		go = getObject(nearest_name);
 		if (go != 0) objects.push_back(go);
 	}
@@ -1547,14 +1557,14 @@ void GLRenderer::pickObjects2(List<GeometricObject*>& objects)
 
 			go = getObject(nearest_name);
 			if (go != 0) objects.push_back(go);
-		}    
+		}
 	}
 
 	updateCamera();
 }
 
 
-// ############################ MOVEMENT/SIZE ###################################		
+// ############################ MOVEMENT/SIZE ###################################
 void GLRenderer::setSize(float width, float height)
 	throw()
 {
@@ -1594,10 +1604,10 @@ void GLRenderer::updateCamera(const Camera* camera)
 
 	glLoadIdentity();
 
-	gluLookAt(camera->getViewPoint().x, 
+	gluLookAt(camera->getViewPoint().x,
 						camera->getViewPoint().y,
 						camera->getViewPoint().z,
-						camera->getLookAtPosition().x, 
+						camera->getLookAtPosition().x,
 						camera->getLookAtPosition().y,
 						camera->getLookAtPosition().z,
 						camera->getLookUpVector().x,
@@ -1620,7 +1630,7 @@ bool GLRenderer::isExtensionSupported(const String& extension) const
 	if (extension == "" || extension.hasSubstring(" ")) return false;
 
 	// Get Extensions String
-	if (glGetString(GL_EXTENSIONS) == 0) 
+	if (glGetString(GL_EXTENSIONS) == 0)
 	{
 		return false;
 	}
@@ -1643,7 +1653,7 @@ String GLRenderer::getRenderer()
 	return (char*)glGetString(GL_RENDERER);
 }
 
-String GLRenderer::getOpenGLVersion() 
+String GLRenderer::getOpenGLVersion()
 {
 	if (glGetString(GL_VERSION) == 0) return "";
 	return (char*)glGetString(GL_VERSION);
@@ -1669,7 +1679,7 @@ bool GLRenderer::enableVertexBuffers(bool state)
 #ifndef BALL_USE_GLEW
 	return false;
 #else
-	if (!isExtensionSupported("GL_ARB_vertex_buffer_object")) 
+	if (!isExtensionSupported("GL_ARB_vertex_buffer_object"))
 	{
 		use_vertex_buffer_ = false;
 		return false;
@@ -1902,10 +1912,10 @@ Position GLRenderer::createTextureFromGrid(const RegularData3D& grid, const Colo
 		}
 	}
 
-	glGenTextures(1, &texname);	
-	glBindTexture(GL_TEXTURE_3D, texname);	
+	glGenTextures(1, &texname);
+	glBindTexture(GL_TEXTURE_3D, texname);
 	glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, tex_size.x, tex_size.y, tex_size.z, 0, GL_RGBA, GL_UNSIGNED_BYTE, texels);
-	glBindTexture(GL_TEXTURE_3D, 0);	
+	glBindTexture(GL_TEXTURE_3D, 0);
 	grid_to_texture_[&grid] = texname;
 	delete[] texels;
 #endif
@@ -1964,14 +1974,14 @@ void GLRenderer::renderGridVisualisation_(const GridVisualisation& vol)
 	throw()
 {
 	Position texname = vol.getTexture();
-	if (texname == 0) 
+	if (texname == 0)
 	{
 		scene_->setStatusbarText("Graphics card does not support 3D textures", true);
 		return;
 	}
 
 	const Vector3 origin = vol.origin;
-	
+
 	if (vol.draw_box)
 	{
 		Box box(origin, vol.x, vol.y, vol.z.getLength());
@@ -1981,20 +1991,20 @@ void GLRenderer::renderGridVisualisation_(const GridVisualisation& vol)
 		renderBox_(box);
 		display_lists_index_ = dli;
 	}
-		
+
 	initDrawingOthers_();
 	glDisable(GL_LIGHTING);
 	glDisable(GL_CULL_FACE);
 
 	////////////////////////////////////////////////////////////////////////////////
-	glBindTexture(GL_TEXTURE_3D, texname);	
+	glBindTexture(GL_TEXTURE_3D, texname);
 	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	
+
 	///// init the texture: automated texture coordinate generation
 	// normalized vectors in grids directions:
 	Vector3 xd = vol.x;
@@ -2035,7 +2045,7 @@ void GLRenderer::renderGridVisualisation_(const GridVisualisation& vol)
 	glMatrixMode(GL_TEXTURE);
 	glLoadIdentity();
 	const Vector3 dim = vol.x + vol.y + vol.z;
-	glScaled((double)1.0 / (double) dim.x, 
+	glScaled((double)1.0 / (double) dim.x,
 					 (double)1.0 / (double) dim.y,
 					 (double)1.0 / (double) dim.z);
 	glMatrixMode(GL_MODELVIEW);
@@ -2057,7 +2067,7 @@ void GLRenderer::renderGridVisualisation_(const GridVisualisation& vol)
 
 		v1 *= 2.0;
 		v2 *= 2.0;
-	
+
 		glBegin(GL_QUADS);
 		normalVector3_(-vol.getNormal());
 		vertexVector3_(o);
@@ -2084,7 +2094,7 @@ void GLRenderer::renderGridVisualisation_(const GridVisualisation& vol)
 		// calculate the angles between vv and the axes of the grid
 		Angle angles[3], aangles[3];
 
-		for (Position i = 0; i < 3; i++) 
+		for (Position i = 0; i < 3; i++)
 		{
 			angles[i] = normals[i].getAngle(vv);
 			aangles[i] = (-normals[i]).getAngle(vv);
@@ -2093,7 +2103,7 @@ void GLRenderer::renderGridVisualisation_(const GridVisualisation& vol)
 		Angle min_angle(angles[0]);
 		Position min = 0;
 		bool anti = false;
-		for (Position i = 0; i < 3; i++) 
+		for (Position i = 0; i < 3; i++)
 		{
 			if (angles[i] < min_angle)
 			{
@@ -2121,7 +2131,7 @@ void GLRenderer::renderGridVisualisation_(const GridVisualisation& vol)
 				normal = normals[i];
 				continue;
 			}
-			
+
 			vectors[v] = normals[i];
 			v++;
 		}
@@ -2143,7 +2153,7 @@ void GLRenderer::renderGridVisualisation_(const GridVisualisation& vol)
 		Vector3 y  = o + vectors[1];
 
 		glBegin(GL_QUADS);
-		for (Position i = 0; i < vol.slices; ++i) 
+		for (Position i = 0; i < vol.slices; ++i)
 		{
 			vertexVector3_(y);
 			vertexVector3_(xy);
@@ -2176,7 +2186,7 @@ void GLRenderer::renderGridVisualisation_(const GridVisualisation& vol)
 	glDisable(GL_TEXTURE_GEN_S);
 	glDisable(GL_TEXTURE_GEN_T);
 	glDisable(GL_TEXTURE_GEN_R);
-	glBindTexture(GL_TEXTURE_3D, 0);	
+	glBindTexture(GL_TEXTURE_3D, 0);
 }
 
 void GLRenderer::renderQuadMesh_(const QuadMesh& mesh)
@@ -2211,7 +2221,7 @@ void GLRenderer::renderQuadMesh_(const QuadMesh& mesh)
 	// be assigned efficiently
 	bool multiple_colors = true;
 	if (mesh.colors.size() < mesh.vertex.size())
-	{	
+	{
 		if (mesh.colors.size() > 0)
 		{
 			setColorRGBA_(mesh.colors[0]);
@@ -2238,7 +2248,7 @@ void GLRenderer::renderQuadMesh_(const QuadMesh& mesh)
 		for (Size index = 0; index < nr_triangles; ++index)
 		{
 			glBegin(GL_LINE_STRIP);
-			
+
 			normalVector3_(normal_vector_);
 
 			if (multiple_colors) setColorRGBA_(mesh.colors[mesh.quad[index].q1]);
@@ -2249,10 +2259,10 @@ void GLRenderer::renderQuadMesh_(const QuadMesh& mesh)
 
 			if (multiple_colors) setColorRGBA_(mesh.colors[mesh.quad[index].q3]);
 			vertexVector3_(mesh.vertex[mesh.quad[index].q3]);
-			
+
 			if (multiple_colors) setColorRGBA_(mesh.colors[mesh.quad[index].q4]);
 			vertexVector3_(mesh.vertex[mesh.quad[index].q4]);
-			
+
 			glEnd();
 		}
 	}
@@ -2285,14 +2295,14 @@ void GLRenderer::renderQuadMesh_(const QuadMesh& mesh)
 		glEnd();
 	}
 	else 		// draw the triangles per cel shading
-	{	
+	{
 		// a part of this code stems from http://nehe.gamedev.net lesson 37
 		glDisable(GL_LIGHTING);
 		glPolygonMode(GL_BACK, GL_LINE);										// Draw Backfacing Polygons As Wireframes
 		glLineWidth(3);																			// Set The Line Width
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_FRONT);																// Don't Draw Any Front-Facing Polygons
-		glDepthFunc(GL_LEQUAL);															// Change The Depth Mode 
+		glDepthFunc(GL_LEQUAL);															// Change The Depth Mode
 		setColorRGBA_(ColorRGBA(0.,0.,0.,1.));
 		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);							// Use The Good Calculations
 		glEnable(GL_LINE_SMOOTH);														// Enable Anti-Aliasing
@@ -2308,20 +2318,20 @@ void GLRenderer::renderQuadMesh_(const QuadMesh& mesh)
 		glEnd ();													// Tell OpenGL We've Finished
 
 		// reset to normal:
-		glCullFace(GL_BACK);							// Reset The Face To Be Culled 
+		glCullFace(GL_BACK);							// Reset The Face To Be Culled
 		glPolygonMode (GL_BACK, GL_FILL);	// Reset Back-Facing Polygon Drawing Mode
 		glLineWidth(1);										// Set The Line Width
 
 		// map the texture so it simulates shadows:
-		glEnable(GL_TEXTURE_1D);						
-		glBindTexture(GL_TEXTURE_1D, cel_texture_);	
+		glEnable(GL_TEXTURE_1D);
+		glBindTexture(GL_TEXTURE_1D, cel_texture_);
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 		glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
 
 		// some artefacts when using GL_LINEAR:
-//   				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	
+//   				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 //   				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);	
+		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 		vector<float> tex_values;
