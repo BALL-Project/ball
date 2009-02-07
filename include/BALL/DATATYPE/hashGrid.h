@@ -546,6 +546,7 @@ namespace BALL
 	HashGridBox3<Item>::HashGridBox3()
 		:	first_item_(0)
 	{
+		memset(neighbours, 0, 27*sizeof(HashGridBox3*));
 	}
 
 	template<typename Item>  
