@@ -7,6 +7,7 @@
 
 ///////////////////////////
 #include <BALL/SYSTEM/networking.h>
+#include <BALL/SYSTEM/systemCalls.h> // for sleepFor()
 
 ///////////////////////////
 
@@ -52,17 +53,33 @@ CHECK([EXTRA] simple asynchronous socket transmission to/from threaded server)
 	server.start();
 
 	Size port = server.getPort();
-	ABORT_IF(port <= 0)
 
-	String sent("Hello, world!");
+	// starting up can take a few moments, so we wait up to 1 second
+	Size retries = 0;
+	while ((port == 0) && (retries < 10))
+	{
+		sleepFor(100);
+		port = server.getPort();
+	}
 
-	TCPIOStream stream("localhost", port);
-	stream << sent << std::endl;
-	TEST_EQUAL(sent, server.received);
+	TEST_NOT_EQUAL(port, 0);
+	if (port > 0)
+	{
+		String sent("Hello, world!");
 
-	String received;
-	stream >> received;
-	TEST_EQUAL(received, server.sent_async);	
+		TCPIOStream stream("localhost", port);
+		stream << sent << std::endl;
+
+		String received;
+		stream >> received;
+
+		sleepFor(10);
+		TEST_EQUAL(sent, server.received);
+		TEST_EQUAL(received, server.sent_async);	
+	}
+	server.deactivate();
+	server.terminate();
+	server.wait();
 RESULT
 	
 CHECK([EXTRA] simple synchronous socket transmission to/from threaded server)
@@ -70,17 +87,33 @@ CHECK([EXTRA] simple synchronous socket transmission to/from threaded server)
 	server.start();
 
 	Size port = server.getPort();
-	ABORT_IF(port <= 0)
 
-	String sent("Hello, world!");
+	// starting up can take a few moments, so we wait up to 1 second
+	Size retries = 0;
+	while ((port == 0) && (retries < 10))
+	{
+		sleepFor(100);
+		port = server.getPort();
+	}
 
-	TCPIOStream stream("localhost", port);
-	stream << sent << std::endl;
-	TEST_EQUAL(sent, server.received);
+	TEST_NOT_EQUAL(port, 0);
+	if (port > 0)
+	{
+		String sent("Hello, world!");
 
-	String received;
-	stream >> received;
-	TEST_EQUAL(received, server.sent_sync);	
+		TCPIOStream stream("localhost", port);
+		stream << sent << std::endl;
+
+		String received;
+		stream >> received;
+		sleepFor(10);
+		TEST_EQUAL(sent, server.received);
+		TEST_EQUAL(received, server.sent_sync);	
+	}
+
+	server.deactivate();
+	server.terminate();
+	server.wait();
 RESULT
 	
 
