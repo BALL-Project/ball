@@ -43,9 +43,6 @@ namespace BALL
 
 			connect (update_directly_checkBox, SIGNAL(stateChanged(int)), this, SLOT (updateDirectlyBoxChanged()));
 			
-			connect( sphere_points_slider, SIGNAL( valueChanged(int) ), this, SLOT( spherePointsChanged() ) );
-			connect( tube_points_slider, SIGNAL( valueChanged(int) ), this, SLOT( tubePointsChanged() ) );
-
 			connect( ambient_color_button, SIGNAL( clicked() ), this, SLOT( editAmbientColor() ) );
 			connect( specularity_color_button, SIGNAL(clicked()), this, SLOT( editSpecularityColor() ) );
 			connect( reflectiveness_color_button, SIGNAL(clicked()), this, SLOT( editReflectivenessColor() ) );
@@ -69,7 +66,7 @@ namespace BALL
 			values[3] = 1.0;
 			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  values);
 	
-#ifdef ENABLE_RAYTRACING
+#ifdef ENABLE_RAYTRACING	
 			Stage::RaytracingMaterial& rt_material = stage.getRTMaterial();
 
 			rt_material.ambient_color  	 = VIEW::getColor(ambient_color_label);
@@ -85,17 +82,6 @@ namespace BALL
 			// TODO! This is currently pretty hacky!
 			Scene::getInstance(0)->updateRTMaterials(apply_to_selected_radioButton->isChecked());
 #endif
-
-			if (update_directly_checkBox->isChecked())
-			{
-
-			// Set the RTFact - settings
-			//TODO
-			//if (apply_to_selected_radioButton->isChecked())
-			//
-			//else if (apply_to_all_radioButton->isChecked())
-			//{}
-			}
 		}
 
 		void MaterialSettings::ambientChanged()
@@ -159,68 +145,6 @@ namespace BALL
 			//TODO is this needed??
 			if (update_directly_checkBox->isChecked())
 			{
-				//TODO read out __ALL__ fields	
-		/*		ambient_factor_label
-				specularity_factor_label	
-				reflectiveness_factor_label	
-				shininess_factor_label	
-
-				sphere_points_label	
-				tube_points_label->text();*/
-				ColorRGBA color  = VIEW::getColor(ambient_color_label);
-				ColorRGBA color2 = VIEW::getColor(specularity_color_label);
-				ColorRGBA color3 = VIEW::getColor(reflectiveness_color_label);
-std::cout << " RTFact read __all__ values!" << std::endl;
-				apply();
-			}
-		}
-
-		void MaterialSettings::spherePointsChanged()
-		{
-			setValues_(*sphere_points_slider, *sphere_points_label, 1);	
-			if (update_directly_checkBox->isChecked())
-			{	
-				int sphere_points = 0;
-				try
-				{
-					sphere_points =  ascii(sphere_points_label->text()).toUnsignedInt();
-				}
-				catch(...)
-				{
-					Log.error() << "Invalid sphere resolution!" << std::endl;
-					return;
-				}
-
-				if (sphere_points < 0)
-				{
-					Log.error() << "Invalid sphere resolution!" << std::endl;
-					return;
-				}
-				apply();
-			}
-		}
-
-		void MaterialSettings::tubePointsChanged()
-		{	
-			setValues_(*tube_points_slider, *tube_points_label, 1);	
-			if (update_directly_checkBox->isChecked())
-			{	
-				int tube_points = 0;
-
-				try
-				{
-					tube_points =  ascii(tube_points_label->text()).toUnsignedInt();
-					if (tube_points < 0)
-					{
-						Log.error() << "Invalid sphere resolution!" << std::endl;
-						return;
-					}
-				}
-				catch(...)
-				{
-					Log.error() << "Invalid tube resolution!" << std::endl;
-					return;
-				}	
 				apply();
 			}
 		}

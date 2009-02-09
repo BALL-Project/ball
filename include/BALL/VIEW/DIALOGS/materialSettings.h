@@ -65,8 +65,6 @@ namespace BALL
 			virtual void reflectivenessFactorChanged();
 			virtual void shininessFactorChanged();
 			virtual void updateDirectlyBoxChanged();
-			virtual void spherePointsChanged();
-			virtual void tubePointsChanged();
 			virtual void editAmbientColor();
 			virtual void editSpecularityColor();
 			virtual void editReflectivenessColor();
