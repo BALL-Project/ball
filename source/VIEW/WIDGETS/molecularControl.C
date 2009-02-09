@@ -697,6 +697,8 @@ namespace BALL
 //   																 + String(__FILE__) + " " + String(__LINE__), true);
 				return 0;
 			}
+			
+			QTreeWidgetItem* item = to_find->second;
 
 			context_composite_ = 0;
 			context_item_ = 0;
@@ -708,7 +710,7 @@ namespace BALL
 			if (composite.isRoot() && listview->topLevelItemCount() <= 1)
 			{
 				composite_to_item_.clear();
-				QTreeWidgetItem* item = to_find->second;	
+
 				listview->takeTopLevelItem(0);
 				delete item;
 				enableUpdates_(enabled);
