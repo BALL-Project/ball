@@ -5,6 +5,4 @@
 *.swp
 *.ncb
 *.vpj
-BALL-VisualStudio/GeneratedFiles/*
-BALL-VisualStudio/libVIEW/GeneratedFiles/*
-BALL-VisualStudio/BALLView/GeneratedFiles/*
+Contrib/*
