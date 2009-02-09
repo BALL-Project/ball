@@ -319,7 +319,7 @@ namespace BALL
 			else
 			{
 				// rotate around the rotation axis
-				rotation_quat.set(rotation_axis.x, rotation_axis.y, rotation_axis.z, Constants::PI);
+				rotation_quat.fromAxisAngle(rotation_axis, Constants::PI);
 
 				// Compute the matrix4x4 form of the rotation and apply it to tv3,tw2,tw3
 				rotation_quat.getRotationMatrix(rotation);
@@ -350,7 +350,7 @@ namespace BALL
 						double scalar_prod = axis_w * axis_v;
 						if (scalar_prod < 0.0)
 						{
-							rotation_quat.set(tv2.x, tv2.y, tv2.z, Constants::PI);
+							rotation_quat.fromAxisAngle(tv2, Constants::PI);
 							rotation_quat.getRotationMatrix(rotation);
 						}
 						else
@@ -364,7 +364,7 @@ namespace BALL
 						double angle = acos(axis_w * axis_v);
 						if (angle > EPSILON)
 						{
-							rotation_quat.set(rotation_axis.x, rotation_axis.y, rotation_axis.z, acos(axis_w * axis_v));
+							rotation_quat.fromAxisAngle(rotation_axis, acos(axis_w * axis_v));
 
 							// Compute the matrix4x4 form of the rotation
 							// and add it to the transformation

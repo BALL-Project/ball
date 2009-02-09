@@ -986,10 +986,10 @@ namespace BALL
 			const Camera& camera = stage_->getCamera();
 
 			Quaternion q1;
- 			q1.set(camera.getLookUpVector(), Angle(degree_right, false).toRadian());
+ 			q1.fromAxisAngle(camera.getLookUpVector(), Angle(degree_right, false).toRadian());
 
 			Quaternion q2;
- 			q2.set(camera.getRightVector(), Angle(degree_up, false).toRadian());
+ 			q2.fromAxisAngle(camera.getRightVector(), Angle(degree_up, false).toRadian());
 
  			q1 += q2;
 			
@@ -1029,13 +1029,13 @@ namespace BALL
 			vv.normalize(); 
 
 			Quaternion q1;
- 			q1.set(camera.getLookUpVector(), Angle(degree_right, false).toRadian());
+ 			q1.fromAxisAngle(camera.getLookUpVector(), Angle(degree_right, false).toRadian());
 
 			Quaternion q2;
- 			q2.set(camera.getRightVector(), Angle(degree_up, false).toRadian());
+ 			q2.fromAxisAngle(camera.getRightVector(), Angle(degree_up, false).toRadian());
 
 			Quaternion Q;
- 			Q.set(camera.getViewVector(), Angle(degree_clockwise, false).toRadian());
+ 			Q.fromAxisAngle(camera.getViewVector(), Angle(degree_clockwise, false).toRadian());
 
  			q1 += q2;
  			q1 += Q;

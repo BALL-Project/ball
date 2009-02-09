@@ -15,7 +15,6 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/MATHS/matrix44.h>
-#include <BALL/MATHS/quaternion.h>
 #include <BALL/DATATYPE/stringHashMap.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/structureMapper.h>
