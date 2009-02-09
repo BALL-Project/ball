@@ -106,6 +106,7 @@ CHECK(bool mapFragments(const vector<Fragment*>& A, const vector<Fragment*>& B, 
 RESULT
 
 CHECK(static Matrix4x4 matchPoints(const Vector3& w1, const Vector3& w2, const Vector3& w3, const Vector3& v1, const Vector3& v2, const Vector3& v3))
+	PRECISION(1e-5)
 	Vector3 v1(2.0, 2.0, 2.0);
 	Vector3 v2(3.0, 2.0, 2.0);
 	Vector3 v3(2.0, 3.0, 2.0);

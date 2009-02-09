@@ -12,7 +12,7 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
-#	include <boost/math/quaternion.hpp>
+#include <boost/math/quaternion.hpp>
 #include <iostream>
 
 namespace BALL 
@@ -365,7 +365,7 @@ namespace BALL
 	BALL_INLINE 
 	TQuaternion<T>& TQuaternion<T>::normalize()
 	{
-		T length = (T) norm(*this);
+		T length = boost::math::norm(*this);
 
 		if (!(Maths::isEqual(length, (T)0)))
 		{
@@ -537,7 +537,7 @@ namespace BALL
 	template <typename T>
 	TMatrix4x4<T>& TQuaternion<T>::getRotationMatrix(TMatrix4x4<T>& m) const
 	{
-		T s = 2.0 / norm(*this);
+		T s = 2.0 / boost::math::norm(*this);
 		m.set
 			(
 				(T)(1.0 - s * (this->c * this->c + this->d * this->d)), 
@@ -569,7 +569,7 @@ namespace BALL
 	TQuaternion<T> TQuaternion<T>::getInverse() const
 	{
 		
-		return conj(*this) / norm(*this);
+		return conj(*this) / boost::math::norm(*this);
 	}
 	
 	template <typename T>

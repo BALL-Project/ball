@@ -132,15 +132,9 @@ namespace BALL
 		double eval_max = eval->data[0];
 		TVector4<double> evec_max = EV.getColumn(0);
 
-		// BALL uses a slightly different order of quaternion		
-		// components than Coutsias et al., so we reorder:
-		// q_max = (q0, _q_) -> (angle, (i,j,k))
 		Quaternion q_max; 
-		q_max.angle = evec_max[0];
-		q_max.i = evec_max[1];
-		q_max.j =	evec_max[2];
-		q_max.k = evec_max[3];
-	
+		q_max.set(evec_max[0], evec_max[1], evec_max[2], evec_max[3]);
+
 		// Compute the complete transformation: move barycenter of A to the origin, 
 		// apply quaternion,  move to the barycenter of B. This will (optimally) 
 		// map X onto Y.
