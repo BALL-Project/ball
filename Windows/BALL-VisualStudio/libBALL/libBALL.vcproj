@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="libBALL"
 	ProjectGUID="{19709205-47E2-45A3-A266-3488F113508D}"
 	RootNamespace="libBALL"
@@ -52,7 +52,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(SolutionDir)\..\Contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\Python&quot;;.\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtSql&quot;;$(QTDIR)\include\QtNetwork"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(SolutionDir)\..\Contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\boost\tr1&quot;;&quot;$(SolutionDir)\..\Contrib\include\Python&quot;;.\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;"
 				PreprocessorDefinitions="WIN32;QT_THREAD_SUPPORT;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_SQL_LIB;LIBBALL_LIB;QT_NETWORK_LIB;BALL_BUILD_DLL"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
@@ -73,7 +73,7 @@
 				AdditionalDependencies="qtmain.lib QtCore4.lib QtSql4.lib QtNetwork4.lib regex.lib oncrpc.lib gsl_mt.lib cblas_mt.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib WSock32.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\Contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;"
-				GenerateDebugInformation="false"
+				GenerateDebugInformation="true"
 				SubSystem="2"
 			/>
 			<Tool
@@ -132,7 +132,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(SolutionDir)\..\Contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\Python&quot;;.\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtSql&quot;;$(QTDIR)\include\QtNetwork"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(SolutionDir)\..\Contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\boost\tr1&quot;;&quot;$(SolutionDir)\..\Contrib\include\Python&quot;;.\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;"
 				PreprocessorDefinitions="WIN32;QT_THREAD_SUPPORT;QT_CORE_LIB;QT_SQL_LIB;LIBBALL_LIB;BALL_BUILD_DLL;QT_NETWORK_LIB"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
@@ -184,13 +184,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Source Dateien"
-			Filter="cpp;cxx;c;def"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
-			>
-		</Filter>
-		<Filter
-			Name="Header Dateien"
+			Name="Header Files"
 			Filter="h"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
@@ -1734,11 +1728,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\SYSTEM\path.h"
+					RelativePath="..\..\..\include\BALL\SYSTEM\networking.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\SYSTEM\socket.h"
+					RelativePath="..\..\..\include\BALL\SYSTEM\path.h"
 					>
 				</File>
 				<File
@@ -1760,27 +1754,7 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="Form Dateien"
-			Filter="ui"
-			UniqueIdentifier="{99349809-55BA-4b9d-BF79-8FDBB0286EB3}"
-			>
-		</Filter>
-		<Filter
-			Name="Resource Dateien"
-			Filter="qrc;*"
-			UniqueIdentifier="{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}"
-			ParseFiles="false"
-			>
-		</Filter>
-		<Filter
-			Name="Generierte Dateien"
-			Filter="moc;h;cpp"
-			UniqueIdentifier="{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}"
-			SourceControlFiles="false"
-			>
-		</Filter>
-		<Filter
-			Name="Lexerfiles"
+			Name="Lexer Files"
 			>
 			<File
 				RelativePath="..\..\..\source\KERNEL\expressionParserLexer.l"
@@ -1840,7 +1814,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Parserfiles"
+			Name="Parser Files"
 			>
 			<File
 				RelativePath="..\..\..\source\KERNEL\expressionParserParser.y"
@@ -1900,7 +1874,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Quelldateien"
+			Name="Source Files"
 			>
 			<Filter
 				Name="COMMON"
@@ -8234,7 +8208,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\SYSTEM\path.C"
+					RelativePath="..\..\..\source\SYSTEM\networking.C"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -8254,7 +8228,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\SYSTEM\socket.C"
+					RelativePath="..\..\..\source\SYSTEM\path.C"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
