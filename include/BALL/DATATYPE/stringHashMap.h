@@ -249,6 +249,11 @@ namespace BALL
 
 	};
 
+// required for visual studio
+#ifdef BALL_COMPILER_MSVC
+template class BALL_EXPORT StringHashMap<String>;
+#endif
+
 }// namespace BALL
 
 #endif // BALL_DATATYPE_HASHMAP_H
