@@ -128,7 +128,7 @@ namespace BALL
 		
 		/** Normalize the quaternion.
 			 The quaternion is scaled with its norm:
-			 @return T, a reference to the normalized vector
+			 @return TQuaternion&, a reference to the normalized quaternion
 		*/
 		TQuaternion<T>& normalize();
 		
@@ -160,6 +160,8 @@ namespace BALL
 		void toAxisAngle(TVector3<T>& axis, T& angle);
 		
 		/**	Assign the TQuaternion to Euler angles.
+		 		Assume the following rotation order:.
+				 	q' = roll( pitch( yaw(q) ) ).
 				@param yaw the rotation about the yaw axis z-axis()
 				@param pitch the rotation about the pitch axis (y-axis)
 				@param roll the nrotation about the roll axis (x-axis)
@@ -238,6 +240,10 @@ namespace BALL
 				@return get a reference to the axis component k
 		*/
 		T& k();
+		
+		/**	Get the constant axis component k.
+				@return get a const reference to the axis component k
+		*/
 		const T& k() const;
 
 		
@@ -437,23 +443,6 @@ namespace BALL
 							 
 	}
 	
-	//template <typename T>
-	//void TQuaternion<T>::fromEA(const T& yaw, const T& pitch, const T& roll)
-	//{
-	//	TQuaternion<T> qx, qy, qz;
-	//	qx.fromAxisAngle(Vector3(1,0,0), roll);
-	//	qy.fromAxisAngle(Vector3(0,1,0), pitch);
-	//	qz.fromAxisAngle(Vector3(0,0,1), yaw);
-	//	
-	//	//*this *= qx;
-	//	//*this *= qy;
-	//	//*this *= qz;
-	//	*this *= qz;
-	//	*this *= qy;
-	//	*this *= qx;
-	//	
-	//}
-	
 	template <typename T>
 	void TQuaternion<T>::toAxisAngle(TVector3<T>& axis, T& angle)
 	{
@@ -510,25 +499,6 @@ namespace BALL
 
 	}
 	
-	//template <typename T>
-	//void TQuaternion<T>::toEA(T& yaw, T& pitch, T& roll)
-	//{
-	//		if (((this->b*this->c + this->d*this->a) - 0.5 ) > Constants::EPSILON)
-	//		{
-	//			yaw = 2 * atan2(this->b, this->a);
-	//		}
-	//		else if (((this->b*this->c + this->d*this->a) > -0.5) > Constants::EPSILON)
-	//		{
-	//			yaw = -2 * atan2(this->b, this->a);
-	//		}
-	//		else
-	//		{
-	//			yaw = atan2(2.*this->c*this->a - (2.*this->b*this->d) , (1. - 2.*pow(this->c,2) - 2.*pow(this->d,2)));
-	//		}
-	//		pitch = asin(2.*this->b*this->c + 2.*this->d*this->a);
-	//		roll = atan2(2.*this->b*this->a - 2.*this->c*this->d , 1. - 2.*pow(this->b,2) - 2.*pow(this->d,2));
-	//}
-	
 	template <typename T>
 	BALL_INLINE 
 	void TQuaternion<T>::get(TQuaternion<T>& q) const
@@ -567,7 +537,6 @@ namespace BALL
 	template <typename T>
 	TMatrix4x4<T>& TQuaternion<T>::getRotationMatrix(TMatrix4x4<T>& m) const
 	{
-		//T s = 2.0 / (this->b*this->b + this->c*this->c + this->d*this->d + this->a*this->a );
 		T s = 2.0 / norm(*this);
 		m.set
 			(
