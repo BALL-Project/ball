@@ -56,10 +56,6 @@ namespace BALL
 
 			public slots:
 
-			virtual void ambientChanged();
-			virtual void diffuseChanged();
-			virtual void specularChanged();
-			virtual void shininessChanged();
 			virtual void ambientFactorChanged();
 			virtual void specularityFactorChanged();
 			virtual void reflectivenessFactorChanged();
@@ -68,7 +64,7 @@ namespace BALL
 			virtual void editAmbientColor();
 			virtual void editSpecularityColor();
 			virtual void editReflectivenessColor();
-
+			virtual void rendererChanged();
 			private:
 
 			void setValues_(const QSlider& slider, QLabel& label, int divisor);

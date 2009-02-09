@@ -30,19 +30,17 @@ namespace BALL
 			setColor(specularity_color_label, ColorRGBA(1.0, 1.0, 1.0));
 
 			// signals and slots connections
-			connect( specular_slider, SIGNAL( valueChanged(int) ), this, SLOT( specularChanged() ) );
-			connect( diffuse_slider, SIGNAL( valueChanged(int) ), this, SLOT( diffuseChanged() ) );
-			connect( ambient_slider, SIGNAL( valueChanged(int) ), this, SLOT( ambientChanged() ) );
-			connect( diffuse_slider, SIGNAL( valueChanged(int) ), this, SLOT( diffuseChanged() ) );
-			connect( shininess_slider, SIGNAL( valueChanged(int) ), this, SLOT( shininessChanged() ) );
-			
 			connect( ambient_factor_slider, SIGNAL( valueChanged(int) ), this, SLOT( ambientFactorChanged() ) );
 			connect( specularity_factor_slider, SIGNAL( valueChanged(int) ), this, SLOT( specularityFactorChanged() ) );
 			connect( reflectiveness_factor_slider, SIGNAL( valueChanged(int) ), this, SLOT( reflectivenessFactorChanged() ) );
 			connect( shininess_factor_slider, SIGNAL( valueChanged(int) ), this, SLOT( shininessFactorChanged() ) );
 
 			connect (update_directly_checkBox, SIGNAL(stateChanged(int)), this, SLOT (updateDirectlyBoxChanged()));
-			
+		
+			connect (radioButton_OpenGL, SIGNAL(clicked()), this, SLOT (rendererChanged()));
+			connect (radioButton_POVRay, SIGNAL(clicked()), this, SLOT (rendererChanged()));
+			connect (radioButton_RTFact, SIGNAL(clicked()), this, SLOT (rendererChanged()));
+
 			connect( ambient_color_button, SIGNAL( clicked() ), this, SLOT( editAmbientColor() ) );
 			connect( specularity_color_button, SIGNAL(clicked()), this, SLOT( editSpecularityColor() ) );
 			connect( reflectiveness_color_button, SIGNAL(clicked()), this, SLOT( editReflectivenessColor() ) );
@@ -53,63 +51,56 @@ namespace BALL
 
 		void MaterialSettings::apply()
 		{
-			Stage& stage = *Scene::getInstance(0)->getStage();
-			stage.setSpecularIntensity(	((float)specular_slider->value())  / 100.0);
-			stage.setDiffuseIntensity(	((float)diffuse_slider->value())   / 100.0);
-			stage.setAmbientIntensity(	((float)ambient_slider->value())   / 100.0);
-			stage.setShininess(					(float)shininess_slider->value());
+//TODO still missing: use the colors:  ambient_color_button, .. in POVRay and OpenGL 
 
+			//TODO necessary?
+			if (Scene::getInstance(0)->getStage())
+			{	
+				Stage& stage = *Scene::getInstance(0)->getStage();
 
-			glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, stage.getShininess());
-			GLfloat values[4];
-			values[0] = values[1] = values[2] =  stage.getSpecularIntensity();
-			values[3] = 1.0;
-			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  values);
-	
+				//TODO really both??
+				if (radioButton_OpenGL->isChecked() || radioButton_POVRay->isChecked())
+				{
+					stage.setSpecularIntensity(specularity_factor_label->text().toFloat());
+					//  ((float)specular_factor_slider->value())  / 100.0);
+					//TODO are diffusity and reflectiveness really the same?? 
+					stage.setDiffuseIntensity(1. - reflectiveness_factor_label->text().toFloat());
+					// ((float)diffuse_factor_slider->value())   / 100.0);
+					stage.setAmbientIntensity( ambient_factor_label->text().toFloat());
+					//	((float)ambient_factor_slider->value())   / 100.0);
+					stage.setShininess(	 shininess_factor_label->text().toFloat());
+					//				(float)shininess_factor_slider->value());
+				}
+				if (radioButton_OpenGL->isChecked()) // TODO is this correct? names indicate but who knows??
+				{
+					glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, stage.getShininess());
+					GLfloat values[4];
+					values[0] = values[1] = values[2] =  stage.getSpecularIntensity();
+					values[3] = 1.0;
+					glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  values);
+				}
 #ifdef ENABLE_RAYTRACING	
-			Stage::RaytracingMaterial& rt_material = stage.getRTMaterial();
+				else if (radioButton_RTFact->isChecked())
+				{
+					Stage::RaytracingMaterial& rt_material = stage.getRTMaterial();
 
-			rt_material.ambient_color  	 = VIEW::getColor(ambient_color_label);
-			rt_material.specular_color 	 = VIEW::getColor(specularity_color_label);
-			rt_material.reflective_color = VIEW::getColor(reflectiveness_color_label);
+					rt_material.ambient_color  	 = VIEW::getColor(ambient_color_label);
+					rt_material.specular_color 	 = VIEW::getColor(specularity_color_label);
+					rt_material.reflective_color = VIEW::getColor(reflectiveness_color_label);
 
-			rt_material.ambient_intensity    = ambient_factor_label->text().toFloat();
-			rt_material.specular_intensity   = specularity_factor_label->text().toFloat();
-			rt_material.reflective_intensity = reflectiveness_factor_label->text().toFloat();
+					rt_material.ambient_intensity    = ambient_factor_label->text().toFloat();
+					rt_material.specular_intensity   = specularity_factor_label->text().toFloat();
+					rt_material.reflective_intensity = reflectiveness_factor_label->text().toFloat();
 
-			rt_material.shininess          = shininess_factor_label->text().toFloat();
+					rt_material.shininess          = shininess_factor_label->text().toFloat();
 
-			// TODO! This is currently pretty hacky!
-			Scene::getInstance(0)->updateRTMaterials(apply_to_selected_radioButton->isChecked());
+					// TODO! This is currently pretty hacky!
+					Scene::getInstance(0)->updateRTMaterials(apply_to_selected_radioButton->isChecked());
+				}
 #endif
+			}
 		}
 
-		void MaterialSettings::ambientChanged()
-		{
-			setValues_(*ambient_slider, *ambient_label, 10);
-			apply();
-		}
-
-		void MaterialSettings::specularChanged()
-		{
-			setValues_(*specular_slider, *specular_label, 10);	
-			apply();
-		}
-
-		void MaterialSettings::diffuseChanged()
-		{
-			setValues_(*diffuse_slider, *diffuse_label, 10);
-			apply();
-		}
-
-		void MaterialSettings::shininessChanged()
-		{
-			//TODO shouldn't OpenGL and RTfact shininess factors have the same range?
-			setValues_(*shininess_slider, *shininess_label, 10);
-			apply();
-		}
-		
-		//              ///////// RTFact ///////////
 		void MaterialSettings::ambientFactorChanged()
 		{ 
 			setValues_(*ambient_factor_slider, *ambient_factor_label, 100);
@@ -180,7 +171,16 @@ namespace BALL
 			QColor color = VIEW::chooseColor(reflectiveness_color_label);
 			std::cout << "Reflectiveness color is " << color.rgb() << std::endl;
 		}
-		
+	
+		void MaterialSettings::rendererChanged()
+		{
+			bool isOpenGL = radioButton_OpenGL->isChecked(); 
+			bool isPOVRay = radioButton_POVRay->isChecked();
+			bool isRTFact = radioButton_RTFact->isChecked();
+			groupBox_ambientIntensity->setDisabled(isOpenGL && (!isPOVRay) && (!isRTFact));
+			groupBox_Reflectiveness->setDisabled(isOpenGL && (!isPOVRay) && (!isRTFact));
+		}
+
 		
 	} // namespace VIEW
 } // namespace BALL
