@@ -130,6 +130,9 @@
 #define BALL_MAP_NAMESPACE boost
 #define BALL_MAP_NAME std::tr1::unordered_map<Key, T>
 
+// defined, if extensions to hash must be defined in namespace std
+/* #undef BALL_EXTEND_HASH_IN_STD_NS */
+
 // defined if BALL was configured with asio support
 #define BALL_HAS_ASIO
 

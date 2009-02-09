@@ -48,7 +48,7 @@
 #endif
 
 #if defined(BALL_HAS_UNORDERED_MAP) || defined(BALL_HAS_HASHMAP)
-#ifdef BALL_HAS_UNORDERED_MAP
+#ifdef BALL_EXTEND_HASH_IN_STD_NS
 namespace std
 {
 #endif
@@ -61,7 +61,7 @@ namespace std
 			{ return (size_t)f.third; }
 		};
 	}
-#ifdef BALL_HAS_UNORDERED_MAP
+#ifdef BALL_EXTEND_HASH_IN_STD_NS
 }
 #endif
 #endif
