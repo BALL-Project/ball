@@ -259,7 +259,7 @@ class String
 
 	long __hash__();
 %MethodCode
-	std::BALL_MAP_NAMESPACE::hash<const String&> h;
+	BALL_MAP_NAMESPACE::hash<const String> h;
 	sipRes = h(*sipCpp);
 %End
 
