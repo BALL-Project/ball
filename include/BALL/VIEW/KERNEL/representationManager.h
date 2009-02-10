@@ -235,8 +235,11 @@ namespace BALL
 
 			vector<ClippingPlane*> clipping_planes_;
 			
-			UpdateRepresentationThread* thread_;
+			// we need to ensure that the mutex is always created correctly before
+			// the thread that tries to access it!
 			mutable Mutex 							update_mutex_;
+
+			UpdateRepresentationThread* thread_;
 			bool 												no_update_;
 			bool 												still_to_notify_;
 
