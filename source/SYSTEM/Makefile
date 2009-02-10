@@ -8,6 +8,7 @@ CPP_SOURCES=$(ASIO_SOURCES)\
 	directory.C\
 	file.C\
 	fileSystem.C\
+	mutex.C\
 	path.C\
 	sysinfo.C\
 	systemCalls.C\
