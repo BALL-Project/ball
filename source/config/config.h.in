@@ -146,7 +146,7 @@
 #define BALL_MAP_NAME map
 
 // defined, if extensions to hash must be defined in namespace std
-/* #undef BALL_EXTEND_HASH_IN_STD_NS */
+#undef BALL_EXTEND_HASH_IN_STD_NS
 
 // defined if BALL was configured with asio support
 #undef BALL_HAS_ASIO
