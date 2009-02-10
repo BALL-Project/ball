@@ -82,8 +82,9 @@ namespace BALL
 
 			Size getNumberOfNCSSymOps() const;
 			const Matrix4x4& getNCS(Position p) const;
+			bool insertNCS(Position p, Matrix4x4 ncsm);
 			void pushbackNCS(Matrix4x4 ncsm);
-			void dropNCS(Position p);
+			bool eraseNCS(Position p);
 
 			const Matrix4x4& getCart2Frac() const;	
 			const Matrix4x4& getFrac2Cart() const;	

@@ -137,10 +137,34 @@ namespace BALL
 	}
 	
 	
+	bool CrystalInfo::insertNCS(Position p, Matrix4x4 ncsm)
+	{
+		vector<Matrix4x4>::iterator it = ncs_symops_.begin();
+		if (p > (ncs_symops_.size()))
+		{
+			return false;
+		}
+		ncs_symops_.insert(it+p, ncsm);
+		return true;
+	}
+	
 	//pushbackNCS	
-	//dropNCS	
+	void CrystalInfo::pushbackNCS(Matrix4x4 ncsm)
+	{
+		ncs_symops_.push_back(ncsm);
+	}
 	
-	
+	bool CrystalInfo::eraseNCS(Position p)
+	{
+		vector<Matrix4x4>::iterator it = ncs_symops_.begin();
+		if (p > (ncs_symops_.size()))
+		{
+			return false;
+		}
+		ncs_symops_.erase(it+p);
+		return true;
+	}
+
 	const Matrix4x4& CrystalInfo::getCart2Frac() const
 	{
 		return cart2frac_;
