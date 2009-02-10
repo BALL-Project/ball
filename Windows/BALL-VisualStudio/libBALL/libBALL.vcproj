@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="libBALL"
 	ProjectGUID="{19709205-47E2-45A3-A266-3488F113508D}"
 	RootNamespace="libBALL"
@@ -1725,6 +1725,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\SYSTEM\fileSystem.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\SYSTEM\mutex.h"
 					>
 				</File>
 				<File
@@ -8198,6 +8202,18 @@
 							CompileAs="2"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\SYSTEM\mutex.C"
+					>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>

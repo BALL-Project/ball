@@ -7,6 +7,13 @@
 
 #include <QtCore/qmutex.h>
 
+// TEST
+#define BALL_HAS_BOOST_THREAD
+
+#ifdef BALL_HAS_BOOST_THREAD
+#	include <boost/thread/mutex.hpp>
+#endif
+
 namespace BALL
 {
 	/** This class provides a very thin wrapper around different mutex types.
@@ -27,13 +34,11 @@ namespace BALL
 	};
 
 #ifdef BALL_HAS_BOOST_THREAD
-	
-#include <boost/thread/mutex.hpp>
 
 	// Boost-based mutexes only require a mapping of tryLock to try_lock.
 	template <>
 	class TMutex<boost::mutex>
-		: public TMutex<boost::mutex>
+		: public boost::mutex
 	{
 		public:
 			TMutex()
@@ -58,9 +63,10 @@ namespace BALL
 	template class BALL_EXPORT TMutex<QMutex>;
 #endif
 
+	// TEST!
 	// the standard mutex to use
-	typedef TMutex<QMutex> Mutex;
-
+//	typedef TMutex<QMutex> Mutex;
+	typedef TMutex<boost::mutex> Mutex;
 }
 
 #endif // BALL_SYSTEM_MUTEX_H
