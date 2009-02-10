@@ -25,6 +25,7 @@ namespace BALL
 RepresentationManager::RepresentationManager(MainControl* mc)
 	throw()
 	: Object(),
+		update_mutex_(),
 		thread_(new UpdateRepresentationThread()),
 		no_update_(false),
 		still_to_notify_(false),
