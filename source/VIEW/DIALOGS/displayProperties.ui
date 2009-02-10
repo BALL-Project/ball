@@ -296,37 +296,6 @@
     <property name="alignment" >
      <set>Qt::AlignHCenter</set>
     </property>
-    <widget class="QPushButton" name="edit_selection" >
-     <property name="geometry" >
-      <rect>
-       <x>52</x>
-       <y>30</y>
-       <width>70</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="minimumSize" >
-      <size>
-       <width>70</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="maximumSize" >
-      <size>
-       <width>70</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="focusPolicy" >
-      <enum>Qt::TabFocus</enum>
-     </property>
-     <property name="text" >
-      <string>Edit</string>
-     </property>
-     <property name="autoDefault" >
-      <bool>true</bool>
-     </property>
-    </widget>
     <widget class="QLabel" name="selection_color_label" >
      <property name="geometry" >
       <rect>
@@ -828,6 +797,37 @@
      </property>
      <property name="margin" >
       <number>0</number>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="edit_selection" >
+     <property name="geometry" >
+      <rect>
+       <x>52</x>
+       <y>30</y>
+       <width>70</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="minimumSize" >
+      <size>
+       <width>70</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>70</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="focusPolicy" >
+      <enum>Qt::TabFocus</enum>
+     </property>
+     <property name="text" >
+      <string>Edit</string>
+     </property>
+     <property name="autoDefault" >
+      <bool>true</bool>
      </property>
     </widget>
    </widget>

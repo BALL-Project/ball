@@ -54,7 +54,7 @@ namespace BALL
 //TODO still missing: use the colors:  ambient_color_button, .. in POVRay and OpenGL 
 
 			//TODO necessary?
-			if (Scene::getInstance(0)->getStage())
+			if (Scene::getInstance(0) && Scene::getInstance(0)->getStage())
 			{	
 				Stage& stage = *Scene::getInstance(0)->getStage();
 
@@ -133,7 +133,6 @@ namespace BALL
 	
 		void MaterialSettings::updateDirectlyBoxChanged()
 		{
-			//TODO is this needed??
 			if (update_directly_checkBox->isChecked())
 			{
 				apply();
@@ -179,6 +178,11 @@ namespace BALL
 			bool isRTFact = radioButton_RTFact->isChecked();
 			groupBox_ambientIntensity->setDisabled(isOpenGL && (!isPOVRay) && (!isRTFact));
 			groupBox_Reflectiveness->setDisabled(isOpenGL && (!isPOVRay) && (!isRTFact));
+			if (isOpenGL || isPOVRay)
+			{
+				update_directly_checkBox->setChecked(false);
+			}
+			update_directly_checkBox->setDisabled(isOpenGL || isPOVRay);
 		}
 
 		
