@@ -47,7 +47,7 @@
 #	include <BALL/KERNEL/secondaryStructure.h>
 #endif
 
-#if defined(BALL_HAS_UNORDERED_MAP) || defined(BALL_HAS_HASHMAP)
+#if defined(BALL_HAS_UNORDERED_MAP) || defined(BALL_HAS_HASH_MAP)
 #ifdef BALL_EXTEND_HASH_IN_STD_NS
 namespace std
 {
