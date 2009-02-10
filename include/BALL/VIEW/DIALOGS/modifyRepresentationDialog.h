@@ -42,6 +42,11 @@
 # include <BALL/DATATYPE/hashGrid.h>
 #endif
 
+#ifndef BALL_VIEW_DIALOG_MATERIALSETTINGS_H
+# include <BALL/VIEW/DIALOGS/materialSettings.h>
+#endif
+
+
 namespace BALL
 {
 	namespace VIEW
@@ -152,6 +157,7 @@ namespace BALL
 			Representation* rep_;
 			List<RegularData3D*> grid_list_;
 			vector<Vector3> vertices_;
+			MaterialSettings* material_settings_;
 		};
 
 	} // namespace VIEW

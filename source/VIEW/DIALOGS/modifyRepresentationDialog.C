@@ -41,10 +41,11 @@ namespace BALL
 	 namespace VIEW
 	 {
 
-		 ModifyRepresentationDialog::ModifyRepresentationDialog(const ModifyRepresentationDialog&)
+		 ModifyRepresentationDialog::ModifyRepresentationDialog(const ModifyRepresentationDialog& mrd)
 			: QDialog(0),
 				ModularWidget()
 		{
+			material_settings_ = mrd.material_settings_;
 		}
 
 		ModifyRepresentationDialog::ModifyRepresentationDialog( QWidget* parent,  const char* name, bool, Qt::WFlags fl )
@@ -52,10 +53,16 @@ namespace BALL
 				Ui_ModifyRepresentationDialogData(),
 				ModularWidget(name),
 				grid_(0),
-				rep_(0)
+				rep_(0),
+				material_settings_(NULL)
 		{
 			setupUi(this);
 
+			material_settings_ = new MaterialSettings(this, "MaterialSettingsDialog");
+			if (material_settings_)
+			{
+				material_settings_->setParent(material_setting);
+			}
 			// signals and slots connections
 			connect( apply_button, SIGNAL( clicked() ), this, SLOT( applyPressed() ) );
 			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( cancelPressed() ) );
@@ -126,7 +133,12 @@ namespace BALL
 				applySplit();
 				return;
 			}
-				
+			else if (surface_tab->currentWidget() == material_setting)	
+			{
+				if (material_settings_)
+					material_settings_->apply();
+			}
+
 			rep_->enableModelUpdate(false);
 			rep_->enableColoringUpdate(false);
 			if (rep_->isHidden())
