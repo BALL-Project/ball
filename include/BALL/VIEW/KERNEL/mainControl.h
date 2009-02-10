@@ -950,7 +950,7 @@ namespace BALL
 			Index 							rep_label_delta_;
 			QTimer 							timer_;
 			QTimer 							render_timer_;
-			QMutex 							composites_locked_mutex_;
+			Mutex 							composites_locked_mutex_;
 
 			String 							proxy_;
 			Position 						proxy_port_;

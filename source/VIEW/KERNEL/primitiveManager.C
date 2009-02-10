@@ -32,7 +32,7 @@ namespace BALL
 
 #ifdef BALL_QT_HAS_THREADS
 	UpdateRepresentationThread PrimitiveManager::thread_;
-	QMutex 										 PrimitiveManager::mutex_;
+	Mutex 										 PrimitiveManager::mutex_;
 #endif
 
 

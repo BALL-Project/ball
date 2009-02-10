@@ -10,7 +10,10 @@
 #	include <BALL/VIEW/KERNEL/representation.h>
 #endif
 
-#include <QtCore/qmutex.h>
+#ifndef BALL_SYSTEM_MUTEX_H
+#include <BALL/SYSTEM/mutex.h>
+#endif
+
 #include <QtCore/qwaitcondition.h>
 
 #include <vector>
@@ -233,7 +236,7 @@ namespace BALL
 			vector<ClippingPlane*> clipping_planes_;
 			
 			UpdateRepresentationThread* thread_;
-			mutable QMutex 							update_mutex_;
+			mutable Mutex 							update_mutex_;
 			bool 												no_update_;
 			bool 												still_to_notify_;
 
