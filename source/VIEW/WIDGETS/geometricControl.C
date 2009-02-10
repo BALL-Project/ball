@@ -238,7 +238,7 @@ namespace BALL
 			addItem_("Save Surface", SLOT(saveSurface()));
  			addItem_("Select Atoms", SLOT(selectAtoms()));
 			addItem_("Modify Model", SLOT(modifyRepresentation_()));	
- 			addItem_("Customize Representation", SLOT(show()), modify_rep_dialog_);	
+ 			addItem_("Modify Representation", SLOT(show()), modify_rep_dialog_);	
 			addItem_("Rename", SLOT(renameRepresentation()));
 			context_menu_.addSeparator();
 			Size acs = context_menu_actions_.size() - 1;
@@ -519,7 +519,7 @@ namespace BALL
 
 			menu_load_surface_ = insertMenuEntry(MainControl::FILE_OPEN, "Surface", this,
 																						SLOT(loadSurface()));
-			modify_surface_ = insertMenuEntry(MainControl::DISPLAY, "Customize Representation", 
+			modify_surface_ = insertMenuEntry(MainControl::DISPLAY, "Modify Representation", 
 																						modify_rep_dialog_, SLOT(show()));	
 			registerForHelpSystem(this, "geometricControl.html");
 		}
