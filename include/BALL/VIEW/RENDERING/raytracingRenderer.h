@@ -9,6 +9,10 @@
 #	include <BALL/VIEW/RENDERING/renderer.h>
 #endif
 
+#ifndef BALL_VIEW_KERNEL_STAGE_H
+# include <BALL/VIEW/KERNEL/stage.h>
+#endif
+
 #include <BALL/VIEW/RENDERING/bufferedRenderer.h>
 
 namespace BALL
@@ -52,6 +56,7 @@ namespace BALL
 				throw() = 0;    
 
 			virtual void updateMaterialForRepresentation(Representation const* rep) = 0;
+			virtual void updateMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material) = 0;
 
         protected:
 

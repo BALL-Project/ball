@@ -80,9 +80,11 @@ namespace BALL
 				virtual void renderToBufferImpl(FrameBufferPtr buffer);
 
 				void updateMaterialForRepresentation(Representation const* rep);
+				void updateMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material);
 
 				GroupHandle transformTube(const TwoColoredTube& tube);
 				void updateMaterialFromStage(RTfact::Remote::RTAppearanceHandle& material);
+				void convertMaterial(Stage::RaytracingMaterial const& rt_material, RTfact::Remote::RTAppearanceHandle& material);
 
 			private:
 

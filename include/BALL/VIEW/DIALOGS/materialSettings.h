@@ -30,6 +30,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class Scene;
+		class Representation;
 
 		/** Dialog for setting the Material, which is added to the Preferences.
 		 		This dialog allows the control of the Materials of a Scene.
@@ -54,6 +55,12 @@ namespace BALL
 			/// Apply the new values to the stage
 			void apply();
 
+			/// set the current representation
+			void setCurrentRepresentation(Representation const* representation)
+			{
+				current_representation_ = representation;
+			}
+
 			public slots:
 
 			virtual void ambientFactorChanged();
@@ -68,6 +75,8 @@ namespace BALL
 			private:
 
 			void setValues_(const QSlider& slider, QLabel& label, int divisor);
+
+			Representation const* current_representation_;
 		};
 
 	}

@@ -175,7 +175,7 @@ namespace BALL
 							rt_data.object_handles.push_back(handle);
 							rt_data.material_handles.push_back(material);
 
-                            has_geometry = true;
+							has_geometry = true;
 						} 
 
 						if (RTTI::isKindOf<Sphere>(**it))
@@ -208,7 +208,7 @@ namespace BALL
 							rt_data.object_handles.push_back(handle);
 							rt_data.material_handles.push_back(material);
 
-                            has_geometry = true;
+							has_geometry = true;
 						}
 
 						if (RTTI::isKindOf<TwoColoredTube>(**it))
@@ -276,7 +276,7 @@ namespace BALL
 								}
 							}
 
-                            has_geometry = true;
+							has_geometry = true;
 						}
 
 						// finally, insert our new RTData into the hash map
@@ -313,6 +313,26 @@ namespace BALL
 			}
 		}
 
+		void RTfactRenderer::updateMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material)
+		{
+			List<GeometricObject*>::ConstIterator it;
+			for (it =  rep->getGeometricObjects().begin();
+					 it != rep->getGeometricObjects().end();
+					 it++)
+			{
+				if (objects_.find(*it) != objects_.end())
+				{
+					RTfactData& rt_data = objects_[*it];
+
+					for (Position i=0; i<rt_data.material_handles.size(); ++i)
+					{
+						convertMaterial(new_material, rt_data.material_handles[i]);
+					}
+				}
+			}
+		}
+
+
 		GroupHandle RTfactRenderer::transformTube(const TwoColoredTube& tube) 
 		{
 			Vector3 vec = tube.getVertex2() - tube.getVertex1();
@@ -337,11 +357,14 @@ namespace BALL
 																		 *matrix*Transform::scale(Vec3f<1>(radius, radius, len)));
 		}
 
-
 		void RTfactRenderer::updateMaterialFromStage(RTAppearanceHandle& material)
 		{
 			Stage::RaytracingMaterial const& rt_material = scene_->getStage()->getRTMaterial();
-		
+			convertMaterial(rt_material, material);
+		}
+
+		void RTfactRenderer::convertMaterial(Stage::RaytracingMaterial const& rt_material, RTAppearanceHandle& material)
+		{
 			// ambience
 			float red   = (float)rt_material.ambient_color.getRed()   * rt_material.ambient_intensity;
 			float blue  = (float)rt_material.ambient_color.getBlue()  * rt_material.ambient_intensity;

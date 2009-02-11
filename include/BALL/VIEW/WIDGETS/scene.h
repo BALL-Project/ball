@@ -531,7 +531,9 @@ namespace BALL
 			void resetTracking() {tracking_initialized_ = false;}
 // TODO: this pretty hacky!
 #ifdef ENABLE_RAYTRACING
-			void updateRTMaterials(bool only_selected);
+			void updateAllRTMaterials();
+
+			void updateRTMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material);
 #endif
 
 			public slots:
