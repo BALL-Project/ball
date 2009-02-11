@@ -52,9 +52,9 @@ namespace BALL
             /*
              * Get description of the renderer int textual form
              */
-			virtual String getRenderer()	
-				throw() = 0;    
+			virtual String getRenderer() = 0;    
 
+			virtual void bufferRepresentation(Representation const* rep) = 0;
 			virtual void updateMaterialForRepresentation(Representation const* rep) = 0;
 			virtual void updateMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material) = 0;
 
