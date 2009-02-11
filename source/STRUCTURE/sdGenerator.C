@@ -30,9 +30,15 @@ using namespace std;
 
 namespace BALL
 {
+	const char* SDGenerator::Option::SHOW_HYDROGENS = "sd_generator_show_hydrogens";
+	const bool  SDGenerator::Default::SHOW_HYDROGENS = false;
+ 
+	SDGenerator::SDGenerator(bool show_hydrogens)
+	{
+		setDefaultOptions();
+		options[SDGenerator::Option::SHOW_HYDROGENS] = show_hydrogens;
+	}
 
-	SDGenerator::SDGenerator()
-	{}
 
 
 	SDGenerator::~SDGenerator()
@@ -41,10 +47,10 @@ namespace BALL
 	void SDGenerator::checkAtoms(System& molecule_sys)
 	{
 
-		//      remove all Hydrogen-Atoms from the System
-		bool no_H = 1;
+		// check, if all Hydrogen-Atoms should be deleted from the System
+		bool show_H = options.getBool(Option::SHOW_HYDROGENS);
 
-		if (no_H)
+		if (!show_H)
 		{
 			Selector s("element(H)");
 			molecule_sys.apply(s);
@@ -365,5 +371,11 @@ namespace BALL
 
 		DEBUG("Structure Diagram has been generated.")
 	}
-
+	
+	void SDGenerator::setDefaultOptions()
+	{		
+	
+	 	options.setDefaultBool(SDGenerator::Option::SHOW_HYDROGENS,
+	 												 SDGenerator::Default::SHOW_HYDROGENS);
+	}
 } // namespace BALL

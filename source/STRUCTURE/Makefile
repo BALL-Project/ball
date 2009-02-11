@@ -27,6 +27,7 @@ SMARTS_SOURCES=\
 CPP_SOURCES=\
 	addHydrogenProcessor.C\
 	analyticalSES.C\
+	assignBondOrderProcessor.C\
 	atomBijection.C\
 	atomTyper.C\
 	bindingPocketProcessor.C\
@@ -41,9 +42,9 @@ CPP_SOURCES=\
 	graphEdge.C\
 	graphFace.C\
 	graphVertex.C\
-	kekulizer.C\
-	molecularGraph.C\
 	HBondProcessor.C\
+	hybridisationProcessor.C\
+	kekulizer.C\
 	moleculeAssembler.C\
 	molecularGraph.C\
 	numericalSAS.C\
@@ -100,6 +101,7 @@ include ../common.mak
 ifeq ($(BALL_HAS_GSL),true)
 	CPP_SOURCES+=RMSDMinimizer.C
 endif
+
 
 depend:	$(SMILES_SOURCES)	$(SMARTS_SOURCES) subdirsdepend
 

@@ -19,6 +19,9 @@ CVIEW=""
 
 CGSL="--enable-gsl"
 #CGSL="--disable-gsl"
+
+CLPSOLVE="--enable-lpsolve"
+#CLPSOLVE="--disable-lpsolve"
 #######################################
 
 # ignore below
@@ -126,6 +129,9 @@ automaticInstaller()
 							$CGSL\
 						  "--with-gsl-lib=$LIBDIR"\
 							"--with-gsl-incl=$INCDIR"\
+							$CLPSOLVE\
+							"--with-lpsolve-lib=$LIBDIR"\
+							"--with-lpsolve-incl=$INCDIR"\
 							"--enable-fftw"\
 							"--disable-fftw-float"\
 							"--disable-fftw-longdbl"\

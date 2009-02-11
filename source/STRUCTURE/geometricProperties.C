@@ -343,7 +343,7 @@ namespace BALL
 a2.getPosition().y, a2.getPosition().z));
 		}
 
-		Vector3 a12(a2.getPosition() - a1.getPosition());
+		Vector3 a12(a1.getPosition() - a2.getPosition());
 		Vector3 a23(a3.getPosition() - a2.getPosition());
 
 		a12.normalize();

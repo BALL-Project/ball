@@ -15,6 +15,10 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
+#ifndef BALL_KERNEL_ATOMCONTAINER_H
+# include <BALL/KERNEL/atomContainer.h>
+#endif
+
 namespace BALL 
 {
 	class Atom;
@@ -136,6 +140,8 @@ namespace BALL
 		void clear_();
 		
 		bool buildAll_(System& system);
+
+		bool containsAtomChilds_(AtomContainerConstIterator& frag_it);
 
 		BALL_EXPORT struct AtomStruct
 		{

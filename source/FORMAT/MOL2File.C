@@ -79,30 +79,32 @@ namespace BALL
 		vector<const AtomContainer*> substructure_pointers;
 		AtomContainerConstIterator frag_it = system.beginAtomContainer();
 
-		// increment the iterator once to skip the system (which is no substructure)
-		++frag_it;
+		// we will need to exclude atomcontainers that have only other atom containers as childs
 		for (; +frag_it; ++frag_it)
 		{
-			name = frag_it->getName();
-			// if the fragment is a residue...
-			const Residue* residue = dynamic_cast<const Residue*>(&*frag_it);
-			if (residue != 0)
-			{	
-				// ...append its ID (PDB ID) to the name. E.g.: ALA154
-				name = name + residue->getID();
-			}
-
-			// empty names are replaced by "****"
-			name.trim();
-			if (name == "")
+			if (containsAtomChilds_(frag_it))
 			{
-				name = "****";
-			}
+				name = frag_it->getName();
+				// if the fragment is a residue...
+				const Residue* residue = dynamic_cast<const Residue*>(&*frag_it);
+				if (residue != 0)
+				{	
+					// ...append its ID (PDB ID) to the name. E.g.: ALA154
+					name = name + residue->getID();
+				}
 
-			// store the name and the pointer 
-			substructure_map.insert(pair<const AtomContainer*, Position>(&*frag_it, (Size)substructure_name.size()));
-			substructure_pointers.push_back(&*frag_it);
-			substructure_name.push_back(name);
+				// empty names are replaced by "****"
+				name.trim();
+				if (name == "")
+				{
+					name = "****";
+				}
+
+				// store the name and the pointer 
+				substructure_map.insert(pair<const AtomContainer*, Position>(&*frag_it, (Size)substructure_name.size()));
+				substructure_pointers.push_back(&*frag_it);
+				substructure_name.push_back(name);
+			}
 		}
 
 		// count the bonds in the system
@@ -876,6 +878,19 @@ namespace BALL
 		}
 		
 		return name;
+	}
+
+	bool MOL2File::containsAtomChilds_(AtomContainerConstIterator& frag_it)
+	{
+		// iterate over the children of this atom container
+		AtomContainer::ChildCompositeConstIterator children_it;
+		for (children_it = frag_it->beginChildComposite(); +children_it; ++children_it)
+		{
+			if (RTTI::isKindOf<Atom>(*children_it))
+				return true;
+		}
+
+		return false;
 	}
 
 	const MOL2File& MOL2File::operator = (const MOL2File& file)

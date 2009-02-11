@@ -121,6 +121,13 @@ Bond::Order Bond::getOrder() const
 }
 	
 BALL_INLINE
+bool Bond::isAromatic() const
+	throw()
+{
+	return (hasProperty(IS_AROMATIC) || (bond_order_ == ORDER__AROMATIC));
+}
+
+BALL_INLINE
 void Bond::setType(Type bond_type)
 	throw()
 {

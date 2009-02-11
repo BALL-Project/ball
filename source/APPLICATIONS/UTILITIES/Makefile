@@ -23,6 +23,7 @@ EXECUTABLES =\
 	compute_docking_RMSD\
 	create_random_numbers\
 	dcd2dcd\
+	atomtyper\
 	export_fragment\
 	hin2mol2\
 	pdb2amber_naming\

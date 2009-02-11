@@ -47,8 +47,7 @@ namespace BALL
 		last_atom_ = atom;
 
 		// prevent adding Hydrogens, e.g. to aromatic Carboxy group
-		if (atom->countBonds() == 1 &&
-				atom->getBond(0)->getOrder() == Bond::ORDER__AROMATIC)
+		if (atom->countBonds() == 1 && atom->getBond(0)->isAromatic())
 		{
 			return Processor::CONTINUE;
 		}
@@ -532,7 +531,7 @@ namespace BALL
 		AtomBondIterator bit = atom.beginBond();
 		for (; +bit; ++bit)
 		{
-			if (bit->getOrder() == Bond::ORDER__AROMATIC)
+			if (bit->isAromatic())
 			{
 				nr += 1.5;
 				continue;

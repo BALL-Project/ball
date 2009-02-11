@@ -15,9 +15,13 @@ using namespace std;
 
 namespace BALL
 {
+	const char* AromaticityProcessor::Option::OVERWRITE_BOND_ORDERS = "overwrite_bond_orders";
+	const bool  AromaticityProcessor::Default::OVERWRITE_BOND_ORDERS = true;
+
 	AromaticityProcessor::AromaticityProcessor()
 		:	UnaryProcessor<AtomContainer>()
 	{
+		setDefaultOptions();
 	}
 
 	AromaticityProcessor::AromaticityProcessor(const AromaticityProcessor& aro)
@@ -58,6 +62,11 @@ namespace BALL
 		}
 	}
 
+	bool AromaticityProcessor::start()
+	{
+		overwrite_bond_orders_ = options.getBool(Option::OVERWRITE_BOND_ORDERS);
+		return true;
+	}
 
 	Processor::Result AromaticityProcessor::operator () (AtomContainer& ac)
 	{
@@ -487,6 +496,7 @@ namespace BALL
 
 	void AromaticityProcessor::aromatize(const vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
 	{
+		overwrite_bond_orders_ = options.getBool(Option::OVERWRITE_BOND_ORDERS);
 		vector<HashSet<Atom*> > sssr;
 		for (vector<vector<Atom*> >::const_iterator it1=sssr_orig.begin();it1!=sssr_orig.end();++it1)
 		{
@@ -812,7 +822,11 @@ namespace BALL
 							{
 								if (ring.has(b_it->getPartner(**it)))
 								{
-									b_it->setOrder(Bond::ORDER__AROMATIC);
+									b_it->setProperty(Bond::IS_AROMATIC);
+									if (overwrite_bond_orders_)
+									{
+										b_it->setOrder(Bond::ORDER__AROMATIC);
+									}
 								}
 							}
 						}
@@ -828,7 +842,11 @@ namespace BALL
 						{
 							if (ring.has(b_it->getPartner(**it)))
 							{
-								b_it->setOrder(Bond::ORDER__AROMATIC);
+								b_it->setProperty(Bond::IS_AROMATIC);
+								if (overwrite_bond_orders_)
+								{	
+									b_it->setOrder(Bond::ORDER__AROMATIC);
+								}
 							}
 						}
 					}
@@ -847,7 +865,11 @@ namespace BALL
 					{
 						if (ring.has(b_it->getPartner(**it)))
 						{
-							b_it->setOrder(Bond::ORDER__AROMATIC);
+							b_it->setProperty(Bond::IS_AROMATIC);
+							if (overwrite_bond_orders_)
+							{
+								b_it->setOrder(Bond::ORDER__AROMATIC);
+							}
 						}
 					}
 				}
@@ -1108,5 +1130,10 @@ namespace BALL
 		}
 	}
 	
+	void AromaticityProcessor::setDefaultOptions()
+	{		
+	 	options.setDefaultBool(AromaticityProcessor::Option::OVERWRITE_BOND_ORDERS, 
+	 												 AromaticityProcessor::Default::OVERWRITE_BOND_ORDERS); 
+	}
 } // namespace BALL
 

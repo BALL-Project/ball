@@ -221,7 +221,7 @@ BALL supports a variety of file formats. For example we could write the system
 to a HyperChem HIN file~\cite{HyperChem}: \label{useofstreams}
 
 \begin{lstlisting}{}
-  HINFile outfile("water.hin", File::OUT);
+  HINFile outfile("water.hin", std::ios::out);
   outfile << S;
   outfile.close();
 \end{lstlisting}
@@ -229,7 +229,7 @@ to a HyperChem HIN file~\cite{HyperChem}: \label{useofstreams}
 \noindent
 These three lines of code create a \class{HINFile} object which is used to
 read and write HyperChem files. The first line opens a file named {\tt
-water.hin} for output ({\tt File::OUT}; if the second argument is omitted the
+water.hin} for output ({\tt std::ios::out}; if the second argument is omitted the
 file is opened for reading only). The second line uses the stream operator 
 {\tt <<} \index{operator {\tt <<}} to write the contents of system {\tt S} to 
 this file. The file is closed in the third line.
@@ -381,7 +381,7 @@ int main()
   S->insert(*water2);
 
   // and write this system to a HyperChem file
-  HINFile outfile("water.hin", File::OUT);
+  HINFile outfile("water.hin", std::ios::out);
   outfile << *S;
   outfile.close();
 

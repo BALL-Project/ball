@@ -19,11 +19,13 @@
 #include <BALL/VIEW/DIALOGS/editSettings.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/DIALOGS/PTEDialog.h>
+#include <BALL/VIEW/DIALOGS/assignBondOrderConfigurationDialog.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
+#include <BALL/STRUCTURE/assignBondOrderProcessor.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/MATHS/randomNumberGenerator.h>
 #include <BALL/MATHS/analyticalGeometry.h>
@@ -36,6 +38,8 @@
 #include <BALL/MATHS/vector3.h>
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MATHS/angle.h>
+
+#include <sstream>
 
 using std::endl;
 
@@ -173,6 +177,16 @@ void EditableScene::initializeWidget(MainControl& main_control)
 	main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
 	Path path;
+
+	
+	QIcon icon4(path.find("graphics/assignBondOrders.png").c_str());
+	bondorders_ = new QAction(icon4, "Quickly optimize bond orders", this);
+	bondorders_->setObjectName(bondorders_->text());
+	bondorders_->setToolTip("Edit mode: Quickly optimize the highlighted structures bond orders");
+	registerForHelpSystem(bondorders_, "scene.html#bondorders");
+	connect(bondorders_, SIGNAL(triggered()), this, SLOT(computeBondOrders()));
+
+
 	QIcon icon(path.find("graphics/minimize.png").c_str());
 	optimize_ = new QAction(icon, "Quickly optimize structure", this);
 	optimize_->setObjectName(optimize_->text());
@@ -212,8 +226,19 @@ void EditableScene::checkMenu(MainControl& main_control)
 	Scene::checkMenu(main_control);
 	bool edit_mode = (current_mode_ == (Scene::ModeType)EDIT__MODE);
 	bool selected_system = !busy && main_control.getSelectedSystem();
+	
 	optimize_->setEnabled(selected_system);
 	add_hydrogens_->setEnabled(selected_system);
+	
+	List<Composite*> highl = getMainControl()->getMolecularControlSelection();
+	List<Composite*>::Iterator lit = highl.begin();
+	bool selected_system_or_molecule =   (highl.size() == 1)
+																		&& (RTTI::isKindOf<System>(**lit) || RTTI::isKindOf<Molecule>(**lit) ) ;
+
+	bondorders_->setEnabled(selected_system_or_molecule && !busy);
+	optimize_->setEnabled(selected_system_or_molecule && !busy);
+	add_hydrogens_->setEnabled(selected_system_or_molecule && !busy);
+	
 	element_action_->setEnabled(!busy && edit_mode);
 
 	new_molecule_->setEnabled(!busy);
@@ -925,13 +950,35 @@ void EditableScene::showContextMenu(QPoint pos)
 		oas.push_back(order->addAction("Triple",    this, SLOT(changeBondOrder_())));
 		oas.push_back(order->addAction("Quadruple", this, SLOT(changeBondOrder_())));
 		oas.push_back(order->addAction("Aromatic",  this, SLOT(changeBondOrder_())));
+		oas.push_back(order->addAction("Unknown",   this, SLOT(changeBondOrder_())));
 
 		Index bo = 0;
-		if (current_bond_) bo = ((Index)current_bond_->getOrder()) - 1;
+		if (current_bond_) bo = ((Index)current_bond_->getOrder());
 		for (Index p = 0; p < (Index) oas.size(); p++)
 		{
 			oas[p]->setCheckable(true);
-			if (p == bo) oas[p]->setChecked(true);
+		}
+
+		switch (bo)
+		{
+			case Bond::ORDER__SINGLE:
+				oas[0]->setChecked(true);
+				break;
+			case Bond::ORDER__DOUBLE:
+				oas[1]->setChecked(true);
+				break;
+			case Bond::ORDER__TRIPLE:
+				oas[2]->setChecked(true);
+				break;
+			case Bond::ORDER__QUADRUPLE:
+				oas[3]->setChecked(true);
+				break;
+			case Bond::ORDER__AROMATIC:
+				oas[4]->setChecked(true);
+				break;
+			default:
+				oas[5]->setChecked(true);
+				break;
 		}
 
 		change_order->setEnabled(current_bond_ != 0);
@@ -987,6 +1034,7 @@ void EditableScene::showContextMenu(QPoint pos)
 
 		menu.addAction(optimize_);
 		menu.addAction(add_hydrogens_);
+		menu.addAction(bondorders_);
 	}
 
 	menu.exec(mapToGlobal(pos));
@@ -1147,6 +1195,8 @@ void EditableScene::activatedOrderItem_(QAction* action)
 	else if (text == "Triple") bond_order_ = Bond::ORDER__TRIPLE;
 	else if (text == "Quadruple") bond_order_ = Bond::ORDER__QUADRUPLE;
 	else if (text == "Aromatic") bond_order_ = Bond::ORDER__AROMATIC;
+	else if (text == "Unknown") bond_order_ = Bond::ORDER__UNKNOWN;
+
 }
 
 void EditableScene::moveAtom_()
@@ -1418,6 +1468,127 @@ void EditableScene::saturateWithHydrogens()
 	getMainControl()->update(*ac, true);
 }
 
+
+void EditableScene::computeBondOrders()
+{
+	if (getMainControl()->isBusy()) return;
+
+	System* system = getMainControl()->getSelectedSystem();  
+	if (system == 0) { return;};              
+
+	deselect_(false);
+
+	// do we have a Molecular Structure?
+	MolecularStructure* ms = MolecularStructure::getInstance(0);
+	if (ms == 0) return;
+
+	// get the highlighted atomcontainer
+	List<AtomContainer*> containers;
+	if (only_highlighted_)
+	{
+		List<Composite*> highl = getMainControl()->getMolecularControlSelection();
+		List<Composite*>::Iterator lit = highl.begin();
+		for (; lit != highl.end(); ++lit)
+		{
+			AtomContainer* ac = dynamic_cast<AtomContainer*>(*lit);
+			if (ac != 0) containers.push_back(ac);
+		}
+	}
+
+	if (containers.size() != 1) 
+	{
+		setStatusbarText("Please highlight exactly one AtomContainer!", true);
+		return;
+	}
+
+	AssignBondOrderConfigurationDialog& bond_order_dialog = ms->getBondOrderDialog();
+
+	AssignBondOrderProcessor abop;
+
+	// read the options from the dialog
+	// bond_order_dialog.setOptionsForProcessor(abop);
+	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_singleBO_box->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_doubleBO_box->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_tripleBO_box->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS] 		= bond_order_dialog.overwrite_selected_bonds_box->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::KEKULIZE_RINGS] 									= bond_order_dialog.kekulizeBonds_button->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::ADD_HYDROGENS] 									= bond_order_dialog.add_hydrogens_checkBox->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::ALGORITHM] 											= bond_order_dialog.ILP_button->isChecked() ? AssignBondOrderProcessor::Algorithm::ILP : AssignBondOrderProcessor::Algorithm::A_STAR;
+	abop.options[AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING]						= (bond_order_dialog.penalty_balance_slider->value()/100.);
+	
+	// get the parameter folder
+	abop.options[AssignBondOrderProcessor::Option::INIFile] = ascii(bond_order_dialog.parameter_file_edit->text());
+
+	// check for valid inputs
+	if (bond_order_dialog.max_n_opt_solutions->text().toInt() < 1)
+		bond_order_dialog.max_n_opt_solutions->setText(String(1).c_str());
+
+	if (bond_order_dialog.max_n_all_solutions->text().toInt() < 1)
+		bond_order_dialog.max_n_all_solutions->setText(String(1).c_str());
+
+	// get the limitations for number of bond order assignment
+	if (bond_order_dialog.single_solution_button->isChecked())
+	{
+		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= 1;
+		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= false;
+	}
+	else if (bond_order_dialog.all_optimal_solutions_button->isChecked())
+	{
+		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= 0;
+		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= false;
+	}
+	else if (bond_order_dialog.n_opt_solutions_button->isChecked())
+	{
+		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= bond_order_dialog.max_n_opt_solutions->text().toInt();
+		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= false;
+	}
+	else if (bond_order_dialog.n_all_solutions_button->isChecked())
+	{
+		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= bond_order_dialog.max_n_all_solutions->text().toInt();
+		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= true;
+	}
+
+	// automatically applying a solution might confuse the user --> set to false
+	abop.options.setBool(AssignBondOrderProcessor::Option::APPLY_FIRST_SOLUTION, false);
+
+	// apply
+	containers.front()->apply(abop);
+
+	// give a message
+	if (abop.getNumberOfComputedSolutions() == 0)
+	{
+		setStatusbarText(String("Could not find a valid bond order assignment.", true));
+	}
+	else
+	{	
+		String nr = abop.getNumberOfComputedSolutions();
+		setStatusbarText(String("Found ") + nr + " bond order assignments.", true);
+	
+		Log.info()<< "  > Result AssignBondOrderProcessor: " << endl;
+
+		for (Size i = 0; i < abop.getNumberOfComputedSolutions(); i++)
+		{
+			ostringstream stream_description;
+			stream_description.setf(std::ios_base::fixed);
+			stream_description.precision(2);
+
+			stream_description  << "      Solution " << i 
+						 						 << " has penalty " << abop.getTotalPenalty(i)
+						 						 << ", charge " << abop.getTotalCharge(i)
+												 << ", " <<  abop.getNumberOfAddedHydrogens(i) << " added hydrogens.";
+ 
+			String description = stream_description.str();
+
+			Log.info() << description << endl; 
+		}
+
+		ms->showBondOrderAssignmentResults(abop);
+	}
+
+	getMainControl()->update(*containers.front(), true);
+}
+
+
 void EditableScene::optimizeStructure()
 {
 	if (getMainControl()->isBusy()) return;
@@ -1494,6 +1665,7 @@ void EditableScene::addToolBarEntries(QToolBar* tb)
 	toolbar_actions_.push_back(element_action_);
 	toolbar_actions_.push_back(add_hydrogens_);
 	toolbar_actions_.push_back(optimize_);
+	toolbar_actions_.push_back(bondorders_);
 	Scene::addToolBarEntries(tb);
 	toolbar_->insertSeparator(element_action_);
 
