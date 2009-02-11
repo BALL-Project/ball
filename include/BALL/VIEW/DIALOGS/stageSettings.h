@@ -84,6 +84,9 @@ namespace BALL
 
 			///
 			void fogStateChanged();
+			
+			///
+			void projectionTransformationChanged();
 
 			private:
 

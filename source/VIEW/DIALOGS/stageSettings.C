@@ -49,7 +49,9 @@ namespace BALL
 			connect( eye_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( eyeDistanceChanged() ) );
 			connect( focal_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( focalDistanceChanged() ) );
 			connect( enable_fog, SIGNAL( stateChanged(int) ), this, SLOT( fogStateChanged() ) );
-		}
+			connect( radioButton_perspectiveProjection, SIGNAL( clicked() ), this, SLOT( projectionTransformationChanged()));
+			connect( radioButton_orthographicProjection, SIGNAL( clicked() ), this, SLOT( projectionTransformationChanged()));
+		} 
 
 
 		void StageSettings::colorPressed()
@@ -83,6 +85,7 @@ namespace BALL
 
 			eyeDistanceChanged();
 			focalDistanceChanged();
+
 			getGLSettings();
 		}
 
@@ -109,6 +112,9 @@ namespace BALL
 			{
 				stage_->setFogIntensity(0);
 			}
+
+			//TODO see projectionTransformationChanged() for code examples.
+			//stage_->setPerspectiveProjection(radioButton_perspectiveProjection->isChecked());
 
 			Scene::setShowLightSources(show_lights_->isChecked());
 			Scene::setAnimationSmoothness(((float)animation_smoothness->value()) / 10.0);
@@ -157,7 +163,8 @@ namespace BALL
 			smooth_lines_->setChecked(false);
 			enable_fog->setChecked(false);
 			fog_slider->setValue(200);
-
+			radioButton_perspectiveProjection->setChecked(true);
+			radioButton_orthographicProjection->setChecked(false);
 			slider_->setValue(5);
 			wheel_slider_->setValue(5);
 
@@ -207,6 +214,25 @@ namespace BALL
 		{
 			fog_slider->setEnabled(enable_fog->isChecked());
 		}
+	
+		void StageSettings::projectionTransformationChanged()
+		{
+			if (radioButton_perspectiveProjection->isChecked())
+			{
+				Log.info() << "Switched to perspective projection." << endl;
+					// glMatrixMode(GL_PROJECTION);
+					// glLoadIdentity();
+					// glFrustrum(left, right, bottom, top, near, far);	
+					//stage_->setPerspectiveProjection(radioButton_perspectiveProjection->isChecked());
+			}
+			else if (radioButton_orthographicProjection->isChecked())
+			{
+				Log.info() << "Switched to orthographic projection." << endl;
+				// glMatrixMode(GL_PROJECTION);
+				// glLoadIdentity();
+				// glOrtho(left, right, bottom, top, near, far);
+			}	
+		}
 
 		void StageSettings::getGLSettings()
 			throw()
@@ -231,6 +257,12 @@ namespace BALL
 
 			smooth_lines_->setChecked(renderer.getSmoothLines());
 			use_vertex_buffers->setChecked(renderer.vertexBuffersEnabled());
+			
+			//TODO 
+			/*bool perspectiveProjection = renderer_->isPerspectiveProjection();
+			radioButton_perspectiveProjection->setChecked(perspectiveProjection);
+			radioButton_orthographicProjection->setChecked(!perspectiveProjection);*/
+
 		}
 
 	} // namespace VIEW
