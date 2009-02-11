@@ -58,11 +58,10 @@ namespace BALL
 		{
 			setupUi(this);
 
-			material_settings_ = new MaterialSettings(this, "MaterialSettingsDialog");
-			if (material_settings_)
-			{
-				material_settings_->setParent(material_setting);
-			}
+			// NOTE: we *rely* on the object name "MaterialSettingsForRepresentation" to be able to
+			//       distinguish between the dialog used here and the one used in the preferences
+			material_settings_ = new MaterialSettings(material_setting, "MaterialSettingsForRepresentation");
+
 			// signals and slots connections
 			connect( apply_button, SIGNAL( clicked() ), this, SLOT( applyPressed() ) );
 			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( cancelPressed() ) );
@@ -136,7 +135,9 @@ namespace BALL
 			else if (surface_tab->currentWidget() == material_setting)	
 			{
 				if (material_settings_)
+				{
 					material_settings_->apply();
+				}
 			}
 
 			rep_->enableModelUpdate(false);
@@ -727,6 +728,8 @@ namespace BALL
 			if (isVisible()) gridSelected() ;
 
 			mode_combobox->setCurrentIndex(rep_->getDrawingMode());
+
+			material_settings_->setCurrentRepresentation(rep_);
 
 			checkApplyButton_();
 		}

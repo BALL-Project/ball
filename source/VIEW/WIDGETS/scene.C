@@ -3252,10 +3252,8 @@ namespace BALL
 		}
 
 #ifdef ENABLE_RAYTRACING
-		void Scene::updateRTMaterials(bool only_selected)
+		void Scene::updateAllRTMaterials()
 		{
-			// iterate over all selected representations
-			// TODO: currently this changes ALL representations!
 			RepresentationManager& pm = getMainControl()->getRepresentationManager();
 
 			RepresentationList::ConstIterator it = pm.getRepresentations().begin();
@@ -3263,6 +3261,13 @@ namespace BALL
 			{
 				rt_renderer_->updateMaterialForRepresentation(*it);
 			}
+
+			update(false);
+		}
+
+		void Scene::updateRTMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material)
+		{
+			rt_renderer_->updateMaterialForRepresentation(rep, new_material);
 
 			update(false);
 		}

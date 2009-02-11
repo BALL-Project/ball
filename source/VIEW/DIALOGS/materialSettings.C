@@ -6,6 +6,8 @@
 
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/VIEW/KERNEL/representation.h>
+#include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
 
 #include <QtGui/qlabel.h>
 #include <QtGui/qslider.h>
@@ -18,7 +20,8 @@ namespace BALL
 		MaterialSettings::MaterialSettings(QWidget* parent, const char* name, Qt::WFlags fl)
 			: QWidget(parent, fl),
 				Ui_MaterialSettingsData(),
-				PreferencesEntry()
+				PreferencesEntry(),
+				current_representation_(0)
 		{
 			setupUi(this);
 			setObjectName(name);
@@ -82,7 +85,8 @@ namespace BALL
 #ifdef ENABLE_RAYTRACING	
 				else if (radioButton_RTFact->isChecked())
 				{
-					Stage::RaytracingMaterial& rt_material = stage.getRTMaterial();
+					// first, decide whether we have been called from the preferences or from the geometric control
+					Stage::RaytracingMaterial rt_material;
 
 					rt_material.ambient_color  	 = VIEW::getColor(ambient_color_label);
 					rt_material.specular_color 	 = VIEW::getColor(specularity_color_label);
@@ -94,8 +98,21 @@ namespace BALL
 
 					rt_material.shininess          = shininess_factor_label->text().toFloat();
 
-					// TODO! This is currently pretty hacky!
-					Scene::getInstance(0)->updateRTMaterials(apply_to_selected_radioButton->isChecked());
+					if (objectName() == "MaterialSettingsForRepresentation")
+					{
+						// we have been called from the right mouse button menu of a representation and should *only*
+						// apply the values to this one
+						if (current_representation_)
+							Scene::getInstance(0)->updateRTMaterialForRepresentation(current_representation_, rt_material);
+						else
+							Log.error() << "MaterialSettings::apply(): Invalid representation selected!" << std::endl;
+					}
+					else
+					{
+						// we have been called from the preferences and should set new default values for *all* representations
+						rt_material = stage.getRTMaterial() = rt_material;
+						Scene::getInstance(0)->updateAllRTMaterials();
+					}
 				}
 #endif
 			}
