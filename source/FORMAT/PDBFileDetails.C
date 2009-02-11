@@ -18,6 +18,7 @@
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/COMMON/logStream.h>
 #include <BALL/DATATYPE/regularExpression.h>
+#include <BALL/XRAY/crystalInfo.h>
 
 #include <time.h> // time, asctime
 #include <ctype.h>
@@ -580,6 +581,28 @@ namespace BALL
 		
 	bool PDBFile::interpretRecord(const PDB::RecordCRYST1& record )
 	{
+		CrystalInfo* ci_ptr;
+		if (!(current_protein_->hasProperty("CRYSTALINFO")))
+		{
+		ci_ptr = new CrystalInfo();
+		current_protein_->setProperty("CRYSTALINFO", *ci_ptr);
+		}
+
+		ci_ptr = dynamic_cast<CrystalInfo*>(current_protein_->getProperty("CRYSTALINFO").getObject());
+		
+		ci_ptr->setSpaceGroup(String(record.unit_cell.space_group));
+		ci_ptr->setCellEdgeLengthA(record.unit_cell.a);
+		ci_ptr->setCellEdgeLengthB(record.unit_cell.b);
+		ci_ptr->setCellEdgeLengthC(record.unit_cell.c);
+		ci_ptr->setCellAngleAlpha(Angle(record.unit_cell.alpha, false));
+		ci_ptr->setCellAngleBeta(Angle(record.unit_cell.beta, false));
+		ci_ptr->setCellAngleGamma(Angle(record.unit_cell.gamma, false));
+
+		cout << "S" << ci_ptr->getSpaceGroup() << endl;	
+		cout << "M" << ci_ptr->getCart2Frac() << endl;	
+		cout << "I" << ci_ptr->getFrac2Cart() << endl;	
+
+
 		current_protein_->setProperty("UNITCELL_A", record.unit_cell.a);
 		current_protein_->setProperty("UNITCELL_B", record.unit_cell.b);
 		current_protein_->setProperty("UNITCELL_C", record.unit_cell.c);
@@ -588,14 +611,14 @@ namespace BALL
 		current_protein_->setProperty("UNITCELL_GAMMA", record.unit_cell.gamma);
 		current_protein_->setProperty("SPACE_GROUP", string(record.unit_cell.space_group));
 		current_protein_->setProperty("Z_VALUE", int(record.unit_cell.z_value));
-		std::cout << record.unit_cell.a << std::endl;
-		std::cout << record.unit_cell.b << std::endl;
-		std::cout << record.unit_cell.c << std::endl;
-		std::cout << record.unit_cell.alpha << std::endl;
-		std::cout << record.unit_cell.beta << std::endl;
-		std::cout << record.unit_cell.gamma << std::endl;
-		std::cout << record.unit_cell.space_group << std::endl;
-		std::cout << record.unit_cell.z_value << std::endl;
+		//std::cout << record.unit_cell.a << std::endl;
+		//std::cout << record.unit_cell.b << std::endl;
+		//std::cout << record.unit_cell.c << std::endl;
+		//std::cout << record.unit_cell.alpha << std::endl;
+		//std::cout << record.unit_cell.beta << std::endl;
+		//std::cout << record.unit_cell.gamma << std::endl;
+		//std::cout << record.unit_cell.space_group << std::endl;
+		//std::cout << record.unit_cell.z_value << std::endl;
     return true;
 	}
 
@@ -751,6 +774,157 @@ namespace BALL
 	{
 		return true;
 	}
+
+	bool PDBFile::parseRecordMTRIX1(const char* line, Size size)
+	{
+		static PDB::RecordMTRIX1 record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordMTRIX1& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_MTRIX1,
+										 record.record_name, &record.serial_number,
+										 &record.transformation_matrix[0],
+										 &record.transformation_matrix[1],
+										 &record.transformation_matrix[2],
+										 &record.transformation_matrix[3],
+										 &record.is_given);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordMTRIX1& record)
+	{
+		CrystalInfo* ci_ptr;
+		if (!(current_protein_->hasProperty("CRYSTALINFO")))
+		{
+		ci_ptr = new CrystalInfo();
+		current_protein_->setProperty("CRYSTALINFO", *ci_ptr);
+		}
+
+		ci_ptr = dynamic_cast<CrystalInfo*>(current_protein_->getProperty("CRYSTALINFO").getObject());
+		
+		if (!(ci_ptr->getNumberOfNCSSymOps() >= (Size)record.serial_number))
+		{
+			Matrix4x4 new_mtrix;
+			new_mtrix.setIdentity();
+			ci_ptr->pushbackNCS(new_mtrix);
+		}
+		
+		Matrix4x4& curr_mtrx = ci_ptr->getNCS(record.serial_number-1);
+		curr_mtrx(0,0) = record.transformation_matrix[0];
+		curr_mtrx(0,1) = record.transformation_matrix[1];
+		curr_mtrx(0,2) = record.transformation_matrix[2];
+		curr_mtrx(0,3) = record.transformation_matrix[3];
+		
+		
+		
+		
+		//cout << record.serial_number;
+		//cout << " " << record.transformation_matrix[0];
+		//cout << " " << record.transformation_matrix[1];
+		//cout << " " << record.transformation_matrix[2];
+		//cout << " " << record.transformation_matrix[3] << endl;
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordMTRIX2(const char* line, Size size)
+	{
+		static PDB::RecordMTRIX2 record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordMTRIX2& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_MTRIX2,
+										 record.record_name, &record.serial_number,
+										 &record.transformation_matrix[0],
+										 &record.transformation_matrix[1],
+										 &record.transformation_matrix[2],
+										 &record.transformation_matrix[3],
+										 &record.is_given);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordMTRIX2& record)
+	{
+		CrystalInfo* ci_ptr;
+		if (!(current_protein_->hasProperty("CRYSTALINFO")))
+		{
+		ci_ptr = new CrystalInfo();
+		current_protein_->setProperty("CRYSTALINFO", *ci_ptr);
+		}
+
+		ci_ptr = dynamic_cast<CrystalInfo*>(current_protein_->getProperty("CRYSTALINFO").getObject());
+		
+		if (!(ci_ptr->getNumberOfNCSSymOps() >= (Size)record.serial_number))
+		{
+			Matrix4x4 new_mtrix;
+			new_mtrix.setIdentity();
+			ci_ptr->pushbackNCS(new_mtrix);
+		}
+		
+		Matrix4x4& curr_mtrx = ci_ptr->getNCS(record.serial_number-1);
+		curr_mtrx(1,0) = record.transformation_matrix[0];
+		curr_mtrx(1,1) = record.transformation_matrix[1];
+		curr_mtrx(1,2) = record.transformation_matrix[2];
+		curr_mtrx(1,3) = record.transformation_matrix[3];
+		//cout << record.serial_number;
+		//cout << " " << record.transformation_matrix[0];
+		//cout << " " << record.transformation_matrix[1];
+		//cout << " " << record.transformation_matrix[2];
+		//cout << " " << record.transformation_matrix[3] << endl;
+		return true;
+	}
+
+
+	bool PDBFile::parseRecordMTRIX3(const char* line, Size size)
+	{
+		static PDB::RecordMTRIX3 record;
+		return (fillRecord(line, size, record) && interpretRecord(record));
+	}
+		
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordMTRIX3& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_MTRIX3,
+										 record.record_name, &record.serial_number,
+										 &record.transformation_matrix[0],
+										 &record.transformation_matrix[1],
+										 &record.transformation_matrix[2],
+										 &record.transformation_matrix[3],
+										 &record.is_given);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordMTRIX3& record)
+	{
+		CrystalInfo* ci_ptr;
+		if (!(current_protein_->hasProperty("CRYSTALINFO")))
+		{
+		ci_ptr = new CrystalInfo();
+		current_protein_->setProperty("CRYSTALINFO", *ci_ptr);
+		}
+
+		ci_ptr = dynamic_cast<CrystalInfo*>(current_protein_->getProperty("CRYSTALINFO").getObject());
+		
+		if (!(ci_ptr->getNumberOfNCSSymOps() >= (Size)record.serial_number))
+		{
+			Matrix4x4 new_mtrix;
+			new_mtrix.setIdentity();
+			ci_ptr->pushbackNCS(new_mtrix);
+		}
+		
+		Matrix4x4& curr_mtrx = ci_ptr->getNCS(record.serial_number-1);
+		curr_mtrx(2,0) = record.transformation_matrix[0];
+		curr_mtrx(2,1) = record.transformation_matrix[1];
+		curr_mtrx(2,2) = record.transformation_matrix[2];
+		curr_mtrx(2,3) = record.transformation_matrix[3];
+		//cout << record.serial_number;
+		//cout << " " << record.transformation_matrix[0];
+		//cout << " " << record.transformation_matrix[1];
+		//cout << " " << record.transformation_matrix[2];
+		//cout << " " << record.transformation_matrix[3] << endl;
+		return true;
+	}
+
 
 
 	bool PDBFile::parseRecordMODEL(const char* line, Size size)

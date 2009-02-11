@@ -12,6 +12,14 @@
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #endif
 
+#ifndef BALL_DATATYPE_STRING_H
+#include <BALL/DATATYPE/string.h>
+#endif
+
+#ifndef BALL_COMMON_EXCEPTION_H
+# include <BALL/COMMON/exception.h>
+#endif
+
 #include <string>
 
 namespace BALL
@@ -59,14 +67,14 @@ namespace BALL
 
 			/** Constructor
 			 */
-			//CrystalInfo(string group, Vector3 dim, Angle Alpha, Angle Beta, Angle Gamma);
+			CrystalInfo(String group, Vector3 dim, Angle alpha, Angle beta, Angle gamma);
 			
 			/** Default Constructor
 			 */
 			~CrystalInfo() throw ();
 	
-			bool setSpaceGroup(const string& sg);
-			const string& getSpaceGroup() const;
+			bool setSpaceGroup(const String& sg);
+			const String& getSpaceGroup() const;
 			
 			void setCellDimensions(const Vector3& dim);
 			void setCellEdgeLengthA(const float& a);
@@ -81,10 +89,19 @@ namespace BALL
 			const Matrix4x4& getSymOp(Position p) const;
 
 			Size getNumberOfNCSSymOps() const;
-			const Matrix4x4& getNCS(Position p) const;
-			bool insertNCS(Position p, Matrix4x4 ncsm);
+			const Matrix4x4& getNCS(Position p) const
+				throw(Exception::IndexOverflow);
+			
+			Matrix4x4& getNCS(Position p)
+				throw(Exception::IndexOverflow);
+			
+			bool insertNCS(Position p, Matrix4x4 ncsm)
+				throw(Exception::IndexOverflow);
+			
 			void pushbackNCS(Matrix4x4 ncsm);
-			bool eraseNCS(Position p);
+			
+			bool eraseNCS(Position p)
+				throw(Exception::IndexOverflow);
 
 			const Matrix4x4& getCart2Frac() const;	
 			const Matrix4x4& getFrac2Cart() const;	
@@ -92,12 +109,12 @@ namespace BALL
 		protected:
 
 			void calculateMatrices_();
-			bool retrieveSymOps_(const string& sg);
+			bool retrieveSymOps_(const String& sg);
 
-			string space_group_;
+			String space_group_;
 			Vector3 cell_dimensions_;
 			Angle alpha_, beta_, gamma_;
-			string filename_;
+			String filename_;
 			
 			Matrix4x4 cart2frac_;
 			Matrix4x4 frac2cart_;

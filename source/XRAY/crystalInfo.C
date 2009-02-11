@@ -28,6 +28,21 @@ namespace BALL
 		retrieveSymOps_(space_group_);
 	}
 
+	CrystalInfo::CrystalInfo(String group, Vector3 dim, Angle alpha, Angle beta, Angle gamma)
+		:	space_group_(group),
+			cell_dimensions_(dim.x, dim.y, dim.z),
+			alpha_(alpha),
+			beta_(beta),
+			gamma_(gamma),
+			filename_(Default::SPACE_GROUP_FILE),
+			cart2frac_(),
+			frac2cart_(),
+			ncs_symops_(),
+			sg_symops_()
+	{
+		calculateMatrices_();
+		retrieveSymOps_(space_group_);
+	}
 	
 	CrystalInfo::~CrystalInfo() throw()
 	{
@@ -35,7 +50,7 @@ namespace BALL
 	}
 	
 	
-	bool CrystalInfo::setSpaceGroup(const string& sg)
+	bool CrystalInfo::setSpaceGroup(const String& sg)
 	{
 		if (retrieveSymOps_(sg))
 		{
@@ -47,7 +62,7 @@ namespace BALL
 	}
 
 	
-	const string& CrystalInfo::getSpaceGroup() const
+	const String& CrystalInfo::getSpaceGroup() const
 	{
 		return space_group_;
 	}
@@ -132,17 +147,32 @@ namespace BALL
 
 	
 	const Matrix4x4& CrystalInfo::getNCS(Position p) const
+		throw(Exception::IndexOverflow)
 	{
+		if (p > (ncs_symops_.size()))
+		{
+			throw Exception::IndexOverflow(__FILE__, __LINE__, p, ncs_symops_.size());
+		}
 		return ncs_symops_[p];				
 	}
 	
+	Matrix4x4& CrystalInfo::getNCS(Position p)
+		throw(Exception::IndexOverflow)
+	{
+		if (p > (ncs_symops_.size()))
+		{
+			throw Exception::IndexOverflow(__FILE__, __LINE__, p, ncs_symops_.size());
+		}
+		return ncs_symops_[p];				
+	}
 	
 	bool CrystalInfo::insertNCS(Position p, Matrix4x4 ncsm)
+		throw(Exception::IndexOverflow)
 	{
 		vector<Matrix4x4>::iterator it = ncs_symops_.begin();
 		if (p > (ncs_symops_.size()))
 		{
-			return false;
+			throw Exception::IndexOverflow(__FILE__, __LINE__, p, ncs_symops_.size());
 		}
 		ncs_symops_.insert(it+p, ncsm);
 		return true;
@@ -155,11 +185,12 @@ namespace BALL
 	}
 	
 	bool CrystalInfo::eraseNCS(Position p)
+		throw(Exception::IndexOverflow)
 	{
 		vector<Matrix4x4>::iterator it = ncs_symops_.begin();
 		if (p > (ncs_symops_.size()))
 		{
-			return false;
+			throw Exception::IndexOverflow(__FILE__, __LINE__, p, ncs_symops_.size());
 		}
 		ncs_symops_.erase(it+p);
 		return true;
@@ -194,12 +225,12 @@ namespace BALL
 
 		cart2frac_ = frac2cart_;
 		cart2frac_.invert();
-		cout << "M" << frac2cart_ << endl;
-		cout << "I" << cart2frac_ << endl;
+		//cout << "M" << frac2cart_ << endl;
+		//cout << "I" << cart2frac_ << endl;
 	}
 	
 	
-	bool CrystalInfo::retrieveSymOps_(const string& sg)
+	bool CrystalInfo::retrieveSymOps_(const String& sg)
 	{
 		Path path;
 		String sg_filename(path.find(filename_));
@@ -207,9 +238,9 @@ namespace BALL
 		{
 			throw Exception::FileNotFound(__FILE__, __LINE__, filename_);
 		}
-
+		String trimmed_sg = sg.trim();
 		LineBasedFile* groupfile = new LineBasedFile(sg_filename);
-		if (groupfile->search(sg))
+		if (groupfile->search(trimmed_sg))
 		{
 			sg_symops_.clear();
 			
@@ -240,37 +271,49 @@ namespace BALL
 					sign_add = 0;
 					divid = 0;
 					divis = 1;
-					if (tmp[i].length() == 1)
+					switch(tmp[i].length())
 					{
-						comp = int(tmp[i][0])-88;
-					}
-					else if (tmp[i].length() == 2)
-					{
-						sign = -(int(tmp[i][0])-44);
-						comp = int(tmp[i][1])-88;
-					}
-					else if (tmp[i].length() == 3)
-					{
-						comp = int(tmp[i][0])-88;
-						sign_add = -(int(tmp[i][1])-44);
-						comp_add = int(tmp[i][2])-88;
-					}
-					else
-					{
-						if (isdigit(tmp[i][0]))
-						{
-							divid = float(tmp[i][0])-48;
-							divis = float(tmp[i][2])-48;
-							sign = -(int(tmp[i][3])-44);
-							comp = int(tmp[i][4])-88;
-						}
-						else
-						{
+						case 1:
 							comp = int(tmp[i][0])-88;
-							sign = -(int(tmp[i][1])-44);
-							divid = float(tmp[i][2])-48;
-							divis = float(tmp[i][4])-48;
-						}
+							break;
+
+						case 2:
+							sign = -(int(tmp[i][0])-44);
+							comp = int(tmp[i][1])-88;
+							break;
+
+						case 3:
+							comp = int(tmp[i][0])-88;
+							sign_add = -(int(tmp[i][1])-44);
+							comp_add = int(tmp[i][2])-88;
+							break;
+
+						case 5: 
+							if (isdigit(tmp[i][0]))
+							{
+								divid = float(tmp[i][0])-48;
+								divis = float(tmp[i][2])-48;
+								sign = -(int(tmp[i][3])-44);
+								comp = int(tmp[i][4])-88;
+							}
+							else
+							{
+								comp = int(tmp[i][0])-88;
+								sign = -(int(tmp[i][1])-44);
+								divid = float(tmp[i][2])-48;
+								divis = float(tmp[i][4])-48;
+							}
+							break;
+
+						case 6:
+							sign = -(int(tmp[i][0])-44);
+							comp = int(tmp[i][1])-88;
+							divid = float(tmp[i][3])-48;
+							divis = float(tmp[i][5])-48;
+							break;
+
+						default:
+							cout << "Wrong Notation" << endl;
 					}
 					sym_mtrx(i,comp) = sign;
 					if (sign_add) sym_mtrx(i,comp_add) = sign_add;
