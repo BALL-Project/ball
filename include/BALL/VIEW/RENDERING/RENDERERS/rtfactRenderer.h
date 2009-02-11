@@ -34,13 +34,13 @@ namespace BALL
 		{	  
 			public:	  
 
-				/** This class encapsulates RTfact's data structures per GeometricObject.
+				/** This class encapsulates RTfact's data structures per Representation.
 				 */
 				class RTfactData
 				{
 					public:
-						/// The group this object was assigned to
-						RTfact::Remote::GroupHandle group_handle;
+						/// The group handles this object was assigned to
+						std::vector<RTfact::Remote::GroupHandle> group_handle;
 						
 						/// The object handles
 						std::vector<RTfact::Remote::GeoHandle> object_handles;
@@ -51,14 +51,14 @@ namespace BALL
 
 				/// Default Constructor.
 				RTfactRenderer()
+					: RaytracingRenderer(),
+						rtfact_needs_update_(false)
 				{
-
 				}
 
 				/// Destructor
 				virtual ~RTfactRenderer()
 				{
-
 				}
 
 				/************************************************************************/
@@ -67,10 +67,9 @@ namespace BALL
 				virtual bool init(const Scene& scene) throw();
 
 				virtual String getRenderer()  
-					throw()
-					{
-						return "RTfact-RTRemote Ray Tracer";
-					}
+				{
+					return "RTfact-RTRemote Ray Tracer";
+				}
 
 				virtual void formatUpdated()
 				{
@@ -79,6 +78,7 @@ namespace BALL
 				virtual void prepareBufferedRendering(const Stage& stage);
 				virtual void renderToBufferImpl(FrameBufferPtr buffer);
 
+				void bufferRepresentation(Representation const* rep);
 				void updateMaterialForRepresentation(Representation const* rep);
 				void updateMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material);
 
@@ -94,7 +94,7 @@ namespace BALL
 
 				RTfact::Remote::Renderer m_renderer;
 
-				HashMap<GeometricObject const*, RTfactData> objects_;
+				HashMap<Representation const*, RTfactData> objects_;
 
 				Surface sphere_template_;
 				Surface tube_template_;
@@ -107,6 +107,7 @@ namespace BALL
 				{
 				}
 
+				bool rtfact_needs_update_;
 		};
 
 

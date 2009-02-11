@@ -29,8 +29,8 @@ namespace BALL
 			
 			// prepare the sphere template
 			TriangulatedSphere sphere_template;
-			sphere_template.icosaeder();
-			sphere_template.refine(3, true);
+			sphere_template.pentakisDodecaeder();
+			sphere_template.refine(1, true);
 
 			sphere_template.exportSurface(sphere_template_);
 
@@ -39,6 +39,9 @@ namespace BALL
 			tube_template->exportSurface(tube_template_);
 			delete (tube_template);
 				
+			objects_.clear();
+			rtfact_needs_update_ = false;
+
 			return true;
 		}
 
@@ -107,187 +110,191 @@ namespace BALL
 			}
 		}
 
-		void RTfactRenderer::renderToBufferImpl(FrameBufferPtr buffer)
-		{		    
-			bool recreate_accel = false;
-			Stage const& stage = *(scene_->getStage());
+		void RTfactRenderer::bufferRepresentation(Representation const* rep)
+		{
+			// TODO: delete of already present representations!
+			std::cout << "RTfactRenderer: buffering Representation!" << std::endl;
 
-			RepresentationManager& pm = scene_->getMainControl()->getRepresentationManager();
-
-			static bool has_geometry = false;
-
-			RepresentationList::ConstIterator it = pm.getRepresentations().begin();
-			for (; it != pm.getRepresentations().end(); ++it)
+			if (objects_.find(rep) != objects_.end())
 			{
-				Representation const* rep = *it;
-				if (rep->isHidden()) continue;
+				// TODO: handle the update!!!
+				std::cout << "Representation already buffered!!! exiting!" << std::endl;
+				return;
+			}
 
-				List<GeometricObject*>::ConstIterator it;
-				for (it =  rep->getGeometricObjects().begin();
-						it != rep->getGeometricObjects().end();
-						it++)
+			RTfactData rt_data;
+			objects_[rep] = rt_data;
+
+			List<GeometricObject*>::ConstIterator it;
+			for (it =  rep->getGeometricObjects().begin();
+					it != rep->getGeometricObjects().end();
+					it++)
+			{
+				if (RTTI::isKindOf<Mesh>(**it))
 				{
-					if (objects_.find(*it) == objects_.end())
+					Mesh const& mesh = *(const Mesh*)*it;
+
+					float const* vertices = reinterpret_cast<float const*>(&(mesh.vertex[0]));
+					float const* normals  = reinterpret_cast<float const*>(&(mesh.normal[0]));
+					Index const* indices  = reinterpret_cast<Index const*>(&(mesh.triangle[0]));
+
+
+					RTAppearanceHandle material = m_renderer.createAppearance("PhongShader");
+					updateMaterialFromStage(material);
+
+					GeoHandle handle;
+
+					float const* colors = 0;
+					if (mesh.colors.size() > 1)
 					{
-						RTfactData rt_data;
-						recreate_accel = true;
+						colors  = reinterpret_cast<float const*>(&(mesh.colors[0]));
+						material->setParam("useVertexColor", true);
 
-						has_geometry = true;
-						objects_[*it] = rt_data;
+						handle = m_renderer.createGeometry(vertices, normals, colors, (const unsigned int*)indices, (unsigned int)mesh.triangle.size(), material);
+					} 
+					else 
+					{
+						ColorRGBA const &c = (mesh.colors.size() == 1) ? mesh.colors[0] : ColorRGBA(1., 1., 1., 1.);
 
-						if (RTTI::isKindOf<Mesh>(**it))
-						{
-							Mesh const& mesh = *(const Mesh*)*it;
+						material->setParam("diffuseColor", float3(c.getRed(), c.getGreen(), c.getBlue()));
+						material->setParam("useVertexColor", false);
 
-							float const* vertices = reinterpret_cast<float const*>(&(mesh.vertex[0]));
-							float const* normals  = reinterpret_cast<float const*>(&(mesh.normal[0]));
-							Index const* indices  = reinterpret_cast<Index const*>(&(mesh.triangle[0]));
-
-
-							RTAppearanceHandle material = m_renderer.createAppearance("PhongShader");
-							updateMaterialFromStage(material);
-
-							GeoHandle handle;
-
-							float const* colors = 0;
-							if (mesh.colors.size() > 1)
-							{
-								colors  = reinterpret_cast<float const*>(&(mesh.colors[0]));
-								material->setParam("useVertexColor", true);
-
-							 	handle = m_renderer.createGeometry(vertices, normals, colors, (const unsigned int*)indices, (unsigned int)mesh.triangle.size(), material);
-							} 
-							else 
-							{
-								ColorRGBA const &c = (mesh.colors.size() == 1) ? mesh.colors[0] : ColorRGBA(1., 1., 1., 1.);
-
-								material->setParam("diffuseColor", float3(c.getRed(), c.getGreen(), c.getBlue()));
-								material->setParam("useVertexColor", false);
-
-							 	handle = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)mesh.triangle.size(), material);
-							}
-
-							GroupHandle meshGroup = m_renderer.createGroup(Transform::identity());
-							meshGroup->add(handle);                
-							m_renderer.getRoot()->add(meshGroup);
-
-							rt_data.group_handle = meshGroup;
-							rt_data.object_handles.push_back(handle);
-							rt_data.material_handles.push_back(material);
-
-							has_geometry = true;
-						} 
-
-						if (RTTI::isKindOf<Sphere>(**it))
-						{
-							Sphere const& sphere = *(const Sphere*)*it;
-
-							float const* vertices = reinterpret_cast<float const*>(&(sphere_template_.vertex[0]));
-							float const* normals  = reinterpret_cast<float const*>(&(sphere_template_.normal[0]));
-							Index const* indices  = reinterpret_cast<Index const*>(&(sphere_template_.triangle[0]));
-
-							ColorRGBA const& color = sphere.getColor();
-
-							RTAppearanceHandle material = m_renderer.createAppearance("PhongShader");
-							updateMaterialFromStage(material);
-
-							material->setParam("diffuseColor", float3(color.getRed(), color.getGreen(), color.getBlue()));
-							material->setParam("useVertexColor", false);
-
-							GeoHandle handle   = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)sphere_template_.triangle.size(), material);
-
-							Vector3 const& sphere_pos = sphere.getPosition();
-							float radius = sphere.getRadius();
-
-							GroupHandle sphereGroup = m_renderer.createGroup(  Transform::translation(sphere_pos.x, sphere_pos.y, sphere_pos.z)
-																																*Transform::scale(Vec3f<1>(radius, radius, radius)));
-							sphereGroup->add(handle);
-							m_renderer.getRoot()->add(sphereGroup);
-
-							rt_data.group_handle = sphereGroup;
-							rt_data.object_handles.push_back(handle);
-							rt_data.material_handles.push_back(material);
-
-							has_geometry = true;
-						}
-
-						if (RTTI::isKindOf<TwoColoredTube>(**it))
-						{
-							TwoColoredTube const& old_tube = *(const TwoColoredTube*)*it;
-
-							float const* vertices = reinterpret_cast<float const*>(&(tube_template_.vertex[0]));
-							float const* normals  = reinterpret_cast<float const*>(&(tube_template_.normal[0]));
-							Index const* indices  = reinterpret_cast<Index const*>(&(tube_template_.triangle[0]));
-
-							// we will produce two tubes using the same vertex/normal/color values, just with the correct offsets
-							ColorRGBA const& color1 = old_tube.getColor();
-							ColorRGBA const& color2 = old_tube.getColor2();
-
-							RTAppearanceHandle material_1 = m_renderer.createAppearance("PhongShader");
-							updateMaterialFromStage(material_1);
-
-							material_1->setParam("diffuseColor", float3(color1.getRed(), color1.getGreen(), color1.getBlue()));
-							material_1->setParam("useVertexColor", false);
-
-							GeoHandle handle_1 = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)tube_template_.triangle.size(), material_1);
-
-							if (color1 == color2)
-							{
-								GroupHandle tubeGroup = transformTube(old_tube);
-								tubeGroup->add(handle_1);
-
-								m_renderer.getRoot()->add(tubeGroup);
-							} 
-							else 
-							{
-								RTAppearanceHandle material_2 = m_renderer.createAppearance("PhongShader");
-								updateMaterialFromStage(material_2);
-
-								material_2->setParam("diffuseColor", float3(color2.getRed(), color2.getGreen(), color2.getBlue()));
-								material_2->setParam("useVertexColor", false);
-
-								GeoHandle handle_2 = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)tube_template_.triangle.size(), material_2);
-
-								try {
-								TwoColoredTube new_tube = old_tube;
-								new_tube.setVertex2(old_tube.getMiddleVertex());
-
-								GroupHandle all_group = m_renderer.createGroup(Transform::identity());
-								GroupHandle tubeGroup_1 = transformTube(new_tube);
-								tubeGroup_1->add(handle_1);
-
-								new_tube.setVertex1(old_tube.getVertex2());
-								new_tube.setVertex2(old_tube.getMiddleVertex());
-								GroupHandle tubeGroup_2 = transformTube(new_tube);
-								tubeGroup_2->add(handle_2);
-
-								all_group->add(tubeGroup_1);
-								all_group->add(tubeGroup_2);
-
-								m_renderer.getRoot()->add(all_group);
-
-								rt_data.group_handle = all_group;
-								rt_data.object_handles.push_back(handle_1);
-								rt_data.object_handles.push_back(handle_2);
-								rt_data.material_handles.push_back(material_1);
-								rt_data.material_handles.push_back(material_2);
-								} catch (...) {
-									Log.error() << "Caught a zero-length tube during rendering!" << std::endl;
-								}
-							}
-
-							has_geometry = true;
-						}
-
-						// finally, insert our new RTData into the hash map
-						objects_[*it] = rt_data;
+						handle = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)mesh.triangle.size(), material);
 					}
+
+					GroupHandle meshGroup = m_renderer.createGroup(Transform::identity());
+					meshGroup->add(handle);                
+					m_renderer.getRoot()->add(meshGroup);
+
+					rt_data.group_handle.push_back(meshGroup);
+					rt_data.object_handles.push_back(handle);
+					rt_data.material_handles.push_back(material);
+
+					rtfact_needs_update_ = true;
+				} 
+
+				if (RTTI::isKindOf<Sphere>(**it))
+				{
+					Sphere const& sphere = *(const Sphere*)*it;
+
+					float const* vertices = reinterpret_cast<float const*>(&(sphere_template_.vertex[0]));
+					float const* normals  = reinterpret_cast<float const*>(&(sphere_template_.normal[0]));
+					Index const* indices  = reinterpret_cast<Index const*>(&(sphere_template_.triangle[0]));
+
+					ColorRGBA const& color = sphere.getColor();
+
+					RTAppearanceHandle material = m_renderer.createAppearance("PhongShader");
+					updateMaterialFromStage(material);
+
+					material->setParam("diffuseColor", float3(color.getRed(), color.getGreen(), color.getBlue()));
+					material->setParam("useVertexColor", false);
+
+					GeoHandle handle   = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)sphere_template_.triangle.size(), material);
+
+					Vector3 const& sphere_pos = sphere.getPosition();
+					float radius = sphere.getRadius();
+
+					GroupHandle sphereGroup = m_renderer.createGroup(  Transform::translation(sphere_pos.x, sphere_pos.y, sphere_pos.z)
+							*Transform::scale(Vec3f<1>(radius, radius, radius)));
+					sphereGroup->add(handle);
+					m_renderer.getRoot()->add(sphereGroup);
+
+					rt_data.group_handle.push_back(sphereGroup);
+					rt_data.object_handles.push_back(handle);
+					rt_data.material_handles.push_back(material);
+
+					rtfact_needs_update_ = true;
+				}
+
+				if (RTTI::isKindOf<TwoColoredTube>(**it))
+				{
+					TwoColoredTube const& old_tube = *(const TwoColoredTube*)*it;
+
+					float const* vertices = reinterpret_cast<float const*>(&(tube_template_.vertex[0]));
+					float const* normals  = reinterpret_cast<float const*>(&(tube_template_.normal[0]));
+					Index const* indices  = reinterpret_cast<Index const*>(&(tube_template_.triangle[0]));
+
+					// we will produce two tubes using the same vertex/normal/color values, just with the correct offsets
+					ColorRGBA const& color1 = old_tube.getColor();
+					ColorRGBA const& color2 = old_tube.getColor2();
+
+					RTAppearanceHandle material_1 = m_renderer.createAppearance("PhongShader");
+					updateMaterialFromStage(material_1);
+
+					material_1->setParam("diffuseColor", float3(color1.getRed(), color1.getGreen(), color1.getBlue()));
+					material_1->setParam("useVertexColor", false);
+
+					GeoHandle handle_1 = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)tube_template_.triangle.size(), material_1);
+
+					if (color1 == color2)
+					{
+						GroupHandle tubeGroup = transformTube(old_tube);
+						tubeGroup->add(handle_1);
+
+						m_renderer.getRoot()->add(tubeGroup);
+					} 
+					else 
+					{
+						RTAppearanceHandle material_2 = m_renderer.createAppearance("PhongShader");
+						updateMaterialFromStage(material_2);
+
+						material_2->setParam("diffuseColor", float3(color2.getRed(), color2.getGreen(), color2.getBlue()));
+						material_2->setParam("useVertexColor", false);
+
+						GeoHandle handle_2 = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)tube_template_.triangle.size(), material_2);
+
+						TwoColoredTube new_tube_1 = old_tube;
+						TwoColoredTube new_tube_2 = old_tube;
+
+						new_tube_1.setVertex2(old_tube.getMiddleVertex());
+						new_tube_2.setVertex1(old_tube.getMiddleVertex());
+
+						GroupHandle all_group = m_renderer.createGroup(Transform::identity());
+
+						GroupHandle tubeGroup_1 = transformTube(new_tube_1);
+						tubeGroup_1->add(handle_1);
+
+						GroupHandle tubeGroup_2 = transformTube(new_tube_2);
+						tubeGroup_2->add(handle_2);
+
+						all_group->add(tubeGroup_1);
+						all_group->add(tubeGroup_2);
+
+						m_renderer.getRoot()->add(all_group);
+
+						rt_data.group_handle.push_back(all_group);
+						rt_data.object_handles.push_back(handle_1);
+						rt_data.object_handles.push_back(handle_2);
+						rt_data.material_handles.push_back(material_1);
+						rt_data.material_handles.push_back(material_2);
+					}
+
+					rtfact_needs_update_ = true;
 				}
 			}
-			if (recreate_accel)
+		}
+
+		void RTfactRenderer::renderToBufferImpl(FrameBufferPtr buffer)
+		{		    
+			Stage const& stage = *(scene_->getStage());
+
+			// deactivate hidden representations
+			for (HashMap<Representation const*, RTfactData>::iterator it = objects_.begin(); it != objects_.end(); ++it)
+			{
+				if (it->first->isHidden())
+					continue; // TODO: code for deactivation
+				else
+					continue; // TODO: code for reactivation
+			}
+
+			if (rtfact_needs_update_)
+			{
 				m_renderer.createAccelStruct();
+				rtfact_needs_update_ = false;
+			}
+
 			FrameBufferFormat fmt = buffer->getFormat();		    
-			if ((fmt.getPixelFormat() == PixelFormat::RGBF_96) && has_geometry)
+			if ((fmt.getPixelFormat() == PixelFormat::RGBF_96) && (objects_.size() != 0))
 			{
 				m_renderer.attachFrameBuffer(fmt.getWidth(), fmt.getHeight(), fmt.getPitch(), (float*)buffer->getData());
 				m_renderer.renderToBuffer();
@@ -296,38 +303,26 @@ namespace BALL
 
 		void RTfactRenderer::updateMaterialForRepresentation(Representation const* rep)
 		{
-			List<GeometricObject*>::ConstIterator it;
-			for (it =  rep->getGeometricObjects().begin();
-					 it != rep->getGeometricObjects().end();
-					 it++)
+			if (objects_.find(rep) != objects_.end())
 			{
-				if (objects_.find(*it) != objects_.end())
-				{
-					RTfactData& rt_data = objects_[*it];
+				RTfactData& rt_data = objects_[rep];
 
-					for (Position i=0; i<rt_data.material_handles.size(); ++i)
-					{
-						updateMaterialFromStage(rt_data.material_handles[i]);
-					}
+				for (Position i=0; i<rt_data.material_handles.size(); ++i)
+				{
+					updateMaterialFromStage(rt_data.material_handles[i]);
 				}
 			}
 		}
 
 		void RTfactRenderer::updateMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material)
 		{
-			List<GeometricObject*>::ConstIterator it;
-			for (it =  rep->getGeometricObjects().begin();
-					 it != rep->getGeometricObjects().end();
-					 it++)
+			if (objects_.find(rep) != objects_.end())
 			{
-				if (objects_.find(*it) != objects_.end())
-				{
-					RTfactData& rt_data = objects_[*it];
+				RTfactData& rt_data = objects_[rep];
 
-					for (Position i=0; i<rt_data.material_handles.size(); ++i)
-					{
-						convertMaterial(new_material, rt_data.material_handles[i]);
-					}
+				for (Position i=0; i<rt_data.material_handles.size(); ++i)
+				{
+					convertMaterial(new_material, rt_data.material_handles[i]);
 				}
 			}
 		}

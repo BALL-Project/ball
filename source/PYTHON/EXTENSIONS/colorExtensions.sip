@@ -43,4 +43,6 @@ class MultiColorExtension
   virtual void clear() throw();
   void set(const MultiColorExtension&) throw();
 //  const ColorExtension2& operator = (const ColorExtension2& color_extension) throw();
+	void setColors(const vector<ColorRGBA>& colors) throw();
+	vector<ColorRGBA>& getColors();
 };

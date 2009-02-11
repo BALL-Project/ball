@@ -325,6 +325,8 @@ namespace BALL
 						{
 #ifndef ENABLE_RAYTRACING
 							gl_renderer_->bufferRepresentation(*rep);
+#else
+							rt_renderer_->bufferRepresentation(rep);
 #endif
 							pm.finishedRendering(rep);
 						}
