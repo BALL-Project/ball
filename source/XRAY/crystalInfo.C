@@ -22,6 +22,7 @@ namespace BALL
 			cart2frac_(),
 			frac2cart_(),
 			ncs_symops_(),
+			ncs_isgiven_(),
 			sg_symops_()
 	{
 		calculateMatrices_();
@@ -38,6 +39,7 @@ namespace BALL
 			cart2frac_(),
 			frac2cart_(),
 			ncs_symops_(),
+			ncs_isgiven_(),
 			sg_symops_()
 	{
 		calculateMatrices_();
@@ -145,7 +147,6 @@ namespace BALL
 		return (Size)ncs_symops_.size();
 	}
 
-	
 	const Matrix4x4& CrystalInfo::getNCS(Position p) const
 		throw(Exception::IndexOverflow)
 	{
@@ -166,33 +167,58 @@ namespace BALL
 		return ncs_symops_[p];				
 	}
 	
-	bool CrystalInfo::insertNCS(Position p, Matrix4x4 ncsm)
+	const bool CrystalInfo::isgivenNCS(Position p) const
 		throw(Exception::IndexOverflow)
 	{
-		vector<Matrix4x4>::iterator it = ncs_symops_.begin();
 		if (p > (ncs_symops_.size()))
 		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__, p, ncs_symops_.size());
 		}
-		ncs_symops_.insert(it+p, ncsm);
+		return ncs_isgiven_[p];				
+	}
+	
+	bool CrystalInfo::isgivenNCS(Position p)
+		throw(Exception::IndexOverflow)
+	{
+		if (p > (ncs_symops_.size()))
+		{
+			throw Exception::IndexOverflow(__FILE__, __LINE__, p, ncs_symops_.size());
+		}
+		return ncs_isgiven_[p];				
+	}
+	
+	bool CrystalInfo::insertNCS(Position p, Matrix4x4 ncsm, bool is_given)
+		throw(Exception::IndexOverflow)
+	{
+		vector<Matrix4x4>::iterator ita = ncs_symops_.begin();
+		vector<bool>::iterator itb = ncs_isgiven_.begin();
+		if (p > (ncs_symops_.size()))
+		{
+			throw Exception::IndexOverflow(__FILE__, __LINE__, p, ncs_symops_.size());
+		}
+		ncs_symops_.insert(ita+p, ncsm);
+		ncs_isgiven_.insert(itb+p, is_given);
 		return true;
 	}
 	
 	//pushbackNCS	
-	void CrystalInfo::pushbackNCS(Matrix4x4 ncsm)
+	void CrystalInfo::pushbackNCS(Matrix4x4 ncsm, bool is_given)
 	{
 		ncs_symops_.push_back(ncsm);
+		ncs_isgiven_.push_back(is_given);
 	}
 	
 	bool CrystalInfo::eraseNCS(Position p)
 		throw(Exception::IndexOverflow)
 	{
-		vector<Matrix4x4>::iterator it = ncs_symops_.begin();
+		vector<Matrix4x4>::iterator ita = ncs_symops_.begin();
+		vector<bool>::iterator itb = ncs_isgiven_.begin();
 		if (p > (ncs_symops_.size()))
 		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__, p, ncs_symops_.size());
 		}
-		ncs_symops_.erase(it+p);
+		ncs_symops_.erase(ita+p);
+		ncs_isgiven_.erase(itb+p);
 		return true;
 	}
 
@@ -260,7 +286,7 @@ namespace BALL
 				curr_line = groupfile->getLine();
 				curr_line.trim("()");
 				curr_line.split(tmp,",",0);
-				cout << curr_line << endl;
+				//cout << curr_line << endl;
 				int comp, comp_add, sign, sign_add;
 				float divid, divis;
 				for (unsigned int i=0; i < tmp.size(); i++)

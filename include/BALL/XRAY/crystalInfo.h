@@ -89,16 +89,23 @@ namespace BALL
 			const Matrix4x4& getSymOp(Position p) const;
 
 			Size getNumberOfNCSSymOps() const;
+
 			const Matrix4x4& getNCS(Position p) const
 				throw(Exception::IndexOverflow);
 			
 			Matrix4x4& getNCS(Position p)
 				throw(Exception::IndexOverflow);
 			
-			bool insertNCS(Position p, Matrix4x4 ncsm)
+			const bool isgivenNCS(Position p) const
 				throw(Exception::IndexOverflow);
 			
-			void pushbackNCS(Matrix4x4 ncsm);
+			bool isgivenNCS(Position p)
+				throw(Exception::IndexOverflow);
+			
+			bool insertNCS(Position p, Matrix4x4 ncsm, bool is_given = 0)
+				throw(Exception::IndexOverflow);
+			
+			void pushbackNCS(Matrix4x4 ncsm, bool is_given = 0);
 			
 			bool eraseNCS(Position p)
 				throw(Exception::IndexOverflow);
@@ -120,6 +127,7 @@ namespace BALL
 			Matrix4x4 frac2cart_;
 
 			vector<Matrix4x4> ncs_symops_;
+			vector<bool> ncs_isgiven_;
 			vector<Matrix4x4> sg_symops_;
 
 	};

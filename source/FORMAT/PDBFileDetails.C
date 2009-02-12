@@ -598,7 +598,7 @@ namespace BALL
 		ci_ptr->setCellAngleBeta(Angle(record.unit_cell.beta, false));
 		ci_ptr->setCellAngleGamma(Angle(record.unit_cell.gamma, false));
 
-		cout << "S" << ci_ptr->getSpaceGroup() << endl;	
+		cout << "S " << ci_ptr->getSpaceGroup() << endl;	
 		cout << "M" << ci_ptr->getCart2Frac() << endl;	
 		cout << "I" << ci_ptr->getFrac2Cart() << endl;	
 
@@ -807,7 +807,7 @@ namespace BALL
 		{
 			Matrix4x4 new_mtrix;
 			new_mtrix.setIdentity();
-			ci_ptr->pushbackNCS(new_mtrix);
+			ci_ptr->pushbackNCS(new_mtrix, record.is_given);
 		}
 		
 		Matrix4x4& curr_mtrx = ci_ptr->getNCS(record.serial_number-1);
@@ -860,7 +860,7 @@ namespace BALL
 		{
 			Matrix4x4 new_mtrix;
 			new_mtrix.setIdentity();
-			ci_ptr->pushbackNCS(new_mtrix);
+			ci_ptr->pushbackNCS(new_mtrix, record.is_given);
 		}
 		
 		Matrix4x4& curr_mtrx = ci_ptr->getNCS(record.serial_number-1);
@@ -909,7 +909,7 @@ namespace BALL
 		{
 			Matrix4x4 new_mtrix;
 			new_mtrix.setIdentity();
-			ci_ptr->pushbackNCS(new_mtrix);
+			ci_ptr->pushbackNCS(new_mtrix, record.is_given);
 		}
 		
 		Matrix4x4& curr_mtrx = ci_ptr->getNCS(record.serial_number-1);
