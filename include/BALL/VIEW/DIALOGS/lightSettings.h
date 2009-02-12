@@ -103,8 +103,10 @@ namespace BALL
 
 			void setPosition_(const Vector3& v);
 			void setDirection_(const Vector3& v);
+			void setAttenuation_(const Vector3& a);
 			Vector3 getDirection_() throw(Exception::InvalidFormat);
 			Vector3 getPosition_() throw(Exception::InvalidFormat);
+			Vector3 getAttenuation_() throw(Exception::InvalidFormat);
 			void setControlsEnabled_(bool state);
 			Index getCurrentLightNumber_() const;
 
