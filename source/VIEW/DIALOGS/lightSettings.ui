@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>545</width>
+    <width>610</width>
     <height>354</height>
    </rect>
   </property>
@@ -74,20 +74,29 @@
     <string>Alt+A</string>
    </property>
   </widget>
-  <widget class="QLabel" name="TextLabel1" >
+  <widget class="QListWidget" name="lights_list" >
    <property name="geometry" >
     <rect>
-     <x>3</x>
-     <y>4</y>
+     <x>0</x>
+     <y>20</y>
      <width>130</width>
-     <height>16</height>
+     <height>250</height>
     </rect>
    </property>
-   <property name="text" >
-    <string>Select Light</string>
+   <property name="minimumSize" >
+    <size>
+     <width>130</width>
+     <height>0</height>
+    </size>
    </property>
-   <property name="alignment" >
-    <set>Qt::AlignCenter</set>
+   <property name="maximumSize" >
+    <size>
+     <width>130</width>
+     <height>32767</height>
+    </size>
+   </property>
+   <property name="toolTip" >
+    <string>Lights list. Max 8 lights supported</string>
    </property>
   </widget>
   <widget class="QPushButton" name="remove_lights_button" >
@@ -124,29 +133,20 @@
     <string>Alt+R</string>
    </property>
   </widget>
-  <widget class="QListWidget" name="lights_list" >
+  <widget class="QLabel" name="TextLabel1" >
    <property name="geometry" >
     <rect>
-     <x>0</x>
-     <y>20</y>
+     <x>3</x>
+     <y>4</y>
      <width>130</width>
-     <height>250</height>
+     <height>16</height>
     </rect>
    </property>
-   <property name="minimumSize" >
-    <size>
-     <width>130</width>
-     <height>0</height>
-    </size>
+   <property name="text" >
+    <string>Select Light</string>
    </property>
-   <property name="maximumSize" >
-    <size>
-     <width>130</width>
-     <height>32767</height>
-    </size>
-   </property>
-   <property name="toolTip" >
-    <string>Lights list. Max 8 lights supported</string>
+   <property name="alignment" >
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QGroupBox" name="settings_group" >
@@ -154,262 +154,511 @@
     <rect>
      <x>145</x>
      <y>6</y>
-     <width>395</width>
+     <width>451</width>
      <height>343</height>
     </rect>
    </property>
    <property name="title" >
     <string>Light Source Settings</string>
    </property>
-   <widget class="QLabel" name="color_sample" >
+   <widget class="QWidget" name="" >
     <property name="geometry" >
      <rect>
-      <x>90</x>
-      <y>250</y>
-      <width>84</width>
-      <height>30</height>
+      <x>10</x>
+      <y>290</y>
+      <width>431</width>
+      <height>27</height>
      </rect>
     </property>
-    <property name="sizePolicy" >
-     <sizepolicy>
-      <hsizetype>5</hsizetype>
-      <vsizetype>5</vsizetype>
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="minimumSize" >
-     <size>
-      <width>30</width>
-      <height>25</height>
-     </size>
-    </property>
-    <property name="maximumSize" >
-     <size>
-      <width>100</width>
-      <height>32</height>
-     </size>
-    </property>
-    <property name="toolTip" >
-     <string>Color of the light</string>
-    </property>
-    <property name="frameShape" >
-     <enum>QFrame::WinPanel</enum>
-    </property>
-    <property name="text" >
-     <string/>
-    </property>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="textLabel1_4" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>3</hsizetype>
+         <vsizetype>5</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>90</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>32767</width>
+         <height>110</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>Attenuation</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>51</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="label" >
+       <property name="text" >
+        <string>p1</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="attenuation_p_1" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>5</hsizetype>
+         <vsizetype>5</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>30</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>80</width>
+         <height>500</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>Position x</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_2" >
+       <property name="text" >
+        <string>p2</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="attenuation_p_2" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>5</hsizetype>
+         <vsizetype>5</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>30</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>80</width>
+         <height>500</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>Position y</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_3" >
+       <property name="text" >
+        <string>p3</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="attenuation_p_3" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>5</hsizetype>
+         <vsizetype>5</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>30</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>80</width>
+         <height>500</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>Position z</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
-   <widget class="QLabel" name="textLabel1" >
+   <widget class="QWidget" name="" >
     <property name="geometry" >
      <rect>
       <x>11</x>
-      <y>210</y>
-      <width>73</width>
-      <height>25</height>
+      <y>159</y>
+      <width>429</width>
+      <height>122</height>
      </rect>
     </property>
-    <property name="sizePolicy" >
-     <sizepolicy>
-      <hsizetype>5</hsizetype>
-      <vsizetype>5</vsizetype>
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="minimumSize" >
-     <size>
-      <width>30</width>
-      <height>25</height>
-     </size>
-    </property>
-    <property name="maximumSize" >
-     <size>
-      <width>100</width>
-      <height>26</height>
-     </size>
-    </property>
-    <property name="text" >
-     <string>Intensity</string>
-    </property>
-    <property name="alignment" >
-     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-    </property>
-    <property name="margin" >
-     <number>5</number>
-    </property>
-   </widget>
-   <widget class="QLabel" name="textLabel1_2" >
-    <property name="geometry" >
-     <rect>
-      <x>11</x>
-      <y>250</y>
-      <width>73</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="sizePolicy" >
-     <sizepolicy>
-      <hsizetype>5</hsizetype>
-      <vsizetype>5</vsizetype>
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="minimumSize" >
-     <size>
-      <width>30</width>
-      <height>25</height>
-     </size>
-    </property>
-    <property name="maximumSize" >
-     <size>
-      <width>100</width>
-      <height>32</height>
-     </size>
-    </property>
-    <property name="text" >
-     <string>Color</string>
-    </property>
-    <property name="alignment" >
-     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-    </property>
-    <property name="margin" >
-     <number>5</number>
-    </property>
-   </widget>
-   <widget class="QSlider" name="intensity" >
-    <property name="geometry" >
-     <rect>
-      <x>90</x>
-      <y>210</y>
-      <width>84</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="sizePolicy" >
-     <sizepolicy>
-      <hsizetype>5</hsizetype>
-      <vsizetype>5</vsizetype>
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="minimumSize" >
-     <size>
-      <width>30</width>
-      <height>25</height>
-     </size>
-    </property>
-    <property name="maximumSize" >
-     <size>
-      <width>100</width>
-      <height>21</height>
-     </size>
-    </property>
-    <property name="toolTip" >
-     <string>Select intensity of light source</string>
-    </property>
-    <property name="maximum" >
-     <number>100</number>
-    </property>
-    <property name="orientation" >
-     <enum>Qt::Horizontal</enum>
-    </property>
-    <property name="tickInterval" >
-     <number>50</number>
-    </property>
-   </widget>
-   <widget class="QLabel" name="intensity_label" >
-    <property name="geometry" >
-     <rect>
-      <x>180</x>
-      <y>210</y>
-      <width>70</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="sizePolicy" >
-     <sizepolicy>
-      <hsizetype>5</hsizetype>
-      <vsizetype>5</vsizetype>
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="minimumSize" >
-     <size>
-      <width>30</width>
-      <height>25</height>
-     </size>
-    </property>
-    <property name="maximumSize" >
-     <size>
-      <width>70</width>
-      <height>26</height>
-     </size>
-    </property>
-    <property name="font" >
-     <font>
-      <family>Sans Serif</family>
-      <pointsize>9</pointsize>
-      <weight>75</weight>
-      <italic>false</italic>
-      <bold>true</bold>
-      <underline>false</underline>
-      <strikeout>false</strikeout>
-     </font>
-    </property>
-    <property name="text" >
-     <string>0</string>
-    </property>
-    <property name="alignment" >
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="color_button" >
-    <property name="geometry" >
-     <rect>
-      <x>180</x>
-      <y>250</y>
-      <width>70</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="sizePolicy" >
-     <sizepolicy>
-      <hsizetype>5</hsizetype>
-      <vsizetype>5</vsizetype>
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="minimumSize" >
-     <size>
-      <width>30</width>
-      <height>25</height>
-     </size>
-    </property>
-    <property name="maximumSize" >
-     <size>
-      <width>70</width>
-      <height>30</height>
-     </size>
-    </property>
-    <property name="toolTip" >
-     <string>open a color dialog</string>
-    </property>
-    <property name="text" >
-     <string>Edit</string>
-    </property>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QGroupBox" name="groupBox" >
+       <property name="title" >
+        <string>Intensity</string>
+       </property>
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>9</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item row="1" column="0" >
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="textLabel1_2" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>5</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize" >
+             <size>
+              <width>30</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>100</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>Color</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+            <property name="margin" >
+             <number>5</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="color_sample" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>5</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize" >
+             <size>
+              <width>30</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>100</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="toolTip" >
+             <string>Color of the light</string>
+            </property>
+            <property name="frameShape" >
+             <enum>QFrame::WinPanel</enum>
+            </property>
+            <property name="text" >
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="color_button" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>5</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize" >
+             <size>
+              <width>30</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>70</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="toolTip" >
+             <string>open a color dialog</string>
+            </property>
+            <property name="text" >
+             <string>Edit</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="0" >
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="textLabel1" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>5</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize" >
+             <size>
+              <width>30</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>100</width>
+              <height>26</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>factor</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+            <property name="margin" >
+             <number>5</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="intensity" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>5</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize" >
+             <size>
+              <width>30</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>100</width>
+              <height>21</height>
+             </size>
+            </property>
+            <property name="toolTip" >
+             <string>Select intensity of light source</string>
+            </property>
+            <property name="maximum" >
+             <number>100</number>
+            </property>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="tickInterval" >
+             <number>50</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="intensity_label" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>5</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize" >
+             <size>
+              <width>30</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>70</width>
+              <height>26</height>
+             </size>
+            </property>
+            <property name="font" >
+             <font>
+              <family>Sans Serif</family>
+              <pointsize>9</pointsize>
+              <weight>75</weight>
+              <italic>false</italic>
+              <bold>true</bold>
+              <underline>false</underline>
+              <strikeout>false</strikeout>
+             </font>
+            </property>
+            <property name="text" >
+             <string>0</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="type_group" >
+       <property name="title" >
+        <string>Type</string>
+       </property>
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>9</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item row="2" column="0" >
+         <widget class="QRadioButton" name="directional" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip" >
+           <string>Light from an infinite distance (position needed for angle of rays)</string>
+          </property>
+          <property name="text" >
+           <string>Directional</string>
+          </property>
+          <property name="checked" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" >
+         <widget class="QRadioButton" name="point" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip" >
+           <string>Light from a specific position</string>
+          </property>
+          <property name="text" >
+           <string>Point</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" >
+         <widget class="QRadioButton" name="ambient" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip" >
+           <string>Ambient light doesnt have a specific position source</string>
+          </property>
+          <property name="text" >
+           <string>Ambient</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
    </widget>
    <widget class="QGroupBox" name="orientation_group" >
     <property name="geometry" >
      <rect>
       <x>11</x>
-      <y>26</y>
-      <width>377</width>
-      <height>131</height>
+      <y>27</y>
+      <width>429</width>
+      <height>126</height>
      </rect>
     </property>
     <property name="title" >
@@ -698,84 +947,6 @@
        </property>
        <property name="text" >
         <string>Direction</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QGroupBox" name="type_group" >
-    <property name="geometry" >
-     <rect>
-      <x>260</x>
-      <y>170</y>
-      <width>120</width>
-      <height>161</height>
-     </rect>
-    </property>
-    <property name="title" >
-     <string>Type</string>
-    </property>
-    <layout class="QGridLayout" >
-     <property name="margin" >
-      <number>9</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item row="2" column="0" >
-      <widget class="QRadioButton" name="directional" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>5</hsizetype>
-         <vsizetype>5</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="toolTip" >
-        <string>Light from an infinite distance (position needed for angle of rays)</string>
-       </property>
-       <property name="text" >
-        <string>Directional</string>
-       </property>
-       <property name="checked" >
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" >
-      <widget class="QRadioButton" name="point" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>5</hsizetype>
-         <vsizetype>5</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="toolTip" >
-        <string>Light from a specific position</string>
-       </property>
-       <property name="text" >
-        <string>Point</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" >
-      <widget class="QRadioButton" name="ambient" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>5</hsizetype>
-         <vsizetype>5</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="toolTip" >
-        <string>Ambient light doesnt have a specific position source</string>
-       </property>
-       <property name="text" >
-        <string>Ambient</string>
        </property>
       </widget>
      </item>

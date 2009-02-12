@@ -126,10 +126,12 @@ void LightSettings::addLightPressed()
 
 	// create a kind of headlight
 	// position light 20 space units behind camera position
-	
+
 	light.setRelativeToCamera(true);
 	light.setPosition(Vector3(0, 4, -20));
 	light.setDirection(Vector3(0, 0, 1));
+	light.setAttenuation(Vector3(1., 0., 0.));
+
 
 	lights_.push_back(light);
 	update();
@@ -167,6 +169,7 @@ void LightSettings::saveSettingsToLight_()
 	{
 		Vector3 pos = getPosition_();
 		Vector3 dir = getDirection_();
+		Vector3 att = getAttenuation_();
 		bool relative = Ui_LightSettingsData::relative->isChecked();
 		light.setRelativeToCamera(relative);
 
@@ -180,9 +183,10 @@ void LightSettings::saveSettingsToLight_()
 		
 		light.setPosition(pos);
 		light.setDirection(dir);
+		light.setAttenuation(att);
 
 		light.setIntensity((float)(intensity->value()) / 100.0);
-
+		
 		/////////////////////////////////////////////////////
 		// type of light
 
@@ -242,7 +246,6 @@ void LightSettings::typeSelected()
 void LightSettings::typeSelected_(Position type)
 {
 	bool is_ambient = (type == LightSource::AMBIENT);
-	
 	bool pos_enabled = type != LightSource::DIRECTIONAL && !is_ambient;
 
 	position_x->setEnabled(pos_enabled);
@@ -254,6 +257,14 @@ void LightSettings::typeSelected_(Position type)
 	direction_z->setEnabled(!is_ambient);
 	relative->setEnabled(!is_ambient);
 	not_relative->setEnabled(!is_ambient);
+
+	attenuation_p_1->setEnabled(pos_enabled);
+	attenuation_p_2->setEnabled(pos_enabled);
+	attenuation_p_3->setEnabled(pos_enabled);
+	textLabel1_4->setEnabled(pos_enabled);
+	label->setEnabled(pos_enabled);
+	label_2->setEnabled(pos_enabled);
+	label_3->setEnabled(pos_enabled);
 }
 
 void LightSettings::getValues_()
@@ -270,6 +281,7 @@ void LightSettings::getValues_()
 
 	Vector3 pos = light.getPosition();
 	Vector3 dir = light.getDirection();
+	Vector3 att = light.getAttenuation();
 
 	if (light.isRelativeToCamera())
 	{
@@ -283,7 +295,8 @@ void LightSettings::getValues_()
 
 	setPosition_(pos);
 	setDirection_(dir);
-
+	setAttenuation_(att);
+	
 	typeSelected();
 	
 	if (light.getType() == LightSource::AMBIENT) ambient->setChecked(true);
@@ -303,6 +316,9 @@ void LightSettings::clearFields_()
 	direction_x->clear();
 	direction_y->clear();
 	direction_z->clear();
+	attenuation_p_1->clear();
+	attenuation_p_2->clear();
+	attenuation_p_3->clear();
 	setControlsEnabled_(false);
 }
 
@@ -324,6 +340,10 @@ void LightSettings::setControlsEnabled_(bool state)
 	color_button->setEnabled(state);
 	point->setEnabled(state);
 	directional->setEnabled(state);
+	attenuation_p_1->setEnabled(state);
+	attenuation_p_2->setEnabled(state);
+	attenuation_p_3->setEnabled(state);
+
 	ambient->setEnabled(state);
 }
 
@@ -404,6 +424,13 @@ void LightSettings::setDirection_(const Vector3& v)
 	direction_z->setText(createFloatString(v.z, 2).c_str());
 }
 
+void LightSettings::setAttenuation_(const Vector3& a)
+{
+	 attenuation_p_1->setText(createFloatString(a.x, 2).c_str());
+	 attenuation_p_2->setText(createFloatString(a.y, 2).c_str());
+	 attenuation_p_3->setText(createFloatString(a.z, 2).c_str());
+}
+
 Vector3 LightSettings::getPosition_() 
 	throw(Exception::InvalidFormat)
 {
@@ -419,6 +446,15 @@ Vector3 LightSettings::getDirection_()
 				 			   direction_y->text().toFloat(),
 			  				 direction_z->text().toFloat());
 }
+
+Vector3 LightSettings::getAttenuation_() 
+	throw(Exception::InvalidFormat)
+{
+	return Vector3(attenuation_p_1->text().toFloat(),
+				 			   attenuation_p_2->text().toFloat(),
+			  				 attenuation_p_3->text().toFloat());
+}
+
 
 Index LightSettings::getCurrentLightNumber_() const
 {
