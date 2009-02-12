@@ -110,6 +110,15 @@ namespace BALL
 			/// Set the direction vector of the light
 			void setDirection(const Vector3& direction)
 				throw() { direction_ = direction;}
+	
+			/// Get the attenuation parameters of the light
+			const Vector3& getAttenuation() const
+				throw() { return attenuation_;}
+
+			/// Set the attenuation parameters of the light
+			void setAttenuation(const Vector3& attenuation)
+				throw() { attenuation_ = attenuation;}
+
 
 			/// Get the angle of the light cone
 			const Angle& getAngle() const
@@ -197,6 +206,9 @@ namespace BALL
 
 			//_ Direction of the light cone
 			Vector3 		direction_;
+			
+			//_ Attenuation parameters of the light 
+			Vector3 		attenuation_;
 
 			//_
 			Vector3     r_position_;
