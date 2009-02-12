@@ -336,6 +336,8 @@ namespace BALL
 					case RepresentationMessage::REMOVE:
 #ifndef ENABLE_RAYTRACING
 						gl_renderer_->removeRepresentation(*rep);
+#else
+						rt_renderer_->removeRepresentation(rep);
 #endif
 						break;
 

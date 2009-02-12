@@ -117,13 +117,11 @@ namespace BALL
 
 			if (objects_.find(rep) != objects_.end())
 			{
-				// TODO: handle the update!!!
-				std::cout << "Representation already buffered!!! exiting!" << std::endl;
-				return;
+				// TODO: handle the update more gracefully!
+				removeRepresentation(rep);
 			}
 
 			RTfactData rt_data;
-			objects_[rep] = rt_data;
 
 			List<GeometricObject*>::ConstIterator it;
 			for (it =  rep->getGeometricObjects().begin();
@@ -166,7 +164,7 @@ namespace BALL
 					meshGroup->add(handle);                
 					m_renderer.getRoot()->add(meshGroup);
 
-					rt_data.group_handle.push_back(meshGroup);
+					rt_data.top_group_handles.push_back(meshGroup);
 					rt_data.object_handles.push_back(handle);
 					rt_data.material_handles.push_back(material);
 
@@ -199,7 +197,7 @@ namespace BALL
 					sphereGroup->add(handle);
 					m_renderer.getRoot()->add(sphereGroup);
 
-					rt_data.group_handle.push_back(sphereGroup);
+					rt_data.top_group_handles.push_back(sphereGroup);
 					rt_data.object_handles.push_back(handle);
 					rt_data.material_handles.push_back(material);
 
@@ -232,6 +230,10 @@ namespace BALL
 						tubeGroup->add(handle_1);
 
 						m_renderer.getRoot()->add(tubeGroup);
+
+						rt_data.top_group_handles.push_back(tubeGroup);
+						rt_data.object_handles.push_back(handle_1);
+						rt_data.material_handles.push_back(material_1);
 					} 
 					else 
 					{
@@ -262,7 +264,7 @@ namespace BALL
 
 						m_renderer.getRoot()->add(all_group);
 
-						rt_data.group_handle.push_back(all_group);
+						rt_data.top_group_handles.push_back(all_group);
 						rt_data.object_handles.push_back(handle_1);
 						rt_data.object_handles.push_back(handle_2);
 						rt_data.material_handles.push_back(material_1);
@@ -270,6 +272,22 @@ namespace BALL
 					}
 
 					rtfact_needs_update_ = true;
+				}
+			}
+			objects_[rep] = rt_data;
+		}
+
+		void RTfactRenderer::removeRepresentation(const Representation* rep)
+		{
+			if (objects_.find(rep) != objects_.end())
+			{
+				// 	     - find out if this also deletes the geometries and materials
+				RTfactData& rt_data = objects_[rep];
+				GroupHandle root = m_renderer.getRoot();
+
+				for (Position i=0; i<rt_data.top_group_handles.size(); ++i)
+				{
+					root->remove(rt_data.top_group_handles[i]);
 				}
 			}
 		}
