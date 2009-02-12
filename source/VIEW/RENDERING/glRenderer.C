@@ -403,7 +403,7 @@ void GLRenderer::setLights(bool reset_all)
 			                   light_dir.z,
 			                   0.0};  // the 1 is for positional lights
 
-			glLightfv(light_nr, GL_POSITION, pos);
+			glLightfv(light_nr, GL_POSITION, pos);	
 			glEnable(light_nr);
 			light_nr++;
 			continue;
@@ -445,7 +445,12 @@ void GLRenderer::setLights(bool reset_all)
 		                   1.0};  // the 1 is for positional lights
 
 		glLightfv(light_nr, GL_POSITION, pos);
-
+	
+		Vector3 att =  it->getAttenuation();
+		glLightf(light_nr, GL_CONSTANT_ATTENUATION, att.x);
+		glLightf(light_nr, GL_LINEAR_ATTENUATION, att.y);
+		glLightf(light_nr, GL_QUADRATIC_ATTENUATION, att.z);
+			
 		glEnable(light_nr);
 		light_nr++;
 	}
