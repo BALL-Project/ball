@@ -11,13 +11,47 @@ namespace BALL
 	namespace VIEW 
 	{
 
+	  QGLFormat GLRenderWindow::gl_format_(
+				QGL::DepthBuffer 		 | 
+#ifndef BALL_OS_DARWIN
+				QGL::StereoBuffers 	 | 
+#endif
+				QGL::DoubleBuffer 	 | 
+				QGL::DirectRendering |
+				QGL::SampleBuffers   |
+				QGL::StencilBuffer);
+
+
 		GLRenderWindow::GLRenderWindow()
-			: FB_TEXTURE_FORMAT(GL_RGB), 
+			: QGLWidget(gl_format_),
+				FB_TEXTURE_FORMAT(GL_RGB), 
 			  FB_TEXTURE_DATATYPE(GL_FLOAT),
-              FB_TEXTURE_TARGET(GL_TEXTURE_2D),
-              FB_INTERNAL_TEXTURE_FORMAT(GL_RGB)
+				FB_TEXTURE_TARGET(GL_TEXTURE_2D),
+				FB_INTERNAL_TEXTURE_FORMAT(GL_RGB)
 		{		
 			m_screenTexID = 0;
+		}
+
+		GLRenderWindow::GLRenderWindow(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
+			: QGLWidget(gl_format_, parent_widget, (QGLWidget*)0, w_flags),
+				FB_TEXTURE_FORMAT(GL_RGB), 
+			  FB_TEXTURE_DATATYPE(GL_FLOAT),
+				FB_TEXTURE_TARGET(GL_TEXTURE_2D),
+				FB_INTERNAL_TEXTURE_FORMAT(GL_RGB)
+		{
+			if (!QGLWidget::isValid())
+			{
+				Log.error() << "QGLWidget is not valid in Scene!" << std::endl;
+			}
+		}
+
+		GLRenderWindow::GLRenderWindow(const GLRenderWindow& window, QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
+			: QGLWidget(gl_format_, parent_widget, (QGLWidget*)0, w_flags),
+				FB_TEXTURE_FORMAT(GL_RGB), 
+			  FB_TEXTURE_DATATYPE(GL_FLOAT),
+				FB_TEXTURE_TARGET(GL_TEXTURE_2D),
+				FB_INTERNAL_TEXTURE_FORMAT(GL_RGB)
+		{
 		}
 
 		GLRenderWindow::~GLRenderWindow()

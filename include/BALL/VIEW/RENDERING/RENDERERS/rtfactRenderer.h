@@ -58,13 +58,14 @@ namespace BALL
 
 				/// Destructor
 				virtual ~RTfactRenderer()
+					throw()
 				{
 				}
 
 				/************************************************************************/
 				/* RaytracingRenderer methods					   */
 				/************************************************************************/
-				virtual bool init(const Scene& scene) throw();
+				virtual bool init(Scene& scene);
 
 				virtual String getRenderer()  
 				{
@@ -78,8 +79,8 @@ namespace BALL
 				virtual void prepareBufferedRendering(const Stage& stage);
 				virtual void renderToBufferImpl(FrameBufferPtr buffer);
 
-				void bufferRepresentation(Representation const* rep);
-				void removeRepresentation(Representation const* rep);
+				void bufferRepresentation(const Representation& rep);
+				void removeRepresentation(const Representation& rep);
 
 				void updateMaterialForRepresentation(Representation const* rep);
 				void updateMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material);
@@ -91,8 +92,6 @@ namespace BALL
 			private:
 
 				std::vector<RTfact::Remote::RTLightHandle> lights_;
-
-				Scene const* scene_;
 
 				RTfact::Remote::Renderer m_renderer;
 

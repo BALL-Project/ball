@@ -4,6 +4,7 @@
 // $Id: renderer.C,v 1.12.16.1 2007/03/25 21:57:02 oliver Exp $
 
 #include <BALL/VIEW/RENDERING/renderer.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
@@ -31,6 +32,7 @@ namespace BALL
 		Renderer::Renderer()
 			throw() 
 			: Object(),
+				scene_(0),
 				stage_(0),
 				width_(0),
 				height_(0)
@@ -41,6 +43,7 @@ namespace BALL
 		Renderer::Renderer(const Renderer& renderer)
 			throw() 
 		: Object(renderer),
+			scene_(renderer.scene_),
 			stage_(renderer.stage_),
 			width_(renderer.width_),
 			height_(renderer.height_)
@@ -107,8 +110,24 @@ namespace BALL
 		}
 
 
+		bool Renderer::init(Scene& scene)
+		{
+			scene_ = &scene;
+
+			Stage* stage = scene.getStage();
+			if (stage == 0)
+			{
+				init(Stage(), scene.width(), scene.height());
+			}
+			else
+			{
+				init(*stage, scene.width(), scene.height());
+			}
+
+			return true;
+		}
+
 		bool Renderer::init(const Stage& stage, float width, float  height)
-			throw()
 		{
 			stage_ = &stage;
 			width_ = width;

@@ -136,15 +136,10 @@ namespace BALL
 			GeometricObject* getObject(GLRenderer::Name name) const
 				throw();
 
-			/** Initialise the renderer, by calling the init method below
-			 		This method is called by Scene::initializeGL.
-			*/
-			virtual bool init(Scene& scene)
-				throw();
+			virtual bool init(Scene& scene);
 
 			/// Initialise the renderer, e.g. the display lists.
-			virtual bool init(const Stage& stage, float height, float width)
-				throw();
+			virtual bool init(const Stage& stage, float height, float width);
 
 			/// Set the light sources according to the stage
 			virtual void setLights(bool reset_all = false)
@@ -434,8 +429,6 @@ namespace BALL
 			Position createTextureFromGrid(const RegularData3D& grid, const ColorMap& map);
 			void removeTextureFor_(const RegularData3D& grid);
 			void setupGridClipPlanes_(const GridVisualisation& slice);
-
-			Scene* 								scene_;
 
 			///
 			DrawingMode 					drawing_mode_;

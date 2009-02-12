@@ -62,11 +62,13 @@
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
 
+#include <BALL/VIEW/RENDERING/bufferedRenderer.h>
+
 #ifdef ENABLE_RAYTRACING
     
-    #include <BALL/VIEW/RENDERING/glRenderWindow.h>
-    //#include <BALL/VIEW/RENDERING/RENDERERS/cudaVolumeRenderer.h>    
-    #include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>    
+#include <BALL/VIEW/RENDERING/glRenderWindow.h>
+//#include <BALL/VIEW/RENDERING/RENDERERS/cudaVolumeRenderer.h>    
+#include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>    
 
 #endif
 
@@ -81,15 +83,13 @@ namespace BALL
 	namespace VIEW
 	{
 
-	#ifdef ENABLE_RAYTRACING    
+#ifdef ENABLE_RAYTRACING    
+		//typedef CudaVolumeRenderer t_RaytracingRenderer;
+		typedef RTfactRenderer t_RaytracingRenderer;
+		typedef GLRenderWindow t_RaytracingWindow;    
+#endif
 
-        //typedef CudaVolumeRenderer t_RaytracingRenderer;
-        typedef RTfactRenderer t_RaytracingRenderer;
-        typedef GLRenderWindow t_RaytracingWindow;    
-
-    #endif
-
-        Position Scene::screenshot_nr_ = 100000;
+		Position Scene::screenshot_nr_ = 100000;
 		Position Scene::pov_nr_ = 100000;
 		Position Scene::vrml_nr_ = 100000;
 		bool Scene::offscreen_rendering_ = true;
@@ -108,26 +108,17 @@ namespace BALL
 		#define  TRANSLATE_FACTOR 4.
     #define  ZOOM_FACTOR      7.
 
-	  QGLFormat Scene::gl_format_(QGL::DepthBuffer 		| 
-#ifndef BALL_OS_DARWIN
-																QGL::StereoBuffers 	| 
-#endif
-																QGL::DoubleBuffer 	| 
-																QGL::DirectRendering |
-																QGL::SampleBuffers  |
-																QGL::StencilBuffer);
-
 		Scene::Scene()
 			throw()
-			:	QGLWidget(gl_format_),
+			:	GLRenderWindow(),
 				ModularWidget("<Scene>"),
 				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage()),
+				renderers_(),
 				gl_renderer_(new GLRenderer()),
-        #ifdef ENABLE_RAYTRACING
+#ifdef ENABLE_RAYTRACING
 				rt_renderer_(new t_RaytracingRenderer()),
-				rt_window_(new t_RaytracingWindow()),
-        #endif
+#endif
 				light_settings_(new LightSettings(this)),
 				stage_settings_(new StageSettings(this)),
 				material_settings_(new MaterialSettings(this)),
@@ -137,6 +128,12 @@ namespace BALL
 				left_eye_widget_(0),
 				right_eye_widget_(0)
 		{
+#ifndef ENABLE_RAYTRACING
+			renderers_.push_back(std::pair<Renderer*, GLRenderWindow*>((Renderer*)gl_renderer_, this));
+#else
+			renderers_.push_back(std::pair<Renderer*, GLRenderWindow*>((Renderer*)&*rt_renderer_, this));
+#endif
+
 			setAcceptDrops(true);
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (1) " << this << std::endl;
@@ -145,7 +142,7 @@ namespace BALL
 
 		Scene::Scene(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 			throw()
-			:	QGLWidget(gl_format_, parent_widget, (QGLWidget*)0, w_flags),
+			:	GLRenderWindow(parent_widget, name, w_flags),
 				ModularWidget(name),
 				current_mode_(ROTATE__MODE),
 				last_mode_(PICKING__MODE),
@@ -162,11 +159,11 @@ namespace BALL
 				y_window_pick_pos_first_(0),
 				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage),
+				renderers_(),
 				gl_renderer_(new GLRenderer),
-        #ifdef ENABLE_RAYTRACING
+#ifdef ENABLE_RAYTRACING
 				rt_renderer_(new t_RaytracingRenderer()),
-				rt_window_(new t_RaytracingWindow()),
-        #endif
+#endif
 				light_settings_(0),
 				stage_settings_(0),
 				animation_thread_(0),
@@ -186,29 +183,32 @@ namespace BALL
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (2) " << this << std::endl;
 #endif
+
+#ifndef ENABLE_RAYTRACING
+			renderers_.push_back(std::pair<Renderer*, GLRenderWindow*>((Renderer*)gl_renderer_, this));
+#else
+			renderers_.push_back(std::pair<Renderer*, GLRenderWindow*>((Renderer*)&*rt_renderer_, this));
+#endif
+
 			setObjectName(name);
 			// the widget with the MainControl
 			registerWidget(this);
 			setAcceptDrops(true);
 
-			if (!QGLWidget::isValid())
-			{
-				Log.error() << "QGLWidget is not valid in Scene!" << std::endl;
-			}
 		}
 
 		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 			throw()
-			:	QGLWidget(gl_format_, parent_widget, (QGLWidget*)0, w_flags),
+			:	GLRenderWindow(scene, parent_widget, name, w_flags),
 				ModularWidget(scene),
 				system_origin_(scene.system_origin_),
 				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage(*scene.stage_)),
+				renderers_(),
 				gl_renderer_(new GLRenderer()),
-        #ifdef ENABLE_RAYTRACING
+#ifdef ENABLE_RAYTRACING
 				rt_renderer_(new t_RaytracingRenderer()),
-				rt_window_(new t_RaytracingWindow()),
-        #endif
+#endif
 				light_settings_(new LightSettings(this)),
 				stage_settings_(new StageSettings(this)),
 				material_settings_(new MaterialSettings(this)),
@@ -223,10 +223,16 @@ namespace BALL
 			Log.error() << "new Scene (3) " << this << std::endl;
 #endif
 
+#ifndef ENABLE_RAYTRACING
+			renderers_.push_back(std::pair<Renderer*, GLRenderWindow*>((Renderer*)gl_renderer_, this));
+#else
+			renderers_.push_back(std::pair<Renderer*, GLRenderWindow*>((Renderer*)&*rt_renderer_, this));
+#endif
+
 			setObjectName(name);
 
-			resize((Size) scene.gl_renderer_->getWidth(), 
-						 (Size) scene.gl_renderer_->getHeight());
+			resize((Size) scene.renderers_[0].first->getWidth(), 
+						 (Size) scene.renderers_[0].first->getHeight());
 
 			// the widget with the MainControl
 			ModularWidget::registerWidget(this);
@@ -235,17 +241,20 @@ namespace BALL
 
 		Scene::~Scene()
 			throw()
-			{
+		{
 #ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object Scene " << this << " of class Scene" << std::endl;
 #endif 
 
 				delete stage_;
-				delete gl_renderer_;
+
+				for (Position i=0; i<renderers_.size(); ++i)
+					delete renderers_[i].first; // TODO: what do we do with the RenderWindows?
+
 				delete left_eye_widget_;
 				delete right_eye_widget_;
 
-                //rt_renderer_ & rt_render_window are smart pointers
+				//rt_renderer_ & rt_render_window are smart pointers
 
 				if (animation_thread_ != 0) delete animation_thread_;
 			}
@@ -331,22 +340,21 @@ namespace BALL
 						RepresentationManager& pm = getMainControl()->getRepresentationManager();
 						if (pm.startRendering(rep))
 						{
-#ifndef ENABLE_RAYTRACING
-							gl_renderer_->bufferRepresentation(*rep);
-#else
-							rt_renderer_->bufferRepresentation(rep);
-#endif
+							for (Position i=0; i<renderers_.size(); ++i)
+							{
+								renderers_[i].first->bufferRepresentation(*rep);
+							}
+
 							pm.finishedRendering(rep);
 						}
 						break;
 					}
 
 					case RepresentationMessage::REMOVE:
-#ifndef ENABLE_RAYTRACING
-						gl_renderer_->removeRepresentation(*rep);
-#else
-						rt_renderer_->removeRepresentation(rep);
-#endif
+							for (Position i=0; i<renderers_.size(); ++i)
+							{
+								renderers_[i].first->removeRepresentation(*rep);
+							}
 						break;
 
 					default:
@@ -370,7 +378,13 @@ namespace BALL
 				{
 					case DatasetMessage::UPDATE:
 					case DatasetMessage::REMOVE:
-						gl_renderer_->removeTextureFor_(*set->getData());
+						for (Position i=0; i<renderers_.size(); ++i)
+						{
+							Renderer* current_renderer = renderers_[i].first;
+
+							if (RTTI::isKindOf<GLRenderer>(*current_renderer))
+								((GLRenderer*)current_renderer)->removeTextureFor_(*set->getData());
+						}
 						break;
 
 					default:
@@ -445,53 +459,42 @@ namespace BALL
 			QGLWidget::initializeGL();
 			if (!format().rgba())  Log.error() << "no rgba mode for OpenGL available." << endl;
 
-			makeCurrent();			
+			for (Position i=0; i<renderers_.size(); ++i)
+			{
+				Renderer* current_renderer     = renderers_[i].first;
+				GLRenderWindow* current_target = renderers_[i].second;
 
-		#ifdef ENABLE_RAYTRACING
+				current_target->makeCurrent();
 
-			//initialize the window buffer and OpenGL pasting texture
-			rt_window_->init();
+				// initialize the rendering target
+				current_target->init();
 
-			//initialize the renderer
-			initializeRaytracing();
+				// initialize the renderer
+				if(!current_renderer->init(*this))
+				{
+					Log.error() << "Renderer failed to initialize" << endl;
+					throw Exception::GeneralException(__FILE__, __LINE__);
+				}			
+				if (RTTI::isKindOf<GLRenderer>(*current_renderer))
+					((GLRenderer*)current_renderer)->enableVertexBuffers(want_to_use_vertex_buffer_);
+			}
 
-		#else
-
-			gl_renderer_->init(*this);
-			gl_renderer_->initSolid();
 			if (stage_->getLightSources().size() == 0) setDefaultLighting(false);
-			gl_renderer_->updateCamera();
-			gl_renderer_->enableVertexBuffers(want_to_use_vertex_buffer_);
  			stage_settings_->getGLSettings();		
 
-		#endif
 		}
-
-#ifdef ENABLE_RAYTRACING	
-
-		void Scene::initializeRaytracing()
-		{
-			if(!rt_renderer_->init(*this))
-			{
-				Log.error() << "Raytracing renderer failed to initialize" << endl;
-				throw Exception::GeneralException(__FILE__, __LINE__);
-			}			
-		}
-#endif
 
 		void Scene::paintGL()
 		{
 			time_ = PreciseTime::now();
 
-		#ifdef ENABLE_RAYTRACING
-			
-            rt_renderer_->renderToBuffer(rt_window_.get(), *stage_);
-            rt_window_->refresh();
-
-		#else
+#ifdef ENABLE_RAYTRACING
+			rt_renderer_->renderToBuffer(this, *stage_);
+			refresh();
+#else
 
 			// cannot call update here, because it calls updateGL
-   			renderView_(DISPLAY_LISTS_RENDERING);
+			renderView_(DISPLAY_LISTS_RENDERING);
 			glFlush();
 
 			if (info_string_ != "")
@@ -565,25 +568,33 @@ namespace BALL
 
 		void Scene::resizeGL(int width, int height)
 		{						
-
-		#ifdef ENABLE_RAYTRACING
-
-			if(!rt_window_->resize(width, height))
-            {
-                Log.error() << "Cannot resize window. Size " << width << " x " << height << " is not supported" << endl;
-            }		
-            if(!rt_renderer_->setFrameBufferFormat(rt_window_->getFormat()))
+			for (Position i=0; i<renderers_.size(); ++i)
 			{
-				Log.error() << "Raytracing render does not support window framebuffer format. Seems to be configuration error" << endl;
-				throw Exception::GeneralException(__FILE__, __LINE__);
+				Renderer* 			current_renderer = renderers_[i].first;
+				GLRenderWindow* current_window   = renderers_[i].second;
+				
+				if(!current_window->resize(width, height))
+				{
+					Log.error() << "Cannot resize window. Size " 
+											<< width << " x " 
+											<< height << " is not supported" << endl;
+				}
+
+				if (RTTI::isKindOf<BufferedRenderer>(*current_renderer))
+				{
+					if(!(((BufferedRenderer*)current_renderer)->setFrameBufferFormat(getFormat())))
+					{
+						Log.error() << "Raytracing render does not support window framebuffer format. Seems to be configuration error" << endl;
+						throw Exception::GeneralException(__FILE__, __LINE__);
+					}
+				}
+
+				if (RTTI::isKindOf<GLRenderer>(*current_renderer))
+				{
+					((GLRenderer*)current_renderer)->setSize(width, height);
+					((GLRenderer*)current_renderer)->updateCamera();			
+				}
 			}
-
-		#else
-
-			gl_renderer_->setSize(width, height);
-			gl_renderer_->updateCamera();			
-
-		#endif
 
 			content_changed_ = true;
 		}
@@ -3601,23 +3612,25 @@ Log.error() << "Render grid not yet supported by raytracer!" << std::endl;
 			delete gl_renderer_;
 			gl_renderer_ = &renderer;
 		}
+
 #ifdef ENABLE_RAYTRACING
-        Scene::RaytracingWindowPtr Scene::getWindow(WindowType aWindowType)
+		Scene::RaytracingWindowPtr Scene::getWindow(WindowType aWindowType)
 		{
 			switch(aWindowType)
 			{
 				case CONTROL_WINDOW:
 				case LEFT_EYE_WINDOW:
 				case RIGHT_EYE_WINDOW:
-						return rt_window_;
+					return RaytracingWindowPtr(this);
 					break;
 
 				default: 
-						return rt_window_;
+					return RaytracingWindowPtr(this);
 					break;
 			}
 		}
 #endif
+
 		void AnimationThread::mySleep(Size msec) 
 		{
 			msleep(msec);

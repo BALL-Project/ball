@@ -19,7 +19,8 @@ namespace BALL
 {
 	namespace VIEW
 	{
-        class Scene;
+		class Scene;
+
 		/** RaytracingRenderer
 		 		General interface for renderer, which provides raytracing instead of regular rendering.                
 				\ingroup ViewRendering
@@ -30,8 +31,8 @@ namespace BALL
 		public:
 
 			/* 
-            * \link BufferedRenderer \endlink public methods 
-            */
+			 * \link BufferedRenderer \endlink public methods 
+			 */
 			virtual bool supports(const PixelFormat &format) const;			
 
 			virtual Resolution getSupportedResolution(
@@ -40,22 +41,9 @@ namespace BALL
                 throw(BALL::Exception::FormatUnsupported);			
 					
 			/*
-             * Specific public methods for this class
-             */
-
-            /*
-             * Initialize the renderer, giving in reference to \link Scene \endlink class
-             */
-			virtual bool init(const Scene& scene)
-				throw() = 0;           
-						
-            /*
-             * Get description of the renderer int textual form
-             */
+			 * Get description of the renderer int textual form
+			 */
 			virtual String getRenderer() = 0;    
-
-			virtual void bufferRepresentation(Representation const* rep) = 0;
-			virtual void removeRepresentation(Representation const* rep) = 0;
 
 			virtual void updateMaterialForRepresentation(Representation const* rep) = 0;
 			virtual void updateMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material) = 0;

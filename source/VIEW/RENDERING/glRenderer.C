@@ -85,7 +85,6 @@ namespace BALL
 GLRenderer::GLRenderer()
 	throw()
 	: Renderer(),
-		scene_(0),
 		drawing_mode_(DRAWING_MODE_SOLID),
 		drawing_precision_(DRAWING_PRECISION_HIGH),
 		GL_spheres_list_(0),
@@ -131,24 +130,6 @@ void GLRenderer::clear()
 	display_lists_.clear();
 }
 
-bool GLRenderer::init(Scene& scene)
-	throw()
-{
-	scene_ = &scene;
-
-	Stage* stage = scene.getStage();
-	if (stage == 0)
-	{
-		init(Stage(), scene.width(), scene.height());
-	}
-	else
-	{
-		init(*stage, scene.width(), scene.height());
-	}
-
-	return true;
-}
-
 void GLRenderer::setAntialiasing(bool state)
 {
 #ifndef GL_MULTISAMPLE
@@ -185,8 +166,12 @@ bool GLRenderer::getSmoothLines()
 	return smooth_lines_;
 }
 
+bool GLRenderer::init(Scene& scene)
+{
+	Renderer::init(scene);
+}
+
 bool GLRenderer::init(const Stage& stage, float height, float width)
-	throw()
 {
 	Renderer::init(stage, height, width);
 
@@ -325,6 +310,9 @@ bool GLRenderer::init(const Stage& stage, float height, float width)
 	// glHint( GL_LINE_SMOOTH_HINT, GL_DONT_CARE );
 
 	line_list_.endDefinition();
+
+	initSolid();
+	updateCamera();
 
 	return true;
 }

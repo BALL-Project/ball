@@ -5,7 +5,13 @@
 #ifndef BALL_VIEW_RENDERING_BUFFEREDRENDERER_H
 #define BALL_VIEW_RENDERING_BUFFEREDRENDERER_H
 
-#include <BALL/VIEW/RENDERING/renderTarget.h>
+#ifndef BALL_VIEW_RENDERING_RENDERER_H
+# include <BALL/VIEW/RENDERING/renderer.h>
+#endif
+
+#ifndef BALL_VIEW_RENDERING_RENDERTARGET_H
+# include <BALL/VIEW/RENDERING/renderTarget.h>
+#endif
 
 namespace BALL
 {
@@ -21,12 +27,15 @@ namespace BALL
 		 *  as long as the format of the RenderTarget is the same that you set before.
 		 */
 		class BufferedRenderer
+			: public Renderer
 		{
 		public:
 
-			BufferedRenderer() : bufferFormat() { }
+			BufferedRenderer()
+			 : Renderer(), 
+			 	 bufferFormat() { }
 
-			virtual ~BufferedRenderer() { }
+			virtual ~BufferedRenderer() throw() { }
 
 			/** Tries to choose a format for buffered rendering.
 			 *  @return true if the format could be set,
