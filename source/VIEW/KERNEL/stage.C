@@ -13,6 +13,7 @@ namespace BALL
 			throw()
 			:	position_(),
 				direction_(0, 0, -1),
+				attenuation_(1., 0., 0.),
 				angle_(10),
 				intensity_(0.8),
 				color_(255, 255, 255, 255),
@@ -25,6 +26,7 @@ namespace BALL
 			throw()
 			: position_(light_source.position_),
 				direction_(light_source.direction_),
+				attenuation_(light_source.attenuation_),
 				angle_(light_source.angle_),
 				intensity_(light_source.intensity_),
 				color_(light_source.color_),
@@ -38,6 +40,7 @@ namespace BALL
 		{
 				position_ = light.position_;
 			 direction_ = light.direction_;
+		 attenuation_ = light.attenuation_; 
 					 angle_ = light.angle_,
 			 intensity_ = light.intensity_;
 					 color_ = light.color_,
@@ -51,12 +54,13 @@ namespace BALL
 		bool LightSource::operator == (const LightSource& light_source) const
 			throw()
 		{
-			return position_ 		== light_source.position_ 	&&
-						 direction_ 	== light_source.direction_ 	&&
-						 angle_ 			== light_source.angle_ 		 	&&
-						 intensity_ 	== light_source.intensity_ 	&&
-						 color_ 			== light_source.color_ 			&&
-						 type_ 				== light_source.type_ 			&&
+			return position_ 		== light_source.position_ 	 &&
+						 direction_ 	== light_source.direction_ 	 &&
+						 attenuation_ == light_source.attenuation_ &&
+						 angle_ 			== light_source.angle_ 		 	 &&
+						 intensity_ 	== light_source.intensity_ 	 &&
+						 color_ 			== light_source.color_ 			 &&
+						 type_ 				== light_source.type_ 			 &&
 						 relative_ 		== light_source.relative_;
 		}
 		
@@ -80,6 +84,9 @@ namespace BALL
 
 			BALL_DUMP_DEPTH(s, depth);
 			s << "Direction : " << direction_<< std::endl;
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "Attenuation : " << attenuation_<< std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
 			s << "Angle : " << angle_ << std::endl;
