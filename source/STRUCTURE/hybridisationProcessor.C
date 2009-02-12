@@ -16,7 +16,6 @@
 #include <BALL/MATHS/common.h>
 
 // Qt
-#include <BALL/VIEW/KERNEL/common.h>
 #include <QtXml/QtXml>
 #include <Qt/qdom.h>
 
@@ -24,7 +23,6 @@
 #undef DEBUG
 
 using namespace std;
-using namespace BALL::VIEW;
 
 namespace BALL 
 {
@@ -650,7 +648,7 @@ if (!openNbr)
 		if (!file.open(QFile::ReadOnly | QFile::Text)) 
 		{
 			Log.error() << "HybridisationProcessor: cannot read file " << filename << std::endl;
-			Log.error() << "Reason was: " << ascii(file.errorString()) << std::endl;
+			Log.error() << "Reason was: " << file.errorString().toAscii().constData() << std::endl;
 			return 1;
 		}
 
@@ -661,7 +659,7 @@ if (!openNbr)
 		{
 			Log.error() << "Parse error in line " << errorLine << " column " << errorColumn 
 									<<  " of file " << filename << endl;
-			Log.error() << "Reason was: " << ascii(errorStr) << std::endl;
+			Log.error() << "Reason was: " << errorStr.toAscii().constData() << std::endl;
 			return 1;
 		}
 		// get the root element...
@@ -680,7 +678,7 @@ if (!openNbr)
 			
 			if (smartstrings.length() == 1)
 			{
-				tmp.first = ascii(smartstrings.item(0).toElement().firstChild().nodeValue());	
+				tmp.first = (smartstrings.item(0).toElement().firstChild().nodeValue()).toAscii().constData();	
 			} 
 			else if (smartstrings.length() == 0)
 			{

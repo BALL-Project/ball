@@ -207,6 +207,9 @@
 #define BALL_HAS_FFTW_FLOAT
 #define BALL_FFTW_DEFAULT_TRAITS FloatTraits
 
+// Define whether BALL was built with lpsolve support
+#undef BALL_HAS_LPSOLVE
+
 // QT options
 #define BALL_HAS_VIEW
 #define BALL_QT_HAS_THREADS

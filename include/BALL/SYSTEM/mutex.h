@@ -5,10 +5,11 @@
 #ifndef BALL_SYSTEM_MUTEX_H
 #define BALL_SYSTEM_MUTEX_H
 
-#include <QtCore/qmutex.h>
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
 
-// TEST
-#define BALL_HAS_BOOST_THREAD
+#include <QtCore/qmutex.h>
 
 #ifdef BALL_HAS_BOOST_THREAD
 #	include <boost/thread/mutex.hpp>
@@ -105,7 +106,7 @@ namespace BALL
 #else
 // required for visual studio
 #ifdef BALL_COMPILER_MSVC
-	template class BALL_EXPORT TMutex<QMutex>;
+	template class BALL_EXPORT TMutex<BALL_DEFAULT_MUTEX_TYPE>;
 #endif
 #endif
 
