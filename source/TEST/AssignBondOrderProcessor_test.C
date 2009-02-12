@@ -210,6 +210,8 @@ CHECK(Option::ALGORITHM: A_STAR)
 	sys6.apply(abop);
 	TEST_REAL_EQUAL(abop.getTotalPenalty(1), 6 )
 RESULT
+
+#ifdef BALL_HAS_LPSOLVE
 CHECK(Option::ALGORITHM: ILP)
   // There is really not much we can test here, so we just execute the processor
 	// to have a chance of catching bugs with valgrind if they sneak in
@@ -223,6 +225,8 @@ CHECK(Option::ALGORITHM: ILP)
 	sys6.apply(abop);
 	TEST_REAL_EQUAL(abop.getTotalPenalty(0), 0 )
 RESULT
+#endif
+
 CHECK(ALGORITHM: K_GREEDY)
   // There is really not much we can test here, so we just execute the processor
 	// to have a chance of catching bugs with valgrind if they sneak in
