@@ -39,8 +39,8 @@ namespace BALL
 				class RTfactData
 				{
 					public:
-						/// The group handles this object was assigned to
-						std::vector<RTfact::Remote::GroupHandle> group_handle;
+						/// The top-level group handles this object was assigned to
+						std::vector<RTfact::Remote::GroupHandle> top_group_handles;
 						
 						/// The object handles
 						std::vector<RTfact::Remote::GeoHandle> object_handles;
@@ -79,6 +79,8 @@ namespace BALL
 				virtual void renderToBufferImpl(FrameBufferPtr buffer);
 
 				void bufferRepresentation(Representation const* rep);
+				void removeRepresentation(Representation const* rep);
+
 				void updateMaterialForRepresentation(Representation const* rep);
 				void updateMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material);
 

@@ -55,6 +55,8 @@ namespace BALL
 			virtual String getRenderer() = 0;    
 
 			virtual void bufferRepresentation(Representation const* rep) = 0;
+			virtual void removeRepresentation(Representation const* rep) = 0;
+
 			virtual void updateMaterialForRepresentation(Representation const* rep) = 0;
 			virtual void updateMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material) = 0;
 
