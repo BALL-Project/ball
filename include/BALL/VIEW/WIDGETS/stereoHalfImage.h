@@ -38,6 +38,8 @@ namespace BALL
 				QSize sizeHint() const;
 
 				void setRenderMode(int mode) {mode_ = mode;}
+
+				GLRenderer* getRenderer() { return gl_renderer_; }
 			protected:
 				void initializeGL();
 				void paintGL();

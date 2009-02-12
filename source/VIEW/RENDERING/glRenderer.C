@@ -1978,7 +1978,10 @@ void GLRenderer::setupGridClipPlanes_(const GridVisualisation& slice)
 void GLRenderer::renderGridVisualisation_(const GridVisualisation& vol)
 	throw()
 {
-	Position texname = vol.getTexture();
+	if (!grid_to_texture_.has(vol.getGrid()))
+		return;
+
+	Position texname = grid_to_texture_[vol.getGrid()];
 	if (texname == 0)
 	{
 		scene_->setStatusbarText("Graphics card does not support 3D textures", true);
