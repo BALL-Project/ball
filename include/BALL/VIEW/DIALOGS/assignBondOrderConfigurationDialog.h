@@ -6,8 +6,6 @@
 #ifndef BALL_VIEW_DIALOGS_ASSIGNBONDORDERCONFIGURATIONDIALOG_H
 #define BALL_VIEW_DIALOGS_ASSIGNBONDORDERCONFIGURATIONDIALOG_H
 
-#include <BALL/VIEW/UIC/assignBondOrderConfigurationDialogData.h>
-
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
@@ -22,6 +20,12 @@
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 # include <BALL/VIEW/KERNEL/modularWidget.h>
+#endif
+
+#ifdef BALL_COMPILER_MSVC
+# include <BALL/VIEW/UIC/ui_assignBondOrderConfigurationDialog.h>
+#else
+# include <BALL/VIEW/UIC/assignBondOrderConfigurationDialogData.h>
 #endif
 
 

@@ -18,7 +18,7 @@ namespace BALL
 	{
 
 		///
-		class SDWidget 
+		class BALL_VIEW_EXPORT SDWidget 
 			: public QWidget
 		{
 			public:
@@ -27,7 +27,7 @@ namespace BALL
 				*/
 				//@{
 				/// Option names
-				struct BALL_EXPORT Option
+				struct BALL_VIEW_EXPORT Option
 				{		
 					/**	show hydrogen atoms.
 					*/
@@ -35,7 +35,7 @@ namespace BALL
 				};
 
 				/// Default values for options
-				struct BALL_EXPORT Default
+				struct BALL_VIEW_EXPORT Default
 				{
 					static const bool SHOW_HYDROGENS;
 				};

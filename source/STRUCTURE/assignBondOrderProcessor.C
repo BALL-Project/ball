@@ -18,7 +18,6 @@
 #include <BALL/KERNEL/expression.h>
 
 // Qt
-#include <BALL/VIEW/KERNEL/common.h>
 #include <QtXml/QtXml>
 #include <Qt/qdom.h>
 
@@ -56,7 +55,7 @@
 #define INFINITE_PENALTY 1e5
 
 using namespace std;
-using namespace BALL::VIEW;
+
 namespace BALL 
 {	
 	const String AssignBondOrderProcessor::Heuristic::SIMPLE = "heurisic_simple";
@@ -1682,11 +1681,11 @@ cout << " ) : atom type pen = " << entry.estimated_atom_type_penalty << ", bond 
 	{
 		// Open parameter file
 		Path    path;
-		String  inifilename(path.find(options[Option::Option::INIFile]));
+		String  inifilename(path.find(options[Option::INIFile]));
 		
 		if (inifilename == "") 
 		{
-			throw Exception::FileNotFound(__FILE__, __LINE__, options[Option::Option::INIFile]);
+			throw Exception::FileNotFound(__FILE__, __LINE__, options[Option::INIFile]);
 		}
 
 		QString errorStr;
@@ -1697,7 +1696,7 @@ cout << " ) : atom type pen = " << entry.estimated_atom_type_penalty << ", bond 
 		if (!file.open(QFile::ReadOnly | QFile::Text)) 
 		{
 			Log.error() << "Error: cannot read file " << inifilename <<" " << __FILE__ << " " << __LINE__ << std::endl;
-			Log.error() << "Reason was: " << ascii(file.errorString()) << std::endl;
+			Log.error() << "Reason was: " << file.errorString().toAscii().constData() << std::endl;
 			return 1;
 		}
 
@@ -1707,7 +1706,7 @@ cout << " ) : atom type pen = " << entry.estimated_atom_type_penalty << ", bond 
 					&errorColumn)) 
 		{
 			Log.error() << "Parse error in line " << errorLine << " column " << errorColumn <<  " of file " << inifilename << endl;
-			Log.error() << "Reason was: " << ascii(errorStr) << std::endl;
+			Log.error() << "Reason was: " << errorStr.toAscii().constData() << std::endl;
 			return 1;
 		}
 
@@ -1730,21 +1729,21 @@ cout << " ) : atom type pen = " << entry.estimated_atom_type_penalty << ", bond 
 			{
 				// read the element type
 				QDomNode element = elementstrings.item(0);
-				tmp.first = ascii(element.firstChild().nodeValue()); 
+				tmp.first = element.firstChild().nodeValue().toAscii().constData(); 
 
 				// read the SMARTS-string
 				QDomNodeList smartstring =  entries.item(i).toElement().elementsByTagName("smartstring");
 				if (smartstring.length() == 1)
 				{
-					tmp.second = ascii(smartstring.item(0).toElement().firstChild().nodeValue());
+					tmp.second = smartstring.item(0).toElement().firstChild().nodeValue().toAscii().constData();
 				} 
 				else if (smartstring.length() == 0)
 				{
-					Log.warn() << "In file " << inifilename << " : no SMARTS-string found for element " << ascii(element.firstChild().nodeValue()) << endl;
+					Log.warn() << "In file " << inifilename << " : no SMARTS-string found for element " << element.firstChild().nodeValue().toAscii().constData() << endl;
 				}  
 				else
 				{
-					Log.error() <<  "Parse error in file " << inifilename << " : more than on3 SMARTS-string for element " << ascii(element.firstChild().nodeValue()) << endl;
+					Log.error() <<  "Parse error in file " << inifilename << " : more than on3 SMARTS-string for element " << element.firstChild().nodeValue().toAscii().constData() << endl;
 					return false;
 				}
 
@@ -1763,7 +1762,7 @@ cout << " ) : atom type pen = " << entry.estimated_atom_type_penalty << ", bond 
 				}
 				else
 				{
-					Log.error() << "In file " << inifilename << " : no penalties found for element " << ascii(element.firstChild().nodeValue()) << endl;
+					Log.error() << "In file " << inifilename << " : no penalties found for element " << element.firstChild().nodeValue().toAscii().constData() << endl;
 					return false;
 				}
 			}

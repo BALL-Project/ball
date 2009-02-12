@@ -70,7 +70,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/NODEFAULTLIB:libcmt"
-				AdditionalDependencies="qtmain.lib QtCore4.lib QtSql4.lib QtNetwork4.lib regex.lib oncrpc.lib gsl_mt.lib cblas_mt.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib WSock32.lib"
+				AdditionalDependencies="qtmain.lib QtCore4.lib QtSql4.lib QtNetwork4.lib QtXml4.lib regex.lib oncrpc.lib gsl_mt.lib cblas_mt.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib WSock32.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\Contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;"
 				GenerateDebugInformation="true"
@@ -150,7 +150,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/NODEFAULTLIB:libcmtd"
-				AdditionalDependencies="qtmaind.lib QtCored4.lib QtSqld4.lib regex.lib oncrpc.lib gsl_mtd.lib cblas_mtd.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib QtNetworkd4.lib WSock32.lib"
+				AdditionalDependencies="qtmaind.lib QtCored4.lib QtSqld4.lib QtXml4d.lib regex.lib oncrpc.lib gsl_mtd.lib cblas_mtd.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib QtNetworkd4.lib WSock32.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\Contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;"
@@ -938,6 +938,14 @@
 						RelativePath="..\..\..\include\BALL\MOLMEC\AMBER\amberTorsion.h"
 						>
 					</File>
+					<File
+						RelativePath="..\..\..\include\BALL\MOLMEC\AMBER\GAFFCESParser.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\BALL\MOLMEC\AMBER\GAFFTypeProcessor.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="CHARMM"
@@ -1444,6 +1452,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\assignBondOrderProcessor.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\STRUCTURE\atomBijection.h"
 					>
 				</File>
@@ -1489,6 +1501,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\STRUCTURE\HBondProcessor.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\hybridisationProcessor.h"
 					>
 				</File>
 				<File
@@ -1765,6 +1781,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\MOLMEC\AMBER\GAFFCESParserLexer.l"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\FORMAT\GAMESSDatParserLexer.l"
 				>
 				<FileConfiguration
@@ -1822,6 +1842,10 @@
 			>
 			<File
 				RelativePath="..\..\..\source\KERNEL\expressionParserParser.y"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\MOLMEC\AMBER\GAFFCESParserParser.y"
 				>
 			</File>
 			<File
@@ -4482,6 +4506,54 @@
 							/>
 						</FileConfiguration>
 					</File>
+					<File
+						RelativePath="..\..\..\source\MOLMEC\AMBER\GAFFCESParser.C"
+						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\..\..\source\MOLMEC\AMBER\GAFFCESParserLexer.C"
+						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\..\..\source\MOLMEC\AMBER\GAFFCESParserParser.C"
+						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\..\..\source\MOLMEC\AMBER\GAFFTypeProcessor.C"
+						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+					</File>
 				</Filter>
 				<Filter
 					Name="CHARMM"
@@ -6764,6 +6836,18 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\..\..\source\STRUCTURE\assignBondOrderProcessor.C"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath="..\..\..\source\STRUCTURE\atomBijection.C"
 					>
 					<FileConfiguration
@@ -7016,6 +7100,18 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\STRUCTURE\hybridisationProcessor.C"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -8214,6 +8310,14 @@
 				<File
 					RelativePath="..\..\..\source\SYSTEM\mutex.C"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
 						>
