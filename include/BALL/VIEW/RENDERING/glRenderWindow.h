@@ -5,9 +5,19 @@
 #ifndef BALL_VIEW_RENDERING_GLRENDERWINDOW_H
 #define BALL_VIEW_RENDERING_GLRENDERWINDOW_H
 
-#include <BALL/COMMON/global.h>
-#include <BALL/DATATYPE/string.h>
-#include <BALL/VIEW/RENDERING/renderWindow.h>
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
+#ifndef BALL_DATATYPE_STRING_H
+# include <BALL/DATATYPE/string.h>
+#endif
+
+#ifndef BALL_VIEW_RENDERING_RENDERWINDOW_H
+# include <BALL/VIEW/RENDERING/renderWindow.h>
+#endif
+
+#include <QtOpenGL/qgl.h>
 
 namespace BALL
 {
@@ -15,16 +25,17 @@ namespace BALL
 	{				
         /**
          * Model of the \link RenderWindow \endlink which uses OpenGL to render its buffer to the screen
-         * This is pure OpenGL window, e.g. it does not solve the opening and closing of a real window.
-         * It assumes an appropriate OpenGL context is active when its methods are called.
-         * A window which also opens/closes system window and manages OpenGL context should be implemented
-         * as a descendat of this GLRenderWindow.
          */
-		class GLRenderWindow : public RenderWindow<float>
+		class GLRenderWindow 
+			: public RenderWindow<float>,
+				public QGLWidget
 		{
 			
 		public:
 			GLRenderWindow();
+			GLRenderWindow(QWidget* parent_widget, const char* name = NULL, Qt::WFlags w_flags = 0);
+			GLRenderWindow(const GLRenderWindow& window, QWidget* parent_widget, const char* name = NULL, Qt::WFlags w_flags = 0);
+
 			virtual ~GLRenderWindow();
 
 			/* RenderWindow methods */
@@ -32,21 +43,27 @@ namespace BALL
 			virtual bool resize(const unsigned int width, const unsigned int height);
 			virtual void refresh();			
 			
-		private:	
+		protected:	
+			static QGLFormat gl_format_;
 
-			GLuint m_screenTexID;					// ID of the fullscreen texture used to paste image into GPU framebuffer            
-            GLenum FB_TEXTURE_TARGET;               // type of the texture used
-			GLenum FB_TEXTURE_FORMAT;		        // format of the GL texture (GL_RGB, GL_RGBA, etc.)
-            GLenum FB_INTERNAL_TEXTURE_FORMAT;      // internal format specified when creating the textures
-			GLenum FB_TEXTURE_DATATYPE;	            // data type of the GL texture (GL_FLOAT, GL_UNSIGNED_INT, etc.						
+			// ID of the fullscreen texture used to paste image into GPU framebuffer            
+			GLuint m_screenTexID;
+			// type of the texture used
+			GLenum FB_TEXTURE_TARGET;
+			// format of the GL texture (GL_RGB, GL_RGBA, etc.)
+			GLenum FB_TEXTURE_FORMAT;
+      // internal format specified when creating the textures
+			GLenum FB_INTERNAL_TEXTURE_FORMAT;
+			// data type of the GL texture (GL_FLOAT, GL_UNSIGNED_INT, etc.)
+			GLenum FB_TEXTURE_DATATYPE;
 					
 			void createTexture(const unsigned int winWidth, const unsigned int winHeight);	
 			void deleteTexture();
 
-            void checkGL();
+			void checkGL();
 
-            bool errorInGL(GLenum& error);
-            String getGLErrorString(GLenum error);
+			bool errorInGL(GLenum& error);
+			String getGLErrorString(GLenum error);
 		};
 
 	} // namespace VIEW

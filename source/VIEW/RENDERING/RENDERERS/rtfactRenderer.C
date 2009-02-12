@@ -20,10 +20,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		bool RTfactRenderer::init(const Scene& scene)
-				throw()
+		bool RTfactRenderer::init(Scene& scene)
 		{		     
-			scene_ = &scene;
+			Renderer::init(scene);
 
 			GroupHandle root = m_renderer.getRoot();
 			
@@ -110,12 +109,12 @@ namespace BALL
 			}
 		}
 
-		void RTfactRenderer::bufferRepresentation(Representation const* rep)
+		void RTfactRenderer::bufferRepresentation(const Representation& rep)
 		{
 			// TODO: delete of already present representations!
 			std::cout << "RTfactRenderer: buffering Representation!" << std::endl;
 
-			if (objects_.find(rep) != objects_.end())
+			if (objects_.find(&rep) != objects_.end())
 			{
 				// TODO: handle the update more gracefully!
 				removeRepresentation(rep);
@@ -124,8 +123,8 @@ namespace BALL
 			RTfactData rt_data;
 
 			List<GeometricObject*>::ConstIterator it;
-			for (it =  rep->getGeometricObjects().begin();
-					it != rep->getGeometricObjects().end();
+			for (it =  rep.getGeometricObjects().begin();
+					it != rep.getGeometricObjects().end();
 					it++)
 			{
 				if (RTTI::isKindOf<Mesh>(**it))
@@ -274,15 +273,15 @@ namespace BALL
 					rtfact_needs_update_ = true;
 				}
 			}
-			objects_[rep] = rt_data;
+			objects_[&rep] = rt_data;
 		}
 
-		void RTfactRenderer::removeRepresentation(const Representation* rep)
+		void RTfactRenderer::removeRepresentation(Representation const& rep)
 		{
-			if (objects_.find(rep) != objects_.end())
+			if (objects_.find(&rep) != objects_.end())
 			{
 				// 	     - find out if this also deletes the geometries and materials
-				RTfactData& rt_data = objects_[rep];
+				RTfactData& rt_data = objects_[&rep];
 				GroupHandle root = m_renderer.getRoot();
 
 				for (Position i=0; i<rt_data.top_group_handles.size(); ++i)

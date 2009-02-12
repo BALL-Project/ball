@@ -1,9 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.66.16.1 2007-03-25 21:26:24 oliver Exp $
-// v 1.67 (2008.09.12) modified by Annette Treichel
-//
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
 #define BALL_VIEW_WIDGETS_SCENE_H
@@ -24,9 +21,13 @@
 # include <BALL/VIEW/KERNEL/common.h>
 #endif 
 
+#ifndef BALL_VIEW_RENDERING_RENDERWINDOW_H
+# include <BALL/VIEW/RENDERING/renderWindow.h>
+#endif
 
-// has to come after BALL includes to prevent problems with Visual Studio Net
-#include <QtOpenGL/qgl.h>
+#ifndef BALL_VIEW_RENDERING_GLRENDERWINDOW_H
+# include <BALL/VIEW/RENDERING/glRenderWindow.h>
+#endif
 
 #include <QtCore/qthread.h>
 #include <QtCore/qtimer.h>
@@ -43,11 +44,13 @@
 #define ENABLE_RAYTRACING
 			 
 #ifdef ENABLE_RAYTRACING 
-	#include <BALL/VIEW/RENDERING/renderWindow.h>
-	#include <BALL/VIEW/RENDERING/raytracingRenderer.h>
 
-    #include <boost/shared_ptr.hpp>
-#endif 
+#ifndef BALL_VIEW_RENDERING_RAYTRACINGRENDERER_H
+# include <BALL/VIEW/RENDERING/raytracingRenderer.h>
+#endif
+
+# include <boost/shared_ptr.hpp>
+#endif // ENABLE_RAYTRACING 
 
 class QMouseEvent;
 class QRubberBand;
@@ -110,18 +113,16 @@ namespace BALL
 				\ingroup ViewWidgets
 		*/
 		class BALL_VIEW_EXPORT Scene
-			: public QGLWidget, 
+			: public GLRenderWindow,
 				public ModularWidget
 		{
 			friend class AnimationThread;
 			friend class StereoHalfImage;
 
-        #ifdef ENABLE_RAYTRACING
-                                   
-            typedef boost::shared_ptr<RaytracingRenderer> RaytracingRendererPtr;
-            typedef boost::shared_ptr<t_RenderWindow> RaytracingWindowPtr;
-        
-        #endif
+#ifdef ENABLE_RAYTRACING
+      typedef boost::shared_ptr<RaytracingRenderer> RaytracingRendererPtr;
+      typedef boost::shared_ptr<t_RenderWindow> RaytracingWindowPtr;
+#endif
 
 			Q_OBJECT
 
@@ -541,7 +542,9 @@ namespace BALL
 			void updateRTMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material);
 #endif
 
-			public slots:
+			Position prepareGridTextures(const RegularData3D& grid, const ColorMap& map);
+
+		public slots:
 
 			/// Create an coordinate system at current position
 			void createCoordinateSystem()
@@ -706,14 +709,6 @@ namespace BALL
 			*/
 			virtual void initializeGL();
 
-#ifdef ENABLE_RAYTRACING
-			/** Initialize the raytracing renderer.
-					This method will be called automatically before any call to raytracing functions.
-					\see RaytracingRenderer::init
-			*/
-			virtual void initializeRaytracing();
-#endif
-
 			/** Render the visualization.
 					Overriden qt method for rendering the visualization of this scene.
 					This method will be called automatically every time an update is necessary.
@@ -874,6 +869,7 @@ namespace BALL
 			Camera stereo_camera_;
 			Camera stored_camera_;
 
+			std::vector<std::pair<Renderer*, GLRenderWindow*> > renderers_;
 			GLRenderer* gl_renderer_;
 
 #ifdef ENABLE_RAYTRACING
@@ -897,7 +893,6 @@ namespace BALL
 			//nr of last vrml or stl export
 			static Position vrml_nr_;
 
-			static QGLFormat gl_format_;
 			List<Camera> animation_points_;
 			AnimationThread* animation_thread_;
 			bool stop_animation_;

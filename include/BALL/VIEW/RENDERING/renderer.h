@@ -18,6 +18,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		class Scene;
 		class Line;
 		class MultiLine;
 		class Tube;
@@ -73,11 +74,15 @@ namespace BALL
 			virtual void clear()
 				throw() {}
 
+			/** Initialization routines.
+			 		This method is called by Scene::initializeGL.
+			*/
+			virtual bool init(Scene& scene);
+
 			/** Initialisation with the Stage.
 			 		Called by Scene::exportScene().
 			 */
-			virtual bool init(const Stage& stage, float height, float width)
-				throw();
+			virtual bool init(const Stage& stage, float height, float width);
 
 			///
 			virtual bool finish()
@@ -92,6 +97,15 @@ namespace BALL
 			*/
 			virtual bool render(const Representation& representation)
 				throw();
+
+
+			/** Buffer a Representation for later rendering.
+			 */
+			virtual void bufferRepresentation(const Representation& rep) {};
+
+			/** Remove a representation from the buffer.
+			 */
+			virtual void removeRepresentation(const Representation& rep) {};
 
 			/** Get the stage for the renderer (const)
 			 */
@@ -194,6 +208,9 @@ namespace BALL
 				throw() {Log.error() << "renderQuadMesh_ not implemented in derived Renderer class" << std::endl;}
 				//@}
 			
+			//_
+			Scene* scene_;
+
 			//_
 			const Stage*		stage_;
 
