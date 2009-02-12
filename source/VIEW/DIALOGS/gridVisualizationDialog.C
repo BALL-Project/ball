@@ -297,8 +297,15 @@ namespace BALL
 
 			const RegularData3D& grid = *grid_;
 
-			GLRenderer& gl = Scene::getInstance(0)->getGLRenderer();
-			Position texname = gl.createTextureFromGrid(grid, cm);
+			Position texname = Scene::getInstance(0)->prepareGridTextures(grid, cm);
+
+			if (texname == 0)
+			{
+				reject();
+				getMainControl()->setStatusbarText("Setting up of 3D textures failed!");
+				return;
+			}
+
 			if (texname == 0)
 			{
 				reject();

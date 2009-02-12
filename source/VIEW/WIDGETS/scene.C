@@ -3332,6 +3332,31 @@ namespace BALL
 		}
 #endif
 
+		Position Scene::prepareGridTextures(const RegularData3D& grid, const ColorMap& map)
+		{
+			// NOTE: this implementation has a slight disadvantage:
+			// 			 if you want 3d textures for stereo with different
+			// 			 half images, you need to ensure that this function
+			// 			 is called *after* switching to stereo!
+			// TODO: change this to something more sensible!
+			Position texname;
+
+			if (gl_renderer_->getStereoMode() != GLRenderer::DUAL_VIEW_DIFFERENT_DISPLAY_STEREO)
+			{
+				texname = gl_renderer_->createTextureFromGrid(grid, map);
+			}
+			else
+			{
+				left_eye_widget_->makeCurrent();
+				texname = left_eye_widget_->getRenderer()->createTextureFromGrid(grid, map);
+				right_eye_widget_->makeCurrent();
+ 				right_eye_widget_->getRenderer()->createTextureFromGrid(grid, map);
+				makeCurrent();
+			}
+
+			return texname;
+		}
+
 		void Scene::switchShowGrid()
 		{
 			draw_grid_ = !draw_grid_;
