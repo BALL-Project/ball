@@ -58,7 +58,7 @@ namespace BALL
 
 			Size num_lights = lights_.size();
 
-			Vector3 direction, light_position;
+			Vector3 direction, light_position, attenuation;
 			Size current_light=0;
 			List<LightSource>::ConstIterator it = stage.getLightSources().begin();
 			
@@ -97,6 +97,9 @@ namespace BALL
 							light_position = stage.calculateAbsoluteCoordinates(it->getPosition())+stage.getCamera().getViewPoint();
 						}
 						lights_[current_light]->setParam("position", float3(light_position.x, light_position.y, light_position.z));
+
+						attenuation = it->getAttenuation();
+						lights_[current_light]->setParam("attenuation", float3(attenuation.x, attenuation.y, attenuation.z));
 						break;
 					default:
 						std::cerr << "Light source type not supported!" << std::endl;
