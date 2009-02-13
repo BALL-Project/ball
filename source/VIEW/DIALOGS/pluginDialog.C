@@ -2,14 +2,13 @@
 #include <BALL/PLUGIN/pluginManager.h>
 #include <BALL/PLUGIN/BALLPlugin.h>
 #include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
-#include <BALL/VIEW/INPUT/inputPlugin.h>
 #include <BALL/COMMON/logStream.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
+#include <BALL/VIEW/PLUGIN/inputDevPluginHandler.h>
+
 Q_DECLARE_METATYPE(BALL::VIEW::VIEWPlugin*)
-Q_DECLARE_METATYPE(BALL::BALLPlugin*)
-Q_DECLARE_METATYPE(BALL::VIEW::InputPlugin*)
 
 #include <QtGui/QFileDialog>
 #include <QtCore/QObject>
@@ -37,6 +36,8 @@ namespace BALL
 		PluginModel::PluginModel()
 			: num_rows_(0)
 		{
+			PluginManager& man = PluginManager::instance();
+			man.registerHandler(new InputDevPluginHandler());
 		}
 
 		int PluginModel::rowCount(const QModelIndex& parent) const
@@ -80,10 +81,10 @@ namespace BALL
 				case Qt::DecorationRole:
 				{
 					VIEWPlugin* ptr = qobject_cast<VIEWPlugin*>(man.getPluginInstance(i.row()));
-					
-					if (ptr) 
+
+					if (ptr)
 						return QIcon(*(ptr->getIcon()));
-					else 
+					else
 						return QVariant();
 				}
 				default:
@@ -177,15 +178,10 @@ namespace BALL
 			QObject* active_object = qvariant_cast<QObject*>(model_.data(active_index_, Qt::UserRole));
 			BALLPlugin* active_plugin = qobject_cast<BALLPlugin*>(active_object);
 			if(active_plugin->isActive()) {
-				active_plugin->deactivate();
+				PluginManager::instance().stopPlugin(active_plugin);
 				togglePluginButton->setText("Activate");
 			} else {
-				// TODO: this should be somewhere else! :-)
-				InputPlugin* ptr = qobject_cast<InputPlugin*>(active_object);
-				ptr->setReceiver(Scene::getInstance(0));
-
-				active_plugin->activate();
-
+				PluginManager::instance().startPlugin(active_plugin);
 				togglePluginButton->setText("Deactivate");
 			}
 		}

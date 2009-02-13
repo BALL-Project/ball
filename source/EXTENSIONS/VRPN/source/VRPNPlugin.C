@@ -48,16 +48,18 @@ namespace BALL
 			return(driver);
 		}
 
-		void VRPNPlugin::activate()
+		bool VRPNPlugin::activate()
 		{
 			is_active_ = true;
 
-			startDriver();
+			return startDriver();
 		}
 
-		void VRPNPlugin::deactivate()
+		bool VRPNPlugin::deactivate()
 		{
 			is_active_ = false;
+
+			return true;
 		}
 
 	}

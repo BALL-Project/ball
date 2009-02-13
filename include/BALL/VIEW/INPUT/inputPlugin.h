@@ -14,7 +14,17 @@ namespace BALL
 			public:
 				virtual ~InputPlugin() {}
 
+				/**
+				 * Set the receiver of the events emited by the
+				 * input device.
+				 */
 				virtual void setReceiver(QWidget* receiver) = 0;
+
+				/**
+				 * Starts the input device driver and makes it send events.
+				 *
+				 * @return A pointer to the started driver
+				 */
 				virtual InputDeviceDriver* startDriver() = 0;
 		};
 	}

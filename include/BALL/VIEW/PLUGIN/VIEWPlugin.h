@@ -11,7 +11,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class VIEWPlugin 
+		class VIEWPlugin
 		{
 			public:
 				virtual ~VIEWPlugin() {}
@@ -23,9 +23,6 @@ namespace BALL
 				virtual QDialog* getConfigDialog() = 0;
 
 				virtual bool isActive() = 0;
-
-				virtual void activate() = 0;
-				virtual void deactivate() = 0;
 		};
 
 	}

@@ -11,7 +11,8 @@ DIRECTORY=VIEW/PLUGIN
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
-	VIEWPlugin.C
+	VIEWPlugin.C\
+	inputDevPluginHandler.C
 
 include ../../common.mak
 -include .Dependencies
