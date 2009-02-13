@@ -4517,12 +4517,28 @@
 								CompileAs="2"
 							/>
 						</FileConfiguration>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\..\..\source\MOLMEC\AMBER\GAFFCESParserLexer.C"
 						>
 						<FileConfiguration
 							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Debug|Win32"
 							>
 							<Tool
 								Name="VCCLCompilerTool"
@@ -4541,12 +4557,28 @@
 								CompileAs="2"
 							/>
 						</FileConfiguration>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\..\..\source\MOLMEC\AMBER\GAFFTypeProcessor.C"
 						>
 						<FileConfiguration
 							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Debug|Win32"
 							>
 							<Tool
 								Name="VCCLCompilerTool"
@@ -6846,6 +6878,14 @@
 							CompileAs="2"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\atomBijection.C"
@@ -7112,6 +7152,14 @@
 					>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
