@@ -13,10 +13,6 @@
 # include <BALL/VIEW/RENDERING/glRenderer.h>
 #endif
 
-#ifndef BALL_VIEW_WIDGETS_STEREOHALFIMAGE_H
-#	include <BALL/VIEW/WIDGETS/stereoHalfImage.h>
-#endif
-
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
 #endif 
@@ -175,20 +171,6 @@ namespace BALL
 			*/ 
 			//@{
 			
-			/** There a three different kind of rendering for a Scene:
-			*/
-			enum RenderMode
-			{
-				/// Render without display lists, directly to the Scene
-				DIRECT_RENDERING = 0,
-
-				/// Render the contents of the display lists
-				DISPLAY_LISTS_RENDERING,
-
-				/// Rebuild the contents of the display lists and redraw them
-				REBUILD_DISPLAY_LISTS
-			};
-
 			/**
 			 * Scene may hold several windows for different renering modes.
 			 * If you need to retrieve a particular window, use this enum together
@@ -278,14 +260,6 @@ namespace BALL
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
-
-			/** Update the visualization.
-					\param  rebuild_displaylists is set to true than all GLDisplayList are updated. 
-									If set to false, the display is only redrawed.
-					\see    GLDisplayList
-			*/
-			void update(bool rebuild_displaylists = false)
-				throw();
 
 			/** Handles messages sent by other registered ConnectionObject objects.
 					Filters for SceneMessage and sets the Camera appropriate or updates the visualization. 
@@ -535,6 +509,10 @@ namespace BALL
 			bool isUpdateRunning() const { return update_running_;}
 
 			void resetTracking() {tracking_initialized_ = false;}
+			
+			///
+			bool inMoveMode() const { return (mouse_button_is_pressed_ && (getMode() == MOVE__MODE)); }
+
 // TODO: this pretty hacky!
 #ifdef ENABLE_RAYTRACING
 			void updateAllRTMaterials();
@@ -623,9 +601,6 @@ namespace BALL
 			void setupViewVolume();
 
 			///
-			void disableViewVolumeRestriction();
-
-			///
 			void storeViewPoint();
 
 			///
@@ -685,7 +660,6 @@ namespace BALL
 
 			///
 			virtual void dragEnterEvent(QDragEnterEvent* e);
-
 
 			// dummy slot for menu entries without immediate action (saves many lines code this way)
 			void dummySlot(){}
@@ -778,17 +752,6 @@ namespace BALL
 
 			void updateGL();
 
-			void renderView_(RenderMode mode)
-				throw();
-
-			//_ called by renderView_
-			void renderRepresentations_(RenderMode mode)
-				throw();
-
-			//_ called by renderRepresentations_
-			void render_(const Representation& rep, RenderMode mode)
-				throw();
-
 			//_
 			void animate_()
 				throw();
@@ -821,6 +784,9 @@ namespace BALL
 			void createCoordinateSystem_(bool at_origin)
 				throw();
 	
+			/// Estimate current fps and convert into a string
+			String createFPSInfo_();
+
 			void renderGrid_();
 
 			/// Given 2D screen coordinates computes the 3D Position in Viewing Volume
@@ -896,7 +862,6 @@ namespace BALL
 			List<Camera> animation_points_;
 			AnimationThread* animation_thread_;
 			bool stop_animation_;
-			bool content_changed_;
 			bool want_to_use_vertex_buffer_;
 			bool mouse_button_is_pressed_;
 			bool preview_;
@@ -919,10 +884,11 @@ namespace BALL
 
 			Vector3 near_left_bot_, near_right_bot_, near_left_top_;
 			String info_string_;
-			float  volume_width_;
 
+			/*
 			StereoHalfImage* left_eye_widget_;
 			StereoHalfImage* right_eye_widget_;
+			*/
 		};
 
 

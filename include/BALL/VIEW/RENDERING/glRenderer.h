@@ -50,10 +50,11 @@ namespace BALL
 #define BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS 1000000
 	namespace VIEW
 	{
-		class GLDisplayList;
 		class Scene;
+		class GLDisplayList;
 		class MeshBuffer;
 		class ColorMap;
+		class RenderTarget;
 
 		/** GLRenderer
 		 		Renderer which provides hardware accelerated OPENGL rendering.
@@ -95,6 +96,21 @@ namespace BALL
 				///
 				RENDER_MODE_ALWAYS_FRONT
 			};
+
+
+			////
+			enum BufferMode
+			{
+				/// Render without display lists, directly to the Scene
+				DIRECT_RENDERING = 0,
+
+				/// Render the contents of the display lists
+				DISPLAY_LISTS_RENDERING,
+
+				/// Rebuild the contents of the display lists and redraw them
+				REBUILD_DISPLAY_LISTS
+			};
+
 
 			/** WrongModes Exception class.
 					This exeption will be thrown if the <b> drawing_precision_</b> or
@@ -237,9 +253,17 @@ namespace BALL
 			///
 			void setRenderMode(RenderMode mode) { render_mode_ = mode;}
 
+			/** This function renders into the buffer of the RenderTarget which has to be
+			 *  made current before this function is called. Buffers are not automatically
+			 *  swapped afterwards!
+			 */
+			virtual void renderToBuffer(RenderTarget* renderTarget, BufferMode);
+
 			///
 			virtual bool render(const Representation& representation, bool for_display_list = false)
 				throw();
+
+			virtual void bufferingDependentRender_(const Representation& repr, BufferMode mode);
 
 			/** Test if a given opengl extension is supported by the current driver.
 			 		Call this only after Scene::initializeGL();
@@ -281,6 +305,9 @@ namespace BALL
 			void initPerspective();
 
 			void renderRepresentation_(const Representation& representation, bool for_display_list);
+
+			///
+			void renderRepresentations_(BufferMode mode);
 
 			///
 			virtual void renderLabel_(const Label& /*label*/)

@@ -30,7 +30,6 @@ namespace BALL
 	{
 
 		Renderer::Renderer()
-			throw() 
 			: Object(),
 				scene_(0),
 				stage_(0),
@@ -41,7 +40,6 @@ namespace BALL
 		}
 
 		Renderer::Renderer(const Renderer& renderer)
-			throw() 
 		: Object(renderer),
 			scene_(renderer.scene_),
 			stage_(renderer.stage_),
@@ -50,7 +48,7 @@ namespace BALL
 		{}
 
 
-		bool Renderer::render(const Representation& representation)
+		bool Renderer::renderOneRepresentation(const Representation& representation)
 			throw()
 		{
 			if (representation.isHidden()) return true;

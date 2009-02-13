@@ -67,7 +67,7 @@ namespace BALL
 
 				if (buffer->getFormat() != bufferFormat)
 				{
-                    throw BALL::Exception::InvalidFormat(__FILE__, __LINE__, "Buffer with wrong framebuffer format supplied");
+					throw BALL::Exception::InvalidFormat(__FILE__, __LINE__, "Buffer with wrong framebuffer format supplied");
 				}
 
 				renderToBufferImpl( buffer );
