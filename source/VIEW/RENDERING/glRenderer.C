@@ -44,7 +44,7 @@
 #endif
 
 #ifdef BALL_USE_GLEW
- #include <BALL/VIEW/RENDERING/vertexBuffer.h>
+# include <BALL/VIEW/RENDERING/vertexBuffer.h>
 #endif
 
 using namespace std;
@@ -61,100 +61,100 @@ namespace BALL
 
 #ifdef BALL_VIEW_DEBUG
 #define CHECK_GL_ERROR \
-{\
-	GLenum e = glGetError(); \
-	if (e != GL_NO_ERROR)\
-	{\
-		Log.error() << "GL Error occurred in " << __FILE__ << " " << __LINE__ << std::endl;\
-		switch (e)\
 		{\
-			case GL_INVALID_VALUE: Log.error() << " GL_INVALID_VALUE" << std::endl;break;\
-			case GL_INVALID_ENUM: Log.error() << " GL_INVALID_ENUM" << std::endl;break;\
-			case GL_INVALID_OPERATION: Log.error() << " GL_INVALID_OPERATION" << std::endl;break;\
-			case GL_STACK_OVERFLOW: Log.error() << " GL_STACK_OVERFLOW" << std::endl;break;\
-			case GL_STACK_UNDERFLOW: Log.error() << " GL_STACK_UNDERFLOW" << std::endl;break;\
-			case GL_TABLE_TOO_LARGE: Log.error() << " GL_TABLE_TOO_LARGE" << std::endl;break;\
-			default: Log.error() << " UNKNOWN ERROR" << std::endl;\
-		}\
-	}\
-}
+			GLenum e = glGetError(); \
+			if (e != GL_NO_ERROR)\
+			{\
+				Log.error() << "GL Error occurred in " << __FILE__ << " " << __LINE__ << std::endl;\
+				switch (e)\
+				{\
+					case GL_INVALID_VALUE: Log.error() << " GL_INVALID_VALUE" << std::endl;break;\
+					case GL_INVALID_ENUM: Log.error() << " GL_INVALID_ENUM" << std::endl;break;\
+					case GL_INVALID_OPERATION: Log.error() << " GL_INVALID_OPERATION" << std::endl;break;\
+					case GL_STACK_OVERFLOW: Log.error() << " GL_STACK_OVERFLOW" << std::endl;break;\
+					case GL_STACK_UNDERFLOW: Log.error() << " GL_STACK_UNDERFLOW" << std::endl;break;\
+					case GL_TABLE_TOO_LARGE: Log.error() << " GL_TABLE_TOO_LARGE" << std::endl;break;\
+					default: Log.error() << " UNKNOWN ERROR" << std::endl;\
+				}\
+			}\
+		}
 #else
 #define CHECK_GL_ERROR
 #endif
 
-GLRenderer::GLRenderer()
-	throw()
-	: Renderer(),
-		drawing_mode_(DRAWING_MODE_SOLID),
-		drawing_precision_(DRAWING_PRECISION_HIGH),
-		GL_spheres_list_(0),
-		GL_tubes_list_(0),
-		GL_boxes_list_(0),
-		name_to_object_(),
-		object_to_name_(),
-		all_names_(1),
-		stereo_(NO_STEREO),
-		render_mode_(RENDER_MODE_UNDEFINED),
-		use_vertex_buffer_(false),
+		GLRenderer::GLRenderer()
+			throw()
+			: Renderer(),
+				drawing_mode_(DRAWING_MODE_SOLID),
+				drawing_precision_(DRAWING_PRECISION_HIGH),
+				GL_spheres_list_(0),
+				GL_tubes_list_(0),
+				GL_boxes_list_(0),
+				name_to_object_(),
+				object_to_name_(),
+				all_names_(1),
+				stereo_(NO_STEREO),
+				render_mode_(RENDER_MODE_UNDEFINED),
+				use_vertex_buffer_(false),
 		smooth_lines_(false),
-		picking_mode_(false),
-		model_type_(MODEL_LINES),
-		drawed_other_object_(false),
-		drawed_mesh_(false),
-		GLU_quadric_obj_(0)
-{
-}
+				picking_mode_(false),
+				model_type_(MODEL_LINES),
+				drawed_other_object_(false),
+				drawed_mesh_(false),
+				GLU_quadric_obj_(0)
+		{
+		}
 
-GLRenderer::~GLRenderer()
-	throw()
-{
-	clear();
-}
+		GLRenderer::~GLRenderer()
+			throw()
+		{
+			clear();
+		}
 
-void GLRenderer::clear()
-	throw()
-{
-	name_to_object_.clear();
-	object_to_name_.clear();
-	all_names_ = 1;
+		void GLRenderer::clear()
+			throw()
+		{
+			name_to_object_.clear();
+			object_to_name_.clear();
+			all_names_ = 1;
 
-	if (GL_spheres_list_ != 0) delete[] GL_spheres_list_;
-	if (GL_boxes_list_   != 0) delete[] GL_boxes_list_;
-	if (GL_tubes_list_   != 0) delete[] GL_tubes_list_;
+			if (GL_spheres_list_ != 0) delete[] GL_spheres_list_;
+			if (GL_boxes_list_   != 0) delete[] GL_boxes_list_;
+			if (GL_tubes_list_   != 0) delete[] GL_tubes_list_;
 
-	DisplayListHashMap::Iterator it = display_lists_.begin();
-	for (; it != display_lists_.end(); it++)
-	{
-		delete it->second;
-	}
-	display_lists_.clear();
-}
+			DisplayListHashMap::Iterator it = display_lists_.begin();
+			for (; it != display_lists_.end(); it++)
+			{
+				delete it->second;
+			}
+			display_lists_.clear();
+		}
 
-void GLRenderer::setAntialiasing(bool state)
-{
+		void GLRenderer::setAntialiasing(bool state)
+		{
 #ifndef GL_MULTISAMPLE
- #define GL_MULTISAMPLE  0x809D
+#define GL_MULTISAMPLE  0x809D
 #endif
-	if (state)
-	{
-		glEnable(GL_MULTISAMPLE);
+			if (state)
+			{
+				glEnable(GL_MULTISAMPLE);
 		if(smooth_lines_) {
 			// smooth line drawing
 			glEnable(GL_LINE_SMOOTH);
 		}
-		// slower, but better results:
-		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+				// slower, but better results:
+				glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+				glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-	}
-	else
-	{
-		glDisable(GL_MULTISAMPLE);
-		glDisable(GL_LINE_SMOOTH);
-		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
-		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
-	}
-}
+			}
+			else
+			{
+				glDisable(GL_MULTISAMPLE);
+				glDisable(GL_LINE_SMOOTH);
+				glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
+				glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+			}
+		}
 
 void GLRenderer::setSmoothLines(bool smooth_lines)
 {
@@ -166,15 +166,15 @@ bool GLRenderer::getSmoothLines()
 	return smooth_lines_;
 }
 
-bool GLRenderer::init(Scene& scene)
-{
-	Renderer::init(scene);
-}
+		bool GLRenderer::init(Scene& scene)
+		{
+			return Renderer::init(scene);
+		}
 
-bool GLRenderer::init(const Stage& stage, float height, float width)
-{
-	Renderer::init(stage, height, width);
-
+		bool GLRenderer::init(const Stage& stage, float height, float width)
+		{
+			Renderer::init(stage, height, width);
+			
 	// Force OpenGL to normalize transformed normals to be of unit
 	// length before using the normals in OpenGL's lighting equations
 	// While this corrects potential lighting problems introduced by scaling,
@@ -182,446 +182,748 @@ bool GLRenderer::init(const Stage& stage, float height, float width)
 	glEnable(GL_NORMALIZE);
 
 #ifdef BALL_USE_GLEW
-	glewInit();
-	// accelerate lighting calculations, if possible:
-	if (isExtensionSupported("GL_EXT_rescale_normal"))
-	{
-		// workaround for some Radeon cards and Mesa:
-		String renderer = getRenderer();
-		if (!renderer.hasSubstring("Mesa") ||
-				!renderer.hasSubstring("Radeon"))
-		{
-			glEnable(GL_RESCALE_NORMAL);
-		}
-	}
+			glewInit();
+			// accelerate lighting calculations, if possible:
+			if (isExtensionSupported("GL_EXT_rescale_normal"))
+			{
+				// workaround for some Radeon cards and Mesa:
+				String renderer = getRenderer();
+				if (!renderer.hasSubstring("Mesa") ||
+						!renderer.hasSubstring("Radeon"))
+				{
+					glEnable(GL_RESCALE_NORMAL);
+				}
+			}
 #endif
 
-	glFrontFace(GL_CCW);     // selects counterclockwise polygons as front-facing
-	glCullFace(GL_BACK);     // specify whether front- or back-facing facets can be culled
+			glFrontFace(GL_CCW);     // selects counterclockwise polygons as front-facing
+			glCullFace(GL_BACK);		 // specify whether front- or back-facing facets can be culled
 
-	glDisable(GL_FOG);
+			// Force OpenGL to normalize transformed normals to be of unit 
+			// length before using the normals in OpenGL's lighting equations
+			// While this corrects potential lighting problems introduced by scaling, 
+			// it also slows OpenGL's vertex processing speed since normalization requires extra operations.
+			glDisable(GL_FOG);
+			
+			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, false);
 
-	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, false);
+			// Specifies the depth comparison function:
+			// Passes if the incoming z value is greater than  or equal to the stored z value
+			glDepthFunc(GL_LEQUAL);
 
-	// Specifies the depth comparison function:
-	// Passes if the incoming z value is greater than  or equal to the stored z value
-	glDepthFunc(GL_LEQUAL);
+			// specify the clear value for the depth buffer 
+			glClearDepth(200.0);
 
-	// specify the clear value for the depth buffer
-	glClearDepth(200.0);
+			setAntialiasing(true);
 
-	setAntialiasing(true);
+			glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+			// select smooth shading 
+			glShadeModel(GL_SMOOTH);
 
-	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-	// select smooth shading
-	glShadeModel(GL_SMOOTH);
+			// is problematic on some machines and should not be used:
+			glDisable(GL_POLYGON_SMOOTH);
+			// glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
-	// is problematic on some machines and should not be used:
-	glDisable(GL_POLYGON_SMOOTH);
-	// glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+			glBlendFunc(GL_SRC_ALPHA,  GL_ONE_MINUS_SRC_ALPHA);
 
-	glBlendFunc(GL_SRC_ALPHA,  GL_ONE_MINUS_SRC_ALPHA);
+			// setup all in the stage given lightsources
+			setSize(width, height);
+			setLights();
+			glEnable(GL_LIGHTING);
 
-	// setup all in the stage given lightsources
-	setSize(width, height);
-	setLights();
-	glEnable(GL_LIGHTING);
+			// set the background color according to the stage
+			updateBackgroundColor();
 
-	// set the background color according to the stage
-	updateBackgroundColor();
+			glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+			glEnable(GL_COLOR_MATERIAL);
+			
+			GLfloat diff[] = {0.4, 0.4, 0.4, 1.0};
+			GLfloat shin[] = {76.8};
+			GLfloat spec[] = {0.774597, 0.774597, 0.774597, 1.0};
+			GLfloat ambient[] = {0.25, 0.25, 0.25, 1.0};
 
-	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-	glEnable(GL_COLOR_MATERIAL);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  spec);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shin );
+			glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,  diff);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,  ambient);
 
-	GLfloat diff[] = {0.4, 0.4, 0.4, 1.0};
-	GLfloat shin[] = {76.8};
-	GLfloat spec[] = {0.774597, 0.774597, 0.774597, 1.0};
-	GLfloat ambient[] = {0.25, 0.25, 0.25, 1.0};
+			// if displaylists were already calculated, return
+			if (GL_spheres_list_ != 0) return true;
 
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  spec);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shin );
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,  diff);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,  ambient);
+			initSolid();
 
-	// if displaylists were already calculated, return
-	if (GL_spheres_list_ != 0) return true;
+			GL_spheres_list_ = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
+			GL_tubes_list_   = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
+			GL_boxes_list_   = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
 
-	initSolid();
+			GLU_quadric_obj_ = gluNewQuadric();
+			gluQuadricOrientation(GLU_quadric_obj_, GLU_OUTSIDE);
+			gluQuadricNormals(GLU_quadric_obj_, GLU_SMOOTH); //GLU_FLAT GLU_SMOOTH
+			gluQuadricTexture(GLU_quadric_obj_, GL_FALSE);
+			gluQuadricDrawStyle(GLU_quadric_obj_, GLU_FILL);
 
-	GL_spheres_list_ = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
-	GL_tubes_list_   = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
-	GL_boxes_list_   = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
+			createSpheres_();
+			createTubes_();
+			createBoxes_();
 
-	GLU_quadric_obj_ = gluNewQuadric();
-	gluQuadricOrientation(GLU_quadric_obj_, GLU_OUTSIDE);
-	gluQuadricNormals(GLU_quadric_obj_, GLU_SMOOTH); //GLU_FLAT GLU_SMOOTH
-	gluQuadricTexture(GLU_quadric_obj_, GL_FALSE);
-	gluQuadricDrawStyle(GLU_quadric_obj_, GLU_FILL);
+			//////////////////////////////////////////////////////
+			// toon shader:
+			// first entries: greatest angle between normal and light vector
+			float shader[32] = { 0.2, 0.21, 0.23, 0.25, 0.27, 0.29, 0.31, 0.33, 0.36, 0.39, 0.41, 0.4, 0.44, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
 
-	createSpheres_();
-	createTubes_();
-	createBoxes_();
+			float cel_shader_data[32][3];
 
-	//////////////////////////////////////////////////////
-	// toon shader:
-	// first entries: greatest angle between normal and light vector
-	float shader[32] = { 0.2, 0.21, 0.23, 0.25, 0.27, 0.29, 0.31, 0.33, 0.36, 0.39, 0.41, 0.4, 0.44, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
-
-	float cel_shader_data[32][3];
-
-	for (Position p = 0; p < 32; p++)
-	{
-		cel_shader_data[p][0] =
-		cel_shader_data[p][1] =
-		cel_shader_data[p][2] = shader[p];
-	}
-
-	glEnable(GL_TEXTURE_1D);
-	glGenTextures(1, &cel_texture_);
-	glBindTexture(GL_TEXTURE_1D, cel_texture_);
-	glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB, 32, 0, GL_RGB , GL_FLOAT, cel_shader_data);
-	glBindTexture(GL_TEXTURE_1D, 0);
-
-	//////////////////////////////////////////////////////
-
-	// display list for illuminated lines
-	generateIlluminationTexture_(0.1, 0.3, 0.599, 0.5);
-	line_list_.clear();
-	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-	glGenTextures(1, &line_texture_bind_);
-	glBindTexture(GL_TEXTURE_2D, line_texture_bind_);
-	glTexImage2D(GL_TEXTURE_2D, 0, 4, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, line_tex_);
-
-	line_list_.useCompileMode();
-	line_list_.startDefinition();
-
-	glBindTexture(GL_TEXTURE_2D, line_texture_bind_);
-
-	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP );
-	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP );
-	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-	glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-	glEnable( GL_TEXTURE_2D );
-
-	// glEnable( GL_LINE_SMOOTH );
-	glEnable( GL_BLEND );
-//         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-	// glHint( GL_LINE_SMOOTH_HINT, GL_DONT_CARE );
-
-	line_list_.endDefinition();
-
-	initSolid();
-	updateCamera();
-
-	return true;
-}
-
-
-void GLRenderer::updateBackgroundColor()
-	throw()
-{
-	glClearColor((float) stage_->getBackgroundColor().getRed(),
-	             (float) stage_->getBackgroundColor().getGreen(),
-	             (float) stage_->getBackgroundColor().getBlue(),
-	             (float) stage_->getBackgroundColor().getAlpha());
-}
-
-void GLRenderer::setLights(bool reset_all)
-	throw()
-{
-	GLenum light_nr = GL_LIGHT0;
-
-	if (reset_all)
-	{
-		GLint lights_max;
-		glGetIntegerv(GL_MAX_LIGHTS, &lights_max);
-		for (; (GLint)light_nr < GL_LIGHT0 + lights_max; light_nr++)
-		{
-			glDisable(light_nr);
-		}
-
-		light_nr = GL_LIGHT0;
-	}
-
-	List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
-	for (; it != stage_->getLightSources().end(); it++)
-	{
-		if (reset_all && !it->isRelativeToCamera())
-		{
-			continue;
-		}
-
-		// setup the light intensity
-		GLfloat intensity[] = {((float) it->getColor().getRed())   * it->getIntensity(),
-		                       ((float) it->getColor().getGreen()) * it->getIntensity(),
-		                       ((float) it->getColor().getBlue())  * it->getIntensity(),
-		                       ((float) it->getColor().getAlpha())};
-
-		GLfloat zero[] = {0, 0, 0, 0};
-
-		if (it->getType() == LightSource::AMBIENT)
-		{
-			glLightfv(light_nr, GL_AMBIENT, intensity);
-			glLightfv(light_nr, GL_DIFFUSE, zero);
-			glLightfv(light_nr, GL_SPECULAR, zero);
-			glEnable(light_nr);
-			light_nr++;
-			continue;
-		}
-
-		glLightfv(light_nr, GL_AMBIENT, zero);
-		glLightfv(light_nr, GL_DIFFUSE, intensity);
-		glLightfv(light_nr, GL_SPECULAR, intensity);
-
-		Vector3 light_dir;
-
-		if (it->getType() == LightSource::DIRECTIONAL)
-		{
-			// directional light sources dont have a position!
-			// but they get their direction with GL_POSITION!
-			light_dir = -it->getDirection();
-			if (it->isRelativeToCamera())
+			for (Position p = 0; p < 32; p++)
 			{
-				light_dir = stage_->calculateAbsoluteCoordinates(light_dir);
+				cel_shader_data[p][0] = 
+				cel_shader_data[p][1] = 
+				cel_shader_data[p][2] = shader[p];
 			}
 
-			GLfloat pos[]  = { light_dir.x,
-			                   light_dir.y,
-			                   light_dir.z,
-			                   0.0};  // the 1 is for positional lights
+			glEnable(GL_TEXTURE_1D);
+			glGenTextures(1, &cel_texture_);		
+			glBindTexture(GL_TEXTURE_1D, cel_texture_);	
+			glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB, 32, 0, GL_RGB , GL_FLOAT, cel_shader_data);
+			glBindTexture(GL_TEXTURE_1D, 0);	
 
-			glLightfv(light_nr, GL_POSITION, pos);	
-			glEnable(light_nr);
-			light_nr++;
-			continue;
-		}
+			//////////////////////////////////////////////////////
 
-		Vector3 light_pos;
+			// display list for illuminated lines
+			generateIlluminationTexture_(0.1, 0.3, 0.599, 0.5);
+			line_list_.clear();
+			glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+			glGenTextures(1, &line_texture_bind_);
+			glBindTexture(GL_TEXTURE_2D, line_texture_bind_); 
+			glTexImage2D(GL_TEXTURE_2D, 0, 4, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, line_tex_);
 
-		if (it->isRelativeToCamera())
-		{
-			light_pos = stage_->calculateAbsoluteCoordinates(it->getPosition()) + stage_->getCamera().getViewPoint();
-			light_dir = stage_->calculateAbsoluteCoordinates(it->getDirection());
-		}
-		else
-		{
-			light_pos = it->getPosition();
-			light_dir = it->getDirection() - light_pos;
-		}
+			line_list_.useCompileMode();
+			line_list_.startDefinition();
 
-		// setup the direction of the light
-		GLfloat dir[] = { light_dir.x,
-		                  light_dir.y,
-		                  light_dir.z};
-		glLightfv(light_nr, GL_SPOT_DIRECTION, dir);
-
-		// setup the angle of the light cone
-		GLfloat angle = 180;
-		if (it->getAngle().toDegree() <= 90)
-		{
-			angle = it->getAngle().toDegree();
-		}
-
-		glLightfv(light_nr, GL_SPOT_CUTOFF, &angle);
-		glLightf(light_nr, GL_SPOT_EXPONENT, (GLfloat) 100);
-
-		// setup the position of the lightsource
-		GLfloat pos[]  = { light_pos.x,
-		                   light_pos.y,
-		                   light_pos.z,
-		                   1.0};  // the 1 is for positional lights
-
-		glLightfv(light_nr, GL_POSITION, pos);
-	
-		Vector3 att =  it->getAttenuation();
-		glLightf(light_nr, GL_CONSTANT_ATTENUATION, att.x);
-		glLightf(light_nr, GL_LINEAR_ATTENUATION, att.y);
-		glLightf(light_nr, GL_QUADRATIC_ATTENUATION, att.z);
+			glBindTexture(GL_TEXTURE_2D, line_texture_bind_);
 			
-		glEnable(light_nr);
-		light_nr++;
-	}
-}
+			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP );
+			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP );
+			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+			glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+			glEnable( GL_TEXTURE_2D );
+
+			// glEnable( GL_LINE_SMOOTH );
+			glEnable( GL_BLEND );
+		//         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );    
+			// glHint( GL_LINE_SMOOTH_HINT, GL_DONT_CARE );
+
+			line_list_.endDefinition();
+
+			initSolid();
+			updateCamera();
+
+			return true;
+		}
 
 
-void GLRenderer::removeRepresentation(const Representation& rep)
-	throw()
-{
-	if (!getMainControl()->getRepresentationManager().has(rep)) return;
+		void GLRenderer::updateBackgroundColor() 
+			throw()
+		{
+			glClearColor((float) stage_->getBackgroundColor().getRed(),
+									 (float) stage_->getBackgroundColor().getGreen(),
+									 (float) stage_->getBackgroundColor().getBlue(),
+									 (float) stage_->getBackgroundColor().getAlpha());
+		}
+			
+		void GLRenderer::setLights(bool reset_all)
+			throw()
+		{
+			GLenum light_nr = GL_LIGHT0;
 
-	if (rep.getGeometricObjects().size() == 0) return;
+			if (reset_all)
+			{
+				GLint lights_max;
+				glGetIntegerv(GL_MAX_LIGHTS, &lights_max);
+				for (; (GLint)light_nr < GL_LIGHT0 + lights_max; light_nr++)
+				{
+					glDisable(light_nr);
+				}
+				
+				light_nr = GL_LIGHT0;
+			}
 
-	if (vertexBuffersEnabled())
-	{
-		clearVertexBuffersFor(*(Representation*)&rep);
-	}
+			List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
+			for (; it != stage_->getLightSources().end(); it++)
+			{
+				if (reset_all && !it->isRelativeToCamera())
+				{
+					continue;
+				}
+				
+				// setup the light intensity
+				GLfloat intensity[] = {((float) it->getColor().getRed()) 		* it->getIntensity(),
+															( (float) it->getColor().getGreen()) 	* it->getIntensity(),
+															( (float) it->getColor().getBlue())		* it->getIntensity(),
+															( (float) it->getColor().getAlpha())};
 
-	DisplayListHashMap::Iterator hit = display_lists_.find(&rep);
-	if (hit == display_lists_.end()) return;
+				GLfloat zero[] = {0, 0, 0, 0};
 
-	delete hit->second;
-	display_lists_.erase(hit);
-}
+				if (it->getType() == LightSource::AMBIENT)
+				{
+					glLightfv(light_nr, GL_AMBIENT, intensity);
+					glLightfv(light_nr, GL_DIFFUSE, zero);
+					glLightfv(light_nr, GL_SPECULAR, zero);
+					glEnable(light_nr);
+					light_nr++;
+					continue;
+				}
+				
+				glLightfv(light_nr, GL_AMBIENT, zero);
+				glLightfv(light_nr, GL_DIFFUSE, intensity);
+				glLightfv(light_nr, GL_SPECULAR, intensity);
 
-void GLRenderer::bufferRepresentation(const Representation& rep)
-	throw()
-{
+				Vector3 light_dir;
+
+				if (it->getType() == LightSource::DIRECTIONAL)
+				{
+					// directional light sources dont have a position!
+					// but they get their direction with GL_POSITION!
+					light_dir = -it->getDirection();
+					if (it->isRelativeToCamera())
+					{
+						light_dir = stage_->calculateAbsoluteCoordinates(light_dir);
+					}
+
+					GLfloat pos[]  = { light_dir.x,
+														 light_dir.y,
+														 light_dir.z,
+														 0.0};  // the 1 is for positional lights
+
+					glLightfv(light_nr, GL_POSITION, pos);	
+					glEnable(light_nr);
+					light_nr++;
+					continue;
+				}
+
+				Vector3 light_pos;
+
+				if (it->isRelativeToCamera())
+				{
+					light_pos = stage_->calculateAbsoluteCoordinates(it->getPosition()) + stage_->getCamera().getViewPoint();
+					light_dir = stage_->calculateAbsoluteCoordinates(it->getDirection());
+				}
+				else
+				{
+					light_pos = it->getPosition();
+					light_dir = it->getDirection() - light_pos;
+				}
+				
+				// setup the direction of the light
+				GLfloat dir[] = { light_dir.x,
+													light_dir.y,
+													light_dir.z};
+				glLightfv(light_nr, GL_SPOT_DIRECTION, dir);
+
+				// setup the angle of the light cone
+				GLfloat angle = 180;
+				if (it->getAngle().toDegree() <= 90)
+				{
+					angle = it->getAngle().toDegree();
+				}
+				
+				glLightfv(light_nr, GL_SPOT_CUTOFF, &angle);
+				glLightf(light_nr, GL_SPOT_EXPONENT, (GLfloat) 100);
+
+				// setup the position of the lightsource
+				GLfloat pos[]  = { light_pos.x,
+													 light_pos.y,
+													 light_pos.z,
+													 1.0};  // the 1 is for positional lights
+
+				glLightfv(light_nr, GL_POSITION, pos);
+			
+				Vector3 att =  it->getAttenuation();
+				glLightf(light_nr, GL_CONSTANT_ATTENUATION, att.x);
+				glLightf(light_nr, GL_LINEAR_ATTENUATION, att.y);
+				glLightf(light_nr, GL_QUADRATIC_ATTENUATION, att.z);
+					
+				glEnable(light_nr);
+				light_nr++;
+			}
+		}
+
+		void GLRenderer::removeRepresentation(const Representation& rep)
+			throw()
+		{
+			if (!getMainControl()->getRepresentationManager().has(rep)) return;
+
+			if (rep.getGeometricObjects().size() == 0) return;
+
+			if (vertexBuffersEnabled())
+			{
+				clearVertexBuffersFor(*(Representation*)&rep);
+			}
+
+			DisplayListHashMap::Iterator hit = display_lists_.find(&rep);
+			if (hit == display_lists_.end()) return;
+
+			delete hit->second;
+			display_lists_.erase(hit);
+		}
+
+		void GLRenderer::bufferRepresentation(const Representation& rep)
+			throw()
+		{
 #ifdef BALL_BENCHMARKING
-	Timer t;
-	t.start();
+			Timer t;
+			t.start();
 #endif
-	GLDisplayList* display_list;
-	if (display_lists_.has(&rep))
-	{
-		display_list = display_lists_[&rep];
-		display_list->clear();
-	}
-	else
-	{
-		display_list = new GLDisplayList;
-		display_lists_[&rep] = display_list;
-	}
+			GLDisplayList* display_list;
+			if (display_lists_.has(&rep))
+			{
+				display_list = display_lists_[&rep];
+				display_list->clear();
+			}
+			else
+			{
+				display_list = new GLDisplayList;
+				display_lists_[&rep] = display_list;
+			}
 
-	display_list->useCompileMode();
-	display_list->startDefinition();
-
-	render(rep, true);
-
-	display_list->endDefinition();
+			display_list->useCompileMode();
+			display_list->startDefinition();
+			
+			render(rep, true);
+			
+			display_list->endDefinition();
 
 #ifdef BALL_USE_GLEW
-	clearVertexBuffersFor(*(Representation*)&rep);
-
-	if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
-	{
-		// prevent copying the pointers of the buffers later...
-		rep_to_buffers_[&rep] = vector<MeshBuffer*>();
-
-		vector<MeshBuffer*>& buffers = rep_to_buffers_.find(&rep)->second;
-
-		const List<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
-		List<GeometricObject*>::ConstIterator git = geometric_objects.begin();
-		for (; git != geometric_objects.end(); git++)
-		{
-			const Mesh* const mesh = dynamic_cast<Mesh*>(*git);
-			if (mesh != 0)
+			clearVertexBuffersFor(*(Representation*)&rep);
+			
+			if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
 			{
-				MeshBuffer* buffer = new MeshBuffer;
-				buffer->setMesh(*mesh);
-				buffer->initialize();
-				buffers.push_back(buffer);
+				// prevent copying the pointers of the buffers later...
+				rep_to_buffers_[&rep] = vector<MeshBuffer*>();
+				
+				vector<MeshBuffer*>& buffers = rep_to_buffers_.find(&rep)->second;
+
+				const List<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
+				List<GeometricObject*>::ConstIterator git = geometric_objects.begin();
+				for (; git != geometric_objects.end(); git++)
+				{
+					const Mesh* const mesh = dynamic_cast<Mesh*>(*git);
+					if (mesh != 0) 
+					{
+						MeshBuffer* buffer = new MeshBuffer;
+						buffer->setMesh(*mesh);
+						buffer->initialize();
+						buffers.push_back(buffer);
+					}
+				}
 			}
-		}
-	}
 #endif
 
 #ifdef BALL_BENCHMARKING
-t.stop();
-logString("OpenGL rendering time: " + String(t.getCPUTime()));
+		t.stop();
+		logString("OpenGL rendering time: " + String(t.getCPUTime()));
 #endif
-}
+		}
 
-
-bool GLRenderer::render(const Representation& representation, bool for_display_list)
-	throw()
-{
-	if (representation.isHidden()) return true;
-
-	if (!representation.isValid())
-	{
-		BALLVIEW_DEBUG;
-		representation.dump(std::cout, 0);
-		return false;
-	}
-
-	drawing_precision_  = representation.getDrawingPrecision();
-	drawing_mode_ 		  = representation.getDrawingMode();
-
-	drawed_mesh_ = false;
-	drawed_other_object_ = false;
-
-	display_lists_index_ = drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + drawing_precision_;
-
-	if (representation.getDrawingMode() == DRAWING_MODE_DOTS)
-	{
-		glDisable(GL_LIGHTING);
-	}
-	else
-	{
-		glEnable(GL_LIGHTING);
-	}
-
-	if (representation.hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
-	{
-		initAlwaysFront();
-	}
-	else if (representation.getTransparency() == 0)
-	{
-		initSolid();
-	}
-	else
-	{
-		if (!representation.hasProperty("DONT_CLIP"))
+		// TODO: do we need the mode???
+		void GLRenderer::renderToBuffer(RenderTarget* renderTarget, BufferMode mode)
 		{
-			// prevent artifacts:
-			// first run to fill depth buffer
-			initTransparent();
+			if (show_preview_)
+				setAntialiasing(false);
+
 			glDepthMask(GL_TRUE);
-			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+
+			glDrawBuffer(GL_BACK);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			RepresentationManager& pm = getMainControl()->getRepresentationManager();
+
+			// ============== enable active Clipping planes ==============================
+			GLint current_clipping_plane = GL_CLIP_PLANE0;
+
+			vector<ClippingPlane*> active_planes;
+			vector<ClippingPlane*> inactive_planes;
+
+			bool move_mode = scene_->inMoveMode();
+			
+			const vector<ClippingPlane*>& vc = pm.getClippingPlanes();
+			vector<ClippingPlane*>::const_iterator plane_it = vc.begin();
+			for (;plane_it != vc.end(); plane_it++)
+			{
+				ClippingPlane& plane = **plane_it;
+
+				if (plane.isHidden()) continue;
+
+				if (!plane.isActive()) 
+				{
+					inactive_planes.push_back(*plane_it);
+					if (!move_mode) continue;
+				}
+
+				active_planes.push_back(*plane_it);
+
+				const Vector3& n(plane.getNormal());
+				const GLdouble planef[] ={n.x, n.y, n.z, plane.getDistance()};
+				glClipPlane(current_clipping_plane, planef);
+				current_clipping_plane++;
+			}
+
+			// -------------------------------------------------------------------
+			// show light sources
+			if (show_light_sources_)
+			{
+				List<LightSource>::ConstIterator lit = stage_->getLightSources().begin();
+				for (; lit != stage_->getLightSources().end(); lit++)
+				{
+					Vector3 pos = (*lit).getPosition();
+					Vector3 dir = (*lit).getDirection();
+
+					if ((*lit).isRelativeToCamera())
+					{
+						pos = stage_->getCamera().getViewPoint() + stage_->calculateAbsoluteCoordinates(pos);
+						dir = pos + stage_->calculateAbsoluteCoordinates(dir);
+					}
+
+					Vector3 diff = dir - pos;
+					if (!Maths::isZero(diff.getSquareLength())) diff.normalize();
+					diff *= 100.0;
+
+					Sphere s;
+					s.setPosition(pos);
+					s.setRadius(5);
+					s.setColor(ColorRGBA(255,255,255));
+					renderSphere_(s);
+
+					Tube t;
+					t.setVertex1(pos);
+					t.setVertex2(pos + diff);
+					t.setColor(ColorRGBA(255,255,255));
+					renderTube_(t);
+				}
+			}
+			// -------------------------------------------------------------------
+			
+			
+			// we draw all the representations in different runs, 
+			// 1. normal reps
+			// 2. transparent reps
+			// 3. allways front
+			for (Position run = 0; run < 3; run++)
+			{
+				if (run == 1)
+				{
+					// render inactive clipping planes
+					for (plane_it = inactive_planes.begin(); plane_it != inactive_planes.end(); plane_it++)
+					{
+						renderClippingPlane_(**plane_it);
+					}
+				}
+
+				RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+				for(; it != pm.getRepresentations().end(); it++)
+				{
+					Representation& rep = **it;
+					if (rep.isHidden()) continue;
+
+					if (run == 0)
+					{
+						// render all "normal" (non always front and non transparent models)
+						if (!rep.hasProperty("DONT_CLIP") && (
+								rep.getTransparency() != 0 ||
+								rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT)))
+						{
+							continue;
+						}
+					}
+					else if (run == 1)
+					{
+						// render all transparent models
+						if (rep.hasProperty("DONT_CLIP") ||
+								rep.getTransparency() == 0 ||
+								rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
+						{
+							continue;
+						}
+					}
+					else
+					{
+						// render all always front models
+						if (!rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT)) continue;
+					}
+					
+					vector<Position> rep_active_planes; // clipping planes
+
+					Index cap_nr = -1;
+					for (Position plane_nr = 0; plane_nr < active_planes.size(); plane_nr++)
+					{
+						if (!active_planes[plane_nr]->getRepresentations().has(*it)) continue;
+						
+						const ClippingPlane& plane = *active_planes[plane_nr];
+						rep_active_planes.push_back(plane_nr);
+						if (!plane.cappingEnabled())
+						{
+							glEnable(plane_nr + GL_CLIP_PLANE0);
+							continue;
+						}
+
+						cap_nr = plane_nr;
+					}
+
+					// no capping? then we are done: disable again all clipping planes
+					if (cap_nr == -1)
+					{
+						bufferingDependentRender_(rep, mode);
+
+						for (Position p = 0; p < rep_active_planes.size(); p++)
+						{
+							glDisable(rep_active_planes[p] + GL_CLIP_PLANE0);
+						}
+						continue;
+					}
+
+					// draw a capping plane
+ 					const ClippingPlane& plane = *active_planes[cap_nr];
+					Vector3 p, x, y, n;
+					p = plane.getPoint();
+					x = getNormal(plane.getNormal()) * 400;
+					y = x % plane.getNormal() * 400;
+ 					n = plane.getNormal();
+					n.normalize();
+					
+					// disable all clipping planes
+					for (Position p = 0; p < rep_active_planes.size(); p++)
+					{
+						glDisable(rep_active_planes[p] + GL_CLIP_PLANE0);
+					}
+
+					// fill the stencil buffer
+					glEnable(cap_nr + GL_CLIP_PLANE0);
+					glEnable(GL_STENCIL_TEST);
+					glClearStencil(0);
+					glClear(GL_STENCIL_BUFFER_BIT);
+					glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+					glStencilFunc(GL_ALWAYS, 0x0, 0xff);
+					glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
+					bufferingDependentRender_(rep, mode);
+					
+					// disable all clipping planes
+					for (Position p = 0; p < rep_active_planes.size(); p++)
+					{
+						glEnable(rep_active_planes[p] + GL_CLIP_PLANE0);
+					}
+
+					// render the Representation once again, this time with colors
+					setColorRGBA_(ColorRGBA(0,1.0,0));
+					glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+					glDisable(GL_STENCIL_TEST);
+					bufferingDependentRender_(rep, mode);
+
+					// render the capping plane
+					glEnable(GL_STENCIL_TEST);
+					glStencilFunc(GL_NOTEQUAL, 0x0, 0xff);
+
+					ColorRGBA color = ClippingPlane::getCappingColor();
+					bool transparent = (int)color.getAlpha() != 255;
+					if (transparent) initTransparent();
+					else 						 initSolid();
+
+					glDisable(cap_nr + GL_CLIP_PLANE0);
+					Disc d(Circle3(p, n, 400));
+					d.setColor(color);
+					render_(&d);
+					
+					glDisable(GL_STENCIL_TEST);
+				}
+			}
+
+			// TODO: what do we do with *that*????
+			/**
+			if (text_ != "")
+			{
+				ColorRGBA c = stage_->getBackgroundColor().getInverseColor();
+				QFont font;
+				font.setPixelSize(font_size_);
+				font.setBold(true);
+				glDisable(GL_LIGHTING);
+				setColorRGBA_(c);
+				QFontMetrics fm(font);
+				QRect r = fm.boundingRect(text_.c_str());
+				renderText(width() -  (20 + r.width()), 
+									 height() - (r.height() - 5),
+									 text_.c_str(), font);
+				glEnable(GL_LIGHTING);
+			}
+			**/
+
+			if (show_preview_) 
+				setAntialiasing(true);
+
+			return;
+		}
+
+		void GLRenderer::bufferingDependentRender_(const Representation& repr, BufferMode mode)
+		{
+			RepresentationManager& pm = getMainControl()->getRepresentationManager();
+			Representation* rep = (Representation*)& repr;
+
+			// preview mode:
+			// if we have a model with only sticks and cylinders, decrease the rendering detail
+			// and draw it directly instead of using display lists.
+			// BUT: if the representation is currently rebuild, we can only draw buffered!
+			DrawingPrecision pbak = repr.getDrawingPrecision();
+
+			if (show_preview_)
+			{
+				if (repr.getModelType() >= MODEL_STICK &&
+						repr.getModelType() <= MODEL_VDW &&
+						pm.startRendering(rep))
+				{
+					rep->setDrawingPrecision(DRAWING_PRECISION_LOW);
+					mode = DIRECT_RENDERING;
+				}
+			}
+
+			if (mode == DISPLAY_LISTS_RENDERING &&
+					!repr.hasProperty("RENDER_DIRECT") && 
+					repr.getDrawingMode() != DRAWING_MODE_TOON)
+			{
+				drawBuffered(repr);
+				return;
+			}
+
+			if (!show_preview_) 
+			{
+				// if we use previewing mode, the RepresentationManager was already notified above
+				if (!pm.startRendering(rep))
+				{
+					// if Representation is to be rebuilded, but it is currently recalculated,
+					// we can only draw it from the DisplayList
+					drawBuffered(repr);
+					return;
+				}
+			}
+
+			if (mode == REBUILD_DISPLAY_LISTS)
+			{
+				bufferRepresentation(repr);
+			}
+			else //	DIRECT_RENDERING:
+			{
+				render(repr);
+			}
+
+			if (show_preview_)
+			{
+				if (repr.getDrawingPrecision() != pbak)
+				{
+					// if previewing mode was used: reset the drawing precision
+					(*(Representation*)&repr).setDrawingPrecision(pbak);
+				}
+			}
+
+			pm.finishedRendering(rep);
+		}
+
+
+		bool GLRenderer::render(const Representation& representation, bool for_display_list)
+			throw()
+		{
+			if (representation.isHidden()) return true;
+
+			if (!representation.isValid())
+			{
+				BALLVIEW_DEBUG;
+				representation.dump(std::cout, 0);
+				return false;
+			}
+
+			drawing_precision_  = representation.getDrawingPrecision();
+			drawing_mode_ 		  = representation.getDrawingMode();
+
+			drawed_mesh_ = false;
+			drawed_other_object_ = false;
+
+			display_lists_index_ = drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + drawing_precision_;
+
+			if (representation.getDrawingMode() == DRAWING_MODE_DOTS)
+			{
+				glDisable(GL_LIGHTING);
+			}
+			else
+			{
+				glEnable(GL_LIGHTING);
+			}
+
+			if (representation.hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
+			{
+				initAlwaysFront();
+			}
+			else if (representation.getTransparency() == 0)
+			{
+				initSolid();
+			}
+			else
+			{
+				if (!representation.hasProperty("DONT_CLIP"))
+				{
+					// prevent artifacts:
+					// first run to fill depth buffer
+					initTransparent();
+					glDepthMask(GL_TRUE);
+					glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+					renderRepresentation_(representation, for_display_list);
+
+					// options for second run 
+					glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+				}
+				initTransparent();
+			}
+
 			renderRepresentation_(representation, for_display_list);
+			glFlush();
 
-			// options for second run
-			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+			return true;
 		}
-		initTransparent();
-	}
 
-	renderRepresentation_(representation, for_display_list);
-	glFlush();
-
-	return true;
-}
-
-void GLRenderer::renderRepresentation_(const Representation& representation, bool for_display_list)
-{
-	model_type_ = representation.getModelType();
-
-	// accelerate things a little by calling getGeometricObjects() only once
-	const List<GeometricObject*>& geometric_objects = representation.getGeometricObjects();
-	if (geometric_objects.size() == 0) return;
-	List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
-	if (for_display_list)
-	{
-		if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
+		void GLRenderer::renderRepresentation_(const Representation& representation, bool for_display_list)
 		{
-			// draw everything except of meshes, these are put into vertex buffer objects in bufferRepresentation()
-			for (; it != geometric_objects.end(); it++)
+			model_type_ = representation.getModelType();
+
+			// accelerate things a little by calling getGeometricObjects() only once
+			const List<GeometricObject*>& geometric_objects = representation.getGeometricObjects();
+			if (geometric_objects.size() == 0) return;
+			List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
+			if (for_display_list)
 			{
-				if (dynamic_cast<Mesh*>(*it) == 0) render_(*it);
+				if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
+				{
+					// draw everything except of meshes, these are put into vertex buffer objects in bufferRepresentation()
+					for (; it != geometric_objects.end(); it++)
+					{
+						if (dynamic_cast<Mesh*>(*it) == 0) render_(*it);
+					}
+				}
+				else
+				{
+					// render everything
+					for (; it != geometric_objects.end(); it++)
+					{
+						render_(*it);
+					}
+				}
 			}
-		}
-		else
-		{
-			// render everything
-			for (; it != geometric_objects.end(); it++)
+			else // drawing for picking directly
 			{
-				render_(*it);
+				for (; it != geometric_objects.end(); it++)
+				{
+					// render everything with names from glLoadName
+					glLoadName(getName(**it));
+					render_(*it);
+				}
 			}
-		}
-	}
-	else // drawing for picking directly
-	{
-		for (; it != geometric_objects.end(); it++)
-		{
-			// render everything with names from glLoadName
-			glLoadName(getName(**it));
-			render_(*it);
-		}
-	}
 
-	glFlush();
-}
+			glFlush();
+		}
 
 void GLRenderer::dump(std::ostream& s, Size depth) const
 	throw()

@@ -455,7 +455,7 @@ void EditableScene::mouseMoveEvent(QMouseEvent *e)
 
 	// paint the line representing the offered bond
 	draw_line_ = true;
-	update(false);
+	updateGL();
 
 	x_window_pos_old_ = x_window_pos_new_;
 	y_window_pos_old_ = y_window_pos_new_;
@@ -681,7 +681,7 @@ void EditableScene::getClickedItems_(int x, int y)
 	List<GeometricObject*> objects;
 	gl_renderer_->pickObjects1((Position) p.x(), (Position) p.y(), 
 														(Position) p.x(), (Position) p.y());
-	renderView_(DIRECT_RENDERING);
+	gl_renderer_->renderToBuffer(this, GLRenderer::DIRECT_RENDERING);
 	gl_renderer_->pickObjects2(objects);
 
 	if (objects.size() > 0)

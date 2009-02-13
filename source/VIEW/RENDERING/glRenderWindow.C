@@ -30,6 +30,8 @@ namespace BALL
 				FB_INTERNAL_TEXTURE_FORMAT(GL_RGB)
 		{		
 			m_screenTexID = 0;
+			// we will swap buffers manually in the scene for synchronization
+			setAutoBufferSwap(false);
 		}
 
 		GLRenderWindow::GLRenderWindow(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
@@ -43,6 +45,8 @@ namespace BALL
 			{
 				Log.error() << "QGLWidget is not valid in Scene!" << std::endl;
 			}
+			// we will swap buffers manually in the scene for synchronization
+			setAutoBufferSwap(false);
 		}
 
 		GLRenderWindow::GLRenderWindow(const GLRenderWindow& window, QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
@@ -52,6 +56,8 @@ namespace BALL
 				FB_TEXTURE_TARGET(GL_TEXTURE_2D),
 				FB_INTERNAL_TEXTURE_FORMAT(GL_RGB)
 		{
+			// we will swap buffers manually in the scene for synchronization
+			setAutoBufferSwap(false);
 		}
 
 		GLRenderWindow::~GLRenderWindow()
@@ -100,48 +106,61 @@ namespace BALL
 
 		void GLRenderWindow::refresh()
 		{			
-            RenderWindow::refresh();
+			RenderWindow::refresh();
 
 			glPushAttrib(GL_TEXTURE_BIT);
 			glPushAttrib(GL_DEPTH_BUFFER_BIT);
 
-				glBindTexture(FB_TEXTURE_TARGET, m_screenTexID);
-				glTexSubImage2D(FB_TEXTURE_TARGET, 0, 0, 0, m_fmt.getWidth(), m_fmt.getHeight(), 
-								FB_TEXTURE_FORMAT, FB_TEXTURE_DATATYPE, m_pixels.get());                
-					
-				glEnable(FB_TEXTURE_TARGET);
-				glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-				
-				glDisable(GL_DEPTH_TEST);
-				glMatrixMode(GL_PROJECTION);
-				glPushMatrix();
-					
-					glLoadIdentity();
-					
-					glPushAttrib(GL_VIEWPORT_BIT);
-						glViewport(0, 0, m_fmt.getWidth(), m_fmt.getHeight());
-						float aspectRatio = static_cast<float>(m_fmt.getWidth()) / m_fmt.getHeight();
-						glOrtho(-aspectRatio, aspectRatio, -1.0f, 1.0f, -1.0f, 1.0f);
-						
-						glBegin(GL_QUADS);
-						
-							glTexCoord2f(1.0f, 1.0f);
-							glVertex2f(-aspectRatio, -1.0f);
-							
-							glTexCoord2f(0.0f, 1.0f );
-							glVertex2f(aspectRatio, -1.0f);	
-							
-							glTexCoord2f(0.0f, 0.0f );
-							glVertex2f(aspectRatio, 1.0f);	
-							
-							glTexCoord2f(1.0f, 0.0f);
-							glVertex2f(-aspectRatio, 1.0f);
-					
-							glEnd();
-					glPopAttrib();
-				
-				glPopMatrix();	
-				glMatrixMode(GL_MODELVIEW);				
+			glBindTexture(FB_TEXTURE_TARGET, m_screenTexID);
+			glTexSubImage2D(FB_TEXTURE_TARGET, 0, 0, 0, m_fmt.getWidth(), m_fmt.getHeight(), 
+					FB_TEXTURE_FORMAT, FB_TEXTURE_DATATYPE, m_pixels.get());                
+
+			glEnable(FB_TEXTURE_TARGET);
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+			glDisable(GL_DEPTH_TEST);
+			glMatrixMode(GL_PROJECTION);
+			glPushMatrix();
+
+			glLoadIdentity();
+
+			glPushAttrib(GL_VIEWPORT_BIT);
+			glViewport(0, 0, m_fmt.getWidth(), m_fmt.getHeight());
+			float aspectRatio = static_cast<float>(m_fmt.getWidth()) / m_fmt.getHeight();
+			glOrtho(-aspectRatio, aspectRatio, -1.0f, 1.0f, -1.0f, 1.0f);
+
+			glBegin(GL_QUADS);
+
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex2f(-aspectRatio, -1.0f);
+
+			glTexCoord2f(0.0f, 1.0f );
+			glVertex2f(aspectRatio, -1.0f);	
+
+			glTexCoord2f(0.0f, 0.0f );
+			glVertex2f(aspectRatio, 1.0f);	
+
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex2f(-aspectRatio, 1.0f);
+
+			if (info_text_ != "")
+			{
+				// TODO: this does not seem to work yet!
+				QFont font;
+				font.setPixelSize(16);
+				font.setBold(true);
+				glDisable(GL_LIGHTING);
+				//glColor4ub(info_color_.getRed(), info_color_.getGreen(), info_color_.getBlue(), info_color_.getAlpha());
+				glColor4ub(1, 0, 0, 1);
+				renderText(info_point_.x(), info_point_.y(), info_text_.c_str(), font);
+				glEnable(GL_LIGHTING);
+			}
+
+			glEnd();
+			glPopAttrib();
+
+			glPopMatrix();	
+			glMatrixMode(GL_MODELVIEW);				
 
 			glPopAttrib();
 			glPopAttrib();

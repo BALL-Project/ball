@@ -72,6 +72,7 @@
 
 #endif
 
+
 //#define BALL_BENCHMARKING
 
 
@@ -124,9 +125,7 @@ namespace BALL
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
 				toolbar_(new QToolBar("3D View Controls", this)),
-				mode_group_(new QActionGroup(this)),
-				left_eye_widget_(0),
-				right_eye_widget_(0)
+				mode_group_(new QActionGroup(this))
 		{
 #ifndef ENABLE_RAYTRACING
 			renderers_.push_back(std::pair<Renderer*, GLRenderWindow*>((Renderer*)gl_renderer_, this));
@@ -150,7 +149,6 @@ namespace BALL
 				picking_action_(0),
 				system_origin_(0.0, 0.0, 0.0),
 				need_update_(false),
-				update_running_(false),
 				x_window_pos_old_(0),
 				y_window_pos_old_(0),
 				x_window_pos_new_(0),
@@ -168,17 +166,13 @@ namespace BALL
 				stage_settings_(0),
 				animation_thread_(0),
 				stop_animation_(false),
-				content_changed_(true),
 				want_to_use_vertex_buffer_(false),
 				mouse_button_is_pressed_(false),
 				preview_(false),
 				use_preview_(true),
 				show_fps_(false),
 				toolbar_(new QToolBar("3D View Controls", this)),
-				mode_group_(new QActionGroup(this)),
-				volume_width_(FLT_MAX),
-				left_eye_widget_(0),
-				right_eye_widget_(0)
+				mode_group_(new QActionGroup(this))
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (2) " << this << std::endl;
@@ -215,9 +209,7 @@ namespace BALL
 				animation_thread_(0),
 				stop_animation_(false),
 				toolbar_(new QToolBar("3D View Controls", this)),
-				mode_group_(new QActionGroup(this)),
-				left_eye_widget_(0),
-				right_eye_widget_(0)
+				mode_group_(new QActionGroup(this))
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (3) " << this << std::endl;
@@ -250,9 +242,6 @@ namespace BALL
 
 				for (Position i=0; i<renderers_.size(); ++i)
 					delete renderers_[i].first; // TODO: what do we do with the RenderWindows?
-
-				delete left_eye_widget_;
-				delete right_eye_widget_;
 
 				//rt_renderer_ & rt_render_window are smart pointers
 
@@ -303,23 +292,6 @@ namespace BALL
 
 		// ####################GL, CAMERA############################################
 
-		void Scene::update(bool rebuild_displaylists)
-			throw()
-		{
-			if (update_running_) return;
-			update_running_ = true;
-			if (rebuild_displaylists)
-			{
-				renderView_(REBUILD_DISPLAY_LISTS);
-			}
-
-			//might need some scene refresh in RT
-
-			update_running_ = false;
-			updateGL();
-		}
-
-
 		void Scene::onNotify(Message *message)
 			throw()
 		{
@@ -331,6 +303,8 @@ namespace BALL
 
 			if (RTTI::isKindOf<RepresentationMessage>(*message)) 
 			{
+				bool needs_updategl = true;
+
 				RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
 				Representation* rep = rm->getRepresentation();
 				switch (rm->getType())
@@ -342,6 +316,7 @@ namespace BALL
 						{
 							for (Position i=0; i<renderers_.size(); ++i)
 							{
+								renderers_[i].second->makeCurrent();
 								renderers_[i].first->bufferRepresentation(*rep);
 							}
 
@@ -353,17 +328,22 @@ namespace BALL
 					case RepresentationMessage::REMOVE:
 							for (Position i=0; i<renderers_.size(); ++i)
 							{
+								renderers_[i].second->makeCurrent();
 								renderers_[i].first->removeRepresentation(*rep);
 							}
+						break;
+
+					case RepresentationMessage::FINISHED_UPDATE:
+						needs_updategl = false;
 						break;
 
 					default:
 						break;
 				}
 
-				content_changed_ = true;
+				if (needs_updategl)
+					updateGL();
 
-				update(false);
 				return;
 			}
 
@@ -380,6 +360,7 @@ namespace BALL
 					case DatasetMessage::REMOVE:
 						for (Position i=0; i<renderers_.size(); ++i)
 						{
+							renderers_[i].second->makeCurrent();
 							Renderer* current_renderer = renderers_[i].first;
 
 							if (RTTI::isKindOf<GLRenderer>(*current_renderer))
@@ -391,8 +372,7 @@ namespace BALL
 						return;
 				}
 
-				content_changed_ = true;
-				update(false);
+				updateGL();
 				return;
 			}
 
@@ -404,17 +384,15 @@ namespace BALL
 			switch (scene_message->getType())
 			{
 				case SceneMessage::REDRAW:
-					content_changed_ = true;
-					update(false);
+					updateGL();
 					return;
 
 				case SceneMessage::REBUILD_DISPLAY_LISTS:
-					content_changed_ = true;
-					update(true);
+					// TODO: this needs to a complete rebuffering!!!!
+					updateGL();
 					return;
 
 				case SceneMessage::UPDATE_CAMERA:
-					content_changed_ = true;
 					stage_->getCamera() = scene_message->getStage().getCamera();
 					system_origin_ = scene_message->getStage().getCamera().getLookAtPosition();
 					updateCamera_();
@@ -422,7 +400,6 @@ namespace BALL
 					return;
 
 				case SceneMessage::REMOVE_COORDINATE_SYSTEM:
-					content_changed_ = true;
 					stage_->showCoordinateSystem(false);
 					stage_settings_->updateFromStage();
 					return;
@@ -484,94 +461,137 @@ namespace BALL
 
 		}
 
-		void Scene::paintGL()
+		String Scene::createFPSInfo_()
 		{
-			time_ = PreciseTime::now();
+			String fps_string;
 
-#ifdef ENABLE_RAYTRACING
-			rt_renderer_->renderToBuffer(this, *stage_);
-			refresh();
-#else
+			float ti = 1000000.0 / (PreciseTime::now().getMicroSeconds() - time_.getMicroSeconds());
 
-			// cannot call update here, because it calls updateGL
-			renderView_(DISPLAY_LISTS_RENDERING);
-			glFlush();
-
-			if (info_string_ != "")
+			if (ti < 0)
 			{
-				ColorRGBA c = stage_->getBackgroundColor().getInverseColor();
-				QFont font;
-				font.setPixelSize(16);
-				font.setBold(true);
-				glDisable(GL_LIGHTING);
-				gl_renderer_->setColorRGBA_(c);
-				renderText(info_point_.x(), info_point_.y(), info_string_.c_str(), font);
-				glEnable(GL_LIGHTING);
+				time_ = PreciseTime::now();
+				return fps_string;
 			}
 
-			renderGrid_();
-		#endif
-			if (show_fps_)
+			if (fps_.size() > 0)
 			{
-				float ti = 1000000.0 / (PreciseTime::now().getMicroSeconds() - time_.getMicroSeconds());
-
-				if (ti < 0)
+				if (BALL_ABS(*fps_.begin() - ti) > ti / 0.5)
 				{
-					time_ = PreciseTime::now();
-					return;
+					fps_.clear();
+				}
+			}
+
+			fps_.push_back(ti);
+			if (fps_.size() > 10) fps_.pop_front();
+
+			float fps = 0;
+			list<float>::iterator lit = fps_.begin();
+			for (; lit != fps_.end(); lit++)
+			{
+				fps += *lit;
+			}
+
+			fps /= fps_.size();
+
+			fps_string = createFloatString(fps, 1);
+
+			if (fps < 10.0) fps_string = String(" ") + fps_string;
+			if (fps < 100.0) fps_string = String(" ") + fps_string;
+
+			if (!fps_string.has('.')) fps_string = fps_string + ".0";
+
+			fps_string = String("FPS ") + fps_string;
+
+			return fps_string;
+		}
+
+		void Scene::paintGL()
+		{
+			// This function tries to sync renderers by letting (a) all renderers
+			// perform their updates and then (b) swap in the newly created buffers
+			// of all render targets
+
+			// needed for all fps estimates
+			time_ = PreciseTime::now();
+
+			// precompute fps string if necessary
+			// NOTE: this currently does not work correctly for multiple renderers, probably
+			
+			// first, let all renderers do their work
+			for (Position i=0; i<renderers_.size(); ++i)
+			{
+				Renderer* 			current_renderer = renderers_[i].first;
+				GLRenderWindow* current_window   = renderers_[i].second;
+
+				current_window->makeCurrent();
+
+				current_renderer->setPreviewMode(use_preview_ && preview_);
+				current_renderer->showLightSources(show_light_sources_);
+
+				if (RTTI::isKindOf<BufferedRenderer>(*current_renderer))
+				{
+					((BufferedRenderer*)current_renderer)->renderToBuffer(current_window, *stage_);
+					current_window->refresh();
+
+					// TODO: render coordinate systems!
 				}
 
-				if (fps_.size() > 0)
+				if (RTTI::isKindOf<GLRenderer>(*current_renderer))
 				{
-					if (BALL_ABS(*fps_.begin() - ti) > ti / 0.5)
-					{
-						fps_.clear();
-					}
+					GLRenderer* current_gl_renderer = (GLRenderer*)current_renderer;
+
+					// cannot call update here, because it calls updateGL
+					current_gl_renderer->renderToBuffer(current_window, GLRenderer::DISPLAY_LISTS_RENDERING);
+
+					glFlush();
+
+					renderGrid_();
+				}
+			}
+
+			// then, estimate fps if necessary and add to the render target
+			ColorRGBA text_color = stage_->getBackgroundColor().getInverseColor();
+
+			String fps_string;
+			QPoint fps_point;
+
+			if (show_fps_)
+				fps_string = createFPSInfo_();
+
+			// draw all renderable texts and swap the new buffers in
+			for (Position i=0; i<renderers_.size(); ++i)
+			{
+				GLRenderWindow* current_window = renderers_[i].second;
+
+				current_window->makeCurrent();
+
+				if (show_fps_)
+				{
+					QFont font;
+					font.setPixelSize(16);
+					font.setBold(true);
+					QFontMetrics fm(font);
+					QRect r = fm.boundingRect(fps_string.c_str());
+
+					QPoint fps_point(current_window->width() - 20 - r.width(), 20);
+					current_window->setRenderText(fps_point, fps_string.c_str(), text_color);
 				}
 
-				fps_.push_back(ti);
-				if (fps_.size() > 10) fps_.pop_front();
+				current_window->setRenderText(info_point_, info_string_, text_color);
 
-				float fps = 0;
-				list<float>::iterator lit = fps_.begin();
-				for (; lit != fps_.end(); lit++)
-				{
-					fps += *lit;
-				}
-
-				fps /= fps_.size();
-
-				String temp = createFloatString(fps, 1);
-
-				if (fps < 10.0) temp = String(" ") + temp;
-				if (fps < 100.0) temp = String(" ") + temp;
-
-				if (!temp.has('.')) temp = temp + ".0";
-
-				temp = String("FPS ") + temp;
-
-				ColorRGBA color = getStage()->getBackgroundColor().getInverseColor();
-
-				QFont font;
-				font.setStyleHint(QFont::Courier, QFont::OpenGLCompatible);
-				font.setPixelSize(16);
-				font.setBold(true);
-				gl_renderer_->setColorRGBA_(color);
-				glDisable(GL_LIGHTING);
-				QFontMetrics fm(font);
-				QRect r = fm.boundingRect(temp.c_str());
-
-				renderText(width() - 20 - r.width(), 20, temp.c_str(), font);
-				glEnable(GL_LIGHTING);
+				current_window->swapBuffers();
 			}
 		}
 
 		void Scene::resizeGL(int width, int height)
 		{						
+			// TODO: is this really correct? don't we want individual resizeGL's for the individual renderers?
 			for (Position i=0; i<renderers_.size(); ++i)
 			{
 				Renderer* 			current_renderer = renderers_[i].first;
 				GLRenderWindow* current_window   = renderers_[i].second;
+
+				current_window->makeCurrent();
 				
 				if(!current_window->resize(width, height))
 				{
@@ -595,484 +615,6 @@ namespace BALL
 					((GLRenderer*)current_renderer)->updateCamera();			
 				}
 			}
-
-			content_changed_ = true;
-		}
-
-
-		void Scene::renderView_(RenderMode mode)
-			throw()
-		{
-#ifndef ENABLE_RAYTRACING
-			makeCurrent();
-
-			if (use_preview_ && preview_) gl_renderer_->setAntialiasing(false);
-
-			glDepthMask(GL_TRUE);
-			if (gl_renderer_->getStereoMode() == GLRenderer::NO_STEREO)
-			{
-				glDrawBuffer(GL_BACK);
-				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-				renderRepresentations_(mode);
-				content_changed_ = false;
-
-				if (use_preview_ && preview_) gl_renderer_->setAntialiasing(true);
-
-				return;
-			}
-
-			// ok, this is going the stereo way...
-			if (gl_renderer_->getStereoMode() == GLRenderer::DUAL_VIEW_DIFFERENT_DISPLAY_STEREO)
-			{
-				left_eye_widget_->setRenderMode(mode);
-				right_eye_widget_->setRenderMode(mode);
-
-				left_eye_widget_->updateGL();
-				right_eye_widget_->updateGL();
-				makeCurrent();
-				return;
-			}
-				
-
-			glDrawBuffer(GL_BACK_LEFT);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-			stereo_camera_ = stage_->getCamera();
-
-			Vector3 old_view_point = stage_->getCamera().getViewPoint();
-			Vector3 old_look_at = stage_->getCamera().getLookAtPosition();
-			Vector3	diff = stage_->getCamera().getRightVector() * (stage_->getEyeDistance() / 2.0);  
-
-			float nearf = 1.5; 
-			float farf = 600;
-
-			float ndfl    = nearf / stage_->getFocalDistance();
-
-      float left  = -2.0 *gl_renderer_->getXScale() - 0.5 * stage_->getEyeDistance() * ndfl;
-      float right =  2.0 *gl_renderer_->getXScale() - 0.5 * stage_->getEyeDistance() * ndfl;
-
-			//================== draw first buffer =============
-	    glMatrixMode(GL_PROJECTION);
-			if (gl_renderer_->getStereoMode() == GLRenderer::DUAL_VIEW_STEREO)
-			{
-				gl_renderer_->setSize(width()/2, height());
-				glLoadIdentity();
-				glFrustum(left,right,
-								-2.0 * gl_renderer_->getXScale() / 2, 
-								 2.0 * gl_renderer_->getYScale(),
-								nearf,farf);
-				glViewport(0, 0, width() / 2, height());
-
-		  }
-			else
-			{
-				glLoadIdentity();
-				glFrustum(left,right,
-									-2.0 * gl_renderer_->getXScale(), 
-									 2.0 * gl_renderer_->getYScale(),
-									nearf,farf);
-			}
-
-			if (stage_->swapSideBySideStereo())
-				diff *= -1;
-
-			// draw models
-      glMatrixMode(GL_MODELVIEW);
-			if (gl_renderer_->getStereoMode() == GLRenderer::ACTIVE_STEREO)
-			{
-				glDrawBuffer(GL_BACK_RIGHT);
-				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			}	
-
-			glPushMatrix();
-			stereo_camera_.setViewPoint(old_view_point + diff);
-			stereo_camera_.setLookAtPosition(old_look_at + diff);
-			gl_renderer_->updateCamera(&stereo_camera_);
- 			gl_renderer_->setLights(true);
-			renderRepresentations_(mode);
-			glPopMatrix();
-
-			//================== draw second buffer =============
-	    glMatrixMode(GL_PROJECTION);
-      left  = -2.0 *gl_renderer_->getXScale() + 0.5 * stage_->getEyeDistance() * ndfl;
-      right =  2.0 *gl_renderer_->getXScale() + 0.5 * stage_->getEyeDistance() * ndfl;
-
-			if (gl_renderer_->getStereoMode() == GLRenderer::DUAL_VIEW_STEREO)
-			{
-				gl_renderer_->setSize(width()/2, height());
-				glLoadIdentity();
-				glFrustum(left,right,
-								-2.0 * gl_renderer_->getXScale() / 2, 
-								 2.0 * gl_renderer_->getYScale(),
-								nearf,farf);
-				glViewport(width() / 2, 0, width() / 2, height());
-		  }
-			else
-			{
-				glLoadIdentity();
-				glFrustum(left,right,
-									-2.0 * gl_renderer_->getXScale(), 
-									 2.0 * gl_renderer_->getYScale(),
-									nearf,farf);
-			}
-
-
-      glMatrixMode(GL_MODELVIEW);
-
-			if (gl_renderer_->getStereoMode() == GLRenderer::ACTIVE_STEREO)
-			{
-				glDrawBuffer(GL_BACK_LEFT);
-				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			}
-
-			glPushMatrix();
-			stereo_camera_.setViewPoint(old_view_point - diff);
-			stereo_camera_.setLookAtPosition(old_look_at - diff);
-			gl_renderer_->updateCamera(&stereo_camera_);
- 			gl_renderer_->setLights(true);
-			renderRepresentations_(DISPLAY_LISTS_RENDERING);
-			glPopMatrix();
-			content_changed_ = false;
-
-			if (use_preview_ && preview_) gl_renderer_->setAntialiasing(true);
-#endif
-		}
-
-		void Scene::renderRepresentations_(RenderMode mode)
-			throw()
-		{
-			RepresentationManager& pm = getMainControl()->getRepresentationManager();
-
-			if (volume_width_ != FLT_MAX)
-			{
-				const Camera& camera = stage_->getCamera();
-				Vector3 n(-camera.getViewVector());
-				n.normalize();
-				Vector3 nr(camera.getRightVector());
-				nr.normalize();
-				Vector3 nu(camera.getLookUpVector());
-				nu.normalize();
-				ClippingPlane plane;
-
-				for (Position p = 1; p < 6; p++)
-				{
-					if (p == 1)
-					{
-						plane.setPoint(camera.getLookAtPosition() - n * volume_width_);
-						plane.setNormal(n);
-					}
-					else if (p == 2)
-					{
-						plane.setPoint(camera.getLookAtPosition() - nr * volume_width_);
-						plane.setNormal(nr);
-					}
-					else if (p == 3)
-					{
-						plane.setPoint(camera.getLookAtPosition() + nr * volume_width_);
-						plane.setNormal(-nr);
-					}
-					else if (p == 4)
-					{
-						plane.setPoint(camera.getLookAtPosition() - nu * volume_width_);
-						plane.setNormal(nu);
-					}
-					else if (p == 5)
-					{
-						plane.setPoint(camera.getLookAtPosition() + nu * volume_width_);
-						plane.setNormal(-nu);
-					}
-
-					Vector3 v = plane.getNormal();
-					GLdouble planef[] ={v.x, v.y, v.z, plane.getDistance()};
-					glClipPlane(GL_CLIP_PLANE0 + p, planef);
-					glEnable(GL_CLIP_PLANE0 + p);
-				}
-			}
-		
-			// ============== enable active Clipping planes ==============================
-			GLint current_clipping_plane = GL_CLIP_PLANE0;
-
-			vector<ClippingPlane*> active_planes;
-			vector<ClippingPlane*> inactive_planes;
-
-			bool move_mode = (mouse_button_is_pressed_ && getMode() == MOVE__MODE);
-			
-			const vector<ClippingPlane*>& vc = pm.getClippingPlanes();
-			vector<ClippingPlane*>::const_iterator plane_it = vc.begin();
-			for (;plane_it != vc.end(); plane_it++)
-			{
-				ClippingPlane& plane = **plane_it;
-
-				if (plane.isHidden()) continue;
-
-				if (!plane.isActive()) 
-				{
-					inactive_planes.push_back(*plane_it);
-					if (!move_mode) continue;
-				}
-
-				active_planes.push_back(*plane_it);
-
-				const Vector3& n(plane.getNormal());
-				const GLdouble planef[] ={n.x, n.y, n.z, plane.getDistance()};
-				glClipPlane(current_clipping_plane, planef);
-				current_clipping_plane++;
-			}
-
-			// -------------------------------------------------------------------
-			// show light sources
-			if (show_light_sources_)
-			{
-				List<LightSource>::ConstIterator lit = stage_->getLightSources().begin();
-				for (; lit != stage_->getLightSources().end(); lit++)
-				{
-					Vector3 pos = (*lit).getPosition();
-					Vector3 dir = (*lit).getDirection();
-
-					if ((*lit).isRelativeToCamera())
-					{
-						pos = stage_->getCamera().getViewPoint() + stage_->calculateAbsoluteCoordinates(pos);
-						dir = pos + stage_->calculateAbsoluteCoordinates(dir);
-					}
-
-					Vector3 diff = dir - pos;
-					if (!Maths::isZero(diff.getSquareLength())) diff.normalize();
-					diff *= 100.0;
-
-					Sphere s;
-					s.setPosition(pos);
-					s.setRadius(5);
-					s.setColor(ColorRGBA(255,255,255));
-					gl_renderer_->renderSphere_(s);
-
-					Tube t;
-					t.setVertex1(pos);
-					t.setVertex2(pos + diff);
-					t.setColor(ColorRGBA(255,255,255));
-					gl_renderer_->renderTube_(t);
-				}
-			}
-			// -------------------------------------------------------------------
-			
-			
-			// we draw all the representations in different runs, 
-			// 1. normal reps
-			// 2. transparent reps
-			// 3. allways front
-			for (Position run = 0; run < 3; run++)
-			{
-				if (run == 1)
-				{
-					for (Position p = 0; p < 20; p++)
-					{
-						if (volume_width_ != FLT_MAX) glDisable(GL_CLIP_PLANE0 + p);
-					}
-
-					// render inactive clipping planes
-					for (plane_it = inactive_planes.begin(); plane_it != inactive_planes.end(); plane_it++)
-					{
-						gl_renderer_->renderClippingPlane_(**plane_it);
-					}
-				}
-
-				RepresentationList::ConstIterator it = pm.getRepresentations().begin();
-				for(; it != pm.getRepresentations().end(); it++)
-				{
-					Representation& rep = **it;
-					if (rep.isHidden()) continue;
-
-					if (run == 0)
-					{
-						// render all "normal" (non always front and non transparent models)
-						if (!rep.hasProperty("DONT_CLIP") && (
-								rep.getTransparency() != 0 ||
-								rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT)))
-						{
-							continue;
-						}
-					}
-					else if (run == 1)
-					{
-						// render all transparent models
-						if (rep.hasProperty("DONT_CLIP") ||
-								rep.getTransparency() == 0 ||
-								rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
-						{
-							continue;
-						}
-					}
-					else
-					{
-						// render all always front models
-						if (!rep.hasProperty(Representation::PROPERTY__ALWAYS_FRONT)) continue;
-					}
-					
-					vector<Position> rep_active_planes; // clipping planes
-
-					Index cap_nr = -1;
-					for (Position plane_nr = 0; plane_nr < active_planes.size(); plane_nr++)
-					{
-						if (!active_planes[plane_nr]->getRepresentations().has(*it)) continue;
-						
-						const ClippingPlane& plane = *active_planes[plane_nr];
-						rep_active_planes.push_back(plane_nr);
-						if (!plane.cappingEnabled())
-						{
-							glEnable(plane_nr + GL_CLIP_PLANE0);
-							continue;
-						}
-
-						cap_nr = plane_nr;
-					}
-
-					// no capping? then we are done: disable again all clipping planes
-					if (cap_nr == -1)
-					{
-						render_(rep, mode);
-
-						for (Position p = 0; p < rep_active_planes.size(); p++)
-						{
-							glDisable(rep_active_planes[p] + GL_CLIP_PLANE0);
-						}
-						continue;
-					}
-
-					// draw a capping plane
- 					const ClippingPlane& plane = *active_planes[cap_nr];
-					Vector3 p, x, y, n;
-					p = plane.getPoint();
-					x = getNormal(plane.getNormal()) * 400;
-					y = x % plane.getNormal() * 400;
- 					n = plane.getNormal();
-					n.normalize();
-					
-					// disable all clipping planes
-					for (Position p = 0; p < rep_active_planes.size(); p++)
-					{
-						glDisable(rep_active_planes[p] + GL_CLIP_PLANE0);
-					}
-
-					// fill the stencil buffer
-					glEnable(cap_nr + GL_CLIP_PLANE0);
-					glEnable(GL_STENCIL_TEST);
-					glClearStencil(0);
-					glClear(GL_STENCIL_BUFFER_BIT);
-					glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-					glStencilFunc(GL_ALWAYS, 0x0, 0xff);
-					glStencilOp(GL_KEEP, GL_INVERT, GL_INVERT);
-					render_(rep, mode);
-					
-					// disable all clipping planes
-					for (Position p = 0; p < rep_active_planes.size(); p++)
-					{
-						glEnable(rep_active_planes[p] + GL_CLIP_PLANE0);
-					}
-
-					// render the Representation once again, this time with colors
-					gl_renderer_->setColorRGBA_(ColorRGBA(0,1.0,0));
-					glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-					glDisable(GL_STENCIL_TEST);
-					render_(rep, mode);
-
-					// render the capping plane
-					glEnable(GL_STENCIL_TEST);
-					glStencilFunc(GL_NOTEQUAL, 0x0, 0xff);
-
-					ColorRGBA color = ClippingPlane::getCappingColor();
-					bool transparent = (int)color.getAlpha() != 255;
-					if (transparent) gl_renderer_->initTransparent();
-					else 						 gl_renderer_->initSolid();
-
-					glDisable(cap_nr + GL_CLIP_PLANE0);
-					Disc d(Circle3(p, n, 400));
-					d.setColor(color);
-					gl_renderer_->render_(&d);
-					
-					glDisable(GL_STENCIL_TEST);
-				}
-			}
-
-			if (text_ != "")
-			{
-				ColorRGBA c = stage_->getBackgroundColor().getInverseColor();
-				QFont font;
-				font.setPixelSize(font_size_);
-				font.setBold(true);
-				glDisable(GL_LIGHTING);
-				gl_renderer_->setColorRGBA_(c);
-				QFontMetrics fm(font);
-				QRect r = fm.boundingRect(text_.c_str());
-				renderText(width() -  (20 + r.width()), 
-									 height() - (r.height() - 5),
-									 text_.c_str(), font);
-				glEnable(GL_LIGHTING);
-			}
-		}
-
-
-		void Scene::render_(const Representation& repr, RenderMode mode)
-			throw()
-		{
-			RepresentationManager& pm = getMainControl()->getRepresentationManager();
-			Representation* rep = (Representation*)& repr;
-
-			// preview mode:
-			// if we have a model with only sticks and cylinders, decrease the rendering detail
-			// and draw it directly instead of using display lists.
-			// BUT: if the representation is currently rebuild, we can only draw buffered!
-			bool used_preview = false;
-			DrawingPrecision pbak = repr.getDrawingPrecision();
-			if (use_preview_ && preview_)
-			{
-				if (repr.getModelType() >= MODEL_STICK &&
-						repr.getModelType() <= MODEL_VDW &&
-						pm.startRendering(rep))
-				{
-					rep->setDrawingPrecision(DRAWING_PRECISION_LOW);
-					mode = DIRECT_RENDERING;
-					used_preview = true;
-				}
-			}
-
-			if (mode == DISPLAY_LISTS_RENDERING &&
-					!repr.hasProperty("RENDER_DIRECT") && 
-					repr.getDrawingMode() != DRAWING_MODE_TOON)
-			{
-				gl_renderer_->drawBuffered(repr);
-				return;
-			}
-
-			if (!used_preview) 
-			{
-				// if we use previewing mode, the RepresentationManager was already notified above
-				if (!pm.startRendering(rep))
-				{
-					// if Representation is to be rebuilded, but it is currently recalculated,
-					// we can only draw it from the DisplayList
-					gl_renderer_->drawBuffered(repr);
-					return;
-				}
-			}
-
-			if (mode == REBUILD_DISPLAY_LISTS)
-			{
-				gl_renderer_->bufferRepresentation(repr);
-			}
-			else //	DIRECT_RENDERING:
-			{
-				gl_renderer_->render(repr);
-			}
-
-			if (used_preview)
-			{
-				if (repr.getDrawingPrecision() != pbak)
-				{
-					// if previewing mode was used: reset the drawing precision
-					(*(Representation*)&repr).setDrawingPrecision(pbak);
-				}
-			}
-
-			pm.finishedRendering(rep);
 		}
 
 		/////////////////////////////////////////////////////////
@@ -1277,7 +819,7 @@ namespace BALL
 																(Position) p1.y());
 
 			// draw the representations
-			renderView_(DIRECT_RENDERING);
+			gl_renderer_->renderToBuffer(this, GLRenderer::DIRECT_RENDERING);
 
  			gl_renderer_->pickObjects2(objects);
 
@@ -1361,7 +903,8 @@ namespace BALL
 			gl_renderer_->setLights(true);
 			light_settings_->updateFromStage();
 
-			if (update_GL) renderView_(REBUILD_DISPLAY_LISTS);
+			if (update_GL)
+				updateGL();
 		}
 
 		void Scene::createCoordinateSystem()
@@ -1503,7 +1046,7 @@ namespace BALL
 				it = main_control->getRepresentationManager().getRepresentations().begin();
 				for (; it != main_control->getRepresentationManager().getRepresentations().end(); it++)
 				{
-					if (!er.render(**it))
+					if (!er.renderOneRepresentation(**it))
 					{
 						getMainControl()->setStatusbarText("Error rendering representation...");
 						return false;
@@ -1678,7 +1221,10 @@ namespace BALL
 				// glFogf(GL_FOG_DENSITY, ((float) stage_->getFogIntensity()) / 40.0);
 			}
 
-			renderView_(REBUILD_DISPLAY_LISTS);
+			// TODO: We *need* to get this to work again!
+			/*
+			gl_renderer_->renderToBuffer(this, GLRenderer::REBUILD_DISPLAY_LISTS);
+			*/
 			updateGL();
 		}
 
@@ -1885,7 +1431,6 @@ namespace BALL
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Limit ViewVolume", this, SLOT(setupViewVolume()));
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Reset ViewVolume", this, SLOT(disableViewVolumeRestriction()));
 
 			QAction* screenshot_action = insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", 
 																	this, SLOT(showExportPNGDialog()), Qt::ALT + Qt::Key_P);
@@ -2219,8 +1764,6 @@ namespace BALL
 				return;
 			}
 
-			content_changed_ = true;
-
 			switch ((Index)(e->buttons() | e->modifiers()))
 			{
 				case (Qt::ShiftModifier | Qt::LeftButton): 
@@ -2428,7 +1971,7 @@ namespace BALL
 			for (Position p = 0; p < 8; p++)
 			{
 				gl_renderer_->pickObjects1(pos_x - p, pos_y - p, pos_x + p, pos_y + p);
-				renderView_(DIRECT_RENDERING);
+				gl_renderer_->renderToBuffer(this, GLRenderer::DIRECT_RENDERING);
 				gl_renderer_->pickObjects2(objects);
 				if (objects.size() != 0) break;
 			}
@@ -2894,7 +2437,7 @@ namespace BALL
 			String result = ascii(qresult);
 			if (!offscreen_rendering_)
 			{
-				update(false);
+				updateGL();
 				getMainControl()->processEvents(9999);
 			}
 			exportPNG(result);
@@ -2927,7 +2470,7 @@ namespace BALL
 					gl_renderer_->setLights(true);
 					gl_renderer_->enableVertexBuffers(want_to_use_vertex_buffer_);
 					glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-					renderRepresentations_(DIRECT_RENDERING);
+					gl_renderer_->renderToBuffer(this, GLRenderer::DIRECT_RENDERING);
 					glFlush();
 					image = pbuffer.toImage();
 					makeCurrent();
@@ -3032,9 +2575,6 @@ namespace BALL
 			gl_renderer_->initPerspective();
 			glMatrixMode(GL_MODELVIEW);
 
-			delete left_eye_widget_;
-			delete right_eye_widget_;
-
 			setFullScreen(false);
 		}
 
@@ -3046,7 +2586,7 @@ namespace BALL
 				showNormal();  // needed on windows
 				setParent(0);
 				showFullScreen();
-				update();
+				updateGL(); // TODO: update() or updateGL()???
 				return;
 			}
 
@@ -3055,15 +2595,12 @@ namespace BALL
 			show();
 			getMainControl()->setCentralWidget(this);
 			getMainControl()->restoreState(last_state_);
-			update();
+			updateGL(); // TODO: update() or updateGL()???
 		}
 
 		void Scene::enterActiveStereo()
 			throw()
 		{
-			delete left_eye_widget_;
-			delete right_eye_widget_;
-
 			gl_renderer_->setStereoMode(GLRenderer::ACTIVE_STEREO);
 			setFullScreen(true);
 
@@ -3076,9 +2613,6 @@ namespace BALL
 		void Scene::enterDualStereo()
 			throw()
 		{
-			delete left_eye_widget_;
-			delete right_eye_widget_;
-
 			gl_renderer_->setStereoMode(GLRenderer::DUAL_VIEW_STEREO);
 			setFullScreen(true);
 
@@ -3098,11 +2632,12 @@ namespace BALL
 			dual_stereo_action_->setChecked(false);
 			dual_stereo_different_display_action_->setChecked(true);
 
-			left_eye_widget_ = new StereoHalfImage(stage_, this, 0, true);
+/*			left_eye_widget_ = new StereoHalfImage(stage_, this, 0, true);
 			right_eye_widget_ = new StereoHalfImage(stage_, this, 1, false);
 
 			left_eye_widget_->show();
 			right_eye_widget_->showFullScreen();
+			*/
 
 			setFullScreen(false);
 		}
@@ -3274,7 +2809,6 @@ namespace BALL
 		void Scene::updateGL()
 		{
  			QGLWidget::updateGL();
-
 		}
 
 		void Scene::setOffScreenRendering(bool enabled, Size factor)
@@ -3309,7 +2843,7 @@ namespace BALL
 		{ 
 			text_ = text; 
 			font_size_= font_size;
-			update();
+			updateGL(); // TODO: update() or updateGL()???
 		}
 
 		void Scene::addToolBarEntries(QToolBar* tb)
@@ -3332,14 +2866,14 @@ namespace BALL
 				rt_renderer_->updateMaterialForRepresentation(*it);
 			}
 
-			update(false);
+			updateGL();
 		}
 
 		void Scene::updateRTMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material)
 		{
 			rt_renderer_->updateMaterialForRepresentation(rep, new_material);
 
-			update(false);
+			updateGL();
 		}
 #endif
 
@@ -3358,11 +2892,13 @@ namespace BALL
 			}
 			else
 			{
+				/*
 				left_eye_widget_->makeCurrent();
 				texname = left_eye_widget_->getRenderer()->createTextureFromGrid(grid, map);
 				right_eye_widget_->makeCurrent();
  				right_eye_widget_->getRenderer()->createTextureFromGrid(grid, map);
 				makeCurrent();
+				*/
 			}
 
 			return texname;
@@ -3372,7 +2908,7 @@ namespace BALL
 		{
 			draw_grid_ = !draw_grid_;
 			switch_grid_->setChecked(draw_grid_);
-			update();
+			updateGL();
 		}
 
 
@@ -3538,7 +3074,7 @@ Log.error() << "Render grid not yet supported by raytracer!" << std::endl;
 			List<GeometricObject*> objects;
 			gl_renderer_->pickObjects1((Position) p.x(), (Position) p.y(), 
 																(Position) p.x(), (Position) p.y());
-			renderView_(DIRECT_RENDERING);
+			gl_renderer_->renderToBuffer(this, GLRenderer::DIRECT_RENDERING);
 			gl_renderer_->pickObjects2(objects);
 
 			if (objects.size() == 0) return;
@@ -3579,11 +3115,6 @@ Log.error() << "Render grid not yet supported by raytracer!" << std::endl;
 			}
 		}
 
-		void Scene::disableViewVolumeRestriction()
-		{
-			volume_width_ = FLT_MAX;
-		}
-
 		void Scene::setupViewVolume()
 		{
 			bool ok;
@@ -3592,8 +3123,54 @@ Log.error() << "Render grid not yet supported by raytracer!" << std::endl;
 																						20, 5, 200, 1, &ok);
 			if (!ok) return;
 
-			volume_width_ = value;
-			update(false);
+			// find out if the visible viewing volume has to be cut
+			RepresentationManager& pm = getMainControl()->getRepresentationManager();
+
+			if (value != FLT_MAX)
+			{
+				const Camera& camera = stage_->getCamera();
+				Vector3 n(-camera.getViewVector());
+				n.normalize();
+				Vector3 nr(camera.getRightVector());
+				nr.normalize();
+				Vector3 nu(camera.getLookUpVector());
+				nu.normalize();
+
+				for (Position p = 1; p < 6; p++)
+				{
+					ClippingPlane *plane = new ClippingPlane;
+
+					if (p == 1)
+					{
+						plane->setPoint(camera.getLookAtPosition() - n * value);
+						plane->setNormal(n);
+					}
+					else if (p == 2)
+					{
+						plane->setPoint(camera.getLookAtPosition() - nr * value);
+						plane->setNormal(nr);
+					}
+					else if (p == 3)
+					{
+						plane->setPoint(camera.getLookAtPosition() + nr * value);
+						plane->setNormal(-nr);
+					}
+					else if (p == 4)
+					{
+						plane->setPoint(camera.getLookAtPosition() - nu * value);
+						plane->setNormal(nu);
+					}
+					else if (p == 5)
+					{
+						plane->setPoint(camera.getLookAtPosition() + nu * value);
+						plane->setNormal(-nu);
+					}
+
+					pm.insertClippingPlane(plane);
+				}
+			}
+
+			updateGL();
 		}
 
 		void Scene::restoreViewPoint()

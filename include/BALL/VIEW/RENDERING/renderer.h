@@ -56,18 +56,15 @@ namespace BALL
 
 			/** Default Constructor.
 			*/
-			Renderer()
-				throw();
+			Renderer();
 			
 			/**	Copy constructor.
 			*/
-			Renderer(const Renderer& renderer)
-				throw();
+			Renderer(const Renderer& renderer);
 
 			/** Destructor
 			*/
-			virtual ~Renderer()
-				throw() {}
+			virtual ~Renderer() throw() {}
 
 			/** Explicit default initialization.
 			*/
@@ -95,7 +92,7 @@ namespace BALL
 			
 			/** Render a Representation.
 			*/
-			virtual bool render(const Representation& representation)
+			virtual bool renderOneRepresentation(const Representation& representation)
 				throw();
 
 
@@ -122,17 +119,26 @@ namespace BALL
 				throw();
 
 			/// Set the size of the display
-			virtual void setSize(float width, float height)
-				throw() { width_ = width; height_ = height;}
+			virtual void setSize(float width, float height) { width_ = width; height_ = height;}
 
 			///
-			virtual float getWidth() const
-				throw() { return width_;}
+			virtual float getWidth() const { return width_;}
 
 			///
-			virtual float getHeight() const
-				throw() { return height_;}
+			virtual float getHeight() const { return height_;}
 
+			/** Decides whether the renderer should use a faster preview mode.
+			 *  Please note that not all renderers support previews and may choose
+			 *  just to ignore this setting.
+			 */
+			virtual void setPreviewMode(bool show_preview) { show_preview_ = show_preview; }
+
+			/** Decides whether to draw light sources explicitly.
+			 *  Please note that not all renderers support this feature and may choose
+			 *  just to ignore this setting.
+			 */
+			virtual void showLightSources(bool show_light_sources) { show_light_sources_ = show_light_sources; }
+			
 			//@}
 			/**	@name Predicates
 			*/
@@ -219,6 +225,15 @@ namespace BALL
 
 			//_
 			float 					height_;
+
+			//_
+			bool						show_preview_;
+
+			//_
+			float						volume_width_;
+
+			//_
+			bool						show_light_sources_;
 		};
 
 	} // namespace VIEW

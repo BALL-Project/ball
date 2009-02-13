@@ -17,15 +17,19 @@
 # include <BALL/VIEW/RENDERING/renderWindow.h>
 #endif
 
+#ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
+# include <BALL/VIEW/DATATYPE/colorRGBA.h>
+#endif
+
 #include <QtOpenGL/qgl.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{				
-        /**
-         * Model of the \link RenderWindow \endlink which uses OpenGL to render its buffer to the screen
-         */
+		/**
+		 * Model of the \link RenderWindow \endlink which uses OpenGL to render its buffer to the screen
+		 */
 		class GLRenderWindow 
 			: public RenderWindow<float>,
 				public QGLWidget
@@ -42,7 +46,14 @@ namespace BALL
 			virtual bool init();
 			virtual bool resize(const unsigned int width, const unsigned int height);
 			virtual void refresh();			
-			
+
+			void setRenderText(const QPoint& position, const String& text, const ColorRGBA& color)
+			{
+				info_point_ = position;
+				info_text_  = text;
+				info_color_ = color;
+			}
+
 		protected:	
 			static QGLFormat gl_format_;
 
@@ -64,6 +75,11 @@ namespace BALL
 
 			bool errorInGL(GLenum& error);
 			String getGLErrorString(GLenum error);
+
+			// position and text of possible information texts like fps
+			QPoint 	  info_point_;
+			String 	  info_text_;
+			ColorRGBA info_color_;
 		};
 
 	} // namespace VIEW
