@@ -584,6 +584,66 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\GeneratedFiles\sipBALLAssignBondOrderProcessor.C"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\GeneratedFiles\sipBALLAssignBondOrderProcessorAlgorithm.C"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\GeneratedFiles\sipBALLAssignBondOrderProcessorDefault.C"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\GeneratedFiles\sipBALLAssignBondOrderProcessorHeuristic.C"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\GeneratedFiles\sipBALLAssignBondOrderProcessorOption.C"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\GeneratedFiles\sipBALLAssignChargeProcessor.C"
 				>
 				<FileConfiguration
@@ -6090,13 +6150,6 @@
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\BALL.sip"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="SipGenerator"
-					/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 	</Files>
