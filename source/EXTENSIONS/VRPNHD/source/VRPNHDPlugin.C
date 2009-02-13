@@ -49,17 +49,19 @@ namespace BALL
 			return(driver);
 		}
 
-		void VRPNHDPlugin::activate()
+		bool VRPNHDPlugin::activate()
 		{
 			is_active_ = true;
 
 			receiver_->resetTracking();
-			startDriver();
+			return startDriver();
 		}
 
-		void VRPNHDPlugin::deactivate()
+		bool void VRPNHDPlugin::deactivate()
 		{
 			is_active_ = false;
+
+			return true;
 		}
 
 	}

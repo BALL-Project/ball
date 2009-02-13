@@ -11,7 +11,8 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	BALLPlugin.C\
-	pluginManager.C
+	pluginManager.C\
+	pluginHandler.C
 
 include ../common.mak
 -include .Dependencies

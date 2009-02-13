@@ -32,8 +32,8 @@ namespace BALL
 
 				InputDeviceDriver* startDriver();
 
-				void activate();
-				void deactivate();
+				bool activate();
+				bool deactivate();
 
 				void setReceiver(QWidget* receiver);
 

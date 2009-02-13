@@ -2,7 +2,6 @@
 
 #include <spaceNavigatorDriver.h>
 
-
 Q_EXPORT_PLUGIN2(pluginSpaceNavigator, BALL::VIEW::SpaceNavigatorPlugin)
 
 namespace BALL
@@ -44,21 +43,20 @@ namespace BALL
 			SpaceNavigatorDriver* driver = new SpaceNavigatorDriver(receiver_);
 			if(!driver->setUp()) {
 				delete driver;
-
 				return NULL;
 			}
 			driver->setEnabled(true);
 			return driver;
 		}
 
-		void SpaceNavigatorPlugin::activate()
+		bool SpaceNavigatorPlugin::activate()
 		{
-			is_active_ = (bool)startDriver();
+			return (is_active_ = (bool)startDriver());
 		}
 
-		void SpaceNavigatorPlugin::deactivate()
+		bool SpaceNavigatorPlugin::deactivate()
 		{
-			is_active_ = false;
+			return is_active_ = false;
 		}
 
 	}
