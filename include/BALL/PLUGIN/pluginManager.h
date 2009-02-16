@@ -4,6 +4,7 @@
 #include <QtCore/QString>
 #include <QtCore/QHash>
 #include <QtCore/QMutex>
+#include <QtCore/QReadWriteLock>
 
 #include <list>
 
@@ -144,7 +145,13 @@ namespace BALL
 			std::list<PluginHandler*> handlers_;
 
 			static PluginManager* manager_;
+
+			//This mutex is used in the creation of the singleton
 			static QMutex mutex_;
+			//This mutex guards the handlers_ list
+			mutable QReadWriteLock handler_mutex_;
+			//This mutex guards the loaders_ list
+			mutable QReadWriteLock loader_mutex_;
 	};
 }
 
