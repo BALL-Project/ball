@@ -2,6 +2,7 @@
 #define BALL_PLUGIN_PLUGINHANDLER_H
 
 #include <list>
+#include <QtCore/QReadWriteLock>
 
 namespace BALL
 {
@@ -84,6 +85,7 @@ namespace BALL
 			virtual bool specificShutdown_(BALLPlugin* plugin) = 0;
 
 		private:
+			mutable QReadWriteLock mutex_;
 			std::list<BALLPlugin*> running_plugins_;
 	};
 }
