@@ -77,14 +77,30 @@ namespace BALL
 			const String& getSpaceGroup() const;
 			
 			void setCellDimensions(const Vector3& dim);
+			
 			void setCellEdgeLengthA(const float& a);
+			const float& getCellEdgeLengthA() const;
+			
 			void setCellEdgeLengthB(const float& b);
+			const float& getCellEdgeLengthB() const;
+			
 			void setCellEdgeLengthC(const float& c);
+			const float& getCellEdgeLengthC() const;
+			
 			void setCellAngles(const Angle& alpha, const Angle& beta, const Angle& gamma);
+			
 			void setCellAngleAlpha(const Angle& alpha);
+			const Angle& getCellAngleAlpha() const;
+			
 			void setCellAngleBeta(const Angle& beta);
+			const Angle& getCellAngleBeta() const;
+			
 			void setCellAngleGamma(const Angle& gamma);
+			const Angle& getCellAngleGamma() const;
 
+			void setZScore(const int& zscore);
+			const int& getZScore() const;
+			
 			Size getNumberOfSymOps() const ;
 			const Matrix4x4& getSymOp(Position p) const;
 
@@ -121,6 +137,7 @@ namespace BALL
 			String space_group_;
 			Vector3 cell_dimensions_;
 			Angle alpha_, beta_, gamma_;
+			int z_score_;
 			String filename_;
 			
 			Matrix4x4 cart2frac_;

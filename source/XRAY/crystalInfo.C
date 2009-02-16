@@ -18,6 +18,7 @@ namespace BALL
 			alpha_(90, false),
 			beta_(90, false),
 			gamma_(90, false),
+			z_score_(1),
 			filename_(Default::SPACE_GROUP_FILE),
 			cart2frac_(),
 			frac2cart_(),
@@ -85,6 +86,10 @@ namespace BALL
 		calculateMatrices_();
 	}
 
+	const float& CrystalInfo::getCellEdgeLengthA() const
+	{
+		return cell_dimensions_.x;
+	}
 	
 	void CrystalInfo::setCellEdgeLengthB(const float& b) 
 	{
@@ -93,10 +98,20 @@ namespace BALL
 	}
 	
 	
+	const float& CrystalInfo::getCellEdgeLengthB() const
+	{
+		return cell_dimensions_.y;
+	}
+	
 	void CrystalInfo::setCellEdgeLengthC(const float& c) 
 	{
 		cell_dimensions_.z = c;
 		calculateMatrices_();
+	}
+
+	const float& CrystalInfo::getCellEdgeLengthC() const
+	{
+		return cell_dimensions_.z;
 	}
 	
 	
@@ -115,6 +130,10 @@ namespace BALL
 		calculateMatrices_();
 	}
 
+	const Angle& CrystalInfo::getCellAngleAlpha() const
+	{
+		return alpha_; 
+	}
 	
 	void CrystalInfo::setCellAngleBeta(const Angle& beta)
 	{
@@ -122,6 +141,10 @@ namespace BALL
 		calculateMatrices_();
 	}
 	
+	const Angle& CrystalInfo::getCellAngleBeta() const
+	{
+		return beta_; 
+	}
 	
 	void CrystalInfo::setCellAngleGamma(const Angle& gamma)
 	{
@@ -129,12 +152,25 @@ namespace BALL
 		calculateMatrices_();
 	}
 	
+	const Angle& CrystalInfo::getCellAngleGamma() const
+	{
+		return gamma_; 
+	}
 	
 	Size CrystalInfo::getNumberOfSymOps() const
 	{
 		return (Size)sg_symops_.size();
 	}
 	
+	void CrystalInfo::setZScore(const int& zscore)
+	{
+		z_score_ = zscore;	
+	}
+	
+	const int& CrystalInfo::getZScore() const
+	{
+		return z_score_;	
+	}
 	
 	const Matrix4x4& CrystalInfo::getSymOp(Position p) const
 	{

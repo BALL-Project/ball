@@ -730,6 +730,14 @@ namespace BALL
 		void writeRecord_(const PDB::RecordSSBOND& helix);
 		/**	Write a CONECT record to the current stream */
 		void writeRecord_(const PDB::RecordCONECT& helix);
+		/**	Write a CRYST1 record to the current stream */
+		void writeRecord_(const PDB::RecordCRYST1& cryst1);
+		/**	Write a MTRIX1 record to the current stream */
+		void writeRecord_(const PDB::RecordMTRIX1& mtrix1);
+		/**	Write a MTRIX2 record to the current stream */
+		void writeRecord_(const PDB::RecordMTRIX2& mtrix2);
+		/**	Write a MTRIX3 record to the current stream */
+		void writeRecord_(const PDB::RecordMTRIX3& mtrix3);
 		
 		void writeAtom_(const PDB::Structure::AtomEntry& atom, PDB::AdditionalAtomInfo& cr, bool hetatm = false);
 		
@@ -751,6 +759,8 @@ namespace BALL
 		void writeSSBONDSection_(const PDB::Structure& structure);
 		void writeHYDBNDSection_(const PDB::Structure& structure);
 		void writeSLTBRGSection_(const PDB::Structure& structure);
+		void writeCRYST1Section_(const PDB::Structure& structure);
+		void writeMTRIXnSection_(const PDB::Structure& structure);
 
 		/**	Extract the atom and bond information from an atom container prior to writing a PDB file.
 				This method is called by \link write_ \endlink.

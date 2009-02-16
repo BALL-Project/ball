@@ -597,20 +597,21 @@ namespace BALL
 		ci_ptr->setCellAngleAlpha(Angle(record.unit_cell.alpha, false));
 		ci_ptr->setCellAngleBeta(Angle(record.unit_cell.beta, false));
 		ci_ptr->setCellAngleGamma(Angle(record.unit_cell.gamma, false));
+		ci_ptr->setZScore(record.unit_cell.z_value);
 
 		cout << "S " << ci_ptr->getSpaceGroup() << endl;	
 		cout << "M" << ci_ptr->getCart2Frac() << endl;	
 		cout << "I" << ci_ptr->getFrac2Cart() << endl;	
 
 
-		current_protein_->setProperty("UNITCELL_A", record.unit_cell.a);
-		current_protein_->setProperty("UNITCELL_B", record.unit_cell.b);
-		current_protein_->setProperty("UNITCELL_C", record.unit_cell.c);
-		current_protein_->setProperty("UNITCELL_ALPHA", record.unit_cell.alpha);
-		current_protein_->setProperty("UNITCELL_BETA", record.unit_cell.beta);
-		current_protein_->setProperty("UNITCELL_GAMMA", record.unit_cell.gamma);
-		current_protein_->setProperty("SPACE_GROUP", string(record.unit_cell.space_group));
-		current_protein_->setProperty("Z_VALUE", int(record.unit_cell.z_value));
+		//current_protein_->setProperty("UNITCELL_A", record.unit_cell.a);
+		//current_protein_->setProperty("UNITCELL_B", record.unit_cell.b);
+		//current_protein_->setProperty("UNITCELL_C", record.unit_cell.c);
+		//current_protein_->setProperty("UNITCELL_ALPHA", record.unit_cell.alpha);
+		//current_protein_->setProperty("UNITCELL_BETA", record.unit_cell.beta);
+		//current_protein_->setProperty("UNITCELL_GAMMA", record.unit_cell.gamma);
+		//current_protein_->setProperty("SPACE_GROUP", string(record.unit_cell.space_group));
+		//current_protein_->setProperty("Z_VALUE", int(record.unit_cell.z_value));
 		//std::cout << record.unit_cell.a << std::endl;
 		//std::cout << record.unit_cell.b << std::endl;
 		//std::cout << record.unit_cell.c << std::endl;
@@ -816,14 +817,6 @@ namespace BALL
 		curr_mtrx(0,2) = record.transformation_matrix[2];
 		curr_mtrx(0,3) = record.transformation_matrix[3];
 		
-		
-		
-		
-		//cout << record.serial_number;
-		//cout << " " << record.transformation_matrix[0];
-		//cout << " " << record.transformation_matrix[1];
-		//cout << " " << record.transformation_matrix[2];
-		//cout << " " << record.transformation_matrix[3] << endl;
 		return true;
 	}
 
@@ -868,11 +861,7 @@ namespace BALL
 		curr_mtrx(1,1) = record.transformation_matrix[1];
 		curr_mtrx(1,2) = record.transformation_matrix[2];
 		curr_mtrx(1,3) = record.transformation_matrix[3];
-		//cout << record.serial_number;
-		//cout << " " << record.transformation_matrix[0];
-		//cout << " " << record.transformation_matrix[1];
-		//cout << " " << record.transformation_matrix[2];
-		//cout << " " << record.transformation_matrix[3] << endl;
+
 		return true;
 	}
 
@@ -917,11 +906,7 @@ namespace BALL
 		curr_mtrx(2,1) = record.transformation_matrix[1];
 		curr_mtrx(2,2) = record.transformation_matrix[2];
 		curr_mtrx(2,3) = record.transformation_matrix[3];
-		//cout << record.serial_number;
-		//cout << " " << record.transformation_matrix[0];
-		//cout << " " << record.transformation_matrix[1];
-		//cout << " " << record.transformation_matrix[2];
-		//cout << " " << record.transformation_matrix[3] << endl;
+
 		return true;
 	}
 
@@ -1246,7 +1231,6 @@ namespace BALL
 	
 	void PDBFile::extractStructure_(const AtomContainer& ac, PDB::Structure& structure)
 	{
-		std::cout << "DEBUG extractStructure_: gets called" << std::endl;
 		// Paranoia: remove old crap from structure.
 		structure.clear();
 		
@@ -1257,26 +1241,32 @@ namespace BALL
 			return;
 		}
 		
-		// check if the Parent Atomcontainer has crystal information
+		// check if the parent atomcontainer has crystal information
 		if (ac.countAtomContainers() != 0)
 		{
-			if ((ac.getAtomContainer(0))->hasProperty("UNITCELL_A") &&
-					(ac.getAtomContainer(0))->hasProperty("UNITCELL_B") &&
-					(ac.getAtomContainer(0))->hasProperty("UNITCELL_C") &&
-					(ac.getAtomContainer(0))->hasProperty("UNITCELL_ALPHA") &&
-					(ac.getAtomContainer(0))->hasProperty("UNITCELL_BETA") &&
-					(ac.getAtomContainer(0))->hasProperty("UNITCELL_GAMMA") &&
-					(ac.getAtomContainer(0))->hasProperty("SPACE_GROUP") &&
-					(ac.getAtomContainer(0))->hasProperty("Z_VALUE"))
+			if (ac.getAtomContainer(0)->hasProperty("CRYSTALINFO"))
 			{
-				structure.unitcell_info.a = ac.getAtomContainer(0)->getProperty("UNITCELL_A").getDouble();		
-				structure.unitcell_info.b = ac.getAtomContainer(0)->getProperty("UNITCELL_B").getDouble();		
-				structure.unitcell_info.c = ac.getAtomContainer(0)->getProperty("UNITCELL_C").getDouble();		
-				structure.unitcell_info.alpha = ac.getAtomContainer(0)->getProperty("UNITCELL_ALPHA").getDouble();		
-				structure.unitcell_info.beta = ac.getAtomContainer(0)->getProperty("UNITCELL_BETA").getDouble();		
-				structure.unitcell_info.gamma = ac.getAtomContainer(0)->getProperty("UNITCELL_GAMMA").getDouble();		
-				strcpy(structure.unitcell_info.space_group, ac.getAtomContainer(0)->getProperty("SPACE_GROUP").getString().c_str());		
-				structure.unitcell_info.z_value = ac.getAtomContainer(0)->getProperty("Z_VALUE").getInt();		
+				CrystalInfo* ci_ptr = dynamic_cast<CrystalInfo*>(ac.getAtomContainer(0)->getProperty("CRYSTALINFO").getObject());
+				if (ci_ptr != 0)
+				{
+					// extract all crystal informations to the structure
+					strcpy(structure.unitcell_info.space_group, ci_ptr->getSpaceGroup().c_str());		
+					structure.unitcell_info.a = ci_ptr->getCellEdgeLengthA(); 
+					structure.unitcell_info.b = ci_ptr->getCellEdgeLengthB(); 
+					structure.unitcell_info.c = ci_ptr->getCellEdgeLengthC(); 
+					structure.unitcell_info.alpha = ci_ptr->getCellAngleAlpha().toDegree(); 
+					structure.unitcell_info.beta = ci_ptr->getCellAngleBeta().toDegree(); 
+					structure.unitcell_info.gamma = ci_ptr->getCellAngleGamma().toDegree(); 
+					structure.unitcell_info.z_value = ci_ptr->getZScore(); 
+					if(ci_ptr->getNumberOfNCSSymOps() != 0)
+					{
+						for(Position i = 0; i < ci_ptr->getNumberOfNCSSymOps(); i++)
+						{
+							cout << i << ci_ptr->getNCS(i) << endl;
+							structure.ncs_matrices.push_back(PDB::Structure::NCSMatrix(ci_ptr->getNCS(i), ci_ptr->isgivenNCS(i)));
+						}
+					}
+				}
 			}
 		}
 		
@@ -1872,7 +1862,6 @@ namespace BALL
 
   void PDBFile::writeCRYST1Section_(const PDB::Structure& structure)
   {
-		std::cout << "Strucki " << structure.unitcell_info.z_value << std::endl;	
 		if (structure.unitcell_info.z_value != -1)
 		{
 			PDB::RecordCRYST1 cr;
@@ -1886,6 +1875,41 @@ namespace BALL
 			cr.unit_cell.z_value = structure.unitcell_info.z_value;
 
 			writeRecord_(cr);
+		}
+	}
+  
+	void PDBFile::writeMTRIXnSection_(const PDB::Structure& structure)
+	{
+		if (structure.ncs_matrices.size() != 0)
+		{
+			for (Position i = 0; i < structure.ncs_matrices.size(); i++)
+			{
+				// write all MTRIXn records at once, as they only make sense when they are complete
+				PDB::RecordMTRIX1 mr1;
+				PDB::RecordMTRIX2 mr2;
+				PDB::RecordMTRIX3 mr3;
+				mr1.serial_number = i;
+				mr2.serial_number = i;
+				mr3.serial_number = i;
+				mr1.transformation_matrix[0] = structure.ncs_matrices[i].matrix[0]; 
+				mr1.transformation_matrix[1] = structure.ncs_matrices[i].matrix[1]; 
+				mr1.transformation_matrix[2] = structure.ncs_matrices[i].matrix[2]; 
+				mr1.transformation_matrix[3] = structure.ncs_matrices[i].matrix[3]; 
+				mr2.transformation_matrix[0] = structure.ncs_matrices[i].matrix[4]; 
+				mr2.transformation_matrix[1] = structure.ncs_matrices[i].matrix[5]; 
+				mr2.transformation_matrix[2] = structure.ncs_matrices[i].matrix[6]; 
+				mr2.transformation_matrix[3] = structure.ncs_matrices[i].matrix[7]; 
+				mr3.transformation_matrix[0] = structure.ncs_matrices[i].matrix[8]; 
+				mr3.transformation_matrix[1] = structure.ncs_matrices[i].matrix[9]; 
+				mr3.transformation_matrix[2] = structure.ncs_matrices[i].matrix[10]; 
+				mr3.transformation_matrix[3] = structure.ncs_matrices[i].matrix[11]; 
+				mr1.is_given = structure.ncs_matrices[i].isgiven;
+				mr2.is_given = structure.ncs_matrices[i].isgiven;
+				mr3.is_given = structure.ncs_matrices[i].isgiven;
+				writeRecord_(mr1);
+				writeRecord_(mr2);
+				writeRecord_(mr3);
+			}
 		}
   }
 
@@ -1922,7 +1946,7 @@ namespace BALL
 	}
 
 	void BALL::PDBFile::writeCrystallographicSection_
-		(const PDB::Structure& /* structure */, const BALL::PDBInfo& info)
+		(const PDB::Structure& structure, const BALL::PDBInfo& info)
 	{
 		// --- CRYST1 ---
 		addAllRecords_(info, PDB::RECORD_TYPE__CRYST1);
@@ -1938,12 +1962,8 @@ namespace BALL
 		addAllRecords_(info, PDB::RECORD_TYPE__SCALE2);
 		// --- SCALE3 ---
 		addAllRecords_(info, PDB::RECORD_TYPE__SCALE3);
-		// --- MTRIX1 ---
-		addAllRecords_(info, PDB::RECORD_TYPE__MTRIX1);
-		// --- MTRIX2 ---
-		addAllRecords_(info, PDB::RECORD_TYPE__MTRIX2);
-		// --- MTRIX3 ---
-		addAllRecords_(info, PDB::RECORD_TYPE__MTRIX3);
+		// --- MTRIX1, MTRIX2, MTRIX3 ---
+		writeMTRIXnSection_(structure);
 		// --- TVECT ---
 		addAllRecords_(info, PDB::RECORD_TYPE__TVECT);
 	}
@@ -2118,5 +2138,38 @@ namespace BALL
 								 cr.unit_cell.gamma,
 								 cr.unit_cell.space_group,
 								 cr.unit_cell.z_value);
+	}
+	
+	void PDBFile::writeRecord_(const PDB::RecordMTRIX1& mr1)
+	{
+		writeRecord_(PDB::RECORD_TYPE__MTRIX1,
+								 mr1.serial_number,
+								 mr1.transformation_matrix[0],
+								 mr1.transformation_matrix[1],
+								 mr1.transformation_matrix[2],
+								 mr1.transformation_matrix[3],
+								 mr1.is_given);
+	}
+	
+	void PDBFile::writeRecord_(const PDB::RecordMTRIX2& mr2)
+	{
+		writeRecord_(PDB::RECORD_TYPE__MTRIX2,
+								 mr2.serial_number,
+								 mr2.transformation_matrix[0],
+								 mr2.transformation_matrix[1],
+								 mr2.transformation_matrix[2],
+								 mr2.transformation_matrix[3],
+								 mr2.is_given);
+	}
+	
+	void PDBFile::writeRecord_(const PDB::RecordMTRIX3& mr3)
+	{
+		writeRecord_(PDB::RECORD_TYPE__MTRIX3,
+								 mr3.serial_number,
+								 mr3.transformation_matrix[0],
+								 mr3.transformation_matrix[1],
+								 mr3.transformation_matrix[2],
+								 mr3.transformation_matrix[3],
+								 mr3.is_given);
 	}
 } // namespace BALL

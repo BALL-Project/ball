@@ -41,9 +41,9 @@ namespace BALL
 		const char* FORMAT_MASTER  = "    %5d%5d%5d%5d%5d%5d%5d%5d%5d%5d%5d%5d";
 		const char* FORMAT_MODEL   = "    %4ld";
 		const char* FORMAT_MODRES  = " %3.3s %3.3s %c %4ld%c %3.3s  %41.41s";
-		const char* FORMAT_MTRIX1  = " %3ld%10f%10f%10f     %10f    %1ld";
-		const char* FORMAT_MTRIX2  = " %3ld%10f%10f%10f     %10f    %1ld";
-		const char* FORMAT_MTRIX3  = " %3ld%10f%10f%10f     %10f    %1ld";
+		const char* FORMAT_MTRIX1  = " %3ld%10.6f%10.6f%10.6f     %10.5f    %1ld";
+		const char* FORMAT_MTRIX2  = " %3ld%10.6f%10.6f%10.6f     %10.5f    %1ld";
+		const char* FORMAT_MTRIX3  = " %3ld%10.6f%10.6f%10.6f     %10.5f    %1ld";
 		const char* FORMAT_OBSLTE  = "  %2ld %9.9s %4.4s      %4.4s %4.4s %4.4s %4.4s %4.4s %4.4s %4.4s %4.4s";
 		const char* FORMAT_ORIGX1  = "    %10f%10f%10f     %10f";
 		const char* FORMAT_ORIGX2  = "    %10f%10f%10f     %10f";

@@ -31,6 +31,10 @@
 #	include <BALL/DATATYPE/hashSet.h>
 #endif
 
+#ifndef BALL_MATHS_MATRIX44_H
+#	include <BALL/MATHS/matrix44.h>
+#endif
+
 namespace BALL 
 {
 
@@ -1192,6 +1196,20 @@ namespace BALL
 				}
 			} unitcell_info;
 
+			struct BALL_EXPORT NCSMatrix
+			{
+				Real     matrix[12];
+				Integer  isgiven;
+				NCSMatrix(const BALL::Matrix4x4& m, bool is_given)
+				{
+					matrix[0] = m(0,0); matrix[1] = m(0,1); matrix[2] = m(0,2); matrix[3] = m(0,3);
+					matrix[4] = m(1,0); matrix[5] = m(1,1); matrix[6] = m(1,2); matrix[7] = m(1,3);
+					matrix[8] = m(2,0); matrix[9] = m(2,1); matrix[10] = m(2,2); matrix[11] = m(2,3);
+					isgiven = is_given;
+				}
+			};
+
+			std::vector<NCSMatrix> ncs_matrices;
 			std::vector<AtomEntry> atoms;
 
 			HashSet<const ::BALL::Atom*>	conect_atoms;
