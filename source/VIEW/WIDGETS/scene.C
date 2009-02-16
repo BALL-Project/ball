@@ -510,29 +510,6 @@ namespace BALL
 				return;
 			}
 
-<<<<<<< HEAD:source/VIEW/WIDGETS/scene.C
-=======
-			// ok, this is going the stereo way...
-			if (gl_renderer_->getStereoMode() == GLRenderer::DUAL_VIEW_DIFFERENT_DISPLAY_STEREO)
-			{
-				left_eye_widget_->setRenderMode(mode);
-				right_eye_widget_->setRenderMode(mode);
-
-				left_eye_widget_->updateGL();
-				right_eye_widget_->updateGL();
-
-				left_eye_widget_->makeCurrent();
-				left_eye_widget_->swapBuffers();
-
-				right_eye_widget_->makeCurrent();
-				right_eye_widget_->swapBuffers();
-
-				makeCurrent();
-				return;
-			}
-				
-
->>>>>>> 67c467b... Improved support for tracking plugins.:source/VIEW/WIDGETS/scene.C
 			glDrawBuffer(GL_BACK_LEFT);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
