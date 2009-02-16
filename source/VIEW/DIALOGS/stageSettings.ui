@@ -22,234 +22,424 @@
     </rect>
    </property>
    <property name="currentIndex" >
-    <number>3</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="Main" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
-      <number>9</number>
+    <widget class="QWidget" name="" >
+     <property name="geometry" >
+      <rect>
+       <x>310</x>
+       <y>10</y>
+       <width>291</width>
+       <height>381</height>
+      </rect>
      </property>
-     <property name="spacing" >
-      <number>6</number>
+     <layout class="QVBoxLayout" >
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QGroupBox" name="fog_box" >
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>16777215</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="toolTip" >
+         <string>The fog is currently not exported to POVRay</string>
+        </property>
+        <property name="title" >
+         <string>Use Fog</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignLeading</set>
+        </property>
+        <property name="checkable" >
+         <bool>true</bool>
+        </property>
+        <layout class="QGridLayout" >
+         <property name="margin" >
+          <number>9</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item row="2" column="0" >
+          <widget class="QLabel" name="min_label" >
+           <property name="text" >
+            <string>min</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1" >
+          <widget class="QLabel" name="max_label" >
+           <property name="text" >
+            <string>max</string>
+           </property>
+           <property name="alignment" >
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" colspan="2" >
+          <widget class="QSlider" name="fog_slider" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="toolTip" >
+            <string>Intensity of fog</string>
+           </property>
+           <property name="whatsThis" >
+            <string>Intensity of fog</string>
+           </property>
+           <property name="maximum" >
+            <number>400</number>
+           </property>
+           <property name="value" >
+            <number>200</number>
+           </property>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="tickInterval" >
+            <number>50</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="environment_map" >
+        <property name="toolTip" >
+         <string/>
+        </property>
+        <property name="title" >
+         <string>Use Environment Maps</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignJustify</set>
+        </property>
+        <property name="checkable" >
+         <bool>true</bool>
+        </property>
+        <property name="checked" >
+         <bool>false</bool>
+        </property>
+        <layout class="QGridLayout" >
+         <property name="margin" >
+          <number>9</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item row="1" column="0" >
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLineEdit" name="texture_file_edit" >
+             <property name="minimumSize" >
+              <size>
+               <width>150</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="focusPolicy" >
+              <enum>Qt::StrongFocus</enum>
+             </property>
+             <property name="text" >
+              <string>texture</string>
+             </property>
+             <property name="maxLength" >
+              <number>32767</number>
+             </property>
+             <property name="frame" >
+              <bool>true</bool>
+             </property>
+             <property name="echoMode" >
+              <enum>QLineEdit::Normal</enum>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="texture_browse_button" >
+             <property name="minimumSize" >
+              <size>
+               <width>50</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="focusPolicy" >
+              <enum>Qt::TabFocus</enum>
+             </property>
+             <property name="toolTip" >
+              <string>Browse your computer for amber file</string>
+             </property>
+             <property name="text" >
+              <string>Browse</string>
+             </property>
+             <property name="autoDefault" >
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="0" column="0" >
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="textLabel1_3_2" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>3</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>90</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>32767</width>
+               <height>110</height>
+              </size>
+             </property>
+             <property name="text" >
+              <string>up-direction</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="up_direction_x" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>30</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>40</width>
+               <height>500</height>
+              </size>
+             </property>
+             <property name="toolTip" >
+              <string>Direction x</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="up_direction_y" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>30</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>40</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="toolTip" >
+              <string>Direction y</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="up_direction_z" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>30</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>40</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="toolTip" >
+              <string>Direction z</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="offscreen_group" >
+        <property name="toolTip" >
+         <string>Screenshots can also be created through offscreen rendering, which enables images larger than the screen resolution. Uncheck this if there are poblems with the resulting images.</string>
+        </property>
+        <property name="title" >
+         <string>Use offscreen rendering for PNGs</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignJustify</set>
+        </property>
+        <property name="checkable" >
+         <bool>true</bool>
+        </property>
+        <property name="checked" >
+         <bool>false</bool>
+        </property>
+        <layout class="QGridLayout" >
+         <property name="margin" >
+          <number>9</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item row="0" column="1" >
+          <widget class="QSpinBox" name="resolution_factor" >
+           <property name="maximum" >
+            <number>5</number>
+           </property>
+           <property name="minimum" >
+            <number>1</number>
+           </property>
+           <property name="value" >
+            <number>1</number>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0" >
+          <widget class="QLabel" name="factor_label" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>7</hsizetype>
+             <vsizetype>5</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text" >
+            <string>resolution factor</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" colspan="2" >
+          <widget class="QLabel" name="max_label" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>7</hsizetype>
+             <vsizetype>5</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text" >
+            <string>(max width/height: 4096 pixels)</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>11</y>
+       <width>291</width>
+       <height>381</height>
+      </rect>
      </property>
-     <item row="0" column="0" >
-      <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
-       <item row="1" column="0" >
-        <widget class="QGroupBox" name="fob_box" >
-         <property name="toolTip" >
-          <string>The fog is currently not exported to POVRay</string>
+     <layout class="QVBoxLayout" >
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QGroupBox" name="background_box" >
+        <property name="toolTip" >
+         <string>Set the background color of the Scene.</string>
+        </property>
+        <property name="title" >
+         <string>Background Color</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignHCenter</set>
+        </property>
+        <widget class="QWidget" name="" >
+         <property name="geometry" >
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>271</width>
+           <height>29</height>
+          </rect>
          </property>
-         <property name="title" >
-          <string>Fog</string>
-         </property>
-         <property name="alignment" >
-          <set>Qt::AlignHCenter</set>
-         </property>
-         <layout class="QGridLayout" >
+         <layout class="QHBoxLayout" >
           <property name="margin" >
-           <number>9</number>
+           <number>0</number>
           </property>
           <property name="spacing" >
            <number>6</number>
           </property>
-          <item row="0" column="0" >
-           <widget class="QCheckBox" name="enable_fog" >
-            <property name="text" >
-             <string>Enable fog</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="2" >
-           <widget class="QSlider" name="fog_slider" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
-            <property name="toolTip" >
-             <string>Intensity of fog</string>
-            </property>
-            <property name="whatsThis" >
-             <string>Intensity of fog</string>
-            </property>
-            <property name="maximum" >
-             <number>400</number>
-            </property>
-            <property name="value" >
-             <number>200</number>
-            </property>
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="tickInterval" >
-             <number>50</number>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1" >
-           <widget class="QLabel" name="max_label" >
-            <property name="text" >
-             <string>max</string>
-            </property>
-            <property name="alignment" >
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" >
-           <widget class="QLabel" name="min_label" >
-            <property name="text" >
-             <string>min</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="2" column="1" >
-        <widget class="QGroupBox" name="offscreen_group" >
-         <property name="toolTip" >
-          <string>Screenshots can also be created through offscreen rendering, which enables images larger than the screen resolution. Uncheck this if there are poblems with the resulting images.</string>
-         </property>
-         <property name="title" >
-          <string>Use offscreen rendering for PNGs</string>
-         </property>
-         <property name="alignment" >
-          <set>Qt::AlignJustify</set>
-         </property>
-         <property name="checkable" >
-          <bool>true</bool>
-         </property>
-         <property name="checked" >
-          <bool>false</bool>
-         </property>
-         <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <item row="0" column="1" >
-           <widget class="QSpinBox" name="resolution_factor" >
-            <property name="maximum" >
-             <number>5</number>
-            </property>
-            <property name="minimum" >
-             <number>1</number>
-            </property>
-            <property name="value" >
-             <number>1</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" >
-           <widget class="QLabel" name="factor_label" >
-            <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>7</hsizetype>
-              <vsizetype>5</vsizetype>
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text" >
-             <string>resolution factor</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="2" >
-           <widget class="QLabel" name="max_label" >
-            <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>7</hsizetype>
-              <vsizetype>5</vsizetype>
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text" >
-             <string>(max width/height: 4096 pixels)</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="1" >
-        <widget class="QGroupBox" name="lights_box" >
-         <property name="title" >
-          <string>Misc</string>
-         </property>
-         <property name="alignment" >
-          <set>Qt::AlignHCenter</set>
-         </property>
-         <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <item row="2" column="0" >
-           <widget class="QCheckBox" name="use_preview" >
-            <property name="toolTip" >
-             <string>Show the lightsources in the 3D view for easier positioning.</string>
-            </property>
-            <property name="text" >
-             <string>Use faster preview models</string>
-            </property>
-            <property name="checked" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" >
-           <widget class="QCheckBox" name="show_fps" >
-            <property name="toolTip" >
-             <string>Show the lightsources in the 3D view for easier positioning.</string>
-            </property>
-            <property name="text" >
-             <string>Show frames per second (FPS)</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" >
-           <widget class="QCheckBox" name="show_lights_" >
-            <property name="toolTip" >
-             <string>Show the lightsources in the 3D view for easier positioning.</string>
-            </property>
-            <property name="text" >
-             <string>Show lightsources in Scene</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="0" >
-        <widget class="QGroupBox" name="background_box" >
-         <property name="toolTip" >
-          <string>Set the background color of the Scene.</string>
-         </property>
-         <property name="title" >
-          <string>Background color</string>
-         </property>
-         <property name="alignment" >
-          <set>Qt::AlignHCenter</set>
-         </property>
-         <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <item row="0" column="0" >
+          <item>
            <widget class="QLabel" name="color_sample" >
             <property name="sizePolicy" >
              <sizepolicy>
@@ -279,7 +469,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1" >
+          <item>
            <widget class="QPushButton" name="color_button" >
             <property name="text" >
              <string>Edit</string>
@@ -288,148 +478,199 @@
           </item>
          </layout>
         </widget>
-       </item>
-       <item row="0" column="1" >
-        <widget class="QGroupBox" name="animation_box" >
-         <property name="toolTip" >
-          <string/>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="animation_box" >
+        <property name="toolTip" >
+         <string/>
+        </property>
+        <property name="title" >
+         <string>Animation Smoothness</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignHCenter</set>
+        </property>
+        <layout class="QGridLayout" >
+         <property name="margin" >
+          <number>9</number>
          </property>
-         <property name="title" >
-          <string>Animation Smoothness</string>
+         <property name="spacing" >
+          <number>6</number>
          </property>
-         <property name="alignment" >
-          <set>Qt::AlignHCenter</set>
+         <item row="1" column="1" >
+          <widget class="QLabel" name="max_label" >
+           <property name="text" >
+            <string>max</string>
+           </property>
+           <property name="alignment" >
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" >
+          <widget class="QLabel" name="min_label" >
+           <property name="text" >
+            <string>min</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0" colspan="2" >
+          <widget class="QSlider" name="animation_smoothness" >
+           <property name="toolTip" >
+            <string>Smoothness of the interpolation between stored 3D positions.</string>
+           </property>
+           <property name="whatsThis" >
+            <string/>
+           </property>
+           <property name="minimum" >
+            <number>1</number>
+           </property>
+           <property name="maximum" >
+            <number>100</number>
+           </property>
+           <property name="value" >
+            <number>25</number>
+           </property>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="tickInterval" >
+            <number>50</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="capping_box" >
+        <property name="toolTip" >
+         <string>Capping planes work almost like clipping planes, but create a solid volume.</string>
+        </property>
+        <property name="title" >
+         <string>Capping</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignHCenter</set>
+        </property>
+        <layout class="QGridLayout" >
+         <property name="margin" >
+          <number>9</number>
          </property>
-         <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <item row="0" column="0" colspan="2" >
-           <widget class="QSlider" name="animation_smoothness" >
-            <property name="toolTip" >
-             <string>Smoothness of the interpolation between stored 3D positions.</string>
-            </property>
-            <property name="whatsThis" >
-             <string/>
-            </property>
-            <property name="minimum" >
-             <number>1</number>
-            </property>
-            <property name="maximum" >
-             <number>100</number>
-            </property>
-            <property name="value" >
-             <number>25</number>
-            </property>
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="tickInterval" >
-             <number>50</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" >
-           <widget class="QLabel" name="min_label" >
-            <property name="text" >
-             <string>min</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1" >
-           <widget class="QLabel" name="max_label" >
-            <property name="text" >
-             <string>max</string>
-            </property>
-            <property name="alignment" >
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="2" column="0" >
-        <widget class="QGroupBox" name="capping_box" >
-         <property name="toolTip" >
-          <string>Capping planes work almost like clipping planes, but create a solid volume.</string>
+         <property name="spacing" >
+          <number>6</number>
          </property>
-         <property name="title" >
-          <string>Capping</string>
+         <item row="1" column="1" >
+          <widget class="QSpinBox" name="capping_transparency" >
+           <property name="maximum" >
+            <number>255</number>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" >
+          <widget class="QLabel" name="label" >
+           <property name="text" >
+            <string>Transparency</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" >
+          <widget class="QPushButton" name="capping_color_button" >
+           <property name="text" >
+            <string>Edit</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0" >
+          <widget class="QLabel" name="capping_color" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>7</hsizetype>
+             <vsizetype>5</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="toolTip" >
+            <string>Color for Caping planes</string>
+           </property>
+           <property name="frameShape" >
+            <enum>QFrame::Panel</enum>
+           </property>
+           <property name="frameShadow" >
+            <enum>QFrame::Sunken</enum>
+           </property>
+           <property name="lineWidth" >
+            <number>1</number>
+           </property>
+           <property name="midLineWidth" >
+            <number>0</number>
+           </property>
+           <property name="text" >
+            <string/>
+           </property>
+           <property name="margin" >
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="lights_box" >
+        <property name="title" >
+         <string>Misc</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignHCenter</set>
+        </property>
+        <layout class="QGridLayout" >
+         <property name="margin" >
+          <number>9</number>
          </property>
-         <property name="alignment" >
-          <set>Qt::AlignHCenter</set>
+         <property name="spacing" >
+          <number>6</number>
          </property>
-         <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <item row="0" column="0" >
-           <widget class="QLabel" name="capping_color" >
-            <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>7</hsizetype>
-              <vsizetype>5</vsizetype>
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="toolTip" >
-             <string>Color for Caping planes</string>
-            </property>
-            <property name="frameShape" >
-             <enum>QFrame::Panel</enum>
-            </property>
-            <property name="frameShadow" >
-             <enum>QFrame::Sunken</enum>
-            </property>
-            <property name="lineWidth" >
-             <number>1</number>
-            </property>
-            <property name="midLineWidth" >
-             <number>0</number>
-            </property>
-            <property name="text" >
-             <string/>
-            </property>
-            <property name="margin" >
-             <number>0</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" colspan="2" >
-           <widget class="QPushButton" name="capping_color_button" >
-            <property name="text" >
-             <string>Edit</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" >
-           <widget class="QLabel" name="label" >
-            <property name="text" >
-             <string>Transparency</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1" colspan="2" >
-           <widget class="QSpinBox" name="capping_transparency" >
-            <property name="maximum" >
-             <number>255</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
+         <item row="2" column="0" >
+          <widget class="QCheckBox" name="use_preview" >
+           <property name="toolTip" >
+            <string>Show the lightsources in the 3D view for easier positioning.</string>
+           </property>
+           <property name="text" >
+            <string>Use faster preview models</string>
+           </property>
+           <property name="checked" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" >
+          <widget class="QCheckBox" name="show_fps" >
+           <property name="toolTip" >
+            <string>Show the lightsources in the 3D view for easier positioning.</string>
+           </property>
+           <property name="text" >
+            <string>Show frames per second (FPS)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0" >
+          <widget class="QCheckBox" name="show_lights_" >
+           <property name="toolTip" >
+            <string>Show the lightsources in the 3D view for easier positioning.</string>
+           </property>
+           <property name="text" >
+            <string>Show lightsources in Scene</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
    <widget class="QWidget" name="Mouse" >
     <layout class="QGridLayout" >
@@ -849,7 +1090,7 @@
     </layout>
    </widget>
    <widget class="QWidget" name="OpenGL" >
-    <widget class="QWidget" name="" >
+    <widget class="QWidget" name="layoutWidget" >
      <property name="geometry" >
       <rect>
        <x>9</x>
@@ -1014,7 +1255,7 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="QLabel" name="" >
+           <widget class="QLabel" name="label" >
             <property name="text" >
              <string>Projection Transformations:</string>
             </property>
@@ -1325,7 +1566,6 @@
  <layoutdefault spacing="6" margin="11" />
  <tabstops>
   <tabstop>color_button</tabstop>
-  <tabstop>enable_fog</tabstop>
   <tabstop>fog_slider</tabstop>
   <tabstop>capping_color_button</tabstop>
   <tabstop>capping_transparency</tabstop>
