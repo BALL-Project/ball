@@ -443,8 +443,7 @@ AC_DEFUN([CF_VIEW_QT_EXECUTABLES], [
 			MOC_VERSION=`${MOC} -v 2>&1 | ${TR} -d "()" | ${SED} "s/.* Qt //" | ${SED} "s/-.*//"`
 			AC_MSG_RESULT(${MOC_VERSION})
 			
-		dnl ???????????????????
-			if test "${QT_VERSION_STR}" != "${QT_VERSION_STR}" ; then
+			if test "${MOC_VERSION}" != "${QT_VERSION_STR}" ; then
 				AC_MSG_RESULT()
 				AC_MSG_RESULT([QT version (${QT_VERSION_STR}) is incompatible with moc version (${MOC_VERSION})!])
 				AC_MSG_RESULT([Please check your QTDIR environment variable, include the correct])
@@ -502,13 +501,67 @@ AC_DEFUN([CF_VIEW_QT_EXECUTABLES], [
 
 			AC_MSG_RESULT(${UIC_VERSION})
 			
-		dnl ??????????????????????
-			if test "${QT_VERSION_STR}" != "${QT_VERSION_STR}" ; then
+			if test "${UIC_VERSION}" != "${QT_VERSION_STR}" ; then
 				AC_MSG_RESULT()
 				AC_MSG_RESULT([QT version (${QT_VERSION_STR}) is incompatible with uic version (${UIC_VERSION})!])
 				AC_MSG_RESULT([Please check your QTDIR environment variable, include the correct])
 				AC_MSG_RESULT([path to uic in your PATH environment variable, or specify the correct])
 				AC_MSG_RESULT([path to uic using the option --with-uic=PATH to rerun configure.])
+				CF_ERROR
+			fi
+		fi
+	fi
+
+	dnl
+	dnl	try to find the RCC (QT meta object compiler)
+	dnl It is usually installed in ${QTDIR}/bin/rcc
+	dnl
+	if test "${USE_VIEW}" = true ; then
+		if test "${RCC}" = rcc ; then
+			if test "${QTDIR}" != "" ; then
+				RCC=${QTDIR}/bin/rcc
+			fi
+		fi
+
+		dnl
+		dnl  try to find that damned moc
+		dnl
+		AC_PATH_PROG(RCC,rcc,rcc)
+		if test "${RCC}" = rcc ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([Could not find the QT Meta Object Compiler (rcc)!])
+			AC_MSG_RESULT([You might run into trouble if you want to compile MolVIEW.])
+			AC_MSG_RESULT([Please include the correct path to rcc into your])
+			AC_MSG_RESULT([PATH environment variable or specify the path to moc])
+			AC_MSG_RESULT([using the option --with-rcc=PATH to rerun configure.])
+			CF_ERROR
+		fi
+    dnl
+    dnl  Make sure the RCC we found is actually executable
+    dnl
+		AC_MSG_CHECKING(whether we can run rcc)
+    if test ! -x "${RCC}" ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([The QT Resource Compiler (rcc) found in ])
+      AC_MSG_RESULT("  ${RCC}")
+      AC_MSG_RESULT([seems not to be an executable!])
+			AC_MSG_RESULT([Please include the correct path to rcc into your])
+			AC_MSG_RESULT([PATH environment variable or specify the path to rcc])
+			AC_MSG_RESULT([using the option --with-rcc=PATH to rerun configure.])
+			CF_ERROR
+		else
+			AC_MSG_RESULT(yes)
+			AC_MSG_CHECKING(rcc version)
+			RCC_VERSION=`${RCC} -v 2>&1 | ${TR} -d "()" | ${SED} "s/.* Qt //" | ${SED} "s/-.*//"`
+			AC_MSG_RESULT(${RCC_VERSION})
+
+		dnl ???????????????????
+			if test "${QT_VERSION_STR}" != "${QT_VERSION_STR}" ; then
+				AC_MSG_RESULT()
+				AC_MSG_RESULT([QT version (${QT_VERSION_STR}) is incompatible with moc version (${RCC_VERSION})!])
+				AC_MSG_RESULT([Please check your QTDIR environment variable, include the correct])
+				AC_MSG_RESULT([path to moc in your PATH environment variable, or specify the correct])
+				AC_MSG_RESULT([path to moc using the option --with-rcc=PATH to rerun configure.])
 				CF_ERROR
 			fi
 		fi
