@@ -22,6 +22,10 @@
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
+#ifndef BALL_MATH_VECTOR3
+#  include <BALL/MATHS/vector3.h>
+#endif
+
 #include <QtGui/QWidget>
 
 namespace BALL
@@ -71,8 +75,15 @@ namespace BALL
 			/// Show a QColorDialog to select a new background color for the Scene
 			void colorPressed();
 
+			/// Show a QFileDialog to select a new environment texture map for the Scene
+			void loadEnvironmentMapPressed();
+			
+			///
+			void environmentMapChanged(bool active);
+
 			///
 			void cappingColorPressed();
+
 
 			private slots:
 				
@@ -83,12 +94,16 @@ namespace BALL
 			void focalDistanceChanged();
 
 			///
-			void fogStateChanged();
-			
-			///
 			void projectionTransformationChanged();
 
 			private:
+			
+			///
+			Vector3 getTextureUpDirection_()
+				throw(Exception::InvalidFormat);
+			
+			///
+			void setTextureUpDirection_(const Vector3& tud);
 
 			///
 			void setDefaultValues_();

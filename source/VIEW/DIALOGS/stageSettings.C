@@ -16,6 +16,7 @@
 #include <QtGui/QSlider>
 #include <QtGui/QStackedWidget>
 #include <QtGui/QListWidget>
+#include <QtGui/QFileDialog>
 
 namespace BALL
 {
@@ -48,15 +49,39 @@ namespace BALL
 			connect( capping_color_button, SIGNAL( clicked() ), this, SLOT( cappingColorPressed() ) );
 			connect( eye_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( eyeDistanceChanged() ) );
 			connect( focal_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( focalDistanceChanged() ) );
-			connect( enable_fog, SIGNAL( stateChanged(int) ), this, SLOT( fogStateChanged() ) );
 			connect( radioButton_perspectiveProjection, SIGNAL( clicked() ), this, SLOT( projectionTransformationChanged()));
 			connect( radioButton_orthographicProjection, SIGNAL( clicked() ), this, SLOT( projectionTransformationChanged()));
+			connect( texture_browse_button, SIGNAL( clicked() ), this, SLOT( loadEnvironmentMapPressed()));
+			connect( environment_map, SIGNAL( toggled(bool)), this, SLOT(environmentMapChanged(bool)));
 		} 
 
 
 		void StageSettings::colorPressed()
 		{
 			chooseColor(color_sample);
+		}
+	
+		void StageSettings::environmentMapChanged(bool active)
+		{
+ 			if (active)
+			{
+				setTextureUpDirection_(stage_->getCamera().getLookUpVector());	
+			}
+		}
+
+		void StageSettings::loadEnvironmentMapPressed()
+		{
+			//TODO set the file filter for texture files correctly!
+			QStringList files = QFileDialog::getOpenFileNames(
+					0,
+					"Choose an environment texture file to open",
+					scene_->getWorkingDir().c_str(),
+					"*");
+			if (files.begin() != files.end())
+			{
+				texture_file_edit->setText(*files.begin());
+				//TODO open this file and prepare for stage or submit the filename to the stage or scene
+			}
 		}
 
 		void StageSettings::cappingColorPressed()
@@ -76,9 +101,13 @@ namespace BALL
 			eye_distance_slider->setValue((int) (stage_->getEyeDistance() * 10.0));
 			focal_distance_slider->setValue((int) (stage_->getFocalDistance()));
 			fog_slider->setValue((int) (stage_->getFogIntensity()));
-			enable_fog->setChecked(stage_->getFogIntensity() > 0);
+			fog_box->setChecked(stage_->getFogIntensity() > 0);
 			animation_smoothness->setValue((int) (Scene::getAnimationSmoothness() * 10.0));
-
+			
+			//TODO
+			//environment_box->setChecked(stage->getTexture()!=""); or pointer to some texture
+			//setTextureUpDirection_(stage->getTextureUpDirection());
+				
 			ColorRGBA color = ClippingPlane::getCappingColor();
 			setColor(capping_color, color);
 			capping_transparency->setValue(255 - (int)color.getAlpha());
@@ -101,10 +130,19 @@ namespace BALL
 
 			stage_->setEyeDistance((float)(eye_distance_slider->value() / 10.0));
 			stage_->setFocalDistance((float)(focal_distance_slider->value()));
+			
+			//TODO
+			//if (environement_map->isChecked())
+			//{
+			//   stage->setTextureUpDirection(getTextureUpDirection_()));	
+			//   String filenname = ascii(texture_file_edit->text()));
+			//   if (filename is valid?)
+			//     stage->setTexture(filename));
+			//}
 
 			stage_->setSwapSideBySideStereo(swap_sss_button->isChecked());
 
-			if (enable_fog->isChecked())
+			if (fog_box->isChecked())
 			{
 				stage_->setFogIntensity(fog_slider->value());
 			}
@@ -154,6 +192,22 @@ namespace BALL
 			renderer.setSmoothLines(smooth_lines_->isChecked());
 		}
 
+		Vector3 StageSettings::getTextureUpDirection_()
+			throw(Exception::InvalidFormat)
+		{
+			return Vector3(up_direction_x->text().toFloat(),
+				 			   up_direction_y->text().toFloat(),
+			  				 up_direction_z->text().toFloat());
+		}
+
+		void StageSettings::setTextureUpDirection_(const Vector3& tud)
+		{
+			up_direction_x->setText(createFloatString(tud.x, 2).c_str());
+			up_direction_y->setText(createFloatString(tud.y, 2).c_str());
+			up_direction_z->setText(createFloatString(tud.z, 2).c_str());
+		}
+
+
 
 		void StageSettings::setDefaultValues_()
 		{
@@ -161,8 +215,12 @@ namespace BALL
 			animation_smoothness->setValue(25);
 			show_lights_->setChecked(false);
 			smooth_lines_->setChecked(false);
-			enable_fog->setChecked(false);
+			fog_box->setChecked(false);
 			fog_slider->setValue(200);
+			environment_map->setChecked(false);
+			
+			setTextureUpDirection_(stage_->getCamera().getLookUpVector());	
+			texture_file_edit->setText("texture");
 			radioButton_perspectiveProjection->setChecked(true);
 			radioButton_orthographicProjection->setChecked(false);
 			slider_->setValue(5);
@@ -208,11 +266,6 @@ namespace BALL
 				text.truncate(text.size() - 1);
 			}
 			focal_distance_label->setText(text.c_str());
-		}
-
-		void StageSettings::fogStateChanged()
-		{
-			fog_slider->setEnabled(enable_fog->isChecked());
 		}
 	
 		void StageSettings::projectionTransformationChanged()
