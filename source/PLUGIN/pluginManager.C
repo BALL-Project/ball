@@ -5,6 +5,8 @@
 #include <QtCore/QPluginLoader>
 #include <QtCore/QDir>
 #include <QtCore/QDebug>
+#include <QtCore/QReadLocker>
+#include <QtCore/QWriteLocker>
 #include <BALL/COMMON/logStream.h>
 
 namespace BALL
@@ -66,7 +68,6 @@ namespace BALL
 		if (loader->load())
 		{
 			plugin = qobject_cast<BALLPlugin*>(loader->instance());
-
 		}
 		else
 		{
@@ -75,7 +76,9 @@ namespace BALL
 
 		if(plugin) {
 			qDebug("loaded plugin");
+			loader_mutex_.lockForWrite();
 			loaders_.insert(plugin->getName(), loader);
+			loader_mutex_.unlock();
 		}
 
 		return plugin;
@@ -83,9 +86,13 @@ namespace BALL
 
 	bool PluginManager::unloadPlugin(const QString& plugin)
 	{
+		QWriteLocker locker(&loader_mutex_);
 		QHash<QString, QPluginLoader*>::iterator it = loaders_.find(plugin);
 
 		if(it != loaders_.end()) {
+			//Shutdown the plugin
+			stopPlugin(qobject_cast<BALLPlugin*>(it.value()->instance()));
+			//Delete the loader
 			it.value()->unload();
 			delete it.value();
 			loaders_.erase(it);
@@ -98,6 +105,7 @@ namespace BALL
 
 	QObject* PluginManager::getPluginInstance(const QString& plugin)
 	{
+		QReadLocker locker(&loader_mutex_);
 		QHash<QString, QPluginLoader*>::iterator it = loaders_.find(plugin);
 
 		if(it != loaders_.end()) {
@@ -109,6 +117,7 @@ namespace BALL
 
 	QObject* PluginManager::getPluginInstance(int pos)
 	{
+		QReadLocker locker(&loader_mutex_);
 		if(pos < 0 || pos >= getPluginCount()) {
 			return NULL;
 		}
@@ -121,7 +130,9 @@ namespace BALL
 
 	void PluginManager::registerHandler(PluginHandler* h)
 	{
+		handler_mutex_.lockForWrite();
 		handlers_.push_back(h);
+		handler_mutex_.unlock();
 	}
 
 	bool PluginManager::startPlugin(int plugin)
@@ -141,12 +152,14 @@ namespace BALL
 		}
 
 		bool started = false;
+		handler_mutex_.lockForRead();
 		std::list<PluginHandler*>::iterator it = handlers_.begin();
 		for(; it != handlers_.end(); ++it) {
 			if((*it)->canHandle(plugin)) {
 				started = (*it)->startPlugin(plugin) && !started;
 			}
 		}
+		handler_mutex_.unlock();
 
 		return started;
 	}
@@ -168,18 +181,21 @@ namespace BALL
 		}
 
 		bool all_stopped = true;
+		handler_mutex_.lockForRead();
 		std::list<PluginHandler*>::iterator it = handlers_.begin();
 		for(; it != handlers_.end(); ++it) {
 			if((*it)->isRunning(plugin)) {
 				all_stopped = (*it)->stopPlugin(plugin) && all_stopped;
 			}
 		}
+		handler_mutex_.unlock();
 
 		return all_stopped;
 	}
 
 	int PluginManager::getPluginCount() const
 	{
+		QReadLocker locker(&loader_mutex_);
 		return loaders_.size();
 	}
 }
