@@ -599,27 +599,6 @@ namespace BALL
 		ci_ptr->setCellAngleGamma(Angle(record.unit_cell.gamma, false));
 		ci_ptr->setZScore(record.unit_cell.z_value);
 
-		cout << "S " << ci_ptr->getSpaceGroup() << endl;	
-		cout << "M" << ci_ptr->getCart2Frac() << endl;	
-		cout << "I" << ci_ptr->getFrac2Cart() << endl;	
-
-
-		//current_protein_->setProperty("UNITCELL_A", record.unit_cell.a);
-		//current_protein_->setProperty("UNITCELL_B", record.unit_cell.b);
-		//current_protein_->setProperty("UNITCELL_C", record.unit_cell.c);
-		//current_protein_->setProperty("UNITCELL_ALPHA", record.unit_cell.alpha);
-		//current_protein_->setProperty("UNITCELL_BETA", record.unit_cell.beta);
-		//current_protein_->setProperty("UNITCELL_GAMMA", record.unit_cell.gamma);
-		//current_protein_->setProperty("SPACE_GROUP", string(record.unit_cell.space_group));
-		//current_protein_->setProperty("Z_VALUE", int(record.unit_cell.z_value));
-		//std::cout << record.unit_cell.a << std::endl;
-		//std::cout << record.unit_cell.b << std::endl;
-		//std::cout << record.unit_cell.c << std::endl;
-		//std::cout << record.unit_cell.alpha << std::endl;
-		//std::cout << record.unit_cell.beta << std::endl;
-		//std::cout << record.unit_cell.gamma << std::endl;
-		//std::cout << record.unit_cell.space_group << std::endl;
-		//std::cout << record.unit_cell.z_value << std::endl;
     return true;
 	}
 
@@ -1262,7 +1241,6 @@ namespace BALL
 					{
 						for(Position i = 0; i < ci_ptr->getNumberOfNCSSymOps(); i++)
 						{
-							cout << i << ci_ptr->getNCS(i) << endl;
 							structure.ncs_matrices.push_back(PDB::Structure::NCSMatrix(ci_ptr->getNCS(i), ci_ptr->isgivenNCS(i)));
 						}
 					}
@@ -1888,9 +1866,9 @@ namespace BALL
 				PDB::RecordMTRIX1 mr1;
 				PDB::RecordMTRIX2 mr2;
 				PDB::RecordMTRIX3 mr3;
-				mr1.serial_number = i;
-				mr2.serial_number = i;
-				mr3.serial_number = i;
+				mr1.serial_number = i+1;
+				mr2.serial_number = i+1;
+				mr3.serial_number = i+1;
 				mr1.transformation_matrix[0] = structure.ncs_matrices[i].matrix[0]; 
 				mr1.transformation_matrix[1] = structure.ncs_matrices[i].matrix[1]; 
 				mr1.transformation_matrix[2] = structure.ncs_matrices[i].matrix[2]; 
