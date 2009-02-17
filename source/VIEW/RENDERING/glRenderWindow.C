@@ -101,6 +101,9 @@ namespace BALL
 				return false;
 			}
 			createTexture(width, height);
+
+			QGLWidget::resize(width, height);
+
 			return true;
 		}						
 

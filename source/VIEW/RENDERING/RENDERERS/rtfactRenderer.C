@@ -46,16 +46,12 @@ namespace BALL
 
 		void RTfactRenderer::setLights(bool reset_all)
 		{
-			std::cout << "Setting " << stage_->getLightSources().size() << " lights!" << std::endl;
-
-			// TODO: this *crashes*
-			/*
 			if (reset_all)
 			{
 				for (Position i=0; i<lights_.size(); ++i)
 					m_renderer.removeLight(lights_[i]);
 				lights_.clear();
-			} */
+			}
 
 			Vector3 direction, light_position, attenuation;
 			Size current_light=0;

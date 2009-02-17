@@ -1858,6 +1858,7 @@ void GLRenderer::pickObjects2(List<GeometricObject*>& objects)
 
 
 // ############################ MOVEMENT/SIZE ###################################
+// TODO: shouldn't we use a camera aperture angle?
 void GLRenderer::setSize(float width, float height)
 	throw()
 {
@@ -1918,13 +1919,16 @@ void GLRenderer::setupStereo(float eye_separation, float focal_length)
 
 	float ndfl    = nearf / focal_length;
 
-	float left  = -2.0 * getXScale() - eye_separation * ndfl;
-	float right =  2.0 * getXScale() - eye_separation * ndfl;
+	float left   = -2.0 * x_scale_ - eye_separation * ndfl;
+	float right  =  2.0 * x_scale_ - eye_separation * ndfl;
+	float bottom = -2.0 * y_scale_;
+	float top    =  2.0 * y_scale_;
 
 	glMatrixMode(GL_PROJECTION);
 
 	glLoadIdentity();
-	glFrustum(left, right, -2.0 * getXScale(), 2.0 * getYScale(), nearf,farf);
+	glFrustum(left, right, bottom, top, nearf, farf);
+	glViewport(0, 0, width_, height_);
 
 	glMatrixMode(GL_MODELVIEW);
 }
