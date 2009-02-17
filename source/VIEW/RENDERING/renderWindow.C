@@ -47,19 +47,19 @@ namespace BALL
 					m_framebuffer = FrameBufferPtr(new FrameBuffer(m_pixels.get(), m_fmt));                
 					return m_framebuffer;                
 				}
-			};
+			}
 
 		template<typename taPixelDatatype>
 			FrameBufferFormat RenderWindow<taPixelDatatype>::getFormat() const
 			{
 				return m_fmt;
-			};
+			}
 
 		template<typename taPixelDatatype>
 			void RenderWindow<taPixelDatatype>::releaseBuffer(FrameBufferPtr buffer)
 			{
 				m_bufferLocked = false;
-			};		
+			}		
 
 		template<typename taPixelDatatype>
 			bool RenderWindow<taPixelDatatype>::init()
@@ -67,7 +67,7 @@ namespace BALL
 				m_fmt = FrameBufferFormat(0, 0, m_pfm);
 				m_bufferLocked = false;
 				return true;
-			};
+			}
 
 		template<typename taPixelDatatype>
 			bool RenderWindow<taPixelDatatype>::resize(const unsigned int width, const unsigned int height)
@@ -85,7 +85,7 @@ namespace BALL
 				memset(m_pixels.get(), '\0', m_fmt.getWidth() * m_fmt.getHeight() * m_pfm.computeByteSize());
 
 				return true;
-			};
+			}
 
 		template<typename taPixelDatatype>
 			void RenderWindow<taPixelDatatype>::refresh()
