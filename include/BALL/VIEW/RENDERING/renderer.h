@@ -14,6 +14,10 @@
 #	include <BALL/CONCEPT/object.h>
 #endif
 
+#ifndef BALL_VIEW_KERNEL_STAGE_H
+# include <BALL/VIEW/KERNEL/stage.h>
+#endif
+
 namespace BALL
 {
 	namespace VIEW
@@ -31,7 +35,6 @@ namespace BALL
 		class SimpleBox;
 		class TwoColoredLine;
 		class TwoColoredTube;
-		class Stage;
 		class ClippingPlane;
 		class GridVisualisation;
 		class QuadMesh;
@@ -80,6 +83,23 @@ namespace BALL
 			 		Called by Scene::exportScene().
 			 */
 			virtual bool init(const Stage& stage, float height, float width);
+
+			/// Set the light sources according to the stage
+			virtual void setLights(bool reset_all = false);
+
+			/** Update the camera position either from a given Camera, or from the default Stage.
+			 */
+			virtual void updateCamera(const Camera* camera = 0);
+
+			/// Update the background color from the stage
+			virtual void updateBackgroundColor();
+
+			/** Sets this renderer as a part of a stereo setup.
+			 *
+			 *  eye_separation denotes the distance along the right vector used
+			 *  by this "eye".
+			 */
+			virtual void setupStereo(float eye_separation, float focal_length);
 
 			///
 			virtual bool finish()
@@ -234,6 +254,15 @@ namespace BALL
 
 			//_
 			bool						show_light_sources_;
+
+			//_
+			Camera					camera_;
+
+			// An offset added to camera position and look at
+			Vector3					camera_offset_;
+
+			bool						use_offset_;
+
 		};
 
 	} // namespace VIEW

@@ -165,6 +165,103 @@ namespace BALL
 				///
 				ROTATE_CLOCKWISE_ACTION
 			};
+
+			/// Encapsulates renderers and their targets
+			class RenderSetup
+			{
+				public:
+					RenderSetup(Renderer* r, GLRenderWindow* t)
+						: renderer(r),
+							target(t),
+							rendering_paused_(false),
+							receive_updates_(true),
+							use_offset_(false),
+							camera_(),
+							camera_offset_(Vector3(0.))
+					{}
+
+					// TODO: this should be boost smart pointers!
+					Renderer* 				renderer;
+					GLRenderWindow*		target;
+
+					enum STEREO_SETUP {
+						NONE,
+						LEFT_EYE,
+						RIGHT_EYE
+					};
+
+					/** Pause rendering.
+					 *  This function allows to skip rendering while still
+					 *  buffering representations. Thus, a paused renderer
+					 *  will still receive all updates to representations,
+					 *  it will just not display anything.
+					 */
+					void pauseRendering() { rendering_paused_ = true; }
+
+					/** This function allows to activate a paused renderer
+					 *  again. Please note that the corresponding window will
+					 *  not be automatically updated. This has to be performed
+					 *  by the caller.
+					 */
+					void startRendering() { rendering_paused_ = false; }
+
+					/** This function returns the rendering state of our renderer.
+					 */
+					bool isPaused() const { return rendering_paused_; }
+
+					/** Prevent updating of rendering buffers.
+					 *
+					 *  This function allows to prevent the renderer from buffering or 
+					 * 	deleting representations.
+					 *
+					 * 	Please note that this is potentially dangerous, since the renderer
+					 * 	will not be made aware of deleted representations. Callers should
+					 * 	make sure that the renderer state is effectively reset upon reactivating
+					 * 	this switch.
+					 *
+					 * 	A common use case for this function is to support two render targets 
+					 * 	sharing one render context, where we want to prevent the second target
+					 * 	from rebuffering all representations already seen by the first.
+					 * 	
+					 */
+					void setReceiveBufferUpdates(bool do_receive) { receive_updates_ = do_receive; }
+
+					/** Returns the buffering state of the renderer.
+					 */
+					bool receivesBufferUpdates() const { return receive_updates_; };
+
+					/** Tells the connected renderer to update its camera.
+					 *
+					 * 	This function applies transformations like adding an offset to camera
+					 * 	position and view point before handing over the camera to the renderer.
+					 */
+					void updateCamera(const Camera* camera = 0);
+
+					/** Sets an offset to apply to camera position and look at point.
+					 *
+					 *  Please note that the offset is interpreted as relative to the camera with
+					 *  components (right, up, view) and will be updated at each position change.
+					 */
+					void setOffset(const Vector3& offset);
+
+					/** This function turns the connected renderer into part of a stereo setup.
+					 *
+					 * 	Depending on the value set here, renderers will be passed additional information
+					 * 	upon update camera to set eye separation and focal distance or to prepare correct
+					 * 	frustra.
+					 */
+					void setStereoMode(STEREO_SETUP stereo) { stereo_setup_ = stereo; };
+
+				protected:
+					bool rendering_paused_;
+					bool receive_updates_;
+					bool use_offset_;
+
+					Camera  camera_;
+					Vector3 camera_offset_;
+
+					STEREO_SETUP stereo_setup_;
+			};
 			
 			//@} 
 			/** @name Enums 
@@ -358,8 +455,7 @@ namespace BALL
 				throw() { return animation_smoothness_;}
 
 			///
-			void setDefaultLighting(bool update_GL = true)
-				throw();
+			void setDefaultLighting(bool update_GL = true);
 
 			///
 			void initializePreferencesTab(Preferences &preferences)
@@ -652,8 +748,7 @@ namespace BALL
 				throw();
 
 			/// Update the GL camera and if necessary the lights
-			virtual void updateCamera_()
-				throw();
+			virtual void updateCamera_();
 			
 			///
 			virtual void dropEvent(QDropEvent* e);
@@ -835,7 +930,7 @@ namespace BALL
 			Camera stereo_camera_;
 			Camera stored_camera_;
 
-			std::vector<std::pair<Renderer*, GLRenderWindow*> > renderers_;
+			std::vector<RenderSetup> renderers_;
 			GLRenderer* gl_renderer_;
 
 #ifdef ENABLE_RAYTRACING

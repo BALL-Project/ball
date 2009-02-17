@@ -234,6 +234,7 @@ namespace BALL
 			}	
 		}
 
+		// TODO: rewrite to allow more than one renderer
 		void StageSettings::getGLSettings()
 			throw()
 		{

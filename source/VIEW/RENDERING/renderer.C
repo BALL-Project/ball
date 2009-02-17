@@ -34,7 +34,10 @@ namespace BALL
 				scene_(0),
 				stage_(0),
 				width_(0),
-				height_(0)
+				height_(0),
+				show_preview_(false),
+				volume_width_(0.),
+				show_light_sources_(false)
 		{
 			stage_ = &RTTI::getDefault<Stage>();
 		}
@@ -44,7 +47,10 @@ namespace BALL
 			scene_(renderer.scene_),
 			stage_(renderer.stage_),
 			width_(renderer.width_),
-			height_(renderer.height_)
+			height_(renderer.height_),
+			show_preview_(renderer.show_preview_),
+			volume_width_(renderer.volume_width_),
+			show_light_sources_(renderer.show_light_sources_)
 		{}
 
 
@@ -107,7 +113,6 @@ namespace BALL
 			return stage_ != &RTTI::getDefault<Stage>();
 		}
 
-
 		bool Renderer::init(Scene& scene)
 		{
 			scene_ = &scene;
@@ -133,10 +138,31 @@ namespace BALL
 			return true;
 		}
 
+		void Renderer::setLights(bool reset_all)
+		{
+			Log.error() << "Renderer::setLights() not implemented for this kind of renderer yet!" << std::endl;
+		}
+
+		void Renderer::updateCamera(const Camera* camera)
+		{
+			Log.error() << "Renderer::updateCamera() not implemented for this kind of renderer yet!" << std::endl;
+		}
+
+		void Renderer::updateBackgroundColor()
+		{
+			Log.error() << "Renderer::updateBackgroundColor() not implemented for this kind of renderer yet!" << std::endl;
+		}
+
+		void Renderer::setupStereo(float eye_separation, float focal_length)
+		{
+			Log.error() << "Renderer::setupStereo() not implemented for this kind of renderer yet!" << std::endl;
+		}
+
 		bool Renderer::finish()
 			throw()
 		{
 			return true;
 		}
+
 
 } } // namespaces
