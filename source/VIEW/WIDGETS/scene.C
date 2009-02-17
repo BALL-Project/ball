@@ -2671,17 +2671,18 @@ namespace BALL
 		void Scene::enterActiveStereo()
 			throw()
 		{
+return;
 			GLRenderWindow* new_widget = new GLRenderWindow(0, "blubb", Qt::Window);
 			new_widget->makeCurrent();
 			new_widget->init();
 			new_widget->resize(width(), height());
 			new_widget->show();
 
-			RenderSetup rs(&*rt_renderer_, new_widget);
-			rs.setReceiveBufferUpdates(false);
-			rs.setOffset(Vector3(5, 0, 5)); // TEST
+//			RenderSetup rs(&*rt_renderer_, new_widget);
+//			rs.setReceiveBufferUpdates(false);
+//			rs.setOffset(Vector3(5, 0, 5)); // TEST
 
-			renderers_.push_back(rs);
+//			renderers_.push_back(rs);
 			return;
 
 			gl_renderer_->setStereoMode(GLRenderer::ACTIVE_STEREO);
@@ -2696,8 +2697,6 @@ namespace BALL
 		void Scene::enterDualStereo()
 			throw()
 		{
-			Vector3	diff = Vector3(stage_->getEyeDistance()*0.5, 0, 0);  
-
 			GLRenderWindow* left_widget = new GLRenderWindow(0, "bla", Qt::Window);
 			left_widget->makeCurrent();
 			left_widget->init();
@@ -2749,19 +2748,43 @@ namespace BALL
 		void Scene::enterDualStereoDifferentDisplays()
 			throw()
 		{
-			gl_renderer_->setStereoMode(GLRenderer::DUAL_VIEW_DIFFERENT_DISPLAY_STEREO);
+			GLRenderWindow* left_widget = new GLRenderWindow(QApplication::desktop()->screen(0), "left eye");
+			left_widget->makeCurrent();
+			left_widget->init();
+			left_widget->resize(width(), height());
 
-			no_stereo_action_->setChecked(false);
-			active_stereo_action_->setChecked(false);
-			dual_stereo_action_->setChecked(false);
-			dual_stereo_different_display_action_->setChecked(true);
+			GLRenderer*   left_renderer = new GLRenderer;
+			left_renderer->init(*this);
+			left_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
 
-/*			left_eye_widget_ = new StereoHalfImage(stage_, this, 0, true);
-			right_eye_widget_ = new StereoHalfImage(stage_, this, 1, false);
+			left_widget->show();
 
-			left_eye_widget_->show();
-			right_eye_widget_->showFullScreen();
-			*/
+			RenderSetup left_rs(left_renderer, left_widget);
+
+			resetRepresentationsForRenderer_(left_rs);
+			left_rs.setStereoMode(RenderSetup::LEFT_EYE);
+
+			renderers_.push_back(left_rs);
+
+			GLRenderWindow* right_widget = new GLRenderWindow(QApplication::desktop()->screen(1), "right eye");
+			right_widget->makeCurrent();
+			right_widget->init();
+			right_widget->resize(width(), height());
+
+			GLRenderer*   right_renderer = new GLRenderer;
+			right_renderer->init(*this);
+			right_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
+
+			right_widget->show();
+
+			RenderSetup right_rs(right_renderer, right_widget);
+
+			resetRepresentationsForRenderer_(right_rs);
+			right_rs.setStereoMode(RenderSetup::RIGHT_EYE);
+
+			renderers_.push_back(right_rs);
+
+			updateGL();
 
 			setFullScreen(false);
 		}
