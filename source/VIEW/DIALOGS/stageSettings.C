@@ -100,7 +100,7 @@ namespace BALL
 			Scene::setMouseWheelSensitivity(wheel_slider_->value() + 1);
 
 			stage_->setEyeDistance((float)(eye_distance_slider->value() / 10.0));
-			stage_->setFocalDistance((float)(eye_distance_slider->value()));
+			stage_->setFocalDistance((float)(focal_distance_slider->value()));
 
 			stage_->setSwapSideBySideStereo(swap_sss_button->isChecked());
 

@@ -924,6 +924,21 @@ namespace BALL
 			updateGL();
 		}
 
+		void Scene::resetRepresentationsForRenderer_(RenderSetup& rs)
+		{
+			// TODO: reset all representations already buffered in the renderer
+			if (rs.receivesBufferUpdates())
+			{
+				RepresentationManager& pm = getMainControl()->getRepresentationManager();
+
+				RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+				for (; it != pm.getRepresentations().end(); ++it)
+				{
+					rs.renderer->bufferRepresentation(**it);
+				}
+			}
+		}
+
 		// ##################MISC############################
 
 		void Scene::setDefaultLighting(bool update_GL)
@@ -2695,6 +2710,8 @@ namespace BALL
 			left_widget->show();
 
 			RenderSetup left_rs(left_renderer, left_widget);
+
+			resetRepresentationsForRenderer_(left_rs);
 			left_rs.setStereoMode(RenderSetup::LEFT_EYE);
 
 			renderers_.push_back(left_rs);
@@ -2711,10 +2728,13 @@ namespace BALL
 			right_widget->show();
 
 			RenderSetup right_rs(right_renderer, right_widget);
+
+			resetRepresentationsForRenderer_(right_rs);
 			right_rs.setStereoMode(RenderSetup::RIGHT_EYE);
 
 			renderers_.push_back(right_rs);
 
+			updateGL();
 			return;
 
 			gl_renderer_->setStereoMode(GLRenderer::DUAL_VIEW_STEREO);
