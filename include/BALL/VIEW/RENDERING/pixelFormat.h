@@ -66,7 +66,7 @@ namespace BALL
 			// Flags
 			enum {
 				// framebuffer data structure
-				PLANAR_FRAMEBUFFER                  = 1<<1, // otherwise interlaced
+				PLANAR_FRAMEBUFFER                  = 1<<1 // otherwise interlaced
 			};
 
 

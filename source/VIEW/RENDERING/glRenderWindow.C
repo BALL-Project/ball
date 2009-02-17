@@ -69,7 +69,7 @@ namespace BALL
 		{
 			checkGL();
 
-			RenderWindow::init();
+			RenderWindow<float>::init();
 			bool result = false;
 
 			FB_TEXTURE_TARGET = GL_TEXTURE_2D;
@@ -96,7 +96,7 @@ namespace BALL
 		
 		bool GLRenderWindow::resize(const unsigned int width, const unsigned int height)
 		{						
-			if(!RenderWindow::resize(width, height))
+			if(!RenderWindow<float>::resize(width, height))
 			{
 				return false;
 			}
@@ -109,7 +109,7 @@ namespace BALL
 
 		void GLRenderWindow::refresh()
 		{			
-			RenderWindow::refresh();
+			RenderWindow<float>::refresh();
 
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();
