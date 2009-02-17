@@ -44,49 +44,46 @@ namespace BALL
 			return true;
 		}
 
-
-		void RTfactRenderer::prepareBufferedRendering(const Stage& stage)
+		void RTfactRenderer::setLights(bool reset_all)
 		{
-			Camera  const& camera = stage.getCamera();
-			Vector3 const& position = camera.getViewPoint();
-			Vector3 const& view_vector = camera.getViewVector();
-			Vector3 const& look_up = camera.getLookUpVector();
+			std::cout << "Setting " << stage_->getLightSources().size() << " lights!" << std::endl;
 
-			m_renderer.setCameraPosition(float3(position.x, position.y, position.z),
-																	 float3(view_vector.x, view_vector.y, view_vector.z),
-																	 float3(look_up.x, look_up.y, look_up.z));
-
-			Size num_lights = lights_.size();
+			// TODO: this *crashes*
+			/*
+			if (reset_all)
+			{
+				for (Position i=0; i<lights_.size(); ++i)
+					m_renderer.removeLight(lights_[i]);
+				lights_.clear();
+			} */
 
 			Vector3 direction, light_position, attenuation;
 			Size current_light=0;
-			List<LightSource>::ConstIterator it = stage.getLightSources().begin();
-			
-			for (; it != stage.getLightSources().end(); ++it, ++current_light)
+			List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
+
+			for (; it != stage_->getLightSources().end(); ++it, ++current_light)
 			{
-				if (current_light >= num_lights)
+				RTfact::Remote::RTLightHandle light; 
+				switch (it->getType())
 				{
-					RTfact::Remote::RTLightHandle light; 
-					switch (it->getType())
-					{
-						case LightSource::DIRECTIONAL:
-							light = m_renderer.createLight("DirectionalLight"); 
-							break;
-						case LightSource::POSITIONAL:
-							light = m_renderer.createLight("PointLight"); 
-							break;
-						default:
-							std::cerr << "Light source type not supported!" << std::endl;
-							break;
-					}
-					lights_.push_back(light);
+					case LightSource::DIRECTIONAL:
+						light = m_renderer.createLight("DirectionalLight"); 
+						break;
+					case LightSource::POSITIONAL:
+						light = m_renderer.createLight("PointLight"); 
+						break;
+					default:
+						std::cerr << "Light source type not supported!" << std::endl;
+						break;
 				}
+				lights_.push_back(light);
+
 				switch (it->getType())
 				{
 					case LightSource::DIRECTIONAL:
 						direction = it->getDirection();
 						if (it->isRelativeToCamera())
-							direction = stage.calculateAbsoluteCoordinates(direction);
+							direction = stage_->calculateAbsoluteCoordinates(direction);
 
 						lights_[current_light]->setParam("direction", float3(direction.x, direction.y, direction.z));
 						break;
@@ -94,7 +91,7 @@ namespace BALL
 						light_position = it->getPosition();
 						if (it->isRelativeToCamera())
 						{
-							light_position = stage.calculateAbsoluteCoordinates(it->getPosition())+stage.getCamera().getViewPoint();
+							light_position = stage_->calculateAbsoluteCoordinates(it->getPosition())+stage_->getCamera().getViewPoint();
 						}
 						lights_[current_light]->setParam("position", float3(light_position.x, light_position.y, light_position.z));
 
@@ -110,6 +107,52 @@ namespace BALL
 
 				lights_[current_light]->setParam("intensity", float3((float)color.getRed()*intensity,(float)color.getGreen()*intensity,(float)color.getBlue()*intensity));
 			}
+		}
+
+		void RTfactRenderer::updateCamera(const Camera* camera)
+		{
+			if (camera == 0) camera = &(stage_->getCamera());
+
+			Vector3 const& position = camera->getViewPoint();
+			Vector3 const& view_vector = camera->getViewVector();
+			Vector3 const& look_up = camera->getLookUpVector();
+
+			m_renderer.setCameraPosition(float3(position.x, position.y, position.z),
+																	 float3(view_vector.x, view_vector.y, view_vector.z),
+																	 float3(look_up.x, look_up.y, look_up.z));
+
+			// lights that are relative to the camera need to have their position updated
+			if (lights_.size() == 0) return; // TEST
+			List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
+			Size current_light=0;
+			Vector3 light_position, direction;
+			for (; it != stage_->getLightSources().end(); ++it, ++current_light)
+			{
+				switch (it->getType())
+				{
+					case LightSource::DIRECTIONAL:
+						direction = it->getDirection();
+						if (it->isRelativeToCamera())
+							direction = stage_->calculateAbsoluteCoordinates(direction);
+
+						lights_[current_light]->setParam("direction", float3(direction.x, direction.y, direction.z));
+					case LightSource::POSITIONAL:
+						light_position = it->getPosition();
+						if (it->isRelativeToCamera())
+						{
+							light_position = stage_->calculateAbsoluteCoordinates(it->getPosition())+stage_->getCamera().getViewPoint();
+						}
+						lights_[current_light]->setParam("position", float3(light_position.x, light_position.y, light_position.z));
+						break;
+					default:
+						break;
+				}
+			}
+		}
+
+		void RTfactRenderer::prepareBufferedRendering(const Stage& stage)
+		{
+			// this function is not needed for this kind of raytracer
 		}
 
 		void RTfactRenderer::bufferRepresentation(const Representation& rep)

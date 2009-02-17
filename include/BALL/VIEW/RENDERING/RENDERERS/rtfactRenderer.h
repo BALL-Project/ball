@@ -82,6 +82,10 @@ namespace BALL
 				void bufferRepresentation(const Representation& rep);
 				void removeRepresentation(const Representation& rep);
 
+				void setLights(bool reset_all = false);
+
+				void updateCamera(const Camera* camera = 0);
+
 				void updateMaterialForRepresentation(Representation const* rep);
 				void updateMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material);
 

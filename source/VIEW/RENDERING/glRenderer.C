@@ -171,9 +171,9 @@ bool GLRenderer::getSmoothLines()
 			return Renderer::init(scene);
 		}
 
-		bool GLRenderer::init(const Stage& stage, float height, float width)
+		bool GLRenderer::init(const Stage& stage, float width, float height)
 		{
-			Renderer::init(stage, height, width);
+			Renderer::init(stage, width, height);
 			
 	// Force OpenGL to normalize transformed normals to be of unit
 	// length before using the normals in OpenGL's lighting equations
@@ -323,7 +323,6 @@ bool GLRenderer::getSmoothLines()
 
 
 		void GLRenderer::updateBackgroundColor() 
-			throw()
 		{
 			glClearColor((float) stage_->getBackgroundColor().getRed(),
 									 (float) stage_->getBackgroundColor().getGreen(),
@@ -332,7 +331,6 @@ bool GLRenderer::getSmoothLines()
 		}
 			
 		void GLRenderer::setLights(bool reset_all)
-			throw()
 		{
 			GLenum light_nr = GL_LIGHT0;
 
@@ -1887,9 +1885,8 @@ void GLRenderer::setSize(float width, float height)
 
 
 void GLRenderer::updateCamera(const Camera* camera)
-	throw()
 {
-	if (camera == 0) camera = &stage_->getCamera();
+	if (camera == 0) camera = &(stage_->getCamera());
 
 	if (Maths::isZero(camera->getViewVector().getSquareLength()))
 	{
@@ -1910,6 +1907,26 @@ void GLRenderer::updateCamera(const Camera* camera)
 						camera->getLookUpVector().z);
 
 	normal_vector_ = (-camera->getViewVector().normalize());
+}
+
+void GLRenderer::setupStereo(float eye_separation, float focal_length)
+{
+	// TODO: - make near and far clip configurable!!!
+	//       - keep the same frustrum until either the size or the stereo settings change
+	float nearf = 1.5; 
+	float farf = 600;
+
+	float ndfl    = nearf / focal_length;
+
+	float left  = -2.0 * getXScale() - eye_separation * ndfl;
+	float right =  2.0 * getXScale() - eye_separation * ndfl;
+
+	glMatrixMode(GL_PROJECTION);
+
+	glLoadIdentity();
+	glFrustum(left, right, -2.0 * getXScale(), 2.0 * getYScale(), nearf,farf);
+
+	glMatrixMode(GL_MODELVIEW);
 }
 
 bool GLRenderer::hasDisplayListFor(const Representation& rep) const

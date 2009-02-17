@@ -155,11 +155,10 @@ namespace BALL
 			virtual bool init(Scene& scene);
 
 			/// Initialise the renderer, e.g. the display lists.
-			virtual bool init(const Stage& stage, float height, float width);
+			virtual bool init(const Stage& stage, float width, float height);
 
 			/// Set the light sources according to the stage
-			virtual void setLights(bool reset_all = false)
-				throw();
+			virtual void setLights(bool reset_all = false);
 
 			///Should the lines in the line representation and the wireframe models
 			///be smoothed?
@@ -197,15 +196,8 @@ namespace BALL
 			float getYScale() const
 				throw();
 
-			/** Update the camera position with gluLookAt,
-			 		either from a given Camera, or from the default Stage.
-			*/
-			void updateCamera(const Camera* camera = 0)
-				throw();
-
 			/// Update the background color from the stage
-			void updateBackgroundColor()
-				throw();
+			virtual void updateBackgroundColor();
 
 			// Initialise transparent rendering
 			void initTransparent()
@@ -303,6 +295,22 @@ namespace BALL
 
 			///
 			void initPerspective();
+
+			//_
+			void setColorRGBA_(const ColorRGBA& color)
+				throw();
+
+			//_
+			void vertexVector3_(const Vector3& v)
+				throw();
+
+			//
+			void updateCamera(const Camera* camera = 0);
+
+			//
+			void setupStereo(float eye_separation, float focal_length);
+
+	protected:
 
 			void renderRepresentation_(const Representation& representation, bool for_display_list);
 
@@ -419,9 +427,6 @@ namespace BALL
 			void normalVector3_(const Vector3& v)
 				throw();
 
-			//_
-			void vertexVector3_(const Vector3& v)
-				throw();
 
 			//_
 			void translateVector3_(const Vector3& v)
@@ -443,9 +448,6 @@ namespace BALL
 			void scale_(float f)
 				throw();
 
-			//_
-			void setColorRGBA_(const ColorRGBA& color)
-				throw();
 
 			void initGLU_(DrawingMode mode);
 

@@ -69,15 +69,15 @@ namespace BALL
 		{
 			checkGL();
 
-            RenderWindow::init();
+			RenderWindow::init();
 			bool result = false;
 
 			FB_TEXTURE_TARGET = GL_TEXTURE_2D;
 
-            if(m_fmt.getPixelFormat() == PixelFormat::RGBF_96)
+			if(m_fmt.getPixelFormat() == PixelFormat::RGBF_96)
 			{
 				FB_INTERNAL_TEXTURE_FORMAT = GL_RGB;
-                FB_TEXTURE_FORMAT = GL_RGB;
+				FB_TEXTURE_FORMAT = GL_RGB;
 				FB_TEXTURE_DATATYPE = GL_FLOAT;
 				result = true;
 			}
@@ -86,7 +86,7 @@ namespace BALL
 				if(m_fmt.getPixelFormat() == PixelFormat::RGBA_32)
 				{
 					FB_INTERNAL_TEXTURE_FORMAT = GL_RGBA;
-                    FB_TEXTURE_FORMAT = GL_RGBA;
+					FB_TEXTURE_FORMAT = GL_RGBA;
 					FB_TEXTURE_DATATYPE = GL_UNSIGNED_BYTE;
 				}
 				result = true;
@@ -107,6 +107,9 @@ namespace BALL
 		void GLRenderWindow::refresh()
 		{			
 			RenderWindow::refresh();
+
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
 
 			glPushAttrib(GL_TEXTURE_BIT);
 			glPushAttrib(GL_DEPTH_BUFFER_BIT);
@@ -131,16 +134,16 @@ namespace BALL
 
 			glBegin(GL_QUADS);
 
-			glTexCoord2f(1.0f, 1.0f);
+			glTexCoord2f(0.0f, 0.0f);
 			glVertex2f(-aspectRatio, -1.0f);
 
-			glTexCoord2f(0.0f, 1.0f );
+			glTexCoord2f(1.0f, 0.0f );
 			glVertex2f(aspectRatio, -1.0f);	
 
-			glTexCoord2f(0.0f, 0.0f );
+			glTexCoord2f(1.0f, 1.0f );
 			glVertex2f(aspectRatio, 1.0f);	
 
-			glTexCoord2f(1.0f, 0.0f);
+			glTexCoord2f(0.0f, 1.0f);
 			glVertex2f(-aspectRatio, 1.0f);
 
 			if (info_text_ != "")
@@ -177,10 +180,10 @@ namespace BALL
 
 			glBindTexture(FB_TEXTURE_TARGET, m_screenTexID);			                
 
-				glTexParameteri(FB_TEXTURE_TARGET, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-				glTexParameteri(FB_TEXTURE_TARGET, GL_TEXTURE_MAG_FILTER, GL_NEAREST);                
-						
-				glTexImage2D(FB_TEXTURE_TARGET, 0, FB_INTERNAL_TEXTURE_FORMAT, width, height, 0, FB_TEXTURE_FORMAT, FB_TEXTURE_DATATYPE, NULL);                                
+			glTexParameteri(FB_TEXTURE_TARGET, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(FB_TEXTURE_TARGET, GL_TEXTURE_MAG_FILTER, GL_NEAREST);                
+					
+			glTexImage2D(FB_TEXTURE_TARGET, 0, FB_INTERNAL_TEXTURE_FORMAT, width, height, 0, FB_TEXTURE_FORMAT, FB_TEXTURE_DATATYPE, NULL);                                
 
 			glBindTexture(FB_TEXTURE_TARGET, 0);
 		}
@@ -191,52 +194,52 @@ namespace BALL
 			m_screenTexID = 0;
 		}
 
-        bool GLRenderWindow::errorInGL(GLenum& error)
-        {
-            error = glGetError();
-            return (error != GL_NO_ERROR);
-        }
+		bool GLRenderWindow::errorInGL(GLenum& error)
+		{
+				error = glGetError();
+				return (error != GL_NO_ERROR);
+		}
 
-        String GLRenderWindow::getGLErrorString(GLenum error)
-        {
-            String result;
-            switch(error)
-            {
-            case GL_INVALID_ENUM:
-                result = "Invalid enumeration value";
-                break;
-            case GL_INVALID_VALUE:
-                result = "Numeric argument out of range";
-                break;
-            case GL_INVALID_OPERATION:
-                result = "Operation illegal in current state";
-                break;
-            case GL_STACK_OVERFLOW:
-                result = "Command would cause stack overflow";
-                break;
-            case GL_STACK_UNDERFLOW:
-                result = "Command would cause stack underflow";
-                break;
-            case GL_OUT_OF_MEMORY:
-                result = "Not enough memory left to execute command";
-                break;
-            case GL_TABLE_TOO_LARGE:
-                result = "The specified table is too large";
-                break;
-            default:
-                result = "Uknown OpenGL error";
-            }
-            return result;
-        }
+		String GLRenderWindow::getGLErrorString(GLenum error)
+		{
+				String result;
+				switch(error)
+				{
+				case GL_INVALID_ENUM:
+						result = "Invalid enumeration value";
+						break;
+				case GL_INVALID_VALUE:
+						result = "Numeric argument out of range";
+						break;
+				case GL_INVALID_OPERATION:
+						result = "Operation illegal in current state";
+						break;
+				case GL_STACK_OVERFLOW:
+						result = "Command would cause stack overflow";
+						break;
+				case GL_STACK_UNDERFLOW:
+						result = "Command would cause stack underflow";
+						break;
+				case GL_OUT_OF_MEMORY:
+						result = "Not enough memory left to execute command";
+						break;
+				case GL_TABLE_TOO_LARGE:
+						result = "The specified table is too large";
+						break;
+				default:
+						result = "Uknown OpenGL error";
+				}
+				return result;
+		}
 
-        void GLRenderWindow::checkGL()
-        {
-            GLenum err;
-            if(errorInGL(err))
-            {
-                BALL::Log.error() << "Error in OpenGL: " << getGLErrorString(err) << std::endl;
-            }
-        }
+		void GLRenderWindow::checkGL()
+		{
+				GLenum err;
+				if(errorInGL(err))
+				{
+						BALL::Log.error() << "Error in OpenGL: " << getGLErrorString(err) << std::endl;
+				}
+		}
 
 	} // namespace VIEW
 } //namespace BALL
