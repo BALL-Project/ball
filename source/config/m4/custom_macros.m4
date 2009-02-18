@@ -1244,30 +1244,29 @@ dnl   checking for DEBUG-Flag
 dnl
 AC_DEFUN([CF_CHECK_DEBUG_FLAG], [
 AC_MSG_CHECKING(for DEBUG flag)
-if test "$DEBUG" != "" ; then
 dnl   define a debug flag and prevent the compilation of
 dnl   inline functions by defining PROJECT[]_NO_INLINE_FUNCTIONS
 dnl   (see COMMON/debug.h)
-if test "$DEBUG" = true ; then
-dnl  if debug information is also required, add the corresponding flag
-dnl
-if test "${DEBUG_INFO}" = true -a "$CXXFLAGS_DI" != "" ; then
-CXXFLAGS_D="${CXXFLAGS_D} ${CXXFLAGS_DI}"
-fi
-AC_DEFINE(PROJECT[]_DEBUG,)
-AC_DEFINE(PROJECT[]_NO_INLINE_FUNCTIONS,)
-AC_MSG_RESULT(enabled)
-CPP_MODE_FLAGS="${CXXFLAGS_D}"
-CPP_MODE_FLAGS_NO_OPTIMIZATION="${CXXFLAGS_D}"
+if test "$DEBUG" = "true" ; then
+	dnl  if debug information is also required, add the corresponding flag
+	dnl
+	if test "${DEBUG_INFO}" = true -a "$CXXFLAGS_DI" != "" ; then
+		CXXFLAGS_D="${CXXFLAGS_D} ${CXXFLAGS_DI}"
+	fi
+	AC_DEFINE(PROJECT[]_DEBUG,)
+	AC_DEFINE(PROJECT[]_NO_INLINE_FUNCTIONS,)
+	AC_MSG_RESULT(enabled)
+	CPP_MODE_FLAGS="${CXXFLAGS_D}"
+	CPP_MODE_FLAGS_NO_OPTIMIZATION="${CXXFLAGS_D}"
 else
-AC_MSG_RESULT(disabled)
-CPP_MODE_FLAGS="${CXXFLAGS_O}"
-CPP_MODE_FLAGS_NO_OPTIMIZATION=""
-fi
-else
-AC_MSG_RESULT(disabled)
-CPP_MODE_FLAGS="${CXXFLAGS_O}"
-CPP_MODE_FLAGS_NO_OPTIMIZATION=""
+	AC_MSG_RESULT(disabled)
+	dnl Even with optimization enabled, we still 
+	dnl might want to add debug information
+	if test "${DEBUG_INFO}" = true -a "$CXXFLAGS_DI" != "" ; then
+		CXXFLAGS_O="${CXXFLAGS_O} ${CXXFLAGS_DI}"
+	fi
+	CPP_MODE_FLAGS="${CXXFLAGS_O}"
+	CPP_MODE_FLAGS_NO_OPTIMIZATION=""
 fi
 ])
 
