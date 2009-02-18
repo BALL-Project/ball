@@ -2751,13 +2751,14 @@ return;
 			GLRenderWindow* left_widget = new GLRenderWindow(QApplication::desktop()->screen(0), "left eye");
 			left_widget->makeCurrent();
 			left_widget->init();
-			left_widget->resize(width(), height());
+			left_widget->resize(QApplication::desktop()->screen(0)->width(), QApplication::desktop()->screen(0)->height());
 
 			GLRenderer*   left_renderer = new GLRenderer;
 			left_renderer->init(*this);
 			left_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
 
-			left_widget->show();
+			left_widget->showFullScreen();
+			left_renderer->setSize(left_widget->width(), left_widget->height());
 
 			RenderSetup left_rs(left_renderer, left_widget);
 
@@ -2769,13 +2770,14 @@ return;
 			GLRenderWindow* right_widget = new GLRenderWindow(QApplication::desktop()->screen(1), "right eye");
 			right_widget->makeCurrent();
 			right_widget->init();
-			right_widget->resize(width(), height());
+			right_widget->resize(QApplication::desktop()->screen(0)->width(), QApplication::desktop()->screen(0)->height());
 
 			GLRenderer*   right_renderer = new GLRenderer;
 			right_renderer->init(*this);
 			right_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
 
-			right_widget->show();
+			right_widget->showFullScreen();
+			right_renderer->setSize(right_widget->width(), right_widget->height());
 
 			RenderSetup right_rs(right_renderer, right_widget);
 
@@ -3351,7 +3353,7 @@ Log.error() << "Render grid not yet supported by raytracer!" << std::endl;
 
 				renderer->setupStereo(eye_separation, stage.getFocalDistance());
 
-				camera_offset_  = Vector3(eye_separation, 0., 0.);
+				camera_offset_  = Vector3(eye_separation, 5., 0.);
 
 				use_offset_ = true;
 			}
