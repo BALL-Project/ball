@@ -25,7 +25,15 @@
     <number>0</number>
    </property>
    <widget class="QWidget" name="Main" >
-    <widget class="QWidget" name="" >
+    <property name="geometry" >
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>611</width>
+      <height>401</height>
+     </rect>
+    </property>
+    <widget class="QWidget" name="layoutWidget" >
      <property name="geometry" >
       <rect>
        <x>310</x>
@@ -35,11 +43,11 @@
       </rect>
      </property>
      <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>0</number>
-      </property>
       <property name="spacing" >
        <number>6</number>
+      </property>
+      <property name="margin" >
+       <number>0</number>
       </property>
       <item>
        <widget class="QGroupBox" name="fog_box" >
@@ -145,11 +153,11 @@
          </property>
          <item row="1" column="0" >
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="margin" >
+            <number>0</number>
            </property>
            <item>
             <widget class="QLineEdit" name="texture_file_edit" >
@@ -205,18 +213,16 @@
          </item>
          <item row="0" column="0" >
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="margin" >
+            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="textLabel1_3_2" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>3</hsizetype>
-               <vsizetype>5</vsizetype>
+              <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -241,9 +247,7 @@
            <item>
             <widget class="QLineEdit" name="up_direction_x" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>5</hsizetype>
-               <vsizetype>5</vsizetype>
+              <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -268,9 +272,7 @@
            <item>
             <widget class="QLineEdit" name="up_direction_y" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>5</hsizetype>
-               <vsizetype>5</vsizetype>
+              <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -295,9 +297,7 @@
            <item>
             <widget class="QLineEdit" name="up_direction_z" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>5</hsizetype>
-               <vsizetype>5</vsizetype>
+              <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -350,11 +350,11 @@
          </property>
          <item row="0" column="1" >
           <widget class="QSpinBox" name="resolution_factor" >
-           <property name="maximum" >
-            <number>5</number>
-           </property>
            <property name="minimum" >
             <number>1</number>
+           </property>
+           <property name="maximum" >
+            <number>5</number>
            </property>
            <property name="value" >
             <number>1</number>
@@ -364,9 +364,7 @@
          <item row="0" column="0" >
           <widget class="QLabel" name="factor_label" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>7</hsizetype>
-             <vsizetype>5</vsizetype>
+            <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -379,9 +377,7 @@
          <item row="1" column="0" colspan="2" >
           <widget class="QLabel" name="max_label" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>7</hsizetype>
-             <vsizetype>5</vsizetype>
+            <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -396,7 +392,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="" >
+    <widget class="QWidget" name="layoutWidget" >
      <property name="geometry" >
       <rect>
        <x>10</x>
@@ -406,11 +402,11 @@
       </rect>
      </property>
      <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>0</number>
-      </property>
       <property name="spacing" >
        <number>6</number>
+      </property>
+      <property name="margin" >
+       <number>0</number>
       </property>
       <item>
        <widget class="QGroupBox" name="background_box" >
@@ -423,7 +419,7 @@
         <property name="alignment" >
          <set>Qt::AlignHCenter</set>
         </property>
-        <widget class="QWidget" name="" >
+        <widget class="QWidget" name="layoutWidget" >
          <property name="geometry" >
           <rect>
            <x>10</x>
@@ -433,18 +429,16 @@
           </rect>
          </property>
          <layout class="QHBoxLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="margin" >
+           <number>0</number>
           </property>
           <item>
            <widget class="QLabel" name="color_sample" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>7</hsizetype>
-              <vsizetype>5</vsizetype>
+             <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -585,9 +579,7 @@
          <item row="0" column="0" >
           <widget class="QLabel" name="capping_color" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>7</hsizetype>
-             <vsizetype>5</vsizetype>
+            <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -642,7 +634,7 @@
             <string>Use faster preview models</string>
            </property>
            <property name="checked" >
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -666,6 +658,16 @@
            </property>
           </widget>
          </item>
+         <item row="3" column="0" >
+          <widget class="QCheckBox" name="smooth_lines_" >
+           <property name="toolTip" >
+            <string>Should simple lines be smoothed by OpenGL? Enabling this options can lead to cluttered wireframe and line representations.</string>
+           </property>
+           <property name="text" >
+            <string>Smooth Lines</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>
@@ -673,6 +675,14 @@
     </widget>
    </widget>
    <widget class="QWidget" name="Mouse" >
+    <property name="geometry" >
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>100</width>
+      <height>30</height>
+     </rect>
+    </property>
     <layout class="QGridLayout" >
      <property name="margin" >
       <number>9</number>
@@ -685,7 +695,7 @@
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0" >
         <size>
          <width>40</width>
          <height>20</height>
@@ -698,7 +708,7 @@
        <property name="orientation" >
         <enum>Qt::Vertical</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0" >
         <size>
          <width>20</width>
          <height>40</height>
@@ -766,9 +776,7 @@
      <item row="0" column="0" >
       <widget class="QGroupBox" name="groupBox1" >
        <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>7</hsizetype>
-         <vsizetype>5</vsizetype>
+        <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -831,6 +839,14 @@
     </layout>
    </widget>
    <widget class="QWidget" name="Stereo" >
+    <property name="geometry" >
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>100</width>
+      <height>30</height>
+     </rect>
+    </property>
     <layout class="QGridLayout" >
      <property name="margin" >
       <number>9</number>
@@ -843,7 +859,7 @@
        <property name="orientation" >
         <enum>Qt::Vertical</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0" >
         <size>
          <width>20</width>
          <height>40</height>
@@ -856,7 +872,7 @@
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0" >
         <size>
          <width>40</width>
          <height>20</height>
@@ -866,11 +882,11 @@
      </item>
      <item row="0" column="0" >
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
        <property name="spacing" >
         <number>6</number>
+       </property>
+       <property name="margin" >
+        <number>0</number>
        </property>
        <item>
         <widget class="QGroupBox" name="groupBox1_2_2" >
@@ -924,9 +940,7 @@
           <item row="0" column="2" >
            <widget class="QLabel" name="eye_distance_label" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>0</hsizetype>
-              <vsizetype>0</vsizetype>
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -974,9 +988,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox1_2_2_2" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>7</hsizetype>
-           <vsizetype>5</vsizetype>
+          <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -1016,9 +1028,7 @@
           <item row="0" column="2" >
            <widget class="QLabel" name="focal_distance_label" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>0</hsizetype>
-              <vsizetype>0</vsizetype>
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -1090,6 +1100,14 @@
     </layout>
    </widget>
    <widget class="QWidget" name="OpenGL" >
+    <property name="geometry" >
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>100</width>
+      <height>30</height>
+     </rect>
+    </property>
     <widget class="QWidget" name="layoutWidget" >
      <property name="geometry" >
       <rect>
@@ -1100,11 +1118,11 @@
       </rect>
      </property>
      <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>0</number>
-      </property>
       <property name="spacing" >
        <number>6</number>
+      </property>
+      <property name="margin" >
+       <number>0</number>
       </property>
       <item>
        <layout class="QGridLayout" >
@@ -1137,9 +1155,7 @@
         <item row="1" column="0" >
          <widget class="QLabel" name="textLabel1_2_3" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>5</vsizetype>
+           <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -1171,9 +1187,7 @@
         <item row="2" column="0" >
          <widget class="QLabel" name="textLabel1_2" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>5</vsizetype>
+           <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -1195,9 +1209,7 @@
         <item row="0" column="0" >
          <widget class="QLabel" name="textLabel1" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>5</vsizetype>
+           <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -1227,11 +1239,11 @@
       </item>
       <item>
        <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <property name="spacing" >
          <number>6</number>
+        </property>
+        <property name="margin" >
+         <number>0</number>
         </property>
         <item>
          <widget class="QCheckBox" name="use_vertex_buffers" >
@@ -1248,11 +1260,11 @@
         </item>
         <item>
          <layout class="QVBoxLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="margin" >
+           <number>0</number>
           </property>
           <item>
            <widget class="QLabel" name="label" >
@@ -1263,11 +1275,11 @@
           </item>
           <item>
            <layout class="QVBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <property name="spacing" >
              <number>6</number>
+            </property>
+            <property name="margin" >
+             <number>0</number>
             </property>
             <item>
              <widget class="QRadioButton" name="radioButton_perspectiveProjection" >
@@ -1296,6 +1308,14 @@
     </widget>
    </widget>
    <widget class="QWidget" name="RTFact" >
+    <property name="geometry" >
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>100</width>
+      <height>30</height>
+     </rect>
+    </property>
     <widget class="QWidget" name="layoutWidget" >
      <property name="geometry" >
       <rect>
@@ -1306,19 +1326,19 @@
       </rect>
      </property>
      <layout class="QHBoxLayout" >
-      <property name="margin" >
-       <number>0</number>
-      </property>
       <property name="spacing" >
        <number>6</number>
       </property>
+      <property name="margin" >
+       <number>0</number>
+      </property>
       <item>
        <layout class="QVBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <property name="spacing" >
          <number>6</number>
+        </property>
+        <property name="margin" >
+         <number>0</number>
         </property>
         <item>
          <widget class="QGroupBox" name="groupBox_9" >
@@ -1334,26 +1354,24 @@
            </property>
            <item row="0" column="0" >
             <layout class="QHBoxLayout" >
-             <property name="margin" >
-              <number>0</number>
-             </property>
              <property name="spacing" >
               <number>6</number>
              </property>
+             <property name="margin" >
+              <number>0</number>
+             </property>
              <item>
               <layout class="QVBoxLayout" >
-               <property name="margin" >
-                <number>0</number>
-               </property>
                <property name="spacing" >
                 <number>6</number>
+               </property>
+               <property name="margin" >
+                <number>0</number>
                </property>
                <item>
                 <widget class="QLabel" name="textLabel1_51" >
                  <property name="sizePolicy" >
-                  <sizepolicy>
-                   <hsizetype>0</hsizetype>
-                   <vsizetype>0</vsizetype>
+                  <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
@@ -1378,9 +1396,7 @@
                <item>
                 <widget class="QLabel" name="textLabel1_52" >
                  <property name="sizePolicy" >
-                  <sizepolicy>
-                   <hsizetype>0</hsizetype>
-                   <vsizetype>0</vsizetype>
+                  <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
@@ -1406,11 +1422,11 @@
              </item>
              <item>
               <layout class="QVBoxLayout" >
-               <property name="margin" >
-                <number>0</number>
-               </property>
                <property name="spacing" >
                 <number>6</number>
+               </property>
+               <property name="margin" >
+                <number>0</number>
                </property>
                <item>
                 <widget class="QSlider" name="sphere_points_slider" >
@@ -1463,18 +1479,16 @@
              </item>
              <item>
               <layout class="QVBoxLayout" >
-               <property name="margin" >
-                <number>0</number>
-               </property>
                <property name="spacing" >
                 <number>6</number>
+               </property>
+               <property name="margin" >
+                <number>0</number>
                </property>
                <item>
                 <widget class="QLabel" name="sphere_points_label" >
                  <property name="sizePolicy" >
-                  <sizepolicy>
-                   <hsizetype>0</hsizetype>
-                   <vsizetype>0</vsizetype>
+                  <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
@@ -1499,9 +1513,7 @@
                <item>
                 <widget class="QLabel" name="tube_points_label" >
                  <property name="sizePolicy" >
-                  <sizepolicy>
-                   <hsizetype>0</hsizetype>
-                   <vsizetype>0</vsizetype>
+                  <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
@@ -1535,7 +1547,7 @@
           <property name="orientation" >
            <enum>Qt::Vertical</enum>
           </property>
-          <property name="sizeHint" >
+          <property name="sizeHint" stdset="0" >
            <size>
             <width>20</width>
             <height>281</height>
@@ -1550,7 +1562,7 @@
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>291</width>
           <height>20</height>
