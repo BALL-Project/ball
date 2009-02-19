@@ -11,7 +11,7 @@
 #	include <BALL/KERNEL/atom.h>
 #endif
 
-namespace BALL 
+namespace BALL
 {
 	/** @name Typedefs for the various BondIterators
     	\ingroup  KernelIterators
@@ -20,19 +20,19 @@ namespace BALL
 
 	/** A mutable iterator for atom bonds.
 	*/
-	typedef Atom::BondIterator 							AtomBondIterator;
+	typedef Atom::BondIterator             AtomBondIterator;
 
 	/** A constant iterator for atom bonds.
 	*/
-	typedef Atom::BondConstIterator 				AtomBondConstIterator;
+	typedef Atom::BondConstIterator        AtomBondConstIterator;
 
 	/** A mutable reverse iterator for atom bonds.
 	*/
-	typedef Atom::BondReverseIterator 			AtomBondReverseIterator;
+	typedef Atom::BondReverseIterator      AtomBondReverseIterator;
 
 	/** A constant reverse iterator for atom bonds.
 	*/
-	typedef Atom::BondConstReverseIterator 	AtomBondConstReverseIterator;
+	typedef Atom::BondConstReverseIterator AtomBondConstReverseIterator;
 
 	//@}
 }
