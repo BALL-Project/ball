@@ -177,7 +177,8 @@ namespace BALL
 							receive_updates_(true),
 							use_offset_(false),
 							camera_(),
-							camera_offset_(Vector3(0.))
+							camera_offset_(Vector3(0.)),
+							stereo_setup_(NONE)
 					{}
 
 					// TODO: this should be boost smart pointers!
