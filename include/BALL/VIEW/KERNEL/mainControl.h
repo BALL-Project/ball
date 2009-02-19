@@ -838,6 +838,12 @@ namespace BALL
 					It calls among other things the method applyPreferences().
 			*/
 			virtual void applyPreferencesClicked_();
+			
+			/*_ This slot is called internally whenever the ok button
+					of the Preferences dialog	is pressed.
+					It calls among other things the method applyPreferences().
+			*/
+			virtual void okPreferencesClicked_();
 
 			//_ Called by timer to clear the text in the statusbar
 			void clearStatusBarText_();
