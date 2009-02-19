@@ -38,7 +38,7 @@ namespace BALL
 	}
 
 	MMFF94NonBonded::MMFF94NonBonded()
-		throw()
+		
 		:	ForceFieldComponent(),
 			algorithm_type_(MolmecSupport::BRUTE_FORCE),
 			cut_off_(20),
@@ -55,7 +55,7 @@ namespace BALL
 	}
 
 	MMFF94NonBonded::MMFF94NonBonded(ForceField& force_field)
-		throw()
+		
 		:	ForceFieldComponent(force_field),
 			algorithm_type_(MolmecSupport::BRUTE_FORCE),
 			cut_off_(20),
@@ -72,7 +72,7 @@ namespace BALL
 	}
 
 	MMFF94NonBonded::MMFF94NonBonded(const MMFF94NonBonded& component)
-		throw()
+		
 		:	ForceFieldComponent(component),
 			algorithm_type_(component.algorithm_type_),
 			cut_off_(component.cut_off_),
@@ -88,13 +88,13 @@ namespace BALL
 	}
 
 	MMFF94NonBonded::~MMFF94NonBonded()
-		throw()
+		
 	{
 		clear();
 	}
 
 	const MMFF94NonBonded& MMFF94NonBonded::operator = (const MMFF94NonBonded& anb)
-		throw()
+		
 	{
 		// catch self assignment
 		if (&anb == this) return *this;
@@ -106,14 +106,14 @@ namespace BALL
 	}
 
 	void MMFF94NonBonded::clear()
-		throw()
+		
 	{
 		algorithm_type_ = MolmecSupport::BRUTE_FORCE;
 	}
 
 
 	bool MMFF94NonBonded::operator == (const MMFF94NonBonded& anb)
-		throw()
+		
 	{
 		dc_ = anb.dc_;
 		n_  = anb.n_;
@@ -127,7 +127,7 @@ namespace BALL
 	// efficient way. Otherwise it returns 1. 
 	MolmecSupport::PairListAlgorithmType
 	MMFF94NonBonded::determineMethodOfAtomPairGeneration()
-		throw()
+		
 	{
 		if (force_field_->getAtoms().size() > 900) 
 		{ 
@@ -340,7 +340,7 @@ namespace BALL
 
 
 	double MMFF94NonBonded::updateEnergy()
-		throw()
+		
 	{
 		energy_ 		= 0;
 		vdw_energy_ = 0;
@@ -463,7 +463,7 @@ namespace BALL
 	
 
 	void MMFF94NonBonded::updateForces()
-		throw()
+		
 	{
 		double dbuf = 0.07;
 		double gbuf = 0.12;

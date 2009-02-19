@@ -27,7 +27,7 @@ namespace BALL
 	};
  
 	HINFile::HINFile()
-		throw()
+		
 		:	GenericMolFile(),
 			box_(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
 			temperature_(0.0)
@@ -62,7 +62,7 @@ namespace BALL
 	}
 
 	HINFile::~HINFile()
-		throw()
+		
 	{
 	}
 	

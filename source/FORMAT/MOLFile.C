@@ -60,7 +60,7 @@ namespace BALL
 
 
 	MOLFile::MOLFile()
-		throw()
+		
 		:	GenericMolFile()
 	{
 	}
@@ -79,7 +79,7 @@ namespace BALL
 	}
 
 	MOLFile::~MOLFile()
-		throw()
+		
 	{
 	}
 
@@ -748,7 +748,7 @@ namespace BALL
 	}
 
 	const MOLFile& MOLFile::operator = (const MOLFile& file)
-		throw()
+		
 	{
 		GenericMolFile::operator = (file);
 		return *this;

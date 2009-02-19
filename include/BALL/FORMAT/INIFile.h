@@ -67,11 +67,11 @@ namespace BALL
 
 			/// Needed for MSVC
 			bool operator < (const Section& section) const
-				throw();
+				;
 
 			/// Needed for MSVC
 			bool operator > (const Section& section) const
-				throw();
+				;
 
 			protected:
 
@@ -380,7 +380,7 @@ namespace BALL
 
 		///
 		const INIFile& operator = (const INIFile& file)
-			throw();
+			;
 
 		//@}
 		/** @name Predicates
@@ -417,11 +417,11 @@ namespace BALL
 
 		///
 		List<String> getContent() const
-			throw();
+			;
 
 		///
 		bool setContent(const List<String>& lines)
-			throw();
+			;
 
 		protected:
 

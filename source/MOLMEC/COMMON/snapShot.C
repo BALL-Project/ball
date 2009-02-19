@@ -14,7 +14,7 @@ namespace BALL
 
 	// The default constructor of the SnapShot class. 
   SnapShot::SnapShot()
-		throw()
+		
 		:	index_(0),
 			number_of_atoms_(0),
 			potential_energy_(0.0),
@@ -28,7 +28,7 @@ namespace BALL
 
 	// The copy constructor of the SnapShot class. 
 	SnapShot::SnapShot (const SnapShot& snapshot)
-		throw()
+		
 		:	index_(snapshot.index_),
 			number_of_atoms_(snapshot.number_of_atoms_),
 			potential_energy_(snapshot.potential_energy_),
@@ -43,7 +43,7 @@ namespace BALL
 	// The destructor just deletes all STL components (superfluous and just
 	// for clarity) 
 	SnapShot::~SnapShot()
-		throw()
+		
 	{
 		clear();
 	}
@@ -51,7 +51,7 @@ namespace BALL
 
 	// The assignment operator 
 	const SnapShot& SnapShot::operator = (const SnapShot& snapshot)
-		throw()
+		
 	{
 		index_ = snapshot.index_;
 		number_of_atoms_ = snapshot.number_of_atoms_;
@@ -66,7 +66,7 @@ namespace BALL
 
 
 	void SnapShot::clear()
-		throw()
+		
 	{
 		index_ = 0;
 		number_of_atoms_ = 0;
@@ -80,7 +80,7 @@ namespace BALL
 
 
 	bool SnapShot::operator == (const SnapShot& snapshot) const
-		throw()
+		
 	{
 		return 
 			   (index_ == snapshot.index_)
@@ -94,7 +94,7 @@ namespace BALL
 
 
 	bool SnapShot::isValid() const
-		throw()
+		
 	{
 		return 	number_of_atoms_ > 0 &&
 					 	number_of_atoms_ == atom_forces_.size() &&
@@ -104,98 +104,98 @@ namespace BALL
 
 	
 	void SnapShot::setIndex(Size index)
-		throw()
+		
 	{
 		index_ = index;
 	}
 
 
 	Size SnapShot::getIndex() const
-		throw()
+		
 	{
 		return index_;
 	}
 
 
 	void SnapShot::setNumberOfAtoms(Size number_of_atoms)
-		throw()
+		
 	{
 		number_of_atoms_ = number_of_atoms;
 	}
 
 
 	Size SnapShot::getNumberOfAtoms() const
-		throw()
+		
 	{
 		return number_of_atoms_;
 	}
 
 
 	DoubleReal SnapShot::getPotentialEnergy() const
-		throw()
+		
 	{
 		return potential_energy_;
 	}
 
 
 	void SnapShot::setPotentialEnergy(DoubleReal potential_energy) 
-		throw()
+		
 	{
 		potential_energy_ = potential_energy;
 	}
 
 
 	DoubleReal SnapShot::getKineticEnergy() const
-		throw()
+		
 	{
 		return kinetic_energy_;
 	}
 
 
 	void SnapShot::setKineticEnergy(DoubleReal kinetic_energy)
-		throw()
+		
 	{
 		kinetic_energy_ = kinetic_energy;
 	}
 
 
 	void SnapShot::setAtomPositions(const ::std::vector<Vector3>& atom_postions)
-		throw()
+		
 	{
 		atom_positions_ = atom_postions;
 	}
 
 
 	const ::std::vector<Vector3>& SnapShot::getAtomPositions() const
-		throw()
+		
 	{
 		return atom_positions_;
 	}
 
 
 	void SnapShot::setAtomVelocities(const ::std::vector<Vector3>& atom_velocities)
-		throw()
+		
 	{
 		atom_velocities_ = atom_velocities;
 	}
 
 
 	const ::std::vector<Vector3>& SnapShot::getAtomVelocities() const
-		throw()
+		
 	{
 		return atom_velocities_;
 	}
 
 
 	void SnapShot::setAtomForces(const ::std::vector<Vector3>& atom_forces)
-		throw()
+		
 	{
 		atom_forces_ = atom_forces;
 	}
 
 
 	const ::std::vector<Vector3>& SnapShot::getAtomForces() const
-		throw()
+		
 	{
 		return atom_forces_;
 	}
@@ -224,7 +224,7 @@ namespace BALL
 
 
 	void SnapShot::applySnapShot(System& system) const
-		throw()
+		
 	{
 		if (system.countAtoms() != number_of_atoms_)
 		{
@@ -273,7 +273,7 @@ namespace BALL
 
 
 	void SnapShot::setAtomPositions(System& system) const
-		throw()
+		
 	{
 		if (system.countAtoms() != number_of_atoms_)
 		{
@@ -306,7 +306,7 @@ namespace BALL
 
 
 	void SnapShot::setAtomVelocitites(System& system) const
-		throw()
+		
 	{
 		if (system.countAtoms() != number_of_atoms_)
 		{
@@ -340,7 +340,7 @@ namespace BALL
 
 
 	void SnapShot::setAtomForces(System& system) const
-		throw()
+		
 	{
 		if (system.countAtoms() != number_of_atoms_)
 		{

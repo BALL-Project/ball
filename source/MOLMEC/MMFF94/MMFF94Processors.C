@@ -507,14 +507,14 @@ void MMFF94ChargeProcessor::setup(const String& section)
 }
 
 void MMFF94ChargeProcessor::clear()
-	throw()
+	
 {
 	types_to_charges_.clear();
 	rule_types_.clear();
 }
 
 const MMFF94ChargeProcessor& MMFF94ChargeProcessor::operator = (const MMFF94ChargeProcessor&)
-	throw()
+	
 {
 	return *this;
 }

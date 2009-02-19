@@ -35,7 +35,7 @@ namespace BALL
 	}
 
 	const INIFile& INIFile::operator = (const INIFile& file)
-		throw()
+		
 	{
 		check_duplicate_keys_ = file.check_duplicate_keys_;
 		valid_ = file.valid_;
@@ -603,7 +603,7 @@ namespace BALL
 	}
 
 	List<String> INIFile::getContent() const
-		throw()
+		
 	{
 		List<String> lines;
 		LineIterator it = const_cast<INIFile*>(this)->getLine(0);
@@ -617,7 +617,7 @@ namespace BALL
 
 
 	bool INIFile::setContent(const List<String>& lines)
-		throw()
+		
 	{
  		List<String>::ConstIterator it = lines.begin();
 		for (; it != lines.end(); ++it)
@@ -845,13 +845,13 @@ namespace BALL
 
 
 	bool INIFile::Section::operator < (const Section& section) const
-		throw()
+		
 	{
 		return name_ < section.name_;
 	}
 
 	bool INIFile::Section::operator > (const Section& section) const
-		throw()
+		
 	{
 		return name_ < section.name_;
 	}

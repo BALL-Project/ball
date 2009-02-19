@@ -35,7 +35,7 @@ namespace BALL
 		/**	Default constructor
 		*/
 		SDFile()
-			throw();
+			;
 
 		/** Detailed constructor.
 		*/
@@ -49,7 +49,7 @@ namespace BALL
 
 		/// Destructor
 		virtual ~SDFile()
-			throw();
+			;
 		
 		//@}
 
@@ -91,17 +91,17 @@ namespace BALL
 				the optional information contained in the SD file.
 		*/
 		void disableAtoms()
-			throw();
+			;
 
 		/** Read atoms and bonds.
 				@see disableAtoms
 		*/
 		void enableAtoms()
-			throw();
+			;
 
 		///
 		const SDFile& operator = (const SDFile& file)
-			throw();
+			;
 
 		//@}
 

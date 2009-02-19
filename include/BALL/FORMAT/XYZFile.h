@@ -59,7 +59,7 @@ namespace BALL
 
 		/// Destructor
 		virtual ~XYZFile()
-			throw();
+			;
 		
 		//@}
 		/**	@name Reading and Writing of Kernel Datastructures
@@ -95,7 +95,7 @@ namespace BALL
 		}
 
 		const XYZFile& operator = (const XYZFile& file)
-			throw()
+			
 		{
 			File::operator = (file);
 

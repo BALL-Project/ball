@@ -61,7 +61,7 @@ namespace BALL
 	}
 
 	ResourceEntry::~ResourceEntry()
-		throw()
+		
 	{
 		ResourceEntry::clear();
 	}
@@ -660,13 +660,13 @@ namespace BALL
 
 	
 	ResourceFile::~ResourceFile()
-		throw()
+		
 	{
 		close();
 	}
 
 
-	void ResourceFile::clear() throw()
+	void ResourceFile::clear() 
 	{
 		root_.clear();
 	}

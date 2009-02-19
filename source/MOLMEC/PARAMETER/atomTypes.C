@@ -13,7 +13,7 @@ namespace BALL
 {
 
 
-	AtomTypes::AtomTypes() throw()
+	AtomTypes::AtomTypes() 
 		: ParameterSection(),
 			type_map_(),
 			names_()
@@ -21,7 +21,7 @@ namespace BALL
 	}
 
 
-	AtomTypes::AtomTypes(const AtomTypes& atom_types) throw()
+	AtomTypes::AtomTypes(const AtomTypes& atom_types) 
 		: ParameterSection(atom_types),
 			type_map_(atom_types.type_map_),
 			names_(atom_types.names_)
@@ -29,14 +29,14 @@ namespace BALL
 	}
 
 
-	AtomTypes::~AtomTypes() throw()
+	AtomTypes::~AtomTypes() 
 	{
 		clear();
 
 		valid_ = false;
 	}
 
-	void AtomTypes::clear() throw()
+	void AtomTypes::clear() 
 	{
 		names_.clear();
 		type_map_.clear();
@@ -45,7 +45,7 @@ namespace BALL
 	}
 
 
-	AtomTypes& AtomTypes::operator = (const AtomTypes& atom_types) throw()
+	AtomTypes& AtomTypes::operator = (const AtomTypes& atom_types) 
 	{
 		clear();
 
@@ -58,7 +58,7 @@ namespace BALL
 
 
 	bool AtomTypes::extractSection
-		(Parameters& parameters, const String& section_name) throw()
+		(Parameters& parameters, const String& section_name) 
 	{
 		valid_ = true;
 		// extract the basis information
@@ -91,13 +91,13 @@ namespace BALL
 	}
 
 
-	bool AtomTypes::hasType(const String& name) const throw()
+	bool AtomTypes::hasType(const String& name) const 
 	{
 		return type_map_.has(name);
 	}
 
 
-	Atom::Type AtomTypes::getType(const String& name) const throw()
+	Atom::Type AtomTypes::getType(const String& name) const 
 	{
 		// try to find the name in the hash map
 		StringHashMap<Atom::Type>::ConstIterator it = type_map_.find(name);
@@ -112,7 +112,7 @@ namespace BALL
 	}
 
 
-	String AtomTypes::getTypeName(Atom::Type type) const throw()
+	String AtomTypes::getTypeName(Atom::Type type) const 
 	{
 		static const String empty_string;
 		if ((type < 0) || (type >= (Index)names_.size()))
@@ -124,13 +124,13 @@ namespace BALL
 	}
 
 
-	Size AtomTypes::getNumberOfTypes() const throw()
+	Size AtomTypes::getNumberOfTypes() const 
 	{
 		return (Size)names_.size();
 	}
 
 
-	bool AtomTypes::operator == (const AtomTypes& atom_types) const throw()
+	bool AtomTypes::operator == (const AtomTypes& atom_types) const 
 	{
 		return (ParameterSection::operator == (atom_types)
 			&& (type_map_ == atom_types.type_map_)

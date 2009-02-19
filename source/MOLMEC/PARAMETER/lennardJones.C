@@ -12,7 +12,7 @@ using namespace std;
 namespace BALL 
 {
 
-	LennardJones::LennardJones() throw()
+	LennardJones::LennardJones() 
 		:	ParameterSection(),
 			A_(0),
 			B_(0),
@@ -26,7 +26,7 @@ namespace BALL
 	}
 
 
-	LennardJones::LennardJones(const LennardJones& lj) throw()
+	LennardJones::LennardJones(const LennardJones& lj) 
 		:	ParameterSection(lj),
 			A_(lj.A_),
 			B_(lj.B_),
@@ -40,13 +40,13 @@ namespace BALL
 	}
 
 
-	LennardJones::~LennardJones() throw()
+	LennardJones::~LennardJones() 
 	{
 		clear();
 	}
 
 
-	void LennardJones::clear() throw()
+	void LennardJones::clear() 
 	{
 		// clear allocated parameter fields
 		A_.clear();
@@ -63,7 +63,7 @@ namespace BALL
 
 
 	const LennardJones& LennardJones::operator = (const LennardJones& lj)
-		throw()
+		
 	{
 		ParameterSection::operator = (lj);
 		A_ = lj.A_;
@@ -80,14 +80,14 @@ namespace BALL
 
 
 	bool LennardJones::extractSection
-		(Parameters& parameters, const String& section_name) throw()
+		(Parameters& parameters, const String& section_name) 
 	{
 		return ParameterSection::extractSection(parameters, section_name);
 	}
 
 
 	bool LennardJones::extractSection
-		(ForceFieldParameters& parameters, const String& section_name) throw()
+		(ForceFieldParameters& parameters, const String& section_name) 
 	{
 		// check whether the parameters are valid
 		if (!parameters.isValid())
@@ -326,7 +326,7 @@ namespace BALL
 
 
 	bool LennardJones::hasParameters(Atom::Type I, Atom::Type J) const
-		throw()
+		
 	{
 		if (I < 0 || I >= (Index)number_of_atom_types_)
 		{
@@ -342,7 +342,7 @@ namespace BALL
 	}
 
 
-	LennardJones::Values LennardJones::getParameters(Atom::Type I, Atom::Type J) const throw()
+	LennardJones::Values LennardJones::getParameters(Atom::Type I, Atom::Type J) const 
 	{
 		LennardJones::Values parameters;
 		assignParameters(parameters, I, J);
@@ -351,7 +351,7 @@ namespace BALL
 
 
 	bool LennardJones::assignParameters(LennardJones::Values& parameters, Atom::Type I, Atom::Type J) const 
-		throw()
+		
 	{
 		if (hasParameters(I, J)) 
 		{
@@ -365,7 +365,7 @@ namespace BALL
 	}
 
 
-	bool LennardJones::operator == (const LennardJones& lj) const throw()
+	bool LennardJones::operator == (const LennardJones& lj) const 
 	{
 		return (ParameterSection::operator == (lj)
 						&& (A_ 		== lj.A_) 

@@ -47,7 +47,7 @@ namespace BALL
 			/** Default constructor
 			 */
 			GAMESSLogFile()
-				throw();
+				;
 
 			/** Copy constructor
 			 */
@@ -62,7 +62,7 @@ namespace BALL
 			/** Destructor
 			 */
 			virtual ~GAMESSLogFile()
-				throw();
+				;
 			
 			//@}
 			/** @name Assignment.
@@ -114,43 +114,43 @@ namespace BALL
 			 */
 			//@{
 			void newMolecule()
-				throw();
+				;
 
 			void setMoleculeName(char* name)
-				throw();			
+				;			
 			
 			void insertAtom(const String& element, float charge, float x, float y, float z)
-				throw();
+				;
 
 			void insertBond(Index a1, Index a2)
-				throw();
+				;
 
 			void clearBonds()
-				throw();
+				;
 
 			void setCurrentCharge(float charge)
-				throw();
+				;
 
 			void setUnitConversionFactor(float factor)
-				throw();
+				;
 
 			void addCoefficient(float coefficient)
-				throw();
+				;
 
 			void initializeBasisSet()
-				throw();
+				;
 
 			QMBasisSet& getBasisSet()
-				throw();
+				;
 
 			const QMBasisSet& getBasisSet() const
-				throw();
+				;
 
 			void addBasisOption(const String& key, const String& value)
-				throw();
+				;
 
 			String getBasisOption(const String& key)
-				throw();
+				;
 			//@}
 			
 			static State state;

@@ -197,7 +197,7 @@ namespace BALL
 		
 		/// Destructor
 		virtual ~PDBFile()
-			throw();
+			;
 		//@}
 
 		/** @name Assignment.
@@ -667,7 +667,7 @@ namespace BALL
 		/*_ A helper function for initializing certain data structures. Used by
 				constructors.
 		*/
-		void init_() throw();
+		void init_() ;
 
 		void postprocessSSBonds_();
 		void postprocessHelices_();
@@ -818,7 +818,7 @@ namespace BALL
   */
 	inline
 	BALL_EXPORT HashIndex Hash(const PDBFile::ResidueQuadruple& quadruple)
-		throw()
+		
 	{
 		return (Index)quadruple.third;
 	}

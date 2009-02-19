@@ -130,7 +130,7 @@ namespace BALL
 		/**	Default constructor
 		*/
 		MOLFile()
-			throw();
+			;
 
 		/** Detailed constructor.
 		*/
@@ -144,7 +144,7 @@ namespace BALL
 
 		/// Destructor
 		virtual ~MOLFile()
-			throw();
+			;
 		
 		//@}
 
@@ -174,7 +174,7 @@ namespace BALL
 			throw(Exception::ParseError);
 			
 		///
-		const MOLFile& operator = (const MOLFile& file) throw();
+		const MOLFile& operator = (const MOLFile& file) ;
 
 		//@}
 

@@ -13,7 +13,7 @@ using namespace std;
 namespace BALL
 {
 	NMRAtomData::NMRAtomData()
-		throw()
+		
 		: atom_ID(0),
 			residue_seq_code(0),
 			residue_label(""),
@@ -27,14 +27,14 @@ namespace BALL
 
 
 	ShiftReferenceSet::ShiftReferenceSet()
-		throw()
+		
 		: name(),
 			elements()
 	{
 	}
 
 	ostream& operator << (ostream &s, const NMRAtomData& ad)
-		throw()
+		
 	{
 		s << "atom_ID: "					  << ad.atom_ID;
 		s << " residue_seq_code: "  << ad.residue_seq_code;
@@ -47,7 +47,7 @@ namespace BALL
 	}
 
 	ostream& operator << (::std::ostream& s, const SampleCondition& sc)
-		throw()
+		
 	{
 		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
 		s << "name "				<< sc.name << endl;;
@@ -59,7 +59,7 @@ namespace BALL
 	}
 
 	ostream& operator << (::std::ostream& s, const ShiftReferenceElement& sre)
-		throw()
+		
 	{
 		s << endl;
 		s << "mol_common_name "		<< sre.mol_common_name << endl;
@@ -91,7 +91,7 @@ namespace BALL
 	}
 	
 	ostream& operator << (::std::ostream& s, const ShiftReferenceSet& sr)
-		throw()
+		
 	{
 		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
 		s << "name " << sr.name << endl << endl;
@@ -104,7 +104,7 @@ namespace BALL
 	}
 
 	ostream& operator << (::std::ostream& s, const NMRAtomDataSet& set)
-		throw()
+		
 	{
 		s << endl << "name " << set.name << endl << endl;
 
@@ -121,7 +121,7 @@ namespace BALL
 	}
 
 	ShiftReferenceElement::ShiftReferenceElement()
-		throw()
+		
 		: atom_type(),
 			isotope_number(0),
 			atom_group(),
@@ -134,7 +134,7 @@ namespace BALL
 	}
 
 	SampleCondition::SampleCondition()
-		throw()
+		
 		: name(""),
 			temperature(0.0),
 			pH(7.0),
@@ -143,7 +143,7 @@ namespace BALL
 	}
 
 	NMRAtomDataSet::NMRAtomDataSet()
-		throw()
+		
 		: name(),
 			condition(),
 			reference()
@@ -155,7 +155,7 @@ namespace BALL
 
 
 	NMRStarFile::NMRStarFile()
-		throw ()
+		
 		:	LineBasedFile(),
 			number_of_shifts_(0),
 			atom_data_sets_(),
@@ -200,12 +200,12 @@ namespace BALL
 	}
 
 	NMRStarFile::~NMRStarFile()
-		throw()
+		
 	{
 	}
 
 	const NMRStarFile& NMRStarFile::operator = (const NMRStarFile& f)
-		throw ()
+		
 	{
 		LineBasedFile::operator = (f);
 
@@ -219,7 +219,7 @@ namespace BALL
 	}
 
 	Size NMRStarFile::getNumberOfAtoms() 
-		const	throw()
+		const	
 	{
 		Size max = 0;
 		for (Position pos = 0;  pos < atom_data_sets_.size(); pos++)
@@ -234,7 +234,7 @@ namespace BALL
 	}
 
 	const std::vector<NMRAtomDataSet>& NMRStarFile::getData() 
-		const	throw()
+		const	
 	{
 		return atom_data_sets_;
 	}
@@ -263,7 +263,7 @@ namespace BALL
 	}
 
 	void NMRStarFile::readMolSystem_()
-		throw()
+		
 	{
 		try
 		{
@@ -293,7 +293,7 @@ namespace BALL
 	}
 
 	void NMRStarFile::readSampleConditions_()
-		throw()
+		
 	{
 		try
 		{
@@ -372,7 +372,7 @@ namespace BALL
 	}
 
 	void NMRStarFile::initializeReferenceOptions_()
-		throw()
+		
 	{
 		if (reference_options_.size() > 0)
 		{
@@ -391,7 +391,7 @@ namespace BALL
 	}
 
 	void NMRStarFile::readShiftReferences_()
-		throw()
+		
 	{
 		try
 		{
@@ -680,17 +680,17 @@ namespace BALL
 		}
 	}
 
-	bool NMRStarFile::operator == (const NMRStarFile& f)  throw()
+	bool NMRStarFile::operator == (const NMRStarFile& f)  
 	{
 		return File::operator == (f);
 	}
 
-	bool NMRStarFile::operator != (const NMRStarFile& f)  throw()
+	bool NMRStarFile::operator != (const NMRStarFile& f)  
 	{
 		return !(File::operator == (f));
 	}
 
-	void NMRStarFile::clear() throw()
+	void NMRStarFile::clear() 
 	{
 		LineBasedFile::clear();
 		number_of_shifts_ = 0;

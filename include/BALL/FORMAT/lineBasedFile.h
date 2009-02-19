@@ -32,7 +32,7 @@ namespace BALL
 
 		/// Default constructor
 		LineBasedFile()
-			throw();
+			;
 			
 		/** Detailed constuctor.
 		 		@param trim_whitespaces - sets wheter leading and trailing whitespaces 
@@ -51,7 +51,7 @@ namespace BALL
 		/**	Clear method.
 		*/
 		void clear() 
-			throw();
+			;
 
 		//@}
 		/**	@name Equality operators
@@ -60,11 +60,11 @@ namespace BALL
 
 		/** Equality operator
 		*/
-		bool operator == (const LineBasedFile& f)  throw();
+		bool operator == (const LineBasedFile& f)  ;
 
 		/** Inequality operator
 		*/
-		bool operator != (const LineBasedFile& f)  throw();
+		bool operator != (const LineBasedFile& f)  ;
 		//@}
 
 		/**	@name Assignment
@@ -84,15 +84,15 @@ namespace BALL
 
 		/// Get the last line number in the file.
 		Position getLineNumber() 
-			const	throw();
+			const	;
 
 		/// Return the current line
 		const String& getLine() 
-			const throw();
+			const ;
 
 		/// Return the current line
 		String& getLine() 
-			throw();
+			;
 
 		//@}
 		/**	@name	Help-Methods for File Acces
@@ -158,17 +158,17 @@ namespace BALL
 
 		/// Test if the current line starts with text
 		bool startsWith(const String& text) 
-			const throw();
+			const ;
 
 		/// Return true if the current line contains text
 		bool has(const String& text) 
-			const throw();
+			const ;
 
 		/** Switch method of the current line.
 				Return the position of the current line in data or -1 if it does not exist.
 		*/
 		Index switchString(const std::vector<String>& data) 
-			const throw();
+			const ;
 
 		/**	Parse column based formats.
 				Copy the subsection of the current line defined by <tt>index</tt> and <tt>length</tt> into a buffer
@@ -178,11 +178,11 @@ namespace BALL
 
 		/// Set wheter leading and trailing whitespaces in lines shall be removed
 		void enableTrimWhitespaces(bool state)
-			throw();
+			;
 		
 		///
 		bool trimWhiteSpacesEnabled() const
-			throw();
+			;
 
 		protected:
 		//@}

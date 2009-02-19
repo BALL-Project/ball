@@ -198,12 +198,12 @@ namespace BALL
 		/**	Assignment operator
 		*/
 		const MMFF94& operator = (const MMFF94& force_field)
-			throw();
+			;
 
 		/**	Clear method
 		*/
 		virtual void clear()
-			throw();
+			;
 		
 		//@}
 		/**	@name	Setup Methods
@@ -263,7 +263,7 @@ namespace BALL
 
 		/// Get the current results in String form
 		virtual String getResults() const
-			throw();
+			;
 
 		///
 		const vector<Bond*> getBonds() const { return bonds_;}

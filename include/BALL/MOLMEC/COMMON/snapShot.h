@@ -41,15 +41,15 @@ namespace BALL
     /** The default constructor. It creates an empty SnapShot object. 
     */
     SnapShot()
-			throw();
+			;
 
 		/// Copy constructor.
 		SnapShot(const SnapShot& snapshot)
-			throw();
+			;
 
     /// The destructor 
     virtual ~SnapShot()
-			throw();
+			;
 
     //@}
     /// @name Assignment 
@@ -57,11 +57,11 @@ namespace BALL
 
     /// Assignment operator.
     const SnapShot& operator = (const SnapShot& snapshot)
-			throw();
+			;
 
 		/// Clear method.
 		virtual void clear()
-			throw();
+			;
 
     //@}
     /// @name Predicates
@@ -69,13 +69,13 @@ namespace BALL
 
 		/// Equality operator
 		bool operator == (const SnapShot& snapshot) const
-			throw();
+			;
 
     /** Indicates validity of the SnapShot
 				@return true if this instance is valid
     */
     bool isValid() const
-			throw();
+			;
 
     //@}
 		/// @name Accessors
@@ -83,59 +83,59 @@ namespace BALL
 
 		/// Set the index attribute.
 		void setIndex(Size index)
-			throw();
+			;
 
 		/// Get the index of this instance.
 		Size getIndex() const
-			throw();
+			;
 
 		/// Set the number of atoms that are covered by this snapshot.
 		void setNumberOfAtoms(Size number_of_atoms)
-			throw();
+			;
 
 		/// Get the number of atoms that are covered by this snapshot.
 		Size getNumberOfAtoms() const
-			throw();
+			;
 
 		/// Set the value for the potential energy of this snapshot's system
 		void setPotentialEnergy(DoubleReal potential_energy) 
-			throw();
+			;
 
 		/// Get the value for the potential energy of this snapshot's system
 		DoubleReal getPotentialEnergy() const
-			throw();
+			;
 
 		/// Set the value for the kinetic energy of this snapshot's system
 		void setKineticEnergy(DoubleReal kinetic_energy)
-			throw();
+			;
 
 		/// Get the value for the kinetic energy of this snapshot's system
 		DoubleReal getKineticEnergy() const
-			throw();
+			;
 
 		/// Specify all atom positions
 		void setAtomPositions(const ::std::vector<Vector3>& atom_postions)
-			throw();
+			;
 
 		/// Get the vector containing the atom postions
 		const ::std::vector<Vector3>& getAtomPositions() const
-			throw();
+			;
 
 		/// Specify all atom velocities
 		void setAtomVelocities(const ::std::vector<Vector3>& atom_velocities)
-			throw();
+			;
 
 		/// Get the vector containing the atom velocitites
 		const ::std::vector<Vector3>& getAtomVelocities() const
-			throw();
+			;
 
 		/// Specify all atom forces
 		void setAtomForces(const ::std::vector<Vector3>& atom_forces)
-			throw();
+			;
 
 		/// Get all atom forces
 		const ::std::vector<Vector3>& getAtomForces() const
-			throw();
+			;
 
 		//@}
 		/// @name System interaction
@@ -156,7 +156,7 @@ namespace BALL
 				@param system the System which will be manipulated
 		*/
 		void applySnapShot(System& system) const
-			throw();
+			;
 
 		/** Read all atom positions from a System and store them in this
 				instance of SnapShot.
@@ -170,7 +170,7 @@ namespace BALL
 				@param system the system which will be manipulated
 		*/
 		void setAtomPositions(System& system) const
-			throw();
+			;
 
 		/** Read all atom velocities from a System and store them in this
 				instance of SnapShot.
@@ -184,7 +184,7 @@ namespace BALL
 				@param system the system which will be manipulated
 		*/
 		void setAtomVelocitites(System& system) const
-			throw();
+			;
 
 		/** Read all atom forces from a System and store them in this
 				instance of SnapShot.
@@ -198,7 +198,7 @@ namespace BALL
 				@param system the system which will be manipulated
 		*/
 		void setAtomForces(System& system) const
-			throw();
+			;
 
 		//@}
 

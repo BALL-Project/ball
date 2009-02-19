@@ -17,12 +17,12 @@ namespace BALL
 	{
 	}
 
-	QuadraticAngleBend::~QuadraticAngleBend() throw()
+	QuadraticAngleBend::~QuadraticAngleBend() 
 	{
 		clear();
 	}
 
-	void QuadraticAngleBend::clear() throw()
+	void QuadraticAngleBend::clear() 
 	{
 		// clear allocatd parameter fields
 		values_.clear();

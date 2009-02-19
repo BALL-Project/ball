@@ -30,16 +30,16 @@ namespace BALL
 		*/
 		//@{
 		/// Default constructor
-		SCWRLRotamerFile() throw();
+		SCWRLRotamerFile() ;
 
 		/// Copy constructor
-		SCWRLRotamerFile(const SCWRLRotamerFile& file) throw();
+		SCWRLRotamerFile(const SCWRLRotamerFile& file) ;
 
 		/// Detailed constructor
-		SCWRLRotamerFile(const String& name, File::OpenMode open_mode = std::ios::in) throw();
+		SCWRLRotamerFile(const String& name, File::OpenMode open_mode = std::ios::in) ;
 
 		/// Destructor
-		virtual ~SCWRLRotamerFile() throw();
+		virtual ~SCWRLRotamerFile() ;
 		//@}
 
 

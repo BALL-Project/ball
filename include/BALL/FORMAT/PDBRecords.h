@@ -53,11 +53,11 @@ namespace BALL
 		/**	@name Constructors and Destructor */
 		//@{
 		///
-		PDBRecords() throw();
+		PDBRecords() ;
 		///
-		PDBRecords(const PDBRecords& pdbi) throw();
+		PDBRecords(const PDBRecords& pdbi) ;
 		///
-		virtual ~PDBRecords() throw();
+		virtual ~PDBRecords() ;
 		//@}
 
 		/**	Assignment

@@ -23,7 +23,7 @@ namespace BALL
 	const unsigned int SnapShotManager::Default::FLUSH_TO_DISK_FREQUENCY = 10;
 
 	SnapShotManager::SnapShotManager()
-		throw()
+		
 		: options(),
 			system_ptr_(0),
 			force_field_ptr_(0),
@@ -50,7 +50,7 @@ namespace BALL
 	SnapShotManager::SnapShotManager
 		(System* my_system, const ForceField* my_forcefield, 
 		 TrajectoryFile* file)
-		throw()
+		
 		: options(),
 			system_ptr_(my_system),
 			force_field_ptr_(my_forcefield),
@@ -80,7 +80,7 @@ namespace BALL
 	SnapShotManager::SnapShotManager 
 		(System* my_system, const ForceField* my_forcefield, 
 		 const Options& my_options, TrajectoryFile* file)
-		throw()
+		
 		: options(my_options),
 			system_ptr_(my_system),
 			force_field_ptr_(my_forcefield),
@@ -102,7 +102,7 @@ namespace BALL
 	// NOTE, that this copy constructor DOES NOT copy the system and force
 	// field but only the pointers!
 	SnapShotManager::SnapShotManager (const SnapShotManager& manager)
-		throw()
+		
 		: options(manager.options),
 			system_ptr_(manager.system_ptr_),
 			force_field_ptr_(manager.force_field_ptr_),
@@ -117,7 +117,7 @@ namespace BALL
 
 	// The destructor of SnapShotManager 
 	SnapShotManager::~SnapShotManager()
-		throw()
+		
 	{
 		// clear() handles open files, so the destructor does not handle them
 		clear();
@@ -125,7 +125,7 @@ namespace BALL
 
 
 	const SnapShotManager& SnapShotManager::operator = (const SnapShotManager& manager)
-		throw()
+		
 	{
 		options = manager.options;
 		system_ptr_ = manager.system_ptr_;
@@ -141,7 +141,7 @@ namespace BALL
 
 
 	void SnapShotManager::clear()
-		throw()
+		
 	{
 		// bring the instance to initial state
 		options.clear();
@@ -159,7 +159,7 @@ namespace BALL
 
 
 	bool SnapShotManager::isValid() const
-		throw()
+		
 	{
 		// first test for existence of system and force field
 		if (system_ptr_ == 0 || !system_ptr_->isValid())
@@ -191,7 +191,7 @@ namespace BALL
 	// The setup method does the actual preparations
 	bool SnapShotManager::setup(System* my_system, 
 			const ForceField* my_forcefield, TrajectoryFile* my_snapshot_file)
-		throw()
+		
 	{
 		setSystem(my_system);
 		setForceField(my_forcefield);
@@ -202,7 +202,7 @@ namespace BALL
 
 	// The setup method does the actual preparations
 	bool SnapShotManager::setup()
-		throw()
+		
 	{
 		if (!isValid()) return false;
 
@@ -331,56 +331,56 @@ namespace BALL
 
 
 	void SnapShotManager::setSystem(System* my_system)
-		throw()
+		
 	{
 		system_ptr_ = my_system;
 	}
 
 
 	System* SnapShotManager::getSystem() const
-		throw()
+		
 	{
 		return system_ptr_;
 	}
 
 
 	void SnapShotManager::setForceField(const ForceField* my_ff)
-		throw()
+		
 	{
 		force_field_ptr_ = my_ff;
 	}
 
 
 	const ForceField* SnapShotManager::getForceField() const
-		throw()
+		
 	{
 		return force_field_ptr_;
 	}
 
 
 	void SnapShotManager::setTrajectoryFile(TrajectoryFile* my_file)
-		throw()
+		
 	{
 		trajectory_file_ptr_ = my_file;
 	}
 
 
 	TrajectoryFile* SnapShotManager::getTrajectoryFile() const
-		throw()
+		
 	{
 		return trajectory_file_ptr_;
 	}
 
 
 	void SnapShotManager::setFlushToDiskFrequency(Size number)
-		throw()
+		
 	{
 		flush_to_disk_frequency_ = number;
 	}
 
 
 	Size SnapShotManager::getFlushToDiskFrequency() const
-		throw()
+		
 	{
 		return flush_to_disk_frequency_;
 	}
@@ -431,7 +431,7 @@ namespace BALL
 
 
 	bool SnapShotManager::applySnapShot(Size number)
-		throw()
+		
 	{
 		// we start at SnapShot number 1!
 		if (number > 0) number --;
@@ -485,7 +485,7 @@ namespace BALL
 
 
 	bool SnapShotManager::applyFirstSnapShot()
-		throw()
+		
 	{
 		if (system_ptr_ == 0) return false;
 
@@ -512,7 +512,7 @@ namespace BALL
 
 
 	bool SnapShotManager::applyNextSnapShot()
-		throw()
+		
 	{
 		if (system_ptr_ == 0) return false;
 
@@ -548,7 +548,7 @@ namespace BALL
 
 
 	bool SnapShotManager::applyLastSnapShot()
-		throw()
+		
 	{
 		if (system_ptr_ == 0) return false;
 
@@ -607,7 +607,7 @@ namespace BALL
 	}	
 
 	bool SnapShotManager::readFromFile()
-		throw()
+		
 	{
 		if (trajectory_file_ptr_ == 0) return false;
 		snapshot_buffer_.clear();
@@ -631,7 +631,7 @@ namespace BALL
 	}
 
 	void SnapShotManager::clearBuffer()
-		throw()
+		
 	{
 		snapshot_buffer_.clear();
 		current_snapshot_ = 0;

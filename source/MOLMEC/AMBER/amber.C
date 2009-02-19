@@ -128,7 +128,7 @@ namespace BALL
 	}
 
 	void AmberFF::clear()
-		throw()
+		
 	{
 		ForceField::clear();
 		filename_ = Default::FILENAME;
@@ -136,7 +136,7 @@ namespace BALL
 	}
 
 	const AmberFF& AmberFF::operator = (const AmberFF& force_field)
-		throw()
+		
 	{
 		// avoid self assignment
 		if (&force_field != this)
@@ -383,7 +383,7 @@ namespace BALL
 	}
 
 	String AmberFF::getResults() const
-		throw()
+		
 	{
 		String result = String("\n")
 		+ "AMBER Energy:\n"

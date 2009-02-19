@@ -21,7 +21,7 @@ using namespace std;
 namespace BALL 
 {
 	MOL2File::MOL2File()
-		throw()
+		
 		:	GenericMolFile()
 	{
 	}
@@ -39,7 +39,7 @@ namespace BALL
 	}
 
 	MOL2File::~MOL2File()
-		throw()
+		
 	{
 	}
 	
@@ -894,7 +894,7 @@ namespace BALL
 	}
 
 	const MOL2File& MOL2File::operator = (const MOL2File& file)
-		throw()
+		
 	{
 		atoms_		     = file.atoms_;
 		bonds_		     = file.bonds_;

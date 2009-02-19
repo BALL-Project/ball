@@ -14,7 +14,7 @@ namespace BALL
 {
 
 	SDFile::SDFile()
-		throw()
+		
 		:	MOLFile()
 	{
 	}
@@ -34,16 +34,16 @@ namespace BALL
 	}
 
 	SDFile::~SDFile()
-		throw()
+		
 	{
 	}
 
-	void SDFile::disableAtoms() throw()
+	void SDFile::disableAtoms() 
 	{
 		read_atoms_ = false;
 	}
 
-	void SDFile::enableAtoms() throw()
+	void SDFile::enableAtoms() 
 	{
 		read_atoms_ = true;
 	}
@@ -202,7 +202,7 @@ namespace BALL
 	}
 
 	const SDFile& SDFile::operator = (const SDFile& file)
-		throw()
+		
 	{
 		read_atoms_ = file.read_atoms_;
 		MOLFile::operator = (file);

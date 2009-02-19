@@ -47,7 +47,7 @@ namespace BALL
 			:	public Exception::GeneralException
 		{
 			public:
-			InvalidQuery(const char* file, int line, const String& s = "<unknown query>") throw();
+			InvalidQuery(const char* file, int line, const String& s = "<unknown query>") ;
 			virtual ~InvalidQuery() throw() {}
 
 			protected:
@@ -58,7 +58,7 @@ namespace BALL
 			:	public Exception::GeneralException
 		{
 			public:
-			NotConnected(const char* file, int line, const String& s = "<not connected>") throw();
+			NotConnected(const char* file, int line, const String& s = "<not connected>") ;
 			virtual ~NotConnected() throw() {}
 
 			protected:
@@ -70,7 +70,7 @@ namespace BALL
 			:	public Exception::GeneralException
 		{
 			public:
-			InconsistentTopology(const char* file, int line, const String& s = "<inconsistent topology>") throw();
+			InconsistentTopology(const char* file, int line, const String& s = "<inconsistent topology>") ;
 			virtual ~InconsistentTopology() throw() {}
 
 			protected:

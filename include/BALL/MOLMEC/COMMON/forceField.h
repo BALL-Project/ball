@@ -134,7 +134,7 @@ namespace BALL
 		/**	Clear method.
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/**	@name	Assignments 
@@ -155,7 +155,7 @@ namespace BALL
 				and  \link setup setup \endlink  was successful.
 		*/
 		bool isValid() const
-			throw();
+			;
 
 		//@}
 		/**	@name	Setup methods 
@@ -219,36 +219,36 @@ namespace BALL
 		/**	Returns a reference to the atom vector
 		*/
 		BALL_INLINE
-		const	AtomVector& getAtoms() const throw();
+		const	AtomVector& getAtoms() const ;
 
 		/**	Returns a pointer to the system
 		*/
 		BALL_INLINE
-		System* getSystem() throw();
+		System* getSystem() ;
 
     /** Returns a const pointer to the system
     */
 		BALL_INLINE
-    const System* getSystem() const throw();
+    const System* getSystem() const ;
 
 		/**	Return the status of the selection mechanism
 		*/
 		BALL_INLINE
-		bool getUseSelection() const throw();
+		bool getUseSelection() const ;
 
 		/**	Set the status of the selection mechanism
 		*/
 		BALL_INLINE
-		void disableSelection() throw();
+		void disableSelection() ;
 
 		/**	Set the status of the selection mechanism
 		*/
 		BALL_INLINE
-		void enableSelection() throw();
+		void enableSelection() ;
 
 		/**	Return the status of the selection mechanism */
 		BALL_INLINE
-		bool isSelectionEnabled() const throw();
+		bool isSelectionEnabled() const ;
 
 		/**	Returns a pointer to the parameter file
 		*/
@@ -266,7 +266,7 @@ namespace BALL
 				update the  \link setup_time_stamp_ setup_time_stamp_ \endlink 
 		*/
 		const TimeStamp& getUpdateTime() const
-			throw();
+			;
 		
 		/**	Return the point of time of the last call to setup.
 				ForceField contains a time stamp which is used to determine
@@ -276,7 +276,7 @@ namespace BALL
 				update the  \link setup_time_stamp_ setup_time_stamp_ \endlink 
 		*/
 		const TimeStamp& getSetupTime() const
-			throw();
+			;
 		
 		/**	Insert a new component into the force field's component list.
 				Responsability for the destruction of the component is passed on to
@@ -345,7 +345,7 @@ namespace BALL
 		 		(Generic function to be overloaded in derived classes.)
 		*/
 		virtual String getResults() const
-			throw() { return "undefined";}
+			 { return "undefined";}
 
 		//_ Report an error and increase the error counter
 		std::ostream& error() throw(Exception::TooManyErrors);

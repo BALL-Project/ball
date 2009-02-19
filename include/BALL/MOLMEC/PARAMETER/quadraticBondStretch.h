@@ -54,11 +54,11 @@ namespace BALL
 
 		/**	Destructor.
 		*/
-		virtual ~QuadraticBondStretch() throw();
+		virtual ~QuadraticBondStretch() ;
 
 		/**	Clear method  
 		*/
-		virtual void clear() throw();
+		virtual void clear() ;
 
 		/**	Reads a parameter section from an INI file.
 				This method reads the section given in section_name from ini_file,

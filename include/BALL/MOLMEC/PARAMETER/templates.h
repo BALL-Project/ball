@@ -49,11 +49,11 @@ namespace BALL
 
 		/**	Destructor.
 		*/
-		virtual ~Templates() throw();
+		virtual ~Templates() ;
 
 		/**	Clear method. 
 		*/
-		virtual void clear() throw();
+		virtual void clear() ;
 
 		//@}
 		/**	Parameter extraction

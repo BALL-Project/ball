@@ -46,7 +46,7 @@ namespace BALL
 
 		/// Default constructor
 		DCDFile()
-			throw();
+			;
 
 		/// Copy constructor
 		DCDFile(const DCDFile& file)
@@ -58,7 +58,7 @@ namespace BALL
 
 		/// Destructor
 		virtual ~DCDFile()
-			throw();
+			;
 
 		//@}
 		/** @name Assignment
@@ -67,11 +67,11 @@ namespace BALL
 
 		/// Assignment operator
 		const DCDFile& operator = (const DCDFile& file)
-			throw();
+			;
 
 		/// Clear method
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/** @name Predicates
@@ -80,15 +80,15 @@ namespace BALL
 
 		/// Equality operator
 		bool operator == (const DCDFile& file) const
-			throw();
+			;
 
 		///
 		bool isSwappingBytes() const
-			throw();
+			;
 
 		///
 		bool hasVelocities() const
-			throw();
+			;
 
 		//@}
 		/// @name Public methods for file handling
@@ -102,24 +102,24 @@ namespace BALL
 		/** Initialize this instance, i. e. read the header and update members
 		*/
 		bool init()
-			throw();
+			;
 
 		/** Read the header of an existing file.
 				Return true if the header could be read successfully, false ow.
 		*/
 		virtual bool readHeader()
-			throw();
+			;
 
 		/** Write a header
 				Return true if the header could be written successfully, false ow.
 		*/
 		virtual bool writeHeader()
-			throw();
+			;
 
 		/** 
 		*/
 		virtual bool seekAndWriteHeader()
-			throw();
+			;
 
 		// ?????:
 		// should append() also write the header? what is more intuitive?
@@ -129,14 +129,14 @@ namespace BALL
 				@return true, if writing was successful
 		*/
 		virtual bool append(const SnapShot& snapshot)
-			throw();
+			;
 
 		/** Read the next snapshot from the file
 				@param snapshot a buffer for result delivery
 				@return true, if a snapshot could be read, false ow.
 		*/
 		virtual bool read(SnapShot& snapshot)
-			throw();
+			;
 
 		/**
 		*/
@@ -150,11 +150,11 @@ namespace BALL
 
 		/// 
 		void enableVelocityStorage()
-			throw();
+			;
 
 		/// 
 		void disableVelocityStorage()
-			throw();
+			;
 
 		//@}
 
@@ -162,31 +162,31 @@ namespace BALL
 
 		//_ 
 		void writeSize_(const Size& data)
-			throw() { *this << BinaryFileAdaptor<Size>(data);}
+			 { *this << BinaryFileAdaptor<Size>(data);}
 
 		//_ 
 		void writeFloat_(const float& data)
-			throw() { *this << BinaryFileAdaptor<float>(data);}
+			 { *this << BinaryFileAdaptor<float>(data);}
 
 		//_
 		void writeVector_(const vector<Vector3>& v)
-			throw();
+			;
 		
 		//_
  		float readFloat_()
-			throw(); 
+			; 
 
 		//_
 		Size readSize_()
-			throw();
+			;
 
 		//_
 		bool readSize_(Size expected_size, const String& what)
-			throw();
+			;
 
 		//_
 		bool readVector_(vector<Vector3>& v)
-			throw();
+			;
 
 		//_
 		Size verbosity_;

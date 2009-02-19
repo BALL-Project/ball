@@ -13,7 +13,7 @@ namespace BALL
 {
 
 	bool JCAMPFile::JCAMPValue::operator == (const JCAMPValue& value) const
-		throw()
+		
 	{
 		return string_value  	== value.string_value &&
 					 numeric_value  == value.numeric_value && 
@@ -21,7 +21,7 @@ namespace BALL
 	}
 
 	bool JCAMPFile::JCAMPValue::operator != (const JCAMPValue& value) const
-		throw()
+		
 	{
 		return !(*this == value);
 	}
@@ -302,7 +302,7 @@ namespace BALL
 	}
 
 	const JCAMPFile& JCAMPFile::operator = (const JCAMPFile& file)
-		throw()
+		
 	{
 		header_  = file.header_;
 		entries_ = file.entries_;
@@ -311,14 +311,14 @@ namespace BALL
 		return *this;
 	}
 
-	bool JCAMPFile::operator == (const JCAMPFile& f)  const throw()
+	bool JCAMPFile::operator == (const JCAMPFile& f)  const 
 	{
 		return header_ == f.header_ &&
 					 entries_ == f.entries_;
 
 	}
 
-	bool JCAMPFile::operator != (const JCAMPFile& f)  const throw()
+	bool JCAMPFile::operator != (const JCAMPFile& f)  const 
 	{
 		return ! (*this == f);
 	}

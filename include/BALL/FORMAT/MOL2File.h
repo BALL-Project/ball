@@ -65,7 +65,7 @@ namespace BALL
 		/**	Default constructor
 		*/
 		MOL2File()
-			throw();
+			;
 
 		/** Detailed constructor
 		*/
@@ -79,7 +79,7 @@ namespace BALL
 
 		/// Destructor
 		virtual ~MOL2File()
-			throw();
+			;
 		
 		//@}
 
@@ -108,7 +108,7 @@ namespace BALL
 			throw(File::CannotWrite);
 
 		///
-		const MOL2File& operator = (const MOL2File& file) throw();
+		const MOL2File& operator = (const MOL2File& file) ;
 
 		/// Return the number of TRIPOS-Sets defined in this instance
 		Size getNumberOfSets() const { return sets_.size(); }

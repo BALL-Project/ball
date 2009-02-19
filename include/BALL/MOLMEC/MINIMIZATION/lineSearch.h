@@ -53,7 +53,7 @@ namespace BALL
 			
 			/** Destructor.
 			*/
-			virtual ~LineSearch() throw();
+			virtual ~LineSearch() ;
 			
 			//@}
 			/** @name Assignments

@@ -131,7 +131,7 @@ namespace BALL
 			float       lambda;
 
 			TRRHeader()
-				throw()
+				
 				: MAGIC(1993),
 					VERSION(13),
 	  			title_string_length(24),
@@ -161,16 +161,16 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		TRRFile() throw();
+		TRRFile() ;
 
 		/// Copy constructor
 		TRRFile(const TRRFile& file) throw(Exception::FileNotFound);
 
 		/// Construct and open a file
-		TRRFile(const String& name, File::OpenMode open_mode = std::ios::in) throw();
+		TRRFile(const String& name, File::OpenMode open_mode = std::ios::in) ;
 
 		/// Destructor
-		virtual ~TRRFile() throw();
+		virtual ~TRRFile() ;
 		//@}
 
 		/** @name Assignment
@@ -178,10 +178,10 @@ namespace BALL
 		//@{
 
 		/// Assignment operator
-		const TRRFile& operator = (const TRRFile& file) throw();
+		const TRRFile& operator = (const TRRFile& file) ;
 
 		/// Clear method
-		virtual void clear() throw();
+		virtual void clear() ;
 		//@}
 
 		/** @name Predicates
@@ -189,42 +189,42 @@ namespace BALL
 		//@{
 
 		/// Equality operator
-		bool operator == (const TRRFile& file) const throw();
+		bool operator == (const TRRFile& file) const ;
 		//@}
 
 		/// @name Public methods for file handling
 		//@{
 
 		/// Initialize the file for usage
-		virtual bool init() throw();
+		virtual bool init() ;
 
 		/** Writes the next header that shall preceed the next
 				data block.
 				@param header the TRRHeader we want to write
 				@return true, if a header could be written, false ow.
 		*/
-		virtual bool writeNextHeader(const TRRHeader& header) throw();
+		virtual bool writeNextHeader(const TRRHeader& header) ;
 
 		/** Reads the next header preceding the next data block.
 				@param header a buffer for result delivery
 				@return true, if a header could be read, false ow.
 		*/
-		virtual bool readNextHeader(TRRHeader& header) throw();
+		virtual bool readNextHeader(TRRHeader& header) ;
 		
 		/** Append a SnapShot to an existing file
 				@param snapshot the SnapShot we want to store
 				@return true, if writing was successful
 		*/
-		virtual bool append(const SnapShot& snapshot) throw();
+		virtual bool append(const SnapShot& snapshot) ;
 
 		/** Read the next snapshot from the file
 				@param snapshot a buffer for result delivery
  				@return true, if a snapshot could be read, false otherwise.
 		*/
-		virtual bool read(SnapShot& snapshot) throw();
+		virtual bool read(SnapShot& snapshot) ;
 
 		/// Read the whole file into a SnapShotManager
-		virtual TRRFile& operator >> (SnapShotManager& ssm) throw();
+		virtual TRRFile& operator >> (SnapShotManager& ssm) ;
 		
 		/**
 		*/
@@ -237,40 +237,40 @@ namespace BALL
 		//@{
 
 		///
-		bool hasVelocities() const throw();
+		bool hasVelocities() const ;
 
 		///
-		void setVelocityStorage(bool storage)	throw();
+		void setVelocityStorage(bool storage)	;
 
 		///
-		bool hasForces() const throw();
+		bool hasForces() const ;
 
 		///
-		void setForceStorage(bool storage) throw();
+		void setForceStorage(bool storage) ;
 
 		///
-		Size getPrecision() const throw();
+		Size getPrecision() const ;
 
 		///
-		bool setPrecision(const Size precision) throw();
+		bool setPrecision(const Size precision) ;
 
 		///
-		float getTimestep() const	throw();
+		float getTimestep() const	;
 
 		///
-		void setTimestep(float timestep) throw();
+		void setTimestep(float timestep) ;
 
 		///
-		Vector3 getBoundingBoxX() const	throw();
+		Vector3 getBoundingBoxX() const	;
 
 		///
-		Vector3 getBoundingBoxY() const	throw();
+		Vector3 getBoundingBoxY() const	;
 
 		///
-		Vector3 getBoundingBoxZ() const	throw();
+		Vector3 getBoundingBoxZ() const	;
 
 		///
-		void setBoundingBox(const Vector3& x, const Vector3& y, const Vector3& z) throw();
+		void setBoundingBox(const Vector3& x, const Vector3& y, const Vector3& z) ;
 
 		//@}
 

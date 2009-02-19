@@ -57,7 +57,7 @@ namespace BALL
 		/**	Destructor.
 		*/
 		virtual ~ForceFieldParameters()
-			throw();
+			;
 
 		//@}
 		/** @name Assignment 
@@ -67,7 +67,7 @@ namespace BALL
 		/** Clear method 
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		/** Assignment operator 
 		*/

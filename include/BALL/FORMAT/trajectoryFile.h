@@ -38,11 +38,11 @@ namespace BALL
 
 		/// Default constructor
 		TrajectoryFile()
-			throw();
+			;
 
 		/// Copy constructor
 		TrajectoryFile(const TrajectoryFile& file)
-			throw();
+			;
 
 		/** Detailed constructor requiring a filename and the mode in which
 				this file should be opened.
@@ -56,7 +56,7 @@ namespace BALL
 
 		/// Destructor
 		virtual ~TrajectoryFile()
-			throw();
+			;
 
 		//@}
 		/// @name Assignment
@@ -64,11 +64,11 @@ namespace BALL
 		
 		/// Assignment operator
 		const TrajectoryFile& operator = (const TrajectoryFile& file)
-			throw();
+			;
 
 		/// Clear method
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/// @name Predicates
@@ -76,7 +76,7 @@ namespace BALL
 
 		/// Equality operator
 		bool operator == (const TrajectoryFile& file) const
-			throw();
+			;
 
 		//@}
 		/// @name Accessors
@@ -86,13 +86,13 @@ namespace BALL
 				@return the number of snapshots of this instance
 		*/
 		Size getNumberOfSnapShots() const
-			throw();
+			;
 
 		/** get the number of atoms coverd by each snapshot.
 				@return the number of atoms 
 		*/
 		Size getNumberOfAtoms() const
-			throw();
+			;
 
 		//@}
 		/// @name Public methods for file handling
@@ -102,13 +102,13 @@ namespace BALL
 				@return true if the header could be read successfully, false ow.
 		*/
 		virtual bool readHeader()
-			throw();
+			;
 
 		/** Write a header.
 				@return true if the header could be written successfully, false ow.
 		*/
 		virtual bool writeHeader()
-			throw();
+			;
 
 		/** Append a SnapShot to an existing file. <b>Note</b> that this method
 				does <b>note</b> update the header.
@@ -116,14 +116,14 @@ namespace BALL
 				@return true, if writing was successful
 		*/
 		virtual bool append(const SnapShot& snapshot)
-			throw();
+			;
 
 		/** Read the next SnapShot from the file.
 				@param snapshot a buffer for result delivery
 				@return true if a snapshot could be read, <tt>false</tt> ow.
 		*/
 		virtual bool read(SnapShot& snapshot)
-			throw();
+			;
 
 		/** Write several SnapShots to disk.
 				@param buffer a vector of snapshots

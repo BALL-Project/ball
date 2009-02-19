@@ -314,13 +314,13 @@ namespace BALL
 	}
 	
 	Size EnergyMinimizer::getForceUpdateCounter() const
-		throw()
+		
 	{
 		return force_update_counter_;
 	}
 	
 	Size EnergyMinimizer::getEnergyUpdateCounter() const
-		throw()
+		
 	{
 		return energy_update_counter_;
 	}
@@ -582,7 +582,7 @@ namespace BALL
 	}
 	
 	bool EnergyMinimizer::operator==(const EnergyMinimizer& energy_minimizer)
-		throw()
+		
 	{
 		return ((force_field_ == energy_minimizer.force_field_)
 			&& (options == energy_minimizer.options)
@@ -620,7 +620,7 @@ namespace BALL
 	}
 	
 	bool EnergyMinimizer::wasAborted() const
-		throw()
+		
 	{
 		return aborted_;
 	}

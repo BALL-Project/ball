@@ -189,7 +189,7 @@ namespace BALL
 	}
 
 
-	PDBFile::~PDBFile() throw()
+	PDBFile::~PDBFile() 
 	{
 		clear_();
 		close();
@@ -745,7 +745,7 @@ namespace BALL
 	}
 
 	void PDBFile::init_()
-		throw()
+		
 	{
 		// set a default for the current record type
 		compare_record_type_format_.record_type = PDB::RECORD_TYPE__UNKNOWN;

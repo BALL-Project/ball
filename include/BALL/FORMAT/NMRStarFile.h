@@ -28,7 +28,7 @@ namespace BALL
 	*/
 	struct BALL_EXPORT NMRAtomData
 	{
-		NMRAtomData() throw();
+		NMRAtomData() ;
 
 		Position	atom_ID;
 		Position	residue_seq_code;
@@ -47,7 +47,7 @@ namespace BALL
 	*/
 	struct BALL_EXPORT SampleCondition
 	{
-		SampleCondition() throw();
+		SampleCondition() ;
 
 		String	name;
 		float		temperature;
@@ -62,7 +62,7 @@ namespace BALL
 	*/
 	struct BALL_EXPORT ShiftReferenceElement
 	{
-		ShiftReferenceElement() throw();
+		ShiftReferenceElement() ;
 
 		String		mol_common_name;
 		char			atom_type;
@@ -82,14 +82,14 @@ namespace BALL
 	*/
 	struct BALL_EXPORT ShiftReferenceSet
 	{
-		ShiftReferenceSet() throw();
+		ShiftReferenceSet() ;
 		String name;
 		std::vector<ShiftReferenceElement> elements;
 	};
 
 	struct BALL_EXPORT NMRAtomDataSet
 	{
-		NMRAtomDataSet() throw();
+		NMRAtomDataSet() ;
 
 		String										name;
 		std::vector<NMRAtomData> atom_data;
@@ -97,11 +97,11 @@ namespace BALL
 		ShiftReferenceSet				reference;
 	};
 
-	std::ostream& operator << (std::ostream& s, const NMRAtomData&						ad)	throw();
-	std::ostream& operator << (std::ostream& s, const SampleCondition&				sc)	throw();
-	std::ostream& operator << (std::ostream& s, const ShiftReferenceElement& sre) throw();
-	std::ostream& operator << (std::ostream& s, const ShiftReferenceSet&			sr)	throw();
-	std::ostream& operator << (std::ostream& s, const NMRAtomDataSet&				 set)	throw();
+	std::ostream& operator << (std::ostream& s, const NMRAtomData&						ad)	;
+	std::ostream& operator << (std::ostream& s, const SampleCondition&				sc)	;
+	std::ostream& operator << (std::ostream& s, const ShiftReferenceElement& sre) ;
+	std::ostream& operator << (std::ostream& s, const ShiftReferenceSet&			sr)	;
+	std::ostream& operator << (std::ostream& s, const NMRAtomDataSet&				 set)	;
 	
 	//@}
 
@@ -127,7 +127,7 @@ namespace BALL
 			/** Standard constructor
 			*/
 			NMRStarFile()
-				throw();
+				;
 			
 			/** Copy constructor.
 					If the file was open, it is closed.
@@ -147,15 +147,15 @@ namespace BALL
 					@see NMRStarFile(const NMRStarFile& f)
 			*/
 			const NMRStarFile& operator = (const NMRStarFile& f)  
-				throw();
+				;
 
 			~NMRStarFile()
-				throw();
+				;
 				
 			/** Clear the object.
 			*/
 			void clear() 
-				throw();
+				;
 
 			//@}
 
@@ -167,12 +167,12 @@ namespace BALL
 			/** Get the maiximum number of atoms in all shift sets
 			*/
 			Size getNumberOfAtoms() 
-				const throw();
+				const ;
 
 			/** Get the extracted data for the atoms.
 			*/
 			const std::vector<NMRAtomDataSet>& getData()
-				const throw();
+				const ;
 
 			//@}
 			/**	@name	Equality
@@ -182,12 +182,12 @@ namespace BALL
 			/** Equality operator.
 					Test if both instances point to the same file.
 			*/
-			bool operator == (const NMRStarFile& f)  throw();
+			bool operator == (const NMRStarFile& f)  ;
 
 			/** Inequality operator
 					Test if both instances point to different files.
 			*/
-			bool operator != (const NMRStarFile& f)  throw();
+			bool operator != (const NMRStarFile& f)  ;
 
 			//@}
 			/**	@name	Enums
@@ -228,15 +228,15 @@ namespace BALL
 
 			/// reads the molecular system name
 			void readMolSystem_()
-				throw();
+				;
 
 			/// reads the sample conditions
 			void readSampleConditions_()
-				throw();
+				;
 
 			/// reads the shift references
 			void readShiftReferences_()
-				throw();
+				;
 
 			/// reads the shift datas
 			void readShifts_()
@@ -244,7 +244,7 @@ namespace BALL
 
 			/// initialize the referenceOptions
 			static void initializeReferenceOptions_()
-				throw ();
+				;
 
 			//_@}
 			/*_	@name	NMR-Star specific attributes

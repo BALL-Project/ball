@@ -137,14 +137,14 @@ namespace BALL
 	}
 
 	void CharmmFF::clear()
-		throw()
+		
 	{
 		ForceField::clear();
 		filename_ = Default::FILENAME;
 	}
 
 	const CharmmFF& CharmmFF::operator = (const CharmmFF& force_field)
-		throw()
+		
 	{
 		if (&force_field != this)
 		{
@@ -452,7 +452,7 @@ namespace BALL
 	}
 	
 	String CharmmFF::getResults() const
-		throw()
+		
 	{
 		String result = String("\n") 
 		+ "CHARMM Energy:\n"

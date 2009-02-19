@@ -38,15 +38,15 @@ namespace BALL
 		
 		/**	Default constructor.
 		*/
-		AtomTypes() throw();
+		AtomTypes() ;
 
 		/**	Copy constructor.
 		*/
-		AtomTypes(const AtomTypes& atom_types) throw();
+		AtomTypes(const AtomTypes& atom_types) ;
 
 		/**	Destructor.
 		*/
-		virtual ~AtomTypes() throw();
+		virtual ~AtomTypes() ;
 
 		//@}
 		/**	Parameter extraction
@@ -59,23 +59,23 @@ namespace BALL
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
 		virtual bool extractSection(Parameters& parameters, 
-				const String& section_name = "AtomTypes") throw();
+				const String& section_name = "AtomTypes") ;
 
 		/**	Returns the numeric type for a given string.
 		*/
-		Atom::Type getType(const String& name) const throw();
+		Atom::Type getType(const String& name) const ;
 
 		/**	Queries whether a given atom type is defined
 		*/
-		bool hasType(const String& name) const throw();
+		bool hasType(const String& name) const ;
 
 		/**	Returns the name for a given index 
 		*/
-		String getTypeName(Atom::Type type) const throw();
+		String getTypeName(Atom::Type type) const ;
 
 		/**	
 		*/
-		Size getNumberOfTypes() const throw();
+		Size getNumberOfTypes() const ;
 
 		//@}
 		/**	@name	Assignment
@@ -84,12 +84,12 @@ namespace BALL
 
 		/** Clear method 
 		*/
-		virtual void clear() throw();
+		virtual void clear() ;
 
 		/**	Assignment operator.
 				@param	atom_types the atom types object to be copied
 		*/
-		AtomTypes& operator = (const AtomTypes& atom_types) throw();
+		AtomTypes& operator = (const AtomTypes& atom_types) ;
 
 		//@}
 		/** @name Predicates 
@@ -98,7 +98,7 @@ namespace BALL
 
 		/** Equality operator 
 		*/
-		bool operator == (const AtomTypes& atom_types) const throw();
+		bool operator == (const AtomTypes& atom_types) const ;
 
 		//@}
 

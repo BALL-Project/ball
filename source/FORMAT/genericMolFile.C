@@ -11,7 +11,7 @@
 namespace BALL 
 {
 	GenericMolFile::GenericMolFile()
-		throw()
+		
 		:	LineBasedFile()
 	{
 	}
@@ -30,7 +30,7 @@ namespace BALL
 	}
  
 	GenericMolFile::~GenericMolFile()
-		throw()
+		
 	{
 	}
 

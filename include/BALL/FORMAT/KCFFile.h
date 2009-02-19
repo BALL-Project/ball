@@ -54,7 +54,7 @@ namespace BALL
 		//@{
 
 		///
-		KCFFile() throw();
+		KCFFile() ;
 
 		////
 		KCFFile(const String& filename, File::OpenMode open_mode = std::ios::in)
@@ -64,7 +64,7 @@ namespace BALL
 		KCFFile(const KCFFile& file) throw(Exception::FileNotFound);
 
 		///
-		virtual ~KCFFile() throw();
+		virtual ~KCFFile() ;
 		//@}
 
 		/**	@name Reading and Writing of Kernel Datastructures
@@ -92,7 +92,7 @@ namespace BALL
 
 		///
 		const KCFFile& operator = (const KCFFile& file)
-			throw();
+			;
 
 		//@}
 

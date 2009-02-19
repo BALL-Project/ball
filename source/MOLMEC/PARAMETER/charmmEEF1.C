@@ -14,7 +14,7 @@ namespace BALL
 {
 
 	CharmmEEF1::CharmmEEF1() 
-		throw()
+		
 		:	ParameterSection(),
 			number_of_atom_types_(0),
 			V_(0),
@@ -29,7 +29,7 @@ namespace BALL
 	}
 
 
-	CharmmEEF1::CharmmEEF1(const CharmmEEF1& charmm_EEF1) throw()
+	CharmmEEF1::CharmmEEF1(const CharmmEEF1& charmm_EEF1) 
 		:	ParameterSection(charmm_EEF1),
 			number_of_atom_types_(charmm_EEF1.number_of_atom_types_),
 			V_(0),
@@ -75,7 +75,7 @@ namespace BALL
 
 
 	CharmmEEF1::~CharmmEEF1()
-		throw()
+		
 	{
 		clear();
 
@@ -84,7 +84,7 @@ namespace BALL
 	
 
 	void CharmmEEF1::clear()  
-		throw()
+		
 	{
 		// clear allocated parameter fields
 		delete [] V_;
@@ -109,14 +109,14 @@ namespace BALL
 
 
 	bool CharmmEEF1::extractSection(Parameters& parameters, 
-			const String& section_name) throw()
+			const String& section_name) 
 	{
 		return ParameterSection::extractSection(parameters, section_name);
 	}
 
 
 	bool CharmmEEF1::extractSection(ForceFieldParameters& parameters, 
-			const String& section_name) throw()
+			const String& section_name) 
 	{
 		// check whether the parameters are valid
 		if (!parameters.isValid())
@@ -343,14 +343,14 @@ namespace BALL
 
 
 	bool CharmmEEF1::hasParameters(Atom::Type I) const 
-		throw()
+		
 	{
 		return ((I >= 0) && ((Size)I < number_of_atom_types_) && is_defined_[I]);
 	}
 
 
 	CharmmEEF1::Values CharmmEEF1::getParameters(Atom::Type I) const 
-		throw()
+		
 	{
 		CharmmEEF1::Values parameters;
 		assignParameters(parameters, I);
@@ -359,7 +359,7 @@ namespace BALL
 
 
 	bool CharmmEEF1::assignParameters
-		(CharmmEEF1::Values& parameters, Atom::Type I) const throw()
+		(CharmmEEF1::Values& parameters, Atom::Type I) const 
 	{
 		if (hasParameters(I)) 
 		{
@@ -380,7 +380,7 @@ namespace BALL
 
 
 	const CharmmEEF1& CharmmEEF1::operator = (const CharmmEEF1& charmm_EEF1)
-		throw()
+		
 	{
 		// clear old contents
 		clear();
@@ -437,7 +437,7 @@ namespace BALL
 
 	
 	bool CharmmEEF1::operator == (const CharmmEEF1& charmm_EEF1) const
-		throw()
+		
 	{
 		if (!ParameterSection::operator == (charmm_EEF1))
 		{

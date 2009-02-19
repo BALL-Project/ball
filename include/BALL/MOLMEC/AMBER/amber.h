@@ -202,12 +202,12 @@ namespace BALL
 		/**	Assignment operator
 		*/
 		const AmberFF& operator = (const AmberFF& force_field)
-			throw();
+			;
 
 		/**	Clear method
 		*/
 		virtual void clear()
-			throw();
+			;
 		
 		//@}
 		/**	@name	Setup Methods
@@ -261,7 +261,7 @@ namespace BALL
 
 		/// Get the current results in String form
 		virtual String getResults() const
-			throw();
+			;
 
 		//@}
 

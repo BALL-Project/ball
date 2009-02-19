@@ -12,7 +12,7 @@
 namespace BALL
 {
 	CanonicalMD::CanonicalMD()
-		throw()
+		
 		:	MolecularDynamics()
 	{
 		valid_ = false;
@@ -20,7 +20,7 @@ namespace BALL
 
 
 	CanonicalMD::CanonicalMD(ForceField& myforcefield)
-		throw()
+		
 		:	MolecularDynamics(myforcefield)
 	{
 		// the user does not want to take snapshots.
@@ -31,7 +31,7 @@ namespace BALL
 
 
 	CanonicalMD::CanonicalMD(ForceField& myforcefield, SnapShotManager* ssm)
-		throw()
+		
 		:	MolecularDynamics(myforcefield)
 	{
 		valid_ = setup(myforcefield, ssm);
@@ -39,7 +39,7 @@ namespace BALL
 
 
 	CanonicalMD::CanonicalMD(ForceField& myforcefield, SnapShotManager* ssm, const Options& myoptions)
-		throw()
+		
 		:	MolecularDynamics(myforcefield)
 	{
 		valid_ = setup (myforcefield, ssm, myoptions);
@@ -47,7 +47,7 @@ namespace BALL
 
 
 	CanonicalMD::CanonicalMD(const CanonicalMD& rhs)
-		throw()
+		
 		:	MolecularDynamics (rhs)
 	{
 		// copy class specific variables 
@@ -56,14 +56,14 @@ namespace BALL
 
 
 	CanonicalMD::~CanonicalMD()
-		throw()
+		
 	{
 	}
 
 
 	// This method does the general setup. 
 	bool CanonicalMD::setup(ForceField & myforcefield, SnapShotManager * ssm)
-		throw()
+		
 	{
 		// No specific options have been named -> we use the force field's options
 		valid_ = setup (myforcefield, ssm, myforcefield.options);
@@ -73,7 +73,7 @@ namespace BALL
 
 
 	bool CanonicalMD::setup(ForceField& myforcefield, SnapShotManager* ssm, const Options& myoptions)
-		throw()
+		
 	{
 		// first call the base class setup method
 		valid_ = MolecularDynamics::setup(myforcefield, ssm, myoptions);
@@ -94,7 +94,7 @@ namespace BALL
 
   // Choose a new time step. This means that all pre-factors must be recomputed.
 	void CanonicalMD::setTimeStep(double time)
-		throw()
+		
   {
 		MolecularDynamics::setTimeStep(time);
 
@@ -105,7 +105,7 @@ namespace BALL
 
   // This method allows us to set the coupling to a thermal bath 
   void CanonicalMD::setBathRelaxationTime(double time)
-		throw()
+		
   {
 		bath_relaxation_time_ = time;
 		options[MolecularDynamics::Option::BATH_RELAXATION_TIME] = time;
@@ -115,7 +115,7 @@ namespace BALL
   // This method allows us to get the current value for the bath 
   // relaxation time (coupling to an external heat bath) 
   double CanonicalMD::getBathRelaxationTime() const
-		throw()
+		
 	{
 		return bath_relaxation_time_;
 	}       
@@ -124,7 +124,7 @@ namespace BALL
 	// This method calculates certain factors that are needed
 	// throughout the simulation
 	void CanonicalMD::calculateFactors_()
-		throw()
+		
 	{
 		// precompute a vector of factors to save some work 
 		// Clear the vector of factors if it is already existing
@@ -150,7 +150,7 @@ namespace BALL
 	// This method performs additional setup preparations in addition 
 	// to those done in MolecularDynamics::setup 
 	bool CanonicalMD::specificSetup()
-		throw()
+		
 	{
 		if (!valid_)	
 		{
@@ -170,7 +170,7 @@ namespace BALL
 
 
 	CanonicalMD & CanonicalMD::operator = (const CanonicalMD & rhs)
-		throw()
+		
 	{
 		mass_factor_ = rhs.mass_factor_;
 
@@ -186,7 +186,7 @@ namespace BALL
   // restart=true means that the counting of iterations is started with the end
   // value of the previous run
 	bool CanonicalMD::simulateIterations(Size iterations, bool restart)
-		throw()
+		
 	{
 		// local variables
 		double current_energy;

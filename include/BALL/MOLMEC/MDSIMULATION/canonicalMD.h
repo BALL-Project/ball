@@ -40,13 +40,13 @@ namespace BALL
 
 
     ///
-    CanonicalMD()	throw();
+    CanonicalMD()	;
 
     /** This constructor expects a force field .
         The force field's options are used and no saving of snapshots is done.
 				@param myforcefield the forcefield we need for the simulation
     */
-    CanonicalMD(ForceField& myforcefield)	throw();
+    CanonicalMD(ForceField& myforcefield)	;
 
     /** This constructor expects a force field and a snapshot manager.
         The force field's options are used. 
@@ -54,7 +54,7 @@ namespace BALL
 				@param ssm  a pointer to the SnapShotManager which will be used to 
 				create trajectory files
     */
-    CanonicalMD(ForceField& force_field, SnapShotManager* ssm) throw();
+    CanonicalMD(ForceField& force_field, SnapShotManager* ssm) ;
 
     /** This constructor wants a force field, a snapshot manager and new options.
 				@param myforcefield the forcefield which is to be used in the	simulation
@@ -64,20 +64,20 @@ namespace BALL
 								instance instead of those defined therein
     */
     CanonicalMD(ForceField& myforcefield, SnapShotManager* ssm,	
-								const Options& options) throw();
+								const Options& options) ;
 
     /// Copy constructor
-    CanonicalMD(const CanonicalMD& rhs) throw();
+    CanonicalMD(const CanonicalMD& rhs) ;
 
     /// Destructor
-    virtual ~CanonicalMD() throw();
+    virtual ~CanonicalMD() ;
     //@}
 
     /** @name Assignment  */
     //@{
 
     /// Assignment operator
-    CanonicalMD &operator = (const CanonicalMD& rhs) throw();
+    CanonicalMD &operator = (const CanonicalMD& rhs) ;
     //@}
 
     /** @name Setup methods
@@ -89,19 +89,19 @@ namespace BALL
 				@param force_field the forcefield, which has to be bound to a system
     */
     virtual bool setup(ForceField& force_field, SnapShotManager* ssm = 0)
-			throw();
+			;
 
     /** This method does general setup things. 
 				This method also allows the assignment of options for the setup.
     */
     virtual bool setup(ForceField& force_field, SnapShotManager* ssm,
 											const Options& options)
-			throw();
+			;
 
     /** This method is meant for additional preparations apart from those done in setup.
 				@return bool, <b>true</b> if specificSetup() was successful
     */
-    virtual bool specificSetup() throw();
+    virtual bool specificSetup() ;
     //@} 
 
     /** @name Accessors
@@ -114,16 +114,16 @@ namespace BALL
 				time specified here has elapsed.
 				@param time the time in <em>ps</em>
     */
-    void setBathRelaxationTime(double time)	throw();
+    void setBathRelaxationTime(double time)	;
 
     /** This method gets the current value for heat bath coupling.
 				@return the bath relaxation time in <em>ps</em>
     */
-    double getBathRelaxationTime() const throw();
+    double getBathRelaxationTime() const ;
 
     /** Set a new time step for the numerical integration.
     */
-    virtual void setTimeStep(double time) throw();
+    virtual void setTimeStep(double time) ;
 
     /**  This method does the actual simulation stuff. 
          It runs for the indicated number of iterations. 
@@ -132,7 +132,7 @@ namespace BALL
 				 @param number the number of iterations that have to be simulated 
 				 @param restart flag for restarting the simulation
     */
-    virtual bool simulateIterations(Size number, bool restart = false) throw();
+    virtual bool simulateIterations(Size number, bool restart = false) ;
 
     //@}
 
@@ -150,7 +150,7 @@ namespace BALL
 
     /** A protected method for calculating some factors that are needed all the time.
     */
-    void calculateFactors_() throw();
+    void calculateFactors_() ;
     //@}
 
     /**  @name Protected Attributes */

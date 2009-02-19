@@ -54,19 +54,19 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		Potential1210() throw();
+		Potential1210() ;
 
 		/** Copy constructor. 
 		*/
-		Potential1210(const Potential1210& pot1210) throw();
+		Potential1210(const Potential1210& pot1210) ;
 
 		/**	Destructor.
 		*/
-		virtual ~Potential1210() throw();
+		virtual ~Potential1210() ;
 		
 		/**	Clear method. 
 		*/
-		virtual void clear() throw();
+		virtual void clear() ;
 
 		//@}
 		/** @name Parameter extraction 
@@ -79,20 +79,20 @@ namespace BALL
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, 
-				const String& section_name) throw();
+				const String& section_name) ;
 
 		///
 		virtual bool extractSection(Parameters& parameters, 
-				const String& section_name) throw();
+				const String& section_name) ;
 
 		/** Queries whether a parameter set is defined for the given atom types.
 		*/
-		bool hasParameters(Atom::Type I, Atom::Type J) const throw();
+		bool hasParameters(Atom::Type I, Atom::Type J) const ;
 		
 		/**	Returns the parameters for a given atom type combination.
 		*/
 		Potential1210::Values getParameters
-			(Atom::Type I, Atom::Type J) const throw();
+			(Atom::Type I, Atom::Type J) const ;
 		
 		/**	Assign the parameters for a given atom type combination.
 				If no parameters are defined for this combination, false is
@@ -100,7 +100,7 @@ namespace BALL
 		*/
 		bool assignParameters
 			(Potential1210::Values& parameters, 
-			 Atom::Type I, Atom::Type J) const throw();
+			 Atom::Type I, Atom::Type J) const ;
 
 		//@}
 		/** @name Assignment 
@@ -109,7 +109,7 @@ namespace BALL
 
 		/** Assignment operator 
 		*/
-		const Potential1210& operator = (const Potential1210& pot1210) throw();
+		const Potential1210& operator = (const Potential1210& pot1210) ;
 
 		//@}
 		/** @name Predicates 
@@ -118,7 +118,7 @@ namespace BALL
 
 		/** Equality operator 
 		*/
-		bool operator == (const Potential1210& pot1210) const throw();
+		bool operator == (const Potential1210& pot1210) const ;
 
 		//@}
 

@@ -25,7 +25,7 @@ namespace BALL
 
 	// default constructor
 	AmberNonBonded::AmberNonBonded()
-		throw()
+		
 		:	ForceFieldComponent(),
 			electrostatic_energy_(0.0),
 			vdw_energy_(0.0),
@@ -54,7 +54,7 @@ namespace BALL
 
 	// constructor
 	AmberNonBonded::AmberNonBonded(ForceField& force_field)
-		throw()
+		
 		:	ForceFieldComponent(force_field),
 			electrostatic_energy_(0.0),
 			vdw_energy_(0.0),
@@ -83,7 +83,7 @@ namespace BALL
 
 	// copy constructor
 	AmberNonBonded::AmberNonBonded(const AmberNonBonded& component)
-		throw()
+		
 		:	ForceFieldComponent(component),
 			electrostatic_energy_(component.electrostatic_energy_),
 			vdw_energy_(component.vdw_energy_),
@@ -110,13 +110,13 @@ namespace BALL
 
 	// destructor
 	AmberNonBonded::~AmberNonBonded()
-		throw()
+		
 	{
 		clear();
 	}
 
 	const AmberNonBonded& AmberNonBonded::operator = (const AmberNonBonded& anb)
-		throw()
+		
 	{
 		// catch self assignment
 		if (&anb == this)
@@ -152,7 +152,7 @@ namespace BALL
 	}
 
 	void AmberNonBonded::clear()
-		throw()
+		
 	{
 		electrostatic_energy_ = 0.0;
 		vdw_energy_ = 0.0;
@@ -177,7 +177,7 @@ namespace BALL
 
 
 	bool AmberNonBonded::operator == (const AmberNonBonded& anb)
-		throw()
+		
 	{
 		return (this == &anb);
 	}
@@ -189,7 +189,7 @@ namespace BALL
 	// efficient way. Otherwise it returns 1. 
 	MolmecSupport::PairListAlgorithmType
 	AmberNonBonded::determineMethodOfAtomPairGeneration()
-		throw()
+		
 	{
 		if (force_field_->getAtoms().size() > 900) 
 		{ 
@@ -553,7 +553,7 @@ namespace BALL
 	// boundary conditions.
 	BALL_INLINE
 	void AMBERcalculateMinimumImage(Vector3& difference, const Vector3& period)
-		throw()
+		
 	{
 		// half the period of the cell
 		float half_period_x = period.x * 0.5;
@@ -707,7 +707,7 @@ namespace BALL
 		 bool use_periodic_boundary, 
 		 bool use_dist_depend,
 		 bool use_selection)
-		throw()
+		
 	{
     // calculate the difference vector between the two atoms
 		// useful aliases
@@ -883,7 +883,7 @@ namespace BALL
 
 	// Compute the non-bonded energy (i.e. electrostatic, vdW, and H-bonds)
 	double AmberNonBonded::updateEnergy()
-		throw()
+		
 	{
 		// Calculate squared cut_off values
 		double cut_off_electrostatic_2 = SQR(cut_off_electrostatic_);
@@ -1064,7 +1064,7 @@ namespace BALL
 	// This method AMBERcalculates the current forces resulting from
 	// van-der-Waals and electrostatic interactions 
 	void AmberNonBonded::updateForces()
-		throw()
+		
 	{
 		if (getForceField() == 0)
 		{
@@ -1208,13 +1208,13 @@ namespace BALL
 	} // end of method AmberNonBonded::updateForces()
 
 	double AmberNonBonded::getElectrostaticEnergy() const
-		throw()
+		
 	{
 		return electrostatic_energy_;
 	}
 
 	double AmberNonBonded::getVdwEnergy() const
-		throw()
+		
 	{
 		return vdw_energy_;
 	}

@@ -39,7 +39,7 @@ namespace BALL
 	}
 
 	Bruker2DFile::~Bruker2DFile()
-		throw()
+		
 	{
 	}
 
@@ -256,7 +256,7 @@ read_counter += 4;
   }
 
   const Bruker2DFile& Bruker2DFile::operator = (const Bruker2DFile& file)
-	  throw()
+	  
   {
 		parsf1_    = file.parsf1_;
 		parsf2_    = file.parsf2_;

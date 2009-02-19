@@ -59,19 +59,19 @@ namespace BALL
 
 		/**	Default constructor
 		*/
-		RuleEvaluator() throw();
+		RuleEvaluator() ;
 			
 		/**	Detailed constructor
 		*/
-		RuleEvaluator(INIFile& file, const String& prefix) throw();
+		RuleEvaluator(INIFile& file, const String& prefix) ;
 			
 		/**	Copy constructor
 		*/
-		RuleEvaluator(const RuleEvaluator& evaluator) throw();
+		RuleEvaluator(const RuleEvaluator& evaluator) ;
 
 		/**	Destructor
 		*/
-		virtual ~RuleEvaluator() throw();
+		virtual ~RuleEvaluator() ;
 
 		//@}
 		/**	@name	Accessors
@@ -80,15 +80,15 @@ namespace BALL
 
 		/**
 		*/
-		bool initialize(INIFile& file, const String& prefix) throw();
+		bool initialize(INIFile& file, const String& prefix) ;
 
 		/**	Return the prefix of the INI file sections
 		*/
-		const String& getPrefix() const throw();
+		const String& getPrefix() const ;
 			
 		/**	Set the prefix of the INI file sections
 		*/
-		void setPrefix(const String& prefix) throw();
+		void setPrefix(const String& prefix) ;
 			
 		//@}
 		/**	@name	Assignment
@@ -98,11 +98,11 @@ namespace BALL
 		/** Assignment operator
 		*/
 		const RuleEvaluator& operator = (const RuleEvaluator& evaluator)
-		throw();
+		;
 
 		/** Clear method
 		*/
-		virtual void clear() throw();
+		virtual void clear() ;
 
 		//@}
 		/**	@name Predicates
@@ -114,10 +114,10 @@ namespace BALL
 				the corresponding value. If no rule matches, an empty string is
 				returned.
 		*/
-		String operator () (const Atom& atom) const throw();
+		String operator () (const Atom& atom) const ;
 
 		/** Equality operator */
-		bool operator == (const RuleEvaluator& evaluator) const throw();
+		bool operator == (const RuleEvaluator& evaluator) const ;
 
 		//@}
 		/**	@name Debugging and Diagnostics
@@ -126,19 +126,19 @@ namespace BALL
 
 		/**	
 		*/
-		bool isValid() const throw();
+		bool isValid() const ;
 
 		/**	
 		*/
 		void dump(std::ostream& s = std::cout, Size indent_depth = 0) const
-		throw();
+		;
 
 		//@}
 
 		protected:
 
 		//_ parse the section with name: predicate_ + ":" + symbol of file
-		void extractSection_(INIFile& file, const String& symbol) throw();
+		void extractSection_(INIFile& file, const String& symbol) ;
 
 		//_ The INI file section prefix
 		String		prefix_;
