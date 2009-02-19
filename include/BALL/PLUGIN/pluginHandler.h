@@ -23,6 +23,11 @@ namespace BALL
 	{
 		public:
 			/**
+			 * A virtual destructor. Does nothing at the moment.
+			 */
+			virtual ~PluginHandler();
+
+			/**
 			 * This function is used to check whether this PluginHandler can initialize
 			 * the passed plugin. A usual implementation would be something like:
 			 *

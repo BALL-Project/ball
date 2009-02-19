@@ -19,57 +19,50 @@
 #	include <BALL/KERNEL/predicate.h>
 #endif
 
-namespace BALL 
+namespace BALL
 {
 	/** Traits class for the AtomIterators
 			
     	\ingroup  KernelIterators
 	*/
 	class BALL_EXPORT AtomIteratorTraits
-		: public CompositeIteratorTraits 
+		: public CompositeIteratorTraits
 	{
 		public:
 
 		inline AtomIteratorTraits()
-			throw()
 			:	CompositeIteratorTraits()
 		{
 			predicate_ = &RTTI::getDefault<KernelPredicate<Atom> >();
 		}
-			
+
 		inline AtomIteratorTraits(const AtomIteratorTraits& traits)
-			throw()
+
 			:	CompositeIteratorTraits(traits)
 		{
 		}
-			
-		AtomIteratorTraits(const Composite& composite)
-			throw();
-		
-		AtomIteratorTraits& operator = (const AtomIteratorTraits& traits)
-			throw();
 
-		void resetPredicate()
-			throw();
+		AtomIteratorTraits(const Composite& composite);
+
+		AtomIteratorTraits& operator = (const AtomIteratorTraits& traits);
+
+		void resetPredicate();
 	};
 
 
 	inline AtomIteratorTraits::AtomIteratorTraits(const Composite& composite)
-		throw()
 		:	CompositeIteratorTraits(composite)
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<Atom> >();
 	}
-		
+
 	inline AtomIteratorTraits& AtomIteratorTraits::operator = (const AtomIteratorTraits& traits)
-		throw()
 	{
 		CompositeIteratorTraits::operator = (traits);
 		return *this;
 	}
 
 	inline void AtomIteratorTraits::resetPredicate()
-		throw()
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<Atom> >();
 	}
@@ -97,8 +90,9 @@ namespace BALL
 
 	/// A constant reverse bidirectional iterator for the Atom class.
 	typedef std::reverse_iterator<AtomConstIterator> AtomConstReverseIterator;
-	
+
 	//@}
 } // namespace BALL
 
 #endif // BALL_KERNEL_ATOMITERATOR_H
+

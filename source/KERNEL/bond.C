@@ -7,18 +7,17 @@
 #include <BALL/KERNEL/bond.h>
 
 using namespace::std;
-namespace BALL 
+namespace BALL
 {
 	using namespace BALL::Exception;
 
 	Bond::NotBound::NotBound(const char* file, int line)
-		throw()
 		:	Exception::GeneralException(file, line, "Bond::NotBound", "The bond is not connected to any atom.")
 	{
 	}
 
 	Bond::Bond()
-		throw()
+
 		: Composite(),
 			PropertyManager(),
 			first_(BALL_BOND_DEFAULT_FIRST_ATOM),
@@ -30,7 +29,6 @@ namespace BALL
 	}
 
 	Bond::Bond(const Bond& bond, bool deep)
-		throw()
 		: Composite(bond, deep),
 			PropertyManager(bond),
 			first_(bond.first_),
@@ -40,7 +38,7 @@ namespace BALL
 			bond_type_(bond.bond_type_)
 	{
 	}
-		
+
 	Bond::Bond(const String& name, Atom& first, Atom& second, Bond::Order order, Type type)
 		throw(TooManyBonds)
 		: Composite(),
@@ -71,14 +69,14 @@ namespace BALL
 		{
 			return 0;
 		}
-		
+
 		Bond* bond_ptr = first.getBond(second);
 
 		if (bond_ptr != 0)
 		{
 			return bond_ptr;
 		}
-		
+
 		// throw an exception if there is no possibility to create another bond
 		// for any of the two atoms
 		if (((Size)first.number_of_bonds_ >= (Size)Atom::MAX_NUMBER_OF_BONDS)
@@ -86,14 +84,13 @@ namespace BALL
 		{
 			delete bond_ptr;
 			bond_ptr = 0;
-			throw TooManyBonds(__FILE__, __LINE__, 
+			throw TooManyBonds(__FILE__, __LINE__,
 									first.getFullName() + String(" and ") + second.getFullName() + ".");
-					
 		}
 
 		// if the bond is already bound, delete it and create 
 		// it anew
-		if (bond.isBound()) 
+		if (bond.isBound())
 		{
 			bond.clear();
 		}
@@ -101,7 +98,7 @@ namespace BALL
 		first.bond_[first.number_of_bonds_]
 			= second.bond_[second.number_of_bonds_]
 			= &bond;
-		
+
 		++(first.number_of_bonds_);
 		++(second.number_of_bonds_);
 
@@ -121,8 +118,7 @@ namespace BALL
 	}
 
 	Bond::~Bond()
-		throw()
-	{ 
+	{
 		arrangeBonds_();
 	}
 
@@ -134,7 +130,7 @@ namespace BALL
 			Composite::persistentWrite(pm);
 
       pm.writeStorableObject(dynamic_cast<const PropertyManager&>(*this), "PropertyManager");
- 
+
 			pm.writeObjectPointer(first_, "first_");
 			pm.writeObjectPointer(second_, "second_");
 			pm.writePrimitive(name_, "name_");
@@ -161,9 +157,8 @@ namespace BALL
 		pm.readPrimitive(tmp, "bond_type_");
 		bond_type_ = (Bond::Order)tmp;
 	}
- 
+
 	Bond& Bond::operator = (const Bond& bond)
-		throw()
 	{
 		PropertyManager::operator = (bond);
 
@@ -177,7 +172,6 @@ namespace BALL
 	}
 
 	void Bond::swap(Bond &bond)
-		throw()
 	{
 		PropertyManager::swap(bond);
 
@@ -201,24 +195,23 @@ namespace BALL
 	}
 
 	void Bond::dump(ostream& s, Size depth) const
-		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
-		
+
 		Composite::dump(s, depth);
 
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  name: " << name_ << endl;
-		
+
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  order: " << bond_order_ << endl;
-		
+
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  type: " << bond_type_ << endl;
-		
+
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  first atom: " << first_ << endl;
-		
+
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  second atom: " << second_ << endl;
 
@@ -226,7 +219,6 @@ namespace BALL
 	}
 
   void Bond::arrangeBonds_()
-	      throw() 
 	{
 		if (first_ != 0 && second_ != 0)
 		{
@@ -234,7 +226,7 @@ namespace BALL
 			{
 				first_->swapLastBond_(second_);
 			}
-		
+
 			if (second_->number_of_bonds_ > 0)
 			{
 				second_->swapLastBond_(first_);
@@ -247,3 +239,4 @@ namespace BALL
 # endif
 
 } // namespace BALL
+
