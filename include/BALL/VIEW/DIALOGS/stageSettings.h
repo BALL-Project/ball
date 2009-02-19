@@ -83,6 +83,9 @@ namespace BALL
 			
 			///
 			void environmentMapChanged(bool active);
+			
+			///
+			void fogBoxChanged(bool active);
 
 			///
 			void cappingColorPressed();
