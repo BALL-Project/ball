@@ -54,6 +54,7 @@ namespace BALL
 			connect( radioButton_orthographicProjection, SIGNAL( clicked() ), this, SLOT( projectionTransformationChanged()));
 			connect( texture_browse_button, SIGNAL( clicked() ), this, SLOT( loadEnvironmentMapPressed()));
 			connect( environment_map, SIGNAL( toggled(bool)), this, SLOT(environmentMapChanged(bool)));
+			connect( fog_box, SIGNAL( toggled(bool)), this, SLOT(fogBoxChanged(bool)));
 		} 
 
 
@@ -120,6 +121,12 @@ namespace BALL
 				setTextureUpDirection_(stage_->getCamera().getLookUpVector());	
 			}
 		}
+		
+		void StageSettings::fogBoxChanged(bool active)
+		{
+			fog_slider->setEnabled(active);
+		}
+
 
 		void StageSettings::loadEnvironmentMapPressed()
 		{
