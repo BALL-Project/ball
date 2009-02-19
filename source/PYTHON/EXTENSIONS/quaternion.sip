@@ -14,6 +14,8 @@ class Quaternion
   // BALL_CREATE_NODEEP(Quaternion)
   Quaternion();
   Quaternion(const Quaternion& /q/);
+};
+/*
   Quaternion(const Vector3& /axis/, float /angle/);
   Quaternion(float /x/, float /y/, float /z/, float /angle/);
   ~Quaternion();
@@ -40,3 +42,4 @@ class Quaternion
   float k;
   float angle;
 };
+*/
