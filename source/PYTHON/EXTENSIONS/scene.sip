@@ -32,7 +32,6 @@ static Scene* getInstance(Position /index/);
 //  void set(const Scene&) throw();
   ~Scene() throw();
 
-	void update(bool rebuild_displaylists = false) throw();
 	virtual void onNotify(Message*) throw();
 	virtual bool exportScene(Renderer&) const throw();
 	virtual void initializeWidget(MainControl&) throw();
@@ -106,5 +105,4 @@ static Scene* getInstance(Position /index/);
 	void switchShowGrid();
 	void showInfos();
 	void setupViewVolume();
-	void disableViewVolumeRestriction();
 };

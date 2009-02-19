@@ -22,6 +22,6 @@ class Renderer
   void clear() throw();
   void setSize(float, float) throw();
   void setStage(const Stage&) throw();
-	bool render(const Representation&) throw();
+	void bufferRepresentation(const Representation&) throw();
   ~Renderer() throw();
 };
