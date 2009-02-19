@@ -459,18 +459,18 @@ namespace BALL
 		void setPrefix(const std::ostream& s, const string& prefix);
 
 		/// Disable all output
-		void disableOutput() throw();
+		void disableOutput() ;
 
 		/// Enable all output
-		void enableOutput() throw();
+		void enableOutput() ;
 
 		/// Is Output enabled?
 		bool outputEnabled() const
-			throw();
+			;
 
 		///
 		void flush()
-			throw();
+			;
 		//@}		
 		
 		/**	@name	Message Buffer Management */

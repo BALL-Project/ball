@@ -36,14 +36,14 @@ namespace BALL
 
 
 	ForceFieldParameters::~ForceFieldParameters()
-		throw()
+		
 	{
 		clear();
 	}
 
 
 	void ForceFieldParameters::clear()
-		throw()
+		
 	{
 		// clean up everything
 		INI_file_.clear();

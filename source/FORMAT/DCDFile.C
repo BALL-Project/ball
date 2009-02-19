@@ -15,7 +15,7 @@ namespace BALL
 {
 
 	DCDFile::DCDFile()
-		throw()
+		
 		: TrajectoryFile(),
 			verbosity_(0),
 			swap_bytes_(false),
@@ -86,7 +86,7 @@ namespace BALL
 
 
 	DCDFile::~DCDFile()
-		throw()
+		
 	{
 		close();
 		clear();
@@ -94,7 +94,7 @@ namespace BALL
 
 
 	const DCDFile& DCDFile::operator = (const DCDFile& file)
-		throw()
+		
 	{
 		TrajectoryFile::operator = (file);
 		verbosity_ = file.verbosity_;
@@ -106,7 +106,7 @@ namespace BALL
 
 
 	void DCDFile::clear()
-		throw()
+		
 	{
 		swap_bytes_ = false;
 		has_velocities_ = false;
@@ -115,7 +115,7 @@ namespace BALL
 
 
 	bool DCDFile::operator == (const DCDFile& file) const
-		throw()
+		
 	{
 		// ?????: Header vergleichen. Was heiﬂt gleich eigentlich in diesem Fall?
 		return (TrajectoryFile::operator == (file));
@@ -123,7 +123,7 @@ namespace BALL
 
 
 	bool DCDFile::isSwappingBytes() const
-		throw()
+		
 	{
 		return swap_bytes_;
 	}
@@ -153,14 +153,14 @@ namespace BALL
 
 
 	bool DCDFile::hasVelocities() const
-		throw()
+		
 	{
 		return has_velocities_;
 	}
 
 
 	bool DCDFile::readHeader()
-		throw()
+		
 	{
 		current_snapshot_ = 0;
 
@@ -414,7 +414,7 @@ namespace BALL
 
 
 	bool DCDFile::writeHeader()
-		throw()
+		
 	{
 		Size i;
 		if (!isAccessible() || !isOpen()) return false;
@@ -460,7 +460,7 @@ namespace BALL
 
 
 	bool DCDFile::append(const SnapShot& snapshot)
-		throw()
+		
 	{
 		if (number_of_atoms_ != snapshot.getNumberOfAtoms())
 		{
@@ -497,7 +497,7 @@ namespace BALL
 
 
 	void DCDFile::writeVector_(const vector<Vector3>& v)
-		throw()
+		
 	{
 		writeSize_(4*number_of_atoms_);
 		for (Size atom = 0; atom < number_of_atoms_; ++atom)
@@ -521,7 +521,7 @@ namespace BALL
 
 	
 	bool DCDFile::read(SnapShot& snapshot)
-		throw()
+		
 	{
 		#ifdef BALL_DEBUG
 			Log.info() << "file position at beginning of read(): " << tellg() << endl;
@@ -600,7 +600,7 @@ namespace BALL
 	}
 
 	Size DCDFile::readSize_()
-		throw()
+		
 	{
 		*this >> adapt_size_; 
 		if (swap_bytes_) swapBytes(adapt_size_.getData());
@@ -608,7 +608,7 @@ namespace BALL
 	}
 
 	bool DCDFile::readSize_(Size expected_size, const String& what)
-		throw()
+		
 	{
 		Size tmp = readSize_();
 		// sanity check
@@ -623,7 +623,7 @@ namespace BALL
 	}
 
 	float DCDFile::readFloat_()
-		throw()
+		
 	{
 		*this >> adapt_float_; 
 		if (swap_bytes_) swapBytes(adapt_float_.getData());
@@ -632,7 +632,7 @@ namespace BALL
 
 
 	bool DCDFile::readVector_(vector<Vector3>& v)
-		throw()
+		
 	{
 		Size expected_noa = getNumberOfAtoms();
 		Size expected_size = expected_noa * 4;
@@ -666,7 +666,7 @@ namespace BALL
 
 
 	bool DCDFile::seekAndWriteHeader()
-		throw()
+		
 	{
 		Position here = tellp();
 		seekp(0, ios::beg);
@@ -724,7 +724,7 @@ namespace BALL
 
 
 	bool DCDFile::init()
-		throw()
+		
 	{
 		#ifdef BALL_DEBUG
 		 verbosity_ = 1;
@@ -749,14 +749,14 @@ namespace BALL
 
 
 	void DCDFile::enableVelocityStorage()
-		throw()
+		
 	{
 		has_velocities_ = true;
 	}
 
 	
 	void DCDFile::disableVelocityStorage()
-		throw()
+		
 	{
 		has_velocities_ = false;
 	}

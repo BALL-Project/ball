@@ -14,7 +14,7 @@ namespace BALL
 	const String ParameterSection::UNDEFINED = "(UNDEFINED)";
 
 
-	ParameterSection::ParameterSection() throw()
+	ParameterSection::ParameterSection() 
 		:	section_name_(""),
 			format_line_(""),
 			section_entries_(),
@@ -28,7 +28,7 @@ namespace BALL
 	}
 
 	ParameterSection::ParameterSection(const ParameterSection& parameter_section) 
-		throw()
+		
 		:	options(parameter_section.options),
 			section_name_(parameter_section.section_name_),
 			format_line_(parameter_section.format_line_),
@@ -42,12 +42,12 @@ namespace BALL
 	{
 	}
 
-	ParameterSection::~ParameterSection() throw()
+	ParameterSection::~ParameterSection() 
 	{
 		clear();
 	}
 
-	void ParameterSection::clear() throw()
+	void ParameterSection::clear() 
 	{
 		// clear the options
 		options.clear();
@@ -76,13 +76,13 @@ namespace BALL
 	}
 
 	const String& ParameterSection::getSectionName() const
-		throw()
+		
 	{
 		return section_name_;
 	}
 
 	bool ParameterSection::extractSection(Parameters& parameters, 
-			const String& section_name) throw()
+			const String& section_name) 
  	{
 		if (!parameters.isValid())
 		{
@@ -333,18 +333,18 @@ namespace BALL
 	}
 
 	bool ParameterSection::has(const String& key, const String& variable) const 
-		throw()
+		
 	{
 		return section_entries_.has(key) && variable_names_.has(variable);
 	}
 
-	bool ParameterSection::has(const String& key) const throw()
+	bool ParameterSection::has(const String& key) const 
 	{
 		return section_entries_.has(key);
 	}
 
 	const String& ParameterSection::getValue(const String& key,	 
-			const String& variable) const throw()
+			const String& variable) const 
 	{
 		// check whether the entry exists
 		if (!section_entries_.has(key) || !variable_names_.has(variable))
@@ -357,7 +357,7 @@ namespace BALL
 	}
 		
 	const String& ParameterSection::getValue(Size key_index, 
-			Size variable_index) const throw()
+			Size variable_index) const 
 	{
 		// check whether the entry exists
 		if ((key_index < keys_.size()) 
@@ -370,7 +370,7 @@ namespace BALL
 		return UNDEFINED;
 	}
 		
-	const String& ParameterSection::getKey(Position key_index) const throw()
+	const String& ParameterSection::getKey(Position key_index) const 
 	{
 		// check whether the entry exists
 		if ((key_index >= section_entries_.size()))
@@ -382,23 +382,23 @@ namespace BALL
 		return keys_[key_index];
 	}
 
-	Size ParameterSection::getNumberOfKeys() const throw()
+	Size ParameterSection::getNumberOfKeys() const 
 	{
 		return (Size)keys_.size();
 	}
 
-	Size ParameterSection::getNumberOfVariables() const throw()
+	Size ParameterSection::getNumberOfVariables() const 
 	{
 		return number_of_variables_;
 	}
 
-	bool ParameterSection::hasVariable(const String& variable) const throw()
+	bool ParameterSection::hasVariable(const String& variable) const 
 	{
 		return variable_names_.has(variable);
 	}
 
 	Position ParameterSection::getColumnIndex(const String& variable) const
-		throw()
+		
 	{
 		if (variable_names_.has(variable))
 		{
@@ -409,7 +409,7 @@ namespace BALL
 	}
 
 	const ParameterSection& ParameterSection::operator = 
-		(const ParameterSection& section) throw()
+		(const ParameterSection& section) 
 	{
 		options = section.options;
 		section_name_ = section.section_name_;
@@ -425,13 +425,13 @@ namespace BALL
 		return *this;
 	}
 
-	bool ParameterSection::isValid() const throw()
+	bool ParameterSection::isValid() const 
 	{
 		return valid_;
 	}
 
 	bool ParameterSection::operator == (const ParameterSection& parameter_section)
-		const throw()
+		const 
 	{
 		return ( (options == parameter_section.options)
 				&& (section_name_ == parameter_section.section_name_)

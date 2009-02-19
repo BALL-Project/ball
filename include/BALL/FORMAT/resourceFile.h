@@ -76,7 +76,7 @@ namespace BALL
 		/**	
 		*/
 		virtual ~ResourceEntry()
-			throw();
+			;
 
 		/**	
 		*/
@@ -633,7 +633,7 @@ namespace BALL
 		/**	Destructor
 		*/
 		virtual ~ResourceFile()
-			throw();
+			;
 
 		/**	Destroy method
 		*/
@@ -641,7 +641,7 @@ namespace BALL
 
 		/**	Clear method
 		*/
-		virtual void clear() throw();
+		virtual void clear() ;
 
 		//@}
 

@@ -31,12 +31,12 @@ namespace BALL
 	{
 	}
 
-	ResidueTorsions::~ResidueTorsions() throw()
+	ResidueTorsions::~ResidueTorsions() 
 	{
 		clear();
 	}
 
-	void ResidueTorsions::clear() throw()
+	void ResidueTorsions::clear() 
 	{
 		ParameterSection::clear();
 	}

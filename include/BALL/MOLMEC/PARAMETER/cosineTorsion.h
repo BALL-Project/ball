@@ -169,11 +169,11 @@ namespace BALL
 
 		/**	Destructor.  
 		*/
-		virtual ~CosineTorsion() throw();
+		virtual ~CosineTorsion() ;
 
 		/**	Clear method.  
 		*/
-		virtual void clear() throw();
+		virtual void clear() ;
 
 		//@}
 		

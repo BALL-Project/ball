@@ -37,7 +37,7 @@ namespace BALL
 	}
 
 	XYZFile::~XYZFile()
-		throw()
+		
 	{
 	}
 	

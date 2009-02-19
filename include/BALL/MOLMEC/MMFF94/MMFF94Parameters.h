@@ -52,11 +52,11 @@ namespace BALL
 
 		///	Assignment operator
 		const MMFF94ParametersBase& operator = (const MMFF94ParametersBase&)
-			throw() {return *this;};
+			 {return *this;};
 
 		///	Clear method
 		virtual void clear()
-			throw();
+			;
 
 		///
 		bool isInitialized() { return is_initialized_;}
@@ -99,7 +99,7 @@ namespace BALL
 		
 		///
 		void clear()
-			throw();
+			;
 
 		/** Get an equivalence atom type for the given atom type.
 		 		@param number between 1 and 4, 4 is the most general equivalence
@@ -227,11 +227,11 @@ namespace BALL
 
 		///	Assignment operator
 		const MMFF94StretchParameters& operator = (const MMFF94StretchParameters& param)
-			throw();
+			;
 
 		///	Clear method
 		virtual void clear()
-			throw();
+			;
 
 		///
 		bool assignParameters(Position type1, Position type2, BondData& data) const;
@@ -281,11 +281,11 @@ namespace BALL
 
 		///	Assignment operator
 		const MMFF94BendParameters& operator = (const MMFF94BendParameters& param)
-			throw();
+			;
 
 		///	Clear method
 		virtual void clear()
-			throw();
+			;
 
 		///
 		bool assignParameters(Position bend_type,
@@ -328,11 +328,11 @@ namespace BALL
 
 		///	Assignment operator
 		const MMFF94StretchBendParameters& operator = (const MMFF94StretchBendParameters& param)
-			throw();
+			;
 
 		///	Clear method
 		virtual void clear()
-			throw();
+			;
 
 		///
 		bool assignParameters(Position stretch_bend_type, const Atom& atom1, const Atom& atom2, const Atom& atom3, 
@@ -383,11 +383,11 @@ namespace BALL
 
 		///	Assignment operator
 		const MMFF94TorsionParameters& operator = (const MMFF94TorsionParameters& param)
-			throw();
+			;
 
 		///	Clear method
 		virtual void clear()
-			throw();
+			;
 
 		///
 		bool assignParameters(Position type_index,
@@ -431,11 +431,11 @@ namespace BALL
 
 		/// Assignment operator
 		const MMFF94PlaneParameters& operator = (const MMFF94PlaneParameters& param)
-			throw();
+			;
 
 		///	Clear method
 		virtual void clear()
-			throw();
+			;
 
 		///
 		bool assignParameters(Index at1, Index at2, Index at3, Index at4, double& v) const;
@@ -482,11 +482,11 @@ namespace BALL
 
 		/// Assignment operator
 		const MMFF94VDWParameters& operator = (const MMFF94VDWParameters& param)
-			throw();
+			;
 
 		///	Clear method
 		virtual void clear()
-			throw();
+			;
 
 		///
 		double getR(Position atom_type) const;
@@ -539,11 +539,11 @@ namespace BALL
 
 		/// Assignment operator
 		const MMFF94ESParameters& operator = (const MMFF94ESParameters& param)
-			throw();
+			;
 
 		///	Clear method
 		virtual void clear()
-			throw();
+			;
 
 		/** Get the partial charge increment for the two atom types and the bond type.
 		 		The increment is for the atom with atom type at1.

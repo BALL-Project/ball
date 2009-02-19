@@ -39,7 +39,7 @@ namespace BALL
 	}
 
 	void ForceField::clear()
-		throw()
+		
 	{
 		options.clear();
 		periodic_boundary.clear();
@@ -200,7 +200,7 @@ namespace BALL
 		
 	// Is the force field valid
 	bool ForceField::isValid() const
-		throw()
+		
 	{
 		return valid_;
 	}
@@ -389,13 +389,13 @@ namespace BALL
 	}
 
 	const TimeStamp& ForceField::getUpdateTime() const
-		throw()
+		
 	{
 		return update_time_stamp_;
 	}
 
 	const TimeStamp& ForceField::getSetupTime() const
-		throw()
+		
 	{
 		return setup_time_stamp_;
 	}

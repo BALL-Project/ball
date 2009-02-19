@@ -46,7 +46,7 @@ namespace BALL
 		/**	Destructor.
 		*/
 		virtual ~Bruker2DFile()
-			throw();
+			;
 
 		/** Read a spectrum. 
 				It will be stored in spectrum_;
@@ -81,7 +81,7 @@ namespace BALL
 											 double bfreqf1, double bfreqf2, double spointnumf1, double spointnumf2);
 
 		///
-		const Bruker2DFile& operator = (const Bruker2DFile& file) throw();
+		const Bruker2DFile& operator = (const Bruker2DFile& file) ;
 
 	  protected:
 		/// These classes give access to the parameters used in aqcuiring the spectrum.

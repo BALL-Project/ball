@@ -10,7 +10,7 @@
 
 namespace BALL
 {
-	const char* VersionInfo::getVersion() throw()
+	const char* VersionInfo::getVersion() 
 	{
 		return BALL_RELEASE_STRING " ("__DATE__", " __TIME__ ")";
 	}
@@ -36,7 +36,7 @@ namespace BALL
 		return release.getField(0, ". ").toInt();
 	}
 	
-	VersionInfo::Type VersionInfo::getType() throw()
+	VersionInfo::Type VersionInfo::getType() 
 	{
 		StringHashMap<VersionInfo::Type> type_mapper;
 		type_mapper.insert(std::pair<String, VersionInfo::Type>("alpha", ALPHA));

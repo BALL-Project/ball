@@ -60,10 +60,10 @@ namespace BALL
 			JCAMPValue() : string_value(""), numeric_value(), type(STRING) {}
 			
 			bool operator == (const JCAMPValue& value) const
-				throw();
+				;
 
 			bool operator != (const JCAMPValue& value) const
-				throw();
+				;
 		};
 
 		/// a key-value pair
@@ -81,7 +81,7 @@ namespace BALL
 		//@{
 
 		///
-		JCAMPFile() throw() {}
+		JCAMPFile()  {}
 
 		///
 		JCAMPFile(const String& name, OpenMode open_mode = std::ios::in)
@@ -92,7 +92,7 @@ namespace BALL
 			throw(Exception::FileNotFound);
 
 		///	Destructor.
-		virtual ~JCAMPFile() throw() {}
+		virtual ~JCAMPFile()  {}
 
 		//@}
 		/** @name Accessors
@@ -108,16 +108,16 @@ namespace BALL
 			throw(File::CannotWrite);
 
 		///
-		HeaderMap& getHeader() throw() { return header_; }
+		HeaderMap& getHeader()  { return header_; }
 
 		///
-		const HeaderMap& getHeader() const throw() { return header_; }
+		const HeaderMap& getHeader() const  { return header_; }
 
 		///
-		EntryMap& getEntries() throw() { return entries_; }
+		EntryMap& getEntries()  { return entries_; }
 
 		///
-		const EntryMap& getEntries() const throw() { return entries_; }
+		const EntryMap& getEntries() const  { return entries_; }
 
 		///
 		const JCAMPValue& operator [] (const String& name) const { return entries_[name]; }
@@ -131,13 +131,13 @@ namespace BALL
 			throw(Exception::InvalidFormat);
 
 		/// 
-		bool hasEntry(const String& name) const throw() { return entries_.has(name); }
+		bool hasEntry(const String& name) const  { return entries_.has(name); }
 
 		/// 
-		bool hasHeader(const String& name) const throw() { return header_.has(name); }
+		bool hasHeader(const String& name) const  { return header_.has(name); }
 
 		/// 
-		const JCAMPFile& operator = (const JCAMPFile& file) throw();
+		const JCAMPFile& operator = (const JCAMPFile& file) ;
 
 		//@}
 		/**	@name Equality operators
@@ -146,11 +146,11 @@ namespace BALL
 
 		/** Equality operator
 		*/
-		bool operator == (const JCAMPFile& f)  const throw();
+		bool operator == (const JCAMPFile& f)  const ;
 
 		/** Inequality operator
 		*/
-		bool operator != (const JCAMPFile& f)  const throw();
+		bool operator != (const JCAMPFile& f)  const ;
 		//@}
 
 		

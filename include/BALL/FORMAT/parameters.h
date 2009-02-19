@@ -50,7 +50,7 @@ namespace BALL
 		/**	Clear method.
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/**	@name	Assignment 

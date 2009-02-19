@@ -12,7 +12,7 @@ namespace BALL
 {
 
 	TrajectoryFile::TrajectoryFile()
-		throw()
+		
 		:	File(),
 			number_of_snapshots_(0),
 			number_of_atoms_(0)
@@ -21,7 +21,7 @@ namespace BALL
 
 
 	TrajectoryFile::TrajectoryFile(const TrajectoryFile& file)
-		throw()
+		
 		:	File(file),
 			number_of_snapshots_(file.number_of_snapshots_),
 			number_of_atoms_(file.number_of_atoms_)
@@ -40,7 +40,7 @@ namespace BALL
 
 	TrajectoryFile::~TrajectoryFile
 		()
-		throw()
+		
 	{
 		clear();
 	}
@@ -48,7 +48,7 @@ namespace BALL
 
 	const TrajectoryFile& TrajectoryFile::operator =
 		(const TrajectoryFile& file)
-		throw()
+		
 	{
 		File::operator = (file);
 
@@ -60,7 +60,7 @@ namespace BALL
 
 
 	void TrajectoryFile::clear()
-		throw()
+		
 	{
 		File::clear();
 
@@ -72,7 +72,7 @@ namespace BALL
 
 	bool TrajectoryFile::operator ==
 		(const TrajectoryFile& file) const
-		throw()
+		
 	{
 		return((File::operator == (file))
 				&& (number_of_snapshots_ == number_of_snapshots_)
@@ -81,7 +81,7 @@ namespace BALL
 
 
 	bool TrajectoryFile::readHeader()
-		throw()
+		
 	{
 		Log.error() << "TrajectoryFile::readHeader(): " 
 			<< "This method should not be called" << endl;
@@ -90,7 +90,7 @@ namespace BALL
 
 
 	bool TrajectoryFile::writeHeader()
-		throw()
+		
 	{
 		Log.error() << "TrajectoryFile::writeHeader(): " 
 			<< "This method should not be called" << endl;
@@ -99,7 +99,7 @@ namespace BALL
 
 
 	bool TrajectoryFile::append(const SnapShot& /* snapshot */)
-		throw()
+		
 	{
 		Log.error() << "TrajectoryFile::append(): " 
 			<< "This method should not be called" << endl;
@@ -108,7 +108,7 @@ namespace BALL
 
 
 	bool TrajectoryFile::read(SnapShot& /* snapshot */)
-		throw()
+		
 	{
 		Log.error() << "TrajectoryFile::read(): " 
 			<< "This method should not be called" << endl;
@@ -117,14 +117,14 @@ namespace BALL
 
 
 	Size TrajectoryFile::getNumberOfSnapShots() const
-		throw()
+		
 	{
 		return number_of_snapshots_;
 	}
 
 
 	Size TrajectoryFile::getNumberOfAtoms() const
-		throw()
+		
 	{
 		return number_of_atoms_;
 	}

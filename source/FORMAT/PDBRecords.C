@@ -9,17 +9,17 @@
 namespace BALL 
 {
 
-	PDBRecords::PDBRecords() throw()
+	PDBRecords::PDBRecords() 
 		:	records_(500)
 	{
 	}
 
-	PDBRecords::PDBRecords(const PDBRecords& pdbr) throw()
+	PDBRecords::PDBRecords(const PDBRecords& pdbr) 
 		:	records_(pdbr.records_)
 	{
 	}
 
-	PDBRecords::~PDBRecords() throw()
+	PDBRecords::~PDBRecords() 
 	{
 		records_.clear();
 	}

@@ -46,7 +46,7 @@ namespace BALL
 
 		/// Destructor
 		virtual ~Bruker1DFile()
-			throw();
+			;
 
 		//@}
 		/**	@name Accessors
@@ -72,7 +72,7 @@ namespace BALL
 		const JCAMPFile::HeaderMap& getHeader() const { return pars_.getHeader();}
 
 		///
-		const Bruker1DFile& operator = (const Bruker1DFile& file) throw();
+		const Bruker1DFile& operator = (const Bruker1DFile& file) ;
 
 		//@}
 

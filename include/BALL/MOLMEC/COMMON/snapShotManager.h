@@ -62,7 +62,7 @@ class BALL_EXPORT SnapShotManager
 
 	/// Default constructor
 	SnapShotManager()
-		throw();
+		;
 
 	/** This constructor expects a valid system, a valid force field
 			and the name of a snapshot file. 
@@ -73,7 +73,7 @@ class BALL_EXPORT SnapShotManager
 	*/
 	SnapShotManager(System* my_system, const ForceField* my_force_field,
 		 							TrajectoryFile* my_snapshot_file)
-		throw();
+		;
 
 	/** This constructor expects a valid system, a valid force field
 			and the name of a snapshot file. 
@@ -86,15 +86,15 @@ class BALL_EXPORT SnapShotManager
 	SnapShotManager	
 		(System* my_system, const ForceField* my_force_field,
 		 const Options& my_options, TrajectoryFile* file)
-		throw();
+		;
 
 	/// Copy constructor.
 	SnapShotManager(const SnapShotManager& manager)
-		throw();
+		;
 
 	/// Destructor.
 	virtual ~SnapShotManager()
-		throw();
+		;
 
 	//@}
 	/** @name Setup methods
@@ -109,14 +109,14 @@ class BALL_EXPORT SnapShotManager
 	*/
 	bool setup(System* my_system, const ForceField* my_forcefield,
 			TrajectoryFile* my_snapshot_file)
-		throw();
+		;
 
 	/** The setup method does all preparations necessary for using the
 			SnapshotManager.
 			@return true, if setup was succesful
 	*/
 	virtual bool setup()
-		throw();
+		;
 
 	//@}
 	/** @name Assignment
@@ -126,11 +126,11 @@ class BALL_EXPORT SnapShotManager
 	/** The assignment operator.  
 	*/
 	const SnapShotManager& operator = (const SnapShotManager& manager)
-		throw();
+		;
 
 	/// Clear method
 	virtual void clear()
-		throw();
+		;
 
 	//@}
 	/// @name Debugging and diagnostics
@@ -139,7 +139,7 @@ class BALL_EXPORT SnapShotManager
 	/** Is the SnapshotManager ready for use?
 	*/
 	virtual bool isValid() const
-		throw();
+		;
 
 	//@}
 	/// @name Accessors
@@ -150,40 +150,40 @@ class BALL_EXPORT SnapShotManager
 			SnapshotManager will be bound
 	*/
 	void setSystem(System* my_system)
-		throw();
+		;
 
 	/// get a const pointer to the system member
 	System* getSystem() const
-		throw();
+		;
 
 	/// set the force field
 	void setForceField(const ForceField* my_ff)
-		throw();
+		;
 
 	/// get a const pointer to the force field
 	const ForceField* getForceField() const
-		throw();
+		;
 
 	/// set the trajectory file
 	void setTrajectoryFile(TrajectoryFile* my_file)
-		throw();
+		;
 
 	/// get a pointer to the trajectory file
 	TrajectoryFile* getTrajectoryFile() const
-		throw();
+		;
 
 	/** Set the frequency for saving snapshots to hard disk. 
 			Every 'number' iterations, a save will be  done.         
 			@param number the number of snapshots to take before flushing to disk
 	*/
 	void setFlushToDiskFrequency(Size number)
-		throw();
+		;
 
 	/** Get the current frequency for doing saves to hard disk
 			@return the number of snapshots to take before flushing them to disk
 	*/
 	Size getFlushToDiskFrequency() const
-		throw();
+		;
 
 	/** This method takes a snapshot of the system's current state and stores
 			it in main memory. If there is not sufficient space, the snapshots
@@ -200,14 +200,14 @@ class BALL_EXPORT SnapShotManager
 			@return true if the snapshot could be read, <b>false</b> ow.
 	*/
 	virtual bool applySnapShot(Size number)
-		throw();
+		;
 
 	/** Read a the first SnapShot from the associated TrajectoryFile.
 			@param snapshot a buffer for returning the snapshot
 			@return true if the snapshot could be read, <b>false</b> ow.
 	*/
 	virtual bool applyFirstSnapShot()
-		throw();
+		;
 
 	/** Read a the next SnapShot from the associated TrajectoryFile and
 			apply it to the system
@@ -215,7 +215,7 @@ class BALL_EXPORT SnapShotManager
 			@return true if the snapshot could be read, <b>false</b> ow.
 	*/
 	virtual bool applyNextSnapShot()
-		throw();
+		;
 
 	/** This method applies the last SnapShot of the associated file
 			i. e. writes all available data (positions, forces, etc.) from the
@@ -223,7 +223,7 @@ class BALL_EXPORT SnapShotManager
 			all data.
 	*/
 	virtual bool applyLastSnapShot()
-		throw();
+		;
 
 	/// This method writes all snapshots taken so far to hard disk
 	virtual void flushToDisk()
@@ -231,20 +231,20 @@ class BALL_EXPORT SnapShotManager
 
 	///
 	Size getNumberOfSnapShotsInBuffer()
-		throw() { return  snapshot_buffer_.size();}
+		 { return  snapshot_buffer_.size();}
 
 	///
 	Position getCurrentSnapshotNumber() const
-		throw() { return current_snapshot_ + 1;}
+		 { return current_snapshot_ + 1;}
 
 	/** Try to read all SnapShot 's from the TrajectoryFile into the memory.
 	*/
 	bool readFromFile()
-		throw();
+		;
 
 	/// Clear all currently loaded SnapShot 's.
 	void clearBuffer()
-		throw();
+		;
 
 	//@}
 	/// @name Public Attributes

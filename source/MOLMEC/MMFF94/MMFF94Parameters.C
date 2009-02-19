@@ -30,7 +30,7 @@ namespace BALL
 	}
 
 	void MMFF94ParametersBase::clear()
-		throw()
+		
 	{
 		is_initialized_ = false;
 	}
@@ -102,7 +102,7 @@ MMFF94AtomTypeEquivalences::MMFF94AtomTypeEquivalences(const MMFF94AtomTypeEquiv
 }
 
 void MMFF94AtomTypeEquivalences::clear()
-	throw()
+	
 {
 	is_initialized_ = false;
 	equivalences_.clear();
@@ -261,14 +261,14 @@ MMFF94StretchParameters::~MMFF94StretchParameters()
 }
 
 void MMFF94StretchParameters::clear()
-	throw()
+	
 {
 	parameters_.clear();
 }
 
 const MMFF94StretchParameters& MMFF94StretchParameters::operator = 
 	(const MMFF94StretchParameters& param)
-	throw()
+	
 {
 	parameters_ = param.parameters_;
 	return *this;
@@ -444,13 +444,13 @@ MMFF94BendParameters::~MMFF94BendParameters()
 }
 
 void MMFF94BendParameters::clear()
-	throw()
+	
 {
 	parameters_.clear();
 }
 
 const MMFF94BendParameters& MMFF94BendParameters::operator = (const MMFF94BendParameters& param)
-	throw()
+	
 {
 	parameters_ = param.parameters_;
 	return *this;
@@ -556,13 +556,13 @@ MMFF94StretchBendParameters::~MMFF94StretchBendParameters()
 }
 
 void MMFF94StretchBendParameters::clear()
-	throw()
+	
 {
 	parameters_.clear();
 }
 
 const MMFF94StretchBendParameters& MMFF94StretchBendParameters::operator = (const MMFF94StretchBendParameters& param)
-	throw()
+	
 {
 	parameters_ = param.parameters_;
 	return *this;
@@ -731,13 +731,13 @@ MMFF94TorsionParameters::~MMFF94TorsionParameters()
 }
 
 void MMFF94TorsionParameters::clear()
-	throw()
+	
 {
 	parameters_.clear();
 }
 
 const MMFF94TorsionParameters& MMFF94TorsionParameters::operator = (const MMFF94TorsionParameters& param)
-	throw()
+	
 {
 	parameters_ = param.parameters_;
 	return *this;
@@ -845,13 +845,13 @@ MMFF94PlaneParameters::~MMFF94PlaneParameters()
 }
 
 void MMFF94PlaneParameters::clear()
-	throw()
+	
 {
 	parameters_.clear();
 }
 
 const MMFF94PlaneParameters& MMFF94PlaneParameters::operator = (const MMFF94PlaneParameters& param)
-	throw()
+	
 {
 	parameters_ = param.parameters_;
 	return *this;
@@ -959,13 +959,13 @@ MMFF94VDWParameters::~MMFF94VDWParameters()
 }
 
 void MMFF94VDWParameters::clear()
-	throw()
+	
 {
 	parameters_.clear();
 }
 
 const MMFF94VDWParameters& MMFF94VDWParameters::operator = (const MMFF94VDWParameters& param)
-	throw()
+	
 {
 	parameters_ = param.parameters_;
 	return *this;
@@ -1131,7 +1131,7 @@ MMFF94ESParameters::~MMFF94ESParameters()
 }
 
 void MMFF94ESParameters::clear()
-	throw()
+	
 {
 	parameters_.clear();
 	phis_.clear();
@@ -1139,7 +1139,7 @@ void MMFF94ESParameters::clear()
 }
 
 const MMFF94ESParameters& MMFF94ESParameters::operator = (const MMFF94ESParameters& param)
-	throw()
+	
 {
 	parameters_ = param.parameters_;
 	pbcis_ 			= param.pbcis_;

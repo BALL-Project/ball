@@ -52,7 +52,7 @@ namespace BALL
 
 		/** Return the version number, which is defined in BALL_RELEASE_STRING
 		*/
-		static const char* getVersion() throw();
+		static const char* getVersion() ;
 
 		/** Return the major revision number.
 				(The part of the release number before the point)
@@ -67,7 +67,7 @@ namespace BALL
 		/** Return the type of release:
 				ALPHA, BETA, NONPUPLIC, STABLE, PRERELEASE, PATCHLVL, UNKNOWN.
 		*/
-		static Type getType() throw();
+		static Type getType() ;
 		
 
 		protected:

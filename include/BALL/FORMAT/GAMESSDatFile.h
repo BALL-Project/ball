@@ -39,7 +39,7 @@ namespace BALL
 					StringHashMap<String> data;
 
 					void operator >> (std::ostream& os) const
-						throw();
+						;
 					
 			};
 			
@@ -56,7 +56,7 @@ namespace BALL
 			/** Default constructor
 			 */
 			GAMESSDatFile()
-				throw();
+				;
 
 			/** Copy constructor
 			 */
@@ -71,7 +71,7 @@ namespace BALL
 			/** Destructor
 			 */
 			virtual ~GAMESSDatFile()
-				throw();
+				;
 			
 			//@}
 			/** @name Assignment.
@@ -123,34 +123,34 @@ namespace BALL
 			 */
 			//@{
 			void newMolecule()
-				throw();
+				;
 
 			void setMoleculeName(char* name)
-				throw();			
+				;			
 			
 			void insertAtom(char* element, float charge, float x, float y, float z)
-				throw();
+				;
 
 			void insertBond(Index a1, Index a2)
-				throw();
+				;
 			
 			void inBlock(const char* blockname)
-				throw();
+				;
 
 			void insertBlockedData(const char* key, const char* value)
-				throw();
+				;
 
 			void insertBlockedData(const String& key, const String& value)
-				throw();
+				;
 
 			String& getBlockedData(const String& block, const String& key)
-				throw();
+				;
 
 			const String& getBlockedData(const String& block, const String& key) const
-				throw();
+				;
 
 			void clearParameters()
-				throw();
+				;
 			//@}
 			
 			static State state;

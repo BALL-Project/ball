@@ -67,7 +67,7 @@ namespace BALL
 		/**	Default constructor
 		*/
 		GenericMolFile()
-			throw();
+			;
 
 		/** Detailed constructor
 		*/
@@ -82,7 +82,7 @@ namespace BALL
 		/** Destructor
 		*/
 		virtual ~GenericMolFile()
-			throw();
+			;
 		
 		//@}
 		/**	@name Assignment

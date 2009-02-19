@@ -33,11 +33,11 @@ namespace BALL
 		/**	@name Constructors and Destructor */
 		//@{
 		///
-		PDBInfo() throw();
+		PDBInfo() ;
 		///
-		PDBInfo(const PDBInfo& pdbi) throw();
+		PDBInfo(const PDBInfo& pdbi) ;
 		///
-		virtual ~PDBInfo() throw();
+		virtual ~PDBInfo() ;
 		/// Reset all attributes to their initial state
 		virtual void clear();
 		//@}

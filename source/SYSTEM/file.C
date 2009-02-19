@@ -31,7 +31,7 @@ namespace BALL
 	const File::OpenMode File::MODE_TRUNC = std::ios::trunc;
  
 	File::CannotWrite::CannotWrite(const char* file, int line, const String& filename)
-		throw()
+		
 		:	Exception::GeneralException(file, line, "File::CannotWrite", ""),
 			filename_(filename)
 	{
@@ -45,7 +45,7 @@ namespace BALL
 	}
 
 	String File::CannotWrite::getFilename() const
-		throw()
+		
 	{
 		return filename_;
 	}
@@ -196,7 +196,7 @@ namespace BALL
 																				| BALL_BIT(File::TRANSFORMATION__URL);
 
 	File::File()
-		throw()
+		
 		:	std::fstream(),
 			name_(),
 			open_mode_(std::ios::in),
@@ -234,7 +234,7 @@ namespace BALL
 	}
 
 	File::~File()
-		throw()
+		
 	{
 		close();
 	}
@@ -393,7 +393,7 @@ namespace BALL
 	}
 
 	void File::close()
-		throw()
+		
 	{
 		if (is_open_ == true)
 		{
@@ -520,7 +520,7 @@ namespace BALL
 	}
 
 	bool File::createTemporaryFilename(String& temporary)
-		throw()
+		
 	{
 		temporary = "_1234567.TMP";
 		

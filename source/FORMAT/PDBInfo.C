@@ -8,7 +8,7 @@
 
 namespace BALL 
 {
-	PDBInfo::PDBInfo() throw()
+	PDBInfo::PDBInfo() 
 		:	skipped_records_(),
 			invalid_records_(),
 			filename_(""),
@@ -22,7 +22,7 @@ namespace BALL
 	{
 	}
 
-	PDBInfo::PDBInfo(const PDBInfo& pdbi) throw()
+	PDBInfo::PDBInfo(const PDBInfo& pdbi) 
 		:	skipped_records_(pdbi.skipped_records_),
 			invalid_records_(pdbi.invalid_records_),
 			filename_(pdbi.filename_),
@@ -71,7 +71,7 @@ namespace BALL
 		return ! operator == (rhs);
 	}
 
-	PDBInfo::~PDBInfo() throw()
+	PDBInfo::~PDBInfo() 
 	{
 		clear();
 	}

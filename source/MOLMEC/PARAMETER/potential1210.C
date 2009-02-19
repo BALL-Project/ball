@@ -12,7 +12,7 @@ using namespace std;
 namespace BALL 
 {
 
-	Potential1210::Potential1210() throw()
+	Potential1210::Potential1210() 
 		:	ParameterSection(),
 			number_of_atom_types_(0),
 			A_(0),
@@ -23,7 +23,7 @@ namespace BALL
 	}
 
 
-	Potential1210::Potential1210(const Potential1210& pot1210) throw()
+	Potential1210::Potential1210(const Potential1210& pot1210) 
 		:	ParameterSection(pot1210),
 			number_of_atom_types_(pot1210.number_of_atom_types_),
 			A_(pot1210.A_),
@@ -34,7 +34,7 @@ namespace BALL
 	}
 
 
-	Potential1210::~Potential1210() throw()
+	Potential1210::~Potential1210() 
 	{
 		clear();
 		
@@ -42,7 +42,7 @@ namespace BALL
 	}
 
 
-	void Potential1210::clear() throw()
+	void Potential1210::clear() 
 	{
 		// clear parameter fields
 		number_of_atom_types_ = 0;
@@ -56,7 +56,7 @@ namespace BALL
 
 
 	const Potential1210& Potential1210::operator = (const Potential1210& pot1210) 
-		throw()
+		
 	{
 		ParameterSection::operator = (pot1210);
 
@@ -70,7 +70,7 @@ namespace BALL
 	}
 
 
-	bool Potential1210::operator == (const Potential1210& pot1210) const throw()
+	bool Potential1210::operator == (const Potential1210& pot1210) const 
 	{
 		return (ParameterSection::operator == (pot1210)
 			&& (number_of_atom_types_ == pot1210.number_of_atom_types_)
@@ -82,14 +82,14 @@ namespace BALL
 
 
 	bool Potential1210::extractSection
-		(Parameters& parameters, const String& section_name) throw()
+		(Parameters& parameters, const String& section_name) 
 	{
 		return ParameterSection::extractSection(parameters, section_name);
 	}
 
 
 	bool Potential1210::extractSection
-		(ForceFieldParameters& parameters, const String& section_name) throw()
+		(ForceFieldParameters& parameters, const String& section_name) 
 	{
 
 		// clear the fields first
@@ -195,7 +195,7 @@ namespace BALL
 
 
 	bool Potential1210::hasParameters(Atom::Type I, Atom::Type J) const
-		throw()
+		
 	{
 		if ((I < 0) || ((Size)I >= number_of_atom_types_))
 			return false;
@@ -208,7 +208,7 @@ namespace BALL
 
 
 	Potential1210::Values Potential1210::getParameters
-		(Atom::Type I, Atom::Type J) const throw()
+		(Atom::Type I, Atom::Type J) const 
 	{
 		Potential1210::Values parameters;
 		assignParameters(parameters, I, J);
@@ -218,7 +218,7 @@ namespace BALL
 
 	bool Potential1210::assignParameters
 		(Potential1210::Values& parameters,
-		 Atom::Type I, Atom::Type J) const throw()
+		 Atom::Type I, Atom::Type J) const 
 	{
 		if (hasParameters(I, J)) 
 		{

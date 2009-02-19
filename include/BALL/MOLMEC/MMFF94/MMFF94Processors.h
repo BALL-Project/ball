@@ -111,11 +111,11 @@ namespace BALL
 
 		///
 		const MMFF94ChargeProcessor& operator = (const MMFF94ChargeProcessor& cp)
-			throw();
+			;
 
 		///
 		virtual void clear()
-			throw();
+			;
 		
 		///
 		virtual bool start();

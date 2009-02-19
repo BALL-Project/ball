@@ -31,7 +31,7 @@ namespace BALL
 	}
 
 
-	void Templates::clear() throw()
+	void Templates::clear() 
 	{
 		charges_.clear();
 		type_names_.clear();
@@ -42,7 +42,7 @@ namespace BALL
 	}
 
 
-	Templates::~Templates() throw()
+	Templates::~Templates() 
 	{
 		clear();
 	}

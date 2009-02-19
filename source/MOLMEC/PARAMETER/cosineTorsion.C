@@ -28,12 +28,12 @@ namespace BALL
 	{
 	}
 
-	CosineTorsion::~CosineTorsion() throw()
+	CosineTorsion::~CosineTorsion() 
 	{
 		clear();
 	}
 
-	void CosineTorsion::clear() throw()
+	void CosineTorsion::clear() 
 	{
 		ParameterSection::clear();
 		number_of_atom_types_ = 0;

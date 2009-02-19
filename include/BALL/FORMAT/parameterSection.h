@@ -66,15 +66,15 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		ParameterSection() throw();
+		ParameterSection() ;
 
 		/** Copy constructor 
 		*/
-		ParameterSection(const ParameterSection& parameter_section) throw();
+		ParameterSection(const ParameterSection& parameter_section) ;
 
 		/**	Destructor.
 		*/
-		virtual ~ParameterSection() throw();
+		virtual ~ParameterSection() ;
 
 		//@}	
 		/**	@name	Extracting Data from the Section
@@ -90,21 +90,21 @@ namespace BALL
 				@return bool - <b>true</b> if the section could be read, <b>false</b> otherwise
 		*/
 		bool extractSection(Parameters& parameters, const String& section_name)
-			throw();
+			;
 
 		/**	Return the name of the section read.
 				The section name is empty before  \link extractSection extractSection \endlink  was called.
 				@return the	name of the section extracted
 		*/
 		const String& getSectionName() const
-			throw();
+			;
 
 		/** Returns the value associated with the key and returns the value of the
 				given variable.
 				If the requested variable is not defined in the format line, an empty string is returned.
 		*/
 		const String& getValue(const String& key, const String& variable) const
-			throw();
+			;
 		
 		/**	Query for a pair of key and variable.
 				False is returned if 
@@ -114,43 +114,43 @@ namespace BALL
 								in the format line
 				
 		*/
-		bool has(const String& key, const String& variable) const throw();
+		bool has(const String& key, const String& variable) const ;
 		
 		/**	Query for a key.
 				False is returned if the key could not be found.
 				@param key the key to serch in the hash table
 		*/
-		bool has(const String& key) const throw();
+		bool has(const String& key) const ;
 		
 		/**	Query whether a specified variable was defined in the format line.
 		*/
-		bool hasVariable(const String& variable) const throw();
+		bool hasVariable(const String& variable) const ;
 
 		/**	Return the column index of a variable.
 				If section doesn't have the variable, INVALID_POSITION
 				is returned.
 		*/
-		Position getColumnIndex(const String& variable) const throw();
+		Position getColumnIndex(const String& variable) const ;
 
 		/**	Returns the number of defined variables.
 		*/
-		Size getNumberOfVariables() const throw();
+		Size getNumberOfVariables() const ;
 
 		/**	Returns the number of different keys defined.
 		*/
-		Size getNumberOfKeys() const throw();
+		Size getNumberOfKeys() const ;
 
 		/**	Fast access to the value array.
 				If the value is undefined,  \link UNDEFINED UNDEFINED \endlink  is returned.
 		*/
 		const String& getValue(Position key_index, Position variable_index)
-			const throw();
+			const ;
 
 		/**	Fast access to the key array.
 				The first key has the index 0.
 				If the key is undefined,  \link UNDEFINED UNDEFINED \endlink  is returned.
 		*/
-		const String& getKey(Position key_index) const throw();
+		const String& getKey(Position key_index) const ;
 
 		//@}
 		/** @name Assignment 
@@ -160,12 +160,12 @@ namespace BALL
 		/**	Clear method.  
 		*/
 		virtual void clear() 
-			throw();
+			;
 
 		/** Assignment operator 
 		*/
 		const ParameterSection& operator = (const ParameterSection& section)
-			throw();
+			;
 
 		//@}
 		/**	@name	Predicates
@@ -174,12 +174,12 @@ namespace BALL
 			
 		/**	Validity predicate
 		*/
-		virtual bool isValid() const throw();
+		virtual bool isValid() const ;
 
 		/** Equality operator 
 		*/
 		bool operator == (const ParameterSection& parameter_section) const
-			throw();
+			;
 
 		//@}
 		/**	@name	Public Members

@@ -26,7 +26,7 @@ namespace BALL
   const char* KCFFile::DELIMITER_TAG = "///";
 	const char* KCFFile::CONTINUED_LINE = " ";
 	
-	KCFFile::KCFFile() throw()
+	KCFFile::KCFFile() 
 		:	GenericMolFile()
 	{
 	}
@@ -43,7 +43,7 @@ namespace BALL
 	{
 	}
 
-	KCFFile::~KCFFile() throw()
+	KCFFile::~KCFFile() 
 	{
 	}
 
@@ -293,7 +293,7 @@ namespace BALL
 	
 
 	const KCFFile& KCFFile::operator = (const KCFFile& file)
-		throw()
+		
 	{
 		GenericMolFile::operator = (file);
 		return *this;

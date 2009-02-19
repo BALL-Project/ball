@@ -64,7 +64,7 @@ namespace BALL
 
 	// Clear method
 	void PeriodicBoundary::clear()
-		throw()
+		
 	{
 		options = 0;
 		force_field_ = 0;

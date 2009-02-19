@@ -152,7 +152,7 @@ namespace BALL
 			
 			/** Equality operator
 			 */
-			bool operator == (const EnergyMinimizer& energy_minimizer) throw();
+			bool operator == (const EnergyMinimizer& energy_minimizer) ;
 			
 			/** @name Debugging and Diagnostics
 			*/
@@ -384,11 +384,11 @@ namespace BALL
 			
 			/** Return the number of force updates since the start of the minimization.
 			*/
-			Size getForceUpdateCounter() const throw();
+			Size getForceUpdateCounter() const ;
 			
 			/** Return the number of energy updates since the start of the minimization.
 			*/
-			Size getEnergyUpdateCounter() const throw();
+			Size getEnergyUpdateCounter() const ;
 			
 			/** Minimize the energy of the system bound to the force field.
 			 *  If a number of steps is given, the minimization is aborted after
@@ -422,7 +422,7 @@ namespace BALL
 			/** Return true, if the minimization was aborted, e.g. because of strange
 			 *  energies or gradient.
 			 */
-			bool wasAborted() const throw();
+			bool wasAborted() const ;
 			
 			//@}
 			/**	@name	Public Attributes

@@ -36,7 +36,7 @@ namespace BALL
 		/** Default constructor
 		*/
 		HINFile()
-			throw();
+			;
 
 		/** Copy constructor
 		*/
@@ -51,7 +51,7 @@ namespace BALL
 		/**	Destructor
 		*/
 		virtual ~HINFile()
-			throw();
+			;
 
 		//@}
 		/**	@name Assignment.

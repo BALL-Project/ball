@@ -83,7 +83,7 @@ namespace BALL
 	
 	// Destructor
 	LineSearch::~LineSearch()
-		throw()
+		
 	{
 	}
 	

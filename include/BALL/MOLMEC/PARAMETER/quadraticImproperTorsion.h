@@ -41,12 +41,12 @@ namespace BALL
 			float phase;
 			float k;
 
-			bool operator == (const Values& values) const throw()
+			bool operator == (const Values& values) const 
 			{
 				return ((phase == values.phase) && (k == values.k));
 			}
 
-			bool operator != (const Values& values) const throw()
+			bool operator != (const Values& values) const 
 			{
 				return !(operator == (values));
 			}
@@ -71,20 +71,20 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		QuadraticImproperTorsion() throw();
+		QuadraticImproperTorsion() ;
 
 		/** Copy constructor. 
 		*/
 		QuadraticImproperTorsion(const QuadraticImproperTorsion& torsion)
-			throw();
+			;
 
 		/**	Destructor.
 		*/
-		virtual ~QuadraticImproperTorsion() throw();
+		virtual ~QuadraticImproperTorsion() ;
 
 		/**	Clear method. 
 		*/
-		virtual void clear() throw();
+		virtual void clear() ;
 
 		//@}
 		/** @name Parameter extraction 
@@ -98,23 +98,23 @@ namespace BALL
 				fast and easy acces this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters,
-				const String& section_name) throw();
+				const String& section_name) ;
 
 		///
 		virtual bool extractSection(Parameters& parameters,
-				const String& section_name) throw();
+				const String& section_name) ;
 
 		//@}
 
 		/** Queries whether a parameter set is defined for the given atom types.
 		*/
 		bool hasParameters(Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) 
-			const throw();
+			const ;
 		
 		/**	Returns the parameters for a given atom type combination.
 		*/
 		QuadraticImproperTorsion::Values getParameters(Atom::Type I, Atom::Type J,
-				Atom::Type K, Atom::Type L) const throw();
+				Atom::Type K, Atom::Type L) const ;
 		
 		/**	Assign the parameters for a given atom type combination.
 				If no parameters are defined for this combination, false is
@@ -122,7 +122,7 @@ namespace BALL
 		*/
 		bool assignParameters(QuadraticImproperTorsion::Values& parameters,
 				Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const
-			throw();
+			;
 
 		/** @name Assignment 
 		*/
@@ -131,7 +131,7 @@ namespace BALL
 		/** Assignment operator 
 		*/
 		const QuadraticImproperTorsion& operator = 
-			(const QuadraticImproperTorsion& torsion) throw();
+			(const QuadraticImproperTorsion& torsion) ;
 
 		//@}
 		/** @name Predicates 
@@ -141,7 +141,7 @@ namespace BALL
 		/** Equality operator 
 		*/
 		bool operator == (const QuadraticImproperTorsion& torsion) const
-			throw();
+			;
 
 		//@}
 

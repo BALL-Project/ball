@@ -124,14 +124,14 @@ namespace BALL
 	}
 
 	void MMFF94::clear()
-		throw()
+		
 	{
 		ForceField::clear();
 		parameters_initialized_ = false;
 	}
 
 	const MMFF94& MMFF94::operator = (const MMFF94& force_field)
-		throw()
+		
 	{
 		// avoid self assignment
 		if (&force_field != this)
@@ -408,7 +408,7 @@ namespace BALL
 	}
 
 	String MMFF94::getResults() const
-		throw()
+		
 	{
 		String result = String("\n")
 		+ "MMFF94 Energy:\n";

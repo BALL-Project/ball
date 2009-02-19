@@ -503,26 +503,26 @@ namespace BALL
 	}
 
 	void LogStream::disableOutput()
-		throw()
+		
 	{
 		disable_output_ = true;
 	}
 
 	void LogStream::enableOutput()
-		throw()
+		
 	{
 		disable_output_ = false;
 		std::ostream::flush();
 	}
 
 	bool LogStream::outputEnabled() const
-		throw()
+		
 	{
 		return disable_output_;
 	}
 
 	void LogStream::flush()
-		throw()
+		
 	{
 		if (disable_output_) return;
 

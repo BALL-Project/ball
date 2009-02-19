@@ -58,31 +58,31 @@ namespace BALL
 
 		///	Default constructor.
 		MMFF94NonBonded()
-			throw();
+			;
 
 		///	Constructor.
 		MMFF94NonBonded(ForceField& force_field)
-			throw();
+			;
 
 		///	Copy constructor
 		MMFF94NonBonded(const MMFF94NonBonded& MMFF94_non_bonded)
-			throw();
+			;
 
 		///	Destructor.
 		virtual ~MMFF94NonBonded()
-			throw();
+			;
 		
 		/// Assignment operator
 		const MMFF94NonBonded& operator = (const MMFF94NonBonded& anb)
-			throw();
+			;
 
 		/// Clear method
 		virtual void clear()
-			throw();
+			;
 
 		/// Equality operator
 		bool operator == (const MMFF94NonBonded& anb)
-			throw();
+			;
 
 		///	Setup method.
 		virtual bool setup()
@@ -90,11 +90,11 @@ namespace BALL
 
 		///	Calculates and returns the component's energy.
 		virtual double updateEnergy()
-			throw();
+			;
 
 		///	Calculates and returns the component's forces.
 		virtual void updateForces()
-			throw();
+			;
 
 		/**	Update the pair list.
 				This method is called by the force field whenever
@@ -107,7 +107,7 @@ namespace BALL
 		///	Computes the most efficient way to calculate the non-bonded atom pairs
 		virtual MolmecSupport::PairListAlgorithmType
 			determineMethodOfAtomPairGeneration()
-			throw();
+			;
 
 		///
 		const ForceField::PairVector& getAtomPairs() const { return atom_pair_vector_;}

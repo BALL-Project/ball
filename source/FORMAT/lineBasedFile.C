@@ -14,7 +14,7 @@ namespace BALL
 {
 
 	LineBasedFile::LineBasedFile()
-		throw()
+		
 		:	File(),
 			line_number_(0),
 			trim_whitespaces_(false)
@@ -57,12 +57,12 @@ namespace BALL
 		return *this;
 	}
 
-	bool LineBasedFile::operator == (const LineBasedFile& f)  throw()
+	bool LineBasedFile::operator == (const LineBasedFile& f)  
 	{
 		return File::operator == (f);
 	}
 
-	bool LineBasedFile::operator != (const LineBasedFile& f)  throw()
+	bool LineBasedFile::operator != (const LineBasedFile& f)  
 	{
 		return !(File::operator == (f));
 	}
@@ -202,7 +202,7 @@ namespace BALL
 	}
 
 	void LineBasedFile::clear()
-		throw()
+		
 	{
 		line_ = "";
 		line_number_ = 0;
@@ -231,7 +231,7 @@ namespace BALL
 	}
 
 	Index LineBasedFile::switchString(const vector<String>& data)
-		const throw()
+		const 
 	{
 		for (Index i = 0; i < (Index) data.size(); i++)
 		{
@@ -244,13 +244,13 @@ namespace BALL
 	}
 
 	bool LineBasedFile::startsWith(const String& text)
-		const throw()
+		const 
 	{
 		return line_.hasPrefix(text);
 	}
 
 	bool LineBasedFile::has(const String& text) 
-		const throw()
+		const 
 	{
 		return line_.hasSubstring(text);
 	}
@@ -285,13 +285,13 @@ namespace BALL
 	}
 
 	void LineBasedFile::enableTrimWhitespaces(bool state)
-		throw()
+		
 	{
 		trim_whitespaces_ = state;
 	}
 
 	bool LineBasedFile::trimWhiteSpacesEnabled() const
-		throw()
+		
 	{
 		return trim_whitespaces_;
 	}

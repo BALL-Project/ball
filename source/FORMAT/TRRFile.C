@@ -14,7 +14,7 @@ using namespace std;
 namespace BALL
 {
   TRRFile::TRRFile()
-		throw()
+		
 		:TrajectoryFile(),
 		 header_(),
 		 precision_(4),
@@ -46,7 +46,7 @@ namespace BALL
 	}
 
 	TRRFile::TRRFile(const String& name, File::OpenMode open_mode)
-		throw()
+		
 		: TrajectoryFile(name, open_mode),
 			header_(),
 			precision_(4),
@@ -66,14 +66,14 @@ namespace BALL
 	}
 
 	TRRFile::~TRRFile()
-		throw()
+		
 	{
 		close();
 		clear();
 	}
 
 	const TRRFile& TRRFile::operator = (const TRRFile& file)
-		throw()
+		
 	{
 		TrajectoryFile::operator = (file);
 		header_ = file.header_;
@@ -90,7 +90,7 @@ namespace BALL
 	}
 
 	void TRRFile::clear()
-		throw()
+		
 	{
 		header_ = TRRHeader();
 		precision_ = 4;
@@ -105,7 +105,7 @@ namespace BALL
 	}
 
 	bool TRRFile::operator == (const TRRFile& file) const
-		throw()
+		
 	{
 		return ((TrajectoryFile::operator == (file)) && (timestep_index_ == file.timestep_index_)
 						&& (timestep_ == file.timestep_) && (precision_ == file.precision_)
@@ -113,37 +113,37 @@ namespace BALL
 	}
 
 	bool TRRFile::hasVelocities() const
-		throw()
+		
 	{
 		return has_velocities_;
 	}
 
 	void TRRFile::setVelocityStorage(bool storage)
-		throw()
+		
 	{
 		has_velocities_ = storage;
 	}
 
 	bool TRRFile::hasForces() const
-		throw()
+		
 	{
 		return has_forces_;
 	}
 
 	void TRRFile::setForceStorage(bool storage)
-		throw()
+		
 	{
 		has_forces_ = storage;
 	}
 
 	Size TRRFile::getPrecision() const
-		throw()
+		
 	{
 		return precision_;
 	}
 
 	bool TRRFile::setPrecision(const Size newprecision)
-		throw()
+		
 	{
 		if ((newprecision == 4) || (newprecision == 8))
 		{
@@ -155,37 +155,37 @@ namespace BALL
 	}
 
 	float TRRFile::getTimestep() const
-		throw()
+		
 	{
 		return timestep_;
 	}
 
 	void TRRFile::setTimestep(float timestep)
-		throw()
+		
 	{
 		timestep_ = timestep;
 	}
 
 	Vector3 TRRFile::getBoundingBoxX() const
-		throw()
+		
 	{
 		return box1_;
 	}
 
 	Vector3 TRRFile::getBoundingBoxY() const
-		throw()
+		
 	{
 		return box2_;
 	}
 
 	Vector3 TRRFile::getBoundingBoxZ() const
-		throw()
+		
 	{
 		return box3_;
 	}
 
 	void TRRFile::setBoundingBox(const Vector3& x, const Vector3& y, const Vector3& z)
-		throw()
+		
 	{
 		box1_ = x;
 		box2_ = y;
@@ -193,7 +193,7 @@ namespace BALL
 	}
 
 	bool TRRFile::writeNextHeader(const TRRHeader& header)
-		throw()
+		
 	{
 		Size i;
 
@@ -226,7 +226,7 @@ namespace BALL
 	}
 
 	bool TRRFile::readNextHeader(TRRHeader &header)
-		throw()
+		
 	{
 		Size i;
 
@@ -303,7 +303,7 @@ namespace BALL
 
 
 	bool TRRFile::append(const SnapShot& snapshot)
-		throw()
+		
 	{
 		Size noa = snapshot.getNumberOfAtoms();
 		header_.number_of_atoms = noa;
@@ -475,7 +475,7 @@ namespace BALL
 	}
 
 	bool TRRFile::read(SnapShot& snapshot)
-		throw()
+		
 	{
  		if (!readNextHeader(header_)) return false;
 
@@ -672,7 +672,7 @@ namespace BALL
 	}
 
 	TRRFile& TRRFile::operator >> (SnapShotManager& ssm)
-		throw()
+		
 	{
 			System S = *(ssm.getSystem());
 			SnapShot sn;
@@ -709,7 +709,7 @@ namespace BALL
 	}
 
 	bool TRRFile::init()
-		throw()
+		
 	{
 		if (sizeof(Size) != 4)
 		{

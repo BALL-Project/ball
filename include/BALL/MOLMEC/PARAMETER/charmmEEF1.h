@@ -69,19 +69,19 @@ namespace BALL
 
 		/**	Default constructor.  
 		*/
-		CharmmEEF1() throw();
+		CharmmEEF1() ;
 
 		/** Copy constructor 
 		*/
-		CharmmEEF1(const CharmmEEF1& charmm_EEF1) throw();
+		CharmmEEF1(const CharmmEEF1& charmm_EEF1) ;
 
 		/**	Destructor.  
 		*/
-		virtual ~CharmmEEF1() throw();
+		virtual ~CharmmEEF1() ;
 
 		/**	Clear method.  
 		*/
-		virtual void clear() throw();
+		virtual void clear() ;
 
 		//@}
 
@@ -92,27 +92,27 @@ namespace BALL
 				fast and easy acces this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, 
-				const String& section_name) throw();
+				const String& section_name) ;
 
 		/** ?????
 		*/
 		virtual bool extractSection(Parameters& parameters, 
-				const String& section_name) throw();
+				const String& section_name) ;
 
 		/** Queries whether a parameter set is defined for the given atom type.
 		*/
-		bool hasParameters(Atom::Type I) const throw();
+		bool hasParameters(Atom::Type I) const ;
 		
 		/**	Returns the parameters for a given atom type combination.
 		*/
-		CharmmEEF1::Values getParameters(Atom::Type I) const throw();
+		CharmmEEF1::Values getParameters(Atom::Type I) const ;
 		
 		/**	Assign the parameters for a given atom type combination.
 				If no parameters are defined for this combination, false is
 				returned and nothing is changed.
 		*/
 		bool assignParameters(CharmmEEF1::Values& parameters, Atom::Type I)
-			const throw();
+			const ;
 
 		/** @name Assignment 
 		*/
@@ -120,7 +120,7 @@ namespace BALL
 
 		/** Assignment operator 
 		*/
-		const CharmmEEF1& operator = (const CharmmEEF1& charmm_EEF1) throw();
+		const CharmmEEF1& operator = (const CharmmEEF1& charmm_EEF1) ;
 
 		//@}
 		/** @name Predicates 
@@ -129,7 +129,7 @@ namespace BALL
 
 		/** Equality operator 
 		*/
-		bool operator == (const CharmmEEF1& charmm_EEF1) const throw();
+		bool operator == (const CharmmEEF1& charmm_EEF1) const ;
 
 		//@}
 

@@ -147,12 +147,12 @@ namespace BALL
 		{
 			public:
 			CannotWrite(const char* file, int line, const String& filename)
-				throw();
+				;
 
-			~CannotWrite()
+			~CannotWrite() 
 				throw();
 			String getFilename() const
-				throw();
+				;
 
 			protected:
 			std::string filename_;
@@ -251,7 +251,7 @@ namespace BALL
 		/** Default constructor.
 		*/
 		File()
-			throw();
+			;
 
 		/** Construct new File object from the file <b>  name </b> and open the file.
 				@param  name the name of the file to be opend
@@ -273,11 +273,11 @@ namespace BALL
 				The file is closed.
 		*/
 		virtual ~File()
-			throw();
+			;
 
 		/** Clear the File object.
 		*/
-		virtual void clear() throw();
+		virtual void clear() ;
 		//@}
 
 		/**	@name	Assignment 
@@ -289,7 +289,7 @@ namespace BALL
 				The file is not opend.
 		*/
 		const File& operator = (const File& file)
-			throw();
+			;
 
 		//@}
 
@@ -324,24 +324,24 @@ namespace BALL
 		/**	Close the file.
 		*/
 		void close()
-			throw();
+			;
 
 		/**	Return the name of the file.
 				@return String the name of the file
 		*/
 		const String& getName()
-			const	throw();
+			const	;
 		
 		/** Close the file and point to an other file.
 				@param  name the new file
 		*/
 		void setName(const String& name)
-			throw();
+			;
 
 		/**
 		*/
 		const String& getOriginalName() const
-			throw();
+			;
 
 		/**	Return the size of the file.
 				If the file does not exist, 0 is returned.
@@ -361,7 +361,7 @@ namespace BALL
 				@return int the open mode
 		*/
 		File::OpenMode getOpenMode()
-			const	throw();
+			const	;
 		
 		/**	Return the filetype of a given file.
 				@param name the name of the file.
@@ -419,13 +419,13 @@ namespace BALL
 				@return bool true if the file could be removed
 		*/
 		static bool remove(String name)
-			throw();
+			;
 
 		/**	Remove the file.
 				@return bool true if the file could be removed
 		*/
 		bool remove()
-			throw();
+			;
 
 		/**	Rename a file.
 				@param old_path the path and name of the file to be renamed
@@ -466,7 +466,7 @@ namespace BALL
 				@return bool true if a temporary filename could be found
 		*/
 		static bool createTemporaryFilename(String& temporary)
-			throw();
+			;
 
     /** Return the stream associated with this file.
 				Implemented just for convenience.
@@ -523,34 +523,34 @@ namespace BALL
 				Two File objects are equal if they point to the same canonized filename.
 		*/
 		bool operator == (const File& file)
-			const	throw();
+			const	;
 		
 		/**	Inequality comparison operator.
 				Two File objects are inequal if they point not to the same canonized filename.
 		*/
 		bool operator != (const File& file)
-			const	throw();
+			const	;
 
 		/**	Test if the file is opend.
 				The standard constructor opens the file.
 				@return bool true if the file is closed
 		*/
 		bool isOpen()
-			const	throw();
+			const	;
 
 		/**	Test if the file is closed.
 				The standard constructor opens the file.
 				@return bool true if the file is closed
 		*/
 		bool isClosed()
-			const	throw();
+			const	;
 
 		/**	Test if a given file can be accessed.
 				@param name the name of the file to be tested
 				@return bool true if the file can be accessed
 		*/
 		static bool isAccessible(String name)
-			throw ();
+			;
 
 		/**	Test if the file can be accessed.
 				@return bool true if the file can be accessed
@@ -617,7 +617,7 @@ namespace BALL
 				@return bool true if the file is valid
 		*/
 		bool isValid()
-			const	throw();
+			const	;
 
 		//@}
 
@@ -656,11 +656,11 @@ namespace BALL
 
 		/// Default constructor
 		BinaryFileAdaptor()
-			throw();
+			;
 
 		/// Detailed constructor
 		BinaryFileAdaptor(const T& data, bool swap_endian = false)
-			throw();
+			;
 
 		//@}
 		///@name Accessors
@@ -668,27 +668,27 @@ namespace BALL
 
 		/// Set the swap_endian flag
 		void setSwapEndian(bool swap_endian)
-			throw();
+			;
 
 		/// return the swap_endian flag
 		bool getSwapEndian() const
-			throw();
+			;
 
 		/** Sets the member <tt>data</tt> to the desired value.
 				@param data data of type T
 		*/
 		void setData(const T& data)
-			throw();
+			;
 
 		/** Returns a const reference to the data stored in the adaptor
 		*/
 		const T& getData() const
-			throw();
+			;
 
 		/** Returns a mutable reference to the data stored in the adaptor
 				*/
 		T& getData()
-			throw();
+			;
 
 		//@}
 
@@ -704,7 +704,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	BinaryFileAdaptor<T>::BinaryFileAdaptor()
-		throw()
+		
 		: data_(),
 			swap_endian_(false)
 	{
@@ -713,7 +713,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	BinaryFileAdaptor<T>::BinaryFileAdaptor(const T& data, bool swap_endian)
-		throw()
+		
 		: data_(data),
 			swap_endian_(swap_endian)
 	{
@@ -722,7 +722,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void BinaryFileAdaptor<T>::setSwapEndian(bool swap_endian)
-		throw()
+		
 	{
 		swap_endian_ = swap_endian;
 	}
@@ -730,7 +730,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	bool BinaryFileAdaptor<T>::getSwapEndian() const
-		throw()
+		
 	{
 		return swap_endian_;
 	}
@@ -738,7 +738,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void BinaryFileAdaptor<T>::setData(const T& data)
-		throw()
+		
 	{
 		data_ = data;
 	}
@@ -746,7 +746,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	const T& BinaryFileAdaptor<T>::getData() const 
-		throw()
+		
 	{
 		return data_;
 	}
@@ -754,7 +754,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	T& BinaryFileAdaptor<T>::getData()
-		throw()
+		
 	{
 		return data_;
 	}

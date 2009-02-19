@@ -35,7 +35,7 @@ namespace BALL
 
 
 	void Parameters::clear()
-		throw()
+		
 	{
 		// clean up everything
 		INI_file_.clear();

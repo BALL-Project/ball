@@ -36,7 +36,7 @@ namespace BALL
 
 		/// Default constructor
 		DSN6File()
-			throw();
+			;
 
 		/// Copy constructor
 		DSN6File(const DSN6File& file)
@@ -44,11 +44,11 @@ namespace BALL
 
 		/// Detailed constructor
 		DSN6File(const String& name, File::OpenMode open_mode = std::ios::in)
-			throw();
+			;
 
 		/// Destructor
 		virtual ~DSN6File()
-			throw();
+			;
 
 		//@}
 		/** @name Assignment
@@ -57,11 +57,11 @@ namespace BALL
 
 		/// Assignment operator
 		const DSN6File& operator = (const DSN6File& file)
-			throw();
+			;
 
 		/// Clear method
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/** @name Predicates
@@ -70,11 +70,11 @@ namespace BALL
 
 		/// Equality operator
 		bool operator == (const DSN6File& file) const
-			throw();
+			;
 
 		///
 		bool isSwappingBytes() const
-			throw();
+			;
 
 		//@}
 		/// @name Public methods for file handling
@@ -89,17 +89,17 @@ namespace BALL
 				Return true if the header could be read successfully, false ow.
 		*/
 		virtual bool readHeader()
-			throw();
+			;
 
 		/** Read the file into a RegularData3D field. **/
 		virtual bool read(RegularData3D& map)
-			throw();
+			;
 
 		/** Write a header
 				Return true if the header could be written successfully, false ow.
 		*/
 		virtual bool writeHeader()
-			throw();
+			;
 
 		//@}
 		/** @name Accessors 
@@ -111,10 +111,10 @@ namespace BALL
 		protected:
 
 			short int readHeaderValue_(char* header, Position pos)
-				throw();
+				;
 
 			void convertBrick_(char* brick)
-				throw();
+				;
 
 			/// a flag indicating that we have to swap bytes when reading header values
 			bool swap_bytes_;

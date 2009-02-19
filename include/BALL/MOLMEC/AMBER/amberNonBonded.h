@@ -52,22 +52,22 @@ namespace BALL
 		/**	Default constructor.
 		*/
 		AmberNonBonded()
-			throw();
+			;
 
 		/**	Constructor.
 		*/
 		AmberNonBonded(ForceField& force_field)
-			throw();
+			;
 
 		/**	Copy constructor
 		*/
 		AmberNonBonded(const AmberNonBonded& amber_non_bonded)
-			throw();
+			;
 
 		/**	Destructor.
 		*/
 		virtual ~AmberNonBonded()
-			throw();
+			;
 		//@}
 
 		/** Assignment
@@ -77,12 +77,12 @@ namespace BALL
 		/** Assignment operator
 		*/
 		const AmberNonBonded& operator = (const AmberNonBonded& anb)
-			throw();
+			;
 
 		/** Clear method
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/** Predicates
@@ -92,7 +92,7 @@ namespace BALL
 		/** Equality operator
 		*/
 		bool operator == (const AmberNonBonded& anb)
-			throw();
+			;
 
 		//@}
 		/**	@name	Setup Methods	
@@ -112,12 +112,12 @@ namespace BALL
 		/**	Calculates and returns the component's energy.
 		*/
 		virtual double updateEnergy()
-			throw();
+			;
 
 		/**	Calculates and returns the component's forces.
 		*/
 		virtual void updateForces()
-			throw();
+			;
 
 		/**	Update the pair list.
 				This method is called by the force field whenever
@@ -130,12 +130,12 @@ namespace BALL
 		/**	Return the electrostatic energy.
 		*/
 		virtual double getElectrostaticEnergy() const
-			throw();
+			;
 
 		/**	Return the Van-der-Waals energy.
 		*/
 		virtual double getVdwEnergy() const
-			throw();
+			;
 
 		//@}
 		/**	@name Neighbourhood and Parameter calculations
@@ -146,7 +146,7 @@ namespace BALL
 		*/
 		virtual MolmecSupport::PairListAlgorithmType
 			determineMethodOfAtomPairGeneration()
-			throw();
+			;
 
 		/**	Build a vector of non-bonded atom pairs with the vdw parameters
 		*/

@@ -15,7 +15,7 @@ using namespace std;
 namespace BALL 
 {
 
-	RuleEvaluator::RuleEvaluator() throw()
+	RuleEvaluator::RuleEvaluator() 
 		:	prefix_(),
 			rule_map_(),
 			valid_(false)
@@ -23,7 +23,7 @@ namespace BALL
 	}
 
 
-	RuleEvaluator::RuleEvaluator(INIFile& file, const String& prefix) throw()
+	RuleEvaluator::RuleEvaluator(INIFile& file, const String& prefix) 
 		:	prefix_(),
 			rule_map_(),
 			valid_(false)
@@ -32,7 +32,7 @@ namespace BALL
 	}
 
 
-	RuleEvaluator::RuleEvaluator(const RuleEvaluator& evaluator) throw()
+	RuleEvaluator::RuleEvaluator(const RuleEvaluator& evaluator) 
 		:	prefix_(evaluator.prefix_),
 			rule_map_(evaluator.rule_map_),
 			valid_(evaluator.valid_)
@@ -40,14 +40,14 @@ namespace BALL
 	}
 
 
-	RuleEvaluator::~RuleEvaluator() throw()
+	RuleEvaluator::~RuleEvaluator() 
 	{
 		clear();
 	}
 
 	
 	void RuleEvaluator::clear() 
-		throw()
+		
 	{
 		prefix_ = "";
 		rule_map_.clear();
@@ -56,20 +56,20 @@ namespace BALL
 	}
 	
 
-	const String& RuleEvaluator::getPrefix() const throw()
+	const String& RuleEvaluator::getPrefix() const 
 	{
 		return prefix_;
 	}
 
 
-	void RuleEvaluator::setPrefix(const String& prefix) throw()
+	void RuleEvaluator::setPrefix(const String& prefix) 
 	{
 		prefix_ = prefix;
 	}
 
 
 	bool RuleEvaluator::initialize
-		(INIFile& file, const String& prefix) throw()
+		(INIFile& file, const String& prefix) 
 	{
 		// destroy the old rules
 		rule_map_.clear();
@@ -107,7 +107,7 @@ namespace BALL
 
 
 	void RuleEvaluator::extractSection_(INIFile& file, const String& symbol)
-		throw()
+		
 	{
 		// assemble the section name
 		String section_name(prefix_ + ":" + symbol);
@@ -155,7 +155,7 @@ namespace BALL
 	}
 
 
-	String RuleEvaluator::operator () (const Atom& atom) const throw()
+	String RuleEvaluator::operator () (const Atom& atom) const 
 	{
 		// check whether we got a rule for this element
 		String symbol = atom.getElement().getSymbol();
@@ -207,7 +207,7 @@ namespace BALL
 
 
 	bool RuleEvaluator::operator == (const RuleEvaluator& evaluator) const
-		throw()
+		
 	{
 		return ((prefix_ == evaluator.prefix_)
 			&& (rule_map_ == evaluator.rule_map_)
@@ -216,7 +216,7 @@ namespace BALL
 
 
 	const RuleEvaluator& RuleEvaluator::operator = 
-		(const RuleEvaluator& evaluator) throw()
+		(const RuleEvaluator& evaluator) 
 	{
 		valid_ = evaluator.valid_;
 		prefix_ = evaluator.prefix_;
@@ -226,14 +226,14 @@ namespace BALL
 	}
 
 
-	bool RuleEvaluator::isValid() const throw()
+	bool RuleEvaluator::isValid() const 
 	{
 		return valid_;
 	}
 
 
 	void RuleEvaluator::dump(std::ostream& /* s */, Size /* indent_depth */)
-		const throw()
+		const 
 	{
 		// ?????
 	}

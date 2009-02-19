@@ -20,12 +20,12 @@ namespace BALL
 	{
 	}
 
-	QuadraticBondStretch::~QuadraticBondStretch() throw()
+	QuadraticBondStretch::~QuadraticBondStretch() 
 	{
 		clear();
 	}
 
-	void QuadraticBondStretch::clear() throw()
+	void QuadraticBondStretch::clear() 
 	{
 		// clear allocated parameter fields
 		delete [] k_;

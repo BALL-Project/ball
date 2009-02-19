@@ -83,11 +83,11 @@ namespace BALL
 
 		/**	Destructor.
 		*/
-		virtual ~ResidueTorsions() throw();
+		virtual ~ResidueTorsions() ;
 
 		/**	Clear method.  
 		*/
-		virtual void clear() throw();
+		virtual void clear() ;
 
 		//@}
 		/**	@name	Accessors

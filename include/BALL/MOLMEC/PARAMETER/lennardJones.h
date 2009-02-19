@@ -86,19 +86,19 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		LennardJones() throw();
+		LennardJones() ;
 
 		/** Copy constructor. 
 		*/
-		LennardJones(const LennardJones& lj) throw();
+		LennardJones(const LennardJones& lj) ;
 
 		/**	Destructor.
 		*/
-		virtual ~LennardJones() throw();
+		virtual ~LennardJones() ;
 
 		/**	Clear method. 
 		*/
-		virtual void clear() throw();
+		virtual void clear() ;
 
 		//@}
 		
@@ -109,26 +109,26 @@ namespace BALL
 				datastructures for fast and easy access to this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, 
-				const String& section_name) throw();
+				const String& section_name) ;
 
 		///
 		virtual bool extractSection(Parameters& parameters, 
-				const String& section_name) throw();
+				const String& section_name) ;
 
 		/** Queries whether a parameter set is defined for the given atom types.
 		*/
-		bool hasParameters(Atom::Type I, Atom::Type J) const throw();
+		bool hasParameters(Atom::Type I, Atom::Type J) const ;
 		
 		/**	Returns the parameters for a given atom type combination.
 		*/
-		Values getParameters(Atom::Type I, Atom::Type J) const throw();
+		Values getParameters(Atom::Type I, Atom::Type J) const ;
 		
 		/**	Assign the parameters for a given atom type combination.
 				If no parameters are defined for this combination, false is
 				returned and nothing is changed.
 		*/
 		bool assignParameters(Values& parameters, Atom::Type I, Atom::Type J)
-			const throw();
+			const ;
 
 		/** @name Assignment 
 		*/
@@ -136,7 +136,7 @@ namespace BALL
 
 		/** Assignment operator 
 		*/
-		const LennardJones& operator = (const LennardJones& lj) throw();
+		const LennardJones& operator = (const LennardJones& lj) ;
 
 		//@}
 		/** @name Predicates 
@@ -145,7 +145,7 @@ namespace BALL
 
 		/** Equality operator 
 		*/
-		bool operator == (const LennardJones& lj) const throw();
+		bool operator == (const LennardJones& lj) const ;
 
 		//@}
 

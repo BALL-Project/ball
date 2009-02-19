@@ -42,7 +42,7 @@ namespace BALL
 	}
 
 	Bruker1DFile::~Bruker1DFile()
-		throw()
+		
 	{
 	}
 
@@ -130,7 +130,7 @@ namespace BALL
 
 
 	const Bruker1DFile& Bruker1DFile::operator = (const Bruker1DFile& file)
-		throw()
+		
 	{
 		min_  = file.min_;
 		max_  = file.max_;

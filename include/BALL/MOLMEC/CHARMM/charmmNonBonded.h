@@ -60,22 +60,22 @@ namespace BALL
 		/**	Default constructor.
 		*/
 		CharmmNonBonded()
-			throw();
+			;
 
 		/**	Constructor.
 		*/
 		CharmmNonBonded(ForceField& force_field)
-			throw();
+			;
 
 		/**	Copy constructor
 		*/
 		CharmmNonBonded(const CharmmNonBonded& charmm_non_bonded)
-			throw();
+			;
 
 		/**	Destructor.
 		*/
 		virtual ~CharmmNonBonded()
-			throw();
+			;
 
 		//@}
 		/** @name Assignment
@@ -86,12 +86,12 @@ namespace BALL
 		*/
 		const CharmmNonBonded& operator = 
 			(const CharmmNonBonded& charmm_non_bonded)
-			throw();
+			;
 
 		/** Clear method
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/** @name Predicates
@@ -101,7 +101,7 @@ namespace BALL
 		/** Equality operator
 		*/
 		bool operator == (const CharmmNonBonded& charmm_non_bonded)
-			throw();
+			;
 
 		//@}
 		/**	@name	Setup Methods	
@@ -121,27 +121,27 @@ namespace BALL
 		/**	Calculates and returns the component's energy.
 		*/
 		virtual double updateEnergy()
-			throw();
+			;
 
 		/**	Calculates and returns the component's forces.
 		*/
 		virtual void updateForces()
-			throw();
+			;
 
 		/**	Return the electrostatic energy.
 		*/
 		virtual double getElectrostaticEnergy() const
-			throw();
+			;
 
 		/**	Return the Van-der-Waals energy.
 		*/
 		virtual double getVdwEnergy() const
-			throw();
+			;
 
 		/** Return the solvation energy.
 		*/
 		virtual double getSolvationEnergy() const
-			throw();
+			;
 
 		//@}
 		/**	@name Neighbourhood and Parameter calculations
@@ -152,7 +152,7 @@ namespace BALL
 		*/
 		virtual MolmecSupport::PairListAlgorithmType	
 			determineMethodOfAtomPairGeneration()
-			throw();
+			;
 
 		/**	Build a vector of non-bonded atom pairs with the vdw parameters
 		*/

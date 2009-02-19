@@ -22,7 +22,7 @@ namespace BALL
 
 	// default constructor
 	CharmmNonBonded::CharmmNonBonded()
-		throw()
+		
 		:	ForceFieldComponent(),
 			electrostatic_energy_(0.0),
 			vdw_energy_(0.0),
@@ -57,7 +57,7 @@ namespace BALL
 
 	// constructor
 	CharmmNonBonded::CharmmNonBonded(ForceField& force_field)
-		throw()
+		
 		:	ForceFieldComponent(force_field),
 			electrostatic_energy_(0.0),
 			vdw_energy_(0.0),
@@ -92,7 +92,7 @@ namespace BALL
 
 	// copy constructor
 	CharmmNonBonded::CharmmNonBonded(const CharmmNonBonded&	component)
-		throw()
+		
 		:	ForceFieldComponent(component),
 			electrostatic_energy_(component.electrostatic_energy_),
 			vdw_energy_(component.vdw_energy_),
@@ -127,7 +127,7 @@ namespace BALL
 
 	// destructor
 	CharmmNonBonded::~CharmmNonBonded()
-		throw()
+		
 	{
 		clear();
 	}
@@ -135,7 +135,7 @@ namespace BALL
 	// assignemnt
 	const CharmmNonBonded& CharmmNonBonded::operator = 
 		(const CharmmNonBonded& charmm_non_bonded)
-		throw()
+		
 	{
 		ForceFieldComponent::operator = (charmm_non_bonded);
 
@@ -173,7 +173,7 @@ namespace BALL
 
 	// clear function
 	void CharmmNonBonded::clear()
-		throw()
+		
 	{
 		electrostatic_energy_ = 0.0;
 		vdw_energy_ = 0.0;
@@ -185,7 +185,7 @@ namespace BALL
 
 
 	bool CharmmNonBonded::operator == (const CharmmNonBonded& cnb)
-		throw()
+		
 	{
 		return (this == &cnb);
 	}
@@ -198,7 +198,7 @@ namespace BALL
 
 	MolmecSupport::PairListAlgorithmType	
 		CharmmNonBonded::determineMethodOfAtomPairGeneration()
-		throw()
+		
 	{
 		MolmecSupport::PairListAlgorithmType algorithm_type 
 			= MolmecSupport::HASH_GRID;
@@ -613,7 +613,7 @@ namespace BALL
 
 	BALL_INLINE 
 	void CHARMMcalculateMinimumImage(Vector3& difference, Vector3& period, Vector3& half_period)
-		throw()
+		
 	{
 		if (difference.x < -half_period.x) 
 		{	
@@ -665,7 +665,7 @@ namespace BALL
 		 double& electrostatic_energy,
 		 double& vdw_energy,
 		 double& solvation_energy)
-		throw()
+		
 	{
 		Vector3 difference(it->atom1->position - it->atom2->position);
 
@@ -779,7 +779,7 @@ namespace BALL
 		 bool use_selection,		
 		 bool use_periodic_boundary, 
 		 bool use_dist_depend)
-		throw()
+		
 	{
 		// calculate the difference vector between the two atoms
 		Vector3 direction(it->atom1->position - it->atom2->position);
@@ -1040,7 +1040,7 @@ namespace BALL
 
 	// This method calculates the current energy resulting from non-bonded interactions 
 	double CharmmNonBonded::updateEnergy()
-		throw()
+		
 	{
 		// Calculate squared cut_off values
 		double	cut_off_vdw_2 = SQR(cut_off_vdw_);
@@ -1244,7 +1244,7 @@ namespace BALL
 		solvation_
 
 	void CharmmNonBonded::updateForces()
-		throw()
+		
 	{
 		// Define variables for the squared cut_offs, the unit factors and so on
 		double cut_off_electrostatic_2 = SQR(cut_off_electrostatic_);
@@ -1407,19 +1407,19 @@ namespace BALL
 
 
 	double CharmmNonBonded::getElectrostaticEnergy() const
-		throw()
+		
 	{
 		return electrostatic_energy_;
 	}
 
 	double CharmmNonBonded::getVdwEnergy() const
-		throw()
+		
 	{
 		return vdw_energy_;
 	}
  
 	double CharmmNonBonded::getSolvationEnergy() const
-		throw()
+		
 	{
 		return solvation_energy_;
 	}

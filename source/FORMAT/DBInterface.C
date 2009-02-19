@@ -38,7 +38,7 @@ namespace BALL
 	const String DBInterface::BALL_DEFAULT_DATABASE_NAME = "structures";
 	const String DBInterface::BALL_DEFAULT_DATABASE_SECTIONNAME = "StructureDatabase";
 
-	DBInterface::InvalidQuery::InvalidQuery(const char* file, int line, const String& s) throw()
+	DBInterface::InvalidQuery::InvalidQuery(const char* file, int line, const String& s) 
 		:	Exception::GeneralException(file, line, "DBInterface::InvalidQuery", ""),
 			query_(s)										
 	{
@@ -48,7 +48,7 @@ namespace BALL
 		Exception::globalHandler.setMessage(message_);
 	}
 
-	DBInterface::NotConnected::NotConnected(const char* file, int line, const String& s) throw()
+	DBInterface::NotConnected::NotConnected(const char* file, int line, const String& s) 
 		:	Exception::GeneralException(file, line, "DBInterface::NotConnected", ""),
 			query_(s)										
 	{
@@ -58,7 +58,7 @@ namespace BALL
 		Exception::globalHandler.setMessage(message_);
 	}
 
-	DBInterface::InconsistentTopology::InconsistentTopology(const char* file, int line, const String& s) throw()
+	DBInterface::InconsistentTopology::InconsistentTopology(const char* file, int line, const String& s) 
 		:	Exception::GeneralException(file, line, "DBInterface::InconsistentTopology", ""),
 			query_(s)										
 	{

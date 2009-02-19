@@ -11,22 +11,22 @@ using namespace std;
 
 namespace BALL
 {
-		SCWRLRotamerFile::SCWRLRotamerFile() throw()
+		SCWRLRotamerFile::SCWRLRotamerFile() 
 			:	LineBasedFile()
 		{
 		}
 
-		SCWRLRotamerFile::SCWRLRotamerFile(const SCWRLRotamerFile& file) throw()
+		SCWRLRotamerFile::SCWRLRotamerFile(const SCWRLRotamerFile& file) 
 			: LineBasedFile(file)
 		{
 		}
 
-		SCWRLRotamerFile::SCWRLRotamerFile(const String& name, File::OpenMode open_mode) throw()
+		SCWRLRotamerFile::SCWRLRotamerFile(const String& name, File::OpenMode open_mode) 
 			:	LineBasedFile(name, open_mode)
 		{
 		}
 
-		SCWRLRotamerFile::~SCWRLRotamerFile() throw()
+		SCWRLRotamerFile::~SCWRLRotamerFile() 
 		{
 		}
 
