@@ -54,25 +54,31 @@ namespace BALL
 			}
 
 			Vector3 direction, light_position, attenuation;
-			Size current_light=0;
+
+			Size current_light=0; 
+			Size num_lights=lights_.size();
+
 			List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
 
 			for (; it != stage_->getLightSources().end(); ++it, ++current_light)
 			{
-				RTfact::Remote::RTLightHandle light; 
-				switch (it->getType())
+				if (current_light >= num_lights)
 				{
-					case LightSource::DIRECTIONAL:
-						light = m_renderer.createLight("DirectionalLight"); 
-						break;
-					case LightSource::POSITIONAL:
-						light = m_renderer.createLight("PointLight"); 
-						break;
-					default:
-						std::cerr << "Light source type not supported!" << std::endl;
-						break;
+					RTfact::Remote::RTLightHandle light; 
+					switch (it->getType())
+					{
+						case LightSource::DIRECTIONAL:
+							light = m_renderer.createLight("DirectionalLight"); 
+							break;
+						case LightSource::POSITIONAL:
+							light = m_renderer.createLight("PointLight"); 
+							break;
+						default:
+							std::cerr << "Light source type not supported!" << std::endl;
+							break;
+					}
+					lights_.push_back(light);
 				}
-				lights_.push_back(light);
 
 				switch (it->getType())
 				{
