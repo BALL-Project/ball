@@ -1,6 +1,14 @@
 <ui version="4.0" >
  <class>PreferencesData</class>
  <widget class="QDialog" name="PreferencesData" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>850</width>
+    <height>470</height>
+   </rect>
+  </property>
   <property name="sizePolicy" >
    <sizepolicy>
     <hsizetype>0</hsizetype>
@@ -70,6 +78,9 @@
     <enum>QFrame::Plain</enum>
    </property>
    <property name="lineWidth" >
+    <number>0</number>
+   </property>
+   <property name="currentIndex" >
     <number>0</number>
    </property>
    <widget class="QWidget" name="WStackPage" >
