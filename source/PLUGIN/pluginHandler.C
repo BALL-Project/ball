@@ -6,6 +6,10 @@
 namespace BALL
 {
 
+	PluginHandler::~PluginHandler()
+	{
+	}
+
 	bool PluginHandler::isRunning(BALLPlugin* plugin) const
 	{
 		QReadLocker locker(&mutex_);
