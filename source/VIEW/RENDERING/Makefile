@@ -12,20 +12,20 @@ DIRECTORY=VIEW/RENDERING
 THISLIB=$(LIBNAME)
 
 VIEW_RENDERING_SUBDIRS=\
-	RENDERERS
+#	RENDERERS
 
 CPP_SOURCES=\
 	glDisplayList.C\
 	glRenderer.C\
-	glRenderWindow.C\
 	renderer.C\
-	renderWindow.C\
-	pixelFormat.C\
 	POVRenderer.C\
 	STLRenderer.C\
 	VRMLRenderer.C\
-	raytracingRenderer.C\
-	vertexBuffer.C
+	vertexBuffer.C\
+	glRenderWindow.C\
+	renderWindow.C\
+	pixelFormat.C\
+	raytracingRenderer.C
 
 include ../../common.mak
 -include .Dependencies
