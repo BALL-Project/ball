@@ -69,7 +69,7 @@ namespace BALL
 		/**	Destructor
 		*/
 		virtual ~AutoDeletable()
-			throw();
+			;
 
 		/**	<b>new</b> operator.
 				This operator allocates storage for the object and remembers its
@@ -79,7 +79,7 @@ namespace BALL
 				identified.
 		*/
 		void* operator new(size_t size) 
-			throw();
+			;
 	
 		/**	<b>delete</b> operator.
 				This operator frees the space allocated for an Autodeletable
@@ -88,7 +88,7 @@ namespace BALL
 				new/delete do not appear in pairs.
 		*/
 		void operator delete(void* ptr) 
-			throw();
+			;
 	
 		/**	Placement <b>new</b> operator.
 				This operator allocates storage for the object and remembers its
@@ -98,7 +98,7 @@ namespace BALL
 				identified.
 		*/
 		void* operator new(size_t size, void* ptr)
-			throw();
+			;
 	
 		/**	Placement <b>delete</b> operator.
 				This operator frees the space allocated for an Autodeletable
@@ -107,7 +107,7 @@ namespace BALL
 				new/delete do not appear in pairs.
 		*/
 		void operator delete(void* ptr, void*)
-			throw();
+			;
 	
 		//@}
 	
@@ -122,7 +122,7 @@ namespace BALL
 				invoking <b>delete</b> on a static object may result in a crash.
 		*/
 		void setAutoDeletable(bool enable)
-			throw();
+			;
 
 		/* This is required for cleaning up in case we want to
 			 valgrind our stuff -- otherwise we get "still reachable"
@@ -142,7 +142,7 @@ namespace BALL
 				should not call the destructor for objects that return <b>true</b>.
 		*/
 		bool isAutoDeletable() const
-			throw();
+			;
 		//@}
 
 
@@ -153,12 +153,12 @@ namespace BALL
 				AutoDeletable objects by themselves.
 		*/
 		AutoDeletable()
-			throw();
+			;
 
 		/*_ Copy constructor.
 		*/
 		AutoDeletable(const AutoDeletable& auto_deletable, bool deep = false)
-			throw();
+			;
 
 
 		private:

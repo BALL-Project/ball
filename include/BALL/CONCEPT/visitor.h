@@ -31,17 +31,17 @@ namespace BALL
 		/**	Default constructor
 		*/
 		Visitor()
-			throw();
+			;
 
 		/**	Copy constructor
 		*/
 		Visitor(const Visitor& visitor)
-			throw();
+			;
 
 		/**	Destructor
 		*/
 		virtual ~Visitor()
-			throw();
+			;
 
 		//@}
 
@@ -61,20 +61,20 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	Visitor<T>::Visitor()
-		throw()
+		
 	{
 	}
 
 	template <typename Host>
 	BALL_INLINE
 	Visitor<Host>::Visitor(const Visitor<Host>& /* visitor */)
-		throw()
+		
 	{
 	}
 
 	template <typename T>
 	Visitor<T>::~Visitor()
-		throw()
+		
 	{
 	}
 }

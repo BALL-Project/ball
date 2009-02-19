@@ -11,7 +11,7 @@ namespace BALL
 {
   
 	ObjectCreator::ObjectCreator()
-			throw()
+			
 		:
 		init_(false),
 		pm_()
@@ -19,7 +19,7 @@ namespace BALL
 	}
 
 	ObjectCreator::~ObjectCreator()
-			throw()
+			
 	{
 		#ifdef BALL_DEBUG
 			cout << "Destructing object " << (void *)this 
@@ -28,25 +28,25 @@ namespace BALL
 	}
 
 	void ObjectCreator::clear()
-			throw()
+			
 	{
 	}
 
 
 	void ObjectCreator::initPersistenceManager(TextPersistenceManager & /* pm */)
-			throw()
+			
 	{
 	}
 
 	Composite *ObjectCreator::convertObject(PersistentObject & /* po */)
-			throw()
+			
 	{
 		return (Composite *)0;
 	}
 
 #ifdef BALL_HAS_ASIO
 	Composite *ObjectCreator::operator() (TCPIOStream& tcp_iostream)
-			throw()
+			
 	{
 		// initialize the PersistenceManager only one times
 		if (init_ == false)

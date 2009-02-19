@@ -51,22 +51,22 @@ namespace BALL
 				Initialize with zero.
 		*/
 		PreciseTime()
-			throw();
+			;
 			
 		/**	Copy constructor
 		*/
 		PreciseTime(const PreciseTime& time)
-			throw();
+			;
 
 		/**	Detailed constructor
 		*/
 		PreciseTime(long secs, long usecs)
-			throw();
+			;
 			
 		/**	Destructor
 		*/
 		virtual ~PreciseTime()
-			throw();
+			;
 
 		//@}
 		/**	@name Constants.
@@ -85,22 +85,22 @@ namespace BALL
 		/** Assignment method
 		*/
 		void set(long secs, long usecs) 
-			throw();
+			;
 
 		/** Assignment method
 		*/
 		void set(const PreciseTime& time) 
-			throw();
+			;
 
 		/**	Assignment operator
 		*/
 		const PreciseTime& operator = (const PreciseTime& time) 
-			throw();
+			;
 
 		/**	Clear method
 		*/
 		virtual void clear() 
-			throw();
+			;
 
 		//@}
 		/**	@name Predicates
@@ -110,17 +110,17 @@ namespace BALL
 		/**	Greater than operator.
 		*/
 		bool operator < (const PreciseTime& time) const 
-			throw();
+			;
 
 		/**	Lesser than operator.
 		*/
 		bool operator > (const PreciseTime& time) const 
-			throw();
+			;
 
 		/**	Equality operator.
 		*/
 		bool operator == (const PreciseTime& time) const 
-			throw();
+			;
 
 		//@}
 		/**	@name Accessors 
@@ -130,18 +130,18 @@ namespace BALL
 		/**	Return the seconds since Jan. 1, 1970.
 		*/
 		long getSeconds() const 
-			throw();
+			;
 
 		/**	Return the microseconds.
 		*/
 		long getMicroSeconds() const 
-			throw();
+			;
 
 		/**	Return the current time.
 				@return PreciseTime the current time in seconds since Jan. 1, 1970
 		*/
 		static PreciseTime now() 
-			throw();
+			;
 
 		//@}
 
@@ -156,7 +156,7 @@ namespace BALL
         @param pm the persistence manager
     */
     void write(PersistenceManager& pm) const
-			throw();
+			;
 
     /** Persistent stream reading.
         This method reads the contents of a  \link PreciseTime PreciseTime \endlink  object from the
@@ -165,7 +165,7 @@ namespace BALL
         @param pm the persistence manager
     */
     bool read(PersistenceManager& pm)
-			throw();
+			;
 
 		//@}
  
@@ -198,12 +198,12 @@ namespace BALL
 		/** Default constructor
 		*/
 		TimeStamp()
-			throw();
+			;
 
 		/** Destructor
 		*/
 		virtual ~TimeStamp()
-			throw();
+			;
 
 		//@}
 		/**	@name	Predicates
@@ -213,27 +213,27 @@ namespace BALL
 		/**	Check the time stamp.
 		*/
 		bool isNewerThan(const PreciseTime& time) const 
-			throw();
+			;
 		
 		/**	Check the time stamp.
 		*/
 		bool isOlderThan(const PreciseTime& time) const 
-			throw();
+			;
 
 		/**	Check the time stamp.
 		*/
 		bool isNewerThan(const TimeStamp& stamp) const 
-			throw();
+			;
 		
 		/**	Check the time stamp.
 		*/
 		bool isOlderThan(const TimeStamp& stamp) const 
-			throw();
+			;
 
 		/** Equality operator
 		*/
 		bool operator == (const TimeStamp& stamp) const 
-			throw();
+			;
 		
 		//@}
 		/**	@name Accessors
@@ -247,13 +247,13 @@ namespace BALL
 				@param time the new time stamp (default =  \link PreciseTime::now PreciseTime::now \endlink )														
 		*/
 		virtual void stamp(const PreciseTime& time = PreciseTime::ZERO) 
-			throw();
+			;
 
 		/**	Return the time of last modification
 				@return the time stamp
 		*/
 		const PreciseTime& getTime() const 
-			throw();
+			;
 
 		//@}
 		/**	@name	Assignment
@@ -263,12 +263,12 @@ namespace BALL
 		/**	Assignment operator
 		*/
 		const PreciseTime& operator = (const PreciseTime& time) 
-			throw();
+			;
 
 		/**	Clear method
 		*/
 		virtual void clear() 
-			throw();
+			;
 
 		//@}
     /** @name Storable interface.
@@ -282,7 +282,7 @@ namespace BALL
         @param pm the persistence manager
     */
     void write(PersistenceManager& pm) const
-			throw();
+			;
 
     /** Persistent stream reading.
         This method reads the contents of a  \link TimeStamp TimeStamp \endlink  object from the
@@ -291,7 +291,7 @@ namespace BALL
         @param pm the persistence manager
     */
     bool read(PersistenceManager& pm)
-			throw();
+			;
 
 		//@}
 
@@ -310,13 +310,13 @@ namespace BALL
 	*/
 	BALL_EXPORT
 	std::ostream& operator << (std::ostream& os, const PreciseTime& time)
-		throw();
+		;
 
 	/**	Print the contents of a TimeStamp object to a stream.
 	*/
 	BALL_EXPORT
 	std::ostream& operator << (std::ostream& os, const TimeStamp& stamp)
-		throw();
+		;
 
 	//@}
 

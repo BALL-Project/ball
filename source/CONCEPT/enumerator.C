@@ -17,7 +17,7 @@ namespace BALL
 
 	EnumeratorIndex::IncompatibleIndex::IncompatibleIndex
 		(const char* file, int line)
-		throw()
+		
 		: Exception::GeneralException(file, line, "IncompatibleIndex", "")
 	{
 		message_ = "different enumerator moduli occured.";
@@ -27,7 +27,7 @@ namespace BALL
 
 
 	EnumeratorIndex::EnumeratorIndex()
-		throw()
+		
 		: vector<Position>(),
 			modulus_(),
 			base_multipliers_()
@@ -35,7 +35,7 @@ namespace BALL
 	}
 
 	EnumeratorIndex::~EnumeratorIndex()
-		throw()
+		
 	{
 	}
 
@@ -92,7 +92,7 @@ namespace BALL
 	}
 
 	const EnumeratorIndex& EnumeratorIndex::operator = (const EnumeratorIndex& rhs)
-		throw()
+		
 	{
 		std::vector<Position>::operator = (rhs);
 		modulus_ = rhs.modulus_;
@@ -145,13 +145,13 @@ namespace BALL
 	}
 
 	bool EnumeratorIndex::operator == (const EnumeratorIndex& rhs) const
-		throw()
+		
 	{
 		return (modulus_ == rhs.modulus_) && (static_cast<const vector<Position>&>(*this) == static_cast<const vector<Position>&>(rhs));
 	}
 
 	bool EnumeratorIndex::operator != (const EnumeratorIndex& rhs) const
-		throw()
+		
 	{
 		return (modulus_ != rhs.modulus_) || (static_cast<const vector<Position>&>(*this) != static_cast<const vector<Position>&>(rhs));
 	}

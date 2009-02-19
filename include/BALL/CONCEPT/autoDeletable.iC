@@ -5,7 +5,7 @@
 
 BALL_INLINE 
 AutoDeletable::AutoDeletable()
-	throw()
+	
 {
 	if (this == last_ptr_)
 	{
@@ -24,7 +24,7 @@ AutoDeletable::AutoDeletable()
 
 BALL_INLINE 
 AutoDeletable::AutoDeletable(const AutoDeletable&, bool /* deep */)
-	throw()
+	
 {
 	// autodeletable object cannot be copied by default
 	// it doesn't make sense!
@@ -46,20 +46,20 @@ AutoDeletable::AutoDeletable(const AutoDeletable&, bool /* deep */)
 
 BALL_INLINE 
 void AutoDeletable::operator delete (void* ptr) 
-	throw()
+	
 {
 	::operator delete(ptr);
 }
 
 BALL_INLINE 
 AutoDeletable::~AutoDeletable()
-	throw()
+	
 {
 }
 
 BALL_INLINE 
 void* AutoDeletable::operator new (size_t size) 
-	throw()
+	
 {
 	last_ptr_ = ::operator new(size);
 	return last_ptr_;
@@ -67,7 +67,7 @@ void* AutoDeletable::operator new (size_t size)
 
 BALL_INLINE 
 void* AutoDeletable::operator new (size_t size, void* ptr) 
-	throw()
+	
 {
 	last_ptr_ = ::operator new (size, ptr);
 	return last_ptr_;
@@ -75,7 +75,7 @@ void* AutoDeletable::operator new (size_t size, void* ptr)
 
 BALL_INLINE 
 void AutoDeletable::operator delete (void* ptr, void*)
-	throw()
+	
 {
 	::operator delete(ptr);
 }
@@ -83,14 +83,14 @@ void AutoDeletable::operator delete (void* ptr, void*)
 
 BALL_INLINE 
 void AutoDeletable::setAutoDeletable(bool enable)
-	throw()
+	
 {
   enabled_ = enable;
 }
 
 BALL_INLINE 
 bool AutoDeletable::isAutoDeletable() const
-	throw()
+	
 {
   return enabled_;
 }

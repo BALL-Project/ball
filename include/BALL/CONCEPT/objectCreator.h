@@ -52,7 +52,7 @@ namespace BALL
 				\see         TextPersistenceManager
 		*/
 		ObjectCreator()
-			throw();
+			;
 
 		//@}
 		/** @name Destructors 
@@ -62,13 +62,13 @@ namespace BALL
 		/** Destructor.
 		*/
 		virtual ~ObjectCreator()
-			throw();
+			;
 
 		/** Explicit default initialization.
 				Empty for further purpose.
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors: inspectors and mutators 
@@ -84,7 +84,7 @@ namespace BALL
 				\see    TextPersistenceManager
 		*/
 		virtual void initPersistenceManager(TextPersistenceManager &pm)
-			throw();
+			;
 
 		/** Convert persistent objects.
 				Override this method to convert PersistentObject objects to
@@ -95,7 +95,7 @@ namespace BALL
 									into a Composite object
 		*/
 		virtual Composite *convertObject(PersistentObject &po)
-			throw();
+			;
 						
 		//@}
 		/**	@name	Operators
@@ -116,7 +116,7 @@ namespace BALL
 				\return Composite* a pointer to a received Composite object (<tt> 0</tt> if no composite object was received)
 		*/
 		Composite *operator() (TCPIOStream &tcp_iostream)
-			throw();
+			;
 #endif
 
 		//@}

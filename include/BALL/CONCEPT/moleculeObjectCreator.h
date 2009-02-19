@@ -34,7 +34,7 @@ namespace BALL
 		/** Default Constructor.
 		*/
 		MoleculeObjectCreator()
-			throw();
+			;
 
 		//@}
 		/** @name Destructors 
@@ -44,13 +44,13 @@ namespace BALL
 		/** Destructor.
 		*/
 		virtual ~MoleculeObjectCreator()
-			throw();
+			;
 
 		/** Explicit default initialization.
 				Calls ObjectCreator::clear.
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors: inspectors and mutators 
@@ -66,7 +66,7 @@ namespace BALL
 				\see    convertObject
 		*/
 		virtual void initPersistenceManager(TextPersistenceManager &pm)
-			throw();
+			;
 
 		/** Converts persistent objects.
 				If <b> po </b> is an object that represents a molecular structure (an Atom,
@@ -79,7 +79,7 @@ namespace BALL
 				\see    initPersistenceManager
 		*/
 		virtual Composite *convertObject(PersistentObject &po)
-			throw();
+			;
 		//@}
 	};
 

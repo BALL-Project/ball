@@ -13,13 +13,13 @@ using namespace std;
 namespace BALL
 {
 	MolecularInformation::MolecularInformation()
-		throw()
+		
 		:	Visitor<Composite>()
 	{
 	}
 
 	MolecularInformation::~MolecularInformation()
-		throw()
+		
 	{
 		#ifdef BALL_DEBUG
 			Log.info() << "Destructing object " << (void *)this 
@@ -28,7 +28,7 @@ namespace BALL
 	}
 
 	void MolecularInformation::clear()
-		throw()
+		
 	{
 		name_ = "unkown";
 		type_name_ = "unkown type";

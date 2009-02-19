@@ -88,16 +88,16 @@ namespace BALL
 		*/
 		//@{
 		///	Default constructor
-		BALL_INLINE BaseIterator() throw() {}
+		BALL_INLINE BaseIterator()  {}
 	
 		///	Copy constructor
-		BALL_INLINE BaseIterator(const BaseIterator& iterator) throw()
+		BALL_INLINE BaseIterator(const BaseIterator& iterator) 
 			:	traits_(iterator.traits_)
 		{
 		}
 
 		///	Destructor.
-		BALL_INLINE ~BaseIterator() throw() {}
+		BALL_INLINE ~BaseIterator()  {}
 		//@}
 
 		/**	@name	Assignment
@@ -108,14 +108,14 @@ namespace BALL
 				Assigns the contents of an iterator to another iterator.
 				@param	iterator the iterator to be copied
 		*/
-		BALL_INLINE BaseIterator& operator = (const BaseIterator& iterator) throw()
+		BALL_INLINE BaseIterator& operator = (const BaseIterator& iterator) 
 		{
 			traits_ = iterator.traits_;
 			return *this;
 		}
 			
 		///	Swap two iterators
-		BALL_INLINE void swap(BaseIterator& iterator) throw() { std::swap(traits_, iterator.traits_); }
+		BALL_INLINE void swap(BaseIterator& iterator)  { std::swap(traits_, iterator.traits_); }
 		//@}
 
 		/**	@name	 Accessors 
@@ -123,19 +123,19 @@ namespace BALL
 		//@{
 
 		/// Invalidate the iterator.
-		BALL_INLINE void invalidate() throw() { traits_.invalidate(); }
+		BALL_INLINE void invalidate()  { traits_.invalidate(); }
 
 		/// Set the traits
-		BALL_INLINE void setTraits(const Traits& traits) throw() { traits_ = traits; }
+		BALL_INLINE void setTraits(const Traits& traits)  { traits_ = traits; }
 
 		/// Get a constant reference to the traits of this iterator.
-		BALL_INLINE const Traits& getTraits() const throw() { return traits_; }
+		BALL_INLINE const Traits& getTraits() const  { return traits_; }
 
 		/// Get a constant reference to the traits of this iterator.
-		BALL_INLINE Traits& getTraits() throw() { return traits_; }
+		BALL_INLINE Traits& getTraits()  { return traits_; }
 
 		/// Get a constant pointer to the container of this iterator.
-		BALL_INLINE const Container* getContainer() const	throw() { return traits_.getContainer(); }
+		BALL_INLINE const Container* getContainer() const	 { return traits_.getContainer(); }
 		//@}
 
 		/** @name Converters
@@ -146,13 +146,13 @@ namespace BALL
 				This method returns the position of the iterator. Note that
 				Position is a template within this context and not the BALL datatype.
 		*/
-		BALL_INLINE operator const Position& () const throw() { return traits_.getPosition(); }
+		BALL_INLINE operator const Position& () const  { return traits_.getPosition(); }
 
 		/// Convert an iterator to its Datatype by returning a reference to the current data.
-		BALL_INLINE reference operator * () const throw() { return (reference)traits_.getData(); }
+		BALL_INLINE reference operator * () const  { return (reference)traits_.getData(); }
 
 		/// Return a pointer to the current data.
-		BALL_INLINE pointer operator -> () const throw() { return (pointer)&traits_.getData(); }
+		BALL_INLINE pointer operator -> () const  { return (pointer)&traits_.getData(); }
 		//@}
 
 		/**	@name	Predicates
@@ -160,27 +160,27 @@ namespace BALL
 		//@{
 
 		/// Equality operator
-		BALL_INLINE bool operator == (const BaseIterator& iterator) const throw() { return (traits_ == iterator.traits_); }
+		BALL_INLINE bool operator == (const BaseIterator& iterator) const  { return (traits_ == iterator.traits_); }
 
 		/// Inequality operator
-		BALL_INLINE bool operator != (const BaseIterator& iterator) const throw() { return !(traits_ == iterator.traits_); }
+		BALL_INLINE bool operator != (const BaseIterator& iterator) const  { return !(traits_ == iterator.traits_); }
 
 		/** Singularity predicate.
 				This method returns <b>true</b> if the iterator is singular, i.e., 
 				not associated with a container.
 		*/
-		BALL_INLINE bool isSingular() const	throw() { return traits_.isSingular(); }
+		BALL_INLINE bool isSingular() const	 { return traits_.isSingular(); }
 
 		/** Validity predicate
 				@return true if the iterator is valid (pointing at an element in a container) 
 		*/
-		BALL_INLINE bool isValid() const throw() { return traits_.isValid(); }
+		BALL_INLINE bool isValid() const  { return traits_.isValid(); }
 
 		/// Validity predicate
-		BALL_INLINE bool operator + () const throw() { return traits_.isValid(); }
+		BALL_INLINE bool operator + () const  { return traits_.isValid(); }
 
 		/// Invalidity perdicate
-		BALL_INLINE bool operator - () const throw() { return !traits_.isValid(); }
+		BALL_INLINE bool operator - () const  { return !traits_.isValid(); }
 		//@}
 
 		protected:
@@ -188,7 +188,7 @@ namespace BALL
 		/** Constructor.
 				Protected to allow instantiation and use in derived classes only.
 		*/
-		BALL_INLINE BaseIterator(const Container& container) throw()
+		BALL_INLINE BaseIterator(const Container& container) 
 			:	traits_(container)
 		{
 		}

@@ -95,31 +95,31 @@ namespace BALL
 		/**	Default constructor
 		*/
 		PersistenceManager()
-      throw();
+      ;
 
 		/** Copy constructor
 		*/
 		PersistenceManager(const PersistenceManager& pm)
-			throw();
+			;
 
 		/**	Detailed constructor with an input stream.
 				Creates a persistence manager object and assigns an input stream.
 		*/
 		PersistenceManager(::std::istream& is)
-      throw();
+      ;
 			
 		/**	Detailed constructor with an output stream.
 				Creates a persistence manager object and assigns an output stream.
 		*/
 		PersistenceManager(::std::ostream& os)
-      throw();
+      ;
 			
 		/**	Detailed constructor with an input stream and an output stream.
 				Creates a persistence manager object and assigns an input stream
 				and an output stream.
 		*/
 		PersistenceManager(::std::istream& is, ::std::ostream& os)
-      throw();
+      ;
 			
 		/**	Destructor.
 				Destruct the persistence manager and and clear up all data
@@ -127,7 +127,7 @@ namespace BALL
 				( \link PersistenceManager::setIStream setIStream \endlink / \link PersistenceManager::setOStream setOStream \endlink ) are not closed.
 		*/
 		virtual ~PersistenceManager()
-      throw();
+      ;
 
 		//@}
 
@@ -160,7 +160,7 @@ namespace BALL
 				@param m a dynamic class create method
 		*/
 		virtual void registerClass(String signature, const CreateMethod	m)
-      throw();
+      ;
 
 		/**	Create an object of a registered class.
 				If the persistence manager has registered a create method for the
@@ -173,26 +173,26 @@ namespace BALL
 				@see		registerClass
 		*/
 		virtual void* createObject(String signature) const
-      throw();
+      ;
 
 		/**	Return the number of registerd classes.
 				@return	Size the nubmer of classes contained in the persistence
 								manager's internal StringHashMap
 		*/
 		virtual Size	getNumberOfClasses() const
-      throw();
+      ;
 		
 		/**	Set the output stream for persistent objects.
 				@param	s the output stream
 		*/
 		virtual void setOstream(::std::ostream& s)
-      throw();
+      ;
 
 		/**	Set the input stream for persistent objects.
 				@param	s the input stream
 		*/
 		virtual void setIstream(::std::istream& s)
-      throw();
+      ;
 
 		/**	Start the output to a persistent stream.	
 				This method write a start marker to the output stream and prepares
@@ -203,7 +203,7 @@ namespace BALL
 				It need not be called usually, as it is called by <tt>operator >></tt>.
 		*/
 		void startOutput()
-      throw();
+      ;
 
 		/**	Terminate the output to a persistent stream.
 				This method finishes the writing of a persistent object to a
@@ -217,7 +217,7 @@ namespace BALL
 				It need not be called usually, as it is called by <tt>operator >></tt>.
 		*/
 		void endOutput()
-      throw();
+      ;
 
 		/**	Read a persistent object from the stream.
 				This method tries to read a persistent object from the stream,
@@ -236,13 +236,13 @@ namespace BALL
 				This method writes a persistent object to a stream.
 		*/
 		PersistenceManager& operator << (const PersistentObject& object)
-      throw();
+      ;
 
 		/**	Read a persistent object from a stream.
 				This method calls  \link PersistenceManager::readObject readObject \endlink .
 		*/
 		PersistenceManager& operator >> (PersistentObject*& object_ptr)
-      throw();
+      ;
 
 		//@}
 
@@ -258,14 +258,14 @@ namespace BALL
 		*/
 		template <typename T>
 		bool checkObjectHeader(const T& /* object */, const char* name = 0)
-			throw();
+			;
 
 		/** Check an object header by supplying its stream name.
 				@param	type_name the stream name of the object type
 				@return	true if the object header could be checked successfully
 		*/
 		bool checkObjectHeader(const char* type_name)
-			throw();
+			;
 
 		/** Write an object Header.
 				Determine the stream name of the object via @see RTTI and call @see
@@ -275,19 +275,19 @@ namespace BALL
 		*/
 		template <typename T>
 		void writeObjectHeader(const T* object, const char* name = 0)
-			throw();
+			;
 
 		/** Write an object trailer by calling @see writeTrailer.
 				@param	name the name of the object
 		*/
 		void writeObjectTrailer(const char* name = 0)
-			throw();
+			;
 
 		/** Check an object trailer by calling @see checkTrailer.
 				@param	name the name of the object
 		*/
 		bool checkObjectTrailer(const char* name = 0)
-			throw();
+			;
 
 		/**	Write a primitive member variable.
 				This method also writes the necessary header and trailer of the
@@ -297,7 +297,7 @@ namespace BALL
 		*/
 		template <typename T>
 		void writePrimitive(const T& t, const char* name)
-			throw();
+			;
  
 		/**	Read a primitive member variable. 
 				This method also checks header and trailer of the primitive.
@@ -307,7 +307,7 @@ namespace BALL
 		*/
 		template <typename T>
 		bool readPrimitive(T& t, const char* name)
-			throw();
+			;
 
 		/**	Write a storable object. 
 				This method also writes header and trailer of the object.
@@ -316,7 +316,7 @@ namespace BALL
 		*/
 		template <typename T>
 		void writeStorableObject(const T& t, const char* name)
-			throw();
+			;
 
 		/**	Read a storable object. This method also checks header and trailer
 				of the object.
@@ -326,7 +326,7 @@ namespace BALL
 		*/
 		template <typename T>
 		bool readStorableObject(T& t, const char* name)
-			throw();
+			;
 
 		/**	Write a pointer to a PersistentObject. 
 				This method also writes the necessary header and trailer.
@@ -335,7 +335,7 @@ namespace BALL
 		*/
 		template <typename T>
 		void writeObjectPointer(const T* object, const char* name)
-			throw();
+			;
  
 		/**	Read a pointer to a PersistentObject.
 				This method also checks header and trailer.
@@ -345,7 +345,7 @@ namespace BALL
 		*/
 		template <typename T>
 		bool readObjectPointer(T*& object, const char* name)
-			throw();
+			;
 
 		/** Write a reference to a PersistentObject. 
 				This method also writes the necessary header and trailer.
@@ -354,7 +354,7 @@ namespace BALL
 		*/
 		template <typename T>
 		void writeObjectReference(const T& object, const char* name)
-			throw();
+			;
 
 		/**	Read a reference to a PersistentObject.
 				This method also checks header and trailer of the object reference.
@@ -364,7 +364,7 @@ namespace BALL
 		*/
 		template <typename T>
 		bool readObjectReference(T& object, const char* name)
-			throw();
+			;
 
 		/**	Write an array of persistent objects.
 				This method writes <tt>size</tt> persistent objects to the persistent
@@ -375,7 +375,7 @@ namespace BALL
 		*/
 		template <typename T>
 		void writeObjectArray(const T* array, const char* name, Size size)
-			throw();
+			;
 
 		/**	Read an array of persistent objects.
 				This method reads <tt>size</tt> persistent objects from the persistent
@@ -386,7 +386,7 @@ namespace BALL
 		*/
 		template <typename T>
 		bool readObjectArray(const T* array, const char* name, Size& size)
-			throw();
+			;
 
 		/** Write an array of pointers to persistent objects.
 				This method writes <tt>size</tt> persistent objects to the persistent
@@ -397,7 +397,7 @@ namespace BALL
 		*/
 		template <typename T>
 		void writeObjectPointerArray(T** arr, const char* name, const Size size)
-			throw();
+			;
 	
 		/**	Read an array of persistent object pointers.
 				This method reads <tt>size</tt> persistent object pointers from the
@@ -408,7 +408,7 @@ namespace BALL
 		*/
 		template <typename T>
 		bool readObjectPointerArray(T** array, const char* name, Size& size)
-			throw();
+			;
 	 
 		//@}
 
@@ -619,25 +619,25 @@ namespace BALL
 		/**	Prepare the output stream for output.
 		*/
 		virtual void initializeOutputStream()
-			throw();
+			;
 
 
 		/**	Prepare the output stream for closing.
 		*/
 		virtual void finalizeOutputStream()
-			throw();
+			;
 
 
 		/**	Prepare the input stream for reading.
 		*/
 		virtual void initializeInputStream()
-			throw();
+			;
 
 
 		/**	Prepare the input stream for closing.
 		*/
 		virtual void finalizeInputStream()
-			throw();
+			;
 
 		//@}
 
@@ -746,12 +746,12 @@ namespace BALL
 				This method is automatically called in the constructor.
 		*/
 		void registerKernelClasses_()
-			throw();
+			;
 
 		/*_
 		*/
 		void addPointerPair_(LongSize old_ptr, void* new_ptr)
-			throw();
+			;
 				
 		/*_
 		*/
@@ -761,7 +761,7 @@ namespace BALL
 		/*_
 		*/
 		bool updatePointers_()
-			throw();
+			;
 
 		/*_
 		*/
@@ -818,7 +818,7 @@ namespace BALL
 	template <typename T>
 	bool PersistenceManager::checkObjectHeader(const T& /* object */,
 			const char* name)
-		throw()
+		
 	{
 		LongSize ptr;
 		return checkHeader(RTTI::getStreamName<T>(), name, ptr);
@@ -828,7 +828,7 @@ namespace BALL
 	template <typename T>
 	void PersistenceManager::writeObjectHeader(const T* object,
 			const char* name)
-		throw()
+		
 	{
 		object_out_.insert(object);
 		writeHeader(RTTI::getStreamName<T>(), name, (LongSize)reinterpret_cast<PointerSizeUInt>(object));
@@ -837,7 +837,7 @@ namespace BALL
 
 	template <typename T>
 	void PersistenceManager::writePrimitive(const T& t, const char* name)
-		throw()
+		
 	{
 		writePrimitiveHeader(RTTI::getStreamName<T>(), name);
 		put(t);
@@ -847,7 +847,7 @@ namespace BALL
 
 	template <typename T>
 	bool PersistenceManager::readPrimitive(T& t, const char* name)
-		throw()
+		
 	{
 		if (!checkPrimitiveHeader(RTTI::getStreamName<T>(), name))
 		{
@@ -861,7 +861,7 @@ namespace BALL
 
 	template <typename T>
 	void PersistenceManager::writeStorableObject(const T& t, const char* name)
-		throw()
+		
 	{
 		writeStorableHeader(RTTI::getStreamName<T>(), name);
 		t.write(*this);
@@ -871,7 +871,7 @@ namespace BALL
 
 	template <typename T>
 	bool PersistenceManager::readStorableObject(T& t, const char* name)
-		throw()
+		
 	{
 		return (checkStorableHeader(RTTI::getStreamName<T>(), name) 
 						&& t.read(*this) && checkStorableTrailer());
@@ -880,7 +880,7 @@ namespace BALL
 
 	template <typename T>
 	void PersistenceManager::writeObjectPointer(const T* object, const char* name)
-		throw()
+		
 	{
 		if (object != 0 && !object_out_.has(object))
 		{
@@ -895,7 +895,7 @@ namespace BALL
 
 	template <typename T>
 	bool PersistenceManager::readObjectPointer(T*& object, const char* name)
-		throw()
+		
 	{
 		if (!checkObjectPointerHeader(RTTI::getStreamName<T>(), name))
 		{
@@ -919,7 +919,7 @@ namespace BALL
 	template <typename T>
 	void PersistenceManager::writeObjectReference(const T& object,
 			const char* name)
-		throw()
+		
 	{
 		if (&object != 0 && !object_out_.has(&object))
 		{
@@ -934,7 +934,7 @@ namespace BALL
 
 	template <typename T>
 	bool PersistenceManager::readObjectReference(T& object, const char* name)
-		throw()
+		
 	{
 		if (!checkObjectReferenceHeader(RTTI::getStreamName<T>(), name))
 		{
@@ -963,7 +963,7 @@ namespace BALL
 	template <typename T>
 	void PersistenceManager::writeObjectArray(const T* array, const char* name,
 			Size size)
-		throw()
+		
 	{
 		writeObjectPointerArrayHeader(RTTI::getStreamName<T>(), name, size);
 
@@ -979,7 +979,7 @@ namespace BALL
 	template <typename T>
 	bool PersistenceManager::readObjectArray
 		(const T* array, const char* name, Size& size)
-		throw()
+		
 	{
 		if (!checkObjectPointerArrayHeader(RTTI::getStreamName<T>(), name, size))
 		{
@@ -1000,7 +1000,7 @@ namespace BALL
 	template <typename T>
 	void PersistenceManager::writeObjectPointerArray
 		(T** arr, const char* name, const Size size)
-		throw()
+		
 	{
 		writeObjectPointerArrayHeader(RTTI::getStreamName<T>(), name, size);
 
@@ -1022,7 +1022,7 @@ namespace BALL
 	template <typename T>
 	bool PersistenceManager::readObjectPointerArray(T** array, const char* name,
 			Size& size)
-		throw()
+		
 	{
 		if (!checkObjectPointerArrayHeader(RTTI::getStreamName<T>(), name, size))
 		{

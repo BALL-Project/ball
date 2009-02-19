@@ -39,7 +39,7 @@ namespace BALL
 				The default constructor has no functionality.
 		*/
 		PersistentObject() 
-			throw()
+			
 			:	Object()
 		{
 		}
@@ -48,7 +48,7 @@ namespace BALL
 				The destructor has no functionality.
 		*/
 		virtual ~PersistentObject() 
-			throw()
+			
 		{
 		}
 		//@}

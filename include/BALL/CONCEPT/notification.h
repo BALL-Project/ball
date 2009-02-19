@@ -43,25 +43,25 @@ namespace BALL
 
 		///
 		~NotificationTarget_()
-			throw();
+			;
 
 		///
 		NotificationTarget_* getNextTarget()
-			throw();
+			;
 
 		///
 		void* getTarget()
-			throw();
+			;
 
 		private:
 
 		///
 		NotificationTarget_()
-			throw();
+			;
 
 		///
 		NotificationTarget_(NotificationTarget_* notification_target, void* target)
-			throw();
+			;
 
 
 		NotificationTarget_*	next_;
@@ -77,38 +77,38 @@ namespace BALL
 
 		///
 		~NotificationSource_()
-			throw();
+			;
 
 		///
 		void enable()
-			throw();
+			;
 	
 		///
 		void disable()
-			throw();
+			;
 
 		///
 		bool isEnabled()
-			throw();
+			;
 	
 		///
 		bool isDisabled()
-			throw();
+			;
 
 	
 		private:
 
 		///
 		NotificationSource_()
-			throw();
+			;
 
 		///
 		NotificationSource_(NotificationSource_* notification_source, void* source)
-			throw();
+			;
 
 		///
 		void destroy()
-			throw();
+			;
 
 		NotificationSource_*	next_;
 		NotificationTarget_*	first_;
@@ -126,13 +126,13 @@ namespace BALL
 
 		///
 		~NotificationSlot_()
-			throw();
+			;
 
 
 		private:
 
 		NotificationSlot_()
-			throw();
+			;
 
 		NotificationSource_* first_;
 	};
@@ -141,7 +141,7 @@ namespace BALL
 	class NotificationManager_
 	{
 		friend NotificationManager_& NotificationManager()
-			throw();
+			;
 
 		public:
 
@@ -150,98 +150,98 @@ namespace BALL
 
 		///
 		~NotificationManager_()
-			throw();
+			;
 
 		///
 		Size getSize()
-			throw();
+			;
 
 		///
 		void insert(void* source, void* target)
-			throw();
+			;
 
 		///
 		void remove(void* source)
-			throw();
+			;
 
 		///
 		void remove(void* source, void* target)
-			throw();
+			;
 
 		///
 		NotificationSource_* findSource(void* source)
-			throw();
+			;
 
 		///
 		NotificationTarget_* findFirstTarget(void* source)
-			throw();
+			;
 
 		///
 		NotificationTarget_* findTarget(void* source, void* target)
-			throw();
+			;
 
 		///
 		NotificationSource_* findEnabledSource(void* source)
-			throw();
+			;
 
 		///
 		NotificationTarget_* findEnabledFirstTarget(void* source)
-			throw();
+			;
 
 		///
 		NotificationTarget_* findEnabledTarget(void* source, void* target)
-			throw();
+			;
 
 		///
 		void destroy()
-			throw();
+			;
 
 		///
 		void enable()
-			throw();
+			;
 
 		///
 		void disable()
-			throw();
+			;
 
 		///
 		bool isEnabled()
-			throw();
+			;
 	
 		///
 		bool isDisabled()
-			throw();
+			;
 	
 		///
 		bool isEmpty()
-			throw();
+			;
 
 		///
 		bool isInserted(void* source)
-			throw();
+			;
 
 		///
 		bool isInserted(void* source, void* target)
-			throw();
+			;
 
 		///
 		void dump(std::ostream& s)
-			throw();
+			;
 
 
 		private:
 
 		NotificationManager_()
-			throw();
+			;
 			
 		bool needResize_()
-			throw();
+			;
 
 		void resize_()
-			throw();
+			;
 
 		Index hash_(void* ptr)
-			throw();
+			;
 
 		Size 								number_of_targets_;
 		Size 								number_of_slots_;
@@ -251,27 +251,27 @@ namespace BALL
 
 	///	
   NotificationManager_& NotificationManager()
-		throw();
+		;
  
 	///
 	void NotificationManagerEnable()
-		throw();
+		;
 
 	///
 	void NotificationManagerDisable()
-		throw();
+		;
 
 	///
 	bool NotificationManagerIsEnabled()
-		throw();
+		;
 
 	///
 	bool NotificationManagerIsDisabled()
-		throw();
+		;
 
 	template <class NotificationSource>
 	inline void NotificationSourceEnable(NotificationSource &notification_source)
-		throw()
+		
 	{
 		NotificationSource_* source_ptr = NotificationManager().findSource((void*)&notification_source);
 
@@ -283,7 +283,7 @@ namespace BALL
 
 	template <class NotificationSource>
 	inline void NotificationSourceDisable(NotificationSource &notification_source)
-		throw()
+		
 	{
 		NotificationSource_* source_ptr = NotificationManager().findSource((void*)&notification_source);
 
@@ -295,14 +295,14 @@ namespace BALL
 
 	template <class NotificationSource>
 	inline bool NotificationSourceIsEnabled(NotificationSource &notification_source)
-		throw()
+		
 	{
 		return (NotificationManager().findEnabledSource((void*)&notification_source) != 0);
 	}
 
 	template <class NotificationSource>
 	inline bool NotificationSourceIsDisabled(NotificationSource &notification_source)
-		throw()
+		
 	{
 		return (NotificationManager().findEnabledSource((void*)&notification_source) == 0);
 	}
@@ -314,7 +314,7 @@ namespace BALL
 	class NotificationTarget
 	{
 		public:
-		virtual ~NotificationTarget() throw() {}
+		virtual ~NotificationTarget()  {}
 
 		/**	The method to be invoked upon receiving a notification
 		*/
@@ -323,7 +323,7 @@ namespace BALL
 		/** 
 		*/
 		virtual unsigned short countNotificationTypes_()
-			throw()
+			
 		{
 			return 0;
 		}
@@ -331,7 +331,7 @@ namespace BALL
 		/**
 		*/
 		static void* getNotificationType_()
-			throw()
+			
 		{
 			return RTTI::getClassID<NotificationSource>();
 		}
@@ -339,7 +339,7 @@ namespace BALL
 		/**
 		*/
 		virtual void* getVirtualNotificationType_()
-			throw()
+			
 		{
 			return getNotificationType_();
 		}
@@ -356,21 +356,21 @@ namespace BALL
 
 		///
 		virtual unsigned short countNotificationTypes_()
-			throw()
+			
 		{
 			return 1;
 		}
 
 		///
 		static void* getNotificationType_()
-			throw()
+			
 		{
 			return (void* )&getNotificationType_;
 		}
 
 		///
 		virtual void* getVirtualNotificationType()
-			throw()
+			
 		{
 			return getNotificationType_();
 		}
@@ -387,21 +387,21 @@ namespace BALL
 
 		///
 		virtual unsigned short countNotificationTypes_()
-			throw()
+			
 		{
 			return 2;
 		}
 
 		///
 		static void* getNotificationType_()
-			throw()
+			
 		{
 			return (void* )&getNotificationType_;
 		}
 
 		///
 		virtual void* getVirtualNotificationType_()
-			throw()
+			
 		{
 			return getNotificationType_();
 		}
@@ -411,14 +411,14 @@ namespace BALL
 
 	template <class Source, class Target>
 	inline void NotificationRegister(const Source &source, const Target &target)
-		throw()
+		
 	{
 		NotificationManager().insert((void*)&source, (void*)&(NotificationTarget<Source> &)target);
 	}
 
 	template <class Source, class Target, class T1>
 	inline void NotificationRegister1(const Source& source, const Target& target, const T1 &)
-		throw()
+		
 	{
 		NotificationManager().insert((void*)&source, (void*)&(NotificationTarget1<Source, T1> &)target);
 	}
@@ -428,7 +428,7 @@ namespace BALL
 		(const NotificationSource &notification_source,
 		 const NotificationTarget &notification_target,
 		 const T1 &, const T2 &)
-		throw()
+		
 	{
 		NotificationManager().insert
 			((void*)&notification_source, 
@@ -436,18 +436,18 @@ namespace BALL
 	}
 
 	void NotificationUnregisterAll()
-		throw();
+		;
 
 	template <class NotificationSource>
 	inline void NotificationUnregister(const NotificationSource &notification_source)
-		throw()
+		
 	{
 		NotificationManager().remove((void*)&notification_source);
 	}
 
 	template <class Source, class Target>
 	inline void NotificationUnregister(const Source &source, const Target &target)
-		throw()
+		
 	{
 		NotificationManager().remove((void*)&source, (void*)&(NotificationTarget<Source> &)target);
 	}
@@ -457,7 +457,7 @@ namespace BALL
 		(const NotificationSource &notification_source,
 		 const NotificationTarget &notification_target,
 		 const T1 &)
-		throw()
+		
 	{
 		NotificationManager().remove((void*)&notification_source, 
 			 (void*)&(NotificationTarget1<NotificationSource, T1> &)notification_target);
@@ -468,7 +468,7 @@ namespace BALL
 		(const NotificationSource &notification_source,
 		 const NotificationTarget &notification_target,
 		 const T1& , const T2& )
-		throw()
+		
 	{
 		NotificationManager().remove
 			((void*)&notification_source, 
@@ -477,14 +477,14 @@ namespace BALL
 
 	template <class NotificationSource>
 	inline bool NotificationIsRegistered(const NotificationSource &notification_source)
-		throw()
+		
 	{
 		return NotificationManager().isInserted((void*)&notification_source);
 	}
 
 	template <class Source, class Target>
 	inline bool NotificationIsRegistered(const Source& source, const Target& target)
-		throw()
+		
 	{
 		return NotificationManager().isInserted((void*)&source, 
 			 (void*)&(NotificationTarget<Source> &)target);
@@ -492,7 +492,7 @@ namespace BALL
 
 	template <class NotificationSource>
 	bool Notify(NotificationSource &notification_source)
-		throw()
+		
 	{
 		if (NotificationManager().isDisabled() == true)
 		{
@@ -524,7 +524,7 @@ namespace BALL
 
 	template <class NotificationSource, class T1>
 	bool Notify(NotificationSource &notification_source, const T1 &data1)
-		throw()
+		
 	{
 		if (NotificationManager().isDisabled() == true)
 		{
@@ -558,7 +558,7 @@ namespace BALL
 
 	template <class NotificationSource, class T1, class T2>
 	bool Notify (NotificationSource& notification_source, const T1& data1, const T2& data2)
-		throw()
+		
 	{
 		if (NotificationManager().isDisabled())
 		{
