@@ -15,7 +15,7 @@ namespace BALL
 
 
 	NamedProperty::NamedProperty()
-		throw()
+		
 		: PersistentObject(),
 			type_(NONE),
 			name_("")
@@ -23,7 +23,7 @@ namespace BALL
 	}
 
 	NamedProperty::NamedProperty(const NamedProperty& property) 
-		throw()
+		
 		: PersistentObject(property),
 			type_(property.type_),
 			name_(property.name_)
@@ -104,7 +104,7 @@ namespace BALL
 	}
 
   void PropertyManager::write(PersistenceManager& pm) const
-		throw()
+		
   {
 		pm.writeStorableObject(bitvector_, "bitvector_");
 		Size size = (Size)named_properties_.size();
@@ -116,7 +116,7 @@ namespace BALL
 	}
 
   bool PropertyManager::read(PersistenceManager& pm)
-		throw()
+		
   {
 		if (!pm.readStorableObject(bitvector_, "bitvector_"))
 		{
@@ -139,14 +139,14 @@ namespace BALL
 	}
   
 	void PropertyManager::set(const PropertyManager& property_manager)
-		throw()
+		
 	{
 		bitvector_ = property_manager.bitvector_;
 		named_properties_ = property_manager.named_properties_;
 	}
 
 	void PropertyManager::setProperty(const NamedProperty& property)
-		throw()
+		
 	{
 		// search whether the property already exists
 		vector<NamedProperty>::iterator it = named_properties_.begin();
@@ -165,7 +165,7 @@ namespace BALL
 	}
 
 	void PropertyManager::setProperty(const string& name)
-		throw()
+		
 	{
 		// search whether a property with the same name already exists
 		vector<NamedProperty>::iterator it = named_properties_.begin();
@@ -184,7 +184,7 @@ namespace BALL
 	}
 
 	const NamedProperty& PropertyManager::getProperty(const string& name) const
-		throw()
+		
 	{
 		for (Size i = 0; i < named_properties_.size(); ++i)
 		{
@@ -198,7 +198,7 @@ namespace BALL
 	}
 	
 	void PropertyManager::clearProperty(const string& name)
-		throw()
+		
 	{
     vector<NamedProperty>::iterator it = named_properties_.begin();
 		for (; it != named_properties_.end(); ++it)
@@ -212,7 +212,7 @@ namespace BALL
 	}
 
 	bool PropertyManager::hasProperty(const string& name) const
-		throw()
+		
 	{
 		for (Size i = 0; i < named_properties_.size(); i++)
 		{
@@ -226,7 +226,7 @@ namespace BALL
 	}
 
 	void PropertyManager::dump(ostream& s, Size depth) const
-		throw()
+		
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 

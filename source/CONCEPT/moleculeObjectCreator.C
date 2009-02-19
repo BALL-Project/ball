@@ -18,13 +18,13 @@ namespace BALL
 {
 
 	MoleculeObjectCreator::MoleculeObjectCreator()
-		throw()
+		
 		:	ObjectCreator()
 	{
 	}
 
 	MoleculeObjectCreator::~MoleculeObjectCreator()
-		throw()
+		
 	{
 		#ifdef BALL_DEBUG
 			cout << "Destructing object " << (void *)this 
@@ -33,13 +33,13 @@ namespace BALL
 	}
 
 	void MoleculeObjectCreator::clear()
-		throw()
+		
 	{
 		ObjectCreator::clear();
 	}
 
 	void MoleculeObjectCreator::initPersistenceManager(TextPersistenceManager &pm)
-		throw()
+		
 	{
 		using namespace RTTI;
 
@@ -66,7 +66,7 @@ namespace BALL
 	}
 
 	Composite* MoleculeObjectCreator::convertObject(PersistentObject &po)
-		throw()
+		
 	{
 		cout << "read object @ " << (void*)&po << endl;
 	

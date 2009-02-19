@@ -12,20 +12,20 @@ namespace BALL
 {
 
 	Client::InvalidClient::InvalidClient(const char* file, int line)
-			throw()
+			
 		:	Exception::GeneralException(file, line, string("InvalidClient"), string("client not valid!"))
 	{
 	}
 
 	Client::NoPersistentObject::NoPersistentObject(const char* file, int line)
-			throw()
+			
 		:	Exception::GeneralException(file, line, string("NoPersistentObject"), string("object is not a persistent object!"))
 	{
 	}
 
 
 	Client::Client()
-		throw()
+		
 		:	host_(),
 			port_(20000),
 			pm_()
@@ -33,14 +33,14 @@ namespace BALL
 	}
 
 	Client::Client(const String& host, int port)
-		throw()
+		
 		:	pm_()
 	{
 		connect(host, port);
 	}
 
 	Client::~Client()
-		throw()
+		
 	{
 		#ifdef BALL_DEBUG
 			cout << "Destructing object " << (void *)this 
@@ -49,12 +49,12 @@ namespace BALL
 	}
 
 	void Client::clear()
-		throw()
+		
 	{
 	}
 
 	void Client::connect(const String& host, int port)
-		throw()
+		
 	{
 		host_ = host;
 		port_ = port;
@@ -85,13 +85,13 @@ namespace BALL
 	}
 
 	bool Client::isValid() const
-		throw()
+		
 	{
 		return (host_ != "" && port_ != 0);
 	}
 
 	void Client::dump(ostream& s, Size depth) const
-		throw()
+		
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		

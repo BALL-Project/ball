@@ -33,22 +33,22 @@ namespace BALL
   // and hands them back to the xdr buffer.
 #ifdef BALL_XDRREC_CREATE_VOID_VOID_INT
 		extern "C" int XDRReadStream_(void* stream_ptr, void* buffer, int number)
-			throw()
+			
 #else
 #ifdef BALL_XDRREC_CREATE_VOID_VOID_UINT
 		extern "C" int XDRReadStream_(void* stream_ptr, void* buffer, unsigned int number)
-			throw()
+			
 #else
 #ifdef BALL_XDRREC_CREATE_VOID_CHAR_INT
 		extern "C" int XDRReadStream_(void* stream_ptr, char* buffer, int number)
-			throw()
+			
 #else
 # ifdef BALL_XDRREC_CREATE_CHAR_CHAR_INT
 		extern "C" int XDRReadStream_(char* stream_ptr, char* buffer, int number)
-			throw()
+			
 #	else
 		extern "C" int XDRReadStream_(void* stream_ptr, void* buffer, unsigned int number)
-			throw()
+			
 #	endif
 #endif
 #endif
@@ -80,22 +80,22 @@ namespace BALL
 
 #ifdef BALL_XDRREC_CREATE_VOID_CHAR_INT
 	extern "C" int XDRWriteStream_(void* stream_ptr, char* buffer, int number)
-		throw()
+		
 #else
 #ifdef BALL_XDRREC_CREATE_VOID_VOID_INT
 	extern "C" int XDRWriteStream_(void* stream_ptr, void* buffer, int number)
-		throw()
+		
 #else
 #ifdef BALL_XDRREC_CREATE_VOID_VOID_UINT
 	extern "C" int XDRWriteStream_(void* stream_ptr, void* buffer, unsigned int number)
-		throw()
+		
 #else
 #ifdef BALL_XDRREC_CREATE_CHAR_CHAR_INT
 	extern "C" int XDRWriteStream_(char* stream_ptr, char* buffer, int number)
-		throw()
+		
 #else
 	extern "C" int XDRWriteStream_(void* stream_ptr, void* buffer, unsigned int number)
-		throw()
+		
 #endif
 #endif
 #endif
@@ -117,22 +117,22 @@ namespace BALL
 
 #ifdef BALL_XDRREC_CREATE_VOID_CHAR_INT
 	extern "C" int XDRError_(void* , char*, int)
-		throw()
+		
 #else
 #ifdef BALL_XDRREC_CREATE_VOID_VOID_INT
 	extern "C" int XDRError_(void* , void*, int)
-		throw()
+		
 #else
 #ifdef BALL_XDRREC_CREATE_VOID_VOID_UINT
 	extern "C" int XDRError_(void* , void*, unsigned int)
-		throw()
+		
 #else
 #ifdef BALL_XDRREC_CREATE_CHAR_CHAR_INT
 	extern "C" int XDRError_(char* , char*, int)
-		throw()
+		
 #else
 	extern "C" int XDRError_(void* , void*, unsigned int)
-		throw()
+		
 #endif
 #endif
 #endif
@@ -150,31 +150,31 @@ namespace BALL
 	
 
 	XDRPersistenceManager::XDRPersistenceManager()
-		throw()
+		
 		:	PersistenceManager()
 	{
 	}
 
 	XDRPersistenceManager::XDRPersistenceManager(istream& is)
-		throw()
+		
 		:	PersistenceManager(is)
 	{
 	}
 
 	XDRPersistenceManager::XDRPersistenceManager(ostream& os)
-		throw()
+		
 		:	PersistenceManager(os)
 	{
 	}
 
 	XDRPersistenceManager::XDRPersistenceManager(istream& is, ostream& os)
-		throw()
+		
 		:	PersistenceManager(is, os)
 	{
 	}
 
   void XDRPersistenceManager::writeHeader(const char* type_name, const char* name, LongSize ptr)
-		throw()
+		
   {
 		DEBUG("XDRPersistenceManager: writing header for " << name << "/" << type_name)
 
@@ -186,7 +186,7 @@ namespace BALL
 	}
  
 	void XDRPersistenceManager::writeTrailer(const char* /* name */)
-		throw()
+		
 	{
 		// write a trailer to identify the end of the stream
 		put(OBJECT_TRAILER);
@@ -194,7 +194,7 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::writeStreamHeader()
-		throw()
+		
 	{
 		if (ostr_ == 0)
 		{
@@ -208,7 +208,7 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::initializeOutputStream()
-		throw()
+		
 	{
 		if (ostr_ == 0)
 		{
@@ -229,7 +229,7 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::initializeInputStream()
-		throw()
+		
 	{
 		if (istr_ == 0)
 		{
@@ -250,7 +250,7 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::finalizeOutputStream()
-		throw()
+		
 	{
 		// destroy the XDR stream
 		xdr_destroy(&xdr_out_);
@@ -258,7 +258,7 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::finalizeInputStream()
-		throw()
+		
 	{
 		// destroy the XDR stream 
 		xdr_destroy(&xdr_in_);
@@ -266,7 +266,7 @@ namespace BALL
 	}
 
 	bool XDRPersistenceManager::checkStreamHeader()
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: entering checkStreamHeader()")
 
@@ -284,7 +284,7 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::writeStreamTrailer()
-		throw()
+		
 	{
 		// write a trailer to identify the end of the stream
 		put(STREAM_TRAILER);
@@ -294,7 +294,7 @@ namespace BALL
 	}
 
 	bool XDRPersistenceManager::checkStreamTrailer()
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: entering checkStreamTrailer()")
 
@@ -309,10 +309,10 @@ namespace BALL
 
 #	ifdef BALL_DEBUG_PERSISTENCE
 	bool XDRPersistenceManager::checkTrailer(const char* name) 
-		throw()
+		
 #	else
 	bool XDRPersistenceManager::checkTrailer(const char* /* name */) 
-		throw()
+		
 #endif
 	{
 		DEBUG("XDRPersistenceManager: entering checkTrailer(" << (name == 0 ? "" : name) << ")")
@@ -326,7 +326,7 @@ namespace BALL
 	}
 
 	bool XDRPersistenceManager::checkHeader(const char* type_name, const char* name, LongSize& ptr)
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: entering checkHeader(" << type_name << ", " << name << ")")
     if ((name != 0) && (!strcmp(name, "")))
@@ -348,7 +348,7 @@ namespace BALL
 	}
 
 	bool XDRPersistenceManager::getObjectHeader(String& type_name, LongSize& ptr)
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: entering getObjectHeader()")
 
@@ -372,90 +372,90 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::writeName(const char* /* name */)
-		throw()
+		
 	{
 	}
 
 	bool XDRPersistenceManager::checkName(const char* /* name */)
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: entering checkName()")
 		return true;
 	}
 
 	void XDRPersistenceManager::writeStorableHeader(const char* /* type_name */, const char* /* name */)
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: writeStorableHeader")
 	}
 
 	bool XDRPersistenceManager::checkStorableHeader(const char* /* type_name */, const char* /* name */)
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: entering checkStorableHeader()")
 		return true;
 	}
 
 	void XDRPersistenceManager::writeStorableTrailer()
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: writeStorableTrailer")
 	}
 
 	bool XDRPersistenceManager::checkStorableTrailer()
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: entering checkStorableTrailer()")
 		return true;
 	}
 
 	void XDRPersistenceManager::writePrimitiveHeader(const char* /* type_name */, const char* /* name */)
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: writePrimitiveHeader")
 	}
 
 	bool XDRPersistenceManager::checkPrimitiveHeader(const char* /* type_name */, const char* /* name */)
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: entering checkPrimitiveHeader()")
 		return true;
 	}
 
 	void XDRPersistenceManager::writePrimitiveTrailer()
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: writePrimitiveTrailer")
 	}
 
 	bool XDRPersistenceManager::checkPrimitiveTrailer()
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: entering checkPrimitiveTrailer()")
 		return true;
 	}
 
 	void XDRPersistenceManager::writeObjectPointerHeader(const char* /* type_name */, const char* /* name */)
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: writeObjectPointerHeader")
 	}
 	
 	bool XDRPersistenceManager::checkObjectPointerHeader(const char* /* type_name */, const char* /* name */)
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: entering checkObjectPointerHeader()")
 		return true;
 	}
 	
 	void XDRPersistenceManager::writeObjectReferenceHeader(const char* /* type_name */, const char* /* name */)
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: writeObjectReferenceHeader")
 	}
 	
 	bool XDRPersistenceManager::checkObjectReferenceHeader(const char* /* type_name */, const char* /* name */)
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: entering checkObjectReferenceHeader()")
 		return true;
@@ -463,7 +463,7 @@ namespace BALL
 	
 	void XDRPersistenceManager::writeObjectPointerArrayHeader
 		(const char* /* type_name */, const char* /* name */, Size size)
-		throw()
+		
 	{
 		put(size);
 		DEBUG("XDRPersistenceManager: writeObjectPointerArrayHeader (size = " << size << ")")
@@ -471,7 +471,7 @@ namespace BALL
 
 	bool XDRPersistenceManager::checkObjectPointerArrayHeader
 		(const char* /* type_name */, const char* /* name */, Size& size)
-		throw()
+		
 	{
 		get(size);
 
@@ -480,13 +480,13 @@ namespace BALL
 	}
 	
 	void XDRPersistenceManager::writeObjectPointerArrayTrailer()
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: entering writeObjectPointerArrayTrailer()")
 	}
 			
 	bool XDRPersistenceManager::checkObjectPointerArrayTrailer()
-		throw()
+		
 	{
 		DEBUG("XDRPersistenceManager: entering checkObjectPointerArrayTrailer()")
 		return true;
@@ -494,7 +494,7 @@ namespace BALL
 
 	/// Layer 0: primitive put methods
 	void XDRPersistenceManager::put(const char c)
-		throw()
+		
 	{
 		char* char_ptr = const_cast<char*>(&c);
 		xdr_char(&xdr_out_, char_ptr);
@@ -502,7 +502,7 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::put(const Byte b)
-		throw()
+		
 	{
 		unsigned char* char_ptr = const_cast<unsigned char*>(&b);
 		xdr_u_char(&xdr_out_, char_ptr);
@@ -510,7 +510,7 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::put(const bool b)
-		throw()
+		
 	{		
 		char c = b ? (char)1 : (char)0;
 		xdr_char(&xdr_out_, &c);
@@ -518,7 +518,7 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::put(const Index i)
-		throw()
+		
 	{
 		Index* index_ptr = const_cast<Index*>(&i);
 		xdr_int(&xdr_out_, index_ptr);
@@ -526,7 +526,7 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::put(const Size s)
-		throw()
+		
 	{
 		Size* size_ptr = const_cast<Size*>(&s);
 		xdr_u_int(&xdr_out_, size_ptr);
@@ -534,7 +534,7 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::put(const Real x)
-		throw()
+		
 	{
 		Real* real_ptr = const_cast<Real*>(&x);
 		xdr_float(&xdr_out_, real_ptr);
@@ -542,7 +542,7 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::put(const DoubleReal x)
-		throw()
+		
 	{
 		DoubleReal* double_ptr = const_cast<DoubleReal*>(&x);
 		xdr_double(&xdr_out_, double_ptr);
@@ -550,7 +550,7 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::put(const LongSize ptr)
-		throw()
+		
 	{
 #   ifdef BALL_HAS_XDR_U_HYPER
 			BALL_XDR_UINT64_TYPE* p = (BALL_XDR_UINT64_TYPE*)&ptr;
@@ -566,7 +566,7 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::put(const string& s)
-		throw()
+		
 	{
 		char* ptr = const_cast<char*>(s.c_str());
 		xdr_string(&xdr_out_, &ptr, ((int)s.size()));
@@ -575,7 +575,7 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::get(char& c)
-		throw()
+		
 	{
 		xdr_char(&xdr_in_, &c);
 
@@ -583,7 +583,7 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::get(Byte& c)
-		throw()
+		
 	{
 		xdr_u_char(&xdr_in_, &c);
 
@@ -591,7 +591,7 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::get(bool& b)
-		throw()
+		
 	{
 		char c;
 		xdr_char(&xdr_in_, &c);
@@ -601,7 +601,7 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::get(string& s)
-		throw()
+		
 	{
 		static char buf[65536];
 		char* ptr = &(buf[0]);
@@ -619,35 +619,35 @@ namespace BALL
 	}
 
 	void XDRPersistenceManager::get(Index& i)
-		throw()
+		
 	{
 		xdr_int(&xdr_in_, &i);
 		DEBUG("XDRPersistenceManager: read int: " << i)
 	}
 
 	void XDRPersistenceManager::get(Size& s)
-		throw()
+		
 	{
 		xdr_u_int(&xdr_in_, &s);
 		DEBUG("XDRPersistenceManager: read unsigned int: " << s << "/" << hex << s)
 	}
 
 	void XDRPersistenceManager::get(Real& x)
-		throw()
+		
 	{
 		xdr_float(&xdr_in_, &x);
 		DEBUG("XDRPersistenceManager: read Real: " << x)
 	}
 
 	void XDRPersistenceManager::get(DoubleReal& x)
-		throw()
+		
 	{
 		xdr_double(&xdr_in_, &x);
 		DEBUG("XDRPersistenceManager: read DoubleReal: " << x)
 	}
 
 	void XDRPersistenceManager::get(LongSize& ptr)
-		throw()
+		
 	{
 #   ifdef BALL_HAS_XDR_U_HYPER
 		BALL_XDR_UINT64_TYPE* p = (BALL_XDR_UINT64_TYPE*)&ptr;

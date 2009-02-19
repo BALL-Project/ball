@@ -80,7 +80,7 @@ namespace BALL
 			public:
 
 			InvalidClient(const char* file, int line)
-				throw();
+				;
 		};
 
 		/** NoPersistentObject exception class.
@@ -94,7 +94,7 @@ namespace BALL
 			public:
 
 			NoPersistentObject(const char* file, int line)
-				throw();
+				;
 		};
 
 		//@}
@@ -109,7 +109,7 @@ namespace BALL
 				\see         connect
 		*/
 		Client()
-			throw();
+			;
 
 		/** Detailed state initializing constructor.
 				Constructs new client.
@@ -123,7 +123,7 @@ namespace BALL
 				\see         connect
 		*/
 		Client(const String& host, int port = 20000)
-			throw();
+			;
 
 		//@}
 		/** @name Destructors */
@@ -132,13 +132,13 @@ namespace BALL
 		/** Destructor.
 		*/
 		virtual ~Client()
-			throw();
+			;
 
 		/** Explicit default initialization.
 				Empty for further purpose.
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors: inspectors and mutators 
@@ -152,7 +152,7 @@ namespace BALL
 				\param   port the port number of the host
 		*/
 		void connect(const String& host, int port = 20000)
-			throw();
+			;
 
 		/** Adds a new composite.
 				Inserts a new Composite to this client. 
@@ -184,7 +184,7 @@ namespace BALL
 										<tt> false</tt> otherwise
 		*/
 		virtual bool isValid() const
-			throw();
+			;
 
 		/** Internal value dump.
 				Dumps the current host and port of this client to 
@@ -193,7 +193,7 @@ namespace BALL
 				\param   depth the dumping depth
 		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw();
+			;
 
 		//@}
 		

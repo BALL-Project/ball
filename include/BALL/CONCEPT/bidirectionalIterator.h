@@ -42,16 +42,16 @@ namespace BALL
 		//@{
 
 		///
-		BALL_INLINE ConstBidirectionalIterator() throw() {}
+		BALL_INLINE ConstBidirectionalIterator()  {}
 	
 		///
-		BALL_INLINE ConstBidirectionalIterator(const ConstBidirectionalIterator& iterator) throw()
+		BALL_INLINE ConstBidirectionalIterator(const ConstBidirectionalIterator& iterator) 
 			:	Base(iterator)
 		{
 		}
 
 		///
-		BALL_INLINE ~ConstBidirectionalIterator() throw() {}
+		BALL_INLINE ~ConstBidirectionalIterator()  {}
 		//@}
 
 		/** @name Iterator methods
@@ -62,25 +62,25 @@ namespace BALL
 		BALL_INLINE void toBegin() throw(Exception::Precondition);
 
 		/// Check whether the iterator points to the item at the beginning of the container
-		BALL_INLINE bool isBegin() const throw() { return Base::getTraits().isBegin(); }
+		BALL_INLINE bool isBegin() const  { return Base::getTraits().isBegin(); }
 
 		/// Move the iterator to the position after the last item of the container
 		void toEnd() throw(Exception::Precondition);
 
 		/// Check whether the iterator points to the position after the last item of the container.
-		BALL_INLINE bool isEnd() const throw() { return Base::getTraits().isEnd(); }
+		BALL_INLINE bool isEnd() const  { return Base::getTraits().isEnd(); }
 
 		/// Move the iterator to the "reverse" beginning of the container
 		void toRBegin() throw(Exception::Precondition);
 
 		/// Test whether the iterator points to the "reverse" first element	of the container
-		BALL_INLINE bool isRBegin() const throw() { return Base::getTraits().isRBegin(); }
+		BALL_INLINE bool isRBegin() const  { return Base::getTraits().isRBegin(); }
 
 		/// Move the iterator to the position before the first element
 		void toREnd()	throw(Exception::Precondition);
 
 		/// Test wheter the iterator points to the position before the first element
-		BALL_INLINE bool isREnd() const throw() { return Base::getTraits().isREnd(); }
+		BALL_INLINE bool isREnd() const  { return Base::getTraits().isREnd(); }
 
 		/// Increment operator
 		BALL_INLINE ConstBidirectionalIterator& operator ++ () throw(Exception::Precondition);
@@ -110,7 +110,7 @@ namespace BALL
 		protected:
 
 		/// Construct an iterator bound to a specific container
-		BALL_INLINE ConstBidirectionalIterator(const Container& container) throw()
+		BALL_INLINE ConstBidirectionalIterator(const Container& container) 
 			:	Base(container)
 		{
 		}
@@ -267,17 +267,17 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		BALL_INLINE BidirectionalIterator() throw() {}
+		BALL_INLINE BidirectionalIterator()  {}
 	
 		/// Copy constructor
 		BALL_INLINE BidirectionalIterator(const BidirectionalIterator& iterator)
-			throw()
+			
 			:	ConstBidirectionalIterator<Container, DataType, Position, Traits>(iterator)
 		{
 		}
 
 		/// Destructor
-		BALL_INLINE ~BidirectionalIterator() throw() {}
+		BALL_INLINE ~BidirectionalIterator()  {}
 
 		//@}
 
@@ -286,10 +286,10 @@ namespace BALL
 		//@{
 
 		/// Dereferentiation
-		BALL_INLINE reference operator * () const throw() { return (reference)Base::getTraits().getData(); }
+		BALL_INLINE reference operator * () const  { return (reference)Base::getTraits().getData(); }
 
 		/// Pointer dereferentiation
-		BALL_INLINE pointer operator -> () const throw() { return (pointer)&Base::getTraits().getData(); }
+		BALL_INLINE pointer operator -> () const  { return (pointer)&Base::getTraits().getData(); }
 
 		/// Increment operator
 		BALL_INLINE BidirectionalIterator& operator ++ ()	throw(Exception::Precondition);
@@ -323,7 +323,7 @@ namespace BALL
 		protected:
 
 		/// Construct an iterator bound to a specific container
-		BALL_INLINE BidirectionalIterator(const Container& container)	throw();
+		BALL_INLINE BidirectionalIterator(const Container& container)	;
 	};
 
 
@@ -416,7 +416,7 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	BALL_INLINE
 	BidirectionalIterator<Container, DataType, Position, Traits>::BidirectionalIterator(const Container& container)
-		throw()
+		
 		:	ConstBidirectionalIterator<Container, DataType, Position, Traits>(container)
 	{
 	}

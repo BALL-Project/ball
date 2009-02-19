@@ -12,7 +12,7 @@ namespace BALL
 {
 
 	Embeddable::Embeddable(const String& identifier)
-		throw()
+		
 		:	identifier_(identifier)
 	{
 		#ifdef BALL_DEBUG
@@ -22,7 +22,7 @@ namespace BALL
 	}
 
 	Embeddable::Embeddable(const Embeddable& embeddable)
-		throw()
+		
 		:	identifier_(embeddable.identifier_)
 	{
 		#ifdef BALL_DEBUG
@@ -32,7 +32,7 @@ namespace BALL
 	}
 
 	Embeddable::~Embeddable()
-		throw()
+		
 	{
 		#ifdef BALL_DEBUG
 			Log.info() << "destructing Embeddable [this = " << (void*)this << "]" << std::endl;
@@ -43,19 +43,19 @@ namespace BALL
 	}
 
 	const String& Embeddable::getIdentifier() const
-		throw()
+		
 	{
 		return identifier_;
 	}
 
 	void Embeddable::setIdentifier(const String& identifier)
-		throw()
+		
 	{
 		identifier_ = identifier;
 	}
 
 	void Embeddable::registerThis() 
-		throw()
+		
 	{
 		if (typeid(*this) != typeid(BALL::Embeddable))
 		{
@@ -66,14 +66,14 @@ namespace BALL
 	}
 
 	void Embeddable::unregisterThis() 
-		throw()
+		
 	{
 		Embeddable::unregisterInstance_(this);
 	}
 
 
 	void Embeddable::registerInstance_(const std::type_info& type, const Embeddable* instance) 
-		throw()
+		
 	{
 		// retrieve the class name
 		const char* class_id_string = type.name();
@@ -111,7 +111,7 @@ namespace BALL
 	}
 
 	void Embeddable::unregisterInstance_(const Embeddable* const_instance) 
-		throw()
+		
 	{
 		// for convenience, we use const pointers in the map, but const ptr
 		// for registerInstance/unregisterInstance, since it is *logically* const.
@@ -154,7 +154,7 @@ namespace BALL
 	}
 
 	Size Embeddable::countInstances_(const std::type_info& type) 
-		throw()
+		
 	{
 		// check whether we got a vector with that name
 		if (instance_vectors_.has(type.name()))
@@ -167,7 +167,7 @@ namespace BALL
 	}
 
 	Embeddable* Embeddable::getInstance_(const std::type_info& type, Position index)
-		throw()
+		
 	{
 		// check whether we got a vector with that name
 		if (instance_vectors_.has(type.name()))
@@ -183,7 +183,7 @@ namespace BALL
 	}
 
 	Embeddable* Embeddable::getInstance_(const std::type_info& type, const String& identifier)
-		throw()
+		
 	{
 		// check whether we got a vector with that name
 		if (instance_vectors_.has(type.name()))
@@ -211,7 +211,7 @@ namespace BALL
 
 
 	void Embeddable::dump(std::ostream& s, Size depth) const
-		throw()
+		
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		

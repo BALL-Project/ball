@@ -45,7 +45,7 @@ namespace BALL
 				Creates a new selectable object and sets its state to unselected.
 		*/
 		Selectable()
-			throw();
+			;
 			
 		/**	Copy constructor.
 				Creates a copy of selectable object.
@@ -53,19 +53,19 @@ namespace BALL
 				@param	deep ignored
 		*/
 		Selectable(const Selectable& selectable, bool deep = true)
-			throw();
+			;
 			
 		/**	Destructor.
 				The destructor has no functionality.
 		*/
 		virtual ~Selectable()
-			throw();
+			;
 
 		/**	Clear the selection flag.
 				Clear resets the selection flag to unselected.
 		*/
 		virtual void clear()
-			throw();
+			;
 		
 		//@}
 
@@ -78,7 +78,7 @@ namespace BALL
 				@param deep ignored
 		*/
 		void set(const Selectable& selectable, bool deep = true)
-			throw();
+			;
 
 		/**	Assignment operator.
 				Assigns the contents of another Selectable object
@@ -86,20 +86,20 @@ namespace BALL
 				@param selectable the object to be copied
 		*/
 		const Selectable& operator = (const Selectable& selectable)
-			throw();
+			;
 		
 		/**	Copy the contents of this object into another.
 				@param selectable the object to be assigned to
 				@param deep ignored
 		*/
 		void get(Selectable& selectable, bool deep = true) const
-			throw();
+			;
 
 		/**	Swap the contents of two objects.
 				@param selectable the object to swap contents with
 		*/
 		void swap(Selectable& selectable)
-			throw();
+			;
 		//@}
 
 		/**	Accessors
@@ -110,18 +110,18 @@ namespace BALL
 				The internal flag is set to <b>true</b>.
 		*/
 		virtual void select()
-			throw();
+			;
 
 		/**	Deselect the object.
 				The internal flag is set to <b>false</b>.
 		*/
 		virtual void deselect()
-			throw();
+			;
 
 		/** For faster access 
 		 */
 		virtual void setSelected(bool selected)
-			throw() { selected_ = selected; }
+			 { selected_ = selected; }
 
 		//@}
 		/**	@name Predicates 
@@ -132,17 +132,17 @@ namespace BALL
 				@return bool <b>true</b>, if the object is selected, <b>false</b> otherwise
 		*/
 		bool isSelected() const
-			throw();
+			;
 
 		/** Equality operator
 		*/
 		bool operator == (const Selectable& selectable) const 
-			throw();
+			;
 
 		/** Inequality operator
 		*/
 		bool operator != (const Selectable& selectable) const 
-			throw();
+			;
 
 		//@}
 
@@ -157,7 +157,7 @@ namespace BALL
 				@param pm the persistence manager
 		*/
 		void write(PersistenceManager& pm) const
-			throw();
+			;
 
 		/** Persistent stream reading.
 				This method reads a boolean variable from the
@@ -166,7 +166,7 @@ namespace BALL
 				@param pm the persistence manager
 		*/
 		bool read(PersistenceManager& pm)
-			throw();
+			;
 
 		//@}
 		/**	@name Debugging and Diagnostics 
@@ -175,7 +175,7 @@ namespace BALL
 		
 		///
 		virtual void dump(::std::ostream& s = std::cout, Size depth = 0) const
-			throw();
+			;
 
 		//@}
 	
