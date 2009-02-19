@@ -15,7 +15,7 @@
 #	include <BALL/KERNEL/predicate.h>
 #endif
 
-namespace BALL 
+namespace BALL
 {
 	class AtomContainer;
 
@@ -28,39 +28,38 @@ namespace BALL
 	{
 		public:
 
-		inline AtomContainerIteratorTraits()	throw();
-			
-		AtomContainerIteratorTraits(const Composite& composite) throw();
-			
-		inline AtomContainerIteratorTraits(const AtomContainerIteratorTraits& traits)	throw();
-			
-		AtomContainerIteratorTraits& operator = (const AtomContainerIteratorTraits& traits)	throw();
+		inline AtomContainerIteratorTraits();
 
-		void resetPredicate()	throw();
+		AtomContainerIteratorTraits(const Composite& composite);
+
+		inline AtomContainerIteratorTraits(const AtomContainerIteratorTraits& traits);
+
+		AtomContainerIteratorTraits& operator = (const AtomContainerIteratorTraits& traits);
+
+		void resetPredicate();
 	};
 
 
-	inline AtomContainerIteratorTraits::AtomContainerIteratorTraits()	throw()
+	inline AtomContainerIteratorTraits::AtomContainerIteratorTraits()
 		:	CompositeIteratorTraits()
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<AtomContainer> >();
 	}
-		
-	inline AtomContainerIteratorTraits::AtomContainerIteratorTraits(const Composite& composite) throw()
+
+	inline AtomContainerIteratorTraits::AtomContainerIteratorTraits(const Composite& composite)
 		:	CompositeIteratorTraits(composite)
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<AtomContainer> >();
 	}
-		
-	inline AtomContainerIteratorTraits::AtomContainerIteratorTraits(const AtomContainerIteratorTraits& traits)	throw()
+
+	inline AtomContainerIteratorTraits::AtomContainerIteratorTraits(const AtomContainerIteratorTraits& traits)
 		: CompositeIteratorTraits(traits)
 	{
 	}
-		
+
 	inline
 	AtomContainerIteratorTraits& AtomContainerIteratorTraits::operator =
 		(const AtomContainerIteratorTraits& traits)
-		throw()
 	{
 		CompositeIteratorTraits::operator=(traits);
 		return *this;
@@ -68,7 +67,6 @@ namespace BALL
 
 	inline
 	void AtomContainerIteratorTraits::resetPredicate()
-		throw()
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<AtomContainer> >();
 	}

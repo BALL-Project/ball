@@ -19,11 +19,12 @@
 #	include <BALL/KERNEL/predicate.h>
 #endif
 
-namespace BALL 
+namespace BALL
 {
 	/** Traits class for the various ChainIterators.
 			
-    	\ingroup  KernelIterators
+	    \ingroup  KernelIterators
+	    @todo Complete Documentation
 	*/
 	class BALL_EXPORT ChainIteratorTraits
 		: public CompositeIteratorTraits
@@ -31,45 +32,44 @@ namespace BALL
 
 		public:
 
-		inline ChainIteratorTraits()	throw();
-			
-		ChainIteratorTraits(const Composite& composite) throw();
-			
-		inline ChainIteratorTraits(const ChainIteratorTraits& traits)	throw();
-			
-		ChainIteratorTraits& operator = (const ChainIteratorTraits& traits)	throw();
+		inline ChainIteratorTraits();
 
-		void resetPredicate() throw();
+		ChainIteratorTraits(const Composite& composite);
+
+		inline ChainIteratorTraits(const ChainIteratorTraits& traits);
+
+		ChainIteratorTraits& operator = (const ChainIteratorTraits& traits);
+
+		void resetPredicate();
 	};
 
-	inline ChainIteratorTraits::ChainIteratorTraits() throw()
+	inline ChainIteratorTraits::ChainIteratorTraits()
 		:	CompositeIteratorTraits()
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<Chain> >();
 	}
-		
-	inline ChainIteratorTraits::ChainIteratorTraits(const Composite& composite)	throw()
+
+	inline ChainIteratorTraits::ChainIteratorTraits(const Composite& composite)
 		:	CompositeIteratorTraits(composite)
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<Chain> >();
 	}
-		
-	inline ChainIteratorTraits::ChainIteratorTraits(const ChainIteratorTraits& traits)	throw()
+
+	inline ChainIteratorTraits::ChainIteratorTraits(const ChainIteratorTraits& traits)
 		:	CompositeIteratorTraits(traits)
 	{
 	}
-		
-	inline ChainIteratorTraits& ChainIteratorTraits::operator = (const ChainIteratorTraits& traits) throw()
+
+	inline ChainIteratorTraits& ChainIteratorTraits::operator = (const ChainIteratorTraits& traits)
 	{
 		CompositeIteratorTraits::operator=(traits);
 		return *this;
 	}
 
-	inline void ChainIteratorTraits::resetPredicate() throw()
+	inline void ChainIteratorTraits::resetPredicate()
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<Chain> >();
 	}
-
 
 	/** @name Iterator type definitions for the various ChainIterators
     	\ingroup  KernelIterators
@@ -88,8 +88,9 @@ namespace BALL
 	typedef std::reverse_iterator<ChainIterator> ChainReverseIterator;
 
 	/// A constant reverse bidirectional iterator for the Chain class.
-	typedef std::reverse_iterator<ChainConstIterator> ChainConstReverseIterator;	
+	typedef std::reverse_iterator<ChainConstIterator> ChainConstReverseIterator;
 	//@}
 } // namespace BALL 
 
 #endif // BALL_KERNEL_CHAINITERATOR_H
+
