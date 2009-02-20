@@ -5,7 +5,9 @@
 
 #include <BALL/QSAR/Model.h>
 #include <BALL/QSAR/kernelModel.h>
+#include <BALL/QSAR/registry.h>
 using namespace BALL::QSAR;
+using namespace BALL;
 
 
 
@@ -609,3 +611,37 @@ bool Model::optimizeParameters(int k)
 {
 	return optimizeParameters(k, default_no_opt_steps_);
 }
+
+
+
+
+Model* QSAR::createNewModelFromFile(String model_file, const QSARData& q)
+{
+	Registry reg;
+	Model* m;
+	String model_type;
+	ifstream model_input(model_file.c_str()); // read model-abbreviation
+	if(!model_input)
+	{
+		throw BALL::Exception::FileNotFound(__FILE__,__LINE__,model_file);
+		return NULL;
+	}
+	getline(model_input,model_type);
+	getline(model_input,model_type);
+	model_type = model_type.getField(0,"\t");
+	model_input.close();
+	RegistryEntry* entry = reg.getEntry(model_type);	
+	if(!entry->kernel)
+	{
+		m = (*entry->create)(q);
+	}
+	else
+	{	
+		// parameters irrelevant; will be overwritten by those read from file
+		m = (*entry->createKernel1)(q,1,1, -1);
+	}
+	
+	m->readFromFile(model_file);
+	return m;	
+}
+

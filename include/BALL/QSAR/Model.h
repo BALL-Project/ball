@@ -31,7 +31,7 @@ namespace BALL
 {
 	
 	namespace QSAR
-	{
+	{	
 		class Model
 		{	
 			public:
@@ -227,6 +227,9 @@ namespace BALL
 				friend class KPCRModel;
 				friend class FeatureSelection;
 		};
+		
+		/** convenience function for creating a new Model object from a given model-file */
+		Model* createNewModelFromFile(String model_file, const QSARData& q);
 	}
 }
 
