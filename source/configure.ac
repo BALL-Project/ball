@@ -100,7 +100,7 @@ AC_ARG_ENABLE(double-cplx,     [  --enable-double-cplx    use double precision f
 AC_ARG_ENABLE(longdbl-cplx,    [  --enable-longdbl-cplx   use long double precision floats for Complex type])
 
 dnl ** GSL **
-AC_ARG_ENABLE(gsl,             [  --enable-gsl            enable the build of BALL with support for GSL (GNU Scientific Library)])
+#AC_ARG_ENABLE(gsl,             [  --enable-gsl            enable the build of BALL with support for GSL (GNU Scientific Library)])
 AC_ARG_WITH(gsl-lib,           [  --with-gsl-lib=DIR      libgsl is in DIR])
 AC_ARG_WITH(gsl-incl,          [  --with-gsl-incl=DIR     gsl includes are in DIR])
 
@@ -327,20 +327,15 @@ else
 fi
 
 # support for GSL (GNU Scientific Library)
-if test "$with_gsl" != "" -a "$with_gsl" != "no" -o "$enable_gsl" = yes ; then
-	GSL_SUPPORT=true
-	if test "${with_gsl_lib}" != "" ; then
-		GSL_LIBDIR=${with_gsl_lib}
-	else
-		GSL_LIBDIR=""
-	fi
-	if test "${with_gsl_incl}" != "" ; then
-		GSL_INCDIR=${with_gsl_incl}
-	else
-		GSL_INCDIR=""
-	fi
+if test "${with_gsl_lib}" != "" ; then
+	GSL_LIBDIR=${with_gsl_lib}
 else
-	GSL_SUPPORT=
+	GSL_LIBDIR=""
+fi
+if test "${with_gsl_incl}" != "" ; then
+	GSL_INCDIR=${with_gsl_incl}
+else
+	GSL_INCDIR=""
 fi
 
 # support for lpsolve 
@@ -618,9 +613,7 @@ fi
 dnl
 dnl GSL -- The GNU Scientific Library
 dnl
-if test "${GSL_SUPPORT}" == true ; then
-	CF_GSL
-fi
+CF_GSL
 
 dnl Spacenavigator input plugin support
 dnl
