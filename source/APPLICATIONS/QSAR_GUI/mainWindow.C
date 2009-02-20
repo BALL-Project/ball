@@ -1662,6 +1662,14 @@ bool MainWindow::checkForEmptyPipelines()
 
 int MainWindow::chooseValidationStatisticDialog(ModelItem* modelitem)
 {
+	const map<uint,String>* statistics = modelitem->getRegistryEntry()->getStatistics();
+	
+	// if there is just one registered statistic, don't bother the user with a useless question! 
+	if(statistics->size()==1)
+	{
+		return statistics->begin()->first;
+	}
+		
 	QDialog dialog;
 	QVBoxLayout main_layout;
 	
@@ -1669,7 +1677,6 @@ int MainWindow::chooseValidationStatisticDialog(ModelItem* modelitem)
 	QLabel label("Desired quality statistic");
 	QComboBox statistic_box;
 		
-	const map<uint,String>* statistics = modelitem->getRegistryEntry()->getStatistics();
 	for(map<uint,String>::const_iterator it=statistics->begin(); it!=statistics->end(); ++it)
 	{
 		statistic_box.addItem(it->second.c_str(),it->first);

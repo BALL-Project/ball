@@ -42,6 +42,10 @@ void ClassificationValidation::selectStat(int s)
 	{
 		qualCalculation = &ClassificationValidation::calculateOverallMCC;
 	}
+	else if(s==5)
+	{
+		qualCalculation = &ClassificationValidation::calculateTDR;
+	}
 }
 
 void ClassificationValidation::crossValidation(int k, bool restore)
@@ -452,6 +456,29 @@ void ClassificationValidation::calculateOverallMCC()
 	quality_= nom/denom;
 }
 
+
+// calculation of True Discovery Rate
+void ClassificationValidation::calculateTDR()
+{
+	quality_ = 0;
+	int TP = 0; int FP=0;
+	
+	if(confusion_matrix_.getColumnCount()>2)
+	{
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Classification validation error","True Discovery Rate can only be calculated for binary classification data sets!");
+	}
+	
+	TP = (int)confusion_matrix_(1,2);
+	FP = (int)confusion_matrix_(2,2);
+	
+	if(TP==0) 
+	{
+		quality_ = 0;
+		return;
+	}
+		
+	quality_= ((double)TP)/(TP+FP);	
+}
 
 
 const BALL::Matrix<double>* ClassificationValidation::getConfusionMatrix()

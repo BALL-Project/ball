@@ -501,6 +501,7 @@ FeatureSelectionConfiguration ConfigIO::readFeatureSelectionConfiguration(istrea
 		else if(line.hasPrefix("classification_statistic") || line.hasPrefix("regression_statistic"))
 		{
 			String s = ((String)line.after("=")).trimLeft();
+			if(s=="R2/Q2 version2") s="R2/Q2";
 			conf.statistic_name = s;
 			
 			const map<uint,String>* stats;
@@ -704,6 +705,7 @@ ValidationConfiguration ConfigIO::readValidationConfiguration(istream* input)
 		else if(line.hasPrefix("classification_statistic") || line.hasPrefix("regression_statistic"))
 		{
 			String s = ((String)line.after("=")).trimLeft();
+			if(s=="R2/Q2 version2") s="R2/Q2";
 			conf.statistic_name = s;
 			
 			const map<uint,String>* stats;
@@ -855,6 +857,7 @@ PredictionConfiguration ConfigIO::readPredictionConfiguration(istream* input)
 		else if(line.hasPrefix("classification_statistic") || line.hasPrefix("regression_statistic"))
 		{
 			String s = ((String)line.after("=")).trimLeft();
+			if(s=="R2/Q2 version2") s="R2/Q2";
 			conf.statistic_name = s;
 			
 			const map<uint,String>* stats;

@@ -103,6 +103,9 @@ namespace BALL
 				
 				/** calculate MCC for all classes at once */
 				void calculateOverallMCC();
+				
+				/** calculate the True Discovery Rate (only applicable to binary classification validation results). */
+				void calculateTDR();
 				//@}
 				
 				
