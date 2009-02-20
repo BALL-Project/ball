@@ -1506,3 +1506,52 @@ void QSARData::removeHighlyCorrelatedCompounds(double& cor_threshold)
 	}
 	removeInvalidSubstances(to_be_deleted);
 }
+
+
+void QSARData::getSimilarDescriptors(int descriptor_ID, double correlation, list<pair<uint,String> >& similar_descriptor_IDs)
+{
+	if(descriptor_ID<0 || descriptor_ID>=(int)descriptor_matrix_.size())
+	{
+		String mess = "Specified descriptor ID '"+String(descriptor_ID)+"' is out ouf range";
+		if(descriptor_ID>=(int)descriptor_matrix_.size())
+		{
+			mess+="; max. index="+String(descriptor_matrix_.size()-1);
+		}
+		
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"getSimilarDescriptors() error",mess);
+	}
+	
+	similar_descriptor_IDs.clear();
+	
+	vector<double> stddev(getNoDescriptors(),1);
+	vector<double> mean(getNoDescriptors(),0);
+	
+	// if data has not been centered, calculate mean and stddev of each feature
+	if(descriptor_transformations_.size()==0)
+	{
+		for(uint i=0; i<mean.size();i++)
+		{
+			mean[i] = Statistics::getMean(descriptor_matrix_[i]);
+		}		
+		for(uint i=0; i<stddev.size();i++)
+		{
+			stddev[i] = Statistics::getStddev(descriptor_matrix_[i], mean[i]);
+		}
+	}
+	
+	uint size=(uint)descriptor_matrix_.size();
+	for(uint i=0; i<size; i++)
+	{
+		if((uint)descriptor_ID==i) continue;
+			
+		double covar = Statistics::getCovariance(descriptor_matrix_[descriptor_ID], descriptor_matrix_[i],mean[descriptor_ID],mean[i]);
+			
+		double abs_cor = abs(covar/(stddev[descriptor_ID]*stddev[i]));
+			
+		if(abs_cor>correlation)
+		{
+			similar_descriptor_IDs.push_back(make_pair(i,column_names_[i]));
+		}
+	}
+}
+

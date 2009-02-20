@@ -174,6 +174,12 @@ namespace BALL
 				
 				/** removes compounds whose absolute correlation coefficient to another compound is larger than cor_threshold */
 				void removeHighlyCorrelatedCompounds(double& cor_threshold);
+				
+				/** Find all descriptors of the current data set that have a correlation of at least 'similarity' to the specified feature 
+				@param descriptor_ID the ID of the descriptor for which similar features should be searched
+				@param similarity the desired minimal correlation 
+				@param similar_descriptor_IDs list to which the IDs of the found descriptors will be saved as pairs of descriptor ID and descriptor name */
+				void getSimilarDescriptors(int descriptor_ID, double correlation, list<pair<uint,String> >& similar_descriptor_IDs);
 				//@}
 				
 				
