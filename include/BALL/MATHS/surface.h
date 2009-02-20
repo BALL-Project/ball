@@ -45,13 +45,13 @@ namespace BALL
 				Index	v2;
 				Index	v3;
 
-				bool operator == (const Triangle& triangle) const throw()
+				bool operator == (const Triangle& triangle) const 
 				{
 					return (v1 == triangle.v1) && (v2 == triangle.v2) && (v3 == triangle.v3);
 				}
 
 
-				bool operator != (const Triangle& triangle) const throw()
+				bool operator != (const Triangle& triangle) const 
 				{
 					return !(v1 == triangle.v1) && (v2 == triangle.v2) && (v3 == triangle.v3);
 				}
@@ -70,15 +70,15 @@ namespace BALL
 
 		///
 		TSurface()
-			throw();
+			;
 
 		///
 		TSurface(const TSurface& surface)
-			throw();
+			;
 
 		///
 		virtual ~TSurface()
-			throw();
+			;
 		//@}
 
 		/**	@name	Assignment
@@ -87,19 +87,19 @@ namespace BALL
 
 		///
 		void set(const TSurface& surface)
-			throw();
+			;
 
 		///
 		TSurface& operator = (const TSurface& surface)
-			throw();
+			;
 
 		///
 		void get(TSurface& surface) const
-			throw();
+			;
 
 		///
 		void clear()
-			throw();
+			;
 
 		/**	Read from MSMS file.
 				Read the contents of the vertex and faces file created by Michael
@@ -118,27 +118,27 @@ namespace BALL
 				triangles.
 		*/
 		float getArea() const
-			throw();
+			;
 
 		/// Return the number of triangles
 		Size getNumberOfTriangles() const
-			throw();
+			;
 		
 		/// Return the number of vertices
 		Size getNumberOfVertices() const
-			throw();
+			;
 
 		/// Return the number of normals
 		Size getNumberOfNormals() const
-			throw();
+			;
 
 		/// Return a triangle with a given index
 		Triangle& getTriangle(Position index)
-			throw();
+			;
 
 		/// Return a triangle with a given index
 		const Triangle& getTriangle(Position index) const
-			throw();
+			;
 			
 		/// Clear all triangles
 		void clearTriangles();
@@ -148,15 +148,15 @@ namespace BALL
 
 		/// Add a triangle
 		void pushBackTriangle(const Triangle& triangle)
-			throw();
+			;
 
 		/// Return the position of a vertex
 		Vertex& getVertex(Position index)
-			throw();
+			;
 
 		/// Return the position of a vertex
 		const Vertex& getVertex(Position index) const
-			throw();
+			;
 
 		/// Clear all vertices
 		void clearVertices();
@@ -166,15 +166,15 @@ namespace BALL
 
 		/// Add a vertex
 		void pushBackVertex(const Vertex& vertex)
-			throw();
+			;
 
 		/// Return the position of a normal
 		Normal& getNormal(Position index)
-			throw();
+			;
 
 		/// Return the position of a normal
 		const Normal& getNormal(Position index) const
-			throw();
+			;
 
 		/// Clear all normals
 		void clearNormals();
@@ -184,7 +184,7 @@ namespace BALL
 
 		/// Add a normal
 		void pushBackNormal(const Normal& n)
-			throw();
+			;
 
 		//@}
 
@@ -194,11 +194,11 @@ namespace BALL
 
 		///
 		bool operator == (const TSurface& surface) const
-			throw();
+			;
 
 		///
 		bool operator != (const TSurface& surface) const
-			throw();
+			;
 		//@}
 
 		/**	@name	Attributes
@@ -224,13 +224,13 @@ namespace BALL
 
 	template <typename T>
 	TSurface<T>::TSurface()
-		throw()
+		
 	{
 	}
 
 	template <typename T>
 	TSurface<T>::TSurface(const TSurface<T>& surface)
-		throw()
+		
 		:	vertex(surface.vertex),
 			normal(surface.normal),
 			triangle(surface.triangle)
@@ -239,13 +239,13 @@ namespace BALL
 
 	template <typename T>
 	TSurface<T>::~TSurface()
-		throw()
+		
 	{
 	}
 
 	template <typename T>
 	void TSurface<T>::clear()
-		throw()
+		
 	{
 		vertex.clear();
 		normal.clear();
@@ -254,7 +254,7 @@ namespace BALL
 	
 	template <typename T>
 	void TSurface<T>::set(const TSurface<T>& surface)
-		throw()
+		
 	{
 		vertex = surface.vertex;
 		normal = surface.normal;
@@ -263,7 +263,7 @@ namespace BALL
 
 	template <typename T>
 	TSurface<T>& TSurface<T>::operator = (const TSurface<T>& surface)
-		throw()
+		
 	{
 		vertex = surface.vertex;
 		normal = surface.normal;
@@ -273,7 +273,7 @@ namespace BALL
 	
 	template <typename T>
 	void TSurface<T>::get(TSurface<T>& surface) const
-		throw()
+		
 	{
 		surface.vertex = vertex;
 		surface.normal = normal;
@@ -358,7 +358,7 @@ namespace BALL
 
 	template <typename T>
 	float TSurface<T>::getArea() const
-		throw()
+		
 	{
 		// add the areas of all triangles
 		double area = 0;
@@ -375,7 +375,7 @@ namespace BALL
 
 	template <typename T>
 	bool TSurface<T>::operator == (const TSurface<T>& surface) const
-		throw()
+		
 	{
 		return ((surface.vertex == vertex) 
 						&& (surface.normal == normal) 
@@ -385,7 +385,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	Size TSurface<T>::getNumberOfTriangles() const
-			throw()
+			
 	{
 		return (Size)triangle.size();
 	}
@@ -393,7 +393,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	Size TSurface<T>::getNumberOfVertices() const
-			throw()
+			
 	{
 		return (Size)vertex.size();
 	}
@@ -401,7 +401,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	Size TSurface<T>::getNumberOfNormals() const
-			throw()
+			
 	{
 		return (Size)normal.size();
 	}
@@ -410,7 +410,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	typename TSurface<T>::Triangle& TSurface<T>::getTriangle(Position index)
-		throw()
+		
 	{
 		return triangle[index];
 	}
@@ -418,7 +418,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	const typename TSurface<T>::Triangle& TSurface<T>::getTriangle(Position index) const
-		throw()
+		
 	{
 		return triangle[index];
 	}
@@ -441,7 +441,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void TSurface<T>::pushBackTriangle(const Triangle& t)
-		throw()
+		
 	{
 		triangle.push_back(t);
 	}
@@ -450,7 +450,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	typename TSurface<T>::Vertex& TSurface<T>::getVertex(Position index)
-		throw()
+		
 	{
 		return vertex[index];
 	}
@@ -458,7 +458,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	const typename TSurface<T>::Vertex& TSurface<T>::getVertex(Position index) const
-		throw()
+		
 	{
 		return vertex[index];
 	}
@@ -481,7 +481,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void TSurface<T>::pushBackVertex(const typename TSurface<T>::Vertex& position)
-		throw()
+		
 	{
 		vertex.push_back(position);
 	}
@@ -489,7 +489,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	typename TSurface<T>::Normal& TSurface<T>::getNormal(Position index)
-		throw()
+		
 	{
 		return normal[index];
 	}
@@ -497,7 +497,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	const typename TSurface<T>::Normal& TSurface<T>::getNormal(Position index) const
-		throw()
+		
 	{
 		return normal[index];
 	}
@@ -519,14 +519,14 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void TSurface<T>::pushBackNormal(const typename TSurface<T>::Normal& n)
-		throw()
+		
 	{
 		normal.push_back(n);
 	}
 
 	template <typename T>
 	bool TSurface<T>::operator != (const TSurface<T>& surface) const
-		throw()
+		
 	{
 		return !(*this == surface);
 	}

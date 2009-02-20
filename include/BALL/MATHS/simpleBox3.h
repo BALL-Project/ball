@@ -43,22 +43,20 @@ namespace BALL
 				of the two TVector3 are initialized to {\tt (T)0}.
 		*/
 		TSimpleBox3()
-			throw();
+			;
 
 		/**	Copy constructor.
 				Create a new TSimpleBox3 object from another.
 				@param box the TSimpleBox3 object to be copied
 		*/	
-		TSimpleBox3(const TSimpleBox3& box)
-			throw();
+		TSimpleBox3(const TSimpleBox3& box);
 
 		/**	Detailed constructor.
 				Create a new TSimpleBox3 object from two instances of TVector3.
 				@param	a assigned to <TT>  a </TT>
 				@param	b assigned to <TT>  b </TT>
 		*/
-		TSimpleBox3(const TVector3<T>& a, const TVector3<T>& b)
-			throw();
+		TSimpleBox3(const TVector3<T>& a, const TVector3<T>& b);
 
 		/**	Detailed constructor.
 				Create a new TSimpleBox3 object from six variables of type <TT>  T </TT>.
@@ -69,24 +67,21 @@ namespace BALL
   			@param	by assigned to <TT>  b.y </TT>
 				@param	bz assigned to <TT>  b.z </TT>
 		*/
-		TSimpleBox3(const T& ax, const T& ay, const T& az,
-					const T& bx, const T& by, const T& bz)
-			throw();
+		TSimpleBox3(const T& ax, const T& ay, const T& az, const T& bx, const T& by, const T& bz);
 
 		/**	Destructor.	
 				Destructs the TSimpleBox3 object. As there are no dynamic
 				data structures, nothing happens.
 		*/	
 		virtual ~TSimpleBox3()
-			throw()
+			
 		{
 		}
 
 		/** Clear method.
 				The values are set to 0.
 		*/
-		virtual void clear()
-			throw();
+		virtual void clear();
 
 		//@}
 		/**	@name	Assignment
@@ -96,15 +91,13 @@ namespace BALL
 		/**	Assign from another instance of TSimpleBox3.
 				@param box	the TSimpleBox3 object to assign from
 		*/
-		void set(const TSimpleBox3& box)
-			throw();
+		void set(const TSimpleBox3& box);
 
 		/**	Assign from two points.
 				@param lower the lower corner of the box
 				@param upper the upper corner of the box
 		*/
-		void set(const TVector3<T>& lower, const TVector3<T>& upper)
-			throw();
+		void set(const TVector3<T>& lower, const TVector3<T>& upper);
 
 		/**	Assign from six values of type <TT>  T </TT>.
 				@param	ax assigned to <TT>  a.x </TT>
@@ -114,30 +107,28 @@ namespace BALL
   			@param	by assigned to <TT>  b.y </TT>
 				@param	bz assigned to <TT>  b.z </TT>
 		*/
-		void set(const T& ax, const T& ay, const T& az,
-						 const T& bx, const T& by, const T& bz)
-			throw();
+		void set(const T& ax, const T& ay, const T& az, const T& bx, const T& by, const T& bz)
+			;
 
 		/**	Assignment operator.
 				Assign the box components from another instance of TSimpleBox3.
 				@param box the TSimpleBox3 to assign from
 		**/
 		const TSimpleBox3& operator = (const TSimpleBox3& box)
-			throw();
+			;
 
 		/**	Assign to another instance of TSimpleBox3.
 				Assigns the box components to another box.
 				@param box	the box to be assigned to
 		*/
-		void get(TSimpleBox3& box) const
-			throw();
+		void get(TSimpleBox3& box) const;
 
 		/**	Assign to two variables of type <TT>  TVector3 </TT>.
 				@param lower the lower corner of the box
 				@param upper the upper corner of the box
 		*/
 		void get(TVector3<T>& lower, TVector3<T>& upper) const
-			throw();
+			;
 
 		/**	Assign to six variables of type <TT>  T </TT>.
 				@param	ax is assigned <TT>  a.x </TT>
@@ -147,14 +138,12 @@ namespace BALL
 				@param	by is assigned <TT>  b.y </TT>
 				@param	bz is assigned <TT>  b.z </TT>
 		*/
-		void get(T& ax, T& ay, T& az, T& bx, T& by, T& bz) const
-			throw();
+		void get(T& ax, T& ay, T& az, T& bx, T& by, T& bz) const;
 
 		/**	Swap the contents of two instances.
 				@param	box the box to swap contents with
 		*/
-		void swap(TSimpleBox3& box)
-			throw();
+		void swap(TSimpleBox3& box);
 
 		//@}
 
@@ -166,31 +155,31 @@ namespace BALL
 				@return T the surface
 		*/
 		T getSurface() const
-			throw();
+			;
 
 		/**	Calculate the volume.
 				@return T the volume
 		*/
 		T getVolume() const
-			throw();
+			;
 
 		/**	Return the width of the box.
 				@return T the width
 		*/
 		T getWidth() const
-			throw();
+			;
 	
 		/**	Return the height of the box.
 				@return T the height
 		*/
 		T getHeight() const
-			throw();
+			;
 	
 		/**	Return the depth of the box.
 				@return T the depth
 		*/
 		T getDepth() const
-			throw();
+			;
 	
 		/**	Join the box with an other.
 				Instance is set to the box containing
@@ -198,7 +187,7 @@ namespace BALL
 				@param	box the box to join with
 		*/
 		void join(const TSimpleBox3& box)
-			throw();
+			;
 
 		//@}
 		/**	@name	Predicates
@@ -209,13 +198,13 @@ namespace BALL
 				@return bool, <b>  true </b> if all box components are equal, <b>  false </b> otherwise
 		*/
 		bool operator == (const TSimpleBox3& box) const
-			throw();
+			;
 
 		/**	Inequality operator.
 				@return bool, <b>  true </b> if the two boxes differ in at least one component, <b>  false </b> otherwise
 		*/
 		bool operator != (const TSimpleBox3& box) const
-			throw();
+			;
 
 		/**	Test if a given point is a member of the box.
 				Optional it can be testet, if the point lies on the surface.
@@ -224,14 +213,14 @@ namespace BALL
 				@return bool, <b>  true </b> or <b>  false </b>
 		*/
 		bool has(const TVector3<T>& point, bool on_surface = false) const
-			throw();
+			;
 
 		/**	Test if two boxes intersect.
 				@param box the box to be tested
 				@return bool, <b>  true </b> if the two boxes are intersecting, <b>  false </b> otherwise
 		*/
 		bool isIntersecting(const TSimpleBox3& box) const
-			throw();
+			;
 		//@}
 
 		/**	@name	Debugging and Diagnostics
@@ -243,7 +232,7 @@ namespace BALL
 				@return bool <b>  true </b>
 		*/
 		bool isValid() const
-			throw();
+			;
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to 
@@ -252,7 +241,7 @@ namespace BALL
 				@param   depth - the dumping depth
 		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw();
+			;
 		//@}
 
 
@@ -273,7 +262,7 @@ namespace BALL
 
 	template <typename T>
 	TSimpleBox3<T>::TSimpleBox3()
-		throw()
+		
 		:	a(),
 			b()
 	{
@@ -281,7 +270,7 @@ namespace BALL
 
 	template <typename T>
 	TSimpleBox3<T>::TSimpleBox3(const TSimpleBox3<T>& box)
-		throw()
+		
 		:	a(box.a),
 			b(box.b)
 	{
@@ -289,7 +278,7 @@ namespace BALL
 
 	template <typename T>
 	TSimpleBox3<T>::TSimpleBox3(const TVector3<T>& lower, const TVector3<T>& upper)
-		throw()
+		
 		:	a(lower),
 			b(upper)
 	{
@@ -298,7 +287,7 @@ namespace BALL
 	template <typename T>
 	TSimpleBox3<T>::TSimpleBox3(const T& ax, const T& ay, const T& az,
 						 		  const T& bx, const T& by, const T& bz)
-		throw()
+		
 		:	a(ax, ay, az),
 			b(bx, by, bz)
 	{
@@ -307,7 +296,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TSimpleBox3<T>::set(const TSimpleBox3<T>& box)
-		throw()
+		
 	{
 		a.set(box.a);
 		b.set(box.b);
@@ -316,7 +305,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TSimpleBox3<T>::set(const TVector3<T>& lower, const TVector3<T>& upper)
-		throw()
+		
 	{
 		a.set(lower);
 		b.set(upper);
@@ -326,7 +315,7 @@ namespace BALL
 	BALL_INLINE 
 	void TSimpleBox3<T>::set(const T& ax, const T& ay, const T& az,
 										 const T& bx, const T& by, const T& bz)
-		throw()
+		
 	{
 		a.set(ax, ay, az);
 		b.set(bx, by, bz);
@@ -335,7 +324,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	const TSimpleBox3<T>& TSimpleBox3<T>::operator = (const TSimpleBox3<T> &box)
-		throw()
+		
 	{
 		set(box);
 		return *this;
@@ -344,7 +333,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TSimpleBox3<T>::get(TSimpleBox3<T>& box) const
-		throw()
+		
 	{
 		box.set(*this);
 	}
@@ -352,7 +341,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TSimpleBox3<T>::get(TVector3<T>& lower, TVector3<T>& upper) const
-		throw()
+		
 	{
 		lower.set(a);
 		upper.set(b);
@@ -361,7 +350,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TSimpleBox3<T>::get(T& ax, T& ay, T& az, T& bx, T& by, T& bz) const
-		throw()
+		
 	{
 		a.get(ax, ay, az);
 		b.get(bx, by, bz);
@@ -370,7 +359,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TSimpleBox3<T>::swap(TSimpleBox3<T>& box)
-		throw()
+		
 	{
 		a.swap(box.a);
 		b.swap(box.b);
@@ -379,7 +368,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void TSimpleBox3<T>::clear()
-		throw()
+		
 	{
 		a.set((T)0, (T)0, (T)0);
 		b.set((T)0, (T)0, (T)0);
@@ -388,7 +377,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T TSimpleBox3<T>::getSurface() const
-		throw()
+		
 	{
 		T width  = Maths::abs(b.x - a.x);
 		T height = Maths::abs(b.y - a.y);
@@ -400,7 +389,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T TSimpleBox3<T>::getVolume() const
-		throw()
+		
 	{
 		T width  = Maths::abs(b.x - a.x);
 		T height = Maths::abs(b.y - a.y);
@@ -412,7 +401,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T TSimpleBox3<T>::getWidth() const
-		throw()
+		
 	{
 		return Maths::abs(b.x - a.x);
 	}
@@ -420,7 +409,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	T TSimpleBox3<T>::getHeight() const
-		throw()
+		
 	{
 		return Maths::abs(b.y - a.y);
 	}
@@ -428,14 +417,14 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	T TSimpleBox3<T>::getDepth() const
-		throw()
+		
 	{
 		return Maths::abs(b.z - a.z);
 	}
 
 	template <typename T>
 	void TSimpleBox3<T>::join(const TSimpleBox3<T>& box)
-		throw()
+		
 	{
 		T minimum = a.x;
 		minimum = Maths::min(minimum, b.x);
@@ -480,7 +469,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool TSimpleBox3<T>::operator == (const TSimpleBox3<T>& box) const
-		throw()
+		
 	{
 		return (a == box.a && b == box.b);
 	}
@@ -488,7 +477,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool TSimpleBox3<T>::operator != (const TSimpleBox3<T> &box) const
-		throw()
+		
 	{
 		return !(*this == box);
 	}
@@ -496,14 +485,14 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool TSimpleBox3<T>::isValid() const
-		throw()
+		
 	{
 		return (a.isValid() && b.isValid());
 	}
 
 	template <typename T>
 	bool TSimpleBox3<T>::has(const TVector3<T>& point, bool on_surface) const
-		throw()
+		
 	{
 		if (!on_surface)
 		{
@@ -544,7 +533,7 @@ namespace BALL
 
 	template <typename T>
 	bool TSimpleBox3<T>::isIntersecting(const TSimpleBox3& box) const
-		throw()
+		
 	{
 		const TVector3<T>* lower;
 		const TVector3<T>* higher;
@@ -590,7 +579,7 @@ namespace BALL
 
 	template <typename T>
 	void TSimpleBox3<T>::dump(std::ostream& s, Size depth) const
-		throw()
+		
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		
@@ -615,7 +604,7 @@ namespace BALL
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TSimpleBox3<T>& box)
-		throw()
+		
 	{
 		char c;
 		s >> c >> box.a >> box.b >> c;
@@ -632,7 +621,7 @@ namespace BALL
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TSimpleBox3<T>& box)
-		throw()
+		
 	{
 		return s << "(" << box.a << ' ' << box.b << ')';
 	}

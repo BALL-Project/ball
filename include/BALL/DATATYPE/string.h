@@ -70,8 +70,7 @@ namespace BALL
 		// cast true to 1 and copy only the string from the second character
 		// on! We could use BALL_CREATE_NODEEP, but this leads to trouble with
 		// inline constructors, so we code it by hand (here and in string.C)
-		virtual void* create(bool /* deep */ = true, bool empty = false) const
-			throw();
+		virtual void* create(bool /* deep */ = true, bool empty = false) const;
 	
 		/**	@name	Enums and Constants */
 		//@{
@@ -148,16 +147,13 @@ namespace BALL
 		//@{
 
 		/// Default Constructor
-		String()
-			throw();
+		String();
 
 		/// Copy constructor 
-		String(const String& string)
-			throw();
+		String(const String& string);
 
 		/// STL string copy constructor
-		String(const string& string)
-			throw();
+		String(const string& string);
 
 		/** Creates a new string from a given range of another string.
 				@see 		String:Indices
@@ -195,56 +191,50 @@ namespace BALL
 				object leads to identical copies.
 		*/
 #ifdef BALL_HAS_SSTREAM
-		String(std::stringstream& s)
-			throw();
+		String(std::stringstream& s);
 #else
-		String(std::strstream& s)
-			throw();
+		String(std::strstream& s);
 #endif
 
 		/** Creates a new string from len copies of c.
 		*/
-		String(const char c, Size len = 1)
-			throw();
+		String(const char c, Size len = 1);
 
 		/// Creates a string just containing an unsigned character
-		String(const unsigned char uc)
-			throw();
+		String(const unsigned char uc);
 
 		/// Construct a String from a short
-		String(short s)
-			throw();
+		String(short s);
 
 		/// Construct a String from an unsigned short
-		String(unsigned short us)
-			throw();
+		String(unsigned short us);
 
 		/// Construct a String from an int
-		String(int i)	throw();
+		String(int i);
 
 		/// Construct a String from an unsigned int
-		String(unsigned int ui) throw();
+		String(unsigned int ui);
 
 		/// Construct a String from a long
-		String(long l) throw();
+		String(long l);
 
 		/// Construct a String from an unsigned long
-		String(unsigned long) throw();
+		String(unsigned long);
 
 		/// Construct a String from a float value
-		String(float f)	throw();
+		String(float f);
 
 		/// Construct a String from a double value
-		String(double d) throw();
+		String(double d);
 
 		/// Destructor
-		virtual ~String()	throw();
+		virtual ~String();
 
 		/// Clear the string (reset to the empty string)
-		void destroy() throw();
+		void destroy();
 
 		/// Clears the string (same as destroy)
-		virtual void clear() throw();
+		virtual void clear();
 		//@}
 
 		/**	@name	Assignment methods 
@@ -279,49 +269,47 @@ namespace BALL
 				The contents of the <tt>stringstream</tt> object are not modified.
 		*/
 #ifdef BALL_HAS_SSTREAM
-		void set(std::stringstream& s)
-			throw();
+		void set(std::stringstream& s);
 #else
-		void set(std::strstream& s)
-			throw();
+		void set(std::strstream& s);
 #endif
 
 		/// Assign a String from the result of repeating <b>c</b> <b>len</b> times
-		void set(char c, Size len = 1) throw();
+		void set(char c, Size len = 1);
 
 		///	Assign a String from an unsigned char
-		void set(unsigned char uc) throw();
+		void set(unsigned char uc);
 
 		/// Assign a String from a short
-		void set(short s)	throw();
+		void set(short s);
 
 		/// Assign a String from an unsigned short
-		void set(unsigned short us) throw();
+		void set(unsigned short us);
 
 		/// Assign a String from an int
-		void set(int i) throw();
+		void set(int i);
 
 		/// Assign a String from an unsigned int
-		void set(unsigned int ui) throw();
+		void set(unsigned int ui);
 
 		/// Assign a String from a long 
-		void set(long l) throw();
+		void set(long l);
 
 		/// Assign a String from an unsigned long
-		void set(unsigned long ul) throw();
+		void set(unsigned long ul);
 
 		/// Assign a String from a float value
-		void set(float f) throw();
+		void set(float f);
 
 		/// Assign a String from a double value
-		void set(double d) throw();
+		void set(double d);
 
 		/// Assign to a C type string
 		void get(char* char_ptr, Index from = 0, Size len = EndPos) const
 			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/// Assign a String from another String
-		const String& operator = (const String& s) throw();
+		const String& operator = (const String& s);
 
 		/// Assign a String from a C type string
 		const String& operator = (const char* pc)
@@ -331,40 +319,40 @@ namespace BALL
 				The contents of the <tt>stringstream</tt> object are not modified.
 		*/
 #ifdef BALL_HAS_SSTREAM
-		const String& operator = (std::stringstream& s)	throw();
+		const String& operator = (std::stringstream& s);
 #else
-		const String& operator = (std::strstream& s) throw();
+		const String& operator = (std::strstream& s);
 #endif
 
 		/// Assign a String from a single char
-		const String& operator = (char c)	throw();
+		const String& operator = (char c);
 
 		/// Assign a String from an unsigned char
-		const String& operator = (unsigned char uc) throw();
+		const String& operator = (unsigned char uc);
 
 		/// Assign a String from a short
-		const String& operator = (short s) throw();
+		const String& operator = (short s);
 
 		/// Assign a String from an unsigned short
-		const String& operator = (unsigned short us) throw();
+		const String& operator = (unsigned short us);
 
 		/// Assign a String from an int
-		const String& operator = (int i) throw();
+		const String& operator = (int i);
 
 		/// Assign a String from an unsigned int
-		const String& operator = (unsigned int ui) throw();
+		const String& operator = (unsigned int ui);
 
 		/// Assign a String from a long
-		const String& operator = (long l)	throw();
+		const String& operator = (long l);
 
 		/// Assign a String from an unsigned long
-		const String& operator = (unsigned long ul)	throw();
+		const String& operator = (unsigned long ul);
 
 		/// Assign a String from a float
-		const String& operator = (float f) throw();
+		const String& operator = (float f);
 
 		/// Assign a String from a double
-		const String& operator = (double d)	throw();
+		const String& operator = (double d);
 		//@}
 
 		/** @name Compare mode-related methods.
@@ -374,10 +362,10 @@ namespace BALL
 		*/
 		//@{
 		/// Set the compareison mode for all string comparisons
-		static void setCompareMode(CompareMode compare_mode) throw();
+		static void setCompareMode(CompareMode compare_mode);
 
 		/// Return the current comparison mode
-		static CompareMode getCompareMode() throw();
+		static CompareMode getCompareMode();
 		//@}
 
 		/** @name Converters 
@@ -388,13 +376,13 @@ namespace BALL
 				This method returns <b>false</b>, if the string contains the string <tt>false</tt>
 				(may be surrounded by whitespaces), or <b>true</b> otherwise.
 		*/
-		bool toBool() const	throw();
+		bool toBool() const;
 
 		///	Return the first character of the string
-		char toChar() const throw();
+		char toChar() const;
 
 		/// Return the first character of the string converted to an unsigned char
-		unsigned char toUnsignedChar() const throw();
+		unsigned char toUnsignedChar() const;
 
 		/// Convert the string to a short
 		short toShort() const throw(Exception::InvalidFormat);
@@ -449,23 +437,19 @@ namespace BALL
 
 		/** Return a substring containing the string before the first occurence of <b>s</b>
 		*/
-		Substring before(const String& s, Index from = 0) const
-			throw();
+		Substring before(const String& s, Index from = 0) const;
  
 		/** Return a substring containing the beginning of the string including the first occurence of <b>s</b>
 		*/
-		Substring through(const String& s, Index from = 0) const
-			throw();
+		Substring through(const String& s, Index from = 0) const;
  
 		/** Return a substring containing the string from the first occurence of <b>s</b> on
 		*/
-		Substring from(const String& s, Index from = 0) const
-			throw();
+		Substring from(const String& s, Index from = 0) const;
 
 		/** Return a substring containing the string after the first occurence of <b>s</b>.
 		*/
-		Substring after(const String& s, Index from = 0) const
-			throw();
+		Substring after(const String& s, Index from = 0) const;
 
 		//@}
 		/**	@name	AWK style field operations 
@@ -525,8 +509,7 @@ namespace BALL
 				remove blanks from the beginning of a string.
 				Strings consisting of character from <tt>trimmed</tt> only yield an empty string.
 		*/
-		String& trimLeft(const char* trimmed = CHARACTER_CLASS__WHITESPACE)
-			throw();
+		String& trimLeft(const char* trimmed = CHARACTER_CLASS__WHITESPACE);
 
 		/** Strips all characters in <b>trimmed</b> from the right of the string.
 				trimRight stops at the first character encountered that is not in <b>trimmed</b>.
@@ -534,33 +517,27 @@ namespace BALL
 				remove blanks from the end of a string.
 				Strings consisting of character from <tt>trimmed</tt> only yield an empty string.
 		*/
-		String& trimRight(const char* trimmed = CHARACTER_CLASS__WHITESPACE)
-			throw();
+		String& trimRight(const char* trimmed = CHARACTER_CLASS__WHITESPACE);
 
 		/**	Strips all characters in <b>trimmed</b> from both sides of the string.
 				trim calls <tt>trimRight(trimmed).trimLeft(trimmed)</tt>.
 		*/
-		String& trim(const char* trimmed = CHARACTER_CLASS__WHITESPACE)
-			throw();
+		String& trim(const char* trimmed = CHARACTER_CLASS__WHITESPACE);
 
 		// ?????
 		/**	Strips all characters in <b>trimmed</b> from both sides of the string.
 				trim calls <tt>trimRight(trimmed).trimLeft(trimmed)</tt>.
 		*/
-		String trim(const char* trimmed = CHARACTER_CLASS__WHITESPACE) const
-			throw();
+		String trim(const char* trimmed = CHARACTER_CLASS__WHITESPACE) const;
 
 		/// Truncate the string to length <b>size</b>
-		String& truncate(Size size)
-			throw();
+		String& truncate(Size size);
 
 		/// Return a substring containing the <b>len</b> leftmost characters of the string
-		Substring left(Size len) const
-			throw();
+		Substring left(Size len) const;
 
 		/// Return a substring containing the <b>len</b> rightmost characters of the string
-		Substring right(Size len) const
-			throw();
+		Substring right(Size len) const;
 
 		/** Return a substring containing the first occurence of <b>pattern</b> in the string.
 				If the pattern is not contained in the string, an empty Substring is returned.
@@ -570,8 +547,7 @@ namespace BALL
 				@param	pattern the search pattern
 				@param  from		the index in the string to start the search from
 		*/
-		Substring instr(const String& pattern, Index from = 0) const
-			throw();
+		Substring instr(const String& pattern, Index from = 0) const;
 
 		//@}
 		/**	@name	String Operations  
@@ -579,30 +555,24 @@ namespace BALL
 		//@{
 
 		///	Concatenates two strings
-		String operator + (const string& string) const
-			throw();
+		String operator + (const string& string) const;
 
 		/// Concatenates a string and a C type string
-		String operator + (const char* char_ptr) const
-			throw();
+		String operator + (const char* char_ptr) const;
 
 		/// Concatenates a string and a character
-		String operator + (char c) const
-			throw();
+		String operator + (char c) const;
 
 		/// Concatenates a C type string and a string
 		BALL_EXPORT
-		friend String operator + (const char* char_ptr, const String& s)
-			throw();
+		friend String operator + (const char* char_ptr, const String& s);
 
 		/// Concatenates a character and a string
 		BALL_EXPORT
-		friend String operator + (char c, const String& s)
-			throw();
+		friend String operator + (char c, const String& s);
 
 		/// Swaps the contents with another String
-		void swap(String& s)
-			throw();
+		void swap(String& s);
 
 		/** Reverses the string.
 				If called without arguments, this method simply reverses the character sequence of the string.
@@ -617,8 +587,7 @@ namespace BALL
 		/** Substitute the first occurence of <b>to_replace</b> by the content of <b>replacing</b>.
 				@return the first position of the substitution or  \link EndPos EndPos \endlink  if <b>to_replace</b> is not found
 		*/
-		Size substitute(const String& to_replace, const String& replacing)
-			throw();
+		Size substitute(const String& to_replace, const String& replacing);
 
 		//@}
 
@@ -627,84 +596,68 @@ namespace BALL
 		//@{
 
 		/// True, if the string contains character <b>c</b>
-		bool has(char c) const
-			throw();
+		bool has(char c) const;
 
 		/// True, if the string contains the substring <b>s</b> after index <b>from</b>
-		bool hasSubstring(const String& s, Index from = 0) const
-			throw();
+		bool hasSubstring(const String& s, Index from = 0) const;
 
 		/// True, if the string starts with <b>s</b>
-		bool hasPrefix(const String& s) const
-			throw();
+		bool hasPrefix(const String& s) const;
 
 		/// True, if the string ends with <b>s</b>
-		bool hasSuffix(const String& s) const
-			throw();
+		bool hasSuffix(const String& s) const;
 
 		/// True, if the string has size 0
-		bool isEmpty() const
-			throw();
+		bool isEmpty() const;
 
 		/** True, if the string only contains letters (any case).	
 				It returns also <b>true</b>, if called for an empty string.
 		*/
-		bool isAlpha() const
-			throw();
+		bool isAlpha() const;
 
 		/** True, if the string only contains letters and digits.
 				It returns also <b>true</b>, if called for an empty string.
 		*/
-		bool isAlnum() const
-			throw();
+		bool isAlnum() const;
 
 		/** True, if the string only contains digits.
 				It returns also <b>true</b>, if called for an empty string.
 		*/
-		bool isDigit() const
-			throw();
+		bool isDigit() const;
 
 		/** True, if the string is a floating number.
 				(It contains only numbers and maybe a dot).
 				It returns also <b>true</b>, if called for an empty string.
 		*/
-		bool isFloat() const
-			throw();
+		bool isFloat() const;
 
 		/** True, if the string only contains spaces.
 				It returns also <b>true</b>, if called for an empty string.
 		*/
-		bool isSpace() const
-			throw();
+		bool isSpace() const;
 
 		/** True, if the string only contains whitespace characters.
 				Whitespaces are defined in CHARACTER_CLASS__WHITESPACE.
 				It returns also <b>true</b>, if called for an empty string.
 		*/
-		bool isWhitespace() const
-			throw();
+		bool isWhitespace() const;
 
 		/// True, if the character is a letter (any case)
-		static bool isAlpha(char c)
-			throw();
+		static bool isAlpha(char c);
 	
 		/// True, if the character is a letter or a digit
-		static bool isAlnum(char c)
-			throw();
+		static bool isAlnum(char c);
 
 		/// True, if the character is a digit
-		static bool isDigit(char c)
-			throw();
+		static bool isDigit(char c);
 
 		/// True, if the character is a space
-		static bool isSpace(char c)
-			throw();
+		static bool isSpace(char c);
 
 		/** True, if the character is any whitespace character.
 				Whitespaces are defined in CHARACTER_CLASS__WHITESPACE
 		*/
-		static bool isWhitespace(char c)
-			throw();
+		static bool isWhitespace(char c);
 		
 		//@}
 		/** @name Base64 String methods
@@ -712,14 +665,12 @@ namespace BALL
 		//@{
 		
 		/// Convert a string to a base 64 string
-		String encodeBase64()
-			throw();
+		String encodeBase64();
 
 		/** Decode a base 64 string.
 				Return an empty string, if base64 string is not right encoded. 
 		*/
-		String decodeBase64()
-			throw();
+		String decodeBase64();
 		
 		//@}
 		/**	@name	Comparators 
@@ -748,28 +699,22 @@ namespace BALL
 			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		///
-		bool operator == (const String& string) const
-			throw();
+		bool operator == (const String& string) const;
 
 		///
-		bool operator != (const String& string) const
-			throw();
+		bool operator != (const String& string) const;
 
 		///
-		bool operator < (const String& string) const
-			throw();
+		bool operator < (const String& string) const;
 
 		///
-		bool operator <= (const String& string) const
-			throw();
+		bool operator <= (const String& string) const;
 
 		///
-		bool operator >= (const String& string) const
-			throw();
+		bool operator >= (const String& string) const;
 
 		///
-		bool operator > (const String& string) const
-			throw();
+		bool operator > (const String& string) const;
 
 		///
 		BALL_EXPORT
@@ -827,56 +772,44 @@ namespace BALL
 
 		///
 		BALL_EXPORT
-		friend bool operator == (char c, const String& string)
-			throw();
+		friend bool operator == (char c, const String& string);
 
 		///
 		BALL_EXPORT
-		friend bool operator != (char c, const String& string)
-			throw();
+		friend bool operator != (char c, const String& string);
 
 		///
 		BALL_EXPORT
-		friend bool operator < (char c, const String& string)
-			throw();
+		friend bool operator < (char c, const String& string);
 
 		///
 		BALL_EXPORT
-		friend bool operator <= (char c, const String& string)
-			throw();
+		friend bool operator <= (char c, const String& string);
 		
 		///
 		BALL_EXPORT
-		friend bool operator > (char c, const String& string)
-			throw();
+		friend bool operator > (char c, const String& string);
 
 		///
-		friend bool operator >= (char c, const String& string)
-			throw();
+		friend bool operator >= (char c, const String& string);
 
 		///
-		bool operator == (char c) const
-			throw();
+		bool operator == (char c) const;
 
 		///
-		bool operator != (char c) const
-			throw();
+		bool operator != (char c) const;
 
 		///
-		bool operator < (char c) const
-			throw();
+		bool operator < (char c) const;
 
 		///
-		bool operator <= (char c) const
-			throw();
+		bool operator <= (char c) const;
 
 		///
-		bool operator > (char c) const
-			throw();
+		bool operator > (char c) const;
 
 		///
-		bool operator >= (char c) const
-			throw();
+		bool operator >= (char c) const;
 
 		//@}
 		/**	@name	Debugging and Diagnostics 
@@ -884,12 +817,10 @@ namespace BALL
 		//@{
 
 		///
-		bool isValid() const
-			throw();
+		bool isValid() const;
 
 		///
-		void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw();
+		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 		//@}			
 		/**	@name	Stream Operations 
@@ -897,12 +828,10 @@ namespace BALL
 		//@{
 
 		///
-		std::istream& getline(std::istream& s = std::cin, char delimiter = '\n')
-			throw();
+		std::istream& getline(std::istream& s = std::cin, char delimiter = '\n');
 
 		///
-		friend std::istream& getline(std::istream& s,  String& string,  char delimiter = '\n')
-			throw();
+		friend std::istream& getline(std::istream& s,  String& string,  char delimiter = '\n');
 
 		//@}
 
@@ -926,16 +855,13 @@ namespace BALL
 		static void validateCharPtrRange_(Index& from, Size& len, const char* char_ptr)
 			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
 		
-		static void valudateCharPtrIndex_(Index& index)
-			throw();
+		static void valudateCharPtrIndex_(Index& index);
 		
 		private:
 
-		static int compareAscendingly_(const char* a,  const char* b)
-			throw();
+		static int compareAscendingly_(const char* a,  const char* b);
 
-		static int compareDescendingly_(const char* a,  const char* b)
-			throw();
+		static int compareDescendingly_(const char* a,  const char* b);
 
 		static CompareMode compare_mode_;
 
@@ -995,16 +921,14 @@ namespace BALL
 		/** Default constructor.
 				Create an empty string.
 		*/
-		Substring() 
-			throw();
+		Substring();
 
 		/** Copy constructor.
 				Create a substring from another substring.
 				@param substring the substring to be copied
 				@param deep ignored
 		*/
-		Substring(const Substring& substring, bool deep = true)
-			throw();
+		Substring(const Substring& substring, bool deep = true);
 
 		/** Create a substring from a string and two indices.
 				@param	string the string the substring is bound to.
@@ -1017,22 +941,19 @@ namespace BALL
 		/** Destructor.
 				Destruct the substring.
 		*/
-		virtual ~Substring()
-			throw();
+		virtual ~Substring();
 
 		/** Clear the substrings contents.
 				Unbind the substring from its string and set the
 				start and the end position to 0.
 		*/
-		void destroy()
-			throw();
+		void destroy();
 
 		/** Clear the substrings contents.
 				Unbind the substring from its string and set the
 				start and the end position to 0.
 		*/
-		virtual void clear()
-			throw();
+		virtual void clear();
 
 		//@}
 		/**	@name Converters 
@@ -1071,16 +992,14 @@ namespace BALL
 			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/// unbinds the substring from the string it is bound to
-		void unbind()
-			throw();
+		void unbind();
 
 		/// Return a pointer to the bound String
-		String* getBoundString()
-			throw();
+		String* getBoundString();
 
 		/// Retunrs a const pointer to the bound String
 		const String* getBoundString() const
-			throw();
+;
 
 		//@}
 		/**	@name	Assignment 
@@ -1139,8 +1058,7 @@ namespace BALL
 			throw(Substring::UnboundSubstring);
 
 		/// Return the substring size
-		Size size() const
-			throw();
+		Size size() const;
 
 		/// Mutable random access to a character of the substring
 		char& operator [] (Index index)
@@ -1164,12 +1082,10 @@ namespace BALL
 		//@{
 
 		/// Return true, if the substring is bound to a String
-		bool isBound() const
-			throw();
+		bool isBound() const;
 		
 		/// Return true, if the substring is empty or unbound
-		bool isEmpty() const
-			throw();
+		bool isEmpty() const;
 
 		//@}
 		/**	@name	Comparison Operators 
@@ -1225,8 +1141,7 @@ namespace BALL
 
 		/// Writes the substring to a stream
 		BALL_EXPORT
-		friend std::ostream& operator << (std::ostream& s, const Substring& substring)
-			throw();
+		friend std::ostream& operator << (std::ostream& s, const Substring& substring);
 
 		//@}
 		/**	@name	Debugging and Diagnostics 
@@ -1237,8 +1152,7 @@ namespace BALL
 				Valid indices means that the first index is not greater than the last index, 
 				both indices are non-negative and lesser than the size of the bound string.
 		*/
-		bool isValid() const
-			throw();
+		bool isValid() const;
 
 		///	Dumps the substring object (including the values of its private members)
 		void dump(std::ostream& s = std::cout, Size depth = 0) const 

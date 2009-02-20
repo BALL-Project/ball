@@ -27,7 +27,7 @@ namespace BALL
 	const String RegularExpression::WHITESPACE("^[ \n\t\r\f\v]+$");
 
 
-	RegularExpression::RegularExpression() throw()
+	RegularExpression::RegularExpression()
 		:	pattern_(BALL_REGULAR_EXPRESSION_DEFAULT_PATTERN),
 			valid_pattern_(false)
 	{
@@ -35,14 +35,14 @@ namespace BALL
 	}
 
 	RegularExpression::RegularExpression 
-		(const RegularExpression& regular_expression)throw()
+		(const RegularExpression& regular_expression)
 		:	pattern_(regular_expression.pattern_),
 			valid_pattern_(false)
 	{
 		compilePattern_();
 	}
 
-	RegularExpression::RegularExpression(const String& pattern, bool wildcard_pattern) throw()
+	RegularExpression::RegularExpression(const String& pattern, bool wildcard_pattern)
 		:	pattern_(pattern),
 			valid_pattern_(false)
 	{
@@ -54,7 +54,7 @@ namespace BALL
 		compilePattern_();
 	}
 
-	RegularExpression::~RegularExpression() throw()
+	RegularExpression::~RegularExpression()
 	{
 		regfree(&regex_);
 	}
@@ -219,7 +219,7 @@ namespace BALL
 		return false;
 	}
 
-	void RegularExpression::dump(ostream& s, Size depth) const throw()
+	void RegularExpression::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -237,13 +237,13 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
-	ostream& operator << (ostream& s, const RegularExpression& regular_expression) throw()
+	ostream& operator << (ostream& s, const RegularExpression& regular_expression)
 	{
 		s << regular_expression.pattern_ << ' ';
 		return s;
 	}
 
-	istream& operator >> (istream& s, RegularExpression& regular_expression) throw()
+	istream& operator >> (istream& s, RegularExpression& regular_expression)
 	{
 		String pattern;
 		s >> pattern;
@@ -251,12 +251,12 @@ namespace BALL
 		return s;
 	}
 
-	void RegularExpression::compilePattern_() throw()
+	void RegularExpression::compilePattern_()
 	{
 		valid_pattern_ = !::regcomp(&regex_, pattern_.c_str(), REG_EXTENDED);
 	}
 
-	void RegularExpression::toExtendedRegularExpression_() throw()
+	void RegularExpression::toExtendedRegularExpression_()
 	{
 		const char* pattern = pattern_.c_str();
 		String regexp;

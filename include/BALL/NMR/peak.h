@@ -29,7 +29,7 @@ namespace BALL
 			Each peak contains a pointer to an associated atom 
 			(in the case of NMR: the atom that causes this peak).	
 			 \par
-			\ingroup Spectra		
+			\ingroup Spectra	
 	*/
 	template <typename PositionType>
 	class Peak
@@ -58,8 +58,7 @@ namespace BALL
 		
 		/**	Destructor
 		*/
-		virtual ~Peak()
-			throw();
+		virtual ~Peak();
 		
 		//@}
 		/** @name Accessors
@@ -127,9 +126,9 @@ namespace BALL
 
 		protected:
 
-		Position		position_;
-		Position		width_;
-		float				intensity_;
+		Position	position_;
+		Position	width_;
+		float	intensity_;
 		const Atom*	atom_;
 	};
 
@@ -145,7 +144,6 @@ namespace BALL
 
 	template <typename PositionType>
 	Peak<PositionType>::~Peak()
-		throw()
 	{
 	}
 

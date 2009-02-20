@@ -19,7 +19,6 @@ namespace BALL
 	const char* AnisotropyShiftProcessor::PROPERTY__ANISOTROPY_SHIFT = "AnisotropyShift";
 
 	AnisotropyShiftProcessor::AnisotropyShiftProcessor()
-		throw()
 		:	ShiftModule(),
 			proton_list_(),
 			eff_list_(),
@@ -29,7 +28,6 @@ namespace BALL
 	}
 
 	AnisotropyShiftProcessor::AnisotropyShiftProcessor(const AnisotropyShiftProcessor& processor)
-		throw()
 		:	ShiftModule(processor),
 			proton_list_(processor.proton_list_),
 			eff_list_(processor.eff_list_),
@@ -39,12 +37,11 @@ namespace BALL
 	}
 
 	AnisotropyShiftProcessor::~AnisotropyShiftProcessor()
-		throw()
+		
 	{
 	}
 
 	void AnisotropyShiftProcessor::init()
-		throw()
 	{
 		valid_ = false;
 
@@ -65,7 +62,6 @@ namespace BALL
 	}
 
 	bool AnisotropyShiftProcessor::finish()
-		throw()
 	{
 		// Abort if the parameters were not initialized correctly.
 		if (!isValid())
@@ -299,7 +295,6 @@ namespace BALL
 	}
 
 	Processor::Result AnisotropyShiftProcessor::operator () (Composite& composite)
-		throw()
 	{
 		// Collect all effector bonds(C=O) and store them in eff_list_
 		// All protons are collected in proton_list_.

@@ -12,24 +12,21 @@ namespace BALL
 	const char* RandomCoilShiftProcessor::PROPERTY__RANDOM_COIL_SHIFT = "RandomCoilShift";
 
 	RandomCoilShiftProcessor::RandomCoilShiftProcessor()
-		throw()
 	{
 	}
 
 	RandomCoilShiftProcessor::RandomCoilShiftProcessor(const RandomCoilShiftProcessor& processor)
-		throw()
 		:	ShiftModule(processor),
 			shift_map_(processor.shift_map_)
 	{
 	}
 
 	RandomCoilShiftProcessor::~RandomCoilShiftProcessor()
-		throw()
+		
 	{
 	}
 
 	void RandomCoilShiftProcessor::init()
-		throw()
 	{
 		// we assume the worst case: init fails -> valid_ = false
 		valid_ = false;
@@ -64,8 +61,7 @@ namespace BALL
 		return;
 	}
 
-	Processor::Result RandomCoilShiftProcessor::operator () (Composite& composite)
-		throw()
+	Processor::Result RandomCoilShiftProcessor::operator () (Composite& composite)	
 	{
 		Atom* atom_ptr = dynamic_cast<Atom*>(&composite);
 		if (atom_ptr == 0)

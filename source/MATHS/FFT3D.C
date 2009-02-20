@@ -13,7 +13,6 @@ namespace BALL
 
 	template <>
 	TFFT3D<DoubleTraits>::~TFFT3D()
-		throw()
 	{
 		// AR: destroy FFTW plans if there are any
 		if (planCalculated_)
@@ -26,7 +25,6 @@ namespace BALL
 
 	template <>
 	TFFT3D<DoubleTraits>::TFFT3D(const TFFT3D &data)
-		throw()
 		: TRegularData3D<Complex>(data),
 			lengthX_(data.lengthX_),
 			lengthY_(data.lengthY_),
@@ -72,7 +70,6 @@ namespace BALL
 	// AR: ldn is not any longer the binary logarithm but the absolute number of grid points
 	template <>
 	TFFT3D<DoubleTraits>::TFFT3D(Size ldnX, Size ldnY, Size ldnZ, double stepPhysX, double stepPhysY, double stepPhysZ, Vector3 origin, bool inFourierSpace)
-		throw()
 		: TRegularData3D<Complex>(TRegularData3D<Complex>::IndexType((ldnX), (ldnY), (ldnZ)), -origin, Vector3((((ldnX)-1)*stepPhysX_),(((ldnY)-1)*stepPhysY_),(((ldnZ)-1)*stepPhysZ_))),
 		  lengthX_(ldnX),
 			lengthY_(ldnY),
@@ -117,7 +114,6 @@ namespace BALL
 	
 	template <>
 	void TFFT3D<DoubleTraits>::clear()
-		throw()
 	{
 		TRegularData3D<Complex>::clear();
 		
@@ -136,7 +132,6 @@ namespace BALL
 	
 	template <>
 	const TFFT3D<DoubleTraits>& TFFT3D<DoubleTraits>::operator = (const TFFT3D& fft3D)
-		throw()
 	{
 		clear();
 		TRegularData3D<Complex>::operator = (fft3D);
@@ -185,7 +180,6 @@ namespace BALL
 
 	template <>
 	void TFFT3D<DoubleTraits>::destroy()
-		throw()
 	{		
 		// TRegularData3D seems to be missing a destroy routine...
 		// until this is fixed, we will use clear() instead
@@ -225,7 +219,6 @@ namespace BALL
 
 	template <>
 	void TFFT3D<DoubleTraits>::doFFT()
-		throw()
 	{
 				
 		if ((dataAdress_ != &data_[0]) || (dataLength_ != data_.size()))
@@ -266,7 +259,6 @@ namespace BALL
 
 	template <>
 	void TFFT3D<DoubleTraits>::doiFFT()
-		throw()
 	{
 		if ((dataAdress_ != &data_[0]) || (dataLength_ != data_.size()))
 		{
@@ -309,7 +301,6 @@ namespace BALL
 
 	template <>
 	TFFT3D<FloatTraits>::~TFFT3D()
-		throw()
 	{
 		// AR: destroy FFTW plans if there are any
 		if (planCalculated_)
@@ -322,7 +313,6 @@ namespace BALL
 
 	template <>
 	TFFT3D<FloatTraits>::TFFT3D(const TFFT3D &data)
-		throw()
 		: TRegularData3D<Complex>(data),
 			lengthX_(data.lengthX_),
 			lengthY_(data.lengthY_),
@@ -368,7 +358,6 @@ namespace BALL
 	// AR: ldn is not any longer the binary logarithm but the absolute number of grid points
 	template <>
 	TFFT3D<FloatTraits>::TFFT3D(Size ldnX, Size ldnY, Size ldnZ, double stepPhysX, double stepPhysY, double stepPhysZ, Vector3 origin, bool inFourierSpace)
-		throw()
 		: TRegularData3D<Complex>(TRegularData3D<Complex>::IndexType((ldnX), (ldnY), (ldnZ)), -origin, Vector3((((ldnX)-1)*stepPhysX_),(((ldnY)-1)*stepPhysY_),(((ldnZ)-1)*stepPhysZ_))),
 		  lengthX_(ldnX),
 			lengthY_(ldnY),
@@ -413,7 +402,6 @@ namespace BALL
 	
 	template <>
 	void TFFT3D<FloatTraits>::clear()
-		throw()
 	{
 		TRegularData3D<Complex>::clear();
 		
@@ -432,7 +420,6 @@ namespace BALL
 	
 	template <>
 	const TFFT3D<FloatTraits>& TFFT3D<FloatTraits>::operator = (const TFFT3D& fft3D)
-		throw()
 	{
 		clear();
 		TRegularData3D<Complex>::operator = (fft3D);
@@ -481,7 +468,6 @@ namespace BALL
 
 	template <>
 	void TFFT3D<FloatTraits>::destroy()
-		throw()
 	{		
 		// TRegularData3D seems to be missing a destroy routine...
 		// until this is fixed, we will use clear() instead
@@ -521,7 +507,7 @@ namespace BALL
 
 	template <>
 	void TFFT3D<FloatTraits>::doFFT()
-		throw()
+
 	{
 				
 		if ((dataAdress_ != &data_[0]) || (dataLength_ != data_.size()))
@@ -563,7 +549,6 @@ namespace BALL
 
 	template <>
 	void TFFT3D<FloatTraits>::doiFFT()
-		throw()
 	{
 		if ((dataAdress_ != &data_[0]) || (dataLength_ != data_.size()))
 		{
@@ -608,7 +593,6 @@ namespace BALL
 
 	template <>
 	TFFT3D<LongDoubleTraits>::~TFFT3D()
-		throw()
 	{
 		// AR: destroy FFTW plans if there are any
 		if (planCalculated_)
@@ -621,7 +605,6 @@ namespace BALL
 
 	template <>
 	TFFT3D<LongDoubleTraits>::TFFT3D(const TFFT3D &data)
-		throw()
 		: TRegularData3D<Complex>(data),
 			lengthX_(data.lengthX_),
 			lengthY_(data.lengthY_),
@@ -667,7 +650,6 @@ namespace BALL
 	// AR: ldn is not any longer the binary logarithm but the absolute number of grid points
 	template <>
 	TFFT3D<LongDoubleTraits>::TFFT3D(Size ldnX, Size ldnY, Size ldnZ, double stepPhysX, double stepPhysY, double stepPhysZ, Vector3 origin, bool inFourierSpace)
-		throw()
 		: TRegularData3D<Complex>(TRegularData3D<Complex>::IndexType((ldnX), (ldnY), (ldnZ)), -origin, Vector3((((ldnX)-1)*stepPhysX_),(((ldnY)-1)*stepPhysY_),(((ldnZ)-1)*stepPhysZ_))),
 		  lengthX_(ldnX),
 			lengthY_(ldnY),
@@ -712,7 +694,6 @@ namespace BALL
 	
 	template <>
 	void TFFT3D<LongDoubleTraits>::clear()
-		throw()
 	{
 		TRegularData3D<Complex>::clear();
 		
@@ -731,7 +712,6 @@ namespace BALL
 	
 	template <>
 	const TFFT3D<LongDoubleTraits>& TFFT3D<LongDoubleTraits>::operator = (const TFFT3D& fft3D)
-		throw()
 	{
 		clear();
 		TRegularData3D<Complex>::operator = (fft3D);
@@ -780,7 +760,6 @@ namespace BALL
 
 	template <>
 	void TFFT3D<LongDoubleTraits>::destroy()
-		throw()
 	{		
 		// TRegularData3D seems to be missing a destroy routine...
 		// until this is fixed, we will use clear() instead
@@ -820,7 +799,6 @@ namespace BALL
 
 	template <>
 	void TFFT3D<LongDoubleTraits>::doFFT()
-		throw()
 	{
 				
 		if ((dataAdress_ != &data_[0]) || (dataLength_ != data_.size()))
@@ -862,7 +840,6 @@ namespace BALL
 
 	template <>
 	void TFFT3D<LongDoubleTraits>::doiFFT()
-		throw()
 	{
 		if ((dataAdress_ != &data_[0]) || (dataLength_ != data_.size()))
 		{

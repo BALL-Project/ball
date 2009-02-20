@@ -42,13 +42,13 @@ namespace BALL
 		typedef typename PT::Position Position;
 
 		/// The peak type
-		typedef	PT										PeakType;
+		typedef	PT PeakType;
 	
 		///
-		typedef typename List<PT>::iterator					Iterator;
+		typedef typename List<PT>::iterator Iterator;
 
 		///
-		typedef typename List<PT>::ConstIterator		ConstIterator;		
+		typedef typename List<PT>::ConstIterator ConstIterator;
 		//@}
 
 		/** @name	Constructors and Destructors
@@ -70,7 +70,7 @@ namespace BALL
 
 		/**	Destructor
 		*/
-		virtual ~PeakList() throw()
+		virtual ~PeakList()
 		{
 		}
 		
@@ -130,13 +130,13 @@ namespace BALL
 	//@{
 		
 	/// 1D peak list
-	typedef PeakList<Peak<float> >			PeakList1D;
+	typedef PeakList<Peak<float> > PeakList1D;
 
 	/// 2D peak list
-	typedef PeakList<Peak<Vector2> >		PeakList2D;
+	typedef PeakList<Peak<Vector2> > PeakList2D;
 
 	/// 3D peak list
-	typedef PeakList<Peak<Vector3> >		PeakList3D;
+	typedef PeakList<Peak<Vector3> > PeakList3D;
 	
 	//@}
   

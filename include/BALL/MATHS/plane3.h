@@ -41,12 +41,10 @@ namespace BALL
 	*/
 	//@{
 	template <typename T>
-	std::istream& operator >> (std::istream& s, TPlane3<T>& plane)
-		throw();
+	std::istream& operator >> (std::istream& s, TPlane3<T>& plane);
 
 	template <typename T>
-	std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane)
-		throw();
+	std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane);
 	//@}
 
 	/** Threedimensional plane.
@@ -68,7 +66,7 @@ namespace BALL
 				are initialized to <tt>(T)0</tt>.
 		*/
 		TPlane3()
-			throw()
+			
 			:	p(),
 				n()
 		{
@@ -79,7 +77,7 @@ namespace BALL
 				@param plane the TPlane3 object to be copied
 		*/	
 		TPlane3(const TPlane3& plane)
-			throw()
+			
 			:	p(plane.p),
 				n(plane.n)
 		{
@@ -91,7 +89,7 @@ namespace BALL
 				@param	normal assigned to <tt>n</tt>
 		*/
 		TPlane3(const TVector3<T>& point, const TVector3<T>& normal)
-			throw()
+			
 			:	p(point),
 				n(normal)
 		{
@@ -103,7 +101,7 @@ namespace BALL
 				@param	a, b, c are used to calculate the normal <tt>n</tt>
 		*/
 		TPlane3(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c)
-			throw()
+			
 			:	p(a),
 				n((a - b) % (b - c))
 		{
@@ -141,7 +139,7 @@ namespace BALL
 				data structures, nothing happens.
 		*/
 		virtual ~TPlane3()
-			throw()
+			
 		{
 		}
 
@@ -149,7 +147,7 @@ namespace BALL
 				The values are set to 0.
 		*/
 		virtual void clear() 
-			throw()
+			
 		{
 			n.clear();
 			p.clear();
@@ -162,7 +160,7 @@ namespace BALL
 		//@{
 
 		///
-		void swap(TPlane3& plane)	throw()
+		void swap(TPlane3& plane)	
 		{
 			TVector3<T> temp_point(p);
 			p = plane.p;
@@ -178,7 +176,7 @@ namespace BALL
 				@param bool ignored - just for interface consistency
 		*/
 		void set(const TPlane3& plane)
-			throw()
+			
 		{
 			p = plane.p;
 			n = plane.n;
@@ -189,7 +187,7 @@ namespace BALL
 				@param	normal the new normal
 		*/
 		void set(const TVector3<T>& point, const TVector3<T>& normal)
-			throw()
+			
 		{
 			p = point;
 			n = normal;
@@ -201,7 +199,7 @@ namespace BALL
 				@param c the third point
 		*/
 		void set(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c)
-			throw()
+			
 		{
 				p = a;
 				n = (a - b) % (b - c);
@@ -212,7 +210,7 @@ namespace BALL
 				@param plane the plane to assign from
 		**/
 		TPlane3& operator = (const TPlane3& plane)
-			throw()
+			
 		{
 			p = plane.p;
 			n = plane.n;
@@ -225,7 +223,7 @@ namespace BALL
 				@param plane the plane to be assigned to
 		*/
 		void get(TPlane3& plane) const
-			throw()
+			
 		{
 			plane.p = p;
 			plane.n = n;
@@ -236,7 +234,7 @@ namespace BALL
 				@param normal the normal to be assigned to
 		*/
 		void get(TVector3<T>& point, TVector3<T>& normal) const
-			throw()
+			
 		{
 			point = p;
 			normal = n;
@@ -272,7 +270,7 @@ namespace BALL
 				is less then zero, the normal is negated.
 		*/
 		void hessify()
-			throw()
+			
 		{
 			normalize();
       if (Maths::isLess(n * p, 0))
@@ -291,7 +289,7 @@ namespace BALL
 				@return bool, <b>true</b> if all components are equal, <b>false</b> otherwise
 		*/
 		bool operator == (const TPlane3& plane) const
-			throw()
+			
 		{
 			return (p == plane.p && n == plane.n);
 		}
@@ -300,7 +298,7 @@ namespace BALL
 				@return bool, <b>false</b> if all components are equal, <b>true</b> otherwise
 		*/
 		bool operator != (const TPlane3& plane) const
-			throw()
+			
 		{
 			return (p != plane.p || n != plane.n);
 		}
@@ -310,7 +308,7 @@ namespace BALL
 				@return bool, <b>true</b> or <b>false</b>
 		*/
 		bool has(const TVector3<T>& point) const
-			throw()
+			
 		{
 			return Maths::isZero(n * (point - p));
 		}
@@ -320,7 +318,7 @@ namespace BALL
 				@return bool, <b>true</b> or <b>false</b>
 		*/
 		bool has(const TLine3<T>& line) const
-			throw()
+			
 		{
 			return (Maths::isZero(n * line.d) && has(line.p));
 		}
@@ -335,7 +333,7 @@ namespace BALL
 				@return bool <b>true</b>
 		*/
 		bool isValid() const
-			throw()
+			
 		{
 			return true;
 		}
@@ -347,7 +345,7 @@ namespace BALL
 				@param   depth - the dumping depth
 		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw()
+			
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 
@@ -383,7 +381,7 @@ namespace BALL
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TPlane3<T>& plane)
-		throw()
+		
 	{
 		char c;
 		s >> c >> plane.p >>  plane.n >> c;
@@ -395,7 +393,7 @@ namespace BALL
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane)
-		throw()
+		
 	{
 		return (s << '(' << plane.p << ' '  << plane.n << ')');
 	}

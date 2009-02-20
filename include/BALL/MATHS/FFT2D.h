@@ -56,12 +56,10 @@ namespace BALL
       //@{
  
       /// Default constructor
-      TFFT2D()
-        throw();
+      TFFT2D();
 
 			/// Copy constructor
-			TFFT2D(const TFFT2D &data)
-				throw();
+			TFFT2D(const TFFT2D &data);
 
 			/** Detailed constructor.  \par
 			 		@param nX The number of grid points in X direction 
@@ -73,12 +71,10 @@ namespace BALL
 																space
 			 */
 			 // AR: ldn is not any longer the binary logarithm but the absolute number of grid points
-			TFFT2D(Size nX, Size nY, double stepPhysX=1., double stepPhysY=1., Vector2 origin=Vector2(0.,0.), bool inFourierSpace=false)
-				throw();
-      
+			TFFT2D(Size nX, Size nY, double stepPhysX=1., double stepPhysY=1., Vector2 origin=Vector2(0.,0.), bool inFourierSpace=false);
+
 			/// Destructor
-			virtual ~TFFT2D()
-				throw();
+			virtual ~TFFT2D();
 			
 			//@}
 
@@ -87,18 +83,15 @@ namespace BALL
 			//@{
 
 			/// Assignment operator
-			const TFFT2D& operator = (const TFFT2D& fft_2d)
-				throw();
+			const TFFT2D& operator = (const TFFT2D& fft_2d);
 			
 			/** Clear the contents.
 			 */
-			virtual void clear()
-				throw();
+			virtual void clear();
 			
 			/** Clear the contents and reset all attributes.
 			 */
-			virtual void destroy()
-				throw();
+			virtual void destroy();
 
 			//@}
 
@@ -108,124 +101,103 @@ namespace BALL
 
 			/** Equality operator.
 			 */
-			bool operator == (const TFFT2D& fft_2d) const
-				throw();
+			bool operator == (const TFFT2D& fft_2d) const;
 			//@}
 			
 			// @name Accessors
 			
 			/** Perform a single fast fourier transform on the data.
 			 */
-			void doFFT()
-				throw();
+			void doFFT();
 
 			/** Perform a single inverse fourier transform on the data.
 			 */
-			void doiFFT()
-				throw();
+			void doiFFT();
 
 			/** Translate the origin in physical space about {\em trans_origin},
 					i.e. the new origin will be located at the former position {\em trans_origin}.
 					If the result is out of bounds, the function does nothing and
 					returns <b>  false </b>.
 			 */
-			bool translate(const Vector2& trans_origin)
-				throw();
+			bool translate(const Vector2& trans_origin);
 
 			/** Set the step width in physical space to {\em new_width_x, new_width_y}.
 				The step width in fourier space is automatically adjusted
 				accordingly. {\em new_width_x and new_width_y} must be positive, otherwise
 				the function does nothing and retuns <b>  false </b>.
 			 */
-			bool setPhysStepWidth(double new_width_x, double new_width_y)
-				throw();
+			bool setPhysStepWidth(double new_width_x, double new_width_y);
 
 			/** Returns the step width in physical space in X direction.
 			 */
-			double getPhysStepWidthX() const
-				throw();
+			double getPhysStepWidthX() const;
 
 			/** Returns the step width in physical space in Y direction.
 			 */
-			double getPhysStepWidthY() const
-				throw();
+			double getPhysStepWidthY() const;
 
 			/** Returns the step width in fourier space in X direction.
 			 */
-			double getFourierStepWidthX() const
-				throw();
+			double getFourierStepWidthX() const;
 
 			/** Returns the step width in fourier space in Y direction.
 			 */
-			double getFourierStepWidthY() const
-				throw();
+			double getFourierStepWidthY() const;
 
 			/** Returns the minimal position of the grid in physical space in X direction.
 			 */
-			double getPhysSpaceMinX() const
-				throw();
+			double getPhysSpaceMinX() const;
 
 			/** Returns the minimal position of the grid in physical space in Y direction.
 			 */
-			double getPhysSpaceMinY() const
-				throw();
+			double getPhysSpaceMinY() const;
 
 			/** Returns the maximal position of the grid in physical space in X direction.
 			 */
-			double getPhysSpaceMaxX() const
-				throw();
+			double getPhysSpaceMaxX() const;
 
 			/** Returns the maximal position of the grid in physical space in Y direction.
 			 */
-			double getPhysSpaceMaxY() const
-				throw();
+			double getPhysSpaceMaxY() const;
 
 			/** Returns the minimal position of the grid in fourier space in X direction.
 			 */
-			double getFourierSpaceMinX() const
-				throw();
+			double getFourierSpaceMinX() const;
 
 			/** Returns the minimal position of the grid in fourier space in Y direction.
 			 */
-			double getFourierSpaceMinY() const
-				throw();
+			double getFourierSpaceMinY() const;
 
 			/** Returns the maximal position of the grid in fourier space in X direction.
 			 */
-			double getFourierSpaceMaxX() const
-				throw();
+			double getFourierSpaceMaxX() const;
 
 			/** Returns the maximal position of the grid in fourier space in Y direction.
 			 */
-			double getFourierSpaceMaxY() const
-				throw();
+			double getFourierSpaceMaxY() const;
 				
 			/** AR: Return the largest grid position for the x direction. 
 			 		This method returns the maximum position allowed in the grid. As the point 
 					in the origin has the indices (0, 0), this method returns the number of 
 					points in X direction minus one.
 			  */
-			Size getMaxXIndex() const
-				throw();
+			Size getMaxXIndex() const;
 
 			/** AR: Return the largest grid position for the y direction. 
 			 		This method returns the maximum position allowed in the grid. As the point 
 					in the origin has the indices (0, 0), this method returns the number of 
 					points in Y direction minus one.
 			  */
-			Size getMaxYIndex() const
-				throw();
+			Size getMaxYIndex() const;
 				
 			/** AR: Return the number of inverse transforms that have been carried out using this class.
 			 		This is an important factor for the normalization of the data.
 			 */
-			Size getNumberOfInverseTransforms() const
-				throw();
+			Size getNumberOfInverseTransforms() const;
 
 			/** AR: Returns the grid coordinate corresponding to the position.
 			 */
-			Vector2 getGridCoordinates(Position position) const
-				throw();
+			Vector2 getGridCoordinates(Position position) const;
 
 			/** Returns the data at the grid position closest to <b>  pos </b>,
 				and automatically includes
@@ -267,13 +239,13 @@ namespace BALL
 					@note No range checking is done. For a more robust version, please
 					use getData.
 				*/
-			const Complex& operator [] (const IndexType& index) const throw() { return TRegularData2D<Complex>::operator [](index); }
+			const Complex& operator [] (const IndexType& index) const { return TRegularData2D<Complex>::operator [](index); }
 
 			/** Mutable random access operator.
 					@note No range checking is done. For a more robust version, please
 					use getData.
 			*/
-			Complex& operator [] (const IndexType& index) throw() {  return TRegularData2D<Complex>::operator [](index); }
+			Complex& operator [] (const IndexType& index) {  return TRegularData2D<Complex>::operator [](index); }
 			
 			/** AR: Access the (raw) data at Position pos.
 			 */
@@ -307,14 +279,12 @@ namespace BALL
 				if the origin of the coordinate system in physical space
 				is not in the "lower left corner".
 			 */
-			Complex phase(const Vector2& pos) const
-				throw();
+			Complex phase(const Vector2& pos) const;
 				
 			/** AR: Returns <b>true</b> if the data is considered to be in Fourier space,
 			 		<b>false</b> otherwise.
 			 */
-			bool isInFourierSpace() const
-				throw();
+			bool isInFourierSpace() const;
 
 		protected:
 			Size lengthX_, lengthY_;
@@ -348,20 +318,17 @@ namespace BALL
 	 */
 	template <typename ComplexTraits>
 	const TRegularData2D<typename TFFT2D<ComplexTraits>::Complex>& operator<< 
-			(TRegularData2D<typename TFFT2D<ComplexTraits>::Complex>& to, const TFFT2D<ComplexTraits>& from)
-		throw();
+			(TRegularData2D<typename TFFT2D<ComplexTraits>::Complex>& to, const TFFT2D<ComplexTraits>& from);
 	
 	/** Global assignment operator from FFT3D to TRegularData3D<float>.
 	 		This operator assigns the <b>real</b> part of the complex TFFT2D-data to the
 			TRegularData2D<float> to.
 	 */
 	template <typename ComplexTraits>
-	const RegularData2D& operator << (RegularData2D& to, const TFFT2D<ComplexTraits>& from)
-		throw();
+	const RegularData2D& operator << (RegularData2D& to, const TFFT2D<ComplexTraits>& from);
 	
 	template <typename ComplexTraits>
 	TFFT2D<ComplexTraits>::TFFT2D()
-		throw()
 		: TRegularData2D<Complex>(),
 			dataLength_(0),
 			dataAdress_(0),
@@ -371,7 +338,6 @@ namespace BALL
 	
 	template <typename ComplexTraits>
 	bool TFFT2D<ComplexTraits>::operator == (const TFFT2D<ComplexTraits>& fft2D) const
-		throw()
 	{
 		// AR: test whether data_.size() == fft2D.data_.size()
 		//     instead of testing 2 lengths. Better for vector handling.
@@ -414,7 +380,6 @@ namespace BALL
 	
 	template <typename ComplexTraits>
 	bool TFFT2D<ComplexTraits>::translate(const Vector2& trans_origin)
-		throw()
 	{
 		Position internalOriginX = (Position) Maths::rint(trans_origin.x*stepPhysX_);
 		Position internalOriginY = (Position) Maths::rint(trans_origin.y*stepPhysY_);
@@ -439,7 +404,6 @@ namespace BALL
 
 	template <typename ComplexTraits>
 	bool TFFT2D<ComplexTraits>::setPhysStepWidth(double new_width_x, double new_width_y)
-		throw()
 	{
 		if ((new_width_x <= 0) || (new_width_y <= 0))
 		{
@@ -463,105 +427,90 @@ namespace BALL
 	
 	template <typename ComplexTraits>
 	double TFFT2D<ComplexTraits>::getPhysStepWidthX() const
-		throw()
 	{
 		return stepPhysX_;
 	}
 
 	template <typename ComplexTraits>
 	double TFFT2D<ComplexTraits>::getPhysStepWidthY() const
-		throw()
 	{
 		return stepPhysY_;
 	}
 
 	template <typename ComplexTraits>
 	double TFFT2D<ComplexTraits>::getFourierStepWidthX() const
-		throw()
 	{
 		return stepFourierX_;
 	}
 
 	template <typename ComplexTraits>
 	double TFFT2D<ComplexTraits>::getFourierStepWidthY() const
-		throw()
 	{
 		return stepFourierY_;
 	}
 
 	template <typename ComplexTraits>
 	double TFFT2D<ComplexTraits>::getPhysSpaceMinX() const
-		throw()
 	{
     return minPhys_.x;
   }
 
 	template <typename ComplexTraits>
 	double TFFT2D<ComplexTraits>::getPhysSpaceMinY() const
-		throw()
 	{
     return minPhys_.y;
   }
 
 	template <typename ComplexTraits>
 	double TFFT2D<ComplexTraits>::getPhysSpaceMaxX() const
-		throw()
 	{
     return maxPhys_.x;
  	}
 
 	template <typename ComplexTraits>
 	double TFFT2D<ComplexTraits>::getPhysSpaceMaxY() const
-		throw()
 	{
     return maxPhys_.y;
  	}
 
 	template <typename ComplexTraits>
 	double TFFT2D<ComplexTraits>::getFourierSpaceMinX() const
-		throw()
 	{
 		return minFourier_.x;
 	}
 
 	template <typename ComplexTraits>
 	double TFFT2D<ComplexTraits>::getFourierSpaceMinY() const
-		throw()
 	{
 		return minFourier_.y;
 	}
 
 	template <typename ComplexTraits>
 	double TFFT2D<ComplexTraits>::getFourierSpaceMaxX() const
-		throw()
 	{
 		return maxFourier_.x;
 	}
 
 	template <typename ComplexTraits>
 	double TFFT2D<ComplexTraits>::getFourierSpaceMaxY() const
-		throw()
 	{
 		return maxFourier_.y;
 	}
 	
 	template <typename ComplexTraits>
 	Size TFFT2D<ComplexTraits>::getMaxXIndex() const
-		throw()
 	{
 		return (lengthX_ - 1);
 	}
 	
 	template <typename ComplexTraits>
 	Size TFFT2D<ComplexTraits>::getMaxYIndex() const
-		throw()
 	{
 		return (lengthY_ - 1);
 	}
 	
 	template <typename ComplexTraits>
 	Size TFFT2D<ComplexTraits>::getNumberOfInverseTransforms() const
-		throw()
 	{
 		return numFourierToPhys_;
 	}
@@ -569,7 +518,6 @@ namespace BALL
 	// AR: new for compatibility with FFT3D
 	template <typename ComplexTraits>
 	Vector2 TFFT2D<ComplexTraits>::getGridCoordinates(Position position) const
-		throw()
 	{
 		if (!inFourierSpace_)
 		{
@@ -801,7 +749,6 @@ namespace BALL
 	
 	template <typename ComplexTraits>
 	typename TFFT2D<ComplexTraits>::Complex TFFT2D<ComplexTraits>::phase(const Vector2& pos) const
-		throw()
 	{
 	  double phase = 2.*M_PI*(  Maths::rint(pos.x/stepFourierX_)*Maths::rint(origin_.x/stepPhysX_)
 															/lengthX_
@@ -815,7 +762,6 @@ namespace BALL
 	
 	template <typename ComplexTraits>
 	bool TFFT2D<ComplexTraits>::isInFourierSpace() const
-		throw()
 	{
 		return inFourierSpace_;
 	}
@@ -823,7 +769,6 @@ namespace BALL
 	template <typename ComplexTraits>
 	const TRegularData2D<typename TFFT2D<ComplexTraits>::Complex>& operator << 
 		(TRegularData2D<typename TFFT2D<ComplexTraits>::Complex>& to, const TFFT2D<ComplexTraits>& from)
-		throw()
 	{
 		// first decide if the FFT3D data is in Fourier space.
 		if (!from.isInFourierSpace())
@@ -920,7 +865,6 @@ namespace BALL
 	
 	template <typename ComplexTraits>
 	const RegularData2D& operator << (RegularData2D& to, const TFFT2D<ComplexTraits>& from)
-		throw()
 	{
 		// first decide if the FFT2D data is in Fourier space.
 		if (!from.isInFourierSpace())
@@ -971,15 +915,8 @@ namespace BALL
 			//float stepPhysY = from.getPhysStepWidthY();
 			float stepFourierX = from.getFourierStepWidthX();
 			float stepFourierY = from.getFourierStepWidthY();
-
-
-			
-			RegularData2D newGrid(RegularData2D::IndexType(lengthX, lengthY),
-														Vector2(from.getFourierSpaceMinX(), 
-																		from.getFourierSpaceMinY()),
-														Vector2(from.getFourierSpaceMaxX(),
-																		from.getFourierSpaceMaxY()));
-
+	
+			RegularData2D newGrid(RegularData2D::IndexType(lengthX, lengthY), Vector2(from.getFourierSpaceMinX(), from.getFourierSpaceMinY()), Vector2(from.getFourierSpaceMaxX(), from.getFourierSpaceMaxY()));
 
 			// and fill it
 			// AR: old version double normalization=1./(sqrt(2.*M_PI))*(stepPhysX*stepPhysY*stepPhysZ)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
@@ -1049,6 +986,5 @@ namespace BALL
 	
 	
 }
-			 
 
 #endif // BALL_MATHS_TFFT2D_H

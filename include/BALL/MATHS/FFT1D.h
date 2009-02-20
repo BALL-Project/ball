@@ -50,12 +50,10 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		TFFT1D()
-			throw();
+		TFFT1D();
 
 		/// Copy constructor
-		TFFT1D(const TFFT1D &data)
-			throw();
+		TFFT1D(const TFFT1D &data);
 
 		/** Detailed constructor.  \par
 				@param ldn The binary logarithm of the number of grid points (we use the logarithm to
@@ -67,12 +65,10 @@ namespace BALL
 															space
 		 */
 		 // AR: ldn is not any longer the binary logarithm but the absolute number of grid points
-		TFFT1D(Size ldn, double stepPhys = 1., double origin = 0., bool inFourierSpace = false)
-			throw();
+		TFFT1D(Size ldn, double stepPhys = 1., double origin = 0., bool inFourierSpace = false);
 		
 		/// Destructor
-		virtual ~TFFT1D()
-			throw();
+		virtual ~TFFT1D();
 		
 		//@}
 
@@ -81,18 +77,15 @@ namespace BALL
 		//@{
 
 		/// Assignment operator
-		const TFFT1D& operator = (const TFFT1D& fft1d)
-			throw();
+		const TFFT1D& operator = (const TFFT1D& fft1d);
 		
 		/** Clear the contents.
 		 */
-		virtual void clear()
-			throw();
+		virtual void clear();
 		
 		/** Clear the contents and reset all attributes.
 		 */
-		virtual void destroy()
-			throw();
+		virtual void destroy();
 
 		//@}
 
@@ -102,85 +95,71 @@ namespace BALL
 
 		/** Equality operator.
 		 */
-		bool operator == (const TFFT1D& fft1d) const
-			throw();
+		bool operator == (const TFFT1D& fft1d) const;
 		//@}
 		
 		// @name Accessors
 		
 		/** Perform a single fast fourier transform on the data.
 		 */
-		void doFFT()
-			throw();
+		void doFFT();
 
 		/** Perform a single inverse fourier transform on the data.
 		 */
-		void doiFFT()
-			throw();
+		void doiFFT();
 
 		/** Translate the origin in physical space about <b>  transOrigin </b>.
 			If the result is out of bounds, the function does nothing and
 			returns <b>  false </b>.
 		 */
-		bool translate(double trans_origin)
-			throw();
+		bool translate(double trans_origin);
 
 		/** Set the step width in physical space to <b>  newWidth </b>.
 			The step width in fourier space is automatically adjusted
 			accordingly. <b>  newWidth </b> must be positive, otherwise
 			the function does nothing and retuns <b>  false </b>.
 		 */
-		bool setPhysStepWidth(double new_width)
-			throw();
+		bool setPhysStepWidth(double new_width);
 
 		/** Returns the step width in physical space.
 		 */
-		double getPhysStepWidth() const
-			throw();
+		double getPhysStepWidth() const;
 
 		/** Returns the step width in fourier space.
 		 */
-		double getFourierStepWidth() const
-			throw();
+		double getFourierStepWidth() const;
 
 		/** Returns the minimal position of the grid in physical space.
 		 */
-		double getPhysSpaceMin() const
-			throw();
+		double getPhysSpaceMin() const;
 
 		/** Returns the maximal position of the grid in physical space.
 		 */
-		double getPhysSpaceMax() const
-			throw();
+		double getPhysSpaceMax() const;
 
 		/** Returns the minimal position of the grid in fourier space.
 		 */
-		double getFourierSpaceMin() const
-			throw();
+		double getFourierSpaceMin() const;
 
 		/** Returns the maximal position of the grid in fourier space.
 		 */
-		double getFourierSpaceMax() const
-			throw();
+		double getFourierSpaceMax() const;
 			
 		/** AR: Return the largest grid position direction. 
 		 		This method returns the maximum position allowed in the grid. As the point 
 				in the origin has the indices 0, this method returns the number of 
 				points minus one.
 		 */
-		Size getMaxIndex() const
-			throw();
+		Size getMaxIndex() const;
 
 		/** AR: Return the number of inverse transforms that have been carried out using this class.
 			 	This is an important factor for the normalization of the data.
 			 */
-		Size getNumberOfInverseTransforms() const
-			throw();
+		Size getNumberOfInverseTransforms() const;
 	
 		/** AR: Returns the grid coordinate corresponding to the position.
 		 */
-		double getGridCoordinates(Position position) const
-			throw();
+		double getGridCoordinates(Position position) const;
 
 		/** Returns the data at the grid position closest to <b>  pos </b>,
 			and automatically includes
@@ -247,16 +226,14 @@ namespace BALL
 		/** AR: Returns <b>true</b> if the data is considered to be in Fourier space,
 		    <b>false</b> otherwise.
 		 */
-		bool isInFourierSpace() const
-			throw();
+		bool isInFourierSpace() const;
 		
 		/** Compute the phase factor.
 			This computes the phase factor in fourier space that results
 			if the origin of the coordinate system in physical space
 			is not in the "lower left corner".
 		 */
-		Complex phase(const double pos) const
-			throw();
+		Complex phase(const double pos) const;
 
 		protected:
 
@@ -289,20 +266,19 @@ namespace BALL
 	/** Global assignment operator from FFT2D to TRegularData2D<Complex>
 	 */
 //	const TRegularData1D<Complex>& operator << (TRegularData1D<Complex>& to, const TFFT1D& from)
-	//	throw(); ?????
+	//; ?????
 	
 	/** Global assignment operator from FFT3D to TRegularData3D<float>.
 	 		This operator assigns the <b>real</b> part of the complex FFT2D-data to the
 			TRegularData2D<float> to.
 	 */
 //	const RegularData1D& operator << (RegularData1D& to, const TFFT1D& from)
-//		throw(); ???????
+//; ???????
 
 
 
   template <typename ComplexTraits>
 	TFFT1D<ComplexTraits>::TFFT1D()
-		throw()
 		: TRegularData1D<Complex>(0, 0, 1.),  // AR: old case: This is necessary because FFTW_COMPLEX has no default constructor
 			length_(0),
 			inFourierSpace_(false),
@@ -314,7 +290,6 @@ namespace BALL
 
 	template <typename ComplexTraits>
 	bool TFFT1D<ComplexTraits>::operator == (const TFFT1D<ComplexTraits>& fft1d) const
-		throw()
 	{
 		if (ComplexVector::size() == fft1d.size() &&
 				origin_ == fft1d.origin_ &&
@@ -349,7 +324,6 @@ namespace BALL
 
 	template <typename ComplexTraits>
 	bool TFFT1D<ComplexTraits>::translate(double trans_origin)
-		throw()
 	{
 		Position internalOrigin = (int) rint(trans_origin/stepPhys_);
 		if (internalOrigin <= length_)
@@ -371,7 +345,6 @@ namespace BALL
 
 	template <typename ComplexTraits>
 	bool TFFT1D<ComplexTraits>::setPhysStepWidth(double new_width)
-		throw()
 	{
 		if (new_width < 0)
 		{
@@ -393,56 +366,48 @@ namespace BALL
 
 	template <typename ComplexTraits>	
 	double TFFT1D<ComplexTraits>::getPhysStepWidth() const
-		throw()
 	{
 		return stepPhys_;
 	}
 
 	template <typename ComplexTraits>
 	double TFFT1D<ComplexTraits>::getFourierStepWidth() const
-		throw()
 	{
 		return stepFourier_;
 	}
 
 	template <typename ComplexTraits>
 	double TFFT1D<ComplexTraits>::getPhysSpaceMin() const
-		throw()
 	{
     return minPhys_;
   }
 
 	template <typename ComplexTraits>
 	double TFFT1D<ComplexTraits>::getPhysSpaceMax() const
-		throw()
 	{
     return maxPhys_;
  	}
 
 	template <typename ComplexTraits>
 	double TFFT1D<ComplexTraits>::getFourierSpaceMin() const
-		throw()
 	{
 		return minFourier_;
 	}
 
 	template <typename ComplexTraits>
 	double TFFT1D<ComplexTraits>::getFourierSpaceMax() const
-		throw()
 	{
 		return maxFourier_;
 	}
 
 	template <typename ComplexTraits>	
 	Size TFFT1D<ComplexTraits>::getMaxIndex() const
-		throw()
 	{
 		return (length_ - 1);
 	}
 
 	template <typename ComplexTraits>	
 	Size TFFT1D<ComplexTraits>::getNumberOfInverseTransforms() const
-		throw()
 	{
 		return numFourierToPhys_;
 	}
@@ -450,7 +415,6 @@ namespace BALL
 	// AR: new 
 	template <typename ComplexTraits>
 	double TFFT1D<ComplexTraits>::getGridCoordinates(Position position) const
-		throw()
 	{
 		if (!inFourierSpace_)
 		{
@@ -627,7 +591,6 @@ namespace BALL
 
 	template <typename ComplexTraits>
 	typename TFFT1D<ComplexTraits>::Complex TFFT1D<ComplexTraits>::phase(const double pos) const
-		throw()
 	{
 	  double phase = 2.*M_PI*(rint(pos/stepFourier_))
 		                     *(rint(origin_/stepPhys_))
@@ -639,13 +602,11 @@ namespace BALL
 
 	template <typename ComplexTraits>
 	bool TFFT1D<ComplexTraits>::isInFourierSpace() const
-		throw()
 	{
 		return inFourierSpace_;
 	}
 /*	
 	const TRegularData1D<Complex >& operator << (TRegularData1D<Complex >& to, const TFFT1D<ComplexTraits>& from)
-		throw()
 	{
 		// first decide if the TFFT1D data is in Fourier space.
 		if (!from.isInFourierSpace())
@@ -712,7 +673,6 @@ namespace BALL
 	
 	template <typename ComplexTraits>
 	const RegularData1D& operator << (RegularData1D& to, const TFFT1D<ComplexTraits>& from)
-		throw()
 	{
 		// first decide if the FFT1D data is in Fourier space.
 		if (!from.isInFourierSpace())

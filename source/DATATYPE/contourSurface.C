@@ -11,7 +11,7 @@ namespace BALL
 
 	template <>
 	HashIndex Hash(const std::pair<Position, Position>& p) 
-		throw()
+		
 	{
 		return (HashIndex)(p.first + p.second);
 	}

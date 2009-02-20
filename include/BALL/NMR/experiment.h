@@ -58,7 +58,7 @@ namespace BALL
 		/**	Destructor
 		*/
 		virtual ~Experiment()
-			throw();
+			;
 		//@}
 		
 		/** @name Accessors
@@ -105,7 +105,7 @@ namespace BALL
 
 	template <typename PeakListType>
 	Experiment<PeakListType>::~Experiment()
-		throw()
+		
 	{
 	}
 
@@ -170,7 +170,7 @@ namespace BALL
 		
 		/// Destructor
 		virtual ~SimpleExperiment1D()
-			throw();
+			;
 		//@}
 		
 		/**	@name Processor related methods
@@ -181,7 +181,7 @@ namespace BALL
 				@return always <b>true</b>
 		*/
 		virtual bool start()
-			throw();
+			;
 		/**	Processor application operator.
 				This operator creates a new peak in the peak list for
 				every atom it encounters that possesses shift data
@@ -191,7 +191,7 @@ namespace BALL
 				defined using  \link setDefaultPeak setDefaultPeak \endlink  (defaults to zero).
 		*/
 		virtual Processor::Result operator () (Composite& composite)
-			throw();
+			;
 		//@}
 
 		/**	@name Accessors

@@ -25,26 +25,22 @@ namespace BALL
 	const Size Options::MAX_ENTRY_LENGTH = 1024;
 
 	Options::Options()
-	 throw()
 		:	StringHashMap<String>(),
 			name_("")
 	{
 	}
 
 	Options::Options(const Options& options)
-	 throw()
 		:	StringHashMap<String>(options),
 			name_(options.name_)
 	{
 	}
 
 	Options::~Options()
-	 throw()
 	{
 	}
 
 	bool Options::isReal(const String& key) const
-	 throw()
 	{
 		// an empty string is no real number
 		const String& value = get(key);
@@ -52,7 +48,6 @@ namespace BALL
 	}
 
 	bool Options::isVector(const String& key) const 
-	 throw()
 	{
 		// if the key does not exist - then the nonexistent value	
 		// cannot contain a vector
@@ -72,7 +67,6 @@ namespace BALL
 	}
 
 	bool Options::isBool(const String& key) const
-	 throw()
 	{
 		String s = get(key);
 		if (s == "")
@@ -85,13 +79,11 @@ namespace BALL
 	}
 	
 	bool Options::isSet(const String& key) const
-	 throw()
 	{
 		return (StringHashMap<String>::find(key) != StringHashMap<String>::end());
 	}
 	
 	bool Options::isInteger(const String& key) const 
-	 throw()
 	{
 		// if it cannot be read as a floating point number
 		// it cannot be an integer
@@ -115,8 +107,7 @@ namespace BALL
 	}
 
 
-	double Options::getReal(const String& key) const 
-	 throw()
+	double Options::getReal(const String& key) const
 	{
 		if (!has(key))
 		{
@@ -137,7 +128,6 @@ namespace BALL
 	}
 
 	Vector3	Options::getVector(const String& key) const 
-	 throw()
 	{
 		Vector3	h(0,0,0);
 		
@@ -161,8 +151,7 @@ namespace BALL
 	}
 
 
-	bool Options::getBool(const String& key) const 
-	 throw()
+	bool Options::getBool(const String& key) const
 	{
 		if (!has(key))
 		{
@@ -180,8 +169,7 @@ namespace BALL
 		}
 	}
 
-	long Options::getInteger(const String& key) const 
-	 throw()
+	long Options::getInteger(const String& key) const
 	{
 		if (!has(key))
 		{
@@ -209,13 +197,11 @@ namespace BALL
 	}
 
 	void Options::set(const String& key, const String& value)
-	 throw()
 	{
 		(*this)[key] = value;
 	}
 
 	void Options::setInteger(const String& key, const long value)
-	 throw()
 	{
 		static char buffer[MAX_ENTRY_LENGTH + 1];
 		sprintf(buffer, "%ld", value);			
@@ -223,7 +209,6 @@ namespace BALL
 	}
 
 	void Options::setReal(const String& key, const double value)
-	 throw()
 	{
 		char buffer[MAX_ENTRY_LENGTH + 1];
 		sprintf(buffer, "%f", value);
@@ -231,7 +216,6 @@ namespace BALL
 	}
 
 	void Options::setVector(const String& key, const Vector3& value)
-	 throw()
 	{
 		char buffer[MAX_ENTRY_LENGTH + 1];
 		sprintf(buffer, "(%f %f %f)", value.x, value.y, value.z);
@@ -239,7 +223,6 @@ namespace BALL
 	}
 
 	void Options::setBool(const String& key, const bool value)
-	 throw()
 	{
 		if (value)
 		{
@@ -252,7 +235,7 @@ namespace BALL
 	}
 
 	String Options::setDefault(const String& key, const String& value)
-	 throw()
+
 	{
 		if (!has(key))
 		{
@@ -266,7 +249,6 @@ namespace BALL
 	}
 		
 	double Options::setDefaultReal(const String& key, const double value)
-	 throw()
 	{
 		if (!has(key) || !isReal(key))
 		{
@@ -280,7 +262,6 @@ namespace BALL
 	}
 
 	bool Options::setDefaultBool(const String& key, const bool value)
-	 throw()
 	{
 		if (!has(key) || !isBool(key))
 		{
@@ -294,7 +275,6 @@ namespace BALL
 	}
 
 	long Options::setDefaultInteger(const String& key, const long value)
-	 throw()
 	{
 		if (!has(key) || !isInteger(key))
 		{
@@ -308,19 +288,16 @@ namespace BALL
 	}
 
 	void Options::setName(const String& name)
-	 throw()
 	{
 		name_ = name;
 	}
 
 	const String& Options::getName() const
-	 throw()
 	{
 		return name_;
 	}
 
 	String Options::get(const String& key) const
-	 throw()
 	{
 		if (!has(key))
 		{
@@ -339,7 +316,6 @@ namespace BALL
 	}
 
 	bool Options::readOptionFile(const String& filename)
-	 throw()
 	{
 		ifstream	infile;
 		infile.open(filename.c_str(), ios::in);
@@ -366,7 +342,6 @@ namespace BALL
 	}
 		
 	bool Options::writeOptionFile(const String& filename) const
-	 throw()
 	{
 		std::list<String>		entry_list;
 		String							entry;
@@ -402,7 +377,6 @@ namespace BALL
 	}
 
 	void Options::write(PersistenceManager& pm) const
-		throw()
 	{
 		std::list<String>		entry_list;
 		String							entry;
@@ -426,7 +400,6 @@ namespace BALL
 	}
 	
 	bool Options::read(PersistenceManager& pm)
-		throw()
 	{
 		clear();
 		bool success = pm.readPrimitive(name_, "name_");
@@ -444,7 +417,6 @@ namespace BALL
 	}
 
 	void Options::dump(ostream& stream, Size /* depth */) const
-	 throw()
 	{
 		std::list<String>		entry_list;
 		String							entry;
@@ -472,7 +444,6 @@ namespace BALL
 	}
 
 	const Options& Options::operator = (const Options& options)
-	 throw()
 	{
 		StringHashMap<String>::operator = (options);
 		name_ = options.name_;
@@ -481,7 +452,6 @@ namespace BALL
 	}
 
 	bool Options::operator == (const Options& option) const 
-		throw()
 	{
 		if (this->name_ != option.name_)
 		{
@@ -492,12 +462,11 @@ namespace BALL
 	}
 
 	bool Options::operator != (const Options& option) const 
-		throw()
 	{
 		return !(*this == option);
 	}
 
-	void Options::clear() throw()
+	void Options::clear()
 	{
 		name_ = "";
 		StringHashMap<String>::clear();

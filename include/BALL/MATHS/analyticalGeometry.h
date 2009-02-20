@@ -57,7 +57,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	T getDeterminant_(const T* m, Size dim)
-		throw()
 	{
 		T determinant = 0;
 		Index dim1 = dim - 1;
@@ -94,7 +93,6 @@ namespace BALL
 	*/
 	template <typename T>
 	T getDeterminant(const T* m, Size dim)
-		throw()
 	{
 		if (dim == 2)
 		{
@@ -121,7 +119,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T getDeterminant2(const T* m)
-		throw()
 	{
 		Size dim = 2;
 		return (BALL_CELL(0,0) * BALL_CELL(1,1) - BALL_CELL(0,1) * BALL_CELL(1,0));
@@ -136,7 +133,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T getDeterminant2(const T& m00, const T& m01, const T& m10, const T& m11)
-		throw()
 	{
 		return (m00 * m11 - m01 * m10);
 	}
@@ -147,7 +143,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T getDeterminant3(const T *m)
-		throw()
 	{
 		Size dim = 3;
 		return (  BALL_CELL(0,0) * BALL_CELL(1,1) * BALL_CELL(2,2) 
@@ -163,17 +158,9 @@ namespace BALL
 	*/
 	template <typename T>
 	BALL_INLINE T 
-	getDeterminant3(const T& m00, const T& m01, const T& m02,
-								  const T& m10, const T& m11, const T& m12,
-								  const T& m20, const T& m21, const T& m22)
-		throw()
+	getDeterminant3(const T& m00, const T& m01, const T& m02, const T& m10, const T& m11, const T& m12, const T& m20, const T& m21, const T& m22)
 	{
-		return (  m00 * m11 * m22
-						+ m01 * m12 * m20
-						+ m02 * m10 * m21
-						- m02 * m11 * m20
-						- m00 * m12 * m21
-						- m01 * m10 * m22); 
+		return (  m00 * m11 * m22 + m01 * m12 * m20 + m02 * m10 * m21 - m02 * m11 * m20 - m00 * m12 * m21 - m01 * m10 * m22); 
 	}
 
 	/**	Solve a system of linear equations.
@@ -204,7 +191,6 @@ namespace BALL
 	*/
 	template <typename T>
 	bool SolveSystem(const T* m, T* x, const Size dim)
-		throw()
 	{
 		T pivot;
 		Index i, j, k, p;
@@ -298,9 +284,7 @@ namespace BALL
 	*/
 	template <typename T>
 	BALL_INLINE 
-	bool SolveSystem2(const T& a1, const T& b1, const T& c1,
-										const T& a2, const T& b2, const T& c2, T& x1, T& x2)
-		throw()
+	bool SolveSystem2(const T& a1, const T& b1, const T& c1, const T& a2, const T& b2, const T& c2, T& x1, T& x2)
 	{
 		T quot = (a1 * b2 - a2 * b1);
 
@@ -326,7 +310,6 @@ namespace BALL
 	*/
 	template <typename T>
 	short	SolveQuadraticEquation(const T& a, const T& b, const T &c, T &x1, T &x2)
-		throw()
 	{
 		if (a == 0)
 		{
@@ -368,7 +351,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector3<T> GetPartition(const TVector3<T>& a, const TVector3<T>& b)
-		throw()
 	{
 		return TVector3<T>((b.x + a.x) / 2, (b.y + a.y) / 2, (b.z + a.z) / 2);
 	}
@@ -405,7 +387,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T GetDistance(const TVector3<T>& a, const TVector3<T>& b)
-		throw()
 	{
 		T dx = a.x - b.x;
 		T dy = a.y - b.y;
@@ -589,7 +570,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool GetAngle(const TLine3<T>& a, const TLine3<T>& b, TAngle<T>& intersection_angle)
-		throw()
 	{
 		T length_product = a.d.getSquareLength() *  b.d.getSquareLength();
 
@@ -610,7 +590,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool GetAngle(const TPlane3<T>& plane, const TVector3<T>& vector, TAngle<T>& intersection_angle)
-		throw()
 	{
 		T length_product = plane.n.getSquareLength() * vector.getSquareLength();
 		
@@ -633,9 +612,7 @@ namespace BALL
 	*/
 	template <typename T>
 	BALL_INLINE 
-	bool GetAngle(const TVector3<T>& vector ,const TPlane3<T>& plane,
-								TAngle<T> &intersection_angle)
-		throw()
+	bool GetAngle(const TVector3<T>& vector ,const TPlane3<T>& plane, TAngle<T> &intersection_angle)
 	{
 		return GetAngle(plane, vector, intersection_angle);
 	}
@@ -648,9 +625,7 @@ namespace BALL
 	*/
 	template <typename T>
 	BALL_INLINE 
-	bool GetAngle(const TPlane3<T>& plane,const TLine3<T>& line,
-								TAngle<T>& intersection_angle)
-		throw()
+	bool GetAngle(const TPlane3<T>& plane,const TLine3<T>& line, TAngle<T>& intersection_angle)
 	{
 		T length_product = plane.n.getSquareLength() * line.d.getSquareLength();
 		
@@ -671,9 +646,7 @@ namespace BALL
 	*/
 	template <typename T>
 	BALL_INLINE 
-	bool GetAngle(const TLine3<T>& line, const TPlane3<T>& plane,
-								TAngle<T>& intersection_angle)
-		throw()
+	bool GetAngle(const TLine3<T>& line, const TPlane3<T>& plane, TAngle<T>& intersection_angle)
 	{
 		return GetAngle(plane, line, intersection_angle);
 	}
@@ -688,7 +661,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool GetAngle(const TPlane3<T>& a, const TPlane3<T>& b, TAngle<T>& intersection_angle)
-		throw()
 	{
 		T length_product = a.n.getSquareLength() * b.n.getSquareLength();
 
@@ -709,24 +681,11 @@ namespace BALL
 	*/
 	template <typename T>
 	bool GetIntersection(const TLine3<T>& a, const TLine3<T>& b, TVector3<T>& point)
-		throw()
 	{
 		T c1, c2;
-
-		if ((SolveSystem2(a.d.x, -b.d.x, b.p.x - a.p.x, a.d.y,  -b.d.y, b.p.y - a.p.y,
-						 				  c1, c2) == true
-				 && Maths::isEqual(a.p.z + a.d.z * c1, b.p.z + b.d.z * c2))
-
-				|| (SolveSystem2(a.d.x, -b.d.x, b.p.x - a.p.x, a.d.z, -b.d.z, b.p.z - a.p.z,
-						 						 c1, c2) == true
-						&& Maths::isEqual(a.p.y + a.d.y * c1, b.p.y + b.d.y * c2))
-
-				|| (SolveSystem2(a.d.y, -b.d.y, b.p.y - a.p.y, a.d.z, -b.d.z, b.p.z - a.p.z,
-				 								 c1, c2) == true
-						&& Maths::isEqual(a.p.x + a.d.x * c1, b.p.x + b.d.x * c2)))
+		if ((SolveSystem2(a.d.x, -b.d.x, b.p.x - a.p.x, a.d.y,  -b.d.y, b.p.y - a.p.y, c1, c2) == true && Maths::isEqual(a.p.z + a.d.z * c1, b.p.z + b.d.z * c2)) || (SolveSystem2(a.d.x, -b.d.x, b.p.x - a.p.x, a.d.z, -b.d.z, b.p.z - a.p.z, c1, c2) == true && Maths::isEqual(a.p.y + a.d.y * c1, b.p.y + b.d.y * c2)) || (SolveSystem2(a.d.y, -b.d.y, b.p.y - a.p.y, a.d.z, -b.d.z, b.p.z - a.p.z, c1, c2) == true && Maths::isEqual(a.p.x + a.d.x * c1, b.p.x + b.d.x * c2)))
 		{
 			point.set(a.p.x + a.d.x * c1, a.p.y + a.d.y * c1, a.p.z + a.d.z * c1);
-			
 			return true;
 		} 
 
@@ -741,17 +700,13 @@ namespace BALL
 	*/
 	template <typename T>
 	BALL_INLINE 
-	bool GetIntersection(const TPlane3<T>& plane, const TLine3<T>& line,
-												TVector3<T>& intersection_point)
-		throw()
+	bool GetIntersection(const TPlane3<T>& plane, const TLine3<T>& line, TVector3<T>& intersection_point)
 	{
 		T dot_product = plane.n * line.d;
-
 		if (Maths::isZero(dot_product))
 		{
 			return false;
 		} 
-
 		intersection_point.set(line.p + (plane.n * (plane.p - line.p)) * line.d / dot_product);
 		return true;
 	}
@@ -764,9 +719,7 @@ namespace BALL
 	*/
 	template <typename T>
 	BALL_INLINE 
-	bool GetIntersection(const TLine3<T>& line, const TPlane3<T>& plane,
-												TVector3<T>& intersection_point)
-		throw()
+	bool GetIntersection(const TLine3<T>& line, const TPlane3<T>& plane, TVector3<T>& intersection_point)
 	{
 		return GetIntersection(plane, line, intersection_point);
 	}
@@ -779,7 +732,6 @@ namespace BALL
 	*/
 	template <typename T>
 	bool GetIntersection(const TPlane3<T>& plane1, const TPlane3<T>& plane2, TLine3<T>& line)
-		throw()
 	{
 		T u = plane1.p*plane1.n;
 		T v = plane2.p*plane2.n;
@@ -846,17 +798,10 @@ namespace BALL
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
 	template <typename T>
-	bool GetIntersection(const TSphere3<T>& sphere, const TLine3<T>& line,
-												TVector3<T>& intersection_point1, TVector3<T>& intersection_point2)
-		throw()
+	bool GetIntersection(const TSphere3<T>& sphere, const TLine3<T>& line, TVector3<T>& intersection_point1, TVector3<T>& intersection_point2)
 	{
 		T x1, x2;
-		short number_of_solutions 
-			= SolveQuadraticEquation
-					(line.d * line.d,
-					 (line.p - sphere.p) * line.d * 2,
-					 (line.p - sphere.p) * (line.p - sphere.p) - sphere.radius * sphere.radius,
-					 x1, x2);
+		short number_of_solutions = SolveQuadraticEquation (line.d * line.d, (line.p - sphere.p) * line.d * 2, (line.p - sphere.p) * (line.p - sphere.p) - sphere.radius * sphere.radius, x1, x2);
 
 		if (number_of_solutions == 0)
 		{
@@ -878,9 +823,7 @@ namespace BALL
 	*/
 	template <typename T>
 	BALL_INLINE 
-	bool GetIntersection(const TLine3<T>& line, const TSphere3<T>& sphere,
-												TVector3<T>& intersection_point1, TVector3<T>& intersection_point2)
-		throw()
+	bool GetIntersection(const TLine3<T>& line, const TSphere3<T>& sphere, TVector3<T>& intersection_point1, TVector3<T>& intersection_point2)
 	{
 		return GetIntersection(sphere, line, intersection_point1, intersection_point2);
 	}
@@ -892,9 +835,7 @@ namespace BALL
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
 	template <typename T>
-	bool GetIntersection(const TSphere3<T>& sphere, const TPlane3<T>& plane,
-												TCircle3<T>& intersection_circle)
-		throw()
+	bool GetIntersection(const TSphere3<T>& sphere, const TPlane3<T>& plane, TCircle3<T>& intersection_circle)
 	{
 		T distance = GetDistance(sphere.p, plane);
 
@@ -928,9 +869,7 @@ namespace BALL
 	*/
 	template <typename T>
 	BALL_INLINE bool
-	GetIntersection(const TPlane3<T>& plane, const TSphere3<T>& sphere,
-									TCircle3<T>& intersection_circle)
-		throw()
+	GetIntersection(const TPlane3<T>& plane, const TSphere3<T>& sphere, TCircle3<T>& intersection_circle)
 	{
 		return GetIntersection(sphere, plane, intersection_circle);
 	}
@@ -945,7 +884,6 @@ namespace BALL
 	*/
 	template <typename T>
 	bool GetIntersection(const TSphere3<T>& a, const TSphere3<T>& b, TCircle3<T>& intersection_circle)
-		throw()
 	{
 		TVector3<T> norm = b.p - a.p;
 		T square_dist = norm * norm;
@@ -990,13 +928,7 @@ namespace BALL
 			@return bool, <b>true</b> if an intersection can be calculated, otherwise <b>false</b>
 	*/
 	template <class T>
-	bool GetIntersection(const TSphere3<T>& s1,
-											 const TSphere3<T>& s2,
-											 const TSphere3<T>& s3,
-											 TVector3<T>& p1,
-											 TVector3<T>& p2,
-											 bool test = true)
-		throw()
+	bool GetIntersection(const TSphere3<T>& s1, const TSphere3<T>& s2, const TSphere3<T>& s3, TVector3<T>& p1, TVector3<T>& p2, bool test = true)
 	{
 		T r1_square = s1.radius*s1.radius;
 		T r2_square = s2.radius*s2.radius;
@@ -1022,10 +954,7 @@ namespace BALL
 		{
 			TVector3<T> diff(s1.p-line.p);
 			T x1, x2;
-			if (SolveQuadraticEquation(line.d*line.d,
-																 -diff*line.d*2,
-																 diff*diff-r1_square,
-																 x1,x2) > 0)
+			if (SolveQuadraticEquation(line.d*line.d, -diff*line.d*2, diff*diff-r1_square, x1,x2) > 0)
 			{
 				p1 = line.p+x1*line.d;
 				p2 = line.p+x2*line.d;
@@ -1077,7 +1006,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isCollinear(const TVector3<T>& a, const TVector3<T>& b)
-		throw()
 	{
 		return (a % b).isZero();
 	}
@@ -1091,7 +1019,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isComplanar(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c)
-		throw()
 	{
 		return Maths::isZero(TVector3<T>::getTripleProduct(a, b, c));
 	}
@@ -1106,7 +1033,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isComplanar(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c, const TVector3<T>& d)
-		throw()
 	{
 		return isComplanar(a - b, a - c, a - d);
 	}
@@ -1119,7 +1045,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isOrthogonal(const TVector3<T>& a, const TVector3<T>& b)
-		throw()
 	{
 		return Maths::isZero(a * b);
 	}
@@ -1132,7 +1057,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isOrthogonal(const TVector3<T>& vector, const TLine3<T>& line)
-		throw()
 	{
 		return Maths::isZero(vector * line.d);
 	}
@@ -1145,7 +1069,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isOrthogonal(const TLine3<T>& line, const TVector3<T>& vector)
-		throw()
 	{
 		return isOrthogonal(vector, line);
 	}
@@ -1158,7 +1081,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isOrthogonal(const TLine3<T>& a, const TLine3<T>& b)
-		throw()
 	{
 		return Maths::isZero(a.d * b.d);
 	}
@@ -1171,7 +1093,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isOrthogonal(const TVector3<T>& vector, const TPlane3<T>& plane)
-		throw()
 	{
 		return isCollinear(vector, plane.n);
 	}
@@ -1184,7 +1105,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isOrthogonal(const TPlane3<T>& plane, const TVector3<T>& vector)
-		throw()
 	{
 		return isOrthogonal(vector, plane);
 	}
@@ -1197,7 +1117,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isOrthogonal(const TPlane3<T>& a, const TPlane3<T>& b)
-		throw()
 	{
 		return Maths::isZero(a.n * b.n);
 	}
@@ -1210,7 +1129,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isIntersecting(const TVector3<T>& point, const TLine3<T>& line)
-		throw()
 	{
 		return Maths::isZero(GetDistance(point, line));
 	}
@@ -1223,7 +1141,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isIntersecting(const TLine3<T>& line, const TVector3<T>& point)
-		throw()
 	{
 		return isIntersecting(point, line);
 	}
@@ -1236,7 +1153,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isIntersecting(const TLine3<T>& a, const TLine3<T>& b)
-		throw()
 	{
 		return Maths::isZero(GetDistance(a, b));
 	}
@@ -1249,7 +1165,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isIntersecting(const TVector3<T>& point, const TPlane3<T>& plane)
-		throw()
 	{
 		return Maths::isZero(GetDistance(point, plane));
 	}
@@ -1262,7 +1177,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isIntersecting(const TPlane3<T>& plane, const TVector3<T>& point)
-		throw()
 	{
 		return isIntersecting(point, plane);
 	}
@@ -1275,7 +1189,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isIntersecting(const TLine3<T>& line, const TPlane3<T>& plane)
-		throw()
 	{
 		return Maths::isZero(GetDistance(line, plane));
 	}
@@ -1288,7 +1201,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isIntersecting(const TPlane3<T>& plane, const TLine3<T>& line)
-		throw()
 	{
 		return isIntersecting(line, plane);
 	}
@@ -1301,7 +1213,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isIntersecting(const TPlane3<T>& a, const TPlane3<T>& b)
-		throw()
 	{
 		return Maths::isZero(GetDistance(a, b));
 	}
@@ -1314,7 +1225,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isParallel(const TLine3<T>& line, const TPlane3<T>& plane)
-		throw()
 	{
 		return isOrthogonal(line.d, plane.n);
 	}
@@ -1327,7 +1237,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isParallel(const TPlane3<T>& plane, const TLine3<T>& line)
-		throw()
 	{
 		return isParallel(line, plane);
 	}
@@ -1340,7 +1249,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool isParallel(const TPlane3<T>& a, const TPlane3<T>& b)
-		throw()
 	{
 		return isCollinear(a.n, b.n);
 	}

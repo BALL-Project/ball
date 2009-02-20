@@ -12,15 +12,12 @@ namespace BALL
 {
 	#ifdef BALL_HAS_FFTW
 	std::istream& operator >> (std::istream& s, fftw_complex& cpx)
-		throw()
 	{
 		return s >> cpx[0] >> cpx[1];
 	}
 
 	std::ostream& operator << (std::ostream& s, const fftw_complex& cpx)
-		throw()
-	{
-		
+	{	
 		return s << cpx[0] << " " << cpx[1];
 	}
 	#endif

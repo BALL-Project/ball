@@ -10,7 +10,7 @@ using namespace std;
 namespace BALL
 {
 
-	PiecewiseFunction::PiecewiseFunction() throw()
+	PiecewiseFunction::PiecewiseFunction() 
 		:	intervals_(0),
 			coefficients_(0),
 			valid_(false),
@@ -20,7 +20,7 @@ namespace BALL
 
 
 	PiecewiseFunction::PiecewiseFunction(const PiecewiseFunction& function)
-		throw() 
+		 
 		:	intervals_(function.intervals_),
 			coefficients_(function.coefficients_),
 			valid_(function.valid_),
@@ -30,7 +30,7 @@ namespace BALL
 
 
 	PiecewiseFunction::PiecewiseFunction(const std::vector<Interval>& intervals,
-			const std::vector<Coefficients>& coeffs) throw()
+			const std::vector<Coefficients>& coeffs) 
 		:	intervals_(intervals),
 			coefficients_(coeffs)
 	{
@@ -39,7 +39,7 @@ namespace BALL
 	}
 
 
-	PiecewiseFunction::~PiecewiseFunction() throw()
+	PiecewiseFunction::~PiecewiseFunction() 
 	{
 		clear();
 
@@ -47,7 +47,7 @@ namespace BALL
 	}
 
 
-	void PiecewiseFunction::clear() throw()
+	void PiecewiseFunction::clear() 
 	{
 		intervals_.clear();
 		coefficients_.clear();
@@ -57,7 +57,7 @@ namespace BALL
 
 
 	void PiecewiseFunction::set(const std::vector<Interval>& intervals,
-		const std::vector<Coefficients>& coeffs) throw()
+		const std::vector<Coefficients>& coeffs) 
 	{
 		intervals_ = intervals;
 		coefficients_ = coeffs;
@@ -67,7 +67,7 @@ namespace BALL
 
 
 	PiecewiseFunction& PiecewiseFunction::operator = 
-		(const PiecewiseFunction& function) throw()
+		(const PiecewiseFunction& function) 
 	{
 		intervals_ = function.intervals_;
 		coefficients_ = function.coefficients_;
@@ -79,7 +79,7 @@ namespace BALL
 
 
 	void PiecewiseFunction::setIntervals(const std::vector<Interval>& intervals) 
-		throw()
+		
 	{
 		intervals_ = intervals;
 		calculateRange();
@@ -88,7 +88,7 @@ namespace BALL
 
 
 	const std::vector<Interval>& PiecewiseFunction::getIntervals() const
-		throw()
+		
 	{
 		return intervals_;
 	}
@@ -140,14 +140,14 @@ namespace BALL
 	}
 
 
-	const Interval& PiecewiseFunction::getRange() const throw()
+	const Interval& PiecewiseFunction::getRange() const 
 	{
 		return range_;
 	}
 
 
 	void PiecewiseFunction::setCoefficients
-		(const std::vector<Coefficients>& coefficients) throw()
+		(const std::vector<Coefficients>& coefficients) 
 	{
 		coefficients_ = coefficients;
 		valid_ = isValid();
@@ -155,7 +155,7 @@ namespace BALL
 
 
 	const std::vector<Coefficients>& PiecewiseFunction::getCoefficients()
-		const throw() 
+		const  
 	{
 		if (coefficients_.size() == 0)
 		{
@@ -189,10 +189,10 @@ namespace BALL
 	}
 
 
-	bool PiecewiseFunction::isValid() const throw()
+	bool PiecewiseFunction::isValid() const 
 	{
 
-		// ?????: ist das vollständig?
+		// ?????: ist das vollstï¿½ndig?
 		if ((coefficients_.size() == 0) || (intervals_.size() == 0))
 		{
 			return false;
@@ -223,13 +223,13 @@ namespace BALL
 	}
 
 
-	double PiecewiseFunction::operator() (double /* x */) const throw()
+	double PiecewiseFunction::operator() (double /* x */) const 
 	{
 		return 0.0;
 	}
 
 
-	bool PiecewiseFunction::isInRange(double x) const throw()
+	bool PiecewiseFunction::isInRange(double x) const 
 	{
 		if ((x >= range_.first) && (x < range_.second))
 		{
@@ -243,7 +243,7 @@ namespace BALL
 
 
 	bool PiecewiseFunction::operator == (const PiecewiseFunction& function)
-		const throw()
+		const 
 	{
 		return ((intervals_ == function.intervals_)
 			&& (coefficients_ == function.coefficients_));
@@ -251,7 +251,7 @@ namespace BALL
 
 
 	void PiecewiseFunction::dump(ostream& stream, Size /* depth */) const
-		throw()
+		
 	{
 		if (!isValid())
 		{
@@ -275,7 +275,7 @@ namespace BALL
 	}
 
 
-	void PiecewiseFunction::calculateRange() throw()
+	void PiecewiseFunction::calculateRange() 
 	{
 		if (intervals_.size() == 0)
 		{

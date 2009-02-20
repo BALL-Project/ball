@@ -176,7 +176,6 @@ namespace BALL
 	}
 		
 	JohnsonBoveyShiftProcessor::JohnsonBoveyShiftProcessor()
-		throw()
 		:	proton_list_(),
 			atom_list_(),
 			aromat_list_(),
@@ -187,12 +186,11 @@ namespace BALL
 	}
 
 	JohnsonBoveyShiftProcessor::~JohnsonBoveyShiftProcessor()
-		throw()
 	{
 	}
 
 	void JohnsonBoveyShiftProcessor::init()
-		throw()
+		
 	{
 		// if anything fails, valid_ will be false
 		valid_ = false;
@@ -291,7 +289,6 @@ namespace BALL
 	}
 		
 	bool JohnsonBoveyShiftProcessor::start()
-		throw()
 	{
 		if (!isValid())
 		{
@@ -306,8 +303,7 @@ namespace BALL
 		return true;
 	}
 	
-	bool JohnsonBoveyShiftProcessor::finish()
-		throw()
+	bool JohnsonBoveyShiftProcessor::finish()	
 	{		
 		// check for validity of the object
 		if (!isValid())
@@ -462,7 +458,7 @@ namespace BALL
 	}
 		
 	Processor::Result JohnsonBoveyShiftProcessor::operator () (Composite& composite)
-		throw()
+		
 	{
 		// ueberpruefe fuer jedes Residue ob es in residues_with_rings ist und fuege es in die Liste aromat_list_ ein.
 		// ueberpruefe fuer jedes Atom die Liste der Expressions und falls eine wahr ist fuege das Atom in die Liste ein.

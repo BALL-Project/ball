@@ -41,7 +41,7 @@ namespace BALL_MAP_NAMESPACE
 namespace BALL
 {
 	template<>
-	BALL_EXPORT HashIndex Hash(const std::pair<Position, Position>& p) throw();
+	BALL_EXPORT HashIndex Hash(const std::pair<Position, Position>& p);
 
 	// 
 	typedef Index FacetArray[256][12];
@@ -97,8 +97,7 @@ namespace BALL
 		TContourSurface(const TRegularData3D<T>& data, T threshold = 0.0);
 
 		/// Destructor
-		virtual ~TContourSurface()
-			throw();
+		virtual ~TContourSurface();
 		//@}
 
 		/** @name Assignment
@@ -136,7 +135,7 @@ namespace BALL
 		{	
 			public:
 
-			Cube(const TRegularData3D<T>& grid) throw()
+			Cube(const TRegularData3D<T>& grid)
 				:	grid_(&grid),
 					current_position_(0),
 					ptr_(0),
@@ -191,7 +190,6 @@ namespace BALL
 			}
 
 			void shift() 
-				throw()
 			{
 				// Shift the cube by one along the x-axis.
 				current_position_++;
@@ -211,8 +209,7 @@ namespace BALL
 			}
 
 			/// Compute the topology code for the current cube.
-			Position computeTopology(double threshold)
-				throw()	
+			Position computeTopology(double threshold)	
 			{
 				static const Position topology_modifier[8] = {1, 2, 4, 8, 16, 32, 64, 128};
 
@@ -252,8 +249,7 @@ namespace BALL
 
 
 		/// 
-		void addTriangles_(Cube& cube, const FacetArray& facet_data)
-			throw();
+		void addTriangles_(Cube& cube, const FacetArray& facet_data);
 
 		///
 		void computeTriangles(Size topology, const TRegularData3D<T>& data);
@@ -288,8 +284,7 @@ namespace BALL
 	}
    
 	template <typename T>
-	TContourSurface<T>::~TContourSurface()
-		throw()		
+	TContourSurface<T>::~TContourSurface()	
   {
   }
 
@@ -397,8 +392,7 @@ namespace BALL
 
 	template <typename T>
 	void TContourSurface<T>::addTriangles_
-		(typename TContourSurface<T>::Cube& cube, const FacetArray& facet_data) 
-		throw()
+		(typename TContourSurface<T>::Cube& cube, const FacetArray& facet_data)
 	{ 
 		// Some static variables we need below -- since we will
 		// call this rather often, we would rather want to avoid

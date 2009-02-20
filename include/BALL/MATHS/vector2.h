@@ -43,20 +43,18 @@ namespace BALL
 	*/
 	template <typename T>
 	BALL_INLINE 
-	TVector2<T> operator * (const T& scalar, const TVector2<T>& vector)
-		throw();
+	TVector2<T> operator * (const T& scalar, const TVector2<T>& vector);
 
 	/** Input stream.
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TVector2<T>& vector)
-		throw();
+		;
 
 	/* Output stream.
 	*/
 	template <typename T>
-	std::ostream& operator << (std::ostream& s, const TVector2<T>& vector)
-		throw();
+	std::ostream& operator << (std::ostream& s, const TVector2<T>& vector);
 	
 	//@}
 
@@ -79,7 +77,7 @@ namespace BALL
 				are initialized to <tt>(T)0</tt>.
 		*/
 		TVector2()
-			throw();
+			;
 
 		/**	Scalar constructor.
 				Create a new vector with all components set
@@ -87,7 +85,7 @@ namespace BALL
 				@param	value the value of all components
 		*/
 		explicit TVector2(const T& value)
-			throw();
+			;
 
 		/**	Detailed constructor.
 				Create a new TVector2 object from two variables of type <tt>T</tt>.
@@ -95,14 +93,14 @@ namespace BALL
 				@param	vy assigned to <tt>y</tt>
 		*/
 		TVector2(const T& vx, const T& vy)
-			throw();
+			;
 
 		/**	Copy constructor.
 				Create a new TVector2 object from another.
 				@param vector the TVector2 object to be copied
 		*/	
 		TVector2(const TVector2& vector)
-			throw();
+			;
 
 		/**	Array constructor.
 				This constructor creates a TVector3 object from the first
@@ -119,13 +117,13 @@ namespace BALL
 				data structures, nothing happens.
 		*/	
 		virtual ~TVector2()
-			throw();
+			;
 
 		/** Clear method
 				The values are set to 0.
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 
@@ -159,34 +157,34 @@ namespace BALL
 				@param	value the new value of the components
 		*/
 		void set(const T& value)
-			throw();
+			;
 
 		/**	Assign the vector components.
 				@param vx the new x component
 				@param vy the new y component
 		*/
 		void set(const T& vx, const T& vy)
-			throw();
+			;
 
 		/**	Assign from another TVector2.
 				@param vector	the TVector2 object to assign from
 		*/
 		void set(const TVector2& vector)
-			throw();
+			;
 
 		/**	Assignment operator.
 				Assign the vector components from another vector.
 				@param v the vector to assign from
 		**/
 		TVector2& operator = (const TVector2& v)
-			throw();
+			;
 
 		/** Assignment operator.
 				Assign a constant value to the two vector components.
 				@param value the constant to assign to x, y
 		**/
 		TVector2& operator = (const T& value)
-			throw();
+			;
 
 		/**	Array assignment operator.
 				Assigns the first two elements of an array to the vector components.
@@ -202,7 +200,7 @@ namespace BALL
 				@return T, the vector length
 		*/	
 		T getLength() const
-			throw();
+			;
 
 		/**	Return the squared length of the vector.
 				This method avoids the square root needed in getLength,
@@ -210,7 +208,7 @@ namespace BALL
 				@return T, \f$x^2 + y^2\f$
 		*/
 		T getSquareLength() const
-			throw();
+			;
 
 		/**	Normalize the vector.
 				The vector is scaled with its length:
@@ -226,18 +224,18 @@ namespace BALL
 				@return T, a reference to {\em *this} vector
 		*/
 		TVector2& negate()
-			throw();
+			;
 
 		/**	Return a vector with all components 0.
 		*/
 		static const TVector2& getZero()
-			throw();
+			;
 
 		/**	Return a vector with all components 1.
 				@return: TVector4(1, 1, 1, 1)
 		*/
 		static const TVector2& getUnit()
-			throw();
+			;
 
 		/**	Mutable array-like access to the components.
 				@exception Exception::IndexOverflow if <tt>index > 1</tt>
@@ -259,22 +257,22 @@ namespace BALL
 		/**	Positive sign.
 		*/
 		const TVector2& operator + () const
-			throw();
+			;
 
 		/**	Negative sign.
 		*/
 		TVector2 operator - () const
-			throw();
+			;
 
 		/** Addition.
 		*/
 		TVector2 operator + (const TVector2& b) const
-			throw();
+			;
 
 		/** Subtraction.
 		*/
 		TVector2 operator - (const TVector2& b) const
-			throw();
+			;
 
 		/**	Add a vector to this vector.
 				Add the components of <tt>vector</tt> to this vector.
@@ -282,14 +280,14 @@ namespace BALL
 				@return TVector2&, {\em *this}
 		*/
 		TVector2& operator += (const TVector2& vector)
-			throw();
+			;
 
 		/**	Subtract a vector from this vector.
 				@param vector the vector to subtract
 				@return TVector2&, {\em *this}
 		*/
 		TVector2& operator -= (const TVector2& vector)
-			throw();
+			;
 
 		/**	Scalar product.
 				Return <tt>TVector2(x * scalar, y * scalar)</tt>.
@@ -298,7 +296,7 @@ namespace BALL
 				@return TVector2, the scalar product of this vector and <tt>scalar</tt>
 		*/
 		TVector2 operator * (const T& scalar) const
-			throw();
+			;
 
 		/**	Multiply by a scalar.
 				Multiply all components of the vector by a <tt>scalar</tt> value.
@@ -306,7 +304,7 @@ namespace BALL
 				@return TVector2&, {\em *this}
 		*/
 		TVector2& operator *= (const T& scalar)
-			throw();
+			;
 
 		/**	Fraction of a vector.
 				Return <tt>TVector2(x / lambda, y / lambda)</tt>.
@@ -329,7 +327,7 @@ namespace BALL
 				Return the dot product of this vector and <tt>vector</tt>.
 		*/
 		T operator * (const TVector2& vector) const
-			throw();
+			;
 
 		//@}
 
@@ -340,12 +338,12 @@ namespace BALL
 		/**	Return the distance to another vector.
 		*/
 		T getDistance(const TVector2& vector) const
-			throw();
+			;
 
 		/**	Return the squared distance to another vector.
 		*/
 		T getSquareDistance(const TVector2& vector) const
-			throw();
+			;
 
 		//@}
 	
@@ -359,7 +357,7 @@ namespace BALL
 				@return bool, <b>true</b> if all two vector components are equal, <b>false</b> otherwise
 		*/
 		bool operator == (const TVector2& vector) const
-			throw();
+			;
 	
 		/**	Inequality operator.
 				The function Maths::isEqual is used to compare the values. 
@@ -367,19 +365,19 @@ namespace BALL
 				@return bool, <b>true</b> if the two vectors differ in at least one component, <b>false</b> otherwise
 		*/
 		bool operator != (const TVector2& vector) const
-			throw();
+			;
 
 		/**	Zero predicate.
 				The function Maths::isZero is used to compare the values with zero. 
 				 \link Maths::isZero Maths::isZero \endlink 
 		*/
 		bool isZero() const
-			throw();
+			;
 
 		/**	Orthogonality predicate.
 		*/
 		bool isOrthogonalTo(TVector2& vector) const
-			throw();
+			;
 
 		//@}
 
@@ -395,14 +393,14 @@ namespace BALL
 				@param   depth - the dumping depth
 		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw();
+			;
 
 		/**	Test if instance is valid.
 				Always returns true.
 				@return bool <b>true</b>
 		*/
 		bool isValid() const
-			throw();
+			;
 
 		//@}
 
@@ -430,7 +428,7 @@ namespace BALL
 	
 	template <typename T>
 	TVector2<T>::TVector2()
-		throw()
+		
 		:	PersistentObject(),
 			x(0),
 			y(0)
@@ -439,7 +437,7 @@ namespace BALL
 
 	template <typename T>
 	TVector2<T>::TVector2(const T& value)
-		throw()
+		
 		:	PersistentObject(),	
 			x(value),
 			y(value)
@@ -448,7 +446,7 @@ namespace BALL
 
 	template <typename T>
 	TVector2<T>::TVector2(const T& vx, const T& vy)
-		throw()
+		
 		:	PersistentObject(),
 			x(vx),
 			y(vy)
@@ -457,7 +455,7 @@ namespace BALL
 
 	template <typename T>
 	TVector2<T>::TVector2(const TVector2& vector)
-		throw()
+		
 		:	PersistentObject(),
 			x(vector.x),
 			y(vector.y)
@@ -466,7 +464,7 @@ namespace BALL
 
 	template <typename T>
 	TVector2<T>::~TVector2()
-		throw()
+		
 	{
 	}
 
@@ -486,7 +484,7 @@ namespace BALL
 
 	template <typename T>
 	void TVector2<T>::clear()
-		throw()
+		
 	{
 		x = y = (T)0;
 	}
@@ -512,7 +510,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TVector2<T>::set(const T& value)
-		throw()
+		
 	{
 		x = value;
 		y = value;
@@ -521,7 +519,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TVector2<T>::set(const T& vx, const T& vy)
-		throw()
+		
 	{
 		x = vx;
 		y = vy;
@@ -530,7 +528,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TVector2<T>::set(const TVector2<T>& vector)
-		throw()
+		
 	{
 		x = vector.x;
 		y = vector.y;
@@ -539,7 +537,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector2<T>& TVector2<T>::operator = (const TVector2<T>& vector)
-		throw()
+		
 	{
 		x = vector.x;
 		y = vector.y;
@@ -565,7 +563,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	TVector2<T>& TVector2<T>::operator = (const T& value)
-		throw()
+		
 	{
 		x = value;
 		y = value;
@@ -576,7 +574,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T TVector2<T>::getLength() const
-		throw()
+		
 	{
 		return (T)sqrt(x * x + y * y);
 	}
@@ -584,7 +582,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T TVector2<T>::getSquareLength() const
-		throw()
+		
 	{
 		return (T)(x * x + y * y);
 	}
@@ -608,7 +606,7 @@ namespace BALL
 
 	template <typename T>
 	TVector2<T>& TVector2<T>::negate()
-		throw()
+		
 	{
 		x *= -1;
 		y *= -1;
@@ -618,7 +616,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	const TVector2<T>& TVector2<T>::getZero()
-		throw()
+		
 	{
 		static TVector2<T> null_vector(0, 0);
 		return null_vector;
@@ -627,7 +625,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	const TVector2<T>& TVector2<T>::getUnit()
-		throw()
+		
 	{
 		static TVector2<T> unit_vector(1, 1);
 		return unit_vector;
@@ -672,7 +670,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	const TVector2<T>& TVector2<T>::operator + () const	
-		throw()
+		
 	{
 		return *this;
 	}
@@ -680,7 +678,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	TVector2<T> TVector2<T>::operator - () const	
-		throw()
+		
 	{
 		return TVector2<T>(-x, -y);
 	}
@@ -688,7 +686,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector2<T> TVector2<T>::operator + (const TVector2<T>& b) const
-		throw()
+		
 	{
 		return TVector2<T>(x + b.x, y + b.y);
 	}
@@ -696,7 +694,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	TVector2<T> TVector2<T>::operator - (const TVector2<T>& b) const
-		throw()
+		
 	{
 		return TVector2<T>(x - b.x, y - b.y);
 	}
@@ -704,7 +702,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector2<T>& TVector2<T>::operator += (const TVector2<T>& vector)
-		throw()
+		
 	{
 		x += vector.x;
 		y += vector.y;
@@ -715,7 +713,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector2<T>& TVector2<T>::operator -= (const TVector2<T>& vector)
-		throw()
+		
 	{
 		x -= vector.x;
 		y -= vector.y;
@@ -726,7 +724,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector2<T> TVector2<T>::operator * (const T& scalar) const 
-		throw()
+		
 	{
 		return TVector2<T>(x * scalar, y * scalar);
 	}
@@ -734,7 +732,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector2<T>& TVector2<T>::operator *= (const T &scalar)
-		throw()
+		
 	{
 		x *= scalar;
 		y *= scalar;
@@ -770,7 +768,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T TVector2<T>::operator * (const TVector2<T>& vector) const
-		throw()
+		
 	{
 		return (x * vector.x + y * vector.y);
 	}
@@ -778,7 +776,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T TVector2<T>::getDistance(const TVector2<T>& v) const
-		throw()
+		
 	{
 		T dx = x - v.x;
 		T dy = y - v.y;
@@ -789,7 +787,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T TVector2<T>::getSquareDistance(const TVector2<T>& v) const
-		throw()
+		
 	{
 		T dx = x - v.x;
 		T dy = y - v.y;
@@ -800,7 +798,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool TVector2<T>::operator == (const TVector2<T>& v) const
-		throw()
+		
 	{
 		return (Maths::isEqual(x, v.x) && Maths::isEqual(y, v.y));
 	}
@@ -808,7 +806,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool TVector2<T>::operator != (const TVector2<T>& v) const
-		throw()
+		
 	{
 		return (Maths::isNotEqual(x, v.x) || Maths::isNotEqual(y, v.y));
 	}
@@ -816,7 +814,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool TVector2<T>::isOrthogonalTo(TVector2<T>& v) const
-		throw()
+		
 	{
 		return Maths::isZero((*this) * v);
 	}
@@ -824,7 +822,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool TVector2<T>::isValid() const
-		throw()
+		
 	{
 		return true;
 	}
@@ -832,14 +830,14 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool TVector2<T>::isZero() const
-		throw()
+		
 	{
 		return (Maths::isZero(x) && Maths::isZero(y));
 	}
 
 	template <typename T>
 	void TVector2<T>::dump(std::ostream& s, Size depth) const
-		throw()
+		
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -861,14 +859,14 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector2<T> operator * (const T& scalar, const TVector2<T>& vector)
-		throw()
+		
 	{
 		return TVector2<T>(scalar * vector.x, scalar * vector.y);
 	}
 
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TVector2<T>& v)
-		throw()
+		
 	{
 		char c;
 		s >> c >> v.x >> v.y >> c;
@@ -878,7 +876,7 @@ namespace BALL
 
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TVector2<T>& v)
-		throw()
+		
 	{
 		s << "(" << v.x << ' ' << v.y << ')';
 

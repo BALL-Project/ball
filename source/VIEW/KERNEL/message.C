@@ -17,21 +17,21 @@ namespace BALL
 	{
 
 Message::Message()
-	throw()
+	
 	: connection_object_(0),
 		deletable_(true)
 {
 }
 
 Message::Message(const Message& message)
-	throw()
+	
 	: connection_object_(message.connection_object_),
 		deletable_(message.deletable_)
 {
 }
 
 Message::~Message()
-	throw()
+	
 {
 }
 
@@ -59,7 +59,7 @@ bool DatasetMessage::isValid() const
 
 
 CompositeMessage::CompositeMessage()
-	throw()
+	
 	: Message(),
 		type_(UNDEFINED),
 		composite_(0),
@@ -73,7 +73,7 @@ CompositeMessage::CompositeMessage()
 }
 
 CompositeMessage::CompositeMessage(const Composite& composite, CompositeMessageType type, bool update_representations)
-	throw()
+	
 	: Message(),
 		type_(type),
 		composite_((Composite*)&composite),
@@ -87,7 +87,7 @@ CompositeMessage::CompositeMessage(const Composite& composite, CompositeMessageT
 }
 
 CompositeMessage::CompositeMessage(const CompositeMessage& message)
-	throw()
+	
 	: Message(message),
 		type_(message.type_),
 		composite_(message.composite_),
@@ -101,7 +101,7 @@ CompositeMessage::CompositeMessage(const CompositeMessage& message)
 }
 
 CompositeMessage::~CompositeMessage()
-	throw()
+	
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing " << this << " CompositeMessage" << endl;
@@ -109,7 +109,7 @@ CompositeMessage::~CompositeMessage()
 }
 
 SceneMessage::SceneMessage(SceneMessageType type)
-	throw()
+	
 	: Message(),
 		type_(type),
 		stage_()
@@ -120,7 +120,7 @@ SceneMessage::SceneMessage(SceneMessageType type)
 }
 
 SceneMessage::SceneMessage(const SceneMessage& message)
-	throw()
+	
 	: Message(message),
 		type_(message.type_),
 		stage_(message.stage_)
@@ -131,7 +131,7 @@ SceneMessage::SceneMessage(const SceneMessage& message)
 }
 
 SceneMessage::~SceneMessage()
-	throw()
+	
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing " << this << " SceneMessage" << endl;
@@ -139,7 +139,7 @@ SceneMessage::~SceneMessage()
 }
 
 void SceneMessage::setType(SceneMessageType type)
-	throw() 
+	 
 { 
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "SceneMessage::setType " << type << std::endl;
@@ -150,27 +150,27 @@ void SceneMessage::setType(SceneMessageType type)
 
 
 GenericSelectionMessage::GenericSelectionMessage()
-	throw()
+	
 	: Message(),
 		selection_()
 {
 }
 
 GenericSelectionMessage::GenericSelectionMessage(const GenericSelectionMessage& message)
-	throw()
+	
 	: Message(message),
 		selection_(message.selection_)
 {
 }
 
 GenericSelectionMessage::~GenericSelectionMessage()
-	throw()
+	
 {
 }
 
 
 GeometricObjectSelectionMessage::GeometricObjectSelectionMessage()
-	throw()
+	
 	: Message()
 {
 	#ifdef BALL_VIEW_DEBUG
@@ -179,7 +179,7 @@ GeometricObjectSelectionMessage::GeometricObjectSelectionMessage()
 }
 
 GeometricObjectSelectionMessage::~GeometricObjectSelectionMessage()
-	throw()
+	
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing object " << (void *)this 
@@ -188,7 +188,7 @@ GeometricObjectSelectionMessage::~GeometricObjectSelectionMessage()
 }
 
 ControlSelectionMessage::ControlSelectionMessage()
-	throw()
+	
 	: GenericSelectionMessage()
 {
 	#ifdef BALL_VIEW_DEBUG
@@ -197,7 +197,7 @@ ControlSelectionMessage::ControlSelectionMessage()
 }
 
 NewSelectionMessage::NewSelectionMessage() 
-	throw()
+	
 	: Message(),
 		open_(false)
 { 
@@ -207,7 +207,7 @@ NewSelectionMessage::NewSelectionMessage()
 }
 
 RepresentationMessage::RepresentationMessage()
-	throw()
+	
 	: representation_(0),
 		type_(UNDEFINED)
 {
@@ -217,7 +217,7 @@ RepresentationMessage::RepresentationMessage()
 }
 
 RepresentationMessage::RepresentationMessage(Representation& rep, RepresentationMessageType type)
-	throw()
+	
 	: representation_(&rep),
 		type_(type)
 {
@@ -227,7 +227,7 @@ RepresentationMessage::RepresentationMessage(Representation& rep, Representation
 }
 
 RepresentationMessage::~RepresentationMessage()
-	throw()
+	
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing " << this << " RepresentationMessage" << endl;
@@ -235,7 +235,7 @@ RepresentationMessage::~RepresentationMessage()
 }
 
 void RepresentationMessage::setType(RepresentationMessageType type)
-	throw() 
+	 
 { 
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "RepresentationMessage::setType " << type << std::endl;
@@ -245,7 +245,7 @@ void RepresentationMessage::setType(RepresentationMessageType type)
 }
 
 MolecularTaskMessage::MolecularTaskMessage(MolecularTaskMessageType type)
-	throw()
+	
 	: type_(type)
 {
 	#ifdef BALL_VIEW_DEBUG
@@ -254,7 +254,7 @@ MolecularTaskMessage::MolecularTaskMessage(MolecularTaskMessageType type)
 }
 
 void MolecularTaskMessage::setType(MolecularTaskMessageType type)
-	throw() 
+	 
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "MolecularTaskMessage::setType " << type << std::endl;
@@ -265,7 +265,7 @@ void MolecularTaskMessage::setType(MolecularTaskMessageType type)
 
 
 CreateRepresentationMessage::CreateRepresentationMessage()
-	throw() 
+	 
 	: Message(), 
 		composites_(),
 		model_type_(MODEL_UNKNOWN),
@@ -278,7 +278,7 @@ CreateRepresentationMessage::CreateRepresentationMessage()
 
 CreateRepresentationMessage::CreateRepresentationMessage(const List<Composite*>& composites, 
 		ModelType model_type, ColoringMethod coloring_method)
- 	throw() 
+ 	 
 	: Message(),
 		composites_(composites), 
 		model_type_(model_type),
@@ -290,7 +290,7 @@ CreateRepresentationMessage::CreateRepresentationMessage(const List<Composite*>&
 }
 
 TransformationMessage::TransformationMessage()
-	throw()
+	
 	: Message(),
 		matrix_()
 {
@@ -300,7 +300,7 @@ TransformationMessage::TransformationMessage()
 }
 
 TransformationMessage::TransformationMessage(const Matrix4x4& m)
-	throw()
+	
 	: Message(),
 		matrix_(m)
 {
@@ -310,13 +310,13 @@ TransformationMessage::TransformationMessage(const Matrix4x4& m)
 }
 
 FinishedSimulationMessage::FinishedSimulationMessage()
-	throw()
+	
 	: Message()
 {
 }
 
 ShowHelpMessage::ShowHelpMessage(String url, String project, String entry)
-	throw()
+	
 	: Message(),
 		url_(url),
 		project_(project),
@@ -325,7 +325,7 @@ ShowHelpMessage::ShowHelpMessage(String url, String project, String entry)
 }
 
 RegisterHelpSystemMessage::RegisterHelpSystemMessage()
-	throw()
+	
 	: Message(),
 		object_(0),
 		url_(""),
@@ -334,7 +334,7 @@ RegisterHelpSystemMessage::RegisterHelpSystemMessage()
 }
 		
 DockingFinishedMessage::DockingFinishedMessage()
-	throw()
+	
 	: Message(),
 		conformation_set_(0)
 {
@@ -344,7 +344,7 @@ DockingFinishedMessage::DockingFinishedMessage()
 }
 
 DockingFinishedMessage::DockingFinishedMessage(bool abort)
-	throw()
+	
 	: Message(),
 		conformation_set_(0)
 {
@@ -355,7 +355,7 @@ DockingFinishedMessage::DockingFinishedMessage(bool abort)
 }
 
 DockingFinishedMessage::~DockingFinishedMessage()
-	throw()
+	
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing " << this << "DockingFinishedMessage" << std::endl;

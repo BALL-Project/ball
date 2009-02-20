@@ -94,7 +94,7 @@ namespace BALL
 		/**	Default constructor.
 				Creates a TRegularData3D object without allocating a grid.
 			*/
-		TRegularData3D() throw();	
+		TRegularData3D();	
 	
 		/**	Copy constructor.
 		*/
@@ -122,14 +122,12 @@ namespace BALL
 
 		/**	Destructor. 
 		*/
-		virtual ~TRegularData3D()
-			throw();
+		virtual ~TRegularData3D();
 
 		/** Clear method.
 			 Delete the grid contents and resize it to zero.
 		*/
-		virtual void clear() 
-			throw();
+		virtual void clear();
 		//@}
 
     /** @name Assignment
@@ -153,30 +151,30 @@ namespace BALL
 				all three dimensions, same origin, spacing and all array members
 				are identical.
 		*/
-		bool operator == (const TRegularData3D<ValueType>& grid) const throw();
+		bool operator == (const TRegularData3D<ValueType>& grid) const;
 
 		/** Inequality operator.
 		*/
-		BALL_INLINE bool operator != (const TRegularData3D<ValueType>& grid) const throw() {	return !this->operator == (grid); }
+		BALL_INLINE bool operator != (const TRegularData3D<ValueType>& grid) const {	return !this->operator == (grid); }
 
 		/// Empty predicate
-		BALL_INLINE bool empty() const throw() { return data_.empty(); }
+		BALL_INLINE bool empty() const { return data_.empty(); }
 
 		/// Test if a given point is inside the grid.
-		bool isInside(const CoordinateType& r) const throw();
+		bool isInside(const CoordinateType& r) const;
 		//@}
 
     /** @name Iterators
     */
     //@{
     ///
-    BALL_INLINE ConstIterator begin() const throw() { return data_.begin(); }
+    BALL_INLINE ConstIterator begin() const { return data_.begin(); }
     ///
-    BALL_INLINE ConstIterator end() const throw() { return data_.end(); }
+    BALL_INLINE ConstIterator end() const { return data_.end(); }
     ///
-    BALL_INLINE Iterator begin() throw() { return data_.begin(); }
+    BALL_INLINE Iterator begin() { return data_.begin(); }
     ///
-    BALL_INLINE Iterator end() throw() { return data_.end(); }
+    BALL_INLINE Iterator end() { return data_.end(); }
     //@}
 
 		/**	@name	Accessors
@@ -184,8 +182,8 @@ namespace BALL
 		//@{
 
     // STL compatibility
-    BALL_INLINE size_type size() const throw() { return data_.size(); }
-    BALL_INLINE size_type max_size() const throw() { return data_.max_size(); }
+    BALL_INLINE size_type size() const { return data_.size(); }
+    BALL_INLINE size_type max_size() const { return data_.max_size(); }
     BALL_INLINE void swap(TRegularData3D<ValueType>& grid) { std::swap(*this, grid); }
 
 
@@ -220,7 +218,7 @@ namespace BALL
         @note No range checking is done. For a more robust version, please
         use getData.
     */
-    const ValueType& operator [] (const IndexType& index) const throw() 
+    const ValueType& operator [] (const IndexType& index) const 
 		{		
 			return data_[index.x + size_.x * index.y + index.z * size_.x * size_.y]; 
 		}
@@ -229,7 +227,7 @@ namespace BALL
         @note No range checking is done. For a more robust version, please
         use getData.
     */
-    ValueType& operator [] (const IndexType& index) throw()
+    ValueType& operator [] (const IndexType& index)
 		{		
 			return data_[index.x + size_.x * index.y + index.z * size_.x * size_.y]; 
 		}
@@ -238,13 +236,13 @@ namespace BALL
         @note No range checking is done. For a more robust version, please
         use getData.
     */
-    const ValueType& operator [] (Position index) const throw() { return data_[index]; }
+    const ValueType& operator [] (Position index) const { return data_[index]; }
 
     /** Mutable random access operator.
         @note No range checking is done. For a more robust version, please
         use getData.
     */
-    ValueType& operator [] (Position index) throw() { return data_[index]; }
+    ValueType& operator [] (Position index) { return data_[index]; }
 
     /** Function operator.
         This operator allows the use of a TRegularData1D instance
@@ -256,7 +254,7 @@ namespace BALL
         \link getInterpolatedValue() getInterpolatedValue() \endlink.
         @precondition getOrigin() <= x <= getOrigin() + getDimension()
     */
-    ValueType operator () (const CoordinateType& x) const throw();
+    ValueType operator () (const CoordinateType& x) const;
 		
     /** Return the linearly interpolated value of the surrounding two grid points.
         This method first performs a range check for the argument <tt>x</tt>
@@ -302,29 +300,29 @@ namespace BALL
         Use \link size size \endlink to obtain the <em>total</em> number of
         points in the grid.
     */
-    inline const IndexType& getSize() const throw() { return size_; }
+    inline const IndexType& getSize() const { return size_; }
 		
     /** Return the origin of the data.
         The origin represents the coordinate of the very first
         (lower left) element, i.e. <tt>data_[0]</tt>.
     */
-    inline const CoordinateType& getOrigin() const throw() { return origin_; }
+    inline const CoordinateType& getOrigin() const { return origin_; }
 
     /** Return the spacing of the data.
         The spacing corresponds to the distance between two adjacent
         data elements.
     */
-    const CoordinateType& getSpacing() const throw() {  return spacing_; }
+    const CoordinateType& getSpacing() const {  return spacing_; }
     /** Set the origin of the data.
     */
-    void setOrigin(const CoordinateType& origin) throw() { origin_ = origin; }
+    void setOrigin(const CoordinateType& origin) { origin_ = origin; }
 
     /** Return the dimension of the data.
         The dimension represents the length of the data vector.
         Hence, the coordinate of the rightmost element, <tt>data_[getSize() - 1]</tt>
         is the origin plus the dimension (<tt>getOrigin() + getDimension()</tt>).
     */
-    const CoordinateType& getDimension() const throw() { return dimension_; }
+    const CoordinateType& getDimension() const { return dimension_; }
 
     /** Set the dimension of the data.
         This will affect neither the origin of the data, nor the number of
@@ -334,7 +332,7 @@ namespace BALL
 				Note: For non-orthogonal grids, the spacing cannot be correctly deduced and
 				will consequently not be changed.
     */
-    void setDimension(const CoordinateType& dimension) throw()	
+    void setDimension(const CoordinateType& dimension)	
 		{
 			dimension_ = dimension;
 			if (is_orthogonal_)
@@ -448,7 +446,6 @@ namespace BALL
 			
 		/// map indices to Cartesian coordinates
 		const CoordinateType mapToCartesian_(CoordinateType r) const
-			throw()
 		{
 			Vector3 result;
 			r.x /= (size_.x - 1.);
@@ -463,8 +460,7 @@ namespace BALL
 		}
 		
 		/// map Cartesian coordinates to indices (note: this does not yet convert the double values to Index)
-		const CoordinateType mapInverse_(CoordinateType r) const 
-			throw()
+		const CoordinateType mapInverse_(CoordinateType r) const
 		{
 			r -= origin_;
 
@@ -513,7 +509,6 @@ namespace BALL
 	// default constructor.
 	template <class ValueType>
 	TRegularData3D<ValueType>::TRegularData3D()
-		throw()
 		: data_(0),
 			origin_(0.0),
 			dimension_(0.0),
@@ -680,7 +675,6 @@ namespace BALL
 
 	template <class ValueType>
 	TRegularData3D<ValueType>::~TRegularData3D()
-		throw()
 	{
 	}
 
@@ -843,7 +837,6 @@ namespace BALL
 	template <class ValueType> 
 	BALL_INLINE
 	bool TRegularData3D<ValueType>::isInside(const typename TRegularData3D<ValueType>::CoordinateType& r) const		
-		throw()
 	{
 		if (is_orthogonal_)
 		{
@@ -1069,7 +1062,6 @@ namespace BALL
 	BALL_INLINE
 	ValueType TRegularData3D<ValueType>::operator ()
 		(const typename TRegularData3D<ValueType>::CoordinateType& r) const
-		throw()
 	{
 		Position x;
 		Position y;		
@@ -1251,7 +1243,7 @@ namespace BALL
 
 
 	template <typename ValueType>
-	void TRegularData3D<ValueType>::clear() throw()
+	void TRegularData3D<ValueType>::clear()
 	{
     data_.resize(0);
 
@@ -1267,7 +1259,6 @@ namespace BALL
 	
 	template <typename ValueType>	
 	bool TRegularData3D<ValueType>::operator == (const TRegularData3D<ValueType>& grid) const 
-		throw()
 	{
     return ((origin_ == grid.origin_)
             && (dimension_ == grid.dimension_)
@@ -1396,8 +1387,7 @@ namespace BALL
 	//@{
 	/// Output operator
 	template <typename ValueType>
-	std::ostream& operator << (std::ostream& os, const TRegularData3D<ValueType>& grid) 
-		throw()
+	std::ostream& operator << (std::ostream& os, const TRegularData3D<ValueType>& grid)
 	{
 		// Write the grid origin, dimension, and number of grid points
 		os << grid.getOrigin().x << " " << grid.getOrigin().y << " " << grid.getOrigin().z
@@ -1417,8 +1407,7 @@ namespace BALL
 
 	/// Input operator 
 	template <typename ValueType>
-	std::istream& operator >> (std::istream& is, TRegularData3D<ValueType>& grid) 
-		throw()
+	std::istream& operator >> (std::istream& is, TRegularData3D<ValueType>& grid)
 	{
     typename TRegularData3D<ValueType>::CoordinateType origin;
     typename TRegularData3D<ValueType>::CoordinateType dimension;

@@ -29,18 +29,15 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		ClearShiftProcessor()	
-			throw();
+		ClearShiftProcessor();
 		
 		/**	Copy constructor.
 		*/
-		ClearShiftProcessor(const ClearShiftProcessor& processor)	
-			throw();
+		ClearShiftProcessor(const ClearShiftProcessor& processor);
 		
 		/**	Destructor
 		*/
-		virtual ~ClearShiftProcessor()
-			throw();
+		virtual ~ClearShiftProcessor();
 		
 		//@}
 
@@ -50,8 +47,7 @@ namespace BALL
 
 		/**	Application method
 		*/
-		virtual Processor::Result operator () (Composite& composite)
-			throw();
+		virtual Processor::Result operator () (Composite& composite);
 
 		//@}
 		

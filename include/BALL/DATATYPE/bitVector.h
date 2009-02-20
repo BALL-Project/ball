@@ -69,11 +69,11 @@ namespace BALL
 
 		/** Default constructor 
 		*/
-		Bit() throw();
+		Bit();
 
 		/**	Copy constructor
 		*/
-		Bit(const Bit& bit) throw();
+		Bit(const Bit& bit);
 
 		/** Detailed constructor.
 				For use with nonconst bitvector.
@@ -94,8 +94,7 @@ namespace BALL
 
 		/** Destructor
 		*/
-		virtual ~Bit()	
-			throw();
+		virtual ~Bit();
 		//@}
 
 
@@ -115,7 +114,7 @@ namespace BALL
 		/** Assignment operator.
 				Assign the position from a Bit to this instance
 		*/
-		Bit& operator = (const Bit& bit) throw();
+		Bit& operator = (const Bit& bit);
 
 		/** Assignment operator.
 				Assign a bool value to this instance.
@@ -127,7 +126,7 @@ namespace BALL
 
 		/** Clear method 
 		*/
-		virtual void clear() throw();
+		virtual void clear();
 
 		//@}
 		/**	@name	 Predicates
@@ -137,7 +136,7 @@ namespace BALL
 		/** Equality operator.
 				Test if two instances have the same position in a bitvector
 		*/
-		bool operator == (const Bit& bit) const throw();
+		bool operator == (const Bit& bit) const;
 
 		/** Equality operator.
 				Test if this instance has the given bool value
@@ -147,7 +146,7 @@ namespace BALL
 		/** Inequality operator.
 				Test if two instances point to different positions.
 		*/
-		bool operator != (const Bit& bit) const throw();
+		bool operator != (const Bit& bit) const;
 
 		/** Inequality operator.
 				Test if this instance has not the given bool value
@@ -200,7 +199,7 @@ namespace BALL
 
 		/**	Default constructor
 		*/
-		BitVector() throw();
+		BitVector();
 
 		/**	Detailled constructor
 		*/
@@ -219,12 +218,12 @@ namespace BALL
 
 		/**	Destructor
 		*/
-		virtual ~BitVector() throw();
+		virtual ~BitVector();
 
 		/**	Clear method.
 				This method will set the size of this instance to 0.
 		*/
-		void clear() throw();
+		void clear();
 
 		//@}
 		/**	@name	Assignment 
@@ -279,23 +278,23 @@ namespace BALL
 
 		/**	Return the size of this instance.
 		*/
-		Size getSize() const throw();
+		Size getSize() const;
 
 		/** Count a given bool value in this instance.
 				@param value the value to be counted
 				@return Size the number of the given value
 		*/
-		Size countValue(bool value) const throw();
+		Size countValue(bool value) const;
 
 		/** Return a muteable pointer to the values of this instance.
 				@return unsigned char*	a muteable pointer to the values of this instance
 		*/
-		VectorType& getBitSet() throw();
+		VectorType& getBitSet();
 
 		/** Return a constant pointer to the values of this instance.
 				@return unsigned char*	a constant pointer to the values of this instance
 		*/
-		const VectorType& getBitSet() const throw();
+		const VectorType& getBitSet() const;
 
 		/**	Random access to the components.
 				If the given index is greater than the size of this instance, this BitVector
@@ -369,43 +368,43 @@ namespace BALL
 				For example: 22 => 00010110.
 				@param bit_pattern the new pattern.
 		*/
-		void setUnsignedChar(unsigned char bit_pattern) throw();
+		void setUnsignedChar(unsigned char bit_pattern);
 
 		/** Get the bit pattern as unsigned char.
 				For example: 00010110 => 22.
 				@return unsigned char the bit-pattern
 		*/
-		unsigned char getUnsignedChar() const throw();
+		unsigned char getUnsignedChar() const;
 
 		/** Set a unsigned short as the bit pattern.
 				@see setUnsignedChar
 		*/
-		void setUnsignedShort(unsigned short bit_pattern) throw();
+		void setUnsignedShort(unsigned short bit_pattern);
 
 		/** Get the bit pattern as unsigned short.
 				@see getUnsignedChar
 		*/
-		unsigned short getUnsignedShort() const throw();
+		unsigned short getUnsignedShort() const;
 
 		/** Set a unsigned int as the bit pattern.
 				@see setUnsignedChar
 		*/
-		void setUnsignedInt(unsigned int bit_pattern) throw();
+		void setUnsignedInt(unsigned int bit_pattern);
 
 		/** Get the bit pattern as unsigned int.
 				@see getUnsignedChar
 		*/
-		unsigned int getUnsignedInt() const throw();
+		unsigned int getUnsignedInt() const;
 
 		/** Set a unsigned long as the bit pattern.
 				@see setUnsignedChar
 		*/
-		void setUnsignedLong(unsigned long bit_pattern) throw();
+		void setUnsignedLong(unsigned long bit_pattern);
 
 		/** Get the bit pattern as unsigned long.
 				@see getUnsignedChar
 		*/
-		unsigned long getUnsignedLong() const throw();
+		unsigned long getUnsignedLong() const;
 
 		/** Compute {\em this or bit_vector}.
 				The result is saved in this instance.
@@ -477,10 +476,10 @@ namespace BALL
 		//@{
 
 		/// Equality operator
-		bool operator == (const BitVector& bit_vector) const throw();
+		bool operator == (const BitVector& bit_vector) const;
 
 		/// Inequality operator
-		bool operator != (const BitVector& bit_vector) const throw();
+		bool operator != (const BitVector& bit_vector) const;
 
 		/** Test if any bit in a given range has the given value.
 				@param value the value to look for
@@ -505,7 +504,7 @@ namespace BALL
 
 		/** Test if this instance is valid.
 		*/
-		bool isValid() const throw();
+		bool isValid() const;
 
 		//@}
 		/**	@name	Storers 
@@ -521,8 +520,7 @@ namespace BALL
 		/**	Output operator.
 				Writes the values of type <b>  bool </b> to an ostream.
 		*/
-		BALL_EXPORT friend std::ostream& operator << (std::ostream& s, const BitVector& bit_vector)
-			throw();
+		BALL_EXPORT friend std::ostream& operator << (std::ostream& s, const BitVector& bit_vector);
 
 		/**	Read the values of of type <b>  bool </b> from an istream.
 		*/
@@ -531,11 +529,11 @@ namespace BALL
 
 		/**	Write the values of of type <b>  bool </b> to an ostream.
 		*/
-		virtual void write(std::ostream& s) const throw();
+		virtual void write(std::ostream& s) const;
 
 		/**	Storable write method.
 		*/
-		virtual void write(PersistenceManager& pm) const throw();
+		virtual void write(PersistenceManager& pm) const;
 
 		/**	Storable read method.
 		*/
@@ -564,8 +562,7 @@ namespace BALL
 		Index block_(Index index) const
 			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
-		BlockType mask_(Index index) const
-			throw();
+		BlockType mask_(Index index) const;
 
 		// --- ATTRIBUTES
 

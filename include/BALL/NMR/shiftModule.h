@@ -68,29 +68,24 @@ namespace BALL
 		
 		/** Default Constructor
 		*/
-		ShiftModule()
-			throw();
+		ShiftModule();
 
 		/**	Detailed constructor
 		*/
-		ShiftModule(Parameters& parameters, const String& name = "")
-			throw();
+		ShiftModule(Parameters& parameters, const String& name = "");
 
 		/**	Copy constructor
 		*/
-		ShiftModule(const ShiftModule& module)
-			throw();
+		ShiftModule(const ShiftModule& module);
 
 		/**	Destructor
 		*/
-		virtual ~ShiftModule()
-			throw();
+		virtual ~ShiftModule();
 
 		/**	Clear method.
 				Clear the name and the pointer to the parameters.
 		*/
-		virtual void clear()
-			throw();
+		virtual void clear();
 
 		//@}
 		/**	@name Assignment
@@ -99,8 +94,7 @@ namespace BALL
 
 		/**	Assignment operator
 		*/
-		const ShiftModule& operator = (const ShiftModule& module)
-			throw();
+		const ShiftModule& operator = (const ShiftModule& module);
 
 		//@}
 		/**	@name Accessors
@@ -109,13 +103,11 @@ namespace BALL
 
 		/**	Set the modules name
 		*/
-		void setName(const String& name)
-			throw();
+		void setName(const String& name);
 
 		/**	Return the module name
 		*/
-		const String& getName() const
-			throw();
+		const String& getName() const;
 
 		/**	Set the parameters.
 				After the assignment, the state of the module is \emph{invalid},
@@ -123,13 +115,11 @@ namespace BALL
 				@param parameters the new parameters
 				@see	isValid
 		*/
-		void setParameters(Parameters& parameters)
-			throw();
+		void setParameters(Parameters& parameters);
 
 		/**	Return a pointer to the parameters
 		*/
-		const Parameters* getParameters() const
-			throw();
+		const Parameters* getParameters() const;
 
 		/**	Parameter initalization.
 				Use this method to implement the extraction and initialization of
@@ -139,8 +129,7 @@ namespace BALL
 				All implementations in derived classes should set the  \link valid_ valid_ \endlink  flag
 				to <b>true</b> if the initialization was successful and to <b>false</b> otherwise.
 		*/
-		virtual void init() 
-			throw();
+		virtual void init();
 
 		//@}
 		/**	@name Processor related methods
@@ -151,15 +140,13 @@ namespace BALL
 				This method aborts, if the module is not correctly initialized.
 				@see isValid
 		*/
-		virtual bool start() 
-			throw();
+		virtual bool start();
 
 		/**	Finish method.
 				This method aborts, if the module is not correctly initialized.
 				@see isValid
 		*/
-		virtual bool finish() 
-			throw();
+		virtual bool finish();
 
 		//@}
 		/**	@name	Predicates
@@ -170,8 +157,7 @@ namespace BALL
 				The module is valid if  \link init init \endlink  was executed successfully.
 				@return the module state
 		*/
-		bool isValid() const
-			throw();
+		bool isValid() const;
 
 		//@}
 
@@ -179,7 +165,7 @@ namespace BALL
 
 		/*_	The module name
 		*/
-		String			module_name_;		
+		String	module_name_;		
 
 		/*_	A pointer to the modules parameters
 		*/

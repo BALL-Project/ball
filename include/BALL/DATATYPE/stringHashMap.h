@@ -68,7 +68,6 @@ namespace BALL
 				Create an empty hash map.
 		*/
 		StringHashMap()
-			throw()
 			: HashMap<String, Value>()
 		{
 		}
@@ -78,7 +77,6 @@ namespace BALL
 				@param	map the hash map to be copied
 		*/
 		StringHashMap(const StringHashMap& map)
-			throw()
 			: HashMap<String, Value>(map)
 		{
 		}
@@ -87,7 +85,6 @@ namespace BALL
 				Destruct the hash map and free all used memory.
 		*/
 		virtual ~StringHashMap()
-			throw()
 		{
 		}
 
@@ -95,7 +92,6 @@ namespace BALL
 				Remove all contents from the hash map.
 		*/
 		void destroy()
-			throw()
 		{
 			HashMap<String, Value>::clear();
 		}
@@ -110,7 +106,6 @@ namespace BALL
 				@param	hash_map	the map to be copied
 		*/
     void set(const StringHashMap& hash_map)
-			throw()
 		{
 			HashMap<String, Value>::clear();
 
@@ -123,7 +118,6 @@ namespace BALL
 
 		/// Assign a hash map from another
 		const StringHashMap& operator = (const StringHashMap& hash_map)
-			throw()
 		{
 			set(hash_map);
 			return *this;
@@ -131,14 +125,12 @@ namespace BALL
 			
 		/// Assigns the content of a hash map to another
     void get(StringHashMap& hash_map) const
-			throw()
 		{
 			hash_map.set(*this);
 		}
 
 		/// Swaps the contents of two hash maps
     void swap(StringHashMap& hash_map)
-			throw()
 		{
 			std::swap(*this, hash_map);
 		}
@@ -151,7 +143,6 @@ namespace BALL
 		/**	Insert a pair of key and value.
 		*/
 		std::pair<Iterator, bool> insert(const ValueType& obj)
-			throw()
 		{
 			return HashMap<String, Value>::insert(obj);
 		}
@@ -161,7 +152,6 @@ namespace BALL
 				@param	key the value`s key
 		*/
 		::std::pair<Iterator, bool> insert(const String& key, const Value& value)
-			throw()
 		{
 			return HashMap<String, Value>::insert(::std::pair<String, Value>(key, value));
 		}
@@ -171,8 +161,7 @@ namespace BALL
 				@param	key the key of the entry to be removed
 				@return	bool <b>true</b> if the key was removed
 		*/
-		bool remove(const String& key)	
-			throw()
+		bool remove(const String& key)
 		{
 			// search the key
 			Iterator it = HashMap<String, Value>::find(key);
@@ -191,7 +180,6 @@ namespace BALL
 		/** Return the size of the hash map.
 		*/
 		Size getSize() const
-			throw()
 		{
 			return HashMap<String, Value>::size();
 		}
@@ -203,14 +191,14 @@ namespace BALL
 
 		/**	Compare two string hash maps.
 		*/
-		bool operator == (const StringHashMap<Value>& hash_map) const throw()
+		bool operator == (const StringHashMap<Value>& hash_map) const
 		{
 			return HashMap<String, Value>::operator == (hash_map);
 		}
 
 		/**	Compare two string hash maps.
 		*/
-		bool operator != (const StringHashMap<Value>& hash_map) const throw()
+		bool operator != (const StringHashMap<Value>& hash_map) const
 		{
 			return !(HashMap<String, Value>::operator == (hash_map));
 		}
@@ -218,7 +206,6 @@ namespace BALL
 		/** Decide whether the hash map contains a given key.
 		*/
 		bool has(const String& key) const
-			throw()
 		{
 			return !(HashMap<String, Value>::find(key) == HashMap<String, Value>::end());
 		}
@@ -227,7 +214,6 @@ namespace BALL
 				This method return <b>true</b> if the hash map does not contain any entries.
 		*/
 		bool isEmpty() const
-			throw()
 		{
 			return (HashMap<String, Value>::size() == 0);
 		}
@@ -241,7 +227,6 @@ namespace BALL
 				@param	visitor	the visitor
 		*/
 		void host(Visitor<StringHashMap<Value> >& visitor)
-			throw()
 		{
 			visitor.visit(*this);  
 		}

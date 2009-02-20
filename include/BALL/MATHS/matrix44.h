@@ -49,7 +49,7 @@ namespace BALL
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TMatrix4x4<T>& m)
-		throw();
+		;
 
 	/**	Output Operator
 			Writes sixteen values of type <tt>T</tt> to an output stream.
@@ -58,7 +58,7 @@ namespace BALL
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TMatrix4x4<T>& m)
-		throw();
+		;
 	//@}
 	
 	/**	Generic 4x4 Matrix Class.
@@ -79,7 +79,7 @@ namespace BALL
 				are initialized to <tt>0</tt>.
 		*/
 		TMatrix4x4()
-			throw();
+			;
 
 		/**	Array constructor.
 				This constructor creates a TMatrix4x4 object from the first
@@ -105,7 +105,7 @@ namespace BALL
 				@param bool ignored (just for interface consistency)
 		*/	
 		TMatrix4x4(const TMatrix4x4& m)
-			throw();
+			;
 
 		/**	Detailed constructor.
 				Create a new TMatrix4x4 object from four TVector4.
@@ -118,7 +118,7 @@ namespace BALL
 		TMatrix4x4
 			(const TVector4<T>& col1, const TVector4<T>& col2,
 			 const TVector4<T>& col3, const TVector4<T>& col4)
-			throw();
+			;
 
 		/**	Detailed constructor.
 				Create a new TMatrix4x4 object from sixteen <tt>T</tt> values.
@@ -129,14 +129,14 @@ namespace BALL
 			 const T& m21, const T& m22, const T& m23, const T& m24, 
 			 const T& m31, const T& m32, const T& m33, const T& m34, 
 			 const T& m41, const T& m42, const T& m43, const T& m44)
-			throw();
+			;
 
 		/**	Destructor.	
 				Destructs the TMatrix4x4 object. As there are no dynamic
 				data structures, nothing happens.
 		*/
 		virtual ~TMatrix4x4()
-			throw()
+			
 		{
 		}
 
@@ -144,7 +144,7 @@ namespace BALL
 				The values are set to 0.
 		*/
 		virtual void clear() 
-			throw();
+			;
 
 		//@}
 		/**	@name	Assignment
@@ -171,7 +171,7 @@ namespace BALL
 				@param TMatrix4x4	the TMatrix4x4 object to assign from
 		*/
 		void set(const TMatrix4x4& m)
-			throw();
+			;
 
 		/**	Assign from four TVector4.
 				@param col1 assigned to the first column
@@ -182,7 +182,7 @@ namespace BALL
 		void set
 			(const TVector4<T>& col1, const TVector4<T>& col2,
 			 const TVector4<T>& col3, const TVector4<T>& col4)
-			throw();
+			;
 
 		/**	Assign from sixteen values of type T.
 				@param m11 - m44 assigned to the components
@@ -192,7 +192,7 @@ namespace BALL
 			 const T& m21, const T& m22, const T& m23, const T& m24, 
 			 const T& m31, const T& m32, const T& m33, const T& m34, 
 			 const T& m41, const T& m42, const T& m43, const T& m44)
-			throw();
+			;
 
 		/**	Assignment operator.
 				Assign the components from the first 16 values assigned by <tt>ptr</tt>.
@@ -213,7 +213,7 @@ namespace BALL
 				@param TMatrix4x4 the TMatrix4x4 to assign from
 		**/
 		TMatrix4x4& operator = (const TMatrix4x4& m)
-			throw();
+			;
 
 		/**	Assign to an array.
 				Assigns the components to a pointer of an array of sixteen values of type <tt>T</tt>.
@@ -236,7 +236,7 @@ namespace BALL
 				@param TMatrix4x4	the TMatrix4x4 to be assigned to
 		*/
 		void get(TMatrix4x4& m) const
-			throw();
+			;
 
 		/**	Assign to four variables of type <b>  TVector4 </b>.
 				@param col1 the TVector4 to obtain the values of the first column
@@ -247,7 +247,7 @@ namespace BALL
 		void get
 			(TVector4<T>& col1, TVector4<T>& col2,
 			 TVector4<T>& col3, TVector4<T>& col4) const
-			throw();
+			;
 
 		/**	Assign to sixteen variables of type <tt>T</tt>.
 				@param m11 - m44 the variables to assign to
@@ -257,13 +257,13 @@ namespace BALL
 			 T& m21, T& m22, T& m23, T& m24, 
 			 T& m31, T& m32, T& m33, T& m34, 
 			 T& m41, T& m42, T& m43, T& m44) const
-			throw();
+			;
 
 		/**	Swap the contents of two instances of TMatrix4x4.
 				@param TMatrix4x4 the TMatrix4x4 to swap contents with
 		*/
 		void swap(TMatrix4x4& m)
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors
@@ -274,36 +274,36 @@ namespace BALL
 				Get the sum of the diagonal elements (m11 + m22 + m33 + m44).
 				@return T the trace
 		*/
-		T getTrace() const throw();
+		T getTrace() const ;
 
 		/** Create a zero matrix.
 				A new matrix object is created and all elements set to 0.
 		*/
-		static const TMatrix4x4& getZero() throw();
+		static const TMatrix4x4& getZero() ;
 
 		/** Create an identity matrix.
 				A new matrix object is created and all elements but the diagonal are 
 				set to zero. The diagonal elements are set to 1.
 		*/
-		static const TMatrix4x4& getIdentity() throw();
+		static const TMatrix4x4& getIdentity() ;
 
 		/** Set to an identity matrix.
 				m11, m22, m33, m44 = 1;
 				the other cells have the value 0;
 		*/
-		void setIdentity() throw();
+		void setIdentity() ;
 
 		/** Set the diagonal elements to the given value.
 				All other elements are set to 0.
 				@param T the value to fill with (default: 1)
 		*/
-		void set(const T& t = (T)1)	throw();
+		void set(const T& t = (T)1)	;
 
 		/** Mirror the Matrix at the diagonal.
 				All values are swaped by the mirrored value.
 				(I.e. m12 <=> m21 , m13 <=> m31 , ...)
 		*/
-		void transpose() throw();
+		void transpose() ;
 
 		/** Get a row of the matrix.
 				@param row the number of the row (0-3)
@@ -343,12 +343,12 @@ namespace BALL
 				@param m the matrix to compare with
 				@return bool, <b>true</b> if all components are equal, <b>false</b> otherwise
 		*/
-		bool isEqual(const TMatrix4x4& m) const throw();
+		bool isEqual(const TMatrix4x4& m) const ;
 
 		/** Get the diagonal of the matrix.
 				@return TVector4 the diagonal
 		*/
-		TVector4<T> getDiagonal() const throw();
+		TVector4<T> getDiagonal() const ;
 		
 		/** Access operator of a cell.
 				@param row the number of the row (0-3)
@@ -385,51 +385,51 @@ namespace BALL
 
 		/**	Positive sign.
 		*/
-		TMatrix4x4 operator + () const throw();
+		TMatrix4x4 operator + () const ;
 
 		/**	Negative sign.
 		*/
-		TMatrix4x4 operator - () const throw();
+		TMatrix4x4 operator - () const ;
 
 		/** Addition operator.
 				Adds another matrix to this matrix and return the result.
 				@param m the matrix to add
 				@return TMatrix4x4 the result
 		*/
-		TMatrix4x4 operator + (const TMatrix4x4& m) const	throw();
+		TMatrix4x4 operator + (const TMatrix4x4& m) const	;
 
 		/** Addition operator.
 				Adds another matrix to this matrix.
 				@param m the matrix to add
 				@return TMatrix4x4&, {\em *this}
 		*/
-		TMatrix4x4& operator += (const TMatrix4x4& m)	throw();
+		TMatrix4x4& operator += (const TMatrix4x4& m)	;
 
 		/** Subtraction operator.
 				Subtract another matrix from this matrix and return the result
 				@param m the matrix to subtract
 				@return TMatrix4x4 the result
 		*/
-		TMatrix4x4 operator - (const TMatrix4x4& m) const throw();
+		TMatrix4x4 operator - (const TMatrix4x4& m) const ;
 
 		/** Subtraction operator.
 				Subtract another matrix from this matrix.
 				@param m the matrix to subtract
 				@return TMatrix4x4&, {\em *this}
 		*/
-		TMatrix4x4& operator -= (const TMatrix4x4& m) throw();
+		TMatrix4x4& operator -= (const TMatrix4x4& m) ;
 
 		/**	Multiply by a scalar.
 				Operator for multiplying every cell value with a scalar value.
 				@return TMatrix4x4 the result
 		*/
-		TMatrix4x4 operator * (const T& scalar) const	throw();
+		TMatrix4x4 operator * (const T& scalar) const	;
 
 		/**	Multiply by a scalar.
 				Operator for multiplying every cell value with a scalar value.
 				@return TMatrix4x4&, {\em *this}
 		*/
-		TMatrix4x4& operator *= (const T& scalar)	throw();
+		TMatrix4x4& operator *= (const T& scalar)	;
 
 		/**	Divide by a scalar.
 				Operator for dividing every cell value by a scalar value.
@@ -450,17 +450,17 @@ namespace BALL
 		/**	Multiply two matrices.
 				@return TMatrix4x4 the result
 		*/
-		TMatrix4x4 operator * (const TMatrix4x4& m) const	throw();
+		TMatrix4x4 operator * (const TMatrix4x4& m) const	;
 
 		/**	Multiply two matrices
 				@return TMatrix4x4&, {\em *this}
 		*/
-		TMatrix4x4& operator *= (const TMatrix4x4& m)	throw();
+		TMatrix4x4& operator *= (const TMatrix4x4& m)	;
 
 		/**	Multiplication by an instance of type <b>  TVector4 </b>.
 				@return TMatrix4x4&, {\em *this}
 		*/
-		TVector4<T> operator * (const TVector4<T>& vector) const throw();
+		TVector4<T> operator * (const TVector4<T>& vector) const ;
 
 		/**	Invert the matrix.
 				Tests if the matrix can be inverted.
@@ -468,107 +468,107 @@ namespace BALL
 				@param inverse is assigned the inverse matrix 
 				@return bool true if the inverse matrix could be calculated, otherwise false.
 		*/
-		bool invert(TMatrix4x4& inverse) const throw();
+		bool invert(TMatrix4x4& inverse) const ;
 
 		/**	Invert the matrix.
 				Tests if the matrix can be inverted.
 				If this is possible, the result is stored in the matrix.
 				@return bool true if the inverse matrix could be calculated, otherwise false.
 		*/
-		bool invert() throw();
+		bool invert() ;
 
 		/**	Compute the determinant.
 				@return T the determinant.
 		*/
-		T getDeterminant() const throw();
+		T getDeterminant() const ;
 
 		/**	Translate the matrix.
 				@param x the x-component of the translation
 				@param y the y-component of the translation
 				@param z the z-component of the translation
 		*/
-		void translate(const T &x, const T &y, const T &z) throw();
+		void translate(const T &x, const T &y, const T &z) ;
 
 		/**	Translate the matrix.
 				@param v the vector to translate with
 		*/
-		void translate(const TVector3<T>& v) throw();
+		void translate(const TVector3<T>& v) ;
 
 		/**	Set the matrix to a translation matrix.
 				@param x the x-component of the translation
 				@param y the y-component of the translation
 				@param z the z-component of the translation
 		*/
-		void setTranslation(const T& x, const T& y, const T& z) throw();
+		void setTranslation(const T& x, const T& y, const T& z) ;
 
 		/**	Set the matrix to a translation matrix.
 				@param v the vector to translate with
 		*/
-		void setTranslation(const TVector3<T>& v)	throw();
+		void setTranslation(const TVector3<T>& v)	;
 
 		/**	Scale the matrix.
 				@param x_scale the x scale factor
 				@param y_scale the y scale factor
 				@param z_scale the z scale factor
 		*/
-		void scale(const T& x_scale, const T& y_scale, const T& z_scale) throw();
+		void scale(const T& x_scale, const T& y_scale, const T& z_scale) ;
 
 		/**	Scale the matrix.
 				@param scale the scale factor
 		*/
-		void scale(const T& scale) throw();
+		void scale(const T& scale) ;
 
 		/**	Scale the matrix.
 				@param v the vector with the scale factor
 		*/
-		void scale(const TVector3<T>& v) throw();
+		void scale(const TVector3<T>& v) ;
 
 		/**	Set the matrix to a scalation matrix.
 				@param x_scale the x scale factor
 				@param y_scale the y scale factor
 				@param z_scale the z scale factor
 		*/
-		void setScale(const T& x_scale, const T& y_scale, const T& z_scale)	throw();
+		void setScale(const T& x_scale, const T& y_scale, const T& z_scale)	;
 
 		/**	Set the matrix to a scalation matrix.
 				@param scale the scale factor
 		*/
-		void setScale(const T& scale)	throw();
+		void setScale(const T& scale)	;
 
 		/**	Set the matrix to a scalation matrix.
 				@param v the vector with the scale factor
 		*/
-		void setScale(const TVector3<T>& v)	throw();
+		void setScale(const TVector3<T>& v)	;
 
 		/**	Rotate the matrix around the x axis.
 				@param phi the rotation angle
 		*/
-		void rotateX(const TAngle<T>& phi) throw();
+		void rotateX(const TAngle<T>& phi) ;
 
 		/**	Set the matrix to a x rotation matrix.
 				@param phi the rotation angle
 		*/
-		void setRotationX(const TAngle<T>& phi)	throw();
+		void setRotationX(const TAngle<T>& phi)	;
 
 		/**	Rotate the matrix around the y axis.
 				@param phi the rotation angle
 		*/
-		void rotateY(const TAngle<T>& phi) throw();
+		void rotateY(const TAngle<T>& phi) ;
 
 		/**	Set the matrix to a y rotation matrix.
 				@param phi the rotation angle
 		*/
-		void setRotationY(const TAngle<T>& phi) throw();
+		void setRotationY(const TAngle<T>& phi) ;
 
 		/**	Rotate the matrix around the z axis.
 				@param phi the rotation angle
 		*/
-		void rotateZ(const TAngle<T>& phi) throw();
+		void rotateZ(const TAngle<T>& phi) ;
 
 		/**	Set the matrix to a z rotation matrix.
 				@param phi the rotation angle
 		*/
-		void setRotationZ(const TAngle<T>& phi)	throw();
+		void setRotationZ(const TAngle<T>& phi)	;
 
 		/** Rotate the matrix around a given axis.
 				@param phi the rotation angle
@@ -576,19 +576,19 @@ namespace BALL
 				@param axis_y the y component of the axis
 				@param axis_z the z component of the axis
 		*/
-		void rotate(const TAngle<T>& phi, const T& axis_x, const T& axis_y, const T& axis_z) throw();
+		void rotate(const TAngle<T>& phi, const T& axis_x, const T& axis_y, const T& axis_z) ;
 
 		/** Rotate the matrix around a given axis.
 				@param phi the rotation angle
 				@param axis the axis vector
 		*/
-		void rotate(const TAngle<T>& phi, const TVector3<T>& axis) throw();
+		void rotate(const TAngle<T>& phi, const TVector3<T>& axis) ;
 
 		/** Rotate the matrix around a given axis.
 				@param phi the rotation angle
 				@param axis the axis vector, the fourth component of the vector is ignored
 		*/
-		void rotate(const TAngle<T>& phi, const TVector4<T>& axis) throw();
+		void rotate(const TAngle<T>& phi, const TVector4<T>& axis) ;
 
 		/**	Set the matrix to a rotation matrix.
 				@param phi the rotation angle
@@ -596,19 +596,19 @@ namespace BALL
 				@param axis_y the y component of the axis
 				@param axis_z the z component of the axis				
 		*/
-		void setRotation(const TAngle<T>& phi, const T& axis_x, const T& axis_y, const T& axis_z) throw();
+		void setRotation(const TAngle<T>& phi, const T& axis_x, const T& axis_y, const T& axis_z) ;
 
 		/**	Set the matrix to a rotation matrix.
 				@param phi the rotation angle
 				@param axis the axis vector
 		*/
-		void setRotation(const TAngle<T>& phi, const TVector3<T>& axis)	throw();
+		void setRotation(const TAngle<T>& phi, const TVector3<T>& axis)	;
 
 		/**	Set the matrix to a rotation matrix.
 				@param phi the rotation angle
 				@param axis the axis vector, the fourth component of the vector is ignored
 		*/
-		void setRotation(const TAngle<T>& phi, const TVector4<T>& axis)	throw();
+		void setRotation(const TAngle<T>& phi, const TVector4<T>& axis)	;
 		//@}
 
 		/**	@name	Predicates
@@ -620,51 +620,51 @@ namespace BALL
 				 \link isEqual isEqual \endlink 
 				@return bool, <b>true</b> if all components are equal, <b>false</b> otherwise
 		*/
-		bool operator == (const TMatrix4x4& m) const throw(); 
+		bool operator == (const TMatrix4x4& m) const ; 
 
 		/**	Inequality operator.
 				Instead of this operator isEqual should be used.
 				 \link isEqual isEqual \endlink 
 				@return bool, <b>true</b> if the two TMatrix4x4 differ in at least one component, <b>false</b> otherwise
 		*/
-		bool operator != (const TMatrix4x4& m) const throw();
+		bool operator != (const TMatrix4x4& m) const ;
 
 		/** Test whether this matrix is an identity matrix.
 				(I.e. m11, m22, m33, m44 = 1 and the other cells have the value 0)
 				@return bool, <b>true</b> if identity matrix, <b>false</b> otherwise
 		*/
-		bool isIdentity() const	throw();
+		bool isIdentity() const	;
 
 		/** Test whether this matrix is regular.
 				@return bool, <b>true</b> if (Determinant != 0), <b>false</b> otherwise
 		*/
-		bool isRegular() const throw();
+		bool isRegular() const ;
 
 		/** Test whether this matrix is singular.
 				@return bool, <b>true</b> if (Determinant == 0), <b>false</b> otherwise
 		*/
-		bool isSingular() const	throw();
+		bool isSingular() const	;
 
 		/** Test whether this matrix is symmetric.
 				(m12 = m21, m31 = m13, ...)
 				@return bool, <b>true</b> if symmatric, <b>false</b> otherwise
 		*/
-		bool isSymmetric() const throw();
+		bool isSymmetric() const ;
 
 		/** Test whether the lower triangular is zero.
 				@return bool, <b>true</b> if (m12 = m13 = m14 = m23 = m24 = m34 = 0), <b>false</b> otherwise
 		*/
-		bool isLowerTriangular() const throw();
+		bool isLowerTriangular() const ;
 
 		/** Test whether the upper triangular is zero.
 				@return bool, <b>true</b> if (m21 = m31 = m32 = m41 = m42 = m43 = 0), <b>false</b> otherwise
 		*/
-		bool isUpperTriangular() const throw();
+		bool isUpperTriangular() const ;
 
 		/** Test whether all cells but the diagonal are zero.
 				@return bool, <b>true</b> or <b>false</b>
 		*/
-		bool isDiagonal() const throw();
+		bool isDiagonal() const ;
 		//@}
 
 		/**	@name	Debugging and Diagnostics
@@ -675,7 +675,7 @@ namespace BALL
 				Always returns true.
 				@return bool <b>true</b>
 		*/
-		bool isValid() const throw();
+		bool isValid() const ;
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to 
@@ -683,7 +683,7 @@ namespace BALL
 				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/
-		void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
+		void dump(std::ostream& s = std::cout, Size depth = 0) const ;
 		//@}
 
 		/**	@name	Attributes
@@ -742,7 +742,7 @@ namespace BALL
 		private:
 
 		void initializeComponentPointers_()
-			throw()
+			
 		{
 			T **ptr = (T **)comp_ptr_;
 
@@ -759,7 +759,7 @@ namespace BALL
 
 	template <typename T>
 	TMatrix4x4<T>::TMatrix4x4()
-		throw()
+		
 		:	m11(0), m12(0), m13(0), m14(0), 
 			m21(0), m22(0), m23(0), m24(0), 
 			m31(0), m32(0), m33(0), m34(0), 
@@ -806,7 +806,7 @@ namespace BALL
 
 	template <typename T>
 	TMatrix4x4<T>::TMatrix4x4(const TMatrix4x4<T>& m)
-		throw()
+		
 		:	m11(m.m11), m12(m.m12), m13(m.m13), m14(m.m14), 
 			m21(m.m21), m22(m.m22), m23(m.m23), m24(m.m24), 
 			m31(m.m31), m32(m.m32), m33(m.m33), m34(m.m34), 
@@ -820,7 +820,7 @@ namespace BALL
 	TMatrix4x4<T>::TMatrix4x4
 		(const TVector4<T>& col1, const TVector4<T>& col2,
 		 const TVector4<T>& col3,const TVector4<T>& col4)
-		throw()
+		
 		:	m11(col1.x), m12(col1.y), m13(col1.z), m14(col1.h), 
 			m21(col2.x), m22(col2.y), m23(col2.z), m24(col2.h), 
 			m31(col3.x), m32(col3.y), m33(col3.z), m34(col3.h), 
@@ -835,7 +835,7 @@ namespace BALL
 		 const T& m21, const T& m22, const T& m23, const T& m24, 
 		 const T& m31, const T& m32, const T& m33, const T& m34, 
 		 const T& m41, const T& m42, const T& m43, const T& m44)
-		throw()
+		
 		:	m11(m11), m12(m12), m13(m13), m14(m14), 
 			m21(m21), m22(m22), m23(m23), m24(m24), 
 			m31(m31), m32(m32), m33(m33), m34(m34), 
@@ -846,7 +846,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::clear()
-		throw()
+		
 	{
 		set((T)0);
 	}
@@ -885,7 +885,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::set(const TMatrix4x4<T>& m)
-		throw()
+		
 	{
 		m11 = m.m11; m12 = m.m12; m13 = m.m13; m14 = m.m14; 
 		m21 = m.m21; m22 = m.m22; m23 = m.m23; m24 = m.m24; 
@@ -897,7 +897,7 @@ namespace BALL
 	void TMatrix4x4<T>::set
 		(const TVector4<T>& col1, const TVector4<T>& col2,
 		 const TVector4<T>& col3, const TVector4<T>& col4)
-		throw()
+		
 	{
 		m11 = col1.x; m12 = col1.y; m13 = col1.z; m14 = col1.h; 
 		m21 = col2.x; m22 = col2.y; m23 = col2.z; m24 = col2.h; 
@@ -911,7 +911,7 @@ namespace BALL
 		 const T& c21, const T& c22, const T& c23, const T& c24, 
 		 const T& c31, const T& c32, const T& c33, const T& c34, 
 		 const T& c41, const T& c42, const T& c43, const T& c44)
-		throw()
+		
 	{
 		m11 = c11; m12 = c12;	m13 = c13; m14 = c14;
 		m21 = c21; m22 = c22;	m23 = c23; m24 = c24;
@@ -940,7 +940,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TMatrix4x4<T>& TMatrix4x4<T>::operator = (const TMatrix4x4<T>& m)
-		throw()
+		
 	{
 		set(m);
 		return *this;
@@ -980,7 +980,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::get(TMatrix4x4<T>& m) const
-		throw()
+		
 	{
 		m.set(*this);
 	}
@@ -989,7 +989,7 @@ namespace BALL
 	void TMatrix4x4<T>::get
 		(TVector4<T>& col1, TVector4<T>& col2,
 		 TVector4<T>& col3, TVector4<T>& col4) const
-		throw()
+		
 	{
 		col1.x = m11; col1.y = m12; col1.z = m13; col1.h = m14; 
 		col2.x = m21; col2.y = m22; col2.z = m23; col2.h = m24; 
@@ -1003,7 +1003,7 @@ namespace BALL
 		 T& c21, T& c22, T& c23, T& c24, 
 		 T& c31, T& c32, T& c33, T& c34, 
 		 T& c41, T& c42, T& c43, T& c44) const
-		throw()
+		
 	{
 		c11 = m11; c12 = m12;	c13 = m13; c14 = m14;
 		c21 = m21; c22 = m22;	c23 = m23; c24 = m24;
@@ -1014,7 +1014,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T TMatrix4x4<T>::getTrace() const
-		throw()
+		
 	{
 		return (m11 + m22 + m33 + m44);
 	}
@@ -1022,7 +1022,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	const TMatrix4x4<T>& TMatrix4x4<T>::getZero()
-		throw()
+		
 	{
 		static TMatrix4x4<T> null_matrix
 			(0, 0, 0, 0,
@@ -1037,7 +1037,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void TMatrix4x4<T>::setIdentity()
-		throw()
+		
 	{
 		m12 = m13 = m14 = m21 = m23 = m24 = m31 = m32 = m34 = m41 = m42 = m43 = 0;
 		m11 = m22 = m33 = m44 = (T)1;
@@ -1045,7 +1045,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	const TMatrix4x4<T>& TMatrix4x4<T>::getIdentity()
-		throw()
+		
 	{
 		static TMatrix4x4<T> identity
 			(1, 0, 0, 0,
@@ -1058,7 +1058,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::set(const T& t)
-		throw()
+		
 	{
 			m11 = m12 = m13 = m14 
 		= m21 = m22 = m23 = m24 
@@ -1069,7 +1069,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::swap(TMatrix4x4<T>& m)
-		throw()
+		
 	{
 		T tmp = m11; m11 = m.m11; m.m11 = tmp;
 			tmp = m12; m12 = m.m12; m.m12 = tmp;
@@ -1091,7 +1091,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::transpose()
-		throw()
+		
 	{
 		T tmp = m12;
 		m12 = m21;
@@ -1185,7 +1185,7 @@ namespace BALL
 
 	template <typename T>
 	bool TMatrix4x4<T>::isEqual(const TMatrix4x4<T>& m) const
-		throw()
+		
 	{
 		// iterate over all component pointers
 		// and compare the elements for approximate equality
@@ -1202,7 +1202,7 @@ namespace BALL
 
 	template <typename T>
 	TVector4<T>TMatrix4x4<T>::getDiagonal() const
-		throw()
+		
 	{
 		return TVector4<T>(m11, m22, m33, m44);
 	}
@@ -1260,7 +1260,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TMatrix4x4<T> TMatrix4x4<T>::operator + () const
-		throw()
+		
 	{
 		return *this;
 	}
@@ -1268,7 +1268,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE TMatrix4x4<T>
 	TMatrix4x4<T>::operator - () const
-		throw()
+		
 	{
 		return TMatrix4x4<T>
 			(-m11, -m12, -m13, -m14,
@@ -1279,7 +1279,7 @@ namespace BALL
 
 	template <typename T>
 	TMatrix4x4<T> TMatrix4x4<T>::operator + (const TMatrix4x4<T>& m) const
-		throw()
+		
 	{
 		return TMatrix4x4<T>
 			(m11 + m.m11, m12 + m.m12, m13 + m.m13, m14 + m.m14,
@@ -1290,7 +1290,7 @@ namespace BALL
 
 	template <typename T>
 	TMatrix4x4<T>& TMatrix4x4<T>::operator += (const TMatrix4x4<T>& m)
-		throw()
+		
 	{
 		m11 += m.m11;
 		m12 += m.m12;
@@ -1314,7 +1314,7 @@ namespace BALL
 
 	template <typename T>
 	TMatrix4x4<T> TMatrix4x4<T>::operator - (const TMatrix4x4<T>& m) const
-		throw()
+		
 	{
 		return TMatrix4x4<T>
 			(m11 - m.m11, m12 - m.m12, m13 - m.m13, m14 - m.m14,
@@ -1325,7 +1325,7 @@ namespace BALL
 
 	template <typename T>
 	TMatrix4x4<T>& TMatrix4x4<T>::operator -= (const TMatrix4x4<T>& m)
-		throw()
+		
 	{
 		m11 -= m.m11;
 		m12 -= m.m12;
@@ -1349,7 +1349,7 @@ namespace BALL
 
 	template <typename T>
 	TMatrix4x4<T> TMatrix4x4<T>::operator * (const T& scalar) const
-		throw()
+		
 	{
 		return TMatrix4x4<T>
 			(m11 * scalar, m12 * scalar, m13 * scalar, m14 * scalar,
@@ -1360,7 +1360,7 @@ namespace BALL
 
 	template <typename T>
 	TMatrix4x4<T> operator * (const T& scalar, const TMatrix4x4<T>& m)
-		throw()
+		
 	{
 		return TMatrix4x4<T>
 			(scalar * m.m11, scalar * m.m12, scalar * m.m13, scalar * m.m14,
@@ -1371,7 +1371,7 @@ namespace BALL
 
 	template <typename T>
 	TMatrix4x4<T>& TMatrix4x4<T>::operator *= (const T& scalar)
-		throw()
+		
 	{
 		m11 *= scalar;
 		m12 *= scalar;
@@ -1395,7 +1395,7 @@ namespace BALL
 
 	template <typename T>
 	TVector3<T> operator *(const TMatrix4x4<T>& matrix, const TVector3<T>& vector)
-		throw()
+		
 	{
 		return TVector3<T>
 			(matrix.m11 * vector.x + matrix.m12 * vector.y + matrix.m13 * vector.z + matrix.m14,
@@ -1431,7 +1431,7 @@ namespace BALL
 
 	template <typename T>
 	TMatrix4x4<T> TMatrix4x4<T>::operator * (const TMatrix4x4<T>& m) const
-		throw()
+		
 	{
 		return TMatrix4x4<T>
 				(m11 * m.m11 + m12 * m.m21 + m13 * m.m31 + m14 * m.m41,
@@ -1457,7 +1457,7 @@ namespace BALL
 
 	template <typename T>
 	TMatrix4x4<T>& TMatrix4x4<T>::operator *= (const TMatrix4x4<T>& m)
-		throw()
+		
 	{
 		set(m11 * m.m11 + m12 * m.m21 + m13 * m.m31 + m14 * m.m41,
 				m11 * m.m12 + m12 * m.m22 + m13 * m.m32 + m14 * m.m42,
@@ -1484,7 +1484,7 @@ namespace BALL
 
 	template <typename T>
 	TVector4<T> TMatrix4x4<T>::operator * (const TVector4<T>& v) const
-		throw()
+		
 	{
 		return TVector4<T>
 			(m11 * v.x + m12 * v.y + m13 * v.z + m14 * v.h,
@@ -1495,7 +1495,7 @@ namespace BALL
 
 	template <typename T>
 	bool TMatrix4x4<T>::invert(TMatrix4x4<T>& inverse) const
-		throw()
+		
 	{
 		/** First, we compute a QR decomposition, then we use it to solve
 		 *  the system A*A^-1 = I <=> R * A^-1 = Q^t, where R is upper
@@ -1627,14 +1627,14 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE bool TMatrix4x4<T>::invert()
-		throw()
+		
 	{
 		return invert(*this);
 	}
 
 	template <typename T>
 	T TMatrix4x4<T>::getDeterminant() const
-		throw()
+		
 	{
 		Position i;
 		Position j;
@@ -1674,7 +1674,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::translate(const T& x, const T& y, const T& z)
-		throw()
+		
 	{
 		m14 += m11 * x + m12 * y + m13 * z;
 		m24 += m21 * x + m22 * y + m23 * z;
@@ -1684,7 +1684,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::translate(const TVector3<T>& v)
-		throw()
+		
 	{
 		m14 += m11 * v.x + m12 * v.y + m13 * v.z;
 		m24 += m21 * v.x + m22 * v.y + m23 * v.z;
@@ -1694,7 +1694,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::setTranslation(const T& x, const T& y, const T& z)
-		throw()
+		
 	{
 		m11 = m22 = m33 = m44 = 1;
 
@@ -1710,7 +1710,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::setTranslation(const TVector3<T>& v)
-		throw()
+		
 	{
 		m11 = m22 = m33 = m44 = 1;
 
@@ -1726,7 +1726,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::scale(const T& x_scale, const T& y_scale, const T& z_scale)
-		throw()
+		
 	{
 		m11 *= x_scale;
 		m21 *= x_scale;
@@ -1746,7 +1746,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::scale(const T& scale)
-		throw()
+		
 	{
 		m11 *= scale;
 		m21 *= scale;
@@ -1766,7 +1766,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::scale(const TVector3<T>& v)
-		throw()
+		
 	{
 		m11 *= v.x;
 		m21 *= v.x;
@@ -1786,7 +1786,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::setScale(const T& x_scale, const T& y_scale, const T& z_scale)
-		throw()
+		
 	{
 		m11 = x_scale;
 		m22 = y_scale;
@@ -1801,7 +1801,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::setScale(const T& scale)
-		throw()
+		
 	{
 		m11 = scale;
 		m22 = scale;
@@ -1816,7 +1816,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::setScale(const TVector3<T>& v)
-		throw()
+		
 	{
 		m11 = v.x;
 		m22 = v.y;
@@ -1832,7 +1832,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TMatrix4x4<T>::rotateX(const TAngle<T>& phi)
-		throw()
+		
 	{
 		TMatrix4x4<T> rotation;
 
@@ -1842,7 +1842,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::setRotationX(const TAngle<T>& phi)
-		throw()
+		
 	{
 		m11 = m44 = 1;
 
@@ -1859,7 +1859,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TMatrix4x4<T>::rotateY(const TAngle<T>& phi)
-		throw()
+		
 	{
 		TMatrix4x4<T> rotation;
 
@@ -1869,7 +1869,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::setRotationY(const TAngle<T>& phi)
-		throw()
+		
 	{
 		m22 = m44 = 1;
 
@@ -1886,7 +1886,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TMatrix4x4<T>::rotateZ(const TAngle<T>& phi)
-		throw()
+		
 	{
 		TMatrix4x4<T> rotation;
 
@@ -1896,7 +1896,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::setRotationZ(const TAngle<T>& phi)
-		throw()
+		
 	{
 		m33 = m44 = 1;
 
@@ -1910,7 +1910,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TMatrix4x4<T>::rotate(const TAngle<T>& phi, const TVector3<T>& v)
-		throw()
+		
 	{
 		rotate(phi, v.x, v.y, v.z);
 	}
@@ -1918,7 +1918,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TMatrix4x4<T>::rotate(const TAngle<T>& phi, const TVector4<T>& v)
-		throw()
+		
 	{
 		rotate(phi, v.x, v.y, v.z);
 	}
@@ -1981,7 +1981,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::rotate(const TAngle<T>& phi, const T& ax, const T& ay, const T& az)
-		throw()
+		
 	{
 		T xx, yy, zz, xy, yz, zx, xs, ys, zs, one_c;
 		T x = ax;
@@ -2045,7 +2045,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::setRotation(const TAngle<T>& phi, const T& x, const T& y, const T& z)
-		throw()
+		
 	{
 		m12 = m13 = m14 = m21 = m23 = m24 = m31 = m32 = m34 = m41 = m42 = m43 = 0;
 		m11 = m22 = m33 = m44 = (T)1;
@@ -2055,7 +2055,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TMatrix4x4<T>::setRotation(const TAngle<T>& phi, const TVector3<T>& v)
-		throw()
+		
 	{
 		m12 = m13 = m14 = m21 = m23 = m24 = m31 = m32 = m34 = m41 = m42 = m43 = 0;
 		m11 = m22 = m33 = m44 = (T)1;
@@ -2065,7 +2065,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TMatrix4x4<T>::setRotation(const TAngle<T>& phi, const TVector4<T>& v)
-		throw()
+		
 	{
 		m12 = m13 = m14 = m21 = m23 = m24 = m31 = m32 = m34 = m41 = m42 = m43 = 0;
 		m11 = m22 = m33 = m44 = (T)1;
@@ -2074,7 +2074,7 @@ namespace BALL
 
 	template <typename T>
 	bool TMatrix4x4<T>::operator == (const TMatrix4x4<T>& m) const
-		throw()
+		
 	{
 		return 
 			(   m11 == m.m11
@@ -2097,7 +2097,7 @@ namespace BALL
 
 	template <typename T>
 	bool TMatrix4x4<T>::operator != (const TMatrix4x4<T>& m) const
-		throw()
+		
 	{
 		return 
 			(   m11 != m.m11
@@ -2120,7 +2120,7 @@ namespace BALL
 
 	template <typename T>
 	bool TMatrix4x4<T>::isIdentity() const
-		throw()
+		
 	{
 		return 
 			(   m11 == (T)1
@@ -2144,7 +2144,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool TMatrix4x4<T>::isRegular() const
-		throw()
+		
 	{
 		return (getDeterminant() != (T)0);
 	}
@@ -2152,14 +2152,14 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	bool TMatrix4x4<T>::isSingular() const
-		throw()
+		
 	{
 		return (getDeterminant() == (T)0);
 	}
 
 	template <typename T>
 	bool TMatrix4x4<T>::isSymmetric() const
-		throw()
+		
 	{
 		return (   m12 == m21 && m13 == m31
 						&& m14 == m41 && m23 == m32
@@ -2168,7 +2168,7 @@ namespace BALL
 
 	template <typename T>
 	bool TMatrix4x4<T>::isLowerTriangular() const
-		throw()
+		
 	{
 		return (   m12 == (T)0
 						&& m13 == (T)0
@@ -2180,7 +2180,7 @@ namespace BALL
 
 	template <typename T>
 	bool TMatrix4x4<T>::isUpperTriangular() const
-		throw()
+		
 	{
 		return (   m21 == (T)0
 						&& m31 == (T)0
@@ -2193,7 +2193,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool TMatrix4x4<T>::isDiagonal() const
-		throw()
+		
 	{
 		return (   m12 == (T)0
 					  && m13 == (T)0
@@ -2211,7 +2211,7 @@ namespace BALL
 
 	template <typename T>
 	bool TMatrix4x4<T>::isValid() const
-		throw()
+		
 	{
 		T **ptr = (T **)comp_ptr_;
 		
@@ -2235,7 +2235,7 @@ namespace BALL
 
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TMatrix4x4<T>& m)
-		throw()
+		
 	{		
 		char c;
 		s >> c
@@ -2249,7 +2249,7 @@ namespace BALL
 
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TMatrix4x4<T>& m)
-		throw()
+		
 	{ 
 		s << '/'  <<  std::setw(14) << m.m11 << ' ' << std::setw(14) << m.m12 << ' ' << std::setw(14) << m.m13 << ' ' << std::setw(14) << m.m14 << " \\" << std::endl
 			<< '|'  <<  std::setw(14) << m.m21 << ' ' << std::setw(14) << m.m22 << ' ' << std::setw(14) << m.m23 << ' ' << std::setw(14) << m.m24 << " |"  << std::endl
@@ -2261,7 +2261,7 @@ namespace BALL
 
 	template <typename T>
 	void TMatrix4x4<T>::dump(std::ostream& s, Size depth) const
-		throw()
+		
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -2285,12 +2285,12 @@ namespace BALL
 	///
 	template <typename T>
 	TMatrix4x4<T> operator * (const T& scalar, const TMatrix4x4<T>& m)
-		throw();
+		;
 
 	///
 	template <typename T>
 	TVector3<T> operator * (const TMatrix4x4<T>& matrix, const TVector3<T>& vector)
-		throw();
+		;
 
 	/**	The Default TMatrix4x4 Type.
 			This default is predefined for convenience for those cases where single precision is sufficient.

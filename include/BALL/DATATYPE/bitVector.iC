@@ -6,7 +6,7 @@
 
 BALL_INLINE 
 BALL::Size BitVector::getSize() const
-	throw()
+	
 {
   return size_;
 }
@@ -58,7 +58,7 @@ Bit::Bit(BitVector* bit_vector, Index index)
 
 BALL_INLINE
 void Bit::clear() 
-	throw()
+	
 {
 	bitvector_					= 0;
 	index_							= 0;
@@ -68,14 +68,14 @@ void Bit::clear()
 
 BALL_INLINE
 BitVector::BlockType BitVector::mask_(Index index) const
-	throw()
+	
 {
 	return (BitVector::BlockType)(1 << (index & BALL_BLOCK_MASK));
 }
 
 BALL_INLINE 
 void BitVector::clear()
-	throw()
+	
 {
 	setSize(0, false);
 }
@@ -105,14 +105,14 @@ void BitVector::get(BitVector& bit_vector) const
 
 BALL_INLINE 
 BALL::BitVector::VectorType& BitVector::getBitSet()
-	throw()
+	
 {
   return bitset_;
 }
 
 BALL_INLINE 
 const BALL::BitVector::VectorType& BitVector::getBitSet() const
-	throw()
+	
 {
   return bitset_;
 }
@@ -179,14 +179,14 @@ BitVector BitVector::operator ~ ()
 
 BALL_INLINE 
 bool BitVector::operator != (const BitVector &bit_vector) const
-	throw()
+	
 {
   return !(*this == bit_vector);
 }
 
 BALL_INLINE 
 bool BitVector::isValid() const
-	throw()
+	
 {
   return true;
 }
@@ -272,7 +272,7 @@ bool Bit::operator != (bool bit) const
 
 BALL_INLINE
 bool Bit::operator == (const Bit& bit) const 
-	throw()
+	
 {
 	return (bitvector_					== bit.bitvector_					&& 
 					index_							== bit.index_							&&
@@ -281,7 +281,7 @@ bool Bit::operator == (const Bit& bit) const
 
 BALL_INLINE
 bool Bit::operator != (const Bit& bit) const 
-	throw()
+	
 {
 	return !(*this == bit);
 }
@@ -300,7 +300,7 @@ Bit::operator bool() const
 
 BALL_INLINE
 Bit& Bit::operator = (const Bit& bit)	
-	throw()
+	
 {
 	bitvector_					= bit.bitvector_;
 	index_							= bit.index_;

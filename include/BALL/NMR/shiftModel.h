@@ -72,30 +72,25 @@ namespace BALL
 		
 		/** Default Constructor
 		*/
-		ShiftModel()
-			throw();
+		ShiftModel();
 
 		/** Detailed Constructor
 		*/
-		ShiftModel(const String& filename)
-			throw();
+		ShiftModel(const String& filename);
 
 		/**	Copy constructor
 		*/
-		ShiftModel(const ShiftModel& model)
-			throw();
+		ShiftModel(const ShiftModel& model);
 
 		/**	Destructor
 		*/
-		virtual ~ShiftModel()
-			throw();
+		virtual ~ShiftModel();
 
 		/**	Clear method.
 				This method destructs all shift modules in the module list.
 				Then, it clears the module list, the parameters, and the options.		
 		*/
-		void clear()
-			throw();
+		void clear();
 
 		//@}
 		/**	@name Accessors
@@ -104,13 +99,11 @@ namespace BALL
 
 		/**
 		*/
-		Parameters& getParameters()
-			throw();
+		Parameters& getParameters();
 
 		/**	Return the list of modules
 		*/
-		ModuleList& getModuleList()
-			throw();
+		ModuleList& getModuleList();
 
 		/**	Set the parameter filename.
 		*/
@@ -119,8 +112,7 @@ namespace BALL
 
 		/**	Return the parameter filename.
 		*/
-		const String& getFilename() const
-			throw();
+		const String& getFilename() const;
 		
 		/**	Register a new module type.
 		*/
@@ -129,8 +121,7 @@ namespace BALL
 
 		/**	Unregister a module type.
 		*/
-		void unregisterModule(const String& name) 
-			throw();
+		void unregisterModule(const String& name) ;
 
 		//@}
 		/**	@name	Predicates
@@ -139,13 +130,11 @@ namespace BALL
 			
 		/**	Validity flag
 		*/
-		bool isValid() const
-			throw();
+		bool isValid() const;
 
 		/**	Check whether a module of this name is registered
 		*/
-		bool isRegistered(const String& name) const
-			throw();
+		bool isRegistered(const String& name) const;
 
 		//@}
 		/**	@name	Assignment
@@ -154,13 +143,11 @@ namespace BALL
 			
 		/**	Assignment operator
 		*/
-		const ShiftModel& operator = (const ShiftModel& model)
-			throw();
+		const ShiftModel& operator = (const ShiftModel& model);
 
 		/**	Assignment operator (via filename).
 		*/
-		const ShiftModel& operator = (const String& filename)
-			throw();
+		const ShiftModel& operator = (const String& filename);
 
 		//@}
 		/**	@name Public Attributes
@@ -178,18 +165,15 @@ namespace BALL
 
 		/**	Start method
 		*/
-		bool start()
-			throw();
+		bool start();
 
 		/**	Finish method
 		*/
-		bool finish()
-			throw();
+		bool finish();
 
 		/**	Application method
 		*/
-		Processor::Result operator () (Composite& composite)
-			throw();
+		Processor::Result operator () (Composite& composite);
 		//@}
 
 		protected:
@@ -206,21 +190,19 @@ namespace BALL
 				This method create a shift module from the symbolic
 				name if this name is contained in the hash map \Ref{registered_modules_}.
 		*/
-		ShiftModule* createModule_(const String& type, const String& name) const
-			throw();
+		ShiftModule* createModule_(const String& type, const String& name) const;
 
 		/*_	Register the standard modules.
 		*/
-		void registerStandardModules_()
-			throw();
+		void registerStandardModules_();
 		
 		/*_	The parameters object
 		*/
-		Parameters				parameters_;
+		Parameters parameters_;
 
 		/*_	The list of shift modules of this model
 		*/
-		ModuleList				modules_;
+		ModuleList modules_;
 
 		/*_	A hash map containing all registered module types and their creation methods.
 		*/

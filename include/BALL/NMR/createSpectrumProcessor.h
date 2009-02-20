@@ -40,8 +40,8 @@ namespace BALL
 	class Atom;
 
 	/**	Processor creates peaklist_. 
-			Each atom´s chemical shift will create a new peak.
-			Thist peak´s <tt>atomlist_</tt> will contain the corresponding atom.  \par
+			Each atomï¿½s chemical shift will create a new peak.
+			Thist peakï¿½s <tt>atomlist_</tt> will contain the corresponding atom.  \par
 	\ingroup Spectra
 	*/
 	class BALL_EXPORT CreateSpectrumProcessor
@@ -77,7 +77,7 @@ namespace BALL
 		/**	Destructor
 		*/
 		virtual ~CreateSpectrumProcessor()
-			throw();
+			;
 		
 		//@}
 		/** @name	Processor related methods
@@ -98,12 +98,12 @@ namespace BALL
 		/**	Start method.
 		*/
 		virtual bool start() 
-			throw();
+			;
 
 		/**	Application method.
 		*/
 		virtual Processor::Result operator () (Composite& atom)
-			throw();
+			;
 		
 		/**	Returns a reference to <tt>peaklist_</tt>.
 		*/
@@ -116,34 +116,34 @@ namespace BALL
 		
 		///
 		void setWidth(float width)
-			throw();
+			;
 
 		///
 		float getWidth() const
-			throw();
+			;
 
 		///
 		void setAtomAveraging(bool flag = true)
-			throw();
+			;
 			
 		///
 		bool getAtomAveraging() const
-			throw();
+			;
 			
 		///
 		void setAtomIgnoring(bool flag = true)
-			throw();
+			;
 
 		///
 		bool getAtomIgnoring() const
-			throw();
+			;
 
 		///
 		void setExpression(const String& expression)
-			throw();
+			;
 
 		const String& getExpression() const
-			throw();
+			;
 
 		//@}
 
@@ -173,7 +173,7 @@ namespace BALL
 			by its position \f$\delta_i\f$, intensity \f$h_i\f$, and width \f$w_i\f$.
 	\ingroup Spectra
 	*/
-	BALL_EXPORT const RegularData1D& operator << (RegularData1D& data, const PeakList1D& peak_list) throw();
+	BALL_EXPORT const RegularData1D& operator << (RegularData1D& data, const PeakList1D& peak_list) ;
   
 } //namespace BALL
 	 

@@ -41,11 +41,11 @@ namespace BALL
 		*/
 		//@{
 		/// The datatype used to store the spectrum
-		typedef DataT			DataType;
+		typedef DataT DataType;
 		/// the data type used to store a position (for peaks and data)
-		typedef	PositionT	PositionType;
+		typedef	PositionT PositionType;
 		///	The peak type
-		typedef	PeakT			PeakType;
+		typedef	PeakT PeakType;
 		/// An iterator 
 		typedef typename DataT::Iterator Iterator;
 		/// A constant iterator 
@@ -65,11 +65,9 @@ namespace BALL
 		*/
 		//@{
 		///
-		const DataType& getData() const
-			throw();
+		const DataType& getData() const;
 		///
-		DataType& getData()
-			throw();
+		DataType& getData();
 		//@}
 
 		virtual void clear();
@@ -79,7 +77,7 @@ namespace BALL
 		virtual PositionType getSpacing() const;
 		
 		protected:
-		DataType			data_;
+		DataType	data_;
 		PositionType	spacing_;
 		PositionType	min_;
 		PositionType	max_;

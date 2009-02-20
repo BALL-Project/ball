@@ -11,14 +11,13 @@ using namespace std;
 namespace BALL
 {
 	
-	PiecewisePolynomial::PiecewisePolynomial() throw()
+	PiecewisePolynomial::PiecewisePolynomial() 
 		:	PiecewiseFunction(),
 			degree_(0)
 	{
 	}
 
 	PiecewisePolynomial::PiecewisePolynomial(const PiecewisePolynomial& poly)
-		throw()
 		:	PiecewiseFunction(poly),
 			degree_(poly.degree_)
 	{
@@ -26,14 +25,14 @@ namespace BALL
 
 	PiecewisePolynomial::PiecewisePolynomial(Size degree, 
 			const std::vector<Interval>& intervals, 
-			const std::vector<Coefficients>& coefficients) throw()
+			const std::vector<Coefficients>& coefficients) 
 		:	PiecewiseFunction(intervals, coefficients),
 			degree_(degree)
 	{
 	}
 
 
-	PiecewisePolynomial::~PiecewisePolynomial() throw()
+	PiecewisePolynomial::~PiecewisePolynomial() 
 	{
 		clear();
 
@@ -43,14 +42,14 @@ namespace BALL
 
 	void PiecewisePolynomial::set(Size degree,
 			const std::vector<Interval>& intervals,
-			const std::vector<Coefficients>& coeffs) throw()
+			const std::vector<Coefficients>& coeffs) 
 	{
 		PiecewiseFunction::set(intervals, coeffs);
 		degree_ = degree;
 	}
 
 
-	void PiecewisePolynomial::clear() throw()
+	void PiecewisePolynomial::clear() 
 	{
 		degree_ = 0;
 
@@ -59,7 +58,7 @@ namespace BALL
 
 
 	PiecewisePolynomial& PiecewisePolynomial::operator =
-		(const PiecewisePolynomial& poly) throw()
+		(const PiecewisePolynomial& poly) 
 	{
 		PiecewiseFunction::operator = (poly);
 		degree_ = poly.degree_;
@@ -68,19 +67,19 @@ namespace BALL
 	}
 
 
-	void PiecewisePolynomial::setDegree(Size degree) throw()
+	void PiecewisePolynomial::setDegree(Size degree) 
 	{
 		degree_ = degree;
 	}
 
 
-	Size PiecewisePolynomial::getDegree() const throw()
+	Size PiecewisePolynomial::getDegree() const 
 	{
 		return degree_;
 	}
 
 
-	double PiecewisePolynomial::operator () (double x) const throw()
+	double PiecewisePolynomial::operator () (double x) const 
 	{
 		// ?????
 		if (!isInRange(x))
@@ -104,7 +103,7 @@ namespace BALL
 
 
 	bool PiecewisePolynomial::operator == (const PiecewisePolynomial& poly)
-		const throw()
+		const 
 	{
 		return (PiecewiseFunction::operator == (poly)
 			&& (degree_ == poly.degree_));
@@ -112,7 +111,7 @@ namespace BALL
 
 
 	void PiecewisePolynomial::dump(ostream& stream, Size /* depth */) const
-		throw() 
+		 
 	{
 		stream << "[PiecewisePolynomial: degree " << degree_ << "]" << endl;
 		PiecewiseFunction::dump();

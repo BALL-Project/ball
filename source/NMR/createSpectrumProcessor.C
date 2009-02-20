@@ -30,12 +30,12 @@ namespace BALL
 	}
 
 	CreateSpectrumProcessor::~CreateSpectrumProcessor ()
-		throw()
+		
 	{
 	}
 
 	bool CreateSpectrumProcessor::start()
-		throw()
+		
 	{
 		// clear the contents of the old peak list
 		peaklist_.clear();
@@ -109,7 +109,7 @@ namespace BALL
 	}
 
 	Processor::Result CreateSpectrumProcessor::operator () (Composite& composite)
-		throw()
+		
 	{		
 		// Collect all atoms with assigned chemical shifts
 		Atom* atom = dynamic_cast<Atom*>(&composite);
@@ -186,55 +186,55 @@ namespace BALL
 	}
 
 	void CreateSpectrumProcessor::setWidth(float width)
-		throw()
+		
 	{
 		width_ = width;
 	}
 	
 	float CreateSpectrumProcessor::getWidth() const
-		throw()
+		
 	{
 		return width_;
 	}
 
 	void CreateSpectrumProcessor::setAtomAveraging(bool flag)
-		throw()
+		
 	{
 		use_averaging_ = flag;
 	}
 
 	bool CreateSpectrumProcessor::getAtomAveraging() const
-		throw()
+		
 	{
 		return use_averaging_;
 	}
 
 	void CreateSpectrumProcessor::setAtomIgnoring(bool flag)
-		throw()
+		
 	{
 		use_ignore_table_ = flag;
 	}
 	
 	bool CreateSpectrumProcessor::getAtomIgnoring() const
-		throw()
+		
 	{
 		return use_ignore_table_;
 	}
 
 	void CreateSpectrumProcessor::setExpression(const String& expression)
-		throw()
+		
 	{
 		expression_.setExpression(expression);
 	}
 
 	const String& CreateSpectrumProcessor::getExpression() const
-		throw()
+		
 	{
 		return expression_.getExpressionString();
 	}
 
 	const RegularData1D& operator << (RegularData1D& data, const PeakList1D& /* peak_list */)
-		throw()
+		
 	{
 		// ????? implementation missing!
 

@@ -49,9 +49,9 @@ namespace BALL
 		///
 		struct BALL_EXPORT Ring
     {
-			double							radius;
-			double							intensity;
-			Size								electrons;
+			double	radius;
+			double	intensity;
+			Size	electrons;
 			std::vector<String>	atom_names;
 
 			bool operator == (const Ring& ring) const;
@@ -77,11 +77,11 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		JohnsonBoveyShiftProcessor() throw();
+		JohnsonBoveyShiftProcessor();
 
 		/**	Destructor
 		*/
-		virtual ~JohnsonBoveyShiftProcessor() throw();
+		virtual ~JohnsonBoveyShiftProcessor();
 
 		//@}
 		/** @name	Processor specific functions.
@@ -90,15 +90,15 @@ namespace BALL
 
 		/**	Start method.
 		*/
-		virtual bool start() throw();
+		virtual bool start();
 
 		/**	Finish method.
 		*/
-		virtual bool finish() throw();
+		virtual bool finish();
 
 		/**	Application method
 		*/
-		virtual Processor::Result operator () (Composite& composite) throw();
+		virtual Processor::Result operator () (Composite& composite);
 		
 		//@}
 		/**	@name Accessors
@@ -107,16 +107,16 @@ namespace BALL
 			
 		/** Initialize all parameters required
 		*/
-		virtual void init() throw();
+		virtual void init();
 			
 		//@}
 
 		protected:
 
-		std::list<Atom*>				proton_list_;	
-		std::list<Atom*>				atom_list_;	
-		std::list<Residue*>			aromat_list_;
-		StringHashMap<Ring>			rings_;
+		std::list<Atom*>	proton_list_;	
+		std::list<Atom*>	atom_list_;	
+		std::list<Residue*>	aromat_list_;
+		StringHashMap<Ring>	rings_;
 		StringHashMap<Position>	residues_with_rings_;
 		std::vector<Expression>	expressions_;
 		

@@ -35,55 +35,48 @@ namespace BALL
 		: public unary_function<arg, double> 
 	{
 		public:
-			
-		/** @name Constructors and Destructors
-		 */
-		//@{
-
-		/// Default constructor
-		ParsedFunction()
-			throw();
-
-		/// Detailed constructor.
-		ParsedFunction(const String& expression)
-			throw();
-		
-		/// Copy constructor
-		ParsedFunction(const ParsedFunction& func)
-			throw();
-		
-		/// Destructor
-		~ParsedFunction()
-			throw();
-		
-		//@}
-		
-		/** @name Accessors
-		 */
-		//@{
-		/** Evaluate the function at point \f$p\f$.
-		 */
-		double operator () (arg p)
-			throw(Exception::ParseError);
-	
-		//@}
-		/** @name Parsing
-		 */
-		//@{
-		/** This function initializes the function table and the constant table
-		    of our parser.
+			/** @name Constructors and Destructors
 			*/
-		void initTable()
-			throw();
-		//@}
-
-		/** The table of constants
-		 */
-		StringHashMap<double*> constants_;
-
-		/** The table of functions
-		 */
-		StringHashMap<double (*)(double)> functions_;
+			//@{
+	
+			/// Default constructor
+			ParsedFunction();
+	
+			/// Detailed constructor.
+			ParsedFunction(const String& expression);
+			
+			/// Copy constructor
+			ParsedFunction(const ParsedFunction& func);
+			
+			/// Destructor
+			~ParsedFunction();
+			
+			//@}
+			
+			/** @name Accessors
+			*/
+			//@{
+			/** Evaluate the function at point \f$p\f$.
+			*/
+			double operator () (arg p) throw(Exception::ParseError);
+		
+			//@}
+			/** @name Parsing
+			*/
+			//@{
+			/** This function initializes the function table and the constant table
+				of our parser.
+				*/
+			void initTable();
+			//@}
+	
+			/** The table of constants
+			*/
+			StringHashMap<double*> constants_;
+	
+			/** The table of functions
+			*/
+			StringHashMap<double (*)(double)> functions_;
 		
 		protected:
 			String expression_;

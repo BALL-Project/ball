@@ -66,7 +66,6 @@ namespace BALL
 	}
 
 	Substring::Substring()
-		throw()
 		:	bound_(0),
 			from_((Index)String::EndPos),
 			to_((Index)String::EndPos)
@@ -74,7 +73,6 @@ namespace BALL
 	}
 
 	Substring::Substring(const Substring& substring, bool /* deep */)
-		throw()
 		:	bound_(substring.bound_),
 			from_(substring.from_),
 			to_(substring.to_)
@@ -92,7 +90,6 @@ namespace BALL
 	}
 
 	Substring::~Substring()
-		throw()
 	{
 	}
 
@@ -129,7 +126,6 @@ namespace BALL
 	}
 
 	ostream& operator << (ostream &s, const Substring& substring)
-		throw()
 	{
 		if (substring.isBound() == false)
 		{
@@ -161,7 +157,6 @@ namespace BALL
 
 	// hand-coded create method
 	void* String::create(bool /* deep */, bool empty) const
-		throw()
 	{
 		void* ptr;
 		if (empty == true)
@@ -204,10 +199,8 @@ namespace BALL
 
 #ifdef BALL_HAS_SSTREAM
 	String::String(std::stringstream& s)
-			throw()
 #else
 	String::String(std::strstream& s)
-			throw()
 #endif
 		: string("")
 	{
@@ -215,7 +208,7 @@ namespace BALL
 	}
 
 #	define BALL_STRING_DEFINE_CONSTRUCTOR_METHOD(type, format_string) \
-	String::String(type t) 	throw()\
+	String::String(type t)\
 	{ \
 		setlocale(LC_NUMERIC, "C"); \
 		char buffer[128]; \
@@ -235,7 +228,7 @@ namespace BALL
 
 	#undef BALL_STRING_DEFINE_CONSTRUCTOR_METHOD
 
-	String::~String() throw()
+	String::~String()
 	{
 		erase();
 	}
@@ -301,7 +294,7 @@ namespace BALL
 	}
 
 #	define BALL_STRING_DEFINE_SET_METHOD(type, format_string) \
-	void String::set(type t) 	throw()\
+	void String::set(type t)\
 	{ \
 		char buffer[128]; \
 	\
@@ -348,7 +341,6 @@ namespace BALL
 	}
  
 	bool String::toBool() const
-		throw()
 	{
 		string::size_type str_index = find_first_not_of(CHARACTER_CLASS__WHITESPACE);
 		
@@ -797,7 +789,6 @@ namespace BALL
 	}
 
 	const char* eatDelimiters_(const char* start, const char* end, const char* delimiters)
-		throw()
 	{
 		const char* current_delimiter = (char*)strchr(delimiters, *start);
 		while ((current_delimiter != 0) && (start < end))
@@ -981,7 +972,6 @@ namespace BALL
 	}
 
 	String& String::trimLeft(const char* trimmed_chars)
-		throw()
 	{
 		if ((trimmed_chars == 0) || (size() == 0))
 		{
@@ -1009,7 +999,6 @@ namespace BALL
 	}
 
 	String& String::trimRight(const char* trimmed_chars)
-		throw()
 	{
 		if (trimmed_chars == 0 ||
 				size() == 0)
@@ -1038,7 +1027,6 @@ namespace BALL
 	}
 
 	String operator + (const char* char_ptr, const String& s)
-		throw()
 	{
 		String result(char_ptr);
 		result.append(s);
@@ -1046,7 +1034,6 @@ namespace BALL
 	}
 
 	String operator + (char c, const String& s)
-		throw()
 	{
 		String result(c);
 		result.append(s);
@@ -1054,7 +1041,6 @@ namespace BALL
 	}
 
 	bool String::hasPrefix(const String& s) const
-		throw()
 	{
 		if (s.size() > size())
 		{
@@ -1069,7 +1055,6 @@ namespace BALL
 	}
 
 	bool String::hasSuffix(const String& s) const
-		throw()
 	{
 		if (s.size() > size())
 		{
@@ -1087,7 +1072,7 @@ namespace BALL
 
 
 	#define BALL_STRING_DEFINE_IS_CLASS_METHOD(func, isclass) \
-	bool func() const throw()\
+	bool func() const\
 	{ \
 		const char* end = &c_str()[size()]; \
 	 \
@@ -1334,7 +1319,6 @@ namespace BALL
 	}
 
 	istream& getline(istream& s, String& str, char delimiter)
-		throw()
 	{
 		char c;
 		
@@ -1353,7 +1337,6 @@ namespace BALL
 	}
 
 	void String::dump(ostream &s, Size depth) const
-		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -1377,7 +1360,6 @@ namespace BALL
 	}
 
 	Size String::substitute(const String& to_replace, const String& replacing)
-		throw()
 	{
 		Size replaced_size = (Size)to_replace.size();
 
@@ -1644,7 +1626,6 @@ namespace BALL
 
 
 	Substring String::before(const String& s, Index from) const
-		throw()
 	{
 		Position found = EndPos;
 		if (s != "")
@@ -1662,7 +1643,6 @@ namespace BALL
 
 
 	Substring String::through (const String& s, Index from) const
-		throw()
 	{
 		Position found = EndPos;
 		if (s != "")
@@ -1680,7 +1660,6 @@ namespace BALL
 
 
 	Substring String::from(const String& s, Index from) const
-		throw()
 	{
 		if (s == "")
 		{
@@ -1699,7 +1678,7 @@ namespace BALL
 
 
 	Substring String::after(const String& s, Index from) const
-		throw()
+
 	{
 		if (s == "")
 		{
@@ -1718,7 +1697,6 @@ namespace BALL
 
 
 	Substring String::right(Size len) const
-		throw()
 	{
 		// to save calls to size()
 		Size s = (Size)size();
@@ -1773,7 +1751,6 @@ int String::Index_64_[128] = {
 #define base64val_(c) Index_64_[(unsigned int)(c)]
 
 String String::encodeBase64()
-	throw()
 {
 	Size in_length((Size)this->size());
 	const char* in = this->c_str();
@@ -1808,7 +1785,6 @@ String String::encodeBase64()
 }
 
 String String::decodeBase64()
-	throw()
 {
 	const char* in = this->c_str();
 	String out;
