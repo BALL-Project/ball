@@ -614,6 +614,11 @@ namespace BALL
 				Renderer* 			current_renderer = renderers_[i].renderer;
 				GLRenderWindow* current_window   = renderers_[i].target;
 
+				// prevent resizing of full screen Windows because they are
+				// most probably stereo half images
+				if (current_window->isFullScreen())
+					continue;
+
 				current_window->makeCurrent();
 				
 				if(!current_window->resize(width, height))
@@ -3035,19 +3040,13 @@ return;
 			// TODO: change this to something more sensible!
 			Position texname;
 
-			if (gl_renderer_->getStereoMode() != GLRenderer::DUAL_VIEW_DIFFERENT_DISPLAY_STEREO)
+			for (Position i=0; i<renderers_.size(); ++i)
 			{
-				texname = gl_renderer_->createTextureFromGrid(grid, map);
-			}
-			else
-			{
-				/*
-				left_eye_widget_->makeCurrent();
-				texname = left_eye_widget_->getRenderer()->createTextureFromGrid(grid, map);
-				right_eye_widget_->makeCurrent();
- 				right_eye_widget_->getRenderer()->createTextureFromGrid(grid, map);
-				makeCurrent();
-				*/
+				renderers_[i].target->makeCurrent();
+				Renderer* current_renderer = renderers_[i].renderer;
+
+				if (RTTI::isKindOf<GLRenderer>(*current_renderer))
+					texname = ((GLRenderer*)current_renderer)->createTextureFromGrid(grid, map);
 			}
 
 			return texname;
