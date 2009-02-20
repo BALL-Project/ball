@@ -30,13 +30,12 @@
 namespace BALL
 {
   /** Shift assignment processor implementing the effect of hydrogen bonds. 
-	\ingroup ShiftModulesNMR		
+	\ingroup ShiftModulesNMR	
   */
   class BALL_EXPORT HBondShiftProcessor
-		: public ShiftModule
+	: public ShiftModule
   {
     public:
-    
     BALL_CREATE(HBondShiftProcessor)
 
     /** @name Enums and Constants
@@ -53,17 +52,17 @@ namespace BALL
     /** Default constructor.
     */
     HBondShiftProcessor()
-      throw();
+      ;
 
     /** Copy constructor.
     */
     HBondShiftProcessor(const HBondShiftProcessor& processor)
-      throw();
+      ;
 
     /** Destructor.
     */
     virtual ~HBondShiftProcessor()
-      throw();
+      ;
 
     //@}
     /** @name Accessors
@@ -77,8 +76,7 @@ namespace BALL
 		    and the slope <tt>a</tt> and the shift <tt>b</tt> are universal, that is the same for all 
 				kinds of hydrogen bonds.
     */
-    virtual void init()
-      throw();
+    virtual void init();
 
     //@}
     /** @name Processor specific funtions.
@@ -87,15 +85,13 @@ namespace BALL
 
     /** Processor start method.
      */
-    virtual bool start()
-      throw();
+    virtual bool start();
 
     /** operator ().
 	      This method adds all acceptors to the <tt>acceptor_list_</tt> and all donors to the
 		    <tt>donor_list_</tt>.
     */
-    virtual Processor::Result operator () (Composite& composite)
-      throw();
+    virtual Processor::Result operator () (Composite& composite);
 
     
     /** Finish method.
@@ -110,8 +106,7 @@ namespace BALL
 				and in the named property  \link PROPERTY__HBOND_SHIFT PROPERTY__HBOND_SHIFT \endlink .
 				@return bool, <b>false</b> if <tt>parameters_ == 0</tt>
     */
-    virtual bool finish()
-      throw();
+    virtual bool finish();
 
     //@}
 
@@ -141,7 +136,6 @@ namespace BALL
      */
     float maximum_bond_length_;
 };
-  
 } // namespace BALL
 
 #endif

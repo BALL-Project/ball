@@ -8,7 +8,7 @@
 namespace BALL
 {
 
-	ComposedEnergyProcessor::ComposedEnergyProcessor() throw()
+	ComposedEnergyProcessor::ComposedEnergyProcessor()
 		:	EnergyProcessor(),
 			components_()
 	{
@@ -16,7 +16,7 @@ namespace BALL
 
 
 	ComposedEnergyProcessor::ComposedEnergyProcessor
-		(const ComposedEnergyProcessor& proc) throw()
+		(const ComposedEnergyProcessor& proc)
 		:	EnergyProcessor(proc),
 			components_(proc.components_)
 	{
@@ -24,7 +24,7 @@ namespace BALL
 
 
 	ComposedEnergyProcessor::ComposedEnergyProcessor(
-			EnergyProcessorList proc_list) throw()
+			EnergyProcessorList proc_list)
 		: EnergyProcessor(),
 			components_(proc_list)
 	{
@@ -32,7 +32,7 @@ namespace BALL
 	}
 
 
-	ComposedEnergyProcessor::~ComposedEnergyProcessor() throw()
+	ComposedEnergyProcessor::~ComposedEnergyProcessor()
 	{
 		clear();
 
@@ -40,7 +40,7 @@ namespace BALL
 	}
 
 
-	void ComposedEnergyProcessor::clear() throw()
+	void ComposedEnergyProcessor::clear()
 	{
 		EnergyProcessor::clear();
 		components_.clear();
@@ -48,7 +48,7 @@ namespace BALL
 
 
 	const ComposedEnergyProcessor& ComposedEnergyProcessor::operator =
-		(const ComposedEnergyProcessor& proc) throw()
+		(const ComposedEnergyProcessor& proc)
 	{
 		EnergyProcessor::operator = (proc);
 		components_ = proc.components_;
@@ -58,7 +58,7 @@ namespace BALL
 	}
 
 
-	bool ComposedEnergyProcessor::finish() throw()
+	bool ComposedEnergyProcessor::finish()
 	{
 		EnergyProcessorList::Iterator list_it = components_.begin();
 		for (; list_it != components_.end(); ++list_it)
@@ -70,7 +70,7 @@ namespace BALL
 	}
 
 
-	void ComposedEnergyProcessor::addComponent(EnergyProcessor* proc) throw()
+	void ComposedEnergyProcessor::addComponent(EnergyProcessor* proc)
 	{
 		// if there was no processor in the list before, assume that the
 		// instance will be valid after insertion.
@@ -90,18 +90,18 @@ namespace BALL
 	}
 
 
-	void ComposedEnergyProcessor::removeComponent(EnergyProcessor* proc) throw()
+	void ComposedEnergyProcessor::removeComponent(EnergyProcessor* proc)
 	{
 		components_.remove(proc);
 		checkValidity();
 	}
 
-	Size ComposedEnergyProcessor::getNumberOfEnergyProcessors() const throw()
+	Size ComposedEnergyProcessor::getNumberOfEnergyProcessors() const
 	{
 		return (Size)components_.size();
 	}
 	
-	void ComposedEnergyProcessor::checkValidity() throw()
+	void ComposedEnergyProcessor::checkValidity()
 	{
 		valid_ = true;
 		EnergyProcessorList::Iterator it = components_.begin();

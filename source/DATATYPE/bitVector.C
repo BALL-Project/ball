@@ -26,12 +26,10 @@ namespace BALL
 
 
 	Bit::~Bit()
-		throw()
 	{
 	}
 
-	Bit::Bit() 
-		throw()
+	Bit::Bit()
 		: bitvector_(0),
 			index_(0),
 			bitvector_muteable_(false)
@@ -39,7 +37,6 @@ namespace BALL
 	}
 
 	Bit::Bit(const Bit& bit) 
-		throw()
 		: bitvector_(bit.bitvector_),
 			index_(bit.index_),
 			bitvector_muteable_(bit.bitvector_muteable_)
@@ -47,7 +44,6 @@ namespace BALL
 	}
 
 	BitVector::BitVector()
-		throw()
 		:	size_(0),
 			bitset_(1)
 	{
@@ -81,7 +77,6 @@ namespace BALL
 	}
 
 	BitVector::~BitVector()
-		throw()
 	{
 	}
 
@@ -201,7 +196,7 @@ namespace BALL
 	}
 
 	BALL::Size BitVector::countValue(bool value) const
-		throw()
+
 	{
 		Size count = 0;
 
@@ -267,7 +262,6 @@ namespace BALL
 	}
 
 	void BitVector::setUnsignedChar(unsigned char bit_pattern)
-		throw()
 	{
 		setSize(BALL_CHAR_BITS, false);
 		unsigned char c = bit_pattern;
@@ -282,7 +276,6 @@ namespace BALL
 	}
 
 	unsigned char BitVector::getUnsignedChar() const
-		throw()
 	{
 		unsigned char c = 0;
 
@@ -302,7 +295,6 @@ namespace BALL
 	}
 
 	void BitVector::setUnsignedShort(unsigned short bit_pattern)
-		throw()
 	{
 		setSize(sizeof(unsigned short) * BALL_CHAR_BITS, false);
 		unsigned short c = bit_pattern;
@@ -315,7 +307,6 @@ namespace BALL
 	}
 
 	unsigned short BitVector::getUnsignedShort() const
-		throw()
 	{
 		unsigned short c = 0;
 		Index i = (Index)std::min((Size)(sizeof(unsigned short) * BALL_CHAR_BITS), getSize()) - 1;
@@ -332,7 +323,6 @@ namespace BALL
 	}
 
 	void BitVector::setUnsignedInt(unsigned int bit_pattern)
-		throw()
 	{
 		setSize(sizeof(unsigned int) * BALL_CHAR_BITS, false);
 		unsigned int c = bit_pattern;
@@ -345,7 +335,6 @@ namespace BALL
 	}
 
 	unsigned int BitVector::getUnsignedInt() const
-		throw()
 	{
 		unsigned int c = 0;
 
@@ -363,7 +352,6 @@ namespace BALL
 	}
 
 	void BitVector::setUnsignedLong(unsigned long bit_pattern)
-		throw()
 	{
 		setSize(sizeof(unsigned long) * BALL_CHAR_BITS, false);
 		unsigned long c = bit_pattern;
@@ -376,7 +364,6 @@ namespace BALL
 	}
 
 	unsigned long BitVector::getUnsignedLong() const
-		throw()
 	{
 		unsigned long c = 0;
 
@@ -433,7 +420,6 @@ namespace BALL
 	}
 
 	bool BitVector::operator == (const BitVector& bit_vector) const
-		throw()
 	{
 		if (size_ != bit_vector.size_)
 		{
@@ -493,7 +479,6 @@ namespace BALL
 	}
 
 	std::ostream& operator << (std::ostream& s, const BitVector& bit_vector)
-		throw()
 	{
 		bit_vector.write(s);
 		return s;
@@ -521,7 +506,6 @@ namespace BALL
 	}
 
 	void BitVector::write(std::ostream& s) const
-		throw()
 	{
 		s << getSize() << ' ';
 
@@ -555,7 +539,6 @@ namespace BALL
 	}
 
 	void BitVector::write(PersistenceManager& pm) const
-		throw()
 	{
 		Size size = getSize();
 		pm.writePrimitive(size, "size");

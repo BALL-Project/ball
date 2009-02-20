@@ -35,21 +35,17 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	TVector4<T> operator + (const TVector4<T>& a, const TVector4<T>& b)
-		throw();
+	TVector4<T> operator + (const TVector4<T>& a, const TVector4<T>& b);
 
 	template <typename T>
 	BALL_INLINE
-	TVector4<T> operator - (const TVector4<T>& a, const TVector4<T>& b)
-		throw();
+	TVector4<T> operator - (const TVector4<T>& a, const TVector4<T>& b);
 	
 	template <typename T>
-	std::istream& operator >> (std::istream& s, TVector4<T>& vector)
-		throw();
+	std::istream& operator >> (std::istream& s, TVector4<T>& vector);
 
 	template <typename T>
-	std::ostream& operator << (std::ostream& s, const TVector4<T>& vector)
-		throw();
+	std::ostream& operator << (std::ostream& s, const TVector4<T>& vector);
 		
 	/**	Generic Four-Dimensional Vector.
 			Representation of points and vectors in four-dimensional space.
@@ -69,8 +65,7 @@ namespace BALL
 				This method creates a new TVector4 object. The four components
 				are initialized to <tt>(T)0</tt>.
 		*/
-		TVector4()
-			throw();
+		TVector4();
 
 		/**	Array constructor.
 				This constructor creates a TVector4 object from the first
@@ -79,15 +74,14 @@ namespace BALL
 				@exception NullPointer if <tt>ptr == 0</tt>
 		*/
 		TVector4(const T* ptr)
-			throw(Exception::NullPointer);
+		throw(Exception::NullPointer);
 
    /** Scalar constructor.
         Create a new vector with all components set
         to the same <tt>value</tt>.
         @param  value the value of all components
     */
-    explicit TVector4(const T& value)
-      throw();                                                                                                                                                                     
+    	explicit TVector4(const T& value);
 
 		/**	Detailed constructor.
 				Create a new TVector4 object from three or four values of type <tt>T</tt>.
@@ -96,28 +90,24 @@ namespace BALL
 				@param	z assigned to <tt>z</tt>
 				@param	h assigned to <tt>h</tt>, default: 1 ; 
 		*/
-		TVector4(const T& x, const T& y, const T& z, const T& h = (T)1)
-			throw();
+		TVector4(const T& x, const T& y, const T& z, const T& h = (T)1);
 
 		/**	Copy constructor.
 				Create a new TVector4 object from another.
 				@param vector the TVector4 object to be copied
 		*/	
-		TVector4(const TVector4& vector)
-			throw();
+		TVector4(const TVector4& vector);
 
 		/**	Destructor.	
 				Destructs the TVector4 object. As there are no dynamic
 				data structures, nothing happens.
 		*/	
-		virtual ~TVector4()
-			throw();
+		virtual ~TVector4();
 
 		/** Clear method
 				The values are set to 0.
 		*/
 		virtual void clear()
-			throw()
 		{
 			x = y = z = h = (T)0;
 		}
@@ -142,14 +132,12 @@ namespace BALL
 				@param rz the new z component
 				@param rh the new h component, default: 1
 		*/
-		void set(const T& rx, const T& ry, const T& rz, const T& rh = (T)1)
-      throw();
+		void set(const T& rx, const T& ry, const T& rz, const T& rh = (T)1);
 
 		/**	Assign from another TVector4.
 				@param vector	the TVector4 object to assign from
 		*/
-		void set(const TVector4& vector)
-      throw();
+		void set(const TVector4& vector);
 
 		/**	Array assignment operator.
 				Assigns the first four elements of an array to the vector components x, y, z and h.
@@ -157,21 +145,19 @@ namespace BALL
 				@exception	NullPointer if <tt>ptr == 0</tt>
 		*/
 		TVector4& operator = (const T* ptr)
-      throw(Exception::NullPointer);
+		throw(Exception::NullPointer);
 
 		/**	Assignment operator.
 				Assign the vector components from another vector.
 				@param vector the vector to assign from
 		**/
-		TVector4& operator = (const TVector4& vector)
-      throw();
+		TVector4& operator = (const TVector4& vector);
 
 		/** Assignment operator.
 		    Assign a constant value to all four vector components.
 			  @param value the constant to assign to x, y, z, h
 		*/
-		TVector4& operator = (T value)
-			throw();
+		TVector4& operator = (T value);
 
 		/**	Assign to an array.
 				Sets the first four array elements pointed of array <tt>ptr</tt> 
@@ -188,21 +174,18 @@ namespace BALL
 				@param	rz the z component
 				@param	rh the h component
 		*/
-		void get(T& rx, T& ry, T& rz, T& rh) const
-      throw();
+		void get(T& rx, T& ry, T& rz, T& rh) const;
 
 		/**	Assign to another Vector4.
 				Assigns the vector components to another vector.
 				@param vector	the vector to be assigned to
 		*/
-		void get(TVector4& vector) const
-      throw();
+		void get(TVector4& vector) const;
 
 		/**	Swap the contents of two vectors.
 				@param	vector the vector to swap contents with
 		*/
-		void swap(TVector4& vector)
-      throw();
+		void swap(TVector4& vector);
 
 		//@}
 		/**	@name	Accessors
@@ -214,16 +197,14 @@ namespace BALL
 				\f$\sqrt{x^2 + y^2 + z^2 + h^2}\f$.
 				@return T, the vector length
 		*/	
-		T getLength() const
-      throw();
+		T getLength() const;
 
 		/**	Return the squared length of the vector.
 				This method avoids the square root needed in getLength,
 				so this method should be preferred if possible.
 				@return T, \f$x^2 + y^2 + z^2 + h^2\f$
 		*/
-		T getSquareLength() const
-      throw();
+		T getSquareLength() const;
 
 		/**	Normalize the vector.
 				The vector is scaled with its length:
@@ -236,19 +217,16 @@ namespace BALL
 
 		/**	Return a vector with all components 0.
 		*/
-		static const TVector4& getZero()
-      throw();
+		static const TVector4& getZero();
 
 		/**	Return a vector with all components 1.
 		*/
-		static const TVector4& getUnit()
-      throw();
+		static const TVector4& getUnit();
 
 		/** Assign one value to all vector components.
 				@param value	the value to be assigned to, default: 1
 		*/
-		void set(const T& value = (T)1)
-      throw();
+		void set(const T& value = (T)1);
 
 		/**	Mutable array-like access to the components.
 				@exception Exception::IndexOverflow if <tt>index > 3</tt>
@@ -269,43 +247,37 @@ namespace BALL
 
 		/**	Positive sign.
 		*/
-		TVector4 operator + () const
-      throw();
+		TVector4 operator + () const;
 
 		/**	Negative sign.
 		*/
-		TVector4 operator - () const
-      throw();
+		TVector4 operator - () const;
 
 		/**	Add a vector to this vector.
 				@param vector the vector to add
 				@return TVector4, {\em *this}
 		*/
-		TVector4& operator += (const TVector4& vector)
-      throw();
+		TVector4& operator += (const TVector4& vector);
 
 		/**	Subtract a vector from this vector.
 				@param vector the vector to subtract
 				@return TVector4 {\em *this}
 		*/
-		TVector4& operator -= (const TVector4& vector)
-      throw();
+		TVector4& operator -= (const TVector4& vector);
 
 		/**	Scalar product.
 				Return <tt>TVector4(x * scalar, y * scalar, z * scalar, h * scalar)</tt>.
 				@param scalar the scalar to multiply by
 				@return TVector4 the scalar product of this vector and <tt>scalar</tt>
 		*/
-		TVector4 operator * (const T& scalar)
-      throw();
+		TVector4 operator * (const T& scalar);
 
 		/**	Multiply by a scalar.
 				Multiply all components of the vector with a <tt>scalar</tt>.
 				@param scalar the scalar to multiply by
 				@return TVector4& {\em *this}
 		*/
-		TVector4& operator *= (const T& scalar)
-      throw();
+		TVector4& operator *= (const T& scalar);
 
 		/**	Fraction of a vector.
 				Return <tt>TVector4(x / scalar, y / scalar, z / scalar, h / scalar)</tt>.
@@ -328,15 +300,13 @@ namespace BALL
 				@param vector the vector to multiply by
 				@return T the dot product of this vector with <tt>vector</tt>.
 		*/
-		T operator * (const TVector4& vector) const
-      throw();
+		T operator * (const TVector4& vector) const;
 
 		/**	Return the distance to another vector
 				@param vector the reference vector
 				@return T, the distance
 		*/
-		T getDistance(const TVector4& vector) const
-      throw();
+		T getDistance(const TVector4& vector) const;
 
 		/**	Return the squared distance to another vector.
 				This method avoids the square root needed in getDistance,
@@ -345,7 +315,7 @@ namespace BALL
 				@return T, the squared distance
 		*/
 		T getSquareDistance(const TVector4& vector) const
-      throw();
+      ;
 
 		//@}
 		/**	@name	Predicates
@@ -358,7 +328,7 @@ namespace BALL
 				@return bool, <b>true</b> if all four vector components are equal, <b>false</b> otherwise
 		*/
 		bool operator == (const TVector4& vector) const
-      throw();
+      ;
 
 		/**	Inequality operator.
 				The function Maths::isEqual is used to compare the values. 
@@ -366,12 +336,12 @@ namespace BALL
 				@return bool, <b>true</b> if the two vectors differ in at least one component, <b>false</b> otherwise
 		*/
 		bool operator != (const TVector4& vector) const
-      throw();
+      ;
 
 		/**	Orthogonality predicate.
 		*/
 		bool isOrthogonalTo(const TVector4& vector) const
-      throw();
+      ;
 
 		//@}
 		/**	@name	Debugging and Diagnostics
@@ -383,7 +353,7 @@ namespace BALL
 				@return bool <b>true</b>
 		*/
 		bool isValid() const
-      throw();
+      ;
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to 
@@ -392,7 +362,7 @@ namespace BALL
 				@param   depth - the dumping depth
 		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
-      throw();
+      ;
 
 		//@}
 		/**	@name	Attributes
@@ -422,7 +392,7 @@ namespace BALL
 	
 	template <typename T>
 	TVector4<T>::TVector4()
-		throw()
+		
 		:	x(0),
 			y(0),
 			z(0),
@@ -448,7 +418,7 @@ namespace BALL
 
   template <typename T>
   TVector4<T>::TVector4(const T& value)
-    throw()
+    
     : x(value),
       y(value),
       z(value),
@@ -458,7 +428,7 @@ namespace BALL
 
 	template <typename T>
 	TVector4<T>::TVector4(const T& x, const T& y, const T& z, const T& h)
-		throw()
+		
 		: x(x),
 			y(y),
 			z(z),
@@ -468,7 +438,7 @@ namespace BALL
 
 	template <typename T>
 	TVector4<T>::TVector4(const TVector4<T>& v)
-		throw()
+		
 		:	x(v.x),
 			y(v.y),
 			z(v.z),
@@ -478,7 +448,7 @@ namespace BALL
 
 	template <typename T>
 	TVector4<T>::~TVector4()
-		throw()
+		
 	{
 	}
 
@@ -500,7 +470,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TVector4<T>::set(const T& rx, const T& ry, const T& rz, const T& rh)
-		throw()
+		
 	{
 		x = rx;
 		y = ry;
@@ -511,7 +481,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TVector4<T>::set(const TVector4<T>& v)
-		throw()
+		
 	{
 		x = v.x;
 		y = v.y;
@@ -539,7 +509,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector4<T>& TVector4<T>::operator = (const TVector4<T>& v)
-		throw()
+		
 	{
 		x = v.x;
 		y = v.y;
@@ -552,7 +522,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector4<T>& TVector4<T>::operator = (T value)
-		throw()
+		
 	{
 		x = value;
 		y = value;
@@ -580,7 +550,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TVector4<T>::get(T& rx, T& ry, T& rz, T& rh) const
-		throw()
+		
 	{
 		rx = x;
 		ry = y;
@@ -591,7 +561,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TVector4<T>::get(TVector4<T>& v) const
-		throw()
+		
 	{
 		v.x = x;
 		v.y = y;
@@ -601,7 +571,7 @@ namespace BALL
 
 	template <typename T>
 	void TVector4<T>::swap(TVector4<T>& v)
-		throw()
+		
 	{
 		T temp = x;
 		x = v.x;
@@ -623,7 +593,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T TVector4<T>::getLength() const
-		throw()
+		
 	{
 		return (T)sqrt(x * x + y * y + z * z + h * h);
 	}
@@ -631,7 +601,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T TVector4<T>::getSquareLength() const
-		throw()
+		
 	{
 		return (T)(x * x + y * y + z * z + h * h);
 	}
@@ -660,7 +630,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	const TVector4<T>& TVector4<T>::getZero()
-		throw()
+		
 	{
 		static const TVector4<T> null4(0, 0, 0, 0);
 		return null4;
@@ -669,7 +639,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	const TVector4<T>& TVector4<T>::getUnit()
-		throw()
+		
 	{
 		static const TVector4<T> unit_vector(1, 1, 1, 1);
 		return unit_vector;
@@ -678,7 +648,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TVector4<T>::set(const T& value)
-		throw()
+		
 	{
 		x = y = z = h = value;
 	}
@@ -726,7 +696,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector4<T> TVector4<T>::operator + () const
-		throw()
+		
 	{
 		return *this;
 	}
@@ -734,7 +704,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector4<T> TVector4<T>::operator - () const
-		throw()
+		
 	{
 		return TVector4<T>(-x, -y, -z, -h);
 	}
@@ -742,7 +712,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector4<T>& TVector4<T>::operator += (const TVector4<T>& v)
-		throw()
+		
 	{
 		x += v.x;
 		y += v.y;
@@ -755,7 +725,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector4<T>& TVector4<T>::operator -= (const TVector4<T> &v)
-		throw()
+		
 	{
 		x -= v.x;
 		y -= v.y;
@@ -768,7 +738,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector4<T> TVector4<T>::operator * (const T& scalar)
-		throw()
+		
 	{
 		return TVector4<T>(x * scalar, y * scalar, z * scalar, h * scalar);
 	}
@@ -776,7 +746,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector4<T>& TVector4<T>::operator *= (const T &scalar)
-		throw()
+		
 	{
 		x *= scalar;
 		y *= scalar;
@@ -816,7 +786,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T TVector4<T>::operator * (const TVector4<T>& v) const
-		throw()
+		
 	{
 		return (x * v.x + y * v.y + z * v.z + h * v.h);
 	}
@@ -824,7 +794,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T TVector4<T>::getDistance(const TVector4<T> &v) const
-		throw()
+		
 	{
 		T da = x - v.x;
 		T db = y - v.y;
@@ -837,7 +807,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T TVector4<T>::getSquareDistance(const TVector4<T> &v) const
-		throw()
+		
 	{
 		T da = x - v.x;
 		T db = y - v.y;
@@ -850,7 +820,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool TVector4<T>::operator == (const TVector4<T>& v) const
-		throw()
+		
 	{
 		return (Maths::isEqual(x, v.x) && Maths::isEqual(y, v.y) 
 									&& Maths::isEqual(z, v.z) && Maths::isEqual(h, v.h));
@@ -859,7 +829,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool TVector4<T>::operator != (const TVector4<T>& v) const
-		throw()
+		
 	{
 		return (Maths::isNotEqual(x, v.x) || Maths::isNotEqual(y, v.y)
 									|| Maths::isNotEqual(z, v.z) || Maths::isNotEqual(h, v.h));
@@ -868,7 +838,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool TVector4<T>::isOrthogonalTo(const TVector4<T>& v) const
-		throw()
+		
 	{
 		return Maths::isZero(*this * v);
 	}
@@ -876,14 +846,14 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	bool TVector4<T>::isValid() const
-		throw()
+		
 	{
 		return true;
 	}
 
 	template <typename T>
 	void TVector4<T>::dump(std::ostream& s, Size depth) const
-		throw()
+		
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -907,7 +877,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector4<T> operator + (const TVector4<T>& a, const TVector4<T>& b)
-		throw()
+		
 	{
 		return TVector4<T>(a.x + b.x, a.y + b.y, a.z + b.z, a.h + b.h);
 	}
@@ -918,7 +888,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector4<T> operator - (const TVector4<T>& a, const TVector4<T>& b)
-		throw()
+		
 	{
 		return TVector4<T>(a.x - b.x, a.y - b.y, a.z - b.z, a.h - b.h);
 	}
@@ -929,7 +899,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector4<T> operator * (const T& scalar, const TVector4<T>& v)
-		throw()
+		
 	{
 		return TVector4<T>(scalar * v.x, scalar * v.y, scalar * v.z, scalar * v.h);
 	}
@@ -940,7 +910,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector4<T> operator * (const TVector4<T>& v, const T& scalar)
-		throw()
+		
 	{
 		return TVector4<T>(scalar * v.x, scalar * v.y, scalar * v.z, scalar * v.h);
 	}
@@ -952,7 +922,7 @@ namespace BALL
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TVector4<T>& v)
-		throw()
+		
 	{
 		char c;
     s >> c >> v.x >> v.y >> v.z >> v.h >>c;  
@@ -967,7 +937,7 @@ namespace BALL
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TVector4<T>& v)
-		throw()
+		
 	{
 		s << '(' <<v.x << ' ' << v.y << ' ' << v.z << ' ' << v.h << ')';
 		

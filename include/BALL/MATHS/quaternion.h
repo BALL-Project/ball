@@ -629,7 +629,7 @@ namespace BALL
 
 	template <typename T>
 	std::istream& operator >>(std::istream& s, TQuaternion<T>& q)
-		throw()
+		
 	{
 		char c;
 		s >> c >> q.w() >> c >> q.i() >> c >> q.j() >> c >>q.k() >> c;
@@ -638,7 +638,7 @@ namespace BALL
 
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TQuaternion<T>& q)
-		throw()
+		
 	{
 		s << '(' << q.w() << ',' << q.i() << ','
 				     << q.j() << ',' << q.k() << ')';

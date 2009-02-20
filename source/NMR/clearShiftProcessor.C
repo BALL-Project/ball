@@ -8,26 +8,22 @@
 namespace BALL
 {
 
-	ClearShiftProcessor::ClearShiftProcessor()
-		throw()
+	ClearShiftProcessor::ClearShiftProcessor()	
 		:	ShiftModule()
 	{
 		valid_ = true;
 	}
 
 	ClearShiftProcessor::~ClearShiftProcessor()
-		throw()
 	{
 	}
 
 	ClearShiftProcessor::ClearShiftProcessor(const ClearShiftProcessor& processor)
-		throw()
 		:	ShiftModule(processor)
 	{
 	}
 
 	Processor::Result ClearShiftProcessor::operator () (Composite& composite)
-		throw()
 	{
 		// clear the checmical shift property (ShiftModule::PROPERTY__SHIFT)
 		// of the atom(if defined)

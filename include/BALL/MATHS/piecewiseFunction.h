@@ -51,20 +51,20 @@ namespace BALL
 
 		/** Default constructor 
 		*/
-		PiecewiseFunction() throw();
+		PiecewiseFunction() ;
 
 		/** Copy constructor 
 		*/
-		PiecewiseFunction(const PiecewiseFunction& function) throw();
+		PiecewiseFunction(const PiecewiseFunction& function) ;
 
 		/** Detailed constructor 
 		*/
 		PiecewiseFunction(const std::vector<Interval>& intervals, 
-			const std::vector<Coefficients>& coeffs) throw();
+			const std::vector<Coefficients>& coeffs) ;
 
 		/** Destructor 
 		*/
-		virtual ~PiecewiseFunction() throw();
+		virtual ~PiecewiseFunction() ;
 
 		//@}
 		/** @name Assignment 
@@ -73,11 +73,11 @@ namespace BALL
 
 		/** Assignemnt operator 
 		*/
-		PiecewiseFunction& operator = (const PiecewiseFunction& function) throw();
+		PiecewiseFunction& operator = (const PiecewiseFunction& function) ;
 
 		/** Clear function 
 		*/
-		void clear() throw();
+		void clear() ;
 
 		//@}
 		/** @name Accessors 
@@ -88,11 +88,11 @@ namespace BALL
 				Note that this method does <b>not</b> check the definition of the
 				intervals for sanity.
 		 */
-		void setIntervals(const std::vector<Interval>& intervals) throw();
+		void setIntervals(const std::vector<Interval>& intervals) ;
 
 		/** Get all the intervals 
 		*/
-		const std::vector<Interval>& getIntervals() const throw();
+		const std::vector<Interval>& getIntervals() const ;
 
 		/** Get the interval a given x belongs to 
 		*/
@@ -111,16 +111,16 @@ namespace BALL
 
 		/** Return the range of the definition 
 		*/
-		const Interval& getRange() const throw();
+		const Interval& getRange() const ;
 
 		/** Set the coefficients.
 				Note that this method does <b>not</b> check the vector of coefficients
 				for sanity.
 		 */
-		void setCoefficients(const vector<Coefficients>& coefficients) throw();
+		void setCoefficients(const vector<Coefficients>& coefficients) ;
 
 		/** */
-		const std::vector<Coefficients>& getCoefficients() const throw();
+		const std::vector<Coefficients>& getCoefficients() const ;
 
 		/** Get the coefficients for a given x 
 		*/
@@ -134,11 +134,11 @@ namespace BALL
 		
 		/** compute the value of the piecewise function data for a given x 
 		*/
-		virtual double operator () (double x) const throw();
+		virtual double operator () (double x) const ;
 
 		/** */
 		void set(const std::vector<Interval>& intervals,
-				const std::vector<Coefficients>& coeffs) throw();
+				const std::vector<Coefficients>& coeffs) ;
 
 		//@}
 		/** @name Predicates 
@@ -147,15 +147,15 @@ namespace BALL
 
 		/** Check whether a given x is in the range of definition 
 		*/
-		bool isInRange(double x) const throw();
+		bool isInRange(double x) const ;
 
 		/** check validity of the definition 
 		*/
-		virtual bool isValid() const throw();
+		virtual bool isValid() const ;
 
 		/** Equality operator 
 		*/
-		bool operator == (const PiecewiseFunction& function) const throw();
+		bool operator == (const PiecewiseFunction& function) const ;
 
 		//@}
 		/** @name Debugging and Diagnostics 
@@ -164,7 +164,7 @@ namespace BALL
 
 		/** 	Dumps the whole content of the object 
 		*/
-		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const throw();
+		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const ;
 
 		//@}
 
@@ -189,7 +189,7 @@ namespace BALL
 
 		/*_ Set the internal range fields 
 		*/
-		void calculateRange() throw();
+		void calculateRange() ;
 
 	};
 }

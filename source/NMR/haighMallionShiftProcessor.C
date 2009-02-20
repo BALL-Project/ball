@@ -22,14 +22,12 @@ namespace BALL
 
 	
 	HaighMallionShiftProcessor::HaighMallionShiftProcessor()
-		throw()
 		:	ShiftModule(),
 			asrings_(0)
 	{
 	}
 
 	void HaighMallionShiftProcessor::init()
-		throw()
 	{
 		valid_ = false;
 		if (parameters_ == 0)
@@ -98,7 +96,6 @@ namespace BALL
 
 		
 	HaighMallionShiftProcessor::~HaighMallionShiftProcessor()
-		throw()
 	{
 		if (asrings_ != 0)
 		{
@@ -108,10 +105,10 @@ namespace BALL
 			delete [] asrings_[3];
 		}
 		delete [] asrings_;
-	}		
+	}
 
 	bool HaighMallionShiftProcessor::finish()
-		throw()
+		
 	{
 		if (!isValid())
 		{
@@ -260,9 +257,7 @@ namespace BALL
 								   value =  ---------------- * |---------   +  ---------|
 								   	               2           \ |r_1|^3        |r_2|^3 /
 								*/
-								float value  = r_1 * (r_2 % normal) 
-											* 0.5 * (1.0 / (r_1.getSquareLength() * r_1.getLength()) 
-															 +  1.0 / (r_2.getSquareLength() * r_2.getLength()));
+								float value  = r_1 * (r_2 % normal) * 0.5 * (1.0 / (r_1.getSquareLength() * r_1.getLength()) +  1.0 / (r_2.getSquareLength() * r_2.getLength()));
 								
 								// add the contributions of this ring
 								sum += value;
@@ -291,7 +286,7 @@ namespace BALL
 	}
 		
 	Processor::Result HaighMallionShiftProcessor::operator () (Composite& composite)
-		throw()
+		
 	{
 		// Here, we collect all aromatic residues (effectors)
 		// and all protons whose shift is to be calculated
@@ -310,7 +305,7 @@ namespace BALL
 					aromat_list_.push_back(residue);
 					break; 
 				}
-			}		
+			}	
 
 			return Processor::CONTINUE;
 		} 

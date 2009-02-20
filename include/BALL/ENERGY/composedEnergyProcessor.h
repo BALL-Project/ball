@@ -49,19 +49,19 @@ namespace BALL
 
 		/** Default constructor 
 		*/
-		ComposedEnergyProcessor() throw();
+		ComposedEnergyProcessor();
 
 		/** Copy constructor 
 		*/
-		ComposedEnergyProcessor(const ComposedEnergyProcessor& composed_energy_proc) throw();
+		ComposedEnergyProcessor(const ComposedEnergyProcessor& composed_energy_proc);
 
 		/** Detailed constructor 
 		*/
-		ComposedEnergyProcessor(EnergyProcessorList proc_list) throw();
+		ComposedEnergyProcessor(EnergyProcessorList proc_list);
 
 		/** Destructor 
 		*/
-		virtual ~ComposedEnergyProcessor() throw();
+		virtual ~ComposedEnergyProcessor();
 
 		//@}
 		/** @name Assignment 
@@ -71,12 +71,12 @@ namespace BALL
 		/** Assignment operator 
 		*/
 		const ComposedEnergyProcessor& operator = 
-			(const ComposedEnergyProcessor& proc) throw();
+			(const ComposedEnergyProcessor& proc);
 
 		/** Clear method.
 		 * 	Clears the calculated energy and the list of processors.
 		*/
-		virtual void clear() throw();
+		virtual void clear();
 	
 		//@}
 		/** @name Processor functions 
@@ -85,7 +85,7 @@ namespace BALL
 		
 		/** Do all calculations and sum up the different energy contributions 
 		*/
-		virtual bool finish() throw();
+		virtual bool finish();
 
 		//@}
 		/** @name Accessors 
@@ -94,15 +94,15 @@ namespace BALL
 
 		/** Add a component to the list of EnergyProcessors 
 		*/
-		void addComponent(EnergyProcessor* proc) throw();
+		void addComponent(EnergyProcessor* proc);
 
 		/** remove a component from the list 
 		*/
-		void removeComponent(EnergyProcessor* proc) throw();
+		void removeComponent(EnergyProcessor* proc);
 
 		/** Get number of added EnergyProcessors.
 		*/
-		Size getNumberOfEnergyProcessors() const throw();
+		Size getNumberOfEnergyProcessors() const;
 		
 		//@}
 		/** @name Predicates 
@@ -111,7 +111,7 @@ namespace BALL
 
 		/** Equality operator 
 		*/
-		bool operator == (const ComposedEnergyProcessor& proc) const throw();
+		bool operator == (const ComposedEnergyProcessor& proc) const;
 
 		//@}
 
@@ -126,7 +126,7 @@ namespace BALL
 		 * the list is invalid, then this instance of ComposedEnergyProcessor
 		 * is invalid 
 		*/
-		void checkValidity() throw();
+		void checkValidity();
 
 	};
 } // namespace BALL

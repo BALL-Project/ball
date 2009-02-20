@@ -17,7 +17,6 @@ namespace BALL
 
 	template <typename arg>
 	ParsedFunction<arg>::ParsedFunction()
-		throw()
 		:	constants_(),
 			functions_(),
 			expression_("")
@@ -27,7 +26,6 @@ namespace BALL
 
 	template <typename arg>
 	ParsedFunction<arg>::ParsedFunction(const String& expression)
-		throw()
 		:	constants_(),
 			functions_(),
 			expression_(expression)
@@ -38,7 +36,7 @@ namespace BALL
 	/* Strange... gcc-3.0.1 needs this constructor as a non-template version... */
 	template <>
 	ParsedFunction<float>::ParsedFunction(const String& expression)
-		throw()
+		
 		: constants_(),
 			functions_(),
 			expression_(expression)
@@ -48,8 +46,7 @@ namespace BALL
 	}
 
 	template <typename arg>
-	ParsedFunction<arg>::ParsedFunction(const ParsedFunction& func)
-		throw()
+	ParsedFunction<arg>::ParsedFunction(const ParsedFunction& func)	
 	{
 		constants_ = func.constants_;
 		functions_ = func.functions_;
@@ -59,14 +56,12 @@ namespace BALL
 
 	template <typename arg>
 	ParsedFunction<arg>::~ParsedFunction()
-		throw()
 	{
 	}
 
 	/** Strange... gcc-3.0.1 needs this destructor in a non-template version... **/
 	template <>
 	ParsedFunction<float>::~ParsedFunction()
-		throw()
 	{
 	}
 
@@ -101,7 +96,6 @@ namespace BALL
 
 	template <typename arg>
 	void ParsedFunction<arg>::initTable()
-		throw()
 	{
 		// initialize the functions table
 		functions_["sin"] = (double(*)(double))&sin;

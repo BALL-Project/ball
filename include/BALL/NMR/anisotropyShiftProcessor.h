@@ -49,18 +49,15 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		AnisotropyShiftProcessor()
-			throw();
+		AnisotropyShiftProcessor();
 
 		/**	Copy constructor
 		*/
-		AnisotropyShiftProcessor(const AnisotropyShiftProcessor& processor)
-			throw();
+		AnisotropyShiftProcessor(const AnisotropyShiftProcessor& processor);
 		
 		/**	Destructor
 		*/
-		virtual ~AnisotropyShiftProcessor() 
-			throw();
+		virtual ~AnisotropyShiftProcessor();
 		
 		//@}
 		/** @name	Processor specific functions.
@@ -122,7 +119,7 @@ namespace BALL
 				Finally C=N anisotropy has finished and <tt>gs</tt> is added to the actual hydrogens shift.
 				Then iteration goes on with the next hydrogen.
 		*/
-		virtual bool finish() throw();
+		virtual bool finish();
 
 		/**	Application method.
 				Atoms are stored in three different lists , named  \par
@@ -135,7 +132,7 @@ namespace BALL
 				residues called "GLU" and "GLN".
 				Effectors of C=N anisotropy are all bounds between atoms named "C" and "N".
 		*/
-		virtual Processor::Result operator() (Composite& composite) throw();
+		virtual Processor::Result operator() (Composite& composite);
 
 		//@}
 		/**	@name	Accessors
@@ -144,8 +141,7 @@ namespace BALL
 
 		/**	Module initialization
 		*/
-		virtual void init()
-			throw();
+		virtual void init();
 
 		//@}
 		

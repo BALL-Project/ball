@@ -116,22 +116,22 @@ namespace BALL
 		//@{
 			
 		///	Default constructor
-		RegularExpression()	throw();
+		RegularExpression();
 
 		///	Copy constructor
-		RegularExpression(const RegularExpression& regular_expression) throw();
+		RegularExpression(const RegularExpression& regular_expression);
 
 		///
-		RegularExpression(const String& pattern, bool wildcard_pattern = false) throw();
+		RegularExpression(const String& pattern, bool wildcard_pattern = false);
 
 		///	Destructor
-		virtual ~RegularExpression() throw();
+		virtual ~RegularExpression();
 
 		///	Reset the object attributes to their default values
-		virtual void clear() throw();
+		virtual void clear();
 
 		///	Destroy the instance
-		void destroy() throw();
+		void destroy();
 		//@}
 
 		/**	@name	Assignment
@@ -139,16 +139,16 @@ namespace BALL
 		//@{
 
 		/// Assignment operator
-		RegularExpression& operator = (const RegularExpression& expression) throw();
+		RegularExpression& operator = (const RegularExpression& expression);
 
 		///	Assign from another instance
-		void set(const RegularExpression& regular_expression) throw();
+		void set(const RegularExpression& regular_expression);
 
 		///	Assign from a string
-		void set(const String& pattern, bool wildcard_pattern = false) throw();
+		void set(const String& pattern, bool wildcard_pattern = false);
 
 		///	Assign to another instance
-		void get(RegularExpression& regular_expression) const throw();
+		void get(RegularExpression& regular_expression) const;
 		//@}
 
 		/**	@name	Accessors
@@ -156,10 +156,10 @@ namespace BALL
 		//@{
 
 		///	Get the expression pattern.
-		const String& getPattern() const throw();
+		const String& getPattern() const;
 
 		///	Count subexpressions.
-		Size countSubexpressions() const throw();
+		Size countSubexpressions() const;
 
 		/**	Match a text with a given pattern.
 				@param text to process
@@ -221,31 +221,31 @@ namespace BALL
 
 		/**	Test if expression is empty.
 		*/
-		bool isEmpty() const throw();
+		bool isEmpty() const;
 
 		/**	Equality operator
 		*/
-		bool operator == (const RegularExpression& regular_expression) const throw();
+		bool operator == (const RegularExpression& regular_expression) const;
 
 		/**	Inequality operator
 		*/
-		bool operator != (const RegularExpression& regular_expression) const throw();
+		bool operator != (const RegularExpression& regular_expression) const;
 
 		/**	Less operator
 		*/
-		bool operator < (const RegularExpression& regular_expression) const throw();
+		bool operator < (const RegularExpression& regular_expression) const;
 
 		/**	Less or equal operator
 		*/
-		bool operator <= (const RegularExpression& regular_expression) const throw();
+		bool operator <= (const RegularExpression& regular_expression) const;
 
 		/**	Greater or equal operator
 		*/
-		bool operator >= (const RegularExpression& regular_expression) const throw();
+		bool operator >= (const RegularExpression& regular_expression) const;
 
 		/**	Greater operator
 		*/
-		bool operator > (const RegularExpression& regular_expression) const throw();
+		bool operator > (const RegularExpression& regular_expression) const;
 
 		//@}
 		/**	@name	Debugging and Diagnostics
@@ -254,15 +254,14 @@ namespace BALL
 
 		/**	Test if instance is valid.
 		*/
-		virtual bool isValid() const throw();
+		virtual bool isValid() const;
 
 		/**	Dump this instance to an ostream
 				depth is normaly just used for internal use.
 				@param s the ostream, default is the standard output
 				@param depth the indentation depth of the output
 		*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw();
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 		//@}
 		/**	@name Storers
@@ -272,24 +271,20 @@ namespace BALL
 		/**	output operator
 		*/
 		BALL_EXPORT
-		friend std::ostream& operator << (std::ostream& s, const RegularExpression& regular_expression)
-			throw();
+		friend std::ostream& operator << (std::ostream& s, const RegularExpression& regular_expression);
 
 		/**	input operator
 		*/
 		BALL_EXPORT
-		friend std::istream& operator >> (std::istream& s, RegularExpression& regular_expression)
-			throw();
+		friend std::istream& operator >> (std::istream& s, RegularExpression& regular_expression);
 
 		//@}
 		
 		private:
 
-		void compilePattern_()
-			throw();
+		void compilePattern_();
 
-		void toExtendedRegularExpression_() 
-			throw();
+		void toExtendedRegularExpression_();
 
 			regex_t regex_;
 		

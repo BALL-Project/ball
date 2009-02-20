@@ -20,7 +20,6 @@ namespace BALL
 	const char* ShiftModel::MODULE_LIST_SECTION = "ShiftModules";
 
 	ShiftModel::ShiftModel()
-		throw()
 		:	ShiftModule(),
 			parameters_(),
 			modules_(),
@@ -30,7 +29,6 @@ namespace BALL
 	}
 
 	ShiftModel::ShiftModel(const String& filename)
-		throw()
 		:	ShiftModule(),
 			parameters_(filename),
 			modules_(),
@@ -42,7 +40,6 @@ namespace BALL
 	}
 
 	ShiftModel::ShiftModel(const ShiftModel& model)
-		throw()
 		:	ShiftModule(),
 			parameters_(model.parameters_),
 			modules_(),
@@ -53,7 +50,6 @@ namespace BALL
 	}
 
 	void ShiftModel::clear()
-		throw()
 	{
 		// model is invalid
 		valid_ = false;
@@ -78,19 +74,16 @@ namespace BALL
 	}
 
 	ShiftModel::~ShiftModel()
-		throw()
 	{
 		clear();
 	}
 
 	Parameters& ShiftModel::getParameters()
-		throw()
 	{
 		return parameters_;
 	}
 
-	ShiftModel::ModuleList& ShiftModel::getModuleList()
-		throw()
+	ShiftModel::ModuleList& ShiftModel::getModuleList()	
 	{
 		return modules_;
 	}
@@ -105,20 +98,18 @@ namespace BALL
 		init_();
 	}
 	
-	const String& ShiftModel::getFilename() const
-		throw()
+	const String& ShiftModel::getFilename() const	
 	{
 		return parameters_.getFilename();
 	}
 
 	bool ShiftModel::isValid() const
-		throw()
+		
 	{
 		return valid_;
 	}
 
-	const ShiftModel& ShiftModel::operator = (const ShiftModel& model)
-		throw()
+	const ShiftModel& ShiftModel::operator = (const ShiftModel& model)	
 	{
 		// clear the old contents
 		clear();
@@ -137,7 +128,6 @@ namespace BALL
 	}
 
 	const ShiftModel& ShiftModel::operator = (const String& filename)
-		throw()
 	{
 		// clear the old contents,
 		clear();
@@ -145,7 +135,7 @@ namespace BALL
 		// read the parameters, and initialize
 		setFilename(filename);
 
-		return *this;		
+		return *this;
 	}
 
 	bool ShiftModel::init_()
@@ -199,7 +189,6 @@ namespace BALL
 	
 
 	bool ShiftModel::isRegistered(const String& name) const
-		throw()
 	{
 		return registered_modules_.has(name);
 	}
@@ -218,13 +207,11 @@ namespace BALL
 	}
 
 	void ShiftModel::unregisterModule(const String& name)
-		throw()
 	{
 		registered_modules_.erase(name);
 	}
 
 	ShiftModule* ShiftModel::createModule_(const String& type, const String& name) const
-		throw()
 	{
 		ShiftModule* module = 0;
 		if (registered_modules_.has(type))
@@ -246,7 +233,6 @@ namespace BALL
 	}
 
 	void ShiftModel::registerStandardModules_()
-		throw()
 	{
 		registerModule("JohnsonBovey", Factory<JohnsonBoveyShiftProcessor>::createVoid);
 		registerModule("HaighMallion", Factory<HaighMallionShiftProcessor>::createVoid);
@@ -257,7 +243,6 @@ namespace BALL
 	}
 
 	Processor::Result ShiftModel::operator () (Composite& composite)
-		throw()
 	{
 		// Clear previsously assigned shifts and...
 		Atom* atom = dynamic_cast<Atom*>(&composite);
@@ -277,38 +262,34 @@ namespace BALL
 			{
 				break;
 			}
-		}				
+		}
 		
 		return result;
 	}
 
 
 	bool ShiftModel::start()
-		throw()
 	{
 		ModuleList::iterator it = modules_.begin();
 		for (; it != modules_.end(); ++it)
 		{
 			if (!(*it)->start()) return false;
-		}				
+		}
 		
 		return true;
 	}
 
 
 	bool ShiftModel::finish()
-		throw()
 	{
 		ModuleList::iterator it = modules_.begin();
 		for (; it != modules_.end(); ++it)
 		{
 			if (!(*it)->finish()) return false;
-		}				
+		}
 		
 		return true;
 	}
-
-
 }
 
 

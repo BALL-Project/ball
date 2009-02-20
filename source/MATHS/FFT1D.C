@@ -15,7 +15,6 @@ namespace BALL
 
 	template <>
 	TFFT1D<DoubleTraits>::~TFFT1D()
-		throw()
 	{
 		// AR: destroy FFTW plans if there are any
 		if (planCalculated_)
@@ -28,7 +27,6 @@ namespace BALL
 	
 	template <>
 	TFFT1D<DoubleTraits>::TFFT1D(const TFFT1D<DoubleTraits> &data)
-		throw()
 		: TRegularData1D<Complex>(data),
 			length_(data.length_),
 			inFourierSpace_(data.inFourierSpace_),
@@ -37,20 +35,18 @@ namespace BALL
 			origin_(data.origin_),
 			stepPhys_(data.stepPhys_),
 			stepFourier_(data.stepFourier_),
-      minPhys_((-1.)*origin_),
-      maxPhys_(((length_-1)*stepPhys_)-origin_),
-      minFourier_((-1.)*(length_/2.-1)*stepFourier_),
-      maxFourier_((length_/2.)*stepFourier_)
+			minPhys_((-1.)*origin_),
+			maxPhys_(((length_-1)*stepPhys_)-origin_),
+			minFourier_((-1.)*(length_/2.-1)*stepFourier_),
+			maxFourier_((length_/2.)*stepFourier_)
 	{
 		// AR: new version for FFTW3
 		if (length_ != 0)
 		{
 			dataAdress_ = &data_[0];
 			planCalculated_ = true;
-			planForward_  = fftw_plan_dft_1d(length_, reinterpret_cast<fftw_complex*>(dataAdress_), 
-																			reinterpret_cast<fftw_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
-			planBackward_ = fftw_plan_dft_1d(length_, reinterpret_cast<fftw_complex*>(dataAdress_), 
-																			reinterpret_cast<fftw_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+			planForward_  = fftw_plan_dft_1d(length_, reinterpret_cast<fftw_complex*>(dataAdress_),  reinterpret_cast<fftw_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+			planBackward_ = fftw_plan_dft_1d(length_, reinterpret_cast<fftw_complex*>(dataAdress_),reinterpret_cast<fftw_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
 		}
 		else
 		{
@@ -63,7 +59,6 @@ namespace BALL
 	// AR: ldn is not any longer the binary logarithm but the absolute number of grid points
 	template <>
 	TFFT1D<DoubleTraits>::TFFT1D(Size ldn, double stepPhys, double origin, bool inFourierSpace)
-		throw()
 		: TRegularData1D<Complex>(-origin, ((ldn)-1)*stepPhys, stepPhys),
 		  length_(ldn),
 			inFourierSpace_(inFourierSpace),
@@ -96,7 +91,6 @@ namespace BALL
 	
 	template <>
 	void TFFT1D<DoubleTraits>::clear()
-		throw()
 	{
 		TRegularData1D<Complex>::clear();
 		
@@ -116,7 +110,6 @@ namespace BALL
 		
 	template <>
 	const TFFT1D<DoubleTraits>& TFFT1D<DoubleTraits>::operator = (const TFFT1D<DoubleTraits>& fft1d)
-		throw()
 	{
 		clear();
 		origin_ = fft1d.origin_;
@@ -171,7 +164,6 @@ namespace BALL
 
 	template <>
 	void TFFT1D<DoubleTraits>::destroy()
-		throw()
 	{		
 		TRegularData1D<Complex >::clear();
 		
@@ -199,7 +191,6 @@ namespace BALL
 	
 	template <>
 	void TFFT1D<DoubleTraits>::doFFT()
-		throw()
 	{
 		// AR: new version, if start adress or vector size has changed, recalculate the plans
 		if ((dataAdress_ != &data_[0]) || (length_ != data_.size()))
@@ -244,7 +235,6 @@ namespace BALL
 	
 	template <>
 	void TFFT1D<DoubleTraits>::doiFFT()
-		throw()
 	{
 		// AR: new version, if vector size or start adress has changed, recalculate the plans
 		if ((dataAdress_ != &data_[0]) || (length_ != data_.size()))
@@ -292,7 +282,6 @@ namespace BALL
 
 	template <>
 	TFFT1D<FloatTraits>::~TFFT1D()
-		throw()
 	{
 		// AR: destroy FFTW plans if there are any
 		if (planCalculated_)
@@ -305,7 +294,6 @@ namespace BALL
 	
 	template <>
 	TFFT1D<FloatTraits>::TFFT1D(const TFFT1D<FloatTraits> &data)
-		throw()
 		: TRegularData1D<Complex>(data),
 			length_(data.length_),
 			inFourierSpace_(data.inFourierSpace_),
@@ -340,7 +328,6 @@ namespace BALL
 	// AR: ldn is not any longer the binary logarithm but the absolute number of grid points
 	template <>
 	TFFT1D<FloatTraits>::TFFT1D(Size ldn, double stepPhys, double origin, bool inFourierSpace)
-		throw()
 		: TRegularData1D<Complex >(-origin, ((ldn)-1)*stepPhys, stepPhys),
 		  length_(ldn),
 			inFourierSpace_(inFourierSpace),
@@ -349,10 +336,10 @@ namespace BALL
 			origin_(origin),
 			stepPhys_(stepPhys),
 			stepFourier_(2.*M_PI/(stepPhys_*length_)),
-      minPhys_((-1.)*origin_),
-      maxPhys_(((length_-1)*stepPhys_)-origin_),
-      minFourier_((-1.)*(length_/2.-1)*stepFourier_),
-      maxFourier_((length_/2.)*stepFourier_)
+			minPhys_((-1.)*origin_),
+			maxPhys_(((length_-1)*stepPhys_)-origin_),
+			minFourier_((-1.)*(length_/2.-1)*stepFourier_),
+			maxFourier_((length_/2.)*stepFourier_)
 	{
 		// AR: new version for FFTW3
 		dataAdress_ = &data_[0];
@@ -374,14 +361,12 @@ namespace BALL
 		
 	template <>
 	void TFFT1D<FloatTraits>::clear()
-		throw()
 	{
 		TRegularData1D<Complex>::clear();
 		
 		// AR: new version for FFTW3
     dataAdress_ = 0;
-    length_ = 0;
-    
+    length_ = 0; 
     if (planCalculated_)
     {
 			fftwf_destroy_plan(planForward_);
@@ -392,7 +377,6 @@ namespace BALL
 	
 	template <>
 	const TFFT1D<FloatTraits>& TFFT1D<FloatTraits>::operator = (const TFFT1D<FloatTraits>& fft1d)
-		throw()
 	{
 		clear();
 		origin_ = fft1d.origin_;
@@ -443,7 +427,6 @@ namespace BALL
 	
 	template <>
 	void TFFT1D<FloatTraits>::destroy()
-		throw()
 	{		
 		TRegularData1D<Complex >::clear();
 		
@@ -453,27 +436,23 @@ namespace BALL
 		stepFourier_ = 0.;
 		numPhysToFourier_ = 
 		numFourierToPhys_ = 0;
-    minPhys_ =
-    maxPhys_ =
-    minFourier_ =
-    maxFourier_ = 0.;
-    
-    // AR: new version for FFTW3
-    dataAdress_ = 0;
-    
-    if (planCalculated_)
-    {
-			fftwf_destroy_plan(planForward_);
-			fftwf_destroy_plan(planBackward_);
-			planCalculated_ = false;
-    }
+		minPhys_ =
+		maxPhys_ =
+		minFourier_ =
+		maxFourier_ = 0.;
+		// AR: new version for FFTW3
+		dataAdress_ = 0;
+		if (planCalculated_)
+		{
+				fftwf_destroy_plan(planForward_);
+				fftwf_destroy_plan(planBackward_);
+				planCalculated_ = false;
+		}
 	}
-	
 	
 	
 	template <>
 	void TFFT1D<FloatTraits>::doFFT()
-		throw()
 	{
 		// AR: new version, if start adress or vector size has changed, recalculate the plans
 		if ((dataAdress_ != &data_[0]) || (length_ != data_.size()))
@@ -490,10 +469,8 @@ namespace BALL
 			{
 				dataAdress_ = &data_[0];
 				planCalculated_ = true;
-				planForward_  = fftwf_plan_dft_1d(length_, reinterpret_cast<fftwf_complex*>(dataAdress_), 
-																				reinterpret_cast<fftwf_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
-				planBackward_ = fftwf_plan_dft_1d(length_, reinterpret_cast<fftwf_complex*>(dataAdress_), 
-																				reinterpret_cast<fftwf_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+				planForward_  = fftwf_plan_dft_1d(length_, reinterpret_cast<fftwf_complex*>(dataAdress_), reinterpret_cast<fftwf_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+				planBackward_ = fftwf_plan_dft_1d(length_, reinterpret_cast<fftwf_complex*>(dataAdress_),  reinterpret_cast<fftwf_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
 			}
 			else
 			{
@@ -513,12 +490,9 @@ namespace BALL
 		inFourierSpace_ = true;
 		numPhysToFourier_++;
 	}
-	
-	
-		
+
 	template <>
 	void TFFT1D<FloatTraits>::doiFFT()
-		throw()
 	{
 		// AR: new version, if vector size or start adress has changed, recalculate the plans
 		if ((dataAdress_ != &data_[0]) || (length_ != data_.size()))
@@ -535,10 +509,8 @@ namespace BALL
 			{
 				dataAdress_ = &data_[0];
 				planCalculated_ = true;
-				planForward_  = fftwf_plan_dft_1d(length_, reinterpret_cast<fftwf_complex*>(dataAdress_), 
-																				reinterpret_cast<fftwf_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
-				planBackward_ = fftwf_plan_dft_1d(length_, reinterpret_cast<fftwf_complex*>(dataAdress_), 
-																				reinterpret_cast<fftwf_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+				planForward_  = fftwf_plan_dft_1d(length_, reinterpret_cast<fftwf_complex*>(dataAdress_), reinterpret_cast<fftwf_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+				planBackward_ = fftwf_plan_dft_1d(length_, reinterpret_cast<fftwf_complex*>(dataAdress_), reinterpret_cast<fftwf_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
 			}
 			else
 			{
@@ -566,7 +538,6 @@ namespace BALL
 
 	template <>
 	TFFT1D<LongDoubleTraits>::~TFFT1D()
-		throw()
 	{
 		// AR: destroy FFTW plans if there are any
 		if (planCalculated_)
@@ -579,7 +550,6 @@ namespace BALL
 	
 	template <>
 	TFFT1D<LongDoubleTraits>::TFFT1D(const TFFT1D<LongDoubleTraits> &data)
-		throw()
 		: TRegularData1D<Complex>(data),
 			length_(data.length_),
 			inFourierSpace_(data.inFourierSpace_),
@@ -588,20 +558,18 @@ namespace BALL
 			origin_(data.origin_),
 			stepPhys_(data.stepPhys_),
 			stepFourier_(data.stepFourier_),
-      minPhys_((-1.)*origin_),
-      maxPhys_(((length_-1)*stepPhys_)-origin_),
-      minFourier_((-1.)*(length_/2.-1)*stepFourier_),
-      maxFourier_((length_/2.)*stepFourier_)
+			minPhys_((-1.)*origin_),
+			maxPhys_(((length_-1)*stepPhys_)-origin_),
+			minFourier_((-1.)*(length_/2.-1)*stepFourier_),
+			maxFourier_((length_/2.)*stepFourier_)
 	{
 		// AR: new version for FFTW3
 		if (length_ != 0)
 		{
 			dataAdress_ = &data_[0];
 			planCalculated_ = true;
-			planForward_  = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
-																			reinterpret_cast<fftwl_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
-			planBackward_ = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
-																			reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+			planForward_  = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_),  reinterpret_cast<fftwl_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+			planBackward_ = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
 		}
 		else
 		{
@@ -613,7 +581,6 @@ namespace BALL
 	// AR: ldn is not any longer the binary logarithm but the absolute number of grid points
 	template <>
 	TFFT1D<LongDoubleTraits>::TFFT1D(Size ldn, double stepPhys, double origin, bool inFourierSpace)
-		throw()
 		: TRegularData1D<Complex>(-origin, ((ldn)-1)*stepPhys, stepPhys),
 		  length_(ldn),
 			inFourierSpace_(inFourierSpace),
@@ -622,18 +589,16 @@ namespace BALL
 			origin_(origin),
 			stepPhys_(stepPhys),
 			stepFourier_(2.*M_PI/(stepPhys_*length_)),
-      minPhys_((-1.)*origin_),
-      maxPhys_(((length_-1)*stepPhys_)-origin_),
-      minFourier_((-1.)*(length_/2.-1)*stepFourier_),
-      maxFourier_((length_/2.)*stepFourier_)
+			minPhys_((-1.)*origin_),
+			maxPhys_(((length_-1)*stepPhys_)-origin_),
+			minFourier_((-1.)*(length_/2.-1)*stepFourier_),
+			maxFourier_((length_/2.)*stepFourier_)
 	{
 		// AR: new version for FFTW3
 		dataAdress_ = &data_[0];
 		planCalculated_ = true;
-		planForward_  = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
-																		reinterpret_cast<fftwl_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
-		planBackward_ = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
-																		reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+		planForward_  = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), reinterpret_cast<fftwl_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+		planBackward_ = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
 
 	 	if (inFourierSpace)
 		{
@@ -645,14 +610,12 @@ namespace BALL
 	
 	template <>
 	void TFFT1D<LongDoubleTraits>::clear()
-		throw()
 	{
 		TRegularData1D<Complex>::clear();
 		
 		// AR: new version for FFTW3
     dataAdress_ = 0;
     length_ = 0;
-    
     if (planCalculated_)
     {
 			fftwl_destroy_plan(planForward_);
@@ -663,7 +626,6 @@ namespace BALL
 	
 	template <>
 	const TFFT1D<LongDoubleTraits>& TFFT1D<LongDoubleTraits>::operator = (const TFFT1D<LongDoubleTraits>& fft1d)
-		throw()
 	{
 		clear();
 		origin_ = fft1d.origin_;
@@ -672,11 +634,11 @@ namespace BALL
 		origin_ = fft1d.origin_;
 		stepPhys_ = fft1d.stepPhys_;
 		stepFourier_ = fft1d.stepFourier_;
-    minPhys_ = ((-1.)*origin_);
-    maxPhys_ = (((length_-1)*stepPhys_)-origin_);
-    minFourier_ = ((-1.)*(length_/2.-1)*stepFourier_);
-    maxFourier_ = ((length_/2.)*stepFourier_);
-    numPhysToFourier_ = fft1d.numPhysToFourier_;
+		minPhys_ = ((-1.)*origin_);
+		maxPhys_ = (((length_-1)*stepPhys_)-origin_);
+		minFourier_ = ((-1.)*(length_/2.-1)*stepFourier_);
+		maxFourier_ = ((length_/2.)*stepFourier_);
+		numPhysToFourier_ = fft1d.numPhysToFourier_;
 		numFourierToPhys_ = fft1d.numFourierToPhys_;
 		
 		// AR: new code for FFTW3
@@ -696,10 +658,8 @@ namespace BALL
 			dataAdress_ = &data_[0];
 		
 			// ...and calculate new ones
-			planForward_  = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
-																				reinterpret_cast<fftwl_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
-			planBackward_ = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
-																				reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+			planForward_  = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_),  reinterpret_cast<fftwl_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+			planBackward_ = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
 		}
 		else
 		{
@@ -712,7 +672,6 @@ namespace BALL
 	
 	template <>
 	void TFFT1D<LongDoubleTraits>::destroy()
-		throw()
 	{		
 		TRegularData1D<Complex >::clear();
 		
@@ -722,25 +681,22 @@ namespace BALL
 		stepFourier_ = 0.;
 		numPhysToFourier_ = 
 		numFourierToPhys_ = 0;
-    minPhys_ =
-    maxPhys_ =
-    minFourier_ =
-    maxFourier_ = 0.;
-    
+		minPhys_ =
+		maxPhys_ =
+		minFourier_ =
+		maxFourier_ = 0.;
     // AR: new version for FFTW3
     dataAdress_ = 0;
-    
     if (planCalculated_)
     {
-			fftwl_destroy_plan(planForward_);
-			fftwl_destroy_plan(planBackward_);
-			planCalculated_ = false;
+		fftwl_destroy_plan(planForward_);
+		fftwl_destroy_plan(planBackward_);
+		planCalculated_ = false;
     }
 	}
 	
 	template <>
 	void TFFT1D<LongDoubleTraits>::doFFT()
-		throw()
 	{
 		// AR: new version, if start adress or vector size has changed, recalculate the plans
 		if ((dataAdress_ != &data_[0]) || (length_ != data_.size()))
@@ -757,10 +713,9 @@ namespace BALL
 			{
 				dataAdress_ = &data_[0];
 				planCalculated_ = true;
-				planForward_  = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
-																				reinterpret_cast<fftwl_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+				planForward_  = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_),  reinterpret_cast<fftwl_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
 				planBackward_ = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
-																				reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+				reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
 			}
 			else
 			{
@@ -783,7 +738,6 @@ namespace BALL
 	
 	template <>
 	void TFFT1D<LongDoubleTraits>::doiFFT()
-		throw()
 	{
 		// AR: new version, if vector size or start adress has changed, recalculate the plans
 		if ((dataAdress_ != &data_[0]) || (length_ != data_.size()))
@@ -800,10 +754,8 @@ namespace BALL
 			{
 				dataAdress_ = &data_[0];
 				planCalculated_ = true;
-				planForward_  = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
-																				reinterpret_cast<fftwl_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
-				planBackward_ = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
-																				reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+				planForward_  = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), reinterpret_cast<fftwl_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+				planBackward_ = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
 			}
 			else
 			{
@@ -813,7 +765,7 @@ namespace BALL
 				// AR: if there are no data return without doing anything but update 'dataAdress_' and the flag
 				//     Clear fft1d in that case?
 				return;
-			}				
+			}
 		}
 		
 		fftwl_execute(planBackward_);

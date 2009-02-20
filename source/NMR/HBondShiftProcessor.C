@@ -14,13 +14,11 @@ namespace BALL
   const char* HBondShiftProcessor::PROPERTY__HBOND_SHIFT = "HBondShift";
 
   HBondShiftProcessor::HBondShiftProcessor()
-    throw()
     : ShiftModule()
   {
   }
 
   HBondShiftProcessor::HBondShiftProcessor(const HBondShiftProcessor& processor)
-    throw()
     : ShiftModule(processor),
       donor_list_(processor.donor_list_),
       acceptor_list_(processor.acceptor_list_),
@@ -32,14 +30,12 @@ namespace BALL
   }
 
   HBondShiftProcessor::~HBondShiftProcessor()
-    throw()
   {
   }
 
   void HBondShiftProcessor::init()
-    throw()
   {
-		// by default, we assume the worst...
+	// by default, we assume the worst...
     valid_ = false;
 
     // if no parameters are assigned, abort immediately
@@ -74,7 +70,6 @@ namespace BALL
   }
 
   bool HBondShiftProcessor::start()
-    throw()
   {
     // if the module is invalid, abort
     if (!isValid())
@@ -90,7 +85,6 @@ namespace BALL
   }
 
   bool HBondShiftProcessor::finish()
-    throw()
   {
     // if the module is invalid, abort
     if (!isValid())
@@ -127,22 +121,17 @@ namespace BALL
 	  if (at->getElement() == PTE[Element::H])
 	    {
 	      // print the partners of the assumed hydrogen bond
-	      
 	      // compute the euclidian distance between acceptor and donor
 	      Vector3 acceptor_pos = (*acceptor_it)->getPosition();
 	      Vector3 donor_h_pos = (at)->getPosition();
-	      
 	      Vector3 don_h = donor_pos - donor_h_pos;
 	      Vector3 don_h_acc = acceptor_pos - donor_h_pos;
-	      
-	      Angle psi = don_h.getAngle(don_h_acc);
-	      	      
+	      Angle psi = don_h.getAngle(don_h_acc); 
 	      BALL::Atom::BondConstIterator accit = (*acceptor_it)->beginBond();
 	      Atom* c;
 	      Vector3 acceptor_plane;
 	      Angle theta;
 	      Angle phi;
-	      
 	      while (+accit) 
 	      {
 		c = (*accit).getPartner(**acceptor_it);
@@ -175,18 +164,12 @@ namespace BALL
 		}
 		++accit;
 	      }
-	      
-	      
-	      
 	      // this is used to compute the shift	
 	      float b_length = donor_h_pos.getDistance(acceptor_pos);
-	      
 	      // this is used to decide whether there is an hbond or not
 	      float distance = donor_pos.getDistance(acceptor_pos);
-	      
 	      // this is a test! empirical guess
 	      // float b_length = (2. / 3) * distance;
-	      
 	      // do they form a bond?
 	      // like in the paper by wuethrich, no bonds are accepted: - outside a certain range
 	      //							  - on the same residue
@@ -246,9 +229,7 @@ namespace BALL
     } 
     return true;
   }
-  
   Processor::Result HBondShiftProcessor::operator () (Composite& object)
-    throw()
   {
     // here, we collect all possible acceptors and donors
     if (RTTI::isKindOf<Atom>(object))
@@ -282,7 +263,6 @@ namespace BALL
 	  {
 	    donor_list_.push_back(atom_ptr);
 	  }
-     
 	if (   ((residue_name == "ALA") && (atom_name == "O"))
 	       || ((residue_name == "ARG") && (atom_name == "O"))
 	       || ((residue_name == "ASN") && (atom_name == "O"))

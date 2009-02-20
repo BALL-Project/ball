@@ -12,7 +12,6 @@ namespace BALL
 
 	template <>
 	TFFT2D<DoubleTraits>::~TFFT2D()
-		throw()
 	{
 		// AR: destroy FFTW plans if there are any
 		if (planCalculated_)
@@ -25,7 +24,6 @@ namespace BALL
 
 	template <>
 	TFFT2D<DoubleTraits>::TFFT2D(const TFFT2D &data)
-		throw()
 		: TRegularData2D<Complex>(data),
 			lengthX_(data.lengthX_),
 			lengthY_(data.lengthY_),
@@ -63,7 +61,6 @@ namespace BALL
 	// AR: ldn is not any longer the binary logarithm but the absolute number of grid points
 	template <>
 	TFFT2D<DoubleTraits>::TFFT2D(Size ldnX, Size ldnY, double stepPhysX, double stepPhysY, Vector2 origin, bool inFourierSpace)
-		throw()
 		: TRegularData2D<Complex>(TRegularData2D<Complex>::IndexType((ldnX), (ldnY)), -origin, Vector2((((ldnX)-1)*stepPhysX_),(((ldnX)-1)*stepPhysY_))),
 		  lengthX_(ldnX),
 			lengthY_(ldnY),
@@ -108,7 +105,6 @@ namespace BALL
 	
 	template <>
 	void TFFT2D<DoubleTraits>::clear()
-		throw()
 	{
 		TRegularData2D<Complex>::clear();
 		
@@ -128,7 +124,6 @@ namespace BALL
 
 	template <>
 	const TFFT2D<DoubleTraits>& TFFT2D<DoubleTraits>::operator = (const TFFT2D<DoubleTraits>& fft2D)
-		throw()
 	{
 		clear();
 		//lower_ = fft2D.lower_;
@@ -181,7 +176,6 @@ namespace BALL
 
 	template <>
 	void TFFT2D<DoubleTraits>::destroy()
-		throw()
 	{		
 		// TRegularData2D seems to be missing a destroy routine...
 		// until this is fixed, we will use clear() instead
@@ -218,7 +212,6 @@ namespace BALL
 	
 	template <>
 	void TFFT2D<DoubleTraits>::doFFT()
-		throw()
 	{
 		if ((dataAdress_ != &data_[0]) || (dataLength_ != data_.size()))
 		{
@@ -259,7 +252,7 @@ namespace BALL
 
 	template <>
 	void TFFT2D<DoubleTraits>::doiFFT()
-		throw()
+
 	{
 		if ((dataAdress_ != &data_[0]) || (dataLength_ != data_.size()))
 		{
@@ -303,7 +296,6 @@ namespace BALL
 
 	template <>
 	TFFT2D<FloatTraits>::~TFFT2D()
-		throw()
 	{
 		// AR: destroy FFTW plans if there are any
 		if (planCalculated_)
@@ -316,7 +308,6 @@ namespace BALL
 
 	template <>
 	TFFT2D<FloatTraits>::TFFT2D(const TFFT2D &data)
-		throw()
 		: TRegularData2D<Complex>(data),
 			lengthX_(data.lengthX_),
 			lengthY_(data.lengthY_),
@@ -354,7 +345,6 @@ namespace BALL
 	// AR: ldn is not any longer the binary logarithm but the absolute number of grid points
 	template <>
 	TFFT2D<FloatTraits>::TFFT2D(Size ldnX, Size ldnY, double stepPhysX, double stepPhysY, Vector2 origin, bool inFourierSpace)
-		throw()
 		: TRegularData2D<Complex>(TRegularData2D<Complex>::IndexType((ldnX), (ldnY)), -origin, Vector2((((ldnX)-1)*stepPhysX_),(((ldnX)-1)*stepPhysY_))),
 		  lengthX_(ldnX),
 			lengthY_(ldnY),
@@ -399,7 +389,6 @@ namespace BALL
 	
 	template <>
 	void TFFT2D<FloatTraits>::clear()
-		throw()
 	{
 		TRegularData2D<Complex>::clear();
 		
@@ -419,7 +408,6 @@ namespace BALL
 
 	template <>
 	const TFFT2D<FloatTraits>& TFFT2D<FloatTraits>::operator = (const TFFT2D& fft2D)
-		throw()
 	{
 		clear();
 		//lower_ = fft2D.lower_;
@@ -472,7 +460,6 @@ namespace BALL
 
 	template <>
 	void TFFT2D<FloatTraits>::destroy()
-		throw()
 	{		
 		// TRegularData2D seems to be missing a destroy routine...
 		// until this is fixed, we will use clear() instead
@@ -509,7 +496,6 @@ namespace BALL
 	
 	template <>
 	void TFFT2D<FloatTraits>::doFFT()
-		throw()
 	{
 		if ((dataAdress_ != &data_[0]) || (dataLength_ != data_.size()))
 		{
@@ -550,7 +536,7 @@ namespace BALL
 
 	template <>
 	void TFFT2D<FloatTraits>::doiFFT()
-		throw()
+
 	{
 		if ((dataAdress_ != &data_[0]) || (dataLength_ != data_.size()))
 		{
@@ -595,7 +581,7 @@ namespace BALL
 
 template <>
 	TFFT2D<LongDoubleTraits>::~TFFT2D()
-		throw()
+
 	{
 		// AR: destroy FFTW plans if there are any
 		if (planCalculated_)
@@ -608,7 +594,6 @@ template <>
 
 	template <>
 	TFFT2D<LongDoubleTraits>::TFFT2D(const TFFT2D &data)
-		throw()
 		: TRegularData2D<Complex>(data),
 			lengthX_(data.lengthX_),
 			lengthY_(data.lengthY_),
@@ -646,7 +631,6 @@ template <>
 	// AR: ldn is not any longer the binary logarithm but the absolute number of grid points
 	template <>
 	TFFT2D<LongDoubleTraits>::TFFT2D(Size ldnX, Size ldnY, double stepPhysX, double stepPhysY, Vector2 origin, bool inFourierSpace)
-		throw()
 		: TRegularData2D<Complex>(TRegularData2D<Complex>::IndexType((ldnX), (ldnY)), -origin, Vector2((((ldnX)-1)*stepPhysX_),(((ldnX)-1)*stepPhysY_))),
 		  lengthX_(ldnX),
 			lengthY_(ldnY),
@@ -691,7 +675,6 @@ template <>
 	
 	template <>
 	void TFFT2D<LongDoubleTraits>::clear()
-		throw()
 	{
 		TRegularData2D<Complex>::clear();
 		
@@ -711,7 +694,6 @@ template <>
 
 	template <>
 	const TFFT2D<LongDoubleTraits>& TFFT2D<LongDoubleTraits>::operator = (const TFFT2D& fft2D)
-		throw()
 	{
 		clear();
 		//lower_ = fft2D.lower_;
@@ -764,7 +746,6 @@ template <>
 
 	template <>
 	void TFFT2D<LongDoubleTraits>::destroy()
-		throw()
 	{		
 		// TRegularData2D seems to be missing a destroy routine...
 		// until this is fixed, we will use clear() instead
@@ -801,7 +782,6 @@ template <>
 	
 	template <>
 	void TFFT2D<LongDoubleTraits>::doFFT()
-		throw()
 	{
 		if ((dataAdress_ != &data_[0]) || (dataLength_ != data_.size()))
 		{
@@ -843,7 +823,6 @@ template <>
 
 	template <>
 	void TFFT2D<LongDoubleTraits>::doiFFT()
-		throw()
 	{
 		if ((dataAdress_ != &data_[0]) || (dataLength_ != data_.size()))
 		{

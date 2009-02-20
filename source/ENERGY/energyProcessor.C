@@ -8,7 +8,7 @@
 namespace BALL
 {
 
-	EnergyProcessor::EnergyProcessor() throw()
+	EnergyProcessor::EnergyProcessor()
 		: UnaryProcessor<AtomContainer>(),
 			fragment_(0),
 			energy_(0),
@@ -16,7 +16,7 @@ namespace BALL
 	{
 	}
 
-	EnergyProcessor::EnergyProcessor(const EnergyProcessor& proc) throw()
+	EnergyProcessor::EnergyProcessor(const EnergyProcessor& proc)
 		: UnaryProcessor<AtomContainer>(),
 			fragment_(proc.fragment_),
 			energy_(proc.energy_),
@@ -24,19 +24,19 @@ namespace BALL
 	{
 	}
 
-	EnergyProcessor::~EnergyProcessor() throw()
+	EnergyProcessor::~EnergyProcessor()
 	{
 		clear();
 		valid_ = false;
 	}
 
-	void EnergyProcessor::clear() throw()
+	void EnergyProcessor::clear()
 	{
 		fragment_ = 0;
 		energy_ = 0;
 	}
 
-	bool EnergyProcessor::start() throw()
+	bool EnergyProcessor::start()
 	{
 		fragment_ = 0;
 		energy_ = 0;
@@ -44,7 +44,7 @@ namespace BALL
 	}
 
 	const EnergyProcessor& EnergyProcessor::operator =
-		(const EnergyProcessor& proc) throw()
+		(const EnergyProcessor& proc)
 	{
 		fragment_ = proc.fragment_;
 		energy_ = proc.energy_;
@@ -52,7 +52,7 @@ namespace BALL
 		return *this;
 	}
 
-	Processor::Result EnergyProcessor::operator () (AtomContainer& fragment) throw()
+	Processor::Result EnergyProcessor::operator () (AtomContainer& fragment)
 	{
 		if (fragment_ == 0)
 		{
@@ -61,17 +61,17 @@ namespace BALL
 		return Processor::BREAK;
 	}
 
-	double EnergyProcessor::getEnergy() const throw()
+	double EnergyProcessor::getEnergy() const
 	{
 		return energy_;
 	}
 	
-	bool EnergyProcessor::isValid() const throw()
+	bool EnergyProcessor::isValid() const
 	{
 		return valid_;
 	}
 
-	bool EnergyProcessor::operator == (const EnergyProcessor& proc) const throw()
+	bool EnergyProcessor::operator == (const EnergyProcessor& proc) const
 	{
 		bool result;
 		if ((fragment_ == 0) && (proc.fragment_ == 0))

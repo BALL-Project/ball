@@ -35,18 +35,15 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	TAngle<T> operator * (const T& val, const TAngle<T>& angle)
-		throw();
+	TAngle<T> operator * (const T& val, const TAngle<T>& angle);
 
 	template <typename T>
 	BALL_INLINE
-	TAngle<T> operator + (const T& val, const TAngle<T>& angle)
-		throw();
+	TAngle<T> operator + (const T& val, const TAngle<T>& angle);
 
 	template <typename T>
 	BALL_INLINE
-	TAngle<T> operator - (const T& val, const TAngle<T>& angle)
-		throw();
+	TAngle<T> operator - (const T& val, const TAngle<T>& angle);
 
 	/**	Generic Angle Class.
 			Use this class to describe angles. The TAngle class permits the conversion
@@ -86,16 +83,14 @@ namespace BALL
 		/**	Default constructor.
 				Creates a new angle object. Its value is set to 0.
 		*/
-		TAngle()
-			throw();
+		TAngle();
 
 		/**	Copy constructor.
 				Create a copy of a TAngle object. Copies are always
 				shallow.
 				@param	angle the object to be copied
 		*/
-		TAngle(const TAngle& angle)
-			throw();
+		TAngle(const TAngle& angle);
 
 		/**	Detailed constructor.
 				Create a new angle object and set its value to 
@@ -104,13 +99,11 @@ namespace BALL
 				@param	new_value the value of the angle object
 				@param	radian <b>true</b> if <tt>new_value</tt> is in radians, <tt>false</tt> otherwise 
 		*/
-		explicit TAngle(const T& new_value, bool radian = true)
-			throw();
+		explicit TAngle(const T& new_value, bool radian = true);
 
 		/**	Destructor.
 		*/
 		virtual ~TAngle()
-			throw()
 		{
 		}
 
@@ -118,7 +111,6 @@ namespace BALL
 				The value is set to 0.
 		*/
 		virtual void clear()
-			throw()
 		{
 			value = (T)0;
 		}
@@ -130,8 +122,7 @@ namespace BALL
 
 		/**	Swap the contents of two angles.
 		*/
-		void swap(TAngle& angle)
-			throw();
+		void swap(TAngle& angle);
 
 		/**	Assign a new value to the angle.
 				<tt>radian</tt> determines whether <tt>new_value</tt>
@@ -139,40 +130,34 @@ namespace BALL
 				@param	new_value the value of the angle object
 				@param	radian <b>true</b> if <tt>new_value</tt> is in radians, <tt>false</tt> otherwise 
 		*/
-		void set(const T& new_value, bool radian = true)
-			throw();
+		void set(const T& new_value, bool radian = true);
 
 		/**	Assign an Angle object from another.
 				@param	angle the angle object to be assigned from
 		*/
-		void set(const TAngle& angle)
-			throw();
+		void set(const TAngle& angle);
 
 		/**	Assignment operator
 		*/
-		TAngle& operator = (const TAngle& angle)
-			throw();
+		TAngle& operator = (const TAngle& angle);
 
 		/**	Assignment operator for floats.
 				Assign a float value to the angle.
 				The assigned value has to be in radians!
 				@param	new_value the new value
 		*/
-		TAngle& operator = (const T& new_value)
-			throw();
+		TAngle& operator = (const T& new_value);
 
 		/**	Assign the value to another angle.
 				@param	angle the angle to assign the value to
 		*/
-		void get(TAngle& angle) const
-			throw();
+		void get(TAngle& angle) const;
 
 		/**	Assign the value to a variable of type <tt>T</tt>.
 				@param	val the variable to assign the value to
 				@param	radian if set to <tt>true</tt> assigns the value in radians (default).
 		*/
-		void get(T& val, bool radian = true) const
-			throw();
+		void get(T& val, bool radian = true) const;
 
 		//@}
 		/**	@name	Accessors
@@ -182,34 +167,30 @@ namespace BALL
 		/** Cast operator
 				@return value in radians
 		*/
-		operator T () const
-			throw();
+		operator T () const;
 
 		/** Return the value of the angle
 				@return value in radians
 		*/
 		T toRadian() const
-			throw();
+	;
 
 		/** Calculate radians from degrees
 				@param degree the value in degrees
 				@return T the value in radians
 		*/
-		static T toRadian(const T& degree)
-			throw();
+		static T toRadian(const T& degree);
 
 		/** Return the value of the angle
 				@return value in degrees
 		*/
-		T toDegree() const
-			throw();
+		T toDegree() const;
 
 		/** Calculate degrees from radians
 				@param radian the value in radians
 				@return T the value in degrees
 		*/
-		static T toDegree(const T& radian)
-			throw();
+		static T toDegree(const T& radian);
 
 		/**	Normalize the angle over a given range.
 				<tt>RANGE__UNLIMITED = 0</tt> no limitations.
@@ -217,79 +198,67 @@ namespace BALL
 				<tt>RANGE__SIGNED    = 2</tt> \f$-180 \le \mathtt{angle} \le 180, -\pi \le \mathtt{angle} \le \pi\f$.
 				@param range the range of the angle
 		*/		
-		void normalize(Range range)
-			throw();
+		void normalize(Range range);
 
 		/**  Negate the angle
 		*/
-		void negate()
-			throw();
+		void negate();
 
 		/**	Positive sign.
 		*/
-		TAngle operator + () const
-			throw();
+		TAngle operator + () const;
 
 		/**	Negative sign.
 		*/
-		TAngle operator - () const
-			throw();
+		TAngle operator - () const;
 
 		/**	Addition operator.
 				@param angle the angle to add
 				@return TAngle, {\em *this}
 		*/
-		TAngle& operator += (const TAngle& angle)
-			throw();
+		TAngle& operator += (const TAngle& angle);
 
 		/**	Add a value to this angle.
 				@param val the value to add
 				@return TAngle, {\em *this}
 		*/
-		TAngle& operator += (const T& val)
-			throw();
+		TAngle& operator += (const T& val);
 
 		/**	Addition operator.
 				@param angle the angle to add
 				@return TAngle, the new angle
 		*/
-		TAngle operator + (const TAngle& angle)
-			throw();
+		TAngle operator + (const TAngle& angle);
 
 		/**	Substraction operator.
 				@param angle the angle to substract
 				@return TAngle, {\em *this}
 		*/
-		TAngle& operator -= (const TAngle& angle)
-			throw();
+		TAngle& operator -= (const TAngle& angle);
 
 		/**	Substract a value from this angle.
 				@param val the value to substract
 				@return TAngle, {\em *this}
 		*/
-		TAngle& operator -= (const T& val)
-			throw();
+		TAngle& operator -= (const T& val);
 
 		/**	Subtraction an angle from this angle.
 				@param angle the angle to substract
 				@return TAngle, the new angle
 		*/
-		TAngle operator - (const TAngle& angle)
-			throw();
+		TAngle operator - (const TAngle& angle);
 
 		/**	Multiply an angle with this angle.
 				@param angle the angle to multiply by
 				@return TAngle, {\em *this}
 		*/
-		TAngle& operator *= (const TAngle& angle)
-			throw();
+		TAngle& operator *= (const TAngle& angle);
 
 		/**	Multiply a value with this angle.
 				@param val the value to multiply by
 				@return TAngle, {\em *this}
 		*/
-		TAngle& operator *= (const T& val)
-			throw();
+		TAngle& operator *= (const T& val);
 
 		/**	Division operator.
 				@param angle the angle to divide by
@@ -323,8 +292,7 @@ namespace BALL
 				@param angle the angle to compare with
 				@return bool, <b>true</b> if the two angles are equal
 		*/
-		bool operator == (const TAngle& angle) const
-			throw();
+		bool operator == (const TAngle& angle) const;
 
 		/**	Inequality operator
 				This test uses Maths::isNotEqual instead of comparing the
@@ -332,8 +300,7 @@ namespace BALL
 				@param angle the angle to compare with
 				@return bool, <b>true</b> if the two angles are not equal
 		*/
-		bool operator != (const TAngle& angle) const
-			throw();
+		bool operator != (const TAngle& angle) const;
 
 		/**	Is less operator.
 				This test uses Maths::isLess instead of comparing the
@@ -341,8 +308,7 @@ namespace BALL
 				@param angle the angle to compare with
 				@return bool, <b>true</b> if {\em *this} angle is smaller than <tt>value</tt>
 		*/
-		bool operator < (const TAngle& angle) const
-			throw();
+		bool operator < (const TAngle& angle) const;
 
 		/**	Is less operator.
 				This test uses Maths::isLess instead of comparing the
@@ -350,8 +316,7 @@ namespace BALL
 				@param val the value to compare with
 				@return bool, <b>true</b> if {\em *this} angle is smaller than <tt>value</tt>
 		*/
-		bool operator < (const T& val) const
-			throw();
+		bool operator < (const T& val) const;
 
 		/**	Is less or equal operator.
 				This test uses Maths::isLessOrEqual instead of comparing the
@@ -359,8 +324,7 @@ namespace BALL
 				@param angle the angle to compare with
 				@return bool, <b>true</b> if {\em *this} angle is smaller or equal than <tt>value</tt>
 		*/
-		bool operator <= (const TAngle& angle) const
-			throw();
+		bool operator <= (const TAngle& angle) const;
 
 		/**	Is greater or equal operator.
 				This test uses Maths::isGreaterOrEqual instead of comparing the
@@ -368,8 +332,7 @@ namespace BALL
 				@param angle the angle to compare with
 				@return bool, <b>true</b> if {\em *this} angle is greater or equal than <tt>value</tt>
 		*/
-		bool operator >= (const TAngle& angle) const
-			throw();
+		bool operator >= (const TAngle& angle) const;
 
 		/**	Is greater operator.
 				This test uses Maths::isGreater instead of comparing the
@@ -377,8 +340,7 @@ namespace BALL
 				@param angle the angle to compare with
 				@return bool, <b>true</b> if {\em *this} angle is greater than <tt>value</tt>
 		*/
-		bool operator > (const TAngle& angle) const
-			throw();
+		bool operator > (const TAngle& angle) const;
 
 		/**	Test whether two angles are equivalent.
 				Both angles are normalized and afterwards compared with Maths::isEqual
@@ -386,8 +348,7 @@ namespace BALL
 				@param angle the angle to compare with
 				@return bool, <b>true</b> if {\em *this} angle is equal to <tt>value</tt>
 		*/
-		bool isEquivalent(TAngle angle) const
-			throw();
+		bool isEquivalent(TAngle angle) const;
 
 		//@}
 		/**	@name	Debugging and Diagnostics
@@ -398,8 +359,7 @@ namespace BALL
 				Always returns true
 				@return bool <b>true</b>
 		*/
-		bool isValid () const
-			throw();
+		bool isValid () const;
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to 
@@ -407,8 +367,7 @@ namespace BALL
 				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/
-		void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw();
+		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 		//@}
 		/**	@name	Attributes
@@ -425,21 +384,18 @@ namespace BALL
 
 	template <typename T>
 	TAngle<T>::TAngle()
-		throw()
 		: value((T)0)
 	{
 	}
 
 	template <typename T>
 	TAngle<T>::TAngle(const TAngle& angle)
-		throw()
 		:	value((T)angle.value)
 	{
 	}
 
 	template <typename T>
 	TAngle<T>::TAngle(const T& new_value, bool radian)
-		throw()
 		:	value((radian == true)
 			 ? (T)new_value 
 			 : (T)BALL_ANGLE_DEGREE_TO_RADIAN((double)new_value))
@@ -448,7 +404,6 @@ namespace BALL
 
 	template <typename T>
 	void TAngle<T>::swap(TAngle& angle)
-		throw()
 	{
 		T temp = value;
 		value = angle.value;
@@ -457,14 +412,12 @@ namespace BALL
 
 	template <typename T>
 	void TAngle<T>::set(const TAngle& angle)
-		throw()
 	{
 		value = angle.value;
 	}
 
 	template <typename T>
 	void TAngle<T>::set(const T& new_value, bool radian)
-		throw()
 	{
 		value = (radian == true)
 			 ? new_value 
@@ -473,7 +426,6 @@ namespace BALL
 
 	template <typename T>
 	TAngle<T>& TAngle<T>::operator = (const TAngle& angle)
-		throw()
 	{
 		value = angle.value;
 		return *this;
@@ -481,7 +433,6 @@ namespace BALL
 
 	template <typename T>
 	TAngle<T>& TAngle<T>::operator = (const T& new_value)
-		throw()
 	{
 		value = new_value;
 		return *this;
@@ -489,14 +440,12 @@ namespace BALL
 
 	template <typename T>
 	void TAngle<T>::get(TAngle& angle) const
-		throw()
 	{
 		angle.value = value;
 	}
 
 	template <typename T>
 	void TAngle<T>::get(T& val, bool radian) const
-		throw()
 	{
 		val = (radian == true)
 					 ? value 
@@ -505,28 +454,24 @@ namespace BALL
 
 	template <typename T>
 	TAngle<T>::operator T () const
-		throw()
 	{
 		return value;
 	}
 
 	template <typename T>
 	T TAngle<T>::toRadian() const
-		throw()
 	{
 		return value;
 	}
 
 	template <typename T>
 	T TAngle<T>::toRadian(const T& degree)
-		throw()
 	{
 		return BALL_ANGLE_DEGREE_TO_RADIAN(degree);
 	}
 
 	template <typename T>
 	T TAngle<T>::toDegree() const
-		throw()
 	{
 		if (value == (T) 0.0) return (T) 0.0;
 		return BALL_ANGLE_RADIAN_TO_DEGREE(value);
@@ -534,7 +479,6 @@ namespace BALL
 
 	template <typename T>
 	T TAngle<T>::toDegree(const T& radian)
-		throw()
 	{
 		if (radian == (T) 0.0) return (T) 0.0;
 		return BALL_ANGLE_RADIAN_TO_DEGREE(radian);
@@ -542,7 +486,6 @@ namespace BALL
 
 	template <typename T>
 	void TAngle<T>::normalize(Range range)
-		throw()
 	{
 		if (range == RANGE__UNLIMITED)
 		{
@@ -578,28 +521,24 @@ namespace BALL
 
 	template <typename T>
 	void TAngle<T>::negate() 
-		throw()
 	{
 		value = -value;
 	}
 
 	template <typename T>
 	TAngle<T> TAngle<T>::operator + () const 
-		throw()
 	{
 		return *this;
 	}
 
 	template <typename T>
 	TAngle<T> TAngle<T>::operator - () const 
-		throw()
 	{
 		return TAngle(-value);
 	}
 
 	template <typename T>
 	TAngle<T>& TAngle<T>::operator += (const TAngle& angle) 
-		throw()
 	{
 		value += angle.value;
 		return *this;
@@ -607,30 +546,26 @@ namespace BALL
 
 	template <typename T>
 	TAngle<T>& TAngle<T>::operator += (const T& val) 
-		throw()
 	{
 		value += val;
 		return *this;
 	}
 
 	template <typename T>
-	TAngle<T> TAngle<T>::operator + (const TAngle& angle) 
-		throw()
+	TAngle<T> TAngle<T>::operator + (const TAngle& angle)
 	{
 		return TAngle(value + angle.value);
 	}
 
 	template <typename T>
-	TAngle<T>& TAngle<T>::operator -= (const TAngle& angle) 
-		throw()
+	TAngle<T>& TAngle<T>::operator -= (const TAngle& angle)
 	{
 		value -= angle.value;
 		return *this;
 	}
 
 	template <typename T>
-	TAngle<T>& TAngle<T>::operator -= (const T& val) 
-		throw()
+	TAngle<T>& TAngle<T>::operator -= (const T& val)
 	{
 		value -= val;
 		return *this;
@@ -638,22 +573,19 @@ namespace BALL
 
 	template <typename T>
 	TAngle<T> TAngle<T>::operator - (const TAngle& angle) 
-		throw()
 	{
 		return TAngle(value - angle.value);
 	}
 
 	template <typename T>
-	TAngle<T>& TAngle<T>::operator *= (const TAngle& angle) 
-		throw()
+	TAngle<T>& TAngle<T>::operator *= (const TAngle& angle)
 	{
 		value *= angle.value;
 		return *this;
 	}
 
 	template <typename T>
-	TAngle<T>& TAngle<T>::operator *= (const T& val) 
-		throw()
+	TAngle<T>& TAngle<T>::operator *= (const T& val)
 	{
 		value *= val;
 		return *this;
@@ -699,57 +631,50 @@ namespace BALL
 	}
 
 	template <typename T>
-	bool TAngle<T>::operator == (const TAngle& angle) const 
-		throw()
+	bool TAngle<T>::operator == (const TAngle& angle) const
 	{
 		return Maths::isEqual(value, angle.value);
 	}
 
 	template <typename T>
 	bool TAngle<T>::operator != (const TAngle& angle) const 
-		throw()
 	{
 		return Maths::isNotEqual(value, angle.value);
 	}
 
 	template <typename T>
-	bool TAngle<T>::operator < (const TAngle& angle) const	
-		throw()
+	bool TAngle<T>::operator < (const TAngle& angle) const
 	{
 		return Maths::isLess(value, angle.value);
 	}
 
 	template <typename T>
-	bool TAngle<T>::operator < (const T& val) const 
-		throw()
+	bool TAngle<T>::operator < (const T& val) const
 	{
 		return Maths::isLess(value, val);
 	}
 
 	template <typename T>
 	bool TAngle<T>::operator <= (const TAngle& angle) const
-		throw()
 	{
 		return Maths::isLessOrEqual(value, angle.value);
 	}
 
 	template <typename T>
 	bool TAngle<T>::operator >= (const TAngle& angle) const 
-		throw()
 	{
 		return Maths::isGreaterOrEqual(value, angle.value);
 	}
 
 	template <typename T>
 	bool TAngle<T>::operator > (const TAngle& angle) const 
-		throw()
+		
 	{
 		return Maths::isGreater(value, angle.value);
 	}
 
 	template <typename T>
 	bool TAngle<T>::isEquivalent(TAngle angle) const
-		throw()
 	{
 		TAngle this_angle(*this);
 
@@ -761,14 +686,12 @@ namespace BALL
 
 	template <typename T>
 	bool TAngle<T>::isValid() const 
-		throw()
 	{
 		return true;
 	}
 
 	template <typename T>
 	void TAngle<T>::dump(std::ostream& s, Size depth) const
-		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -792,7 +715,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	TAngle<T> operator * (const T& val, const TAngle<T>& angle)
-		throw()
 	{
 		return TAngle<T>(val * angle.value);
 	}
@@ -803,7 +725,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	TAngle<T> operator + (const T& val, const TAngle<T>& angle) 
-		throw()
 	{
 		return TAngle<T>(val + angle.value);
 	}
@@ -814,7 +735,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	TAngle<T> operator - (const T& val, const TAngle<T>& angle) 
-		throw()
 	{
 		return TAngle<T>(val - angle.value);
 	}
@@ -824,7 +744,6 @@ namespace BALL
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TAngle<T>& angle)
-		throw()
 	{
 		char c;
 		s >> c >> angle.value >> c;
@@ -838,7 +757,6 @@ namespace BALL
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TAngle<T>& angle)
-		throw()
 	{
 		s << '(' << angle.value << ')';
 

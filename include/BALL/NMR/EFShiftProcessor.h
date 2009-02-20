@@ -46,17 +46,17 @@ namespace BALL
 		/**	Default constructor.
 		*/
 		EFShiftProcessor()
-			throw();
+			;
 	
 		/**	Copy constructor.
 		*/
 		EFShiftProcessor(const EFShiftProcessor& processor)
-			throw();
+			;
 			
 		/**	Destructor.
 		*/
 		virtual ~EFShiftProcessor()
-			throw();	
+			;	
 
 		//@}
 		/**	@name	Accessors.
@@ -79,7 +79,7 @@ namespace BALL
 				@see operator ()
 		*/
 		virtual void init()
-			throw();
+			;
 
 		//@}
 		/**	@name	Processor specific functions.
@@ -92,7 +92,7 @@ namespace BALL
 				@return bool, <b>false</b> if <tt>parameters_ == 0</tt>
 		*/
 		virtual bool start()
-			throw();
+			;
 
 
 		/**	operator ().
@@ -104,7 +104,7 @@ namespace BALL
 				@param composite an arbitrary composite. All non-atom objects are ignored.
 		*/
 		virtual Processor::Result operator () (Composite& composite)
-			throw();
+			;
 
 		/**	Finish method.
 				This method performs the chemical shift calculation.
@@ -124,7 +124,7 @@ namespace BALL
 				@return bool, <b>false</b> if <tt>parameters_ == 0</tt>
 		*/
 		virtual bool finish()
-			throw();
+			;
 			
 		//@}
 

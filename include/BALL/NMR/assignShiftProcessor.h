@@ -22,7 +22,7 @@
 #include <vector>
 
 namespace BALL 
-{             
+{
 	class FragmentDB;
 
 	/**	Set a property called chemical_shift.
@@ -75,27 +75,24 @@ namespace BALL
 		//@{
 
 		/// 
-		void setFragmentDB(const FragmentDB* db) 
-			throw();
+		void setFragmentDB(const FragmentDB* db);
 
 		///
-		const FragmentDB* getFragmentDB()
-			throw();
+		const FragmentDB* getFragmentDB();
 
 		/**	Return the state of the object
 		*/
-		bool isValid() const
-			throw();
+		bool isValid() const;
 
 		//@}
 		
 		protected:
 		
-		StringHashMap<float>							shift_table_;
-		const std::vector<NMRAtomData>&		atom_data_;
-		const Molecule*										molecule_;
-		Position													number_of_fragment_;
-		FragmentDB* 											fragment_db_;
+		StringHashMap<float> shift_table_;
+		const std::vector<NMRAtomData>&	atom_data_;
+		const Molecule*	molecule_;
+		Position number_of_fragment_;
+		FragmentDB* fragment_db_;
 	};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

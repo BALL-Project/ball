@@ -65,20 +65,20 @@ namespace BALL
 
 		/**	Default constructor. Creates a new and empty Options object.
 		*/
-		Options() throw();
+		Options();
 
 		/**	Copy constructor.	
 				Creates a new option table from an existing one.
 				@param	options the options to be copied
 		*/
-		Options(const Options& options) throw();
+		Options(const Options& options);
 
 		/**		Destructor.
 					Destructs the option table and frees all 
 					allocated memory.
 					@see	clear
 		*/
-		virtual ~Options() throw();
+		virtual ~Options();
 
 		//@}
 		/**@name Assignment
@@ -87,11 +87,11 @@ namespace BALL
 		
 		/** Assignment operator
 		*/
-		const Options& operator = (const Options& options) throw();
+		const Options& operator = (const Options& options);
 
 		/** Clear method
 		*/
-		virtual void clear() throw();
+		virtual void clear();
 
 		//@}
 		/** @name	Predicates
@@ -103,7 +103,7 @@ namespace BALL
 					@param	key String
 					@return	true, if <b>  key </b> is an integer
 		*/
-		bool isInteger(const String& key) const throw();
+		bool isInteger(const String& key) const;
 
 		/**		Returns true, if the value associated with the 
 					given key is a boolean.
@@ -112,14 +112,14 @@ namespace BALL
 					@param	key String
 					@return	true, if <b>  key </b> is a boolean value
 		*/
-		bool isBool(const String& key) const throw();
+		bool isBool(const String& key) const;
 
 		/**		Returns true, if the value associated with the 
 					given key is a real number
 					@param	key String
 					@return	true, if <b>  key </b> is a real number
 		*/
-		bool isReal(const String& key) const throw();
+		bool isReal(const String& key) const;
 
 		/**		Returns true, if the value associated with the given key 
 					can be read as a vector.
@@ -129,13 +129,13 @@ namespace BALL
 					@param					key String
 					@return					true, if <b>  </b> key represents a 3D vector of reals
 		*/
-		bool isVector(const String& key) const throw();
+		bool isVector(const String& key) const;
 
 		/**		Returns true, if a value is defined for the given key.
 					@param					key String
 					@return					bool, true/false
 		*/
-		bool isSet(const String& key) const throw();
+		bool isSet(const String& key) const;
 
 		//@}
 		/** @name Inspectors and mutators
@@ -144,18 +144,18 @@ namespace BALL
 
 		/**		Sets the option table's name.
 		*/
-		void setName(const String& name) throw();
+		void setName(const String& name);
 
 		/**		Returns the option table's name.
 		*/
-		const String& getName() const throw();
+		const String& getName() const;
 
 		/**		Returns the value associated with the key.
 					If the key does not exists an empty string is returned.
 					@param	key the key
 					@return	String, the value
 		*/
-		String get(const String& key) const throw();
+		String get(const String& key) const;
 
 		/**		Returns the value associated with the key as bool.
 					This method tries to convert the value associated
@@ -167,7 +167,7 @@ namespace BALL
 					@param	key the key
 					@return	bool, boolean value
 		*/
-		bool	getBool(const String& key) const throw();
+		bool	getBool(const String& key) const;
 
 		/**		Returns the value associated with the key as a floting point number.
 					If the value could not be converted to a floating point number or the key
@@ -177,7 +177,7 @@ namespace BALL
 					@param	key the key
 					@return float, floating point value
 		*/
-		double getReal(const String& key) const throw();
+		double getReal(const String& key) const;
 
 		/**		Returns the value associated with the key as a Vector3 object.
 					This method is useful to read threedimensional coordinates, points, etc.
@@ -191,7 +191,7 @@ namespace BALL
 					@param	key the key
 					@return	Vector3	vector containing the three coordinates
 		*/
-		Vector3	getVector(const String& key) const throw();
+		Vector3	getVector(const String& key) const;
 
 		/**		Returns the value associated with the key as an integer.
 					If the value corresponding to <b>key</b> could not be converted to an
@@ -201,7 +201,7 @@ namespace BALL
 					@return 	long the integer value
 					@param	key the key
 		*/
-		long getInteger(const String& key) const throw();
+		long getInteger(const String& key) const;
 
 		/** 	Assigns value to key. 
 					The string given as <b>value</b> is assigned to the <b>key</b>.
@@ -209,7 +209,7 @@ namespace BALL
 					is inserted.
 					@param key the key
 		*/
-		void set(const String& key, const String& value) throw();
+		void set(const String& key, const String& value);
 
 		/** 	Assigns the real number given by value to key.
 					<b>value</b> is first converted to a string, which is 
@@ -218,7 +218,7 @@ namespace BALL
 					@param	value the new value
 					@param key the key
 		*/
-		void setReal(const String& key, const double value) throw();
+		void setReal(const String& key, const double value);
 
 		/**		Assigns a Vector3 object to the value corresponding to a key.
 					The given Vector3 is converted to a string by the following
@@ -229,7 +229,7 @@ namespace BALL
 					@param	key the key
 					@param	value a vector
 		*/
-		void setVector(const String& key, const Vector3& value) throw();
+		void setVector(const String& key, const Vector3& value);
 
 		/** Assigns the integer given by value to key.
 				<b>value</b> is first converted to a string, which is 
@@ -238,7 +238,7 @@ namespace BALL
 				@param	key the key
 				@param	value the integer value
 		*/
-		void setInteger(const String& key, const long value) throw();
+		void setInteger(const String& key, const long value);
 
 		/**	Assigns the boolean value given by value to the table entry key.
 				The value associated with <b>key</b> is either set to
@@ -247,7 +247,7 @@ namespace BALL
 				@param	key the key
 				@param	value the boolean value
 		*/
-		void setBool(const String& key, const bool value) throw();
+		void setBool(const String& key, const bool value);
 
 		/**	Assigns the value only, if the key is not yet defined. 
 				If an entry for <b>key</b> exists, it is not modified.
@@ -256,7 +256,7 @@ namespace BALL
 				@param	key the key
 				@param 	value	a new value
 		*/
-		String setDefault(const String& key, const String& value) throw();
+		String setDefault(const String& key, const String& value);
 
 		/**	Assigns the value only, if the key is not yet defined. 
 				If an entry for <b>key</b> exists, it is not modified.
@@ -266,7 +266,7 @@ namespace BALL
 				@param 	value	a new value
 				@return	the value of <tt>key</tt>
 		*/
-		long setDefaultInteger(const String& key, const long value) throw();
+		long setDefaultInteger(const String& key, const long value);
 
 		/**	Assigns the value only, if the key is not yet defined. 
 				If an entry for <b>key</b> exists, it is not modified.
@@ -276,7 +276,7 @@ namespace BALL
 				@param 	value	a new value
 				@return	the value of <tt>key</tt>
 		*/
-		double setDefaultReal(const String& key, const double value) throw();
+		double setDefaultReal(const String& key, const double value);
 
 		/**	Assigns the value only if the key is not yet defined.
 				If an entry for <b>key</b> exists, it is not modified.
@@ -286,7 +286,7 @@ namespace BALL
 				@param 	value	a new value
 				@return	the value of <tt>key</tt>
 		*/
-		bool setDefaultBool(const String& key, const bool value) throw();
+		bool setDefaultBool(const String& key, const bool value);
 
 		/**		Reads options from a file. 
 					This method opens the file specified by <b>filename</b>.
@@ -306,7 +306,7 @@ namespace BALL
 													- <b>false</b> otherwise
 												
 		*/
-		bool readOptionFile(const String& filename) throw();
+		bool readOptionFile(const String& filename);
 
 		/**		Writes options to a file.
 					This method opens or creates the file specified by <b>filename</b>.
@@ -319,15 +319,14 @@ namespace BALL
 												
 					@see readOptionFile
 		*/		
-		bool writeOptionFile(const String& filename) const throw();
+		bool writeOptionFile(const String& filename) const;
 
 		/**	Persistent stream writing.
 				This method writes the strings using the <tt>writePrimitive</tt> method
 				of the PersistenceManager.
 				@param pm the persistence manager
 		*/
-		void write(PersistenceManager& pm) const
-			throw();
+		void write(PersistenceManager& pm) const;
 
 		/** Persistent stream reading.
 				This method reads from the
@@ -335,14 +334,13 @@ namespace BALL
 				of the PersistenceManager.
 				@param pm the persistence manager
 		*/
-		bool read(PersistenceManager& pm)
-			throw();
+		bool read(PersistenceManager& pm);
 
 		/// Equality operator
-		bool operator == (const Options& option) const throw();
+		bool operator == (const Options& option) const;
 
 		/// Inequality operator
-		bool operator != (const Options& option) const throw();
+		bool operator != (const Options& option) const;
 
 
 		//@}
@@ -352,8 +350,7 @@ namespace BALL
 		
 		/** Dumps the whole content of the object 
 		*/
-		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const 
-			throw();
+		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const;
 
 		//@}
 

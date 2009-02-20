@@ -28,16 +28,13 @@ namespace BALL
 		//@{
 		
 		/// Default constructor
-		NumericalIntegrator()
-			throw();
+		NumericalIntegrator();
 		
 		/// Copy constructor 
-		NumericalIntegrator(const NumericalIntegrator& nint)
-			throw();
+		NumericalIntegrator(const NumericalIntegrator& nint);
 		
 		/// Destructor
-		virtual ~NumericalIntegrator()
-			throw();
+		virtual ~NumericalIntegrator();
 
 		//@}
 
@@ -46,8 +43,7 @@ namespace BALL
 		//@{
 
 		/// Assignment operator
-		NumericalIntegrator& operator = (const NumericalIntegrator& nint)
-			throw();
+		NumericalIntegrator& operator = (const NumericalIntegrator& nint);
 
 		//@}
 		
@@ -56,8 +52,7 @@ namespace BALL
 		//@{
 
 		/// Equality operator 
-		bool operator == (const NumericalIntegrator& nint) const
-			throw();
+		bool operator == (const NumericalIntegrator& nint) const;
 
 		//@}
 
@@ -68,33 +63,30 @@ namespace BALL
 		/** set the function to be integrated
 				@param the function to be assigned
 		*/
-		void setFunction(const Function& function)
-			throw();
+		void setFunction(const Function& function);
 
 		/** Get the function to be integrated (const version).
 				@return a const reference to the actual function
 		*/
-		const Function& getFunction() const	throw() { return function_; }
+		const Function& getFunction() const	 { return function_; }
 
 		/** Get the function to be integrated (const version).
 				@return a mutable reference to the actual function
 		*/
-		Function& getFunction()	throw() { return function_; }
+		Function& getFunction()	 { return function_; }
 
 		/** Get the value of the function at position <b>  x </b>
 				@param x the position at which <tt>function\_</tt> is to be evaluated
 				@return the value of <tt>function\_</tt> at <b>  x </b>
 		*/
-		DataType getValue(const DataType& x) const
-			throw();
+		DataType getValue(const DataType& x) const;
 
 		/** Integrate the function numerically
 				@param from lower limit of the integration
 				@param to upper limit of the integration
 				@return the value of the integral
 		*/
-		DataType integrate(const DataType& from, const DataType& to) const
-			throw();
+		DataType integrate(const DataType& from, const DataType& to) const;
 
 		//@}
 
@@ -110,7 +102,6 @@ namespace BALL
 	template<typename Function, typename DataType>
 	BALL_INLINE
 	NumericalIntegrator<Function, DataType>::NumericalIntegrator()
-		throw()
 		: function_()
 	{
 	}
@@ -119,7 +110,6 @@ namespace BALL
 	template<typename Function, typename DataType>
 	BALL_INLINE
 	NumericalIntegrator<Function, DataType>::NumericalIntegrator(const NumericalIntegrator<Function, DataType>& nint)
-		throw()
 		: function_(nint.function_)
 	{
 	}
@@ -128,7 +118,6 @@ namespace BALL
 	template<typename Function, typename DataType>
 	BALL_INLINE
 	NumericalIntegrator<Function, DataType>::~NumericalIntegrator()
-		throw()
 	{
 	}
 
@@ -138,7 +127,6 @@ namespace BALL
 	NumericalIntegrator<Function, DataType>&
 	NumericalIntegrator<Function, DataType>::operator =
 	(const NumericalIntegrator<Function, DataType>& nint)
-		throw()
 	{
 		function_ = nint.function_;
 		return *this;
@@ -148,7 +136,6 @@ namespace BALL
 	template<typename Function, typename DataType>
 	BALL_INLINE
 	void NumericalIntegrator<Function, DataType>::setFunction(const Function& function)
-		throw()
 	{	
 		function_ = function;
 	}
@@ -158,7 +145,6 @@ namespace BALL
 	BALL_INLINE
 	bool NumericalIntegrator<Function, DataType>::operator ==
 	(const NumericalIntegrator<Function, DataType>& nint) const
-		throw()
 	{
 		return (function_ == nint.function_);
 	}
@@ -167,7 +153,6 @@ namespace BALL
 	template<typename Function, typename DataType>
 	BALL_INLINE
 	DataType NumericalIntegrator<Function, DataType>::getValue(const DataType& x) const
-		throw()
 	{
 		return function_(x);
 	}
@@ -177,7 +162,6 @@ namespace BALL
 	BALL_INLINE
 	DataType NumericalIntegrator<Function, DataType>::integrate(
 			const DataType& from, const DataType& to) const
-		throw()
 	{
 		// ?????
 		// the number of samples has to be user configurable

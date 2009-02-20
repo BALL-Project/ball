@@ -5,7 +5,7 @@
 
 BALL_INLINE
 void Message::setSender(const ConnectionObject* object)
-	throw()
+	
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "Message " << this << " setSender " << object << "   " << typeid(object).name() << std::endl;
@@ -15,14 +15,14 @@ void Message::setSender(const ConnectionObject* object)
 
 BALL_INLINE
 const ConnectionObject* Message::getSender() const
-	throw()
+	
 {
 	return connection_object_;
 }
 
 BALL_INLINE
 void Message::setDeletable(bool flag)
-	throw()
+	
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "Message " << this << " setDeletable" << flag<< std::endl;
@@ -32,56 +32,56 @@ void Message::setDeletable(bool flag)
 
 BALL_INLINE
 bool Message::isDeletable() const
-	throw()
+	
 {
 	return deletable_;
 }
 
 BALL_INLINE
 void CompositeMessage::setComposite(const Composite& composite)
-	throw()
+	
 {
   composite_ = const_cast<Composite*>(&composite);
 }
 
 BALL_INLINE
 Composite* CompositeMessage::getComposite() const
-	throw()
+	
 {
 	return composite_;
 }
 
 BALL_INLINE
 void CompositeMessage::setCompositeName(const String& name)
-	throw()
+	
 {
 	composite_name_ = name;
 }
 
 BALL_INLINE
 const String& CompositeMessage::getCompositeName() const
-	throw()
+	
 {
 	return composite_name_;
 }
 	
 BALL_INLINE
 void GenericSelectionMessage::setSelection(const List<Composite*>& selection)
-	throw()
+	
 {
 	selection_ = selection;
 }
 
 BALL_INLINE
 const List<Composite*>& GenericSelectionMessage::getSelection() const
-	throw()
+	
 {
 	return selection_;
 }
 
 BALL_INLINE
 List<Composite*>& GenericSelectionMessage::getSelection()
-	throw()
+	
 {
 	return selection_;
 }

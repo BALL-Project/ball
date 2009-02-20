@@ -13,7 +13,6 @@ namespace BALL
 	const char* ShiftModule::PROPERTY__SHIFT = "ChemicalShift";
 
 	ShiftModule::ShiftModule()
-		throw()
 		:	module_name_(""),
 			parameters_(0),
 			valid_(false)
@@ -21,12 +20,10 @@ namespace BALL
 	}
 
 	ShiftModule::~ShiftModule()
-		throw()
 	{
 	}
 
 	ShiftModule::ShiftModule(Parameters& parameters, const String& name)
-		throw()
 		:	module_name_(name),
 			parameters_(&parameters),
 			valid_(false)
@@ -34,7 +31,6 @@ namespace BALL
 	}
 
 	ShiftModule::ShiftModule(const ShiftModule& module)
-		throw()
 		:	UnaryProcessor<Composite>(module),
 			module_name_(module.module_name_),
 			parameters_(module.parameters_),
@@ -42,8 +38,7 @@ namespace BALL
 	{
 	}
 
-	void ShiftModule::clear()
-		throw()
+	void ShiftModule::clear()	
 	{
 		module_name_ = "";
 		parameters_ = 0;
@@ -52,13 +47,11 @@ namespace BALL
 
 
 	void ShiftModule::init()
-		throw()
 	{
 		// empty method
 	}
 
-	const ShiftModule& ShiftModule::operator = (const ShiftModule& module) 
-		throw()
+	const ShiftModule& ShiftModule::operator = (const ShiftModule& module)
 	{
 		module_name_ = module.module_name_;
 		parameters_ = module.parameters_;
@@ -67,47 +60,40 @@ namespace BALL
 		return *this;
 	}
 
-	void ShiftModule::setName(const String& name)
-		throw()
+	void ShiftModule::setName(const String& name)	
 	{
 		module_name_ = name;
 	}
 
-	const String& ShiftModule::getName() const
-		throw()
+	const String& ShiftModule::getName() const	
 	{
 		return module_name_;
 	}
 
-	void ShiftModule::setParameters(Parameters& parameters)
-		throw()
+	void ShiftModule::setParameters(Parameters& parameters)	
 	{
 		parameters_ = &parameters;
 		valid_ = false;
 	}
 
-	const Parameters* ShiftModule::getParameters() const
-		throw()
+	const Parameters* ShiftModule::getParameters() const	
 	{
 		return parameters_;
 	}
 
-	bool ShiftModule::start()
-		throw()
+	bool ShiftModule::start()	
 	{
 		// abort if the module was not correctly initialized
 		return valid_;
 	}
 
-	bool ShiftModule::finish()
-		throw()
+	bool ShiftModule::finish()	
 	{
 		// abort if the module was not correctly initialized
 		return valid_;
 	}
 
-	bool ShiftModule::isValid() const
-		throw()
+	bool ShiftModule::isValid() const	
 	{
 		return valid_;
 	}

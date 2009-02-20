@@ -20,12 +20,10 @@ namespace BALL
 	}
 
 	SimpleExperiment1D::~SimpleExperiment1D()
-		throw()
 	{
 	}
 
 	bool SimpleExperiment1D::start()
-		throw()
 	{
 		// delete all old peaks
 		peak_list_.clear();
@@ -35,7 +33,6 @@ namespace BALL
 	}
 
 	Processor::Result SimpleExperiment1D::operator () (Composite& composite)
-		throw()
 	{
 		Atom* atom_ptr = dynamic_cast<Atom*>(&composite);
 		if ((atom_ptr != 0) && (expression_(*atom_ptr) == true))

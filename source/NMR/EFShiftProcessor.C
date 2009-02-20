@@ -16,13 +16,13 @@ namespace BALL
 	const char* EFShiftProcessor::PROPERTY__EF_SHIFT = "ElectricFieldShift";
 
 	EFShiftProcessor::EFShiftProcessor()
-		throw()
+		
 		:	ShiftModule()
 	{	
 	}
 
 	EFShiftProcessor::EFShiftProcessor(const EFShiftProcessor& processor)
-		throw()
+		
 		:	ShiftModule(processor),
 			bond_list_(processor.bond_list_),
 			effector_list_(processor.effector_list_),
@@ -37,12 +37,12 @@ namespace BALL
 	}
 	
 	EFShiftProcessor::~EFShiftProcessor()
-		throw()
+		
 	{
 	}
 
 	void EFShiftProcessor::init()
-		throw()
+		
 	{
 		// by default, we assume the worst...
 		valid_ = false;
@@ -140,7 +140,7 @@ namespace BALL
 	}
 		
 	bool EFShiftProcessor::start()
-		throw()
+		
 	{
 		// if the module is invalid, abort
 		if (!isValid())
@@ -156,7 +156,7 @@ namespace BALL
 	}
 
 	bool EFShiftProcessor::finish()
-		throw()
+		
 	{
 		// if the module is in an invalid state, abort
 		if (!isValid())
@@ -255,7 +255,7 @@ namespace BALL
 	}
 		
 	Processor::Result EFShiftProcessor::operator () (Composite& object)
-		throw()
+		
 	{
 		// Here, we collect all bonds
 		// and all charged atoms (as effectors of the electric field)

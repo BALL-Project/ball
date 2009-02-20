@@ -37,21 +37,21 @@ namespace BALL
 
 		/** Default constructor 
 		*/
-		PiecewisePolynomial() throw();
+		PiecewisePolynomial();
 
 		/** Copy constructor 
 		*/
-		PiecewisePolynomial(const PiecewisePolynomial& polynomial) throw();
+		PiecewisePolynomial(const PiecewisePolynomial& polynomial) ;
 
 		/** Detailed Constructor.
 				This constructor does <b>not</b> check sanity of the arguments 
 		 */
 		PiecewisePolynomial(Size degree, const std::vector<Interval>& intervals,
-				const std::vector<Coefficients>& coefficients) throw();
+				const std::vector<Coefficients>& coefficients) ;
 
 		/** Destructor 
 		*/
-		virtual ~PiecewisePolynomial() throw();
+		virtual ~PiecewisePolynomial();
 
 		//@}
 		/** @name Assignment 
@@ -60,12 +60,11 @@ namespace BALL
 
 		/** Assignment operator 
 		*/
-		PiecewisePolynomial& operator = (const PiecewisePolynomial& poly)
-			throw();
+		PiecewisePolynomial& operator = (const PiecewisePolynomial& poly);
 
 		/** Clear method 
 		*/
-		virtual void clear() throw();
+		virtual void clear();
 
 		//@}
 		/** @name Accessors
@@ -74,17 +73,16 @@ namespace BALL
 
 		/** Set the instance manually 
 		*/
-		void set(Size degree, const std::vector<Interval>& intervals,
-			const std::vector<Coefficients>& coeffs) throw();
+		void set(Size degree, const std::vector<Interval>& intervals, const std::vector<Coefficients>& coeffs);
 
 		/// set the degree of the polynomial
-		void setDegree(Size degree) throw();
+		void setDegree(Size degree);
 
 		/// get the degree of the polynomial
-		Size getDegree() const throw();
+		Size getDegree() const;
 
 		/// compute the value of the PiecewisePolynomial at a given x
-		virtual double operator () (double x) const throw();
+		virtual double operator () (double x) const;
 
 		//@}
 		/** @name Predicates 
@@ -93,7 +91,7 @@ namespace BALL
 
 		/** Equality operator 
 		*/
-		bool operator == (const PiecewisePolynomial& poly) const throw();
+		bool operator == (const PiecewisePolynomial& poly) const;
 
 		//@}
 		/** @name Debugging and Diagnostics 
@@ -102,8 +100,7 @@ namespace BALL
 
 		/** Dumps the whole content of the object 
 		*/
-		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const
-			throw();
+		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const;
 
 		//@}
 

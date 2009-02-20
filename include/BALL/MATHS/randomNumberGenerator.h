@@ -66,26 +66,21 @@ namespace BALL
 		public:
 
 			/// 
-			RandomNumberGenerator()
-				throw();
+			RandomNumberGenerator();
 
 			///
-			RandomNumberGenerator(const RandomNumberGenerator& rng)
-				throw();
+			RandomNumberGenerator(const RandomNumberGenerator& rng);
 
 			///
-			~RandomNumberGenerator()
-				throw();
+			~RandomNumberGenerator();
 
-			void setup(int ij = 1802, int kl = 9373)
-				throw();
+			void setup(int ij = 1802, int kl = 9373);
 
 			/**
 				This is the random number generator proposed by George Marsaglia in
 				Florida State University Report: FSU-SCRI-87-50
 			*/
-			double randomUniform()
-				throw();
+			double randomUniform();
 
 			/** Random number generator from
 				ALGORITHM 712, COLLECTED ALGORITHMS FROM ACM. THIS WORK PUBLISHED
@@ -97,22 +92,19 @@ namespace BALL
 				algorithm uses the ratio of uniforms method of A.J. Kinderman and
 				J.F. Monahan augmented with quadratic bounding curves.
 			*/
-			double randomGaussian(double mean, double stddev)
-				throw();
+			double randomGaussian(double mean, double stddev);
 
 			/** Generate a random integer in the interval [lower, upper]
 			*/
-			int randomInteger(int lower, int upper)
-				throw();
+			int randomInteger(int lower, int upper);
 
 			/** Generate a random double in the interval (lower, upper)
 			*/
-			double randomDouble(double lower, double upper)
-				throw();
+			double randomDouble(double lower, double upper);
 
 			///
 			bool isValid()
-				throw()
+				
 			{
 				return(valid_);
 			}

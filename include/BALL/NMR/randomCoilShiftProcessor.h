@@ -40,18 +40,15 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		RandomCoilShiftProcessor() 
-			throw();
+		RandomCoilShiftProcessor();
 		
 		/**	Copy constructor.
 		*/
-		RandomCoilShiftProcessor(const RandomCoilShiftProcessor& processor) 
-			throw();
+		RandomCoilShiftProcessor(const RandomCoilShiftProcessor& processor);
 		
 		/**	Destructor
 		*/
-		virtual ~RandomCoilShiftProcessor() 
-			throw();
+		virtual ~RandomCoilShiftProcessor();
 		
 		//@}
 		/**	@name Accessors
@@ -64,8 +61,7 @@ namespace BALL
 				If it terminates correctly, the module is valid.
 				@see isValid
 		*/
-		virtual void init()
-			throw();
+		virtual void init();
 
 		//@}
 		/** @name	Processor specific functions.
@@ -81,7 +77,7 @@ namespace BALL
 				If this entry is not found the random coil shift is set to 1000 and added as well to the
 				Hydrogens chemical shift, to mark that Hydrogen not to have a random coil shift table entry.
 		*/
-		virtual Processor::Result operator () (Composite& composite) throw();
+		virtual Processor::Result operator () (Composite& composite);
 
 		//@}
 
@@ -89,7 +85,7 @@ namespace BALL
 
 		/*_	The hash map containing the atom names and the random coil shifts.
 		*/
-		StringHashMap<float>		shift_map_;
+		StringHashMap<float>	shift_map_;
 	};
   
 } // namespace BALL

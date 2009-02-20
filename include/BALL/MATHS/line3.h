@@ -33,11 +33,11 @@ namespace BALL
 	//@{
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TLine3<T>& line)
-		throw();
+		;
 
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TLine3<T>& line)
-		throw();
+		;
 	//@}
 	
 	/**	Generic Line in Three-Dimensional Space.
@@ -71,7 +71,7 @@ namespace BALL
 		/**	Default constructor
 		*/
 		TLine3()
-			throw()
+			
 			:	p(),
 				d()
 		{
@@ -82,7 +82,7 @@ namespace BALL
 				@param bool ignored - just for interface consistency
 		*/	
 		TLine3(const TLine3& line)
-			throw()
+			
 			:	p(line.p),
 				d(line.d)
 		{
@@ -100,7 +100,7 @@ namespace BALL
 								<tt>1</tt> two Points
 		*/
 		TLine3(const TVector3<T>& point, const TVector3<T>& vector, Form form = FORM__PARAMETER)
-			throw()
+			
 			:	p(point),
 				d((form == FORM__PARAMETER) 
 					? vector 
@@ -113,7 +113,7 @@ namespace BALL
 				data structures, nothing happens.
 		*/
 		virtual ~TLine3()
-			throw()
+			
 		{
 		}
 
@@ -121,7 +121,7 @@ namespace BALL
 				The values are set to 0.
 		*/
 		virtual void clear() 
-			throw()
+			
 		{
 			p.clear();
 			d.clear();
@@ -137,7 +137,7 @@ namespace BALL
 				@param	line the TLine3 to swap contents with
 		*/
 		void swap(TLine3& line)
-			throw()
+			
 		{
 			TVector3<T> temp_point(p);
 			p = line.p;
@@ -152,7 +152,7 @@ namespace BALL
 				@param line	the TLine3 object to assign from
 		*/
 		void set(const TLine3& line)
-			throw()
+			
 		{
 			p = line.p;
 			d = line.d;
@@ -165,7 +165,7 @@ namespace BALL
 				@param	form assigns form of parameter
 		*/
 		void set(const TVector3<T>& point, const TVector3<T>& vector, Form form = FORM__PARAMETER)
-			throw()
+			
 		{
 			p = point;
 			if (form == FORM__PARAMETER) 
@@ -183,7 +183,7 @@ namespace BALL
 				@param line the vector to assign from
 		**/
 		TLine3& operator = (const TLine3& line)
-			throw()
+			
 		{
 			p = line.p;
 			d = line.d;
@@ -195,7 +195,7 @@ namespace BALL
 				Assigns the vector components to another vector.
 				@param line	the line to be assigned to
 		*/
-		void get(TLine3& line) const throw()
+		void get(TLine3& line) const 
 		{
 			line.p = p;
 			line.d = d;
@@ -210,7 +210,7 @@ namespace BALL
 								<tt>1</tt> two Points
 		*/
 		void get(TVector3<T>& point,TVector3<T>& vector, Form form = FORM__PARAMETER) const
-			throw()
+			
 		{
 			point = p;
 			if (form == FORM__PARAMETER) 
@@ -235,7 +235,7 @@ namespace BALL
 				@exception DivisionByZero if the length of the vector is 0
 		*/
 		void normalize()
-			throw()
+			
 		{
 			d.normalize();
 		}
@@ -249,7 +249,7 @@ namespace BALL
 				@return bool, <b>true</b> if both components are equal, <b>false</b> otherwise
 		*/
 		bool operator == (const TLine3& line) const
-			throw()
+			
 		{
 			return (p == line.p && d == line.d);
 		}
@@ -258,7 +258,7 @@ namespace BALL
 				@return bool, <b>true</b> if the two lines differ in at least one component, <b>false</b> otherwise
 		*/
 		bool operator != (const TLine3& line) const
-			throw()
+			
 		{
 			return (p != line.p || d != line.d);
 		}
@@ -267,7 +267,7 @@ namespace BALL
 				@return bool, <b>true</b> or <b>false</b>
 		*/
 		bool has(const TVector3<T>& point) const
-			throw()
+			
 		{
 			if (Maths::isNotZero(d.x))
 			{
@@ -309,7 +309,7 @@ namespace BALL
 				@return bool <b>true</b>
 		*/
 		bool isValid() const
-			throw()
+			
 		{
 			return true;
 		}
@@ -321,7 +321,7 @@ namespace BALL
 				@param   depth - the dumping depth
 		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw()
+			
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 
@@ -364,7 +364,7 @@ namespace BALL
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TLine3<T>& line)
-		throw()
+		
 	{
 		char c;
 		s >> c >> line.p >> line.d >> c;
@@ -380,7 +380,7 @@ namespace BALL
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TLine3<T>& line)
-		throw()
+		
 	{
 		s << '(' << line.p << ' ' << line.d << ')';
 		return s;

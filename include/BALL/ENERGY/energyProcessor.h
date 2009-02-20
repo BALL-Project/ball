@@ -41,15 +41,15 @@ namespace BALL
 
 		/** Default constructor 
 		*/
-		EnergyProcessor() throw();
+		EnergyProcessor();
 
 		/** Copy constructor 
 		*/
-		EnergyProcessor(const EnergyProcessor& proc) throw();
+		EnergyProcessor(const EnergyProcessor& proc);
 
 		/** Destructor 
 		*/
-		virtual ~EnergyProcessor() throw();
+		virtual ~EnergyProcessor();
 
 		//@}
 		/** @name Assignment 
@@ -58,11 +58,11 @@ namespace BALL
 
 		/** Assignment operator.
 		 */ 
-		const EnergyProcessor& operator = (const EnergyProcessor& proc) throw();
+		const EnergyProcessor& operator = (const EnergyProcessor& proc);
 
 		/** Clear method.
 		 */
-		virtual void clear() throw();
+		virtual void clear();
 
 		//@}
 		/** @name	Processor related methods
@@ -71,11 +71,11 @@ namespace BALL
 
 		/** Start-function. 
 		*/
-		virtual bool start() throw();
+		virtual bool start();
 
 		/** Operator-function. This function only stores the AtomContainer. 
 		*/
-		virtual Processor::Result operator () (AtomContainer& fragment) throw();
+		virtual Processor::Result operator () (AtomContainer& fragment);
 		
 		//@}
 		/** @name Accessors 
@@ -84,7 +84,7 @@ namespace BALL
 
 		/** Return the computed energy 
 		*/
-		double getEnergy() const throw();
+		double getEnergy() const;
 
 		//@}	
 		/** @name Predicates 
@@ -93,11 +93,11 @@ namespace BALL
 
 		/** Validity.
 		*/
-		bool isValid() const throw();
+		bool isValid() const;
 
 		/** Equality operator.
 		*/
-		bool operator == (const EnergyProcessor& proc) const throw();
+		bool operator == (const EnergyProcessor& proc) const;
 
 		//@}
 

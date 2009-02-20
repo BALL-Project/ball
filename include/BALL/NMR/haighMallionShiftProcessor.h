@@ -19,7 +19,7 @@
 #include <list>
 
 namespace BALL 
-{				
+{
 	/**	Shift assignment processor implementing Haigh Mallion theory. 
 		\ingroup ShiftModulesNMR	
 	*/
@@ -46,11 +46,11 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		HaighMallionShiftProcessor() throw();
+		HaighMallionShiftProcessor();
 		
 		/**	Destructor.
 		*/
-		virtual ~HaighMallionShiftProcessor() throw();
+		virtual ~HaighMallionShiftProcessor();
 		
 		//@}
 		/** @name	Processor specific functions.
@@ -76,13 +76,13 @@ namespace BALL
 				Distances are expressed in terms of the actual ring's diameter.
 				Triangle areas are expressed in terms of the actual ring's area.
 		*/
-		virtual bool finish() throw();
+		virtual bool finish();
 
 		/**	Application method
 				Works as a collector:	It stores the systems aromatic rings in 
 				a list called aromat_list_ and each proton in a list called proton_list_
 		*/
-		virtual Processor::Result operator () (Composite& atom) throw();
+		virtual Processor::Result operator () (Composite& atom);
 
 		//@}
 		/**	@name	Accessors
@@ -91,8 +91,7 @@ namespace BALL
 
 		/**	Initialization method.
 		*/
-		virtual void init()
-			throw();
+		virtual void init();
 
 		//@}
 		

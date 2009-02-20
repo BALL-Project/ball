@@ -10,16 +10,14 @@
 namespace BALL
 {
 
-	RandomNumberGenerator::RandomNumberGenerator()
-		throw()
-		:	valid_(false)
+	RandomNumberGenerator::RandomNumberGenerator()	
+	: valid_(false)
 	{
 		setup();
 	}
 
 	RandomNumberGenerator::RandomNumberGenerator(const RandomNumberGenerator&
 	rng)
-		throw()
 		:	u_(rng.u_),
 			c_(rng.c_),
 			cd_(rng.cd_),
@@ -31,12 +29,10 @@ namespace BALL
 	}
 
 	RandomNumberGenerator::~RandomNumberGenerator()
-		throw()
 	{
 	}
 
 	void RandomNumberGenerator::setup(int ij, int kl)
-		throw()
 	{
 		double s,t;
 		int ii,i,j,k,l,jj,m;
@@ -87,9 +83,7 @@ namespace BALL
 	}
 
 	double RandomNumberGenerator::randomUniform()
-		throw()
 	{
-
 		if (!isValid())
 		{
 			Log.warn() << "RandomNumberGenerator::randomUniform(): "
@@ -121,9 +115,7 @@ namespace BALL
 	}
 
 	double RandomNumberGenerator::randomGaussian(double mean, double stddev)
-		throw()
 	{
-
 		double q,u,v,x,y;
 
 		/*  
@@ -157,16 +149,13 @@ namespace BALL
 	}
 
 	int RandomNumberGenerator::randomInteger(int lower, int upper)
-		throw()
 	{
 		 return((int)(randomUniform() * (upper - lower + 1)) + lower);
 	}
 
-	double RandomNumberGenerator::randomDouble(double lower, double upper)
-		throw()
+	double RandomNumberGenerator::randomDouble(double lower, double upper)	
 	{
 		 return((upper - lower) * randomUniform() + lower);
 	}
-
 }
 

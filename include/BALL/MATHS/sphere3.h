@@ -46,7 +46,7 @@ namespace BALL
 				are initialized to <tt>(T)0</tt>.
 		*/
 		TSphere3()
-			throw()
+			
 			: p(),
 				radius(0)
 		{
@@ -57,7 +57,7 @@ namespace BALL
 				@param sphere the Sphere3 object to be copied
 		*/	
 		TSphere3(const TSphere3& sphere)
-			throw()
+			
 			: p(sphere.p),
 				radius(sphere.radius)
 		{
@@ -69,7 +69,7 @@ namespace BALL
 				@param	radius assigned to the radius
 		*/
 		TSphere3(const TVector3<T>& point, const T& radius)
-			throw()
+			
 			: p(point),
 				radius(radius)
 		{
@@ -79,14 +79,14 @@ namespace BALL
 				As there are no dynamic data structures, nothing happens.
 		*/
 		virtual ~TSphere3()
-			throw()
+			
 		{
 		}
 
 		/** Default initialisation
 		 */
 		virtual void clear()
-			throw()
+			
 		{
 			p.clear();
 			radius = (T) 0;
@@ -101,7 +101,7 @@ namespace BALL
 				@param	sphere the Sphere3 to swap contents with
 		*/
 		void swap(TSphere3& sphere)
-			throw()
+			
 		{
 			TVector3<T> temp_point(p);
 			p = sphere.p;
@@ -116,7 +116,7 @@ namespace BALL
 				@param sphere	the Sphere3 object to assign from
 		*/
 		void set(const TSphere3& sphere)
-			throw()
+			
 		{
 			p = sphere.p;
 			radius = sphere.radius;
@@ -128,7 +128,7 @@ namespace BALL
 
 		*/
 		void set(const TVector3<T>& point, const T& r)
-			throw()
+			
 		{
 			p = point;
 			radius = r;
@@ -139,7 +139,7 @@ namespace BALL
 				@param sphere the sphere to assign from
 		**/
 		TSphere3& operator = (const TSphere3& sphere)
-			throw()
+			
 		{
 			p = sphere.p;
 			radius = sphere.radius;
@@ -151,7 +151,7 @@ namespace BALL
 				@param sphere	the sphere to be assigned to
 		*/
 		void get(TSphere3& sphere) const
-			throw()
+			
 		{
 			sphere.p = p;
 			sphere.radius = radius;
@@ -162,7 +162,7 @@ namespace BALL
 				@param	r the radius component
 		*/
 		void get(TVector3<T>& point, T& r) const
-			throw()
+			
 		{
 			point = p;
 			r = radius;
@@ -177,7 +177,7 @@ namespace BALL
 				@return bool, <b>true</b> if all components are equal, <b>false</b> otherwise
 		*/
 		bool operator == (const TSphere3& sphere) const
-			throw()
+			
 		{
 			return (p == sphere.p && Maths::isEqual(radius, sphere.radius));
 		}
@@ -186,7 +186,7 @@ namespace BALL
 				@return bool, <b>true</b> if the two Sphere3 differ in at least one component, <b>false</b> otherwise
 		*/
 		bool operator != (const TSphere3& sphere) const
-			throw()
+			
 		{
 			return (p != sphere.p || Maths::isNotEqual(radius, sphere.radius));
 		}
@@ -198,7 +198,7 @@ namespace BALL
 				@return bool, <b>true</b> or <b>false</b>
 		*/
 		bool has(const TVector3<T>& point, bool on_surface = false) const
-			throw()
+			
 		{
 			if (on_surface)
 			{
@@ -214,7 +214,7 @@ namespace BALL
 				@return bool, <b>true</b> or <b>false</b>
 		*/
 		bool isEmpty() const
-			throw()
+			
 		{
 			return Maths::isZero(radius);
 		}
@@ -229,7 +229,7 @@ namespace BALL
 				@return bool <b>true</b>
 		*/
 		bool isValid() const
-			throw()
+			
 		{
 			return true;
 		}
@@ -241,7 +241,7 @@ namespace BALL
 				@param   depth - the dumping depth
 		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw()
+			
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 
@@ -285,7 +285,7 @@ namespace BALL
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TSphere3<T>& sphere)
-		throw()
+		
 	{
 		char c;
 		s >> c >> sphere.p >> sphere.radius >> c;
@@ -300,7 +300,7 @@ namespace BALL
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TSphere3<T>& sphere)
-		throw()
+		
 	{
 		s << '(' << sphere.p << ' ' << sphere.radius << ')';
 		return s;
