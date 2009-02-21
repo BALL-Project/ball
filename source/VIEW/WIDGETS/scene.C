@@ -835,6 +835,10 @@ namespace BALL
 		// picking routine ------
 		void Scene::selectObjects_()
 		{
+#ifdef ENABLE_RAYTRACING
+			Log.info() << "Scene::showInfos(): sorry, raytracing does not yet support picking!" << std::endl;
+			return;
+#endif
 			rb_->hide();
 
 			QPoint p0 = mapFromGlobal(QPoint(x_window_pick_pos_first_, y_window_pick_pos_first_));
@@ -2022,6 +2026,10 @@ namespace BALL
 
 		void Scene::showInfos()
 		{
+#ifdef ENABLE_RAYTRACING
+			Log.info() << "Scene::showInfos(): sorry, raytracing does not yet support picking!" << std::endl;
+			return;
+#endif
 			info_string_ = "";
 
 			if (getMainControl()->isBusy()) return;
@@ -2276,6 +2284,10 @@ namespace BALL
 
 		void Scene::pickingMode_()
 		{
+#ifdef ENABLE_RAYTRACING
+			Log.info() << "Scene::showInfos(): sorry, raytracing does not yet support picking!" << std::endl;
+			return;
+#endif
 			if (current_mode_ == PICKING__MODE) return;
 			
 			gl_renderer_->enterPickingMode();
