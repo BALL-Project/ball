@@ -413,6 +413,46 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\assignBondOrderConfigurationDialog.C"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\assignBondOrderResultsDialog.C"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\atomOverview.C"
 					>
 					<FileConfiguration
@@ -5862,6 +5902,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\BALL\VIEW\UIC\ui_assignBondOrderConfigurationDialog.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\BALL\VIEW\UIC\ui_assignBondOrderResultsDialog.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\BALL\VIEW\UIC\ui_atomOverview.h"
 				>
 			</File>
@@ -6027,6 +6075,14 @@
 							Name="VCCLCompilerTool"
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\GeneratedFiles\Release\moc_assignBondOrderConfigurationDialog.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\GeneratedFiles\Release\moc_assignBondOrderResultsDialog.cpp"
+					>
 				</File>
 				<File
 					RelativePath=".\GeneratedFiles\Release\moc_atomOverview.cpp"
@@ -6718,6 +6774,30 @@
 				>
 				<File
 					RelativePath=".\GeneratedFiles\Debug\moc_amberConfigurationDialog.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\GeneratedFiles\Debug\moc_assignBondOrderConfigurationDialog.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\GeneratedFiles\Debug\moc_assignBondOrderResultsDialog.cpp"
 					>
 					<FileConfiguration
 						Name="Release|Win32"

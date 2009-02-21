@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="libBALL"
 	ProjectGUID="{19709205-47E2-45A3-A266-3488F113508D}"
 	RootNamespace="libBALL"
@@ -30,16 +30,19 @@
 				Name="VCPreBuildEventTool"
 			/>
 			<Tool
+				Name="FlexGenerator"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
 				Name="BisonParser"
 			/>
 			<Tool
 				Name="SipGenerator"
 			/>
 			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="FlexGenerator"
+				Name="UicGenerator"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -70,7 +73,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/NODEFAULTLIB:libcmt"
-				AdditionalDependencies="qtmain.lib QtCore4.lib QtSql4.lib QtNetwork4.lib regex.lib oncrpc.lib gsl_mt.lib cblas_mt.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib WSock32.lib"
+				AdditionalDependencies="qtmain.lib QtCore4.lib QtSql4.lib QtNetwork4.lib QtXml4.lib regex.lib oncrpc.lib gsl_mt.lib cblas_mt.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib WSock32.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\Contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;"
 				GenerateDebugInformation="true"
@@ -109,16 +112,19 @@
 				Name="VCPreBuildEventTool"
 			/>
 			<Tool
+				Name="FlexGenerator"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
 				Name="BisonParser"
 			/>
 			<Tool
 				Name="SipGenerator"
 			/>
 			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="FlexGenerator"
+				Name="UicGenerator"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -150,7 +156,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/NODEFAULTLIB:libcmtd"
-				AdditionalDependencies="qtmaind.lib QtCored4.lib QtSqld4.lib regex.lib oncrpc.lib gsl_mtd.lib cblas_mtd.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib QtNetworkd4.lib WSock32.lib"
+				AdditionalDependencies="qtmaind.lib QtCored4.lib QtSqld4.lib QtXmld4.lib regex.lib oncrpc.lib gsl_mtd.lib cblas_mtd.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib QtNetworkd4.lib WSock32.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\Contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;"
@@ -1444,6 +1450,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\assignBondOrderProcessor.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\STRUCTURE\atomBijection.h"
 					>
 				</File>
@@ -1489,6 +1499,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\STRUCTURE\HBondProcessor.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\hybridisationProcessor.h"
 					>
 				</File>
 				<File
@@ -1725,6 +1739,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\SYSTEM\fileSystem.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\SYSTEM\mutex.h"
 					>
 				</File>
 				<File
@@ -6760,6 +6778,26 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\..\..\source\STRUCTURE\assignBondOrderProcessor.C"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath="..\..\..\source\STRUCTURE\atomBijection.C"
 					>
 					<FileConfiguration
@@ -7001,6 +7039,26 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\HBondProcessor.C"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\STRUCTURE\hybridisationProcessor.C"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -8189,6 +8247,26 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\SYSTEM\fileSystem.C"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\SYSTEM\mutex.C"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
