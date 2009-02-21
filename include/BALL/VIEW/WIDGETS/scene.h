@@ -37,7 +37,7 @@
 // This allows us to switch raytracing on and off. Later, we might add this flag
 // to config.h or remove it completely and always raytracing always.
 #undef ENABLE_RAYTRACING
-#define ENABLE_RAYTRACING
+//#define ENABLE_RAYTRACING
 			 
 #ifdef ENABLE_RAYTRACING 
 
