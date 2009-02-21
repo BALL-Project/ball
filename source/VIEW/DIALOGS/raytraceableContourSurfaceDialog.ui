@@ -15,9 +15,6 @@
   <property name="windowTitle" >
    <string>Ray-traced Contour Surface Options</string>
   </property>
-  <property name="windowIcon" >
-   <iconset/>
-  </property>
   <property name="toolTip" >
    <string comment="C" />
   </property>
