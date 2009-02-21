@@ -486,7 +486,7 @@ PredictionItem* MainWindow::createPrediction(InputDataItem* input, ModelItem* mo
 
  void MainWindow::about()
 {
-	String s = "Version 0.75\nbuild "+String(__DATE__);
+	String s = "Version 0.80\nbuild "+String(__DATE__);
 	QMessageBox::information(this, tr("About QSAR_GUI"), tr(s.c_str()),
 	QMessageBox::Ok);
 }
