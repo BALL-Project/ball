@@ -174,19 +174,25 @@ namespace BALL
 		void MaterialSettings::editAmbientColor()
 		{
 			QColor color = VIEW::chooseColor(ambient_color_label);
-			std::cout << "Ambient color is " << color.rgb() << std::endl;
+
+			if (update_directly_checkBox->isChecked())
+				apply();
 		}	
 		
 		void MaterialSettings::editSpecularityColor()
 		{
 			QColor color = VIEW::chooseColor(specularity_color_label);
-			std::cout << "Specularity color is " << color.rgb() << std::endl;
+
+			if (update_directly_checkBox->isChecked())
+				apply();
 		}
 		
 		void MaterialSettings::editReflectivenessColor()
 		{
 			QColor color = VIEW::chooseColor(reflectiveness_color_label);
-			std::cout << "Reflectiveness color is " << color.rgb() << std::endl;
+
+			if (update_directly_checkBox->isChecked())
+				apply();
 		}
 	
 		void MaterialSettings::rendererChanged()
