@@ -336,6 +336,8 @@ namespace BALL
 				{
 					root->remove(rt_data.top_group_handles[i]);
 				}
+
+				objects_.erase(&rep);
 			}
 		}
 
