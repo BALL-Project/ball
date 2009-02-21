@@ -19,7 +19,6 @@
 #include <BALL/VIEW/WIDGETS/fileObserver.h>
 #include <BALL/VIEW/WIDGETS/testFramework.h>
 #include <BALL/VIEW/DIALOGS/pubchemDialog.h>
-#include <BALL/VIEW/DIALOGS/pluginDialog.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -46,7 +45,11 @@
 #else
 # include "aboutDialog.h"
 #endif
+
+// NOTE: this does not yet work correctly on windows
+#ifndef BALL_COMPILER_MSVC
 #include <BALL/VIEW/DIALOGS/pluginDialog.h>
+#endif
 
 using namespace std;
 //#define BALL_VIEW_DEBUG
@@ -99,7 +102,9 @@ namespace BALL
 		new MolecularFileDialog(this, "MolecularFileDialog");
 		new DownloadPDBFile(		this, "DownloadPDBFile", false);
 		new PubChemDialog(this, "PubChemDialog");
+#ifndef BALL_COMPILER_MSVC
 		new PluginDialog(this, "PluginDialog");
+#endif
  		addDockWidget(Qt::LeftDockWidgetArea, new MolecularControl(this, "Structures"));
 		addDockWidget(Qt::LeftDockWidgetArea, new GeometricControl(this, "Representations"));
 		addDockWidget(Qt::TopDockWidgetArea,  new DatasetControl(this, "Datasets"));
