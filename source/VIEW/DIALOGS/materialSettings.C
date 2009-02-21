@@ -71,12 +71,13 @@ namespace BALL
 					// ((float)diffuse_factor_slider->value())   / 100.0);
 					stage.setAmbientIntensity( ambient_factor_label->text().toFloat());
 					//	((float)ambient_factor_slider->value())   / 100.0);
-					stage.setShininess(	 shininess_factor_label->text().toFloat());
+					stage.setShininess(shininess_factor_label->text().toFloat());
 					//				(float)shininess_factor_slider->value());
 				}
 				if (radioButton_OpenGL->isChecked()) // TODO is this correct? names indicate but who knows??
 				{
-					glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, stage.getShininess());
+					// shininess uses a logarithmic scale
+					glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 2*log(stage.getShininess()+1.1));
 					GLfloat values[4];
 					values[0] = values[1] = values[2] =  stage.getSpecularIntensity();
 					values[3] = 1.0;
@@ -96,7 +97,8 @@ namespace BALL
 					rt_material.specular_intensity   = specularity_factor_label->text().toFloat();
 					rt_material.reflective_intensity = reflectiveness_factor_label->text().toFloat();
 
-					rt_material.shininess          = shininess_factor_label->text().toFloat();
+					// shininess uses a logarithmic scale
+					rt_material.shininess          = 2*log(shininess_factor_label->text().toFloat()+1.1);
 
 					if (objectName() == "MaterialSettingsForRepresentation")
 					{
@@ -123,7 +125,6 @@ namespace BALL
 			setValues_(*ambient_factor_slider, *ambient_factor_label, 100);
 			if (update_directly_checkBox->isChecked())
 				apply();
-
 		}
 
 		void MaterialSettings::specularityFactorChanged()
