@@ -56,7 +56,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="qtmain.lib QtCore4.lib QtGui4.lib QtXml4.lib QtSql4.lib QtOpenGL4.lib glu32.lib QtNetwork4.lib QtSvg4.lib QtTest4.lib libBALL.lib glew32.lib opengl32.lib RTfactRemote.lib"
+				AdditionalDependencies="qtmain.lib QtCore4.lib QtGui4.lib QtXml4.lib QtSql4.lib QtOpenGL4.lib glu32.lib QtNetwork4.lib QtSvg4.lib QtTest4.lib libBALL.lib glew32.lib opengl32.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;;&quot;$(OutDir)&quot;;$(LIB);$(RTREMOTE_RELEASE)"
 				GenerateDebugInformation="true"
@@ -127,7 +127,7 @@
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
 				AdditionalOptions="/fixed:no"
-				AdditionalDependencies="qtmaind.lib QtCored4.lib QtGuid4.lib QtXmld4.lib QtSqld4.lib QtOpenGLd4.lib opengl32.lib glu32.lib QtNetworkd4.lib QtSvgd4.lib libBALL.lib glew32d.lib QtTestd4.lib RTfactRemote.lib"
+				AdditionalDependencies="qtmaind.lib QtCored4.lib QtGuid4.lib QtXmld4.lib QtSqld4.lib QtOpenGLd4.lib opengl32.lib glu32.lib QtNetworkd4.lib QtSvgd4.lib libBALL.lib glew32d.lib QtTestd4.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;;&quot;$(OutDir)&quot;;$(LIB);$(RTREMOTE_DEBUG)"
@@ -2376,6 +2376,7 @@
 						>
 						<FileConfiguration
 							Name="Release|Win32"
+							ExcludedFromBuild="true"
 							>
 							<Tool
 								Name="VCCLCompilerTool"
@@ -2385,6 +2386,7 @@
 						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
+							ExcludedFromBuild="true"
 							>
 							<Tool
 								Name="VCCLCompilerTool"
