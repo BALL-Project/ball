@@ -3,7 +3,6 @@
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QLineEdit>
-#include <QtGui/QTableWidget>
 #include <QtGui/QHeaderView>
 
 using namespace BALL::VIEW;
@@ -446,6 +445,26 @@ ConnectionsPage::ConnectionsPage(ModelConfigurationDialog* parent)
 	setLayout(mainLayout);	
 }
 
+
+// SLOT
+void DataPage::updateDescriptorExplanation()
+{
+	//descriptor_explanation_->setText(table_->currentItem()->text());
+	const String* expl = main_window_->getDescriptorExplanation(table_->currentItem()->text().toStdString());
+	
+	if(expl!=0)
+	{
+		descriptor_explanation_->setText(expl->c_str());
+		descriptor_explanation_->setMaximumHeight(50);
+	}
+	else 
+	{
+		descriptor_explanation_->setText("");
+		descriptor_explanation_->setMaximumHeight(0);
+	}
+}
+
+
 DataPage::DataPage(ModelConfigurationDialog* parent)
 {
 	///return if there's no parent
@@ -453,6 +472,8 @@ DataPage::DataPage(ModelConfigurationDialog* parent)
 	{
 		return;
 	}
+	main_window_ = parent->parent;
+	
 	QVBoxLayout* mainLayout = new QVBoxLayout();
 	QVBoxLayout* resultGroupLayout = new QVBoxLayout();
 
@@ -464,28 +485,34 @@ DataPage::DataPage(ModelConfigurationDialog* parent)
 	QStringList labels;
 	labels << "Descriptor name";
 
-	QTableWidget* table = new QTableWidget(descriptor_names_->size(), 1, this);	
-	table->verticalHeader()->hide();
-	table->setHorizontalHeaderLabels (labels);
-	table->setAlternatingRowColors(true);
-	table->setDragDropMode(QAbstractItemView::NoDragDrop);
-	table->setEditTriggers(QAbstractItemView::NoEditTriggers);	
-	table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+	table_ = new QTableWidget(descriptor_names_->size(), 1, this);	
+	table_->verticalHeader()->hide();
+	table_->setHorizontalHeaderLabels (labels);
+	table_->setAlternatingRowColors(true);
+	table_->setDragDropMode(QAbstractItemView::NoDragDrop);
+	table_->setEditTriggers(QAbstractItemView::NoEditTriggers);	
+	table_->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 
 	for (unsigned int i=0; i< descriptor_names_->size(); i++)
 	{
 		QTableWidgetItem* name = new QTableWidgetItem(QString(descriptor_names_->at(i).c_str()));
-		table->setItem(i, 0, name);	
+		table_->setItem(i, 0, name);	
 	}
 
 	QScrollArea* scrollArea = new QScrollArea(this);
-	scrollArea->setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
-	scrollArea->setVerticalScrollBarPolicy ( Qt::ScrollBarAsNeeded );
+	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	scrollArea->setFrameShape(QFrame::NoFrame);
-	scrollArea->setWidget(table);
+	scrollArea->setWidget(table_);
 	scrollArea->setWidgetResizable(true);
+	
+	descriptor_explanation_ = new QTextEdit(this);
+	descriptor_explanation_->setReadOnly(1);
+	descriptor_explanation_->setMaximumHeight(0);
+	connect(table_,SIGNAL(currentCellChanged(int,int,int,int)),this,SLOT(updateDescriptorExplanation()));
 
 	resultGroupLayout->addWidget(scrollArea);
+	resultGroupLayout->addWidget(descriptor_explanation_);
 	resultGroup->setLayout(resultGroupLayout);
 
 	QString tmp;
@@ -502,7 +529,6 @@ DataPage::DataPage(ModelConfigurationDialog* parent)
 	
 	mainLayout->addWidget(num_of_descriptors);
 	mainLayout->addWidget(resultGroup);
-	mainLayout->addStretch(1);
 	setLayout(mainLayout);	
 }
 

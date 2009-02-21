@@ -7,9 +7,12 @@
 #include <QtGui/QCheckBox>
 #include <QtGui/QComboBox>
 #include <QtGui/QGroupBox>
+#include <QtGui/QTextEdit>
+#include <QtGui/QTableWidget>
 
 #include <BALL/APPLICATIONS/QSAR_GUI/modelConfigurationDialog.h>
 #include <BALL/APPLICATIONS/QSAR_GUI/connectionManager.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/mainWindow.h>
 #include <BALL/QSAR/sortedList.h>
 
 
@@ -133,19 +136,29 @@ namespace BALL
 		};
 
 		
-		/** @class ConnectionsPage
+		/** @class DataPage
 		* @brief a dialog page
 		*
 		* @todo
 		*/
 		class DataPage : public QWidget
 		{
+			Q_OBJECT
+			
 			public:
 				DataPage(ModelConfigurationDialog* parent);
 			
 			private:
 				const vector<string>* descriptor_names_;
 				BALL::QSAR::SortedList<unsigned int>* descriptor_ids_;
+				
+				QTableWidget* table_;
+				QTextEdit* descriptor_explanation_;
+				MainWindow* main_window_;
+				
+			private slots:
+				void updateDescriptorExplanation();
+				
 		};
 	}
 }

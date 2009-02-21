@@ -85,6 +85,7 @@ void MainWindow::init()
 	settings.email_address="";
 	settings.tmp_folder="";
 	settings.path_separator = BALL::FileSystem::PATH_SEPARATOR;
+	settings.descriptor_explanation_files.push_back("dragon_descriptors.txt");
 	settings.readFromFile(s);
 	
 	if(executable_directory_!="")
@@ -124,6 +125,7 @@ void MainWindow::init()
 		data_directory_ = "QSAR"+settings.path_separator;
 	}
 	
+	read_descriptor_explanations_=0;
 	documentation_= 0;
 	showDocumentation();
 }
@@ -1718,3 +1720,50 @@ BALL::String BALL::VIEW::valueToString(double value)
 	}
 	return t;
 }
+
+
+void MainWindow::readDescriptorExplanations()
+{
+	Path p;
+	
+	for(list<String>::iterator it = settings.descriptor_explanation_files.begin();
+		it!=settings.descriptor_explanation_files.end(); it++)
+	{
+		String filename = data_directory_+settings.path_separator+*it;
+		String abs_filename = p.find(filename);
+		if(abs_filename=="") abs_filename=filename;
+	
+		ifstream in(abs_filename.c_str());
+		if(!in)
+		{
+			cout<<"Error: feature-description file '"<<abs_filename<<"' not found!"<<endl;
+			return;
+		}
+		string name;
+		string explanation;
+		while(in)
+		{
+			String line; 
+			getline(in,line);
+			if(line==""||line=="\n") break;
+			
+			name = line.before("\t");
+			explanation = line.after("\t");
+			descriptor_explanations_.insert(make_pair(name,explanation));
+		}
+	}
+	
+	read_descriptor_explanations_ = 1;
+}
+
+
+const BALL::String* MainWindow::getDescriptorExplanation(String descriptor_name)
+{
+	if(!read_descriptor_explanations_) readDescriptorExplanations();
+	
+	map<String,String>::iterator it = descriptor_explanations_.find(descriptor_name);
+	
+	if(it!=descriptor_explanations_.end()) return &it->second;
+	else return NULL;
+}
+

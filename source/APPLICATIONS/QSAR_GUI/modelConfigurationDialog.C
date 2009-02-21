@@ -26,8 +26,6 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, InputDa
 	param1_is_set_(false),
 	param2_is_set_(false)
 {
-	setMaximumWidth(370);
-	
 	entry_ = model_item_->getRegistryEntry();
 	entryHasKernel = entry_->kernel;
 	entryHasParameters = entry_->parameterNames.size() > 0;
@@ -44,7 +42,6 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, InputDa
 
 	QVBoxLayout *mainLayout = new QVBoxLayout;
 
-	mainLayout->addStretch(1);
 	mainLayout->addSpacing(12);
 
 	contentsWidget = new QListWidget(this);
@@ -92,8 +89,9 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, InputDa
 	std::string ab_name = entry_->name_abreviation;
 	std::string name = entry_->name;
 	this->setWindowTitle("Model Properties: " + QString(name.c_str()) + " (" + QString(ab_name.c_str()) + ") ");
-	
+
 }
+
 
 ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, MainWindow* parent):
 	parent(parent),
@@ -103,8 +101,6 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, MainWin
 	param1_is_set_(false),
 	param2_is_set_(false)
 {
-	setMaximumWidth(370);
-	
 	entry_ = model_item_->getRegistryEntry();
 	entryHasKernel = entry_->kernel;
 	entryHasParameters = entry_->parameterNames.size() > 0;
@@ -117,8 +113,7 @@ ModelConfigurationDialog::ModelConfigurationDialog(ModelItem* modelitem, MainWin
 	connect(buttons_, SIGNAL(accepted()), this, SLOT(accept()));
 	
 	QVBoxLayout *mainLayout = new QVBoxLayout();
-	mainLayout->addStretch(1);
-	mainLayout->addSpacing(12);
+//	mainLayout->addSpacing(12);
 
 	contentsWidget = new QListWidget(this);
 	contentsWidget->setViewMode(QListView::IconMode);

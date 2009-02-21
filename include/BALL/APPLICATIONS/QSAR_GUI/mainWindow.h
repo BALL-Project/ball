@@ -129,6 +129,9 @@ namespace BALL
 				Pipeline<InputPartitionItem*> partition_pipeline_;
 				
 				Pipeline<DataItem*> all_items_pipeline_;
+				
+				const String* getDescriptorExplanation(String descriptor_name);
+				
 
 			signals:
 				void sendNewValue(int);
@@ -195,6 +198,9 @@ namespace BALL
 					By default BALL::FileSystem::PATH_SEPARATOR is used */
 					String path_separator;
 					
+					/** names of files containing explanations for descriptors */
+					list<String> descriptor_explanation_files;
+					
 					MainWindow* main_window;
 					
 					void saveToFile(String file);
@@ -227,6 +233,8 @@ namespace BALL
 				/** exports the current Pipeline to file(s).
 				@param no_immediate_archiving if true, the pipeline is saved as several files even if tar.gz archive was chosen. All created files will later be archived _after_ all calculation on the cluster for this pipeline are ready. */
 				String exportPipeline(bool no_immediate_archiving);
+				
+				void readDescriptorExplanations();
 			
 				/** @name Private Attributes */
 
@@ -239,6 +247,9 @@ namespace BALL
 				DataItemScene model_list_scene_;
 				DataItemScene fs_list_scene_;
 				DataItemScene val_list_scene_;
+				
+				map<String,String> descriptor_explanations_;
+				bool read_descriptor_explanations_;
 				
 				/** List of all dock-widget of the mainWindow. It is used for switching to/from fullscreen mode by hiding all dockwidgets */
 				list<QDockWidget*> dockwidgets_;
