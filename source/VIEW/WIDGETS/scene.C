@@ -1324,10 +1324,12 @@ namespace BALL
 
 				Vector3 dir = light.getDirection();
 				Vector3 pos = light.getPosition();
+				Vector3 att = light.getAttenuation();
 
 				data = vector3ToString(pos);
 				inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Position",  vector3ToString(pos));
 				inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Direction", vector3ToString(dir));
+				inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Attenuation", vector3ToString(att));
 
 				data = String(light.getAngle().toRadian());
 				inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Angle", data);
@@ -1364,7 +1366,7 @@ namespace BALL
 					while(inifile.hasEntry("LIGHTING", "Light_" + String(nr) + "_Position"))
 					{
 						LightSource light;
-						Vector3 pos, dir;
+						Vector3 pos, dir, att;
 
 						String data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Relative");
 						light.setRelativeToCamera(data.toUnsignedInt());
@@ -1375,8 +1377,12 @@ namespace BALL
 						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Direction");
 						stringToVector3(data, dir);
 
+						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Attenuation");
+						stringToVector3(data, att);
+
 						light.setPosition(pos);
 						light.setDirection(dir);
+						light.setAttenuation(att);
 
 						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Angle");
 						light.setAngle(Angle(data.toFloat()));
