@@ -289,11 +289,17 @@ namespace BALL
 
 						GeoHandle handle_2 = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)tube_template_.triangle.size(), material_2);
 
-						TwoColoredTube new_tube_1 = old_tube;
-						TwoColoredTube new_tube_2 = old_tube;
+						// NOTE: Just copying tube would be highly dangerous; vertex2 can store pointers
+						//       to the vertices instead of using its own, and these are copied as well!
+						TwoColoredTube new_tube_1, new_tube_2;
 
+						new_tube_1.setVertex1(old_tube.getVertex1());
 						new_tube_1.setVertex2(old_tube.getMiddleVertex());
+						new_tube_1.setRadius(old_tube.getRadius());
+
 						new_tube_2.setVertex1(old_tube.getMiddleVertex());
+						new_tube_2.setVertex2(old_tube.getVertex2());
+						new_tube_2.setRadius(old_tube.getRadius());
 
 						GroupHandle all_group = m_renderer.createGroup(Transform::identity());
 
