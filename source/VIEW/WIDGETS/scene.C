@@ -1479,7 +1479,7 @@ namespace BALL
 			setMenuHelp("tips.html#3D");
 
 			active_stereo_action_ = insertMenuEntry (
- 					MainControl::DISPLAY_STEREO, "Shuttter Glasses", this, SLOT(enterActiveStereo()));
+ 					MainControl::DISPLAY_STEREO, "Shutter Glasses", this, SLOT(enterActiveStereo()));
 			setMenuHelp("tips.html#3D");
 			active_stereo_action_->setCheckable(true);
 

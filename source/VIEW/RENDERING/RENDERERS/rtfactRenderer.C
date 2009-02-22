@@ -159,9 +159,6 @@ namespace BALL
 
 		void RTfactRenderer::bufferRepresentation(const Representation& rep)
 		{
-			// TODO: delete of already present representations!
-			std::cout << "RTfactRenderer: buffering Representation!" << std::endl;
-
 			if (objects_.find(&rep) != objects_.end())
 			{
 				// TODO: handle the update more gracefully!
