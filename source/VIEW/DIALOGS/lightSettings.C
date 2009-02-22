@@ -368,6 +368,7 @@ void LightSettings::apply()
 	throw()
 {
 	saveSettingsToLight_();
+
 	stage_->clearLightSources();
 	for (Position p = 0; p < lights_.size(); p++)
 	{

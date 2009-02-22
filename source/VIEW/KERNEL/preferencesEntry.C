@@ -262,7 +262,6 @@ namespace BALL
 				}
 			}
 		}
-
 		
 		bool PreferencesEntry::setValue_(QWidget* widget, const String& value)
 		{
