@@ -657,6 +657,9 @@ namespace BALL
 				throw();
 
 			///
+			void addGlWindow();
+
+			///
 			void exitStereo()
 				throw();
 
