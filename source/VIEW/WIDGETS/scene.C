@@ -594,13 +594,15 @@ namespace BALL
 					font.setPixelSize(16);
 					font.setBold(true);
 					QFontMetrics fm(font);
+
 					QRect r = fm.boundingRect(fps_string.c_str());
 
 					QPoint fps_point(current_window->width() - 20 - r.width(), 20);
-					current_window->setRenderText(fps_point, fps_string.c_str(), text_color);
+					current_window->renderText(fps_point.x(), fps_point.y(), fps_string.c_str(), text_color);
 				}
 
-				current_window->setRenderText(info_point_, info_string_, text_color);
+				if (info_string_ != "")
+					current_window->renderText(info_point_.x(), info_point_.y(), info_string_, text_color);
 
 				current_window->swapBuffers();
 			}
@@ -3007,9 +3009,13 @@ return;
 
 		void Scene::showText(const String& text, Size font_size) 
 		{ 
-			text_ = text; 
+			// TODO: reactivate!
+			/*
+			info_text_ = text; 
 			font_size_= font_size;
+
 			updateGL(); // TODO: update() or updateGL()???
+			*/
 		}
 
 		void Scene::addToolBarEntries(QToolBar* tb)

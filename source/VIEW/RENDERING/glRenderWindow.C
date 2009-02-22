@@ -149,19 +149,6 @@ namespace BALL
 			glTexCoord2f(0.0f, 1.0f);
 			glVertex2f(-aspectRatio, 1.0f);
 
-			if (info_text_ != "")
-			{
-				// TODO: this does not seem to work yet!
-				QFont font;
-				font.setPixelSize(16);
-				font.setBold(true);
-				glDisable(GL_LIGHTING);
-				//glColor4ub(info_color_.getRed(), info_color_.getGreen(), info_color_.getBlue(), info_color_.getAlpha());
-				glColor4ub(1, 0, 0, 1);
-				renderText(info_point_.x(), info_point_.y(), info_text_.c_str(), font);
-				glEnable(GL_LIGHTING);
-			}
-
 			glEnd();
 			glPopAttrib();
 
@@ -170,6 +157,38 @@ namespace BALL
 
 			glPopAttrib();
 			glPopAttrib();
+		}
+
+		void GLRenderWindow::renderText(int x, int y, const String& text, const ColorRGBA& color, Size size)
+		{
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+
+			glViewport(0, 0, m_fmt.getWidth(), m_fmt.getHeight());
+
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
+
+			QFont font;
+			font.setPixelSize(size);
+			font.setBold(true);
+
+			glDisable(GL_LIGHTING);
+			glColor4ub(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+			QGLWidget::renderText(x, y, text.c_str(), font);
+			glEnable(GL_LIGHTING);
+		}
+
+		void GLRenderWindow::renderText(float x, float y, float z, const String& text, const ColorRGBA& color, Size size)
+		{
+			QFont font;
+			font.setPixelSize(size);
+			font.setBold(true);
+
+			glDisable(GL_LIGHTING);
+			glColor4ub(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+			QGLWidget::renderText(x, y, z, text.c_str(), font);
+			glEnable(GL_LIGHTING);
 		}
 
 		void GLRenderWindow::createTexture(const unsigned int width, const unsigned int height)

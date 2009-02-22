@@ -47,12 +47,10 @@ namespace BALL
 			virtual bool resize(const unsigned int width, const unsigned int height);
 			virtual void refresh();			
 
-			void setRenderText(const QPoint& position, const String& text, const ColorRGBA& color)
-			{
-				info_point_ = position;
-				info_text_  = text;
-				info_color_ = color;
-			}
+			// render the given text in the given color and size at window coordinates (x, y)
+			virtual void renderText(int x, int y, const String& text, const ColorRGBA& color, Size size = 16);
+			// render the given text in the given color and size at world coordinates (x, y, z)
+			virtual void renderText(float x, float y, float z, const String& text, const ColorRGBA& color, Size size = 16);
 
 		protected:	
 			static QGLFormat gl_format_;
@@ -75,11 +73,6 @@ namespace BALL
 
 			bool errorInGL(GLenum& error);
 			String getGLErrorString(GLenum error);
-
-			// position and text of possible information texts like fps
-			QPoint 	  info_point_;
-			String 	  info_text_;
-			ColorRGBA info_color_;
 		};
 
 	} // namespace VIEW
