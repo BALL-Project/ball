@@ -1378,7 +1378,11 @@ namespace BALL
 						stringToVector3(data, dir);
 
 						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Attenuation");
-						stringToVector3(data, att);
+						// old ini files may not contain the attenuation. Try to be compatible
+						if (data == INIFile::UNDEFINED)
+							att = Vector3(1, 0, 0);
+						else
+							stringToVector3(data, att);
 
 						light.setPosition(pos);
 						light.setDirection(dir);
