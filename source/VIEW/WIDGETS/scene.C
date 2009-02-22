@@ -1434,6 +1434,7 @@ namespace BALL
 			create_coordinate_system_->addAction("at origin", this, SLOT(createCoordinateSystemAtOrigin()));
 			create_coordinate_system_->addAction("here", this, SLOT(createCoordinateSystem()));
 			
+			insertMenuEntry(MainControl::DISPLAY, "Add new GL Window", this, SLOT(addGlWindow()));
 			// ======================== ANIMATION ===============================================
 			String help_url = "tips.html#animations";
 
@@ -2685,6 +2686,26 @@ namespace BALL
 			getMainControl()->setCentralWidget(this);
 			getMainControl()->restoreState(last_state_);
 			updateGL(); // TODO: update() or updateGL()???
+		}
+
+		void Scene::addGlWindow()
+		{
+			GLRenderWindow* new_widget = new GLRenderWindow(0, "Scene", Qt::Window);
+			new_widget->makeCurrent();
+			new_widget->init();
+			new_widget->resize(width(), height());
+
+			GLRenderer*   new_renderer = new GLRenderer;
+			new_renderer->init(*this);
+			new_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
+
+			new_widget->show();
+
+			RenderSetup new_rs(new_renderer, new_widget);
+
+			resetRepresentationsForRenderer_(new_rs);
+
+			renderers_.push_back(new_rs);
 		}
 
 		void Scene::enterActiveStereo()
