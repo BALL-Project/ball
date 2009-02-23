@@ -70,7 +70,8 @@ SOURCES       = dataItem.C\
 		bayesPlotter\
 		featurePlotter.C\
 		componentPlotter.C\
-		moc_componentPlotter.C
+		moc_componentPlotter.C\
+		moc_featurePlotter.C
 # 		connectionsList.C\
 # 		moc_connectionsList.C
 	
@@ -132,7 +133,8 @@ OBJECTS       = dataItem.o \
 		bayesPlotter.o\
 		featurePlotter.o\
 		componentPlotter.o\
-		moc_componentPlotter.o
+		moc_componentPlotter.o\
+		moc_featurePlotter.o
 # 		connectionsList.o\
 # 		moc_connectionsList.o
 

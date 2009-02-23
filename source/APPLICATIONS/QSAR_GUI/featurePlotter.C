@@ -1,4 +1,5 @@
 #include <BALL/APPLICATIONS/QSAR_GUI/featurePlotter.h>
+#include <BALL/APPLICATIONS/QSAR_GUI/mainWindow.h>
 #include <qwt_plot_curve.h>
 #include <qwt_plot_marker.h>
 #include <qwt_plot_zoomer.h>
@@ -13,10 +14,23 @@ FeaturePlotter::FeaturePlotter(ModelItem* model_item)
 	: Plotter(model_item)
 {
 	model_item_ = model_item;
+	feature_combobox_ = new QComboBox(this);
+	buttonsLayout_->addWidget(feature_combobox_);
+	connect(feature_combobox_,SIGNAL(currentIndexChanged(int)),this,SLOT(selectedFeatureChanged()));
+	
 	plot(1);
 	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
 }
 
+
+// SLOT
+void FeaturePlotter::selectedFeatureChanged()
+{
+	delete zoomer_;
+	zoomer_ = NULL;
+	plot(1);
+	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this); // if not creating a new zoomer, zooming will not work correctly
+}
 
 
 void FeaturePlotter::plot(bool zoom)
@@ -62,6 +76,16 @@ void FeaturePlotter::plot(bool zoom)
 	const uint no_compounds = descriptor_matrix->Nrows();
 	const uint no_features = descriptor_matrix->Ncols();
 	
+	if(feature_combobox_->count()==0) // if combobox has not yet been set up
+	{
+		feature_combobox_->addItem("All features",0);
+		for(uint i=0;i<no_features;i++)
+		{
+			feature_combobox_->addItem((*feature_names)[i].c_str(),i+1);
+		}	
+		feature_combobox_->setCurrentIndex(0);
+	}
+	
 	// sort ascendingly according to activity value
 	vector<SortedList<pair<double,double> > > values(no_features);
 	for(uint i=1; i<=no_features; i++)
@@ -72,7 +96,17 @@ void FeaturePlotter::plot(bool zoom)
 		}
 	}	
 	
-	for(uint i=1; i<=no_features; i++)
+	uint first_feature=1;
+	uint last_feature=no_features;
+	bool one_feature=0;
+	if(feature_combobox_->currentIndex()>0)
+	{
+		first_feature = feature_combobox_->currentIndex();
+		last_feature = feature_combobox_->currentIndex();
+		one_feature=1;
+	}
+	
+	for(uint i=first_feature; i<=last_feature; i++)
 	{
 		values[i-1].front();
 		QwtPlotCurve* curve_i = new QwtPlotCurve;
@@ -88,6 +122,14 @@ void FeaturePlotter::plot(bool zoom)
 			double y_j = p.second;
 			x[j-1] = x_ji;
 			y[j-1] = y_j;	// TODO: enable more than 1 resp. variable
+			
+			if(one_feature)
+			{
+				QwtPlotMarker* marker= new QwtPlotMarker;
+				marker->setSymbol(data_symbol);
+				marker->setValue(x_ji,y_j);
+				marker->attach(qwt_plot_); // attached object will be automatically deleted by QwtPlot
+			}
 			
 			if(x_ji<min_x) min_x=x_ji;
 			if(x_ji>max_x) max_x=x_ji;
@@ -130,10 +172,45 @@ void FeaturePlotter::plot(bool zoom)
 		QPen pen(c);
 		curve_i->setPen(pen);
 		curve_i->attach(qwt_plot_); // attached object will be automatically deleted by QwtPlot
-	}
-		
+	}		
 	
-	QString s1 = "features values";
+	QwtText s1("feature values");
+	s1.setFont(qwt_plot_->axisTitle(0).font());
+	cout<<"font="<<qwt_plot_->axisTitle(0).font().pointSize()<<endl;
+	if(feature_combobox_->currentIndex()>0)
+	{
+		const vector<string>* names = model_item_->model()->getDescriptorNames();
+	
+		const String* expl = model_item_->view()->data_scene->main_window->getDescriptorExplanation((*names)[feature_combobox_->currentIndex()-1]);
+		if(expl!=NULL)
+		{
+			QFont font = s1.font();
+			s1 = QwtText(expl->c_str());
+		
+			uint max_width=width()-100;
+			uint size=font.pointSize();
+			uint i=0;
+			cout<<"font="<<size<<", "<<s1.textSize(font).width()<<"  "<<max_width<<endl;
+			for(; s1.textSize(font).width()>max_width && i<6; i++) 
+			{
+				cout<<"font="<<size<<", "<<s1.textSize(font).width()<<endl;
+				size--;
+				font.setPointSize(size);
+			}
+			cout<<"font="<<size<<", "<<s1.textSize(font).width()<<"  "<<max_width<<endl;
+			if(i==6) // feature explanation is too long, use feature name instead
+			{
+				s1=QwtText((*names)[feature_combobox_->currentIndex()-1].c_str());
+				font = qwt_plot_->axisTitle(0).font();
+			}
+			s1.setFont(font);
+		}
+		else 
+		{
+			s1=QwtText((*names)[feature_combobox_->currentIndex()-1].c_str());
+			s1.setFont(qwt_plot_->axisTitle(0).font());
+		}
+	}
 	QString s2 = "response values";
 	qwt_plot_->setAxisTitle(0,s2);
 	qwt_plot_->setAxisTitle(2,s1);
