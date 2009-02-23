@@ -382,10 +382,10 @@ namespace BALL
 			//@{
 			
 			/// Save the current configuration, structures and representations to a BALLView project file (*.bvp)
-			void saveBALLViewProjectFile(const String& filename);
+			void saveBALLViewProjectFile(const String& filename, bool binary = false);
 			
 			/// Load a BALLView project file
-			void loadBALLViewProjectFile(const String& filename) throw();
+			void loadBALLViewProjectFile(const String& filename);
 
 			/** Fetch the preferences from the INIfile.
 					Calls fetchPreferences() for all registered ModularWidgets.
