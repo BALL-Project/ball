@@ -37,6 +37,7 @@
 
 #include <BALL/SYSTEM/directory.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
+#include <BALL/CONCEPT/XDRPersistenceManager.h>
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/SYSTEM/systemCalls.h>
 #include <BALL/SYSTEM/path.h>
@@ -1766,13 +1767,14 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 
-	void MainControl::saveBALLViewProjectFile(const String& filename)
+	void MainControl::saveBALLViewProjectFile(const String& filename, bool binary)
 	{
 		String temp;
 		File::createTemporaryFilename(temp);
 		INIFile out(temp);
 		out.appendSection("BALLVIEW_PROJECT");
 
+		out.insertValue("BALLVIEW_PROJECT", "PersistenceFormat", binary ? "XDR" : "TEXT");
 		getRepresentationManager().storeRepresentations(out);
 
 		// write turning point of scene
@@ -1815,9 +1817,17 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			if (!RTTI::isKindOf<System>(**cit)) continue;
 
-			// hack to prevent ambiguous problem with overloaded cstr
-			TextPersistenceManager pm(result.getFileStream(), result.getFileStream());
-			(*dynamic_cast<System*>(*cit)) >> pm;
+			if (!binary)
+			{
+				// hack to prevent ambiguous problem with overloaded cstr
+				TextPersistenceManager pm(result.getFileStream(), result.getFileStream());
+				(*dynamic_cast<System*>(*cit)) >> pm;
+			}
+			else
+			{
+				XDRPersistenceManager pm(result.getFileStream(), result.getFileStream());
+				(*dynamic_cast<System*>(*cit)) >> pm;
+			}
 		}
 
 		result.close();
@@ -1825,7 +1835,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 	} 
 
 	void MainControl::loadBALLViewProjectFile(const String& filename)
-		throw()
 	{
 		if (isBusy())
 		{
@@ -1878,10 +1887,25 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 		vector<const Composite*> new_systems;
 		Position current_composite = 0;
+		PersistenceManager *pm;
+
+		// if the persistence format is not explicitly given, or if it is not explicitly
+		// set to XDR, we assume TextPersistence
+		bool use_xdr = false;
+		if (in.hasEntry("BALLVIEW_PROJECT", "PersistenceFormat"))
+		{
+			if (in.getValue("BALLVIEW_PROJECT", "PersistenceFormat") == "XDR")
+				use_xdr = true;
+		}
+
+		if (use_xdr)
+			pm = new XDRPersistenceManager(file, file);
+		else
+			pm = new TextPersistenceManager(file, file);
+
 		while (file.good() && !file.eof() && current_composite < nr_composites)
 		{
-			TextPersistenceManager pm(file, file);
-			PersistentObject* po = pm.readObject();
+			PersistentObject* po = pm->readObject();
 			if (!RTTI::isKindOf<System>(*po))
 			{
 				setStatusbarText("Error while reading project file, could not read molecule", true);
@@ -1896,6 +1920,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			new_systems.push_back(system);
 			current_composite++;
 		}
+
+		delete (pm);
 
 		file.close();
 		if (has_dp) DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
