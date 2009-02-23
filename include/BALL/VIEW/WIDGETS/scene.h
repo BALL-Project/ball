@@ -25,6 +25,10 @@
 # include <BALL/VIEW/RENDERING/glRenderWindow.h>
 #endif
 
+#ifndef BALL_VIEW_RENDERING_RENDERSETUP_H
+# include <BALL/VIEW/RENDERING/renderSetup.h>
+#endif
+
 #include <QtCore/qthread.h>
 #include <QtCore/qtimer.h>
 #include <QtGui/QDragEnterEvent>
@@ -113,7 +117,7 @@ namespace BALL
 				public ModularWidget
 		{
 			friend class AnimationThread;
-			friend class StereoHalfImage;
+			friend class RenderSetup;
 
 #ifdef ENABLE_RAYTRACING
       typedef boost::shared_ptr<RaytracingRenderer> RaytracingRendererPtr;
@@ -166,104 +170,6 @@ namespace BALL
 				ROTATE_CLOCKWISE_ACTION
 			};
 
-			/// Encapsulates renderers and their targets
-			class RenderSetup
-			{
-				public:
-					RenderSetup(Renderer* r, GLRenderWindow* t)
-						: renderer(r),
-							target(t),
-							rendering_paused_(false),
-							receive_updates_(true),
-							use_offset_(false),
-							camera_(),
-							camera_offset_(Vector3(0.)),
-							stereo_setup_(NONE)
-					{}
-
-					// TODO: this should be boost smart pointers!
-					Renderer* 				renderer;
-					GLRenderWindow*		target;
-
-					enum STEREO_SETUP {
-						NONE,
-						LEFT_EYE,
-						RIGHT_EYE
-					};
-
-					/** Pause rendering.
-					 *  This function allows to skip rendering while still
-					 *  buffering representations. Thus, a paused renderer
-					 *  will still receive all updates to representations,
-					 *  it will just not display anything.
-					 */
-					void pauseRendering() { rendering_paused_ = true; }
-
-					/** This function allows to activate a paused renderer
-					 *  again. Please note that the corresponding window will
-					 *  not be automatically updated. This has to be performed
-					 *  by the caller.
-					 */
-					void startRendering() { rendering_paused_ = false; }
-
-					/** This function returns the rendering state of our renderer.
-					 */
-					bool isPaused() const { return rendering_paused_; }
-
-					/** Prevent updating of rendering buffers.
-					 *
-					 *  This function allows to prevent the renderer from buffering or 
-					 * 	deleting representations.
-					 *
-					 * 	Please note that this is potentially dangerous, since the renderer
-					 * 	will not be made aware of deleted representations. Callers should
-					 * 	make sure that the renderer state is effectively reset upon reactivating
-					 * 	this switch.
-					 *
-					 * 	A common use case for this function is to support two render targets 
-					 * 	sharing one render context, where we want to prevent the second target
-					 * 	from rebuffering all representations already seen by the first.
-					 * 	
-					 */
-					void setReceiveBufferUpdates(bool do_receive) { receive_updates_ = do_receive; }
-
-					/** Returns the buffering state of the renderer.
-					 */
-					bool receivesBufferUpdates() const { return receive_updates_; };
-
-					/** Tells the connected renderer to update its camera.
-					 *
-					 * 	This function applies transformations like adding an offset to camera
-					 * 	position and view point before handing over the camera to the renderer.
-					 */
-					void updateCamera(const Camera* camera = 0);
-
-					/** Sets an offset to apply to camera position and look at point.
-					 *
-					 *  Please note that the offset is interpreted as relative to the camera with
-					 *  components (right, up, view) and will be updated at each position change.
-					 */
-					void setOffset(const Vector3& offset);
-
-					/** This function turns the connected renderer into part of a stereo setup.
-					 *
-					 * 	Depending on the value set here, renderers will be passed additional information
-					 * 	upon update camera to set eye separation and focal distance or to prepare correct
-					 * 	frustra.
-					 */
-					void setStereoMode(STEREO_SETUP stereo) { stereo_setup_ = stereo; };
-
-				protected:
-					bool rendering_paused_;
-					bool receive_updates_;
-					bool use_offset_;
-
-					Camera  camera_;
-					Vector3 camera_offset_;
-
-					STEREO_SETUP stereo_setup_;
-			};
-			
 			//@} 
 			/** @name Enums 
 			*/ 
@@ -649,6 +555,9 @@ namespace BALL
 
 			/// Enable or disable model previews e.g. while rotating
 			void setPreview(bool state) { use_preview_ = state; }
+
+			/// Returns the state of the preview mode
+			bool usePreview() const { return use_preview_; }
 			
 			/** Show or hide widget (Called by menu entry in "WINDOWS")
 					If the ModularWidget is not also a QWidget, this method does nothing
