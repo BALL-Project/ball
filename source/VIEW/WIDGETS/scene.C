@@ -128,9 +128,9 @@ namespace BALL
 				mode_group_(new QActionGroup(this))
 		{
 #ifndef ENABLE_RAYTRACING
-			renderers_.push_back(RenderSetup(gl_renderer_, this));
+			renderers_.push_back(RenderSetup(gl_renderer_, this, this, stage_));
 #else
-			renderers_.push_back(RenderSetup(&*rt_renderer_, this));
+			renderers_.push_back(RenderSetup(&*rt_renderer_, this, this, stage_));
 #endif
 
 			setAcceptDrops(true);
@@ -179,9 +179,9 @@ namespace BALL
 #endif
 
 #ifndef ENABLE_RAYTRACING
-			renderers_.push_back(RenderSetup(gl_renderer_, this));
+			renderers_.push_back(RenderSetup(gl_renderer_, this, this, stage_));
 #else
-			renderers_.push_back(RenderSetup(&*rt_renderer_, this));
+			renderers_.push_back(RenderSetup(&*rt_renderer_, this, this, stage_));
 #endif
 
 			setObjectName(name);
@@ -216,9 +216,9 @@ namespace BALL
 #endif
 
 #ifndef ENABLE_RAYTRACING
-			renderers_.push_back(RenderSetup(gl_renderer_, this));
+			renderers_.push_back(RenderSetup(gl_renderer_, this, this, stage_));
 #else
-			renderers_.push_back(RenderSetup(&*rt_renderer_, this));
+			renderers_.push_back(RenderSetup(&*rt_renderer_, this, this, stage_));
 #endif
 
 			setObjectName(name);
@@ -320,13 +320,7 @@ namespace BALL
 						if (pm.startRendering(rep))
 						{
 							for (Position i=0; i<renderers_.size(); ++i)
-							{
-								if (renderers_[i].receivesBufferUpdates())
-								{
-									renderers_[i].target->makeCurrent();
-									renderers_[i].renderer->bufferRepresentation(*rep);
-								}
-							}
+								renderers_[i].bufferRepresentation(*rep);
 
 							pm.finishedRendering(rep);
 						}
@@ -335,13 +329,7 @@ namespace BALL
 
 					case RepresentationMessage::REMOVE:
 							for (Position i=0; i<renderers_.size(); ++i)
-							{
-								if (renderers_[i].receivesBufferUpdates())
-								{
-									renderers_[i].target->makeCurrent();
-									renderers_[i].renderer->removeRepresentation(*rep);
-								}
-							}
+								renderers_[i].removeRepresentation(*rep);
 							break;
 
 					case RepresentationMessage::FINISHED_UPDATE:
@@ -369,14 +357,9 @@ namespace BALL
 				{
 					case DatasetMessage::UPDATE:
 					case DatasetMessage::REMOVE:
+						// TODO: change to a correct render setup call!
 						for (Position i=0; i<renderers_.size(); ++i)
-						{
-							renderers_[i].target->makeCurrent();
-							Renderer* current_renderer = renderers_[i].renderer;
-
-							if (RTTI::isKindOf<GLRenderer>(*current_renderer))
-								((GLRenderer*)current_renderer)->removeTextureFor_(*set->getData());
-						}
+							renderers_[i].removeGridTextures(*set->getData());
 						break;
 
 					default:
@@ -441,35 +424,16 @@ namespace BALL
 			}
 		}
 
-
 		void Scene::initializeGL()
 		{
 			QGLWidget::initializeGL();
 			if (!format().rgba())  Log.error() << "no rgba mode for OpenGL available." << endl;
 
 			for (Position i=0; i<renderers_.size(); ++i)
-			{
-				Renderer* current_renderer     = renderers_[i].renderer;
-				GLRenderWindow* current_target = renderers_[i].target;
-
-				current_target->makeCurrent();
-
-				// initialize the rendering target
-				current_target->init();
-
-				// initialize the renderer
-				if(!current_renderer->init(*this))
-				{
-					Log.error() << "Renderer failed to initialize" << endl;
-					throw Exception::GeneralException(__FILE__, __LINE__);
-				}			
-				if (RTTI::isKindOf<GLRenderer>(*current_renderer))
-					((GLRenderer*)current_renderer)->enableVertexBuffers(want_to_use_vertex_buffer_);
-			}
+				renderers_[i].init();
 
 			if (stage_->getLightSources().size() == 0) setDefaultLighting(false);
  			stage_settings_->getGLSettings();		
-
 		}
 
 		String Scene::createFPSInfo_()
@@ -531,42 +495,7 @@ namespace BALL
 			// first, let all renderers do their work
 			for (Position i=0; i<renderers_.size(); ++i)
 			{
-				if (renderers_[i].isPaused())
-					continue;
-
-				Renderer* 			current_renderer = renderers_[i].renderer;
-				GLRenderWindow* current_window   = renderers_[i].target;
-
-				current_window->makeCurrent();
-
-				current_renderer->setPreviewMode(use_preview_ && preview_);
-				current_renderer->showLightSources(show_light_sources_);
-
-				renderers_[i].updateCamera();
-
-				if (RTTI::isKindOf<BufferedRenderer>(*current_renderer))
-				{
-					((BufferedRenderer*)current_renderer)->renderToBuffer(current_window, *stage_);
-					current_window->refresh();
-
-					// TODO: render coordinate systems!
-				}
-
-				if (RTTI::isKindOf<GLRenderer>(*current_renderer))
-				{
-					GLRenderer* current_gl_renderer = (GLRenderer*)current_renderer;
-
-					// cannot call update here, because it calls updateGL
-					current_gl_renderer->renderToBuffer(current_window, GLRenderer::DISPLAY_LISTS_RENDERING);
-
-					glFlush();
-
-					renderGrid_();
-
-					// TEST
-					if (current_window != this)
-						current_window->updateGL();
-				}
+				renderers_[i].renderToBuffer();
 			}
 
 			// then, estimate fps if necessary and add to the render target
@@ -612,39 +541,7 @@ namespace BALL
 		{						
 			// TODO: is this really correct? don't we want individual resizeGL's for the individual renderers?
 			for (Position i=0; i<renderers_.size(); ++i)
-			{
-				Renderer* 			current_renderer = renderers_[i].renderer;
-				GLRenderWindow* current_window   = renderers_[i].target;
-
-				// prevent resizing of full screen Windows because they are
-				// most probably stereo half images
-				if (current_window->isFullScreen())
-					continue;
-
-				current_window->makeCurrent();
-				
-				if(!current_window->resize(width, height))
-				{
-					Log.error() << "Cannot resize window. Size " 
-											<< width << " x " 
-											<< height << " is not supported" << endl;
-				}
-
-				if (RTTI::isKindOf<BufferedRenderer>(*current_renderer))
-				{
-					if(!(((BufferedRenderer*)current_renderer)->setFrameBufferFormat(getFormat())))
-					{
-						Log.error() << "Raytracing render does not support window framebuffer format. Seems to be configuration error" << endl;
-						throw Exception::GeneralException(__FILE__, __LINE__);
-					}
-				}
-
-				if (RTTI::isKindOf<GLRenderer>(*current_renderer))
-				{
-					((GLRenderer*)current_renderer)->setSize(width, height);
-					((GLRenderer*)current_renderer)->updateCamera();			
-				}
-			}
+				renderers_[i].resize(width, height);
 		}
 
 		/////////////////////////////////////////////////////////
@@ -916,9 +813,6 @@ namespace BALL
 			for (Position i=0; i<renderers_.size(); ++i)
 			{
 				Renderer* current_renderer = renderers_[i].renderer;
-				GLRenderWindow* current_window = renderers_[i].target;
-
-				current_window->makeCurrent();
 
 				if (RTTI::isKindOf<GLRenderer>(*current_renderer))
 				{
@@ -927,7 +821,7 @@ namespace BALL
 					if (current_gl_renderer->getStereoMode() == GLRenderer::NO_STEREO)
 					{
 						// TODO: do we need a reset all here??? and dont we want to set that for all kinds of renderers?
-						current_gl_renderer->setLights();
+						renderers_[i].setLights();
 					}
 				}
 			}
@@ -945,7 +839,7 @@ namespace BALL
 				RepresentationList::ConstIterator it = pm.getRepresentations().begin();
 				for (; it != pm.getRepresentations().end(); ++it)
 				{
-					rs.renderer->bufferRepresentation(**it);
+					rs.bufferRepresentation(**it);
 				}
 			}
 		}
@@ -964,13 +858,7 @@ namespace BALL
 			stage_->addLightSource(light);
 
 			for (Position i=0; i<renderers_.size(); ++i)
-			{
-				Renderer* current_renderer = renderers_[i].renderer;
-				GLRenderWindow* current_window = renderers_[i].target;
-
-				current_window->makeCurrent();
-				current_renderer->setLights(true);
-			}
+				renderers_[i].setLights(true);
 
 			light_settings_->updateFromStage();
 
@@ -1098,6 +986,7 @@ namespace BALL
 #ifndef ENABLE_RAYTRACING
 			// we have to add the representation in the GLRenderer manualy,
 			// because the message wont arrive in Scene::onNotify
+			// TODO: this needs to be changed to a correct RenderSetup call!
 			gl_renderer_->bufferRepresentation(*rp);
 #endif
 
@@ -1232,10 +1121,7 @@ namespace BALL
 			light_settings_->apply();
 
 			for (Position i=0; i<renderers_.size(); ++i)
-			{
-				renderers_[i].target->makeCurrent();
-				renderers_[i].renderer->setLights(true);
-			}
+				renderers_[i].setLights(true);
 
 			updateCamera_();
 
@@ -1272,10 +1158,7 @@ namespace BALL
 			material_settings_->apply();
 
 			for (Position i=0; i<renderers_.size(); ++i)
-			{
-				renderers_[i].target->makeCurrent();
-				renderers_[i].renderer->updateBackgroundColor(); 
-			}
+				renderers_[i].updateBackgroundColor();
 
 			if (stage_->getFogIntensity() == 0)
 			{
@@ -2711,7 +2594,7 @@ namespace BALL
 
 			new_widget->show();
 
-			RenderSetup new_rs(new_renderer, new_widget);
+			RenderSetup new_rs(new_renderer, new_widget, this, stage_);
 
 			resetRepresentationsForRenderer_(new_rs);
 
@@ -2728,7 +2611,7 @@ return;
 			new_widget->resize(width(), height());
 			new_widget->show();
 
-//			RenderSetup rs(&*rt_renderer_, new_widget);
+//			RenderSetup rs(&*rt_renderer_, new_widget, this, stage_);
 //			rs.setReceiveBufferUpdates(false);
 //			rs.setOffset(Vector3(5, 0, 5)); // TEST
 
@@ -2758,7 +2641,7 @@ return;
 
 			left_widget->show();
 
-			RenderSetup left_rs(left_renderer, left_widget);
+			RenderSetup left_rs(left_renderer, left_widget, this, stage_);
 
 			resetRepresentationsForRenderer_(left_rs);
 			left_rs.setStereoMode(RenderSetup::LEFT_EYE);
@@ -2776,7 +2659,7 @@ return;
 
 			right_widget->show();
 
-			RenderSetup right_rs(right_renderer, right_widget);
+			RenderSetup right_rs(right_renderer, right_widget, this, stage_);
 
 			resetRepresentationsForRenderer_(right_rs);
 			right_rs.setStereoMode(RenderSetup::RIGHT_EYE);
@@ -2810,7 +2693,7 @@ return;
 			left_widget->showFullScreen();
 			left_renderer->setSize(left_widget->width(), left_widget->height());
 
-			RenderSetup left_rs(left_renderer, left_widget);
+			RenderSetup left_rs(left_renderer, left_widget, this, stage_);
 
 			resetRepresentationsForRenderer_(left_rs);
 			left_rs.setStereoMode(RenderSetup::LEFT_EYE);
@@ -2829,7 +2712,7 @@ return;
 			right_widget->showFullScreen();
 			right_renderer->setSize(right_widget->width(), right_widget->height());
 
-			RenderSetup right_rs(right_renderer, right_widget);
+			RenderSetup right_rs(right_renderer, right_widget, this, stage_);
 
 			resetRepresentationsForRenderer_(right_rs);
 			right_rs.setStereoMode(RenderSetup::RIGHT_EYE);
@@ -3086,17 +2969,13 @@ return;
 			// 			 if you want 3d textures for stereo with different
 			// 			 half images, you need to ensure that this function
 			// 			 is called *after* switching to stereo!
-			// TODO: change this to something more sensible!
+			//
+			// TODO: - change this to something more sensible!
+			// 			 - call something in RenderSetup instead!	
 			Position texname;
 
 			for (Position i=0; i<renderers_.size(); ++i)
-			{
-				renderers_[i].target->makeCurrent();
-				Renderer* current_renderer = renderers_[i].renderer;
-
-				if (RTTI::isKindOf<GLRenderer>(*current_renderer))
-					texname = ((GLRenderer*)current_renderer)->createTextureFromGrid(grid, map);
-			}
+				texname = renderers_[i].prepareGridTextures(grid, map);
 
 			return texname;
 		}
@@ -3107,7 +2986,6 @@ return;
 			switch_grid_->setChecked(draw_grid_);
 			updateGL();
 		}
-
 
 		void Scene::renderGrid_()
 		{
@@ -3385,52 +3263,6 @@ Log.error() << "Render grid not yet supported by raytracer!" << std::endl;
 		{
 			delete gl_renderer_;
 			gl_renderer_ = &renderer;
-		}
-
-		void Scene::RenderSetup::updateCamera(const Camera* camera)
-		{
-			Stage const& stage = renderer->getStage();
-			 
-			camera_ = (camera == 0) ? stage.getCamera() : *camera;
-
-			if (stereo_setup_ != NONE)
-			{
-				float eye_separation = stage.getEyeDistance() * 0.5;
-				eye_separation *= (stereo_setup_ == LEFT_EYE) ? -1. : 1.;
-				eye_separation *= stage.swapSideBySideStereo() ? -1. : 1.;
-
-				renderer->setupStereo(eye_separation, stage.getFocalDistance());
-
-				camera_offset_  = Vector3(eye_separation, 5., 0.);
-
-				use_offset_ = true;
-			}
-
-			if (use_offset_)
-			{
-				Vector3 const& right = camera_.getRightVector();
-				Vector3 const& up    = camera_.getLookUpVector();
-				Vector3 const& view  = camera_.getViewVector();
-
-				Vector3 absolute_offset = 	right * camera_offset_.x
-																	+ up    * camera_offset_.y
-																	+ view  * camera_offset_.z;
-
-				camera_.setViewPoint(camera_.getViewPoint()+absolute_offset);
-				camera_.setLookAtPosition(camera_.getLookAtPosition()+absolute_offset);
-			}
-
-			renderer->updateCamera(&camera_);
-		}
-
-		void Scene::RenderSetup::setOffset(const Vector3& offset)
-		{
-			camera_offset_ = offset;
-
-			if (offset.getSquareLength() > 0)
-				use_offset_ = true;
-			else
-				use_offset_ = false;
 		}
 
 #ifdef ENABLE_RAYTRACING

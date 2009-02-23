@@ -310,6 +310,9 @@ namespace BALL
 			//
 			void setupStereo(float eye_separation, float focal_length);
 
+			Position createTextureFromGrid(const RegularData3D& grid, const ColorMap& map);
+			void removeTextureFor_(const RegularData3D& grid);
+
 	protected:
 
 			void renderRepresentation_(const Representation& representation, bool for_display_list);
@@ -455,8 +458,6 @@ namespace BALL
 			void generateIlluminationTexture_(float ka, float kd, float kr, float shininess);
 
 			inline Position getTextureIndex_(Position x, Position y, Position z, Size width, Size height);
-			Position createTextureFromGrid(const RegularData3D& grid, const ColorMap& map);
-			void removeTextureFor_(const RegularData3D& grid);
 			void setupGridClipPlanes_(const GridVisualisation& slice);
 
 			///

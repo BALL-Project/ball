@@ -101,6 +101,18 @@ namespace BALL
 			 */
 			virtual void setupStereo(float eye_separation, float focal_length);
 
+			/** Decide between event based and (threaded) continuous loop rendering.
+			*/
+			virtual void useContinuousLoop(bool use_loop) 
+			{ 
+				// TODO: mutex for use_continuous_loop_ just to be on the safe side
+				use_continuous_loop_ = use_loop;
+			};
+
+			/** Returns the mode of the render loop.
+			*/
+			bool isContinuous() { return use_continuous_loop_; }
+
 			///
 			virtual bool finish()
 				throw();
@@ -261,8 +273,7 @@ namespace BALL
 			// An offset added to camera position and look at
 			Vector3					camera_offset_;
 
-			bool						use_offset_;
-
+			bool						use_continuous_loop_;
 		};
 
 	} // namespace VIEW

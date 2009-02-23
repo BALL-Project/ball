@@ -113,6 +113,10 @@ namespace BALL
 
 		void RTfactRenderer::updateCamera(const Camera* camera)
 		{
+			// the renderer should be paused whenever the camera has been updated
+			if (use_continuous_loop_)
+				m_renderer.pauseAnimation(true);
+
 			if (camera == 0) camera = &(stage_->getCamera());
 
 			Vector3 const& position = camera->getViewPoint();
@@ -324,6 +328,10 @@ namespace BALL
 					rtfact_needs_update_ = true;
 				}
 			}
+
+			if (rtfact_needs_update_ && use_continuous_loop_)
+				m_renderer.pauseAnimation(true);
+
 			objects_[&rep] = rt_data;
 		}
 
@@ -341,6 +349,9 @@ namespace BALL
 				}
 
 				objects_.erase(&rep);
+
+				if (use_continuous_loop_)
+					m_renderer.pauseAnimation(true);
 			}
 		}
 
@@ -368,6 +379,9 @@ namespace BALL
 			{
 				m_renderer.attachFrameBuffer(fmt.getWidth(), fmt.getHeight(), fmt.getPitch(), (float*)buffer->getData());
 				m_renderer.renderToBuffer();
+
+				if (use_continuous_loop_)
+					m_renderer.pauseAnimation(false);
 			}
 		}
 
