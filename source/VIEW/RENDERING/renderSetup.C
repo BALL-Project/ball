@@ -1,5 +1,5 @@
 #include <BALL/VIEW/RENDERING/renderSetup.h>
-
+#include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
 namespace BALL
 {
 	namespace VIEW
@@ -29,6 +29,8 @@ namespace BALL
 		{
 			render_mutex_.lock();
 
+		// TEST
+			printf("init makeCurrent()\n");
 			target->makeCurrent();
 
 			// initialize the rendering target
@@ -55,6 +57,7 @@ namespace BALL
 
 			render_mutex_.lock();
 
+			printf("resize makeCurrent()\n");
 			target->makeCurrent();
 
 			if(!target->resize(width, height))
@@ -147,11 +150,18 @@ namespace BALL
 
 		void RenderSetup::run()
 		{
+			printf("run makeCurrent()\n");
+			target->makeCurrent();
+
 			useContinuousLoop(true);
 
 			// to be stopped from the outside, someone needs to call useContinuousLoop(false)
 			while (use_continuous_loop_)
+			{
+				printf("######################### NEXT FRAME ######################\n");
 				renderToBuffer_();
+				printf("###########################################################\n");
+			}
 		}
 
 		void RenderSetup::renderToBuffer()
@@ -168,24 +178,35 @@ namespace BALL
 					msleep(100);
 				return;
 			}
+printf("start to rtb_\n");
 
 			render_mutex_.lock();
 
-			target->makeCurrent();
+			printf("rtb makeCurrent()\n");
+			if (!use_continuous_loop_)
+				target->makeCurrent();
 
+	printf("setprev\n");
 			renderer->setPreviewMode(scene_->use_preview_ && scene_->preview_);
 			renderer->showLightSources(scene_->show_light_sources_);
 
 			// We need to find out whether a recursive lock would be faster...
+printf("camera\n");
 			render_mutex_.unlock();
 			updateCamera();
 			render_mutex_.lock();
+printf("camera done\n");
 
 			if (RTTI::isKindOf<BufferedRenderer>(*renderer))
 			{
+printf("rtti done\n");
 				((BufferedRenderer*)renderer)->renderToBuffer(target, *stage_);
+printf("refreshing\n");
+// TEST
+	//render_mutex_.unlock();
+	//return;
 				target->refresh();
-
+printf("real rtb\n");
 				// TODO: render coordinate systems!
 			}
 
@@ -206,6 +227,15 @@ namespace BALL
 					target->updateGL();
 			}
 
+printf("swap\n");
+			if (use_continuous_loop_)
+			{
+				target->swapBuffers();
+	printf("done current\n");
+			//	target->doneCurrent();
+			}
+
+printf("stop the rtb_\n");
 			render_mutex_.unlock();
 		}
 
@@ -215,6 +245,7 @@ namespace BALL
 			{
 				render_mutex_.lock();
 
+				printf("buffer makeCurrnet\n");
 				target->makeCurrent();
 				renderer->bufferRepresentation(rep);
 
@@ -228,6 +259,7 @@ namespace BALL
 			{
 				render_mutex_.lock();
 
+				printf("bufferdel makeCurrnet\n");
 				target->makeCurrent();
 				renderer->removeRepresentation(rep);
 
@@ -239,7 +271,11 @@ namespace BALL
 		{
 			render_mutex_.lock();
 
-			target->makeCurrent();
+			if (!use_continuous_loop_)
+			{
+				printf("set lights makeCurrent\n");
+				target->makeCurrent();
+			}
 			renderer->setLights(reset_all);
 
 			render_mutex_.unlock();
@@ -249,7 +285,8 @@ namespace BALL
 		{
 			render_mutex_.lock();
 
-			target->makeCurrent();
+			if (!use_continuous_loop_)
+				target->makeCurrent();
 			renderer->updateBackgroundColor();
 
 			render_mutex_.unlock();

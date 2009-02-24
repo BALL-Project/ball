@@ -304,7 +304,6 @@ namespace BALL
 			Log.error() << "Scene " << this  << "onNotify " << message << std::endl;
 #endif
 //   			qApp->processEvents(); ??????? AM
-			makeCurrent();
 
 			if (RTTI::isKindOf<RepresentationMessage>(*message)) 
 			{
@@ -486,6 +485,8 @@ namespace BALL
 			// perform their updates and then (b) swap in the newly created buffers
 			// of all render targets
 
+			doneCurrent();
+
 			// needed for all fps estimates
 			time_ = PreciseTime::now();
 
@@ -494,9 +495,7 @@ namespace BALL
 			
 			// first, let all renderers do their work
 			for (Position i=0; i<renderers_.size(); ++i)
-			{
 				renderers_[i].renderToBuffer();
-			}
 
 			// then, estimate fps if necessary and add to the render target
 			ColorRGBA text_color = stage_->getBackgroundColor().getInverseColor();
@@ -1639,7 +1638,8 @@ namespace BALL
 		{
 			if (isAnimationRunning()) return;
 
-			makeCurrent();
+// TEST
+//			makeCurrent();
 
 			need_update_ = true;
 
@@ -1674,7 +1674,9 @@ namespace BALL
 			info_string_ = "";
 
 			if (isAnimationRunning()) return;
-			makeCurrent();
+			
+// TEST
+//			makeCurrent();
 
 			mouse_button_is_pressed_ = true;
 			ignore_pick_ = false;
@@ -1883,7 +1885,8 @@ namespace BALL
 		{
 			if (isAnimationRunning()) return;
 
-			makeCurrent();
+			// TEST
+//			makeCurrent();
 
 			mouse_button_is_pressed_ = false;
 			preview_ = false;
@@ -2033,6 +2036,28 @@ namespace BALL
 
 		void Scene::keyPressEvent(QKeyEvent* e)
 		{
+			// TEST
+			if (e->key() == Qt::Key_Space)
+			{
+				if (renderers_[0].isContinuous())
+				{
+					renderers_[0].useContinuousLoop(false);
+				}
+				else
+				{
+					// TEST
+					doneCurrent();
+
+					renderers_[0].target = new GLRenderWindow(this);
+					renderers_[0].target->makeCurrent();
+					renderers_[0].target->init();
+					renderers_[0].target->resize(width(), height());
+					renderers_[0].target->show();
+					renderers_[0].target->doneCurrent();
+					renderers_[0].start();
+				}
+			}
+
 			if (gl_renderer_->getStereoMode() == GLRenderer::NO_STEREO &&
 			    e->key() == Qt::Key_Escape) 
 			{

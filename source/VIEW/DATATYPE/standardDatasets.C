@@ -41,7 +41,7 @@ namespace BALL
 	{	
 		String coreName = filename;
 		String::size_type dotIndex = filename.find_last_of(".");
-		if (dotIndex != -1)
+		if (dotIndex != string::npos)
 		{
 			coreName = filename.getSubstring(0, dotIndex);				
 		}
@@ -1169,17 +1169,17 @@ namespace BALL
 			{
 				rt_contour_surface_dialog_ = new RaytraceableContourSurfaceDialog(getDatasetControl());
 			}
-			*/
+
 			//rt_contour_surface_dialog_->setController(this);
 			//rt_contour_surface_dialog_->setGrid(getData(data));
 			//since this is no modal window no exec but:
-			/*rt_contour_surface_dialog_->show();
+			///rt_contour_surface_dialog_->show();
 			rt_contour_surface_dialog_->raise();
-			rt_contour_surface_dialog_->activateWindow();*/
+			rt_contour_surface_dialog_->activateWindow();
 			//rt_contour_surface_dialog_->exec();
-/* 
- * TODO: something like
- * 	Representation* rep = new Representation();
+
+  TODO: something like
+  	Representation* rep = new Representation();
 			rep->insert(*mesh);
 			rep->setModelType(MODEL_CONTOUR_SURFACE); 
 
@@ -1191,7 +1191,7 @@ namespace BALL
 			getMainControl()->insert(*rep);
 			getMainControl()->update(*rep);
 
- * */
+  */
 
 		}
 

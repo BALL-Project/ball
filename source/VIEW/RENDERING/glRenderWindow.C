@@ -109,17 +109,30 @@ namespace BALL
 
 		void GLRenderWindow::refresh()
 		{			
+			printf("ref 1\n");
 			RenderWindow<float>::refresh();
+			printf("ref 2\n");
 
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();
 
+			printf("ref 3\n");
+	// TEST
 			glPushAttrib(GL_TEXTURE_BIT);
 			glPushAttrib(GL_DEPTH_BUFFER_BIT);
+			printf("ref 4\n");
 
 			glBindTexture(FB_TEXTURE_TARGET, m_screenTexID);
+			printf("ref 5\n");
+			m_fmt.getWidth();
+			printf("ref 6\n");
+			m_fmt.getHeight();
+			printf("ref 7\n");
+			m_pixels.get();
+			printf("ref 8\n");
 			glTexSubImage2D(FB_TEXTURE_TARGET, 0, 0, 0, m_fmt.getWidth(), m_fmt.getHeight(), 
 					FB_TEXTURE_FORMAT, FB_TEXTURE_DATATYPE, m_pixels.get());                
+			printf("ref 6\n");
 
 			glEnable(FB_TEXTURE_TARGET);
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
@@ -157,6 +170,7 @@ namespace BALL
 
 			glPopAttrib();
 			glPopAttrib();
+			printf("ref 4\n");
 		}
 
 		void GLRenderWindow::renderText(int x, int y, const String& text, const ColorRGBA& color, Size size)

@@ -124,5 +124,3 @@ dockingController_moc.C:	$(HEADER_DIR)/dockingController.h
 
 testFramework_moc.C:	$(HEADER_DIR)/testFramework.h
 	$(MOC) $(HEADER_DIR)/testFramework.h -o $@
-
-ADD_CXXFLAGS=-g
