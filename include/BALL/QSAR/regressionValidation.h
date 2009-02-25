@@ -185,9 +185,7 @@ namespace BALL
 				
 				double (RegressionValidation::* fitQualFetcher_)();
 				
-				void calculateQOF1();
-				void calculateQOF2();
-				void calculatePSE();
+				void calculateQOF();
 				
 				/** contains the standart deviations of all predicted coefficients in one column for each modelled activity */
 				BALL::Matrix<double> coefficient_stderr_;

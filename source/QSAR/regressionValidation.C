@@ -447,19 +447,9 @@ const BALL::Matrix<double>& RegressionValidation::yRandomizationTest(int runs, i
 	return yRand_results_;
 }
 
-void RegressionValidation::calculateQOF1()
-{
-	quality_ =  1 - ssE_/(ssE_+ssR_);	
-}
-
-void RegressionValidation::calculateQOF2()
+void RegressionValidation::calculateQOF()
 {
 	quality_ = (ssY_-ssE_)/ssY_;	
-}
-
-void RegressionValidation::calculatePSE()
-{
-	quality_ = 1/sqrt((1./test_substances_.size())*ssE_);	
 }
 
 
@@ -511,28 +501,15 @@ void RegressionValidation::selectStat(int s)
 	predQualFetcher_ = &RegressionValidation::getQ2;
 	fitQualFetcher_ = &RegressionValidation::getR2;
 	
-	if(s==1)
-	{
-		validation_statistic_ = 1;
-		qualCalculation = &RegressionValidation::calculateQOF1;
-	}
 	if(s==0)
 	{
 		validation_statistic_ = 0;
-		qualCalculation = &RegressionValidation::calculateQOF2;
+		qualCalculation = &RegressionValidation::calculateQOF;
 	}
-	if(s==2)
+	else 
 	{
-		validation_statistic_ = 2;
-		qualCalculation = &RegressionValidation::calculatePSE;
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"RegressionValidation error","Validation statistic "+String(s)+" is unknown!");
 	}
-	
-// 	else if(s==1)
-// 	{
-// 		validation_statistic_ = 1;
-// 		fitQualFetcher_ = &RegressionValidation::getFregr;
-// 		predQualFetcher_ = &RegressionValidation::getFcv;
-// 	}
 }
 				
 				
