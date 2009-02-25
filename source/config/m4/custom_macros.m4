@@ -917,11 +917,11 @@ fi
 
 
 dnl   optimze as on highest level: this compiler
-CXXFLAGS_O="${CXXFLAGS_O} -O1"
+CXXFLAGS_O="-cxxlib -xW -fPIC -O3 -inline-level=1 -restrict -w1 -msse -msse2"
 
 dnl   avoid high level optimization to
 dnl   get debuggable code...
-CXXFLAGS_D="${CXXFLAGS_D} -O0 -g -w1"
+CXXFLAGS_D="-cxxlib -g -O0 -inline-level=0 -w1 -msse -msse2"
 CXXFLAGS_DI="${CXXFLAGS_DI}"
 ])
 
