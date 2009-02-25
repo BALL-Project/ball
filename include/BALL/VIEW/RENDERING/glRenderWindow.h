@@ -21,6 +21,10 @@
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
 
+#ifndef BALL_SYSTEM_MUTEX_H
+# include <BALL/SYSTEM/mutex.h>
+#endif
+
 #include <QtOpenGL/qgl.h>
 
 namespace BALL
@@ -52,6 +56,12 @@ namespace BALL
 			// render the given text in the given color and size at world coordinates (x, y, z)
 			virtual void renderText(float x, float y, float z, const String& text, const ColorRGBA& color, Size size = 16);
 
+			/// Lock the context for the current thread and make it active
+			void lockGLContext();
+
+			/// Unlock the context for the current thread and make it active
+			void unlockGLContext();
+
 		protected:	
 			static QGLFormat gl_format_;
 
@@ -73,6 +83,8 @@ namespace BALL
 
 			bool errorInGL(GLenum& error);
 			String getGLErrorString(GLenum error);
+
+			mutable Mutex contex_mutex_;
 		};
 
 	} // namespace VIEW
