@@ -898,6 +898,8 @@ namespace BALL
 			Vector3 near_left_bot_, near_right_bot_, near_left_top_;
 			String info_string_;
 
+			GLRenderWindow* main_display_;
+
 			/*
 			StereoHalfImage* left_eye_widget_;
 			StereoHalfImage* right_eye_widget_;

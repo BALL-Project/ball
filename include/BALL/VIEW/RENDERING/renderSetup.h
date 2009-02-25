@@ -51,7 +51,8 @@ namespace BALL {
 						stereo_setup_(NONE),
 						use_continuous_loop_(false),
 						scene_(scene),
-						stage_(stage)
+						stage_(stage),
+						render_mutex_(true)
 				{}
 
 				RenderSetup(const RenderSetup& rs)
@@ -66,7 +67,8 @@ namespace BALL {
 						stereo_setup_(rs.stereo_setup_),
 						use_continuous_loop_(rs.use_continuous_loop_),
 						scene_(rs.scene_),
-						stage_(rs.stage_)
+						stage_(rs.stage_),
+						render_mutex_(true)
 				{}
 
 				const RenderSetup& operator = (const RenderSetup& rs);
