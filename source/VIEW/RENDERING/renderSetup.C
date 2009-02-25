@@ -1,5 +1,12 @@
 #include <BALL/VIEW/RENDERING/renderSetup.h>
 #include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
+
+// TEST
+#define USE_TBB
+#ifdef USE_TBB
+# include <tbb/task_scheduler_init.h>
+#endif
+
 namespace BALL
 {
 	namespace VIEW
@@ -152,6 +159,9 @@ namespace BALL
 
 		void RenderSetup::run()
 		{
+#ifdef USE_TBB
+			tbb::task_scheduler_init init;
+#endif
 			target->lockGLContext();
 
 			useContinuousLoop(true);
