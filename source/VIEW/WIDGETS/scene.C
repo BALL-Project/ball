@@ -125,13 +125,19 @@ namespace BALL
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
 				toolbar_(new QToolBar("3D View Controls", this)),
-				mode_group_(new QActionGroup(this))
+				mode_group_(new QActionGroup(this)),
+				main_display_(new GLRenderWindow(this))
 		{
 #ifndef ENABLE_RAYTRACING
-			renderers_.push_back(RenderSetup(gl_renderer_, this, this, stage_));
+			renderers_.push_back(RenderSetup(gl_renderer_, main_display_, this, stage_));
 #else
-			renderers_.push_back(RenderSetup(&*rt_renderer_, this, this, stage_));
+			renderers_.push_back(RenderSetup(&*rt_renderer_, main_display_, this, stage_));
 #endif
+
+			main_display_->makeCurrent();
+			main_display_->init();
+			main_display_->resize(width(), height());
+			main_display_->doneCurrent();
 
 			setAcceptDrops(true);
 #ifdef BALL_VIEW_DEBUG
@@ -172,16 +178,21 @@ namespace BALL
 				use_preview_(true),
 				show_fps_(false),
 				toolbar_(new QToolBar("3D View Controls", this)),
-				mode_group_(new QActionGroup(this))
+				mode_group_(new QActionGroup(this)),
+				main_display_(new GLRenderWindow(this))
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (2) " << this << std::endl;
 #endif
+			main_display_->makeCurrent();
+			main_display_->init();
+			main_display_->resize(width(), height());
+			main_display_->doneCurrent();
 
 #ifndef ENABLE_RAYTRACING
-			renderers_.push_back(RenderSetup(gl_renderer_, this, this, stage_));
+			renderers_.push_back(RenderSetup(gl_renderer_, main_display_, this, stage_));
 #else
-			renderers_.push_back(RenderSetup(&*rt_renderer_, this, this, stage_));
+			renderers_.push_back(RenderSetup(&*rt_renderer_, main_display_, this, stage_));
 #endif
 
 			setObjectName(name);
@@ -209,22 +220,27 @@ namespace BALL
 				animation_thread_(0),
 				stop_animation_(false),
 				toolbar_(new QToolBar("3D View Controls", this)),
-				mode_group_(new QActionGroup(this))
+				mode_group_(new QActionGroup(this)),
+				main_display_(new GLRenderWindow(this))
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (3) " << this << std::endl;
 #endif
 
 #ifndef ENABLE_RAYTRACING
-			renderers_.push_back(RenderSetup(gl_renderer_, this, this, stage_));
+			renderers_.push_back(RenderSetup(gl_renderer_, main_display_, this, stage_));
 #else
-			renderers_.push_back(RenderSetup(&*rt_renderer_, this, this, stage_));
+			renderers_.push_back(RenderSetup(&*rt_renderer_, main_display_, this, stage_));
 #endif
 
 			setObjectName(name);
 
 			resize((Size) scene.renderers_[0].renderer->getWidth(), 
 						 (Size) scene.renderers_[0].renderer->getHeight());
+			main_display_->makeCurrent();
+			main_display_->init();
+			main_display_->resize(width(), height());
+			main_display_->doneCurrent();
 
 			// the widget with the MainControl
 			ModularWidget::registerWidget(this);
@@ -485,7 +501,8 @@ namespace BALL
 			// perform their updates and then (b) swap in the newly created buffers
 			// of all render targets
 
-			doneCurrent();
+			// this widget does not really paint anything
+			//doneCurrent();
 
 			// needed for all fps estimates
 			time_ = PreciseTime::now();
@@ -509,12 +526,12 @@ namespace BALL
 			// draw all renderable texts and swap the new buffers in
 			for (Position i=0; i<renderers_.size(); ++i)
 			{
-				if (renderers_[i].isPaused())
+				if (renderers_[i].isPaused() || renderers_[i].isContinuous())
 					continue;
 
 				GLRenderWindow* current_window = renderers_[i].target;
 
-				current_window->makeCurrent();
+				current_window->lockGLContext();
 
 				if (show_fps_)
 				{
@@ -533,12 +550,13 @@ namespace BALL
 					current_window->renderText(info_point_.x(), info_point_.y(), info_string_, text_color);
 
 				current_window->swapBuffers();
+
+				current_window->unlockGLContext();
 			}
 		}
 
 		void Scene::resizeGL(int width, int height)
 		{						
-			// TODO: is this really correct? don't we want individual resizeGL's for the individual renderers?
 			for (Position i=0; i<renderers_.size(); ++i)
 				renderers_[i].resize(width, height);
 		}
@@ -2046,14 +2064,7 @@ namespace BALL
 				else
 				{
 					// TEST
-					doneCurrent();
-
-					renderers_[0].target = new GLRenderWindow(this);
-					renderers_[0].target->makeCurrent();
-					renderers_[0].target->init();
-					renderers_[0].target->resize(width(), height());
-					renderers_[0].target->show();
-					renderers_[0].target->doneCurrent();
+					renderers_[0].target->unlockGLContext();
 					renderers_[0].start();
 				}
 			}

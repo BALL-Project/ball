@@ -29,9 +29,7 @@ namespace BALL
 		{
 			render_mutex_.lock();
 
-		// TEST
-			printf("init makeCurrent()\n");
-			target->makeCurrent();
+			target->lockGLContext();
 
 			// initialize the rendering target
 			target->init();
@@ -45,6 +43,8 @@ namespace BALL
 			if (RTTI::isKindOf<GLRenderer>(*renderer))
 				((GLRenderer*)renderer)->enableVertexBuffers(scene_->want_to_use_vertex_buffer_);
 
+			target->unlockGLContext();
+
 			render_mutex_.unlock();
 		}
 
@@ -57,8 +57,7 @@ namespace BALL
 
 			render_mutex_.lock();
 
-			printf("resize makeCurrent()\n");
-			target->makeCurrent();
+			target->lockGLContext();
 
 			if(!target->resize(width, height))
 			{
@@ -69,10 +68,11 @@ namespace BALL
 
 			if (RTTI::isKindOf<BufferedRenderer>(*renderer))
 			{
-				if(!(((BufferedRenderer*)renderer)->setFrameBufferFormat(scene_->getFormat())))
+				if(!(((BufferedRenderer*)renderer)->setFrameBufferFormat(target->getFormat())))
 				{
 					Log.error() << "Raytracing render does not support window framebuffer format. Seems to be configuration error" << endl;
 
+					target->unlockGLContext();
 					render_mutex_.unlock();
 
 					throw Exception::GeneralException(__FILE__, __LINE__);
@@ -83,6 +83,8 @@ namespace BALL
 				((GLRenderer*)renderer)->setSize(width, height);
 
 			// do *not* move this unlock call below updateCamera, or we will deadlock!
+			target->unlockGLContext();
+
 			render_mutex_.unlock();
 
 			updateCamera();
@@ -150,8 +152,7 @@ namespace BALL
 
 		void RenderSetup::run()
 		{
-			printf("run makeCurrent()\n");
-			target->makeCurrent();
+			target->lockGLContext();
 
 			useContinuousLoop(true);
 
@@ -162,6 +163,8 @@ namespace BALL
 				renderToBuffer_();
 				printf("###########################################################\n");
 			}
+
+			target->unlockGLContext();
 		}
 
 		void RenderSetup::renderToBuffer()
@@ -178,35 +181,22 @@ namespace BALL
 					msleep(100);
 				return;
 			}
-printf("start to rtb_\n");
 
 			render_mutex_.lock();
 
-			printf("rtb makeCurrent()\n");
 			if (!use_continuous_loop_)
-				target->makeCurrent();
+				target->lockGLContext();
 
-	printf("setprev\n");
 			renderer->setPreviewMode(scene_->use_preview_ && scene_->preview_);
 			renderer->showLightSources(scene_->show_light_sources_);
 
-			// We need to find out whether a recursive lock would be faster...
-printf("camera\n");
-			render_mutex_.unlock();
 			updateCamera();
-			render_mutex_.lock();
-printf("camera done\n");
 
 			if (RTTI::isKindOf<BufferedRenderer>(*renderer))
 			{
-printf("rtti done\n");
 				((BufferedRenderer*)renderer)->renderToBuffer(target, *stage_);
-printf("refreshing\n");
-// TEST
-	//render_mutex_.unlock();
-	//return;
+				//TEST
 				target->refresh();
-printf("real rtb\n");
 				// TODO: render coordinate systems!
 			}
 
@@ -227,15 +217,16 @@ printf("real rtb\n");
 					target->updateGL();
 			}
 
-printf("swap\n");
 			if (use_continuous_loop_)
 			{
 				target->swapBuffers();
-	printf("done current\n");
-			//	target->doneCurrent();
+//				target->doneCurrent();
+			}
+			else
+			{
+				target->unlockGLContext();
 			}
 
-printf("stop the rtb_\n");
 			render_mutex_.unlock();
 		}
 
@@ -245,7 +236,6 @@ printf("stop the rtb_\n");
 			{
 				render_mutex_.lock();
 
-				printf("buffer makeCurrnet\n");
 				target->makeCurrent();
 				renderer->bufferRepresentation(rep);
 
@@ -259,7 +249,6 @@ printf("stop the rtb_\n");
 			{
 				render_mutex_.lock();
 
-				printf("bufferdel makeCurrnet\n");
 				target->makeCurrent();
 				renderer->removeRepresentation(rep);
 
@@ -273,7 +262,6 @@ printf("stop the rtb_\n");
 
 			if (!use_continuous_loop_)
 			{
-				printf("set lights makeCurrent\n");
 				target->makeCurrent();
 			}
 			renderer->setLights(reset_all);
