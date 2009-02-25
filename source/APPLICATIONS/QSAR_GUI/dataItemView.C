@@ -28,10 +28,11 @@ DataItemView::DataItemView(DataItemScene* scene, MainWindow* mw):
 	setInteractive (true);
  }
 
- void DataItemView::wheelEvent(QWheelEvent *event)
+ void DataItemView::wheelEvent(QWheelEvent* event)
  {
 	if (name == "view")
 	{
+		centerOn(event->x(),event->y());
 		scaleView(pow((double)2, -event->delta() / 240.0));
 	}
  }
