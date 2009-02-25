@@ -47,6 +47,9 @@ namespace BALL
 				void printToFile(QString& file);
 				
 				~Plotter();
+				
+				/** Call this (overloaded) method every new results are available within the connected item */
+				virtual void update() {};
 
 				
 				

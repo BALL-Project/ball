@@ -388,6 +388,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 			pos = model_item_at_pos->pos();
 			item->setView(view);
 			addItem(item);
+			item->addToPipeline();
 			pos += getOffset(pos,item);
 			item->setPos(pos);
 			
@@ -400,7 +401,6 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 			addItem(edge);
 			Edge* edge2 = new Edge(model_item_at_pos, item);
 			addItem(edge2);
-			item->addToPipeline();
 		}
 		catch(InvalidFeatureSelectionItem)
 		{

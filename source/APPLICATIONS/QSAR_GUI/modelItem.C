@@ -399,6 +399,7 @@ bool ModelItem::execute()
 	}
 	
 	setResultString((int)model_->getDescriptorNames()->size());
+	feature_plotter_->update();
 	done_ = 1; //ready!
 	return 1;
 }
@@ -429,25 +430,25 @@ void ModelItem::optimizeKernelParameters()
 bool ModelItem::isDone()
 {
 	if(done_) return 1;
-	if(!save_attribute_) return 1; // if model is trained by FeatureSelectionItem, do nothing here !
 	
-	// if this item has (only) a FeatureSelectionItem as parent, the FeatureSelectionItem will train this model after selecting features ... so do nothing here!
-	bool only_fs_items=1;
+	// If this ModelItem is the output of a feature selection, FeatureSelectionItem::execute() will set this->done_ to true.
+	// Thus if this ModelItem is the output of a feature selection and the pipeline has just been reloaded (done_==0), just check in order to set the correct pixmap in this case.	
+	bool only_fs=1;
 	for(set<Edge*>::iterator it=in_edge_list_.begin();it!=in_edge_list_.end();it++)
 	{
 		if((*it)->sourceNode()->type()!=FeatureSelectionItem::Type)
 		{
-			only_fs_items = 0;
+			only_fs=0;
 			break;
 		}
 	}
-	if(only_fs_items) // this item will be trained by FSItems, so don't change icon
+	if(only_fs)
 	{
-		no_training_ = 1;
-		return 0;
+		enableTraining(); // sets pixmap
+		return 1; 
 	}
 	
-	// if this model is the last child of a pipeline train it in order to be able to display the coefficients
+	// if this model is the last child of a pipeline train it in order to be able to analyze the final model or make predictions
 	if(out_edge_list_.size()==0)
 	{
 		enableTraining();
@@ -464,8 +465,9 @@ bool ModelItem::isDone()
 			return 0;
 		}
 	}
-	disableTraining();
-	return 0;
+	
+	disableTraining(); // sets pixmap
+	return 1;
 }
 
 void ModelItem::disableTraining()
@@ -876,11 +878,11 @@ BALL::String ModelItem::getMouseOverText()
 void ModelItem::change()
 {
 	DataItem::change();
-	delete feature_plotter_; 
+//	delete feature_plotter_; 
 	delete plotter_; 
 	delete latent_variable_plotter_;
 	delete loading_plotter_;
-	feature_plotter_=NULL;
+//	feature_plotter_=NULL;
 	plotter_=NULL;
 	latent_variable_plotter_=NULL;
 	loading_plotter_=NULL;
@@ -890,9 +892,9 @@ void ModelItem::change()
 // SLOT
 void ModelItem::showFeaturePlotter()
 {
-	if(model_==NULL) return;
+	if(model_==NULL || !isDone()) return;
 	
-	if(entry_->regression && ((RegressionModel*)model_)->getTrainingResult()->Ncols()!=0)
+	if(entry_->regression)
 	{
 		if(feature_plotter_ == NULL)
 		{

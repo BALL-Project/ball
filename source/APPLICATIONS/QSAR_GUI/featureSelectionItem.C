@@ -91,6 +91,7 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 	k_ = conf.k_fold;
 	name_ = conf.selection_name.c_str();
 	opt_ = conf.opt;
+	addToPipeline();
 	
 	// model-/kernel-parameter optimization parameters
 	post_optimization_model_par_ = conf.opt_model_after_fs;
@@ -111,7 +112,7 @@ FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<
 	{
 		feature_selection_->setQualityIncreaseCutoff(quality_increase_cutoff_);
 	}
-	addToPipeline();
+	
 	view_->data_scene->addItem(this);
 	if(item_positions!=0 && item_positions->size()>0)
 	{

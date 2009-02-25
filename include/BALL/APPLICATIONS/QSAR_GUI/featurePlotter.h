@@ -16,6 +16,9 @@ namespace BALL
 			
 			public:
 				FeaturePlotter(ModelItem* model_item);
+				
+				/** fetch new results if the model was retrained and update display */
+				void update();
 		
 			
 			private:
@@ -23,11 +26,15 @@ namespace BALL
 				
 				QComboBox* feature_combobox_;
 				
+				QPushButton* delete_feature_button_;
+				
 				void plot(bool zoom);
 			
 				
 			private slots:
 				void selectedFeatureChanged();
+				
+				void deleteCurrentFeature();
 		
 			
 			
