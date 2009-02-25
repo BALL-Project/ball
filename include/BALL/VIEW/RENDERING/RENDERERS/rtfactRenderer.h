@@ -107,7 +107,6 @@ namespace BALL
 				template<typename taPixelType>
 				void renderImpl(taPixelType* buffer, const unsigned int width, const unsigned int height, const unsigned int pitch);
 
-				template<>
 				void renderImpl(float* buffer, const unsigned int width, const unsigned int height, const unsigned int pitch)
 				{
 				}
