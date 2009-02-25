@@ -399,7 +399,7 @@ bool ModelItem::execute()
 	}
 	
 	setResultString((int)model_->getDescriptorNames()->size());
-	feature_plotter_->update();
+	if(feature_plotter_!=0) feature_plotter_->update();
 	done_ = 1; //ready!
 	return 1;
 }
@@ -466,8 +466,11 @@ bool ModelItem::isDone()
 		}
 	}
 	
-	disableTraining(); // sets pixmap
-	return 1;
+	// If this ModelItem is connected only to FeatureSelectionItem (!=type 5),
+	// then make sure that this model is NOT trained but return 0, so that execute() will 
+	// read the training data
+	disableTraining();
+	return 0;
 }
 
 void ModelItem::disableTraining()
