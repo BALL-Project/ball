@@ -75,6 +75,7 @@ namespace BALL
 			private:
 
 			void setValues_(const QSlider& slider, QLabel& label, int divisor);
+			void setQuadraticValues_(const QSlider& slider, QLabel& label, int divisor);
 
 			Representation const* current_representation_;
 		};

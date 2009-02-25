@@ -76,8 +76,7 @@ namespace BALL
 				}
 				if (radioButton_OpenGL->isChecked()) // TODO is this correct? names indicate but who knows??
 				{
-					// shininess uses a logarithmic scale
-					glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 2*log(stage.getShininess()+1.1));
+					glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, (stage.getShininess()+0.1));
 					GLfloat values[4];
 					values[0] = values[1] = values[2] =  stage.getSpecularIntensity();
 					values[3] = 1.0;
@@ -97,8 +96,7 @@ namespace BALL
 					rt_material.specular_intensity   = specularity_factor_label->text().toFloat();
 					rt_material.reflective_intensity = reflectiveness_factor_label->text().toFloat();
 
-					// shininess uses a logarithmic scale
-					rt_material.shininess          = 2*log(shininess_factor_label->text().toFloat()+1.1);
+					rt_material.shininess          = shininess_factor_label->text().toFloat()+0.1;
 
 					if (objectName() == "MaterialSettingsForRepresentation")
 					{
@@ -144,7 +142,8 @@ namespace BALL
 
 		void MaterialSettings::shininessFactorChanged()
 		{
-			setValues_(*shininess_factor_slider, *shininess_factor_label, 1);	
+			//setValues_(*shininess_factor_slider, *shininess_factor_label, 1);	
+			setQuadraticValues_(*shininess_factor_slider, *shininess_factor_label, shininess_factor_slider->maximum());	
 			if (update_directly_checkBox->isChecked())
 				apply();
 		}
@@ -169,6 +168,26 @@ namespace BALL
 			if (text.hasSuffix(".")) text += "0";
 				
 			label.setText(text.c_str());
+		}
+		
+		void MaterialSettings::setQuadraticValues_(const QSlider& slider, QLabel& label, int divisor)
+		{
+			float quadratic_value =((float)slider.value()) / divisor; 
+			quadratic_value *= quadratic_value;
+			quadratic_value *= divisor;
+			QString truncated_text;
+			truncated_text.setNum(quadratic_value,'f', 3);
+			//String text = String(quadratic_value);
+			//
+			//while (text.has('.') && text.hasSuffix("0"))
+			//{
+			//	text = text.trimRight("0");
+			//}
+
+			//if (text.hasSuffix(".")) text += "0";
+			//	
+			//label.setText(text.c_str());
+			label.setText(truncated_text);
 		}
 		
 		void MaterialSettings::editAmbientColor()
