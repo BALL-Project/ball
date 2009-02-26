@@ -12,7 +12,7 @@ using namespace std;
 namespace BALL
 {
 
-	SolventParameter::SolventParameter() throw()
+	SolventParameter::SolventParameter()
 		: ParameterSection(),
 			name_(),
 			number_density_(0.0),
@@ -23,7 +23,7 @@ namespace BALL
 	}
 
 
-	SolventParameter::SolventParameter(const SolventParameter& param) throw()
+	SolventParameter::SolventParameter(const SolventParameter& param)
 		: ParameterSection(param),
 			name_(param.name_),
 			number_density_(param.number_density_),
@@ -34,7 +34,7 @@ namespace BALL
 	}
 
 
-	SolventParameter::SolventParameter(const AtomTypes& atom_types) throw()
+	SolventParameter::SolventParameter(const AtomTypes& atom_types)
 		: ParameterSection(),
 			name_(),
 			number_density_(),
@@ -45,14 +45,14 @@ namespace BALL
 	}
 
 
-	SolventParameter::~SolventParameter() throw()
+	SolventParameter::~SolventParameter()
 	{
 		clear();
 		valid_ = false;
 	}
 
 
-	void SolventParameter::clear() throw()
+	void SolventParameter::clear()
 	{
 		ParameterSection::clear();
 		name_ = "";
@@ -64,7 +64,7 @@ namespace BALL
 
 
 	const SolventParameter& SolventParameter::operator = 
-		(const SolventParameter& param) throw()
+		(const SolventParameter& param)
 	{
 		ParameterSection::operator = (param);
 		name_ = param.name_;
@@ -78,7 +78,6 @@ namespace BALL
 
 
 	bool SolventParameter::operator == (const SolventParameter& param) const
-		throw()
 	{
 		// ?????
 		return ((ParameterSection::operator == (param))
@@ -89,33 +88,33 @@ namespace BALL
 	}
 
 
-	SolventDescriptor& SolventParameter::getSolventDescriptor() throw()
+	SolventDescriptor& SolventParameter::getSolventDescriptor()
 	{
 		return solvent_descriptor_;
 	}
 
-	const SolventDescriptor& SolventParameter::getSolventDescriptor() const throw()
+	const SolventDescriptor& SolventParameter::getSolventDescriptor() const
 	{
 		return solvent_descriptor_;
 	}
 
-	const String& SolventParameter::getSolventName() const throw()
+	const String& SolventParameter::getSolventName() const
 	{
 		return name_;
 	}
 
-	const std::vector<SolventAtomDescriptor>& SolventParameter::getSolventDescription() const throw()
+	const std::vector<SolventAtomDescriptor>& SolventParameter::getSolventDescription() const
 	{
 		return solvent_atoms_;
 	}  
 
-	const float& SolventParameter::getSolventDensity() const throw()
+	const float& SolventParameter::getSolventDensity() const
 	{
 		return number_density_;
 	}
 
 	bool SolventParameter::extractSection(Parameters& parameters,
-			const String& section_name) throw()
+			const String& section_name)
 	{
 		// ?????
 		if (!parameters.isValid())

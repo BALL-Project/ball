@@ -127,16 +127,15 @@ namespace BALL
 
 		/** Default constructor 
 		*/
-		PierottiCavFreeEnergyProcessor() throw();
+		PierottiCavFreeEnergyProcessor();
 
 		/** Copy constructor 
 		*/
-		PierottiCavFreeEnergyProcessor(const PierottiCavFreeEnergyProcessor& proc) 
-			throw();
+		PierottiCavFreeEnergyProcessor(const PierottiCavFreeEnergyProcessor& proc);
 
 		/** Destructor 
 		*/
-		virtual ~PierottiCavFreeEnergyProcessor() throw();
+		virtual ~PierottiCavFreeEnergyProcessor();
 
 		//@}
 		/** @name Assignment 
@@ -145,12 +144,11 @@ namespace BALL
 
 		/** Assignment operator 
 		*/
-		const PierottiCavFreeEnergyProcessor& operator = (
-				const PierottiCavFreeEnergyProcessor& proc) throw();
+		const PierottiCavFreeEnergyProcessor& operator = (const PierottiCavFreeEnergyProcessor& proc);
 
 		/** Clear function 
 		*/
-		virtual void clear() throw();
+		virtual void clear();
 
 		//@}
 		/** @name Predicates 
@@ -159,7 +157,7 @@ namespace BALL
 		
 		/** Equality operator 
 		*/
-		bool operator == (const PierottiCavFreeEnergyProcessor& proc) const throw();
+		bool operator == (const PierottiCavFreeEnergyProcessor& proc) const;
 
 		//@}
 		/** @name processor functions 
@@ -168,7 +166,7 @@ namespace BALL
 
 		/** This is where the actual computation takes place. 
 		*/
-		virtual bool finish() throw();
+		virtual bool finish();
 
 		//@}
 		/** @name Options 
@@ -183,7 +181,7 @@ namespace BALL
 
 		private:
 
-		void setDefaultOptions() throw();
+		void setDefaultOptions();
 
 	};
    

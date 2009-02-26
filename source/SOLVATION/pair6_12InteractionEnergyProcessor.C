@@ -50,7 +50,7 @@ namespace BALL
 
 
 	Pair6_12InteractionEnergyProcessor::Pair6_12InteractionEnergyProcessor()
-		throw()
+		
 		: EnergyProcessor(),
 			solvent_(),
 			rdf_parameter_(),
@@ -67,7 +67,7 @@ namespace BALL
 
 
 	Pair6_12InteractionEnergyProcessor::Pair6_12InteractionEnergyProcessor
-		(const Pair6_12InteractionEnergyProcessor& proc) throw()
+		(const Pair6_12InteractionEnergyProcessor& proc) 
 		: EnergyProcessor(proc),
 			solvent_(proc.solvent_),
 			rdf_parameter_(proc.rdf_parameter_),
@@ -80,7 +80,7 @@ namespace BALL
 		(const SolventDescriptor& solvent,
 		 const RDFParameter& rdf_parameter,
 		 const Pair6_12RDFIntegrator& rdf_integrator) 
-		throw()
+		
 		:	solvent_(solvent),
 			rdf_parameter_(rdf_parameter),
 			rdf_integrator_(rdf_integrator)
@@ -89,7 +89,7 @@ namespace BALL
 
 
 	Pair6_12InteractionEnergyProcessor::~Pair6_12InteractionEnergyProcessor()
-		throw()
+		
 	{
 		clear();
 
@@ -97,7 +97,7 @@ namespace BALL
 	}
 
 
-	void Pair6_12InteractionEnergyProcessor::clear() throw()
+	void Pair6_12InteractionEnergyProcessor::clear() 
 	{
 		EnergyProcessor::clear();
 		solvent_.clear();
@@ -109,42 +109,42 @@ namespace BALL
 
 
 	void Pair6_12InteractionEnergyProcessor::setSolventDescriptor
-		(const SolventDescriptor& solvent) throw()
+		(const SolventDescriptor& solvent) 
 	{
 		solvent_ = solvent;
 	}
 
 
 	const SolventDescriptor& 
-		Pair6_12InteractionEnergyProcessor::getSolventDescriptor() const throw()
+		Pair6_12InteractionEnergyProcessor::getSolventDescriptor() const 
 	{
 		return solvent_;
 	}
 
 
 	void Pair6_12InteractionEnergyProcessor::setRDFParameters
-		(const RDFParameter& rdf_parameter) throw()
+		(const RDFParameter& rdf_parameter) 
 	{
 		rdf_parameter_ = rdf_parameter;
 	}
 
 
 	const RDFParameter& 
-		Pair6_12InteractionEnergyProcessor::getRDFParameter() const throw() 
+		Pair6_12InteractionEnergyProcessor::getRDFParameter() const  
 	{
 		return rdf_parameter_;
 	}
 
 
 	void Pair6_12InteractionEnergyProcessor::setRDFIntegrator
-		(const Pair6_12RDFIntegrator& integrator) throw()
+		(const Pair6_12RDFIntegrator& integrator) 
 	{
 		rdf_integrator_ = integrator;
 	}
 
 
 	const Pair6_12RDFIntegrator& 
-		Pair6_12InteractionEnergyProcessor::getRDFIntegrator() const throw()
+		Pair6_12InteractionEnergyProcessor::getRDFIntegrator() const 
 	{
 		return rdf_integrator_;
 	}
@@ -152,7 +152,7 @@ namespace BALL
 
 	const Pair6_12InteractionEnergyProcessor&
 		Pair6_12InteractionEnergyProcessor::operator =
-		(const Pair6_12InteractionEnergyProcessor& proc) throw()
+		(const Pair6_12InteractionEnergyProcessor& proc) 
 	{
 		EnergyProcessor::operator = (proc);
 		solvent_ = proc.solvent_;
@@ -164,7 +164,7 @@ namespace BALL
 
 
 	bool Pair6_12InteractionEnergyProcessor::operator == (const
-	Pair6_12InteractionEnergyProcessor& proc) const throw()
+	Pair6_12InteractionEnergyProcessor& proc) const 
 	{
 		return (EnergyProcessor::operator == (proc)
 			&& (solvent_ == proc.solvent_)
@@ -613,9 +613,9 @@ namespace BALL
 	// ?????: shouldn't be here...
 	void Pair6_12InteractionEnergyProcessor::getExternalSurface_(
 			vector< pair<Vector3, Surface> >& surface_map, 
-			const char* surface_file) throw()
+			const char* surface_file) 
 	{
-		// HIER WIRD NICHTS, ABER AUCH GAR NICHTS GEPRÜFT!!!
+		// HIER WIRD NICHTS, ABER AUCH GAR NICHTS GEPRï¿½FT!!!
 		surface_map.clear();
 
 		String tag;

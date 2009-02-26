@@ -42,22 +42,20 @@ namespace BALL
 
 		/** Default constructor 
 		*/
-		ClaverieParameter() throw();
+		ClaverieParameter();
 
 		/** Detailed constructor 
 		*/
 		ClaverieParameter(const Parameters& parameters) 
-			throw();
+			;
 
 		/** Copy constructor 
 		*/
-		ClaverieParameter(const ClaverieParameter& param) 
-			throw();
+		ClaverieParameter(const ClaverieParameter& param);
 
 		/** Destructor 
 		*/
-		virtual ~ClaverieParameter() 
-			throw();
+		virtual ~ClaverieParameter();
 
 		//@}
 		/** @name Assignment 
@@ -66,13 +64,11 @@ namespace BALL
 
 		/** Assignment operator 
 		*/
-		const ClaverieParameter& operator = (const ClaverieParameter& param)
-			throw();
+		const ClaverieParameter& operator = (const ClaverieParameter& param);
 
 		/** Clear method 
 		*/
-		virtual void clear() 
-			throw();
+		virtual void clear();
 
 		//@}
 		/** @name Accessors 
@@ -82,29 +78,24 @@ namespace BALL
 		/** Indicate, whether this parameter set has parameters for the
 				specified atom types.
 		*/
-		bool hasParameters(Atom::Type solvent_type, Atom::Type solute_type) const
-			throw();
+		bool hasParameters(Atom::Type solvent_type, Atom::Type solute_type) const;
 
 		/** Get the parameters for the specified atom types.
 		*/
 		std::pair<float, float> getParameters(Atom::Type solvent_type,
-				Atom::Type solute_type) const 
-			throw();
+				Atom::Type solute_type) const;
 
 		/** ?????
 		*/
-		std::pair<float, float> getParameters(Atom::Type type) const 
-			throw();
+		std::pair<float, float> getParameters(Atom::Type type) const;
 
 		/** Return the whole parameter set.
 		*/
-		const ::std::vector< ::std::pair<float, float> >& getParameters() const
-			throw();
+		const ::std::vector< ::std::pair<float, float> >& getParameters() const;
 
 		/** Return the indices used for mapping types to numbers
 		*/
-		const HashMap<Atom::Type, Index>& getIndices() const
-			throw();
+		const HashMap<Atom::Type, Index>& getIndices() const;
 
 		//@}
 		/** @name Predicates 
@@ -113,16 +104,14 @@ namespace BALL
 
 		/** Equality operator.
 		*/
-		bool operator == (const ClaverieParameter& param) const 
-			throw();
+		bool operator == (const ClaverieParameter& param) const;
 
 		//@}
 
 		/** Extract the parameter file section (@see ParameterSection).
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters,
-				const String& section_name) 
-			throw();
+				const String& section_name);
 
 		protected:
 

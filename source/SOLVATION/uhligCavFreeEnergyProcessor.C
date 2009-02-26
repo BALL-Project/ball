@@ -26,7 +26,7 @@ namespace BALL
 		= 3854.606;
 
 
-	UhligCavFreeEnergyProcessor::UhligCavFreeEnergyProcessor() throw()
+	UhligCavFreeEnergyProcessor::UhligCavFreeEnergyProcessor()
 		:	EnergyProcessor()
 	{
 		setDefaultOptions();
@@ -36,13 +36,13 @@ namespace BALL
 
 
 	UhligCavFreeEnergyProcessor::UhligCavFreeEnergyProcessor
-	(const UhligCavFreeEnergyProcessor& proc) throw()
+	(const UhligCavFreeEnergyProcessor& proc)
 		: EnergyProcessor(proc)
 	{
 	}
 
 
-	UhligCavFreeEnergyProcessor::~UhligCavFreeEnergyProcessor() throw()
+	UhligCavFreeEnergyProcessor::~UhligCavFreeEnergyProcessor()
 	{
 		clear();
 
@@ -50,7 +50,7 @@ namespace BALL
 	}
 
 
-	void UhligCavFreeEnergyProcessor::clear() throw()
+	void UhligCavFreeEnergyProcessor::clear()
 	{
 		EnergyProcessor::clear();
 		setDefaultOptions();
@@ -58,15 +58,15 @@ namespace BALL
 		valid_ = true;
 	}
 
-	const UhligCavFreeEnergyProcessor& UhligCavFreeEnergyProcessor::operator = (const UhligCavFreeEnergyProcessor& proc) throw()     
+	const UhligCavFreeEnergyProcessor& UhligCavFreeEnergyProcessor::operator = (const UhligCavFreeEnergyProcessor& proc) 
 	{
 		valid_=proc.valid_;
 		energy_=proc.energy_;
-		fragment_=proc.fragment_;  
+		fragment_=proc.fragment_;
 		return *this;
 	}
 
-	bool UhligCavFreeEnergyProcessor::operator == (const UhligCavFreeEnergyProcessor& proc) const throw()
+	bool UhligCavFreeEnergyProcessor::operator == (const UhligCavFreeEnergyProcessor& proc) const
 	{
 		bool result;
 		if ((fragment_ == 0) && (proc.fragment_ == 0))
@@ -81,15 +81,13 @@ namespace BALL
 			}
 			else
 			{
-				result = ((*fragment_ == *proc.fragment_) 
-						&& (energy_ 	 == proc.energy_)
-						&& (valid_ 	 == proc.valid_));
+				result = ((*fragment_ == *proc.fragment_) && (energy_ 	 == proc.energy_) && (valid_ 	 == proc.valid_));
 			}
 		}
 		return result;
 	}
 
-	bool UhligCavFreeEnergyProcessor::finish() throw()
+	bool UhligCavFreeEnergyProcessor::finish()
 	{
 
 		// first check for user settings
@@ -120,7 +118,7 @@ namespace BALL
 	}
 
 
-	void UhligCavFreeEnergyProcessor::setDefaultOptions() throw()
+	void UhligCavFreeEnergyProcessor::setDefaultOptions()
 	{
 		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
 		options.setDefaultReal(Option::PROBE_RADIUS, Default::PROBE_RADIUS);

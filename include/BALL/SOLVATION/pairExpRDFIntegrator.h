@@ -81,14 +81,12 @@ namespace BALL
 
 		/** Default constructor
 		*/
-		PairExpRDFIntegrator() 
-			throw();
+		PairExpRDFIntegrator();
 
 		/** Copy constructor.
 				@param integrator the integrator to copy construct from
 		*/
-		PairExpRDFIntegrator(const PairExpRDFIntegrator& integrator) 
-			throw();
+		PairExpRDFIntegrator(const PairExpRDFIntegrator& integrator);
 
 		/** Detailed constructor 
 				@param alpha potential constant
@@ -100,13 +98,11 @@ namespace BALL
 				@param rdf a radial distribution functin  \link RadialDistributionFunction RadialDistributionFunction \endlink  
 		*/
 		PairExpRDFIntegrator(double alpha, double C1, double C2, double R_ij_o,
-				double k1, double k2, const RadialDistributionFunction& rdf)
-			throw();
+				double k1, double k2, const RadialDistributionFunction& rdf);
 
 		/** Destructor 
 		*/
-		virtual ~PairExpRDFIntegrator()
-			throw();
+		virtual ~PairExpRDFIntegrator();
 
 		//@}
 		/** @name Assignment 
@@ -118,13 +114,11 @@ namespace BALL
 				@return a const reference to this
 		*/
 		const PairExpRDFIntegrator& operator = 
-			(const PairExpRDFIntegrator& integrator) 
-			throw();
+			(const PairExpRDFIntegrator& integrator) ;
 
 		/** Clear method 
 		*/
-		virtual void clear() 
-			throw();
+		virtual void clear();
 
 		//@}
 		/** @name Accessors 
@@ -141,8 +135,7 @@ namespace BALL
 				@param k2 geometric correction constant
 		*/
 		void setConstants(double alpha, double C1, double C2, double R_ij_o,
-				double k1, double k2) 
-			throw();
+				double k1, double k2);
 
 		/** Get the potential and geometric correction constants of this
 				instance of PairExpRDFIntegrator
@@ -154,15 +147,13 @@ namespace BALL
 				@param k2 geometric correction constant (set by this function)
 		*/
 		void getConstants(double& alpha, double& C1, double& C2, double& R_ij_o,
-				double& k1, double& k2) 
-			throw();
+				double& k1, double& k2) ;
 
 		/** Integrate to Infinity from <tt>from</tt> using previously set constants 
 				@param from the lower limit of integration
 				@return the value of the integration
 		*/
-		double integrateToInf(double from) const 
-			throw();
+		double integrateToInf(double from) const;
 
 		/** Integrate from <tt>from</tt> to infinity using the specified constants 
 				@param from the lower limit of the integration
@@ -175,16 +166,14 @@ namespace BALL
 				@return the value of the integral
 		*/
 		double integrateToInf(double from, double alpha, double C1, double C2,
-				double R_ij_o, double k1, double k2) 
-			throw();
+				double R_ij_o, double k1, double k2);
 
 		/** Integrate from <tt>from</tt> to <tt>to</tt> using previously assigned	constants.
 				@param from the lower limit
 				@param to the upper limit 
 				@return the value of the integration
 		*/
-		double integrate(double from, double to) const 
-			throw();
+		double integrate(double from, double to) const ;
 
 		/** Integrate from <tt>from</tt> to <tt>to</tt> using the specified constants 
 				@param from the lower limit of integration
@@ -198,16 +187,14 @@ namespace BALL
 				@return the value of the integration
 		*/
 		double integrate(double from, double to, double alpha, double C1, 
-				double C2, double R_ij_o, double k1, double k2) 
-			throw();
+				double C2, double R_ij_o, double k1, double k2) ;
 		
 		/** Default operation, integrate from <tt>x</tt> to infinity using
 				previously assigned constants 
 				@param x the lower limit of the integration to infinity
 				@return the value of the integration
 		 */
-		virtual double operator () (double x) const 
-			throw();
+		virtual double operator () (double x) const;
 
 		//@}
 		/** @name Predicates 
@@ -219,8 +206,7 @@ namespace BALL
 				@param integrator another instance of PairExpRDFIntegrator
 				@return true, if both instances are equal
 		*/
-		bool operator == (const PairExpRDFIntegrator& integrator) const 
-			throw();
+		bool operator == (const PairExpRDFIntegrator& integrator) const;
 
 		//@}
 
@@ -236,8 +222,7 @@ namespace BALL
 				@param s an ostream, defaults to std::cout
 				@param depth the indentation depth of the output
 		*/
-		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const
-			throw();
+		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const;
 		
 		//@}
 
@@ -274,20 +259,20 @@ namespace BALL
 				@param interval the interval to be integrated
 				@return the value of the integral
 		*/
-		double numericallyIntegrateInterval(Interval interval) const throw();
+		double numericallyIntegrateInterval(Interval interval) const;
 
 		/*_ Project a number from the integration beam to the projection beam
 				of an atom center for the rdf thingy. 
 				@param x the value to be projected
 				@return the projection of <b>  x </b>
 		*/
-		double project(double x) const throw();
+		double project(double x) const;
 
 		/*_ Do the reverse of project(). 
 				@param x the valut to be reversly projected
 				@return the projection of <b>  x </b>
 		*/
-		double unproject(double x) const throw();
+		double unproject(double x) const;
 
 	};
    

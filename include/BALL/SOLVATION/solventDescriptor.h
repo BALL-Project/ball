@@ -72,20 +72,20 @@ namespace BALL
 
 		/** Default constructor 
 		*/
-		SolventDescriptor() throw();
+		SolventDescriptor();
 
 		/** Copy constructor 
 		*/
-		SolventDescriptor(const SolventDescriptor& solvent) throw();
+		SolventDescriptor(const SolventDescriptor& solvent);
 
 		/** Detailed constructor 
 		*/
 		SolventDescriptor(const String& name, float number_density,
-			const std::vector<SolventAtomDescriptor>& atom_list) throw();
+			const std::vector<SolventAtomDescriptor>& atom_list);
 
 		/** Destructor 
 		*/
-		virtual ~SolventDescriptor() throw();
+		virtual ~SolventDescriptor();
 
 		//@}
 		/** @name Assignment 
@@ -94,12 +94,11 @@ namespace BALL
 
 		/** Assignment operator 
 		*/
-		const SolventDescriptor& operator = (const SolventDescriptor& descriptor) 
-			throw();
+		const SolventDescriptor& operator = (const SolventDescriptor& descriptor);
 
 		/** Clear function 
 		*/
-		void clear() throw();
+		void clear();
 
 		//@}
 		/** @name Accessors 
@@ -108,38 +107,36 @@ namespace BALL
 
 		/** Set the name 
 		*/
-		void setName(const String& name) throw();
+		void setName(const String& name);
 
 		/** Get the name 
 		*/
-		const String& getName() const throw();
+		const String& getName() const;
 
 		/** Set the number density 
 		*/
-		void setNumberDensity(float number_density) throw();
+		void setNumberDensity(float number_density);
 		
 		/** Get the number density of this solvent (in $ A^{-3}$) 
 		*/
-		float getNumberDensity() const throw();
+		float getNumberDensity() const;
 
 		/** Set the list of solvent atom descriptors 
 		*/
 		void setSolventAtomDescriptorList(const
-			std::vector<SolventAtomDescriptor>& solvent_atoms) throw();
+			std::vector<SolventAtomDescriptor>& solvent_atoms);
 
 		/** Get the list of atom descriptors 
 		*/
-		const std::vector<SolventAtomDescriptor>& getSolventAtomDescriptorList() const
-			throw();
+		const std::vector<SolventAtomDescriptor>& getSolventAtomDescriptorList() const;
 		
 		/** Get the list of atom descriptors 
 		*/
-		std::vector<SolventAtomDescriptor>& getSolventAtomDescriptorList()
-			throw();
+		std::vector<SolventAtomDescriptor>& getSolventAtomDescriptorList();
 
 		/** Get the number of different atom types within a solvent molecule 
 		*/
-		Size getNumberOfAtomTypes() const throw();
+		Size getNumberOfAtomTypes() const;
 
 		/** Get atom decriptions by index 
 		*/
@@ -158,11 +155,11 @@ namespace BALL
 
 		/** Validity 
 		*/
-		bool isValid() const throw();
+		bool isValid() const;
 
 		/** Equality operator 
 		*/
-		bool operator == (const SolventDescriptor& descriptor) const throw();
+		bool operator == (const SolventDescriptor& descriptor) const;
 
 		//@}
 

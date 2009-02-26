@@ -14,7 +14,7 @@ namespace BALL
 	const bool ElectrostaticPotentialCalculator::Default::LOCALITY = true;
 	
 	ElectrostaticPotentialCalculator::ElectrostaticPotentialCalculator()
-		throw()
+		
 		: mySys_(),
 			frag_db_(0)
 	{
@@ -22,7 +22,7 @@ namespace BALL
 	}
 
 	ElectrostaticPotentialCalculator::ElectrostaticPotentialCalculator(const ElectrostaticPotentialCalculator& epc)
-		throw()
+		
 		: mySys_(epc.mySys_),
 		  frag_db_(epc.frag_db_)
 	{
@@ -31,7 +31,7 @@ namespace BALL
 	}
 
 	ElectrostaticPotentialCalculator::~ElectrostaticPotentialCalculator()
-		throw()
+		
 	{
 	}
 
@@ -53,7 +53,7 @@ namespace BALL
 	}
 
 	float ElectrostaticPotentialCalculator::operator() (const Vector3& pos)
-		throw()
+		
 	{
 		float phi_nonloc=0.;
 		float length;
@@ -99,13 +99,13 @@ namespace BALL
 	}
 
 	void ElectrostaticPotentialCalculator::setFragmentDB(const FragmentDB* db)
-		throw()
+		
 	{
 		frag_db_ = (FragmentDB*) db;
 	}
 
 	const FragmentDB* ElectrostaticPotentialCalculator::getFragmentDB() const
-		throw()
+		
 	{
 		return frag_db_;
 	}
