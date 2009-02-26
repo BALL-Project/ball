@@ -62,6 +62,15 @@ namespace BALL
 			if (target->isFullScreen())
 				return;
 
+			bool reset_continuous = false;
+
+			if (use_continuous_loop_)
+			{
+				// stop the thread
+				useContinuousLoop(false);
+				reset_continuous = true;
+			}
+
 			render_mutex_.lock();
 
 			target->lockGLContext();
@@ -95,6 +104,12 @@ namespace BALL
 			render_mutex_.unlock();
 
 			updateCamera();
+
+			if (reset_continuous)
+			{
+//				use_continuous_loop_ = true;
+//				start();
+			}
 		}
 
 		void RenderSetup::updateCamera(const Camera* camera)
@@ -162,6 +177,7 @@ namespace BALL
 #ifdef USE_TBB
 			tbb::task_scheduler_init init;
 #endif
+			target->ignoreEvents(true);
 			target->lockGLContext();
 
 			useContinuousLoop(true);
@@ -173,6 +189,7 @@ namespace BALL
 			}
 
 			target->unlockGLContext();
+			target->ignoreEvents(false);
 		}
 
 		void RenderSetup::renderToBuffer()
@@ -242,9 +259,13 @@ namespace BALL
 		{
 			if (receive_updates_)
 			{
+				if (use_continuous_loop_)
+					useContinuousLoop(false);
+
 				render_mutex_.lock();
 
-				target->makeCurrent();
+				if (!use_continuous_loop_)
+					target->makeCurrent();
 				renderer->bufferRepresentation(rep);
 
 				render_mutex_.unlock();
@@ -255,9 +276,13 @@ namespace BALL
 		{
 			if (receive_updates_)
 			{
+				if (use_continuous_loop_)
+					useContinuousLoop(false);
+
 				render_mutex_.lock();
 
-				target->makeCurrent();
+				if (!use_continuous_loop_)
+					target->makeCurrent();
 				renderer->removeRepresentation(rep);
 
 				render_mutex_.unlock();
