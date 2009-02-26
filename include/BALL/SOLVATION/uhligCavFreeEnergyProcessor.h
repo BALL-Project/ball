@@ -123,16 +123,15 @@ namespace BALL
 
 		/** Default constructor 
 		*/
-		UhligCavFreeEnergyProcessor() throw();
+		UhligCavFreeEnergyProcessor();
 
 		/** Copy constructor 
 		*/
-		UhligCavFreeEnergyProcessor(const UhligCavFreeEnergyProcessor& proc)
-			throw();
+		UhligCavFreeEnergyProcessor(const UhligCavFreeEnergyProcessor& proc);
 
 		/** Destructor 
 		*/
-		virtual ~UhligCavFreeEnergyProcessor() throw();
+		virtual ~UhligCavFreeEnergyProcessor();
 
 		//@}
 		/** @name Assignment 
@@ -141,12 +140,11 @@ namespace BALL
 
 		/** Assignment operator 
 		*/
-		const UhligCavFreeEnergyProcessor& operator = 
-			(const UhligCavFreeEnergyProcessor& proc) throw();
+		const UhligCavFreeEnergyProcessor& operator = (const UhligCavFreeEnergyProcessor& proc);
 
 		/** Clear function 
 		*/
-		virtual void clear() throw();
+		virtual void clear();
 
 		//@}
 		/** @name Predicates 
@@ -155,8 +153,7 @@ namespace BALL
 
 		/** Equality operator 
 		*/
-		bool operator == (const UhligCavFreeEnergyProcessor& proc) const
-			throw();
+		bool operator == (const UhligCavFreeEnergyProcessor& proc) const;
 
 		//@}
 		/** @name Processor functions 
@@ -165,7 +162,7 @@ namespace BALL
 
 		/** This is where the actual computation takes place. 
 		*/
-		virtual bool finish() throw();
+		virtual bool finish();
 
 		//@}
 		/** @name Options 
@@ -180,10 +177,9 @@ namespace BALL
 
 		private:
 
-		void setDefaultOptions() throw();
+		void setDefaultOptions();
 
 	};
-   
 }
 
 #endif // BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H

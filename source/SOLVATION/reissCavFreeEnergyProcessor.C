@@ -29,7 +29,7 @@ namespace BALL
 	const float ReissCavFreeEnergyProcessor::Default::PROBE_RADIUS = 1.385;
 
 
-	ReissCavFreeEnergyProcessor::ReissCavFreeEnergyProcessor() throw()
+	ReissCavFreeEnergyProcessor::ReissCavFreeEnergyProcessor()
 		: EnergyProcessor()
 	{
 		setDefaultOptions();
@@ -39,13 +39,13 @@ namespace BALL
 
 
 	ReissCavFreeEnergyProcessor::ReissCavFreeEnergyProcessor
-		(const ReissCavFreeEnergyProcessor& proc) throw()
+		(const ReissCavFreeEnergyProcessor& proc)
 		: EnergyProcessor(proc)
 	{
 	}
 
 
-	ReissCavFreeEnergyProcessor::~ReissCavFreeEnergyProcessor() throw()
+	ReissCavFreeEnergyProcessor::~ReissCavFreeEnergyProcessor()
 	{
 		clear();
 
@@ -53,7 +53,7 @@ namespace BALL
 	}
 
 
-	void ReissCavFreeEnergyProcessor::clear() throw()
+	void ReissCavFreeEnergyProcessor::clear()
 	{
 		EnergyProcessor::clear();
 		setDefaultOptions();
@@ -62,7 +62,7 @@ namespace BALL
 	}
 
 
-	const ReissCavFreeEnergyProcessor& ReissCavFreeEnergyProcessor::operator = (const ReissCavFreeEnergyProcessor& proc) throw()     
+	const ReissCavFreeEnergyProcessor& ReissCavFreeEnergyProcessor::operator = (const ReissCavFreeEnergyProcessor& proc) 
 	{
 		valid_ = proc.valid_;
 		energy_ = proc.energy_;
@@ -71,7 +71,7 @@ namespace BALL
 	}
 
 
-	bool ReissCavFreeEnergyProcessor::operator == (const ReissCavFreeEnergyProcessor& proc) const throw()
+	bool ReissCavFreeEnergyProcessor::operator == (const ReissCavFreeEnergyProcessor& proc) const
 	{
 		bool result;
 		if ((fragment_ == 0) && (proc.fragment_ == 0))
@@ -95,7 +95,7 @@ namespace BALL
 	}
 
 
-	bool ReissCavFreeEnergyProcessor::finish() throw()
+	bool ReissCavFreeEnergyProcessor::finish()
 	{
 
 		// first check for user settings
@@ -165,14 +165,12 @@ namespace BALL
 	}
 		
 	
-	void ReissCavFreeEnergyProcessor::setDefaultOptions() throw()
+	void ReissCavFreeEnergyProcessor::setDefaultOptions()
 	{
 		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
-		options.setDefaultReal(Option::SOLVENT_NUMBER_DENSITY, 
-				Default::SOLVENT_NUMBER_DENSITY);
+		options.setDefaultReal(Option::SOLVENT_NUMBER_DENSITY, Default::SOLVENT_NUMBER_DENSITY);
 		options.setDefaultReal(Option::PRESSURE, Default::PRESSURE);
-		options.setDefaultReal(Option::ABSOLUTE_TEMPERATURE,
-				Default::ABSOLUTE_TEMPERATURE);
+		options.setDefaultReal(Option::ABSOLUTE_TEMPERATURE, Default::ABSOLUTE_TEMPERATURE);
 		options.setDefaultReal(Option::PROBE_RADIUS, Default::PROBE_RADIUS);
 	}
 

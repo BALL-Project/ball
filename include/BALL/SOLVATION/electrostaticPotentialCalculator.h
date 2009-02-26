@@ -64,17 +64,17 @@ namespace BALL
 		/** Default constructor
 		 */
 		ElectrostaticPotentialCalculator()
-			throw();
+			;
 
 		/** Copy constructor
 		 */
 		ElectrostaticPotentialCalculator(const ElectrostaticPotentialCalculator& epc)
-			throw();
+			;
 
 		/** Destructor.
 		 */
 		virtual ~ElectrostaticPotentialCalculator()
-			throw();
+			;
 
 		//@}
 		/** @name Assignment
@@ -89,11 +89,11 @@ namespace BALL
 
 		///
 		void setFragmentDB(const FragmentDB* db)
-			throw();
+			;
 
 		///
 		const FragmentDB* getFragmentDB() const
-			throw();
+			;
 
 		//@}
 		/** @name Accessors
@@ -103,7 +103,7 @@ namespace BALL
 		/** Returns the electrostatic potential at position pos.
 		 */
 		float operator() (const Vector3& pos)
-			throw();
+			;
 
 		//@}
 		/** @name Options
