@@ -46,6 +46,7 @@ namespace BALL
 
 			// signals and slots connections
 			connect( color_button, SIGNAL( clicked() ), this, SLOT( colorPressed() ) );
+			connect( computeDefault_button, SIGNAL( clicked() ), this, SLOT( computeDefaultPressed() ) );
 			connect( capping_color_button, SIGNAL( clicked() ), this, SLOT( cappingColorPressed() ) );
 			connect( eye_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( eyeDistanceChanged() ) );
 			connect( focal_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( focalDistanceChanged() ) );
@@ -61,6 +62,57 @@ namespace BALL
 			chooseColor(color_sample);
 		}
 	
+		void StageSettings::computeDefaultPressed()
+		{
+			// try to compute sensible stereo settings
+			Camera& camera = Scene::getInstance(0)->getStage()->getCamera();
+			Vector3 view_vector = camera.getViewVector();
+			view_vector.normalize();
+			const Vector3& view_point = camera.getViewPoint();
+
+			RepresentationManager& r = MainControl::getInstance(0)->getRepresentationManager();
+			RepresentationList::const_iterator rit = r.getRepresentations().begin();
+
+			float min_separation = 600;
+			float max_separation = 1.5;
+
+			for (; rit != r.getRepresentations().end(); ++rit)
+			{
+				List<GeometricObject*>::ConstIterator it = (*rit)->getGeometricObjects().begin();
+
+				vector<Vector3> positions;
+				for (; it != (*rit)->getGeometricObjects().end(); ++it)
+				{
+					(*it)->getVertices(positions);
+					// iterate over them and find the closest point along the view vector
+					for (Position i=0; i<positions.size(); i++)
+					{
+						float separation = (positions[i] - view_point)*view_vector;
+						min_separation = std::min(std::max(separation, 0.f), min_separation);
+						max_separation = std::max(std::max(separation, 0.f), max_separation);
+					}
+					positions.clear();
+				}
+			}
+			Log.info() << "min_sep " << min_separation << std::endl;
+			Log.info() << "max_sep " << max_separation << std::endl;
+
+			float focal_distance = (max_separation - min_separation)/3 + min_separation;
+			Log.info() << "focal distance  " << focal_distance << std::endl;
+
+			float real2intern = focal_distance / getUser2ScreenDistance_();
+			Log.info() << "screen2intern  " << real2intern << std::endl;
+
+			float eye_separation = real2intern * getUserEyeDistance_();
+			
+			stage_->setEyeDistance(eye_separation);
+			stage_->setFocalDistance(focal_distance);
+			eye_distance_slider->setValue((int) ((eye_separation) * 10.));
+			focal_distance_slider->setValue((int) ((focal_distance) * 10.));
+			eyeDistanceChanged();
+			focalDistanceChanged();
+		}
+		
 		void StageSettings::environmentMapChanged(bool active)
 		{
  			if (active)
@@ -99,7 +151,7 @@ namespace BALL
 			wheel_slider_->setValue((int) Scene::getMouseWheelSensitivity() - 1);
 
 			eye_distance_slider->setValue((int) (stage_->getEyeDistance() * 10.0));
-			focal_distance_slider->setValue((int) (stage_->getFocalDistance()));
+			focal_distance_slider->setValue((int) (stage_->getFocalDistance() * 10.0));
 			fog_slider->setValue((int) (stage_->getFogIntensity()));
 			fog_box->setChecked(stage_->getFogIntensity() > 0);
 			animation_smoothness->setValue((int) (Scene::getAnimationSmoothness() * 10.0));
@@ -129,7 +181,7 @@ namespace BALL
 			Scene::setMouseWheelSensitivity(wheel_slider_->value() + 1);
 
 			stage_->setEyeDistance((float)(eye_distance_slider->value() / 10.0));
-			stage_->setFocalDistance((float)(focal_distance_slider->value()));
+			stage_->setFocalDistance((float)(focal_distance_slider->value() / 10.));
 			
 			//TODO
 			//if (environement_map->isChecked())
@@ -208,7 +260,39 @@ namespace BALL
 		}
 
 
+		float StageSettings::getUser2ScreenDistance_()
+			throw(Exception::InvalidFormat)
+		{
+			return screen_distance_lineEdit->text().toFloat();
+		}
 
+		void StageSettings::setUser2ScreenDistance_(const float& s2u)
+		{
+			screen_distance_lineEdit->setText(createFloatString(s2u, 2).c_str());
+		}
+
+		float StageSettings::getUserEyeDistance_()
+			throw(Exception::InvalidFormat)
+		{
+			return eye_distance_lineEdit->text().toFloat();
+		}
+
+		void StageSettings::setUserEyeDistance_(const float& s2u)
+		{
+			eye_distance_lineEdit->setText(createFloatString(s2u, 2).c_str());
+		}
+		
+		float StageSettings::getUserEyeLevel_()
+			throw(Exception::InvalidFormat)
+		{
+			return eye_level_lineEdit->text().toFloat();
+		}
+
+		void StageSettings::setUserEyeLevel_(const float& s2u)
+		{
+			eye_level_lineEdit->setText(createFloatString(s2u, 2).c_str());
+		}
+		
 		void StageSettings::setDefaultValues_()
 		{
 			setColor(color_sample, ColorRGBA(0,0,0));
@@ -260,7 +344,7 @@ namespace BALL
 				return;
 			}
 
-			String text(focal_distance_slider->value());
+			String text(focal_distance_slider->value() / 10.0);
 			while(text.has('.'))
 			{
 				text.truncate(text.size() - 1);

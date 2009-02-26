@@ -74,6 +74,9 @@ namespace BALL
 
 			/// Show a QColorDialog to select a new background color for the Scene
 			void colorPressed();
+			
+			///
+			void computeDefaultPressed();
 
 			/// Show a QFileDialog to select a new environment texture map for the Scene
 			void loadEnvironmentMapPressed();
@@ -105,6 +108,26 @@ namespace BALL
 			///
 			void setTextureUpDirection_(const Vector3& tud);
 
+			///
+			float getUser2ScreenDistance_()
+				throw(Exception::InvalidFormat);
+			
+			///
+			void setUser2ScreenDistance_(const float& s2u);
+			
+			///
+			float getUserEyeLevel_()
+				throw(Exception::InvalidFormat);
+			
+			///
+			void setUserEyeLevel_(const float& s2u);
+			
+			///
+			float getUserEyeDistance_()
+				throw(Exception::InvalidFormat);
+			
+			///
+			void setUserEyeDistance_(const float& s2u);
 			///
 			void setDefaultValues_();
 

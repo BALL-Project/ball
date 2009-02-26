@@ -327,6 +327,10 @@ namespace BALL
 			/// Rotate the camera
 			void rotate(const Quaternion& q, const Vector3& origin)
 				throw();
+			
+			/// Rotate the camera
+			void rotate(const Matrix4x4& mat, const Vector3& origin)
+				throw();
 
 			/// Reset Camera to standard values
 			virtual void clear()
