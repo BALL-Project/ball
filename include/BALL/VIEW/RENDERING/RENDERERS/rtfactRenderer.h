@@ -14,6 +14,7 @@
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/MATHS/surface.h>
+#include <BALL/MATHS/vector3.h>
 #include <BALL/DATATYPE/hashMap.h>
 
 //RTRemote proxy to RTfact
@@ -79,6 +80,8 @@ namespace BALL
 				virtual void prepareBufferedRendering(const Stage& stage);
 				virtual void renderToBufferImpl(FrameBufferPtr buffer);
 
+				virtual void useContinuousLoop(bool use_loop);
+
 				void bufferRepresentation(const Representation& rep);
 				void removeRepresentation(const Representation& rep);
 
@@ -112,6 +115,10 @@ namespace BALL
 				}
 
 				bool rtfact_needs_update_;
+
+				Vector3 last_camera_position;
+				Vector3 last_camera_view_vec;
+				Vector3 last_camera_lookup;
 		};
 
 

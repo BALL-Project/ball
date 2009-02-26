@@ -169,9 +169,7 @@ namespace BALL
 			// to be stopped from the outside, someone needs to call useContinuousLoop(false)
 			while (use_continuous_loop_)
 			{
-				printf("######################### NEXT FRAME ######################\n");
 				renderToBuffer_();
-				printf("###########################################################\n");
 			}
 
 			target->unlockGLContext();

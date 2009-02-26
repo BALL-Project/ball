@@ -114,14 +114,19 @@ namespace BALL
 		void RTfactRenderer::updateCamera(const Camera* camera)
 		{
 			// the renderer should be paused whenever the camera has been updated
-			if (use_continuous_loop_)
-				m_renderer.pauseAnimation(true);
-
 			if (camera == 0) camera = &(stage_->getCamera());
 
 			Vector3 const& position = camera->getViewPoint();
 			Vector3 const& view_vector = camera->getViewVector();
 			Vector3 const& look_up = camera->getLookUpVector();
+
+			if (use_continuous_loop_)
+			{
+				if (   ((last_camera_position - position   ).getSquareLength() > 1e-5)
+						 ||((last_camera_view_vec - view_vector).getSquareLength() > 1e-5)
+						 ||((last_camera_lookup   - look_up    ).getSquareLength() > 1e-5))
+						m_renderer.pauseAnimation(false);
+			}
 
 			m_renderer.setCameraPosition(float3(position.x, position.y, position.z),
 																	 float3(view_vector.x, view_vector.y, view_vector.z),
@@ -154,6 +159,9 @@ namespace BALL
 						break;
 				}
 			}
+			last_camera_position  = position;
+			last_camera_view_vec  = view_vector; 
+			last_camera_lookup    = look_up;
 		}
 
 		void RTfactRenderer::prepareBufferedRendering(const Stage& stage)
@@ -330,7 +338,7 @@ namespace BALL
 			}
 
 			if (rtfact_needs_update_ && use_continuous_loop_)
-				m_renderer.pauseAnimation(true);
+				m_renderer.pauseAnimation(false);
 
 			objects_[&rep] = rt_data;
 		}
@@ -351,8 +359,15 @@ namespace BALL
 				objects_.erase(&rep);
 
 				if (use_continuous_loop_)
-					m_renderer.pauseAnimation(true);
+					m_renderer.pauseAnimation(false);
 			}
+		}
+
+		void RTfactRenderer::useContinuousLoop(bool use_loop)
+		{
+			Renderer::useContinuousLoop(use_loop);
+
+			m_renderer.pauseAnimation(use_loop);
 		}
 
 		void RTfactRenderer::renderToBufferImpl(FrameBufferPtr buffer)
@@ -381,7 +396,7 @@ namespace BALL
 				m_renderer.renderToBuffer();
 
 				if (use_continuous_loop_)
-					m_renderer.pauseAnimation(false);
+					m_renderer.pauseAnimation(true);
 			}
 		}
 
