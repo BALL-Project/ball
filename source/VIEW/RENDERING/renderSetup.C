@@ -291,6 +291,9 @@ namespace BALL
 
 		void RenderSetup::setLights(bool reset_all)
 		{
+			if (reset_all && use_continuous_loop_)
+				useContinuousLoop(false);
+
 			render_mutex_.lock();
 
 			if (!use_continuous_loop_)
