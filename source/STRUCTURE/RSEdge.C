@@ -14,7 +14,7 @@ namespace BALL
 {
 
 	RSEdge::RSEdge()
-		throw()
+		
 		: GraphEdge< RSVertex,RSEdge,RSFace >(),
 			center_of_torus_(),
 			radius_of_torus_(0.0),
@@ -29,7 +29,7 @@ namespace BALL
 
 
 	RSEdge::RSEdge(const RSEdge& rsedge, bool deep)
-		throw()
+		
 		: GraphEdge< RSVertex,RSEdge,RSFace >(rsedge,deep),
 			center_of_torus_(rsedge.center_of_torus_),
 			radius_of_torus_(rsedge.radius_of_torus_),
@@ -56,7 +56,7 @@ namespace BALL
 			const TVector3<double>& intersection_point2,
 			bool singular,
 			Index index)
-		throw()
+		
 		: GraphEdge< RSVertex,RSEdge,RSFace >
 				(vertex1,vertex2,face1,face2,index),
 			center_of_torus_(center_of_torus),
@@ -72,13 +72,13 @@ namespace BALL
 
 
 	RSEdge::~RSEdge()
-		throw()
+		
 	{
 	}
 
 
 	void RSEdge::set(const RSEdge& rsedge, bool deep)
-		throw()
+		
 	{
 		if (this != &rsedge)
 		{
@@ -96,7 +96,7 @@ namespace BALL
 
 
 	RSEdge& RSEdge::operator = (const RSEdge& rsedge)
-		throw()
+		
 	{
 		if (this != &rsedge)
 		{
@@ -127,7 +127,7 @@ namespace BALL
 			const TVector3<double>& intersection_point1,
 			bool singular,
 			Index index)
-		throw()
+		
 	{
 		GraphEdge< RSVertex,RSEdge,RSFace >::set
 				(vertex0,vertex1,face0,face1,index);
@@ -143,49 +143,49 @@ namespace BALL
 
 
 	void RSEdge::setCenterOfTorus(const TVector3<double>& center)
-		throw()
+		
 	{
 		center_of_torus_ = center;
 	}
 
 
 	TVector3<double> RSEdge::getCenterOfTorus() const
-		throw()
+		
 	{
 		return center_of_torus_;
 	}
 
 
 	void RSEdge::setMajorRadiusOfTorus(const double& radius)
-		throw()
+		
 	{
 		radius_of_torus_ = radius;
 	}
 
 
 	double RSEdge::getMajorRadiusOfTorus() const
-		throw()
+		
 	{
 		return radius_of_torus_;
 	}
 
 
 	void RSEdge::setAngle(const TAngle<double>& angle)
-		throw()
+		
 	{
 		angle_ = angle;
 	}
 
 
 	TAngle<double> RSEdge::getAngle() const
-		throw()
+		
 	{
 		return angle_;
 	}
 
 
 	void  RSEdge::setContactCircle(Position i, const TCircle3<double>&  circle)
-		throw()
+		
 	{
 		if (i == 0)
 		{
@@ -199,7 +199,7 @@ namespace BALL
 
 
 	TCircle3<double> RSEdge::getContactCircle(Position i) const
-		throw()
+		
 	{
 		if (i == 0)
 		{
@@ -213,7 +213,7 @@ namespace BALL
 
 
 	void RSEdge::setIntersectionPoint(Position i, const TVector3<double>& point)
-		throw()
+		
 	{
 		if (i == 0)
 		{
@@ -245,14 +245,14 @@ namespace BALL
 
 
 	void RSEdge::setSingular(bool singular)
-		throw()
+		
 	{
 		singular_ = singular;
 	}
 
 
 	bool RSEdge::operator == (const RSEdge& rsedge) const
-		throw()
+		
 	{
 		return ((
 						 ((vertex_[0] == rsedge.vertex_[0]) &&
@@ -268,14 +268,14 @@ namespace BALL
 
 
 	bool RSEdge::operator != (const RSEdge& rsedge) const
-		throw()
+		
 	{
 		return ( ! (*this == rsedge) );
 	}
 
 
 	bool RSEdge::operator *= (const RSEdge& rsedge) const
-		throw()
+		
 	{
 		return (
 						((vertex_[0]->atom_ == rsedge.vertex_[0]->atom_) &&
@@ -287,14 +287,14 @@ namespace BALL
 
 
 	bool RSEdge::isSingular() const
-		throw()
+		
 	{
 		return singular_;
 	}
 
 
 	bool RSEdge::isFree() const
-		throw()
+		
 	{
 		return (face_[0] == NULL);
 	}

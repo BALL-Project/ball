@@ -28,7 +28,7 @@ namespace BALL
 
 
 	CHPI::AromaticRing::AromaticRing()
-		throw()
+		
 		:	ring_atoms_(),
 			centre_(0.0f),
 			normal_vector_(0.0f)
@@ -37,7 +37,7 @@ namespace BALL
 
 	CHPI::AromaticRing::AromaticRing
 		(const AromaticRing& aromatic_ring)
-		throw()
+		
 		:	ring_atoms_(aromatic_ring.ring_atoms_),
 			centre_(aromatic_ring.centre_),
 			normal_vector_(aromatic_ring.normal_vector_)
@@ -46,7 +46,7 @@ namespace BALL
 
 	CHPI::AromaticRing::AromaticRing
 		(const std::vector<Atom*>& atoms)
-		throw()
+		
 		:	ring_atoms_(),
 			centre_(0.0f),
 			normal_vector_(0.0f)
@@ -56,7 +56,7 @@ namespace BALL
 
 
 	void CHPI::AromaticRing::computeCentre_()
-		throw()
+		
 	{
 		std::vector<Atom*>::const_iterator iter = ring_atoms_.begin();
 		Size x = 0;
@@ -70,7 +70,7 @@ namespace BALL
 
 
 	void CHPI::AromaticRing::computeNormalVector_()
-		throw()
+		
 	{
 		Vector3 v13 = ring_atoms_[2]->getPosition() - ring_atoms_[0]->getPosition();
 		Vector3 v15 = ring_atoms_[4]->getPosition() - ring_atoms_[0]->getPosition();
@@ -80,21 +80,21 @@ namespace BALL
 
 
 	const Vector3& CHPI::AromaticRing::getCentre() const
-		throw()
+		
 	{
 		return(centre_);
 	}
 
 
 	const Vector3& CHPI::AromaticRing::getNormalVector() const
-		throw()
+		
 	{
 		return(normal_vector_);
 	}
 
 
 	void CHPI::AromaticRing::dump(ostream& s) const
-		throw()
+		
 	{
 		std::vector<Atom*>::const_iterator it = ring_atoms_.begin();
 		for (; it != ring_atoms_.end(); ++it)
@@ -109,7 +109,7 @@ namespace BALL
 
 	void CHPI::AromaticRing::setRing
 		(const std::vector<Atom*>& atoms)
-		throw()
+		
 	{
 		ring_atoms_ = atoms;
 		computeCentre_();
@@ -118,27 +118,27 @@ namespace BALL
 
 
 	const std::vector<Atom*>& CHPI::AromaticRing::getRing() const
-		throw()
+		
 	{
 		return(ring_atoms_);
 	}
 
 
 	CHPI::CHGroup::~CHGroup()
-		throw()
+		
 	{
 	}
 
 
 	CHPI::CHGroup::CHGroup(const Atom* C_Atom, const Atom* H_Atom)
-		throw()
+		
 	{
 		setAtoms(C_Atom, H_Atom);
 	}
 
 
 	CHPI::CHGroup::CHGroup(const CHGroup& CH_groups)
-		throw()
+		
 		:	H_atom_(CH_groups.H_atom_),
 			C_atom_(CH_groups.C_atom_)
 	{
@@ -146,7 +146,7 @@ namespace BALL
 
 
 	void CHPI::CHGroup::dump(std::ostream& s) const
-		throw()
+		
 	{
 		s << "C: " << C_atom_ << endl;
 		s << "H: " << H_atom_ << endl;
@@ -154,7 +154,7 @@ namespace BALL
 
 
 	void CHPI::CHGroup::setAtoms(const Atom* C_Atom, const Atom* H_Atom)
-		throw()
+		
 	{
 		C_atom_ = C_Atom;
 		H_atom_ = H_Atom;
@@ -195,7 +195,7 @@ namespace BALL
 
 	// Default constructor
 	CHPI::CHPI ()  
-		throw ()
+		
 		:	ScoringComponent(),
 			possible_interactions_(),
 			all_CH_groups_(),
@@ -211,7 +211,7 @@ namespace BALL
 
 	// Detailed constructor
 	CHPI::CHPI (ScoringFunction& sf)  
-		throw() 
+		 
 		: ScoringComponent(sf),
 			possible_interactions_(),
 			all_CH_groups_(),
@@ -227,7 +227,7 @@ namespace BALL
 
 	// Copy constructor
 	CHPI::CHPI (const CHPI& frs )
-		throw()
+		
 		: ScoringComponent(frs),
 			possible_interactions_(frs.possible_interactions_),
 			all_CH_groups_(frs.all_CH_groups_),
@@ -242,7 +242,7 @@ namespace BALL
 
 	// Destructor
 	CHPI::~CHPI()
-		throw()
+		
 	{
 		clear();
 	}
@@ -250,7 +250,7 @@ namespace BALL
 
 	// Clearing function
 	void CHPI::clear()
-		throw()
+		
 	{ 
 		possible_interactions_.clear();
 		all_CH_groups_.clear();
@@ -261,7 +261,7 @@ namespace BALL
 	// Set up atomic properties for the calculation of the scoring 
 	// contribution
 	bool CHPI::setup()
-		throw()
+		
 	{
 
 		Timer timer;
@@ -480,7 +480,7 @@ namespace BALL
 
 
 	double CHPI::calculateScore()
-		throw()
+		
 	{
 
 		Timer timer;

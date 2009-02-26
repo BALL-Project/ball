@@ -35,7 +35,7 @@ namespace BALL
 	const float SLICKScore::Default::POLAR    =  0.05f;
 
 	SLICKScore::SLICKScore()
-		throw()
+		
 		:	ScoringFunction()
 	{
 		// register all components of the force field
@@ -44,7 +44,7 @@ namespace BALL
 
 
 	SLICKScore::SLICKScore(Molecule& protein, Molecule& ligand)
-		throw()
+		
 		:	ScoringFunction()
 	{
 		setReceptor(protein);
@@ -66,7 +66,7 @@ namespace BALL
 
 	SLICKScore::SLICKScore(Molecule& protein, Molecule& ligand,
 			const Options& new_options)
-		throw()
+		
 		:	ScoringFunction()
 	{
 		setReceptor(protein);
@@ -88,21 +88,21 @@ namespace BALL
 
 
 	SLICKScore::SLICKScore(const SLICKScore& slick)
-		throw()
+		
 		:	ScoringFunction(slick)
 	{
 	}
 
 
 	SLICKScore::~SLICKScore()
-		throw()
+		
 	{
 		clear();
 	}
 
 
 	void SLICKScore::clear()
-		throw()
+		
 	{
 		ScoringFunction::clear();
 	}
@@ -161,7 +161,7 @@ namespace BALL
 
 
 	const SLICKScore& SLICKScore::operator = (const SLICKScore& slick)
-		throw()
+		
 	{
 		// avoid self assignment
 		if (&slick != this)
@@ -174,7 +174,7 @@ namespace BALL
 
 
 	double SLICKScore::getCHPIScore() const
-		throw()
+		
 	{
 		const ScoringComponent* component = getComponent("CHPI");
 		if (component != 0)
@@ -189,7 +189,7 @@ namespace BALL
 
 
 	double SLICKScore::getVDWScore() const
-		throw()
+		
 	{
 		const ScoringComponent* component = getComponent("van-der-Waals");
 		if (component != 0)
@@ -204,7 +204,7 @@ namespace BALL
 
 
 	double SLICKScore::getPolarSolvationScore() const
-		throw()
+		
 	{
 		const ScoringComponent* component = getComponent("Polar Solvation");
 		if (component != 0)
@@ -219,7 +219,7 @@ namespace BALL
 
 
 	double SLICKScore::getNonpolarSolvationScore() const
-		throw()
+		
 	{
 		const ScoringComponent* component = getComponent("Nonpolar Solvation");
 		if (component != 0)
@@ -233,7 +233,7 @@ namespace BALL
 	}
 
 	double SLICKScore::getHydrogenBondScore() const
-		throw()
+		
 	{
 		const ScoringComponent* component = getComponent("SLICK HydrogenBond");
 		if (component != 0)
@@ -247,7 +247,7 @@ namespace BALL
 	}
 	
 	void SLICKScore::registerComponents_()
-		throw()
+		
 	{
 		// create the component list
 		insertComponent(new CHPI(*this));

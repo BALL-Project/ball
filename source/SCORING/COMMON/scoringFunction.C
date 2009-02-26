@@ -22,7 +22,7 @@ namespace BALL
 
 
 	ScoringFunction::ScoringFunction()
-		throw()
+		
 		:	options(),
 			molecule1_(0),
 			molecule2_(0),
@@ -40,7 +40,7 @@ namespace BALL
 
 
 	ScoringFunction::ScoringFunction(const ScoringFunction& sf)
-		throw()
+		
 		:	options(),
 			molecule1_(sf.molecule1_),
 			molecule2_(sf.molecule2_),
@@ -62,7 +62,7 @@ namespace BALL
 
 	ScoringFunction::ScoringFunction(Molecule& receptor, Molecule& ligand,
 			const Options& options)
-		throw()
+		
 		:	options(options),
 			molecule1_(&receptor),
 			molecule2_(&ligand),
@@ -80,14 +80,14 @@ namespace BALL
 
 
 	ScoringFunction::~ScoringFunction()
-		throw()
+		
 	{
 		clear();
 	}
 
 
 	void ScoringFunction::clear()
-		throw()
+		
 	{
 		options.clear();
 
@@ -116,7 +116,7 @@ namespace BALL
 
 
 	ScoringFunction& ScoringFunction::operator = (const ScoringFunction& sf)
-		throw()
+		
 	{
 		options = sf.options;
 		name_ = sf.name_;
@@ -132,7 +132,7 @@ namespace BALL
 
 
 	bool ScoringFunction::setup()
-		throw()
+		
 	{
 
 		// Get defaults from the options
@@ -207,7 +207,7 @@ namespace BALL
 
 
 	bool ScoringFunction::setup(Molecule& receptor, Molecule& ligand)
-		throw()
+		
 	{
 		setReceptor(receptor);
 		setLigand(ligand);
@@ -217,7 +217,7 @@ namespace BALL
 
 	bool ScoringFunction::setup(Molecule& receptor, Molecule& ligand,
 			const Options& opt)
-		throw()
+		
 	{
 		setReceptor(receptor);
 		setLigand(ligand);
@@ -235,90 +235,90 @@ namespace BALL
 
 
 	void ScoringFunction::setMaximumNumberOfErrors(Size nr)
-		throw()
+		
 	{
 		max_number_of_errors_ = nr;
 	}
 
 
 	Size ScoringFunction::getMaximumNumberOfErrors() const
-		throw()
+		
 	{
 		return(max_number_of_errors_);
 	}
 
 	
 	void ScoringFunction::setFirstMolecule(Molecule& molecule)
-		throw()
+		
 	{
 		molecule1_ = &molecule;
 	}
 
 
 	Molecule* ScoringFunction::getFirstMolecule() const
-		throw()
+		
 	{
 		return(molecule1_);
 	}
 
 	void ScoringFunction::setSecondMolecule(Molecule& molecule)
-		throw()
+		
 	{
 		molecule2_ = &molecule;
 	}
 
 
 	Molecule* ScoringFunction::getSecondMolecule() const
-		throw()
+		
 	{
 		return(molecule2_);
 	}
 
 
 	void ScoringFunction::setReceptor(Molecule& molecule)
-		throw()
+		
 	{
 		setFirstMolecule(molecule);
 	}
 
 
 	Molecule* ScoringFunction::getReceptor() const
-		throw()
+		
 	{
 		return(getFirstMolecule());
 	}
 
 
 	void ScoringFunction::setLigand(Molecule& molecule)
-		throw()
+		
 	{
 		setSecondMolecule(molecule);
 	}
 
 
 	Molecule* ScoringFunction::getLigand() const
-		throw()
+		
 	{
 		return(getSecondMolecule());
 	}
 
 
 	void ScoringFunction::setIntercept(double intercept)
-		throw()
+		
 	{
 		intercept_ = intercept;
 	}
 
 
 	double ScoringFunction::getIntercept() const
-		throw()
+		
 	{
 		return(intercept_);
 	}
 
 
 	ScoringBaseFunction* ScoringFunction::getBaseFunction() const
-		throw()
+		
 	{
 		return(base_function_);
 	}
@@ -326,14 +326,14 @@ namespace BALL
 
 	void ScoringFunction::insertComponent(ScoringComponent* component,
 			float coefficient)
-		throw()
+		
 	{
 		components_.push_back(std::pair<ScoringComponent*, float>(component, coefficient));
 	}
 
 
 	void ScoringFunction::removeComponent(const ScoringComponent* component)
-		throw()
+		
 	{
 		std::vector< std::pair<ScoringComponent*, float> >::iterator it;
 		for (it = components_.begin(); it != components_.end(); ++it)
@@ -349,7 +349,7 @@ namespace BALL
 
 
 	void ScoringFunction::removeComponent(const String& name)
-		throw()
+		
 	{
 		std::vector< std::pair<ScoringComponent*, float> >::iterator it;
 		for (it = components_.begin(); it != components_.end(); ++it)
@@ -366,7 +366,7 @@ namespace BALL
 
 	void ScoringFunction::setCoefficient(const ScoringComponent* component, 
 			float coefficient)
-		throw()
+		
 	{
 		std::vector< std::pair<ScoringComponent*, float> >::iterator it;
 		for (it = components_.begin(); it != components_.end(); ++it)
@@ -382,7 +382,7 @@ namespace BALL
 
 	void ScoringFunction::setCoefficient(const String& name, 
 			float coefficient)
-		throw()
+		
 	{
 		std::vector< std::pair<ScoringComponent*, float> >::iterator it;
 		for (it = components_.begin(); it != components_.end(); ++it)
@@ -398,7 +398,7 @@ namespace BALL
 
 	bool ScoringFunction::getCoefficient(const ScoringComponent* component,
 			float& coefficient) const
-		throw()
+		
 	{
 		std::vector< std::pair<ScoringComponent*, float> >::const_iterator it;
 		for (it = components_.begin(); it != components_.end(); ++it)
@@ -415,7 +415,7 @@ namespace BALL
 
 	bool ScoringFunction::getCoefficient(const String& name,
 			float& coefficient) const
-		throw()
+		
 	{
 		std::vector< std::pair<ScoringComponent*, float> >::const_iterator it;
 		for (it = components_.begin(); it != components_.end(); ++it)
@@ -431,7 +431,7 @@ namespace BALL
 
 
 	ScoringComponent* ScoringFunction::getComponent(const String& name) const
-		throw()
+		
 	{
 		std::vector< std::pair<ScoringComponent*, float> >::const_iterator it;
 		for (it = components_.begin(); it != components_.end(); ++it)
@@ -446,7 +446,7 @@ namespace BALL
 
 
 	ScoringComponent* ScoringFunction::getComponent(const Size index) const
-		throw()
+		
 	{
 		if (index < components_.size()) 
 		{
@@ -460,7 +460,7 @@ namespace BALL
 
 
 	double ScoringFunction::calculateScore()
-		throw()
+		
 	{
 		score_ = 0.0;
 		for (Size i = 0; i < components_.size(); ++i)
@@ -474,14 +474,14 @@ namespace BALL
 
 
 	const HashSet<const Atom*>& ScoringFunction::getUnassignedAtoms() const
-		throw()
+		
 	{
 		return(unassigned_atoms_);
 	}
 
 
 	HashSet<const Atom*>& ScoringFunction::getUnassignedAtoms()
-		throw()
+		
 	{
 		return(unassigned_atoms_);
 	}

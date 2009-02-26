@@ -177,13 +177,13 @@ namespace BALL
 				public:
 
 					// constructor
-					Peak_() throw();
+					Peak_() ;
 
 					// destructor
-					~Peak_() throw();
+					~Peak_() ;
 
 					// Operator <
-					bool operator < (const Peak_& p) const throw();
+					bool operator < (const Peak_& p) const ;
 
 					double  value;
 					Vector3 orientation;
@@ -199,45 +199,45 @@ namespace BALL
 				public: 
 
 					// constructor
-					RotationAngles_() throw();
+					RotationAngles_() ;
 					
 					// constructor
-					RotationAngles_( int step ) throw();
+					RotationAngles_( int step ) ;
 
 					// destructor
-					~RotationAngles_() throw() {};
+					~RotationAngles_()  {};
 
 					// generate all non-degenerate rotation angles.
 					// This algorithm is based on ???
 					bool generateSomeAngles( const float deg_phi,   const float deg_psi, const float deg_theta,
 												 					 const float phi_min,   const float phi_max,
 																	 const float psi_min,   const float psi_max,
-																	 const float theta_min, const float theta_max ) throw();
+																	 const float theta_min, const float theta_max ) ;
 
 					// generate all non-degenerate rotation angles.
 					// This algorithm is based on ???
-					bool generateAllAngles( const int deg ) throw();
+					bool generateAllAngles( const int deg ) ;
 
 					int getRotationNum()
-						throw()
+						
 					{
 						return ang_num_;
 					}
 
 					int getXAng( int n ) // get the euler angle rotate around x axis
-						throw()
+						
 					{
 						return phi_[n];
 					}
 
 					int getYAng( int n ) // get the euler angle rotate around y axis
-						throw()
+						
 					{
 						return theta_[n];
 					}
 
 					int getZAng( int n ) // get the euler angle rotate around z axis
-						throw()
+						
 					{
 						return psi_[n];
 					}
@@ -260,7 +260,7 @@ namespace BALL
       // Default constructor
       // Creates an empty GeometricFit object
       GeometricFit() 
-				throw();
+				;
 
 			/** Constructor.
 					Creates an instance of Geometric Fit and calls
@@ -268,21 +268,21 @@ namespace BALL
 					The options used are the default options.
 			*/
 			GeometricFit(System &system1, System &system2)
-				throw();
+				;
 
 			/** Constructor.
 					Creates an instance of Geometric Fit and assigns
 					the given options to the Geometric Fit object's options.
 			*/
 			GeometricFit(Options& new_options)
-				throw();
+				;
 			
 			/** Constructor.
 					Creates an instance of FDPB and calls
 					setup(system1, system2, new_options)
 			*/
 			GeometricFit(System &system1,System &system2 ,Options& new_options)
-				throw();
+				;
 				
 				
 /*       // Copy constructor */
@@ -290,43 +290,43 @@ namespace BALL
 /*       GeometricFit( const GeometricFit& geo_fit ); */
 
       // Destructor
-      ~GeometricFit() throw();
+      ~GeometricFit() ;
 
 			/** The setup routines.
 			 */
 			virtual void setup(System& system1, System& system2, Options& new_options)
-				throw();
+				;
 			
 			virtual void setup(System& system1, System& system2)
-				throw();		
+				;		
 	
 			/** Start the main loop of the algorithm.
 			 */
 			void start()
-				throw();
+				;
 
       // return the overall docking progress as a percentage
       float getProgress() const
-				throw();
+				;
       
       // 
       bool hasFinished() const
-				throw();
+				;
 
 			/** Return the translation corresponding to conformation con_num.
 			 */
 			Vector3 getTranslation(Index con_num) const
-				throw();
+				;
 
 			/** Return the orientation corresponding to conformation con_num.
 			 */
 			Vector3 getOrientation(Index con_num) const
-				throw();
+				;
 
 			/** Return the ranked conformations.
 			 */
 			ConformationSet getConformationSet(Index total_number = 0)
-				throw();
+				;
 			
       //////////////////////////////////////////
       // the member variables
@@ -339,43 +339,43 @@ namespace BALL
 
       // Free all allocated memory and destroys the options and results
       void destroy_()
-				throw();
+				;
 
       // find the inside points
       void findInsidePoints_( System& system, ProteinIndex pro_idx )
-				throw();
+				;
 
       // find out the surface points according to the Connolly's surface definition.
       void findConnollySurfacePoints_( System& system, ProteinIndex pro_idx )
-				throw();
+				;
 
       // find out the surface points according to the van der Waal's surface definition.
       void findVanDerWaalsSurfacePoints_( System& system, ProteinIndex pro_idx )
-				throw();
+				;
 
       // find the inside points using the same algorithm as FTDock
       void findFTDockInsidePoints_( System& system, ProteinIndex pro_idx )
-				throw();
+				;
 
       // find out the surface points according to the FTDock surface definition.
       void findFTDockSurfacePoints_( System& system, ProteinIndex pro_idx )
-				throw();
+				;
 
 			/** Compute the center of mass of system
 			 */
       Vector3 getMassCenter_( System& system ) 
-				throw();
+				;
 
 			/** Compute the radius of the circumsphere of all atoms in system.
 			 */
       float getRadius_( System& system )
-				throw();
+				;
 
       void doPreTranslation_( ProteinIndex pro_idx )
-				throw();
+				;
 
       void initGridSizes_()
-				throw();
+				;
 
       /** Optimize grid size for the FFTW.
 			 *	Certain combinations of certain powers are optimal for the fft algorithm, and
@@ -383,39 +383,39 @@ namespace BALL
 			 *	to accomodate the original data.
 			 */ 
       int optimizeGridSize_( int raw_size )
-				throw();
+				;
 
 			/** Initialize the grid.
 			 */
       void initFFTGrid_( ProteinIndex pro_idx )
-				throw();
+				;
 
       // make grid from System
       void makeFFTGrid_( ProteinIndex pro_idx )
-      	throw();
+      	;
 
       // get the global peaks and put them into a list
       void getGlobalPeak_(Peak_* peak_list)
-				throw();
+				;
 
       // change the orientation of protein around its center according to euler_ang
       void changeProteinOrientation_( System& system, Vector3 euler_ang )
-				throw();
+				;
 
       // calculate the conjugate of each point in FFT grid
       void calcConjugate_( ProteinIndex pro_idx )
-				throw();
+				;
 
       // calculate the product of the two FFT grids
       void FFTGridMulti_()
-				throw();
+				;
 
       // get the transformation of the peak value according to its position in matrix
       Vector3 getTranslation_( const Vector3& mat_pos )
-				throw();
+				;
 
       Vector3 getSeparation_( const Vector3& mat_pos )
-				throw();
+				;
 
 
       // here we have two units for the size

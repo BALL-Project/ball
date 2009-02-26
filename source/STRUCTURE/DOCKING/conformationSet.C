@@ -25,13 +25,13 @@ namespace BALL
 	}
 
 	void ConformationSet::setup(const System& system)
-		throw()
+		
 	{
 		system_ = system;
 	}
   
 	void ConformationSet::add(const float score, const System& conformation)
-	  throw()
+	  
 	{
 		SnapShot sn;
 		sn.takeSnapShot(conformation);
@@ -42,31 +42,31 @@ namespace BALL
 	}
 
 	const System& ConformationSet::getSystem() const
-		throw()
+		
 	{
 		return system_;
 	}
 	
 	System& ConformationSet::getSystem()
-		throw()
+		
 	{
 		return system_;
 	}
 	
 	const std::vector<ConformationSet::Conformation>& ConformationSet::getScoring() const
-		throw()
+		
 	{
 		return snapshot_order_;
 	}
 
 	void ConformationSet::setScoring(std::vector<Conformation>& score)
-		throw()
+		
 	{
 		snapshot_order_ = score;
 	}
 
 	void ConformationSet::resetScoring()
-		throw()
+		
 	{
 		snapshot_order_.resize(structures_.size());
 
@@ -78,7 +78,7 @@ namespace BALL
 	}
 
 	const std::vector<SnapShot>& ConformationSet::getUnscoredConformations() const
-		throw()
+		
 	{
 		return structures_;
 	}
@@ -116,7 +116,7 @@ namespace BALL
 	}
 	
 	bool ConformationSet::readDCDFile(const String& filename)
-		throw()
+		
 	{
 		try
 		{

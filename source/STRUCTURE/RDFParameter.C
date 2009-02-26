@@ -12,7 +12,7 @@ using namespace std;
 namespace BALL
 {
 
-	RDFParameter::RDFParameter() throw()
+	RDFParameter::RDFParameter() 
 		:	ParameterSection(),
 			rdf_list_(),
 			rdf_indices_()
@@ -20,7 +20,7 @@ namespace BALL
 	}
 
 
-	RDFParameter::RDFParameter(const RDFParameter& rdf_parameter) throw()
+	RDFParameter::RDFParameter(const RDFParameter& rdf_parameter) 
 		:	ParameterSection(rdf_parameter),
 			rdf_list_(rdf_parameter.rdf_list_),
 			rdf_indices_(rdf_parameter.rdf_indices_)
@@ -28,7 +28,7 @@ namespace BALL
 	}
 
 
-	RDFParameter::~RDFParameter() throw()
+	RDFParameter::~RDFParameter() 
 	{
 		clear();
 		valid_ = false;
@@ -36,7 +36,7 @@ namespace BALL
 
 
 	const RDFParameter& RDFParameter::operator = (const RDFParameter& parameter) 
-		throw()
+		
 	{
 		ParameterSection::operator = (parameter);
 		rdf_list_ = parameter.rdf_list_;
@@ -46,7 +46,7 @@ namespace BALL
 	}
 
 
-	void RDFParameter::clear() throw()
+	void RDFParameter::clear() 
 	{
 		ParameterSection::clear();
 		rdf_list_.clear();
@@ -56,7 +56,7 @@ namespace BALL
 
 
 	bool RDFParameter::hasRDF(Atom::Type solvent_atom_type,
-			Atom::Type solute_atom_type) const throw()
+			Atom::Type solute_atom_type) const 
 	{
 		if (rdf_indices_.has(solvent_atom_type))
 		{
@@ -77,14 +77,14 @@ namespace BALL
 
 
 	bool RDFParameter::hasParameters(Atom::Type solvent_atom_type,
-			Atom::Type solute_atom_type) const throw()
+			Atom::Type solute_atom_type) const 
 	{
 		return hasRDF(solvent_atom_type, solute_atom_type);
 	}
 	
 
 	Position RDFParameter::getIndex(Atom::Type type_i, Atom::Type type_j)
-		const throw()
+		const 
 	{
 		if (hasRDF(type_i, type_j))
 		{
@@ -98,7 +98,7 @@ namespace BALL
 
 
 	const RadialDistributionFunction& RDFParameter::getRDF(Position index)
-		const throw()
+		const 
 	{
 		if (index < rdf_list_.size())
 		{
@@ -114,7 +114,7 @@ namespace BALL
 
 
 	const RadialDistributionFunction& RDFParameter::getRDF(Atom::Type type_i,
-			Atom::Type type_j) const throw()
+			Atom::Type type_j) const 
 	{
 		if (hasRDF(type_i, type_j))
 		{
@@ -143,7 +143,7 @@ namespace BALL
 
 
 	bool RDFParameter::extractSection(ForceFieldParameters& parameters,
-			const String& section_name) throw()
+			const String& section_name) 
 	{
 
 		if (!parameters.isValid())

@@ -31,7 +31,7 @@ namespace BALL
 	}
 	
 	SmilesParser::SPAtom::~SPAtom()
-		throw()
+		
 	{
 	}
 
@@ -196,7 +196,7 @@ namespace BALL
 	}
 
 	SmilesParser::SPBond::~SPBond()
-		throw()
+		
 	{
 		destroy();
 	}

@@ -6,7 +6,7 @@
 namespace BALL 
 {
 	FermiBaseFunction::FermiBaseFunction()
-		throw()
+		
 		:	a_(0.0),
 			b_(0.0)
 	{
@@ -14,7 +14,7 @@ namespace BALL
 
 	FermiBaseFunction::FermiBaseFunction(float lower,
 			float upper)
-		throw()
+		
 	{
 		// ????? see constructor of BaseFunctionLinear
 		// BaseFunction::BaseFunction(lower, upper);
@@ -24,28 +24,28 @@ namespace BALL
 	}
 
 	void FermiBaseFunction::setLower(float lower)
-		throw()
+		
 	{
 		ScoringBaseFunction::setLower(lower);
 		// computeFermiParameters_();
 	}
 
 	void FermiBaseFunction::setUpper(float upper)
-		throw()
+		
 	{
 		ScoringBaseFunction::setUpper(upper);
 		// computeFermiParameters_();
 	}
 
 	float FermiBaseFunction::calculate(float x) const
-		throw()
+		
 	{
 		return(1.0 / (1.0 + exp(-a_ * x + b_)));
 	}
 
 	float FermiBaseFunction::calculate(float x, float lower,
 			float upper)
-		throw()
+		
 	{
 		setLower(lower);
 		setUpper(upper);
@@ -55,7 +55,7 @@ namespace BALL
 
 
 	void FermiBaseFunction::computeFermiParameters_()
-		throw()
+		
 	{
 		a_ = 4.0 / (lower_ - upper_);
 		b_ = a_ * (lower_ + 0.5 * (upper_ - lower_));

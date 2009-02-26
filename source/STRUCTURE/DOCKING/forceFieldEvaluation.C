@@ -3,7 +3,7 @@
 namespace BALL
 {
 	ForceFieldEvaluation::ForceFieldEvaluation()
-		throw()
+		
 		: EnergeticEvaluation(),
 			ff_(new ForceField()),
 			delete_force_field_(true)
@@ -11,7 +11,7 @@ namespace BALL
 	}
 
 	ForceFieldEvaluation::ForceFieldEvaluation(ForceField& ff)
-		throw()
+		
 		: EnergeticEvaluation(),
 			ff_(&ff),
 			delete_force_field_(false)
@@ -19,44 +19,44 @@ namespace BALL
 	}
 
 	ForceFieldEvaluation::~ForceFieldEvaluation()
-		throw()
+		
 	{
 		if (delete_force_field_) delete ff_;
 	}
 
 	void ForceFieldEvaluation::setForceField(ForceField& ff)
-		throw()
+		
 	{
 		ff_ = &ff;
 		delete_force_field_ = false;
 	}
 
 	void ForceFieldEvaluation::setOptions(const Options& options)
-		throw()
+		
 	{
 		options_ = options;
 	}
 
 	ForceField& ForceFieldEvaluation::getForceField()
-		throw()
+		
 	{
 		return *ff_;
 	}
 
 	const ForceField& ForceFieldEvaluation::getForceField() const
-		throw()
+		
 	{
 		return *ff_;
 	}
 
 	Options& ForceFieldEvaluation::getOptions()
-		throw()
+		
 	{
 		return options_;
 	}
 
 	const Options& ForceFieldEvaluation::getOptions() const
-		throw()
+		
 	{
 		return options_;
 	}

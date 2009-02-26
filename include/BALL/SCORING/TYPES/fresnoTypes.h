@@ -99,10 +99,10 @@ namespace BALL
 		};
 		
 		FresnoTypes(ScoringComponent& sc)
-			throw();
+			;
 
 		virtual bool setup()
-			throw();
+			;
 
 	};
 

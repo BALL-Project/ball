@@ -10,7 +10,7 @@ using namespace std;
 namespace BALL
 {
 
-	RadialDistributionFunction::RadialDistributionFunction() throw()
+	RadialDistributionFunction::RadialDistributionFunction() 
 		:	representation_(),
 			valid_(false)
 	{
@@ -18,7 +18,7 @@ namespace BALL
 
 
 	RadialDistributionFunction::RadialDistributionFunction 
-		(const RadialDistributionFunction& rdf) throw()
+		(const RadialDistributionFunction& rdf) 
 		:	representation_(rdf.representation_),
 			valid_(rdf.valid_)
 	{
@@ -26,14 +26,14 @@ namespace BALL
 
 
 	RadialDistributionFunction::RadialDistributionFunction
-		(const PiecewisePolynomial& polynomial) throw()
+		(const PiecewisePolynomial& polynomial) 
 		:	representation_(polynomial)
 	{
 		valid_ = representation_.isValid();
 	}
 
 
-	RadialDistributionFunction::~RadialDistributionFunction() throw()
+	RadialDistributionFunction::~RadialDistributionFunction() 
 	{
 		clear();
 
@@ -41,7 +41,7 @@ namespace BALL
 	}
 
 
-	void RadialDistributionFunction::clear() throw()
+	void RadialDistributionFunction::clear() 
 	{
 		representation_.clear();
 
@@ -49,7 +49,7 @@ namespace BALL
 	}
 
 	const RadialDistributionFunction& RadialDistributionFunction::operator =
-		(const RadialDistributionFunction& rdf) throw()
+		(const RadialDistributionFunction& rdf) 
 	{
 		representation_ = rdf.representation_;
 		valid_ = rdf.valid_;
@@ -59,7 +59,7 @@ namespace BALL
 
 
 	void RadialDistributionFunction::setRepresentation
-		(const PiecewisePolynomial& polynomial) throw()
+		(const PiecewisePolynomial& polynomial) 
 	{
 		representation_ = polynomial;
 		valid_ = polynomial.isValid();
@@ -67,45 +67,45 @@ namespace BALL
 
 
 	const PiecewisePolynomial& RadialDistributionFunction::getRepresentation() 
-		const throw()
+		const 
 	{
 		return representation_;
 	}
 
 
-	const Interval& RadialDistributionFunction::getRange() const throw()
+	const Interval& RadialDistributionFunction::getRange() const 
 	{
 		return representation_.getRange();
 	}
 
 
-	double RadialDistributionFunction::operator () (double x) const throw()
+	double RadialDistributionFunction::operator () (double x) const 
 	{
 		return representation_.operator () (x);
 	}
 
 
-	bool RadialDistributionFunction::isInRange(double x) const throw()
+	bool RadialDistributionFunction::isInRange(double x) const 
 	{
 		return representation_.isInRange(x);
 	}
 
 
 	bool RadialDistributionFunction::operator == 
-		(const RadialDistributionFunction& rdf) const throw()
+		(const RadialDistributionFunction& rdf) const 
 	{
 		return (representation_ == rdf.representation_);
 	}
 
 
-	bool RadialDistributionFunction::isValid() const throw()
+	bool RadialDistributionFunction::isValid() const 
 	{
 		return valid_;
 	}
 
 	
 	void RadialDistributionFunction::dump(ostream& stream, Size /* depth */)
-		const throw()
+		const 
 	{
 		representation_.dump(stream);
 	}

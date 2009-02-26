@@ -29,7 +29,7 @@ namespace BALL
 	const Size BuriedPolar::Default::VERBOSITY = 0;
 
 	BuriedPolar::BuriedPolar()
-		throw()
+		
 		:	ScoringComponent(),
 			possible_buried_polar_interactions_(),
 			r1_offset_(0.0),
@@ -41,7 +41,7 @@ namespace BALL
 
 
 	BuriedPolar::BuriedPolar(ScoringFunction& sf)
-		throw()
+		
 		:	ScoringComponent(sf),
 			possible_buried_polar_interactions_(),
 			r1_offset_(0.0),
@@ -53,7 +53,7 @@ namespace BALL
 
 
 	BuriedPolar::BuriedPolar(const BuriedPolar& bp)
-		throw()
+		
 		:	ScoringComponent(bp),
 			possible_buried_polar_interactions_(bp.possible_buried_polar_interactions_),
 			r1_offset_(bp.r1_offset_),
@@ -63,14 +63,14 @@ namespace BALL
 
 
 	BuriedPolar::~BuriedPolar()
-		throw()
+		
 	{
 		clear();
 	}
 
 
 	void BuriedPolar::clear()
-		throw()
+		
 	{
 		possible_buried_polar_interactions_.clear();
 		r1_offset_ = 0.0;
@@ -82,7 +82,7 @@ namespace BALL
 
 
 	bool BuriedPolar::setup()
-		throw()
+		
 	{
 		Timer timer;
 		timer.start();
@@ -178,7 +178,7 @@ namespace BALL
 
 
 	double BuriedPolar::calculateScore()
-		throw()
+		
 	{
 
 		Timer timer;

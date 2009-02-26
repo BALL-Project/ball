@@ -150,11 +150,11 @@ namespace BALL
 
 		 ///
 		 void setFragmentDB(const FragmentDB* db)
-			 throw();
+			 ;
 
 		 ///
 		 const FragmentDB* getFragmentDB() const
-			 throw();
+			 ;
 	   
 	 protected:
 	   std::vector<AminoAcidDescriptor> sequence_;

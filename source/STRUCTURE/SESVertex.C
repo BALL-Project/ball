@@ -13,7 +13,7 @@ namespace BALL
 {
 
 	SESVertex::SESVertex()
-		throw()
+		
 		: GraphVertex< SESVertex,SESEdge,SESFace >(),
 			point_(),
 			normal_(),
@@ -23,7 +23,7 @@ namespace BALL
 
 
 	SESVertex::SESVertex(const SESVertex& sesvertex, bool deep)
-		throw()
+		
 		: GraphVertex< SESVertex,SESEdge,SESFace >(sesvertex,deep),
 			point_(sesvertex.point_),
 			normal_(sesvertex.normal_),
@@ -37,7 +37,7 @@ namespace BALL
 			 const TVector3<double>&	normal,
 			 Index							atom,
 			 Index							index)
-		throw()
+		
 		: GraphVertex< SESVertex,SESEdge,SESFace >(),
 			point_(point),
 			normal_(normal),
@@ -48,13 +48,13 @@ namespace BALL
 
 
 	SESVertex::~SESVertex()
-		throw()
+		
 	{
 	}
 
 
 	void SESVertex::set(const SESVertex& sesvertex, bool deep)
-		throw()
+		
 	{
 		if (this != &sesvertex)
 		{
@@ -68,7 +68,7 @@ namespace BALL
 
 
 	SESVertex& SESVertex::operator = (const SESVertex& sesvertex)
-		throw()
+		
 	{
 		if (this != &sesvertex)
 		{
@@ -86,7 +86,7 @@ namespace BALL
 			const TVector3<double>& normal,
 			Index atom,
 			Index index)
-		throw()
+		
 	{
 		point_ = point;
 		normal_ = normal;
@@ -96,14 +96,14 @@ namespace BALL
 
 
 	void SESVertex::setPoint(const TVector3<double>& point)
-		throw()
+		
 	{
 		point_ = point;
 	}
 
 
 	TVector3<double> SESVertex::getPoint() const
-		throw()
+		
 	{
 		return point_;
 	}
@@ -118,42 +118,42 @@ namespace BALL
 
 
 	TVector3<double> SESVertex::getNormal() const
-		throw()
+		
 	{
 		return normal_;
 	}
 
 
 	void SESVertex::setAtom(Index atom)
-		throw()
+		
 	{
 		atom_ = atom;
 	}
 
 
 	Index SESVertex::getAtom() const
-		throw()
+		
 	{
 		return atom_;
 	}
 
 
 	bool SESVertex::operator == (const SESVertex&) const
-		throw()
+		
 	{
 		return true;
 	}
 
 
 	bool SESVertex::operator != (const SESVertex&) const
-		throw()
+		
 	{
 		return false;
 	}
 
 
 	bool SESVertex::operator *= (const SESVertex&) const
-		throw()
+		
 	{
 		return true;
 	}

@@ -88,31 +88,31 @@ namespace BALL
 
 		///
 		VanDerWaals()
-			throw();
+			;
 
 		///
 		VanDerWaals(ScoringFunction& sf)
-			throw();
+			;
 
 		///
 		VanDerWaals(ScoringComponent& sc)
-			throw();
+			;
 
 		///
 		virtual ~VanDerWaals()
-			throw();
+			;
 
 		///
 		virtual void clear()
-			throw();
+			;
 
 		///
 		virtual bool setup()
-			throw();
+			;
 
 		///
 		virtual double calculateScore()
-			throw();
+			;
 
 
 		protected:
@@ -158,11 +158,11 @@ namespace BALL
 
 		//_
 		double calculateVDWEnergy_(const AtomVector& atom_vector)
-			throw();
+			;
 
 		//_
 		Size createNonBondedList_(const ForceField::PairVector& atom_pair_vector)
-			throw();
+			;
 
 		//_ Verbosity of the code
 		Size verbosity_;

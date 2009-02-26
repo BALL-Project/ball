@@ -27,7 +27,7 @@ bool Kekuliser::AtomInfo::operator < (const Kekuliser::AtomInfo& info) const
 	return (*atom) < *info.atom;
 }
 
-Kekuliser::AtomInfo& Kekuliser::AtomInfo::operator = (const AtomInfo& ai) throw()
+Kekuliser::AtomInfo& Kekuliser::AtomInfo::operator = (const AtomInfo& ai) 
 {
 	atom 							= ai.atom;
 	double_bond 			= ai.double_bond;

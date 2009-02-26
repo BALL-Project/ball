@@ -7,14 +7,14 @@ namespace BALL
 {
 
 	FresnoTypes::FresnoTypes(ScoringComponent& sc)
-			throw()
+			
 			:	ScoringTypes(sc)
 		{
 			setup();
 		}
 
 		bool FresnoTypes::setup()
-			throw()
+			
 		{
 
 			Size verbosity = 10;

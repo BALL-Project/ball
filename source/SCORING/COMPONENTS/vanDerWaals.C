@@ -47,7 +47,7 @@ namespace BALL
 
 
 	VanDerWaals::VanDerWaals()
-		throw()
+		
 		:	ScoringComponent()
 	{
 		// Set the name of this component
@@ -57,7 +57,7 @@ namespace BALL
 
 
 	VanDerWaals::VanDerWaals(ScoringComponent& vdw)
-		throw()
+		
 		: ScoringComponent(vdw)
 	{
 		// Set the name of this component
@@ -67,7 +67,7 @@ namespace BALL
 
 
 	VanDerWaals::VanDerWaals(ScoringFunction& sf)
-		throw()
+		
 		: ScoringComponent(sf)
 	{
 		// Set the name of this component
@@ -77,14 +77,14 @@ namespace BALL
 
 
 	VanDerWaals::~VanDerWaals()
-		throw()
+		
 	{
 		clear();
 	}
 
 
 	void VanDerWaals::clear()
-		throw()
+		
 	{
 		non_bonded_.clear();
 	}
@@ -99,7 +99,7 @@ namespace BALL
 
 
 	bool VanDerWaals::setup()
-		throw()
+		
 	{
 
 		if (getScoringFunction() == 0)
@@ -224,7 +224,7 @@ namespace BALL
 
 
 	Size VanDerWaals::createNonBondedList_(const ForceField::PairVector& atom_pair_vector)
-		throw()
+		
 	{
 
 		// The following piece of code is stolen and adapted from
@@ -557,7 +557,7 @@ type_atom2);
 
 
 	double VanDerWaals::calculateVDWEnergy_(const AtomVector& atom_vector)
-		throw()
+		
 	{
 		// NOTE: The following is NOT the AMBER definition of van der Waals.
 		// This is the 6-12 interaction of non-bonded atoms ONLY, there are no
@@ -658,7 +658,7 @@ type_atom2);
 
 
 	double VanDerWaals::calculateScore()
-		throw()
+		
 	{
 
 		// Because we have local copies, we need to update the atom postition

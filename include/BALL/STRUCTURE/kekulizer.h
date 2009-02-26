@@ -43,7 +43,7 @@ namespace BALL
 		{
 			// needed for sorting:
 			bool operator < (const AtomInfo& info) const;
-			AtomInfo& operator = (const AtomInfo& ai) throw();
+			AtomInfo& operator = (const AtomInfo& ai) ;
 
 			// THE atom 
 			Atom* atom;

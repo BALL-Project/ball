@@ -185,22 +185,22 @@ namespace BALL
 		/**	Default constructor.
 		*/
 		PolarSolvation()
-			throw();
+			;
 
 		/**	Constructor.
 		*/
 		PolarSolvation(ScoringFunction& sf)
-			throw();
+			;
 
 		/**	Copy constructor
 		*/
 		PolarSolvation(const PolarSolvation& fhb)
-			throw();
+			;
 
 		/**	Destructor.
 		*/
 		virtual ~PolarSolvation()
-			throw();
+			;
 
 		//@}
 		/**	@name	Assignment
@@ -210,12 +210,12 @@ namespace BALL
 		/** Assignment.
 		*/
 		const PolarSolvation& operator = (const PolarSolvation& fr)
-			throw();
+			;
 
 		/** Clear method.
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/**	@name	Predicates.
@@ -223,7 +223,7 @@ namespace BALL
 		//@{
 
 		bool operator == (const PolarSolvation& fr) const
-			throw();
+			;
 
 		//@}
 		/**	@name	Setup Methods	
@@ -233,7 +233,7 @@ namespace BALL
 		/**	Setup method.
 		*/
 		virtual bool setup()
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors	
@@ -243,7 +243,7 @@ namespace BALL
 		/**	Calculates and returns the component's energy.
 		*/
 		virtual double calculateScore()
-			throw();
+			;
 
 		//@}
 
@@ -300,35 +300,35 @@ namespace BALL
 		/*_
 		*/
 		bool computeEnergyDifference_(System& system, float& energy)
-			throw();
+			;
 
 		/*_
 		*/
 		bool computeESEnergy_(System& system, float& energy)
-			throw();
+			;
 
 		/*_
 		*/
 		float computeESInteractionEnergy_(const Molecule& molecule, const
 				HashMap<const Atom*, float>& p_hash)
-			throw();
+			;
 
 		/*_
 		*/
 		bool computeFullCycle_(System& system, Molecule& protein, 
 				Molecule& ligand, float& energy)
-			throw();
+			;
 
 		/*_
 		*/
 		Vector3 permuteComponentSigns_(Vector3 vector, Size permutation)
-			throw();
+			;
 
 		/*_ Condense hydrogens without radius but bearing charges on the heavy
 		    atom they are attached to
 		*/
 		Size uniteAtoms_(Molecule& molecule)
-			throw();
+			;
 
 	};
 
