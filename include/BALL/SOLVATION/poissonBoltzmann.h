@@ -46,11 +46,11 @@ namespace BALL
 		{
 			/**	No error.	
 			*/
-			ERROR__NONE							= -1,
+			ERROR__NONE	= -1,
 
 			/**	Unknown error.
 			*/
-			ERROR__UNKNOWN					=  0,
+			ERROR__UNKNOWN	=  0,
 
 			/**	Not implemented error. Someone has been too lazy to implement the
 					this method. Wait for the next release...

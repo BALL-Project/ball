@@ -121,56 +121,45 @@ namespace BALL
 			throw(Exception::FileNotFound);
 
 		///
-		~GeneralizedBornModel()
-			throw();
+		~GeneralizedBornModel();
 
 		///
-		void clear()
-			throw();
+		void clear();
 
 		/// We need an additional optioned version of that piece of code
 		bool setup(const AtomContainer& ac)
 			throw(Exception::FileNotFound);
 
 		/// ??? This should be done through Options!
-		void setScalingFactorFile(const String& filename)
-			throw();
+		void setScalingFactorFile(const String& filename);
 
 		///
-		void setScalingFactors(const StringHashMap<float>& scaling_factors)
-			throw();
+		void setScalingFactors(const StringHashMap<float>& scaling_factors);
 
 		///
-		const StringHashMap<float>& getScalingFactors() const
-			throw();
+		const StringHashMap<float>& getScalingFactors() const;
 
 		/// ??? Should be done by options
-		void setSolventDC(float solvent_dc)
-			throw();
+		void setSolventDC(float solvent_dc);
 
 		/// ??? Should be done by options
-		void setSoluteDC(float solute_dc)
-			throw();
+		void setSoluteDC(float solute_dc);
 
 		/// Compute the total energy of the system
-		float calculateEnergy()
-			throw();
+		float calculateEnergy();
 
 		/// Compoute only the solvation energy (meaning the transfer energy
 		/// which is a kind of a reaction field energy)
-		float calculateSolvationEnergy()
-			throw();
+		float calculateSolvationEnergy();
 
 		/// Calculate the total potential created by every other atom of the
 		/// system for every atom and return a hashmap conteining the potential
 		/// values.
-		void calculatePotential(HashMap<const Atom*, float>& p_hash) const
-			throw();
+		void calculatePotential(HashMap<const Atom*, float>& p_hash) const;
 
 		/// Calculate the total potential created by every other atom of the
 		/// system at the position of atom_i
-		float calculatePotential(const Atom& atom_i) const
-			throw();
+		float calculatePotential(const Atom& atom_i) const;
 
 		///
 		bool readScalingFactors(const String& inifile_name)
@@ -185,26 +174,19 @@ namespace BALL
 		{
 			public:
 
-			GBParameters()
-				throw();
+			GBParameters();
 
-			~GBParameters()
-				throw();
+			~GBParameters();
 
-			bool extractSection(Parameters& parameters, const String& section_name)
-				throw();
+			bool extractSection(Parameters& parameters, const String& section_name);
 
-			const StringHashMap<float>& getScalingFactors() const
-				throw();
+			const StringHashMap<float>& getScalingFactors() const;
 
-			float getSoluteDC() const
-				throw();
+			float getSoluteDC() const;
 
-			float getSolventDC() const
-				throw();
+			float getSolventDC() const;
 
-			float getKappa() const
-				throw();
+			float getKappa() const;
 
 			private:
 
@@ -304,34 +286,29 @@ namespace BALL
 
 		/** Calculate the Born radii of all atoms
 		*/
-		void calculateBornRadii_()
-			throw();
+		void calculateBornRadii_();
 		
 		/** Calculate the energetic cost of creating a charge distribution in
 				a uniform dielectric
 		*/
-		float calculateCreationEnergy_() const
-			throw();
+		float calculateCreationEnergy_() const;
 
 		/** Calculate the energetic cost of transfering a solute into a
 				dielectric medium.
 		*/
-		float calculateTransferEnergy_() const
-			throw();
+		float calculateTransferEnergy_() const;
 
 		/** A smooth function describing an approximation of the solute volume
 				and several Born-dependent effects (including Coulomb integrals).
 				There are several techniques in usage. We implement the on
 				described in [1].
 		*/
-		float f_GB_(Size i, Size j) const
-			throw();
+		float f_GB_(Size i, Size j) const;
 
 		/** An approximation of the coulomb integral
 		*/
 		float coulombIntegralApproximation_(float distance, float scaled_radius_j,
-				float radius_i) const
-			throw();
+				float radius_i) const;
 
 
 

@@ -59,7 +59,6 @@ namespace BALL
 		= "surface.surf";
 
 	PairExpInteractionEnergyProcessor::PairExpInteractionEnergyProcessor()
-		throw()
 		:	EnergyProcessor(),
 			options(),
 			alpha_(0),
@@ -82,7 +81,7 @@ namespace BALL
 
 	
 	PairExpInteractionEnergyProcessor::PairExpInteractionEnergyProcessor(const
-			PairExpInteractionEnergyProcessor& proc) throw()
+			PairExpInteractionEnergyProcessor& proc)
 		:	EnergyProcessor(proc),
 			options(proc.options),
 			alpha_(proc.alpha_),
@@ -95,13 +94,12 @@ namespace BALL
 
 	
 	PairExpInteractionEnergyProcessor::~PairExpInteractionEnergyProcessor()
-		throw()
 	{
 		clear();
 	}
 
 	
-	void PairExpInteractionEnergyProcessor::clear() throw()
+	void PairExpInteractionEnergyProcessor::clear()
 	{
 		options.clear();
 		alpha_ = 0.0;
@@ -116,7 +114,7 @@ namespace BALL
 
 	const PairExpInteractionEnergyProcessor&
 		PairExpInteractionEnergyProcessor::operator = 
-			(const PairExpInteractionEnergyProcessor& proc) throw()
+			(const PairExpInteractionEnergyProcessor& proc)
 	{
 		options = proc.options;
 		alpha_ = proc.alpha_;
@@ -129,7 +127,7 @@ namespace BALL
 	}
 
 
-	bool PairExpInteractionEnergyProcessor::finish() throw()
+	bool PairExpInteractionEnergyProcessor::finish()
 	{
 
 		// first check for user settings
@@ -484,9 +482,9 @@ namespace BALL
 	// ?????: shouldn't be here.
 	void PairExpInteractionEnergyProcessor::getExternalSurface_(
 			vector< pair<Vector3, Surface> >& surface_map, 
-			const char* surface_file) throw()
+			const char* surface_file)
 	{
-		// HIER WIRD NICHTS, ABER AUCH GAR NICHTS GEPRÜFT!!!
+		// HIER WIRD NICHTS, ABER AUCH GAR NICHTS GEPRï¿½FT!!!
 		surface_map.clear();
 
 		String tag;

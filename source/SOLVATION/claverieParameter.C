@@ -10,7 +10,7 @@ using namespace std;
 namespace BALL
 {
 
-	ClaverieParameter::ClaverieParameter() throw()
+	ClaverieParameter::ClaverieParameter()
 		:	ParameterSection(),
 			parameters_(),
 			indices_()
@@ -19,7 +19,6 @@ namespace BALL
 
 
 	ClaverieParameter::ClaverieParameter(const ClaverieParameter& param)
-		throw()
 		:	ParameterSection(param),
 			parameters_(param.parameters_),
 			indices_(param.indices_)
@@ -27,15 +26,14 @@ namespace BALL
 	}
 
 
-	ClaverieParameter::~ClaverieParameter() throw()
+	ClaverieParameter::~ClaverieParameter()
 	{
 		clear();
-
 		valid_ = false;
 	}
 
 
-	void ClaverieParameter::clear() throw()
+	void ClaverieParameter::clear()
 	{
 		ParameterSection::clear();
 		parameters_.clear();
@@ -43,8 +41,7 @@ namespace BALL
 	}
 
 
-	const ClaverieParameter& ClaverieParameter::operator = 
-		(const ClaverieParameter& param) throw()
+	const ClaverieParameter& ClaverieParameter::operator = (const ClaverieParameter& param)
 	{
 		ParameterSection::operator = (param);
 		parameters_ = param.parameters_;
@@ -54,8 +51,7 @@ namespace BALL
 	}
 
 
-	bool ClaverieParameter::hasParameters(Atom::Type solvent_type,
-			Atom::Type solute_type) const throw()
+	bool ClaverieParameter::hasParameters(Atom::Type solvent_type, Atom::Type solute_type) const
 	{
 		if (indices_.has(solvent_type) && indices_.has(solute_type))
 		{
@@ -68,8 +64,7 @@ namespace BALL
 	}
 
 
-	std::pair<float, float> ClaverieParameter::getParameters(
-			Atom::Type solvent_type, Atom::Type solute_type) const throw()
+	std::pair<float, float> ClaverieParameter::getParameters(Atom::Type solvent_type, Atom::Type solute_type) const
 	{
 		float K_m;
 		float R_m;
@@ -97,29 +92,25 @@ namespace BALL
 	}
 
 
-	std::pair<float, float> ClaverieParameter::getParameters(Atom::Type type)
-		const throw()
+	std::pair<float, float> ClaverieParameter::getParameters(Atom::Type type) const
 	{
 		return parameters_[indices_[type]];
 	}
 
 
 	const ::std::vector< ::std::pair<float, float> >& ClaverieParameter::getParameters() const
-		throw()
 	{
 		return parameters_;
 	}
 
 	
 	const HashMap<Atom::Type, Index>& ClaverieParameter::getIndices() const
-		throw()
 	{
 		return indices_;
 	}
 
 
-	bool ClaverieParameter::operator == (const ClaverieParameter& param)
-		const throw()
+	bool ClaverieParameter::operator == (const ClaverieParameter& param) const
 	{
 		return ((ParameterSection::operator == (param))
 			&& (parameters_ == param.parameters_)
@@ -127,8 +118,7 @@ namespace BALL
 	}
 
 
-	bool ClaverieParameter::extractSection(ForceFieldParameters& parameters,
-		const String& section_name) throw()
+	bool ClaverieParameter::extractSection(ForceFieldParameters& parameters, const String& section_name)
 	{
 
 		if (!parameters.isValid())
@@ -140,13 +130,12 @@ namespace BALL
 
 		if (!hasVariable("K") || !hasVariable("R"))
 		{
-			Log.error() 
-				<< "Variable missing." << endl;
+			Log.error() << "Variable missing." << endl;
 			return false;
 		}
 		else
 		{
-			AtomTypes& atom_types = parameters.getAtomTypes();         
+			AtomTypes& atom_types = parameters.getAtomTypes();
 
 			Size number_of_keys = getNumberOfKeys();
 			parameters_.resize(number_of_keys);
