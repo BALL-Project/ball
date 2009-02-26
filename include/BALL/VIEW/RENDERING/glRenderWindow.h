@@ -62,7 +62,11 @@ namespace BALL
 			/// Unlock the context for the current thread and make it active
 			void unlockGLContext();
 
+			/// Force the window to ignore paint events
+			void ignoreEvents(bool ignore) {ignore_events_ = ignore;}
+
 		protected:	
+			void paintEvent(QPaintEvent* e) { if (!ignore_events_) QGLWidget::paintEvent(e);}
 			static QGLFormat gl_format_;
 
 			// ID of the fullscreen texture used to paste image into GPU framebuffer            
@@ -85,6 +89,7 @@ namespace BALL
 			String getGLErrorString(GLenum error);
 
 			mutable Mutex contex_mutex_;
+			bool ignore_events_;
 		};
 
 	} // namespace VIEW

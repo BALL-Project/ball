@@ -27,7 +27,8 @@ namespace BALL
 				FB_TEXTURE_FORMAT(GL_RGB), 
 			  FB_TEXTURE_DATATYPE(GL_FLOAT),
 				FB_TEXTURE_TARGET(GL_TEXTURE_2D),
-				FB_INTERNAL_TEXTURE_FORMAT(GL_RGB)
+				FB_INTERNAL_TEXTURE_FORMAT(GL_RGB),
+				ignore_events_(false)
 		{		
 			m_screenTexID = 0;
 			// we will swap buffers manually in the scene for synchronization
@@ -39,7 +40,8 @@ namespace BALL
 				FB_TEXTURE_FORMAT(GL_RGB), 
 			  FB_TEXTURE_DATATYPE(GL_FLOAT),
 				FB_TEXTURE_TARGET(GL_TEXTURE_2D),
-				FB_INTERNAL_TEXTURE_FORMAT(GL_RGB)
+				FB_INTERNAL_TEXTURE_FORMAT(GL_RGB),
+				ignore_events_(false)
 		{
 			if (!QGLWidget::isValid())
 			{
@@ -54,7 +56,8 @@ namespace BALL
 				FB_TEXTURE_FORMAT(GL_RGB), 
 			  FB_TEXTURE_DATATYPE(GL_FLOAT),
 				FB_TEXTURE_TARGET(GL_TEXTURE_2D),
-				FB_INTERNAL_TEXTURE_FORMAT(GL_RGB)
+				FB_INTERNAL_TEXTURE_FORMAT(GL_RGB),
+				ignore_events_(false)
 		{
 			// we will swap buffers manually in the scene for synchronization
 			setAutoBufferSwap(false);
