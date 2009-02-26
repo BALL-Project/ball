@@ -108,22 +108,22 @@ namespace BALL
 		/**	Default constructor.
 		*/
 		RotationalEntropyLoss()
-			throw();
+			;
 
 		/**	Constructor.
 		*/
 		RotationalEntropyLoss(ScoringFunction& sf)
-			throw();
+			;
 
 		/**	Copy constructor
 		*/
 		RotationalEntropyLoss(const RotationalEntropyLoss& fr)
-			throw();
+			;
 
 		/**	Destructor.
 		*/
 		virtual ~RotationalEntropyLoss()
-			throw();
+			;
 
 		//@}
 		/**	@name	Assignment
@@ -133,12 +133,12 @@ namespace BALL
 		/** Assignment.
 		*/
 		const RotationalEntropyLoss& operator = (const RotationalEntropyLoss& fr)
-			throw();
+			;
 
 		/** Clear method.
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/**	@name	Predicates.
@@ -146,7 +146,7 @@ namespace BALL
 		//@{
 
 		bool operator == (const RotationalEntropyLoss& fr) const
-			throw();
+			;
 
 		//@}
 		/**	@name	Setup Methods	
@@ -156,7 +156,7 @@ namespace BALL
 		/**	Setup method.
 		*/
 		virtual bool setup()
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors	
@@ -166,7 +166,7 @@ namespace BALL
 		/**	Calculates and returns the component's energy.
 		*/
 		virtual double calculateScore()
-			throw();
+			;
 
 		//@}
 
@@ -237,7 +237,7 @@ namespace BALL
 				std::stack<const Bond*>& possible_cycle_bonds,
 				HashSet<const Bond*>& cycle_bonds,
 				int& cycle_count)
-			throw();
+			;
 
 
 		/*_ A simple DFS implementation for counting heavy (as defined by
@@ -246,18 +246,18 @@ namespace BALL
 		void heavyAtomsDFS_(const Atom* atom, const Bond* bond,
 				HashSet<const Atom*>& visited,
 				int& heavy_atom_count, int& nonlip_heavy_atom_count)
-			throw();
+			;
 		
 		/*_ Find out which bonds are still frozen
 		 */
 		void updateFrozenBonds_()
-			throw();
+			;
 		
 		/*_
 		 */
 		bool frozenBondsDFS_(const Atom* atom,
 				HashSet<const Atom*>& visited)
-			throw();
+			;
 	};
 
 } // namespace BALL

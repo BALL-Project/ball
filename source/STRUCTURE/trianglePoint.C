@@ -11,7 +11,7 @@ namespace BALL
 {
 
 	TrianglePoint::TrianglePoint()
-		throw()
+		
 		:	GraphVertex< TrianglePoint,TriangleEdge,Triangle >(),
 			point_(),
 			normal_()
@@ -26,7 +26,7 @@ namespace BALL
 	}
 
 	TrianglePoint::TrianglePoint(const TrianglePoint& point, bool deep)
-		throw()
+		
 		:	GraphVertex< TrianglePoint,TriangleEdge,Triangle >
 				(point,deep),
 			point_(point.point_),
@@ -36,13 +36,13 @@ namespace BALL
 
 
 	TrianglePoint::~TrianglePoint()
-		throw()
+		
 	{
 	}
 
 
 	void TrianglePoint::set(const TrianglePoint& point, bool deep)
-		throw()
+		
 	{
 		if (this != &point)
 		{
@@ -56,7 +56,7 @@ namespace BALL
 
 	TrianglePoint& TrianglePoint:: operator =
 			(const TrianglePoint& point)
-		throw()
+		
 	{
 		if (this != &point)
 		{
@@ -70,21 +70,21 @@ namespace BALL
 
 
 	TVector3<double> TrianglePoint::getPoint() const
-		throw()
+		
 	{
 		return point_;
 	}
 
 
 	void TrianglePoint::setPoint(const TVector3<double>& point)
-		throw()
+		
 	{
 		point_ = point;
 	}
 
 
 	TVector3<double> TrianglePoint::getNormal() const
-		throw()
+		
 	{
 		return normal_;
 	}
@@ -99,21 +99,21 @@ namespace BALL
 
 
 	bool TrianglePoint::operator == (const TrianglePoint& point) const
-		throw()
+		
 	{
 		return (point_ == point.point_);
 	}
 
 
 	bool TrianglePoint::operator != (const TrianglePoint& point) const
-		throw()
+		
 	{
 		return (point_ != point.point_);
 	}
 
 
 	bool TrianglePoint::operator *= (const TrianglePoint& point) const
-		throw()
+		
 	{
 		return (point_ == point.point_);
 	}

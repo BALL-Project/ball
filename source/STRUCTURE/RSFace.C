@@ -12,7 +12,7 @@ namespace BALL
 {
 
 	RSFace::RSFace()
-		throw()
+		
 		: GraphTriangle< RSVertex,RSEdge,RSFace >(),
 			center_(),
 			normal_(),
@@ -22,7 +22,7 @@ namespace BALL
 
 
 	RSFace::RSFace(const RSFace& rsface, bool deep)
-		throw()
+		
 		:	GraphTriangle< RSVertex,RSEdge,RSFace >(rsface,deep),
 			center_(rsface.center_),
 			normal_(rsface.normal_),
@@ -53,13 +53,13 @@ namespace BALL
 
 
 	RSFace::~RSFace()
-		throw()
+		
 	{
 	}
 
 
 	void RSFace::set(const RSFace& rsface, bool deep)
-		throw()
+		
 	{
 		if (this != &rsface)
 		{
@@ -72,7 +72,7 @@ namespace BALL
 
 
 	RSFace& RSFace::operator = (const RSFace& rsface)
-		throw()
+		
 	{
 		if (this != &rsface)
 		{
@@ -107,7 +107,7 @@ namespace BALL
 
 
 	bool RSFace::operator == (const RSFace& rsface) const
-		throw()
+		
 	{
 		return (
 						(center_ == rsface.center_) 														&&
@@ -134,14 +134,14 @@ namespace BALL
 
 
 	bool RSFace::operator != (const RSFace& rsface) const
-		throw()
+		
 	{
 		return ( ! (*this == rsface) );
 	}
 
 
 	bool RSFace::operator *= (const RSFace& rsface) const
-		throw()
+		
 	{
 		return (
 						((vertex_[0]->atom_ == rsface.vertex_[0]->atom_) &&
@@ -167,21 +167,21 @@ namespace BALL
 
 
 	bool RSFace::isSingular() const
-		throw()
+		
 	{
 		return singular_;
 	}
 
 
 	void RSFace::setCenter(const TVector3<double>& center)
-		throw()
+		
 	{
 		center_ = center;
 	}
 
 
 	TVector3<double> RSFace::getCenter() const
-		throw()
+		
 	{
 		return center_;
 	}
@@ -196,14 +196,14 @@ namespace BALL
 
 
 	TVector3<double> RSFace::getNormal() const
-		throw()
+		
 	{
 		return normal_;
 	}
 
 
 	void RSFace::setSingular(bool singular)
-		throw()
+		
 	{
 		singular_ = singular;
 	}
@@ -213,7 +213,7 @@ namespace BALL
 			(HashSet<RSEdge*>&		edges,
 			 HashSet<RSVertex*>&	vertices,
 			 HashSet<RSFace*>&		faces)
-		throw()
+		
 	{
 		vertex_[0]->faces_.erase(this);
 		vertex_[1]->faces_.erase(this);

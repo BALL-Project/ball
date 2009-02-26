@@ -201,23 +201,23 @@ namespace BALL
 
 		/**	Enable a specific test
 		*/
-		void enable(TestType t) throw();
+		void enable(TestType t) ;
 
 		/**	Disable a specific test
 		*/
-		void disable(TestType t) throw();
+		void disable(TestType t) ;
 
 		/**	Enable selection of problematic atoms
 		*/
-		void enableSelection() throw() { selection_ = true; }
+		void enableSelection()  { selection_ = true; }
 
 		/**	Disable selection of problematic atoms
 		*/
-		void disableSelection() throw() { selection_ = false; }
+		void disableSelection()  { selection_ = false; }
 
 		/**	Return the status of the selection
 		*/
-		bool isSelectionEnabled() throw() { return selection_; }
+		bool isSelectionEnabled()  { return selection_; }
 
 		/**	Return true if the last application did not produce any warning.
 				The getStatus method may be called after applying the ResidueChecker 
@@ -230,7 +230,7 @@ namespace BALL
 
 		/**	Check whether a specific test is enabled
 		*/
-		bool isEnabled(TestType t) const throw();
+		bool isEnabled(TestType t) const ;
 		//@}
 
 		/**	Processor-related methods
@@ -257,22 +257,22 @@ namespace BALL
 		/**
 		*/
 		bool checkAtomPositions(const Residue& res, const String& res_name)
-			throw();
+			;
 
 		/**
 		*/
 		bool checkCharge(const Residue& res, const String& res_name)
-			throw();
+			;
 
 		/**
 		*/
 		bool checkCompleteness(const Residue& res, const Residue& reference, const String& res_name)
-			throw();
+			;
 
 		/**
 		*/
 		bool checkTemplate(const Residue& res, const Residue& reference, const String& res_name)
-			throw();
+			;
 			
 		//@}
 			

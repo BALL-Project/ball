@@ -4,12 +4,12 @@ using namespace::std;
 using namespace BALL;
 
 EnergeticEvaluation::EnergeticEvaluation()
-	throw()
+	
 {
 }
 
 EnergeticEvaluation::~EnergeticEvaluation()
-	throw()
+	
 {
 }
 

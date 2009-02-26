@@ -94,7 +94,7 @@ namespace BALL
 				This method creates a new RSFace object.
 		*/
 		RSFace()
-			throw();
+			;
 
 		/**	Copy constructor.
 				Create a new RSFace object from another.
@@ -104,7 +104,7 @@ namespace BALL
 												to the neighbours of the old RSFace object.
 		*/
 		RSFace(const RSFace& rsface, bool deep = false)
-			throw();
+			;
 
 		/**	Detailled constructor.
 				Create a new RSFace object from a lot of nice objects
@@ -135,7 +135,7 @@ namespace BALL
 				Destructs the RSFace object.
 		*/
 		virtual ~RSFace()
-			throw();
+			;
 
 		//@}
 		/**	@name	Assignment
@@ -149,7 +149,7 @@ namespace BALL
 												the neighbours of the RSFace object to assign from.
 		*/
 		void set(const RSFace& rsface, bool deep = false)
-			throw();
+			;
 
 		/**	Assign from another RSFace.
 				The RSFace object is linked to the neighbours of the RSFace object to	
@@ -157,7 +157,7 @@ namespace BALL
 				@param	rsface	the RSFace object to assign from
 		*/
 		RSFace& operator = (const RSFace& rsface)
-			throw();
+			;
 
 		/**	Assign to a lot of nice objects
 				@param	vertex1		assigned to the first vertex
@@ -193,28 +193,28 @@ namespace BALL
 											and the centers are equal, <b>false</b> otherwise
 		*/
 		virtual bool operator == (const RSFace& rsface) const
-			throw();
+			;
 
 		/**	Inequality operator.
 				@return	bool	<b>false</b> if all vertices are similar modulo order	
 											and the centers are equal, <b>true</b> otherwise
 		*/
 		virtual bool operator != (const RSFace& rsface) const
-			throw();
+			;
 
 		/**	Similarity operator.
 				@return	bool	<b>true</b> if all vertices are similar modulo order,	
 											<b>false</b> otherwise
 		*/
 		virtual bool operator *=(const RSFace& rsface) const
-			throw();
+			;
 		
 		/** isSingular
 				@return	bool	<b>true</b> if the RSFace is singular,	
 											<b>false</b> otherwise
 		*/
 		bool isSingular() const
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors
@@ -225,13 +225,13 @@ namespace BALL
 				@param	center	the new center
 		*/
 		void setCenter(const TVector3<double>& center)
-			throw();
+			;
 
 		/** Return the center of the probe sphere defining the RSFace.
 				@return	TVector3<double>	the center of the probe sphere
 		*/
 		TVector3<double> getCenter() const
-			throw();
+			;
 
 		/** Set the vector orthogonal to the RSFace.
 				@param	normal	the new normal
@@ -243,12 +243,12 @@ namespace BALL
 				@return	TVector3<double>	the vector orthogonal to the RSFace.
 		*/
 		TVector3<double> getNormal() const
-			throw();
+			;
 
 		/** Set singular
 		*/
 		void setSingular(bool singular)
-			throw();
+			;
 
 		/** Remove a RSFace from a ReducedSurface graph structure.
 				@param	edges			In this HashSet all edges are pushed which do not	
@@ -262,7 +262,7 @@ namespace BALL
 				(HashSet<RSEdge*>&		edges,
 				 HashSet<RSVertex*>&	vertices,
 				 HashSet<RSFace*>&		faces)
-			throw();
+			;
 
 		//@}
 

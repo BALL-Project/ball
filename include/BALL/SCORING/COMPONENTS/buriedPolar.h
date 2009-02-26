@@ -73,22 +73,22 @@ namespace BALL
 		/**	Default constructor.
 		*/
 		BuriedPolar()
-			throw();
+			;
 
 		/**	Constructor.
 		*/
 		BuriedPolar(ScoringFunction& sf)
-			throw();
+			;
 
 		/**	Copy constructor
 		*/
 		BuriedPolar(const BuriedPolar& bp)
-			throw();
+			;
 
 		/**	Destructor.
 		*/
 		virtual ~BuriedPolar()
-			throw();
+			;
 
 		//@}
 		/**	@name	Assignment
@@ -98,12 +98,12 @@ namespace BALL
 		/** Assignment.
 		*/
 		const BuriedPolar& operator = (const BuriedPolar& bp)
-			throw();
+			;
 
 		/** Clear method.
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/**	@name	Predicates.
@@ -111,7 +111,7 @@ namespace BALL
 		//@{
 
 		bool operator == (const BuriedPolar& bp) const
-			throw();
+			;
 
 		//@}
 		/**	@name	Setup Methods	
@@ -121,7 +121,7 @@ namespace BALL
 		/**	Setup method.
 		*/
 		virtual bool setup()
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors	
@@ -131,7 +131,7 @@ namespace BALL
 		/**	Calculates and returns the component's energy.
 		*/
 		virtual double calculateScore()
-			throw();
+			;
 
 		//@}
 

@@ -68,7 +68,7 @@ namespace BALL
 
 
 	PolarSolvation::PolarSolvation()
-		throw()
+		
 		:	ScoringComponent(),
 			calculation_method_(0),
 			verbosity_(0),
@@ -83,7 +83,7 @@ namespace BALL
 
 
 	PolarSolvation::PolarSolvation(ScoringFunction& sf)
-		throw()
+		
 		:	ScoringComponent(sf),
 			calculation_method_(0),
 			verbosity_(0),
@@ -98,7 +98,7 @@ namespace BALL
 
 
 	PolarSolvation::PolarSolvation(const PolarSolvation& ps)
-		throw()
+		
 		:	ScoringComponent(ps),
 			calculation_method_(0),
 			verbosity_(0),
@@ -111,14 +111,14 @@ namespace BALL
 
 
 	PolarSolvation::~PolarSolvation()
-		throw()
+		
 	{
 		clear();
 	}
 
 
 	void PolarSolvation::clear()
-		throw()
+		
 	{
 		ScoringComponent::clear();
 		calculation_method_ = 0;
@@ -130,7 +130,7 @@ namespace BALL
 
 
 	bool PolarSolvation::setup()
-		throw()
+		
 	{
 
 		Timer timer;
@@ -268,7 +268,7 @@ namespace BALL
 
 
 	double PolarSolvation::calculateScore()
-		throw()
+		
 	{
 
 		// Because we have local copies, we need to update the atom postition
@@ -623,7 +623,7 @@ namespace BALL
 
 	bool PolarSolvation::computeEnergyDifference_(System& system,
 			float& energy)
-		throw()
+		
 	{
 		float dG;
 
@@ -675,7 +675,7 @@ namespace BALL
 
 
 	bool PolarSolvation::computeESEnergy_(System& system, float& energy)
-		throw()
+		
 	{
 		if (use_gb_ == true)
 		{
@@ -703,7 +703,7 @@ namespace BALL
 
 	float PolarSolvation::computeESInteractionEnergy_(const Molecule&
 	molecule, const HashMap<const Atom*, float>& p_hash)
-		throw()
+		
 	{
 
 		float dGint = 0.0;
@@ -739,7 +739,7 @@ namespace BALL
 
 	bool PolarSolvation::computeFullCycle_(System& system, Molecule&
 			protein, Molecule& ligand, float& energy)
-		throw()
+		
 	{
 
 		// we are computing in bulk water.
@@ -956,7 +956,7 @@ namespace BALL
 
 	Vector3 PolarSolvation::permuteComponentSigns_(Vector3 vector, 
 			Size permutation)
-		throw()
+		
 	{
 		switch (permutation)
 		{
@@ -1010,7 +1010,7 @@ namespace BALL
 	}
 
 	Size PolarSolvation::uniteAtoms_(Molecule& molecule)
-		throw()
+		
 	{
 		// Go through the atoms of the molecule and find those charged
 		// hydrogens which have to be condensed on heavy atoms, because they

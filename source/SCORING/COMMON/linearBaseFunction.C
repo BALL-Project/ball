@@ -7,19 +7,19 @@ namespace BALL
 {
 
 	LinearBaseFunction::LinearBaseFunction()
-		throw()
+		
 	{
 	}
 
 	LinearBaseFunction::LinearBaseFunction(float lower, float upper)
-		throw()
+		
 	{
 		lower_ = lower;
 		upper_ = upper;
 	}
 
 	float LinearBaseFunction::calculate(float x) const
-		throw()
+		
 	{
 
 		float return_value;
@@ -86,7 +86,7 @@ namespace BALL
 
 	float LinearBaseFunction::calculate(float x, float lower,
 			float upper) 
-		throw()
+		
 	{
 		setLower(lower);
 		setUpper(upper);

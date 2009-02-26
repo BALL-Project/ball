@@ -22,10 +22,10 @@ namespace BALL
 			public:
 
 				EnergeticEvaluation()
-					throw();
+					;
 				
 				virtual ~EnergeticEvaluation()
-					throw();
+					;
 				
 				/** Operations
 				*/

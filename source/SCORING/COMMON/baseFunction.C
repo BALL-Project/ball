@@ -6,7 +6,7 @@ namespace BALL
 {
 
 	ScoringBaseFunction::ScoringBaseFunction()
-		throw()
+		
 		:	lower_(0.0f),
 			upper_(0.0f)
 	{
@@ -14,7 +14,7 @@ namespace BALL
 
 
 	ScoringBaseFunction::ScoringBaseFunction(float lower, float upper)
-		throw()
+		
 		:	lower_(lower),
 			upper_(upper)
 	{
@@ -22,27 +22,27 @@ namespace BALL
 
 
 	ScoringBaseFunction::~ScoringBaseFunction()
-		throw()
+		
 	{
 	}
 
 
 	void ScoringBaseFunction::setLower(float lower)
-		throw()
+		
 	{
 		lower_ = lower;
 	}
 
 
 	void ScoringBaseFunction::setUpper(float upper)
-		throw()
+		
 	{
 		upper_ = upper;
 	}
 
 
 	float ScoringBaseFunction::calculate(float /* x */) const 
-		throw()
+		
 	{
 		return(0.0);
 	}
@@ -50,7 +50,7 @@ namespace BALL
 
 	float ScoringBaseFunction::calculate(float /* x */, float /* lower */,
 			float /* upper */) 
-		throw()
+		
 	{
 		return(0.0);
 	}

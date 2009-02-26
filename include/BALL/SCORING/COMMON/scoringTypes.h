@@ -14,25 +14,25 @@ namespace BALL
 		public:
 
 		ScoringTypes()
-			throw();
+			;
 
 		ScoringTypes(const ScoringTypes& st)
-			throw();
+			;
 
 		ScoringTypes(const ScoringComponent& sc)
-			throw();
+			;
 
 		virtual ~ScoringTypes()
-			throw();
+			;
 
 		virtual void clear()
-			throw();
+			;
 
 		virtual bool setup()
-			throw();
+			;
 
 		const HashMap<const Atom*, Size>& getTypeMap() const
-			throw();
+			;
 
 		protected:
 

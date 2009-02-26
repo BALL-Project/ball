@@ -34,22 +34,22 @@ namespace BALL
 		/** Default constructor.
 		*/
 		RadialDistributionFunction() 
-			throw();
+			;
 
 		/** Copy constructor.
 		*/
 		RadialDistributionFunction(const RadialDistributionFunction& rdf)
-			throw();
+			;
 
 		/** Detailed constructor.
 		*/
 		RadialDistributionFunction(const PiecewisePolynomial& polynomial)
-			throw();
+			;
 		
 		/** Destructor.
 		*/
 		virtual ~RadialDistributionFunction() 
-			throw();
+			;
 
 		//@}
 		/** @name Assignment.
@@ -59,12 +59,12 @@ namespace BALL
 		/** Assignment operator.
 		*/
 		const RadialDistributionFunction& operator = (const RadialDistributionFunction& rdf)
-			throw();
+			;
 
 		/** Clear function.
 		*/
 		virtual void clear() 
-			throw();
+			;
 
 		//@}
 		/** @name Accessors.
@@ -74,22 +74,22 @@ namespace BALL
 		/** Set the representing PiecewisePolynomial.
 		*/
 		void setRepresentation(const PiecewisePolynomial& polynomial) 
-			throw();
+			;
 
 		/** Get the representation of the RDF.
 		*/
 		const PiecewisePolynomial& getRepresentation() const 
-			throw();
+			;
 
 		/** Get the range of the representing function.
 		*/
 		const Interval& getRange() const 
-			throw();
+			;
 
 		/** Compute the value of the distribution function at a given x.
 		*/
 		virtual double operator () (double x) const 
-			throw();
+			;
 
 		//@}
 		/** @name Predicates.
@@ -99,17 +99,17 @@ namespace BALL
 		/** Check, whether a given x is in the range of the RDF. 
 		*/
 		bool isInRange(double x) const 
-			throw();
+			;
 
 		/** Check validity.
 		*/
 		bool isValid() const 
-			throw();
+			;
 
 		/** Equality operator.
 		*/
 		bool operator == (const RadialDistributionFunction& rdf) const 
-			throw();
+			;
 
 		//@}
 		/** Debugging and Diagnostics.
@@ -119,7 +119,7 @@ namespace BALL
 		/** Dumps the whole content of the object.
 		*/
 		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const 
-			throw();
+			;
 
 		//@}
 

@@ -39,7 +39,7 @@ namespace BALL
 {
 
 	FragmentDB::NoFragmentNode::NoFragmentNode(const char* file, int line, const string& filename)
-		throw()
+		
 		: Exception::GeneralException(file, line, "NoFragmentNode", 
 											 string("the resource database does not contain a valid Fragment entry: ") + filename),
 			filename_(filename)
@@ -452,7 +452,7 @@ namespace BALL
 	}
 
 	FragmentDB& FragmentDB::operator = (const FragmentDB& db)
-		throw()
+		
 	{
 		destroy();
 		filename_ = db.filename_;

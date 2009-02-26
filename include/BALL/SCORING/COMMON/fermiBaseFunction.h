@@ -18,37 +18,37 @@ namespace BALL
 
 			/// 
 			FermiBaseFunction()
-				throw();
+				;
 
 			/// The function is defined in such a way that the score approaches 1
 			/// for values < lower and 0 for values > upper. If you need contrary
 			/// behaviour, you have to supply a "lower" which is greater than
 			/// "upper". This will invert the function.
 			FermiBaseFunction(float lower, float upper)
-				throw();
+				;
 
 			///
 			void setLower(float lower)
-				throw();
+				;
 
 			///
 			void setUpper(float upper)
-				throw();
+				;
 
 			///
 			float calculate(float x) const
-				throw();
+				;
 
 			///
 			float calculate(float x, float lower, float upper)
-				throw();
+				;
 
 
 		private:
 
 			//_
 			void computeFermiParameters_()
-				throw();
+				;
 
 			//_
 			float a_;

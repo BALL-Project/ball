@@ -60,30 +60,30 @@ namespace BALL
 
 		friend class TMolecularGraph<Node, Edge>;
 
-		NodeItem() throw();
-		NodeItem(const Atom& atom) throw();
+		NodeItem() ;
+		NodeItem(const Atom& atom) ;
 
-		Node& getData() throw();
-		const Node& getData() const throw();
-		void setData(const Node& data) throw();
+		Node& getData() ;
+		const Node& getData() const ;
+		void setData(const Node& data) ;
 
-		const Atom* getAtom() const throw();
-		Atom* getAtom() throw();
+		const Atom* getAtom() const ;
+		Atom* getAtom() ;
 
-		Iterator begin() throw();
-		ConstIterator begin() const throw();
-		Iterator end() throw();
-		ConstIterator end() const throw();
+		Iterator begin() ;
+		ConstIterator begin() const ;
+		Iterator end() ;
+		ConstIterator end() const ;
 
-		Size getDegree() const throw();
+		Size getDegree() const ;
 
-		bool operator == (const NodeItem& item) const throw();
-		bool operator != (const NodeItem& item) const throw();
+		bool operator == (const NodeItem& item) const ;
+		bool operator != (const NodeItem& item) const ;
 
 		protected:
 
 		void deleteEdge_(EdgeItemType* item)
-			throw();
+			;
 
 		Node	data_;
 		Atom* atom_;
@@ -154,11 +154,11 @@ namespace BALL
 		typedef typename std::list<EdgeItemType>::iterator EdgeIterator;
 		typedef typename std::list<EdgeItemType>::const_iterator EdgeConstIterator;
 
-		TMolecularGraph() throw();
-		TMolecularGraph(const Molecule& molecule) throw();
+		TMolecularGraph() ;
+		TMolecularGraph(const Molecule& molecule) ;
 
-		bool newNode(const Atom& atom) throw();
-		bool newEdge(const Bond& bond) throw();
+		bool newNode(const Atom& atom) ;
+		bool newEdge(const Bond& bond) ;
 
 		bool deleteNode(NodeItemType& node);
 		bool deleteEdge(EdgeItemType& edge);
@@ -185,11 +185,11 @@ namespace BALL
 
 		/** Return the number of nodes in the graph
 		*/
-		Size getNumberOfNodes() const throw();
+		Size getNumberOfNodes() const ;
 
 		/** Return the number of nodes in the graph
 		*/
-		Size getNumberOfEdges() const throw();
+		Size getNumberOfEdges() const ;
 
 		protected:
 		std::list<NodeItemType>	nodes_;
@@ -205,7 +205,7 @@ namespace BALL
 
 	template <typename Node, typename Edge>
 	TMolecularGraph<Node, Edge>::TMolecularGraph()
-			throw()
+			
 		:	nodes_(),
 			edges_(),
 			atom_to_node_(),
@@ -215,7 +215,7 @@ namespace BALL
 
 	template <typename Node, typename Edge>
 	TMolecularGraph<Node, Edge>::TMolecularGraph(const Molecule& molecule)
-			throw()
+			
 		:	nodes_(),
 			edges_(),
 			atom_to_node_(),
@@ -241,7 +241,7 @@ namespace BALL
 
 	template <typename Node, typename Edge>
 	bool TMolecularGraph<Node, Edge>::newNode(const Atom& atom)
-		throw()
+		
 	{
 		Atom* atom_ptr = const_cast<Atom*>(&atom);
 
@@ -258,7 +258,7 @@ namespace BALL
 
 	template <typename Node, typename Edge>
 	bool TMolecularGraph<Node, Edge>::newEdge(const Bond& bond)
-		throw()
+		
 	{
 		// Create convenience aliases for atoms.
 		Atom* first = const_cast<Atom*>(bond.getFirstAtom());
@@ -380,28 +380,28 @@ namespace BALL
 
 	template <typename Node, typename Edge>
 	NodeItem<Node, Edge>::NodeItem()
-		throw()
+		
 		: atom_(0)
 	{
 	}
 
 	template <typename Node, typename Edge>
 	NodeItem<Node, Edge>::NodeItem(const Atom& atom)
-		throw()
+		
 		:	atom_(const_cast<Atom*>(&atom))
 	{
 	}
 
 	template <typename Node, typename Edge>
 	Node& NodeItem<Node, Edge>::getData()
-		throw()
+		
 	{
 		return data_;
 	}
 
 	template <typename Node, typename Edge>
 	const Node& NodeItem<Node, Edge>::getData() const 
-		throw()
+		
 	{	
 		return data_;
 	}
@@ -409,7 +409,7 @@ namespace BALL
 
 	template <typename Node, typename Edge>
 	void NodeItem<Node, Edge>::setData(const Node& data) 
-		throw()
+		
 	{ 
 		data_ = data; 
 	}
@@ -417,70 +417,70 @@ namespace BALL
 	
 	template <typename Node, typename Edge>
 	const Atom* NodeItem<Node, Edge>::getAtom() const 
-		throw()
+		
 	{ 
 		return atom_;
 	}
 
 	template <typename Node, typename Edge>
 	Atom* NodeItem<Node, Edge>::getAtom() 
-		throw()
+		
 	{ 
 		return atom_;
 	}
 
 	template <typename Node, typename Edge>
 	typename NodeItem<Node, Edge>::Iterator NodeItem<Node, Edge>::begin() 
-		throw()
+		
 	{ 
 		return adjacent_edges_.begin(); 
 	}
 	
 	template <typename Node, typename Edge>
 	typename NodeItem<Node, Edge>::ConstIterator NodeItem<Node, Edge>::begin() const 
-		throw()
+		
 	{ 
 		return adjacent_edges_.begin(); 
 	}
 
 	template <typename Node, typename Edge>
 	typename NodeItem<Node, Edge>::Iterator NodeItem<Node, Edge>::end() 
-		throw()
+		
 	{ 
 		return adjacent_edges_.end(); 
 	}
 
 	template <typename Node, typename Edge>
 	typename NodeItem<Node, Edge>::ConstIterator NodeItem<Node, Edge>::end() const		
-		throw()
+		
 	{ 
 		return adjacent_edges_.end(); 
 	}
 
 	template <typename Node, typename Edge>
 	Size NodeItem<Node, Edge>::getDegree() const 
-		throw()
+		
 	{ 
 		return (Size)adjacent_edges_.size(); 
 	}
 
 	template <typename Node, typename Edge>
 	bool NodeItem<Node, Edge>::operator == (const NodeItem& item) const 
-		throw()
+		
 	{ 
 		return (atom_ == item.atom_); 
 	}
 
 	template <typename Node, typename Edge>
 	bool NodeItem<Node, Edge>::operator != (const NodeItem& item) const 
-		throw()
+		
 	{ 
 		return (atom_ != item.atom_); 
 	}
 
 	template <typename Node, typename Edge>
 	void NodeItem<Node, Edge>::deleteEdge_(EdgeItemType* item)
-		throw()
+		
 	{
 		Iterator it(std::find(adjacent_edges_.begin(), adjacent_edges_.end(), item));
 		if (it != adjacent_edges_.end())
@@ -492,7 +492,7 @@ namespace BALL
 	template <typename Node, typename Edge>
 	BALL_INLINE
 	Size TMolecularGraph<Node, Edge>::getNumberOfNodes() const
-		throw()
+		
 	{
 		return nodes_.size();
 	}
@@ -500,7 +500,7 @@ namespace BALL
 	template <typename Node, typename Edge>
 	BALL_INLINE
 	Size TMolecularGraph<Node, Edge>::getNumberOfEdges() const
-		throw()
+		
 	{
 		return edges_.size();
 	}

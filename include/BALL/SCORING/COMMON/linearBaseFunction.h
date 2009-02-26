@@ -18,22 +18,22 @@ namespace BALL
 
 			///
 			LinearBaseFunction()
-				throw();
+				;
 
 			/// The function is defined in such a way that the score is 1 for
 			/// values < lower and 0 for values > upper. If you need contrary 
 			/// behaviour, you have to supply a "lower" which is greater than
 			/// "upper". This will invert the function.
 			LinearBaseFunction(float lower, float upper)
-				throw();
+				;
 
 			///
 			float calculate(float x) const
-				throw();
+				;
 
 			///
 			float calculate(float x, float lower, float upper)
-				throw();
+				;
 
 	};
 

@@ -30,15 +30,15 @@ namespace BALL
 			public:
 
 				RandomEvaluation()
-					throw();
+					;
 				
 				virtual ~RandomEvaluation()
-					throw();
+					;
 				
 				/** Operations
 				*/
 				std::vector<ConformationSet::Conformation> operator () (ConformationSet& conformations)
-					throw();
+					;
 		};
 }
 #endif

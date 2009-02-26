@@ -27,7 +27,7 @@ namespace BALL
 {
 
 	TriangulatedSES::TriangulatedSES()
-		throw()
+		
 		:	TriangulatedSurface(),
 			ses_(NULL),
 			density_(4.5)
@@ -37,7 +37,7 @@ namespace BALL
 
 	TriangulatedSES::TriangulatedSES
 			(const TriangulatedSES& surface, bool deep)
-		throw()
+		
 		:	TriangulatedSurface(surface,deep),
 			ses_(surface.ses_),
 			density_(surface.density_)
@@ -47,7 +47,7 @@ namespace BALL
 
 	TriangulatedSES::TriangulatedSES
 			(SolventExcludedSurface* ses, const double& density)
-		throw()
+		
 		:	TriangulatedSurface(),
 			ses_(ses),
 			density_(density)
@@ -56,13 +56,13 @@ namespace BALL
 
 
 	TriangulatedSES::~TriangulatedSES()
-		throw()
+		
 	{
 	}
 
 
 	void TriangulatedSES::set(const TriangulatedSES& surface, bool)
-		throw()
+		
 	{
 		if (this != &surface)
 		{
@@ -75,7 +75,7 @@ namespace BALL
 
 	TriangulatedSES& TriangulatedSES::operator =
 			(const TriangulatedSES& surface)
-		throw()
+		
 	{
 		if (this != &surface)
 		{
@@ -88,14 +88,14 @@ namespace BALL
 
 
 	void TriangulatedSES::setDensity(const double& density)
-		throw()
+		
 	{
 		density_ = density;
 	}
 
 
 	double TriangulatedSES::getDensity() const
-		throw()
+		
 	{
 		return density_;
 	}
@@ -110,7 +110,7 @@ namespace BALL
 
 
 	SESTriangulator::SESTriangulator()
-		throw()
+		
 		:	tses_(0),
 			point_(),
 			edge_(),
@@ -121,7 +121,7 @@ namespace BALL
 
 
 	SESTriangulator::SESTriangulator(TriangulatedSES* tses)
-		throw()
+		
 		:	tses_(tses),
 			point_(tses->ses_->number_of_vertices_),
 			edge_(tses->ses_->number_of_edges_),
@@ -132,7 +132,7 @@ namespace BALL
 
 
 	SESTriangulator::~SESTriangulator()
-		throw()
+		
 	{
 		std::list<TrianglePoint*>::iterator i;
 		for (i = template_spheres_[0].begin(); i != template_spheres_[0].end(); i++)
@@ -171,7 +171,7 @@ namespace BALL
 
 
 	void SESTriangulator::preProcessing()
-		throw()
+		
 	{
 		tses_->ses_->clean(tses_->density_);
 		tses_->ses_->splitSphericFaces();
@@ -188,7 +188,7 @@ namespace BALL
 
 
 	void SESTriangulator::triangulateToricFaces()
-		throw()
+		
 	{
 		double epsilon = Constants::EPSILON;
 		Constants::EPSILON = 1e-4;
@@ -202,7 +202,7 @@ namespace BALL
 
 
 	void SESTriangulator::partitionSingularEdges()
-		throw()
+		
 	{
 		std::list<SESEdge*>::iterator e;
 		for (e = tses_->ses_->singular_edges_.begin();
@@ -215,7 +215,7 @@ namespace BALL
 
 
 	void SESTriangulator::triangulateContactFaces()
-		throw()
+		
 	{
 		SESFace* current_face;
 		TSphere3<double> sphere;
@@ -230,7 +230,7 @@ namespace BALL
 
 
 	void SESTriangulator::triangulateSphericFaces()
-		throw()
+		
 	{
 		SESFace* current_face;
 		TSphere3<double> sphere;
@@ -283,7 +283,7 @@ namespace BALL
 	void SESTriangulator::triangulateToricFace
 			(SESFace*	face,
 			 const double&			probe_radius)
-		throw()
+		
 	{
 		if (face->isFree())
 		{
@@ -306,7 +306,7 @@ namespace BALL
 	void SESTriangulator::triangulateNonSingularToricFace
 			(SESFace*	face,
 			 const double&			probe_radius)
-		throw()
+		
 	{
 		std::list<SESEdge*>::iterator e = face->edge_.begin();
 		SESEdge* edge0 = *e;
@@ -511,7 +511,7 @@ namespace BALL
 	void SESTriangulator::triangulateFreeToricFace
 			(SESFace*	face,
 			 const double&			probe_radius)
-		throw()
+		
 	{
 		TVector3<double> normal(face->edge_.front()->circle_.n);
 		TCircle3<double> circle1(face->edge_.front()->circle_);
@@ -555,7 +555,7 @@ namespace BALL
 	void SESTriangulator::triangulateSingularToricFace
 			(SESFace*	face,
 			 const double&			probe_radius)
-		throw()
+		
 	{
 		face->normalize(true);
 		std::list<SESEdge*>::iterator e = face->edge_.begin();
@@ -664,7 +664,7 @@ namespace BALL
 
 
 	void SESTriangulator::partitionSingularEdge(SESEdge* singular_edge)
-		throw()
+		
 	{
 		if (singular_edge->vertex_[0] == NULL)
 		{
@@ -679,7 +679,7 @@ namespace BALL
 
 	void SESTriangulator::partitionFreeSingularEdge
 			(SESEdge* singular_edge)
-		throw()
+		
 	{
 		TAngle<double> phi;
 		phi.value = 2*Constants::PI;
@@ -737,7 +737,7 @@ namespace BALL
 
 	void SESTriangulator::partitionNonFreeSingularEdge
 			(SESEdge* singular_edge)
-		throw()
+		
 	{
 		TAngle<double> phi(getOrientedAngle(singular_edge->vertex_[0]->point_-
 																					singular_edge->circle_.p,
@@ -797,7 +797,7 @@ namespace BALL
 	void SESTriangulator::triangulateContactFace
 			(SESFace*				face,
 			 const TSphere3<double>&	sphere)
-		throw()
+		
 	{
 		Position number_of_edges = face->edge_.size();
 		if (number_of_edges > 0)
@@ -887,7 +887,7 @@ namespace BALL
 	bool SESTriangulator::triangulateSphericFace
 			(SESFace*				face,
 			 const TSphere3<double>&	sphere)
-		throw()
+		
 	{
 		TriangulatedSES part;
 		bool ok = buildSphericTriangles(face,part,sphere,false);
@@ -908,7 +908,7 @@ namespace BALL
 			 TriangulatedSES&	part,
 			 const TSphere3<double>&		sphere,
 			 bool									convex)
-		throw()
+		
 	{
 		HashSet<TrianglePoint*> points;
 		std::list<TrianglePoint*>::iterator p;
@@ -1019,7 +1019,7 @@ namespace BALL
 			 const TSphere3<double>&									sphere,
 			 const HashSet<TrianglePoint*>&	points,
 				bool															convex)
-		throw()
+		
 	{
 		SESEdge* first_sesedge = firstSESEdge(face->edge_);
 		if (first_sesedge == NULL)
@@ -1129,7 +1129,7 @@ namespace BALL
 
 	SESEdge* SESTriangulator::firstSESEdge
 			(const std::list<SESEdge*>& sesedge)
-		throw()
+		
 	{
 		bool found = false;
 		std::list<SESEdge*>::const_iterator e = sesedge.begin();
@@ -1180,7 +1180,7 @@ namespace BALL
 			 TriangulatedSES&					 part,
 				bool													convex
 			)
-		throw()
+		
 	{
 		TriangleEdge* edge1;
 		TriangleEdge* edge2;
@@ -1247,7 +1247,7 @@ namespace BALL
 			 TriangulatedSES&					 part,
 				bool												 convex
 			)
-		throw()
+		
 	{
 		std::list<TrianglePoint*>::iterator p;
 		points.push_back(edge->vertex_[0]);
@@ -1392,7 +1392,7 @@ namespace BALL
 			 Triangle*&			triangle,
 			 bool								convex
 			)
-		throw()
+		
 	{
 		// build two new edges
 		edge1	= new TriangleEdge;
@@ -1455,7 +1455,7 @@ namespace BALL
 			 Size										number_of_segments,
 			 vector< TVector3<double> >&	partition,
 			 bool										on_surface)
-		throw()
+		
 	{
 		TVector4<double> p;
 		if (on_surface)
@@ -1486,7 +1486,7 @@ namespace BALL
 
 
 	Size SESTriangulator::numberOfRefinements(const double& density, const double& radius)
-		throw()
+		
 	{
 		double test0 = (4.0*density*Constants::PI*radius*radius-12.0)/30.0;
 		Size n = 0;
@@ -1514,7 +1514,7 @@ namespace BALL
 
 
 	void SESTriangulator::buildTemplateSpheres()
-		throw()
+		
 	{
 		TriangulatedSphere::ConstPointIterator p;
 		TrianglePoint* point;
@@ -1555,7 +1555,7 @@ namespace BALL
 			const std::vector< TVector3<double> >&	edge1_points,
 			const std::vector< TVector3<double> >&	edge3_points,
 			const double&													probe_radius)
-		throw()
+		
 	{
 		TAngle<double> pi(Constants::PI,true);
 		TAngle<double> psi;

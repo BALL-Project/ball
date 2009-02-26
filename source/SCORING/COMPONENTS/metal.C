@@ -20,7 +20,7 @@ namespace BALL
 	const Size ChemScoreMetal::Default::VERBOSITY = 0;
 
 	ChemScoreMetal::ChemScoreMetal()
-		throw()
+		
 		:	ScoringComponent()
 			possible_metal_interactions_(),
 			r1_(0.0),
@@ -32,7 +32,7 @@ namespace BALL
 
 
 	ChemScoreMetal::ChemScoreMetal(ScoringFunction& sf)
-		throw()
+		
 		:	ScoringComponent(sf),
 			possible_metal_interactions_(),
 			r1_(0.0),
@@ -44,7 +44,7 @@ namespace BALL
 
 
 	ChemScoreMetal::ChemScoreMetal(const ChemScoreMetal& csm)
-		throw()
+		
 		:	ScoringComponent(csm),
 			possible_metal_interactions_(csm.possible_metal_interactions_),
 			r1_(csm.r1_),
@@ -54,14 +54,14 @@ namespace BALL
 
 
 	ChemScoreMetal::~ChemScoreMetal()
-		throw()
+		
 	{
 		clear();
 	}
 
 
 	void ChemScoreMetal::clear()
-		throw()
+		
 	{
 		possible_metal_interactions_.clear();
 		r1_ = 0.0;
@@ -70,7 +70,7 @@ namespace BALL
 
 
 	bool ChemScoreMetal::setup()
-		throw()
+		
 	{
 		// clear the vector of buried polar interactions
 		possible_metal_interactions_.clear();
@@ -149,7 +149,7 @@ namespace BALL
 
 
 	double ChemScoreMetal::updateEnergy()
-		throw()
+		
 	{
 
 		energy_ = 0.0;
@@ -206,7 +206,7 @@ namespace BALL
 
 
 	void ChemScoreMetal::updateForces()
-		throw()
+		
 	{
 	}
 

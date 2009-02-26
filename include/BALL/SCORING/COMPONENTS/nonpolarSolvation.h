@@ -176,22 +176,22 @@ namespace BALL
 		/**	Default constructor.
 		*/
 		NonpolarSolvation()
-			throw();
+			;
 
 		/**	Constructor.
 		*/
 		NonpolarSolvation(ScoringFunction& sf)
-			throw();
+			;
 
 		/**	Copy constructor
 		*/
 		NonpolarSolvation(const NonpolarSolvation& fhb)
-			throw();
+			;
 
 		/**	Destructor.
 		*/
 		virtual ~NonpolarSolvation()
-			throw();
+			;
 
 		//@}
 		/**	@name	Assignment
@@ -201,12 +201,12 @@ namespace BALL
 		/** Assignment.
 		*/
 		const NonpolarSolvation& operator = (const NonpolarSolvation& fr)
-			throw();
+			;
 
 		/** Clear method.
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/**	@name	Predicates.
@@ -214,7 +214,7 @@ namespace BALL
 		//@{
 
 		bool operator == (const NonpolarSolvation& fr) const
-			throw();
+			;
 
 		//@}
 		/**	@name	Setup Methods	
@@ -224,7 +224,7 @@ namespace BALL
 		/**	Setup method.
 		*/
 		virtual bool setup()
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors	
@@ -234,7 +234,7 @@ namespace BALL
 		/**	Calculates and returns the component's energy.
 		*/
 		virtual double calculateScore()
-			throw();
+			;
 
 		//@}
 

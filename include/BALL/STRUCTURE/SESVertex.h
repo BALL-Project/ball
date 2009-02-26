@@ -61,7 +61,7 @@ namespace BALL
 				This method creates a new SESVertex object.
 		*/
 		SESVertex()
-			throw();
+			;
 
 		/**	Copy constructor.
 				Create a new SESVertex object from another.
@@ -71,7 +71,7 @@ namespace BALL
 													linked to the neighbours of the old SESVertex object.
 		*/
 		SESVertex(const SESVertex& sesvertex, bool deep = false)
-			throw();
+			;
 
 		/**	Detailled constructor.
 				Create a new SESVertex object from some nice objects.
@@ -85,13 +85,13 @@ namespace BALL
 				 const TVector3<double>&	normal,
 				 Index					atom,
 				 Index					index)
-			throw();
+			;
 
 		/**	Destructor.
 				Destructs the RSVertex object.
 		*/
 		virtual ~SESVertex()
-			throw();
+			;
 
 		//@}
 		/**	@name	Assignment
@@ -106,7 +106,7 @@ namespace BALL
 													to assign from.
 		*/
 		void set(const SESVertex& sesvertex, bool deep = false)
-			throw();
+			;
 
 		/**	Assign from another SESVertex.
 				The new SESVertex object is linked to the neighbours of the SESVertex	
@@ -114,7 +114,7 @@ namespace BALL
 				@param	sesvertex	the SESVertex object to assign from
 		*/
 		SESVertex& operator = (const SESVertex& sesvertex)
-			throw();
+			;
 
 		/**	Assign to two TVector3<double>'s and two indices.
 				@param	point		assigned to the point represented by the vertex
@@ -126,19 +126,19 @@ namespace BALL
 				const TVector3<double>& normal,
 				Index atom,
 				Index index)
-			throw();
+			;
 
 		/**	Set the point represented by the SESVertex.
 				@param	point	the new point
 		*/
 		void setPoint(const TVector3<double>& point)
-			throw();
+			;
 
 		/**	Return the point represented by the SESVertex.
 				@return	TVector3<double>	the point represented by the vertex
 		*/
 		TVector3<double> getPoint() const
-			throw();
+			;
 
 		/**	Set the normal vector of the SESVertex.
 				@param	normal	the new normal vector
@@ -150,19 +150,19 @@ namespace BALL
 				@return	TVector3<double>	the normal vector of the vertex
 		*/
 		TVector3<double> getNormal() const
-			throw();
+			;
 
 		/**	Set the index of the closest atom of the SESVertex.
 				@param	atom	the index of the closest atom
 		*/
 		void setAtom(Index atom)
-			throw();
+			;
 
 		/**	Return the index of the closest atom.
 				@return	Index	the index of the closest atom
 		*/
 		Index getAtom() const
-			throw();
+			;
 
 		//@}
 
@@ -174,19 +174,19 @@ namespace BALL
 				@return	bool	<b>true</b>
 		*/
 		virtual bool operator == (const SESVertex&) const
-			throw();
+			;
 
 		/**	Inequality operator.
 				@return	bool	<b>false</b>
 		*/
 		virtual bool operator != (const SESVertex&) const
-			throw();
+			;
 
 		/**	Similarity operator.
 				@return	bool	<b>true</b>
 		*/
 		virtual bool operator *= (const SESVertex&) const
-			throw();
+			;
 
 		//@}
 

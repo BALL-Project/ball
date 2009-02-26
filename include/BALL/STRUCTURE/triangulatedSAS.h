@@ -96,7 +96,7 @@ namespace BALL
 				This method creates a new TriangulatedSAS object.
 		*/
 		TriangulatedSAS()
-			throw();
+			;
 
 		/**	Copy constructor.
 				Create a new TriangulatedSAS object from another.
@@ -104,7 +104,7 @@ namespace BALL
 				@param	bool		ignored - just for interface consistency
 		*/
 		TriangulatedSAS(const TriangulatedSAS& surface, bool = true)
-			throw();
+			;
 
 		/** Detailed constructor.
 				Create a new empty TriangulatedSAS object and set its SAS.
@@ -112,13 +112,13 @@ namespace BALL
 				@param	density	the density to use by triangulation
 		*/
 		TriangulatedSAS(SolventAccessibleSurface* sas, const double& density)
-			throw();
+			;
 
 		/**	Destructor.
 				Destructs the TriangulatedSAS object.
 		*/
 		virtual ~TriangulatedSAS()
-			throw();
+			;
 		//@}
 
 		/**	@name	Assignment
@@ -130,13 +130,13 @@ namespace BALL
 				@param	bool		ignored - just for interface consistency
 		*/
 		void set(const TriangulatedSAS& surface, bool = true)
-			throw();
+			;
 
 		/**	Assign from another TriangulatedSAS.
 				@param	surface	the TriangulatedSAS object to assign from
 		*/
 		TriangulatedSAS& operator = (const TriangulatedSAS& surface)
-			throw();
+			;
 
 		//@}
 
@@ -147,17 +147,17 @@ namespace BALL
 		/** Set the density used by triangulation.
 		*/
 		void setDensity(const double& density)
-			throw();
+			;
 
 		/** Get the density used by triangulation.
 		*/
 		double getDensity() const
-			throw();
+			;
 
 		/** Compute the solvent-accessible surface
 		*/
 		void compute()
-			throw();
+			;
 
 		//@}
 
@@ -204,20 +204,20 @@ namespace BALL
 				This method creates a new SASTriangulator object.
 		*/
 		SASTriangulator()
-			throw();
+			;
 
 		/** Detailed constructor.
 				Create a new empty SASTriangulator object and set its SAS.
 				@param	tsas			a pointer to the corresponding SAS
 		*/
 		SASTriangulator(TriangulatedSAS* tsas)
-			throw();
+			;
 
 		/**	Destructor.
 				Destructs the SASTriangulator object.
 		*/
 		virtual ~SASTriangulator()
-			throw();
+			;
 		//@}
 
 		/** @name Accessors
@@ -225,46 +225,46 @@ namespace BALL
 		//@{
 
 		void run()
-			throw();
+			;
 
 		private:
 
 		void triangulateFace(SASFace* face)
-			throw();
+			;
 
 		void createPlanes
 				(SASFace* face,
 				 std::list< std::pair<TPlane3<double>,double> >& planes)
-			throw();
+			;
 
 		void tagPoints
 				(TriangulatedSurface& part,
 				 const std::list< std::pair<TPlane3<double>,double> >& planes)
-			throw();
+			;
 
 		void removeInsideTriangles(TriangulatedSurface& part)
-			throw();
+			;
 
 		HashGrid3<TrianglePoint*> createHashGrid(const TriangulatedSurface& part)
-			throw();
+			;
 
 		void createPoints
 				(TriangulatedSurface& part,
 				 const std::list< std::pair<TPlane3<double>,double> >& planes,
 				 HashGrid3<TrianglePoint*>& grid)
-			throw();
+			;
 
 		void createNewTriangles
 				(TriangulatedSurface& part,
 				 HashGrid3<TrianglePoint*>& grid)
-			throw();
+			;
 
 		void onePointOutside
 				(Index outside,
 				 Triangle* t,
 				 TriangulatedSurface& part,
 				 HashGrid3<TrianglePoint*>& grid)
-			throw();
+			;
 
 		void twoPointsOutside
 				(Position outside1,
@@ -272,18 +272,18 @@ namespace BALL
 				 Triangle* t,
 				 TriangulatedSurface& part,
 				 HashGrid3<TrianglePoint*>& grid)
-			throw();
+			;
 
 		TrianglePoint* vertexExists
 				(const TVector3<double>& point,
 				 HashGrid3<TrianglePoint*>& grid)
-			throw();
+			;
 
 		Size numberOfRefinements(const double& density, const double& radius)
-			throw();
+			;
 
 		void buildTemplateSpheres()
-			throw();
+			;
 
 		//@}
 

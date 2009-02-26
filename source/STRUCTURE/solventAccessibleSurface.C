@@ -16,7 +16,7 @@ namespace BALL
 {
 
 	SolventAccessibleSurface::SolventAccessibleSurface()
-		throw()
+		
 		:	number_of_vertices_(0),
 			vertices_(),
 			number_of_edges_(0),
@@ -30,7 +30,7 @@ namespace BALL
 
 	SolventAccessibleSurface::SolventAccessibleSurface
 			(const SolventAccessibleSurface& ,bool)//sas, bool)
-		throw()
+		
 		:	number_of_vertices_(0),
 			vertices_(),
 			number_of_edges_(0),
@@ -68,7 +68,7 @@ namespace BALL
 
 
 	SolventAccessibleSurface::SolventAccessibleSurface(ReducedSurface* reduced_surface)
-		throw()
+		
 		:	number_of_vertices_(0),
 			vertices_(),
 			number_of_edges_(0),
@@ -81,7 +81,7 @@ namespace BALL
 
 
 	SolventAccessibleSurface::~SolventAccessibleSurface()
-		throw()
+		
 	{
 		clear();
 	}
@@ -118,7 +118,7 @@ namespace BALL
 
 
 	Size SolventAccessibleSurface::numberOfVertices() const
-		throw()
+		
 	{
 		return number_of_vertices_;
 	}
@@ -153,7 +153,7 @@ namespace BALL
 
 
 	Size SolventAccessibleSurface::numberOfEdges() const
-		throw()
+		
 	{
 		return number_of_edges_;
 	}
@@ -188,21 +188,21 @@ namespace BALL
 
 
 	Size SolventAccessibleSurface::numberOfFaces() const
-		throw()
+		
 	{
 		return number_of_faces_;
 	}
 
 
 	void SolventAccessibleSurface::setRS(ReducedSurface* rs)
-		throw()
+		
 	{
 		reduced_surface_ = rs;
 	}
 
 
 	ReducedSurface* SolventAccessibleSurface::getRS() const
-		throw()
+		
 	{
 		return reduced_surface_;
 	}
@@ -233,7 +233,7 @@ namespace BALL
 
 
 	void SolventAccessibleSurface::compute()
-		throw()
+		
 	{
 		preProcessing();
 		get();
@@ -241,7 +241,7 @@ namespace BALL
 
 
 	void SolventAccessibleSurface::preProcessing()
-		throw()
+		
 	{
 		number_of_vertices_ = reduced_surface_->number_of_faces_;
 		number_of_edges_ = reduced_surface_->number_of_edges_;
@@ -271,7 +271,7 @@ namespace BALL
 
 
 	void SolventAccessibleSurface::get()
-		throw()
+		
 	{
 		for (Position i = 0; i < number_of_vertices_; i++)
 		{
@@ -289,7 +289,7 @@ namespace BALL
 
 
 	void SolventAccessibleSurface::createVertex(Position j)
-		throw()
+		
 	{
 		SASVertex* vertex = vertices_[j];
 		vertex->index_ = j;
@@ -304,7 +304,7 @@ namespace BALL
 
 
 	void SolventAccessibleSurface::createEdge(Position j)
-		throw()
+		
 	{
 		SASEdge* edge = edges_[j];
 		edge->index_ = j;
@@ -331,7 +331,7 @@ namespace BALL
 
 
 	void SolventAccessibleSurface::createFace(Position j)
-		throw()
+		
 	{
 		SASFace* face = faces_[j];
 		face->index_ = j;

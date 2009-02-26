@@ -215,7 +215,7 @@ namespace BALL
 	}
 	
 	SmartsParser::SPAtom::~SPAtom()
-		throw()
+		
 	{
 	}
 	
@@ -793,7 +793,7 @@ namespace BALL
 	}
 
 	SmartsParser::SPBond::~SPBond()
-		throw()
+		
 	{
 	}
 

@@ -32,31 +32,31 @@ namespace BALL
 
 			///
 			ScoringBaseFunction()
-				throw();
+				;
 
 			///
 			ScoringBaseFunction(float lower, float upper)
-				throw();
+				;
 
 			///
 			virtual ~ScoringBaseFunction()
-				throw();
+				;
 
 			///
 			virtual void setLower(float lower)
-				throw();
+				;
 
 			///
 			virtual void setUpper(float upper)
-				throw();
+				;
 
 			///
 			virtual float calculate(float x) const
-				throw();
+				;
 
 			///
 			virtual float calculate(float x, float lower, float upper) 
-				throw();
+				;
 
 
 		protected:

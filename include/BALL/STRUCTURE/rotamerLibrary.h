@@ -56,16 +56,16 @@ namespace BALL
         Uses rotamer library <tt>RotamerLibrary::DEFAULT_LIBRARY</tt> and 
         fragment db <tt>RotamerLibrary::DEFAULT_FRAGMENT_DB</tt>.
 		*/
-		RotamerLibrary() throw();
+		RotamerLibrary() ;
 
 		///	Detailed constructor, provided for convenience
-		RotamerLibrary(const String& filename, const FragmentDB& fragment_db) throw();
+		RotamerLibrary(const String& filename, const FragmentDB& fragment_db) ;
 
 		/// Detailed constructor
-		RotamerLibrary(const FragmentDB& fragment_db) throw();
+		RotamerLibrary(const FragmentDB& fragment_db) ;
 
 		///	Copy constructor
-		RotamerLibrary(const RotamerLibrary& library) throw();
+		RotamerLibrary(const RotamerLibrary& library) ;
 
 		///	Destructor
 		virtual ~RotamerLibrary();

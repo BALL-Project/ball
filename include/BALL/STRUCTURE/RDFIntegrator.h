@@ -31,24 +31,24 @@ namespace BALL
 		/** Default constructor 
 		*/
 		RDFIntegrator()
-			throw();
+			;
 
 		/** Copy constructor.
 				@param integrator the integrator to copy from
 		*/
 		RDFIntegrator(const RDFIntegrator& integrator)
-			throw();
+			;
 
 		/** Detailed constructor.
 				@param rdf the radial distribution function to initialize <b>  this </b> with
 		*/
 		RDFIntegrator(const RadialDistributionFunction& rdf)
-			throw();
+			;
 
 		/** Destructor 
 		*/
 		virtual ~RDFIntegrator()
-			throw();
+			;
 
 		//@}
 		/** @name Assignment 
@@ -60,12 +60,12 @@ namespace BALL
 				@return a constant reference to <b>  this </b>
 		*/
 		const RDFIntegrator& operator = (const RDFIntegrator& integrator)
-			throw();
+			;
 
 		/** Clear function.
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/// Predicates
@@ -76,13 +76,13 @@ namespace BALL
 				@return true, if the instances are equal, false ow.
 		*/
 		bool operator == (const RDFIntegrator& integrator) const
-			throw();
+			;
 
 		/** Validity test. Return the valid flag.
 				@return true, if this instance is valid.
 		*/
 		virtual bool isValid() const 
-			throw();
+			;
 
 		//@}
 		/// Accessors
@@ -93,13 +93,13 @@ namespace BALL
 				@see RadialDistributionFunction
 		*/
 		void setRDF(const RadialDistributionFunction& rdf)
-			throw();
+			;
 
 		/** Get the radial distribution function of this instance.
 				@return a const reference to the radial distribution function
 		*/
 		const RadialDistributionFunction& getRDF() const
-			throw();
+			;
 
 		/** Compute the value of the integral at a given x. This function
 				should not be called, because it is merely a sort of prototype
@@ -108,7 +108,7 @@ namespace BALL
 				@return always 0.0
 		*/
 		virtual double operator () (double x) const
-			throw();
+			;
 
 		//@}
 

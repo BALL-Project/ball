@@ -26,7 +26,7 @@ namespace BALL
 {
 
 	SolventExcludedSurface::SolventExcludedSurface()
-		throw()
+		
 		:	number_of_vertices_(0),
 			vertices_(),
 			number_of_edges_(0),
@@ -46,7 +46,7 @@ namespace BALL
 
 	SolventExcludedSurface::SolventExcludedSurface
 		(const SolventExcludedSurface& ses, bool)
-		throw()
+		
 		:	number_of_vertices_(ses.vertices_.size()),
 			vertices_(number_of_vertices_),
 			number_of_edges_(ses.edges_.size()),
@@ -91,7 +91,7 @@ namespace BALL
 
 	SolventExcludedSurface::SolventExcludedSurface
 			(ReducedSurface* reduced_surface)
-		throw()
+		
 		:	number_of_vertices_(0),
 			vertices_(),
 			number_of_edges_(0),
@@ -110,7 +110,7 @@ namespace BALL
 
 
 	SolventExcludedSurface::~SolventExcludedSurface()
-		throw()
+		
 	{
 		clear();
 	}
@@ -198,7 +198,7 @@ namespace BALL
 	bool SolventExcludedSurface::cleanSingularToricFace
 			(SESFace* face,
 			 const double&			sqrt_density)
-		throw()
+		
 	{
 		face->normalize(true);
 		std::list<SESEdge*>::iterator e = face->edge_.begin();
@@ -257,7 +257,7 @@ namespace BALL
 	bool SolventExcludedSurface::cleanToricFace
 			(SESFace* face,
 			 const double&			sqrt_density)
-		throw()
+		
 	{
 		face->normalize(false);
 		std::list<SESEdge*>::iterator e = face->edge_.begin();
@@ -312,7 +312,7 @@ namespace BALL
 
 
 	void SolventExcludedSurface::cleanVertices()
-		throw()
+		
 	{
 		while ((number_of_vertices_ > 0) &&
 					 (vertices_[number_of_vertices_-1] == NULL))
@@ -339,7 +339,7 @@ namespace BALL
 
 
 	void SolventExcludedSurface::cleanEdges()
-		throw()
+		
 	{
 		while ((number_of_edges_ > 0) &&
 					 (edges_[number_of_edges_-1] == NULL))
@@ -366,7 +366,7 @@ namespace BALL
 
 
 	void SolventExcludedSurface::cleanContactFaces()
-		throw()
+		
 	{
 		while ((number_of_contact_faces_ > 0) &&
 					 (contact_faces_[number_of_contact_faces_-1] == NULL))
@@ -393,7 +393,7 @@ namespace BALL
 
 
 	void SolventExcludedSurface::cleanToricFaces()
-		throw()
+		
 	{
 		while ((number_of_toric_faces_ > 0) &&
 					 (toric_faces_[number_of_toric_faces_-1] == NULL))
@@ -420,7 +420,7 @@ namespace BALL
 
 
 	void SolventExcludedSurface::cleanSphericFaces()
-		throw()
+		
 	{
 		while ((number_of_spheric_faces_ > 0) &&
 					 (spheric_faces_[number_of_spheric_faces_-1] == NULL))
@@ -447,7 +447,7 @@ namespace BALL
 
 
 	void SolventExcludedSurface::deleteSmallToricFace(SESFace* face)
-		throw()
+		
 	{
 		SESEdge* edge[4];
 		std::list<SESEdge*>::iterator e = face->edge_.begin();
@@ -533,7 +533,7 @@ namespace BALL
 
 	void SolventExcludedSurface::deleteSmallSingularToricFace
 			(SESFace* face)
-		throw()
+		
 	{
 		SESEdge* edge[6];
 		std::list<SESEdge*>::iterator e = face->edge_.begin();
@@ -644,7 +644,7 @@ namespace BALL
 
 
 	void SolventExcludedSurface::splitSphericFaces()
-		throw()
+		
 	{
 		for (Position i = 0; i < number_of_spheric_faces_; i++)
 		{
@@ -654,7 +654,7 @@ namespace BALL
 
 
 	void SolventExcludedSurface::splitSphericFace(Position i)
-		throw()
+		
 	{
 		SESFace* face = spheric_faces_[i];
 		std::list<SESEdge*>::iterator e = face->edge_.begin();
@@ -722,7 +722,7 @@ namespace BALL
 
 
 	bool SolventExcludedSurface::check()
-		throw()
+		
 	{
 		for (Position i = 0; i < number_of_vertices_; i++)
 		{
@@ -758,7 +758,7 @@ namespace BALL
 
 	SolventExcludedSurface::VertexIterator
 			SolventExcludedSurface::beginVertex()
-		throw()
+		
 	{
 		return vertices_.begin();
 	}
@@ -766,7 +766,7 @@ namespace BALL
 
 	SolventExcludedSurface::ConstVertexIterator
 			SolventExcludedSurface::beginVertex() const
-		throw()
+		
 	{
 		return vertices_.begin();
 	}
@@ -774,7 +774,7 @@ namespace BALL
 
 	SolventExcludedSurface::VertexIterator
 			SolventExcludedSurface::endVertex()
-		throw()
+		
 	{
 		return vertices_.end();
 	}
@@ -782,7 +782,7 @@ namespace BALL
 
 	SolventExcludedSurface::ConstVertexIterator
 			SolventExcludedSurface::endVertex() const
-		throw()
+		
 	{
 		return vertices_.end();
 	}
@@ -790,7 +790,7 @@ namespace BALL
 
 	SolventExcludedSurface::EdgeIterator
 			SolventExcludedSurface::beginEdge()
-		throw()
+		
 	{
 		return edges_.begin();
 	}
@@ -798,7 +798,7 @@ namespace BALL
 
 	SolventExcludedSurface::ConstEdgeIterator
 			SolventExcludedSurface::beginEdge() const
-		throw()
+		
 	{
 		return edges_.begin();
 	}
@@ -806,7 +806,7 @@ namespace BALL
 
 	SolventExcludedSurface::EdgeIterator
 			SolventExcludedSurface::endEdge()
-		throw()
+		
 	{
 		return edges_.end();
 	}
@@ -814,7 +814,7 @@ namespace BALL
 
 	SolventExcludedSurface::ConstEdgeIterator
 			SolventExcludedSurface::endEdge() const
-		throw()
+		
 	{
 		return edges_.end();
 	}
@@ -822,7 +822,7 @@ namespace BALL
 
 	SolventExcludedSurface::SingularEdgeIterator
 			SolventExcludedSurface::beginSingularEdge()
-		throw()
+		
 	{
 		return singular_edges_.begin();
 	}
@@ -830,7 +830,7 @@ namespace BALL
 
 	SolventExcludedSurface::ConstSingularEdgeIterator
 			SolventExcludedSurface::beginSingularEdge() const
-		throw()
+		
 	{
 		return singular_edges_.begin();
 	}
@@ -838,7 +838,7 @@ namespace BALL
 
 	SolventExcludedSurface::SingularEdgeIterator
 			SolventExcludedSurface::endSingularEdge()
-		throw()
+		
 	{
 		return singular_edges_.end();
 	}
@@ -846,7 +846,7 @@ namespace BALL
 
 	SolventExcludedSurface::ConstSingularEdgeIterator
 			SolventExcludedSurface::endSingularEdge() const
-		throw()
+		
 	{
 		return singular_edges_.end();
 	}
@@ -854,7 +854,7 @@ namespace BALL
 
 	SolventExcludedSurface::ContactFaceIterator
 			SolventExcludedSurface::beginContactFace()
-		throw()
+		
 	{
 		return contact_faces_.begin();
 	}
@@ -862,7 +862,7 @@ namespace BALL
 
 	SolventExcludedSurface::ConstContactFaceIterator
 			SolventExcludedSurface::beginContactFace() const
-		throw()
+		
 	{
 		return contact_faces_.begin();
 	}
@@ -870,7 +870,7 @@ namespace BALL
 
 	SolventExcludedSurface::ContactFaceIterator
 			SolventExcludedSurface::endContactFace()
-		throw()
+		
 	{
 		return contact_faces_.end();
 	}
@@ -878,7 +878,7 @@ namespace BALL
 
 	SolventExcludedSurface::ConstContactFaceIterator
 			SolventExcludedSurface::endContactFace() const
-		throw()
+		
 	{
 		return contact_faces_.end();
 	}
@@ -886,7 +886,7 @@ namespace BALL
 
 	SolventExcludedSurface::SphericFaceIterator
 			SolventExcludedSurface::beginSphericFace()
-		throw()
+		
 	{
 		return spheric_faces_.begin();
 	}
@@ -894,7 +894,7 @@ namespace BALL
 
 	SolventExcludedSurface::ConstSphericFaceIterator
 			SolventExcludedSurface::beginSphericFace() const
-		throw()
+		
 	{
 		return spheric_faces_.begin();
 	}
@@ -902,7 +902,7 @@ namespace BALL
 
 	SolventExcludedSurface::SphericFaceIterator
 			SolventExcludedSurface::endSphericFace()
-		throw()
+		
 	{
 		return spheric_faces_.end();
 	}
@@ -910,7 +910,7 @@ namespace BALL
 
 	SolventExcludedSurface::ConstSphericFaceIterator
 			SolventExcludedSurface::endSphericFace() const
-		throw()
+		
 	{
 		return spheric_faces_.end();
 	}
@@ -918,7 +918,7 @@ namespace BALL
 
 	SolventExcludedSurface::ToricFaceIterator
 			SolventExcludedSurface::beginToricFace()
-		throw()
+		
 	{
 		return toric_faces_.begin();
 	}
@@ -926,7 +926,7 @@ namespace BALL
 
 	SolventExcludedSurface::ConstToricFaceIterator
 			SolventExcludedSurface::beginToricFace() const
-		throw()
+		
 	{
 		return toric_faces_.begin();
 	}
@@ -934,7 +934,7 @@ namespace BALL
 
 	SolventExcludedSurface::ToricFaceIterator
 			SolventExcludedSurface::endToricFace()
-		throw()
+		
 	{
 		return toric_faces_.end();
 	}
@@ -942,7 +942,7 @@ namespace BALL
 
 	SolventExcludedSurface::ConstToricFaceIterator
 			SolventExcludedSurface::endToricFace() const
-		throw()
+		
 	{
 		return toric_faces_.end();
 	}
@@ -1036,7 +1036,7 @@ namespace BALL
 
 
 	SESComputer::SESComputer()
-		throw()
+		
 		:	ses_(),
 			vertex_grid_()
 	{
@@ -1044,7 +1044,7 @@ namespace BALL
 
 
 	SESComputer::SESComputer(SolventExcludedSurface* ses)
-		throw()
+		
 		:	ses_(ses),
 			vertex_grid_()
 	{
@@ -1052,7 +1052,7 @@ namespace BALL
 
 
 	SESComputer::~SESComputer()
-		throw()
+		
 	{
 	}
 
@@ -1075,7 +1075,7 @@ namespace BALL
 
 
 	void SESComputer::preProcessing()
-		throw()
+		
 	{
 		ses_->clear();
 		ses_->number_of_contact_faces_
@@ -1132,7 +1132,7 @@ namespace BALL
 
 
 	void SESComputer::get()
-		throw()
+		
 	{
 		for (Position i = 0; i < ses_->number_of_spheric_faces_; i++)
 		{
@@ -1146,7 +1146,7 @@ namespace BALL
 
 
 	void SESComputer::createSphericFace(Position j)
-		throw()
+		
 	{
 		SESFace* face = ses_->spheric_faces_[j];
 		RSFace* rsface = face->rsface_;
@@ -1169,7 +1169,7 @@ namespace BALL
 		(SESFace*				face,
 		 const TSphere3<double>& probe,
 		 RSVertex*			rsvertex)
-		throw()
+		
 	{
 		// Create a new vertex on the correct position ...
 		SESVertex* vertex(createVertex(probe.p,rsvertex->atom_));
@@ -1203,7 +1203,7 @@ namespace BALL
 		 Position			p1,
 		 Position			p2,
 		 const double&			radius_of_probe)
-		throw()
+		
 	{
 		RSFace* rsface = face->rsface_;
 		RSEdge* rsedge(0);
@@ -1225,7 +1225,7 @@ namespace BALL
 	SESVertex* SESComputer::createVertex
 		(const TVector3<double>& probe_center,
 		 Index							index)
-		throw()
+		
 	{
 		SESVertex* vertex = new SESVertex;
 		TSphere3<double>* atom = &(ses_->reduced_surface_->atom_[index]);
@@ -1244,7 +1244,7 @@ namespace BALL
 		 Position			p2,
 		 Index				index,
 		 const double&			radius_of_probe)
-		throw()
+		
 	{
 		SESEdge* edge = new SESEdge;
 		// set the vertices of the edge
@@ -1277,7 +1277,7 @@ namespace BALL
 
 
 	void SESComputer::createToricFace(Position i)
-		throw()
+		
 	{
 		SESFace* face = ses_->toric_faces_[i];
 		if (face->isFree())
@@ -1332,7 +1332,7 @@ namespace BALL
 	SESEdge* SESComputer::createConvexEdge
 		(SESFace*		face,
 		 RSVertex*	rsvertex)
-		throw()
+		
 	{
 		SESEdge* edge = new SESEdge;
 		Index atom = rsvertex->atom_;
@@ -1393,7 +1393,7 @@ namespace BALL
 
 
 	void SESComputer::treatSingularToricFace(Position i)
-		throw()
+		
 	{
 		SESFace* face = ses_->toric_faces_[i];
 		face->normalize(false);
@@ -1486,7 +1486,7 @@ namespace BALL
 			 SESEdge* edge0,
 			 SESEdge* edge1,
 			 SESEdge* edge2)
-		throw()
+		
 	{
 		SESVertex* vertex(0);
 		TVector3<double> intersection_point(face0->rsedge_->getIntersectionPoint(ip));
@@ -1523,7 +1523,7 @@ namespace BALL
 			 SESVertex*	vertex1,
 			 SESVertex*	vertex2,
 			 bool						is_new)
-		throw()
+		
 	{
 		if (edge->vertex_[0] == vertex1)
 		{
@@ -1545,7 +1545,7 @@ namespace BALL
 
 
 	void SESComputer::createFreeToricFace(Position i)
-		throw()
+		
 	{
 		SESFace* face(ses_->toric_faces_[i]);
 		TCircle3<double> circle1(face->rsedge_->circle0_);
@@ -1586,7 +1586,7 @@ namespace BALL
 		 const TVector3<double>& p2,
 		 const double&						dist,
 		 TVector3<double>&				result)
-		throw()
+		
 	{
 		result.set(p2-p1);
 		result.normalize();
@@ -1596,7 +1596,7 @@ namespace BALL
 
 
 	Index SESComputer::vertexExists(const TVector3<double>& point)
-		throw()
+		
 	{
 		double epsilon = Constants::EPSILON;
 		Constants::EPSILON = 0.001;
@@ -1628,7 +1628,7 @@ namespace BALL
 
 
 	SESSingularityCleaner::SESSingularityCleaner()
-		throw()
+		
 		:	ses_(),
 			vertex_grid_(),
 			probe_intersections_()
@@ -1639,7 +1639,7 @@ namespace BALL
 	SESSingularityCleaner::SESSingularityCleaner
 			(SolventExcludedSurface* ses,
 			 HashGrid3<Index>*			 vertex_grid)
-		throw()
+		
 		:	ses_(ses),
 			vertex_grid_(vertex_grid),
 			probe_intersections_()
@@ -1648,7 +1648,7 @@ namespace BALL
 
 
 	SESSingularityCleaner::~SESSingularityCleaner()
-		throw()
+		
 	{
 		// delete probe_intersections
 		HashMap< Position,
@@ -1690,7 +1690,7 @@ namespace BALL
 
 
 	bool SESSingularityCleaner::treatFirstCategory()
-		throw()
+		
 	{
 		std::list<SESFace*> first_category_faces;
 		getFirstCategoryFaces(first_category_faces);
@@ -1732,7 +1732,7 @@ namespace BALL
 
 	void SESSingularityCleaner::getFirstCategoryFaces
 		(std::list<SESFace*>& first_category_faces)
-		throw()
+		
 	{
 		std::list<SESFace*> singular_faces;
 		getSingularFaces(singular_faces);
@@ -1761,7 +1761,7 @@ namespace BALL
 
 	void SESSingularityCleaner::getSingularFaces
 			(std::list<SESFace*>& faces)
-		throw()
+		
 	{
 		for (Position i = 0; i < ses_->number_of_spheric_faces_; i++)
 		{
@@ -1775,7 +1775,7 @@ namespace BALL
 
 	void SESSingularityCleaner::noCut
 			(SESFace* face1, SESFace* face2)
-		throw()
+		
 	{
 		TCircle3<double> circle;
 		double probe_radius = ses_->reduced_surface_->probe_radius_;
@@ -1820,7 +1820,7 @@ namespace BALL
 
 	void SESSingularityCleaner::twoCuts
 			(SESFace* face1, SESFace* face2)
-		throw()
+		
 	{
 		std::vector<SESEdge*> sesedge1(7);
 		std::vector<SESEdge*> sesedge2(7);
@@ -1894,7 +1894,7 @@ namespace BALL
 			 std::vector<SESEdge*>& sesedge2,
 			 std::vector<SESVertex*>& sesvertex1,
 			 std::vector<SESVertex*>& sesvertex2)
-		throw()
+		
 	{
 		// find two equal vertices
 		std::list<SESVertex*>::iterator v1 = face1->vertex_.begin();
@@ -1982,7 +1982,7 @@ namespace BALL
 
 
 	void SESSingularityCleaner::treatSecondCategory()
-		throw()
+		
 	{
 		double x_min = ses_->spheric_faces_[0]->rsface_->center_.x;
 		double y_min = ses_->spheric_faces_[0]->rsface_->center_.y;
@@ -2050,7 +2050,7 @@ namespace BALL
 		(SESEdge*							edge,
 		 HashGrid3<Position>&			grid,
 		 std::list<SESEdge*>&	deletable_edges)
-		throw()
+		
 	{
 		if (edge->vertex_[0] == NULL)
 		{
@@ -2127,7 +2127,7 @@ namespace BALL
 			(const std::list<Intersection>& intersections,
 			 std::list<Intersection>& min,
 			 std::list<Intersection>& max)
-		throw()
+		
 	{
 		TAngle<double> min_phi(2*Constants::PI);
 		TAngle<double> max_phi(0,true);
@@ -2164,7 +2164,7 @@ namespace BALL
 		 const TAngle<double>&					phi,
 		 HashGrid3<Position>&			grid,
 		 std::list<Intersection>& intersections)
-		throw()
+		
 	{
 		TQuaternion<double> rotate(edge->circle_.n,phi/2);
 		TMatrix4x4<double> rotation;
@@ -2236,7 +2236,7 @@ namespace BALL
 		 TVector3<double>&	point1,
 		 TAngle<double>&		phi2,
 		 TVector3<double>&	point2)
-		throw()
+		
 	{
 		if (probeIntersection(index1,
 													index2,
@@ -2281,7 +2281,7 @@ namespace BALL
 			const TAngle<double>&	 phi,
 			const TVector3<double>& middle,
 			const TSphere3<double>& probe)
-		throw()
+		
 	{
 		double epsilon = Constants::EPSILON;
 		Constants::EPSILON = 0.001;
@@ -2325,7 +2325,7 @@ namespace BALL
 		 SESVertex*&								vertex2,
 		 Index&													actual_min,
 		 Index&													actual_max)
-		throw()
+		
 	{
 		buildEndEdge(edge,min,vertex1,actual_min,true);
 		buildEndEdge(edge,max,vertex2,actual_max,false);
@@ -2338,7 +2338,7 @@ namespace BALL
 		 SESVertex*&								vertex,
 		 Index&													actual_extremum,
 		 bool														min)
-		throw()
+		
 	{
 		vertex = NULL;
 		std::list<Intersection>::const_iterator m;
@@ -2417,7 +2417,7 @@ namespace BALL
 		 SESVertex*&				vertex,
 		 const HashSet<Index>&	indices,
 		 bool										minimum)
-		throw()
+		
 	{
 		SESFace* spheric_face1 = ses_->spheric_faces_[face1];
 		SESFace* spheric_face2 = ses_->spheric_faces_[face2];
@@ -2566,7 +2566,7 @@ namespace BALL
 			Index				 face3,
 			TVector3<double>& point1,
 			TVector3<double>& point2)
-		throw()
+		
 	{
 		// sort the indices of the spheric faces
 		sort(face1,face2,face3,face1,face2,face3);
@@ -2638,7 +2638,7 @@ namespace BALL
 			Index&	s1,
 			Index&	s2,
 			Index&	s3)
-		throw()
+		
 	{
 		s1 = u1;
 		s2 = u2;
@@ -2666,7 +2666,7 @@ namespace BALL
 
 
 	Index SESSingularityCleaner::vertexExists(TVector3<double> point)
-		throw()
+		
 	{
 		double epsilon = Constants::EPSILON;
 		Constants::EPSILON = 0.001;

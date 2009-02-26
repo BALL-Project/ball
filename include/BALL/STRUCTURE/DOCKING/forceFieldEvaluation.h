@@ -25,40 +25,40 @@ namespace BALL
 
 				/// Default constructor.
 				ForceFieldEvaluation()
-					throw();
+					;
 				
 				/// 
 				ForceFieldEvaluation(ForceField& ff)
-					throw();
+					;
 				
 				/// 
 				virtual ~ForceFieldEvaluation()
-					throw();
+					;
 				
 				/** Operations
 				*/
 				void setForceField(ForceField& ff)
-					throw();
+					;
 
 				/// 
 				void setOptions(const Options& options)
-					throw();
+					;
 
 				/// 
 				ForceField& getForceField()
-					throw();
+					;
 
 				/// 
 				const ForceField& getForceField() const
-					throw();
+					;
 
 				/// 
 				Options& getOptions()
-					throw();
+					;
 
 				/// 
 				const Options& getOptions() const
-					throw();
+					;
 				
 				/// 
 				virtual std::vector<ConformationSet::Conformation> operator () (ConformationSet& conformations)
