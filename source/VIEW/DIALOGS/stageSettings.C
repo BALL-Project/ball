@@ -248,7 +248,7 @@ namespace BALL
 			}
 
 			renderer.enableVertexBuffers(use_buffer);
-			renderer.setSmoothLines(smooth_lines_->isChecked());
+			//renderer.setSmoothLines(smooth_lines_->isChecked());
 		}
 
 		Vector3 StageSettings::getTextureUpDirection_()
@@ -305,7 +305,7 @@ namespace BALL
 			setColor(color_sample, ColorRGBA(0,0,0));
 			animation_smoothness->setValue(25);
 			show_lights_->setChecked(false);
-			smooth_lines_->setChecked(false);
+			//smooth_lines_->setChecked(false);
 			fog_box->setChecked(false);
 			fog_slider->setValue(200);
 			environment_map->setChecked(false);
@@ -400,7 +400,7 @@ namespace BALL
 				use_vertex_buffers->setEnabled(false);
 			}
 
-			smooth_lines_->setChecked(renderer.getSmoothLines());
+			//smooth_lines_->setChecked(renderer.getSmoothLines());
 			use_vertex_buffers->setChecked(renderer.vertexBuffersEnabled());
 			
 			//TODO 
