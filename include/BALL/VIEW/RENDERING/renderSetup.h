@@ -226,6 +226,10 @@ namespace BALL {
 
 				// locks the renderer during updates and rendering
 				mutable Mutex render_mutex_;
+
+				Size width_;
+				Size height_;
+				bool do_resize_;
 		};
 	}
 }

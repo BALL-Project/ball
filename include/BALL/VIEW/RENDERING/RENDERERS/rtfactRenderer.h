@@ -89,6 +89,8 @@ namespace BALL
 
 				void updateCamera(const Camera* camera = 0);
 
+				void updateBackgroundColor();
+
 				void updateMaterialForRepresentation(Representation const* rep);
 				void updateMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material);
 

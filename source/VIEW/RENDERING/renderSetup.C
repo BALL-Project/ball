@@ -38,6 +38,8 @@ namespace BALL
 
 			target->lockGLContext();
 
+			do_resize_ = false;
+
 			// initialize the rendering target
 			target->init();
 
@@ -66,6 +68,9 @@ namespace BALL
 
 			if (use_continuous_loop_)
 			{
+				width_  = width;
+				height_ = height;
+				do_resize_ = true;
 				// stop the thread
 				useContinuousLoop(false);
 				reset_continuous = true;
@@ -97,6 +102,11 @@ namespace BALL
 
 			if (RTTI::isKindOf<GLRenderer>(*renderer))
 				((GLRenderer*)renderer)->setSize(width, height);
+
+			if (RTTI::isKindOf<BufferedRenderer>(*renderer))
+				target->refresh();
+			else
+				target->updateGL();
 
 			// do *not* move this unlock call below updateCamera, or we will deadlock!
 			target->unlockGLContext();
@@ -307,6 +317,9 @@ namespace BALL
 
 		void RenderSetup::updateBackgroundColor()
 		{
+			if (use_continuous_loop_)
+				useContinuousLoop(false);
+
 			render_mutex_.lock();
 
 			if (!use_continuous_loop_)
