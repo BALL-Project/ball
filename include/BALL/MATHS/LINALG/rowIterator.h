@@ -13,6 +13,9 @@
 #include <BALL/CONCEPT/randomAccessIterator.h>
 #endif
 
+
+typedef unsigned int uint;
+
 namespace BALL {
 
 	// forward declaration

@@ -2,6 +2,8 @@
 # include <BALL/MATHS/LINALG/eigenSolver.h>
 #endif
 
+#include <algorithm>
+
 namespace BALL {
 
 	// ----- EigenSolver::solveRightEigenProblem_lapack ----- //

@@ -5,7 +5,9 @@
 #include <map>
 #include <iterator>
 
- 
+
+typedef unsigned int uint;
+
 namespace BALL
 {
 	namespace VIEW
