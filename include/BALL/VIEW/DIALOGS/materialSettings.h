@@ -67,6 +67,7 @@ namespace BALL
 			virtual void specularityFactorChanged();
 			virtual void reflectivenessFactorChanged();
 			virtual void shininessFactorChanged();
+			virtual void transparencyFactorChanged();
 			virtual void updateDirectlyBoxChanged();
 			virtual void editAmbientColor();
 			virtual void editSpecularityColor();

@@ -164,6 +164,13 @@ namespace BALL
 			last_camera_lookup    = look_up;
 		}
 
+		void RTfactRenderer::updateBackgroundColor() 
+		{
+			m_renderer.setEnvironmentColor(float3(stage_->getBackgroundColor().getRed(),
+									 												  stage_->getBackgroundColor().getGreen(),
+																						stage_->getBackgroundColor().getBlue()));
+		}
+			
 		void RTfactRenderer::prepareBufferedRendering(const Stage& stage)
 		{
 			// this function is not needed for this kind of raytracer
