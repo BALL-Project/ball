@@ -165,10 +165,9 @@ namespace BALL
 
 		void RTfactRenderer::updateBackgroundColor() 
 		{
-			m_renderer.setEnvironmentColor(
-                stage_->getBackgroundColor().getRed(),
-                stage_->getBackgroundColor().getGreen(),
-				stage_->getBackgroundColor().getBlue());
+			m_renderer.setEnvironmentColor(float3(stage_->getBackgroundColor().getRed(),
+									 												  stage_->getBackgroundColor().getGreen(),
+																						stage_->getBackgroundColor().getBlue()));
 		}
 			
 		void RTfactRenderer::prepareBufferedRendering(const Stage& stage)
