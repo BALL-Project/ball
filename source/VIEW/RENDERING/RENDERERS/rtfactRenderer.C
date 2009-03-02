@@ -166,9 +166,10 @@ namespace BALL
 
 		void RTfactRenderer::updateBackgroundColor() 
 		{
-			m_renderer.setEnvironmentColor(float3(stage_->getBackgroundColor().getRed(),
-									 												  stage_->getBackgroundColor().getGreen(),
-																						stage_->getBackgroundColor().getBlue()));
+			m_renderer.setEnvironmentColor(
+                stage_->getBackgroundColor().getRed(),
+                stage_->getBackgroundColor().getGreen(),
+				stage_->getBackgroundColor().getBlue());
 		}
 			
 		void RTfactRenderer::prepareBufferedRendering(const Stage& stage)
@@ -489,6 +490,9 @@ namespace BALL
 
 			// shininess
 			material->setParam("shininess", rt_material.shininess);
+
+            // transparency
+            material->setParam("alpha", (100.f - rt_material.transparency) * 0.01f);
 		}
 
 	}
