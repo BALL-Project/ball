@@ -35,7 +35,7 @@ namespace BALL {
 		 * 	Please try to call functions inside this class instead of working with
 		 * 	the renderers and targets directly to ensure thread safety.
 		 */
-		class BALL_EXPORT RenderSetup
+		class BALL_VIEW_EXPORT RenderSetup
 			:	public QThread
 		{
 			public:
