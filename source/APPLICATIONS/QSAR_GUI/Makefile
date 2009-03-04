@@ -147,7 +147,7 @@ QSARTool-static:	$(OBJECTS)	$(SPECIAL_OBJECTS)
 
 
 QSARTool-static2:	$(OBJECTS)	$(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $@ $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_PATH)/lib/libBALL.a $(BALL_PATH)/lib/libVIEW.a $(BALL_PATH)/contrib/libsvm/libsvm.a $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgsl.a  $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgslcblas.a $(BALL_PATH)/contrib/qwt-5.0.2/lib/libqwt.a -L/media/sda6/qt-x11-opensource-src-4.4.0/lib -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql -lGLU -lGL /media/sda6/lapack-3.1.1/lapack_LINUX.a /media/sda6/lapack-3.1.1/blas_LINUX.a /media/sda6/lapack-3.1.1/tmglib_LINUX.a /usr/lib/libgfortran.a
+	$(CXX)	$(LDFLAGS) -o $@ $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_PATH)/lib/libBALL.a $(BALL_PATH)/lib/libVIEW.a $(BALL_PATH)/contrib/libsvm/libsvm.a $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgsl.a  $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgslcblas.a $(BALL_PATH)/contrib/qwt-5.0.2/lib/libqwt.a -L/media/sda6/qt-x11-opensource-src-4.4.0/lib -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql -lGLU -lGL /media/sda3/BALL-git/contrib/lapack-3.1.1/lapack_LINUX.a /media/sda3/BALL-git/contrib/lapack-3.1.1/blas_LINUX.a /media/sda3/BALL-git/contrib/lapack-3.1.1/tmglib_LINUX.a /usr/lib/gcc/i486-linux-gnu/4.3.2/libgfortran.a
 
 	
 # 	/media/sda6/clapack/lapack_LINUX.a  /media/sda6/clapack/blas_LINUX.a /media/sda6/clapack/F2CLIBS/libF77.a /media/sda6/clapack/F2CLIBS/libI77.a /media/sda7/BALL-git/contrib/gsl-1.8/gsl-1.8/lib/libgslcblas.a

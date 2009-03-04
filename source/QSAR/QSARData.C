@@ -5,6 +5,7 @@
 
 #include <BALL/QSAR/QSARData.h>
 #include <set>
+#include <algorithm>
 
 using namespace BALL::QSAR;
 
@@ -1026,33 +1027,87 @@ void QSARData::manipulateY(vector<String> v)
 	}
 }
 
+
 void QSARData::discretizeY(vector<double> thresholds)
 {
-	for(unsigned int i=0; i<Y_.size();i++)
-	{
-		for(unsigned int j=0; j<Y_[0].size(); j++)
+	// make sure that the thresholds are sorted ascendingly
+	sort(thresholds.begin(),thresholds.end());
+	
+	// if response variable(s) were not normalized, use given thresholds directly
+	if(y_transformations_.size()==0)
+	{	
+		for(unsigned int i=0; i<Y_.size();i++)
 		{
-			if(Y_[i][j]<thresholds[0])
+			for(unsigned int j=0; j<Y_[0].size(); j++)
 			{
-				Y_[i][j]=0;
-			}
-			else if(Y_[i][j]>=thresholds[thresholds.size()-1])
-			{
-				Y_[i][j]=thresholds.size();
-			}
-			else
-			{
-				for(unsigned int k=0; k<thresholds.size()-1;k++)
+				if(Y_[i][j]<thresholds[0])
 				{
-					if(Y_[i][j]>=thresholds[k] && Y_[i][j]<thresholds[k+1])
+					Y_[i][j]=0; // lowest class-label == 0
+				}
+				else if(Y_[i][j]>=thresholds[thresholds.size()-1])
+				{
+					Y_[i][j]=thresholds.size(); // highest class-label
+				}
+				else
+				{
+					for(unsigned int k=0; k<thresholds.size()-1;k++)
 					{
-						Y_[i][j]=k+1;
+						if(Y_[i][j]>=thresholds[k] && Y_[i][j]<thresholds[k+1])
+						{
+							Y_[i][j]=k+1;
+						}
 					}
 				}
 			}
 		}
 	}
+	
+	// if response variable(s) were normalized, normalize the given thresholds first
+	else
+	{
+		uint no_thresholds = thresholds.size();
+		
+		vector<vector<double> > norm_thresholds(Y_.size());
+		for(uint act=0; act<Y_.size(); act++)
+		{
+			norm_thresholds[act].resize(no_thresholds);
+			for(uint i=0; i<no_thresholds; i++)
+			{
+				norm_thresholds[act][i] = (thresholds[i]-y_transformations_[act][0])/y_transformations_[act][1];
+			}
+		}
+		
+		for(unsigned int act=0; act<Y_.size();act++)
+		{
+			for(unsigned int j=0; j<Y_[0].size(); j++)
+			{
+				if(Y_[act][j]<norm_thresholds[act][0])
+				{
+					Y_[act][j]=0; // lowest class-label == 0
+				}
+				else if(Y_[act][j]>=norm_thresholds[act][no_thresholds-1])
+				{
+					Y_[act][j]=no_thresholds; // highest class-label
+				}
+				else
+				{
+					for(unsigned int k=0; k<no_thresholds-1;k++)
+					{
+						if(Y_[act][j]>=norm_thresholds[act][k] && Y_[act][j]<norm_thresholds[act][k+1])
+						{
+							Y_[act][j]=k+1;
+						}
+					}
+				}
+			}
+		}
+		
+		// now we have discretized response variables, so do not do any response normalization any more
+		y_transformations_.clear();
+		y_transformations_.resize(0);
+	}
 }
+
 
 void QSARData::transformX(vector<String> v)
 {

@@ -132,7 +132,7 @@ namespace BALL
 				@param v string containing the equation, e.g."x1+x3*5+x10^2" */
 				void manipulateY(String v);
 				
-				/** discretize the response values
+				/** Discretize the response values. If the response variable(s) of this data object have been normalized, the given thresolds will be automatically normalized accordingly.
 				@param thresolds d thresholds for d+1 classes, that are to be created */
 				void discretizeY(vector<double> thresholds);
 				
@@ -224,7 +224,7 @@ namespace BALL
 				/** 2xm dimensional matrix (m=no of descriptors) containing mean and stddev of each transformed descriptor */
 				VMatrix descriptor_transformations_;
 				
-				/** 2xc dimensional matrix (m=no of activities) containing mean and stddev of each transformed activity */
+				/** 2xc dimensional matrix (c=no of activities) containing mean and stddev of each transformed activity */
 				VMatrix y_transformations_;
 			
 				/** names of all descriptors */
