@@ -1,18 +1,17 @@
-
-//#include <RTfact/Utils/Packets/Detail/Constants.inc.cpp>
-
 #include <BALL/STRUCTURE/triangulatedSurface.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 
 #include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
 
-#include <RTfact/Config/Init.inc.cpp>
+#include <RTfact/Config/Init.hpp>
+#include <RTfact/Utils/Transform.hpp>
 
 using RTfact::Vec3f;
 using RTfact::Remote::GroupHandle;
 using RTfact::Remote::GeoHandle;
 using RTfact::Transform;
+using RTfact::Matrix4f;
 using RTfact::Remote::float3;
 using RTfact::Remote::RTAppearanceHandle;
 
@@ -400,7 +399,7 @@ namespace BALL
 			FrameBufferFormat fmt = buffer->getFormat();		    
 			if ((fmt.getPixelFormat() == PixelFormat::RGBF_96) && (objects_.size() != 0))
 			{
-				m_renderer.attachFrameBuffer(fmt.getWidth(), fmt.getHeight(), fmt.getPitch(), (float*)buffer->getData());
+				m_renderer.attachFrameBuffer((float*)buffer->getData(), 3, fmt.getWidth(), fmt.getHeight());
 				m_renderer.renderToBuffer();
 
 				if (use_continuous_loop_)
