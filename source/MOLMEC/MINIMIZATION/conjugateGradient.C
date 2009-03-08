@@ -31,7 +31,7 @@ namespace BALL
 	// It does nothing but calling its base class constructor 
   ConjugateGradientMinimizer::ConjugateGradientMinimizer()
 		: EnergyMinimizer(),
-			line_search_(*this),
+			line_search_(),
 			unscaled_direction_(),
 			number_of_atoms_(0),
 			updt_method_(DEFAULT_METHOD),
@@ -48,13 +48,15 @@ namespace BALL
 			restart_frequency_(1),
 			last_restart_iter_(0)
 	{
+		line_search_.setMinimizer(*this);
+
 		options.setDefaultInteger(Option::UPDATE_METHOD, Default::UPDATE_METHOD);
 	}
 
 	// Constructor initialized with a force field
 	ConjugateGradientMinimizer::ConjugateGradientMinimizer(ForceField& force_field)
 		: EnergyMinimizer(),
-			line_search_(*this),
+			line_search_(),
 			unscaled_direction_(),
 			number_of_atoms_(0),
 			updt_method_(DEFAULT_METHOD),
@@ -71,6 +73,8 @@ namespace BALL
 			restart_frequency_(1),
 			last_restart_iter_(0)
 	{
+		line_search_.setMinimizer(*this);
+
 		options.setDefaultInteger(Option::UPDATE_METHOD, Default::UPDATE_METHOD);
 		valid_ = setup(force_field);
 		
@@ -84,7 +88,7 @@ namespace BALL
 	ConjugateGradientMinimizer::ConjugateGradientMinimizer
 		(ForceField& force_field, SnapShotManager* ssm)
 		: EnergyMinimizer(),
-			line_search_(*this),
+			line_search_(),
 			unscaled_direction_(),
 			number_of_atoms_(0),
 			updt_method_(DEFAULT_METHOD),
@@ -101,6 +105,8 @@ namespace BALL
 			restart_frequency_(1),
 			last_restart_iter_(0)
 	{
+		line_search_.setMinimizer(*this);
+
 		options.setDefaultInteger(Option::UPDATE_METHOD, Default::UPDATE_METHOD);
 		valid_ = setup(force_field, ssm);
 		
@@ -115,7 +121,7 @@ namespace BALL
 	ConjugateGradientMinimizer::ConjugateGradientMinimizer
 		(ForceField& force_field, const Options& new_options) 
 		: EnergyMinimizer(),
-			line_search_(*this),
+			line_search_(),
 			unscaled_direction_(),
 			number_of_atoms_(0),
 			updt_method_(DEFAULT_METHOD),
@@ -132,6 +138,8 @@ namespace BALL
 			restart_frequency_(1),
 			last_restart_iter_(0)
 	{
+		line_search_.setMinimizer(*this);
+
 		options.setDefaultInteger(Option::UPDATE_METHOD, Default::UPDATE_METHOD);
 		
 		// The actual work is done in setup 
@@ -147,7 +155,7 @@ namespace BALL
 	ConjugateGradientMinimizer::ConjugateGradientMinimizer
 		(ForceField& force_field, SnapShotManager* ssm, const Options& new_options)
 		: EnergyMinimizer(),
-			line_search_(*this),
+			line_search_(),
 			unscaled_direction_(),
 			number_of_atoms_(0),
 			updt_method_(DEFAULT_METHOD),
@@ -164,6 +172,8 @@ namespace BALL
 			restart_frequency_(1),
 			last_restart_iter_(0)
 	{
+		line_search_.setMinimizer(*this);
+
 		options.setDefaultInteger(Option::UPDATE_METHOD, Default::UPDATE_METHOD);
 		
 		// The actual work is done in setup 
