@@ -40,7 +40,7 @@ namespace BALL
 	// Default constructor
 	ShiftedLVMMMinimizer::ShiftedLVMMMinimizer()
 		: EnergyMinimizer(),
-			line_search_(*this),
+			line_search_(),
 			first_iter_(true),
 			number_of_atoms_(0),
 			max_number_of_cols_(DEFAULT_NUMBER_OF_COLUMNS),
@@ -56,6 +56,8 @@ namespace BALL
 			hess_factor_(),
 			initial_atoms_()
 	{
+		line_search_.setMinimizer(*this);
+
 		options.setDefaultInteger(Option::UPDATE_METHOD, Default::UPDATE_METHOD);
 		options.setDefaultInteger(Option::CORRECTION_PARAMETER, Default::CORRECTION_PARAMETER);
 		options.setDefaultInteger(Option::NUM_OF_COLUMNS, Default::NUM_OF_COLUMNS);
@@ -64,7 +66,7 @@ namespace BALL
 	// Constructor initialized with a force field
 	ShiftedLVMMMinimizer::ShiftedLVMMMinimizer(ForceField& force_field)
 		: EnergyMinimizer(),
-			line_search_(*this),
+			line_search_(),
 			first_iter_(true),
 			number_of_atoms_(0),
 			max_number_of_cols_(DEFAULT_NUMBER_OF_COLUMNS),
@@ -80,6 +82,8 @@ namespace BALL
 			hess_factor_(),
 			initial_atoms_()
 	{
+		line_search_.setMinimizer(*this);
+
 		options.setDefaultInteger(Option::UPDATE_METHOD, Default::UPDATE_METHOD);
 		options.setDefaultInteger(Option::CORRECTION_PARAMETER, Default::CORRECTION_PARAMETER);
 		options.setDefaultInteger(Option::NUM_OF_COLUMNS, Default::NUM_OF_COLUMNS);
@@ -96,7 +100,7 @@ namespace BALL
 	ShiftedLVMMMinimizer::ShiftedLVMMMinimizer
 		(ForceField& force_field, SnapShotManager* ssm)
 		: EnergyMinimizer(),
-			line_search_(*this),
+			line_search_(),
 			first_iter_(true),
 			number_of_atoms_(0),
 			max_number_of_cols_(DEFAULT_NUMBER_OF_COLUMNS),
@@ -112,6 +116,8 @@ namespace BALL
 			hess_factor_(),
 			initial_atoms_()
 	{
+		line_search_.setMinimizer(*this);
+
 		options.setDefaultInteger(Option::UPDATE_METHOD, Default::UPDATE_METHOD);
 		options.setDefaultInteger(Option::CORRECTION_PARAMETER, Default::CORRECTION_PARAMETER);
 		options.setDefaultInteger(Option::NUM_OF_COLUMNS, Default::NUM_OF_COLUMNS);
@@ -129,7 +135,7 @@ namespace BALL
 	ShiftedLVMMMinimizer::ShiftedLVMMMinimizer
 		(ForceField& force_field, const Options& new_options) 
 		: EnergyMinimizer(),
-			line_search_(*this),
+			line_search_(),
 			first_iter_(true),
 			number_of_atoms_(0),
 			max_number_of_cols_(DEFAULT_NUMBER_OF_COLUMNS),
@@ -145,6 +151,8 @@ namespace BALL
 			hess_factor_(),
 			initial_atoms_()
 	{
+		line_search_.setMinimizer(*this);
+
 		options = new_options;
 		
 		// The actual work is done in setup 
@@ -160,7 +168,7 @@ namespace BALL
 	ShiftedLVMMMinimizer::ShiftedLVMMMinimizer
 		(ForceField& force_field, SnapShotManager* ssm, const Options& new_options)
 		: EnergyMinimizer(),
-			line_search_(*this),
+			line_search_(),
 			first_iter_(true),
 			number_of_atoms_(0),
 			max_number_of_cols_(DEFAULT_NUMBER_OF_COLUMNS),
@@ -176,6 +184,8 @@ namespace BALL
 			hess_factor_(),
 			initial_atoms_()
 	{
+		line_search_.setMinimizer(*this);
+
 		options = new_options;
 		
 		// The actual work is done in setup 
