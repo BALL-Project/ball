@@ -20,8 +20,9 @@ namespace BALL
 	// Default constructor
 	 SteepestDescentMinimizer::SteepestDescentMinimizer()
 		:	EnergyMinimizer(),
-			line_search_(*this)
+			line_search_()
 	{
+		line_search_.setMinimizer(*this);
 	}
 	
 	// Copy constructor 
@@ -36,8 +37,10 @@ namespace BALL
 	// Constructor initialized with a force field
 	SteepestDescentMinimizer::SteepestDescentMinimizer(ForceField& force_field)
 		:	EnergyMinimizer(),
-			line_search_(*this)
+			line_search_()
 	{
+		line_search_.setMinimizer(*this);
+
 		valid_ = setup(force_field);
 		
 		if (!valid_)
@@ -49,8 +52,10 @@ namespace BALL
 	// Constructor initialized with a force field and a snapshot  manager 
 	SteepestDescentMinimizer::SteepestDescentMinimizer(ForceField& force_field, SnapShotManager* ssm)
 		:	EnergyMinimizer(),
-			line_search_(*this)
+			line_search_()
 	{
+		line_search_.setMinimizer(*this);
+
 		valid_ = setup (force_field, ssm);
 		
 		if (!valid_)
@@ -63,8 +68,10 @@ namespace BALL
 	SteepestDescentMinimizer::SteepestDescentMinimizer
 		(ForceField& force_field, const Options& new_options)
 		:	EnergyMinimizer(),
-			line_search_(*this)
+			line_search_()
 	{
+		line_search_.setMinimizer(*this);
+
 		options = new_options;
 		valid_  = setup (force_field, new_options);
 		
@@ -79,8 +86,10 @@ namespace BALL
 																										 SnapShotManager* ssm,
 																										 const Options& new_options)
 		:	EnergyMinimizer(),
-			line_search_(*this)
+			line_search_()
 	{
+		line_search_.setMinimizer(*this);
+
 		options = new_options;
 		valid_  = setup(force_field, ssm, new_options);
 		

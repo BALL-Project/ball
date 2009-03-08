@@ -452,9 +452,9 @@ namespace BALL
 								Log.info() << "B CO: " << B_CO << endl;
 							}
 
-							if (((A_sp2 & B_sp3) | (B_sp2 & A_sp3) | (A_sp3 & B_sp3))
-									| ((A_CO & B_sp3 & isCarbon(*atom2)) 
-										| (A_sp3 & B_CO & isCarbon(*atom1))) == true)
+							if (((A_sp2 && B_sp3) || (B_sp2 && A_sp3) || (A_sp3 && B_sp3))
+									|| ((A_CO && B_sp3 && isCarbon(*atom2)) 
+										|| (A_sp3 && B_CO && isCarbon(*atom1))) == true)
 							{
 								if (verbosity >= 100)
 								{

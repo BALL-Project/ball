@@ -33,7 +33,7 @@ namespace BALL
 	// Default constructor 
 	StrangLBFGSMinimizer::StrangLBFGSMinimizer()
 		: EnergyMinimizer(),
-			line_search_(*this),
+			line_search_(),
 			first_iter_(true),
 			number_of_atoms_(0),
 			max_num_of_vect_pairs_(DEFAULT_NUMBER_OF_VECTOR_PAIRS),
@@ -46,6 +46,8 @@ namespace BALL
 			index_of_free_vect_(0),
 			initial_atoms_()
 	{
+		line_search_.setMinimizer(*this);
+
 		options.setDefaultBool(Option::IMPROVED, Default::IMPROVED);
 		options.setDefaultInteger(Option::NUM_OF_STORED_VECT_PAIRS, Default::NUM_OF_STORED_VECT_PAIRS);
 	}
@@ -53,7 +55,7 @@ namespace BALL
 	// Constructor initialized with a force field
 	StrangLBFGSMinimizer::StrangLBFGSMinimizer(ForceField& force_field)
 		: EnergyMinimizer(),
-			line_search_(*this),
+			line_search_(),
 			first_iter_(true),
 			number_of_atoms_(0),
 			max_num_of_vect_pairs_(DEFAULT_NUMBER_OF_VECTOR_PAIRS),
@@ -66,6 +68,8 @@ namespace BALL
 			index_of_free_vect_(0),
 			initial_atoms_()
 	{
+		line_search_.setMinimizer(*this);
+
 		options.setDefaultBool(Option::IMPROVED, Default::IMPROVED);
 		options.setDefaultInteger(Option::NUM_OF_STORED_VECT_PAIRS, Default::NUM_OF_STORED_VECT_PAIRS);
 		
@@ -81,7 +85,7 @@ namespace BALL
 	StrangLBFGSMinimizer::StrangLBFGSMinimizer
 		(ForceField& force_field, SnapShotManager* ssm)
 		: EnergyMinimizer(),
-			line_search_(*this),
+			line_search_(),
 			first_iter_(true),
 			number_of_atoms_(0),
 			max_num_of_vect_pairs_(DEFAULT_NUMBER_OF_VECTOR_PAIRS),
@@ -94,6 +98,8 @@ namespace BALL
 			index_of_free_vect_(0),
 			initial_atoms_()
 	{
+		line_search_.setMinimizer(*this);
+
 		options.setDefaultBool(Option::IMPROVED, Default::IMPROVED);
 		options.setDefaultInteger(Option::NUM_OF_STORED_VECT_PAIRS, Default::NUM_OF_STORED_VECT_PAIRS);
 		
@@ -110,7 +116,7 @@ namespace BALL
 	StrangLBFGSMinimizer::StrangLBFGSMinimizer
 		(ForceField& force_field, const Options& new_options) 
 		: EnergyMinimizer(),
-			line_search_(*this),
+			line_search_(),
 			first_iter_(true),
 			number_of_atoms_(0),
 			max_num_of_vect_pairs_(DEFAULT_NUMBER_OF_VECTOR_PAIRS),
@@ -123,6 +129,8 @@ namespace BALL
 			index_of_free_vect_(0),
 			initial_atoms_()
 	{
+		line_search_.setMinimizer(*this);
+
 		options = new_options;
 		
 		// The actual work is done in setup 
@@ -138,7 +146,7 @@ namespace BALL
 	StrangLBFGSMinimizer::StrangLBFGSMinimizer
 		(ForceField& force_field, SnapShotManager* ssm, const Options& new_options)
 		: EnergyMinimizer(),
-			line_search_(*this),
+			line_search_(),
 			first_iter_(true),
 			number_of_atoms_(0),
 			max_num_of_vect_pairs_(DEFAULT_NUMBER_OF_VECTOR_PAIRS),
@@ -151,6 +159,8 @@ namespace BALL
 			index_of_free_vect_(0),
 			initial_atoms_()
 	{
+		line_search_.setMinimizer(*this);
+
 		options = new_options;
 		
 		// The actual work is done in setup 
