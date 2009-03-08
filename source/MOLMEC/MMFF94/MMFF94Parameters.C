@@ -1064,7 +1064,7 @@ bool MMFF94VDWParameters::assignParameters(Position at1, Position at2, double& r
 	const double rj = getR(at2);
 
 	// no parameters for one of the two types?
-	if (ri < 0 || rj < 0) return -1;
+	if (ri < 0 || rj < 0) return false;
 
 	// equation 4
 	const double l = (ri - rj) / (ri + rj);
