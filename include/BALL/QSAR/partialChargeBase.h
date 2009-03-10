@@ -48,7 +48,7 @@ namespace BALL
 		//@{
 		/** Assignment Operator
 		*/
-		virtual PartialChargeBase& operator = (const PartialChargeBase& pcb);
+		PartialChargeBase& operator = (const PartialChargeBase& pcb);
 		//@}
 
 
