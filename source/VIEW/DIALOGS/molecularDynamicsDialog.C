@@ -191,9 +191,9 @@ void MolecularDynamicsDialog::chooseDCDFile()
 
 void MolecularDynamicsDialog::selectForceField(Position nr)
 {
-	if 			(nr == 0) useAmberRadioButton->setChecked(Qt::Checked);
-	else if (nr == 1) useCharmmRadioButton->setChecked(Qt::Checked);
-	else if (nr == 2) useMMFF94RadioButton->setChecked(Qt::Checked);
+	if 			(nr == 0) useAmberRadioButton->setChecked(true);
+	else if (nr == 1) useCharmmRadioButton->setChecked(true);
+	else if (nr == 2) useMMFF94RadioButton->setChecked(true);
 	else
 	{
 		BALLVIEW_DEBUG
