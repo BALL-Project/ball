@@ -181,7 +181,7 @@ CHECK(RelNegativeVdWSurface)
 	S.apply(rns);
 
 	PRECISION(0.0001)
-	double results[] = {0.409677, 0.662013, 0.483263, 0.565445, 0.431677, 0.61005, 0.831509, 0.739518};
+	double results[] = {0.409677, 0.662013, 0.483263, 0.565445, 0.431677, 0.61005, 0.831509, 0.739518, 0};
 	for (Size i = 0; i < limit ;++i)
 	{
 		molecule = S.getMolecule(i);
