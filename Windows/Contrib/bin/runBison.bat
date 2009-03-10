@@ -40,6 +40,6 @@ SET FIRSTLETTER=%FIRSTLETTER:z=Z%
 SET PARSERNAME=%FIRSTLETTER%%PARSERNAME:~1%
 
 CD %~dp0
-%~dp0\bison.exe -b %1 -d -p %PARSERNAME% %3 -o bison.out.C
+%~dp0\bison.exe -l -b %1 -d -p %PARSERNAME% %3 -o bison.out.C
 MOVE bison.out.c %2\%1.C
 MOVE bison.out.h %2\%1.h
