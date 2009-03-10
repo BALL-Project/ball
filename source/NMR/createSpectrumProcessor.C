@@ -43,6 +43,12 @@ namespace BALL
 		return valid_;
 	}
 
+	void CreateSpectrumProcessor::init()
+	{
+		ShiftModule::init();
+		init("NMR/StandardSpectrum.ini");
+	}
+
 	void CreateSpectrumProcessor::init(const String& filename)
 		throw(Exception::ParseError, Exception::FileNotFound)
 	{
