@@ -2060,6 +2060,7 @@ namespace BALL
 				if (renderers_[0].isContinuous())
 				{
 					renderers_[0].useContinuousLoop(false);
+					renderers_[0].wait();
 				}
 				else
 				{

@@ -691,7 +691,7 @@ void EditableScene::getClickedItems_(int x, int y)
 	List<GeometricObject*> objects;
 	gl_renderer_->pickObjects1((Position) p.x(), (Position) p.y(), 
 														(Position) p.x(), (Position) p.y());
-	gl_renderer_->renderToBuffer(this, GLRenderer::DIRECT_RENDERING);
+	gl_renderer_->renderToBuffer(main_display_, GLRenderer::DIRECT_RENDERING);
 	gl_renderer_->pickObjects2(objects);
 
 	if (objects.size() > 0)
