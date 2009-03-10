@@ -64,7 +64,7 @@ namespace BALL
 			{
 				for (; number_read < number && !is.eof(); ++number_read)
 				{
-					((char*)buffer)[number_read] = is.get();
+					is.get(((char*)buffer)[number_read]);
 				}
 			}
 			catch (...)	
