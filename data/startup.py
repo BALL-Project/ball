@@ -216,7 +216,7 @@ def createStickModel():
 	dp = getDisplayProperties()
 	dp.setDrawingPrecision(DRAWING_PRECISION_HIGH)
 	dp.selectMode(DRAWING_MODE_SOLID)
-	dp.selectModel(MODEL_STICK)
+	dp.selectModel(MODEL_VDW)
 	dp.selectColoringMethod(COLORING_ELEMENT)
 	dp.setTransparency(0)
 	dp.apply()
@@ -231,4 +231,117 @@ def createChainSurfaces():
 		l.append(c)
 		getDisplayProperties().createRepresentation(l)
 
+def addPlane(plane_specifier, height, boundary, bottom = True):
+  systems = getSystems()
+  system = systems[0]
+  bbp = BoundingBoxProcessor()
+  system.apply(bbp)
+  v_low = Vector3(bbp.getLower().x, bbp.getLower().y, bbp.getLower().z)
+  v_upp = Vector3(bbp.getUpper().x, bbp.getUpper().y, bbp.getUpper().z)
+  #
+  if (len(systems) > 1):
+    for system in systems[1:]:
+      system.apply(bbp)
+      low = bbp.getLower()
+      upp = bbp.getUpper()
+      #
+      if v_low.x > low.x:
+        v_low.x = low.x
+      if v_low.y > low.y:
+        v_low.y = low.y
+      if v_low.z > low.z:
+        v_low.z = low.z
+      #
+      if v_upp.x < upp.x:
+        v_upp.x = upp.x 
+      if v_upp.y < upp.y:
+        v_upp.y = upp.y
+      if v_upp.z < upp.z:
+        v_upp.z = upp.z
+  #
+  if (not bottom):
+    v_tmp = v_low
+    v_low = v_upp
+    v_upp = v_tmp
+    height = height*(-1)
+    boundary = boundary*(-1)
+  #
+  v_low_left = Vector3()
+  v_low_right = Vector3()
+  v_upp_right = Vector3()
+  v_upp_left = Vector3()
+  #
+  normal = Vector3()
+  #
+  if (plane_specifier == 'x'):
+    v_low = v_low - Vector3(height, boundary, boundary)
+    v_upp = v_upp + Vector3(height, boundary, boundary)
+    #
+    v_low_left  = Vector3(v_low.x, v_low.y, v_low.z)
+    v_low_right = Vector3(v_low.x, v_upp.y, v_low.z)
+    v_upp_right = Vector3(v_low.x, v_upp.y, v_upp.z)
+    v_upp_left  = Vector3(v_low.x, v_low.y, v_upp.z)
+    #
+    normal = Vector3(1, 0, 0)
+  #
+  elif (plane_specifier == 'y'):
+    v_low = v_low - Vector3(boundary, height, boundary)
+    v_upp = v_upp + Vector3(boundary, height, boundary)
+    #
+    v_low_left  = Vector3(v_low.x, v_low.y, v_low.z)
+    v_low_right = Vector3(v_low.x, v_low.y, v_upp.z)
+    v_upp_right = Vector3(v_upp.x, v_low.y, v_upp.z)
+    v_upp_left  = Vector3(v_upp.x, v_low.y, v_low.z)
+    #
+    normal = Vector3(0, 1, 0)
+    #
+  elif (plane_specifier == 'z'):
+    v_low = v_low - Vector3(boundary, boundary, height)
+    v_upp = v_upp + Vector3(boundary, boundary, height)
+    #
+    v_low_left  = Vector3(v_low.x, v_low.y, v_low.z)
+    v_low_right = Vector3(v_low.x, v_upp.y, v_low.z)
+    v_upp_right = Vector3(v_upp.x, v_upp.y, v_low.z)
+    v_upp_left  = Vector3(v_upp.x, v_low.y, v_low.z)
+    #
+    normal = Vector3(0, 0, 1)
+    #
+  plane = Mesh()
+  #
+  # the vertices
+  plane.pushBackVertex(v_low_left)
+  plane.pushBackVertex(v_low_right)
+  plane.pushBackVertex(v_upp_right)
+  plane.pushBackVertex(v_upp_left)
+  #
+  # the triangles
+  t1 = Mesh.Triangle()
+  t1.v1 = 0 # v_low_left
+  t1.v2 = 1 # v_low_right
+  t1.v3 = 2 # v_upp_right
+  #
+  plane.pushBackTriangle(t1)
+  #
+  t2 = Mesh.Triangle()
+  t2.v1 = 2 # v_upp_right
+  t2.v2 = 3 # v_upp_left
+  t2.v3 = 0 # v_low_left
+  #
+  plane.pushBackTriangle(t2)
+  #
+  # the normals
+  for i in range(4):
+    plane.pushBackNormal(normal)
+  #
+  color = ColorRGBA(0.2,0.2,0.2,1)
+  #
+  colors = plane.getColors()
+  colors.append(color)
+  plane.setColors(colors)
+  #
+  r = Representation()
+  r.insert(plane)
+  #
+  getMainControl().insert(r)
+  getMainControl().update(r)
 
