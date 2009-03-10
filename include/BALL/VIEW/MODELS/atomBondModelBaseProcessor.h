@@ -78,7 +78,7 @@ namespace BALL
 					Calls clearUsedAtoms_().
 					Calls ModelProcessor::set.
 			*/
-			virtual void set(const AtomBondModelBaseProcessor& processor)
+			void set(const AtomBondModelBaseProcessor& processor)
 				throw();
 
 			/** Assignment operator.

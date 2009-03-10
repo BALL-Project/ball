@@ -124,6 +124,11 @@ namespace BALL
 			showHelp(default_page_);
 		}
 
+		void HelpViewer::showHelp(const String& URL)
+		{
+			showHelp(URL, "");
+		}
+
 		void HelpViewer::showHelp(const String& org_url, String entry)
 		{
 			String url = org_url;
