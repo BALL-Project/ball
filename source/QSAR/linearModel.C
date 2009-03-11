@@ -47,7 +47,7 @@ BALL::Vector<double> LinearModel::predict(const vector<double>& substance, bool 
 	Vector<double> v=getSubstanceVector(substance, transform);
 
 	Vector<double> res=v*training_result_;
-	if(offsets_.getSize()==res.getSize()) res -= offsets_;
+	//if(offsets_.getSize()==res.getSize()) res -= offsets_;
 
 	if(transform && y_transformations_.Ncols()!=0)
 	{

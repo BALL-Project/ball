@@ -77,7 +77,7 @@ BALL::Vector<double> KernelModel::predict(const vector<double>& substance, bool 
 	kernel->calculateKernelVector(K_,input, descriptor_matrix_, K_t); // dim: 1xn
 
 	Vector<double> res = K_t*training_result_;  // dim: 1xc
-	if(offsets_.getSize()==res.getSize()) res -= offsets_;
+	//if(offsets_.getSize()==res.getSize()) res -= offsets_;
 	
 	if(transform && y_transformations_.Ncols()!=0)
 	{
