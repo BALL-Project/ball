@@ -80,7 +80,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 	for (Position p = 0; p < python_patterns.size(); p++)
 	{
 		const QRegExp& expression = python_patterns[p];
-		Index index = text.indexOf(expression);
+		Index index = expression.indexIn(text);
 		while (index >= 0) 
 		{
 			int length = expression.matchedLength();
@@ -92,7 +92,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 	for (Position p = 0; p < BALL_patterns.size(); p++)
 	{
 		const QRegExp& expression = BALL_patterns[p];
-		Index index = text.indexOf(expression);
+		Index index = expression.indexIn(text);
 		while (index >= 0) 
 		{
 			int length = expression.matchedLength();
@@ -101,7 +101,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 		}
 	}
 
-	Index index = text.indexOf(string_pattern);
+	Index index = string_pattern.indexIn(text);
 	while (index >= 0) 
 	{
 		int length = string_pattern.matchedLength();
@@ -109,7 +109,7 @@ void PythonHighlighter::highlightBlock(const QString& text)
 		index = text.indexOf(string_pattern, index + length);
 	}
 
-	index = text.indexOf(comment_pattern);
+	index = comment_pattern.indexIn(text);
 	while (index >= 0) 
 	{
 		int length = comment_pattern.matchedLength();
