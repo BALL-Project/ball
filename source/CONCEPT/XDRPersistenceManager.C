@@ -603,7 +603,7 @@ namespace BALL
 	void XDRPersistenceManager::get(string& s)
 		
 	{
-		static char buf[65536];
+		static vector<char> buf(65536);
 		char* ptr = &(buf[0]);
 		if (xdr_string(&xdr_in_, &ptr, 65535))
 		{
