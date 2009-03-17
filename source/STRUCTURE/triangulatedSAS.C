@@ -162,7 +162,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 
 
 	TriangulatedSAS::TriangulatedSAS()
-		throw()
+		
 		:	TriangulatedSurface(),
 			sas_(NULL),
 			density_(4.5)
@@ -171,7 +171,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 
 
 	TriangulatedSAS::TriangulatedSAS(const TriangulatedSAS& surface, bool deep)
-		throw()
+		
 		:	TriangulatedSurface(surface,deep),
 			sas_(surface.sas_),
 			density_(surface.density_)
@@ -182,7 +182,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 	TriangulatedSAS::TriangulatedSAS
 			(SolventAccessibleSurface* sas,
 			 const double& density)
-		throw()
+		
 		:	TriangulatedSurface(),
 			sas_(sas),
 			density_(density)
@@ -191,13 +191,13 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 
 
 	TriangulatedSAS::~TriangulatedSAS()
-		throw()
+		
 	{
 	}
 
 
 	void TriangulatedSAS::set(const TriangulatedSAS& surface, bool)
-		throw()
+		
 	{
 		if (this != &surface)
 		{
@@ -210,7 +210,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 
 	TriangulatedSAS& TriangulatedSAS::operator =
 			(const TriangulatedSAS& surface)
-		throw()
+		
 	{
 		if (this != &surface)
 		{
@@ -223,21 +223,21 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 
 
 	void TriangulatedSAS::setDensity(const double& density)
-		throw()
+		
 	{
 		density_ = density;
 	}
 
 
 	double TriangulatedSAS::getDensity() const
-		throw()
+		
 	{
 		return density_;
 	}
 
 
 	void TriangulatedSAS::compute()
-		throw()
+		
 	{
 		SASTriangulator sast(this);
 		sast.run();
@@ -246,7 +246,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 
 	#ifdef debug_triangulation
 	void TriangulatedSAS::printToHIN(const string& filename)
-		throw()
+		
 	{
 		Molecule* molecule = new Molecule;
 		std::list<Triangle*>::iterator t;
@@ -301,7 +301,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 //////////////////////////////////////////////////
 
 	SASTriangulator::SASTriangulator()
-		throw()
+		
 		:	tsas_(NULL),
 			sqrt_density_(0.0),
 			edge_(),
@@ -311,7 +311,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 
 
 	SASTriangulator::SASTriangulator(TriangulatedSAS* tsas)
-		throw()
+		
 		:	tsas_(tsas),
 			sqrt_density_(sqrt(tsas->density_)),
 			edge_(tsas_->sas_->number_of_edges_),
@@ -321,13 +321,13 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 
 
 	SASTriangulator::~SASTriangulator()
-		throw()
+		
 	{
 	}
 
 
 	void SASTriangulator::run()
-		throw()
+		
 	{
 		// build template spheres with different densities and outside normal vectors
 		buildTemplateSpheres();
@@ -340,7 +340,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 
 
 	void SASTriangulator::triangulateFace(SASFace* face)
-		throw()
+		
 	{
 		// store the planes of the SAS edges
 		std::list< std::pair<TPlane3<double>,double> > planes;
@@ -376,7 +376,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 	void SASTriangulator::createPlanes
 			(SASFace* face,
 			 std::list< std::pair<TPlane3<double>,double> >& planes)
-		throw()
+		
 	{
 		std::pair<TPlane3<double>,double> plane;
 		std::list<SASEdge*>::iterator edge;
@@ -402,7 +402,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 	void SASTriangulator::tagPoints
 			(TriangulatedSurface& part,
 			 const std::list< std::pair<TPlane3<double>,double> >& planes)
-		throw()
+		
 	{
 		TriangulatedSurface::PointIterator p;
 		std::list< std::pair<TPlane3<double>,double> >::const_iterator plane;
@@ -427,7 +427,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 
 
 	void SASTriangulator::removeInsideTriangles(TriangulatedSurface& part)
-		throw()
+		
 	{
 		TriangulatedSurface::TriangleIterator t1;
 		TriangulatedSurface::TriangleIterator t2;
@@ -460,7 +460,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 
 
 	HashGrid3<TrianglePoint*> SASTriangulator::createHashGrid(const TriangulatedSurface& part)
-		throw()
+		
 	{
 		double x_min = (*(part.beginPoint()))->point_.x;
 		double y_min = (*(part.beginPoint()))->point_.y;
@@ -500,7 +500,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 			(TriangulatedSurface& part,
 			 const std::list< std::pair<TPlane3<double>,double> >& planes,
 			 HashGrid3<TrianglePoint*>& grid)
-		throw()
+		
 	{
 		TriangulatedSurface::EdgeIterator edge = part.beginEdge();
 		std::list< std::pair<TPlane3<double>,double> >::const_iterator plane;
@@ -575,7 +575,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 	void SASTriangulator::createNewTriangles
 			(TriangulatedSurface& part,
 			 HashGrid3<TrianglePoint*>& grid)
-		throw()
+		
 	{
 		TriangulatedSurface::TriangleIterator t = part.beginTriangle();
 		while (t != part.endTriangle())
@@ -614,7 +614,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 			 Triangle* t,
 			 TriangulatedSurface& part,
 			 HashGrid3<TrianglePoint*>& grid)
-		throw()
+		
 	{
 std::cout << "onePointOutside ...\n";
 		// get the relative indices of the intersected edges
@@ -719,7 +719,7 @@ std::cout << "... ok\n";
 			 Triangle* t,
 			 TriangulatedSurface& part,
 			 HashGrid3<TrianglePoint*>& grid)
-		throw()
+		
 	{
 std::cout << "twoPointsOutside ...\n";
 		// get the relative indices of the intersected edges
@@ -795,7 +795,7 @@ std::cout << "... ok\n";
 	TrianglePoint* SASTriangulator::vertexExists
 			(const TVector3<double>& point,
 			 HashGrid3<TrianglePoint*>& grid)
-		throw()
+		
 	{
 		double epsilon = Constants::EPSILON;
 		Constants::EPSILON = 0.001;
@@ -823,7 +823,7 @@ std::cout << "... ok\n";
 
 
 	Size SASTriangulator::numberOfRefinements(const double& density, const double& radius)
-		throw()
+		
 	{
 		double test0 = (4.0*density*Constants::PI*radius*radius-12.0)/30.0;
 		Size n = 0;
@@ -851,7 +851,7 @@ std::cout << "... ok\n";
 
 
 	void SASTriangulator::buildTemplateSpheres()
-		throw()
+		
 	{
 		TriangulatedSphere sphere;
 		sphere.icosaeder(true);

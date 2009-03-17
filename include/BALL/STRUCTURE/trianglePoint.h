@@ -77,7 +77,7 @@ namespace BALL
 				This method creates a new TrianglePoint object.
 		*/
 		TrianglePoint()
-			throw();
+			;
 
 		/** Detailed constructor.
  				This method creates a new TrianglePoint object with the given
@@ -93,13 +93,13 @@ namespace BALL
 											neighbours of the old TrianglePoint object.
 		*/
 		TrianglePoint(const TrianglePoint& point, bool deep = false)
-			throw();
+			;
 
 		/**	Destructor.
 				Destructs the TrianglePoint object.
 		*/
 		virtual ~TrianglePoint()
-			throw();
+			;
 
 		//@}
 		/**	@name	Assignments
@@ -114,7 +114,7 @@ namespace BALL
 											assign from.
 		*/
 		void set(const TrianglePoint& point, bool deep = false)
-			throw();
+			;
 
 		/**	Assign from another TrianglePoint.
 				The new TrianglePoint object is linked to the neighbours of the	
@@ -122,7 +122,7 @@ namespace BALL
 				@param	point	the TrianglePoint object to assign from
 		*/
 		TrianglePoint& operator = (const TrianglePoint& point)
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors
@@ -132,17 +132,17 @@ namespace BALL
 		/** Get the point
 		*/
 		TVector3<double> getPoint() const
-			throw();
+			;
 
 		/** Set the point
 		*/
 		void setPoint(const TVector3<double>& point)
-			throw();
+			;
 
 		/** Get the normal of the TrianglePoint
 		*/
 		TVector3<double> getNormal() const
-			throw();
+			;
 
 		/** Set the normal of the TrianglePoint
 		*/
@@ -160,21 +160,21 @@ namespace BALL
 											<b>false</b> otherwise.
 		*/
 		virtual bool operator == (const TrianglePoint& point) const
-			throw();
+			;
 
 		/** Inequality operator
 				@return	bool	<b>false</b> if the TrianglePoints lie on the same point,	
 											<b>true</b> otherwise.
 		*/
 		virtual bool operator != (const TrianglePoint& point) const
-			throw();
+			;
 
 		/** Similarity operator
 				@return	bool	<b>true</b> if the TrianglePoints lie on the same point,	
 											<b>false</b> otherwise.
 		*/
 		virtual bool operator *= (const TrianglePoint& point) const
-			throw();
+			;
 
 		//@}
 

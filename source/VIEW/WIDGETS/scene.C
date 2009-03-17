@@ -1741,9 +1741,9 @@ namespace BALL
 			{
 				if (e.modifiers() == Qt::ShiftModifier) 											return ZOOM_ACTION;
 				if (e.modifiers() == Qt::ControlModifier) 										return ROTATE_ACTION;
-				if (e.modifiers() == Qt::ShiftModifier | Qt::ControlModifier) return ROTATE_CLOCKWISE_ACTION;
+				if (e.modifiers() == (Qt::ShiftModifier | Qt::ControlModifier)) return ROTATE_CLOCKWISE_ACTION;
 			}
-			else if (e.buttons() == Qt::LeftButton | Qt::RightButton)
+			else if (e.buttons() == (Qt::LeftButton | Qt::RightButton))
 			{
 				return ROTATE_CLOCKWISE_ACTION;
 			}
@@ -1761,18 +1761,18 @@ namespace BALL
 
 			switch ((Index)(e->buttons() | e->modifiers()))
 			{
-				case (Qt::ShiftModifier | Qt::LeftButton): 
+				case (Qt::SHIFT | Qt::LeftButton): 
 				case  Qt::MidButton:
 					zoomSystem_();
 					break;
 
-				case (Qt::ControlModifier | Qt::LeftButton):
+				case (Qt::CTRL | Qt::LeftButton):
 				case  Qt::RightButton:
 					translateSystem_();
 					break;
 
-				case (Qt::LeftButton | (Index)Qt::RightButton):
-				case (Qt::LeftButton | Qt::ShiftModifier | Qt::ControlModifier):
+				case ((Index)Qt::LeftButton | Qt::RightButton):
+				case (Qt::SHIFT | Qt::CTRL | Qt::LeftButton):
 					rotateSystemClockwise_();
 					break;
 

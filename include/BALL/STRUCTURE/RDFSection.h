@@ -44,15 +44,15 @@ namespace BALL
 
 		/** Default constructor 
 		*/
-		RDFSection() throw();
+		RDFSection() ;
 
 		/** Copy constructor 
 		*/
-		RDFSection(const RDFSection& rdf_section) throw();
+		RDFSection(const RDFSection& rdf_section) ;
 
 		/** Destructor 
 		*/
-		virtual ~RDFSection() throw();
+		virtual ~RDFSection() ;
 
 		//@}
 		/** @name Assignment 
@@ -60,11 +60,11 @@ namespace BALL
 		//@{
 
 		/** */
-		const RDFSection& operator = (const RDFSection& rdf_section) throw();
+		const RDFSection& operator = (const RDFSection& rdf_section) ;
 
 		/** Clear method 
 		*/
-		virtual void clear() throw();
+		virtual void clear() ;
 
 		//@}
 		/** @name Parameter extraction 
@@ -73,7 +73,7 @@ namespace BALL
 
 		/** */
 		virtual bool extractSection(Parameters& parameters,	const String& section_name) 
-			throw();
+			;
 		
 		//@}
 		/** @name Accessors 
@@ -82,7 +82,7 @@ namespace BALL
 
 		/** return the RDF created by extractSection() 
 		*/
-		const RadialDistributionFunction& getRDF() const throw();
+		const RadialDistributionFunction& getRDF() const ;
 
 		//@}
 		/** @name Predicates 
@@ -91,7 +91,7 @@ namespace BALL
 
 		/** Equality operator 
 		*/
-		bool operator == (const RDFSection& section) const throw();
+		bool operator == (const RDFSection& section) const ;
 
 		//@}
 

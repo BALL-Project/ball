@@ -12,28 +12,28 @@ using namespace std;
 namespace BALL
 {
 
-	RDFSection::RDFSection() throw()
+	RDFSection::RDFSection() 
 		:	ParameterSection(),
 		 	rdf_()
 	{
 	}
 
 
-	RDFSection::RDFSection(const RDFSection& rdf_section) throw()
+	RDFSection::RDFSection(const RDFSection& rdf_section) 
 		:	ParameterSection(),
 			rdf_(rdf_section.rdf_)
 	{
 	}
 
 
-	RDFSection::~RDFSection() throw()
+	RDFSection::~RDFSection() 
 	{
 		clear();
 		valid_ = false;
 	}
 
 
-	void RDFSection::clear() throw()
+	void RDFSection::clear() 
 	{
 		rdf_.clear();
 
@@ -42,7 +42,7 @@ namespace BALL
 
 
 	const RDFSection& RDFSection::operator = (const RDFSection& rdf_section)
-		throw()
+		
 	{
 		ParameterSection::operator = (rdf_section);
 		rdf_ = rdf_section.rdf_;
@@ -51,13 +51,13 @@ namespace BALL
 	}
 
 
-	const RadialDistributionFunction& RDFSection::getRDF() const throw()
+	const RadialDistributionFunction& RDFSection::getRDF() const 
 	{
 		return rdf_;
 	}
 
 	
-	bool RDFSection::operator == (const RDFSection& section) const throw()
+	bool RDFSection::operator == (const RDFSection& section) const 
 	{
 		return (ParameterSection::operator == (section)
 						&& (rdf_ == section.rdf_));
@@ -65,7 +65,7 @@ namespace BALL
 
 
 	bool RDFSection::extractSection(Parameters& parameters,
-			const String& section_name) throw()
+			const String& section_name) 
 	{
 		if (!parameters.isValid())
 		{

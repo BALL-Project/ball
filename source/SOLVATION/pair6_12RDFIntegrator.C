@@ -27,7 +27,7 @@ namespace BALL
 	const Size Pair6_12RDFIntegrator::Default::METHOD = METHOD__ANALYTICAL;
 	const Size Pair6_12RDFIntegrator::Default::SAMPLES = 30;
 
-	Pair6_12RDFIntegrator::Pair6_12RDFIntegrator() throw()
+	Pair6_12RDFIntegrator::Pair6_12RDFIntegrator()
 		: RDFIntegrator(),
 			A_(0.0),
 			B_(0.0),
@@ -41,7 +41,7 @@ namespace BALL
 
 
 	Pair6_12RDFIntegrator::Pair6_12RDFIntegrator(const Pair6_12RDFIntegrator&
-	integrator) throw()
+	integrator)
 		:	RDFIntegrator(integrator),
 			options(integrator.options),
 			A_(integrator.A_),
@@ -53,7 +53,7 @@ namespace BALL
 
 
 	Pair6_12RDFIntegrator::Pair6_12RDFIntegrator(double A, double B,
-			double k1, double k2, const RadialDistributionFunction& rdf) throw()
+			double k1, double k2, const RadialDistributionFunction& rdf)
 		:	RDFIntegrator(rdf),
 			A_(A),
 			B_(B),
@@ -66,7 +66,7 @@ namespace BALL
 	}
 
 
-	Pair6_12RDFIntegrator::~Pair6_12RDFIntegrator() throw()
+	Pair6_12RDFIntegrator::~Pair6_12RDFIntegrator()
 	{
 		clear();
 
@@ -74,7 +74,7 @@ namespace BALL
 	}
 
 
-	void Pair6_12RDFIntegrator::clear() throw()
+	void Pair6_12RDFIntegrator::clear()
 	{
 		A_ = 0.0;
 		B_ = 0.0;
@@ -87,7 +87,7 @@ namespace BALL
 
 
 	const Pair6_12RDFIntegrator& Pair6_12RDFIntegrator::operator =
-		(const Pair6_12RDFIntegrator& integrator) throw()
+		(const Pair6_12RDFIntegrator& integrator)
 	{
 		A_ = integrator.A_;
 		B_ = integrator.B_;
@@ -101,7 +101,7 @@ namespace BALL
 
 
 	void Pair6_12RDFIntegrator::setConstants(double A, double B, double k1, 
-			double k2) throw()
+			double k2)
 	{
 		A_ = A;
 		B_ = B;
@@ -112,7 +112,7 @@ namespace BALL
 
 	void Pair6_12RDFIntegrator::getConstants(double& A, double& B, double& k1, 
 			double& k2) 
-		throw()
+		
 	{
 		A = A_;
 		B = B_;
@@ -122,7 +122,7 @@ namespace BALL
 
 
 	double Pair6_12RDFIntegrator::integrateToInf(double from) 
-		const throw()
+		const 
 	{
 
 		Index verbosity =
@@ -217,7 +217,7 @@ namespace BALL
 
 
 	double Pair6_12RDFIntegrator::integrateToInf(double from, double A, 
-			double B, double k1, double k2) throw()
+			double B, double k1, double k2) 
 	{
 		setConstants(A, B, k1, k2);
 		return integrateToInf(from);
@@ -225,7 +225,7 @@ namespace BALL
 
 
 	double Pair6_12RDFIntegrator::integrate(double from, double to) const
-		throw()
+		
 	{
 
 		// This is hack. I think. 
@@ -412,14 +412,14 @@ namespace BALL
 
 
 	double Pair6_12RDFIntegrator::integrate(double from, double to, double A, 
-			double B, double k1, double k2) throw()
+			double B, double k1, double k2) 
 	{
 		setConstants(A, B, k1, k2);
 		return integrate(from, to);
 	}
 
 
-	double Pair6_12RDFIntegrator::operator () (double x) const throw()
+	double Pair6_12RDFIntegrator::operator () (double x) const 
 	{
 		return integrateToInf(x);
 	}
@@ -427,7 +427,7 @@ namespace BALL
 
 	bool Pair6_12RDFIntegrator::operator == 
 		(const Pair6_12RDFIntegrator& integrator) const 
-		throw()
+		
 	{
 		return ((RDFIntegrator::operator == (integrator))
 			&& (A_ == integrator.A_)
@@ -439,7 +439,7 @@ namespace BALL
 
 	double Pair6_12RDFIntegrator::numericallyIntegrateInterval
 		(const Interval& interval) const 
-		throw()
+		
 	{
 
 		int samples = (int) options.getInteger(Option::SAMPLES);
@@ -508,7 +508,7 @@ namespace BALL
 
 	double Pair6_12RDFIntegrator::analyticallyIntegrateInterval
 		(const Interval& interval, const Coefficients& a, float x0) 
-		const throw()
+		const 
 	{
 
 		double r = interval.first;
@@ -650,7 +650,7 @@ namespace BALL
 
 
 	void Pair6_12RDFIntegrator::dump(ostream& stream, Size /* depth */) const
-	throw()
+	
 	{
 		stream << "[Pair6_12RDFIntegrator:]" << endl;
 		stream << "A_ = " << A_ << endl;
@@ -661,7 +661,7 @@ namespace BALL
 	}
 
 
-	double Pair6_12RDFIntegrator::project(double x) const throw()
+	double Pair6_12RDFIntegrator::project(double x) const 
 	{
 		// k2_ is always > 0, so we don't have to fabs() here
 		if (k2_ < MIN_DISTANCE)
@@ -686,7 +686,7 @@ namespace BALL
 	}
 
 
-	double Pair6_12RDFIntegrator::unproject(double x) const throw()
+	double Pair6_12RDFIntegrator::unproject(double x) const 
 	{
 		// k2_ is always > 0, so we don't have to fabs() here
 		if (k2_ < MIN_DISTANCE)

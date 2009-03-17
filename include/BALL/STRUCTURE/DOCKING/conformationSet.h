@@ -50,38 +50,38 @@ namespace BALL
 				/** Operations
 				*/
 				void setup(const System& system)
-					throw();
+					;
 
 				void add(const float score, const System& conformations) 
-					throw();
+					;
 
 				const System& getSystem() const
-					throw();
+					;
 					
 				System& getSystem()
-					throw();
+					;
 
 				/** Use score as the new scoring information.
 				 */
 				void setScoring(std::vector<Conformation>& score)
-					throw();
+					;
 				
 				/** Return the current scoring.
 				 */
 				const std::vector<Conformation>& getScoring() const
-					throw();
+					;
 
 				/** Reset the scoring vector to the identity permutation with
 				 * 	identical scores of 0.
 				 */
 				void resetScoring()
-					throw();
+					;
 
 				/** Returns the _unranked_ list of conformations, i.e. the conformations
 				 *  in the order in which they were added.
 				 */
 				const std::vector<SnapShot>& getUnscoredConformations() const
-					throw();
+					;
 
 				/** Returns the i-th snapshot using the current scoring information.
 				 * 	TODO: Exception handling
@@ -94,7 +94,7 @@ namespace BALL
 				bool writeDCDFile(const String& filename, const Size num=0);
 				
 				bool readDCDFile(const String& filename)
-					throw();
+					;
 
 				/** Return the number of conformations.
 				 */

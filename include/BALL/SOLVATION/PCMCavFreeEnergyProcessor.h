@@ -112,16 +112,15 @@ namespace BALL
 
 		/** Default constructor 
 		*/
-		PCMCavFreeEnergyProcessor() throw();
+		PCMCavFreeEnergyProcessor();
 
 		/** Copy constructor 
 		*/
-		PCMCavFreeEnergyProcessor(const PCMCavFreeEnergyProcessor& proc)
-		throw();
+		PCMCavFreeEnergyProcessor(const PCMCavFreeEnergyProcessor& proc);
 
 		/** Destructor 
 		*/
-		virtual ~PCMCavFreeEnergyProcessor() throw();
+		virtual ~PCMCavFreeEnergyProcessor();
 
 		//@}
 		/** @name Assignment 
@@ -130,12 +129,11 @@ namespace BALL
 
 		/** Assignment operator 
 		*/
-		const PCMCavFreeEnergyProcessor& operator = (
-				const PCMCavFreeEnergyProcessor& proc) throw();
+		const PCMCavFreeEnergyProcessor& operator = (const PCMCavFreeEnergyProcessor& proc);
 
 		/** Clear function 
 		*/
-		virtual void clear() throw();
+		virtual void clear();
 
 		//@}
 		/** @name Predicates 
@@ -144,7 +142,7 @@ namespace BALL
 
 		/** Equality operator 
 		*/
-		bool operator == (const PCMCavFreeEnergyProcessor& proc) const throw();
+		bool operator == (const PCMCavFreeEnergyProcessor& proc) const;
 
 		//@}
 		/** @name processor functions 
@@ -153,7 +151,7 @@ namespace BALL
 
 		/** This is where the actual computation takes place. 
 		*/
-		virtual bool finish() throw();
+		virtual bool finish();
 
 		//@}
 		/** @name Options 

@@ -102,7 +102,7 @@ namespace BALL
 				This method creates a new RSEdge object.
 		*/
 		RSEdge()
-			throw();
+			;
 
 		/**	Copy constructor.
 				Create a new RSEdge object from another.
@@ -112,7 +112,7 @@ namespace BALL
 												to the neighbours of the old RSEdge object.
 		*/
 		RSEdge(const RSEdge& rsedge, bool deep = false)
-			throw();
+			;
 
 		/**	Detailled constructor.
 				Create a new RSEdge object from a lot of nice objects
@@ -145,14 +145,14 @@ namespace BALL
 				const TVector3<double>& intersection_point2,
 				bool singular,
 				Index index)
-			throw();
+			;
 
 		/**	Destructor.
 				Destructs the RSEdge object.
 				The neighboured faces and vertices are {/bf not} destructed.
 		*/
 		virtual ~RSEdge()
-			throw();
+			;
 
 		//@}
 		/**	@name	Assignment
@@ -166,7 +166,7 @@ namespace BALL
 												the neighbours of the RSEdge object to assign from.
 		*/
 		void set(const RSEdge& rsedge, bool deep = false)
-			throw();
+			;
 
 		/**	Assign from another RSEdge.
 				The RSEdge object is linked to the neighbours of the RSEdge object to	
@@ -174,7 +174,7 @@ namespace BALL
 				@param	rsedge	the RSEdge object to assign from
 		*/
 		RSEdge& operator = (const RSEdge& rsedge)
-			throw();
+			;
 
 		/**	Assign from a lot of nice objects
 				@param	vertex0							assigned to the first vertex
@@ -206,7 +206,7 @@ namespace BALL
 				const TVector3<double>& intersection_point1,
 				bool singular,
 				Index index)
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors
@@ -219,7 +219,7 @@ namespace BALL
 				@param	center	the new center
 		*/
 		void setCenterOfTorus(const TVector3<double>& center)
-			throw();
+			;
 
 		/** Return the center of the torus.
 				Return the center of the torus described by the probe sphere
@@ -227,7 +227,7 @@ namespace BALL
 				@return	TVector3<double>	the center of the torus
 		*/
 		TVector3<double> getCenterOfTorus() const
-			throw();
+			;
 
 		/** Set the major radius of the torus.
 				Set the major radius of the torus described by the probe sphere
@@ -235,7 +235,7 @@ namespace BALL
 				@param	radius	the new radius
 		*/
 		void setMajorRadiusOfTorus(const double& radius)
-			throw();
+			;
 
 		/** Return the  major radius of the torus.
 				Return the  major radius of the torus described by the probe sphere
@@ -243,7 +243,7 @@ namespace BALL
 				@return	TVector3<double>	the major radius of the torus
 		*/
 		double getMajorRadiusOfTorus() const
-			throw();
+			;
 
 		/** Set the rotation angle.
 				Set the rotation angle between the starting and ending position of
@@ -251,7 +251,7 @@ namespace BALL
 				@param	angle	the new rotation angle
 		*/
 		void setAngle(const TAngle<double>& angle)
-			throw();
+			;
 
 		/** Return the rotation angle.
 				Return the rotation angle between the starting and ending position
@@ -259,7 +259,7 @@ namespace BALL
 				@return	TAngle<double>	the rotation angle
 		*/
 		TAngle<double> getAngle() const
-			throw();
+			;
 
 		/** Set one of the two contact circles.
 				Set one of the two contact circles of the probe sphere with the two
@@ -269,7 +269,7 @@ namespace BALL
 				@param	circle	the new contact circle
 		*/
 		void  setContactCircle(Position i, const TCircle3<double>&  circle)
-			throw();
+			;
 
 		/** Return one of the the contact circles.
 				Return one of the the contact circles of the probe sphere with the
@@ -280,7 +280,7 @@ namespace BALL
 														RSVertex otherwise
 		*/
 		TCircle3<double> getContactCircle(Position i) const
-			throw();
+			;
 
 		/** Set one of the intersection points.
 				Set one of the intersection points of the probe sphere with the RSEdge.
@@ -289,7 +289,7 @@ namespace BALL
 				@param	point	the new intersection point
 		*/
 		void setIntersectionPoint(Position i, const TVector3<double>& point)
-			throw();
+			;
 
 		/** Return one of the intersection points.
 				Return one of the intersection points of the probe sphere
@@ -305,7 +305,7 @@ namespace BALL
 		/** Set singular
 		*/
 		void setSingular(bool singular)
-			throw();
+			;
 
 		//@}
 
@@ -319,34 +319,34 @@ namespace BALL
 											modulo order, <b>false</b> otherwise
 		*/
 		virtual bool operator == (const RSEdge& rsedge) const
-			throw();
+			;
 
 		/**	Inequality operator.
 				@return	bool	<b>false</b> if all vertices and all faces are equal	
 											modulo order, <b>true</b> otherwise
 		*/
 		virtual bool operator != (const RSEdge& rsedge) const
-			throw();
+			;
 
 		/**	Similarity operator.
 				@return	bool	<b>true</b> if all vertices are similar modulo order,
 											<b>false</b> otherwise
 		*/
 		virtual bool operator *=(const RSEdge& rsedge) const
-			throw();
+			;
 
 		/** isSingular
 				@return	bool	<b>true</b> if the RSEdge is singular,
 											<b>false</b> otherwise
 		*/
 		bool isSingular() const
-			throw();
+			;
 
 		/** isFree
 				@return	bool	<b>true</b> if the RSEdge is free, <b>false</b> otherwise
 		*/
 		bool isFree() const
-			throw();
+			;
 
 		//@}
 

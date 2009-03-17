@@ -87,7 +87,7 @@ namespace BALL
 
 		void ModifyRepresentationDialog::normalizationChanged()
 		{
-			if (!normalization->checkState() == Qt::Checked) return;
+			if (normalization->checkState() != Qt::Checked) return;
 
 			min_box->setText("0.0");
 			mid_box->setText("0.5");

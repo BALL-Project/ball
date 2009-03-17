@@ -45,58 +45,58 @@ namespace BALL
 			 *  Assigns systems 1 and two and the options for this DockingAlgorithm.
 			 */
 			virtual void setup(System& system1, System& system2, Options& new_options)
-				throw();
+				;
 
 			/** Alternative setup.
 			 *  Assigns systems 1 and two without changing the options for this DockingAlgorithm.
 			 */
 			virtual void setup(System& system1, System& system2)
-				throw();
+				;
 
 			/**
 			*/
 			virtual void start()
-				throw();
+				;
 
 			/**
 			*/
 			virtual void pause()
-				throw();
+				;
 
 			/**
 			*/
 			virtual void proceed()
-				throw();
+				;
 
 			/**
 			*/
 			virtual void abort()
-				throw();
+				;
 
 			/**
 			*/
 			virtual bool hasFinished() const
-				throw();
+				;
 
 			///
 			virtual bool wasAborted() const
-				throw() { return abort_;}
+				 { return abort_;}
 
 			///
 			virtual bool wasPaused() const
-				throw() { return pause_;}
+				 { return pause_;}
 
 			/**
 			*/
 			virtual float getProgress() const
-				throw();
+				;
 
 			/** Return total_conformations putative complexes, ordered
 			 *  according to their rank.
 			 *  If total_conformations == 0, the option TOP_N is used
 			 */
 			virtual ConformationSet getConformationSet(Index total_conformations = 0)
-				throw();
+				;
 
 		protected:
 			System system1_;

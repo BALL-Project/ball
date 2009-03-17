@@ -14,7 +14,7 @@ namespace BALL
 {
 
 	SASEdge::SASEdge()
-		throw()
+		
 		: GraphEdge< SASVertex,SASEdge,SASFace >(),
 			circle_(),
 			angle_()
@@ -23,7 +23,7 @@ namespace BALL
 
 
 	SASEdge::SASEdge(const SASEdge& sasedge, bool deep)
-		throw()
+		
 		: GraphEdge< SASVertex,SASEdge,SASFace >(sasedge,deep),
 			circle_(sasedge.circle_),
 			angle_(sasedge.angle_)
@@ -38,7 +38,7 @@ namespace BALL
 			const TCircle3<double>& circle,
 			const TAngle<double>& angle,
 			Index index)
-		throw()
+		
 		: GraphEdge< SASVertex,SASEdge,SASFace >
 				(vertex0,vertex1,face0,face1,index),
 			circle_(circle),
@@ -48,13 +48,13 @@ namespace BALL
 
 
 	SASEdge::~SASEdge()
-		throw()
+		
 	{
 	}
 
 
 	void SASEdge::set(const SASEdge& sasedge, bool deep)
-		throw()
+		
 	{
 		if (this != &sasedge)
 		{
@@ -66,7 +66,7 @@ namespace BALL
 
 
 	SASEdge& SASEdge::operator = (const SASEdge& sasedge)
-		throw()
+		
 	{
 		if (this != &sasedge)
 		{
@@ -86,7 +86,7 @@ namespace BALL
 			 const TCircle3<double>& circle,
 			 const TAngle<double>& angle,
 			 Index index)
-		throw()
+		
 	{
 		GraphEdge< SASVertex,SASEdge,SASFace >::set
 				(vertex0,vertex1,face0,face1,index);
@@ -96,56 +96,56 @@ namespace BALL
 
 
 	void SASEdge::setCircle(const TCircle3<double>& circle)
-		throw()
+		
 	{
 		circle_ = circle;
 	}
 
 
 	TCircle3<double> SASEdge::getCircle() const
-		throw()
+		
 	{
 		return circle_;
 	}
 
 
 	void SASEdge::setAngle(const TAngle<double>& angle)
-		throw()
+		
 	{
 		angle_ = angle;
 	}
 
 
 	TAngle<double> SASEdge::getAngle() const
-		throw()
+		
 	{
 		return angle_;
 	}
 
 
 	bool SASEdge::operator == (const SASEdge&) const
-		throw()
+		
 	{
 		return true;
 	}
 
 
 	bool SASEdge::operator != (const SASEdge&) const
-		throw()
+		
 	{
 		return false;
 	}
 
 
 	bool SASEdge::operator *= (const SASEdge&) const
-		throw()
+		
 	{
 		return true;
 	}
 
 
 	bool SASEdge::isFree() const
-		throw()
+		
 	{
 		return (vertex_[0] == NULL);
 	}

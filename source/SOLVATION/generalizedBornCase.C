@@ -100,20 +100,19 @@ namespace BALL
 
 
 	GeneralizedBornModel::~GeneralizedBornModel()
-		throw()
 	{
 	}
 
 
 	void GeneralizedBornModel::clear()
-		throw()
+		
 	{
 		// Clear the AtomContainer pointer
 		ac_ = 0;
 
 		// Don't clear the scaling factors, although this is a clear() function.
 		// This is obviously inconsistent, but should make sense in this case.
-		// Maybe we should rename this methodö
+		// Maybe we should rename this methodï¿½
 
 		// Clear all the lists we built for fast calculations
 		atoms_.clear();
@@ -316,7 +315,7 @@ namespace BALL
 
 
 	void GeneralizedBornModel::calculateBornRadii_()
-		throw()
+		
 	{
 		born_radii_.clear();
 		born_radii_.resize(atoms_.size());
@@ -409,7 +408,7 @@ namespace BALL
 
 
 	float GeneralizedBornModel::calculateEnergy()
-		throw()
+		
 	{
 		// We have to calculate Born radii every time we do the calculation of
 		// the energy because the distances between atoms does influence the
@@ -427,7 +426,7 @@ namespace BALL
 
 
 	float GeneralizedBornModel::calculateSolvationEnergy()
-		throw()
+		
 	{
 		// We have to calculate Born radii every time we do the calculation of
 		// the energy because the distances between atoms does influence the
@@ -475,7 +474,7 @@ namespace BALL
 
 	float GeneralizedBornModel::calculateCreationEnergy_() 
 		const
-		throw()
+		
 	{
 		Timer timer;
 		timer.start();
@@ -523,7 +522,7 @@ namespace BALL
 
 	float GeneralizedBornModel::calculateTransferEnergy_() 
 		const
-		throw()
+		
 	{
 		Timer timer;
 		timer.start();
@@ -606,7 +605,7 @@ namespace BALL
 
 
 	float GeneralizedBornModel::f_GB_(Size i, Size j) const
-		throw()
+		
 	{
 		// we need the effective Born radii for computing this smooth volume
 		// function
@@ -645,7 +644,7 @@ namespace BALL
 
 	float GeneralizedBornModel::coulombIntegralApproximation_(float r_ij,
 			float scaled_radius_j, float radius_i) const
-		throw()
+		
 	{
 		// This is the approximation by Hawkins, Cramer, Truhlar (based on the
 		// calculations of Schaefer and Froemmel
@@ -696,21 +695,21 @@ namespace BALL
 
 	
 	void GeneralizedBornModel::setScalingFactorFile(const String& filename)
-		throw()
+		
 	{
 		scaling_factor_filename_ = filename;
 	}
 
 
 	void GeneralizedBornModel::setSolventDC(float solvent_dc)
-		throw()
+		
 	{
 		dc_solvent_ = solvent_dc;
 	}
 
 
 	void GeneralizedBornModel::setSoluteDC(float solute_dc)
-		throw()
+		
 	{
 		dc_solute_ = solute_dc;
 	}
@@ -718,7 +717,7 @@ namespace BALL
 
 	void GeneralizedBornModel::calculatePotential(HashMap<const Atom*,
 			float>& p_hash) const
-		throw()
+		
 	{
 		p_hash.clear();
 
@@ -731,7 +730,7 @@ namespace BALL
 
 
 	float GeneralizedBornModel::calculatePotential(const Atom& atom_i) const
-		throw()
+		
 	{
 
 		Timer timer;
@@ -837,13 +836,13 @@ namespace BALL
 
 
 	GeneralizedBornModel::GBParameters::~GBParameters()
-		throw()
+		
 	{
 	}
 
 
 	GeneralizedBornModel::GBParameters::GBParameters()
-		throw()
+		
 		: ParameterSection(),
 			scaling_factors_()
 	{
@@ -851,28 +850,28 @@ namespace BALL
 
 
 	const StringHashMap<float>& GeneralizedBornModel::GBParameters::getScalingFactors() const
-		throw()
+		
 	{
 		return(scaling_factors_);
 	}
 
 
 	float GeneralizedBornModel::GBParameters::getSoluteDC() const
-		throw()
+		
 	{
 		return(dc_solute_);
 	}
 
 
 	float GeneralizedBornModel::GBParameters::getSolventDC() const
-		throw()
+		
 	{
 		return(dc_solvent_);
 	}
 
 
 	float GeneralizedBornModel::GBParameters::getKappa() const
-		throw()
+		
 	{
 		return(kappa_);
 	}
@@ -880,7 +879,7 @@ namespace BALL
 
 	bool GeneralizedBornModel::GBParameters::extractSection(Parameters&
 			parameters, const String& section_name)
-		throw()
+		
 	{
 		if (!parameters.isValid())
 		{

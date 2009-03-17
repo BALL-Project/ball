@@ -66,7 +66,7 @@ namespace BALL
 				This method creates a new SASFace object.
 		*/
 		SASFace()
-			throw();
+			;
 
 		/**	Copy constructor.
 				Create a new SASFace object from another.
@@ -76,13 +76,13 @@ namespace BALL
 												to the neighbours of the old SASFace object.
 		*/
 		SASFace(const SASFace& sasface, bool deep = false)
-			throw();
+			;
 
 		/**	Destructor.
 				Destructs the SASFace object.
 		*/
 		virtual ~SASFace()
-			throw();
+			;
 
 		//@}
 		/**	@name	Assignments
@@ -96,7 +96,7 @@ namespace BALL
 												to the neighbours of the SASFace object to assign from.
 		*/
 		void set(const SASFace& sasface, bool deep = false)
-			throw();
+			;
 
 		/**	Assign from another SASFace.
 				The new SASFace object is linked to the neighbours of the SASFace	
@@ -104,7 +104,7 @@ namespace BALL
 				@param	sasface the SASFace object to assign from
 		*/
 		SASFace& operator = (const SASFace& sasface)
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors
@@ -115,13 +115,13 @@ namespace BALL
 				@param	sphere	the new sphere
 		*/
 		void setSphere(const TSphere3<double>& sphere)
-			throw();
+			;
 
 		/** Return the sphere the GraphFace lies on.
 				@return	TSphere<double>	the sphere the GraphFace lies on
 		*/
 		TSphere3<double> getSphere() const
-			throw();
+			;
 
 		//@}
 		/**	@name	Predicates
@@ -132,19 +132,19 @@ namespace BALL
 				@return bool	<b>true</b>
 		*/
 		virtual bool operator == (const SASFace&) const
-			throw();
+			;
 
 		/**	Inequality operator.
 				@return	bool	<b>false</b>
 		*/
 		virtual bool operator != (const SASFace&) const
-			throw();
+			;
 
 		/**	Similarity operator.
 				@return	bool	<b>true</b>
 		*/
 		virtual bool operator *= (const SASFace&) const
-			throw();
+			;
 
 		//@}
 		/**	@name	External Iterators
@@ -152,13 +152,13 @@ namespace BALL
 		//@{
 
 		OrientationIterator beginOrientation()
-			throw();
+			;
 		ConstOrientationIterator beginOrientation() const
-			throw();
+			;
 		OrientationIterator endOrientation()
-			throw();
+			;
 		ConstOrientationIterator endOrientation() const
-			throw();
+			;
 
 		//@}
 

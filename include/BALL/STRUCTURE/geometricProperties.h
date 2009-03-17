@@ -67,22 +67,22 @@ namespace BALL
 		/**
 		*/
 		virtual bool start()
-			throw();
+			;
 
 		/**
 		*/
 		virtual bool finish()
-			throw();
+			;
 
 		/**
 		*/
 		virtual Processor::Result operator () (Atom& atom)
-			throw() { return operator() (atom.getPosition());}
+			 { return operator() (atom.getPosition());}
 
 		/**
 		*/
 		virtual Processor::Result operator () (const Vector3& v)
-			throw();
+			;
 
 
 		//@}
@@ -93,17 +93,17 @@ namespace BALL
 		/** Return the bounding box
 		*/
 		SimpleBox3 getBox() const
-			throw();
+			;
 
 		/**	Returns the lower corner of the bounding box
 		*/
 		const Vector3& getLower() const
-			throw();
+			;
 
 		/**	Returns the upper corner of the bounding box
 		*/
 		const Vector3& getUpper() const
-			throw();
+			;
 
 		//@}
 			
@@ -135,22 +135,22 @@ namespace BALL
 		/**
 		*/
 		virtual bool start()
-			throw();
+			;
 
 		/**
 		*/
 		virtual bool finish()
-			throw();
+			;
 
 		/**
 		*/
 		virtual Processor::Result operator()(Atom& atom)
-			throw() { return operator()(atom.getPosition());}
+			 { return operator()(atom.getPosition());}
 
 		/**
 		*/
 		virtual Processor::Result operator()(const Vector3& v)
-			throw();
+			;
 
 		//@}
 		/**@name	Accessors
@@ -160,7 +160,7 @@ namespace BALL
 		/**	Returns the center of the object
 		*/
 		Vector3& getCenter()
-			throw();
+			;
 
 		//@}
 
@@ -200,14 +200,14 @@ namespace BALL
 		/**	Default constructor
 		*/
 		FragmentDistanceCollector()
-			throw();
+			;
 
 		/**	Constructor.
 				Creates a new collector and sets the reference composite
 				@param	composite the reference composite
 		*/
 		FragmentDistanceCollector(const Composite& composite)
-			throw();
+			;
 
 		/**	Constructor.
 				Creates a new collector and sets the reference composite and the distance.
@@ -215,10 +215,10 @@ namespace BALL
 				@param	distance the maximum distance between any two atoms
 		*/
 		FragmentDistanceCollector(const Composite& composite, float distance)
-			throw();
+			;
 			
 		virtual ~FragmentDistanceCollector()
-			throw()
+			
 		{}	
 			
 		//@}
@@ -229,17 +229,17 @@ namespace BALL
 		/**
 		*/
 		virtual bool start()
-			throw();
+			;
 
 		/**
 		*/
 		virtual bool finish()
-			throw();
+			;
 
 		/**
 		*/
 		virtual Processor::Result operator()(Composite& composite)
-			throw();
+			;
 
 		//@}
 		/**	@name Accessors
@@ -250,31 +250,31 @@ namespace BALL
 				@return	the number of fragments in the array
 		*/
 		Size getNumberOfFragments()
-			throw();
+			;
 
 		/**	Sets the reference composite
 				@param	composite the new reference composite
 		*/
 		void setComposite(const Composite& composite)
-			throw();
+			;
 
 		/**	Gets the reference composite
 				@return a const pointer to the reference composite
 		*/
 		const Composite* getComposite() const
-			throw();
+			;
 
 		/**	Gets the maximum distance
 				@return the maximum distance
 		*/
 		float getDistance() const
-			throw();
+			;
 		
 		/**	Sets the maximum distance
 				@param	distance the new maximum distance 
 		*/
 		void setDistance(float distance)
-			throw();
+			;
 
 		//@}
 		

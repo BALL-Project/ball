@@ -75,7 +75,7 @@ namespace BALL
 
 
 	NonpolarSolvation::NonpolarSolvation()
-		throw()
+		
 		:	ScoringComponent(),
 			verbosity_(0),
 			factor_(0.0),
@@ -95,7 +95,7 @@ namespace BALL
 
 
 	NonpolarSolvation::NonpolarSolvation(ScoringFunction& sf)
-		throw()
+		
 		:	ScoringComponent(sf),
 			verbosity_(0),
 			factor_(0.0),
@@ -115,7 +115,7 @@ namespace BALL
 
 
 	NonpolarSolvation::NonpolarSolvation(const NonpolarSolvation& fd)
-		throw()
+		
 		:	ScoringComponent(fd),
 			verbosity_(fd.verbosity_),
 			factor_(fd.factor_),
@@ -133,14 +133,14 @@ namespace BALL
 
 
 	NonpolarSolvation::~NonpolarSolvation()
-		throw()
+		
 	{
 		clear();
 	}
 
 
 	void NonpolarSolvation::clear()
-		throw()
+		
 	{
 		ScoringComponent::clear();
 		probe_radius_ = 0.0;
@@ -156,7 +156,7 @@ namespace BALL
 
 
 	bool NonpolarSolvation::setup()
-		throw()
+		
 	{
 
 		Timer timer;
@@ -378,7 +378,7 @@ namespace BALL
 
 
 	double NonpolarSolvation::calculateScore()
-		throw()
+		
 	{
 
 		Timer timer;

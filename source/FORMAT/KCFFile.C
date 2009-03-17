@@ -62,7 +62,8 @@ namespace BALL
 		// number of blanks????  properties are not read, written??? Which ones are there?
 		os << ENTRY_TAG << "      " << molecule.getName() << std::endl;
 		
-		static char buffer[BALL_MAX_LINE_LENGTH];
+		static vector<char> buffer_data(BALL_MAX_LINE_LENGTH);
+		char* buffer = &(buffer_data[0]);
 
 		// Write NODE block
 		// How to create the KEGG atom types? How many blanks?

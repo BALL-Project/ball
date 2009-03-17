@@ -790,9 +790,9 @@ BALL_INLINE
 std::istream& String::getline(std::istream& s,  char delimiter)
 	
 {
-	static char line_buffer[8192];
-  s.getline(line_buffer, 8191, delimiter);
-	set(line_buffer);
+	static vector<char> line_buffer(8192);
+  s.getline(&(line_buffer[0]), 8191, delimiter);
+	set(&(line_buffer[0]));
 	
 	return s;
 }

@@ -74,7 +74,7 @@ namespace BALL
 	
 	
   GeometricFit::GeometricFit()
-    throw()
+    
     : FFT_grid_a_(0),
       FFT_grid_b_(0)
   {
@@ -111,7 +111,7 @@ namespace BALL
 			The options used are the default options.
 	*/
 	GeometricFit::GeometricFit(System &system1,System &system2)
-		throw()
+		
   : FFT_grid_a_(0),
     FFT_grid_b_(0) 
 	{
@@ -144,7 +144,7 @@ namespace BALL
 			the given options to the Geometric Fit object's options.
 	*/
 	GeometricFit::GeometricFit(Options& new_options)
-		throw()
+		
 	: FFT_grid_a_(0),
 		FFT_grid_b_(0)
 	{
@@ -156,19 +156,19 @@ namespace BALL
 			setup(system1, system2, options)
 	*/
 	GeometricFit::GeometricFit(System &system1, System &system2, Options& new_options)
-		throw()
+		
 	{
 		setup(system1, system2, new_options);
 	}
 			
   GeometricFit::~GeometricFit()
-    throw()
+    
   {
     destroy_();
   }
 
 	void GeometricFit::setup(System& system1, System& system2, Options& new_options)
-		throw()
+		
 	{
 		radius_a_ = 0.0;
     radius_b_ = 0.0;
@@ -180,7 +180,7 @@ namespace BALL
 	}
 
 	void GeometricFit::setup(System& system1, System& system2)
-		throw()
+		
 	{
 		radius_a_ = 0.0;
     radius_b_ = 0.0;
@@ -193,7 +193,7 @@ namespace BALL
 	/** Compute the center of mass of system
 	 */
   Vector3 GeometricFit::getMassCenter_( System& system )
-    throw()
+    
   {
     int atom_num = 0;
     Vector3 mass_center = Vector3(0., 0., 0.);
@@ -214,7 +214,7 @@ namespace BALL
 	/** Compute the radius of the circumsphere of all atoms in system.
 	 */
   float GeometricFit::getRadius_( System& system )
-    throw()
+    
   {
     Vector3 mc = getMassCenter_(system);
 
@@ -235,7 +235,7 @@ namespace BALL
   }
 
   void GeometricFit::doPreTranslation_( ProteinIndex pro_idx )
-    throw()
+    
   {
 		System& system = ( pro_idx == PROTEIN_A ) ? system1_ : system2_;
     Vector3 mc = getMassCenter_( system );
@@ -262,7 +262,7 @@ namespace BALL
 	 *	 to accomodate the original data.
 	 */ 
   int GeometricFit::optimizeGridSize_( int raw_size )
-    throw()
+    
   {
     list<int> size_list;
 
@@ -328,7 +328,7 @@ namespace BALL
   }
 
   void GeometricFit::initGridSizes_()
-    throw()
+    
   {
 		float grid_spacing = options.getReal(Option::GRID_SPACING);
 
@@ -362,7 +362,7 @@ namespace BALL
   /** Initialize the grid.
 	 */
   void GeometricFit::initFFTGrid_( ProteinIndex pro_idx )
-    throw()
+    
   {
     float r;
     int   r_idx;
@@ -417,7 +417,7 @@ namespace BALL
 
   // find the inside points
   void GeometricFit::findInsidePoints_( System& system, ProteinIndex pro_idx )
-    throw()
+    
   {
 		int number_of_points = 0;  
 		int verbosity = options.getInteger(Option::VERBOSITY);
@@ -503,7 +503,7 @@ namespace BALL
 
 	// find out the surface points according to the Connolly's surface definition.
   void GeometricFit::findConnollySurfacePoints_( System& system, ProteinIndex pro_idx )
-    throw()
+    
   {
 		int verbosity = options.getInteger(Option::VERBOSITY);
 
@@ -591,7 +591,7 @@ namespace BALL
 
 	// find out the surface points according to the van der Waal's surface definition.
   void GeometricFit::findVanDerWaalsSurfacePoints_( System& system, ProteinIndex pro_idx )
-    throw()
+    
   {
 		int number_of_points = 0;
     FFT3D* FFT_grid;
@@ -675,7 +675,7 @@ namespace BALL
 
 	// use the same algorithm FTDock uses to find the inside points
 	void GeometricFit::findFTDockInsidePoints_(System& system, ProteinIndex pro_idx)
-		throw()
+		
 	{
 		int number_of_points = 0;
 		int verbosity = options.getInteger(Option::VERBOSITY);
@@ -754,7 +754,7 @@ namespace BALL
 
 	// compute surface points according to FTDock's definition
 	void GeometricFit::findFTDockSurfacePoints_(System& /*system*/, ProteinIndex pro_idx)
-		throw()
+		
 	{
 		int verbosity = options.getInteger(Option::VERBOSITY);
 
@@ -836,7 +836,7 @@ namespace BALL
 
   // make grid from System
   void GeometricFit::makeFFTGrid_( ProteinIndex pro_idx )
-    throw()
+    
   {
 		int surface_type = options.getInteger(Option::SURFACE_TYPE);
 		System& system = ( pro_idx == PROTEIN_A ) ? system1_ : system2_;
@@ -914,7 +914,7 @@ namespace BALL
   
   // Free all allocated memory and destroys the options and results
   void GeometricFit::destroy_()
-    throw()
+    
   {
     // free grid memory
     // we have only two grids to free
@@ -935,7 +935,7 @@ namespace BALL
 
   // change the orientation of protein around its center according to euler_ang
   void GeometricFit::changeProteinOrientation_( System& mobile_system, Vector3 euler_ang )
-    throw()
+    
   {
     // three euler angles, around axis x,y,z separately
     double phi   = euler_ang.x * Constants::PI / 180.0;
@@ -977,7 +977,7 @@ namespace BALL
   // calculate the conjugate of each point in FFT grid
 	// TODO: maybe a rewrite would make that readable
   void GeometricFit::calcConjugate_( ProteinIndex pro_idx )
-    throw()
+    
   {
     FFT3D* FFT_grid = NULL;
 
@@ -1003,7 +1003,7 @@ namespace BALL
 
   // calculate the product of the two FFT grids
   void GeometricFit::FFTGridMulti_()
-    throw()
+    
   {
     // use pointers to do iterations
     Complex* grid_a = &( (*FFT_grid_a_)[0] );
@@ -1020,7 +1020,7 @@ namespace BALL
   }
   
   void GeometricFit::getGlobalPeak_(Peak_ *peak_list)
-    throw()
+    
   {    
     if( FFT_grid_b_ == 0 )
     {
@@ -1077,7 +1077,7 @@ namespace BALL
   // get the translation between the two proteins after doing 
   // pre-translation of the two proteins.  
   Vector3 GeometricFit::getSeparation_( const Vector3& mat_pos )
-    throw()
+    
   {
     Vector3 trans = mat_pos + FFT_grid_origin_; // all in angstroms
 
@@ -1099,7 +1099,7 @@ namespace BALL
   // get the translaion between the two >>ORIGINAL<< proteins
   // "original" means the "input" proteins 
   Vector3 GeometricFit::getTranslation_( const Vector3& mat_pos )
-    throw()
+    
   {
     Vector3 trans = mat_pos + FFT_grid_origin_; // all in angstroms
 
@@ -1122,7 +1122,7 @@ namespace BALL
 	/** Currently the main loop of the algorithm.
 	 */
   void GeometricFit::start()
-    throw()
+    
   {
 		DockingAlgorithm::start();
 	
@@ -1351,7 +1351,7 @@ namespace BALL
   /** Return the overall docking progress as a percentage
 	 */
   float GeometricFit::getProgress() const
-    throw()
+    
   {
 		if (total_round_ == 0) return 0.0;
 		
@@ -1361,7 +1361,7 @@ namespace BALL
 	/** Returns true if the docking is already done.
 	 */
   bool GeometricFit::hasFinished() const
-    throw()
+    
   {
     return ( (total_round_ != 0) &&  ( current_round_ == total_round_ ) );
   }
@@ -1369,7 +1369,7 @@ namespace BALL
 	/** Return the translation corresponding to conformation con_num.
 	 */
 	Vector3 GeometricFit::getTranslation(Index con_num) const
-		throw()
+		
 	{
 		Vector3 result = (con_num < (Index)translations_.size()) ? translations_[con_num] : Vector3(0.);
 
@@ -1379,7 +1379,7 @@ namespace BALL
 	/** Return the orientation corresponding to conformation con_num.
 	 */
 	Vector3 GeometricFit::getOrientation(Index con_num) const
-		throw()
+		
 	{
 		Vector3 result = (con_num < (Index)orientations_.size()) ? orientations_[con_num] : Vector3(0.);
 
@@ -1388,7 +1388,7 @@ namespace BALL
 		/** Return the ranked conformations.
 	 */
 	ConformationSet GeometricFit::getConformationSet(Index total_number)
-		throw()
+		
 	{
 		// first see how many conformations we should generate
 		if ( (total_number == 0) || (total_number > options.getInteger(Option::BEST_NUM)) )
@@ -1453,7 +1453,7 @@ namespace BALL
 	 *  Constructor.
 	 */
 	GeometricFit::Peak_::Peak_()
-		throw()
+		
 	: value(0.)
 	{
 	}
@@ -1462,7 +1462,7 @@ namespace BALL
 	 * 	Destructor.
 	 */
 	GeometricFit::Peak_::~Peak_() 
-		throw()
+		
 	{
 	}
 
@@ -1472,7 +1472,7 @@ namespace BALL
 	 *  			In this way, the largest peak value is on top of the multiset used in the algorithm.
 	 */ 
 	bool GeometricFit::Peak_::operator < (const Peak_& p) const
-		throw()
+		
 	{
 		return value > p.value;  // based on peak value only
 	}
@@ -1481,7 +1481,7 @@ namespace BALL
 	 *  Default constructor.
 	 */
 	GeometricFit::RotationAngles_::RotationAngles_()
-		throw()
+		
 	: max_rotation_(50000),
 		ang_num_(0),
 		phi_(),
@@ -1497,7 +1497,7 @@ namespace BALL
 	 * 	Detailed constructor.
 	 */
 	GeometricFit::RotationAngles_::RotationAngles_( int step ) 
-		throw()
+		
 	: max_rotation_(50000),
 		ang_num_(0),
 		phi_(),
@@ -1519,7 +1519,7 @@ namespace BALL
 								 																					const float phi_min, const float phi_max,
 																													const float psi_min, const float psi_max,
 																													const float theta_min, const float theta_max	) 
-		throw()
+		
 	{
 		ang_num_ = 0;
 
@@ -1623,7 +1623,7 @@ namespace BALL
 	 * 	This algorithm is based on ???
 	 */
 	bool GeometricFit::RotationAngles_::generateAllAngles( const int deg ) 
-		throw()
+		
 	{
 		ang_num_ = 0;
 

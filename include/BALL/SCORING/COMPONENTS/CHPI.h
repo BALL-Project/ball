@@ -28,35 +28,35 @@ namespace BALL
 
 					///
 					AromaticRing()
-						throw();
+						;
 
 					///
 					AromaticRing(const AromaticRing& aromatic_ring)
-						throw();
+						;
 
 					///
 					AromaticRing(const std::vector<Atom*>& atoms)
-						throw();
+						;
 
 					///
 					const Vector3& getCentre() const
-						throw();
+						;
 
 					///
 					const Vector3& getNormalVector() const
-						throw();
+						;
 
 					///
 					void setRing(const std::vector<Atom*>& atoms)
-						throw();
+						;
 
 					// accessors for the private data members
 					const std::vector<Atom*>& getRing() const 
-						throw();
+						;
 
 					///
 					void dump(std::ostream& s = std::cout) const
-						throw();
+						;
 
 				private:
 
@@ -71,11 +71,11 @@ namespace BALL
 
 					//_
 					void computeCentre_()
-						throw();
+						;
 
 					//_
 					void computeNormalVector_()
-						throw();
+						;
 
 			};
 
@@ -88,48 +88,48 @@ namespace BALL
 
 					///
 					CHGroup()
-						throw();
+						;
 
 					///
 					~CHGroup()
-						throw();
+						;
 
 					///
 					CHGroup(const CHGroup& CH_groups)
-						throw();
+						;
 
 					///
 					CHGroup (const Atom* C_atom, const Atom* H_atom)
-						throw();
+						;
 
 					///
 					void setCAtom(const Atom* C_atom)
-						throw();
+						;
 
 					///
 					void setHAtom(const Atom* H_atom)
-						throw();
+						;
 
 					///
 					void setAtoms(const Atom* C_atom, const Atom* H_atom)
-						throw();
+						;
 
 					///
 					const Atom* getHAtom() const 
-						throw()
+						
 					{ 
 						return(H_atom_);
 					}
 
 					///
 					const Atom* getCAtom() const 
-						throw()
+						
 					{
 						return(C_atom_);
 					} 
 
 					void dump(std::ostream& s = std::cout) const
-						throw();
+						;
 
 				private :
 
@@ -215,22 +215,22 @@ namespace BALL
 			/**	Default constructor.
 			 */
 			CHPI()
-				throw();
+				;
 
 			/**	Constructor.
 			 */
 			CHPI(ScoringFunction& sf)
-				throw();
+				;
 
 			/**	Copy constructor
 			 */
 			CHPI(const CHPI& chpi)
-				throw();
+				;
 
 			/**	Destructor.
 			 */
 			virtual ~CHPI()
-				throw();
+				;
 
 			//@}
 			/**	@name	Assignment
@@ -240,12 +240,12 @@ namespace BALL
 			/** Assignment.
 			 */
 			const CHPI& operator = (const CHPI& chpi)
-				throw();
+				;
 
 			/** Clear method.
 			 */
 			virtual void clear()
-				throw();
+				;
 
 			//@}
 			/**	@name	Predicates.
@@ -253,7 +253,7 @@ namespace BALL
 			//@{
 
 			bool operator == (const CHPI& chpi) const
-				throw();
+				;
 
 			//@}
 			/**	@name	Setup Methods	
@@ -263,10 +263,10 @@ namespace BALL
 			/**	Setup method.
 			 */
 			virtual bool setup()
-				throw();
+				;
 
 			virtual double calculateScore()
-				throw();
+				;
 
 			///
 			Options options;

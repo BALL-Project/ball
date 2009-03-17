@@ -98,27 +98,27 @@ namespace BALL
 		/**	Default constructor.
 		*/
 		HydrogenBond()
-			throw();
+			;
 
 		/**	Constructor.
 		*/
 		HydrogenBond(ScoringFunction& sf)
-			throw();
+			;
 
 		/**	Constructor.
 		*/
 		HydrogenBond(ScoringComponent& sc)
-			throw();
+			;
 
 		/**	Copy constructor
 		*/
 		HydrogenBond(const HydrogenBond& fhb)
-			throw();
+			;
 
 		/**	Destructor.
 		*/
 		virtual ~HydrogenBond()
-			throw();
+			;
 
 		//@}
 		/**	@name	Assignment
@@ -128,12 +128,12 @@ namespace BALL
 		/** Assignment.
 		*/
 		const HydrogenBond& operator = (const HydrogenBond& fhb)
-			throw();
+			;
 
 		/** Clear method.
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/**	@name	Predicates.
@@ -141,7 +141,7 @@ namespace BALL
 		//@{
 
 		bool operator == (const HydrogenBond& fhb) const
-			throw();
+			;
 
 		//@}
 		/**	@name	Setup Methods	
@@ -151,7 +151,7 @@ namespace BALL
 		/**	Setup method.
 		*/
 		virtual bool setup()
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors	
@@ -161,10 +161,10 @@ namespace BALL
 		/**	
 		*/
 		virtual double calculateScore()
-			throw();
+			;
 
 		const HashMap<const Atom*, Size>& getFresnoTypes()
-			throw();
+			;
 		//@}
 
 		private:

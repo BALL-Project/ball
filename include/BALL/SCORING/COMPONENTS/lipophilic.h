@@ -71,22 +71,22 @@ namespace BALL
 		/**	Default constructor.
 		*/
 		Lipophilic()
-			throw();
+			;
 
 		/**	Constructor.
 		*/
 		Lipophilic(ScoringFunction& sf)
-			throw();
+			;
 
 		/**	Copy constructor
 		*/
 		Lipophilic(const Lipophilic& li)
-			throw();
+			;
 
 		/**	Destructor.
 		*/
 		virtual ~Lipophilic()
-			throw();
+			;
 
 		//@}
 		/**	@name	Assignment
@@ -96,12 +96,12 @@ namespace BALL
 		/** Assignment.
 		*/
 		const Lipophilic& operator = (const Lipophilic& li)
-			throw();
+			;
 
 		/** Clear method.
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/**	@name	Predicates.
@@ -109,7 +109,7 @@ namespace BALL
 		//@{
 
 		bool operator == (const Lipophilic& li) const
-			throw();
+			;
 
 		//@}
 		/**	@name	Setup Methods	
@@ -119,7 +119,7 @@ namespace BALL
 		/**	Setup method.
 		*/
 		virtual bool setup()
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors	
@@ -129,7 +129,7 @@ namespace BALL
 		/**	Calculates and returns the component's energy.
 		*/
 		virtual double calculateScore()
-			throw();
+			;
 
 		//@}
 

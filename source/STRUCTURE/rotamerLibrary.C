@@ -18,7 +18,7 @@ namespace BALL
   const String RotamerLibrary::DEFAULT_LIBRARY = "rotamers/bbdep02.May.sortlib";
   const String RotamerLibrary::DEFAULT_FRAGMENT_DB = "fragments/Fragments.db";
 
-	RotamerLibrary::RotamerLibrary() throw()
+	RotamerLibrary::RotamerLibrary() 
 		: step_width_(0),
 			fragment_db_(DEFAULT_FRAGMENT_DB),
 			backbone_dependent_(false)
@@ -29,7 +29,7 @@ namespace BALL
 		file >> *this;
 	}
 
-	RotamerLibrary::RotamerLibrary(const RotamerLibrary& library) throw()
+	RotamerLibrary::RotamerLibrary(const RotamerLibrary& library) 
 		:	bb_dep_sets_(library.bb_dep_sets_),
 			bb_indep_sets_(library.bb_indep_sets_),
 			step_width_(library.step_width_),
@@ -38,7 +38,7 @@ namespace BALL
 	{
 	}
 
-	RotamerLibrary::RotamerLibrary(const String& filename, const FragmentDB& fragment_db) throw()
+	RotamerLibrary::RotamerLibrary(const String& filename, const FragmentDB& fragment_db) 
 		:	step_width_(0),
 			fragment_db_(fragment_db),
 			backbone_dependent_(false)
@@ -49,7 +49,7 @@ namespace BALL
 		file >> *this;
 	}
 
-	RotamerLibrary::RotamerLibrary(const FragmentDB& fragment_db) throw()
+	RotamerLibrary::RotamerLibrary(const FragmentDB& fragment_db) 
 		: step_width_(0),
 			fragment_db_(fragment_db),
 			backbone_dependent_(false)

@@ -18,51 +18,51 @@ namespace BALL
 
 		///
 		ScoringComponent()
-			throw();
+			;
 
 		///
 		ScoringComponent(const ScoringComponent& sc)
-			throw();
+			;
 
 		///
 		ScoringComponent(ScoringFunction& sf)
-			throw();
+			;
 
 		///
 		virtual ~ScoringComponent()
-			throw();
+			;
 
 		///
 		virtual void clear()
-			throw();
+			;
 
 		///
 		virtual bool setup()
-			throw();
+			;
 
 		///
 		ScoringFunction* getScoringFunction() const
-			throw();
+			;
 
 		///
 		void setScoringFunction(ScoringFunction& sf)
-			throw();
+			;
 
 		///
 		String getName() const
-			throw();
+			;
 
 		///
 		void setName(const String& name)
-			throw();
+			;
 
 		///
 		virtual double calculateScore()
-			throw();
+			;
 
 		///
 		virtual double getScore() const
-			throw();
+			;
 
 
 		protected:
