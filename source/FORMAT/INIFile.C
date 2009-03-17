@@ -101,18 +101,18 @@ namespace BALL
 		List<Section>::Iterator	section_it(sections_.begin());
 
 		// read all lines from the file
-		char buffer[MAX_LINE_LENGTH];
+		std::vector<char> buffer(MAX_LINE_LENGTH);
 		while (infile.getline(&(buffer[0]), MAX_LINE_LENGTH))
 		{
 			// remove leading blanks
-			String line(buffer);
+			String line(&(buffer[0]));
 			line.trimLeft();
 
 			// check for comment lines or empty line
 			if ((line.size() == 0) || (line[0] == '!') || 
 					(line[0] == ';')   || (line[0] == '#'))
 			{
-				section_it->lines_.push_back(buffer);
+				section_it->lines_.push_back(&(buffer[0]));
 				continue;
 			}
 
