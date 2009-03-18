@@ -58,22 +58,30 @@ void FeaturePlotter::deleteCurrentFeature()
 	if(b==QMessageBox::Ok)
 	{
 		uint index = feature_combobox_->currentIndex();
-		uint current_feature_no = feature_combobox_->itemData(index).toInt();
-		SortedList<uint>* features = model_item_->model()->getDescriptorIDs();
-		SortedList<uint>::iterator it=features->begin();
-		uint i=1;	
-		for(; i<current_feature_no;i++)
+	
+		map<String,uint>::iterator it=map_names_to_ID_.find(feature_combobox_->currentText().toStdString());
+		if(it==map_names_to_ID_.end())
 		{
-			if(it==features->end()) 
+			cout<<"error: ID of feature to be deleted not found!"<<endl;
+			return;
+		}		
+		
+		uint feature_ID = it->second;
+		
+		SortedList<uint>* features = model_item_->model()->getDescriptorIDs();
+		if(features->size()==0)
+		{
+			for(uint i=0; i<feature_combobox_->count()-1; i++)
 			{
-				cout<<"Error, feature not found!!"<<endl;
-				return;
+				if(i!=feature_ID) features->push_back(i);
 			}
-			it++;
+		}
+		else
+		{
+			features->erase(feature_ID);
 		}
 		
-		cout<<"deleting the "<<i<<"'th feature, ID="<<*it<<", name="<<feature_combobox_->currentText().toStdString()<<endl;
-		features->erase(it);
+		cout<<"deleting a feature: ID="<<feature_ID<<", name="<<feature_combobox_->currentText().toStdString()<<endl;
 		
 		feature_combobox_->removeItem(index);
 		
@@ -135,10 +143,27 @@ void FeaturePlotter::plot(bool zoom)
 	if(feature_combobox_->count()==0) // if combobox has not yet been set up
 	{
 		feature_combobox_->addItem("All features",0);
-		for(uint i=0;i<no_features;i++)
+		map_names_to_ID_.clear();
+		
+		SortedList<uint>* features = model_item_->model()->getDescriptorIDs();
+		if(features->size()>0) // features have already been selected
 		{
-			feature_combobox_->addItem((*feature_names)[i].c_str(),i+1);
-		}	
+			features->front();
+			for(uint i=0;features->hasNext();i++)
+			{
+				feature_combobox_->addItem((*feature_names)[i].c_str(),i+1);
+				map_names_to_ID_.insert(make_pair((*feature_names)[i],features->next()));
+			}
+		}
+		else
+		{
+			for(uint i=0;i<no_features;i++)
+			{
+				feature_combobox_->addItem((*feature_names)[i].c_str(),i+1);
+				map_names_to_ID_.insert(make_pair((*feature_names)[i],i));
+			}
+		}
+			
 		feature_combobox_->setCurrentIndex(0);
 	}
 	
@@ -249,14 +274,14 @@ void FeaturePlotter::plot(bool zoom)
 			}
 			if(i==6) // feature explanation is too long, use feature name instead
 			{
-				s1=QwtText((*names)[feature_combobox_->currentIndex()-1].c_str());
+				s1=QwtText((*names)[feature_index-1].c_str());
 				font = qwt_plot_->axisTitle(0).font();
 			}
 			s1.setFont(font);
 		}
 		else 
 		{
-			s1=QwtText((*names)[feature_combobox_->currentIndex()-1].c_str());
+			s1=QwtText((*names)[feature_index-1].c_str());
 			s1.setFont(qwt_plot_->axisTitle(0).font());
 		}
 	}

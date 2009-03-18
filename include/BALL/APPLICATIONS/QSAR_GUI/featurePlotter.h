@@ -29,6 +29,8 @@ namespace BALL
 				QPushButton* delete_feature_button_;
 				
 				void plot(bool zoom);
+				
+				map<String,uint> map_names_to_ID_;
 			
 				
 			private slots:

@@ -445,7 +445,8 @@ bool ModelItem::isDone()
 	if(only_fs)
 	{
 		enableTraining(); // sets pixmap
-		return 1; 
+		if(!(*in_edge_list_.begin())->sourceNode()->isDone()) return 1; 
+		else return 0;
 	}
 	
 	// if this model is the last child of a pipeline train it in order to be able to analyze the final model or make predictions
