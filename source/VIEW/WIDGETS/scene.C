@@ -2491,7 +2491,7 @@ namespace BALL
 			screenshot_nr_ ++;
 			QString qresult = QFileDialog::getSaveFileName(
 												0,
-												"Export POVRay File",
+												"Export PNG File",
 												(getWorkingDir() + String(FileSystem::PATH_SEPARATOR) + start).c_str(),
 												"*.png");
 
