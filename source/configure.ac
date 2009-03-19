@@ -360,7 +360,7 @@ else
 	LPSOLVE_SUPPORT=
 fi
 
-if test "$enable_spacenavigator" != "no" -a "$USE_VIEW" == "true"; then
+if test "$USE_VIEW" == "true" -a "$enable_spacenavigator" = "yes" ; then
 	SPACENAV_SUPPORT=true
 	SPACENAV_LIBDIR=${with_spacenavigator_lib}
 	SPACENAV_INCLDIR=${with_spacenavigator_incl}
