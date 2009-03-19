@@ -20,7 +20,7 @@ namespace BALL
 {
 	class Atom;
 
-	/**	Atom Selection from Regular Expression.
+	/**	Atom Selection from BALL Expression.
     	\ingroup  Predicates
 	*/
 	class BALL_EXPORT Selector

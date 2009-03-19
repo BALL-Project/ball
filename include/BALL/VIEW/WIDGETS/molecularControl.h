@@ -40,7 +40,7 @@ class BondProperties;
 		This class is derived from the class GenericControl and extends it for showing and modifiying
 		molecular structures. The methods checkMenu() and buildContextMenu() are overridden 
 		for performing special molecular tasks.
-		MolecularControl has also a QLineEdit to select Composites by regular expressions.
+		MolecularControl has also a QLineEdit to select Composites by BALL expressions.
 		For further informations on this topic have a look at the class Selector.
 		\ingroup ViewWidgets
 */
@@ -182,7 +182,7 @@ class BALL_VIEW_EXPORT MolecularControl
 	virtual void initializeWidget(MainControl& main_control)
 		throw();
 
-	/** Apply a given regular expression
+	/** Apply a given BALL expression
 			@return Size number of selected atoms
 	*/
 	Size applySelector(const String& expression)
@@ -293,7 +293,7 @@ class BALL_VIEW_EXPORT MolecularControl
 	/// Expand all QListViewItem
 	void expandAll();
 
-	/** Apply the regular expression from the QLineEdit
+	/** Apply the BALL expression from the QLineEdit
 			@return Size number of selected atoms
 	*/
 	Size applySelector();
