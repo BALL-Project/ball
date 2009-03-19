@@ -64,7 +64,7 @@ namespace BALL
 		   \link File File \endlink  provides the ability to transform files on the fly using 
 			predefined transformation commands  (e.g. unix-style filters). For example, compressed 
       files can be automatically decompressed by calling the unic <tt>compress</tt> command.
-			The respective commands are selectedvia a suitable regular expression, usually
+			The respective commands are selected via a suitable regular expression, usually
       matching the file suffix. A frequent application for this transformation is the
 			compressed storage of PDB files in the unix compressed format (<tt>*.Z</tt>).
 			Transformation manager basically contains a map consisting of two strings.
