@@ -14,6 +14,8 @@
 namespace BALL 
 {
 	class System;
+	class Molecule;
+	class AtomContainer;
 
 	/**	XYZ file class.
 			This class enables BALL to read and write XMol XYZ files.
@@ -66,36 +68,32 @@ namespace BALL
 		*/
 		//@{
 		
+		/** Write an AtomContainer to the XYZ file
+		 */
+		virtual bool write(const AtomContainer& ac)
+			throw(File::CannotWrite);
+
 		/**	Write a system to the XYZ file
 		*/
-		virtual bool write(const System&	system)
+		virtual bool write(const System& system)
 			throw(File::CannotWrite);
 		
+		/**	Write a molecule to the XYZ file
+		*/
+		virtual bool write(const Molecule& mol)
+			throw(File::CannotWrite);
+
 		/**	Read a system from the XYZ file
 		*/
 		virtual bool read(System&	system)
 			throw(Exception::ParseError);
 
-		/**	Read a system from the XYZ file
-		*/
-		virtual XYZFile& operator >> (System& system)
-			throw(Exception::ParseError)
-		{
-			read(system);
-			return *this;
-		}
-		
-		/**	Write a system to the XYZ file
-		*/
-		virtual XYZFile& operator << (const System& system)
-			throw(File::CannotWrite)
-		{
-			write(system);
-			return *this;
-		}
+		/** Read a molecule from the XYZ file
+		 */
+		virtual Molecule* read()
+			throw(Exception::ParseError);
 
 		const XYZFile& operator = (const XYZFile& file)
-			
 		{
 			File::operator = (file);
 

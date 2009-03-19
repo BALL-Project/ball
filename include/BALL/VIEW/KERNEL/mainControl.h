@@ -382,10 +382,10 @@ namespace BALL
 			//@{
 			
 			/// Save the current configuration, structures and representations to a BALLView project file (*.bvp)
-			void saveBALLViewProjectFile(const String& filename);
+			void saveBALLViewProjectFile(const String& filename, bool binary = false);
 			
 			/// Load a BALLView project file
-			void loadBALLViewProjectFile(const String& filename) throw();
+			void loadBALLViewProjectFile(const String& filename);
 
 			/** Fetch the preferences from the INIfile.
 					Calls fetchPreferences() for all registered ModularWidgets.
@@ -838,6 +838,12 @@ namespace BALL
 					It calls among other things the method applyPreferences().
 			*/
 			virtual void applyPreferencesClicked_();
+			
+			/*_ This slot is called internally whenever the ok button
+					of the Preferences dialog	is pressed.
+					It calls among other things the method applyPreferences().
+			*/
+			virtual void okPreferencesClicked_();
 
 			//_ Called by timer to clear the text in the statusbar
 			void clearStatusBarText_();

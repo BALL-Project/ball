@@ -56,7 +56,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
-		virtual ConnectivityBase& operator = (const ConnectivityBase& cb);
+		ConnectivityBase& operator = (const ConnectivityBase& cb);
 
 		protected:
 

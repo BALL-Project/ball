@@ -51,7 +51,7 @@ CHECK(RMSDMinimizer::Result RMSDMinimizer::computeTransformation
 	TEST_EXCEPTION(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::computeTransformation(A, B))
 	B.push_back(Vector3(3.0, 2.0, 1.0));
 	RMSDMinimizer::Result r = RMSDMinimizer::computeTransformation(A, B);
-	PRECISION(0.0003)
+	PRECISION(1e-3)
 	TEST_REAL_EQUAL(r.second, 0.0)
 	STATUS("RMSD: " << r.second)
 	STATUS("T:\n" << r.first)

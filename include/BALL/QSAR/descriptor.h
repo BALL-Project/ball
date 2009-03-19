@@ -58,7 +58,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
-		virtual Descriptor& operator = (const Descriptor& descriptor);
+		Descriptor& operator = (const Descriptor& descriptor);
 		//@}
 
 		/**	@name	Processor-related methods

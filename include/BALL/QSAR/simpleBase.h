@@ -51,7 +51,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
-		virtual SimpleBase& operator = (const SimpleBase& sb);
+		SimpleBase& operator = (const SimpleBase& sb);
 		//@}
 
 

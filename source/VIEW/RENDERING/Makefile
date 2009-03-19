@@ -18,6 +18,7 @@ CPP_SOURCES=\
 	glDisplayList.C\
 	glRenderer.C\
 	renderer.C\
+	renderSetup.C\
 	POVRenderer.C\
 	STLRenderer.C\
 	VRMLRenderer.C\
@@ -30,7 +31,7 @@ CPP_SOURCES=\
 include ../../common.mak
 -include .Dependencies
 
-depend:	subdirsdepend
+depend:	subdirsdepend 
 
 default_clean:	subdirsclean
 

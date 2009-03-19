@@ -475,6 +475,11 @@ void EditableScene::paintGL()
 
 	if (!draw_line_ || current_atom_ == 0) return;
 
+#ifdef ENABLE_RAYTRACING
+			Log.info() << "EditableScene::paintGL(): sorry, raytracing does not yet support picking!" << std::endl;
+			return;
+#endif
+
 	glDisable(GL_LIGHTING);
 	gl_renderer_->setColorRGBA_(stage_->getBackgroundColor().getInverseColor());
 
@@ -674,6 +679,11 @@ List<AtomContainer*> EditableScene::getContainers_()
 
 void EditableScene::getClickedItems_(int x, int y)
 {
+#ifdef ENABLE_RAYTRACING
+			Log.info() << "EditableScene::getClickedItems_(): sorry, raytracing does not yet support picking!" << std::endl;
+			return;
+#endif
+
 	current_bond_ = 0;
 	current_atom_ = 0;
 
@@ -681,7 +691,7 @@ void EditableScene::getClickedItems_(int x, int y)
 	List<GeometricObject*> objects;
 	gl_renderer_->pickObjects1((Position) p.x(), (Position) p.y(), 
 														(Position) p.x(), (Position) p.y());
-	gl_renderer_->renderToBuffer(this, GLRenderer::DIRECT_RENDERING);
+	gl_renderer_->renderToBuffer(main_display_, GLRenderer::DIRECT_RENDERING);
 	gl_renderer_->pickObjects2(objects);
 
 	if (objects.size() > 0)

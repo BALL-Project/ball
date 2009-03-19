@@ -37,7 +37,8 @@ namespace BALL
 				height_(0),
 				show_preview_(false),
 				volume_width_(0.),
-				show_light_sources_(false)
+				show_light_sources_(false),
+				use_continuous_loop_(false)
 		{
 			stage_ = &RTTI::getDefault<Stage>();
 		}
@@ -50,7 +51,8 @@ namespace BALL
 			height_(renderer.height_),
 			show_preview_(renderer.show_preview_),
 			volume_width_(renderer.volume_width_),
-			show_light_sources_(renderer.show_light_sources_)
+			show_light_sources_(renderer.show_light_sources_),
+			use_continuous_loop_(renderer.use_continuous_loop_)
 		{}
 
 

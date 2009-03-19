@@ -1,18 +1,17 @@
-
-//#include <RTfact/Utils/Packets/Detail/Constants.inc.cpp>
-
 #include <BALL/STRUCTURE/triangulatedSurface.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 
 #include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
 
-#include <RTfact/Config/Init.inc.cpp>
+#include <RTfact/Config/Init.hpp>
+#include <RTfact/Utils/Transform.hpp>
 
 using RTfact::Vec3f;
 using RTfact::Remote::GroupHandle;
 using RTfact::Remote::GeoHandle;
 using RTfact::Transform;
+using RTfact::Matrix4f;
 using RTfact::Remote::float3;
 using RTfact::Remote::RTAppearanceHandle;
 
@@ -104,7 +103,7 @@ namespace BALL
 						std::cerr << "Light source type not supported!" << std::endl;
 						break;
 				}
-				float intensity = it->getIntensity()*500;
+				float intensity = it->getIntensity()*100;
 				ColorRGBA const& color = it->getColor();
 
 				lights_[current_light]->setParam("intensity", float3((float)color.getRed()*intensity,(float)color.getGreen()*intensity,(float)color.getBlue()*intensity));
@@ -113,11 +112,20 @@ namespace BALL
 
 		void RTfactRenderer::updateCamera(const Camera* camera)
 		{
+			// the renderer should be paused whenever the camera has been updated
 			if (camera == 0) camera = &(stage_->getCamera());
 
 			Vector3 const& position = camera->getViewPoint();
 			Vector3 const& view_vector = camera->getViewVector();
 			Vector3 const& look_up = camera->getLookUpVector();
+
+			if (use_continuous_loop_)
+			{
+				if (   ((last_camera_position - position   ).getSquareLength() > 1e-5)
+						 ||((last_camera_view_vec - view_vector).getSquareLength() > 1e-5)
+						 ||((last_camera_lookup   - look_up    ).getSquareLength() > 1e-5))
+						m_renderer.pauseAnimation(false);
+			}
 
 			m_renderer.setCameraPosition(float3(position.x, position.y, position.z),
 																	 float3(view_vector.x, view_vector.y, view_vector.z),
@@ -150,8 +158,18 @@ namespace BALL
 						break;
 				}
 			}
+			last_camera_position  = position;
+			last_camera_view_vec  = view_vector; 
+			last_camera_lookup    = look_up;
 		}
 
+		void RTfactRenderer::updateBackgroundColor() 
+		{
+			m_renderer.setEnvironmentColor(float3(stage_->getBackgroundColor().getRed(),
+									 												  stage_->getBackgroundColor().getGreen(),
+																						stage_->getBackgroundColor().getBlue()));
+		}
+			
 		void RTfactRenderer::prepareBufferedRendering(const Stage& stage)
 		{
 			// this function is not needed for this kind of raytracer
@@ -159,9 +177,6 @@ namespace BALL
 
 		void RTfactRenderer::bufferRepresentation(const Representation& rep)
 		{
-			// TODO: delete of already present representations!
-			std::cout << "RTfactRenderer: buffering Representation!" << std::endl;
-
 			if (objects_.find(&rep) != objects_.end())
 			{
 				// TODO: handle the update more gracefully!
@@ -292,11 +307,17 @@ namespace BALL
 
 						GeoHandle handle_2 = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)tube_template_.triangle.size(), material_2);
 
-						TwoColoredTube new_tube_1 = old_tube;
-						TwoColoredTube new_tube_2 = old_tube;
+						// NOTE: Just copying tube would be highly dangerous; vertex2 can store pointers
+						//       to the vertices instead of using its own, and these are copied as well!
+						TwoColoredTube new_tube_1, new_tube_2;
 
+						new_tube_1.setVertex1(old_tube.getVertex1());
 						new_tube_1.setVertex2(old_tube.getMiddleVertex());
+						new_tube_1.setRadius(old_tube.getRadius());
+
 						new_tube_2.setVertex1(old_tube.getMiddleVertex());
+						new_tube_2.setVertex2(old_tube.getVertex2());
+						new_tube_2.setRadius(old_tube.getRadius());
 
 						GroupHandle all_group = m_renderer.createGroup(Transform::identity());
 
@@ -321,6 +342,10 @@ namespace BALL
 					rtfact_needs_update_ = true;
 				}
 			}
+
+			if (rtfact_needs_update_ && use_continuous_loop_)
+				m_renderer.pauseAnimation(false);
+
 			objects_[&rep] = rt_data;
 		}
 
@@ -338,7 +363,17 @@ namespace BALL
 				}
 
 				objects_.erase(&rep);
+
+				if (use_continuous_loop_)
+					m_renderer.pauseAnimation(false);
 			}
+		}
+
+		void RTfactRenderer::useContinuousLoop(bool use_loop)
+		{
+			Renderer::useContinuousLoop(use_loop);
+
+			m_renderer.pauseAnimation(use_loop);
 		}
 
 		void RTfactRenderer::renderToBufferImpl(FrameBufferPtr buffer)
@@ -363,8 +398,11 @@ namespace BALL
 			FrameBufferFormat fmt = buffer->getFormat();		    
 			if ((fmt.getPixelFormat() == PixelFormat::RGBF_96) && (objects_.size() != 0))
 			{
-				m_renderer.attachFrameBuffer(fmt.getWidth(), fmt.getHeight(), fmt.getPitch(), (float*)buffer->getData());
+				m_renderer.attachFrameBuffer((float*)buffer->getData(), 3, fmt.getWidth(), fmt.getHeight());
 				m_renderer.renderToBuffer();
+
+				if (use_continuous_loop_)
+					m_renderer.pauseAnimation(true);
 			}
 		}
 
@@ -450,6 +488,9 @@ namespace BALL
 
 			// shininess
 			material->setParam("shininess", rt_material.shininess);
+
+            // transparency
+            material->setParam("alpha", (100.f - rt_material.transparency) * 0.01f);
 		}
 
 	}

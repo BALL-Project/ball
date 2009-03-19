@@ -204,8 +204,12 @@ namespace BALL
 		*/
 		//@{
 
-		/// Clear method.
-		virtual void clear(int state = 0);
+		/// Clear the stream state.
+		virtual void clear(int state);
+
+		/// Clear all members and close the file.
+		virtual void clear();
+
 		//@}
 
 		/** @name Accessors.
@@ -646,17 +650,18 @@ namespace BALL
 		///
 		bool read(System& system) throw(Exception::ParseError);
 		///
+		Molecule* read() throw(Exception::ParseError);
+		///
 		bool write(const Protein& protein) throw(File::CannotWrite);
 		///
 		bool write(const Molecule& molecule) throw(File::CannotWrite);
 		///
-		bool write(const System& system, const PDBInfo& info = PDBInfo()) throw(File::CannotWrite);
+		bool write(const System& system) throw(File::CannotWrite);
+		///
+		bool write(const System& system, const PDBInfo& info) throw(File::CannotWrite);
 		//@}
 
 		protected:
-
-		//_
-		void clear_();
 
 		//_
 		PDBFile(const File& pdbf) throw(Exception::FileNotFound);

@@ -39,7 +39,7 @@ namespace BALL
 			connect( defaults_button, SIGNAL( clicked() ), this, SLOT( setDefaultValues() ) );
 			connect( entries_listview, SIGNAL(itemSelectionChanged()), this, SLOT(entrySelected()));
 			connect( help_button, SIGNAL( clicked() ), this, SLOT( showHelp() ) );
-			//connect( apply_button, SIGNAL( clicked() ), this, SLOT( apply() ) );
+			//for some reason the ok_button and the apply button is connected in VIEW/KERNEL/mainControl.C
 		}
 
 		Preferences::~Preferences()

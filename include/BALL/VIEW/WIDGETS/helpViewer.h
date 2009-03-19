@@ -95,7 +95,10 @@ namespace BALL
 				throw();
 
 			///
-			virtual void showHelp(const String& URL, String entry = "");
+			virtual void showHelp(const String& URL);
+
+			///
+			virtual void showHelp(const String& URL, String entry);
 
 			///
 			void setDefaultPage(const String& url);

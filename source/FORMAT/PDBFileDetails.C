@@ -933,7 +933,7 @@ namespace BALL
 	bool PDBFile::read(Protein& protein)
 		throw(Exception::ParseError)
 	{
-		clear_();
+		clear();
 		protein.destroy();
 		current_protein_ = &protein;
 		readRecords();
@@ -975,6 +975,21 @@ namespace BALL
 		}
 
 		return result;
+	}
+
+	Molecule* PDBFile::read()
+		throw(Exception::ParseError)
+	{
+		Molecule* result = new Molecule;
+		read(*result);
+
+		return result;
+	}
+
+	bool PDBFile::write(const System& system)
+		throw(File::CannotWrite)
+	{
+		return write(system, PDBInfo());
 	}
 
 	bool PDBFile::write(const System& system, const PDBInfo& info)

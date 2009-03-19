@@ -40,8 +40,8 @@ namespace BALL
 	class Atom;
 
 	/**	Processor creates peaklist_. 
-			Each atom�s chemical shift will create a new peak.
-			Thist peak�s <tt>atomlist_</tt> will contain the corresponding atom.  \par
+			Each atom's chemical shift will create a new peak.
+			This peak's <tt>atomlist_</tt> will contain the corresponding atom.  \par
 	\ingroup Spectra
 	*/
 	class BALL_EXPORT CreateSpectrumProcessor
@@ -76,8 +76,7 @@ namespace BALL
 		
 		/**	Destructor
 		*/
-		virtual ~CreateSpectrumProcessor()
-			;
+		virtual ~CreateSpectrumProcessor();
 		
 		//@}
 		/** @name	Processor related methods
@@ -92,7 +91,17 @@ namespace BALL
 				@exception FileNotFound if the INI file does not exist
 				@exception ParseError if the contents of the file could not be parsed
 		*/
-		virtual void init(const String& filename = "NMR/StandardSpectrum.ini")
+		virtual void init();
+
+		/**	Init method.
+				Read the contents of a specified INI file containing
+				information on ignored and averaged atoms.
+				The default filename is <tt>NMR/StandardSpectrum.ini</tt> 
+				in the BALL data path.
+				@exception FileNotFound if the INI file does not exist
+				@exception ParseError if the contents of the file could not be parsed
+		*/
+		virtual void init(const String& filename)
 			throw(Exception::ParseError, Exception::FileNotFound);
 
 		/**	Start method.

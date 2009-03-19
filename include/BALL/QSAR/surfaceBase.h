@@ -51,7 +51,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
-		virtual SurfaceBase& operator = (const SurfaceBase& sb);
+		SurfaceBase& operator = (const SurfaceBase& sb);
 		//@}
 
 		protected:
