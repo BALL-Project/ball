@@ -434,11 +434,17 @@ namespace BALL
 			///
 			void setOffScreenRendering(bool enabled, Size factor);
 
+			///
+			virtual void paintEvent(QPaintEvent* e);
+
 			/// Catch key events
 			virtual void keyPressEvent(QKeyEvent* e);
 
 			///
 			virtual void mouseDoubleClickEvent(QMouseEvent* e);
+
+			///
+			virtual bool eventFilter(QObject* object, QEvent* event);
 
 			///
 			ModeType getMode() const

@@ -450,7 +450,10 @@ namespace BALL
 		void Scene::init()
 		{
 			for (Position i=0; i<renderers_.size(); ++i)
+			{
 				renderers_[i].init();
+				renderers_[i].target->installEventFilter(this);
+			}
 
 			if (stage_->getLightSources().size() == 0) setDefaultLighting(false);
 		}
@@ -559,11 +562,53 @@ namespace BALL
 			}
 		}
 
+		void Scene::paintEvent(QPaintEvent* e)
+		{
+			paintGL();
+		}
+
 		void Scene::resizeEvent(QResizeEvent* /*event*/)
 		{						
-			printf("resize called!\n");
 			for (Position i=0; i<renderers_.size(); ++i)
 				renderers_[i].resize(width(), height());
+		}
+
+		bool Scene::eventFilter(QObject* object, QEvent* event)
+		{
+			for (Position i=0; i<renderers_.size(); ++i)
+			{
+				if ((QGLWidget*)renderers_[i].target != object)
+					continue;
+
+				bool filter_out = false;
+
+//				printf("received event %d\n", event->type());
+
+				switch (event->type())
+				{
+					case QEvent::Resize:
+						// we already handle resize events for our child widgets
+						filter_out = true;
+						break;
+					case QEvent::Paint:
+						paintGL();
+						filter_out = true;
+						break;
+					case QEvent::ToolTip:
+						// prevent tool tip events for continuous renderers; these would
+						// stall the rendering loop
+						if (renderers_[i].isContinuous())
+							filter_out = true;
+						break;
+					default:
+						break;
+				}
+
+				if (filter_out)
+					return true;
+			}
+
+			return QWidget::eventFilter(object, event);
 		}
 
 		/////////////////////////////////////////////////////////
@@ -2625,6 +2670,8 @@ namespace BALL
 			new_widget->makeCurrent();
 			new_widget->init();
 			new_widget->resize(width(), height());
+
+			new_widget->installEventFilter(this);
 
 			GLRenderer*   new_renderer = new GLRenderer;
 			new_renderer->init(*this);
