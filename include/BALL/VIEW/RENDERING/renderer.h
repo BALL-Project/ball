@@ -130,11 +130,11 @@ namespace BALL
 
 			/** Buffer a Representation for later rendering.
 			 */
-			virtual void bufferRepresentation(const Representation& rep) {};
+			virtual void bufferRepresentation(const Representation& /*rep*/) {};
 
 			/** Remove a representation from the buffer.
 			 */
-			virtual void removeRepresentation(const Representation& rep) {};
+			virtual void removeRepresentation(const Representation& /*rep*/) {};
 
 			/** Get the stage for the renderer (const)
 			 */
