@@ -140,12 +140,12 @@ namespace BALL
 			return true;
 		}
 
-		void Renderer::setLights(bool reset_all)
+		void Renderer::setLights(bool /*reset_all*/)
 		{
 			Log.error() << "Renderer::setLights() not implemented for this kind of renderer yet!" << std::endl;
 		}
 
-		void Renderer::updateCamera(const Camera* camera)
+		void Renderer::updateCamera(const Camera* /*camera*/)
 		{
 			Log.error() << "Renderer::updateCamera() not implemented for this kind of renderer yet!" << std::endl;
 		}
@@ -155,7 +155,7 @@ namespace BALL
 			Log.error() << "Renderer::updateBackgroundColor() not implemented for this kind of renderer yet!" << std::endl;
 		}
 
-		void Renderer::setupStereo(float eye_separation, float focal_length)
+		void Renderer::setupStereo(float /*eye_separation*/, float /*focal_length*/)
 		{
 			Log.error() << "Renderer::setupStereo() not implemented for this kind of renderer yet!" << std::endl;
 		}
