@@ -2251,7 +2251,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\RENDERING\raytracingRenderer.C"
+					RelativePath="..\..\..\source\VIEW\RENDERING\renderer.C"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -2271,18 +2271,10 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\RENDERING\renderer.C"
+					RelativePath="..\..\..\source\VIEW\RENDERING\renderSetup.C"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -4253,21 +4245,6 @@
 				<File
 					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\POVRenderer.h"
 					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\raytracingRenderer.h"
-					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Performing Custom Build Step"
-							CommandLine=""
-							AdditionalDependencies=""
-							Outputs=""
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\renderer.h"
