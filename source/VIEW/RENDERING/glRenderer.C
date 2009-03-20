@@ -411,7 +411,7 @@ bool GLRenderer::getSmoothLines()
 					light_pos = it->getPosition();
 					light_dir = it->getDirection() - light_pos;
 				}
-				
+			
 				// setup the direction of the light
 				GLfloat dir[] = { light_dir.x,
 													light_dir.y,
@@ -440,7 +440,7 @@ bool GLRenderer::getSmoothLines()
 				glLightf(light_nr, GL_CONSTANT_ATTENUATION, att.x);
 				glLightf(light_nr, GL_LINEAR_ATTENUATION, att.y);
 				glLightf(light_nr, GL_QUADRATIC_ATTENUATION, att.z);
-					
+
 				glEnable(light_nr);
 				light_nr++;
 			}
@@ -533,6 +533,9 @@ bool GLRenderer::getSmoothLines()
 
 			glDrawBuffer(GL_BACK);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			if (!getMainControl())
+				return;
 
 			RepresentationManager& pm = getMainControl()->getRepresentationManager();
 
